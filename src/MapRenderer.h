@@ -257,7 +257,7 @@ public:
 
 	void clearEvents();
 	void checkEvents(Point loc);
-	void checkHotspots();
+	void checkHotspots(Point hero_pos);
 	void checkTooltip();
 
 	// vars

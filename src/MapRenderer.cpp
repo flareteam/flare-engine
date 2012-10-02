@@ -997,7 +997,7 @@ void MapRenderer::checkEvents(Point loc) {
  * This function checks valid mouse clicks against all clickable events, and
  * executes
  */
-void MapRenderer::checkHotspots() {
+void MapRenderer::checkHotspots(Point hero_pos) {
 	show_tooltip = false;
 
 	vector<Map_Event>::iterator it;
@@ -1076,7 +1076,8 @@ void MapRenderer::checkHotspots() {
 					}
 
 					if ((abs(cam.x - (*it).location.x * UNITS_PER_TILE) < CLICK_RANGE)
-						&& (abs(cam.y - (*it).location.y * UNITS_PER_TILE) < CLICK_RANGE)) {
+						&& (abs(cam.y - (*it).location.y * UNITS_PER_TILE) < CLICK_RANGE)
+						&& collider.line_of_sight((*it).location.x * UNITS_PER_TILE, (*it).location.y * UNITS_PER_TILE, hero_pos.x, hero_pos.y)) {
 
 						// only check events if the player is clicking
 						// and allowed to click
