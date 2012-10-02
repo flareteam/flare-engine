@@ -561,7 +561,7 @@ void GameStatePlay::logic() {
 		checkLoot();
 		checkEnemyFocus();
 		checkNPCInteraction();
-		map->checkHotspots();
+		map->checkHotspots(pc->stats.pos);
 
 		pc->logic(menu->act->checkAction(inpt->mouse), restrictPowerUse());
 
