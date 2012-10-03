@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * GameStateLoad
  */
 
+#include "Avatar.h"
 #include "SDL_gfxBlitFunc.h"
 #include "FileParser.h"
 #include "GameStateLoad.h"
@@ -141,19 +142,17 @@ GameStateLoad::GameStateLoad() : GameState() {
 	bool found_layer = false;
 	if(infile.open(mods->locate("engine/hero_options.txt"))) {
 		while(infile.next()) {
+			infile.val = infile.val + ',';
+
 			if(infile.key == "layer") {
-				infile.val = infile.val + ',';
+				unsigned dir = eatFirstInt(infile.val,',');
+				if (dir != 6) continue;
+				else found_layer = true;
 
-				if(infile.key == "layer") {
-					unsigned dir = eatFirstInt(infile.val,',');
-					if (dir != 6) continue;
-					else found_layer = true;
-
-					string layer = eatFirstString(infile.val,',');
-					while (layer != "") {
-						preview_layer.push_back(layer);
-						layer = eatFirstString(infile.val,',');
-					}
+				string layer = eatFirstString(infile.val,',');
+				while (layer != "") {
+					preview_layer.push_back(layer);
+					layer = eatFirstString(infile.val,',');
 				}
 			}
 		}
@@ -321,22 +320,30 @@ void GameStateLoad::loadPreview(int slot) {
 	short body = -1;
 	vector<bool> alpha;
 
+	// fall back to default if it exists
+	for (unsigned int i=0; i<preview_layer.size(); i++) {
+		bool exists = fileExists(mods->locate("animations/avatar/" + stats[slot].base + "/default_" + preview_layer[i] + ".txt"));
+		if (exists) {
+			img_gfx.push_back("default_" + preview_layer[i]);
+		} else {
+			img_gfx.push_back("");
+		}
+		if (preview_layer[i] == "chest") body = img_gfx.size()-1;
+	}
+
 	for (unsigned int i=0; i<equipped[slot].size(); i++) {
 		if ((unsigned)equipped[slot][i] > items->items.size()-1){
 			fprintf(stderr, "Item with id=%d out of bounds 1-%d. Your savegame is broken or you might use incompatible savegame/mod\nQuitting to avoid savegame rewriting\n", equipped[slot][i], (int)items->items.size()-1);
 			SDL_Quit();
 			exit(1);
 		}
-		if ((equipped[slot][i] != 0) && (items->items[equipped[slot][i]].type == "body")) {
-			img_gfx.push_back(items->items[equipped[slot][i]].gfx);
-			body = img_gfx.size()-1;
+		vector<string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
+		if (equipped[slot][i] > 0 && found != preview_layer.end()) {
+			img_gfx[distance(preview_layer.begin(), found)] = items->items[equipped[slot][i]].gfx;
 		}
-		else if ((equipped[slot][i] != 0) &&
-				find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type) != preview_layer.end())
-			img_gfx.push_back(items->items[equipped[slot][i]].gfx);
 	}
 	if (body == -1) {
-		img_gfx.push_back("clothes");
+		img_gfx.push_back("default_chest");
 		body = img_gfx.size()-1;
 	}
 	// load the body as the base image
@@ -372,6 +379,7 @@ void GameStateLoad::loadPreview(int slot) {
 			exit(1);
 		}
 	}
+	// load head graphic
 	gfx_surf.push_back(NULL);
 	alpha.push_back(true);
 	if (TEXTURE_QUALITY == false) {
