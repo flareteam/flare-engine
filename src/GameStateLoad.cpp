@@ -314,8 +314,7 @@ void GameStateLoad::readGameSlot(int slot) {
 
 void GameStateLoad::loadPreview(int slot) {
 
-	vector<Layer_gfx> img_gfx;
-	Layer_gfx gfx;
+	vector<string> img_gfx;
 	vector<SDL_Surface*> gfx_surf;
 	SDL_Rect dest;
 	short body = -1;
@@ -325,13 +324,9 @@ void GameStateLoad::loadPreview(int slot) {
 	for (unsigned int i=0; i<preview_layer.size(); i++) {
 		bool exists = fileExists(mods->locate("animations/avatar/" + stats[slot].base + "/default_" + preview_layer[i] + ".txt"));
 		if (exists) {
-			gfx.gfx = "default_" + preview_layer[i];
-			gfx.type = preview_layer[i];
-			img_gfx.push_back(gfx);
+			img_gfx.push_back("default_" + preview_layer[i]);
 		} else {
-			gfx.gfx = "";
-			gfx.type = "";
-			img_gfx.push_back(gfx);
+			img_gfx.push_back("");
 		}
 		if (preview_layer[i] == "chest") body = img_gfx.size()-1;
 	}
@@ -344,23 +339,19 @@ void GameStateLoad::loadPreview(int slot) {
 		}
 		vector<string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
 		if (equipped[slot][i] > 0 && found != preview_layer.end()) {
-			gfx.gfx = items->items[equipped[slot][i]].gfx;
-			gfx.type = items->items[equipped[slot][i]].type;
-			img_gfx[distance(preview_layer.begin(), found)] = gfx;
+			img_gfx[distance(preview_layer.begin(), found)] = items->items[equipped[slot][i]].gfx;
 		}
 	}
 	if (body == -1) {
-		gfx.gfx = "default_chest";
-		gfx.type = "chest";
-		img_gfx.push_back(gfx);
+		img_gfx.push_back("default_chest");
 		body = img_gfx.size()-1;
 	}
 	// load the body as the base image
 	// we'll blit the other layers onto it
 	if (TEXTURE_QUALITY == false)
-		sprites[slot] = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/noalpha/" + img_gfx[body].gfx + ".png").c_str());
+		sprites[slot] = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/noalpha/" + img_gfx[body] + ".png").c_str());
 	if (!sprites[slot]) {
-		sprites[slot] = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/" + img_gfx[body].gfx + ".png").c_str());
+		sprites[slot] = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/" + img_gfx[body] + ".png").c_str());
 	} else {
 		SDL_SetColorKey(sprites[slot], SDL_SRCCOLORKEY, SDL_MapRGB(sprites[slot]->format, 255, 0, 255));
 	}
@@ -372,15 +363,15 @@ void GameStateLoad::loadPreview(int slot) {
 
 	// composite the hero graphic
 	for (unsigned int i=0; i<img_gfx.size(); i++) {
-		if (img_gfx[i].gfx == "") continue;
+		if (img_gfx[i] == "") continue;
 		gfx_surf.push_back(NULL);
 		alpha.push_back(true);
 		if (TEXTURE_QUALITY == false) {
-			gfx_surf.back() = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/noalpha/" + img_gfx[i].gfx + ".png").c_str());
+			gfx_surf.back() = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/noalpha/" + img_gfx[i] + ".png").c_str());
 			alpha.back() = false;
 		}
 		if (!gfx_surf.back()) {
-			gfx_surf.back() = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/" + img_gfx[i].gfx + ".png").c_str());
+			gfx_surf.back() = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/" + img_gfx[i] + ".png").c_str());
 		}
 		if (!gfx_surf.back()) {
 			fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
