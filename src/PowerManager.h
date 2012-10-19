@@ -190,7 +190,7 @@ public:
 
 		, requires_mp(0)
 		, requires_hp(0)
-		, sacrifice(false)
+		, sacrifice(true)
 		, requires_los(false)
 		, requires_empty_target(false)
 		, requires_item(-1)
