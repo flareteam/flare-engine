@@ -98,9 +98,6 @@ public:
 	void clearHighlight();
 
 	SDL_Rect carried_area;
-	std::vector<SDL_Rect> equipped_area;
-	std::vector<std::string> slot_type;
-	std::vector<std::string> slot_desc;
 
 	MenuItemStorage inventory[2];
 	int currency;
@@ -113,6 +110,9 @@ public:
 
 	std::string log_msg;
 
+	std::vector<SDL_Rect> equipped_area;
+	std::vector<std::string> slot_type;
+	std::vector<std::string> slot_desc;
 };
 
 #endif
