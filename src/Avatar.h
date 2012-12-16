@@ -130,6 +130,7 @@ public:
 	bool drag_walking;
 	bool newLevelNotification;
 	bool respawn;
+	bool revived;
 
 private:
 	void handlePower(int actionbar_power);

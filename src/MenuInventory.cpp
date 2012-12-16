@@ -526,6 +526,28 @@ void MenuInventory::remove(int item) {
 }
 
 /**
+ * Removes a one-time-use revive item from the player's equipment
+ */
+void MenuInventory::removeReviveItem() {
+	int item_id;
+	unsigned bonus_counter;
+	for (int i = 0; i < MAX_EQUIPPED; i++) {
+		item_id = inventory[EQUIPMENT][i].item;
+		const Item &item = items->items[item_id];
+		bonus_counter = 0;
+		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
+			if (item.bonus_stat[bonus_counter] == "revive") {
+				log_msg = msg->get("%s removed", item.name);
+				inventory[EQUIPMENT].remove(item_id);
+				applyEquipment(inventory[EQUIPMENT].storage);
+				return;
+			}
+			bonus_counter++;
+		}
+	}
+}
+
+/**
  * Add currency to the current total
  */
 void MenuInventory::addCurrency(int count) {

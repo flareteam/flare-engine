@@ -551,6 +551,9 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 			modifier = msg->get("%d\% Speed", items[item].bonus_val[bonus_counter]);
 			if (items[item].bonus_val[bonus_counter] >= 100) color = color_bonus;
 			else color = color_penalty;
+		} else if (items[item].bonus_stat[bonus_counter] == "revive") {
+			modifier = msg->get("One-time protection from death");
+			color = color_bonus;
 		} else {
 			if (items[item].bonus_val[bonus_counter] > 0) {
 				modifier = msg->get("Increases %s by %d",
@@ -604,7 +607,7 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	if (items[item].flavor != "") {
 		tip.addText(items[item].flavor, color_flavor);
 	}
-	
+
 	// buy or sell price
 	if (items[item].price > 0) {
 
