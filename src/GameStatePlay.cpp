@@ -673,6 +673,10 @@ void GameStatePlay::logic() {
 	}
 
 	// these actions occur whether the game is paused or not.
+	if (pc->revived) {
+		menu->inv->removeReviveItem();
+		pc->revived = false;
+	}
 	checkNotifications();
 	checkLootDrop();
 	checkTeleport();

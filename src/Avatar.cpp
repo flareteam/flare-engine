@@ -53,6 +53,7 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
  , attacking (false)
  , drag_walking(false)
  , respawn(false)
+ , revived(false)
 {
 
 	init();
@@ -105,6 +106,7 @@ void Avatar::init() {
 
 	log_msg = "";
 	respawn = true;
+	revived = false;
 
 	stats.cooldown_ticks = 0;
 
@@ -418,7 +420,13 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 	// check for bleeding to death
 	if (stats.hp == 0 && !(stats.cur_state == AVATAR_DEAD)) {
-		stats.cur_state = AVATAR_DEAD;
+		if (stats.effects.revive) {
+			stats.hp = stats.maxhp;
+			stats.alive = true;
+			revived = true;
+		} else {
+			stats.cur_state = AVATAR_DEAD;
+		}
 	}
 
 	// assist mouse movement
@@ -776,10 +784,15 @@ bool Avatar::takeHit(const Hazard &h) {
 		}
 
 		if (stats.hp <= 0) {
-			stats.cur_state = AVATAR_DEAD;
-
-			// raise the death penalty flag.  Another module will read this and reset.
-			stats.death_penalty = true;
+			if (stats.effects.revive) {
+				stats.hp = stats.maxhp;
+				stats.alive = true;
+				revived = true;
+			} else {
+				stats.cur_state = AVATAR_DEAD;
+				// raise the death penalty flag.  Another module will read this and reset.
+				stats.death_penalty = true;
+			}
 		}
 		else if (prev_hp > stats.hp) { // only interrupt if damage was taken
 			if (sound_hit)
