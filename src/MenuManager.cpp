@@ -293,79 +293,73 @@ void MenuManager::logic() {
 		}
 	}
 
-	// inventory menu toggle
-	if ((inpt->pressing[INVENTORY] && !key_lock && !dragging) || clicking_inventory) {
-		key_lock = true;
-		if (inv->visible) {
-			closeRight(true);
-		}
-		else {
-			closeRight(false);
-			act->requires_attention[MENU_INVENTORY] = false;
-			inv->visible = true;
-			if (sfx_open)
-				Mix_PlayChannel(-1, sfx_open, 0);
-		}
-
-	}
-
-	// powers menu toggle
-	if (((inpt->pressing[POWERS] && !key_lock && !dragging) || clicking_powers) && stats->humanoid) {
-		key_lock = true;
-		if (pow->visible) {
-			closeRight(true);
-		}
-		else {
-			closeRight(false);
-			act->requires_attention[MENU_POWERS] = false;
-			pow->visible = true;
-			if (sfx_open)
-				Mix_PlayChannel(-1, sfx_open, 0);
-		}
-	}
-	act->requires_attention[MENU_POWERS] = pow->getUnspent() > 0;
-
-	// character menu toggleggle
-	if (((inpt->pressing[CHARACTER] && !key_lock && !dragging) || clicking_character) && stats->humanoid) {
-		key_lock = true;
-		if (chr->visible) {
-			closeLeft(true);
-		}
-		else {
-			closeLeft(false);
-			act->requires_attention[MENU_CHARACTER] = false;
-			chr->visible = true;
-			if (sfx_open)
-				Mix_PlayChannel(-1, sfx_open, 0);
-			// Make sure the stat list isn't scrolled when we open the character menu
-			inpt->resetScroll();
-		}
-	}
-	act->requires_attention[MENU_CHARACTER] = chr->getUnspent() > 0;
-
-	// log menu toggle
-	if ((inpt->pressing[LOG] && !key_lock && !dragging) || clicking_log) {
-		key_lock = true;
-		if (log->visible) {
-			closeLeft(true);
-		}
-		else {
-			closeLeft(false);
-			act->requires_attention[MENU_LOG] = false;
-			log->visible = true;
-			if (sfx_open)
-				Mix_PlayChannel(-1, sfx_open, 0);
-			// Make sure the log isn't scrolled when we open the log menu
-			inpt->resetScroll();
-		}
-	}
-
-	if (MENUS_PAUSE) {
-		pause = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
-	}
-	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
-
 	if (stats->alive) {
+		// inventory menu toggle
+		if ((inpt->pressing[INVENTORY] && !key_lock && !dragging) || clicking_inventory) {
+			key_lock = true;
+			if (inv->visible) {
+				closeRight(true);
+			}
+			else {
+				closeRight(false);
+				act->requires_attention[MENU_INVENTORY] = false;
+				inv->visible = true;
+				if (sfx_open)
+					Mix_PlayChannel(-1, sfx_open, 0);
+			}
+
+		}
+
+		// powers menu toggle
+		if (((inpt->pressing[POWERS] && !key_lock && !dragging) || clicking_powers) && stats->humanoid) {
+			key_lock = true;
+			if (pow->visible) {
+				closeRight(true);
+			}
+			else {
+				closeRight(false);
+				act->requires_attention[MENU_POWERS] = false;
+				pow->visible = true;
+				if (sfx_open)
+					Mix_PlayChannel(-1, sfx_open, 0);
+			}
+		}
+		act->requires_attention[MENU_POWERS] = pow->getUnspent() > 0;
+
+		// character menu toggleggle
+		if (((inpt->pressing[CHARACTER] && !key_lock && !dragging) || clicking_character) && stats->humanoid) {
+			key_lock = true;
+			if (chr->visible) {
+				closeLeft(true);
+			}
+			else {
+				closeLeft(false);
+				act->requires_attention[MENU_CHARACTER] = false;
+				chr->visible = true;
+				if (sfx_open)
+					Mix_PlayChannel(-1, sfx_open, 0);
+				// Make sure the stat list isn't scrolled when we open the character menu
+				inpt->resetScroll();
+			}
+		}
+		act->requires_attention[MENU_CHARACTER] = chr->getUnspent() > 0;
+
+		// log menu toggle
+		if ((inpt->pressing[LOG] && !key_lock && !dragging) || clicking_log) {
+			key_lock = true;
+			if (log->visible) {
+				closeLeft(true);
+			}
+			else {
+				closeLeft(false);
+				act->requires_attention[MENU_LOG] = false;
+				log->visible = true;
+				if (sfx_open)
+					Mix_PlayChannel(-1, sfx_open, 0);
+				// Make sure the log isn't scrolled when we open the log menu
+				inpt->resetScroll();
+			}
+		}
 
 		// handle right-click
 		if (!dragging && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
@@ -668,6 +662,11 @@ void MenuManager::logic() {
 			dragging = false;
 		}
 		closeAll(false);
+	}
+
+	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
+	if (MENUS_PAUSE) {
+		pause = menus_open;
 	}
 
 	// handle equipment changes affecting hero stats
