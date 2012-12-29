@@ -360,14 +360,6 @@ void MenuManager::logic() {
 				inpt->resetScroll();
 			}
 		}
-	}
-
-	if (MENUS_PAUSE) {
-		pause = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
-	}
-	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
-
-	if (stats->alive) {
 
 		// handle right-click
 		if (!dragging && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
@@ -671,6 +663,11 @@ void MenuManager::logic() {
 		}
 		closeAll(false);
 	}
+
+	if (MENUS_PAUSE) {
+		pause = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
+	}
+	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
 
 	// handle equipment changes affecting hero stats
 	if (inv->changed_equipment || inv->changed_artifact) {
