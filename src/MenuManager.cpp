@@ -664,10 +664,10 @@ void MenuManager::logic() {
 		closeAll(false);
 	}
 
-	if (MENUS_PAUSE) {
-		pause = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
-	}
 	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible);
+	if (MENUS_PAUSE) {
+		pause = menus_open;
+	}
 
 	// handle equipment changes affecting hero stats
 	if (inv->changed_equipment || inv->changed_artifact) {
