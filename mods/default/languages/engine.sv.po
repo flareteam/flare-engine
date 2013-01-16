@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Flare 0.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-21 15:57+0300\n"
-"PO-Revision-Date: 2013-01-13 22:25+0100\n"
+"PO-Revision-Date: 2013-01-16 01:01+0100\n"
 "Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -433,9 +433,8 @@ msgid "Shift"
 msgstr ""
 
 #: ../../../src/InputState.cpp:79
-#, fuzzy
 msgid "Delete"
-msgstr "Radera sparat spel"
+msgstr "Radera"
 
 #: ../../../src/InputState.cpp:81
 msgid "lmb"
