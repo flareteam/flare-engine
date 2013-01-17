@@ -173,6 +173,7 @@ StatBlock::StatBlock()
 {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
+	refCounter = 0;
 
 	// xp table
 	// default to MAX_INT
@@ -648,3 +649,19 @@ void StatBlock::loadHeroStats() {
 	infile.close();
 }
 
+int StatBlock::getRef()
+{ 
+  return refCounter;
+};
+
+void StatBlock::incRef() {
+  refCounter++;
+  // fprintf(stderr, "StatBlock[%p] Inc references = %d\n", this, refCounter);
+}
+
+void StatBlock::decRef() {
+  if (refCounter == 0)
+    return;
+  refCounter--;
+  // fprintf(stderr, "StatBlock[%p] Dec references = %d\n", this, refCounter);
+}

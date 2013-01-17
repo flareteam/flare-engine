@@ -149,6 +149,14 @@ void HazardManager::checkNewHazards() {
 }
 
 void HazardManager::expire(int index) {
+
+	h[index]->src_stats->decRef();
+	if (h[index]->src_stats->getRef() == 1)
+	{
+	  // fprintf(stderr, "Freeing StatBlock[%p]\n", this);
+	  delete h[index]->src_stats;
+	}
+
 	delete h[index];
 	h.erase(h.begin()+index);
 }
