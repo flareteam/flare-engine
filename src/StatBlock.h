@@ -84,6 +84,7 @@ class StatBlock {
 private:
 	void loadHeroStats();
 	bool statsLoaded;
+	int refCounter;
 
 public:
 	StatBlock();
@@ -94,6 +95,10 @@ public:
 	void recalc();
 	void recalc_alt();
 	void logic();
+
+	void incRef();
+	void decRef();
+	int getRef();
 
 	bool alive;
 	bool corpse; // creature is dead and done animating
