@@ -460,6 +460,9 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 	//the hazard holds the statblock of its source
 	haz->src_stats = src_stats;
 
+	if (src_stats->getRef() != 0)
+	  src_stats->incRef();
+
 	haz->power_index = power_index;
 
 	if (powers[power_index].source_type == -1){
