@@ -545,8 +545,8 @@ void GameStatePlay::checkNPCInteraction() {
 	if (pc->attacking) return;
 
 	int npc_click = -1;
-	int max_interact_distance = UNITS_PER_TILE * 4;
-	int interact_distance = max_interact_distance+1;
+	unsigned int max_interact_distance = UNITS_PER_TILE * 4;
+	unsigned int interact_distance = max_interact_distance+1;
 
 	// check for clicking on an NPC
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
@@ -561,7 +561,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// check distance to this npc
 	if (npc_id != -1) {
-		interact_distance = (int)calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 	}
 
 	if (map->event_npc != "") {
