@@ -81,9 +81,10 @@ GameStatePlay::GameStatePlay()
 	, loading(new WidgetLabel())
 	, loading_bg(IMG_Load(mods->locate("images/menus/confirm_bg.png").c_str()))
 	, npc_id(-1)
+	, eventDialogOngoing(false)
+	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
 	, game_slot(0)
-	, eventDialogOngoing(false)
 {
 	hasMusic = true;
 	// GameEngine scope variables
@@ -545,8 +546,8 @@ void GameStatePlay::checkNPCInteraction() {
 	if (pc->attacking) return;
 
 	int npc_click = -1;
-	int max_interact_distance = UNITS_PER_TILE * 4;
-	int interact_distance = max_interact_distance+1;
+	unsigned int max_interact_distance = UNITS_PER_TILE * 4;
+	unsigned int interact_distance = max_interact_distance+1;
 
 	// check for clicking on an NPC
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
@@ -561,7 +562,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// check distance to this npc
 	if (npc_id != -1) {
-		interact_distance = (int)calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 	}
 
 	if (map->event_npc != "") {
@@ -574,7 +575,7 @@ void GameStatePlay::checkNPCInteraction() {
 	}
 
 	// if close enough to the NPC, open the appropriate interaction screen
-	if (npc_click != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid || eventPendingDialog) {
+	if ((npc_click != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog) {
 		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
@@ -599,7 +600,7 @@ void GameStatePlay::checkNPCInteraction() {
 		menu->npc->setNPC(NULL);
 	}
 
-	if (npc_id != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid || eventPendingDialog) {
+	if ((npc_id != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog) {
 
 		if (menu->talker->vendor_visible && !menu->vendor->talker_visible) {
 
@@ -659,7 +660,7 @@ void GameStatePlay::checkNPCInteraction() {
 			npc_id = -1;
 		}
 	}
-	else if (!menu->vendor->visible && !menu->talker->visible || npc_click != -1) { 
+	else if ((!menu->vendor->visible && !menu->talker->visible) || npc_click != -1) { 
 		eventDialogOngoing = false;
 	}
 
