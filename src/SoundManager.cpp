@@ -213,6 +213,7 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point po
 	p.location = pos;
 	p.virtual_channel = channel;
 	p.loop = loop;
+	p.finished = false;
 
 	if (p.virtual_channel != GLOBAL_VIRTUAL_CHANNEL) {
 
