@@ -466,20 +466,16 @@ ItemStack LootManager::checkNearestPickup(Point hero_pos, int &currency, MenuInv
 
 	int best_distance = std::numeric_limits<int>::max();
 
-	vector<Loot>::iterator it;
-	vector<Loot>::iterator nearest;
-
-	for (it = loot.end(); it != loot.begin(); ) {
-		--it;
-
-		int distance = (int)calcDist(hero_pos,it->pos);
+	std::vector<Loot>::iterator nearest = loot.begin();
+	for(; nearest != loot.end(); nearest++ ) {
+		int distance = (int)calcDist(hero_pos,nearest->pos);
 		if (distance < LOOT_RANGE && distance < best_distance) {
 			best_distance = distance;
-			nearest = it;
+			break;
 		}
 	}
 
-	if (&(*nearest) != NULL) {
+	if (nearest != loot.end()) {
 		if (nearest->stack.item > 0 && !(inv->full(nearest->stack.item))) {
 			loot_stack = nearest->stack;
 			loot.erase(nearest);
