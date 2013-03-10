@@ -55,19 +55,26 @@ public:
 
 SoundManager::SoundManager() {
 	Mix_AllocateChannels(50);
+	audiothread_lock = SDL_CreateMutex();
 }
 
 SoundManager::~SoundManager() {
 	SoundManager::SoundMapIterator it;
 	while((it = sounds.begin()) != sounds.end())
 		unload(it->first);
+
+	SDL_DestroyMutex(audiothread_lock);
 }
 
 void SoundManager::logic(Point c) {
 
+	SDL_LockMutex(audiothread_lock);
+
 	PlaybackMapIterator it = playback.begin();
-	if (it == playback.end())
+	if (it == playback.end()) {
+		SDL_UnlockMutex(audiothread_lock);
 		return;
+	}
 
 	while(it != playback.end()) {
 
@@ -96,13 +103,18 @@ void SoundManager::logic(Point c) {
 		Mix_SetPosition(it->first, a, d);
 		it++;
 	}
+	SDL_UnlockMutex(audiothread_lock);
+
 }
 
 void SoundManager::reset() {
+	SDL_LockMutex(audiothread_lock);
 
 	PlaybackMapIterator it = playback.begin();
-	if (it == playback.end())
+	if (it == playback.end()) {
+		SDL_UnlockMutex(audiothread_lock);
 		return;
+	}
 
 	while(it != playback.end()) {
 
@@ -111,6 +123,7 @@ void SoundManager::reset() {
 
 		++it;
 	}
+	SDL_UnlockMutex(audiothread_lock);
 }
 
 SoundManager::SoundID SoundManager::load(const std::string& filename, const std::string& errormessage) {
@@ -128,11 +141,16 @@ SoundManager::SoundID SoundManager::load(const std::string& filename, const std:
 
 	/* create sid hash and check if already loaded */
 	sid = coll.hash(realfilename.data(), realfilename.data()+realfilename.length());
+
+	SDL_LockMutex(audiothread_lock);
 	it = sounds.find(sid);
 	if (it != sounds.end()) {
 		it->second->refCnt++;
+		SDL_UnlockMutex(audiothread_lock);
 		return sid;
 	}
+	SDL_UnlockMutex(audiothread_lock);
+
 
 	/* load non existing sound */
 	lsnd.chunk = Mix_LoadWAV(realfilename.c_str());
@@ -146,7 +164,10 @@ SoundManager::SoundID SoundManager::load(const std::string& filename, const std:
 	/* instantiate and add sound to manager */
 	Sound *psnd = new Sound;
 	*psnd = lsnd;
+
+	SDL_LockMutex(audiothread_lock);
 	sounds.insert(pair<SoundID,Sound *>(sid, psnd));
+	SDL_UnlockMutex(audiothread_lock);
 
 	return sid;
 }
@@ -154,15 +175,22 @@ SoundManager::SoundID SoundManager::load(const std::string& filename, const std:
 void SoundManager::unload(SoundManager::SoundID sid) {
 
 	SoundMapIterator it;
+
+	SDL_LockMutex(audiothread_lock);
+
 	it = sounds.find(sid);
-	if (it == sounds.end())
+	if (it == sounds.end()) {
+		SDL_UnlockMutex(audiothread_lock);
 		return;
+	}
 
 	if (--it->second->refCnt == 0) {
 		Mix_FreeChunk(it->second->chunk);
 		delete it->second;
 		sounds.erase(it);
 	}
+
+	SDL_UnlockMutex(audiothread_lock);
 }
 
 
@@ -175,9 +203,17 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point po
 	if (!sid || !AUDIO || !SOUND_VOLUME)
 		return;
 
+	SDL_LockMutex(audiothread_lock);
 	it = sounds.find(sid);
-	if (it == sounds.end())
+	if (it == sounds.end()) {
+		SDL_UnlockMutex(audiothread_lock);
 		return;
+	}
+
+	// Let playback own a reference to prevent unloading playbacked sound.
+	it->second->refCnt++;
+
+	SDL_UnlockMutex(audiothread_lock);
 
 	/* create playback object and start playback of sound chunk */
 	Playback p;
@@ -189,15 +225,14 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point po
 	if (p.virtual_channel != GLOBAL_VIRTUAL_CHANNEL) {
 
 		/* if playback exists, stop it befor playin next sound */
+		SDL_LockMutex(audiothread_lock);
 		vcit = channels.find(p.virtual_channel);
 		if (vcit != channels.end())
 			Mix_HaltChannel(vcit->second);
 
 		vcit = channels.insert(pair<std::string, int>(p.virtual_channel, -1)).first;
+		SDL_UnlockMutex(audiothread_lock);
 	}
-
-	// Let playback own a reference to prevent unloading playbacked sound.
-	it->second->refCnt++;
 
 	Mix_ChannelFinished(&channel_finished);
 	int c = Mix_PlayChannel(-1, it->second->chunk, (loop ? -1 : 0));
@@ -211,14 +246,25 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point po
 	if (vcit != channels.end())
 		vcit->second = c;
 
+	SDL_LockMutex(audiothread_lock);
 	playback.insert(pair<int, Playback>(c, p));
+	SDL_UnlockMutex(audiothread_lock);
 }
 
+
+/* This callback is called from audiosubsystem thread
+ * and any variable it touches needs to be locked with mutex.
+ *
+ */
 void SoundManager::on_channel_finished(int channel)
 {
+	SDL_LockMutex(audiothread_lock);
+
 	PlaybackMapIterator pit = playback.find(channel);
-	if (pit == playback.end())
+	if (pit == playback.end()) {
+		SDL_UnlockMutex(audiothread_lock);
 		return;
+	}
 
 	/* find and erase virtual channel for playback if exists */
 	VirtualChannelMapIterator vcit = channels.find(pit->second.virtual_channel);
@@ -231,6 +277,8 @@ void SoundManager::on_channel_finished(int channel)
 	unload(pit->second.sid);
 
 	playback.erase(pit);
+
+	SDL_UnlockMutex(audiothread_lock);
 }
 
 void SoundManager::channel_finished(int channel)
