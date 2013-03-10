@@ -577,6 +577,25 @@ void GameStatePlay::checkNPCInteraction() {
 		map->event_npc = "";
 	}
 
+	// check for walking away from an NPC
+	if (npc_id != -1 && !eventDialogOngoing) {
+		if (interact_distance > max_interact_distance || !pc->stats.alive) {
+			menu->npc->setNPC(NULL);
+			menu->vendor->npc = NULL;
+			menu->talker->npc = NULL;
+			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {
+				menu->vendor->visible = false;
+				menu->talker->visible = false;
+				menu->npc->visible = false;
+			}
+			npc_id = -1;
+			return;
+		}
+	}
+	else if ((!menu->vendor->visible && !menu->talker->visible) || npc_click != -1) {
+		eventDialogOngoing = false;
+	}
+
 	// if close enough to the NPC, open the appropriate interaction screen
 
 	if (npc_id != -1 && ((npc_click != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
@@ -650,25 +669,6 @@ void GameStatePlay::checkNPCInteraction() {
 		if (eventPendingDialog) eventPendingDialog = false;
 
 	}
-
-	// check for walking away from an NPC
-	if (npc_id != -1 && !eventDialogOngoing) {
-		if (interact_distance > max_interact_distance || !pc->stats.alive) {
-			menu->npc->setNPC(NULL);
-			menu->vendor->npc = NULL;
-			menu->talker->npc = NULL;
-			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {
-				menu->vendor->visible = false;
-				menu->talker->visible = false;
-				menu->npc->visible = false;
-			}
-			npc_id = -1;
-		}
-	}
-	else if ((!menu->vendor->visible && !menu->talker->visible) || npc_click != -1) {
-		eventDialogOngoing = false;
-	}
-
 }
 
 void GameStatePlay::checkStash() {
