@@ -53,8 +53,11 @@ public:
 	bool loop;
 };
 
+bool SoundManager::locked = false;
+
 SoundManager::SoundManager() {
 	Mix_AllocateChannels(50);
+	locked = false;
 }
 
 SoundManager::~SoundManager() {
@@ -99,10 +102,8 @@ void SoundManager::logic(Point c) {
 }
 
 void SoundManager::reset() {
-
+	locked = true;
 	PlaybackMapIterator it = playback.begin();
-	if (it == playback.end())
-		return;
 
 	while(it != playback.end()) {
 
@@ -111,6 +112,7 @@ void SoundManager::reset() {
 
 		++it;
 	}
+	locked = false;
 }
 
 SoundManager::SoundID SoundManager::load(const std::string& filename, const std::string& errormessage) {
@@ -235,5 +237,7 @@ void SoundManager::on_channel_finished(int channel)
 
 void SoundManager::channel_finished(int channel)
 {
+	if(locked)
+		return;
 	snd->on_channel_finished(channel);
 }
