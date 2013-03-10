@@ -977,7 +977,7 @@ void MapRenderer::executeOnLoadEvents() {
 
 		if ((*it).type == "on_load") {
 			if (executeEvent(*it))
-				events.erase(it);
+				it = events.erase(it);
 		}
 	}
 }
@@ -995,17 +995,17 @@ void MapRenderer::checkEvents(Point loc) {
 
 		// skip inactive events
 		if (!isActive(*it)) continue;
-
+		 
 		if ((*it).type == "on_clear") {
 			if (enemies_cleared && executeEvent(*it))
-				events.erase(it);
+				it = events.erase(it);
 		}
 		else if (maploc.x >= (*it).location.x &&
 			maploc.y >= (*it).location.y &&
 			maploc.x <= (*it).location.x + (*it).location.w-1 &&
 			maploc.y <= (*it).location.y + (*it).location.h-1) {
 			if (executeEvent(*it))
-				events.erase(it);
+				it = events.erase(it);
 		}
 	}
 }
@@ -1119,34 +1119,35 @@ void MapRenderer::checkNearestEvent(Point loc) {
 	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
-		vector<Map_Event>::iterator it;
 		vector<Map_Event>::iterator nearest;
 		int best_distance = std::numeric_limits<int>::max();
 
 		// loop in reverse because we may erase elements
-		for (it = events.end(); it != events.begin(); ) {
-			--it;
+		for (nearest = events.begin(); nearest != events.end(); ++nearest) {
 
 			// skip inactive events
-			if (!isActive(*it)) continue;
+			if (!isActive(*nearest)) continue;
 
 			// skip events without hotspots
-			if ((*it).hotspot.h == 0) continue;
+			if ((*nearest).hotspot.h == 0) continue;
 
 			// skip events on cooldown
-			if ((*it).cooldown_ticks != 0) continue;
+			if ((*nearest).cooldown_ticks != 0) continue;
 
 			Point ev_loc;
-			ev_loc.x = (*it).location.x * UNITS_PER_TILE;
-			ev_loc.y = (*it).location.y * UNITS_PER_TILE;
+			ev_loc.x = (*nearest).location.x * UNITS_PER_TILE;
+			ev_loc.y = (*nearest).location.y * UNITS_PER_TILE;
 			int distance = (int)calcDist(loc,ev_loc);
 			if (distance < CLICK_RANGE && distance < best_distance) {
 				best_distance = distance;
-				nearest = it;
+				break;
 			}
 		}
-		if (executeEvent(*nearest))
-			events.erase(nearest);
+
+		if(nearest != events.end()) {
+			if (executeEvent(*nearest))
+				nearest = events.erase(nearest);
+		}
 	}
 }
 
@@ -1369,10 +1370,11 @@ MapRenderer::~MapRenderer() {
 	delete tip;
 
 	/* unload sounds */
-	snd->reset();
-	while (!sids.empty()) {
+/*	snd->reset();
+	while (!sids.empty()){ 
 		snd->unload(sids.back());
 		sids.pop_back();
 	}
+*/
 }
 

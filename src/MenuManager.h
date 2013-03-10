@@ -79,6 +79,7 @@ private:
 	int drag_src;
 
 	bool done;
+	bool locked;
 
 public:
 	MenuManager(PowerManager *powers, StatBlock *stats, CampaignManager *camp, ItemManager *items);
@@ -90,6 +91,7 @@ public:
 	void closeAll();
 	void closeLeft();
 	void closeRight();
+	void closeVendor();
 
 	std::vector<Menu*> menus;
 	ItemManager *items;

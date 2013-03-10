@@ -800,6 +800,11 @@ void MenuManager::closeRight() {
 	}
 }
 
+void MenuManager::closeVendor() {
+	if( drag_src == DRAG_SRC_VENDOR )
+		dragging = false;
+}
+
 MenuManager::~MenuManager() {
 
 	tip_buf.clear();

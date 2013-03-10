@@ -81,6 +81,7 @@ public:
 	void update();
 
 	TooltipData checkTooltip(Point mouse);
+	bool detailed_tips;
 
 	int hotkeys[12]; // refer to power_index in PowerManager
 	int actionbar[12]; // temp for shapeshifting
