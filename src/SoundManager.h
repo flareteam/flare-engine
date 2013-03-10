@@ -51,10 +51,6 @@ public:
 	void logic(Point center);
 	void reset();
 
-	// Prevent SDL sound system from invalidating our iterator by locking
-	// TEMPORARY SOLUTION
-	static bool locked;	
-
 private:
 	typedef std::map<std::string, int> VirtualChannelMap;
 	typedef VirtualChannelMap::iterator VirtualChannelMapIterator;
