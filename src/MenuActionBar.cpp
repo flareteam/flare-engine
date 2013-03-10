@@ -52,6 +52,7 @@ MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surfac
 	drag_prev_slot = -1;
 	last_mouse.x = 0;
 	last_mouse.y = 0;
+	detailed_tips = 0;
 
 	clear();
 
@@ -164,6 +165,8 @@ void MenuActionBar::update() {
 			menuArea.x = window_area.x+eatFirstInt(infile.val, ',');
 			menuArea.w = eatFirstInt(infile.val, ',');
 			menuArea.h = eatFirstInt(infile.val, ',');
+		} else if (infile.key == "detailedTips") {
+			detailed_tips = static_cast<bool>(eatFirstInt(infile.val, ','));
 		}
 
 	  }
@@ -417,6 +420,8 @@ TooltipData MenuActionBar::checkTooltip(Point mouse) {
 		if (hotkeys[i] != 0) {
 			if (isWithin(slots[i], mouse)) {
 				tip.addText(powers->powers[hotkeys[i]].name);
+				if( detailed_tips )
+					tip.addText("\n"+powers->powers[hotkeys[i]].description);
 			}
 		}
 	}

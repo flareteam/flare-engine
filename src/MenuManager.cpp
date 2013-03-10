@@ -801,7 +801,6 @@ void MenuManager::closeRight() {
 }
 
 void MenuManager::closeVendor() {
-	vendor->visible = false;
 	if( drag_src == DRAG_SRC_VENDOR )
 		dragging = false;
 }
