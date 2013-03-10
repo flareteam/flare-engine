@@ -1369,10 +1369,10 @@ MapRenderer::~MapRenderer() {
 	delete tip;
 
 	/* unload sounds */
-/*	snd->reset();
+	snd->reset();
 	while (!sids.empty()) {
 		snd->unload(sids.back());
 		sids.pop_back();
-	} */
+	} 
 }
 
