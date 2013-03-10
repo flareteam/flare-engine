@@ -82,6 +82,7 @@ GameStatePlay::GameStatePlay()
 	, loading_bg(IMG_Load(mods->locate("images/menus/confirm_bg.png").c_str()))
 	, npc_id(-1)
 	, eventDialogOngoing(false)
+	, eventPendingDialog(0)
 	, color_normal(font->getColor("menu_normal"))
 	, game_slot(0)
 {
@@ -563,11 +564,6 @@ void GameStatePlay::checkNPCInteraction() {
 		if (npc_click != -1) npc_id = npc_click;
 	}
 
-	// check distance to this npc
-	if (npc_id != -1) {
-		interact_distance = (int)calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
-	}
-
 	if (map->event_npc != "") {
 		npc_id = npcs->getID(map->event_npc);
 		if (npc_id != -1) {
@@ -577,8 +573,12 @@ void GameStatePlay::checkNPCInteraction() {
 		map->event_npc = "";
 	}
 
-	// if close enough to the NPC, open the appropriate interaction screen
+	// check distance to this npc
+	if (npc_id != -1) {
+		interact_distance = (int)calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+	}
 
+	// if close enough to the NPC, open the appropriate interaction screen
 	if (npc_id != -1 && ((npc_click != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
 
 		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;

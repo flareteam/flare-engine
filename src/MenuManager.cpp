@@ -624,6 +624,7 @@ void MenuManager::logic() {
 
 			else if (drag_src == DRAG_SRC_VENDOR) {
 
+
 				// dropping an item from vendor (we only allow to drop into the carried area)
 				if (inv->visible && isWithin( inv->carried_area, inpt->mouse)) {
 					if (!inv->buy(drag_stack,vendor->getTab())) {
