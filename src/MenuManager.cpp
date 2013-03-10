@@ -790,6 +790,11 @@ void MenuManager::closeLeft() {
 	}
 }
 
+void MenuManager::closeVendor() {
+	if(drag_src == DRAG_SRC_VENDOR)
+		dragging = false;
+}
+
 void MenuManager::closeRight() {
 	if (!dragging) {
 		inv->visible = false;
