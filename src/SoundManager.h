@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_thread.h>
+
 #include "Utils.h"
 
 #include <map>
@@ -63,6 +65,8 @@ private:
 
 	static void channel_finished(int channel);
 	void on_channel_finished(int channel);
+
+	SDL_mutex *audiothread_lock;
 
 	SoundMap sounds;
 	VirtualChannelMap channels;
