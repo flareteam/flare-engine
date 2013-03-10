@@ -547,7 +547,7 @@ void GameStatePlay::checkNotifications() {
  * If an NPC is giving a reward, process it
  */
 void GameStatePlay::checkNPCInteraction() {
-	if (pc->attacking) return;
+//	if (pc->attacking) return;
 
 	int npc_click = -1;
 	int max_interact_distance = UNITS_PER_TILE * 4;
@@ -654,10 +654,11 @@ void GameStatePlay::checkNPCInteraction() {
 	// check for walking away from an NPC
 	if (npc_id != -1 && !eventDialogOngoing) {
 		if (interact_distance > max_interact_distance || !pc->stats.alive) {
+			menu->closeVendor();
 			menu->npc->setNPC(NULL);
 			menu->vendor->npc = NULL;
 			menu->talker->npc = NULL;
-			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {
+			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {\
 				menu->vendor->visible = false;
 				menu->talker->visible = false;
 				menu->npc->visible = false;

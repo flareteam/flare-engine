@@ -792,8 +792,10 @@ void MenuManager::closeLeft() {
 }
 
 void MenuManager::closeVendor() {
-	if(drag_src == DRAG_SRC_VENDOR)
+	if(drag_src == DRAG_SRC_VENDOR) {
+		vendor->itemReturn( drag_stack);
 		dragging = false;
+	}
 }
 
 void MenuManager::closeRight() {
