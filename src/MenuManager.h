@@ -88,6 +88,7 @@ public:
 	void render();
 	void renderIcon(int icon_id, int x, int y);
 	void closeAll();
+	void closeVendor();
 	void closeLeft();
 	void closeRight();
 
