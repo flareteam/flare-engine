@@ -174,8 +174,11 @@ GameStateNew::GameStateNew() : GameState() {
 	setName(name[0]);
 
 	// Set up tab list
-	tablist.add(button_create);
 	tablist.add(button_exit);
+	tablist.add(button_create);
+	tablist.add(button_prev);
+	tablist.add(button_next);
+	tablist.add(class_list);
 }
 
 void GameStateNew::loadGraphics() {
@@ -254,7 +257,7 @@ void GameStateNew::logic() {
 		}
 	}
 
-	if (button_exit->checkClick()) {
+	if ((inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) || button_exit->checkClick()) {
 		delete requestedGameState;
 		requestedGameState = new GameStateLoad();
 	}
