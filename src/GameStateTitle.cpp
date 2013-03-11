@@ -61,6 +61,11 @@ GameStateTitle::GameStateTitle() : GameState() {
 	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, msg->get("Flare Alpha v0.17"), font->getColor("menu_normal"));
 
 	inpt->enableMouseEmulation();
+
+	// Setup tab order
+	tablist.add(button_play);
+	tablist.add(button_cfg);
+	tablist.add(button_exit);
 }
 
 void GameStateTitle::loadGraphics() {
@@ -78,6 +83,25 @@ void GameStateTitle::loadGraphics() {
 
 void GameStateTitle::logic() {
 	button_play->enabled = ENABLE_PLAYGAME;
+
+	if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+		inpt->lock[DOWN] = true;
+		tablist.getNext();
+	}
+	else if(inpt->pressing[UP] && !inpt->lock[UP]) {
+		inpt->lock[UP] = true;
+		tablist.getPrev();
+	}
+
+	if(inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		inpt->lock[ACCEPT] = true;
+		tablist.activate();	// Activate the currently infocus item
+	}
+
+	// If mouse is clicked, defocus current tabindex item
+	if(inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+		tablist.defocus();
+	}
 
 	if (button_play->checkClick()) {
 		delete requestedGameState;

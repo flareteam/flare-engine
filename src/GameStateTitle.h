@@ -24,14 +24,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class WidgetButton;
 class WidgetLabel;
+class TabIndex;
 
 class GameStateTitle : public GameState {
 private:
 	SDL_Surface *logo;
+
 	WidgetButton *button_play;
 	WidgetButton *button_exit;
     WidgetButton *button_cfg;
 	WidgetLabel *label_version;
+
+	TabList tablist;
 
 public:
 	GameStateTitle();
