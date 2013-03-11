@@ -394,6 +394,7 @@ void GameStateLoad::logic() {
 
 	if (!confirm->visible) {
 		if (button_exit->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+			inpt->lock[CANCEL] = true;
 			delete requestedGameState;
 			requestedGameState = new GameStateTitle();
 		}

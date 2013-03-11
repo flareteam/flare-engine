@@ -86,7 +86,8 @@ void GameStateTitle::logic() {
 
 	snd->logic(Point(0,0));
 
-	if(inpt->pressing[CANCEL]) {
+	if(inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+		inpt->lock[CANCEL] = true;
 		exitRequested = true;
 	}
 
