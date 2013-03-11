@@ -56,6 +56,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "UtilsParsing.h"
 #include "MenuPowers.h"
+#include "MinionManager.h"
 
 using namespace std;
 
@@ -73,7 +74,8 @@ GameStatePlay::GameStatePlay()
 	, map(new MapRenderer(camp))
 	, pc(new Avatar(powers, map))
 	, enemies(new EnemyManager(powers, map))
-	, hazards(new HazardManager(powers, pc, enemies))
+	, minions(new MinionManager(powers, map))
+    , hazards(new HazardManager(powers, pc, enemies, minions))
 	, menu(new MenuManager(powers, &pc->stats, camp, items))
 	, loot(new LootManager(items, map, &pc->stats))
 	, npcs(new NPCManager(map, loot, items, &pc->stats))
@@ -94,6 +96,10 @@ GameStatePlay::GameStatePlay()
 	camp->currency = &menu->inv->currency;
 	camp->hero = &pc->stats;
 	map->powers = powers;
+	minions->enemyManager = enemies;
+    enemies->minionManager = minions;
+    pc->minions = minions;
+    minions->pc = pc;
 
 	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
@@ -257,8 +263,15 @@ void GameStatePlay::checkTeleport() {
 			map->cam.y = pc->stats.pos.y = pc->stats.teleport_destination.y;
 		}
 
+		for (unsigned int i=0; i < minions->minions.size(); i++) {
+            minions->minions[i]->stats.pos.x = pc->stats.pos.x;
+            minions->minions[i]->stats.pos.y = pc->stats.pos.y;
+        }
+
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
+            //cleanup minion corpses on map change
+            minions->RemoveCorpses();
 			showLoading();
 			map->load(map->teleport_mapname);
 			enemies->handleNewMap();
@@ -725,6 +738,11 @@ void GameStatePlay::logic() {
 		else enemies->hero_stealth = pc->stats.effects.bonus_stealth;
 
 		enemies->logic();
+
+		minions->hero_pos = pc->stats.pos;
+        minions->hero_alive = pc->stats.alive;
+        minions->logic();
+
 		hazards->logic();
 		loot->logic();
 		enemies->checkEnemiesforXP(camp);
@@ -820,6 +838,8 @@ void GameStatePlay::render() {
 
 	enemies->addRenders(rens, rens_dead);
 
+	minions->addRenders(rens, rens_dead);
+
 	npcs->addRenders(rens); // npcs cannot be dead
 
 	loot->addRenders(rens, rens_dead);
@@ -867,6 +887,7 @@ GameStatePlay::~GameStatePlay() {
 	delete npcs;
 	delete hazards;
 	delete enemies;
+	delete minions;
 	delete pc;
 	delete map;
 	delete menu;

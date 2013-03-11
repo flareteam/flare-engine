@@ -41,8 +41,9 @@ private:
 	Avatar *hero;
 	EnemyManager *enemies;
 	PowerManager *powers;
+	MinionManager *minions;
 public:
-	HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies);
+	HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies, MinionManager *_minions);
 	~HazardManager();
 	void logic();
 	void expire(int index);

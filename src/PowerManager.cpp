@@ -459,6 +459,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 
 	if (powers[power_index].source_type == -1){
 		if (src_stats->hero) haz->source_type = SOURCE_TYPE_HERO;
+		else if (src_stats->minion) haz->source_type = SOURCE_TYPE_MINION;
 		else haz->source_type = SOURCE_TYPE_ENEMY;
 	}
 	else {
@@ -855,31 +856,57 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 	// If there's a sound effect, play it here
 	playSound(power_index, src_stats);
 
-	Map_Enemy espawn;
-	espawn.type = powers[power_index].spawn_type;
+	string spType = powers[power_index].spawn_type;
+    Point spPoint;
 
 	// enemy spawning position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
-		espawn.pos.x = src_stats->pos.x;
-		espawn.pos.y = src_stats->pos.y;
+		spPoint.x = src_stats->pos.x;
+        spPoint.y = src_stats->pos.y;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		espawn.pos.x = target.x;
-		espawn.pos.y = target.y;
+		spPoint.x = target.x;
+        spPoint.y = target.y;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		FPoint fpos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
-		espawn.pos.x = static_cast<int>(fpos.x);
-		espawn.pos.y = static_cast<int>(fpos.y);
+		spPoint.x = static_cast<int>(fpos.x);
+		spPoint.y = static_cast<int>(fpos.y);
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		espawn.pos = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor);
+		spPoint = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor);
 	}
 
-	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
-	for (int i=0; i < powers[power_index].count; i++) {
-		enemies.push(espawn);
-	}
+	int spDirection = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+
+    //add an enemy or minion depending on who is casting
+    if(src_stats->hero)
+    {
+
+        Minion* spMinion = new Minion(this, NULL);
+        spMinion->stats.direction = spDirection;
+        spMinion->stats.pos.x = spPoint.x;
+        spMinion->stats.pos.y = spPoint.y;
+        spMinion->type = spType;
+        spMinion->power_index = power_index;
+
+        for (int i=0; i < powers[power_index].count; i++) {
+            minions.push(spMinion);
+        }
+    }
+    else
+    {
+        Map_Enemy espawn;
+        espawn.type = spType;
+        espawn.direction = spDirection;
+        espawn.pos.x = spPoint.x;
+        espawn.pos.y = spPoint.y;
+
+        for (int i=0; i < powers[power_index].count; i++) {
+            enemies.push(espawn);
+        }
+    }
+
 	payPowerCost(power_index, src_stats);
 
 	return true;

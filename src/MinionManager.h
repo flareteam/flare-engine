@@ -1,7 +1,8 @@
 /*
-Copyright Â© 2011-2012 Clint Bellanger
-Copyright Â© 2012 Stefan Beller
-Copyright Â© 2013 Henrik Andersson
+Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012 Stefan Beller
+Copyright © 2013 Henrik Andersson
+Copyright © 2013 Ryan Dansie
 
 This file is part of FLARE.
 
@@ -17,30 +18,27 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-/*
- * class EnemyManager
- */
-
-
-#pragma once
-#ifndef ENEMY_MANAGER_H
-#define ENEMY_MANAGER_H
+#ifndef MINIONMANAGER_H
+#define MINIONMANAGER_H
 
 #include "Settings.h"
 #include "MapRenderer.h"
-#include "Enemy.h"
+#include "Minion.h"
 #include "Utils.h"
 #include "PowerManager.h"
 #include "CampaignManager.h"
 
-class EnemyManager {
+class Minion;
+
+class MinionManager
+{
 private:
 
-	MapRenderer *map;
+    MapRenderer *map;
 	PowerManager *powers;
 
 	void loadSounds(const std::string& type_id);
-	void loadAnimations(Enemy *e);
+	void loadAnimations(Minion *e);
 
 	std::vector<std::string> sfx_prefixes;
 	std::vector<SoundManager::SoundID> sound_phys;
@@ -52,31 +50,27 @@ private:
 	std::vector<std::string> anim_prefixes;
 	std::vector<std::vector<Animation*> > anim_entities;
 
-	/**
-	 * callee is responsible for deleting returned enemy object
-	 */
-	Enemy *getEnemyPrototype(const std::string& type_id);
 
-	std::vector<Enemy> prototypes;
+	std::vector<Minion> prototypes;
 
-public:
-	EnemyManager(PowerManager *_powers, MapRenderer *_map);
-	~EnemyManager();
-	void handleNewMap();
+	public:
+    MinionManager(PowerManager *_powers, MapRenderer *_map);
+	~MinionManager();
 	void handleSpawn();
 	void logic();
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
-	void checkEnemiesforXP(CampaignManager *camp);
-	bool isCleared();
-	Enemy *enemyFocus(Point mouse, Point cam, bool alive_only);
+	Minion *minionFocus(Point mouse, Point cam, bool alive_only);
+	void RemoveCorpses();
+	static bool RemoveCorpsePredicate(const Minion* m );
+
+    EnemyManager* enemyManager;
 
 	// vars
-	MinionManager *minionManager;
-	std::vector<Enemy*> enemies;
+	std::vector<Minion*> minions;
 	Point hero_pos;
 	bool hero_alive;
 	int hero_stealth;
+	Avatar *pc;
 };
 
-
-#endif
+#endif // MINIONMANAGER_H

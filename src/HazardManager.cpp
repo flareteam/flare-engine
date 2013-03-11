@@ -31,10 +31,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-HazardManager::HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies) {
+HazardManager::HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies, MinionManager *_minions) {
 	powers = _powers;
 	hero = _hero;
 	enemies = _enemies;
+	minions = _minions;
 }
 
 void HazardManager::logic() {
@@ -98,7 +99,7 @@ void HazardManager::logic() {
 			}
 
 			// process hazards that can hurt the hero
-			if (h[i]->source_type != SOURCE_TYPE_HERO) { //enemy or neutral sources
+			if ((h[i]->source_type != SOURCE_TYPE_HERO) && (h[i]->source_type != SOURCE_TYPE_MINION)) { //enemy or neutral sources
 				if (hero->stats.hp > 0 && h[i]->active) {
 					if (isWithin(round(h[i]->pos), h[i]->radius, hero->stats.pos)) {
 						if (!h[i]->hasEntity(hero)) {
@@ -112,6 +113,26 @@ void HazardManager::logic() {
 						}
 					}
 				}
+
+				//now process minions
+                for (unsigned int eindex = 0; eindex < minions->minions.size(); eindex++) {
+                    // only check living minions
+                    if (minions->minions[eindex]->stats.hp > 0 && h[i]->active) {
+                        if (isWithin(round(h[i]->pos), h[i]->radius, minions->minions[eindex]->stats.pos)) {
+                            if (!h[i]->hasEntity(minions->minions[eindex])) {
+                                h[i]->addEntity(minions->minions[eindex]);
+                                // hit!
+                                hit = minions->minions[eindex]->takeHit(*h[i]);
+                                if (!h[i]->multitarget && hit) {
+                                    h[i]->active = false;
+                                    if (!h[i]->complete_animation) h[i]->lifespan = 0;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
 			}
 
 		}

@@ -646,7 +646,15 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
 				stats.corpse = true;
+
+                //once the player dies, kill off any remaining minions
+                for (unsigned int i=0; i < minions->minions.size(); i++) {
+                    if(!minions->minions[i]->stats.corpse)
+                        minions->minions[i]->InstantDeath();
+                }
 			}
+
+
 
 			// allow respawn with Accept if not permadeath
 			if (inpt->pressing[ACCEPT]) {

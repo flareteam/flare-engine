@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
+#include "MinionManager.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -99,6 +100,7 @@ public:
 	~Avatar();
 
 	PowerManager *powers;
+	MinionManager *minions;
 
 	void init();
 	void loadLayerDefinitions();
