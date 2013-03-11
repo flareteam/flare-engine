@@ -88,24 +88,7 @@ void GameStateTitle::logic() {
 		exitRequested = true;
 	}
 
-	if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
-		inpt->lock[DOWN] = true;
-		tablist.getNext();
-	}
-	else if(inpt->pressing[UP] && !inpt->lock[UP]) {
-		inpt->lock[UP] = true;
-		tablist.getPrev();
-	}
-
-	if(inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		inpt->lock[ACCEPT] = true;
-		tablist.activate();	// Activate the currently infocus item
-	}
-
-	// If mouse is clicked, defocus current tabindex item
-	if(inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-		tablist.defocus();
-	}
+	tablist.logic();
 
 	if (button_play->checkClick()) {
 		delete requestedGameState;
