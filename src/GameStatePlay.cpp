@@ -658,7 +658,7 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->npc->setNPC(NULL);
 			menu->vendor->npc = NULL;
 			menu->talker->npc = NULL;
-			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {\
+			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {
 				menu->vendor->visible = false;
 				menu->talker->visible = false;
 				menu->npc->visible = false;
