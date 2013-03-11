@@ -383,7 +383,6 @@ void GameStateLoad::loadPreview(int slot) {
 
 }
 
-
 void GameStateLoad::logic() {
 
 	frame_ticker++;
@@ -394,7 +393,8 @@ void GameStateLoad::logic() {
 		current_frame = (63 - frame_ticker) / 8;
 
 	if (!confirm->visible) {
-		if (button_exit->checkClick()) {
+		if (button_exit->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+			inpt->lock[CANCEL] = true;
 			delete requestedGameState;
 			requestedGameState = new GameStateTitle();
 		}
@@ -405,7 +405,7 @@ void GameStateLoad::logic() {
 			logicLoading();
 		}
 
-		if (button_action->checkClick()) {
+		if (button_action->checkClick() || (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT])) {
 			if (stats[selected_slot].name == "") {
 				// create a new game
 				GameStateNew* newgame = new GameStateNew();
@@ -416,11 +416,13 @@ void GameStateLoad::logic() {
 				loading_requested = true;
 			}
 		}
+
 		if (button_alternate->checkClick()) {
 			// Display pop-up to make sure save should be deleted
 			confirm->visible = true;
 			confirm->render();
 		}
+
 		// check clicking game slot
 		if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 			for (int i=0; i<GAME_SLOT_MAX; i++) {
@@ -431,6 +433,21 @@ void GameStateLoad::logic() {
 				}
 			}
 		}
+
+		// Allow characters to be navigateable via movement keys
+		if ((inpt->pressing[UP] && !inpt->lock[UP]) ||
+			(inpt->pressing[LEFT] && !inpt->lock[LEFT]) ) {
+			inpt->lock[UP] = inpt->lock[LEFT] = true;
+			selected_slot = (--selected_slot < 0) ? GAME_SLOT_MAX - 1 : selected_slot; 
+			updateButtons();
+		}
+		else if ((inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
+			     (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) ) {
+			inpt->lock[DOWN] = inpt->lock[RIGHT] = true;
+			selected_slot = (++selected_slot == GAME_SLOT_MAX) ? 0 : selected_slot;
+			updateButtons();
+		}
+
 	} else if (confirm->visible) {
 		confirm->logic();
 		if (confirm->confirmClicked) {

@@ -61,6 +61,11 @@ GameStateTitle::GameStateTitle() : GameState() {
 	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, msg->get("Flare Alpha v0.17"), font->getColor("menu_normal"));
 
 	inpt->enableMouseEmulation();
+
+	// Setup tab order
+	tablist.add(button_play);
+	tablist.add(button_cfg);
+	tablist.add(button_exit);
 }
 
 void GameStateTitle::loadGraphics() {
@@ -80,6 +85,13 @@ void GameStateTitle::logic() {
 	button_play->enabled = ENABLE_PLAYGAME;
 
 	snd->logic(Point(0,0));
+
+	if(inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+		inpt->lock[CANCEL] = true;
+		exitRequested = true;
+	}
+
+	tablist.logic();
 
 	if (button_play->checkClick()) {
 		delete requestedGameState;

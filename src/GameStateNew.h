@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "WidgetTooltip.h"
 
+class TabList;
 class WidgetButton;
 class WidgetCheckBox;
 class WidgetInput;
@@ -76,6 +77,8 @@ private:
 	WidgetLabel *label_classlist;
 	WidgetListBox *class_list;
 	WidgetTooltip *tip;
+
+	TabList tablist;
 
 	Point name_pos;
 	LabelInfo portrait_label;

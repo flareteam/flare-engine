@@ -466,6 +466,34 @@ void WidgetListBox::refresh() {
 
 }
 
+bool WidgetListBox::getNext() {
+	int sel = getSelected();
+	selected[sel] = false;
+
+	if(sel == list_amount-1) {
+		selected[0] = true;
+	}
+	else {
+		selected[sel+1] = true;
+	}
+
+	return true;
+}
+
+bool WidgetListBox::getPrev() {
+	int sel = getSelected();
+	selected[sel] = false;
+
+	if(sel == 0) {
+		selected[list_amount-1] = true;
+	}
+	else {
+		selected[sel-1] = true;
+	}
+
+	return true;
+}
+
 WidgetListBox::~WidgetListBox() {
 	SDL_FreeSurface(listboxs);
 	delete[] values;
