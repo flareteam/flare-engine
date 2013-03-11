@@ -84,7 +84,8 @@ void GameStateTitle::loadGraphics() {
 void GameStateTitle::logic() {
 	button_play->enabled = ENABLE_PLAYGAME;
 
-	if(inpt->pressing[CANCEL]) {
+	if(inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+		inpt->lock[CANCEL] = true;
 		exitRequested = true;
 	}
 
