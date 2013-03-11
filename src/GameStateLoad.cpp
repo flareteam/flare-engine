@@ -434,15 +434,16 @@ void GameStateLoad::logic() {
 			}
 		}
 
-		// Allow characters to be navigateable via up/down keys
-		if (inpt->pressing[UP] && !inpt->lock[UP]) {
-			inpt->lock[UP] = true;
+		// Allow characters to be navigateable via movement keys
+		if ((inpt->pressing[UP] && !inpt->lock[UP]) ||
+			(inpt->pressing[LEFT] && !inpt->lock[LEFT]) ) {
+			inpt->lock[UP] = inpt->lock[LEFT] = true;
 			selected_slot = (--selected_slot < 0) ? GAME_SLOT_MAX - 1 : selected_slot; 
 			updateButtons();
 		}
-
-		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
-			inpt->lock[DOWN] = true;
+		else if ((inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
+			     (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) ) {
+			inpt->lock[DOWN] = inpt->lock[RIGHT] = true;
 			selected_slot = (++selected_slot == GAME_SLOT_MAX) ? 0 : selected_slot;
 			updateButtons();
 		}
