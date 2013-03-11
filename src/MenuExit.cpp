@@ -33,6 +33,7 @@ MenuExit::MenuExit() : Menu() {
 	buttonClose = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
 
 	loadGraphics();
+	tablist.add(buttonExit);
 }
 
 void MenuExit::loadGraphics() {
@@ -60,6 +61,8 @@ void MenuExit::update() {
 
 void MenuExit::logic() {
 	if (visible) {
+		tablist.logic();
+
 		if (buttonExit->checkClick()) {
 			exitClicked = true;
 		}
