@@ -34,6 +34,14 @@ Widget::~Widget()
 void Widget::activate()
 {}
 
+bool Widget::getNext() {
+	return false;
+}
+
+bool Widget::getPrev() {
+	return false;
+}
+
 TabList::TabList()
 	: widgets()
 	, current(-1)
@@ -60,13 +68,16 @@ void TabList::remove(Widget* widget) {
 		widgets.erase(find);
 }
 
-Widget* TabList::getNext() {
+Widget* TabList::getNext(bool inner) {
 	if(widgets.size() == 0)
 		return NULL;
 
-	if(current >= 0 && current < widgets.size())
-		widgets.at(current)->in_focus = false;
+	if(current >= 0 && current < widgets.size()) {
+		if(inner && widgets.at(current)->getNext())
+			return NULL;
 
+		widgets.at(current)->in_focus = false;
+	}
 	++current;
 
 	if(current >= widgets.size())
@@ -76,12 +87,16 @@ Widget* TabList::getNext() {
 	return widgets.at(current);
 }
 
-Widget* TabList::getPrev() {
+Widget* TabList::getPrev(bool inner) {
 	if(widgets.size() == 0)
 		return NULL;
 
-	if(current >= 0 && current < widgets.size())
+	if(current >= 0 && current < widgets.size()) {
+		if(inner && widgets.at(current)->getPrev())
+			return NULL;
+
 		widgets.at(current)->in_focus = false;
+	}
 
 	--current;
 
@@ -108,11 +123,19 @@ void TabList::defocus() {
 void TabList::logic() {
 	if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 		inpt->lock[DOWN] = true;
-		getNext();
+		getNext(true);
 	}
 	else if(inpt->pressing[UP] && !inpt->lock[UP]) {
 		inpt->lock[UP] = true;
+		getPrev(true);
+	}
+	else if(inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
+		inpt->lock[LEFT] = true;
 		getPrev();
+	}
+	else if(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+		inpt->lock[RIGHT] = true;
+		getNext();
 	}
 
 	if(inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
