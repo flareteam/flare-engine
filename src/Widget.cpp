@@ -123,19 +123,19 @@ void TabList::defocus() {
 void TabList::logic() {
 	if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 		inpt->lock[DOWN] = true;
-		getNext(true);
+		getNext();
 	}
 	else if(inpt->pressing[UP] && !inpt->lock[UP]) {
 		inpt->lock[UP] = true;
-		getPrev(true);
+		getPrev();
 	}
 	else if(inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
 		inpt->lock[LEFT] = true;
-		getPrev();
+		getPrev(false);
 	}
 	else if(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
 		inpt->lock[RIGHT] = true;
-		getNext();
+		getNext(false);
 	}
 
 	if(inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
