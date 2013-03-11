@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "SharedResources.h"
 #include "Widget.h"
 
 Widget::Widget()
@@ -102,4 +103,25 @@ void TabList::defocus() {
 		widgets.at(current)->in_focus = false;
 
 	current = -1;
+}
+
+void TabList::logic() {
+	if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+		inpt->lock[DOWN] = true;
+		getNext();
+	}
+	else if(inpt->pressing[UP] && !inpt->lock[UP]) {
+		inpt->lock[UP] = true;
+		getPrev();
+	}
+
+	if(inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		inpt->lock[ACCEPT] = true;
+		activate();	// Activate the currently infocus item
+	}
+
+	// If mouse is clicked, defocus current tabindex item
+	if(inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+		defocus();
+	}
 }
