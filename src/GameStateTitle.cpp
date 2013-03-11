@@ -84,6 +84,10 @@ void GameStateTitle::loadGraphics() {
 void GameStateTitle::logic() {
 	button_play->enabled = ENABLE_PLAYGAME;
 
+	if(inpt->pressing[CANCEL]) {
+		exitRequested = true;
+	}
+
 	if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 		inpt->lock[DOWN] = true;
 		tablist.getNext();
