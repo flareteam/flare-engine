@@ -56,6 +56,8 @@ public:
 	Widget* getPrev();			// Decrement current selected, return widget
 	void activate();			// Fire off what happens when the user presses 'accept'
 	void defocus();				// Call when user clicks outside of a widget, resets current
+
+	void logic();
 };
 
 #endif
