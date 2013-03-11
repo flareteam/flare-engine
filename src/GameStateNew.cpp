@@ -172,6 +172,10 @@ GameStateNew::GameStateNew() : GameState() {
 	loadOptions("hero_options.txt");
 	loadPortrait(portrait[0]);
 	setName(name[0]);
+
+	// Set up tab list
+	tablist.add(button_create);
+	tablist.add(button_exit);
 }
 
 void GameStateNew::loadGraphics() {
@@ -231,6 +235,8 @@ void GameStateNew:: setName(const string& default_name) {
 }
 
 void GameStateNew::logic() {
+	tablist.logic();
+
 	button_permadeath->checkClick();
 	if (show_classlist) class_list->checkClick();
 
