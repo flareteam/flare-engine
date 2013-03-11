@@ -86,6 +86,10 @@ void GameStateTitle::logic() {
 
 	snd->logic(Point(0,0));
 
+	if(inpt->pressing[CANCEL]) {
+		exitRequested = true;
+	}
+
 	if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 		inpt->lock[DOWN] = true;
 		tablist.getNext();
