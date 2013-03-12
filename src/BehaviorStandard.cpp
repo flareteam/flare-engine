@@ -263,7 +263,10 @@ void BehaviorStandard::checkPower() {
 
 			e->powers->activate(power_id, &e->stats, pursue_pos);
 			e->stats.power_ticks[power_slot] = e->stats.power_cooldown[power_slot];
-			e->stats.cooldown_ticks = e->stats.cooldown;
+			if (e->stats.effects.speed > 0)
+				e->stats.cooldown_ticks += ((100.0f / e->stats.effects.speed) * e->stats.cooldown);
+			else
+				e->stats.cooldown_ticks += 100 * e->stats.cooldown;
 
 			if (e->stats.activated_powerslot == ON_HALF_DEAD) {
 				e->stats.on_half_dead_casted = true;
