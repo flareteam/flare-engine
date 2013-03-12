@@ -880,7 +880,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 	int spDirection = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
     //add an enemy or minion depending on who is casting
-    if(src_stats->hero)
+    if(src_stats->hero || src_stats->minion)
     {
 
         Minion* spMinion = new Minion(this, NULL);
