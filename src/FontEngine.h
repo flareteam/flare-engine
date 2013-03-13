@@ -76,6 +76,7 @@ public:
 
 	SDL_Color getColor(std::string _color);
 	void setFont(std::string _font);
+	TTF_Font* getFontPtr();
 
 	int calc_width(const std::string& text);
 	Point calc_size(const std::string& text_with_newlines, int width);
