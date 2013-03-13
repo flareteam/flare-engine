@@ -216,15 +216,15 @@ void EnemyManager::logic() {
 					 << enemies[i]->stats.sfx_prefix << "')" << endl;
 			} else {
 				if (enemies[i]->sfx_phys)
-					snd->play(sound_phys[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
+					snd->play(sound_phys[pref_id]);
 				if (enemies[i]->sfx_ment)
-					snd->play(sound_ment[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
+					snd->play(sound_ment[pref_id]);
 				if (enemies[i]->sfx_hit)
-					snd->play(sound_hit[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
+					snd->play(sound_hit[pref_id]);
 				if (enemies[i]->sfx_die)
-					snd->play(sound_die[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
+					snd->play(sound_die[pref_id]);
 				if (enemies[i]->sfx_critdie)
-					snd->play(sound_critdie[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
+					snd->play(sound_critdie[pref_id]);
 			}
 
 			// clear sound flags
