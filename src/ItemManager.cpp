@@ -410,7 +410,7 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 }
 
 void ItemManager::playSound(int item, Point pos) {
-  snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+  snd->play(items[item].sfx);
 }
 
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {

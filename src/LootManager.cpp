@@ -354,7 +354,7 @@ void LootManager::addLoot(ItemStack stack, Point pos) {
 	ld.loadAnimation(animationname);
 	ld.currency = 0;
 	loot.push_back(ld);
-	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+	snd->play(sfx_loot);
 }
 
 void LootManager::addCurrency(int count, Point pos) {
@@ -377,7 +377,7 @@ void LootManager::addCurrency(int count, Point pos) {
 
 	ld.currency = count;
 	loot.push_back(ld);
-	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+	snd->play(sfx_loot);
 }
 
 /**
@@ -511,7 +511,7 @@ void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_de
 }
 
 void LootManager::playCurrencySound(Point pos) {
-  snd->play(sfx_currency, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+  snd->play(sfx_currency);
 }
 
 LootManager::~LootManager() {
