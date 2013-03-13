@@ -548,7 +548,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
 				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
+				if (stats.effects.speed <= 100) stats.cooldown_ticks += stats.cooldown;
 			}
 			break;
 
@@ -568,7 +568,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
 				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
+				if (stats.effects.speed <= 100) stats.cooldown_ticks += stats.cooldown;
 			}
 			break;
 
@@ -586,7 +586,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
 				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
+				if (stats.effects.speed <= 100) stats.cooldown_ticks += stats.cooldown;
 			}
 			break;
 
@@ -611,6 +611,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
 				stats.cur_state = AVATAR_STANCE;
+				stats.resillience = stats.resillience_base;
 			}
 
 			break;
@@ -799,8 +800,9 @@ bool Avatar::takeHit(const Hazard &h) {
 		}
 		else if (prev_hp > stats.hp) { // only interrupt if damage was taken
 			snd->play(sound_hit);
-			if (!percentChance(stats.poise)) {
+			if (!percentChance(stats.poise) && stats.resillience == stats.resillience_base) {
 				stats.cur_state = AVATAR_HIT;
+				stats.resillience--;
 			}
 		}
 
