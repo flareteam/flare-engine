@@ -222,6 +222,8 @@ public:
 
 	int poise;
 	int poise_base;
+	int resillience;
+	int resillience_base;
 
 	// state
 	int cur_state;

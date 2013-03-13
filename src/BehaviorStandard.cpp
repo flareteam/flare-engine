@@ -456,7 +456,10 @@ void BehaviorStandard::updateState() {
 			if (e->activeAnimation->isFirstFrame()) {
 				e->stats.effects.triggered_hit = true;
 			}
-			if (e->activeAnimation->isLastFrame()) e->newState(ENEMY_STANCE);
+			if (e->activeAnimation->isLastFrame()) {
+				e->newState(ENEMY_STANCE);
+				e->stats.resillience = e->stats.resillience_base;
+			}
 			break;
 
 		case ENEMY_DEAD:
