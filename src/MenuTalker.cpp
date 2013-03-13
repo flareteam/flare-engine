@@ -93,6 +93,7 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 				portrait_you.w = eatFirstInt(infile.val,',');
 				portrait_you.h = eatFirstInt(infile.val,',');
 			}
+
 		}
 		infile.close();
 	} else fprintf(stderr, "Unable to open menus/talker.txt!\n");
@@ -196,11 +197,13 @@ void MenuTalker::createBuffer() {
 
 	// speaker name
 	string etype = npc->dialog[dialog_node][event_cursor].type;
+	string who;
+
 	if (etype == "him" || etype == "her") {
-		line = npc->name + ": ";
+		who = npc->name;
 	}
 	else if (etype == "you") {
-		line = hero_name + ": ";
+		who = hero_name;
 	}
 
 	line = line + npc->dialog[dialog_node][event_cursor].s;
@@ -209,8 +212,11 @@ void MenuTalker::createBuffer() {
 	SDL_FreeSurface(msg_buffer);
 	msg_buffer = createAlphaSurface(text_pos.w,text_pos.h);
 	font->setFont("font_regular");
-	font->render(line, text_offset.x, text_offset.y, JUSTIFY_LEFT, msg_buffer, text_pos.w - text_offset.x*2, color_normal);
 
+	TTF_SetFontStyle(font->getFontPtr(), TTF_STYLE_BOLD);
+	font->render(who, 10, 10, JUSTIFY_LEFT, msg_buffer, 512, color_normal);
+	TTF_SetFontStyle(font->getFontPtr(), TTF_STYLE_NORMAL);
+	font->render(line, text_offset.x, text_offset.y+15, JUSTIFY_LEFT, msg_buffer, text_pos.w - text_offset.x*2, color_normal);
 }
 
 void MenuTalker::render() {

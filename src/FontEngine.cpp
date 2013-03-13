@@ -121,6 +121,10 @@ void FontEngine::setFont(string _font) {
 	}
 }
 
+TTF_Font* FontEngine::getFontPtr() {
+	return this->active_font->ttfont;
+}
+
 /**
  * For single-line text, just calculate the width
  */
