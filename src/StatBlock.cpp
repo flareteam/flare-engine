@@ -152,6 +152,8 @@ StatBlock::StatBlock()
 	, melee_weapon_power(0)
 	, mental_weapon_power(0)
 	, ranged_weapon_power(0)
+	, resillience(8)
+	, resillience_base(8)
 	, currency(0)
 	, death_penalty(false)
 	, defeat_status("")			// enemy only
@@ -278,6 +280,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "absorb_min") absorb_min = num;
 		else if (infile.key == "absorb_max") absorb_max = num;
 		else if (infile.key == "poise") poise = poise_base = num;
+		else if (infile.key == "resillience_base") resillience = resillience_base = num;
 
 		// behavior stats
 		else if (infile.key == "flying") {
@@ -491,6 +494,13 @@ void StatBlock::logic() {
 		takeDamage(effects.damage);
 	}
 
+	// decrement resillience counter
+	if(resillience > 0 && resillience < resillience_base){
+		--resillience;
+	} else if(resillience == 0){
+		resillience = resillience_base;
+	}
+
 	// apply healing over time
 	if (effects.hpot > 0) {
 		comb->addMessage(msg->get("+%d HP",effects.hpot), pos, COMBAT_MESSAGE_BUFF);
@@ -619,6 +629,8 @@ void StatBlock::loadHeroStats() {
 			stat_points_per_level = value;
 		} else if (infile.key == "power_points_per_level") {
 			power_points_per_level = value;
+		} else if(infile.key == "resillience_base") {
+			resillience_base = value;
 		}
 	}
 	infile.close();
