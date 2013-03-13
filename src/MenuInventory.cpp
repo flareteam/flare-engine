@@ -748,7 +748,6 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	}
 
 	// defaults
-	stats->recalc_alt();
 	stats->powers_list_items.clear();
 
 	// the default for weapons/absorb are not added to equipped items
@@ -786,6 +785,14 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		stats->absorb_min = stats->absorb_min_default;
 	if (stats->absorb_max < stats->absorb_max_default)
 		stats->absorb_max = stats->absorb_max_default;
+
+	// apply bonus_per_* stats
+	stats->dmg_melee_min += stats->get_physical() * stats->bonus_per_physical;
+	stats->dmg_melee_max += stats->get_physical() * stats->bonus_per_physical;
+	stats->dmg_ranged_min += stats->get_offense() * stats->bonus_per_offense;
+	stats->dmg_ranged_max += stats->get_offense() * stats->bonus_per_offense;
+	stats->dmg_ment_min += stats->get_mental() * stats->bonus_per_mental;
+	stats->dmg_ment_max += stats->get_mental() * stats->bonus_per_mental;
 
 	// update stat display
 	stats->refresh_stats = true;

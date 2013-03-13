@@ -339,33 +339,30 @@ void MenuCharacter::refreshStats() {
 	int bonus;
 
 	if (show_stat[6]) {
-		bonus = stats->get_physical() * stats->bonus_per_physical;
 		ss.str("");
 		ss << msg->get("Melee Damage:") << " ";
 		if (stats->dmg_melee_max > 0)
-			ss << stats->dmg_melee_min + bonus << "-" << stats->dmg_melee_max + bonus;
+			ss << stats->dmg_melee_min << "-" << stats->dmg_melee_max;
 		else
 			ss << "-";
 		statList->set(visible_stats++, ss.str(),"");
 	}
 
 	if (show_stat[7]) {
-		bonus = stats->get_offense() * stats->bonus_per_offense;
 		ss.str("");
 		ss << msg->get("Ranged Damage:") << " ";
 		if (stats->dmg_ranged_max > 0)
-			ss << stats->dmg_ranged_min + bonus << "-" << stats->dmg_ranged_max + bonus;
+			ss << stats->dmg_ranged_min << "-" << stats->dmg_ranged_max;
 		else
 			ss << "-";
 		statList->set(visible_stats++, ss.str(),"");
 	}
 
 	if (show_stat[8]) {
-		bonus = stats->get_mental() * stats->bonus_per_mental;
 		ss.str("");
 		ss << msg->get("Mental Damage:") << " ";
 		if (stats->dmg_ment_max > 0)
-			ss << stats->dmg_ment_min + bonus << "-" << stats->dmg_ment_max + bonus;
+			ss << stats->dmg_ment_min << "-" << stats->dmg_ment_max;
 		else
 			ss << "-";
 		statList->set(visible_stats++, ss.str(),"");
