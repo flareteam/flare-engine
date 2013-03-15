@@ -81,9 +81,6 @@ EndIf (NOT SDLTTF_FOUND)
 # Sources
 
 Set (FLARE_SOURCES
-	./src/Minion.cpp
-	./src/MinionManager.cpp
-	./src/MinionBehavior.cpp
 	./src/Entity.cpp
 	./src/Animation.cpp
 	./src/AnimationManager.cpp
