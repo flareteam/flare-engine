@@ -84,6 +84,7 @@ GameStatePlay::GameStatePlay()
 	, loading_bg(IMG_Load(mods->locate("images/menus/confirm_bg.png").c_str()))
 	, npc_id(-1)
 	, eventDialogOngoing(false)
+	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
 	, game_slot(0)
 {
@@ -795,6 +796,10 @@ void GameStatePlay::logic() {
 			menu->act->locked[count] = true;
 		} else if (pc->stats.manual_untransform && pc->untransform_power == 0)
 			fprintf(stderr, "Untransform power not found, you can't untransform manually\n");
+
+		// reapply equipment if the transformation allows it
+		if (pc->stats.transform_with_equipment)
+			menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
 	}
 	// revert hero powers
 	if (pc->revertPowers) {

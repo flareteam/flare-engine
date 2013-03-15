@@ -93,6 +93,7 @@ public:
 	void takeDamage(int dmg);
 	void recalc();
 	void recalc_alt();
+	void calcBaseDmgAndAbs();
 	void logic();
 
 	bool alive;
@@ -214,6 +215,7 @@ public:
 	int transform_duration;
 	int transform_duration_total;
 	bool manual_untransform;
+	bool transform_with_equipment;
 	EffectManager effects;
 
 	Point pos;
@@ -223,6 +225,9 @@ public:
 
 	int poise;
 	int poise_base;
+
+	int cooldown_hit;
+	int cooldown_hit_ticks;
 
 	// state
 	int cur_state;

@@ -53,7 +53,7 @@ NPC::NPC(MapRenderer *_map, ItemManager *_items)
 	, portrait(NULL)
 	, talker(false)
 	, vendor(false)
-	// stock
+	, stock(ItemStorage())
 	, stock_count(0)
 	, vox_intro(vector<SoundManager::SoundID>())
 	, vox_quests(vector<SoundManager::SoundID>())
@@ -157,6 +157,15 @@ void NPC::load(const string& npc_id, int hero_level) {
 					while (infile.val != "") {
 						stack.item = toInt(infile.nextValue());
 						stock.add(stack);
+					}
+				}
+				else if (infile.key == "status_stock") {
+					if (map->camp->checkStatus(infile.nextValue())) {
+						stack.quantity = 1;
+						while (infile.val != "") {
+							stack.item = toInt(infile.nextValue());
+							stock.add(stack);
+						}
 					}
 				}
 
@@ -323,10 +332,8 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 		/* roll a dialog for this group and add to result */
 		int di = it->second[rand() % it->second.size()];
 		result.push_back(di);
-		it++;
+		++it;
 	}
-
-
 }
 
 std::string NPC::getDialogTopic(unsigned int dialog_node) {

@@ -167,6 +167,7 @@ public:
 
 	int transform_duration;
 	bool manual_untransform; // true binds to the power another recurrence power
+	bool keep_equipment;
 
 	// special effects
 	bool buff;
@@ -249,6 +250,7 @@ public:
 
 		, transform_duration(0)
 		, manual_untransform(false)
+		, keep_equipment(false)
 
 		, buff(false)
 		, buff_teleport(false)

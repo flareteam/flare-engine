@@ -110,6 +110,7 @@ StatBlock::StatBlock()
 	, transform_duration(0)
 	, transform_duration_total(0)
 	, manual_untransform(false)
+	, transform_with_equipment(false)
 	, effects(EffectManager())
 	, pos(Point())
 	, forced_speed(Point())
@@ -117,6 +118,8 @@ StatBlock::StatBlock()
 	, hero_cooldown(vector<int>(POWER_COUNT, 0)) // hero only
 	, poise(0)
 	, poise_base(0)
+	, cooldown_hit(0)
+	, cooldown_hit_ticks(0)
 	, cur_state(0)
 	, waypoints(queue<Point>())		// enemy only
 	, waypoint_pause(0)				// enemy only
@@ -322,6 +325,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "chance_on_half_dead") power_chance[ON_HALF_DEAD] = num;
 		else if (infile.key == "chance_on_debuff") power_chance[ON_DEBUFF] = num;
 		else if (infile.key == "chance_on_join_combat") power_chance[ON_JOIN_COMBAT] = num;
+		else if (infile.key == "cooldown_hit") cooldown_hit = num;
 
 		else if (infile.key == "passive_powers") {
 			std::string p = infile.nextValue();
@@ -400,6 +404,25 @@ void StatBlock::recalc() {
 }
 
 /**
+ * Base damage and absorb is 0
+ * Plus an optional bonus_per_[base stat]
+ */
+void StatBlock::calcBaseDmgAndAbs() {
+
+	// this bonus is skipped for the default level 1 of a stat
+	int phys0 = get_physical() -1;
+	int ment0 = get_mental() -1;
+	int off0 = get_offense() -1;
+	int def0 = get_defense() -1;
+
+	dmg_melee_min = dmg_melee_max = bonus_per_physical * phys0;
+	dmg_ment_min = dmg_ment_max = bonus_per_mental * ment0;
+	dmg_ranged_min = dmg_ranged_max = bonus_per_offense * off0;
+	absorb_min = absorb_max = bonus_per_defense * def0;
+
+}
+
+/**
  * Recalc derived stats from base stats + effect bonuses
  */
 void StatBlock::recalc_alt() {
@@ -425,6 +448,7 @@ void StatBlock::recalc_alt() {
 		accuracy = accuracy_base + (accuracy_per_level * lev0) + (accuracy_per_offense * off0) + effects.bonus_accuracy;
 		avoidance = avoidance_base + (avoidance_per_level * lev0) + (avoidance_per_defense * def0) + effects.bonus_avoidance;
 		crit = crit_base + (crit_per_level * lev0) + effects.bonus_crit;
+
 	} else {
 		maxhp = hp_base + effects.bonus_hp;
 		maxmp = mp_base + effects.bonus_mp;
@@ -491,6 +515,9 @@ void StatBlock::logic() {
 	if (effects.damage > 0) {
 		takeDamage(effects.damage);
 	}
+
+	if(cooldown_hit_ticks > 0)
+		cooldown_hit_ticks--;
 
 	// apply healing over time
 	if (effects.hpot > 0) {
@@ -620,6 +647,8 @@ void StatBlock::loadHeroStats() {
 			stat_points_per_level = value;
 		} else if (infile.key == "power_points_per_level") {
 			power_points_per_level = value;
+		} else if (infile.key == "cooldown_hit") {
+			cooldown_hit = value;
 		}
 	}
 	infile.close();
