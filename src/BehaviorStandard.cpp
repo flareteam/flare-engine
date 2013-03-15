@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "PowerManager.h"
 #include "StatBlock.h"
 #include "UtilsMath.h"
-#include "EnemyManager.h"
 
 BehaviorStandard::BehaviorStandard(Enemy *_e) : EnemyBehavior(_e) {
 	los = false;
@@ -130,6 +129,12 @@ void BehaviorStandard::findTarget() {
 	else
 		dist = 0;
 
+	// check line-of-sight
+	if (dist < e->stats.threat_range && e->stats.hero_alive)
+		los = e->map->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, e->stats.hero_pos.x, e->stats.hero_pos.y);
+	else
+		los = false;
+
 	// check entering combat (because the player hit the enemy)
 	if (e->stats.join_combat) {
 		if (dist <= (stealth_threat_range *2)) {
@@ -171,36 +176,12 @@ void BehaviorStandard::findTarget() {
 		pursue_pos.x = e->stats.hero_pos.x;
 		pursue_pos.y = e->stats.hero_pos.y;
 
-		//if there are minions closer than the hero, target a minion instead
-        std::vector<Minion*>* minions = &(e->enemyManager->minionManager->minions);
-        if(e->stats.in_combat) {
-            for (unsigned int i=0; i < (*minions).size(); i++) {
-                Minion* minion = (*minions)[i];
-                if(!minion->stats.corpse)
-                {
-                    //now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest minion)
-                    int minionDist = e->getDistance(minion->stats.pos);
-                    int currentTargetDist = e->getDistance(pursue_pos);
-                    if(minionDist < currentTargetDist){
-                        pursue_pos.x = minion->stats.pos.x;
-                        pursue_pos.y = minion->stats.pos.y;
-                    }
-                }
-            }
-        }
-
 		if (!(e->stats.in_combat || e->stats.waypoints.empty())) {
 			Point waypoint = e->stats.waypoints.front();
 			pursue_pos.x = waypoint.x;
 			pursue_pos.y = waypoint.y;
 		}
 	}
-
-	// check line-of-sight
-    if (dist < e->stats.threat_range && e->stats.hero_alive)
-        los = e->map->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
-    else
-        los = false;
 }
 
 
@@ -238,7 +219,7 @@ void BehaviorStandard::checkPower() {
 		}
 
 		// check ranged power use
-		if (e->getDistance(pursue_pos) > e->stats.melee_range) {
+		if (dist > e->stats.melee_range) {
 
 			if (percentChance(e->stats.power_chance[RANGED_PHYS]) && e->stats.power_ticks[RANGED_PHYS] == 0) {
 				e->newState(ENEMY_POWER);

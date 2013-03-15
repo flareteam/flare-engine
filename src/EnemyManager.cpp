@@ -137,8 +137,6 @@ void EnemyManager::handleNewMap () {
 
 		Enemy *e = getEnemyPrototype(me.type);
 
-		e->enemyManager = this;
-
 		e->stats.waypoints = me.waypoints;
 		e->stats.pos.x = me.pos.x;
 		e->stats.pos.y = me.pos.y;
@@ -168,7 +166,6 @@ void EnemyManager::handleSpawn() {
 		Enemy *e = new Enemy(powers, map);
 		// factory
 		e->eb = new BehaviorStandard(e);
-		e->enemyManager = this;
 
 		e->stats.pos.x = espawn.pos.x;
 		e->stats.pos.y = espawn.pos.y;

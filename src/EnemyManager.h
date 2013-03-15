@@ -71,7 +71,6 @@ public:
 	Enemy *enemyFocus(Point mouse, Point cam, bool alive_only);
 
 	// vars
-	MinionManager *minionManager;
 	std::vector<Enemy*> enemies;
 	Point hero_pos;
 	bool hero_alive;

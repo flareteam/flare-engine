@@ -62,7 +62,6 @@ public:
 	Hazard *haz;
 	EnemyBehavior *eb;
 	PowerManager *powers;
-	EnemyManager *enemyManager;
 
 	// sound effects flags
 	bool sfx_phys;

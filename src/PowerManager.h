@@ -31,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "MapRenderer.h"
 #include "Utils.h"
-#include "Minion.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -80,8 +79,6 @@ const int TRIGGER_HIT = 1;
 const int TRIGGER_HALFDEATH = 2;
 const int TRIGGER_JOINCOMBAT = 3;
 const int TRIGGER_DEATH = 4;
-
-class Minion;
 
 class PostEffect {
 public:
@@ -316,7 +313,6 @@ public:
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> enemies; // output; read by PowerManager
-    std::queue<Minion *> minions;
 
 	// shared sounds for power special effects
 	std::vector<SoundManager::SoundID> sfx;

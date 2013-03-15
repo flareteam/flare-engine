@@ -49,7 +49,6 @@ class NPCManager;
 class PowerManager;
 class QuestLog;
 class WidgetLabel;
-class MinionManager;
 
 class Title{
 public:
@@ -80,7 +79,6 @@ private:
 	MapRenderer *map;
 	Avatar *pc;
 	EnemyManager *enemies;
-	MinionManager *minions;
 	HazardManager *hazards;
 	MenuManager *menu;
 	LootManager *loot;
