@@ -64,6 +64,8 @@ MapRenderer::MapRenderer(CampaignManager *_camp)
  , teleportation(false)
  , teleport_destination(Point())
  , respawn_point(Point())
+ , cutscene(false)
+ , cutscene_file("")
  , log_msg("")
  , shaky_cam_ticks(0)
  , stash(false)
@@ -548,6 +550,9 @@ int MapRenderer::load(string filename) {
 				}
 				else if (infile.key == "npc") {
 					new_npc.id = infile.val;
+					e->s = infile.val;
+				}
+				else if (infile.key == "cutscene") {
 					e->s = infile.val;
 				}
 			}
@@ -1346,6 +1351,10 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		}
 		else if (ec->type == "npc") {
 			event_npc = ec->s;
+		}
+		else if (ec->type == "cutscene") {
+			cutscene = true;
+			cutscene_file = ec->s;
 		}
 	}
 	if (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event)
