@@ -26,6 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyBehavior.h"
 #include "BehaviorStandard.h"
 #include "BehaviorAlly.h"
+#include "Avatar.h"
+
 
 #include <iostream>
 #include <algorithm>
@@ -107,11 +109,16 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 void EnemyManager::handleNewMap () {
 
 	Map_Enemy me;
+	std::queue<Enemy *> allies;
 
 	// delete existing enemies
 	for (unsigned int i=0; i < enemies.size(); i++) {
-		anim->decreaseCount(enemies[i]->animationSet->getName());
-		delete enemies[i];
+        anim->decreaseCount(enemies[i]->animationSet->getName());
+        if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse)
+            allies.push(enemies[i]);
+        else{
+            delete enemies[i];
+        }
 	}
 	enemies.clear();
 
@@ -149,6 +156,24 @@ void EnemyManager::handleNewMap () {
 
 		map->collider.block(me.pos.x, me.pos.y);
 	}
+
+	while (!allies.empty()){
+
+        Enemy *e = allies.front();
+		allies.pop();
+
+        //dont need the result of this. its only called to handle animation and sound
+		getEnemyPrototype(e->type);
+
+		e->stats.pos.x = pc->stats.pos.x;
+		e->stats.pos.y = pc->stats.pos.y;
+		e->stats.direction = pc->stats.direction;
+
+		enemies.push_back(e);
+
+		map->collider.block(e->stats.pos.x, e->stats.pos.y);
+	}
+
 	anim->cleanUp();
 }
 
@@ -175,6 +200,7 @@ void EnemyManager::handleSpawn() {
         e->summoned = true;
         e->summoned_power_index = espawn.summon_power_index;
 
+        e->type = espawn.type;
 		e->stats.pos.x = espawn.pos.x;
 		e->stats.pos.y = espawn.pos.y;
 		e->stats.direction = espawn.direction;
