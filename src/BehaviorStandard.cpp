@@ -25,9 +25,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsMath.h"
 
-BehaviorStandard::BehaviorStandard(Enemy *_e) : EnemyBehavior(_e) {
+BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior(_e, _em) {
 	los = false;
-	dist = 0;
+	hero_dist = 0;
+	target_dist = 0;
 	pursue_pos.x = pursue_pos.y = -1;
 }
 
@@ -59,7 +60,7 @@ void BehaviorStandard::doUpkeep() {
 	e->stats.logic();
 
 	// heal rapidly while not in combat
-	if (!e->stats.in_combat) {
+	if (!e->stats.in_combat && !e->stats.hero_ally) {
 		if (e->stats.alive && e->stats.hero_alive) {
 			e->stats.hp++;
 			if (e->stats.hp > e->stats.maxhp) e->stats.hp = e->stats.maxhp;
@@ -89,7 +90,8 @@ void BehaviorStandard::doUpkeep() {
 
 	// check for bleeding to death
 	if (e->stats.hp <= 0 && !(e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD)) {
-		e->doRewards();
+        if(!e->stats.hero_ally)
+            e->doRewards();
 		e->stats.effects.triggered_death = true;
 		e->stats.cur_state = ENEMY_DEAD;
 		e->map->collider.unblock(e->stats.pos.x,e->stats.pos.y);
@@ -125,19 +127,14 @@ void BehaviorStandard::findTarget() {
 
 	// check distance and line of sight between enemy and hero
 	if (e->stats.hero_alive)
-		dist = e->getDistance(e->stats.hero_pos);
+		hero_dist = e->getDistance(e->stats.hero_pos);
 	else
-		dist = 0;
+		hero_dist = 0;
 
-	// check line-of-sight
-	if (dist < e->stats.threat_range && e->stats.hero_alive)
-		los = e->map->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, e->stats.hero_pos.x, e->stats.hero_pos.y);
-	else
-		los = false;
 
 	// check entering combat (because the player hit the enemy)
 	if (e->stats.join_combat) {
-		if (dist <= (stealth_threat_range *2)) {
+		if (hero_dist <= (stealth_threat_range *2)) {
 			e->stats.join_combat = false;
 		}
 		else {
@@ -147,7 +144,7 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check entering combat (because the player got too close)
-	if (!e->stats.in_combat && los && dist < stealth_threat_range) {
+	if (!e->stats.in_combat && los && hero_dist < stealth_threat_range) {
 
 		if (e->stats.in_combat) e->stats.join_combat = true;
 		e->stats.in_combat = true;
@@ -155,7 +152,7 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check exiting combat (player died or got too far away)
-	if (e->stats.in_combat && dist > (e->stats.threat_range *2) && !e->stats.join_combat) {
+	if (e->stats.in_combat && hero_dist > (e->stats.threat_range *2) && !e->stats.join_combat) {
 		e->stats.in_combat = false;
 	}
 
@@ -175,6 +172,25 @@ void BehaviorStandard::findTarget() {
 		// by default, the enemy pursues the hero directly
 		pursue_pos.x = e->stats.hero_pos.x;
 		pursue_pos.y = e->stats.hero_pos.y;
+		target_dist = hero_dist;
+
+
+		//if there are player allies closer than the hero, target an ally instead
+        if(e->stats.in_combat) {
+            for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+                if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally)
+                {
+                    //now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
+                    int ally_dist = e->getDistance(enemies->enemies[i]->stats.pos);
+                    if(ally_dist < target_dist){
+                        pursue_pos.x = enemies->enemies[i]->stats.pos.x;
+                        pursue_pos.y = enemies->enemies[i]->stats.pos.y;
+                        target_dist = ally_dist;
+                    }
+                }
+            }
+        }
+
 
 		if (!(e->stats.in_combat || e->stats.waypoints.empty())) {
 			Point waypoint = e->stats.waypoints.front();
@@ -182,6 +198,12 @@ void BehaviorStandard::findTarget() {
 			pursue_pos.y = waypoint.y;
 		}
 	}
+
+	// check line-of-sight
+	if (target_dist < e->stats.threat_range && e->stats.hero_alive)
+		los = e->map->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
+	else
+		los = false;
 }
 
 
@@ -219,7 +241,7 @@ void BehaviorStandard::checkPower() {
 		}
 
 		// check ranged power use
-		if (dist > e->stats.melee_range) {
+		if (target_dist > e->stats.melee_range) {
 
 			if (percentChance(e->stats.power_chance[RANGED_PHYS]) && e->stats.power_ticks[RANGED_PHYS] == 0) {
 				e->newState(ENEMY_POWER);
@@ -285,7 +307,7 @@ void BehaviorStandard::checkMove() {
 	if (e->stats.effects.stun) return;
 
 	// handle not being in combat and (not patrolling waypoints or waiting at waypoint)
-	if (!e->stats.in_combat && (e->stats.waypoints.empty() || e->stats.waypoint_pause_ticks > 0) && (!e->stats.wander || e->stats.wander_pause_ticks > 0)) {
+	if (!e->stats.hero_ally && !e->stats.in_combat && (e->stats.waypoints.empty() || e->stats.waypoint_pause_ticks > 0) && (!e->stats.wander || e->stats.wander_pause_ticks > 0)) {
 
 		if (e->stats.cur_state == ENEMY_MOVE) {
 			e->newState(ENEMY_STANCE);
@@ -317,49 +339,15 @@ void BehaviorStandard::checkMove() {
 			e->stats.turn_ticks = 0;
 		}
 	}
-	int prev_direction = e->stats.direction;
 
 	// try to start moving
 	if (e->stats.cur_state == ENEMY_STANCE) {
-
-		if (dist < e->stats.melee_range) {
-			// too close, do nothing
-		}
-		else if (percentChance(e->stats.chance_pursue)) {
-
-			if (e->move()) {
-				e->newState(ENEMY_MOVE);
-			}
-			else {
-
-				// hit an obstacle, try the next best angle
-				e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-				if (e->move()) {
-					e->newState(ENEMY_MOVE);
-				}
-				else e->stats.direction = prev_direction;
-			}
-		}
+        checkMoveStateStance();
 	}
 
 	// already moving
 	else if (e->stats.cur_state == ENEMY_MOVE) {
-
-		// close enough to the hero
-		if (dist < e->stats.melee_range) {
-			e->newState(ENEMY_STANCE);
-		}
-
-		// try to continue moving
-		else if (!e->move()) {
-
-			// hit an obstacle.  Try the next best angle
-			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-			if (!e->move()) {
-				e->newState(ENEMY_STANCE);
-				e->stats.direction = prev_direction;
-			}
-		}
+        checkMoveStateMove();
 	}
 
 	// if patrolling waypoints and has reached a waypoint, cycle to the next one
@@ -389,6 +377,48 @@ void BehaviorStandard::checkMove() {
 	e->map->collider.block(e->stats.pos.x, e->stats.pos.y);
 
 }
+
+void BehaviorStandard::checkMoveStateStance() {
+    if (hero_dist < e->stats.melee_range) {
+        // too close, do nothing
+    }
+    else if (percentChance(e->stats.chance_pursue)) {
+
+        if (e->move()) {
+            e->newState(ENEMY_MOVE);
+        }
+        else {
+
+            int prev_direction = e->stats.direction;
+
+            // hit an obstacle, try the next best angle
+            e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+            if (e->move()) {
+                e->newState(ENEMY_MOVE);
+            }
+            else e->stats.direction = prev_direction;
+        }
+    }
+}
+
+void BehaviorStandard::checkMoveStateMove() {
+    // close enough to the hero
+    if (hero_dist < e->stats.melee_range) {
+        e->newState(ENEMY_STANCE);
+    }
+
+    // try to continue moving
+    else if (!e->move()) {
+        int prev_direction = e->stats.direction;
+        // hit an obstacle.  Try the next best angle
+        e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+        if (!e->move()) {
+            e->newState(ENEMY_STANCE);
+            e->stats.direction = prev_direction;
+        }
+    }
+}
+
 
 /**
  * Perform miscellaneous state-based actions.
@@ -442,7 +472,10 @@ void BehaviorStandard::updateState() {
 		case ENEMY_SPAWN:
 
 			e->setAnimation("spawn");
-			if (e->activeAnimation->isLastFrame()) e->newState(ENEMY_STANCE);
+			if (e->activeAnimation->isLastFrame()){
+                e->newState(ENEMY_STANCE);
+                e->CheckSummonSustained();
+			}
 			break;
 
 		case ENEMY_BLOCK:

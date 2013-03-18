@@ -37,6 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 #include "UtilsMath.h"
+#include "EnemyManager.h"
 
 #include <sstream>
 
@@ -646,6 +647,12 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
 				stats.corpse = true;
+
+				//once the player dies, kill off any remaining summons
+                for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+                    if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally)
+                        enemies->enemies[i]->InstantDeath();
+                }
 			}
 
 			// allow respawn with Accept if not permadeath

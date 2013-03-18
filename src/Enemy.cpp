@@ -31,14 +31,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "PowerManager.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
+#include "Avatar.h"
 
 #include <sstream>
 
 using namespace std;
 
 
-Enemy::Enemy(PowerManager *_powers, MapRenderer *_map) : Entity(_map) {
+Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_map) {
 	powers = _powers;
+	enemies = _em;
 
 	stats.cur_state = ENEMY_STANCE;
 	stats.turn_ticks = MAX_FRAMES_PER_SEC;
@@ -58,6 +60,7 @@ Enemy::Enemy(PowerManager *_powers, MapRenderer *_map) : Entity(_map) {
 	sfx_critdie = false;
 	reward_xp = false;
 	instant_power = false;
+	summoned = false;
 
 	eb = NULL;
 }
@@ -66,8 +69,9 @@ Enemy::Enemy(const Enemy& e)
  : Entity(e)
  , type(e.type)
  , haz(NULL) // do not copy hazard. This constructor is used during mapload, so no hazard should be active.
- , eb(new BehaviorStandard(this))
+ , eb(new BehaviorStandard(this,e.enemies))
  , powers(e.powers)
+ , enemies(e.enemies)
  , sfx_phys(e.sfx_phys)
  , sfx_ment(e.sfx_ment)
  , sfx_hit(e.sfx_hit)
@@ -308,6 +312,10 @@ bool Enemy::takeHit(const Hazard &h) {
  * Upon enemy death, handle rewards (currency, xp, loot)
  */
 void Enemy::doRewards() {
+
+    if(stats.hero_ally)
+        return;
+
 	reward_xp = true;
 
 	// some creatures create special loot if we're on a quest
@@ -334,6 +342,39 @@ void Enemy::doRewards() {
 	}
 
 	LootManager::getInstance()->addEnemyLoot(this);
+}
+
+void Enemy::InstantDeath() {
+    stats.effects.triggered_death = true;
+    stats.cur_state = ENEMY_DEAD;
+
+    sfx_die = true;
+    stats.corpse_ticks = CORPSE_TIMEOUT;
+    stats.effects.clearEffects();
+}
+
+void Enemy::CheckSummonSustained(){
+    //if minion was raised by a spawn power
+    if(summoned && stats.hero_ally){
+
+        int maxSummons = enemies->pc->stats.mental_character + enemies->pc->stats.mental_additional;
+
+        int qtySummons = 0;
+        for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+            if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->summoned
+               && !enemies->enemies[i]->stats.corpse
+               && enemies->enemies[i]->summoned_power_index == summoned_power_index){
+                    qtySummons++;
+            }
+        }
+
+        //if total minions sumoned by this skill does not exceed the player mental ability
+        if(qtySummons > maxSummons)
+        {
+            InstantDeath();
+        }
+
+    }
 }
 
 /**

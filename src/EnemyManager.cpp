@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "EnemyBehavior.h"
 #include "BehaviorStandard.h"
+#include "BehaviorAlly.h"
 
 #include <iostream>
 #include <algorithm>
@@ -80,9 +81,9 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 			return new Enemy(prototypes[i]);
 		}
 
-	Enemy e = Enemy(powers, map);
+	Enemy e = Enemy(powers, map, this);
 
-	e.eb = new BehaviorStandard(&e);
+	e.eb = new BehaviorStandard(&e, this);
 	e.stats.load("enemies/" + type_id + ".txt");
 	e.type = type_id;
 
@@ -163,9 +164,16 @@ void EnemyManager::handleSpawn() {
 		espawn = powers->enemies.front();
 		powers->enemies.pop();
 
-		Enemy *e = new Enemy(powers, map);
+		Enemy *e = new Enemy(powers, map, this);
 		// factory
-		e->eb = new BehaviorStandard(e);
+		if(espawn.hero_ally)
+            e->eb = new BehaviorAlly(e, this);
+        else
+            e->eb = new BehaviorStandard(e, this);
+
+        e->stats.hero_ally = espawn.hero_ally;
+        e->summoned = true;
+        e->summoned_power_index = espawn.summon_power_index;
 
 		e->stats.pos.x = espawn.pos.x;
 		e->stats.pos.y = espawn.pos.y;

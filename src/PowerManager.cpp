@@ -463,6 +463,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 
 	if (powers[power_index].source_type == -1){
 		if (src_stats->hero) haz->source_type = SOURCE_TYPE_HERO;
+		else if (src_stats->hero_ally) haz->source_type = SOURCE_TYPE_ALLY;
 		else haz->source_type = SOURCE_TYPE_ENEMY;
 	}
 	else {
@@ -867,6 +868,9 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 	}
 
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	espawn.summon_power_index = power_index;
+	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
+
 	for (int i=0; i < powers[power_index].count; i++) {
 		enemies.push(espawn);
 	}

@@ -43,6 +43,7 @@ class MapCollision;
 const int SOURCE_TYPE_HERO = 0;
 const int SOURCE_TYPE_NEUTRAL = 1;
 const int SOURCE_TYPE_ENEMY = 2;
+const int SOURCE_TYPE_ALLY = 3;
 
 class Hazard {
 private:

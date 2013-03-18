@@ -81,6 +81,7 @@ EndIf (NOT SDLTTF_FOUND)
 # Sources
 
 Set (FLARE_SOURCES
+	./src/BehaviorAlly.cpp
 	./src/Entity.cpp
 	./src/Animation.cpp
 	./src/AnimationManager.cpp

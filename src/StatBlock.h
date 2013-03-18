@@ -100,6 +100,7 @@ public:
 	bool corpse; // creature is dead and done animating
 	int corpse_ticks;
 	bool hero; // else, enemy or other
+	bool hero_ally;
 	bool humanoid; // true for human, sceleton...; false for wyvern, snake...
 	bool permadeath;
 	bool transformed;

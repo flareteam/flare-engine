@@ -75,6 +75,7 @@ public:
 	Point hero_pos;
 	bool hero_alive;
 	int hero_stealth;
+	Avatar *pc;
 };
 
 

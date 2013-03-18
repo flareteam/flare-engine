@@ -28,14 +28,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENEMY_BEHAVIOR_H
 #define ENEMY_BEHAVIOR_H
 
+#include "EnemyManager.h"
+
 // fwd-declare Enemy class
 class Enemy;
 
 class EnemyBehavior {
 protected:
 	Enemy *e;
+	EnemyManager *enemies;
 public:
-	EnemyBehavior(Enemy *_e);
+	EnemyBehavior(Enemy *_e, EnemyManager *_em);
 	virtual ~EnemyBehavior();
 	virtual void logic();
 };

@@ -99,6 +99,7 @@ public:
 	~Avatar();
 
 	PowerManager *powers;
+	EnemyManager *enemies;
 
 	void init();
 	void loadLayerDefinitions();
