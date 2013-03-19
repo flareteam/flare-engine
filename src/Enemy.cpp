@@ -357,19 +357,48 @@ void Enemy::CheckSummonSustained(){
     //if minion was raised by a spawn power
     if(summoned && stats.hero_ally){
 
-        int maxSummons = enemies->pc->stats.mental_character + enemies->pc->stats.mental_additional;
+        Power *spawn_power = &powers->powers[summoned_power_index];
 
-        int qtySummons = 0;
+        int max_summons = 0;
+
+        if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_FIXED)
+            max_summons = spawn_power->spawn_limit_qty;
+        else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT)
+        {
+            int stat_val = 1;
+            switch(spawn_power->spawn_limit_stat){
+            case SPAWN_LIMIT_STAT_PHYSICAL:
+                stat_val = enemies->pc->stats.physical_character + enemies->pc->stats.physical_additional;
+                break;
+            case SPAWN_LIMIT_STAT_MENTAL:
+                stat_val = enemies->pc->stats.mental_character + enemies->pc->stats.mental_additional;
+                break;
+            case SPAWN_LIMIT_STAT_OFFENSE:
+                stat_val = enemies->pc->stats.offense_character + enemies->pc->stats.offense_additional;
+                break;
+            case SPAWN_LIMIT_STAT_DEFENSE:
+                stat_val = enemies->pc->stats.defense_character + enemies->pc->stats.defense_additional;
+                break;
+            }
+            max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
+        }
+        else
+            return;//unlimited or unknown mode
+
+        //if the power is available, there should be at least 1 allowed summon
+        if(max_summons < 1) max_summons = 1;
+
+        int qty_summons = 0;
         for (unsigned int i=0; i < enemies->enemies.size(); i++) {
             if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->summoned
                && !enemies->enemies[i]->stats.corpse
                && enemies->enemies[i]->summoned_power_index == summoned_power_index){
-                    qtySummons++;
+                    qty_summons++;
             }
         }
 
         //if total minions sumoned by this skill does not exceed the player mental ability
-        if(qtySummons > maxSummons)
+        if(qty_summons > max_summons)
         {
             InstantDeath();
         }

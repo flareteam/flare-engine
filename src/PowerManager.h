@@ -80,6 +80,15 @@ const int TRIGGER_HALFDEATH = 2;
 const int TRIGGER_JOINCOMBAT = 3;
 const int TRIGGER_DEATH = 4;
 
+const int SPAWN_LIMIT_MODE_FIXED = 0;
+const int SPAWN_LIMIT_MODE_STAT = 1;
+const int SPAWN_LIMIT_MODE_UNLIMITED = 2;
+
+const int SPAWN_LIMIT_STAT_PHYSICAL = 0;
+const int SPAWN_LIMIT_STAT_MENTAL = 1;
+const int SPAWN_LIMIT_STAT_OFFENSE = 2;
+const int SPAWN_LIMIT_STAT_DEFENSE = 3;
+
 class PostEffect {
 public:
 	int id;
@@ -182,6 +191,10 @@ public:
 	// spawn info
 	std::string spawn_type;
 	int target_neighbor;
+	int spawn_limit_mode;
+    int spawn_limit_qty;
+    int spawn_limit_every;
+    int spawn_limit_stat;
 
 	Power()
 		: type(-1)
@@ -262,6 +275,10 @@ public:
 		, allow_power_mod(false)
 		, spawn_type("")
 		, target_neighbor(0)
+		, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
+        , spawn_limit_qty(1)
+        , spawn_limit_every(1)
+        , spawn_limit_stat(SPAWN_LIMIT_STAT_MENTAL)
 	{}
 
 };

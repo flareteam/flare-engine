@@ -222,6 +222,7 @@ void EnemyManager::handleSpawn() {
 
 		// special animation state for spawning enemies
 		e->stats.cur_state = ENEMY_SPAWN;
+
 		enemies.push_back(e);
 
 		map->collider.block(espawn.pos.x, espawn.pos.y);

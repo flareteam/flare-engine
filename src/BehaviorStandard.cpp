@@ -472,7 +472,8 @@ void BehaviorStandard::updateState() {
 		case ENEMY_SPAWN:
 
 			e->setAnimation("spawn");
-			if (e->activeAnimation->isLastFrame()){
+			//the second check is needed in case the entity does not have a spawn animation
+			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "spawn"){
                 e->newState(ENEMY_STANCE);
                 e->CheckSummonSustained();
 			}
