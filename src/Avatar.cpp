@@ -776,8 +776,8 @@ bool Avatar::takeHit(const Hazard &h) {
 		// after effects
 		if (stats.hp > 0 && dmg > 0) {
 
-			if (h.mod_power > 0) powers->effect(&stats, h.mod_power);
-			powers->effect(&stats, h.power_index);
+			if (h.mod_power > 0) powers->effect(&stats, h.mod_power, h.source_type);
+			powers->effect(&stats, h.power_index, h.source_type);
 
 			if (!stats.effects.immunity) {
 				if (stats.effects.forced_move) {

@@ -61,6 +61,7 @@ Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Enti
 	reward_xp = false;
 	instant_power = false;
 	summoned = false;
+	kill_source_type = SOURCE_TYPE_NEUTRAL;
 
 	eb = NULL;
 }
@@ -79,6 +80,7 @@ Enemy::Enemy(const Enemy& e)
  , sfx_critdie(e.sfx_critdie)
  , reward_xp(e.reward_xp)
  , instant_power(e.instant_power)
+ , kill_source_type(e.kill_source_type)
 {
 	assert(e.haz == NULL);
 }
@@ -236,8 +238,8 @@ bool Enemy::takeHit(const Hazard &h) {
 		// after effects
 		if (stats.hp > 0) {
 
-			if (h.mod_power > 0) powers->effect(&stats, h.mod_power);
-			powers->effect(&stats, h.power_index);
+			if (h.mod_power > 0) powers->effect(&stats, h.mod_power,h.source_type);
+			powers->effect(&stats, h.power_index,h.source_type);
 
 			if (stats.effects.forced_move) {
 				float theta = powers->calcTheta(stats.hero_pos.x, stats.hero_pos.y, stats.pos.x, stats.pos.y);
@@ -270,14 +272,14 @@ bool Enemy::takeHit(const Hazard &h) {
 		if (dmg > 0) {
 
 			if (stats.hp <= 0 && crit) {
-				doRewards();
+				doRewards(h.source_type);
 				stats.effects.triggered_death = true;
 				stats.cur_state = ENEMY_CRITDEAD;
 				map->collider.unblock(stats.pos.x,stats.pos.y);
 
 			}
 			else if (stats.hp <= 0) {
-				doRewards();
+				doRewards(h.source_type);
 				stats.effects.triggered_death = true;
 				stats.cur_state = ENEMY_DEAD;
 				map->collider.unblock(stats.pos.x,stats.pos.y);
@@ -311,12 +313,13 @@ bool Enemy::takeHit(const Hazard &h) {
 /**
  * Upon enemy death, handle rewards (currency, xp, loot)
  */
-void Enemy::doRewards() {
+void Enemy::doRewards(int source_type) {
 
     if(stats.hero_ally)
         return;
 
 	reward_xp = true;
+	kill_source_type = source_type;
 
 	// some creatures create special loot if we're on a quest
 	if (stats.quest_loot_requires != "") {

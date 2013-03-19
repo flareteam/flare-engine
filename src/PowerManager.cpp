@@ -627,7 +627,8 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
 
 	// handle all other effects
 	if (powers[power_index].buff) {
-		effect(src_stats, power_index);
+        int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
+		effect(src_stats, power_index, source_type);
 	}
 
 	// activate any post powers here if the power doesn't use a hazard
@@ -665,7 +666,7 @@ void PowerManager::playSound(int power_index, StatBlock *src_stats) {
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
 
-bool PowerManager::effect(StatBlock *src_stats, int power_index) {
+bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
 		int effect_index = powers[power_index].post_effects[i].id;
@@ -688,7 +689,7 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index) {
 				if (src_stats->hp > src_stats->maxhp) src_stats->hp = src_stats->maxhp;
 			}
 
-			src_stats->effects.addEffect(effect_index, powers[effect_index].icon, duration, magnitude, powers[effect_index].effect_type, powers[effect_index].animation_name, powers[effect_index].effect_additive, false, powers[power_index].passive_trigger, powers[effect_index].effect_render_above);
+			src_stats->effects.addEffect(effect_index, powers[effect_index].icon, duration, magnitude, powers[effect_index].effect_type, powers[effect_index].animation_name, powers[effect_index].effect_additive, false, powers[power_index].passive_trigger, powers[effect_index].effect_render_above, source_type);
 		}
 
 		// If there's a sound effect, play it here

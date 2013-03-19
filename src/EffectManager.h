@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "SharedResources.h"
 #include "Utils.h"
+#include "Hazard.h"
 
 #include <string>
 #include <vector>
@@ -53,6 +54,7 @@ public:
 	bool item;
 	int trigger;
 	bool render_above;
+	int source_type;
 
 	Effect()
 	 : id(0)
@@ -67,6 +69,7 @@ public:
 	 , item(false)
 	 , trigger(-1)
 	 , render_above(false)
+	 , source_type(SOURCE_TYPE_HERO)
 	{}
 
 	~Effect() {
@@ -86,7 +89,7 @@ public:
 	EffectManager& operator= (const EffectManager &emSource);
 	void clearStatus();
 	void logic();
-	void addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above);
+	void addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int source_type);
 	void removeEffectType(std::string type);
 	void clearEffects();
 	void clearNegativeEffects();

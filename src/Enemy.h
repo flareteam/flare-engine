@@ -53,7 +53,7 @@ public:
 	void newState(int state);
 	int getDistance(Point dest);
 	bool takeHit(const Hazard &h);
-	void doRewards();
+	void doRewards(int source_type);
 	void InstantDeath();
 	void CheckSummonSustained();
 
@@ -79,6 +79,7 @@ public:
 	bool instant_power;
 	bool summoned;
 	int summoned_power_index;
+	int kill_source_type;
 
 };
 

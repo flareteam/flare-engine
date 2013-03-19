@@ -28,7 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorAlly.h"
 #include "Avatar.h"
 
-
 #include <iostream>
 #include <algorithm>
 
@@ -307,7 +306,12 @@ Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
 void EnemyManager::checkEnemiesforXP(CampaignManager *camp) {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		if (enemies[i]->reward_xp) {
-			camp->rewardXP(enemies[i]->stats.xp, false);
+            //adjust for party exp if necessary
+            float xp_multiplier = 1;
+            if(enemies[i]->kill_source_type == SOURCE_TYPE_ALLY)
+                xp_multiplier = PARTY_EXP_PERCENTAGE / 100;
+
+			camp->rewardXP(enemies[i]->stats.xp * xp_multiplier, false);
 			enemies[i]->reward_xp = false; // clear flag
 		}
 	}

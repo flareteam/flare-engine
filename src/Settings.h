@@ -120,6 +120,7 @@ extern int AIM_ASSIST;
 extern std::string WINDOW_TITLE;
 extern std::string GAME_PREFIX;
 extern int SOUND_FALLOFF;
+extern int PARTY_EXP_PERCENTAGE;
 
 // Tile Settings
 extern unsigned short UNITS_PER_TILE;

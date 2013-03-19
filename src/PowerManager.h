@@ -322,7 +322,7 @@ public:
 	bool canUsePower(unsigned id) const;
 	bool hasValidTarget(int power_index, StatBlock *src_stats, Point target);
 	bool spawn(const std::string& enemy_type, Point target);
-	bool effect(StatBlock *src_stats, int power_index);
+	bool effect(StatBlock *src_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
 	int getIdFromTag(std::string tag);
