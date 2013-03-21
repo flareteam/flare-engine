@@ -110,6 +110,7 @@ void EffectManager::clearStatus() {
 	forced_speed = 0;
 	forced_move = false;
 	revive = false;
+	convert = false;
 
 	bonus_hp = 0;
 	bonus_hp_regen = 0;
@@ -153,6 +154,7 @@ void EffectManager::logic() {
 				forced_speed = effect_list[i].magnitude;
 			}
 			else if (effect_list[i].type == "revive") revive = true;
+			else if (effect_list[i].type == "convert") convert = true;
 			else if (effect_list[i].type == "hp") bonus_hp += effect_list[i].magnitude;
 			else if (effect_list[i].type == "hp_regen") bonus_hp_regen += effect_list[i].magnitude;
 			else if (effect_list[i].type == "hp_percent") bonus_hp_percent += effect_list[i].magnitude;

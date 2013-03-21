@@ -108,6 +108,7 @@ public:
 	int forced_speed;
 	bool forced_move;
 	bool revive;
+	bool convert;
 
 	int bonus_hp;
 	int bonus_hp_regen;

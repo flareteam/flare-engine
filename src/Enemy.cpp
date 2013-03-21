@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Animation.h"
 #include "BehaviorStandard.h"
+#include "BehaviorAlly.h"
 #include "CampaignManager.h"
 #include "EnemyBehavior.h"
 #include "Enemy.h"
@@ -145,6 +146,16 @@ void Enemy::newState(int state) {
 void Enemy::logic() {
 
 	eb->logic();
+
+	//need to check whether the enemy was converted here
+	//cant do it in behaviour because the behaviour object would be replaced by this
+	if(stats.effects.convert != stats.converted){
+        delete eb;
+        eb = stats.hero_ally ? new BehaviorStandard(this, enemies) : new BehaviorAlly(this, enemies);
+        stats.converted = !stats.converted;
+        stats.hero_ally = !stats.hero_ally;
+    }
+
 	return;
 }
 

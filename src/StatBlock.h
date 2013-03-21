@@ -105,6 +105,7 @@ public:
 	bool permadeath;
 	bool transformed;
 	bool refresh_stats;
+	bool converted;
 
 	int movement_type;
 	bool flying;
