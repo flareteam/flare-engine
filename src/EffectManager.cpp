@@ -111,6 +111,7 @@ void EffectManager::clearStatus() {
 	forced_move = false;
 	revive = false;
 	convert = false;
+	death_sentence = false;
 
 	bonus_hp = 0;
 	bonus_hp_regen = 0;
@@ -183,6 +184,8 @@ void EffectManager::logic() {
 			if (effect_list[i].duration > 0) {
 				if (effect_list[i].ticks > 0) effect_list[i].ticks--;
 				if (effect_list[i].ticks == 0) {
+				    //death sentence is only applied at the end of the timer
+                    if (effect_list[i].type == "death_sentence") death_sentence = true;
 					removeEffect(i);
 					i--;
 					continue;

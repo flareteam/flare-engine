@@ -517,6 +517,9 @@ void StatBlock::logic() {
 		takeDamage(effects.damage);
 	}
 
+	if(effects.death_sentence)
+        hp = 0;
+
 	if(cooldown_hit_ticks > 0)
 		cooldown_hit_ticks--;
 

@@ -109,6 +109,7 @@ public:
 	bool forced_move;
 	bool revive;
 	bool convert;
+	bool death_sentence;
 
 	int bonus_hp;
 	int bonus_hp_regen;
