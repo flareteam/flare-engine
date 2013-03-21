@@ -362,6 +362,7 @@ void Enemy::InstantDeath() {
     stats.effects.triggered_death = true;
     stats.cur_state = ENEMY_DEAD;
 
+    stats.hp = 0;
     sfx_die = true;
     stats.corpse_ticks = CORPSE_TIMEOUT;
     stats.effects.clearEffects();
