@@ -222,6 +222,9 @@ void EnemyManager::handleSpawn() {
 		// special animation state for spawning enemies
 		e->stats.cur_state = ENEMY_SPAWN;
 
+		//now apply post effects to the spawned enemy
+		powers->effect(&e->stats, e->summoned_power_index,e->stats.hero_ally ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY);
+
 		enemies.push_back(e);
 
 		map->collider.block(espawn.pos.x, espawn.pos.y);
