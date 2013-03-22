@@ -407,7 +407,10 @@ void Enemy::CheckSummonSustained(){
         for (unsigned int i=0; i < enemies->enemies.size(); i++) {
             if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->summoned
                && !enemies->enemies[i]->stats.corpse
-               && enemies->enemies[i]->summoned_power_index == summoned_power_index){
+               && enemies->enemies[i]->summoned_power_index == summoned_power_index
+               && enemies->enemies[i]->stats.cur_state != ENEMY_SPAWN
+               && enemies->enemies[i]->stats.cur_state != ENEMY_DEAD
+               && enemies->enemies[i]->stats.cur_state != ENEMY_CRITDEAD){
                     qty_summons++;
             }
         }
