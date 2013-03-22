@@ -283,6 +283,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "absorb_min") absorb_min = num;
 		else if (infile.key == "absorb_max") absorb_max = num;
 		else if (infile.key == "poise") poise = poise_base = num;
+		else if (infile.key == "hp_per_minute") hp_per_minute = num;
 
 		// behavior stats
 		else if (infile.key == "flying") {
