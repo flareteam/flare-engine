@@ -286,6 +286,7 @@ bool Enemy::takeHit(const Hazard &h) {
 				if(stats.cooldown_hit_ticks == 0) {
 					stats.cur_state = ENEMY_HIT;
 					stats.cooldown_hit_ticks = stats.cooldown_hit;
+					stats.activated_powerslot = -1;
 				}
 				// roll to see if the enemy's ON_HIT power is casted
 				if (percentChance(stats.power_chance[ON_HIT])) {
