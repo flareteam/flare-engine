@@ -802,6 +802,7 @@ bool Avatar::takeHit(const Hazard &h) {
 			if (!percentChance(stats.poise) && stats.cooldown_hit_ticks == 0) {
 				stats.cur_state = AVATAR_HIT;
 				stats.cooldown_hit_ticks = stats.cooldown_hit;
+				current_power = 0;
 			}
 		}
 

@@ -259,14 +259,16 @@ void BehaviorStandard::checkPower() {
 			e->instant_power = false;
 
 			int power_slot =  e->stats.activated_powerslot;
-			int power_id = e->stats.power_index[e->stats.activated_powerslot];
+			if (power_slot != -1) {
+				int power_id = e->stats.power_index[power_slot];
 
-			e->powers->activate(power_id, &e->stats, pursue_pos);
-			e->stats.power_ticks[power_slot] = e->stats.power_cooldown[power_slot];
-			e->stats.cooldown_ticks = e->stats.cooldown;
+				e->powers->activate(power_id, &e->stats, pursue_pos);
+				e->stats.power_ticks[power_slot] = e->stats.power_cooldown[power_slot];
+				e->stats.cooldown_ticks = e->stats.cooldown;
 
-			if (e->stats.activated_powerslot == ON_HALF_DEAD) {
-				e->stats.on_half_dead_casted = true;
+				if (power_slot == ON_HALF_DEAD) {
+					e->stats.on_half_dead_casted = true;
+				}
 			}
 		}
 	}
@@ -420,7 +422,8 @@ void BehaviorStandard::updateState() {
 
 		case ENEMY_POWER:
 
-			power_id = e->stats.power_index[e->stats.activated_powerslot];
+			if (e->stats.activated_powerslot != -1)
+				power_id = e->stats.power_index[e->stats.activated_powerslot];
 			power_state = e->powers->powers[power_id].new_state;
 
 			// animation based on power type
