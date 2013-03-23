@@ -178,6 +178,8 @@ public:
 	// special effects
 	bool buff;
 	bool buff_teleport;
+	bool buff_party;
+	int buff_party_power_id;
 
 	std::vector<PostEffect> post_effects;
 	std::string effect_type;
@@ -264,6 +266,8 @@ public:
 
 		, buff(false)
 		, buff_teleport(false)
+        , buff_party(false)
+        , buff_party_power_id(0)
 
 		, effect_type("")
 		, effect_additive(false)
@@ -330,6 +334,7 @@ public:
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> enemies; // output; read by PowerManager
+	std::queue<int> party_buffs;
 
 	// shared sounds for power special effects
 	std::vector<SoundManager::SoundID> sfx;

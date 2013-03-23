@@ -259,6 +259,10 @@ void PowerManager::loadPowers(const std::string& filename) {
 			powers[input_id].buff= toBool(infile.val);
 		else if (infile.key == "buff_teleport")
 			powers[input_id].buff_teleport = toBool(infile.val);
+        else if (infile.key == "buff_party")
+			powers[input_id].buff_party = toBool(infile.val);
+        else if (infile.key == "buff_party_power_id")
+			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
 			infile.val = infile.val + ',';
 			PostEffect pe;
@@ -629,6 +633,10 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
 	if (powers[power_index].buff) {
         int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
 		effect(src_stats, power_index, source_type);
+	}
+
+	if (powers[power_index].buff_party){
+        party_buffs.push(power_index);
 	}
 
 	// activate any post powers here if the power doesn't use a hazard
