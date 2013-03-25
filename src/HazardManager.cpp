@@ -80,7 +80,7 @@ void HazardManager::logic() {
 				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
 
 					// only check living enemies
-					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && !enemies->enemies[eindex]->stats.hero_ally) {
+					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemies->enemies[eindex]->stats.hero_ally == h[i]->target_party)) {
 						if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
 								h[i]->addEntity(enemies->enemies[eindex]);

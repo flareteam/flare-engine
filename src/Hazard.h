@@ -75,6 +75,7 @@ public:
 	int crit_chance;
 	int accuracy;
 	int source_type;
+	bool target_party;
 
 	FPoint pos;
 	FPoint speed;

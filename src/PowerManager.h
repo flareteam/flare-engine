@@ -154,6 +154,7 @@ public:
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
 	int range;
+	bool target_party;
 
 	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
 	int hp_steal;
@@ -246,6 +247,7 @@ public:
 		, starting_pos(STARTING_POS_SOURCE)
 		, multitarget(false)
 		, range(0)
+		, target_party(false)
 
 		, hp_steal(0)
 		, mp_steal(0)

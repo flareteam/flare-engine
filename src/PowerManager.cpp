@@ -306,6 +306,8 @@ void PowerManager::loadPowers(const std::string& filename) {
 			else if (infile.val == "defense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_DEFENSE;
 			else fprintf(stderr, "unknown spawn_limit_stat %s\n", infile.val.c_str());
 		}
+		else if (infile.key == "target_party")
+			powers[input_id].target_party = toBool(infile.val);
 		else
 			fprintf(stderr, "ignoring unknown key %s set to %s\n", infile.key.c_str(), infile.val.c_str());
 	}
@@ -490,6 +492,8 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 	else {
 		haz->source_type = powers[power_index].source_type;
 	}
+
+	haz->target_party = powers[power_index].target_party;
 
 	// Hazard attributes based on power source
 	haz->crit_chance = src_stats->crit;

@@ -177,10 +177,10 @@ bool GameStatePlay::restrictPowerUse() {
 			return true;
 		}
 		if(enemy != NULL)
-            if(enemy->stats.hero_ally)
+            if(enemy->stats.hero_ally && inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse)))
                 return true;
-
 	}
+
 	return false;
 }
 
