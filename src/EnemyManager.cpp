@@ -200,8 +200,6 @@ void EnemyManager::handleSpawn() {
         e->summoned_power_index = espawn.summon_power_index;
 
         e->type = espawn.type;
-		e->stats.pos.x = espawn.pos.x;
-		e->stats.pos.y = espawn.pos.y;
 		e->stats.direction = espawn.direction;
 		e->stats.load("enemies/" + espawn.type + ".txt");
 		if (e->stats.animations != "") {
@@ -219,6 +217,14 @@ void EnemyManager::handleSpawn() {
 		}
 		loadSounds(e->stats.sfx_prefix);
 
+
+		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type) || !e->stats.hero_ally){
+            e->stats.pos.x = espawn.pos.x;
+            e->stats.pos.y = espawn.pos.y;
+		} else {
+            e->stats.pos.x = hero_pos.x;
+            e->stats.pos.y = hero_pos.y;
+		}
 		// special animation state for spawning enemies
 		e->stats.cur_state = ENEMY_SPAWN;
 
