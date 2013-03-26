@@ -173,13 +173,18 @@ void GameStatePlay::checkEnemyFocus() {
  */
 bool GameStatePlay::restrictPowerUse() {
 	if(MOUSE_MOVE) {
-		if(enemy == NULL && inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
-			return true;
-		}
-		if(enemy != NULL)
-            if(enemy->stats.hero_ally && inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse)))
+        if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
+            if(enemy == NULL) {
                 return true;
+            }
+            else{
+                if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
+                    return true;
+            }
+        }
 	}
+
+
 
 	return false;
 }
