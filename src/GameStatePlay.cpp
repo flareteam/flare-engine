@@ -556,6 +556,12 @@ void GameStatePlay::checkNotifications() {
 		quests->newQuestNotification = false;
 		menu->act->requires_attention[MENU_LOG] = true;
 	}
+
+	// if the player is transformed into a creature, don't show notifications for some menus
+	if (!pc->stats.humanoid) {
+		menu->act->requires_attention[MENU_CHARACTER] = false;
+		menu->act->requires_attention[MENU_POWERS] = false;
+	}
 }
 
 /**
@@ -776,7 +782,7 @@ void GameStatePlay::logic() {
 	// change hero powers on transformation
 	if (pc->setPowers) {
 		pc->setPowers = false;
-		menu->closeAll();
+		if (!pc->stats.humanoid && menu->pow->visible) menu->closeRight();
 		// save ActionBar state and lock slots from removing/replacing power
 		for (int i=0; i<12 ; i++) {
 			menu->act->actionbar[i] = menu->act->hotkeys[i];

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare 0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-15 21:44+0100\n"
+"POT-Creation-Date: 2013-03-24 14:09+0100\n"
 "PO-Revision-Date: 2012-12-24 14:36+0100\n"
 "Last-Translator: Hans Joachim Desserud <github@desserud.org>\n"
 "Language-Team: Norwegian Bokmal\n"
@@ -39,7 +39,7 @@ msgid "miss"
 msgstr "bom"
 
 #: ../../../src/Avatar.cpp:784 ../../../src/Enemy.cpp:248
-#: ../../../src/PowerManager.cpp:666 ../../../src/StatBlock.cpp:522
+#: ../../../src/PowerManager.cpp:668 ../../../src/StatBlock.cpp:539
 #, c-format
 msgid "+%d HP"
 msgstr ""
@@ -47,17 +47,17 @@ msgstr ""
 #: ../../../src/CampaignManager.cpp:140
 #, c-format
 msgid "You receive %s."
-msgstr ""
+msgstr "Du mottar %s."
 
 #: ../../../src/CampaignManager.cpp:142
 #, c-format
 msgid "You receive %s x%d."
-msgstr ""
+msgstr "Du mottar %s x%d."
 
 #: ../../../src/CampaignManager.cpp:150
 #, c-format
 msgid "You receive %d %s."
-msgstr ""
+msgstr "Du mottar %s x%d."
 
 #: ../../../src/CampaignManager.cpp:157
 #, c-format
@@ -78,19 +78,19 @@ msgstr ""
 
 #: ../../../src/CampaignManager.cpp:176
 msgid "Negative effects removed."
-msgstr ""
+msgstr "Negative effekter fjernet."
 
 #: ../../../src/CampaignManager.cpp:182
 msgid "HP and MP restored, negative effects removed"
 msgstr ""
 
-#: ../../../src/Enemy.cpp:255 ../../../src/StatBlock.cpp:527
+#: ../../../src/Enemy.cpp:255 ../../../src/StatBlock.cpp:544
 #, c-format
 msgid "+%d MP"
 msgstr ""
 
-#: ../../../src/GameStateConfig.cpp:79
-msgid "Ok"
+#: ../../../src/GameStateConfig.cpp:79 ../../../src/GameStateConfig.cpp:164
+msgid "OK"
 msgstr "Ok"
 
 #: ../../../src/GameStateConfig.cpp:84 ../../../src/GameStateConfig.cpp:163
@@ -98,13 +98,13 @@ msgid "Defaults"
 msgstr "Standardinnstillinger"
 
 #: ../../../src/GameStateConfig.cpp:89 ../../../src/GameStateNew.cpp:55
-#: ../../../src/InputState.cpp:59
+#: ../../../src/InputState.cpp:59 ../../../src/MenuNPCActions.cpp:77
 msgid "Cancel"
 msgstr "Avbryt"
 
 #: ../../../src/GameStateConfig.cpp:154
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: ../../../src/GameStateConfig.cpp:155
 msgid "Audio"
@@ -133,20 +133,15 @@ msgstr ""
 
 #: ../../../src/GameStateConfig.cpp:163
 msgid "Reset ALL settings?"
-msgstr ""
+msgstr "Still tilbake ALLE innstillinger?"
 
 #: ../../../src/GameStateConfig.cpp:164
-msgid "OK"
-msgstr ""
-
-#: ../../../src/GameStateConfig.cpp:164
-#, fuzzy
 msgid "Use this resolution?"
-msgstr "Oppløsning"
+msgstr "Behold denne oppløsningen?"
 
 #: ../../../src/GameStateConfig.cpp:254
 msgid "Full Screen Mode"
-msgstr ""
+msgstr "Fullskjerm"
 
 #: ../../../src/GameStateConfig.cpp:267
 msgid "Move hero using mouse"
@@ -178,7 +173,7 @@ msgstr ""
 
 #: ../../../src/GameStateConfig.cpp:360
 msgid "Animated tiles"
-msgstr ""
+msgstr "Animerte fliser"
 
 #: ../../../src/GameStateConfig.cpp:373
 msgid "Mouse aim"
@@ -190,11 +185,11 @@ msgstr ""
 
 #: ../../../src/GameStateConfig.cpp:400
 msgid "Music Volume"
-msgstr ""
+msgstr "Musikkvolum"
 
 #: ../../../src/GameStateConfig.cpp:413
 msgid "Sound Volume"
-msgstr ""
+msgstr "Lydvolum"
 
 #: ../../../src/GameStateConfig.cpp:426
 msgid "Gamma"
@@ -243,7 +238,7 @@ msgstr "Slett lagret spill"
 
 #: ../../../src/GameStateLoad.cpp:57
 msgid "Delete this save?"
-msgstr ""
+msgstr "Slett dette spillet?"
 
 #: ../../../src/GameStateLoad.cpp:59
 msgid "Exit to Title"
@@ -292,16 +287,15 @@ msgstr "Velg et portrett"
 
 #: ../../../src/GameStateNew.cpp:160
 msgid "Choose a Name"
-msgstr ""
+msgstr "Velg et navn"
 
 #: ../../../src/GameStateNew.cpp:162
 msgid "Permadeath?"
-msgstr ""
+msgstr "Permanent død?"
 
 #: ../../../src/GameStateNew.cpp:164
-#, fuzzy
 msgid "Choose a Class"
-msgstr "Velg et portrett"
+msgstr "Velg en klasse"
 
 #: ../../../src/GameStatePlay.cpp:99
 msgid "Loading..."
@@ -330,11 +324,11 @@ msgstr "Innstillinger"
 
 #: ../../../src/GameStateTitle.cpp:54
 msgid "Exit Game"
-msgstr ""
+msgstr "Avslutt spill"
 
 #: ../../../src/GameStateTitle.cpp:61
-msgid "Flare Alpha v0.17"
-msgstr "Flare alfa v0.17"
+msgid "Flare Alpha v0.18"
+msgstr "Flare alfa v0.18"
 
 #: ../../../src/InputState.cpp:60
 msgid "Accept"
@@ -407,7 +401,7 @@ msgstr ""
 
 #: ../../../src/InputState.cpp:77 ../../../src/MenuPowers.cpp:173
 msgid "Powers"
-msgstr ""
+msgstr "Krefter"
 
 #: ../../../src/InputState.cpp:78 ../../../src/MenuLog.cpp:158
 msgid "Log"
@@ -415,11 +409,11 @@ msgstr "Logg"
 
 #: ../../../src/InputState.cpp:79
 msgid "Main1"
-msgstr ""
+msgstr "Hoved1"
 
 #: ../../../src/InputState.cpp:80
 msgid "Main2"
-msgstr ""
+msgstr "Hoved2"
 
 #: ../../../src/InputState.cpp:81
 msgid "Ctrl"
@@ -499,17 +493,17 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:507
 #, c-format
 msgid "Absorb: %d-%d"
-msgstr ""
+msgstr "Absorberer: %d-%d"
 
 #: ../../../src/ItemManager.cpp:509
 #, c-format
 msgid "Absorb: %d"
-msgstr ""
+msgstr "Absorberer: %d"
 
 #: ../../../src/ItemManager.cpp:517
 #, c-format
-msgid "%d\\% Speed"
-msgstr ""
+msgid "%d%% Speed"
+msgstr "%d%% Hastighet"
 
 #: ../../../src/ItemManager.cpp:522 ../../../src/ItemManager.cpp:614
 #, c-format
@@ -519,7 +513,7 @@ msgstr "Øker %s med %d"
 #: ../../../src/ItemManager.cpp:529 ../../../src/ItemManager.cpp:617
 #, c-format
 msgid "Decreases %s by %d"
-msgstr ""
+msgstr "Reduserer %s by %d"
 
 #: ../../../src/ItemManager.cpp:550 ../../../src/MenuPowers.cpp:541
 #: ../../../src/MenuPowers.cpp:543
@@ -548,44 +542,44 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:583 ../../../src/ItemManager.cpp:591
 #, c-format
 msgid "Buy Price: %d %s"
-msgstr ""
+msgstr "Kjøp for: %d %s"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/ItemManager.cpp:593
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr ""
+msgstr "Kjøp for: %d %s hver"
 
 #: ../../../src/ItemManager.cpp:598
 #, c-format
 msgid "Sell Price: %d %s"
-msgstr ""
+msgstr "Selg for: %d %s"
 
 #: ../../../src/ItemManager.cpp:600
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr ""
+msgstr "Selg for: %d %s hver"
 
 #: ../../../src/ItemManager.cpp:610
 msgid "Set: "
-msgstr ""
+msgstr "Sett: "
 
 #: ../../../src/ItemManager.cpp:614 ../../../src/ItemManager.cpp:617
 #, c-format
 msgid "%d items: "
 msgstr ""
 
-#: ../../../src/LootManager.cpp:183 ../../../src/MenuInventory.cpp:176
+#: ../../../src/LootManager.cpp:185 ../../../src/MenuInventory.cpp:176
 #, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
-#: ../../../src/MapRenderer.cpp:1227
+#: ../../../src/MapRenderer.cpp:1244
 msgid "Unknown destination"
 msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:401
 msgid "Character Menu (C)"
-msgstr ""
+msgstr "Karaktermeny (C)"
 
 #: ../../../src/MenuActionBar.cpp:405
 msgid "Inventory Menu (I)"
@@ -597,7 +591,7 @@ msgstr ""
 
 #: ../../../src/MenuActionBar.cpp:413
 msgid "Log Menu (L)"
-msgstr ""
+msgstr "Loggmeny (L)"
 
 #: ../../../src/MenuCharacter.cpp:232
 msgid "Name"
@@ -665,7 +659,7 @@ msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:329
 msgid "Accuracy:"
-msgstr ""
+msgstr "Treffsikkerhet"
 
 #: ../../../src/MenuCharacter.cpp:330
 #, c-format
@@ -699,7 +693,7 @@ msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:377
 msgid "Absorb:"
-msgstr ""
+msgstr "Absorberer:"
 
 #: ../../../src/MenuCharacter.cpp:387
 msgid "Poise: "
@@ -709,18 +703,22 @@ msgstr ""
 msgid "Reduces your chance of stumbling when hit"
 msgstr ""
 
-#: ../../../src/MenuCharacter.cpp:393 ../../../src/MenuCharacter.cpp:399
-msgid "Bonus"
+#: ../../../src/MenuCharacter.cpp:393
+msgid "Bonus XP: "
 msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:394
 msgid "Increases the XP gained per kill"
 msgstr ""
 
+#: ../../../src/MenuCharacter.cpp:399
+msgid "Bonus"
+msgstr "Bonus"
+
 #: ../../../src/MenuCharacter.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop"
-msgstr "Øker %s med %d"
+msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:405
 msgid "Bonus Item Find: "
@@ -781,11 +779,11 @@ msgstr "%s nivå %d"
 
 #: ../../../src/MenuExit.cpp:31
 msgid "Exit"
-msgstr ""
+msgstr "Avslutt"
 
 #: ../../../src/MenuExit.cpp:58
 msgid "Save and exit to title?"
-msgstr ""
+msgstr "Lagre og gå til hovedmeny?"
 
 #: ../../../src/MenuInventory.cpp:210
 msgid "Use SHIFT to move only one item."
@@ -793,7 +791,7 @@ msgstr "Bruk SHIFT for å flytte en enkelt gjenstand."
 
 #: ../../../src/MenuInventory.cpp:211
 msgid "CTRL-click a carried item to sell it."
-msgstr ""
+msgstr "CTRL-klikk på en gjenstand for å selge den."
 
 #: ../../../src/MenuInventory.cpp:415
 msgid "This item can only be used from the action bar."
@@ -816,6 +814,10 @@ msgstr ""
 #: ../../../src/MenuManager.cpp:630 ../../../src/MenuManager.cpp:631
 msgid "Not enough money."
 msgstr "Ikke nok penger."
+
+#: ../../../src/MenuNPCActions.cpp:76
+msgid "Trade"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:460
 msgid "Unspent skill points:"
@@ -856,7 +858,7 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:553 ../../../src/MenuPowers.cpp:556
 #, c-format
 msgid "Requires Level %d"
-msgstr ""
+msgstr "Krever nivå %d"
 
 #: ../../../src/MenuPowers.cpp:563 ../../../src/MenuPowers.cpp:568
 #, c-format
@@ -899,18 +901,21 @@ msgstr ""
 msgid "Vendor"
 msgstr ""
 
-#: ../../../src/PowerManager.cpp:659
+#: ../../../src/PowerManager.cpp:661
 #, c-format
 msgid "+%d Shield"
-msgstr ""
+msgstr "+%d Skjold"
 
-#: ../../../src/PowerManager.cpp:901
+#: ../../../src/PowerManager.cpp:903
 msgid "You are already transformed, untransform first."
 msgstr ""
 
 #: ../../../src/Settings.cpp:500
 msgid "Adventurer"
 msgstr "Eventyrer"
+
+#~ msgid "Ok"
+#~ msgstr "Ok"
 
 #~ msgid "Flare"
 #~ msgstr "Flare"

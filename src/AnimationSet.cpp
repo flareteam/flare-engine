@@ -52,7 +52,7 @@ Animation *AnimationSet::getAnimation()
 AnimationSet::AnimationSet(const std::string &animationname)
  : name(animationname)
  , loaded(false)
- , animations(vector<Animation*>())
+ , animations()
  , sprite(NULL)
 {
 	defaultAnimation = new Animation("default", "play_once", NULL);
@@ -204,5 +204,6 @@ AnimationSet::~AnimationSet() {
 	if (imagefile != "") imag->decreaseCount(imagefile);
 	for (unsigned i = 0; i < animations.size(); ++i)
 		delete animations[i];
+	delete defaultAnimation;
 }
 

@@ -52,7 +52,7 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
  , powers(_powers)
  , hero_stats(NULL)
  , charmed_stats(NULL)
- , act_target(Point())
+ , act_target()
  , attacking (false)
  , drag_walking(false)
  , respawn(false)
@@ -740,10 +740,10 @@ bool Avatar::takeHit(const Hazard &h) {
 			}
 
 			if (absorption > 0) {
-				if ((dmg*100)/absorption > MAX_BLOCK)
-					absorption = (absorption * MAX_BLOCK) /100;
-				if ((dmg*100)/absorption > MAX_ABSORB && !stats.effects.triggered_block)
-					absorption = (absorption * MAX_ABSORB) /100;
+				if ((absorption*100)/dmg > MAX_BLOCK)
+					absorption = (dmg * MAX_BLOCK) /100;
+				if ((absorption*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
+					absorption = (dmg * MAX_ABSORB) /100;
 
 				// Sometimes, the absorb limits cause absorbtion to drop to 1
 				// This could be confusing to a player that has something with an absorb of 1 equipped
@@ -843,6 +843,7 @@ void Avatar::transform() {
 	stats.humanoid = charmed_stats->humanoid;
 	stats.animations = charmed_stats->animations;
 	stats.powers_list = charmed_stats->powers_list;
+	stats.powers_passive = charmed_stats->powers_passive;
 	stats.effects.clearEffects();
 
 	string animationname = "animations/enemies/"+charmed_stats->animations + ".txt";
@@ -902,6 +903,7 @@ void Avatar::untransform() {
 	stats.animations = hero_stats->animations;
 	stats.effects = hero_stats->effects;
 	stats.powers_list = hero_stats->powers_list;
+	stats.powers_passive = hero_stats->powers_passive;
 
 	anim->increaseCount("animations/hero.txt");
 	anim->decreaseCount("animations/enemies/"+charmed_stats->animations + ".txt");

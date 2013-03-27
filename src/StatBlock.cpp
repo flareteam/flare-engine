@@ -112,37 +112,38 @@ StatBlock::StatBlock()
 	, transform_duration_total(0)
 	, manual_untransform(false)
 	, transform_with_equipment(false)
-	, effects(EffectManager())
-	, pos(Point())
-	, forced_speed(Point())
+	, effects()
+	, pos()
+	, forced_speed()
 	, direction(0)
-	, hero_cooldown(vector<int>(POWER_COUNT, 0)) // hero only
+	, hero_cooldown(POWER_COUNT, 0) // hero only
 	, poise(0)
 	, poise_base(0)
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
-	, waypoints(queue<Point>())		// enemy only
+	, waypoints()		// enemy only
 	, waypoint_pause(0)				// enemy only
 	, waypoint_pause_ticks(0)		// enemy only
 	, wander(false)					// enemy only
-	, wander_area(SDL_Rect())		// enemy only
+	, wander_area()		// enemy only
 	, wander_ticks(0)				// enemy only
 	, wander_pause_ticks(0)			// enemy only
 	, chance_pursue(0)
 	, chance_flee(0)				// read in, but unused in formulas.
-	, powers_list(vector<int>(0))	// hero only
-	, powers_list_items(vector<int>(0))	// hero only
-	, power_chance(vector<int>(POWERSLOT_COUNT, 0))		// enemy only
-	, power_index(vector<int>(POWERSLOT_COUNT, 0))		// both
-	, power_cooldown(vector<int>(POWERSLOT_COUNT, 0))	// enemy only
-	, power_ticks(vector<int>(POWERSLOT_COUNT, 0))		// enemy only
+	, powers_list()	// hero only
+	, powers_list_items()	// hero only
+	, powers_passive()
+	, power_chance(POWERSLOT_COUNT, 0)		// enemy only
+	, power_index(POWERSLOT_COUNT, 0)		// both
+	, power_cooldown(POWERSLOT_COUNT, 0)	// enemy only
+	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
-	, hero_pos(Point(-1, -1))
+	, hero_pos(-1, -1)
 	, hero_alive(true)
 	, hero_stealth(0)
-	, last_seen(Point(-1, -1))  // no effects to gameplay?
+	, last_seen(-1, -1)  // no effects to gameplay?
 	, turn_delay(0)
 	, turn_ticks(0)
 	, in_combat(false)  //enemy only
@@ -153,7 +154,7 @@ StatBlock::StatBlock()
 	, on_half_dead_casted(false) // enemy only
 	, suppress_hp(false)
 	, teleportation(false)
-	, teleport_destination(Point())
+	, teleport_destination()
 	, melee_weapon_power(0)
 	, mental_weapon_power(0)
 	, ranged_weapon_power(0)
@@ -224,6 +225,8 @@ void StatBlock::load(const string& filename) {
 	}
 
 	int num = 0;
+	string loot_token;
+
 	while (infile.next()) {
 		if (isInt(infile.val)) num = toInt(infile.val);
 		bool valid = false;
@@ -249,6 +252,8 @@ void StatBlock::load(const string& filename) {
 
 			// loot entries format:
 			// loot=[id],[percent_chance]
+			// optionally allow range:
+			// loot=[id],[percent_chance],[count_min],[count_max]
 
 			EnemyLoot el;
 			std::string loot_id = infile.nextValue();
@@ -259,6 +264,18 @@ void StatBlock::load(const string& filename) {
 			else
 				el.id = toInt(loot_id);
 			el.chance = toInt(infile.nextValue());
+
+			// check for optional range.
+			loot_token = infile.nextValue();
+			if (loot_token != "") {
+				el.count_min = toInt(loot_token);
+				el.count_max = el.count_min;
+			}
+			loot_token = infile.nextValue();
+			if (loot_token != "") {
+				el.count_max = toInt(loot_token);
+			}
+
 			loot.push_back(el);
 		}
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
@@ -332,7 +349,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "passive_powers") {
 			std::string p = infile.nextValue();
 			while (p != "") {
-				powers_list.push_back(toInt(p));
+				powers_passive.push_back(toInt(p));
 				p = infile.nextValue();
 			}
 		}

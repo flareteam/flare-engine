@@ -54,6 +54,7 @@ public:
 	bool item;
 	int trigger;
 	bool render_above;
+	int passive_id;
 	int source_type;
 
 	Effect()
@@ -69,6 +70,7 @@ public:
 	 , item(false)
 	 , trigger(-1)
 	 , render_above(false)
+	 , passive_id(0)
 	 , source_type(SOURCE_TYPE_HERO)
 	{}
 
@@ -89,8 +91,9 @@ public:
 	EffectManager& operator= (const EffectManager &emSource);
 	void clearStatus();
 	void logic();
-	void addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int source_type);
+	void addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type);
 	void removeEffectType(std::string type);
+	void removeEffectPassive(int id);
 	void clearEffects();
 	void clearNegativeEffects();
 	void clearItemEffects();

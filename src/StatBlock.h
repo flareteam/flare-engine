@@ -73,10 +73,14 @@ class EnemyLoot {
 public:
 	int id;
 	int chance;
+	int count_min;
+	int count_max;
 
 	EnemyLoot()
 		: id(0)
 		, chance(0)
+		, count_min(1)
+		, count_max(1)
 	{}
 };
 
@@ -250,6 +254,7 @@ public:
 
 	std::vector<int> powers_list;
 	std::vector<int> powers_list_items;
+	std::vector<int> powers_passive;
 	std::vector<int> power_chance;
 	std::vector<int> power_index;
 	std::vector<int> power_cooldown;
