@@ -634,10 +634,15 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
 	}
 
 	// handle all other effects
-	if (powers[power_index].buff) {
+	if (powers[power_index].buff || (powers[power_index].buff_party && src_stats->hero_ally)) {
         int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
 		effect(src_stats, power_index, source_type);
 	}
+
+    if (powers[power_index].buff_party && !powers[power_index].passive){
+        party_buffs.push(power_index);
+	}
+
 
 	// activate any post powers here if the power doesn't use a hazard
 	// otherwise the post power will chain off the hazard itself

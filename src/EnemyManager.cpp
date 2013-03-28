@@ -231,6 +231,25 @@ void EnemyManager::handleSpawn() {
 		//now apply post effects to the spawned enemy
 		powers->effect(&e->stats, e->summoned_power_index,e->stats.hero_ally ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY);
 
+        //apply party passives
+        //synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
+        //at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
+        for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
+            if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && e->stats.hero_ally
+                && (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
+
+                e->stats.powers_passive.push_back(pc->stats.powers_passive[i]);
+            }
+        }
+
+        for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
+            if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && e->stats.hero_ally
+                && (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
+
+                e->stats.powers_passive.push_back(pc->stats.powers_list_items[i]);
+            }
+        }
+
 		enemies.push_back(e);
 
 		map->collider.block(espawn.pos.x, espawn.pos.y);
