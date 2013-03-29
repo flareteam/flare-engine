@@ -397,16 +397,16 @@ void Enemy::CheckSummonSustained(){
             int stat_val = 1;
             switch(spawn_power->spawn_limit_stat){
             case SPAWN_LIMIT_STAT_PHYSICAL:
-                stat_val = enemies->pc->stats.physical_character + enemies->pc->stats.physical_additional;
+                stat_val = enemies->pc->stats.get_physical();
                 break;
             case SPAWN_LIMIT_STAT_MENTAL:
-                stat_val = enemies->pc->stats.mental_character + enemies->pc->stats.mental_additional;
+                stat_val = enemies->pc->stats.get_mental();
                 break;
             case SPAWN_LIMIT_STAT_OFFENSE:
-                stat_val = enemies->pc->stats.offense_character + enemies->pc->stats.offense_additional;
+                stat_val = enemies->pc->stats.get_offense();
                 break;
             case SPAWN_LIMIT_STAT_DEFENSE:
-                stat_val = enemies->pc->stats.defense_character + enemies->pc->stats.defense_additional;
+                stat_val = enemies->pc->stats.get_defense();
                 break;
             }
             max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
