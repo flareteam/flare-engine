@@ -289,23 +289,29 @@ void PowerManager::loadPowers(const std::string& filename) {
 			powers[input_id].spawn_type = infile.val;
 		else if (infile.key == "target_neighbor")
 			powers[input_id].target_neighbor = toInt(infile.val);
-        else if (infile.key == "spawn_limit_mode") {
-			if (infile.val == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
-			else if (infile.val == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
-			else if (infile.val == "unlimited") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_UNLIMITED;
-			else fprintf(stderr, "unknown spawn_limit_mode %s\n", infile.val.c_str());
-		}
-		else if (infile.key == "spawn_limit_qty")
-			powers[input_id].spawn_limit_qty = toInt(infile.val);
-        else if (infile.key == "spawn_limit_every")
-			powers[input_id].spawn_limit_every = toInt(infile.val);
-        else if (infile.key == "spawn_limit_stat") {
-			if (infile.val == "physical") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_PHYSICAL;
-			else if (infile.val == "mental") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_MENTAL;
-			else if (infile.val == "offense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_OFFENSE;
-			else if (infile.val == "defense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_DEFENSE;
-			else fprintf(stderr, "unknown spawn_limit_stat %s\n", infile.val.c_str());
-		}
+        else if (infile.key == "spawn_limit") {
+            infile.val = infile.val + ',';
+            std::string mode = eatFirstString(infile.val,',');
+            if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
+			else if (mode == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
+			else if (mode == "unlimited") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_UNLIMITED;
+			else fprintf(stderr, "unknown spawn_limit_mode %s\n", mode.c_str());
+
+            if(powers[input_id].spawn_limit_mode != SPAWN_LIMIT_MODE_UNLIMITED){
+                powers[input_id].spawn_limit_qty = eatFirstInt(infile.val,',');
+
+                if(powers[input_id].spawn_limit_mode == SPAWN_LIMIT_MODE_STAT){
+                    powers[input_id].spawn_limit_every = eatFirstInt(infile.val,',');
+
+                    std::string stat = eatFirstString(infile.val,',');
+                    if (stat == "physical") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_PHYSICAL;
+                    else if (stat == "mental") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_MENTAL;
+                    else if (stat == "offense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_OFFENSE;
+                    else if (stat == "defense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_DEFENSE;
+                    else fprintf(stderr, "unknown spawn_limit_stat %s\n", stat.c_str());
+                }
+            }
+        }
 		else if (infile.key == "target_party")
 			powers[input_id].target_party = toBool(infile.val);
         else if (infile.key == "target_categories"){
