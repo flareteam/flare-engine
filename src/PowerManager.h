@@ -155,6 +155,7 @@ public:
 	bool multitarget;
 	int range;
 	bool target_party;
+	std::vector<std::string> target_categories;
 
 	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
 	int hp_steal;

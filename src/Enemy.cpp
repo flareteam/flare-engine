@@ -166,6 +166,20 @@ void Enemy::logic() {
  * Returns false on miss
  */
 bool Enemy::takeHit(const Hazard &h) {
+
+    //check if this enemy should be affected by this hazard based on the category
+    if(!powers->powers[h.power_index].target_categories.empty()){
+        //the power has a target category requirement, so if it doesnt match, dont continue
+        bool match_found = false;
+        for (unsigned int i=0; i<stats.categories.size(); i++) {
+            if(std::find(powers->powers[h.power_index].target_categories.begin(), powers->powers[h.power_index].target_categories.end(), stats.categories[i]) != powers->powers[h.power_index].target_categories.end()){
+                match_found = true;
+            }
+        }
+        if(!match_found)
+            return false;
+    }
+
 	if (stats.cur_state != ENEMY_DEAD && stats.cur_state != ENEMY_CRITDEAD)
 	{
 		if (!stats.in_combat) {

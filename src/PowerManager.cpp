@@ -308,6 +308,12 @@ void PowerManager::loadPowers(const std::string& filename) {
 		}
 		else if (infile.key == "target_party")
 			powers[input_id].target_party = toBool(infile.val);
+        else if (infile.key == "target_categories"){
+            string cat;
+            while ((cat = infile.nextValue()) != "") {
+                powers[input_id].target_categories.push_back(cat);
+            }
+        }
 		else
 			fprintf(stderr, "ignoring unknown key %s set to %s\n", infile.key.c_str(), infile.val.c_str());
 	}

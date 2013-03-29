@@ -116,6 +116,8 @@ public:
 	bool intangible;
 	bool facing; // does this creature turn to face the hero
 
+	std::vector<std::string> categories;
+
 	std::string name;
 	std::string sfx_prefix;
 

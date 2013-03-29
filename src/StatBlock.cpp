@@ -372,9 +372,14 @@ void StatBlock::load(const string& filename) {
 				suppress_hp = false;
 		}
 
-		// these are only used for EnemyGroupManager
+		else if (infile.key == "categories"){
+            string cat;
+            while ((cat = infile.nextValue()) != "") {
+                categories.push_back(cat);
+            }
+		}
+		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
-		else if (infile.key == "categories") valid = true;
 		else if (infile.key == "rarity") valid = true;
 
 		else if (!valid) {
