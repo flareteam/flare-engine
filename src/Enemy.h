@@ -52,8 +52,7 @@ public:
 	int faceNextBest(int mapx, int mapy);
 	void newState(int state);
 	int getDistance(Point dest);
-	bool takeHit(const Hazard &h);
-	void doRewards(int source_type);
+	virtual void doRewards(int source_type);
 	void InstantDeath();
 	void CheckSummonSustained();
 
@@ -63,16 +62,7 @@ public:
 
 	Hazard *haz;
 	EnemyBehavior *eb;
-	PowerManager *powers;
 	EnemyManager *enemies;
-
-	// sound effects flags
-	bool sfx_phys;
-	bool sfx_ment;
-
-	bool sfx_hit;
-	bool sfx_die;
-	bool sfx_critdie;
 
 	// other flags
 	bool reward_xp;

@@ -39,7 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_map) {
+Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_powers, _map) {
 	powers = _powers;
 	enemies = _em;
 
@@ -54,11 +54,6 @@ Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Enti
 
 	haz = NULL;
 
-	sfx_phys = false;
-	sfx_ment = false;
-	sfx_hit = false;
-	sfx_die = false;
-	sfx_critdie = false;
 	reward_xp = false;
 	instant_power = false;
 	summoned = false;
@@ -72,13 +67,7 @@ Enemy::Enemy(const Enemy& e)
  , type(e.type)
  , haz(NULL) // do not copy hazard. This constructor is used during mapload, so no hazard should be active.
  , eb(new BehaviorStandard(this,e.enemies))
- , powers(e.powers)
  , enemies(e.enemies)
- , sfx_phys(e.sfx_phys)
- , sfx_ment(e.sfx_ment)
- , sfx_hit(e.sfx_hit)
- , sfx_die(e.sfx_die)
- , sfx_critdie(e.sfx_critdie)
  , reward_xp(e.reward_xp)
  , instant_power(e.instant_power)
  , kill_source_type(e.kill_source_type)
@@ -157,186 +146,6 @@ void Enemy::logic() {
     }
 
 	return;
-}
-
-/**
- * Whenever a hazard collides with an enemy, this function resolves the effect
- * Called by HazardManager
- *
- * Returns false on miss
- */
-bool Enemy::takeHit(const Hazard &h) {
-
-    //check if this enemy should be affected by this hazard based on the category
-    if(!powers->powers[h.power_index].target_categories.empty()){
-        //the power has a target category requirement, so if it doesnt match, dont continue
-        bool match_found = false;
-        for (unsigned int i=0; i<stats.categories.size(); i++) {
-            if(std::find(powers->powers[h.power_index].target_categories.begin(), powers->powers[h.power_index].target_categories.end(), stats.categories[i]) != powers->powers[h.power_index].target_categories.end()){
-                match_found = true;
-            }
-        }
-        if(!match_found)
-            return false;
-    }
-
-	if (stats.cur_state != ENEMY_DEAD && stats.cur_state != ENEMY_CRITDEAD)
-	{
-		if (!stats.in_combat) {
-			stats.join_combat = true;
-			stats.in_combat = true;
-			stats.last_seen.x = stats.hero_pos.x;
-			stats.last_seen.y = stats.hero_pos.y;
-			powers->activate(stats.power_index[BEACON], &stats, stats.pos); //emit beacon
-		}
-
-		// exit if it was a beacon (to prevent stats.targeted from being set)
-		if (powers->powers[h.power_index].beacon) return false;
-
-		// prepare the combat text
-		CombatText *combat_text = comb;
-
-		// if it's a miss, do nothing
-		int avoidance = stats.avoidance;
-		clampCeil(avoidance, MAX_AVOIDANCE);
-		if (percentChance(avoidance - h.accuracy - 25)) {
-			combat_text->addMessage(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
-			return false;
-		}
-
-		// calculate base damage
-		int dmg = randBetween(h.dmg_min, h.dmg_max);
-
-		// apply elemental resistance
-
-		if (h.trait_elemental >= 0 && unsigned(h.trait_elemental) < stats.vulnerable.size()) {
-			unsigned i = h.trait_elemental;
-			int vulnerable = stats.vulnerable[i];
-			if (stats.vulnerable[i] > MAX_RESIST && stats.vulnerable[i] < 100)
-				vulnerable = MAX_RESIST;
-			dmg = (dmg * vulnerable) / 100;
-		}
-
-		if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
-			// substract absorption from armor
-			int absorption = randBetween(stats.absorb_min, stats.absorb_max);
-
-			if (absorption > 0 && dmg > 0) {
-			
-				if ((absorption*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
-					absorption = (dmg * MAX_ABSORB) /100;
-
-				if (absorption == 0) absorption = 1;
-			}
-
-			dmg = dmg - absorption;
-			if (dmg <= 0) {
-				dmg = 0;
-				if (h.trait_elemental < 0) {
-					if (MAX_ABSORB < 100) dmg = 1;
-				} else {
-					if (MAX_RESIST < 100) dmg = 1;
-				}
-			}
-		}
-
-		// check for crits
-		int true_crit_chance = h.crit_chance;
-		if (stats.effects.stun || stats.effects.speed < 100)
-			true_crit_chance += h.trait_crits_impaired;
-
-		bool crit = percentChance(true_crit_chance);
-		if (crit) {
-			dmg = dmg + h.dmg_max;
-			map->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
-
-			// show crit damage
-			combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_CRIT);
-		}
-		else {
-			// show normal damage
-			combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_GIVEDMG);
-		}
-
-		// apply damage
-		stats.takeDamage(dmg);
-
-		// damage always breaks stun
-		if (dmg > 0) stats.effects.removeEffectType("stun");
-
-		// after effects
-		if (stats.hp > 0) {
-
-			if (h.mod_power > 0) powers->effect(&stats, h.mod_power,h.source_type);
-			powers->effect(&stats, h.power_index,h.source_type);
-
-			if (stats.effects.forced_move) {
-				float theta = powers->calcTheta(stats.hero_pos.x, stats.hero_pos.y, stats.pos.x, stats.pos.y);
-				stats.forced_speed.x = static_cast<int>(ceil(stats.effects.forced_speed * cos(theta)));
-				stats.forced_speed.y = static_cast<int>(ceil(stats.effects.forced_speed * sin(theta)));
-			}
-		}
-
-		if (h.hp_steal != 0) {
-			int heal_amt = (dmg * h.hp_steal) / 100;
-			if (heal_amt == 0 && dmg > 0) heal_amt = 1;
-			combat_text->addMessage(msg->get("+%d HP",heal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-			h.src_stats->hp += heal_amt;
-			clampCeil(h.src_stats->hp, h.src_stats->maxhp);
-		}
-		if (h.mp_steal != 0) {
-			int heal_amt = (dmg * h.mp_steal) / 100;
-			if (heal_amt == 0 && dmg > 0) heal_amt = 1;
-			combat_text->addMessage(msg->get("+%d MP",heal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-			h.src_stats->mp += heal_amt;
-			clampCeil(h.src_stats->mp, h.src_stats->maxmp);
-		}
-
-		// post effect power
-		if (h.post_power > 0 && dmg > 0) {
-			powers->activate(h.post_power, h.src_stats, stats.pos);
-		}
-
-		// interrupted to new state
-		if (dmg > 0) {
-
-			if (stats.hp <= 0 && crit) {
-				doRewards(h.source_type);
-				stats.effects.triggered_death = true;
-				stats.cur_state = ENEMY_CRITDEAD;
-				map->collider.unblock(stats.pos.x,stats.pos.y);
-
-			}
-			else if (stats.hp <= 0) {
-				doRewards(h.source_type);
-				stats.effects.triggered_death = true;
-				stats.cur_state = ENEMY_DEAD;
-				map->collider.unblock(stats.pos.x,stats.pos.y);
-
-			}
-			// don't go through a hit animation if stunned
-			else if (!stats.effects.stun && !percentChance(stats.poise)) {
-				sfx_hit = true;
-
-				if(stats.cooldown_hit_ticks == 0) {
-					stats.cur_state = ENEMY_HIT;
-					stats.cooldown_hit_ticks = stats.cooldown_hit;
-				}
-				// roll to see if the enemy's ON_HIT power is casted
-				if (percentChance(stats.power_chance[ON_HIT])) {
-					powers->activate(stats.power_index[ON_HIT], &stats, stats.pos);
-				}
-			}
-			// just play the hit sound
-			else {
-				sfx_hit = true;
-			}
-
-		}
-
-		return true;
-	}
-	return false;
 }
 
 /**
