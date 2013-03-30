@@ -371,6 +371,10 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	// clear current space to allow correct movement
 	map->collider.unblock(stats.pos.x, stats.pos.y);
 
+	// turn on all passive powers
+	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn && !transform_triggered) powers->activatePassives(&stats);
+	if (transform_triggered) transform_triggered = false;
+
 	int stepfx;
 	stats.logic();
 	if (stats.effects.forced_move) {
@@ -452,7 +456,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 			anims[i]->advanceFrame();
 
 	// handle transformation
-	if (stats.transform_type != "" && stats.transform_type != "untransform" && transform_triggered == false) transform();
+	if (stats.transform_type != "" && stats.transform_type != "untransform" && stats.transformed == false) transform();
 	if (stats.transform_type != "" && stats.transform_duration == 0) untransform();
 
 	switch(stats.cur_state) {
@@ -657,6 +661,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// allow respawn with Accept if not permadeath
 			if (inpt->pressing[ACCEPT]) {
+				inpt->lock[ACCEPT] = true;
 				map->teleportation = true;
 				map->teleport_mapname = map->respawn_map;
 				if (stats.permadeath) {
@@ -678,9 +683,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		default:
 			break;
 	}
-
-	// turn on all passive powers
-	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn) powers->activatePassives(&stats);
 
 	// calc new cam position from player position
 	// cam is focused at player position
@@ -739,7 +741,7 @@ bool Avatar::takeHit(const Hazard &h) {
 				absorption += absorption + stats.absorb_max; // blocking doubles your absorb amount
 			}
 
-			if (absorption > 0) {
+			if (absorption > 0 && dmg != 0) {
 				if ((absorption*100)/dmg > MAX_BLOCK)
 					absorption = (dmg * MAX_BLOCK) /100;
 				if ((absorption*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
@@ -890,7 +892,7 @@ void Avatar::untransform() {
 	if (!map->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL)) return;
 
 	stats.transformed = false;
-	transform_triggered = false;
+	transform_triggered = true;
 	stats.transform_type = "";
 	revertPowers = true;
 	stats.effects.clearEffects();
