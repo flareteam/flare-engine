@@ -145,6 +145,7 @@ public:
 	 , waypoints(std::queue<Point>())
 	 , wander(false)
 	 , hero_ally(false)
+	 , summon_power_index(0)
 	{
 		wander_area.x = 0;
 		wander_area.y = 0;

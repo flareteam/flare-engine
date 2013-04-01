@@ -229,7 +229,8 @@ void EnemyManager::handleSpawn() {
 		e->stats.cur_state = ENEMY_SPAWN;
 
 		//now apply post effects to the spawned enemy
-		powers->effect(&e->stats, e->summoned_power_index,e->stats.hero_ally ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY);
+		if(e->summoned_power_index > 0)
+            powers->effect(&e->stats, e->summoned_power_index,e->stats.hero_ally ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY);
 
         //apply party passives
         //synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
