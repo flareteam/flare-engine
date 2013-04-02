@@ -56,6 +56,7 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
  , drag_walking(false)
  , respawn(false)
  , close_menus(false)
+ , enemies(NULL)
 {
 
 	init();

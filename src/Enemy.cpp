@@ -57,8 +57,8 @@ Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Enti
 	reward_xp = false;
 	instant_power = false;
 	summoned = false;
+	summoned_power_index = 0;
 	kill_source_type = SOURCE_TYPE_NEUTRAL;
-
 	eb = NULL;
 }
 
@@ -70,6 +70,8 @@ Enemy::Enemy(const Enemy& e)
  , enemies(e.enemies)
  , reward_xp(e.reward_xp)
  , instant_power(e.instant_power)
+ , summoned(e.summoned)
+ , summoned_power_index(e.summoned_power_index)
  , kill_source_type(e.kill_source_type)
 {
 	assert(e.haz == NULL);
