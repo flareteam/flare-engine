@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -165,6 +166,43 @@ bool isWithin(SDL_Rect r, Point target) {
 	return target.x >= r.x && target.y >= r.y && target.x < r.x+r.w && target.y < r.y+r.h;
 }
 
+
+Uint32 readPixel(SDL_Surface *surface, int x, int y)
+{
+	SDL_LockSurface(surface);
+	int bpp = surface->format->BytesPerPixel;
+	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+	Uint32 pixel;
+
+	switch (bpp) {
+	case 1:
+		pixel = *p;
+		break;
+
+	case 2:
+		pixel = *(Uint16 *)p;
+		break;
+
+	case 3:
+	  if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+		  pixel = p[0] << 16 | p[1] << 8 | p[2];
+	  else
+		  pixel = p[0] | p[1] << 8 | p[2] << 16;
+	  break;
+
+	case 4:
+		pixel = *(Uint32 *)p;
+		break;
+
+	default:
+		SDL_UnlockSurface(surface);
+		return 0;
+	}
+
+	SDL_UnlockSurface(surface);
+	return pixel;
+}
+
 /*
  * Set the pixel at (x, y) to the given value
  * NOTE: The surface must be locked before calling this!
@@ -304,6 +342,26 @@ SDL_Surface* createSurface(int width, int height) {
 	SDL_FreeSurface(cleanup);
 
 	return surface;
+}
+
+SDL_Surface* loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey)
+{
+	SDL_Surface *ret = NULL;
+	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
+	if(!cleanup) {
+		if (!errormessage.empty())
+			fprintf(stderr, "%s: %s\n", errormessage.c_str(), IMG_GetError());
+		if (IfNotFoundExit) {
+			SDL_Quit();
+			exit(1);
+		}
+	} else {
+		if (HavePinkColorKey)
+			SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, SDL_MapRGB(cleanup->format, 255, 0, 255));
+		ret = SDL_DisplayFormatAlpha(cleanup);
+		SDL_FreeSurface(cleanup);
+	}
+	return ret;
 }
 
 /*

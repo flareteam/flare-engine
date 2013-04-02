@@ -2,13 +2,16 @@ Project (Flare)
 cmake_minimum_required (VERSION 2.6)
 
 Set (PACKAGE "FLARE")
-Set (VERSION "0.17")
+Set (VERSION "0.18")
 
 
 # Default definitions
 if (NOT MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-math-errno -fno-exceptions -ffast-math")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-math-errno -fno-exceptions")
+  if (NOT CMAKE_CXX_COMPILER MATCHES "clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
+  endif (NOT CMAKE_CXX_COMPILER MATCHES "clang")
   set(CMAKE_LD_FLAGS "-fwhole-program")
 endif (NOT MSVC)
 
@@ -31,11 +34,6 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg")
   set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg")
   set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
-else()
-  set(CMAKE_CXX_FLAGS "-g3")
-  set(CMAKE_EXE_LINKER_FLAGS "")
-  set(CMAKE_SHARED_LINKER_FLAGS "")
-  set(CMAKE_MODULE_LINKER_FLAGS "")
 endif()
 
 set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game executable will be installed.")
@@ -100,6 +98,7 @@ Set (FLARE_SOURCES
 	./src/FontEngine.cpp
 	./src/GameState.cpp
 	./src/GameStateConfig.cpp
+	./src/GameStateCutscene.cpp
 	./src/GameStateTitle.cpp
 	./src/GameStateLoad.cpp
 	./src/GameStatePlay.cpp

@@ -285,7 +285,7 @@ bool Entity::takeHit(const Hazard &h) {
 
 		if (!stats.effects.immunity) {
 			if (stats.effects.forced_move) {
-				float theta = powers->calcTheta(h.src_stats->pos.x, h.src_stats->pos.y, stats.pos.x, stats.pos.y);
+				float theta = calcTheta(h.src_stats->pos.x, h.src_stats->pos.y, stats.pos.x, stats.pos.y);
 				stats.forced_speed.x = static_cast<int>(ceil(stats.effects.forced_speed * cos(theta)));
 				stats.forced_speed.y = static_cast<int>(ceil(stats.effects.forced_speed * sin(theta)));
 			}

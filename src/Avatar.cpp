@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "PowerManager.h"
 #include "SharedResources.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 #include "UtilsMath.h"
 #include "EnemyManager.h"
@@ -171,7 +172,7 @@ void Avatar::loadLayerDefinitions() {
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/hero_options.txt!\n");
+	}
 
 	// There are the positions of the items relative to layer_reference_order
 	// so if layer_reference_order=main,body,head,off
@@ -277,7 +278,7 @@ void Avatar::set_direction() {
 				target = path.back();
 			}
 		}
-		stats.direction = face(target.x, target.y);
+		stats.direction = calcDirection(stats.pos, target);
 	} else {
 		if (inpt->pressing[UP] && inpt->pressing[LEFT]) stats.direction = 1;
 		else if (inpt->pressing[UP] && inpt->pressing[RIGHT]) stats.direction = 3;
@@ -328,7 +329,7 @@ void Avatar::handlePower(int actionbar_power) {
 
 		// is this a power that requires changing direction?
 		if (power.face) {
-			stats.direction = face(target.x, target.y);
+			stats.direction = calcDirection(stats.pos, target);
 		}
 
 		switch (power.new_state) {
