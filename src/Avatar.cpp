@@ -367,31 +367,31 @@ void Avatar::handlePower(int actionbar_power) {
  */
 void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
-    // hazards are processed after Avatar and Enemy[]
-    // so process and clear sound effects from previous frames
-    // check sound effects
-    if (AUDIO) {
-        if (sfx_phys)
-            snd->play(sound_melee, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-        if (sfx_ment)
-            snd->play(sound_mental, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-        if (sfx_hit)
-            snd->play(sound_hit, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-        if (sfx_die)
-            snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-        if (sfx_critdie)
-            snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-        if(sfx_block)
-            snd->play(sound_block, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
+	// hazards are processed after Avatar and Enemy[]
+	// so process and clear sound effects from previous frames
+	// check sound effects
+	if (AUDIO) {
+		if (sfx_phys)
+			snd->play(sound_melee, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
+		if (sfx_ment)
+			snd->play(sound_mental, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
+		if (sfx_hit)
+			snd->play(sound_hit, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
+		if (sfx_die)
+			snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
+		if (sfx_critdie)
+			snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
+		if(sfx_block)
+			snd->play(sound_block, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
 
-        // clear sound flags
-        sfx_hit = false;
-        sfx_phys = false;
-        sfx_ment = false;
-        sfx_die = false;
-        sfx_critdie = false;
-        sfx_block = false;
-    }
+		// clear sound flags
+		sfx_hit = false;
+		sfx_phys = false;
+		sfx_ment = false;
+		sfx_die = false;
+		sfx_critdie = false;
+		sfx_block = false;
+	}
 
 	// clear current space to allow correct movement
 	map->collider.unblock(stats.pos.x, stats.pos.y);
@@ -469,8 +469,8 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		drag_walking = false;
 		attacking = false;
 	} else {
-        if(!inpt->lock[MAIN1]) {
-            attacking = true;
+		if(!inpt->lock[MAIN1]) {
+			attacking = true;
 		}
 	}
 
@@ -678,10 +678,10 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				stats.corpse = true;
 
 				//once the player dies, kill off any remaining summons
-                for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-                    if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally)
-                        enemies->enemies[i]->InstantDeath();
-                }
+				for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+					if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally)
+						enemies->enemies[i]->InstantDeath();
+				}
 			}
 
 			// allow respawn with Accept if not permadeath
@@ -879,10 +879,10 @@ int Avatar::getUntransformPower() {
 }
 
 void Avatar::resetActiveAnimation(){
-    activeAnimation->reset(); // shield stutter
-    for (unsigned i=0; i < animsets.size(); i++)
-        if (anims[i])
-            anims[i]->reset();
+	activeAnimation->reset(); // shield stutter
+	for (unsigned i=0; i < animsets.size(); i++)
+		if (anims[i])
+			anims[i]->reset();
 }
 
 void Avatar::addRenders(vector<Renderable> &r) {

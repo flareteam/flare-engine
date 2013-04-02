@@ -139,11 +139,11 @@ void Enemy::logic() {
 	//need to check whether the enemy was converted here
 	//cant do it in behaviour because the behaviour object would be replaced by this
 	if(stats.effects.convert != stats.converted){
-        delete eb;
-        eb = stats.hero_ally ? new BehaviorStandard(this, enemies) : new BehaviorAlly(this, enemies);
-        stats.converted = !stats.converted;
-        stats.hero_ally = !stats.hero_ally;
-    }
+		delete eb;
+		eb = stats.hero_ally ? new BehaviorStandard(this, enemies) : new BehaviorAlly(this, enemies);
+		stats.converted = !stats.converted;
+		stats.hero_ally = !stats.hero_ally;
+	}
 
 	return;
 }
@@ -153,8 +153,8 @@ void Enemy::logic() {
  */
 void Enemy::doRewards(int source_type) {
 
-    if(stats.hero_ally)
-        return;
+	if(stats.hero_ally)
+		return;
 
 	reward_xp = true;
 	kill_source_type = source_type;
@@ -186,69 +186,69 @@ void Enemy::doRewards(int source_type) {
 }
 
 void Enemy::InstantDeath() {
-    stats.effects.triggered_death = true;
-    stats.cur_state = ENEMY_DEAD;
+	stats.effects.triggered_death = true;
+	stats.cur_state = ENEMY_DEAD;
 
-    stats.hp = 0;
-    sfx_die = true;
-    stats.corpse_ticks = CORPSE_TIMEOUT;
-    stats.effects.clearEffects();
+	stats.hp = 0;
+	sfx_die = true;
+	stats.corpse_ticks = CORPSE_TIMEOUT;
+	stats.effects.clearEffects();
 }
 
 void Enemy::CheckSummonSustained(){
-    //if minion was raised by a spawn power
-    if(summoned && stats.hero_ally){
+	//if minion was raised by a spawn power
+	if(summoned && stats.hero_ally){
 
-        Power *spawn_power = &powers->powers[summoned_power_index];
+		Power *spawn_power = &powers->powers[summoned_power_index];
 
-        int max_summons = 0;
+		int max_summons = 0;
 
-        if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_FIXED)
-            max_summons = spawn_power->spawn_limit_qty;
-        else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT)
-        {
-            int stat_val = 1;
-            switch(spawn_power->spawn_limit_stat){
-            case SPAWN_LIMIT_STAT_PHYSICAL:
-                stat_val = enemies->pc->stats.get_physical();
-                break;
-            case SPAWN_LIMIT_STAT_MENTAL:
-                stat_val = enemies->pc->stats.get_mental();
-                break;
-            case SPAWN_LIMIT_STAT_OFFENSE:
-                stat_val = enemies->pc->stats.get_offense();
-                break;
-            case SPAWN_LIMIT_STAT_DEFENSE:
-                stat_val = enemies->pc->stats.get_defense();
-                break;
-            }
-            max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
-        }
-        else
-            return;//unlimited or unknown mode
+		if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_FIXED)
+			max_summons = spawn_power->spawn_limit_qty;
+		else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT)
+		{
+			int stat_val = 1;
+			switch(spawn_power->spawn_limit_stat){
+			case SPAWN_LIMIT_STAT_PHYSICAL:
+				stat_val = enemies->pc->stats.get_physical();
+				break;
+			case SPAWN_LIMIT_STAT_MENTAL:
+				stat_val = enemies->pc->stats.get_mental();
+				break;
+			case SPAWN_LIMIT_STAT_OFFENSE:
+				stat_val = enemies->pc->stats.get_offense();
+				break;
+			case SPAWN_LIMIT_STAT_DEFENSE:
+				stat_val = enemies->pc->stats.get_defense();
+				break;
+			}
+			max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
+		}
+		else
+			return;//unlimited or unknown mode
 
-        //if the power is available, there should be at least 1 allowed summon
-        if(max_summons < 1) max_summons = 1;
+		//if the power is available, there should be at least 1 allowed summon
+		if(max_summons < 1) max_summons = 1;
 
-        int qty_summons = 0;
-        for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-            if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->summoned
-               && !enemies->enemies[i]->stats.corpse
-               && enemies->enemies[i]->summoned_power_index == summoned_power_index
-               && enemies->enemies[i]->stats.cur_state != ENEMY_SPAWN
-               && enemies->enemies[i]->stats.cur_state != ENEMY_DEAD
-               && enemies->enemies[i]->stats.cur_state != ENEMY_CRITDEAD){
-                    qty_summons++;
-            }
-        }
+		int qty_summons = 0;
+		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->summoned
+			   && !enemies->enemies[i]->stats.corpse
+			   && enemies->enemies[i]->summoned_power_index == summoned_power_index
+			   && enemies->enemies[i]->stats.cur_state != ENEMY_SPAWN
+			   && enemies->enemies[i]->stats.cur_state != ENEMY_DEAD
+			   && enemies->enemies[i]->stats.cur_state != ENEMY_CRITDEAD){
+					qty_summons++;
+			}
+		}
 
-        //if total minions sumoned by this skill does not exceed the player mental ability
-        if(qty_summons > max_summons)
-        {
-            InstantDeath();
-        }
+		//if total minions sumoned by this skill does not exceed the player mental ability
+		if(qty_summons > max_summons)
+		{
+			InstantDeath();
+		}
 
-    }
+	}
 }
 
 /**
