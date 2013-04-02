@@ -26,10 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <string>
 #include <vector>
 
 class MenuHUDLog : public Menu {

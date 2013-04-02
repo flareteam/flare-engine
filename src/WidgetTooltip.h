@@ -28,9 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Utils.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-
 #include <vector>
 
 const int STYLE_FLOAT = 0;

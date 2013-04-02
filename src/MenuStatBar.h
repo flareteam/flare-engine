@@ -30,9 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "WidgetLabel.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-
 class WidgetLabel;
 
 class MenuStatBar : public Menu {
