@@ -121,40 +121,6 @@ bool Entity::move() {
 }
 
 /**
- * Change direction to face the target map location
- */
-int Entity::face(int mapx, int mapy) {
-	// inverting Y to convert map coordinates to standard cartesian coordinates
-	int dx = mapx - stats.pos.x;
-	int dy = stats.pos.y - mapy;
-
-	// avoid div by zero
-	if (dx == 0) {
-		if (dy > 0) return 3;
-		else return 7;
-	}
-
-	float slope = ((float)dy)/((float)dx);
-	if (0.5 <= slope && slope <= 2.0) {
-		if (dy > 0) return 4;
-		else return 0;
-	}
-	if (-0.5 <= slope && slope <= 0.5) {
-		if (dx > 0) return 5;
-		else return 1;
-	}
-	if (-2.0 <= slope && slope <= -0.5) {
-		if (dx > 0) return 6;
-		else return 2;
-	}
-	if (2.0 <= slope || -2.0 >= slope) {
-		if (dy > 0) return 3;
-		else return 7;
-	}
-	return stats.direction;
-}
-
-/**
  * Whenever a hazard collides with an entity, this function resolves the effect
  * Called by HazardManager
  *

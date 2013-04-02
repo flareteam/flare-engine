@@ -362,3 +362,110 @@ bool checkPixel(Point px, SDL_Surface *surface) {
 
 	return true;
 }
+
+SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height)
+{
+	if(!source || !width || !height)
+		return 0;
+
+	double _stretch_factor_x, _stretch_factor_y;
+	SDL_Surface *_ret = SDL_CreateRGBSurface(source->flags, width, height,
+						 source->format->BitsPerPixel,
+						 source->format->Rmask,
+						 source->format->Gmask,
+						 source->format->Bmask,
+						 source->format->Amask);
+
+	_stretch_factor_x = width / (double)source->w;
+	_stretch_factor_y = height / (double)source->h;
+
+	for(Uint32 y = 0; y < (Uint32)source->h; y++)
+		for(Uint32 x = 0; x < (Uint32)source->w; x++)
+		{
+			Uint32 spixel = readPixel(source, x, y);
+			for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y)
+				for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x)
+				{
+					Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
+					Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
+					drawPixel(_ret, dx, dy, spixel);
+				}
+		}
+
+	return _ret;
+}
+
+int calcDirection(const Point &src, const Point &dst)
+{
+	return calcDirection(src.x, src.y, dst.x, dst.y);
+}
+
+int calcDirection(int x0, int y0, int x1, int y1)
+{
+	// TODO: use calcTheta instead and check for the areas between -PI and PI
+
+	// inverting Y to convert map coordinates to standard cartesian coordinates
+	int dx = x1 - x0;
+	int dy = y0 - y1;
+
+	// avoid div by zero
+	if (dx == 0) {
+		if (dy > 0) return 3;
+		else return 7;
+	}
+
+	float slope = ((float)dy)/((float)dx);
+	if (0.5 <= slope && slope <= 2.0) {
+		if (dy > 0) return 4;
+		else return 0;
+	}
+	if (-0.5 <= slope && slope <= 0.5) {
+		if (dx > 0) return 5;
+		else return 1;
+	}
+	if (-2.0 <= slope && slope <= -0.5) {
+		if (dx > 0) return 6;
+		else return 2;
+	}
+	// now scope must be (2.0 <= slope || -2.0 >= slope)
+	if (dy > 0) return 3;
+	else return 7;
+}
+
+// convert cartesian to polar theta where (x1,x2) is the origin
+float calcTheta(int x1, int y1, int x2, int y2) {
+
+	float pi = 3.1415926535898f;
+
+	// calculate base angle
+	float dx = (float)x2 - (float)x1;
+	float dy = (float)y2 - (float)y1;
+	int exact_dx = x2 - x1;
+	float theta;
+
+	// convert cartesian to polar coordinates
+	if (exact_dx == 0) {
+		if (dy > 0.0) theta = pi/2.0f;
+		else theta = -pi/2.0f;
+	}
+	else {
+		theta = atan(dy/dx);
+		if (dx < 0.0 && dy >= 0.0) theta += pi;
+		if (dx < 0.0 && dy < 0.0) theta -= pi;
+	}
+	return theta;
+}
+
+void setupSDLVideoMode(unsigned width, unsigned height)
+{
+	Uint32 flags = 0;
+
+	if (FULLSCREEN) flags = flags | SDL_FULLSCREEN;
+	if (DOUBLEBUF) flags = flags | SDL_DOUBLEBUF;
+	if (HWSURFACE)
+		flags = flags | SDL_HWSURFACE | SDL_HWACCEL;
+	else
+		flags = flags | SDL_SWSURFACE;
+
+	screen = SDL_SetVideoMode (width, height, 0, flags);
+}

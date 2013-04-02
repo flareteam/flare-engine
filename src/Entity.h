@@ -44,7 +44,6 @@ public:
 	virtual ~Entity();
 
 	bool move();
-	int face(int, int);
 	bool takeHit(const Hazard &h);
 	virtual void resetActiveAnimation();
 	virtual void doRewards(int source_type){}
