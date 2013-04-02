@@ -73,6 +73,8 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	forced_speed = emSource.forced_speed;
 	forced_move = emSource.forced_move;
 	revive = emSource.revive;
+	convert = emSource.convert;
+	death_sentence = emSource.death_sentence;
 	bonus_hp = emSource.bonus_hp;
 	bonus_hp_regen = emSource.bonus_hp_regen;
 	bonus_hp_percent = emSource.bonus_hp_percent;
@@ -185,8 +187,8 @@ void EffectManager::logic() {
 			if (effect_list[i].duration > 0) {
 				if (effect_list[i].ticks > 0) effect_list[i].ticks--;
 				if (effect_list[i].ticks == 0) {
-				    //death sentence is only applied at the end of the timer
-                    if (effect_list[i].type == "death_sentence") death_sentence = true;
+					//death sentence is only applied at the end of the timer
+					if (effect_list[i].type == "death_sentence") death_sentence = true;
 					removeEffect(i);
 					i--;
 					continue;
