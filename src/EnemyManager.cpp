@@ -112,12 +112,12 @@ void EnemyManager::handleNewMap () {
 
 	// delete existing enemies
 	for (unsigned int i=0; i < enemies.size(); i++) {
-        anim->decreaseCount(enemies[i]->animationSet->getName());
-        if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != ENEMY_DEAD && enemies[i]->stats.cur_state != ENEMY_CRITDEAD)
-            allies.push(enemies[i]);
-        else{
-            delete enemies[i];
-        }
+		anim->decreaseCount(enemies[i]->animationSet->getName());
+		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != ENEMY_DEAD && enemies[i]->stats.cur_state != ENEMY_CRITDEAD)
+			allies.push(enemies[i]);
+		else{
+			delete enemies[i];
+		}
 	}
 	enemies.clear();
 
@@ -158,10 +158,10 @@ void EnemyManager::handleNewMap () {
 
 	while (!allies.empty()){
 
-        Enemy *e = allies.front();
+		Enemy *e = allies.front();
 		allies.pop();
 
-        //dont need the result of this. its only called to handle animation and sound
+		//dont need the result of this. its only called to handle animation and sound
 		getEnemyPrototype(e->type);
 
 		e->stats.pos.x = pc->stats.pos.x;
@@ -191,15 +191,15 @@ void EnemyManager::handleSpawn() {
 		Enemy *e = new Enemy(powers, map, this);
 		// factory
 		if(espawn.hero_ally)
-            e->eb = new BehaviorAlly(e, this);
-        else
-            e->eb = new BehaviorStandard(e, this);
+			e->eb = new BehaviorAlly(e, this);
+		else
+			e->eb = new BehaviorStandard(e, this);
 
-        e->stats.hero_ally = espawn.hero_ally;
-        e->summoned = true;
-        e->summoned_power_index = espawn.summon_power_index;
+		e->stats.hero_ally = espawn.hero_ally;
+		e->summoned = true;
+		e->summoned_power_index = espawn.summon_power_index;
 
-        e->type = espawn.type;
+		e->type = espawn.type;
 		e->stats.direction = espawn.direction;
 		e->stats.load("enemies/" + espawn.type + ".txt");
 		if (e->stats.animations != "") {
@@ -219,37 +219,37 @@ void EnemyManager::handleSpawn() {
 
 
 		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type) || !e->stats.hero_ally){
-            e->stats.pos.x = espawn.pos.x;
-            e->stats.pos.y = espawn.pos.y;
+			e->stats.pos.x = espawn.pos.x;
+			e->stats.pos.y = espawn.pos.y;
 		} else {
-            e->stats.pos.x = hero_pos.x;
-            e->stats.pos.y = hero_pos.y;
+			e->stats.pos.x = hero_pos.x;
+			e->stats.pos.y = hero_pos.y;
 		}
 		// special animation state for spawning enemies
 		e->stats.cur_state = ENEMY_SPAWN;
 
 		//now apply post effects to the spawned enemy
 		if(e->summoned_power_index > 0)
-            powers->effect(&e->stats, e->summoned_power_index,e->stats.hero_ally ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY);
+			powers->effect(&e->stats, e->summoned_power_index,e->stats.hero_ally ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY);
 
-        //apply party passives
-        //synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
-        //at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
-        for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
-            if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && e->stats.hero_ally
-                && (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
+		//apply party passives
+		//synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
+		//at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
+		for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
+			if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && e->stats.hero_ally
+				&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
 
-                e->stats.powers_passive.push_back(pc->stats.powers_passive[i]);
-            }
-        }
+				e->stats.powers_passive.push_back(pc->stats.powers_passive[i]);
+			}
+		}
 
-        for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
-            if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && e->stats.hero_ally
-                && (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
+		for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
+			if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && e->stats.hero_ally
+				&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
 
-                e->stats.powers_passive.push_back(pc->stats.powers_list_items[i]);
-            }
-        }
+				e->stats.powers_passive.push_back(pc->stats.powers_list_items[i]);
+			}
+		}
 
 		enemies.push_back(e);
 
@@ -259,17 +259,17 @@ void EnemyManager::handleSpawn() {
 
 void EnemyManager::handlePartyBuff()
 {
-    while (!powers->party_buffs.empty()) {
-        int power_index = powers->party_buffs.front();
-        powers->party_buffs.pop();
-        Power *buff_power = &powers->powers[power_index];
+	while (!powers->party_buffs.empty()) {
+		int power_index = powers->party_buffs.front();
+		powers->party_buffs.pop();
+		Power *buff_power = &powers->powers[power_index];
 
-        for (unsigned int i=0; i < enemies.size(); i++) {
-            if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0 && (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->summoned_power_index)){
-                powers->effect(&enemies[i]->stats,power_index,SOURCE_TYPE_HERO);
-            }
-        }
-    }
+		for (unsigned int i=0; i < enemies.size(); i++) {
+			if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0 && (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->summoned_power_index)){
+				powers->effect(&enemies[i]->stats,power_index,SOURCE_TYPE_HERO);
+			}
+		}
+	}
 }
 
 /**
@@ -352,10 +352,10 @@ Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
 void EnemyManager::checkEnemiesforXP(CampaignManager *camp) {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		if (enemies[i]->reward_xp) {
-            //adjust for party exp if necessary
-            float xp_multiplier = 1;
-            if(enemies[i]->kill_source_type == SOURCE_TYPE_ALLY)
-                xp_multiplier = ((float)PARTY_EXP_PERCENTAGE) / (float)100;
+			//adjust for party exp if necessary
+			float xp_multiplier = 1;
+			if(enemies[i]->kill_source_type == SOURCE_TYPE_ALLY)
+				xp_multiplier = ((float)PARTY_EXP_PERCENTAGE) / (float)100;
 
 			camp->rewardXP(enemies[i]->stats.xp * xp_multiplier, false);
 			enemies[i]->reward_xp = false; // clear flag
