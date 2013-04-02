@@ -44,7 +44,7 @@ class MapRenderer;
 class Enemy : public Entity {
 
 public:
-	Enemy(PowerManager *_powers, MapRenderer *_map);
+	Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em);
 	Enemy(const Enemy& e);
 	~Enemy();
 	bool lineOfSight();
@@ -52,8 +52,9 @@ public:
 	int faceNextBest(int mapx, int mapy);
 	void newState(int state);
 	int getDistance(Point dest);
-	bool takeHit(const Hazard &h);
-	void doRewards();
+	virtual void doRewards(int source_type);
+	void InstantDeath();
+	void CheckSummonSustained();
 
 	std::string type;
 
@@ -61,19 +62,15 @@ public:
 
 	Hazard *haz;
 	EnemyBehavior *eb;
-	PowerManager *powers;
-
-	// sound effects flags
-	bool sfx_phys;
-	bool sfx_ment;
-
-	bool sfx_hit;
-	bool sfx_die;
-	bool sfx_critdie;
+	EnemyManager *enemies;
 
 	// other flags
 	bool reward_xp;
 	bool instant_power;
+	bool summoned;
+	int summoned_power_index;
+	int kill_source_type;
+
 };
 
 

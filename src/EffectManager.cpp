@@ -111,6 +111,8 @@ void EffectManager::clearStatus() {
 	forced_speed = 0;
 	forced_move = false;
 	revive = false;
+	convert = false;
+	death_sentence = false;
 
 	bonus_hp = 0;
 	bonus_hp_regen = 0;
@@ -154,6 +156,7 @@ void EffectManager::logic() {
 				forced_speed = effect_list[i].magnitude;
 			}
 			else if (effect_list[i].type == "revive") revive = true;
+			else if (effect_list[i].type == "convert") convert = true;
 			else if (effect_list[i].type == "hp") bonus_hp += effect_list[i].magnitude;
 			else if (effect_list[i].type == "hp_regen") bonus_hp_regen += effect_list[i].magnitude;
 			else if (effect_list[i].type == "hp_percent") bonus_hp_percent += effect_list[i].magnitude;
@@ -182,6 +185,8 @@ void EffectManager::logic() {
 			if (effect_list[i].duration > 0) {
 				if (effect_list[i].ticks > 0) effect_list[i].ticks--;
 				if (effect_list[i].ticks == 0) {
+				    //death sentence is only applied at the end of the timer
+                    if (effect_list[i].type == "death_sentence") death_sentence = true;
 					removeEffect(i);
 					i--;
 					continue;
@@ -213,7 +218,7 @@ void EffectManager::logic() {
 	}
 }
 
-void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id) {
+void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type) {
 	// if we're already immune, don't add negative effects
 	if (immunity) {
 		if (type == "damage") return;
@@ -230,7 +235,11 @@ void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std
 	for (unsigned i=0; i<effect_list.size(); i++) {
 		if (effect_list[i].id == id) {
 			if (trigger > -1 && effect_list[i].trigger == trigger) return; // trigger effects can only be cast once per trigger
-			if (effect_list[i].duration <= duration) {
+			if (effect_list[i].duration <= duration && effect_list[i].type != "death_sentence") {
+				effect_list[i].ticks = effect_list[i].duration = duration;
+				if (effect_list[i].animation) effect_list[i].animation->reset();
+			}
+			if (effect_list[i].duration > duration && effect_list[i].type == "death_sentence") {
 				effect_list[i].ticks = effect_list[i].duration = duration;
 				if (effect_list[i].animation) effect_list[i].animation->reset();
 			}
@@ -258,6 +267,7 @@ void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std
 	e.trigger = trigger;
 	e.render_above = render_above;
 	e.passive_id = passive_id;
+	e.source_type = source_type;
 
 	if (animation != "") {
 		anim->increaseCount(animation);

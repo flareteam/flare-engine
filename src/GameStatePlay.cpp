@@ -97,6 +97,8 @@ GameStatePlay::GameStatePlay()
 	camp->currency = &menu->inv->currency;
 	camp->hero = &pc->stats;
 	map->powers = powers;
+	pc->enemies = enemies;
+	enemies->pc = pc;
 
 	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
@@ -163,10 +165,19 @@ void GameStatePlay::checkEnemyFocus() {
  */
 bool GameStatePlay::restrictPowerUse() {
 	if(MOUSE_MOVE) {
-		if(enemy == NULL && inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
-			return true;
-		}
+        if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
+            if(enemy == NULL) {
+                return true;
+            }
+            else{
+                if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
+                    return true;
+            }
+        }
 	}
+
+
+
 	return false;
 }
 
@@ -249,6 +260,13 @@ void GameStatePlay::checkTeleport() {
 			map->cam.x = pc->stats.pos.x = pc->stats.teleport_destination.x;
 			map->cam.y = pc->stats.pos.y = pc->stats.teleport_destination.y;
 		}
+
+		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+            if(enemies->enemies[i]->stats.hero_ally){
+                enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
+                enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
+            }
+        }
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
