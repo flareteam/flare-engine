@@ -22,12 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-
 #include <fstream>
-#include <string>
 #include <map>
 #include <vector>
 

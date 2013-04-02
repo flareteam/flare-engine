@@ -22,10 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 
-#include <SDL.h>
-#include <string>
-
-
 #define JOY_DEADZONE	100
 
 #define JOY_POS_CENTER	0

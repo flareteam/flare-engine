@@ -64,6 +64,7 @@ public:
 	~EnemyManager();
 	void handleNewMap();
 	void handleSpawn();
+	void handlePartyBuff();
 	void logic();
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP(CampaignManager *camp);
@@ -75,6 +76,7 @@ public:
 	Point hero_pos;
 	bool hero_alive;
 	int hero_stealth;
+	Avatar *pc;
 };
 
 

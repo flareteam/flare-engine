@@ -104,15 +104,19 @@ public:
 	bool corpse; // creature is dead and done animating
 	int corpse_ticks;
 	bool hero; // else, enemy or other
+	bool hero_ally;
 	bool humanoid; // true for human, sceleton...; false for wyvern, snake...
 	bool permadeath;
 	bool transformed;
 	bool refresh_stats;
+	bool converted;
 
 	int movement_type;
 	bool flying;
 	bool intangible;
 	bool facing; // does this creature turn to face the hero
+
+	std::vector<std::string> categories;
 
 	std::string name;
 	std::string sfx_prefix;

@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 #include "Widget.h"
-#include <SDL.h>
-#include <string>
 
 class WidgetInput : public Widget {
 

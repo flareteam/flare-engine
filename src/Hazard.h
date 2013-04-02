@@ -30,9 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Entity;
 
 #include <vector>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
 #include "Utils.h"
 
 class Animation;
@@ -43,6 +40,7 @@ class MapCollision;
 const int SOURCE_TYPE_HERO = 0;
 const int SOURCE_TYPE_NEUTRAL = 1;
 const int SOURCE_TYPE_ENEMY = 2;
+const int SOURCE_TYPE_ALLY = 3;
 
 class Hazard {
 private:
@@ -74,6 +72,7 @@ public:
 	int crit_chance;
 	int accuracy;
 	int source_type;
+	bool target_party;
 
 	FPoint pos;
 	FPoint speed;
