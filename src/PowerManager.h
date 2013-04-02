@@ -89,6 +89,10 @@ const int SPAWN_LIMIT_STAT_MENTAL = 1;
 const int SPAWN_LIMIT_STAT_OFFENSE = 2;
 const int SPAWN_LIMIT_STAT_DEFENSE = 3;
 
+const int STAT_MODIFIER_MODE_MULTIPLY = 0;
+const int STAT_MODIFIER_MODE_ADD = 1;
+const int STAT_MODIFIER_MODE_ABSOLUTE = 2;
+
 class PostEffect {
 public:
 	int id;
@@ -156,6 +160,18 @@ public:
 	int range;
 	bool target_party;
 	std::vector<std::string> target_categories;
+
+	int mod_accuracy_mode;
+	int mod_accuracy_value;
+	bool mod_accuracy_ignore_avoid;
+
+	int mod_crit_mode;
+	int mod_crit_value;
+
+	int mod_damage_mode;
+	int mod_damage_value_min;
+	int mod_damage_value_max;//only used if mode is absolute
+	bool mod_damage_ignore_absorb;
 
 	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
 	int hp_steal;
@@ -249,6 +265,15 @@ public:
 		, multitarget(false)
 		, range(0)
 		, target_party(false)
+        , mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
+        , mod_accuracy_value(100)
+        , mod_accuracy_ignore_avoid(false)
+        , mod_crit_mode(STAT_MODIFIER_MODE_MULTIPLY)
+        , mod_crit_value(100)
+        , mod_damage_mode(STAT_MODIFIER_MODE_MULTIPLY)
+        , mod_damage_value_min(100)
+        , mod_damage_value_max(0)
+        , mod_damage_ignore_absorb(false)
 
 		, hp_steal(0)
 		, mp_steal(0)

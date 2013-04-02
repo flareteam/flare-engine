@@ -198,16 +198,40 @@ bool Entity::takeHit(const Hazard &h) {
     CombatText *combat_text = comb;
 
     // if it's a miss, do nothing
-    int avoidance = stats.avoidance;
-    if (stats.effects.triggered_block) avoidance *= 2;
-    clampCeil(avoidance, MAX_AVOIDANCE);
-    if (percentChance(avoidance - h.accuracy - 25)) {
+    int accuracy = h.accuracy;
+    if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
+        accuracy *= ((float)(powers->powers[h.power_index].mod_accuracy_value)) / (float)100;
+    else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
+        accuracy += powers->powers[h.power_index].mod_accuracy_value;
+    else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+        accuracy = powers->powers[h.power_index].mod_accuracy_value;
+
+    int avoidance = 0;
+    if(!powers->powers[h.power_index].mod_accuracy_ignore_avoid){
+        avoidance = stats.avoidance;
+        if (stats.effects.triggered_block) avoidance *= 2;
+    }
+
+    int true_avoidance = 100 - (accuracy + 25 - avoidance);
+    //if we are using an absolute accuracy, offset the constant 25 added to the accuracy
+    if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+        true_avoidance += 25;
+    clampCeil(true_avoidance, MAX_AVOIDANCE);
+
+    if (percentChance(true_avoidance)) {
         combat_text->addMessage(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
         return false;
     }
 
     // calculate base damage
     int dmg = randBetween(h.dmg_min, h.dmg_max);
+
+    if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+        dmg *= ((float)(powers->powers[h.power_index].mod_damage_value_min)) / (float)100;
+    else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+        dmg += powers->powers[h.power_index].mod_damage_value_min;
+    else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+        dmg = randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
 
     // apply elemental resistance
     if (h.trait_elemental >= 0 && unsigned(h.trait_elemental) < stats.vulnerable.size()) {
@@ -218,7 +242,7 @@ bool Entity::takeHit(const Hazard &h) {
         dmg = (dmg * vulnerable) / 100;
     }
 
-    if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
+    if (!h.trait_armor_penetration && !powers->powers[h.power_index].mod_damage_ignore_absorb) { // armor penetration ignores all absorption
         // substract absorption from armor
         int absorption = randBetween(stats.absorb_min, stats.absorb_max);
 
@@ -254,6 +278,14 @@ bool Entity::takeHit(const Hazard &h) {
 
     // check for crits
     int true_crit_chance = h.crit_chance;
+
+    if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY)
+        true_crit_chance *= ((float)(powers->powers[h.power_index].mod_crit_value)) / (float)100;
+    else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ADD)
+        true_crit_chance += powers->powers[h.power_index].mod_crit_value;
+    else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+        true_crit_chance = powers->powers[h.power_index].mod_crit_value;
+
     if (stats.effects.stun || stats.effects.speed < 100)
         true_crit_chance += h.trait_crits_impaired;
 

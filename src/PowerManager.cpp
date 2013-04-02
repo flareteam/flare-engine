@@ -320,6 +320,39 @@ void PowerManager::loadPowers(const std::string& filename) {
                 powers[input_id].target_categories.push_back(cat);
             }
         }
+        else if (infile.key == "modifier_accuracy"){
+            infile.val = infile.val + ',';
+            std::string mode = eatFirstString(infile.val, ',');
+            if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
+            if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
+            if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+            else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_accuracy_ignore_avoid = (1 == eatFirstInt(infile.val, ','));
+        }
+        else if (infile.key == "modifier_damage"){
+            infile.val = infile.val + ',';
+            std::string mode = eatFirstString(infile.val, ',');
+            if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
+            if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
+            if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+            else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_damage_value_min = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_damage_value_max = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_damage_ignore_absorb = (1 == eatFirstInt(infile.val, ','));
+        }
+        else if (infile.key == "modifier_critical"){
+            infile.val = infile.val + ',';
+            std::string mode = eatFirstString(infile.val, ',');
+            if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
+            if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
+            if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+            else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_crit_value = eatFirstInt(infile.val, ',');
+        }
 		else
 			fprintf(stderr, "ignoring unknown key %s set to %s\n", infile.key.c_str(), infile.val.c_str());
 	}
