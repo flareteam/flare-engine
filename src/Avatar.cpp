@@ -672,16 +672,16 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				else {
 					log_msg = msg->get("You are defeated.  You lose half your %s.  Press Enter to continue.", CURRENCY);
 				}
-			}
-
-			if (activeAnimation->getTimesPlayed() >= 1) {
-				stats.corpse = true;
 
 				//once the player dies, kill off any remaining summons
                 for (unsigned int i=0; i < enemies->enemies.size(); i++) {
                     if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally)
                         enemies->enemies[i]->InstantDeath();
                 }
+			}
+
+			if (activeAnimation->getTimesPlayed() >= 1) {
+				stats.corpse = true;
 			}
 
 			// allow respawn with Accept if not permadeath
