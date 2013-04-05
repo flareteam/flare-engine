@@ -157,12 +157,12 @@ void GameStateConfig::init() {
 
 	// Allocate KeyBindings
 	for (unsigned int i = 0; i < 25; i++) {
-		 settings_lb[i] = new WidgetLabel();
-		 settings_lb[i]->set(inpt->binding_name[i]);
-		 settings_lb[i]->setJustify(JUSTIFY_RIGHT);
+		settings_lb[i] = new WidgetLabel();
+		settings_lb[i]->set(inpt->binding_name[i]);
+		settings_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
 	for (unsigned int i = 0; i < 50; i++) {
-		 settings_key[i] = new WidgetButton("images/menus/buttons/button_default.png");
+		settings_key[i] = new WidgetButton("images/menus/buttons/button_default.png");
 	}
 
 	// Allocate resolution list box
@@ -638,10 +638,11 @@ void GameStateConfig::readConfig () {
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
 	input_scrollbox->pos.x = scrollpane.x + frame.x;
 	input_scrollbox->pos.y = scrollpane.y + frame.y;
-	input_scrollbox->resize(scrollpane_contents);
 	input_scrollbox->bg.r = scrollpane_color.r;
 	input_scrollbox->bg.g = scrollpane_color.g;
 	input_scrollbox->bg.b = scrollpane_color.b;
+	input_scrollbox->transparent = false;
+	input_scrollbox->resize(scrollpane_contents);
 
 	// Set positions of secondary key bindings
 	for (unsigned int i = 25; i < 50; i++) {
@@ -1010,12 +1011,14 @@ void GameStateConfig::render ()
 
 	// render keybindings tab
 	if (active_tab == 4) {
-		if (input_scrollbox->update) input_scrollbox->refresh();
-		for (unsigned int i = 0; i < 25; i++) {
-			if (input_scrollbox->update) settings_lb[i]->render(input_scrollbox->contents);
-		}
-		for (unsigned int i = 0; i < 50; i++) {
-			if (input_scrollbox->update) settings_key[i]->render(input_scrollbox->contents);
+		if (input_scrollbox->update) {
+			input_scrollbox->refresh();
+			for (unsigned int i = 0; i < 25; i++) {
+				settings_lb[i]->render(input_scrollbox->contents);
+			}
+			for (unsigned int i = 0; i < 50; i++) {
+				settings_key[i]->render(input_scrollbox->contents);
+			}
 		}
 		input_scrollbox->render();
 	}

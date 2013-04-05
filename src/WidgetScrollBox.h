@@ -46,6 +46,7 @@ public:
 	SDL_Surface * contents;
 	bool update;
 	SDL_Color bg;
+	bool transparent;
 
 private:
 	void scroll(int amount);
