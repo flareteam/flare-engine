@@ -60,8 +60,25 @@ void ModManager::loadModList() {
 		fprintf(stderr, "Mod \"%s\" not found, skipping\n", FALLBACK_MOD);
 	}
 
+	// get the mods prefix
+	string prefix = PATH_DATA + "mods/mods_prefix.txt";
+	infile.open(prefix.c_str(), ios::in);
+	while(infile.good()) {
+		line = getLine(infile);
+
+		// skip ahead if this line is empty
+		if (line.length() == 0) continue;
+
+		// skip comments
+		starts_with = line.at(0);
+		if (starts_with == "#") continue;
+
+		MODS_PREFIX = line + "_";
+	}
+	infile.close();
+
 	// Add all other mods.
-	string place1 = PATH_CONF + "mods.txt";
+	string place1 = PATH_CONF + MODS_PREFIX + "mods.txt";
 	string place2 = PATH_DATA + "mods/mods.txt";
 
 	infile.open(place1.c_str(), ios::in);

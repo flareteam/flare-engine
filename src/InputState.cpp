@@ -126,7 +126,7 @@ void InputState::loadKeyBindings() {
 
 	FileParser infile;
 
-	if (!infile.open(PATH_CONF + FILE_KEYBINDINGS, "")) {
+	if (!infile.open(PATH_CONF + MODS_PREFIX + FILE_KEYBINDINGS, "")) {
 		if (!infile.open(mods->locate("engine/default_keybindings.txt"), "")) {
 			saveKeyBindings();
 			return;
@@ -180,7 +180,7 @@ void InputState::loadKeyBindings() {
  */
 void InputState::saveKeyBindings() {
 	ofstream outfile;
-	outfile.open((PATH_CONF + FILE_KEYBINDINGS).c_str(), ios::out);
+	outfile.open((PATH_CONF + MODS_PREFIX + FILE_KEYBINDINGS).c_str(), ios::out);
 
 	if (outfile.is_open()) {
 
