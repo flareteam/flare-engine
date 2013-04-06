@@ -1259,7 +1259,7 @@ bool GameStateConfig::setMods() {
 		if (activemods_lstb->getValue(i) != "") mods->mod_list.push_back(activemods_lstb->getValue(i));
 	}
 	ofstream outfile;
-	outfile.open((PATH_CONF + "mods.txt").c_str(), ios::out);
+	outfile.open((PATH_CONF + MODS_PREFIX + "mods.txt").c_str(), ios::out);
 
 	if (outfile.is_open()) {
 

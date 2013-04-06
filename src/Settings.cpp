@@ -77,6 +77,7 @@ string PATH_CONF = "";
 string PATH_USER = "";
 string PATH_DATA = "";
 string USER_PATH_DATA = "";
+string MODS_PREFIX = "";
 
 // Filenames
 string FILE_SETTINGS	= "settings.txt";
@@ -513,7 +514,7 @@ bool loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS, "")) {
+	if (!infile.open(PATH_CONF + MODS_PREFIX + FILE_SETTINGS, "")) {
 		if (!infile.open(mods->locate("engine/default_settings.txt"), "")) {
 			saveSettings();
 			return true;
@@ -539,7 +540,7 @@ bool loadSettings() {
 bool saveSettings() {
 
 	ofstream outfile;
-	outfile.open((PATH_CONF + FILE_SETTINGS).c_str(), ios::out);
+	outfile.open((PATH_CONF + MODS_PREFIX + FILE_SETTINGS).c_str(), ios::out);
 
 	if (outfile.is_open()) {
 
