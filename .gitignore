@@ -5,6 +5,8 @@ CMakeCache.txt
 Makefile
 cmake_install.cmake
 build/
+config/
+saves/
 # ignore also vim swap files
 .*.sw*
 flare.desktop
