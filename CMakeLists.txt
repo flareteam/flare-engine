@@ -36,6 +36,9 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
 endif()
 
+set(GAME "flare" CACHE STRING "The game name, used for the executable, desktop files, etc.")
+add_definitions(-DENGINE_FOLDER="${GAME}")
+
 set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game executable will be installed.")
 set(DATADIR "share/games/flare" CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game data files will be installed.")
 
@@ -172,34 +175,34 @@ IF (WIN32)
     )
 ENDIF (WIN32)
 
-Add_Executable (flare ${FLARE_SOURCES})
+Add_Executable (${GAME} ${FLARE_SOURCES})
 
 # libSDLMain comes with libSDL if needed on certain platforms
 If (NOT SDLMAIN_LIBRARY)
   Set (SDLMAIN_LIBRARY "")
 EndIf (NOT SDLMAIN_LIBRARY)
 
-Target_Link_Libraries (flare ${CMAKE_LD_FLAGS} ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} ${SDLMAIN_LIBRARY})
+Target_Link_Libraries (${GAME} ${CMAKE_LD_FLAGS} ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} ${SDLMAIN_LIBRARY})
 
 
 # desktop file
 If(NOT IS_ABSOLUTE "${BINDIR}")
-	set(FLARE_EXECUTABLE_PATH ${CMAKE_INSTALL_PREFIX}/${BINDIR}/flare)
+	set(FLARE_EXECUTABLE_PATH ${CMAKE_INSTALL_PREFIX}/${BINDIR}/${GAME})
 Else(NOT IS_ABSOLUTE "${BINDIR}")
-	set(FLARE_EXECUTABLE_PATH ${BINDIR}/flare)
+	set(FLARE_EXECUTABLE_PATH ${BINDIR}/${GAME})
 EndIf(NOT IS_ABSOLUTE "${BINDIR}")
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/distribution/${GAME}.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/${GAME}.desktop")
 
 
 # installing to the proper places
 install(PROGRAMS
-  ${CMAKE_CURRENT_BINARY_DIR}/flare
+	${CMAKE_CURRENT_BINARY_DIR}/${GAME}
   DESTINATION ${BINDIR})
 install(DIRECTORY
   "${CMAKE_CURRENT_SOURCE_DIR}/mods"
   DESTINATION ${DATADIR})
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
+	"${CMAKE_CURRENT_BINARY_DIR}/${GAME}.desktop"
   DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
 install(FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"

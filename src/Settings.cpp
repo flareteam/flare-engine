@@ -204,7 +204,11 @@ void setPaths() {
 #else
 void setPaths() {
 
-	string engine_folder = "flare";
+	string engine_folder = "";
+#if defined ENGINE_FOLDER
+	engine_folder = ENGINE_FOLDER;
+#endif
+	if (engine_folder == "") engine_folder = "flare";
 
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
