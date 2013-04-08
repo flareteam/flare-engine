@@ -215,10 +215,10 @@ int main(int argc, char *argv[])
 			debug_event = true;
 		} else if (parseArg(arg) == "game") {
 			ENGINE_FOLDER = parseArgValue(arg);
-		} else if (parseArg(arg) == "game_data") {
-			USER_PATH_DATA = parseArgValue(arg);
-			if (!USER_PATH_DATA.empty() && USER_PATH_DATA.at(USER_PATH_DATA.length()-1) != '/')
-				USER_PATH_DATA += "/";
+		} else if (parseArg(arg) == "data_path") {
+			CUSTOM_PATH_DATA = parseArgValue(arg);
+			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
+				CUSTOM_PATH_DATA += "/";
 		}
 	}
 

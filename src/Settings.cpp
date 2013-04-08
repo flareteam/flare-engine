@@ -77,7 +77,7 @@ string ENGINE_FOLDER = "";
 string PATH_CONF = "";
 string PATH_USER = "";
 string PATH_DATA = "";
-string USER_PATH_DATA = "";
+string CUSTOM_PATH_DATA = "";
 
 // Filenames
 string FILE_SETTINGS	= "settings.txt";
@@ -183,8 +183,8 @@ void setPaths() {
 	PATH_CONF = "config";
 	PATH_USER = "saves";
 	PATH_DATA = "";
-	if (dirExists(USER_PATH_DATA)) PATH_DATA = USER_PATH_DATA;
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// TODO: place config and save data in the user's home, windows style
 	createDir(PATH_CONF);
@@ -199,8 +199,8 @@ void setPaths() {
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
-	if (dirExists(USER_PATH_DATA)) PATH_DATA = USER_PATH_DATA;
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
 #else
 void setPaths() {
@@ -270,11 +270,11 @@ void setPaths() {
 	// NOTE: from here on out, the function exits early when the data dir is found
 
 	// if the user specified a data path, try to use it
-	if (dirExists(USER_PATH_DATA)) {
-		PATH_DATA = USER_PATH_DATA;
+	if (dirExists(CUSTOM_PATH_DATA)) {
+		PATH_DATA = CUSTOM_PATH_DATA;
 		return;
 	}
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
