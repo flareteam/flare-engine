@@ -73,7 +73,7 @@ ConfigEntry config[] = {
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
 // Paths
-string ENGINE_FOLDER = "";
+string ENGINE_FOLDER = "default";
 string PATH_CONF = "";
 string PATH_USER = "";
 string PATH_DATA = "";
@@ -212,14 +212,14 @@ void setPaths() {
 
 	// set config path (settings, keybindings)
 	// $XDG_CONFIG_HOME/flare/
-	if (getenv("XDG_CONFIG_HOME") != NULL && !ENGINE_FOLDER.empty()) {
+	if (getenv("XDG_CONFIG_HOME") != NULL) {
 		PATH_CONF = (string)getenv("XDG_CONFIG_HOME") + "/flare/";
 		createDir(PATH_CONF);
 		PATH_CONF += ENGINE_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// $HOME/.config/flare/
-	else if (getenv("HOME") != NULL && !ENGINE_FOLDER.empty()) {
+	else if (getenv("HOME") != NULL) {
 		PATH_CONF = (string)getenv("HOME") + "/.config/";
 		createDir(PATH_CONF);
 		PATH_CONF += "flare/";
@@ -235,14 +235,14 @@ void setPaths() {
 
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
-	if (getenv("XDG_DATA_HOME") != NULL && !ENGINE_FOLDER.empty()) {
+	if (getenv("XDG_DATA_HOME") != NULL) {
 		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
 		createDir(PATH_USER);
 		PATH_USER += ENGINE_FOLDER + "/";
 		createDir(PATH_USER);
 	}
 	// $HOME/.local/share/flare/
-	else if (getenv("HOME") != NULL && !ENGINE_FOLDER.empty()) {
+	else if (getenv("HOME") != NULL) {
 		PATH_USER = (string)getenv("HOME") + "/.local/";
 		createDir(PATH_USER);
 		PATH_USER += "share/";
@@ -284,7 +284,7 @@ void setPaths() {
 
 	// check $XDG_DATA_DIRS options
 	// a list of directories in preferred order separated by :
-	if (getenv("XDG_DATA_DIRS") != NULL && !ENGINE_FOLDER.empty()) {
+	if (getenv("XDG_DATA_DIRS") != NULL) {
 		string pathlist = (string)getenv("XDG_DATA_DIRS");
 		string pathtest;
 		pathtest = eatFirstString(pathlist,':');
@@ -300,21 +300,19 @@ void setPaths() {
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 #endif
 
-	if (!ENGINE_FOLDER.empty()) {
-		// check /usr/local/share/flare/ and /usr/share/flare/ next
-		PATH_DATA = "/usr/local/share/flare/" + ENGINE_FOLDER + "/";
-		if (dirExists(PATH_DATA)) return; // NOTE: early exit
+	// check /usr/local/share/flare/ and /usr/share/flare/ next
+	PATH_DATA = "/usr/local/share/flare/" + ENGINE_FOLDER + "/";
+	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
-		PATH_DATA = "/usr/share/flare/" + ENGINE_FOLDER + "/";
-		if (dirExists(PATH_DATA)) return; // NOTE: early exit
+	PATH_DATA = "/usr/share/flare/" + ENGINE_FOLDER + "/";
+	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
-		// check "games" variants of these
-		PATH_DATA = "/usr/local/share/games/flare/" + ENGINE_FOLDER + "/";
-		if (dirExists(PATH_DATA)) return; // NOTE: early exit
+	// check "games" variants of these
+	PATH_DATA = "/usr/local/share/games/flare/" + ENGINE_FOLDER + "/";
+	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
-		PATH_DATA = "/usr/share/games/flare/" + ENGINE_FOLDER + "/";
-		if (dirExists(PATH_DATA)) return; // NOTE: early exit
-	}
+	PATH_DATA = "/usr/share/games/flare/" + ENGINE_FOLDER + "/";
+	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
 	// finally assume the local folder
 	PATH_DATA = "./";
