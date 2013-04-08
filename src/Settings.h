@@ -65,7 +65,7 @@ typedef struct HeroClass{
 }HeroClass;
 
 // Path info
-extern std::string ENGINE_FOLDER;
+extern std::string GAME_FOLDER;
 extern std::string PATH_CONF; // user-configurable settings files
 extern std::string PATH_USER; // important per-user data (saves)
 extern std::string PATH_DATA; // common game data
