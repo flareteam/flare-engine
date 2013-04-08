@@ -155,7 +155,7 @@ void Enemy::logic() {
  */
 void Enemy::doRewards(int source_type) {
 
-	if(stats.hero_ally)
+	if(stats.hero_ally && !stats.converted)
 		return;
 
 	reward_xp = true;
