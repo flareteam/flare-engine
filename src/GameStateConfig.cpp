@@ -64,9 +64,9 @@ void GameStateConfig::init() {
 
 	tip = new WidgetTooltip();
 
-	ok_button = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
-	defaults_button = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
-	cancel_button = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	ok_button = new WidgetButton("images/menus/buttons/button_default.png");
+	defaults_button = new WidgetButton("images/menus/buttons/button_default.png");
+	cancel_button = new WidgetButton("images/menus/buttons/button_default.png");
 
 	ok_button->label = msg->get("OK");
 	ok_button->pos.x = VIEW_W_HALF - ok_button->pos.w/2;
@@ -93,50 +93,50 @@ void GameStateConfig::init() {
 		}
 	}
 
-	fullscreen_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	fullscreen_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	fullscreen_lb = new WidgetLabel();
-	mouse_move_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	mouse_move_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	mouse_move_lb = new WidgetLabel();
-	combat_text_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	combat_text_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	combat_text_lb = new WidgetLabel();
-	hwsurface_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	hwsurface_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	hwsurface_lb = new WidgetLabel();
-	doublebuf_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	doublebuf_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	doublebuf_lb = new WidgetLabel();
-	enable_joystick_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	enable_joystick_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	enable_joystick_lb = new WidgetLabel();
-	texture_quality_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	texture_quality_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	texture_quality_lb = new WidgetLabel();
-	change_gamma_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	change_gamma_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	change_gamma_lb = new WidgetLabel();
-	animated_tiles_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	animated_tiles_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	animated_tiles_lb = new WidgetLabel();
-	mouse_aim_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	mouse_aim_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	mouse_aim_lb = new WidgetLabel();
-	show_fps_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	show_fps_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	show_fps_lb = new WidgetLabel();
-	music_volume_sl = new WidgetSlider(mods->locate("images/menus/buttons/slider_default.png"));
+	music_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	music_volume_lb = new WidgetLabel();
-	sound_volume_sl = new WidgetSlider(mods->locate("images/menus/buttons/slider_default.png"));
+	sound_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	sound_volume_lb = new WidgetLabel();
-	gamma_sl = new WidgetSlider(mods->locate("images/menus/buttons/slider_default.png"));
+	gamma_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	gamma_lb = new WidgetLabel();
 	resolution_lb = new WidgetLabel();
-	activemods_lstb = new WidgetListBox(mods_total, 10, mods->locate("images/menus/buttons/listbox_default.png"));
+	activemods_lstb = new WidgetListBox(mods_total, 10, "images/menus/buttons/listbox_default.png");
 	activemods_lb = new WidgetLabel();
-	inactivemods_lstb = new WidgetListBox(mods_total, 10, mods->locate("images/menus/buttons/listbox_default.png"));
+	inactivemods_lstb = new WidgetListBox(mods_total, 10, "images/menus/buttons/listbox_default.png");
 	inactivemods_lb = new WidgetLabel();
-	joystick_device_lstb = new WidgetListBox(SDL_NumJoysticks(), 10, mods->locate("images/menus/buttons/listbox_default.png"));
+	joystick_device_lstb = new WidgetListBox(SDL_NumJoysticks(), 10, "images/menus/buttons/listbox_default.png");
 	joystick_device_lb = new WidgetLabel();
 	language_lb = new WidgetLabel();
 	hws_note_lb = new WidgetLabel();
 	dbuf_note_lb = new WidgetLabel();
 	anim_tiles_note_lb = new WidgetLabel();
 	test_note_lb = new WidgetLabel();
-	activemods_shiftup_btn = new WidgetButton(mods->locate("images/menus/buttons/up.png"));
-	activemods_shiftdown_btn = new WidgetButton(mods->locate("images/menus/buttons/down.png"));
-	activemods_deactivate_btn = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
-	inactivemods_activate_btn = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	activemods_shiftup_btn = new WidgetButton("images/menus/buttons/up.png");
+	activemods_shiftdown_btn = new WidgetButton("images/menus/buttons/down.png");
+	activemods_deactivate_btn = new WidgetButton("images/menus/buttons/button_default.png");
+	inactivemods_activate_btn = new WidgetButton("images/menus/buttons/button_default.png");
 
 	tabControl = new WidgetTabControl(6);
 	tabControl->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
@@ -157,18 +157,18 @@ void GameStateConfig::init() {
 
 	// Allocate KeyBindings
 	for (unsigned int i = 0; i < 25; i++) {
-		 settings_lb[i] = new WidgetLabel();
-		 settings_lb[i]->set(inpt->binding_name[i]);
-		 settings_lb[i]->setJustify(JUSTIFY_RIGHT);
+		settings_lb[i] = new WidgetLabel();
+		settings_lb[i]->set(inpt->binding_name[i]);
+		settings_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
 	for (unsigned int i = 0; i < 50; i++) {
-		 settings_key[i] = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+		settings_key[i] = new WidgetButton("images/menus/buttons/button_default.png");
 	}
 
 	// Allocate resolution list box
 	int resolutions = getVideoModes();
 	if (resolutions < 1) fprintf(stderr, "Unable to get resolutions list!\n");
-	resolution_lstb = new WidgetListBox(resolutions, 10, mods->locate("images/menus/buttons/listbox_default.png"));
+	resolution_lstb = new WidgetListBox(resolutions, 10, "images/menus/buttons/listbox_default.png");
 	resolution_lstb->can_deselect = false;
 
 	// Allocate Languages ListBox
@@ -177,7 +177,7 @@ void GameStateConfig::init() {
 	language_full = std::vector<std::string>();
 	language_ISO.resize(langCount);
 	language_full.resize(langCount);
-	language_lstb = new WidgetListBox(langCount, 10, mods->locate("images/menus/buttons/listbox_default.png"));
+	language_lstb = new WidgetListBox(langCount, 10, "images/menus/buttons/listbox_default.png");
 	language_lstb->can_deselect = false;
 
 	readConfig();
@@ -638,10 +638,11 @@ void GameStateConfig::readConfig () {
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
 	input_scrollbox->pos.x = scrollpane.x + frame.x;
 	input_scrollbox->pos.y = scrollpane.y + frame.y;
-	input_scrollbox->resize(scrollpane_contents);
 	input_scrollbox->bg.r = scrollpane_color.r;
 	input_scrollbox->bg.g = scrollpane_color.g;
 	input_scrollbox->bg.b = scrollpane_color.b;
+	input_scrollbox->transparent = false;
+	input_scrollbox->resize(scrollpane_contents);
 
 	// Set positions of secondary key bindings
 	for (unsigned int i = 25; i < 50; i++) {
@@ -1010,12 +1011,14 @@ void GameStateConfig::render ()
 
 	// render keybindings tab
 	if (active_tab == 4) {
-		if (input_scrollbox->update) input_scrollbox->refresh();
-		for (unsigned int i = 0; i < 25; i++) {
-			if (input_scrollbox->update) settings_lb[i]->render(input_scrollbox->contents);
-		}
-		for (unsigned int i = 0; i < 50; i++) {
-			if (input_scrollbox->update) settings_key[i]->render(input_scrollbox->contents);
+		if (input_scrollbox->update) {
+			input_scrollbox->refresh();
+			for (unsigned int i = 0; i < 25; i++) {
+				settings_lb[i]->render(input_scrollbox->contents);
+			}
+			for (unsigned int i = 0; i < 50; i++) {
+				settings_key[i]->render(input_scrollbox->contents);
+			}
 		}
 		input_scrollbox->render();
 	}

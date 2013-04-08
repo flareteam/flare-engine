@@ -44,9 +44,9 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 	portrait = NULL;
 	msg_buffer = NULL;
 
-	advanceButton = new WidgetButton(mods->locate("images/menus/buttons/right.png"));
+	advanceButton = new WidgetButton("images/menus/buttons/right.png");
 
-	closeButton = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
+	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	visible = false;
 	vendor_visible = false;
@@ -58,7 +58,7 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 	// fonts
 	font_who = font_dialog = "font_regular";
 
-	loadGraphicSurface("images/menus/dialog_box.png");
+	background = loadGraphicSurface("images/menus/dialog_box.png");
 
 	// Load config settings
 	FileParser infile;

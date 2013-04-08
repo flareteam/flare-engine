@@ -54,10 +54,6 @@ MenuLog::MenuLog() {
 				tab_area.y = eatFirstInt(infile.val,',');
 				tab_area.w = eatFirstInt(infile.val,',');
 				tab_area.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "tab_bg_color") {
-				tab_bg.r = eatFirstInt(infile.val,',');
-				tab_bg.g = eatFirstInt(infile.val,',');
-				tab_bg.b = eatFirstInt(infile.val,',');
 			}
 		}
 		infile.close();
@@ -67,9 +63,6 @@ MenuLog::MenuLog() {
 	for (int i=0; i<LOG_TYPE_COUNT; i++) {
 		log_count[i] = 0;
 		msg_buffer[i] = new WidgetScrollBox(tab_area.w,tab_area.h);
-		msg_buffer[i]->bg.r = tab_bg.r;
-		msg_buffer[i]->bg.g = tab_bg.g;
-		msg_buffer[i]->bg.b = tab_bg.b;
 	}
 
 	// Initialize the tab control.
@@ -84,7 +77,7 @@ MenuLog::MenuLog() {
 
 	background = loadGraphicSurface("images/menus/log.png");
 
-	closeButton = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
+	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	color_normal = font->getColor("menu_normal");
 }
