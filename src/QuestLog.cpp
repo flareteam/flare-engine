@@ -59,6 +59,12 @@ void QuestLog::loadAll() {
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
 
+		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/quests/index.txt";
+
+		if (fileExists(test_path)) {
+			this->loadIndex(test_path);
+		}
+
 		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/quests/index.txt";
 
 		if (fileExists(test_path)) {

@@ -240,6 +240,7 @@ void setPaths() {
 		createDir(PATH_USER);
 		PATH_USER += ENGINE_FOLDER + "/";
 		createDir(PATH_USER);
+		createDir(PATH_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -251,6 +252,7 @@ void setPaths() {
 		createDir(PATH_USER);
 		PATH_USER += ENGINE_FOLDER + "/";
 		createDir(PATH_USER);
+		createDir(PATH_USER + "mods/");
 	}
 	// ./saves/
 	else {
@@ -296,7 +298,7 @@ void setPaths() {
 	}
 
 #if defined DATA_INSTALL_DIR
-	PATH_DATA = DATA_INSTALL_DIR "/";
+	PATH_DATA = DATA_INSTALL_DIR "/" + ENGINE_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 #endif
 

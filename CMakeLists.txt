@@ -37,7 +37,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game executable will be installed.")
-set(DATADIR "share/games/flare/default" CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game data files will be installed.")
+set(DATADIR "share/games/flare" CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game data files will be installed.")
 
 If(NOT IS_ABSOLUTE "${DATADIR}")
 	add_definitions(-DDATA_INSTALL_DIR="${CMAKE_INSTALL_PREFIX}/${DATADIR}")
@@ -197,7 +197,7 @@ install(PROGRAMS
   DESTINATION ${BINDIR})
 install(DIRECTORY
   "${CMAKE_CURRENT_SOURCE_DIR}/mods"
-  DESTINATION ${DATADIR})
+  DESTINATION ${DATADIR}/default)
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
   DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
