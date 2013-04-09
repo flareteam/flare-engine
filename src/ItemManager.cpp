@@ -93,6 +93,26 @@ void ItemManager::loadAll() {
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
+		// check locally installed mods first
+		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/items.txt";
+
+		if (fileExists(test_path)) {
+			this->load(test_path);
+		}
+
+		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/types.txt";
+
+		if (fileExists(test_path)) {
+			this->loadTypes(test_path);
+		}
+
+		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/sets.txt";
+
+		if (fileExists(test_path)) {
+			this->loadSets(test_path);
+		}
+
+		// now check global mods
 		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/items.txt";
 
 		if (fileExists(test_path)) {
