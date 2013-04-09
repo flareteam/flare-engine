@@ -80,6 +80,19 @@ const int TRIGGER_HALFDEATH = 2;
 const int TRIGGER_JOINCOMBAT = 3;
 const int TRIGGER_DEATH = 4;
 
+const int SPAWN_LIMIT_MODE_FIXED = 0;
+const int SPAWN_LIMIT_MODE_STAT = 1;
+const int SPAWN_LIMIT_MODE_UNLIMITED = 2;
+
+const int SPAWN_LIMIT_STAT_PHYSICAL = 0;
+const int SPAWN_LIMIT_STAT_MENTAL = 1;
+const int SPAWN_LIMIT_STAT_OFFENSE = 2;
+const int SPAWN_LIMIT_STAT_DEFENSE = 3;
+
+const int STAT_MODIFIER_MODE_MULTIPLY = 0;
+const int STAT_MODIFIER_MODE_ADD = 1;
+const int STAT_MODIFIER_MODE_ABSOLUTE = 2;
+
 class PostEffect {
 public:
 	int id;
@@ -145,6 +158,20 @@ public:
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
 	int range;
+	bool target_party;
+	std::vector<std::string> target_categories;
+
+	int mod_accuracy_mode;
+	int mod_accuracy_value;
+	bool mod_accuracy_ignore_avoid;
+
+	int mod_crit_mode;
+	int mod_crit_value;
+
+	int mod_damage_mode;
+	int mod_damage_value_min;
+	int mod_damage_value_max;//only used if mode is absolute
+	bool mod_damage_ignore_absorb;
 
 	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
 	int hp_steal;
@@ -169,6 +196,8 @@ public:
 	// special effects
 	bool buff;
 	bool buff_teleport;
+	bool buff_party;
+	int buff_party_power_id;
 
 	std::vector<PostEffect> post_effects;
 	std::string effect_type;
@@ -182,6 +211,10 @@ public:
 	// spawn info
 	std::string spawn_type;
 	int target_neighbor;
+	int spawn_limit_mode;
+    int spawn_limit_qty;
+    int spawn_limit_every;
+    int spawn_limit_stat;
 
 	Power()
 		: type(-1)
@@ -231,6 +264,16 @@ public:
 		, starting_pos(STARTING_POS_SOURCE)
 		, multitarget(false)
 		, range(0)
+		, target_party(false)
+        , mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
+        , mod_accuracy_value(100)
+        , mod_accuracy_ignore_avoid(false)
+        , mod_crit_mode(STAT_MODIFIER_MODE_MULTIPLY)
+        , mod_crit_value(100)
+        , mod_damage_mode(STAT_MODIFIER_MODE_MULTIPLY)
+        , mod_damage_value_min(100)
+        , mod_damage_value_max(0)
+        , mod_damage_ignore_absorb(false)
 
 		, hp_steal(0)
 		, mp_steal(0)
@@ -251,6 +294,8 @@ public:
 
 		, buff(false)
 		, buff_teleport(false)
+        , buff_party(false)
+        , buff_party_power_id(0)
 
 		, effect_type("")
 		, effect_additive(false)
@@ -262,6 +307,10 @@ public:
 		, allow_power_mod(false)
 		, spawn_type("")
 		, target_neighbor(0)
+		, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
+        , spawn_limit_qty(1)
+        , spawn_limit_every(1)
+        , spawn_limit_stat(SPAWN_LIMIT_STAT_MENTAL)
 	{}
 
 };
@@ -303,7 +352,7 @@ public:
 	bool canUsePower(unsigned id) const;
 	bool hasValidTarget(int power_index, StatBlock *src_stats, Point target);
 	bool spawn(const std::string& enemy_type, Point target);
-	bool effect(StatBlock *src_stats, int power_index);
+	bool effect(StatBlock *src_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
 	int getIdFromTag(std::string tag);
@@ -311,6 +360,7 @@ public:
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> enemies; // output; read by PowerManager
+	std::queue<int> party_buffs;
 
 	// shared sounds for power special effects
 	std::vector<SoundManager::SoundID> sfx;

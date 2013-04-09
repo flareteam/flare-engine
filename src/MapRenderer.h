@@ -134,6 +134,8 @@ public:
 	std::queue<Point> waypoints;
 	bool wander;
 	SDL_Rect wander_area;
+	bool hero_ally;
+	int summon_power_index;
 
 	Map_Enemy(std::string _type="", Point _pos=Point())
 	 : type(_type)
@@ -141,6 +143,8 @@ public:
 	 , direction(rand() % 8)
 	 , waypoints(std::queue<Point>())
 	 , wander(false)
+	 , hero_ally(false)
+	 , summon_power_index(0)
 	{
 		wander_area.x = 0;
 		wander_area.y = 0;

@@ -42,10 +42,12 @@ StatBlock::StatBlock()
 	, corpse(false)
 	, corpse_ticks(0)
 	, hero(false)
+	, hero_ally(false)
 	, humanoid(false)
 	, permadeath(false)
 	, transformed(false)
 	, refresh_stats(false)
+	, converted(false)
 	, movement_type(MOVEMENT_NORMAL)
 	, flying(false)
 	, intangible(false)
@@ -296,6 +298,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "absorb_min") absorb_min = num;
 		else if (infile.key == "absorb_max") absorb_max = num;
 		else if (infile.key == "poise") poise = poise_base = num;
+		else if (infile.key == "hp_regen_base") hp_regen_base = num;
 
 		// behavior stats
 		else if (infile.key == "flying") {
@@ -367,9 +370,14 @@ void StatBlock::load(const string& filename) {
 				suppress_hp = false;
 		}
 
-		// these are only used for EnemyGroupManager
+		else if (infile.key == "categories"){
+            string cat;
+            while ((cat = infile.nextValue()) != "") {
+                categories.push_back(cat);
+            }
+		}
+		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
-		else if (infile.key == "categories") valid = true;
 		else if (infile.key == "rarity") valid = true;
 
 		else if (!valid) {
@@ -468,6 +476,7 @@ void StatBlock::recalc_alt() {
 		maxmp = mp_base + effects.bonus_mp;
 		accuracy = accuracy_base + effects.bonus_accuracy;
 		avoidance = avoidance_base + effects.bonus_avoidance;
+		hp_per_minute = hp_regen_base + effects.bonus_hp_regen;
 	}
 
 	speed = speed_default;
@@ -529,6 +538,9 @@ void StatBlock::logic() {
 	if (effects.damage > 0) {
 		takeDamage(effects.damage);
 	}
+
+	if(effects.death_sentence)
+        hp = 0;
 
 	if(cooldown_hit_ticks > 0)
 		cooldown_hit_ticks--;
