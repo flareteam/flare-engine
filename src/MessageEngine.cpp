@@ -34,8 +34,25 @@ using namespace std;
 
 MessageEngine::MessageEngine() {
 	GetText infile;
+	string path;
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-		string path = PATH_DATA + "mods/" + mods->mod_list[i] + "/languages/";
+		// check locally installed mods first
+		path = PATH_USER + "mods/" + mods->mod_list[i] + "/languages/";
+		if (infile.open(path + "engine." + LANGUAGE + ".po")) {
+			while (infile.next() && !infile.fuzzy) {
+				messages.insert(pair<string,string>(infile.key, infile.val));
+			}
+		    infile.close();
+		}
+		if (infile.open(path + "data." + LANGUAGE + ".po")) {
+			while (infile.next() && !infile.fuzzy) {
+				messages.insert(pair<string,string>(infile.key, infile.val));
+			}
+		    infile.close();
+		}
+
+		// now check global mods
+		path = PATH_DATA + "mods/" + mods->mod_list[i] + "/languages/";
 		if (infile.open(path + "engine." + LANGUAGE + ".po")) {
 			while (infile.next() && !infile.fuzzy) {
 				messages.insert(pair<string,string>(infile.key, infile.val));
@@ -46,7 +63,7 @@ MessageEngine::MessageEngine() {
 		}
 		if (infile.open(path + "data." + LANGUAGE + ".po")) {
 			while (infile.next() && !infile.fuzzy) {
-				messages.insert(pair<string,string>(infile.key, infile.val)); 		       
+				messages.insert(pair<string,string>(infile.key, infile.val));
 			}
 		    infile.close();
 		} else if (LANGUAGE != "en" && mods->mod_list[i] != FALLBACK_MOD) {

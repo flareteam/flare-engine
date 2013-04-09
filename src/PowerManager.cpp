@@ -66,6 +66,12 @@ void PowerManager::loadAll() {
 	// load each config file
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
 
+		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/powers/powers.txt";
+
+		if (fileExists(test_path)) {
+			this->loadPowers(test_path);
+		}
+
 		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/powers/powers.txt";
 
 		if (fileExists(test_path)) {

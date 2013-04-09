@@ -47,6 +47,14 @@ void EnemyGroupManager::generate() {
 	// load each enemies folder. Individual enemies can be overwritten with mods.
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
 
+		string dir_local = PATH_USER + "mods/" + mods->mod_list[i] + "/enemies";
+
+		vector<string> files_local;
+		getFileList(dir_local, ".txt", files_local);
+		for (size_t j = 0; j < files_local.size(); ++j) {
+			parseEnemyFileAndStore(files_local[j]);
+		}
+
 		string dir = PATH_DATA + "mods/" + mods->mod_list[i] + "/enemies";
 
 		vector<string> files;

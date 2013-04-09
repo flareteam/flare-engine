@@ -73,10 +73,11 @@ ConfigEntry config[] = {
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
 // Paths
+string GAME_FOLDER = "default";
 string PATH_CONF = "";
 string PATH_USER = "";
 string PATH_DATA = "";
-string USER_PATH_DATA = "";
+string CUSTOM_PATH_DATA = "";
 
 // Filenames
 string FILE_SETTINGS	= "settings.txt";
@@ -182,8 +183,8 @@ void setPaths() {
 	PATH_CONF = "config";
 	PATH_USER = "saves";
 	PATH_DATA = "";
-	if (dirExists(USER_PATH_DATA)) PATH_DATA = USER_PATH_DATA;
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// TODO: place config and save data in the user's home, windows style
 	createDir(PATH_CONF);
@@ -198,28 +199,32 @@ void setPaths() {
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
-	if (dirExists(USER_PATH_DATA)) PATH_DATA = USER_PATH_DATA;
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
 #else
 void setPaths() {
 
-	string engine_folder = "flare";
-
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+
+	// Note: If the GAME_FOLDER isn't defined, we fall back to using the current directory
 
 	// set config path (settings, keybindings)
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
-		PATH_CONF = (string)getenv("XDG_CONFIG_HOME") + "/" + engine_folder + "/";
+		PATH_CONF = (string)getenv("XDG_CONFIG_HOME") + "/flare/";
+		createDir(PATH_CONF);
+		PATH_CONF += GAME_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// $HOME/.config/flare/
 	else if (getenv("HOME") != NULL) {
 		PATH_CONF = (string)getenv("HOME") + "/.config/";
 		createDir(PATH_CONF);
-		PATH_CONF += engine_folder + "/";
+		PATH_CONF += "flare/";
+		createDir(PATH_CONF);
+		PATH_CONF += GAME_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// ./config/
@@ -231,8 +236,11 @@ void setPaths() {
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
 	if (getenv("XDG_DATA_HOME") != NULL) {
-		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/" + engine_folder + "/";
+		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
 		createDir(PATH_USER);
+		PATH_USER += GAME_FOLDER + "/";
+		createDir(PATH_USER);
+		createDir(PATH_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -240,8 +248,11 @@ void setPaths() {
 		createDir(PATH_USER);
 		PATH_USER += "share/";
 		createDir(PATH_USER);
-		PATH_USER += engine_folder + "/";
+		PATH_USER += "flare/";
 		createDir(PATH_USER);
+		PATH_USER += GAME_FOLDER + "/";
+		createDir(PATH_USER);
+		createDir(PATH_USER + "mods/");
 	}
 	// ./saves/
 	else {
@@ -261,11 +272,11 @@ void setPaths() {
 	// NOTE: from here on out, the function exits early when the data dir is found
 
 	// if the user specified a data path, try to use it
-	if (dirExists(USER_PATH_DATA)) {
-		PATH_DATA = USER_PATH_DATA;
+	if (dirExists(CUSTOM_PATH_DATA)) {
+		PATH_DATA = CUSTOM_PATH_DATA;
 		return;
 	}
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
@@ -280,29 +291,29 @@ void setPaths() {
 		string pathtest;
 		pathtest = eatFirstString(pathlist,':');
 		while (pathtest != "") {
-			PATH_DATA = pathtest + "/" + engine_folder + "/";
+			PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
 			if (dirExists(PATH_DATA)) return; // NOTE: early exit
 			pathtest = eatFirstString(pathlist,':');
 		}
 	}
 
 #if defined DATA_INSTALL_DIR
-	PATH_DATA = DATA_INSTALL_DIR "/";
+	PATH_DATA = DATA_INSTALL_DIR "/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	PATH_DATA = "/usr/local/share/" + engine_folder + "/";
+	PATH_DATA = "/usr/local/share/flare/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
-	PATH_DATA = "/usr/share/" + engine_folder + "/";
+	PATH_DATA = "/usr/share/flare/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
 	// check "games" variants of these
-	PATH_DATA = "/usr/local/share/games/" + engine_folder + "/";
+	PATH_DATA = "/usr/local/share/games/flare/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
-	PATH_DATA = "/usr/share/games/" + engine_folder + "/";
+	PATH_DATA = "/usr/share/games/flare/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
 	// finally assume the local folder
