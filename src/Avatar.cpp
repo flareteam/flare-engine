@@ -50,6 +50,7 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
  , lockCast(false)
  , lockShoot(false)
  , animFwd(false)
+ , enemies(NULL)
  , hero_stats(NULL)
  , charmed_stats(NULL)
  , act_target()
@@ -57,7 +58,6 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
  , drag_walking(false)
  , respawn(false)
  , close_menus(false)
- , enemies(NULL)
 {
 
 	init();
