@@ -211,11 +211,11 @@ int main(int argc, char *argv[])
 
 	for (int i = 1 ; i < argc; i++) {
 		string arg = string(argv[i]);
-		if (parseArg(arg) == "debug_event") {
+		if (parseArg(arg) == "debug-event") {
 			debug_event = true;
 		} else if (parseArg(arg) == "game") {
 			GAME_FOLDER = parseArgValue(arg);
-		} else if (parseArg(arg) == "data_path") {
+		} else if (parseArg(arg) == "data-path") {
 			CUSTOM_PATH_DATA = parseArgValue(arg);
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";
