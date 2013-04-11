@@ -356,21 +356,18 @@ void MapRenderer::loadEventComponent(FileParser &infile)
 		e->s = msg->get(infile.val);
 	}
 	else if (infile.key == "power_path") {
-		e->type = "power_src";
+		// x,y are src, if s=="hero" we target the hero,
+		// else we'll use values in a,b as coordinates
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.nextValue());
-
-		events.back().components.push_back(Event_Component());
-		e = &events.back().components.back();
-		e->type = "power_dest";
 
 		string dest = infile.nextValue();
 		if (dest == "hero") {
 			e->s = "hero";
 		}
 		else {
-			e->x = toInt(dest);
-			e->y = toInt(infile.nextValue());
+			e->a = toInt(dest);
+			e->b = toInt(infile.nextValue());
 		}
 	}
 	else if (infile.key == "intermap") {
@@ -1322,16 +1319,16 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 			int power_index = ec->x;
 
+			Event_Component *ec_path = ev.getComponent("power_path");
 			if (ev.stats == NULL) {
 				ev.stats = new StatBlock();
 
 				ev.stats->accuracy = 1000; //always hits its target
 
 				// if a power path was specified, place the source position there
-				Event_Component *ec_src = ev.getComponent("power_src");
-				if (ec_src) {
-					ev.stats->pos.x = ec_src->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					ev.stats->pos.y = ec_src->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				if (ec_path) {
+					ev.stats->pos.x = ec_path->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					ev.stats->pos.y = ec_path->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 				}
 				// otherwise the source position is the event position
 				else {
@@ -1345,17 +1342,16 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 			Point target;
 
-			Event_Component *ec_dest = ev.getComponent("power_dest");
-			if (ec_dest) {
+			if (ec_path) {
 				// targets hero option
-				if (ec_dest->s == "hero") {
+				if (ec_path->s == "hero") {
 					target.x = cam.x;
 					target.y = cam.y;
 				}
 				// targets fixed path option
 				else {
-					target.x = ec_dest->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					target.y = ec_dest->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					target.x = ec_path->a * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					target.y = ec_path->b * UNITS_PER_TILE + UNITS_PER_TILE/2;
 				}
 			}
 			// no path specified, targets self location
