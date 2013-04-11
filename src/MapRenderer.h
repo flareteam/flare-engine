@@ -90,7 +90,6 @@ public:
 	SDL_Rect location;
 	std::vector<Event_Component> components;
 	SDL_Rect hotspot;
-	std::string tooltip;
 	int cooldown; // events that run multiple times pause this long in frames
 
 	//power spawn variables
@@ -106,7 +105,6 @@ public:
 	Map_Event()
 	 : type("")
 	 , components(std::vector<Event_Component>())
-	 , tooltip("")
 	 , cooldown(0)
 	 , power_src()
 	 , power_dest()

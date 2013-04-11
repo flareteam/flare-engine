@@ -333,9 +333,6 @@ void MapRenderer::loadEvent(FileParser &infile)
 			events.back().hotspot.h = toInt(infile.nextValue());
 		}
 	}
-	else if (infile.key == "tooltip") {
-		events.back().tooltip = msg->get(infile.val);
-	}
 	else if (infile.key == "power_path") {
 		events.back().power_src.x = toInt(infile.nextValue());
 		events.back().power_src.y = toInt(infile.nextValue());
@@ -367,7 +364,10 @@ void MapRenderer::loadEventComponent(FileParser &infile)
 	Event_Component *e = &events.back().components.back();
 	e->type = infile.key;
 
-	if (infile.key == "intermap") {
+	if (infile.key == "tooltip") {
+		e->s = msg->get(infile.val);
+	}
+	else if (infile.key == "intermap") {
 		e->s = infile.nextValue();
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.nextValue());
@@ -1099,11 +1099,17 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					if (!(*it).tooltip.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+					std::vector<Event_Component>::iterator ec;
+					string tooltip = "";
+					for (ec = (*it).components.begin(); ec != (*it).components.end(); ++ec)
+						if (ec->type == "tooltip")
+							tooltip = ec->s;
+
+					if (!tooltip.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
 						show_tooltip = true;
-						if (!tip_buf.compareFirstLine((*it).tooltip)) {
+						if (!tip_buf.compareFirstLine(tooltip)) {
 							tip_buf.clear();
-							tip_buf.addText((*it).tooltip);
+							tip_buf.addText(tooltip);
 						}
 						TOOLTIP_CONTEXT = TOOLTIP_MAP;
 					} else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
