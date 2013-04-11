@@ -118,6 +118,18 @@ public:
 		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
 	}
 
+	// returns a pointer to the event component within the components list
+	// no need to free the pointer by caller
+	// NULL will be returned if no such event is found
+	Event_Component *getComponent(const std::string &_type)
+	{
+		std::vector<Event_Component>::iterator it;
+		for (it = components.begin(); it != components.end(); ++it)
+			if (it->type == _type)
+				return &(*it);
+		return NULL;
+	}
+
 	~Map_Event()
 	{
 		delete stats; // may be NULL, but delete can deal with null pointers.
