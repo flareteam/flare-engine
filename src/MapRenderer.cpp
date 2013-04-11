@@ -1105,17 +1105,12 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					std::vector<Event_Component>::iterator ec;
-					string tooltip = "";
-					for (ec = (*it).components.begin(); ec != (*it).components.end(); ++ec)
-						if (ec->type == "tooltip")
-							tooltip = ec->s;
-
-					if (!tooltip.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+					Event_Component *ec = (*it).getComponent("tooltip");
+					if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
 						show_tooltip = true;
-						if (!tip_buf.compareFirstLine(tooltip)) {
+						if (!tip_buf.compareFirstLine(ec->s)) {
 							tip_buf.clear();
-							tip_buf.addText(tooltip);
+							tip_buf.addText(ec->s);
 						}
 						TOOLTIP_CONTEXT = TOOLTIP_MAP;
 					} else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
