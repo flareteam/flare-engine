@@ -333,18 +333,6 @@ void MapRenderer::loadEvent(FileParser &infile)
 			events.back().hotspot.h = toInt(infile.nextValue());
 		}
 	}
-	else if (infile.key == "power_path") {
-		events.back().power_src.x = toInt(infile.nextValue());
-		events.back().power_src.y = toInt(infile.nextValue());
-		string dest = infile.nextValue();
-		if (dest == "hero") {
-			events.back().targetHero = true;
-		}
-		else {
-			events.back().power_dest.x = toInt(dest);
-			events.back().power_dest.y = toInt(infile.nextValue());
-		}
-	}
 	else if (infile.key == "power_damage") {
 		events.back().damagemin = toInt(infile.nextValue());
 		events.back().damagemax = toInt(infile.nextValue());
@@ -366,6 +354,24 @@ void MapRenderer::loadEventComponent(FileParser &infile)
 
 	if (infile.key == "tooltip") {
 		e->s = msg->get(infile.val);
+	}
+	else if (infile.key == "power_path") {
+		e->type = "power_src";
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
+
+		events.back().components.push_back(Event_Component());
+		e = &events.back().components.back();
+		e->type = "power_dest";
+
+		string dest = infile.nextValue();
+		if (dest == "hero") {
+			e->s = "hero";
+		}
+		else {
+			e->x = toInt(dest);
+			e->y = toInt(infile.nextValue());
+		}
 	}
 	else if (infile.key == "intermap") {
 		e->s = infile.nextValue();
@@ -1327,9 +1333,10 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 				ev.stats->accuracy = 1000; //always hits its target
 
 				// if a power path was specified, place the source position there
-				if (ev.power_src.x > 0) {
-					ev.stats->pos.x = ev.power_src.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					ev.stats->pos.y = ev.power_src.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				Event_Component *ec_src = ev.getComponent("power_src");
+				if (ec_src) {
+					ev.stats->pos.x = ec_src->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					ev.stats->pos.y = ec_src->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 				}
 				// otherwise the source position is the event position
 				else {
@@ -1343,16 +1350,18 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 			Point target;
 
-			// if a power path was specified:
-			// targets hero option
-			if (ev.targetHero) {
-				target.x = cam.x;
-				target.y = cam.y;
-			}
-			// targets fixed path option
-			else if (ev.power_dest.x != 0) {
-				target.x = ev.power_dest.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				target.y = ev.power_dest.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			Event_Component *ec_dest = ev.getComponent("power_dest");
+			if (ec_dest) {
+				// targets hero option
+				if (ec_dest->s == "hero") {
+					target.x = cam.x;
+					target.y = cam.y;
+				}
+				// targets fixed path option
+				else {
+					target.x = ec_dest->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					target.y = ec_dest->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				}
 			}
 			// no path specified, targets self location
 			else {
@@ -1361,7 +1370,6 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			}
 
 			powers->activate(power_index, ev.stats, target);
-
 		}
 		else if (ec->type == "stash") {
 			stash = true;

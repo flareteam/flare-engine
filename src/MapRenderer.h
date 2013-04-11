@@ -92,10 +92,6 @@ public:
 	SDL_Rect hotspot;
 	int cooldown; // events that run multiple times pause this long in frames
 
-	//power spawn variables
-	Point power_src;
-	Point power_dest;
-	bool targetHero;
 	int damagemin;
 	int damagemax;
 	int cooldown_ticks;
@@ -106,9 +102,6 @@ public:
 	 : type("")
 	 , components(std::vector<Event_Component>())
 	 , cooldown(0)
-	 , power_src()
-	 , power_dest()
-	 , targetHero(false)
 	 , damagemin(0)
 	 , damagemax(0)
 	 , cooldown_ticks(0)
