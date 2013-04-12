@@ -311,7 +311,16 @@ void MapRenderer::loadNPC(FileParser &infile)
 void MapRenderer::loadEvent(FileParser &infile)
 {
 	if (infile.key == "type") {
-		events.back().type = infile.val;
+		string type = infile.val;
+		events.back().type = type;
+		if (type == "custom");
+		else if (type == "on_load");
+		else if (type == "on_clear");
+		else if (type == "run_once");
+		else if (type == "stash");
+		else {
+			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"custom\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
+		}
 	}
 	else if (infile.key == "location") {
 		events.back().location.x = toInt(infile.nextValue());

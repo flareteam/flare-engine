@@ -87,12 +87,11 @@ public:
 class Map_Event {
 public:
 	std::string type;
-	SDL_Rect location;
 	std::vector<Event_Component> components;
+	SDL_Rect location;
 	SDL_Rect hotspot;
 	int cooldown; // events that run multiple times pause this long in frames
 	int cooldown_ticks;
-
 	StatBlock *stats;
 
 	Map_Event()
