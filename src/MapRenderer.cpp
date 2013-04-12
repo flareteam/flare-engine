@@ -333,10 +333,6 @@ void MapRenderer::loadEvent(FileParser &infile)
 			events.back().hotspot.h = toInt(infile.nextValue());
 		}
 	}
-	else if (infile.key == "power_damage") {
-		events.back().damagemin = toInt(infile.nextValue());
-		events.back().damagemax = toInt(infile.nextValue());
-	}
 	else if (infile.key == "cooldown") {
 		events.back().cooldown = parse_duration(infile.val);
 	}
@@ -369,6 +365,10 @@ void MapRenderer::loadEventComponent(FileParser &infile)
 			e->a = toInt(dest);
 			e->b = toInt(infile.nextValue());
 		}
+	}
+	else if (infile.key == "power_damage") {
+		e->a = toInt(infile.nextValue());
+		e->b = toInt(infile.nextValue());
 	}
 	else if (infile.key == "intermap") {
 		e->s = infile.nextValue();
@@ -1336,8 +1336,11 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 					ev.stats->pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 				}
 
-				ev.stats->dmg_melee_min = ev.stats->dmg_ranged_min = ev.stats->dmg_ment_min = ev.damagemin;
-				ev.stats->dmg_melee_max = ev.stats->dmg_ranged_max = ev.stats->dmg_ment_max = ev.damagemax;
+				Event_Component *ec_damage = ev.getComponent("power_damage");
+				if (ec_damage) {
+					ev.stats->dmg_melee_min = ev.stats->dmg_ranged_min = ev.stats->dmg_ment_min = ec_damage->a;
+					ev.stats->dmg_melee_max = ev.stats->dmg_ranged_max = ev.stats->dmg_ment_max = ec_damage->b;
+				}
 			}
 
 			Point target;

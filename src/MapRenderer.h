@@ -91,9 +91,6 @@ public:
 	std::vector<Event_Component> components;
 	SDL_Rect hotspot;
 	int cooldown; // events that run multiple times pause this long in frames
-
-	int damagemin;
-	int damagemax;
 	int cooldown_ticks;
 
 	StatBlock *stats;
@@ -102,8 +99,6 @@ public:
 	 : type("")
 	 , components(std::vector<Event_Component>())
 	 , cooldown(0)
-	 , damagemin(0)
-	 , damagemax(0)
 	 , cooldown_ticks(0)
 	 , stats(NULL)
 	{
