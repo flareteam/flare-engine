@@ -40,14 +40,11 @@ Point round(FPoint fp) {
 Point screen_to_map(int x, int y, int camx, int camy) {
 	Point r;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		int scrx = x - VIEW_W_HALF;
-		int scry = y - VIEW_H_HALF;
+		int scrx = (x - VIEW_W_HALF) /2;
+		int scry = (y - VIEW_H_HALF) /2;
 
-		int cx = UNITS_PER_PIXEL_X /2;
-		int cy = UNITS_PER_PIXEL_Y /2;
-
-		r.x = (cx * scrx) + (cy * scry) + camx;
-		r.y = (cy * scry) - (cx * scrx) + camy;
+		r.x = (UNITS_PER_PIXEL_X * scrx) + (UNITS_PER_PIXEL_Y * scry) + camx;
+		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
 	}
 	else {
 		r.x = (x - VIEW_W_HALF) * (UNITS_PER_PIXEL_X ) + camx;
