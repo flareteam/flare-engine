@@ -82,7 +82,7 @@ void HazardManager::logic() {
 				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
 
 					// only check living enemies
-					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active) {
+					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemies->enemies[eindex]->stats.hero_ally == h[i]->target_party)) {
 						if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
 								h[i]->addEntity(enemies->enemies[eindex]);
@@ -100,7 +100,7 @@ void HazardManager::logic() {
 			}
 
 			// process hazards that can hurt the hero
-			if (h[i]->source_type != SOURCE_TYPE_HERO) { //enemy or neutral sources
+			if (h[i]->source_type != SOURCE_TYPE_HERO && h[i]->source_type != SOURCE_TYPE_ALLY) { //enemy or neutral sources
 				if (hero->stats.hp > 0 && h[i]->active) {
 					if (isWithin(round(h[i]->pos), h[i]->radius, hero->stats.pos)) {
 						if (!h[i]->hasEntity(hero)) {
@@ -114,6 +114,25 @@ void HazardManager::logic() {
 						}
 					}
 				}
+
+				//now process allies
+                for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
+                    // only check living allies
+                    if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && enemies->enemies[eindex]->stats.hero_ally) {
+                        if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
+                            if (!h[i]->hasEntity(enemies->enemies[eindex])) {
+                                h[i]->addEntity(enemies->enemies[eindex]);
+                                // hit!
+                                hit = enemies->enemies[eindex]->takeHit(*h[i]);
+                                if (!h[i]->multitarget && hit) {
+                                    h[i]->active = false;
+                                    if (!h[i]->complete_animation) h[i]->lifespan = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+
 			}
 
 		}

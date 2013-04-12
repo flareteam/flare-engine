@@ -167,6 +167,7 @@ int AIM_ASSIST = 0;
 std::string GAME_PREFIX = "";
 std::string WINDOW_TITLE = "Flare";
 int SOUND_FALLOFF = 15;
+int PARTY_EXP_PERCENTAGE = 100;
 
 /**
  * Set system paths
@@ -401,6 +402,8 @@ void loadMiscSettings() {
 				GAME_PREFIX = infile.val;
 			} else if (infile.key == "sound_falloff") {
 				SOUND_FALLOFF = toInt(infile.val);
+			} else if (infile.key == "party_exp_percentage") {
+				PARTY_EXP_PERCENTAGE = toInt(infile.val);
 			}
 
 		}

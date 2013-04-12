@@ -43,7 +43,7 @@ std::vector<SoundManager::SoundID> vox_quests;
 std::vector<std::vector<Event_Component> > dialog;
 
 NPC::NPC(MapRenderer *_map, ItemManager *_items)
-	: Entity(_map)
+	: Entity(NULL,_map)
 	, items(_items)
 	, name("")
 	, gfx("")

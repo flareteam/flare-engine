@@ -264,6 +264,10 @@ void PowerManager::loadPowers(const std::string& filename) {
 			powers[input_id].buff= toBool(infile.val);
 		else if (infile.key == "buff_teleport")
 			powers[input_id].buff_teleport = toBool(infile.val);
+        else if (infile.key == "buff_party")
+			powers[input_id].buff_party = toBool(infile.val);
+        else if (infile.key == "buff_party_power_id")
+			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
 			infile.val = infile.val + ',';
 			PostEffect pe;
@@ -290,6 +294,70 @@ void PowerManager::loadPowers(const std::string& filename) {
 			powers[input_id].spawn_type = infile.val;
 		else if (infile.key == "target_neighbor")
 			powers[input_id].target_neighbor = toInt(infile.val);
+        else if (infile.key == "spawn_limit") {
+            infile.val = infile.val + ',';
+            std::string mode = eatFirstString(infile.val,',');
+            if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
+			else if (mode == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
+			else if (mode == "unlimited") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_UNLIMITED;
+			else fprintf(stderr, "unknown spawn_limit_mode %s\n", mode.c_str());
+
+            if(powers[input_id].spawn_limit_mode != SPAWN_LIMIT_MODE_UNLIMITED){
+                powers[input_id].spawn_limit_qty = eatFirstInt(infile.val,',');
+
+                if(powers[input_id].spawn_limit_mode == SPAWN_LIMIT_MODE_STAT){
+                    powers[input_id].spawn_limit_every = eatFirstInt(infile.val,',');
+
+                    std::string stat = eatFirstString(infile.val,',');
+                    if (stat == "physical") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_PHYSICAL;
+                    else if (stat == "mental") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_MENTAL;
+                    else if (stat == "offense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_OFFENSE;
+                    else if (stat == "defense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_DEFENSE;
+                    else fprintf(stderr, "unknown spawn_limit_stat %s\n", stat.c_str());
+                }
+            }
+        }
+		else if (infile.key == "target_party")
+			powers[input_id].target_party = toBool(infile.val);
+        else if (infile.key == "target_categories"){
+            string cat;
+            while ((cat = infile.nextValue()) != "") {
+                powers[input_id].target_categories.push_back(cat);
+            }
+        }
+        else if (infile.key == "modifier_accuracy"){
+            infile.val = infile.val + ',';
+            std::string mode = eatFirstString(infile.val, ',');
+            if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
+            if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
+            if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+            else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_accuracy_ignore_avoid = (1 == eatFirstInt(infile.val, ','));
+        }
+        else if (infile.key == "modifier_damage"){
+            infile.val = infile.val + ',';
+            std::string mode = eatFirstString(infile.val, ',');
+            if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
+            if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
+            if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+            else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_damage_value_min = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_damage_value_max = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_damage_ignore_absorb = (1 == eatFirstInt(infile.val, ','));
+        }
+        else if (infile.key == "modifier_critical"){
+            infile.val = infile.val + ',';
+            std::string mode = eatFirstString(infile.val, ',');
+            if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
+            if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
+            if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+            else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_crit_value = eatFirstInt(infile.val, ',');
+        }
 		else
 			fprintf(stderr, "ignoring unknown key %s set to %s\n", infile.key.c_str(), infile.val.c_str());
 	}
@@ -407,11 +475,14 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 
 	if (powers[power_index].source_type == -1){
 		if (src_stats->hero) haz->source_type = SOURCE_TYPE_HERO;
+		else if (src_stats->hero_ally) haz->source_type = SOURCE_TYPE_ALLY;
 		else haz->source_type = SOURCE_TYPE_ENEMY;
 	}
 	else {
 		haz->source_type = powers[power_index].source_type;
 	}
+
+	haz->target_party = powers[power_index].target_party;
 
 	// Hazard attributes based on power source
 	haz->crit_chance = src_stats->crit;
@@ -552,9 +623,15 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
 	}
 
 	// handle all other effects
-	if (powers[power_index].buff) {
-		effect(src_stats, power_index);
+	if (powers[power_index].buff || (powers[power_index].buff_party && src_stats->hero_ally)) {
+        int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
+		effect(src_stats, power_index, source_type);
 	}
+
+    if (powers[power_index].buff_party && !powers[power_index].passive){
+        party_buffs.push(power_index);
+	}
+
 
 	// activate any post powers here if the power doesn't use a hazard
 	// otherwise the post power will chain off the hazard itself
@@ -591,7 +668,7 @@ void PowerManager::playSound(int power_index, StatBlock *src_stats) {
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
 
-bool PowerManager::effect(StatBlock *src_stats, int power_index) {
+bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
 		int effect_index = powers[power_index].post_effects[i].id;
@@ -617,7 +694,7 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index) {
 			int passive_id = 0;
 			if (powers[power_index].passive) passive_id = power_index;
 
-			src_stats->effects.addEffect(effect_index, powers[effect_index].icon, duration, magnitude, powers[effect_index].effect_type, powers[effect_index].animation_name, powers[effect_index].effect_additive, false, powers[power_index].passive_trigger, powers[effect_index].effect_render_above, passive_id);
+			src_stats->effects.addEffect(effect_index, powers[effect_index].icon, duration, magnitude, powers[effect_index].effect_type, powers[effect_index].animation_name, powers[effect_index].effect_additive, false, powers[power_index].passive_trigger, powers[effect_index].effect_render_above, passive_id, source_type);
 		}
 
 		// If there's a sound effect, play it here
@@ -814,6 +891,9 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 	}
 
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	espawn.summon_power_index = power_index;
+	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
+
 	for (int i=0; i < powers[power_index].count; i++) {
 		enemies.push(espawn);
 	}
