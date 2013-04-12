@@ -1232,7 +1232,13 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 	const Event_Component *ec;
 	bool destroy_event = false;
 
-	for (unsigned i=0; i<ev.components.size(); i++) {
+	if (ev.type == "stash") {
+		stash = true;
+		stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+	}
+
+	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
 
 		if (ec->type == "set_status") {
@@ -1374,11 +1380,6 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 			powers->activate(power_index, ev.stats, target);
 		}
-		else if (ec->type == "stash") {
-			stash = true;
-			stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		}
 		else if (ec->type == "npc") {
 			event_npc = ec->s;
 		}
@@ -1393,10 +1394,7 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			cutscene_file = ec->s;
 		}
 	}
-	if (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event)
-		return true;
-	else
-		return false;
+	return (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event);
 }
 
 MapRenderer::~MapRenderer() {
