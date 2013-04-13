@@ -273,7 +273,7 @@ void Avatar::set_direction() {
 			vector<Point> path;
 
 			// if a path is returned, target first waypoint
-			if ( map->collider.compute_path(stats.pos, target, path, 1000, stats.movement_type)) {
+			if ( map->collider.compute_path(stats.pos, target, path, stats.movement_type), 1000) {
 				target = path.back();
 			}
 		}
@@ -444,8 +444,8 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		drag_walking = false;
 		attacking = false;
 	} else {
-        if(!inpt->lock[MAIN1]) {
-            attacking = true;
+		if(!inpt->lock[MAIN1]) {
+			attacking = true;
 		}
 	}
 
