@@ -43,10 +43,16 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, pressed(false)
 	, hover(false)
 {
+	focusable = true;
 	pos.x = pos.y = pos.w = pos.h = 0;
 	loadArt();
 	pos.w = buttons->w;
 	pos.h = (buttons->h / 4); //height of one button
+}
+
+void WidgetButton::activate()
+{
+	pressed = true;
 }
 
 void WidgetButton::loadArt() {
@@ -82,16 +88,12 @@ bool WidgetButton::checkClick(int x, int y) {
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return false;
+	if (inpt->lock[ACCEPT]) return false;
 
 	// main click released, so the button state goes back to unpressed
-	if (pressed && !inpt->lock[MAIN1]) {
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT]) {
 		pressed = false;
-
-		if (isWithin(pos, mouse)) {
-
-			// activate upon release
-			return true;
-		}
+		return true;
 	}
 
 	pressed = false;
@@ -125,6 +127,8 @@ void WidgetButton::render(SDL_Surface *target) {
 	else if (pressed)
 		src.y = BUTTON_GFX_PRESSED * pos.h;
 	else if (hover)
+		src.y = BUTTON_GFX_HOVER * pos.h;
+	else if(in_focus)
 		src.y = BUTTON_GFX_HOVER * pos.h;
 	else
 		src.y = BUTTON_GFX_NORMAL * pos.h;

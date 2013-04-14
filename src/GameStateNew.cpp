@@ -172,6 +172,13 @@ GameStateNew::GameStateNew() : GameState() {
 	loadOptions("hero_options.txt");
 	loadPortrait(portrait[0]);
 	setName(name[0]);
+
+	// Set up tab list
+	tablist.add(button_exit);
+	tablist.add(button_create);
+	tablist.add(button_prev);
+	tablist.add(button_next);
+	tablist.add(class_list);
 }
 
 void GameStateNew::loadGraphics() {
@@ -216,6 +223,8 @@ void GameStateNew:: setName(const string& default_name) {
 }
 
 void GameStateNew::logic() {
+	tablist.logic();
+
 	button_permadeath->checkClick();
 	if (show_classlist) class_list->checkClick();
 
@@ -233,7 +242,8 @@ void GameStateNew::logic() {
 		}
 	}
 
-	if (button_exit->checkClick()) {
+	if ((inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) || button_exit->checkClick()) {
+		inpt->lock[CANCEL] = true;
 		delete requestedGameState;
 		requestedGameState = new GameStateLoad();
 	}

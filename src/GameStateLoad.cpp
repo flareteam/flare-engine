@@ -353,7 +353,8 @@ void GameStateLoad::logic() {
 		current_frame = (63 - frame_ticker) / 8;
 
 	if (!confirm->visible) {
-		if (button_exit->checkClick()) {
+		if (button_exit->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+			inpt->lock[CANCEL] = true;
 			delete requestedGameState;
 			requestedGameState = new GameStateTitle();
 		}
@@ -364,7 +365,8 @@ void GameStateLoad::logic() {
 			logicLoading();
 		}
 
-		if (button_action->checkClick()) {
+		if (button_action->checkClick() || (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT])) {
+			inpt->lock[ACCEPT] = true;
 			if (stats[selected_slot].name == "") {
 				// create a new game
 				GameStateNew* newgame = new GameStateNew();
@@ -390,6 +392,20 @@ void GameStateLoad::logic() {
 				}
 			}
 		}
+
+		// Allow characters to be navigateable via up/down keys
+		if (inpt->pressing[UP] && !inpt->lock[UP]) {
+			inpt->lock[UP] = true;
+			selected_slot = (--selected_slot < 0) ? GAME_SLOT_MAX - 1 : selected_slot; 
+			updateButtons();
+		}
+
+		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+			inpt->lock[DOWN] = true;
+			selected_slot = (++selected_slot == GAME_SLOT_MAX) ? 0 : selected_slot;
+			updateButtons();
+		}
+
 	} else if (confirm->visible) {
 		confirm->logic();
 		if (confirm->confirmClicked) {
