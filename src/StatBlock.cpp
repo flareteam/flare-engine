@@ -141,6 +141,7 @@ StatBlock::StatBlock()
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
 	, hero_pos(-1, -1)
+	, hero_direction(0)
 	, hero_alive(true)
 	, hero_stealth(0)
 	, last_seen(-1, -1)  // no effects to gameplay?

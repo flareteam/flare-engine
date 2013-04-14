@@ -393,9 +393,7 @@ void BehaviorStandard::checkMove() {
 	}
 
 	// re-block current space to allow correct movement
-	//if this is an ally and the player is adjacent to it, dont block
-	if(!(e->stats.hero_ally && hero_dist < 100))
-        e->map->collider.block(e->stats.pos.x, e->stats.pos.y);
+    e->map->collider.block(e->stats.pos.x, e->stats.pos.y);
 
 }
 

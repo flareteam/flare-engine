@@ -37,8 +37,12 @@ EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
 	: map(_map)
 	, powers(_powers)
 	, enemies()
+	, hero_pos(0,0)
+	, hero_direction(0)
 	, hero_alive(true)
 	, hero_stealth(0)
+    , player_blocked(false)
+    , player_blocked_ticks(0)
 {
 	hero_pos.x = hero_pos.y = -1;
 	handleNewMap();
@@ -277,6 +281,12 @@ void EnemyManager::handlePartyBuff()
  */
 void EnemyManager::logic() {
 
+    if(player_blocked){
+        player_blocked_ticks--;
+        if(player_blocked_ticks <= 0)
+            player_blocked = false;
+    }
+
 	handleSpawn();
 
 	handlePartyBuff();
@@ -317,6 +327,7 @@ void EnemyManager::logic() {
 
 		// new actions this round
 		(*it)->stats.hero_pos = hero_pos;
+		(*it)->stats.hero_direction = hero_direction;
 		(*it)->stats.hero_alive = hero_alive;
 		(*it)->stats.hero_stealth = hero_stealth;
 		(*it)->logic();

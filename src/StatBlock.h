@@ -267,6 +267,7 @@ public:
 	int melee_range;
 	int threat_range;
 	Point hero_pos;
+	char hero_direction;
 	bool hero_alive;
 	int hero_stealth;
 	Point last_seen;
