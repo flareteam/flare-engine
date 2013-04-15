@@ -26,6 +26,7 @@ void BehaviorAlly::findTarget()
     //if the minion gets too far, transport it to the player pos
     if(hero_dist > MAXIMUM_FOLLOW_DISTANCE && !e->stats.in_combat)
     {
+        e->map->collider.unblock(e->stats.pos.x, e->stats.pos.y);
         e->stats.pos.x = e->stats.hero_pos.x;
         e->stats.pos.y = e->stats.hero_pos.y;
         hero_dist = 0;
