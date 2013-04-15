@@ -58,6 +58,7 @@ public:
 
 	void add(Widget* widget);			// Add a widget
 	void remove(Widget* widget);		// Remove a widget
+	void clear();						// Remove all widgets
 	Widget* getNext(bool inner = true);	// Increment current selected, return widget
 	Widget* getPrev(bool inner = true);	// Decrement current selected, return widget
 	void activate();					// Fire off what happens when the user presses 'accept'

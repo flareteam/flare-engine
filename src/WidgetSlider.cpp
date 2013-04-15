@@ -153,5 +153,27 @@ void WidgetSlider::render (SDL_Surface *target)
 		SDL_BlitSurface(sl, &base, target, &pos);
 		SDL_BlitSurface(sl, &knob, target, &pos_knob);
 	}
+
+	if (in_focus)
+	{
+		Point topLeft;
+		Point bottomRight;
+		Uint32 color;
+		
+		topLeft.x = pos.x;
+		topLeft.y = pos.y;
+		bottomRight.x = pos.x + pos.w;
+		bottomRight.y = pos.y + pos.h;
+		color = SDL_MapRGB(target->format, 255,248,220);
+
+		if (target == screen)
+		{
+			SDL_LockSurface(screen);
+			drawRectangle(target, topLeft, bottomRight, color);
+			SDL_UnlockSurface(screen);
+		}
+		else
+			drawRectangle(target, topLeft, bottomRight, color);
+	}
 }
 

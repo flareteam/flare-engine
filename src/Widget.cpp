@@ -75,6 +75,10 @@ void TabList::remove(Widget* widget) {
 		widgets.erase(find);
 }
 
+void TabList::clear() {
+	widgets.clear();
+}
+
 Widget* TabList::getNext(bool inner) {
 	if(widgets.size() == 0)
 		return NULL;
