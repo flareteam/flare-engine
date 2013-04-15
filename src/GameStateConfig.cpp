@@ -211,7 +211,6 @@ void GameStateConfig::init() {
 	resolution_confirm_ticks = 0;
 
 	// Set up tab list
-	tablist = TabList(HORIZONTAL);
 	tablist.add(ok_button);
 	tablist.add(defaults_button);
 	tablist.add(cancel_button);

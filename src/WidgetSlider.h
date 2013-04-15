@@ -39,6 +39,9 @@ public:
 
 	SDL_Rect pos_knob; // This is the position of the slider's knob within the screen
 
+	bool getNext();
+	bool getPrev();
+
 private:
 	SDL_Surface * sl;
 	bool pressed;

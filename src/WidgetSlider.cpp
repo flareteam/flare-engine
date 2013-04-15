@@ -177,3 +177,28 @@ void WidgetSlider::render (SDL_Surface *target)
 	}
 }
 
+bool WidgetSlider::getNext() {
+
+	value -= (maximum - minimum)/10;
+	if (value < minimum)
+		value = minimum;
+
+	pos_knob.x = pos.x + ((value-minimum)* pos.w)/(maximum-minimum) - (pos_knob.w/2);
+	pos_knob.y = pos.y;
+
+	return true;
+}
+
+bool WidgetSlider::getPrev() {
+
+	value += (maximum - minimum)/10;
+	if (value > maximum)
+		value = maximum;
+
+	pos_knob.x = pos.x + ((value-minimum)* pos.w)/(maximum-minimum) - (pos_knob.w/2);
+	pos_knob.y = pos.y;
+
+	return true;
+}
+
+
