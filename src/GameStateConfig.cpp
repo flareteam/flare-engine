@@ -787,7 +787,7 @@ void GameStateConfig::logic ()
 														combat_text_cb->in_focus ||
 														enable_joystick_cb->in_focus ||
 														settings_key[0]->in_focus ||
-														activemods_lstb->in_focus))
+														inactivemods_lstb->in_focus))
 	{
 		int newTab = tabControl->getActiveTab() - 1;
 		newTab = (newTab < 0) ? tabControl->getTabsAmount() - 1 : newTab;
