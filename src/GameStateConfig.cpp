@@ -83,6 +83,10 @@ void GameStateConfig::init() {
 	cancel_button->pos.y = VIEW_H - (cancel_button->pos.h);
 	cancel_button->refresh();
 
+	tablist.add(ok_button);
+	tablist.add(defaults_button);
+	tablist.add(cancel_button);
+
 	vector<string> mod_dirs;
 	vector<string> mod_dirs_local;
 	getDirList(PATH_DATA + "mods", mod_dirs);
@@ -793,6 +797,7 @@ void GameStateConfig::logic ()
 
 	if (!input_confirm->visible && !defaults_confirm->visible && !resolution_confirm->visible) {
 		tabControl->logic();
+		tablist.logic();
 
 		// Ok/Cancel Buttons
 		if (ok_button->checkClick()) {
@@ -823,7 +828,8 @@ void GameStateConfig::logic ()
 			}
 		} else if (defaults_button->checkClick()) {
 			defaults_confirm->visible = true;
-		} else if (cancel_button->checkClick()) {
+		} else if (cancel_button->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+			inpt->lock[CANCEL] = true;
 			check_resolution = false;
 			loadSettings();
 			loadMiscSettings();

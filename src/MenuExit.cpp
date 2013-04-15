@@ -34,6 +34,7 @@ MenuExit::MenuExit() : Menu() {
 
 	background = loadGraphicSurface("images/menus/confirm_bg.png");
 	tablist.add(buttonExit);
+	tablist.add(buttonClose);
 }
 
 void MenuExit::update() {

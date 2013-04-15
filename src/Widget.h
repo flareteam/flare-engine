@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <SDL.h>
 #include <vector>
 
+enum ScrollType {VERTICAL, HORIZONTAL, TWO_DIRECTIONS};
+
 class Widget {
 public:
 	Widget();
@@ -48,8 +50,10 @@ class TabList {
 private:
 	std::vector<Widget*> widgets;
 	int current;
+	ScrollType scrolltype;
 public:
 	TabList();
+	TabList(ScrollType scrolltype);
 	~TabList();
 
 	void add(Widget* widget);			// Add a widget

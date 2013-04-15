@@ -45,6 +45,13 @@ bool Widget::getPrev() {
 TabList::TabList()
 	: widgets()
 	, current(-1)
+	, scrolltype(TWO_DIRECTIONS)
+{}
+
+TabList::TabList(ScrollType scrolltype)
+	: widgets()
+	, current(-1)
+	, scrolltype(scrolltype)
 {}
 
 TabList::~TabList()
@@ -121,21 +128,28 @@ void TabList::defocus() {
 }
 
 void TabList::logic() {
-	if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
-		inpt->lock[DOWN] = true;
-		getNext();
+	if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS)
+	{
+		if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+			inpt->lock[DOWN] = true;
+			getNext();
+		}
+		else if(inpt->pressing[UP] && !inpt->lock[UP]) {
+			inpt->lock[UP] = true;
+			getPrev();
+		}
 	}
-	else if(inpt->pressing[UP] && !inpt->lock[UP]) {
-		inpt->lock[UP] = true;
-		getPrev();
-	}
-	else if(inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
-		inpt->lock[LEFT] = true;
-		getPrev(false);
-	}
-	else if(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
-		inpt->lock[RIGHT] = true;
-		getNext(false);
+
+	if (scrolltype == HORIZONTAL || scrolltype == TWO_DIRECTIONS)
+	{
+		if(inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
+			inpt->lock[LEFT] = true;
+			getPrev(false);
+		}
+		else if(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+			inpt->lock[RIGHT] = true;
+			getNext(false);
+		}
 	}
 
 	if(inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
