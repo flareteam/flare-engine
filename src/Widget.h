@@ -50,6 +50,7 @@ class TabList {
 private:
 	std::vector<Widget*> widgets;
 	int current;
+	bool current_is_valid();
 	ScrollType scrolltype;
 public:
 	TabList();
