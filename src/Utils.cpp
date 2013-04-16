@@ -274,6 +274,13 @@ void drawLine(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
 	drawLine(surface, pos0.x, pos0.y, pos1.x, pos1.y, color);
 }
 
+void drawRectangle(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
+	drawLine(surface, pos0.x, pos0.y, pos1.x, pos0.y, color);
+	drawLine(surface, pos1.x, pos0.y, pos1.x, pos1.y, color);
+	drawLine(surface, pos0.x, pos0.y, pos0.x, pos1.y, color);
+	drawLine(surface, pos0.x, pos1.y, pos1.x, pos1.y, color);
+}
+
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	*rmask = 0xff000000;

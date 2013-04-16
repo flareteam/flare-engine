@@ -83,6 +83,9 @@ public:
 	void render(SDL_Surface *target = NULL);
 	void refresh();
 
+	bool getNext();
+	bool getPrev();
+
 	SDL_Rect pos_scroll;
 	bool pressed;
 	bool *selected;

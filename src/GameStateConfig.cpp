@@ -209,6 +209,40 @@ void GameStateConfig::init() {
 	old_view_h = VIEW_H;
 
 	resolution_confirm_ticks = 0;
+
+	// Set up tab list
+	tablist.add(ok_button);
+	tablist.add(defaults_button);
+	tablist.add(cancel_button);
+	tablist.add(fullscreen_cb);
+	tablist.add(hwsurface_cb);
+	tablist.add(doublebuf_cb);
+	tablist.add(change_gamma_cb);
+	tablist.add(gamma_sl);
+	tablist.add(texture_quality_cb);
+	tablist.add(animated_tiles_cb);
+	tablist.add(resolution_lstb);
+
+	tablist.add(music_volume_sl);
+	tablist.add(sound_volume_sl);
+
+	tablist.add(combat_text_cb);
+	tablist.add(show_fps_cb);
+	tablist.add(language_lstb);
+
+	tablist.add(enable_joystick_cb);
+	tablist.add(mouse_move_cb);
+	tablist.add(mouse_aim_cb);
+	tablist.add(joystick_device_lstb);
+
+	tablist.add(settings_key[0]);
+
+	tablist.add(inactivemods_lstb);
+	tablist.add(activemods_lstb);
+	tablist.add(inactivemods_activate_btn);
+	tablist.add(activemods_deactivate_btn);
+	tablist.add(activemods_shiftup_btn);
+	tablist.add(activemods_shiftdown_btn);
 }
 
 void GameStateConfig::readConfig () {
@@ -685,6 +719,7 @@ void GameStateConfig::update () {
 	else {
 		change_gamma_cb->unCheck();
 		GAMMA = 1.0;
+		gamma_sl->enabled = false;
 	}
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
 	SDL_SetGamma(GAMMA,GAMMA,GAMMA);
@@ -746,6 +781,35 @@ void GameStateConfig::update () {
 
 void GameStateConfig::logic ()
 {
+	// Allow configs to be navigateable via left/right keys
+	if (inpt->pressing[LEFT] && !inpt->lock[LEFT] && (ok_button->in_focus ||
+														music_volume_sl->in_focus ||
+														combat_text_cb->in_focus ||
+														enable_joystick_cb->in_focus ||
+														settings_key[0]->in_focus ||
+														inactivemods_lstb->in_focus))
+	{
+		int newTab = tabControl->getActiveTab() - 1;
+		newTab = (newTab < 0) ? tabControl->getTabsAmount() - 1 : newTab;
+		tabControl->setActiveTab(newTab);
+	}
+
+	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && (resolution_lstb->in_focus ||
+														sound_volume_sl->in_focus ||
+														language_lstb->in_focus ||
+														joystick_device_lstb->in_focus ||
+														settings_key[0]->in_focus ||
+														activemods_shiftdown_btn->in_focus))
+	{
+		int newTab = tabControl->getActiveTab() + 1;
+		newTab = (newTab == tabControl->getTabsAmount()) ? 0 : newTab;
+		tabControl->setActiveTab(newTab);
+	}
+	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && cancel_button->in_focus)
+	{
+		tabControl->setActiveTab(0);
+	}
+
 	check_resolution = true;
 
 	std::string resolution_value;
@@ -793,6 +857,7 @@ void GameStateConfig::logic ()
 
 	if (!input_confirm->visible && !defaults_confirm->visible && !resolution_confirm->visible) {
 		tabControl->logic();
+		tablist.logic();
 
 		// Ok/Cancel Buttons
 		if (ok_button->checkClick()) {
@@ -823,7 +888,8 @@ void GameStateConfig::logic ()
 			}
 		} else if (defaults_button->checkClick()) {
 			defaults_confirm->visible = true;
-		} else if (cancel_button->checkClick()) {
+		} else if (cancel_button->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+			inpt->lock[CANCEL] = true;
 			check_resolution = false;
 			loadSettings();
 			loadMiscSettings();
@@ -853,10 +919,14 @@ void GameStateConfig::logic ()
 			if (texture_quality_cb->isChecked()) TEXTURE_QUALITY=true;
 			else TEXTURE_QUALITY=false;
 		} else if (change_gamma_cb->checkClick()) {
-			if (change_gamma_cb->isChecked()) CHANGE_GAMMA=true;
+			if (change_gamma_cb->isChecked()) {
+				CHANGE_GAMMA=true;
+				gamma_sl->enabled = true;
+			}
 			else {
 				CHANGE_GAMMA=false;
 				GAMMA = 1.0;
+				gamma_sl->enabled = false;
 				gamma_sl->set(5,20,(int)(GAMMA*10.0));
 				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
 			}
@@ -866,6 +936,7 @@ void GameStateConfig::logic ()
 		} else if (resolution_lstb->checkClick()) {
 			; // nothing to do here: resolution value changes next frame.
 		} else if (CHANGE_GAMMA) {
+			gamma_sl->enabled = true;
 			if (gamma_sl->checkClick()) {
 					GAMMA=(gamma_sl->getValue())*0.1f;
 					SDL_SetGamma(GAMMA,GAMMA,GAMMA);

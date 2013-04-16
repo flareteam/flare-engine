@@ -37,12 +37,18 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 		  checked(false),
 		  pressed(false)
 {
+	focusable = true;
 	cb = loadGraphicSurface(fname, "Couldn't load image", true, false);
 
 	pos.w = cb->w;
 	pos.h = cb->h / 2;
 
 	render_to_alpha = false;
+}
+
+void WidgetCheckBox::activate()
+{
+	pressed = true;
 }
 
 WidgetCheckBox::~WidgetCheckBox ()
@@ -71,15 +77,13 @@ bool WidgetCheckBox::checkClick (int x, int y) {
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return false;
+	if (inpt->lock[ACCEPT]) return false;
 
-	if (pressed && !inpt->lock[MAIN1]) { // this is a button release
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT]) { // this is a button release
 		pressed = false;
-		if (isWithin(pos, mouse)) { // the button release is done over the widget
-			// toggle the state of the check button
-			checked = !checked;
-			// activate upon release
-			return true;
-		}
+
+		checked = !checked;
+		return true;
 	}
 
 	if (inpt->pressing[MAIN1]) {
@@ -114,5 +118,27 @@ void WidgetCheckBox::render (SDL_Surface *target)
 		SDL_gfxBlitRGBA(cb, &src, target, &pos);
 	else
 		SDL_BlitSurface(cb, &src, target, &pos);
+
+	if (in_focus)
+	{
+		Point topLeft;
+		Point bottomRight;
+		Uint32 color;
+		
+		topLeft.x = pos.x;
+		topLeft.y = pos.y;
+		bottomRight.x = pos.x + pos.w;
+		bottomRight.y = pos.y + pos.h;
+		color = SDL_MapRGB(target->format, 255,248,220);
+
+		if (target == screen)
+		{
+			SDL_LockSurface(screen);
+			drawRectangle(target, topLeft, bottomRight, color);
+			SDL_UnlockSurface(screen);
+		}
+		else
+			drawRectangle(target, topLeft, bottomRight, color);
+	}
 }
 
