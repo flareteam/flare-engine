@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 #include <queue>
 
+#include "MapCollision.h"
+
 class Power;
 
 const int POWERSLOT_COUNT = 10;
@@ -109,7 +111,7 @@ public:
 	bool transformed;
 	bool refresh_stats;
 
-	int movement_type;
+	MOVEMENTTYPE movement_type;
 	bool flying;
 	bool intangible;
 	bool facing; // does this creature turn to face the hero

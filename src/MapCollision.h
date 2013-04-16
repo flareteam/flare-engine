@@ -46,9 +46,11 @@ const int CHECK_MOVEMENT = 1;
 const int CHECK_SIGHT = 2;
 
 // movement options
-const int MOVEMENT_NORMAL = 0;
-const int MOVEMENT_FLYING = 1; // can move through BLOCKS_MOVEMENT (e.g. water)
-const int MOVEMENT_INTANGIBLE = 2; // can move through BLOCKS_ALL (e.g. walls)
+typedef enum {
+	MOVEMENT_NORMAL = 0,
+	MOVEMENT_FLYING = 1, // can move through BLOCKS_MOVEMENT (e.g. water)
+	MOVEMENT_INTANGIBLE = 2 // can move through BLOCKS_ALL (e.g. walls)
+} MOVEMENTTYPE;
 
 const unsigned int PATH_MAX_TILES = 256;
 
@@ -56,7 +58,7 @@ const unsigned int PATH_MAX_TILES = 256;
 class MapCollision {
 private:
 
-	bool line_check(int x1, int y1, int x2, int y2, int check_type, int movement_type);
+	bool line_check(int x1, int y1, int x2, int y2, int check_type, MOVEMENTTYPE movement_type);
 	bool is_sidestepable(int tile_x, int tile_y, int offx2, int offy2);
 
 public:
@@ -64,20 +66,20 @@ public:
 	~MapCollision();
 
 	void setmap(const unsigned short _colmap[][256], unsigned short w, unsigned short h);
-	bool move(int &x, int &y, int step_x, int step_y, int dist, int movement_type);
+	bool move(int &x, int &y, int step_x, int step_y, int dist, MOVEMENTTYPE movement_type);
 
 	bool is_outside_map(int tile_x, int tile_y) const;
 	bool is_empty(int x, int y) const;
 	bool is_wall(int x, int y) const;
-	bool is_valid_tile(int x, int y, int movement_type) const;
-	bool is_valid_position(int x, int y, int movement_type) const;
+	bool is_valid_tile(int x, int y, MOVEMENTTYPE movement_type) const;
+	bool is_valid_position(int x, int y, MOVEMENTTYPE movement_type) const;
 
 	int is_one_step_around(int x, int y, int xidr, int ydir);
 
 	bool line_of_sight(int x1, int y1, int x2, int y2);
-	bool line_of_movement(int x1, int y1, int x2, int y2, int movement_type);
+	bool line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE movement_type);
 
-	bool compute_path(Point start, Point end, std::vector<Point> &path, int movement_type, unsigned int limit = PATH_MAX_TILES);
+	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = PATH_MAX_TILES);
 
 	void block(int map_x, int map_y);
 	void unblock(int map_x, int map_y);
