@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define BEHAVIOR_STANDARD_H
 
 #include "EnemyBehavior.h"
+#include "Utils.h"
 
 // forward declarations
 class Enemy;
@@ -31,18 +32,22 @@ private:
 
 	// logic steps
 	void doUpkeep();
-	void findTarget();
+	virtual void findTarget();
 	void checkPower();
 	void checkMove();
+	virtual void checkMoveStateStance();
+	virtual void checkMoveStateMove();
 	void updateState();
 
+protected:
+	int hero_dist;
+	int target_dist;
+	Point pursue_pos;
 	// targeting vars
 	bool los;
-	int dist;
-	Point pursue_pos;
 
 public:
-	BehaviorStandard(Enemy *_e);
+	BehaviorStandard(Enemy *_e, EnemyManager *_em);
 	void logic();
 
 };

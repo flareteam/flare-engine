@@ -98,7 +98,7 @@ public:
 	Avatar(PowerManager *_powers, MapRenderer *_map);
 	~Avatar();
 
-	PowerManager *powers;
+	EnemyManager *enemies;
 
 	void init();
 	void loadLayerDefinitions();
@@ -111,7 +111,6 @@ public:
 	void logic(int actionbar_power, bool restrictPowerUse);
 	bool pressing_move();
 	void set_direction();
-	bool takeHit(const Hazard &h);
 	std::string log_msg;
 
 	// transformation handling
@@ -123,6 +122,7 @@ public:
 	StatBlock *hero_stats;
 	StatBlock *charmed_stats;
 
+    virtual void resetActiveAnimation();
 	virtual Renderable getRender() { return Renderable(); }
 	void addRenders(std::vector<Renderable> &r);
 

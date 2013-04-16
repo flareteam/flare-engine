@@ -489,11 +489,9 @@ int calcDirection(int x0, int y0, int x1, int y1)
 		if (dx > 0) return 6;
 		else return 2;
 	}
-	if (2.0 <= slope || -2.0 >= slope) {
-		if (dy > 0) return 3;
-		else return 7;
-	}
-	return 0;
+	// now scope must be (2.0 <= slope || -2.0 >= slope)
+	if (dy > 0) return 3;
+	else return 7;
 }
 
 // convert cartesian to polar theta where (x1,x2) is the origin
@@ -533,4 +531,3 @@ void setupSDLVideoMode(unsigned width, unsigned height)
 
 	screen = SDL_SetVideoMode (width, height, 0, flags);
 }
-
