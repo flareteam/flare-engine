@@ -1,0 +1,43 @@
+.\" -*- nroff -*-
+
+.TH FLARE 1 "March 2013"
+
+.SH NAME
+flare \- action role-playing engine
+
+.SH SYNOPSIS
+.B flare
+.RB [ options ]
+
+.SH DESCRIPTION
+.B FLARE
+(short for Free Libre Action Roleplaying Engine) is a single-player, 2D-isometric
+action role-playing engine. It uses simple file formats (INI-style config files)
+for most of the game data, allowing anyone to easily modify game contents.
+
+.SH OPTIONS
+.IP "\fB\-\-debug-event\fP"
+Switch on event debugging information.
+.IP "\fB\-\-data-path \fIpath\fP"
+Set an alternate path to the game data.
+.IP "\fB\-\-game \fIgame\fP"
+Set the game that the flare engine should use.
+
+
+.SH FILES
+.TP
+The settings are stored in
+.LP
+\fB$XDG_CONFIG_HOME\fR/\fB$GAMENAME\fR
+.LP
+\fB$HOME\fR/.config/\fB$GAMENAME\fR
+
+.TP
+The game data is stored in
+.LP
+\fB$XDG_DATA_HOME\fR/\fB$GAMENAME\fR
+.LP
+\fB$HOME\fR/.local/share/\fB$GAMENAME\fR
+
+.SH AVAILABILITY
+For more information about the FLARE engine, visit http://flarerpg.org
