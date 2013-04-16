@@ -311,7 +311,16 @@ void MapRenderer::loadNPC(FileParser &infile)
 void MapRenderer::loadEvent(FileParser &infile)
 {
 	if (infile.key == "type") {
-		events.back().type = infile.val;
+		string type = infile.val;
+		events.back().type = type;
+		if (type == "custom");
+		else if (type == "on_load");
+		else if (type == "on_clear");
+		else if (type == "run_once");
+		else if (type == "stash");
+		else {
+			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"custom\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
+		}
 	}
 	else if (infile.key == "location") {
 		events.back().location.x = toInt(infile.nextValue());
@@ -333,25 +342,6 @@ void MapRenderer::loadEvent(FileParser &infile)
 			events.back().hotspot.h = toInt(infile.nextValue());
 		}
 	}
-	else if (infile.key == "tooltip") {
-		events.back().tooltip = msg->get(infile.val);
-	}
-	else if (infile.key == "power_path") {
-		events.back().power_src.x = toInt(infile.nextValue());
-		events.back().power_src.y = toInt(infile.nextValue());
-		string dest = infile.nextValue();
-		if (dest == "hero") {
-			events.back().targetHero = true;
-		}
-		else {
-			events.back().power_dest.x = toInt(dest);
-			events.back().power_dest.y = toInt(infile.nextValue());
-		}
-	}
-	else if (infile.key == "power_damage") {
-		events.back().damagemin = toInt(infile.nextValue());
-		events.back().damagemax = toInt(infile.nextValue());
-	}
 	else if (infile.key == "cooldown") {
 		events.back().cooldown = parse_duration(infile.val);
 	}
@@ -367,7 +357,29 @@ void MapRenderer::loadEventComponent(FileParser &infile)
 	Event_Component *e = &events.back().components.back();
 	e->type = infile.key;
 
-	if (infile.key == "intermap") {
+	if (infile.key == "tooltip") {
+		e->s = msg->get(infile.val);
+	}
+	else if (infile.key == "power_path") {
+		// x,y are src, if s=="hero" we target the hero,
+		// else we'll use values in a,b as coordinates
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
+
+		string dest = infile.nextValue();
+		if (dest == "hero") {
+			e->s = "hero";
+		}
+		else {
+			e->a = toInt(dest);
+			e->b = toInt(infile.nextValue());
+		}
+	}
+	else if (infile.key == "power_damage") {
+		e->a = toInt(infile.nextValue());
+		e->b = toInt(infile.nextValue());
+	}
+	else if (infile.key == "intermap") {
 		e->s = infile.nextValue();
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.nextValue());
@@ -578,7 +590,7 @@ void MapRenderer::loadEventComponent(FileParser &infile)
 		e->s = infile.val;
 	}
 	else {
-		fprintf(stderr, "Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
+		fprintf(stderr, "MapRenderer: Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
 	}
 }
 
@@ -1099,11 +1111,12 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					if (!(*it).tooltip.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+					Event_Component *ec = (*it).getComponent("tooltip");
+					if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
 						show_tooltip = true;
-						if (!tip_buf.compareFirstLine((*it).tooltip)) {
+						if (!tip_buf.compareFirstLine(ec->s)) {
 							tip_buf.clear();
-							tip_buf.addText((*it).tooltip);
+							tip_buf.addText(ec->s);
 						}
 						TOOLTIP_CONTEXT = TOOLTIP_MAP;
 					} else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
@@ -1222,7 +1235,13 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 	const Event_Component *ec;
 	bool destroy_event = false;
 
-	for (unsigned i=0; i<ev.components.size(); i++) {
+	if (ev.type == "stash") {
+		stash = true;
+		stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+	}
+
+	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
 
 		if (ec->type == "set_status") {
@@ -1318,15 +1337,16 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 			int power_index = ec->x;
 
+			Event_Component *ec_path = ev.getComponent("power_path");
 			if (ev.stats == NULL) {
 				ev.stats = new StatBlock();
 
 				ev.stats->accuracy = 1000; //always hits its target
 
 				// if a power path was specified, place the source position there
-				if (ev.power_src.x > 0) {
-					ev.stats->pos.x = ev.power_src.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					ev.stats->pos.y = ev.power_src.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				if (ec_path) {
+					ev.stats->pos.x = ec_path->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					ev.stats->pos.y = ec_path->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 				}
 				// otherwise the source position is the event position
 				else {
@@ -1334,22 +1354,26 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 					ev.stats->pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 				}
 
-				ev.stats->dmg_melee_min = ev.stats->dmg_ranged_min = ev.stats->dmg_ment_min = ev.damagemin;
-				ev.stats->dmg_melee_max = ev.stats->dmg_ranged_max = ev.stats->dmg_ment_max = ev.damagemax;
+				Event_Component *ec_damage = ev.getComponent("power_damage");
+				if (ec_damage) {
+					ev.stats->dmg_melee_min = ev.stats->dmg_ranged_min = ev.stats->dmg_ment_min = ec_damage->a;
+					ev.stats->dmg_melee_max = ev.stats->dmg_ranged_max = ev.stats->dmg_ment_max = ec_damage->b;
+				}
 			}
 
 			Point target;
 
-			// if a power path was specified:
-			// targets hero option
-			if (ev.targetHero) {
-				target.x = cam.x;
-				target.y = cam.y;
-			}
-			// targets fixed path option
-			else if (ev.power_dest.x != 0) {
-				target.x = ev.power_dest.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				target.y = ev.power_dest.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			if (ec_path) {
+				// targets hero option
+				if (ec_path->s == "hero") {
+					target.x = cam.x;
+					target.y = cam.y;
+				}
+				// targets fixed path option
+				else {
+					target.x = ec_path->a * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					target.y = ec_path->b * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				}
 			}
 			// no path specified, targets self location
 			else {
@@ -1358,12 +1382,6 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			}
 
 			powers->activate(power_index, ev.stats, target);
-
-		}
-		else if (ec->type == "stash") {
-			stash = true;
-			stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 		}
 		else if (ec->type == "npc") {
 			event_npc = ec->s;
@@ -1379,10 +1397,7 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			cutscene_file = ec->s;
 		}
 	}
-	if (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event)
-		return true;
-	else
-		return false;
+	return (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event);
 }
 
 MapRenderer::~MapRenderer() {

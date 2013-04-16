@@ -87,37 +87,34 @@ public:
 class Map_Event {
 public:
 	std::string type;
-	SDL_Rect location;
 	std::vector<Event_Component> components;
+	SDL_Rect location;
 	SDL_Rect hotspot;
-	std::string tooltip;
 	int cooldown; // events that run multiple times pause this long in frames
-
-	//power spawn variables
-	Point power_src;
-	Point power_dest;
-	bool targetHero;
-	int damagemin;
-	int damagemax;
 	int cooldown_ticks;
-
 	StatBlock *stats;
 
 	Map_Event()
 	 : type("")
 	 , components(std::vector<Event_Component>())
-	 , tooltip("")
 	 , cooldown(0)
-	 , power_src()
-	 , power_dest()
-	 , targetHero(false)
-	 , damagemin(0)
-	 , damagemax(0)
 	 , cooldown_ticks(0)
 	 , stats(NULL)
 	{
 		location.x = location.y = location.w = location.h = 0;
 		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
+	}
+
+	// returns a pointer to the event component within the components list
+	// no need to free the pointer by caller
+	// NULL will be returned if no such event is found
+	Event_Component *getComponent(const std::string &_type)
+	{
+		std::vector<Event_Component>::iterator it;
+		for (it = components.begin(); it != components.end(); ++it)
+			if (it->type == _type)
+				return &(*it);
+		return NULL;
 	}
 
 	~Map_Event()
