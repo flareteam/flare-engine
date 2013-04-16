@@ -50,10 +50,10 @@ TabList::TabList()
 	, scrolltype(TWO_DIRECTIONS)
 {}
 
-TabList::TabList(ScrollType scrolltype)
+TabList::TabList(ScrollType _scrolltype)
 	: widgets()
 	, current(-1)
-	, scrolltype(scrolltype)
+	, scrolltype(_scrolltype)
 {}
 
 TabList::~TabList()
@@ -61,7 +61,7 @@ TabList::~TabList()
 
 void TabList::add(Widget* widget)
 {
-	if( widget == NULL )
+	if (widget == NULL)
 		return;
 
 	widgets.push_back(widget);
@@ -75,7 +75,7 @@ void TabList::remove(Widget* widget)
 			widget
 										  );
 
-	if(find != widgets.end())
+	if (find != widgets.end())
 		widgets.erase(find);
 }
 
@@ -84,20 +84,25 @@ void TabList::clear()
 	widgets.clear();
 }
 
+bool TabList::current_is_valid()
+{
+	return current >= 0 && current < (int)widgets.size();
+}
+
 Widget* TabList::getNext(bool inner)
 {
-	if(widgets.size() == 0)
+	if (widgets.size() == 0)
 		return NULL;
 
-	if(current >= 0 && current < widgets.size()) {
-		if(inner && widgets.at(current)->getNext())
+	if (current_is_valid()) {
+		if (inner && widgets.at(current)->getNext())
 			return NULL;
 
 		widgets.at(current)->in_focus = false;
 	}
 	++current;
 
-	if(current >= widgets.size())
+	if (current >= (int)widgets.size())
 		current = 0;
 
 	widgets.at(current)->in_focus = true;
@@ -106,11 +111,11 @@ Widget* TabList::getNext(bool inner)
 
 Widget* TabList::getPrev(bool inner)
 {
-	if(widgets.size() == 0)
+	if (widgets.size() == 0)
 		return NULL;
 
-	if(current >= 0 && current < widgets.size()) {
-		if(inner && widgets.at(current)->getPrev())
+	if (current_is_valid()) {
+		if (inner && widgets.at(current)->getPrev())
 			return NULL;
 
 		widgets.at(current)->in_focus = false;
@@ -118,7 +123,7 @@ Widget* TabList::getPrev(bool inner)
 
 	--current;
 
-	if(current <= -1)
+	if (current <= -1)
 		current = widgets.size()-1;
 
 	widgets.at(current)->in_focus = true;
@@ -127,14 +132,14 @@ Widget* TabList::getPrev(bool inner)
 
 void TabList::activate()
 {
-	if(current >= 0 && current < widgets.size()) {
+	if (current_is_valid()) {
 		widgets.at(current)->activate();
 	}
 }
 
 void TabList::defocus()
 {
-	if(current >= 0 && current < widgets.size())
+	if (current_is_valid())
 		widgets.at(current)->in_focus = false;
 
 	current = -1;
@@ -143,34 +148,34 @@ void TabList::defocus()
 void TabList::logic()
 {
 	if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
-		if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;
 			getNext();
 		}
-		else if(inpt->pressing[UP] && !inpt->lock[UP]) {
+		else if (inpt->pressing[UP] && !inpt->lock[UP]) {
 			inpt->lock[UP] = true;
 			getPrev();
 		}
 	}
 
 	if (scrolltype == HORIZONTAL || scrolltype == TWO_DIRECTIONS) {
-		if(inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
+		if (inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
 			inpt->lock[LEFT] = true;
 			getPrev(false);
 		}
-		else if(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+		else if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
 			inpt->lock[RIGHT] = true;
 			getNext(false);
 		}
 	}
 
-	if(inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 		inpt->lock[ACCEPT] = true;
 		activate();	// Activate the currently infocus item
 	}
 
 	// If mouse is clicked, defocus current tabindex item
-	if(inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 		defocus();
 	}
 }
