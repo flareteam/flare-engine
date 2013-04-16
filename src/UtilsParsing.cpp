@@ -80,7 +80,7 @@ int parse_duration(const std::string& s) {
 	if (suffix == "s")
 		val *= MAX_FRAMES_PER_SEC;
 	else if (suffix == "ms")
-		val = (val/1000.0f)*MAX_FRAMES_PER_SEC;
+		val = (val*MAX_FRAMES_PER_SEC) / 1000;
 
 	return val;
 }
