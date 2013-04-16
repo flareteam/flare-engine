@@ -805,6 +805,10 @@ void GameStateConfig::logic ()
 		newTab = (newTab == tabControl->getTabsAmount()) ? 0 : newTab;
 		tabControl->setActiveTab(newTab);
 	}
+	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && cancel_button->in_focus)
+	{
+		tabControl->setActiveTab(0);
+	}
 
 	check_resolution = true;
 
