@@ -31,13 +31,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-HazardManager::HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies) {
+HazardManager::HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies)
+{
 	powers = _powers;
 	hero = _hero;
 	enemies = _enemies;
 }
 
-void HazardManager::logic() {
+void HazardManager::logic()
+{
 
 	// remove all hazards with lifespan 0.  Most hazards still display their last frame.
 	for (int i=h.size()-1; i>=0; i--) {
@@ -116,22 +118,22 @@ void HazardManager::logic() {
 				}
 
 				//now process allies
-                for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
-                    // only check living allies
-                    if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && enemies->enemies[eindex]->stats.hero_ally) {
-                        if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
-                            if (!h[i]->hasEntity(enemies->enemies[eindex])) {
-                                h[i]->addEntity(enemies->enemies[eindex]);
-                                // hit!
-                                hit = enemies->enemies[eindex]->takeHit(*h[i]);
-                                if (!h[i]->multitarget && hit) {
-                                    h[i]->active = false;
-                                    if (!h[i]->complete_animation) h[i]->lifespan = 0;
-                                }
-                            }
-                        }
-                    }
-                }
+				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
+					// only check living allies
+					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && enemies->enemies[eindex]->stats.hero_ally) {
+						if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
+							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
+								h[i]->addEntity(enemies->enemies[eindex]);
+								// hit!
+								hit = enemies->enemies[eindex]->takeHit(*h[i]);
+								if (!h[i]->multitarget && hit) {
+									h[i]->active = false;
+									if (!h[i]->complete_animation) h[i]->lifespan = 0;
+								}
+							}
+						}
+					}
+				}
 
 			}
 
@@ -143,7 +145,8 @@ void HazardManager::logic() {
  * Look for hazards generated this frame
  * TODO: all these hazards will originate from PowerManager instead
  */
-void HazardManager::checkNewHazards() {
+void HazardManager::checkNewHazards()
+{
 
 	// check PowerManager for hazards
 	while (!powers->hazards.empty()) {
@@ -169,7 +172,8 @@ void HazardManager::checkNewHazards() {
 	}
 }
 
-void HazardManager::expire(int index) {
+void HazardManager::expire(int index)
+{
 	delete h[index];
 	h.erase(h.begin()+index);
 }
@@ -177,7 +181,8 @@ void HazardManager::expire(int index) {
 /**
  * Reset all hazards and get new collision object
  */
-void HazardManager::handleNewMap() {
+void HazardManager::handleNewMap()
+{
 	for (unsigned int i = 0; i < h.size(); i++)
 		delete h[i];
 	h.clear();
@@ -188,12 +193,14 @@ void HazardManager::handleNewMap() {
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-void HazardManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void HazardManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead)
+{
 	for (unsigned int i=0; i<h.size(); i++)
 		h[i]->addRenderable(r, r_dead);
 }
 
-HazardManager::~HazardManager() {
+HazardManager::~HazardManager()
+{
 	for (unsigned int i = 0; i < h.size(); i++)
 		delete h[i];
 	// h.clear(); not needed in destructor

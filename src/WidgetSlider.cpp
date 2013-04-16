@@ -34,12 +34,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 WidgetSlider::WidgetSlider (const string  & fname)
-	 : enabled(true)
-	 , sl(NULL)
-	 , pressed(false)
-	 , minimum(0)
-	 , maximum(0)
-	 , value(0)
+	: enabled(true)
+	, sl(NULL)
+	, pressed(false)
+	, minimum(0)
+	, maximum(0)
+	, value(0)
 {
 	sl = loadGraphicSurface(fname);
 	if (!sl) {
@@ -62,7 +62,8 @@ WidgetSlider::~WidgetSlider ()
 }
 
 
-bool WidgetSlider::checkClick() {
+bool WidgetSlider::checkClick()
+{
 	if (!enabled) return false;
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
@@ -72,9 +73,9 @@ bool WidgetSlider::checkClick (int x, int y)
 {
 	if (!enabled) return false;
 	Point mouse(x, y);
-		//
-		//	We are just grabbing the knob
-		//
+	//
+	//	We are just grabbing the knob
+	//
 	if (!pressed && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 		if (isWithin(pos_knob, mouse)) {
 			pressed = true;
@@ -92,9 +93,9 @@ bool WidgetSlider::checkClick (int x, int y)
 		return true;
 	}
 	if (pressed) {
-			//
-			// The knob has been released
-			//
+		//
+		// The knob has been released
+		//
 		// create a temporary SDL_Rect slightly wider than the slider
 		SDL_Rect tmp_pos;
 		tmp_pos.x = pos.x - (pos_knob.w*2);
@@ -160,25 +161,24 @@ void WidgetSlider::render (SDL_Surface *target)
 	if (render_to_alpha) {
 		SDL_gfxBlitRGBA(sl, &base, target, &pos);
 		SDL_gfxBlitRGBA(sl, &knob, target, &pos_knob);
-	} else {
+	}
+	else {
 		SDL_BlitSurface(sl, &base, target, &pos);
 		SDL_BlitSurface(sl, &knob, target, &pos_knob);
 	}
 
-	if (in_focus)
-	{
+	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
 		Uint32 color;
-		
+
 		topLeft.x = pos.x;
 		topLeft.y = pos.y;
 		bottomRight.x = pos.x + pos.w;
 		bottomRight.y = pos.y + pos.h;
 		color = SDL_MapRGB(target->format, 255,248,220);
 
-		if (target == screen)
-		{
+		if (target == screen) {
 			SDL_LockSurface(screen);
 			drawRectangle(target, topLeft, bottomRight, color);
 			SDL_UnlockSurface(screen);
@@ -188,7 +188,8 @@ void WidgetSlider::render (SDL_Surface *target)
 	}
 }
 
-bool WidgetSlider::getNext() {
+bool WidgetSlider::getNext()
+{
 	if (!enabled) return false;
 
 	value -= (maximum - minimum)/10;
@@ -201,7 +202,8 @@ bool WidgetSlider::getNext() {
 	return true;
 }
 
-bool WidgetSlider::getPrev() {
+bool WidgetSlider::getPrev()
+{
 	if (!enabled) return false;
 
 	value += (maximum - minimum)/10;

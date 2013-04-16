@@ -109,7 +109,8 @@ GameStatePlay::GameStatePlay()
 /**
  * Reset all game states to a new game.
  */
-void GameStatePlay::resetGame() {
+void GameStatePlay::resetGame()
+{
 	map->load("spawn.txt");
 	camp->clearAll();
 	pc->init();
@@ -134,7 +135,8 @@ void GameStatePlay::resetGame() {
  * class variable "enemy" contains a live enemy on mouseover.
  * This function also sets enemy mouseover for Menu Enemy.
  */
-void GameStatePlay::checkEnemyFocus() {
+void GameStatePlay::checkEnemyFocus()
+{
 	// determine enemies mouseover
 	// only check alive enemies for targeting
 	enemy = enemies->enemyFocus(inpt->mouse, map->cam, true);
@@ -163,17 +165,18 @@ void GameStatePlay::checkEnemyFocus() {
  * If mouse_move is enabled, and the mouse is over a live enemy,
  * Do not allow power use with button MAIN1
  */
-bool GameStatePlay::restrictPowerUse() {
+bool GameStatePlay::restrictPowerUse()
+{
 	if(MOUSE_MOVE) {
-        if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
-            if(enemy == NULL) {
-                return true;
-            }
-            else{
-                if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
-                    return true;
-            }
-        }
+		if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
+			if(enemy == NULL) {
+				return true;
+			}
+			else {
+				if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
+					return true;
+			}
+		}
 	}
 
 
@@ -184,7 +187,8 @@ bool GameStatePlay::restrictPowerUse() {
 /**
  * Check to see if the player is picking up loot on the ground
  */
-void GameStatePlay::checkLoot() {
+void GameStatePlay::checkLoot()
+{
 
 	if (!pc->stats.alive)
 		return;
@@ -245,7 +249,8 @@ void GameStatePlay::checkLoot() {
 	}
 }
 
-void GameStatePlay::checkTeleport() {
+void GameStatePlay::checkTeleport()
+{
 
 	// both map events and player powers can cause teleportation
 	if (map->teleportation || pc->stats.teleportation) {
@@ -262,11 +267,11 @@ void GameStatePlay::checkTeleport() {
 		}
 
 		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-            if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive){
-                enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
-                enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
-            }
-        }
+			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
+				enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
+				enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
+			}
+		}
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
@@ -321,7 +326,8 @@ void GameStatePlay::checkTeleport() {
  * Check for cancel key to exit menus or exit the game.
  * Also check closing the game window entirely.
  */
-void GameStatePlay::checkCancel() {
+void GameStatePlay::checkCancel()
+{
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
@@ -342,7 +348,8 @@ void GameStatePlay::checkCancel() {
 /**
  * Check for log messages from various child objects
  */
-void GameStatePlay::checkLog() {
+void GameStatePlay::checkLog()
+{
 
 	// If the player has just respawned, we want to clear the HUD log
 	if (pc->respawn) {
@@ -383,7 +390,8 @@ void GameStatePlay::checkLog() {
 	}
 }
 
-void GameStatePlay::loadTitles() {
+void GameStatePlay::loadTitles()
+{
 	FileParser infile;
 	if(infile.open(mods->locate("engine/titles.txt"))) {
 		while (infile.next()) {
@@ -406,7 +414,8 @@ void GameStatePlay::loadTitles() {
 	}
 }
 
-void GameStatePlay::checkTitle() {
+void GameStatePlay::checkTitle()
+{
 	if (!pc->stats.check_title || titles.empty()) return;
 
 	int title_id = -1;
@@ -422,31 +431,40 @@ void GameStatePlay::checkTitle() {
 			if (titles[i].primary_stat == "physical") {
 				if (pc->stats.get_physical() <= pc->stats.get_mental() || pc->stats.get_physical() <= pc->stats.get_offense() || pc->stats.get_physical() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "offense") {
+			}
+			else if (titles[i].primary_stat == "offense") {
 				if (pc->stats.get_offense() <= pc->stats.get_mental() || pc->stats.get_offense() <= pc->stats.get_physical() || pc->stats.get_offense() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "mental") {
+			}
+			else if (titles[i].primary_stat == "mental") {
 				if (pc->stats.get_mental() <= pc->stats.get_physical() || pc->stats.get_mental() <= pc->stats.get_offense() || pc->stats.get_mental() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "defense") {
+			}
+			else if (titles[i].primary_stat == "defense") {
 				if (pc->stats.get_defense() <= pc->stats.get_mental() || pc->stats.get_defense() <= pc->stats.get_offense() || pc->stats.get_defense() <= pc->stats.get_physical())
 					continue;
-			} else if (titles[i].primary_stat == "physoff") {
+			}
+			else if (titles[i].primary_stat == "physoff") {
 				if (pc->stats.physoff() <= pc->stats.physdef() || pc->stats.physoff() <= pc->stats.mentoff() || pc->stats.physoff() <= pc->stats.mentdef() || pc->stats.physoff() <= pc->stats.physment() || pc->stats.physoff() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "physment") {
+			}
+			else if (titles[i].primary_stat == "physment") {
 				if (pc->stats.physment() <= pc->stats.physdef() || pc->stats.physment() <= pc->stats.mentoff() || pc->stats.physment() <= pc->stats.mentdef() || pc->stats.physment() <= pc->stats.physoff() || pc->stats.physment() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "physdef") {
+			}
+			else if (titles[i].primary_stat == "physdef") {
 				if (pc->stats.physdef() <= pc->stats.physoff() || pc->stats.physdef() <= pc->stats.mentoff() || pc->stats.physdef() <= pc->stats.mentdef() || pc->stats.physdef() <= pc->stats.physment() || pc->stats.physdef() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "mentoff") {
+			}
+			else if (titles[i].primary_stat == "mentoff") {
 				if (pc->stats.mentoff() <= pc->stats.physdef() || pc->stats.mentoff() <= pc->stats.physoff() || pc->stats.mentoff() <= pc->stats.mentdef() || pc->stats.mentoff() <= pc->stats.physment() || pc->stats.mentoff() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "offdef") {
+			}
+			else if (titles[i].primary_stat == "offdef") {
 				if (pc->stats.offdef() <= pc->stats.physdef() || pc->stats.offdef() <= pc->stats.mentoff() || pc->stats.offdef() <= pc->stats.mentdef() || pc->stats.offdef() <= pc->stats.physment() || pc->stats.offdef() <= pc->stats.physoff())
 					continue;
-			} else if (titles[i].primary_stat == "mentdef") {
+			}
+			else if (titles[i].primary_stat == "mentdef") {
 				if (pc->stats.mentdef() <= pc->stats.physdef() || pc->stats.mentdef() <= pc->stats.mentoff() || pc->stats.mentdef() <= pc->stats.physoff() || pc->stats.mentdef() <= pc->stats.physment() || pc->stats.mentdef() <= pc->stats.offdef())
 					continue;
 			}
@@ -461,7 +479,8 @@ void GameStatePlay::checkTitle() {
 	pc->stats.refresh_stats = true;
 }
 
-void GameStatePlay::checkEquipmentChange() {
+void GameStatePlay::checkEquipmentChange()
+{
 	if (menu->inv->changed_equipment) {
 
 		vector<Layer_gfx> img_gfx;
@@ -497,7 +516,8 @@ void GameStatePlay::checkEquipmentChange() {
 	}
 }
 
-void GameStatePlay::checkLootDrop() {
+void GameStatePlay::checkLootDrop()
+{
 
 	// if the player has dropped an item from the inventory
 	if (menu->drop_stack.item > 0) {
@@ -518,7 +538,8 @@ void GameStatePlay::checkLootDrop() {
 /**
  * When a consumable-based power is used, we need to remove it from the inventory.
  */
-void GameStatePlay::checkConsumable() {
+void GameStatePlay::checkConsumable()
+{
 	for (unsigned i=0; i<powers->used_items.size(); i++) {
 		if (menu->items->items[powers->used_items[i]].type == "consumable") {
 			menu->inv->remove(powers->used_items[i]);
@@ -534,7 +555,8 @@ void GameStatePlay::checkConsumable() {
 /**
  * Marks the menu if it needs attention.
  */
-void GameStatePlay::checkNotifications() {
+void GameStatePlay::checkNotifications()
+{
 	if (pc->newLevelNotification) {
 		pc->newLevelNotification = false;
 		menu->act->requires_attention[MENU_CHARACTER] = true;
@@ -564,7 +586,8 @@ void GameStatePlay::checkNotifications() {
  * If a player walks away from an NPC, end the interaction with that NPC
  * If an NPC is giving a reward, process it
  */
-void GameStatePlay::checkNPCInteraction() {
+void GameStatePlay::checkNPCInteraction()
+{
 	if (pc->attacking) return;
 
 	int npc_click = -1;
@@ -590,8 +613,8 @@ void GameStatePlay::checkNPCInteraction() {
 	if (map->event_npc != "") {
 		npc_id = npcs->getID(map->event_npc);
 		if (npc_id != -1) {
-		  eventDialogOngoing = true;
-		  eventPendingDialog = true;
+			eventDialogOngoing = true;
+			eventPendingDialog = true;
 		}
 		map->event_npc = "";
 	}
@@ -616,7 +639,8 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->vendor->talker_visible = false;
 			menu->talker->vendor_visible = true;
 			npcs->npcs[npc_id]->playSound(NPC_VOX_INTRO);
-		} else if (menu->npc->dialog_selected) {
+		}
+		else if (menu->npc->dialog_selected) {
 			menu->vendor->talker_visible = true;
 			menu->talker->vendor_visible = false;
 		}
@@ -646,7 +670,8 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->talker->vendor_visible = false;
 			menu->vendor->talker_visible = false;
 
-		} else if (!menu->talker->vendor_visible && menu->vendor->talker_visible && npcs->npcs[npc_id]->talker) {
+		}
+		else if (!menu->talker->vendor_visible && menu->vendor->talker_visible && npcs->npcs[npc_id]->talker) {
 
 			// begin talking
 			if (npcs->npcs[npc_id]->vendor) {
@@ -690,7 +715,8 @@ void GameStatePlay::checkNPCInteraction() {
 
 }
 
-void GameStatePlay::checkStash() {
+void GameStatePlay::checkStash()
+{
 	int max_interact_distance = UNITS_PER_TILE * 4;
 	int interact_distance = max_interact_distance+1;
 
@@ -699,7 +725,8 @@ void GameStatePlay::checkStash() {
 		menu->inv->visible = true;
 		menu->stash->visible = true;
 		map->stash = false;
-	} else {
+	}
+	else {
 		// Close stash if inventory is closed
 		if (!menu->inv->visible) menu->stash->visible = false;
 
@@ -717,36 +744,38 @@ void GameStatePlay::checkStash() {
 	}
 }
 
-void GameStatePlay::checkCutscene() {
-       if (!map->cutscene)
-               return;
+void GameStatePlay::checkCutscene()
+{
+	if (!map->cutscene)
+		return;
 
-       GameStateCutscene *cutscene = new GameStateCutscene(NULL);
+	GameStateCutscene *cutscene = new GameStateCutscene(NULL);
 
-       if (!cutscene->load(map->cutscene_file)) {
-               delete cutscene;
-               map->cutscene = false;
-               return;
-       }
+	if (!cutscene->load(map->cutscene_file)) {
+		delete cutscene;
+		map->cutscene = false;
+		return;
+	}
 
-       // handle respawn point and set game play game_slot
-       cutscene->game_slot = game_slot;
+	// handle respawn point and set game play game_slot
+	cutscene->game_slot = game_slot;
 
-       if (map->teleportation) {
+	if (map->teleportation) {
 
-	       if (map->teleport_mapname != "")
-		       map->respawn_map = map->teleport_mapname;
+		if (map->teleport_mapname != "")
+			map->respawn_map = map->teleport_mapname;
 
-	       map->respawn_point = map->teleport_destination;
+		map->respawn_point = map->teleport_destination;
 
-       } else {
-	       map->respawn_point = pc->stats.pos;
-       }
+	}
+	else {
+		map->respawn_point = pc->stats.pos;
+	}
 
-       saveGame();
+	saveGame();
 
-       delete requestedGameState;
-       requestedGameState = cutscene;
+	delete requestedGameState;
+	requestedGameState = cutscene;
 }
 
 
@@ -754,7 +783,8 @@ void GameStatePlay::checkCutscene() {
  * Process all actions for a single frame
  * This includes some message passing between child object
  */
-void GameStatePlay::logic() {
+void GameStatePlay::logic()
+{
 
 	checkCutscene();
 
@@ -832,7 +862,8 @@ void GameStatePlay::logic() {
 		if (pc->stats.manual_untransform && pc->untransform_power > 0) {
 			menu->act->hotkeys[count] = pc->untransform_power;
 			menu->act->locked[count] = true;
-		} else if (pc->stats.manual_untransform && pc->untransform_power == 0)
+		}
+		else if (pc->stats.manual_untransform && pc->untransform_power == 0)
 			fprintf(stderr, "Untransform power not found, you can't untransform manually\n");
 
 		// reapply equipment if the transformation allows it
@@ -870,7 +901,8 @@ void GameStatePlay::logic() {
 /**
  * Render all graphics for a single frame
  */
-void GameStatePlay::render() {
+void GameStatePlay::render()
+{
 
 	// Create a list of Renderables from all objects not already on the map.
 	// split the list into the beings alive (may move) and dead beings (must not move)
@@ -910,7 +942,8 @@ void GameStatePlay::render() {
 	combat_text->render();
 }
 
-void GameStatePlay::showLoading() {
+void GameStatePlay::showLoading()
+{
 	if (!loading_bg) return;
 
 	SDL_Rect dest;
@@ -923,7 +956,8 @@ void GameStatePlay::showLoading() {
 	SDL_Flip(screen);
 }
 
-GameStatePlay::~GameStatePlay() {
+GameStatePlay::~GameStatePlay()
+{
 	delete quests;
 	delete npcs;
 	delete hazards;

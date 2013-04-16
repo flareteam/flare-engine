@@ -18,7 +18,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Loot.h"
 
-Loot::Loot() {
+Loot::Loot()
+{
 	stack.item = 0;
 	stack.quantity = 0;
 	pos.x = 0;
@@ -29,7 +30,8 @@ Loot::Loot() {
 	gfx = "";
 }
 
-Loot::Loot(const Loot &other) {
+Loot::Loot(const Loot &other)
+{
 	stack.item = other.stack.item;
 	stack.quantity = other.stack.quantity;
 	pos.x = other.pos.x;
@@ -42,7 +44,8 @@ Loot::Loot(const Loot &other) {
 
 // The assignment operator mainly used in internal vector managing,
 // e.g. in vector::erase()
-Loot& Loot::operator= (const Loot &other) {
+Loot& Loot::operator= (const Loot &other)
+{
 	if (gfx != "")
 		anim->decreaseCount(gfx);
 	delete animation;
@@ -60,7 +63,8 @@ Loot& Loot::operator= (const Loot &other) {
 	return *this;
 }
 
-void Loot::loadAnimation(std::string _gfx) {
+void Loot::loadAnimation(std::string _gfx)
+{
 	gfx = _gfx;
 	if (gfx != "") {
 		anim->increaseCount(gfx);
@@ -69,13 +73,15 @@ void Loot::loadAnimation(std::string _gfx) {
 	}
 }
 
-bool Loot::isFlying() {
-	 return !animation->isLastFrame();
+bool Loot::isFlying()
+{
+	return !animation->isLastFrame();
 }
 
-Loot::~Loot() {
+Loot::~Loot()
+{
 	if (gfx != "")
-			anim->decreaseCount(gfx);
+		anim->decreaseCount(gfx);
 	delete animation;
 }
 

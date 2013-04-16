@@ -42,13 +42,14 @@ ImageManager::~ImageManager()
 	if (!sprites.empty()) {
 		cout << "ImageManager still holding these images:" << endl;
 		for (unsigned i = 0; i < sprites.size(); ++i)
-			 fprintf(stderr, "%s %d\n", names[i].c_str(), counts[i]);
+			fprintf(stderr, "%s %d\n", names[i].c_str(), counts[i]);
 	}
 	assert(sprites.size() == 0);
 #endif
 }
 
-SDL_Surface *ImageManager::getSurface(const std::string &name) {
+SDL_Surface *ImageManager::getSurface(const std::string &name)
+{
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -66,29 +67,34 @@ SDL_Surface *ImageManager::getSurface(const std::string &name) {
 	return 0;
 }
 
-void ImageManager::increaseCount(const std::string &name) {
+void ImageManager::increaseCount(const std::string &name)
+{
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]++;
-	} else {
+	}
+	else {
 		sprites.push_back(0);
 		names.push_back(name);
 		counts.push_back(1);
 	}
 }
 
-void ImageManager::decreaseCount(const std::string &name) {
+void ImageManager::decreaseCount(const std::string &name)
+{
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]--;
-	} else {
+	}
+	else {
 		fprintf(stderr, "ImageManager::decreaseCount: Couldn't decrease image count: %s\n", name.c_str());
 	}
 }
 
-void ImageManager::cleanUp() {
+void ImageManager::cleanUp()
+{
 	int i = sprites.size() - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {

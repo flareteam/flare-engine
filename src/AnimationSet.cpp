@@ -50,16 +50,17 @@ Animation *AnimationSet::getAnimation()
 }
 
 AnimationSet::AnimationSet(const std::string &animationname)
- : name(animationname)
- , loaded(false)
- , animations()
- , sprite(NULL)
+	: name(animationname)
+	, loaded(false)
+	, animations()
+	, sprite(NULL)
 {
 	defaultAnimation = new Animation("default", "play_once", NULL);
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
-void AnimationSet::load() {
+void AnimationSet::load()
+{
 	assert(!loaded);
 	loaded = true;
 
@@ -198,7 +199,8 @@ void AnimationSet::load() {
 	}
 }
 
-AnimationSet::~AnimationSet() {
+AnimationSet::~AnimationSet()
+{
 	if (imagefile != "") imag->decreaseCount(imagefile);
 	for (unsigned i = 0; i < animations.size(); ++i)
 		delete animations[i];

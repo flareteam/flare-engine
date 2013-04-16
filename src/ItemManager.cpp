@@ -88,7 +88,8 @@ ItemManager::ItemManager()
 /**
  * Load all items files in all mods
  */
-void ItemManager::loadAll() {
+void ItemManager::loadAll()
+{
 	string test_path;
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
@@ -154,7 +155,8 @@ void ItemManager::loadAll() {
  *
  * @param filename The full path and name of the file to load
  */
-void ItemManager::load(const string& filename) {
+void ItemManager::load(const string& filename)
+{
 	FileParser infile;
 	if (!infile.open(filename))
 		return;
@@ -166,7 +168,8 @@ void ItemManager::load(const string& filename) {
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(items, id+1);
-		} else id_line = false;
+		}
+		else id_line = false;
 
 		if (id < 1) {
 			if (id_line) fprintf(stderr, "Item index out of bounds 1-%d, skipping\n", INT_MAX);
@@ -194,7 +197,7 @@ void ItemManager::load(const string& filename) {
 				items[id].quality = ITEM_QUALITY_EPIC;
 		}
 		else if (infile.key == "item_type") {
-				items[id].type = infile.val;
+			items[id].type = infile.val;
 		}
 		else if (infile.key == "dmg_melee") {
 			items[id].dmg_melee_min = toInt(infile.nextValue());
@@ -295,7 +298,8 @@ void ItemManager::load(const string& filename) {
 	infile.close();
 }
 
-void ItemManager::loadTypes(const string& filename) {
+void ItemManager::loadTypes(const string& filename)
+{
 	FileParser infile;
 	string type,description;
 	type = description = "";
@@ -314,7 +318,8 @@ void ItemManager::loadTypes(const string& filename) {
 	}
 }
 
-string ItemManager::getItemType(std::string _type) {
+string ItemManager::getItemType(std::string _type)
+{
 	map<string,string>::iterator it,end;
 	for (it=item_types.begin(), end=item_types.end(); it!=end; ++it) {
 		if (_type.compare(it->first) == 0) return it->second;
@@ -323,7 +328,8 @@ string ItemManager::getItemType(std::string _type) {
 	return _type;
 }
 
-void ItemManager::loadSets(const string& filename) {
+void ItemManager::loadSets(const string& filename)
+{
 	FileParser infile;
 	if (!infile.open(filename))
 		return;
@@ -335,7 +341,8 @@ void ItemManager::loadSets(const string& filename) {
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(item_sets, id+1);
-		} else id_line = false;
+		}
+		else id_line = false;
 
 		if (id < 1) {
 			if (id_line) fprintf(stderr, "Item set index out of bounds 1-%d, skipping\n", INT_MAX);
@@ -355,7 +362,8 @@ void ItemManager::loadSets(const string& filename) {
 				if (temp_id > 0 && temp_id < static_cast<int>(items.size())) {
 					items[temp_id].set = id;
 					item_sets[id].items.push_back(temp_id);
-				} else {
+				}
+				else {
 					const int maxsize = static_cast<int>(items.size()-1);
 					const char* cname = item_sets[id].name.c_str();
 					fprintf(stderr, "Item index inside item set %s definition out of bounds 1-%d, skipping item\n", cname, maxsize);
@@ -391,7 +399,8 @@ void ItemManager::loadIcons()
  * Renders icons at small size or large size
  * Also display the stack size
  */
-void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
+void ItemManager::renderIcon(ItemStack stack, int x, int y, int size)
+{
 	if (!icons) return;
 
 	SDL_Rect src, dest;
@@ -417,11 +426,13 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 	}
 }
 
-void ItemManager::playSound(int item, Point pos) {
-  snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+void ItemManager::playSound(int item, Point pos)
+{
+	snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
-TooltipData ItemManager::getShortTooltip(ItemStack stack) {
+TooltipData ItemManager::getShortTooltip(ItemStack stack)
+{
 	stringstream ss;
 	TooltipData tip;
 	SDL_Color color = color_normal;
@@ -445,7 +456,8 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	// name
 	if (stack.quantity > 1) {
 		ss << stack.quantity << " " << items[stack.item].name;
-	} else {
+	}
+	else {
 		ss << items[stack.item].name;
 	}
 	tip.addText(ss.str(), color);
@@ -456,7 +468,8 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 /**
  * Create detailed tooltip showing all relevant item info
  */
-TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
+TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context)
+{
 	TooltipData tip;
 	SDL_Color color = color_normal;
 
@@ -525,18 +538,19 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 			modifier = msg->get("%d%% Speed", items[item].bonus_val[bonus_counter]);
 			if (items[item].bonus_val[bonus_counter] >= 100) color = color_bonus;
 			else color = color_penalty;
-		} else {
+		}
+		else {
 			if (items[item].bonus_val[bonus_counter] > 0) {
 				modifier = msg->get("Increases %s by %d",
-						items[item].bonus_val[bonus_counter],
-						msg->get(items[item].bonus_stat[bonus_counter]));
+									items[item].bonus_val[bonus_counter],
+									msg->get(items[item].bonus_stat[bonus_counter]));
 
 				color = color_bonus;
 			}
 			else {
 				modifier = msg->get("Decreases %s by %d",
-						items[item].bonus_val[bonus_counter],
-						msg->get(items[item].bonus_stat[bonus_counter]));
+									items[item].bonus_val[bonus_counter],
+									msg->get(items[item].bonus_stat[bonus_counter]));
 
 				color = color_penalty;
 			}
@@ -591,7 +605,8 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 				tip.addText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
 			else
 				tip.addText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
-		} else if (context == VENDOR_SELL) {
+		}
+		else if (context == VENDOR_SELL) {
 			price_per_unit = items[item].getSellPrice();
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
@@ -599,7 +614,8 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 				tip.addText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
 			else
 				tip.addText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
-		} else if (context == PLAYER_INV) {
+		}
+		else if (context == PLAYER_INV) {
 			price_per_unit = items[item].getSellPrice();
 			if (price_per_unit == 0) price_per_unit = 1;
 			if (items[item].max_quantity <= 1)
@@ -610,48 +626,53 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	}
 
 	if (items[item].set > 0) {
-			// item set bonuses
-			ItemSet set = item_sets[items[item].set];
-			bonus_counter = 0;
-			modifier = "";
+		// item set bonuses
+		ItemSet set = item_sets[items[item].set];
+		bonus_counter = 0;
+		modifier = "";
 
-			tip.addText("\n" + msg->get("Set: ") + msg->get(item_sets[items[item].set].name), set.color);
+		tip.addText("\n" + msg->get("Set: ") + msg->get(item_sets[items[item].set].name), set.color);
 
-			while (bonus_counter < set.bonus.size() && set.bonus[bonus_counter].bonus_stat != "") {
-				if (set.bonus[bonus_counter].bonus_val > 0) {
-					modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Increases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
-				}
-				else {
-					modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Decreases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
-				}
-				tip.addText(modifier, set.color);
-				bonus_counter++;
+		while (bonus_counter < set.bonus.size() && set.bonus[bonus_counter].bonus_stat != "") {
+			if (set.bonus[bonus_counter].bonus_val > 0) {
+				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Increases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
 			}
+			else {
+				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Decreases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
+			}
+			tip.addText(modifier, set.color);
+			bonus_counter++;
+		}
 	}
 
 	return tip;
 }
 
-ItemManager::~ItemManager() {
+ItemManager::~ItemManager()
+{
 	SDL_FreeSurface(icons);
 }
 
 /**
  * Compare two item stack to be able to sorting them on their item_id in the vendors' stock
  */
-bool ItemStack::operator > (const ItemStack &param) const {
+bool ItemStack::operator > (const ItemStack &param) const
+{
 	if (item == 0 && param.item > 0) {
 		// Make the empty slots the last while sorting
 		return true;
-	} else if (item > 0 && param.item == 0) {
+	}
+	else if (item > 0 && param.item == 0) {
 		// Make the empty slots the last while sorting
 		return false;
-	} else {
+	}
+	else {
 		return item > param.item;
 	}
 }
 
-int Item::getSellPrice() {
+int Item::getSellPrice()
+{
 	int new_price = 0;
 	if (price_sell != 0)
 		new_price = price_sell;

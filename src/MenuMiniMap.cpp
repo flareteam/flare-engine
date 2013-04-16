@@ -31,7 +31,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <iostream>
 using namespace std;
 
-MenuMiniMap::MenuMiniMap() {
+MenuMiniMap::MenuMiniMap()
+{
 
 	map_surface = 0;
 	createMapSurface();
@@ -50,7 +51,8 @@ MenuMiniMap::MenuMiniMap() {
 				pos.y = eatFirstInt(infile.val,',');
 				pos.w = eatFirstInt(infile.val,',');
 				pos.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "text_pos") {
+			}
+			else if(infile.key == "text_pos") {
 				text_pos = eatLabelInfo(infile.val);
 			}
 		}
@@ -62,20 +64,24 @@ MenuMiniMap::MenuMiniMap() {
 
 }
 
-void MenuMiniMap::getMapTitle(std::string map_title) {
+void MenuMiniMap::getMapTitle(std::string map_title)
+{
 	label->set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, map_title, font->getColor("menu_normal"), text_pos.font_style);
 }
 
-void MenuMiniMap::createMapSurface() {
+void MenuMiniMap::createMapSurface()
+{
 
 	SDL_FreeSurface(map_surface);
 	map_surface = createSurface(512, 512);
 }
 
-void MenuMiniMap::render() {
+void MenuMiniMap::render()
+{
 }
 
-void MenuMiniMap::render(Point hero_pos) {
+void MenuMiniMap::render(Point hero_pos)
+{
 	if (!text_pos.hidden) label->render();
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
@@ -84,7 +90,8 @@ void MenuMiniMap::render(Point hero_pos) {
 		renderOrtho(hero_pos);
 }
 
-void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
+void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h)
+{
 	map_size.x = map_w;
 	map_size.y = map_h;
 	SDL_FillRect(map_surface, 0, SDL_MapRGB(map_surface->format,255,0,255));
@@ -98,7 +105,8 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 /**
  * Render a top-down version of the map (90 deg angle)
  */
-void MenuMiniMap::renderOrtho(Point hero_pos) {
+void MenuMiniMap::renderOrtho(Point hero_pos)
+{
 
 	const int herox = hero_pos.x / UNITS_PER_TILE;
 	const int heroy = hero_pos.y / UNITS_PER_TILE;
@@ -129,7 +137,8 @@ void MenuMiniMap::renderOrtho(Point hero_pos) {
 /**
  * Render an "isometric" version of the map (45 deg angle)
  */
-void MenuMiniMap::renderIso(Point hero_pos) {
+void MenuMiniMap::renderIso(Point hero_pos)
+{
 
 	const int herox = hero_pos.x / UNITS_PER_TILE;
 	const int heroy = hero_pos.y / UNITS_PER_TILE;
@@ -158,7 +167,8 @@ void MenuMiniMap::renderIso(Point hero_pos) {
 	SDL_UnlockSurface(screen);
 }
 
-void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
+void MenuMiniMap::prerenderOrtho(MapCollision *collider)
+{
 	for (int i=0; i<std::min(map_surface->w, map_size.x); i++) {
 		for (int j=0; j<std::min(map_surface->h, map_size.y); j++) {
 			if (collider->colmap[i][j] == 1) {
@@ -171,7 +181,8 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
 	}
 }
 
-void MenuMiniMap::prerenderIso(MapCollision *collider) {
+void MenuMiniMap::prerenderIso(MapCollision *collider)
+{
 	// a 2x1 pixel area correlates to a tile, so we can traverse tiles using pixel counting
 	Uint32 draw_color;
 	int tile_type;
@@ -230,7 +241,8 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 	}
 }
 
-MenuMiniMap::~MenuMiniMap() {
+MenuMiniMap::~MenuMiniMap()
+{
 	SDL_FreeSurface(map_surface);
 	delete label;
 }

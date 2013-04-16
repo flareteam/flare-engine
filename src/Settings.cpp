@@ -178,7 +178,8 @@ int PARTY_EXP_PERCENTAGE = 100;
 
 #ifdef _WIN32
 // Windows paths
-void setPaths() {
+void setPaths()
+{
 
 	// handle Windows-specific path options
 	PATH_CONF = "config";
@@ -196,7 +197,8 @@ void setPaths() {
 }
 #elif __amigaos4__
 // AmigaOS paths
-void setPaths() {
+void setPaths()
+{
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
@@ -204,7 +206,8 @@ void setPaths() {
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
 #else
-void setPaths() {
+void setPaths()
+{
 
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
@@ -322,7 +325,8 @@ void setPaths() {
 }
 #endif
 
-static ConfigEntry * getConfigEntry(const char * name) {
+static ConfigEntry * getConfigEntry(const char * name)
+{
 
 	for (int i = 0; i < config_size; i++) {
 		if (std::strcmp(config[i].name, name) == 0) return config + i;
@@ -330,11 +334,13 @@ static ConfigEntry * getConfigEntry(const char * name) {
 	return NULL;
 }
 
-static ConfigEntry * getConfigEntry(const std::string & name) {
+static ConfigEntry * getConfigEntry(const std::string & name)
+{
 	return getConfigEntry(name.c_str());
 }
 
-void loadTilesetSettings() {
+void loadTilesetSettings()
+{
 	FileParser infile;
 	// load tileset settings from engine config
 	if (infile.open(mods->locate("engine/tileset_config.txt"), "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
@@ -370,15 +376,15 @@ void loadTilesetSettings() {
 		UNITS_PER_PIXEL_X = UNITS_PER_TILE / TILE_W;
 		UNITS_PER_PIXEL_Y = UNITS_PER_TILE / TILE_H;
 	}
-	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0)
-	{
+	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
 		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", UNITS_PER_PIXEL_X, UNITS_PER_PIXEL_Y);
 		SDL_Quit();
 		exit(1);
 	}
 }
 
-void loadMiscSettings() {
+void loadMiscSettings()
+{
 	FileParser infile;
 	// load miscellaneous settings from engine config
 	// misc.txt
@@ -387,22 +393,29 @@ void loadMiscSettings() {
 			if (infile.key == "save_hpmp") {
 				if (toInt(infile.val) == 1)
 					SAVE_HPMP = true;
-			} else if (infile.key == "corpse_timeout") {
+			}
+			else if (infile.key == "corpse_timeout") {
 				CORPSE_TIMEOUT = toInt(infile.val);
-			} else if (infile.key == "sell_without_vendor") {
+			}
+			else if (infile.key == "sell_without_vendor") {
 				if (toInt(infile.val) == 1)
 					SELL_WITHOUT_VENDOR = true;
 				else
 					SELL_WITHOUT_VENDOR = false;
-			} else if (infile.key == "aim_assist") {
+			}
+			else if (infile.key == "aim_assist") {
 				AIM_ASSIST = toInt(infile.val);
-			} else if (infile.key == "window_title") {
+			}
+			else if (infile.key == "window_title") {
 				WINDOW_TITLE = infile.val;
-			} else if (infile.key == "game_prefix") {
+			}
+			else if (infile.key == "game_prefix") {
 				GAME_PREFIX = infile.val;
-			} else if (infile.key == "sound_falloff") {
+			}
+			else if (infile.key == "sound_falloff") {
 				SOUND_FALLOFF = toInt(infile.val);
-			} else if (infile.key == "party_exp_percentage") {
+			}
+			else if (infile.key == "party_exp_percentage") {
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
 			}
 
@@ -422,7 +435,8 @@ void loadMiscSettings() {
 				MIN_VIEW_W = toInt(infile.val);
 				if (VIEW_W < MIN_VIEW_W) VIEW_W = MIN_VIEW_W;
 				VIEW_W_HALF = VIEW_W/2;
-			} else if (infile.key == "required_height") {
+			}
+			else if (infile.key == "required_height") {
 				MIN_VIEW_H = toInt(infile.val);
 				if (VIEW_H < MIN_VIEW_H) VIEW_H = MIN_VIEW_H;
 				VIEW_H_HALF = VIEW_H/2;
@@ -447,11 +461,14 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			if (infile.key == "max_absorb_percent") {
 				MAX_ABSORB = toInt(infile.val);
-			} else if (infile.key == "max_resist_percent") {
+			}
+			else if (infile.key == "max_resist_percent") {
 				MAX_RESIST = toInt(infile.val);
-			} else if (infile.key == "max_block_percent") {
+			}
+			else if (infile.key == "max_block_percent") {
 				MAX_BLOCK = toInt(infile.val);
-			} else if (infile.key == "max_avoidance_percent") {
+			}
+			else if (infile.key == "max_avoidance_percent") {
 				MAX_AVOIDANCE = toInt(infile.val);
 			}
 		}
@@ -522,7 +539,8 @@ void loadMiscSettings() {
 	}
 }
 
-bool loadSettings() {
+bool loadSettings()
+{
 
 	// init defaults
 	for (int i = 0; i < config_size; i++) {
@@ -537,7 +555,8 @@ bool loadSettings() {
 		if (!infile.open(mods->locate("engine/default_settings.txt"), "")) {
 			saveSettings();
 			return true;
-		} else saveSettings();
+		}
+		else saveSettings();
 	}
 
 	while (infile.next()) {
@@ -556,7 +575,8 @@ bool loadSettings() {
 /**
  * Save the current main settings (primary video and audio settings)
  */
-bool saveSettings() {
+bool saveSettings()
+{
 
 	ofstream outfile;
 	outfile.open((PATH_CONF + FILE_SETTINGS).c_str(), ios::out);
@@ -585,7 +605,8 @@ bool saveSettings() {
 /**
  * Load all default settings, except video settings.
  */
-bool loadDefaults() {
+bool loadDefaults()
+{
 
 	// HACK init defaults except video
 	for (int i = 3; i < config_size; i++) {

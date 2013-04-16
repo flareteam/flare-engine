@@ -38,33 +38,33 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 Entity::Entity(PowerManager *_powers, MapRenderer* _map)
- : sprites(NULL)
- , sfx_phys(false)
- , sfx_ment(false)
- , sfx_hit(false)
- , sfx_die(false)
- , sfx_critdie(false)
- , sfx_block(false)
- , activeAnimation(NULL)
- , animationSet(NULL)
- , map(_map)
- , powers(_powers)
+	: sprites(NULL)
+	, sfx_phys(false)
+	, sfx_ment(false)
+	, sfx_hit(false)
+	, sfx_die(false)
+	, sfx_critdie(false)
+	, sfx_block(false)
+	, activeAnimation(NULL)
+	, animationSet(NULL)
+	, map(_map)
+	, powers(_powers)
 {
 }
 
 Entity::Entity(const Entity &e)
- : sprites(e.sprites)
- , sfx_phys(e.sfx_phys)
- , sfx_ment(e.sfx_ment)
- , sfx_hit(e.sfx_hit)
- , sfx_die(e.sfx_die)
- , sfx_critdie(e.sfx_critdie)
- , sfx_block(e.sfx_block)
- , activeAnimation(new Animation(*e.activeAnimation))
- , animationSet(e.animationSet)
- , map(e.map)
- , stats(StatBlock(e.stats))
- , powers(e.powers)
+	: sprites(e.sprites)
+	, sfx_phys(e.sfx_phys)
+	, sfx_ment(e.sfx_ment)
+	, sfx_hit(e.sfx_hit)
+	, sfx_die(e.sfx_die)
+	, sfx_critdie(e.sfx_critdie)
+	, sfx_block(e.sfx_block)
+	, activeAnimation(new Animation(*e.activeAnimation))
+	, animationSet(e.animationSet)
+	, map(e.map)
+	, stats(StatBlock(e.stats))
+	, powers(e.powers)
 {
 }
 
@@ -74,7 +74,8 @@ Entity::Entity(const Entity &e)
  *
  * @return Returns false if wall collision, otherwise true.
  */
-bool Entity::move() {
+bool Entity::move()
+{
 
 	if (stats.effects.forced_move) {
 		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type);
@@ -126,14 +127,15 @@ bool Entity::move() {
  *
  * Returns false on miss
  */
-bool Entity::takeHit(const Hazard &h) {
+bool Entity::takeHit(const Hazard &h)
+{
 
 	//check if this enemy should be affected by this hazard based on the category
-	if(!powers->powers[h.power_index].target_categories.empty() && !stats.hero){
+	if(!powers->powers[h.power_index].target_categories.empty() && !stats.hero) {
 		//the power has a target category requirement, so if it doesnt match, dont continue
 		bool match_found = false;
 		for (unsigned int i=0; i<stats.categories.size(); i++) {
-			if(std::find(powers->powers[h.power_index].target_categories.begin(), powers->powers[h.power_index].target_categories.end(), stats.categories[i]) != powers->powers[h.power_index].target_categories.end()){
+			if(std::find(powers->powers[h.power_index].target_categories.begin(), powers->powers[h.power_index].target_categories.end(), stats.categories[i]) != powers->powers[h.power_index].target_categories.end()) {
 				match_found = true;
 			}
 		}
@@ -173,7 +175,7 @@ bool Entity::takeHit(const Hazard &h) {
 		accuracy = powers->powers[h.power_index].mod_accuracy_value;
 
 	int avoidance = 0;
-	if(!powers->powers[h.power_index].mod_accuracy_ignore_avoid){
+	if(!powers->powers[h.power_index].mod_accuracy_ignore_avoid) {
 		avoidance = stats.avoidance;
 		if (stats.effects.triggered_block) avoidance *= 2;
 	}
@@ -234,7 +236,8 @@ bool Entity::takeHit(const Hazard &h) {
 			if (h.trait_elemental < 0) {
 				if (stats.effects.triggered_block && MAX_BLOCK < 100) dmg = 1;
 				else if (!stats.effects.triggered_block && MAX_ABSORB < 100) dmg = 1;
-			} else {
+			}
+			else {
 				if (MAX_RESIST < 100) dmg = 1;
 			}
 			sfx_block = true;
@@ -264,7 +267,7 @@ bool Entity::takeHit(const Hazard &h) {
 
 	if(stats.hero)
 		combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_TAKEDMG);
-	else{
+	else {
 		if(crit)
 			combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_CRIT);
 		else
@@ -312,11 +315,11 @@ bool Entity::takeHit(const Hazard &h) {
 	// interrupted to new state
 	if (dmg > 0) {
 
-		if(stats.hp <= 0){
+		if(stats.hp <= 0) {
 			stats.effects.triggered_death = true;
 			if(stats.hero)
 				stats.cur_state = AVATAR_DEAD;
-			else{
+			else {
 				doRewards(h.source_type);
 				if (crit)
 					stats.cur_state = ENEMY_CRITDEAD;
@@ -349,14 +352,16 @@ bool Entity::takeHit(const Hazard &h) {
 	return true;
 }
 
-void Entity::resetActiveAnimation(){
+void Entity::resetActiveAnimation()
+{
 	activeAnimation->reset();
 }
 
 /**
  * Set the entity's current animation by name
  */
-bool Entity::setAnimation(const string& animationName) {
+bool Entity::setAnimation(const string& animationName)
+{
 
 	// if the animation is already the requested one do nothing
 	if (activeAnimation != NULL && activeAnimation->getName() == animationName)
@@ -371,7 +376,8 @@ bool Entity::setAnimation(const string& animationName) {
 	return activeAnimation == NULL;
 }
 
-Entity::~Entity () {
+Entity::~Entity ()
+{
 
 	delete activeAnimation;
 }

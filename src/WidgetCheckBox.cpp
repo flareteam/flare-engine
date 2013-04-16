@@ -33,9 +33,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 WidgetCheckBox::WidgetCheckBox (const string &fname)
-		: cb(NULL),
-		  checked(false),
-		  pressed(false)
+	: cb(NULL),
+	  checked(false),
+	  pressed(false)
 {
 	focusable = true;
 	cb = loadGraphicSurface(fname, "Couldn't load image", true, false);
@@ -71,7 +71,8 @@ bool WidgetCheckBox::checkClick()
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
-bool WidgetCheckBox::checkClick (int x, int y) {
+bool WidgetCheckBox::checkClick (int x, int y)
+{
 
 	Point mouse(x,y);
 
@@ -119,20 +120,18 @@ void WidgetCheckBox::render (SDL_Surface *target)
 	else
 		SDL_BlitSurface(cb, &src, target, &pos);
 
-	if (in_focus)
-	{
+	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
 		Uint32 color;
-		
+
 		topLeft.x = pos.x;
 		topLeft.y = pos.y;
 		bottomRight.x = pos.x + pos.w;
 		bottomRight.y = pos.y + pos.h;
 		color = SDL_MapRGB(target->format, 255,248,220);
 
-		if (target == screen)
-		{
+		if (target == screen) {
 			SDL_LockSurface(screen);
 			drawRectangle(target, topLeft, bottomRight, color);
 			SDL_UnlockSurface(screen);

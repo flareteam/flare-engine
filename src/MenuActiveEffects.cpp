@@ -39,7 +39,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuActiveEffects::MenuActiveEffects(SDL_Surface *_icons) {
+MenuActiveEffects::MenuActiveEffects(SDL_Surface *_icons)
+{
 	stats = NULL;
 	icons = _icons;
 	orientation = 0; // horizontal
@@ -64,18 +65,21 @@ MenuActiveEffects::MenuActiveEffects(SDL_Surface *_icons) {
 	loadGraphics();
 }
 
-void MenuActiveEffects::loadGraphics() {
+void MenuActiveEffects::loadGraphics()
+{
 
 	timer = loadGraphicSurface("images/menus/disabled.png");
 }
 
-void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max){
+void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
+{
 	if (icon_id > -1) {
 		SDL_Rect pos,src,overlay;
 		if (orientation == 0) {
 			pos.x = window_area.x + (index * ICON_SIZE);
 			pos.y = window_area.y;
-		} else if (orientation == 1) {
+		}
+		else if (orientation == 1) {
 			pos.x = window_area.x;
 			pos.y = window_area.y + (index * ICON_SIZE);
 		}
@@ -98,11 +102,13 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 	}
 }
 
-void MenuActiveEffects::update(StatBlock *_stats) {
+void MenuActiveEffects::update(StatBlock *_stats)
+{
 	stats = _stats;
 }
 
-void MenuActiveEffects::render() {
+void MenuActiveEffects::render()
+{
 	int count=-1;
 
 	// Step through the list of effects and render those that are active
@@ -125,6 +131,7 @@ void MenuActiveEffects::render() {
 	}
 }
 
-MenuActiveEffects::~MenuActiveEffects() {
+MenuActiveEffects::~MenuActiveEffects()
+{
 	SDL_FreeSurface(timer);
 }

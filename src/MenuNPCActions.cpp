@@ -34,12 +34,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-class Action {
+class Action
+{
 public:
 	Action(std::string _id = "", std::string _label="")
 		: id(_id)
-		, label(id != "" ? new WidgetLabel() : NULL)
-	{
+		, label(id != "" ? new WidgetLabel() : NULL) {
 		if (label)
 			label->set(_label);
 	}
@@ -52,7 +52,9 @@ public:
 		}
 	}
 
-	virtual ~Action() { delete label; }
+	virtual ~Action() {
+		delete label;
+	}
 
 	std::string id;
 	WidgetLabel *label;
@@ -121,7 +123,8 @@ MenuNPCActions::MenuNPCActions()
 	}
 }
 
-void MenuNPCActions::update() {
+void MenuNPCActions::update()
+{
 	if (action_menu)
 		SDL_FreeSurface(action_menu);
 
@@ -165,10 +168,11 @@ void MenuNPCActions::update() {
 					text_color = topic_hilight_color;
 
 				npc_actions[i].label->set(MENU_BORDER + (w/2),
-							  yoffs + (npc_actions[i].rect.h/2) ,
-							  JUSTIFY_CENTER, VALIGN_CENTER,
-							  npc_actions[i].label->get(), text_color);
-			} else {
+										  yoffs + (npc_actions[i].rect.h/2) ,
+										  JUSTIFY_CENTER, VALIGN_CENTER,
+										  npc_actions[i].label->get(), text_color);
+			}
+			else {
 				if (npc_actions[i].id == "id_cancel")
 					text_color = cancel_normal_color;
 				else if (npc_actions[i].id == "id_vendor")
@@ -177,9 +181,9 @@ void MenuNPCActions::update() {
 					text_color = topic_normal_color;
 
 				npc_actions[i].label->set(MENU_BORDER + (w/2),
-							  yoffs + (npc_actions[i].rect.h/2),
-							  JUSTIFY_CENTER, VALIGN_CENTER,
-							  npc_actions[i].label->get(), text_color);
+										  yoffs + (npc_actions[i].rect.h/2),
+										  JUSTIFY_CENTER, VALIGN_CENTER,
+										  npc_actions[i].label->get(), text_color);
 			}
 
 		}
@@ -195,19 +199,20 @@ void MenuNPCActions::update() {
 	/* render action menu surface */
 	action_menu = createAlphaSurface(w,h);
 	Uint32 bg = SDL_MapRGBA(action_menu->format,
-				background_color.r, background_color.g,
-				background_color.b, background_alpha);
+							background_color.r, background_color.g,
+							background_color.b, background_alpha);
 	SDL_FillRect(action_menu, NULL, bg);
 
 	for(size_t i=0; i<npc_actions.size(); i++) {
-	  if (npc_actions[i].label) {
-		  npc_actions[i].label->render(action_menu);
-	  }
+		if (npc_actions[i].label) {
+			npc_actions[i].label->render(action_menu);
+		}
 	}
 
 }
 
-void MenuNPCActions::setNPC(NPC *pnpc) {
+void MenuNPCActions::setNPC(NPC *pnpc)
+{
 
 	// clear actions menu
 	npc_actions.clear();
@@ -282,15 +287,18 @@ void MenuNPCActions::setNPC(NPC *pnpc) {
 
 }
 
-bool MenuNPCActions::empty() {
+bool MenuNPCActions::empty()
+{
 	return is_empty;
 }
 
-bool MenuNPCActions::selection() {
+bool MenuNPCActions::selection()
+{
 	return is_selected;
 }
 
-void MenuNPCActions::logic() {
+void MenuNPCActions::logic()
+{
 	if (!visible) return;
 
 	if (inpt->lock[MAIN1])
@@ -347,7 +355,8 @@ void MenuNPCActions::logic() {
 
 }
 
-void MenuNPCActions::render() {
+void MenuNPCActions::render()
+{
 	if (!visible) return;
 
 	if (!action_menu) return;
@@ -356,7 +365,8 @@ void MenuNPCActions::render() {
 
 }
 
-MenuNPCActions::~MenuNPCActions() {
+MenuNPCActions::~MenuNPCActions()
+{
 	SDL_FreeSurface(action_menu);
 }
 

@@ -210,14 +210,16 @@ StatBlock::StatBlock()
 	on_half_dead_casted = false;
 }
 
-bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
+bool sortLoot(const EnemyLoot &a, const EnemyLoot &b)
+{
 	return a.chance < b.chance;
 }
 
 /**
  * load a statblock, typically for an enemy definition
  */
-void StatBlock::load(const string& filename) {
+void StatBlock::load(const string& filename)
+{
 	FileParser infile;
 	if (!infile.open(mods->locate(filename)))
 		return;
@@ -370,11 +372,11 @@ void StatBlock::load(const string& filename) {
 				suppress_hp = false;
 		}
 
-		else if (infile.key == "categories"){
-            string cat;
-            while ((cat = infile.nextValue()) != "") {
-                categories.push_back(cat);
-            }
+		else if (infile.key == "categories") {
+			string cat;
+			while ((cat = infile.nextValue()) != "") {
+				categories.push_back(cat);
+			}
 		}
 		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
@@ -393,7 +395,8 @@ void StatBlock::load(const string& filename) {
 /**
  * Reduce temphp first, then hp
  */
-void StatBlock::takeDamage(int dmg) {
+void StatBlock::takeDamage(int dmg)
+{
 	hp -= effects.damageShields(dmg);
 	if (hp <= 0) {
 		hp = 0;
@@ -405,7 +408,8 @@ void StatBlock::takeDamage(int dmg) {
  * Refill HP/MP
  * Creatures might skip these formulas.
  */
-void StatBlock::recalc() {
+void StatBlock::recalc()
+{
 
 	if (!statsLoaded) loadHeroStats();
 
@@ -429,7 +433,8 @@ void StatBlock::recalc() {
  * Base damage and absorb is 0
  * Plus an optional bonus_per_[base stat]
  */
-void StatBlock::calcBaseDmgAndAbs() {
+void StatBlock::calcBaseDmgAndAbs()
+{
 
 	// this bonus is skipped for the default level 1 of a stat
 	int phys0 = get_physical() -1;
@@ -447,7 +452,8 @@ void StatBlock::calcBaseDmgAndAbs() {
 /**
  * Recalc derived stats from base stats + effect bonuses
  */
-void StatBlock::recalc_alt() {
+void StatBlock::recalc_alt()
+{
 
 	int lev0 = level -1;
 
@@ -471,7 +477,8 @@ void StatBlock::recalc_alt() {
 		avoidance = avoidance_base + (avoidance_per_level * lev0) + (avoidance_per_defense * def0) + effects.bonus_avoidance;
 		crit = crit_base + (crit_per_level * lev0) + effects.bonus_crit;
 
-	} else {
+	}
+	else {
 		maxhp = hp_base + effects.bonus_hp;
 		maxmp = mp_base + effects.bonus_mp;
 		accuracy = accuracy_base + effects.bonus_accuracy;
@@ -495,7 +502,8 @@ void StatBlock::recalc_alt() {
 /**
  * Process per-frame actions
  */
-void StatBlock::logic() {
+void StatBlock::logic()
+{
 	if (hp <= 0 && !effects.triggered_death && !effects.revive) alive = false;
 	else alive = true;
 
@@ -540,7 +548,7 @@ void StatBlock::logic() {
 	}
 
 	if(effects.death_sentence)
-        hp = 0;
+		hp = 0;
 
 	if(cooldown_hit_ticks > 0)
 		cooldown_hit_ticks--;
@@ -564,10 +572,12 @@ void StatBlock::logic() {
 	else movement_type = MOVEMENT_NORMAL;
 }
 
-StatBlock::~StatBlock() {
+StatBlock::~StatBlock()
+{
 }
 
-bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
+bool StatBlock::canUsePower(const Power &power, unsigned powerid) const
+{
 	MenuPowers *menu_powers = MenuPowers::getInstance();
 
 	// needed to unlock shapeshifter powers
@@ -576,17 +586,18 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 	//don't use untransform power if hero is not transformed
 	else if (power.spawn_type == "untransform" && !transformed) return false;
 	else
-	return (!power.requires_mental_weapon || wielding_mental)
-		&& (!power.requires_offense_weapon || wielding_offense)
-		&& (!power.requires_physical_weapon || wielding_physical)
-		&& mp >= power.requires_mp
-		&& (!power.sacrifice == false || hp > power.requires_hp)
-		&& menu_powers->meetsUsageStats(powerid)
-		&& !power.passive;
+		return (!power.requires_mental_weapon || wielding_mental)
+			   && (!power.requires_offense_weapon || wielding_offense)
+			   && (!power.requires_physical_weapon || wielding_physical)
+			   && mp >= power.requires_mp
+			   && (!power.sacrifice == false || hp > power.requires_hp)
+			   && menu_powers->meetsUsageStats(powerid)
+			   && !power.passive;
 
 }
 
-void StatBlock::loadHeroStats() {
+void StatBlock::loadHeroStats()
+{
 	// Redefine numbers from config file if present
 	FileParser infile;
 	if (!infile.open(mods->locate("engine/stats.txt")))
@@ -597,81 +608,119 @@ void StatBlock::loadHeroStats() {
 
 		if (infile.key == "max_points_per_stat") {
 			max_points_per_stat = value;
-		} else if (infile.key == "hp_base") {
+		}
+		else if (infile.key == "hp_base") {
 			hp_base = value;
-		} else if (infile.key == "hp_per_level") {
+		}
+		else if (infile.key == "hp_per_level") {
 			hp_per_level = value;
-		} else if (infile.key == "hp_per_physical") {
+		}
+		else if (infile.key == "hp_per_physical") {
 			hp_per_physical = value;
-		} else if (infile.key == "hp_regen_base") {
+		}
+		else if (infile.key == "hp_regen_base") {
 			hp_regen_base = value;
-		} else if (infile.key == "hp_regen_per_level") {
+		}
+		else if (infile.key == "hp_regen_per_level") {
 			hp_regen_per_level = value;
-		} else if (infile.key == "hp_regen_per_physical") {
+		}
+		else if (infile.key == "hp_regen_per_physical") {
 			hp_regen_per_physical = value;
-		} else if (infile.key == "mp_base") {
+		}
+		else if (infile.key == "mp_base") {
 			mp_base = value;
-		} else if (infile.key == "mp_per_level") {
+		}
+		else if (infile.key == "mp_per_level") {
 			mp_per_level = value;
-		} else if (infile.key == "mp_per_mental") {
+		}
+		else if (infile.key == "mp_per_mental") {
 			mp_per_mental = value;
-		} else if (infile.key == "mp_regen_base") {
+		}
+		else if (infile.key == "mp_regen_base") {
 			mp_regen_base = value;
-		} else if (infile.key == "mp_regen_per_level") {
+		}
+		else if (infile.key == "mp_regen_per_level") {
 			mp_regen_per_level = value;
-		} else if (infile.key == "mp_regen_per_mental") {
+		}
+		else if (infile.key == "mp_regen_per_mental") {
 			mp_regen_per_mental = value;
-		} else if (infile.key == "accuracy_base") {
+		}
+		else if (infile.key == "accuracy_base") {
 			accuracy_base = value;
-		} else if (infile.key == "accuracy_per_level") {
+		}
+		else if (infile.key == "accuracy_per_level") {
 			accuracy_per_level = value;
-		} else if (infile.key == "accuracy_per_offense") {
+		}
+		else if (infile.key == "accuracy_per_offense") {
 			accuracy_per_offense = value;
-		} else if (infile.key == "avoidance_base") {
+		}
+		else if (infile.key == "avoidance_base") {
 			avoidance_base = value;
-		} else if (infile.key == "avoidance_per_level") {
+		}
+		else if (infile.key == "avoidance_per_level") {
 			avoidance_per_level = value;
-		} else if (infile.key == "avoidance_per_defense") {
+		}
+		else if (infile.key == "avoidance_per_defense") {
 			avoidance_per_defense = value;
-		} else if (infile.key == "crit_base") {
+		}
+		else if (infile.key == "crit_base") {
 			crit_base = value;
-		} else if (infile.key == "crit_per_level") {
+		}
+		else if (infile.key == "crit_per_level") {
 			crit_per_level = value;
-		} else if (infile.key == "dmg_melee_min") {
+		}
+		else if (infile.key == "dmg_melee_min") {
 			dmg_melee_min = dmg_melee_min_default = value;
-		} else if (infile.key == "dmg_melee_max") {
+		}
+		else if (infile.key == "dmg_melee_max") {
 			dmg_melee_max = dmg_melee_max_default = value;
-		} else if (infile.key == "dmg_ranged_min") {
+		}
+		else if (infile.key == "dmg_ranged_min") {
 			dmg_ranged_min = dmg_ranged_min_default = value;
-		} else if (infile.key == "dmg_ranged_max") {
+		}
+		else if (infile.key == "dmg_ranged_max") {
 			dmg_ranged_max = dmg_ranged_max_default = value;
-		} else if (infile.key == "dmg_ment_min") {
+		}
+		else if (infile.key == "dmg_ment_min") {
 			dmg_ment_min = dmg_ment_min_default = value;
-		} else if (infile.key == "dmg_ment_max") {
+		}
+		else if (infile.key == "dmg_ment_max") {
 			dmg_ment_max = dmg_ment_max_default = value;
-		} else if (infile.key == "absorb_min") {
+		}
+		else if (infile.key == "absorb_min") {
 			absorb_min = absorb_min_default = value;
-		} else if (infile.key == "absorb_max") {
+		}
+		else if (infile.key == "absorb_max") {
 			absorb_max = absorb_max_default = value;
-		} else if (infile.key == "speed") {
+		}
+		else if (infile.key == "speed") {
 			speed = speed_default = value;
-		} else if (infile.key == "dspeed") {
+		}
+		else if (infile.key == "dspeed") {
 			dspeed = dspeed_default = value;
-		} else if (infile.key == "bonus_per_physical") {
+		}
+		else if (infile.key == "bonus_per_physical") {
 			bonus_per_physical = value;
-		} else if (infile.key == "bonus_per_mental") {
+		}
+		else if (infile.key == "bonus_per_mental") {
 			bonus_per_mental = value;
-		} else if (infile.key == "bonus_per_offense") {
+		}
+		else if (infile.key == "bonus_per_offense") {
 			bonus_per_offense = value;
-		} else if (infile.key == "bonus_per_defense") {
+		}
+		else if (infile.key == "bonus_per_defense") {
 			bonus_per_defense = value;
-		} else if (infile.key == "sfx_step") {
+		}
+		else if (infile.key == "sfx_step") {
 			sfx_step = infile.val;
-		} else if (infile.key == "stat_points_per_level") {
+		}
+		else if (infile.key == "stat_points_per_level") {
 			stat_points_per_level = value;
-		} else if (infile.key == "power_points_per_level") {
+		}
+		else if (infile.key == "power_points_per_level") {
 			power_points_per_level = value;
-		} else if (infile.key == "cooldown_hit") {
+		}
+		else if (infile.key == "cooldown_hit") {
 			cooldown_hit = value;
 		}
 	}
