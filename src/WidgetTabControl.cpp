@@ -73,6 +73,10 @@ int WidgetTabControl::getActiveTab() {
 	return activeTab;
 }
 
+int WidgetTabControl::getTabsAmount() {
+	return tabsAmount;
+}
+
 /**
  * Define the position and size of the tab control.
  *

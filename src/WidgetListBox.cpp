@@ -374,6 +374,28 @@ void WidgetListBox::render(SDL_Surface *target) {
 		}
 	}
 
+	if (in_focus)
+	{
+		Point topLeft;
+		Point bottomRight;
+		Uint32 color;
+		
+		topLeft.x = rows[0].x;
+		topLeft.y = rows[0].y;
+		bottomRight.x = rows[list_height - 1].x + rows[0].w;
+		bottomRight.y = rows[list_height - 1].y + rows[0].h;
+		color = SDL_MapRGB(target->format, 255,248,220);
+
+		if (target == screen)
+		{
+			SDL_LockSurface(screen);
+			drawRectangle(target, topLeft, bottomRight, color);
+			SDL_UnlockSurface(screen);
+		}
+		else
+			drawRectangle(target, topLeft, bottomRight, color);
+	}
+
 	if (has_scroll_bar)
 		scrollbar->render(target);
 }
@@ -442,6 +464,34 @@ void WidgetListBox::refresh() {
 		}
 	}
 
+}
+
+bool WidgetListBox::getNext() {
+	int sel = getSelected();
+	selected[sel] = false;
+
+	if(sel == list_amount-1) {
+		selected[0] = true;
+	}
+	else {
+		selected[sel+1] = true;
+	}
+
+	return true;
+}
+
+bool WidgetListBox::getPrev() {
+	int sel = getSelected();
+	selected[sel] = false;
+
+	if(sel == 0) {
+		selected[list_amount-1] = true;
+	}
+	else {
+		selected[sel-1] = true;
+	}
+
+	return true;
 }
 
 WidgetListBox::~WidgetListBox() {

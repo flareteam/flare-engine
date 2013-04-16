@@ -34,9 +34,11 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu
 	if (hasConfirmButton) {
 		buttonConfirm = new WidgetButton("images/menus/buttons/button_default.png");
 		buttonConfirm->label = _buttonMsg;
+		tablist.add(buttonConfirm);
 	}
 
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
+	tablist.add(buttonClose);
 
 	background = loadGraphicSurface("images/menus/confirm_bg.png");
 }
@@ -56,7 +58,11 @@ void MenuConfirm::update() {
 }
 
 void MenuConfirm::logic() {
-	if (visible) confirmClicked = false;
+	if (visible)
+	{
+		tablist.logic();
+		confirmClicked = false;
+	}
 	if (visible && hasConfirmButton) {
 		if(buttonConfirm->checkClick()) {
 			confirmClicked = true;

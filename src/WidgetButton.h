@@ -62,6 +62,8 @@ public:
 	WidgetButton(const std::string& _fileName);
 	~WidgetButton();
 
+	void activate();
+
 	void loadArt();
 	bool checkClick();
 	bool checkClick(int x, int y);

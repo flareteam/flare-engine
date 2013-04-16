@@ -31,6 +31,7 @@ protected:
 	WidgetButton *buttonConfirm;
 	WidgetButton *buttonClose;
 	WidgetLabel label;
+	TabList  tablist;
 
 	std::string boxMsg;
 	bool hasConfirmButton;

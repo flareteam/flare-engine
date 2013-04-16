@@ -69,6 +69,10 @@ GameStateLoad::GameStateLoad() : GameState() {
 	button_alternate->label = msg->get("Delete Save");
 	button_alternate->enabled = false;
 
+	// Set up tab list
+	tablist = TabList(HORIZONTAL);
+	tablist.add(button_exit);
+
 	// Read positions from config file
 	FileParser infile;
 
@@ -353,7 +357,9 @@ void GameStateLoad::logic() {
 		current_frame = (63 - frame_ticker) / 8;
 
 	if (!confirm->visible) {
-		if (button_exit->checkClick()) {
+		tablist.logic();
+		if (button_exit->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+			inpt->lock[CANCEL] = true;
 			delete requestedGameState;
 			requestedGameState = new GameStateTitle();
 		}
@@ -390,6 +396,20 @@ void GameStateLoad::logic() {
 				}
 			}
 		}
+
+		// Allow characters to be navigateable via up/down keys
+		if (inpt->pressing[UP] && !inpt->lock[UP]) {
+			inpt->lock[UP] = true;
+			selected_slot = (--selected_slot < 0) ? GAME_SLOT_MAX - 1 : selected_slot; 
+			updateButtons();
+		}
+
+		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+			inpt->lock[DOWN] = true;
+			selected_slot = (++selected_slot == GAME_SLOT_MAX) ? 0 : selected_slot;
+			updateButtons();
+		}
+
 	} else if (confirm->visible) {
 		confirm->logic();
 		if (confirm->confirmClicked) {
@@ -427,22 +447,33 @@ void GameStateLoad::logicLoading() {
 void GameStateLoad::updateButtons() {
 	loadPortrait(selected_slot);
 
-	button_action->enabled = true;
+	if (button_action->enabled == false)
+	{
+		button_action->enabled = true;
+		tablist.add(button_action);
+	}
 	button_action->tooltip = "";
 	if (stats[selected_slot].name == "") {
 		button_action->label = msg->get("New Game");
 		if (!fileExists(mods->locate("maps/spawn.txt"))) {
 			button_action->enabled = false;
+			tablist.remove(button_action);
 			button_action->tooltip = msg->get("Enable a story mod to continue");
 		}
 		button_alternate->enabled = false;
+		tablist.remove(button_alternate);
 	}
 	else {
-		button_alternate->enabled = true;
+		if (button_alternate->enabled == false)
+		{
+			button_alternate->enabled = true;
+			tablist.add(button_alternate);
+		}
 		button_action->label = msg->get("Load Game");
 		if (current_map[selected_slot] == "") {
 			if (!fileExists(mods->locate("maps/spawn.txt"))) {
 				button_action->enabled = false;
+				tablist.remove(button_action);
 				button_action->tooltip = msg->get("Enable a story mod to continue");
 			}
 		}

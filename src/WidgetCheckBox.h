@@ -32,6 +32,7 @@ public:
 	WidgetCheckBox (const std::string &fname);
 	~WidgetCheckBox ();
 
+	void activate();
 	void Check ();
 	void unCheck ();
 	bool checkClick ();
