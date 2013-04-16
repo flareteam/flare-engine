@@ -24,7 +24,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-WidgetInput::WidgetInput() {
+WidgetInput::WidgetInput()
+{
 
 	enabled = true;
 	inFocus = false;
@@ -45,18 +46,21 @@ WidgetInput::WidgetInput() {
 	color_normal = font->getColor("widget_normal");
 }
 
-void WidgetInput::loadGraphics(const string& filename) {
+void WidgetInput::loadGraphics(const string& filename)
+{
 
 	// load input background image
 	background = loadGraphicSurface(filename, "Couldn't load image", true);
 }
 
-void WidgetInput::logic() {
+void WidgetInput::logic()
+{
 	if (logic(inpt->mouse.x,inpt->mouse.y))
 		return;
 }
 
-bool WidgetInput::logic(int x, int y) {
+bool WidgetInput::logic(int x, int y)
+{
 	Point mouse(x, y);
 
 	// Change the hover state
@@ -101,7 +105,8 @@ bool WidgetInput::logic(int x, int y) {
 	return true;
 }
 
-void WidgetInput::render(SDL_Surface *target) {
+void WidgetInput::render(SDL_Surface *target)
+{
 	if (target == NULL) {
 		target = screen;
 	}
@@ -137,7 +142,8 @@ void WidgetInput::render(SDL_Surface *target) {
 	}
 }
 
-void WidgetInput::setPosition(int x, int y) {
+void WidgetInput::setPosition(int x, int y)
+{
 	pos.x = x;
 	pos.y = y;
 
@@ -146,7 +152,8 @@ void WidgetInput::setPosition(int x, int y) {
 	font_pos.y = pos.y + (pos.h/2) - (font->getFontHeight()/2);
 }
 
-bool WidgetInput::checkClick() {
+bool WidgetInput::checkClick()
+{
 
 	// disabled buttons can't be clicked;
 	if (!enabled) return false;
@@ -179,7 +186,8 @@ bool WidgetInput::checkClick() {
 	return false;
 }
 
-WidgetInput::~WidgetInput() {
+WidgetInput::~WidgetInput()
+{
 	SDL_FreeSurface(background);
 }
 

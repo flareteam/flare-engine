@@ -42,7 +42,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-GameStateNew::GameStateNew() : GameState() {
+GameStateNew::GameStateNew() : GameState()
+{
 	game_slot = 0;
 	current_option = 0;
 	option_count = 0;
@@ -81,46 +82,56 @@ GameStateNew::GameStateNew() : GameState() {
 	FileParser infile;
 
 	if (infile.open(mods->locate("menus/gamenew.txt"))) {
-	  while (infile.next()) {
-		infile.val = infile.val + ',';
+		while (infile.next()) {
+			infile.val = infile.val + ',';
 
-		if (infile.key == "button_prev") {
-			button_prev->pos.x = eatFirstInt(infile.val, ',');
-			button_prev->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "button_next") {
-			button_next->pos.x = eatFirstInt(infile.val, ',');
-			button_next->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "button_permadeath") {
-			button_permadeath->pos.x = eatFirstInt(infile.val, ',');
-			button_permadeath->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "name_input") {
-			name_pos.x = eatFirstInt(infile.val, ',');
-			name_pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "portrait_label") {
-			portrait_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "name_label") {
-			name_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "permadeath_label") {
-			permadeath_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "classlist_label") {
-			classlist_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "portrait") {
-			portrait_pos.x = eatFirstInt(infile.val, ',');
-			portrait_pos.y = eatFirstInt(infile.val, ',');
-			portrait_pos.w = eatFirstInt(infile.val, ',');
-			portrait_pos.h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "class_list") {
-			class_list->pos.x = eatFirstInt(infile.val, ',');
-			class_list->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "show_classlist") {
-			int show_cl = eatFirstInt(infile.val, ',');
-			if (show_cl == 1)
-				show_classlist = true;
-			else
-				show_classlist = false;
+			if (infile.key == "button_prev") {
+				button_prev->pos.x = eatFirstInt(infile.val, ',');
+				button_prev->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "button_next") {
+				button_next->pos.x = eatFirstInt(infile.val, ',');
+				button_next->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "button_permadeath") {
+				button_permadeath->pos.x = eatFirstInt(infile.val, ',');
+				button_permadeath->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "name_input") {
+				name_pos.x = eatFirstInt(infile.val, ',');
+				name_pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "portrait_label") {
+				portrait_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "name_label") {
+				name_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "permadeath_label") {
+				permadeath_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "classlist_label") {
+				classlist_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "portrait") {
+				portrait_pos.x = eatFirstInt(infile.val, ',');
+				portrait_pos.y = eatFirstInt(infile.val, ',');
+				portrait_pos.w = eatFirstInt(infile.val, ',');
+				portrait_pos.h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "class_list") {
+				class_list->pos.x = eatFirstInt(infile.val, ',');
+				class_list->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "show_classlist") {
+				int show_cl = eatFirstInt(infile.val, ',');
+				if (show_cl == 1)
+					show_classlist = true;
+				else
+					show_classlist = false;
+			}
 		}
-	  }
-	  infile.close();
+		infile.close();
 	}
 
 	button_prev->pos.x += (VIEW_W - FRAME_W)/2;
@@ -182,11 +193,13 @@ GameStateNew::GameStateNew() : GameState() {
 	tablist.add(class_list);
 }
 
-void GameStateNew::loadGraphics() {
+void GameStateNew::loadGraphics()
+{
 	portrait_border = loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true);
 }
 
-void GameStateNew::loadPortrait(const string& portrait_filename) {
+void GameStateNew::loadPortrait(const string& portrait_filename)
+{
 	SDL_FreeSurface(portrait_image);
 	portrait_image = loadGraphicSurface("images/portraits/" + portrait_filename + ".png");
 }
@@ -196,7 +209,8 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
  *
  * @param filename File containing entries for option=base,look
  */
-void GameStateNew::loadOptions(const string& filename) {
+void GameStateNew::loadOptions(const string& filename)
+{
 	FileParser fin;
 	if (!fin.open(mods->locate("engine/" + filename))) return;
 
@@ -216,14 +230,16 @@ void GameStateNew::loadOptions(const string& filename) {
  *
  * @param default_name The name we want to use for the hero
  */
-void GameStateNew:: setName(const string& default_name) {
+void GameStateNew:: setName(const string& default_name)
+{
 	if (input_name->getText() == "" || !modified_name) {
 		input_name->setText(default_name);
 		modified_name = false;
 	}
 }
 
-void GameStateNew::logic() {
+void GameStateNew::logic()
+{
 	tablist.logic();
 
 	button_permadeath->checkClick();
@@ -283,7 +299,8 @@ void GameStateNew::logic() {
 	if (input_name->getText() != name[current_option]) modified_name = true;
 }
 
-void GameStateNew::render() {
+void GameStateNew::render()
+{
 
 	// display buttons
 	button_exit->render();
@@ -333,13 +350,15 @@ void GameStateNew::render() {
 
 }
 
-std::string GameStateNew::getClassTooltip(int index) {
+std::string GameStateNew::getClassTooltip(int index)
+{
 	string tooltip;
 	if (HERO_CLASSES[index].description != "") tooltip += msg->get(HERO_CLASSES[index].description);
 	return tooltip;
 }
 
-GameStateNew::~GameStateNew() {
+GameStateNew::~GameStateNew()
+{
 	SDL_FreeSurface(portrait_image);
 	SDL_FreeSurface(portrait_border);
 	delete button_exit;

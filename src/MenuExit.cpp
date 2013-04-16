@@ -23,7 +23,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 
-MenuExit::MenuExit() : Menu() {
+MenuExit::MenuExit() : Menu()
+{
 
 	exitClicked = false;
 
@@ -37,7 +38,8 @@ MenuExit::MenuExit() : Menu() {
 	tablist.add(buttonClose);
 }
 
-void MenuExit::update() {
+void MenuExit::update()
+{
 	buttonExit->pos.x = VIEW_W_HALF - buttonExit->pos.w/2;
 	buttonExit->pos.y = VIEW_H/2;
 	buttonExit->refresh();
@@ -48,7 +50,8 @@ void MenuExit::update() {
 	label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonExit->pos.h * 2), JUSTIFY_CENTER, VALIGN_TOP, msg->get("Save and exit to title?"), font->getColor("menu_normal"));
 }
 
-void MenuExit::logic() {
+void MenuExit::logic()
+{
 	if (visible) {
 		tablist.logic();
 
@@ -61,7 +64,8 @@ void MenuExit::logic() {
 	}
 }
 
-void MenuExit::render() {
+void MenuExit::render()
+{
 	if (visible) {
 		SDL_Rect src;
 
@@ -79,7 +83,8 @@ void MenuExit::render() {
 	}
 }
 
-MenuExit::~MenuExit() {
+MenuExit::~MenuExit()
+{
 	delete buttonExit;
 	delete buttonClose;
 	SDL_FreeSurface(background);

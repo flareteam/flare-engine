@@ -57,7 +57,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	, drag_power(0)
 	, drag_src(0)
 	, done(false)
-	/*std::vector<Menu*> menus;*/
+/*std::vector<Menu*> menus;*/
 	, items(_items)
 	, inv(NULL)
 	, pow(NULL)
@@ -171,11 +171,14 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 				menus[menu_index]->window_area.w = w;
 				menus[menu_index]->window_area.h = h;
 
-			} else if (infile.key == "align") {
+			}
+			else if (infile.key == "align") {
 				menus[menu_index]->alignment = infile.val;
-			} else if (infile.key == "soundfx_open") {
+			}
+			else if (infile.key == "soundfx_open") {
 				menus[menu_index]->sfx_open = snd->load(infile.val, "MenuManager open tab");
-			} else if (infile.key == "soundfx_close") {
+			}
+			else if (infile.key == "soundfx_close") {
 				menus[menu_index]->sfx_close = snd->load(infile.val, "MenuManager close tab");
 			}
 
@@ -218,7 +221,8 @@ void MenuManager::loadIcons()
 	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
 }
 
-void MenuManager::renderIcon(int icon_id, int x, int y) {
+void MenuManager::renderIcon(int icon_id, int x, int y)
+{
 	SDL_Rect src;
 	SDL_Rect dest;
 	dest.x = x;
@@ -232,7 +236,8 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 	SDL_BlitSurface(icons, &src, screen, &dest);
 }
 
-void MenuManager::logic() {
+void MenuManager::logic()
+{
 
 	bool clicking_character = false;
 	bool clicking_inventory = false;
@@ -276,7 +281,7 @@ void MenuManager::logic() {
 
 	// handle npc action menu
 	if (npc->visible) {
-	  npc->logic();
+		npc->logic();
 	}
 
 	// check if mouse-clicking a menu button
@@ -418,17 +423,20 @@ void MenuManager::logic() {
 							log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Not enough %s.", CURRENCY));
 							vendor->itemReturn( stack);
-						} else {
+						}
+						else {
 							if (inv->full(stack.item)) {
 								log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 								hudlog->add(msg->get("Inventory is full."));
 								drop_stack = stack;
-							} else {
+							}
+							else {
 								inv->add(stack);
 							}
 						}
 					}
-				} else {
+				}
+				else {
 					// start dragging a vendor item
 					drag_stack = vendor->click(inpt);
 					if (drag_stack.item > 0) {
@@ -448,12 +456,14 @@ void MenuManager::logic() {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
 							drop_stack = stack;
-						} else {
+						}
+						else {
 							inv->add(stack);
 						}
 						stash->updated = true;
 					}
-				} else {
+				}
+				else {
 					// start dragging a stash item
 					drag_stack = stash->click(inpt);
 					if (drag_stack.item > 0) {
@@ -556,8 +566,9 @@ void MenuManager::logic() {
 			else if (drag_src == DRAG_SRC_ACTIONBAR) {
 				if (isWithin(act->numberArea,inpt->mouse) || isWithin(act->mouseArea,inpt->mouse)) {
 					act->drop(inpt->mouse, drag_power, 1);
-				// for locked slots forbid power dropping
-				} else if (act->locked[act->drag_prev_slot]) {
+					// for locked slots forbid power dropping
+				}
+				else if (act->locked[act->drag_prev_slot]) {
 					act->hotkeys[act->drag_prev_slot] = drag_power;
 				}
 			}
@@ -622,12 +633,14 @@ void MenuManager::logic() {
 						log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
 						hudlog->add(msg->get("Not enough %s.", CURRENCY));
 						vendor->itemReturn( drag_stack);
-					} else {
+					}
+					else {
 						if (inv->full(drag_stack.item)) {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
 							drop_stack = drag_stack;
-						} else {
+						}
+						else {
 							inv->drop(inpt->mouse,drag_stack);
 						}
 					}
@@ -649,10 +662,12 @@ void MenuManager::logic() {
 						// quest items cannot be dropped
 						if (items->items[drag_stack.item].type != "quest") {
 							drop_stack = drag_stack;
-						} else {
+						}
+						else {
 							stash->itemReturn(drag_stack);
 						}
-					} else {
+					}
+					else {
 						inv->drop(inpt->mouse,drag_stack);
 					}
 					stash->updated = true;
@@ -670,7 +685,8 @@ void MenuManager::logic() {
 			dragging = false;
 		}
 
-	} else {
+	}
+	else {
 		if (dragging) {
 			if (drag_src == DRAG_SRC_VENDOR) vendor->itemReturn(drag_stack);
 			else if (drag_src == DRAG_SRC_STASH) stash->itemReturn(drag_stack);
@@ -714,7 +730,8 @@ void MenuManager::logic() {
 
 }
 
-void MenuManager::render() {
+void MenuManager::render()
+{
 	for (unsigned int i=0; i<menus.size(); i++) {
 		menus[i]->render();
 	}
@@ -752,7 +769,8 @@ void MenuManager::render() {
 		}
 		tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
 		TOOLTIP_CONTEXT = TOOLTIP_MENU;
-	} else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
+	}
+	else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
 		TOOLTIP_CONTEXT = TOOLTIP_NONE;
 	}
 
@@ -766,7 +784,8 @@ void MenuManager::render() {
 
 }
 
-void MenuManager::closeAll() {
+void MenuManager::closeAll()
+{
 	if (!dragging) {
 		closeLeft();
 		closeRight();
@@ -774,7 +793,8 @@ void MenuManager::closeAll() {
 	}
 }
 
-void MenuManager::closeLeft() {
+void MenuManager::closeLeft()
+{
 	if (!dragging) {
 		chr->visible = false;
 		log->visible = false;
@@ -786,7 +806,8 @@ void MenuManager::closeLeft() {
 	}
 }
 
-void MenuManager::closeRight() {
+void MenuManager::closeRight()
+{
 	if (!dragging) {
 		inv->visible = false;
 		pow->visible = false;
@@ -796,7 +817,8 @@ void MenuManager::closeRight() {
 	}
 }
 
-MenuManager::~MenuManager() {
+MenuManager::~MenuManager()
+{
 
 	tip_buf.clear();
 

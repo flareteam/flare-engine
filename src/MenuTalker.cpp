@@ -36,7 +36,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
+MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp)
+{
 	camp = _camp;
 	menu = _menu;
 	npc = NULL;
@@ -69,35 +70,43 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 			if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "advance") {
+			}
+			else if(infile.key == "advance") {
 				advance_pos.x = eatFirstInt(infile.val,',');
 				advance_pos.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "dialogbox"){
+			}
+			else if (infile.key == "dialogbox") {
 				dialog_pos.x = eatFirstInt(infile.val,',');
 				dialog_pos.y = eatFirstInt(infile.val,',');
 				dialog_pos.w = eatFirstInt(infile.val,',');
 				dialog_pos.h = eatFirstInt(infile.val,',');
-			} else if (infile.key == "dialogtext"){
+			}
+			else if (infile.key == "dialogtext") {
 				text_pos.x = eatFirstInt(infile.val,',');
 				text_pos.y = eatFirstInt(infile.val,',');
 				text_pos.w = eatFirstInt(infile.val,',');
 				text_pos.h = eatFirstInt(infile.val,',');
-			} else if (infile.key == "text_offset"){
+			}
+			else if (infile.key == "text_offset") {
 				text_offset.x = eatFirstInt(infile.val,',');
 				text_offset.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "portrait_he"){
+			}
+			else if (infile.key == "portrait_he") {
 				portrait_he.x = eatFirstInt(infile.val,',');
 				portrait_he.y = eatFirstInt(infile.val,',');
 				portrait_he.w = eatFirstInt(infile.val,',');
 				portrait_he.h = eatFirstInt(infile.val,',');
-			} else if (infile.key == "portrait_you"){
+			}
+			else if (infile.key == "portrait_you") {
 				portrait_you.x = eatFirstInt(infile.val,',');
 				portrait_you.y = eatFirstInt(infile.val,',');
 				portrait_you.w = eatFirstInt(infile.val,',');
 				portrait_you.h = eatFirstInt(infile.val,',');
-			} else if (infile.key == "font_who") {
+			}
+			else if (infile.key == "font_who") {
 				font_who = eatFirstString(infile.val,',');
-			} else if (infile.key == "font_dialog") {
+			}
+			else if (infile.key == "font_dialog") {
 				font_dialog = eatFirstString(infile.val,',');
 			}
 		}
@@ -107,18 +116,20 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 	color_normal = font->getColor("menu_normal");
 }
 
-void MenuTalker::chooseDialogNode(int request_dialog_node) {
+void MenuTalker::chooseDialogNode(int request_dialog_node)
+{
 	event_cursor = 0;
 
 	if(request_dialog_node == -1)
-	  return;
+		return;
 
 	dialog_node = request_dialog_node;
 	npc->processDialog(dialog_node, event_cursor);
 	createBuffer();
 }
 
-void MenuTalker::update() {
+void MenuTalker::update()
+{
 	advanceButton->pos.x = window_area.x + advance_pos.x;
 	advanceButton->pos.y = window_area.y + advance_pos.y;
 
@@ -129,7 +140,8 @@ void MenuTalker::update() {
 /**
  * Menu interaction (enter/space/click to continue)
  */
-void MenuTalker::logic() {
+void MenuTalker::logic()
+{
 
 	if (!visible || npc==NULL) return;
 
@@ -183,7 +195,8 @@ void MenuTalker::logic() {
 	}
 }
 
-void MenuTalker::createBuffer() {
+void MenuTalker::createBuffer()
+{
 
 	string line;
 
@@ -210,7 +223,8 @@ void MenuTalker::createBuffer() {
 
 }
 
-void MenuTalker::render() {
+void MenuTalker::render()
+{
 	if (!visible) return;
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -267,14 +281,16 @@ void MenuTalker::render() {
 	}
 }
 
-void MenuTalker::setHero(const string& name, const string& portrait_filename) {
+void MenuTalker::setHero(const string& name, const string& portrait_filename)
+{
 	hero_name = name;
 
 	SDL_FreeSurface(portrait);
 	portrait = loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait");
 }
 
-MenuTalker::~MenuTalker() {
+MenuTalker::~MenuTalker()
+{
 	SDL_FreeSurface(msg_buffer);
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(portrait);

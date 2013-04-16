@@ -64,7 +64,8 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 	pos.h = (listboxs->h / 3); // height of one item
 }
 
-bool WidgetListBox::checkClick() {
+bool WidgetListBox::checkClick()
+{
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
@@ -72,7 +73,8 @@ bool WidgetListBox::checkClick() {
  * Sets and releases the "pressed" visual state of the ListBox
  * If press and release, activate (return true)
  */
-bool WidgetListBox::checkClick(int x, int y) {
+bool WidgetListBox::checkClick(int x, int y)
+{
 
 	Point mouse(x, y);
 
@@ -93,7 +95,8 @@ bool WidgetListBox::checkClick(int x, int y) {
 			scrollDown();
 			inpt->resetScroll();
 		}
-	} else {
+	}
+	else {
 		inpt->resetScroll();
 	}
 
@@ -135,7 +138,8 @@ bool WidgetListBox::checkClick(int x, int y) {
 					// activate upon release
 					if (selected[i+cursor]) {
 						if (can_deselect) selected[i+cursor] = false;
-					} else {
+					}
+					else {
 						selected[i+cursor] = true;
 					}
 					refresh();
@@ -149,7 +153,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 
 	// detect new click
 	if (inpt->pressing[MAIN1]) {
-		for (int i=0; i<list_height;i++) {
+		for (int i=0; i<list_height; i++) {
 			if (isWithin(rows[i], mouse)) {
 
 				inpt->lock[MAIN1] = true;
@@ -167,7 +171,8 @@ bool WidgetListBox::checkClick(int x, int y) {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData WidgetListBox::checkTooltip(Point mouse) {
+TooltipData WidgetListBox::checkTooltip(Point mouse)
+{
 	TooltipData _tip;
 
 	for(int i=0; i<list_height; i++) {
@@ -185,8 +190,9 @@ TooltipData WidgetListBox::checkTooltip(Point mouse) {
 /**
  * Set the value and tooltip of the first available slot
  */
-void WidgetListBox::append(std::string value, std::string tooltip) {
-	for (int i=0;i<list_amount;i++) {
+void WidgetListBox::append(std::string value, std::string tooltip)
+{
+	for (int i=0; i<list_amount; i++) {
 		if (values[i] == "") {
 			values[i] = value;
 			tooltips[i] = tooltip;
@@ -199,7 +205,8 @@ void WidgetListBox::append(std::string value, std::string tooltip) {
 /**
  * Set a specific slot's value and tooltip
  */
-void WidgetListBox::set(int index, std::string value, std::string tooltip) {
+void WidgetListBox::set(int index, std::string value, std::string tooltip)
+{
 	if (index > list_amount || index < 0) return;
 
 	values[index] = value;
@@ -209,13 +216,15 @@ void WidgetListBox::set(int index, std::string value, std::string tooltip) {
 /**
  * Clear a slot at a specified index, shifting the other items accordingly
  */
-void WidgetListBox::remove(int index) {
-	for (int i=index;i<list_amount;i++) {
+void WidgetListBox::remove(int index)
+{
+	for (int i=index; i<list_amount; i++) {
 		if (i==list_amount-1) {
 			selected[i] = false;
 			values[i] = "";
 			tooltips[i] = "";
-		} else {
+		}
+		else {
 			selected[i] = selected[i+1];
 			values[i] = values[i+1];
 			tooltips[i] = tooltips[i+1];
@@ -228,7 +237,8 @@ void WidgetListBox::remove(int index) {
 /*
  * Clear the list
  */
-void WidgetListBox::clear() {
+void WidgetListBox::clear()
+{
 	for (int i=0; i<list_amount; i++) {
 		selected[i] = false;
 		values[i] = "";
@@ -240,7 +250,8 @@ void WidgetListBox::clear() {
 /*
  * Move an item up on the list
  */
-void WidgetListBox::shiftUp() {
+void WidgetListBox::shiftUp()
+{
 	any_selected = false;
 	if (!selected[0]) {
 		for (int i=1; i < non_empty_slots; i++) {
@@ -268,7 +279,8 @@ void WidgetListBox::shiftUp() {
 /*
  * Move an item down on the list
  */
-void WidgetListBox::shiftDown() {
+void WidgetListBox::shiftDown()
+{
 	any_selected = false;
 	if (!selected[non_empty_slots-1]) {
 		for (int i=non_empty_slots-2; i >= 0; i--) {
@@ -293,7 +305,8 @@ void WidgetListBox::shiftDown() {
 	}
 }
 
-int WidgetListBox::getSelected() {
+int WidgetListBox::getSelected()
+{
 	// return the first selected value
 	for (int i=0; i<non_empty_slots; i++) {
 		if (selected[i]) return i;
@@ -301,7 +314,8 @@ int WidgetListBox::getSelected() {
 	return -1; // nothing is selected
 }
 
-std::string WidgetListBox::getValue() {
+std::string WidgetListBox::getValue()
+{
 	for (int i=0; i<non_empty_slots; i++) {
 		if (selected[i]) return values[i];
 	}
@@ -311,28 +325,32 @@ std::string WidgetListBox::getValue() {
 /*
  * Get the item name at a specific index
  */
-std::string WidgetListBox::getValue(int index) {
+std::string WidgetListBox::getValue(int index)
+{
 	return values[index];
 }
 
 /*
  * Get the item tooltip at a specific index
  */
-std::string WidgetListBox::getTooltip(int index) {
+std::string WidgetListBox::getTooltip(int index)
+{
 	return tooltips[index];
 }
 
 /*
  * Get the amount of ListBox items
  */
-int WidgetListBox::getSize() {
+int WidgetListBox::getSize()
+{
 	return list_amount;
 }
 
 /*
  * Shift the viewing area up
  */
-void WidgetListBox::scrollUp() {
+void WidgetListBox::scrollUp()
+{
 	if (cursor > 0)
 		cursor -= 1;
 	refresh();
@@ -341,13 +359,15 @@ void WidgetListBox::scrollUp() {
 /*
  * Shift the viewing area down
  */
-void WidgetListBox::scrollDown() {
+void WidgetListBox::scrollDown()
+{
 	if (cursor+list_height < non_empty_slots)
 		cursor += 1;
 	refresh();
 }
 
-void WidgetListBox::render(SDL_Surface *target) {
+void WidgetListBox::render(SDL_Surface *target)
+{
 	if (target == NULL) {
 		target = screen;
 	}
@@ -374,20 +394,18 @@ void WidgetListBox::render(SDL_Surface *target) {
 		}
 	}
 
-	if (in_focus)
-	{
+	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
 		Uint32 color;
-		
+
 		topLeft.x = rows[0].x;
 		topLeft.y = rows[0].y;
 		bottomRight.x = rows[list_height - 1].x + rows[0].w;
 		bottomRight.y = rows[list_height - 1].y + rows[0].h;
 		color = SDL_MapRGB(target->format, 255,248,220);
 
-		if (target == screen)
-		{
+		if (target == screen) {
 			SDL_LockSurface(screen);
 			drawRectangle(target, topLeft, bottomRight, color);
 			SDL_UnlockSurface(screen);
@@ -404,14 +422,15 @@ void WidgetListBox::render(SDL_Surface *target) {
  * Create the text buffer
  * Also, toggle the scrollbar based on the size of the list
  */
-void WidgetListBox::refresh() {
+void WidgetListBox::refresh()
+{
 
 	std::string temp;
 	int right_margin = 0;
 
 	// Get the number of slots that have content
 	non_empty_slots = 0;
-	for (int i=0;i<list_amount;i++) {
+	for (int i=0; i<list_amount; i++) {
 		if (values[i] != "")
 			non_empty_slots = i+1;
 	}
@@ -425,19 +444,20 @@ void WidgetListBox::refresh() {
 		pos_scroll.h = (pos.h*list_height)-scrollbar->pos_down.h-(scrollbar_offset*2);
 		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, non_empty_slots-list_height);
 		right_margin = scrollbar->pos_knob.w + 8;
-	} else {
+	}
+	else {
 		has_scroll_bar = false;
 		right_margin = 8;
 	}
 
 	// Update each row's hitbox and label
-	for(int i=0;i<list_height;i++)
-	{
+	for(int i=0; i<list_height; i++) {
 		rows[i].x = pos.x;
 		rows[i].y = (pos.h*i)+pos.y;
 		if (has_scroll_bar) {
 			rows[i].w = pos.w - pos_scroll.w;
-		} else {
+		}
+		else {
 			rows[i].w = pos.w;
 		}
 		rows[i].h = pos.h;
@@ -452,13 +472,15 @@ void WidgetListBox::refresh() {
 			if (font->calc_width(values[i+cursor]) > pos.w-right_margin) {
 				temp = values[i+cursor].substr(0,max_length);
 				temp.append("...");
-			} else {
+			}
+			else {
 				temp = values[i+cursor];
 			}
 
 			if(selected[i+cursor]) {
 				vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_normal);
-			} else {
+			}
+			else {
 				vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_disabled);
 			}
 		}
@@ -466,7 +488,8 @@ void WidgetListBox::refresh() {
 
 }
 
-bool WidgetListBox::getNext() {
+bool WidgetListBox::getNext()
+{
 	int sel = getSelected();
 	selected[sel] = false;
 
@@ -480,7 +503,8 @@ bool WidgetListBox::getNext() {
 	return true;
 }
 
-bool WidgetListBox::getPrev() {
+bool WidgetListBox::getPrev()
+{
 	int sel = getSelected();
 	selected[sel] = false;
 
@@ -494,7 +518,8 @@ bool WidgetListBox::getPrev() {
 	return true;
 }
 
-WidgetListBox::~WidgetListBox() {
+WidgetListBox::~WidgetListBox()
+{
 	SDL_FreeSurface(listboxs);
 	delete[] values;
 	delete[] tooltips;

@@ -45,12 +45,14 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	pos_up.h = pos_down.h = pos_knob.h = (scrollbars->h / 5); //height of one button
 }
 
-void WidgetScrollBar::loadArt() {
+void WidgetScrollBar::loadArt()
+{
 
 	scrollbars = loadGraphicSurface(fileName, "Couldn't load image", true);
 }
 
-int WidgetScrollBar::checkClick() {
+int WidgetScrollBar::checkClick()
+{
 	int r = checkClick(inpt->mouse.x,inpt->mouse.y);
 	return r;
 }
@@ -59,7 +61,8 @@ int WidgetScrollBar::checkClick() {
  * Sets and releases the "pressed" visual state of the ScrollBar
  * If press and release, activate (return 1 for up, 2 for down)
  */
-int WidgetScrollBar::checkClick(int x, int y) {
+int WidgetScrollBar::checkClick(int x, int y)
+{
 	Point mouse = Point(x,y);
 
 	// main ScrollBar already in use, new click not allowed
@@ -103,10 +106,12 @@ int WidgetScrollBar::checkClick(int x, int y) {
 		if (isWithin(pos_up, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_up = true;
-		} else if (isWithin(pos_down, mouse)) {
+		}
+		else if (isWithin(pos_down, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_down = true;
-		} else if (isWithin(pos_knob, mouse)) {
+		}
+		else if (isWithin(pos_knob, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_knob = true;
 		}
@@ -116,17 +121,20 @@ int WidgetScrollBar::checkClick(int x, int y) {
 
 }
 
-void WidgetScrollBar::set() {
+void WidgetScrollBar::set()
+{
 	if (maximum < 1) maximum = 1;
 	value = max(0, min(maximum, value));
 	pos_knob.y = pos_up.y + pos_up.h + (value * (bar_height - pos_up.h) / maximum);
 }
 
-int WidgetScrollBar::getValue() {
+int WidgetScrollBar::getValue()
+{
 	return value;
 }
 
-void WidgetScrollBar::render(SDL_Surface *target) {
+void WidgetScrollBar::render(SDL_Surface *target)
+{
 	if (target == NULL) {
 		target = screen;
 	}
@@ -160,7 +168,8 @@ void WidgetScrollBar::render(SDL_Surface *target) {
 		SDL_gfxBlitRGBA(scrollbars, &src_up, target, &pos_up);
 		SDL_gfxBlitRGBA(scrollbars, &src_down, target, &pos_down);
 		SDL_gfxBlitRGBA(scrollbars, &src_knob, target, &pos_knob);
-	} else {
+	}
+	else {
 		SDL_BlitSurface(scrollbars, &src_up, target, &pos_up);
 		SDL_BlitSurface(scrollbars, &src_down, target, &pos_down);
 		SDL_BlitSurface(scrollbars, &src_knob, target, &pos_knob);
@@ -170,7 +179,8 @@ void WidgetScrollBar::render(SDL_Surface *target) {
 /**
  * Updates the scrollbar's location
  */
-void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
+void WidgetScrollBar::refresh(int x, int y, int h, int val, int max)
+{
 	maximum = max;
 	value = val;
 	pos_up.x = pos_down.x = pos_knob.x = x;
@@ -180,7 +190,8 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 	set();
 }
 
-WidgetScrollBar::~WidgetScrollBar() {
+WidgetScrollBar::~WidgetScrollBar()
+{
 	SDL_FreeSurface(scrollbars);
 }
 

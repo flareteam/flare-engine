@@ -35,7 +35,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuEnemy::MenuEnemy() {
+MenuEnemy::MenuEnemy()
+{
 	custom_text_pos = false;
 
 	// Load config settings
@@ -49,7 +50,8 @@ MenuEnemy::MenuEnemy() {
 				bar_pos.y = eatFirstInt(infile.val,',');
 				bar_pos.w = eatFirstInt(infile.val,',');
 				bar_pos.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "text_pos") {
+			}
+			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
 			}
@@ -70,18 +72,21 @@ void MenuEnemy::loadGraphics()
 	bar_hp = loadGraphicSurface("images/menus/enemy_bar_hp.png");
 }
 
-void MenuEnemy::handleNewMap() {
+void MenuEnemy::handleNewMap()
+{
 	enemy = NULL;
 }
 
-void MenuEnemy::logic() {
+void MenuEnemy::logic()
+{
 
 	// after a fixed amount of time, hide the enemy display
 	if (timeout > 0) timeout--;
 	if (timeout == 0) enemy = NULL;
 }
 
-void MenuEnemy::render() {
+void MenuEnemy::render()
+{
 	if (enemy == NULL) return;
 	if (enemy->stats.corpse && enemy->stats.corpse_ticks == 0) return;
 
@@ -123,7 +128,8 @@ void MenuEnemy::render() {
 
 		if (custom_text_pos) {
 			label.set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal, text_pos.font_style);
-		} else {
+		}
+		else {
 			label.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y, JUSTIFY_CENTER, VALIGN_BOTTOM, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal);
 		}
 		label.render();
@@ -136,7 +142,8 @@ void MenuEnemy::render() {
 	//SDL_UpdateRects(screen, 1, &dest);
 }
 
-MenuEnemy::~MenuEnemy() {
+MenuEnemy::~MenuEnemy()
+{
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(bar_hp);
 }

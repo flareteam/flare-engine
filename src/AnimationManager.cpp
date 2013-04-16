@@ -23,7 +23,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-AnimationSet *AnimationManager::getAnimationSet(const string& filename) {
+AnimationSet *AnimationManager::getAnimationSet(const string& filename)
+{
 	vector<string>::iterator found = find(names.begin(), names.end(), filename);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -31,7 +32,8 @@ AnimationSet *AnimationManager::getAnimationSet(const string& filename) {
 			sets[index] = new AnimationSet(filename);
 		}
 		return sets[index];
-	} else {
+	}
+	else {
 		fprintf(stderr, "AnimationManager::getAnimationSet: %s not found\n", filename.c_str());
 		SDL_Quit();
 		exit(1);
@@ -56,32 +58,37 @@ AnimationManager::~AnimationManager()
 #endif
 }
 
-void AnimationManager::increaseCount(const std::string &name) {
+void AnimationManager::increaseCount(const std::string &name)
+{
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]++;
-	} else {
+	}
+	else {
 		sets.push_back(0);
 		names.push_back(name);
 		counts.push_back(1);
 	}
 }
 
-void AnimationManager::decreaseCount(const std::string &name) {
+void AnimationManager::decreaseCount(const std::string &name)
+{
 
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]--;
-	} else {
+	}
+	else {
 		fprintf(stderr, "AnimationManager::decreaseCount: %s not found\n", name.c_str());
 		SDL_Quit();
 		exit(1);
 	}
 }
 
-void AnimationManager::cleanUp() {
+void AnimationManager::cleanUp()
+{
 	int i = sets.size() - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {

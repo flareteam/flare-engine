@@ -25,7 +25,8 @@ using namespace std;
  *
  * @param amount  Amount of tabs the control will have.
  */
-WidgetTabControl::WidgetTabControl(int amount) {
+WidgetTabControl::WidgetTabControl(int amount)
+{
 
 	// Based on given amount:
 	tabsAmount = amount;
@@ -46,7 +47,8 @@ WidgetTabControl::WidgetTabControl(int amount) {
 /**
  * Class destructor.
  */
-WidgetTabControl::~WidgetTabControl() {
+WidgetTabControl::~WidgetTabControl()
+{
 	SDL_FreeSurface(activeTabSurface);
 	SDL_FreeSurface(inactiveTabSurface);
 	delete[] titles;
@@ -60,7 +62,8 @@ WidgetTabControl::~WidgetTabControl() {
  * @param title         Tab title.
  * @param updateHeader  Whether or not the header should be updated.
  */
-void WidgetTabControl::setTabTitle(int number, const std::string& title) {
+void WidgetTabControl::setTabTitle(int number, const std::string& title)
+{
 	titles[number] = title;
 }
 
@@ -69,11 +72,13 @@ void WidgetTabControl::setTabTitle(int number, const std::string& title) {
  *
  * For example, if the first tab is open, it will return 0.
  */
-int WidgetTabControl::getActiveTab() {
+int WidgetTabControl::getActiveTab()
+{
 	return activeTab;
 }
 
-int WidgetTabControl::getTabsAmount() {
+int WidgetTabControl::getTabsAmount()
+{
 	return tabsAmount;
 }
 

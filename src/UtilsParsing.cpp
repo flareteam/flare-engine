@@ -32,7 +32,8 @@ using namespace std;
  * Check to see if this string represents an integer
  * The first character can be a negative (-) sign.
  */
-bool isInt(const string& s) {
+bool isInt(const string& s)
+{
 	if (s == "") return false;
 
 	int start=0;
@@ -50,7 +51,8 @@ bool isInt(const string& s) {
 /**
  * trim: remove leading and trailing c from s
  */
-string trim(const string& s, char c) {
+string trim(const string& s, char c)
+{
 	if (s.length() == 0) return "";
 
 	unsigned int first = 0;
@@ -69,7 +71,8 @@ string trim(const string& s, char c) {
 /**
  * Parse a duration string and return duration in frames.
  */
-int parse_duration(const std::string& s) {
+int parse_duration(const std::string& s)
+{
 	int val = 0;
 	std::string suffix = "";
 	std::stringstream ss;
@@ -85,13 +88,15 @@ int parse_duration(const std::string& s) {
 	return val;
 }
 
-string parse_section_title(const string& s) {
+string parse_section_title(const string& s)
+{
 	size_t bracket = s.find_first_of(']');
 	if (bracket == string::npos) return ""; // not found
 	return s.substr(1, bracket-1);
 }
 
-void parse_key_pair(const string& s, string &key, string &val) {
+void parse_key_pair(const string& s, string &key, string &val)
+{
 	size_t separator = s.find_first_of('=');
 	if (separator == string::npos) {
 		key = "";
@@ -110,7 +115,8 @@ void parse_key_pair(const string& s, string &key, string &val) {
  *
  * This is basically a really lazy "split" replacement
  */
-int eatFirstInt(string &s, char separator) {
+int eatFirstInt(string &s, char separator)
+{
 	size_t seppos = s.find_first_of(separator);
 	if (seppos == string::npos) {
 		s = "";
@@ -121,7 +127,8 @@ int eatFirstInt(string &s, char separator) {
 	return num;
 }
 
-string eatFirstString(string &s, char separator) {
+string eatFirstString(string &s, char separator)
+{
 	size_t seppos = s.find_first_of(separator);
 	if (seppos == string::npos) return ""; // not found
 	string outs = s.substr(0, seppos);
@@ -130,7 +137,8 @@ string eatFirstString(string &s, char separator) {
 }
 
 // similar to eatFirstString but does not alter the input string
-string getNextToken(const string& s, size_t &cursor, char separator) {
+string getNextToken(const string& s, size_t &cursor, char separator)
+{
 	size_t seppos = s.find_first_of(separator, cursor);
 	if (seppos == string::npos) { // not found
 		cursor = string::npos;
@@ -142,7 +150,8 @@ string getNextToken(const string& s, size_t &cursor, char separator) {
 }
 
 // strip carriage return if exists
-string stripCarriageReturn(const string& line) {
+string stripCarriageReturn(const string& line)
+{
 	if (line.length() > 0) {
 		if ('\r' == line.at(line.length()-1)) {
 			return line.substr(0, line.length()-1);
@@ -151,7 +160,8 @@ string stripCarriageReturn(const string& line) {
 	return line;
 }
 
-string getLine(ifstream &infile) {
+string getLine(ifstream &infile)
+{
 	string line;
 	// This is the standard way to check whether a read failed.
 	if (!getline(infile, line))
@@ -160,34 +170,45 @@ string getLine(ifstream &infile) {
 	return line;
 }
 
-bool tryParseValue(const type_info & type, const char * value, void * output) {
+bool tryParseValue(const type_info & type, const char * value, void * output)
+{
 	return tryParseValue(type, string(value), output);
 }
 
-bool tryParseValue(const type_info & type, const std::string & value, void * output) {
+bool tryParseValue(const type_info & type, const std::string & value, void * output)
+{
 
 	stringstream stream(value);
 
 	// TODO: add additional type parsing
 	if (type == typeid(bool)) {
 		stream>>(bool&)*((bool*)output);
-	} else if (type == typeid(int)) {
+	}
+	else if (type == typeid(int)) {
 		stream>>(int&)*((int*)output);
-	} else if (type == typeid(unsigned int)) {
+	}
+	else if (type == typeid(unsigned int)) {
 		stream>>(unsigned int&)*((unsigned int*)output);
-	} else if (type == typeid(short)) {
+	}
+	else if (type == typeid(short)) {
 		stream>>(short&)*((short*)output);
-	} else if (type == typeid(unsigned short)) {
+	}
+	else if (type == typeid(unsigned short)) {
 		stream>>(unsigned short&)*((unsigned short*)output);
-	} else if (type == typeid(char)) {
+	}
+	else if (type == typeid(char)) {
 		stream>>(char&)*((char*)output);
-	} else if (type == typeid(unsigned char)) {
+	}
+	else if (type == typeid(unsigned char)) {
 		stream>>(unsigned char&)*((unsigned char*)output);
-	} else if (type == typeid(float)) {
+	}
+	else if (type == typeid(float)) {
 		stream>>(float&)*((float*)output);
-	} else if (type == typeid(std::string)) {
+	}
+	else if (type == typeid(std::string)) {
 		*((string *)output) = value;
-	} else {
+	}
+	else {
 		cout << __FUNCTION__ << ": a required type is not defined!" << endl;
 		return false;
 	}
@@ -195,30 +216,40 @@ bool tryParseValue(const type_info & type, const std::string & value, void * out
 	return !stream.fail();
 }
 
-std::string toString(const type_info & type, void * value) {
+std::string toString(const type_info & type, void * value)
+{
 
 	stringstream stream;
 
 	// TODO: add additional type parsing
 	if (type == typeid(bool)) {
 		stream<<*((bool*)value);
-	} else if (type == typeid(int)) {
+	}
+	else if (type == typeid(int)) {
 		stream<<*((int*)value);
-	} else if (type == typeid(unsigned int)) {
+	}
+	else if (type == typeid(unsigned int)) {
 		stream<<*((unsigned int*)value);
-	} else if (type == typeid(short)) {
+	}
+	else if (type == typeid(short)) {
 		stream<<*((short*)value);
-	} else if (type == typeid(unsigned short)) {
+	}
+	else if (type == typeid(unsigned short)) {
 		stream<<*((unsigned short*)value);
-	} else if (type == typeid(char)) {
+	}
+	else if (type == typeid(char)) {
 		stream<<*((char*)value);
-	} else if (type == typeid(unsigned char)) {
+	}
+	else if (type == typeid(unsigned char)) {
 		stream<<*((unsigned char*)value);
-	} else if (type == typeid(float)) {
+	}
+	else if (type == typeid(float)) {
 		stream<<*((float*)value);
-	} else if (type == typeid(std::string)) {
+	}
+	else if (type == typeid(std::string)) {
 		return (string &)*((string *)value);
-	} else {
+	}
+	else {
 		cout << __FUNCTION__ << ": a required type is not defined!" << endl;
 		return "";
 	}
@@ -226,26 +257,31 @@ std::string toString(const type_info & type, void * value) {
 	return stream.str();
 }
 
-int toInt(const string& s, int default_value) {
+int toInt(const string& s, int default_value)
+{
 	int result;
 	if (!(stringstream(s) >> result))
 		result = default_value;
 	return result;
 }
 
-string &trim_right_inplace(string &s, const string& delimiters = " \f\n\r\t\v") {
+string &trim_right_inplace(string &s, const string& delimiters = " \f\n\r\t\v")
+{
 	return s.erase(s.find_last_not_of(delimiters) + 1);
 }
 
-string& trim_left_inplace(string &s, const string& delimiters = " \f\n\r\t\v" ) {
+string& trim_left_inplace(string &s, const string& delimiters = " \f\n\r\t\v" )
+{
 	return s.erase(0, s.find_first_not_of(delimiters));
 }
 
-string &trim(string &s, const string& delimiters = " \f\n\r\t\v") {
+string &trim(string &s, const string& delimiters = " \f\n\r\t\v")
+{
 	return trim_left_inplace(trim_right_inplace(s, delimiters), delimiters);
 }
 
-bool toBool(std::string value) {
+bool toBool(std::string value)
+{
 	trim(value);
 
 	std::transform(value.begin(), value.end(), value.begin(), ::tolower);

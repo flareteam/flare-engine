@@ -23,7 +23,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu() {
+MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu()
+{
 	confirmClicked = false;
 	cancelClicked = false;
 	hasConfirmButton = true;
@@ -43,13 +44,15 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu
 	background = loadGraphicSurface("images/menus/confirm_bg.png");
 }
 
-void MenuConfirm::update() {
+void MenuConfirm::update()
+{
 	if (hasConfirmButton) {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;
 		buttonConfirm->refresh();
 		label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2), JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
-	} else {
+	}
+	else {
 		label.set(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4), JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
 	}
 
@@ -57,9 +60,9 @@ void MenuConfirm::update() {
 	buttonClose->pos.y = window_area.y;
 }
 
-void MenuConfirm::logic() {
-	if (visible)
-	{
+void MenuConfirm::logic()
+{
+	if (visible) {
 		tablist.logic();
 		confirmClicked = false;
 	}
@@ -71,7 +74,8 @@ void MenuConfirm::logic() {
 			visible = false;
 			cancelClicked = true;
 		}
-	} else if (visible && !hasConfirmButton) {
+	}
+	else if (visible && !hasConfirmButton) {
 		if(buttonClose->checkClick()) {
 			visible = false;
 			cancelClicked = true;
@@ -79,7 +83,8 @@ void MenuConfirm::logic() {
 	}
 }
 
-void MenuConfirm::render() {
+void MenuConfirm::render()
+{
 	SDL_Rect src;
 
 	// background
@@ -95,7 +100,8 @@ void MenuConfirm::render() {
 	buttonClose->render();
 }
 
-MenuConfirm::~MenuConfirm() {
+MenuConfirm::~MenuConfirm()
+{
 	if (hasConfirmButton) delete buttonConfirm;
 	delete buttonClose;
 	SDL_FreeSurface(background);
