@@ -39,11 +39,23 @@ protected:
 	SDL_Surface *sprites;
 
 public:
-	Entity(MapRenderer*);
+	Entity(PowerManager *_powers, MapRenderer*);
 	Entity(const Entity&);
 	virtual ~Entity();
 
 	bool move();
+	bool takeHit(const Hazard &h);
+	virtual void resetActiveAnimation();
+	virtual void doRewards(int){}
+
+	// sound effects flags
+	bool sfx_phys;
+	bool sfx_ment;
+
+	bool sfx_hit;
+	bool sfx_die;
+	bool sfx_critdie;
+	bool sfx_block;
 
 	// Each child of Entity defines its own rendering method
 	virtual Renderable getRender() = 0;
@@ -54,6 +66,7 @@ public:
 
 	MapRenderer* map;
 	StatBlock stats;
+	PowerManager *powers;
 };
 
 #endif

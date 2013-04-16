@@ -52,7 +52,7 @@ protected:
 	const animation_type type;
 	SDL_Surface *sprite;
 
-	unsigned short number_frames; // how many ticks this animation lasts.
+    unsigned short number_frames; // how many ticks this animation lasts.
 	unsigned short cur_frame;     // counts up until reaching number_frames.
 
 	unsigned short cur_frame_index; // which frame in this animation is currently being displayed? range: 0..gfx.size()-1
@@ -132,6 +132,7 @@ public:
 		if (type == PLAY_ONCE && times_played > 0) return true;
 		else return false;
 	}
+
 };
 
 #endif
