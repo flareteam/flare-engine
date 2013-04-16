@@ -36,8 +36,7 @@ MenuItemStorage::MenuItemStorage()
 	, highlight_image(NULL)
 {}
 
-void MenuItemStorage::init(int _slot_number, ItemManager *_items, SDL_Rect _area, int _icon_size, int _nb_cols)
-{
+void MenuItemStorage::init(int _slot_number, ItemManager *_items, SDL_Rect _area, int _icon_size, int _nb_cols) {
 	ItemStorage::init( _slot_number, _items);
 	area.push_back(_area);
 	nb_cols = _nb_cols;
@@ -54,8 +53,7 @@ void MenuItemStorage::init(int _slot_number, ItemManager *_items, SDL_Rect _area
 /**
  * Overloaded function for case, if slot positions are predefined
  */
-void MenuItemStorage::init(int _slot_number, ItemManager *_items, vector<SDL_Rect> _area, vector<string> _slot_type)
-{
+void MenuItemStorage::init(int _slot_number, ItemManager *_items, vector<SDL_Rect> _area, vector<string> _slot_type) {
 	ItemStorage::init( _slot_number, _items);
 	area = _area;
 	nb_cols = 0;
@@ -70,13 +68,11 @@ void MenuItemStorage::init(int _slot_number, ItemManager *_items, vector<SDL_Rec
 	loadGraphics();
 }
 
-void MenuItemStorage::loadGraphics()
-{
+void MenuItemStorage::loadGraphics() {
 	highlight_image = loadGraphicSurface("images/menus/attention_glow.png", "Couldn't load icon highlight image");
 }
 
-void MenuItemStorage::render()
-{
+void MenuItemStorage::render() {
 	for (int i=0; i<slot_number; i++) {
 		if (nb_cols > 0) {
 			if (storage[i].item > 0) items->renderIcon(storage[i], area[0].x + (i % nb_cols * icon_size[i]), area[0].y + (i / nb_cols * icon_size[i]), icon_size[i]);
@@ -89,8 +85,7 @@ void MenuItemStorage::render()
 	}
 }
 
-void MenuItemStorage::renderHighlight(int x, int y, int _icon_size)
-{
+void MenuItemStorage::renderHighlight(int x, int y, int _icon_size) {
 	if (_icon_size == ICON_SIZE) {
 		SDL_Rect dest;
 		dest.x = x;
@@ -99,8 +94,7 @@ void MenuItemStorage::renderHighlight(int x, int y, int _icon_size)
 	}
 }
 
-int MenuItemStorage::slotOver(Point mouse)
-{
+int MenuItemStorage::slotOver(Point mouse) {
 	if (isWithin(area[0], mouse) && nb_cols > 0) {
 		return (mouse.x - area[0].x) / icon_size[0] + (mouse.y - area[0].y) / icon_size[0] * nb_cols;
 	}
@@ -112,8 +106,7 @@ int MenuItemStorage::slotOver(Point mouse)
 	return -1;
 }
 
-TooltipData MenuItemStorage::checkTooltip(Point mouse, StatBlock *stats, int context)
-{
+TooltipData MenuItemStorage::checkTooltip(Point mouse, StatBlock *stats, int context) {
 	TooltipData tip;
 	int slot = slotOver( mouse);
 
@@ -123,8 +116,7 @@ TooltipData MenuItemStorage::checkTooltip(Point mouse, StatBlock *stats, int con
 	return tip;
 }
 
-ItemStack MenuItemStorage::click(InputState * input)
-{
+ItemStack MenuItemStorage::click(InputState * input) {
 	ItemStack item;
 	drag_prev_slot = slotOver(input->mouse);
 	if (drag_prev_slot > -1) {
@@ -142,8 +134,7 @@ ItemStack MenuItemStorage::click(InputState * input)
 	}
 }
 
-void MenuItemStorage::itemReturn(ItemStack stack)
-{
+void MenuItemStorage::itemReturn(ItemStack stack) {
 	add( stack, drag_prev_slot);
 	drag_prev_slot = -1;
 }
@@ -151,8 +142,7 @@ void MenuItemStorage::itemReturn(ItemStack stack)
 /**
  * Sort storage array, so items order matches slots order
  */
-void MenuItemStorage::fillEquipmentSlots()
-{
+void MenuItemStorage::fillEquipmentSlots() {
 	// create temporary arrays
 	int *equip_item = new int[slot_number];
 	int *equip_quantity = new int[slot_number];;
@@ -183,22 +173,19 @@ void MenuItemStorage::fillEquipmentSlots()
 	delete [] equip_quantity;
 }
 
-void MenuItemStorage::highlightMatching(string type)
-{
+void MenuItemStorage::highlightMatching(string type) {
 	for (int i=0; i<slot_number; i++) {
 		if (slot_type[i] == type) highlight[i] = true;
 	}
 }
 
-void MenuItemStorage::highlightClear()
-{
+void MenuItemStorage::highlightClear() {
 	for (int i=0; i<slot_number; i++) {
 		highlight[i] = false;
 	}
 }
 
-MenuItemStorage::~MenuItemStorage()
-{
+MenuItemStorage::~MenuItemStorage() {
 	delete[] highlight;
 	delete[] icon_size;
 	SDL_FreeSurface(highlight_image);

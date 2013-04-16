@@ -44,13 +44,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 LootManager *lootManager = 0;
-LootManager *LootManager::getInstance()
-{
+LootManager *LootManager::getInstance() {
 	return lootManager;
 }
 
-LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero)
-{
+LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero) {
 	items = _items;
 	map = _map; // we need to be able to read loot that drops from map containers
 	hero = _hero; // we need the player's position for dropping loot in a valid spot
@@ -127,8 +125,7 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
  * The "loot" variable on each item refers to the "flying loot" animation for that item.
  * Here we load all the animations used by the item database.
  */
-void LootManager::loadGraphics()
-{
+void LootManager::loadGraphics() {
 
 	// check all items in the item database
 	for (unsigned int i=0; i < items->items.size(); i++) {
@@ -146,13 +143,11 @@ void LootManager::loadGraphics()
 	}
 }
 
-void LootManager::handleNewMap()
-{
+void LootManager::handleNewMap() {
 	loot.clear();
 }
 
-void LootManager::logic()
-{
+void LootManager::logic() {
 	vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
 
@@ -174,8 +169,7 @@ void LootManager::logic()
 /**
  * Show all tooltips for loot on the floor
  */
-void LootManager::renderTooltips(Point cam)
-{
+void LootManager::renderTooltips(Point cam) {
 	Point dest;
 	stringstream ss;
 
@@ -211,8 +205,7 @@ void LootManager::renderTooltips(Point cam)
  * Enemies that drop loot raise a "loot_drop" flag to notify this loot
  * manager to create loot based on that creature's level and position.
  */
-void LootManager::checkEnemiesForLoot()
-{
+void LootManager::checkEnemiesForLoot() {
 	ItemStack istack;
 	istack.quantity = 1;
 
@@ -235,8 +228,7 @@ void LootManager::checkEnemiesForLoot()
 	enemiesDroppingLoot.clear();
 }
 
-void LootManager::addEnemyLoot(const Enemy *e)
-{
+void LootManager::addEnemyLoot(const Enemy *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 
@@ -244,8 +236,7 @@ void LootManager::addEnemyLoot(const Enemy *e)
  * As map events occur, some might have a component named "loot"
  * Loot is created at component x,y
  */
-void LootManager::checkMapForLoot()
-{
+void LootManager::checkMapForLoot() {
 	Point p;
 	Event_Component *ec;
 	ItemStack new_loot;
@@ -321,8 +312,7 @@ void LootManager::checkMapForLoot()
  * This function is called when there definitely is a piece of loot dropping
  * calls addLoot()
  */
-void LootManager::determineLootByEnemy(const Enemy *e, Point pos)
-{
+void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 	ItemStack new_loot;
 	std::vector<int> possible_ids;
 	std::vector<Point> possible_ranges;
@@ -380,8 +370,7 @@ void LootManager::determineLootByEnemy(const Enemy *e, Point pos)
 	}
 }
 
-void LootManager::addLoot(ItemStack stack, Point pos)
-{
+void LootManager::addLoot(ItemStack stack, Point pos) {
 	// TODO: z-sort insert?
 	Loot ld;
 	ld.stack = stack;
@@ -396,8 +385,7 @@ void LootManager::addLoot(ItemStack stack, Point pos)
 	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
-void LootManager::addCurrency(int count, Point pos)
-{
+void LootManager::addCurrency(int count, Point pos) {
 	Loot ld;
 	ld.stack.item = 0;
 	ld.stack.quantity = 0;
@@ -425,8 +413,7 @@ void LootManager::addCurrency(int count, Point pos)
  * screen coordinates to map locations.  We need the hero position because
  * the hero has to be within range to pick up an item.
  */
-ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, int &currency, MenuInventory *inv)
-{
+ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, int &currency, MenuInventory *inv) {
 	Point p;
 	SDL_Rect r;
 	ItemStack loot_stack;
@@ -479,8 +466,7 @@ ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, int &
  * Autopickup loot if enabled in the engine
  * Currently, only currency is checked for autopickup
  */
-ItemStack LootManager::checkAutoPickup(Point hero_pos, int &currency)
-{
+ItemStack LootManager::checkAutoPickup(Point hero_pos, int &currency) {
 	ItemStack loot_stack;
 	currency = 0;
 	loot_stack.item = 0;
@@ -500,8 +486,7 @@ ItemStack LootManager::checkAutoPickup(Point hero_pos, int &currency)
 	return loot_stack;
 }
 
-ItemStack LootManager::checkNearestPickup(Point hero_pos, int &currency, MenuInventory *inv)
-{
+ItemStack LootManager::checkNearestPickup(Point hero_pos, int &currency, MenuInventory *inv) {
 	ItemStack loot_stack;
 	currency = 0;
 	loot_stack.item = 0;
@@ -542,8 +527,7 @@ ItemStack LootManager::checkNearestPickup(Point hero_pos, int &currency, MenuInv
 	return loot_stack;
 }
 
-void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_dead)
-{
+void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_dead) {
 	vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
 		Renderable r = it->animation->getCurrentFrame(0);
@@ -554,13 +538,11 @@ void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_de
 	}
 }
 
-void LootManager::playCurrencySound(Point pos)
-{
+void LootManager::playCurrencySound(Point pos) {
 	snd->play(sfx_currency, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
-LootManager::~LootManager()
-{
+LootManager::~LootManager() {
 	// remove all items in the item database
 	for (unsigned int i=0; i < items->items.size(); i++) {
 		string anim_id = items->items[i].loot_animation;

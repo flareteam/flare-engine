@@ -33,8 +33,7 @@ FileParser::FileParser()
 	, val("")
 {}
 
-bool FileParser::open(const string& _filename, const string &errormessage)
-{
+bool FileParser::open(const string& _filename, const string &errormessage) {
 	this->filename = _filename;
 	infile.open(filename.c_str(), ios::in);
 	bool ret = infile.is_open();
@@ -43,8 +42,7 @@ bool FileParser::open(const string& _filename, const string &errormessage)
 	return ret;
 }
 
-void FileParser::close()
-{
+void FileParser::close() {
 	if (infile.is_open())
 		infile.close();
 }
@@ -55,8 +53,7 @@ void FileParser::close()
  *
  * @return false if EOF, otherwise true
  */
-bool FileParser::next()
-{
+bool FileParser::next() {
 
 	string starts_with;
 	new_section = false;
@@ -95,8 +92,7 @@ bool FileParser::next()
 /**
  * Get an unparsed, unfiltered line from the input file
  */
-string FileParser::getRawLine()
-{
+string FileParser::getRawLine() {
 	line = "";
 
 	if (infile.good()) {
@@ -105,8 +101,7 @@ string FileParser::getRawLine()
 	return line;
 }
 
-string FileParser::nextValue()
-{
+string FileParser::nextValue() {
 	if (val == "") {
 		return ""; // not found
 	}
@@ -127,12 +122,10 @@ string FileParser::nextValue()
 	return s;
 }
 
-std::string FileParser::getFileName()
-{
+std::string FileParser::getFileName() {
 	return filename;
 }
 
-FileParser::~FileParser()
-{
+FileParser::~FileParser() {
 	close();
 }

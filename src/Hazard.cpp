@@ -66,20 +66,17 @@ Hazard::Hazard(MapCollision *_collider)
 	, trait_elemental(-1)
 	, post_power(0)
 	, wall_power(0)
-	, mod_power(0)
-{
+	, mod_power(0) {
 }
 
-Hazard::~Hazard()
-{
+Hazard::~Hazard() {
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
 	}
 }
 
-void Hazard::logic()
-{
+void Hazard::logic() {
 
 	// if the hazard is on delay, take no action
 	if (delay_frames > 0) {
@@ -110,8 +107,7 @@ void Hazard::logic()
 	}
 }
 
-void Hazard::loadAnimation(std::string &s)
-{
+void Hazard::loadAnimation(std::string &s) {
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
@@ -125,27 +121,23 @@ void Hazard::loadAnimation(std::string &s)
 	}
 }
 
-bool Hazard::isDangerousNow()
-{
+bool Hazard::isDangerousNow() {
 	return active && (delay_frames == 0) &&
 		   ( (activeAnimation != NULL && activeAnimation->isActiveFrame())
 			 || activeAnimation == NULL);
 }
 
-bool Hazard::hasEntity(Entity *ent)
-{
+bool Hazard::hasEntity(Entity *ent) {
 	for(vector<Entity*>::iterator it = entitiesCollided.begin(); it != entitiesCollided.end(); ++it)
 		if(*it == ent) return true;
 	return false;
 }
 
-void Hazard::addEntity(Entity *ent)
-{
+void Hazard::addEntity(Entity *ent) {
 	entitiesCollided.push_back(ent);
 }
 
-void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead)
-{
+void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	if (delay_frames == 0 && activeAnimation) {
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
 		re.map_pos.x = round(pos.x);

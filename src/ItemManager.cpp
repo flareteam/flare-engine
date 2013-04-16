@@ -43,8 +43,7 @@ using namespace std;
  * Resizes vector vec, so it can fit index id.
  */
 template <typename Ty_>
-static inline void ensureFitsId(vector<Ty_>& vec, int id)
-{
+static inline void ensureFitsId(vector<Ty_>& vec, int id) {
 	// id's are always greater or equal 1;
 	if (id < 1) return;
 
@@ -61,8 +60,7 @@ static inline void ensureFitsId(vector<Ty_>& vec, int id)
  * It is sometimes also called "swap trick".
  */
 template <typename Ty_>
-static inline void shrinkVecToFit(std::vector<Ty_>& vec)
-{
+static inline void shrinkVecToFit(std::vector<Ty_>& vec) {
 	if (vec.capacity() != vec.size())
 		std::vector<Ty_>(vec).swap(vec);
 }
@@ -75,8 +73,7 @@ ItemManager::ItemManager()
 	, color_bonus(font->getColor("item_bonus"))
 	, color_penalty(font->getColor("item_penalty"))
 	, color_requirements_not_met(font->getColor("requirements_not_met"))
-	, color_flavor(font->getColor("item_flavor"))
-{
+	, color_flavor(font->getColor("item_flavor")) {
 	// NB: 20 is arbitrary picked number, but it looks like good start.
 	items.reserve(20);
 	item_sets.reserve(5);
@@ -88,8 +85,7 @@ ItemManager::ItemManager()
 /**
  * Load all items files in all mods
  */
-void ItemManager::loadAll()
-{
+void ItemManager::loadAll() {
 	string test_path;
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
@@ -155,8 +151,7 @@ void ItemManager::loadAll()
  *
  * @param filename The full path and name of the file to load
  */
-void ItemManager::load(const string& filename)
-{
+void ItemManager::load(const string& filename) {
 	FileParser infile;
 	if (!infile.open(filename))
 		return;
@@ -298,8 +293,7 @@ void ItemManager::load(const string& filename)
 	infile.close();
 }
 
-void ItemManager::loadTypes(const string& filename)
-{
+void ItemManager::loadTypes(const string& filename) {
 	FileParser infile;
 	string type,description;
 	type = description = "";
@@ -318,8 +312,7 @@ void ItemManager::loadTypes(const string& filename)
 	}
 }
 
-string ItemManager::getItemType(std::string _type)
-{
+string ItemManager::getItemType(std::string _type) {
 	map<string,string>::iterator it,end;
 	for (it=item_types.begin(), end=item_types.end(); it!=end; ++it) {
 		if (_type.compare(it->first) == 0) return it->second;
@@ -328,8 +321,7 @@ string ItemManager::getItemType(std::string _type)
 	return _type;
 }
 
-void ItemManager::loadSets(const string& filename)
-{
+void ItemManager::loadSets(const string& filename) {
 	FileParser infile;
 	if (!infile.open(filename))
 		return;
@@ -390,8 +382,7 @@ void ItemManager::loadSets(const string& filename)
 /**
  * Icon sets
  */
-void ItemManager::loadIcons()
-{
+void ItemManager::loadIcons() {
 	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
 }
 
@@ -399,8 +390,7 @@ void ItemManager::loadIcons()
  * Renders icons at small size or large size
  * Also display the stack size
  */
-void ItemManager::renderIcon(ItemStack stack, int x, int y, int size)
-{
+void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 	if (!icons) return;
 
 	SDL_Rect src, dest;
@@ -426,13 +416,11 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size)
 	}
 }
 
-void ItemManager::playSound(int item, Point pos)
-{
+void ItemManager::playSound(int item, Point pos) {
 	snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
-TooltipData ItemManager::getShortTooltip(ItemStack stack)
-{
+TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	stringstream ss;
 	TooltipData tip;
 	SDL_Color color = color_normal;
@@ -468,8 +456,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack)
 /**
  * Create detailed tooltip showing all relevant item info
  */
-TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context)
-{
+TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	TooltipData tip;
 	SDL_Color color = color_normal;
 
@@ -648,16 +635,14 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context)
 	return tip;
 }
 
-ItemManager::~ItemManager()
-{
+ItemManager::~ItemManager() {
 	SDL_FreeSurface(icons);
 }
 
 /**
  * Compare two item stack to be able to sorting them on their item_id in the vendors' stock
  */
-bool ItemStack::operator > (const ItemStack &param) const
-{
+bool ItemStack::operator > (const ItemStack &param) const {
 	if (item == 0 && param.item > 0) {
 		// Make the empty slots the last while sorting
 		return true;
@@ -671,8 +656,7 @@ bool ItemStack::operator > (const ItemStack &param) const
 	}
 }
 
-int Item::getSellPrice()
-{
+int Item::getSellPrice() {
 	int new_price = 0;
 	if (price_sell != 0)
 		new_price = price_sell;

@@ -37,8 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Check to see if a directory/folder exists
  */
-bool dirExists(std::string path)
-{
+bool dirExists(std::string path) {
 	struct stat st;
 	return (stat(path.c_str(), &st) == 0);
 }
@@ -47,8 +46,7 @@ bool dirExists(std::string path)
  * Create this folder if it doesn't already exist
  */
 
-void createDir(std::string path)
-{
+void createDir(std::string path) {
 
 #ifndef _WIN32
 	// *nix implementation
@@ -66,8 +64,7 @@ void createDir(std::string path)
  * Check to see if a file exists
  * The filename parameter should include the entire path to this file
  */
-bool fileExists(std::string filename)
-{
+bool fileExists(std::string filename) {
 	bool exists;
 
 	std::ifstream infile(filename.c_str());
@@ -80,8 +77,7 @@ bool fileExists(std::string filename)
 /**
  * Returns a vector containing all filenames in a given folder with the given extension
  */
-int getFileList(std::string dir, std::string ext, std::vector<std::string> &files)
-{
+int getFileList(std::string dir, std::string ext, std::vector<std::string> &files) {
 
 	DIR *dp;
 	struct dirent *dirp;
@@ -108,8 +104,7 @@ int getFileList(std::string dir, std::string ext, std::vector<std::string> &file
 /**
  * Returns a vector containing all directory names in a given directory
  */
-int getDirList(std::string dir, std::vector<std::string> &dirs)
-{
+int getDirList(std::string dir, std::vector<std::string> &dirs) {
 
 	DIR *dp;
 	struct dirent *dirp;

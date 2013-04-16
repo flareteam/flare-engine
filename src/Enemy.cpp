@@ -39,8 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_powers, _map)
-{
+Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_powers, _map) {
 	powers = _powers;
 	enemies = _em;
 
@@ -73,16 +72,14 @@ Enemy::Enemy(const Enemy& e)
 	, instant_power(e.instant_power)
 	, summoned(e.summoned)
 	, summoned_power_index(e.summoned_power_index)
-	, kill_source_type(e.kill_source_type)
-{
+	, kill_source_type(e.kill_source_type) {
 	assert(e.haz == NULL);
 }
 
 /**
  * The current direction leads to a wall.  Try the next best direction, if one is available.
  */
-int Enemy::faceNextBest(int mapx, int mapy)
-{
+int Enemy::faceNextBest(int mapx, int mapy) {
 	int dx = abs(mapx - stats.pos.x);
 	int dy = abs(mapy - stats.pos.y);
 	switch (stats.direction) {
@@ -117,8 +114,7 @@ int Enemy::faceNextBest(int mapx, int mapy)
 /**
  * Calculate distance between the enemy and the hero
  */
-int Enemy::getDistance(Point dest)
-{
+int Enemy::getDistance(Point dest) {
 	int dx = dest.x - stats.pos.x;
 	int dy = dest.y - stats.pos.y;
 	double step1 = (double)dx * (double)dx + (double)dy * (double)dy;
@@ -126,8 +122,7 @@ int Enemy::getDistance(Point dest)
 	return int(step2);
 }
 
-void Enemy::newState(int state)
-{
+void Enemy::newState(int state) {
 
 	stats.cur_state = state;
 }
@@ -138,8 +133,7 @@ void Enemy::newState(int state)
  * - move the enemy based on AI % chances
  * - calculate the next frame of animation
  */
-void Enemy::logic()
-{
+void Enemy::logic() {
 
 	eb->logic();
 
@@ -158,8 +152,7 @@ void Enemy::logic()
 /**
  * Upon enemy death, handle rewards (currency, xp, loot)
  */
-void Enemy::doRewards(int source_type)
-{
+void Enemy::doRewards(int source_type) {
 
 	if(stats.hero_ally && !stats.converted)
 		return;
@@ -193,8 +186,7 @@ void Enemy::doRewards(int source_type)
 	LootManager::getInstance()->addEnemyLoot(this);
 }
 
-void Enemy::InstantDeath()
-{
+void Enemy::InstantDeath() {
 	stats.effects.triggered_death = true;
 	stats.cur_state = ENEMY_DEAD;
 
@@ -204,8 +196,7 @@ void Enemy::InstantDeath()
 	stats.effects.clearEffects();
 }
 
-void Enemy::CheckSummonSustained()
-{
+void Enemy::CheckSummonSustained() {
 	//if minion was raised by a spawn power
 	if(summoned && stats.hero_ally) {
 
@@ -264,16 +255,14 @@ void Enemy::CheckSummonSustained()
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-Renderable Enemy::getRender()
-{
+Renderable Enemy::getRender() {
 	Renderable r = activeAnimation->getCurrentFrame(stats.direction);
 	r.map_pos.x = stats.pos.x;
 	r.map_pos.y = stats.pos.y;
 	return r;
 }
 
-Enemy::~Enemy()
-{
+Enemy::~Enemy() {
 	delete haz;
 	delete eb;
 }

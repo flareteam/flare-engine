@@ -23,8 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-AnimationSet *AnimationManager::getAnimationSet(const string& filename)
-{
+AnimationSet *AnimationManager::getAnimationSet(const string& filename) {
 	vector<string>::iterator found = find(names.begin(), names.end(), filename);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -44,8 +43,7 @@ AnimationSet *AnimationManager::getAnimationSet(const string& filename)
 AnimationManager::AnimationManager()
 {}
 
-AnimationManager::~AnimationManager()
-{
+AnimationManager::~AnimationManager() {
 	cleanUp();
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG
@@ -58,8 +56,7 @@ AnimationManager::~AnimationManager()
 #endif
 }
 
-void AnimationManager::increaseCount(const std::string &name)
-{
+void AnimationManager::increaseCount(const std::string &name) {
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -72,8 +69,7 @@ void AnimationManager::increaseCount(const std::string &name)
 	}
 }
 
-void AnimationManager::decreaseCount(const std::string &name)
-{
+void AnimationManager::decreaseCount(const std::string &name) {
 
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
@@ -87,8 +83,7 @@ void AnimationManager::decreaseCount(const std::string &name)
 	}
 }
 
-void AnimationManager::cleanUp()
-{
+void AnimationManager::cleanUp() {
 	int i = sets.size() - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {

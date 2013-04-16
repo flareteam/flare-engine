@@ -33,8 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuLog::MenuLog()
-{
+MenuLog::MenuLog() {
 
 	visible = false;
 	tab_content_indent = 4;
@@ -85,8 +84,7 @@ MenuLog::MenuLog()
 	color_normal = font->getColor("menu_normal");
 }
 
-void MenuLog::update()
-{
+void MenuLog::update() {
 	tabControl->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y, tab_area.w, tab_area.h);
 	tabControl->updateHeader();
 	closeButton->pos.x = window_area.x + close_pos.x;
@@ -101,8 +99,7 @@ void MenuLog::update()
 /**
  * Perform one frame of logic.
  */
-void MenuLog::logic()
-{
+void MenuLog::logic() {
 	if(!visible) return;
 
 	if (closeButton->checkClick()) {
@@ -118,8 +115,7 @@ void MenuLog::logic()
 /**
  * Render graphics for this frame when the menu is open
  */
-void MenuLog::render()
-{
+void MenuLog::render() {
 
 	if (!visible) return;
 
@@ -166,8 +162,7 @@ void MenuLog::render()
 	msg_buffer[active_log]->render();
 }
 
-void MenuLog::refresh(int log_type)
-{
+void MenuLog::refresh(int log_type) {
 	int y = tab_content_indent;
 
 	font->setFont("font_regular");
@@ -184,8 +179,7 @@ void MenuLog::refresh(int log_type)
 /**
  * Add a new message to the log.
  */
-void MenuLog::add(const string& s, int log_type)
-{
+void MenuLog::add(const string& s, int log_type) {
 	// If we have too many messages, remove the oldest ones
 	while (log_msg[log_type].size() >= MAX_LOG_MESSAGES) {
 		log_msg[log_type].erase(log_msg[log_type].begin());
@@ -202,8 +196,7 @@ void MenuLog::add(const string& s, int log_type)
 /**
  * Remove log message with the given identifier.
  */
-void MenuLog::remove(int msg_index, int log_type)
-{
+void MenuLog::remove(int msg_index, int log_type) {
 
 	log_msg[log_type][msg_index].erase();
 	msg_buffer[log_type]->update = true;
@@ -212,23 +205,20 @@ void MenuLog::remove(int msg_index, int log_type)
 	log_count[log_type]--;
 }
 
-void MenuLog::clear(int log_type)
-{
+void MenuLog::clear(int log_type) {
 	log_count[log_type] = 0;
 	log_msg[log_type].clear();
 	msg_buffer[log_type]->update = true;
 	refresh(log_type);
 }
 
-void MenuLog::clear()
-{
+void MenuLog::clear() {
 	for (int i=0; i<LOG_TYPE_COUNT; i++) {
 		clear(i);
 	}
 }
 
-MenuLog::~MenuLog()
-{
+MenuLog::~MenuLog() {
 
 	for (int i=0; i<LOG_TYPE_COUNT; i++) {
 		log_count[i] = 0;

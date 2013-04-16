@@ -48,8 +48,7 @@ Entity::Entity(PowerManager *_powers, MapRenderer* _map)
 	, activeAnimation(NULL)
 	, animationSet(NULL)
 	, map(_map)
-	, powers(_powers)
-{
+	, powers(_powers) {
 }
 
 Entity::Entity(const Entity &e)
@@ -64,8 +63,7 @@ Entity::Entity(const Entity &e)
 	, animationSet(e.animationSet)
 	, map(e.map)
 	, stats(StatBlock(e.stats))
-	, powers(e.powers)
-{
+	, powers(e.powers) {
 }
 
 /**
@@ -74,8 +72,7 @@ Entity::Entity(const Entity &e)
  *
  * @return Returns false if wall collision, otherwise true.
  */
-bool Entity::move()
-{
+bool Entity::move() {
 
 	if (stats.effects.forced_move) {
 		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type);
@@ -127,8 +124,7 @@ bool Entity::move()
  *
  * Returns false on miss
  */
-bool Entity::takeHit(const Hazard &h)
-{
+bool Entity::takeHit(const Hazard &h) {
 
 	//check if this enemy should be affected by this hazard based on the category
 	if(!powers->powers[h.power_index].target_categories.empty() && !stats.hero) {
@@ -352,16 +348,14 @@ bool Entity::takeHit(const Hazard &h)
 	return true;
 }
 
-void Entity::resetActiveAnimation()
-{
+void Entity::resetActiveAnimation() {
 	activeAnimation->reset();
 }
 
 /**
  * Set the entity's current animation by name
  */
-bool Entity::setAnimation(const string& animationName)
-{
+bool Entity::setAnimation(const string& animationName) {
 
 	// if the animation is already the requested one do nothing
 	if (activeAnimation != NULL && activeAnimation->getName() == animationName)
@@ -376,8 +370,7 @@ bool Entity::setAnimation(const string& animationName)
 	return activeAnimation == NULL;
 }
 
-Entity::~Entity ()
-{
+Entity::~Entity () {
 
 	delete activeAnimation;
 }

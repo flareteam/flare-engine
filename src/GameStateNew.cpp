@@ -42,8 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-GameStateNew::GameStateNew() : GameState()
-{
+GameStateNew::GameStateNew() : GameState() {
 	game_slot = 0;
 	current_option = 0;
 	option_count = 0;
@@ -193,13 +192,11 @@ GameStateNew::GameStateNew() : GameState()
 	tablist.add(class_list);
 }
 
-void GameStateNew::loadGraphics()
-{
+void GameStateNew::loadGraphics() {
 	portrait_border = loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true);
 }
 
-void GameStateNew::loadPortrait(const string& portrait_filename)
-{
+void GameStateNew::loadPortrait(const string& portrait_filename) {
 	SDL_FreeSurface(portrait_image);
 	portrait_image = loadGraphicSurface("images/portraits/" + portrait_filename + ".png");
 }
@@ -209,8 +206,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename)
  *
  * @param filename File containing entries for option=base,look
  */
-void GameStateNew::loadOptions(const string& filename)
-{
+void GameStateNew::loadOptions(const string& filename) {
 	FileParser fin;
 	if (!fin.open(mods->locate("engine/" + filename))) return;
 
@@ -230,16 +226,14 @@ void GameStateNew::loadOptions(const string& filename)
  *
  * @param default_name The name we want to use for the hero
  */
-void GameStateNew:: setName(const string& default_name)
-{
+void GameStateNew:: setName(const string& default_name) {
 	if (input_name->getText() == "" || !modified_name) {
 		input_name->setText(default_name);
 		modified_name = false;
 	}
 }
 
-void GameStateNew::logic()
-{
+void GameStateNew::logic() {
 	tablist.logic();
 
 	button_permadeath->checkClick();
@@ -299,8 +293,7 @@ void GameStateNew::logic()
 	if (input_name->getText() != name[current_option]) modified_name = true;
 }
 
-void GameStateNew::render()
-{
+void GameStateNew::render() {
 
 	// display buttons
 	button_exit->render();
@@ -350,15 +343,13 @@ void GameStateNew::render()
 
 }
 
-std::string GameStateNew::getClassTooltip(int index)
-{
+std::string GameStateNew::getClassTooltip(int index) {
 	string tooltip;
 	if (HERO_CLASSES[index].description != "") tooltip += msg->get(HERO_CLASSES[index].description);
 	return tooltip;
 }
 
-GameStateNew::~GameStateNew()
-{
+GameStateNew::~GameStateNew() {
 	SDL_FreeSurface(portrait_image);
 	SDL_FreeSurface(portrait_border);
 	delete button_exit;

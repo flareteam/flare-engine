@@ -38,8 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuStatBar::MenuStatBar(std::string type)
-{
+MenuStatBar::MenuStatBar(std::string type) {
 
 	label = new WidgetLabel();
 
@@ -82,22 +81,19 @@ MenuStatBar::MenuStatBar(std::string type)
 	color_normal = font->getColor("menu_normal");
 }
 
-void MenuStatBar::loadGraphics(std::string type)
-{
+void MenuStatBar::loadGraphics(std::string type) {
 	background = loadGraphicSurface("images/menus/bar_" + type + "_background.png");
 	bar = loadGraphicSurface("images/menus/bar_" + type + ".png");
 }
 
-void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string)
-{
+void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string) {
 	if (_custom_string != "") custom_string = _custom_string;
 	mouse = _mouse;
 	stat_cur = _stat_cur;
 	stat_max = _stat_max;
 }
 
-void MenuStatBar::render()
-{
+void MenuStatBar::render() {
 	SDL_Rect src;
 	SDL_Rect dest;
 	int bar_length;
@@ -158,8 +154,7 @@ void MenuStatBar::render()
 	}
 }
 
-MenuStatBar::~MenuStatBar()
-{
+MenuStatBar::~MenuStatBar() {
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(bar);
 	delete label;

@@ -27,25 +27,21 @@ GetText::GetText()
 	: line("")
 	, key("")
 	, val("")
-	, fuzzy(false)
-{
+	, fuzzy(false) {
 }
 
-bool GetText::open(const string& filename)
-{
+bool GetText::open(const string& filename) {
 	infile.open(filename.c_str(), ios::in);
 	return infile.is_open();
 }
 
-void GetText::close()
-{
+void GetText::close() {
 	if (infile.is_open())
 		infile.close();
 }
 
 // Turns all \" into just "
-string GetText::sanitize(string message)
-{
+string GetText::sanitize(string message) {
 	signed int pos = 0;
 	while ((pos = message.find("\\\"")) != -1) {
 		message = message.substr(0, pos) + message.substr(pos+1);
@@ -58,8 +54,7 @@ string GetText::sanitize(string message)
  *
  * @return false if EOF, otherwise true
  */
-bool GetText::next()
-{
+bool GetText::next() {
 
 	key = "";
 	val = "";
@@ -125,7 +120,6 @@ bool GetText::next()
 	return false;
 }
 
-GetText::~GetText()
-{
+GetText::~GetText() {
 	close();
 }

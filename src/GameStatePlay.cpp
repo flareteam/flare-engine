@@ -86,8 +86,7 @@ GameStatePlay::GameStatePlay()
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
-	, game_slot(0)
-{
+	, game_slot(0) {
 	hasMusic = true;
 	// GameEngine scope variables
 
@@ -109,8 +108,7 @@ GameStatePlay::GameStatePlay()
 /**
  * Reset all game states to a new game.
  */
-void GameStatePlay::resetGame()
-{
+void GameStatePlay::resetGame() {
 	map->load("spawn.txt");
 	camp->clearAll();
 	pc->init();
@@ -135,8 +133,7 @@ void GameStatePlay::resetGame()
  * class variable "enemy" contains a live enemy on mouseover.
  * This function also sets enemy mouseover for Menu Enemy.
  */
-void GameStatePlay::checkEnemyFocus()
-{
+void GameStatePlay::checkEnemyFocus() {
 	// determine enemies mouseover
 	// only check alive enemies for targeting
 	enemy = enemies->enemyFocus(inpt->mouse, map->cam, true);
@@ -165,8 +162,7 @@ void GameStatePlay::checkEnemyFocus()
  * If mouse_move is enabled, and the mouse is over a live enemy,
  * Do not allow power use with button MAIN1
  */
-bool GameStatePlay::restrictPowerUse()
-{
+bool GameStatePlay::restrictPowerUse() {
 	if(MOUSE_MOVE) {
 		if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
 			if(enemy == NULL) {
@@ -187,8 +183,7 @@ bool GameStatePlay::restrictPowerUse()
 /**
  * Check to see if the player is picking up loot on the ground
  */
-void GameStatePlay::checkLoot()
-{
+void GameStatePlay::checkLoot() {
 
 	if (!pc->stats.alive)
 		return;
@@ -249,8 +244,7 @@ void GameStatePlay::checkLoot()
 	}
 }
 
-void GameStatePlay::checkTeleport()
-{
+void GameStatePlay::checkTeleport() {
 
 	// both map events and player powers can cause teleportation
 	if (map->teleportation || pc->stats.teleportation) {
@@ -326,8 +320,7 @@ void GameStatePlay::checkTeleport()
  * Check for cancel key to exit menus or exit the game.
  * Also check closing the game window entirely.
  */
-void GameStatePlay::checkCancel()
-{
+void GameStatePlay::checkCancel() {
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
@@ -348,8 +341,7 @@ void GameStatePlay::checkCancel()
 /**
  * Check for log messages from various child objects
  */
-void GameStatePlay::checkLog()
-{
+void GameStatePlay::checkLog() {
 
 	// If the player has just respawned, we want to clear the HUD log
 	if (pc->respawn) {
@@ -390,8 +382,7 @@ void GameStatePlay::checkLog()
 	}
 }
 
-void GameStatePlay::loadTitles()
-{
+void GameStatePlay::loadTitles() {
 	FileParser infile;
 	if(infile.open(mods->locate("engine/titles.txt"))) {
 		while (infile.next()) {
@@ -414,8 +405,7 @@ void GameStatePlay::loadTitles()
 	}
 }
 
-void GameStatePlay::checkTitle()
-{
+void GameStatePlay::checkTitle() {
 	if (!pc->stats.check_title || titles.empty()) return;
 
 	int title_id = -1;
@@ -479,8 +469,7 @@ void GameStatePlay::checkTitle()
 	pc->stats.refresh_stats = true;
 }
 
-void GameStatePlay::checkEquipmentChange()
-{
+void GameStatePlay::checkEquipmentChange() {
 	if (menu->inv->changed_equipment) {
 
 		vector<Layer_gfx> img_gfx;
@@ -516,8 +505,7 @@ void GameStatePlay::checkEquipmentChange()
 	}
 }
 
-void GameStatePlay::checkLootDrop()
-{
+void GameStatePlay::checkLootDrop() {
 
 	// if the player has dropped an item from the inventory
 	if (menu->drop_stack.item > 0) {
@@ -538,8 +526,7 @@ void GameStatePlay::checkLootDrop()
 /**
  * When a consumable-based power is used, we need to remove it from the inventory.
  */
-void GameStatePlay::checkConsumable()
-{
+void GameStatePlay::checkConsumable() {
 	for (unsigned i=0; i<powers->used_items.size(); i++) {
 		if (menu->items->items[powers->used_items[i]].type == "consumable") {
 			menu->inv->remove(powers->used_items[i]);
@@ -555,8 +542,7 @@ void GameStatePlay::checkConsumable()
 /**
  * Marks the menu if it needs attention.
  */
-void GameStatePlay::checkNotifications()
-{
+void GameStatePlay::checkNotifications() {
 	if (pc->newLevelNotification) {
 		pc->newLevelNotification = false;
 		menu->act->requires_attention[MENU_CHARACTER] = true;
@@ -586,8 +572,7 @@ void GameStatePlay::checkNotifications()
  * If a player walks away from an NPC, end the interaction with that NPC
  * If an NPC is giving a reward, process it
  */
-void GameStatePlay::checkNPCInteraction()
-{
+void GameStatePlay::checkNPCInteraction() {
 	if (pc->attacking) return;
 
 	int npc_click = -1;
@@ -715,8 +700,7 @@ void GameStatePlay::checkNPCInteraction()
 
 }
 
-void GameStatePlay::checkStash()
-{
+void GameStatePlay::checkStash() {
 	int max_interact_distance = UNITS_PER_TILE * 4;
 	int interact_distance = max_interact_distance+1;
 
@@ -744,8 +728,7 @@ void GameStatePlay::checkStash()
 	}
 }
 
-void GameStatePlay::checkCutscene()
-{
+void GameStatePlay::checkCutscene() {
 	if (!map->cutscene)
 		return;
 
@@ -783,8 +766,7 @@ void GameStatePlay::checkCutscene()
  * Process all actions for a single frame
  * This includes some message passing between child object
  */
-void GameStatePlay::logic()
-{
+void GameStatePlay::logic() {
 
 	checkCutscene();
 
@@ -901,8 +883,7 @@ void GameStatePlay::logic()
 /**
  * Render all graphics for a single frame
  */
-void GameStatePlay::render()
-{
+void GameStatePlay::render() {
 
 	// Create a list of Renderables from all objects not already on the map.
 	// split the list into the beings alive (may move) and dead beings (must not move)
@@ -942,8 +923,7 @@ void GameStatePlay::render()
 	combat_text->render();
 }
 
-void GameStatePlay::showLoading()
-{
+void GameStatePlay::showLoading() {
 	if (!loading_bg) return;
 
 	SDL_Rect dest;
@@ -956,8 +936,7 @@ void GameStatePlay::showLoading()
 	SDL_Flip(screen);
 }
 
-GameStatePlay::~GameStatePlay()
-{
+GameStatePlay::~GameStatePlay() {
 	delete quests;
 	delete npcs;
 	delete hazards;

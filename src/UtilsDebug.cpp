@@ -25,8 +25,7 @@ using namespace std;
 
 ostream &
 operator<< (ostream             & os,
-			const SDL_Event     & evt)
-{
+			const SDL_Event     & evt) {
 	switch (evt.type) {
 		case SDL_ACTIVEEVENT:
 			os << reinterpret_cast<const SDL_ActiveEvent&>(evt);
@@ -81,8 +80,7 @@ operator<< (ostream             & os,
 
 ostream &
 operator<< (ostream                 & os,
-			const SDL_ActiveEvent   & evt)
-{
+			const SDL_ActiveEvent   & evt) {
 	os << "{SDL_ACTIVE_EVENT, gain = " << static_cast<uint16_t>(evt.gain)
 	   << ", state = " << static_cast<uint16_t>(evt.state) << "}";
 	return os;
@@ -91,8 +89,7 @@ operator<< (ostream                 & os,
 
 ostream &
 operator<< (ostream                 & os,
-			const SDL_KeyboardEvent & evt)
-{
+			const SDL_KeyboardEvent & evt) {
 	os << "{";
 	if (SDL_KEYDOWN == evt.type) {
 		os << "SDL_KEYDOWN";
@@ -132,8 +129,7 @@ operator<< (ostream             & os,
 
 ostream &
 operator<< (ostream                     & os,
-			const SDL_MouseMotionEvent  & evt)
-{
+			const SDL_MouseMotionEvent  & evt) {
 	os << "{SDL_MOUSEMOTION, state = " << static_cast<uint16_t>(evt.state)
 	   << ", (x,y) = (" << evt.x << "," << evt.y << ")"
 	   << ", (xrel,yrel) = (" << evt.xrel << "," << evt.yrel << ")}";
@@ -143,8 +139,7 @@ operator<< (ostream                     & os,
 
 ostream &
 operator << (ostream                    & os,
-			 const SDL_MouseButtonEvent & evt)
-{
+			 const SDL_MouseButtonEvent & evt) {
 	os << "{SDL_MOUSEBUTTON, type = ";
 	if (SDL_MOUSEBUTTONDOWN == evt.type) {
 		os << "DOWN";
@@ -173,8 +168,7 @@ operator << (ostream                    & os,
 
 ostream &
 operator<< (ostream                 & os,
-			const SDL_JoyAxisEvent  & evt)
-{
+			const SDL_JoyAxisEvent  & evt) {
 	os << "{SDL_JOYAXIS, which = " << static_cast<uint16_t>(evt.which)
 	   << ", axis = " << static_cast<uint16_t>(evt.axis) << ", value = " << evt.value << "}";
 	return os;
@@ -183,8 +177,7 @@ operator<< (ostream                 & os,
 
 ostream &
 operator<< (ostream                 & os,
-			const SDL_JoyBallEvent  & evt)
-{
+			const SDL_JoyBallEvent  & evt) {
 	os << "{SDL_JOYBALLMOTION, which = " << static_cast<uint16_t>(evt.which)
 	   << ", ball = " << static_cast<uint16_t>(evt.ball)
 	   << ", (xrel,yrel) = " << "(" << evt.xrel << "," << evt.yrel << ")}";
@@ -194,8 +187,7 @@ operator<< (ostream                 & os,
 
 ostream &
 operator<< (ostream                 & os,
-			const SDL_JoyHatEvent   & evt)
-{
+			const SDL_JoyHatEvent   & evt) {
 	os << "{SDL_JOYHATEVENT, which = " << static_cast<uint16_t>(evt.which)
 	   << ", hat = " << static_cast<uint16_t>(evt.hat)
 	   << ", value = " << static_cast<uint16_t>(evt.value) << "}";
@@ -205,8 +197,7 @@ operator<< (ostream                 & os,
 
 ostream &
 operator<< (ostream                     & os,
-			const SDL_JoyButtonEvent    & evt)
-{
+			const SDL_JoyButtonEvent    & evt) {
 	if (SDL_JOYBUTTONDOWN == evt.type) {
 		os << "{SDL_JOYBUTTONDOWN, ";
 	}
@@ -233,43 +224,37 @@ operator<< (ostream                     & os,
 
 
 ostream &
-operator<< (ostream & os, const SDL_QuitEvent &)
-{
+operator<< (ostream & os, const SDL_QuitEvent &) {
 	os << "{SDL_QUITEVENT}";
 	return os;
 }
 
 ostream &
-operator<< (ostream & os, const SDL_SysWMEvent &)
-{
+operator<< (ostream & os, const SDL_SysWMEvent &) {
 	os << "{SDL_SYSWMEVENT}";
 	return os;
 }
 
 ostream &
-operator<< (ostream & os, const SDL_ResizeEvent &evt)
-{
+operator<< (ostream & os, const SDL_ResizeEvent &evt) {
 	os << "{SDL_RESIZE_EVENT, (w,h) = (" << evt.w << "," << evt.h << ")}";
 	return os;
 }
 
 ostream &
-operator<< (ostream & os, const SDL_ExposeEvent &)
-{
+operator<< (ostream & os, const SDL_ExposeEvent &) {
 	os << "{SDL_EXPOSEEVENT}";
 	return os;
 }
 
 ostream &
-operator<< (ostream & os, const SDL_Rect & rect)
-{
+operator<< (ostream & os, const SDL_Rect & rect) {
 	os << "(x,y,h,w) = (" << rect.x << "," << rect.y << "," << rect.h << "," << rect.w << ")";
 	return os;
 }
 
 ostream &
-operator<< (ostream & os, const Point & p)
-{
+operator<< (ostream & os, const Point & p) {
 	os << "(x,y) = (" << p.x << "," << p.y << ")";
 	return os;
 }

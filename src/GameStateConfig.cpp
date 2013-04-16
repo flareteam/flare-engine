@@ -52,16 +52,14 @@ GameStateConfig::GameStateConfig ()
 	, cancel_button(NULL)
 	, tip_buf()
 	, input_key(0)
-	, check_resolution(true)
-{
+	, check_resolution(true) {
 	background = loadGraphicSurface("images/menus/config.png");
 
 	init();
 	update();
 }
 
-void GameStateConfig::init()
-{
+void GameStateConfig::init() {
 
 	tip = new WidgetTooltip();
 
@@ -246,8 +244,7 @@ void GameStateConfig::init()
 	tablist.add(activemods_shiftdown_btn);
 }
 
-void GameStateConfig::readConfig ()
-{
+void GameStateConfig::readConfig () {
 	//Load the menu configuration from file
 
 	int offset_x = 0;
@@ -693,8 +690,7 @@ void GameStateConfig::readConfig ()
 	}
 }
 
-void GameStateConfig::update ()
-{
+void GameStateConfig::update () {
 	if (FULLSCREEN) fullscreen_cb->Check();
 	else fullscreen_cb->unCheck();
 	if (AUDIO) {
@@ -785,8 +781,7 @@ void GameStateConfig::update ()
 	input_scrollbox->refresh();
 }
 
-void GameStateConfig::logic ()
-{
+void GameStateConfig::logic () {
 	// Allow configs to be navigateable via left/right keys
 	if (inpt->pressing[LEFT] && !inpt->lock[LEFT] && (ok_button->in_focus ||
 			music_volume_sl->in_focus ||
@@ -1091,8 +1086,7 @@ void GameStateConfig::logic ()
 	}
 }
 
-void GameStateConfig::render ()
-{
+void GameStateConfig::render () {
 	if (resolution_confirm->visible) {
 		resolution_confirm->render();
 		return;
@@ -1155,8 +1149,7 @@ void GameStateConfig::render ()
 
 }
 
-int GameStateConfig::getVideoModes()
-{
+int GameStateConfig::getVideoModes() {
 	int w,h;
 	if (MIN_VIEW_W != -1) w = MIN_VIEW_W;
 	else w = 640;
@@ -1260,8 +1253,7 @@ int GameStateConfig::getVideoModes()
 	return modes;
 }
 
-bool GameStateConfig::getLanguagesList()
-{
+bool GameStateConfig::getLanguagesList() {
 	FileParser infile;
 	if (infile.open(mods->locate("engine/languages.txt"))) {
 		unsigned int i=0;
@@ -1276,8 +1268,7 @@ bool GameStateConfig::getLanguagesList()
 	return true;
 }
 
-int GameStateConfig::getLanguagesNumber()
-{
+int GameStateConfig::getLanguagesNumber() {
 	int languages_num = 0;
 	FileParser infile;
 	if (infile.open(mods->locate("engine/languages.txt"))) {
@@ -1290,8 +1281,7 @@ int GameStateConfig::getLanguagesNumber()
 	return languages_num;
 }
 
-void GameStateConfig::refreshFont()
-{
+void GameStateConfig::refreshFont() {
 	delete font;
 	font = new FontEngine();
 }
@@ -1299,8 +1289,7 @@ void GameStateConfig::refreshFont()
 /**
  * Tries to apply the selected video settings, reverting back to the old settings upon failure
  */
-bool GameStateConfig::applyVideoSettings(int width, int height)
-{
+bool GameStateConfig::applyVideoSettings(int width, int height) {
 	if (MIN_VIEW_W > width && MIN_VIEW_H > height) {
 		fprintf (stderr, "A mod is requiring a minimum resolution of %dx%d\n", MIN_VIEW_W, MIN_VIEW_H);
 		if (width < MIN_VIEW_W) width = MIN_VIEW_W;
@@ -1334,8 +1323,7 @@ bool GameStateConfig::applyVideoSettings(int width, int height)
 /**
  * Activate mods
  */
-void GameStateConfig::enableMods()
-{
+void GameStateConfig::enableMods() {
 	for (int i=0; i<inactivemods_lstb->getSize(); i++) {
 		if (inactivemods_lstb->selected[i]) {
 			activemods_lstb->append(inactivemods_lstb->getValue(i),inactivemods_lstb->getTooltip(i));
@@ -1348,8 +1336,7 @@ void GameStateConfig::enableMods()
 /**
  * Deactivate mods
  */
-void GameStateConfig::disableMods()
-{
+void GameStateConfig::disableMods() {
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
 		if (activemods_lstb->selected[i] && activemods_lstb->getValue(i) != FALLBACK_MOD) {
 			inactivemods_lstb->append(activemods_lstb->getValue(i),activemods_lstb->getTooltip(i));
@@ -1362,8 +1349,7 @@ void GameStateConfig::disableMods()
 /**
  * Save new mods list. Return true if modlist was changed. Else return false
  */
-bool GameStateConfig::setMods()
-{
+bool GameStateConfig::setMods() {
 	vector<string> temp_list = mods->mod_list;
 	mods->mod_list.clear();
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
@@ -1391,8 +1377,7 @@ bool GameStateConfig::setMods()
 /**
  * Scan key binding
  */
-void GameStateConfig::scanKey(int button)
-{
+void GameStateConfig::scanKey(int button) {
 	if (input_confirm->visible) {
 		if (inpt->last_button != -1 && inpt->last_button < 8) {
 			if (button < 25) inpt->binding[button] = inpt->last_button;
@@ -1415,8 +1400,7 @@ void GameStateConfig::scanKey(int button)
 	}
 }
 
-GameStateConfig::~GameStateConfig()
-{
+GameStateConfig::~GameStateConfig() {
 	tip_buf.clear();
 	delete tip;
 	delete tabControl;

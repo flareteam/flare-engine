@@ -32,12 +32,10 @@ Menu::Menu()
 	, sfx_close(0)
 {}
 
-Menu::~Menu()
-{
+Menu::~Menu() {
 }
 
-void Menu::align()
-{
+void Menu::align() {
 	SDL_Rect temp = window_area;
 
 	if (alignment == "topleft") {

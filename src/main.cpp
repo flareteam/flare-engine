@@ -39,8 +39,7 @@ SDL_Surface *titlebar_icon;
 /**
  * Game initialization.
  */
-static void init()
-{
+static void init() {
 
 	setPaths();
 
@@ -126,8 +125,7 @@ static void init()
 	gswitch = new GameSwitcher();
 }
 
-static void mainLoop (bool debug_event)
-{
+static void mainLoop (bool debug_event) {
 
 	bool done = false;
 	int max_fps = MAX_FRAMES_PER_SEC;
@@ -158,8 +156,7 @@ static void mainLoop (bool debug_event)
 	}
 }
 
-static void cleanup()
-{
+static void cleanup() {
 	delete gswitch;
 
 	delete anim;
@@ -177,8 +174,7 @@ static void cleanup()
 	SDL_Quit();
 }
 
-string parseArg(const string &arg)
-{
+string parseArg(const string &arg) {
 	string result = "";
 
 	// arguments must start with '--'
@@ -192,8 +188,7 @@ string parseArg(const string &arg)
 	return result;
 }
 
-string parseArgValue(const string &arg)
-{
+string parseArgValue(const string &arg) {
 	string result = "";
 	bool found_equals = false;
 
@@ -207,8 +202,7 @@ string parseArgValue(const string &arg)
 	return result;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	bool debug_event = false;
 
 	for (int i = 1 ; i < argc; i++) {

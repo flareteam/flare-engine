@@ -48,8 +48,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, SDL_Sur
 	, gfx()
 	, render_offset()
 	, duration()
-	, active_frames()
-{
+	, active_frames() {
 	if (type == NONE)
 		cout << "Warning: animation type " << _type << " is unknown" << endl;
 }
@@ -71,8 +70,7 @@ Animation::Animation(const Animation& a)
 	, active_frames(std::vector<short>(a.active_frames))
 {}
 
-void Animation::setupUncompressed(Point _render_size, Point _render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds)
-{
+void Animation::setupUncompressed(Point _render_size, Point _render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds) {
 	setup(_frames, _duration, _maxkinds);
 
 	for (unsigned short i = 0 ; i < _frames; i++) {
@@ -88,8 +86,7 @@ void Animation::setupUncompressed(Point _render_size, Point _render_offset, int 
 	}
 }
 
-void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds)
-{
+void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds) {
 	if (type == PLAY_ONCE) {
 		number_frames = _frames * _duration;
 		additional_data = 0;
@@ -120,8 +117,7 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 void Animation::addFrame(	unsigned short index,
 							unsigned short kind,
 							SDL_Rect sdl_rect,
-							Point _render_offset)
-{
+							Point _render_offset) {
 
 	if (index > gfx.size()/max_kinds) {
 		fprintf(stderr, "WARNING: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]\n",
@@ -137,8 +133,7 @@ void Animation::addFrame(	unsigned short index,
 	render_offset[max_kinds*index+kind] = _render_offset;
 }
 
-void Animation::advanceFrame()
-{
+void Animation::advanceFrame() {
 
 	if (!this)
 		return;
@@ -197,8 +192,7 @@ void Animation::advanceFrame()
 	}
 }
 
-Renderable Animation::getCurrentFrame(int kind)
-{
+Renderable Animation::getCurrentFrame(int kind) {
 	Renderable r;
 	if (this) {
 		const int index = (max_kinds*cur_frame_index) + kind;
@@ -213,8 +207,7 @@ Renderable Animation::getCurrentFrame(int kind)
 	return r;
 }
 
-void Animation::reset()
-{
+void Animation::reset() {
 	cur_frame = 0;
 	cur_frame_duration = 0;
 	cur_frame_index = 0;
@@ -222,8 +215,7 @@ void Animation::reset()
 	additional_data = 1;
 }
 
-void Animation::syncTo(const Animation *other)
-{
+void Animation::syncTo(const Animation *other) {
 	cur_frame = other->cur_frame;
 	cur_frame_duration = other->cur_frame_duration;
 	cur_frame_index = other->cur_frame_index;
@@ -231,8 +223,7 @@ void Animation::syncTo(const Animation *other)
 	additional_data = other->additional_data;
 }
 
-void Animation::setActiveFrames(const std::vector<short> &_active_frames)
-{
+void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
 	if (_active_frames.size() == 1 && _active_frames[0] == -1) {
 		for (short i = 0; i < number_frames; ++i)
 			active_frames.push_back(i);

@@ -32,8 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Animation *AnimationSet::getAnimation(const std::string &_name)
-{
+Animation *AnimationSet::getAnimation(const std::string &_name) {
 	if (!loaded)
 		load();
 	for (size_t i = 0; i < animations.size(); i++)
@@ -42,8 +41,7 @@ Animation *AnimationSet::getAnimation(const std::string &_name)
 	return new Animation(*defaultAnimation);
 }
 
-Animation *AnimationSet::getAnimation()
-{
+Animation *AnimationSet::getAnimation() {
 	if (!loaded)
 		load();
 	return new Animation(*defaultAnimation);
@@ -53,14 +51,12 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	: name(animationname)
 	, loaded(false)
 	, animations()
-	, sprite(NULL)
-{
+	, sprite(NULL) {
 	defaultAnimation = new Animation("default", "play_once", NULL);
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
-void AnimationSet::load()
-{
+void AnimationSet::load() {
 	assert(!loaded);
 	loaded = true;
 
@@ -199,8 +195,7 @@ void AnimationSet::load()
 	}
 }
 
-AnimationSet::~AnimationSet()
-{
+AnimationSet::~AnimationSet() {
 	if (imagefile != "") imag->decreaseCount(imagefile);
 	for (unsigned i = 0; i < animations.size(); ++i)
 		delete animations[i];

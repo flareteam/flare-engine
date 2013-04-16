@@ -41,8 +41,7 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, tooltip("")
 	, enabled(true)
 	, pressed(false)
-	, hover(false)
-{
+	, hover(false) {
 	focusable = true;
 	pos.x = pos.y = pos.w = pos.h = 0;
 	loadArt();
@@ -50,13 +49,11 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	pos.h = (buttons->h / 4); //height of one button
 }
 
-void WidgetButton::activate()
-{
+void WidgetButton::activate() {
 	pressed = true;
 }
 
-void WidgetButton::loadArt()
-{
+void WidgetButton::loadArt() {
 
 	// load button images
 	buttons = loadGraphicSurface(fileName);
@@ -67,8 +64,7 @@ void WidgetButton::loadArt()
 	}
 }
 
-bool WidgetButton::checkClick()
-{
+bool WidgetButton::checkClick() {
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
@@ -76,8 +72,7 @@ bool WidgetButton::checkClick()
  * Sets and releases the "pressed" visual state of the button
  * If press and release, activate (return true)
  */
-bool WidgetButton::checkClick(int x, int y)
-{
+bool WidgetButton::checkClick(int x, int y) {
 	Point mouse(x,y);
 
 	// Change the hover state
@@ -114,8 +109,7 @@ bool WidgetButton::checkClick(int x, int y)
 
 }
 
-void WidgetButton::render(SDL_Surface *target)
-{
+void WidgetButton::render(SDL_Surface *target) {
 	if (target == NULL) {
 		target = screen;
 	}
@@ -161,8 +155,7 @@ void WidgetButton::render(SDL_Surface *target)
 /**
  * Create the text buffer
  */
-void WidgetButton::refresh()
-{
+void WidgetButton::refresh() {
 	if (label != "") {
 
 		int font_x = pos.x + (pos.w/2);
@@ -180,8 +173,7 @@ void WidgetButton::refresh()
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData WidgetButton::checkTooltip(Point mouse)
-{
+TooltipData WidgetButton::checkTooltip(Point mouse) {
 	TooltipData _tip;
 
 	if (isWithin(pos, mouse) && tooltip != "") {
@@ -191,8 +183,7 @@ TooltipData WidgetButton::checkTooltip(Point mouse)
 	return _tip;
 }
 
-WidgetButton::~WidgetButton()
-{
+WidgetButton::~WidgetButton() {
 	SDL_FreeSurface(buttons);
 	tip_buf.clear();
 	delete tip;

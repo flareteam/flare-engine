@@ -34,8 +34,7 @@ ImageManager* ImageManager_instance = 0;
 ImageManager::ImageManager()
 {}
 
-ImageManager::~ImageManager()
-{
+ImageManager::~ImageManager() {
 	cleanUp();
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG
@@ -48,8 +47,7 @@ ImageManager::~ImageManager()
 #endif
 }
 
-SDL_Surface *ImageManager::getSurface(const std::string &name)
-{
+SDL_Surface *ImageManager::getSurface(const std::string &name) {
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -67,8 +65,7 @@ SDL_Surface *ImageManager::getSurface(const std::string &name)
 	return 0;
 }
 
-void ImageManager::increaseCount(const std::string &name)
-{
+void ImageManager::increaseCount(const std::string &name) {
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -81,8 +78,7 @@ void ImageManager::increaseCount(const std::string &name)
 	}
 }
 
-void ImageManager::decreaseCount(const std::string &name)
-{
+void ImageManager::decreaseCount(const std::string &name) {
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -93,8 +89,7 @@ void ImageManager::decreaseCount(const std::string &name)
 	}
 }
 
-void ImageManager::cleanUp()
-{
+void ImageManager::cleanUp() {
 	int i = sprites.size() - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {

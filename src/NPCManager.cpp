@@ -41,8 +41,7 @@ NPCManager::NPCManager(MapRenderer *_map, LootManager *_loot, ItemManager *_item
 	, loot(_loot)
 	, items(_items)
 	, stats(_stats)
-	, tip_buf()
-{
+	, tip_buf() {
 	FileParser infile;
 	// load tooltip_margin from engine config file
 	if (infile.open(mods->locate("engine/tooltips.txt").c_str())) {
@@ -55,15 +54,13 @@ NPCManager::NPCManager(MapRenderer *_map, LootManager *_loot, ItemManager *_item
 	}
 }
 
-void NPCManager::addRenders(std::vector<Renderable> &r)
-{
+void NPCManager::addRenders(std::vector<Renderable> &r) {
 	for (unsigned i=0; i<npcs.size(); i++) {
 		r.push_back(npcs[i]->getRender());
 	}
 }
 
-void NPCManager::handleNewMap()
-{
+void NPCManager::handleNewMap() {
 
 	Map_NPC mn;
 	ItemStack item_roll;
@@ -90,23 +87,20 @@ void NPCManager::handleNewMap()
 
 }
 
-void NPCManager::logic()
-{
+void NPCManager::logic() {
 	for (unsigned i=0; i<npcs.size(); i++) {
 		npcs[i]->logic();
 	}
 }
 
-int NPCManager::getID(std::string npcName)
-{
+int NPCManager::getID(std::string npcName) {
 	for (unsigned i=0; i<npcs.size(); i++) {
 		if (npcs[i]->filename == npcName) return i;
 	}
 	return -1;
 }
 
-int NPCManager::checkNPCClick(Point mouse, Point cam)
-{
+int NPCManager::checkNPCClick(Point mouse, Point cam) {
 	Point p;
 	SDL_Rect r;
 	for (unsigned i=0; i<npcs.size(); i++) {
@@ -126,8 +120,7 @@ int NPCManager::checkNPCClick(Point mouse, Point cam)
 	return -1;
 }
 
-int NPCManager::getNearestNPC(Point pos)
-{
+int NPCManager::getNearestNPC(Point pos) {
 	int nearest = -1;
 	int best_distance = std::numeric_limits<int>::max();
 
@@ -145,8 +138,7 @@ int NPCManager::getNearestNPC(Point pos)
 /**
  * On mouseover, display NPC's name
  */
-void NPCManager::renderTooltips(Point cam, Point mouse)
-{
+void NPCManager::renderTooltips(Point cam, Point mouse) {
 	Point p;
 	SDL_Rect r;
 
@@ -182,8 +174,7 @@ void NPCManager::renderTooltips(Point cam, Point mouse)
 	}
 }
 
-NPCManager::~NPCManager()
-{
+NPCManager::~NPCManager() {
 	for (unsigned i=0; i<npcs.size(); i++) {
 		delete npcs[i];
 	}

@@ -31,20 +31,17 @@ EffectManager::EffectManager()
 	, triggered_hit(false)
 	, triggered_halfdeath(false)
 	, triggered_joincombat(false)
-	, triggered_death(false)
-{
+	, triggered_death(false) {
 	clearStatus();
 }
 
-EffectManager::~EffectManager()
-{
+EffectManager::~EffectManager() {
 	for (unsigned i=0; i<effect_list.size(); i++) {
 		removeAnimation(i);
 	}
 }
 
-EffectManager& EffectManager::operator= (const EffectManager &emSource)
-{
+EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	effect_list.resize(emSource.effect_list.size());
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
@@ -105,8 +102,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource)
 	return *this;
 }
 
-void EffectManager::clearStatus()
-{
+void EffectManager::clearStatus() {
 	damage = 0;
 	hpot = 0;
 	mpot = 0;
@@ -144,8 +140,7 @@ void EffectManager::clearStatus()
 	}
 }
 
-void EffectManager::logic()
-{
+void EffectManager::logic() {
 	clearStatus();
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
@@ -224,8 +219,7 @@ void EffectManager::logic()
 	}
 }
 
-void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type)
-{
+void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type) {
 	// if we're already immune, don't add negative effects
 	if (immunity) {
 		if (type == "damage") return;
@@ -285,14 +279,12 @@ void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std
 	effect_list.push_back(e);
 }
 
-void EffectManager::removeEffect(int id)
-{
+void EffectManager::removeEffect(int id) {
 	removeAnimation(id);
 	effect_list.erase(effect_list.begin()+id);
 }
 
-void EffectManager::removeAnimation(int id)
-{
+void EffectManager::removeAnimation(int id) {
 	if (effect_list[id].animation && effect_list[id].animation_name != "") {
 		anim->decreaseCount(effect_list[id].animation_name);
 		delete effect_list[id].animation;
@@ -301,22 +293,19 @@ void EffectManager::removeAnimation(int id)
 	}
 }
 
-void EffectManager::removeEffectType(std::string type)
-{
+void EffectManager::removeEffectType(std::string type) {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == type) removeEffect(i-1);
 	}
 }
 
-void EffectManager::removeEffectPassive(int id)
-{
+void EffectManager::removeEffectPassive(int id) {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].passive_id == id) removeEffect(i-1);
 	}
 }
 
-void EffectManager::clearEffects()
-{
+void EffectManager::clearEffects() {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
 		removeEffect(i-1);
 	}
@@ -325,8 +314,7 @@ void EffectManager::clearEffects()
 	triggered_others = triggered_block = triggered_hit = triggered_halfdeath = triggered_joincombat = triggered_death = false;
 }
 
-void EffectManager::clearNegativeEffects()
-{
+void EffectManager::clearNegativeEffects() {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == "damage") removeEffect(i-1);
 		else if (effect_list[i-1].type == "speed" && effect_list[i-1].magnitude_max < 100) removeEffect(i-1);
@@ -334,22 +322,19 @@ void EffectManager::clearNegativeEffects()
 	}
 }
 
-void EffectManager::clearItemEffects()
-{
+void EffectManager::clearItemEffects() {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].item) removeEffect(i-1);
 	}
 }
 
-void EffectManager::clearTriggerEffects(int trigger)
-{
+void EffectManager::clearTriggerEffects(int trigger) {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].trigger > -1 && effect_list[i-1].trigger == trigger) removeEffect(i-1);
 	}
 }
 
-int EffectManager::damageShields(int dmg)
-{
+int EffectManager::damageShields(int dmg) {
 	int over_dmg = dmg;
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
@@ -368,8 +353,7 @@ int EffectManager::damageShields(int dmg)
 	return over_dmg;
 }
 
-Animation* EffectManager::loadAnimation(std::string &s)
-{
+Animation* EffectManager::loadAnimation(std::string &s) {
 	if (s != "") {
 		AnimationSet *animationSet = anim->getAnimationSet(s);
 		return animationSet->getAnimation();

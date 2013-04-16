@@ -79,8 +79,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	, stash(NULL)
 	, pause(false)
 	, menus_open(false)
-	, drop_stack()
-{
+	, drop_stack() {
 	loadIcons();
 
 	hp = new MenuStatBar("hp");
@@ -216,13 +215,11 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 /**
  * Icon set shared by all menus
  */
-void MenuManager::loadIcons()
-{
+void MenuManager::loadIcons() {
 	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
 }
 
-void MenuManager::renderIcon(int icon_id, int x, int y)
-{
+void MenuManager::renderIcon(int icon_id, int x, int y) {
 	SDL_Rect src;
 	SDL_Rect dest;
 	dest.x = x;
@@ -236,8 +233,7 @@ void MenuManager::renderIcon(int icon_id, int x, int y)
 	SDL_BlitSurface(icons, &src, screen, &dest);
 }
 
-void MenuManager::logic()
-{
+void MenuManager::logic() {
 
 	bool clicking_character = false;
 	bool clicking_inventory = false;
@@ -730,8 +726,7 @@ void MenuManager::logic()
 
 }
 
-void MenuManager::render()
-{
+void MenuManager::render() {
 	for (unsigned int i=0; i<menus.size(); i++) {
 		menus[i]->render();
 	}
@@ -784,8 +779,7 @@ void MenuManager::render()
 
 }
 
-void MenuManager::closeAll()
-{
+void MenuManager::closeAll() {
 	if (!dragging) {
 		closeLeft();
 		closeRight();
@@ -793,8 +787,7 @@ void MenuManager::closeAll()
 	}
 }
 
-void MenuManager::closeLeft()
-{
+void MenuManager::closeLeft() {
 	if (!dragging) {
 		chr->visible = false;
 		log->visible = false;
@@ -806,8 +799,7 @@ void MenuManager::closeLeft()
 	}
 }
 
-void MenuManager::closeRight()
-{
+void MenuManager::closeRight() {
 	if (!dragging) {
 		inv->visible = false;
 		pow->visible = false;
@@ -817,8 +809,7 @@ void MenuManager::closeRight()
 	}
 }
 
-MenuManager::~MenuManager()
-{
+MenuManager::~MenuManager() {
 
 	tip_buf.clear();
 

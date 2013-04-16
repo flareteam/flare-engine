@@ -35,8 +35,7 @@ using namespace std;
 WidgetCheckBox::WidgetCheckBox (const string &fname)
 	: cb(NULL),
 	  checked(false),
-	  pressed(false)
-{
+	  pressed(false) {
 	focusable = true;
 	cb = loadGraphicSurface(fname, "Couldn't load image", true, false);
 
@@ -46,33 +45,27 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 	render_to_alpha = false;
 }
 
-void WidgetCheckBox::activate()
-{
+void WidgetCheckBox::activate() {
 	pressed = true;
 }
 
-WidgetCheckBox::~WidgetCheckBox ()
-{
+WidgetCheckBox::~WidgetCheckBox () {
 	SDL_FreeSurface(cb);
 }
 
-void WidgetCheckBox::Check ()
-{
+void WidgetCheckBox::Check () {
 	checked = true;
 }
 
-void WidgetCheckBox::unCheck ()
-{
+void WidgetCheckBox::unCheck () {
 	checked = false;
 }
 
-bool WidgetCheckBox::checkClick()
-{
+bool WidgetCheckBox::checkClick() {
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
-bool WidgetCheckBox::checkClick (int x, int y)
-{
+bool WidgetCheckBox::checkClick (int x, int y) {
 
 	Point mouse(x,y);
 
@@ -97,14 +90,12 @@ bool WidgetCheckBox::checkClick (int x, int y)
 }
 
 
-bool WidgetCheckBox::isChecked () const
-{
+bool WidgetCheckBox::isChecked () const {
 	return checked;
 }
 
 
-void WidgetCheckBox::render (SDL_Surface *target)
-{
+void WidgetCheckBox::render (SDL_Surface *target) {
 	if (target == NULL) {
 		target = screen;
 	}

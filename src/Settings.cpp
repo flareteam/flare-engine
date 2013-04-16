@@ -39,8 +39,7 @@ using namespace std;
 #define log2(x)	logf(x)/logf(2)
 #endif
 
-class ConfigEntry
-{
+class ConfigEntry {
 public:
 	const char * name;
 	const type_info * type;
@@ -178,8 +177,7 @@ int PARTY_EXP_PERCENTAGE = 100;
 
 #ifdef _WIN32
 // Windows paths
-void setPaths()
-{
+void setPaths() {
 
 	// handle Windows-specific path options
 	PATH_CONF = "config";
@@ -197,8 +195,7 @@ void setPaths()
 }
 #elif __amigaos4__
 // AmigaOS paths
-void setPaths()
-{
+void setPaths() {
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
@@ -206,8 +203,7 @@ void setPaths()
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
 #else
-void setPaths()
-{
+void setPaths() {
 
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
@@ -325,8 +321,7 @@ void setPaths()
 }
 #endif
 
-static ConfigEntry * getConfigEntry(const char * name)
-{
+static ConfigEntry * getConfigEntry(const char * name) {
 
 	for (int i = 0; i < config_size; i++) {
 		if (std::strcmp(config[i].name, name) == 0) return config + i;
@@ -334,13 +329,11 @@ static ConfigEntry * getConfigEntry(const char * name)
 	return NULL;
 }
 
-static ConfigEntry * getConfigEntry(const std::string & name)
-{
+static ConfigEntry * getConfigEntry(const std::string & name) {
 	return getConfigEntry(name.c_str());
 }
 
-void loadTilesetSettings()
-{
+void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
 	if (infile.open(mods->locate("engine/tileset_config.txt"), "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
@@ -383,8 +376,7 @@ void loadTilesetSettings()
 	}
 }
 
-void loadMiscSettings()
-{
+void loadMiscSettings() {
 	FileParser infile;
 	// load miscellaneous settings from engine config
 	// misc.txt
@@ -539,8 +531,7 @@ void loadMiscSettings()
 	}
 }
 
-bool loadSettings()
-{
+bool loadSettings() {
 
 	// init defaults
 	for (int i = 0; i < config_size; i++) {
@@ -575,8 +566,7 @@ bool loadSettings()
 /**
  * Save the current main settings (primary video and audio settings)
  */
-bool saveSettings()
-{
+bool saveSettings() {
 
 	ofstream outfile;
 	outfile.open((PATH_CONF + FILE_SETTINGS).c_str(), ios::out);
@@ -605,8 +595,7 @@ bool saveSettings()
 /**
  * Load all default settings, except video settings.
  */
-bool loadDefaults()
-{
+bool loadDefaults() {
 
 	// HACK init defaults except video
 	for (int i = 3; i < config_size; i++) {

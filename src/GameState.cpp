@@ -17,8 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "GameState.h"
 
-GameState::GameState()
-{
+GameState::GameState() {
 
 	requestedGameState = NULL;
 
@@ -27,19 +26,15 @@ GameState::GameState()
 	reload_music = false;
 }
 
-GameState* GameState::getRequestedGameState()
-{
+GameState* GameState::getRequestedGameState() {
 	return requestedGameState;
 }
 
-void GameState::logic()
-{
+void GameState::logic() {
 }
 
-void GameState::render()
-{
+void GameState::render() {
 }
 
-GameState::~GameState()
-{
+GameState::~GameState() {
 }

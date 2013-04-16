@@ -28,25 +28,21 @@ using namespace std;
 EnemyGroupManager* EnemyGroupManager::_instance = 0;
 
 
-EnemyGroupManager::EnemyGroupManager()
-{
+EnemyGroupManager::EnemyGroupManager() {
 	generate();
 }
 
-EnemyGroupManager::~EnemyGroupManager()
-{
+EnemyGroupManager::~EnemyGroupManager() {
 }
 
-EnemyGroupManager& EnemyGroupManager::instance()
-{
+EnemyGroupManager& EnemyGroupManager::instance() {
 	if (_instance == 0) {
 		_instance = new EnemyGroupManager;
 	}
 	return *(_instance);
 }
 
-void EnemyGroupManager::generate()
-{
+void EnemyGroupManager::generate() {
 
 	// load each enemies folder. Individual enemies can be overwritten with mods.
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
@@ -69,8 +65,7 @@ void EnemyGroupManager::generate()
 	}
 }
 
-void EnemyGroupManager::parseEnemyFileAndStore(const string& filename)
-{
+void EnemyGroupManager::parseEnemyFileAndStore(const string& filename) {
 	FileParser infile;
 	if (infile.open(mods->locate("enemies/" + filename))) {
 		Enemy_Level new_enemy;
@@ -93,8 +88,7 @@ void EnemyGroupManager::parseEnemyFileAndStore(const string& filename)
 	}
 }
 
-Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const
-{
+Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {
 	vector<Enemy_Level> enemyCategory;
 	map<string, vector<Enemy_Level> >::const_iterator it = _categories.find(category);
 	if (it != _categories.end()) {
