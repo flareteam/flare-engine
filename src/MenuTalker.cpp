@@ -36,8 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp)
-{
+MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 	camp = _camp;
 	menu = _menu;
 	npc = NULL;
@@ -116,8 +115,7 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp)
 	color_normal = font->getColor("menu_normal");
 }
 
-void MenuTalker::chooseDialogNode(int request_dialog_node)
-{
+void MenuTalker::chooseDialogNode(int request_dialog_node) {
 	event_cursor = 0;
 
 	if(request_dialog_node == -1)
@@ -128,8 +126,7 @@ void MenuTalker::chooseDialogNode(int request_dialog_node)
 	createBuffer();
 }
 
-void MenuTalker::update()
-{
+void MenuTalker::update() {
 	advanceButton->pos.x = window_area.x + advance_pos.x;
 	advanceButton->pos.y = window_area.y + advance_pos.y;
 
@@ -140,8 +137,7 @@ void MenuTalker::update()
 /**
  * Menu interaction (enter/space/click to continue)
  */
-void MenuTalker::logic()
-{
+void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
 
@@ -195,8 +191,7 @@ void MenuTalker::logic()
 	}
 }
 
-void MenuTalker::createBuffer()
-{
+void MenuTalker::createBuffer() {
 
 	string line;
 
@@ -223,8 +218,7 @@ void MenuTalker::createBuffer()
 
 }
 
-void MenuTalker::render()
-{
+void MenuTalker::render() {
 	if (!visible) return;
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -281,16 +275,14 @@ void MenuTalker::render()
 	}
 }
 
-void MenuTalker::setHero(const string& name, const string& portrait_filename)
-{
+void MenuTalker::setHero(const string& name, const string& portrait_filename) {
 	hero_name = name;
 
 	SDL_FreeSurface(portrait);
 	portrait = loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait");
 }
 
-MenuTalker::~MenuTalker()
-{
+MenuTalker::~MenuTalker() {
 	SDL_FreeSurface(msg_buffer);
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(portrait);

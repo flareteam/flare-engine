@@ -23,8 +23,7 @@ Widget::Widget()
 	: render_to_alpha(false)
 	, in_focus(false)
 	, focusable(false)
-	, pos()
-{
+	, pos() {
 	pos.x = pos.y = pos.w = pos.h = 0;
 }
 
@@ -34,13 +33,11 @@ Widget::~Widget()
 void Widget::activate()
 {}
 
-bool Widget::getNext()
-{
+bool Widget::getNext() {
 	return false;
 }
 
-bool Widget::getPrev()
-{
+bool Widget::getPrev() {
 	return false;
 }
 
@@ -59,16 +56,14 @@ TabList::TabList(ScrollType _scrolltype)
 TabList::~TabList()
 {}
 
-void TabList::add(Widget* widget)
-{
+void TabList::add(Widget* widget) {
 	if (widget == NULL)
 		return;
 
 	widgets.push_back(widget);
 }
 
-void TabList::remove(Widget* widget)
-{
+void TabList::remove(Widget* widget) {
 	std::vector<Widget*>::iterator find = std::find(
 			widgets.begin(),
 			widgets.end(),
@@ -79,18 +74,15 @@ void TabList::remove(Widget* widget)
 		widgets.erase(find);
 }
 
-void TabList::clear()
-{
+void TabList::clear() {
 	widgets.clear();
 }
 
-bool TabList::current_is_valid()
-{
+bool TabList::current_is_valid() {
 	return current >= 0 && current < (int)widgets.size();
 }
 
-Widget* TabList::getNext(bool inner)
-{
+Widget* TabList::getNext(bool inner) {
 	if (widgets.size() == 0)
 		return NULL;
 
@@ -109,8 +101,7 @@ Widget* TabList::getNext(bool inner)
 	return widgets.at(current);
 }
 
-Widget* TabList::getPrev(bool inner)
-{
+Widget* TabList::getPrev(bool inner) {
 	if (widgets.size() == 0)
 		return NULL;
 
@@ -130,23 +121,20 @@ Widget* TabList::getPrev(bool inner)
 	return widgets.at(current);
 }
 
-void TabList::activate()
-{
+void TabList::activate() {
 	if (current_is_valid()) {
 		widgets.at(current)->activate();
 	}
 }
 
-void TabList::defocus()
-{
+void TabList::defocus() {
 	if (current_is_valid())
 		widgets.at(current)->in_focus = false;
 
 	current = -1;
 }
 
-void TabList::logic()
-{
+void TabList::logic() {
 	if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
 		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;

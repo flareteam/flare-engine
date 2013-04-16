@@ -28,8 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-void ItemStorage::init(int _slot_number, ItemManager *_items)
-{
+void ItemStorage::init(int _slot_number, ItemManager *_items) {
 	slot_number = _slot_number;
 	items = _items;
 
@@ -41,16 +40,14 @@ void ItemStorage::init(int _slot_number, ItemManager *_items)
 	}
 }
 
-ItemStack & ItemStorage::operator [] (int slot)
-{
+ItemStack & ItemStorage::operator [] (int slot) {
 	return storage[slot];
 }
 
 /**
  * Take the savefile CSV list of items id and convert to storage array
  */
-void ItemStorage::setItems(string s)
-{
+void ItemStorage::setItems(string s) {
 	s = s + ',';
 	for (int i=0; i<slot_number; i++) {
 		storage[i].item = eatFirstInt(s, ',');
@@ -76,8 +73,7 @@ void ItemStorage::setItems(string s)
 /**
  * Take the savefile CSV list of items quantities and convert to storage array
  */
-void ItemStorage::setQuantities(string s)
-{
+void ItemStorage::setQuantities(string s) {
 	s = s + ',';
 	for (int i=0; i<slot_number; i++) {
 		storage[i].quantity = eatFirstInt(s, ',');
@@ -88,16 +84,14 @@ void ItemStorage::setQuantities(string s)
 	}
 }
 
-int ItemStorage::getSlotNumber()
-{
+int ItemStorage::getSlotNumber() {
 	return slot_number;
 }
 
 /**
  * Convert storage array to a CSV list of items id for savefile
  */
-string ItemStorage::getItems()
-{
+string ItemStorage::getItems() {
 	stringstream ss;
 	ss.str("");
 	for (int i=0; i<slot_number; i++) {
@@ -110,8 +104,7 @@ string ItemStorage::getItems()
 /**
  * Convert storage array to a CSV list of items quantities for savefile
  */
-string ItemStorage::getQuantities()
-{
+string ItemStorage::getQuantities() {
 	stringstream ss;
 	ss.str("");
 	for (int i=0; i<slot_number; i++) {
@@ -121,8 +114,7 @@ string ItemStorage::getQuantities()
 	return ss.str();
 }
 
-void ItemStorage::clear()
-{
+void ItemStorage::clear() {
 	for( int i=0; i<slot_number; i++) {
 		storage[i].item = 0;
 		storage[i].quantity = 0;
@@ -135,8 +127,7 @@ void ItemStorage::clear()
  * @param ItemStack Stack of items
  * @param slot Slot number where it will try to store the item
  */
-void ItemStorage::add( ItemStack stack, int slot)
-{
+void ItemStorage::add( ItemStack stack, int slot) {
 
 	if (stack.item != 0) {
 		int max_quantity = items->items[stack.item].max_quantity;
@@ -187,8 +178,7 @@ void ItemStorage::add( ItemStack stack, int slot)
  *
  * @param slot Slot number
  */
-void ItemStorage::substract(int slot, int quantity)
-{
+void ItemStorage::substract(int slot, int quantity) {
 	storage[slot].quantity -= quantity;
 	if (storage[slot].quantity <= 0) {
 		storage[slot].item = 0;
@@ -198,8 +188,7 @@ void ItemStorage::substract(int slot, int quantity)
 /**
  * Remove one given item
  */
-bool ItemStorage::remove(int item)
-{
+bool ItemStorage::remove(int item) {
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item) {
 			substract(i, 1);
@@ -209,8 +198,7 @@ bool ItemStorage::remove(int item)
 	return false;
 }
 
-int compareItemStack (const void *a, const void *b)
-{
+int compareItemStack (const void *a, const void *b) {
 	const ItemStack *i1 = static_cast<const ItemStack*>(a);
 	const ItemStack *i2 = static_cast<const ItemStack*>(b);
 	if ((*i1) > (*i2))
@@ -219,13 +207,11 @@ int compareItemStack (const void *a, const void *b)
 		return -1;
 }
 
-void ItemStorage::sort()
-{
+void ItemStorage::sort() {
 	qsort(storage, slot_number, sizeof(ItemStack), compareItemStack);
 }
 
-bool ItemStorage::full(int item)
-{
+bool ItemStorage::full(int item) {
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item && items->items[item].max_quantity > 1) {
 			return false;
@@ -240,8 +226,7 @@ bool ItemStorage::full(int item)
 /**
  * Get the number of the specified item carried (not equipped)
  */
-int ItemStorage::count(int item)
-{
+int ItemStorage::count(int item) {
 	int item_count=0;
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item) {
@@ -254,8 +239,7 @@ int ItemStorage::count(int item)
 /**
  * Check to see if the given item is equipped
  */
-bool ItemStorage::contain(int item)
-{
+bool ItemStorage::contain(int item) {
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item)
 			return true;
@@ -263,8 +247,7 @@ bool ItemStorage::contain(int item)
 	return false;
 }
 
-ItemStorage::~ItemStorage()
-{
+ItemStorage::~ItemStorage() {
 	delete[] storage;
 }
 

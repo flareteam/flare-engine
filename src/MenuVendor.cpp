@@ -44,8 +44,7 @@ MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
 	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
 	, buyback_stock()
-	, talker_visible(false)
-{
+	, talker_visible(false) {
 	background = loadGraphicSurface("images/menus/vendor.png");
 
 	tabControl->setTabTitle(VENDOR_BUY,msg->get("Inventory"));
@@ -83,8 +82,7 @@ MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
 	VENDOR_SLOTS = slots_cols * slots_rows;
 }
 
-void MenuVendor::update()
-{
+void MenuVendor::update() {
 	slots_area.x += window_area.x;
 	slots_area.y += window_area.y;
 	slots_area.w = slots_cols*ICON_SIZE;
@@ -103,12 +101,10 @@ void MenuVendor::update()
 	closeButton->pos.y = window_area.y+close_pos.y;
 }
 
-void MenuVendor::loadMerchant(const std::string&)
-{
+void MenuVendor::loadMerchant(const std::string&) {
 }
 
-void MenuVendor::logic()
-{
+void MenuVendor::logic() {
 	if (!visible) return;
 
 	if (closeButton->checkClick()) {
@@ -117,20 +113,17 @@ void MenuVendor::logic()
 	}
 }
 
-void MenuVendor::tabsLogic()
-{
+void MenuVendor::tabsLogic() {
 	tabControl->logic();
 	activetab = tabControl->getActiveTab();
 }
 
-void MenuVendor::setTab(int tab)
-{
+void MenuVendor::setTab(int tab) {
 	tabControl->setActiveTab(tab);
 	activetab = tab;
 }
 
-void MenuVendor::render()
-{
+void MenuVendor::render() {
 	if (!visible) return;
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -165,8 +158,7 @@ void MenuVendor::render()
  * Start dragging a vendor item
  * Players can drag an item to their inventory to purchase.
  */
-ItemStack MenuVendor::click(InputState * input)
-{
+ItemStack MenuVendor::click(InputState * input) {
 	ItemStack stack = stock[activetab].click(input);
 	saveInventory();
 	return stack;
@@ -175,15 +167,13 @@ ItemStack MenuVendor::click(InputState * input)
 /**
  * Cancel the dragging initiated by the clic()
  */
-void MenuVendor::itemReturn(ItemStack stack)
-{
+void MenuVendor::itemReturn(ItemStack stack) {
 	items->playSound(stack.item);
 	stock[activetab].itemReturn(stack);
 	saveInventory();
 }
 
-void MenuVendor::add(ItemStack stack)
-{
+void MenuVendor::add(ItemStack stack) {
 	// Remove the first item stack to make room
 	if (stock[VENDOR_SELL].full(stack.item)) {
 		stock[VENDOR_SELL][0].item = 0;
@@ -195,8 +185,7 @@ void MenuVendor::add(ItemStack stack)
 	saveInventory();
 }
 
-TooltipData MenuVendor::checkTooltip(Point mouse)
-{
+TooltipData MenuVendor::checkTooltip(Point mouse) {
 	int vendor_view = (activetab == VENDOR_BUY) ? VENDOR_BUY : VENDOR_SELL;
 	return stock[activetab].checkTooltip( mouse, stats, vendor_view);
 }
@@ -205,8 +194,7 @@ TooltipData MenuVendor::checkTooltip(Point mouse)
  * Several NPCs vendors can share this menu.
  * When the player talks to a new NPC, apply that NPC's inventory
  */
-void MenuVendor::setInventory()
-{
+void MenuVendor::setInventory() {
 	for (int i=0; i<VENDOR_SLOTS; i++) {
 		stock[VENDOR_BUY][i] = npc->stock[i];
 		stock[VENDOR_SELL][i] = buyback_stock[i];
@@ -220,8 +208,7 @@ void MenuVendor::setInventory()
  * For persistent stock amounts and buyback (at least until
  * the player leaves this map)
  */
-void MenuVendor::saveInventory()
-{
+void MenuVendor::saveInventory() {
 	for (int i=0; i<VENDOR_SLOTS; i++) {
 		if (npc) npc->stock[i] = stock[VENDOR_BUY][i];
 		buyback_stock[i] = stock[VENDOR_SELL][i];
@@ -229,8 +216,7 @@ void MenuVendor::saveInventory()
 
 }
 
-void MenuVendor::sort(int type)
-{
+void MenuVendor::sort(int type) {
 	for (int i=0; i<VENDOR_SLOTS; i++) {
 		if (stock[type][i].item == 0) {
 			for (int j=i; j<VENDOR_SLOTS; j++) {
@@ -245,8 +231,7 @@ void MenuVendor::sort(int type)
 	}
 }
 
-MenuVendor::~MenuVendor()
-{
+MenuVendor::~MenuVendor() {
 	SDL_FreeSurface(background);
 	delete closeButton;
 	delete tabControl;

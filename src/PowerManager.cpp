@@ -51,16 +51,14 @@ PowerManager::PowerManager()
 	: collider(NULL)
 	, log_msg("")
 	, used_items()
-	, used_equipped_items()
-{
+	, used_equipped_items() {
 	loadAll();
 }
 
 /**
  * Load all powers files in all mods
  */
-void PowerManager::loadAll()
-{
+void PowerManager::loadAll() {
 
 	string test_path;
 
@@ -87,8 +85,7 @@ void PowerManager::loadAll()
  *
  * @param filename The full path and filename to this powers.txt file
  */
-void PowerManager::loadPowers(const std::string& filename)
-{
+void PowerManager::loadPowers(const std::string& filename) {
 	FileParser infile;
 	if (!infile.open(filename))
 		return;
@@ -372,8 +369,7 @@ void PowerManager::loadPowers(const std::string& filename)
  * @param filename The .ogg file containing the sound for this power, assumed to be in soundfx/powers/
  * @return The sfx[] array index for this mix chunk, or -1 upon load failure
  */
-int PowerManager::loadSFX(const string& filename)
-{
+int PowerManager::loadSFX(const string& filename) {
 
 	SoundManager::SoundID sid = snd->load("soundfx/powers/" + filename, "PowerManager sfx");
 	vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
@@ -389,16 +385,14 @@ int PowerManager::loadSFX(const string& filename)
 /**
  * Set new collision object
  */
-void PowerManager::handleNewMap(MapCollision *_collider)
-{
+void PowerManager::handleNewMap(MapCollision *_collider) {
 	collider = _collider;
 }
 
 /**
  * Keep two points within a certain range
  */
-Point PowerManager::limitRange(int range, Point src, Point target)
-{
+Point PowerManager::limitRange(int range, Point src, Point target) {
 	if (range > 0) {
 		if (src.x+range < target.x)
 			target.x = src.x+range;
@@ -416,8 +410,7 @@ Point PowerManager::limitRange(int range, Point src, Point target)
 /**
  * Check if the target is valid (not an empty area or a wall)
  */
-bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, Point target)
-{
+bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, Point target) {
 
 	if (!collider) return false;
 
@@ -432,8 +425,7 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, Point t
 	return true;
 }
 
-Point PowerManager::targetNeighbor(Point target, int range)
-{
+Point PowerManager::targetNeighbor(Point target, int range) {
 	return targetNeighbor(target,range,false);
 }
 
@@ -441,8 +433,7 @@ Point PowerManager::targetNeighbor(Point target, int range)
  * Try to retarget the power to one of the 8 adjacent tiles
  * Returns the retargeted position on success, returns the original position on failure
  */
-Point PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked)
-{
+Point PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked) {
 	Point new_target = target;
 	std::vector<Point> valid_tiles;
 
@@ -474,8 +465,7 @@ Point PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked)
  * @param target Aim position in map coordinates
  * @param haz A newly-initialized hazard
  */
-void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point target, Hazard *haz)
-{
+void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point target, Hazard *haz) {
 
 	//the hazard holds the statblock of its source
 	haz->src_stats = src_stats;
@@ -610,8 +600,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
  * Any attack-based effects are handled by hazards.
  * Self-enhancements (buffs) are handled by this function.
  */
-void PowerManager::buff(int power_index, StatBlock *src_stats, Point target)
-{
+void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
@@ -656,8 +645,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, Point target)
  * Play the sound effect for this power
  * Equipped items may have unique sounds
  */
-void PowerManager::playSound(int power_index, StatBlock *src_stats)
-{
+void PowerManager::playSound(int power_index, StatBlock *src_stats) {
 	bool play_base_sound = false;
 
 	if (powers[power_index].allow_power_mod) {
@@ -681,8 +669,7 @@ void PowerManager::playSound(int power_index, StatBlock *src_stats)
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
 
-bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type)
-{
+bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
 		int effect_index = powers[power_index].post_effects[i].id;
@@ -727,8 +714,7 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::fixed(int power_index, StatBlock *src_stats, Point target)
-{
+bool PowerManager::fixed(int power_index, StatBlock *src_stats, Point target) {
 
 	if (powers[power_index].use_hazard) {
 		int delay_iterator = 0;
@@ -764,8 +750,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, Point target)
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target)
-{
+bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target) {
 	float pi = 3.1415926535898f;
 
 	Point src;
@@ -828,8 +813,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target)
 /**
  * Repeaters are multiple hazards that spawn in a straight line
  */
-bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target)
-{
+bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target) {
 
 	payPowerCost(power_index, src_stats);
 
@@ -879,8 +863,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target)
 /**
  * Spawn a creature. Does not create a hazard
  */
-bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target)
-{
+bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 
 	// apply any buffs
 	buff(power_index, src_stats, target);
@@ -924,8 +907,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target)
 /**
  * A simpler spawn routine for map events
  */
-bool PowerManager::spawn(const std::string& enemy_type, Point target)
-{
+bool PowerManager::spawn(const std::string& enemy_type, Point target) {
 
 	Map_Enemy espawn;
 
@@ -942,8 +924,7 @@ bool PowerManager::spawn(const std::string& enemy_type, Point target)
 /**
  * Transform into a creature. Fully replaces entity characteristics
  */
-bool PowerManager::transform(int power_index, StatBlock *src_stats, Point target)
-{
+bool PowerManager::transform(int power_index, StatBlock *src_stats, Point target) {
 	// locking the actionbar prevents power usage until after the hero is transformed
 	inpt->lockActionBar();
 
@@ -988,8 +969,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, Point target
 /**
  * Activate is basically a switch/redirect to the appropriate function
  */
-bool PowerManager::activate(int power_index, StatBlock *src_stats, Point target)
-{
+bool PowerManager::activate(int power_index, StatBlock *src_stats, Point target) {
 
 	if (src_stats->hero) {
 		if (powers[power_index].requires_mp > src_stats->mp)
@@ -1021,8 +1001,7 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, Point target)
 /**
  * pay costs, i.e. remove mana or items.
  */
-void PowerManager::payPowerCost(int power_index, StatBlock *src_stats)
-{
+void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
 	if (src_stats) {
 		if (src_stats->hero) {
 			src_stats->mp -= powers[power_index].requires_mp;
@@ -1042,8 +1021,7 @@ void PowerManager::payPowerCost(int power_index, StatBlock *src_stats)
 /**
  * Activate an entity's passive powers
  */
-void PowerManager::activatePassives(StatBlock *src_stats)
-{
+void PowerManager::activatePassives(StatBlock *src_stats) {
 	bool triggered_others = false;
 	int trigger = -1;
 	// unlocked powers
@@ -1109,8 +1087,7 @@ void PowerManager::activatePassives(StatBlock *src_stats)
  * Activate a single passive
  * this is used when unlocking powers in MenuPowers
  */
-void PowerManager::activateSinglePassive(StatBlock *src_stats, int id)
-{
+void PowerManager::activateSinglePassive(StatBlock *src_stats, int id) {
 	if (!powers[id].passive) return;
 
 	if (powers[id].passive_trigger == -1) {
@@ -1124,8 +1101,7 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, int id)
  * Find the first power id for a given tag
  * returns 0 if no tag is found
  */
-int PowerManager::getIdFromTag(std::string tag)
-{
+int PowerManager::getIdFromTag(std::string tag) {
 	if (tag == "") return 0;
 	for (unsigned i=1; i<powers.size(); i++) {
 		if (powers[i].tag == tag) return i;
@@ -1133,8 +1109,7 @@ int PowerManager::getIdFromTag(std::string tag)
 	return 0;
 }
 
-PowerManager::~PowerManager()
-{
+PowerManager::~PowerManager() {
 
 	for (unsigned i=0; i<sfx.size(); i++) {
 		snd->unload(sfx[i]);

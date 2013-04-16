@@ -41,8 +41,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-GameSwitcher::GameSwitcher()
-{
+GameSwitcher::GameSwitcher() {
 
 	// The initial state is the intro cutscene and then title screen
 	GameStateTitle *title=new GameStateTitle();
@@ -62,8 +61,7 @@ GameSwitcher::GameSwitcher()
 	loadFPS();
 }
 
-void GameSwitcher::loadMusic()
-{
+void GameSwitcher::loadMusic() {
 	if (AUDIO && MUSIC_VOLUME) {
 		Mix_FreeMusic(music);
 		music = Mix_LoadMUS((mods->locate("music/title_theme.ogg")).c_str());
@@ -77,8 +75,7 @@ void GameSwitcher::loadMusic()
 	}
 }
 
-void GameSwitcher::logic()
-{
+void GameSwitcher::logic() {
 	// Check if a the game state is to be changed and change it if necessary, deleting the old state
 	GameState* newState = currentState->getRequestedGameState();
 	if (newState != NULL) {
@@ -106,16 +103,14 @@ void GameSwitcher::logic()
 	}
 }
 
-void GameSwitcher::showFPS(int fps)
-{
+void GameSwitcher::showFPS(int fps) {
 	if (!SHOW_FPS) return;
 	string sfps = toString(typeid(fps), &fps) + string(" fps");
 	label_fps->set(fps_position.x, fps_position.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
 	label_fps->render();
 }
 
-void GameSwitcher::loadFPS()
-{
+void GameSwitcher::loadFPS() {
 	// Load FPS rendering settings
 	FileParser infile;
 	if(infile.open(mods->locate("menus/fps.txt"))) {
@@ -157,13 +152,11 @@ void GameSwitcher::loadFPS()
 
 }
 
-void GameSwitcher::render()
-{
+void GameSwitcher::render() {
 	currentState->render();
 }
 
-GameSwitcher::~GameSwitcher()
-{
+GameSwitcher::~GameSwitcher() {
 	delete currentState;
 	delete label_fps;
 	Mix_FreeMusic(music);

@@ -33,14 +33,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-TileSet::TileSet()
-{
+TileSet::TileSet() {
 	sprites = NULL;
 	reset();
 }
 
-void TileSet::reset()
-{
+void TileSet::reset() {
 
 	SDL_FreeSurface(sprites);
 
@@ -57,8 +55,7 @@ void TileSet::reset()
 	max_size_y = 0;
 }
 
-void TileSet::loadGraphics(const std::string& filename)
-{
+void TileSet::loadGraphics(const std::string& filename) {
 	if (sprites)
 		SDL_FreeSurface(sprites);
 
@@ -69,8 +66,7 @@ void TileSet::loadGraphics(const std::string& filename)
 		sprites = loadGraphicSurface("images/tilesets/" + filename);
 }
 
-void TileSet::load(const std::string& filename)
-{
+void TileSet::load(const std::string& filename) {
 	if (current_map == filename) return;
 
 	reset();
@@ -137,8 +133,7 @@ void TileSet::load(const std::string& filename)
 	current_map = filename;
 }
 
-void TileSet::logic()
-{
+void TileSet::logic() {
 
 	if (ANIMATED_TILES) {
 		for (unsigned i = 0; i < anim.size() ; i++) {
@@ -156,7 +151,6 @@ void TileSet::logic()
 	}
 }
 
-TileSet::~TileSet()
-{
+TileSet::~TileSet() {
 	SDL_FreeSurface(sprites);
 }

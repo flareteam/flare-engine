@@ -57,8 +57,7 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
 	, attacking (false)
 	, drag_walking(false)
 	, respawn(false)
-	, close_menus(false)
-{
+	, close_menus(false) {
 
 	init();
 
@@ -73,8 +72,7 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
 	loadLayerDefinitions();
 }
 
-void Avatar::init()
-{
+void Avatar::init() {
 
 	stats.hero_cooldown.resize(POWER_COUNT);
 
@@ -141,8 +139,7 @@ void Avatar::init()
 /**
  * Load avatar sprite layer definitions into vector.
  */
-void Avatar::loadLayerDefinitions()
-{
+void Avatar::loadLayerDefinitions() {
 	layer_def = vector<vector<unsigned> >(8, vector<unsigned>());
 	layer_reference_order = vector<string>();
 
@@ -182,8 +179,7 @@ void Avatar::loadLayerDefinitions()
 	// then the layer_def[3] looks like (3,1,2,0)
 }
 
-void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx)
-{
+void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 
 	for (unsigned int i=0; i<animsets.size(); i++) {
 		if (animsets[i])
@@ -209,8 +205,7 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx)
 	anim->cleanUp();
 }
 
-void Avatar::loadSounds(const string& type_id)
-{
+void Avatar::loadSounds(const string& type_id) {
 	// unload any sounds that are common between creatures and the hero
 	snd->unload(sound_melee);
 	snd->unload(sound_mental);
@@ -237,8 +232,7 @@ void Avatar::loadSounds(const string& type_id)
 /**
  * Walking/running steps sound depends on worn armor
  */
-void Avatar::loadStepFX(const string& stepname)
-{
+void Avatar::loadStepFX(const string& stepname) {
 
 	string filename = stats.sfx_step;
 	if (stepname != "") {
@@ -262,8 +256,7 @@ void Avatar::loadStepFX(const string& stepname)
 }
 
 
-bool Avatar::pressing_move()
-{
+bool Avatar::pressing_move() {
 	if (inpt->mouse_emulation) return false;
 	if (MOUSE_MOVE) {
 		return inpt->pressing[MAIN1];
@@ -273,8 +266,7 @@ bool Avatar::pressing_move()
 	}
 }
 
-void Avatar::set_direction()
-{
+void Avatar::set_direction() {
 	// handle direction changes
 	if (inpt->mouse_emulation) return;
 	if (MOUSE_MOVE) {
@@ -307,8 +299,7 @@ void Avatar::set_direction()
 	}
 }
 
-void Avatar::handlePower(int actionbar_power)
-{
+void Avatar::handlePower(int actionbar_power) {
 	if (actionbar_power != 0 && stats.cooldown_ticks == 0) {
 		const Power &power = powers->getPower(actionbar_power);
 		Point target;
@@ -380,8 +371,7 @@ void Avatar::handlePower(int actionbar_power)
  * @param actionbar_power The actionbar power activated.  0 means no power.
  * @param restrictPowerUse rather or not to allow power usage on mouse1
  */
-void Avatar::logic(int actionbar_power, bool restrictPowerUse)
-{
+void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 	// hazards are processed after Avatar and Enemy[]
 	// so process and clear sound effects from previous frames
@@ -746,8 +736,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse)
 	map->collider.block(stats.pos.x, stats.pos.y);
 }
 
-void Avatar::transform()
-{
+void Avatar::transform() {
 	// calling a transform power locks the actionbar, so we unlock it here
 	inpt->unlockActionBar();
 
@@ -811,8 +800,7 @@ void Avatar::transform()
 	loadStepFX("NULL");
 }
 
-void Avatar::untransform()
-{
+void Avatar::untransform() {
 	// calling a transform power locks the actionbar, so we unlock it here
 	inpt->unlockActionBar();
 
@@ -872,8 +860,7 @@ void Avatar::untransform()
 	hero_stats = NULL;
 }
 
-void Avatar::setAnimation(std::string name)
-{
+void Avatar::setAnimation(std::string name) {
 	if (name == activeAnimation->getName())
 		return;
 
@@ -890,8 +877,7 @@ void Avatar::setAnimation(std::string name)
 /**
  * Find untransform power index to use for manual untransfrom ability
  */
-int Avatar::getUntransformPower()
-{
+int Avatar::getUntransformPower() {
 	for (unsigned id=0; id<powers->powers.size(); id++) {
 		if (powers->powers[id].spawn_type == "untransform" && powers->powers[id].requires_item == -1)
 			return id;
@@ -899,16 +885,14 @@ int Avatar::getUntransformPower()
 	return 0;
 }
 
-void Avatar::resetActiveAnimation()
-{
+void Avatar::resetActiveAnimation() {
 	activeAnimation->reset(); // shield stutter
 	for (unsigned i=0; i < animsets.size(); i++)
 		if (anims[i])
 			anims[i]->reset();
 }
 
-void Avatar::addRenders(vector<Renderable> &r)
-{
+void Avatar::addRenders(vector<Renderable> &r) {
 	if (!stats.transformed) {
 		for (unsigned i = 0; i < layer_def[stats.direction].size(); ++i) {
 			unsigned index = layer_def[stats.direction][i];
@@ -937,8 +921,7 @@ void Avatar::addRenders(vector<Renderable> &r)
 	}
 }
 
-Avatar::~Avatar()
-{
+Avatar::~Avatar() {
 
 	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
 		anim->decreaseCount("animations/enemies/"+charmed_stats->animations + ".txt");

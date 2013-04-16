@@ -27,20 +27,17 @@ Scene::Scene() : frame_counter(0)
 	, caption("")
 	, caption_size(0,0)
 	, art(NULL)
-	, sid(-1)
-{
+	, sid(-1) {
 }
 
-Scene::~Scene()
-{
+Scene::~Scene() {
 
 	while(!components.empty())
 		components.pop();
 
 }
 
-bool Scene::logic()
-{
+bool Scene::logic() {
 
 	/* TODO: handle cancel input to skip scene */
 	bool skip = false;
@@ -101,8 +98,7 @@ bool Scene::logic()
 	return true;
 }
 
-void Scene::render()
-{
+void Scene::render() {
 	SDL_Rect r = art_dest;
 	if (art != NULL)
 		SDL_BlitSurface(art, NULL, screen, &r);
@@ -117,17 +113,14 @@ void Scene::render()
 
 GameStateCutscene::GameStateCutscene(GameState *game_state)
 	: previous_gamestate(game_state)
-	, game_slot(-1)
-{
+	, game_slot(-1) {
 	scale_graphics = false;
 }
 
-GameStateCutscene::~GameStateCutscene()
-{
+GameStateCutscene::~GameStateCutscene() {
 }
 
-void GameStateCutscene::logic()
-{
+void GameStateCutscene::logic() {
 
 	if (scenes.empty()) {
 		if (game_slot != -1) {
@@ -149,14 +142,12 @@ void GameStateCutscene::logic()
 		scenes.pop();
 }
 
-void GameStateCutscene::render()
-{
+void GameStateCutscene::render() {
 	if (!scenes.empty())
 		scenes.front().render();
 }
 
-bool GameStateCutscene::load(std::string filename)
-{
+bool GameStateCutscene::load(std::string filename) {
 	FileParser infile;
 
 	if (!infile.open(mods->locate("cutscenes/" + filename)))
@@ -216,8 +207,7 @@ bool GameStateCutscene::load(std::string filename)
 	return true;
 }
 
-SDL_Surface *GameStateCutscene::loadImage(std::string filename)
-{
+SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
 
 	std::string image_file = (mods->locate("images/"+ filename));
 	SDL_Surface *image = IMG_Load(image_file.c_str());

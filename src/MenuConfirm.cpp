@@ -23,8 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu()
-{
+MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu() {
 	confirmClicked = false;
 	cancelClicked = false;
 	hasConfirmButton = true;
@@ -44,8 +43,7 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu
 	background = loadGraphicSurface("images/menus/confirm_bg.png");
 }
 
-void MenuConfirm::update()
-{
+void MenuConfirm::update() {
 	if (hasConfirmButton) {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;
@@ -60,8 +58,7 @@ void MenuConfirm::update()
 	buttonClose->pos.y = window_area.y;
 }
 
-void MenuConfirm::logic()
-{
+void MenuConfirm::logic() {
 	if (visible) {
 		tablist.logic();
 		confirmClicked = false;
@@ -83,8 +80,7 @@ void MenuConfirm::logic()
 	}
 }
 
-void MenuConfirm::render()
-{
+void MenuConfirm::render() {
 	SDL_Rect src;
 
 	// background
@@ -100,8 +96,7 @@ void MenuConfirm::render()
 	buttonClose->render();
 }
 
-MenuConfirm::~MenuConfirm()
-{
+MenuConfirm::~MenuConfirm() {
 	if (hasConfirmButton) delete buttonConfirm;
 	delete buttonClose;
 	SDL_FreeSurface(background);

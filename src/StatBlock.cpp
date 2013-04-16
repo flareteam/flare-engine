@@ -170,8 +170,7 @@ StatBlock::StatBlock()
 	, portrait("male01")
 	, transform_type("")
 	, animations("")
-	, sfx_step("cloth")
-{
+	, sfx_step("cloth") {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
 
@@ -210,16 +209,14 @@ StatBlock::StatBlock()
 	on_half_dead_casted = false;
 }
 
-bool sortLoot(const EnemyLoot &a, const EnemyLoot &b)
-{
+bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
 	return a.chance < b.chance;
 }
 
 /**
  * load a statblock, typically for an enemy definition
  */
-void StatBlock::load(const string& filename)
-{
+void StatBlock::load(const string& filename) {
 	FileParser infile;
 	if (!infile.open(mods->locate(filename)))
 		return;
@@ -395,8 +392,7 @@ void StatBlock::load(const string& filename)
 /**
  * Reduce temphp first, then hp
  */
-void StatBlock::takeDamage(int dmg)
-{
+void StatBlock::takeDamage(int dmg) {
 	hp -= effects.damageShields(dmg);
 	if (hp <= 0) {
 		hp = 0;
@@ -408,8 +404,7 @@ void StatBlock::takeDamage(int dmg)
  * Refill HP/MP
  * Creatures might skip these formulas.
  */
-void StatBlock::recalc()
-{
+void StatBlock::recalc() {
 
 	if (!statsLoaded) loadHeroStats();
 
@@ -433,8 +428,7 @@ void StatBlock::recalc()
  * Base damage and absorb is 0
  * Plus an optional bonus_per_[base stat]
  */
-void StatBlock::calcBaseDmgAndAbs()
-{
+void StatBlock::calcBaseDmgAndAbs() {
 
 	// this bonus is skipped for the default level 1 of a stat
 	int phys0 = get_physical() -1;
@@ -452,8 +446,7 @@ void StatBlock::calcBaseDmgAndAbs()
 /**
  * Recalc derived stats from base stats + effect bonuses
  */
-void StatBlock::recalc_alt()
-{
+void StatBlock::recalc_alt() {
 
 	int lev0 = level -1;
 
@@ -502,8 +495,7 @@ void StatBlock::recalc_alt()
 /**
  * Process per-frame actions
  */
-void StatBlock::logic()
-{
+void StatBlock::logic() {
 	if (hp <= 0 && !effects.triggered_death && !effects.revive) alive = false;
 	else alive = true;
 
@@ -572,12 +564,10 @@ void StatBlock::logic()
 	else movement_type = MOVEMENT_NORMAL;
 }
 
-StatBlock::~StatBlock()
-{
+StatBlock::~StatBlock() {
 }
 
-bool StatBlock::canUsePower(const Power &power, unsigned powerid) const
-{
+bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 	MenuPowers *menu_powers = MenuPowers::getInstance();
 
 	// needed to unlock shapeshifter powers
@@ -596,8 +586,7 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const
 
 }
 
-void StatBlock::loadHeroStats()
-{
+void StatBlock::loadHeroStats() {
 	// Redefine numbers from config file if present
 	FileParser infile;
 	if (!infile.open(mods->locate("engine/stats.txt")))
