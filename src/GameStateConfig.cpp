@@ -719,6 +719,7 @@ void GameStateConfig::update () {
 	else {
 		change_gamma_cb->unCheck();
 		GAMMA = 1.0;
+		gamma_sl->enabled = false;
 	}
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
 	SDL_SetGamma(GAMMA,GAMMA,GAMMA);
@@ -914,10 +915,14 @@ void GameStateConfig::logic ()
 			if (texture_quality_cb->isChecked()) TEXTURE_QUALITY=true;
 			else TEXTURE_QUALITY=false;
 		} else if (change_gamma_cb->checkClick()) {
-			if (change_gamma_cb->isChecked()) CHANGE_GAMMA=true;
+			if (change_gamma_cb->isChecked()) {
+				CHANGE_GAMMA=true;
+				gamma_sl->enabled = true;
+			}
 			else {
 				CHANGE_GAMMA=false;
 				GAMMA = 1.0;
+				gamma_sl->enabled = false;
 				gamma_sl->set(5,20,(int)(GAMMA*10.0));
 				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
 			}
@@ -927,6 +932,7 @@ void GameStateConfig::logic ()
 		} else if (resolution_lstb->checkClick()) {
 			; // nothing to do here: resolution value changes next frame.
 		} else if (CHANGE_GAMMA) {
+			gamma_sl->enabled = true;
 			if (gamma_sl->checkClick()) {
 					GAMMA=(gamma_sl->getValue())*0.1f;
 					SDL_SetGamma(GAMMA,GAMMA,GAMMA);

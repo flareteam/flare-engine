@@ -36,6 +36,7 @@ using namespace std;
 WidgetSlider::WidgetSlider (const string  & fname)
 	 : sl(NULL)
 	 , pressed(false)
+	 , enabled(true)
 	 , minimum(0)
 	 , maximum(0)
 	 , value(0)
@@ -62,12 +63,14 @@ WidgetSlider::~WidgetSlider ()
 
 
 bool WidgetSlider::checkClick() {
+	if (!enabled) return false;
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
 
 bool WidgetSlider::checkClick (int x, int y)
 {
+	if (!enabled) return false;
 	Point mouse(x, y);
 		//
 		//	We are just grabbing the knob
@@ -79,6 +82,14 @@ bool WidgetSlider::checkClick (int x, int y)
 			return true;
 		}
 		return false;
+	}
+
+	// buttons already in use, new click not allowed
+	if (inpt->lock[UP]) return false;
+	if (inpt->lock[DOWN]) return false;
+
+	if (!pressed && !inpt->lock[UP] && !inpt->lock[DOWN]) {
+		return true;
 	}
 	if (pressed) {
 			//
@@ -178,6 +189,7 @@ void WidgetSlider::render (SDL_Surface *target)
 }
 
 bool WidgetSlider::getNext() {
+	if (!enabled) return false;
 
 	value -= (maximum - minimum)/10;
 	if (value < minimum)
@@ -190,6 +202,7 @@ bool WidgetSlider::getNext() {
 }
 
 bool WidgetSlider::getPrev() {
+	if (!enabled) return false;
 
 	value += (maximum - minimum)/10;
 	if (value > maximum)
