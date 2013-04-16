@@ -795,13 +795,11 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 }
 
 void MenuInventory::applyItemStats(ItemStack *equipped) {
-	unsigned bonus_counter;
 	const vector<Item> &pc_items = items->items;
-	int item_id;
 
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		item_id = equipped[i].item;
+		int item_id = equipped[i].item;
 		const Item &item = pc_items[item_id];
 
 		// apply base stats
@@ -839,7 +837,7 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		stats->absorb_max += item.abs_max;
 
 		// apply various bonuses
-		bonus_counter = 0;
+		unsigned bonus_counter = 0;
 		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
 			int id = powers->getIdFromTag(item.bonus_stat[bonus_counter]);
 
@@ -864,11 +862,9 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	vector<int> set;
 	vector<int> quantity;
 	vector<int>::iterator it;
-	unsigned bonus_counter = 0;
-	int item_id;
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		item_id = equipped[i].item;
+		int item_id = equipped[i].item;
 		it = find(set.begin(), set.end(), items->items[item_id].set);
 		if (items->items[item_id].set > 0 && it != set.end()) {
 			quantity[distance(set.begin(), it)] += 1;
@@ -882,6 +878,7 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	ItemSet temp_set;
 	for (unsigned k=0; k<set.size(); k++) {
 		temp_set = items->item_sets[set[k]];
+		unsigned bonus_counter = 0;
 		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 			if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 

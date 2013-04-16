@@ -36,19 +36,18 @@ using namespace std;
 
 class Action {
 public:
-	Action(std::string _id = "", std::string _label="")
+	Action(std::string _id = "", std::string _label = "")
 		: id(_id)
 		, label(id != "" ? new WidgetLabel() : NULL) {
 		if (label)
 			label->set(_label);
 	}
 
-	Action(const Action &r) : label(NULL) {
-		id = r.id;
-		if (id != "") {
-			label = new WidgetLabel();
+	Action(const Action &r)
+		: id(r.id)
+		, label(id != "" ? new WidgetLabel() : NULL) {
+		if (label)
 			label->set(r.label->get());
-		}
 	}
 
 	virtual ~Action() {
