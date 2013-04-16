@@ -38,7 +38,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuStatBar::MenuStatBar(std::string type) {
+MenuStatBar::MenuStatBar(std::string type)
+{
 
 	label = new WidgetLabel();
 
@@ -60,10 +61,12 @@ MenuStatBar::MenuStatBar(std::string type) {
 				bar_pos.y = eatFirstInt(infile.val,',');
 				bar_pos.w = eatFirstInt(infile.val,',');
 				bar_pos.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "text_pos") {
+			}
+			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
-			} else if(infile.key == "orientation") {
+			}
+			else if(infile.key == "orientation") {
 				int orient = eatFirstInt(infile.val,',');
 				if (orient == 1)
 					orientation = true;
@@ -85,14 +88,16 @@ void MenuStatBar::loadGraphics(std::string type)
 	bar = loadGraphicSurface("images/menus/bar_" + type + ".png");
 }
 
-void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string) {
+void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string)
+{
 	if (_custom_string != "") custom_string = _custom_string;
 	mouse = _mouse;
 	stat_cur = _stat_cur;
 	stat_max = _stat_max;
 }
 
-void MenuStatBar::render() {
+void MenuStatBar::render()
+{
 	SDL_Rect src;
 	SDL_Rect dest;
 	int bar_length;
@@ -121,7 +126,8 @@ void MenuStatBar::render() {
 		src.w = bar_length;
 		src.h = bar_pos.h;
 		SDL_BlitSurface(bar, &src, screen, &dest);
-	} else if (orientation == 1) {
+	}
+	else if (orientation == 1) {
 		if (stat_max == 0) bar_length = 0;
 		else bar_length = (stat_cur * bar_pos.h) / stat_max;
 		src.x = 0;
@@ -152,7 +158,8 @@ void MenuStatBar::render() {
 	}
 }
 
-MenuStatBar::~MenuStatBar() {
+MenuStatBar::~MenuStatBar()
+{
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(bar);
 	delete label;

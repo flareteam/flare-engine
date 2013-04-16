@@ -41,7 +41,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-GameSwitcher::GameSwitcher() {
+GameSwitcher::GameSwitcher()
+{
 
 	// The initial state is the intro cutscene and then title screen
 	GameStateTitle *title=new GameStateTitle();
@@ -61,12 +62,13 @@ GameSwitcher::GameSwitcher() {
 	loadFPS();
 }
 
-void GameSwitcher::loadMusic() {
+void GameSwitcher::loadMusic()
+{
 	if (AUDIO && MUSIC_VOLUME) {
 		Mix_FreeMusic(music);
 		music = Mix_LoadMUS((mods->locate("music/title_theme.ogg")).c_str());
 		if (!music)
-		  printf("Mix_LoadMUS: %s\n", Mix_GetError());
+			printf("Mix_LoadMUS: %s\n", Mix_GetError());
 	}
 
 	if (music) {
@@ -75,7 +77,8 @@ void GameSwitcher::loadMusic() {
 	}
 }
 
-void GameSwitcher::logic() {
+void GameSwitcher::logic()
+{
 	// Check if a the game state is to be changed and change it if necessary, deleting the old state
 	GameState* newState = currentState->getRequestedGameState();
 	if (newState != NULL) {
@@ -103,14 +106,16 @@ void GameSwitcher::logic() {
 	}
 }
 
-void GameSwitcher::showFPS(int fps) {
+void GameSwitcher::showFPS(int fps)
+{
 	if (!SHOW_FPS) return;
 	string sfps = toString(typeid(fps), &fps) + string(" fps");
 	label_fps->set(fps_position.x, fps_position.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
 	label_fps->render();
 }
 
-void GameSwitcher::loadFPS() {
+void GameSwitcher::loadFPS()
+{
 	// Load FPS rendering settings
 	FileParser infile;
 	if(infile.open(mods->locate("menus/fps.txt"))) {
@@ -121,7 +126,8 @@ void GameSwitcher::loadFPS() {
 				fps_position.x = eatFirstInt(infile.val,',');
 				fps_position.y = eatFirstInt(infile.val,',');
 				fps_corner = eatFirstString(infile.val,',');
-			} else if(infile.key == "color") {
+			}
+			else if(infile.key == "color") {
 				fps_color.r = eatFirstInt(infile.val,',');
 				fps_color.g = eatFirstInt(infile.val,',');
 				fps_color.b = eatFirstInt(infile.val,',');
@@ -137,22 +143,27 @@ void GameSwitcher::loadFPS() {
 
 	if (fps_corner == "top_left") {
 		// relative to {0,0}, so no changes
-	} else if (fps_corner == "top_right") {
+	}
+	else if (fps_corner == "top_right") {
 		fps_position.x += VIEW_W-w;
-	} else if (fps_corner == "bottom_left") {
+	}
+	else if (fps_corner == "bottom_left") {
 		fps_position.y += VIEW_H-h;
-	} else if (fps_corner == "bottom_right") {
+	}
+	else if (fps_corner == "bottom_right") {
 		fps_position.x += VIEW_W-w;
 		fps_position.y += VIEW_H-h;
 	}
 
 }
 
-void GameSwitcher::render() {
+void GameSwitcher::render()
+{
 	currentState->render();
 }
 
-GameSwitcher::~GameSwitcher() {
+GameSwitcher::~GameSwitcher()
+{
 	delete currentState;
 	delete label_fps;
 	Mix_FreeMusic(music);

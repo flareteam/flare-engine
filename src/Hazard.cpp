@@ -70,14 +70,16 @@ Hazard::Hazard(MapCollision *_collider)
 {
 }
 
-Hazard::~Hazard() {
+Hazard::~Hazard()
+{
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
 	}
 }
 
-void Hazard::logic() {
+void Hazard::logic()
+{
 
 	// if the hazard is on delay, take no action
 	if (delay_frames > 0) {
@@ -108,7 +110,8 @@ void Hazard::logic() {
 	}
 }
 
-void Hazard::loadAnimation(std::string &s) {
+void Hazard::loadAnimation(std::string &s)
+{
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
@@ -122,10 +125,11 @@ void Hazard::loadAnimation(std::string &s) {
 	}
 }
 
-bool Hazard::isDangerousNow() {
+bool Hazard::isDangerousNow()
+{
 	return active && (delay_frames == 0) &&
-			( (activeAnimation != NULL && activeAnimation->isActiveFrame())
-			|| activeAnimation == NULL);
+		   ( (activeAnimation != NULL && activeAnimation->isActiveFrame())
+			 || activeAnimation == NULL);
 }
 
 bool Hazard::hasEntity(Entity *ent)

@@ -28,21 +28,25 @@ using namespace std;
 EnemyGroupManager* EnemyGroupManager::_instance = 0;
 
 
-EnemyGroupManager::EnemyGroupManager() {
+EnemyGroupManager::EnemyGroupManager()
+{
 	generate();
 }
 
-EnemyGroupManager::~EnemyGroupManager() {
+EnemyGroupManager::~EnemyGroupManager()
+{
 }
 
-EnemyGroupManager& EnemyGroupManager::instance() {
+EnemyGroupManager& EnemyGroupManager::instance()
+{
 	if (_instance == 0) {
 		_instance = new EnemyGroupManager;
 	}
 	return *(_instance);
 }
 
-void EnemyGroupManager::generate() {
+void EnemyGroupManager::generate()
+{
 
 	// load each enemies folder. Individual enemies can be overwritten with mods.
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
@@ -65,7 +69,8 @@ void EnemyGroupManager::generate() {
 	}
 }
 
-void EnemyGroupManager::parseEnemyFileAndStore(const string& filename) {
+void EnemyGroupManager::parseEnemyFileAndStore(const string& filename)
+{
 	FileParser infile;
 	if (infile.open(mods->locate("enemies/" + filename))) {
 		Enemy_Level new_enemy;
@@ -88,12 +93,14 @@ void EnemyGroupManager::parseEnemyFileAndStore(const string& filename) {
 	}
 }
 
-Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {
+Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const
+{
 	vector<Enemy_Level> enemyCategory;
 	map<string, vector<Enemy_Level> >::const_iterator it = _categories.find(category);
 	if (it != _categories.end()) {
 		enemyCategory = it->second;
-	} else {
+	}
+	else {
 		return Enemy_Level();
 	}
 
@@ -107,14 +114,17 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 			int add_times = 0;
 			if (new_enemy.rarity == "common") {
 				add_times = 6;
-			} else if (new_enemy.rarity == "uncommon") {
+			}
+			else if (new_enemy.rarity == "uncommon") {
 				add_times = 3;
-			} else if (new_enemy.rarity == "rare") {
+			}
+			else if (new_enemy.rarity == "rare") {
 				add_times = 1;
-			} else {
+			}
+			else {
 				fprintf(stderr,
-					"ERROR: 'rarity' property for enemy '%s' not valid (common|uncommon|rare): %s\n",
-					new_enemy.type.c_str(), new_enemy.rarity.c_str());
+						"ERROR: 'rarity' property for enemy '%s' not valid (common|uncommon|rare): %s\n",
+						new_enemy.type.c_str(), new_enemy.rarity.c_str());
 			}
 
 			// do add, the given number of times
@@ -126,7 +136,8 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 
 	if (enemyCandidates.empty()) {
 		return Enemy_Level();
-	} else {
+	}
+	else {
 		return enemyCandidates[rand() % enemyCandidates.size()];
 	}
 }

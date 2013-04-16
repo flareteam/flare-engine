@@ -34,11 +34,13 @@ Widget::~Widget()
 void Widget::activate()
 {}
 
-bool Widget::getNext() {
+bool Widget::getNext()
+{
 	return false;
 }
 
-bool Widget::getPrev() {
+bool Widget::getPrev()
+{
 	return false;
 }
 
@@ -57,29 +59,33 @@ TabList::TabList(ScrollType scrolltype)
 TabList::~TabList()
 {}
 
-void TabList::add(Widget* widget) {
+void TabList::add(Widget* widget)
+{
 	if( widget == NULL )
 		return;
 
 	widgets.push_back(widget);
 }
 
-void TabList::remove(Widget* widget) {
+void TabList::remove(Widget* widget)
+{
 	std::vector<Widget*>::iterator find = std::find(
-		widgets.begin(),
-		widgets.end(),
-		widget
-	);
+			widgets.begin(),
+			widgets.end(),
+			widget
+										  );
 
 	if(find != widgets.end())
 		widgets.erase(find);
 }
 
-void TabList::clear() {
+void TabList::clear()
+{
 	widgets.clear();
 }
 
-Widget* TabList::getNext(bool inner) {
+Widget* TabList::getNext(bool inner)
+{
 	if(widgets.size() == 0)
 		return NULL;
 
@@ -98,7 +104,8 @@ Widget* TabList::getNext(bool inner) {
 	return widgets.at(current);
 }
 
-Widget* TabList::getPrev(bool inner) {
+Widget* TabList::getPrev(bool inner)
+{
 	if(widgets.size() == 0)
 		return NULL;
 
@@ -118,22 +125,24 @@ Widget* TabList::getPrev(bool inner) {
 	return widgets.at(current);
 }
 
-void TabList::activate() {
+void TabList::activate()
+{
 	if(current >= 0 && current < widgets.size()) {
 		widgets.at(current)->activate();
 	}
 }
 
-void TabList::defocus() {
+void TabList::defocus()
+{
 	if(current >= 0 && current < widgets.size())
 		widgets.at(current)->in_focus = false;
 
 	current = -1;
 }
 
-void TabList::logic() {
-	if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS)
-	{
+void TabList::logic()
+{
+	if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
 		if(inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;
 			getNext();
@@ -144,8 +153,7 @@ void TabList::logic() {
 		}
 	}
 
-	if (scrolltype == HORIZONTAL || scrolltype == TWO_DIRECTIONS)
-	{
+	if (scrolltype == HORIZONTAL || scrolltype == TWO_DIRECTIONS) {
 		if(inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
 			inpt->lock[LEFT] = true;
 			getPrev(false);

@@ -20,10 +20,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 using namespace std;
-	bool new_section;
-	std::string section;
-	std::string key;
-	std::string val;
+bool new_section;
+std::string section;
+std::string key;
+std::string val;
 
 FileParser::FileParser()
 	: line("")
@@ -33,7 +33,8 @@ FileParser::FileParser()
 	, val("")
 {}
 
-bool FileParser::open(const string& _filename, const string &errormessage) {
+bool FileParser::open(const string& _filename, const string &errormessage)
+{
 	this->filename = _filename;
 	infile.open(filename.c_str(), ios::in);
 	bool ret = infile.is_open();
@@ -42,7 +43,8 @@ bool FileParser::open(const string& _filename, const string &errormessage) {
 	return ret;
 }
 
-void FileParser::close() {
+void FileParser::close()
+{
 	if (infile.is_open())
 		infile.close();
 }
@@ -53,7 +55,8 @@ void FileParser::close() {
  *
  * @return false if EOF, otherwise true
  */
-bool FileParser::next() {
+bool FileParser::next()
+{
 
 	string starts_with;
 	new_section = false;
@@ -92,7 +95,8 @@ bool FileParser::next() {
 /**
  * Get an unparsed, unfiltered line from the input file
  */
-string FileParser::getRawLine() {
+string FileParser::getRawLine()
+{
 	line = "";
 
 	if (infile.good()) {
@@ -101,7 +105,8 @@ string FileParser::getRawLine() {
 	return line;
 }
 
-string FileParser::nextValue() {
+string FileParser::nextValue()
+{
 	if (val == "") {
 		return ""; // not found
 	}
@@ -127,6 +132,7 @@ std::string FileParser::getFileName()
 	return filename;
 }
 
-FileParser::~FileParser() {
+FileParser::~FileParser()
+{
 	close();
 }

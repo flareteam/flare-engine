@@ -36,7 +36,8 @@ will be returned by SoundManager::load().
 
 using namespace std;
 
-class Sound {
+class Sound
+{
 public:
 	Mix_Chunk *chunk;
 	Sound() :  chunk(0), refCnt(0) {}
@@ -45,7 +46,8 @@ private:
 	int refCnt;
 };
 
-class Playback {
+class Playback
+{
 public:
 	SoundManager::SoundID sid;
 	std::string virtual_channel;
@@ -54,17 +56,20 @@ public:
 	bool finished;
 };
 
-SoundManager::SoundManager() {
+SoundManager::SoundManager()
+{
 	Mix_AllocateChannels(50);
 }
 
-SoundManager::~SoundManager() {
+SoundManager::~SoundManager()
+{
 	SoundManager::SoundMapIterator it;
 	while((it = sounds.begin()) != sounds.end())
 		unload(it->first);
 }
 
-Uint8 SoundManager::calc_distance(const Point *s, const Point *d) {
+Uint8 SoundManager::calc_distance(const Point *s, const Point *d)
+{
 	float dx = s->x - d->x;
 	float dy = s->y - d->y;
 	float dist = sqrt(dx*dx + dy*dy);
@@ -72,7 +77,8 @@ Uint8 SoundManager::calc_distance(const Point *s, const Point *d) {
 	return max(0.0f, min(dist, 255.0f));
 }
 
-void SoundManager::logic(Point c) {
+void SoundManager::logic(Point c)
+{
 
 	PlaybackMapIterator it = playback.begin();
 	if (it == playback.end())
@@ -129,7 +135,8 @@ void SoundManager::logic(Point c) {
 	}
 }
 
-void SoundManager::reset() {
+void SoundManager::reset()
+{
 
 	PlaybackMapIterator it = playback.begin();
 	if (it == playback.end())
@@ -145,7 +152,8 @@ void SoundManager::reset() {
 	logic(Point(0,0));
 }
 
-SoundManager::SoundID SoundManager::load(const std::string& filename, const std::string& errormessage) {
+SoundManager::SoundID SoundManager::load(const std::string& filename, const std::string& errormessage)
+{
 
 	Sound lsnd;
 	SoundID sid = 0;
@@ -171,7 +179,7 @@ SoundManager::SoundID SoundManager::load(const std::string& filename, const std:
 	lsnd.refCnt = 1;
 	if (!lsnd.chunk) {
 		fprintf(stderr, "%s: Loading sound %s (%s) failed: %s \n", errormessage.c_str(),
-			realfilename.c_str(), filename.c_str(), Mix_GetError());
+				realfilename.c_str(), filename.c_str(), Mix_GetError());
 		return 0;
 	}
 
@@ -183,7 +191,8 @@ SoundManager::SoundID SoundManager::load(const std::string& filename, const std:
 	return sid;
 }
 
-void SoundManager::unload(SoundManager::SoundID sid) {
+void SoundManager::unload(SoundManager::SoundID sid)
+{
 
 	SoundMapIterator it;
 	it = sounds.find(sid);
@@ -199,7 +208,8 @@ void SoundManager::unload(SoundManager::SoundID sid) {
 
 
 
-void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point pos, bool loop) {
+void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point pos, bool loop)
+{
 
 	SoundMapIterator it;
 	VirtualChannelMapIterator vcit = channels.end();

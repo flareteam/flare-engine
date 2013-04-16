@@ -25,15 +25,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EnemyBehavior.h"
 
-EnemyBehavior::EnemyBehavior(Enemy *_e, EnemyManager *_em) {
+EnemyBehavior::EnemyBehavior(Enemy *_e, EnemyManager *_em)
+{
 	e = _e;
 	enemies = _em;
 }
 
-void EnemyBehavior::logic() {
+void EnemyBehavior::logic()
+{
 
 }
 
-EnemyBehavior::~EnemyBehavior() {
+EnemyBehavior::~EnemyBehavior()
+{
 
 }

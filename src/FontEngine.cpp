@@ -30,13 +30,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), ttfont(NULL), line_height(0), font_height(0) {
+FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), ttfont(NULL), line_height(0), font_height(0)
+{
 }
 
 FontEngine::FontEngine()
- : ttf(NULL)
- , active_font(NULL)
- , cursor_y(0)
+	: ttf(NULL)
+	, active_font(NULL)
+	, cursor_y(0)
 {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
@@ -70,7 +71,8 @@ FontEngine::FontEngine()
 				style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
 				if(style->ttfont == NULL) {
 					printf("TTF_OpenFont: %s\n", TTF_GetError());
-				} else {
+				}
+				else {
 					style->line_height = TTF_FontLineSkip(style->ttfont);
 					style->font_height = TTF_FontLineSkip(style->ttfont);
 				}
@@ -103,7 +105,8 @@ FontEngine::FontEngine()
 	}
 }
 
-SDL_Color FontEngine::getColor(string _color) {
+SDL_Color FontEngine::getColor(string _color)
+{
 	map<string,SDL_Color>::iterator it,end;
 	for (it=color_map.begin(), end=color_map.end(); it!=end; ++it) {
 		if (_color.compare(it->first) == 0) return it->second;
@@ -112,7 +115,8 @@ SDL_Color FontEngine::getColor(string _color) {
 	return FONT_WHITE;
 }
 
-void FontEngine::setFont(string _font) {
+void FontEngine::setFont(string _font)
+{
 	for (unsigned int i=0; i<font_styles.size(); i++) {
 		if (font_styles[i].name == _font) {
 			active_font = &(font_styles[i]);
@@ -124,7 +128,8 @@ void FontEngine::setFont(string _font) {
 /**
  * For single-line text, just calculate the width
  */
-int FontEngine::calc_width(const std::string& text) {
+int FontEngine::calc_width(const std::string& text)
+{
 	int w, h;
 	TTF_SizeUTF8(active_font->ttfont, text.c_str(), &w, &h);
 	return w;
@@ -133,7 +138,8 @@ int FontEngine::calc_width(const std::string& text) {
 /**
  * Using the given wrap width, calculate the width and height necessary to display this text
  */
-Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
+Point FontEngine::calc_size(const std::string& text_with_newlines, int width)
+{
 	char newline = 10;
 
 	string text = text_with_newlines;
@@ -206,7 +212,8 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
  * Render the given text at (x,y) on the target image.
  * Justify is left, right, or center
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_Surface *target, SDL_Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_Surface *target, SDL_Color color)
+{
 	SDL_Rect dest_rect;
 
 	// calculate actual starting x,y based on justify
@@ -247,7 +254,8 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 /**
  * Word wrap to width
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_Surface *target, int width, SDL_Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_Surface *target, int width, SDL_Color color)
+{
 
 	string fulltext = text + " ";
 	cursor_y = y;
@@ -287,17 +295,20 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, SDL_Surface *target, SDL_Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, SDL_Surface *target, SDL_Color color)
+{
 	render(text, x+1, y+1, justify, target, FONT_BLACK);
 	render(text, x, y, justify, target, color);
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, SDL_Surface *target, int width, SDL_Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, SDL_Surface *target, int width, SDL_Color color)
+{
 	render(text, x+1, y+1, justify, target, width, FONT_BLACK);
 	render(text, x, y, justify, target, width, color);
 }
 
-FontEngine::~FontEngine() {
+FontEngine::~FontEngine()
+{
 	SDL_FreeSurface(ttf);
 	for (unsigned int i=0; i<font_styles.size(); ++i) TTF_CloseFont(font_styles[i].ttfont);
 	TTF_Quit();

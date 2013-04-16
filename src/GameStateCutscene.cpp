@@ -31,14 +31,16 @@ Scene::Scene() : frame_counter(0)
 {
 }
 
-Scene::~Scene() {
+Scene::~Scene()
+{
 
 	while(!components.empty())
 		components.pop();
 
 }
 
-bool Scene::logic() {
+bool Scene::logic()
+{
 
 	/* TODO: handle cancel input to skip scene */
 	bool skip = false;
@@ -62,7 +64,8 @@ bool Scene::logic() {
 			caption = components.front().s;
 			caption_size = font->calc_size(caption, VIEW_W * 0.8f);
 
-		} else if (components.front().type == "image") {
+		}
+		else if (components.front().type == "image") {
 
 			if (art)
 				SDL_FreeSurface(art);
@@ -74,7 +77,8 @@ bool Scene::logic() {
 			art_dest.w = art->w;
 			art_dest.h = art->h;
 
-		} else if (components.front().type == "soundfx") {
+		}
+		else if (components.front().type == "soundfx") {
 			if (sid != 0)
 				snd->unload(sid);
 
@@ -97,7 +101,8 @@ bool Scene::logic() {
 	return true;
 }
 
-void Scene::render() {
+void Scene::render()
+{
 	SDL_Rect r = art_dest;
 	if (art != NULL)
 		SDL_BlitSurface(art, NULL, screen, &r);
@@ -105,8 +110,8 @@ void Scene::render() {
 	if (caption != "") {
 		font->setFont("font_captions");
 		font->renderShadowed(caption, screen->w / 2, screen->h - (caption_size.y*2),
-							JUSTIFY_CENTER,
-							screen, FONT_WHITE);
+							 JUSTIFY_CENTER,
+							 screen, FONT_WHITE);
 	}
 }
 
@@ -121,10 +126,10 @@ GameStateCutscene::~GameStateCutscene()
 {
 }
 
-void GameStateCutscene::logic() {
+void GameStateCutscene::logic()
+{
 
-	if (scenes.empty())
-	{
+	if (scenes.empty()) {
 		if (game_slot != -1) {
 			GameStatePlay *gsp = new GameStatePlay();
 			gsp->resetGame();
@@ -144,12 +149,14 @@ void GameStateCutscene::logic() {
 		scenes.pop();
 }
 
-void GameStateCutscene::render() {
+void GameStateCutscene::render()
+{
 	if (!scenes.empty())
 		scenes.front().render();
 }
 
-bool GameStateCutscene::load(std::string filename) {
+bool GameStateCutscene::load(std::string filename)
+{
 	FileParser infile;
 
 	if (!infile.open(mods->locate("cutscenes/" + filename)))
@@ -165,7 +172,8 @@ bool GameStateCutscene::load(std::string filename) {
 
 		if (infile.section.empty()) {
 			// allow having an empty section (globals such as scale_gfx might be set here
-		} else if (infile.section == "scene") {
+		}
+		else if (infile.section == "scene") {
 			SceneComponent sc;
 			sc.type = "";
 
@@ -191,7 +199,8 @@ bool GameStateCutscene::load(std::string filename) {
 			if (sc.type != "")
 				scenes.back().components.push(sc);
 
-		} else {
+		}
+		else {
 			fprintf(stderr, "unknown section %s in file %s\n", infile.section.c_str(), infile.getFileName().c_str());
 		}
 		if (infile.key == "scale_gfx") {
@@ -207,7 +216,8 @@ bool GameStateCutscene::load(std::string filename) {
 	return true;
 }
 
-SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
+SDL_Surface *GameStateCutscene::loadImage(std::string filename)
+{
 
 	std::string image_file = (mods->locate("images/"+ filename));
 	SDL_Surface *image = IMG_Load(image_file.c_str());

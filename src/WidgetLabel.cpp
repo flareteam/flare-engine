@@ -28,20 +28,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-LabelInfo::LabelInfo() : x(0), y(0), justify(JUSTIFY_LEFT), valign(VALIGN_TOP), hidden(false), font_style("font_regular") {
+LabelInfo::LabelInfo() : x(0), y(0), justify(JUSTIFY_LEFT), valign(VALIGN_TOP), hidden(false), font_style("font_regular")
+{
 }
 
 /**
  * This is used in menus (e.g. MenuInventory) when parsing their config files
  */
-LabelInfo eatLabelInfo(string val) {
+LabelInfo eatLabelInfo(string val)
+{
 	LabelInfo info;
 	string justify,valign,style;
 
 	std::string tmp = eatFirstString(val,',');
 	if (tmp == "hidden") {
 		info.hidden = true;
-	} else {
+	}
+	else {
 		info.hidden = false;
 		info.x = atoi(tmp.c_str());
 		info.y = eatFirstInt(val,',');
@@ -64,14 +67,14 @@ LabelInfo eatLabelInfo(string val) {
 }
 
 WidgetLabel::WidgetLabel()
-	 : text("")
-	 , color(font->getColor("widget_normal"))
-	 , x_origin(0)
-	 , y_origin(0)
-	 , justify(JUSTIFY_LEFT)
-	 , valign(VALIGN_TOP)
-	 , font_style("font_regular")
-	 , text_buffer(NULL)
+	: text("")
+	, color(font->getColor("widget_normal"))
+	, x_origin(0)
+	, y_origin(0)
+	, justify(JUSTIFY_LEFT)
+	, valign(VALIGN_TOP)
+	, font_style("font_regular")
+	, text_buffer(NULL)
 
 {
 	bounds.x = bounds.y = 0;
@@ -83,7 +86,8 @@ WidgetLabel::WidgetLabel()
 /**
  * Draw the buffered string surface to the screen
  */
-void WidgetLabel::render(SDL_Surface *target) {
+void WidgetLabel::render(SDL_Surface *target)
+{
 	if (target == NULL) {
 		target = screen;
 	}
@@ -103,14 +107,16 @@ void WidgetLabel::render(SDL_Surface *target) {
 }
 
 
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, SDL_Color _color) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, SDL_Color _color)
+{
 	set(_x, _y, _justify, _valign, _text, _color, "font_regular");
 }
 
 /**
  * A shortcut function to set all attributes simultaneously.
  */
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, SDL_Color _color, std::string _font) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, SDL_Color _color, std::string _font)
+{
 
 	bool changed = false;
 
@@ -152,7 +158,8 @@ void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _
 /**
  * Set initial X position of label.
  */
-void WidgetLabel::setX(int _x) {
+void WidgetLabel::setX(int _x)
+{
 	if (x_origin != _x) {
 		x_origin = _x;
 		applyOffsets();
@@ -163,7 +170,8 @@ void WidgetLabel::setX(int _x) {
 /**
  * Set initial Y position of label.
  */
-void WidgetLabel::setY(int _y) {
+void WidgetLabel::setY(int _y)
+{
 	if (y_origin != _y) {
 		y_origin = _y;
 		applyOffsets();
@@ -174,21 +182,24 @@ void WidgetLabel::setY(int _y) {
 /**
  * Get X position of label.
  */
-int WidgetLabel::getX() {
+int WidgetLabel::getX()
+{
 	return x_origin;
 }
 
 /**
  * Get Y position of label.
  */
-int WidgetLabel::getY() {
+int WidgetLabel::getY()
+{
 	return y_origin;
 }
 
 /**
  * Set justify value.
  */
-void WidgetLabel::setJustify(int _justify) {
+void WidgetLabel::setJustify(int _justify)
+{
 	if (justify != _justify) {
 		justify = _justify;
 		applyOffsets();
@@ -199,7 +210,8 @@ void WidgetLabel::setJustify(int _justify) {
 /**
  * Apply horizontal justify and vertical alignment to label position
  */
-void WidgetLabel::applyOffsets() {
+void WidgetLabel::applyOffsets()
+{
 
 	font->setFont(font_style);
 
@@ -230,7 +242,8 @@ void WidgetLabel::applyOffsets() {
 /**
  * Update the label text only
  */
-void WidgetLabel::set(const string& _text) {
+void WidgetLabel::set(const string& _text)
+{
 	if (text != _text) {
 		this->text = _text;
 		applyOffsets();
@@ -242,7 +255,8 @@ void WidgetLabel::set(const string& _text) {
  * We buffer the rendered text instead of calculating it each frame
  * This function refreshes the buffer.
  */
-void WidgetLabel::refresh() {
+void WidgetLabel::refresh()
+{
 
 	SDL_FreeSurface(text_buffer);
 	text_buffer = createAlphaSurface(bounds.w, bounds.h);
@@ -252,6 +266,7 @@ void WidgetLabel::refresh() {
 }
 
 
-WidgetLabel::~WidgetLabel() {
+WidgetLabel::~WidgetLabel()
+{
 	SDL_FreeSurface(text_buffer);
 }

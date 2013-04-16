@@ -33,7 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <iostream>
 #include <sstream>
 
-CombatText::CombatText() {
+CombatText::CombatText()
+{
 	msg_color[COMBAT_MESSAGE_GIVEDMG] = font->getColor("combat_givedmg");
 	msg_color[COMBAT_MESSAGE_TAKEDMG] = font->getColor("combat_takedmg");
 	msg_color[COMBAT_MESSAGE_CRIT] = font->getColor("combat_crit");
@@ -49,7 +50,8 @@ CombatText::CombatText() {
 		while(infile.next()) {
 			if(infile.key == "duration") {
 				duration = toInt(infile.val);
-			} else if(infile.key == "speed") {
+			}
+			else if(infile.key == "speed") {
 				speed = toInt(infile.val);
 			}
 		}
@@ -57,11 +59,13 @@ CombatText::CombatText() {
 	}
 }
 
-void CombatText::setCam(Point location) {
+void CombatText::setCam(Point location)
+{
 	cam = location;
 }
 
-void CombatText::addMessage(std::string message, Point location, int displaytype) {
+void CombatText::addMessage(std::string message, Point location, int displaytype)
+{
 	if (COMBAT_TEXT) {
 		Combat_Text_Item *c = new Combat_Text_Item();
 		WidgetLabel *label = new WidgetLabel();
@@ -77,7 +81,8 @@ void CombatText::addMessage(std::string message, Point location, int displaytype
 	}
 }
 
-void CombatText::addMessage(int num, Point location, int displaytype) {
+void CombatText::addMessage(int num, Point location, int displaytype)
+{
 	if (COMBAT_TEXT) {
 		std::stringstream ss;
 		ss << num;
@@ -85,7 +90,8 @@ void CombatText::addMessage(int num, Point location, int displaytype) {
 	}
 }
 
-void CombatText::render() {
+void CombatText::render()
+{
 	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
 
 		it->lifespan--;
