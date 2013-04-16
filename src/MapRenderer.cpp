@@ -1134,7 +1134,7 @@ void MapRenderer::checkNearestEvent(Point loc) {
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
 		vector<Map_Event>::iterator it;
-		vector<Map_Event>::iterator nearest;
+		vector<Map_Event>::iterator nearest = events.end();
 		int best_distance = std::numeric_limits<int>::max();
 
 		// loop in reverse because we may erase elements
@@ -1159,8 +1159,11 @@ void MapRenderer::checkNearestEvent(Point loc) {
 				nearest = it;
 			}
 		}
-		if (executeEvent(*nearest))
-			events.erase(nearest);
+		if (nearest != events.end())
+		{
+			if(executeEvent(*nearest))
+				events.erase(nearest);
+		}
 	}
 }
 
