@@ -34,9 +34,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 WidgetSlider::WidgetSlider (const string  & fname)
-	 : sl(NULL)
+	 : enabled(true)
+	 , sl(NULL)
 	 , pressed(false)
-	 , enabled(true)
 	 , minimum(0)
 	 , maximum(0)
 	 , value(0)

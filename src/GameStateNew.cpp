@@ -176,6 +176,7 @@ GameStateNew::GameStateNew() : GameState() {
 	// Set up tab list
 	tablist.add(button_exit);
 	tablist.add(button_create);
+	tablist.add(button_permadeath);
 	tablist.add(button_prev);
 	tablist.add(button_next);
 	tablist.add(class_list);
