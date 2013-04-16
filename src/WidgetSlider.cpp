@@ -39,8 +39,7 @@ WidgetSlider::WidgetSlider (const string  & fname)
 	, pressed(false)
 	, minimum(0)
 	, maximum(0)
-	, value(0)
-{
+	, value(0) {
 	sl = loadGraphicSurface(fname);
 	if (!sl) {
 		SDL_Quit();
@@ -56,21 +55,18 @@ WidgetSlider::WidgetSlider (const string  & fname)
 	render_to_alpha = false;
 }
 
-WidgetSlider::~WidgetSlider ()
-{
+WidgetSlider::~WidgetSlider () {
 	SDL_FreeSurface(sl);
 }
 
 
-bool WidgetSlider::checkClick()
-{
+bool WidgetSlider::checkClick() {
 	if (!enabled) return false;
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
 
-bool WidgetSlider::checkClick (int x, int y)
-{
+bool WidgetSlider::checkClick (int x, int y) {
 	if (!enabled) return false;
 	Point mouse(x, y);
 	//
@@ -123,8 +119,7 @@ bool WidgetSlider::checkClick (int x, int y)
 }
 
 
-void WidgetSlider::set (int min, int max, int val)
-{
+void WidgetSlider::set (int min, int max, int val) {
 	minimum = min;
 	maximum = max;
 	value = val;
@@ -134,14 +129,12 @@ void WidgetSlider::set (int min, int max, int val)
 }
 
 
-int WidgetSlider::getValue () const
-{
+int WidgetSlider::getValue () const {
 	return value;
 }
 
 
-void WidgetSlider::render (SDL_Surface *target)
-{
+void WidgetSlider::render (SDL_Surface *target) {
 	if (target == NULL) {
 		target = screen;
 	}
@@ -188,8 +181,7 @@ void WidgetSlider::render (SDL_Surface *target)
 	}
 }
 
-bool WidgetSlider::getNext()
-{
+bool WidgetSlider::getNext() {
 	if (!enabled) return false;
 
 	value -= (maximum - minimum)/10;
@@ -202,8 +194,7 @@ bool WidgetSlider::getNext()
 	return true;
 }
 
-bool WidgetSlider::getPrev()
-{
+bool WidgetSlider::getPrev() {
 	if (!enabled) return false;
 
 	value += (maximum - minimum)/10;

@@ -51,28 +51,23 @@ AStarNode::AStarNode(const AStarNode& copy)
 	, parent(copy.parent)
 {}
 
-int AStarNode::getX() const
-{
+int AStarNode::getX() const {
 	return x;
 }
 
-int AStarNode::getY() const
-{
+int AStarNode::getY() const {
 	return y;
 }
 
-Point AStarNode::getParent() const
-{
+Point AStarNode::getParent() const {
 	return parent;
 }
 
-void AStarNode::setParent(const Point& p)
-{
+void AStarNode::setParent(const Point& p) {
 	this->parent = p;
 }
 
-std::list<Point> AStarNode::getNeighbours(int limitX, int limitY) const
-{
+std::list<Point> AStarNode::getNeighbours(int limitX, int limitY) const {
 	Point toAdd;
 	std::list<Point> res;
 	if (x>node_stride && y>node_stride) {
@@ -120,42 +115,34 @@ std::list<Point> AStarNode::getNeighbours(int limitX, int limitY) const
 }
 
 
-float AStarNode::getActualCost() const
-{
+float AStarNode::getActualCost() const {
 	return g;
 }
 
-void AStarNode::setActualCost(const float G)
-{
+void AStarNode::setActualCost(const float G) {
 	g = G;
 }
 
-void AStarNode::setEstimatedCost(const float H)
-{
+void AStarNode::setEstimatedCost(const float H) {
 	h = H;
 }
 
-float AStarNode::getFinalCost() const
-{
+float AStarNode::getFinalCost() const {
 	return g+h*2.f;
 }
 
-bool AStarNode::operator<(const AStarNode& n) const
-{
+bool AStarNode::operator<(const AStarNode& n) const {
 	return getFinalCost() < n.getFinalCost();
 }
 
-bool AStarNode::operator==(const AStarNode& n) const
-{
+bool AStarNode::operator==(const AStarNode& n) const {
 	return x == n.x && y == n.y;
 }
 
-bool AStarNode::operator==(const Point& p) const
-{
+bool AStarNode::operator==(const Point& p) const {
 	return x == p.x && y == p.y;
 }
 
-bool AStarNode::operator!=(const Point& p) const
-{
+bool AStarNode::operator!=(const Point& p) const {
 	return x != p.x || y != p.y;
 }

@@ -25,8 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 
-GameStateTitle::GameStateTitle() : GameState()
-{
+GameStateTitle::GameStateTitle() : GameState() {
 
 	exit_game = false;
 	load_game = false;
@@ -69,8 +68,7 @@ GameStateTitle::GameStateTitle() : GameState()
 	tablist.add(button_exit);
 }
 
-void GameStateTitle::logic()
-{
+void GameStateTitle::logic() {
 	button_play->enabled = ENABLE_PLAYGAME;
 
 	snd->logic(Point(0,0));
@@ -95,8 +93,7 @@ void GameStateTitle::logic()
 	}
 }
 
-void GameStateTitle::render()
-{
+void GameStateTitle::render() {
 
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -120,8 +117,7 @@ void GameStateTitle::render()
 	label_version->render();
 }
 
-GameStateTitle::~GameStateTitle()
-{
+GameStateTitle::~GameStateTitle() {
 	delete button_play;
 	delete button_cfg;
 	delete button_exit;

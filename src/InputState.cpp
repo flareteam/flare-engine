@@ -42,8 +42,7 @@ InputState::InputState(void)
 	, last_button(0)
 	, scroll_up(false)
 	, scroll_down(false)
-	, mouse_emulation(false)
-{
+	, mouse_emulation(false) {
 	SDL_EnableUNICODE(true);
 
 	defaultQwertyKeyBindings();
@@ -59,8 +58,7 @@ InputState::InputState(void)
 }
 
 
-void InputState::defaultQwertyKeyBindings ()
-{
+void InputState::defaultQwertyKeyBindings () {
 	binding[CANCEL] = SDLK_ESCAPE;
 	binding[ACCEPT] = SDLK_RETURN;
 	binding[UP] = SDLK_w;
@@ -102,8 +100,7 @@ void InputState::defaultQwertyKeyBindings ()
 	binding_alt[DEL] = SDLK_BACKSPACE;
 }
 
-void InputState::defaultJoystickBindings ()
-{
+void InputState::defaultJoystickBindings () {
 	// most joystick buttons are unbound by default
 	for (int key=0; key<key_count; key++) {
 		binding_joy[key] = -1;
@@ -122,8 +119,7 @@ void InputState::defaultJoystickBindings ()
 /**
  * Key bindings are found in config/keybindings.txt
  */
-void InputState::loadKeyBindings()
-{
+void InputState::loadKeyBindings() {
 
 	FileParser infile;
 
@@ -180,8 +176,7 @@ void InputState::loadKeyBindings()
 /**
  * Write current key bindings to config file
  */
-void InputState::saveKeyBindings()
-{
+void InputState::saveKeyBindings() {
 	ofstream outfile;
 	outfile.open((PATH_CONF + FILE_KEYBINDINGS).c_str(), ios::out);
 
@@ -220,8 +215,7 @@ void InputState::saveKeyBindings()
 
 }
 
-void InputState::handle(bool dump_event)
-{
+void InputState::handle(bool dump_event) {
 	SDL_Event event;
 
 	SDL_GetMouseState(&mouse.x, &mouse.y);
@@ -557,30 +551,26 @@ void InputState::handle(bool dump_event)
 	}
 }
 
-void InputState::resetScroll()
-{
+void InputState::resetScroll() {
 	scroll_up = false;
 	scroll_down = false;
 }
 
-void InputState::enableMouseEmulation()
-{
+void InputState::enableMouseEmulation() {
 	if (ENABLE_JOYSTICK && !mouse_emulation) {
 		mouse_emulation = true;
 		SDL_WarpMouse(VIEW_W_HALF,VIEW_H_HALF);
 	}
 }
 
-void InputState::disableMouseEmulation()
-{
+void InputState::disableMouseEmulation() {
 	if (ENABLE_JOYSTICK && mouse_emulation) {
 		mouse_emulation = false;
 		SDL_WarpMouse(VIEW_W-1,VIEW_H-1);
 	}
 }
 
-void InputState::mouseEmulation()
-{
+void InputState::mouseEmulation() {
 	if (!mouse_emulation) return;
 
 	if (pressing[UP] && my_vel > -MOUSE_EMU_VEL) my_vel--;
@@ -598,8 +588,7 @@ void InputState::mouseEmulation()
 	if (mx_vel != 0 || my_vel != 0) SDL_WarpMouse(mouse.x+mx_vel,mouse.y+my_vel);
 }
 
-void InputState::lockActionBar()
-{
+void InputState::lockActionBar() {
 	pressing[BAR_1] = false;
 	pressing[BAR_2] = false;
 	pressing[BAR_3] = false;
@@ -626,8 +615,7 @@ void InputState::lockActionBar()
 	lock[MAIN2] = true;
 }
 
-void InputState::unlockActionBar()
-{
+void InputState::unlockActionBar() {
 	lock[BAR_1] = false;
 	lock[BAR_2] = false;
 	lock[BAR_3] = false;
@@ -642,8 +630,7 @@ void InputState::unlockActionBar()
 	lock[MAIN2] = false;
 }
 
-void InputState::setKeybindNames()
-{
+void InputState::setKeybindNames() {
 	binding_name[0] = msg->get("Cancel");
 	binding_name[1] = msg->get("Accept");
 	binding_name[2] = msg->get("Up");
@@ -679,6 +666,5 @@ void InputState::setKeybindNames()
 	mouse_button[6] = msg->get("mbx2");
 }
 
-InputState::~InputState()
-{
+InputState::~InputState() {
 }

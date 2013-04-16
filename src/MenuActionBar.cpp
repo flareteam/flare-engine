@@ -40,8 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surface *_icons)
-{
+MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surface *_icons) {
 	powers = _powers;
 	hero = _hero;
 	icons = _icons;
@@ -64,8 +63,7 @@ MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surfac
 
 }
 
-void MenuActionBar::update()
-{
+void MenuActionBar::update() {
 
 	// Read data from config file
 	FileParser infile;
@@ -214,8 +212,7 @@ void MenuActionBar::update()
 	}
 }
 
-void MenuActionBar::clear()
-{
+void MenuActionBar::clear() {
 	// clear action bar
 	for (int i=0; i<12; i++) {
 		hotkeys[i] = 0;
@@ -231,8 +228,7 @@ void MenuActionBar::clear()
 
 }
 
-void MenuActionBar::loadGraphics()
-{
+void MenuActionBar::loadGraphics() {
 
 	emptyslot = loadGraphicSurface("images/menus/slot_empty.png");
 	background = loadGraphicSurface("images/menus/actionbar_trim.png");
@@ -243,8 +239,7 @@ void MenuActionBar::loadGraphics()
 /**
  * generic render small icon
  */
-void MenuActionBar::renderIcon(int icon_id, int x, int y)
-{
+void MenuActionBar::renderIcon(int icon_id, int x, int y) {
 	SDL_Rect icon_src;
 	SDL_Rect icon_dest;
 
@@ -259,8 +254,7 @@ void MenuActionBar::renderIcon(int icon_id, int x, int y)
 }
 
 // Renders the "needs attention" icon over the appropriate log menu
-void MenuActionBar::renderAttention(int menu_id)
-{
+void MenuActionBar::renderAttention(int menu_id) {
 	SDL_Rect dest;
 
 	// x-value is 12 hotkeys and 4 empty slots over
@@ -270,14 +264,12 @@ void MenuActionBar::renderAttention(int menu_id)
 	SDL_BlitSurface(attention, NULL, screen, &dest);
 }
 
-void MenuActionBar::logic()
-{
+void MenuActionBar::logic() {
 }
 
 
 
-void MenuActionBar::render()
-{
+void MenuActionBar::render() {
 
 	SDL_Rect dest;
 	SDL_Rect trimsrc;
@@ -336,8 +328,7 @@ void MenuActionBar::render()
  * Display a notification for any power on cooldown
  * Also displays disabled powers
  */
-void MenuActionBar::renderCooldowns()
-{
+void MenuActionBar::renderCooldowns() {
 
 	SDL_Rect item_src;
 	SDL_Rect item_dest;
@@ -369,8 +360,7 @@ void MenuActionBar::renderCooldowns()
 /**
  * For powers that have consumables, display the number of consumables remaining
  */
-void MenuActionBar::renderItemCounts()
-{
+void MenuActionBar::renderItemCounts() {
 
 	stringstream ss;
 
@@ -389,8 +379,7 @@ void MenuActionBar::renderItemCounts()
 /**
  * On mouseover, show tooltip for buttons
  */
-TooltipData MenuActionBar::checkTooltip(Point mouse)
-{
+TooltipData MenuActionBar::checkTooltip(Point mouse) {
 	TooltipData tip;
 
 	if (isWithin(menus[0], mouse)) {
@@ -423,8 +412,7 @@ TooltipData MenuActionBar::checkTooltip(Point mouse)
 /**
  * After dragging a power or item onto the action bar, set as new hotkey
  */
-void MenuActionBar::drop(Point mouse, int power_index, bool rearranging)
-{
+void MenuActionBar::drop(Point mouse, int power_index, bool rearranging) {
 	for (int i=0; i<12; i++) {
 		if (isWithin(slots[i], mouse)) {
 			if (rearranging) {
@@ -444,16 +432,14 @@ void MenuActionBar::drop(Point mouse, int power_index, bool rearranging)
 /**
  * Return the power to the last clicked on slot
  */
-void MenuActionBar::actionReturn(int power_index)
-{
+void MenuActionBar::actionReturn(int power_index) {
 	drop(last_mouse, power_index, 0);
 }
 
 /**
  * CTRL-click a hotkey to clear it
  */
-void MenuActionBar::remove(Point mouse)
-{
+void MenuActionBar::remove(Point mouse) {
 	for (int i=0; i<12; i++) {
 		if (isWithin(slots[i], mouse)) {
 			if (locked[i]) return;
@@ -467,8 +453,7 @@ void MenuActionBar::remove(Point mouse)
  * If pressing an action key (keyboard or mouseclick) and the power is enabled,
  * return that power's ID.
  */
-int MenuActionBar::checkAction(Point mouse)
-{
+int MenuActionBar::checkAction(Point mouse) {
 
 	// check click action
 	if ((inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) || (inpt->pressing[MAIN2] && !inpt->lock[MAIN2])) {
@@ -499,8 +484,7 @@ int MenuActionBar::checkAction(Point mouse)
 /**
  * If clicking while a menu is open, assume the player wants to rearrange the action bar
  */
-int MenuActionBar::checkDrag(Point mouse)
-{
+int MenuActionBar::checkDrag(Point mouse) {
 	int power_index;
 
 	for (int i=0; i<12; i++) {
@@ -519,8 +503,7 @@ int MenuActionBar::checkDrag(Point mouse)
 /**
  * if clicking a menu, act as if the player pressed that menu's hotkey
  */
-void MenuActionBar::checkMenu(Point mouse, bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l)
-{
+void MenuActionBar::checkMenu(Point mouse, bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
 	if ((inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) || (inpt->pressing[MAIN2] && !inpt->lock[MAIN2])) {
 		if (isWithin(menus[MENU_CHARACTER], mouse)) {
 			if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) inpt->lock[MAIN1] = true;
@@ -550,14 +533,12 @@ void MenuActionBar::checkMenu(Point mouse, bool &menu_c, bool &menu_i, bool &men
 /**
  * Set all hotkeys at once e.g. when loading a game
  */
-void MenuActionBar::set(int power_id[12])
-{
+void MenuActionBar::set(int power_id[12]) {
 	for (int i=0; i<12; i++)
 		hotkeys[i] = power_id[i];
 }
 
-MenuActionBar::~MenuActionBar()
-{
+MenuActionBar::~MenuActionBar() {
 	SDL_FreeSurface(emptyslot);
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(disabled);

@@ -25,8 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsMath.h"
 
-BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior(_e, _em)
-{
+BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior(_e, _em) {
 	los = false;
 	hero_dist = 0;
 	target_dist = 0;
@@ -36,8 +35,7 @@ BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior
 /**
  * One frame of logic for this behavior
  */
-void BehaviorStandard::logic()
-{
+void BehaviorStandard::logic() {
 
 	// skip all logic if the enemy is dead and no longer animating
 	if (e->stats.corpse) {
@@ -57,8 +55,7 @@ void BehaviorStandard::logic()
  * Various upkeep on stats
  * TODO: some of these actions could be moved to StatBlock::logic()
  */
-void BehaviorStandard::doUpkeep()
-{
+void BehaviorStandard::doUpkeep() {
 	// activate all passive powers
 	if (e->stats.hp > 0 || e->stats.effects.triggered_death) e->powers->activatePassives(&e->stats);
 
@@ -146,8 +143,7 @@ void BehaviorStandard::doUpkeep()
 /**
  * Locate the player and set various targeting info
  */
-void BehaviorStandard::findTarget()
-{
+void BehaviorStandard::findTarget() {
 	int stealth_threat_range = (e->stats.threat_range * (100 - e->stats.hero_stealth)) / 100;
 
 	// stunned enemies can't act
@@ -239,8 +235,7 @@ void BehaviorStandard::findTarget()
  * Begin using a power if idle, based on behavior % chances.
  * Activate a ready power, if the attack animation has followed through
  */
-void BehaviorStandard::checkPower()
-{
+void BehaviorStandard::checkPower() {
 
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
@@ -327,8 +322,7 @@ void BehaviorStandard::checkPower()
 /**
  * Check state changes related to movement
  */
-void BehaviorStandard::checkMove()
-{
+void BehaviorStandard::checkMove() {
 
 	// dying enemies can't move
 	if (e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD) return;
@@ -410,8 +404,7 @@ void BehaviorStandard::checkMove()
 
 }
 
-void BehaviorStandard::checkMoveStateStance()
-{
+void BehaviorStandard::checkMoveStateStance() {
 	if (hero_dist < e->stats.melee_range) {
 		// too close, do nothing
 	}
@@ -434,8 +427,7 @@ void BehaviorStandard::checkMoveStateStance()
 	}
 }
 
-void BehaviorStandard::checkMoveStateMove()
-{
+void BehaviorStandard::checkMoveStateMove() {
 	// close enough to the hero
 	if (hero_dist < e->stats.melee_range) {
 		e->newState(ENEMY_STANCE);
@@ -459,8 +451,7 @@ void BehaviorStandard::checkMoveStateMove()
  * 1) Set animations and sound effects
  * 2) Return to the default state (Stance) when actions are complete
  */
-void BehaviorStandard::updateState()
-{
+void BehaviorStandard::updateState() {
 
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;

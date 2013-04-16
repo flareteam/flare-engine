@@ -69,17 +69,14 @@ MapRenderer::MapRenderer(CampaignManager *_camp)
 	, shaky_cam_ticks(0)
 	, stash(false)
 	, stash_pos()
-	, enemies_cleared(false)
-{
+	, enemies_cleared(false) {
 }
 
-void MapRenderer::clearEvents()
-{
+void MapRenderer::clearEvents() {
 	events.clear();
 }
 
-void MapRenderer::push_enemy_group(Map_Group g)
-{
+void MapRenderer::push_enemy_group(Map_Group g) {
 	// activate at all?
 	float activate_chance = (rand() % 100) / 100.0f;
 	if (activate_chance > g.chance) {
@@ -120,8 +117,7 @@ void MapRenderer::push_enemy_group(Map_Group g)
 	}
 }
 
-int MapRenderer::load(string filename)
-{
+int MapRenderer::load(string filename) {
 	FileParser infile;
 	maprow *cur_layer = NULL;
 
@@ -187,8 +183,7 @@ int MapRenderer::load(string filename)
 	return 0;
 }
 
-void MapRenderer::loadHeader(FileParser &infile)
-{
+void MapRenderer::loadHeader(FileParser &infile) {
 	if (infile.key == "title") {
 		this->title = msg->get(infile.val);
 	}
@@ -211,8 +206,7 @@ void MapRenderer::loadHeader(FileParser &infile)
 	}
 }
 
-void MapRenderer::loadLayer(FileParser &infile, maprow **current_layer)
-{
+void MapRenderer::loadLayer(FileParser &infile, maprow **current_layer) {
 	if (infile.key == "type") {
 		*current_layer = new maprow[w];
 		if (infile.val == "background") background = *current_layer;
@@ -241,8 +235,7 @@ void MapRenderer::loadLayer(FileParser &infile, maprow **current_layer)
 	}
 }
 
-void MapRenderer::loadEnemy(FileParser &infile)
-{
+void MapRenderer::loadEnemy(FileParser &infile) {
 	if (infile.key == "type") {
 		enemies.back().type = infile.val;
 	}
@@ -276,8 +269,7 @@ void MapRenderer::loadEnemy(FileParser &infile)
 	}
 }
 
-void MapRenderer::loadEnemyGroup(FileParser &infile, Map_Group *group)
-{
+void MapRenderer::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	if (infile.key == "type") {
 		group->category = infile.val;
 	}
@@ -301,8 +293,7 @@ void MapRenderer::loadEnemyGroup(FileParser &infile, Map_Group *group)
 	}
 }
 
-void MapRenderer::loadNPC(FileParser &infile)
-{
+void MapRenderer::loadNPC(FileParser &infile) {
 	if (infile.key == "type") {
 		npcs.back().id = infile.val;
 	}
@@ -312,8 +303,7 @@ void MapRenderer::loadNPC(FileParser &infile)
 	}
 }
 
-void MapRenderer::loadEvent(FileParser &infile)
-{
+void MapRenderer::loadEvent(FileParser &infile) {
 	if (infile.key == "type") {
 		string type = infile.val;
 		events.back().type = type;
@@ -354,8 +344,7 @@ void MapRenderer::loadEvent(FileParser &infile)
 	}
 }
 
-void MapRenderer::loadEventComponent(FileParser &infile)
-{
+void MapRenderer::loadEventComponent(FileParser &infile) {
 	// new event component
 	events.back().components.push_back(Event_Component());
 	Event_Component *e = &events.back().components.back();
@@ -598,8 +587,7 @@ void MapRenderer::loadEventComponent(FileParser &infile)
 	}
 }
 
-void MapRenderer::clearQueues()
-{
+void MapRenderer::clearQueues() {
 	enemies = queue<Map_Enemy>();
 	npcs = queue<Map_NPC>();
 	loot.clear();
@@ -609,8 +597,7 @@ void MapRenderer::clearQueues()
  * No guarantee that maps will use all layers
  * Clear all tile layers (e.g. when loading a map)
  */
-void MapRenderer::clearLayers()
-{
+void MapRenderer::clearLayers() {
 	delete[] background;
 	delete[] fringe;
 	delete[] object;
@@ -627,8 +614,7 @@ void MapRenderer::clearLayers()
 	backgroundsurface = 0;
 }
 
-void MapRenderer::loadMusic(const std::string &new_music_filename)
-{
+void MapRenderer::loadMusic(const std::string &new_music_filename) {
 
 	// keep playing if already the correct track
 	if (music_filename == new_music_filename)
@@ -653,8 +639,7 @@ void MapRenderer::loadMusic(const std::string &new_music_filename)
 	}
 }
 
-void MapRenderer::logic()
-{
+void MapRenderer::logic() {
 
 	// handle camera shaking timer
 	if (shaky_cam_ticks > 0) shaky_cam_ticks--;
@@ -670,8 +655,7 @@ void MapRenderer::logic()
 
 }
 
-bool priocompare(const Renderable &r1, const Renderable &r2)
-{
+bool priocompare(const Renderable &r1, const Renderable &r2) {
 	return r1.prio < r2.prio;
 }
 
@@ -679,8 +663,7 @@ bool priocompare(const Renderable &r1, const Renderable &r2)
  * Sort in the same order as the tiles are drawn
  * Depends upon the map implementation
  */
-void calculatePriosIso(vector<Renderable> &r)
-{
+void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
 		const unsigned tilex = it->map_pos.x >> TILE_SHIFT;
 		const unsigned tiley = it->map_pos.y >> TILE_SHIFT;
@@ -688,8 +671,7 @@ void calculatePriosIso(vector<Renderable> &r)
 	}
 }
 
-void calculatePriosOrtho(vector<Renderable> &r)
-{
+void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
 		const unsigned tilex = it->map_pos.x >> TILE_SHIFT;
 		const unsigned tiley = it->map_pos.y >> TILE_SHIFT;
@@ -697,8 +679,7 @@ void calculatePriosOrtho(vector<Renderable> &r)
 	}
 }
 
-void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead)
-{
+void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 
 	if (shaky_cam_ticks == 0) {
 		shakycam.x = cam.x;
@@ -725,8 +706,7 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead)
 	}
 }
 
-void MapRenderer::createBackgroundSurface()
-{
+void MapRenderer::createBackgroundSurface() {
 	SDL_FreeSurface(backgroundsurface);
 	backgroundsurface = createSurface(
 							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
@@ -735,8 +715,7 @@ void MapRenderer::createBackgroundSurface()
 	SDL_SetColorKey(backgroundsurface, 0, 0);
 }
 
-void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor)
-{
+void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
 	if (r_cursor->sprite) {
 		SDL_Rect dest;
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
@@ -746,8 +725,7 @@ void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor)
 	}
 }
 
-void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const unsigned short layerdata[256][256])
-{
+void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const unsigned short layerdata[256][256]) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	SDL_Rect dest;
@@ -808,15 +786,13 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 	}
 }
 
-void MapRenderer::renderIsoBackObjects(vector<Renderable> &r)
-{
+void MapRenderer::renderIsoBackObjects(vector<Renderable> &r) {
 	vector<Renderable>::iterator it;
 	for (it = r.begin(); it != r.end(); ++it)
 		drawRenderable(it);
 }
 
-void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r)
-{
+void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	int_fast16_t i;
 	int_fast16_t j;
 	SDL_Rect dest;
@@ -885,8 +861,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r)
 	}
 }
 
-void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead)
-{
+void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	const Point nulloffset(0, 0);
 	if (ANIMATED_TILES) {
 		if (background) renderIsoLayer(screen, nulloffset, background);
@@ -923,8 +898,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead)
 	checkTooltip();
 }
 
-void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256])
-{
+void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 
 	const Point upperright = screen_to_map(0, 0, shakycam.x, shakycam.y);
 
@@ -952,16 +926,14 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256])
 	}
 }
 
-void MapRenderer::renderOrthoBackObjects(std::vector<Renderable> &r)
-{
+void MapRenderer::renderOrthoBackObjects(std::vector<Renderable> &r) {
 	// some renderables are drawn above the background and below the objects
 	vector<Renderable>::iterator it;
 	for (it = r.begin(); it != r.end(); ++it)
 		drawRenderable(it);
 }
 
-void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r)
-{
+void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	short int i;
 	short int j;
@@ -1003,8 +975,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r)
 	}
 }
 
-void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead)
-{
+void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	if (background) renderOrthoLayer(background);
 	if (fringe) renderOrthoLayer(fringe);
 	if (object) renderOrthoBackObjects(r_dead);
@@ -1014,8 +985,7 @@ void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead)
 	checkTooltip();
 }
 
-void MapRenderer::executeOnLoadEvents()
-{
+void MapRenderer::executeOnLoadEvents() {
 	vector<Map_Event>::iterator it;
 
 	// loop in reverse because we may erase elements
@@ -1033,8 +1003,7 @@ void MapRenderer::executeOnLoadEvents()
 }
 
 
-void MapRenderer::checkEvents(Point loc)
-{
+void MapRenderer::checkEvents(Point loc) {
 	Point maploc;
 	maploc.x = loc.x >> TILE_SHIFT;
 	maploc.y = loc.y >> TILE_SHIFT;
@@ -1070,8 +1039,7 @@ void MapRenderer::checkEvents(Point loc)
  * This function checks valid mouse clicks against all clickable events, and
  * executes
  */
-void MapRenderer::checkHotspots()
-{
+void MapRenderer::checkHotspots() {
 	show_tooltip = false;
 
 	vector<Map_Event>::iterator it;
@@ -1174,8 +1142,7 @@ void MapRenderer::checkHotspots()
 	}
 }
 
-void MapRenderer::checkNearestEvent(Point loc)
-{
+void MapRenderer::checkNearestEvent(Point loc) {
 	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
@@ -1212,8 +1179,7 @@ void MapRenderer::checkNearestEvent(Point loc)
 	}
 }
 
-bool MapRenderer::isActive(const Map_Event &e)
-{
+bool MapRenderer::isActive(const Map_Event &e) {
 	for (unsigned i=0; i < e.components.size(); i++) {
 		if (e.components[i].type == "requires_not") {
 			if (camp->checkStatus(e.components[i].s)) {
@@ -1244,8 +1210,7 @@ bool MapRenderer::isActive(const Map_Event &e)
 	return true;
 }
 
-void MapRenderer::checkTooltip()
-{
+void MapRenderer::checkTooltip() {
 	if (show_tooltip)
 		tip->render(tip_buf, tip_pos, STYLE_TOPLABEL);
 }
@@ -1257,8 +1222,7 @@ void MapRenderer::checkTooltip()
  * @param The triggered event
  * @return Returns true if the event shall not be run again.
  */
-bool MapRenderer::executeEvent(Map_Event &ev)
-{
+bool MapRenderer::executeEvent(Map_Event &ev) {
 	if(&ev == NULL) return false;
 
 	// skip executing events that are on cooldown
@@ -1435,8 +1399,7 @@ bool MapRenderer::executeEvent(Map_Event &ev)
 	return (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event);
 }
 
-MapRenderer::~MapRenderer()
-{
+MapRenderer::~MapRenderer() {
 	if (music != NULL) {
 		Mix_HaltMusic();
 		Mix_FreeMusic(music);

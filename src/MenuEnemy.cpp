@@ -35,8 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuEnemy::MenuEnemy()
-{
+MenuEnemy::MenuEnemy() {
 	custom_text_pos = false;
 
 	// Load config settings
@@ -66,27 +65,23 @@ MenuEnemy::MenuEnemy()
 	color_normal = font->getColor("menu_normal");
 }
 
-void MenuEnemy::loadGraphics()
-{
+void MenuEnemy::loadGraphics() {
 	background = loadGraphicSurface("images/menus/enemy_bar.png");
 	bar_hp = loadGraphicSurface("images/menus/enemy_bar_hp.png");
 }
 
-void MenuEnemy::handleNewMap()
-{
+void MenuEnemy::handleNewMap() {
 	enemy = NULL;
 }
 
-void MenuEnemy::logic()
-{
+void MenuEnemy::logic() {
 
 	// after a fixed amount of time, hide the enemy display
 	if (timeout > 0) timeout--;
 	if (timeout == 0) enemy = NULL;
 }
 
-void MenuEnemy::render()
-{
+void MenuEnemy::render() {
 	if (enemy == NULL) return;
 	if (enemy->stats.corpse && enemy->stats.corpse_ticks == 0) return;
 
@@ -142,8 +137,7 @@ void MenuEnemy::render()
 	//SDL_UpdateRects(screen, 1, &dest);
 }
 
-MenuEnemy::~MenuEnemy()
-{
+MenuEnemy::~MenuEnemy() {
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(bar_hp);
 }

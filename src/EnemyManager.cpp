@@ -38,14 +38,12 @@ EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
 	, powers(_powers)
 	, enemies()
 	, hero_alive(true)
-	, hero_stealth(0)
-{
+	, hero_stealth(0) {
 	hero_pos.x = hero_pos.y = -1;
 	handleNewMap();
 }
 
-void EnemyManager::loadSounds(const string& type_id)
-{
+void EnemyManager::loadSounds(const string& type_id) {
 
 	// first check to make sure the sfx isn't already loaded
 	if (find(sfx_prefixes.begin(), sfx_prefixes.end(), type_id) != sfx_prefixes.end())
@@ -69,16 +67,14 @@ void EnemyManager::loadSounds(const string& type_id)
 	sfx_prefixes.push_back(type_id);
 }
 
-void EnemyManager::loadAnimations(Enemy *e)
-{
+void EnemyManager::loadAnimations(Enemy *e) {
 	string animationsname = "animations/enemies/"+e->stats.animations + ".txt";
 	anim->increaseCount(animationsname);
 	e->animationSet = anim->getAnimationSet(animationsname);
 	e->activeAnimation = e->animationSet->getAnimation();
 }
 
-Enemy *EnemyManager::getEnemyPrototype(const string& type_id)
-{
+Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 	for (size_t i = 0; i < prototypes.size(); i++)
 		if (prototypes[i].type == type_id) {
 			string animationsname = "animations/enemies/"+prototypes[i].stats.animations + ".txt";
@@ -109,8 +105,7 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id)
  * When loading a new map, we eliminate existing enemies and load the new ones.
  * The map will have loaded Entity blocks into an array; retrieve the Enemies and init them
  */
-void EnemyManager::handleNewMap ()
-{
+void EnemyManager::handleNewMap () {
 
 	Map_Enemy me;
 	std::queue<Enemy *> allies;
@@ -185,8 +180,7 @@ void EnemyManager::handleNewMap ()
  * Powers can cause new enemies to spawn
  * Check PowerManager for any new queued enemies
  */
-void EnemyManager::handleSpawn()
-{
+void EnemyManager::handleSpawn() {
 
 	Map_Enemy espawn;
 
@@ -264,8 +258,7 @@ void EnemyManager::handleSpawn()
 	}
 }
 
-void EnemyManager::handlePartyBuff()
-{
+void EnemyManager::handlePartyBuff() {
 	while (!powers->party_buffs.empty()) {
 		int power_index = powers->party_buffs.front();
 		powers->party_buffs.pop();
@@ -282,8 +275,7 @@ void EnemyManager::handlePartyBuff()
 /**
  * perform logic() for all enemies
  */
-void EnemyManager::logic()
-{
+void EnemyManager::logic() {
 
 	handleSpawn();
 
@@ -333,8 +325,7 @@ void EnemyManager::logic()
 	}
 }
 
-Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only)
-{
+Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
 	Point p;
 	SDL_Rect r;
 	for(unsigned int i = 0; i < enemies.size(); i++) {
@@ -359,8 +350,7 @@ Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only)
 /**
  * If an enemy has died, reward the hero with experience points
  */
-void EnemyManager::checkEnemiesforXP(CampaignManager *camp)
-{
+void EnemyManager::checkEnemiesforXP(CampaignManager *camp) {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		if (enemies[i]->reward_xp) {
 			//adjust for party exp if necessary
@@ -374,8 +364,7 @@ void EnemyManager::checkEnemiesforXP(CampaignManager *camp)
 	}
 }
 
-bool EnemyManager::isCleared()
-{
+bool EnemyManager::isCleared() {
 	if (enemies.empty()) return true;
 
 	for (unsigned int i=0; i < enemies.size(); i++) {
@@ -390,8 +379,7 @@ bool EnemyManager::isCleared()
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-void EnemyManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead)
-{
+void EnemyManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
 		bool dead = (*it)->stats.corpse;
@@ -416,8 +404,7 @@ void EnemyManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead)
 	}
 }
 
-EnemyManager::~EnemyManager()
-{
+EnemyManager::~EnemyManager() {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		anim->decreaseCount(enemies[i]->animationSet->getName());
 		delete enemies[i];

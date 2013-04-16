@@ -26,8 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-ModManager::ModManager()
-{
+ModManager::ModManager() {
 	loc_cache.clear();
 	mod_list.clear();
 
@@ -44,8 +43,7 @@ ModManager::ModManager()
  * One mod folder name per line
  * Later mods override previous mods
  */
-void ModManager::loadModList()
-{
+void ModManager::loadModList() {
 	ifstream infile;
 	string line;
 	string starts_with;
@@ -118,8 +116,7 @@ void ModManager::loadModList()
  * Find the location (mod file name) for this data file.
  * Use private loc_cache to prevent excessive disk I/O
  */
-string ModManager::locate(const string& filename)
-{
+string ModManager::locate(const string& filename) {
 
 	// if we have this location already cached, return it
 	if (loc_cache.find(filename) != loc_cache.end()) {
@@ -146,6 +143,5 @@ string ModManager::locate(const string& filename)
 	return PATH_DATA + filename;
 }
 
-ModManager::~ModManager()
-{
+ModManager::~ModManager() {
 }

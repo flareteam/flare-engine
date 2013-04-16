@@ -73,8 +73,7 @@ MenuStash::MenuStash(ItemManager *_items, StatBlock *_stats)
 	STASH_SLOTS = slots_cols * slots_rows;
 }
 
-void MenuStash::update()
-{
+void MenuStash::update() {
 	slots_area.x += window_area.x;
 	slots_area.y += window_area.y;
 	slots_area.w = slots_cols*ICON_SIZE;
@@ -86,8 +85,7 @@ void MenuStash::update()
 	closeButton->pos.y = window_area.y+close_pos.y;
 }
 
-void MenuStash::logic()
-{
+void MenuStash::logic() {
 	if (!visible) return;
 
 	if (closeButton->checkClick()) {
@@ -96,8 +94,7 @@ void MenuStash::logic()
 	}
 }
 
-void MenuStash::render()
-{
+void MenuStash::render() {
 	if (!visible) return;
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -128,8 +125,7 @@ void MenuStash::render()
 /**
  * Dragging and dropping an item can be used to rearrange the stash
  */
-void MenuStash::drop(Point mouse, ItemStack stack)
-{
+void MenuStash::drop(Point mouse, ItemStack stack) {
 	int slot;
 	int drag_prev_slot;
 
@@ -162,8 +158,7 @@ void MenuStash::drop(Point mouse, ItemStack stack)
 
 }
 
-void MenuStash::add(ItemStack stack, int slot)
-{
+void MenuStash::add(ItemStack stack, int slot) {
 
 	if (stack.item != 0) {
 		int max_quantity = items->items[stack.item].max_quantity;
@@ -208,8 +203,7 @@ void MenuStash::add(ItemStack stack, int slot)
  * Start dragging a vendor item
  * Players can drag an item to their inventory.
  */
-ItemStack MenuStash::click(InputState * input)
-{
+ItemStack MenuStash::click(InputState * input) {
 	ItemStack stack = stock.click(input);
 	return stack;
 }
@@ -217,30 +211,25 @@ ItemStack MenuStash::click(InputState * input)
 /**
  * Cancel the dragging initiated by the click()
  */
-void MenuStash::itemReturn(ItemStack stack)
-{
+void MenuStash::itemReturn(ItemStack stack) {
 	stock.itemReturn(stack);
 }
 
-void MenuStash::add(ItemStack stack)
-{
+void MenuStash::add(ItemStack stack) {
 	items->playSound(stack.item);
 
 	stock.add(stack);
 }
 
-TooltipData MenuStash::checkTooltip(Point mouse)
-{
+TooltipData MenuStash::checkTooltip(Point mouse) {
 	return stock.checkTooltip( mouse, stats, PLAYER_INV);
 }
 
-bool MenuStash::full(int item)
-{
+bool MenuStash::full(int item) {
 	return stock.full(item);
 }
 
-MenuStash::~MenuStash()
-{
+MenuStash::~MenuStash() {
 	SDL_FreeSurface(background);
 	delete closeButton;
 }

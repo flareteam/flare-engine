@@ -34,8 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-class Action
-{
+class Action {
 public:
 	Action(std::string _id = "", std::string _label="")
 		: id(_id)
@@ -74,8 +73,7 @@ MenuNPCActions::MenuNPCActions()
 	, dialog_selected(false)
 	, vendor_selected(false)
 	, cancel_selected(false)
-	, selected_dialog_node(-1)
-{
+	, selected_dialog_node(-1) {
 	// Load config settings
 	FileParser infile;
 	if(infile.open(mods->locate("menus/npc.txt"))) {
@@ -123,8 +121,7 @@ MenuNPCActions::MenuNPCActions()
 	}
 }
 
-void MenuNPCActions::update()
-{
+void MenuNPCActions::update() {
 	if (action_menu)
 		SDL_FreeSurface(action_menu);
 
@@ -211,8 +208,7 @@ void MenuNPCActions::update()
 
 }
 
-void MenuNPCActions::setNPC(NPC *pnpc)
-{
+void MenuNPCActions::setNPC(NPC *pnpc) {
 
 	// clear actions menu
 	npc_actions.clear();
@@ -287,18 +283,15 @@ void MenuNPCActions::setNPC(NPC *pnpc)
 
 }
 
-bool MenuNPCActions::empty()
-{
+bool MenuNPCActions::empty() {
 	return is_empty;
 }
 
-bool MenuNPCActions::selection()
-{
+bool MenuNPCActions::selection() {
 	return is_selected;
 }
 
-void MenuNPCActions::logic()
-{
+void MenuNPCActions::logic() {
 	if (!visible) return;
 
 	if (inpt->lock[MAIN1])
@@ -355,8 +348,7 @@ void MenuNPCActions::logic()
 
 }
 
-void MenuNPCActions::render()
-{
+void MenuNPCActions::render() {
 	if (!visible) return;
 
 	if (!action_menu) return;
@@ -365,8 +357,7 @@ void MenuNPCActions::render()
 
 }
 
-MenuNPCActions::~MenuNPCActions()
-{
+MenuNPCActions::~MenuNPCActions() {
 	SDL_FreeSurface(action_menu);
 }
 

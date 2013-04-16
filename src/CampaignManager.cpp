@@ -46,8 +46,7 @@ CampaignManager::CampaignManager()
 	, quest_update(true)
 {}
 
-void CampaignManager::clearAll()
-{
+void CampaignManager::clearAll() {
 	// clear campaign data
 	status.clear();
 }
@@ -55,8 +54,7 @@ void CampaignManager::clearAll()
 /**
  * Take the savefile campaign= and convert to status array
  */
-void CampaignManager::setAll(std::string s)
-{
+void CampaignManager::setAll(std::string s) {
 	string str = s + ',';
 	string token;
 	while (str != "") {
@@ -69,8 +67,7 @@ void CampaignManager::setAll(std::string s)
 /**
  * Convert status array to savefile campaign= (status csv)
  */
-std::string CampaignManager::getAll()
-{
+std::string CampaignManager::getAll() {
 	stringstream ss;
 	ss.str("");
 	for (unsigned int i=0; i < status.size(); i++) {
@@ -80,8 +77,7 @@ std::string CampaignManager::getAll()
 	return ss.str();
 }
 
-bool CampaignManager::checkStatus(std::string s)
-{
+bool CampaignManager::checkStatus(std::string s) {
 
 	// avoid searching empty statuses
 	if (s == "") return false;
@@ -92,8 +88,7 @@ bool CampaignManager::checkStatus(std::string s)
 	return false;
 }
 
-void CampaignManager::setStatus(std::string s)
-{
+void CampaignManager::setStatus(std::string s) {
 
 	// avoid adding empty statuses
 	if (s == "") return;
@@ -106,8 +101,7 @@ void CampaignManager::setStatus(std::string s)
 	hero->check_title = true;
 }
 
-void CampaignManager::unsetStatus(std::string s)
-{
+void CampaignManager::unsetStatus(std::string s) {
 
 	// avoid searching empty statuses
 	if (s == "") return;
@@ -125,18 +119,15 @@ void CampaignManager::unsetStatus(std::string s)
 	}
 }
 
-bool CampaignManager::checkItem(int item_id)
-{
+bool CampaignManager::checkItem(int item_id) {
 	return carried_items->contain(item_id);
 }
 
-void CampaignManager::removeItem(int item_id)
-{
+void CampaignManager::removeItem(int item_id) {
 	carried_items->remove(item_id);
 }
 
-void CampaignManager::rewardItem(ItemStack istack)
-{
+void CampaignManager::rewardItem(ItemStack istack) {
 
 	if (carried_items->full(istack.item)) {
 		drop_stack.item = istack.item;
@@ -154,22 +145,19 @@ void CampaignManager::rewardItem(ItemStack istack)
 	}
 }
 
-void CampaignManager::rewardCurrency(int amount)
-{
+void CampaignManager::rewardCurrency(int amount) {
 	*currency += amount;
 	addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
 	LootManager::getInstance()->playCurrencySound();
 }
 
-void CampaignManager::rewardXP(int amount, bool show_message)
-{
+void CampaignManager::rewardXP(int amount, bool show_message) {
 	hero->xp += (amount * (100 + hero->effects.bonus_xp)) / 100;
 	hero->refresh_stats = true;
 	if (show_message) addMsg(msg->get("You receive %d XP.", amount));
 }
 
-void CampaignManager::restoreHPMP(std::string s)
-{
+void CampaignManager::restoreHPMP(std::string s) {
 	if (s == "hp") {
 		hero->hp = hero->maxhp;
 		addMsg(msg->get("HP restored."));
@@ -195,12 +183,10 @@ void CampaignManager::restoreHPMP(std::string s)
 	}
 }
 
-void CampaignManager::addMsg(const string& new_msg)
-{
+void CampaignManager::addMsg(const string& new_msg) {
 	if (log_msg != "") log_msg += " ";
 	log_msg += new_msg;
 }
 
-CampaignManager::~CampaignManager()
-{
+CampaignManager::~CampaignManager() {
 }

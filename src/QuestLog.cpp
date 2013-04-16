@@ -37,8 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-QuestLog::QuestLog(CampaignManager *_camp, MenuLog *_log)
-{
+QuestLog::QuestLog(CampaignManager *_camp, MenuLog *_log) {
 	camp = _camp;
 	log = _log;
 
@@ -47,15 +46,13 @@ QuestLog::QuestLog(CampaignManager *_camp, MenuLog *_log)
 	loadAll();
 }
 
-QuestLog::~QuestLog()
-{
+QuestLog::~QuestLog() {
 }
 
 /**
  * Load each [mod]/quests/index.txt file
  */
-void QuestLog::loadAll()
-{
+void QuestLog::loadAll() {
 	string test_path;
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
@@ -83,8 +80,7 @@ void QuestLog::loadAll()
  *
  * @param filename The full path and filename to the [mod]/quests/index.txt file
  */
-void QuestLog::loadIndex(const std::string& filename)
-{
+void QuestLog::loadIndex(const std::string& filename) {
 	ifstream infile;
 	string line;
 
@@ -109,8 +105,7 @@ void QuestLog::loadIndex(const std::string& filename)
  *
  * @param filename The quest file name and extension, no path
  */
-void QuestLog::load(const std::string& filename)
-{
+void QuestLog::load(const std::string& filename) {
 	FileParser infile;
 	if (!infile.open(mods->locate("quests/" + filename)))
 		return;
@@ -128,8 +123,7 @@ void QuestLog::load(const std::string& filename)
 	infile.close();
 }
 
-void QuestLog::logic()
-{
+void QuestLog::logic() {
 	if (camp->quest_update) {
 		resetQuestNotification = true;
 		camp->quest_update = false;
@@ -140,8 +134,7 @@ void QuestLog::logic()
 /**
  * All active quests are placed in the Quest tab of the Log Menu
  */
-void QuestLog::createQuestList()
-{
+void QuestLog::createQuestList() {
 	log->clear(LOG_TYPE_QUESTS);
 
 	for (unsigned int i=0; i<quests.size(); i++) {

@@ -27,8 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuHUDLog::MenuHUDLog()
-{
+MenuHUDLog::MenuHUDLog() {
 
 	list_area.x = 224;
 	list_area.y = 416;
@@ -42,8 +41,7 @@ MenuHUDLog::MenuHUDLog()
  * Calculate how long a given message should remain on the HUD
  * Formula: minimum time plus x frames per character
  */
-int MenuHUDLog::calcDuration(const string& s)
-{
+int MenuHUDLog::calcDuration(const string& s) {
 	// 5 seconds plus an extra second per 10 letters
 	return MAX_FRAMES_PER_SEC * 5 + s.length() * (MAX_FRAMES_PER_SEC/10);
 }
@@ -52,8 +50,7 @@ int MenuHUDLog::calcDuration(const string& s)
  * Perform one frame of logic
  * Age messages
  */
-void MenuHUDLog::logic()
-{
+void MenuHUDLog::logic() {
 	for (unsigned i=0; i<msg_age.size(); i++) {
 		if (msg_age[i] > 0)
 			msg_age[i]--;
@@ -66,8 +63,7 @@ void MenuHUDLog::logic()
 /**
  * New messages appear on the screen for a brief time
  */
-void MenuHUDLog::render()
-{
+void MenuHUDLog::render() {
 
 	SDL_Rect dest;
 	dest.x = window_area.x;
@@ -89,8 +85,7 @@ void MenuHUDLog::render()
 /**
  * Add a new message to the log
  */
-void MenuHUDLog::add(const string& s)
-{
+void MenuHUDLog::add(const string& s) {
 
 	// add new message
 	log_msg.push_back(s);
@@ -113,16 +108,14 @@ void MenuHUDLog::add(const string& s)
 /**
  * Remove the given message from the list
  */
-void MenuHUDLog::remove(int msg_index)
-{
+void MenuHUDLog::remove(int msg_index) {
 	SDL_FreeSurface(msg_buffer.at(msg_index));
 	msg_buffer.erase(msg_buffer.begin()+msg_index);
 	msg_age.erase(msg_age.begin()+msg_index);
 	log_msg.erase(log_msg.begin()+msg_index);
 }
 
-void MenuHUDLog::clear()
-{
+void MenuHUDLog::clear() {
 	for (unsigned i=0; i<msg_buffer.size(); i++) {
 		SDL_FreeSurface(msg_buffer[i]);
 	}
@@ -131,8 +124,7 @@ void MenuHUDLog::clear()
 	log_msg.clear();
 }
 
-MenuHUDLog::~MenuHUDLog()
-{
+MenuHUDLog::~MenuHUDLog() {
 	for (unsigned i=0; i<msg_buffer.size(); i++) {
 		SDL_FreeSurface(msg_buffer[i]);
 	}

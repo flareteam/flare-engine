@@ -25,8 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-WidgetScrollBox::WidgetScrollBox(int width, int height)
-{
+WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	pos.x = pos.y = 0;
 	pos.w = width;
 	pos.h = height;
@@ -40,14 +39,12 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	resize(height);
 }
 
-WidgetScrollBox::~WidgetScrollBox()
-{
+WidgetScrollBox::~WidgetScrollBox() {
 	if (contents != NULL) SDL_FreeSurface(contents);
 	delete scrollbar;
 }
 
-void WidgetScrollBox::scroll(int amount)
-{
+void WidgetScrollBox::scroll(int amount) {
 	cursor += amount;
 	if (cursor < 0) {
 		cursor = 0;
@@ -58,21 +55,18 @@ void WidgetScrollBox::scroll(int amount)
 	refresh();
 }
 
-Point WidgetScrollBox::input_assist(Point mouse)
-{
+Point WidgetScrollBox::input_assist(Point mouse) {
 	Point new_mouse;
 	new_mouse.x = mouse.x-pos.x;
 	new_mouse.y = mouse.y-pos.y+cursor;
 	return new_mouse;
 }
 
-void WidgetScrollBox::logic()
-{
+void WidgetScrollBox::logic() {
 	logic(inpt->mouse.x,inpt->mouse.y);
 }
 
-void WidgetScrollBox::logic(int x, int y)
-{
+void WidgetScrollBox::logic(int x, int y) {
 	Point mouse(x, y);
 
 	if (isWithin(pos,mouse)) {
@@ -107,8 +101,7 @@ void WidgetScrollBox::logic(int x, int y)
 	}
 }
 
-void WidgetScrollBox::resize(int h)
-{
+void WidgetScrollBox::resize(int h) {
 	if (contents != NULL) SDL_FreeSurface(contents);
 
 	if (pos.h > h) h = pos.h;
@@ -122,8 +115,7 @@ void WidgetScrollBox::resize(int h)
 	refresh();
 }
 
-void WidgetScrollBox::refresh()
-{
+void WidgetScrollBox::refresh() {
 	if (update) {
 		int h = pos.h;
 		if (contents != NULL) {
@@ -141,8 +133,7 @@ void WidgetScrollBox::refresh()
 	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor, contents->h-pos.h-scrollbar->pos_knob.h);
 }
 
-void WidgetScrollBox::render(SDL_Surface *target)
-{
+void WidgetScrollBox::render(SDL_Surface *target) {
 	if (target == NULL) {
 		target = screen;
 	}

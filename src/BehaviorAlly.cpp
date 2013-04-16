@@ -4,16 +4,13 @@
 const unsigned short MINIMUM_FOLLOW_DISTANCE = 200;
 const unsigned short MAXIMUM_FOLLOW_DISTANCE = 2000;
 
-BehaviorAlly::BehaviorAlly(Enemy *_e, EnemyManager *_em) : BehaviorStandard(_e, _em)
-{
+BehaviorAlly::BehaviorAlly(Enemy *_e, EnemyManager *_em) : BehaviorStandard(_e, _em) {
 }
 
-BehaviorAlly::~BehaviorAlly()
-{
+BehaviorAlly::~BehaviorAlly() {
 }
 
-void BehaviorAlly::findTarget()
-{
+void BehaviorAlly::findTarget() {
 	// stunned minions can't act
 	if (e->stats.effects.stun) return;
 
@@ -78,8 +75,7 @@ void BehaviorAlly::findTarget()
 
 }
 
-void BehaviorAlly::checkMoveStateStance()
-{
+void BehaviorAlly::checkMoveStateStance() {
 
 	if(e->stats.in_combat && target_dist > e->stats.melee_range)
 		e->newState(ENEMY_MOVE);
@@ -101,8 +97,7 @@ void BehaviorAlly::checkMoveStateStance()
 	}
 }
 
-void BehaviorAlly::checkMoveStateMove()
-{
+void BehaviorAlly::checkMoveStateMove() {
 	//if close enough to hero, stop miving
 	if(hero_dist < MINIMUM_FOLLOW_DISTANCE && !e->stats.in_combat) {
 		e->newState(ENEMY_STANCE);

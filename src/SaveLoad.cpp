@@ -51,8 +51,7 @@ using namespace std;
 /**
  * Before exiting the game, save to file
  */
-void GameStatePlay::saveGame()
-{
+void GameStatePlay::saveGame() {
 
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
@@ -177,8 +176,7 @@ void GameStatePlay::saveGame()
 /**
  * When loading the game, load from file if possible
  */
-void GameStatePlay::loadGame()
-{
+void GameStatePlay::loadGame() {
 	int saved_hp = 0;
 	int saved_mp = 0;
 
@@ -368,8 +366,7 @@ void GameStatePlay::loadGame()
 /**
  * Load a class definition, index
  */
-void GameStatePlay::loadClass(int index)
-{
+void GameStatePlay::loadClass(int index) {
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
 
@@ -402,8 +399,7 @@ void GameStatePlay::loadClass(int index)
 /*
  * This is used to load the stash when starting a new game
  */
-void GameStatePlay::loadStash()
-{
+void GameStatePlay::loadStash() {
 	// Load stash
 	FileParser infile;
 	stringstream ss;

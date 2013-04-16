@@ -40,14 +40,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 MenuPowers *menuPowers = NULL;
-MenuPowers *MenuPowers::getInstance()
-{
+MenuPowers *MenuPowers::getInstance() {
 	return menuPowers;
 }
 
 
-MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons)
-{
+MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons) {
 
 	int id;
 
@@ -185,8 +183,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 	color_penalty = font->getColor("menu_penalty");
 }
 
-void MenuPowers::update()
-{
+void MenuPowers::update() {
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		slots[i].w = slots[i].h = ICON_SIZE;
 		slots[i].x = window_area.x + power_cell[i].pos.x;
@@ -214,8 +211,7 @@ void MenuPowers::update()
 	}
 }
 
-void MenuPowers::loadGraphics()
-{
+void MenuPowers::loadGraphics() {
 
 	background = loadGraphicSurface("images/menus/powers.png");
 	powers_unlock = loadGraphicSurface("images/menus/powers_unlock.png");
@@ -233,8 +229,7 @@ void MenuPowers::loadGraphics()
 /**
  * generic render 32-pixel icon
  */
-void MenuPowers::renderIcon(int icon_id, int x, int y)
-{
+void MenuPowers::renderIcon(int icon_id, int x, int y) {
 	SDL_Rect icon_src;
 	SDL_Rect icon_dest;
 
@@ -249,8 +244,7 @@ void MenuPowers::renderIcon(int icon_id, int x, int y)
 	SDL_BlitSurface(icons, &icon_src, screen, &icon_dest);
 }
 
-short MenuPowers::id_by_powerIndex(short power_index)
-{
+short MenuPowers::id_by_powerIndex(short power_index) {
 	// Find cell with our power
 	for (unsigned i=0; i<power_cell.size(); i++)
 		if (power_cell[i].id == power_index)
@@ -259,8 +253,7 @@ short MenuPowers::id_by_powerIndex(short power_index)
 	return -1;
 }
 
-bool MenuPowers::baseRequirementsMet(int power_index)
-{
+bool MenuPowers::baseRequirementsMet(int power_index) {
 	int id = id_by_powerIndex(power_index);
 
 	if ((stats->physoff() >= power_cell[id].requires_physoff) &&
@@ -279,8 +272,7 @@ bool MenuPowers::baseRequirementsMet(int power_index)
 /**
  * With great power comes great stat requirements.
  */
-bool MenuPowers::requirementsMet(int power_index)
-{
+bool MenuPowers::requirementsMet(int power_index) {
 
 	// power_index can be 0 during recursive call if requires_power is not defined.
 	// Power with index 0 doesn't exist and is always enabled
@@ -302,8 +294,7 @@ bool MenuPowers::requirementsMet(int power_index)
 /**
  * Check if we can unlock power.
  */
-bool MenuPowers::powerUnlockable(int power_index)
-{
+bool MenuPowers::powerUnlockable(int power_index) {
 
 	// power_index can be 0 during recursive call if requires_power is not defined.
 	// Power with index 0 doesn't exist and is always enabled
@@ -326,8 +317,7 @@ bool MenuPowers::powerUnlockable(int power_index)
 /**
  * Click-to-drag a power (to the action bar)
  */
-int MenuPowers::click(Point mouse)
-{
+int MenuPowers::click(Point mouse) {
 
 	// if we have tabControl
 	if (tabs_count > 1) {
@@ -354,8 +344,7 @@ int MenuPowers::click(Point mouse)
 /**
  * Unlock a power
  */
-bool MenuPowers::unlockClick(Point mouse)
-{
+bool MenuPowers::unlockClick(Point mouse) {
 
 	// if we have tabCOntrol
 	if (tabs_count > 1) {
@@ -385,8 +374,7 @@ bool MenuPowers::unlockClick(Point mouse)
 	return false;
 }
 
-void MenuPowers::logic()
-{
+void MenuPowers::logic() {
 	short points_used = 0;
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		if (powers->powers[power_cell[i].id].passive) {
@@ -424,8 +412,7 @@ void MenuPowers::logic()
 	if (tabs_count > 1) tabControl->logic();
 }
 
-void MenuPowers::render()
-{
+void MenuPowers::render() {
 	if (!visible) return;
 
 	SDL_Rect src;
@@ -478,8 +465,7 @@ void MenuPowers::render()
 /**
  * Highlight unlocked powers
  */
-void MenuPowers::displayBuild(int power_id)
-{
+void MenuPowers::displayBuild(int power_id) {
 	SDL_Rect src_unlock;
 
 	src_unlock.x = 0;
@@ -497,8 +483,7 @@ void MenuPowers::displayBuild(int power_id)
 /**
  * Show mouseover descriptions of disciplines and powers
  */
-TooltipData MenuPowers::checkTooltip(Point mouse)
-{
+TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 	TooltipData tip;
 
@@ -626,8 +611,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse)
 	return tip;
 }
 
-MenuPowers::~MenuPowers()
-{
+MenuPowers::~MenuPowers() {
 	SDL_FreeSurface(background);
 	for (unsigned int i=0; i<tree_surf.size(); i++) SDL_FreeSurface(tree_surf[i]);
 	SDL_FreeSurface(powers_unlock);
@@ -641,8 +625,7 @@ MenuPowers::~MenuPowers()
 /**
  * Return true if required stats for power usage are met. Else return false.
  */
-bool MenuPowers::meetsUsageStats(unsigned powerid)
-{
+bool MenuPowers::meetsUsageStats(unsigned powerid) {
 
 	// Find cell with our power
 	int id = id_by_powerIndex(powerid);
@@ -659,8 +642,7 @@ bool MenuPowers::meetsUsageStats(unsigned powerid)
 		   && stats->get_physical() >= power_cell[id].requires_physical;
 }
 
-void MenuPowers::renderPowers(int tab_num)
-{
+void MenuPowers::renderPowers(int tab_num) {
 
 	SDL_Rect disabled_src;
 	disabled_src.x = disabled_src.y = 0;

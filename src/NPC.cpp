@@ -57,8 +57,7 @@ NPC::NPC(MapRenderer *_map, ItemManager *_items)
 	, stock_count(0)
 	, vox_intro()
 	, vox_quests()
-	, dialog()
-{
+	, dialog() {
 	stock.init(NPC_VENDOR_MAX_STOCK, _items);
 }
 
@@ -67,8 +66,7 @@ NPC::NPC(MapRenderer *_map, ItemManager *_items)
  *
  * @param npc_id Config file loaded at npcs/[npc_id].txt
  */
-void NPC::load(const string& npc_id, int hero_level)
-{
+void NPC::load(const string& npc_id, int hero_level) {
 
 	FileParser infile;
 	ItemStack stack;
@@ -181,8 +179,7 @@ void NPC::load(const string& npc_id, int hero_level)
 	loadGraphics(filename_portrait);
 }
 
-void NPC::loadGraphics(const string& filename_portrait)
-{
+void NPC::loadGraphics(const string& filename_portrait) {
 
 	if (gfx != "") {
 		std::string anim_name = "animations/npcs/" + gfx + ".txt";
@@ -200,8 +197,7 @@ void NPC::loadGraphics(const string& filename_portrait)
  * returns -1 if not loaded or error.
  * returns index in specific vector where to be found.
  */
-int NPC::loadSound(const string& fname, int type)
-{
+int NPC::loadSound(const string& fname, int type) {
 
 	SoundManager::SoundID a = snd->load("soundfx/npcs/" + fname, "NPC voice");
 
@@ -220,16 +216,14 @@ int NPC::loadSound(const string& fname, int type)
 	return -1;
 }
 
-void NPC::logic()
-{
+void NPC::logic() {
 	activeAnimation->advanceFrame();
 }
 
 /**
  * type is a const int enum, see NPC.h
  */
-bool NPC::playSound(int type, int id)
-{
+bool NPC::playSound(int type, int id) {
 	if (type == NPC_VOX_INTRO) {
 		int roll;
 		if (vox_intro.empty()) return false;
@@ -248,8 +242,7 @@ bool NPC::playSound(int type, int id)
 /**
  * get list of available dialogs with NPC
  */
-void NPC::getDialogNodes(std::vector<int> &result)
-{
+void NPC::getDialogNodes(std::vector<int> &result) {
 	result.clear();
 	if (!talker)
 		return;
@@ -331,8 +324,7 @@ void NPC::getDialogNodes(std::vector<int> &result)
 	}
 }
 
-std::string NPC::getDialogTopic(unsigned int dialog_node)
-{
+std::string NPC::getDialogTopic(unsigned int dialog_node) {
 	if (!talker)
 		return "";
 
@@ -349,8 +341,7 @@ std::string NPC::getDialogTopic(unsigned int dialog_node)
  *
  * Return false if the dialog has ended
  */
-bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor)
-{
+bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 
 	while (event_cursor < dialog[dialog_node].size()) {
 
@@ -410,8 +401,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor)
 	return false;
 }
 
-Renderable NPC::getRender()
-{
+Renderable NPC::getRender() {
 	Renderable r = activeAnimation->getCurrentFrame(direction);
 	r.map_pos.x = pos.x;
 	r.map_pos.y = pos.y;
@@ -420,8 +410,7 @@ Renderable NPC::getRender()
 }
 
 
-NPC::~NPC()
-{
+NPC::~NPC() {
 	if (gfx != "") {
 		const string anim_name = "animations/npcs/" + gfx + ".txt";
 		anim->decreaseCount(anim_name);

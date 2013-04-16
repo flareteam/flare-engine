@@ -34,8 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuCharacter::MenuCharacter(StatBlock *_stats)
-{
+MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	stats = _stats;
 
 	skill_points = 0;
@@ -252,8 +251,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats)
 	background = loadGraphicSurface("images/menus/character.png");
 }
 
-void MenuCharacter::update()
-{
+void MenuCharacter::update() {
 
 	// close button
 	closeButton->pos.x = window_area.x + close_pos.x;
@@ -292,8 +290,7 @@ void MenuCharacter::update()
 /**
  * Rebuild all stat values and tooltip info
  */
-void MenuCharacter::refreshStats()
-{
+void MenuCharacter::refreshStats() {
 
 	stats->refresh_stats = false;
 
@@ -484,15 +481,13 @@ void MenuCharacter::refreshStats()
 /**
  * Color-coding for positive/negative/no bonus
  */
-SDL_Color MenuCharacter::bonusColor(int stat)
-{
+SDL_Color MenuCharacter::bonusColor(int stat) {
 	if (stat > 0) return font->getColor("menu_bonus");
 	if (stat < 0) return font->getColor("menu_penalty");
 	return font->getColor("menu_label");
 }
 
-void MenuCharacter::logic()
-{
+void MenuCharacter::logic() {
 	if (!visible) return;
 
 	if (closeButton->checkClick()) {
@@ -527,8 +522,7 @@ void MenuCharacter::logic()
 
 
 
-void MenuCharacter::render()
-{
+void MenuCharacter::render() {
 	if (!visible) return;
 
 	SDL_Rect src;
@@ -571,8 +565,7 @@ void MenuCharacter::render()
 /**
  * Display various mouseovers tooltips depending on cursor location
  */
-TooltipData MenuCharacter::checkTooltip()
-{
+TooltipData MenuCharacter::checkTooltip() {
 
 	for (int i=0; i<CSTAT_COUNT; i++) {
 		if (isWithin(cstat[i].hover, inpt->mouse) && !cstat[i].tip.isEmpty() && cstat[i].visible)
@@ -586,8 +579,7 @@ TooltipData MenuCharacter::checkTooltip()
  * User might click this menu to upgrade a stat.  Check for this situation.
  * Return true if a stat was upgraded.
  */
-bool MenuCharacter::checkUpgrade()
-{
+bool MenuCharacter::checkUpgrade() {
 	int spent = stats->physical_character + stats->mental_character + stats->offense_character + stats->defense_character -4;
 	skill_points = (stats->level * stats->stat_points_per_level) - spent;
 
@@ -631,8 +623,7 @@ bool MenuCharacter::checkUpgrade()
 	return false;
 }
 
-MenuCharacter::~MenuCharacter()
-{
+MenuCharacter::~MenuCharacter() {
 	SDL_FreeSurface(background);
 	delete closeButton;
 
