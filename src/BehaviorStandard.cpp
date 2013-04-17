@@ -30,6 +30,7 @@ BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior
 	hero_dist = 0;
 	target_dist = 0;
 	pursue_pos.x = pursue_pos.y = -1;
+	fleeing = false;
 }
 
 /**
@@ -49,6 +50,7 @@ void BehaviorStandard::logic() {
 	checkMove();
 	updateState();
 
+    fleeing = false;
 }
 
 /**
@@ -354,7 +356,10 @@ void BehaviorStandard::checkMove() {
 				}
 			}
 
-			e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+            if(fleeing)
+                e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
+            else
+                e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
 			e->stats.turn_ticks = 0;
 		}
 	}
