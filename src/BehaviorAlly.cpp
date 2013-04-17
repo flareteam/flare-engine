@@ -84,16 +84,18 @@ void BehaviorAlly::findTarget()
     //if the player is blocked, all summons which the player is facing to move away for the specified frames
     //need to set the flag player_blocked so that other allies know to get out of the way as well
     //if hero is facing the summon
-    if(!enemies->player_blocked && hero_dist < MINIMUM_FOLLOW_DISTANCE_LOWER
-       && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
-            enemies->player_blocked = true;
-            enemies->player_blocked_ticks = BLOCK_TICKS;
-    }
+    if(ENABLE_ALLY_COLLISION_AI){
+        if(!enemies->player_blocked && hero_dist < MINIMUM_FOLLOW_DISTANCE_LOWER
+            && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
+                enemies->player_blocked = true;
+                enemies->player_blocked_ticks = BLOCK_TICKS;
+        }
 
-    if(enemies->player_blocked
-       && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
-            fleeing = true;
-            pursue_pos = e->stats.hero_pos;
+        if(enemies->player_blocked
+            && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
+                fleeing = true;
+                pursue_pos = e->stats.hero_pos;
+        }
     }
 
 }

@@ -168,6 +168,8 @@ std::string GAME_PREFIX = "";
 std::string WINDOW_TITLE = "Flare";
 int SOUND_FALLOFF = 15;
 int PARTY_EXP_PERCENTAGE = 100;
+bool ENABLE_ALLY_COLLISION_AI = true;
+bool ENABLE_ALLY_COLLISION = false;
 
 /**
  * Set system paths
@@ -404,6 +406,10 @@ void loadMiscSettings() {
 				SOUND_FALLOFF = toInt(infile.val);
 			} else if (infile.key == "party_exp_percentage") {
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
+			} else if (infile.key == "enable_ally_collision") {
+				ENABLE_ALLY_COLLISION = (toInt(infile.val) == 1);
+			} else if (infile.key == "enable_ally_collision_ai") {
+				ENABLE_ALLY_COLLISION_AI = (toInt(infile.val) == 1);
 			}
 
 		}

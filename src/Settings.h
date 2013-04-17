@@ -122,6 +122,8 @@ extern std::string WINDOW_TITLE;
 extern std::string GAME_PREFIX;
 extern int SOUND_FALLOFF;
 extern int PARTY_EXP_PERCENTAGE;
+extern bool ENABLE_ALLY_COLLISION_AI;
+extern bool ENABLE_ALLY_COLLISION;
 
 // Tile Settings
 extern unsigned short UNITS_PER_TILE;
