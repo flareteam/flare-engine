@@ -30,12 +30,12 @@ GameStateTitle::GameStateTitle() : GameState() {
 	exit_game = false;
 	load_game = false;
 
-	loadGraphics();
+	logo = loadGraphicSurface("images/menus/logo.png");
 
 	// set up buttons
-	button_play = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
-	button_exit = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
-	button_cfg = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	button_play = new WidgetButton("images/menus/buttons/button_default.png");
+	button_exit = new WidgetButton("images/menus/buttons/button_default.png");
+	button_cfg = new WidgetButton("images/menus/buttons/button_default.png");
 
 	button_play->label = msg->get("Play Game");
 	button_play->pos.x = VIEW_W_HALF - button_play->pos.w/2;
@@ -58,22 +58,14 @@ GameStateTitle::GameStateTitle() : GameState() {
 
 	// set up labels
 	label_version = new WidgetLabel();
-	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, msg->get("Flare Alpha v0.17"), font->getColor("menu_normal"));
+	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, msg->get("Flare Alpha v0.18"), font->getColor("menu_normal"));
 
 	inpt->enableMouseEmulation();
-}
 
-void GameStateTitle::loadGraphics() {
-
-	SDL_Surface *cleanup = IMG_Load(mods->locate("images/menus/logo.png").c_str());
-
-	if(!cleanup) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		logo = SDL_DisplayFormatAlpha(cleanup);
-		SDL_FreeSurface(cleanup);
-	}
+	// Setup tab order
+	tablist.add(button_play);
+	tablist.add(button_cfg);
+	tablist.add(button_exit);
 }
 
 void GameStateTitle::logic() {
@@ -81,13 +73,22 @@ void GameStateTitle::logic() {
 
 	snd->logic(Point(0,0));
 
+	if(inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+		inpt->lock[CANCEL] = true;
+		exitRequested = true;
+	}
+
+	tablist.logic();
+
 	if (button_play->checkClick()) {
 		delete requestedGameState;
 		requestedGameState = new GameStateLoad();
-	} else if (button_cfg->checkClick()) {
+	}
+	else if (button_cfg->checkClick()) {
 		delete requestedGameState;
 		requestedGameState = new GameStateConfig();
-	} else if (button_exit->checkClick()) {
+	}
+	else if (button_exit->checkClick()) {
 		exitRequested = true;
 	}
 }

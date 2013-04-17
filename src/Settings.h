@@ -65,10 +65,11 @@ typedef struct HeroClass{
 }HeroClass;
 
 // Path info
+extern std::string GAME_FOLDER;
 extern std::string PATH_CONF; // user-configurable settings files
 extern std::string PATH_USER; // important per-user data (saves)
 extern std::string PATH_DATA; // common game data
-extern std::string USER_PATH_DATA; // user-defined replacement for PATH_DATA
+extern std::string CUSTOM_PATH_DATA; // user-defined replacement for PATH_DATA
 
 // Filenames
 extern std::string FILE_SETTINGS;     // Name of the settings file (e.g. "settings.txt").
@@ -120,6 +121,7 @@ extern int AIM_ASSIST;
 extern std::string WINDOW_TITLE;
 extern std::string GAME_PREFIX;
 extern int SOUND_FALLOFF;
+extern int PARTY_EXP_PERCENTAGE;
 
 // Tile Settings
 extern unsigned short UNITS_PER_TILE;

@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 #include <queue>
 
+#include "MapCollision.h"
+
 class Power;
 
 const int POWERSLOT_COUNT = 10;
@@ -73,10 +75,14 @@ class EnemyLoot {
 public:
 	int id;
 	int chance;
+	int count_min;
+	int count_max;
 
 	EnemyLoot()
 		: id(0)
 		, chance(0)
+		, count_min(1)
+		, count_max(1)
 	{}
 };
 
@@ -100,16 +106,19 @@ public:
 	bool corpse; // creature is dead and done animating
 	int corpse_ticks;
 	bool hero; // else, enemy or other
-	bool minion;
+	bool hero_ally;
 	bool humanoid; // true for human, sceleton...; false for wyvern, snake...
 	bool permadeath;
 	bool transformed;
 	bool refresh_stats;
+	bool converted;
 
-	int movement_type;
+	MOVEMENTTYPE movement_type;
 	bool flying;
 	bool intangible;
 	bool facing; // does this creature turn to face the hero
+
+	std::vector<std::string> categories;
 
 	std::string name;
 	std::string sfx_prefix;
@@ -249,6 +258,7 @@ public:
 
 	std::vector<int> powers_list;
 	std::vector<int> powers_list_items;
+	std::vector<int> powers_passive;
 	std::vector<int> power_chance;
 	std::vector<int> power_index;
 	std::vector<int> power_cooldown;

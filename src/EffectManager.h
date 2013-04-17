@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "SharedResources.h"
 #include "Utils.h"
+#include "Hazard.h"
 
 #include <string>
 #include <vector>
@@ -53,6 +54,8 @@ public:
 	bool item;
 	int trigger;
 	bool render_above;
+	int passive_id;
+	int source_type;
 
 	Effect()
 	 : id(0)
@@ -67,6 +70,8 @@ public:
 	 , item(false)
 	 , trigger(-1)
 	 , render_above(false)
+	 , passive_id(0)
+	 , source_type(SOURCE_TYPE_HERO)
 	{}
 
 	~Effect() {
@@ -86,8 +91,9 @@ public:
 	EffectManager& operator= (const EffectManager &emSource);
 	void clearStatus();
 	void logic();
-	void addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above);
+	void addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type);
 	void removeEffectType(std::string type);
+	void removeEffectPassive(int id);
 	void clearEffects();
 	void clearNegativeEffects();
 	void clearItemEffects();
@@ -105,6 +111,8 @@ public:
 	int forced_speed;
 	bool forced_move;
 	bool revive;
+	bool convert;
+	bool death_sentence;
 
 	int bonus_hp;
 	int bonus_hp_regen;

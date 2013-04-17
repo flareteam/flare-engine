@@ -31,8 +31,7 @@ EffectManager::EffectManager()
 	, triggered_hit(false)
 	, triggered_halfdeath(false)
 	, triggered_joincombat(false)
-	, triggered_death(false)
-{
+	, triggered_death(false) {
 	clearStatus();
 }
 
@@ -56,6 +55,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 		effect_list[i].item = emSource.effect_list[i].item;
 		effect_list[i].trigger = emSource.effect_list[i].trigger;
 		effect_list[i].render_above = emSource.effect_list[i].render_above;
+		effect_list[i].passive_id = emSource.effect_list[i].passive_id;
 
 		if (emSource.effect_list[i].animation_name != "") {
 			effect_list[i].animation_name = emSource.effect_list[i].animation_name;
@@ -72,6 +72,8 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	forced_speed = emSource.forced_speed;
 	forced_move = emSource.forced_move;
 	revive = emSource.revive;
+	convert = emSource.convert;
+	death_sentence = emSource.death_sentence;
 	bonus_hp = emSource.bonus_hp;
 	bonus_hp_regen = emSource.bonus_hp_regen;
 	bonus_hp_percent = emSource.bonus_hp_percent;
@@ -110,6 +112,8 @@ void EffectManager::clearStatus() {
 	forced_speed = 0;
 	forced_move = false;
 	revive = false;
+	convert = false;
+	death_sentence = false;
 
 	bonus_hp = 0;
 	bonus_hp_regen = 0;
@@ -153,6 +157,7 @@ void EffectManager::logic() {
 				forced_speed = effect_list[i].magnitude;
 			}
 			else if (effect_list[i].type == "revive") revive = true;
+			else if (effect_list[i].type == "convert") convert = true;
 			else if (effect_list[i].type == "hp") bonus_hp += effect_list[i].magnitude;
 			else if (effect_list[i].type == "hp_regen") bonus_hp_regen += effect_list[i].magnitude;
 			else if (effect_list[i].type == "hp_percent") bonus_hp_percent += effect_list[i].magnitude;
@@ -181,6 +186,8 @@ void EffectManager::logic() {
 			if (effect_list[i].duration > 0) {
 				if (effect_list[i].ticks > 0) effect_list[i].ticks--;
 				if (effect_list[i].ticks == 0) {
+					//death sentence is only applied at the end of the timer
+					if (effect_list[i].type == "death_sentence") death_sentence = true;
 					removeEffect(i);
 					i--;
 					continue;
@@ -212,7 +219,7 @@ void EffectManager::logic() {
 	}
 }
 
-void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above) {
+void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type) {
 	// if we're already immune, don't add negative effects
 	if (immunity) {
 		if (type == "damage") return;
@@ -229,7 +236,11 @@ void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std
 	for (unsigned i=0; i<effect_list.size(); i++) {
 		if (effect_list[i].id == id) {
 			if (trigger > -1 && effect_list[i].trigger == trigger) return; // trigger effects can only be cast once per trigger
-			if (effect_list[i].duration <= duration) {
+			if (effect_list[i].duration <= duration && effect_list[i].type != "death_sentence") {
+				effect_list[i].ticks = effect_list[i].duration = duration;
+				if (effect_list[i].animation) effect_list[i].animation->reset();
+			}
+			if (effect_list[i].duration > duration && effect_list[i].type == "death_sentence") {
 				effect_list[i].ticks = effect_list[i].duration = duration;
 				if (effect_list[i].animation) effect_list[i].animation->reset();
 			}
@@ -256,6 +267,8 @@ void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std
 	e.item = item;
 	e.trigger = trigger;
 	e.render_above = render_above;
+	e.passive_id = passive_id;
+	e.source_type = source_type;
 
 	if (animation != "") {
 		anim->increaseCount(animation);
@@ -283,6 +296,12 @@ void EffectManager::removeAnimation(int id) {
 void EffectManager::removeEffectType(std::string type) {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == type) removeEffect(i-1);
+	}
+}
+
+void EffectManager::removeEffectPassive(int id) {
+	for (unsigned i=effect_list.size(); i > 0; i--) {
+		if (effect_list[i-1].passive_id == id) removeEffect(i-1);
 	}
 }
 
@@ -324,7 +343,8 @@ int EffectManager::damageShields(int dmg) {
 			if (effect_list[i].magnitude < 0) {
 				if (abs(effect_list[i].magnitude) < over_dmg) over_dmg = abs(effect_list[i].magnitude);
 				effect_list[i].magnitude = 0;
-			} else {
+			}
+			else {
 				over_dmg = 0;
 			}
 		}

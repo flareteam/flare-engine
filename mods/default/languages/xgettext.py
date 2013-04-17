@@ -1,6 +1,7 @@
 #! /usr/bin/python
 import os
 import datetime
+import codecs   # proper UTF8 handling with files
 
 keys = []
 comments = []
@@ -24,7 +25,7 @@ msgstr ""
 
 '''
 
-POT_STRING = '''\
+POT_STRING = u'''\
 #: {comment}
 msgid "{msgid}"
 msgstr ""
@@ -35,16 +36,16 @@ msgstr ""
 def extract(filename):
     if not os.path.exists(filename):
         return
-    infile = open(filename, 'r')
+    infile = codecs.open(filename, encoding='UTF-8', mode='r')
     triggers = [
         'msg', 'him', 'her', 'you', 'name', 'title', 'tooltip',
         'power_desc', 'quest_text', 'description', 'item_type',
         'slot_name', 'tab_title', 'resist', 'currency_name',
-        'bonus', 'flavor',
+        'bonus', 'flavor', 'topic', 'option'
     ]
     plain_text = [
         'msg', 'him', 'her', 'you', 'name', 'title', 'tooltip',
-        'quest_text', 'description',
+        'quest_text', 'description', 'topic', 'flavor',
         ]
     for i, line in enumerate(infile, start=1):
         for trigger in triggers:
@@ -63,6 +64,9 @@ def extract(filename):
                 elif len(values) == 3:
                    # bonus={set_level},{stat},{value}
                    set_level, stat, value = values
+                elif len(values) == 4:
+                   # option=base,head,portrait,name
+                   stat = values[-1]
                 comment = filename + ':' + str(i)
                 comments.append(comment)
                 keys.append(stat.rstrip())
@@ -82,7 +86,7 @@ def remove_duplicates():
 
 # this writes the list of keys to a gettext .po file
 def save(filename):
-    outfile = open('data.pot', 'w')
+    outfile = codecs.open('data.pot', encoding='UTF-8', mode='w')
     outfile.write(header.format(now=now.strftime('%Y-%m-%d %H:%M+%z')))
     remove_duplicates()
     for line_c,line in zip(comments,keys):
@@ -107,6 +111,9 @@ extract('../menus/powers.txt')
 extract('../powers/powers.txt')
 extract('../engine/elements.txt')
 extract('../engine/loot.txt')
+extract('../engine/classes.txt')
+extract('../engine/hero_options.txt')
+extract('../engine/titles.txt')
 
 for folder in ['enemies', 'maps', 'quests', 'npcs']:
     target = os.path.join('..', folder)

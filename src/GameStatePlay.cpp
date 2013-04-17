@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStatePlay.h"
 #include "GameState.h"
 #include "GameStateTitle.h"
+#include "GameStateCutscene.h"
 #include "Hazard.h"
 #include "HazardManager.h"
 #include "LootManager.h"
@@ -56,7 +57,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "UtilsParsing.h"
 #include "MenuPowers.h"
-#include "MinionManager.h"
 
 using namespace std;
 
@@ -74,20 +74,19 @@ GameStatePlay::GameStatePlay()
 	, map(new MapRenderer(camp))
 	, pc(new Avatar(powers, map))
 	, enemies(new EnemyManager(powers, map))
-	, minions(new MinionManager(powers, map))
-    , hazards(new HazardManager(powers, pc, enemies, minions))
+	, hazards(new HazardManager(powers, pc, enemies))
 	, menu(new MenuManager(powers, &pc->stats, camp, items))
 	, loot(new LootManager(items, map, &pc->stats))
 	, npcs(new NPCManager(map, loot, items, &pc->stats))
 	, quests(new QuestLog(camp, menu->log))
 	, loading(new WidgetLabel())
-	, loading_bg(IMG_Load(mods->locate("images/menus/confirm_bg.png").c_str()))
+	// Load the loading screen image (we currently use the confirm dialog background):
+	, loading_bg(loadGraphicSurface("images/menus/confirm_bg.png"))
 	, npc_id(-1)
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
-	, game_slot(0)
-{
+	, game_slot(0) {
 	hasMusic = true;
 	// GameEngine scope variables
 
@@ -97,22 +96,10 @@ GameStatePlay::GameStatePlay()
 	camp->currency = &menu->inv->currency;
 	camp->hero = &pc->stats;
 	map->powers = powers;
-	minions->enemyManager = enemies;
-    enemies->minionManager = minions;
-    pc->minions = minions;
-    minions->pc = pc;
+	pc->enemies = enemies;
+	enemies->pc = pc;
 
 	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
-
-	// Load the loading screen image (we currently use the confirm dialog background)
-
-	if(!loading_bg) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		SDL_Surface *cleanup = loading_bg;
-		loading_bg = SDL_DisplayFormatAlpha(loading_bg);
-		SDL_FreeSurface(cleanup);
-	}
 
 	// load the config file for character titles
 	loadTitles();
@@ -177,10 +164,19 @@ void GameStatePlay::checkEnemyFocus() {
  */
 bool GameStatePlay::restrictPowerUse() {
 	if(MOUSE_MOVE) {
-		if(enemy == NULL && inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
-			return true;
+		if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
+			if(enemy == NULL) {
+				return true;
+			}
+			else {
+				if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
+					return true;
+			}
 		}
 	}
+
+
+
 	return false;
 }
 
@@ -264,15 +260,15 @@ void GameStatePlay::checkTeleport() {
 			map->cam.y = pc->stats.pos.y = pc->stats.teleport_destination.y;
 		}
 
-		for (unsigned int i=0; i < minions->minions.size(); i++) {
-            minions->minions[i]->stats.pos.x = pc->stats.pos.x;
-            minions->minions[i]->stats.pos.y = pc->stats.pos.y;
-        }
+		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
+				enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
+				enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
+			}
+		}
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
-            //cleanup minion corpses on map change
-            minions->RemoveCorpses();
 			showLoading();
 			map->load(map->teleport_mapname);
 			enemies->handleNewMap();
@@ -297,7 +293,10 @@ void GameStatePlay::checkTeleport() {
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
 				stringstream filename;
-				filename << PATH_USER << "save" << game_slot << ".txt";
+				filename << PATH_USER;
+				if (GAME_PREFIX.length() > 0)
+					filename << GAME_PREFIX << "_";
+				filename << "save" << game_slot << ".txt";
 				if(remove(filename.str().c_str()) != 0)
 					perror("Error deleting save from path");
 
@@ -400,10 +399,10 @@ void GameStatePlay::loadTitles() {
 			else if (infile.key == "requires_status") titles.back().requires_status = infile.val;
 			else if (infile.key == "requires_not") titles.back().requires_not = infile.val;
 			else if (infile.key == "primary_stat") titles.back().primary_stat = infile.val;
+			else fprintf(stderr, "GameStatePlay: Unknown key value in title definitons: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
 		}
 		infile.close();
 	}
-	else fprintf(stderr, "Unable to open engine/titles.txt!\n");
 }
 
 void GameStatePlay::checkTitle() {
@@ -422,31 +421,40 @@ void GameStatePlay::checkTitle() {
 			if (titles[i].primary_stat == "physical") {
 				if (pc->stats.get_physical() <= pc->stats.get_mental() || pc->stats.get_physical() <= pc->stats.get_offense() || pc->stats.get_physical() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "offense") {
+			}
+			else if (titles[i].primary_stat == "offense") {
 				if (pc->stats.get_offense() <= pc->stats.get_mental() || pc->stats.get_offense() <= pc->stats.get_physical() || pc->stats.get_offense() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "mental") {
+			}
+			else if (titles[i].primary_stat == "mental") {
 				if (pc->stats.get_mental() <= pc->stats.get_physical() || pc->stats.get_mental() <= pc->stats.get_offense() || pc->stats.get_mental() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "defense") {
+			}
+			else if (titles[i].primary_stat == "defense") {
 				if (pc->stats.get_defense() <= pc->stats.get_mental() || pc->stats.get_defense() <= pc->stats.get_offense() || pc->stats.get_defense() <= pc->stats.get_physical())
 					continue;
-			} else if (titles[i].primary_stat == "physoff") {
+			}
+			else if (titles[i].primary_stat == "physoff") {
 				if (pc->stats.physoff() <= pc->stats.physdef() || pc->stats.physoff() <= pc->stats.mentoff() || pc->stats.physoff() <= pc->stats.mentdef() || pc->stats.physoff() <= pc->stats.physment() || pc->stats.physoff() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "physment") {
+			}
+			else if (titles[i].primary_stat == "physment") {
 				if (pc->stats.physment() <= pc->stats.physdef() || pc->stats.physment() <= pc->stats.mentoff() || pc->stats.physment() <= pc->stats.mentdef() || pc->stats.physment() <= pc->stats.physoff() || pc->stats.physment() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "physdef") {
+			}
+			else if (titles[i].primary_stat == "physdef") {
 				if (pc->stats.physdef() <= pc->stats.physoff() || pc->stats.physdef() <= pc->stats.mentoff() || pc->stats.physdef() <= pc->stats.mentdef() || pc->stats.physdef() <= pc->stats.physment() || pc->stats.physdef() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "mentoff") {
+			}
+			else if (titles[i].primary_stat == "mentoff") {
 				if (pc->stats.mentoff() <= pc->stats.physdef() || pc->stats.mentoff() <= pc->stats.physoff() || pc->stats.mentoff() <= pc->stats.mentdef() || pc->stats.mentoff() <= pc->stats.physment() || pc->stats.mentoff() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "offdef") {
+			}
+			else if (titles[i].primary_stat == "offdef") {
 				if (pc->stats.offdef() <= pc->stats.physdef() || pc->stats.offdef() <= pc->stats.mentoff() || pc->stats.offdef() <= pc->stats.mentdef() || pc->stats.offdef() <= pc->stats.physment() || pc->stats.offdef() <= pc->stats.physoff())
 					continue;
-			} else if (titles[i].primary_stat == "mentdef") {
+			}
+			else if (titles[i].primary_stat == "mentdef") {
 				if (pc->stats.mentdef() <= pc->stats.physdef() || pc->stats.mentdef() <= pc->stats.mentoff() || pc->stats.mentdef() <= pc->stats.physoff() || pc->stats.mentdef() <= pc->stats.physment() || pc->stats.mentdef() <= pc->stats.offdef())
 					continue;
 			}
@@ -551,6 +559,12 @@ void GameStatePlay::checkNotifications() {
 		quests->newQuestNotification = false;
 		menu->act->requires_attention[MENU_LOG] = true;
 	}
+
+	// if the player is transformed into a creature, don't show notifications for some menus
+	if (!pc->stats.humanoid) {
+		menu->act->requires_attention[MENU_CHARACTER] = false;
+		menu->act->requires_attention[MENU_POWERS] = false;
+	}
 }
 
 /**
@@ -584,8 +598,8 @@ void GameStatePlay::checkNPCInteraction() {
 	if (map->event_npc != "") {
 		npc_id = npcs->getID(map->event_npc);
 		if (npc_id != -1) {
-		  eventDialogOngoing = true;
-		  eventPendingDialog = true;
+			eventDialogOngoing = true;
+			eventPendingDialog = true;
 		}
 		map->event_npc = "";
 	}
@@ -610,7 +624,8 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->vendor->talker_visible = false;
 			menu->talker->vendor_visible = true;
 			npcs->npcs[npc_id]->playSound(NPC_VOX_INTRO);
-		} else if (menu->npc->dialog_selected) {
+		}
+		else if (menu->npc->dialog_selected) {
 			menu->vendor->talker_visible = true;
 			menu->talker->vendor_visible = false;
 		}
@@ -640,7 +655,8 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->talker->vendor_visible = false;
 			menu->vendor->talker_visible = false;
 
-		} else if (!menu->talker->vendor_visible && menu->vendor->talker_visible && npcs->npcs[npc_id]->talker) {
+		}
+		else if (!menu->talker->vendor_visible && menu->vendor->talker_visible && npcs->npcs[npc_id]->talker) {
 
 			// begin talking
 			if (npcs->npcs[npc_id]->vendor) {
@@ -693,7 +709,8 @@ void GameStatePlay::checkStash() {
 		menu->inv->visible = true;
 		menu->stash->visible = true;
 		map->stash = false;
-	} else {
+	}
+	else {
 		// Close stash if inventory is closed
 		if (!menu->inv->visible) menu->stash->visible = false;
 
@@ -711,11 +728,47 @@ void GameStatePlay::checkStash() {
 	}
 }
 
+void GameStatePlay::checkCutscene() {
+	if (!map->cutscene)
+		return;
+
+	GameStateCutscene *cutscene = new GameStateCutscene(NULL);
+
+	if (!cutscene->load(map->cutscene_file)) {
+		delete cutscene;
+		map->cutscene = false;
+		return;
+	}
+
+	// handle respawn point and set game play game_slot
+	cutscene->game_slot = game_slot;
+
+	if (map->teleportation) {
+
+		if (map->teleport_mapname != "")
+			map->respawn_map = map->teleport_mapname;
+
+		map->respawn_point = map->teleport_destination;
+
+	}
+	else {
+		map->respawn_point = pc->stats.pos;
+	}
+
+	saveGame();
+
+	delete requestedGameState;
+	requestedGameState = cutscene;
+}
+
+
 /**
  * Process all actions for a single frame
  * This includes some message passing between child object
  */
 void GameStatePlay::logic() {
+
+	checkCutscene();
 
 	// check menus first (top layer gets mouse click priority)
 	menu->logic();
@@ -723,11 +776,13 @@ void GameStatePlay::logic() {
 	if (!menu->pause) {
 
 		// these actions only occur when the game isn't paused
-		checkLoot();
+		if (pc->stats.alive) checkLoot();
 		checkEnemyFocus();
-		checkNPCInteraction();
-		map->checkHotspots();
-		map->checkNearestEvent(pc->stats.pos);
+		if (pc->stats.alive) {
+			checkNPCInteraction();
+			map->checkHotspots();
+			map->checkNearestEvent(pc->stats.pos);
+		}
 		checkTitle();
 
 		pc->logic(menu->act->checkAction(inpt->mouse), restrictPowerUse());
@@ -739,11 +794,6 @@ void GameStatePlay::logic() {
 		else enemies->hero_stealth = pc->stats.effects.bonus_stealth;
 
 		enemies->logic();
-
-		minions->hero_pos = pc->stats.pos;
-        minions->hero_alive = pc->stats.alive;
-        minions->logic();
-
 		hazards->logic();
 		loot->logic();
 		enemies->checkEnemiesforXP(camp);
@@ -776,7 +826,7 @@ void GameStatePlay::logic() {
 	// change hero powers on transformation
 	if (pc->setPowers) {
 		pc->setPowers = false;
-		menu->closeAll();
+		if (!pc->stats.humanoid && menu->pow->visible) menu->closeRight();
 		// save ActionBar state and lock slots from removing/replacing power
 		for (int i=0; i<12 ; i++) {
 			menu->act->actionbar[i] = menu->act->hotkeys[i];
@@ -794,7 +844,8 @@ void GameStatePlay::logic() {
 		if (pc->stats.manual_untransform && pc->untransform_power > 0) {
 			menu->act->hotkeys[count] = pc->untransform_power;
 			menu->act->locked[count] = true;
-		} else if (pc->stats.manual_untransform && pc->untransform_power == 0)
+		}
+		else if (pc->stats.manual_untransform && pc->untransform_power == 0)
 			fprintf(stderr, "Untransform power not found, you can't untransform manually\n");
 
 		// reapply equipment if the transformation allows it
@@ -843,8 +894,6 @@ void GameStatePlay::render() {
 
 	enemies->addRenders(rens, rens_dead);
 
-	minions->addRenders(rens, rens_dead);
-
 	npcs->addRenders(rens); // npcs cannot be dead
 
 	loot->addRenders(rens, rens_dead);
@@ -892,7 +941,6 @@ GameStatePlay::~GameStatePlay() {
 	delete npcs;
 	delete hazards;
 	delete enemies;
-	delete minions;
 	delete pc;
 	delete map;
 	delete menu;

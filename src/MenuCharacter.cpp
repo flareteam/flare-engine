@@ -55,11 +55,11 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	statlist_rows = 10;
 	statlist_scrollbar_offset = 0;
 
-	closeButton = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
+	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// Upgrade buttons
 	for (int i=0; i<4; i++) {
-		upgradeButton[i] = new WidgetButton(mods->locate("images/menus/buttons/upgrade.png"));
+		upgradeButton[i] = new WidgetButton("images/menus/buttons/upgrade.png");
 		upgradeButton[i]->enabled = false;
 		show_upgrade[i] = true;
 	}
@@ -83,130 +83,172 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "caption") {
+			}
+			else if(infile.key == "caption") {
 				title = eatLabelInfo(infile.val);
-			} else if(infile.key == "upgrade_physical") {
+			}
+			else if(infile.key == "upgrade_physical") {
 				upgrade_pos[0].x = eatFirstInt(infile.val,',');
 				upgrade_pos[0].y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "upgrade_mental") {
+			}
+			else if(infile.key == "upgrade_mental") {
 				upgrade_pos[1].x = eatFirstInt(infile.val,',');
 				upgrade_pos[1].y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "upgrade_offense") {
+			}
+			else if(infile.key == "upgrade_offense") {
 				upgrade_pos[2].x = eatFirstInt(infile.val,',');
 				upgrade_pos[2].y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "upgrade_defense") {
+			}
+			else if(infile.key == "upgrade_defense") {
 				upgrade_pos[3].x = eatFirstInt(infile.val,',');
 				upgrade_pos[3].y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "statlist") {
+			}
+			else if(infile.key == "statlist") {
 				statlist_pos.x = eatFirstInt(infile.val,',');
 				statlist_pos.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "statlist_rows") {
+			}
+			else if (infile.key == "statlist_rows") {
 				statlist_rows = eatFirstInt(infile.val,',');
-			} else if (infile.key == "statlist_scrollbar_offset") {
+			}
+			else if (infile.key == "statlist_scrollbar_offset") {
 				statlist_scrollbar_offset = eatFirstInt(infile.val,',');
-			} else if(infile.key == "label_name") {
+			}
+			else if(infile.key == "label_name") {
 				label_pos[0] = eatLabelInfo(infile.val);
 				cstat[CSTAT_NAME].visible = !label_pos[0].hidden;
-			} else if(infile.key == "label_level") {
+			}
+			else if(infile.key == "label_level") {
 				label_pos[1] = eatLabelInfo(infile.val);
 				cstat[CSTAT_LEVEL].visible = !label_pos[1].hidden;
-			} else if(infile.key == "label_physical") {
+			}
+			else if(infile.key == "label_physical") {
 				label_pos[2] = eatLabelInfo(infile.val);
 				cstat[CSTAT_PHYSICAL].visible = !label_pos[2].hidden;
-			} else if(infile.key == "label_mental") {
+			}
+			else if(infile.key == "label_mental") {
 				label_pos[3] = eatLabelInfo(infile.val);
 				cstat[CSTAT_MENTAL].visible = !label_pos[3].hidden;
-			} else if(infile.key == "label_offense") {
+			}
+			else if(infile.key == "label_offense") {
 				label_pos[4] = eatLabelInfo(infile.val);
 				cstat[CSTAT_OFFENSE].visible = !label_pos[4].hidden;
-			} else if(infile.key == "label_defense") {
+			}
+			else if(infile.key == "label_defense") {
 				label_pos[5] = eatLabelInfo(infile.val);
 				cstat[CSTAT_DEFENSE].visible = !label_pos[5].hidden;
-			} else if(infile.key == "name") {
+			}
+			else if(infile.key == "name") {
 				value_pos[0].x = eatFirstInt(infile.val,',');
 				value_pos[0].y = eatFirstInt(infile.val,',');
 				value_pos[0].w = eatFirstInt(infile.val,',');
 				value_pos[0].h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "level") {
+			}
+			else if(infile.key == "level") {
 				value_pos[1].x = eatFirstInt(infile.val,',');
 				value_pos[1].y = eatFirstInt(infile.val,',');
 				value_pos[1].w = eatFirstInt(infile.val,',');
 				value_pos[1].h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "physical") {
+			}
+			else if(infile.key == "physical") {
 				value_pos[2].x = eatFirstInt(infile.val,',');
 				value_pos[2].y = eatFirstInt(infile.val,',');
 				value_pos[2].w = eatFirstInt(infile.val,',');
 				value_pos[2].h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "mental") {
+			}
+			else if(infile.key == "mental") {
 				value_pos[3].x = eatFirstInt(infile.val,',');
 				value_pos[3].y = eatFirstInt(infile.val,',');
 				value_pos[3].w = eatFirstInt(infile.val,',');
 				value_pos[3].h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "offense") {
+			}
+			else if(infile.key == "offense") {
 				value_pos[4].x = eatFirstInt(infile.val,',');
 				value_pos[4].y = eatFirstInt(infile.val,',');
 				value_pos[4].w = eatFirstInt(infile.val,',');
 				value_pos[4].h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "defense") {
+			}
+			else if(infile.key == "defense") {
 				value_pos[5].x = eatFirstInt(infile.val,',');
 				value_pos[5].y = eatFirstInt(infile.val,',');
 				value_pos[5].w = eatFirstInt(infile.val,',');
 				value_pos[5].h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "unspent") {
+			}
+			else if(infile.key == "unspent") {
 				unspent_pos = eatLabelInfo(infile.val);
-			} else if (infile.key == "show_upgrade_physical"){
+			}
+			else if (infile.key == "show_upgrade_physical") {
 				if (eatFirstInt(infile.val,',') == 0) show_upgrade[0] = false;
-			} else if (infile.key == "show_upgrade_mental"){
+			}
+			else if (infile.key == "show_upgrade_mental") {
 				if (eatFirstInt(infile.val,',') == 0) show_upgrade[1] = false;
-			} else if (infile.key == "show_upgrade_offense"){
+			}
+			else if (infile.key == "show_upgrade_offense") {
 				if (eatFirstInt(infile.val,',') == 0) show_upgrade[2] = false;
-			} else if (infile.key == "show_upgrade_defense"){
+			}
+			else if (infile.key == "show_upgrade_defense") {
 				if (eatFirstInt(infile.val,',') == 0) show_upgrade[3] = false;
-			} else if (infile.key == "show_maxhp"){
+			}
+			else if (infile.key == "show_maxhp") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[0] = false;
-			} else if (infile.key == "show_hpregen"){
+			}
+			else if (infile.key == "show_hpregen") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[1] = false;
-			} else if (infile.key == "show_maxmp"){
+			}
+			else if (infile.key == "show_maxmp") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[2] = false;
-			} else if (infile.key == "show_mpregen"){
+			}
+			else if (infile.key == "show_mpregen") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[3] = false;
-			} else if (infile.key == "show_accuracy"){
+			}
+			else if (infile.key == "show_accuracy") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[4] = false;
-			} else if (infile.key == "show_avoidance"){
+			}
+			else if (infile.key == "show_avoidance") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[5] = false;
-			} else if (infile.key == "show_melee"){
+			}
+			else if (infile.key == "show_melee") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[6] = false;
-			} else if (infile.key == "show_ranged"){
+			}
+			else if (infile.key == "show_ranged") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[7] = false;
-			} else if (infile.key == "show_mental"){
+			}
+			else if (infile.key == "show_mental") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[8] = false;
-			} else if (infile.key == "show_crit"){
+			}
+			else if (infile.key == "show_crit") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[9] = false;
-			} else if (infile.key == "show_absorb"){
+			}
+			else if (infile.key == "show_absorb") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[10] = false;
-			} else if (infile.key == "show_poise"){
+			}
+			else if (infile.key == "show_poise") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[11] = false;
-			} else if (infile.key == "show_bonus_xp"){
+			}
+			else if (infile.key == "show_bonus_xp") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[12] = false;
-			} else if (infile.key == "show_bonus_currency"){
+			}
+			else if (infile.key == "show_bonus_currency") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[13] = false;
-			} else if (infile.key == "show_bonus_itemfind"){
+			}
+			else if (infile.key == "show_bonus_itemfind") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[14] = false;
-			} else if (infile.key == "show_bonus_stealth"){
+			}
+			else if (infile.key == "show_bonus_stealth") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[15] = false;
-			} else if (infile.key == "show_resists"){
+			}
+			else if (infile.key == "show_resists") {
 				if (eatFirstInt(infile.val,',') == 0) show_stat[16] = false;
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/character.txt!\n");
+	}
 
 	// stat list
-	statList = new WidgetListBox(STATLIST_COUNT-1+stats->vulnerable.size(), statlist_rows, mods->locate("images/menus/buttons/listbox_char.png"));
+	statList = new WidgetListBox(STATLIST_COUNT-1+stats->vulnerable.size(), statlist_rows, "images/menus/buttons/listbox_char.png");
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
 
-	loadGraphics();
+	background = loadGraphicSurface("images/menus/character.png");
 }
 
 void MenuCharacter::update() {
@@ -243,20 +285,6 @@ void MenuCharacter::update() {
 	cstat[CSTAT_MENTAL].setHover(window_area.x+value_pos[3].x, window_area.y+value_pos[3].y, value_pos[3].w, value_pos[3].h);
 	cstat[CSTAT_OFFENSE].setHover(window_area.x+value_pos[4].x, window_area.y+value_pos[4].y, value_pos[4].w, value_pos[4].h);
 	cstat[CSTAT_DEFENSE].setHover(window_area.x+value_pos[5].x, window_area.y+value_pos[5].y, value_pos[5].w, value_pos[5].h);
-}
-
-void MenuCharacter::loadGraphics() {
-
-	background = IMG_Load(mods->locate("images/menus/character.png").c_str());
-	if(!background) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
-
 }
 
 /**
@@ -361,7 +389,7 @@ void MenuCharacter::refreshStats() {
 		ss << msg->get("Mental Damage:") << " ";
 		if (stats->dmg_ment_min == stats->dmg_ment_max)
 			ss << stats->dmg_ment_min;
-		else		
+		else
 			ss << stats->dmg_ment_min << "-" << stats->dmg_ment_max;
 		statList->set(visible_stats++, ss.str(),"");
 	}
@@ -377,8 +405,8 @@ void MenuCharacter::refreshStats() {
 		ss << msg->get("Absorb:") << " ";
 		if (stats->absorb_min == stats->absorb_max)
 			ss << stats->absorb_min;
-		else			
-		ss << stats->absorb_min << "-" << stats->absorb_max;
+		else
+			ss << stats->absorb_min << "-" << stats->absorb_max;
 		statList->set(visible_stats++, ss.str(),"");
 	}
 
@@ -390,7 +418,7 @@ void MenuCharacter::refreshStats() {
 
 	if (show_stat[12]) {
 		ss.str("");
-		ss << msg->get("Bonus") << " XP: " << stats->effects.bonus_xp << "%";
+		ss << msg->get("Bonus XP: ") << stats->effects.bonus_xp << "%";
 		statList->set(visible_stats++, ss.str(),msg->get("Increases the XP gained per kill"));
 	}
 
@@ -475,7 +503,7 @@ void MenuCharacter::logic() {
 	int spent = stats->physical_character + stats->mental_character + stats->offense_character + stats->defense_character -4;
 	skill_points = (stats->level * stats->stat_points_per_level) - spent;
 
-	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points) {
+	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points && stats->humanoid ) {
 		if (stats->physical_character < stats->max_points_per_stat && show_upgrade[0]) upgradeButton[0]->enabled = true;
 		if (stats->mental_character  < stats->max_points_per_stat && show_upgrade[1]) upgradeButton[1]->enabled = true;
 		if (stats->offense_character < stats->max_points_per_stat && show_upgrade[2]) upgradeButton[2]->enabled = true;
@@ -501,12 +529,11 @@ void MenuCharacter::render() {
 	SDL_Rect dest;
 
 	// background
+	dest = window_area;
 	src.x = 0;
 	src.y = 0;
-	dest.x = window_area.x;
-	dest.y = window_area.y;
-	src.w = dest.w = 320;
-	src.h = dest.h = 416;
+	src.w = window_area.w;
+	src.h = window_area.h;
 	SDL_BlitSurface(background, &src, screen, &dest);
 
 	// close button

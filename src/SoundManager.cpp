@@ -171,7 +171,7 @@ SoundManager::SoundID SoundManager::load(const std::string& filename, const std:
 	lsnd.refCnt = 1;
 	if (!lsnd.chunk) {
 		fprintf(stderr, "%s: Loading sound %s (%s) failed: %s \n", errormessage.c_str(),
-			realfilename.c_str(), filename.c_str(), Mix_GetError());
+				realfilename.c_str(), filename.c_str(), Mix_GetError());
 		return 0;
 	}
 
@@ -250,8 +250,7 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point po
 	playback.insert(pair<int, Playback>(c, p));
 }
 
-void SoundManager::on_channel_finished(int channel)
-{
+void SoundManager::on_channel_finished(int channel) {
 	PlaybackMapIterator pit = playback.find(channel);
 	if (pit == playback.end())
 		return;
@@ -261,7 +260,6 @@ void SoundManager::on_channel_finished(int channel)
 	Mix_SetPosition(channel, 0, 0);
 }
 
-void SoundManager::channel_finished(int channel)
-{
+void SoundManager::channel_finished(int channel) {
 	snd->on_channel_finished(channel);
 }

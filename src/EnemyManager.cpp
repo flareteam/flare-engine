@@ -25,6 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "EnemyBehavior.h"
 #include "BehaviorStandard.h"
+#include "BehaviorAlly.h"
+#include "Avatar.h"
 
 #include <iostream>
 #include <algorithm>
@@ -34,10 +36,9 @@ using namespace std;
 EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
 	: map(_map)
 	, powers(_powers)
-	, enemies(vector<Enemy*>())
+	, enemies()
 	, hero_alive(true)
-	, hero_stealth(0)
-{
+	, hero_stealth(0) {
 	hero_pos.x = hero_pos.y = -1;
 	handleNewMap();
 }
@@ -54,7 +55,8 @@ void EnemyManager::loadSounds(const string& type_id) {
 		sound_hit.push_back(snd->load("soundfx/enemies/" + type_id + "_hit.ogg", "EnemyManager physical hit sound"));
 		sound_die.push_back(snd->load("soundfx/enemies/" + type_id + "_die.ogg", "EnemyManager die sound"));
 		sound_critdie.push_back(snd->load("soundfx/enemies/" + type_id + "_critdie.ogg", "EnemyManager critdeath sound"));
-	} else {
+	}
+	else {
 		sound_phys.push_back(0);
 		sound_ment.push_back(0);
 		sound_hit.push_back(0);
@@ -80,9 +82,9 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 			return new Enemy(prototypes[i]);
 		}
 
-	Enemy e = Enemy(powers, map);
+	Enemy e = Enemy(powers, map, this);
 
-	e.eb = new BehaviorStandard(&e);
+	e.eb = new BehaviorStandard(&e, this);
 	e.stats.load("enemies/" + type_id + ".txt");
 	e.type = type_id;
 
@@ -106,11 +108,16 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 void EnemyManager::handleNewMap () {
 
 	Map_Enemy me;
+	std::queue<Enemy *> allies;
 
 	// delete existing enemies
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		anim->decreaseCount(enemies[i]->animationSet->getName());
-		delete enemies[i];
+		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != ENEMY_DEAD && enemies[i]->stats.cur_state != ENEMY_CRITDEAD)
+			allies.push(enemies[i]);
+		else {
+			delete enemies[i];
+		}
 	}
 	enemies.clear();
 
@@ -137,8 +144,6 @@ void EnemyManager::handleNewMap () {
 
 		Enemy *e = getEnemyPrototype(me.type);
 
-		e->enemyManager = this;
-
 		e->stats.waypoints = me.waypoints;
 		e->stats.pos.x = me.pos.x;
 		e->stats.pos.y = me.pos.y;
@@ -150,6 +155,24 @@ void EnemyManager::handleNewMap () {
 
 		map->collider.block(me.pos.x, me.pos.y);
 	}
+
+	while (!allies.empty()) {
+
+		Enemy *e = allies.front();
+		allies.pop();
+
+		//dont need the result of this. its only called to handle animation and sound
+		getEnemyPrototype(e->type);
+
+		e->stats.pos.x = pc->stats.pos.x;
+		e->stats.pos.y = pc->stats.pos.y;
+		e->stats.direction = pc->stats.direction;
+
+		enemies.push_back(e);
+
+		map->collider.block(e->stats.pos.x, e->stats.pos.y);
+	}
+
 	anim->cleanUp();
 }
 
@@ -165,13 +188,18 @@ void EnemyManager::handleSpawn() {
 		espawn = powers->enemies.front();
 		powers->enemies.pop();
 
-		Enemy *e = new Enemy(powers, map);
+		Enemy *e = new Enemy(powers, map, this);
 		// factory
-		e->eb = new BehaviorStandard(e);
-		e->enemyManager = this;
+		if(espawn.hero_ally)
+			e->eb = new BehaviorAlly(e, this);
+		else
+			e->eb = new BehaviorStandard(e, this);
 
-		e->stats.pos.x = espawn.pos.x;
-		e->stats.pos.y = espawn.pos.y;
+		e->stats.hero_ally = espawn.hero_ally;
+		e->summoned = true;
+		e->summoned_power_index = espawn.summon_power_index;
+
+		e->type = espawn.type;
 		e->stats.direction = espawn.direction;
 		e->stats.load("enemies/" + espawn.type + ".txt");
 		if (e->stats.animations != "") {
@@ -189,11 +217,58 @@ void EnemyManager::handleSpawn() {
 		}
 		loadSounds(e->stats.sfx_prefix);
 
+
+		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type) || !e->stats.hero_ally) {
+			e->stats.pos.x = espawn.pos.x;
+			e->stats.pos.y = espawn.pos.y;
+		}
+		else {
+			e->stats.pos.x = hero_pos.x;
+			e->stats.pos.y = hero_pos.y;
+		}
 		// special animation state for spawning enemies
 		e->stats.cur_state = ENEMY_SPAWN;
+
+		//now apply post effects to the spawned enemy
+		if(e->summoned_power_index > 0)
+			powers->effect(&e->stats, e->summoned_power_index,e->stats.hero_ally ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY);
+
+		//apply party passives
+		//synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
+		//at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
+		for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
+			if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && e->stats.hero_ally
+					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
+
+				e->stats.powers_passive.push_back(pc->stats.powers_passive[i]);
+			}
+		}
+
+		for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
+			if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && e->stats.hero_ally
+					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
+
+				e->stats.powers_passive.push_back(pc->stats.powers_list_items[i]);
+			}
+		}
+
 		enemies.push_back(e);
 
 		map->collider.block(espawn.pos.x, espawn.pos.y);
+	}
+}
+
+void EnemyManager::handlePartyBuff() {
+	while (!powers->party_buffs.empty()) {
+		int power_index = powers->party_buffs.front();
+		powers->party_buffs.pop();
+		Power *buff_power = &powers->powers[power_index];
+
+		for (unsigned int i=0; i < enemies.size(); i++) {
+			if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0 && (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->summoned_power_index)) {
+				powers->effect(&enemies[i]->stats,power_index,SOURCE_TYPE_HERO);
+			}
+		}
 	}
 }
 
@@ -204,45 +279,48 @@ void EnemyManager::logic() {
 
 	handleSpawn();
 
-	for (unsigned int i=0; i < enemies.size(); i++) {
+	handlePartyBuff();
 
+	vector<Enemy*>::iterator it;
+	for (it = enemies.begin(); it != enemies.end(); ++it) {
 		// hazards are processed after Avatar and Enemy[]
 		// so process and clear sound effects from previous frames
 		// check sound effects
 		if (AUDIO) {
-			vector<string>::iterator found = find (sfx_prefixes.begin(), sfx_prefixes.end(), enemies[i]->stats.sfx_prefix);
+			vector<string>::iterator found = find (sfx_prefixes.begin(), sfx_prefixes.end(), (*it)->stats.sfx_prefix);
 			unsigned pref_id = distance(sfx_prefixes.begin(), found);
 
 			if (pref_id >= sfx_prefixes.size()) {
 				cerr << "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '"
-					 << enemies[i]->stats.name << "', sfx_prefix: '"
-					 << enemies[i]->stats.sfx_prefix << "')" << endl;
-			} else {
-				if (enemies[i]->sfx_phys)
-					snd->play(sound_phys[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
-				if (enemies[i]->sfx_ment)
-					snd->play(sound_ment[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
-				if (enemies[i]->sfx_hit)
-					snd->play(sound_hit[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
-				if (enemies[i]->sfx_die)
-					snd->play(sound_die[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
-				if (enemies[i]->sfx_critdie)
-					snd->play(sound_critdie[pref_id], GLOBAL_VIRTUAL_CHANNEL, enemies[i]->stats.pos, false);
+					 << (*it)->stats.name << "', sfx_prefix: '"
+					 << (*it)->stats.sfx_prefix << "')" << endl;
+			}
+			else {
+				if ((*it)->sfx_phys)
+					snd->play(sound_phys[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
+				if ((*it)->sfx_ment)
+					snd->play(sound_ment[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
+				if ((*it)->sfx_hit)
+					snd->play(sound_hit[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
+				if ((*it)->sfx_die)
+					snd->play(sound_die[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
+				if ((*it)->sfx_critdie)
+					snd->play(sound_critdie[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
 			}
 
 			// clear sound flags
-			enemies[i]->sfx_hit = false;
-			enemies[i]->sfx_phys = false;
-			enemies[i]->sfx_ment = false;
-			enemies[i]->sfx_die = false;
-			enemies[i]->sfx_critdie = false;
+			(*it)->sfx_hit = false;
+			(*it)->sfx_phys = false;
+			(*it)->sfx_ment = false;
+			(*it)->sfx_die = false;
+			(*it)->sfx_critdie = false;
 		}
 
 		// new actions this round
-		enemies[i]->stats.hero_pos = hero_pos;
-		enemies[i]->stats.hero_alive = hero_alive;
-		enemies[i]->stats.hero_stealth = hero_stealth;
-		enemies[i]->logic();
+		(*it)->stats.hero_pos = hero_pos;
+		(*it)->stats.hero_alive = hero_alive;
+		(*it)->stats.hero_stealth = hero_stealth;
+		(*it)->logic();
 
 	}
 }
@@ -275,7 +353,12 @@ Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
 void EnemyManager::checkEnemiesforXP(CampaignManager *camp) {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		if (enemies[i]->reward_xp) {
-			camp->rewardXP(enemies[i]->stats.xp, false);
+			//adjust for party exp if necessary
+			float xp_multiplier = 1;
+			if(enemies[i]->kill_source_type == SOURCE_TYPE_ALLY)
+				xp_multiplier = ((float)PARTY_EXP_PERCENTAGE) / (float)100;
+
+			camp->rewardXP(enemies[i]->stats.xp * xp_multiplier, false);
 			enemies[i]->reward_xp = false; // clear flag
 		}
 	}

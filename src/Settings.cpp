@@ -39,8 +39,7 @@ using namespace std;
 #define log2(x)	logf(x)/logf(2)
 #endif
 
-class ConfigEntry
-{
+class ConfigEntry {
 public:
 	const char * name;
 	const type_info * type;
@@ -73,10 +72,11 @@ ConfigEntry config[] = {
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
 // Paths
+string GAME_FOLDER = "default";
 string PATH_CONF = "";
 string PATH_USER = "";
 string PATH_DATA = "";
-string USER_PATH_DATA = "";
+string CUSTOM_PATH_DATA = "";
 
 // Filenames
 string FILE_SETTINGS	= "settings.txt";
@@ -166,6 +166,7 @@ int AIM_ASSIST = 0;
 std::string GAME_PREFIX = "";
 std::string WINDOW_TITLE = "Flare";
 int SOUND_FALLOFF = 15;
+int PARTY_EXP_PERCENTAGE = 100;
 
 /**
  * Set system paths
@@ -182,8 +183,8 @@ void setPaths() {
 	PATH_CONF = "config";
 	PATH_USER = "saves";
 	PATH_DATA = "";
-	if (dirExists(USER_PATH_DATA)) PATH_DATA = USER_PATH_DATA;
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// TODO: place config and save data in the user's home, windows style
 	createDir(PATH_CONF);
@@ -198,28 +199,32 @@ void setPaths() {
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
-	if (dirExists(USER_PATH_DATA)) PATH_DATA = USER_PATH_DATA;
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
 #else
 void setPaths() {
 
-	string engine_folder = "flare";
-
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+
+	// Note: If the GAME_FOLDER isn't defined, we fall back to using the current directory
 
 	// set config path (settings, keybindings)
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
-		PATH_CONF = (string)getenv("XDG_CONFIG_HOME") + "/" + engine_folder + "/";
+		PATH_CONF = (string)getenv("XDG_CONFIG_HOME") + "/flare/";
+		createDir(PATH_CONF);
+		PATH_CONF += GAME_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// $HOME/.config/flare/
 	else if (getenv("HOME") != NULL) {
 		PATH_CONF = (string)getenv("HOME") + "/.config/";
 		createDir(PATH_CONF);
-		PATH_CONF += engine_folder + "/";
+		PATH_CONF += "flare/";
+		createDir(PATH_CONF);
+		PATH_CONF += GAME_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// ./config/
@@ -231,8 +236,11 @@ void setPaths() {
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
 	if (getenv("XDG_DATA_HOME") != NULL) {
-		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/" + engine_folder + "/";
+		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
 		createDir(PATH_USER);
+		PATH_USER += GAME_FOLDER + "/";
+		createDir(PATH_USER);
+		createDir(PATH_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -240,8 +248,11 @@ void setPaths() {
 		createDir(PATH_USER);
 		PATH_USER += "share/";
 		createDir(PATH_USER);
-		PATH_USER += engine_folder + "/";
+		PATH_USER += "flare/";
 		createDir(PATH_USER);
+		PATH_USER += GAME_FOLDER + "/";
+		createDir(PATH_USER);
+		createDir(PATH_USER + "mods/");
 	}
 	// ./saves/
 	else {
@@ -261,11 +272,11 @@ void setPaths() {
 	// NOTE: from here on out, the function exits early when the data dir is found
 
 	// if the user specified a data path, try to use it
-	if (dirExists(USER_PATH_DATA)) {
-		PATH_DATA = USER_PATH_DATA;
+	if (dirExists(CUSTOM_PATH_DATA)) {
+		PATH_DATA = CUSTOM_PATH_DATA;
 		return;
 	}
-	else if (!USER_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
@@ -280,29 +291,29 @@ void setPaths() {
 		string pathtest;
 		pathtest = eatFirstString(pathlist,':');
 		while (pathtest != "") {
-			PATH_DATA = pathtest + "/" + engine_folder + "/";
+			PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
 			if (dirExists(PATH_DATA)) return; // NOTE: early exit
 			pathtest = eatFirstString(pathlist,':');
 		}
 	}
 
 #if defined DATA_INSTALL_DIR
-	PATH_DATA = DATA_INSTALL_DIR "/";
+	PATH_DATA = DATA_INSTALL_DIR "/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	PATH_DATA = "/usr/local/share/" + engine_folder + "/";
+	PATH_DATA = "/usr/local/share/flare/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
-	PATH_DATA = "/usr/share/" + engine_folder + "/";
+	PATH_DATA = "/usr/share/flare/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
 	// check "games" variants of these
-	PATH_DATA = "/usr/local/share/games/" + engine_folder + "/";
+	PATH_DATA = "/usr/local/share/games/flare/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
-	PATH_DATA = "/usr/share/games/" + engine_folder + "/";
+	PATH_DATA = "/usr/share/games/flare/" + GAME_FOLDER + "/";
 	if (dirExists(PATH_DATA)) return; // NOTE: early exit
 
 	// finally assume the local folder
@@ -325,7 +336,7 @@ static ConfigEntry * getConfigEntry(const std::string & name) {
 void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
-	if (infile.open(mods->locate("engine/tileset_config.txt").c_str())) {
+	if (infile.open(mods->locate("engine/tileset_config.txt"), "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
 		while (infile.next()) {
 			if (infile.key == "units_per_tile") {
 				UNITS_PER_TILE = toInt(infile.val);
@@ -344,19 +355,24 @@ void loadTilesetSettings() {
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n");
+	}
 
 	// Init automatically calculated parameters
 	TILE_SHIFT = log2(UNITS_PER_TILE);
 	VIEW_W_HALF = VIEW_W / 2;
 	VIEW_H_HALF = VIEW_H / 2;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		UNITS_PER_PIXEL_X = UNITS_PER_TILE / TILE_W * 2;
-		UNITS_PER_PIXEL_Y = UNITS_PER_TILE / TILE_H * 2;
+		UNITS_PER_PIXEL_X = (UNITS_PER_TILE * 2) / TILE_W;
+		UNITS_PER_PIXEL_Y = (UNITS_PER_TILE * 2) / TILE_H;
 	}
 	else { // TILESET_ORTHOGONAL
 		UNITS_PER_PIXEL_X = UNITS_PER_TILE / TILE_W;
 		UNITS_PER_PIXEL_Y = UNITS_PER_TILE / TILE_H;
+	}
+	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
+		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", UNITS_PER_PIXEL_X, UNITS_PER_PIXEL_Y);
+		SDL_Quit();
+		exit(1);
 	}
 }
 
@@ -364,33 +380,42 @@ void loadMiscSettings() {
 	FileParser infile;
 	// load miscellaneous settings from engine config
 	// misc.txt
-	if (infile.open(mods->locate("engine/misc.txt").c_str())) {
+	if (infile.open(mods->locate("engine/misc.txt"))) {
 		while (infile.next()) {
 			if (infile.key == "save_hpmp") {
 				if (toInt(infile.val) == 1)
 					SAVE_HPMP = true;
-			} else if (infile.key == "corpse_timeout") {
+			}
+			else if (infile.key == "corpse_timeout") {
 				CORPSE_TIMEOUT = toInt(infile.val);
-			} else if (infile.key == "sell_without_vendor") {
+			}
+			else if (infile.key == "sell_without_vendor") {
 				if (toInt(infile.val) == 1)
 					SELL_WITHOUT_VENDOR = true;
 				else
 					SELL_WITHOUT_VENDOR = false;
-			} else if (infile.key == "aim_assist") {
+			}
+			else if (infile.key == "aim_assist") {
 				AIM_ASSIST = toInt(infile.val);
-			} else if (infile.key == "window_title") {
+			}
+			else if (infile.key == "window_title") {
 				WINDOW_TITLE = infile.val;
-			} else if (infile.key == "game_prefix") {
+			}
+			else if (infile.key == "game_prefix") {
 				GAME_PREFIX = infile.val;
-			} else if (infile.key == "sound_falloff") {
+			}
+			else if (infile.key == "sound_falloff") {
 				SOUND_FALLOFF = toInt(infile.val);
+			}
+			else if (infile.key == "party_exp_percentage") {
+				PARTY_EXP_PERCENTAGE = toInt(infile.val);
 			}
 
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/misc.txt!\n");
+	}
 	// resolutions.txt
-	if (infile.open(mods->locate("engine/resolutions.txt").c_str())) {
+	if (infile.open(mods->locate("engine/resolutions.txt"))) {
 		while (infile.next()) {
 			if (infile.key == "menu_frame_width")
 				FRAME_W = toInt(infile.val);
@@ -402,16 +427,17 @@ void loadMiscSettings() {
 				MIN_VIEW_W = toInt(infile.val);
 				if (VIEW_W < MIN_VIEW_W) VIEW_W = MIN_VIEW_W;
 				VIEW_W_HALF = VIEW_W/2;
-			} else if (infile.key == "required_height") {
+			}
+			else if (infile.key == "required_height") {
 				MIN_VIEW_H = toInt(infile.val);
 				if (VIEW_H < MIN_VIEW_H) VIEW_H = MIN_VIEW_H;
 				VIEW_H_HALF = VIEW_H/2;
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/resolutions.txt!\n");
+	}
 	// gameplay.txt
-	if (infile.open(mods->locate("engine/gameplay.txt").c_str())) {
+	if (infile.open(mods->locate("engine/gameplay.txt"))) {
 		while (infile.next()) {
 			if (infile.key == "enable_playgame") {
 				if (toInt(infile.val) == 1)
@@ -421,24 +447,27 @@ void loadMiscSettings() {
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/gameplay.txt!\n");
+	}
 	// combat.txt
-	if (infile.open(mods->locate("engine/combat.txt").c_str())) {
+	if (infile.open(mods->locate("engine/combat.txt"))) {
 		while (infile.next()) {
 			if (infile.key == "max_absorb_percent") {
 				MAX_ABSORB = toInt(infile.val);
-			} else if (infile.key == "max_resist_percent") {
+			}
+			else if (infile.key == "max_resist_percent") {
 				MAX_RESIST = toInt(infile.val);
-			} else if (infile.key == "max_block_percent") {
+			}
+			else if (infile.key == "max_block_percent") {
 				MAX_BLOCK = toInt(infile.val);
-			} else if (infile.key == "max_avoidance_percent") {
+			}
+			else if (infile.key == "max_avoidance_percent") {
 				MAX_AVOIDANCE = toInt(infile.val);
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/combat.txt!\n");
+	}
 	// elements.txt
-	if (infile.open(mods->locate("engine/elements.txt").c_str())) {
+	if (infile.open(mods->locate("engine/elements.txt"))) {
 		Element e;
 		ELEMENTS.clear();
 		while (infile.next()) {
@@ -451,9 +480,9 @@ void loadMiscSettings() {
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/elements.txt!\n");
+	}
 	// classes.txt
-	if (infile.open(mods->locate("engine/classes.txt").c_str())) {
+	if (infile.open(mods->locate("engine/classes.txt"))) {
 		HeroClass c;
 		HERO_CLASSES.clear();
 		while (infile.next()) {
@@ -492,7 +521,7 @@ void loadMiscSettings() {
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/classes.txt!\n");
+	}
 
 	// Make a default hero class if none were found
 	if (HERO_CLASSES.empty()) {
@@ -513,11 +542,12 @@ bool loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS)) {
-		if (!infile.open(mods->locate("engine/default_settings.txt").c_str())) {
+	if (!infile.open(PATH_CONF + FILE_SETTINGS, "")) {
+		if (!infile.open(mods->locate("engine/default_settings.txt"), "")) {
 			saveSettings();
 			return true;
-		} else saveSettings();
+		}
+		else saveSettings();
 	}
 
 	while (infile.next()) {

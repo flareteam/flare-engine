@@ -41,7 +41,8 @@ LabelInfo eatLabelInfo(string val) {
 	std::string tmp = eatFirstString(val,',');
 	if (tmp == "hidden") {
 		info.hidden = true;
-	} else {
+	}
+	else {
 		info.hidden = false;
 		info.x = atoi(tmp.c_str());
 		info.y = eatFirstInt(val,',');
@@ -64,14 +65,14 @@ LabelInfo eatLabelInfo(string val) {
 }
 
 WidgetLabel::WidgetLabel()
-	 : text("")
-	 , color(font->getColor("widget_normal"))
-	 , x_origin(0)
-	 , y_origin(0)
-	 , justify(JUSTIFY_LEFT)
-	 , valign(VALIGN_TOP)
-	 , font_style("font_regular")
-	 , text_buffer(NULL)
+	: text("")
+	, color(font->getColor("widget_normal"))
+	, x_origin(0)
+	, y_origin(0)
+	, justify(JUSTIFY_LEFT)
+	, valign(VALIGN_TOP)
+	, font_style("font_regular")
+	, text_buffer(NULL)
 
 {
 	bounds.x = bounds.y = 0;

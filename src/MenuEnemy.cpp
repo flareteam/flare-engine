@@ -49,13 +49,14 @@ MenuEnemy::MenuEnemy() {
 				bar_pos.y = eatFirstInt(infile.val,',');
 				bar_pos.w = eatFirstInt(infile.val,',');
 				bar_pos.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "text_pos") {
+			}
+			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/enemy.txt!\n");
+	}
 
 	loadGraphics();
 	enemy = NULL;
@@ -65,28 +66,8 @@ MenuEnemy::MenuEnemy() {
 }
 
 void MenuEnemy::loadGraphics() {
-
-	background = IMG_Load(mods->locate("images/menus/enemy_bar.png").c_str());
-	bar_hp = IMG_Load(mods->locate("images/menus/enemy_bar_hp.png").c_str());
-
-	if(!background || !bar_hp) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	}
-
-	// optimize
-	SDL_Surface *cleanup;
-
-	if (background) {
-		cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
-
-	if (bar_hp) {
-		cleanup = bar_hp;
-		bar_hp = SDL_DisplayFormatAlpha(bar_hp);
-		SDL_FreeSurface(cleanup);
-	}
+	background = loadGraphicSurface("images/menus/enemy_bar.png");
+	bar_hp = loadGraphicSurface("images/menus/enemy_bar_hp.png");
 }
 
 void MenuEnemy::handleNewMap() {
@@ -142,7 +123,8 @@ void MenuEnemy::render() {
 
 		if (custom_text_pos) {
 			label.set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal, text_pos.font_style);
-		} else {
+		}
+		else {
 			label.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y, JUSTIFY_CENTER, VALIGN_BOTTOM, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal);
 		}
 		label.render();

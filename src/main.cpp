@@ -77,16 +77,8 @@ static void init() {
 	SDL_WM_SetIcon(titlebar_icon, NULL);
 
 	// Create window
-	Uint32 flags = 0;
+	setupSDLVideoMode(VIEW_W, VIEW_H);
 
-	if (FULLSCREEN) flags = flags | SDL_FULLSCREEN;
-	if (DOUBLEBUF) flags = flags | SDL_DOUBLEBUF;
-	if (HWSURFACE)
-		flags = flags | SDL_HWSURFACE | SDL_HWACCEL;
-	else
-		flags = flags | SDL_SWSURFACE;
-
-	screen = SDL_SetVideoMode (VIEW_W, VIEW_H, 0, flags);
 	if (screen == NULL) {
 
 		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
@@ -115,8 +107,7 @@ static void init() {
 	else {
 		printf("No joysticks were found.\n");
 	}
-	for(int i = 0; i < SDL_NumJoysticks(); i++)
-	{
+	for(int i = 0; i < SDL_NumJoysticks(); i++) {
 		printf("  Joy %d) %s\n", i, SDL_JoystickName(i));
 	}
 	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
@@ -177,15 +168,13 @@ static void cleanup() {
 	delete msg;
 	delete snd;
 
-	SDL_FreeSurface(screen);
 	SDL_FreeSurface(titlebar_icon);
 
 	Mix_CloseAudio();
 	SDL_Quit();
 }
 
-string parseArg(const string &arg)
-{
+string parseArg(const string &arg) {
 	string result = "";
 
 	// arguments must start with '--'
@@ -199,8 +188,7 @@ string parseArg(const string &arg)
 	return result;
 }
 
-string parseArgValue(const string &arg)
-{
+string parseArgValue(const string &arg) {
 	string result = "";
 	bool found_equals = false;
 
@@ -214,18 +202,21 @@ string parseArgValue(const string &arg)
 	return result;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	bool debug_event = false;
 
 	for (int i = 1 ; i < argc; i++) {
 		string arg = string(argv[i]);
-		if (parseArg(arg) == "debug_event") {
+		if (parseArg(arg) == "debug-event") {
 			debug_event = true;
-		} else if (parseArg(arg) == "game_data") {
-			USER_PATH_DATA = parseArgValue(arg);
-			if (!USER_PATH_DATA.empty() && USER_PATH_DATA.at(USER_PATH_DATA.length()-1) != '/')
-				USER_PATH_DATA += "/";
+		}
+		else if (parseArg(arg) == "game") {
+			GAME_FOLDER = parseArgValue(arg);
+		}
+		else if (parseArg(arg) == "data-path") {
+			CUSTOM_PATH_DATA = parseArgValue(arg);
+			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
+				CUSTOM_PATH_DATA += "/";
 		}
 	}
 

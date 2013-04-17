@@ -62,7 +62,7 @@ void GameStatePlay::saveGame() {
 	ss.str("");
 	ss << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
-	  ss << GAME_PREFIX << "_";
+		ss << GAME_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
 	outfile.open(ss.str().c_str(), ios::out);
@@ -156,7 +156,7 @@ void GameStatePlay::saveGame() {
 	ss.str("");
 	ss << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
-	  ss << GAME_PREFIX << "_";
+		ss << GAME_PREFIX << "_";
 	ss << "stash.txt";
 
 	outfile.open(ss.str().c_str(), ios::out);
@@ -194,7 +194,7 @@ void GameStatePlay::loadGame() {
 	ss.str("");
 	ss << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
-	  ss << GAME_PREFIX << "_";
+		ss << GAME_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
 	if (infile.open(ss.str())) {
@@ -231,9 +231,9 @@ void GameStatePlay::loadGame() {
 				pc->stats.offense_character = toInt(infile.nextValue());
 				pc->stats.defense_character = toInt(infile.nextValue());
 				if (pc->stats.physical_character < 0 || pc->stats.physical_character > pc->stats.max_points_per_stat ||
-					pc->stats.mental_character < 0 || pc->stats.mental_character > pc->stats.max_points_per_stat ||
-					pc->stats.offense_character < 0 || pc->stats.offense_character > pc->stats.max_points_per_stat ||
-					pc->stats.defense_character < 0 || pc->stats.defense_character > pc->stats.max_points_per_stat) {
+						pc->stats.mental_character < 0 || pc->stats.mental_character > pc->stats.max_points_per_stat ||
+						pc->stats.offense_character < 0 || pc->stats.offense_character > pc->stats.max_points_per_stat ||
+						pc->stats.defense_character < 0 || pc->stats.defense_character > pc->stats.max_points_per_stat) {
 
 					fprintf(stderr, "Some basic stats are out of bounds, setting to zero\n");
 					pc->stats.physical_character = 0;
@@ -317,7 +317,8 @@ void GameStatePlay::loadGame() {
 		}
 
 		infile.close();
-	} else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
+	}
+	else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
 
 
 	menu->inv->inventory[EQUIPMENT].fillEquipmentSlots();
@@ -405,7 +406,7 @@ void GameStatePlay::loadStash() {
 	ss.str("");
 	ss << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
-	  ss << GAME_PREFIX << "_";
+		ss << GAME_PREFIX << "_";
 	ss << "stash.txt";
 
 	if (infile.open(ss.str())) {
@@ -418,5 +419,6 @@ void GameStatePlay::loadStash() {
 			}
 		}
 		infile.close();
-	}  else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
+	}
+	else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
 }

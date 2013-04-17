@@ -64,7 +64,6 @@ public:
 	WidgetListBox(int amount, int height, const std::string& _fileName);
 	~WidgetListBox();
 
-	void loadArt();
 	bool checkClick();
 	bool checkClick(int x, int y);
 	TooltipData checkTooltip(Point mouse);
@@ -83,6 +82,9 @@ public:
 	void scrollDown();
 	void render(SDL_Surface *target = NULL);
 	void refresh();
+
+	bool getNext();
+	bool getPrev();
 
 	SDL_Rect pos_scroll;
 	bool pressed;

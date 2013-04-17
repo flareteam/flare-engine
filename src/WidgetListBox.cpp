@@ -40,54 +40,31 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 	, vlabels(new WidgetLabel[list_height])
 	, rows(new SDL_Rect[list_height])
 	, tip( new WidgetTooltip())
-	, scrollbar(new WidgetScrollBar(mods->locate("images/menus/buttons/scrollbar_default.png")))
+	, scrollbar(new WidgetScrollBar("images/menus/buttons/scrollbar_default.png"))
 	, color_normal(font->getColor("widget_normal"))
 	, color_disabled(font->getColor("widget_disabled"))
-	, pos_scroll(SDL_Rect())
+	, pos_scroll()
 	, pressed(false)
 	, selected(new bool[list_amount])
 	, multi_select(false)
 	, can_deselect(true)
 	, can_select(true)
-	, scrollbar_offset(0)
-{
-	listboxs = NULL;
+	, scrollbar_offset(0) {
+	// load ListBox images
+	listboxs = loadGraphicSurface(fileName, "Couldn't load image", true);
 	click = NULL;
-
 
 	for (int i=0; i<list_amount; i++) {
 		selected[i] = false;
 		values[i] = "";
 	}
 
-	loadArt();
-
 	pos.w = listboxs->w;
 	pos.h = (listboxs->h / 3); // height of one item
 }
 
-void WidgetListBox::loadArt() {
-
-	// load ListBox images
-	listboxs = IMG_Load(fileName.c_str());
-
-	if(!listboxs) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-		SDL_Quit();
-		exit(1); // or abort ??
-	}
-
-	// optimize
-	SDL_Surface *cleanup = listboxs;
-	listboxs = SDL_DisplayFormatAlpha(listboxs);
-	SDL_FreeSurface(cleanup);
-}
-
 bool WidgetListBox::checkClick() {
-	if (checkClick(inpt->mouse.x,inpt->mouse.y))
-		return true;
-	else
-		return false;
+	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
 /**
@@ -115,7 +92,8 @@ bool WidgetListBox::checkClick(int x, int y) {
 			scrollDown();
 			inpt->resetScroll();
 		}
-	} else {
+	}
+	else {
 		inpt->resetScroll();
 	}
 
@@ -157,7 +135,8 @@ bool WidgetListBox::checkClick(int x, int y) {
 					// activate upon release
 					if (selected[i+cursor]) {
 						if (can_deselect) selected[i+cursor] = false;
-					} else {
+					}
+					else {
 						selected[i+cursor] = true;
 					}
 					refresh();
@@ -171,7 +150,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 
 	// detect new click
 	if (inpt->pressing[MAIN1]) {
-		for (int i=0; i<list_height;i++) {
+		for (int i=0; i<list_height; i++) {
 			if (isWithin(rows[i], mouse)) {
 
 				inpt->lock[MAIN1] = true;
@@ -208,7 +187,7 @@ TooltipData WidgetListBox::checkTooltip(Point mouse) {
  * Set the value and tooltip of the first available slot
  */
 void WidgetListBox::append(std::string value, std::string tooltip) {
-	for (int i=0;i<list_amount;i++) {
+	for (int i=0; i<list_amount; i++) {
 		if (values[i] == "") {
 			values[i] = value;
 			tooltips[i] = tooltip;
@@ -232,12 +211,13 @@ void WidgetListBox::set(int index, std::string value, std::string tooltip) {
  * Clear a slot at a specified index, shifting the other items accordingly
  */
 void WidgetListBox::remove(int index) {
-	for (int i=index;i<list_amount;i++) {
+	for (int i=index; i<list_amount; i++) {
 		if (i==list_amount-1) {
 			selected[i] = false;
 			values[i] = "";
 			tooltips[i] = "";
-		} else {
+		}
+		else {
 			selected[i] = selected[i+1];
 			values[i] = values[i+1];
 			tooltips[i] = tooltips[i+1];
@@ -396,6 +376,26 @@ void WidgetListBox::render(SDL_Surface *target) {
 		}
 	}
 
+	if (in_focus) {
+		Point topLeft;
+		Point bottomRight;
+		Uint32 color;
+
+		topLeft.x = rows[0].x;
+		topLeft.y = rows[0].y;
+		bottomRight.x = rows[list_height - 1].x + rows[0].w;
+		bottomRight.y = rows[list_height - 1].y + rows[0].h;
+		color = SDL_MapRGB(target->format, 255,248,220);
+
+		if (target == screen) {
+			SDL_LockSurface(screen);
+			drawRectangle(target, topLeft, bottomRight, color);
+			SDL_UnlockSurface(screen);
+		}
+		else
+			drawRectangle(target, topLeft, bottomRight, color);
+	}
+
 	if (has_scroll_bar)
 		scrollbar->render(target);
 }
@@ -411,7 +411,7 @@ void WidgetListBox::refresh() {
 
 	// Get the number of slots that have content
 	non_empty_slots = 0;
-	for (int i=0;i<list_amount;i++) {
+	for (int i=0; i<list_amount; i++) {
 		if (values[i] != "")
 			non_empty_slots = i+1;
 	}
@@ -425,19 +425,20 @@ void WidgetListBox::refresh() {
 		pos_scroll.h = (pos.h*list_height)-scrollbar->pos_down.h-(scrollbar_offset*2);
 		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, non_empty_slots-list_height);
 		right_margin = scrollbar->pos_knob.w + 8;
-	} else {
+	}
+	else {
 		has_scroll_bar = false;
 		right_margin = 8;
 	}
 
 	// Update each row's hitbox and label
-	for(int i=0;i<list_height;i++)
-	{
+	for(int i=0; i<list_height; i++) {
 		rows[i].x = pos.x;
 		rows[i].y = (pos.h*i)+pos.y;
 		if (has_scroll_bar) {
 			rows[i].w = pos.w - pos_scroll.w;
-		} else {
+		}
+		else {
 			rows[i].w = pos.w;
 		}
 		rows[i].h = pos.h;
@@ -452,18 +453,48 @@ void WidgetListBox::refresh() {
 			if (font->calc_width(values[i+cursor]) > pos.w-right_margin) {
 				temp = values[i+cursor].substr(0,max_length);
 				temp.append("...");
-			} else {
+			}
+			else {
 				temp = values[i+cursor];
 			}
 
 			if(selected[i+cursor]) {
 				vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_normal);
-			} else {
+			}
+			else {
 				vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_disabled);
 			}
 		}
 	}
 
+}
+
+bool WidgetListBox::getNext() {
+	int sel = getSelected();
+	selected[sel] = false;
+
+	if(sel == list_amount-1) {
+		selected[0] = true;
+	}
+	else {
+		selected[sel+1] = true;
+	}
+
+	return true;
+}
+
+bool WidgetListBox::getPrev() {
+	int sel = getSelected();
+	selected[sel] = false;
+
+	if(sel == 0) {
+		selected[list_amount-1] = true;
+	}
+	else {
+		selected[sel-1] = true;
+	}
+
+	return true;
 }
 
 WidgetListBox::~WidgetListBox() {

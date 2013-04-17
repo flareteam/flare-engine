@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -32,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "GameSwitcher.h"
 #include "GameStateTitle.h"
+#include "GameStateCutscene.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "FileParser.h"
@@ -41,8 +43,16 @@ using namespace std;
 
 GameSwitcher::GameSwitcher() {
 
-	// The initial state is the title screen
-	currentState = new GameStateTitle();
+	// The initial state is the intro cutscene and then title screen
+	GameStateTitle *title=new GameStateTitle();
+	GameStateCutscene *intro = new GameStateCutscene(title);
+
+	currentState = intro;
+
+	if (!intro->load("intro.txt")) {
+		delete intro;
+		currentState = title;
+	}
 
 	label_fps = new WidgetLabel();
 	done = false;
@@ -56,7 +66,7 @@ void GameSwitcher::loadMusic() {
 		Mix_FreeMusic(music);
 		music = Mix_LoadMUS((mods->locate("music/title_theme.ogg")).c_str());
 		if (!music)
-		  printf("Mix_LoadMUS: %s\n", Mix_GetError());
+			printf("Mix_LoadMUS: %s\n", Mix_GetError());
 	}
 
 	if (music) {
@@ -111,14 +121,15 @@ void GameSwitcher::loadFPS() {
 				fps_position.x = eatFirstInt(infile.val,',');
 				fps_position.y = eatFirstInt(infile.val,',');
 				fps_corner = eatFirstString(infile.val,',');
-			} else if(infile.key == "color") {
+			}
+			else if(infile.key == "color") {
 				fps_color.r = eatFirstInt(infile.val,',');
 				fps_color.g = eatFirstInt(infile.val,',');
 				fps_color.b = eatFirstInt(infile.val,',');
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/fps.txt!\n");
+	}
 
 	// this is a dummy string used to approximate the fps position when aligned to the right
 	font->setFont("font_regular");
@@ -127,11 +138,14 @@ void GameSwitcher::loadFPS() {
 
 	if (fps_corner == "top_left") {
 		// relative to {0,0}, so no changes
-	} else if (fps_corner == "top_right") {
+	}
+	else if (fps_corner == "top_right") {
 		fps_position.x += VIEW_W-w;
-	} else if (fps_corner == "bottom_left") {
+	}
+	else if (fps_corner == "bottom_left") {
 		fps_position.y += VIEW_H-h;
-	} else if (fps_corner == "bottom_right") {
+	}
+	else if (fps_corner == "bottom_right") {
 		fps_position.x += VIEW_W-w;
 		fps_position.y += VIEW_H-h;
 	}

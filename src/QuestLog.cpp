@@ -46,8 +46,7 @@ QuestLog::QuestLog(CampaignManager *_camp, MenuLog *_log) {
 	loadAll();
 }
 
-QuestLog::~QuestLog()
-{
+QuestLog::~QuestLog() {
 }
 
 /**
@@ -58,6 +57,12 @@ void QuestLog::loadAll() {
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
+
+		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/quests/index.txt";
+
+		if (fileExists(test_path)) {
+			this->loadIndex(test_path);
+		}
 
 		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/quests/index.txt";
 
@@ -102,10 +107,8 @@ void QuestLog::loadIndex(const std::string& filename) {
  */
 void QuestLog::load(const std::string& filename) {
 	FileParser infile;
-	if (!infile.open(mods->locate("quests/" + filename))) {
-		fprintf(stderr, "Unable to open quests/%s!\n", filename.c_str());
+	if (!infile.open(mods->locate("quests/" + filename)))
 		return;
-	}
 
 	while (infile.next()) {
 		if (infile.new_section) {

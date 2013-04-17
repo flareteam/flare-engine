@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR dallatower@libero.it, 2012.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-15 21:44+0100\n"
+"POT-Creation-Date: 2013-03-24 14:09+0100\n"
 "PO-Revision-Date: 2012-07-02 19:21+0100\n"
 "Last-Translator: Giovanni Dalla Torre <dallatower@libero.it>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -40,7 +40,7 @@ msgid "miss"
 msgstr "mancato"
 
 #: ../../../src/Avatar.cpp:784 ../../../src/Enemy.cpp:248
-#: ../../../src/PowerManager.cpp:666 ../../../src/StatBlock.cpp:522
+#: ../../../src/PowerManager.cpp:668 ../../../src/StatBlock.cpp:539
 #, c-format
 msgid "+%d HP"
 msgstr "+%d HP"
@@ -85,21 +85,21 @@ msgstr "Effetti Negativi rimossi"
 msgid "HP and MP restored, negative effects removed"
 msgstr "HP e MP ripristinati, Effetti Negativi rimossi"
 
-#: ../../../src/Enemy.cpp:255 ../../../src/StatBlock.cpp:527
+#: ../../../src/Enemy.cpp:255 ../../../src/StatBlock.cpp:544
 #, c-format
 msgid "+%d MP"
 msgstr "+%d MP"
 
-#: ../../../src/GameStateConfig.cpp:79
-msgid "Ok"
-msgstr "Ok"
+#: ../../../src/GameStateConfig.cpp:79 ../../../src/GameStateConfig.cpp:164
+msgid "OK"
+msgstr "OK"
 
 #: ../../../src/GameStateConfig.cpp:84 ../../../src/GameStateConfig.cpp:163
 msgid "Defaults"
 msgstr "Defaults"
 
 #: ../../../src/GameStateConfig.cpp:89 ../../../src/GameStateNew.cpp:55
-#: ../../../src/InputState.cpp:59
+#: ../../../src/InputState.cpp:59 ../../../src/MenuNPCActions.cpp:77
 msgid "Cancel"
 msgstr "Cancellare"
 
@@ -136,10 +136,6 @@ msgstr "Assegnazioni:"
 #, fuzzy
 msgid "Reset ALL settings?"
 msgstr "Settare TUTTI i settaggi a default?"
-
-#: ../../../src/GameStateConfig.cpp:164
-msgid "OK"
-msgstr ""
 
 #: ../../../src/GameStateConfig.cpp:164
 #, fuzzy
@@ -264,7 +260,7 @@ msgstr "Nuovo Gioco"
 
 #: ../../../src/GameStateLoad.cpp:479 ../../../src/GameStateLoad.cpp:489
 msgid "Enable a story mod to continue"
-msgstr ""
+msgstr "Abilita un Story mod per continuare"
 
 #: ../../../src/GameStateLoad.cpp:485
 msgid "Load Game"
@@ -329,7 +325,7 @@ msgstr "Giocare"
 
 #: ../../../src/GameStateTitle.cpp:45
 msgid "Enable a core mod to continue"
-msgstr ""
+msgstr "Abilitare un Core mod per continuare"
 
 #: ../../../src/GameStateTitle.cpp:49
 msgid "Configuration"
@@ -341,8 +337,8 @@ msgstr "Uscire dal Gioco"
 
 #: ../../../src/GameStateTitle.cpp:61
 #, fuzzy
-msgid "Flare Alpha v0.17"
-msgstr "Flare Alpha v0.16"
+msgid "Flare Alpha v0.18"
+msgstr "Flare Alpha v0.18"
 
 #: ../../../src/InputState.cpp:60
 msgid "Accept"
@@ -518,8 +514,8 @@ msgstr "Assorbimento: %d"
 
 #: ../../../src/ItemManager.cpp:517
 #, c-format
-msgid "%d\\% Speed"
-msgstr ""
+msgid "%d%% Speed"
+msgstr "%d%% Velocità"
 
 #: ../../../src/ItemManager.cpp:522 ../../../src/ItemManager.cpp:614
 #, c-format
@@ -585,12 +581,12 @@ msgstr "Set: "
 msgid "%d items: "
 msgstr "%d oggetti: "
 
-#: ../../../src/LootManager.cpp:183 ../../../src/MenuInventory.cpp:176
+#: ../../../src/LootManager.cpp:185 ../../../src/MenuInventory.cpp:176
 #, fuzzy, c-format
 msgid "%d %s"
 msgstr "Livello %d %s"
 
-#: ../../../src/MapRenderer.cpp:1227
+#: ../../../src/MapRenderer.cpp:1244
 msgid "Unknown destination"
 msgstr "Destinazione sconosciuta"
 
@@ -718,23 +714,27 @@ msgstr "Critico: "
 #: ../../../src/MenuCharacter.cpp:377
 #, fuzzy
 msgid "Absorb:"
-msgstr "Assorbimento"
+msgstr "Assorbimento:"
 
 #: ../../../src/MenuCharacter.cpp:387
 msgid "Poise: "
-msgstr ""
+msgstr "Equilibrio:"
 
 #: ../../../src/MenuCharacter.cpp:388
 msgid "Reduces your chance of stumbling when hit"
-msgstr ""
+msgstr "Riduce le probabilità di inciampare quando colpiti"
 
-#: ../../../src/MenuCharacter.cpp:393 ../../../src/MenuCharacter.cpp:399
-msgid "Bonus"
-msgstr ""
+#: ../../../src/MenuCharacter.cpp:393
+msgid "Bonus XP: "
+msgstr "Bonus XP: "
 
 #: ../../../src/MenuCharacter.cpp:394
 msgid "Increases the XP gained per kill"
-msgstr ""
+msgstr "Aumenta i punti XP guadagnati per uccisione"
+
+#: ../../../src/MenuCharacter.cpp:399
+msgid "Bonus"
+msgstr "Bonus"
 
 #: ../../../src/MenuCharacter.cpp:400
 #, fuzzy, c-format
@@ -743,19 +743,19 @@ msgstr "Incremento %s di %d"
 
 #: ../../../src/MenuCharacter.cpp:405
 msgid "Bonus Item Find: "
-msgstr ""
+msgstr "Bonus oggetti trovati: "
 
 #: ../../../src/MenuCharacter.cpp:406
 msgid "Increases the chance that an enemy will drop an item when killed"
-msgstr ""
+msgstr "Aumenta la probabilità che un nemico lascerà cadere un oggetto quando ucciso"
 
 #: ../../../src/MenuCharacter.cpp:411
 msgid "Stealth: "
-msgstr ""
+msgstr "Furtività:"
 
 #: ../../../src/MenuCharacter.cpp:412
 msgid "Increases your ability to move undetected"
-msgstr ""
+msgstr "Aumenta la tua abilità a muoversi furtivamente"
 
 #: ../../../src/MenuCharacter.cpp:430
 #, c-format
@@ -835,6 +835,10 @@ msgstr "XP: %d/%d"
 #: ../../../src/MenuManager.cpp:630 ../../../src/MenuManager.cpp:631
 msgid "Not enough money."
 msgstr "Non hai abbastanza soldi."
+
+#: ../../../src/MenuNPCActions.cpp:76
+msgid "Trade"
+msgstr "Commerciante"
 
 #: ../../../src/MenuPowers.cpp:460
 #, fuzzy
@@ -919,18 +923,21 @@ msgstr "Ricomprare"
 msgid "Vendor"
 msgstr "Venditore"
 
-#: ../../../src/PowerManager.cpp:659
+#: ../../../src/PowerManager.cpp:661
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d scudi"
 
-#: ../../../src/PowerManager.cpp:901
+#: ../../../src/PowerManager.cpp:903
 msgid "You are already transformed, untransform first."
 msgstr "Sei già trasformato, annulla trasformazione prima"
 
 #: ../../../src/Settings.cpp:500
 msgid "Adventurer"
 msgstr "Avventuriero"
+
+#~ msgid "Ok"
+#~ msgstr "Ok"
 
 #~ msgid "Flare"
 #~ msgstr "Flare"
@@ -945,9 +952,6 @@ msgstr "Avventuriero"
 
 #~ msgid "Stats"
 #~ msgstr "Statistiche"
-
-#~ msgid "Trade"
-#~ msgstr "Commerciante"
 
 #~ msgid "Grand Master"
 #~ msgstr "Grande Maestro"

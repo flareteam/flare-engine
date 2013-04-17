@@ -35,13 +35,13 @@ MenuStash::MenuStash(ItemManager *_items, StatBlock *_stats)
 	: Menu()
 	, items(_items)
 	, stats(_stats)
-	, closeButton(new WidgetButton(mods->locate("images/menus/buttons/button_x.png")))
+	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
 	, color_normal(font->getColor("menu_normal"))
-	, stock(MenuItemStorage())
+	, stock()
 	, updated(false)
 
 {
-	loadGraphics();
+	background = loadGraphicSurface("images/menus/stash.png");
 
 	// Load config settings
 	FileParser infile;
@@ -52,33 +52,25 @@ MenuStash::MenuStash(ItemManager *_items, StatBlock *_stats)
 			if (infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "slots_area") {
+			}
+			else if (infile.key == "slots_area") {
 				slots_area.x = eatFirstInt(infile.val,',');
 				slots_area.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "stash_cols"){
+			}
+			else if (infile.key == "stash_cols") {
 				slots_cols = eatFirstInt(infile.val,',');
-			} else if (infile.key == "stash_rows"){
+			}
+			else if (infile.key == "stash_rows") {
 				slots_rows = eatFirstInt(infile.val,',');
-			} else if (infile.key == "caption"){
+			}
+			else if (infile.key == "caption") {
 				title =  eatLabelInfo(infile.val);
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/stash.txt!\n");
+	}
 
 	STASH_SLOTS = slots_cols * slots_rows;
-}
-
-void MenuStash::loadGraphics() {
-	background = IMG_Load(mods->locate("images/menus/stash.png").c_str());
-	if (!background) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
 }
 
 void MenuStash::update() {
@@ -155,7 +147,8 @@ void MenuStash::drop(Point mouse, ItemStack stack) {
 			// Swap the two stacks
 			itemReturn(stock[slot]);
 			stock[slot] = stack;
-		} else {
+		}
+		else {
 			itemReturn( stack);
 		}
 	}

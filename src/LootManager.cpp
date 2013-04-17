@@ -34,6 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuInventory.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
+#include "UtilsMath.h"
+#include "Utils.h"
 
 #include <sstream>
 #include <iostream>
@@ -55,7 +57,7 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 
 	FileParser infile;
 	// load loot animation settings from engine config file
-	if (infile.open(mods->locate("engine/loot.txt").c_str())) {
+	if (infile.open(mods->locate("engine/loot.txt"))) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -64,37 +66,46 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 				animation_pos.y = eatFirstInt(infile.val, ',');
 				animation_pos.w = eatFirstInt(infile.val, ',');
 				animation_pos.h = eatFirstInt(infile.val, ',');
-			} else if (infile.key == "loot_animation_offset") {
+			}
+			else if (infile.key == "loot_animation_offset") {
 				animation_offset.x = eatFirstInt(infile.val, ',');
 				animation_offset.y = eatFirstInt(infile.val, ',');
-			} else if (infile.key == "tooltip_margin") {
+			}
+			else if (infile.key == "tooltip_margin") {
 				tooltip_margin = eatFirstInt(infile.val, ',');
-			} else if (infile.key == "autopickup_range") {
+			}
+			else if (infile.key == "autopickup_range") {
 				AUTOPICKUP_RANGE = eatFirstInt(infile.val, ',');
-			} else if (infile.key == "autopickup_currency") {
+			}
+			else if (infile.key == "autopickup_currency") {
 				int currency = eatFirstInt(infile.val, ',');
 				if (currency == 1)
 					AUTOPICKUP_CURRENCY = true;
 				else
 					AUTOPICKUP_CURRENCY = false;
-			} else if (infile.key == "currency_name") {
+			}
+			else if (infile.key == "currency_name") {
 				CURRENCY = msg->get(eatFirstString(infile.val, ','));
-			} else if (infile.key == "vendor_ratio") {
+			}
+			else if (infile.key == "vendor_ratio") {
 				VENDOR_RATIO = eatFirstInt(infile.val, ',') / 100.0f;
-			} else if (infile.key == "currency_range") {
+			}
+			else if (infile.key == "currency_range") {
 				CurrencyRange cr;
 				cr.filename = eatFirstString(infile.val, ',');
 				cr.low = eatFirstInt(infile.val, ',');
 				cr.high = eatFirstInt(infile.val, ',');
 				currency_range.push_back(cr);
-			} else if (infile.key == "sfx_loot") {
+			}
+			else if (infile.key == "sfx_loot") {
 				sfx_loot =  snd->load(eatFirstString(infile.val, ','), "LootManager dropping loot");
-			} else if (infile.key == "sfx_currency") {
+			}
+			else if (infile.key == "sfx_currency") {
 				sfx_currency =  snd->load(eatFirstString(infile.val, ','), "LootManager currency");
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/loot.txt!\n");
+	}
 
 	// reset current map loot
 	loot.clear();
@@ -145,7 +156,7 @@ void LootManager::logic() {
 
 		if (it->animation->isSecondLastFrame()) {
 			if (it->stack.item > 0)
-			  items->playSound(it->stack.item, it->pos);
+				items->playSound(it->stack.item, it->pos);
 			else
 				playCurrencySound(it->pos);
 		}
@@ -237,16 +248,17 @@ void LootManager::checkMapForLoot() {
 	// first drop any 'fixed' (0% chance) items
 	for (unsigned i = map->loot.size(); i > 0; i--) {
 		ec = &map->loot[i-1];
-		if (ec->w == 0) {
+		if (ec->z == 0) {
 			p.x = ec->x;
 			p.y = ec->y;
 
 			// an item id of 0 means we should drop currency instead
 			if (ec->s == "currency" || toInt(ec->s) == 0) {
-				addCurrency(ec->z, p);
-			} else {
+				addCurrency(randBetween(ec->a,ec->b), p);
+			}
+			else {
 				new_loot.item = toInt(ec->s);
-				new_loot.quantity = ec->z;
+				new_loot.quantity = randBetween(ec->a,ec->b);
 				addLoot(new_loot, p);
 			}
 
@@ -260,15 +272,16 @@ void LootManager::checkMapForLoot() {
 
 		if (possible_ids.empty()) {
 			// find the rarest loot less than the chance roll
-			if (chance < (ec->w * (hero->effects.bonus_item_find + 100)) / 100) {
+			if (chance < (ec->z * (hero->effects.bonus_item_find + 100)) / 100) {
 				possible_ids.push_back(i-1);
-				common_chance = ec->w;
+				common_chance = ec->z;
 				i=map->loot.size(); // start searching from the beginning
 				continue;
 			}
-		} else {
+		}
+		else {
 			// include loot with identical chances
-			if (ec->w == common_chance)
+			if (ec->z == common_chance)
 				possible_ids.push_back(i-1);
 		}
 	}
@@ -283,10 +296,11 @@ void LootManager::checkMapForLoot() {
 
 		// an item id of 0 means we should drop currency instead
 		if (ec->s == "currency" || toInt(ec->s) == 0) {
-			addCurrency(ec->z, p);
-		} else {
+			addCurrency(randBetween(ec->a,ec->b), p);
+		}
+		else {
 			new_loot.item = toInt(ec->s);
-			new_loot.quantity = ec->z;
+			new_loot.quantity = randBetween(ec->a,ec->b);
 			addLoot(new_loot, p);
 		}
 	}
@@ -301,6 +315,8 @@ void LootManager::checkMapForLoot() {
 void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 	ItemStack new_loot;
 	std::vector<int> possible_ids;
+	std::vector<Point> possible_ranges;
+	Point range;
 	int common_chance = -1;
 
 	int chance = rand() % 100;
@@ -311,32 +327,44 @@ void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 			if (chance < (e->stats.loot[i].chance * (hero->effects.bonus_item_find + 100)) / 100) {
 				possible_ids.push_back(e->stats.loot[i].id);
 				common_chance = e->stats.loot[i].chance;
+
+				range.x = e->stats.loot[i].count_min;
+				range.y = e->stats.loot[i].count_max;
+				possible_ranges.push_back(range);
+
 				i=-1; // start searching from the beginning
 				continue;
 			}
-		} else {
+		}
+		else {
 			// include loot with identical chances
-			if (e->stats.loot[i].chance == common_chance)
+			if (e->stats.loot[i].chance == common_chance) {
 				possible_ids.push_back(e->stats.loot[i].id);
+
+				range.x = e->stats.loot[i].count_min;
+				range.y = e->stats.loot[i].count_max;
+				possible_ranges.push_back(range);
+
+			}
 		}
 	}
 
 	if (!possible_ids.empty()) {
-		// if there was more than one item with the same chance, randomly pick one of them
-		if (possible_ids.size() == 1) new_loot.item = possible_ids[0];
-		else new_loot.item = possible_ids[rand() % possible_ids.size()];
-		new_loot.quantity = 1;
+
+		int roll = rand() % possible_ids.size();
+		new_loot.item = possible_ids[roll];
+		new_loot.quantity = randBetween(possible_ranges[roll].x, possible_ranges[roll].y);
 
 		// an item id of 0 means we should drop currency instead
 		if (new_loot.item == 0) {
-			int level = e->stats.level;
-			if (level == 0) level = 1; // avoid div/0 if enemy level is not specified
 
-			// TODO: move gold drop amounts to engine/loot.txt
-			int currency = rand() % (level * 2) + level;
+			// calculate bonus currency
+			int currency = new_loot.quantity;
 			currency = (currency * (100 + hero->effects.bonus_currency)) / 100;
+
 			addCurrency(currency, pos);
-		} else {
+		}
+		else {
 			addLoot(new_loot, pos);
 		}
 	}
@@ -467,7 +495,7 @@ ItemStack LootManager::checkNearestPickup(Point hero_pos, int &currency, MenuInv
 	int best_distance = std::numeric_limits<int>::max();
 
 	vector<Loot>::iterator it;
-	vector<Loot>::iterator nearest;
+	vector<Loot>::iterator nearest = loot.end();
 
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
@@ -479,7 +507,7 @@ ItemStack LootManager::checkNearestPickup(Point hero_pos, int &currency, MenuInv
 		}
 	}
 
-	if (&(*nearest) != NULL) {
+	if (nearest != loot.end()) {
 		if (nearest->stack.item > 0 && !(inv->full(nearest->stack.item))) {
 			loot_stack = nearest->stack;
 			loot.erase(nearest);
@@ -511,7 +539,7 @@ void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_de
 }
 
 void LootManager::playCurrencySound(Point pos) {
-  snd->play(sfx_currency, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+	snd->play(sfx_currency, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
 LootManager::~LootManager() {

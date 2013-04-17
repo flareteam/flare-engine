@@ -49,7 +49,6 @@ class NPCManager;
 class PowerManager;
 class QuestLog;
 class WidgetLabel;
-class MinionManager;
 
 class Title{
 public:
@@ -80,7 +79,6 @@ private:
 	MapRenderer *map;
 	Avatar *pc;
 	EnemyManager *enemies;
-	MinionManager *minions;
 	HazardManager *hazards;
 	MenuManager *menu;
 	LootManager *loot;
@@ -103,6 +101,7 @@ private:
 	void checkNotifications();
 	void checkNPCInteraction();
 	void checkStash();
+	void checkCutscene();
 	void showLoading();
 	void loadTitles();
 
@@ -117,6 +116,8 @@ private:
 public:
 	GameStatePlay();
 	~GameStatePlay();
+
+	void initialize();
 
 	void logic();
 	void render();

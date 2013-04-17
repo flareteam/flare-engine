@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 #include <string>
 
+class TabList;
 class MenuConfirm;
 class Widget;
 class WidgetButton;
@@ -72,19 +73,19 @@ private:
 	void update();
 	void setDefaultResolution();
 	void refreshFont();
-	bool applyVideoSettings(SDL_Surface *src, int width, int height);
+	bool applyVideoSettings(int width, int height);
 	void enableMods();
 	void disableMods();
 	bool setMods();
 	void scanKey(int button);
 
+	TabList tablist;
 	std::vector<Widget*>      child_widget;
 	WidgetTabControl    * tabControl;
 	WidgetButton        * ok_button;
 	WidgetButton        * defaults_button;
 	WidgetButton        * cancel_button;
 	SDL_Surface         * background;
-	std::string         imgFileName;
 
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;

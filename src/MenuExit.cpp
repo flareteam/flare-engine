@@ -27,24 +27,14 @@ MenuExit::MenuExit() : Menu() {
 
 	exitClicked = false;
 
-	buttonExit = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	buttonExit = new WidgetButton("images/menus/buttons/button_default.png");
 	buttonExit->label = msg->get("Exit");
 
-	buttonClose = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
+	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 
-	loadGraphics();
-}
-
-void MenuExit::loadGraphics() {
-	background = IMG_Load(mods->locate("images/menus/confirm_bg.png").c_str());
-	if(!background) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
+	background = loadGraphicSurface("images/menus/confirm_bg.png");
+	tablist.add(buttonExit);
+	tablist.add(buttonClose);
 }
 
 void MenuExit::update() {
@@ -60,6 +50,8 @@ void MenuExit::update() {
 
 void MenuExit::logic() {
 	if (visible) {
+		tablist.logic();
+
 		if (buttonExit->checkClick()) {
 			exitClicked = true;
 		}

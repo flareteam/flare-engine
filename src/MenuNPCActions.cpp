@@ -38,8 +38,7 @@ class Action {
 public:
 	Action(std::string _id = "", std::string _label="")
 		: id(_id)
-		, label(id != "" ? new WidgetLabel() : NULL)
-	{
+		, label(id != "" ? new WidgetLabel() : NULL) {
 		if (label)
 			label->set(_label);
 	}
@@ -52,7 +51,9 @@ public:
 		}
 	}
 
-	virtual ~Action() { delete label; }
+	virtual ~Action() {
+		delete label;
+	}
 
 	std::string id;
 	WidgetLabel *label;
@@ -67,25 +68,12 @@ MenuNPCActions::MenuNPCActions()
 	, first_dialog_node(-1)
 	, current_action(-1)
 	, action_menu(NULL)
-	, vendor_label("Shop")
-	, cancel_label("Cancel")
+	, vendor_label(msg->get("Trade"))
+	, cancel_label(msg->get("Cancel"))
 	, dialog_selected(false)
 	, vendor_selected(false)
 	, cancel_selected(false)
-	, selected_dialog_node(-1)
-{
-	// Setup defaults
-	vendor_normal_color.r = cancel_normal_color.r = topic_normal_color.r = 0xd0;
-	vendor_normal_color.g = cancel_normal_color.g = topic_normal_color.g = 0xd0;
-	vendor_normal_color.b = cancel_normal_color.b = topic_normal_color.b = 0xd0;
-
-	vendor_hilight_color.r = cancel_hilight_color.r = topic_hilight_color.r = 0xff;
-	vendor_hilight_color.g = cancel_hilight_color.g = topic_hilight_color.g = 0xff;
-	vendor_hilight_color.b = cancel_hilight_color.b = topic_hilight_color.b = 0xff;
-
-	background_color.r = background_color.g = background_color.b = 0x00;
-	background_alpha = 0xd0;
-
+	, selected_dialog_node(-1) {
 	// Load config settings
 	FileParser infile;
 	if(infile.open(mods->locate("menus/npc.txt"))) {
@@ -128,17 +116,9 @@ MenuNPCActions::MenuNPCActions()
 				cancel_hilight_color.g = eatFirstInt(infile.val,',');
 				cancel_hilight_color.b = eatFirstInt(infile.val,',');
 			}
-			else if(infile.key == "vendor_label") {
-				vendor_label = eatFirstString(infile.val, ',');
-				vendor_label = msg->get(vendor_label);
-			}
-			else if(infile.key == "cancel_label") {
-				cancel_label = eatFirstString(infile.val, ',');
-				cancel_label = msg->get(cancel_label);
-			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/npc.txt!\n");
+	}
 }
 
 void MenuNPCActions::update() {
@@ -185,10 +165,11 @@ void MenuNPCActions::update() {
 					text_color = topic_hilight_color;
 
 				npc_actions[i].label->set(MENU_BORDER + (w/2),
-							  yoffs + (npc_actions[i].rect.h/2) ,
-							  JUSTIFY_CENTER, VALIGN_CENTER,
-							  npc_actions[i].label->get(), text_color);
-			} else {
+										  yoffs + (npc_actions[i].rect.h/2) ,
+										  JUSTIFY_CENTER, VALIGN_CENTER,
+										  npc_actions[i].label->get(), text_color);
+			}
+			else {
 				if (npc_actions[i].id == "id_cancel")
 					text_color = cancel_normal_color;
 				else if (npc_actions[i].id == "id_vendor")
@@ -197,9 +178,9 @@ void MenuNPCActions::update() {
 					text_color = topic_normal_color;
 
 				npc_actions[i].label->set(MENU_BORDER + (w/2),
-							  yoffs + (npc_actions[i].rect.h/2),
-							  JUSTIFY_CENTER, VALIGN_CENTER,
-							  npc_actions[i].label->get(), text_color);
+										  yoffs + (npc_actions[i].rect.h/2),
+										  JUSTIFY_CENTER, VALIGN_CENTER,
+										  npc_actions[i].label->get(), text_color);
 			}
 
 		}
@@ -215,14 +196,14 @@ void MenuNPCActions::update() {
 	/* render action menu surface */
 	action_menu = createAlphaSurface(w,h);
 	Uint32 bg = SDL_MapRGBA(action_menu->format,
-				background_color.r, background_color.g,
-				background_color.b, background_alpha);
+							background_color.r, background_color.g,
+							background_color.b, background_alpha);
 	SDL_FillRect(action_menu, NULL, bg);
 
 	for(size_t i=0; i<npc_actions.size(); i++) {
-	  if (npc_actions[i].label) {
-		  npc_actions[i].label->render(action_menu);
-	  }
+		if (npc_actions[i].label) {
+			npc_actions[i].label->render(action_menu);
+		}
 	}
 
 }
@@ -377,5 +358,6 @@ void MenuNPCActions::render() {
 }
 
 MenuNPCActions::~MenuNPCActions() {
+	SDL_FreeSurface(action_menu);
 }
 

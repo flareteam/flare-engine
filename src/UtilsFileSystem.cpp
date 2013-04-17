@@ -79,26 +79,26 @@ bool fileExists(std::string filename) {
  */
 int getFileList(std::string dir, std::string ext, std::vector<std::string> &files) {
 
-    DIR *dp;
-    struct dirent *dirp;
+	DIR *dp;
+	struct dirent *dirp;
 
 	if((dp  = opendir(dir.c_str())) == NULL) {
-        //cout << "Error(" << errno << ") opening " << dir << endl;
-        return errno;
-    }
+		//cout << "Error(" << errno << ") opening " << dir << endl;
+		return errno;
+	}
 
 	size_t extlen = ext.length();
-    while ((dirp = readdir(dp)) != NULL) {
-	//	if(dirp->d_type == 0x8) { //0x4 for directories, 0x8 for files
+	while ((dirp = readdir(dp)) != NULL) {
+		//	if(dirp->d_type == 0x8) { //0x4 for directories, 0x8 for files
 		std::string filename = std::string(dirp->d_name);
 		if(filename.length() > extlen) {
 			if(filename.substr(filename.length()-extlen,extlen) == ext) {
 				files.push_back(filename);
 			}
 		}
-    }
-    closedir(dp);
-    return 0;
+	}
+	closedir(dp);
+	return 0;
 }
 
 /**
@@ -116,15 +116,14 @@ int getDirList(std::string dir, std::vector<std::string> &dirs) {
 	}
 
 	while ((dirp = readdir(dp)) != NULL) {
-	//	do not use dirp->d_type, it's not portable
+		//	do not use dirp->d_type, it's not portable
 		std::string directory = std::string(dirp->d_name);
 		std::string mod_dir = dir + "/" + directory;
 		if ((stat(mod_dir.c_str(), &st) != -1)
-			&& S_ISDIR(st.st_mode)
-			&& directory != "."
-			&& directory != ".."
-			)
-		{
+				&& S_ISDIR(st.st_mode)
+				&& directory != "."
+				&& directory != ".."
+		   ) {
 			dirs.push_back(directory);
 		}
 	}

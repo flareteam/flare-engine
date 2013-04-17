@@ -55,65 +55,78 @@ GameStateLoad::GameStateLoad() : GameState() {
 
 	// Confirmation box to confirm deleting
 	confirm = new MenuConfirm(msg->get("Delete Save"), msg->get("Delete this save?"));
-	button_exit = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	button_exit = new WidgetButton("images/menus/buttons/button_default.png");
 	button_exit->label = msg->get("Exit to Title");
 	button_exit->pos.x = VIEW_W_HALF - button_exit->pos.w/2;
 	button_exit->pos.y = VIEW_H - button_exit->pos.h;
 	button_exit->refresh();
 
-	button_action = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	button_action = new WidgetButton("images/menus/buttons/button_default.png");
 	button_action->label = msg->get("Choose a Slot");
 	button_action->enabled = false;
 
-	button_alternate = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	button_alternate = new WidgetButton("images/menus/buttons/button_default.png");
 	button_alternate->label = msg->get("Delete Save");
 	button_alternate->enabled = false;
+
+	// Set up tab list
+	tablist = TabList(HORIZONTAL);
+	tablist.add(button_exit);
 
 	// Read positions from config file
 	FileParser infile;
 
 	if (infile.open(mods->locate("menus/gameload.txt"))) {
-	  while (infile.next()) {
-		infile.val = infile.val + ',';
+		while (infile.next()) {
+			infile.val = infile.val + ',';
 
-		if (infile.key == "action_button") {
-			button_action->pos.x = eatFirstInt(infile.val, ',');
-			button_action->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "atlernate_button") {
-			button_alternate->pos.x = eatFirstInt(infile.val, ',');
-			button_alternate->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "portrait") {
-			portrait_pos.x = eatFirstInt(infile.val, ',');
-			portrait_pos.y = eatFirstInt(infile.val, ',');
-			portrait_pos.w = eatFirstInt(infile.val, ',');
-			portrait_pos.h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "gameslot") {
-			gameslot_pos.x = eatFirstInt(infile.val, ',');
-			gameslot_pos.y = eatFirstInt(infile.val, ',');
-			gameslot_pos.w = eatFirstInt(infile.val, ',');
-			gameslot_pos.h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "preview") {
-			preview_pos.x = eatFirstInt(infile.val, ',');
-			preview_pos.y = eatFirstInt(infile.val, ',');
-			preview_pos.w = eatFirstInt(infile.val, ',');
-			preview_pos.h = eatFirstInt(infile.val, ',');
-		// label positions within each slot
-		} else if (infile.key == "name") {
-			name_pos = eatLabelInfo(infile.val);
-		} else if (infile.key == "level") {
-			level_pos = eatLabelInfo(infile.val);
-		} else if (infile.key == "map") {
-			map_pos = eatLabelInfo(infile.val);
-		} else if (infile.key == "loading_label") {
-			loading_pos = eatLabelInfo(infile.val);
-		// Position for the avatar preview image in each slot
-		} else if (infile.key == "sprite") {
-			sprites_pos.x = eatFirstInt(infile.val, ',');
-			sprites_pos.y = eatFirstInt(infile.val, ',');
+			if (infile.key == "action_button") {
+				button_action->pos.x = eatFirstInt(infile.val, ',');
+				button_action->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "atlernate_button") {
+				button_alternate->pos.x = eatFirstInt(infile.val, ',');
+				button_alternate->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "portrait") {
+				portrait_pos.x = eatFirstInt(infile.val, ',');
+				portrait_pos.y = eatFirstInt(infile.val, ',');
+				portrait_pos.w = eatFirstInt(infile.val, ',');
+				portrait_pos.h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "gameslot") {
+				gameslot_pos.x = eatFirstInt(infile.val, ',');
+				gameslot_pos.y = eatFirstInt(infile.val, ',');
+				gameslot_pos.w = eatFirstInt(infile.val, ',');
+				gameslot_pos.h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "preview") {
+				preview_pos.x = eatFirstInt(infile.val, ',');
+				preview_pos.y = eatFirstInt(infile.val, ',');
+				preview_pos.w = eatFirstInt(infile.val, ',');
+				preview_pos.h = eatFirstInt(infile.val, ',');
+				// label positions within each slot
+			}
+			else if (infile.key == "name") {
+				name_pos = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "level") {
+				level_pos = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "map") {
+				map_pos = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "loading_label") {
+				loading_pos = eatLabelInfo(infile.val);
+				// Position for the avatar preview image in each slot
+			}
+			else if (infile.key == "sprite") {
+				sprites_pos.x = eatFirstInt(infile.val, ',');
+				sprites_pos.y = eatFirstInt(infile.val, ',');
+			}
 		}
-	  }
-	  infile.close();
-	} else fprintf(stderr, "Unable to open menus/gameload.txt!\n");
+		infile.close();
+	}
 
 	// Load the MenuConfirm positions and alignments from menus/menus.txt
 	if (infile.open(mods->locate("menus/menus.txt"))) {
@@ -140,7 +153,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/menus.txt!\n");
+	}
 
 	confirm->align();
 	confirm->update();
@@ -164,7 +177,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/hero_options.txt!\n");
+	}
 	if (!found_layer) fprintf(stderr, "Warning: Could not find layers for direction 6\n");
 
 	button_action->pos.x += (VIEW_W - FRAME_W)/2;
@@ -201,35 +214,9 @@ GameStateLoad::GameStateLoad() : GameState() {
 }
 
 void GameStateLoad::loadGraphics() {
-	background = IMG_Load(mods->locate("images/menus/game_slots.png").c_str());
-	selection = IMG_Load(mods->locate("images/menus/game_slot_select.png").c_str());
-	portrait_border = IMG_Load(mods->locate("images/menus/portrait_border.png").c_str());
-	if (!background || !selection || !portrait_border) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	}
-
-	// optimize
-	SDL_Surface *cleanup;
-
-	if (background) {
-		cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
-
-	if (selection) {
-		SDL_SetColorKey( selection, SDL_SRCCOLORKEY, SDL_MapRGB(selection->format, 255, 0, 255));
-		cleanup = selection;
-		selection = SDL_DisplayFormatAlpha(selection);
-		SDL_FreeSurface(cleanup);
-	}
-
-	if (portrait_border) {
-		SDL_SetColorKey( portrait_border, SDL_SRCCOLORKEY, SDL_MapRGB(portrait_border->format, 255, 0, 255));
-		cleanup = portrait_border;
-		portrait_border = SDL_DisplayFormatAlpha(portrait_border);
-		SDL_FreeSurface(cleanup);
-	}
+	background = loadGraphicSurface("images/menus/game_slots.png");
+	selection = loadGraphicSurface("images/menus/game_slot_select.png", "Couldn't load image", false, true);
+	portrait_border = loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load image", false, true);
 }
 
 void GameStateLoad::loadPortrait(int slot) {
@@ -240,13 +227,7 @@ void GameStateLoad::loadPortrait(int slot) {
 
 	if (stats[slot].name == "") return;
 
-	portrait = IMG_Load(mods->locate("images/portraits/" + stats[slot].portrait + ".png").c_str());
-	if (!portrait) return;
-
-	// optimize
-	SDL_Surface *cleanup = portrait;
-	portrait = SDL_DisplayFormatAlpha(portrait);
-	SDL_FreeSurface(cleanup);
+	portrait = loadGraphicSurface("images/portraits/" + stats[slot].portrait + ".png");
 }
 
 void GameStateLoad::readGameSlots() {
@@ -257,7 +238,7 @@ void GameStateLoad::readGameSlots() {
 
 string GameStateLoad::getMapName(const string& map_filename) {
 	FileParser infile;
-	if (!infile.open(mods->locate("maps/" + map_filename))) return "";
+	if (!infile.open(mods->locate("maps/" + map_filename), "")) return "";
 	string map_name = "";
 
 	while (map_name == "" && infile.next()) {
@@ -280,10 +261,10 @@ void GameStateLoad::readGameSlot(int slot) {
 	// save slots are named save#.txt
 	filename << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
-	  filename << GAME_PREFIX << "_";
+		filename << GAME_PREFIX << "_";
 	filename << "save" << (slot+1) << ".txt";
 
-	if (!infile.open(filename.str())) return;
+	if (!infile.open(filename.str(), "")) return;
 
 	while (infile.next()) {
 
@@ -337,15 +318,17 @@ void GameStateLoad::loadPreview(int slot) {
 		bool exists = fileExists(mods->locate("animations/avatar/" + stats[slot].base + "/default_" + preview_layer[i] + ".txt"));
 		if (exists) {
 			img_gfx.push_back("default_" + preview_layer[i]);
-		} else if (preview_layer[i] == "head") {
+		}
+		else if (preview_layer[i] == "head") {
 			img_gfx.push_back(stats[slot].head);
-		} else {
+		}
+		else {
 			img_gfx.push_back("");
 		}
 	}
 
 	for (unsigned int i=0; i<equipped[slot].size(); i++) {
-		if ((unsigned)equipped[slot][i] > items->items.size()-1){
+		if ((unsigned)equipped[slot][i] > items->items.size()-1) {
 			fprintf(stderr, "Item with id=%d out of bounds 1-%d. Your savegame is broken or you might use incompatible savegame/mod\nQuitting to avoid savegame rewriting\n", equipped[slot][i], (int)items->items.size()-1);
 			SDL_Quit();
 			exit(1);
@@ -358,26 +341,17 @@ void GameStateLoad::loadPreview(int slot) {
 
 	// composite the hero graphic
 	for (unsigned int i=0; i<img_gfx.size(); i++) {
-		if (img_gfx[i] == "") continue;
+		if (img_gfx[i] == "")
+			continue;
+
 		sprites[slot].push_back(NULL);
 
-		if (TEXTURE_QUALITY == false) {
-			sprites[slot].back() = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/noalpha/" + img_gfx[i] + ".png").c_str());
+		if (!TEXTURE_QUALITY) {
+			string fname = "images/avatar/" + stats[slot].base + "/preview/noalpha/" + img_gfx[i] + ".png";
+			sprites[slot].back() = loadGraphicSurface(fname, "Falling back to alpha version", false, true);
 		}
 		if (!sprites[slot].back()) {
-			sprites[slot].back() = IMG_Load(mods->locate("images/avatar/" + stats[slot].base + "/preview/" + img_gfx[i] + ".png").c_str());
-		} else {
-			SDL_SetColorKey(sprites[slot].back(), SDL_SRCCOLORKEY, SDL_MapRGB(sprites[slot].back()->format, 255, 0, 255));
-		}
-		if (!sprites[slot].back()) {
-			fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-		}
-
-		// optimize
-		if (sprites[slot].back()) {
-			SDL_Surface *cleanup = sprites[slot].back();
-			sprites[slot].back() = SDL_DisplayFormatAlpha(sprites[slot].back());
-			SDL_FreeSurface(cleanup);
+			sprites[slot].back() = loadGraphicSurface("images/avatar/" + stats[slot].base + "/preview/" + img_gfx[i] + ".png");
 		}
 	}
 
@@ -394,7 +368,9 @@ void GameStateLoad::logic() {
 		current_frame = (63 - frame_ticker) / 8;
 
 	if (!confirm->visible) {
-		if (button_exit->checkClick()) {
+		tablist.logic();
+		if (button_exit->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+			inpt->lock[CANCEL] = true;
 			delete requestedGameState;
 			requestedGameState = new GameStateTitle();
 		}
@@ -431,22 +407,35 @@ void GameStateLoad::logic() {
 				}
 			}
 		}
-	} else if (confirm->visible) {
+
+		// Allow characters to be navigateable via up/down keys
+		if (inpt->pressing[UP] && !inpt->lock[UP]) {
+			inpt->lock[UP] = true;
+			selected_slot = (--selected_slot < 0) ? GAME_SLOT_MAX - 1 : selected_slot;
+			updateButtons();
+		}
+
+		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+			inpt->lock[DOWN] = true;
+			selected_slot = (++selected_slot == GAME_SLOT_MAX) ? 0 : selected_slot;
+			updateButtons();
+		}
+
+	}
+	else if (confirm->visible) {
 		confirm->logic();
 		if (confirm->confirmClicked) {
 			stringstream filename;
 			filename.str("");
 			filename << PATH_USER;
 			if (GAME_PREFIX.length() > 0)
-			  filename << GAME_PREFIX << "_";
+				filename << GAME_PREFIX << "_";
 			filename << "save" << (selected_slot+1) << ".txt";
 
 			if (remove(filename.str().c_str()) != 0)
 				perror("Error deleting save from path");
 			stats[selected_slot] = StatBlock();
 			readGameSlot(selected_slot);
-			loadPreview(selected_slot);
-			loadPortrait(selected_slot);
 
 			updateButtons();
 
@@ -470,22 +459,31 @@ void GameStateLoad::logicLoading() {
 void GameStateLoad::updateButtons() {
 	loadPortrait(selected_slot);
 
-	button_action->enabled = true;
+	if (button_action->enabled == false) {
+		button_action->enabled = true;
+		tablist.add(button_action);
+	}
 	button_action->tooltip = "";
 	if (stats[selected_slot].name == "") {
 		button_action->label = msg->get("New Game");
 		if (!fileExists(mods->locate("maps/spawn.txt"))) {
 			button_action->enabled = false;
+			tablist.remove(button_action);
 			button_action->tooltip = msg->get("Enable a story mod to continue");
 		}
 		button_alternate->enabled = false;
+		tablist.remove(button_alternate);
 	}
 	else {
-		button_alternate->enabled = true;
+		if (button_alternate->enabled == false) {
+			button_alternate->enabled = true;
+			tablist.add(button_alternate);
+		}
 		button_action->label = msg->get("Load Game");
 		if (current_map[selected_slot] == "") {
 			if (!fileExists(mods->locate("maps/spawn.txt"))) {
 				button_action->enabled = false;
+				tablist.remove(button_action);
 				button_action->tooltip = msg->get("Enable a story mod to continue");
 			}
 		}
@@ -537,7 +535,8 @@ void GameStateLoad::render() {
 
 		if ( loaded) {
 			label_loading->set(msg->get("Entering game world..."));
-		} else {
+		}
+		else {
 			label_loading->set(msg->get("Loading saved game..."));
 		}
 

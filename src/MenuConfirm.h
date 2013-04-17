@@ -27,11 +27,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MenuConfirm : public Menu {
 protected:
-	void loadGraphics();
 
 	WidgetButton *buttonConfirm;
 	WidgetButton *buttonClose;
 	WidgetLabel label;
+	TabList  tablist;
 
 	std::string boxMsg;
 	bool hasConfirmButton;

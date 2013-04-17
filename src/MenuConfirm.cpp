@@ -32,25 +32,15 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu
 	boxMsg = _boxMsg;
 
 	if (hasConfirmButton) {
-		buttonConfirm = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+		buttonConfirm = new WidgetButton("images/menus/buttons/button_default.png");
 		buttonConfirm->label = _buttonMsg;
+		tablist.add(buttonConfirm);
 	}
 
-	buttonClose = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
+	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
+	tablist.add(buttonClose);
 
-	loadGraphics();
-}
-
-void MenuConfirm::loadGraphics() {
-	background = IMG_Load(mods->locate("images/menus/confirm_bg.png").c_str());
-	if(!background) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
+	background = loadGraphicSurface("images/menus/confirm_bg.png");
 }
 
 void MenuConfirm::update() {
@@ -59,7 +49,8 @@ void MenuConfirm::update() {
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;
 		buttonConfirm->refresh();
 		label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2), JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
-	} else {
+	}
+	else {
 		label.set(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4), JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
 	}
 
@@ -68,7 +59,10 @@ void MenuConfirm::update() {
 }
 
 void MenuConfirm::logic() {
-	if (visible) confirmClicked = false;
+	if (visible) {
+		tablist.logic();
+		confirmClicked = false;
+	}
 	if (visible && hasConfirmButton) {
 		if(buttonConfirm->checkClick()) {
 			confirmClicked = true;
@@ -77,7 +71,8 @@ void MenuConfirm::logic() {
 			visible = false;
 			cancelClicked = true;
 		}
-	} else if (visible && !hasConfirmButton) {
+	}
+	else if (visible && !hasConfirmButton) {
 		if(buttonClose->checkClick()) {
 			visible = false;
 			cancelClicked = true;

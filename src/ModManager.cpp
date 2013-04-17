@@ -48,15 +48,23 @@ void ModManager::loadModList() {
 	string line;
 	string starts_with;
 	vector<string> mod_dirs;
+	vector<string> mod_dirs_local;
 	bool found_any_mod = false;
 
 	getDirList(PATH_DATA + "mods", mod_dirs);
+	getDirList(PATH_USER + "mods", mod_dirs_local);
+
+	for (unsigned i=0; i<mod_dirs_local.size(); ++i) {
+		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_local[i]) == mod_dirs.end())
+			mod_dirs.push_back(mod_dirs_local[i]);
+	}
 
 	// Add the fallback mod by default
 	if (find(mod_dirs.begin(), mod_dirs.end(), FALLBACK_MOD) != mod_dirs.end()) {
 		mod_list.push_back(FALLBACK_MOD);
 		found_any_mod = true;
-	} else {
+	}
+	else {
 		fprintf(stderr, "Mod \"%s\" not found, skipping\n", FALLBACK_MOD);
 	}
 
@@ -88,7 +96,8 @@ void ModManager::loadModList() {
 		if (find(mod_dirs.begin(), mod_dirs.end(), line) != mod_dirs.end()) {
 			mod_list.push_back(line);
 			found_any_mod = true;
-		} else {
+		}
+		else {
 			fprintf(stderr, "Mod \"%s\" not found, skipping\n", line.c_str());
 		}
 	}
@@ -118,6 +127,11 @@ string ModManager::locate(const string& filename) {
 	string test_path;
 
 	for (unsigned int i = mod_list.size(); i > 0; i--) {
+		test_path = PATH_USER + "mods/" + mod_list[i-1] + "/" + filename;
+		if (fileExists(test_path)) {
+			loc_cache[filename] = test_path;
+			return test_path;
+		}
 		test_path = PATH_DATA + "mods/" + mod_list[i-1] + "/" + filename;
 		if (fileExists(test_path)) {
 			loc_cache[filename] = test_path;

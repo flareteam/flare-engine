@@ -45,7 +45,7 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
-	loadGraphics();
+	background = loadGraphicSurface("images/menus/inventory.png");
 
 	currency = 0;
 
@@ -54,7 +54,7 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 	changed_artifact = true;
 	log_msg = "";
 
-	closeButton = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
+	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// Load config settings
 	SDL_Rect equipment_slot;
@@ -66,26 +66,34 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 			if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "equipment_slot") {
+			}
+			else if(infile.key == "equipment_slot") {
 				equipment_slot.x = eatFirstInt(infile.val,',');
 				equipment_slot.y = eatFirstInt(infile.val,',');
 				equipment_slot.w = equipment_slot.h = eatFirstInt(infile.val,',');
 				equipped_area.push_back(equipment_slot);
 				slot_type.push_back(eatFirstString(infile.val,','));
-			} else if(infile.key == "slot_name") {
+			}
+			else if(infile.key == "slot_name") {
 				slot_desc.push_back(eatFirstString(infile.val,','));
-			} else if(infile.key == "carried_area") {
+			}
+			else if(infile.key == "carried_area") {
 				carried_area.x = eatFirstInt(infile.val,',');
 				carried_area.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "carried_cols"){
+			}
+			else if (infile.key == "carried_cols") {
 				carried_cols = eatFirstInt(infile.val,',');
-			} else if (infile.key == "carried_rows"){
+			}
+			else if (infile.key == "carried_rows") {
 				carried_rows = eatFirstInt(infile.val,',');
-			} else if (infile.key == "caption"){
+			}
+			else if (infile.key == "caption") {
 				title =  eatLabelInfo(infile.val);
-			} else if (infile.key == "currency"){
+			}
+			else if (infile.key == "currency") {
 				currency_lbl =  eatLabelInfo(infile.val);
-			} else if (infile.key == "help"){
+			}
+			else if (infile.key == "help") {
 				help_pos.x = eatFirstInt(infile.val,',');
 				help_pos.y = eatFirstInt(infile.val,',');
 				help_pos.w = eatFirstInt(infile.val,',');
@@ -93,26 +101,13 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/inventory.txt!\n");
+	}
 
 	MAX_EQUIPPED = equipped_area.size();
 	MAX_CARRIED = carried_cols * carried_rows;
 
 	color_normal = font->getColor("menu_normal");
 	color_high = font->getColor("menu_bonus");
-}
-
-void MenuInventory::loadGraphics() {
-
-	background = IMG_Load(mods->locate("images/menus/inventory.png").c_str());
-	if(!background) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
 }
 
 void MenuInventory::update() {
@@ -184,7 +179,8 @@ void MenuInventory::render() {
 int MenuInventory::areaOver(Point mouse) {
 	if (isWithin(carried_area, mouse)) {
 		return CARRIED;
-	} else {
+	}
+	else {
 		for (unsigned int i=0; i<equipped_area.size(); i++) {
 			if (isWithin(equipped_area[i], mouse)) {
 				return EQUIPMENT;
@@ -242,12 +238,14 @@ ItemStack MenuInventory::click(InputState * input) {
 		if (drag_prev_src == EQUIPMENT) {
 			if (stats->humanoid) {
 				updateEquipment( inventory[EQUIPMENT].drag_prev_slot);
-			} else {
+			}
+			else {
 				itemReturn(item);
 				item.item = 0;
 				item.quantity = 0;
 			}
-		} else if (drag_prev_src == CARRIED && !inpt->pressing[CTRL] && !inpt->pressing[MAIN2]) {
+		}
+		else if (drag_prev_src == CARRIED && !inpt->pressing[CTRL] && !inpt->pressing[MAIN2]) {
 			inventory[EQUIPMENT].highlightMatching(items->items[item.item].type);
 		}
 	}
@@ -306,7 +304,8 @@ void MenuInventory::drop(Point mouse, ItemStack stack) {
 				itemReturn( inventory[area][slot]);
 				inventory[area][slot] = stack;
 				updateEquipment( slot);
-			} else {
+			}
+			else {
 				itemReturn( stack);
 			}
 		}
@@ -332,7 +331,8 @@ void MenuInventory::drop(Point mouse, ItemStack stack) {
 					// Swap the two stacks
 					itemReturn( inventory[area][slot]);
 					inventory[area][slot] = stack;
-				} else {
+				}
+				else {
 					itemReturn( stack);
 				}
 			}
@@ -423,7 +423,7 @@ void MenuInventory::activate(InputState * input) {
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			// first check for first empty
 			if ((slot_type[i] == items->items[inventory[CARRIED][slot].item].type) &&
-				(inventory[EQUIPMENT].storage[i].item == 0)) {
+					(inventory[EQUIPMENT].storage[i].item == 0)) {
 				equip_slot = i;
 			}
 		}
@@ -462,7 +462,8 @@ void MenuInventory::activate(InputState * input) {
 				updateEquipment( equip_slot);
 				items->playSound(inventory[EQUIPMENT][equip_slot].item);
 			}
-		} else fprintf(stderr, "Can't find equip slot, corresponding to type %s\n", items->items[inventory[CARRIED][slot].item].type.c_str());
+		}
+		else fprintf(stderr, "Can't find equip slot, corresponding to type %s\n", items->items[inventory[CARRIED][slot].item].type.c_str());
 	}
 
 	drag_prev_src = -1;
@@ -491,9 +492,9 @@ void MenuInventory::add(ItemStack stack, int area, int slot) {
 			// first search of stack to complete if the item is stackable
 			if (slot == -1 && max_quantity > 1) {
 				int i = 0;
-				while ((inventory[area][i].item != stack.item
-						|| inventory[area][i].quantity >= max_quantity)
-						&& i < MAX_CARRIED)
+				while (i < MAX_CARRIED &&
+						(inventory[area][i].item != stack.item
+						 || inventory[area][i].quantity >= max_quantity))
 					++i;
 				if (i < MAX_CARRIED)
 					slot = i;
@@ -517,7 +518,8 @@ void MenuInventory::add(ItemStack stack, int area, int slot) {
 			if( stack.quantity > 0) {
 				if( drag_prev_src > -1) {
 					itemReturn( stack);
-				} else {
+				}
+				else {
 					add( stack);
 				}
 			}
@@ -669,8 +671,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 
 	// calculate bonuses to basic stats, added by items
 	bool checkRequired = true;
-	while(checkRequired)
-	{
+	while(checkRequired) {
 		checkRequired = false;
 		stats->offense_additional = stats->defense_additional = stats->physical_additional = stats->mental_additional = 0;
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
@@ -748,6 +749,12 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	}
 
 	// defaults
+	for (unsigned i=0; i<stats->powers_list_items.size(); ++i) {
+		int id = stats->powers_list_items[i];
+		// stats->hp > 0 is hack to keep on_death revive passives working
+		if (powers->powers[id].passive && stats->hp > 0)
+			stats->effects.removeEffectPassive(id);
+	}
 	stats->powers_list_items.clear();
 
 	// the default for weapons/absorb are not added to equipped items
@@ -837,13 +844,17 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 			int id = powers->getIdFromTag(item.bonus_stat[bonus_counter]);
 
 			if (id > 0)
-				stats->effects.addEffect(id, powers->powers[id].icon, 0, item.bonus_val[bonus_counter], powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above);
+				stats->effects.addEffect(id, powers->powers[id].icon, 0, item.bonus_val[bonus_counter], powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
 
 			bonus_counter++;
 		}
 
 		// add item powers
-		if (item.power > 0) stats->powers_list_items.push_back(item.power);
+		if (item.power > 0) {
+			stats->powers_list_items.push_back(item.power);
+			if (stats->effects.triggered_others)
+				powers->activateSinglePassive(stats,item.power);
+		}
 
 	}
 }
@@ -877,7 +888,7 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 			int id = powers->getIdFromTag(temp_set.bonus[bonus_counter].bonus_stat);
 
 			if (id > 0)
-				stats->effects.addEffect(id, powers->powers[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above);
+				stats->effects.addEffect(id, powers->powers[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
 		}
 	}
 }

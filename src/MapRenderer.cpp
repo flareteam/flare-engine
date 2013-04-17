@@ -37,39 +37,39 @@ using namespace std;
 const int CLICK_RANGE = 3 * UNITS_PER_TILE; //for activating events
 
 MapRenderer::MapRenderer(CampaignManager *_camp)
- : music(NULL)
- , tip(new WidgetTooltip())
- , tip_pos(Point())
- , show_tooltip(false)
- , events(vector<Map_Event>())
- , background(NULL)
- , fringe(NULL)
- , object(NULL)
- , foreground(NULL)
- , collision(NULL)
- , shakycam(Point())
- , new_music(false)
- , backgroundsurface(NULL)
- , backgroundsurfaceoffset(Point(0,0))
- , repaint_background(false)
- , camp(_camp)
- , powers(NULL)
- , w(0)
- , h(0)
- , cam(Point(0,0))
- , hero_tile(Point())
- , spawn(Point())
- , spawn_dir(0)
- , map_change(false)
- , teleportation(false)
- , teleport_destination(Point())
- , respawn_point(Point())
- , log_msg("")
- , shaky_cam_ticks(0)
- , stash(false)
- , stash_pos(Point())
- , enemies_cleared(false)
-{
+	: music(NULL)
+	, tip(new WidgetTooltip())
+	, tip_pos()
+	, show_tooltip(false)
+	, events()
+	, background(NULL)
+	, fringe(NULL)
+	, object(NULL)
+	, foreground(NULL)
+	, collision(NULL)
+	, shakycam(Point())
+	, backgroundsurface(NULL)
+	, backgroundsurfaceoffset()
+	, repaint_background(false)
+	, camp(_camp)
+	, powers(NULL)
+	, w(0)
+	, h(0)
+	, cam()
+	, hero_tile()
+	, spawn()
+	, spawn_dir(0)
+	, map_change(false)
+	, teleportation(false)
+	, teleport_destination()
+	, respawn_point()
+	, cutscene(false)
+	, cutscene_file("")
+	, log_msg("")
+	, shaky_cam_ticks(0)
+	, stash(false)
+	, stash_pos()
+	, enemies_cleared(false) {
 }
 
 void MapRenderer::clearEvents() {
@@ -103,7 +103,7 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 
 		if (collider.is_empty(x, y)) {
 			Enemy_Level enemy_lev = EnemyGroupManager::instance().getRandomEnemy(g.category, g.levelmin, g.levelmax);
-			if (enemy_lev.type != ""){
+			if (enemy_lev.type != "") {
 				Map_Enemy group_member = Map_Enemy(enemy_lev.type, Point(x, y));
 				enemies.push(group_member);
 
@@ -119,18 +119,13 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 
 int MapRenderer::load(string filename) {
 	FileParser infile;
-	string val;
-	maprow *cur_layer;
-	Map_Enemy new_enemy;
-	Map_Group new_group;
-	bool enemy_awaiting_queue = false;
-	bool group_awaiting_queue = false;
-	bool npc_awaiting_queue = false;
-	Map_NPC new_npc;
+	maprow *cur_layer = NULL;
 
 	clearEvents();
 	clearLayers();
 	clearQueues();
+
+	std::queue<Map_Group> enemy_groups;
 
 	/* unload sounds */
 	snd->reset();
@@ -139,437 +134,46 @@ int MapRenderer::load(string filename) {
 		sids.pop_back();
 	}
 
-	cur_layer = NULL;
 	show_tooltip = false;
 
-	if (!infile.open(mods->locate("maps/" + filename))) {
-		cerr << "Unable to open maps/" << filename << endl;
+	if (!infile.open(mods->locate("maps/" + filename)))
 		return 0;
-	}
 
 	while (infile.next()) {
 		if (infile.new_section) {
 
-			if (enemy_awaiting_queue) {
-				enemies.push(new_enemy);
-				enemy_awaiting_queue = false;
-			}
-			if (npc_awaiting_queue) {
-				npcs.push(new_npc);
-				npc_awaiting_queue = false;
-			}
-			if (group_awaiting_queue) {
-				push_enemy_group(new_group);
-				group_awaiting_queue = false;
-			}
-
 			// for sections that are stored in collections, add a new object here
-			if (infile.section == "enemy") {
-				new_enemy = Map_Enemy();
-				enemy_awaiting_queue = true;
-			}
-			else if (infile.section == "enemygroup") {
-				new_group.clear();
-				group_awaiting_queue = true;
-			}
-			else if (infile.section == "npc") {
-				new_npc.clear();
-				npc_awaiting_queue = true;
-			}
-			else if (infile.section == "event") {
+			if (infile.section == "enemy")
+				enemies.push(Map_Enemy());
+			else if (infile.section == "enemygroup")
+				enemy_groups.push(Map_Group());
+			else if (infile.section == "npc")
+				npcs.push(Map_NPC());
+			else if (infile.section == "event")
 				events.push_back(Map_Event());
-			}
 
 		}
-		if (infile.section == "header") {
-			if (infile.key == "title") {
-				this->title = msg->get(infile.val);
-			}
-			else if (infile.key == "width") {
-				this->w = toInt(infile.val);
-			}
-			else if (infile.key == "height") {
-				this->h = toInt(infile.val);
-			}
-			else if (infile.key == "tileset") {
-				this->tileset = infile.val;
-			}
-			else if (infile.key == "music") {
-				if (this->music_filename == infile.val) {
-					this->new_music = false;
-				}
-				else {
-					this->music_filename = infile.val;
-					this->new_music = true;
-				}
-			}
-			else if (infile.key == "location") {
-				spawn.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				spawn.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				spawn_dir = toInt(infile.nextValue());
-			}
-		}
-		else if (infile.section == "layer") {
-			if (infile.key == "type") {
-				cur_layer = new maprow[w];
-				if (infile.val == "background") background = cur_layer;
-				else if (infile.val == "fringe") fringe = cur_layer;
-				else if (infile.val == "object") object = cur_layer;
-				else if (infile.val == "foreground") foreground = cur_layer;
-				else if (infile.val == "collision") collision = cur_layer;
-			}
-			else if (infile.key == "format") {
-				if (infile.val != "dec") {
-					fprintf(stderr, "ERROR: maploading: The format of a layer must be \"dec\"!\n");
-					SDL_Quit();
-					exit(1);
-				}
-			}
-			else if (infile.key == "data") {
-				// layer map data handled as a special case
-				// The next h lines must contain layer data.  TODO: err
-				for (int j=0; j<h; j++) {
-					val = infile.getRawLine() + ',';
-					for (int i=0; i<w; i++)
-						cur_layer[i][j] = eatFirstInt(val, ',');
-				}
-				if (cur_layer == collision)
-					collider.setmap(collision, w, h);
-			}
-		}
-		else if (infile.section == "enemy") {
-			if (infile.key == "type") {
-				new_enemy.type = infile.val;
-			}
-			else if (infile.key == "location") {
-				new_enemy.pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				new_enemy.pos.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			}
-			else if (infile.key == "direction") {
-				new_enemy.direction = toInt(infile.val);
-			}
-			else if (infile.key == "waypoints") {
-				string none = "";
-				string a = infile.nextValue();
-				string b = infile.nextValue();
-
-				while (a != none) {
-					Point p;
-					p.x = toInt(a) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-					p.y = toInt(b) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-					new_enemy.waypoints.push(p);
-					a = infile.nextValue();
-					b = infile.nextValue();
-				}
-			} else if (infile.key == "wander_area") {
-				new_enemy.wander = true;
-				new_enemy.wander_area.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-				new_enemy.wander_area.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-				new_enemy.wander_area.w = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-				new_enemy.wander_area.h = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-			}
-		}
-		else if (infile.section == "enemygroup") {
-			if (infile.key == "type") {
-				new_group.category = infile.val;
-			}
-			else if (infile.key == "level") {
-				new_group.levelmin = toInt(infile.nextValue());
-				new_group.levelmax = toInt(infile.nextValue());
-			}
-			else if (infile.key == "location") {
-				new_group.pos.x = toInt(infile.nextValue());
-				new_group.pos.y = toInt(infile.nextValue());
-				new_group.area.x = toInt(infile.nextValue());
-				new_group.area.y = toInt(infile.nextValue());
-			}
-			else if (infile.key == "number") {
-				new_group.numbermin = toInt(infile.nextValue());
-				new_group.numbermax = toInt(infile.nextValue());
-			}
-			else if (infile.key == "chance") {
-				new_group.chance = toInt(infile.nextValue()) / 100.0f;
-				if (new_group.chance > 1.0f) {
-					new_group.chance = 1.0f;
-				}
-				if (new_group.chance < 0.0f) {
-					new_group.chance = 0.0f;
-				}
-			}
-		}
-		else if (infile.section == "npc") {
-			if (infile.key == "type") {
-				new_npc.id = infile.val;
-			}
-			else if (infile.key == "location") {
-				new_npc.pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				new_npc.pos.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			}
-		}
-		else if (infile.section == "event") {
-			if (infile.key == "type") {
-				events.back().type = infile.val;
-			}
-			else if (infile.key == "location") {
-				events.back().location.x = toInt(infile.nextValue());
-				events.back().location.y = toInt(infile.nextValue());
-				events.back().location.w = toInt(infile.nextValue());
-				events.back().location.h = toInt(infile.nextValue());
-			}
-			else if (infile.key == "hotspot") {
-				if (infile.val == "location") {
-					events.back().hotspot.x = events.back().location.x;
-					events.back().hotspot.y = events.back().location.y;
-					events.back().hotspot.w = events.back().location.w;
-					events.back().hotspot.h = events.back().location.h;
-				}
-				else {
-					events.back().hotspot.x = toInt(infile.nextValue());
-					events.back().hotspot.y = toInt(infile.nextValue());
-					events.back().hotspot.w = toInt(infile.nextValue());
-					events.back().hotspot.h = toInt(infile.nextValue());
-				}
-			}
-			else if (infile.key == "tooltip") {
-				events.back().tooltip = msg->get(infile.val);
-			}
-			else if (infile.key == "power_path") {
-				events.back().power_src.x = toInt(infile.nextValue());
-				events.back().power_src.y = toInt(infile.nextValue());
-				string dest = infile.nextValue();
-				if (dest == "hero") {
-					events.back().targetHero = true;
-				}
-				else {
-					events.back().power_dest.x = toInt(dest);
-					events.back().power_dest.y = toInt(infile.nextValue());
-				}
-			}
-			else if (infile.key == "power_damage") {
-				events.back().damagemin = toInt(infile.nextValue());
-				events.back().damagemax = toInt(infile.nextValue());
-			}
-			else if (infile.key == "cooldown") {
-				events.back().cooldown = parse_duration(infile.val);
-			}
-			else {
-				// new event component
-				events.back().components.push_back(Event_Component());
-				Event_Component *e = &events.back().components.back();
-				e->type = infile.key;
-
-				if (infile.key == "intermap") {
-					e->s = infile.nextValue();
-					e->x = toInt(infile.nextValue());
-					e->y = toInt(infile.nextValue());
-				}
-				else if (infile.key == "intramap") {
-					e->x = toInt(infile.nextValue());
-					e->y = toInt(infile.nextValue());
-				}
-				else if (infile.key == "mapmod") {
-					e->s = infile.nextValue();
-					e->x = toInt(infile.nextValue());
-					e->y = toInt(infile.nextValue());
-					e->z = toInt(infile.nextValue());
-
-					// add repeating mapmods
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-						e->s = repeat_val;
-						e->x = toInt(infile.nextValue());
-						e->y = toInt(infile.nextValue());
-						e->z = toInt(infile.nextValue());
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "soundfx") {
-					e->s = infile.nextValue();
-					e->x = e->y = -1;
-
-					std::string s = infile.nextValue();
-					if (s != "") e->x = toInt(s);
-
-					s = infile.nextValue();
-					if (s != "") e->y = toInt(s);
-
-				}
-				else if (infile.key == "loot") {
-					e->s = infile.nextValue();
-					e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					e->z = toInt(infile.nextValue());
-					string chance = infile.nextValue();
-					if (chance == "fixed") e->w = 0;
-					else e->w = toInt(chance);
-
-					// add repeating loot
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-						e->s = repeat_val;
-						e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-						e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-						e->z = toInt(infile.nextValue());
-						chance = infile.nextValue();
-						if (chance == "fixed") e->w = 0;
-						else e->w = toInt(chance);
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "msg") {
-					e->s = msg->get(infile.val);
-				}
-				else if (infile.key == "shakycam") {
-					e->x = toInt(infile.val);
-				}
-				else if (infile.key == "requires_status") {
-					e->s = infile.nextValue();
-
-					// add repeating requires_status
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-						e->s = repeat_val;
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "requires_not") {
-					e->s = infile.nextValue();
-
-					// add repeating requires_not
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-						e->s = repeat_val;
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "requires_level") {
-					e->x = toInt(infile.nextValue());
-				}
-				else if (infile.key == "requires_not_level") {
-					e->x = toInt(infile.nextValue());
-				}
-				else if (infile.key == "requires_item") {
-					e->x = toInt(infile.nextValue());
-
-					// add repeating requires_item
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-						e->x = toInt(repeat_val);
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "set_status") {
-					e->s = infile.nextValue();
-
-					// add repeating set_status
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-						e->s = repeat_val;
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "unset_status") {
-					e->s = infile.nextValue();
-
-					// add repeating unset_status
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-						e->s = repeat_val;
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "remove_item") {
-					e->x = toInt(infile.nextValue());
-
-					// add repeating remove_item
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-						e->x = toInt(repeat_val);
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "reward_xp") {
-					e->x = toInt(infile.val);
-				}
-				else if (infile.key == "power") {
-					e->x = toInt(infile.val);
-				}
-				else if (infile.key == "spawn") {
-
-					e->s = infile.nextValue();
-					e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-
-					// add repeating spawn
-					string repeat_val = infile.nextValue();
-					while (repeat_val != "") {
-						events.back().components.push_back(Event_Component());
-						e = &events.back().components.back();
-						e->type = infile.key;
-
-						e->s = repeat_val;
-						e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-						e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-
-						repeat_val = infile.nextValue();
-					}
-				}
-				else if (infile.key == "npc") {
-					new_npc.id = infile.val;
-					e->s = infile.val;
-				}
-			}
-		}
+		if (infile.section == "header")
+			loadHeader(infile);
+		else if (infile.section == "layer")
+			loadLayer(infile, &cur_layer);
+		else if (infile.section == "enemy")
+			loadEnemy(infile);
+		else if (infile.section == "enemygroup")
+			loadEnemyGroup(infile, &enemy_groups.back());
+		else if (infile.section == "npc")
+			loadNPC(infile);
+		else if (infile.section == "event")
+			loadEvent(infile);
 	}
 
 	infile.close();
 
-	// reached end of file.  Handle any final sections.
-	if (enemy_awaiting_queue)
-		enemies.push(new_enemy);
-
-	if (npc_awaiting_queue)
-		npcs.push(new_npc);
-
-	if (group_awaiting_queue)
-		push_enemy_group(new_group);
-
-	if (this->new_music) {
-		loadMusic();
-		this->new_music = false;
+	while (!enemy_groups.empty()) {
+		push_enemy_group(enemy_groups.front());
+		enemy_groups.pop();
 	}
+
 	tset.load(this->tileset);
 
 	// some events automatically trigger when the map loads
@@ -577,6 +181,410 @@ int MapRenderer::load(string filename) {
 	executeOnLoadEvents();
 
 	return 0;
+}
+
+void MapRenderer::loadHeader(FileParser &infile) {
+	if (infile.key == "title") {
+		this->title = msg->get(infile.val);
+	}
+	else if (infile.key == "width") {
+		this->w = toInt(infile.val);
+	}
+	else if (infile.key == "height") {
+		this->h = toInt(infile.val);
+	}
+	else if (infile.key == "tileset") {
+		this->tileset = infile.val;
+	}
+	else if (infile.key == "music") {
+		loadMusic(infile.val);
+	}
+	else if (infile.key == "location") {
+		spawn.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		spawn.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		spawn_dir = toInt(infile.nextValue());
+	}
+}
+
+void MapRenderer::loadLayer(FileParser &infile, maprow **current_layer) {
+	if (infile.key == "type") {
+		*current_layer = new maprow[w];
+		if (infile.val == "background") background = *current_layer;
+		else if (infile.val == "fringe") fringe = *current_layer;
+		else if (infile.val == "object") object = *current_layer;
+		else if (infile.val == "foreground") foreground = *current_layer;
+		else if (infile.val == "collision") collision = *current_layer;
+	}
+	else if (infile.key == "format") {
+		if (infile.val != "dec") {
+			fprintf(stderr, "ERROR: maploading: The format of a layer must be \"dec\"!\n");
+			SDL_Quit();
+			exit(1);
+		}
+	}
+	else if (infile.key == "data") {
+		// layer map data handled as a special case
+		// The next h lines must contain layer data.  TODO: err
+		for (int j=0; j<h; j++) {
+			string val = infile.getRawLine() + ',';
+			for (int i=0; i<w; i++)
+				(*current_layer)[i][j] = eatFirstInt(val, ',');
+		}
+		if ((*current_layer) == collision)
+			collider.setmap(collision, w, h);
+	}
+}
+
+void MapRenderer::loadEnemy(FileParser &infile) {
+	if (infile.key == "type") {
+		enemies.back().type = infile.val;
+	}
+	else if (infile.key == "location") {
+		enemies.back().pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		enemies.back().pos.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+	}
+	else if (infile.key == "direction") {
+		enemies.back().direction = toInt(infile.val);
+	}
+	else if (infile.key == "waypoints") {
+		string none = "";
+		string a = infile.nextValue();
+		string b = infile.nextValue();
+
+		while (a != none) {
+			Point p;
+			p.x = toInt(a) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+			p.y = toInt(b) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+			enemies.back().waypoints.push(p);
+			a = infile.nextValue();
+			b = infile.nextValue();
+		}
+	}
+	else if (infile.key == "wander_area") {
+		enemies.back().wander = true;
+		enemies.back().wander_area.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+		enemies.back().wander_area.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+		enemies.back().wander_area.w = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+		enemies.back().wander_area.h = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+	}
+}
+
+void MapRenderer::loadEnemyGroup(FileParser &infile, Map_Group *group) {
+	if (infile.key == "type") {
+		group->category = infile.val;
+	}
+	else if (infile.key == "level") {
+		group->levelmin = toInt(infile.nextValue());
+		group->levelmax = toInt(infile.nextValue());
+	}
+	else if (infile.key == "location") {
+		group->pos.x = toInt(infile.nextValue());
+		group->pos.y = toInt(infile.nextValue());
+		group->area.x = toInt(infile.nextValue());
+		group->area.y = toInt(infile.nextValue());
+	}
+	else if (infile.key == "number") {
+		group->numbermin = toInt(infile.nextValue());
+		group->numbermax = toInt(infile.nextValue());
+	}
+	else if (infile.key == "chance") {
+		float n = toInt(infile.nextValue()) / 100.0f;
+		group->chance = min(1.0f, max(0.0f, n));
+	}
+}
+
+void MapRenderer::loadNPC(FileParser &infile) {
+	if (infile.key == "type") {
+		npcs.back().id = infile.val;
+	}
+	else if (infile.key == "location") {
+		npcs.back().pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		npcs.back().pos.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+	}
+}
+
+void MapRenderer::loadEvent(FileParser &infile) {
+	if (infile.key == "type") {
+		string type = infile.val;
+		events.back().type = type;
+		if (type == "custom");
+		else if (type == "on_load");
+		else if (type == "on_clear");
+		else if (type == "run_once");
+		else if (type == "stash");
+		else {
+			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"custom\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
+		}
+	}
+	else if (infile.key == "location") {
+		events.back().location.x = toInt(infile.nextValue());
+		events.back().location.y = toInt(infile.nextValue());
+		events.back().location.w = toInt(infile.nextValue());
+		events.back().location.h = toInt(infile.nextValue());
+	}
+	else if (infile.key == "hotspot") {
+		if (infile.val == "location") {
+			events.back().hotspot.x = events.back().location.x;
+			events.back().hotspot.y = events.back().location.y;
+			events.back().hotspot.w = events.back().location.w;
+			events.back().hotspot.h = events.back().location.h;
+		}
+		else {
+			events.back().hotspot.x = toInt(infile.nextValue());
+			events.back().hotspot.y = toInt(infile.nextValue());
+			events.back().hotspot.w = toInt(infile.nextValue());
+			events.back().hotspot.h = toInt(infile.nextValue());
+		}
+	}
+	else if (infile.key == "cooldown") {
+		events.back().cooldown = parse_duration(infile.val);
+	}
+	else {
+		loadEventComponent(infile);
+	}
+}
+
+void MapRenderer::loadEventComponent(FileParser &infile) {
+	// new event component
+	events.back().components.push_back(Event_Component());
+	Event_Component *e = &events.back().components.back();
+	e->type = infile.key;
+
+	if (infile.key == "tooltip") {
+		e->s = msg->get(infile.val);
+	}
+	else if (infile.key == "power_path") {
+		// x,y are src, if s=="hero" we target the hero,
+		// else we'll use values in a,b as coordinates
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
+
+		string dest = infile.nextValue();
+		if (dest == "hero") {
+			e->s = "hero";
+		}
+		else {
+			e->a = toInt(dest);
+			e->b = toInt(infile.nextValue());
+		}
+	}
+	else if (infile.key == "power_damage") {
+		e->a = toInt(infile.nextValue());
+		e->b = toInt(infile.nextValue());
+	}
+	else if (infile.key == "intermap") {
+		e->s = infile.nextValue();
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
+	}
+	else if (infile.key == "intramap") {
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
+	}
+	else if (infile.key == "mapmod") {
+		e->s = infile.nextValue();
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
+		e->z = toInt(infile.nextValue());
+
+		// add repeating mapmods
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+			e->s = repeat_val;
+			e->x = toInt(infile.nextValue());
+			e->y = toInt(infile.nextValue());
+			e->z = toInt(infile.nextValue());
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "soundfx") {
+		e->s = infile.nextValue();
+		e->x = e->y = -1;
+
+		std::string s = infile.nextValue();
+		if (s != "") e->x = toInt(s);
+
+		s = infile.nextValue();
+		if (s != "") e->y = toInt(s);
+
+	}
+	else if (infile.key == "loot") {
+		e->s = infile.nextValue();
+		e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+
+		// drop chance
+		string chance = infile.nextValue();
+		if (chance == "fixed") e->z = 0;
+		else e->z = toInt(chance);
+
+		// quantity min/max
+		e->a = toInt(infile.nextValue());
+		if (e->a < 1) e->a = 1;
+		e->b = toInt(infile.nextValue());
+		if (e->b < e->a) e->b = e->a;
+
+		// add repeating loot
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+			e->s = repeat_val;
+			e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+
+			chance = infile.nextValue();
+			if (chance == "fixed") e->z = 0;
+			else e->z = toInt(chance);
+
+			e->a = toInt(infile.nextValue());
+			if (e->a < 1) e->a = 1;
+			e->b = toInt(infile.nextValue());
+			if (e->b < e->a) e->b = e->a;
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "msg") {
+		e->s = msg->get(infile.val);
+	}
+	else if (infile.key == "shakycam") {
+		e->x = toInt(infile.val);
+	}
+	else if (infile.key == "requires_status") {
+		e->s = infile.nextValue();
+
+		// add repeating requires_status
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+			e->s = repeat_val;
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "requires_not") {
+		e->s = infile.nextValue();
+
+		// add repeating requires_not
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+			e->s = repeat_val;
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "requires_level") {
+		e->x = toInt(infile.nextValue());
+	}
+	else if (infile.key == "requires_not_level") {
+		e->x = toInt(infile.nextValue());
+	}
+	else if (infile.key == "requires_item") {
+		e->x = toInt(infile.nextValue());
+
+		// add repeating requires_item
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+			e->x = toInt(repeat_val);
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "set_status") {
+		e->s = infile.nextValue();
+
+		// add repeating set_status
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+			e->s = repeat_val;
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "unset_status") {
+		e->s = infile.nextValue();
+
+		// add repeating unset_status
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+			e->s = repeat_val;
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "remove_item") {
+		e->x = toInt(infile.nextValue());
+
+		// add repeating remove_item
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+			e->x = toInt(repeat_val);
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "reward_xp") {
+		e->x = toInt(infile.val);
+	}
+	else if (infile.key == "power") {
+		e->x = toInt(infile.val);
+	}
+	else if (infile.key == "spawn") {
+
+		e->s = infile.nextValue();
+		e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+
+		// add repeating spawn
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			events.back().components.push_back(Event_Component());
+			e = &events.back().components.back();
+			e->type = infile.key;
+
+			e->s = repeat_val;
+			e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "npc") {
+		npcs.back().id = infile.val;
+		e->s = infile.val;
+	}
+	else if (infile.key == "music") {
+		e->s = infile.val;
+	}
+	else if (infile.key == "cutscene") {
+		e->s = infile.val;
+	}
+	else {
+		fprintf(stderr, "MapRenderer: Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
+	}
 }
 
 void MapRenderer::clearQueues() {
@@ -606,7 +614,13 @@ void MapRenderer::clearLayers() {
 	backgroundsurface = 0;
 }
 
-void MapRenderer::loadMusic() {
+void MapRenderer::loadMusic(const std::string &new_music_filename) {
+
+	// keep playing if already the correct track
+	if (music_filename == new_music_filename)
+		return;
+
+	music_filename = new_music_filename;
 
 	if (music) {
 		Mix_HaltMusic();
@@ -682,7 +696,8 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		std::sort(r.begin(), r.end(), priocompare);
 		std::sort(r_dead.begin(), r_dead.end(), priocompare);
 		renderOrtho(r, r_dead);
-	} else {
+	}
+	else {
 		calculatePriosIso(r);
 		calculatePriosIso(r_dead);
 		std::sort(r.begin(), r.end(), priocompare);
@@ -694,8 +709,8 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 void MapRenderer::createBackgroundSurface() {
 	SDL_FreeSurface(backgroundsurface);
 	backgroundsurface = createSurface(
-			VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
-			VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
+							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
+							VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
 	// background has no alpha:
 	SDL_SetColorKey(backgroundsurface, 0, 0);
 }
@@ -711,34 +726,41 @@ void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
 }
 
 void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const unsigned short layerdata[256][256]) {
-	short int i;
-	short int j;
+	int_fast16_t i; // first index of the map array
+	int_fast16_t j; // second index of the map array
 	SDL_Rect dest;
 	const Point upperright = screen_to_map(0, 0, shakycam.x, shakycam.y);
-	const short max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
-	const short max_tiles_height = ((2 * VIEW_H / TILE_H) + 2 * tset.max_size_y) * 2;
+	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
+	const int_fast16_t max_tiles_height = ((2 * VIEW_H / TILE_H) + 2 * tset.max_size_y) * 2;
 
 	j = upperright.y / UNITS_PER_TILE - tset.max_size_y + tset.max_size_x;
 	i = upperright.x / UNITS_PER_TILE - tset.max_size_y - tset.max_size_x;
 
-	for (unsigned short y = max_tiles_height ; y; --y) {
-		short tiles_width = 0;
+	for (uint_fast16_t y = max_tiles_height ; y; --y) {
+		int_fast16_t tiles_width = 0;
 
 		// make sure the isometric corners are not rendered:
+		// corner north west, upper left  (i < 0)
 		if (i < -1) {
 			j += i + 1;
 			tiles_width -= i + 1;
 			i = -1;
 		}
-		const short d = j - h;
+		// corner north east, upper right (j > mapheight)
+		const int_fast16_t d = j - h;
 		if (d >= 0) {
-			j -= d; tiles_width += d; i += d;
+			j -= d;
+			tiles_width += d;
+			i += d;
 		}
-		const short j_end = std::max((j+i-w+1), std::max(j - max_tiles_width, 0));
 
+		// lower right (south east) corner is covered by (j+i-w+1)
+		// lower left (south west) corner is caught by having 0 in there, so j>0
+		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1),	std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
 		Point p = map_to_screen(i * UNITS_PER_TILE, j * UNITS_PER_TILE, shakycam.x, shakycam.y);
 		p = center_tile(p);
+
 		// draw one horizontal line
 		while (j > j_end) {
 			--j;
@@ -746,9 +768,7 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 			++tiles_width;
 			p.x += TILE_W;
 
-			const unsigned short current_tile = layerdata[i][j];
-
-			if (current_tile) {
+			if (const uint_fast16_t current_tile = layerdata[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x + offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y + offset.y;
 				// no need to set w and h in dest, as it is ignored
@@ -758,6 +778,7 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 		}
 		j += tiles_width;
 		i -= tiles_width;
+		// Go one line deeper, the starting position goes zig-zag
 		if (y % 2)
 			i++;
 		else
@@ -772,12 +793,12 @@ void MapRenderer::renderIsoBackObjects(vector<Renderable> &r) {
 }
 
 void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
-	short int i;
-	short int j;
+	int_fast16_t i;
+	int_fast16_t j;
 	SDL_Rect dest;
 	const Point upperright = screen_to_map(0, 0, shakycam.x, shakycam.y);
-	const short max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
-	const short max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
+	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
+	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
 
 	vector<Renderable>::iterator r_cursor = r.begin();
 	vector<Renderable>::iterator r_end = r.end();
@@ -789,8 +810,8 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	while (r_cursor != r_end && ((r_cursor->map_pos.x>>TILE_SHIFT) + (r_cursor->map_pos.y>>TILE_SHIFT) < i + j || (r_cursor->map_pos.x>>TILE_SHIFT) < i))
 		++r_cursor;
 
-	for (unsigned short y = max_tiles_height ; y; --y) {
-		short tiles_width = 0;
+	for (uint_fast16_t y = max_tiles_height ; y; --y) {
+		int_fast16_t tiles_width = 0;
 
 		// make sure the isometric corners are not rendered:
 		if (i < -1) {
@@ -798,11 +819,13 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			tiles_width -= i + 1;
 			i = -1;
 		}
-		const short d = j - h;
+		const int_fast16_t d = j - h;
 		if (d >= 0) {
-			j -= d; tiles_width += d; i += d;
+			j -= d;
+			tiles_width += d;
+			i += d;
 		}
-		const short j_end = std::max((j+i-w+1), std::max(j - max_tiles_width, 0));
+		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1), std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
 		// draw one horizontal line
 		Point p = map_to_screen(i * UNITS_PER_TILE, j * UNITS_PER_TILE, shakycam.x, shakycam.y);
@@ -813,9 +836,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			++tiles_width;
 			p.x += TILE_W;
 
-			const unsigned short current_tile = object[i][j];
-
-			if (current_tile) {
+			if (const uint_fast16_t current_tile = object[i][j]) {
 
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
@@ -834,6 +855,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			i++;
 		else
 			j++;
+
 		while (r_cursor != r_end && ((r_cursor->map_pos.x>>TILE_SHIFT) + (r_cursor->map_pos.y>>TILE_SHIFT) < i + j || (r_cursor->map_pos.x>>TILE_SHIFT) <= i))
 			++r_cursor;
 	}
@@ -847,8 +869,8 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	}
 	else {
 		if (abs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender * TILE_W
-			|| abs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender * TILE_H
-			|| repaint_background) {
+				|| abs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender * TILE_H
+				|| repaint_background) {
 
 			if (!backgroundsurface)
 				createBackgroundSurface();
@@ -999,9 +1021,9 @@ void MapRenderer::checkEvents(Point loc) {
 				it = events.erase(it);
 		}
 		else if (maploc.x >= (*it).location.x &&
-			maploc.y >= (*it).location.y &&
-			maploc.x <= (*it).location.x + (*it).location.w-1 &&
-			maploc.y <= (*it).location.y + (*it).location.h-1) {
+				 maploc.y >= (*it).location.y &&
+				 maploc.x <= (*it).location.x + (*it).location.w-1 &&
+				 maploc.y <= (*it).location.y + (*it).location.h-1) {
 			if (executeEvent(*it))
 				it = events.erase(it);
 		}
@@ -1087,15 +1109,21 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					if (!(*it).tooltip.empty())
+					Event_Component *ec = (*it).getComponent("tooltip");
+					if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
 						show_tooltip = true;
-					if (!tip_buf.compareFirstLine((*it).tooltip)) {
-						tip_buf.clear();
-						tip_buf.addText((*it).tooltip);
+						if (!tip_buf.compareFirstLine(ec->s)) {
+							tip_buf.clear();
+							tip_buf.addText(ec->s);
+						}
+						TOOLTIP_CONTEXT = TOOLTIP_MAP;
+					}
+					else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+						TOOLTIP_CONTEXT = TOOLTIP_NONE;
 					}
 
 					if ((abs(cam.x - (*it).location.x * UNITS_PER_TILE) < CLICK_RANGE)
-						&& (abs(cam.y - (*it).location.y * UNITS_PER_TILE) < CLICK_RANGE)) {
+							&& (abs(cam.y - (*it).location.y * UNITS_PER_TILE) < CLICK_RANGE)) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -1107,7 +1135,8 @@ void MapRenderer::checkHotspots() {
 							it = events.erase(it);
 					}
 					return;
-				} else show_tooltip = false;
+				}
+				else show_tooltip = false;
 			}
 		}
 	}
@@ -1118,7 +1147,7 @@ void MapRenderer::checkNearestEvent(Point loc) {
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
 		vector<Map_Event>::iterator it;
-		vector<Map_Event>::iterator nearest;
+		vector<Map_Event>::iterator nearest = events.end();
 		int best_distance = std::numeric_limits<int>::max();
 
 		// loop in reverse because we may erase elements
@@ -1143,12 +1172,14 @@ void MapRenderer::checkNearestEvent(Point loc) {
 				nearest = it;
 			}
 		}
-		if (executeEvent(*nearest))
-			events.erase(nearest);
+		if (nearest != events.end()) {
+			if(executeEvent(*nearest))
+				events.erase(nearest);
+		}
 	}
 }
 
-bool MapRenderer::isActive(const Map_Event &e){
+bool MapRenderer::isActive(const Map_Event &e) {
 	for (unsigned i=0; i < e.components.size(); i++) {
 		if (e.components[i].type == "requires_not") {
 			if (camp->checkStatus(e.components[i].s)) {
@@ -1203,7 +1234,13 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 	const Event_Component *ec;
 	bool destroy_event = false;
 
-	for (unsigned i=0; i<ev.components.size(); i++) {
+	if (ev.type == "stash") {
+		stash = true;
+		stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+	}
+
+	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
 
 		if (ec->type == "set_status") {
@@ -1299,59 +1336,67 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 			int power_index = ec->x;
 
-			// TODO: delete this without breaking hazards, takeHit, etc.
-			StatBlock *dummy = new StatBlock();
-			dummy->accuracy = 1000; //always hits its target
+			Event_Component *ec_path = ev.getComponent("power_path");
+			if (ev.stats == NULL) {
+				ev.stats = new StatBlock();
 
-			// if a power path was specified, place the source position there
-			if (ev.power_src.x > 0) {
-				dummy->pos.x = ev.power_src.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				dummy->pos.y = ev.power_src.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			}
-			// otherwise the source position is the event position
-			else {
-				dummy->pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				dummy->pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			}
+				ev.stats->accuracy = 1000; //always hits its target
 
-			dummy->dmg_melee_min = dummy->dmg_ranged_min = dummy->dmg_ment_min = ev.damagemin;
-			dummy->dmg_melee_max = dummy->dmg_ranged_max = dummy->dmg_ment_max = ev.damagemax;
+				// if a power path was specified, place the source position there
+				if (ec_path) {
+					ev.stats->pos.x = ec_path->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					ev.stats->pos.y = ec_path->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				}
+				// otherwise the source position is the event position
+				else {
+					ev.stats->pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					ev.stats->pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				}
+
+				Event_Component *ec_damage = ev.getComponent("power_damage");
+				if (ec_damage) {
+					ev.stats->dmg_melee_min = ev.stats->dmg_ranged_min = ev.stats->dmg_ment_min = ec_damage->a;
+					ev.stats->dmg_melee_max = ev.stats->dmg_ranged_max = ev.stats->dmg_ment_max = ec_damage->b;
+				}
+			}
 
 			Point target;
 
-			// if a power path was specified:
-			// targets hero option
-			if (ev.targetHero) {
-				target.x = cam.x;
-				target.y = cam.y;
-			}
-			// targets fixed path option
-			else if (ev.power_dest.x != 0) {
-				target.x = ev.power_dest.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				target.y = ev.power_dest.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			if (ec_path) {
+				// targets hero option
+				if (ec_path->s == "hero") {
+					target.x = cam.x;
+					target.y = cam.y;
+				}
+				// targets fixed path option
+				else {
+					target.x = ec_path->a * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					target.y = ec_path->b * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				}
 			}
 			// no path specified, targets self location
 			else {
-				target.x = dummy->pos.x;
-				target.y = dummy->pos.y;
+				target.x = ev.stats->pos.x;
+				target.y = ev.stats->pos.y;
 			}
 
-			powers->activate(power_index, dummy, target);
-
-		}
-		else if (ec->type == "stash") {
-			stash = true;
-			stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			powers->activate(power_index, ev.stats, target);
 		}
 		else if (ec->type == "npc") {
 			event_npc = ec->s;
 		}
+		else if (ec->type == "music") {
+			if (this->music_filename != ec->s) {
+				this->music_filename = ec->s;
+				loadMusic(ec->s);
+			}
+		}
+		else if (ec->type == "cutscene") {
+			cutscene = true;
+			cutscene_file = ec->s;
+		}
 	}
-	if (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event)
-		return true;
-	else
-		return false;
+	return (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event);
 }
 
 MapRenderer::~MapRenderer() {

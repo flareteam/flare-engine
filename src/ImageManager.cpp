@@ -34,15 +34,14 @@ ImageManager* ImageManager_instance = 0;
 ImageManager::ImageManager()
 {}
 
-ImageManager::~ImageManager()
-{
+ImageManager::~ImageManager() {
 	cleanUp();
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG
 	if (!sprites.empty()) {
 		cout << "ImageManager still holding these images:" << endl;
 		for (unsigned i = 0; i < sprites.size(); ++i)
-			 fprintf(stderr, "%s %d\n", names[i].c_str(), counts[i]);
+			fprintf(stderr, "%s %d\n", names[i].c_str(), counts[i]);
 	}
 	assert(sprites.size() == 0);
 #endif
@@ -52,31 +51,14 @@ SDL_Surface *ImageManager::getSurface(const std::string &name) {
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
-		if (sprites[index] == 0) {
-			SDL_Surface *cleanup = NULL;
-
-			if (TEXTURE_QUALITY == false) {
-				string path = mods->locate(name);
-				const char * pch = strrchr(path.c_str(), '/' );
-				path.insert(pch-path.c_str(), "/noalpha");
-				cleanup = IMG_Load(path.c_str());
-				if (!cleanup)
-					printf("failed to load %s\n", path.c_str());
-				else
-					SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, SDL_MapRGB(cleanup->format, 255, 0, 255));
+		if (!sprites[index]) {
+			if (!TEXTURE_QUALITY) {
+				string newname = string(name);
+				newname.replace(name.rfind("/"), 0, "/noalpha");
+				sprites[index] = loadGraphicSurface(newname, "Falling back to alpha version", false, true);
 			}
-
-			if (!cleanup) {
-				cleanup = IMG_Load(mods->locate(name).c_str());
-			}
-
-			if (!cleanup) {
-				fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-			} else {
-				SDL_Surface *sprite = SDL_DisplayFormatAlpha(cleanup);
-				SDL_FreeSurface(cleanup);
-				sprites[index] = sprite;
-			}
+			if (!sprites[index])
+				sprites[index] = loadGraphicSurface(name);
 		}
 		return sprites[index];
 	}
@@ -88,7 +70,8 @@ void ImageManager::increaseCount(const std::string &name) {
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]++;
-	} else {
+	}
+	else {
 		sprites.push_back(0);
 		names.push_back(name);
 		counts.push_back(1);
@@ -100,7 +83,8 @@ void ImageManager::decreaseCount(const std::string &name) {
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]--;
-	} else {
+	}
+	else {
 		fprintf(stderr, "ImageManager::decreaseCount: Couldn't decrease image count: %s\n", name.c_str());
 	}
 }

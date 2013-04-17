@@ -36,11 +36,14 @@ public:
 	void set (int min, int max, int val);
 	int getValue () const;
 	void render (SDL_Surface *target = NULL);
+	bool enabled;
 
 	SDL_Rect pos_knob; // This is the position of the slider's knob within the screen
 
+	bool getNext();
+	bool getPrev();
+
 private:
-	std::string imgFileName;
 	SDL_Surface * sl;
 	bool pressed;
 	int minimum;

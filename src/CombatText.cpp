@@ -49,12 +49,13 @@ CombatText::CombatText() {
 		while(infile.next()) {
 			if(infile.key == "duration") {
 				duration = toInt(infile.val);
-			} else if(infile.key == "speed") {
+			}
+			else if(infile.key == "speed") {
 				speed = toInt(infile.val);
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open engine/combat_text.txt!\n");
+	}
 }
 
 void CombatText::setCam(Point location) {

@@ -50,14 +50,14 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	, powers(_powers)
 	, stats(_stats)
 	, camp(_camp)
-	, tip_buf(TooltipData())
+	, tip_buf()
 	, key_lock(false)
 	, dragging(0)
-	, drag_stack(ItemStack())
+	, drag_stack()
 	, drag_power(0)
 	, drag_src(0)
 	, done(false)
-	/*std::vector<Menu*> menus;*/
+/*std::vector<Menu*> menus;*/
 	, items(_items)
 	, inv(NULL)
 	, pow(NULL)
@@ -79,8 +79,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	, stash(NULL)
 	, pause(false)
 	, menus_open(false)
-	, drop_stack(ItemStack())
-{
+	, drop_stack() {
 	loadIcons();
 
 	hp = new MenuStatBar("hp");
@@ -165,24 +164,27 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 				int y = eatFirstInt(infile.val, ',');
 				int w = eatFirstInt(infile.val, ',');
 				int h = eatFirstInt(infile.val, ',');
-				
+
 				menus[menu_index]->window_area.x = x;
 				menus[menu_index]->window_area.y = y;
 				menus[menu_index]->window_area.w = w;
 				menus[menu_index]->window_area.h = h;
 
-			} else if (infile.key == "align") {
+			}
+			else if (infile.key == "align") {
 				menus[menu_index]->alignment = infile.val;
-			} else if (infile.key == "soundfx_open") {
+			}
+			else if (infile.key == "soundfx_open") {
 				menus[menu_index]->sfx_open = snd->load(infile.val, "MenuManager open tab");
-			} else if (infile.key == "soundfx_close") {
+			}
+			else if (infile.key == "soundfx_close") {
 				menus[menu_index]->sfx_close = snd->load(infile.val, "MenuManager close tab");
 			}
-			
+
 		}
 
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/menus.txt!\n");
+	}
 
 	// Some menus need to be updated to apply their new dimensions
 	act->update();
@@ -214,16 +216,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
  * Icon set shared by all menus
  */
 void MenuManager::loadIcons() {
-
-	icons = IMG_Load(mods->locate("images/icons/icons.png").c_str());
-	if (!icons) {
-		fprintf(stderr, "Couldn't load icons: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = icons;
-		icons = SDL_DisplayFormatAlpha(icons);
-		SDL_FreeSurface(cleanup);
-	}
+	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
 }
 
 void MenuManager::renderIcon(int icon_id, int x, int y) {
@@ -284,7 +277,7 @@ void MenuManager::logic() {
 
 	// handle npc action menu
 	if (npc->visible) {
-	  npc->logic();
+		npc->logic();
 	}
 
 	// check if mouse-clicking a menu button
@@ -298,7 +291,7 @@ void MenuManager::logic() {
 	}
 
 	// exit menu toggle
-	if ((!key_lock && !dragging) && !(stats->corpse && stats->permadeath) && stats->transform_duration < 1) {
+	if ((!key_lock && !dragging) && !(stats->corpse && stats->permadeath)) {
 		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
 			inpt->lock[CANCEL] = true;
 			key_lock = true;
@@ -344,7 +337,7 @@ void MenuManager::logic() {
 	act->requires_attention[MENU_POWERS] = pow->getUnspent() > 0;
 
 	// character menu toggleggle
-	if (((inpt->pressing[CHARACTER] && !key_lock && !dragging) || clicking_character) && stats->humanoid) {
+	if (((inpt->pressing[CHARACTER] && !key_lock && !dragging) || clicking_character)) {
 		key_lock = true;
 		if (chr->visible) {
 			snd->play(chr->sfx_close);
@@ -423,20 +416,23 @@ void MenuManager::logic() {
 					stack = vendor->click(inpt);
 					if (stack.item > 0) {
 						if (!inv->buy(stack,vendor->getTab())) {
-							log->add(msg->get("Not enough money."), LOG_TYPE_MESSAGES);
-							hudlog->add(msg->get("Not enough money."));
+							log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
+							hudlog->add(msg->get("Not enough %s.", CURRENCY));
 							vendor->itemReturn( stack);
-						} else {
+						}
+						else {
 							if (inv->full(stack.item)) {
 								log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 								hudlog->add(msg->get("Inventory is full."));
 								drop_stack = stack;
-							} else {
+							}
+							else {
 								inv->add(stack);
 							}
 						}
 					}
-				} else {
+				}
+				else {
 					// start dragging a vendor item
 					drag_stack = vendor->click(inpt);
 					if (drag_stack.item > 0) {
@@ -456,12 +452,14 @@ void MenuManager::logic() {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
 							drop_stack = stack;
-						} else {
+						}
+						else {
 							inv->add(stack);
 						}
 						stash->updated = true;
 					}
-				} else {
+				}
+				else {
 					// start dragging a stash item
 					drag_stack = stash->click(inpt);
 					if (drag_stack.item > 0) {
@@ -491,7 +489,7 @@ void MenuManager::logic() {
 							}
 						}
 						else {
-							// The vendor could have a limited amount of money in the future. It will be tested here.
+							// The vendor could have a limited amount of currency in the future. It will be tested here.
 							if ((SELL_WITHOUT_VENDOR || vendor->visible) && inv->sell(stack)) {
 								vendor->setTab(VENDOR_SELL);
 								vendor->add(stack);
@@ -564,8 +562,9 @@ void MenuManager::logic() {
 			else if (drag_src == DRAG_SRC_ACTIONBAR) {
 				if (isWithin(act->numberArea,inpt->mouse) || isWithin(act->mouseArea,inpt->mouse)) {
 					act->drop(inpt->mouse, drag_power, 1);
-				// for locked slots forbid power dropping
-				} else if (act->locked[act->drag_prev_slot]) {
+					// for locked slots forbid power dropping
+				}
+				else if (act->locked[act->drag_prev_slot]) {
 					act->hotkeys[act->drag_prev_slot] = drag_power;
 				}
 			}
@@ -627,15 +626,17 @@ void MenuManager::logic() {
 				// dropping an item from vendor (we only allow to drop into the carried area)
 				if (inv->visible && isWithin( inv->carried_area, inpt->mouse)) {
 					if (!inv->buy(drag_stack,vendor->getTab())) {
-						log->add(msg->get("Not enough money."), LOG_TYPE_MESSAGES);
-						hudlog->add(msg->get("Not enough money."));
+						log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
+						hudlog->add(msg->get("Not enough %s.", CURRENCY));
 						vendor->itemReturn( drag_stack);
-					} else {
+					}
+					else {
 						if (inv->full(drag_stack.item)) {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
 							drop_stack = drag_stack;
-						} else {
+						}
+						else {
 							inv->drop(inpt->mouse,drag_stack);
 						}
 					}
@@ -657,10 +658,12 @@ void MenuManager::logic() {
 						// quest items cannot be dropped
 						if (items->items[drag_stack.item].type != "quest") {
 							drop_stack = drag_stack;
-						} else {
+						}
+						else {
 							stash->itemReturn(drag_stack);
 						}
-					} else {
+					}
+					else {
 						inv->drop(inpt->mouse,drag_stack);
 					}
 					stash->updated = true;
@@ -678,7 +681,8 @@ void MenuManager::logic() {
 			dragging = false;
 		}
 
-	} else {
+	}
+	else {
 		if (dragging) {
 			if (drag_src == DRAG_SRC_VENDOR) vendor->itemReturn(drag_stack);
 			else if (drag_src == DRAG_SRC_STASH) stash->itemReturn(drag_stack);
@@ -713,6 +717,7 @@ void MenuManager::logic() {
 
 				// if a non-consumable item power is unequipped, disable that slot
 				if (!inv->isItemEquipped(item_id)) {
+					act->slot_item_count[i] = 0;
 					act->slot_enabled[i] = false;
 				}
 			}
@@ -758,6 +763,10 @@ void MenuManager::render() {
 			tip_buf = tip_new;
 		}
 		tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
+		TOOLTIP_CONTEXT = TOOLTIP_MENU;
+	}
+	else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
+		TOOLTIP_CONTEXT = TOOLTIP_NONE;
 	}
 
 	// draw icon under cursor if dragging

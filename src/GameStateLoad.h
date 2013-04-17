@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 #include <sstream>
 
+class TabList;
 class ItemManager;
 class MenuConfirm;
 class WidgetButton;
@@ -55,6 +56,8 @@ private:
 	void loadPortrait(int slot);
 	std::string getMapName(const std::string& map_filename);
 	void updateButtons();
+
+	TabList tablist;
 
 	ItemManager *items;
 	WidgetButton *button_exit;

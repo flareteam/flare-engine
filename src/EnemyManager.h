@@ -64,6 +64,7 @@ public:
 	~EnemyManager();
 	void handleNewMap();
 	void handleSpawn();
+	void handlePartyBuff();
 	void logic();
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP(CampaignManager *camp);
@@ -71,11 +72,11 @@ public:
 	Enemy *enemyFocus(Point mouse, Point cam, bool alive_only);
 
 	// vars
-	MinionManager *minionManager;
 	std::vector<Enemy*> enemies;
 	Point hero_pos;
 	bool hero_alive;
 	int hero_stealth;
+	Avatar *pc;
 };
 
 

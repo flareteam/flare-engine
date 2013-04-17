@@ -32,9 +32,10 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	cursor = 0;
 	bg.r = bg.g = bg.b = 0;
 	contents = NULL;
-	scrollbar = new WidgetScrollBar(mods->locate("images/menus/buttons/scrollbar_default.png"));
+	scrollbar = new WidgetScrollBar("images/menus/buttons/scrollbar_default.png");
 	update = true;
 	render_to_alpha = false;
+	transparent = true;
 	resize(height);
 }
 
@@ -47,7 +48,8 @@ void WidgetScrollBox::scroll(int amount) {
 	cursor += amount;
 	if (cursor < 0) {
 		cursor = 0;
-	} else if (cursor > contents->h-pos.h) {
+	}
+	else if (cursor > contents->h-pos.h) {
 		cursor = contents->h-pos.h;
 	}
 	refresh();
@@ -76,7 +78,8 @@ void WidgetScrollBox::logic(int x, int y) {
 			scroll(20);
 			inpt->resetScroll();
 		}
-	} else {
+	}
+	else {
 		inpt->resetScroll();
 	}
 
@@ -103,8 +106,10 @@ void WidgetScrollBox::resize(int h) {
 
 	if (pos.h > h) h = pos.h;
 	contents = createAlphaSurface(pos.w,h);
-	SDL_FillRect(contents,NULL,SDL_MapRGB(contents->format,bg.r,bg.g,bg.b));
-	SDL_SetAlpha(contents, 0, 0);
+	if (!transparent) {
+		SDL_FillRect(contents,NULL,SDL_MapRGB(contents->format,bg.r,bg.g,bg.b));
+		SDL_SetAlpha(contents, 0, 0);
+	}
 
 	cursor = 0;
 	refresh();
@@ -119,8 +124,10 @@ void WidgetScrollBox::refresh() {
 		}
 
 		contents = createAlphaSurface(pos.w,h);
-		SDL_FillRect(contents,NULL,SDL_MapRGB(contents->format,bg.r,bg.g,bg.b));
-		SDL_SetAlpha(contents, 0, 0);
+		if (!transparent) {
+			SDL_FillRect(contents,NULL,SDL_MapRGB(contents->format,bg.r,bg.g,bg.b));
+			SDL_SetAlpha(contents, 0, 0);
+		}
 	}
 
 	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor, contents->h-pos.h-scrollbar->pos_knob.h);

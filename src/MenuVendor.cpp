@@ -38,15 +38,14 @@ MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
 	: Menu()
 	, items(_items)
 	, stats(_stats)
-	, closeButton(new WidgetButton(mods->locate("images/menus/buttons/button_x.png")))
+	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
 	, tabControl(new WidgetTabControl(2))
 	, activetab(VENDOR_BUY)
 	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
 	, buyback_stock()
-	, talker_visible(false)
-{
-	loadGraphics();
+	, talker_visible(false) {
+	background = loadGraphicSurface("images/menus/vendor.png");
 
 	tabControl->setTabTitle(VENDOR_BUY,msg->get("Inventory"));
 	tabControl->setTabTitle(VENDOR_SELL,msg->get("Buyback"));
@@ -62,33 +61,25 @@ MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
 			if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "slots_area") {
+			}
+			else if(infile.key == "slots_area") {
 				slots_area.x = eatFirstInt(infile.val,',');
 				slots_area.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "vendor_cols"){
+			}
+			else if (infile.key == "vendor_cols") {
 				slots_cols = eatFirstInt(infile.val,',');
-			} else if (infile.key == "vendor_rows"){
+			}
+			else if (infile.key == "vendor_rows") {
 				slots_rows = eatFirstInt(infile.val,',');
-			} else if (infile.key == "caption"){
+			}
+			else if (infile.key == "caption") {
 				title =  eatLabelInfo(infile.val);
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/vendor.txt!\n");
+	}
 
 	VENDOR_SLOTS = slots_cols * slots_rows;
-}
-
-void MenuVendor::loadGraphics() {
-	background = IMG_Load(mods->locate("images/menus/vendor.png").c_str());
-	if(!background) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
 }
 
 void MenuVendor::update() {

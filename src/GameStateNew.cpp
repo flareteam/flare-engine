@@ -51,25 +51,25 @@ GameStateNew::GameStateNew() : GameState() {
 	modified_name = false;
 
 	// set up buttons
-	button_exit = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	button_exit = new WidgetButton("images/menus/buttons/button_default.png");
 	button_exit->label = msg->get("Cancel");
 	button_exit->pos.x = VIEW_W_HALF - button_exit->pos.w;
 	button_exit->pos.y = VIEW_H - button_exit->pos.h;
 	button_exit->refresh();
 
-	button_create = new WidgetButton(mods->locate("images/menus/buttons/button_default.png"));
+	button_create = new WidgetButton("images/menus/buttons/button_default.png");
 	button_create->label = msg->get("Create");
 	button_create->pos.x = VIEW_W_HALF;
 	button_create->pos.y = VIEW_H - button_create->pos.h;
 	button_create->enabled = false;
 	button_create->refresh();
 
-	button_prev = new WidgetButton(mods->locate("images/menus/buttons/left.png"));
-	button_next = new WidgetButton(mods->locate("images/menus/buttons/right.png"));
+	button_prev = new WidgetButton("images/menus/buttons/left.png");
+	button_next = new WidgetButton("images/menus/buttons/right.png");
 	input_name = new WidgetInput();
-	button_permadeath = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	button_permadeath = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 
-	class_list = new WidgetListBox (HERO_CLASSES.size(), 12, mods->locate("images/menus/buttons/listbox_default.png"));
+	class_list = new WidgetListBox (HERO_CLASSES.size(), 12, "images/menus/buttons/listbox_default.png");
 	class_list->can_deselect = false;
 	class_list->selected[0] = true;
 
@@ -81,47 +81,57 @@ GameStateNew::GameStateNew() : GameState() {
 	FileParser infile;
 
 	if (infile.open(mods->locate("menus/gamenew.txt"))) {
-	  while (infile.next()) {
-		infile.val = infile.val + ',';
+		while (infile.next()) {
+			infile.val = infile.val + ',';
 
-		if (infile.key == "button_prev") {
-			button_prev->pos.x = eatFirstInt(infile.val, ',');
-			button_prev->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "button_next") {
-			button_next->pos.x = eatFirstInt(infile.val, ',');
-			button_next->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "button_permadeath") {
-			button_permadeath->pos.x = eatFirstInt(infile.val, ',');
-			button_permadeath->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "name_input") {
-			name_pos.x = eatFirstInt(infile.val, ',');
-			name_pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "portrait_label") {
-			portrait_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "name_label") {
-			name_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "permadeath_label") {
-			permadeath_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "classlist_label") {
-			classlist_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "portrait") {
-			portrait_pos.x = eatFirstInt(infile.val, ',');
-			portrait_pos.y = eatFirstInt(infile.val, ',');
-			portrait_pos.w = eatFirstInt(infile.val, ',');
-			portrait_pos.h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "class_list") {
-			class_list->pos.x = eatFirstInt(infile.val, ',');
-			class_list->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "show_classlist") {
-			int show_cl = eatFirstInt(infile.val, ',');
-			if (show_cl == 1)
-				show_classlist = true;
-			else
-				show_classlist = false;
+			if (infile.key == "button_prev") {
+				button_prev->pos.x = eatFirstInt(infile.val, ',');
+				button_prev->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "button_next") {
+				button_next->pos.x = eatFirstInt(infile.val, ',');
+				button_next->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "button_permadeath") {
+				button_permadeath->pos.x = eatFirstInt(infile.val, ',');
+				button_permadeath->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "name_input") {
+				name_pos.x = eatFirstInt(infile.val, ',');
+				name_pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "portrait_label") {
+				portrait_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "name_label") {
+				name_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "permadeath_label") {
+				permadeath_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "classlist_label") {
+				classlist_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "portrait") {
+				portrait_pos.x = eatFirstInt(infile.val, ',');
+				portrait_pos.y = eatFirstInt(infile.val, ',');
+				portrait_pos.w = eatFirstInt(infile.val, ',');
+				portrait_pos.h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "class_list") {
+				class_list->pos.x = eatFirstInt(infile.val, ',');
+				class_list->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "show_classlist") {
+				int show_cl = eatFirstInt(infile.val, ',');
+				if (show_cl == 1)
+					show_classlist = true;
+				else
+					show_classlist = false;
+			}
 		}
-	  }
-	  infile.close();
-	} else fprintf(stderr, "Unable to open menus/gamenew.txt!\n");
+		infile.close();
+	}
 
 	button_prev->pos.x += (VIEW_W - FRAME_W)/2;
 	button_prev->pos.y += (VIEW_H - FRAME_H)/2;
@@ -172,30 +182,23 @@ GameStateNew::GameStateNew() : GameState() {
 	loadOptions("hero_options.txt");
 	loadPortrait(portrait[0]);
 	setName(name[0]);
+
+	// Set up tab list
+	tablist.add(button_exit);
+	tablist.add(button_create);
+	tablist.add(button_permadeath);
+	tablist.add(button_prev);
+	tablist.add(button_next);
+	tablist.add(class_list);
 }
 
 void GameStateNew::loadGraphics() {
-	portrait_border = IMG_Load(mods->locate("images/menus/portrait_border.png").c_str());
-	if(!portrait_border) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_SetColorKey( portrait_border, SDL_SRCCOLORKEY, SDL_MapRGB(portrait_border->format, 255, 0, 255) );
-		SDL_Surface *cleanup = portrait_border;
-		portrait_border = SDL_DisplayFormatAlpha(portrait_border);
-		SDL_FreeSurface(cleanup);
-	}
+	portrait_border = loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true);
 }
 
 void GameStateNew::loadPortrait(const string& portrait_filename) {
 	SDL_FreeSurface(portrait_image);
-	portrait_image = IMG_Load(mods->locate("images/portraits/" + portrait_filename + ".png").c_str());
-	if (!portrait_image) return;
-
-	// optimize
-	SDL_Surface *cleanup = portrait_image;
-	portrait_image = SDL_DisplayFormatAlpha(portrait_image);
-	SDL_FreeSurface(cleanup);
+	portrait_image = loadGraphicSurface("images/portraits/" + portrait_filename + ".png");
 }
 
 /**
@@ -231,6 +234,8 @@ void GameStateNew:: setName(const string& default_name) {
 }
 
 void GameStateNew::logic() {
+	tablist.logic();
+
 	button_permadeath->checkClick();
 	if (show_classlist) class_list->checkClick();
 
@@ -248,7 +253,8 @@ void GameStateNew::logic() {
 		}
 	}
 
-	if (button_exit->checkClick()) {
+	if ((inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) || button_exit->checkClick()) {
+		inpt->lock[CANCEL] = true;
 		delete requestedGameState;
 		requestedGameState = new GameStateLoad();
 	}

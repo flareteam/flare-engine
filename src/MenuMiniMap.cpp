@@ -50,12 +50,13 @@ MenuMiniMap::MenuMiniMap() {
 				pos.y = eatFirstInt(infile.val,',');
 				pos.w = eatFirstInt(infile.val,',');
 				pos.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "text_pos") {
+			}
+			else if(infile.key == "text_pos") {
 				text_pos = eatLabelInfo(infile.val);
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/minimap.txt!\n");
+	}
 
 	// label for map name
 	label = new WidgetLabel();

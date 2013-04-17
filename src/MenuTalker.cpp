@@ -44,9 +44,9 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 	portrait = NULL;
 	msg_buffer = NULL;
 
-	advanceButton = new WidgetButton(mods->locate("images/menus/buttons/right.png"));
+	advanceButton = new WidgetButton("images/menus/buttons/right.png");
 
-	closeButton = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
+	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	visible = false;
 	vendor_visible = false;
@@ -58,7 +58,7 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 	// fonts
 	font_who = font_dialog = "font_regular";
 
-	loadGraphics();
+	background = loadGraphicSurface("images/menus/dialog_box.png");
 
 	// Load config settings
 	FileParser infile;
@@ -69,63 +69,57 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 			if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "advance") {
+			}
+			else if(infile.key == "advance") {
 				advance_pos.x = eatFirstInt(infile.val,',');
 				advance_pos.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "dialogbox"){
+			}
+			else if (infile.key == "dialogbox") {
 				dialog_pos.x = eatFirstInt(infile.val,',');
 				dialog_pos.y = eatFirstInt(infile.val,',');
 				dialog_pos.w = eatFirstInt(infile.val,',');
 				dialog_pos.h = eatFirstInt(infile.val,',');
-			} else if (infile.key == "dialogtext"){
+			}
+			else if (infile.key == "dialogtext") {
 				text_pos.x = eatFirstInt(infile.val,',');
 				text_pos.y = eatFirstInt(infile.val,',');
 				text_pos.w = eatFirstInt(infile.val,',');
 				text_pos.h = eatFirstInt(infile.val,',');
-			} else if (infile.key == "text_offset"){
+			}
+			else if (infile.key == "text_offset") {
 				text_offset.x = eatFirstInt(infile.val,',');
 				text_offset.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "portrait_he"){
+			}
+			else if (infile.key == "portrait_he") {
 				portrait_he.x = eatFirstInt(infile.val,',');
 				portrait_he.y = eatFirstInt(infile.val,',');
 				portrait_he.w = eatFirstInt(infile.val,',');
 				portrait_he.h = eatFirstInt(infile.val,',');
-			} else if (infile.key == "portrait_you"){
+			}
+			else if (infile.key == "portrait_you") {
 				portrait_you.x = eatFirstInt(infile.val,',');
 				portrait_you.y = eatFirstInt(infile.val,',');
 				portrait_you.w = eatFirstInt(infile.val,',');
 				portrait_you.h = eatFirstInt(infile.val,',');
-			} else if (infile.key == "font_who") {
+			}
+			else if (infile.key == "font_who") {
 				font_who = eatFirstString(infile.val,',');
-			} else if (infile.key == "font_dialog") {
+			}
+			else if (infile.key == "font_dialog") {
 				font_dialog = eatFirstString(infile.val,',');
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/talker.txt!\n");
+	}
 
 	color_normal = font->getColor("menu_normal");
-}
-
-void MenuTalker::loadGraphics() {
-
-	SDL_FreeSurface(background);
-	background = IMG_Load(mods->locate("images/menus/dialog_box.png").c_str());
-	if(!background) {
-		fprintf(stderr, "Couldn't load image dialog_box.png: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
 }
 
 void MenuTalker::chooseDialogNode(int request_dialog_node) {
 	event_cursor = 0;
 
 	if(request_dialog_node == -1)
-	  return;
+		return;
 
 	dialog_node = request_dialog_node;
 	npc->processDialog(dialog_node, event_cursor);
@@ -285,18 +279,7 @@ void MenuTalker::setHero(const string& name, const string& portrait_filename) {
 	hero_name = name;
 
 	SDL_FreeSurface(portrait);
-	portrait = IMG_Load(mods->locate("images/portraits/" + portrait_filename + ".png").c_str());
-	if(!portrait) {
-		fprintf(stderr, "Couldn't load portrait: %s\n", IMG_GetError());
-
-		// keep playing, just don't show this portrait
-	}
-	else {
-		// optimize
-		SDL_Surface *cleanup = portrait;
-		portrait = SDL_DisplayFormatAlpha(portrait);
-		SDL_FreeSurface(cleanup);
-	}
+	portrait = loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait");
 }
 
 MenuTalker::~MenuTalker() {

@@ -34,42 +34,38 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, wlabel()
 	, color_normal(font->getColor("widget_normal"))
 	, color_disabled(font->getColor("widget_disabled"))
-	, tip_buf(TooltipData())
-	, tip_new(TooltipData())
+	, tip_buf()
+	, tip_new()
 	, tip(new WidgetTooltip())
 	, label("")
 	, tooltip("")
 	, enabled(true)
 	, pressed(false)
-	, hover(false)
-{
+	, hover(false) {
+	focusable = true;
 	pos.x = pos.y = pos.w = pos.h = 0;
 	loadArt();
 	pos.w = buttons->w;
 	pos.h = (buttons->h / 4); //height of one button
 }
 
+void WidgetButton::activate() {
+	pressed = true;
+}
+
 void WidgetButton::loadArt() {
 
 	// load button images
-	SDL_Surface *cleanup = IMG_Load(fileName.c_str());
+	buttons = loadGraphicSurface(fileName);
 
-	if(!cleanup) {
-		fprintf(stderr, "Couldn't load image: %s\n", IMG_GetError());
+	if (!buttons) {
 		SDL_Quit();
 		exit(1); // or abort ??
 	}
-
-	// optimize
-	buttons = SDL_DisplayFormatAlpha(cleanup);
-	SDL_FreeSurface(cleanup);
 }
 
 bool WidgetButton::checkClick() {
-	if (checkClick(inpt->mouse.x,inpt->mouse.y))
-		return true;
-	else
-		return false;
+	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
 /**
@@ -80,11 +76,7 @@ bool WidgetButton::checkClick(int x, int y) {
 	Point mouse(x,y);
 
 	// Change the hover state
-	if (isWithin(pos, mouse)) {
-		hover = true;
-	} else {
-		hover = false;
-	}
+	hover = isWithin(pos, mouse);
 
 	// Check the tooltip
 	tip_new = checkTooltip(mouse);
@@ -94,16 +86,12 @@ bool WidgetButton::checkClick(int x, int y) {
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return false;
+	if (inpt->lock[ACCEPT]) return false;
 
 	// main click released, so the button state goes back to unpressed
-	if (pressed && !inpt->lock[MAIN1]) {
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT]) {
 		pressed = false;
-
-		if (isWithin(pos, mouse)) {
-
-			// activate upon release
-			return true;
-		}
+		return true;
 	}
 
 	pressed = false;
@@ -137,6 +125,8 @@ void WidgetButton::render(SDL_Surface *target) {
 	else if (pressed)
 		src.y = BUTTON_GFX_PRESSED * pos.h;
 	else if (hover)
+		src.y = BUTTON_GFX_HOVER * pos.h;
+	else if(in_focus)
 		src.y = BUTTON_GFX_HOVER * pos.h;
 	else
 		src.y = BUTTON_GFX_NORMAL * pos.h;

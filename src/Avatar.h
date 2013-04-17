@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
-#include "MinionManager.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -99,8 +98,7 @@ public:
 	Avatar(PowerManager *_powers, MapRenderer *_map);
 	~Avatar();
 
-	PowerManager *powers;
-	MinionManager *minions;
+	EnemyManager *enemies;
 
 	void init();
 	void loadLayerDefinitions();
@@ -113,7 +111,6 @@ public:
 	void logic(int actionbar_power, bool restrictPowerUse);
 	bool pressing_move();
 	void set_direction();
-	bool takeHit(const Hazard &h);
 	std::string log_msg;
 
 	// transformation handling
@@ -125,6 +122,7 @@ public:
 	StatBlock *hero_stats;
 	StatBlock *charmed_stats;
 
+    virtual void resetActiveAnimation();
 	virtual Renderable getRender() { return Renderable(); }
 	void addRenders(std::vector<Renderable> &r);
 

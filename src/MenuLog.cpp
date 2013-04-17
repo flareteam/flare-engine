@@ -46,30 +46,25 @@ MenuLog::MenuLog() {
 
 			if(infile.key == "caption") {
 				title = eatLabelInfo(infile.val);
-			} else if(infile.key == "close") {
+			}
+			else if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "tab_area") {
+			}
+			else if(infile.key == "tab_area") {
 				tab_area.x = eatFirstInt(infile.val,',');
 				tab_area.y = eatFirstInt(infile.val,',');
 				tab_area.w = eatFirstInt(infile.val,',');
 				tab_area.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "tab_bg_color") {
-				tab_bg.r = eatFirstInt(infile.val,',');
-				tab_bg.g = eatFirstInt(infile.val,',');
-				tab_bg.b = eatFirstInt(infile.val,',');
 			}
 		}
 		infile.close();
-	} else fprintf(stderr, "Unable to open menus/log.txt!\n");
+	}
 
 	// Store the amount of displayed log messages on each log, and the maximum.
 	for (int i=0; i<LOG_TYPE_COUNT; i++) {
 		log_count[i] = 0;
 		msg_buffer[i] = new WidgetScrollBox(tab_area.w,tab_area.h);
-		msg_buffer[i]->bg.r = tab_bg.r;
-		msg_buffer[i]->bg.g = tab_bg.g;
-		msg_buffer[i]->bg.b = tab_bg.b;
 	}
 
 	// Initialize the tab control.
@@ -82,26 +77,11 @@ MenuLog::MenuLog() {
 	font->setFont("font_regular");
 	paragraph_spacing = font->getLineHeight()/2;
 
-	loadGraphics();
+	background = loadGraphicSurface("images/menus/log.png");
 
-	closeButton = new WidgetButton(mods->locate("images/menus/buttons/button_x.png"));
+	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	color_normal = font->getColor("menu_normal");
-}
-
-void MenuLog::loadGraphics() {
-
-	background = IMG_Load(mods->locate("images/menus/log.png").c_str());
-
-	if(!background) {
-		fprintf(stderr, "Could not load image: %s\n", IMG_GetError());
-	} else {
-		// optimize
-		SDL_Surface *cleanup = background;
-		background = SDL_DisplayFormatAlpha(background);
-		SDL_FreeSurface(cleanup);
-	}
-
 }
 
 void MenuLog::update() {

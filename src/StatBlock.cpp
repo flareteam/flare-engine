@@ -42,11 +42,12 @@ StatBlock::StatBlock()
 	, corpse(false)
 	, corpse_ticks(0)
 	, hero(false)
-	, minion(false)
+	, hero_ally(false)
 	, humanoid(false)
 	, permadeath(false)
 	, transformed(false)
 	, refresh_stats(false)
+	, converted(false)
 	, movement_type(MOVEMENT_NORMAL)
 	, flying(false)
 	, intangible(false)
@@ -111,37 +112,38 @@ StatBlock::StatBlock()
 	, transform_duration_total(0)
 	, manual_untransform(false)
 	, transform_with_equipment(false)
-	, effects(EffectManager())
-	, pos(Point())
-	, forced_speed(Point())
+	, effects()
+	, pos()
+	, forced_speed()
 	, direction(0)
-	, hero_cooldown(vector<int>(POWER_COUNT, 0)) // hero only
+	, hero_cooldown(POWER_COUNT, 0) // hero only
 	, poise(0)
 	, poise_base(0)
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
-	, waypoints(queue<Point>())		// enemy only
+	, waypoints()		// enemy only
 	, waypoint_pause(0)				// enemy only
 	, waypoint_pause_ticks(0)		// enemy only
 	, wander(false)					// enemy only
-	, wander_area(SDL_Rect())		// enemy only
+	, wander_area()		// enemy only
 	, wander_ticks(0)				// enemy only
 	, wander_pause_ticks(0)			// enemy only
 	, chance_pursue(0)
 	, chance_flee(0)				// read in, but unused in formulas.
-	, powers_list(vector<int>(0))	// hero only
-	, powers_list_items(vector<int>(0))	// hero only
-	, power_chance(vector<int>(POWERSLOT_COUNT, 0))		// enemy only
-	, power_index(vector<int>(POWERSLOT_COUNT, 0))		// both
-	, power_cooldown(vector<int>(POWERSLOT_COUNT, 0))	// enemy only
-	, power_ticks(vector<int>(POWERSLOT_COUNT, 0))		// enemy only
+	, powers_list()	// hero only
+	, powers_list_items()	// hero only
+	, powers_passive()
+	, power_chance(POWERSLOT_COUNT, 0)		// enemy only
+	, power_index(POWERSLOT_COUNT, 0)		// both
+	, power_cooldown(POWERSLOT_COUNT, 0)	// enemy only
+	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
-	, hero_pos(Point(-1, -1))
+	, hero_pos(-1, -1)
 	, hero_alive(true)
 	, hero_stealth(0)
-	, last_seen(Point(-1, -1))  // no effects to gameplay?
+	, last_seen(-1, -1)  // no effects to gameplay?
 	, turn_delay(0)
 	, turn_ticks(0)
 	, in_combat(false)  //enemy only
@@ -152,7 +154,7 @@ StatBlock::StatBlock()
 	, on_half_dead_casted(false) // enemy only
 	, suppress_hp(false)
 	, teleportation(false)
-	, teleport_destination(Point())
+	, teleport_destination()
 	, melee_weapon_power(0)
 	, mental_weapon_power(0)
 	, ranged_weapon_power(0)
@@ -168,8 +170,7 @@ StatBlock::StatBlock()
 	, portrait("male01")
 	, transform_type("")
 	, animations("")
-	, sfx_step("cloth")
-{
+	, sfx_step("cloth") {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
 
@@ -217,12 +218,12 @@ bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
  */
 void StatBlock::load(const string& filename) {
 	FileParser infile;
-	if (!infile.open(mods->locate(filename))) {
-		fprintf(stderr, "Unable to open %s!\n", filename.c_str());
+	if (!infile.open(mods->locate(filename)))
 		return;
-	}
 
 	int num = 0;
+	string loot_token;
+
 	while (infile.next()) {
 		if (isInt(infile.val)) num = toInt(infile.val);
 		bool valid = false;
@@ -248,6 +249,8 @@ void StatBlock::load(const string& filename) {
 
 			// loot entries format:
 			// loot=[id],[percent_chance]
+			// optionally allow range:
+			// loot=[id],[percent_chance],[count_min],[count_max]
 
 			EnemyLoot el;
 			std::string loot_id = infile.nextValue();
@@ -258,6 +261,18 @@ void StatBlock::load(const string& filename) {
 			else
 				el.id = toInt(loot_id);
 			el.chance = toInt(infile.nextValue());
+
+			// check for optional range.
+			loot_token = infile.nextValue();
+			if (loot_token != "") {
+				el.count_min = toInt(loot_token);
+				el.count_max = el.count_min;
+			}
+			loot_token = infile.nextValue();
+			if (loot_token != "") {
+				el.count_max = toInt(loot_token);
+			}
+
 			loot.push_back(el);
 		}
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
@@ -282,6 +297,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "absorb_min") absorb_min = num;
 		else if (infile.key == "absorb_max") absorb_max = num;
 		else if (infile.key == "poise") poise = poise_base = num;
+		else if (infile.key == "hp_regen_base") hp_regen_base = num;
 
 		// behavior stats
 		else if (infile.key == "flying") {
@@ -330,7 +346,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "passive_powers") {
 			std::string p = infile.nextValue();
 			while (p != "") {
-				powers_list.push_back(toInt(p));
+				powers_passive.push_back(toInt(p));
 				p = infile.nextValue();
 			}
 		}
@@ -353,9 +369,14 @@ void StatBlock::load(const string& filename) {
 				suppress_hp = false;
 		}
 
-		// these are only used for EnemyGroupManager
+		else if (infile.key == "categories") {
+			string cat;
+			while ((cat = infile.nextValue()) != "") {
+				categories.push_back(cat);
+			}
+		}
+		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
-		else if (infile.key == "categories") valid = true;
 		else if (infile.key == "rarity") valid = true;
 
 		else if (!valid) {
@@ -449,11 +470,13 @@ void StatBlock::recalc_alt() {
 		avoidance = avoidance_base + (avoidance_per_level * lev0) + (avoidance_per_defense * def0) + effects.bonus_avoidance;
 		crit = crit_base + (crit_per_level * lev0) + effects.bonus_crit;
 
-	} else {
+	}
+	else {
 		maxhp = hp_base + effects.bonus_hp;
 		maxmp = mp_base + effects.bonus_mp;
 		accuracy = accuracy_base + effects.bonus_accuracy;
 		avoidance = avoidance_base + effects.bonus_avoidance;
+		hp_per_minute = hp_regen_base + effects.bonus_hp_regen;
 	}
 
 	speed = speed_default;
@@ -516,6 +539,9 @@ void StatBlock::logic() {
 		takeDamage(effects.damage);
 	}
 
+	if(effects.death_sentence)
+		hp = 0;
+
 	if(cooldown_hit_ticks > 0)
 		cooldown_hit_ticks--;
 
@@ -550,104 +576,140 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 	//don't use untransform power if hero is not transformed
 	else if (power.spawn_type == "untransform" && !transformed) return false;
 	else
-	return (!power.requires_mental_weapon || wielding_mental)
-		&& (!power.requires_offense_weapon || wielding_offense)
-		&& (!power.requires_physical_weapon || wielding_physical)
-		&& mp >= power.requires_mp
-		&& (!power.sacrifice == false || hp > power.requires_hp)
-		&& menu_powers->meetsUsageStats(powerid)
-		&& !power.passive;
+		return (!power.requires_mental_weapon || wielding_mental)
+			   && (!power.requires_offense_weapon || wielding_offense)
+			   && (!power.requires_physical_weapon || wielding_physical)
+			   && mp >= power.requires_mp
+			   && (!power.sacrifice == false || hp > power.requires_hp)
+			   && menu_powers->meetsUsageStats(powerid)
+			   && !power.passive;
 
 }
 
 void StatBlock::loadHeroStats() {
 	// Redefine numbers from config file if present
 	FileParser infile;
-	if (!infile.open(mods->locate("engine/stats.txt"))) {
-		fprintf(stderr, "Unable to open engine/stats.txt!\n");
+	if (!infile.open(mods->locate("engine/stats.txt")))
 		return;
-	}
 
 	while (infile.next()) {
 		int value = toInt(infile.val);
 
 		if (infile.key == "max_points_per_stat") {
 			max_points_per_stat = value;
-		} else if (infile.key == "hp_base") {
+		}
+		else if (infile.key == "hp_base") {
 			hp_base = value;
-		} else if (infile.key == "hp_per_level") {
+		}
+		else if (infile.key == "hp_per_level") {
 			hp_per_level = value;
-		} else if (infile.key == "hp_per_physical") {
+		}
+		else if (infile.key == "hp_per_physical") {
 			hp_per_physical = value;
-		} else if (infile.key == "hp_regen_base") {
+		}
+		else if (infile.key == "hp_regen_base") {
 			hp_regen_base = value;
-		} else if (infile.key == "hp_regen_per_level") {
+		}
+		else if (infile.key == "hp_regen_per_level") {
 			hp_regen_per_level = value;
-		} else if (infile.key == "hp_regen_per_physical") {
+		}
+		else if (infile.key == "hp_regen_per_physical") {
 			hp_regen_per_physical = value;
-		} else if (infile.key == "mp_base") {
+		}
+		else if (infile.key == "mp_base") {
 			mp_base = value;
-		} else if (infile.key == "mp_per_level") {
+		}
+		else if (infile.key == "mp_per_level") {
 			mp_per_level = value;
-		} else if (infile.key == "mp_per_mental") {
+		}
+		else if (infile.key == "mp_per_mental") {
 			mp_per_mental = value;
-		} else if (infile.key == "mp_regen_base") {
+		}
+		else if (infile.key == "mp_regen_base") {
 			mp_regen_base = value;
-		} else if (infile.key == "mp_regen_per_level") {
+		}
+		else if (infile.key == "mp_regen_per_level") {
 			mp_regen_per_level = value;
-		} else if (infile.key == "mp_regen_per_mental") {
+		}
+		else if (infile.key == "mp_regen_per_mental") {
 			mp_regen_per_mental = value;
-		} else if (infile.key == "accuracy_base") {
+		}
+		else if (infile.key == "accuracy_base") {
 			accuracy_base = value;
-		} else if (infile.key == "accuracy_per_level") {
+		}
+		else if (infile.key == "accuracy_per_level") {
 			accuracy_per_level = value;
-		} else if (infile.key == "accuracy_per_offense") {
+		}
+		else if (infile.key == "accuracy_per_offense") {
 			accuracy_per_offense = value;
-		} else if (infile.key == "avoidance_base") {
+		}
+		else if (infile.key == "avoidance_base") {
 			avoidance_base = value;
-		} else if (infile.key == "avoidance_per_level") {
+		}
+		else if (infile.key == "avoidance_per_level") {
 			avoidance_per_level = value;
-		} else if (infile.key == "avoidance_per_defense") {
+		}
+		else if (infile.key == "avoidance_per_defense") {
 			avoidance_per_defense = value;
-		} else if (infile.key == "crit_base") {
+		}
+		else if (infile.key == "crit_base") {
 			crit_base = value;
-		} else if (infile.key == "crit_per_level") {
+		}
+		else if (infile.key == "crit_per_level") {
 			crit_per_level = value;
-		} else if (infile.key == "dmg_melee_min") {
+		}
+		else if (infile.key == "dmg_melee_min") {
 			dmg_melee_min = dmg_melee_min_default = value;
-		} else if (infile.key == "dmg_melee_max") {
+		}
+		else if (infile.key == "dmg_melee_max") {
 			dmg_melee_max = dmg_melee_max_default = value;
-		} else if (infile.key == "dmg_ranged_min") {
+		}
+		else if (infile.key == "dmg_ranged_min") {
 			dmg_ranged_min = dmg_ranged_min_default = value;
-		} else if (infile.key == "dmg_ranged_max") {
+		}
+		else if (infile.key == "dmg_ranged_max") {
 			dmg_ranged_max = dmg_ranged_max_default = value;
-		} else if (infile.key == "dmg_ment_min") {
+		}
+		else if (infile.key == "dmg_ment_min") {
 			dmg_ment_min = dmg_ment_min_default = value;
-		} else if (infile.key == "dmg_ment_max") {
+		}
+		else if (infile.key == "dmg_ment_max") {
 			dmg_ment_max = dmg_ment_max_default = value;
-		} else if (infile.key == "absorb_min") {
+		}
+		else if (infile.key == "absorb_min") {
 			absorb_min = absorb_min_default = value;
-		} else if (infile.key == "absorb_max") {
+		}
+		else if (infile.key == "absorb_max") {
 			absorb_max = absorb_max_default = value;
-		} else if (infile.key == "speed") {
+		}
+		else if (infile.key == "speed") {
 			speed = speed_default = value;
-		} else if (infile.key == "dspeed") {
+		}
+		else if (infile.key == "dspeed") {
 			dspeed = dspeed_default = value;
-		} else if (infile.key == "bonus_per_physical") {
+		}
+		else if (infile.key == "bonus_per_physical") {
 			bonus_per_physical = value;
-		} else if (infile.key == "bonus_per_mental") {
+		}
+		else if (infile.key == "bonus_per_mental") {
 			bonus_per_mental = value;
-		} else if (infile.key == "bonus_per_offense") {
+		}
+		else if (infile.key == "bonus_per_offense") {
 			bonus_per_offense = value;
-		} else if (infile.key == "bonus_per_defense") {
+		}
+		else if (infile.key == "bonus_per_defense") {
 			bonus_per_defense = value;
-		} else if (infile.key == "sfx_step") {
+		}
+		else if (infile.key == "sfx_step") {
 			sfx_step = infile.val;
-		} else if (infile.key == "stat_points_per_level") {
+		}
+		else if (infile.key == "stat_points_per_level") {
 			stat_points_per_level = value;
-		} else if (infile.key == "power_points_per_level") {
+		}
+		else if (infile.key == "power_points_per_level") {
 			power_points_per_level = value;
-		} else if (infile.key == "cooldown_hit") {
+		}
+		else if (infile.key == "cooldown_hit") {
 			cooldown_hit = value;
 		}
 	}
@@ -656,10 +718,9 @@ void StatBlock::loadHeroStats() {
 	statsLoaded = true;
 
 	// Load the XP table as well
-	if (!infile.open(mods->locate("engine/xp_table.txt"))) {
-		fprintf(stderr, "Unable to open engine/xp_table.txt!\n");
+	if (!infile.open(mods->locate("engine/xp_table.txt")))
 		return;
-	}
+
 	while(infile.next()) {
 		xp_table[toInt(infile.key) - 1] = toInt(infile.val);
 	}

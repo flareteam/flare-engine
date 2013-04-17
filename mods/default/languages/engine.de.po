@@ -2,13 +2,14 @@
 # This file is distributed under the same license as the Flare package.
 # Thomas 'CruzR' Glamsch <thomas-glamsch@gmx.de>, 2011.
 # Chris Oelmueller <chris.oelmueller@gmail.com>, 2012.
+# Stefan Beller <stefanbeller@googlemail.com>, 2013
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.15\n"
+"Project-Id-Version: 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-15 20:59+0100\n"
+"POT-Creation-Date: 2013-03-25 19:51+0100\n"
 "PO-Revision-Date: 2012-09-25 16:57+0200\n"
-"Last-Translator: Chris Oelmueller <chris.oelmueller@gmail.com>\n"
+"Last-Translator: Stefan Beller\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +21,7 @@ msgstr ""
 #: ../../../src/Avatar.cpp:411
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Glückwunsch, du hast Level %d erreicht!"
+msgstr "Glückwunsch, du hast Stufe %d erreicht!"
 
 #: ../../../src/Avatar.cpp:413
 msgid "You may increase one attribute through the Character Menu."
@@ -40,7 +41,7 @@ msgid "miss"
 msgstr "verfehlt"
 
 #: ../../../src/Avatar.cpp:784 ../../../src/Enemy.cpp:248
-#: ../../../src/PowerManager.cpp:666 ../../../src/StatBlock.cpp:522
+#: ../../../src/PowerManager.cpp:668 ../../../src/StatBlock.cpp:539
 #, c-format
 msgid "+%d HP"
 msgstr "+%d TP"
@@ -83,23 +84,23 @@ msgstr "Debuffs entfernt."
 
 #: ../../../src/CampaignManager.cpp:182
 msgid "HP and MP restored, negative effects removed"
-msgstr "TP und MP wiederhergestellt, Debuffs entfernt."
+msgstr "TP und MP wiederhergestellt, negative Eigenschaften entfernt."
 
-#: ../../../src/Enemy.cpp:255 ../../../src/StatBlock.cpp:527
+#: ../../../src/Enemy.cpp:255 ../../../src/StatBlock.cpp:544
 #, c-format
 msgid "+%d MP"
 msgstr "+%d MP"
 
-#: ../../../src/GameStateConfig.cpp:79
-msgid "Ok"
-msgstr "Annehmen"
+#: ../../../src/GameStateConfig.cpp:79 ../../../src/GameStateConfig.cpp:164
+msgid "OK"
+msgstr "OK"
 
 #: ../../../src/GameStateConfig.cpp:84 ../../../src/GameStateConfig.cpp:163
 msgid "Defaults"
 msgstr "Standard"
 
 #: ../../../src/GameStateConfig.cpp:89 ../../../src/GameStateNew.cpp:55
-#: ../../../src/InputState.cpp:59
+#: ../../../src/InputState.cpp:59 ../../../src/MenuNPCActions.cpp:77
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -134,16 +135,11 @@ msgstr "Zuweisen: "
 
 #: ../../../src/GameStateConfig.cpp:163
 msgid "Reset ALL settings?"
-msgstr "Einstellungen zurücksetzen?"
+msgstr "ALLE Einstellungen zurücksetzen?"
 
 #: ../../../src/GameStateConfig.cpp:164
-msgid "OK"
-msgstr ""
-
-#: ../../../src/GameStateConfig.cpp:164
-#, fuzzy
 msgid "Use this resolution?"
-msgstr "Auflösung"
+msgstr "Diese Auflösung verwenden?"
 
 #: ../../../src/GameStateConfig.cpp:254
 msgid "Full Screen Mode"
@@ -244,7 +240,7 @@ msgstr "Spielstand löschen"
 
 #: ../../../src/GameStateLoad.cpp:57
 msgid "Delete this save?"
-msgstr "Wirklich löschen?"
+msgstr "Spielstand wirklich löschen?"
 
 #: ../../../src/GameStateLoad.cpp:59
 msgid "Exit to Title"
@@ -252,7 +248,7 @@ msgstr "Zurück zum Menü"
 
 #: ../../../src/GameStateLoad.cpp:65
 msgid "Choose a Slot"
-msgstr "Speicherplatz..."
+msgstr "Speicherplatz wählen"
 
 #: ../../../src/GameStateLoad.cpp:476
 msgid "New Game"
@@ -260,7 +256,7 @@ msgstr "Neues Spiel"
 
 #: ../../../src/GameStateLoad.cpp:479 ../../../src/GameStateLoad.cpp:489
 msgid "Enable a story mod to continue"
-msgstr ""
+msgstr "Aktiviere einen 'story mod', um fortfahren zu können"
 
 #: ../../../src/GameStateLoad.cpp:485
 msgid "Load Game"
@@ -268,7 +264,7 @@ msgstr "Spiel laden"
 
 #: ../../../src/GameStateLoad.cpp:539
 msgid "Entering game world..."
-msgstr "Betrete die Spielwelt..."
+msgstr "Betreten der Spielwelt..."
 
 #: ../../../src/GameStateLoad.cpp:541
 msgid "Loading saved game..."
@@ -277,7 +273,7 @@ msgstr "Lade gespeichertes Spiel..."
 #: ../../../src/GameStateLoad.cpp:562
 #, c-format
 msgid "Level %d %s"
-msgstr "Level %d %s"
+msgstr "Stufe %d %s"
 
 #: ../../../src/GameStateLoad.cpp:586
 msgid "Empty Slot"
@@ -300,9 +296,8 @@ msgid "Permadeath?"
 msgstr "Dauerhafter Tod?"
 
 #: ../../../src/GameStateNew.cpp:164
-#, fuzzy
 msgid "Choose a Class"
-msgstr "Speicherplatz..."
+msgstr "Wähle eine Klasse"
 
 #: ../../../src/GameStatePlay.cpp:99
 msgid "Loading..."
@@ -323,7 +318,7 @@ msgstr "Spiel starten"
 
 #: ../../../src/GameStateTitle.cpp:45
 msgid "Enable a core mod to continue"
-msgstr ""
+msgstr "Aktiviere einen 'core mod', um fortfahren zu können"
 
 #: ../../../src/GameStateTitle.cpp:49
 msgid "Configuration"
@@ -334,8 +329,8 @@ msgid "Exit Game"
 msgstr "Beenden"
 
 #: ../../../src/GameStateTitle.cpp:61
-msgid "Flare Alpha v0.17"
-msgstr "Flare Alpha v0.17"
+msgid "Flare Alpha v0.18"
+msgstr "Flare Alpha v0.18"
 
 #: ../../../src/InputState.cpp:60
 msgid "Accept"
@@ -436,15 +431,15 @@ msgstr "Löschen"
 
 #: ../../../src/InputState.cpp:85
 msgid "lmb"
-msgstr ""
+msgstr "lMt"
 
 #: ../../../src/InputState.cpp:86
 msgid "mmb"
-msgstr ""
+msgstr "mMt"
 
 #: ../../../src/InputState.cpp:87
 msgid "rmb"
-msgstr ""
+msgstr "rMt"
 
 #: ../../../src/InputState.cpp:88
 msgid "wheel up"
@@ -456,16 +451,16 @@ msgstr "Mausrad ab"
 
 #: ../../../src/InputState.cpp:90
 msgid "mbx1"
-msgstr ""
+msgstr "Maus-Zusatztaste 1"
 
 #: ../../../src/InputState.cpp:91
 msgid "mbx2"
-msgstr ""
+msgstr "Maus-Zusatztaste 2"
 
 #: ../../../src/ItemManager.cpp:476
 #, c-format
 msgid "Level %d"
-msgstr "Level %d"
+msgstr "Stufe %d"
 
 #: ../../../src/ItemManager.cpp:487
 #, c-format
@@ -490,12 +485,12 @@ msgstr "Fernkampfschaden: %d"
 #: ../../../src/ItemManager.cpp:499
 #, c-format
 msgid "Mental damage: %d-%d"
-msgstr "Zauberschaden: %d-%d"
+msgstr "Magieschaden: %d-%d"
 
 #: ../../../src/ItemManager.cpp:501
 #, c-format
 msgid "Mental damage: %d"
-msgstr "Zauberschaden: %d"
+msgstr "Magieschaden: %d"
 
 #: ../../../src/ItemManager.cpp:507
 #, c-format
@@ -508,9 +503,9 @@ msgid "Absorb: %d"
 msgstr "Absorbieren: %d"
 
 #: ../../../src/ItemManager.cpp:517
-#, c-format
-msgid "%d\\% Speed"
-msgstr ""
+#, fuzzy, c-format
+msgid "%d%% Speed"
+msgstr "%d% Geschwindigkeit"
 
 #: ../../../src/ItemManager.cpp:522 ../../../src/ItemManager.cpp:614
 #, c-format
@@ -526,13 +521,13 @@ msgstr "Verringert %s um %d"
 #: ../../../src/MenuPowers.cpp:543
 #, c-format
 msgid "Requires Physical %d"
-msgstr "Benötigt %d Physisch"
+msgstr "Benötigt %d Kraft"
 
 #: ../../../src/ItemManager.cpp:555 ../../../src/MenuPowers.cpp:546
 #: ../../../src/MenuPowers.cpp:548
 #, c-format
 msgid "Requires Mental %d"
-msgstr "Benötigt %d Mental"
+msgstr "Benötigt %d Geist"
 
 #: ../../../src/ItemManager.cpp:560 ../../../src/MenuPowers.cpp:531
 #: ../../../src/MenuPowers.cpp:533
@@ -573,14 +568,14 @@ msgstr "Set: "
 #: ../../../src/ItemManager.cpp:614 ../../../src/ItemManager.cpp:617
 #, c-format
 msgid "%d items: "
-msgstr "%d Items: "
+msgstr "%d Gegenstände: "
 
-#: ../../../src/LootManager.cpp:183 ../../../src/MenuInventory.cpp:176
+#: ../../../src/LootManager.cpp:185 ../../../src/MenuInventory.cpp:176
 #, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
-#: ../../../src/MapRenderer.cpp:1227
+#: ../../../src/MapRenderer.cpp:1244
 msgid "Unknown destination"
 msgstr "Unbekanntes Ziel"
 
@@ -606,15 +601,15 @@ msgstr "Name"
 
 #: ../../../src/MenuCharacter.cpp:233
 msgid "Level"
-msgstr "Level"
+msgstr "Stufe"
 
 #: ../../../src/MenuCharacter.cpp:234
 msgid "Physical"
-msgstr "Physisch"
+msgstr "Kraft"
 
 #: ../../../src/MenuCharacter.cpp:235
 msgid "Mental"
-msgstr "Mental"
+msgstr "Geist"
 
 #: ../../../src/MenuCharacter.cpp:236
 msgid "Offense"
@@ -635,16 +630,16 @@ msgstr "Max. TP:"
 #: ../../../src/MenuCharacter.cpp:306
 #, c-format
 msgid "Each point of Physical grants +%d HP. Each level grants +%d HP"
-msgstr "Jeder Punkt in Physisch erhöht TP um %d, jedes Level um weitere %d."
+msgstr "Jeder Punkt in Kraft erhöht TP um %d, jedes Level um weitere %d."
 
 #: ../../../src/MenuCharacter.cpp:311
 msgid "HP Regen:"
-msgstr "TP-Regenerierung:"
+msgstr "TP-Regeneration:"
 
 #: ../../../src/MenuCharacter.cpp:312
 #, c-format
 msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-msgstr "Pro Minute regenerierte TP. Jeder Punkt in Physisch erhöht TP-Regenerierung um %d, jedes Level um weitere %d."
+msgstr "Pro Minute regenerierte TP. Jeder Punkt in Kraft erhöht TP-Regeneration um %d, jede Stufe um weitere %d."
 
 #: ../../../src/MenuCharacter.cpp:317
 msgid "Max MP:"
@@ -653,36 +648,34 @@ msgstr "Max. MP:"
 #: ../../../src/MenuCharacter.cpp:318
 #, c-format
 msgid "Each point of Mental grants +%d MP. Each level grants +%d MP"
-msgstr "Jeder Punkt in Mental erhöht MP um %d, jedes Level um weitere %d."
+msgstr "Jeder Punkt in Geist erhöht MP um %d, jede Stufe um weitere %d."
 
 #: ../../../src/MenuCharacter.cpp:323
 msgid "MP Regen:"
-msgstr "MP-Regenerierung:"
+msgstr "MP-Regeneration:"
 
 #: ../../../src/MenuCharacter.cpp:324
 #, c-format
 msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-msgstr "Pro Minute regenerierte MP. Jeder Punkt in Mental erhöht MP-Regenerierung um %d, jedes Level um weitere %d."
+msgstr "Pro Minute regenerierte MP. Jeder Punkt in Geist erhöht MP-Regeneration um %d, jede Stufe um weitere %d."
 
 #: ../../../src/MenuCharacter.cpp:329
-#, fuzzy
 msgid "Accuracy:"
-msgstr "Genauigkeit (gegen V 1):"
+msgstr "Genauigkeit:"
 
 #: ../../../src/MenuCharacter.cpp:330
 #, c-format
 msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-msgstr "Jeder Punkt in Angriff erhöht Genauigkeit um %d, jedes Level um weitere %d."
+msgstr "Jeder Punkt in Angriff erhöht Genauigkeit um %d, jede Stufe um weitere %d."
 
 #: ../../../src/MenuCharacter.cpp:335
-#, fuzzy
 msgid "Avoidance:"
-msgstr "Ausweichen (gegen A 1):"
+msgstr "Ausweichen:"
 
 #: ../../../src/MenuCharacter.cpp:336
 #, c-format
 msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-msgstr "Jeder Punkt in Verteidigung erhöht Ausweichen um %d, jedes Level um weitere %d."
+msgstr "Jeder Punkt in Verteidigung erhöht Ausweichen um %d, jede Stufe um weitere %d."
 
 #: ../../../src/MenuCharacter.cpp:341
 msgid "Melee Damage:"
@@ -694,7 +687,7 @@ msgstr "Fernkampfschaden:"
 
 #: ../../../src/MenuCharacter.cpp:361
 msgid "Mental Damage:"
-msgstr "Zauberschaden:"
+msgstr "Magieschaden:"
 
 #: ../../../src/MenuCharacter.cpp:371
 msgid "Crit:"
@@ -706,40 +699,44 @@ msgstr "Absorbieren:"
 
 #: ../../../src/MenuCharacter.cpp:387
 msgid "Poise: "
-msgstr ""
+msgstr "Gleichgewicht: "
 
 #: ../../../src/MenuCharacter.cpp:388
 msgid "Reduces your chance of stumbling when hit"
-msgstr ""
+msgstr "Reduziert die Wahrscheinlichkeit, bei einem Treffer ins Taumeln zu geraten"
 
-#: ../../../src/MenuCharacter.cpp:393 ../../../src/MenuCharacter.cpp:399
-msgid "Bonus"
-msgstr ""
+#: ../../../src/MenuCharacter.cpp:393
+msgid "Bonus XP: "
+msgstr "Bonus EP: "
 
 #: ../../../src/MenuCharacter.cpp:394
 msgid "Increases the XP gained per kill"
-msgstr ""
+msgstr "Erhöht die erhaltenen EP pro getötetem Gegner"
+
+#: ../../../src/MenuCharacter.cpp:399
+msgid "Bonus"
+msgstr "Bonus"
 
 #: ../../../src/MenuCharacter.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop"
-msgstr "Erhöht %s um %d"
+msgstr "Erhöhte Chance auf %s"
 
 #: ../../../src/MenuCharacter.cpp:405
 msgid "Bonus Item Find: "
-msgstr ""
+msgstr "Zusatzchance für Gegenstände: "
 
 #: ../../../src/MenuCharacter.cpp:406
 msgid "Increases the chance that an enemy will drop an item when killed"
-msgstr ""
+msgstr "Finde mehr Gegenstände bei getöteten Gegnern."
 
 #: ../../../src/MenuCharacter.cpp:411
 msgid "Stealth: "
-msgstr ""
+msgstr "Verborgenheit: "
 
 #: ../../../src/MenuCharacter.cpp:412
 msgid "Increases your ability to move undetected"
-msgstr ""
+msgstr "Erhöht die Fähigkeit, sich unbemerkt zu bewegen"
 
 #: ../../../src/MenuCharacter.cpp:430
 #, c-format
@@ -753,7 +750,7 @@ msgstr "Nächstes: %d"
 
 #: ../../../src/MenuCharacter.cpp:436
 msgid "Physical (P) increases melee weapon proficiency and total HP."
-msgstr "Physisch (P) erhöht Nahkampffertigkeiten und maximale TP."
+msgstr "Kraft (K) erhöht Nahkampffertigkeiten und maximale TP."
 
 #: ../../../src/MenuCharacter.cpp:437 ../../../src/MenuCharacter.cpp:441
 #: ../../../src/MenuCharacter.cpp:445 ../../../src/MenuCharacter.cpp:449
@@ -763,15 +760,15 @@ msgstr "Basis (%d), Bonus (%d)"
 
 #: ../../../src/MenuCharacter.cpp:440
 msgid "Mental (M) increases mental weapon proficiency and total MP."
-msgstr "Mental (M) erhöht Zauberschaden und maximale MP."
+msgstr "Geist (G) erhöht die Fertigkeit für magische Waffen und maximale MP."
 
 #: ../../../src/MenuCharacter.cpp:444
 msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-msgstr "Angriff (A) erhöht Fernkampffertigkeiten und Genauigkeit."
+msgstr "Angriff (A) erhöht die Fertigkeit für Fernkampfwaffen und Genauigkeit."
 
 #: ../../../src/MenuCharacter.cpp:448
 msgid "Defense (D) increases armor proficiency and avoidance."
-msgstr "Verteidigung (V) erhöht Rüstungskenntnis und Ausweichen."
+msgstr "Verteidigung (V) erhöht die Rüstungskenntnis und Ausweichen."
 
 #: ../../../src/MenuEnemy.cpp:138
 msgid "Dead"
@@ -780,7 +777,7 @@ msgstr "Tot"
 #: ../../../src/MenuEnemy.cpp:144 ../../../src/MenuEnemy.cpp:146
 #, c-format
 msgid "%s level %d"
-msgstr "%s Level %d"
+msgstr "%s Stufe %d"
 
 #: ../../../src/MenuExit.cpp:31
 msgid "Exit"
@@ -792,15 +789,15 @@ msgstr "Speichern und zum Hauptmenü?"
 
 #: ../../../src/MenuInventory.cpp:210
 msgid "Use SHIFT to move only one item."
-msgstr "Halte SHIFT gedrückt, um nur ein Item zu bewegen."
+msgstr "Halte Shift gedrückt, um nur einen Gegenstand zu nehmen."
 
 #: ../../../src/MenuInventory.cpp:211
 msgid "CTRL-click a carried item to sell it."
-msgstr "Halte STRG gedrückt und klicke auf eines deiner Items, um es zu verkaufen."
+msgstr "Halte Strg gedrückt und klicke auf einen deiner Gegenstände, um ihn zu verkaufen."
 
 #: ../../../src/MenuInventory.cpp:415
 msgid "This item can only be used from the action bar."
-msgstr "Dieses Item kann nur von der Aktionsleiste aus benutzt werden."
+msgstr "Dieser Gegenstand kann nur von der Aktionsleiste aus benutzt werden."
 
 #: ../../../src/MenuLog.cpp:79
 msgid "Notes"
@@ -808,7 +805,7 @@ msgstr "Aufzeichnungen"
 
 #: ../../../src/MenuLog.cpp:80
 msgid "Quests"
-msgstr "Quests"
+msgstr "Aufgaben"
 
 #: ../../../src/MenuManager.cpp:253
 #, c-format
@@ -818,7 +815,11 @@ msgstr "EP: %d/%d"
 #: ../../../src/MenuManager.cpp:426 ../../../src/MenuManager.cpp:427
 #: ../../../src/MenuManager.cpp:630 ../../../src/MenuManager.cpp:631
 msgid "Not enough money."
-msgstr "Nicht ausreichend viel Geld."
+msgstr "Nicht genug Gold."
+
+#: ../../../src/MenuNPCActions.cpp:76
+msgid "Trade"
+msgstr "Handeln"
 
 #: ../../../src/MenuPowers.cpp:460
 msgid "Unspent skill points:"
@@ -830,11 +831,11 @@ msgstr "Benötigt eine physische Waffe"
 
 #: ../../../src/MenuPowers.cpp:504
 msgid "Requires a mental weapon"
-msgstr "Benötigt eine mentale Waffe"
+msgstr "Benötigt eine magische Waffe"
 
 #: ../../../src/MenuPowers.cpp:506
 msgid "Requires an offense weapon"
-msgstr "Benötigt eine offensive Waffe"
+msgstr "Benötigt eine Fernwaffe"
 
 #: ../../../src/MenuPowers.cpp:511 ../../../src/MenuPowers.cpp:513
 #, c-format
@@ -849,17 +850,17 @@ msgstr "Benötigt %d physische Verteidigung"
 #: ../../../src/MenuPowers.cpp:521 ../../../src/MenuPowers.cpp:523
 #, c-format
 msgid "Requires Mental Offense %d"
-msgstr "Benötigt %d mentalen Angriff"
+msgstr "Benötigt %d magischen Angriff"
 
 #: ../../../src/MenuPowers.cpp:526 ../../../src/MenuPowers.cpp:528
 #, c-format
 msgid "Requires Mental Defense %d"
-msgstr "Benötigt %d mentale Verteidigung"
+msgstr "Benötigt %d magische Verteidigung"
 
 #: ../../../src/MenuPowers.cpp:553 ../../../src/MenuPowers.cpp:556
 #, c-format
 msgid "Requires Level %d"
-msgstr "Benötigt Level %d"
+msgstr "Benötigt Stufe %d"
 
 #: ../../../src/MenuPowers.cpp:563 ../../../src/MenuPowers.cpp:568
 #, c-format
@@ -881,9 +882,9 @@ msgid "Costs %d MP"
 msgstr "Kostet %d MP"
 
 #: ../../../src/MenuPowers.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid "Costs %d HP"
-msgstr "Kostet %d MP"
+msgstr "Kostet %d TP"
 
 #: ../../../src/MenuPowers.cpp:598
 #, c-format
@@ -902,18 +903,21 @@ msgstr "Rückkauf"
 msgid "Vendor"
 msgstr "Verkäufer"
 
-#: ../../../src/PowerManager.cpp:659
+#: ../../../src/PowerManager.cpp:661
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Schild"
 
-#: ../../../src/PowerManager.cpp:901
+#: ../../../src/PowerManager.cpp:903
 msgid "You are already transformed, untransform first."
 msgstr "Du bist bereits verwandelt, beende die Verwandlung zunächst."
 
 #: ../../../src/Settings.cpp:500
 msgid "Adventurer"
 msgstr "Abenteurer"
+
+#~ msgid "Ok"
+#~ msgstr "Annehmen"
 
 #~ msgid "Flare"
 #~ msgstr "Flare"
@@ -929,9 +933,6 @@ msgstr "Abenteurer"
 
 #~ msgid "Stats"
 #~ msgstr "Statistik"
-
-#~ msgid "Trade"
-#~ msgstr "Handeln"
 
 #~ msgid "Grand Master"
 #~ msgstr "Großmeister"
@@ -1084,7 +1085,7 @@ msgstr "Abenteurer"
 #~ msgstr "Fertigkeit: Stab"
 
 #~ msgid "Greatstaff Proficiency"
-#~ msgstr "Fertigkeit: Krummstab"
+#~ msgstr "Fertigkeit: Langstab"
 
 #~ msgid "Slingshot Proficiency"
 #~ msgstr "Fertigkeit: Schleuder"

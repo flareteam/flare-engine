@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "MapCollision.h"
+#include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
@@ -49,9 +50,8 @@ using namespace std;
 PowerManager::PowerManager()
 	: collider(NULL)
 	, log_msg("")
-	, used_items(std::vector<int>())
-	, used_equipped_items(std::vector<int>())
-{
+	, used_items()
+	, used_equipped_items() {
 	loadAll();
 }
 
@@ -64,6 +64,12 @@ void PowerManager::loadAll() {
 
 	// load each config file
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
+
+		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/powers/powers.txt";
+
+		if (fileExists(test_path)) {
+			this->loadPowers(test_path);
+		}
 
 		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/powers/powers.txt";
 
@@ -81,10 +87,8 @@ void PowerManager::loadAll() {
  */
 void PowerManager::loadPowers(const std::string& filename) {
 	FileParser infile;
-	if (!infile.open(filename)) {
-		fprintf(stderr, "Unable to open %s!\n", filename.c_str());
+	if (!infile.open(filename))
 		return;
-	}
 
 	int input_id = 0;
 	bool skippingEntry = false;
@@ -259,6 +263,10 @@ void PowerManager::loadPowers(const std::string& filename) {
 			powers[input_id].buff= toBool(infile.val);
 		else if (infile.key == "buff_teleport")
 			powers[input_id].buff_teleport = toBool(infile.val);
+		else if (infile.key == "buff_party")
+			powers[input_id].buff_party = toBool(infile.val);
+		else if (infile.key == "buff_party_power_id")
+			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
 			infile.val = infile.val + ',';
 			PostEffect pe;
@@ -285,6 +293,70 @@ void PowerManager::loadPowers(const std::string& filename) {
 			powers[input_id].spawn_type = infile.val;
 		else if (infile.key == "target_neighbor")
 			powers[input_id].target_neighbor = toInt(infile.val);
+		else if (infile.key == "spawn_limit") {
+			infile.val = infile.val + ',';
+			std::string mode = eatFirstString(infile.val,',');
+			if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
+			else if (mode == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
+			else if (mode == "unlimited") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_UNLIMITED;
+			else fprintf(stderr, "unknown spawn_limit_mode %s\n", mode.c_str());
+
+			if(powers[input_id].spawn_limit_mode != SPAWN_LIMIT_MODE_UNLIMITED) {
+				powers[input_id].spawn_limit_qty = eatFirstInt(infile.val,',');
+
+				if(powers[input_id].spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
+					powers[input_id].spawn_limit_every = eatFirstInt(infile.val,',');
+
+					std::string stat = eatFirstString(infile.val,',');
+					if (stat == "physical") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_PHYSICAL;
+					else if (stat == "mental") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_MENTAL;
+					else if (stat == "offense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_OFFENSE;
+					else if (stat == "defense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_DEFENSE;
+					else fprintf(stderr, "unknown spawn_limit_stat %s\n", stat.c_str());
+				}
+			}
+		}
+		else if (infile.key == "target_party")
+			powers[input_id].target_party = toBool(infile.val);
+		else if (infile.key == "target_categories") {
+			string cat;
+			while ((cat = infile.nextValue()) != "") {
+				powers[input_id].target_categories.push_back(cat);
+			}
+		}
+		else if (infile.key == "modifier_accuracy") {
+			infile.val = infile.val + ',';
+			std::string mode = eatFirstString(infile.val, ',');
+			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
+			if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
+			if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_accuracy_ignore_avoid = (1 == eatFirstInt(infile.val, ','));
+		}
+		else if (infile.key == "modifier_damage") {
+			infile.val = infile.val + ',';
+			std::string mode = eatFirstString(infile.val, ',');
+			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
+			if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
+			if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_damage_value_min = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_damage_value_max = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_damage_ignore_absorb = (1 == eatFirstInt(infile.val, ','));
+		}
+		else if (infile.key == "modifier_critical") {
+			infile.val = infile.val + ',';
+			std::string mode = eatFirstString(infile.val, ',');
+			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
+			if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
+			if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
+
+			powers[input_id].mod_crit_value = eatFirstInt(infile.val, ',');
+		}
 		else
 			fprintf(stderr, "ignoring unknown key %s set to %s\n", infile.key.c_str(), infile.val.c_str());
 	}
@@ -299,14 +371,14 @@ void PowerManager::loadPowers(const std::string& filename) {
  */
 int PowerManager::loadSFX(const string& filename) {
 
-		SoundManager::SoundID sid = snd->load("soundfx/powers/" + filename, "PowerManager sfx");
-		vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
-		if (it == sfx.end()) {
-		  sfx.push_back(sid);
-		  return sfx.size() - 1;
-		}
+	SoundManager::SoundID sid = snd->load("soundfx/powers/" + filename, "PowerManager sfx");
+	vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
+	if (it == sfx.end()) {
+		sfx.push_back(sid);
+		return sfx.size() - 1;
+	}
 
-		return it - sfx.begin();
+	return it - sfx.begin();
 }
 
 
@@ -315,67 +387,6 @@ int PowerManager::loadSFX(const string& filename) {
  */
 void PowerManager::handleNewMap(MapCollision *_collider) {
 	collider = _collider;
-}
-
-// convert cartesian to polar theta where (x1,x2) is the origin
-float PowerManager::calcTheta(int x1, int y1, int x2, int y2) {
-
-	float pi = 3.1415926535898f;
-
-	// calculate base angle
-	float dx = (float)x2 - (float)x1;
-	float dy = (float)y2 - (float)y1;
-	int exact_dx = x2 - x1;
-	float theta;
-
-	// convert cartesian to polar coordinates
-	if (exact_dx == 0) {
-		if (dy > 0.0) theta = pi/2.0f;
-		else theta = -pi/2.0f;
-	}
-	else {
-		theta = atan(dy/dx);
-		if (dx < 0.0 && dy >= 0.0) theta += pi;
-		if (dx < 0.0 && dy < 0.0) theta -= pi;
-	}
-	return theta;
-}
-
-/**
- * Change direction to face the target map location
- */
-int PowerManager::calcDirection(int origin_x, int origin_y, int target_x, int target_y) {
-
-	// TODO: use calcTheta instead and check for the areas between -PI and PI
-
-	// inverting Y to convert map coordinates to standard cartesian coordinates
-	int dx = target_x - origin_x;
-	int dy = origin_y - target_y;
-
-	// avoid div by zero
-	if (dx == 0) {
-		if (dy > 0) return 3;
-		else return 7;
-	}
-
-	float slope = ((float)dy)/((float)dx);
-	if (0.5 <= slope && slope <= 2.0) {
-		if (dy > 0) return 4;
-		else return 0;
-	}
-	if (-0.5 <= slope && slope <= 0.5) {
-		if (dx > 0) return 5;
-		else return 1;
-	}
-	if (-2.0 <= slope && slope <= -0.5) {
-		if (dx > 0) return 6;
-		else return 2;
-	}
-	if (2.0 <= slope || -2.0 >= slope) {
-		if (dy > 0) return 3;
-		else return 7;
-	}
-	return 0;
 }
 
 /**
@@ -461,14 +472,16 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 
 	haz->power_index = power_index;
 
-	if (powers[power_index].source_type == -1){
+	if (powers[power_index].source_type == -1) {
 		if (src_stats->hero) haz->source_type = SOURCE_TYPE_HERO;
-		else if (src_stats->minion) haz->source_type = SOURCE_TYPE_MINION;
+		else if (src_stats->hero_ally) haz->source_type = SOURCE_TYPE_ALLY;
 		else haz->source_type = SOURCE_TYPE_ENEMY;
 	}
 	else {
 		haz->source_type = powers[power_index].source_type;
 	}
+
+	haz->target_party = powers[power_index].target_party;
 
 	// Hazard attributes based on power source
 	haz->crit_chance = src_stats->crit;
@@ -596,12 +609,14 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
 			Point new_target = targetNeighbor(target,powers[power_index].target_neighbor);
 			if (new_target.x == target.x && new_target.y == target.y) {
 				src_stats->teleportation = false;
-			} else {
+			}
+			else {
 				src_stats->teleportation = true;
 				src_stats->teleport_destination.x = new_target.x;
 				src_stats->teleport_destination.y = new_target.y;
 			}
-		} else {
+		}
+		else {
 			src_stats->teleportation = true;
 			src_stats->teleport_destination.x = target.x;
 			src_stats->teleport_destination.y = target.y;
@@ -609,9 +624,15 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
 	}
 
 	// handle all other effects
-	if (powers[power_index].buff) {
-		effect(src_stats, power_index);
+	if (powers[power_index].buff || (powers[power_index].buff_party && src_stats->hero_ally)) {
+		int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
+		effect(src_stats, power_index, source_type);
 	}
+
+	if (powers[power_index].buff_party && !powers[power_index].passive) {
+		party_buffs.push(power_index);
+	}
+
 
 	// activate any post powers here if the power doesn't use a hazard
 	// otherwise the post power will chain off the hazard itself
@@ -630,15 +651,15 @@ void PowerManager::playSound(int power_index, StatBlock *src_stats) {
 	if (powers[power_index].allow_power_mod) {
 		if (powers[power_index].base_damage == BASE_DAMAGE_MELEE && src_stats->melee_weapon_power != 0
 				&& powers[src_stats->melee_weapon_power].sfx_index != -1) {
-				snd->play(sfx[powers[src_stats->melee_weapon_power].sfx_index]);
+			snd->play(sfx[powers[src_stats->melee_weapon_power].sfx_index]);
 		}
 		else if (powers[power_index].base_damage == BASE_DAMAGE_MENT && src_stats->mental_weapon_power != 0
-				&& powers[src_stats->mental_weapon_power].sfx_index != -1) {
-				snd->play(sfx[powers[src_stats->mental_weapon_power].sfx_index]);
+				 && powers[src_stats->mental_weapon_power].sfx_index != -1) {
+			snd->play(sfx[powers[src_stats->mental_weapon_power].sfx_index]);
 		}
 		else if (powers[power_index].base_damage == BASE_DAMAGE_RANGED && src_stats->ranged_weapon_power != 0
-				&& powers[src_stats->ranged_weapon_power].sfx_index != -1) {
-				snd->play(sfx[powers[src_stats->ranged_weapon_power].sfx_index]);
+				 && powers[src_stats->ranged_weapon_power].sfx_index != -1) {
+			snd->play(sfx[powers[src_stats->ranged_weapon_power].sfx_index]);
 		}
 		else play_base_sound = true;
 	}
@@ -648,7 +669,7 @@ void PowerManager::playSound(int power_index, StatBlock *src_stats) {
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
 
-bool PowerManager::effect(StatBlock *src_stats, int power_index) {
+bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
 		int effect_index = powers[power_index].post_effects[i].id;
@@ -658,12 +679,13 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index) {
 		if (effect_index > 0) {
 			if (powers[effect_index].effect_type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
-				magnitude = (int)ceil(src_stats->dmg_ment_max * powers[power_index].damage_multiplier / 100.0) + (src_stats->get_mental()*src_stats->bonus_per_mental);
+				magnitude = (int)ceil(src_stats->dmg_ment_max * powers[power_index].damage_multiplier / 100.0);
 				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
-			} else if (powers[effect_index].effect_type == "heal") {
+			}
+			else if (powers[effect_index].effect_type == "heal") {
 				// heal for ment weapon damage * damage multiplier
-				int heal_max = (int)ceil(src_stats->dmg_ment_max * powers[power_index].damage_multiplier / 100.0) + (src_stats->get_mental()*src_stats->bonus_per_mental);
-				int heal_min = (int)ceil(src_stats->dmg_ment_min * powers[power_index].damage_multiplier / 100.0) + (src_stats->get_mental()*src_stats->bonus_per_mental);
+				int heal_max = (int)ceil(src_stats->dmg_ment_max * powers[power_index].damage_multiplier / 100.0);
+				int heal_min = (int)ceil(src_stats->dmg_ment_min * powers[power_index].damage_multiplier / 100.0);
 				magnitude = randBetween(heal_min, heal_max-1);
 
 				comb->addMessage(msg->get("+%d HP",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
@@ -671,7 +693,10 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index) {
 				if (src_stats->hp > src_stats->maxhp) src_stats->hp = src_stats->maxhp;
 			}
 
-			src_stats->effects.addEffect(effect_index, powers[effect_index].icon, duration, magnitude, powers[effect_index].effect_type, powers[effect_index].animation_name, powers[effect_index].effect_additive, false, powers[power_index].passive_trigger, powers[effect_index].effect_render_above);
+			int passive_id = 0;
+			if (powers[power_index].passive) passive_id = power_index;
+
+			src_stats->effects.addEffect(effect_index, powers[effect_index].icon, duration, magnitude, powers[effect_index].effect_type, powers[effect_index].animation_name, powers[effect_index].effect_additive, false, powers[power_index].passive_trigger, powers[effect_index].effect_render_above, passive_id, source_type);
 		}
 
 		// If there's a sound effect, play it here
@@ -768,9 +793,9 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target) 
 		//calculate direction based on trajectory, not actual target (UNITS_PER_TILE reduces round off error)
 		if (powers[power_index].directional)
 			haz->animationKind = calcDirection(
-					src.x, src.y,
-					static_cast<int>(src.x + UNITS_PER_TILE * haz->speed.x),
-					static_cast<int>(src.y + UNITS_PER_TILE * haz->speed.y));
+									 src.x, src.y,
+									 static_cast<int>(src.x + UNITS_PER_TILE * haz->speed.x),
+									 static_cast<int>(src.y + UNITS_PER_TILE * haz->speed.y));
 
 		// add optional delay
 		haz->delay_frames = delay_iterator;
@@ -846,57 +871,34 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 	// If there's a sound effect, play it here
 	playSound(power_index, src_stats);
 
-	string spType = powers[power_index].spawn_type;
-    Point spPoint;
+	Map_Enemy espawn;
+	espawn.type = powers[power_index].spawn_type;
 
 	// enemy spawning position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
-		spPoint.x = src_stats->pos.x;
-        spPoint.y = src_stats->pos.y;
+		espawn.pos.x = src_stats->pos.x;
+		espawn.pos.y = src_stats->pos.y;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		spPoint.x = target.x;
-        spPoint.y = target.y;
+		espawn.pos.x = target.x;
+		espawn.pos.y = target.y;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		FPoint fpos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
-		spPoint.x = static_cast<int>(fpos.x);
-		spPoint.y = static_cast<int>(fpos.y);
+		espawn.pos.x = static_cast<int>(fpos.x);
+		espawn.pos.y = static_cast<int>(fpos.y);
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		spPoint = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor);
+		espawn.pos = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor);
 	}
 
-	int spDirection = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	espawn.summon_power_index = power_index;
+	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
 
-    //add an enemy or minion depending on who is casting
-    if(src_stats->hero || src_stats->minion)
-    {
-
-        Minion* spMinion = new Minion(this, NULL);
-        spMinion->stats.direction = spDirection;
-        spMinion->stats.pos.x = spPoint.x;
-        spMinion->stats.pos.y = spPoint.y;
-        spMinion->type = spType;
-        spMinion->power_index = power_index;
-
-        for (int i=0; i < powers[power_index].count; i++) {
-            minions.push(spMinion);
-        }
-    }
-    else
-    {
-        Map_Enemy espawn;
-        espawn.type = spType;
-        espawn.direction = spDirection;
-        espawn.pos.x = spPoint.x;
-        espawn.pos.y = spPoint.y;
-
-        for (int i=0; i < powers[power_index].count; i++) {
-            enemies.push(espawn);
-        }
-    }
-
+	for (int i=0; i < powers[power_index].count; i++) {
+		enemies.push(espawn);
+	}
 	payPowerCost(power_index, src_stats);
 
 	return true;
@@ -949,7 +951,8 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, Point target
 		if (powers[power_index].transform_duration == 0) {
 			// permanent transformation
 			src_stats->transform_duration = -1;
-		} else if (powers[power_index].transform_duration > 0) {
+		}
+		else if (powers[power_index].transform_duration > 0) {
 			// timed transformation
 			src_stats->transform_duration = powers[power_index].transform_duration;
 		}
@@ -980,11 +983,16 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, Point target)
 	// separate functions to handle the details.
 	// POWTYPE_EFFECT is never cast as itself, so it is ignored
 	switch(powers[power_index].type) {
-		case POWTYPE_FIXED:     return fixed(power_index, src_stats, target);
-		case POWTYPE_MISSILE:   return missile(power_index, src_stats, target);
-		case POWTYPE_REPEATER:  return repeater(power_index, src_stats, target);
-		case POWTYPE_SPAWN:     return spawn(power_index, src_stats, target);
-		case POWTYPE_TRANSFORM: return transform(power_index, src_stats, target);
+		case POWTYPE_FIXED:
+			return fixed(power_index, src_stats, target);
+		case POWTYPE_MISSILE:
+			return missile(power_index, src_stats, target);
+		case POWTYPE_REPEATER:
+			return repeater(power_index, src_stats, target);
+		case POWTYPE_SPAWN:
+			return spawn(power_index, src_stats, target);
+		case POWTYPE_TRANSFORM:
+			return transform(power_index, src_stats, target);
 	}
 
 	return false;
@@ -999,7 +1007,10 @@ void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
 			src_stats->mp -= powers[power_index].requires_mp;
 			if (powers[power_index].requires_item != -1)
 				used_items.push_back(powers[power_index].requires_item);
-			if (powers[power_index].requires_equipped_item != -1)
+			// only allow one instance of duplicate items at a time in the used_equipped_items queue
+			// this is useful for Ouroboros rings, where we have 2 equipped, but only want to remove one at a time
+			if (powers[power_index].requires_equipped_item != -1 &&
+					find(used_equipped_items.begin(), used_equipped_items.end(), powers[power_index].requires_equipped_item) == used_equipped_items.end())
 				used_equipped_items.push_back(powers[power_index].requires_equipped_item);
 		}
 		src_stats->hp -= powers[power_index].requires_hp;
@@ -1014,9 +1025,9 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 	bool triggered_others = false;
 	int trigger = -1;
 	// unlocked powers
-	for (unsigned i=0; i<src_stats->powers_list.size(); i++) {
-		if (powers[src_stats->powers_list[i]].passive) {
-			trigger = powers[src_stats->powers_list[i]].passive_trigger;
+	for (unsigned i=0; i<src_stats->powers_passive.size(); i++) {
+		if (powers[src_stats->powers_passive[i]].passive) {
+			trigger = powers[src_stats->powers_passive[i]].passive_trigger;
 
 			if (trigger == -1) {
 				if (src_stats->effects.triggered_others) continue;
@@ -1034,7 +1045,7 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 			}
 			else if (trigger == TRIGGER_DEATH && !src_stats->effects.triggered_death) continue;
 
-			activate(src_stats->powers_list[i], src_stats, src_stats->pos);
+			activate(src_stats->powers_passive[i], src_stats, src_stats->pos);
 			src_stats->refresh_stats = true;
 		}
 	}

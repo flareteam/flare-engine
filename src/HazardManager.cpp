@@ -31,11 +31,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-HazardManager::HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies, MinionManager *_minions) {
+HazardManager::HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies) {
 	powers = _powers;
 	hero = _hero;
 	enemies = _enemies;
-	minions = _minions;
 }
 
 void HazardManager::logic() {
@@ -53,8 +52,10 @@ void HazardManager::logic() {
 		h[i]->logic();
 
 		// remove all hazards that need to die immediately (e.g. exit the map)
-		if (h[i]->remove_now)
+		if (h[i]->remove_now) {
 			expire(i);
+			continue;
+		}
 
 
 		// if a moving hazard hits a wall, check for an after-effect
@@ -81,7 +82,7 @@ void HazardManager::logic() {
 				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
 
 					// only check living enemies
-					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active) {
+					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemies->enemies[eindex]->stats.hero_ally == h[i]->target_party)) {
 						if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
 								h[i]->addEntity(enemies->enemies[eindex]);
@@ -99,7 +100,7 @@ void HazardManager::logic() {
 			}
 
 			// process hazards that can hurt the hero
-			if ((h[i]->source_type != SOURCE_TYPE_HERO) && (h[i]->source_type != SOURCE_TYPE_MINION)) { //enemy or neutral sources
+			if (h[i]->source_type != SOURCE_TYPE_HERO && h[i]->source_type != SOURCE_TYPE_ALLY) { //enemy or neutral sources
 				if (hero->stats.hp > 0 && h[i]->active) {
 					if (isWithin(round(h[i]->pos), h[i]->radius, hero->stats.pos)) {
 						if (!h[i]->hasEntity(hero)) {
@@ -114,24 +115,23 @@ void HazardManager::logic() {
 					}
 				}
 
-				//now process minions
-                for (unsigned int eindex = 0; eindex < minions->minions.size(); eindex++) {
-                    // only check living minions
-                    if (minions->minions[eindex]->stats.hp > 0 && h[i]->active) {
-                        if (isWithin(round(h[i]->pos), h[i]->radius, minions->minions[eindex]->stats.pos)) {
-                            if (!h[i]->hasEntity(minions->minions[eindex])) {
-                                h[i]->addEntity(minions->minions[eindex]);
-                                // hit!
-                                hit = minions->minions[eindex]->takeHit(*h[i]);
-                                if (!h[i]->multitarget && hit) {
-                                    h[i]->active = false;
-                                    if (!h[i]->complete_animation) h[i]->lifespan = 0;
-                                }
-                            }
-                        }
-                    }
-
-                }
+				//now process allies
+				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
+					// only check living allies
+					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && enemies->enemies[eindex]->stats.hero_ally) {
+						if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
+							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
+								h[i]->addEntity(enemies->enemies[eindex]);
+								// hit!
+								hit = enemies->enemies[eindex]->takeHit(*h[i]);
+								if (!h[i]->multitarget && hit) {
+									h[i]->active = false;
+									if (!h[i]->complete_animation) h[i]->lifespan = 0;
+								}
+							}
+						}
+					}
+				}
 
 			}
 

@@ -48,6 +48,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class CampaignManager;
 class PowerManager;
 
+class FileParser;
+
 // TODO: Move these Map_* classes to its own file.
 
 class Map_Group {
@@ -60,62 +62,64 @@ public:
 	int numbermin;
 	int numbermax;
 	float chance;
-	void clear() {
-		category = "";
-		pos.x = 0;
-		pos.y = 0;
-		area.x = 0;
-		area.y = 0;
-		levelmin = 0;
-		levelmax = 0;
-		numbermin = 0;
-		numbermax = 0;
-		chance = 1.0f;
-	}
+	Map_Group()
+		: category("")
+		, pos()
+		, area()
+		, levelmin(0)
+		, levelmax(0)
+		, numbermin(0)
+		, numbermax(0)
+		, chance(1.0f)
+	{}
 };
 
 class Map_NPC {
 public:
 	std::string id;
 	Point pos;
-	void clear() {
-		id = "";
-		pos.x = 0;
-		pos.y = 0;
-	}
+	Map_NPC()
+	: id("")
+	, pos()
+	{}
 };
 
 class Map_Event {
 public:
 	std::string type;
-	SDL_Rect location;
 	std::vector<Event_Component> components;
+	SDL_Rect location;
 	SDL_Rect hotspot;
-	std::string tooltip;
 	int cooldown; // events that run multiple times pause this long in frames
-
-	//power spawn variables
-	Point power_src;
-	Point power_dest;
-	bool targetHero;
-	int damagemin;
-	int damagemax;
 	int cooldown_ticks;
+	StatBlock *stats;
 
 	Map_Event()
 	 : type("")
 	 , components(std::vector<Event_Component>())
-	 , tooltip("")
 	 , cooldown(0)
-	 , targetHero(false)
-	 , damagemin(0)
-	 , damagemax(0)
 	 , cooldown_ticks(0)
+	 , stats(NULL)
 	{
 		location.x = location.y = location.w = location.h = 0;
 		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
-		power_src.x = power_src.y = 0;
-		power_dest.x = power_dest.y = 0;
+	}
+
+	// returns a pointer to the event component within the components list
+	// no need to free the pointer by caller
+	// NULL will be returned if no such event is found
+	Event_Component *getComponent(const std::string &_type)
+	{
+		std::vector<Event_Component>::iterator it;
+		for (it = components.begin(); it != components.end(); ++it)
+			if (it->type == _type)
+				return &(*it);
+		return NULL;
+	}
+
+	~Map_Event()
+	{
+		delete stats; // may be NULL, but delete can deal with null pointers.
 	}
 };
 
@@ -127,6 +131,8 @@ public:
 	std::queue<Point> waypoints;
 	bool wander;
 	SDL_Rect wander_area;
+	bool hero_ally;
+	int summon_power_index;
 
 	Map_Enemy(std::string _type="", Point _pos=Point())
 	 : type(_type)
@@ -134,6 +140,8 @@ public:
 	 , direction(rand() % 8)
 	 , waypoints(std::queue<Point>())
 	 , wander(false)
+	 , hero_ally(false)
+	 , summon_power_index(0)
 	{
 		wander_area.x = 0;
 		wander_area.y = 0;
@@ -155,15 +163,23 @@ private:
 	void push_enemy_group(Map_Group g);
 	bool isActive(const Map_Event &e);
 
-	void loadMusic();
+	void loadMusic(const std::string &new_music_filename);
+
+	typedef unsigned short maprow[256];
+
+	void loadHeader(FileParser &infile);
+	void loadLayer(FileParser &infile, maprow **cur_layer);
+	void loadEnemy(FileParser &infile);
+	void loadEnemyGroup(FileParser &infile, Map_Group *group);
+	void loadNPC(FileParser &infile);
+	void loadEvent(FileParser &infile);
+	void loadEventComponent(FileParser &infile);
 
 	// map events
 	std::vector<Map_Event> events;
 
 	// map soundids
 	std::vector<SoundManager::SoundID> sids;
-
-	typedef unsigned short maprow[256];
 
 	maprow *background;
 	maprow *fringe;
@@ -203,7 +219,6 @@ private:
 	void clearQueues();
 
 	Point shakycam;
-	bool new_music;
 	TileSet tset;
 	std::string tileset;
 	std::string music_filename;
@@ -227,6 +242,8 @@ public:
 	// functions
 	MapRenderer(CampaignManager *_camp);
 	~MapRenderer();
+
+	MapRenderer(const MapRenderer &copy); // not implemented
 
 	int load(std::string filename);
 	void logic();
@@ -271,6 +288,10 @@ public:
 	std::string teleport_mapname;
 	std::string respawn_map;
 	Point respawn_point;
+
+	// cutscene handling
+	bool cutscene;
+	std::string cutscene_file;
 
 	// message handling
 	std::string log_msg;
