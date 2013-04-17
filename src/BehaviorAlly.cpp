@@ -83,35 +83,6 @@ void BehaviorAlly::findTarget()
 
 }
 
-
-/*
-checks whether the entity in pos 1 is facing the point at pos 2
-based on a 45 degree field of vision
-*/
-bool BehaviorAlly::is_facing(int x, int y, char direction, int x2, int y2){
-
-    //45 degree fov
-    switch (direction) {
-		case 2:
-		    return x2 < x && y2 < y;
-		case 3:
-		    return (y2 < y && ((x2-x) < ((-1 * y2)-(-1 * y)) && (((-1 * x2)-(-1 * x)) < ((-1 * y2)-(-1 * y)))));
-		case 4:
-		    return x2 > x && y2 < y;
-		case 5:
-		    return (x2 > x && ((x2-x) > (y2-y)) && ((x2-x) > ((-1 * y2)-(-1 * y))));
-		case 6:
-		    return x2 > x && y2 > y;
-		case 7:
-            return (y2 > y && ((x2-x) < (y2-y)) && (((-1 * x2)-(-1 * x)) < (y2-y)));
-		case 0:
-		    return x2 < x && y2 > y;
-		case 1:
-            return (x2 < x && (((-1 * x2)-(-1 * x)) > (y2-y)) && (((-1 * x2)-(-1 * x)) > ((-1 * y2)-(-1 * y))));
-	}
-	return false;
-}
-
 void BehaviorAlly::checkMoveStateStance()
 {
 
@@ -122,14 +93,14 @@ void BehaviorAlly::checkMoveStateStance()
     //if the player is blocked, all summons which the player is facing to move away for the specified frames
     //if hero is facing the summon
     if(!enemies->player_blocked && hero_dist < MINIMUM_FOLLOW_DISTANCE_LOWER
-       && is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
+       && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
             enemies->player_blocked = true;
             enemies->player_blocked_ticks = BLOCK_TICKS;
     }
 
     //if the player is blocked, all summons in front of him moves away
     if(enemies->player_blocked && !e->stats.in_combat
-       && is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
+       && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
 
         e->stats.direction = calcDirection(e->stats.hero_pos, e->stats.pos);
 
@@ -172,7 +143,7 @@ void BehaviorAlly::checkMoveStateMove()
 {
 
     if(enemies->player_blocked && !e->stats.in_combat
-       && is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
+       && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
 
         e->stats.direction = calcDirection(e->stats.hero_pos, e->stats.pos);
 

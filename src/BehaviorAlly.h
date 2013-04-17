@@ -12,7 +12,6 @@ class BehaviorAlly : public BehaviorStandard
     protected:
     private:
         virtual void findTarget();
-        bool is_facing(int x, int y, char direction, int x2, int y2);
         virtual void checkMoveStateStance();
         virtual void checkMoveStateMove();
 };
