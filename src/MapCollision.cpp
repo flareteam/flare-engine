@@ -364,6 +364,7 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 
 		// reblock target if needed
 		if (target_blocks) block(end_pos.x, end_pos.y);
+		path.push_back(collision_to_map(end));
 
 		return false;
 	}
