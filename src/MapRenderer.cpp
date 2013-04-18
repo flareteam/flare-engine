@@ -573,7 +573,6 @@ void MapRenderer::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "npc") {
-		npcs.back().id = infile.val;
 		e->s = infile.val;
 	}
 	else if (infile.key == "music") {
