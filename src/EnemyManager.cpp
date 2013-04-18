@@ -157,7 +157,7 @@ void EnemyManager::handleNewMap () {
 
 		enemies.push_back(e);
 
-		map->collider.block(me.pos.x, me.pos.y);
+		map->collider.block(me.pos.x, me.pos.y, false);
 	}
 
 	while (!allies.empty()){
@@ -174,7 +174,7 @@ void EnemyManager::handleNewMap () {
 
 		enemies.push_back(e);
 
-		map->collider.block(e->stats.pos.x, e->stats.pos.y);
+		map->collider.block(e->stats.pos.x, e->stats.pos.y, true);
 	}
 
 	anim->cleanUp();
@@ -222,7 +222,7 @@ void EnemyManager::handleSpawn() {
 		loadSounds(e->stats.sfx_prefix);
 
 
-		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type) || !e->stats.hero_ally){
+		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally){
 			e->stats.pos.x = espawn.pos.x;
 			e->stats.pos.y = espawn.pos.y;
 		} else {
@@ -257,7 +257,7 @@ void EnemyManager::handleSpawn() {
 
 		enemies.push_back(e);
 
-		map->collider.block(espawn.pos.x, espawn.pos.y);
+		map->collider.block(espawn.pos.x, espawn.pos.y, e->stats.hero_ally);
 	}
 }
 

@@ -131,7 +131,7 @@ void BehaviorStandard::doUpkeep() {
 		e->stats.pos.x = e->stats.teleport_destination.x;
 		e->stats.pos.y = e->stats.teleport_destination.y;
 
-		e->map->collider.block(e->stats.pos.x,e->stats.pos.y);
+		e->map->collider.block(e->stats.pos.x,e->stats.pos.y, e->stats.hero_ally);
 
 		e->stats.teleportation = false;
 	}
@@ -398,7 +398,7 @@ void BehaviorStandard::checkMove() {
 	}
 
 	// re-block current space to allow correct movement
-    e->map->collider.block(e->stats.pos.x, e->stats.pos.y);
+    e->map->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
 
 }
 

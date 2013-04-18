@@ -40,6 +40,7 @@ const int BLOCKS_MOVEMENT = 2;
 const int BLOCKS_ALL_HIDDEN = 3;
 const int BLOCKS_MOVEMENT_HIDDEN = 4;
 const int BLOCKS_ENTITIES = 5;
+const int BLOCKS_ENEMIES = 6;
 
 // collision check types
 const int CHECK_MOVEMENT = 1;
@@ -64,13 +65,13 @@ public:
 	~MapCollision();
 
 	void setmap(const unsigned short _colmap[][256], unsigned short w, unsigned short h);
-	bool move(int &x, int &y, int step_x, int step_y, int dist, int movement_type);
+	bool move(int &x, int &y, int step_x, int step_y, int dist, int movement_type, bool is_hero);
 
 	bool is_outside_map(int tile_x, int tile_y) const;
 	bool is_empty(int x, int y) const;
 	bool is_wall(int x, int y) const;
-	bool is_valid_tile(int x, int y, int movement_type) const;
-	bool is_valid_position(int x, int y, int movement_type) const;
+	bool is_valid_tile(int x, int y, int movement_type, bool is_hero) const;
+	bool is_valid_position(int x, int y, int movement_type, bool is_hero) const;
 
 	int is_one_step_around(int x, int y, int xidr, int ydir);
 
@@ -81,7 +82,7 @@ public:
 
 	bool compute_path(Point start, Point end, std::vector<Point> &path, int movement_type, unsigned int limit = PATH_MAX_TILES);
 
-	void block(int map_x, int map_y);
+	void block(int map_x, int map_y, bool is_ally);
 	void unblock(int map_x, int map_y);
 
 	unsigned short colmap[256][256];

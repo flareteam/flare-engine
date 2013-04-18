@@ -414,12 +414,12 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		map->hero_tile.x = stats.pos.x / 32;
 		map->hero_tile.y = stats.pos.y / 32;
 
-		map->collider.block(stats.pos.x, stats.pos.y);
+		map->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
 	}
 	if (stats.effects.stun) {
 
-		map->collider.block(stats.pos.x, stats.pos.y);
+		map->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
 	}
 
@@ -728,7 +728,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	}
 
 	// make the current square solid
-	map->collider.block(stats.pos.x, stats.pos.y);
+	map->collider.block(stats.pos.x, stats.pos.y, false);
 }
 
 void Avatar::transform() {
@@ -800,7 +800,7 @@ void Avatar::untransform() {
 	inpt->unlockActionBar();
 
 	// Only allow untransform when on a valid tile
-	if (!map->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL)) return;
+	if (!map->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) return;
 
 	stats.transformed = false;
 	transform_triggered = true;

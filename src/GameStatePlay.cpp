@@ -306,7 +306,7 @@ void GameStatePlay::checkTeleport() {
 			}
 		}
 
-		map->collider.block(pc->stats.pos.x, pc->stats.pos.y);
+		map->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
 		map->teleportation = false;
 		pc->stats.teleportation = false; // teleport spell
