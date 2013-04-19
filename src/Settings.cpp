@@ -169,7 +169,7 @@ std::string WINDOW_TITLE = "Flare";
 int SOUND_FALLOFF = 15;
 int PARTY_EXP_PERCENTAGE = 100;
 bool ENABLE_ALLY_COLLISION_AI = true;
-bool ENABLE_ALLY_COLLISION = false;
+bool ENABLE_ALLY_COLLISION = true;
 
 /**
  * Set system paths
