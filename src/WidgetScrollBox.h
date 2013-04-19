@@ -36,7 +36,7 @@ public:
 	WidgetScrollBox (int width, int height);
 	~WidgetScrollBox ();
 
-	void add(Widget* child);
+	void addChildWidget(Widget* child);
 	Point input_assist(Point mouse);
 	void logic();
 	void logic(int x, int y);
@@ -49,6 +49,7 @@ public:
 	SDL_Color bg;
 	bool transparent;
 
+	TabList tablist;
 	bool getNext();
 	bool getPrev();
 

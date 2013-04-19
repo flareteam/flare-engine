@@ -1113,10 +1113,10 @@ void GameStateConfig::render () {
 		if (input_scrollbox->update) {
 			input_scrollbox->refresh();
 			for (unsigned int i = 0; i < 25; i++) {
-				input_scrollbox->add(settings_lb[i]);
+				settings_lb[i]->render(input_scrollbox->contents);
 			}
 			for (unsigned int i = 0; i < 50; i++) {
-				input_scrollbox->add(settings_key[i]);
+				input_scrollbox->addChildWidget(settings_key[i]);
 			}
 		}
 		input_scrollbox->render();

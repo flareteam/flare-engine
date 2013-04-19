@@ -45,8 +45,9 @@ WidgetScrollBox::~WidgetScrollBox() {
 	delete scrollbar;
 }
 
-void WidgetScrollBox::add(Widget* child) {
+void WidgetScrollBox::addChildWidget(Widget* child) {
 	children.push_back(child);
+	tablist.add(child);
 }
 
 void WidgetScrollBox::scroll(int amount) {
@@ -69,6 +70,7 @@ Point WidgetScrollBox::input_assist(Point mouse) {
 
 void WidgetScrollBox::logic() {
 	logic(inpt->mouse.x,inpt->mouse.y);
+	tablist.logic();
 }
 
 void WidgetScrollBox::logic(int x, int y) {
@@ -161,6 +163,28 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		SDL_BlitSurface(contents, &src, target, &dest);
 	if (contents->h > pos.h) scrollbar->render(target);
 	update = false;
+
+	if (in_focus)
+	{
+		Point topLeft;
+		Point bottomRight;
+		Uint32 color;
+ 
+		topLeft.x = dest.x;
+		topLeft.y = dest.y;
+		bottomRight.x = dest.x + dest.w;
+		bottomRight.y = dest.y + dest.h;
+		color = SDL_MapRGB(target->format, 255,248,220);
+
+		if (target == screen)
+		{
+			SDL_LockSurface(screen);
+			drawRectangle(target, topLeft, bottomRight, color);
+			SDL_UnlockSurface(screen);
+		}
+		else
+			drawRectangle(target, topLeft, bottomRight, color);
+	}
 }
 
 bool WidgetScrollBox::getNext() {
@@ -169,6 +193,11 @@ bool WidgetScrollBox::getNext() {
 	currentChild+=1;
 	currentChild = (currentChild == children.size()) ? 0 : currentChild;
 	
+	if (children[currentChild]->pos.y > (pos.y + pos.h) ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (pos.y + pos.h))
+	{
+		scroll(2*children[currentChild]->pos.h);
+	}
 	children[currentChild]->in_focus = true;
 	return true;
 }
@@ -179,6 +208,11 @@ bool WidgetScrollBox::getPrev() {
 	currentChild-=1;
 	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
 	
+	if (children[currentChild]->pos.y < pos.y ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) < pos.y)
+	{
+		scroll((-2)*children[currentChild]->pos.h);
+	}
 	children[currentChild]->in_focus = true;
 	return true;
 }
