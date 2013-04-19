@@ -49,7 +49,8 @@ MenuEnemy::MenuEnemy() {
 				bar_pos.y = eatFirstInt(infile.val,',');
 				bar_pos.w = eatFirstInt(infile.val,',');
 				bar_pos.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "text_pos") {
+			}
+			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
 			}
@@ -64,8 +65,7 @@ MenuEnemy::MenuEnemy() {
 	color_normal = font->getColor("menu_normal");
 }
 
-void MenuEnemy::loadGraphics()
-{
+void MenuEnemy::loadGraphics() {
 	background = loadGraphicSurface("images/menus/enemy_bar.png");
 	bar_hp = loadGraphicSurface("images/menus/enemy_bar_hp.png");
 }
@@ -123,7 +123,8 @@ void MenuEnemy::render() {
 
 		if (custom_text_pos) {
 			label.set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal, text_pos.font_style);
-		} else {
+		}
+		else {
 			label.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y, JUSTIFY_CENTER, VALIGN_BOTTOM, msg->get("%s level %d", enemy->stats.level, enemy->stats.name), color_normal);
 		}
 		label.render();

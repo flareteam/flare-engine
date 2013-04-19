@@ -34,10 +34,9 @@ FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), ttfont(NULL
 }
 
 FontEngine::FontEngine()
- : ttf(NULL)
- , active_font(NULL)
- , cursor_y(0)
-{
+	: ttf(NULL)
+	, active_font(NULL)
+	, cursor_y(0) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -70,7 +69,8 @@ FontEngine::FontEngine()
 				style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
 				if(style->ttfont == NULL) {
 					printf("TTF_OpenFont: %s\n", TTF_GetError());
-				} else {
+				}
+				else {
 					style->line_height = TTF_FontLineSkip(style->ttfont);
 					style->font_height = TTF_FontLineSkip(style->ttfont);
 				}

@@ -68,8 +68,7 @@ void MenuItemStorage::init(int _slot_number, ItemManager *_items, vector<SDL_Rec
 	loadGraphics();
 }
 
-void MenuItemStorage::loadGraphics()
-{
+void MenuItemStorage::loadGraphics() {
 	highlight_image = loadGraphicSurface("images/menus/attention_glow.png", "Couldn't load icon highlight image");
 }
 
@@ -78,7 +77,8 @@ void MenuItemStorage::render() {
 		if (nb_cols > 0) {
 			if (storage[i].item > 0) items->renderIcon(storage[i], area[0].x + (i % nb_cols * icon_size[i]), area[0].y + (i / nb_cols * icon_size[i]), icon_size[i]);
 			if (highlight[i]) renderHighlight(area[0].x + (i % nb_cols * icon_size[i]), area[0].y + (i / nb_cols * icon_size[i]), icon_size[i]);
-		} else if (nb_cols == 0) {
+		}
+		else if (nb_cols == 0) {
 			if (storage[i].item > 0) items->renderIcon(storage[i], area[i].x, area[i].y, area[i].w);
 			if (highlight[i]) renderHighlight(area[i].x, area[i].y, icon_size[i]);
 		}

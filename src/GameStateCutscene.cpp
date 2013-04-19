@@ -23,12 +23,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 Scene::Scene() : frame_counter(0)
-	       , pause_frames(0)
-	       , caption("")
-	       , caption_size(0,0)
-	       , art(NULL)
-	       , sid(-1)
-{
+	, pause_frames(0)
+	, caption("")
+	, caption_size(0,0)
+	, art(NULL)
+	, sid(-1) {
 }
 
 Scene::~Scene() {
@@ -62,7 +61,8 @@ bool Scene::logic() {
 			caption = components.front().s;
 			caption_size = font->calc_size(caption, VIEW_W * 0.8f);
 
-		} else if (components.front().type == "image") {
+		}
+		else if (components.front().type == "image") {
 
 			if (art)
 				SDL_FreeSurface(art);
@@ -74,7 +74,8 @@ bool Scene::logic() {
 			art_dest.w = art->w;
 			art_dest.h = art->h;
 
-		} else if (components.front().type == "soundfx") {
+		}
+		else if (components.front().type == "soundfx") {
 			if (sid != 0)
 				snd->unload(sid);
 
@@ -105,14 +106,14 @@ void Scene::render() {
 	if (caption != "") {
 		font->setFont("font_captions");
 		font->renderShadowed(caption, screen->w / 2, screen->h - (caption_size.y*2),
-				     JUSTIFY_CENTER,
-				     screen, FONT_WHITE);
+							 JUSTIFY_CENTER,
+							 screen, FONT_WHITE);
 	}
 }
 
-GameStateCutscene::GameStateCutscene(GameState *game_state) : previous_gamestate(game_state)
-	, game_slot(-1)
-{
+GameStateCutscene::GameStateCutscene(GameState *game_state)
+	: previous_gamestate(game_state)
+	, game_slot(-1) {
 	scale_graphics = false;
 }
 
@@ -121,8 +122,7 @@ GameStateCutscene::~GameStateCutscene() {
 
 void GameStateCutscene::logic() {
 
-	if (scenes.empty())
-	{
+	if (scenes.empty()) {
 		if (game_slot != -1) {
 			GameStatePlay *gsp = new GameStatePlay();
 			gsp->resetGame();
@@ -161,7 +161,10 @@ bool GameStateCutscene::load(std::string filename) {
 				scenes.push(Scene());
 		}
 
-		if (infile.section == "scene") {
+		if (infile.section.empty()) {
+			// allow having an empty section (globals such as scale_gfx might be set here
+		}
+		else if (infile.section == "scene") {
 			SceneComponent sc;
 			sc.type = "";
 
@@ -187,17 +190,16 @@ bool GameStateCutscene::load(std::string filename) {
 			if (sc.type != "")
 				scenes.back().components.push(sc);
 
-		} else {
-
-			if (infile.key == "scale_gfx") {
-				scale_graphics = toBool(infile.val);
-			}
-
+		}
+		else {
+			fprintf(stderr, "unknown section %s in file %s\n", infile.section.c_str(), infile.getFileName().c_str());
+		}
+		if (infile.key == "scale_gfx") {
+			scale_graphics = toBool(infile.val);
 		}
 	}
 
-	if (scenes.empty())
-	{
+	if (scenes.empty()) {
 		cerr << "No scenes defined in cutscene file " << filename << endl;
 		return false;
 	}

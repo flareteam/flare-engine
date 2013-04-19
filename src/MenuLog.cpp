@@ -46,10 +46,12 @@ MenuLog::MenuLog() {
 
 			if(infile.key == "caption") {
 				title = eatLabelInfo(infile.val);
-			} else if(infile.key == "close") {
+			}
+			else if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "tab_area") {
+			}
+			else if(infile.key == "tab_area") {
 				tab_area.x = eatFirstInt(infile.val,',');
 				tab_area.y = eatFirstInt(infile.val,',');
 				tab_area.w = eatFirstInt(infile.val,',');

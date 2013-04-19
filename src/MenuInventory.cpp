@@ -66,26 +66,34 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 			if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "equipment_slot") {
+			}
+			else if(infile.key == "equipment_slot") {
 				equipment_slot.x = eatFirstInt(infile.val,',');
 				equipment_slot.y = eatFirstInt(infile.val,',');
 				equipment_slot.w = equipment_slot.h = eatFirstInt(infile.val,',');
 				equipped_area.push_back(equipment_slot);
 				slot_type.push_back(eatFirstString(infile.val,','));
-			} else if(infile.key == "slot_name") {
+			}
+			else if(infile.key == "slot_name") {
 				slot_desc.push_back(eatFirstString(infile.val,','));
-			} else if(infile.key == "carried_area") {
+			}
+			else if(infile.key == "carried_area") {
 				carried_area.x = eatFirstInt(infile.val,',');
 				carried_area.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "carried_cols"){
+			}
+			else if (infile.key == "carried_cols") {
 				carried_cols = eatFirstInt(infile.val,',');
-			} else if (infile.key == "carried_rows"){
+			}
+			else if (infile.key == "carried_rows") {
 				carried_rows = eatFirstInt(infile.val,',');
-			} else if (infile.key == "caption"){
+			}
+			else if (infile.key == "caption") {
 				title =  eatLabelInfo(infile.val);
-			} else if (infile.key == "currency"){
+			}
+			else if (infile.key == "currency") {
 				currency_lbl =  eatLabelInfo(infile.val);
-			} else if (infile.key == "help"){
+			}
+			else if (infile.key == "help") {
 				help_pos.x = eatFirstInt(infile.val,',');
 				help_pos.y = eatFirstInt(infile.val,',');
 				help_pos.w = eatFirstInt(infile.val,',');
@@ -171,7 +179,8 @@ void MenuInventory::render() {
 int MenuInventory::areaOver(Point mouse) {
 	if (isWithin(carried_area, mouse)) {
 		return CARRIED;
-	} else {
+	}
+	else {
 		for (unsigned int i=0; i<equipped_area.size(); i++) {
 			if (isWithin(equipped_area[i], mouse)) {
 				return EQUIPMENT;
@@ -229,12 +238,14 @@ ItemStack MenuInventory::click(InputState * input) {
 		if (drag_prev_src == EQUIPMENT) {
 			if (stats->humanoid) {
 				updateEquipment( inventory[EQUIPMENT].drag_prev_slot);
-			} else {
+			}
+			else {
 				itemReturn(item);
 				item.item = 0;
 				item.quantity = 0;
 			}
-		} else if (drag_prev_src == CARRIED && !inpt->pressing[CTRL] && !inpt->pressing[MAIN2]) {
+		}
+		else if (drag_prev_src == CARRIED && !inpt->pressing[CTRL] && !inpt->pressing[MAIN2]) {
 			inventory[EQUIPMENT].highlightMatching(items->items[item.item].type);
 		}
 	}
@@ -293,7 +304,8 @@ void MenuInventory::drop(Point mouse, ItemStack stack) {
 				itemReturn( inventory[area][slot]);
 				inventory[area][slot] = stack;
 				updateEquipment( slot);
-			} else {
+			}
+			else {
 				itemReturn( stack);
 			}
 		}
@@ -319,7 +331,8 @@ void MenuInventory::drop(Point mouse, ItemStack stack) {
 					// Swap the two stacks
 					itemReturn( inventory[area][slot]);
 					inventory[area][slot] = stack;
-				} else {
+				}
+				else {
 					itemReturn( stack);
 				}
 			}
@@ -410,7 +423,7 @@ void MenuInventory::activate(InputState * input) {
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			// first check for first empty
 			if ((slot_type[i] == items->items[inventory[CARRIED][slot].item].type) &&
-				(inventory[EQUIPMENT].storage[i].item == 0)) {
+					(inventory[EQUIPMENT].storage[i].item == 0)) {
 				equip_slot = i;
 			}
 		}
@@ -449,7 +462,8 @@ void MenuInventory::activate(InputState * input) {
 				updateEquipment( equip_slot);
 				items->playSound(inventory[EQUIPMENT][equip_slot].item);
 			}
-		} else fprintf(stderr, "Can't find equip slot, corresponding to type %s\n", items->items[inventory[CARRIED][slot].item].type.c_str());
+		}
+		else fprintf(stderr, "Can't find equip slot, corresponding to type %s\n", items->items[inventory[CARRIED][slot].item].type.c_str());
 	}
 
 	drag_prev_src = -1;
@@ -480,7 +494,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot) {
 				int i = 0;
 				while (i < MAX_CARRIED &&
 						(inventory[area][i].item != stack.item
-						|| inventory[area][i].quantity >= max_quantity))
+						 || inventory[area][i].quantity >= max_quantity))
 					++i;
 				if (i < MAX_CARRIED)
 					slot = i;
@@ -504,7 +518,8 @@ void MenuInventory::add(ItemStack stack, int area, int slot) {
 			if( stack.quantity > 0) {
 				if( drag_prev_src > -1) {
 					itemReturn( stack);
-				} else {
+				}
+				else {
 					add( stack);
 				}
 			}
@@ -656,8 +671,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 
 	// calculate bonuses to basic stats, added by items
 	bool checkRequired = true;
-	while(checkRequired)
-	{
+	while(checkRequired) {
 		checkRequired = false;
 		stats->offense_additional = stats->defense_additional = stats->physical_additional = stats->mental_additional = 0;
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
@@ -781,13 +795,11 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 }
 
 void MenuInventory::applyItemStats(ItemStack *equipped) {
-	unsigned bonus_counter;
 	const vector<Item> &pc_items = items->items;
-	int item_id;
 
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		item_id = equipped[i].item;
+		int item_id = equipped[i].item;
 		const Item &item = pc_items[item_id];
 
 		// apply base stats
@@ -825,7 +837,7 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		stats->absorb_max += item.abs_max;
 
 		// apply various bonuses
-		bonus_counter = 0;
+		unsigned bonus_counter = 0;
 		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
 			int id = powers->getIdFromTag(item.bonus_stat[bonus_counter]);
 
@@ -850,11 +862,9 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	vector<int> set;
 	vector<int> quantity;
 	vector<int>::iterator it;
-	unsigned bonus_counter = 0;
-	int item_id;
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		item_id = equipped[i].item;
+		int item_id = equipped[i].item;
 		it = find(set.begin(), set.end(), items->items[item_id].set);
 		if (items->items[item_id].set > 0 && it != set.end()) {
 			quantity[distance(set.begin(), it)] += 1;
@@ -868,6 +878,7 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	ItemSet temp_set;
 	for (unsigned k=0; k<set.size(); k++) {
 		temp_set = items->item_sets[set[k]];
+		unsigned bonus_counter = 0;
 		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 			if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 

@@ -40,14 +40,11 @@ Point round(FPoint fp) {
 Point screen_to_map(int x, int y, int camx, int camy) {
 	Point r;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		int scrx = x - VIEW_W_HALF;
-		int scry = y - VIEW_H_HALF;
+		int scrx = (x - VIEW_W_HALF) /2;
+		int scry = (y - VIEW_H_HALF) /2;
 
-		int cx = UNITS_PER_PIXEL_X /2;
-		int cy = UNITS_PER_PIXEL_Y /2;
-
-		r.x = (cx * scrx) + (cy * scry) + camx;
-		r.y = (cy * scry) - (cx * scrx) + camy;
+		r.x = (UNITS_PER_PIXEL_X * scrx) + (UNITS_PER_PIXEL_Y * scry) + camx;
+		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
 	}
 	else {
 		r.x = (x - VIEW_W_HALF) * (UNITS_PER_PIXEL_X ) + camx;
@@ -167,36 +164,35 @@ bool isWithin(SDL_Rect r, Point target) {
 }
 
 
-Uint32 readPixel(SDL_Surface *surface, int x, int y)
-{
+Uint32 readPixel(SDL_Surface *surface, int x, int y) {
 	SDL_LockSurface(surface);
 	int bpp = surface->format->BytesPerPixel;
 	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 	Uint32 pixel;
 
 	switch (bpp) {
-	case 1:
-		pixel = *p;
-		break;
+		case 1:
+			pixel = *p;
+			break;
 
-	case 2:
-		pixel = *(Uint16 *)p;
-		break;
+		case 2:
+			pixel = *(Uint16 *)p;
+			break;
 
-	case 3:
-	  if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-		  pixel = p[0] << 16 | p[1] << 8 | p[2];
-	  else
-		  pixel = p[0] | p[1] << 8 | p[2] << 16;
-	  break;
+		case 3:
+			if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+				pixel = p[0] << 16 | p[1] << 8 | p[2];
+			else
+				pixel = p[0] | p[1] << 8 | p[2] << 16;
+			break;
 
-	case 4:
-		pixel = *(Uint32 *)p;
-		break;
+		case 4:
+			pixel = *(Uint32 *)p;
+			break;
 
-	default:
-		SDL_UnlockSurface(surface);
-		return 0;
+		default:
+			SDL_UnlockSurface(surface);
+			return 0;
 	}
 
 	SDL_UnlockSurface(surface);
@@ -210,22 +206,21 @@ Uint32 readPixel(SDL_Surface *surface, int x, int y)
  * Source: SDL Documentation
  * http://www.libsdl.org/docs/html/guidevideo.html
  */
-void drawPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
-{
+void drawPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
 	int bpp = surface->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to set */
 	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
 	switch(bpp) {
-	case 1:
-		*p = pixel;
-		break;
+		case 1:
+			*p = pixel;
+			break;
 
-	case 2:
-		*(Uint16 *)p = pixel;
-		break;
+		case 2:
+			*(Uint16 *)p = pixel;
+			break;
 
-	case 3:
+		case 3:
 #if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
 			p[0] = (pixel >> 16) & 0xff;
 			p[1] = (pixel >> 8) & 0xff;
@@ -235,11 +230,11 @@ void drawPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 			p[1] = (pixel >> 8) & 0xff;
 			p[2] = (pixel >> 16) & 0xff;
 #endif
-		break;
+			break;
 
-	case 4:
-		*(Uint32 *)p = pixel;
-		break;
+		case 4:
+			*(Uint32 *)p = pixel;
+			break;
 	}
 }
 
@@ -270,11 +265,19 @@ void drawLine(SDL_Surface *surface, int x0, int y0, int x1, int y1, Uint32 color
 			err = err + dx;
 			y0 = y0 + sy;
 		}
-	} while(x0 != x1 || y0 != y1);
+	}
+	while(x0 != x1 || y0 != y1);
 }
 
 void drawLine(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
 	drawLine(surface, pos0.x, pos0.y, pos1.x, pos1.y, color);
+}
+
+void drawRectangle(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
+	drawLine(surface, pos0.x, pos0.y, pos1.x, pos0.y, color);
+	drawLine(surface, pos1.x, pos0.y, pos1.x, pos1.y, color);
+	drawLine(surface, pos0.x, pos0.y, pos0.x, pos1.y, color);
+	drawLine(surface, pos0.x, pos1.y, pos1.x, pos1.y, color);
 }
 
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
@@ -344,8 +347,7 @@ SDL_Surface* createSurface(int width, int height) {
 	return surface;
 }
 
-SDL_Surface* loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey)
-{
+SDL_Surface* loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
 	SDL_Surface *ret = NULL;
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
 	if(!cleanup) {
@@ -355,7 +357,8 @@ SDL_Surface* loadGraphicSurface(std::string filename, std::string errormessage, 
 			SDL_Quit();
 			exit(1);
 		}
-	} else {
+	}
+	else {
 		if (HavePinkColorKey)
 			SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, SDL_MapRGB(cleanup->format, 255, 0, 255));
 		ret = SDL_DisplayFormatAlpha(cleanup);
@@ -389,9 +392,9 @@ bool checkPixel(Point px, SDL_Surface *surface) {
 
 		case 3:
 #if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-				pixel = p[0] << 16 | p[1] << 8 | p[2];
+			pixel = p[0] << 16 | p[1] << 8 | p[2];
 #else
-				pixel = p[0] | p[1] << 8 | p[2] << 16;
+			pixel = p[0] | p[1] << 8 | p[2] << 16;
 #endif
 			break;
 
@@ -421,29 +424,26 @@ bool checkPixel(Point px, SDL_Surface *surface) {
 	return true;
 }
 
-SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height)
-{
+SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height) {
 	if(!source || !width || !height)
 		return 0;
 
 	double _stretch_factor_x, _stretch_factor_y;
 	SDL_Surface *_ret = SDL_CreateRGBSurface(source->flags, width, height,
-						 source->format->BitsPerPixel,
-						 source->format->Rmask,
-						 source->format->Gmask,
-						 source->format->Bmask,
-						 source->format->Amask);
+						source->format->BitsPerPixel,
+						source->format->Rmask,
+						source->format->Gmask,
+						source->format->Bmask,
+						source->format->Amask);
 
 	_stretch_factor_x = width / (double)source->w;
 	_stretch_factor_y = height / (double)source->h;
 
 	for(Uint32 y = 0; y < (Uint32)source->h; y++)
-		for(Uint32 x = 0; x < (Uint32)source->w; x++)
-		{
+		for(Uint32 x = 0; x < (Uint32)source->w; x++) {
 			Uint32 spixel = readPixel(source, x, y);
 			for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y)
-				for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x)
-				{
+				for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
 					Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
 					Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
 					drawPixel(_ret, dx, dy, spixel);
@@ -453,13 +453,11 @@ SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height)
 	return _ret;
 }
 
-int calcDirection(const Point &src, const Point &dst)
-{
+int calcDirection(const Point &src, const Point &dst) {
 	return calcDirection(src.x, src.y, dst.x, dst.y);
 }
 
-int calcDirection(int x0, int y0, int x1, int y1)
-{
+int calcDirection(int x0, int y0, int x1, int y1) {
 	// TODO: use calcTheta instead and check for the areas between -PI and PI
 
 	// inverting Y to convert map coordinates to standard cartesian coordinates
@@ -514,8 +512,7 @@ float calcTheta(int x1, int y1, int x2, int y2) {
 	return theta;
 }
 
-void setupSDLVideoMode(unsigned width, unsigned height)
-{
+void setupSDLVideoMode(unsigned width, unsigned height) {
 	Uint32 flags = 0;
 
 	if (FULLSCREEN) flags = flags | SDL_FULLSCREEN;

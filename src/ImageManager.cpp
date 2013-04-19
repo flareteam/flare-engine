@@ -34,15 +34,14 @@ ImageManager* ImageManager_instance = 0;
 ImageManager::ImageManager()
 {}
 
-ImageManager::~ImageManager()
-{
+ImageManager::~ImageManager() {
 	cleanUp();
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG
 	if (!sprites.empty()) {
 		cout << "ImageManager still holding these images:" << endl;
 		for (unsigned i = 0; i < sprites.size(); ++i)
-			 fprintf(stderr, "%s %d\n", names[i].c_str(), counts[i]);
+			fprintf(stderr, "%s %d\n", names[i].c_str(), counts[i]);
 	}
 	assert(sprites.size() == 0);
 #endif
@@ -71,7 +70,8 @@ void ImageManager::increaseCount(const std::string &name) {
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]++;
-	} else {
+	}
+	else {
 		sprites.push_back(0);
 		names.push_back(name);
 		counts.push_back(1);
@@ -83,7 +83,8 @@ void ImageManager::decreaseCount(const std::string &name) {
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]--;
-	} else {
+	}
+	else {
 		fprintf(stderr, "ImageManager::decreaseCount: Couldn't decrease image count: %s\n", name.c_str());
 	}
 }

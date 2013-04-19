@@ -41,8 +41,7 @@ NPCManager::NPCManager(MapRenderer *_map, LootManager *_loot, ItemManager *_item
 	, loot(_loot)
 	, items(_items)
 	, stats(_stats)
-	, tip_buf()
- {
+	, tip_buf() {
 	FileParser infile;
 	// load tooltip_margin from engine config file
 	if (infile.open(mods->locate("engine/tooltips.txt").c_str())) {
@@ -168,7 +167,8 @@ void NPCManager::renderTooltips(Point cam, Point mouse) {
 			TOOLTIP_CONTEXT = TOOLTIP_MAP;
 
 			break; // display only one NPC tooltip at a time
-		} else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+		}
+		else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
 			TOOLTIP_CONTEXT = TOOLTIP_NONE;
 		}
 	}

@@ -39,8 +39,7 @@ using namespace std;
 #define log2(x)	logf(x)/logf(2)
 #endif
 
-class ConfigEntry
-{
+class ConfigEntry {
 public:
 	const char * name;
 	const type_info * type;
@@ -372,8 +371,7 @@ void loadTilesetSettings() {
 		UNITS_PER_PIXEL_X = UNITS_PER_TILE / TILE_W;
 		UNITS_PER_PIXEL_Y = UNITS_PER_TILE / TILE_H;
 	}
-	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0)
-	{
+	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
 		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", UNITS_PER_PIXEL_X, UNITS_PER_PIXEL_Y);
 		SDL_Quit();
 		exit(1);
@@ -389,22 +387,29 @@ void loadMiscSettings() {
 			if (infile.key == "save_hpmp") {
 				if (toInt(infile.val) == 1)
 					SAVE_HPMP = true;
-			} else if (infile.key == "corpse_timeout") {
+			}
+			else if (infile.key == "corpse_timeout") {
 				CORPSE_TIMEOUT = toInt(infile.val);
-			} else if (infile.key == "sell_without_vendor") {
+			}
+			else if (infile.key == "sell_without_vendor") {
 				if (toInt(infile.val) == 1)
 					SELL_WITHOUT_VENDOR = true;
 				else
 					SELL_WITHOUT_VENDOR = false;
-			} else if (infile.key == "aim_assist") {
+			}
+			else if (infile.key == "aim_assist") {
 				AIM_ASSIST = toInt(infile.val);
-			} else if (infile.key == "window_title") {
+			}
+			else if (infile.key == "window_title") {
 				WINDOW_TITLE = infile.val;
-			} else if (infile.key == "game_prefix") {
+			}
+			else if (infile.key == "game_prefix") {
 				GAME_PREFIX = infile.val;
-			} else if (infile.key == "sound_falloff") {
+			}
+			else if (infile.key == "sound_falloff") {
 				SOUND_FALLOFF = toInt(infile.val);
-			} else if (infile.key == "party_exp_percentage") {
+			}
+			else if (infile.key == "party_exp_percentage") {
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
 			} else if (infile.key == "enable_ally_collision") {
 				ENABLE_ALLY_COLLISION = (toInt(infile.val) == 1);
@@ -428,7 +433,8 @@ void loadMiscSettings() {
 				MIN_VIEW_W = toInt(infile.val);
 				if (VIEW_W < MIN_VIEW_W) VIEW_W = MIN_VIEW_W;
 				VIEW_W_HALF = VIEW_W/2;
-			} else if (infile.key == "required_height") {
+			}
+			else if (infile.key == "required_height") {
 				MIN_VIEW_H = toInt(infile.val);
 				if (VIEW_H < MIN_VIEW_H) VIEW_H = MIN_VIEW_H;
 				VIEW_H_HALF = VIEW_H/2;
@@ -453,11 +459,14 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			if (infile.key == "max_absorb_percent") {
 				MAX_ABSORB = toInt(infile.val);
-			} else if (infile.key == "max_resist_percent") {
+			}
+			else if (infile.key == "max_resist_percent") {
 				MAX_RESIST = toInt(infile.val);
-			} else if (infile.key == "max_block_percent") {
+			}
+			else if (infile.key == "max_block_percent") {
 				MAX_BLOCK = toInt(infile.val);
-			} else if (infile.key == "max_avoidance_percent") {
+			}
+			else if (infile.key == "max_avoidance_percent") {
 				MAX_AVOIDANCE = toInt(infile.val);
 			}
 		}
@@ -543,7 +552,8 @@ bool loadSettings() {
 		if (!infile.open(mods->locate("engine/default_settings.txt"), "")) {
 			saveSettings();
 			return true;
-		} else saveSettings();
+		}
+		else saveSettings();
 	}
 
 	while (infile.next()) {

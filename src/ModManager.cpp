@@ -63,7 +63,8 @@ void ModManager::loadModList() {
 	if (find(mod_dirs.begin(), mod_dirs.end(), FALLBACK_MOD) != mod_dirs.end()) {
 		mod_list.push_back(FALLBACK_MOD);
 		found_any_mod = true;
-	} else {
+	}
+	else {
 		fprintf(stderr, "Mod \"%s\" not found, skipping\n", FALLBACK_MOD);
 	}
 
@@ -95,7 +96,8 @@ void ModManager::loadModList() {
 		if (find(mod_dirs.begin(), mod_dirs.end(), line) != mod_dirs.end()) {
 			mod_list.push_back(line);
 			found_any_mod = true;
-		} else {
+		}
+		else {
 			fprintf(stderr, "Mod \"%s\" not found, skipping\n", line.c_str());
 		}
 	}

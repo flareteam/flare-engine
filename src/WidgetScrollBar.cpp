@@ -34,8 +34,7 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	, maximum(0)
 	, pressed_up(false)
 	, pressed_down(false)
-	, pressed_knob(false)
-{
+	, pressed_knob(false) {
 	scrollbars = NULL;
 	click = NULL;
 
@@ -103,10 +102,12 @@ int WidgetScrollBar::checkClick(int x, int y) {
 		if (isWithin(pos_up, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_up = true;
-		} else if (isWithin(pos_down, mouse)) {
+		}
+		else if (isWithin(pos_down, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_down = true;
-		} else if (isWithin(pos_knob, mouse)) {
+		}
+		else if (isWithin(pos_knob, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_knob = true;
 		}
@@ -160,7 +161,8 @@ void WidgetScrollBar::render(SDL_Surface *target) {
 		SDL_gfxBlitRGBA(scrollbars, &src_up, target, &pos_up);
 		SDL_gfxBlitRGBA(scrollbars, &src_down, target, &pos_down);
 		SDL_gfxBlitRGBA(scrollbars, &src_knob, target, &pos_knob);
-	} else {
+	}
+	else {
 		SDL_BlitSurface(scrollbars, &src_up, target, &pos_up);
 		SDL_BlitSurface(scrollbars, &src_down, target, &pos_down);
 		SDL_BlitSurface(scrollbars, &src_knob, target, &pos_knob);

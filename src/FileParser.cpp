@@ -20,10 +20,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 using namespace std;
-	bool new_section;
-	std::string section;
-	std::string key;
-	std::string val;
+bool new_section;
+std::string section;
+std::string key;
+std::string val;
 
 FileParser::FileParser()
 	: line("")
@@ -122,8 +122,7 @@ string FileParser::nextValue() {
 	return s;
 }
 
-std::string FileParser::getFileName()
-{
+std::string FileParser::getFileName() {
 	return filename;
 }
 

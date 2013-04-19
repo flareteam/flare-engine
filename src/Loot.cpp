@@ -70,12 +70,12 @@ void Loot::loadAnimation(std::string _gfx) {
 }
 
 bool Loot::isFlying() {
-	 return !animation->isLastFrame();
+	return !animation->isLastFrame();
 }
 
 Loot::~Loot() {
 	if (gfx != "")
-			anim->decreaseCount(gfx);
+		anim->decreaseCount(gfx);
 	delete animation;
 }
 

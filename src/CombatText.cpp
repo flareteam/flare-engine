@@ -49,7 +49,8 @@ CombatText::CombatText() {
 		while(infile.next()) {
 			if(infile.key == "duration") {
 				duration = toInt(infile.val);
-			} else if(infile.key == "speed") {
+			}
+			else if(infile.key == "speed") {
 				speed = toInt(infile.val);
 			}
 		}

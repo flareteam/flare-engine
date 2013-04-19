@@ -94,24 +94,29 @@ void BehaviorStandard::doUpkeep() {
 
 	// check for bleeding to death
 	if (e->stats.hp <= 0 && !(e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD)) {
-        //work out who the kill is attributed to
-        bool source_hero = false;
-        bool source_ally = false;
-        bool source_enemy = false;
-        for (unsigned i=0; i<e->stats.effects.effect_list.size(); i++) {
-            if (e->stats.effects.effect_list[i].type == "damage")
-            {
-                switch(e->stats.effects.effect_list[i].source_type){
-                case(SOURCE_TYPE_ALLY): source_ally = true; break;
-                case(SOURCE_TYPE_ENEMY): source_enemy = true; break;
-                case(SOURCE_TYPE_HERO): source_hero = true; break;
-                }
-            }
-        }
+		//work out who the kill is attributed to
+		bool source_hero = false;
+		bool source_ally = false;
+		bool source_enemy = false;
+		for (unsigned i=0; i<e->stats.effects.effect_list.size(); i++) {
+			if (e->stats.effects.effect_list[i].type == "damage") {
+				switch(e->stats.effects.effect_list[i].source_type) {
+					case(SOURCE_TYPE_ALLY):
+						source_ally = true;
+						break;
+					case(SOURCE_TYPE_ENEMY):
+						source_enemy = true;
+						break;
+					case(SOURCE_TYPE_HERO):
+						source_hero = true;
+						break;
+				}
+			}
+		}
 
-        int bleed_source_type = source_hero ? SOURCE_TYPE_HERO : (source_ally ? SOURCE_TYPE_ALLY : (source_enemy ? SOURCE_TYPE_ENEMY : SOURCE_TYPE_NEUTRAL));
+		int bleed_source_type = source_hero ? SOURCE_TYPE_HERO : (source_ally ? SOURCE_TYPE_ALLY : (source_enemy ? SOURCE_TYPE_ENEMY : SOURCE_TYPE_NEUTRAL));
 
-        e->doRewards(bleed_source_type);
+		e->doRewards(bleed_source_type);
 
 		e->stats.effects.triggered_death = true;
 		e->stats.cur_state = ENEMY_DEAD;
@@ -189,7 +194,8 @@ void BehaviorStandard::findTarget() {
 			pursue_pos.y = e->stats.wander_area.y + (rand() % (e->stats.wander_area.h));
 			e->stats.wander_ticks = (rand() % 150) + 150;
 		}
-	} else {
+	}
+	else {
 		// by default, the enemy pursues the hero directly
 		pursue_pos.x = e->stats.hero_pos.x;
 		pursue_pos.y = e->stats.hero_pos.y;
@@ -197,20 +203,19 @@ void BehaviorStandard::findTarget() {
 
 
 		//if there are player allies closer than the hero, target an ally instead
-        if(e->stats.in_combat) {
-            for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-                if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally)
-                {
-                    //now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
-                    int ally_dist = e->getDistance(enemies->enemies[i]->stats.pos);
-                    if(ally_dist < target_dist){
-                        pursue_pos.x = enemies->enemies[i]->stats.pos.x;
-                        pursue_pos.y = enemies->enemies[i]->stats.pos.y;
-                        target_dist = ally_dist;
-                    }
-                }
-            }
-        }
+		if(e->stats.in_combat) {
+			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+				if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally) {
+					//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
+					int ally_dist = e->getDistance(enemies->enemies[i]->stats.pos);
+					if(ally_dist < target_dist) {
+						pursue_pos.x = enemies->enemies[i]->stats.pos.x;
+						pursue_pos.y = enemies->enemies[i]->stats.pos.y;
+						target_dist = ally_dist;
+					}
+				}
+			}
+		}
 
 
 		if (!(e->stats.in_combat || e->stats.waypoints.empty())) {
@@ -366,12 +371,12 @@ void BehaviorStandard::checkMove() {
 
 	// try to start moving
 	if (e->stats.cur_state == ENEMY_STANCE) {
-        checkMoveStateStance();
+		checkMoveStateStance();
 	}
 
 	// already moving
 	else if (e->stats.cur_state == ENEMY_MOVE) {
-        checkMoveStateMove();
+		checkMoveStateMove();
 	}
 
 	// if patrolling waypoints and has reached a waypoint, cycle to the next one
@@ -403,44 +408,44 @@ void BehaviorStandard::checkMove() {
 }
 
 void BehaviorStandard::checkMoveStateStance() {
-    if (hero_dist < e->stats.melee_range) {
-        // too close, do nothing
-    }
-    else if (percentChance(e->stats.chance_pursue)) {
+	if (hero_dist < e->stats.melee_range) {
+		// too close, do nothing
+	}
+	else if (percentChance(e->stats.chance_pursue)) {
 
-        if (e->move()) {
-            e->newState(ENEMY_MOVE);
-        }
-        else {
+		if (e->move()) {
+			e->newState(ENEMY_MOVE);
+		}
+		else {
 
-            int prev_direction = e->stats.direction;
+			int prev_direction = e->stats.direction;
 
-            // hit an obstacle, try the next best angle
-            e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-            if (e->move()) {
-                e->newState(ENEMY_MOVE);
-            }
-            else e->stats.direction = prev_direction;
-        }
-    }
+			// hit an obstacle, try the next best angle
+			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+			if (e->move()) {
+				e->newState(ENEMY_MOVE);
+			}
+			else e->stats.direction = prev_direction;
+		}
+	}
 }
 
 void BehaviorStandard::checkMoveStateMove() {
-    // close enough to the hero
-    if (hero_dist < e->stats.melee_range) {
-        e->newState(ENEMY_STANCE);
-    }
+	// close enough to the hero
+	if (hero_dist < e->stats.melee_range) {
+		e->newState(ENEMY_STANCE);
+	}
 
-    // try to continue moving
-    else if (!e->move()) {
-        int prev_direction = e->stats.direction;
-        // hit an obstacle.  Try the next best angle
-        e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-        if (!e->move()) {
-            e->newState(ENEMY_STANCE);
-            e->stats.direction = prev_direction;
-        }
-    }
+	// try to continue moving
+	else if (!e->move()) {
+		int prev_direction = e->stats.direction;
+		// hit an obstacle.  Try the next best angle
+		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+		if (!e->move()) {
+			e->newState(ENEMY_STANCE);
+			e->stats.direction = prev_direction;
+		}
+	}
 }
 
 
@@ -497,9 +502,9 @@ void BehaviorStandard::updateState() {
 
 			e->setAnimation("spawn");
 			//the second check is needed in case the entity does not have a spawn animation
-			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "spawn"){
-                e->newState(ENEMY_STANCE);
-                e->CheckSummonSustained();
+			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "spawn") {
+				e->newState(ENEMY_STANCE);
+				e->CheckSummonSustained();
 			}
 			break;
 
@@ -530,10 +535,10 @@ void BehaviorStandard::updateState() {
 				if (percentChance(e->stats.power_chance[ON_DEATH]))
 					e->powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
-			if (e->activeAnimation->isLastFrame()){
-                e->stats.corpse = true; // puts renderable under object layer
-                //allow free movement over the corpse
-                e->map->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+			if (e->activeAnimation->isLastFrame()) {
+				e->stats.corpse = true; // puts renderable under object layer
+				//allow free movement over the corpse
+				e->map->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 			}
 
 			break;

@@ -105,6 +105,7 @@ Uint32 readPixel(SDL_Surface *screen, int x, int y);
 void drawPixel(SDL_Surface *screen, int x, int y, Uint32 color);
 void drawLine(SDL_Surface *screen, int x0, int y0, int x1, int y1, Uint32 color);
 void drawLine(SDL_Surface *screen, Point pos0, Point pos1, Uint32 color);
+void drawRectangle(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color);
 bool checkPixel(Point px, SDL_Surface *surface);
 
 

@@ -81,46 +81,56 @@ GameStateNew::GameStateNew() : GameState() {
 	FileParser infile;
 
 	if (infile.open(mods->locate("menus/gamenew.txt"))) {
-	  while (infile.next()) {
-		infile.val = infile.val + ',';
+		while (infile.next()) {
+			infile.val = infile.val + ',';
 
-		if (infile.key == "button_prev") {
-			button_prev->pos.x = eatFirstInt(infile.val, ',');
-			button_prev->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "button_next") {
-			button_next->pos.x = eatFirstInt(infile.val, ',');
-			button_next->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "button_permadeath") {
-			button_permadeath->pos.x = eatFirstInt(infile.val, ',');
-			button_permadeath->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "name_input") {
-			name_pos.x = eatFirstInt(infile.val, ',');
-			name_pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "portrait_label") {
-			portrait_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "name_label") {
-			name_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "permadeath_label") {
-			permadeath_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "classlist_label") {
-			classlist_label = eatLabelInfo(infile.val);
-		} else if (infile.key == "portrait") {
-			portrait_pos.x = eatFirstInt(infile.val, ',');
-			portrait_pos.y = eatFirstInt(infile.val, ',');
-			portrait_pos.w = eatFirstInt(infile.val, ',');
-			portrait_pos.h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "class_list") {
-			class_list->pos.x = eatFirstInt(infile.val, ',');
-			class_list->pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "show_classlist") {
-			int show_cl = eatFirstInt(infile.val, ',');
-			if (show_cl == 1)
-				show_classlist = true;
-			else
-				show_classlist = false;
+			if (infile.key == "button_prev") {
+				button_prev->pos.x = eatFirstInt(infile.val, ',');
+				button_prev->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "button_next") {
+				button_next->pos.x = eatFirstInt(infile.val, ',');
+				button_next->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "button_permadeath") {
+				button_permadeath->pos.x = eatFirstInt(infile.val, ',');
+				button_permadeath->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "name_input") {
+				name_pos.x = eatFirstInt(infile.val, ',');
+				name_pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "portrait_label") {
+				portrait_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "name_label") {
+				name_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "permadeath_label") {
+				permadeath_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "classlist_label") {
+				classlist_label = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "portrait") {
+				portrait_pos.x = eatFirstInt(infile.val, ',');
+				portrait_pos.y = eatFirstInt(infile.val, ',');
+				portrait_pos.w = eatFirstInt(infile.val, ',');
+				portrait_pos.h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "class_list") {
+				class_list->pos.x = eatFirstInt(infile.val, ',');
+				class_list->pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "show_classlist") {
+				int show_cl = eatFirstInt(infile.val, ',');
+				if (show_cl == 1)
+					show_classlist = true;
+				else
+					show_classlist = false;
+			}
 		}
-	  }
-	  infile.close();
+		infile.close();
 	}
 
 	button_prev->pos.x += (VIEW_W - FRAME_W)/2;
@@ -172,6 +182,14 @@ GameStateNew::GameStateNew() : GameState() {
 	loadOptions("hero_options.txt");
 	loadPortrait(portrait[0]);
 	setName(name[0]);
+
+	// Set up tab list
+	tablist.add(button_exit);
+	tablist.add(button_create);
+	tablist.add(button_permadeath);
+	tablist.add(button_prev);
+	tablist.add(button_next);
+	tablist.add(class_list);
 }
 
 void GameStateNew::loadGraphics() {
@@ -216,6 +234,8 @@ void GameStateNew:: setName(const string& default_name) {
 }
 
 void GameStateNew::logic() {
+	tablist.logic();
+
 	button_permadeath->checkClick();
 	if (show_classlist) class_list->checkClick();
 
@@ -233,7 +253,8 @@ void GameStateNew::logic() {
 		}
 	}
 
-	if (button_exit->checkClick()) {
+	if ((inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) || button_exit->checkClick()) {
+		inpt->lock[CANCEL] = true;
 		delete requestedGameState;
 		requestedGameState = new GameStateLoad();
 	}

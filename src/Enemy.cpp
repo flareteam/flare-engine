@@ -63,17 +63,16 @@ Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Enti
 }
 
 Enemy::Enemy(const Enemy& e)
- : Entity(e)
- , type(e.type)
- , haz(NULL) // do not copy hazard. This constructor is used during mapload, so no hazard should be active.
- , eb(new BehaviorStandard(this,e.enemies))
- , enemies(e.enemies)
- , reward_xp(e.reward_xp)
- , instant_power(e.instant_power)
- , summoned(e.summoned)
- , summoned_power_index(e.summoned_power_index)
- , kill_source_type(e.kill_source_type)
-{
+	: Entity(e)
+	, type(e.type)
+	, haz(NULL) // do not copy hazard. This constructor is used during mapload, so no hazard should be active.
+	, eb(new BehaviorStandard(this,e.enemies))
+	, enemies(e.enemies)
+	, reward_xp(e.reward_xp)
+	, instant_power(e.instant_power)
+	, summoned(e.summoned)
+	, summoned_power_index(e.summoned_power_index)
+	, kill_source_type(e.kill_source_type) {
 	assert(e.haz == NULL);
 }
 
@@ -140,7 +139,7 @@ void Enemy::logic() {
 
 	//need to check whether the enemy was converted here
 	//cant do it in behaviour because the behaviour object would be replaced by this
-	if(stats.effects.convert != stats.converted){
+	if(stats.effects.convert != stats.converted) {
 		delete eb;
 		eb = stats.hero_ally ? new BehaviorStandard(this, enemies) : new BehaviorAlly(this, enemies);
 		stats.converted = !stats.converted;
@@ -197,9 +196,9 @@ void Enemy::InstantDeath() {
 	stats.effects.clearEffects();
 }
 
-void Enemy::CheckSummonSustained(){
+void Enemy::CheckSummonSustained() {
 	//if minion was raised by a spawn power
-	if(summoned && stats.hero_ally){
+	if(summoned && stats.hero_ally) {
 
 		Power *spawn_power = &powers->powers[summoned_power_index];
 
@@ -207,22 +206,21 @@ void Enemy::CheckSummonSustained(){
 
 		if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_FIXED)
 			max_summons = spawn_power->spawn_limit_qty;
-		else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT)
-		{
+		else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
 			int stat_val = 1;
-			switch(spawn_power->spawn_limit_stat){
-			case SPAWN_LIMIT_STAT_PHYSICAL:
-				stat_val = enemies->pc->stats.get_physical();
-				break;
-			case SPAWN_LIMIT_STAT_MENTAL:
-				stat_val = enemies->pc->stats.get_mental();
-				break;
-			case SPAWN_LIMIT_STAT_OFFENSE:
-				stat_val = enemies->pc->stats.get_offense();
-				break;
-			case SPAWN_LIMIT_STAT_DEFENSE:
-				stat_val = enemies->pc->stats.get_defense();
-				break;
+			switch(spawn_power->spawn_limit_stat) {
+				case SPAWN_LIMIT_STAT_PHYSICAL:
+					stat_val = enemies->pc->stats.get_physical();
+					break;
+				case SPAWN_LIMIT_STAT_MENTAL:
+					stat_val = enemies->pc->stats.get_mental();
+					break;
+				case SPAWN_LIMIT_STAT_OFFENSE:
+					stat_val = enemies->pc->stats.get_offense();
+					break;
+				case SPAWN_LIMIT_STAT_DEFENSE:
+					stat_val = enemies->pc->stats.get_defense();
+					break;
 			}
 			max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
 		}
@@ -235,18 +233,17 @@ void Enemy::CheckSummonSustained(){
 		int qty_summons = 0;
 		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->summoned
-			   && !enemies->enemies[i]->stats.corpse
-			   && enemies->enemies[i]->summoned_power_index == summoned_power_index
-			   && enemies->enemies[i]->stats.cur_state != ENEMY_SPAWN
-			   && enemies->enemies[i]->stats.cur_state != ENEMY_DEAD
-			   && enemies->enemies[i]->stats.cur_state != ENEMY_CRITDEAD){
-					qty_summons++;
+					&& !enemies->enemies[i]->stats.corpse
+					&& enemies->enemies[i]->summoned_power_index == summoned_power_index
+					&& enemies->enemies[i]->stats.cur_state != ENEMY_SPAWN
+					&& enemies->enemies[i]->stats.cur_state != ENEMY_DEAD
+					&& enemies->enemies[i]->stats.cur_state != ENEMY_CRITDEAD) {
+				qty_summons++;
 			}
 		}
 
 		//if total minions sumoned by this skill does not exceed the player mental ability
-		if(qty_summons > max_summons)
-		{
+		if(qty_summons > max_summons) {
 			InstantDeath();
 		}
 

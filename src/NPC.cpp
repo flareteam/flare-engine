@@ -57,8 +57,7 @@ NPC::NPC(MapRenderer *_map, ItemManager *_items)
 	, stock_count(0)
 	, vox_intro()
 	, vox_quests()
-	, dialog()
-{
+	, dialog() {
 	stock.init(NPC_VENDOR_MAX_STOCK, _items);
 }
 
@@ -297,7 +296,8 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 		if (is_available) {
 			if (!is_grouped) {
 				result.push_back(i);
-			} else {
+			}
+			else {
 				DialogGroups::iterator it;
 				it = groups.find(group);
 				if (it == groups.end()) {

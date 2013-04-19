@@ -31,8 +31,7 @@ EffectManager::EffectManager()
 	, triggered_hit(false)
 	, triggered_halfdeath(false)
 	, triggered_joincombat(false)
-	, triggered_death(false)
-{
+	, triggered_death(false) {
 	clearStatus();
 }
 
@@ -344,7 +343,8 @@ int EffectManager::damageShields(int dmg) {
 			if (effect_list[i].magnitude < 0) {
 				if (abs(effect_list[i].magnitude) < over_dmg) over_dmg = abs(effect_list[i].magnitude);
 				effect_list[i].magnitude = 0;
-			} else {
+			}
+			else {
 				over_dmg = 0;
 			}
 		}

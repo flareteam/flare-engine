@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 #include <string>
 
+class TabList;
 class MenuConfirm;
 class Widget;
 class WidgetButton;
@@ -78,6 +79,7 @@ private:
 	bool setMods();
 	void scanKey(int button);
 
+	TabList tablist;
 	std::vector<Widget*>      child_widget;
 	WidgetTabControl    * tabControl;
 	WidgetButton        * ok_button;

@@ -27,8 +27,7 @@ GetText::GetText()
 	: line("")
 	, key("")
 	, val("")
-	, fuzzy(false)
-{
+	, fuzzy(false) {
 }
 
 bool GetText::open(const string& filename) {
@@ -67,7 +66,7 @@ bool GetText::next() {
 
 		// check if comment and if fuzzy
 		if (line.compare(0,2,"#,") && line.find("fuzzy") == 0)
-		        fuzzy = true;
+			fuzzy = true;
 
 		// this is a key
 		if (line.find("msgid") == 0) {
@@ -82,8 +81,7 @@ bool GetText::next() {
 				// It is a multi-line value, unless it is the first msgid, in which case it will be empty
 				// and it will be ignored when finding the matching msgstr, so no big deal.
 				line = getLine(infile);
-				while(line.find("\"") == 0)
-				{
+				while(line.find("\"") == 0) {
 					// We remove the double quotes.
 					key += line.substr(1, line.length()-2);
 					line = getLine(infile);
@@ -99,23 +97,18 @@ bool GetText::next() {
 			val = sanitize(val);
 
 			// handle keypairs
-			if (key != "")
-			{
-				if(val != "") // One-line value found.
-				{
+			if (key != "") {
+				if(val != "") { // One-line value found.
 					return true;
 				}
-				else  // Might be a multi-line value.
-				{
+				else { // Might be a multi-line value.
 					line = getLine(infile);
-					while(line.find("\"") == 0)
-					{
+					while(line.find("\"") == 0) {
 						// We remove the double quotes.
 						val += line.substr(1, line.length()-2);
 						line = getLine(infile);
 					}
-					if(val != "") // It was a multi-line value indeed.
-					{
+					if(val != "") { // It was a multi-line value indeed.
 						return true;
 					}
 				}

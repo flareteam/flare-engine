@@ -69,79 +69,98 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 	// Read powers data from config file
 	FileParser infile;
 	if (infile.open(mods->locate("menus/powers.txt"))) {
-	  bool id_line = false;
-	  while (infile.next()) {
-		infile.val = infile.val + ',';
+		bool id_line = false;
+		while (infile.next()) {
+			infile.val = infile.val + ',';
 
-		if (infile.key == "tab_title") {
-			tab_titles.push_back(eatFirstString(infile.val, ','));
-		} else if (infile.key == "tab_tree") {
-			tree_image_files.push_back(eatFirstString(infile.val, ','));
-		} else if (infile.key == "caption") {
-			title = eatLabelInfo(infile.val);
-		} else if (infile.key == "unspent_points") {
-			unspent_points = eatLabelInfo(infile.val);
-		} else if (infile.key == "close") {
-			close_pos.x = eatFirstInt(infile.val, ',');
-			close_pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "tab_area") {
-			tab_area.x = eatFirstInt(infile.val, ',');
-			tab_area.y = eatFirstInt(infile.val, ',');
-			tab_area.w = eatFirstInt(infile.val, ',');
-			tab_area.h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "tabs") {
-			tabs_count = eatFirstInt(infile.val, ',');
-			if (tabs_count < 1) tabs_count = 1;
-		}
-
-		if (infile.key == "id") {
-			id = eatFirstInt(infile.val, ',');
-			id_line = true;
-			if (id > 0) {
-				power_cell.push_back(Power_Menu_Cell());
-				slots.push_back(SDL_Rect());
-				power_cell.back().id = id;
+			if (infile.key == "tab_title") {
+				tab_titles.push_back(eatFirstString(infile.val, ','));
 			}
-		} else id_line = false;
+			else if (infile.key == "tab_tree") {
+				tree_image_files.push_back(eatFirstString(infile.val, ','));
+			}
+			else if (infile.key == "caption") {
+				title = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "unspent_points") {
+				unspent_points = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "close") {
+				close_pos.x = eatFirstInt(infile.val, ',');
+				close_pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "tab_area") {
+				tab_area.x = eatFirstInt(infile.val, ',');
+				tab_area.y = eatFirstInt(infile.val, ',');
+				tab_area.w = eatFirstInt(infile.val, ',');
+				tab_area.h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "tabs") {
+				tabs_count = eatFirstInt(infile.val, ',');
+				if (tabs_count < 1) tabs_count = 1;
+			}
 
-		if (id < 1) {
-			if (id_line) fprintf(stderr, "Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
-			continue;
+			if (infile.key == "id") {
+				id = eatFirstInt(infile.val, ',');
+				id_line = true;
+				if (id > 0) {
+					power_cell.push_back(Power_Menu_Cell());
+					slots.push_back(SDL_Rect());
+					power_cell.back().id = id;
+				}
+			}
+			else id_line = false;
+
+			if (id < 1) {
+				if (id_line) fprintf(stderr, "Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
+				continue;
+			}
+			if (id_line) continue;
+
+			if (infile.key == "tab") {
+				power_cell.back().tab = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "position") {
+				power_cell.back().pos.x = eatFirstInt(infile.val, ',');
+				power_cell.back().pos.y = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_physoff") {
+				power_cell.back().requires_physoff = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_physdef") {
+				power_cell.back().requires_physdef = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_mentoff") {
+				power_cell.back().requires_mentoff = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_mentdef") {
+				power_cell.back().requires_mentdef = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_defense") {
+				power_cell.back().requires_defense = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_offense") {
+				power_cell.back().requires_offense = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_physical") {
+				power_cell.back().requires_physical = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_mental") {
+				power_cell.back().requires_mental = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_point") {
+				if (infile.val == "true,")
+					power_cell.back().requires_point = true;
+			}
+			else if (infile.key == "requires_level") {
+				power_cell.back().requires_level = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "requires_power") {
+				power_cell.back().requires_power = eatFirstInt(infile.val, ',');
+			}
+
 		}
-		if (id_line) continue;
-
-		if (infile.key == "tab") {
-			power_cell.back().tab = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "position") {
-			power_cell.back().pos.x = eatFirstInt(infile.val, ',');
-			power_cell.back().pos.y = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_physoff") {
-			power_cell.back().requires_physoff = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_physdef") {
-			power_cell.back().requires_physdef = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_mentoff") {
-			power_cell.back().requires_mentoff = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_mentdef") {
-			power_cell.back().requires_mentdef = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_defense") {
-			power_cell.back().requires_defense = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_offense") {
-			power_cell.back().requires_offense = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_physical") {
-			power_cell.back().requires_physical = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_mental") {
-			power_cell.back().requires_mental = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_point") {
-			if (infile.val == "true,")
-				power_cell.back().requires_point = true;
-		} else if (infile.key == "requires_level") {
-			power_cell.back().requires_level = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "requires_power") {
-			power_cell.back().requires_power = eatFirstInt(infile.val, ',');
-		}
-
-	  }
-	  infile.close();
+		infile.close();
 	}
 
 	loadGraphics();
@@ -151,7 +170,8 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 		fprintf(stderr, "menu/powers.txt error: you don't have tabs, but tab_tree_image and tab_title counts are not 0\n");
 		SDL_Quit();
 		exit(1);
-	} else if((tabs_count > 1) && (tree_image_files.size() != (unsigned)tabs_count || tab_titles.size() != (unsigned)tabs_count)) {
+	}
+	else if((tabs_count > 1) && (tree_image_files.size() != (unsigned)tabs_count || tab_titles.size() != (unsigned)tabs_count)) {
 		fprintf(stderr, "menu/powers.txt error: tabs count, tab_tree_image and tab_name counts do not match\n");
 		SDL_Quit();
 		exit(1);
@@ -199,7 +219,8 @@ void MenuPowers::loadGraphics() {
 
 	if (tree_image_files.empty()) {
 		tree_surf.push_back(loadGraphicSurface("images/menus/powers_tree.png"));
-	} else {
+	}
+	else {
 		for (unsigned int i = 0; i < tree_image_files.size(); ++i)
 			tree_surf.push_back(loadGraphicSurface("images/menus/" + tree_image_files[i]));
 	}
@@ -236,15 +257,15 @@ bool MenuPowers::baseRequirementsMet(int power_index) {
 	int id = id_by_powerIndex(power_index);
 
 	if ((stats->physoff() >= power_cell[id].requires_physoff) &&
-		(stats->physdef() >= power_cell[id].requires_physdef) &&
-		(stats->mentoff() >= power_cell[id].requires_mentoff) &&
-		(stats->mentdef() >= power_cell[id].requires_mentdef) &&
-		(stats->get_defense() >= power_cell[id].requires_defense) &&
-		(stats->get_offense() >= power_cell[id].requires_offense) &&
-		(stats->get_physical() >= power_cell[id].requires_physical) &&
-		(stats->get_mental() >= power_cell[id].requires_mental) &&
-		(stats->level >= power_cell[id].requires_level) &&
-		 requirementsMet(power_cell[id].requires_power)) return true;
+			(stats->physdef() >= power_cell[id].requires_physdef) &&
+			(stats->mentoff() >= power_cell[id].requires_mentoff) &&
+			(stats->mentdef() >= power_cell[id].requires_mentdef) &&
+			(stats->get_defense() >= power_cell[id].requires_defense) &&
+			(stats->get_offense() >= power_cell[id].requires_offense) &&
+			(stats->get_physical() >= power_cell[id].requires_physical) &&
+			(stats->get_mental() >= power_cell[id].requires_mental) &&
+			(stats->level >= power_cell[id].requires_level) &&
+			requirementsMet(power_cell[id].requires_power)) return true;
 	return false;
 }
 
@@ -307,8 +328,9 @@ int MenuPowers::click(Point mouse) {
 				else return 0;
 			}
 		}
-	// if have don't have tabs
-	} else {
+		// if have don't have tabs
+	}
+	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i], mouse)) {
 				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
@@ -336,8 +358,9 @@ bool MenuPowers::unlockClick(Point mouse) {
 				return true;
 			}
 		}
-	// if have don't have tabs
-	} else {
+		// if have don't have tabs
+	}
+	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i], mouse)
 					&& (powerUnlockable(power_cell[i].id))
@@ -364,7 +387,8 @@ void MenuPowers::logic() {
 						power_cell[i].passive_on = false;
 						stats->refresh_stats = true;
 					}
-				} else if (baseRequirementsMet(power_cell[i].id) && !power_cell[i].passive_on) {
+				}
+				else if (baseRequirementsMet(power_cell[i].id) && !power_cell[i].passive_on) {
 					stats->powers_passive.push_back(power_cell[i].id);
 					power_cell[i].passive_on = true;
 					// for passives without special triggers, we need to trigger them here
@@ -374,7 +398,7 @@ void MenuPowers::logic() {
 			}
 		}
 		if (power_cell[i].requires_point &&
-			(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()))
+				(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()))
 			points_used++;
 	}
 	points_left = (stats->level * stats->power_points_per_level) - points_used;
@@ -413,7 +437,8 @@ void MenuPowers::render() {
 				renderPowers(active_tab);
 			}
 		}
-	} else {
+	}
+	else {
 		SDL_BlitSurface(tree_surf[0], &src, screen, &dest);
 		renderPowers(0);
 	}
@@ -462,118 +487,126 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 	TooltipData tip;
 
-		for (unsigned i=0; i<power_cell.size(); i++) {
+	for (unsigned i=0; i<power_cell.size(); i++) {
 
-			if ((tabs_count > 1) && (tabControl->getActiveTab() != power_cell[i].tab)) continue;
+		if ((tabs_count > 1) && (tabControl->getActiveTab() != power_cell[i].tab)) continue;
 
-			if (isWithin(slots[i], mouse)) {
-				tip.addText(powers->powers[power_cell[i].id].name);
-				if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
-				tip.addText(powers->powers[power_cell[i].id].description);
+		if (isWithin(slots[i], mouse)) {
+			tip.addText(powers->powers[power_cell[i].id].name);
+			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
+			tip.addText(powers->powers[power_cell[i].id].description);
 
-				if (powers->powers[power_cell[i].id].requires_physical_weapon)
-					tip.addText(msg->get("Requires a physical weapon"));
-				else if (powers->powers[power_cell[i].id].requires_mental_weapon)
-					tip.addText(msg->get("Requires a mental weapon"));
-				else if (powers->powers[power_cell[i].id].requires_offense_weapon)
-					tip.addText(msg->get("Requires an offense weapon"));
+			if (powers->powers[power_cell[i].id].requires_physical_weapon)
+				tip.addText(msg->get("Requires a physical weapon"));
+			else if (powers->powers[power_cell[i].id].requires_mental_weapon)
+				tip.addText(msg->get("Requires a mental weapon"));
+			else if (powers->powers[power_cell[i].id].requires_offense_weapon)
+				tip.addText(msg->get("Requires an offense weapon"));
 
 
-				// add requirement
-				if ((power_cell[i].requires_physoff > 0) && (stats->physoff() < power_cell[i].requires_physoff)) {
-					tip.addText(msg->get("Requires Physical Offense %d", power_cell[i].requires_physoff), color_penalty);
-				} else if((power_cell[i].requires_physoff > 0) && (stats->physoff() >= power_cell[i].requires_physoff)) {
-					tip.addText(msg->get("Requires Physical Offense %d", power_cell[i].requires_physoff));
-				}
-				if ((power_cell[i].requires_physdef > 0) && (stats->physdef() < power_cell[i].requires_physdef)) {
-					tip.addText(msg->get("Requires Physical Defense %d", power_cell[i].requires_physdef), color_penalty);
-				} else if ((power_cell[i].requires_physdef > 0) && (stats->physdef() >= power_cell[i].requires_physdef)) {
-					tip.addText(msg->get("Requires Physical Defense %d", power_cell[i].requires_physdef));
-				}
-				if ((power_cell[i].requires_mentoff > 0) && (stats->mentoff() < power_cell[i].requires_mentoff)) {
-					tip.addText(msg->get("Requires Mental Offense %d", power_cell[i].requires_mentoff), color_penalty);
-				} else if ((power_cell[i].requires_mentoff > 0) && (stats->mentoff() >= power_cell[i].requires_mentoff)) {
-					tip.addText(msg->get("Requires Mental Offense %d", power_cell[i].requires_mentoff));
-				}
-				if ((power_cell[i].requires_mentdef > 0) && (stats->mentdef() < power_cell[i].requires_mentdef)) {
-					tip.addText(msg->get("Requires Mental Defense %d", power_cell[i].requires_mentdef), color_penalty);
-				} else if ((power_cell[i].requires_mentdef > 0) && (stats->mentdef() >= power_cell[i].requires_mentdef)) {
-					tip.addText(msg->get("Requires Mental Defense %d", power_cell[i].requires_mentdef));
-				}
-				if ((power_cell[i].requires_offense > 0) && (stats->get_offense() < power_cell[i].requires_offense)) {
-					tip.addText(msg->get("Requires Offense %d", power_cell[i].requires_offense), color_penalty);
-				} else if ((power_cell[i].requires_offense > 0) && (stats->get_offense() >= power_cell[i].requires_offense)) {
-					tip.addText(msg->get("Requires Offense %d", power_cell[i].requires_offense));
-				}
-				if ((power_cell[i].requires_defense > 0) && (stats->get_defense() < power_cell[i].requires_defense)) {
-					tip.addText(msg->get("Requires Defense %d", power_cell[i].requires_defense), color_penalty);
-				} else if ((power_cell[i].requires_defense > 0) && (stats->get_defense() >= power_cell[i].requires_defense)) {
-					tip.addText(msg->get("Requires Defense %d", power_cell[i].requires_defense));
-				}
-				if ((power_cell[i].requires_physical > 0) && (stats->get_physical() < power_cell[i].requires_physical)) {
-					tip.addText(msg->get("Requires Physical %d", power_cell[i].requires_physical), color_penalty);
-				} else if ((power_cell[i].requires_physical > 0) && (stats->get_physical() >= power_cell[i].requires_physical)) {
-					tip.addText(msg->get("Requires Physical %d", power_cell[i].requires_physical));
-				}
-				if ((power_cell[i].requires_mental > 0) && (stats->get_mental() < power_cell[i].requires_mental)) {
-					tip.addText(msg->get("Requires Mental %d", power_cell[i].requires_mental), color_penalty);
-				} else if ((power_cell[i].requires_mental > 0) && (stats->get_mental() >= power_cell[i].requires_mental)) {
-					tip.addText(msg->get("Requires Mental %d", power_cell[i].requires_mental));
-				}
+			// add requirement
+			if ((power_cell[i].requires_physoff > 0) && (stats->physoff() < power_cell[i].requires_physoff)) {
+				tip.addText(msg->get("Requires Physical Offense %d", power_cell[i].requires_physoff), color_penalty);
+			}
+			else if((power_cell[i].requires_physoff > 0) && (stats->physoff() >= power_cell[i].requires_physoff)) {
+				tip.addText(msg->get("Requires Physical Offense %d", power_cell[i].requires_physoff));
+			}
+			if ((power_cell[i].requires_physdef > 0) && (stats->physdef() < power_cell[i].requires_physdef)) {
+				tip.addText(msg->get("Requires Physical Defense %d", power_cell[i].requires_physdef), color_penalty);
+			}
+			else if ((power_cell[i].requires_physdef > 0) && (stats->physdef() >= power_cell[i].requires_physdef)) {
+				tip.addText(msg->get("Requires Physical Defense %d", power_cell[i].requires_physdef));
+			}
+			if ((power_cell[i].requires_mentoff > 0) && (stats->mentoff() < power_cell[i].requires_mentoff)) {
+				tip.addText(msg->get("Requires Mental Offense %d", power_cell[i].requires_mentoff), color_penalty);
+			}
+			else if ((power_cell[i].requires_mentoff > 0) && (stats->mentoff() >= power_cell[i].requires_mentoff)) {
+				tip.addText(msg->get("Requires Mental Offense %d", power_cell[i].requires_mentoff));
+			}
+			if ((power_cell[i].requires_mentdef > 0) && (stats->mentdef() < power_cell[i].requires_mentdef)) {
+				tip.addText(msg->get("Requires Mental Defense %d", power_cell[i].requires_mentdef), color_penalty);
+			}
+			else if ((power_cell[i].requires_mentdef > 0) && (stats->mentdef() >= power_cell[i].requires_mentdef)) {
+				tip.addText(msg->get("Requires Mental Defense %d", power_cell[i].requires_mentdef));
+			}
+			if ((power_cell[i].requires_offense > 0) && (stats->get_offense() < power_cell[i].requires_offense)) {
+				tip.addText(msg->get("Requires Offense %d", power_cell[i].requires_offense), color_penalty);
+			}
+			else if ((power_cell[i].requires_offense > 0) && (stats->get_offense() >= power_cell[i].requires_offense)) {
+				tip.addText(msg->get("Requires Offense %d", power_cell[i].requires_offense));
+			}
+			if ((power_cell[i].requires_defense > 0) && (stats->get_defense() < power_cell[i].requires_defense)) {
+				tip.addText(msg->get("Requires Defense %d", power_cell[i].requires_defense), color_penalty);
+			}
+			else if ((power_cell[i].requires_defense > 0) && (stats->get_defense() >= power_cell[i].requires_defense)) {
+				tip.addText(msg->get("Requires Defense %d", power_cell[i].requires_defense));
+			}
+			if ((power_cell[i].requires_physical > 0) && (stats->get_physical() < power_cell[i].requires_physical)) {
+				tip.addText(msg->get("Requires Physical %d", power_cell[i].requires_physical), color_penalty);
+			}
+			else if ((power_cell[i].requires_physical > 0) && (stats->get_physical() >= power_cell[i].requires_physical)) {
+				tip.addText(msg->get("Requires Physical %d", power_cell[i].requires_physical));
+			}
+			if ((power_cell[i].requires_mental > 0) && (stats->get_mental() < power_cell[i].requires_mental)) {
+				tip.addText(msg->get("Requires Mental %d", power_cell[i].requires_mental), color_penalty);
+			}
+			else if ((power_cell[i].requires_mental > 0) && (stats->get_mental() >= power_cell[i].requires_mental)) {
+				tip.addText(msg->get("Requires Mental %d", power_cell[i].requires_mental));
+			}
 
-				// Draw required Level Tooltip
-				if ((power_cell[i].requires_level > 0) && stats->level < power_cell[i].requires_level) {
-					tip.addText(msg->get("Requires Level %d", power_cell[i].requires_level), color_penalty);
-				}
-				else if ((power_cell[i].requires_level > 0) && stats->level >= power_cell[i].requires_level) {
-					tip.addText(msg->get("Requires Level %d", power_cell[i].requires_level));
-				}
+			// Draw required Level Tooltip
+			if ((power_cell[i].requires_level > 0) && stats->level < power_cell[i].requires_level) {
+				tip.addText(msg->get("Requires Level %d", power_cell[i].requires_level), color_penalty);
+			}
+			else if ((power_cell[i].requires_level > 0) && stats->level >= power_cell[i].requires_level) {
+				tip.addText(msg->get("Requires Level %d", power_cell[i].requires_level));
+			}
 
-				// Draw required Skill Point Tooltip
-				if ((power_cell[i].requires_point) &&
+			// Draw required Skill Point Tooltip
+			if ((power_cell[i].requires_point) &&
 					!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) &&
 					(points_left < 1)) {
-						tip.addText(msg->get("Requires %d Skill Point", power_cell[i].requires_point), color_penalty);
-				}
-				else if ((power_cell[i].requires_point) &&
-					!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) &&
-					(points_left > 0)) {
-						tip.addText(msg->get("Requires %d Skill Point", power_cell[i].requires_point));
-				}
+				tip.addText(msg->get("Requires %d Skill Point", power_cell[i].requires_point), color_penalty);
+			}
+			else if ((power_cell[i].requires_point) &&
+					 !(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) &&
+					 (points_left > 0)) {
+				tip.addText(msg->get("Requires %d Skill Point", power_cell[i].requires_point));
+			}
 
-				// Draw unlock power Tooltip
-				if (power_cell[i].requires_point &&
+			// Draw unlock power Tooltip
+			if (power_cell[i].requires_point &&
 					!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) &&
 					(points_left > 0) &&
 					powerUnlockable(power_cell[i].id) && (points_left > 0)) {
-						tip.addText(msg->get("Click to Unlock"), color_bonus);
-				}
-
-
-				// Required Power Tooltip
-				if ((power_cell[i].requires_power != 0) && !(requirementsMet(power_cell[i].requires_power))) {
-					tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power].name), color_penalty);
-				}
-				else if ((power_cell[i].requires_power != 0) && (requirementsMet(power_cell[i].requires_power))) {
-					tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power].name));
-				}
-
-				// add mana cost
-				if (powers->powers[power_cell[i].id].requires_mp > 0) {
-					tip.addText(msg->get("Costs %d MP", powers->powers[power_cell[i].id].requires_mp));
-				}
-				// add health cost
-				if (powers->powers[power_cell[i].id].requires_hp > 0) {
-					tip.addText(msg->get("Costs %d HP", powers->powers[power_cell[i].id].requires_hp));
-				}
-				// add cooldown time
-				if (powers->powers[power_cell[i].id].cooldown > 0) {
-					tip.addText(msg->get("Cooldown: %d seconds", powers->powers[power_cell[i].id].cooldown / MAX_FRAMES_PER_SEC));
-				}
-
-				return tip;
+				tip.addText(msg->get("Click to Unlock"), color_bonus);
 			}
+
+
+			// Required Power Tooltip
+			if ((power_cell[i].requires_power != 0) && !(requirementsMet(power_cell[i].requires_power))) {
+				tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power].name), color_penalty);
+			}
+			else if ((power_cell[i].requires_power != 0) && (requirementsMet(power_cell[i].requires_power))) {
+				tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power].name));
+			}
+
+			// add mana cost
+			if (powers->powers[power_cell[i].id].requires_mp > 0) {
+				tip.addText(msg->get("Costs %d MP", powers->powers[power_cell[i].id].requires_mp));
+			}
+			// add health cost
+			if (powers->powers[power_cell[i].id].requires_hp > 0) {
+				tip.addText(msg->get("Costs %d HP", powers->powers[power_cell[i].id].requires_hp));
+			}
+			// add cooldown time
+			if (powers->powers[power_cell[i].id].cooldown > 0) {
+				tip.addText(msg->get("Cooldown: %d seconds", powers->powers[power_cell[i].id].cooldown / MAX_FRAMES_PER_SEC));
+			}
+
+			return tip;
 		}
+	}
 
 	return tip;
 }
@@ -600,13 +633,13 @@ bool MenuPowers::meetsUsageStats(unsigned powerid) {
 	if (id == -1) return true;
 
 	return stats->physoff() >= power_cell[id].requires_physoff
-		&& stats->physdef() >= power_cell[id].requires_physdef
-		&& stats->mentoff() >= power_cell[id].requires_mentoff
-		&& stats->mentdef() >= power_cell[id].requires_mentdef
-		&& stats->get_defense() >= power_cell[id].requires_defense
-		&& stats->get_offense() >= power_cell[id].requires_offense
-		&& stats->get_mental() >= power_cell[id].requires_mental
-		&& stats->get_physical() >= power_cell[id].requires_physical;
+		   && stats->physdef() >= power_cell[id].requires_physdef
+		   && stats->mentoff() >= power_cell[id].requires_mentoff
+		   && stats->mentdef() >= power_cell[id].requires_mentdef
+		   && stats->get_defense() >= power_cell[id].requires_defense
+		   && stats->get_offense() >= power_cell[id].requires_offense
+		   && stats->get_mental() >= power_cell[id].requires_mental
+		   && stats->get_physical() >= power_cell[id].requires_physical;
 }
 
 void MenuPowers::renderPowers(int tab_num) {

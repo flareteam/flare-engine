@@ -55,7 +55,7 @@ MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surfac
 
 	clear();
 
-	for (unsigned int i=0;i<16;i++) {
+	for (unsigned int i=0; i<16; i++) {
 		labels[i] = new WidgetLabel();
 	}
 
@@ -69,105 +69,123 @@ void MenuActionBar::update() {
 	FileParser infile;
 
 	if (infile.open(mods->locate("menus/actionbar.txt"))) {
-	  while (infile.next()) {
-		infile.val = infile.val + ',';
+		while (infile.next()) {
+			infile.val = infile.val + ',';
 
-		if (infile.key == "slot1") {
-			slots[0].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[0].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[0].w = eatFirstInt(infile.val, ',');
-			slots[0].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot2") {
-			slots[1].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[1].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[1].w = eatFirstInt(infile.val, ',');
-			slots[1].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot3") {
-			slots[2].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[2].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[2].w = eatFirstInt(infile.val, ',');
-			slots[2].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot4") {
-			slots[3].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[3].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[3].w = eatFirstInt(infile.val, ',');
-			slots[3].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot5") {
-			slots[4].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[4].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[4].w = eatFirstInt(infile.val, ',');
-			slots[4].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot6") {
-			slots[5].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[5].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[5].w = eatFirstInt(infile.val, ',');
-			slots[5].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot7") {
-			slots[6].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[6].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[6].w = eatFirstInt(infile.val, ',');
-			slots[6].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot8") {
-			slots[7].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[7].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[7].w = eatFirstInt(infile.val, ',');
-			slots[7].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot9") {
-			slots[8].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[8].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[8].w = eatFirstInt(infile.val, ',');
-			slots[8].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot10") {
-			slots[9].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[9].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[9].w = eatFirstInt(infile.val, ',');
-			slots[9].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot_M1") {
-			slots[10].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[10].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[10].w = eatFirstInt(infile.val, ',');
-			slots[10].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "slot_M2") {
-			slots[11].x = window_area.x+eatFirstInt(infile.val, ',');
-			slots[11].y = window_area.y+eatFirstInt(infile.val, ',');
-			slots[11].w = eatFirstInt(infile.val, ',');
-			slots[11].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "char_menu") {
-			menus[0].x = window_area.x+eatFirstInt(infile.val, ',');
-			menus[0].y = window_area.y+eatFirstInt(infile.val, ',');
-			menus[0].w = eatFirstInt(infile.val, ',');
-			menus[0].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "inv_menu") {
-			menus[1].x = window_area.x+eatFirstInt(infile.val, ',');
-			menus[1].y = window_area.y+eatFirstInt(infile.val, ',');
-			menus[1].w = eatFirstInt(infile.val, ',');
-			menus[1].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "powers_menu") {
-			menus[2].x = window_area.x+eatFirstInt(infile.val, ',');
-			menus[2].y = window_area.y+eatFirstInt(infile.val, ',');
-			menus[2].w = eatFirstInt(infile.val, ',');
-			menus[2].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "log_menu") {
-			menus[3].x = window_area.x+eatFirstInt(infile.val, ',');
-			menus[3].y = window_area.y+eatFirstInt(infile.val, ',');
-			menus[3].w = eatFirstInt(infile.val, ',');
-			menus[3].h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "numberArea") {
-			numberArea.x = window_area.x+eatFirstInt(infile.val, ',');
-			numberArea.w = eatFirstInt(infile.val, ',');
-			numberArea.h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "mouseArea") {
-			mouseArea.x = window_area.x+eatFirstInt(infile.val, ',');
-			mouseArea.w = eatFirstInt(infile.val, ',');
-			mouseArea.h = eatFirstInt(infile.val, ',');
-		} else if (infile.key == "menuArea") {
-			menuArea.x = window_area.x+eatFirstInt(infile.val, ',');
-			menuArea.w = eatFirstInt(infile.val, ',');
-			menuArea.h = eatFirstInt(infile.val, ',');
+			if (infile.key == "slot1") {
+				slots[0].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[0].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[0].w = eatFirstInt(infile.val, ',');
+				slots[0].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot2") {
+				slots[1].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[1].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[1].w = eatFirstInt(infile.val, ',');
+				slots[1].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot3") {
+				slots[2].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[2].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[2].w = eatFirstInt(infile.val, ',');
+				slots[2].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot4") {
+				slots[3].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[3].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[3].w = eatFirstInt(infile.val, ',');
+				slots[3].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot5") {
+				slots[4].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[4].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[4].w = eatFirstInt(infile.val, ',');
+				slots[4].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot6") {
+				slots[5].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[5].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[5].w = eatFirstInt(infile.val, ',');
+				slots[5].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot7") {
+				slots[6].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[6].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[6].w = eatFirstInt(infile.val, ',');
+				slots[6].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot8") {
+				slots[7].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[7].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[7].w = eatFirstInt(infile.val, ',');
+				slots[7].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot9") {
+				slots[8].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[8].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[8].w = eatFirstInt(infile.val, ',');
+				slots[8].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot10") {
+				slots[9].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[9].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[9].w = eatFirstInt(infile.val, ',');
+				slots[9].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot_M1") {
+				slots[10].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[10].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[10].w = eatFirstInt(infile.val, ',');
+				slots[10].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "slot_M2") {
+				slots[11].x = window_area.x+eatFirstInt(infile.val, ',');
+				slots[11].y = window_area.y+eatFirstInt(infile.val, ',');
+				slots[11].w = eatFirstInt(infile.val, ',');
+				slots[11].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "char_menu") {
+				menus[0].x = window_area.x+eatFirstInt(infile.val, ',');
+				menus[0].y = window_area.y+eatFirstInt(infile.val, ',');
+				menus[0].w = eatFirstInt(infile.val, ',');
+				menus[0].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "inv_menu") {
+				menus[1].x = window_area.x+eatFirstInt(infile.val, ',');
+				menus[1].y = window_area.y+eatFirstInt(infile.val, ',');
+				menus[1].w = eatFirstInt(infile.val, ',');
+				menus[1].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "powers_menu") {
+				menus[2].x = window_area.x+eatFirstInt(infile.val, ',');
+				menus[2].y = window_area.y+eatFirstInt(infile.val, ',');
+				menus[2].w = eatFirstInt(infile.val, ',');
+				menus[2].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "log_menu") {
+				menus[3].x = window_area.x+eatFirstInt(infile.val, ',');
+				menus[3].y = window_area.y+eatFirstInt(infile.val, ',');
+				menus[3].w = eatFirstInt(infile.val, ',');
+				menus[3].h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "numberArea") {
+				numberArea.x = window_area.x+eatFirstInt(infile.val, ',');
+				numberArea.w = eatFirstInt(infile.val, ',');
+				numberArea.h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "mouseArea") {
+				mouseArea.x = window_area.x+eatFirstInt(infile.val, ',');
+				mouseArea.w = eatFirstInt(infile.val, ',');
+				mouseArea.h = eatFirstInt(infile.val, ',');
+			}
+			else if (infile.key == "menuArea") {
+				menuArea.x = window_area.x+eatFirstInt(infile.val, ',');
+				menuArea.w = eatFirstInt(infile.val, ',');
+				menuArea.h = eatFirstInt(infile.val, ',');
+			}
+
 		}
-
-	  }
-	  infile.close();
+		infile.close();
 	}
 
 	// screen areas occupied by the three main sections
@@ -176,21 +194,21 @@ void MenuActionBar::update() {
 	// set keybinding labels
 	for (unsigned int i=0; i<10; i++) {
 		if (inpt->binding[i+6] < 8)
-			labels[i]->set(slots[i].x+slots[i].w, slots[i].y+slots[i].h-12, JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+6]-1], font->getColor("menu_normal"));
+			labels[i]->set(slots[i].x+slots[i].w, slots[i].y+slots[i].h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+6]-1], font->getColor("menu_normal"));
 		else
-			labels[i]->set(slots[i].x+slots[i].w, slots[i].y+slots[i].h-12, JUSTIFY_RIGHT, VALIGN_TOP, SDL_GetKeyName((SDLKey)inpt->binding[i+6]), font->getColor("menu_normal"));
+			labels[i]->set(slots[i].x+slots[i].w, slots[i].y+slots[i].h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, SDL_GetKeyName((SDLKey)inpt->binding[i+6]), font->getColor("menu_normal"));
 	}
 	for (unsigned int i=0; i<2; i++) {
 		if (inpt->binding[i+20] < 8)
-			labels[i+10]->set(slots[i+10].x+slots[i+10].w, slots[i+10].y+slots[i+10].h-12, JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+20]-1], font->getColor("menu_normal"));
+			labels[i+10]->set(slots[i+10].x+slots[i+10].w, slots[i+10].y+slots[i+10].h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+20]-1], font->getColor("menu_normal"));
 		else
-			labels[i+10]->set(slots[i+10].x+slots[i+10].w, slots[i+10].y+slots[i+10].h-12, JUSTIFY_RIGHT, VALIGN_TOP, SDL_GetKeyName((SDLKey)inpt->binding[i+20]), font->getColor("menu_normal"));
+			labels[i+10]->set(slots[i+10].x+slots[i+10].w, slots[i+10].y+slots[i+10].h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, SDL_GetKeyName((SDLKey)inpt->binding[i+20]), font->getColor("menu_normal"));
 	}
 	for (unsigned int i=0; i<4; i++) {
 		if (inpt->binding[i+16] < 8)
-			labels[i+12]->set(menus[i].x+menus[i].w, menus[i].y+menus[i].h-12, JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+16]-1], font->getColor("menu_normal"));
+			labels[i+12]->set(menus[i].x+menus[i].w, menus[i].y+menus[i].h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+16]-1], font->getColor("menu_normal"));
 		else
-			labels[i+12]->set(menus[i].x+menus[i].w, menus[i].y+menus[i].h-12, JUSTIFY_RIGHT, VALIGN_TOP, SDL_GetKeyName((SDLKey)inpt->binding[i+16]), font->getColor("menu_normal"));
+			labels[i+12]->set(menus[i].x+menus[i].w, menus[i].y+menus[i].h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, SDL_GetKeyName((SDLKey)inpt->binding[i+16]), font->getColor("menu_normal"));
 	}
 }
 
@@ -204,9 +222,9 @@ void MenuActionBar::clear() {
 		locked[i] = false;
 	}
 
-    // clear menu notifications
-    for (int i=0; i<4; i++)
-        requires_attention[i] = false;
+	// clear menu notifications
+	for (int i=0; i<4; i++)
+		requires_attention[i] = false;
 
 }
 
@@ -239,10 +257,10 @@ void MenuActionBar::renderIcon(int icon_id, int x, int y) {
 void MenuActionBar::renderAttention(int menu_id) {
 	SDL_Rect dest;
 
-    // x-value is 12 hotkeys and 4 empty slots over
+	// x-value is 12 hotkeys and 4 empty slots over
 	dest.x = window_area.x + (menu_id * ICON_SIZE) + ICON_SIZE*15;
 	dest.y = window_area.y+3;
-    dest.w = dest.h = ICON_SIZE;
+	dest.w = dest.h = ICON_SIZE;
 	SDL_BlitSurface(attention, NULL, screen, &dest);
 }
 
@@ -267,7 +285,7 @@ void MenuActionBar::render() {
 	// draw hotkeyed icons
 	src.x = src.y = 0;
 	src.w = src.h = dest.w = dest.h = ICON_SIZE;
-	dest.y = window_area.y+3;
+	dest.y = window_area.y + 3;
 	for (int i=0; i<12; i++) {
 
 		if (i<=9)
@@ -278,10 +296,10 @@ void MenuActionBar::render() {
 		if (hotkeys[i] != 0) {
 			const Power &power = powers->getPower(hotkeys[i]);
 			slot_enabled[i] = (hero->hero_cooldown[hotkeys[i]] == 0)
-						   && (slot_item_count[i] != 0)
-						   && !hero->effects.stun
-						   && hero->alive
-						   && hero->canUsePower(power, hotkeys[i]); //see if the slot should be greyed out
+							  && (slot_item_count[i] != 0)
+							  && !hero->effects.stun
+							  && hero->alive
+							  && hero->canUsePower(power, hotkeys[i]); //see if the slot should be greyed out
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
 			renderIcon(power.icon + icon_offset, dest.x, dest.y);
@@ -294,13 +312,13 @@ void MenuActionBar::render() {
 	renderCooldowns();
 	renderItemCounts();
 
-    // render log attention notifications
-    for (int i=0; i<4; i++)
-        if (requires_attention[i])
-            renderAttention(i);
+	// render log attention notifications
+	for (int i=0; i<4; i++)
+		if (requires_attention[i])
+			renderAttention(i);
 
 	// draw hotkey labels
-	for (int i=0; i<16;i++) {
+	for (int i=0; i<16; i++) {
 		labels[i]->render();
 	}
 
@@ -403,7 +421,8 @@ void MenuActionBar::drop(Point mouse, int power_index, bool rearranging) {
 					locked[drag_prev_slot] = !locked[drag_prev_slot];
 				}
 				hotkeys[drag_prev_slot] = hotkeys[i];
-			} else if (locked[i]) return;
+			}
+			else if (locked[i]) return;
 			hotkeys[i] = power_index;
 			return;
 		}
@@ -479,7 +498,7 @@ int MenuActionBar::checkDrag(Point mouse) {
 	}
 
 	return 0;
- }
+}
 
 /**
  * if clicking a menu, act as if the player pressed that menu's hotkey

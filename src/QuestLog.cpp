@@ -46,8 +46,7 @@ QuestLog::QuestLog(CampaignManager *_camp, MenuLog *_log) {
 	loadAll();
 }
 
-QuestLog::~QuestLog()
-{
+QuestLog::~QuestLog() {
 }
 
 /**

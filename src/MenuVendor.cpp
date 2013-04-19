@@ -44,8 +44,7 @@ MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
 	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
 	, buyback_stock()
-	, talker_visible(false)
-{
+	, talker_visible(false) {
 	background = loadGraphicSurface("images/menus/vendor.png");
 
 	tabControl->setTabTitle(VENDOR_BUY,msg->get("Inventory"));
@@ -62,14 +61,18 @@ MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
 			if(infile.key == "close") {
 				close_pos.x = eatFirstInt(infile.val,',');
 				close_pos.y = eatFirstInt(infile.val,',');
-			} else if(infile.key == "slots_area") {
+			}
+			else if(infile.key == "slots_area") {
 				slots_area.x = eatFirstInt(infile.val,',');
 				slots_area.y = eatFirstInt(infile.val,',');
-			} else if (infile.key == "vendor_cols"){
+			}
+			else if (infile.key == "vendor_cols") {
 				slots_cols = eatFirstInt(infile.val,',');
-			} else if (infile.key == "vendor_rows"){
+			}
+			else if (infile.key == "vendor_rows") {
 				slots_rows = eatFirstInt(infile.val,',');
-			} else if (infile.key == "caption"){
+			}
+			else if (infile.key == "caption") {
 				title =  eatLabelInfo(infile.val);
 			}
 		}

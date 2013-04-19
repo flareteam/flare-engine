@@ -137,7 +137,8 @@ void ItemStorage::add( ItemStack stack, int slot) {
 				// the proposed slot isn't available
 				slot = -1;
 			}
-		} else {
+		}
+		else {
 			// first search of stack to complete if the item is stackable
 			int i = 0;
 			while (max_quantity > 1 && slot == -1 && i < slot_number) {
@@ -197,8 +198,7 @@ bool ItemStorage::remove(int item) {
 	return false;
 }
 
-int compareItemStack (const void *a, const void *b)
-{
+int compareItemStack (const void *a, const void *b) {
 	const ItemStack *i1 = static_cast<const ItemStack*>(a);
 	const ItemStack *i2 = static_cast<const ItemStack*>(b);
 	if ((*i1) > (*i2))

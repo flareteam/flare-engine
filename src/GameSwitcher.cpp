@@ -66,7 +66,7 @@ void GameSwitcher::loadMusic() {
 		Mix_FreeMusic(music);
 		music = Mix_LoadMUS((mods->locate("music/title_theme.ogg")).c_str());
 		if (!music)
-		  printf("Mix_LoadMUS: %s\n", Mix_GetError());
+			printf("Mix_LoadMUS: %s\n", Mix_GetError());
 	}
 
 	if (music) {
@@ -121,7 +121,8 @@ void GameSwitcher::loadFPS() {
 				fps_position.x = eatFirstInt(infile.val,',');
 				fps_position.y = eatFirstInt(infile.val,',');
 				fps_corner = eatFirstString(infile.val,',');
-			} else if(infile.key == "color") {
+			}
+			else if(infile.key == "color") {
 				fps_color.r = eatFirstInt(infile.val,',');
 				fps_color.g = eatFirstInt(infile.val,',');
 				fps_color.b = eatFirstInt(infile.val,',');
@@ -137,11 +138,14 @@ void GameSwitcher::loadFPS() {
 
 	if (fps_corner == "top_left") {
 		// relative to {0,0}, so no changes
-	} else if (fps_corner == "top_right") {
+	}
+	else if (fps_corner == "top_right") {
 		fps_position.x += VIEW_W-w;
-	} else if (fps_corner == "bottom_left") {
+	}
+	else if (fps_corner == "bottom_left") {
 		fps_position.y += VIEW_H-h;
-	} else if (fps_corner == "bottom_right") {
+	}
+	else if (fps_corner == "bottom_right") {
 		fps_position.x += VIEW_W-w;
 		fps_position.y += VIEW_H-h;
 	}

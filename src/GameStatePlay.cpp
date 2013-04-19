@@ -86,8 +86,7 @@ GameStatePlay::GameStatePlay()
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
-	, game_slot(0)
-{
+	, game_slot(0) {
 	hasMusic = true;
 	// GameEngine scope variables
 
@@ -165,15 +164,15 @@ void GameStatePlay::checkEnemyFocus() {
  */
 bool GameStatePlay::restrictPowerUse() {
 	if(MOUSE_MOVE) {
-        if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
-            if(enemy == NULL) {
-                return true;
-            }
-            else{
-                if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
-                    return true;
-            }
-        }
+		if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
+			if(enemy == NULL) {
+				return true;
+			}
+			else {
+				if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
+					return true;
+			}
+		}
 	}
 
 
@@ -262,11 +261,12 @@ void GameStatePlay::checkTeleport() {
 		}
 
 		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-            if(enemies->enemies[i]->stats.hero_ally){
-                enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
-                enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
-            }
-        }
+			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
+                enemies->enemies[i]->map->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
+				enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
+				enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
+			}
+		}
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
@@ -294,7 +294,10 @@ void GameStatePlay::checkTeleport() {
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
 				stringstream filename;
-				filename << PATH_USER << "save" << game_slot << ".txt";
+				filename << PATH_USER;
+				if (GAME_PREFIX.length() > 0)
+					filename << GAME_PREFIX << "_";
+				filename << "save" << game_slot << ".txt";
 				if(remove(filename.str().c_str()) != 0)
 					perror("Error deleting save from path");
 
@@ -397,7 +400,7 @@ void GameStatePlay::loadTitles() {
 			else if (infile.key == "requires_status") titles.back().requires_status = infile.val;
 			else if (infile.key == "requires_not") titles.back().requires_not = infile.val;
 			else if (infile.key == "primary_stat") titles.back().primary_stat = infile.val;
-			else fprintf(stderr, "Unknown key value in title definitons: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
+			else fprintf(stderr, "GameStatePlay: Unknown key value in title definitons: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
 		}
 		infile.close();
 	}
@@ -419,31 +422,40 @@ void GameStatePlay::checkTitle() {
 			if (titles[i].primary_stat == "physical") {
 				if (pc->stats.get_physical() <= pc->stats.get_mental() || pc->stats.get_physical() <= pc->stats.get_offense() || pc->stats.get_physical() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "offense") {
+			}
+			else if (titles[i].primary_stat == "offense") {
 				if (pc->stats.get_offense() <= pc->stats.get_mental() || pc->stats.get_offense() <= pc->stats.get_physical() || pc->stats.get_offense() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "mental") {
+			}
+			else if (titles[i].primary_stat == "mental") {
 				if (pc->stats.get_mental() <= pc->stats.get_physical() || pc->stats.get_mental() <= pc->stats.get_offense() || pc->stats.get_mental() <= pc->stats.get_defense())
 					continue;
-			} else if (titles[i].primary_stat == "defense") {
+			}
+			else if (titles[i].primary_stat == "defense") {
 				if (pc->stats.get_defense() <= pc->stats.get_mental() || pc->stats.get_defense() <= pc->stats.get_offense() || pc->stats.get_defense() <= pc->stats.get_physical())
 					continue;
-			} else if (titles[i].primary_stat == "physoff") {
+			}
+			else if (titles[i].primary_stat == "physoff") {
 				if (pc->stats.physoff() <= pc->stats.physdef() || pc->stats.physoff() <= pc->stats.mentoff() || pc->stats.physoff() <= pc->stats.mentdef() || pc->stats.physoff() <= pc->stats.physment() || pc->stats.physoff() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "physment") {
+			}
+			else if (titles[i].primary_stat == "physment") {
 				if (pc->stats.physment() <= pc->stats.physdef() || pc->stats.physment() <= pc->stats.mentoff() || pc->stats.physment() <= pc->stats.mentdef() || pc->stats.physment() <= pc->stats.physoff() || pc->stats.physment() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "physdef") {
+			}
+			else if (titles[i].primary_stat == "physdef") {
 				if (pc->stats.physdef() <= pc->stats.physoff() || pc->stats.physdef() <= pc->stats.mentoff() || pc->stats.physdef() <= pc->stats.mentdef() || pc->stats.physdef() <= pc->stats.physment() || pc->stats.physdef() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "mentoff") {
+			}
+			else if (titles[i].primary_stat == "mentoff") {
 				if (pc->stats.mentoff() <= pc->stats.physdef() || pc->stats.mentoff() <= pc->stats.physoff() || pc->stats.mentoff() <= pc->stats.mentdef() || pc->stats.mentoff() <= pc->stats.physment() || pc->stats.mentoff() <= pc->stats.offdef())
 					continue;
-			} else if (titles[i].primary_stat == "offdef") {
+			}
+			else if (titles[i].primary_stat == "offdef") {
 				if (pc->stats.offdef() <= pc->stats.physdef() || pc->stats.offdef() <= pc->stats.mentoff() || pc->stats.offdef() <= pc->stats.mentdef() || pc->stats.offdef() <= pc->stats.physment() || pc->stats.offdef() <= pc->stats.physoff())
 					continue;
-			} else if (titles[i].primary_stat == "mentdef") {
+			}
+			else if (titles[i].primary_stat == "mentdef") {
 				if (pc->stats.mentdef() <= pc->stats.physdef() || pc->stats.mentdef() <= pc->stats.mentoff() || pc->stats.mentdef() <= pc->stats.physoff() || pc->stats.mentdef() <= pc->stats.physment() || pc->stats.mentdef() <= pc->stats.offdef())
 					continue;
 			}
@@ -587,8 +599,8 @@ void GameStatePlay::checkNPCInteraction() {
 	if (map->event_npc != "") {
 		npc_id = npcs->getID(map->event_npc);
 		if (npc_id != -1) {
-		  eventDialogOngoing = true;
-		  eventPendingDialog = true;
+			eventDialogOngoing = true;
+			eventPendingDialog = true;
 		}
 		map->event_npc = "";
 	}
@@ -613,7 +625,8 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->vendor->talker_visible = false;
 			menu->talker->vendor_visible = true;
 			npcs->npcs[npc_id]->playSound(NPC_VOX_INTRO);
-		} else if (menu->npc->dialog_selected) {
+		}
+		else if (menu->npc->dialog_selected) {
 			menu->vendor->talker_visible = true;
 			menu->talker->vendor_visible = false;
 		}
@@ -643,7 +656,8 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->talker->vendor_visible = false;
 			menu->vendor->talker_visible = false;
 
-		} else if (!menu->talker->vendor_visible && menu->vendor->talker_visible && npcs->npcs[npc_id]->talker) {
+		}
+		else if (!menu->talker->vendor_visible && menu->vendor->talker_visible && npcs->npcs[npc_id]->talker) {
 
 			// begin talking
 			if (npcs->npcs[npc_id]->vendor) {
@@ -696,7 +710,8 @@ void GameStatePlay::checkStash() {
 		menu->inv->visible = true;
 		menu->stash->visible = true;
 		map->stash = false;
-	} else {
+	}
+	else {
 		// Close stash if inventory is closed
 		if (!menu->inv->visible) menu->stash->visible = false;
 
@@ -715,35 +730,36 @@ void GameStatePlay::checkStash() {
 }
 
 void GameStatePlay::checkCutscene() {
-       if (!map->cutscene)
-               return;
+	if (!map->cutscene)
+		return;
 
-       GameStateCutscene *cutscene = new GameStateCutscene(NULL);
+	GameStateCutscene *cutscene = new GameStateCutscene(NULL);
 
-       if (!cutscene->load(map->cutscene_file)) {
-               delete cutscene;
-               map->cutscene = false;
-               return;
-       }
+	if (!cutscene->load(map->cutscene_file)) {
+		delete cutscene;
+		map->cutscene = false;
+		return;
+	}
 
-       // handle respawn point and set game play game_slot
-       cutscene->game_slot = game_slot;
+	// handle respawn point and set game play game_slot
+	cutscene->game_slot = game_slot;
 
-       if (map->teleportation) {
+	if (map->teleportation) {
 
-	       if (map->teleport_mapname != "")
-		       map->respawn_map = map->teleport_mapname;
+		if (map->teleport_mapname != "")
+			map->respawn_map = map->teleport_mapname;
 
-	       map->respawn_point = map->teleport_destination;
+		map->respawn_point = map->teleport_destination;
 
-       } else {
-	       map->respawn_point = pc->stats.pos;
-       }
+	}
+	else {
+		map->respawn_point = pc->stats.pos;
+	}
 
-       saveGame();
+	saveGame();
 
-       delete requestedGameState;
-       requestedGameState = cutscene;
+	delete requestedGameState;
+	requestedGameState = cutscene;
 }
 
 
@@ -830,7 +846,8 @@ void GameStatePlay::logic() {
 		if (pc->stats.manual_untransform && pc->untransform_power > 0) {
 			menu->act->hotkeys[count] = pc->untransform_power;
 			menu->act->locked[count] = true;
-		} else if (pc->stats.manual_untransform && pc->untransform_power == 0)
+		}
+		else if (pc->stats.manual_untransform && pc->untransform_power == 0)
 			fprintf(stderr, "Untransform power not found, you can't untransform manually\n");
 
 		// reapply equipment if the transformation allows it

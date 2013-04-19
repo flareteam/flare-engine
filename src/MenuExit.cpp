@@ -33,6 +33,8 @@ MenuExit::MenuExit() : Menu() {
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 
 	background = loadGraphicSurface("images/menus/confirm_bg.png");
+	tablist.add(buttonExit);
+	tablist.add(buttonClose);
 }
 
 void MenuExit::update() {
@@ -48,6 +50,8 @@ void MenuExit::update() {
 
 void MenuExit::logic() {
 	if (visible) {
+		tablist.logic();
+
 		if (buttonExit->checkClick()) {
 			exitClicked = true;
 		}

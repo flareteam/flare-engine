@@ -42,8 +42,8 @@ EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
 	, hero_alive(true)
 	, hero_stealth(0)
     , player_blocked(false)
-    , player_blocked_ticks(0)
-{
+    , player_blocked_ticks(0) {
+
 	hero_pos.x = hero_pos.y = -1;
 	handleNewMap();
 }
@@ -60,7 +60,8 @@ void EnemyManager::loadSounds(const string& type_id) {
 		sound_hit.push_back(snd->load("soundfx/enemies/" + type_id + "_hit.ogg", "EnemyManager physical hit sound"));
 		sound_die.push_back(snd->load("soundfx/enemies/" + type_id + "_die.ogg", "EnemyManager die sound"));
 		sound_critdie.push_back(snd->load("soundfx/enemies/" + type_id + "_critdie.ogg", "EnemyManager critdeath sound"));
-	} else {
+	}
+	else {
 		sound_phys.push_back(0);
 		sound_ment.push_back(0);
 		sound_hit.push_back(0);
@@ -119,7 +120,7 @@ void EnemyManager::handleNewMap () {
 		anim->decreaseCount(enemies[i]->animationSet->getName());
 		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != ENEMY_DEAD && enemies[i]->stats.cur_state != ENEMY_CRITDEAD)
 			allies.push(enemies[i]);
-		else{
+		else {
 			delete enemies[i];
 		}
 	}
@@ -160,7 +161,7 @@ void EnemyManager::handleNewMap () {
 		map->collider.block(me.pos.x, me.pos.y, false);
 	}
 
-	while (!allies.empty()){
+	while (!allies.empty()) {
 
 		Enemy *e = allies.front();
 		allies.pop();
@@ -225,7 +226,8 @@ void EnemyManager::handleSpawn() {
 		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally){
 			e->stats.pos.x = espawn.pos.x;
 			e->stats.pos.y = espawn.pos.y;
-		} else {
+		}
+		else {
 			e->stats.pos.x = hero_pos.x;
 			e->stats.pos.y = hero_pos.y;
 		}
@@ -241,7 +243,7 @@ void EnemyManager::handleSpawn() {
 		//at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
 		for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
 			if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && e->stats.hero_ally
-				&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
+					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
 
 				e->stats.powers_passive.push_back(pc->stats.powers_passive[i]);
 			}
@@ -249,7 +251,7 @@ void EnemyManager::handleSpawn() {
 
 		for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
 			if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && e->stats.hero_ally
-				&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
+					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->summoned_power_index)) {
 
 				e->stats.powers_passive.push_back(pc->stats.powers_list_items[i]);
 			}
@@ -261,15 +263,14 @@ void EnemyManager::handleSpawn() {
 	}
 }
 
-void EnemyManager::handlePartyBuff()
-{
+void EnemyManager::handlePartyBuff() {
 	while (!powers->party_buffs.empty()) {
 		int power_index = powers->party_buffs.front();
 		powers->party_buffs.pop();
 		Power *buff_power = &powers->powers[power_index];
 
 		for (unsigned int i=0; i < enemies.size(); i++) {
-			if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0 && (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->summoned_power_index)){
+			if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0 && (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->summoned_power_index)) {
 				powers->effect(&enemies[i]->stats,power_index,SOURCE_TYPE_HERO);
 			}
 		}
@@ -304,7 +305,8 @@ void EnemyManager::logic() {
 				cerr << "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '"
 					 << (*it)->stats.name << "', sfx_prefix: '"
 					 << (*it)->stats.sfx_prefix << "')" << endl;
-			} else {
+			}
+			else {
 				if ((*it)->sfx_phys)
 					snd->play(sound_phys[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
 				if ((*it)->sfx_ment)

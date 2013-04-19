@@ -52,8 +52,7 @@ GameStateConfig::GameStateConfig ()
 	, cancel_button(NULL)
 	, tip_buf()
 	, input_key(0)
-	, check_resolution(true)
-{
+	, check_resolution(true) {
 	background = loadGraphicSurface("images/menus/config.png");
 
 	init();
@@ -209,6 +208,40 @@ void GameStateConfig::init() {
 	old_view_h = VIEW_H;
 
 	resolution_confirm_ticks = 0;
+
+	// Set up tab list
+	tablist.add(ok_button);
+	tablist.add(defaults_button);
+	tablist.add(cancel_button);
+	tablist.add(fullscreen_cb);
+	tablist.add(hwsurface_cb);
+	tablist.add(doublebuf_cb);
+	tablist.add(change_gamma_cb);
+	tablist.add(gamma_sl);
+	tablist.add(texture_quality_cb);
+	tablist.add(animated_tiles_cb);
+	tablist.add(resolution_lstb);
+
+	tablist.add(music_volume_sl);
+	tablist.add(sound_volume_sl);
+
+	tablist.add(combat_text_cb);
+	tablist.add(show_fps_cb);
+	tablist.add(language_lstb);
+
+	tablist.add(enable_joystick_cb);
+	tablist.add(mouse_move_cb);
+	tablist.add(mouse_aim_cb);
+	tablist.add(joystick_device_lstb);
+
+	tablist.add(settings_key[0]);
+
+	tablist.add(inactivemods_lstb);
+	tablist.add(activemods_lstb);
+	tablist.add(inactivemods_activate_btn);
+	tablist.add(activemods_deactivate_btn);
+	tablist.add(activemods_shiftup_btn);
+	tablist.add(activemods_shiftdown_btn);
 }
 
 void GameStateConfig::readConfig () {
@@ -592,16 +625,16 @@ void GameStateConfig::readConfig () {
 			}
 
 			if (setting_num > -1 && setting_num < 25) {
-					//keybindings
-					settings_lb[setting_num]->setX(x1);
-					settings_lb[setting_num]->setY(y1);
-					settings_key[setting_num]->pos.x = x2;
-					settings_key[setting_num]->pos.y = y2;
+				//keybindings
+				settings_lb[setting_num]->setX(x1);
+				settings_lb[setting_num]->setY(y1);
+				settings_key[setting_num]->pos.x = x2;
+				settings_key[setting_num]->pos.y = y2;
 			}
 
-		  }
-		  infile.close();
 		}
+		infile.close();
+	}
 
 	// Load the MenuConfirm positions and alignments from menus/menus.txt
 	if (infile.open(mods->locate("menus/menus.txt"))) {
@@ -665,7 +698,8 @@ void GameStateConfig::update () {
 		Mix_VolumeMusic(MUSIC_VOLUME);
 		sound_volume_sl->set(0,128,SOUND_VOLUME);
 		Mix_Volume(-1, SOUND_VOLUME);
-	} else {
+	}
+	else {
 		music_volume_sl->set(0,128,0);
 		sound_volume_sl->set(0,128,0);
 	}
@@ -685,6 +719,7 @@ void GameStateConfig::update () {
 	else {
 		change_gamma_cb->unCheck();
 		GAMMA = 1.0;
+		gamma_sl->enabled = false;
 	}
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
 	SDL_SetGamma(GAMMA,GAMMA,GAMMA);
@@ -728,7 +763,8 @@ void GameStateConfig::update () {
 	for (unsigned int i = 0; i < 25; i++) {
 		if (inpt->binding[i] < 8) {
 			settings_key[i]->label = inpt->mouse_button[inpt->binding[i]-1];
-		} else {
+		}
+		else {
 			settings_key[i]->label = SDL_GetKeyName((SDLKey)inpt->binding[i]);
 		}
 		settings_key[i]->refresh();
@@ -736,7 +772,8 @@ void GameStateConfig::update () {
 	for (unsigned int i = 25; i < 50; i++) {
 		if (inpt->binding_alt[i-25] < 8) {
 			settings_key[i]->label = inpt->mouse_button[inpt->binding_alt[i-25]-1];
-		} else {
+		}
+		else {
 			settings_key[i]->label = SDL_GetKeyName((SDLKey)inpt->binding_alt[i-25]);
 		}
 		settings_key[i]->refresh();
@@ -744,8 +781,33 @@ void GameStateConfig::update () {
 	input_scrollbox->refresh();
 }
 
-void GameStateConfig::logic ()
-{
+void GameStateConfig::logic () {
+	// Allow configs to be navigateable via left/right keys
+	if (inpt->pressing[LEFT] && !inpt->lock[LEFT] && (ok_button->in_focus ||
+			music_volume_sl->in_focus ||
+			combat_text_cb->in_focus ||
+			enable_joystick_cb->in_focus ||
+			settings_key[0]->in_focus ||
+			inactivemods_lstb->in_focus)) {
+		int newTab = tabControl->getActiveTab() - 1;
+		newTab = (newTab < 0) ? tabControl->getTabsAmount() - 1 : newTab;
+		tabControl->setActiveTab(newTab);
+	}
+
+	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && (resolution_lstb->in_focus ||
+			sound_volume_sl->in_focus ||
+			language_lstb->in_focus ||
+			joystick_device_lstb->in_focus ||
+			settings_key[0]->in_focus ||
+			activemods_shiftdown_btn->in_focus)) {
+		int newTab = tabControl->getActiveTab() + 1;
+		newTab = (newTab == tabControl->getTabsAmount()) ? 0 : newTab;
+		tabControl->setActiveTab(newTab);
+	}
+	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && cancel_button->in_focus) {
+		tabControl->setActiveTab(0);
+	}
+
 	check_resolution = true;
 
 	std::string resolution_value;
@@ -783,7 +845,8 @@ void GameStateConfig::logic ()
 			saveSettings();
 			delete requestedGameState;
 			requestedGameState = new GameStateTitle();
-		} else if (resolution_confirm->cancelClicked || resolution_confirm_ticks == 0) {
+		}
+		else if (resolution_confirm->cancelClicked || resolution_confirm_ticks == 0) {
 			applyVideoSettings(old_view_w, old_view_h);
 			saveSettings();
 			delete requestedGameState;
@@ -793,6 +856,7 @@ void GameStateConfig::logic ()
 
 	if (!input_confirm->visible && !defaults_confirm->visible && !resolution_confirm->visible) {
 		tabControl->logic();
+		tablist.logic();
 
 		// Ok/Cancel Buttons
 		if (ok_button->checkClick()) {
@@ -816,14 +880,18 @@ void GameStateConfig::logic ()
 				resolution_confirm->align();
 				resolution_confirm->update();
 				resolution_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
-			} else {
+			}
+			else {
 				saveSettings();
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
 			}
-		} else if (defaults_button->checkClick()) {
+		}
+		else if (defaults_button->checkClick()) {
 			defaults_confirm->visible = true;
-		} else if (cancel_button->checkClick()) {
+		}
+		else if (cancel_button->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+			inpt->lock[CANCEL] = true;
 			check_resolution = false;
 			loadSettings();
 			loadMiscSettings();
@@ -843,32 +911,44 @@ void GameStateConfig::logic ()
 		if (fullscreen_cb->checkClick()) {
 			if (fullscreen_cb->isChecked()) FULLSCREEN=true;
 			else FULLSCREEN=false;
-		} else if (hwsurface_cb->checkClick()) {
+		}
+		else if (hwsurface_cb->checkClick()) {
 			if (hwsurface_cb->isChecked()) HWSURFACE=true;
 			else HWSURFACE=false;
-		} else if (doublebuf_cb->checkClick()) {
+		}
+		else if (doublebuf_cb->checkClick()) {
 			if (doublebuf_cb->isChecked()) DOUBLEBUF=true;
 			else DOUBLEBUF=false;
-		} else if (texture_quality_cb->checkClick()) {
+		}
+		else if (texture_quality_cb->checkClick()) {
 			if (texture_quality_cb->isChecked()) TEXTURE_QUALITY=true;
 			else TEXTURE_QUALITY=false;
-		} else if (change_gamma_cb->checkClick()) {
-			if (change_gamma_cb->isChecked()) CHANGE_GAMMA=true;
+		}
+		else if (change_gamma_cb->checkClick()) {
+			if (change_gamma_cb->isChecked()) {
+				CHANGE_GAMMA=true;
+				gamma_sl->enabled = true;
+			}
 			else {
 				CHANGE_GAMMA=false;
 				GAMMA = 1.0;
+				gamma_sl->enabled = false;
 				gamma_sl->set(5,20,(int)(GAMMA*10.0));
 				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
 			}
-		} else if (animated_tiles_cb->checkClick()) {
+		}
+		else if (animated_tiles_cb->checkClick()) {
 			if (animated_tiles_cb->isChecked()) ANIMATED_TILES=true;
 			else ANIMATED_TILES=false;
-		} else if (resolution_lstb->checkClick()) {
+		}
+		else if (resolution_lstb->checkClick()) {
 			; // nothing to do here: resolution value changes next frame.
-		} else if (CHANGE_GAMMA) {
+		}
+		else if (CHANGE_GAMMA) {
+			gamma_sl->enabled = true;
 			if (gamma_sl->checkClick()) {
-					GAMMA=(gamma_sl->getValue())*0.1f;
-					SDL_SetGamma(GAMMA,GAMMA,GAMMA);
+				GAMMA=(gamma_sl->getValue())*0.1f;
+				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
 			}
 		}
 	}
@@ -880,7 +960,8 @@ void GameStateConfig::logic ()
 					reload_music = true;
 				MUSIC_VOLUME=music_volume_sl->getValue();
 				Mix_VolumeMusic(MUSIC_VOLUME);
-			} else if (sound_volume_sl->checkClick()) {
+			}
+			else if (sound_volume_sl->checkClick()) {
 				SOUND_VOLUME=sound_volume_sl->getValue();
 				Mix_Volume(-1, SOUND_VOLUME);
 			}
@@ -891,11 +972,13 @@ void GameStateConfig::logic ()
 		if (combat_text_cb->checkClick()) {
 			if (combat_text_cb->isChecked()) COMBAT_TEXT=true;
 			else COMBAT_TEXT=false;
-		} else if (language_lstb->checkClick()) {
+		}
+		else if (language_lstb->checkClick()) {
 			LANGUAGE = language_ISO[language_lstb->getSelected()];
 			delete msg;
 			msg = new MessageEngine();
-		} else if (show_fps_cb->checkClick()) {
+		}
+		else if (show_fps_cb->checkClick()) {
 			if (show_fps_cb->isChecked()) SHOW_FPS=true;
 			else SHOW_FPS=false;
 		}
@@ -905,10 +988,12 @@ void GameStateConfig::logic ()
 		if (mouse_move_cb->checkClick()) {
 			if (mouse_move_cb->isChecked()) MOUSE_MOVE=true;
 			else MOUSE_MOVE=false;
-		} else if (mouse_aim_cb->checkClick()) {
+		}
+		else if (mouse_aim_cb->checkClick()) {
 			if (mouse_aim_cb->isChecked()) MOUSE_AIM=true;
 			else MOUSE_AIM=false;
-		} else if (enable_joystick_cb->checkClick()) {
+		}
+		else if (enable_joystick_cb->checkClick()) {
 			if (enable_joystick_cb->isChecked()) {
 				ENABLE_JOYSTICK=true;
 				inpt->mouse_emulation = true;
@@ -918,14 +1003,16 @@ void GameStateConfig::logic ()
 					joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 					joystick_device_lstb->selected[JOYSTICK_DEVICE] = true;
 				}
-			} else {
+			}
+			else {
 				ENABLE_JOYSTICK=false;
 				inpt->mouse_emulation = false;
 				for (int i=0; i<joystick_device_lstb->getSize(); i++)
 					joystick_device_lstb->selected[i] = false;
 			}
 			if (SDL_NumJoysticks() > 0) joystick_device_lstb->refresh();
-		} else if (joystick_device_lstb->checkClick()) {
+		}
+		else if (joystick_device_lstb->checkClick()) {
 			JOYSTICK_DEVICE = joystick_device_lstb->getSelected();
 			if (JOYSTICK_DEVICE != -1) {
 				enable_joystick_cb->Check();
@@ -935,7 +1022,8 @@ void GameStateConfig::logic ()
 					SDL_JoystickClose(joy);
 					joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 				}
-			} else {
+			}
+			else {
 				enable_joystick_cb->unCheck();
 				ENABLE_JOYSTICK = false;
 				inpt->mouse_emulation = false;
@@ -947,7 +1035,8 @@ void GameStateConfig::logic ()
 		if (input_confirm->visible) {
 			input_confirm->logic();
 			scanKey(input_key);
-		} else {
+		}
+		else {
 			input_scrollbox->logic();
 			if (isWithin(input_scrollbox->pos,inpt->mouse)) {
 				for (unsigned int i = 0; i < 50; i++) {
@@ -978,22 +1067,26 @@ void GameStateConfig::logic ()
 	else if (active_tab == 5 && !defaults_confirm->visible) {
 		if (activemods_lstb->checkClick()) {
 			//do nothing
-		} else if (inactivemods_lstb->checkClick()) {
+		}
+		else if (inactivemods_lstb->checkClick()) {
 			//do nothing
-		} else if (activemods_shiftup_btn->checkClick()) {
+		}
+		else if (activemods_shiftup_btn->checkClick()) {
 			activemods_lstb->shiftUp();
-		} else if (activemods_shiftdown_btn->checkClick()) {
+		}
+		else if (activemods_shiftdown_btn->checkClick()) {
 			activemods_lstb->shiftDown();
-		} else if (activemods_deactivate_btn->checkClick()) {
+		}
+		else if (activemods_deactivate_btn->checkClick()) {
 			disableMods();
-		} else if (inactivemods_activate_btn->checkClick()) {
+		}
+		else if (inactivemods_activate_btn->checkClick()) {
 			enableMods();
 		}
 	}
 }
 
-void GameStateConfig::render ()
-{
+void GameStateConfig::render () {
 	if (resolution_confirm->visible) {
 		resolution_confirm->render();
 		return;
@@ -1030,7 +1123,7 @@ void GameStateConfig::render ()
 	}
 
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
-		 if (optiontab[i] == active_tab) child_widget[i]->render();
+		if (optiontab[i] == active_tab) child_widget[i]->render();
 	}
 
 	if (input_confirm->visible) input_confirm->render();
@@ -1056,8 +1149,7 @@ void GameStateConfig::render ()
 
 }
 
-int GameStateConfig::getVideoModes()
-{
+int GameStateConfig::getVideoModes() {
 	int w,h;
 	if (MIN_VIEW_W != -1) w = MIN_VIEW_W;
 	else w = 640;
@@ -1161,32 +1253,30 @@ int GameStateConfig::getVideoModes()
 	return modes;
 }
 
-bool GameStateConfig::getLanguagesList()
-{
+bool GameStateConfig::getLanguagesList() {
 	FileParser infile;
 	if (infile.open(mods->locate("engine/languages.txt"))) {
 		unsigned int i=0;
 		while (infile.next()) {
-			   language_ISO[i] = infile.key;
-			   language_full[i] = infile.nextValue();
-			   i += 1;
-			}
-			infile.close();
+			language_ISO[i] = infile.key;
+			language_full[i] = infile.nextValue();
+			i += 1;
 		}
+		infile.close();
+	}
 
 	return true;
 }
 
-int GameStateConfig::getLanguagesNumber()
-{
+int GameStateConfig::getLanguagesNumber() {
 	int languages_num = 0;
 	FileParser infile;
 	if (infile.open(mods->locate("engine/languages.txt"))) {
 		while (infile.next()) {
-			   languages_num += 1;
-			}
-			infile.close();
+			languages_num += 1;
 		}
+		infile.close();
+	}
 
 	return languages_num;
 }
@@ -1215,7 +1305,8 @@ bool GameStateConfig::applyVideoSettings(int width, int height) {
 		setupSDLVideoMode(VIEW_W, VIEW_H);
 		return false;
 
-	} else {
+	}
+	else {
 
 		// If the new settings succeed, adjust the view area
 		VIEW_W = width;
@@ -1287,30 +1378,29 @@ bool GameStateConfig::setMods() {
  * Scan key binding
  */
 void GameStateConfig::scanKey(int button) {
-  if (input_confirm->visible) {
-	if (inpt->last_button != -1 && inpt->last_button < 8) {
-		if (button < 25) inpt->binding[button] = inpt->last_button;
-		else inpt->binding_alt[button-25] = inpt->last_button;
+	if (input_confirm->visible) {
+		if (inpt->last_button != -1 && inpt->last_button < 8) {
+			if (button < 25) inpt->binding[button] = inpt->last_button;
+			else inpt->binding_alt[button-25] = inpt->last_button;
 
-		settings_key[button]->label = inpt->mouse_button[inpt->last_button-1];
-		input_confirm->visible = false;
-		settings_key[button]->refresh();
-		return;
-	}
-	if (inpt->last_key != -1) {
-		if (button < 25) inpt->binding[button] = inpt->last_key;
-		else inpt->binding_alt[button-25] = inpt->last_key;
+			settings_key[button]->label = inpt->mouse_button[inpt->last_button-1];
+			input_confirm->visible = false;
+			settings_key[button]->refresh();
+			return;
+		}
+		if (inpt->last_key != -1) {
+			if (button < 25) inpt->binding[button] = inpt->last_key;
+			else inpt->binding_alt[button-25] = inpt->last_key;
 
-		settings_key[button]->label = SDL_GetKeyName((SDLKey)inpt->last_key);
-		input_confirm->visible = false;
-		settings_key[button]->refresh();
-		return;
+			settings_key[button]->label = SDL_GetKeyName((SDLKey)inpt->last_key);
+			input_confirm->visible = false;
+			settings_key[button]->refresh();
+			return;
+		}
 	}
-  }
 }
 
-GameStateConfig::~GameStateConfig()
-{
+GameStateConfig::~GameStateConfig() {
 	tip_buf.clear();
 	delete tip;
 	delete tabControl;
@@ -1324,17 +1414,16 @@ GameStateConfig::~GameStateConfig()
 
 	SDL_FreeSurface(background);
 
-	for (std::vector<Widget*>::iterator iter = child_widget.begin(); iter != child_widget.end(); ++iter)
-	{
+	for (std::vector<Widget*>::iterator iter = child_widget.begin(); iter != child_widget.end(); ++iter) {
 		delete (*iter);
 	}
 	child_widget.clear();
 
 	for (unsigned int i = 0; i < 25; i++) {
-		 delete settings_lb[i];
+		delete settings_lb[i];
 	}
 	for (unsigned int i = 0; i < 50; i++) {
-		 delete settings_key[i];
+		delete settings_key[i];
 	}
 
 	language_ISO.clear();

@@ -107,8 +107,7 @@ static void init() {
 	else {
 		printf("No joysticks were found.\n");
 	}
-	for(int i = 0; i < SDL_NumJoysticks(); i++)
-	{
+	for(int i = 0; i < SDL_NumJoysticks(); i++) {
 		printf("  Joy %d) %s\n", i, SDL_JoystickName(i));
 	}
 	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
@@ -175,8 +174,7 @@ static void cleanup() {
 	SDL_Quit();
 }
 
-string parseArg(const string &arg)
-{
+string parseArg(const string &arg) {
 	string result = "";
 
 	// arguments must start with '--'
@@ -190,8 +188,7 @@ string parseArg(const string &arg)
 	return result;
 }
 
-string parseArgValue(const string &arg)
-{
+string parseArgValue(const string &arg) {
 	string result = "";
 	bool found_equals = false;
 
@@ -205,17 +202,18 @@ string parseArgValue(const string &arg)
 	return result;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	bool debug_event = false;
 
 	for (int i = 1 ; i < argc; i++) {
 		string arg = string(argv[i]);
-		if (parseArg(arg) == "debug_event") {
+		if (parseArg(arg) == "debug-event") {
 			debug_event = true;
-		} else if (parseArg(arg) == "game") {
+		}
+		else if (parseArg(arg) == "game") {
 			GAME_FOLDER = parseArgValue(arg);
-		} else if (parseArg(arg) == "data_path") {
+		}
+		else if (parseArg(arg) == "data-path") {
 			CUSTOM_PATH_DATA = parseArgValue(arg);
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";

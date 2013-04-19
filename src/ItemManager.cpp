@@ -43,8 +43,7 @@ using namespace std;
  * Resizes vector vec, so it can fit index id.
  */
 template <typename Ty_>
-static inline void ensureFitsId(vector<Ty_>& vec, int id)
-{
+static inline void ensureFitsId(vector<Ty_>& vec, int id) {
 	// id's are always greater or equal 1;
 	if (id < 1) return;
 
@@ -61,8 +60,7 @@ static inline void ensureFitsId(vector<Ty_>& vec, int id)
  * It is sometimes also called "swap trick".
  */
 template <typename Ty_>
-static inline void shrinkVecToFit(std::vector<Ty_>& vec)
-{
+static inline void shrinkVecToFit(std::vector<Ty_>& vec) {
 	if (vec.capacity() != vec.size())
 		std::vector<Ty_>(vec).swap(vec);
 }
@@ -75,8 +73,7 @@ ItemManager::ItemManager()
 	, color_bonus(font->getColor("item_bonus"))
 	, color_penalty(font->getColor("item_penalty"))
 	, color_requirements_not_met(font->getColor("requirements_not_met"))
-	, color_flavor(font->getColor("item_flavor"))
-{
+	, color_flavor(font->getColor("item_flavor")) {
 	// NB: 20 is arbitrary picked number, but it looks like good start.
 	items.reserve(20);
 	item_sets.reserve(5);
@@ -166,7 +163,8 @@ void ItemManager::load(const string& filename) {
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(items, id+1);
-		} else id_line = false;
+		}
+		else id_line = false;
 
 		if (id < 1) {
 			if (id_line) fprintf(stderr, "Item index out of bounds 1-%d, skipping\n", INT_MAX);
@@ -194,7 +192,7 @@ void ItemManager::load(const string& filename) {
 				items[id].quality = ITEM_QUALITY_EPIC;
 		}
 		else if (infile.key == "item_type") {
-				items[id].type = infile.val;
+			items[id].type = infile.val;
 		}
 		else if (infile.key == "dmg_melee") {
 			items[id].dmg_melee_min = toInt(infile.nextValue());
@@ -335,7 +333,8 @@ void ItemManager::loadSets(const string& filename) {
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(item_sets, id+1);
-		} else id_line = false;
+		}
+		else id_line = false;
 
 		if (id < 1) {
 			if (id_line) fprintf(stderr, "Item set index out of bounds 1-%d, skipping\n", INT_MAX);
@@ -355,7 +354,8 @@ void ItemManager::loadSets(const string& filename) {
 				if (temp_id > 0 && temp_id < static_cast<int>(items.size())) {
 					items[temp_id].set = id;
 					item_sets[id].items.push_back(temp_id);
-				} else {
+				}
+				else {
 					const int maxsize = static_cast<int>(items.size()-1);
 					const char* cname = item_sets[id].name.c_str();
 					fprintf(stderr, "Item index inside item set %s definition out of bounds 1-%d, skipping item\n", cname, maxsize);
@@ -382,8 +382,7 @@ void ItemManager::loadSets(const string& filename) {
 /**
  * Icon sets
  */
-void ItemManager::loadIcons()
-{
+void ItemManager::loadIcons() {
 	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
 }
 
@@ -418,7 +417,7 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 }
 
 void ItemManager::playSound(int item, Point pos) {
-  snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+	snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {
@@ -445,7 +444,8 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	// name
 	if (stack.quantity > 1) {
 		ss << stack.quantity << " " << items[stack.item].name;
-	} else {
+	}
+	else {
 		ss << items[stack.item].name;
 	}
 	tip.addText(ss.str(), color);
@@ -525,18 +525,19 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 			modifier = msg->get("%d%% Speed", items[item].bonus_val[bonus_counter]);
 			if (items[item].bonus_val[bonus_counter] >= 100) color = color_bonus;
 			else color = color_penalty;
-		} else {
+		}
+		else {
 			if (items[item].bonus_val[bonus_counter] > 0) {
 				modifier = msg->get("Increases %s by %d",
-						items[item].bonus_val[bonus_counter],
-						msg->get(items[item].bonus_stat[bonus_counter]));
+									items[item].bonus_val[bonus_counter],
+									msg->get(items[item].bonus_stat[bonus_counter]));
 
 				color = color_bonus;
 			}
 			else {
 				modifier = msg->get("Decreases %s by %d",
-						items[item].bonus_val[bonus_counter],
-						msg->get(items[item].bonus_stat[bonus_counter]));
+									items[item].bonus_val[bonus_counter],
+									msg->get(items[item].bonus_stat[bonus_counter]));
 
 				color = color_penalty;
 			}
@@ -591,7 +592,8 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 				tip.addText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
 			else
 				tip.addText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
-		} else if (context == VENDOR_SELL) {
+		}
+		else if (context == VENDOR_SELL) {
 			price_per_unit = items[item].getSellPrice();
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
@@ -599,7 +601,8 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 				tip.addText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
 			else
 				tip.addText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
-		} else if (context == PLAYER_INV) {
+		}
+		else if (context == PLAYER_INV) {
 			price_per_unit = items[item].getSellPrice();
 			if (price_per_unit == 0) price_per_unit = 1;
 			if (items[item].max_quantity <= 1)
@@ -610,23 +613,23 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	}
 
 	if (items[item].set > 0) {
-			// item set bonuses
-			ItemSet set = item_sets[items[item].set];
-			bonus_counter = 0;
-			modifier = "";
+		// item set bonuses
+		ItemSet set = item_sets[items[item].set];
+		bonus_counter = 0;
+		modifier = "";
 
-			tip.addText("\n" + msg->get("Set: ") + msg->get(item_sets[items[item].set].name), set.color);
+		tip.addText("\n" + msg->get("Set: ") + msg->get(item_sets[items[item].set].name), set.color);
 
-			while (bonus_counter < set.bonus.size() && set.bonus[bonus_counter].bonus_stat != "") {
-				if (set.bonus[bonus_counter].bonus_val > 0) {
-					modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Increases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
-				}
-				else {
-					modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Decreases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
-				}
-				tip.addText(modifier, set.color);
-				bonus_counter++;
+		while (bonus_counter < set.bonus.size() && set.bonus[bonus_counter].bonus_stat != "") {
+			if (set.bonus[bonus_counter].bonus_val > 0) {
+				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Increases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
 			}
+			else {
+				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Decreases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
+			}
+			tip.addText(modifier, set.color);
+			bonus_counter++;
+		}
 	}
 
 	return tip;
@@ -643,10 +646,12 @@ bool ItemStack::operator > (const ItemStack &param) const {
 	if (item == 0 && param.item > 0) {
 		// Make the empty slots the last while sorting
 		return true;
-	} else if (item > 0 && param.item == 0) {
+	}
+	else if (item > 0 && param.item == 0) {
 		// Make the empty slots the last while sorting
 		return false;
-	} else {
+	}
+	else {
 		return item > param.item;
 	}
 }

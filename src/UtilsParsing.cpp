@@ -80,7 +80,7 @@ int parse_duration(const std::string& s) {
 	if (suffix == "s")
 		val *= MAX_FRAMES_PER_SEC;
 	else if (suffix == "ms")
-		val = (val/1000.0f)*MAX_FRAMES_PER_SEC;
+		val = (val*MAX_FRAMES_PER_SEC) / 1000;
 
 	return val;
 }
@@ -171,23 +171,32 @@ bool tryParseValue(const type_info & type, const std::string & value, void * out
 	// TODO: add additional type parsing
 	if (type == typeid(bool)) {
 		stream>>(bool&)*((bool*)output);
-	} else if (type == typeid(int)) {
+	}
+	else if (type == typeid(int)) {
 		stream>>(int&)*((int*)output);
-	} else if (type == typeid(unsigned int)) {
+	}
+	else if (type == typeid(unsigned int)) {
 		stream>>(unsigned int&)*((unsigned int*)output);
-	} else if (type == typeid(short)) {
+	}
+	else if (type == typeid(short)) {
 		stream>>(short&)*((short*)output);
-	} else if (type == typeid(unsigned short)) {
+	}
+	else if (type == typeid(unsigned short)) {
 		stream>>(unsigned short&)*((unsigned short*)output);
-	} else if (type == typeid(char)) {
+	}
+	else if (type == typeid(char)) {
 		stream>>(char&)*((char*)output);
-	} else if (type == typeid(unsigned char)) {
+	}
+	else if (type == typeid(unsigned char)) {
 		stream>>(unsigned char&)*((unsigned char*)output);
-	} else if (type == typeid(float)) {
+	}
+	else if (type == typeid(float)) {
 		stream>>(float&)*((float*)output);
-	} else if (type == typeid(std::string)) {
+	}
+	else if (type == typeid(std::string)) {
 		*((string *)output) = value;
-	} else {
+	}
+	else {
 		cout << __FUNCTION__ << ": a required type is not defined!" << endl;
 		return false;
 	}
@@ -202,23 +211,32 @@ std::string toString(const type_info & type, void * value) {
 	// TODO: add additional type parsing
 	if (type == typeid(bool)) {
 		stream<<*((bool*)value);
-	} else if (type == typeid(int)) {
+	}
+	else if (type == typeid(int)) {
 		stream<<*((int*)value);
-	} else if (type == typeid(unsigned int)) {
+	}
+	else if (type == typeid(unsigned int)) {
 		stream<<*((unsigned int*)value);
-	} else if (type == typeid(short)) {
+	}
+	else if (type == typeid(short)) {
 		stream<<*((short*)value);
-	} else if (type == typeid(unsigned short)) {
+	}
+	else if (type == typeid(unsigned short)) {
 		stream<<*((unsigned short*)value);
-	} else if (type == typeid(char)) {
+	}
+	else if (type == typeid(char)) {
 		stream<<*((char*)value);
-	} else if (type == typeid(unsigned char)) {
+	}
+	else if (type == typeid(unsigned char)) {
 		stream<<*((unsigned char*)value);
-	} else if (type == typeid(float)) {
+	}
+	else if (type == typeid(float)) {
 		stream<<*((float*)value);
-	} else if (type == typeid(std::string)) {
+	}
+	else if (type == typeid(std::string)) {
 		return (string &)*((string *)value);
-	} else {
+	}
+	else {
 		cout << __FUNCTION__ << ": a required type is not defined!" << endl;
 		return "";
 	}

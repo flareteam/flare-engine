@@ -38,6 +38,7 @@ endif()
 
 set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game executable will be installed.")
 set(DATADIR "share/games/flare" CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game data files will be installed.")
+set(MANDIR  "share/man"         CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where manual pages will be installed.")
 
 If(NOT IS_ABSOLUTE "${DATADIR}")
 	add_definitions(-DDATA_INSTALL_DIR="${CMAKE_INSTALL_PREFIX}/${DATADIR}")
@@ -206,3 +207,8 @@ install(FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"
   DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
   RENAME flare.svg)
+install(FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
+  DESTINATION ${MANDIR}/man1
+  RENAME flare.1)
+

@@ -73,6 +73,10 @@ int WidgetTabControl::getActiveTab() {
 	return activeTab;
 }
 
+int WidgetTabControl::getTabsAmount() {
+	return tabsAmount;
+}
+
 /**
  * Define the position and size of the tab control.
  *
@@ -81,8 +85,7 @@ int WidgetTabControl::getActiveTab() {
  * @param width   Width of the widget.
  * @param height  Height of the widget.
  */
-void WidgetTabControl::setMainArea(int x, int y, int width, int height)
-{
+void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
 	// Set tabs area.
 	tabsArea.x = x;
 	tabsArea.y = y;
@@ -101,8 +104,7 @@ void WidgetTabControl::setMainArea(int x, int y, int width, int height)
  *
  * Use it right after you set the area and tab titles of the tab control.
  */
-void WidgetTabControl::updateHeader()
-{
+void WidgetTabControl::updateHeader() {
 	for (int i=0; i<tabsAmount; i++) {
 		tabs[i].y = tabsArea.y;
 		tabs[i].h = tabsArea.h;
@@ -118,8 +120,7 @@ void WidgetTabControl::updateHeader()
 /**
  * Load the graphics for the control.
  */
-void WidgetTabControl::loadGraphics()
-{
+void WidgetTabControl::loadGraphics() {
 	activeTabSurface = loadGraphicSurface("images/menus/tab_active.png");
 	inactiveTabSurface = loadGraphicSurface("images/menus/tab_inactive.png");
 
@@ -129,8 +130,7 @@ void WidgetTabControl::loadGraphics()
 	}
 }
 
-void WidgetTabControl::logic()
-{
+void WidgetTabControl::logic() {
 	logic(inpt->mouse.x,inpt->mouse.y);
 }
 
@@ -139,8 +139,7 @@ void WidgetTabControl::logic()
  *
  * It basically checks if it was clicked on the header, and if so changes the active tab.
  */
-void WidgetTabControl::logic(int x, int y)
-{
+void WidgetTabControl::logic(int x, int y) {
 	Point mouse(x, y);
 	// If the click was in the tabs area;
 	if(isWithin(tabsArea, mouse) && inpt->pressing[MAIN1]) {
@@ -159,8 +158,7 @@ void WidgetTabControl::logic(int x, int y)
  *
  * Remember to render then on top of it the actual content of the {@link getActiveTab() active tab}.
  */
-void WidgetTabControl::render(SDL_Surface *target)
-{
+void WidgetTabControl::render(SDL_Surface *target) {
 	if (target == NULL) {
 		target = screen;
 	}
@@ -172,8 +170,7 @@ void WidgetTabControl::render(SDL_Surface *target)
 /**
  * Renders the given tab on the widget header.
  */
-void WidgetTabControl::renderTab(int number, SDL_Surface *target)
-{
+void WidgetTabControl::renderTab(int number, SDL_Surface *target) {
 	int i = number;
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -214,7 +211,6 @@ void WidgetTabControl::renderTab(int number, SDL_Surface *target)
 /**
  * Returns the height in pixels of the widget.
  */
-SDL_Rect WidgetTabControl::getContentArea()
-{
+SDL_Rect WidgetTabControl::getContentArea() {
 	return contentArea;
 }

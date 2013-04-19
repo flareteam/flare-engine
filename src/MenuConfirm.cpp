@@ -34,9 +34,11 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu
 	if (hasConfirmButton) {
 		buttonConfirm = new WidgetButton("images/menus/buttons/button_default.png");
 		buttonConfirm->label = _buttonMsg;
+		tablist.add(buttonConfirm);
 	}
 
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
+	tablist.add(buttonClose);
 
 	background = loadGraphicSurface("images/menus/confirm_bg.png");
 }
@@ -47,7 +49,8 @@ void MenuConfirm::update() {
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;
 		buttonConfirm->refresh();
 		label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonConfirm->pos.h * 2), JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
-	} else {
+	}
+	else {
 		label.set(window_area.x + window_area.w/2, window_area.y + (window_area.h / 4), JUSTIFY_CENTER, VALIGN_TOP, boxMsg, font->getColor("menu_normal"));
 	}
 
@@ -56,7 +59,10 @@ void MenuConfirm::update() {
 }
 
 void MenuConfirm::logic() {
-	if (visible) confirmClicked = false;
+	if (visible) {
+		tablist.logic();
+		confirmClicked = false;
+	}
 	if (visible && hasConfirmButton) {
 		if(buttonConfirm->checkClick()) {
 			confirmClicked = true;
@@ -65,7 +71,8 @@ void MenuConfirm::logic() {
 			visible = false;
 			cancelClicked = true;
 		}
-	} else if (visible && !hasConfirmButton) {
+	}
+	else if (visible && !hasConfirmButton) {
 		if(buttonClose->checkClick()) {
 			visible = false;
 			cancelClicked = true;

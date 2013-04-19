@@ -31,8 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 MapCollision::MapCollision()
-	: map_size(Point())
-{
+	: map_size(Point()) {
 	memset(colmap, 0, sizeof(colmap));
 }
 
@@ -50,7 +49,7 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
  * If we encounter an obstacle at 90 degrees, stop.
  * If we encounter an obstacle at 45 or 135 degrees, slide.
  */
-bool MapCollision::move(int &x, int &y, int step_x, int step_y, int dist, int movement_type, bool is_hero) {
+bool MapCollision::move(int &x, int &y, int step_x, int step_y, int dist, MOVEMENTTYPE movement_type, bool is_hero) {
 
 	bool diag = step_x && step_y;
 
@@ -77,7 +76,8 @@ bool MapCollision::move(int &x, int &y, int step_x, int step_y, int dist, int mo
 
 			if (step_x) {
 				y+= way_around;
-			} else {
+			}
+			else {
 				x+= way_around;
 			}
 		}
@@ -125,7 +125,7 @@ bool MapCollision::is_wall(int x, int y) const {
 /**
  * Is this a valid tile for an entity with this movement type?
  */
-bool MapCollision::is_valid_tile(int tile_x, int tile_y, int movement_type, bool is_hero) const {
+bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
 	// outside the map isn't valid
 	if (is_outside_map(tile_x,tile_y)) return false;
@@ -151,7 +151,7 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, int movement_type, bool
 /**
  * Is this a valid position for an entity with this movement type?
  */
-bool MapCollision::is_valid_position(int x, int y, int movement_type, bool is_hero) const {
+bool MapCollision::is_valid_position(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
 	const int tile_x = x >> TILE_SHIFT; // fast div
 	const int tile_y = y >> TILE_SHIFT; // fast div
@@ -194,7 +194,8 @@ int MapCollision::is_one_step_around(int x, int y, int xdir, int ydir) {
 			// would generate pretty much those instructions.
 			ret = (y & (UNITS_PER_TILE - 1)) < UNITS_PER_TILE >> 1 ? 1 : -1;
 		}
-	} else {
+	}
+	else {
 		if (is_sidestepable(tile_x, tile_y, -1, ydir)) {
 			ret = 1;
 		}
@@ -214,7 +215,7 @@ int MapCollision::is_one_step_around(int x, int y, int xdir, int ydir) {
  * Does not have the "slide" submovement that move() features
  * Line can be arbitrary angles.
  */
-bool MapCollision::line_check(int x1, int y1, int x2, int y2, int check_type, int movement_type) {
+bool MapCollision::line_check(int x1, int y1, int x2, int y2, int check_type, MOVEMENTTYPE movement_type) {
 	float x = (float)x1;
 	float y = (float)y1;
 	float dx = (float)abs(x2 - x1);
@@ -258,10 +259,10 @@ bool MapCollision::line_check(int x1, int y1, int x2, int y2, int check_type, in
 }
 
 bool MapCollision::line_of_sight(int x1, int y1, int x2, int y2) {
-	return line_check(x1, y1, x2, y2, CHECK_SIGHT, 0);
+	return line_check(x1, y1, x2, y2, CHECK_SIGHT, MOVEMENT_NORMAL);
 }
 
-bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, int movement_type) {
+bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE movement_type) {
 
 	// intangible entities can always move
 	if (movement_type == MOVEMENT_INTANGIBLE) return true;
@@ -345,7 +346,7 @@ bool MapCollision::is_facing_wide(int x1, int y1, char direction, int x2, int y2
 * limit is the maximum number of explored node
 * @return true if a path is found
 */
-bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, int movement_type, unsigned int limit) {
+bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
 	// path must be empty
 	if (!path.empty())
@@ -427,8 +428,7 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 
 		return false;
 	}
-	else
-	{
+	else {
 		// store path from end to start
 		path.push_back(collision_to_map(end));
 		while (current.x != start.x || current.y != start.y) {

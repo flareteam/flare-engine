@@ -48,7 +48,8 @@ void WidgetScrollBox::scroll(int amount) {
 	cursor += amount;
 	if (cursor < 0) {
 		cursor = 0;
-	} else if (cursor > contents->h-pos.h) {
+	}
+	else if (cursor > contents->h-pos.h) {
 		cursor = contents->h-pos.h;
 	}
 	refresh();
@@ -77,7 +78,8 @@ void WidgetScrollBox::logic(int x, int y) {
 			scroll(20);
 			inpt->resetScroll();
 		}
-	} else {
+	}
+	else {
 		inpt->resetScroll();
 	}
 

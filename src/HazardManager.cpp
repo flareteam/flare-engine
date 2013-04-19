@@ -116,22 +116,22 @@ void HazardManager::logic() {
 				}
 
 				//now process allies
-                for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
-                    // only check living allies
-                    if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && enemies->enemies[eindex]->stats.hero_ally) {
-                        if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
-                            if (!h[i]->hasEntity(enemies->enemies[eindex])) {
-                                h[i]->addEntity(enemies->enemies[eindex]);
-                                // hit!
-                                hit = enemies->enemies[eindex]->takeHit(*h[i]);
-                                if (!h[i]->multitarget && hit) {
-                                    h[i]->active = false;
-                                    if (!h[i]->complete_animation) h[i]->lifespan = 0;
-                                }
-                            }
-                        }
-                    }
-                }
+				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
+					// only check living allies
+					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && enemies->enemies[eindex]->stats.hero_ally) {
+						if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
+							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
+								h[i]->addEntity(enemies->enemies[eindex]);
+								// hit!
+								hit = enemies->enemies[eindex]->takeHit(*h[i]);
+								if (!h[i]->multitarget && hit) {
+									h[i]->active = false;
+									if (!h[i]->complete_animation) h[i]->lifespan = 0;
+								}
+							}
+						}
+					}
+				}
 
 			}
 

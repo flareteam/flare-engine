@@ -60,10 +60,12 @@ MenuStatBar::MenuStatBar(std::string type) {
 				bar_pos.y = eatFirstInt(infile.val,',');
 				bar_pos.w = eatFirstInt(infile.val,',');
 				bar_pos.h = eatFirstInt(infile.val,',');
-			} else if(infile.key == "text_pos") {
+			}
+			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
-			} else if(infile.key == "orientation") {
+			}
+			else if(infile.key == "orientation") {
 				int orient = eatFirstInt(infile.val,',');
 				if (orient == 1)
 					orientation = true;
@@ -79,8 +81,7 @@ MenuStatBar::MenuStatBar(std::string type) {
 	color_normal = font->getColor("menu_normal");
 }
 
-void MenuStatBar::loadGraphics(std::string type)
-{
+void MenuStatBar::loadGraphics(std::string type) {
 	background = loadGraphicSurface("images/menus/bar_" + type + "_background.png");
 	bar = loadGraphicSurface("images/menus/bar_" + type + ".png");
 }
@@ -121,7 +122,8 @@ void MenuStatBar::render() {
 		src.w = bar_length;
 		src.h = bar_pos.h;
 		SDL_BlitSurface(bar, &src, screen, &dest);
-	} else if (orientation == 1) {
+	}
+	else if (orientation == 1) {
 		if (stat_max == 0) bar_length = 0;
 		else bar_length = (stat_cur * bar_pos.h) / stat_max;
 		src.x = 0;

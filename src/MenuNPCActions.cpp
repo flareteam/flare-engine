@@ -36,23 +36,23 @@ using namespace std;
 
 class Action {
 public:
-	Action(std::string _id = "", std::string _label="")
+	Action(std::string _id = "", std::string _label = "")
 		: id(_id)
-		, label(id != "" ? new WidgetLabel() : NULL)
-	{
+		, label(id != "" ? new WidgetLabel() : NULL) {
 		if (label)
 			label->set(_label);
 	}
 
-	Action(const Action &r) : label(NULL) {
-		id = r.id;
-		if (id != "") {
-			label = new WidgetLabel();
+	Action(const Action &r)
+		: id(r.id)
+		, label(id != "" ? new WidgetLabel() : NULL) {
+		if (label)
 			label->set(r.label->get());
-		}
 	}
 
-	virtual ~Action() { delete label; }
+	virtual ~Action() {
+		delete label;
+	}
 
 	std::string id;
 	WidgetLabel *label;
@@ -72,8 +72,7 @@ MenuNPCActions::MenuNPCActions()
 	, dialog_selected(false)
 	, vendor_selected(false)
 	, cancel_selected(false)
-	, selected_dialog_node(-1)
-{
+	, selected_dialog_node(-1) {
 	// Load config settings
 	FileParser infile;
 	if(infile.open(mods->locate("menus/npc.txt"))) {
@@ -165,10 +164,11 @@ void MenuNPCActions::update() {
 					text_color = topic_hilight_color;
 
 				npc_actions[i].label->set(MENU_BORDER + (w/2),
-							  yoffs + (npc_actions[i].rect.h/2) ,
-							  JUSTIFY_CENTER, VALIGN_CENTER,
-							  npc_actions[i].label->get(), text_color);
-			} else {
+										  yoffs + (npc_actions[i].rect.h/2) ,
+										  JUSTIFY_CENTER, VALIGN_CENTER,
+										  npc_actions[i].label->get(), text_color);
+			}
+			else {
 				if (npc_actions[i].id == "id_cancel")
 					text_color = cancel_normal_color;
 				else if (npc_actions[i].id == "id_vendor")
@@ -177,9 +177,9 @@ void MenuNPCActions::update() {
 					text_color = topic_normal_color;
 
 				npc_actions[i].label->set(MENU_BORDER + (w/2),
-							  yoffs + (npc_actions[i].rect.h/2),
-							  JUSTIFY_CENTER, VALIGN_CENTER,
-							  npc_actions[i].label->get(), text_color);
+										  yoffs + (npc_actions[i].rect.h/2),
+										  JUSTIFY_CENTER, VALIGN_CENTER,
+										  npc_actions[i].label->get(), text_color);
 			}
 
 		}
@@ -195,14 +195,14 @@ void MenuNPCActions::update() {
 	/* render action menu surface */
 	action_menu = createAlphaSurface(w,h);
 	Uint32 bg = SDL_MapRGBA(action_menu->format,
-				background_color.r, background_color.g,
-				background_color.b, background_alpha);
+							background_color.r, background_color.g,
+							background_color.b, background_alpha);
 	SDL_FillRect(action_menu, NULL, bg);
 
 	for(size_t i=0; i<npc_actions.size(); i++) {
-	  if (npc_actions[i].label) {
-		  npc_actions[i].label->render(action_menu);
-	  }
+		if (npc_actions[i].label) {
+			npc_actions[i].label->render(action_menu);
+		}
 	}
 
 }

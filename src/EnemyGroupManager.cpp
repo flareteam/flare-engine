@@ -93,7 +93,8 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 	map<string, vector<Enemy_Level> >::const_iterator it = _categories.find(category);
 	if (it != _categories.end()) {
 		enemyCategory = it->second;
-	} else {
+	}
+	else {
 		return Enemy_Level();
 	}
 
@@ -107,14 +108,17 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 			int add_times = 0;
 			if (new_enemy.rarity == "common") {
 				add_times = 6;
-			} else if (new_enemy.rarity == "uncommon") {
+			}
+			else if (new_enemy.rarity == "uncommon") {
 				add_times = 3;
-			} else if (new_enemy.rarity == "rare") {
+			}
+			else if (new_enemy.rarity == "rare") {
 				add_times = 1;
-			} else {
+			}
+			else {
 				fprintf(stderr,
-					"ERROR: 'rarity' property for enemy '%s' not valid (common|uncommon|rare): %s\n",
-					new_enemy.type.c_str(), new_enemy.rarity.c_str());
+						"ERROR: 'rarity' property for enemy '%s' not valid (common|uncommon|rare): %s\n",
+						new_enemy.type.c_str(), new_enemy.rarity.c_str());
 			}
 
 			// do add, the given number of times
@@ -126,7 +130,8 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 
 	if (enemyCandidates.empty()) {
 		return Enemy_Level();
-	} else {
+	}
+	else {
 		return enemyCandidates[rand() % enemyCandidates.size()];
 	}
 }

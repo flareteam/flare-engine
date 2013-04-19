@@ -45,20 +45,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
- : Entity(_powers, _map)
- , lockSwing(false)
- , lockCast(false)
- , lockShoot(false)
- , animFwd(false)
- , enemies(NULL)
- , hero_stats(NULL)
- , charmed_stats(NULL)
- , act_target()
- , attacking (false)
- , drag_walking(false)
- , respawn(false)
- , close_menus(false)
-{
+	: Entity(_powers, _map)
+	, lockSwing(false)
+	, lockCast(false)
+	, lockShoot(false)
+	, animFwd(false)
+	, enemies(NULL)
+	, hero_stats(NULL)
+	, charmed_stats(NULL)
+	, act_target()
+	, attacking (false)
+	, drag_walking(false)
+	, respawn(false)
+	, close_menus(false) {
 
 	init();
 
@@ -197,7 +196,8 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 			animsets.push_back(anim->getAnimationSet(name));
 			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
 			anims.back()->syncTo(activeAnimation);
-		} else {
+		}
+		else {
 			animsets.push_back(NULL);
 			anims.push_back(NULL);
 		}
@@ -217,7 +217,8 @@ void Avatar::loadSounds(const string& type_id) {
 		sound_mental = snd->load("soundfx/enemies/" + type_id + "_ment.ogg", "Avatar mental attack");
 		sound_hit = snd->load("soundfx/enemies/" + type_id + "_hit.ogg", "Avatar was hit");
 		sound_die = snd->load("soundfx/enemies/" + type_id + "_die.ogg", "Avatar death");
-	} else {
+	}
+	else {
 		sound_melee = snd->load("soundfx/melee_attack.ogg", "Avatar melee attack");
 		sound_mental = 0; // hero does not have this sound
 		sound_hit = snd->load("soundfx/" + stats.base + "_hit.ogg", "Avatar was hit");
@@ -259,7 +260,8 @@ bool Avatar::pressing_move() {
 	if (inpt->mouse_emulation) return false;
 	if (MOUSE_MOVE) {
 		return inpt->pressing[MAIN1];
-	} else {
+	}
+	else {
 		return inpt->pressing[UP] || inpt->pressing[DOWN] || inpt->pressing[LEFT] || inpt->pressing[RIGHT];
 	}
 }
@@ -274,12 +276,13 @@ void Avatar::set_direction() {
 			vector<Point> path;
 
 			// if a path is returned, target first waypoint
-			if ( map->collider.compute_path(stats.pos, target, path, 1000, stats.movement_type)) {
+			if (map->collider.compute_path(stats.pos, target, path, stats.movement_type, 1000)) {
 				target = path.back();
 			}
 		}
 		stats.direction = calcDirection(stats.pos, target);
-	} else {
+	}
+	else {
 		if (inpt->pressing[UP] && inpt->pressing[LEFT]) stats.direction = 1;
 		else if (inpt->pressing[UP] && inpt->pressing[RIGHT]) stats.direction = 3;
 		else if (inpt->pressing[DOWN] && inpt->pressing[RIGHT]) stats.direction = 5;
@@ -291,7 +294,7 @@ void Avatar::set_direction() {
 		// Adjust for ORTHO tilesets
 		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL &&
 				(inpt->pressing[UP] || inpt->pressing[DOWN] ||
-				inpt->pressing[LEFT] || inpt->pressing[RIGHT]))
+				 inpt->pressing[LEFT] || inpt->pressing[RIGHT]))
 			stats.direction = stats.direction == 7 ? 0 : stats.direction + 1;
 	}
 }
@@ -305,7 +308,8 @@ void Avatar::handlePower(int actionbar_power) {
 				target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, stats.pos.x, stats.pos.y);
 			else
 				target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
-		} else {
+		}
+		else {
 			FPoint ftarget = calcVector(stats.pos, stats.direction, stats.melee_range);
 			target.x = static_cast<int>(ftarget.x);
 			target.y = static_cast<int>(ftarget.y);
@@ -470,7 +474,8 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	if (!inpt->pressing[MAIN1]) {
 		drag_walking = false;
 		attacking = false;
-	} else {
+	}
+	else {
 		if(!inpt->lock[MAIN1]) {
 			attacking = true;
 		}
@@ -722,7 +727,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	map->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	for (int i = 0; i < POWER_COUNT; i++){
+	for (int i = 0; i < POWER_COUNT; i++) {
 		stats.hero_cooldown[i]--;
 		if (stats.hero_cooldown[i] < 0) stats.hero_cooldown[i] = 0;
 	}
@@ -880,7 +885,7 @@ int Avatar::getUntransformPower() {
 	return 0;
 }
 
-void Avatar::resetActiveAnimation(){
+void Avatar::resetActiveAnimation() {
 	activeAnimation->reset(); // shield stutter
 	for (unsigned i=0; i < animsets.size(); i++)
 		if (anims[i])
@@ -898,7 +903,8 @@ void Avatar::addRenders(vector<Renderable> &r) {
 				r.push_back(ren);
 			}
 		}
-	} else {
+	}
+	else {
 		Renderable ren = activeAnimation->getCurrentFrame(stats.direction);
 		ren.map_pos = stats.pos;
 		r.push_back(ren);
@@ -919,7 +925,8 @@ Avatar::~Avatar() {
 
 	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
 		anim->decreaseCount("animations/enemies/"+charmed_stats->animations + ".txt");
-	} else {
+	}
+	else {
 		anim->decreaseCount("animations/hero.txt");
 	}
 
@@ -939,7 +946,7 @@ Avatar::~Avatar() {
 	snd->unload(sound_die);
 	snd->unload(sound_block);
 
-	for (int i = 0;i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		snd->unload(sound_steps[i]);
 
 	snd->unload(level_up);
