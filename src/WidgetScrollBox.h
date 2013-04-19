@@ -36,6 +36,7 @@ public:
 	WidgetScrollBox (int width, int height);
 	~WidgetScrollBox ();
 
+	void add(Widget* child);
 	Point input_assist(Point mouse);
 	void logic();
 	void logic(int x, int y);
@@ -48,8 +49,13 @@ public:
 	SDL_Color bg;
 	bool transparent;
 
+	bool getNext();
+	bool getPrev();
+
 private:
 	void scroll(int amount);
+	std::vector<Widget*> children;
+	int currentChild;
 
 	int cursor;
 	WidgetScrollBar * scrollbar;

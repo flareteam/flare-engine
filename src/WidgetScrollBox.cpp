@@ -32,6 +32,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	cursor = 0;
 	bg.r = bg.g = bg.b = 0;
 	contents = NULL;
+	currentChild = -1;
 	scrollbar = new WidgetScrollBar("images/menus/buttons/scrollbar_default.png");
 	update = true;
 	render_to_alpha = false;
@@ -42,6 +43,10 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 WidgetScrollBox::~WidgetScrollBox() {
 	if (contents != NULL) SDL_FreeSurface(contents);
 	delete scrollbar;
+}
+
+void WidgetScrollBox::add(Widget* child) {
+	children.push_back(child);
 }
 
 void WidgetScrollBox::scroll(int amount) {
@@ -138,6 +143,11 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		target = screen;
 	}
 
+	for (unsigned i = 0; i < children.size(); i++)
+	{
+		children[i]->render(contents);
+	}
+
 	SDL_Rect	src,dest;
 	dest = pos;
 	src.x = 0;
@@ -153,3 +163,22 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 	update = false;
 }
 
+bool WidgetScrollBox::getNext() {
+	if (currentChild != -1)
+		children[currentChild]->in_focus = false;
+	currentChild+=1;
+	currentChild = (currentChild == children.size()) ? 0 : currentChild;
+	
+	children[currentChild]->in_focus = true;
+	return true;
+}
+
+bool WidgetScrollBox::getPrev() {
+	if (currentChild != -1)
+		children[currentChild]->in_focus = false;
+	currentChild-=1;
+	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
+	
+	children[currentChild]->in_focus = true;
+	return true;
+}

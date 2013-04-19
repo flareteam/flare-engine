@@ -234,7 +234,7 @@ void GameStateConfig::init() {
 	tablist.add(mouse_aim_cb);
 	tablist.add(joystick_device_lstb);
 
-	tablist.add(settings_key[0]);
+	tablist.add(input_scrollbox);
 
 	tablist.add(inactivemods_lstb);
 	tablist.add(activemods_lstb);
@@ -787,7 +787,7 @@ void GameStateConfig::logic () {
 			music_volume_sl->in_focus ||
 			combat_text_cb->in_focus ||
 			enable_joystick_cb->in_focus ||
-			settings_key[0]->in_focus ||
+			input_scrollbox->in_focus ||
 			inactivemods_lstb->in_focus)) {
 		int newTab = tabControl->getActiveTab() - 1;
 		newTab = (newTab < 0) ? tabControl->getTabsAmount() - 1 : newTab;
@@ -798,7 +798,7 @@ void GameStateConfig::logic () {
 			sound_volume_sl->in_focus ||
 			language_lstb->in_focus ||
 			joystick_device_lstb->in_focus ||
-			settings_key[0]->in_focus ||
+			input_scrollbox->in_focus ||
 			activemods_shiftdown_btn->in_focus)) {
 		int newTab = tabControl->getActiveTab() + 1;
 		newTab = (newTab == tabControl->getTabsAmount()) ? 0 : newTab;
@@ -1113,10 +1113,10 @@ void GameStateConfig::render () {
 		if (input_scrollbox->update) {
 			input_scrollbox->refresh();
 			for (unsigned int i = 0; i < 25; i++) {
-				settings_lb[i]->render(input_scrollbox->contents);
+				input_scrollbox->add(settings_lb[i]);
 			}
 			for (unsigned int i = 0; i < 50; i++) {
-				settings_key[i]->render(input_scrollbox->contents);
+				input_scrollbox->add(settings_key[i]);
 			}
 		}
 		input_scrollbox->render();
