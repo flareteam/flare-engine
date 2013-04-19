@@ -91,7 +91,7 @@ void BehaviorAlly::findTarget()
                 enemies->player_blocked_ticks = BLOCK_TICKS;
         }
 
-        if(enemies->player_blocked
+        if(enemies->player_blocked && !e->stats.in_combat
             && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
                 fleeing = true;
                 pursue_pos = e->stats.hero_pos;
