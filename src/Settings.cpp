@@ -67,6 +67,7 @@ ConfigEntry config[] = {
 	{ "gamma",            &typeid(GAMMA),           "1.0", &GAMMA,           "screen gamma (0.5 = darkest, 2.0 = lightest)"},
 	{ "texture_quality",  &typeid(TEXTURE_QUALITY), "1",   &TEXTURE_QUALITY, "texture quality (0 = low quality, 1 = high quality)"},
 	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
+	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
 	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
@@ -131,6 +132,7 @@ bool MOUSE_MOVE;
 bool ENABLE_JOYSTICK;
 int JOYSTICK_DEVICE;
 bool MOUSE_AIM;
+bool NO_MOUSE;
 
 // Language Settings
 std::string LANGUAGE = "en";

@@ -141,6 +141,17 @@ void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
 
+	if (NO_MOUSE)
+	{
+		if (inpt->pressing[UP] && !inpt->lock[UP])
+			inpt->lock[UP] = true;
+		if (inpt->pressing[DOWN] && !inpt->lock[DOWN])
+			inpt->lock[DOWN] = true;
+		if (inpt->pressing[LEFT] && !inpt->lock[LEFT])
+			inpt->lock[LEFT] = true;
+		if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])
+			inpt->lock[RIGHT] = true;
+	}
 	advanceButton->enabled = false;
 	closeButton->enabled = false;
 

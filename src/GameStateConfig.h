@@ -54,7 +54,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[124];
+	int optiontab[125];
 	SDL_Rect frame;
 	SDL_Rect* video_modes;
 
@@ -106,6 +106,8 @@ private:
 	WidgetLabel         * animated_tiles_lb;
 	WidgetCheckBox      * mouse_aim_cb;
 	WidgetLabel         * mouse_aim_lb;
+	WidgetCheckBox      * no_mouse_cb;
+	WidgetLabel         * no_mouse_lb;
 	WidgetCheckBox      * show_fps_cb;
 	WidgetLabel         * show_fps_lb;
 	WidgetSlider        * music_volume_sl;

@@ -51,6 +51,17 @@ void MenuExit::update() {
 void MenuExit::logic() {
 	if (visible) {
 		tablist.logic();
+		if (NO_MOUSE)
+		{
+			if (inpt->pressing[UP] && !inpt->lock[UP])
+				inpt->lock[UP] = true;
+			if (inpt->pressing[DOWN] && !inpt->lock[DOWN])
+				inpt->lock[DOWN] = true;
+			if (inpt->pressing[LEFT] && !inpt->lock[LEFT])
+				inpt->lock[LEFT] = true;
+			if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])
+				inpt->lock[RIGHT] = true;
+		}
 
 		if (buttonExit->checkClick()) {
 			exitClicked = true;
