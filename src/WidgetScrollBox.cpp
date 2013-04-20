@@ -86,6 +86,17 @@ void WidgetScrollBox::scroll(int amount) {
 	refresh();
 }
 
+void WidgetScrollBox::scrollTo(int amount) {
+	cursor = amount;
+	if (cursor < 0) {
+		cursor = 0;
+	}
+	else if (cursor > contents->h-pos.h) {
+		cursor = contents->h-pos.h;
+	}
+	refresh();
+}
+
 Point WidgetScrollBox::input_assist(Point mouse) {
 	Point new_mouse;
 	new_mouse.x = mouse.x-pos.x;
@@ -218,10 +229,15 @@ bool WidgetScrollBox::getNext() {
 	currentChild+=1;
 	currentChild = (currentChild == children.size()) ? 0 : currentChild;
 
-	if (children[currentChild]->pos.y > (pos.y + pos.h) ||
-		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (pos.y + pos.h))
+	if (children[currentChild]->pos.y > (cursor + pos.h) ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h))
 	{
-		scroll(2*children[currentChild]->pos.h);
+		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+	}
+	if (children[currentChild]->pos.y < cursor ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor)
+	{
+		scrollTo(children[currentChild]->pos.y);
 	}
 	children[currentChild]->in_focus = true;
 	return true;
@@ -233,10 +249,15 @@ bool WidgetScrollBox::getPrev() {
 	currentChild-=1;
 	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
 
-	if (children[currentChild]->pos.y < pos.y ||
-		(children[currentChild]->pos.y + children[currentChild]->pos.h) < pos.y)
+	if (children[currentChild]->pos.y > (cursor + pos.h) ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h))
 	{
-		scroll((-2)*children[currentChild]->pos.h);
+		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+	}
+	if (children[currentChild]->pos.y < cursor ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor)
+	{
+		scrollTo(children[currentChild]->pos.y);
 	}
 	children[currentChild]->in_focus = true;
 	return true;

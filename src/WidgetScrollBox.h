@@ -57,6 +57,7 @@ public:
 
 private:
 	void scroll(int amount);
+	void scrollTo(int amount);
 	std::vector<Widget*> children;
 	int currentChild;
 
