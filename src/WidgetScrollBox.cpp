@@ -86,6 +86,17 @@ void WidgetScrollBox::scroll(int amount) {
 	refresh();
 }
 
+void WidgetScrollBox::scrollTo(int amount) {
+	cursor = amount;
+	if (cursor < 0) {
+		cursor = 0;
+	}
+	else if (cursor > contents->h-pos.h) {
+		cursor = contents->h-pos.h;
+	}
+	refresh();
+}
+
 Point WidgetScrollBox::input_assist(Point mouse) {
 	Point new_mouse;
 	new_mouse.x = mouse.x-pos.x;
@@ -194,7 +205,7 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		Point topLeft;
 		Point bottomRight;
 		Uint32 color;
- 
+
 		topLeft.x = dest.x;
 		topLeft.y = dest.y;
 		bottomRight.x = dest.x + dest.w;
@@ -217,11 +228,16 @@ bool WidgetScrollBox::getNext() {
 		children[currentChild]->in_focus = false;
 	currentChild+=1;
 	currentChild = (currentChild == children.size()) ? 0 : currentChild;
-	
-	if (children[currentChild]->pos.y > (pos.y + pos.h) ||
-		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (pos.y + pos.h))
+
+	if (children[currentChild]->pos.y > (cursor + pos.h) ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h))
 	{
-		scroll(2*children[currentChild]->pos.h);
+		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+	}
+	if (children[currentChild]->pos.y < cursor ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor)
+	{
+		scrollTo(children[currentChild]->pos.y);
 	}
 	children[currentChild]->in_focus = true;
 	return true;
@@ -232,12 +248,22 @@ bool WidgetScrollBox::getPrev() {
 		children[currentChild]->in_focus = false;
 	currentChild-=1;
 	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
-	
-	if (children[currentChild]->pos.y < pos.y ||
-		(children[currentChild]->pos.y + children[currentChild]->pos.h) < pos.y)
+
+	if (children[currentChild]->pos.y > (cursor + pos.h) ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h))
 	{
-		scroll((-2)*children[currentChild]->pos.h);
+		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+	}
+	if (children[currentChild]->pos.y < cursor ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor)
+	{
+		scrollTo(children[currentChild]->pos.y);
 	}
 	children[currentChild]->in_focus = true;
 	return true;
+}
+
+void WidgetScrollBox::activate() {
+	if (currentChild != -1)
+		children[currentChild]->activate();
 }
