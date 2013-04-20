@@ -791,10 +791,6 @@ void GameStateConfig::logic () {
 		else if (child_widget[i]->in_focus) tabControl->setActiveTab(optiontab[i]);
 	}
 
-	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && cancel_button->in_focus) {
-		tabControl->setActiveTab(0);
-	}
-
 	check_resolution = true;
 
 	std::string resolution_value;
