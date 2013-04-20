@@ -524,3 +524,42 @@ void setupSDLVideoMode(unsigned width, unsigned height) {
 
 	screen = SDL_SetVideoMode (width, height, 0, flags);
 }
+
+#include "FileParser.h"
+std::vector<std::string> getLanguagesISOList() {
+	std::vector<std::string> ret;
+	FileParser infile;
+	if (infile.open(mods->locate("engine/languages.txt"))) {
+		while (infile.next())
+			ret.push_back(infile.key);
+		infile.close();
+	}
+
+	return ret;
+}
+
+std::vector<std::string> getLanguagesFullList() {
+	std::vector<std::string> ret;
+	FileParser infile;
+	if (infile.open(mods->locate("engine/languages.txt"))) {
+		while (infile.next())
+			ret.push_back(infile.val);
+		infile.close();
+	}
+
+	return ret;
+}
+
+int getLanguagesNumber() {
+	int languages_num = 0;
+	FileParser infile;
+	if (infile.open(mods->locate("engine/languages.txt"))) {
+		while (infile.next()) {
+			languages_num += 1;
+		}
+		infile.close();
+	}
+
+	return languages_num;
+}
+
