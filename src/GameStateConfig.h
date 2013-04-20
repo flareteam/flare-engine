@@ -153,6 +153,7 @@ private:
 	int old_view_w;
 	int old_view_h;
 	int resolution_confirm_ticks;
+	int input_confirm_ticks;
 };
 
 #endif
