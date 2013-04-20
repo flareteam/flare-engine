@@ -234,7 +234,7 @@ void GameStateConfig::init() {
 	tablist.add(mouse_aim_cb);
 	tablist.add(joystick_device_lstb);
 
-	tablist.add(settings_key[0]);
+	tablist.add(input_scrollbox);
 
 	tablist.add(inactivemods_lstb);
 	tablist.add(activemods_lstb);
@@ -242,6 +242,10 @@ void GameStateConfig::init() {
 	tablist.add(activemods_deactivate_btn);
 	tablist.add(activemods_shiftup_btn);
 	tablist.add(activemods_shiftdown_btn);
+
+	for (unsigned int i = 0; i < 50; i++) {
+		input_scrollbox->addChildWidget(settings_key[i]);
+	}
 }
 
 void GameStateConfig::readConfig () {
@@ -782,30 +786,9 @@ void GameStateConfig::update () {
 }
 
 void GameStateConfig::logic () {
-	// Allow configs to be navigateable via left/right keys
-	if (inpt->pressing[LEFT] && !inpt->lock[LEFT] && (ok_button->in_focus ||
-			music_volume_sl->in_focus ||
-			combat_text_cb->in_focus ||
-			enable_joystick_cb->in_focus ||
-			settings_key[0]->in_focus ||
-			inactivemods_lstb->in_focus)) {
-		int newTab = tabControl->getActiveTab() - 1;
-		newTab = (newTab < 0) ? tabControl->getTabsAmount() - 1 : newTab;
-		tabControl->setActiveTab(newTab);
-	}
-
-	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && (resolution_lstb->in_focus ||
-			sound_volume_sl->in_focus ||
-			language_lstb->in_focus ||
-			joystick_device_lstb->in_focus ||
-			settings_key[0]->in_focus ||
-			activemods_shiftdown_btn->in_focus)) {
-		int newTab = tabControl->getActiveTab() + 1;
-		newTab = (newTab == tabControl->getTabsAmount()) ? 0 : newTab;
-		tabControl->setActiveTab(newTab);
-	}
-	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && cancel_button->in_focus) {
-		tabControl->setActiveTab(0);
+	for (unsigned int i = 0; i < child_widget.size(); i++) {
+		if (input_scrollbox->in_focus && !input_confirm->visible) tabControl->setActiveTab(4);
+		else if (child_widget[i]->in_focus) tabControl->setActiveTab(optiontab[i]);
 	}
 
 	check_resolution = true;
@@ -1038,27 +1021,25 @@ void GameStateConfig::logic () {
 		}
 		else {
 			input_scrollbox->logic();
-			if (isWithin(input_scrollbox->pos,inpt->mouse)) {
-				for (unsigned int i = 0; i < 50; i++) {
-					if (settings_key[i]->pressed || settings_key[i]->hover) input_scrollbox->update = true;
-					Point mouse = input_scrollbox->input_assist(inpt->mouse);
-					if (settings_key[i]->checkClick(mouse.x,mouse.y)) {
-						std::string confirm_msg;
-						if (i < 25)
-							confirm_msg = msg->get("Assign: ") + inpt->binding_name[i];
-						else
-							confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-25];
-						delete input_confirm;
-						input_confirm = new MenuConfirm("",confirm_msg);
-						input_confirm->window_area = menuConfirm_area;
-						input_confirm->alignment = menuConfirm_align;
-						input_confirm->align();
-						input_confirm->update();
-						input_confirm->visible = true;
-						input_key = i;
-						inpt->last_button = -1;
-						inpt->last_key = -1;
-					}
+			for (unsigned int i = 0; i < 50; i++) {
+				if (settings_key[i]->pressed || settings_key[i]->hover) input_scrollbox->update = true;
+				Point mouse = input_scrollbox->input_assist(inpt->mouse);
+				if (settings_key[i]->checkClick(mouse.x,mouse.y)) {
+					std::string confirm_msg;
+					if (i < 25)
+						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i];
+					else
+						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-25];
+					delete input_confirm;
+					input_confirm = new MenuConfirm("",confirm_msg);
+					input_confirm->window_area = menuConfirm_area;
+					input_confirm->alignment = menuConfirm_align;
+					input_confirm->align();
+					input_confirm->update();
+					input_confirm->visible = true;
+					input_key = i;
+					inpt->last_button = -1;
+					inpt->last_key = -1;
 				}
 			}
 		}
@@ -1114,9 +1095,6 @@ void GameStateConfig::render () {
 			input_scrollbox->refresh();
 			for (unsigned int i = 0; i < 25; i++) {
 				settings_lb[i]->render(input_scrollbox->contents);
-			}
-			for (unsigned int i = 0; i < 50; i++) {
-				settings_key[i]->render(input_scrollbox->contents);
 			}
 		}
 		input_scrollbox->render();

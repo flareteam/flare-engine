@@ -32,11 +32,13 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	cursor = 0;
 	bg.r = bg.g = bg.b = 0;
 	contents = NULL;
+	currentChild = -1;
 	scrollbar = new WidgetScrollBar("images/menus/buttons/scrollbar_default.png");
 	update = true;
 	render_to_alpha = false;
 	transparent = true;
 	resize(height);
+	tablist = TabList(VERTICAL);
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
@@ -44,8 +46,48 @@ WidgetScrollBox::~WidgetScrollBox() {
 	delete scrollbar;
 }
 
+void WidgetScrollBox::addChildWidget(Widget* child) {
+
+	std::vector<Widget*>::iterator find = std::find(
+		children.begin(),
+		children.end(),
+		child);
+
+	if (find == children.end())
+	{
+		children.push_back(child);
+		tablist.add(child);
+	}
+
+}
+
+void WidgetScrollBox::removeChildWidget(Widget* child) {
+
+	std::vector<Widget*>::iterator find = std::find(
+		children.begin(),
+		children.end(),
+		child);
+
+	if (find != children.end())
+	{
+		children.erase(find);
+		tablist.remove(child);
+	}
+}
+
 void WidgetScrollBox::scroll(int amount) {
 	cursor += amount;
+	if (cursor < 0) {
+		cursor = 0;
+	}
+	else if (cursor > contents->h-pos.h) {
+		cursor = contents->h-pos.h;
+	}
+	refresh();
+}
+
+void WidgetScrollBox::scrollTo(int amount) {
+	cursor = amount;
 	if (cursor < 0) {
 		cursor = 0;
 	}
@@ -64,6 +106,7 @@ Point WidgetScrollBox::input_assist(Point mouse) {
 
 void WidgetScrollBox::logic() {
 	logic(inpt->mouse.x,inpt->mouse.y);
+	tablist.logic();
 }
 
 void WidgetScrollBox::logic(int x, int y) {
@@ -138,6 +181,11 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		target = screen;
 	}
 
+	for (unsigned i = 0; i < children.size(); i++)
+	{
+		children[i]->render(contents);
+	}
+
 	SDL_Rect	src,dest;
 	dest = pos;
 	src.x = 0;
@@ -151,5 +199,71 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		SDL_BlitSurface(contents, &src, target, &dest);
 	if (contents->h > pos.h) scrollbar->render(target);
 	update = false;
+
+	if (in_focus)
+	{
+		Point topLeft;
+		Point bottomRight;
+		Uint32 color;
+
+		topLeft.x = dest.x;
+		topLeft.y = dest.y;
+		bottomRight.x = dest.x + dest.w;
+		bottomRight.y = dest.y + dest.h;
+		color = SDL_MapRGB(target->format, 255,248,220);
+
+		if (target == screen)
+		{
+			SDL_LockSurface(screen);
+			drawRectangle(target, topLeft, bottomRight, color);
+			SDL_UnlockSurface(screen);
+		}
+		else
+			drawRectangle(target, topLeft, bottomRight, color);
+	}
 }
 
+bool WidgetScrollBox::getNext() {
+	if (currentChild != -1)
+		children[currentChild]->in_focus = false;
+	currentChild+=1;
+	currentChild = (currentChild == children.size()) ? 0 : currentChild;
+
+	if (children[currentChild]->pos.y > (cursor + pos.h) ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h))
+	{
+		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+	}
+	if (children[currentChild]->pos.y < cursor ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor)
+	{
+		scrollTo(children[currentChild]->pos.y);
+	}
+	children[currentChild]->in_focus = true;
+	return true;
+}
+
+bool WidgetScrollBox::getPrev() {
+	if (currentChild != -1)
+		children[currentChild]->in_focus = false;
+	currentChild-=1;
+	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
+
+	if (children[currentChild]->pos.y > (cursor + pos.h) ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h))
+	{
+		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+	}
+	if (children[currentChild]->pos.y < cursor ||
+		(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor)
+	{
+		scrollTo(children[currentChild]->pos.y);
+	}
+	children[currentChild]->in_focus = true;
+	return true;
+}
+
+void WidgetScrollBox::activate() {
+	if (currentChild != -1)
+		children[currentChild]->activate();
+}
