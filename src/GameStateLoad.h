@@ -40,7 +40,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 #include <sstream>
 
-class TabList;
 class ItemManager;
 class MenuConfirm;
 class WidgetButton;

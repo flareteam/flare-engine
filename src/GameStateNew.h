@@ -40,7 +40,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "WidgetTooltip.h"
 
-class TabList;
 class WidgetButton;
 class WidgetCheckBox;
 class WidgetInput;
