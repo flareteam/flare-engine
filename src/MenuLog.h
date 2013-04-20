@@ -68,6 +68,8 @@ private:
 	SDL_Color tab_bg;
 	SDL_Color color_normal;
 
+	TabList tablist;
+
 public:
 	MenuLog();
 	~MenuLog();
