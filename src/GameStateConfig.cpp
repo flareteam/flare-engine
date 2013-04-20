@@ -242,6 +242,10 @@ void GameStateConfig::init() {
 	tablist.add(activemods_deactivate_btn);
 	tablist.add(activemods_shiftup_btn);
 	tablist.add(activemods_shiftdown_btn);
+
+	for (unsigned int i = 0; i < 50; i++) {
+		input_scrollbox->addChildWidget(settings_key[i]);
+	}
 }
 
 void GameStateConfig::readConfig () {
@@ -1114,9 +1118,6 @@ void GameStateConfig::render () {
 			input_scrollbox->refresh();
 			for (unsigned int i = 0; i < 25; i++) {
 				settings_lb[i]->render(input_scrollbox->contents);
-			}
-			for (unsigned int i = 0; i < 50; i++) {
-				input_scrollbox->addChildWidget(settings_key[i]);
 			}
 		}
 		input_scrollbox->render();

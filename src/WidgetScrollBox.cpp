@@ -38,6 +38,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	render_to_alpha = false;
 	transparent = true;
 	resize(height);
+	tablist = TabList(VERTICAL);
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
@@ -46,8 +47,32 @@ WidgetScrollBox::~WidgetScrollBox() {
 }
 
 void WidgetScrollBox::addChildWidget(Widget* child) {
-	children.push_back(child);
-	tablist.add(child);
+
+	std::vector<Widget*>::iterator find = std::find(
+		children.begin(),
+		children.end(),
+		child);
+
+	if (find == children.end())
+	{
+		children.push_back(child);
+		tablist.add(child);
+	}
+
+}
+
+void WidgetScrollBox::removeChildWidget(Widget* child) {
+
+	std::vector<Widget*>::iterator find = std::find(
+		children.begin(),
+		children.end(),
+		child);
+
+	if (find != children.end())
+	{
+		children.erase(find);
+		tablist.remove(child);
+	}
 }
 
 void WidgetScrollBox::scroll(int amount) {
