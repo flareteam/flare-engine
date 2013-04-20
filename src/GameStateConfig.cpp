@@ -786,28 +786,11 @@ void GameStateConfig::update () {
 }
 
 void GameStateConfig::logic () {
-	// Allow configs to be navigateable via left/right keys
-	if (inpt->pressing[LEFT] && !inpt->lock[LEFT] && (ok_button->in_focus ||
-			music_volume_sl->in_focus ||
-			combat_text_cb->in_focus ||
-			enable_joystick_cb->in_focus ||
-			input_scrollbox->in_focus ||
-			inactivemods_lstb->in_focus)) {
-		int newTab = tabControl->getActiveTab() - 1;
-		newTab = (newTab < 0) ? tabControl->getTabsAmount() - 1 : newTab;
-		tabControl->setActiveTab(newTab);
+	for (unsigned int i = 0; i < child_widget.size(); i++) {
+		if (input_scrollbox->in_focus && !input_confirm->visible) tabControl->setActiveTab(4);
+		else if (child_widget[i]->in_focus) tabControl->setActiveTab(optiontab[i]);
 	}
 
-	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && (resolution_lstb->in_focus ||
-			sound_volume_sl->in_focus ||
-			language_lstb->in_focus ||
-			joystick_device_lstb->in_focus ||
-			input_scrollbox->in_focus ||
-			activemods_shiftdown_btn->in_focus)) {
-		int newTab = tabControl->getActiveTab() + 1;
-		newTab = (newTab == tabControl->getTabsAmount()) ? 0 : newTab;
-		tabControl->setActiveTab(newTab);
-	}
 	if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT] && cancel_button->in_focus) {
 		tabControl->setActiveTab(0);
 	}
