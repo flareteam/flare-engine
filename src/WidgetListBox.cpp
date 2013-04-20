@@ -475,9 +475,11 @@ bool WidgetListBox::getNext() {
 
 	if(sel == list_amount-1) {
 		selected[0] = true;
+		while (getSelected() < cursor) scrollUp();
 	}
 	else {
 		selected[sel+1] = true;
+		while (getSelected() > cursor+list_height-1) scrollDown();
 	}
 
 	return true;
@@ -490,9 +492,11 @@ bool WidgetListBox::getPrev() {
 
 	if(sel == 0) {
 		selected[list_amount-1] = true;
+		while (getSelected() > cursor+list_height-1) scrollDown();
 	}
 	else {
 		selected[sel-1] = true;
+		while (getSelected() < cursor) scrollUp();
 	}
 
 	return true;
