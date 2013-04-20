@@ -107,6 +107,10 @@ void MenuVendor::loadMerchant(const std::string&) {
 void MenuVendor::logic() {
 	if (!visible) return;
 
+	if (NO_MOUSE)
+	{
+		tablist.logic();
+	}
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);

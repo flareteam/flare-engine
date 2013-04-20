@@ -134,6 +134,8 @@ public:
 
 	std::vector<SDL_Rect> slots; // the location of power slots
 
+	TabList tablist;
+
 };
 extern MenuPowers *menuPowers;
 #endif

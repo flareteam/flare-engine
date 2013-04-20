@@ -88,6 +88,10 @@ void MenuStash::update() {
 void MenuStash::logic() {
 	if (!visible) return;
 
+	if (NO_MOUSE)
+	{
+		tablist.logic();
+	}
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);

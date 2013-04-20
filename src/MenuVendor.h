@@ -82,6 +82,8 @@ public:
 
 	bool talker_visible;
 	SDL_Rect slots_area;
+
+	TabList tablist;
 };
 
 

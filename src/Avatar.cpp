@@ -262,7 +262,10 @@ bool Avatar::pressing_move() {
 		return inpt->pressing[MAIN1];
 	}
 	else {
-		return inpt->pressing[UP] || inpt->pressing[DOWN] || inpt->pressing[LEFT] || inpt->pressing[RIGHT];
+		return (inpt->pressing[UP] && !inpt->lock[UP]) ||
+			(inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
+			(inpt->pressing[LEFT] && !inpt->lock[LEFT]) ||
+			(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]);
 	}
 }
 
@@ -283,18 +286,18 @@ void Avatar::set_direction() {
 		stats.direction = calcDirection(stats.pos, target);
 	}
 	else {
-		if (inpt->pressing[UP] && inpt->pressing[LEFT]) stats.direction = 1;
-		else if (inpt->pressing[UP] && inpt->pressing[RIGHT]) stats.direction = 3;
-		else if (inpt->pressing[DOWN] && inpt->pressing[RIGHT]) stats.direction = 5;
-		else if (inpt->pressing[DOWN] && inpt->pressing[LEFT]) stats.direction = 7;
-		else if (inpt->pressing[LEFT]) stats.direction = 0;
-		else if (inpt->pressing[UP]) stats.direction = 2;
-		else if (inpt->pressing[RIGHT]) stats.direction = 4;
-		else if (inpt->pressing[DOWN]) stats.direction = 6;
+		if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 1;
+		else if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 3;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 5;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 7;
+		else if (inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 0;
+		else if (inpt->pressing[UP] && !inpt->lock[UP]) stats.direction = 2;
+		else if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 4;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) stats.direction = 6;
 		// Adjust for ORTHO tilesets
 		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL &&
-				(inpt->pressing[UP] || inpt->pressing[DOWN] ||
-				 inpt->pressing[LEFT] || inpt->pressing[RIGHT]))
+				((inpt->pressing[UP] && !inpt->lock[UP]) || (inpt->pressing[DOWN] && !inpt->lock[UP]) ||
+				 (inpt->pressing[LEFT] && !inpt->lock[LEFT]) || (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])))
 			stats.direction = stats.direction == 7 ? 0 : stats.direction + 1;
 	}
 }

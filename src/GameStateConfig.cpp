@@ -118,6 +118,8 @@ void GameStateConfig::init() {
 	animated_tiles_lb = new WidgetLabel();
 	mouse_aim_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	mouse_aim_lb = new WidgetLabel();
+	no_mouse_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	no_mouse_lb = new WidgetLabel();
 	show_fps_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	show_fps_lb = new WidgetLabel();
 	music_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
@@ -405,6 +407,19 @@ void GameStateConfig::readConfig () {
 				mouse_aim_lb->set(msg->get("Mouse aim"));
 				mouse_aim_lb->setJustify(JUSTIFY_RIGHT);
 				child_widget.push_back(mouse_aim_lb);
+				optiontab[child_widget.size()-1] = 3;
+			}
+			else if (infile.key == "no_mouse") {
+				no_mouse_cb->pos.x = frame.x + x2;
+				no_mouse_cb->pos.y = frame.y + y2;
+				child_widget.push_back(no_mouse_cb);
+				optiontab[child_widget.size()-1] = 3;
+
+				no_mouse_lb->setX(frame.x + x1);
+				no_mouse_lb->setY(frame.y + y1);
+				no_mouse_lb->set(msg->get("Do not use mouse"));
+				no_mouse_lb->setJustify(JUSTIFY_RIGHT);
+				child_widget.push_back(no_mouse_lb);
 				optiontab[child_widget.size()-1] = 3;
 			}
 			else if (infile.key == "show_fps") {
@@ -733,6 +748,8 @@ void GameStateConfig::update () {
 	else animated_tiles_cb->unCheck();
 	if (MOUSE_AIM) mouse_aim_cb->Check();
 	else mouse_aim_cb->unCheck();
+	if (NO_MOUSE) no_mouse_cb->Check();
+	else no_mouse_cb->unCheck();
 	if (SHOW_FPS) show_fps_cb->Check();
 	else show_fps_cb->unCheck();
 
@@ -976,6 +993,10 @@ void GameStateConfig::logic () {
 		else if (mouse_aim_cb->checkClick()) {
 			if (mouse_aim_cb->isChecked()) MOUSE_AIM=true;
 			else MOUSE_AIM=false;
+		}
+		else if (no_mouse_cb->checkClick()) {
+			if (no_mouse_cb->isChecked()) NO_MOUSE=true;
+			else NO_MOUSE=false;
 		}
 		else if (enable_joystick_cb->checkClick()) {
 			if (enable_joystick_cb->isChecked()) {
