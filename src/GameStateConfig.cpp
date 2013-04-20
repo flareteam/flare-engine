@@ -208,6 +208,7 @@ void GameStateConfig::init() {
 	old_view_h = VIEW_H;
 
 	resolution_confirm_ticks = 0;
+	input_confirm_ticks = 0;
 
 	// Set up tab list
 	tablist.add(ok_button);
@@ -1018,6 +1019,8 @@ void GameStateConfig::logic () {
 		if (input_confirm->visible) {
 			input_confirm->logic();
 			scanKey(input_key);
+			input_confirm_ticks--;
+			if (input_confirm_ticks == 0) input_confirm->visible = false;
 		}
 		else {
 			input_scrollbox->logic();
@@ -1036,6 +1039,7 @@ void GameStateConfig::logic () {
 					input_confirm->alignment = menuConfirm_align;
 					input_confirm->align();
 					input_confirm->update();
+					input_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
 					input_confirm->visible = true;
 					input_key = i;
 					inpt->last_button = -1;
@@ -1363,6 +1367,7 @@ void GameStateConfig::scanKey(int button) {
 
 			settings_key[button]->label = inpt->mouse_button[inpt->last_button-1];
 			input_confirm->visible = false;
+			input_confirm_ticks = 0;
 			settings_key[button]->refresh();
 			return;
 		}
@@ -1372,6 +1377,7 @@ void GameStateConfig::scanKey(int button) {
 
 			settings_key[button]->label = SDL_GetKeyName((SDLKey)inpt->last_key);
 			input_confirm->visible = false;
+			input_confirm_ticks = 0;
 			settings_key[button]->refresh();
 			return;
 		}
