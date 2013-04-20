@@ -1042,27 +1042,25 @@ void GameStateConfig::logic () {
 		}
 		else {
 			input_scrollbox->logic();
-			if (isWithin(input_scrollbox->pos,inpt->mouse)) {
-				for (unsigned int i = 0; i < 50; i++) {
-					if (settings_key[i]->pressed || settings_key[i]->hover) input_scrollbox->update = true;
-					Point mouse = input_scrollbox->input_assist(inpt->mouse);
-					if (settings_key[i]->checkClick(mouse.x,mouse.y)) {
-						std::string confirm_msg;
-						if (i < 25)
-							confirm_msg = msg->get("Assign: ") + inpt->binding_name[i];
-						else
-							confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-25];
-						delete input_confirm;
-						input_confirm = new MenuConfirm("",confirm_msg);
-						input_confirm->window_area = menuConfirm_area;
-						input_confirm->alignment = menuConfirm_align;
-						input_confirm->align();
-						input_confirm->update();
-						input_confirm->visible = true;
-						input_key = i;
-						inpt->last_button = -1;
-						inpt->last_key = -1;
-					}
+			for (unsigned int i = 0; i < 50; i++) {
+				if (settings_key[i]->pressed || settings_key[i]->hover) input_scrollbox->update = true;
+				Point mouse = input_scrollbox->input_assist(inpt->mouse);
+				if (settings_key[i]->checkClick(mouse.x,mouse.y)) {
+					std::string confirm_msg;
+					if (i < 25)
+						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i];
+					else
+						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-25];
+					delete input_confirm;
+					input_confirm = new MenuConfirm("",confirm_msg);
+					input_confirm->window_area = menuConfirm_area;
+					input_confirm->alignment = menuConfirm_align;
+					input_confirm->align();
+					input_confirm->update();
+					input_confirm->visible = true;
+					input_key = i;
+					inpt->last_button = -1;
+					inpt->last_key = -1;
 				}
 			}
 		}

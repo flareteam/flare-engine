@@ -53,6 +53,7 @@ public:
 	TabList tablist;
 	bool getNext();
 	bool getPrev();
+	void activate();
 
 private:
 	void scroll(int amount);

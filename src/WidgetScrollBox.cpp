@@ -194,7 +194,7 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		Point topLeft;
 		Point bottomRight;
 		Uint32 color;
- 
+
 		topLeft.x = dest.x;
 		topLeft.y = dest.y;
 		bottomRight.x = dest.x + dest.w;
@@ -217,7 +217,7 @@ bool WidgetScrollBox::getNext() {
 		children[currentChild]->in_focus = false;
 	currentChild+=1;
 	currentChild = (currentChild == children.size()) ? 0 : currentChild;
-	
+
 	if (children[currentChild]->pos.y > (pos.y + pos.h) ||
 		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (pos.y + pos.h))
 	{
@@ -232,7 +232,7 @@ bool WidgetScrollBox::getPrev() {
 		children[currentChild]->in_focus = false;
 	currentChild-=1;
 	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
-	
+
 	if (children[currentChild]->pos.y < pos.y ||
 		(children[currentChild]->pos.y + children[currentChild]->pos.h) < pos.y)
 	{
@@ -240,4 +240,9 @@ bool WidgetScrollBox::getPrev() {
 	}
 	children[currentChild]->in_focus = true;
 	return true;
+}
+
+void WidgetScrollBox::activate() {
+	if (currentChild != -1)
+		children[currentChild]->activate();
 }
