@@ -48,6 +48,9 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
+	tablist.add(advanceButton);
+	tablist.add(closeButton);
+
 	visible = false;
 	vendor_visible = false;
 

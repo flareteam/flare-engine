@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
+#include "WidgetSlot.h"
 #include "WidgetTooltip.h"
 
 #include <string>
@@ -105,7 +106,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 				id_line = true;
 				if (id > 0) {
 					power_cell.push_back(Power_Menu_Cell());
-					slots.push_back(SDL_Rect());
+					slots.push_back(NULL);
 					power_cell.back().id = id;
 				}
 			}
@@ -184,12 +185,6 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 }
 
 void MenuPowers::update() {
-	for (unsigned i=0; i<power_cell.size(); i++) {
-		slots[i].w = slots[i].h = ICON_SIZE;
-		slots[i].x = window_area.x + power_cell[i].pos.x;
-		slots[i].y = window_area.y + power_cell[i].pos.y;
-	}
-
 	label_powers.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Powers"), font->getColor("menu_normal"), title.font_style);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
@@ -224,24 +219,38 @@ void MenuPowers::loadGraphics() {
 		for (unsigned int i = 0; i < tree_image_files.size(); ++i)
 			tree_surf.push_back(loadGraphicSurface("images/menus/" + tree_image_files[i]));
 	}
+	for (unsigned int i=0; i<slots.size(); i++) {
+		SDL_Surface *single_icon;
+		single_icon = createAlphaSurface(ICON_SIZE, ICON_SIZE);
+		SDL_Rect icon_src;
+		SDL_Rect icon_dest;
+
+		icon_dest.x = 0;
+		icon_dest.y = 0;
+		icon_src.w = icon_src.h = icon_dest.w = icon_dest.h = ICON_SIZE;
+
+		int columns = icons->w / ICON_SIZE;
+		icon_src.x = (powers->powers[power_cell[i].id].icon % columns) * ICON_SIZE;
+		icon_src.y = (powers->powers[power_cell[i].id].icon / columns) * ICON_SIZE;
+
+		SDL_BlitSurface(icons, &icon_src, single_icon, &icon_dest);
+
+		slots[i] = new WidgetSlot(*single_icon);
+
+		slots[i]->pos.x = power_cell[i].pos.x;
+		slots[i]->pos.y = power_cell[i].pos.y;
+
+		SDL_FreeSurface(single_icon);
+	}
 }
 
 /**
  * generic render 32-pixel icon
  */
-void MenuPowers::renderIcon(int icon_id, int x, int y) {
-	SDL_Rect icon_src;
-	SDL_Rect icon_dest;
-
-	icon_dest.x = x;
-	icon_dest.y = y;
-	icon_src.w = icon_src.h = icon_dest.w = icon_dest.h = ICON_SIZE;
-
-	int columns = icons->w / ICON_SIZE;
-	icon_src.x = (icon_id % columns) * ICON_SIZE;
-	icon_src.y = (icon_id / columns) * ICON_SIZE;
-
-	SDL_BlitSurface(icons, &icon_src, screen, &icon_dest);
+void MenuPowers::renderSlot(WidgetSlot *slot) {
+	slot->pos.x = window_area.x + slot->pos.x;
+	slot->pos.y = window_area.y + slot->pos.y;
+	slot->render();
 }
 
 short MenuPowers::id_by_powerIndex(short power_index) {
@@ -323,7 +332,7 @@ int MenuPowers::click(Point mouse) {
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
 		for (unsigned i=0; i<power_cell.size(); i++) {
-			if (isWithin(slots[i], mouse) && (power_cell[i].tab == active_tab)) {
+			if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
 				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
@@ -332,7 +341,7 @@ int MenuPowers::click(Point mouse) {
 	}
 	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
-			if (isWithin(slots[i], mouse)) {
+			if (isWithin(slots[i]->pos, mouse)) {
 				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
@@ -350,7 +359,7 @@ bool MenuPowers::unlockClick(Point mouse) {
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
 		for (unsigned i=0; i<power_cell.size(); i++) {
-			if (isWithin(slots[i], mouse)
+			if (isWithin(slots[i]->pos, mouse)
 					&& (powerUnlockable(power_cell[i].id)) && points_left > 0
 					&& power_cell[i].requires_point && power_cell[i].tab == active_tab) {
 				stats->powers_list.push_back(power_cell[i].id);
@@ -362,7 +371,7 @@ bool MenuPowers::unlockClick(Point mouse) {
 	}
 	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
-			if (isWithin(slots[i], mouse)
+			if (isWithin(slots[i]->pos, mouse)
 					&& (powerUnlockable(power_cell[i].id))
 					&& points_left > 0 && power_cell[i].requires_point) {
 				stats->powers_list.push_back(power_cell[i].id);
@@ -479,7 +488,7 @@ void MenuPowers::displayBuild(int power_id) {
 
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		if (power_cell[i].id == power_id) {
-			SDL_BlitSurface(powers_unlock, &src_unlock, screen, &slots[i]);
+			SDL_BlitSurface(powers_unlock, &src_unlock, screen, &slots[i]->pos);
 		}
 	}
 }
@@ -495,7 +504,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 		if ((tabs_count > 1) && (tabControl->getActiveTab() != power_cell[i].tab)) continue;
 
-		if (isWithin(slots[i], mouse)) {
+		if (isWithin(slots[i]->pos, mouse)) {
 			tip.addText(powers->powers[power_cell[i].id].name);
 			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
 			tip.addText(powers->powers[power_cell[i].id].description);
@@ -618,6 +627,10 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 MenuPowers::~MenuPowers() {
 	SDL_FreeSurface(background);
 	for (unsigned int i=0; i<tree_surf.size(); i++) SDL_FreeSurface(tree_surf[i]);
+	for (unsigned int i=0; i<slots.size(); i++) {
+		delete slots.at(i);
+	}
+	slots.clear();
 	SDL_FreeSurface(powers_unlock);
 	SDL_FreeSurface(overlay_disabled);
 
@@ -660,7 +673,7 @@ void MenuPowers::renderPowers(int tab_num) {
 
 		if (find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) power_in_vector = true;
 
-		renderIcon(powers->powers[power_cell[i].id].icon, window_area.x + power_cell[i].pos.x, window_area.y + power_cell[i].pos.y);
+		renderSlot(slots[i]);
 
 		// highlighting
 		if (power_in_vector || requirementsMet(power_cell[i].id)) {
@@ -668,7 +681,7 @@ void MenuPowers::renderPowers(int tab_num) {
 		}
 		else {
 			if (overlay_disabled != NULL) {
-				SDL_BlitSurface(overlay_disabled, &disabled_src, screen, &slots[i]);
+				SDL_BlitSurface(overlay_disabled, &disabled_src, screen, &slots[i]->pos);
 			}
 		}
 	}
