@@ -65,6 +65,7 @@ MenuLog::MenuLog() {
 	for (int i=0; i<LOG_TYPE_COUNT; i++) {
 		log_count[i] = 0;
 		msg_buffer[i] = new WidgetScrollBox(tab_area.w,tab_area.h);
+		tablist.add(msg_buffer[i]);
 	}
 
 	// Initialize the tab control.
@@ -106,6 +107,12 @@ void MenuLog::logic() {
 	{
 		tablist.logic();
 	}
+
+	// make shure keyboard navigation leads us to correct tab
+	for (unsigned int i = 0; i < LOG_TYPE_COUNT; i++) {
+		if (msg_buffer[i]->in_focus) tabControl->setActiveTab(i);
+	}
+
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);
