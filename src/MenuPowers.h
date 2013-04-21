@@ -109,7 +109,6 @@ private:
 
 	void loadGraphics();
 	void displayBuild(int power_id);
-	void renderSlot(WidgetSlot *slot);
 	bool powerUnlockable(int power_index);
 	void renderPowers(int tab_num);
 

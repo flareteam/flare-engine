@@ -185,6 +185,11 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 }
 
 void MenuPowers::update() {
+	for (unsigned i=0; i<power_cell.size(); i++) {
+		slots[i]->pos.x = window_area.x + power_cell[i].pos.x;
+		slots[i]->pos.y = window_area.y + power_cell[i].pos.y;
+	}
+
 	label_powers.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Powers"), font->getColor("menu_normal"), title.font_style);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
@@ -220,37 +225,12 @@ void MenuPowers::loadGraphics() {
 			tree_surf.push_back(loadGraphicSurface("images/menus/" + tree_image_files[i]));
 	}
 	for (unsigned int i=0; i<slots.size(); i++) {
-		SDL_Surface *single_icon;
-		single_icon = createAlphaSurface(ICON_SIZE, ICON_SIZE);
-		SDL_Rect icon_src;
-		SDL_Rect icon_dest;
 
-		icon_dest.x = 0;
-		icon_dest.y = 0;
-		icon_src.w = icon_src.h = icon_dest.w = icon_dest.h = ICON_SIZE;
-
-		int columns = icons->w / ICON_SIZE;
-		icon_src.x = (powers->powers[power_cell[i].id].icon % columns) * ICON_SIZE;
-		icon_src.y = (powers->powers[power_cell[i].id].icon / columns) * ICON_SIZE;
-
-		SDL_BlitSurface(icons, &icon_src, single_icon, &icon_dest);
-
-		slots[i] = new WidgetSlot(*single_icon);
-
+		slots[i] = new WidgetSlot(icons, powers->powers[power_cell[i].id].icon);
 		slots[i]->pos.x = power_cell[i].pos.x;
 		slots[i]->pos.y = power_cell[i].pos.y;
-
-		SDL_FreeSurface(single_icon);
+		tablist.add(slots[i]);
 	}
-}
-
-/**
- * generic render 32-pixel icon
- */
-void MenuPowers::renderSlot(WidgetSlot *slot) {
-	slot->pos.x = window_area.x + slot->pos.x;
-	slot->pos.y = window_area.y + slot->pos.y;
-	slot->render();
 }
 
 short MenuPowers::id_by_powerIndex(short power_index) {
@@ -417,7 +397,13 @@ void MenuPowers::logic() {
 	if (NO_MOUSE)
 	{
 		tablist.logic();
-	}	
+	}
+	
+	// make shure keyboard navigation leads us to correct tab
+	for (unsigned int i = 0; i < slots.size(); i++) {
+		if (slots[i]->in_focus) tabControl->setActiveTab(power_cell[i].tab);
+	}
+
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);
@@ -673,7 +659,7 @@ void MenuPowers::renderPowers(int tab_num) {
 
 		if (find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) power_in_vector = true;
 
-		renderSlot(slots[i]);
+		slots[i]->render();
 
 		// highlighting
 		if (power_in_vector || requirementsMet(power_cell[i].id)) {

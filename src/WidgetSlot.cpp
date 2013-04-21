@@ -27,12 +27,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-WidgetSlot::WidgetSlot(SDL_Surface _icon)
+WidgetSlot::WidgetSlot(SDL_Surface *_icons, int icon_id)
 	: Widget()
+	, icons(_icons)
+	, icon_id(icon_id)
 	, enabled(true)
-	, pressed(false) {
-
-	icon = new SDL_Surface(_icon);
+	, pressed(false)
+{
 	focusable = true;
 	pos.x = pos.y = 0;
 	pos.w = ICON_SIZE;
@@ -87,16 +88,39 @@ void WidgetSlot::render(SDL_Surface *target) {
 		target = screen;
 	}
 	SDL_Rect src;
-	src.x = src.y = 0;
+
+	int columns = icons->w / ICON_SIZE;
+	src.x = (icon_id % columns) * ICON_SIZE;
+	src.y = (icon_id / columns) * ICON_SIZE;
+	
 	src.w = pos.w;
 	src.h = pos.h;
 
 	if (render_to_alpha)
-		SDL_gfxBlitRGBA(icon, &src, target, &pos);
+		SDL_gfxBlitRGBA(icons, &src, target, &pos);
 	else
-		SDL_BlitSurface(icon, &src, target, &pos);
+		SDL_BlitSurface(icons, &src, target, &pos);
+
+	if (in_focus) {
+		Point topLeft;
+		Point bottomRight;
+		Uint32 color;
+
+		topLeft.x = pos.x;
+		topLeft.y = pos.y;
+		bottomRight.x = pos.x + pos.w;
+		bottomRight.y = pos.y + pos.h;
+		color = SDL_MapRGB(target->format, 0,191,255);
+
+		if (target == screen) {
+			SDL_LockSurface(screen);
+			drawRectangle(target, topLeft, bottomRight, color);
+			SDL_UnlockSurface(screen);
+		}
+		else
+			drawRectangle(target, topLeft, bottomRight, color);
+	}
 }
 
 WidgetSlot::~WidgetSlot() {
-	delete icon;
 }

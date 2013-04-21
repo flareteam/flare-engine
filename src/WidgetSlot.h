@@ -36,10 +36,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class WidgetSlot : public Widget {
 private:
 
-	SDL_Surface *icon;
+	SDL_Surface *icons;	// icons surface
+
+	int icon_id;		// current slot id
 
 public:
-	WidgetSlot(SDL_Surface _icon);
+	WidgetSlot(SDL_Surface *_icon, int icon_id);
 	~WidgetSlot();
 
 	void activate();
