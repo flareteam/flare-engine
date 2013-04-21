@@ -224,6 +224,8 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 }
 
 bool WidgetScrollBox::getNext() {
+	if (children.size() == 0) return false;
+
 	if (currentChild != -1)
 		children[currentChild]->in_focus = false;
 	currentChild+=1;
@@ -244,6 +246,8 @@ bool WidgetScrollBox::getNext() {
 }
 
 bool WidgetScrollBox::getPrev() {
+	if (children.size() == 0) return false;
+
 	if (currentChild != -1)
 		children[currentChild]->in_focus = false;
 	currentChild-=1;
