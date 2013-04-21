@@ -121,7 +121,8 @@ void GameStatePlay::resetGame() {
 	menu->log->clear();
 	quests->createQuestList();
 	menu->hudlog->clear();
-	loadStash();
+	if (!pc->stats.permadeath)
+		loadStash();
 
 	// Finalize new character settings
 	menu->talker->setHero(pc->stats.name, pc->stats.portrait);
@@ -262,7 +263,7 @@ void GameStatePlay::checkTeleport() {
 
 		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
-                enemies->enemies[i]->map->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
+				enemies->enemies[i]->map->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
 				enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
 				enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
 			}
