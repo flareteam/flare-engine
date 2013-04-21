@@ -141,6 +141,10 @@ void MenuInventory::logic() {
 
 	// check close button
 	if (visible) {
+		if (NO_MOUSE)
+		{
+			tablist.logic();
+		}
 		if (closeButton->checkClick()) {
 			visible = false;
 			snd->play(sfx_close);

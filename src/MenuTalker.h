@@ -34,6 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 #include <sstream>
 
+#include "Widget.h"
+
 class CampaignManager;
 class MenuManager;
 class NPC;
@@ -63,6 +65,8 @@ private:
 	std::string font_dialog;
 
 	SDL_Color color_normal;
+
+	TabList tablist;
 
 public:
 	MenuTalker(MenuManager *menu,CampaignManager *camp);

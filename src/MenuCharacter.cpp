@@ -490,6 +490,10 @@ SDL_Color MenuCharacter::bonusColor(int stat) {
 void MenuCharacter::logic() {
 	if (!visible) return;
 
+	if (NO_MOUSE)
+	{
+		tablist.logic();
+	}
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);

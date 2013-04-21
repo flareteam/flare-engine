@@ -116,6 +116,8 @@ public:
 
 	std::string log_msg;
 
+	TabList tablist;
+
 };
 
 #endif

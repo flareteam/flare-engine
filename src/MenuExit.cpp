@@ -50,7 +50,10 @@ void MenuExit::update() {
 
 void MenuExit::logic() {
 	if (visible) {
-		tablist.logic();
+		if (NO_MOUSE)
+		{
+			tablist.logic();
+		}
 
 		if (buttonExit->checkClick()) {
 			exitClicked = true;

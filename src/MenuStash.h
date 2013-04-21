@@ -70,6 +70,8 @@ public:
 	SDL_Rect slots_area;
 	MenuItemStorage stock;
 	bool updated;
+
+	TabList tablist;
 };
 
 
