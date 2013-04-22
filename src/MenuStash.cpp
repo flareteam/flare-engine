@@ -83,6 +83,10 @@ void MenuStash::update() {
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
+
+	for (int i = 0; i < STASH_SLOTS; i++) {
+		tablist.add(stock.slots[i]);
+	}
 }
 
 void MenuStash::logic() {

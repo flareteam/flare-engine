@@ -161,6 +161,7 @@ Set (FLARE_SOURCES
 	./src/WidgetScrollBar.cpp
 	./src/WidgetScrollBox.cpp
 	./src/WidgetSlider.cpp
+	./src/WidgetSlot.cpp
  	./src/WidgetTabControl.cpp
 	./src/WidgetTooltip.cpp
 	./src/main.cpp

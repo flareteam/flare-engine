@@ -126,6 +126,13 @@ void MenuInventory::update() {
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
+
+	for (int i = 0; i < MAX_EQUIPPED; i++) {
+		tablist.add(inventory[EQUIPMENT].slots[i]);
+	}
+	for (int i = 0; i < MAX_CARRIED; i++) {
+		tablist.add(inventory[CARRIED].slots[i]);
+	}
 }
 
 void MenuInventory::logic() {

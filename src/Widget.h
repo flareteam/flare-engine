@@ -50,6 +50,7 @@ class TabList {
 private:
 	std::vector<Widget*> widgets;
 	int current;
+	bool locked;
 	bool current_is_valid();
 	ScrollType scrolltype;
 public:
@@ -57,6 +58,8 @@ public:
 	TabList(ScrollType scrolltype);
 	~TabList();
 
+	void lock();
+	void unlock();
 	void add(Widget* widget);			// Add a widget
 	void remove(Widget* widget);		// Remove a widget
 	void clear();						// Remove all widgets
