@@ -58,11 +58,14 @@ public:
 	TabList(ScrollType scrolltype);
 	~TabList();
 
+	bool isLocked();
 	void lock();
 	void unlock();
 	void add(Widget* widget);			// Add a widget
 	void remove(Widget* widget);		// Remove a widget
 	void clear();						// Remove all widgets
+	int getCurrent();
+	unsigned size();
 	Widget* getNext(bool inner = true);	// Increment current selected, return widget
 	Widget* getPrev(bool inner = true);	// Decrement current selected, return widget
 	void activate();					// Fire off what happens when the user presses 'accept'
