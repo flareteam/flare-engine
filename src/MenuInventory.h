@@ -98,6 +98,9 @@ public:
 	void applyItemStats(ItemStack *equipped);
 	void applyItemSetBonuses(ItemStack *equipped);
 
+	int getEquippedCount();
+	int getCarriedRows();
+
 	void clearHighlight();
 
 	SDL_Rect carried_area;

@@ -901,6 +901,16 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	}
 }
 
+int MenuInventory::getEquippedCount()
+{
+	return (int)equipped_area.size();
+}
+
+int MenuInventory::getCarriedRows()
+{
+	return carried_rows;
+}
+
 void MenuInventory::clearHighlight() {
 	inventory[EQUIPMENT].highlightClear();
 	inventory[CARRIED].highlightClear();
