@@ -48,7 +48,7 @@ private:
 
 	MenuItemStorage stock[2]; // items the vendor currently has in stock
 
-	int VENDOR_SLOTS;
+	unsigned VENDOR_SLOTS;
 
 	// label and widget positions
 	Point close_pos;

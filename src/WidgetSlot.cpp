@@ -29,10 +29,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-WidgetSlot::WidgetSlot(SDL_Surface *_icons, int icon_id)
+WidgetSlot::WidgetSlot(SDL_Surface *_icons, int _icon_id)
 	: Widget()
 	, icons(_icons)
-	, icon_id(icon_id)
+	, icon_id(_icon_id)
 	, amount(1)
 	, max_amount(1)
 	, enabled(true)
@@ -109,7 +109,7 @@ void WidgetSlot::render(SDL_Surface *target) {
 		int columns = icons->w / ICON_SIZE;
 		src.x = (icon_id % columns) * ICON_SIZE;
 		src.y = (icon_id / columns) * ICON_SIZE;
-	
+
 		src.w = pos.w;
 		src.h = pos.h;
 
