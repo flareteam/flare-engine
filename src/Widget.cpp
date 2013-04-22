@@ -51,11 +51,16 @@ TabList::TabList()
 TabList::TabList(ScrollType _scrolltype)
 	: widgets()
 	, current(-1)
+	, locked(false)
 	, scrolltype(_scrolltype)
 {}
 
 TabList::~TabList()
 {}
+
+bool TabList::isLocked() {
+	return locked;
+}
 
 void TabList::lock() {
 	locked = true;
@@ -85,6 +90,14 @@ void TabList::remove(Widget* widget) {
 
 void TabList::clear() {
 	widgets.clear();
+}
+
+int TabList::getCurrent() {
+	return current;
+}
+
+unsigned TabList::size() {
+	return widgets.size();
 }
 
 bool TabList::current_is_valid() {
