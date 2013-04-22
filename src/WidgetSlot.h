@@ -39,15 +39,19 @@ private:
 	SDL_Surface *icons;	// icons surface
 
 	int icon_id;		// current slot id
+	int amount;			// entries amount in slot
+	int max_amount;		// if > 1 always display amount
 
 public:
-	WidgetSlot(SDL_Surface *_icon, int icon_id);
+	WidgetSlot(SDL_Surface *_icon, int icon_id = -1);
 	~WidgetSlot();
 
 	void activate();
 
 	bool checkClick();
 	bool checkClick(int x, int y);
+	void setIcon(int _icon_id);
+	void setAmount(int _amount, int _max_amount = 1);
 	void render(SDL_Surface *target = NULL);
 
 	bool enabled;

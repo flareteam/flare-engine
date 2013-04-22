@@ -99,6 +99,13 @@ void MenuVendor::update() {
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
+
+	for (int i = 0; i < VENDOR_SLOTS; i++) {
+		tablist.add(stock[VENDOR_BUY].slots[i]);
+	}
+	for (int i = 0; i < VENDOR_SLOTS; i++) {
+		tablist.add(stock[VENDOR_SELL].slots[i]);
+	}
 }
 
 void MenuVendor::loadMerchant(const std::string&) {
