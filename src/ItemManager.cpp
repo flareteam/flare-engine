@@ -386,6 +386,10 @@ void ItemManager::loadIcons() {
 	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
 }
 
+SDL_Surface* ItemManager::getIcons() {
+	return icons;
+}
+
 /**
  * Renders icons at small size or large size
  * Also display the stack size

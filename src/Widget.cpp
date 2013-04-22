@@ -44,6 +44,7 @@ bool Widget::getPrev() {
 TabList::TabList()
 	: widgets()
 	, current(-1)
+	, locked(false)
 	, scrolltype(TWO_DIRECTIONS)
 {}
 
@@ -55,6 +56,14 @@ TabList::TabList(ScrollType _scrolltype)
 
 TabList::~TabList()
 {}
+
+void TabList::lock() {
+	locked = true;
+}
+
+void TabList::unlock() {
+	locked = false;
+}
 
 void TabList::add(Widget* widget) {
 	if (widget == NULL)
@@ -135,6 +144,7 @@ void TabList::defocus() {
 }
 
 void TabList::logic() {
+	if (locked) return;
 	if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
 		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;
