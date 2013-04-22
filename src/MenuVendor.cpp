@@ -118,6 +118,23 @@ void MenuVendor::logic() {
 	{
 		tablist.logic();
 	}
+
+	// make shure keyboard navigation leads us to correct tab
+	for (unsigned int i = 0; i < VENDOR_SLOTS; i++) {
+		if (stock[VENDOR_BUY].slots[i]->in_focus)
+		{
+			tabControl->setActiveTab(0);
+			activetab = 0;
+			break;
+		}
+		else if (stock[VENDOR_SELL].slots[i]->in_focus)
+		{
+			tabControl->setActiveTab(1);
+			activetab = 1;
+			break;
+		}
+	}
+
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);

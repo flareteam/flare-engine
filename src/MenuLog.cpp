@@ -110,7 +110,11 @@ void MenuLog::logic() {
 
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned int i = 0; i < LOG_TYPE_COUNT; i++) {
-		if (msg_buffer[i]->in_focus) tabControl->setActiveTab(i);
+		if (msg_buffer[i]->in_focus)
+		{
+			tabControl->setActiveTab(i);
+			break;
+		}
 	}
 
 	if (closeButton->checkClick()) {

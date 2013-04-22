@@ -256,6 +256,18 @@ void MenuManager::logic() {
 	talker->logic();
 	stash->logic();
 
+	if (vendor->visible && inv->visible) {
+		// TODO Handle navigation from menu to menu
+		inv->tablist.lock();
+		vendor->tablist.unlock();
+	}
+
+	if (stash->visible && inv->visible) {
+		// TODO Handle navigation from menu to menu
+		inv->tablist.lock();
+		stash->tablist.unlock();
+	}
+
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
 		inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
