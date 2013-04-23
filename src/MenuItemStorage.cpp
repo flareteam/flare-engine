@@ -29,10 +29,10 @@ using namespace std;
 MenuItemStorage::MenuItemStorage()
 	: icons(NULL)
 	, grid_area()
-	, slots()
 	, nb_cols(0)
 	, slot_type()
 	, drag_prev_slot(-1)
+	, slots()
 	, highlight(NULL)
 	, highlight_image(NULL)
 {}
