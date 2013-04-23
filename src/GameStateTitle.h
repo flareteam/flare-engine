@@ -31,6 +31,7 @@ private:
 	WidgetButton *button_play;
 	WidgetButton *button_exit;
 	WidgetButton *button_cfg;
+	WidgetButton *button_credits;
 	WidgetLabel *label_version;
 
 	TabList tablist;
