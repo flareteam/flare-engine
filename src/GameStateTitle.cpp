@@ -97,10 +97,12 @@ void GameStateTitle::logic() {
 		requestedGameState = new GameStateConfig();
 	}
 	else if (button_credits->checkClick()) {
-		// FIXME Memory leak
-		GameStateCutscene *credits = new GameStateCutscene(new GameStateTitle());
+		GameStateTitle *title = new GameStateTitle();
+		GameStateCutscene *credits = new GameStateCutscene(title);
+
 		if (!credits->load("credits.txt")) {
 			delete credits;
+			delete title;
 		}
 		else {
 			delete requestedGameState;

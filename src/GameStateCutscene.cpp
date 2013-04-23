@@ -22,6 +22,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <iostream>
 using namespace std;
 
+SceneComponent::SceneComponent()
+	: type("")
+	, i(NULL)
+	, s("")
+	, x(0)
+	, y(0)
+	, z(0) {
+}
+
+SceneComponent::~SceneComponent()
+{
+	//SDL_FreeSurface(i);
+}
+
 Scene::Scene() : frame_counter(0)
 	, pause_frames(0)
 	, caption("")
@@ -31,6 +45,8 @@ Scene::Scene() : frame_counter(0)
 }
 
 Scene::~Scene() {
+
+	SDL_FreeSurface(art);
 
 	while(!components.empty())
 		components.pop();
@@ -165,8 +181,7 @@ bool GameStateCutscene::load(std::string filename) {
 			// allow having an empty section (globals such as scale_gfx might be set here
 		}
 		else if (infile.section == "scene") {
-			SceneComponent sc;
-			sc.type = "";
+			SceneComponent sc = SceneComponent();
 
 			if (infile.key == "caption") {
 				sc.type = infile.key;
