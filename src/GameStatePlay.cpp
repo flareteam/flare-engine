@@ -121,8 +121,7 @@ void GameStatePlay::resetGame() {
 	menu->log->clear();
 	quests->createQuestList();
 	menu->hudlog->clear();
-	if (!pc->stats.permadeath)
-		loadStash();
+	loadStash();
 
 	// Finalize new character settings
 	menu->talker->setHero(pc->stats.name, pc->stats.portrait);
@@ -299,8 +298,18 @@ void GameStatePlay::checkTeleport() {
 				if (GAME_PREFIX.length() > 0)
 					filename << GAME_PREFIX << "_";
 				filename << "save" << game_slot << ".txt";
-				if(remove(filename.str().c_str()) != 0)
+				if (remove(filename.str().c_str()) != 0)
 					perror("Error deleting save from path");
+
+				// Remove stash
+				stringstream ss;
+				ss.str("");
+				ss << PATH_USER;
+				if (GAME_PREFIX.length() > 0)
+					ss << GAME_PREFIX << "_";
+				ss << "stash_HC" << game_slot << ".txt";
+				if (remove(ss.str().c_str()) != 0)
+					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", game_slot);
 
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
