@@ -434,6 +434,19 @@ void GameStateLoad::logic() {
 
 			if (remove(filename.str().c_str()) != 0)
 				perror("Error deleting save from path");
+
+			if (stats[selected_slot].permadeath) {
+				// Remove stash
+				stringstream ss;
+				ss.str("");
+				ss << PATH_USER;
+				if (GAME_PREFIX.length() > 0)
+					ss << GAME_PREFIX << "_";
+				ss << "stash_HC" << (selected_slot+1) << ".txt";
+				if (remove(ss.str().c_str()) != 0)
+					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", selected_slot+1);
+			}
+
 			stats[selected_slot] = StatBlock();
 			readGameSlot(selected_slot);
 
