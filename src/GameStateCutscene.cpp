@@ -26,6 +26,7 @@ Scene::Scene() : frame_counter(0)
 	, pause_frames(0)
 	, caption("")
 	, caption_size(0,0)
+	, caption_font("")
 	, art(NULL)
 	, sid(-1) {
 }
