@@ -60,9 +60,13 @@ bool Scene::logic() {
 
 		if (components.front().type == "caption") {
 
-			font->setFont("font_captions");
 			caption = components.front().s;
-			caption_size = font->calc_size(caption, VIEW_W * 0.8f);
+			caption_font = "font_captions";
+		}
+		else if (components.front().type == "text") {
+
+			caption = components.front().s;
+			caption_font = "font_regular";
 
 		}
 		else if (components.front().type == "image") {
@@ -107,10 +111,13 @@ void Scene::render() {
 		SDL_BlitSurface(art, NULL, screen, &r);
 
 	if (caption != "") {
-		font->setFont("font_captions");
-		font->renderShadowed(caption, screen->w / 2, screen->h - (caption_size.y*2),
+		font->setFont(caption_font);
+		caption_size = font->calc_size(caption, VIEW_W * 0.8f);
+		font->renderShadowed(caption, screen->w / 2, screen->h * 0.95f - (caption_size.y),
 							 JUSTIFY_CENTER,
-							 screen, FONT_WHITE);
+							 screen,
+							 VIEW_W * 0.8f,
+							 FONT_WHITE);
 	}
 }
 
@@ -170,7 +177,7 @@ bool GameStateCutscene::load(std::string filename) {
 		else if (infile.section == "scene") {
 			SceneComponent sc = SceneComponent();
 
-			if (infile.key == "caption") {
+			if (infile.key == "caption" || infile.key == "text") {
 				sc.type = infile.key;
 				sc.s = msg->get(infile.val);
 			}

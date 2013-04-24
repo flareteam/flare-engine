@@ -55,6 +55,7 @@ private:
 	int pause_frames;
 	std::string caption;
 	Point caption_size;
+	std::string caption_font;
 	SDL_Surface *art;
 	SDL_Rect art_dest;
 	SoundManager::SoundID sid;
