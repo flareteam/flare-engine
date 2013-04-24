@@ -22,20 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <iostream>
 using namespace std;
 
-SceneComponent::SceneComponent()
-	: type("")
-	, i(NULL)
-	, s("")
-	, x(0)
-	, y(0)
-	, z(0) {
-}
-
-SceneComponent::~SceneComponent()
-{
-	//SDL_FreeSurface(i);
-}
-
 Scene::Scene() : frame_counter(0)
 	, pause_frames(0)
 	, caption("")
@@ -48,9 +34,10 @@ Scene::~Scene() {
 
 	SDL_FreeSurface(art);
 
-	while(!components.empty())
+	while(!components.empty()) {
+		if (components.front().i != NULL) SDL_FreeSurface(components.front().i);
 		components.pop();
-
+	}
 }
 
 bool Scene::logic() {

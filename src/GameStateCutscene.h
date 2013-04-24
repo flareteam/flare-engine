@@ -35,12 +35,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class SceneComponent {
 public:
-	SceneComponent();
-	~SceneComponent();
 	std::string type;
 	SDL_Surface *i;
 	std::string s;
 	int x,y,z;
+	SceneComponent()
+		: type("")
+		, i(NULL)
+		, s("")
+		, x(0)
+		, y(0)
+		, z(0)
+	{}
 };
 
 class Scene {
