@@ -39,6 +39,14 @@ public:
 	SDL_Surface *i;
 	std::string s;
 	int x,y,z;
+	SceneComponent()
+		: type("")
+		, i(NULL)
+		, s("")
+		, x(0)
+		, y(0)
+		, z(0)
+	{}
 };
 
 class Scene {
