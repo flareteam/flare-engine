@@ -234,6 +234,7 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 }
 
 void MenuManager::handleKeyboardNavigation() {
+	// vendor/inventory switching
 	if (vendor->visible && inv->visible) {
 		int VENDOR_ROWS = vendor->getRowsCount() * 2; //Vendor Menu has two tabs
 		int INVENTORY_ROWS = inv->getCarriedRows();
@@ -258,7 +259,7 @@ void MenuManager::handleKeyboardNavigation() {
 			}
 		}
 	}
-
+	// stash/inventory switching
 	if (stash->visible && inv->visible) {
 		int STASH_ROWS = stash->getRowsCount();
 		int INVENTORY_ROWS = inv->getCarriedRows();
@@ -283,7 +284,7 @@ void MenuManager::handleKeyboardNavigation() {
 			}
 		}
 	}
-
+	// UP/DOWn scrolling in vendor menu
 	if (vendor->visible && !vendor->tablist.isLocked()) {
 		int VENDOR_ROWS = vendor->getRowsCount() * 2;
 
@@ -298,7 +299,7 @@ void MenuManager::handleKeyboardNavigation() {
 				vendor->tablist.getPrev();
 		}
 	}
-
+	// UP/DOWn scrolling in inventory
 	if (inv->visible && !inv->tablist.isLocked()) {
 		int INVENTORY_ROWS = inv->getCarriedRows();
 		int EQUIPPED_SLOTS = inv->getEquippedCount();
@@ -314,7 +315,7 @@ void MenuManager::handleKeyboardNavigation() {
 				inv->tablist.getPrev();
 		}
 	}
-
+	// UP/DOWn scrolling in stash
 	if (stash->visible && !stash->tablist.isLocked()) {
 		int STASH_ROWS = stash->getRowsCount();
 

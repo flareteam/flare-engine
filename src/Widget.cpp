@@ -64,10 +64,14 @@ bool TabList::isLocked() {
 
 void TabList::lock() {
 	locked = true;
+	if (current_is_valid())
+		widgets.at(current)->in_focus = false;
 }
 
 void TabList::unlock() {
 	locked = false;
+	if (current_is_valid())
+		widgets.at(current)->in_focus = true;
 }
 
 void TabList::add(Widget* widget) {
