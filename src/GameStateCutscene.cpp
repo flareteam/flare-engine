@@ -24,17 +24,20 @@ using namespace std;
 
 Scene::Scene() : frame_counter(0)
 	, pause_frames(0)
-	, caption("")
-	, caption_size(0,0)
+	, captions()
 	, art(NULL)
 	, sid(-1) {
 }
 
 Scene::~Scene() {
 
-	while(!components.empty())
-		components.pop();
+	captions.clear();
+	SDL_FreeSurface(art);
 
+	while(!components.empty()) {
+		if (components.front().i != NULL) SDL_FreeSurface(components.front().i);
+		components.pop();
+	}
 }
 
 bool Scene::logic() {
@@ -53,14 +56,24 @@ bool Scene::logic() {
 	}
 
 	/* parse scene components until next pause */
+	captions.clear();
 	while (!components.empty() && components.front().type != "pause") {
 
 		if (components.front().type == "caption") {
 
-			font->setFont("font_captions");
-			caption = components.front().s;
-			caption_size = font->calc_size(caption, VIEW_W * 0.8f);
+			Caption caption = Caption();
+			caption.caption = components.front().s;
+			caption.caption_font = "font_captions";
+			caption.caption_size = font->calc_size(caption.caption, (int)(VIEW_W * 0.8f));
+			captions.push_back(caption);
+		}
+		else if (components.front().type == "text") {
 
+			Caption caption = Caption();
+			caption.caption = components.front().s;
+			caption.caption_font = "font_regular";
+			caption.caption_size = font->calc_size(caption.caption, (int)(VIEW_W * 0.8f));
+			captions.push_back(caption);
 		}
 		else if (components.front().type == "image") {
 
@@ -103,11 +116,18 @@ void Scene::render() {
 	if (art != NULL)
 		SDL_BlitSurface(art, NULL, screen, &r);
 
-	if (caption != "") {
-		font->setFont("font_captions");
-		font->renderShadowed(caption, screen->w / 2, screen->h - (caption_size.y*2),
+	Point dest;
+	dest.x = screen->w / 2;
+	dest.y = (int)(screen->h * 0.7f);
+	for (unsigned i = 0; i < captions.size(); i++) {
+		if (captions.size() > 1 && i > 0)
+			dest.y = dest.y + captions.at(i-1).caption_size.y + (int)(screen->h * 0.02f);
+		font->setFont(captions.at(i).caption_font);
+		font->renderShadowed(captions.at(i).caption, dest.x, dest.y,
 							 JUSTIFY_CENTER,
-							 screen, FONT_WHITE);
+							 screen,
+							 (int)(VIEW_W * 0.8f),
+							 FONT_WHITE);
 	}
 }
 
@@ -165,10 +185,9 @@ bool GameStateCutscene::load(std::string filename) {
 			// allow having an empty section (globals such as scale_gfx might be set here
 		}
 		else if (infile.section == "scene") {
-			SceneComponent sc;
-			sc.type = "";
+			SceneComponent sc = SceneComponent();
 
-			if (infile.key == "caption") {
+			if (infile.key == "caption" || infile.key == "text") {
 				sc.type = infile.key;
 				sc.s = msg->get(infile.val);
 			}
@@ -219,7 +238,7 @@ SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
 	/* scale image to fit height */
 	if (scale_graphics) {
 		float ratio = image->h/(float)image->w;
-		SDL_Surface *art = scaleSurface(image, VIEW_W, VIEW_W*ratio);
+		SDL_Surface *art = scaleSurface(image, VIEW_W, (int)(VIEW_W*ratio));
 		if (art == NULL)
 			return image;
 

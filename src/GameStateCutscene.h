@@ -39,14 +39,29 @@ public:
 	SDL_Surface *i;
 	std::string s;
 	int x,y,z;
+	SceneComponent()
+		: type("")
+		, i(NULL)
+		, s("")
+		, x(0)
+		, y(0)
+		, z(0)
+	{}
+};
+
+class Caption {
+public:
+	std::string caption;
+	Point caption_size;
+	std::string caption_font;
+	Caption() : caption(""), caption_size(0,0), caption_font("font_regular") {}
 };
 
 class Scene {
 private:
 	int frame_counter;
 	int pause_frames;
-	std::string caption;
-	Point caption_size;
+	std::vector<Caption> captions;
 	SDL_Surface *art;
 	SDL_Rect art_dest;
 	SoundManager::SoundID sid;
