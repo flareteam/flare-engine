@@ -65,8 +65,6 @@ private:
 	std::vector<std::string> language_full;
 
 	int getVideoModes(void);
-	bool getLanguagesList(void);
-	int getLanguagesNumber(void);
 	void init();
 	void readConfig();
 	void update();

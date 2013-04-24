@@ -606,6 +606,18 @@ bool loadDefaults() {
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
 
+	char *language = setlocale(LC_ALL, "");
+	char language_code[3];
+	language_code[0] = tolower(language[0]);
+	language_code[1] = tolower(language[1]);
+	language_code[2] = 0;
+
+	string lang = string(language_code);
+
+	std::vector<string> languages = getLanguagesISOList();
+	if (std::find(languages.begin(), languages.end(), lang) != languages.end())
+		LANGUAGE = lang;
+
 	// Init automatically calculated parameters
 	VIEW_W_HALF = VIEW_W / 2;
 	VIEW_H_HALF = VIEW_H / 2;

@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <string>
 #include <stdint.h>
+#include <vector>
 
 class Point {
 public:
@@ -155,5 +156,9 @@ SDL_Surface* loadGraphicSurface(std::string filename,
 								bool HavePinkColorKey = false);
 
 void setupSDLVideoMode(unsigned width, unsigned height);
+
+std::vector<std::string> getLanguagesISOList();
+std::vector<std::string> getLanguagesFullList();
+int getLanguagesNumber();
 
 #endif

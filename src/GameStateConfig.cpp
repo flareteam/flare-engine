@@ -180,10 +180,9 @@ void GameStateConfig::init() {
 
 	// Allocate Languages ListBox
 	int langCount = getLanguagesNumber();
-	language_ISO = std::vector<std::string>();
-	language_full = std::vector<std::string>();
-	language_ISO.resize(langCount);
-	language_full.resize(langCount);
+	language_ISO = getLanguagesISOList();
+	language_full = getLanguagesFullList();
+
 	language_lstb = new WidgetListBox(langCount, 10, "images/menus/buttons/listbox_default.png");
 	language_lstb->can_deselect = false;
 
@@ -772,7 +771,11 @@ void GameStateConfig::update () {
 	}
 	joystick_device_lstb->refresh();
 
-	if (!getLanguagesList()) fprintf(stderr, "Unable to get languages list!\n");
+	language_ISO = getLanguagesISOList();
+	language_full = getLanguagesFullList();
+	if (language_ISO.empty())
+		fprintf(stderr, "Unable to get languages list!\n");
+
 	for (int i=0; i < getLanguagesNumber(); i++) {
 		language_lstb->append(language_full[i],"");
 		if (language_ISO[i] == LANGUAGE) language_lstb->selected[i] = true;
@@ -1262,34 +1265,6 @@ int GameStateConfig::getVideoModes() {
 	}
 
 	return modes;
-}
-
-bool GameStateConfig::getLanguagesList() {
-	FileParser infile;
-	if (infile.open(mods->locate("engine/languages.txt"))) {
-		unsigned int i=0;
-		while (infile.next()) {
-			language_ISO[i] = infile.key;
-			language_full[i] = infile.nextValue();
-			i += 1;
-		}
-		infile.close();
-	}
-
-	return true;
-}
-
-int GameStateConfig::getLanguagesNumber() {
-	int languages_num = 0;
-	FileParser infile;
-	if (infile.open(mods->locate("engine/languages.txt"))) {
-		while (infile.next()) {
-			languages_num += 1;
-		}
-		infile.close();
-	}
-
-	return languages_num;
 }
 
 void GameStateConfig::refreshFont() {
