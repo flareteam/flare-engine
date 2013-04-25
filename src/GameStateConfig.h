@@ -130,6 +130,7 @@ private:
 	WidgetLabel         * dbuf_note_lb;
 	WidgetLabel         * anim_tiles_note_lb;
 	WidgetLabel         * test_note_lb;
+	WidgetLabel         * handheld_note_lb;
 	WidgetButton        * activemods_shiftup_btn;
 	WidgetButton        * activemods_shiftdown_btn;
 	WidgetButton        * activemods_deactivate_btn;

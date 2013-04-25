@@ -140,6 +140,7 @@ void GameStateConfig::init() {
 	dbuf_note_lb = new WidgetLabel();
 	anim_tiles_note_lb = new WidgetLabel();
 	test_note_lb = new WidgetLabel();
+	handheld_note_lb = new WidgetLabel();
 	activemods_shiftup_btn = new WidgetButton("images/menus/buttons/up.png");
 	activemods_shiftdown_btn = new WidgetButton("images/menus/buttons/down.png");
 	activemods_deactivate_btn = new WidgetButton("images/menus/buttons/button_default.png");
@@ -592,6 +593,13 @@ void GameStateConfig::readConfig () {
 				test_note_lb->set(msg->get("Experimental"));
 				child_widget.push_back(test_note_lb);
 				optiontab[child_widget.size()-1] = 0;
+			}
+			else if (infile.key == "handheld_note") {
+				handheld_note_lb->setX(frame.x + x1);
+				handheld_note_lb->setY(frame.y + y1);
+				handheld_note_lb->set(msg->get("For handheld devices"));
+				child_widget.push_back(handheld_note_lb);
+				optiontab[child_widget.size()-1] = 3;
 			}
 			//buttons
 			else if (infile.key == "activemods_shiftup") {
