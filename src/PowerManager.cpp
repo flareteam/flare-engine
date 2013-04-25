@@ -76,6 +76,18 @@ void PowerManager::loadAll() {
 		if (fileExists(test_path)) {
 			this->loadPowers(test_path);
 		}
+
+		test_path = PATH_DEFAULT_USER + "mods/" + mods->mod_list[i] + "/powers/powers.txt";
+
+		if (fileExists(test_path)) {
+			this->loadPowers(test_path);
+		}
+
+		test_path = PATH_DEFAULT_DATA + "mods/" + mods->mod_list[i] + "/powers/powers.txt";
+
+		if (fileExists(test_path)) {
+			this->loadPowers(test_path);
+		}
 	}
 }
 

@@ -83,12 +83,14 @@ void GameStateConfig::init() {
 	cancel_button->refresh();
 
 	vector<string> mod_dirs;
-	vector<string> mod_dirs_local;
+	vector<string> mod_dirs_other;
 	getDirList(PATH_DATA + "mods", mod_dirs);
-	getDirList(PATH_USER + "mods", mod_dirs_local);
-	for (unsigned i=0; i<mod_dirs_local.size(); ++i) {
-		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_local[i]) == mod_dirs.end())
-			mod_dirs.push_back(mod_dirs_local[i]);
+	getDirList(PATH_USER + "mods", mod_dirs_other);
+	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs_other);
+	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
+	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
+		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
+			mod_dirs.push_back(mod_dirs_other[i]);
 	}
 	mods_total = mod_dirs.size();
 	// Remove active mods from the available mods list

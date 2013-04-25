@@ -92,41 +92,68 @@ void ItemManager::loadAll() {
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
 		// check locally installed mods first
 		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/items.txt";
-
 		if (fileExists(test_path)) {
 			this->load(test_path);
 		}
 
 		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/types.txt";
-
 		if (fileExists(test_path)) {
 			this->loadTypes(test_path);
 		}
 
 		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/sets.txt";
-
 		if (fileExists(test_path)) {
 			this->loadSets(test_path);
 		}
 
-		// now check global mods
+		// check global mods
 		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/items.txt";
-
 		if (fileExists(test_path)) {
 			this->load(test_path);
 		}
 
 		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/types.txt";
-
 		if (fileExists(test_path)) {
 			this->loadTypes(test_path);
 		}
 
 		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/sets.txt";
-
 		if (fileExists(test_path)) {
 			this->loadSets(test_path);
 		}
+
+		// check the local default mods
+		test_path = PATH_DEFAULT_USER + "mods/" + mods->mod_list[i] + "/items/items.txt";
+		if (fileExists(test_path)) {
+			this->load(test_path);
+		}
+
+		test_path = PATH_DEFAULT_USER + "mods/" + mods->mod_list[i] + "/items/types.txt";
+		if (fileExists(test_path)) {
+			this->loadTypes(test_path);
+		}
+
+		test_path = PATH_DEFAULT_USER + "mods/" + mods->mod_list[i] + "/items/sets.txt";
+		if (fileExists(test_path)) {
+			this->loadSets(test_path);
+		}
+
+		// check the global default mods
+		test_path = PATH_DEFAULT_DATA + "mods/" + mods->mod_list[i] + "/items/items.txt";
+		if (fileExists(test_path)) {
+			this->load(test_path);
+		}
+
+		test_path = PATH_DEFAULT_DATA + "mods/" + mods->mod_list[i] + "/items/types.txt";
+		if (fileExists(test_path)) {
+			this->loadTypes(test_path);
+		}
+
+		test_path = PATH_DEFAULT_DATA + "mods/" + mods->mod_list[i] + "/items/sets.txt";
+		if (fileExists(test_path)) {
+			this->loadSets(test_path);
+		}
+
 	}
 
 	/*

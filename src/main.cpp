@@ -42,6 +42,7 @@ SDL_Surface *titlebar_icon;
 static void init() {
 
 	setPaths();
+	setDefaultPath();
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
