@@ -122,6 +122,8 @@ public:
 
 	TabList tablist;
 
+	bool invoke_from_manager;
+
 };
 
 #endif

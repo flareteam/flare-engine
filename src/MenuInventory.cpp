@@ -52,6 +52,7 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 	drag_prev_src = -1;
 	changed_equipment = true;
 	changed_artifact = true;
+	invoke_from_manager = false;
 	log_msg = "";
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
@@ -849,7 +850,8 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 
 		// apply various bonuses
 		unsigned bonus_counter = 0;
-		hp_changed = mp_changed = false;
+		hp_changed = false;
+		mp_changed = false;
 		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
 			int id = powers->getIdFromTag(item.bonus_stat[bonus_counter]);
 
@@ -863,7 +865,8 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 	 					stats->had_bonus_hp = true;
 	 					stats->prev_bonus_hp = item.bonus_val[bonus_counter];
 	 					float ratio = (float)stats->hp / (float)stats->maxhp;
-	                	stats->hp = ratio * (stats->maxhp + item.bonus_val[bonus_counter]);
+	 					int bonus = stats->maxhp + item.bonus_val[bonus_counter];
+	                	stats->hp = ratio * bonus;
 	 				}
 	 				else if (powers->powers[id].effect_type == "mp") {
 	 					mp_changed = true;
@@ -879,7 +882,7 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		}
 
 		// Maintain HP/MP ratio when transitioning from bonus to non-bonus
-		if (changed_equipment) {
+		if (changed_equipment && invoke_from_manager) {
 			if (stats->had_bonus_hp && !hp_changed) {
 				stats->had_bonus_hp = false;
 				float ratio = (float)stats->hp / (float)stats->maxhp;
@@ -889,7 +892,9 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 				stats->had_bonus_mp = false;
 				float ratio = (float)stats->mp / (float)stats->maxmp;
 				stats->mp = (stats->maxmp - stats->prev_bonus_mp) * ratio;
-			}			
+			}
+
+			invoke_from_manager = false;			
 		}
 
 		// add item powers
