@@ -56,9 +56,11 @@ private:
 	bool current_is_valid();
 	bool previous_is_valid();
 	ScrollType scrolltype;
+	int MV_LEFT;
+	int MV_RIGHT;
+	int ACTIVATE;
 public:
-	TabList();
-	TabList(ScrollType scrolltype);
+	TabList(ScrollType _scrolltype = TWO_DIRECTIONS, int _LEFT = 4/*LEFT*/, int _RIGHT = 5/*RIGHT*/, int _ACTIVATE = 1/*ACCEPT*/);
 	~TabList();
 
 	bool isLocked();

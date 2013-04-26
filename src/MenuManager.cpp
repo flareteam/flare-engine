@@ -347,6 +347,7 @@ void MenuManager::logic() {
 	if (NO_MOUSE)
 		handleKeyboardNavigation();
 
+	act->logic();
 	hudlog->logic();
 	enemy->logic();
 	chr->logic();
@@ -406,7 +407,7 @@ void MenuManager::logic() {
 	}
 
 	// inventory menu toggle
-	if ((inpt->pressing[INVENTORY] && !key_lock && !dragging) || clicking_inventory) {
+	if ((inpt->pressing[INVENTORY] && !key_lock && !dragging) || clicking_inventory || act->menus[MENU_INVENTORY]->checkClick()) {
 		key_lock = true;
 		if (inv->visible) {
 			snd->play(inv->sfx_close);
@@ -422,7 +423,7 @@ void MenuManager::logic() {
 	}
 
 	// powers menu toggle
-	if (((inpt->pressing[POWERS] && !key_lock && !dragging) || clicking_powers) && stats->humanoid) {
+	if (((inpt->pressing[POWERS] && !key_lock && !dragging) || clicking_powers || act->menus[MENU_POWERS]->checkClick()) && stats->humanoid) {
 		key_lock = true;
 		if (pow->visible) {
 			snd->play(pow->sfx_close);
@@ -438,7 +439,7 @@ void MenuManager::logic() {
 	act->requires_attention[MENU_POWERS] = pow->getUnspent() > 0;
 
 	// character menu toggleggle
-	if (((inpt->pressing[CHARACTER] && !key_lock && !dragging) || clicking_character)) {
+	if ((inpt->pressing[CHARACTER] && !key_lock && !dragging) || clicking_character || act->menus[MENU_CHARACTER]->checkClick()) {
 		key_lock = true;
 		if (chr->visible) {
 			snd->play(chr->sfx_close);
@@ -456,7 +457,7 @@ void MenuManager::logic() {
 	act->requires_attention[MENU_CHARACTER] = chr->getUnspent() > 0;
 
 	// log menu toggle
-	if ((inpt->pressing[LOG] && !key_lock && !dragging) || clicking_log) {
+	if ((inpt->pressing[LOG] && !key_lock && !dragging) || clicking_log || act->menus[MENU_LOG]->checkClick()) {
 		key_lock = true;
 		if (log->visible) {
 			snd->play(log->sfx_close);

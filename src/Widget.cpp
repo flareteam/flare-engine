@@ -44,19 +44,15 @@ bool Widget::getPrev() {
 	return false;
 }
 
-TabList::TabList()
-	: widgets()
-	, current(-1)
-	, locked(false)
-	, scrolltype(TWO_DIRECTIONS)
-{}
-
-TabList::TabList(ScrollType _scrolltype)
+TabList::TabList(ScrollType _scrolltype, int _LEFT, int _RIGHT, int _ACTIVATE)
 	: widgets()
 	, current(-1)
 	, previous(-1)
 	, locked(false)
 	, scrolltype(_scrolltype)
+	, MV_LEFT(_LEFT)
+	, MV_RIGHT(_RIGHT)
+	, ACTIVATE(_ACTIVATE)
 {}
 
 TabList::~TabList()
@@ -189,18 +185,18 @@ void TabList::logic() {
 	}
 
 	if (scrolltype == HORIZONTAL || scrolltype == TWO_DIRECTIONS) {
-		if (inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
-			inpt->lock[LEFT] = true;
+		if (inpt->pressing[MV_LEFT] && !inpt->lock[MV_LEFT]) {
+			inpt->lock[MV_LEFT] = true;
 			getPrev(false);
 		}
-		else if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
-			inpt->lock[RIGHT] = true;
+		else if (inpt->pressing[MV_RIGHT] && !inpt->lock[MV_RIGHT]) {
+			inpt->lock[MV_RIGHT] = true;
 			getNext(false);
 		}
 	}
 
-	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		inpt->lock[ACCEPT] = true;
+	if (inpt->pressing[ACTIVATE] && !inpt->lock[ACTIVATE]) {
+		inpt->lock[ACTIVATE] = true;
 		deactivatePrevious(); //Deactivate previously activated item
 		activate();	// Activate the currently infocus item
 	}
