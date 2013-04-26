@@ -51,7 +51,7 @@ private:
 	int ACTIVATE;
 
 public:
-	WidgetSlot(SDL_Surface *_icon, int icon_id = -1, int _ACTIVATE = ACCEPT);
+	WidgetSlot(SDL_Surface *_icon, int _icon_id = -1, int _ACTIVATE = ACCEPT);
 	~WidgetSlot();
 
 	void activate();
