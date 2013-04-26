@@ -340,6 +340,11 @@ public:
 	int avoidance_per_defense;
 	int crit_base;
 	int crit_per_level;
+
+	bool had_bonus_hp;
+	bool had_bonus_mp;
+	int prev_bonus_hp;
+	int prev_bonus_mp;
 };
 
 #endif
