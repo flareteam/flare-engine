@@ -33,6 +33,9 @@ Widget::~Widget()
 void Widget::activate()
 {}
 
+void Widget::deactivate()
+{}
+
 bool Widget::getNext() {
 	return false;
 }
@@ -51,6 +54,7 @@ TabList::TabList()
 TabList::TabList(ScrollType _scrolltype)
 	: widgets()
 	, current(-1)
+	, previous(-1)
 	, locked(false)
 	, scrolltype(_scrolltype)
 {}
@@ -108,6 +112,10 @@ bool TabList::current_is_valid() {
 	return current >= 0 && current < (int)widgets.size();
 }
 
+bool TabList::previous_is_valid() {
+	return previous >= 0 && previous < (int)widgets.size();
+}
+
 Widget* TabList::getNext(bool inner) {
 	if (widgets.size() == 0)
 		return NULL;
@@ -147,9 +155,16 @@ Widget* TabList::getPrev(bool inner) {
 	return widgets.at(current);
 }
 
+void TabList::deactivatePrevious() {
+	if (previous_is_valid() && previous != current) {
+		widgets.at(previous)->deactivate();
+	}
+}
+
 void TabList::activate() {
 	if (current_is_valid()) {
 		widgets.at(current)->activate();
+		previous = current;
 	}
 }
 
@@ -186,6 +201,7 @@ void TabList::logic() {
 
 	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 		inpt->lock[ACCEPT] = true;
+		deactivatePrevious(); //Deactivate previously activated item
 		activate();	// Activate the currently infocus item
 	}
 
