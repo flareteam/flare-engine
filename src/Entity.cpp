@@ -180,6 +180,7 @@ bool Entity::takeHit(const Hazard &h) {
 	//if we are using an absolute accuracy, offset the constant 25 added to the accuracy
 	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 		true_avoidance += 25;
+	clampFloor(true_avoidance, MIN_AVOIDANCE);
 	clampCeil(true_avoidance, MAX_AVOIDANCE);
 
 	if (percentChance(true_avoidance)) {
@@ -201,8 +202,9 @@ bool Entity::takeHit(const Hazard &h) {
 	if (h.trait_elemental >= 0 && unsigned(h.trait_elemental) < stats.vulnerable.size()) {
 		unsigned i = h.trait_elemental;
 		int vulnerable = stats.vulnerable[i];
-		if (stats.vulnerable[i] > MAX_RESIST && stats.vulnerable[i] < 100)
-			vulnerable = MAX_RESIST;
+		clampFloor(vulnerable,MIN_RESIST);
+		if (stats.vulnerable[i] < 100)
+			clampCeil(vulnerable,MAX_RESIST);
 		dmg = (dmg * vulnerable) / 100;
 	}
 
@@ -215,9 +217,14 @@ bool Entity::takeHit(const Hazard &h) {
 		}
 
 		if (absorption > 0 && dmg > 0) {
-			if ((absorption*100)/dmg > MAX_BLOCK)
+			int abs = absorption;
+			if ((abs*100)/dmg < MIN_BLOCK)
+				absorption = (dmg * MIN_BLOCK) /100;
+			if ((abs*100)/dmg > MAX_BLOCK)
 				absorption = (dmg * MAX_BLOCK) /100;
-			if ((absorption*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
+			if ((abs*100)/dmg < MIN_ABSORB && !stats.effects.triggered_block)
+				absorption = (dmg * MIN_ABSORB) /100;
+			if ((abs*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
 				absorption = (dmg * MAX_ABSORB) /100;
 
 			// Sometimes, the absorb limits cause absorbtion to drop to 1

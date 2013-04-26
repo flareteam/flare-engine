@@ -149,6 +149,10 @@ extern short MAX_ABSORB;
 extern short MAX_RESIST;
 extern short MAX_BLOCK;
 extern short MAX_AVOIDANCE;
+extern short MIN_ABSORB;
+extern short MIN_RESIST;
+extern short MIN_BLOCK;
+extern short MIN_AVOIDANCE;
 
 // Elemental types
 extern std::vector<Element> ELEMENTS;
