@@ -262,7 +262,7 @@ void GameStatePlay::checkTeleport() {
 
 		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
-                enemies->enemies[i]->map->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
+				enemies->enemies[i]->map->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
 				enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
 				enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
 			}
@@ -298,8 +298,18 @@ void GameStatePlay::checkTeleport() {
 				if (GAME_PREFIX.length() > 0)
 					filename << GAME_PREFIX << "_";
 				filename << "save" << game_slot << ".txt";
-				if(remove(filename.str().c_str()) != 0)
+				if (remove(filename.str().c_str()) != 0)
 					perror("Error deleting save from path");
+
+				// Remove stash
+				stringstream ss;
+				ss.str("");
+				ss << PATH_USER;
+				if (GAME_PREFIX.length() > 0)
+					ss << GAME_PREFIX << "_";
+				ss << "stash_HC" << game_slot << ".txt";
+				if (remove(ss.str().c_str()) != 0)
+					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", game_slot);
 
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();

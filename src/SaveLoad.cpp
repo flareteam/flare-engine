@@ -157,7 +157,10 @@ void GameStatePlay::saveGame() {
 	ss << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
 		ss << GAME_PREFIX << "_";
-	ss << "stash.txt";
+	ss << "stash";
+	if (pc->stats.permadeath)
+		ss << "_HC" << game_slot;
+	ss << ".txt";
 
 	outfile.open(ss.str().c_str(), ios::out);
 
@@ -201,10 +204,7 @@ void GameStatePlay::loadGame() {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
-				if (toInt(infile.val) == 1)
-					pc->stats.permadeath = true;
-				else
-					pc->stats.permadeath = false;
+				pc->stats.permadeath = (toInt(infile.val) == 1);
 			}
 			else if (infile.key == "option") {
 				pc->stats.base = infile.nextValue();
@@ -407,7 +407,10 @@ void GameStatePlay::loadStash() {
 	ss << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
 		ss << GAME_PREFIX << "_";
-	ss << "stash.txt";
+	ss << "stash";
+	if (pc->stats.permadeath)
+		ss << "_HC" << game_slot;
+	ss << ".txt";
 
 	if (infile.open(ss.str())) {
 		while (infile.next()) {
