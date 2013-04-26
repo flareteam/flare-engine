@@ -62,6 +62,9 @@ CLICK_TYPE WidgetSlot::checkClick() {
 CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	Point mouse(x,y);
 
+	// disabled slots can't be clicked;
+	if (!enabled) return NO_CLICK;
+
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return NO_CLICK;
 	if (inpt->lock[ACTIVATE]) return NO_CLICK;
