@@ -139,20 +139,14 @@ void WidgetSlot::render(SDL_Surface *target) {
 
 		topLeft.x = pos.x - 1;
 		topLeft.y = pos.y - 1;
-		bottomRight.x = pos.x + pos.w;
-		bottomRight.y = pos.y + pos.h;
+		bottomRight.x = topLeft.x + pos.w;
+		bottomRight.y = topLeft.y + pos.h;
 		if (checked)
 			color = SDL_MapRGB(target->format, 122,103,238);
 		else
 			color = SDL_MapRGB(target->format, 0,191,255);
 
-		if (target == screen) {
-			SDL_LockSurface(screen);
-			drawRectangle(target, topLeft, bottomRight, color);
-			SDL_UnlockSurface(screen);
-		}
-		else
-			drawRectangle(target, topLeft, bottomRight, color);
+		drawRectangle(target, topLeft, bottomRight, color);
 	}
 }
 
