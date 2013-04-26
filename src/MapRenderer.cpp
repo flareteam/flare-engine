@@ -307,11 +307,13 @@ void MapRenderer::loadEvent(FileParser &infile) {
 	if (infile.key == "type") {
 		string type = infile.val;
 		events.back().type = type;
-		if (type == "custom");
-		else if (type == "on_load");
-		else if (type == "on_clear");
-		else if (type == "run_once");
-		else {
+
+		if      (type == "on_trigger");
+		else if (type == "on_load") {
+			events.back().keep_after_trigger = false;
+		} else if (type == "on_clear") {
+			events.back().keep_after_trigger = false;
+		} else {
 			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"custom\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
 		}
 	}
@@ -581,6 +583,9 @@ void MapRenderer::loadEventComponent(FileParser &infile) {
 		e->s = infile.val;
 	}
 	else if (infile.key == "cutscene") {
+		e->s = infile.val;
+	}
+	else if (infile.key == "repeat") {
 		e->s = infile.val;
 	}
 	else {
@@ -1233,7 +1238,6 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 	ev.cooldown_ticks = ev.cooldown;
 
 	const Event_Component *ec;
-	bool destroy_event = false;
 
 	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
@@ -1253,7 +1257,7 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 				teleport_destination.y = ec->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 			}
 			else {
-				destroy_event = true;
+				ev.keep_after_trigger = false;
 				log_msg = msg->get("Unknown destination");
 			}
 		}
@@ -1395,8 +1399,11 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			cutscene = true;
 			cutscene_file = ec->s;
 		}
+		else if (ec->type == "repeat") {
+			ev.keep_after_trigger = toBool(ec->s);
+		}
 	}
-	return (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event);
+	return !ev.keep_after_trigger;
 }
 
 MapRenderer::~MapRenderer() {

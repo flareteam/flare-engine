@@ -93,6 +93,7 @@ public:
 	int cooldown; // events that run multiple times pause this long in frames
 	int cooldown_ticks;
 	StatBlock *stats;
+	bool keep_after_trigger; // if this event has been triggered once, should this event be kept? If so, this event can be triggered multiple times.
 
 	Map_Event()
 	 : type("")
@@ -100,6 +101,7 @@ public:
 	 , cooldown(0)
 	 , cooldown_ticks(0)
 	 , stats(NULL)
+	 , keep_after_trigger(true)
 	{
 		location.x = location.y = location.w = location.h = 0;
 		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
