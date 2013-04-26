@@ -309,6 +309,7 @@ void MapRenderer::loadEvent(FileParser &infile) {
 		events.back().type = type;
 
 		if      (type == "on_trigger");
+		else if (type == "on_mapexit"); // no need to set keep_after_trigger to false correctly, it's ignored anyway
 		else if (type == "on_load") {
 			events.back().keep_after_trigger = false;
 		} else if (type == "on_clear") {
@@ -1008,6 +1009,22 @@ void MapRenderer::executeOnLoadEvents() {
 	}
 }
 
+void MapRenderer::executeOnMapExitEvents() {
+	vector<Map_Event>::iterator it;
+
+	// We're leaving the map, so the events of this map are removed anyway in
+	// the next frame (Reminder: We're about to load a new map ;),
+	// so we will ignore the events keep_after_trigger value and do not delete
+	// any event in this loop
+	for (it = events.begin(); it != events.end(); ++it) {
+
+		// skip inactive events
+		if (!isActive(*it)) continue;
+
+		if ((*it).type == "on_mapexit")
+			executeEvent(*it); // ignore repeat value
+	}
+}
 
 void MapRenderer::checkEvents(Point loc) {
 	Point maploc;

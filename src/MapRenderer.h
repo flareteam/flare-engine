@@ -257,6 +257,9 @@ public:
 	void checkNearestEvent(Point loc);
 	void checkTooltip();
 
+	// some events are triggered on exiting the map
+	void executeOnMapExitEvents();
+
 	// vars
 	std::string title;
 	short w;
