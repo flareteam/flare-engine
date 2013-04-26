@@ -284,7 +284,7 @@ void MenuManager::handleKeyboardNavigation() {
 			}
 		}
 	}
-	// UP/DOWn scrolling in vendor menu
+	// UP/DOWN scrolling in vendor menu
 	if (vendor->visible && !vendor->tablist.isLocked()) {
 		int VENDOR_ROWS = vendor->getRowsCount() * 2;
 
@@ -299,7 +299,7 @@ void MenuManager::handleKeyboardNavigation() {
 				vendor->tablist.getPrev();
 		}
 	}
-	// UP/DOWn scrolling in inventory
+	// UP/DOWN scrolling in inventory
 	if (inv->visible && !inv->tablist.isLocked()) {
 		int INVENTORY_ROWS = inv->getCarriedRows();
 		int EQUIPPED_SLOTS = inv->getEquippedCount();
@@ -315,7 +315,7 @@ void MenuManager::handleKeyboardNavigation() {
 				inv->tablist.getPrev();
 		}
 	}
-	// UP/DOWn scrolling in stash
+	// UP/DOWN scrolling in stash
 	if (stash->visible && !stash->tablist.isLocked()) {
 		int STASH_ROWS = stash->getRowsCount();
 
@@ -344,7 +344,8 @@ void MenuManager::logic() {
 	xp->update((stats->xp - stats->xp_table[stats->level-1]),(stats->xp_table[stats->level] - stats->xp_table[stats->level-1]),inpt->mouse,msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
 	effects->update(stats);
 
-	handleKeyboardNavigation();
+	if (NO_MOUSE)
+		handleKeyboardNavigation();
 
 	hudlog->logic();
 	enemy->logic();
