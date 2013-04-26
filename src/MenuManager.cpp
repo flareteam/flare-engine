@@ -236,9 +236,9 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 void MenuManager::handleKeyboardNavigation() {
 	// vendor/inventory switching
 	if (vendor->visible && inv->visible) {
-		int VENDOR_ROWS = vendor->getRowsCount() * 2; //Vendor Menu has two tabs
-		int INVENTORY_ROWS = inv->getCarriedRows();
-		int EQUIPPED_SLOTS = inv->getEquippedCount();
+		const int VENDOR_ROWS = vendor->getRowsCount() * 2; //Vendor Menu has two tabs
+		const int INVENTORY_ROWS = inv->getCarriedRows();
+		const int EQUIPPED_SLOTS = inv->getEquippedCount();
 
 		if (vendor->tablist.getCurrent() != -1 && !vendor->tablist.isLocked()) {
 			if (((vendor->tablist.getCurrent() + 1) % (vendor->tablist.size()/VENDOR_ROWS) == 0) &&
@@ -261,9 +261,9 @@ void MenuManager::handleKeyboardNavigation() {
 	}
 	// stash/inventory switching
 	if (stash->visible && inv->visible) {
-		int STASH_ROWS = stash->getRowsCount();
-		int INVENTORY_ROWS = inv->getCarriedRows();
-		int EQUIPPED_SLOTS = inv->getEquippedCount();
+		const int STASH_ROWS = stash->getRowsCount();
+		const int INVENTORY_ROWS = inv->getCarriedRows();
+		const int EQUIPPED_SLOTS = inv->getEquippedCount();
 
 		if (stash->tablist.getCurrent() != -1 && !stash->tablist.isLocked()) {
 			if (((stash->tablist.getCurrent() + 1) % (stash->tablist.size()/STASH_ROWS) == 0) &&
