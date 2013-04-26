@@ -311,7 +311,6 @@ void MapRenderer::loadEvent(FileParser &infile) {
 		else if (type == "on_load");
 		else if (type == "on_clear");
 		else if (type == "run_once");
-		else if (type == "stash");
 		else {
 			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"custom\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
 		}
@@ -571,6 +570,9 @@ void MapRenderer::loadEventComponent(FileParser &infile) {
 
 			repeat_val = infile.nextValue();
 		}
+	}
+	else if (infile.key == "stash") {
+		e->s = infile.val;
 	}
 	else if (infile.key == "npc") {
 		e->s = infile.val;
@@ -1233,12 +1235,6 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 	const Event_Component *ec;
 	bool destroy_event = false;
 
-	if (ev.type == "stash") {
-		stash = true;
-		stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
-	}
-
 	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
 
@@ -1380,6 +1376,11 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			}
 
 			powers->activate(power_index, ev.stats, target);
+		}
+		else if (ec->type == "stash") {
+			stash = true;
+			stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 		}
 		else if (ec->type == "npc") {
 			event_npc = ec->s;
