@@ -68,6 +68,10 @@ private:
 	SDL_Color color_normal;
 	SDL_Color color_high;
 
+	// hp/mp change
+	bool hp_changed;
+	bool mp_changed;
+
 public:
 	MenuInventory(ItemManager *items, StatBlock *stats, PowerManager *powers);
 	~MenuInventory();
