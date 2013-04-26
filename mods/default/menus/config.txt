@@ -41,7 +41,7 @@ handheld_note=416,136
 # scrollpane values are positions x, y and sizes width, height
 scrollpane=0,4,600,320
 # scrollpane_contents is the height of the scrollpane's internal area
-scrollpane_contents=780
+scrollpane_contents=880
 
 keybinds_bg_color=26,26,26
 cancel=160,10,202,10
@@ -71,6 +71,9 @@ log=160,640,202,640
 ctrl=160,670,202,670
 shift=160,700,202,700
 delete=160,730,202,730
+actionbar=160,760,202,760
+actionbar_back=160,790,202,790
+actionbar_forward=160,820,202,820
 secondary_offset=145,0
 
 [mods]

@@ -98,6 +98,13 @@ void InputState::defaultQwertyKeyBindings () {
 	binding_alt[SHIFT] = SDLK_RSHIFT;
 	binding[DEL] = SDLK_DELETE;
 	binding_alt[DEL] = SDLK_BACKSPACE;
+
+	binding[ACTIONBAR] = SDLK_b;
+	binding_alt[ACTIONBAR] = SDLK_b;
+	binding[ACTIONBAR_BACK] = SDLK_z;
+	binding_alt[ACTIONBAR_BACK] = SDLK_z;
+	binding[ACTIONBAR_FORWARD] = SDLK_x;
+	binding_alt[ACTIONBAR_FORWARD] = SDLK_x;
 }
 
 void InputState::defaultJoystickBindings () {
@@ -163,6 +170,9 @@ void InputState::loadKeyBindings() {
 		else if (infile.key == "ctrl") cursor = CTRL;
 		else if (infile.key == "shift") cursor = SHIFT;
 		else if (infile.key == "delete") cursor = DEL;
+		else if (infile.key == "actionbar") cursor = ACTIONBAR;
+		else if (infile.key == "actionbar_back") cursor = ACTIONBAR_BACK;
+		else if (infile.key == "actionbar_forward") cursor = ACTIONBAR_FORWARD;
 
 		if (cursor != -1) {
 			binding[cursor] = key1;
@@ -207,6 +217,9 @@ void InputState::saveKeyBindings() {
 		outfile << "ctrl=" << binding[CTRL] << "," << binding_alt[CTRL] << "\n";
 		outfile << "shift=" << binding[SHIFT] << "," << binding_alt[SHIFT] << "\n";
 		outfile << "delete=" << binding[DEL] << "," << binding_alt[DEL] << "\n";
+		outfile << "actionbar=" << binding[ACTIONBAR] << "," << binding_alt[ACTIONBAR] << "\n";
+		outfile << "actionbar_back=" << binding[ACTIONBAR_BACK] << "," << binding_alt[ACTIONBAR_BACK] << "\n";
+		outfile << "actionbar_forward=" << binding[ACTIONBAR_FORWARD] << "," << binding_alt[ACTIONBAR_FORWARD] << "\n";
 
 		if (outfile.bad()) fprintf(stderr, "Unable to write keybindings config file. No write access or disk is full!\n");
 		outfile.close();
@@ -656,6 +669,9 @@ void InputState::setKeybindNames() {
 	binding_name[22] = msg->get("Ctrl");
 	binding_name[23] = msg->get("Shift");
 	binding_name[24] = msg->get("Delete");
+	binding_name[25] = msg->get("ActionBar Accept");
+	binding_name[26] = msg->get("ActionBar Left");
+	binding_name[27] = msg->get("ActionBar Right");
 
 	mouse_button[0] = msg->get("lmb");
 	mouse_button[1] = msg->get("mmb");

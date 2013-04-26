@@ -54,7 +54,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[125];
+	int optiontab[134];
 	SDL_Rect frame;
 	SDL_Rect* video_modes;
 
@@ -136,8 +136,8 @@ private:
 	WidgetButton        * activemods_deactivate_btn;
 	WidgetButton        * inactivemods_activate_btn;
 
-	WidgetLabel         * settings_lb[25];
-	WidgetButton        * settings_key[50];
+	WidgetLabel         * settings_lb[28];
+	WidgetButton        * settings_key[56];
 
 	WidgetScrollBox     * input_scrollbox;
 	MenuConfirm         * input_confirm;
