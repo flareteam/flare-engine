@@ -37,7 +37,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Check to see if a directory/folder exists
  */
-bool dirExists(std::string path) {
+bool dirExists(const std::string &path) {
+	struct stat st;
+	return (stat(path.c_str(), &st) == 0);
+}
+
+bool pathExists(const std::string &path) {
 	struct stat st;
 	return (stat(path.c_str(), &st) == 0);
 }
@@ -58,6 +63,12 @@ void createDir(std::string path) {
 	std::string syscmd = "mkdir " + path;
 	system(syscmd.c_str());
 #endif
+}
+
+bool isDirectory(const std::string &path) {
+	struct stat st;
+	stat(path.c_str(), &st);
+	return st.st_mode & S_IFDIR;
 }
 
 /**
