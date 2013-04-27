@@ -143,20 +143,28 @@ string ModManager::locate(const string& filename) {
 	return PATH_DATA + filename;
 }
 
-vector<string> ModManager::list(const string &filename) {
+void amendPathToVector(const string &path, std::vector<std::string> &vec)
+{
+	if (pathExists(path)) {
+		if (isDirectory(path)) {
+			getFileList(path, "*.txt", vec);
+		} else {
+			vec.push_back(path);
+		}
+	}
+}
+
+vector<string> ModManager::list(const string &path) {
 	vector<string> ret;
-	string test_path = PATH_DATA + filename;
-	if (fileExists(test_path))
-		ret.push_back(test_path);
+	string test_path = PATH_DATA + path;
+	amendPathToVector(test_path, ret);
 
 	for (unsigned int i = 0; i < mod_list.size(); ++i) {
-		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + filename;
-		if (fileExists(test_path))
-			ret.push_back(test_path);
+		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + path;
+		amendPathToVector(test_path, ret);
 
-		test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + filename;
-		if (fileExists(test_path))
-			ret.push_back(test_path);
+		test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + path;
+		amendPathToVector(test_path, ret);
 	}
 
 	return ret;
