@@ -103,6 +103,10 @@ StatBlock::StatBlock()
 	, dmg_ranged_max(4)
 	, absorb_min(0)
 	, absorb_max(0)
+	, prev_maxhp(0)
+	, prev_maxmp(0)
+	, pres_hp(0)
+	, pres_mp(0)
 	, speed(14)
 	, dspeed(10)
 	, wielding_physical(false)
@@ -450,6 +454,12 @@ void StatBlock::recalc_alt() {
 
 	int lev0 = level -1;
 
+	// preserve hp/mp states
+	prev_maxhp = maxhp;
+	prev_maxmp = maxmp;
+	pres_hp = hp;
+	pres_mp = mp;	
+
 	if (hero) {
 		// calculate primary stats
 		offense_additional = effects.bonus_offense;
@@ -504,6 +514,17 @@ void StatBlock::logic() {
 
 	// apply bonuses from items/effects to base stats
 	recalc_alt();
+
+	// preserve ratio on maxmp and maxhp changes
+	float ratio;
+	if (prev_maxhp != maxhp) {
+		ratio = (float)pres_hp / (float)prev_maxhp;
+		hp = ratio * maxhp;
+	}
+	if (prev_maxmp != maxmp) {
+		ratio = (float)pres_mp / (float)prev_maxmp;
+		mp = ratio * maxmp;
+	}
 
 	// handle cooldowns
 	if (cooldown_ticks > 0) cooldown_ticks--; // global cooldown
