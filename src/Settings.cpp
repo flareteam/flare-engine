@@ -146,6 +146,10 @@ short MAX_ABSORB = 90;
 short MAX_RESIST = 90;
 short MAX_BLOCK = 100;
 short MAX_AVOIDANCE = 99;
+short MIN_ABSORB = 0;
+short MIN_RESIST = 0;
+short MIN_BLOCK = 0;
+short MIN_AVOIDANCE = 0;
 
 // Elemental types
 std::vector<Element> ELEMENTS;
@@ -453,18 +457,14 @@ void loadMiscSettings() {
 	// combat.txt
 	if (infile.open(mods->locate("engine/combat.txt"))) {
 		while (infile.next()) {
-			if (infile.key == "max_absorb_percent") {
-				MAX_ABSORB = toInt(infile.val);
-			}
-			else if (infile.key == "max_resist_percent") {
-				MAX_RESIST = toInt(infile.val);
-			}
-			else if (infile.key == "max_block_percent") {
-				MAX_BLOCK = toInt(infile.val);
-			}
-			else if (infile.key == "max_avoidance_percent") {
-				MAX_AVOIDANCE = toInt(infile.val);
-			}
+			if (infile.key == "max_absorb_percent") MAX_ABSORB = toInt(infile.val);
+			else if (infile.key == "max_resist_percent") MAX_RESIST = toInt(infile.val);
+			else if (infile.key == "max_block_percent") MAX_BLOCK = toInt(infile.val);
+			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = toInt(infile.val);
+			else if (infile.key == "min_absorb_percent") MIN_ABSORB = toInt(infile.val);
+			else if (infile.key == "min_resist_percent") MIN_RESIST = toInt(infile.val);
+			else if (infile.key == "min_block_percent") MIN_BLOCK = toInt(infile.val);
+			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = toInt(infile.val);
 		}
 		infile.close();
 	}
