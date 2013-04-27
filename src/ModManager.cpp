@@ -143,5 +143,25 @@ string ModManager::locate(const string& filename) {
 	return PATH_DATA + filename;
 }
 
+vector<string> ModManager::list(const string &filename) {
+	vector<string> ret;
+	string test_path = PATH_DATA + filename;
+	if (fileExists(test_path))
+		ret.push_back(test_path);
+
+	for (unsigned int i = 0; i < mod_list.size(); ++i) {
+		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + filename;
+		if (fileExists(test_path))
+			ret.push_back(test_path);
+
+		test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + filename;
+		if (fileExists(test_path))
+			ret.push_back(test_path);
+	}
+
+	return ret;
+}
+
+
 ModManager::~ModManager() {
 }
