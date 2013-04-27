@@ -303,16 +303,7 @@ void MenuActionBar::render() {
 			dest.y = slots[i]->pos.y;
 			dest.h = dest.w = ICON_SIZE;
 			SDL_BlitSurface(emptyslot, &src, screen, &dest);
-			if (slots[i]->in_focus) {
-				Point topLeft;
-				Point bottomRight;
-				topLeft.x = slots[i]->pos.x;
-				topLeft.y = slots[i]->pos.y;
-				bottomRight.x = slots[i]->pos.x + dest.w;
-				bottomRight.y = slots[i]->pos.y + dest.h;
-				Uint32 color = SDL_MapRGB(screen->format, 0,191,255);
-				drawRectangle(screen, topLeft, bottomRight, color);
-			}
+			slots[i]->renderSelection();
 		}
 	}
 
@@ -362,6 +353,7 @@ void MenuActionBar::renderCooldowns() {
 			item_dest.h = slots[i]->pos.h;
 
 			SDL_BlitSurface(disabled, &item_src, screen, &item_dest);
+			slots[i]->renderSelection();
 		}
 	}
 }

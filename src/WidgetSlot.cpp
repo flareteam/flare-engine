@@ -44,6 +44,9 @@ WidgetSlot::WidgetSlot(SDL_Surface *_icons, int _icon_id, int _ACTIVATE)
 	pos.x = pos.y = 0;
 	pos.w = ICON_SIZE;
 	pos.h = ICON_SIZE;
+
+	slot_selected = loadGraphicSurface("images/menus/slot_selected.png");
+	slot_checked = loadGraphicSurface("images/menus/slot_checked.png");
 }
 
 void WidgetSlot::activate() {
@@ -131,24 +134,38 @@ void WidgetSlot::render(SDL_Surface *target) {
 			label.render();
 		}
 	}
+	renderSelection(target);
+}
+
+/**
+ * We can use this function if slot is grayed out to refresh selection frame
+ */
+void WidgetSlot::renderSelection(SDL_Surface *target) {
+	if (target == NULL) {
+		target = screen;
+	}
 
 	if (in_focus) {
-		Point topLeft;
-		Point bottomRight;
-		Uint32 color;
+		SDL_Rect src;
+		src.x = src.y = 0;
+		src.w = src.h = ICON_SIZE;
 
-		topLeft.x = pos.x;
-		topLeft.y = pos.y;
-		bottomRight.x = pos.x + pos.w;
-		bottomRight.y = pos.y + pos.h;
-		if (checked)
-			color = SDL_MapRGB(target->format, 122,103,238);
-		else
-			color = SDL_MapRGB(target->format, 0,191,255);
-
-		drawRectangle(target, topLeft, bottomRight, color);
+		if (render_to_alpha) {
+			if (checked)
+				SDL_gfxBlitRGBA(slot_checked, &src, target, &pos);
+			else
+				SDL_gfxBlitRGBA(slot_selected, &src, target, &pos);
+		}
+		else {
+			if (checked)
+				SDL_BlitSurface(slot_checked, &src, target, &pos);
+			else
+				SDL_BlitSurface(slot_selected, &src, target, &pos);
+		}
 	}
 }
 
 WidgetSlot::~WidgetSlot() {
+	SDL_FreeSurface(slot_selected);
+	SDL_FreeSurface(slot_checked);
 }
