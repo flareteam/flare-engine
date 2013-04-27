@@ -44,7 +44,7 @@ NPCManager::NPCManager(MapRenderer *_map, LootManager *_loot, ItemManager *_item
 	, tip_buf() {
 	FileParser infile;
 	// load tooltip_margin from engine config file
-	if (infile.openLocated("engine/tooltips.txt")) {
+	if (infile.open("engine/tooltips.txt")) {
 		while (infile.next()) {
 			if (infile.key == "npc_tooltip_margin") {
 				tooltip_margin = atoi(infile.val.c_str());

@@ -73,7 +73,7 @@ void NPC::load(const string& npc_id, int hero_level) {
 
 	string filename_portrait = "";
 
-	if (infile.openLocated("npcs/" + npc_id + ".txt")) {
+	if (infile.open("npcs/" + npc_id + ".txt")) {
 		while (infile.next()) {
 			if (infile.section == "dialog") {
 				if (infile.new_section) {

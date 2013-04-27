@@ -45,7 +45,7 @@ CombatText::CombatText() {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.openLocated("engine/combat_text.txt")) {
+	if(infile.open("engine/combat_text.txt")) {
 		while(infile.next()) {
 			if(infile.key == "duration") {
 				duration = toInt(infile.val);

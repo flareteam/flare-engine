@@ -57,7 +57,7 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 
 	FileParser infile;
 	// load loot animation settings from engine config file
-	if (infile.openLocated("engine/loot.txt")) {
+	if (infile.open("engine/loot.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 

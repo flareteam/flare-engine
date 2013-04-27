@@ -80,7 +80,7 @@ GameStateNew::GameStateNew() : GameState() {
 	// Read positions from config file
 	FileParser infile;
 
-	if (infile.openLocated("menus/gamenew.txt")) {
+	if (infile.open("menus/gamenew.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -208,7 +208,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
  */
 void GameStateNew::loadOptions(const string& filename) {
 	FileParser fin;
-	if (!fin.openLocated("engine/" + filename)) return;
+	if (!fin.open("engine/" + filename)) return;
 
 	while (fin.next()) {
 		if (fin.key == "option") {

@@ -136,7 +136,7 @@ int MapRenderer::load(string filename) {
 
 	show_tooltip = false;
 
-	if (!infile.openLocated("maps/" + filename))
+	if (!infile.open("maps/" + filename))
 		return 0;
 
 	while (infile.next()) {

@@ -34,7 +34,7 @@ FileParser::FileParser()
 	, val("")
 {}
 
-bool FileParser::openLocated(const string& _filename, bool locateFileName, bool stopAfterFirstFile, const string &_errormessage) {
+bool FileParser::open(const string& _filename, bool locateFileName, bool stopAfterFirstFile, const string &_errormessage) {
 
 	if (locateFileName) {
 		if (stopAfterFirstFile) {

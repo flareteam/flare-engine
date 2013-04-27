@@ -116,7 +116,7 @@ void ItemManager::loadAll() {
  */
 void ItemManager::loadItems() {
 	FileParser infile;
-	if (!infile.openLocated("items/items.txt", true, false))
+	if (!infile.open("items/items.txt", true, false))
 		return;
 
 	int id = 0;
@@ -261,7 +261,7 @@ void ItemManager::loadTypes() {
 	string type,description;
 	type = description = "";
 
-	if (infile.openLocated("items/types.txt", true, false)) {
+	if (infile.open("items/types.txt", true, false)) {
 		while (infile.next()) {
 			if (infile.key == "name") type = infile.val;
 			else if (infile.key == "description") description = infile.val;
@@ -286,7 +286,7 @@ string ItemManager::getItemType(std::string _type) {
 
 void ItemManager::loadSets() {
 	FileParser infile;
-	if (!infile.openLocated("items/sets.txt", true, false))
+	if (!infile.open("items/sets.txt", true, false))
 		return;
 
 	int id = 0;

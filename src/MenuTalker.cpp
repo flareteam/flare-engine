@@ -65,7 +65,7 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.openLocated("menus/talker.txt")) {
+	if(infile.open("menus/talker.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

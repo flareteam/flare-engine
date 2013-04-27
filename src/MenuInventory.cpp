@@ -59,7 +59,7 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 	// Load config settings
 	SDL_Rect equipment_slot;
 	FileParser infile;
-	if(infile.openLocated("menus/inventory.txt")) {
+	if(infile.open("menus/inventory.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

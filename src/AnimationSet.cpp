@@ -61,7 +61,7 @@ void AnimationSet::load() {
 	loaded = true;
 
 	FileParser parser;
-	if (!parser.openLocated(name, true, true, "Error loading animation definition: " + name))
+	if (!parser.open(name, true, true, "Error loading animation definition: " + name))
 		return;
 
 	string _name = "";

@@ -95,7 +95,7 @@ void QuestLog::loadIndex(const std::string& filename) {
  */
 void QuestLog::load(const std::string& filename) {
 	FileParser infile;
-	if (!infile.openLocated("quests/" + filename))
+	if (!infile.open("quests/" + filename))
 		return;
 
 	while (infile.next()) {

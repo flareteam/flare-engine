@@ -51,7 +51,7 @@ MenuStatBar::MenuStatBar(std::string type) {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.openLocated("menus/"+type+".txt")) {
+	if(infile.open("menus/"+type+".txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

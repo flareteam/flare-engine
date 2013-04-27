@@ -69,7 +69,7 @@ public:
 	 *
 	 * @return true if file could be opened successfully for reading.
 	 */
-	bool openLocated(const std::string& filename, bool locateFileName = true, bool stopAfterFirstFile = true, const std::string &errormessage = "Could not open text file");
+	bool open(const std::string& filename, bool locateFileName = true, bool stopAfterFirstFile = true, const std::string &errormessage = "Could not open text file");
 
 	void close();
 	bool next();

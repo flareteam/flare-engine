@@ -121,7 +121,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 
 	// Load the menu layout and sound effects from menus/menus.txt
 	FileParser infile;
-	if (infile.openLocated("menus/menus.txt")) {
+	if (infile.open("menus/menus.txt")) {
 
 		int menu_index = -1;
 

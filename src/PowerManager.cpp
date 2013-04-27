@@ -57,7 +57,7 @@ PowerManager::PowerManager()
 
 void PowerManager::loadPowers() {
 	FileParser infile;
-	if (!infile.openLocated("powers/powers.txt", true, false))
+	if (!infile.open("powers/powers.txt", true, false))
 		return;
 
 	int input_id = 0;

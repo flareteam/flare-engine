@@ -45,7 +45,7 @@ MenuStash::MenuStash(ItemManager *_items, StatBlock *_stats)
 
 	// Load config settings
 	FileParser infile;
-	if (infile.openLocated("menus/stash.txt")) {
+	if (infile.open("menus/stash.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

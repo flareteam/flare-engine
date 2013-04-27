@@ -76,7 +76,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 
 	// Load config settings
 	FileParser infile;
-	if (infile.openLocated("menus/character.txt")) {
+	if (infile.open("menus/character.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
