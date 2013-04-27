@@ -236,6 +236,7 @@ void GameStateConfig::init() {
 	tablist.add(enable_joystick_cb);
 	tablist.add(mouse_move_cb);
 	tablist.add(mouse_aim_cb);
+	tablist.add(no_mouse_cb);
 	tablist.add(joystick_device_lstb);
 
 	tablist.add(input_scrollbox);
