@@ -316,7 +316,7 @@ void MapRenderer::loadEvent(FileParser &infile) {
 		} else if (type == "on_clear") {
 			events.back().keep_after_trigger = false;
 		} else {
-			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"custom\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
+			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"on_trigger\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
 		}
 	}
 	else if (infile.key == "location") {
