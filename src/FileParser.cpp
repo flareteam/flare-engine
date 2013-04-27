@@ -35,7 +35,7 @@ FileParser::FileParser()
 {}
 
 bool FileParser::open(const string& _filename, bool locateFileName, bool stopAfterFirstFile, const string &_errormessage) {
-
+	filenames.clear();
 	if (locateFileName) {
 		if (stopAfterFirstFile) {
 			filenames.push_back(mods->locate(_filename));
