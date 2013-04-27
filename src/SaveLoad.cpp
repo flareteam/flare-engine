@@ -200,7 +200,7 @@ void GameStatePlay::loadGame() {
 		ss << GAME_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
-	if (infile.openDirect(ss.str())) {
+	if (infile.openLocated(ss.str(), false)) {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
@@ -412,7 +412,7 @@ void GameStatePlay::loadStash() {
 		ss << "_HC" << game_slot;
 	ss << ".txt";
 
-	if (infile.openDirect(ss.str())) {
+	if (infile.openLocated(ss.str(), false)) {
 		while (infile.next()) {
 			if (infile.key == "item") {
 				menu->stash->stock.setItems(infile.val);

@@ -342,7 +342,7 @@ static ConfigEntry * getConfigEntry(const std::string & name) {
 void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
-	if (infile.openLocated("engine/tileset_config.txt", "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
+	if (infile.openLocated("engine/tileset_config.txt", true, true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
 		while (infile.next()) {
 			if (infile.key == "units_per_tile") {
 				UNITS_PER_TILE = toInt(infile.val);
@@ -544,8 +544,8 @@ bool loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.openDirect(PATH_CONF + FILE_SETTINGS, "")) {
-		if (!infile.openLocated("engine/default_settings.txt"), "") {
+	if (!infile.openLocated(PATH_CONF + FILE_SETTINGS, false, true,  "")) {
+		if (!infile.openLocated("engine/default_settings.txt", true, true, "")) {
 			saveSettings();
 			return true;
 		}
