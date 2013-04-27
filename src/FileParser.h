@@ -31,7 +31,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class FileParser {
 private:
-	std::string filename;
+	std::string filename; // generic filename
+	std::string current_filename; // localized by mod manager
 	std::ifstream infile;
 	std::string line;
 
@@ -39,16 +40,33 @@ public:
 	FileParser();
 	~FileParser();
 
+
+	bool openDirect(const std::string& filename, const std::string &errormessage = "Could not open text file");
+
 	/**
 	 * @brief open
-	 * @param filename The file to be opened
+	 * @param filename
+	 * The generic filename to be opened. This generic filename will be located
+	 * by the ModManager.
+	 * If this is a directory, all files in this directory will be opened.
+	 *
 	 * @param errormessage
 	 * Optional parameter, will be printed to stderr together with the filename
 	 * if an error occurs. If errormessage is empty, there will be no output to
 	 * stderr in any case.
+	 *
+	 * @param locateFileName
+	 * If this parameter is set to true, the filename will not be interpreted as
+	 * a generic locatable filename and the ModManager is used to locate the
+	 * actual filename before opening the file. It is true by default.
+	 * If this is set to false, then the filename is interpreted as is.
+	 *
 	 * @return true if file could be opened successfully for reading.
 	 */
-	bool open(const std::string& filename, const std::string &errormessage = "Could not open text file");
+	bool openLocated(const std::string& filename, const std::string &errormessage = "Could not open text file", locateFileName = true);
+
+	bool openAllModsSerialized(const std::string& filename, const std::string &errormessage = "Could not open text file");
+
 	void close();
 	bool next();
 	std::string nextValue(); // next value inside one line.

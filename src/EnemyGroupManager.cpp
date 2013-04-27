@@ -67,7 +67,7 @@ void EnemyGroupManager::generate() {
 
 void EnemyGroupManager::parseEnemyFileAndStore(const string& filename) {
 	FileParser infile;
-	if (infile.open(mods->locate("enemies/" + filename))) {
+	if (infile.openLocated("enemies/" + filename)) {
 		Enemy_Level new_enemy;
 		new_enemy.type = filename.substr(0, filename.length()-4); //removes the ".txt" from the filename
 		while (infile.next()) {

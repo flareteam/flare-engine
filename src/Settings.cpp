@@ -342,7 +342,7 @@ static ConfigEntry * getConfigEntry(const std::string & name) {
 void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
-	if (infile.open(mods->locate("engine/tileset_config.txt"), "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
+	if (infile.openLocated("engine/tileset_config.txt", "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
 		while (infile.next()) {
 			if (infile.key == "units_per_tile") {
 				UNITS_PER_TILE = toInt(infile.val);
@@ -386,7 +386,7 @@ void loadMiscSettings() {
 	FileParser infile;
 	// load miscellaneous settings from engine config
 	// misc.txt
-	if (infile.open(mods->locate("engine/misc.txt"))) {
+	if (infile.openLocated("engine/misc.txt")) {
 		while (infile.next()) {
 			if (infile.key == "save_hpmp") {
 				if (toInt(infile.val) == 1)
@@ -421,7 +421,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// resolutions.txt
-	if (infile.open(mods->locate("engine/resolutions.txt"))) {
+	if (infile.openLocated("engine/resolutions.txt")) {
 		while (infile.next()) {
 			if (infile.key == "menu_frame_width")
 				FRAME_W = toInt(infile.val);
@@ -443,7 +443,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// gameplay.txt
-	if (infile.open(mods->locate("engine/gameplay.txt"))) {
+	if (infile.openLocated("engine/gameplay.txt")) {
 		while (infile.next()) {
 			if (infile.key == "enable_playgame") {
 				if (toInt(infile.val) == 1)
@@ -455,7 +455,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// combat.txt
-	if (infile.open(mods->locate("engine/combat.txt"))) {
+	if (infile.openLocated("engine/combat.txt")) {
 		while (infile.next()) {
 			if (infile.key == "max_absorb_percent") MAX_ABSORB = toInt(infile.val);
 			else if (infile.key == "max_resist_percent") MAX_RESIST = toInt(infile.val);
@@ -469,7 +469,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// elements.txt
-	if (infile.open(mods->locate("engine/elements.txt"))) {
+	if (infile.openLocated("engine/elements.txt")) {
 		Element e;
 		ELEMENTS.clear();
 		while (infile.next()) {
@@ -484,7 +484,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// classes.txt
-	if (infile.open(mods->locate("engine/classes.txt"))) {
+	if (infile.openLocated("engine/classes.txt")) {
 		HeroClass c;
 		HERO_CLASSES.clear();
 		while (infile.next()) {
@@ -544,8 +544,8 @@ bool loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS, "")) {
-		if (!infile.open(mods->locate("engine/default_settings.txt"), "")) {
+	if (!infile.openDirect(PATH_CONF + FILE_SETTINGS, "")) {
+		if (!infile.openLocated("engine/default_settings.txt"), "") {
 			saveSettings();
 			return true;
 		}

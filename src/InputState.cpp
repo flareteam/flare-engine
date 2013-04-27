@@ -123,8 +123,8 @@ void InputState::loadKeyBindings() {
 
 	FileParser infile;
 
-	if (!infile.open(PATH_CONF + FILE_KEYBINDINGS, "")) {
-		if (!infile.open(mods->locate("engine/default_keybindings.txt"), "")) {
+	if (!infile.openDirect(PATH_CONF + FILE_KEYBINDINGS, "")) {
+		if (!infile.openLocated("engine/default_keybindings.txt", "")) {
 			saveKeyBindings();
 			return;
 		}

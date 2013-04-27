@@ -61,9 +61,7 @@ void AnimationSet::load() {
 	loaded = true;
 
 	FileParser parser;
-	const string filename = mods->locate(name);
-
-	if (!parser.open(filename, "Error loading animation definition: " + name))
+	if (!parser.openLocated(name, "Error loading animation definition: " + name))
 		return;
 
 	string _name = "";
@@ -167,7 +165,7 @@ void AnimationSet::load() {
 			newanim->addFrame(index, direction, r, offset);
 		}
 		else {
-			fprintf(stderr, "animations definitions (%s): Key %s not supported!\n", filename.c_str(), parser.key.c_str());
+			fprintf(stderr, "animations definitions (%s): Key %s not supported!\n", parser.getFileName().c_str(), parser.key.c_str());
 		}
 
 		if (_name == "") {

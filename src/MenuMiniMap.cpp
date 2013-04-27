@@ -41,7 +41,7 @@ MenuMiniMap::MenuMiniMap() {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/minimap.txt"))) {
+	if (infile.openLocated("menus/minimap.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

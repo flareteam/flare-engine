@@ -258,7 +258,7 @@ void GameStateConfig::readConfig () {
 	int offset_y = 0;
 
 	FileParser infile;
-	if (infile.open(mods->locate("menus/config.txt"))) {
+	if (infile.openLocated("menus/config.txt")) {
 		while (infile.next()) {
 
 			infile.val = infile.val + ',';
@@ -657,7 +657,7 @@ void GameStateConfig::readConfig () {
 	}
 
 	// Load the MenuConfirm positions and alignments from menus/menus.txt
-	if (infile.open(mods->locate("menus/menus.txt"))) {
+	if (infile.openLocated("menus/menus.txt")) {
 		int menu_index = -1;
 		while (infile.next()) {
 			if (infile.key == "id") {
@@ -1266,7 +1266,7 @@ int GameStateConfig::getVideoModes() {
 
 bool GameStateConfig::getLanguagesList() {
 	FileParser infile;
-	if (infile.open(mods->locate("engine/languages.txt"))) {
+	if (infile.openLocated("engine/languages.txt")) {
 		unsigned int i=0;
 		while (infile.next()) {
 			language_ISO[i] = infile.key;
@@ -1282,7 +1282,7 @@ bool GameStateConfig::getLanguagesList() {
 int GameStateConfig::getLanguagesNumber() {
 	int languages_num = 0;
 	FileParser infile;
-	if (infile.open(mods->locate("engine/languages.txt"))) {
+	if (infile.openLocated("engine/languages.txt")) {
 		while (infile.next()) {
 			languages_num += 1;
 		}

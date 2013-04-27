@@ -86,48 +86,11 @@ ItemManager::ItemManager()
  * Load all items files in all mods
  */
 void ItemManager::loadAll() {
-	string test_path;
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
-	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-		// check locally installed mods first
-		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/items.txt";
-
-		if (fileExists(test_path)) {
-			this->load(test_path);
-		}
-
-		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/types.txt";
-
-		if (fileExists(test_path)) {
-			this->loadTypes(test_path);
-		}
-
-		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/sets.txt";
-
-		if (fileExists(test_path)) {
-			this->loadSets(test_path);
-		}
-
-		// now check global mods
-		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/items.txt";
-
-		if (fileExists(test_path)) {
-			this->load(test_path);
-		}
-
-		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/types.txt";
-
-		if (fileExists(test_path)) {
-			this->loadTypes(test_path);
-		}
-
-		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/sets.txt";
-
-		if (fileExists(test_path)) {
-			this->loadSets(test_path);
-		}
-	}
+	this->loadItems();
+	this->loadTypes();
+	this->loadSets();
 
 	/*
 	 * Shrinks the items vector to the absolute needed size.
@@ -151,9 +114,9 @@ void ItemManager::loadAll() {
  *
  * @param filename The full path and name of the file to load
  */
-void ItemManager::load(const string& filename) {
+void ItemManager::loadItems() {
 	FileParser infile;
-	if (!infile.open(filename))
+	if (!infile.openAllModsSerialized("items/items.txt"))
 		return;
 
 	int id = 0;
@@ -293,12 +256,12 @@ void ItemManager::load(const string& filename) {
 	infile.close();
 }
 
-void ItemManager::loadTypes(const string& filename) {
+void ItemManager::loadTypes() {
 	FileParser infile;
 	string type,description;
 	type = description = "";
 
-	if (infile.open(filename)) {
+	if (infile.openAllModsSerialized("items/types.txt")) {
 		while (infile.next()) {
 			if (infile.key == "name") type = infile.val;
 			else if (infile.key == "description") description = infile.val;
@@ -321,9 +284,9 @@ string ItemManager::getItemType(std::string _type) {
 	return _type;
 }
 
-void ItemManager::loadSets(const string& filename) {
+void ItemManager::loadSets() {
 	FileParser infile;
-	if (!infile.open(filename))
+	if (!infile.openAllModsSerialized("items/sets.txt"))
 		return;
 
 	int id = 0;

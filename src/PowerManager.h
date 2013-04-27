@@ -320,8 +320,7 @@ private:
 
 	MapCollision *collider;
 
-	void loadAll();
-	void loadPowers(const std::string& filename);
+	void loadPowers();
 
 	int loadSFX(const std::string& filename);
 

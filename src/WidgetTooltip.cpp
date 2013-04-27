@@ -34,7 +34,7 @@ WidgetTooltip::WidgetTooltip() {
 
 	FileParser infile;
 	// load tooltip settings from engine config file
-	if (infile.open(mods->locate("engine/tooltips.txt"))) {
+	if (infile.openLocated("engine/tooltips.txt")) {
 		while (infile.next()) {
 			if (infile.key == "tooltip_offset")
 				offset = toInt(infile.val);

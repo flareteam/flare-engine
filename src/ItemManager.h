@@ -176,9 +176,9 @@ class ItemManager {
 private:
 	SDL_Surface *icons;
 
-	void load(const std::string& filename);
-	void loadTypes(const std::string& filename);
-	void loadSets(const std::string& filename);
+	void loadItems();
+	void loadTypes();
+	void loadSets();
 	void loadAll();
 	void loadIcons();
 

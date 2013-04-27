@@ -17,7 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "FileParser.h"
 #include "UtilsParsing.h"
-
+#include "SharedResources.h"
 
 using namespace std;
 bool new_section;
@@ -33,8 +33,9 @@ FileParser::FileParser()
 	, val("")
 {}
 
-bool FileParser::open(const string& _filename, const string &errormessage) {
+bool FileParser::openLocated(const string& _filename, const string &errormessage) {
 	this->filename = _filename;
+	this->current_filename = mods->locate(_filename);
 	infile.open(filename.c_str(), ios::in);
 	bool ret = infile.is_open();
 	if (!ret && !errormessage.empty())

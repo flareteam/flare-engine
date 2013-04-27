@@ -76,7 +76,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 	// Read positions from config file
 	FileParser infile;
 
-	if (infile.open(mods->locate("menus/gameload.txt"))) {
+	if (infile.openLocated("menus/gameload.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -129,7 +129,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 	}
 
 	// Load the MenuConfirm positions and alignments from menus/menus.txt
-	if (infile.open(mods->locate("menus/menus.txt"))) {
+	if (infile.openLocated("menus/menus.txt")) {
 		int menu_index = -1;
 		while (infile.next()) {
 			if (infile.key == "id") {
@@ -160,7 +160,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 
 	// get displayable types list
 	bool found_layer = false;
-	if (infile.open(mods->locate("engine/hero_options.txt"))) {
+	if (infile.openLocated("engine/hero_options.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -238,7 +238,7 @@ void GameStateLoad::readGameSlots() {
 
 string GameStateLoad::getMapName(const string& map_filename) {
 	FileParser infile;
-	if (!infile.open(mods->locate("maps/" + map_filename), "")) return "";
+	if (!infile.openLocated("maps/" + map_filename, "")) return "";
 	string map_name = "";
 
 	while (map_name == "" && infile.next()) {
@@ -264,7 +264,7 @@ void GameStateLoad::readGameSlot(int slot) {
 		filename << GAME_PREFIX << "_";
 	filename << "save" << (slot+1) << ".txt";
 
-	if (!infile.open(filename.str(), "")) return;
+	if (!infile.openDirect(filename.str(), "")) return;
 
 	while (infile.next()) {
 

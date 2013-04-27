@@ -46,7 +46,7 @@ MenuActiveEffects::MenuActiveEffects(SDL_Surface *_icons) {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/activeeffects.txt"))) {
+	if(infile.openLocated("menus/activeeffects.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

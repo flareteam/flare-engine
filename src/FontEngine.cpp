@@ -45,7 +45,7 @@ FontEngine::FontEngine()
 
 	// load the fonts
 	FileParser infile;
-	if (infile.open(mods->locate("engine/font_settings.txt"))) {
+	if (infile.openLocated("engine/font_settings.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -83,7 +83,7 @@ FontEngine::FontEngine()
 	// RGB values, the last value is 'unused'. For info,
 	// see http://www.libsdl.org/cgi/docwiki.cgi/SDL_Color
 	SDL_Color color;
-	if (infile.open(mods->locate("engine/font_colors.txt"))) {
+	if (infile.openLocated("engine/font_colors.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 			color.r = eatFirstInt(infile.val,',');

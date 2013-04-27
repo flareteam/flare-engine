@@ -69,7 +69,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 
 	// Read powers data from config file
 	FileParser infile;
-	if (infile.open(mods->locate("menus/powers.txt"))) {
+	if (infile.openLocated("menus/powers.txt")) {
 		bool id_line = false;
 		while (infile.next()) {
 			infile.val = infile.val + ',';
@@ -398,7 +398,7 @@ void MenuPowers::logic() {
 	{
 		tablist.logic();
 	}
-	
+
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned int i = 0; i < slots.size(); i++) {
 		if (slots[i]->in_focus) tabControl->setActiveTab(power_cell[i].tab);

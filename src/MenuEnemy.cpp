@@ -40,7 +40,7 @@ MenuEnemy::MenuEnemy() {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/enemy.txt"))) {
+	if(infile.openLocated("menus/enemy.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

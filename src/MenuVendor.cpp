@@ -54,7 +54,7 @@ MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/vendor.txt"))) {
+	if(infile.openLocated("menus/vendor.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
