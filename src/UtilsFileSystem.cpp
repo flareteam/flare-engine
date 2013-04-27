@@ -93,20 +93,15 @@ int getFileList(std::string dir, std::string ext, std::vector<std::string> &file
 	DIR *dp;
 	struct dirent *dirp;
 
-	if((dp  = opendir(dir.c_str())) == NULL) {
-		//cout << "Error(" << errno << ") opening " << dir << endl;
+	if((dp  = opendir(dir.c_str())) == NULL)
 		return errno;
-	}
 
 	size_t extlen = ext.length();
 	while ((dirp = readdir(dp)) != NULL) {
-		//	if(dirp->d_type == 0x8) { //0x4 for directories, 0x8 for files
 		std::string filename = std::string(dirp->d_name);
-		if(filename.length() > extlen) {
-			if(filename.substr(filename.length()-extlen,extlen) == ext) {
-				files.push_back(filename);
-			}
-		}
+		if (filename.length() > extlen)
+			if(filename.substr(filename.length() - extlen,extlen) == ext)
+				files.push_back(dir + "/" + filename);
 	}
 	closedir(dp);
 	return 0;

@@ -44,7 +44,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, bool stopAft
 		}
 	} else {
 		if (!stopAfterFirstFile && isDirectory(_filename)) {
-			getFileList(_filename, "*.txt", filenames);
+			getFileList(_filename, "txt", filenames);
 		} else {
 			filenames.push_back(_filename);
 		}

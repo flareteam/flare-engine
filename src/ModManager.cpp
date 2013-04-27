@@ -147,7 +147,7 @@ void amendPathToVector(const string &path, std::vector<std::string> &vec)
 {
 	if (pathExists(path)) {
 		if (isDirectory(path)) {
-			getFileList(path, "*.txt", vec);
+			getFileList(path, "txt", vec);
 		} else {
 			vec.push_back(path);
 		}

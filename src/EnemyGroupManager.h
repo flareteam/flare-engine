@@ -66,18 +66,10 @@ private:
 	/** Container to store enemy data */
 	std::map <std::string, std::vector<Enemy_Level> > _categories;
 
-
-	/** Constructor */
 	EnemyGroupManager();
-	/** Destructor */
 	~EnemyGroupManager();
 
-	/** Generate the list of categories, fills the container with the enemy
-	 * data */
-	void generate();
-
-	/** Get information stored on files and insert into container */
-	void parseEnemyFileAndStore(const std::string& filename);
+	void parseEnemyFilesAndStore();
 };
 
 #endif
