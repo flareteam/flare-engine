@@ -119,6 +119,13 @@ public:
 		return NULL;
 	}
 
+	void deleteAllComponents(const std::string &_type) {
+		std::vector<Event_Component>::iterator it;
+		for (it = components.begin(); it != components.end(); ++it)
+			if (it->type == _type)
+				it = components.erase(it);
+	}
+
 	~Map_Event()
 	{
 		delete stats; // may be NULL, but delete can deal with null pointers.

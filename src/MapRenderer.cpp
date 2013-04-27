@@ -310,6 +310,7 @@ void MapRenderer::loadEvent(FileParser &infile) {
 
 		if      (type == "on_trigger");
 		else if (type == "on_mapexit"); // no need to set keep_after_trigger to false correctly, it's ignored anyway
+		else if (type == "on_leave");
 		else if (type == "on_load") {
 			events.back().keep_after_trigger = false;
 		} else if (type == "on_clear") {
@@ -1042,13 +1043,31 @@ void MapRenderer::checkEvents(Point loc) {
 		if ((*it).type == "on_clear") {
 			if (enemies_cleared && executeEvent(*it))
 				it = events.erase(it);
+			continue;
 		}
-		else if (maploc.x >= (*it).location.x &&
-				 maploc.y >= (*it).location.y &&
-				 maploc.x <= (*it).location.x + (*it).location.w-1 &&
-				 maploc.y <= (*it).location.y + (*it).location.h-1) {
-			if (executeEvent(*it))
-				it = events.erase(it);
+
+		bool inside = maploc.x >= (*it).location.x &&
+					  maploc.y >= (*it).location.y &&
+					  maploc.x <= (*it).location.x + (*it).location.w-1 &&
+					  maploc.y <= (*it).location.y + (*it).location.h-1;
+
+		if ((*it).type == "on_leave") {
+			if (inside) {
+				if (!(*it).getComponent("wasInsideEventArea")) {
+					(*it).components.push_back(Event_Component());
+					(*it).components.back().type = string("wasInsideEventArea");
+				}
+			} else {
+				if ((*it).getComponent("wasInsideEventArea")) {
+					(*it).deleteAllComponents("wasInsideEventArea");
+					if (executeEvent(*it))
+						it = events.erase(it);
+				}
+			}
+		} else {
+			if (inside)
+				if (executeEvent(*it))
+					it = events.erase(it);
 		}
 	}
 }
