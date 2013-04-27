@@ -281,15 +281,8 @@ void MenuActionBar::render() {
 
 	// draw hotkeyed icons
 	src.x = src.y = 0;
-	src.w = src.h = dest.w = dest.h = ICON_SIZE;
-	dest.y = window_area.y + 3;
+	src.w = src.h = ICON_SIZE;
 	for (int i=0; i<12; i++) {
-
-		if (i<=9)
-			dest.x = window_area.x + (i * ICON_SIZE) + ICON_SIZE;
-		else
-			dest.x = window_area.x + (i * ICON_SIZE) + ICON_SIZE* 2;
-
 		if (hotkeys[i] != 0) {
 			const Power &power = powers->getPower(hotkeys[i]);
 			slot_enabled[i] = (hero->hero_cooldown[hotkeys[i]] == 0)
@@ -306,14 +299,17 @@ void MenuActionBar::render() {
 			slots[i]->render();
 		}
 		else {
+			dest.x = slots[i]->pos.x;
+			dest.y = slots[i]->pos.y;
+			dest.h = dest.w = ICON_SIZE;
 			SDL_BlitSurface(emptyslot, &src, screen, &dest);
 			if (slots[i]->in_focus) {
 				Point topLeft;
 				Point bottomRight;
-				topLeft.x = dest.x - 1;
-				topLeft.y = dest.y - 1;
-				bottomRight.x = topLeft.x + dest.w;
-				bottomRight.y = topLeft.y + dest.h;
+				topLeft.x = slots[i]->pos.x;
+				topLeft.y = slots[i]->pos.y;
+				bottomRight.x = slots[i]->pos.x + dest.w;
+				bottomRight.y = slots[i]->pos.y + dest.h;
 				Uint32 color = SDL_MapRGB(screen->format, 0,191,255);
 				drawRectangle(screen, topLeft, bottomRight, color);
 			}

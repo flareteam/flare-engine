@@ -137,10 +137,10 @@ void WidgetSlot::render(SDL_Surface *target) {
 		Point bottomRight;
 		Uint32 color;
 
-		topLeft.x = pos.x - 1;
-		topLeft.y = pos.y - 1;
-		bottomRight.x = topLeft.x + pos.w;
-		bottomRight.y = topLeft.y + pos.h;
+		topLeft.x = pos.x;
+		topLeft.y = pos.y;
+		bottomRight.x = pos.x + pos.w;
+		bottomRight.y = pos.y + pos.h;
 		if (checked)
 			color = SDL_MapRGB(target->format, 122,103,238);
 		else
