@@ -367,23 +367,21 @@ void MenuPowers::logic() {
 	short points_used = 0;
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		if (powers->powers[power_cell[i].id].passive) {
-			if (find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) {
-				vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
-				if (it != stats->powers_passive.end()) {
-					if (!baseRequirementsMet(power_cell[i].id) && power_cell[i].passive_on) {
-						stats->powers_passive.erase(it);
-						stats->effects.removeEffectPassive(power_cell[i].id);
-						power_cell[i].passive_on = false;
-						stats->refresh_stats = true;
-					}
+			bool unlocked_power = find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
+			vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
+			if (it != stats->powers_passive.end()) {
+				if (!baseRequirementsMet(power_cell[i].id) && power_cell[i].passive_on) {
+					stats->powers_passive.erase(it);
+					stats->effects.removeEffectPassive(power_cell[i].id);
+					power_cell[i].passive_on = false;
+					stats->refresh_stats = true;
 				}
-				else if (baseRequirementsMet(power_cell[i].id) && !power_cell[i].passive_on) {
-					stats->powers_passive.push_back(power_cell[i].id);
-					power_cell[i].passive_on = true;
-					// for passives without special triggers, we need to trigger them here
-					if (stats->effects.triggered_others)
-						powers->activateSinglePassive(stats, power_cell[i].id);
-				}
+			} else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
+				stats->powers_passive.push_back(power_cell[i].id);
+				power_cell[i].passive_on = true;
+				// for passives without special triggers, we need to trigger them here
+				if (stats->effects.triggered_others)
+					powers->activateSinglePassive(stats, power_cell[i].id);
 			}
 		}
 		if (power_cell[i].requires_point &&
@@ -398,7 +396,7 @@ void MenuPowers::logic() {
 	{
 		tablist.logic();
 	}
-	
+
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned int i = 0; i < slots.size(); i++) {
 		if (slots[i]->in_focus) tabControl->setActiveTab(power_cell[i].tab);
