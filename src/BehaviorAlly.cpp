@@ -131,8 +131,16 @@ void BehaviorAlly::checkMoveStateMove() {
         // hit an obstacle.  Try the next best angle
         e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
         if (!e->move()) {
-            //minion->newState(MINION_STANCE);
-            e->stats.direction = prev_direction;
+            //this prevents an ally trying to move perpendicular to a bridge if the player gets close to it in a certain position and gets blocked
+            if(enemies->player_blocked && !e->stats.in_combat){
+                e->stats.direction = e->stats.hero_direction;
+                if (!e->move()) {
+                    e->stats.direction = prev_direction;
+                }
+            }
+            else{
+                e->stats.direction = prev_direction;
+            }
         }
     }
 }
