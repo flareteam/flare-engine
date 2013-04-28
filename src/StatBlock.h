@@ -340,6 +340,12 @@ public:
 	int avoidance_per_defense;
 	int crit_base;
 	int crit_per_level;
+
+	// preserve state before calcs
+	int prev_maxhp;
+	int prev_maxmp;
+	int pres_hp;
+	int pres_mp;
 };
 
 #endif
