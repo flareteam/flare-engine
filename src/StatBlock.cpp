@@ -103,10 +103,6 @@ StatBlock::StatBlock()
 	, dmg_ranged_max(4)
 	, absorb_min(0)
 	, absorb_max(0)
-	, prev_maxhp(0)
-	, prev_maxmp(0)
-	, pres_hp(0)
-	, pres_mp(0)
 	, speed(14)
 	, dspeed(10)
 	, wielding_physical(false)
@@ -174,7 +170,11 @@ StatBlock::StatBlock()
 	, portrait("male01")
 	, transform_type("")
 	, animations("")
-	, sfx_step("cloth") {
+	, sfx_step("cloth")
+	, prev_maxhp(0)
+	, prev_maxmp(0)
+	, pres_hp(0)
+	, pres_mp(0) {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
 
@@ -458,7 +458,7 @@ void StatBlock::recalc_alt() {
 	prev_maxhp = maxhp;
 	prev_maxmp = maxmp;
 	pres_hp = hp;
-	pres_mp = mp;	
+	pres_mp = mp;
 
 	if (hero) {
 		// calculate primary stats
