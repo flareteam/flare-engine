@@ -1,12 +1,113 @@
-This document tries to describe the style, we're using to code flare.
-It's important to have a unique coding style within one project, because
-it speeds up development as you become used to that style.
+## Contributing Code
 
-The coding style to be followed is basically the Qt coding style.
-(http://qt-project.org/wiki/Qt_Coding_Style)
+The #1 rule of this project: _all non-trivial code changes must be discussed first!_
 
-Exceptions to this style:
-    * use tabs instead of spaces, and use a tabwidth of 4.
+Years of careful decision-making have gone into all parts of this project.
+Some designs are awaiting planned future changes. If you submit a large patch
+without knowing how it will affect past and future code, **it will be rejected**.
+
+Is my code non-trivial? If it touches multiple functions or files, probably so.
+
+Ways to discuss a desired code change:
+
+* Open an Issue at http://github.com/clintbellanger/flare-engine/
+* Email clintbellanger@gmail.com
+
+## Pull Requests
+
+When possible, use small pull requests that keep the engine in a stable state.
+It is far better to have many small pull requests than to wait until your change
+is too large to merge.
+
+If you're working on more than one feature, submit pull requests separately for these.
+Some times we need to accept one change and reject the other; if your pull request
+is all combined I have to reject the entire thing.
+
+## Cross-platform considerations
+
+To the best of our ability, we want the code to work on Windows, OSX, Linux and more.
+We try to isolate platform-specific code and use C preprocessor directives when necessary.
+
+## OOP as a last resort
+
+My code is simple (some would say not elegant). I start by coding it the simplest
+possible way that would work. I have a deep disdain for overengineering.
+Nevertheless Copy&paste coding style should be avoided.
+
+Action RPGs are a really simple genre. We don't need fully OOP Entity system to
+create these games.
+
+We have introduced OOP as needed, when the solution makes much more sense than the
+added complexity. We won't needlessly refactor working code.
+
+## No C++11 / C++0x
+
+Maybe we'll allow this kind of code in the future. But Flare has a presence on
+obscure platforms; I can't guarantee that the compilers have kept up.
+
+## Indentation
+
+I try to use tabs. I don't really care though, as long as a single file is internally consistent.
+
+## Naming Conventions
+
+Here are the basic conventions, which are not really consistent.
+Not a big deal, I sometimes clean these up as I go.
+
+* ClassName::functionName
+* ClassName::class_variable
+* local_variable
+* ENUM_OR_CONSTANT
+
+## Commenting
+
+I try to use Javadoc style comments on functions, especially if they're non-obvious.
+
+I try to avoid block comments inside functions (so it's easy to block comment out an entire function).
+
+## Brackets
+We try to have put brackets in the same line as the adherent command (if, else, while, function)
+
+
+## Coding style checking in QtCreator
 
 In case you're using QtCreator for hacking flare, import the
 qt.xml file as found in this repository.
+
+## Coding style checking and formatting with artistic style (astyle)
+
+There is a script 'astyle.sh', which will automatically format your
+new code with regard to indentation and brackets.
+
+## Example
+
+A piece of code considered good:
+
+Classname::function() {
+	// meaningful comment (such as: if player is dead, give no xp for killing monsters)
+	// mind the tabs being equal to 4 spaces:
+	if (variable) {
+		int i = foo();
+		bar(&i);
+	} else {
+		printf("A fine coding example\n");
+	}
+}
+
+A bad example
+
+Classname::function()
+{	// Having the bracket adding a new line for no reason
+	/* Multiline comments considered bad. */
+	if(variable)  // Mind the missing space between if and opening bracket
+	{
+		int i = foo();
+		bar(&i);
+	}
+	else
+	{
+		printf("Coding example done wrong\n");
+	}
+}
+
+
