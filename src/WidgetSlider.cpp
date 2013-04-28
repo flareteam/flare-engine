@@ -85,7 +85,7 @@ bool WidgetSlider::checkClick (int x, int y) {
 	if (inpt->lock[UP]) return false;
 	if (inpt->lock[DOWN]) return false;
 
-	if (!pressed && !inpt->lock[UP] && !inpt->lock[DOWN]) {
+	if (!pressed && !inpt->lock[UP] && !inpt->lock[DOWN] && !inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 		return true;
 	}
 	if (pressed) {
