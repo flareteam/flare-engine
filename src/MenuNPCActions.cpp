@@ -75,7 +75,7 @@ MenuNPCActions::MenuNPCActions()
 	, selected_dialog_node(-1) {
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/npc.txt"))) {
+	if (infile.open("menus/npc.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

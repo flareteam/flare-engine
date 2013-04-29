@@ -396,7 +396,7 @@ void GameStatePlay::checkLog() {
 
 void GameStatePlay::loadTitles() {
 	FileParser infile;
-	if(infile.open(mods->locate("engine/titles.txt"))) {
+	if (infile.open("engine/titles.txt")) {
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "title") {
 				Title t;

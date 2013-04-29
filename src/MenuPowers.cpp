@@ -69,7 +69,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 
 	// Read powers data from config file
 	FileParser infile;
-	if (infile.open(mods->locate("menus/powers.txt"))) {
+	if (infile.open("menus/powers.txt")) {
 		bool id_line = false;
 		while (infile.next()) {
 			infile.val = infile.val + ',';

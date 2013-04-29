@@ -40,7 +40,7 @@ MenuLog::MenuLog() {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/log.txt"))) {
+	if(infile.open("menus/log.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

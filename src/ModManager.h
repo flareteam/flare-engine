@@ -42,7 +42,16 @@ private:
 public:
 	ModManager();
 	~ModManager();
+
+	// Returns the filename within the latest mod, in which the provided generic
+	// filename was found.
 	std::string locate(const std::string& filename);
+
+	// Returns a list of filenames, going through all mods, in which the provided
+	// generic filename is found.
+	// The list is ordered the same way as locate() is searching for files, so
+	// files being at later positions in the list should overwrite previous files
+	std::vector<std::string> list(const std::string& path);
 
 	std::vector<std::string> mod_list;
 };
