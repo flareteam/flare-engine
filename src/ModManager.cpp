@@ -28,7 +28,19 @@ using namespace std;
 
 ModManager::ModManager() {
 	loc_cache.clear();
+	mod_dirs.clear();
 	mod_list.clear();
+
+	vector<string> mod_dirs_other;
+	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs);
+	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
+	getDirList(PATH_DATA + "mods", mod_dirs_other);
+	getDirList(PATH_USER + "mods", mod_dirs_other);
+
+	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
+		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
+			mod_dirs.push_back(mod_dirs_other[i]);
+	}
 
 	loadModList();
 }
@@ -47,19 +59,7 @@ void ModManager::loadModList() {
 	ifstream infile;
 	string line;
 	string starts_with;
-	vector<string> mod_dirs;
-	vector<string> mod_dirs_other;
 	bool found_any_mod = false;
-
-	getDirList(PATH_DATA + "mods", mod_dirs);
-	getDirList(PATH_USER + "mods", mod_dirs_other);
-	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs_other);
-	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
-
-	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
-		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
-			mod_dirs.push_back(mod_dirs_other[i]);
-	}
 
 	// Add the fallback mod by default
 	if (find(mod_dirs.begin(), mod_dirs.end(), FALLBACK_MOD) != mod_dirs.end()) {

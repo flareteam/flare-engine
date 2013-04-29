@@ -82,21 +82,11 @@ void GameStateConfig::init() {
 	cancel_button->pos.y = VIEW_H - (cancel_button->pos.h);
 	cancel_button->refresh();
 
-	vector<string> mod_dirs;
-	vector<string> mod_dirs_other;
-	getDirList(PATH_DATA + "mods", mod_dirs);
-	getDirList(PATH_USER + "mods", mod_dirs_other);
-	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs_other);
-	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
-	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
-		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
-			mod_dirs.push_back(mod_dirs_other[i]);
-	}
-	mods_total = mod_dirs.size();
+	mods_total = mods->mod_dirs.size();
 	// Remove active mods from the available mods list
 	for (unsigned int i = 0; i<mods->mod_list.size(); i++) {
-		for (unsigned int j = 0; j<mod_dirs.size(); j++) {
-			if (mods->mod_list[i] == mod_dirs[j] || FALLBACK_MOD == mod_dirs[j]) mod_dirs[j].erase();
+		for (unsigned int j = 0; j<mods->mod_dirs.size(); j++) {
+			if (mods->mod_list[i] == mods->mod_dirs[j] || FALLBACK_MOD == mods->mod_dirs[j]) mods->mod_dirs[j].erase();
 		}
 	}
 
@@ -202,8 +192,8 @@ void GameStateConfig::init() {
 	optiontab[child_widget.size()-1] = 5;
 
 	inactivemods_lstb->multi_select = true;
-	for (unsigned int i = 0; i < mod_dirs.size(); i++) {
-		inactivemods_lstb->append(mod_dirs[i],"");
+	for (unsigned int i = 0; i < mods->mod_dirs.size(); i++) {
+		inactivemods_lstb->append(mods->mod_dirs[i],"");
 	}
 	child_widget.push_back(inactivemods_lstb);
 	optiontab[child_widget.size()-1] = 5;
