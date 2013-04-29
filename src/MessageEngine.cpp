@@ -51,8 +51,50 @@ MessageEngine::MessageEngine() {
 			infile.close();
 		}
 
-		// now check global mods
+		// check global mods
 		path = PATH_DATA + "mods/" + mods->mod_list[i] + "/languages/";
+		if (infile.open(path + "engine." + LANGUAGE + ".po")) {
+			while (infile.next() && !infile.fuzzy) {
+				messages.insert(pair<string,string>(infile.key, infile.val));
+			}
+			infile.close();
+		}
+		else if (LANGUAGE != "en" && mods->mod_list[i] == FALLBACK_MOD) {
+			fprintf(stderr, "Unable to open mods/%s/languages/engine.%s.po!\n", mods->mod_list[i].c_str(), LANGUAGE.c_str());
+		}
+		if (infile.open(path + "data." + LANGUAGE + ".po")) {
+			while (infile.next() && !infile.fuzzy) {
+				messages.insert(pair<string,string>(infile.key, infile.val));
+			}
+			infile.close();
+		}
+		else if (LANGUAGE != "en" && mods->mod_list[i] != FALLBACK_MOD) {
+			fprintf(stderr, "Unable to open mods/%s/languages/data.%s.po!\n", mods->mod_list[i].c_str(), LANGUAGE.c_str());
+		}
+
+		// check local default mods
+		path = PATH_DEFAULT_USER + "mods/" + mods->mod_list[i] + "/languages/";
+		if (infile.open(path + "engine." + LANGUAGE + ".po")) {
+			while (infile.next() && !infile.fuzzy) {
+				messages.insert(pair<string,string>(infile.key, infile.val));
+			}
+			infile.close();
+		}
+		else if (LANGUAGE != "en" && mods->mod_list[i] == FALLBACK_MOD) {
+			fprintf(stderr, "Unable to open mods/%s/languages/engine.%s.po!\n", mods->mod_list[i].c_str(), LANGUAGE.c_str());
+		}
+		if (infile.open(path + "data." + LANGUAGE + ".po")) {
+			while (infile.next() && !infile.fuzzy) {
+				messages.insert(pair<string,string>(infile.key, infile.val));
+			}
+			infile.close();
+		}
+		else if (LANGUAGE != "en" && mods->mod_list[i] != FALLBACK_MOD) {
+			fprintf(stderr, "Unable to open mods/%s/languages/data.%s.po!\n", mods->mod_list[i].c_str(), LANGUAGE.c_str());
+		}
+
+		// check global default mods
+		path = PATH_DEFAULT_DATA + "mods/" + mods->mod_list[i] + "/languages/";
 		if (infile.open(path + "engine." + LANGUAGE + ".po")) {
 			while (infile.next() && !infile.fuzzy) {
 				messages.insert(pair<string,string>(infile.key, infile.val));

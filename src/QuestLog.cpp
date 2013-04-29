@@ -69,6 +69,18 @@ void QuestLog::loadAll() {
 		if (fileExists(test_path)) {
 			this->loadIndex(test_path);
 		}
+
+		test_path = PATH_DEFAULT_USER + "mods/" + mods->mod_list[i] + "/quests/index.txt";
+
+		if (fileExists(test_path)) {
+			this->loadIndex(test_path);
+		}
+
+		test_path = PATH_DEFAULT_DATA + "mods/" + mods->mod_list[i] + "/quests/index.txt";
+
+		if (fileExists(test_path)) {
+			this->loadIndex(test_path);
+		}
 	}
 
 }

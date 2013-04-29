@@ -46,21 +46,38 @@ void EnemyGroupManager::generate() {
 
 	// load each enemies folder. Individual enemies can be overwritten with mods.
 	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
+		string dir;
 
-		string dir_local = PATH_USER + "mods/" + mods->mod_list[i] + "/enemies";
+		dir = PATH_USER + "mods/" + mods->mod_list[i] + "/enemies";
 
 		vector<string> files_local;
-		getFileList(dir_local, ".txt", files_local);
+		getFileList(dir, ".txt", files_local);
 		for (size_t j = 0; j < files_local.size(); ++j) {
 			parseEnemyFileAndStore(files_local[j]);
 		}
 
-		string dir = PATH_DATA + "mods/" + mods->mod_list[i] + "/enemies";
+		dir = PATH_DATA + "mods/" + mods->mod_list[i] + "/enemies";
 
 		vector<string> files;
 		getFileList(dir, ".txt", files);
 		for (size_t j = 0; j < files.size(); ++j) {
 			parseEnemyFileAndStore(files[j]);
+		}
+
+		dir = PATH_DEFAULT_USER + "mods/" + mods->mod_list[i] + "/enemies";
+
+		vector<string> files_default_local;
+		getFileList(dir, ".txt", files_default_local);
+		for (size_t j = 0; j < files_default_local.size(); ++j) {
+			parseEnemyFileAndStore(files_default_local[j]);
+		}
+
+		dir = PATH_DEFAULT_DATA + "mods/" + mods->mod_list[i] + "/enemies";
+
+		vector<string> files_default;
+		getFileList(dir, ".txt", files_default);
+		for (size_t j = 0; j < files_default.size(); ++j) {
+			parseEnemyFileAndStore(files_default[j]);
 		}
 	}
 }
