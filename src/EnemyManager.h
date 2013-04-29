@@ -74,9 +74,13 @@ public:
 	// vars
 	std::vector<Enemy*> enemies;
 	Point hero_pos;
+	char hero_direction;
 	bool hero_alive;
 	int hero_stealth;
 	Avatar *pc;
+
+	bool player_blocked;
+    int player_blocked_ticks;
 };
 
 
