@@ -223,7 +223,7 @@ bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
  */
 void StatBlock::load(const string& filename) {
 	FileParser infile;
-	if (!infile.open(mods->locate(filename)))
+	if (!infile.open(filename))
 		return;
 
 	int num = 0;
@@ -611,7 +611,7 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 void StatBlock::loadHeroStats() {
 	// Redefine numbers from config file if present
 	FileParser infile;
-	if (!infile.open(mods->locate("engine/stats.txt")))
+	if (!infile.open("engine/stats.txt"))
 		return;
 
 	while (infile.next()) {
@@ -740,7 +740,7 @@ void StatBlock::loadHeroStats() {
 	statsLoaded = true;
 
 	// Load the XP table as well
-	if (!infile.open(mods->locate("engine/xp_table.txt")))
+	if (!infile.open("engine/xp_table.txt"))
 		return;
 
 	while(infile.next()) {

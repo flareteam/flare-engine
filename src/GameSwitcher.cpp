@@ -113,7 +113,7 @@ void GameSwitcher::showFPS(int fps) {
 void GameSwitcher::loadFPS() {
 	// Load FPS rendering settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/fps.txt"))) {
+	if (infile.open("menus/fps.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
