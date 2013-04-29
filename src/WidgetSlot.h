@@ -33,28 +33,41 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <string>
 
+enum CLICK_TYPE {
+
+	NO_CLICK = 0,
+	CHECKED = 1,
+	ACTIVATED = 2,
+};
+
 class WidgetSlot : public Widget {
 private:
 
 	SDL_Surface *icons;	// icons surface
+	SDL_Surface *slot_selected;
+	SDL_Surface *slot_checked;
 
 	int icon_id;		// current slot id
 	int amount;			// entries amount in slot
 	int max_amount;		// if > 1 always display amount
+	int ACTIVATE;
 
 public:
-	WidgetSlot(SDL_Surface *_icon, int icon_id = -1);
+	WidgetSlot(SDL_Surface *_icon, int _icon_id = -1, int _ACTIVATE = ACCEPT);
 	~WidgetSlot();
 
 	void activate();
+	void deactivate();
 
-	bool checkClick();
-	bool checkClick(int x, int y);
+	CLICK_TYPE checkClick();
+	CLICK_TYPE checkClick(int x, int y);
 	void setIcon(int _icon_id);
 	void setAmount(int _amount, int _max_amount = 1);
 	void render(SDL_Surface *target = NULL);
+	void renderSelection(SDL_Surface *target = NULL);
 
 	bool enabled;
+	bool checked;
 	bool pressed;
 };
 

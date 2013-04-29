@@ -80,6 +80,8 @@ public:
 	void saveInventory();
 	void sort(int type);
 
+	int getRowsCount();
+
 	bool talker_visible;
 	SDL_Rect slots_area;
 

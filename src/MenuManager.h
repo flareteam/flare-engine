@@ -80,6 +80,8 @@ private:
 
 	bool done;
 
+	void handleKeyboardNavigation();
+
 public:
 	MenuManager(PowerManager *powers, StatBlock *stats, CampaignManager *camp, ItemManager *items);
 	MenuManager(const MenuManager &copy); // not implemented

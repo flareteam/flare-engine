@@ -233,6 +233,104 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 	SDL_BlitSurface(icons, &src, screen, &dest);
 }
 
+void MenuManager::handleKeyboardNavigation() {
+	// vendor/inventory switching
+	if (vendor->visible && inv->visible) {
+		const int VENDOR_ROWS = vendor->getRowsCount() * 2; //Vendor Menu has two tabs
+		const int INVENTORY_ROWS = inv->getCarriedRows();
+		const int EQUIPPED_SLOTS = inv->getEquippedCount();
+
+		if (vendor->tablist.getCurrent() != -1 && !vendor->tablist.isLocked()) {
+			if (((vendor->tablist.getCurrent() + 1) % (vendor->tablist.size()/VENDOR_ROWS) == 0) &&
+				inpt->pressing[RIGHT] && !inpt->lock[RIGHT])
+			{
+				inpt->lock[RIGHT] = true;
+				vendor->tablist.lock();
+				inv->tablist.unlock();
+			}
+		}
+		if (inv->tablist.getCurrent() != -1 && !inv->tablist.isLocked()) {
+			if (((inv->tablist.getCurrent() - EQUIPPED_SLOTS + 1) % ((inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS) == 1) &&
+				inpt->pressing[LEFT] && !inpt->lock[LEFT])
+			{
+				inpt->lock[LEFT] = true;
+				inv->tablist.lock();
+				vendor->tablist.unlock();
+			}
+		}
+	}
+	// stash/inventory switching
+	if (stash->visible && inv->visible) {
+		const int STASH_ROWS = stash->getRowsCount();
+		const int INVENTORY_ROWS = inv->getCarriedRows();
+		const int EQUIPPED_SLOTS = inv->getEquippedCount();
+
+		if (stash->tablist.getCurrent() != -1 && !stash->tablist.isLocked()) {
+			if (((stash->tablist.getCurrent() + 1) % (stash->tablist.size()/STASH_ROWS) == 0) &&
+				inpt->pressing[RIGHT] && !inpt->lock[RIGHT])
+			{
+				inpt->lock[RIGHT] = true;
+				stash->tablist.lock();
+				inv->tablist.unlock();
+			}
+		}
+		if ((inv->tablist.getCurrent() - EQUIPPED_SLOTS) >= 0 && !inv->tablist.isLocked()) {
+			if (((inv->tablist.getCurrent() - EQUIPPED_SLOTS + 1) % ((inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS) == 1) &&
+				inpt->pressing[LEFT] && !inpt->lock[LEFT])
+			{
+				inpt->lock[LEFT] = true;
+				inv->tablist.lock();
+				stash->tablist.unlock();
+			}
+		}
+	}
+	// UP/DOWN scrolling in vendor menu
+	if (vendor->visible && !vendor->tablist.isLocked()) {
+		int VENDOR_ROWS = vendor->getRowsCount() * 2;
+
+		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+			inpt->lock[DOWN] = true;
+			for (unsigned i = 0; i < vendor->tablist.size()/VENDOR_ROWS; i++)
+				vendor->tablist.getNext();
+		}
+		if (inpt->pressing[UP] && !inpt->lock[UP]) {
+			inpt->lock[UP] = true;
+			for (unsigned i = 0; i < vendor->tablist.size()/VENDOR_ROWS; i++)
+				vendor->tablist.getPrev();
+		}
+	}
+	// UP/DOWN scrolling in inventory
+	if (inv->visible && !inv->tablist.isLocked()) {
+		int INVENTORY_ROWS = inv->getCarriedRows();
+		int EQUIPPED_SLOTS = inv->getEquippedCount();
+
+		if (inv->tablist.getCurrent() + 1 > EQUIPPED_SLOTS && inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+			inpt->lock[DOWN] = true;
+			for (unsigned i = 0; i < (inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS; i++)
+				inv->tablist.getNext();
+		}
+		if (inv->tablist.getCurrent() + 1 > EQUIPPED_SLOTS && inpt->pressing[UP] && !inpt->lock[UP]) {
+			inpt->lock[UP] = true;
+			for (unsigned i = 0; i < (inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS; i++)
+				inv->tablist.getPrev();
+		}
+	}
+	// UP/DOWN scrolling in stash
+	if (stash->visible && !stash->tablist.isLocked()) {
+		int STASH_ROWS = stash->getRowsCount();
+
+		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+			inpt->lock[DOWN] = true;
+			for (unsigned i = 0; i < stash->tablist.size()/stash->getRowsCount(); i++)
+				stash->tablist.getNext();
+		}
+		if (inpt->pressing[UP] && !inpt->lock[UP]) {
+			inpt->lock[UP] = true;
+			for (unsigned i = 0; i < stash->tablist.size()/stash->getRowsCount(); i++)
+				stash->tablist.getPrev();
+		}
+	}
+}
 void MenuManager::logic() {
 
 	bool clicking_character = false;
@@ -246,6 +344,10 @@ void MenuManager::logic() {
 	xp->update((stats->xp - stats->xp_table[stats->level-1]),(stats->xp_table[stats->level] - stats->xp_table[stats->level-1]),inpt->mouse,msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
 	effects->update(stats);
 
+	if (NO_MOUSE)
+		handleKeyboardNavigation();
+
+	act->logic();
 	hudlog->logic();
 	enemy->logic();
 	chr->logic();
@@ -255,18 +357,6 @@ void MenuManager::logic() {
 	log->logic();
 	talker->logic();
 	stash->logic();
-
-	if (vendor->visible && inv->visible) {
-		// TODO Handle navigation from menu to menu
-		inv->tablist.lock();
-		vendor->tablist.unlock();
-	}
-
-	if (stash->visible && inv->visible) {
-		// TODO Handle navigation from menu to menu
-		inv->tablist.lock();
-		stash->tablist.unlock();
-	}
 
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
@@ -317,7 +407,7 @@ void MenuManager::logic() {
 	}
 
 	// inventory menu toggle
-	if ((inpt->pressing[INVENTORY] && !key_lock && !dragging) || clicking_inventory) {
+	if ((inpt->pressing[INVENTORY] && !key_lock && !dragging) || clicking_inventory || act->menus[MENU_INVENTORY]->checkClick()) {
 		key_lock = true;
 		if (inv->visible) {
 			snd->play(inv->sfx_close);
@@ -333,7 +423,7 @@ void MenuManager::logic() {
 	}
 
 	// powers menu toggle
-	if (((inpt->pressing[POWERS] && !key_lock && !dragging) || clicking_powers) && stats->humanoid) {
+	if (((inpt->pressing[POWERS] && !key_lock && !dragging) || clicking_powers || act->menus[MENU_POWERS]->checkClick()) && stats->humanoid) {
 		key_lock = true;
 		if (pow->visible) {
 			snd->play(pow->sfx_close);
@@ -349,7 +439,7 @@ void MenuManager::logic() {
 	act->requires_attention[MENU_POWERS] = pow->getUnspent() > 0;
 
 	// character menu toggleggle
-	if (((inpt->pressing[CHARACTER] && !key_lock && !dragging) || clicking_character)) {
+	if ((inpt->pressing[CHARACTER] && !key_lock && !dragging) || clicking_character || act->menus[MENU_CHARACTER]->checkClick()) {
 		key_lock = true;
 		if (chr->visible) {
 			snd->play(chr->sfx_close);
@@ -367,7 +457,7 @@ void MenuManager::logic() {
 	act->requires_attention[MENU_CHARACTER] = chr->getUnspent() > 0;
 
 	// log menu toggle
-	if ((inpt->pressing[LOG] && !key_lock && !dragging) || clicking_log) {
+	if ((inpt->pressing[LOG] && !key_lock && !dragging) || clicking_log || act->menus[MENU_LOG]->checkClick()) {
 		key_lock = true;
 		if (log->visible) {
 			snd->play(log->sfx_close);

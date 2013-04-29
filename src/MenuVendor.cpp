@@ -259,6 +259,10 @@ void MenuVendor::sort(int type) {
 	}
 }
 
+int MenuVendor::getRowsCount() {
+	return slots_rows;
+}
+
 MenuVendor::~MenuVendor() {
 	SDL_FreeSurface(background);
 	delete closeButton;

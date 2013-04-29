@@ -61,6 +61,9 @@ const int MAIN2 = 21;
 const int CTRL = 22;
 const int SHIFT = 23;
 const int DEL = 24;
+const int ACTIONBAR = 25;
+const int ACTIONBAR_BACK = 26;
+const int ACTIONBAR_FORWARD = 27;
 
 // Maxiumum mouse emulation movement speed
 const int MOUSE_EMU_VEL = 32;
@@ -77,12 +80,12 @@ private:
 	int my_vel;
 	void mouseEmulation();
 public:
-	static const int key_count = 25;
+	static const int key_count = 28;
 	int binding[key_count];
 	int binding_alt[key_count];
 	int binding_joy[key_count];
 
-	std::string binding_name[25];
+	std::string binding_name[28];
 	std::string mouse_button[7];
 
 	InputState(void);
