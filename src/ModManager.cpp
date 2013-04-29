@@ -172,16 +172,16 @@ vector<string> ModManager::list(const string &path) {
 	amendPathToVector(test_path, ret);
 
 	for (unsigned int i = 0; i < mod_list.size(); ++i) {
-		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + path;
-		amendPathToVector(test_path, ret);
-
-		test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + path;
+		test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i] + "/" + path;
 		amendPathToVector(test_path, ret);
 
 		test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i] + "/" + path;
 		amendPathToVector(test_path, ret);
 
-		test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i] + "/" + path;
+		test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + path;
+		amendPathToVector(test_path, ret);
+
+		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + path;
 		amendPathToVector(test_path, ret);
 	}
 
