@@ -270,6 +270,7 @@ void GameStatePlay::checkTeleport() {
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
+			map->executeOnMapExitEvents();
 			showLoading();
 			map->load(map->teleport_mapname);
 			enemies->handleNewMap();

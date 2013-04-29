@@ -307,13 +307,16 @@ void MapRenderer::loadEvent(FileParser &infile) {
 	if (infile.key == "type") {
 		string type = infile.val;
 		events.back().type = type;
-		if (type == "custom");
-		else if (type == "on_load");
-		else if (type == "on_clear");
-		else if (type == "run_once");
-		else if (type == "stash");
-		else {
-			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"custom\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
+
+		if      (type == "on_trigger");
+		else if (type == "on_mapexit"); // no need to set keep_after_trigger to false correctly, it's ignored anyway
+		else if (type == "on_leave");
+		else if (type == "on_load") {
+			events.back().keep_after_trigger = false;
+		} else if (type == "on_clear") {
+			events.back().keep_after_trigger = false;
+		} else {
+			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"on_trigger\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
 		}
 	}
 	else if (infile.key == "location") {
@@ -572,6 +575,9 @@ void MapRenderer::loadEventComponent(FileParser &infile) {
 			repeat_val = infile.nextValue();
 		}
 	}
+	else if (infile.key == "stash") {
+		e->s = infile.val;
+	}
 	else if (infile.key == "npc") {
 		e->s = infile.val;
 	}
@@ -579,6 +585,9 @@ void MapRenderer::loadEventComponent(FileParser &infile) {
 		e->s = infile.val;
 	}
 	else if (infile.key == "cutscene") {
+		e->s = infile.val;
+	}
+	else if (infile.key == "repeat") {
 		e->s = infile.val;
 	}
 	else {
@@ -1001,6 +1010,22 @@ void MapRenderer::executeOnLoadEvents() {
 	}
 }
 
+void MapRenderer::executeOnMapExitEvents() {
+	vector<Map_Event>::iterator it;
+
+	// We're leaving the map, so the events of this map are removed anyway in
+	// the next frame (Reminder: We're about to load a new map ;),
+	// so we will ignore the events keep_after_trigger value and do not delete
+	// any event in this loop
+	for (it = events.begin(); it != events.end(); ++it) {
+
+		// skip inactive events
+		if (!isActive(*it)) continue;
+
+		if ((*it).type == "on_mapexit")
+			executeEvent(*it); // ignore repeat value
+	}
+}
 
 void MapRenderer::checkEvents(Point loc) {
 	Point maploc;
@@ -1018,13 +1043,31 @@ void MapRenderer::checkEvents(Point loc) {
 		if ((*it).type == "on_clear") {
 			if (enemies_cleared && executeEvent(*it))
 				it = events.erase(it);
+			continue;
 		}
-		else if (maploc.x >= (*it).location.x &&
-				 maploc.y >= (*it).location.y &&
-				 maploc.x <= (*it).location.x + (*it).location.w-1 &&
-				 maploc.y <= (*it).location.y + (*it).location.h-1) {
-			if (executeEvent(*it))
-				it = events.erase(it);
+
+		bool inside = maploc.x >= (*it).location.x &&
+					  maploc.y >= (*it).location.y &&
+					  maploc.x <= (*it).location.x + (*it).location.w-1 &&
+					  maploc.y <= (*it).location.y + (*it).location.h-1;
+
+		if ((*it).type == "on_leave") {
+			if (inside) {
+				if (!(*it).getComponent("wasInsideEventArea")) {
+					(*it).components.push_back(Event_Component());
+					(*it).components.back().type = string("wasInsideEventArea");
+				}
+			} else {
+				if ((*it).getComponent("wasInsideEventArea")) {
+					(*it).deleteAllComponents("wasInsideEventArea");
+					if (executeEvent(*it))
+						it = events.erase(it);
+				}
+			}
+		} else {
+			if (inside)
+				if (executeEvent(*it))
+					it = events.erase(it);
 		}
 	}
 }
@@ -1231,13 +1274,6 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 	ev.cooldown_ticks = ev.cooldown;
 
 	const Event_Component *ec;
-	bool destroy_event = false;
-
-	if (ev.type == "stash") {
-		stash = true;
-		stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
-	}
 
 	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
@@ -1257,7 +1293,7 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 				teleport_destination.y = ec->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
 			}
 			else {
-				destroy_event = true;
+				ev.keep_after_trigger = false;
 				log_msg = msg->get("Unknown destination");
 			}
 		}
@@ -1381,6 +1417,11 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 			powers->activate(power_index, ev.stats, target);
 		}
+		else if (ec->type == "stash") {
+			stash = true;
+			stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		}
 		else if (ec->type == "npc") {
 			event_npc = ec->s;
 		}
@@ -1394,8 +1435,11 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			cutscene = true;
 			cutscene_file = ec->s;
 		}
+		else if (ec->type == "repeat") {
+			ev.keep_after_trigger = toBool(ec->s);
+		}
 	}
-	return (ev.type == "run_once" || ev.type == "on_load" || ev.type == "on_clear" || destroy_event);
+	return !ev.keep_after_trigger;
 }
 
 MapRenderer::~MapRenderer() {
