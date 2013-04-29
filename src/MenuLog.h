@@ -41,7 +41,7 @@ class WidgetTabControl;
 
 const unsigned int MAX_LOG_MESSAGES = 32;
 
-const int LOG_TYPE_COUNT = 2;
+const unsigned LOG_TYPE_COUNT = 2;
 const int LOG_TYPE_QUESTS = 0;
 const int LOG_TYPE_MESSAGES = 1;
 
@@ -67,6 +67,8 @@ private:
 	SDL_Rect tab_area;
 	SDL_Color tab_bg;
 	SDL_Color color_normal;
+
+	TabList tablist;
 
 public:
 	MenuLog();

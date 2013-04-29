@@ -59,7 +59,7 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 	// Load config settings
 	SDL_Rect equipment_slot;
 	FileParser infile;
-	if(infile.open(mods->locate("menus/inventory.txt"))) {
+	if(infile.open("menus/inventory.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -126,6 +126,13 @@ void MenuInventory::update() {
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
+
+	for (int i = 0; i < MAX_EQUIPPED; i++) {
+		tablist.add(inventory[EQUIPMENT].slots[i]);
+	}
+	for (int i = 0; i < MAX_CARRIED; i++) {
+		tablist.add(inventory[CARRIED].slots[i]);
+	}
 }
 
 void MenuInventory::logic() {
@@ -141,6 +148,10 @@ void MenuInventory::logic() {
 
 	// check close button
 	if (visible) {
+		if (NO_MOUSE)
+		{
+			tablist.logic();
+		}
 		if (closeButton->checkClick()) {
 			visible = false;
 			snd->play(sfx_close);
@@ -888,6 +899,16 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 				stats->effects.addEffect(id, powers->powers[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
 		}
 	}
+}
+
+int MenuInventory::getEquippedCount()
+{
+	return (int)equipped_area.size();
+}
+
+int MenuInventory::getCarriedRows()
+{
+	return carried_rows;
 }
 
 void MenuInventory::clearHighlight() {

@@ -57,7 +57,7 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 
 	FileParser infile;
 	// load loot animation settings from engine config file
-	if (infile.open(mods->locate("engine/loot.txt"))) {
+	if (infile.open("engine/loot.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -219,7 +219,7 @@ void LootManager::checkEnemiesForLoot() {
 		else { // random loot
 			//determine position
 			Point pos = hero->pos;
-			if (map->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL))
+			if (map->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false))
 				pos = e->stats.pos;
 
 			determineLootByEnemy(e, pos);

@@ -106,6 +106,7 @@ extern bool MOUSE_MOVE;
 extern bool ENABLE_JOYSTICK;
 extern int JOYSTICK_DEVICE;
 extern bool MOUSE_AIM;
+extern bool NO_MOUSE;
 
 // User Options
 extern bool COMBAT_TEXT;
@@ -122,6 +123,8 @@ extern std::string WINDOW_TITLE;
 extern std::string GAME_PREFIX;
 extern int SOUND_FALLOFF;
 extern int PARTY_EXP_PERCENTAGE;
+extern bool ENABLE_ALLY_COLLISION_AI;
+extern bool ENABLE_ALLY_COLLISION;
 
 // Tile Settings
 extern unsigned short UNITS_PER_TILE;
@@ -148,6 +151,10 @@ extern short MAX_ABSORB;
 extern short MAX_RESIST;
 extern short MAX_BLOCK;
 extern short MAX_AVOIDANCE;
+extern short MIN_ABSORB;
+extern short MIN_RESIST;
+extern short MIN_BLOCK;
+extern short MIN_AVOIDANCE;
 
 // Elemental types
 extern std::vector<Element> ELEMENTS;

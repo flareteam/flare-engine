@@ -28,10 +28,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <fstream>
 #include <string>
+#include <vector>
 
 class FileParser {
 private:
-	std::string filename;
+	std::vector<std::string> filenames;
+	unsigned current_index;
+	std::string errormessage;
+
 	std::ifstream infile;
 	std::string line;
 
@@ -41,14 +45,32 @@ public:
 
 	/**
 	 * @brief open
-	 * @param filename The file to be opened
+	 * @param filename
+	 * The generic filename to be opened. This generic filename will be located
+	 * by the ModManager.
+	 * If this is a directory, all files in this directory will be opened.
+	 *
 	 * @param errormessage
 	 * Optional parameter, will be printed to stderr together with the filename
 	 * if an error occurs. If errormessage is empty, there will be no output to
 	 * stderr in any case.
+	 *
+	 * @param locateFileName
+	 * If this parameter is set to true, the filename will not be interpreted as
+	 * a generic locatable filename and the ModManager is used to locate the
+	 * actual filename before opening the file. It is true by default.
+	 * If this is set to false, then the filename is interpreted as is.
+	 *
+	 * @param stopAfterFirstFile
+	 * If this is set, the newest file is being read. This is the default.
+	 * If it is set to false, all possible files are parsed and delivered as
+	 * one big stream. Also if using direct directory pathes, these will be
+	 * expanded and parsed.
+	 *
 	 * @return true if file could be opened successfully for reading.
 	 */
-	bool open(const std::string& filename, const std::string &errormessage = "Could not open text file");
+	bool open(const std::string& filename, bool locateFileName = true, bool stopAfterFirstFile = true, const std::string &errormessage = "Could not open text file");
+
 	void close();
 	bool next();
 	std::string nextValue(); // next value inside one line.

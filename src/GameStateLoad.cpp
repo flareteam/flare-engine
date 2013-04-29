@@ -76,7 +76,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 	// Read positions from config file
 	FileParser infile;
 
-	if (infile.open(mods->locate("menus/gameload.txt"))) {
+	if (infile.open("menus/gameload.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -129,7 +129,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 	}
 
 	// Load the MenuConfirm positions and alignments from menus/menus.txt
-	if (infile.open(mods->locate("menus/menus.txt"))) {
+	if (infile.open("menus/menus.txt")) {
 		int menu_index = -1;
 		while (infile.next()) {
 			if (infile.key == "id") {
@@ -160,7 +160,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 
 	// get displayable types list
 	bool found_layer = false;
-	if (infile.open(mods->locate("engine/hero_options.txt"))) {
+	if (infile.open("engine/hero_options.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -238,7 +238,7 @@ void GameStateLoad::readGameSlots() {
 
 string GameStateLoad::getMapName(const string& map_filename) {
 	FileParser infile;
-	if (!infile.open(mods->locate("maps/" + map_filename), "")) return "";
+	if (!infile.open("maps/" + map_filename, true, true, "")) return "";
 	string map_name = "";
 
 	while (map_name == "" && infile.next()) {
@@ -264,7 +264,7 @@ void GameStateLoad::readGameSlot(int slot) {
 		filename << GAME_PREFIX << "_";
 	filename << "save" << (slot+1) << ".txt";
 
-	if (!infile.open(filename.str(), "")) return;
+	if (!infile.open(filename.str(),false, true, "")) return;
 
 	while (infile.next()) {
 
@@ -295,6 +295,9 @@ void GameStateLoad::readGameSlot(int slot) {
 		}
 		else if (infile.key == "spawn") {
 			current_map[slot] = getMapName(infile.nextValue());
+		}
+		else if (infile.key == "permadeath") {
+			stats[slot].permadeath = (toInt(infile.val) == 1);
 		}
 	}
 	infile.close();
@@ -434,6 +437,19 @@ void GameStateLoad::logic() {
 
 			if (remove(filename.str().c_str()) != 0)
 				perror("Error deleting save from path");
+
+			if (stats[selected_slot].permadeath) {
+				// Remove stash
+				stringstream ss;
+				ss.str("");
+				ss << PATH_USER;
+				if (GAME_PREFIX.length() > 0)
+					ss << GAME_PREFIX << "_";
+				ss << "stash_HC" << (selected_slot+1) << ".txt";
+				if (remove(ss.str().c_str()) != 0)
+					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", selected_slot+1);
+			}
+
 			stats[selected_slot] = StatBlock();
 			readGameSlot(selected_slot);
 
@@ -544,14 +560,16 @@ void GameStateLoad::render() {
 		label_loading->render();
 	}
 
+	SDL_Color color_permadeath_enabled = font->getColor("hardcore_color_name");
 	// display text
 	for (int slot=0; slot<GAME_SLOT_MAX; slot++) {
 		if (stats[slot].name != "") {
+			SDL_Color color_used = stats[slot].permadeath ? color_permadeath_enabled : color_normal;
 
 			// name
 			label.x = slot_pos[slot].x + name_pos.x;
 			label.y = slot_pos[slot].y + name_pos.y;
-			label_name[slot]->set(label.x, label.y, name_pos.justify, name_pos.valign, stats[slot].name, color_normal, name_pos.font_style);
+			label_name[slot]->set(label.x, label.y, name_pos.justify, name_pos.valign, stats[slot].name, color_used, name_pos.font_style);
 			label_name[slot]->render();
 
 			// level
@@ -559,6 +577,8 @@ void GameStateLoad::render() {
 			label.x = slot_pos[slot].x + level_pos.x;
 			label.y = slot_pos[slot].y + level_pos.y;
 			ss << msg->get("Level %d %s", stats[slot].level, msg->get(stats[slot].character_class));
+			if (stats[slot].permadeath)
+				ss << ", " + msg->get("Permadeath");
 			label_level[slot]->set(label.x, label.y, level_pos.justify, level_pos.valign, ss.str(), color_normal, level_pos.font_style);
 			label_level[slot]->render();
 

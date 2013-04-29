@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class PowerManager;
 class StatBlock;
 class TooltipData;
+class WidgetSlot;
 
 class Power_Menu_Cell {
 public:
@@ -108,7 +109,6 @@ private:
 
 	void loadGraphics();
 	void displayBuild(int power_id);
-	void renderIcon(int icon_id, int x, int y);
 	bool powerUnlockable(int power_index);
 	void renderPowers(int tab_num);
 
@@ -132,7 +132,9 @@ public:
 	bool meetsUsageStats(unsigned powerid);
 	short getUnspent() { return points_left; }
 
-	std::vector<SDL_Rect> slots; // the location of power slots
+	std::vector<WidgetSlot*> slots; // power slot Widgets
+
+	TabList tablist;
 
 };
 extern MenuPowers *menuPowers;

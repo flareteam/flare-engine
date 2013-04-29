@@ -52,42 +52,12 @@ PowerManager::PowerManager()
 	, log_msg("")
 	, used_items()
 	, used_equipped_items() {
-	loadAll();
+	loadPowers();
 }
 
-/**
- * Load all powers files in all mods
- */
-void PowerManager::loadAll() {
-
-	string test_path;
-
-	// load each config file
-	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-
-		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/powers/powers.txt";
-
-		if (fileExists(test_path)) {
-			this->loadPowers(test_path);
-		}
-
-		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/powers/powers.txt";
-
-		if (fileExists(test_path)) {
-			this->loadPowers(test_path);
-		}
-	}
-}
-
-
-/**
- * Powers are defined in [mod]/powers/powers.txt
- *
- * @param filename The full path and filename to this powers.txt file
- */
-void PowerManager::loadPowers(const std::string& filename) {
+void PowerManager::loadPowers() {
 	FileParser infile;
-	if (!infile.open(filename))
+	if (!infile.open("powers/powers.txt", true, false))
 		return;
 
 	int input_id = 0;
@@ -442,7 +412,7 @@ Point PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked)
 			if (i == 0 && j == 0) continue; // skip the middle tile
 			new_target.x = target.x+UNITS_PER_TILE*i;
 			new_target.y = target.y+UNITS_PER_TILE*j;
-			if (collider->is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL) || ignore_blocked)
+			if (collider->is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
 				valid_tiles.push_back(new_target);
 		}
 	}

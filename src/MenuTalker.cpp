@@ -48,6 +48,9 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
+	tablist.add(advanceButton);
+	tablist.add(closeButton);
+
 	visible = false;
 	vendor_visible = false;
 
@@ -62,7 +65,7 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/talker.txt"))) {
+	if(infile.open("menus/talker.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -141,6 +144,10 @@ void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
 
+	if (NO_MOUSE)
+	{
+		tablist.logic();
+	}
 	advanceButton->enabled = false;
 	closeButton->enabled = false;
 

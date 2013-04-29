@@ -262,7 +262,7 @@ void GameStatePlay::checkTeleport() {
 
 		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
-                enemies->enemies[i]->map->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
+				enemies->enemies[i]->map->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
 				enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
 				enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
 			}
@@ -270,6 +270,7 @@ void GameStatePlay::checkTeleport() {
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
+			map->executeOnMapExitEvents();
 			showLoading();
 			map->load(map->teleport_mapname);
 			enemies->handleNewMap();
@@ -298,8 +299,18 @@ void GameStatePlay::checkTeleport() {
 				if (GAME_PREFIX.length() > 0)
 					filename << GAME_PREFIX << "_";
 				filename << "save" << game_slot << ".txt";
-				if(remove(filename.str().c_str()) != 0)
+				if (remove(filename.str().c_str()) != 0)
 					perror("Error deleting save from path");
+
+				// Remove stash
+				stringstream ss;
+				ss.str("");
+				ss << PATH_USER;
+				if (GAME_PREFIX.length() > 0)
+					ss << GAME_PREFIX << "_";
+				ss << "stash_HC" << game_slot << ".txt";
+				if (remove(ss.str().c_str()) != 0)
+					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", game_slot);
 
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
@@ -309,7 +320,7 @@ void GameStatePlay::checkTeleport() {
 			}
 		}
 
-		map->collider.block(pc->stats.pos.x, pc->stats.pos.y);
+		map->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
 		map->teleportation = false;
 		pc->stats.teleportation = false; // teleport spell
@@ -385,7 +396,7 @@ void GameStatePlay::checkLog() {
 
 void GameStatePlay::loadTitles() {
 	FileParser infile;
-	if(infile.open(mods->locate("engine/titles.txt"))) {
+	if (infile.open("engine/titles.txt")) {
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "title") {
 				Title t;
@@ -790,6 +801,7 @@ void GameStatePlay::logic() {
 
 		// transfer hero data to enemies, for AI use
 		enemies->hero_pos = pc->stats.pos;
+		enemies->hero_direction = pc->stats.direction;
 		enemies->hero_alive = pc->stats.alive;
 		if (pc->stats.effects.bonus_stealth > 100) enemies->hero_stealth = 100;
 		else enemies->hero_stealth = pc->stats.effects.bonus_stealth;

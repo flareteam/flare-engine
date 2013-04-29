@@ -75,7 +75,7 @@ Entity::Entity(const Entity &e)
 bool Entity::move() {
 
 	if (stats.effects.forced_move) {
-		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type);
+		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type, stats.hero);
 	}
 
 	if (stats.effects.speed == 0) return false;
@@ -90,28 +90,28 @@ bool Entity::move() {
 
 	switch (stats.direction) {
 		case 0:
-			full_move = map->collider.move(stats.pos.x, stats.pos.y, -1, 1, speed_diagonal, stats.movement_type);
+			full_move = map->collider.move(stats.pos.x, stats.pos.y, -1, 1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 1:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, 0, speed_straight, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, 0, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 2:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, -1, speed_diagonal, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, -1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 3:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, -1, speed_straight, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, -1, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 4:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, -1, speed_diagonal, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, -1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 5:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 0, speed_straight, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 0, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 6:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 1, speed_diagonal, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 7:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, 1, speed_straight, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, 1, speed_straight, stats.movement_type, stats.hero);
 			break;
 	}
 
@@ -180,6 +180,7 @@ bool Entity::takeHit(const Hazard &h) {
 	//if we are using an absolute accuracy, offset the constant 25 added to the accuracy
 	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 		true_avoidance += 25;
+	clampFloor(true_avoidance, MIN_AVOIDANCE);
 	clampCeil(true_avoidance, MAX_AVOIDANCE);
 
 	if (percentChance(true_avoidance)) {
@@ -201,8 +202,9 @@ bool Entity::takeHit(const Hazard &h) {
 	if (h.trait_elemental >= 0 && unsigned(h.trait_elemental) < stats.vulnerable.size()) {
 		unsigned i = h.trait_elemental;
 		int vulnerable = stats.vulnerable[i];
-		if (stats.vulnerable[i] > MAX_RESIST && stats.vulnerable[i] < 100)
-			vulnerable = MAX_RESIST;
+		clampFloor(vulnerable,MIN_RESIST);
+		if (stats.vulnerable[i] < 100)
+			clampCeil(vulnerable,MAX_RESIST);
 		dmg = (dmg * vulnerable) / 100;
 	}
 
@@ -215,9 +217,14 @@ bool Entity::takeHit(const Hazard &h) {
 		}
 
 		if (absorption > 0 && dmg > 0) {
-			if ((absorption*100)/dmg > MAX_BLOCK)
+			int abs = absorption;
+			if ((abs*100)/dmg < MIN_BLOCK)
+				absorption = (dmg * MIN_BLOCK) /100;
+			if ((abs*100)/dmg > MAX_BLOCK)
 				absorption = (dmg * MAX_BLOCK) /100;
-			if ((absorption*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
+			if ((abs*100)/dmg < MIN_ABSORB && !stats.effects.triggered_block)
+				absorption = (dmg * MIN_ABSORB) /100;
+			if ((abs*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
 				absorption = (dmg * MAX_ABSORB) /100;
 
 			// Sometimes, the absorb limits cause absorbtion to drop to 1

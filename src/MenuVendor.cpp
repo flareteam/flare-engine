@@ -54,7 +54,7 @@ MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/vendor.txt"))) {
+	if(infile.open("menus/vendor.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -99,6 +99,13 @@ void MenuVendor::update() {
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
+
+	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
+		tablist.add(stock[VENDOR_BUY].slots[i]);
+	}
+	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
+		tablist.add(stock[VENDOR_SELL].slots[i]);
+	}
 }
 
 void MenuVendor::loadMerchant(const std::string&) {
@@ -106,6 +113,27 @@ void MenuVendor::loadMerchant(const std::string&) {
 
 void MenuVendor::logic() {
 	if (!visible) return;
+
+	if (NO_MOUSE)
+	{
+		tablist.logic();
+	}
+
+	// make shure keyboard navigation leads us to correct tab
+	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
+		if (stock[VENDOR_BUY].slots[i]->in_focus)
+		{
+			tabControl->setActiveTab(0);
+			activetab = 0;
+			break;
+		}
+		else if (stock[VENDOR_SELL].slots[i]->in_focus)
+		{
+			tabControl->setActiveTab(1);
+			activetab = 1;
+			break;
+		}
+	}
 
 	if (closeButton->checkClick()) {
 		visible = false;
@@ -195,7 +223,7 @@ TooltipData MenuVendor::checkTooltip(Point mouse) {
  * When the player talks to a new NPC, apply that NPC's inventory
  */
 void MenuVendor::setInventory() {
-	for (int i=0; i<VENDOR_SLOTS; i++) {
+	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		stock[VENDOR_BUY][i] = npc->stock[i];
 		stock[VENDOR_SELL][i] = buyback_stock[i];
 	}
@@ -209,7 +237,7 @@ void MenuVendor::setInventory() {
  * the player leaves this map)
  */
 void MenuVendor::saveInventory() {
-	for (int i=0; i<VENDOR_SLOTS; i++) {
+	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		if (npc) npc->stock[i] = stock[VENDOR_BUY][i];
 		buyback_stock[i] = stock[VENDOR_SELL][i];
 	}
@@ -217,9 +245,9 @@ void MenuVendor::saveInventory() {
 }
 
 void MenuVendor::sort(int type) {
-	for (int i=0; i<VENDOR_SLOTS; i++) {
+	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
 		if (stock[type][i].item == 0) {
-			for (int j=i; j<VENDOR_SLOTS; j++) {
+			for (unsigned j=i; j<VENDOR_SLOTS; j++) {
 				if (stock[type][j].item != 0) {
 					stock[type][i] = stock[type][j];
 					stock[type][j].item = 0;
@@ -229,6 +257,10 @@ void MenuVendor::sort(int type) {
 			}
 		}
 	}
+}
+
+int MenuVendor::getRowsCount() {
+	return slots_rows;
 }
 
 MenuVendor::~MenuVendor() {

@@ -1,8 +1,11 @@
 #include "BehaviorAlly.h"
 #include "Enemy.h"
 
-const unsigned short MINIMUM_FOLLOW_DISTANCE = 200;
+const unsigned short MINIMUM_FOLLOW_DISTANCE_LOWER = 100;
+const unsigned short MINIMUM_FOLLOW_DISTANCE = 250;
 const unsigned short MAXIMUM_FOLLOW_DISTANCE = 2000;
+
+const unsigned short BLOCK_TICKS = 10;
 
 BehaviorAlly::BehaviorAlly(Enemy *_e, EnemyManager *_em) : BehaviorStandard(_e, _em) {
 }
@@ -73,45 +76,72 @@ void BehaviorAlly::findTarget() {
 	else
 		los = false;
 
+    //if the player is blocked, all summons which the player is facing to move away for the specified frames
+    //need to set the flag player_blocked so that other allies know to get out of the way as well
+    //if hero is facing the summon
+    if(ENABLE_ALLY_COLLISION_AI){
+        if(!enemies->player_blocked && hero_dist < MINIMUM_FOLLOW_DISTANCE_LOWER
+            && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
+                enemies->player_blocked = true;
+                enemies->player_blocked_ticks = BLOCK_TICKS;
+        }
+
+        if(enemies->player_blocked && !e->stats.in_combat
+            && e->map->collider.is_facing_wide(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
+                fleeing = true;
+                pursue_pos = e->stats.hero_pos;
+        }
+    }
+
 }
+
 
 void BehaviorAlly::checkMoveStateStance() {
 
-	if(e->stats.in_combat && target_dist > e->stats.melee_range)
-		e->newState(ENEMY_MOVE);
+    if(e->stats.in_combat && target_dist > e->stats.melee_range)
+        e->newState(ENEMY_MOVE);
 
-	if(!e->stats.in_combat && hero_dist > MINIMUM_FOLLOW_DISTANCE) {
-		if (e->move()) {
-			e->newState(ENEMY_MOVE);
-		}
-		else {
-			int prev_direction = e->stats.direction;
+    if((!e->stats.in_combat && hero_dist > MINIMUM_FOLLOW_DISTANCE) || fleeing) {
+        if (e->move()) {
+            e->newState(ENEMY_MOVE);
+        }
+        else {
+            int prev_direction = e->stats.direction;
 
-			// hit an obstacle, try the next best angle
-			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-			if (e->move()) {
-				e->newState(ENEMY_MOVE);
-			}
-			else e->stats.direction = prev_direction;
-		}
-	}
+            // hit an obstacle, try the next best angle
+            e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+            if (e->move()) {
+                e->newState(ENEMY_MOVE);
+            }
+            else e->stats.direction = prev_direction;
+        }
+    }
 }
 
-void BehaviorAlly::checkMoveStateMove() {
-	//if close enough to hero, stop miving
-	if(hero_dist < MINIMUM_FOLLOW_DISTANCE && !e->stats.in_combat) {
-		e->newState(ENEMY_STANCE);
-	}
 
-	// try to continue moving
-	else if (!e->move()) {
-		int prev_direction = e->stats.direction;
-		// hit an obstacle.  Try the next best angle
-		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-		if (!e->move()) {
-			//minion->newState(MINION_STANCE);
-			e->stats.direction = prev_direction;
-		}
-	}
+void BehaviorAlly::checkMoveStateMove() {
+    //if close enough to hero, stop miving
+    if(hero_dist < MINIMUM_FOLLOW_DISTANCE && !e->stats.in_combat && !fleeing) {
+        e->newState(ENEMY_STANCE);
+    }
+
+    // try to continue moving
+    else if (!e->move()) {
+        int prev_direction = e->stats.direction;
+        // hit an obstacle.  Try the next best angle
+        e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+        if (!e->move()) {
+            //this prevents an ally trying to move perpendicular to a bridge if the player gets close to it in a certain position and gets blocked
+            if(enemies->player_blocked && !e->stats.in_combat){
+                e->stats.direction = e->stats.hero_direction;
+                if (!e->move()) {
+                    e->stats.direction = prev_direction;
+                }
+            }
+            else{
+                e->stats.direction = prev_direction;
+            }
+        }
+    }
 }
 

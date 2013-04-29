@@ -17,7 +17,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "FileParser.h"
 #include "UtilsParsing.h"
-
+#include "UtilsFileSystem.h"
+#include "SharedResources.h"
 
 using namespace std;
 bool new_section;
@@ -33,12 +34,40 @@ FileParser::FileParser()
 	, val("")
 {}
 
-bool FileParser::open(const string& _filename, const string &errormessage) {
-	this->filename = _filename;
-	infile.open(filename.c_str(), ios::in);
+bool FileParser::open(const string& _filename, bool locateFileName, bool stopAfterFirstFile, const string &_errormessage) {
+	filenames.clear();
+	if (locateFileName) {
+		if (stopAfterFirstFile) {
+			filenames.push_back(mods->locate(_filename));
+		} else {
+			filenames = mods->list(_filename);
+		}
+	} else {
+		if (!stopAfterFirstFile && isDirectory(_filename)) {
+			getFileList(_filename, "txt", filenames);
+		} else {
+			filenames.push_back(_filename);
+		}
+	}
+	current_index = 0;
+	this->errormessage = _errormessage;
+
+	// This should never happen, because when stopAfterFirstFile is set, we
+	// expect to have only one file added above.
+	if (stopAfterFirstFile)
+		if (filenames.size() > 1)
+			fprintf(stderr, "Error in FileParser::open logic. More files detected, although stopAfterFirstFile was set\n");
+
+	if (filenames.size() == 0 && !errormessage.empty()) {
+		fprintf(stderr, "%s: No such file or directory!\n", errormessage.c_str());
+		return false;
+	}
+
+	const string current_filename = filenames[0];
+	infile.open(current_filename.c_str(), ios::in);
 	bool ret = infile.is_open();
 	if (!ret && !errormessage.empty())
-		fprintf(stderr, "%s: %s\n", errormessage.c_str(), filename.c_str());
+		fprintf(stderr, "%s: %s\n", errormessage.c_str(), current_filename.c_str());
 	return ret;
 }
 
@@ -58,31 +87,47 @@ bool FileParser::next() {
 	string starts_with;
 	new_section = false;
 
-	while (infile.good()) {
+	while (current_index < filenames.size()) {
+		while (infile.good()) {
 
-		line = getLine(infile);
+			line = getLine(infile);
 
-		// skip ahead if this line is empty
-		if (line.length() == 0) continue;
+			// skip ahead if this line is empty
+			if (line.length() == 0) continue;
 
-		starts_with = line.at(0);
+			starts_with = line.at(0);
 
-		// skip ahead if this line is a comment
-		if (starts_with == "#") continue;
+			// skip ahead if this line is a comment
+			if (starts_with == "#") continue;
 
-		// set new section if this line is a section declaration
-		if (starts_with == "[") {
-			new_section = true;
-			section = parse_section_title(line);
+			// set new section if this line is a section declaration
+			if (starts_with == "[") {
+				new_section = true;
+				section = parse_section_title(line);
 
-			// keep searching for a key-pair
-			continue;
+				// keep searching for a key-pair
+				continue;
+			}
+
+			// this is a keypair. Perform basic parsing and return
+			parse_key_pair(line, key, val);
+			return true;
 		}
 
-		// this is a keypair. Perform basic parsing and return
-		parse_key_pair(line, key, val);
-		return true;
+		infile.close();
 
+		current_index++;
+		if (current_index == filenames.size()) return false;
+
+		const string current_filename = filenames[current_index];
+		infile.open(current_filename.c_str(), ios::in);
+		if (!infile.is_open()) {
+			if (!errormessage.empty())
+				fprintf(stderr, "%s: %s\n", errormessage.c_str(), current_filename.c_str());
+			return false;
+		}
+		// a new file starts a new section
+		new_section = true;
 	}
 
 	// hit the end of file
@@ -123,7 +168,7 @@ string FileParser::nextValue() {
 }
 
 std::string FileParser::getFileName() {
-	return filename;
+	return filenames[current_index];
 }
 
 FileParser::~FileParser() {

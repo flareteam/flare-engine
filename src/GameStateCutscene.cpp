@@ -32,9 +32,12 @@ Scene::Scene() : frame_counter(0)
 
 Scene::~Scene() {
 
-	while(!components.empty())
-		components.pop();
+	SDL_FreeSurface(art);
 
+	while(!components.empty()) {
+		if (components.front().i != NULL) SDL_FreeSurface(components.front().i);
+		components.pop();
+	}
 }
 
 bool Scene::logic() {
@@ -59,7 +62,7 @@ bool Scene::logic() {
 
 			font->setFont("font_captions");
 			caption = components.front().s;
-			caption_size = font->calc_size(caption, VIEW_W * 0.8f);
+			caption_size = font->calc_size(caption, (int)(VIEW_W * 0.8f));
 
 		}
 		else if (components.front().type == "image") {
@@ -105,9 +108,11 @@ void Scene::render() {
 
 	if (caption != "") {
 		font->setFont("font_captions");
-		font->renderShadowed(caption, screen->w / 2, screen->h - (caption_size.y*2),
+		font->renderShadowed(caption, screen->w / 2, screen->h - (caption_size.y),
 							 JUSTIFY_CENTER,
-							 screen, FONT_WHITE);
+							 screen,
+							 (int)(VIEW_W * 0.8f),
+							 FONT_WHITE);
 	}
 }
 
@@ -150,7 +155,7 @@ void GameStateCutscene::render() {
 bool GameStateCutscene::load(std::string filename) {
 	FileParser infile;
 
-	if (!infile.open(mods->locate("cutscenes/" + filename)))
+	if (!infile.open("cutscenes/" + filename))
 		return false;
 
 	// parse the cutscene file
@@ -165,8 +170,7 @@ bool GameStateCutscene::load(std::string filename) {
 			// allow having an empty section (globals such as scale_gfx might be set here
 		}
 		else if (infile.section == "scene") {
-			SceneComponent sc;
-			sc.type = "";
+			SceneComponent sc = SceneComponent();
 
 			if (infile.key == "caption") {
 				sc.type = infile.key;
@@ -219,7 +223,7 @@ SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
 	/* scale image to fit height */
 	if (scale_graphics) {
 		float ratio = image->h/(float)image->w;
-		SDL_Surface *art = scaleSurface(image, VIEW_W, VIEW_W*ratio);
+		SDL_Surface *art = scaleSurface(image, VIEW_W, (int)(VIEW_W*ratio));
 		if (art == NULL)
 			return image;
 

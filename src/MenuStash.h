@@ -67,9 +67,13 @@ public:
 	void drop(Point mouse, ItemStack stack);
 	void add(ItemStack stack, int slot);
 
+	int getRowsCount();
+
 	SDL_Rect slots_area;
 	MenuItemStorage stock;
 	bool updated;
+
+	TabList tablist;
 };
 
 

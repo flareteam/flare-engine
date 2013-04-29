@@ -33,6 +33,9 @@ Widget::~Widget()
 void Widget::activate()
 {}
 
+void Widget::deactivate()
+{}
+
 bool Widget::getNext() {
 	return false;
 }
@@ -41,20 +44,35 @@ bool Widget::getPrev() {
 	return false;
 }
 
-TabList::TabList()
+TabList::TabList(ScrollType _scrolltype, int _LEFT, int _RIGHT, int _ACTIVATE)
 	: widgets()
 	, current(-1)
-	, scrolltype(TWO_DIRECTIONS)
-{}
-
-TabList::TabList(ScrollType _scrolltype)
-	: widgets()
-	, current(-1)
+	, previous(-1)
+	, locked(false)
 	, scrolltype(_scrolltype)
+	, MV_LEFT(_LEFT)
+	, MV_RIGHT(_RIGHT)
+	, ACTIVATE(_ACTIVATE)
 {}
 
 TabList::~TabList()
 {}
+
+bool TabList::isLocked() {
+	return locked;
+}
+
+void TabList::lock() {
+	locked = true;
+	if (current_is_valid())
+		widgets.at(current)->in_focus = false;
+}
+
+void TabList::unlock() {
+	locked = false;
+	if (current_is_valid())
+		widgets.at(current)->in_focus = true;
+}
 
 void TabList::add(Widget* widget) {
 	if (widget == NULL)
@@ -78,8 +96,20 @@ void TabList::clear() {
 	widgets.clear();
 }
 
+int TabList::getCurrent() {
+	return current;
+}
+
+unsigned TabList::size() {
+	return widgets.size();
+}
+
 bool TabList::current_is_valid() {
 	return current >= 0 && current < (int)widgets.size();
+}
+
+bool TabList::previous_is_valid() {
+	return previous >= 0 && previous < (int)widgets.size();
 }
 
 Widget* TabList::getNext(bool inner) {
@@ -121,9 +151,16 @@ Widget* TabList::getPrev(bool inner) {
 	return widgets.at(current);
 }
 
+void TabList::deactivatePrevious() {
+	if (previous_is_valid() && previous != current) {
+		widgets.at(previous)->deactivate();
+	}
+}
+
 void TabList::activate() {
 	if (current_is_valid()) {
 		widgets.at(current)->activate();
+		previous = current;
 	}
 }
 
@@ -135,6 +172,7 @@ void TabList::defocus() {
 }
 
 void TabList::logic() {
+	if (locked) return;
 	if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
 		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;
@@ -147,18 +185,19 @@ void TabList::logic() {
 	}
 
 	if (scrolltype == HORIZONTAL || scrolltype == TWO_DIRECTIONS) {
-		if (inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
-			inpt->lock[LEFT] = true;
+		if (inpt->pressing[MV_LEFT] && !inpt->lock[MV_LEFT]) {
+			inpt->lock[MV_LEFT] = true;
 			getPrev(false);
 		}
-		else if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
-			inpt->lock[RIGHT] = true;
+		else if (inpt->pressing[MV_RIGHT] && !inpt->lock[MV_RIGHT]) {
+			inpt->lock[MV_RIGHT] = true;
 			getNext(false);
 		}
 	}
 
-	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		inpt->lock[ACCEPT] = true;
+	if (inpt->pressing[ACTIVATE] && !inpt->lock[ACTIVATE]) {
+		inpt->lock[ACTIVATE] = true;
+		deactivatePrevious(); //Deactivate previously activated item
 		activate();	// Activate the currently infocus item
 	}
 

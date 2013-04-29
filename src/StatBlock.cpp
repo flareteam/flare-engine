@@ -141,6 +141,7 @@ StatBlock::StatBlock()
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
 	, hero_pos(-1, -1)
+	, hero_direction(0)
 	, hero_alive(true)
 	, hero_stealth(0)
 	, last_seen(-1, -1)  // no effects to gameplay?
@@ -170,7 +171,11 @@ StatBlock::StatBlock()
 	, portrait("male01")
 	, transform_type("")
 	, animations("")
-	, sfx_step("cloth") {
+	, sfx_step("cloth")
+	, prev_maxhp(0)
+	, prev_maxmp(0)
+	, pres_hp(0)
+	, pres_mp(0) {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
 
@@ -218,7 +223,7 @@ bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
  */
 void StatBlock::load(const string& filename) {
 	FileParser infile;
-	if (!infile.open(mods->locate(filename)))
+	if (!infile.open(filename))
 		return;
 
 	int num = 0;
@@ -450,6 +455,12 @@ void StatBlock::recalc_alt() {
 
 	int lev0 = level -1;
 
+	// preserve hp/mp states
+	prev_maxhp = maxhp;
+	prev_maxmp = maxmp;
+	pres_hp = hp;
+	pres_mp = mp;
+
 	if (hero) {
 		// calculate primary stats
 		offense_additional = effects.bonus_offense;
@@ -504,6 +515,17 @@ void StatBlock::logic() {
 
 	// apply bonuses from items/effects to base stats
 	recalc_alt();
+
+	// preserve ratio on maxmp and maxhp changes
+	float ratio;
+	if (prev_maxhp != maxhp) {
+		ratio = (float)pres_hp / (float)prev_maxhp;
+		hp = ratio * maxhp;
+	}
+	if (prev_maxmp != maxmp) {
+		ratio = (float)pres_mp / (float)prev_maxmp;
+		mp = ratio * maxmp;
+	}
 
 	// handle cooldowns
 	if (cooldown_ticks > 0) cooldown_ticks--; // global cooldown
@@ -589,7 +611,7 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 void StatBlock::loadHeroStats() {
 	// Redefine numbers from config file if present
 	FileParser infile;
-	if (!infile.open(mods->locate("engine/stats.txt")))
+	if (!infile.open("engine/stats.txt"))
 		return;
 
 	while (infile.next()) {
@@ -718,7 +740,7 @@ void StatBlock::loadHeroStats() {
 	statsLoaded = true;
 
 	// Load the XP table as well
-	if (!infile.open(mods->locate("engine/xp_table.txt")))
+	if (!infile.open("engine/xp_table.txt"))
 		return;
 
 	while(infile.next()) {

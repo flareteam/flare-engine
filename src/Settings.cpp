@@ -67,6 +67,7 @@ ConfigEntry config[] = {
 	{ "gamma",            &typeid(GAMMA),           "1.0", &GAMMA,           "screen gamma (0.5 = darkest, 2.0 = lightest)"},
 	{ "texture_quality",  &typeid(TEXTURE_QUALITY), "1",   &TEXTURE_QUALITY, "texture quality (0 = low quality, 1 = high quality)"},
 	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
+	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
 	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
@@ -131,6 +132,7 @@ bool MOUSE_MOVE;
 bool ENABLE_JOYSTICK;
 int JOYSTICK_DEVICE;
 bool MOUSE_AIM;
+bool NO_MOUSE;
 
 // Language Settings
 std::string LANGUAGE = "en";
@@ -144,6 +146,10 @@ short MAX_ABSORB = 90;
 short MAX_RESIST = 90;
 short MAX_BLOCK = 100;
 short MAX_AVOIDANCE = 99;
+short MIN_ABSORB = 0;
+short MIN_RESIST = 0;
+short MIN_BLOCK = 0;
+short MIN_AVOIDANCE = 0;
 
 // Elemental types
 std::vector<Element> ELEMENTS;
@@ -167,6 +173,8 @@ std::string GAME_PREFIX = "";
 std::string WINDOW_TITLE = "Flare";
 int SOUND_FALLOFF = 15;
 int PARTY_EXP_PERCENTAGE = 100;
+bool ENABLE_ALLY_COLLISION_AI = true;
+bool ENABLE_ALLY_COLLISION = true;
 
 /**
  * Set system paths
@@ -336,7 +344,7 @@ static ConfigEntry * getConfigEntry(const std::string & name) {
 void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
-	if (infile.open(mods->locate("engine/tileset_config.txt"), "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
+	if (infile.open("engine/tileset_config.txt", true, true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
 		while (infile.next()) {
 			if (infile.key == "units_per_tile") {
 				UNITS_PER_TILE = toInt(infile.val);
@@ -380,7 +388,7 @@ void loadMiscSettings() {
 	FileParser infile;
 	// load miscellaneous settings from engine config
 	// misc.txt
-	if (infile.open(mods->locate("engine/misc.txt"))) {
+	if (infile.open("engine/misc.txt")) {
 		while (infile.next()) {
 			if (infile.key == "save_hpmp") {
 				if (toInt(infile.val) == 1)
@@ -409,13 +417,17 @@ void loadMiscSettings() {
 			}
 			else if (infile.key == "party_exp_percentage") {
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
+			} else if (infile.key == "enable_ally_collision") {
+				ENABLE_ALLY_COLLISION = (toInt(infile.val) == 1);
+			} else if (infile.key == "enable_ally_collision_ai") {
+				ENABLE_ALLY_COLLISION_AI = (toInt(infile.val) == 1);
 			}
 
 		}
 		infile.close();
 	}
 	// resolutions.txt
-	if (infile.open(mods->locate("engine/resolutions.txt"))) {
+	if (infile.open("engine/resolutions.txt")) {
 		while (infile.next()) {
 			if (infile.key == "menu_frame_width")
 				FRAME_W = toInt(infile.val);
@@ -437,7 +449,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// gameplay.txt
-	if (infile.open(mods->locate("engine/gameplay.txt"))) {
+	if (infile.open("engine/gameplay.txt")) {
 		while (infile.next()) {
 			if (infile.key == "enable_playgame") {
 				if (toInt(infile.val) == 1)
@@ -449,25 +461,21 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// combat.txt
-	if (infile.open(mods->locate("engine/combat.txt"))) {
+	if (infile.open("engine/combat.txt")) {
 		while (infile.next()) {
-			if (infile.key == "max_absorb_percent") {
-				MAX_ABSORB = toInt(infile.val);
-			}
-			else if (infile.key == "max_resist_percent") {
-				MAX_RESIST = toInt(infile.val);
-			}
-			else if (infile.key == "max_block_percent") {
-				MAX_BLOCK = toInt(infile.val);
-			}
-			else if (infile.key == "max_avoidance_percent") {
-				MAX_AVOIDANCE = toInt(infile.val);
-			}
+			if (infile.key == "max_absorb_percent") MAX_ABSORB = toInt(infile.val);
+			else if (infile.key == "max_resist_percent") MAX_RESIST = toInt(infile.val);
+			else if (infile.key == "max_block_percent") MAX_BLOCK = toInt(infile.val);
+			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = toInt(infile.val);
+			else if (infile.key == "min_absorb_percent") MIN_ABSORB = toInt(infile.val);
+			else if (infile.key == "min_resist_percent") MIN_RESIST = toInt(infile.val);
+			else if (infile.key == "min_block_percent") MIN_BLOCK = toInt(infile.val);
+			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = toInt(infile.val);
 		}
 		infile.close();
 	}
 	// elements.txt
-	if (infile.open(mods->locate("engine/elements.txt"))) {
+	if (infile.open("engine/elements.txt")) {
 		Element e;
 		ELEMENTS.clear();
 		while (infile.next()) {
@@ -482,7 +490,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// classes.txt
-	if (infile.open(mods->locate("engine/classes.txt"))) {
+	if (infile.open("engine/classes.txt")) {
 		HeroClass c;
 		HERO_CLASSES.clear();
 		while (infile.next()) {
@@ -542,8 +550,8 @@ bool loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS, "")) {
-		if (!infile.open(mods->locate("engine/default_settings.txt"), "")) {
+	if (!infile.open(PATH_CONF + FILE_SETTINGS, false, true,  "")) {
+		if (!infile.open("engine/default_settings.txt", true, true, "")) {
 			saveSettings();
 			return true;
 		}

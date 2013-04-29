@@ -144,7 +144,7 @@ void Avatar::loadLayerDefinitions() {
 	layer_reference_order = vector<string>();
 
 	FileParser infile;
-	if (infile.open(mods->locate("engine/hero_options.txt"))) {
+	if (infile.open("engine/hero_options.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -262,7 +262,10 @@ bool Avatar::pressing_move() {
 		return inpt->pressing[MAIN1];
 	}
 	else {
-		return inpt->pressing[UP] || inpt->pressing[DOWN] || inpt->pressing[LEFT] || inpt->pressing[RIGHT];
+		return (inpt->pressing[UP] && !inpt->lock[UP]) ||
+			(inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
+			(inpt->pressing[LEFT] && !inpt->lock[LEFT]) ||
+			(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]);
 	}
 }
 
@@ -283,18 +286,18 @@ void Avatar::set_direction() {
 		stats.direction = calcDirection(stats.pos, target);
 	}
 	else {
-		if (inpt->pressing[UP] && inpt->pressing[LEFT]) stats.direction = 1;
-		else if (inpt->pressing[UP] && inpt->pressing[RIGHT]) stats.direction = 3;
-		else if (inpt->pressing[DOWN] && inpt->pressing[RIGHT]) stats.direction = 5;
-		else if (inpt->pressing[DOWN] && inpt->pressing[LEFT]) stats.direction = 7;
-		else if (inpt->pressing[LEFT]) stats.direction = 0;
-		else if (inpt->pressing[UP]) stats.direction = 2;
-		else if (inpt->pressing[RIGHT]) stats.direction = 4;
-		else if (inpt->pressing[DOWN]) stats.direction = 6;
+		if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 1;
+		else if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 3;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 5;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 7;
+		else if (inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 0;
+		else if (inpt->pressing[UP] && !inpt->lock[UP]) stats.direction = 2;
+		else if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 4;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) stats.direction = 6;
 		// Adjust for ORTHO tilesets
 		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL &&
-				(inpt->pressing[UP] || inpt->pressing[DOWN] ||
-				 inpt->pressing[LEFT] || inpt->pressing[RIGHT]))
+				((inpt->pressing[UP] && !inpt->lock[UP]) || (inpt->pressing[DOWN] && !inpt->lock[UP]) ||
+				 (inpt->pressing[LEFT] && !inpt->lock[LEFT]) || (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])))
 			stats.direction = stats.direction == 7 ? 0 : stats.direction + 1;
 	}
 }
@@ -418,12 +421,12 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		map->hero_tile.x = stats.pos.x / 32;
 		map->hero_tile.y = stats.pos.y / 32;
 
-		map->collider.block(stats.pos.x, stats.pos.y);
+		map->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
 	}
 	if (stats.effects.stun) {
 
-		map->collider.block(stats.pos.x, stats.pos.y);
+		map->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
 	}
 
@@ -733,7 +736,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	}
 
 	// make the current square solid
-	map->collider.block(stats.pos.x, stats.pos.y);
+	map->collider.block(stats.pos.x, stats.pos.y, false);
 }
 
 void Avatar::transform() {
@@ -805,7 +808,7 @@ void Avatar::untransform() {
 	inpt->unlockActionBar();
 
 	// Only allow untransform when on a valid tile
-	if (!map->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL)) return;
+	if (!map->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) return;
 
 	stats.transformed = false;
 	transform_triggered = true;

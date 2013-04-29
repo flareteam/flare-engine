@@ -242,6 +242,8 @@ void drawPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
 
 /**
  * draw line to the screen
+ * NOTE: The surface must be locked before calling this!
+ *
  * from http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Simplification
  */
 void drawLine(SDL_Surface *surface, int x0, int y0, int x1, int y1, Uint32 color) {
@@ -270,14 +272,22 @@ void drawLine(SDL_Surface *surface, int x0, int y0, int x1, int y1, Uint32 color
 }
 
 void drawLine(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
+	if (SDL_MUSTLOCK(surface))
+		SDL_LockSurface(surface);
 	drawLine(surface, pos0.x, pos0.y, pos1.x, pos1.y, color);
+	if (SDL_MUSTLOCK(surface))
+		SDL_UnlockSurface(surface);
 }
 
 void drawRectangle(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
+	if (SDL_MUSTLOCK(surface))
+		SDL_LockSurface(surface);
 	drawLine(surface, pos0.x, pos0.y, pos1.x, pos0.y, color);
 	drawLine(surface, pos1.x, pos0.y, pos1.x, pos1.y, color);
 	drawLine(surface, pos0.x, pos0.y, pos0.x, pos1.y, color);
 	drawLine(surface, pos0.x, pos1.y, pos1.x, pos1.y, color);
+	if (SDL_MUSTLOCK(surface))
+		SDL_UnlockSurface(surface);
 }
 
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {

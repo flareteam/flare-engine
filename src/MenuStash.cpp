@@ -45,7 +45,7 @@ MenuStash::MenuStash(ItemManager *_items, StatBlock *_stats)
 
 	// Load config settings
 	FileParser infile;
-	if (infile.open(mods->locate("menus/stash.txt"))) {
+	if (infile.open("menus/stash.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -83,11 +83,19 @@ void MenuStash::update() {
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
+
+	for (int i = 0; i < STASH_SLOTS; i++) {
+		tablist.add(stock.slots[i]);
+	}
 }
 
 void MenuStash::logic() {
 	if (!visible) return;
 
+	if (NO_MOUSE)
+	{
+		tablist.logic();
+	}
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);
@@ -227,6 +235,10 @@ TooltipData MenuStash::checkTooltip(Point mouse) {
 
 bool MenuStash::full(int item) {
 	return stock.full(item);
+}
+
+int MenuStash::getRowsCount() {
+	return slots_rows;
 }
 
 MenuStash::~MenuStash() {

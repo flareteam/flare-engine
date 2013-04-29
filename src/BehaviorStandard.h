@@ -45,6 +45,8 @@ protected:
 	Point pursue_pos;
 	// targeting vars
 	bool los;
+	//when fleeing, the enemy moves away from the pursue_pos
+	bool fleeing;
 
 public:
 	BehaviorStandard(Enemy *_e, EnemyManager *_em);
