@@ -237,6 +237,10 @@ bool MenuStash::full(int item) {
 	return stock.full(item);
 }
 
+int MenuStash::getRowsCount() {
+	return slots_rows;
+}
+
 MenuStash::~MenuStash() {
 	SDL_FreeSurface(background);
 	delete closeButton;

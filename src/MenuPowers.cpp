@@ -668,5 +668,6 @@ void MenuPowers::renderPowers(int tab_num) {
 				SDL_BlitSurface(overlay_disabled, &disabled_src, screen, &slots[i]->pos);
 			}
 		}
+		slots[i]->renderSelection();
 	}
 }

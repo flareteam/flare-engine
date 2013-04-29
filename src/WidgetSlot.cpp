@@ -29,52 +29,59 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-WidgetSlot::WidgetSlot(SDL_Surface *_icons, int _icon_id)
+WidgetSlot::WidgetSlot(SDL_Surface *_icons, int _icon_id, int _ACTIVATE)
 	: Widget()
 	, icons(_icons)
 	, icon_id(_icon_id)
 	, amount(1)
 	, max_amount(1)
+	, ACTIVATE(_ACTIVATE)
 	, enabled(true)
+	, checked(false)
 	, pressed(false)
 {
 	focusable = true;
 	pos.x = pos.y = 0;
 	pos.w = ICON_SIZE;
 	pos.h = ICON_SIZE;
+
+	slot_selected = loadGraphicSurface("images/menus/slot_selected.png");
+	slot_checked = loadGraphicSurface("images/menus/slot_checked.png");
 }
 
 void WidgetSlot::activate() {
 	pressed = true;
 }
 
-bool WidgetSlot::checkClick() {
+void WidgetSlot::deactivate() {
+	pressed = false;
+	checked = false;
+}
+
+CLICK_TYPE WidgetSlot::checkClick() {
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
-/**
- * Sets and releases the "pressed" visual state of the button
- * If press and release, activate (return true)
- */
-bool WidgetSlot::checkClick(int x, int y) {
+CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	Point mouse(x,y);
 
-	// disabled buttons can't be clicked;
-	if (!enabled) return false;
+	// disabled slots can't be clicked;
+	if (!enabled) return NO_CLICK;
 
 	// main button already in use, new click not allowed
-	if (inpt->lock[MAIN1]) return false;
-	if (inpt->lock[ACCEPT]) return false;
+	if (inpt->lock[MAIN1]) return NO_CLICK;
+	if (inpt->lock[ACTIVATE]) return NO_CLICK;
 
-	// main click released, so the button state goes back to unpressed
-	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACCEPT]) {
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACTIVATE]) { // this is a button release
 		pressed = false;
-		return true;
+
+		checked = !checked;
+		if (checked)
+			return CHECKED;
+		else
+			return ACTIVATED;
 	}
 
-	pressed = false;
-
-	// detect new click
 	if (inpt->pressing[MAIN1]) {
 		if (isWithin(pos, mouse)) {
 
@@ -83,7 +90,7 @@ bool WidgetSlot::checkClick(int x, int y) {
 
 		}
 	}
-	return false;
+	return NO_CLICK;
 
 }
 
@@ -127,27 +134,38 @@ void WidgetSlot::render(SDL_Surface *target) {
 			label.render();
 		}
 	}
+	renderSelection(target);
+}
+
+/**
+ * We can use this function if slot is grayed out to refresh selection frame
+ */
+void WidgetSlot::renderSelection(SDL_Surface *target) {
+	if (target == NULL) {
+		target = screen;
+	}
 
 	if (in_focus) {
-		Point topLeft;
-		Point bottomRight;
-		Uint32 color;
+		SDL_Rect src;
+		src.x = src.y = 0;
+		src.w = src.h = ICON_SIZE;
 
-		topLeft.x = pos.x - 1;
-		topLeft.y = pos.y - 1;
-		bottomRight.x = pos.x + pos.w;
-		bottomRight.y = pos.y + pos.h;
-		color = SDL_MapRGB(target->format, 0,191,255);
-
-		if (target == screen) {
-			SDL_LockSurface(screen);
-			drawRectangle(target, topLeft, bottomRight, color);
-			SDL_UnlockSurface(screen);
+		if (render_to_alpha) {
+			if (checked)
+				SDL_gfxBlitRGBA(slot_checked, &src, target, &pos);
+			else
+				SDL_gfxBlitRGBA(slot_selected, &src, target, &pos);
 		}
-		else
-			drawRectangle(target, topLeft, bottomRight, color);
+		else {
+			if (checked)
+				SDL_BlitSurface(slot_checked, &src, target, &pos);
+			else
+				SDL_BlitSurface(slot_selected, &src, target, &pos);
+		}
 	}
 }
 
 WidgetSlot::~WidgetSlot() {
+	SDL_FreeSurface(slot_selected);
+	SDL_FreeSurface(slot_checked);
 }

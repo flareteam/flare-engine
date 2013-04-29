@@ -387,13 +387,7 @@ void WidgetListBox::render(SDL_Surface *target) {
 		bottomRight.y = rows[list_height - 1].y + rows[0].h;
 		color = SDL_MapRGB(target->format, 255,248,220);
 
-		if (target == screen) {
-			SDL_LockSurface(screen);
-			drawRectangle(target, topLeft, bottomRight, color);
-			SDL_UnlockSurface(screen);
-		}
-		else
-			drawRectangle(target, topLeft, bottomRight, color);
+		drawRectangle(target, topLeft, bottomRight, color);
 	}
 
 	if (has_scroll_bar)
