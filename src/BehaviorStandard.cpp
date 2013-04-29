@@ -30,6 +30,7 @@ BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior
 	hero_dist = 0;
 	target_dist = 0;
 	pursue_pos.x = pursue_pos.y = -1;
+	fleeing = false;
 }
 
 /**
@@ -49,6 +50,7 @@ void BehaviorStandard::logic() {
 	checkMove();
 	updateState();
 
+    fleeing = false;
 }
 
 /**
@@ -134,7 +136,7 @@ void BehaviorStandard::doUpkeep() {
 		e->stats.pos.x = e->stats.teleport_destination.x;
 		e->stats.pos.y = e->stats.teleport_destination.y;
 
-		e->map->collider.block(e->stats.pos.x,e->stats.pos.y);
+		e->map->collider.block(e->stats.pos.x,e->stats.pos.y, e->stats.hero_ally);
 
 		e->stats.teleportation = false;
 	}
@@ -359,7 +361,10 @@ void BehaviorStandard::checkMove() {
 				}
 			}
 
-			e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+            if(fleeing)
+                e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
+            else
+                e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
 			e->stats.turn_ticks = 0;
 		}
 	}
@@ -398,9 +403,7 @@ void BehaviorStandard::checkMove() {
 	}
 
 	// re-block current space to allow correct movement
-	//if this is an ally and the player is adjacent to it, dont block
-	if(!(e->stats.hero_ally && hero_dist < 100))
-		e->map->collider.block(e->stats.pos.x, e->stats.pos.y);
+    e->map->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
 
 }
 
