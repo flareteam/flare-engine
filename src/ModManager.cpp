@@ -48,15 +48,17 @@ void ModManager::loadModList() {
 	string line;
 	string starts_with;
 	vector<string> mod_dirs;
-	vector<string> mod_dirs_local;
+	vector<string> mod_dirs_other;
 	bool found_any_mod = false;
 
 	getDirList(PATH_DATA + "mods", mod_dirs);
-	getDirList(PATH_USER + "mods", mod_dirs_local);
+	getDirList(PATH_USER + "mods", mod_dirs_other);
+	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs_other);
+	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
 
-	for (unsigned i=0; i<mod_dirs_local.size(); ++i) {
-		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_local[i]) == mod_dirs.end())
-			mod_dirs.push_back(mod_dirs_local[i]);
+	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
+		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
+			mod_dirs.push_back(mod_dirs_other[i]);
 	}
 
 	// Add the fallback mod by default
@@ -133,6 +135,16 @@ string ModManager::locate(const string& filename) {
 			return test_path;
 		}
 		test_path = PATH_DATA + "mods/" + mod_list[i-1] + "/" + filename;
+		if (fileExists(test_path)) {
+			loc_cache[filename] = test_path;
+			return test_path;
+		}
+		test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i-1] + "/" + filename;
+		if (fileExists(test_path)) {
+			loc_cache[filename] = test_path;
+			return test_path;
+		}
+		test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i-1] + "/" + filename;
 		if (fileExists(test_path)) {
 			loc_cache[filename] = test_path;
 			return test_path;
