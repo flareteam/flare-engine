@@ -51,6 +51,11 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	, stats(_stats)
 	, camp(_camp)
 	, tip_buf()
+	, keyb_tip_buf_vendor()
+	, keyb_tip_buf_stash()
+	, keyb_tip_buf_pow()
+	, keyb_tip_buf_inv()
+	, keyb_tip_buf_act()
 	, key_lock(false)
 	, dragging(0)
 	, drag_stack()
@@ -871,6 +876,9 @@ void MenuManager::render() {
 		TOOLTIP_CONTEXT = TOOLTIP_NONE;
 	}
 
+	if (NO_MOUSE)
+		handleKeyboardTooltips();
+
 	// draw icon under cursor if dragging
 	if (dragging) {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
@@ -879,6 +887,92 @@ void MenuManager::render() {
 			renderIcon(powers->powers[drag_power].icon, inpt->mouse.x-ICON_SIZE/2, inpt->mouse.y-ICON_SIZE/2);
 	}
 
+}
+
+void MenuManager::handleKeyboardTooltips() {
+
+	TooltipData keyb_tip_new_vendor;
+	TooltipData keyb_tip_new_stash;
+	TooltipData keyb_tip_new_pow;
+	TooltipData keyb_tip_new_inv;
+	TooltipData keyb_tip_new_act;
+
+	if (vendor->visible && vendor->tablist.getCurrent() != -1) {
+		if (vendor->tablist.getCurrent() < vendor->tablist.size()/2) {
+			inpt->mouse.x = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.x;
+			inpt->mouse.y = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.y;
+		}
+		else {
+			inpt->mouse.x = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent()]->pos.x;
+			inpt->mouse.y = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent()]->pos.y;
+		}
+		keyb_tip_new_vendor = vendor->checkTooltip(inpt->mouse);
+		if (!keyb_tip_new_vendor.isEmpty()) {
+			if (!keyb_tip_new_vendor.compare(&keyb_tip_buf_vendor)) {
+				keyb_tip_buf_vendor.clear();
+				keyb_tip_buf_vendor = keyb_tip_new_vendor;
+			}
+			tip->render(keyb_tip_buf_vendor, inpt->mouse, STYLE_FLOAT);
+		}
+	}
+
+	if (stash->visible && stash->tablist.getCurrent() != -1) {
+		inpt->mouse.x = stash->stock.slots[stash->tablist.getCurrent()]->pos.x;
+		inpt->mouse.y = stash->stock.slots[stash->tablist.getCurrent()]->pos.y;
+		keyb_tip_new_stash = stash->checkTooltip(inpt->mouse);
+		if (!keyb_tip_new_stash.isEmpty()) {
+			if (!keyb_tip_new_stash.compare(&keyb_tip_buf_stash)) {
+				keyb_tip_buf_stash.clear();
+				keyb_tip_buf_stash = keyb_tip_new_stash;
+			}
+			tip->render(keyb_tip_buf_stash, inpt->mouse, STYLE_FLOAT);
+		}
+	}
+
+	if (pow->visible && pow->tablist.getCurrent() != -1) {
+		inpt->mouse.x = pow->slots[pow->tablist.getCurrent()]->pos.x;
+		inpt->mouse.y = pow->slots[pow->tablist.getCurrent()]->pos.y;
+		keyb_tip_new_pow = pow->checkTooltip(inpt->mouse);
+		if (!keyb_tip_new_pow.isEmpty()) {
+			if (!keyb_tip_new_pow.compare(&keyb_tip_buf_pow)) {
+				keyb_tip_buf_pow.clear();
+				keyb_tip_buf_pow = keyb_tip_new_pow;
+			}
+			tip->render(keyb_tip_buf_pow, inpt->mouse, STYLE_FLOAT);
+		}
+	}
+
+	if (inv->visible && !dragging && inv->tablist.getCurrent() != -1) {
+		if (inv->tablist.getCurrent() < inv->getEquippedCount()) {
+			inpt->mouse.x = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.x;
+			inpt->mouse.y = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.y;
+		}
+		else {
+			inpt->mouse.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent()]->pos.x;
+			inpt->mouse.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent()]->pos.y;
+		}
+		keyb_tip_new_inv = inv->checkTooltip(inpt->mouse);
+		if (!keyb_tip_new_inv.isEmpty()) {
+			if (!keyb_tip_new_inv.compare(&keyb_tip_buf_inv)) {
+				keyb_tip_buf_inv.clear();
+				keyb_tip_buf_inv = keyb_tip_new_inv;
+			}
+			tip->render(keyb_tip_buf_inv, inpt->mouse, STYLE_FLOAT);
+		}	
+	}
+
+	if (act->tablist.getCurrent() != -1) {
+			inpt->mouse.x = act->slots[act->tablist.getCurrent()]->pos.x;
+			inpt->mouse.y = act->slots[act->tablist.getCurrent()]->pos.y;
+		keyb_tip_new_act = act->checkTooltip(inpt->mouse);
+		if (!keyb_tip_new_act.isEmpty()) {
+			if (!keyb_tip_new_act.compare(&keyb_tip_buf_act)) {
+				keyb_tip_buf_act.clear();
+				keyb_tip_buf_act = keyb_tip_new_act;
+			}
+			tip->render(keyb_tip_buf_act, inpt->mouse, STYLE_FLOAT);
+		}
+	}
 }
 
 void MenuManager::closeAll() {

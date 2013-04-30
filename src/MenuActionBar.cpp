@@ -437,17 +437,7 @@ void MenuActionBar::remove(Point mouse) {
  */
 int MenuActionBar::checkAction(Point mouse) {
 
-	// check click action
-	if ((inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) || (inpt->pressing[MAIN2] && !inpt->lock[MAIN2])) {
-		for (int i=0; i<12; i++) {
-			if (isWithin(slots[i]->pos, mouse) && slot_enabled[i]) {
-
-				return hotkeys[i];
-			}
-		}
-	}
-
-	// check hotkey action
+	// check click and hotkey actions
 	if ((inpt->pressing[BAR_1] || slots[0]->checkClick() == ACTIVATED) && slot_enabled[0]) return hotkeys[0];
 	if ((inpt->pressing[BAR_2] || slots[1]->checkClick() == ACTIVATED) && slot_enabled[1]) return hotkeys[1];
 	if ((inpt->pressing[BAR_3] || slots[2]->checkClick() == ACTIVATED) && slot_enabled[2]) return hotkeys[2];
@@ -486,29 +476,17 @@ int MenuActionBar::checkDrag(Point mouse) {
  * if clicking a menu, act as if the player pressed that menu's hotkey
  */
 void MenuActionBar::checkMenu(Point mouse, bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
-	if ((inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) || (inpt->pressing[MAIN2] && !inpt->lock[MAIN2])) {
-		if (isWithin(menus[MENU_CHARACTER]->pos, mouse)) {
-			if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) inpt->lock[MAIN1] = true;
-			else inpt->lock[MAIN2] = true;
-			menu_c = true;
-		}
-		else if (isWithin(menus[MENU_INVENTORY]->pos, mouse)) {
-			if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) inpt->lock[MAIN1] = true;
-			else inpt->lock[MAIN2] = true;
-			menu_i = true;
-		}
-		else if (isWithin(menus[MENU_POWERS]->pos, mouse)) {
-			if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) inpt->lock[MAIN1] = true;
-			else inpt->lock[MAIN2] = true;
-			inpt->lock[MAIN1] = true;
+	if (menus[MENU_CHARACTER]->checkClick()) {
+		menu_c = true;
+	}
+	if (menus[MENU_INVENTORY]->checkClick()) {
+		menu_i = true;
+	}
+	if (menus[MENU_POWERS]->checkClick()) {
 			menu_p = true;
-		}
-		else if (isWithin(menus[MENU_LOG]->pos, mouse)) {
-			if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) inpt->lock[MAIN1] = true;
-			else inpt->lock[MAIN2] = true;
-			inpt->lock[MAIN1] = true;
+	}
+	if (menus[MENU_LOG]->checkClick()) {
 			menu_l = true;
-		}
 	}
 }
 
