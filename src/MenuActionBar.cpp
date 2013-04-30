@@ -479,13 +479,13 @@ void MenuActionBar::checkMenu(Point mouse, bool &menu_c, bool &menu_i, bool &men
 	if (menus[MENU_CHARACTER]->checkClick()) {
 		menu_c = true;
 	}
-	if (menus[MENU_INVENTORY]->checkClick()) {
+	else if (menus[MENU_INVENTORY]->checkClick()) {
 		menu_i = true;
 	}
-	if (menus[MENU_POWERS]->checkClick()) {
+	else if (menus[MENU_POWERS]->checkClick()) {
 			menu_p = true;
 	}
-	if (menus[MENU_LOG]->checkClick()) {
+	else if (menus[MENU_LOG]->checkClick()) {
 			menu_l = true;
 	}
 }
