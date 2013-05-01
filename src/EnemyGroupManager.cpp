@@ -45,7 +45,7 @@ EnemyGroupManager& EnemyGroupManager::instance() {
 void EnemyGroupManager::parseEnemyFilesAndStore() {
 	FileParser infile;
 
-	if (!infile.open("enemies/", true, false))
+	if (!infile.open("enemies", true, false))
 		return;
 
 	Enemy_Level new_enemy;
