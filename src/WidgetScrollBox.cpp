@@ -219,7 +219,7 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 bool WidgetScrollBox::getNext() {
 	if (children.size() == 0) {
 		scroll(20);
-		return false;
+		return true;
 	}
 
 	if (currentChild != -1)
@@ -244,7 +244,7 @@ bool WidgetScrollBox::getNext() {
 bool WidgetScrollBox::getPrev() {
 	if (children.size() == 0) {
 		scroll(-20);
-		return false;
+		return true;
 	}
 
 	if (currentChild != -1)
