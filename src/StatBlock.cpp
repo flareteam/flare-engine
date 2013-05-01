@@ -520,11 +520,11 @@ void StatBlock::logic() {
 	float ratio;
 	if (prev_maxhp != maxhp) {
 		ratio = (float)pres_hp / (float)prev_maxhp;
-		hp = ratio * maxhp;
+		hp = (int)(ratio * maxhp);
 	}
 	if (prev_maxmp != maxmp) {
 		ratio = (float)pres_mp / (float)prev_maxmp;
-		mp = ratio * maxmp;
+		mp = (int)(ratio * maxmp);
 	}
 
 	// handle cooldowns

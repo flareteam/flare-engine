@@ -46,8 +46,6 @@ private:
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
 
-	MenuItemStorage stock[2]; // items the vendor currently has in stock
-
 	unsigned VENDOR_SLOTS;
 
 	// label and widget positions
@@ -64,6 +62,7 @@ public:
 
 	NPC *npc;
 	ItemStorage buyback_stock;
+	MenuItemStorage stock[2]; // items the vendor currently has in stock
 
 	void update();
 	void loadMerchant(const std::string&);
