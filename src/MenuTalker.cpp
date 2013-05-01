@@ -164,13 +164,19 @@ void MenuTalker::logic() {
 	if (event_cursor < npc->dialog[dialog_node].size()-1) {
 		if (npc->dialog[dialog_node][event_cursor+1].type != "") {
 			advanceButton->enabled = true;
+			tablist.remove(closeButton);
+			tablist.add(advanceButton);
 		}
 		else {
 			closeButton->enabled = true;
+			tablist.remove(advanceButton);
+			tablist.add(closeButton);
 		}
 	}
 	else {
 		closeButton->enabled = true;
+		tablist.remove(advanceButton);
+		tablist.add(closeButton);
 	}
 
 	bool more;
