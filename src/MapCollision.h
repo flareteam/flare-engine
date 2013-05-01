@@ -34,13 +34,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <vector>
 
 // collision tile types
+// The numbers 0..4 are the collision tiles as produced by tiled,
+// only 5 and 6 deal with entities on the map
 const int BLOCKS_NONE = 0;
 const int BLOCKS_ALL = 1;
 const int BLOCKS_MOVEMENT = 2;
 const int BLOCKS_ALL_HIDDEN = 3;
 const int BLOCKS_MOVEMENT_HIDDEN = 4;
-const int BLOCKS_ENTITIES = 5;
-const int BLOCKS_ENEMIES = 6;
+const int BLOCKS_ENTITIES = 5; // hero or enemies are blocking this tile, so any other entity is blocked
+const int BLOCKS_ENEMIES = 6;  // an ally is standing on that tile, so the hero could pass if ENABLE_ALLY_COLLISION is false
 
 // collision check types
 const int CHECK_MOVEMENT = 1;
