@@ -276,13 +276,13 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 				break;
 			}
 			else if (dialog[i][j].type == "requires_level") {
-				if (!map->camp->hero->level < dialog[i][j].x)
+				if (map->camp->hero->level >= dialog[i][j].x)
 					continue;
 				is_available = false;
 				break;
 			}
 			else if (dialog[i][j].type == "requires_not_level") {
-				if (!map->camp->hero->level >= dialog[i][j].x)
+				if (map->camp->hero->level < dialog[i][j].x)
 					continue;
 				is_available = false;
 				break;

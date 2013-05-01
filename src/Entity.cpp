@@ -164,7 +164,7 @@ bool Entity::takeHit(const Hazard &h) {
 	// if it's a miss, do nothing
 	int accuracy = h.accuracy;
 	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		accuracy *= ((float)(powers->powers[h.power_index].mod_accuracy_value)) / (float)100;
+		accuracy = (int)((float)accuracy * (float)powers->powers[h.power_index].mod_accuracy_value / 100.0f);
 	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
 		accuracy += powers->powers[h.power_index].mod_accuracy_value;
 	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
@@ -192,7 +192,7 @@ bool Entity::takeHit(const Hazard &h) {
 	int dmg = randBetween(h.dmg_min, h.dmg_max);
 
 	if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		dmg *= ((float)(powers->powers[h.power_index].mod_damage_value_min)) / (float)100;
+		dmg = (int)((float)dmg * (float)powers->powers[h.power_index].mod_damage_value_min / 100.0f);
 	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
 		dmg += powers->powers[h.power_index].mod_damage_value_min;
 	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
@@ -252,7 +252,7 @@ bool Entity::takeHit(const Hazard &h) {
 	int true_crit_chance = h.crit_chance;
 
 	if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		true_crit_chance *= ((float)(powers->powers[h.power_index].mod_crit_value)) / (float)100;
+		true_crit_chance = (int)((float)true_crit_chance * (float)powers->powers[h.power_index].mod_crit_value / 100.0f);
 	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ADD)
 		true_crit_chance += powers->powers[h.power_index].mod_crit_value;
 	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ABSOLUTE)

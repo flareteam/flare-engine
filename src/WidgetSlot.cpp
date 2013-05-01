@@ -70,9 +70,10 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return NO_CLICK;
+	if (inpt->lock[MAIN2]) return NO_CLICK;
 	if (inpt->lock[ACTIVATE]) return NO_CLICK;
 
-	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[ACTIVATE]) { // this is a button release
+	if (pressed && !inpt->lock[MAIN1] && !inpt->lock[MAIN2] && !inpt->lock[ACTIVATE]) { // this is a button release
 		pressed = false;
 
 		checked = !checked;
@@ -82,12 +83,23 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 			return ACTIVATED;
 	}
 
+	// detect new click
+	// use MAIN1 only for selecting
 	if (inpt->pressing[MAIN1]) {
 		if (isWithin(pos, mouse)) {
 
 			inpt->lock[MAIN1] = true;
 			pressed = true;
+			checked = false;
+		}
+	}
+	// use MAIN2 only for activating
+	if (inpt->pressing[MAIN2]) {
+		if (isWithin(pos, mouse)) {
 
+			inpt->lock[MAIN2] = true;
+			pressed = true;
+			checked = true;
 		}
 	}
 	return NO_CLICK;

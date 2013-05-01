@@ -69,6 +69,13 @@ private:
 	CampaignManager *camp;
 
 	TooltipData tip_buf;
+	TooltipData keyb_tip_buf_vendor;
+	TooltipData keyb_tip_buf_stash;
+	TooltipData keyb_tip_buf_pow;
+	TooltipData keyb_tip_buf_inv;
+	TooltipData keyb_tip_buf_act;
+
+	void handleKeyboardTooltips();
 
 	bool key_lock;
 	void loadIcons();
