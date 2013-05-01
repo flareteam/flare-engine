@@ -59,7 +59,7 @@ void BehaviorStandard::logic() {
  */
 void BehaviorStandard::doUpkeep() {
 	// activate all passive powers
-	if (e->stats.hp > 0 || e->stats.effects.triggered_death) e->powers->activatePassives(&e->stats);
+	if (e->stats.hp > 0 || e->stats.effects.triggered_death) PowerManager::instance->activatePassives(&e->stats);
 
 	e->stats.logic();
 
@@ -165,7 +165,7 @@ void BehaviorStandard::findTarget() {
 		}
 		else {
 			e->stats.in_combat = true;
-			e->powers->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
+			PowerManager::instance->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
 		}
 	}
 
@@ -174,7 +174,7 @@ void BehaviorStandard::findTarget() {
 
 		if (e->stats.in_combat) e->stats.join_combat = true;
 		e->stats.in_combat = true;
-		e->powers->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
+		PowerManager::instance->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
 	}
 
 	// check exiting combat (player died or got too far away)
@@ -309,7 +309,7 @@ void BehaviorStandard::checkPower() {
 			int power_slot =  e->stats.activated_powerslot;
 			int power_id = e->stats.power_index[e->stats.activated_powerslot];
 
-			e->powers->activate(power_id, &e->stats, pursue_pos);
+			PowerManager::instance->activate(power_id, &e->stats, pursue_pos);
 			e->stats.power_ticks[power_slot] = e->stats.power_cooldown[power_slot];
 			e->stats.cooldown_ticks = e->stats.cooldown;
 
@@ -480,7 +480,7 @@ void BehaviorStandard::updateState() {
 		case ENEMY_POWER:
 
 			power_id = e->stats.power_index[e->stats.activated_powerslot];
-			power_state = e->powers->powers[power_id].new_state;
+			power_state = PowerManager::instance->powers[power_id].new_state;
 
 			// animation based on power type
 			if (power_state == POWSTATE_SWING) e->setAnimation("melee");
@@ -533,7 +533,7 @@ void BehaviorStandard::updateState() {
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				if (percentChance(e->stats.power_chance[ON_DEATH]))
-					e->powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
+					PowerManager::instance->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
 			if (e->activeAnimation->isLastFrame()) {
 				e->stats.corpse = true; // puts renderable under object layer
@@ -553,7 +553,7 @@ void BehaviorStandard::updateState() {
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				if (percentChance(e->stats.power_chance[ON_DEATH]))
-					e->powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
+					PowerManager::instance->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
 			if (e->activeAnimation->isLastFrame()) e->stats.corpse = true; // puts renderable under object layer
 

@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef AVATAR_H
 #define AVATAR_H
 
-
 #include "Entity.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
@@ -42,7 +41,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Entity;
 class Hazard;
-class PowerManager;
 class StatBlock;
 
 /**
@@ -95,7 +93,7 @@ private:
 	int getUntransformPower();
 
 public:
-	Avatar(PowerManager *_powers, MapRenderer *_map);
+	Avatar(MapRenderer *_map);
 	~Avatar();
 
 	EnemyManager *enemies;

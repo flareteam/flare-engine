@@ -37,7 +37,6 @@ class EnemyManager {
 private:
 
 	MapRenderer *map;
-	PowerManager *powers;
 
 	void loadSounds(const std::string& type_id);
 	void loadAnimations(Enemy *e);
@@ -60,7 +59,7 @@ private:
 	std::vector<Enemy> prototypes;
 
 public:
-	EnemyManager(PowerManager *_powers, MapRenderer *_map);
+	EnemyManager(MapRenderer *_map);
 	~EnemyManager();
 	void handleNewMap();
 	void handleSpawn();

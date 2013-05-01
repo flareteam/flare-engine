@@ -38,7 +38,6 @@ class Avatar;
 class EnemyManager;
 class Hazard;
 class MapCollision;
-class PowerManager;
 
 class Effect{
 public:

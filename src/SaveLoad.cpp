@@ -288,11 +288,11 @@ void GameStatePlay::loadGame() {
 						fprintf(stderr, "Hotkey power on position %d has negative id, skipping\n", i);
 						hotkeys[i] = 0;
 					}
-					else if ((unsigned)hotkeys[i] > powers->powers.size()-1) {
-						fprintf(stderr, "Hotkey power id (%d) out of bounds 1-%d, skipping\n", hotkeys[i], (int)powers->powers.size());
+					else if ((unsigned)hotkeys[i] > PowerManager::instance->powers.size()-1) {
+						fprintf(stderr, "Hotkey power id (%d) out of bounds 1-%d, skipping\n", hotkeys[i], (int)PowerManager::instance->powers.size());
 						hotkeys[i] = 0;
 					}
-					else if (hotkeys[i] != 0 && powers->powers[hotkeys[i]].name == "") {
+					else if (hotkeys[i] != 0 && PowerManager::instance->powers[hotkeys[i]].name == "") {
 						fprintf(stderr, "Hotkey power with id=%d, found on position %d does not exist, skipping\n", hotkeys[i], i);
 						hotkeys[i] = 0;
 					}

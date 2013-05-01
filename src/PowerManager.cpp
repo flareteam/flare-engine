@@ -55,6 +55,8 @@ PowerManager::PowerManager()
 	loadPowers();
 }
 
+PowerManager* PowerManager::instance;
+
 void PowerManager::loadPowers() {
 	FileParser infile;
 	if (!infile.open("powers/powers.txt", true, false))

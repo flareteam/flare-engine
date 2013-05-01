@@ -46,7 +46,6 @@ class LootManager;
 class MapRenderer;
 class MenuManager;
 class NPCManager;
-class PowerManager;
 class QuestLog;
 class WidgetLabel;
 
@@ -73,7 +72,6 @@ class GameStatePlay : public GameState {
 private:
 	Enemy *enemy;
 
-	PowerManager *powers;
 	ItemManager *items;
 	CampaignManager *camp;
 	MapRenderer *map;

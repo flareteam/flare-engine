@@ -40,9 +40,8 @@ class HazardManager {
 private:
 	Avatar *hero;
 	EnemyManager *enemies;
-	PowerManager *powers;
 public:
-	HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies);
+	HazardManager(Avatar *_hero, EnemyManager *_enemies);
 	~HazardManager();
 	void logic();
 	void expire(int index);

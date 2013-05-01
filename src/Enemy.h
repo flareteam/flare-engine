@@ -38,13 +38,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class EnemyBehavior;
 class Hazard;
-class PowerManager;
 class MapRenderer;
 
 class Enemy : public Entity {
 
 public:
-	Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em);
+	Enemy(MapRenderer *_map, EnemyManager *_em);
 	Enemy(const Enemy& e);
 	~Enemy();
 	bool lineOfSight();

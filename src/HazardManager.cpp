@@ -31,8 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-HazardManager::HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies) {
-	powers = _powers;
+HazardManager::HazardManager(Avatar *_hero, EnemyManager *_enemies) {
 	hero = _hero;
 	enemies = _enemies;
 }
@@ -64,8 +63,8 @@ void HazardManager::logic() {
 			target.x = (int)(h[i]->pos.x);
 			target.y = (int)(h[i]->pos.y);
 
-			powers->activate(h[i]->wall_power, h[i]->src_stats, target);
-			if (powers->powers[h[i]->wall_power].directional) powers->hazards.back()->animationKind = h[i]->animationKind;
+			PowerManager::instance->activate(h[i]->wall_power, h[i]->src_stats, target);
+			if (PowerManager::instance->powers[h[i]->wall_power].directional) PowerManager::instance->hazards.back()->animationKind = h[i]->animationKind;
 
 		}
 
@@ -146,9 +145,9 @@ void HazardManager::logic() {
 void HazardManager::checkNewHazards() {
 
 	// check PowerManager for hazards
-	while (!powers->hazards.empty()) {
-		Hazard *new_haz = powers->hazards.front();
-		powers->hazards.pop();
+	while (!PowerManager::instance->hazards.empty()) {
+		Hazard *new_haz = PowerManager::instance->hazards.front();
+		PowerManager::instance->hazards.pop();
 		//new_haz->setCollision(collider);
 
 		h.push_back(new_haz);

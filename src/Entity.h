@@ -39,7 +39,7 @@ protected:
 	SDL_Surface *sprites;
 
 public:
-	Entity(PowerManager *_powers, MapRenderer*);
+	Entity(MapRenderer*);
 	Entity(const Entity&);
 	virtual ~Entity();
 
@@ -66,7 +66,6 @@ public:
 
 	MapRenderer* map;
 	StatBlock stats;
-	PowerManager *powers;
 };
 
 #endif

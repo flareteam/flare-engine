@@ -317,6 +317,8 @@ public:
 
 class PowerManager {
 private:
+    PowerManager();
+	~PowerManager();
 
 	MapCollision *collider;
 
@@ -340,8 +342,9 @@ private:
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
 public:
-	PowerManager();
-	~PowerManager();
+	static void init(){PowerManager::instance = new PowerManager();};
+	static void finalize(){delete PowerManager::instance;};
+	static PowerManager* instance;
 
 	std::string log_msg;
 

@@ -38,10 +38,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManager *_powers) {
+MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats) {
 	items = _items;
 	stats = _stats;
-	powers = _powers;
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
@@ -404,21 +403,21 @@ void MenuInventory::activate(InputState * input) {
 	else if (items->items[inventory[CARRIED][slot].item].type == "consumable") {
 
 		//don't use untransform item if hero is not transformed
-		if (powers->powers[items->items[inventory[CARRIED][slot].item].power].spawn_type == "untransform" && !stats->transformed) return;
+		if (PowerManager::instance->powers[items->items[inventory[CARRIED][slot].item].power].spawn_type == "untransform" && !stats->transformed) return;
 
 		//check for power cooldown
 		if (stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] > 0) return;
-		else stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = powers->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
+		else stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = PowerManager::instance->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
 
 		// if this item requires targeting it can't be used this way
-		if (!powers->powers[items->items[inventory[CARRIED][slot].item].power].requires_targeting) {
+		if (!PowerManager::instance->powers[items->items[inventory[CARRIED][slot].item].power].requires_targeting) {
 
-			unsigned used_item_count = powers->used_items.size();
-			unsigned used_equipped_item_count = powers->used_equipped_items.size();
-			powers->activate(items->items[inventory[CARRIED][slot].item].power, stats, nullpt);
+			unsigned used_item_count = PowerManager::instance->used_items.size();
+			unsigned used_equipped_item_count = PowerManager::instance->used_equipped_items.size();
+			PowerManager::instance->activate(items->items[inventory[CARRIED][slot].item].power, stats, nullpt);
 			// Remove any used items from the queue of items to be removed. We will destroy the items here.
-			if (used_item_count < powers->used_items.size()) powers->used_items.pop_back();
-			if (used_equipped_item_count < powers->used_equipped_items.size()) powers->used_equipped_items.pop_back();
+			if (used_item_count < PowerManager::instance->used_items.size()) PowerManager::instance->used_items.pop_back();
+			if (used_equipped_item_count < PowerManager::instance->used_equipped_items.size()) PowerManager::instance->used_equipped_items.pop_back();
 			inventory[CARRIED].substract(slot);
 		}
 		else {
@@ -763,7 +762,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	for (unsigned i=0; i<stats->powers_list_items.size(); ++i) {
 		int id = stats->powers_list_items[i];
 		// stats->hp > 0 is hack to keep on_death revive passives working
-		if (powers->powers[id].passive && stats->hp > 0)
+		if (PowerManager::instance->powers[id].passive && stats->hp > 0)
 			stats->effects.removeEffectPassive(id);
 	}
 	stats->powers_list_items.clear();
@@ -850,10 +849,10 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		// apply various bonuses
 		unsigned bonus_counter = 0;
 		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
-			int id = powers->getIdFromTag(item.bonus_stat[bonus_counter]);
+			int id = PowerManager::instance->getIdFromTag(item.bonus_stat[bonus_counter]);
 
 			if (id > 0)
-				stats->effects.addEffect(id, powers->powers[id].icon, 0, item.bonus_val[bonus_counter], powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
+				stats->effects.addEffect(id, PowerManager::instance->powers[id].icon, 0, item.bonus_val[bonus_counter], PowerManager::instance->powers[id].effect_type, PowerManager::instance->powers[id].animation_name, PowerManager::instance->powers[id].effect_additive, true, -1, PowerManager::instance->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
 
 			bonus_counter++;
 		}
@@ -862,7 +861,7 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		if (item.power > 0) {
 			stats->powers_list_items.push_back(item.power);
 			if (stats->effects.triggered_others)
-				powers->activateSinglePassive(stats,item.power);
+				PowerManager::instance->activateSinglePassive(stats,item.power);
 		}
 
 	}
@@ -893,10 +892,10 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 			if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
-			int id = powers->getIdFromTag(temp_set.bonus[bonus_counter].bonus_stat);
+			int id = PowerManager::instance->getIdFromTag(temp_set.bonus[bonus_counter].bonus_stat);
 
 			if (id > 0)
-				stats->effects.addEffect(id, powers->powers[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
+				stats->effects.addEffect(id, PowerManager::instance->powers[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, PowerManager::instance->powers[id].effect_type, PowerManager::instance->powers[id].animation_name, PowerManager::instance->powers[id].effect_additive, true, -1, PowerManager::instance->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
 		}
 	}
 }

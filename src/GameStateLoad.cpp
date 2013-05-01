@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "PowerManager.h"
 
 #include <algorithm>
 
@@ -462,6 +463,8 @@ void GameStateLoad::logic() {
 }
 
 void GameStateLoad::logicLoading() {
+    //Initialise Singletons
+	PowerManager::init();
 	// load an existing game
 	GameStatePlay* play = new GameStatePlay();
 	play->resetGame();
