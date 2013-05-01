@@ -28,7 +28,19 @@ using namespace std;
 
 ModManager::ModManager() {
 	loc_cache.clear();
+	mod_dirs.clear();
 	mod_list.clear();
+
+	vector<string> mod_dirs_other;
+	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs);
+	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
+	getDirList(PATH_DATA + "mods", mod_dirs_other);
+	getDirList(PATH_USER + "mods", mod_dirs_other);
+
+	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
+		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
+			mod_dirs.push_back(mod_dirs_other[i]);
+	}
 
 	loadModList();
 }
@@ -47,17 +59,7 @@ void ModManager::loadModList() {
 	ifstream infile;
 	string line;
 	string starts_with;
-	vector<string> mod_dirs;
-	vector<string> mod_dirs_local;
 	bool found_any_mod = false;
-
-	getDirList(PATH_DATA + "mods", mod_dirs);
-	getDirList(PATH_USER + "mods", mod_dirs_local);
-
-	for (unsigned i=0; i<mod_dirs_local.size(); ++i) {
-		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_local[i]) == mod_dirs.end())
-			mod_dirs.push_back(mod_dirs_local[i]);
-	}
 
 	// Add the fallback mod by default
 	if (find(mod_dirs.begin(), mod_dirs.end(), FALLBACK_MOD) != mod_dirs.end()) {
@@ -137,6 +139,16 @@ string ModManager::locate(const string& filename) {
 			loc_cache[filename] = test_path;
 			return test_path;
 		}
+		test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i-1] + "/" + filename;
+		if (fileExists(test_path)) {
+			loc_cache[filename] = test_path;
+			return test_path;
+		}
+		test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i-1] + "/" + filename;
+		if (fileExists(test_path)) {
+			loc_cache[filename] = test_path;
+			return test_path;
+		}
 	}
 
 	// all else failing, simply return the filename
@@ -160,10 +172,16 @@ vector<string> ModManager::list(const string &path) {
 	amendPathToVector(test_path, ret);
 
 	for (unsigned int i = 0; i < mod_list.size(); ++i) {
-		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + path;
+		test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i] + "/" + path;
+		amendPathToVector(test_path, ret);
+
+		test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i] + "/" + path;
 		amendPathToVector(test_path, ret);
 
 		test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + path;
+		amendPathToVector(test_path, ret);
+
+		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + path;
 		amendPathToVector(test_path, ret);
 	}
 

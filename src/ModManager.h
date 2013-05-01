@@ -53,6 +53,7 @@ public:
 	// files being at later positions in the list should overwrite previous files
 	std::vector<std::string> list(const std::string& path);
 
+	std::vector<std::string> mod_dirs;
 	std::vector<std::string> mod_list;
 };
 
