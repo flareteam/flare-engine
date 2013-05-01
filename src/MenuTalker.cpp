@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "NPC.h"
 #include "WidgetButton.h"
+#include "WidgetLabel.h"
+#include "WidgetScrollBox.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"
@@ -42,14 +44,6 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 	npc = NULL;
 	background = NULL;
 	portrait = NULL;
-	msg_buffer = NULL;
-
-	advanceButton = new WidgetButton("images/menus/buttons/right.png");
-
-	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
-
-	tablist.add(advanceButton);
-	tablist.add(closeButton);
 
 	visible = false;
 	vendor_visible = false;
@@ -115,6 +109,15 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 		infile.close();
 	}
 
+	advanceButton = new WidgetButton("images/menus/buttons/right.png");
+	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
+	label_name = new WidgetLabel();
+	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
+
+	tablist.add(advanceButton);
+	tablist.add(closeButton);
+	tablist.add(textbox);
+
 	color_normal = font->getColor("menu_normal");
 }
 
@@ -136,6 +139,11 @@ void MenuTalker::update() {
 	closeButton->pos.x = window_area.x + close_pos.x;
 	closeButton->pos.y = window_area.y + close_pos.y;
 
+	label_name->set(window_area.x+text_pos.x+text_offset.x, window_area.y+text_pos.y+text_offset.y, JUSTIFY_LEFT, VALIGN_TOP, "", color_normal, font_who);
+
+	textbox->pos.x = window_area.x + text_pos.x;
+	textbox->pos.y = window_area.y + text_pos.y+text_offset.y+label_name->bounds.h;
+	textbox->pos.h -= label_name->bounds.h;
 }
 /**
  * Menu interaction (enter/space/click to continue)
@@ -143,6 +151,8 @@ void MenuTalker::update() {
 void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
+
+	textbox->logic();
 
 	if (NO_MOUSE)
 	{
@@ -213,15 +223,15 @@ void MenuTalker::createBuffer() {
 		who = hero_name;
 	}
 
+	label_name->set(who);
+
 	line = npc->dialog[dialog_node][event_cursor].s;
 
-	// render text to back buffer
-	SDL_FreeSurface(msg_buffer);
-	msg_buffer = createAlphaSurface(text_pos.w,text_pos.h);
-	font->setFont(font_who);
-	font->render(who, text_offset.x, text_offset.y, JUSTIFY_LEFT, msg_buffer, text_pos.w - text_offset.x*2, color_normal);
+	// render dialog text to the scrollbox buffer
+	Point line_size = font->calc_size(line,textbox->pos.w-(text_offset.x*2));
+	textbox->resize(line_size.y);
 	font->setFont(font_dialog);
-	font->render(line, text_offset.x, text_offset.y+font->getLineHeight(), JUSTIFY_LEFT, msg_buffer, text_pos.w - text_offset.x*2, color_normal);
+	font->render(line, text_offset.x, 0, JUSTIFY_LEFT, textbox->contents, text_pos.w - text_offset.x*2, color_normal);
 
 }
 
@@ -263,10 +273,9 @@ void MenuTalker::render() {
 		}
 	}
 
-	// text overlay
-	dest.x = offset_x + text_pos.x;
-	dest.y = offset_y + text_pos.y;
-	SDL_BlitSurface(msg_buffer, NULL, screen, &dest);
+	// name & dialog text
+	label_name->render();
+	textbox->render();
 
 	// show advance button if there are more event components, or close button if not
 	if (event_cursor < npc->dialog[dialog_node].size()-1) {
@@ -290,9 +299,10 @@ void MenuTalker::setHero(const string& name, const string& portrait_filename) {
 }
 
 MenuTalker::~MenuTalker() {
-	SDL_FreeSurface(msg_buffer);
 	SDL_FreeSurface(background);
 	SDL_FreeSurface(portrait);
+	delete label_name;
+	delete textbox;
 	delete advanceButton;
 	delete closeButton;
 }
