@@ -152,12 +152,11 @@ void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
 
-	textbox->logic();
-
 	if (NO_MOUSE)
 	{
 		tablist.logic();
 	}
+
 	advanceButton->enabled = false;
 	closeButton->enabled = false;
 
@@ -187,6 +186,7 @@ void MenuTalker::logic() {
 		more = npc->processDialog(dialog_node, event_cursor);
 	}
 	else {
+		textbox->logic();
 		return;
 	}
 
