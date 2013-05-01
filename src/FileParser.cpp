@@ -59,7 +59,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, bool stopAft
 			fprintf(stderr, "Error in FileParser::open logic. More files detected, although stopAfterFirstFile was set\n");
 
 	if (filenames.size() == 0 && !errormessage.empty()) {
-		fprintf(stderr, "%s: No such file or directory!\n", errormessage.c_str());
+		fprintf(stderr, "%s: %s: No such file or directory!\n", _filename.c_str(), errormessage.c_str());
 		return false;
 	}
 
