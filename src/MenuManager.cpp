@@ -898,7 +898,7 @@ void MenuManager::handleKeyboardTooltips() {
 	TooltipData keyb_tip_new_act;
 
 	if (vendor->visible && vendor->tablist.getCurrent() != -1) {
-		if (vendor->tablist.getCurrent() < vendor->tablist.size()/2) {
+		if (vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2) {
 			inpt->mouse.x = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.x;
 			inpt->mouse.y = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.y;
 		}

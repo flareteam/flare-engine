@@ -65,11 +65,11 @@ SoundManager::~SoundManager() {
 }
 
 Uint8 SoundManager::calc_distance(const Point *s, const Point *d) {
-	float dx = s->x - d->x;
-	float dy = s->y - d->y;
+	float dx = (float)(s->x - d->x);
+	float dy = (float)(s->y - d->y);
 	float dist = sqrt(dx*dx + dy*dy);
 	dist = 255.0f * (dist / (SOUND_FALLOFF*UNITS_PER_TILE));
-	return max(0.0f, min(dist, 255.0f));
+	return (Uint8)max(0.0f, min(dist, 255.0f));
 }
 
 void SoundManager::logic(Point c) {
