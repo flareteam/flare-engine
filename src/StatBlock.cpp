@@ -140,6 +140,7 @@ StatBlock::StatBlock()
 	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
+	, passive_attacker(false)//enemy
 	, hero_pos(-1, -1)
 	, hero_direction(0)
 	, hero_alive(true)
@@ -358,6 +359,7 @@ void StatBlock::load(const string& filename) {
 
 		else if (infile.key == "melee_range") melee_range = num;
 		else if (infile.key == "threat_range") threat_range = num;
+		else if (infile.key == "passive_attacker") passive_attacker = num == 1;
 
 		// animation stats
 		else if (infile.key == "melee_weapon_power") melee_weapon_power = num;
