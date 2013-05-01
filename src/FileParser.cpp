@@ -120,6 +120,7 @@ bool FileParser::next() {
 		if (current_index == filenames.size()) return false;
 
 		const string current_filename = filenames[current_index];
+		infile.clear();
 		infile.open(current_filename.c_str(), ios::in);
 		if (!infile.is_open()) {
 			if (!errormessage.empty())
