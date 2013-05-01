@@ -903,8 +903,8 @@ void MenuManager::handleKeyboardTooltips() {
 			inpt->mouse.y = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.y;
 		}
 		else {
-			inpt->mouse.x = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent()]->pos.x;
-			inpt->mouse.y = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent()]->pos.y;
+			inpt->mouse.x = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - (int)vendor->tablist.size()/2]->pos.x;
+			inpt->mouse.y = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - (int)vendor->tablist.size()/2]->pos.y;
 		}
 		keyb_tip_new_vendor = vendor->checkTooltip(inpt->mouse);
 		if (!keyb_tip_new_vendor.isEmpty()) {
@@ -948,8 +948,8 @@ void MenuManager::handleKeyboardTooltips() {
 			inpt->mouse.y = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.y;
 		}
 		else {
-			inpt->mouse.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent()]->pos.x;
-			inpt->mouse.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent()]->pos.y;
+			inpt->mouse.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.x;
+			inpt->mouse.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.y;
 		}
 		keyb_tip_new_inv = inv->checkTooltip(inpt->mouse);
 		if (!keyb_tip_new_inv.isEmpty()) {
