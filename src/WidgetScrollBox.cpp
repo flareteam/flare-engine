@@ -37,6 +37,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	update = true;
 	render_to_alpha = false;
 	transparent = true;
+	line_height = 20;
 	resize(height);
 	tablist = TabList(VERTICAL);
 }
@@ -97,6 +98,14 @@ void WidgetScrollBox::scrollTo(int amount) {
 	refresh();
 }
 
+void WidgetScrollBox::scrollDown() {
+	scroll(line_height);
+}
+
+void WidgetScrollBox::scrollUp() {
+	scroll(-line_height);
+}
+
 Point WidgetScrollBox::input_assist(Point mouse) {
 	Point new_mouse;
 	new_mouse.x = mouse.x-pos.x;
@@ -114,11 +123,11 @@ void WidgetScrollBox::logic(int x, int y) {
 
 	if (isWithin(pos,mouse)) {
 		if (inpt->scroll_up) {
-			scroll(-20);
+			scrollUp();
 			inpt->resetScroll();
 		}
 		if (inpt->scroll_down) {
-			scroll(20);
+			scrollDown();
 			inpt->resetScroll();
 		}
 	}
@@ -130,10 +139,10 @@ void WidgetScrollBox::logic(int x, int y) {
 	if (contents->h > pos.h) {
 		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
 			case 1:
-				scroll(-20);
+				scrollUp();
 				break;
 			case 2:
-				scroll(20);
+				scrollDown();
 				break;
 			case 3:
 				cursor = scrollbar->getValue();
@@ -218,7 +227,7 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 
 bool WidgetScrollBox::getNext() {
 	if (children.size() == 0) {
-		scroll(20);
+		scrollDown();
 		return true;
 	}
 
@@ -243,7 +252,7 @@ bool WidgetScrollBox::getNext() {
 
 bool WidgetScrollBox::getPrev() {
 	if (children.size() == 0) {
-		scroll(-20);
+		scrollUp();
 		return true;
 	}
 

@@ -236,6 +236,7 @@ void MenuTalker::createBuffer() {
 	// render dialog text to the scrollbox buffer
 	Point line_size = font->calc_size(line,textbox->pos.w-(text_offset.x*2));
 	textbox->resize(line_size.y);
+	textbox->line_height = font->getLineHeight();
 	font->setFont(font_dialog);
 	font->render(line, text_offset.x, 0, JUSTIFY_LEFT, textbox->contents, text_pos.w - text_offset.x*2, color_normal);
 
