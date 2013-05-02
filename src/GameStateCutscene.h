@@ -26,12 +26,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
-#include "WidgetLabel.h"
 
 #ifndef GAMESTATECUTSCENE_H
 #define GAMESTATECUTSCENE_H
 
 #include "GameState.h"
+
+class WidgetScrollBox;
 
 class SceneComponent {
 public:
@@ -58,6 +59,7 @@ private:
 	SDL_Surface *art;
 	SDL_Rect art_dest;
 	SoundManager::SoundID sid;
+	WidgetScrollBox *caption_box;
 
 public:
 	Scene();

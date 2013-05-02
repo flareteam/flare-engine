@@ -78,7 +78,13 @@ void TabList::add(Widget* widget) {
 	if (widget == NULL)
 		return;
 
-	widgets.push_back(widget);
+	std::vector<Widget*>::iterator find = std::find(
+			widgets.begin(),
+			widgets.end(),
+			widget
+										  );
+	if (find == widgets.end())
+		widgets.push_back(widget);
 }
 
 void TabList::remove(Widget* widget) {

@@ -40,6 +40,8 @@ class CampaignManager;
 class MenuManager;
 class NPC;
 class WidgetButton;
+class WidgetLabel;
+class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
@@ -47,7 +49,6 @@ private:
 	MenuManager *menu;
 
 	SDL_Surface *portrait;
-	SDL_Surface *msg_buffer;
 	std::string hero_name;
 
 	int dialog_node;
@@ -67,6 +68,9 @@ private:
 	SDL_Color color_normal;
 
 	TabList tablist;
+
+	WidgetLabel *label_name;
+	WidgetScrollBox *textbox;
 
 public:
 	MenuTalker(MenuManager *menu,CampaignManager *camp);

@@ -49,6 +49,7 @@ public:
 	bool update;
 	SDL_Color bg;
 	bool transparent;
+	int line_height;
 
 	TabList tablist;
 	bool getNext();
@@ -58,6 +59,8 @@ public:
 private:
 	void scroll(int amount);
 	void scrollTo(int amount);
+	void scrollDown();
+	void scrollUp();
 	std::vector<Widget*> children;
 	int currentChild;
 
