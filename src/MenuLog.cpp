@@ -65,6 +65,7 @@ MenuLog::MenuLog() {
 	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		log_count[i] = 0;
 		msg_buffer[i] = new WidgetScrollBox(tab_area.w,tab_area.h);
+		msg_buffer[i]->line_height = font->getLineHeight();
 		tablist.add(msg_buffer[i]);
 	}
 
