@@ -164,6 +164,14 @@ std::vector<HeroClass> HERO_CLASSES;
 std::string CURRENCY = "Gold";
 float VENDOR_RATIO = 0.25;
 
+// Death penalty settings
+bool DEATH_PENALTY = true;
+bool DEATH_PENALTY_PERMADEATH = false;
+int DEATH_PENALTY_CURRENCY = 50;
+int DEATH_PENALTY_XP = 0;
+int DEATH_PENALTY_XP_CURRENT = 0;
+bool DEATH_PENALTY_ITEM = false;
+
 // Other Settings
 bool MENUS_PAUSE = false;
 bool SAVE_HPMP = false;
@@ -642,12 +650,24 @@ void loadMiscSettings() {
 		}
 		infile.close();
 	}
-
 	// Make a default hero class if none were found
 	if (HERO_CLASSES.empty()) {
 		HeroClass c;
 		c.name = msg->get("Adventurer");
 		HERO_CLASSES.push_back(c);
+	}
+
+	// death_penalty.txt
+	if (infile.open("engine/death_penalty.txt")) {
+		while (infile.next()) {
+			if (infile.key == "enable") DEATH_PENALTY = toBool(infile.val);
+			else if (infile.key == "permadeath") DEATH_PENALTY_PERMADEATH = toBool(infile.val);
+			else if (infile.key == "currency") DEATH_PENALTY_CURRENCY = toInt(infile.val);
+			else if (infile.key == "xp_total") DEATH_PENALTY_XP = toInt(infile.val);
+			else if (infile.key == "xp_current_level") DEATH_PENALTY_XP_CURRENT = toInt(infile.val);
+			else if (infile.key == "random_item") DEATH_PENALTY_ITEM = toBool(infile.val);
+		}
+		infile.close();
 	}
 }
 

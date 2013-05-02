@@ -680,7 +680,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 					log_msg = msg->get("You are defeated. Game over! Press Enter to exit to Title.");
 				}
 				else {
-					log_msg = msg->get("You are defeated.  You lose half your %s.  Press Enter to continue.", CURRENCY);
+					log_msg = msg->get("You are defeated. Press Enter to continue.");
 				}
 
 				//once the player dies, kill off any remaining summons
