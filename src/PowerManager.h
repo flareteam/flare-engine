@@ -154,7 +154,6 @@ public:
 	bool no_attack;
 	int radius;
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
-	int damage_multiplier; // % of base damage done by power (eg. 200 doubles damage and 50 halves it)
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
 	int range;
@@ -259,7 +258,6 @@ public:
 		, no_attack(false)
 		, radius(0)
 		, base_damage(BASE_DAMAGE_NONE)
-		, damage_multiplier(100)
 		, starting_pos(STARTING_POS_SOURCE)
 		, multitarget(false)
 		, range(0)

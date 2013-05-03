@@ -185,8 +185,6 @@ void PowerManager::loadPowers() {
 			else if (infile.val == "ment")   powers[input_id].base_damage = BASE_DAMAGE_MENT;
 			else fprintf(stderr, "unknown base_damage %s\n", infile.val.c_str());
 		}
-		else if (infile.key == "damage_multiplier")
-			powers[input_id].damage_multiplier = toInt(infile.val);
 		else if (infile.key == "starting_pos") {
 			if (infile.val == "source")      powers[input_id].starting_pos = STARTING_POS_SOURCE;
 			else if (infile.val == "target") powers[input_id].starting_pos = STARTING_POS_TARGET;
@@ -474,10 +472,6 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 			haz->dmg_min = src_stats->dmg_ment_min;
 			haz->dmg_max = src_stats->dmg_ment_max;
 		}
-
-		// some powers have a damage multiplier, default 100 (percent)
-		haz->dmg_min = (int)ceil((haz->dmg_min * powers[power_index].damage_multiplier) / 100.0);
-		haz->dmg_max = (int)ceil((haz->dmg_max * powers[power_index].damage_multiplier) / 100.0);
 	}
 
 	// Only apply stats from powers that are not defaults
@@ -649,14 +643,25 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
 		if (effect_index > 0) {
 			if (powers[effect_index].effect_type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
-				magnitude = (int)ceil(src_stats->dmg_ment_max * powers[power_index].damage_multiplier / 100.0);
+                if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+                    magnitude = src_stats->dmg_ment_max * powers[power_index].mod_damage_value_min / 100;
+                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+                    magnitude = src_stats->dmg_ment_max + powers[power_index].mod_damage_value_min;
+                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+                    magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
+
 				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
 			else if (powers[effect_index].effect_type == "heal") {
 				// heal for ment weapon damage * damage multiplier
-				int heal_max = (int)ceil(src_stats->dmg_ment_max * powers[power_index].damage_multiplier / 100.0);
-				int heal_min = (int)ceil(src_stats->dmg_ment_min * powers[power_index].damage_multiplier / 100.0);
-				magnitude = randBetween(heal_min, heal_max-1);
+				magnitude = randBetween(src_stats->dmg_ment_min, src_stats->dmg_ment_max);
+
+				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+                    magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
+                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+                    magnitude += powers[power_index].mod_damage_value_min;
+                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+                    magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 
 				comb->addMessage(msg->get("+%d HP",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 				src_stats->hp += magnitude;
