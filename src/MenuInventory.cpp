@@ -180,7 +180,7 @@ void MenuInventory::logic() {
 				}
 			}
 			if (!removable_items.empty()) {
-				int random_item = (rand() % removable_items.size()) - 1;
+				int random_item = rand() % removable_items.size();
 				remove(removable_items[random_item]);
 				death_message += msg->get("Lost %s.",items->items[removable_items[random_item]].name);
 			}
