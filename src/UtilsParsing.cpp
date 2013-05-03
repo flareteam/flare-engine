@@ -269,8 +269,10 @@ bool toBool(std::string value) {
 	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 	if (value == "true") return true;
 	if (value == "yes") return true;
+	if (value == "1") return true;
 	if (value == "false") return false;
 	if (value == "no") return false;
+	if (value == "0") return false;
 
 	fprintf(stderr, "%s %s doesn't know how to handle %s\n", __FILE__, __FUNCTION__, value.c_str());
 	return false;

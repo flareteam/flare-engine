@@ -170,7 +170,7 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check entering combat (because the player got too close)
-	if (!e->stats.in_combat && los && hero_dist < stealth_threat_range) {
+	if (!e->stats.in_combat && los && hero_dist < stealth_threat_range && !e->stats.passive_attacker) {
 
 		if (e->stats.in_combat) e->stats.join_combat = true;
 		e->stats.in_combat = true;

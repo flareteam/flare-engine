@@ -268,6 +268,7 @@ public:
 
 	int melee_range;
 	int threat_range;
+	bool passive_attacker;//enemy will not initiate combat unless attacked
 	Point hero_pos;
 	char hero_direction;
 	bool hero_alive;
