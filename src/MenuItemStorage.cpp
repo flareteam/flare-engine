@@ -132,6 +132,15 @@ TooltipData MenuItemStorage::checkTooltip(Point mouse, StatBlock *stats, int con
 ItemStack MenuItemStorage::click(InputState * input) {
 	ItemStack item;
 	drag_prev_slot = slotOver(input->mouse);
+	if (drag_prev_slot == -1) {
+		for (unsigned int i=0; i<slots.size(); i++) {
+			if (slots[i]->in_focus) {
+				drag_prev_slot = i;
+				break;
+			}
+		}
+	}
+
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
 		if (input->pressing[SHIFT]) {
