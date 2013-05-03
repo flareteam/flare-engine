@@ -171,7 +171,7 @@ bool Entity::takeHit(const Hazard &h) {
 		accuracy = powers->powers[h.power_index].mod_accuracy_value;
 
 	int avoidance = 0;
-	if(!powers->powers[h.power_index].mod_accuracy_ignore_avoid) {
+	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
 		avoidance = stats.avoidance;
 		if (stats.effects.triggered_block) avoidance *= 2;
 	}
@@ -208,7 +208,7 @@ bool Entity::takeHit(const Hazard &h) {
 		dmg = (dmg * vulnerable) / 100;
 	}
 
-	if (!h.trait_armor_penetration && !powers->powers[h.power_index].mod_damage_ignore_absorb) { // armor penetration ignores all absorption
+	if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
 		// substract absorption from armor
 		int absorption = randBetween(stats.absorb_min, stats.absorb_max);
 

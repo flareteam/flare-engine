@@ -197,6 +197,8 @@ void PowerManager::loadPowers() {
 			powers[input_id].multitarget = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
+        else if (infile.key == "trait_avoidance_ignore")
+			powers[input_id].trait_avoidance_ignore = toBool(infile.val);
 		else if (infile.key == "trait_crits_impaired")
 			powers[input_id].trait_crits_impaired = toInt(infile.val);
 		else if (infile.key == "trait_elemental") {
@@ -303,7 +305,6 @@ void PowerManager::loadPowers() {
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
-			powers[input_id].mod_accuracy_ignore_avoid = (1 == eatFirstInt(infile.val, ','));
 		}
 		else if (infile.key == "modifier_damage") {
 			infile.val = infile.val + ',';
@@ -315,7 +316,6 @@ void PowerManager::loadPowers() {
 
 			powers[input_id].mod_damage_value_min = eatFirstInt(infile.val, ',');
 			powers[input_id].mod_damage_value_max = eatFirstInt(infile.val, ',');
-			powers[input_id].mod_damage_ignore_absorb = (1 == eatFirstInt(infile.val, ','));
 		}
 		else if (infile.key == "modifier_critical") {
 			infile.val = infile.val + ',';
