@@ -885,6 +885,7 @@ void GameStatePlay::logic() {
 		pc->stats.corpse = false;
 		pc->stats.cur_state = AVATAR_STANCE;
 		menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
+		menu->inv->changed_equipment = true;
 		checkEquipmentChange();
 		pc->powers->activatePassives(&pc->stats);
 		pc->stats.logic();
