@@ -168,12 +168,16 @@ void MenuInventory::logic() {
 			std::vector<int> removable_items;
 			removable_items.clear();
 			for (int i=0; i < MAX_EQUIPPED; i++) {
-				if (inventory[EQUIPMENT][i].item > 0)
-					removable_items.push_back(inventory[EQUIPMENT][i].item);
+				if (inventory[EQUIPMENT][i].item > 0) {
+					if (items->items[inventory[EQUIPMENT][i].item].type != "quest")
+						removable_items.push_back(inventory[EQUIPMENT][i].item);
+				}
 			}
 			for (int i=0; i < MAX_CARRIED; i++) {
-				if (inventory[CARRIED][i].item > 0)
-					removable_items.push_back(inventory[CARRIED][i].item);
+				if (inventory[CARRIED][i].item > 0) {
+					if (items->items[inventory[CARRIED][i].item].type != "quest")
+						removable_items.push_back(inventory[CARRIED][i].item);
+				}
 			}
 			if (!removable_items.empty()) {
 				int random_item = (rand() % removable_items.size()) - 1;
