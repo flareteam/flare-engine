@@ -230,8 +230,9 @@ void BehaviorStandard::findTarget() {
 		los = e->map->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 	else
 		los = false;
-}
 
+    if(e->stats.effects.fear) fleeing = true;
+}
 
 /**
  * Begin using a power if idle, based on behavior % chances.
@@ -240,7 +241,7 @@ void BehaviorStandard::findTarget() {
 void BehaviorStandard::checkPower() {
 
 	// stunned enemies can't act
-	if (e->stats.effects.stun) return;
+	if (e->stats.effects.stun || fleeing) return;
 
 	// currently all enemy power use happens during combat
 	if (!e->stats.in_combat) return;
@@ -295,7 +296,6 @@ void BehaviorStandard::checkPower() {
 			}
 		}
 	}
-
 
 	// Activate Power:
 	// enemy has started the animation to use a power. Activate the power on the Active animation frame
@@ -408,10 +408,8 @@ void BehaviorStandard::checkMove() {
 }
 
 void BehaviorStandard::checkMoveStateStance() {
-	if (hero_dist < e->stats.melee_range) {
-		// too close, do nothing
-	}
-	else if (percentChance(e->stats.chance_pursue)) {
+
+	if ((hero_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
 
 		if (e->move()) {
 			e->newState(ENEMY_MOVE);
