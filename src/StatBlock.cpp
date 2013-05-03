@@ -140,6 +140,7 @@ StatBlock::StatBlock()
 	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
+	, passive_attacker(false)//enemy
 	, hero_pos(-1, -1)
 	, hero_direction(0)
 	, hero_alive(true)
@@ -241,9 +242,7 @@ void StatBlock::load(const string& filename) {
 		}
 
 		if (infile.key == "name") name = msg->get(infile.val);
-		else if (infile.key == "humanoid") {
-			if (infile.val == "true") humanoid = true;
-		}
+		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
 		else if (infile.key == "sfx_prefix") sfx_prefix = infile.val;
 
 		else if (infile.key == "level") level = num;
@@ -305,15 +304,9 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "hp_regen_base") hp_regen_base = num;
 
 		// behavior stats
-		else if (infile.key == "flying") {
-			if (num == 1) flying = true;
-		}
-		else if (infile.key == "intangible") {
-			if (num == 1) intangible = true;
-		}
-		else if (infile.key == "facing") {
-			if (num == 0) facing = false;
-		}
+		else if (infile.key == "flying") flying = toBool(infile.val);
+		else if (infile.key == "intangible") intangible = toBool(infile.val);
+		else if (infile.key == "facing") facing = toBool(infile.val);
 
 		else if (infile.key == "waypoint_pause") waypoint_pause = num;
 
@@ -358,6 +351,7 @@ void StatBlock::load(const string& filename) {
 
 		else if (infile.key == "melee_range") melee_range = num;
 		else if (infile.key == "threat_range") threat_range = num;
+		else if (infile.key == "passive_attacker") passive_attacker = toBool(infile.val);
 
 		// animation stats
 		else if (infile.key == "melee_weapon_power") melee_weapon_power = num;
@@ -367,12 +361,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "animations") animations = infile.val;
 
 		// hide enemy HP bar
-		else if (infile.key == "suppress_hp") {
-			if (num == 1)
-				suppress_hp = true;
-			else
-				suppress_hp = false;
-		}
+		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
 
 		else if (infile.key == "categories") {
 			string cat;
