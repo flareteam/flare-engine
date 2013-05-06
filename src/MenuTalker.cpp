@@ -38,23 +38,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
-	camp = _camp;
-	menu = _menu;
-	npc = NULL;
-	background = NULL;
-	portrait = NULL;
-
-	visible = false;
-	vendor_visible = false;
-
-	// step through NPC dialog nodes
-	dialog_node = 0;
-	event_cursor = 0;
-
-	// fonts
-	font_who = font_dialog = "font_regular";
-
+MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp)
+	: Menu()
+	, camp(_camp)
+	, menu(_menu)
+	, portrait(NULL)
+	, dialog_node(0)
+	, event_cursor(0)
+	, font_who("font_regular")
+	, font_dialog("font_regular")
+	, color_normal(font->getColor("menu_normal"))
+	, npc(NULL)
+	, vendor_visible(false)
+	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
+	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+{
 	background = loadGraphicSurface("images/menus/dialog_box.png");
 
 	// Load config settings
@@ -109,16 +107,12 @@ MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp) {
 		infile.close();
 	}
 
-	advanceButton = new WidgetButton("images/menus/buttons/right.png");
-	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 	label_name = new WidgetLabel();
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
 
 	tablist.add(advanceButton);
 	tablist.add(closeButton);
 	tablist.add(textbox);
-
-	color_normal = font->getColor("menu_normal");
 }
 
 void MenuTalker::chooseDialogNode(int request_dialog_node) {

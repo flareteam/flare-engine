@@ -52,7 +52,7 @@ private:
 	SDL_Surface *emptyslot;
 	SDL_Surface *icons;
 	SDL_Surface *disabled;
-    SDL_Surface *attention;
+	SDL_Surface *attention;
 
 	StatBlock *hero;
 	PowerManager *powers;
@@ -69,9 +69,9 @@ public:
 	void renderAttention(int menu_id);
 	void logic();
 	void render();
-	int checkAction(Point mouse);
+	int checkAction();
 	int checkDrag(Point mouse);
-	void checkMenu(Point mouse, bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l);
+	void checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l);
 	void drop(Point mouse, int power_index, bool rearranging);
 	void actionReturn(int power_index);
 	void remove(Point mouse);
@@ -88,7 +88,7 @@ public:
 	WidgetSlot *menus[4]; // menu buttons
 	int slot_item_count[12]; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.
 	bool slot_enabled[12];
-    bool requires_attention[4];
+	bool requires_attention[4];
 
 	// these store the area occupied by these hotslot sections.
 	// useful for detecting mouse interactions on those locations

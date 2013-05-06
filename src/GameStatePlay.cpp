@@ -797,7 +797,7 @@ void GameStatePlay::logic() {
 		}
 		checkTitle();
 
-		pc->logic(menu->act->checkAction(inpt->mouse), restrictPowerUse());
+		pc->logic(menu->act->checkAction(), restrictPowerUse());
 
 		// transfer hero data to enemies, for AI use
 		enemies->hero_pos = pc->stats.pos;

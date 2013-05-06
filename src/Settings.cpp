@@ -498,7 +498,7 @@ void loadTilesetSettings() {
 		UNITS_PER_PIXEL_Y = UNITS_PER_TILE / TILE_H;
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
-		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", UNITS_PER_PIXEL_X, UNITS_PER_PIXEL_Y);
+		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);
 		SDL_Quit();
 		exit(1);
 	}

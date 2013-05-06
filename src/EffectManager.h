@@ -113,6 +113,7 @@ public:
 	bool revive;
 	bool convert;
 	bool death_sentence;
+	bool fear;
 
 	int bonus_hp;
 	int bonus_hp_regen;
