@@ -37,7 +37,6 @@ public:
 	~WidgetScrollBox ();
 
 	void addChildWidget(Widget* child);
-	void removeChildWidget(Widget* child);
 	Point input_assist(Point mouse);
 	void logic();
 	void logic(int x, int y);
