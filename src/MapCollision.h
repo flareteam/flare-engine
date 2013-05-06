@@ -83,7 +83,7 @@ public:
 	bool line_of_sight(int x1, int y1, int x2, int y2);
 	bool line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE movement_type);
 
-	bool is_facing_wide(int x1, int y1, char direction, int x2, int y2);
+	bool is_facing(int x1, int y1, char direction, int x2, int y2);
 
 	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = PATH_MAX_TILES);
 

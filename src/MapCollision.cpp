@@ -284,29 +284,29 @@ bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE
 
 }
 
-/*
-checks whether the entity in pos 1 is facing the point at pos 2
-based on a 180 degree field of vision
-*/
-bool MapCollision::is_facing_wide(int x1, int y1, char direction, int x2, int y2){
+/**
+ * Checks whether the entity in pos 1 is facing the point at pos 2
+ * based on a 180 degree field of vision
+ */
+bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2){
 
-	//180 degree fov
+	// 180 degree fov
 	switch (direction) {
-		case 2://north west
+		case 2: //north west
 			return ((x2-x1) < ((-1 * y2)-(-1 * y1))) && (((-1 * x2)-(-1 * x1)) > (y2-y1));
-		case 3://north
+		case 3: //north
 			return y2 < y1;
-		case 4://north east
+		case 4: //north east
 			return (((-1 * x2)-(-1 * x1)) < ((-1 * y2)-(-1 * y1))) && ((x2-x1) > (y2-y1));
-		case 5://east
+		case 5: //east
 			return x2 > x1;
-		case 6://south east
+		case 6: //south east
 			return ((x2-x1) > ((-1 * y2)-(-1 * y1))) && (((-1 * x2)-(-1 * x1)) < (y2-y1));
-		case 7://south
+		case 7: //south
 			return y2 > y1;
-		case 0://south west
+		case 0: //south west
 			return (((-1 * x2)-(-1 * x1)) > ((-1 * y2)-(-1 * y1))) && ((x2-x1) < (y2-y1));
-		case 1://west
+		case 1: //west
 			return x2 < x1;
 	}
 	return false;
