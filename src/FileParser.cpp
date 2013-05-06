@@ -27,7 +27,8 @@ std::string key;
 std::string val;
 
 FileParser::FileParser()
-	: line("")
+	: current_index(0)
+	, line("")
 	, new_section(false)
 	, section("")
 	, key("")
