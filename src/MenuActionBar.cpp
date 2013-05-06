@@ -435,7 +435,7 @@ void MenuActionBar::remove(Point mouse) {
  * If pressing an action key (keyboard or mouseclick) and the power is enabled,
  * return that power's ID.
  */
-int MenuActionBar::checkAction(Point mouse) {
+int MenuActionBar::checkAction() {
 
 	// check click and hotkey actions
 	if ((inpt->pressing[BAR_1] || slots[0]->checkClick() == ACTIVATED) && slot_enabled[0]) return hotkeys[0];
@@ -475,7 +475,7 @@ int MenuActionBar::checkDrag(Point mouse) {
 /**
  * if clicking a menu, act as if the player pressed that menu's hotkey
  */
-void MenuActionBar::checkMenu(Point mouse, bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
+void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
 	if (menus[MENU_CHARACTER]->checkClick()) {
 		menu_c = true;
 	}
