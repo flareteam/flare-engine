@@ -37,7 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Entity::Entity(PowerManager *_powers, MapRenderer* _map)
+Entity::Entity(MapRenderer* _map)
 	: sprites(NULL)
 	, sfx_phys(false)
 	, sfx_ment(false)
@@ -47,8 +47,7 @@ Entity::Entity(PowerManager *_powers, MapRenderer* _map)
 	, sfx_block(false)
 	, activeAnimation(NULL)
 	, animationSet(NULL)
-	, map(_map)
-	, powers(_powers) {
+	, map(_map) {
 }
 
 Entity::Entity(const Entity &e)
@@ -62,8 +61,7 @@ Entity::Entity(const Entity &e)
 	, activeAnimation(new Animation(*e.activeAnimation))
 	, animationSet(e.animationSet)
 	, map(e.map)
-	, stats(StatBlock(e.stats))
-	, powers(e.powers) {
+	, stats(StatBlock(e.stats)) {
 }
 
 /**
@@ -127,11 +125,11 @@ bool Entity::move() {
 bool Entity::takeHit(const Hazard &h) {
 
 	//check if this enemy should be affected by this hazard based on the category
-	if(!powers->powers[h.power_index].target_categories.empty() && !stats.hero) {
+	if(!PowerManager::instance->powers[h.power_index].target_categories.empty() && !stats.hero) {
 		//the power has a target category requirement, so if it doesnt match, dont continue
 		bool match_found = false;
 		for (unsigned int i=0; i<stats.categories.size(); i++) {
-			if(std::find(powers->powers[h.power_index].target_categories.begin(), powers->powers[h.power_index].target_categories.end(), stats.categories[i]) != powers->powers[h.power_index].target_categories.end()) {
+			if(std::find(PowerManager::instance->powers[h.power_index].target_categories.begin(), PowerManager::instance->powers[h.power_index].target_categories.end(), stats.categories[i]) != PowerManager::instance->powers[h.power_index].target_categories.end()) {
 				match_found = true;
 			}
 		}
@@ -152,33 +150,33 @@ bool Entity::takeHit(const Hazard &h) {
 		stats.in_combat = true;
 		stats.last_seen.x = stats.hero_pos.x;
 		stats.last_seen.y = stats.hero_pos.y;
-		powers->activate(stats.power_index[BEACON], &stats, stats.pos); //emit beacon
+		PowerManager::instance->activate(stats.power_index[BEACON], &stats, stats.pos); //emit beacon
 	}
 
 	// exit if it was a beacon (to prevent stats.targeted from being set)
-	if (powers->powers[h.power_index].beacon) return false;
+	if (PowerManager::instance->powers[h.power_index].beacon) return false;
 
 	// prepare the combat text
 	CombatText *combat_text = comb;
 
 	// if it's a miss, do nothing
 	int accuracy = h.accuracy;
-	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		accuracy = (int)((float)accuracy * (float)powers->powers[h.power_index].mod_accuracy_value / 100.0f);
-	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
-		accuracy += powers->powers[h.power_index].mod_accuracy_value;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-		accuracy = powers->powers[h.power_index].mod_accuracy_value;
+	if(PowerManager::instance->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
+		accuracy = (int)((float)accuracy * (float)PowerManager::instance->powers[h.power_index].mod_accuracy_value / 100.0f);
+	else if(PowerManager::instance->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
+		accuracy += PowerManager::instance->powers[h.power_index].mod_accuracy_value;
+	else if(PowerManager::instance->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+		accuracy = PowerManager::instance->powers[h.power_index].mod_accuracy_value;
 
 	int avoidance = 0;
-	if(!powers->powers[h.power_index].mod_accuracy_ignore_avoid) {
+	if(!PowerManager::instance->powers[h.power_index].mod_accuracy_ignore_avoid) {
 		avoidance = stats.avoidance;
 		if (stats.effects.triggered_block) avoidance *= 2;
 	}
 
 	int true_avoidance = 100 - (accuracy + 25 - avoidance);
 	//if we are using an absolute accuracy, offset the constant 25 added to the accuracy
-	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+	if(PowerManager::instance->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 		true_avoidance += 25;
 	clampFloor(true_avoidance, MIN_AVOIDANCE);
 	clampCeil(true_avoidance, MAX_AVOIDANCE);
@@ -191,12 +189,12 @@ bool Entity::takeHit(const Hazard &h) {
 	// calculate base damage
 	int dmg = randBetween(h.dmg_min, h.dmg_max);
 
-	if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		dmg = (int)((float)dmg * (float)powers->powers[h.power_index].mod_damage_value_min / 100.0f);
-	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-		dmg += powers->powers[h.power_index].mod_damage_value_min;
-	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-		dmg = randBetween(powers->powers[h.power_index].mod_damage_value_min, powers->powers[h.power_index].mod_damage_value_max);
+	if(PowerManager::instance->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+		dmg = (int)((float)dmg * (float)PowerManager::instance->powers[h.power_index].mod_damage_value_min / 100.0f);
+	else if(PowerManager::instance->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+		dmg += PowerManager::instance->powers[h.power_index].mod_damage_value_min;
+	else if(PowerManager::instance->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+		dmg = randBetween(PowerManager::instance->powers[h.power_index].mod_damage_value_min, PowerManager::instance->powers[h.power_index].mod_damage_value_max);
 
 	// apply elemental resistance
 	if (h.trait_elemental >= 0 && unsigned(h.trait_elemental) < stats.vulnerable.size()) {
@@ -208,7 +206,7 @@ bool Entity::takeHit(const Hazard &h) {
 		dmg = (dmg * vulnerable) / 100;
 	}
 
-	if (!h.trait_armor_penetration && !powers->powers[h.power_index].mod_damage_ignore_absorb) { // armor penetration ignores all absorption
+	if (!h.trait_armor_penetration && !PowerManager::instance->powers[h.power_index].mod_damage_ignore_absorb) { // armor penetration ignores all absorption
 		// substract absorption from armor
 		int absorption = randBetween(stats.absorb_min, stats.absorb_max);
 
@@ -251,12 +249,12 @@ bool Entity::takeHit(const Hazard &h) {
 	// check for crits
 	int true_crit_chance = h.crit_chance;
 
-	if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		true_crit_chance = (int)((float)true_crit_chance * (float)powers->powers[h.power_index].mod_crit_value / 100.0f);
-	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ADD)
-		true_crit_chance += powers->powers[h.power_index].mod_crit_value;
-	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-		true_crit_chance = powers->powers[h.power_index].mod_crit_value;
+	if(PowerManager::instance->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY)
+		true_crit_chance = (int)((float)true_crit_chance * (float)PowerManager::instance->powers[h.power_index].mod_crit_value / 100.0f);
+	else if(PowerManager::instance->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ADD)
+		true_crit_chance += PowerManager::instance->powers[h.power_index].mod_crit_value;
+	else if(PowerManager::instance->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+		true_crit_chance = PowerManager::instance->powers[h.power_index].mod_crit_value;
 
 	if (stats.effects.stun || stats.effects.speed < 100)
 		true_crit_chance += h.trait_crits_impaired;
@@ -286,8 +284,8 @@ bool Entity::takeHit(const Hazard &h) {
 	// after effects
 	if (stats.hp > 0 && dmg > 0) {
 
-		if (h.mod_power > 0) powers->effect(&stats, h.mod_power,h.source_type);
-		powers->effect(&stats, h.power_index,h.source_type);
+		if (h.mod_power > 0) PowerManager::instance->effect(&stats, h.mod_power,h.source_type);
+		PowerManager::instance->effect(&stats, h.power_index,h.source_type);
 
 		if (!stats.effects.immunity) {
 			if (stats.effects.forced_move) {
@@ -312,7 +310,7 @@ bool Entity::takeHit(const Hazard &h) {
 
 	// post effect power
 	if (h.post_power > 0 && dmg > 0) {
-		powers->activate(h.post_power, h.src_stats, stats.pos);
+		PowerManager::instance->activate(h.post_power, h.src_stats, stats.pos);
 	}
 
 	// interrupted to new state
@@ -344,7 +342,7 @@ bool Entity::takeHit(const Hazard &h) {
 			}
 			// roll to see if the enemy's ON_HIT power is casted
 			if (percentChance(stats.power_chance[ON_HIT])) {
-				powers->activate(stats.power_index[ON_HIT], &stats, stats.pos);
+				PowerManager::instance->activate(stats.power_index[ON_HIT], &stats, stats.pos);
 			}
 		}
 		// just play the hit sound

@@ -68,14 +68,13 @@ const int MENU_ENEMY_TIMEOUT = MAX_FRAMES_PER_SEC * 10;
 GameStatePlay::GameStatePlay()
 	: GameState()
 	, enemy(NULL)
-	, powers(new PowerManager())
 	, items(new ItemManager())
 	, camp(new CampaignManager())
 	, map(new MapRenderer(camp))
-	, pc(new Avatar(powers, map))
-	, enemies(new EnemyManager(powers, map))
-	, hazards(new HazardManager(powers, pc, enemies))
-	, menu(new MenuManager(powers, &pc->stats, camp, items))
+	, pc(new Avatar(map))
+	, enemies(new EnemyManager(map))
+	, hazards(new HazardManager(pc, enemies))
+	, menu(new MenuManager(&pc->stats, camp, items))
 	, loot(new LootManager(items, map, &pc->stats))
 	, npcs(new NPCManager(map, loot, items, &pc->stats))
 	, quests(new QuestLog(camp, menu->log))
@@ -95,7 +94,6 @@ GameStatePlay::GameStatePlay()
 	camp->carried_items = &menu->inv->inventory[CARRIED];
 	camp->currency = &menu->inv->currency;
 	camp->hero = &pc->stats;
-	map->powers = powers;
 	pc->enemies = enemies;
 	enemies->pc = pc;
 
@@ -169,7 +167,7 @@ bool GameStatePlay::restrictPowerUse() {
 				return true;
 			}
 			else {
-				if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
+				if(menu->act->slot_enabled[10] && (PowerManager::instance->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
 					return true;
 			}
 		}
@@ -276,7 +274,7 @@ void GameStatePlay::checkTeleport() {
 			enemies->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
-			powers->handleNewMap(&map->collider);
+			PowerManager::instance->handleNewMap(&map->collider);
 			menu->enemy->handleNewMap();
 			npcs->handleNewMap();
 			menu->vendor->npc = NULL;
@@ -388,9 +386,9 @@ void GameStatePlay::checkLog() {
 	}
 
 	// PowerManager has hints for powers
-	if (powers->log_msg != "") {
-		menu->hudlog->add(powers->log_msg);
-		powers->log_msg = "";
+	if (PowerManager::instance->log_msg != "") {
+		menu->hudlog->add(PowerManager::instance->log_msg);
+		PowerManager::instance->log_msg = "";
 	}
 }
 
@@ -539,16 +537,16 @@ void GameStatePlay::checkLootDrop() {
  * When a consumable-based power is used, we need to remove it from the inventory.
  */
 void GameStatePlay::checkConsumable() {
-	for (unsigned i=0; i<powers->used_items.size(); i++) {
-		if (menu->items->items[powers->used_items[i]].type == "consumable") {
-			menu->inv->remove(powers->used_items[i]);
+	for (unsigned i=0; i<PowerManager::instance->used_items.size(); i++) {
+		if (menu->items->items[PowerManager::instance->used_items[i]].type == "consumable") {
+			menu->inv->remove(PowerManager::instance->used_items[i]);
 		}
 	}
-	for (unsigned i=0; i<powers->used_equipped_items.size(); i++) {
-		menu->inv->removeEquipped(powers->used_equipped_items[i]);
+	for (unsigned i=0; i<PowerManager::instance->used_equipped_items.size(); i++) {
+		menu->inv->removeEquipped(PowerManager::instance->used_equipped_items[i]);
 	}
-	powers->used_items.clear();
-	powers->used_equipped_items.clear();
+	PowerManager::instance->used_items.clear();
+	PowerManager::instance->used_equipped_items.clear();
 }
 
 /**
@@ -885,7 +883,7 @@ void GameStatePlay::logic() {
 		pc->stats.corpse = false;
 		pc->stats.cur_state = AVATAR_STANCE;
 		menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
-		pc->powers->activatePassives(&pc->stats);
+		PowerManager::instance->activatePassives(&pc->stats);
 		pc->stats.logic();
 		pc->stats.recalc();
 		pc->respawn = false;
@@ -960,7 +958,7 @@ GameStatePlay::~GameStatePlay() {
 	delete loot;
 	delete camp;
 	delete items;
-	delete powers;
+	PowerManager::finalize();
 
 	delete loading;
 

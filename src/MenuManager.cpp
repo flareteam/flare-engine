@@ -45,9 +45,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "PowerManager.h"
 #include "SharedResources.h"
 
-MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManager *_camp, ItemManager *_items)
+MenuManager::MenuManager(StatBlock *_stats, CampaignManager *_camp, ItemManager *_items)
 	: icons(NULL)
-	, powers(_powers)
 	, stats(_stats)
 	, camp(_camp)
 	, tip_buf()
@@ -97,7 +96,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	menus.push_back(effects); // menus[3]
 	hudlog = new MenuHUDLog();
 	menus.push_back(hudlog); // menus[4]
-	act = new MenuActionBar(powers, stats, icons);
+	act = new MenuActionBar(stats, icons);
 	menus.push_back(act); // menus[5]
 	enemy = new MenuEnemy();
 	menus.push_back(enemy); // menus[6]
@@ -111,9 +110,9 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	menus.push_back(mini); // menus[10]
 	chr = new MenuCharacter(stats);
 	menus.push_back(chr); // menus[11]
-	inv = new MenuInventory(items, stats, powers);
+	inv = new MenuInventory(items, stats);
 	menus.push_back(inv); // menus[12]
-	pow = new MenuPowers(stats, powers, icons);
+	pow = new MenuPowers(stats, icons);
 	menus.push_back(pow); // menus[13]
 	log = new MenuLog();
 	menus.push_back(log); // menus[14]
@@ -813,7 +812,7 @@ void MenuManager::logic() {
 		act->slot_item_count[i] = -1;
 
 		if (act->hotkeys[i] != -1) {
-			int item_id = powers->powers[act->hotkeys[i]].requires_item;
+			int item_id = PowerManager::instance->powers[act->hotkeys[i]].requires_item;
 			if (item_id != -1 && items->items[item_id].type == "consumable") {
 				act->slot_item_count[i] = inv->getItemCountCarried(item_id);
 				if (act->slot_item_count[i] == 0) {
@@ -884,7 +883,7 @@ void MenuManager::render() {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
 			items->renderIcon(drag_stack, inpt->mouse.x - ICON_SIZE/2, inpt->mouse.y - ICON_SIZE/2, ICON_SIZE);
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
-			renderIcon(powers->powers[drag_power].icon, inpt->mouse.x-ICON_SIZE/2, inpt->mouse.y-ICON_SIZE/2);
+			renderIcon(PowerManager::instance->powers[drag_power].icon, inpt->mouse.x-ICON_SIZE/2, inpt->mouse.y-ICON_SIZE/2);
 	}
 
 }
@@ -958,7 +957,7 @@ void MenuManager::handleKeyboardTooltips() {
 				keyb_tip_buf_inv = keyb_tip_new_inv;
 			}
 			tip->render(keyb_tip_buf_inv, inpt->mouse, STYLE_FLOAT);
-		}	
+		}
 	}
 
 	if (act->tablist.getCurrent() != -1) {

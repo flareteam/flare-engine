@@ -82,7 +82,6 @@ public:
 class MenuPowers : public Menu {
 private:
 	StatBlock *stats;
-	PowerManager *powers;
 	std::vector<Power_Menu_Cell> power_cell;
 
 	SDL_Surface *background;
@@ -119,7 +118,7 @@ private:
 
 public:
 	static MenuPowers *getInstance();
-	MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons);
+	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);
 	~MenuPowers();
 	void update();
 	void logic();

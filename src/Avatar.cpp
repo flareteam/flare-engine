@@ -44,8 +44,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
-	: Entity(_powers, _map)
+Avatar::Avatar(MapRenderer *_map)
+	: Entity(_map)
 	, lockSwing(false)
 	, lockCast(false)
 	, lockShoot(false)
@@ -304,7 +304,7 @@ void Avatar::set_direction() {
 
 void Avatar::handlePower(int actionbar_power) {
 	if (actionbar_power != 0 && stats.cooldown_ticks == 0) {
-		const Power &power = powers->getPower(actionbar_power);
+		const Power &power = PowerManager::instance->getPower(actionbar_power);
 		Point target;
 		if (MOUSE_AIM) {
 			if (power.aim_assist)
@@ -327,7 +327,7 @@ void Avatar::handlePower(int actionbar_power) {
 			return;
 		if (stats.hero_cooldown[actionbar_power] > 0)
 			return;
-		if (!powers->hasValidTarget(actionbar_power,&stats,target))
+		if (!PowerManager::instance->hasValidTarget(actionbar_power,&stats,target))
 			return;
 
 		stats.hero_cooldown[actionbar_power] = power.cooldown; //set the cooldown timer
@@ -358,7 +358,7 @@ void Avatar::handlePower(int actionbar_power) {
 				break;
 
 			case POWSTATE_INSTANT:	// handle instant powers
-				powers->activate(current_power, &stats, target);
+				PowerManager::instance->activate(current_power, &stats, target);
 				break;
 		}
 	}
@@ -406,7 +406,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	map->collider.unblock(stats.pos.x, stats.pos.y);
 
 	// turn on all passive powers
-	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn && !transform_triggered) powers->activatePassives(&stats);
+	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn && !transform_triggered) PowerManager::instance->activatePassives(&stats);
 	if (transform_triggered) transform_triggered = false;
 
 	int stepfx;
@@ -583,7 +583,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// do power
 			if (activeAnimation->isActiveFrame()) {
-				powers->activate(current_power, &stats, act_target);
+				PowerManager::instance->activate(current_power, &stats, act_target);
 			}
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
@@ -603,7 +603,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// do power
 			if (activeAnimation->isActiveFrame()) {
-				powers->activate(current_power, &stats, act_target);
+				PowerManager::instance->activate(current_power, &stats, act_target);
 			}
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
@@ -621,7 +621,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// do power
 			if (activeAnimation->isActiveFrame()) {
-				powers->activate(current_power, &stats, act_target);
+				PowerManager::instance->activate(current_power, &stats, act_target);
 			}
 
 			if (activeAnimation->getTimesPlayed() >= 1) {
@@ -634,7 +634,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			setAnimation("block");
 
-			if (powers->powers[actionbar_power].new_state != POWSTATE_BLOCK) {
+			if (PowerManager::instance->powers[actionbar_power].new_state != POWSTATE_BLOCK) {
 				stats.cur_state = AVATAR_STANCE;
 				stats.effects.triggered_block = false;
 				stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
@@ -881,8 +881,8 @@ void Avatar::setAnimation(std::string name) {
  * Find untransform power index to use for manual untransfrom ability
  */
 int Avatar::getUntransformPower() {
-	for (unsigned id=0; id<powers->powers.size(); id++) {
-		if (powers->powers[id].spawn_type == "untransform" && powers->powers[id].requires_item == -1)
+	for (unsigned id=0; id<PowerManager::instance->powers.size(); id++) {
+		if (PowerManager::instance->powers[id].spawn_type == "untransform" && PowerManager::instance->powers[id].requires_item == -1)
 			return id;
 	}
 	return 0;

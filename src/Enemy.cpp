@@ -39,8 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_powers, _map) {
-	powers = _powers;
+Enemy::Enemy(MapRenderer *_map, EnemyManager *_em) : Entity(_map) {
 	enemies = _em;
 
 	stats.cur_state = ENEMY_STANCE;
@@ -200,7 +199,7 @@ void Enemy::CheckSummonSustained() {
 	//if minion was raised by a spawn power
 	if(summoned && stats.hero_ally) {
 
-		Power *spawn_power = &powers->powers[summoned_power_index];
+		Power *spawn_power = &PowerManager::instance->powers[summoned_power_index];
 
 		int max_summons = 0;
 

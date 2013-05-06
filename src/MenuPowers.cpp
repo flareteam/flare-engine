@@ -46,12 +46,11 @@ MenuPowers *MenuPowers::getInstance() {
 }
 
 
-MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons) {
+MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 
 	int id;
 
 	stats = _stats;
-	powers = _powers;
 	icons = _icons;
 
 	overlay_disabled = NULL;
@@ -226,7 +225,7 @@ void MenuPowers::loadGraphics() {
 	}
 	for (unsigned int i=0; i<slots.size(); i++) {
 
-		slots[i] = new WidgetSlot(icons, powers->powers[power_cell[i].id].icon);
+		slots[i] = new WidgetSlot(icons, PowerManager::instance->powers[power_cell[i].id].icon);
 		slots[i]->pos.x = power_cell[i].pos.x;
 		slots[i]->pos.y = power_cell[i].pos.y;
 		tablist.add(slots[i]);
@@ -313,7 +312,7 @@ int MenuPowers::click(Point mouse) {
 		int active_tab = tabControl->getActiveTab();
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
+				if (requirementsMet(power_cell[i].id) && !PowerManager::instance->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
 		}
@@ -322,7 +321,7 @@ int MenuPowers::click(Point mouse) {
 	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
+				if (requirementsMet(power_cell[i].id) && !PowerManager::instance->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
 		}
@@ -366,7 +365,7 @@ bool MenuPowers::unlockClick(Point mouse) {
 void MenuPowers::logic() {
 	short points_used = 0;
 	for (unsigned i=0; i<power_cell.size(); i++) {
-		if (powers->powers[power_cell[i].id].passive) {
+		if (PowerManager::instance->powers[power_cell[i].id].passive) {
 			bool unlocked_power = find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 			vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
 			if (it != stats->powers_passive.end()) {
@@ -381,7 +380,7 @@ void MenuPowers::logic() {
 				power_cell[i].passive_on = true;
 				// for passives without special triggers, we need to trigger them here
 				if (stats->effects.triggered_others)
-					powers->activateSinglePassive(stats, power_cell[i].id);
+					PowerManager::instance->activateSinglePassive(stats, power_cell[i].id);
 			}
 		}
 		if (power_cell[i].requires_point &&
@@ -489,15 +488,15 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 		if ((tabs_count > 1) && (tabControl->getActiveTab() != power_cell[i].tab)) continue;
 
 		if (isWithin(slots[i]->pos, mouse)) {
-			tip.addText(powers->powers[power_cell[i].id].name);
-			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
-			tip.addText(powers->powers[power_cell[i].id].description);
+			tip.addText(PowerManager::instance->powers[power_cell[i].id].name);
+			if (PowerManager::instance->powers[power_cell[i].id].passive) tip.addText("Passive");
+			tip.addText(PowerManager::instance->powers[power_cell[i].id].description);
 
-			if (powers->powers[power_cell[i].id].requires_physical_weapon)
+			if (PowerManager::instance->powers[power_cell[i].id].requires_physical_weapon)
 				tip.addText(msg->get("Requires a physical weapon"));
-			else if (powers->powers[power_cell[i].id].requires_mental_weapon)
+			else if (PowerManager::instance->powers[power_cell[i].id].requires_mental_weapon)
 				tip.addText(msg->get("Requires a mental weapon"));
-			else if (powers->powers[power_cell[i].id].requires_offense_weapon)
+			else if (PowerManager::instance->powers[power_cell[i].id].requires_offense_weapon)
 				tip.addText(msg->get("Requires an offense weapon"));
 
 
@@ -582,23 +581,23 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 			// Required Power Tooltip
 			if ((power_cell[i].requires_power != 0) && !(requirementsMet(power_cell[i].requires_power))) {
-				tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power].name), color_penalty);
+				tip.addText(msg->get("Requires Power: %s", PowerManager::instance->powers[power_cell[i].requires_power].name), color_penalty);
 			}
 			else if ((power_cell[i].requires_power != 0) && (requirementsMet(power_cell[i].requires_power))) {
-				tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power].name));
+				tip.addText(msg->get("Requires Power: %s", PowerManager::instance->powers[power_cell[i].requires_power].name));
 			}
 
 			// add mana cost
-			if (powers->powers[power_cell[i].id].requires_mp > 0) {
-				tip.addText(msg->get("Costs %d MP", powers->powers[power_cell[i].id].requires_mp));
+			if (PowerManager::instance->powers[power_cell[i].id].requires_mp > 0) {
+				tip.addText(msg->get("Costs %d MP", PowerManager::instance->powers[power_cell[i].id].requires_mp));
 			}
 			// add health cost
-			if (powers->powers[power_cell[i].id].requires_hp > 0) {
-				tip.addText(msg->get("Costs %d HP", powers->powers[power_cell[i].id].requires_hp));
+			if (PowerManager::instance->powers[power_cell[i].id].requires_hp > 0) {
+				tip.addText(msg->get("Costs %d HP", PowerManager::instance->powers[power_cell[i].id].requires_hp));
 			}
 			// add cooldown time
-			if (powers->powers[power_cell[i].id].cooldown > 0) {
-				tip.addText(msg->get("Cooldown: %d seconds", powers->powers[power_cell[i].id].cooldown / MAX_FRAMES_PER_SEC));
+			if (PowerManager::instance->powers[power_cell[i].id].cooldown > 0) {
+				tip.addText(msg->get("Cooldown: %d seconds", PowerManager::instance->powers[power_cell[i].id].cooldown / MAX_FRAMES_PER_SEC));
 			}
 
 			return tip;

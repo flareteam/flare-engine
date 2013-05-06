@@ -41,8 +41,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surface *_icons) {
-	powers = _powers;
+MenuActionBar::MenuActionBar(StatBlock *_hero, SDL_Surface *_icons) {
 	hero = _hero;
 	icons = _icons;
 
@@ -284,7 +283,7 @@ void MenuActionBar::render() {
 	src.w = src.h = ICON_SIZE;
 	for (int i=0; i<12; i++) {
 		if (hotkeys[i] != 0) {
-			const Power &power = powers->getPower(hotkeys[i]);
+			const Power &power = PowerManager::instance->getPower(hotkeys[i]);
 			slot_enabled[i] = (hero->hero_cooldown[hotkeys[i]] == 0)
 							  && (slot_item_count[i] != 0)
 							  && !hero->effects.stun
@@ -343,7 +342,7 @@ void MenuActionBar::renderCooldowns() {
 
 			// Wipe from bottom to top
 			if (hero->hero_cooldown[hotkeys[i]]) {
-				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys[i]]) / powers->powers[hotkeys[i]].cooldown;
+				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys[i]]) / PowerManager::instance->powers[hotkeys[i]].cooldown;
 			}
 
 			// SDL_BlitSurface will write to these Rects, so make a copy
@@ -383,7 +382,7 @@ TooltipData MenuActionBar::checkTooltip(Point mouse) {
 	for (int i=0; i<12; i++) {
 		if (hotkeys[i] != 0) {
 			if (isWithin(slots[i]->pos, mouse)) {
-				tip.addText(powers->powers[hotkeys[i]].name);
+				tip.addText(PowerManager::instance->powers[hotkeys[i]].name);
 			}
 		}
 	}
