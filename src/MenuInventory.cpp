@@ -768,10 +768,6 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	}
 	stats->powers_list_items.clear();
 
-	// the default for weapons/absorb are not added to equipped items
-	// later this function they are applied if the defaults aren't met
-	stats->calcBaseDmgAndAbs();
-
 	// reset wielding vars
 	stats->wielding_physical = false;
 	stats->wielding_mental = false;
@@ -783,24 +779,6 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	applyItemStats(equipped);
 	applyItemSetBonuses(equipped);
 
-	// increase damage and absorb to minimum amounts
-	if (stats->dmg_melee_min < stats->dmg_melee_min_default)
-		stats->dmg_melee_min = stats->dmg_melee_min_default;
-	if (stats->dmg_melee_max < stats->dmg_melee_max_default)
-		stats->dmg_melee_max = stats->dmg_melee_max_default;
-	if (stats->dmg_ranged_min < stats->dmg_ranged_min_default)
-		stats->dmg_ranged_min = stats->dmg_ranged_min_default;
-	if (stats->dmg_ranged_max < stats->dmg_ranged_max_default)
-		stats->dmg_ranged_max = stats->dmg_ranged_max_default;
-	if (stats->dmg_ment_min < stats->dmg_ment_min_default)
-		stats->dmg_ment_min = stats->dmg_ment_min_default;
-	if (stats->dmg_ment_max < stats->dmg_ment_max_default)
-		stats->dmg_ment_max = stats->dmg_ment_max_default;
-	if (stats->absorb_min < stats->absorb_min_default)
-		stats->absorb_min = stats->absorb_min_default;
-	if (stats->absorb_max < stats->absorb_max_default)
-		stats->absorb_max = stats->absorb_max_default;
-
 	// update stat display
 	stats->refresh_stats = true;
 }
@@ -808,18 +786,24 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 void MenuInventory::applyItemStats(ItemStack *equipped) {
 	const vector<Item> &pc_items = items->items;
 
+	// reset additional values
+	stats->dmg_melee_min_add = stats->dmg_melee_max_add = 0;
+	stats->dmg_ment_min_add = stats->dmg_ment_max_add = 0;
+	stats->dmg_ranged_min_add = stats->dmg_ranged_max_add = 0;
+	stats->absorb_min_add = stats->absorb_max_add = 0;
+
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
 		int item_id = equipped[i].item;
 		const Item &item = pc_items[item_id];
 
 		// apply base stats
-		stats->dmg_melee_min += item.dmg_melee_min;
-		stats->dmg_melee_max += item.dmg_melee_max;
-		stats->dmg_ranged_min += item.dmg_ranged_min;
-		stats->dmg_ranged_max += item.dmg_ranged_max;
-		stats->dmg_ment_min += item.dmg_ment_min;
-		stats->dmg_ment_max += item.dmg_ment_max;
+		stats->dmg_melee_min_add += item.dmg_melee_min;
+		stats->dmg_melee_max_add += item.dmg_melee_max;
+		stats->dmg_ranged_min_add += item.dmg_ranged_min;
+		stats->dmg_ranged_max_add += item.dmg_ranged_max;
+		stats->dmg_ment_min_add += item.dmg_ment_min;
+		stats->dmg_ment_max_add += item.dmg_ment_max;
 
 		// TODO: add a separate wielding stat to items
 		// e.g. we might want a ring that gives bonus ranged damage but
@@ -844,8 +828,8 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		}
 
 		// apply absorb bonus
-		stats->absorb_min += item.abs_min;
-		stats->absorb_max += item.abs_max;
+		stats->absorb_min_add += item.abs_min;
+		stats->absorb_max_add += item.abs_max;
 
 		// apply various bonuses
 		unsigned bonus_counter = 0;

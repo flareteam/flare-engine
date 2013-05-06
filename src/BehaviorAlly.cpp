@@ -93,6 +93,8 @@ void BehaviorAlly::findTarget() {
 		}
 	}
 
+    if(e->stats.effects.fear) fleeing = true;
+
 }
 
 
