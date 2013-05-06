@@ -68,6 +68,10 @@ GameStateNew::GameStateNew() : GameState() {
 	button_next = new WidgetButton("images/menus/buttons/right.png");
 	input_name = new WidgetInput();
 	button_permadeath = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	if (DEATH_PENALTY_PERMADEATH) {
+		button_permadeath->enabled = false;
+		button_permadeath->Check();
+	}
 
 	class_list = new WidgetListBox (HERO_CLASSES.size(), 12, "images/menus/buttons/listbox_default.png");
 	class_list->can_deselect = false;
