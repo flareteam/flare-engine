@@ -233,15 +233,6 @@ void InputState::handle(bool dump_event) {
 
 	SDL_GetMouseState(&mouse.x, &mouse.y);
 
-	static bool joyReverseAxisX;
-	static bool joyReverseAxisY;
-	static bool joyHasMovedX;
-	static bool joyHasMovedY;
-	static int joyLastPosX;
-	static int joyLastPosY;
-	int joyAxisXval;
-	int joyAxisYval;
-
 	inkeys = "";
 
 	/* Check for events */
@@ -429,8 +420,15 @@ void InputState::handle(bool dump_event) {
 
 	// joystick analog input
 	if(ENABLE_JOYSTICK) {
-		joyAxisXval = SDL_JoystickGetAxis(joy, 0);
-		joyAxisYval = SDL_JoystickGetAxis(joy, 1);
+		static bool joyReverseAxisX;
+		static bool joyReverseAxisY;
+		static bool joyHasMovedX;
+		static bool joyHasMovedY;
+		static int joyLastPosX;
+		static int joyLastPosY;
+
+		int joyAxisXval = SDL_JoystickGetAxis(joy, 0);
+		int joyAxisYval = SDL_JoystickGetAxis(joy, 1);
 
 		// axis 0
 		if(joyAxisXval < -JOY_DEADZONE) {
