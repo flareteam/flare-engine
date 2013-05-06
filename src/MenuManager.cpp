@@ -322,8 +322,6 @@ void MenuManager::handleKeyboardNavigation() {
 	}
 	// UP/DOWN scrolling in stash
 	if (stash->visible && !stash->tablist.isLocked()) {
-		int STASH_ROWS = stash->getRowsCount();
-
 		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;
 			for (unsigned i = 0; i < stash->tablist.size()/stash->getRowsCount(); i++)
