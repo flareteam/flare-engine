@@ -60,7 +60,6 @@ public:
 
 	int getActiveTab();
 	void setActiveTab(int tab) { activeTab = tab; }
-	int getTabsAmount();
 	SDL_Rect getContentArea();
 	int getTabHeight() { return activeTabSurface->h; }
 
