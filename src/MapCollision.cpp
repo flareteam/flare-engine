@@ -390,7 +390,7 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 			}
 			// else, update it's cost if better
 			else if (node.getActualCost()+node_stride < i->getActualCost()) {
-				i->setActualCost(node.getActualCost()+node_stride);
+				i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
 				i->setParent(current);
 			}
 		}
