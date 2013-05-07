@@ -53,12 +53,10 @@ QuestLog::~QuestLog() {
  * Load each [mod]/quests/index.txt file
  */
 void QuestLog::loadAll() {
-	string test_path;
-
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
 	vector<string> files = mods->list("quests/index.txt");
 	for (unsigned int i = 0; i < files.size(); i++)
-		this->loadIndex(test_path);
+		this->loadIndex(files[i]);
 }
 
 /**

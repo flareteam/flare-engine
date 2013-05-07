@@ -18,6 +18,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateCutscene.h"
 #include "GameStatePlay.h"
 #include "FileParser.h"
+#include "WidgetScrollBox.h"
 
 #include <iostream>
 using namespace std;
@@ -27,12 +28,14 @@ Scene::Scene() : frame_counter(0)
 	, caption("")
 	, caption_size(0,0)
 	, art(NULL)
-	, sid(-1) {
+	, sid(-1)
+	, caption_box(NULL) {
 }
 
 Scene::~Scene() {
 
 	SDL_FreeSurface(art);
+	delete caption_box;
 
 	while(!components.empty()) {
 		if (components.front().i != NULL) SDL_FreeSurface(components.front().i);
@@ -63,6 +66,16 @@ bool Scene::logic() {
 			font->setFont("font_captions");
 			caption = components.front().s;
 			caption_size = font->calc_size(caption, (int)(VIEW_W * 0.8f));
+
+			delete caption_box;
+			caption_box = new WidgetScrollBox(screen->w,caption_size.y);
+			caption_box->pos.x = 0;
+			caption_box->pos.y = screen->h - caption_size.y;
+			font->renderShadowed(caption, screen->w / 2, 0,
+								 JUSTIFY_CENTER,
+								 caption_box->contents,
+								 (int)(VIEW_W * 0.8f),
+								 FONT_WHITE);
 
 		}
 		else if (components.front().type == "image") {
@@ -107,12 +120,7 @@ void Scene::render() {
 		SDL_BlitSurface(art, NULL, screen, &r);
 
 	if (caption != "") {
-		font->setFont("font_captions");
-		font->renderShadowed(caption, screen->w / 2, screen->h - (caption_size.y),
-							 JUSTIFY_CENTER,
-							 screen,
-							 (int)(VIEW_W * 0.8f),
-							 FONT_WHITE);
+		caption_box->render();
 	}
 }
 

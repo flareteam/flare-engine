@@ -37,7 +37,6 @@ public:
 	~WidgetScrollBox ();
 
 	void addChildWidget(Widget* child);
-	void removeChildWidget(Widget* child);
 	Point input_assist(Point mouse);
 	void logic();
 	void logic(int x, int y);
@@ -49,6 +48,7 @@ public:
 	bool update;
 	SDL_Color bg;
 	bool transparent;
+	int line_height;
 
 	TabList tablist;
 	bool getNext();
@@ -58,6 +58,8 @@ public:
 private:
 	void scroll(int amount);
 	void scrollTo(int amount);
+	void scrollDown();
+	void scrollUp();
 	std::vector<Widget*> children;
 	int currentChild;
 

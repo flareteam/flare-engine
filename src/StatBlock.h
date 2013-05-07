@@ -211,6 +211,15 @@ public:
 	int absorb_min;
 	int absorb_max;
 
+	int dmg_melee_min_add;
+	int dmg_melee_max_add;
+	int dmg_ment_min_add;
+	int dmg_ment_max_add;
+	int dmg_ranged_min_add;
+	int dmg_ranged_max_add;
+	int absorb_min_add;
+	int absorb_max_add;
+
 	int speed;
 	int dspeed;
 
@@ -268,6 +277,7 @@ public:
 
 	int melee_range;
 	int threat_range;
+	bool passive_attacker;//enemy will not initiate combat unless attacked
 	Point hero_pos;
 	char hero_direction;
 	bool hero_alive;

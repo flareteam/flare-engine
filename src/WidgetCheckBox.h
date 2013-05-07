@@ -39,6 +39,7 @@ public:
 	bool checkClick (int x, int y);
 	bool isChecked () const;
 	void render (SDL_Surface *target = NULL);
+	bool enabled;
 
 private:
 	SDL_Surface * cb;

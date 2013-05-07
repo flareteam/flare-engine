@@ -103,6 +103,14 @@ StatBlock::StatBlock()
 	, dmg_ranged_max(4)
 	, absorb_min(0)
 	, absorb_max(0)
+	, dmg_melee_min_add(0)
+	, dmg_melee_max_add(0)
+	, dmg_ment_min_add(0)
+	, dmg_ment_max_add(0)
+	, dmg_ranged_min_add(0)
+	, dmg_ranged_max_add(0)
+	, absorb_min_add(0)
+	, absorb_max_add(0)
 	, speed(14)
 	, dspeed(10)
 	, wielding_physical(false)
@@ -140,6 +148,7 @@ StatBlock::StatBlock()
 	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
+	, passive_attacker(false)//enemy
 	, hero_pos(-1, -1)
 	, hero_direction(0)
 	, hero_alive(true)
@@ -241,9 +250,7 @@ void StatBlock::load(const string& filename) {
 		}
 
 		if (infile.key == "name") name = msg->get(infile.val);
-		else if (infile.key == "humanoid") {
-			if (infile.val == "true") humanoid = true;
-		}
+		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
 		else if (infile.key == "sfx_prefix") sfx_prefix = infile.val;
 
 		else if (infile.key == "level") level = num;
@@ -305,15 +312,9 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "hp_regen_base") hp_regen_base = num;
 
 		// behavior stats
-		else if (infile.key == "flying") {
-			if (num == 1) flying = true;
-		}
-		else if (infile.key == "intangible") {
-			if (num == 1) intangible = true;
-		}
-		else if (infile.key == "facing") {
-			if (num == 0) facing = false;
-		}
+		else if (infile.key == "flying") flying = toBool(infile.val);
+		else if (infile.key == "intangible") intangible = toBool(infile.val);
+		else if (infile.key == "facing") facing = toBool(infile.val);
 
 		else if (infile.key == "waypoint_pause") waypoint_pause = num;
 
@@ -358,6 +359,7 @@ void StatBlock::load(const string& filename) {
 
 		else if (infile.key == "melee_range") melee_range = num;
 		else if (infile.key == "threat_range") threat_range = num;
+		else if (infile.key == "passive_attacker") passive_attacker = toBool(infile.val);
 
 		// animation stats
 		else if (infile.key == "melee_weapon_power") melee_weapon_power = num;
@@ -367,12 +369,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "animations") animations = infile.val;
 
 		// hide enemy HP bar
-		else if (infile.key == "suppress_hp") {
-			if (num == 1)
-				suppress_hp = true;
-			else
-				suppress_hp = false;
-		}
+		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
 
 		else if (infile.key == "categories") {
 			string cat;
@@ -441,11 +438,32 @@ void StatBlock::calcBaseDmgAndAbs() {
 	int off0 = get_offense() -1;
 	int def0 = get_defense() -1;
 
-	dmg_melee_min = dmg_melee_max = bonus_per_physical * phys0;
-	dmg_ment_min = dmg_ment_max = bonus_per_mental * ment0;
-	dmg_ranged_min = dmg_ranged_max = bonus_per_offense * off0;
-	absorb_min = absorb_max = bonus_per_defense * def0;
+	dmg_melee_min = (bonus_per_physical * phys0) + dmg_melee_min_add;
+	dmg_melee_max = (bonus_per_physical * phys0) + dmg_melee_max_add;
+	dmg_ment_min = (bonus_per_mental * ment0) + dmg_ment_min_add;
+	dmg_ment_max = (bonus_per_mental * ment0) + dmg_ment_max_add;
+	dmg_ranged_min = (bonus_per_offense * off0) + dmg_ranged_min_add;
+	dmg_ranged_max = (bonus_per_offense * off0) + dmg_ranged_max_add;
+	absorb_min = (bonus_per_defense * def0) + absorb_min_add;
+	absorb_max = (bonus_per_defense * def0) + absorb_max_add;
 
+	// increase damage and absorb to minimum amounts
+	if (dmg_melee_min < dmg_melee_min_default)
+		dmg_melee_min = dmg_melee_min_default;
+	if (dmg_melee_max < dmg_melee_max_default)
+		dmg_melee_max = dmg_melee_max_default;
+	if (dmg_ranged_min < dmg_ranged_min_default)
+		dmg_ranged_min = dmg_ranged_min_default;
+	if (dmg_ranged_max < dmg_ranged_max_default)
+		dmg_ranged_max = dmg_ranged_max_default;
+	if (dmg_ment_min < dmg_ment_min_default)
+		dmg_ment_min = dmg_ment_min_default;
+	if (dmg_ment_max < dmg_ment_max_default)
+		dmg_ment_max = dmg_ment_max_default;
+	if (absorb_min < absorb_min_default)
+		absorb_min = absorb_min_default;
+	if (absorb_max < absorb_max_default)
+		absorb_max = absorb_max_default;
 }
 
 /**
@@ -463,6 +481,12 @@ void StatBlock::recalc_alt() {
 
 	if (hero) {
 		// calculate primary stats
+		// refresh the character menu if there has been a change
+		if (get_physical() != physical_character + effects.bonus_physical ||
+			get_mental() != mental_character + effects.bonus_mental ||
+			get_offense() != offense_character + effects.bonus_offense ||
+			get_defense() != defense_character + effects.bonus_defense) refresh_stats = true;
+
 		offense_additional = effects.bonus_offense;
 		defense_additional = effects.bonus_defense;
 		physical_additional = effects.bonus_physical;
@@ -471,6 +495,9 @@ void StatBlock::recalc_alt() {
 		int ment0 = get_mental() -1;
 		int off0 = get_offense() -1;
 		int def0 = get_defense() -1;
+
+		// calculate damage and absorb from base stats + item additions
+		calcBaseDmgAndAbs();
 
 		// calculate other stats
 		maxhp = hp_base + (hp_per_level * lev0) + (hp_per_physical * phys0) + effects.bonus_hp + (effects.bonus_hp_percent * (hp_base + (hp_per_level * lev0) + (hp_per_physical * phys0)) / 100);

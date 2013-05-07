@@ -164,6 +164,14 @@ std::vector<HeroClass> HERO_CLASSES;
 std::string CURRENCY = "Gold";
 float VENDOR_RATIO = 0.25;
 
+// Death penalty settings
+bool DEATH_PENALTY = true;
+bool DEATH_PENALTY_PERMADEATH = false;
+int DEATH_PENALTY_CURRENCY = 50;
+int DEATH_PENALTY_XP = 0;
+int DEATH_PENALTY_XP_CURRENT = 0;
+bool DEATH_PENALTY_ITEM = false;
+
 // Other Settings
 bool MENUS_PAUSE = false;
 bool SAVE_HPMP = false;
@@ -490,7 +498,7 @@ void loadTilesetSettings() {
 		UNITS_PER_PIXEL_Y = UNITS_PER_TILE / TILE_H;
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
-		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", UNITS_PER_PIXEL_X, UNITS_PER_PIXEL_Y);
+		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);
 		SDL_Quit();
 		exit(1);
 	}
@@ -642,12 +650,24 @@ void loadMiscSettings() {
 		}
 		infile.close();
 	}
-
 	// Make a default hero class if none were found
 	if (HERO_CLASSES.empty()) {
 		HeroClass c;
 		c.name = msg->get("Adventurer");
 		HERO_CLASSES.push_back(c);
+	}
+
+	// death_penalty.txt
+	if (infile.open("engine/death_penalty.txt")) {
+		while (infile.next()) {
+			if (infile.key == "enable") DEATH_PENALTY = toBool(infile.val);
+			else if (infile.key == "permadeath") DEATH_PENALTY_PERMADEATH = toBool(infile.val);
+			else if (infile.key == "currency") DEATH_PENALTY_CURRENCY = toInt(infile.val);
+			else if (infile.key == "xp_total") DEATH_PENALTY_XP = toInt(infile.val);
+			else if (infile.key == "xp_current_level") DEATH_PENALTY_XP_CURRENT = toInt(infile.val);
+			else if (infile.key == "random_item") DEATH_PENALTY_ITEM = toBool(infile.val);
+		}
+		infile.close();
 	}
 }
 
