@@ -154,7 +154,6 @@ public:
 	bool no_attack;
 	int radius;
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
-	int damage_multiplier; // % of base damage done by power (eg. 200 doubles damage and 50 halves it)
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
 	int range;
@@ -163,7 +162,6 @@ public:
 
 	int mod_accuracy_mode;
 	int mod_accuracy_value;
-	bool mod_accuracy_ignore_avoid;
 
 	int mod_crit_mode;
 	int mod_crit_value;
@@ -171,7 +169,6 @@ public:
 	int mod_damage_mode;
 	int mod_damage_value_min;
 	int mod_damage_value_max;//only used if mode is absolute
-	bool mod_damage_ignore_absorb;
 
 	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
 	int hp_steal;
@@ -188,6 +185,7 @@ public:
 	int trait_elemental; // enum. of elements
 	bool trait_armor_penetration;
 	int trait_crits_impaired; // crit bonus vs. movement impaired enemies (slowed, immobilized, stunned)
+    bool trait_avoidance_ignore;
 
 	int transform_duration;
 	bool manual_untransform; // true binds to the power another recurrence power
@@ -260,20 +258,17 @@ public:
 		, no_attack(false)
 		, radius(0)
 		, base_damage(BASE_DAMAGE_NONE)
-		, damage_multiplier(100)
 		, starting_pos(STARTING_POS_SOURCE)
 		, multitarget(false)
 		, range(0)
 		, target_party(false)
         , mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
         , mod_accuracy_value(100)
-        , mod_accuracy_ignore_avoid(false)
         , mod_crit_mode(STAT_MODIFIER_MODE_MULTIPLY)
         , mod_crit_value(100)
         , mod_damage_mode(STAT_MODIFIER_MODE_MULTIPLY)
         , mod_damage_value_min(100)
         , mod_damage_value_max(0)
-        , mod_damage_ignore_absorb(false)
 
 		, hp_steal(0)
 		, mp_steal(0)
@@ -287,6 +282,7 @@ public:
 		, trait_elemental(-1)
 		, trait_armor_penetration(false)
 		, trait_crits_impaired(0)
+		, trait_avoidance_ignore(false)
 
 		, transform_duration(0)
 		, manual_untransform(false)
