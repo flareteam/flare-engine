@@ -372,9 +372,12 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
 			Point neighbour = *it;
 
-			// if neighbour is not free of any collision, or already in close, skip it
-			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false) || find(close.begin(), close.end(), neighbour)!=close.end())
+			// if neighbour is not free of any collision, skip it
+			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false))
 				continue;
+            // if nabour is already in close, skip it
+            if(find(close.begin(), close.end(), neighbour)!=close.end())
+                continue;
 
 			list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
 			// if neighbour isn't inside open, add it as a new Node
