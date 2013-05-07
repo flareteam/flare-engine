@@ -849,26 +849,30 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// pick up a power
-	if (pow->visible && pow->tablist.getCurrent() != -1 && pow->slots[pow->tablist.getCurrent()]->checkClick() == CHECKED) {
-		// check for unlock first
-		Point src_slot(pow->slots[pow->tablist.getCurrent()]->pos.x, pow->slots[pow->tablist.getCurrent()]->pos.y);
-		if (!pow->unlockClick(src_slot)) {
+	if (pow->visible && pow->tablist.getCurrent() != -1) {
+		CLICK_TYPE slotClick = pow->slots[pow->tablist.getCurrent()]->checkClick();
+		if (slotClick == CHECKED) {
+			// check for unlock first
+			Point src_slot(pow->slots[pow->tablist.getCurrent()]->pos.x, pow->slots[pow->tablist.getCurrent()]->pos.y);
+			if (!pow->unlockClick(src_slot)) {
 
-			// otherwise, check for dragging
-			drag_power = pow->click(src_slot);
-			if (drag_power > 0) {
-				keyboard_dragging = true;
-				drag_src = DRAG_SRC_POWERS;
+				// otherwise, check for dragging
+				drag_power = pow->click(src_slot);
+				if (drag_power > 0) {
+					keyboard_dragging = true;
+					drag_src = DRAG_SRC_POWERS;
+				}
+			}
+			else {
+				pow->slots[pow->tablist.getCurrent()]->checked = false;
 			}
 		}
-		else {
-			pow->slots[pow->tablist.getCurrent()]->checked = false;
+		// clear power dragging if power slot was pressed twice
+		else if (slotClick == ACTIVATED) {
+			drag_power = 0;
+			keyboard_dragging = false;
+			drag_src = 0;
 		}
-	}
-	// clear power dragging if power slot was pressed twice
-	if (pow->visible && pow->tablist.getCurrent() != -1 && pow->slots[pow->tablist.getCurrent()]->checkClick() == ACTIVATED) {
-		// FIXME: this is never executed
-		std::cout << std::endl;
 	}
 
 	// handle dropping
