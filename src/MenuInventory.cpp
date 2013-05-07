@@ -138,8 +138,56 @@ void MenuInventory::update() {
 void MenuInventory::logic() {
 
 	// if the player has just died, the penalty is half his current currency.
-	if (stats->death_penalty) {
-		currency = currency/2;
+	if (stats->death_penalty && DEATH_PENALTY) {
+		std::string death_message = "";
+
+		// remove a % of currency
+		if (DEATH_PENALTY_CURRENCY > 0) {
+			if (currency > 0)
+				currency -= (currency * DEATH_PENALTY_CURRENCY) / 100;
+			death_message += msg->get("Lost %d% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
+		}
+
+		// remove a % of either total xp or xp since the last level
+		if (DEATH_PENALTY_XP > 0) {
+			if (stats->xp > 0)
+				stats->xp -= (stats->xp * DEATH_PENALTY_XP) / 100;
+			death_message += msg->get("Lost %d% of total XP. ", DEATH_PENALTY_XP);
+		} else if (DEATH_PENALTY_XP_CURRENT > 0) {
+			if (stats->xp - stats->xp_table[stats->level-1] > 0)
+				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * DEATH_PENALTY_XP_CURRENT) / 100;
+			death_message += msg->get("Lost %d% of current level XP. ", DEATH_PENALTY_XP_CURRENT);
+		}
+
+		// prevent down-leveling from removing too much xp
+		if (stats->xp < stats->xp_table[stats->level-1])
+			stats->xp = stats->xp_table[stats->level-1];
+
+		// remove a random carried item
+		if (DEATH_PENALTY_ITEM) {
+			std::vector<int> removable_items;
+			removable_items.clear();
+			for (int i=0; i < MAX_EQUIPPED; i++) {
+				if (inventory[EQUIPMENT][i].item > 0) {
+					if (items->items[inventory[EQUIPMENT][i].item].type != "quest")
+						removable_items.push_back(inventory[EQUIPMENT][i].item);
+				}
+			}
+			for (int i=0; i < MAX_CARRIED; i++) {
+				if (inventory[CARRIED][i].item > 0) {
+					if (items->items[inventory[CARRIED][i].item].type != "quest")
+						removable_items.push_back(inventory[CARRIED][i].item);
+				}
+			}
+			if (!removable_items.empty()) {
+				int random_item = rand() % removable_items.size();
+				remove(removable_items[random_item]);
+				death_message += msg->get("Lost %s.",items->items[removable_items[random_item]].name);
+			}
+		}
+
+		log_msg = death_message;
+
 		stats->death_penalty = false;
 	}
 

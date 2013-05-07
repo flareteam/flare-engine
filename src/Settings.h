@@ -169,6 +169,14 @@ extern std::vector<HeroClass> HERO_CLASSES;
 extern std::string CURRENCY;
 extern float VENDOR_RATIO;
 
+// Death penalty settings
+extern bool DEATH_PENALTY;
+extern bool DEATH_PENALTY_PERMADEATH;
+extern int DEATH_PENALTY_CURRENCY;
+extern int DEATH_PENALTY_XP;
+extern int DEATH_PENALTY_XP_CURRENT;
+extern bool DEATH_PENALTY_ITEM;
+
 void setPaths();
 void setDefaultPath();
 void loadTilesetSettings();

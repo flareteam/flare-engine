@@ -33,7 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 WidgetCheckBox::WidgetCheckBox (const string &fname)
-	: cb(NULL),
+	: enabled(true),
+	  cb(NULL),
 	  checked(false),
 	  pressed(false) {
 	focusable = true;
@@ -66,6 +67,7 @@ bool WidgetCheckBox::checkClick() {
 }
 
 bool WidgetCheckBox::checkClick (int x, int y) {
+	if (!enabled) return false;
 
 	Point mouse(x,y);
 
