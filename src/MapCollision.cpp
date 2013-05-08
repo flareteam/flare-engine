@@ -405,6 +405,25 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 		// reblock target if needed
 		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
 
+        float lowest_score = FLT_MAX;
+		// find lowest score available inside open, make it current node and move it to close
+		list<AStarNode>::iterator lowest_it;
+		for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
+			if (it->getH() < lowest_score) {
+				lowest_score = it->getH();
+				lowest_it = it;
+			}
+		}
+		node = *lowest_it;
+		current.x = node.getX();
+		current.y = node.getY();
+
+        //couldnt find the target so map a path to the closest node found
+        while (current.x != start.x || current.y != start.y) {
+			path.push_back(collision_to_map(current));
+			current = find(close.begin(), close.end(), current)->getParent();
+		}
+
 		return false;
 	}
 	else {

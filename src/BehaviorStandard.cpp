@@ -356,9 +356,9 @@ void BehaviorStandard::checkMove() {
 				// if a path is returned, target first waypoint
 				std::vector<Point> path;
 
-				if ( e->map->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type) ) {
+				e->map->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
+				if(!path.empty())
 					pursue_pos = path.back();
-				}
 			}
 
             if(fleeing)
