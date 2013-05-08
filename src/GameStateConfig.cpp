@@ -1003,11 +1003,19 @@ void GameStateConfig::logic () {
 			else MOUSE_MOVE=false;
 		}
 		else if (mouse_aim_cb->checkClick()) {
-			if (mouse_aim_cb->isChecked()) MOUSE_AIM=true;
+			if (mouse_aim_cb->isChecked()) {
+				MOUSE_AIM=true;
+				no_mouse_cb->unCheck();
+				NO_MOUSE=false;
+			}
 			else MOUSE_AIM=false;
 		}
 		else if (no_mouse_cb->checkClick()) {
-			if (no_mouse_cb->isChecked()) NO_MOUSE=true;
+			if (no_mouse_cb->isChecked()) {
+				NO_MOUSE=true;
+				mouse_aim_cb->unCheck();
+				MOUSE_AIM=false;
+			}
 			else NO_MOUSE=false;
 		}
 		else if (enable_joystick_cb->checkClick()) {

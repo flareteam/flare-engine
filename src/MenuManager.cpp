@@ -324,8 +324,6 @@ void MenuManager::handleKeyboardNavigation() {
 	}
 	// UP/DOWN scrolling in stash
 	if (stash->visible && !stash->tablist.isLocked()) {
-		int STASH_ROWS = stash->getRowsCount();
-
 		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;
 			for (unsigned i = 0; i < stash->tablist.size()/stash->getRowsCount(); i++)
@@ -390,7 +388,7 @@ void MenuManager::logic() {
 	}
 
 	// check if mouse-clicking a menu button
-	act->checkMenu(inpt->mouse, clicking_character, clicking_inventory, clicking_powers, clicking_log);
+	act->checkMenu(clicking_character, clicking_inventory, clicking_powers, clicking_log);
 
 	if (exit->visible) {
 		exit->logic();
@@ -1015,7 +1013,7 @@ void MenuManager::handleKeyboardTooltips() {
 				keyb_tip_buf_inv = keyb_tip_new_inv;
 			}
 			tip->render(keyb_tip_buf_inv, inpt->mouse, STYLE_FLOAT);
-		}	
+		}
 	}
 
 	if (act->tablist.getCurrent() != -1) {

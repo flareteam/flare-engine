@@ -138,8 +138,56 @@ void MenuInventory::update() {
 void MenuInventory::logic() {
 
 	// if the player has just died, the penalty is half his current currency.
-	if (stats->death_penalty) {
-		currency = currency/2;
+	if (stats->death_penalty && DEATH_PENALTY) {
+		std::string death_message = "";
+
+		// remove a % of currency
+		if (DEATH_PENALTY_CURRENCY > 0) {
+			if (currency > 0)
+				currency -= (currency * DEATH_PENALTY_CURRENCY) / 100;
+			death_message += msg->get("Lost %d% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
+		}
+
+		// remove a % of either total xp or xp since the last level
+		if (DEATH_PENALTY_XP > 0) {
+			if (stats->xp > 0)
+				stats->xp -= (stats->xp * DEATH_PENALTY_XP) / 100;
+			death_message += msg->get("Lost %d% of total XP. ", DEATH_PENALTY_XP);
+		} else if (DEATH_PENALTY_XP_CURRENT > 0) {
+			if (stats->xp - stats->xp_table[stats->level-1] > 0)
+				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * DEATH_PENALTY_XP_CURRENT) / 100;
+			death_message += msg->get("Lost %d% of current level XP. ", DEATH_PENALTY_XP_CURRENT);
+		}
+
+		// prevent down-leveling from removing too much xp
+		if (stats->xp < stats->xp_table[stats->level-1])
+			stats->xp = stats->xp_table[stats->level-1];
+
+		// remove a random carried item
+		if (DEATH_PENALTY_ITEM) {
+			std::vector<int> removable_items;
+			removable_items.clear();
+			for (int i=0; i < MAX_EQUIPPED; i++) {
+				if (inventory[EQUIPMENT][i].item > 0) {
+					if (items->items[inventory[EQUIPMENT][i].item].type != "quest")
+						removable_items.push_back(inventory[EQUIPMENT][i].item);
+				}
+			}
+			for (int i=0; i < MAX_CARRIED; i++) {
+				if (inventory[CARRIED][i].item > 0) {
+					if (items->items[inventory[CARRIED][i].item].type != "quest")
+						removable_items.push_back(inventory[CARRIED][i].item);
+				}
+			}
+			if (!removable_items.empty()) {
+				int random_item = rand() % removable_items.size();
+				remove(removable_items[random_item]);
+				death_message += msg->get("Lost %s.",items->items[removable_items[random_item]].name);
+			}
+		}
+
+		log_msg = death_message;
+
 		stats->death_penalty = false;
 	}
 
@@ -768,10 +816,6 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	}
 	stats->powers_list_items.clear();
 
-	// the default for weapons/absorb are not added to equipped items
-	// later this function they are applied if the defaults aren't met
-	stats->calcBaseDmgAndAbs();
-
 	// reset wielding vars
 	stats->wielding_physical = false;
 	stats->wielding_mental = false;
@@ -783,24 +827,6 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	applyItemStats(equipped);
 	applyItemSetBonuses(equipped);
 
-	// increase damage and absorb to minimum amounts
-	if (stats->dmg_melee_min < stats->dmg_melee_min_default)
-		stats->dmg_melee_min = stats->dmg_melee_min_default;
-	if (stats->dmg_melee_max < stats->dmg_melee_max_default)
-		stats->dmg_melee_max = stats->dmg_melee_max_default;
-	if (stats->dmg_ranged_min < stats->dmg_ranged_min_default)
-		stats->dmg_ranged_min = stats->dmg_ranged_min_default;
-	if (stats->dmg_ranged_max < stats->dmg_ranged_max_default)
-		stats->dmg_ranged_max = stats->dmg_ranged_max_default;
-	if (stats->dmg_ment_min < stats->dmg_ment_min_default)
-		stats->dmg_ment_min = stats->dmg_ment_min_default;
-	if (stats->dmg_ment_max < stats->dmg_ment_max_default)
-		stats->dmg_ment_max = stats->dmg_ment_max_default;
-	if (stats->absorb_min < stats->absorb_min_default)
-		stats->absorb_min = stats->absorb_min_default;
-	if (stats->absorb_max < stats->absorb_max_default)
-		stats->absorb_max = stats->absorb_max_default;
-
 	// update stat display
 	stats->refresh_stats = true;
 }
@@ -808,18 +834,24 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 void MenuInventory::applyItemStats(ItemStack *equipped) {
 	const vector<Item> &pc_items = items->items;
 
+	// reset additional values
+	stats->dmg_melee_min_add = stats->dmg_melee_max_add = 0;
+	stats->dmg_ment_min_add = stats->dmg_ment_max_add = 0;
+	stats->dmg_ranged_min_add = stats->dmg_ranged_max_add = 0;
+	stats->absorb_min_add = stats->absorb_max_add = 0;
+
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
 		int item_id = equipped[i].item;
 		const Item &item = pc_items[item_id];
 
 		// apply base stats
-		stats->dmg_melee_min += item.dmg_melee_min;
-		stats->dmg_melee_max += item.dmg_melee_max;
-		stats->dmg_ranged_min += item.dmg_ranged_min;
-		stats->dmg_ranged_max += item.dmg_ranged_max;
-		stats->dmg_ment_min += item.dmg_ment_min;
-		stats->dmg_ment_max += item.dmg_ment_max;
+		stats->dmg_melee_min_add += item.dmg_melee_min;
+		stats->dmg_melee_max_add += item.dmg_melee_max;
+		stats->dmg_ranged_min_add += item.dmg_ranged_min;
+		stats->dmg_ranged_max_add += item.dmg_ranged_max;
+		stats->dmg_ment_min_add += item.dmg_ment_min;
+		stats->dmg_ment_max_add += item.dmg_ment_max;
 
 		// TODO: add a separate wielding stat to items
 		// e.g. we might want a ring that gives bonus ranged damage but
@@ -844,8 +876,8 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		}
 
 		// apply absorb bonus
-		stats->absorb_min += item.abs_min;
-		stats->absorb_max += item.abs_max;
+		stats->absorb_min_add += item.abs_min;
+		stats->absorb_max_add += item.abs_max;
 
 		// apply various bonuses
 		unsigned bonus_counter = 0;

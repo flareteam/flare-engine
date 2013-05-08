@@ -62,20 +62,6 @@ void WidgetScrollBox::addChildWidget(Widget* child) {
 
 }
 
-void WidgetScrollBox::removeChildWidget(Widget* child) {
-
-	std::vector<Widget*>::iterator find = std::find(
-		children.begin(),
-		children.end(),
-		child);
-
-	if (find != children.end())
-	{
-		children.erase(find);
-		tablist.remove(child);
-	}
-}
-
 void WidgetScrollBox::scroll(int amount) {
 	cursor += amount;
 	if (cursor < 0) {

@@ -164,14 +164,14 @@ bool Entity::takeHit(const Hazard &h) {
 	// if it's a miss, do nothing
 	int accuracy = h.accuracy;
 	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		accuracy = (int)((float)accuracy * (float)powers->powers[h.power_index].mod_accuracy_value / 100.0f);
+		accuracy = accuracy * powers->powers[h.power_index].mod_accuracy_value / 100;
 	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
 		accuracy += powers->powers[h.power_index].mod_accuracy_value;
 	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 		accuracy = powers->powers[h.power_index].mod_accuracy_value;
 
 	int avoidance = 0;
-	if(!powers->powers[h.power_index].mod_accuracy_ignore_avoid) {
+	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
 		avoidance = stats.avoidance;
 		if (stats.effects.triggered_block) avoidance *= 2;
 	}
@@ -192,7 +192,7 @@ bool Entity::takeHit(const Hazard &h) {
 	int dmg = randBetween(h.dmg_min, h.dmg_max);
 
 	if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		dmg = (int)((float)dmg * (float)powers->powers[h.power_index].mod_damage_value_min / 100.0f);
+		dmg = dmg * powers->powers[h.power_index].mod_damage_value_min / 100;
 	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
 		dmg += powers->powers[h.power_index].mod_damage_value_min;
 	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
@@ -208,7 +208,7 @@ bool Entity::takeHit(const Hazard &h) {
 		dmg = (dmg * vulnerable) / 100;
 	}
 
-	if (!h.trait_armor_penetration && !powers->powers[h.power_index].mod_damage_ignore_absorb) { // armor penetration ignores all absorption
+	if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
 		// substract absorption from armor
 		int absorption = randBetween(stats.absorb_min, stats.absorb_max);
 
@@ -252,7 +252,7 @@ bool Entity::takeHit(const Hazard &h) {
 	int true_crit_chance = h.crit_chance;
 
 	if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		true_crit_chance = (int)((float)true_crit_chance * (float)powers->powers[h.power_index].mod_crit_value / 100.0f);
+		true_crit_chance = true_crit_chance * powers->powers[h.power_index].mod_crit_value / 100;
 	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ADD)
 		true_crit_chance += powers->powers[h.power_index].mod_crit_value;
 	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ABSOLUTE)

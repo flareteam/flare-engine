@@ -797,7 +797,7 @@ void GameStatePlay::logic() {
 		}
 		checkTitle();
 
-		pc->logic(menu->act->checkAction(inpt->mouse), restrictPowerUse());
+		pc->logic(menu->act->checkAction(), restrictPowerUse());
 
 		// transfer hero data to enemies, for AI use
 		enemies->hero_pos = pc->stats.pos;
@@ -885,6 +885,8 @@ void GameStatePlay::logic() {
 		pc->stats.corpse = false;
 		pc->stats.cur_state = AVATAR_STANCE;
 		menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
+		menu->inv->changed_equipment = true;
+		checkEquipmentChange();
 		pc->powers->activatePassives(&pc->stats);
 		pc->stats.logic();
 		pc->stats.recalc();
