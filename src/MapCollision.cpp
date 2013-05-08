@@ -406,7 +406,7 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
 
         float lowest_score = FLT_MAX;
-		// find lowest score available inside open, make it current node and move it to close
+		// find the closed node which is closest to the target and create a path
 		list<AStarNode>::iterator lowest_it;
 		for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
 			if (it->getH() < lowest_score) {
