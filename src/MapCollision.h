@@ -55,9 +55,6 @@ typedef enum {
 	MOVEMENT_INTANGIBLE = 2 // can move through BLOCKS_ALL (e.g. walls)
 } MOVEMENTTYPE;
 
-const unsigned int PATH_MAX_TILES = 256;
-
-
 class MapCollision {
 private:
 
