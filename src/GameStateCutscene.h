@@ -60,6 +60,7 @@ private:
 	SDL_Rect art_dest;
 	SoundManager::SoundID sid;
 	WidgetScrollBox *caption_box;
+	bool done;
 
 public:
 	Scene();
