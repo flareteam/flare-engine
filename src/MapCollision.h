@@ -82,7 +82,7 @@ public:
 
 	bool is_facing(int x1, int y1, char direction, int x2, int y2);
 
-	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = -1);
+	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
 
 	void block(int map_x, int map_y, bool is_ally);
 	void unblock(int map_x, int map_y);
