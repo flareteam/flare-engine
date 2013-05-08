@@ -279,7 +279,7 @@ void Avatar::set_direction() {
 			vector<Point> path;
 
 			// if a path is returned, target first waypoint
-			if (map->collider.compute_path(stats.pos, target, path, stats.movement_type, 1000)) {
+			if (map->collider.compute_path(stats.pos, target, path, stats.movement_type)) {
 				target = path.back();
 			}
 		}
