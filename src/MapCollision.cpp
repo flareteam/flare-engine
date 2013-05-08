@@ -320,6 +320,10 @@ bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2){
 */
 bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
+	// guess a suitable limit with respect to screen size if no limit is given
+	if (limit == -1)
+		limit = 4 * (VIEW_W / TILE_W + VIEW_H / TILE_H);
+
 	// path must be empty
 	if (!path.empty())
 		path.clear();
