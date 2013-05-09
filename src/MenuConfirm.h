@@ -23,7 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Menu.h"
 #include "WidgetButton.h"
-#include <SDL_image.h>
+#include "SharedIncludes.h"
 
 class MenuConfirm : public Menu {
 protected:

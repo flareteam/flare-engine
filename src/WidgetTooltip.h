@@ -25,13 +25,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef WIDGET_TOOLTIP_H
 #define WIDGET_TOOLTIP_H
 
+#include "SharedIncludes.h"
 #include "SharedResources.h"
 #include "Utils.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include "SharedIncludes.h"
 
 const int STYLE_FLOAT = 0;
 const int STYLE_TOPLABEL = 1;

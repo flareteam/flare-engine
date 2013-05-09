@@ -24,12 +24,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_CHARACTER_H
 #define MENU_CHARACTER_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
 #include "WidgetLabel.h"
 #include "WidgetTooltip.h"
+#include "SharedIncludes.h"
 
 #include <string>
 #include <sstream>

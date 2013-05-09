@@ -33,11 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameState.h"
 #include "WidgetLabel.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
+#include "SharedIncludes.h"
 
-#include <string>
 #include <sstream>
 
 class ItemManager;

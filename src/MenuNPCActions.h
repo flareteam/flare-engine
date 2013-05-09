@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_NPC_ACTIONS_H
 #define MENU_NPC_ACTIONS_H
 
-#include <SDL.h>
 #include "SharedIncludes.h"
 
 class Action;

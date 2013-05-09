@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "WidgetTooltip.h"
 
-#include <SDL.h>
-
 #include "SharedIncludes.h"
 
 class ItemManager;

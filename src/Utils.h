@@ -27,11 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
+#include "SharedIncludes.h"
 #include <stdint.h>
 
 class Point {

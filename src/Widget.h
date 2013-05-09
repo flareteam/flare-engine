@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Base interface all widget needs to implement
  */
-#include <SDL.h>
 #include "SharedIncludes.h"
 
 enum ScrollType {VERTICAL, HORIZONTAL, TWO_DIRECTIONS};

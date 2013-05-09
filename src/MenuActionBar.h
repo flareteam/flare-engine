@@ -28,9 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_ACTION_BAR_H
 
 #include "Utils.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
+#include "SharedIncludes.h"
 #include "WidgetLabel.h"
 
 class PowerManager;

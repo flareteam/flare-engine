@@ -21,8 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "SharedIncludes.h"
 
-#include <SDL_image.h>
-
 /**
  * The image manager class is a manager for images of any kind.
  * It makes sure there are no images loaded twice, but returns the appropriate

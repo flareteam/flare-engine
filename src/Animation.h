@@ -32,8 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 
-#include <SDL_image.h>
-
 #include "SharedIncludes.h"
 
 enum animation_type {

@@ -19,18 +19,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class SoundManager
  */
 
-
 #pragma once
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
 #include "Utils.h"
 
-#include <map>
 #include <stdint.h>
 #include "SharedIncludes.h"
 

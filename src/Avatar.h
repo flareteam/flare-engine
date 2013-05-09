@@ -29,16 +29,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 #include "Entity.h"
+#include "SharedIncludes.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
 #include <math.h>
-#include <string>
 
 class Entity;
 class Hazard;
@@ -122,7 +118,7 @@ public:
 	StatBlock *hero_stats;
 	StatBlock *charmed_stats;
 
-    virtual void resetActiveAnimation();
+	virtual void resetActiveAnimation();
 	virtual Renderable getRender() { return Renderable(); }
 	void addRenders(std::vector<Renderable> &r);
 

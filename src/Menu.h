@@ -27,8 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_H
 #define MENU_H
 
-#include <SDL_image.h>
-#include <string>
+#include "SharedIncludes.h"
 #include "SoundManager.h"
 
 class Menu {

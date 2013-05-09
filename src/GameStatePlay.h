@@ -30,9 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "GameState.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-
 #include "SharedIncludes.h"
 
 class Avatar;

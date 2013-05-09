@@ -35,12 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Loot.h"
 #include "ItemManager.h"
 #include "Settings.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
+#include "SharedIncludes.h"
 
 class EnemyManager;
 class MapRenderer;

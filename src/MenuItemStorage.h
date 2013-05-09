@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "ItemStorage.h"
 #include "WidgetSlot.h"
-#include <SDL.h>
+#include "SharedIncludes.h"
 
 class InputState;
 class TooltipData;

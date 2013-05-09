@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include <SDL.h>
 #include "SharedIncludes.h"
 using namespace std;
 
