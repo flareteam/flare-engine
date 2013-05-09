@@ -28,8 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
+#include "CommonIncludes.h"
 
-#include <string>
 #include <sstream>
 
 using namespace std;

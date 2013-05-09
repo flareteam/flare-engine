@@ -28,7 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 #include "CommonIncludes.h"
 
-#include <string>
 #include <sstream>
 
 class StatBlock;

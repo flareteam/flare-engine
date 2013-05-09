@@ -25,10 +25,8 @@ will be returned by SoundManager::load().
 
 **/
 
-#include <map>
 #include <locale>
-#include <string>
-#include <SDL_mixer.h>
+#include "CommonIncludes.h"
 #include <math.h>
 #include "Settings.h"
 #include "SoundManager.h"

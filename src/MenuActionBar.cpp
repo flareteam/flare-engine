@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the config, display, and usage of the 0-9 hotkeys, mouse buttons, and menu calls
  */
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
@@ -34,7 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetTooltip.h"
 
-#include <string>
 #include <sstream>
 #include <climits>
 

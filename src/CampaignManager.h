@@ -27,8 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define CAMPAIGN_MANAGER_H
 
 #include "ItemManager.h"
-
-#include <string>
+#include "CommonIncludes.h"
 
 class StatBlock;
 class MenuItemStorage;

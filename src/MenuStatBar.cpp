@@ -32,7 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-#include <string>
+#include "CommonIncludes.h"
 #include <sstream>
 
 

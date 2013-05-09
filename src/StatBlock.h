@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EffectManager.h"
 #include "Utils.h"
-#include <string>
+#include "CommonIncludes.h"
 #include <queue>
 
 #include "MapCollision.h"
