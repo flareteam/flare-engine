@@ -35,7 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetSlot.h"
 #include "WidgetTooltip.h"
 
-#include <sstream>
 #include <climits>
 
 using namespace std;

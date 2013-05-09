@@ -29,7 +29,6 @@ mods in priority order when loading data files.
 
 #define FALLBACK_MOD "default"
 
-#include <map>
 #include "CommonIncludes.h"
 
 class ModManager {

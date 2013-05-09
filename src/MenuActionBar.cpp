@@ -35,11 +35,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetTooltip.h"
 
-#include <sstream>
 #include <climits>
 
 using namespace std;
-
 
 MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surface *_icons) {
 	powers = _powers;

@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "CommonIncludes.h"
 #include <cstdlib>
-#include <sstream>
 
 using namespace std;
 

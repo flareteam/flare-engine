@@ -18,7 +18,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * class MenuNPCActions
  */
-#include <sstream>
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuNPCActions.h"

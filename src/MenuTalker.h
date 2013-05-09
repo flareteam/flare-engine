@@ -28,9 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Utils.h"
-
-#include <sstream>
-
 #include "Widget.h"
 
 class CampaignManager;

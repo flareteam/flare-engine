@@ -22,8 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "ItemStorage.h"
 #include "UtilsParsing.h"
-
-#include <sstream>
+#include "CommonIncludes.h"
 
 using namespace std;
 

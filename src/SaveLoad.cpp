@@ -43,7 +43,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include <sstream>
 
 using namespace std;
 

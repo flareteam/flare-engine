@@ -15,20 +15,18 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#ifndef GAMESTATECUTSCENE_H
+#define GAMESTATECUTSCENE_H
+
+#include "GameState.h"
 #include <queue>
 #include <list>
-#include <sstream>
 
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
-
-#ifndef GAMESTATECUTSCENE_H
-#define GAMESTATECUTSCENE_H
-
-#include "GameState.h"
-
+#include "CommonIncludes.h"
 class WidgetScrollBox;
 
 class SceneComponent {

@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class ItemManager
  */
 
+#include "CommonIncludes.h"
 #include "ItemManager.h"
 #include "FileParser.h"
 #include "SharedResources.h"
@@ -34,7 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 #include <climits>
 #include <cstring>
-#include <sstream>
 
 using namespace std;
 

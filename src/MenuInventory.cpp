@@ -32,8 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
-
-#include <sstream>
+#include "CommonIncludes.h"
 
 using namespace std;
 

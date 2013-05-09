@@ -35,8 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-#include <sstream>
-
 class ItemManager;
 class MenuConfirm;
 class WidgetButton;

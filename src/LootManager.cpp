@@ -38,7 +38,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "Utils.h"
 
-#include <sstream>
 #include <limits>
 
 using namespace std;

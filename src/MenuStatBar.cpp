@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 
 #include "CommonIncludes.h"
-#include <sstream>
-
 
 using namespace std;
 

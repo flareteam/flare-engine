@@ -31,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"
-#include <sstream>
 
 CombatText::CombatText() {
 	msg_color[COMBAT_MESSAGE_GIVEDMG] = font->getColor("combat_givedmg");

@@ -39,8 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsMath.h"
 #include "EnemyManager.h"
-
-#include <sstream>
+#include "CommonIncludes.h"
 
 using namespace std;
 

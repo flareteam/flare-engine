@@ -29,10 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "GameState.h"
 #include "WidgetLabel.h"
-
-#include <sstream>
 #include "CommonIncludes.h"
-
 #include "WidgetTooltip.h"
 
 class WidgetButton;

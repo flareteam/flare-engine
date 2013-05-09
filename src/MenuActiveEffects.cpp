@@ -33,11 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-#include <sstream>
-
-
 using namespace std;
-
 
 MenuActiveEffects::MenuActiveEffects(SDL_Surface *_icons) {
 	stats = NULL;

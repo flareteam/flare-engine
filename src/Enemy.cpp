@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorStandard.h"
 #include "BehaviorAlly.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
 #include "EnemyBehavior.h"
 #include "Enemy.h"
 #include "Hazard.h"
@@ -33,8 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsMath.h"
 #include "Avatar.h"
-
-#include <sstream>
 
 using namespace std;
 

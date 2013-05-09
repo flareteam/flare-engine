@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GetText.h"
 #include "SharedResources.h"
 #include "Settings.h"
-#include <sstream>
+#include "CommonIncludes.h"
 
 using namespace std;
 
