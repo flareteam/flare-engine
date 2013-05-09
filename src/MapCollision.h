@@ -27,10 +27,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_COLLISION_H
 #define MAP_COLLISION_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 
 #include <cstdlib>
-#include "CommonIncludes.h"
 
 // collision tile types
 // The numbers 0..4 are the collision tiles as produced by tiled,

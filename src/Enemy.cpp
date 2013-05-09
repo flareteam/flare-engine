@@ -21,8 +21,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
-#include "BehaviorStandard.h"
+#include "Avatar.h"
 #include "BehaviorAlly.h"
+#include "BehaviorStandard.h"
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "EnemyBehavior.h"
@@ -33,10 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "PowerManager.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
-#include "Avatar.h"
 
 using namespace std;
-
 
 Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_powers, _map) {
 	powers = _powers;

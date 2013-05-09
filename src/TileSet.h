@@ -26,9 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef TILE_SET_H
 #define TILE_SET_H
 
-#include "Utils.h"
-
 #include "CommonIncludes.h"
+#include "Utils.h"
 
 /**
  * Describes a tile by its location \a src in the tileset sprite and

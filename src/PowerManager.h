@@ -29,12 +29,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef POWER_MANAGER_H
 #define POWER_MANAGER_H
 
+#include "CommonIncludes.h"
 #include "MapRenderer.h"
 #include "Utils.h"
 
 #include <queue>
 #include <cassert>
-#include "CommonIncludes.h"
 
 class Animation;
 class AnimationSet;

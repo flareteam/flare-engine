@@ -26,13 +26,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_POWERS_H
 #define MENU_POWERS_H
 
+#include "CommonIncludes.h"
 #include "Menu.h"
 #include "Utils.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetTabControl.h"
-
-#include "CommonIncludes.h"
 
 class PowerManager;
 class StatBlock;

@@ -25,7 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_TALKER_H
 #define MENU_TALKER_H
 
-
 #include "CommonIncludes.h"
 #include "Utils.h"
 #include "Widget.h"

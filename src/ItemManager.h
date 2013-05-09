@@ -21,15 +21,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class ItemManager
  */
 
-
 #pragma once
 #ifndef ITEM_MANAGER_H
 #define ITEM_MANAGER_H
 
+#include "CommonIncludes.h"
 #include "WidgetTooltip.h"
 
 #include <stdint.h>
-#include "CommonIncludes.h"
 
 #define VENDOR_BUY 0
 #define VENDOR_SELL 1

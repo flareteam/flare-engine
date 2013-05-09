@@ -25,8 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef WIDGET_ScrollBar_H
 #define WIDGET_ScrollBar_H
 
-#include "Widget.h"
 #include "CommonIncludes.h"
+#include "Widget.h"
 
 class WidgetScrollBar : public Widget {
 private:

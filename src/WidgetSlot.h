@@ -19,14 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetSlot
  */
 
-
 #pragma once
 #ifndef WIDGET_SLOT_H
 #define WIDGET_SLOT_H
 
+#include "CommonIncludes.h"
 #include "Widget.h"
 #include "WidgetTooltip.h"
-#include "CommonIncludes.h"
 
 enum CLICK_TYPE {
 

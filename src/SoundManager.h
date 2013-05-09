@@ -23,10 +23,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 
 #include <stdint.h>
-#include "CommonIncludes.h"
 
 const std::string GLOBAL_VIRTUAL_CHANNEL = "__global__";
 

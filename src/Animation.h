@@ -30,9 +30,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "Utils.h"
-
 #include "CommonIncludes.h"
+#include "Utils.h"
 
 enum animation_type {
 	NONE       = 0,

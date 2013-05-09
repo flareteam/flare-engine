@@ -27,9 +27,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_ACTIVE_EFFECTS_H
 #define MENU_ACTIVE_EFFECTS_H
 
-#include "Utils.h"
-
 #include "CommonIncludes.h"
+#include "Menu.h"
+#include "Utils.h"
 
 class StatBlock;
 

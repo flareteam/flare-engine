@@ -15,16 +15,14 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-
 #pragma once
 #ifndef FONT_ENGINE_H
 #define FONT_ENGINE_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 
 #include <SDL_ttf.h>
-#include "CommonIncludes.h"
-
 
 const int JUSTIFY_LEFT = 0;
 const int JUSTIFY_RIGHT = 1;

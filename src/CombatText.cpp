@@ -26,10 +26,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CombatText.h"
-#include "FileParser.h"
 #include "CommonIncludes.h"
-#include "SharedResources.h"
+#include "FileParser.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "UtilsParsing.h"
 
 CombatText::CombatText() {

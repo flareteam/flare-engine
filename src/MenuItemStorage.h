@@ -25,10 +25,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_ITEM_STORAGE_H
 #define MENU_ITEM_STORAGE_H
 
+#include "CommonIncludes.h"
 #include "ItemManager.h"
 #include "ItemStorage.h"
 #include "WidgetSlot.h"
-#include "CommonIncludes.h"
 
 class InputState;
 class TooltipData;

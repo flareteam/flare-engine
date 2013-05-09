@@ -22,11 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include <cstring>
-#include "CommonIncludes.h"
 #include <typeinfo>
 #include <cmath>
 using namespace std;
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "Settings.h"
 #include "Utils.h"

@@ -19,10 +19,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class FontEngine
  */
 
+#include "CommonIncludes.h"
 #include "SDL_gfxBlitFunc.h"
 #include "FontEngine.h"
 #include "FileParser.h"
-#include "CommonIncludes.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"

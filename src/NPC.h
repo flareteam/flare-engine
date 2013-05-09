@@ -25,11 +25,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef NPC_H
 #define NPC_H
 
+#include "CommonIncludes.h"
 #include "Entity.h"
 #include "ItemStorage.h"
 #include "Utils.h"
-
-#include "CommonIncludes.h"
 
 class ItemManager;
 class MapRenderer;

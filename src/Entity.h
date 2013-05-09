@@ -27,8 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "StatBlock.h"
 #include "CommonIncludes.h"
+#include "StatBlock.h"
 
 class Animation;
 class AnimationSet;

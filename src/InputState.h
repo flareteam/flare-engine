@@ -20,8 +20,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef INPUT_STATE_H
 #define INPUT_STATE_H
 
-#include "Utils.h"
 #include "CommonIncludes.h"
+#include "Utils.h"
 
 #define JOY_DEADZONE	100
 

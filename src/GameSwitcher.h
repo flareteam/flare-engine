@@ -21,9 +21,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAME_SWITCHER_H
 #define GAME_SWITCHER_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
-#include "CommonIncludes.h"
 
 const int GAME_STATE_TITLE = 0;
 const int GAME_STATE_PLAY = 1;

@@ -24,13 +24,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
+#include "LootManager.h"
 #include "MenuItemStorage.h"
 #include "Settings.h"
-#include "StatBlock.h"
 #include "SharedResources.h"
+#include "StatBlock.h"
 #include "UtilsParsing.h"
-#include "LootManager.h"
-#include "CommonIncludes.h"
 
 using namespace std;
 

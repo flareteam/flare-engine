@@ -29,16 +29,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_RENDERER_H
 #define MAP_RENDERER_H
 
+#include "CommonIncludes.h"
 #include "Enemy.h"
 #include "GameStatePlay.h"
-#include "Utils.h"
-#include "TileSet.h"
 #include "MapCollision.h"
 #include "Settings.h"
+#include "TileSet.h"
+#include "Utils.h"
 #include "WidgetTooltip.h"
 
 #include <queue>
-#include "CommonIncludes.h"
 
 class CampaignManager;
 class PowerManager;

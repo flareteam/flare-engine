@@ -18,15 +18,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATECUTSCENE_H
 #define GAMESTATECUTSCENE_H
 
+#include "CommonIncludes.h"
 #include "GameState.h"
-#include <queue>
-#include <list>
-
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
-#include "CommonIncludes.h"
+
+#include <queue>
+#include <list>
+
 class WidgetScrollBox;
 
 class SceneComponent {

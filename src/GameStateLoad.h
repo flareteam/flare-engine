@@ -29,17 +29,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATELOAD_H
 #define GAMESTATELOAD_H
 
-#include "StatBlock.h"
-#include "GameState.h"
-#include "WidgetLabel.h"
-
 #include "CommonIncludes.h"
+#include "GameState.h"
+#include "StatBlock.h"
+#include "WidgetLabel.h"
 
 class ItemManager;
 class MenuConfirm;
 class WidgetButton;
 class WidgetLabel;
-
 
 const int GAME_SLOT_MAX = 4;
 

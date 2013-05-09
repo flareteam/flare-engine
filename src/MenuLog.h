@@ -24,12 +24,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_LOG_H
 #define MENU_LOG_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
-
-#include "CommonIncludes.h"
-
-#include "Utils.h"
 
 class WidgetButton;
 class WidgetScrollBox;

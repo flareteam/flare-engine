@@ -29,13 +29,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define LOOT_MANAGER_H
 
 #include "Animation.h"
-#include "AnimationSet.h"
 #include "AnimationManager.h"
-
-#include "Loot.h"
-#include "ItemManager.h"
-#include "Settings.h"
+#include "AnimationSet.h"
 #include "CommonIncludes.h"
+#include "ItemManager.h"
+#include "Loot.h"
+#include "Settings.h"
 
 class EnemyManager;
 class MapRenderer;

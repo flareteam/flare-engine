@@ -27,9 +27,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef WIDGETINPUT_H
 #define WIDGETINPUT_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "Widget.h"
-#include "CommonIncludes.h"
 
 class WidgetInput : public Widget {
 

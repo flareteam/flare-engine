@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include "MapRenderer.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
 #include "EnemyGroupManager.h"
 #include "FileParser.h"
-#include "SharedResources.h"
-#include "CommonIncludes.h"
+#include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"

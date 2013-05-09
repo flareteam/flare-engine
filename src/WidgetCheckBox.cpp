@@ -20,12 +20,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetCheckBox
  */
 
-
-#include "Widget.h"
-#include "WidgetCheckBox.h"
 #include "CommonIncludes.h"
-#include "SharedResources.h"
 #include "SDL_gfxBlitFunc.h"
+#include "SharedResources.h"
+#include "WidgetCheckBox.h"
+#include "Widget.h"
 
 using namespace std;
 

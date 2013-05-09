@@ -28,9 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATEPLAY_H
 #define GAMESTATEPLAY_H
 
-#include "GameState.h"
-
 #include "CommonIncludes.h"
+#include "GameState.h"
 
 class Avatar;
 class CampaignManager;

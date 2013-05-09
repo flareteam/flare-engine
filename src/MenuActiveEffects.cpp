@@ -23,15 +23,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
-#include "Menu.h"
+#include "FileParser.h"
 #include "MenuActiveEffects.h"
+#include "Menu.h"
 #include "ModManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
-#include "FileParser.h"
-#include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
+#include "UtilsParsing.h"
 
 using namespace std;
 

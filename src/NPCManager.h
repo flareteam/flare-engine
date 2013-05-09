@@ -27,9 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef NPC_MANAGER_H
 #define NPC_MANAGER_H
 
-#include "WidgetTooltip.h"
-
 #include "CommonIncludes.h"
+#include "WidgetTooltip.h"
 
 class ItemManager;
 class LootManager;

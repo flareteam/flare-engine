@@ -27,11 +27,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define EFFECT_MANAGER_H
 
 #include "Animation.h"
+#include "CommonIncludes.h"
+#include "Hazard.h"
 #include "SharedResources.h"
 #include "Utils.h"
-#include "Hazard.h"
-
-#include "CommonIncludes.h"
 
 class Avatar;
 class EnemyManager;

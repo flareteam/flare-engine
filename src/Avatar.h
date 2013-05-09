@@ -27,9 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef AVATAR_H
 #define AVATAR_H
 
-
-#include "Entity.h"
 #include "CommonIncludes.h"
+#include "Entity.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"

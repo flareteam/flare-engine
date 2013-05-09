@@ -25,13 +25,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENEMY_H
 #define ENEMY_H
 
+#include "CommonIncludes.h"
+#include "Entity.h"
+#include "Utils.h"
 
 #include <math.h>
 #include <queue>
-#include "CommonIncludes.h"
-
-#include "Entity.h"
-#include "Utils.h"
 
 class EnemyBehavior;
 class Hazard;

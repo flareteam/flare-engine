@@ -23,9 +23,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuNPCActions.h"
 #include "NPC.h"
+#include "SDL_gfxBlitFunc.h"
 #include "Settings.h"
 #include "SharedResources.h"
-#include "SDL_gfxBlitFunc.h"
 #include "UtilsParsing.h"
 
 #define SEPARATOR_HEIGHT 2

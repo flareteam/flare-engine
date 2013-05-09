@@ -24,9 +24,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_VENDOR_H
 #define MENU_VENDOR_H
 
+#include "CommonIncludes.h"
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
-#include "CommonIncludes.h"
 
 class InputState;
 class ItemStorage;

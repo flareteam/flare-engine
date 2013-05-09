@@ -19,14 +19,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuHUDLog
  */
 
-
 #pragma once
 #ifndef MENU_HUD_LOG_H
 #define MENU_HUD_LOG_H
 
-#include "Utils.h"
-
 #include "CommonIncludes.h"
+#include "Utils.h"
 
 class MenuHUDLog : public Menu {
 private:

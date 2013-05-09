@@ -24,19 +24,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
-#include "AnimationSet.h"
 #include "AnimationManager.h"
-
+#include "AnimationSet.h"
+#include "CommonIncludes.h"
 #include "EnemyManager.h"
 #include "FileParser.h"
 #include "LootManager.h"
 #include "Menu.h"
 #include "MenuInventory.h"
 #include "SharedResources.h"
-#include "CommonIncludes.h"
-#include "UtilsParsing.h"
-#include "UtilsMath.h"
 #include "Utils.h"
+#include "UtilsMath.h"
+#include "UtilsParsing.h"
 
 #include <limits>
 

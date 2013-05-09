@@ -27,9 +27,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATENEW_H
 #define GAMESTATENEW_H
 
+#include "CommonIncludes.h"
 #include "GameState.h"
 #include "WidgetLabel.h"
-#include "CommonIncludes.h"
 #include "WidgetTooltip.h"
 
 class WidgetButton;

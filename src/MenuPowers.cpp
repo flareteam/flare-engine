@@ -22,13 +22,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuPowers
  */
 
-#include "Menu.h"
-#include "FileParser.h"
-#include "MenuPowers.h"
-#include "SharedResources.h"
 #include "CommonIncludes.h"
+#include "FileParser.h"
+#include "Menu.h"
+#include "MenuPowers.h"
 #include "PowerManager.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"

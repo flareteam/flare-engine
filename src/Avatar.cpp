@@ -24,22 +24,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Contains logic and rendering routines for the player avatar.
  */
 
-
-#include "SDL_gfxBlitFunc.h"
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "Avatar.h"
+#include "CommonIncludes.h"
+#include "EnemyManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "Utils.h"
-#include "UtilsParsing.h"
 #include "UtilsMath.h"
-#include "EnemyManager.h"
-#include "CommonIncludes.h"
+#include "UtilsParsing.h"
 
 using namespace std;
 

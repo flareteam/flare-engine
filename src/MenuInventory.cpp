@@ -22,20 +22,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuInventory
  */
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "LootManager.h"
 #include "Menu.h"
 #include "MenuInventory.h"
 #include "PowerManager.h"
-#include "SharedResources.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
-#include "CommonIncludes.h"
 
 using namespace std;
-
 
 MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManager *_powers) {
 	items = _items;

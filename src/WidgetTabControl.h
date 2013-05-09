@@ -20,8 +20,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_TAB_CONTROL_H
 #define MENU_TAB_CONTROL_H
 
-#include "SharedResources.h"
 #include "CommonIncludes.h"
+#include "SharedResources.h"
 
 class WidgetTabControl {
 
