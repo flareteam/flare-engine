@@ -108,9 +108,6 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 	loadGraphics();
 
 	full_msg = false;
-
-	assert(lootm == NULL);
-	lootm = this;
 }
 
 /**
@@ -557,6 +554,5 @@ LootManager::~LootManager() {
 	snd->unload(sfx_loot);
 	snd->unload(sfx_currency);
 
-	lootm = 0;
 	delete tip;
 }

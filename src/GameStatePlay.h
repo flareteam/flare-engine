@@ -36,7 +36,6 @@ class Enemy;
 class EnemyManager;
 class HazardManager;
 class ItemManager;
-class LootManager;
 class MapRenderer;
 class MenuManager;
 class NPCManager;
@@ -75,7 +74,6 @@ private:
 	EnemyManager *enemies;
 	HazardManager *hazards;
 	MenuManager *menu;
-	LootManager *loot;
 	NPCManager *npcs;
 	QuestLog *quests;
 

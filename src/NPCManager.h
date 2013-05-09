@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "TooltipData.h"
 
 class ItemManager;
-class LootManager;
 class MapRenderer;
 class StatBlock;
 class NPC;
@@ -40,14 +39,13 @@ class NPCManager {
 private:
 	MapRenderer *map;
 	WidgetTooltip *tip;
-	LootManager *loot;
 	ItemManager *items;
 	StatBlock *stats;
 	TooltipData tip_buf;
 	int tooltip_margin;
 
 public:
-	NPCManager(MapRenderer *_map, LootManager *_loot, ItemManager *_items, StatBlock *stats);
+	NPCManager(MapRenderer *_map, ItemManager *_items, StatBlock *stats);
 	NPCManager(const NPCManager &copy); // not implemented
 	~NPCManager();
 

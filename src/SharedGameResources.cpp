@@ -18,5 +18,5 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 
 MenuPowers *menu_powers = NULL;
-LootManager *lootm = NULL;
+LootManager *loot = NULL;
 EnemyGroupManager *enemyg = NULL;

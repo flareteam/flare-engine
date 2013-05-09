@@ -34,7 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateCutscene.h"
 #include "Hazard.h"
 #include "HazardManager.h"
-#include "LootManager.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
@@ -77,8 +76,7 @@ GameStatePlay::GameStatePlay()
 	, enemies(new EnemyManager(powers, map))
 	, hazards(new HazardManager(powers, pc, enemies))
 	, menu(new MenuManager(powers, &pc->stats, camp, items))
-	, loot(new LootManager(items, map, &pc->stats))
-	, npcs(new NPCManager(map, loot, items, &pc->stats))
+	, npcs(new NPCManager(map, items, &pc->stats))
 	, quests(new QuestLog(camp, menu->log))
 	, loading(new WidgetLabel())
 	// Load the loading screen image (we currently use the confirm dialog background):
@@ -101,6 +99,7 @@ GameStatePlay::GameStatePlay()
 	enemies->pc = pc;
 
 	enemyg = new EnemyGroupManager();
+	loot = new LootManager(items, map, &pc->stats);
 
 	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 

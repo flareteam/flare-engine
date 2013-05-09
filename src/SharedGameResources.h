@@ -23,7 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyGroupManager.h"
 
 extern MenuPowers *menu_powers;
-extern LootManager *lootm;
+extern LootManager *loot;
 extern EnemyGroupManager *enemyg;
 
 #endif // SHAREDGAMEOBJECTS_H

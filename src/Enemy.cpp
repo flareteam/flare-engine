@@ -29,7 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyBehavior.h"
 #include "Enemy.h"
 #include "Hazard.h"
-#include "LootManager.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
 #include "SharedGameResources.h"
@@ -183,7 +182,7 @@ void Enemy::doRewards(int source_type) {
 		map->camp->setStatus(stats.defeat_status);
 	}
 
-	lootm->addEnemyLoot(this);
+	loot->addEnemyLoot(this);
 }
 
 void Enemy::InstantDeath() {
