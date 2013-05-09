@@ -29,12 +29,9 @@ using namespace std;
 
 EnemyGroupManager::EnemyGroupManager() {
 	parseEnemyFilesAndStore();
-	assert(enemyg == NULL);
-	enemyg = this;
 }
 
 EnemyGroupManager::~EnemyGroupManager() {
-	enemyg = NULL;
 }
 
 void EnemyGroupManager::parseEnemyFilesAndStore() {

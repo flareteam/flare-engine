@@ -39,6 +39,9 @@ public:
  */
 class EnemyGroupManager {
 public:
+	EnemyGroupManager();
+	~EnemyGroupManager();
+
 	/** To get a random enemy with the given characteristics
 	 *
 	 * @param category Enemy of the desired category
@@ -53,9 +56,6 @@ private:
 
 	/** Container to store enemy data */
 	std::map <std::string, std::vector<Enemy_Level> > _categories;
-
-	EnemyGroupManager();
-	~EnemyGroupManager();
 
 	void parseEnemyFilesAndStore();
 };

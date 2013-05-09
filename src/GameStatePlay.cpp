@@ -52,6 +52,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPCManager.h"
 #include "QuestLog.h"
 #include "WidgetLabel.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "FileParser.h"
@@ -98,6 +99,8 @@ GameStatePlay::GameStatePlay()
 	map->powers = powers;
 	pc->enemies = enemies;
 	enemies->pc = pc;
+
+	enemyg = new EnemyGroupManager();
 
 	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
@@ -965,6 +968,8 @@ GameStatePlay::~GameStatePlay() {
 	delete powers;
 
 	delete loading;
+
+	delete enemyg;
 
 	SDL_FreeSurface(loading_bg);
 }
