@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "Utils.h"
 
-#include <math.h>
-
 class Entity;
 class Hazard;
 class PowerManager;

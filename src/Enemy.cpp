@@ -34,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "PowerManager.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
+#include <math.h>
 
 using namespace std;
 

@@ -20,14 +20,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuManager
  */
 
-
 #pragma once
 #ifndef MENU_MANAGER_H
 #define MENU_MANAGER_H
 
 #include "CommonIncludes.h"
 #include "ItemManager.h"
-#include "WidgetTooltip.h"
 
 class Menu;
 class MenuInventory;
@@ -49,6 +47,7 @@ class CampaignManager;
 class ItemManager;
 class PowerManager;
 class StatBlock;
+class WidgetTooltip;
 
 const int DRAG_SRC_POWERS = 1;
 const int DRAG_SRC_INVENTORY = 2;

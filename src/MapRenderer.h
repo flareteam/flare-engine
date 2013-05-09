@@ -24,25 +24,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * This class is capable of rendering isometric and orthogonal maps.
  */
 
-
 #pragma once
 #ifndef MAP_RENDERER_H
 #define MAP_RENDERER_H
 
 #include "CommonIncludes.h"
-#include "Enemy.h"
 #include "GameStatePlay.h"
 #include "MapCollision.h"
 #include "Settings.h"
 #include "TileSet.h"
 #include "Utils.h"
+#include "StatBlock.h"
 #include "WidgetTooltip.h"
 
 #include <queue>
 
 class CampaignManager;
 class PowerManager;
-
 class FileParser;
 
 // TODO: Move these Map_* classes to its own file.

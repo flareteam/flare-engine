@@ -21,17 +21,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Holds the collection of hazards (active attacks, spells, etc) and handles group operations
  */
 
-
 #pragma once
 #ifndef EFFECT_MANAGER_H
 #define EFFECT_MANAGER_H
 
-#include "Animation.h"
 #include "CommonIncludes.h"
 #include "Hazard.h"
 #include "SharedResources.h"
 #include "Utils.h"
 
+class Animation;
 class Avatar;
 class EnemyManager;
 class Hazard;

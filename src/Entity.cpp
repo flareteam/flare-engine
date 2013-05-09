@@ -34,6 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsMath.h"
 
+#include <math.h>
+
 using namespace std;
 
 Entity::Entity(PowerManager *_powers, MapRenderer* _map)

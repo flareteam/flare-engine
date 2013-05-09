@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "Enemy.h"
 #include "Menu.h"
 #include "MenuEnemy.h"
 #include "SharedResources.h"

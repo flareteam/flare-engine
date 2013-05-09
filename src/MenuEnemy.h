@@ -21,15 +21,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of the Enemy info of the screen
  */
 
-
 #pragma once
 #ifndef MENU_ENEMY_H
 #define MENU_ENEMY_H
 
 #include "CommonIncludes.h"
-#include "Enemy.h"
 #include "Settings.h"
 #include "WidgetLabel.h"
+
+class Enemy;
 
 class MenuEnemy : public Menu {
 private:
