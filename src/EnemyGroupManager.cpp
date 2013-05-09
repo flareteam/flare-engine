@@ -19,27 +19,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyGroupManager.h"
 #include "FileParser.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 
+#include <cassert>
+
 using namespace std;
-
-
-EnemyGroupManager* EnemyGroupManager::_instance = 0;
-
 
 EnemyGroupManager::EnemyGroupManager() {
 	parseEnemyFilesAndStore();
+	assert(enemyg == NULL);
+	enemyg = this;
 }
 
 EnemyGroupManager::~EnemyGroupManager() {
-}
-
-EnemyGroupManager& EnemyGroupManager::instance() {
-	if (_instance == 0) {
-		_instance = new EnemyGroupManager;
-	}
-	return *(_instance);
+	enemyg = NULL;
 }
 
 void EnemyGroupManager::parseEnemyFilesAndStore() {

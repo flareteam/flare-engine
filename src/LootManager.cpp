@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "LootManager.h"
 #include "Menu.h"
 #include "MenuInventory.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsMath.h"
@@ -41,11 +42,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits>
 
 using namespace std;
-
-LootManager *lootManager = 0;
-LootManager *LootManager::getInstance() {
-	return lootManager;
-}
 
 LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero) {
 	items = _items;
@@ -113,11 +109,8 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 
 	full_msg = false;
 
-	if (!lootManager)
-		lootManager = this;
-	else
-		exit(25);
-	// TODO: make sure only one instance of the lootmanager is created.
+	assert(lootm == NULL);
+	lootm = this;
 }
 
 /**
@@ -564,6 +557,6 @@ LootManager::~LootManager() {
 	snd->unload(sfx_loot);
 	snd->unload(sfx_currency);
 
-	lootManager = 0;
+	lootm = 0;
 	delete tip;
 }

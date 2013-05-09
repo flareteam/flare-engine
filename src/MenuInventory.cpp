@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuInventory.h"
 #include "PowerManager.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
@@ -610,7 +611,7 @@ void MenuInventory::removeEquipped(int item) {
  */
 void MenuInventory::addCurrency(int count) {
 	currency += count;
-	LootManager::getInstance()->playCurrencySound();
+	lootm->playCurrencySound();
 }
 
 /**
@@ -626,7 +627,7 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
 	if( currency >= count) {
 		currency -= count;
 
-		LootManager::getInstance()->playCurrencySound();
+		lootm->playCurrencySound();
 		return true;
 	}
 	else {
@@ -654,7 +655,7 @@ bool MenuInventory::sell(ItemStack stack) {
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
 	currency += value;
-	LootManager::getInstance()->playCurrencySound();
+	lootm->playCurrencySound();
 	drag_prev_src = -1;
 	return true;
 }

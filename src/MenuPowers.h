@@ -113,7 +113,6 @@ private:
 	short id_by_powerIndex(short power_index);
 
 public:
-	static MenuPowers *getInstance();
 	MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons);
 	~MenuPowers();
 	void update();
@@ -132,5 +131,4 @@ public:
 	TabList tablist;
 
 };
-extern MenuPowers *menuPowers;
 #endif

@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsFileSystem.h"
@@ -103,7 +104,7 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 		bool success = false;
 
 		if (collider.is_empty(x, y)) {
-			Enemy_Level enemy_lev = EnemyGroupManager::instance().getRandomEnemy(g.category, g.levelmin, g.levelmax);
+			Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 			if (enemy_lev.type != "") {
 				Map_Enemy group_member = Map_Enemy(enemy_lev.type, Point(x, y));
 				enemies.push(group_member);

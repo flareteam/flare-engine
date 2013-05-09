@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "LootManager.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
 #include <math.h>
@@ -182,7 +183,7 @@ void Enemy::doRewards(int source_type) {
 		map->camp->setStatus(stats.defeat_status);
 	}
 
-	LootManager::getInstance()->addEnemyLoot(this);
+	lootm->addEnemyLoot(this);
 }
 
 void Enemy::InstantDeath() {

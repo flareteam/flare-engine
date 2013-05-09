@@ -24,8 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-ImageManager* ImageManager_instance = 0;
-
 ImageManager::ImageManager()
 {}
 

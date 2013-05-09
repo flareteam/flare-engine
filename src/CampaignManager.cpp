@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "LootManager.h"
 #include "MenuItemStorage.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
@@ -147,7 +148,7 @@ void CampaignManager::rewardItem(ItemStack istack) {
 void CampaignManager::rewardCurrency(int amount) {
 	*currency += amount;
 	addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
-	LootManager::getInstance()->playCurrencySound();
+	lootm->playCurrencySound();
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {

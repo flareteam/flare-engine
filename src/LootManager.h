@@ -83,7 +83,6 @@ private:
 	std::vector<const class Enemy*> enemiesDroppingLoot;
 
 public:
-	static LootManager *getInstance();
 	LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero);
 	LootManager(const LootManager &copy); // not implemented
 	~LootManager();
@@ -110,7 +109,5 @@ public:
 	int tooltip_margin; // pixels between loot drop center and label
 	bool full_msg;
 };
-
-extern LootManager *lootManager;
 
 #endif

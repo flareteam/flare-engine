@@ -31,7 +31,6 @@ public:
 	Enemy_Level() : level(0), rarity("common") {}
 };
 
-
 /**
  * class EnemyGroupManager
  *
@@ -40,9 +39,6 @@ public:
  */
 class EnemyGroupManager {
 public:
-	/** Get instance of the Singleton */
-	static EnemyGroupManager& instance();
-
 	/** To get a random enemy with the given characteristics
 	 *
 	 * @param category Enemy of the desired category
@@ -54,9 +50,6 @@ public:
 	Enemy_Level getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const;
 
 private:
-	/** Instance of the Singleton */
-	static EnemyGroupManager* _instance;
-
 
 	/** Container to store enemy data */
 	std::map <std::string, std::vector<Enemy_Level> > _categories;
