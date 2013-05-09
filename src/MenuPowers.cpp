@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "MenuPowers.h"
 #include "SharedResources.h"
+#include "SharedIncludes.h"
 #include "PowerManager.h"
 #include "Settings.h"
 #include "StatBlock.h"
@@ -34,9 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetSlot.h"
 #include "WidgetTooltip.h"
 
-#include <string>
 #include <sstream>
-#include <iostream>
 #include <climits>
 
 using namespace std;

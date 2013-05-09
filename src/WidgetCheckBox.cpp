@@ -20,8 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetCheckBox
  */
 
-#include <iostream>
-#include <string>
 #include <SDL.h>
 #include <SDL_image.h>
 

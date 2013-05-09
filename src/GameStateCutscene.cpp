@@ -18,9 +18,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateCutscene.h"
 #include "GameStatePlay.h"
 #include "FileParser.h"
+#include "SharedIncludes.h"
 #include "WidgetScrollBox.h"
 
-#include <iostream>
+
 using namespace std;
 
 Scene::Scene() : frame_counter(0)

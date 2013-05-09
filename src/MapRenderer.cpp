@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyGroupManager.h"
 #include "FileParser.h"
 #include "SharedResources.h"
+#include "SharedIncludes.h"
 #include "PowerManager.h"
 #include "StatBlock.h"
 #include "UtilsFileSystem.h"
@@ -30,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <stdint.h>
 
-#include <iostream>
 #include <limits>
 using namespace std;
 
