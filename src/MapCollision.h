@@ -87,6 +87,8 @@ public:
 	void block(int map_x, int map_y, bool is_ally);
 	void unblock(int map_x, int map_y);
 
+	Point nearest_valid_tile(Point SDL_reinterpret_cast, MOVEMENTTYPE movement_type, bool is_hero);
+
 	unsigned short colmap[256][256];
 	Point map_size;
 };
