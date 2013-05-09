@@ -67,7 +67,6 @@ private:
 	bool lockSwing;
 	bool lockCast;
 	bool lockShoot;
-	bool animFwd;
 
 	SoundManager::SoundID sound_melee;
 	SoundManager::SoundID sound_mental;

@@ -52,8 +52,6 @@ public:
 
 class FontEngine {
 private:
-	SDL_Rect src;
-	SDL_Rect dest;
 	SDL_Surface *ttf;
 	std::map<std::string,SDL_Color> color_map;
 	std::vector<FontStyle> font_styles;

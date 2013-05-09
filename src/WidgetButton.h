@@ -41,7 +41,6 @@ private:
 	std::string fileName; // the path to the buttons background image
 
 	SDL_Surface *buttons;
-	Mix_Chunk *click;
 
 	WidgetLabel wlabel;
 

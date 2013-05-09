@@ -37,7 +37,6 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
-	CampaignManager *camp;
 	MenuManager *menu;
 
 	SDL_Surface *portrait;
@@ -65,7 +64,7 @@ private:
 	WidgetScrollBox *textbox;
 
 public:
-	MenuTalker(MenuManager *menu,CampaignManager *camp);
+	MenuTalker(MenuManager *menu);
 	~MenuTalker();
 
 	NPC *npc;
