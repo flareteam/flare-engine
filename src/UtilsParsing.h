@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define UTILS_PARSING_H
 
 #include "CommonIncludes.h"
+#include <typeinfo>
 
 bool isInt(const std::string& s);
 std::string trim(const std::string& s, char c);
