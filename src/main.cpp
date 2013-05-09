@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 #include <cmath>
 #include <ctime>
-#include <algorithm>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>

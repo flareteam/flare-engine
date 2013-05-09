@@ -17,10 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <queue>
 #include <list>
-#include <string>
 #include <sstream>
-#include <iostream>
-#include <algorithm>
 
 #include "Settings.h"
 #include "SharedResources.h"

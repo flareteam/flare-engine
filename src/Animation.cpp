@@ -28,8 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Animation.h"
 
-#include <algorithm>
-#include <iostream>
 using namespace std;
 
 Animation::Animation(const std::string &_name, const std::string &_type, SDL_Surface *_sprite)

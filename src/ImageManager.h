@@ -19,8 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef __IMAGE_MANAGER__
 #define __IMAGE_MANAGER__
 
-#include <string>
-#include <vector>
+#include "SharedIncludes.h"
 
 #include <SDL_image.h>
 

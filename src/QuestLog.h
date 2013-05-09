@@ -26,8 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef QUEST_LOG_H
 #define QUEST_LOG_H
 
-#include <string>
-#include <vector>
+#include "SharedIncludes.h"
 #include "Utils.h"
 
 class CampaignManager;
@@ -50,8 +49,8 @@ public:
 	void load(const std::string& filename);
 	void logic();
 	void createQuestList();
-    bool newQuestNotification;
-    bool resetQuestNotification;
+	bool newQuestNotification;
+	bool resetQuestNotification;
 };
 
 #endif

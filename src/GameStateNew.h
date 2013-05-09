@@ -34,9 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 
-#include <string>
 #include <sstream>
-#include <vector>
+#include "SharedIncludes.h"
 
 #include "WidgetTooltip.h"
 

@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <vector>
+#include "SharedIncludes.h"
 #include "Animation.h"
 #include "BehaviorStandard.h"
 #include "Enemy.h"
@@ -50,7 +50,7 @@ void BehaviorStandard::logic() {
 	checkMove();
 	updateState();
 
-    fleeing = false;
+	fleeing = false;
 }
 
 /**
@@ -231,7 +231,7 @@ void BehaviorStandard::findTarget() {
 	else
 		los = false;
 
-    if(e->stats.effects.fear) fleeing = true;
+	if(e->stats.effects.fear) fleeing = true;
 }
 
 /**
@@ -361,10 +361,10 @@ void BehaviorStandard::checkMove() {
 				}
 			}
 
-            if(fleeing)
-                e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
-            else
-                e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+			if(fleeing)
+				e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
+			else
+				e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
 			e->stats.turn_ticks = 0;
 		}
 	}
@@ -403,7 +403,7 @@ void BehaviorStandard::checkMove() {
 	}
 
 	// re-block current space to allow correct movement
-    e->map->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
+	e->map->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
 
 }
 

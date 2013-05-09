@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetSlider
  */
 
-#include <algorithm>
 #include <iostream>
 #include <string>
 #include <SDL.h>

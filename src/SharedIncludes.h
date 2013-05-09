@@ -1,5 +1,5 @@
 /*
-Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Stefan Beller
 
 This file is part of FLARE.
 
@@ -15,46 +15,15 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-/**
- * class MenuHUDLog
- */
-
-
 #pragma once
-#ifndef MENU_HUD_LOG_H
-#define MENU_HUD_LOG_H
+#ifndef SHARED_INCLUDES
+#define SHARED_INCLUDES
 
-#include "Utils.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include "SharedIncludes.h"
-
-class MenuHUDLog : public Menu {
-private:
-
-	int calcDuration(const std::string& s);
-
-	std::vector<std::string> log_msg;
-	std::vector<int> msg_age;
-	std::vector<SDL_Surface*> msg_buffer;
-
-	int paragraph_spacing;
-
-	SDL_Color color_normal;
-
-public:
-
-	MenuHUDLog();
-	~MenuHUDLog();
-	void logic();
-	void render();
-	void add(const std::string& s);
-	void remove(int msg_index);
-	void clear();
-
-	Point list_area;
-};
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 
 #endif

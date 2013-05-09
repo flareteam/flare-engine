@@ -26,10 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-#include <fstream>
-#include <string>
-#include <map>
-#include <vector>
+#include "SharedIncludes.h"
 
 
 const int JUSTIFY_LEFT = 0;

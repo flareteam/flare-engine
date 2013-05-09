@@ -30,8 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "WidgetLabel.h"
 
-#include <string>
-#include <vector>
+#include "SharedIncludes.h"
 
 #include "Utils.h"
 

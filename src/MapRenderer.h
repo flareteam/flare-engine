@@ -41,9 +41,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 
-#include <string>
 #include <queue>
-#include <vector>
+#include "SharedIncludes.h"
 
 class CampaignManager;
 class PowerManager;

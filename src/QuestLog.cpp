@@ -27,12 +27,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuLog.h"
 #include "SharedResources.h"
+#include "SharedIncludes.h"
 #include "Settings.h"
 #include "FileParser.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
-#include <fstream>
 
 using namespace std;
 

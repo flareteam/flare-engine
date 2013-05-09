@@ -29,9 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 
-#include <algorithm>
 #include <cstdlib>
-#include <vector>
+#include "SharedIncludes.h"
 
 // collision tile types
 // The numbers 0..4 are the collision tiles as produced by tiled,

@@ -25,8 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_NPC_ACTIONS_H
 
 #include <SDL.h>
-#include <string>
-#include <vector>
+#include "SharedIncludes.h"
 
 class Action;
 class NPC;

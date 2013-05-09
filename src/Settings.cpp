@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Settings
  */
 
-#include <fstream>
 #include <cstring>
 #include <string>
 #include <typeinfo>

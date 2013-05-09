@@ -33,9 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <SDL_mixer.h>
 
 #include <map>
-#include <string>
 #include <stdint.h>
-#include <vector>
+#include "SharedIncludes.h"
 
 #define VENDOR_BUY 0
 #define VENDOR_SELL 1

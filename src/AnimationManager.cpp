@@ -17,9 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "SharedResources.h"
 
-#include <algorithm>
 #include <cassert>
-#include <string>
 #include <iostream>
 
 using namespace std;

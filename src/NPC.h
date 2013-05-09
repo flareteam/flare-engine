@@ -32,8 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
-#include <string>
-#include <vector>
+#include "SharedIncludes.h"
 
 class ItemManager;
 class MapRenderer;

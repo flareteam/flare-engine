@@ -31,8 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include <string>
-#include <vector>
+#include "SharedIncludes.h"
 
 /**
  * Describes a tile by its location \a src in the tileset sprite and
