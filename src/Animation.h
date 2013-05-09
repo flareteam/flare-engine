@@ -34,10 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <SDL_image.h>
 
-#include <algorithm>
 #include <string>
 #include <vector>
-#include <iostream>
 
 enum animation_type {
 	NONE       = 0,
@@ -52,7 +50,7 @@ protected:
 	const animation_type type;
 	SDL_Surface *sprite;
 
-    unsigned short number_frames; // how many ticks this animation lasts.
+	unsigned short number_frames; // how many ticks this animation lasts.
 	unsigned short cur_frame;     // counts up until reaching number_frames.
 
 	unsigned short cur_frame_index; // which frame in this animation is currently being displayed? range: 0..gfx.size()-1
@@ -109,30 +107,26 @@ public:
 	// return the Renderable of the current frame
 	Renderable getCurrentFrame(int direction);
 
-	bool isFirstFrame() { return cur_frame == 0; }
-	bool isLastFrame() { return cur_frame == number_frames - 1; }
-	bool isSecondLastFrame() { return cur_frame == number_frames - 2; }
+	bool isFirstFrame();
+	bool isLastFrame();
+	bool isSecondLastFrame();
 
-	bool isActiveFrame() { return (std::find(active_frames.begin(), active_frames.end(), cur_frame)!=active_frames.end()); }
+	bool isActiveFrame();
 
 	// in a looped animation returns how many times it's been played
 	// in a play once animation returns 1 when the animation is finished
-	int getTimesPlayed() { return times_played; }
+	int getTimesPlayed();
 
 	// resets to beginning of the animation
 	void reset();
 
-	std::string getName() { return name; }
+	std::string getName();
 
 	// a vector of indexes of gfx passed into.
 	// if { -1 } is passed, all frames are set to active.
 	void setActiveFrames(const std::vector<short> &_active_frames);
 
-	bool isCompleted() {
-		if (type == PLAY_ONCE && times_played > 0) return true;
-		else return false;
-	}
-
+	bool isCompleted();
 };
 
 #endif
