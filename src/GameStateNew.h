@@ -29,14 +29,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "GameState.h"
+#include "TooltipData.h"
 #include "WidgetLabel.h"
-#include "WidgetTooltip.h"
 
 class WidgetButton;
 class WidgetCheckBox;
 class WidgetInput;
 class WidgetLabel;
 class WidgetListBox;
+class WidgetTooltip;
 
 class GameStateNew : public GameState {
 private:

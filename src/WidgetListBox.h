@@ -26,10 +26,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Widget.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
 class WidgetLabel;
 class WidgetScrollBar;
+class WidgetTooltip;
 
 class WidgetListBox : public Widget {
 private:

@@ -27,13 +27,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define NPC_MANAGER_H
 
 #include "CommonIncludes.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
 class ItemManager;
 class LootManager;
 class MapRenderer;
 class StatBlock;
 class NPC;
+class WidgetTooltip;
 
 class NPCManager {
 private:

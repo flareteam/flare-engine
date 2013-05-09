@@ -28,10 +28,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "WidgetTooltip.h"
 
 #include <stdint.h>
-
 #include <limits>
+
 using namespace std;
 
 const int CLICK_RANGE = 3 * UNITS_PER_TILE; //for activating events

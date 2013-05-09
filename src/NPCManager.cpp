@@ -31,6 +31,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "LootManager.h"
 #include "StatBlock.h"
+#include "WidgetTooltip.h"
+
 #include <limits>
 
 using namespace std;

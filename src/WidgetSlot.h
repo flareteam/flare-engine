@@ -24,14 +24,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define WIDGET_SLOT_H
 
 #include "CommonIncludes.h"
+#include "InputState.h"
 #include "Widget.h"
-#include "WidgetTooltip.h"
 
 enum CLICK_TYPE {
 
 	NO_CLICK = 0,
 	CHECKED = 1,
-	ACTIVATED = 2,
+	ACTIVATED = 2
 };
 
 class WidgetSlot : public Widget {

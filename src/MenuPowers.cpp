@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
 #include <climits>
 

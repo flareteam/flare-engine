@@ -30,10 +30,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 #include "StatBlock.h"
+#include "TooltipData.h"
 #include "UtilsParsing.h"
 #include "WidgetSlot.h"
 #include "WidgetLabel.h"
-#include "WidgetTooltip.h"
 
 #include <climits>
 

@@ -44,6 +44,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPC.h"
 #include "PowerManager.h"
 #include "SharedResources.h"
+#include "WidgetTooltip.h"
 
 MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManager *_camp, ItemManager *_items)
 	: icons(NULL)

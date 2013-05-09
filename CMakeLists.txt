@@ -148,6 +148,7 @@ Set (FLARE_SOURCES
 	./src/StatBlock.cpp
 	./src/SoundManager.cpp
 	./src/TileSet.cpp
+	./src/TooltipData.cpp
 	./src/Utils.cpp
 	./src/UtilsDebug.cpp
 	./src/UtilsFileSystem.cpp

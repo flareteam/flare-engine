@@ -26,7 +26,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Widget.h"
 #include "WidgetLabel.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
+
+class WidgetTooltip;
 
 const int BUTTON_GFX_NORMAL = 0;
 const int BUTTON_GFX_PRESSED = 1;

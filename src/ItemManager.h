@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ITEM_MANAGER_H
 
 #include "CommonIncludes.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
 #include <stdint.h>
 

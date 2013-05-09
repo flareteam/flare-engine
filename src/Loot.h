@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "ItemManager.h"
 #include "Settings.h"
+#include "TooltipData.h"
 
 class Loot {
 private:

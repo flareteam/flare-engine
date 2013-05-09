@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetScrollBox.h"
 #include "WidgetSlider.h"
 #include "WidgetTabControl.h"
+#include "WidgetTooltip.h"
 
 using namespace std;
 

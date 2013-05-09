@@ -20,9 +20,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetButton
  */
 
-#include "WidgetButton.h"
-#include "SharedResources.h"
 #include "SDL_gfxBlitFunc.h"
+#include "SharedResources.h"
+#include "WidgetButton.h"
+#include "WidgetTooltip.h"
 
 using namespace std;
 

@@ -35,13 +35,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "TileSet.h"
 #include "Utils.h"
 #include "StatBlock.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
 #include <queue>
 
 class CampaignManager;
 class PowerManager;
 class FileParser;
+class WidgetTooltip;
 
 // TODO: Move these Map_* classes to its own file.
 

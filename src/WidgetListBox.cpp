@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBar.h"
+#include "WidgetTooltip.h"
 
 using namespace std;
 

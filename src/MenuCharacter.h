@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "WidgetLabel.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
 class StatBlock;
 class WidgetButton;

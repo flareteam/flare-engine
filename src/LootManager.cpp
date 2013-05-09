@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "WidgetTooltip.h"
 
 #include <limits>
 
