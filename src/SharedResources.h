@@ -30,7 +30,7 @@ Created and destroyed by main.cpp
 #ifndef SHARED_RESOURCES_H
 #define SHARED_RESOURCES_H
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "AnimationManager.h"
 #include "CombatText.h"
 #include "FontEngine.h"

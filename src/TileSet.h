@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 /**
  * Describes a tile by its location \a src in the tileset sprite and

@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 #include "Entity.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"

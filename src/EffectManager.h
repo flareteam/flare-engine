@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "Hazard.h"
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class Avatar;
 class EnemyManager;

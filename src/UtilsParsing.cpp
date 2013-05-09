@@ -19,7 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "UtilsParsing.h"
 #include "Settings.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include <cstdlib>
 #include <sstream>
 

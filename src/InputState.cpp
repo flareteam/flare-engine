@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "InputState.h"
 #include "Settings.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "SharedResources.h"
 #include "UtilsDebug.h"
 #include "UtilsParsing.h"

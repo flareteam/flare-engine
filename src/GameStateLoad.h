@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameState.h"
 #include "WidgetLabel.h"
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 #include <sstream>
 

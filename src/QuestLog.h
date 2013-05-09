@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef QUEST_LOG_H
 #define QUEST_LOG_H
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "Utils.h"
 
 class CampaignManager;

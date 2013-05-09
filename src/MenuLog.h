@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "WidgetLabel.h"
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 #include "Utils.h"
 

@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATECONFIG_H
 #define GAMESTATECONFIG_H
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "GameState.h"
 #include "WidgetTooltip.h"
 

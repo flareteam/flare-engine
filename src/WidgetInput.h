@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 #include "Widget.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class WidgetInput : public Widget {
 

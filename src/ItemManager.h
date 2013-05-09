@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 
 #include <stdint.h>
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 #define VENDOR_BUY 0
 #define VENDOR_SELL 1

@@ -20,7 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class GameState {
 public:

@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Entity;
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "Utils.h"
 
 class Animation;

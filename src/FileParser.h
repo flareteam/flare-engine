@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef FILE_PARSER_H
 #define FILE_PARSER_H
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class FileParser {
 private:

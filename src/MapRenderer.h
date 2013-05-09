@@ -38,7 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 
 #include <queue>
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class CampaignManager;
 class PowerManager;

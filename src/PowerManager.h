@@ -34,7 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <queue>
 #include <cassert>
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class Animation;
 class AnimationSet;

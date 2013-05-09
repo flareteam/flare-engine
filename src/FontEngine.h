@@ -23,7 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 #include <SDL_ttf.h>
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 
 const int JUSTIFY_LEFT = 0;

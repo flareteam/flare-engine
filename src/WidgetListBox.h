@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetScrollBar.h"
 #include "WidgetTooltip.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class WidgetListBox : public Widget {
 private:

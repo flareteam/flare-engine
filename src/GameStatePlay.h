@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "GameState.h"
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class Avatar;
 class CampaignManager;

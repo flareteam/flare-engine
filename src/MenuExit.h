@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Menu.h"
 #include "WidgetButton.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class MenuExit : public Menu {
 protected:

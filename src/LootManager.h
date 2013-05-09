@@ -35,7 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Loot.h"
 #include "ItemManager.h"
 #include "Settings.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class EnemyManager;
 class MapRenderer;

@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 
 #include <sstream>
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 #include "WidgetTooltip.h"
 

@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 typedef struct Element{
 	std::string name;

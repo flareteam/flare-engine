@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class InputState;
 class ItemManager;

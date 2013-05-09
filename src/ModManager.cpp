@@ -19,7 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 using namespace std;
 
 

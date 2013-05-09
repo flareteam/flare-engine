@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Utils.h"
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class MenuHUDLog : public Menu {
 private:

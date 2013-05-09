@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemStorage.h"
 #include "Utils.h"
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class ItemManager;
 class MapRenderer;

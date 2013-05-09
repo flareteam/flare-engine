@@ -20,7 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENEMYGROUPMANAGER_H
 #define ENEMYGROUPMANAGER_H
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 
 class Enemy_Level {

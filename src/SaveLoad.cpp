@@ -40,7 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuTalker.h"
 #include "PowerManager.h"
 #include "Settings.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include <sstream>

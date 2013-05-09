@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef WIDGET_TOOLTIP_H
 #define WIDGET_TOOLTIP_H
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "SharedResources.h"
 #include "Utils.h"
 

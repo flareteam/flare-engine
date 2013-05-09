@@ -22,7 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SDL_gfxBlitFunc.h"
 #include "FontEngine.h"
 #include "FileParser.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"

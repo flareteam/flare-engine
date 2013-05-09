@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Enemy.h"
 #include "Settings.h"
 #include "WidgetLabel.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 class MenuEnemy : public Menu {
 private:

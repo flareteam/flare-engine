@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "Animation.h"
 #include "BehaviorStandard.h"
 #include "Enemy.h"

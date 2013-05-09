@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 #include <stdint.h>
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 
 const std::string GLOBAL_VIRTUAL_CHANNEL = "__global__";
 

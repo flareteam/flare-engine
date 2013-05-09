@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuInventory.h"
 #include "SharedResources.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "UtilsParsing.h"
 #include "UtilsMath.h"
 #include "Utils.h"

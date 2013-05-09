@@ -23,7 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Widget.h"
 #include "WidgetCheckBox.h"
-#include "SharedIncludes.h"
+#include "CommonIncludes.h"
 #include "SharedResources.h"
 #include "SDL_gfxBlitFunc.h"
 
