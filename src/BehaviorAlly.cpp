@@ -19,7 +19,7 @@ void BehaviorAlly::findTarget() {
 
 	// check distance and line of sight between minion and hero
 	if (e->stats.hero_alive)
-		hero_dist = e->getDistance(e->stats.hero_pos);
+		hero_dist = calcDist(e->stats.pos, e->stats.hero_pos);
 	else
 		hero_dist = 0;
 
@@ -39,7 +39,7 @@ void BehaviorAlly::findTarget() {
 
 			//now work out the distance to the enemy and compare it to the distance to the current targer (we want to target the closest enemy)
 			if(enemies_in_combat) {
-				int enemy_dist = e->getDistance(enemy->stats.pos);
+				int enemy_dist = calcDist(e->stats.pos, enemy->stats.pos);
 				if(enemy_dist < target_dist) {
 					pursue_pos.x = enemy->stats.pos.x;
 					pursue_pos.y = enemy->stats.pos.y;
@@ -50,7 +50,7 @@ void BehaviorAlly::findTarget() {
 				//minion is not already chasig another enemy so chase this one
 				pursue_pos.x = enemy->stats.pos.x;
 				pursue_pos.y = enemy->stats.pos.y;
-				target_dist = e->getDistance(enemy->stats.pos);
+				target_dist = calcDist(e->stats.pos, enemy->stats.pos);
 			}
 
 			e->stats.in_combat = true;
@@ -93,7 +93,7 @@ void BehaviorAlly::findTarget() {
 		}
 	}
 
-    if(e->stats.effects.fear) fleeing = true;
+	if(e->stats.effects.fear) fleeing = true;
 
 }
 
