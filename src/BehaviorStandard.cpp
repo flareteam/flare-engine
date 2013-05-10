@@ -50,7 +50,7 @@ void BehaviorStandard::logic() {
 	checkMove();
 	updateState();
 
-    fleeing = false;
+	fleeing = false;
 }
 
 /**
@@ -153,7 +153,7 @@ void BehaviorStandard::findTarget() {
 
 	// check distance and line of sight between enemy and hero
 	if (e->stats.hero_alive)
-		hero_dist = e->getDistance(e->stats.hero_pos);
+		hero_dist = calcDist(e->stats.pos, e->stats.hero_pos);
 	else
 		hero_dist = 0;
 
@@ -207,8 +207,8 @@ void BehaviorStandard::findTarget() {
 			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 				if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally) {
 					//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
-					int ally_dist = e->getDistance(enemies->enemies[i]->stats.pos);
-					if(ally_dist < target_dist) {
+					int ally_dist = calcDist(e->stats.pos, enemies->enemies[i]->stats.pos);
+					if (ally_dist < target_dist) {
 						pursue_pos.x = enemies->enemies[i]->stats.pos.x;
 						pursue_pos.y = enemies->enemies[i]->stats.pos.y;
 						target_dist = ally_dist;
@@ -231,7 +231,7 @@ void BehaviorStandard::findTarget() {
 	else
 		los = false;
 
-    if(e->stats.effects.fear) fleeing = true;
+	if(e->stats.effects.fear) fleeing = true;
 }
 
 /**
@@ -361,10 +361,10 @@ void BehaviorStandard::checkMove() {
 				}
 			}
 
-            if(fleeing)
-                e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
-            else
-                e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+			if(fleeing)
+				e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
+			else
+				e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
 			e->stats.turn_ticks = 0;
 		}
 	}
@@ -403,7 +403,7 @@ void BehaviorStandard::checkMove() {
 	}
 
 	// re-block current space to allow correct movement
-    e->map->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
+	e->map->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
 
 }
 
