@@ -201,6 +201,8 @@ void setPaths() {
 	PATH_CONF = "config";
 	PATH_USER = "saves";
 	PATH_DATA = "";
+	PATH_DEFAULT_USER = "";
+	PATH_DEFAULT_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
@@ -217,6 +219,8 @@ void setPaths() {
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
+	PATH_DEFAULT_USER = "PROGDIR:";
+	PATH_DEFAULT_DATA = "PROGDIR:";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
@@ -256,9 +260,12 @@ void setPaths() {
 	if (getenv("XDG_DATA_HOME") != NULL) {
 		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
 		createDir(PATH_USER);
+		PATH_DEFAULT_USER = PATH_USER + DEFAULT_FOLDER + "/";
 		PATH_USER += GAME_FOLDER + "/";
 		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
+		createDir(PATH_DEFAULT_USER);
+		createDir(PATH_DEFAULT_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -268,129 +275,17 @@ void setPaths() {
 		createDir(PATH_USER);
 		PATH_USER += "flare/";
 		createDir(PATH_USER);
+		PATH_DEFAULT_USER = PATH_USER + DEFAULT_FOLDER + "/";
 		PATH_USER += GAME_FOLDER + "/";
 		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
+		createDir(PATH_DEFAULT_USER);
+		createDir(PATH_DEFAULT_USER + "mods/");
 	}
 	// ./saves/
 	else {
 		PATH_USER = "./saves/";
 		createDir(PATH_USER);
-	}
-
-	// data folder
-	// while PATH_CONF and PATH_USER are created if not found,
-	// PATH_DATA must already have the game data for the game to work.
-	// in most releases the data will be in the same folder as the executable
-	// - Windows apps are released as a simple folder
-	// - OSX apps are released in a .app folder
-	// Official linux distros might put the executable and data files
-	// in a more standard location.
-
-	// NOTE: from here on out, the function exits early when the data dir is found
-
-	// if the user specified a data path, try to use it
-	if (dirExists(CUSTOM_PATH_DATA)) {
-		PATH_DATA = CUSTOM_PATH_DATA;
-		return;
-	}
-	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
-
-	// Check for the local data before trying installed ones.
-	if (dirExists("./mods")) {
-		PATH_DATA = "./";
-		return;
-	}
-
-	// check $XDG_DATA_DIRS options
-	// a list of directories in preferred order separated by :
-	if (getenv("XDG_DATA_DIRS") != NULL) {
-		string pathlist = (string)getenv("XDG_DATA_DIRS");
-		string pathtest;
-		pathtest = eatFirstString(pathlist,':');
-		while (pathtest != "") {
-			PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
-			if (dirExists(PATH_DATA)) return; // NOTE: early exit
-			pathtest = eatFirstString(pathlist,':');
-		}
-	}
-
-#if defined DATA_INSTALL_DIR
-	PATH_DATA = DATA_INSTALL_DIR "/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
-#endif
-
-	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	PATH_DATA = "/usr/local/share/flare/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
-
-	PATH_DATA = "/usr/share/flare/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
-
-	// check "games" variants of these
-	PATH_DATA = "/usr/local/share/games/flare/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
-
-	PATH_DATA = "/usr/share/games/flare/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
-
-	// finally assume the local folder
-	PATH_DATA = "./";
-}
-#endif
-
-static ConfigEntry * getConfigEntry(const char * name) {
-
-	for (int i = 0; i < config_size; i++) {
-		if (std::strcmp(config[i].name, name) == 0) return config + i;
-	}
-	return NULL;
-}
-
-/**
- * Set the default mod path
- * PATH_DEFAULT_DATA is similar to PATH_DATA, except for the default game
- * PATH_DEFAULT_USER is similar to PATH_USER, except for the default game
- */
-
-#ifdef _WIN32
-// Windows paths
-void setDefaultPath() {
-	PATH_DEFAULT_USER = "";
-	PATH_DEFAULT_DATA = "";
-}
-#elif __amigaos4__
-// AmigaOS paths
-void setDefaultPath() {
-	PATH_DEFAULT_USER = "PROGDIR:";
-	PATH_DEFAULT_DATA = "PROGDIR:";
-}
-#else
-void setDefaultPath() {
-
-	// set user path (save games)
-	// $XDG_DATA_HOME/flare/
-	if (getenv("XDG_DATA_HOME") != NULL) {
-		PATH_DEFAULT_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
-		createDir(PATH_DEFAULT_USER);
-		PATH_DEFAULT_USER += DEFAULT_FOLDER + "/";
-		createDir(PATH_DEFAULT_USER);
-		createDir(PATH_DEFAULT_USER + "mods/");
-	}
-	// $HOME/.local/share/flare/
-	else if (getenv("HOME") != NULL) {
-		PATH_DEFAULT_USER = (string)getenv("HOME") + "/.local/";
-		createDir(PATH_DEFAULT_USER);
-		PATH_DEFAULT_USER += "share/";
-		createDir(PATH_DEFAULT_USER);
-		PATH_DEFAULT_USER += "flare/";
-		createDir(PATH_DEFAULT_USER);
-		PATH_DEFAULT_USER += DEFAULT_FOLDER + "/";
-		createDir(PATH_DEFAULT_USER);
-		createDir(PATH_DEFAULT_USER + "mods/");
-	}
-	// ./saves/
-	else {
 		PATH_DEFAULT_USER = "./saves/";
 		createDir(PATH_DEFAULT_USER);
 	}
@@ -404,19 +299,23 @@ void setDefaultPath() {
 	// Official linux distros might put the executable and data files
 	// in a more standard location.
 
-	// NOTE: from here on out, the function exits early when the data dir is found
+	// these flags are set to true when a valid directory is found
+	bool path_data = false;
+	bool path_default_data = false;
 
 	// if the user specified a data path, try to use it
 	if (dirExists(CUSTOM_PATH_DATA)) {
-		PATH_DEFAULT_DATA = CUSTOM_PATH_DATA;
-		return;
+		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
+		if (!path_default_data) PATH_DEFAULT_DATA = CUSTOM_PATH_DATA;
+		path_data = path_default_data = true;
 	}
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
-		PATH_DEFAULT_DATA = "./";
-		return;
+		if (!path_data) PATH_DATA = "./";
+		if (!path_default_data) PATH_DEFAULT_DATA = "./";
+		path_data = path_default_data = true;
 	}
 
 	// check $XDG_DATA_DIRS options
@@ -426,35 +325,67 @@ void setDefaultPath() {
 		string pathtest;
 		pathtest = eatFirstString(pathlist,':');
 		while (pathtest != "") {
-			PATH_DEFAULT_DATA = pathtest + "/flare/" + DEFAULT_FOLDER + "/";
-			if (dirExists(PATH_DEFAULT_DATA)) return; // NOTE: early exit
+			if (!path_data) {
+				PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
+				if (dirExists(PATH_DATA)) path_data = true;
+			}
+			if (!path_default_data) {
+				PATH_DEFAULT_DATA = pathtest + "/flare/" + DEFAULT_FOLDER + "/";
+				if (dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
+			}
+			if (path_data && path_default_data) break;
 			pathtest = eatFirstString(pathlist,':');
 		}
 	}
 
 #if defined DATA_INSTALL_DIR
-	PATH_DEFAULT_DATA = DATA_INSTALL_DIR "/" + DEFAULT_FOLDER + "/";
-	if (dirExists(PATH_DEFAULT_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = DATA_INSTALL_DIR "/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	PATH_DEFAULT_DATA = "/usr/local/share/flare/" + DEFAULT_FOLDER + "/";
-	if (dirExists(PATH_DEFAULT_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = "/usr/local/share/flare/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/local/share/flare/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
-	PATH_DEFAULT_DATA = "/usr/share/flare/" + DEFAULT_FOLDER + "/";
-	if (dirExists(PATH_DEFAULT_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = "/usr/share/flare/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/share/flare/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// check "games" variants of these
-	PATH_DEFAULT_DATA = "/usr/local/share/games/flare/" + DEFAULT_FOLDER + "/";
-	if (dirExists(PATH_DEFAULT_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/local/share/games/flare/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
-	PATH_DEFAULT_DATA = "/usr/share/games/flare/" + DEFAULT_FOLDER + "/";
-	if (dirExists(PATH_DEFAULT_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = "/usr/share/games/flare/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/share/games/flare/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// finally assume the local folder
-	PATH_DEFAULT_DATA = "./";
+	if (!path_data) {
+		PATH_DATA = "./";
+		path_data = true;
+	}
+	if (!path_default_data) {
+		PATH_DEFAULT_DATA = "./";
+		path_default_data = true;
+	}
 }
 #endif
+
+static ConfigEntry * getConfigEntry(const char * name) {
+
+	for (int i = 0; i < config_size; i++) {
+		if (std::strcmp(config[i].name, name) == 0) return config + i;
+	}
+	return NULL;
+}
 
 static ConfigEntry * getConfigEntry(const std::string & name) {
 	return getConfigEntry(name.c_str());
