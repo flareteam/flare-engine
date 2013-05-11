@@ -19,21 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuLog
  */
 
-
 #pragma once
 #ifndef MENU_LOG_H
 #define MENU_LOG_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
-
-#include <string>
-#include <vector>
-
-#include "Utils.h"
 
 class WidgetButton;
 class WidgetScrollBox;

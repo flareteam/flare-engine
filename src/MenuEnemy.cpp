@@ -21,6 +21,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of the Enemy bar on the HUD
  */
 
+#include "CommonIncludes.h"
+#include "Enemy.h"
 #include "Menu.h"
 #include "MenuEnemy.h"
 #include "SharedResources.h"
@@ -29,11 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-#include <string>
-#include <sstream>
-
 using namespace std;
-
 
 MenuEnemy::MenuEnemy() {
 	custom_text_pos = false;

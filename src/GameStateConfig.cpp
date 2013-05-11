@@ -24,22 +24,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle game Settings Menu
  */
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStateConfig.h"
 #include "GameStateTitle.h"
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
-#include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
+#include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBox.h"
 #include "WidgetSlider.h"
 #include "WidgetTabControl.h"
-
-#include <sstream>
+#include "WidgetTooltip.h"
 
 using namespace std;
 

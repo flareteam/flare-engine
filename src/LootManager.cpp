@@ -24,29 +24,24 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
-#include "AnimationSet.h"
 #include "AnimationManager.h"
-
+#include "AnimationSet.h"
+#include "CommonIncludes.h"
 #include "EnemyManager.h"
 #include "FileParser.h"
 #include "LootManager.h"
 #include "Menu.h"
 #include "MenuInventory.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
-#include "UtilsParsing.h"
-#include "UtilsMath.h"
 #include "Utils.h"
+#include "UtilsMath.h"
+#include "UtilsParsing.h"
+#include "WidgetTooltip.h"
 
-#include <sstream>
-#include <iostream>
 #include <limits>
 
 using namespace std;
-
-LootManager *lootManager = 0;
-LootManager *LootManager::getInstance() {
-	return lootManager;
-}
 
 LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero) {
 	items = _items;
@@ -113,12 +108,6 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 	loadGraphics();
 
 	full_msg = false;
-
-	if (!lootManager)
-		lootManager = this;
-	else
-		exit(25);
-	// TODO: make sure only one instance of the lootmanager is created.
 }
 
 /**
@@ -565,6 +554,5 @@ LootManager::~LootManager() {
 	snd->unload(sfx_loot);
 	snd->unload(sfx_currency);
 
-	lootManager = 0;
 	delete tip;
 }

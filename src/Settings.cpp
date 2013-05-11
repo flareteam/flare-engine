@@ -21,13 +21,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Settings
  */
 
-#include <fstream>
 #include <cstring>
-#include <string>
 #include <typeinfo>
 #include <cmath>
 using namespace std;
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "Settings.h"
 #include "Utils.h"

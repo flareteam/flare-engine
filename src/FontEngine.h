@@ -15,22 +15,14 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-
 #pragma once
 #ifndef FONT_ENGINE_H
 #define FONT_ENGINE_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
 #include <SDL_ttf.h>
-
-#include <fstream>
-#include <string>
-#include <map>
-#include <vector>
-
 
 const int JUSTIFY_LEFT = 0;
 const int JUSTIFY_RIGHT = 1;
@@ -60,8 +52,6 @@ public:
 
 class FontEngine {
 private:
-	SDL_Rect src;
-	SDL_Rect dest;
 	SDL_Surface *ttf;
 	std::map<std::string,SDL_Color> color_map;
 	std::vector<FontStyle> font_styles;

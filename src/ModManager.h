@@ -22,16 +22,13 @@ ModManager maintains a list of active mods and provides functions for checking
 mods in priority order when loading data files.
 */
 
-
 #pragma once
 #ifndef MOD_MANAGER_H
 #define MOD_MANAGER_H
 
 #define FALLBACK_MOD "default"
 
-#include <string>
-#include <map>
-#include <vector>
+#include "CommonIncludes.h"
 
 class ModManager {
 private:

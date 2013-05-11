@@ -29,7 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 #include <cstdio>
-#include <iostream>
 
 using namespace std;
 

@@ -21,13 +21,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Settings
  */
 
-
 #pragma once
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <string>
-#include <vector>
+#include "CommonIncludes.h"
 
 typedef struct Element{
 	std::string name;
@@ -184,6 +182,5 @@ void loadMiscSettings();
 bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
-
 
 #endif

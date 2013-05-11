@@ -15,12 +15,12 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "GameStateCutscene.h"
 #include "GameStatePlay.h"
 #include "FileParser.h"
 #include "WidgetScrollBox.h"
 
-#include <iostream>
 using namespace std;
 
 Scene::Scene() : frame_counter(0)

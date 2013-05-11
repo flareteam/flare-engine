@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the config, display, and usage of the 0-9 hotkeys, mouse buttons, and menu calls
  */
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
@@ -29,17 +30,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 #include "StatBlock.h"
+#include "TooltipData.h"
 #include "UtilsParsing.h"
 #include "WidgetSlot.h"
 #include "WidgetLabel.h"
-#include "WidgetTooltip.h"
 
-#include <string>
-#include <sstream>
 #include <climits>
 
 using namespace std;
-
 
 MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surface *_icons) {
 	powers = _powers;

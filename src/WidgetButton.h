@@ -19,21 +19,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetButton
  */
 
-
 #pragma once
 #ifndef WIDGET_BUTTON_H
 #define WIDGET_BUTTON_H
 
+#include "CommonIncludes.h"
 #include "Widget.h"
 #include "WidgetLabel.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
-
+class WidgetTooltip;
 
 const int BUTTON_GFX_NORMAL = 0;
 const int BUTTON_GFX_PRESSED = 1;
@@ -46,7 +41,6 @@ private:
 	std::string fileName; // the path to the buttons background image
 
 	SDL_Surface *buttons;
-	Mix_Chunk *click;
 
 	WidgetLabel wlabel;
 

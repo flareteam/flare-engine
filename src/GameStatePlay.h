@@ -23,18 +23,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Also handles message passing between child objects, often to avoid circular dependencies.
  */
 
-
 #pragma once
 #ifndef GAMESTATEPLAY_H
 #define GAMESTATEPLAY_H
 
+#include "CommonIncludes.h"
 #include "GameState.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <string>
-#include <vector>
 
 class Avatar;
 class CampaignManager;
@@ -42,7 +36,6 @@ class Enemy;
 class EnemyManager;
 class HazardManager;
 class ItemManager;
-class LootManager;
 class MapRenderer;
 class MenuManager;
 class NPCManager;
@@ -81,7 +74,6 @@ private:
 	EnemyManager *enemies;
 	HazardManager *hazards;
 	MenuManager *menu;
-	LootManager *loot;
 	NPCManager *npcs;
 	QuestLog *quests;
 

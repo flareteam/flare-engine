@@ -28,12 +28,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStatePlay.h"
 #include "MapRenderer.h"
-#include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
+#include "Menu.h"
 #include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MenuStash.h"
@@ -42,9 +43,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include <fstream>
-#include <iostream>
-#include <sstream>
 
 using namespace std;
 

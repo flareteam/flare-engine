@@ -17,21 +17,23 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include "MapRenderer.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
 #include "EnemyGroupManager.h"
 #include "FileParser.h"
-#include "SharedResources.h"
+#include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SharedGameResources.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "WidgetTooltip.h"
 
 #include <stdint.h>
-
-#include <iostream>
 #include <limits>
+
 using namespace std;
 
 const int CLICK_RANGE = 3 * UNITS_PER_TILE; //for activating events
@@ -102,7 +104,7 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 		bool success = false;
 
 		if (collider.is_empty(x, y)) {
-			Enemy_Level enemy_lev = EnemyGroupManager::instance().getRandomEnemy(g.category, g.levelmin, g.levelmax);
+			Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 			if (enemy_lev.type != "") {
 				Map_Enemy group_member = Map_Enemy(enemy_lev.type, Point(x, y));
 				enemies.push(group_member);

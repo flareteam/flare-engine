@@ -28,9 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorAlly.h"
 #include "Avatar.h"
 
-#include <iostream>
-#include <algorithm>
-
 using namespace std;
 
 EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
@@ -41,8 +38,8 @@ EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
 	, hero_direction(0)
 	, hero_alive(true)
 	, hero_stealth(0)
-    , player_blocked(false)
-    , player_blocked_ticks(0) {
+	, player_blocked(false)
+	, player_blocked_ticks(0) {
 
 	hero_pos.x = hero_pos.y = -1;
 	handleNewMap();
@@ -282,11 +279,11 @@ void EnemyManager::handlePartyBuff() {
  */
 void EnemyManager::logic() {
 
-    if(player_blocked){
-        player_blocked_ticks--;
-        if(player_blocked_ticks <= 0)
-            player_blocked = false;
-    }
+	if(player_blocked){
+		player_blocked_ticks--;
+		if(player_blocked_ticks <= 0)
+			player_blocked = false;
+	}
 
 	handleSpawn();
 

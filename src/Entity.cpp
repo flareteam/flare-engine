@@ -26,14 +26,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
+#include "Avatar.h"
+#include "CommonIncludes.h"
 #include "Entity.h"
 #include "MapRenderer.h"
-#include "SharedResources.h"
 #include "PowerManager.h"
-#include "Avatar.h"
+#include "SharedResources.h"
 #include "UtilsMath.h"
 
-#include <iostream>
+#include <math.h>
 
 using namespace std;
 
