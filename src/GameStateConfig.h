@@ -1,7 +1,7 @@
 /*
-Copyright © 2012 Clint Bellanger
-Copyright © 2012 davidriod
-Copyright © 2012 Igor Paliychuk
+Copyright Â© 2012 Clint Bellanger
+Copyright Â© 2012 davidriod
+Copyright Â© 2012 Igor Paliychuk
 
 This file is part of FLARE.
 

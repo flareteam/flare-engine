@@ -491,8 +491,7 @@ SDL_Color MenuCharacter::bonusColor(int stat) {
 void MenuCharacter::logic() {
 	if (!visible) return;
 
-	if (NO_MOUSE)
-	{
+	if (NO_MOUSE) {
 		tablist.logic();
 	}
 	if (closeButton->checkClick()) {
@@ -510,23 +509,19 @@ void MenuCharacter::logic() {
 	skill_points = (stats->level * stats->stat_points_per_level) - spent;
 
 	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points && stats->humanoid ) {
-		if (stats->physical_character < stats->max_points_per_stat && show_upgrade[0])
-		{
+		if (stats->physical_character < stats->max_points_per_stat && show_upgrade[0]) {
 			upgradeButton[0]->enabled = true;
 			tablist.add(upgradeButton[0]);
 		}
-		if (stats->mental_character  < stats->max_points_per_stat && show_upgrade[1])
-		{
+		if (stats->mental_character  < stats->max_points_per_stat && show_upgrade[1]) {
 			upgradeButton[1]->enabled = true;
 			tablist.add(upgradeButton[1]);
 		}
-		if (stats->offense_character < stats->max_points_per_stat && show_upgrade[2])
-		{
+		if (stats->offense_character < stats->max_points_per_stat && show_upgrade[2]) {
 			upgradeButton[2]->enabled = true;
 			tablist.add(upgradeButton[2]);
 		}
-		if (stats->defense_character < stats->max_points_per_stat && show_upgrade[3])
-		{
+		if (stats->defense_character < stats->max_points_per_stat && show_upgrade[3]) {
 			upgradeButton[3]->enabled = true;
 			tablist.add(upgradeButton[3]);
 		}

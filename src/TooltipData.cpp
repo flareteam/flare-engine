@@ -56,7 +56,8 @@ void TooltipData::addText(const std::string &text, SDL_Color color) {
 					if (lines.back() == "") lines.back() += ' ';
 					lines.push_back("");
 					colors.push_back(color);
-				} else {
+				}
+				else {
 					lines.back() += text[j];
 				}
 			}

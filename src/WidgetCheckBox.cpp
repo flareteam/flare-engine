@@ -1,6 +1,6 @@
 /*
-Copyright © 2012 Clint Bellanger
-Copyright © 2012 davidriod
+Copyright Â© 2012 Clint Bellanger
+Copyright Â© 2012 davidriod
 
 This file is part of FLARE.
 

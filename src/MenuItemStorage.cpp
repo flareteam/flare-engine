@@ -41,8 +41,7 @@ void MenuItemStorage::init(int _slot_number, ItemManager *_items, SDL_Rect _area
 	ItemStorage::init( _slot_number, _items);
 	icons = items->getIcons();
 	grid_area = _area;
-	for (int i = 0; i < _slot_number; i++)
-	{
+	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot(icons);
 		slots.push_back(slot);
 	}
@@ -63,8 +62,7 @@ void MenuItemStorage::init(int _slot_number, ItemManager *_items, SDL_Rect _area
 void MenuItemStorage::init(int _slot_number, ItemManager *_items, vector<SDL_Rect> _area, vector<string> _slot_type) {
 	ItemStorage::init( _slot_number, _items);
 	icons = items->getIcons();
-	for (int i = 0; i < _slot_number; i++)
-	{
+	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot(icons);
 		slot->pos = _area[i];
 		slots.push_back(slot);
@@ -84,13 +82,11 @@ void MenuItemStorage::loadGraphics() {
 
 void MenuItemStorage::render() {
 	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item > 0)
-		{
+		if (storage[i].item > 0) {
 			slots[i]->setIcon(items->items[storage[i].item].icon);
 			slots[i]->setAmount(storage[i].quantity, items->items[storage[i].item].max_quantity);
 		}
-		else
-		{
+		else {
 			slots[i]->setIcon(-1);
 		}
 		slots[i]->render();

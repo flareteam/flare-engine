@@ -152,12 +152,12 @@ string ModManager::locate(const string& filename) {
 	return PATH_DATA + filename;
 }
 
-void amendPathToVector(const string &path, std::vector<std::string> &vec)
-{
+void amendPathToVector(const string &path, std::vector<std::string> &vec) {
 	if (pathExists(path)) {
 		if (isDirectory(path)) {
 			getFileList(path, "txt", vec);
-		} else {
+		}
+		else {
 			vec.push_back(path);
 		}
 	}

@@ -809,13 +809,11 @@ void GameStateConfig::update () {
 
 void GameStateConfig::logic () {
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
-		if (input_scrollbox->in_focus && !input_confirm->visible)
-		{
+		if (input_scrollbox->in_focus && !input_confirm->visible) {
 			tabControl->setActiveTab(4);
 			break;
 		}
-		else if (child_widget[i]->in_focus)
-		{
+		else if (child_widget[i]->in_focus) {
 			tabControl->setActiveTab(optiontab[i]);
 			break;
 		}

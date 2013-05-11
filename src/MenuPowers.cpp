@@ -370,7 +370,8 @@ void MenuPowers::logic() {
 					power_cell[i].passive_on = false;
 					stats->refresh_stats = true;
 				}
-			} else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
+			}
+			else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
 				stats->powers_passive.push_back(power_cell[i].id);
 				power_cell[i].passive_on = true;
 				// for passives without special triggers, we need to trigger them here
@@ -386,8 +387,7 @@ void MenuPowers::logic() {
 
 	if (!visible) return;
 
-	if (NO_MOUSE)
-	{
+	if (NO_MOUSE) {
 		tablist.logic();
 	}
 

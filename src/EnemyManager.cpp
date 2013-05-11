@@ -220,7 +220,7 @@ void EnemyManager::handleSpawn() {
 		loadSounds(e->stats.sfx_prefix);
 
 
-		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally){
+		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
 			e->stats.pos.x = espawn.pos.x;
 			e->stats.pos.y = espawn.pos.y;
 		}
@@ -279,7 +279,7 @@ void EnemyManager::handlePartyBuff() {
  */
 void EnemyManager::logic() {
 
-	if(player_blocked){
+	if(player_blocked) {
 		player_blocked_ticks--;
 		if(player_blocked_ticks <= 0)
 			player_blocked = false;
