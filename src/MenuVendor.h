@@ -19,18 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuVendor
  */
 
-
 #pragma once
 #ifndef MENU_VENDOR_H
 #define MENU_VENDOR_H
 
+#include "CommonIncludes.h"
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <string>
 
 class InputState;
 class ItemStorage;

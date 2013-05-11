@@ -44,6 +44,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPC.h"
 #include "PowerManager.h"
 #include "SharedResources.h"
+#include "WidgetTooltip.h"
 
 MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManager *_camp, ItemManager *_items)
 	: icons(NULL)
@@ -103,7 +104,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	menus.push_back(enemy); // menus[6]
 	vendor = new MenuVendor(items, stats);
 	menus.push_back(vendor); // menus[7]
-	talker = new MenuTalker(this, camp);
+	talker = new MenuTalker(this);
 	menus.push_back(talker); // menus[8]
 	exit = new MenuExit();
 	menus.push_back(exit); // menus[9]

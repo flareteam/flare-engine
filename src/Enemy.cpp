@@ -21,23 +21,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
-#include "BehaviorStandard.h"
+#include "Avatar.h"
 #include "BehaviorAlly.h"
+#include "BehaviorStandard.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
 #include "EnemyBehavior.h"
 #include "Enemy.h"
 #include "Hazard.h"
-#include "LootManager.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
-#include "Avatar.h"
-
-#include <sstream>
+#include <math.h>
 
 using namespace std;
-
 
 Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_powers, _map) {
 	powers = _powers;
@@ -172,7 +171,7 @@ void Enemy::doRewards(int source_type) {
 		map->camp->setStatus(stats.defeat_status);
 	}
 
-	LootManager::getInstance()->addEnemyLoot(this);
+	loot->addEnemyLoot(this);
 }
 
 void Enemy::InstantDeath() {

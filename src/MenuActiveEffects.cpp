@@ -22,22 +22,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of active effects (buffs/debuffs)
  */
 
-#include "Menu.h"
+#include "CommonIncludes.h"
+#include "FileParser.h"
 #include "MenuActiveEffects.h"
+#include "Menu.h"
 #include "ModManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
-#include "FileParser.h"
-#include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
-
-#include <string>
-#include <sstream>
-
+#include "UtilsParsing.h"
 
 using namespace std;
-
 
 MenuActiveEffects::MenuActiveEffects(SDL_Surface *_icons) {
 	stats = NULL;

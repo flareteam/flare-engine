@@ -19,17 +19,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetSlider
  */
 
-#include <algorithm>
-#include <iostream>
-#include <string>
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include "Widget.h"
-#include "WidgetSlider.h"
+#include "CommonIncludes.h"
+#include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "UtilsDebug.h"
-#include "SDL_gfxBlitFunc.h"
+#include "Widget.h"
+#include "WidgetSlider.h"
 
 using namespace std;
 

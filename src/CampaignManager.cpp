@@ -24,14 +24,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
 #include "MenuItemStorage.h"
 #include "Settings.h"
-#include "StatBlock.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "StatBlock.h"
 #include "UtilsParsing.h"
-#include "LootManager.h"
-
-#include <sstream>
 
 using namespace std;
 
@@ -148,7 +147,7 @@ void CampaignManager::rewardItem(ItemStack istack) {
 void CampaignManager::rewardCurrency(int amount) {
 	*currency += amount;
 	addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
-	LootManager::getInstance()->playCurrencySound();
+	loot->playCurrencySound();
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {

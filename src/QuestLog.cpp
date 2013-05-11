@@ -22,17 +22,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Helper text to remind the player of active quests
  */
 
-#include "QuestLog.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
+#include "FileParser.h"
 #include "Menu.h"
 #include "MenuLog.h"
-#include "SharedResources.h"
+#include "QuestLog.h"
 #include "Settings.h"
-#include "FileParser.h"
+#include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-
-#include <fstream>
 
 using namespace std;
 

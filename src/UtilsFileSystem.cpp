@@ -21,13 +21,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Various file system function wrappers. Abstracted here to hide OS-specific implementations
  */
 
+#include "CommonIncludes.h"
 #include "UtilsFileSystem.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
 #include <errno.h>
-#include <fstream>
 #include <stdlib.h>
 
 #ifndef _WIN32

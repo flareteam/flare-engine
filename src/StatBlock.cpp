@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "FileParser.h"
 #include "PowerManager.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"
@@ -617,7 +618,6 @@ StatBlock::~StatBlock() {
 }
 
 bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
-	MenuPowers *menu_powers = MenuPowers::getInstance();
 
 	// needed to unlock shapeshifter powers
 	if (transformed) return mp >= power.requires_mp;

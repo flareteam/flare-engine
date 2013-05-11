@@ -27,11 +27,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_ACTIVE_EFFECTS_H
 #define MENU_ACTIVE_EFFECTS_H
 
+#include "CommonIncludes.h"
+#include "Menu.h"
 #include "Utils.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <vector>
 
 class StatBlock;
 

@@ -19,20 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuCharacter
  */
 
-
 #pragma once
 #ifndef MENU_CHARACTER_H
 #define MENU_CHARACTER_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
+#include "CommonIncludes.h"
 #include "WidgetLabel.h"
-#include "WidgetTooltip.h"
-
-#include <string>
-#include <sstream>
+#include "TooltipData.h"
 
 class StatBlock;
 class WidgetButton;

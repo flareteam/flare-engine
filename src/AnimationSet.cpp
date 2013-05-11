@@ -26,9 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsParsing.h"
 
-#include <algorithm>
 #include <cassert>
-#include <string>
 
 using namespace std;
 
