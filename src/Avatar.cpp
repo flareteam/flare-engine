@@ -260,9 +260,9 @@ bool Avatar::pressing_move() {
 	}
 	else {
 		return (inpt->pressing[UP] && !inpt->lock[UP]) ||
-			(inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
-			(inpt->pressing[LEFT] && !inpt->lock[LEFT]) ||
-			(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]);
+			   (inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
+			   (inpt->pressing[LEFT] && !inpt->lock[LEFT]) ||
+			   (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]);
 	}
 }
 
@@ -278,7 +278,7 @@ void Avatar::set_direction() {
 			// target first waypoint
 			map->collider.compute_path(stats.pos, target, path, stats.movement_type);
 			if(!path.empty())
-                target = path.back();
+				target = path.back();
 		}
 		stats.direction = calcDirection(stats.pos, target);
 	}

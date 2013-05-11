@@ -288,7 +288,7 @@ bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE
  * Checks whether the entity in pos 1 is facing the point at pos 2
  * based on a 180 degree field of vision
  */
-bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2){
+bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2) {
 
 	// 180 degree fov
 	switch (direction) {

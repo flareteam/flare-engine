@@ -481,10 +481,10 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 		menu_i = true;
 	}
 	else if (menus[MENU_POWERS]->checkClick()) {
-			menu_p = true;
+		menu_p = true;
 	}
 	else if (menus[MENU_LOG]->checkClick()) {
-			menu_l = true;
+		menu_l = true;
 	}
 }
 
