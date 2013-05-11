@@ -368,14 +368,8 @@ void setPaths() {
 	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// finally assume the local folder
-	if (!path_data) {
-		PATH_DATA = "./";
-		path_data = true;
-	}
-	if (!path_default_data) {
-		PATH_DEFAULT_DATA = "./";
-		path_default_data = true;
-	}
+	if (!path_data)	PATH_DATA = "./";
+	if (!path_default_data) PATH_DEFAULT_DATA = "./";
 }
 #endif
 
