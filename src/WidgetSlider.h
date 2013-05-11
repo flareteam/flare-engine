@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetSlider
  */
 
-
 #pragma once
 #ifndef WIDGET_SLIDER_H
 #define WIDGET_SLIDER_H

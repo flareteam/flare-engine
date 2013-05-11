@@ -1,5 +1,5 @@
 /*
-Copyright © 2011-2012 Pavel Kirpichyov (Cheshire)
+Copyright © 2013 Stefan Beller
 
 This file is part of FLARE.
 
@@ -15,39 +15,8 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-/**
- * MenuEnemy
- *
- * Handles the display of the Enemy info of the screen
- */
+#include "SharedGameResources.h"
 
-#pragma once
-#ifndef MENU_ENEMY_H
-#define MENU_ENEMY_H
-
-#include "CommonIncludes.h"
-#include "Settings.h"
-#include "WidgetLabel.h"
-
-class Enemy;
-
-class MenuEnemy : public Menu {
-private:
-	SDL_Surface *background;
-	SDL_Surface *bar_hp;
-	SDL_Rect bar_pos;
-	LabelInfo text_pos;
-	bool custom_text_pos;
-	SDL_Color color_normal;
-public:
-	MenuEnemy();
-	~MenuEnemy();
-	Enemy *enemy;
-	void loadGraphics();
-	void handleNewMap();
-	void logic();
-	void render();
-	int timeout;
-};
-
-#endif
+MenuPowers *menu_powers = NULL;
+LootManager *loot = NULL;
+EnemyGroupManager *enemyg = NULL;

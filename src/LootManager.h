@@ -28,19 +28,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef LOOT_MANAGER_H
 #define LOOT_MANAGER_H
 
-#include "Animation.h"
-#include "AnimationSet.h"
-#include "AnimationManager.h"
-
-#include "Loot.h"
+#include "CommonIncludes.h"
 #include "ItemManager.h"
+#include "Loot.h"
 #include "Settings.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
+class Animation;
 
 class EnemyManager;
 class MapRenderer;
@@ -90,7 +83,6 @@ private:
 	std::vector<const class Enemy*> enemiesDroppingLoot;
 
 public:
-	static LootManager *getInstance();
 	LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero);
 	LootManager(const LootManager &copy); // not implemented
 	~LootManager();
@@ -117,7 +109,5 @@ public:
 	int tooltip_margin; // pixels between loot drop center and label
 	bool full_msg;
 };
-
-extern LootManager *lootManager;
 
 #endif

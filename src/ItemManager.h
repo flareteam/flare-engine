@@ -21,21 +21,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class ItemManager
  */
 
-
 #pragma once
 #ifndef ITEM_MANAGER_H
 #define ITEM_MANAGER_H
 
-#include "WidgetTooltip.h"
+#include "CommonIncludes.h"
+#include "TooltipData.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <map>
-#include <string>
 #include <stdint.h>
-#include <vector>
 
 #define VENDOR_BUY 0
 #define VENDOR_SELL 1

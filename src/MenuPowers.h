@@ -21,21 +21,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuPowers
  */
 
-
 #pragma once
 #ifndef MENU_POWERS_H
 #define MENU_POWERS_H
 
+#include "CommonIncludes.h"
 #include "Menu.h"
 #include "Utils.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetTabControl.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <vector>
 
 class PowerManager;
 class StatBlock;
@@ -118,7 +113,6 @@ private:
 	short id_by_powerIndex(short power_index);
 
 public:
-	static MenuPowers *getInstance();
 	MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons);
 	~MenuPowers();
 	void update();
@@ -137,5 +131,4 @@ public:
 	TabList tablist;
 
 };
-extern MenuPowers *menuPowers;
 #endif

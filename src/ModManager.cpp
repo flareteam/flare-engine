@@ -15,16 +15,13 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "ModManager.h"
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include <SDL.h>
-#include <fstream>
-#include <algorithm>
 
 using namespace std;
-
 
 ModManager::ModManager() {
 	loc_cache.clear();

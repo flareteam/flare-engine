@@ -20,18 +20,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuInventory
  */
 
-
 #pragma once
 #ifndef MENU_INVENTORY_H
 #define MENU_INVENTORY_H
 
+#include "CommonIncludes.h"
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <string>
 
 class InputState;
 class ItemManager;

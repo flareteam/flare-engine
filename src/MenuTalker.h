@@ -20,20 +20,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuTalker
  */
 
-
 #pragma once
 #ifndef MENU_TALKER_H
 #define MENU_TALKER_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
+#include "CommonIncludes.h"
 #include "Utils.h"
-
-#include <string>
-#include <sstream>
-
 #include "Widget.h"
 
 class CampaignManager;
@@ -45,7 +37,6 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
-	CampaignManager *camp;
 	MenuManager *menu;
 
 	SDL_Surface *portrait;
@@ -73,7 +64,7 @@ private:
 	WidgetScrollBox *textbox;
 
 public:
-	MenuTalker(MenuManager *menu,CampaignManager *camp);
+	MenuTalker(MenuManager *menu);
 	~MenuTalker();
 
 	NPC *npc;

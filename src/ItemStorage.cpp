@@ -19,14 +19,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class ItemStorage
  */
 
+#include "CommonIncludes.h"
 #include "ItemManager.h"
 #include "ItemStorage.h"
 #include "UtilsParsing.h"
 
-#include <sstream>
-
 using namespace std;
-
 
 void ItemStorage::init(int _slot_number, ItemManager *_items) {
 	slot_number = _slot_number;

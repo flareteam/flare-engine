@@ -26,9 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef HAZARD_MANAGER_H
 #define HAZARD_MANAGER_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
-
-#include <vector>
 
 class Avatar;
 class EnemyManager;

@@ -20,15 +20,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuMiniMap
  */
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
+#include "MapCollision.h"
 #include "Menu.h"
 #include "MenuMiniMap.h"
-#include "MapCollision.h"
-#include "SharedResources.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "UtilsParsing.h"
 
-#include <iostream>
 using namespace std;
 
 MenuMiniMap::MenuMiniMap() {

@@ -38,9 +38,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuTalker::MenuTalker(MenuManager *_menu, CampaignManager *_camp)
+MenuTalker::MenuTalker(MenuManager *_menu)
 	: Menu()
-	, camp(_camp)
 	, menu(_menu)
 	, portrait(NULL)
 	, dialog_node(0)

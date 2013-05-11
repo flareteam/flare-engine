@@ -15,14 +15,13 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <iostream>
-
-#include "GameStateLoad.h"
-#include "GameStateTitle.h"
+#include "CommonIncludes.h"
 #include "GameStateConfig.h"
 #include "GameStateCutscene.h"
-#include "SharedResources.h"
+#include "GameStateLoad.h"
+#include "GameStateTitle.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 
