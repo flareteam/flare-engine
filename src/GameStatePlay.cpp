@@ -253,11 +253,7 @@ void GameStatePlay::checkTeleport() {
 
 		map->collider.unblock(pc->stats.pos.x, pc->stats.pos.y);
 
-		if (map->teleportation) {
-			map->cam.x = pc->stats.pos.x = map->teleport_destination.x;
-			map->cam.y = pc->stats.pos.y = map->teleport_destination.y;
-		}
-		else {
+		if (!map->teleportation) {
 			map->cam.x = pc->stats.pos.x = pc->stats.teleport_destination.x;
 			map->cam.y = pc->stats.pos.y = pc->stats.teleport_destination.y;
 		}
@@ -271,10 +267,14 @@ void GameStatePlay::checkTeleport() {
 		}
 
 		// process intermap teleport
-		if (map->teleportation && map->teleport_mapname != "") {
+		// beware of infinite teleporting
+		while (map->teleportation && map->teleport_mapname != "") {
+			map->teleportation = false;
 			map->executeOnMapExitEvents();
 			showLoading();
 			map->load(map->teleport_mapname);
+			map->cam.x = pc->stats.pos.x = map->teleport_destination.x;
+			map->cam.y = pc->stats.pos.y = map->teleport_destination.y;
 			enemies->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
@@ -324,7 +324,6 @@ void GameStatePlay::checkTeleport() {
 
 		map->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
-		map->teleportation = false;
 		pc->stats.teleportation = false; // teleport spell
 
 	}
