@@ -29,6 +29,7 @@ will be returned by SoundManager::load().
 #include "Settings.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "UtilsMath.h"
 
 #include <locale>
 #include <math.h>
@@ -63,14 +64,6 @@ SoundManager::~SoundManager() {
 		unload(it->first);
 }
 
-Uint8 SoundManager::calc_distance(const Point *s, const Point *d) {
-	float dx = (float)(s->x - d->x);
-	float dy = (float)(s->y - d->y);
-	float dist = sqrt(dx*dx + dy*dy);
-	dist = 255.0f * (dist / (SOUND_FALLOFF*UNITS_PER_TILE));
-	return (Uint8)max(0.0f, min(dist, 255.0f));
-}
-
 void SoundManager::logic(Point c) {
 
 	PlaybackMapIterator it = playback.begin();
@@ -97,7 +90,10 @@ void SoundManager::logic(Point c) {
 		}
 
 		/* control mixing playback depending on distance */
-		Uint8 dist = calc_distance(&c, &it->second.location);
+		float v = 255.0f * (calcDist(c, it->second.location) / (SOUND_FALLOFF*UNITS_PER_TILE));
+		clamp(v, 0.f, 255.f);
+		Uint8 dist = v;
+
 		if (it->second.loop) {
 			if (dist < (SOUND_FALLOFF*UNITS_PER_TILE))
 				Mix_Resume(it->first);
@@ -239,8 +235,12 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point po
 
 	// precalculate mixing volume if sound has a location
 	Uint8 d = 0;
-	if (p.location.x != 0 || p.location.y != 0)
-		d = calc_distance(&lastPos, &p.location);
+	if (p.location.x != 0 || p.location.y != 0) {
+		float v = 255.0f * (calcDist(lastPos, p.location) / (SOUND_FALLOFF*UNITS_PER_TILE));
+		clamp(v, 0.f, 255.f);
+		d = v;
+	}
+
 	Mix_SetPosition(c, 0, d);
 
 	if (vcit != channels.end())

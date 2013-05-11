@@ -56,7 +56,6 @@ private:
 
 	static void channel_finished(int channel);
 	void on_channel_finished(int channel);
-	Uint8 calc_distance(const Point *s, const Point *d);
 
 	SoundMap sounds;
 	VirtualChannelMap channels;

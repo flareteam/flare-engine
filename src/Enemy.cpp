@@ -110,17 +110,6 @@ int Enemy::faceNextBest(int mapx, int mapy) {
 	return 0;
 }
 
-/**
- * Calculate distance between the enemy and the hero
- */
-int Enemy::getDistance(Point dest) {
-	int dx = dest.x - stats.pos.x;
-	int dy = dest.y - stats.pos.y;
-	double step1 = (double)dx * (double)dx + (double)dy * (double)dy;
-	double step2 = sqrt(step1);
-	return int(step2);
-}
-
 void Enemy::newState(int state) {
 
 	stats.cur_state = state;

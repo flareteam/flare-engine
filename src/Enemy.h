@@ -46,7 +46,6 @@ public:
 	void logic();
 	int faceNextBest(int mapx, int mapy);
 	void newState(int state);
-	int getDistance(Point dest);
 	virtual void doRewards(int source_type);
 	void InstantDeath();
 	void CheckSummonSustained();

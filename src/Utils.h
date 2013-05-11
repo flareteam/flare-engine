@@ -90,7 +90,7 @@ Point center_tile(Point p);
 Point map_to_collision(Point p);
 Point collision_to_map(Point p);
 FPoint calcVector(Point pos, int direction, int dist);
-double calcDist(Point p1, Point p2);
+float calcDist(Point p1, Point p2);
 float calcTheta(int x1, int y1, int x2, int y2);
 int calcDirection(int x0, int y0, int x1, int y1);
 int calcDirection(const Point &src, const Point &dst);

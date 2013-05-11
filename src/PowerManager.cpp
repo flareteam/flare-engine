@@ -297,8 +297,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
@@ -307,8 +307,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_damage_value_min = eatFirstInt(infile.val, ',');
@@ -318,8 +318,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_crit_value = eatFirstInt(infile.val, ',');
