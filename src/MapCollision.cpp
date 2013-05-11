@@ -320,9 +320,8 @@ bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2){
 */
 bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
-	// guess a suitable limit with respect to screen size if no limit is given
 	if (limit == 0)
-		limit = 4 * (VIEW_W / TILE_W + VIEW_H / TILE_H);
+		limit = 256;
 
 	// path must be empty
 	if (!path.empty())
@@ -379,9 +378,9 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 			// if neighbour is not free of any collision, skip it
 			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false))
 				continue;
-            // if nabour is already in close, skip it
-            if(find(close.begin(), close.end(), neighbour)!=close.end())
-                continue;
+			// if nabour is already in close, skip it
+			if(find(close.begin(), close.end(), neighbour)!=close.end())
+				continue;
 
 			list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
 			// if neighbour isn't inside open, add it as a new Node
@@ -405,7 +404,7 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 		// reblock target if needed
 		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
 
-        float lowest_score = FLT_MAX;
+		float lowest_score = FLT_MAX;
 		// find the closed node which is closest to the target and create a path
 		list<AStarNode>::iterator lowest_it;
 		for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
@@ -418,8 +417,8 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 		current.x = node.getX();
 		current.y = node.getY();
 
-        //couldnt find the target so map a path to the closest node found
-        while (current.x != start.x || current.y != start.y) {
+		//couldnt find the target so map a path to the closest node found
+		while (current.x != start.x || current.y != start.y) {
 			path.push_back(collision_to_map(current));
 			current = find(close.begin(), close.end(), current)->getParent();
 		}
