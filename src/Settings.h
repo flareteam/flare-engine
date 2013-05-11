@@ -176,7 +176,6 @@ extern int DEATH_PENALTY_XP_CURRENT;
 extern bool DEATH_PENALTY_ITEM;
 
 void setPaths();
-void setDefaultPath();
 void loadTilesetSettings();
 void loadMiscSettings();
 bool loadSettings();
