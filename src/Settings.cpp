@@ -461,9 +461,11 @@ void loadMiscSettings() {
 			}
 			else if (infile.key == "party_exp_percentage") {
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
-			} else if (infile.key == "enable_ally_collision") {
+			}
+			else if (infile.key == "enable_ally_collision") {
 				ENABLE_ALLY_COLLISION = (toInt(infile.val) == 1);
-			} else if (infile.key == "enable_ally_collision_ai") {
+			}
+			else if (infile.key == "enable_ally_collision_ai") {
 				ENABLE_ALLY_COLLISION_AI = (toInt(infile.val) == 1);
 			}
 

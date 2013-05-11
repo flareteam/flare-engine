@@ -40,13 +40,16 @@ bool FileParser::open(const string& _filename, bool locateFileName, bool stopAft
 	if (locateFileName) {
 		if (stopAfterFirstFile) {
 			filenames.push_back(mods->locate(_filename));
-		} else {
+		}
+		else {
 			filenames = mods->list(_filename);
 		}
-	} else {
+	}
+	else {
 		if (!stopAfterFirstFile && isDirectory(_filename)) {
 			getFileList(_filename, "txt", filenames);
-		} else {
+		}
+		else {
 			filenames.push_back(_filename);
 		}
 	}

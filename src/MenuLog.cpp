@@ -104,15 +104,13 @@ void MenuLog::update() {
 void MenuLog::logic() {
 	if(!visible) return;
 
-	if (NO_MOUSE)
-	{
+	if (NO_MOUSE) {
 		tablist.logic();
 	}
 
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned i = 0; i < LOG_TYPE_COUNT; i++) {
-		if (msg_buffer[i]->in_focus)
-		{
+		if (msg_buffer[i]->in_focus) {
 			tabControl->setActiveTab(i);
 			break;
 		}

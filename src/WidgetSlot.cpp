@@ -37,8 +37,7 @@ WidgetSlot::WidgetSlot(SDL_Surface *_icons, int _icon_id, int _ACTIVATE)
 	, ACTIVATE(_ACTIVATE)
 	, enabled(true)
 	, checked(false)
-	, pressed(false)
-{
+	, pressed(false) {
 	focusable = true;
 	pos.x = pos.y = 0;
 	pos.w = ICON_SIZE;
@@ -105,13 +104,11 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 }
 
-void WidgetSlot::setIcon(int _icon_id)
-{
+void WidgetSlot::setIcon(int _icon_id) {
 	icon_id = _icon_id;
 }
 
-void WidgetSlot::setAmount(int _amount, int _max_amount)
-{
+void WidgetSlot::setAmount(int _amount, int _max_amount) {
 	amount = _amount;
 	max_amount = _max_amount;
 }
@@ -122,8 +119,7 @@ void WidgetSlot::render(SDL_Surface *target) {
 	}
 	SDL_Rect src;
 
-	if (icon_id != -1 && icons != NULL)
-	{
+	if (icon_id != -1 && icons != NULL) {
 		int columns = icons->w / ICON_SIZE;
 		src.x = (icon_id % columns) * ICON_SIZE;
 		src.y = (icon_id / columns) * ICON_SIZE;

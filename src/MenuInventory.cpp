@@ -151,7 +151,8 @@ void MenuInventory::logic() {
 			if (stats->xp > 0)
 				stats->xp -= (stats->xp * DEATH_PENALTY_XP) / 100;
 			death_message += msg->get("Lost %d% of total XP. ", DEATH_PENALTY_XP);
-		} else if (DEATH_PENALTY_XP_CURRENT > 0) {
+		}
+		else if (DEATH_PENALTY_XP_CURRENT > 0) {
 			if (stats->xp - stats->xp_table[stats->level-1] > 0)
 				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * DEATH_PENALTY_XP_CURRENT) / 100;
 			death_message += msg->get("Lost %d% of current level XP. ", DEATH_PENALTY_XP_CURRENT);
@@ -194,8 +195,7 @@ void MenuInventory::logic() {
 
 	// check close button
 	if (visible) {
-		if (NO_MOUSE)
-		{
+		if (NO_MOUSE) {
 			tablist.logic();
 		}
 		if (closeButton->checkClick()) {
@@ -931,13 +931,11 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	}
 }
 
-int MenuInventory::getEquippedCount()
-{
+int MenuInventory::getEquippedCount() {
 	return (int)equipped_area.size();
 }
 
-int MenuInventory::getCarriedRows()
-{
+int MenuInventory::getCarriedRows() {
 	return carried_rows;
 }
 

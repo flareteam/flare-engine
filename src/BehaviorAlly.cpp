@@ -79,17 +79,17 @@ void BehaviorAlly::findTarget() {
 	//if the player is blocked, all summons which the player is facing to move away for the specified frames
 	//need to set the flag player_blocked so that other allies know to get out of the way as well
 	//if hero is facing the summon
-	if(ENABLE_ALLY_COLLISION_AI){
+	if(ENABLE_ALLY_COLLISION_AI) {
 		if(!enemies->player_blocked && hero_dist < MINIMUM_FOLLOW_DISTANCE_LOWER
-			&& e->map->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
-				enemies->player_blocked = true;
-				enemies->player_blocked_ticks = BLOCK_TICKS;
+				&& e->map->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)) {
+			enemies->player_blocked = true;
+			enemies->player_blocked_ticks = BLOCK_TICKS;
 		}
 
 		if(enemies->player_blocked && !e->stats.in_combat
-			&& e->map->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)){
-				fleeing = true;
-				pursue_pos = e->stats.hero_pos;
+				&& e->map->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)) {
+			fleeing = true;
+			pursue_pos = e->stats.hero_pos;
 		}
 	}
 
@@ -134,13 +134,13 @@ void BehaviorAlly::checkMoveStateMove() {
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 		if (!e->move()) {
 			//this prevents an ally trying to move perpendicular to a bridge if the player gets close to it in a certain position and gets blocked
-			if(enemies->player_blocked && !e->stats.in_combat){
+			if(enemies->player_blocked && !e->stats.in_combat) {
 				e->stats.direction = e->stats.hero_direction;
 				if (!e->move()) {
 					e->stats.direction = prev_direction;
 				}
 			}
-			else{
+			else {
 				e->stats.direction = prev_direction;
 			}
 		}

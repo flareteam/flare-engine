@@ -50,8 +50,7 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	, npc(NULL)
 	, vendor_visible(false)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
-	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
-{
+	, closeButton(new WidgetButton("images/menus/buttons/button_x.png")) {
 	background = loadGraphicSurface("images/menus/dialog_box.png");
 
 	// Load config settings
@@ -145,8 +144,7 @@ void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
 
-	if (NO_MOUSE)
-	{
+	if (NO_MOUSE) {
 		tablist.logic();
 	}
 
