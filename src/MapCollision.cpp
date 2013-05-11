@@ -320,6 +320,10 @@ bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2){
 */
 bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
+	// guess a suitable limit with respect to screen size if no limit is given
+	if (limit == 0)
+		limit = 4 * (VIEW_W / TILE_W + VIEW_H / TILE_H);
+
 	// path must be empty
 	if (!path.empty())
 		path.clear();
@@ -438,6 +442,106 @@ void MapCollision::unblock(int x, int y) {
 		colmap[tile_x][tile_y] = BLOCKS_NONE;
 	}
 
+}
+
+class checkPoint {
+public:
+	int x;
+	int y;
+	int spread_direction;
+	// for spread_direction see numpad numbers:
+	// 7 8 9
+	// 4   6
+	// 1 2 3
+	// 4-6 are x axis, 8-2 are y axis
+	float dist;
+
+	checkPoint(int _x, int _y, int _dir, float _dist)
+		: x(_x)
+		, y(_y)
+		, spread_direction(_dir)
+		, dist(_dist)
+	{}
+};
+
+/**
+ * The idea of this algorithm is to search the nearest walkable tile starting
+ * at a given position. We'll have a set of points, which are currently inspected.
+ * These should form a rectangle around the starting point. The rectangle grows
+ * with the same speed to each direction.
+ */
+Point MapCollision::nearest_valid_tile(Point src, MOVEMENTTYPE movement_type, bool is_hero) {
+	//src= map_to_collision(src);
+	if (is_valid_tile(src.x, src.y, movement_type, is_hero))
+		return src;
+
+	vector<checkPoint> borderline;
+	float smallestdistance=1e100;
+
+	int x = src.x;
+	int y = src.y;
+	borderline.push_back(checkPoint(x - 1, y, 4, (float)calcDist(src, collision_to_map(Point(x - 1,y)))));
+	borderline.push_back(checkPoint(x + 1, y, 6, (float)calcDist(src, collision_to_map(Point(x - 1,y)))));
+	borderline.push_back(checkPoint(x, y - 1, 8, (float)calcDist(src, collision_to_map(Point(x - 1,y)))));
+	borderline.push_back(checkPoint(x, y + 1, 2, (float)calcDist(src, collision_to_map(Point(x - 1,y)))));
+	borderline.push_back(checkPoint(x - 1, y - 1, 7, (float)calcDist(src, collision_to_map(Point(x - 1,y)))));
+	borderline.push_back(checkPoint(x - 1, y + 1, 1, (float)calcDist(src, collision_to_map(Point(x - 1,y)))));
+	borderline.push_back(checkPoint(x + 1, y - 1, 9, (float)calcDist(src, collision_to_map(Point(x - 1,y)))));
+	borderline.push_back(checkPoint(x + 1, y + 1, 3, (float)calcDist(src, collision_to_map(Point(x - 1,y)))));
+
+	bool border_expanded = true;
+	while (border_expanded) {
+		border_expanded = false;
+		int index = borderline.size();
+		while (index != 0) {
+			index--;
+			checkPoint *p = &borderline[index];
+
+			if (calcDist(collision_to_map(Point(p->x, p->y)), src) > smallestdistance)
+				continue;
+
+			if (is_valid_tile(p->x, p->y, movement_type, is_hero)) {
+				smallestdistance = min(smallestdistance, (float)calcDist(collision_to_map(Point(p->x, p->y)), src));
+				continue;
+			}
+
+			border_expanded = true;
+			switch(p->spread_direction) {
+			case 4: p->x--; break;
+			case 6: p->x++; break;
+			case 8: p->y--; break;
+			case 2: p->y++; break;
+			case 7:
+				borderline.push_back(checkPoint(p->x, p->y-1, 8, (float)calcDist(src, collision_to_map(Point(p->x,p->y-1)))));
+				borderline.push_back(checkPoint(p->x-1, p->y, 4, (float)calcDist(src, collision_to_map(Point(p->x-1,p->y))));
+				p->x--;
+				p->y--;
+				break;
+			case 9:
+				borderline.push_back(checkPoint(p->x, p->y-1, 8, (float)calcDist(src, collision_to_map(Point(p->x,p->y-1))));
+				borderline.push_back(checkPoint(p->x+1, p->y, 6, (float)calcDist(src, collision_to_map(Point(p->x+1,p->y))));
+				p->x++;
+				p->y--;
+				break;
+			case 3:
+				borderline.push_back(checkPoint(p->x, p->y+1, 2, (float)calcDist(src, collision_to_map(Point(p->x,p->y+1))));
+				borderline.push_back(checkPoint(p->x+1, p->y, 6, (float)calcDist(src, collision_to_map(Point(p->x+1,p->y))));
+				p->x++;
+				p->y++;
+				break;
+			case 1:
+				borderline.push_back(checkPoint(p->x, p->y+1, 2, (float)calcDist(src, collision_to_map(Point(p->x,p->y+1))));
+				borderline.push_back(checkPoint(p->x-1, p->y, 4, (float)calcDist(src, collision_to_map(Point(p->x-1,p->y))));
+				p->x--;
+				p->y++;
+				break;
+			}
+		}
+	}
+	// Now at least one element is in the borderline, there may be severeal.
+	// If there are several, they have all the same distance, so it doesn't
+	// matter, which to return, so just take the very first.
+	return Point(borderline[0].x, borderline[0].y);
 }
 
 MapCollision::~MapCollision() {

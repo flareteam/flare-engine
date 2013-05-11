@@ -53,9 +53,6 @@ typedef enum {
 	MOVEMENT_INTANGIBLE = 2 // can move through BLOCKS_ALL (e.g. walls)
 } MOVEMENTTYPE;
 
-const unsigned int PATH_MAX_TILES = 256;
-
-
 class MapCollision {
 private:
 
@@ -83,10 +80,12 @@ public:
 
 	bool is_facing(int x1, int y1, char direction, int x2, int y2);
 
-	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = PATH_MAX_TILES);
+	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
 
 	void block(int map_x, int map_y, bool is_ally);
 	void unblock(int map_x, int map_y);
+
+	Point nearest_valid_tile(Point SDL_reinterpret_cast, MOVEMENTTYPE movement_type, bool is_hero);
 
 	unsigned short colmap[256][256];
 	Point map_size;

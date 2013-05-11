@@ -275,8 +275,10 @@ void Avatar::set_direction() {
 		if (!map->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
 			vector<Point> path;
 
+			target = collision_to_map(map->collider.nearest_valid_tile(target, stats.movement_type, true));
+
 			// if a path is returned, target first waypoint
-			if (map->collider.compute_path(stats.pos, target, path, stats.movement_type, 1000)) {
+			if (map->collider.compute_path(stats.pos, target, path, stats.movement_type)) {
 				target = path.back();
 			}
 		}
