@@ -272,9 +272,11 @@ void GameStatePlay::checkTeleport() {
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
+			std::string teleport_mapname = map->teleport_mapname;
+			map->teleport_mapname = "";
 			map->executeOnMapExitEvents();
 			showLoading();
-			map->load(map->teleport_mapname);
+			map->load(teleport_mapname);
 			enemies->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
@@ -290,7 +292,7 @@ void GameStatePlay::checkTeleport() {
 			npc_id = -1;
 
 			// store this as the new respawn point
-			map->respawn_map = map->teleport_mapname;
+			map->respawn_map = teleport_mapname;
 			map->respawn_point.x = pc->stats.pos.x;
 			map->respawn_point.y = pc->stats.pos.y;
 
@@ -324,10 +326,11 @@ void GameStatePlay::checkTeleport() {
 
 		map->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
-		map->teleportation = false;
 		pc->stats.teleportation = false; // teleport spell
 
 	}
+
+	if (map->teleport_mapname == "") map->teleportation = false;
 }
 
 /**
