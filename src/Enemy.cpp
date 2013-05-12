@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorStandard.h"
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
-#include "EnemyBehavior.h"
+#include "EntityBehavior.h"
 #include "Enemy.h"
 #include "Hazard.h"
 #include "MapRenderer.h"

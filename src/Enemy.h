@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <queue>
 
-class EnemyBehavior;
+class EntityBehavior;
 class Hazard;
 class PowerManager;
 class MapRenderer;
@@ -55,7 +55,7 @@ public:
 	virtual Renderable getRender();
 
 	Hazard *haz;
-	EnemyBehavior *eb;
+	EntityBehavior *eb;
 	EnemyManager *enemies;
 
 	// other flags

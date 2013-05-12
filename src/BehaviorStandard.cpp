@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsMath.h"
 
-BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior(_e, _em) {
+BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EntityBehavior(_e, _em) {
 	los = false;
 	hero_dist = 0;
 	target_dist = 0;
