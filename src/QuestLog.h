@@ -21,13 +21,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Helper text to remind the player of active quests
  */
 
-
 #pragma once
 #ifndef QUEST_LOG_H
 #define QUEST_LOG_H
 
-#include <string>
-#include <vector>
+#include "CommonIncludes.h"
 #include "Utils.h"
 
 class CampaignManager;
@@ -50,8 +48,8 @@ public:
 	void load(const std::string& filename);
 	void logic();
 	void createQuestList();
-    bool newQuestNotification;
-    bool resetQuestNotification;
+	bool newQuestNotification;
+	bool resetQuestNotification;
 };
 
 #endif

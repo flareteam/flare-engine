@@ -34,7 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateCutscene.h"
 #include "Hazard.h"
 #include "HazardManager.h"
-#include "LootManager.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
@@ -52,6 +51,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPCManager.h"
 #include "QuestLog.h"
 #include "WidgetLabel.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "FileParser.h"
@@ -76,8 +76,7 @@ GameStatePlay::GameStatePlay()
 	, enemies(new EnemyManager(powers, map))
 	, hazards(new HazardManager(powers, pc, enemies))
 	, menu(new MenuManager(powers, &pc->stats, camp, items))
-	, loot(new LootManager(items, map, &pc->stats))
-	, npcs(new NPCManager(map, loot, items, &pc->stats))
+	, npcs(new NPCManager(map, items, &pc->stats))
 	, quests(new QuestLog(camp, menu->log))
 	, loading(new WidgetLabel())
 	// Load the loading screen image (we currently use the confirm dialog background):
@@ -98,6 +97,9 @@ GameStatePlay::GameStatePlay()
 	map->powers = powers;
 	pc->enemies = enemies;
 	enemies->pc = pc;
+
+	enemyg = new EnemyGroupManager();
+	loot = new LootManager(items, map, &pc->stats);
 
 	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
@@ -270,9 +272,11 @@ void GameStatePlay::checkTeleport() {
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
+			std::string teleport_mapname = map->teleport_mapname;
+			map->teleport_mapname = "";
 			map->executeOnMapExitEvents();
 			showLoading();
-			map->load(map->teleport_mapname);
+			map->load(teleport_mapname);
 			enemies->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
@@ -288,7 +292,7 @@ void GameStatePlay::checkTeleport() {
 			npc_id = -1;
 
 			// store this as the new respawn point
-			map->respawn_map = map->teleport_mapname;
+			map->respawn_map = teleport_mapname;
 			map->respawn_point.x = pc->stats.pos.x;
 			map->respawn_point.y = pc->stats.pos.y;
 
@@ -322,10 +326,11 @@ void GameStatePlay::checkTeleport() {
 
 		map->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
-		map->teleportation = false;
 		pc->stats.teleportation = false; // teleport spell
 
 	}
+
+	if (map->teleport_mapname == "") map->teleportation = false;
 }
 
 /**
@@ -965,6 +970,8 @@ GameStatePlay::~GameStatePlay() {
 	delete powers;
 
 	delete loading;
+
+	delete enemyg;
 
 	SDL_FreeSurface(loading_bg);
 }

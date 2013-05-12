@@ -20,9 +20,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetListBox
  */
 
-#include "WidgetListBox.h"
-#include "SharedResources.h"
 #include "SDL_gfxBlitFunc.h"
+#include "SharedResources.h"
+#include "WidgetLabel.h"
+#include "WidgetListBox.h"
+#include "WidgetScrollBar.h"
+#include "WidgetTooltip.h"
 
 using namespace std;
 

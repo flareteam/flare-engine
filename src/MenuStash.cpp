@@ -92,8 +92,7 @@ void MenuStash::update() {
 void MenuStash::logic() {
 	if (!visible) return;
 
-	if (NO_MOUSE)
-	{
+	if (NO_MOUSE) {
 		tablist.logic();
 	}
 	if (closeButton->checkClick()) {

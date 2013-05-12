@@ -22,14 +22,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * This is preferred to directly displaying text because it helps handle positioning
  */
 
-
 #pragma once
 #ifndef WIDGET_LABEL_H
 #define WIDGET_LABEL_H
 
+#include "CommonIncludes.h"
 #include "Widget.h"
-#include <SDL.h>
-#include <string>
 
 const int VALIGN_CENTER = 0;
 const int VALIGN_TOP = 1;

@@ -44,6 +44,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPC.h"
 #include "PowerManager.h"
 #include "SharedResources.h"
+#include "WidgetTooltip.h"
 
 MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManager *_camp, ItemManager *_items)
 	: icons(NULL)
@@ -103,7 +104,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	menus.push_back(enemy); // menus[6]
 	vendor = new MenuVendor(items, stats);
 	menus.push_back(vendor); // menus[7]
-	talker = new MenuTalker(this, camp);
+	talker = new MenuTalker(this);
 	menus.push_back(talker); // menus[8]
 	exit = new MenuExit();
 	menus.push_back(exit); // menus[9]
@@ -247,8 +248,7 @@ void MenuManager::handleKeyboardNavigation() {
 
 		if (vendor->tablist.getCurrent() != -1 && !vendor->tablist.isLocked()) {
 			if (((vendor->tablist.getCurrent() + 1) % (vendor->tablist.size()/VENDOR_ROWS) == 0) &&
-				inpt->pressing[RIGHT] && !inpt->lock[RIGHT])
-			{
+					inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
 				inpt->lock[RIGHT] = true;
 				vendor->tablist.lock();
 				inv->tablist.unlock();
@@ -256,8 +256,7 @@ void MenuManager::handleKeyboardNavigation() {
 		}
 		if (inv->tablist.getCurrent() != -1 && !inv->tablist.isLocked()) {
 			if (((inv->tablist.getCurrent() - EQUIPPED_SLOTS + 1) % ((inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS) == 1) &&
-				inpt->pressing[LEFT] && !inpt->lock[LEFT])
-			{
+					inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
 				inpt->lock[LEFT] = true;
 				inv->tablist.lock();
 				vendor->tablist.unlock();
@@ -272,8 +271,7 @@ void MenuManager::handleKeyboardNavigation() {
 
 		if (stash->tablist.getCurrent() != -1 && !stash->tablist.isLocked()) {
 			if (((stash->tablist.getCurrent() + 1) % (stash->tablist.size()/STASH_ROWS) == 0) &&
-				inpt->pressing[RIGHT] && !inpt->lock[RIGHT])
-			{
+					inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
 				inpt->lock[RIGHT] = true;
 				stash->tablist.lock();
 				inv->tablist.unlock();
@@ -281,8 +279,7 @@ void MenuManager::handleKeyboardNavigation() {
 		}
 		if ((inv->tablist.getCurrent() - EQUIPPED_SLOTS) >= 0 && !inv->tablist.isLocked()) {
 			if (((inv->tablist.getCurrent() - EQUIPPED_SLOTS + 1) % ((inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS) == 1) &&
-				inpt->pressing[LEFT] && !inpt->lock[LEFT])
-			{
+					inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
 				inpt->lock[LEFT] = true;
 				inv->tablist.lock();
 				stash->tablist.unlock();
@@ -960,8 +957,8 @@ void MenuManager::handleKeyboardTooltips() {
 	}
 
 	if (act->tablist.getCurrent() != -1) {
-			inpt->mouse.x = act->slots[act->tablist.getCurrent()]->pos.x;
-			inpt->mouse.y = act->slots[act->tablist.getCurrent()]->pos.y;
+		inpt->mouse.x = act->slots[act->tablist.getCurrent()]->pos.x;
+		inpt->mouse.y = act->slots[act->tablist.getCurrent()]->pos.y;
 		keyb_tip_new_act = act->checkTooltip(inpt->mouse);
 		if (!keyb_tip_new_act.isEmpty()) {
 			if (!keyb_tip_new_act.compare(&keyb_tip_buf_act)) {

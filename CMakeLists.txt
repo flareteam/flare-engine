@@ -144,10 +144,12 @@ Set (FLARE_SOURCES
 	./src/SaveLoad.cpp
 	./src/SDL_gfxBlitFunc.c
 	./src/Settings.cpp
+	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
 	./src/StatBlock.cpp
 	./src/SoundManager.cpp
 	./src/TileSet.cpp
+	./src/TooltipData.cpp
 	./src/Utils.cpp
 	./src/UtilsDebug.cpp
 	./src/UtilsFileSystem.cpp

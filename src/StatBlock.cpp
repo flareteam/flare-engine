@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "FileParser.h"
 #include "PowerManager.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"
@@ -483,9 +484,9 @@ void StatBlock::recalc_alt() {
 		// calculate primary stats
 		// refresh the character menu if there has been a change
 		if (get_physical() != physical_character + effects.bonus_physical ||
-			get_mental() != mental_character + effects.bonus_mental ||
-			get_offense() != offense_character + effects.bonus_offense ||
-			get_defense() != defense_character + effects.bonus_defense) refresh_stats = true;
+				get_mental() != mental_character + effects.bonus_mental ||
+				get_offense() != offense_character + effects.bonus_offense ||
+				get_defense() != defense_character + effects.bonus_defense) refresh_stats = true;
 
 		offense_additional = effects.bonus_offense;
 		defense_additional = effects.bonus_defense;
@@ -617,7 +618,6 @@ StatBlock::~StatBlock() {
 }
 
 bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
-	MenuPowers *menu_powers = MenuPowers::getInstance();
 
 	// needed to unlock shapeshifter powers
 	if (transformed) return mp >= power.requires_mp;

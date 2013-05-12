@@ -15,16 +15,13 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "ModManager.h"
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include <SDL.h>
-#include <fstream>
-#include <algorithm>
 
 using namespace std;
-
 
 ModManager::ModManager() {
 	loc_cache.clear();
@@ -155,12 +152,12 @@ string ModManager::locate(const string& filename) {
 	return PATH_DATA + filename;
 }
 
-void amendPathToVector(const string &path, std::vector<std::string> &vec)
-{
+void amendPathToVector(const string &path, std::vector<std::string> &vec) {
 	if (pathExists(path)) {
 		if (isDirectory(path)) {
 			getFileList(path, "txt", vec);
-		} else {
+		}
+		else {
 			vec.push_back(path);
 		}
 	}

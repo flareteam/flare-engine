@@ -22,16 +22,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle collisions between objects and the map
  */
 
-
 #pragma once
 #ifndef MAP_COLLISION_H
 #define MAP_COLLISION_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 
-#include <algorithm>
 #include <cstdlib>
-#include <vector>
 
 // collision tile types
 // The numbers 0..4 are the collision tiles as produced by tiled,
@@ -54,9 +52,6 @@ typedef enum {
 	MOVEMENT_FLYING = 1, // can move through BLOCKS_MOVEMENT (e.g. water)
 	MOVEMENT_INTANGIBLE = 2 // can move through BLOCKS_ALL (e.g. walls)
 } MOVEMENTTYPE;
-
-const unsigned int PATH_MAX_TILES = 256;
-
 
 class MapCollision {
 private:
@@ -85,7 +80,7 @@ public:
 
 	bool is_facing(int x1, int y1, char direction, int x2, int y2);
 
-	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = PATH_MAX_TILES);
+	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
 
 	void block(int map_x, int map_y, bool is_ally);
 	void unblock(int map_x, int map_y);

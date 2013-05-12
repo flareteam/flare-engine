@@ -288,7 +288,7 @@ bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE
  * Checks whether the entity in pos 1 is facing the point at pos 2
  * based on a 180 degree field of vision
  */
-bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2){
+bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2) {
 
 	// 180 degree fov
 	switch (direction) {
@@ -319,6 +319,9 @@ bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2){
 * @return true if a path is found
 */
 bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
+
+	if (limit == 0)
+		limit = 256;
 
 	// path must be empty
 	if (!path.empty())
@@ -372,8 +375,11 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
 			Point neighbour = *it;
 
-			// if neighbour is not free of any collision, or already in close, skip it
-			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false) || find(close.begin(), close.end(), neighbour)!=close.end())
+			// if neighbour is not free of any collision, skip it
+			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false))
+				continue;
+			// if nabour is already in close, skip it
+			if(find(close.begin(), close.end(), neighbour)!=close.end())
 				continue;
 
 			list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
@@ -386,8 +392,8 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 				open.push_back(newNode);
 			}
 			// else, update it's cost if better
-			else if (node.getActualCost()+node_stride < i->getActualCost()) {
-				i->setActualCost(node.getActualCost()+node_stride);
+			else if (node.getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
+				i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
 				i->setParent(current);
 			}
 		}
@@ -397,6 +403,25 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 
 		// reblock target if needed
 		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
+
+		float lowest_score = FLT_MAX;
+		// find the closed node which is closest to the target and create a path
+		list<AStarNode>::iterator lowest_it;
+		for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
+			if (it->getH() < lowest_score) {
+				lowest_score = it->getH();
+				lowest_it = it;
+			}
+		}
+		node = *lowest_it;
+		current.x = node.getX();
+		current.y = node.getY();
+
+		//couldnt find the target so map a path to the closest node found
+		while (current.x != start.x || current.y != start.y) {
+			path.push_back(collision_to_map(current));
+			current = find(close.begin(), close.end(), current)->getParent();
+		}
 
 		return false;
 	}

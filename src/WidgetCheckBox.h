@@ -1,6 +1,6 @@
 /*
-Copyright © 2012 Clint Bellanger
-Copyright © 2012 davidriod
+Copyright Â© 2012 Clint Bellanger
+Copyright Â© 2012 davidriod
 
 This file is part of FLARE.
 
@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * class WidgetCheckBox
  */
-
 
 #pragma once
 #ifndef WIDGET_CHECKBOX_H

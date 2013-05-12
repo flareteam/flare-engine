@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStatePlay.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "TooltipData.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"

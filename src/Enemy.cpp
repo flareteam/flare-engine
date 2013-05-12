@@ -21,23 +21,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
-#include "BehaviorStandard.h"
+#include "Avatar.h"
 #include "BehaviorAlly.h"
+#include "BehaviorStandard.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
 #include "EnemyBehavior.h"
 #include "Enemy.h"
 #include "Hazard.h"
-#include "LootManager.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
-#include "Avatar.h"
-
-#include <sstream>
+#include <math.h>
 
 using namespace std;
-
 
 Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_powers, _map) {
 	powers = _powers;
@@ -111,17 +110,6 @@ int Enemy::faceNextBest(int mapx, int mapy) {
 	return 0;
 }
 
-/**
- * Calculate distance between the enemy and the hero
- */
-int Enemy::getDistance(Point dest) {
-	int dx = dest.x - stats.pos.x;
-	int dy = dest.y - stats.pos.y;
-	double step1 = (double)dx * (double)dx + (double)dy * (double)dy;
-	double step2 = sqrt(step1);
-	return int(step2);
-}
-
 void Enemy::newState(int state) {
 
 	stats.cur_state = state;
@@ -183,7 +171,7 @@ void Enemy::doRewards(int source_type) {
 		map->camp->setStatus(stats.defeat_status);
 	}
 
-	LootManager::getInstance()->addEnemyLoot(this);
+	loot->addEnemyLoot(this);
 }
 
 void Enemy::InstantDeath() {

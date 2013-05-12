@@ -20,9 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
+#include "CommonIncludes.h"
 
 class GameState {
 public:

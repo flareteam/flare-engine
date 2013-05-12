@@ -24,23 +24,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Contains logic and rendering routines for the player avatar.
  */
 
-
-#include "SDL_gfxBlitFunc.h"
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "Avatar.h"
+#include "CommonIncludes.h"
+#include "EnemyManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "Utils.h"
-#include "UtilsParsing.h"
 #include "UtilsMath.h"
-#include "EnemyManager.h"
-
-#include <sstream>
+#include "UtilsParsing.h"
 
 using namespace std;
 
@@ -49,7 +47,6 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
 	, lockSwing(false)
 	, lockCast(false)
 	, lockShoot(false)
-	, animFwd(false)
 	, enemies(NULL)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
@@ -263,9 +260,9 @@ bool Avatar::pressing_move() {
 	}
 	else {
 		return (inpt->pressing[UP] && !inpt->lock[UP]) ||
-			(inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
-			(inpt->pressing[LEFT] && !inpt->lock[LEFT]) ||
-			(inpt->pressing[RIGHT] && !inpt->lock[RIGHT]);
+			   (inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
+			   (inpt->pressing[LEFT] && !inpt->lock[LEFT]) ||
+			   (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]);
 	}
 }
 
@@ -278,10 +275,10 @@ void Avatar::set_direction() {
 		if (!map->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
 			vector<Point> path;
 
-			// if a path is returned, target first waypoint
-			if (map->collider.compute_path(stats.pos, target, path, stats.movement_type, 1000)) {
+			// target first waypoint
+			map->collider.compute_path(stats.pos, target, path, stats.movement_type);
+			if(!path.empty())
 				target = path.back();
-			}
 		}
 		stats.direction = calcDirection(stats.pos, target);
 	}

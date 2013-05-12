@@ -24,22 +24,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Special code for handling spells, special powers, item effects, etc.
  */
 
-
 #pragma once
 #ifndef POWER_MANAGER_H
 #define POWER_MANAGER_H
 
+#include "CommonIncludes.h"
 #include "MapRenderer.h"
 #include "Utils.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
 #include <queue>
 #include <cassert>
-#include <vector>
 
 class Animation;
 class AnimationSet;
@@ -185,7 +179,7 @@ public:
 	int trait_elemental; // enum. of elements
 	bool trait_armor_penetration;
 	int trait_crits_impaired; // crit bonus vs. movement impaired enemies (slowed, immobilized, stunned)
-    bool trait_avoidance_ignore;
+	bool trait_avoidance_ignore;
 
 	int transform_duration;
 	bool manual_untransform; // true binds to the power another recurrence power
@@ -210,9 +204,9 @@ public:
 	std::string spawn_type;
 	int target_neighbor;
 	int spawn_limit_mode;
-    int spawn_limit_qty;
-    int spawn_limit_every;
-    int spawn_limit_stat;
+	int spawn_limit_qty;
+	int spawn_limit_every;
+	int spawn_limit_stat;
 
 	Power()
 		: type(-1)
@@ -262,13 +256,13 @@ public:
 		, multitarget(false)
 		, range(0)
 		, target_party(false)
-        , mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
-        , mod_accuracy_value(100)
-        , mod_crit_mode(STAT_MODIFIER_MODE_MULTIPLY)
-        , mod_crit_value(100)
-        , mod_damage_mode(STAT_MODIFIER_MODE_MULTIPLY)
-        , mod_damage_value_min(100)
-        , mod_damage_value_max(0)
+		, mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_accuracy_value(100)
+		, mod_crit_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_crit_value(100)
+		, mod_damage_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_damage_value_min(100)
+		, mod_damage_value_max(0)
 
 		, hp_steal(0)
 		, mp_steal(0)
@@ -290,8 +284,8 @@ public:
 
 		, buff(false)
 		, buff_teleport(false)
-        , buff_party(false)
-        , buff_party_power_id(0)
+		, buff_party(false)
+		, buff_party_power_id(0)
 
 		, effect_type("")
 		, effect_additive(false)
@@ -304,9 +298,9 @@ public:
 		, spawn_type("")
 		, target_neighbor(0)
 		, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
-        , spawn_limit_qty(1)
-        , spawn_limit_every(1)
-        , spawn_limit_stat(SPAWN_LIMIT_STAT_MENTAL)
+		, spawn_limit_qty(1)
+		, spawn_limit_every(1)
+		, spawn_limit_stat(SPAWN_LIMIT_STAT_MENTAL)
 	{}
 
 };

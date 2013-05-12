@@ -39,7 +39,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 
 #include <cmath>
-#include <iostream>
 #include <climits>
 using namespace std;
 
@@ -195,7 +194,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].multitarget = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
-        else if (infile.key == "trait_avoidance_ignore")
+		else if (infile.key == "trait_avoidance_ignore")
 			powers[input_id].trait_avoidance_ignore = toBool(infile.val);
 		else if (infile.key == "trait_crits_impaired")
 			powers[input_id].trait_crits_impaired = toInt(infile.val);
@@ -298,8 +297,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
@@ -308,8 +307,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_damage_value_min = eatFirstInt(infile.val, ',');
@@ -319,8 +318,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_crit_value = eatFirstInt(infile.val, ',');
@@ -643,12 +642,12 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
 		if (effect_index > 0) {
 			if (powers[effect_index].effect_type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
-                if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-                    magnitude = src_stats->dmg_ment_max * powers[power_index].mod_damage_value_min / 100;
-                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-                    magnitude = src_stats->dmg_ment_max + powers[power_index].mod_damage_value_min;
-                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-                    magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
+				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+					magnitude = src_stats->dmg_ment_max * powers[power_index].mod_damage_value_min / 100;
+				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+					magnitude = src_stats->dmg_ment_max + powers[power_index].mod_damage_value_min;
+				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 
 				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
@@ -657,11 +656,11 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
 				magnitude = randBetween(src_stats->dmg_ment_min, src_stats->dmg_ment_max);
 
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-                    magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
-                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-                    magnitude += powers[power_index].mod_damage_value_min;
-                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-                    magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
+					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
+				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+					magnitude += powers[power_index].mod_damage_value_min;
+				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 
 				comb->addMessage(msg->get("+%d HP",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 				src_stats->hp += magnitude;

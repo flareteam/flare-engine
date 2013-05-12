@@ -1,6 +1,6 @@
 /*
-Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Justin Jacobs
+Copyright Â© 2011-2012 Clint Bellanger
+Copyright Â© 2012 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -50,12 +50,11 @@ WidgetScrollBox::~WidgetScrollBox() {
 void WidgetScrollBox::addChildWidget(Widget* child) {
 
 	std::vector<Widget*>::iterator find = std::find(
-		children.begin(),
-		children.end(),
-		child);
+			children.begin(),
+			children.end(),
+			child);
 
-	if (find == children.end())
-	{
+	if (find == children.end()) {
 		children.push_back(child);
 		tablist.add(child);
 	}
@@ -176,8 +175,7 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		target = screen;
 	}
 
-	for (unsigned i = 0; i < children.size(); i++)
-	{
+	for (unsigned i = 0; i < children.size(); i++) {
 		children[i]->render(contents);
 	}
 
@@ -195,8 +193,7 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 	if (contents->h > pos.h) scrollbar->render(target);
 	update = false;
 
-	if (in_focus)
-	{
+	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
 		Uint32 color;
@@ -223,13 +220,11 @@ bool WidgetScrollBox::getNext() {
 	currentChild = ((unsigned)currentChild == children.size()) ? 0 : currentChild;
 
 	if (children[currentChild]->pos.y > (cursor + pos.h) ||
-		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h))
-	{
+			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {
 		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
 	}
 	if (children[currentChild]->pos.y < cursor ||
-		(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor)
-	{
+			(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor) {
 		scrollTo(children[currentChild]->pos.y);
 	}
 	children[currentChild]->in_focus = true;
@@ -248,13 +243,11 @@ bool WidgetScrollBox::getPrev() {
 	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
 
 	if (children[currentChild]->pos.y > (cursor + pos.h) ||
-		(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h))
-	{
+			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {
 		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
 	}
 	if (children[currentChild]->pos.y < cursor ||
-		(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor)
-	{
+			(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor) {
 		scrollTo(children[currentChild]->pos.y);
 	}
 	children[currentChild]->in_focus = true;

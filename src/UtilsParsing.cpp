@@ -17,14 +17,11 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "UtilsParsing.h"
 #include "Settings.h"
 #include <cstdlib>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <algorithm>
-#include <string>
+#include <typeinfo>
 
 using namespace std;
 

@@ -22,29 +22,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuPowers
  */
 
-#include "Menu.h"
+#include "CommonIncludes.h"
 #include "FileParser.h"
+#include "Menu.h"
 #include "MenuPowers.h"
-#include "SharedResources.h"
 #include "PowerManager.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
-#include <string>
-#include <sstream>
-#include <iostream>
 #include <climits>
 
 using namespace std;
-MenuPowers *menuPowers = NULL;
-MenuPowers *MenuPowers::getInstance() {
-	return menuPowers;
-}
-
 
 MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons) {
 
@@ -178,7 +172,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_i
 		exit(1);
 	}
 
-	menuPowers = this;
+	menu_powers = this;
 
 	color_bonus = font->getColor("menu_bonus");
 	color_penalty = font->getColor("menu_penalty");
@@ -376,7 +370,8 @@ void MenuPowers::logic() {
 					power_cell[i].passive_on = false;
 					stats->refresh_stats = true;
 				}
-			} else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
+			}
+			else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
 				stats->powers_passive.push_back(power_cell[i].id);
 				power_cell[i].passive_on = true;
 				// for passives without special triggers, we need to trigger them here
@@ -392,8 +387,7 @@ void MenuPowers::logic() {
 
 	if (!visible) return;
 
-	if (NO_MOUSE)
-	{
+	if (NO_MOUSE) {
 		tablist.logic();
 	}
 
@@ -620,7 +614,7 @@ MenuPowers::~MenuPowers() {
 
 	delete closeButton;
 	if (tabs_count > 1) delete tabControl;
-	menuPowers = NULL;
+	menu_powers = NULL;
 }
 
 /**

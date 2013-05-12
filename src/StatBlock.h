@@ -27,12 +27,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef STAT_BLOCK_H
 #define STAT_BLOCK_H
 
+#include "CommonIncludes.h"
 #include "EffectManager.h"
-#include "Utils.h"
-#include <string>
-#include <queue>
-
 #include "MapCollision.h"
+#include "Utils.h"
+
+#include <queue>
 
 class Power;
 

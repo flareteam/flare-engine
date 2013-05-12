@@ -1,7 +1,7 @@
 /*
-Copyright © 2012 Clint Bellanger
-Copyright © 2012 davidriod
-Copyright © 2012 Igor Paliychuk
+Copyright Â© 2012 Clint Bellanger
+Copyright Â© 2012 davidriod
+Copyright Â© 2012 Igor Paliychuk
 
 This file is part of FLARE.
 
@@ -23,15 +23,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle game Settings Menu
  */
 
-
 #pragma once
 #ifndef GAMESTATECONFIG_H
 #define GAMESTATECONFIG_H
 
-#include <vector>
+#include "CommonIncludes.h"
 #include "GameState.h"
-#include "WidgetTooltip.h"
-#include <string>
+#include "TooltipData.h"
 
 class MenuConfirm;
 class Widget;

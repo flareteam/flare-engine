@@ -22,8 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles keyboard and mouse states
  */
 
-#include <iostream>
-
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "InputState.h"
 #include "Settings.h"
