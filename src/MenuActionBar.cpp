@@ -502,7 +502,12 @@ MenuActionBar::~MenuActionBar() {
 	SDL_FreeSurface(disabled);
 	SDL_FreeSurface(attention);
 
-	for (unsigned int i=0; i<16; i++) {
+	for (unsigned i = 0; i < 16; i++)
 		delete labels[i];
-	}
+
+	for (unsigned i = 0; i < 12; i++)
+		delete slots[i];
+
+	for (unsigned int i=0; i<4; i++)
+		delete menus[i];
 }

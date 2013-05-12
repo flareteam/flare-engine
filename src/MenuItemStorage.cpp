@@ -197,4 +197,6 @@ void MenuItemStorage::highlightClear() {
 MenuItemStorage::~MenuItemStorage() {
 	delete[] highlight;
 	SDL_FreeSurface(highlight_image);
+	for (unsigned i=0; i<slots.size(); i++)
+		delete slots[i];
 }
