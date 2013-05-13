@@ -326,44 +326,43 @@ void MenuCharacter::refreshStats() {
 	labelUnspent->set(window_area.x+unspent_pos.x, window_area.y+unspent_pos.y, unspent_pos.justify, unspent_pos.valign, ss.str(), font->getColor("menu_bonus"), unspent_pos.font_style);
 
 	// scrolling stat list
-	// TODO Add a generic tooltip to show bonuses per level, per physical, etc.
 
 	int visible_stats = 0;
 
 	if (show_stat[0]) {
 		ss.str("");
 		ss << msg->get("Max HP:") << " " << stats->get(STAT_HP_MAX);
-		statList->set(visible_stats++, ss.str(), "");
+		statList->set(visible_stats++, ss.str(), statTooltip(STAT_HP_MAX));
 	}
 
 	if (show_stat[1]) {
 		ss.str("");
 		ss << msg->get("HP Regen:") << " " << stats->get(STAT_HP_REGEN);
-		statList->set(visible_stats++, ss.str(), "");
+		statList->set(visible_stats++, ss.str(), msg->get("Ticks of HP regen per minute. ") + statTooltip(STAT_HP_REGEN));
 	}
 
 	if (show_stat[2]) {
 		ss.str("");
 		ss << msg->get("Max MP:") << " " << stats->get(STAT_MP_MAX);
-		statList->set(visible_stats++, ss.str(), "");
+		statList->set(visible_stats++, ss.str(), statTooltip(STAT_MP_MAX));
 	}
 
 	if (show_stat[3]) {
 		ss.str("");
 		ss << msg->get("MP Regen:") << " " << stats->get(STAT_MP_REGEN);
-		statList->set(visible_stats++, ss.str(), "");
+		statList->set(visible_stats++, ss.str(), msg->get("Ticks of MP regen per minute. ") + statTooltip(STAT_MP_REGEN));
 	}
 
 	if (show_stat[4]) {
 		ss.str("");
 		ss << msg->get("Accuracy:") << " " << stats->get(STAT_ACCURACY) << "%";
-		statList->set(visible_stats++, ss.str(), "");
+		statList->set(visible_stats++, ss.str(), statTooltip(STAT_ACCURACY));
 	}
 
 	if (show_stat[5]) {
 		ss.str("");
 		ss << msg->get("Avoidance:") << " " << stats->get(STAT_AVOIDANCE) << "%";
-		statList->set(visible_stats++, ss.str(), "");
+		statList->set(visible_stats++, ss.str(), statTooltip(STAT_AVOIDANCE));
 	}
 
 	if (show_stat[6]) {
@@ -399,7 +398,7 @@ void MenuCharacter::refreshStats() {
 	if (show_stat[9]) {
 		ss.str("");
 		ss << msg->get("Crit:") << " " << stats->get(STAT_CRIT) << "%";
-		statList->set(visible_stats++, ss.str(),"");
+		statList->set(visible_stats++, ss.str(), statTooltip(STAT_CRIT));
 	}
 
 	if (show_stat[10]) {
@@ -415,31 +414,31 @@ void MenuCharacter::refreshStats() {
 	if (show_stat[11]) {
 		ss.str("");
 		ss << msg->get("Poise: ") << stats->get(STAT_POISE) << "%";
-		statList->set(visible_stats++, ss.str(),msg->get("Reduces your chance of stumbling when hit"));
+		statList->set(visible_stats++, ss.str(), msg->get("Reduces your chance of stumbling when hit") + statTooltip(STAT_POISE));
 	}
 
 	if (show_stat[12]) {
 		ss.str("");
 		ss << msg->get("Bonus XP: ") << stats->get(STAT_XP_GAIN) << "%";
-		statList->set(visible_stats++, ss.str(),msg->get("Increases the XP gained per kill"));
+		statList->set(visible_stats++, ss.str(), msg->get("Increases the XP gained per kill") + statTooltip(STAT_XP_GAIN));
 	}
 
 	if (show_stat[13]) {
 		ss.str("");
 		ss << msg->get("Bonus") << " " << CURRENCY << ": " << stats->get(STAT_CURRENCY_FIND) << "%";
-		statList->set(visible_stats++, ss.str(),msg->get("Increases the %s found per drop",CURRENCY));
+		statList->set(visible_stats++, ss.str(), msg->get("Increases the %s found per drop",CURRENCY) + statTooltip(STAT_CURRENCY_FIND));
 	}
 
 	if (show_stat[14]) {
 		ss.str("");
 		ss << msg->get("Bonus Item Find: ") << stats->get(STAT_ITEM_FIND)<< "%";
-		statList->set(visible_stats++, ss.str(),msg->get("Increases the chance that an enemy will drop an item when killed"));
+		statList->set(visible_stats++, ss.str(), msg->get("Increases the chance that an enemy will drop an item when killed") + statTooltip(STAT_ITEM_FIND));
 	}
 
 	if (show_stat[15]) {
 		ss.str("");
 		ss << msg->get("Stealth: ") << stats->get(STAT_STEALTH) << "%";
-		statList->set(visible_stats++, ss.str(),msg->get("Increases your ability to move undetected"));
+		statList->set(visible_stats++, ss.str(), msg->get("Increases your ability to move undetected") + statTooltip(STAT_STEALTH));
 	}
 
 	if (show_stat[16]) {
@@ -487,6 +486,26 @@ SDL_Color MenuCharacter::bonusColor(int stat) {
 	if (stat > 0) return font->getColor("menu_bonus");
 	if (stat < 0) return font->getColor("menu_penalty");
 	return font->getColor("menu_label");
+}
+
+/**
+ * Create tooltip text showing the per_* values of a stat
+ */
+std::string MenuCharacter::statTooltip(int stat) {
+	std::string tooltip_text;
+
+	if (stats->per_level[stat] > 0)
+		tooltip_text += msg->get("Each level grants %d. ", stats->per_level[stat]);
+	if (stats->per_physical[stat] > 0)
+		tooltip_text += msg->get("Each point of Physical grants %d. ", stats->per_physical[stat]);
+	if (stats->per_mental[stat] > 0)
+		tooltip_text += msg->get("Each point of Mental grants %d. ", stats->per_mental[stat]);
+	if (stats->per_offense[stat] > 0)
+		tooltip_text += msg->get("Each point of Offense grants %d. ", stats->per_offense[stat]);
+	if (stats->per_defense[stat] > 0)
+		tooltip_text += msg->get("Each point of Defense grants %d. ", stats->per_defense[stat]);
+
+	return tooltip_text;
 }
 
 void MenuCharacter::logic() {
