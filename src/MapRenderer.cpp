@@ -107,6 +107,7 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 			Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 			if (enemy_lev.type != "") {
 				Map_Enemy group_member = Map_Enemy(enemy_lev.type, Point(x, y));
+				collider.block(x, y, false);
 				enemies.push(group_member);
 
 				success = true;
