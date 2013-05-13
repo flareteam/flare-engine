@@ -147,6 +147,7 @@ Set (FLARE_SOURCES
 	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
 	./src/StatBlock.cpp
+	./src/Stats.cpp
 	./src/SoundManager.cpp
 	./src/TileSet.cpp
 	./src/TooltipData.cpp
