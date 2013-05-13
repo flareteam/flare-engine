@@ -261,7 +261,7 @@ void LootManager::checkMapForLoot() {
 
 		if (possible_ids.empty()) {
 			// find the rarest loot less than the chance roll
-			if (chance < (ec->z * (hero->effects.bonus_item_find + 100)) / 100) {
+			if (chance < (ec->z * (hero->get(STAT_ITEM_FIND) + 100)) / 100) {
 				possible_ids.push_back(i-1);
 				common_chance = ec->z;
 				i=map->loot.size(); // start searching from the beginning
@@ -313,7 +313,7 @@ void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 	for (unsigned i=0; i<e->stats.loot.size(); i++) {
 		if (possible_ids.empty()) {
 			// find the rarest loot less than the chance roll
-			if (chance < (e->stats.loot[i].chance * (hero->effects.bonus_item_find + 100)) / 100) {
+			if (chance < (e->stats.loot[i].chance * (hero->get(STAT_ITEM_FIND) + 100)) / 100) {
 				possible_ids.push_back(e->stats.loot[i].id);
 				common_chance = e->stats.loot[i].chance;
 
@@ -349,7 +349,7 @@ void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 
 			// calculate bonus currency
 			int currency = new_loot.quantity;
-			currency = (currency * (100 + hero->effects.bonus_currency)) / 100;
+			currency = (currency * (100 + hero->get(STAT_CURRENCY_FIND))) / 100;
 
 			addCurrency(currency, pos);
 		}

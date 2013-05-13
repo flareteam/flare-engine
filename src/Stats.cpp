@@ -22,18 +22,14 @@ std::string STAT_NAME[STAT_COUNT];
 // these names aren't visible in-game
 // but they are used for parsing config files like engine/stats.txt
 void setStatNames() {
-	STAT_NAME[STAT_PHYSICAL] = "physical";
-	STAT_NAME[STAT_MENTAL] = "mental";
-	STAT_NAME[STAT_OFFENSE] = "offense";
-	STAT_NAME[STAT_DEFENSE] = "defense";
 	STAT_NAME[STAT_DMG_MELEE_MIN] = "dmg_melee_min";
 	STAT_NAME[STAT_DMG_MELEE_MAX] = "dmg_melee_max";
 	STAT_NAME[STAT_DMG_RANGED_MIN] = "dmg_ranged_min";
 	STAT_NAME[STAT_DMG_RANGED_MAX] = "dmg_ranged_max";
 	STAT_NAME[STAT_DMG_MENT_MIN] = "dmg_ment_min";
 	STAT_NAME[STAT_DMG_MENT_MAX] = "dmg_ment_max";
-	STAT_NAME[STAT_ABS_MIN] = "abs_min";
-	STAT_NAME[STAT_ABS_MAX] = "abs_max";
+	STAT_NAME[STAT_ABS_MIN] = "absorb_min";
+	STAT_NAME[STAT_ABS_MAX] = "absorb_max";
 	STAT_NAME[STAT_HP_MAX] = "hp";
 	STAT_NAME[STAT_HP_REGEN] = "hp_regen";
 	STAT_NAME[STAT_HP_PERCENT] = "hp_percent";

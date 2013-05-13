@@ -66,26 +66,23 @@ StatBlock::StatBlock()
 	, defense_character(0)
 	, physical_character(0)
 	, mental_character(0)
+	, starting()
+	, base()
+	, current()
+	, per_level()
+	, per_physical()
+	, per_mental()
+	, per_offense()
+	, per_defense()
 	, offense_additional(0)
 	, defense_additional(0)
 	, physical_additional(0)
 	, mental_additional(0)
-	, bonus_per_physical(0)
-	, bonus_per_mental(0)
-	, bonus_per_offense(0)
-	, bonus_per_defense(0)
 	, character_class("")
 	, hp(0)
-	, maxhp(0)
-	, hp_per_minute(0)
 	, hp_ticker(0)
 	, mp(0)
-	, maxmp(0)
-	, mp_per_minute(0)
 	, mp_ticker(0)
-	, accuracy(75)
-	, avoidance(0)
-	, crit(0)
 	, dmg_melee_min_default(1)
 	, dmg_melee_max_default(4)
 	, dmg_ment_min_default(1)
@@ -96,14 +93,6 @@ StatBlock::StatBlock()
 	, absorb_max_default(0)
 	, speed_default(14)
 	, dspeed_default(10)
-	, dmg_melee_min(1)
-	, dmg_melee_max(4)
-	, dmg_ment_min(1)
-	, dmg_ment_max(4)
-	, dmg_ranged_min(1)
-	, dmg_ranged_max(4)
-	, absorb_min(0)
-	, absorb_max(0)
 	, dmg_melee_min_add(0)
 	, dmg_melee_max_add(0)
 	, dmg_ment_min_add(0)
@@ -126,8 +115,6 @@ StatBlock::StatBlock()
 	, forced_speed()
 	, direction(0)
 	, hero_cooldown(POWER_COUNT, 0) // hero only
-	, poise(0)
-	, poise_base(0)
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
@@ -198,28 +185,6 @@ StatBlock::StatBlock()
 	vulnerable = std::vector<int>(ELEMENTS.size(), 100);
 	vulnerable_base = std::vector<int>(ELEMENTS.size(), 100);
 
-	// formula numbers. Used only for hero
-	hp_base = 10;
-	hp_per_level = 2;
-	hp_per_physical = 8;
-	hp_regen_base = 10;
-	hp_regen_per_level = 1;
-	hp_regen_per_physical = 4;
-	mp_base = 10;
-	mp_per_level = 2;
-	mp_per_mental = 8;
-	mp_regen_base = 10;
-	mp_regen_per_level = 1;
-	mp_regen_per_mental = 4;
-	accuracy_base = 75;
-	accuracy_per_level = 1;
-	accuracy_per_offense = 5;
-	avoidance_base = 25;
-	avoidance_per_level = 1;
-	avoidance_per_defense = 5;
-	crit_base = 5;
-	crit_per_level = 1;
-
 	activated_powerslot = 0;
 	on_half_dead_casted = false;
 }
@@ -242,6 +207,13 @@ void StatBlock::load(const string& filename) {
 	while (infile.next()) {
 		if (isInt(infile.val)) num = toInt(infile.val);
 		bool valid = false;
+
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (infile.key == STAT_NAME[i]) {
+				starting[i] = base[i] = current[i] = num;
+				valid = true;
+			}
+		}
 
 		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
 			if (infile.key == "vulnerable_" + ELEMENTS[i].name) {
@@ -296,21 +268,7 @@ void StatBlock::load(const string& filename) {
 			quest_loot_id = toInt(infile.nextValue());
 		}
 		// combat stats
-		else if (infile.key == "hp") hp = hp_base = maxhp = num;
-		else if (infile.key == "mp") mp = mp_base = maxmp = num;
 		else if (infile.key == "cooldown") cooldown = parse_duration(infile.val);
-		else if (infile.key == "accuracy") accuracy = accuracy_base = num;
-		else if (infile.key == "avoidance") avoidance = avoidance_base = num;
-		else if (infile.key == "dmg_melee_min") dmg_melee_min = num;
-		else if (infile.key == "dmg_melee_max") dmg_melee_max = num;
-		else if (infile.key == "dmg_ment_min") dmg_ment_min = num;
-		else if (infile.key == "dmg_ment_max") dmg_ment_max = num;
-		else if (infile.key == "dmg_ranged_min") dmg_ranged_min = num;
-		else if (infile.key == "dmg_ranged_max") dmg_ranged_max = num;
-		else if (infile.key == "absorb_min") absorb_min = num;
-		else if (infile.key == "absorb_max") absorb_max = num;
-		else if (infile.key == "poise") poise = poise_base = num;
-		else if (infile.key == "hp_regen_base") hp_regen_base = num;
 
 		// behavior stats
 		else if (infile.key == "flying") flying = toBool(infile.val);
@@ -388,6 +346,9 @@ void StatBlock::load(const string& filename) {
 	}
 	infile.close();
 
+	hp = starting[STAT_HP_MAX];
+	mp = starting[STAT_MP_MAX];
+
 	// sort loot table
 	std::sort(loot.begin(), loot.end(), sortLoot);
 }
@@ -421,62 +382,70 @@ void StatBlock::recalc() {
 		}
 	}
 
-	recalc_alt();
+	applyEffects();
 
-	hp = maxhp;
-	mp = maxmp;
+	hp = get(STAT_HP_MAX);
+	mp = get(STAT_MP_MAX);
 }
 
 /**
  * Base damage and absorb is 0
  * Plus an optional bonus_per_[base stat]
  */
-void StatBlock::calcBaseDmgAndAbs() {
-
-	// this bonus is skipped for the default level 1 of a stat
+void StatBlock::calcBase() {
+	// bonuses are skipped for the default level 1 of a stat
+	int lev0 = level -1;
 	int phys0 = get_physical() -1;
 	int ment0 = get_mental() -1;
 	int off0 = get_offense() -1;
 	int def0 = get_defense() -1;
 
-	dmg_melee_min = (bonus_per_physical * phys0) + dmg_melee_min_add;
-	dmg_melee_max = (bonus_per_physical * phys0) + dmg_melee_max_add;
-	dmg_ment_min = (bonus_per_mental * ment0) + dmg_ment_min_add;
-	dmg_ment_max = (bonus_per_mental * ment0) + dmg_ment_max_add;
-	dmg_ranged_min = (bonus_per_offense * off0) + dmg_ranged_min_add;
-	dmg_ranged_max = (bonus_per_offense * off0) + dmg_ranged_max_add;
-	absorb_min = (bonus_per_defense * def0) + absorb_min_add;
-	absorb_max = (bonus_per_defense * def0) + absorb_max_add;
+	for (int i=0; i<STAT_COUNT; i++) {
+		base[i] = starting[i];
+		base[i] += lev0 * per_level[i];
+		base[i] += phys0 * per_physical[i];
+		base[i] += ment0 * per_mental[i];
+		base[i] += off0 * per_offense[i];
+		base[i] += def0 * per_defense[i];
+	}
+
+	// add damage/absorb from equipment
+	base[STAT_DMG_MELEE_MIN] += dmg_melee_min_add;
+	base[STAT_DMG_MELEE_MAX] += dmg_melee_max_add;
+	base[STAT_DMG_MENT_MIN] += dmg_ment_min_add;
+	base[STAT_DMG_MENT_MAX] += dmg_ment_max_add;
+	base[STAT_DMG_RANGED_MIN] += dmg_ranged_min_add;
+	base[STAT_DMG_RANGED_MAX] += dmg_ranged_max_add;
+	base[STAT_ABS_MIN] += absorb_min_add;
+	base[STAT_ABS_MAX] += absorb_max_add;
 
 	// increase damage and absorb to minimum amounts
-	if (dmg_melee_min < dmg_melee_min_default)
-		dmg_melee_min = dmg_melee_min_default;
-	if (dmg_melee_max < dmg_melee_max_default)
-		dmg_melee_max = dmg_melee_max_default;
-	if (dmg_ranged_min < dmg_ranged_min_default)
-		dmg_ranged_min = dmg_ranged_min_default;
-	if (dmg_ranged_max < dmg_ranged_max_default)
-		dmg_ranged_max = dmg_ranged_max_default;
-	if (dmg_ment_min < dmg_ment_min_default)
-		dmg_ment_min = dmg_ment_min_default;
-	if (dmg_ment_max < dmg_ment_max_default)
-		dmg_ment_max = dmg_ment_max_default;
-	if (absorb_min < absorb_min_default)
-		absorb_min = absorb_min_default;
-	if (absorb_max < absorb_max_default)
-		absorb_max = absorb_max_default;
+	if (base[STAT_DMG_MELEE_MIN] < dmg_melee_min_default)
+		base[STAT_DMG_MELEE_MIN] = dmg_melee_min_default;
+	if (base[STAT_DMG_MELEE_MAX] < dmg_melee_max_default)
+		base[STAT_DMG_MELEE_MAX] = dmg_melee_max_default;
+	if (base[STAT_DMG_RANGED_MIN] < dmg_ranged_min_default)
+		base[STAT_DMG_RANGED_MIN] = dmg_ranged_min_default;
+	if (base[STAT_DMG_RANGED_MAX] < dmg_ranged_max_default)
+		base[STAT_DMG_RANGED_MAX] = dmg_ranged_max_default;
+	if (base[STAT_DMG_MENT_MIN] < dmg_ment_min_default)
+		base[STAT_DMG_MENT_MIN] = dmg_ment_min_default;
+	if (base[STAT_DMG_MENT_MAX] < dmg_ment_max_default)
+		base[STAT_DMG_MENT_MAX] = dmg_ment_max_default;
+	if (base[STAT_ABS_MIN] < absorb_min_default)
+		base[STAT_ABS_MIN] = absorb_min_default;
+	if (base[STAT_ABS_MAX] < absorb_max_default)
+		base[STAT_ABS_MAX] = absorb_max_default;
 }
 
 /**
  * Recalc derived stats from base stats + effect bonuses
  */
-void StatBlock::recalc_alt() {
-
-	int lev0 = level -1;
+void StatBlock::applyEffects() {
 
 	// preserve hp/mp states
-	prev_maxhp = maxhp;
-	prev_maxmp = maxmp;
+	prev_maxhp = get(STAT_HP_MAX);
+	prev_maxmp = get(STAT_MP_MAX);
 	pres_hp = hp;
 	pres_mp = mp;
 
@@ -492,43 +461,26 @@ void StatBlock::recalc_alt() {
 		defense_additional = effects.bonus_defense;
 		physical_additional = effects.bonus_physical;
 		mental_additional = effects.bonus_mental;
-		int phys0 = get_physical() -1;
-		int ment0 = get_mental() -1;
-		int off0 = get_offense() -1;
-		int def0 = get_defense() -1;
-
-		// calculate damage and absorb from base stats + item additions
-		calcBaseDmgAndAbs();
-
-		// calculate other stats
-		maxhp = hp_base + (hp_per_level * lev0) + (hp_per_physical * phys0) + effects.bonus_hp + (effects.bonus_hp_percent * (hp_base + (hp_per_level * lev0) + (hp_per_physical * phys0)) / 100);
-		maxmp = mp_base + (mp_per_level * lev0) + (mp_per_mental * ment0) + effects.bonus_mp + (effects.bonus_mp_percent * (mp_base + (mp_per_level * lev0) + (mp_per_mental * phys0)) / 100);
-		hp_per_minute = hp_regen_base + (hp_regen_per_level * lev0) + (hp_regen_per_physical * phys0) + effects.bonus_hp_regen;
-		mp_per_minute = mp_regen_base + (mp_regen_per_level * lev0) + (mp_regen_per_mental * ment0) + effects.bonus_mp_regen;
-		accuracy = accuracy_base + (accuracy_per_level * lev0) + (accuracy_per_offense * off0) + effects.bonus_accuracy;
-		avoidance = avoidance_base + (avoidance_per_level * lev0) + (avoidance_per_defense * def0) + effects.bonus_avoidance;
-		crit = crit_base + (crit_per_level * lev0) + effects.bonus_crit;
-
-	}
-	else {
-		maxhp = hp_base + effects.bonus_hp;
-		maxmp = mp_base + effects.bonus_mp;
-		accuracy = accuracy_base + effects.bonus_accuracy;
-		avoidance = avoidance_base + effects.bonus_avoidance;
-		hp_per_minute = hp_regen_base + effects.bonus_hp_regen;
 	}
 
-	speed = speed_default;
-	dspeed = dspeed_default;
+	calcBase();
 
-	poise = poise_base + effects.bonus_poise;
+    for (int i=0; i<STAT_COUNT; i++) {
+        current[i] = base[i] + effects.bonus[i];
+    }
 
 	for (unsigned i=0; i<effects.bonus_resist.size(); i++) {
 		vulnerable[i] = vulnerable_base[i] - effects.bonus_resist[i];
 	}
 
-	if (hp > maxhp) hp = maxhp;
-	if (mp > maxmp) mp = maxmp;
+	current[STAT_HP_MAX] += (current[STAT_HP_MAX] * current[STAT_HP_PERCENT]) / 100;
+	current[STAT_MP_MAX] += (current[STAT_MP_MAX] * current[STAT_MP_PERCENT]) / 100;
+
+	if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
+	if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
+
+	speed = speed_default;
+	dspeed = dspeed_default;
 }
 
 /**
@@ -542,17 +494,17 @@ void StatBlock::logic() {
 	effects.logic();
 
 	// apply bonuses from items/effects to base stats
-	recalc_alt();
+	applyEffects();
 
 	// preserve ratio on maxmp and maxhp changes
 	float ratio;
-	if (prev_maxhp != maxhp) {
+	if (prev_maxhp != get(STAT_HP_MAX)) {
 		ratio = (float)pres_hp / (float)prev_maxhp;
-		hp = (int)(ratio * maxhp);
+		hp = (int)(ratio * get(STAT_HP_MAX));
 	}
-	if (prev_maxmp != maxmp) {
+	if (prev_maxmp != get(STAT_MP_MAX)) {
 		ratio = (float)pres_mp / (float)prev_maxmp;
-		mp = (int)(ratio * maxmp);
+		mp = (int)(ratio * get(STAT_MP_MAX));
 	}
 
 	// handle cooldowns
@@ -563,18 +515,18 @@ void StatBlock::logic() {
 	}
 
 	// HP regen
-	if (hp_per_minute > 0 && hp < maxhp && hp > 0) {
+	if (get(STAT_HP_REGEN) > 0 && hp < get(STAT_HP_MAX) && hp > 0) {
 		hp_ticker++;
-		if (hp_ticker >= (60 * MAX_FRAMES_PER_SEC)/hp_per_minute) {
+		if (hp_ticker >= (60 * MAX_FRAMES_PER_SEC)/get(STAT_HP_REGEN)) {
 			hp++;
 			hp_ticker = 0;
 		}
 	}
 
 	// MP regen
-	if (mp_per_minute > 0 && mp < maxmp && hp > 0) {
+	if (get(STAT_MP_REGEN) > 0 && mp < get(STAT_MP_MAX) && hp > 0) {
 		mp_ticker++;
-		if (mp_ticker >= (60 * MAX_FRAMES_PER_SEC)/mp_per_minute) {
+		if (mp_ticker >= (60 * MAX_FRAMES_PER_SEC)/get(STAT_MP_REGEN)) {
 			mp++;
 			mp_ticker = 0;
 		}
@@ -599,12 +551,12 @@ void StatBlock::logic() {
 	if (effects.hpot > 0) {
 		comb->addMessage(msg->get("+%d HP",effects.hpot), pos, COMBAT_MESSAGE_BUFF);
 		hp += effects.hpot;
-		if (hp > maxhp) hp = maxhp;
+		if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
 	}
 	if (effects.mpot > 0) {
 		comb->addMessage(msg->get("+%d MP",effects.mpot), pos, COMBAT_MESSAGE_BUFF);
 		mp += effects.mpot;
-		if (mp > maxmp) mp = maxmp;
+		if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
 	}
 
 	// set movement type
@@ -647,107 +599,11 @@ void StatBlock::loadHeroStats() {
 		if (infile.key == "max_points_per_stat") {
 			max_points_per_stat = value;
 		}
-		else if (infile.key == "hp_base") {
-			hp_base = value;
-		}
-		else if (infile.key == "hp_per_level") {
-			hp_per_level = value;
-		}
-		else if (infile.key == "hp_per_physical") {
-			hp_per_physical = value;
-		}
-		else if (infile.key == "hp_regen_base") {
-			hp_regen_base = value;
-		}
-		else if (infile.key == "hp_regen_per_level") {
-			hp_regen_per_level = value;
-		}
-		else if (infile.key == "hp_regen_per_physical") {
-			hp_regen_per_physical = value;
-		}
-		else if (infile.key == "mp_base") {
-			mp_base = value;
-		}
-		else if (infile.key == "mp_per_level") {
-			mp_per_level = value;
-		}
-		else if (infile.key == "mp_per_mental") {
-			mp_per_mental = value;
-		}
-		else if (infile.key == "mp_regen_base") {
-			mp_regen_base = value;
-		}
-		else if (infile.key == "mp_regen_per_level") {
-			mp_regen_per_level = value;
-		}
-		else if (infile.key == "mp_regen_per_mental") {
-			mp_regen_per_mental = value;
-		}
-		else if (infile.key == "accuracy_base") {
-			accuracy_base = value;
-		}
-		else if (infile.key == "accuracy_per_level") {
-			accuracy_per_level = value;
-		}
-		else if (infile.key == "accuracy_per_offense") {
-			accuracy_per_offense = value;
-		}
-		else if (infile.key == "avoidance_base") {
-			avoidance_base = value;
-		}
-		else if (infile.key == "avoidance_per_level") {
-			avoidance_per_level = value;
-		}
-		else if (infile.key == "avoidance_per_defense") {
-			avoidance_per_defense = value;
-		}
-		else if (infile.key == "crit_base") {
-			crit_base = value;
-		}
-		else if (infile.key == "crit_per_level") {
-			crit_per_level = value;
-		}
-		else if (infile.key == "dmg_melee_min") {
-			dmg_melee_min = dmg_melee_min_default = value;
-		}
-		else if (infile.key == "dmg_melee_max") {
-			dmg_melee_max = dmg_melee_max_default = value;
-		}
-		else if (infile.key == "dmg_ranged_min") {
-			dmg_ranged_min = dmg_ranged_min_default = value;
-		}
-		else if (infile.key == "dmg_ranged_max") {
-			dmg_ranged_max = dmg_ranged_max_default = value;
-		}
-		else if (infile.key == "dmg_ment_min") {
-			dmg_ment_min = dmg_ment_min_default = value;
-		}
-		else if (infile.key == "dmg_ment_max") {
-			dmg_ment_max = dmg_ment_max_default = value;
-		}
-		else if (infile.key == "absorb_min") {
-			absorb_min = absorb_min_default = value;
-		}
-		else if (infile.key == "absorb_max") {
-			absorb_max = absorb_max_default = value;
-		}
 		else if (infile.key == "speed") {
 			speed = speed_default = value;
 		}
 		else if (infile.key == "dspeed") {
 			dspeed = dspeed_default = value;
-		}
-		else if (infile.key == "bonus_per_physical") {
-			bonus_per_physical = value;
-		}
-		else if (infile.key == "bonus_per_mental") {
-			bonus_per_mental = value;
-		}
-		else if (infile.key == "bonus_per_offense") {
-			bonus_per_offense = value;
-		}
-		else if (infile.key == "bonus_per_defense") {
-			bonus_per_defense = value;
 		}
 		else if (infile.key == "sfx_step") {
 			sfx_step = infile.val;
@@ -760,6 +616,16 @@ void StatBlock::loadHeroStats() {
 		}
 		else if (infile.key == "cooldown_hit") {
 			cooldown_hit = value;
+		}
+		else {
+			for (unsigned i=0; i<STAT_COUNT; i++) {
+				if (infile.key == STAT_NAME[i]) starting[i] = value;
+				else if (infile.key == STAT_NAME[i] + "_per_level") per_level[i] = value;
+				else if (infile.key == STAT_NAME[i] + "_per_physical") per_physical[i] = value;
+				else if (infile.key == STAT_NAME[i] + "_per_mental") per_mental[i] = value;
+				else if (infile.key == STAT_NAME[i] + "_per_offense") per_offense[i] = value;
+				else if (infile.key == STAT_NAME[i] + "_per_defense") per_defense[i] = value;
+			}
 		}
 	}
 	infile.close();

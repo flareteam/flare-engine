@@ -808,8 +808,8 @@ void GameStatePlay::logic() {
 		enemies->hero_pos = pc->stats.pos;
 		enemies->hero_direction = pc->stats.direction;
 		enemies->hero_alive = pc->stats.alive;
-		if (pc->stats.effects.bonus_stealth > 100) enemies->hero_stealth = 100;
-		else enemies->hero_stealth = pc->stats.effects.bonus_stealth;
+		if (pc->stats.get(STAT_STEALTH) > 100) enemies->hero_stealth = 100;
+		else enemies->hero_stealth = pc->stats.get(STAT_STEALTH);
 
 		enemies->logic();
 		hazards->logic();

@@ -331,21 +331,21 @@ void GameStatePlay::loadGame() {
 	// powers->activatePassives(pc->stats);
 	pc->stats.logic(); // run stat logic once to apply items bonuses
 	if (SAVE_HPMP) {
-		if (saved_hp < 0 || saved_hp > pc->stats.maxhp) {
+		if (saved_hp < 0 || saved_hp > pc->stats.get(STAT_HP_MAX)) {
 			fprintf(stderr, "HP value is out of bounds, setting to maximum\n");
-			pc->stats.hp = pc->stats.maxhp;
+			pc->stats.hp = pc->stats.get(STAT_HP_MAX);
 		}
 		else pc->stats.hp = saved_hp;
 
-		if (saved_mp < 0 || saved_mp > pc->stats.maxmp) {
+		if (saved_mp < 0 || saved_mp > pc->stats.get(STAT_MP_MAX)) {
 			fprintf(stderr, "MP value is out of bounds, setting to maximum\n");
-			pc->stats.mp = pc->stats.maxmp;
+			pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 		}
 		else pc->stats.mp = saved_mp;
 	}
 	else {
-		pc->stats.hp = pc->stats.maxhp;
-		pc->stats.mp = pc->stats.maxmp;
+		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
+		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 	}
 
 	// reset character menu

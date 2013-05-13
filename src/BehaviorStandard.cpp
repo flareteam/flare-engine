@@ -67,7 +67,7 @@ void BehaviorStandard::doUpkeep() {
 	if (!e->stats.in_combat && !e->stats.hero_ally) {
 		if (e->stats.alive && e->stats.hero_alive) {
 			e->stats.hp++;
-			if (e->stats.hp > e->stats.maxhp) e->stats.hp = e->stats.maxhp;
+			if (e->stats.hp > e->stats.get(STAT_HP_MAX)) e->stats.hp = e->stats.get(STAT_HP_MAX);
 		}
 	}
 
@@ -86,7 +86,7 @@ void BehaviorStandard::doUpkeep() {
 
 	// check for revive
 	if (e->stats.hp <= 0 && e->stats.effects.revive) {
-		e->stats.hp = e->stats.maxhp;
+		e->stats.hp = e->stats.get(STAT_HP_MAX);
 		e->stats.alive = true;
 		e->stats.corpse = false;
 		e->stats.cur_state = ENEMY_STANCE;
@@ -259,7 +259,7 @@ void BehaviorStandard::checkPower() {
 	if (los && (e->stats.cur_state == ENEMY_STANCE || e->stats.cur_state == ENEMY_MOVE)) {
 
 		// check half dead power use
-		if (!e->stats.on_half_dead_casted && e->stats.hp <= e->stats.maxhp/2) {
+		if (!e->stats.on_half_dead_casted && e->stats.hp <= e->stats.get(STAT_HP_MAX)/2) {
 			if (percentChance(e->stats.power_chance[ON_HALF_DEAD])) {
 				e->newState(ENEMY_POWER);
 				e->stats.activated_powerslot = ON_HALF_DEAD;

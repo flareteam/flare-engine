@@ -326,118 +326,119 @@ void MenuCharacter::refreshStats() {
 	labelUnspent->set(window_area.x+unspent_pos.x, window_area.y+unspent_pos.y, unspent_pos.justify, unspent_pos.valign, ss.str(), font->getColor("menu_bonus"), unspent_pos.font_style);
 
 	// scrolling stat list
+	// TODO Add a generic tooltip to show bonuses per level, per physical, etc.
 
 	int visible_stats = 0;
 
 	if (show_stat[0]) {
 		ss.str("");
-		ss << msg->get("Max HP:") << " " << stats->maxhp;
-		statList->set(visible_stats++, ss.str(),msg->get("Each point of Physical grants +%d HP. Each level grants +%d HP", stats->hp_per_physical, stats->hp_per_level));
+		ss << msg->get("Max HP:") << " " << stats->get(STAT_HP_MAX);
+		statList->set(visible_stats++, ss.str(), "");
 	}
 
 	if (show_stat[1]) {
 		ss.str("");
-		ss << msg->get("HP Regen:") << " " << stats->hp_per_minute;
-		statList->set(visible_stats++, ss.str(),msg->get("Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen",stats->hp_regen_per_physical, stats->hp_regen_per_level));
+		ss << msg->get("HP Regen:") << " " << stats->get(STAT_HP_REGEN);
+		statList->set(visible_stats++, ss.str(), "");
 	}
 
 	if (show_stat[2]) {
 		ss.str("");
-		ss << msg->get("Max MP:") << " " << stats->maxmp;
-		statList->set(visible_stats++, ss.str(),msg->get("Each point of Mental grants +%d MP. Each level grants +%d MP", stats->mp_per_mental, stats->mp_per_level));
+		ss << msg->get("Max MP:") << " " << stats->get(STAT_MP_MAX);
+		statList->set(visible_stats++, ss.str(), "");
 	}
 
 	if (show_stat[3]) {
 		ss.str("");
-		ss << msg->get("MP Regen:") << " " << stats->mp_per_minute;
-		statList->set(visible_stats++, ss.str(),msg->get("Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen", stats->mp_regen_per_mental, stats->mp_regen_per_level));
+		ss << msg->get("MP Regen:") << " " << stats->get(STAT_MP_REGEN);
+		statList->set(visible_stats++, ss.str(), "");
 	}
 
 	if (show_stat[4]) {
 		ss.str("");
-		ss << msg->get("Accuracy:") << " " << stats->accuracy << "%";
-		statList->set(visible_stats++, ss.str(),msg->get("Each point of Offense grants +%d accuracy. Each level grants +%d accuracy", stats->accuracy_per_offense, stats->accuracy_per_level));
+		ss << msg->get("Accuracy:") << " " << stats->get(STAT_ACCURACY) << "%";
+		statList->set(visible_stats++, ss.str(), "");
 	}
 
 	if (show_stat[5]) {
 		ss.str("");
-		ss << msg->get("Avoidance:") << " " << stats->avoidance << "%";
-		statList->set(visible_stats++, ss.str(),msg->get("Each point of Defense grants +%d avoidance. Each level grants +%d avoidance", stats->avoidance_per_defense, stats->avoidance_per_level));
+		ss << msg->get("Avoidance:") << " " << stats->get(STAT_AVOIDANCE) << "%";
+		statList->set(visible_stats++, ss.str(), "");
 	}
 
 	if (show_stat[6]) {
 		ss.str("");
 		ss << msg->get("Melee Damage:") << " ";
-		if (stats->dmg_melee_min == stats->dmg_melee_max)
-			ss << stats->dmg_melee_min;
+		if (stats->get(STAT_DMG_MELEE_MIN) == stats->get(STAT_DMG_MELEE_MAX))
+			ss << stats->get(STAT_DMG_MELEE_MIN);
 		else
-			ss << stats->dmg_melee_min << "-" << stats->dmg_melee_max;
+			ss << stats->get(STAT_DMG_MELEE_MIN) << "-" << stats->get(STAT_DMG_MELEE_MAX);
 		statList->set(visible_stats++, ss.str(),"");
 	}
 
 	if (show_stat[7]) {
 		ss.str("");
 		ss << msg->get("Ranged Damage:") << " ";
-		if (stats->dmg_ranged_min == stats->dmg_ranged_max)
-			ss << stats->dmg_ranged_min;
+		if (stats->get(STAT_DMG_RANGED_MIN) == stats->get(STAT_DMG_RANGED_MAX))
+			ss << stats->get(STAT_DMG_RANGED_MIN);
 		else
-			ss << stats->dmg_ranged_min << "-" << stats->dmg_ranged_max;
+			ss << stats->get(STAT_DMG_RANGED_MIN) << "-" << stats->get(STAT_DMG_RANGED_MAX);
 		statList->set(visible_stats++, ss.str(),"");
 	}
 
 	if (show_stat[8]) {
 		ss.str("");
 		ss << msg->get("Mental Damage:") << " ";
-		if (stats->dmg_ment_min == stats->dmg_ment_max)
-			ss << stats->dmg_ment_min;
+		if (stats->get(STAT_DMG_MENT_MIN) == stats->get(STAT_DMG_MENT_MAX))
+			ss << stats->get(STAT_DMG_MENT_MIN);
 		else
-			ss << stats->dmg_ment_min << "-" << stats->dmg_ment_max;
+			ss << stats->get(STAT_DMG_MENT_MIN) << "-" << stats->get(STAT_DMG_MENT_MAX);
 		statList->set(visible_stats++, ss.str(),"");
 	}
 
 	if (show_stat[9]) {
 		ss.str("");
-		ss << msg->get("Crit:") << " " << stats->crit << "%";
+		ss << msg->get("Crit:") << " " << stats->get(STAT_CRIT) << "%";
 		statList->set(visible_stats++, ss.str(),"");
 	}
 
 	if (show_stat[10]) {
 		ss.str("");
 		ss << msg->get("Absorb:") << " ";
-		if (stats->absorb_min == stats->absorb_max)
-			ss << stats->absorb_min;
+		if (stats->get(STAT_ABS_MIN) == stats->get(STAT_ABS_MAX))
+			ss << stats->get(STAT_ABS_MIN);
 		else
-			ss << stats->absorb_min << "-" << stats->absorb_max;
+			ss << stats->get(STAT_ABS_MIN) << "-" << stats->get(STAT_ABS_MAX);
 		statList->set(visible_stats++, ss.str(),"");
 	}
 
 	if (show_stat[11]) {
 		ss.str("");
-		ss << msg->get("Poise: ") << stats->poise << "%";
+		ss << msg->get("Poise: ") << stats->get(STAT_POISE) << "%";
 		statList->set(visible_stats++, ss.str(),msg->get("Reduces your chance of stumbling when hit"));
 	}
 
 	if (show_stat[12]) {
 		ss.str("");
-		ss << msg->get("Bonus XP: ") << stats->effects.bonus_xp << "%";
+		ss << msg->get("Bonus XP: ") << stats->get(STAT_XP_GAIN) << "%";
 		statList->set(visible_stats++, ss.str(),msg->get("Increases the XP gained per kill"));
 	}
 
 	if (show_stat[13]) {
 		ss.str("");
-		ss << msg->get("Bonus") << " " << CURRENCY << ": " << stats->effects.bonus_currency << "%";
+		ss << msg->get("Bonus") << " " << CURRENCY << ": " << stats->get(STAT_CURRENCY_FIND) << "%";
 		statList->set(visible_stats++, ss.str(),msg->get("Increases the %s found per drop",CURRENCY));
 	}
 
 	if (show_stat[14]) {
 		ss.str("");
-		ss << msg->get("Bonus Item Find: ") << stats->effects.bonus_item_find << "%";
+		ss << msg->get("Bonus Item Find: ") << stats->get(STAT_ITEM_FIND)<< "%";
 		statList->set(visible_stats++, ss.str(),msg->get("Increases the chance that an enemy will drop an item when killed"));
 	}
 
 	if (show_stat[15]) {
 		ss.str("");
-		ss << msg->get("Stealth: ") << stats->effects.bonus_stealth << "%";
+		ss << msg->get("Stealth: ") << stats->get(STAT_STEALTH) << "%";
 		statList->set(visible_stats++, ss.str(),msg->get("Increases your ability to move undetected"));
 	}
 
