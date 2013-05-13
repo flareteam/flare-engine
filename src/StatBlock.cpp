@@ -176,9 +176,9 @@ StatBlock::StatBlock()
 	, quest_loot_not("")		// enemy only
 	, quest_loot_id(0)			// enemy only
 	, first_defeat_loot(0)		// enemy only
-	, base("male")
-	, head("head_short")
-	, portrait("male01")
+	, gfx_base("male")
+	, gfx_head("head_short")
+	, gfx_portrait("male01")
 	, transform_type("")
 	, animations("")
 	, sfx_step("cloth")

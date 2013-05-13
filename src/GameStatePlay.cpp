@@ -126,7 +126,7 @@ void GameStatePlay::resetGame() {
 	loadStash();
 
 	// Finalize new character settings
-	menu->talker->setHero(pc->stats.name, pc->stats.portrait);
+	menu->talker->setHero(pc->stats.name, pc->stats.gfx_portrait);
 	pc->loadSounds();
 }
 
@@ -503,12 +503,12 @@ void GameStatePlay::checkEquipmentChange() {
 			}
 			// special case: if we don't have a head, use the portrait's head
 			if (gfx.gfx == "" && pc->layer_reference_order[j] == "head") {
-				gfx.gfx = pc->stats.head;
+				gfx.gfx = pc->stats.gfx_head;
 				gfx.type = "head";
 			}
 			// fall back to default if it exists
 			if (gfx.gfx == "") {
-				bool exists = fileExists(mods->locate("animations/avatar/" + pc->stats.base + "/default_" + gfx.type + ".txt"));
+				bool exists = fileExists(mods->locate("animations/avatar/" + pc->stats.gfx_base + "/default_" + gfx.type + ".txt"));
 				if (exists) gfx.gfx = "default_" + gfx.type;
 			}
 			img_gfx.push_back(gfx);

@@ -188,7 +188,7 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 
 	for (unsigned int i=0; i<_img_gfx.size(); i++) {
 		if (_img_gfx[i].gfx != "") {
-			string name = "animations/avatar/"+stats.base+"/"+_img_gfx[i].gfx+".txt";
+			string name = "animations/avatar/"+stats.gfx_base+"/"+_img_gfx[i].gfx+".txt";
 			anim->increaseCount(name);
 			animsets.push_back(anim->getAnimationSet(name));
 			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
@@ -218,8 +218,8 @@ void Avatar::loadSounds(const string& type_id) {
 	else {
 		sound_melee = snd->load("soundfx/melee_attack.ogg", "Avatar melee attack");
 		sound_mental = 0; // hero does not have this sound
-		sound_hit = snd->load("soundfx/" + stats.base + "_hit.ogg", "Avatar was hit");
-		sound_die = snd->load("soundfx/" + stats.base + "_die.ogg", "Avatar death");
+		sound_hit = snd->load("soundfx/" + stats.gfx_base + "_hit.ogg", "Avatar was hit");
+		sound_die = snd->load("soundfx/" + stats.gfx_base + "_die.ogg", "Avatar death");
 	}
 
 	sound_block = snd->load("soundfx/powers/block.ogg", "Avatar blocking");

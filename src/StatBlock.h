@@ -318,9 +318,9 @@ public:
 	int first_defeat_loot;
 
 	// player look options
-	std::string base; // folder in /images/avatar
-	std::string head; // png in /images/avatar/[base]
-	std::string portrait; // png in /images/portraits
+	std::string gfx_base; // folder in /images/avatar
+	std::string gfx_head; // png in /images/avatar/[base]
+	std::string gfx_portrait; // png in /images/portraits
 	std::string transform_type;
 
 	std::string animations;
