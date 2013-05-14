@@ -118,6 +118,9 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 		else
 			allowed_misses--;
 	}
+	if (enemies_to_spawn)
+		fprintf(stderr, "Could not spawn all enemies in group at (x=%d,y=%d,w=%d,h=%d), %d missing\n",
+		g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn);
 }
 
 int MapRenderer::load(string filename) {
