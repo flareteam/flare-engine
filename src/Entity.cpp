@@ -173,7 +173,7 @@ bool Entity::takeHit(const Hazard &h) {
 
 	int avoidance = 0;
 	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
-		avoidance = stats.avoidance;
+		avoidance = stats.get(STAT_AVOIDANCE);
 		if (stats.effects.triggered_block) avoidance *= 2;
 	}
 
@@ -211,10 +211,10 @@ bool Entity::takeHit(const Hazard &h) {
 
 	if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
 		// substract absorption from armor
-		int absorption = randBetween(stats.absorb_min, stats.absorb_max);
+		int absorption = randBetween(stats.get(STAT_ABS_MIN), stats.get(STAT_ABS_MAX));
 
 		if (stats.effects.triggered_block) {
-			absorption += absorption + stats.absorb_max; // blocking doubles your absorb amount
+			absorption += absorption + stats.get(STAT_ABS_MAX); // blocking doubles your absorb amount
 		}
 
 		if (absorption > 0 && dmg > 0) {
@@ -300,13 +300,13 @@ bool Entity::takeHit(const Hazard &h) {
 				int steal_amt = (dmg * h.hp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->hp = min(h.src_stats->hp + steal_amt, h.src_stats->maxhp);
+				h.src_stats->hp = min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 			}
 			if (h.mp_steal != 0) {
 				int steal_amt = (dmg * h.mp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->mp = min(h.src_stats->mp + steal_amt, h.src_stats->maxmp);
+				h.src_stats->mp = min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
 			}
 		}
 	}
@@ -333,10 +333,10 @@ bool Entity::takeHit(const Hazard &h) {
 			}
 		}
 		// don't go through a hit animation if stunned
-		else if (!stats.effects.stun && !percentChance(stats.poise)) {
+		else if (!stats.effects.stun && !percentChance(stats.get(STAT_POISE))) {
 			sfx_hit = true;
 
-			if(!percentChance(stats.poise) && stats.cooldown_hit_ticks == 0) {
+			if(!percentChance(stats.get(STAT_POISE)) && stats.cooldown_hit_ticks == 0) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
 				else

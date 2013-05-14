@@ -1385,7 +1385,7 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			if (ev.stats == NULL) {
 				ev.stats = new StatBlock();
 
-				ev.stats->accuracy = 1000; //always hits its target
+				ev.stats->current[STAT_ACCURACY] = 1000; //always hits its target
 
 				// if a power path was specified, place the source position there
 				if (ec_path) {
@@ -1400,8 +1400,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 				Event_Component *ec_damage = ev.getComponent("power_damage");
 				if (ec_damage) {
-					ev.stats->dmg_melee_min = ev.stats->dmg_ranged_min = ev.stats->dmg_ment_min = ec_damage->a;
-					ev.stats->dmg_melee_max = ev.stats->dmg_ranged_max = ev.stats->dmg_ment_max = ec_damage->b;
+					ev.stats->current[STAT_DMG_MELEE_MIN] = ev.stats->current[STAT_DMG_RANGED_MIN] = ev.stats->current[STAT_DMG_MENT_MIN] = ec_damage->a;
+					ev.stats->current[STAT_DMG_MELEE_MAX] = ev.stats->current[STAT_DMG_RANGED_MAX] = ev.stats->current[STAT_DMG_MENT_MAX] = ec_damage->b;
 				}
 			}
 

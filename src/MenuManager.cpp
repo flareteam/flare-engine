@@ -339,8 +339,8 @@ void MenuManager::logic() {
 	bool clicking_log = false;
 	ItemStack stack;
 
-	hp->update(stats->hp,stats->maxhp,inpt->mouse,"");
-	mp->update(stats->mp,stats->maxmp,inpt->mouse,"");
+	hp->update(stats->hp,stats->get(STAT_HP_MAX),inpt->mouse,"");
+	mp->update(stats->mp,stats->get(STAT_MP_MAX),inpt->mouse,"");
 	xp->update((stats->xp - stats->xp_table[stats->level-1]),(stats->xp_table[stats->level] - stats->xp_table[stats->level-1]),inpt->mouse,msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
 	effects->update(stats);
 
@@ -361,8 +361,8 @@ void MenuManager::logic() {
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
 		inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
-		stats->hp = stats->maxhp;
-		stats->mp = stats->maxmp;
+		stats->hp = stats->get(STAT_HP_MAX);
+		stats->mp = stats->get(STAT_MP_MAX);
 		stats->level_up = false;
 	}
 

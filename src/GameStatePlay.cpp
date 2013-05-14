@@ -126,7 +126,7 @@ void GameStatePlay::resetGame() {
 	loadStash();
 
 	// Finalize new character settings
-	menu->talker->setHero(pc->stats.name, pc->stats.portrait);
+	menu->talker->setHero(pc->stats.name, pc->stats.gfx_portrait);
 	pc->loadSounds();
 }
 
@@ -503,12 +503,12 @@ void GameStatePlay::checkEquipmentChange() {
 			}
 			// special case: if we don't have a head, use the portrait's head
 			if (gfx.gfx == "" && pc->layer_reference_order[j] == "head") {
-				gfx.gfx = pc->stats.head;
+				gfx.gfx = pc->stats.gfx_head;
 				gfx.type = "head";
 			}
 			// fall back to default if it exists
 			if (gfx.gfx == "") {
-				bool exists = fileExists(mods->locate("animations/avatar/" + pc->stats.base + "/default_" + gfx.type + ".txt"));
+				bool exists = fileExists(mods->locate("animations/avatar/" + pc->stats.gfx_base + "/default_" + gfx.type + ".txt"));
 				if (exists) gfx.gfx = "default_" + gfx.type;
 			}
 			img_gfx.push_back(gfx);
@@ -808,8 +808,8 @@ void GameStatePlay::logic() {
 		enemies->hero_pos = pc->stats.pos;
 		enemies->hero_direction = pc->stats.direction;
 		enemies->hero_alive = pc->stats.alive;
-		if (pc->stats.effects.bonus_stealth > 100) enemies->hero_stealth = 100;
-		else enemies->hero_stealth = pc->stats.effects.bonus_stealth;
+		if (pc->stats.get(STAT_STEALTH) > 100) enemies->hero_stealth = 100;
+		else enemies->hero_stealth = pc->stats.get(STAT_STEALTH);
 
 		enemies->logic();
 		hazards->logic();
