@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AStarNode.h"
 #include "MapCollision.h"
 #include "Settings.h"
+#include "AStarContainer.h"
 #include <cfloat>
 
 using namespace std;
@@ -323,6 +324,10 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 	if (limit == 0)
 		limit = 256;
 
+    //original:600
+    //with new collection:
+    limit = 600;
+
 	// path must be empty
 	if (!path.empty())
 		path.clear();
@@ -340,18 +345,20 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 	}
 
 	Point current = start;
-	AStarNode node(start);
-	node.setActualCost(0);
-	node.setEstimatedCost((float)calcDist(start,end));
-	node.setParent(current);
+	AStarNode* node = new AStarNode(start);
+	node->setActualCost(0);
+	node->setEstimatedCost((float)calcDist(start,end));
+	node->setParent(current);
 
-	list<AStarNode> open;
+	AStarContainer open(map_size.x, map_size.y, limit);
 	list<AStarNode> close;
 
-	open.push_back(node);
+    open.add(node);
+	///open.push_back(node);
 
-	while (!open.empty() && close.size() < limit) {
-		float lowest_score = FLT_MAX;
+	while (!open.isEmpty() && close.size() < limit) {
+
+		/**float lowest_score = FLT_MAX;
 		// find lowest score available inside open, make it current node and move it to close
 		list<AStarNode>::iterator lowest_it;
 		for (list<AStarNode>::iterator it=open.begin(); it != open.end(); ++it) {
@@ -359,17 +366,21 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 				lowest_score = it->getFinalCost();
 				lowest_it = it;
 			}
-		}
-		node = *lowest_it;
-		current.x = node.getX();
-		current.y = node.getY();
-		close.push_back(node);
-		open.erase(lowest_it);
+		}*/
+
+		AStarNode* lowest_it = open.get_shortest_f();
+
+		node = lowest_it;
+		current.x = node->getX();
+		current.y = node->getY();
+		close.push_back(*node);
+		///open.erase(lowest_it);
+		open.remove(lowest_it);
 
 		if ( current.x == end.x && current.y == end.y)
 			break; //path found !
 
-		list<Point> neighbours = node.getNeighbours(256,256); //256 is map max size
+		list<Point> neighbours = node->getNeighbours(256,256); //256 is map max size
 
 		// for every neighbour of current node
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
@@ -382,21 +393,33 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 			if(find(close.begin(), close.end(), neighbour)!=close.end())
 				continue;
 
-			list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
+
+			///list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
+
 			// if neighbour isn't inside open, add it as a new Node
-			if (i==open.end()) {
-				AStarNode newNode(neighbour.x,neighbour.y);
-				newNode.setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
-				newNode.setParent(current);
-				newNode.setEstimatedCost((float)calcDist(neighbour,end));
-				open.push_back(newNode);
+			///if (i==open.end()) {
+			if(!open.exists(neighbour)){
+				AStarNode* newNode = new AStarNode(neighbour.x,neighbour.y);
+				newNode->setActualCost(node->getActualCost()+(float)calcDist(current,neighbour));
+				newNode->setParent(current);
+				newNode->setEstimatedCost((float)calcDist(neighbour,end));
+				///open.push_back(newNode);
+				open.add(newNode);
 			}
 			// else, update it's cost if better
-			else if (node.getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
-				i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
-				i->setParent(current);
+			else{
+                AStarNode* i = open.get(neighbour.x, neighbour.y);
+                if (node->getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
+                    Point pos(i->getX(), i->getY());
+                    Point parent_pos(node->getX(), node->getY());
+                    open.updateParent(pos, parent_pos, node->getActualCost()+(float)calcDist(current,neighbour));
+                    ///i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
+                    ///i->setParent(current);
+                }
 			}
 		}
+
+		delete node;
 	}
 
 	if (current.x != end.x || current.y != end.y) {
@@ -413,9 +436,9 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 				lowest_it = it;
 			}
 		}
-		node = *lowest_it;
-		current.x = node.getX();
-		current.y = node.getY();
+		node = &(*lowest_it);
+		current.x = node->getX();
+		current.y = node->getY();
 
 		//couldnt find the target so map a path to the closest node found
 		while (current.x != start.x || current.y != start.y) {

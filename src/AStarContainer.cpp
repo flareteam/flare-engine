@@ -11,7 +11,8 @@ AStarContainer::AStarContainer(unsigned int map_width, unsigned int map_height, 
     map_pos = new int[map_width * map_height];
 
     //initialise the map array. A -1 value will mean there is no node at that position
-    std::memset(map_pos, -1, sizeof(int) * (map_width + map_height));
+    ///std::memset(map_pos, -1, sizeof(int) * (map_width + map_height));
+    std::fill(map_pos, map_pos + map_width * map_height, -1);
 }
 
 AStarContainer::~AStarContainer()
@@ -25,8 +26,11 @@ AStarContainer::~AStarContainer()
 void AStarContainer::add(AStarNode* node){
     nodes[size] = node;
 
+    map_pos[node->getX() + node->getY() * map_width] = size;
+
     //reorder the heap
     int m = size;
+
     AStarNode* temp = NULL;
     while(m != 0){
         if(nodes[m]->getFinalCost() <= nodes[m/2]->getFinalCost()){
@@ -49,11 +53,16 @@ AStarNode* AStarContainer::get_shortest_f(){
 
 void AStarContainer::remove(AStarNode* node){
 
-    int heap_indexv = map_pos[node->getX() + node->getY() * map_width];
+    int heap_indexv = map_pos[node->getX() + node->getY() * map_width] + 1;
 
     //swap the last node in the list with the node being deleted
-    nodes[heap_indexv] = nodes[size];
+    nodes[heap_indexv-1] = nodes[size-1];
     size--;
+
+    if(size == 0){
+        map_pos[node->getX() + node->getY() * map_width] = -1;
+        return;
+    }
 
     //reorder the heap
     int heap_indexu = heap_indexv;
@@ -62,18 +71,21 @@ void AStarContainer::remove(AStarNode* node){
         heap_indexu = heap_indexv;
         if(2*heap_indexu+1 <= size){//if both children exist
             //Select the lowest of the two children.
-            if(nodes[heap_indexu]->getFinalCost() >= nodes[2*heap_indexu]->getFinalCost()) heap_indexv = 2*heap_indexu;
-            if(nodes[heap_indexv]->getFinalCost() >= nodes[2*heap_indexu+1]->getFinalCost()) heap_indexv = 2*heap_indexu+1;
+            if(nodes[heap_indexu-1]->getFinalCost() >= nodes[2*heap_indexu-1]->getFinalCost()) heap_indexv = 2*heap_indexu;
+            if(nodes[heap_indexv-1]->getFinalCost() >= nodes[2*heap_indexu]->getFinalCost()) heap_indexv = 2*heap_indexu+1;
         }
         else if (2*heap_indexu <= size){//if only child #1 exists
             //Check if the F cost is greater than the child
-            if(nodes[heap_indexu]->getFinalCost() >= nodes[2*heap_indexu]->getFinalCost()) heap_indexv = 2*heap_indexu;
+            if(nodes[heap_indexu-1]->getFinalCost() >= nodes[2*heap_indexu-1]->getFinalCost()) heap_indexv = 2*heap_indexu;
         }
 
         if(heap_indexu != heap_indexv){//If parent's F > one or both of its children, swap them
-            AStarNode* temp = nodes[heap_indexu];
-            nodes[heap_indexu] = nodes[heap_indexv];
-            nodes[heap_indexv] = temp;
+            AStarNode* temp = nodes[heap_indexu-1];
+            nodes[heap_indexu-1] = nodes[heap_indexv-1];
+            map_pos[nodes[heap_indexu-1]->getX() + nodes[heap_indexu-1]->getY() * map_width] = heap_indexu-1;
+            nodes[heap_indexv-1] = temp;
+            map_pos[nodes[heap_indexv-1]->getX() + nodes[heap_indexv-1]->getY() * map_width] = heap_indexv-1;
+
         }
         else{
             break;//if item <= both children, exit loop
@@ -116,6 +128,6 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score){
             break;
     }
 
-    map_pos[pos.x + pos.y * map_width] = m;
+    ///map_pos[pos.x + pos.y * map_width] = m;
 }
 
