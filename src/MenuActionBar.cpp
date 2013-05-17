@@ -438,8 +438,10 @@ int MenuActionBar::checkAction() {
 	if (NO_MOUSE) {
 		int current = tablist.getCurrent();
 		if ((current >= 0 && current < 12) && inpt->pressing[ACTIONBAR]) {
-			inpt->lock[ACTIONBAR] = true;
-			return hotkeys[current];
+			if (slot_enabled[current] && slots[current]->checked) {
+				inpt->lock[ACTIONBAR] = true;
+				return hotkeys[current];
+			}
 		}
 	}
 
