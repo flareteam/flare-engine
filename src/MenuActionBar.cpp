@@ -435,6 +435,16 @@ void MenuActionBar::remove(Point mouse) {
  */
 int MenuActionBar::checkAction() {
 
+	if (NO_MOUSE) {
+		int current = tablist.getCurrent();
+		if ((current >= 0 && current < 12) && inpt->pressing[ACTIONBAR]) {
+			if (slot_enabled[current] && slots[current]->checked) {
+				inpt->lock[ACTIONBAR] = true;
+				return hotkeys[current];
+			}
+		}
+	}
+
 	// check click and hotkey actions
 	if ((inpt->pressing[BAR_1] || slots[0]->checkClick() == ACTIVATED) && slot_enabled[0]) return hotkeys[0];
 	if ((inpt->pressing[BAR_2] || slots[1]->checkClick() == ACTIVATED) && slot_enabled[1]) return hotkeys[1];
