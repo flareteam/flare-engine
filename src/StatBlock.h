@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "EffectManager.h"
 #include "MapCollision.h"
+#include "Stats.h"
 #include "Utils.h"
 
 #include <queue>
@@ -98,8 +99,8 @@ public:
 	void load(const std::string& filename);
 	void takeDamage(int dmg);
 	void recalc();
-	void recalc_alt();
-	void calcBaseDmgAndAbs();
+	void applyEffects();
+	void calcBase();
 	void logic();
 
 	bool alive;
@@ -137,17 +138,23 @@ public:
 	int physical_character;
 	int mental_character;
 
+	// combat stats
+	int starting[STAT_COUNT]; // default level 1 values per stat. Read from file and never changes at runtime.
+	int base[STAT_COUNT]; // values before any active effects are applied
+	int current[STAT_COUNT]; // values after all active effects are applied
+	int per_level[STAT_COUNT]; // value increases each level after level 1
+	int per_physical[STAT_COUNT];
+	int per_mental[STAT_COUNT];
+	int per_offense[STAT_COUNT];
+	int per_defense[STAT_COUNT];
+
+	int get(STAT stat) {return current[stat];}
+
 	// additional values to base stats, given by items
 	int offense_additional;
 	int defense_additional;
 	int physical_additional;
 	int mental_additional;
-
-	// bonuses for base stats
-	int bonus_per_physical;
-	int bonus_per_mental;
-	int bonus_per_offense;
-	int bonus_per_defense;
 
 	// getters for full base stats (character + additional)
 	int get_offense()  const { return offense_character + offense_additional; }
@@ -169,24 +176,11 @@ public:
 
 	// physical stats
 	int hp;
-	int maxhp;
-	int hp_per_minute;
 	int hp_ticker;
 
 	// mental stats
 	int mp;
-	int maxmp;
-	int mp_per_minute;
 	int mp_ticker;
-
-	// offense stats
-	int accuracy;
-
-	// defense stats
-	int avoidance;
-
-	// overall stats
-	int crit;
 
 	// default equipment stats
 	int dmg_melee_min_default;
@@ -201,16 +195,7 @@ public:
 	int speed_default;
 	int dspeed_default;
 
-	// equipment stats
-	int dmg_melee_min;
-	int dmg_melee_max;
-	int dmg_ment_min;
-	int dmg_ment_max;
-	int dmg_ranged_min;
-	int dmg_ranged_max;
-	int absorb_min;
-	int absorb_max;
-
+	// addition damage and absorb granted from items
 	int dmg_melee_min_add;
 	int dmg_melee_max_add;
 	int dmg_ment_min_add;
@@ -240,9 +225,6 @@ public:
 	Point forced_speed;
 	char direction;
 	std::vector<int> hero_cooldown;
-
-	int poise;
-	int poise_base;
 
 	int cooldown_hit;
 	int cooldown_hit_ticks;
@@ -318,9 +300,9 @@ public:
 	int first_defeat_loot;
 
 	// player look options
-	std::string base; // folder in /images/avatar
-	std::string head; // png in /images/avatar/[base]
-	std::string portrait; // png in /images/portraits
+	std::string gfx_base; // folder in /images/avatar
+	std::string gfx_head; // png in /images/avatar/[base]
+	std::string gfx_portrait; // png in /images/portraits
 	std::string transform_type;
 
 	std::string animations;
@@ -331,26 +313,6 @@ public:
 	// formula numbers
 	int max_spendable_stat_points;
 	int max_points_per_stat;
-	int hp_base;
-	int hp_per_level;
-	int hp_per_physical;
-	int hp_regen_base;
-	int hp_regen_per_level;
-	int hp_regen_per_physical;
-	int mp_base;
-	int mp_per_level;
-	int mp_per_mental;
-	int mp_regen_base;
-	int mp_regen_per_level;
-	int mp_regen_per_mental;
-	int accuracy_base;
-	int accuracy_per_level;
-	int accuracy_per_offense;
-	int avoidance_base;
-	int avoidance_per_level;
-	int avoidance_per_defense;
-	int crit_base;
-	int crit_per_level;
 
 	// preserve state before calcs
 	int prev_maxhp;

@@ -70,6 +70,7 @@ private:
 
 	void loadGraphics();
 	SDL_Color bonusColor(int stat);
+	std::string statTooltip(int stat);
 	int skill_points;
 	bool physical_up;
 	bool mental_up;

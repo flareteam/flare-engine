@@ -151,23 +151,23 @@ void CampaignManager::rewardCurrency(int amount) {
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
-	hero->xp += (amount * (100 + hero->effects.bonus_xp)) / 100;
+	hero->xp += (amount * (100 + hero->get(STAT_XP_GAIN))) / 100;
 	hero->refresh_stats = true;
 	if (show_message) addMsg(msg->get("You receive %d XP.", amount));
 }
 
 void CampaignManager::restoreHPMP(std::string s) {
 	if (s == "hp") {
-		hero->hp = hero->maxhp;
+		hero->hp = hero->get(STAT_HP_MAX);
 		addMsg(msg->get("HP restored."));
 	}
 	else if (s == "mp") {
-		hero->mp = hero->maxmp;
+		hero->mp = hero->get(STAT_MP_MAX);
 		addMsg(msg->get("MP restored."));
 	}
 	else if (s == "hpmp") {
-		hero->hp = hero->maxhp;
-		hero->mp = hero->maxmp;
+		hero->hp = hero->get(STAT_HP_MAX);
+		hero->mp = hero->get(STAT_MP_MAX);
 		addMsg(msg->get("HP and MP restored."));
 	}
 	else if (s == "status") {
@@ -175,8 +175,8 @@ void CampaignManager::restoreHPMP(std::string s) {
 		addMsg(msg->get("Negative effects removed."));
 	}
 	else if (s == "all") {
-		hero->hp = hero->maxhp;
-		hero->mp = hero->maxmp;
+		hero->hp = hero->get(STAT_HP_MAX);
+		hero->mp = hero->get(STAT_MP_MAX);
 		hero->effects.clearNegativeEffects();
 		addMsg(msg->get("HP and MP restored, negative effects removed"));
 	}
