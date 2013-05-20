@@ -45,6 +45,7 @@ protected:
 	bool los;
 	//when fleeing, the enemy moves away from the pursue_pos
 	bool fleeing;
+	bool move_to_safe_dist;
 
 public:
 	BehaviorStandard(Enemy *_e, EnemyManager *_em);
