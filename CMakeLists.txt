@@ -114,6 +114,7 @@ Set (FLARE_SOURCES
 	./src/ItemStorage.cpp
 	./src/Loot.cpp
 	./src/LootManager.cpp
+	./src/Map.cpp
 	./src/MapCollision.cpp
 	./src/MapRenderer.cpp
 	./src/Menu.cpp
