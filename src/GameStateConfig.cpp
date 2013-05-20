@@ -114,6 +114,8 @@ void GameStateConfig::init() {
 	no_mouse_lb = new WidgetLabel();
 	show_fps_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	show_fps_lb = new WidgetLabel();
+	colorblind_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	colorblind_lb = new WidgetLabel();
 	music_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	music_volume_lb = new WidgetLabel();
 	sound_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
@@ -223,6 +225,7 @@ void GameStateConfig::init() {
 
 	tablist.add(combat_text_cb);
 	tablist.add(show_fps_cb);
+	tablist.add(colorblind_cb);
 	tablist.add(language_lstb);
 
 	tablist.add(enable_joystick_cb);
@@ -427,6 +430,19 @@ void GameStateConfig::readConfig () {
 				show_fps_lb->set(msg->get("Show FPS"));
 				show_fps_lb->setJustify(JUSTIFY_RIGHT);
 				child_widget.push_back(show_fps_lb);
+				optiontab[child_widget.size()-1] = 2;
+			}
+			else if (infile.key == "colorblind") {
+				colorblind_cb->pos.x = frame.x + x2;
+				colorblind_cb->pos.y = frame.y + y2;
+				child_widget.push_back(colorblind_cb);
+				optiontab[child_widget.size()-1] = 2;
+
+				colorblind_lb->setX(frame.x + x1);
+				colorblind_lb->setY(frame.y + y1);
+				colorblind_lb->set(msg->get("Colorblind Mode"));
+				colorblind_lb->setJustify(JUSTIFY_RIGHT);
+				child_widget.push_back(colorblind_lb);
 				optiontab[child_widget.size()-1] = 2;
 			}
 			//sliders
@@ -756,6 +772,8 @@ void GameStateConfig::update () {
 	else no_mouse_cb->unCheck();
 	if (SHOW_FPS) show_fps_cb->Check();
 	else show_fps_cb->unCheck();
+	if (COLORBLIND) colorblind_cb->Check();
+	else colorblind_cb->unCheck();
 
 	std::stringstream list_mode;
 	unsigned int resolutions = getVideoModes();
@@ -992,6 +1010,10 @@ void GameStateConfig::logic () {
 		else if (show_fps_cb->checkClick()) {
 			if (show_fps_cb->isChecked()) SHOW_FPS=true;
 			else SHOW_FPS=false;
+		}
+		else if (colorblind_cb->checkClick()) {
+			if (colorblind_cb->isChecked()) COLORBLIND=true;
+			else COLORBLIND=false;
 		}
 	}
 	// tab 3 (input)
