@@ -1037,7 +1037,6 @@ void GameStateConfig::logic () {
 		else if (enable_joystick_cb->checkClick()) {
 			if (enable_joystick_cb->isChecked()) {
 				ENABLE_JOYSTICK=true;
-				inpt->mouse_emulation = true;
 				if (SDL_NumJoysticks() > 0) {
 					JOYSTICK_DEVICE = 0;
 					SDL_JoystickClose(joy);
@@ -1047,7 +1046,6 @@ void GameStateConfig::logic () {
 			}
 			else {
 				ENABLE_JOYSTICK=false;
-				inpt->mouse_emulation = false;
 				for (int i=0; i<joystick_device_lstb->getSize(); i++)
 					joystick_device_lstb->selected[i] = false;
 			}
@@ -1061,7 +1059,6 @@ void GameStateConfig::logic () {
 			if (JOYSTICK_DEVICE != -1) {
 				enable_joystick_cb->Check();
 				ENABLE_JOYSTICK=true;
-				inpt->mouse_emulation = true;
 				if (SDL_NumJoysticks() > 0) {
 					SDL_JoystickClose(joy);
 					joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
@@ -1070,7 +1067,6 @@ void GameStateConfig::logic () {
 			else {
 				enable_joystick_cb->unCheck();
 				ENABLE_JOYSTICK = false;
-				inpt->mouse_emulation = false;
 			}
 		}
 	}
