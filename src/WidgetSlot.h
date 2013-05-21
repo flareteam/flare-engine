@@ -63,6 +63,7 @@ public:
 	bool enabled;
 	bool checked;
 	bool pressed;
+	bool continuous;	// allow holding key to keep slot activated
 };
 
 #endif
