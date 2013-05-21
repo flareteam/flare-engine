@@ -20,9 +20,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuItemStorage
  */
 
-#include "InputState.h"
 #include "MenuItemStorage.h"
 #include "Settings.h"
+#include "SharedResources.h"
 
 using namespace std;
 
@@ -125,12 +125,12 @@ TooltipData MenuItemStorage::checkTooltip(Point mouse, StatBlock *stats, int con
 	return tip;
 }
 
-ItemStack MenuItemStorage::click(InputState * input) {
+ItemStack MenuItemStorage::click(Point mouse) {
 	ItemStack item;
-	drag_prev_slot = slotOver(input->mouse);
+	drag_prev_slot = slotOver(mouse);
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
-		if (input->pressing[SHIFT]) {
+		if (inpt->pressing[SHIFT]) {
 			item.quantity = 1;
 		}
 		substract( drag_prev_slot, item.quantity);

@@ -491,7 +491,7 @@ void MenuManager::logic() {
 			else if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
 				inpt->lock[MAIN2] = true;
 				if (isWithin(inv->carried_area, inpt->mouse)) {
-					inv->activate(inpt);
+					inv->activate(inpt->mouse);
 				}
 			}
 		}
@@ -512,7 +512,7 @@ void MenuManager::logic() {
 				vendor->tabsLogic();
 				if (inpt->pressing[CTRL]) {
 					// buy item from a vendor
-					stack = vendor->click(inpt);
+					stack = vendor->click(inpt->mouse);
 					if (stack.item > 0) {
 						if (!inv->buy(stack,vendor->getTab())) {
 							log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
@@ -533,7 +533,7 @@ void MenuManager::logic() {
 				}
 				else {
 					// start dragging a vendor item
-					drag_stack = vendor->click(inpt);
+					drag_stack = vendor->click(inpt->mouse);
 					if (drag_stack.item > 0) {
 						dragging = true;
 						drag_src = DRAG_SRC_VENDOR;
@@ -545,7 +545,7 @@ void MenuManager::logic() {
 				inpt->lock[MAIN1] = true;
 				if (inpt->pressing[CTRL]) {
 					// take an item from the stash
-					stack = stash->click(inpt);
+					stack = stash->click(inpt->mouse);
 					if (stack.item > 0) {
 						if (inv->full(stack.item)) {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
@@ -560,7 +560,7 @@ void MenuManager::logic() {
 				}
 				else {
 					// start dragging a stash item
-					drag_stack = stash->click(inpt);
+					drag_stack = stash->click(inpt->mouse);
 					if (drag_stack.item > 0) {
 						dragging = true;
 						drag_src = DRAG_SRC_STASH;
@@ -576,7 +576,7 @@ void MenuManager::logic() {
 			if (inv->visible && isWithin(inv->window_area,inpt->mouse)) {
 				if (inpt->pressing[CTRL]) {
 					inpt->lock[MAIN1] = true;
-					stack = inv->click(inpt);
+					stack = inv->click(inpt->mouse);
 					if (stack.item > 0) {
 						if (stash->visible) {
 							if (inv->stashAdd(stack) && !stash->full(stack.item)) {
@@ -601,7 +601,7 @@ void MenuManager::logic() {
 				}
 				else {
 					inpt->lock[MAIN1] = true;
-					drag_stack = inv->click(inpt);
+					drag_stack = inv->click(inpt->mouse);
 					if (drag_stack.item > 0) {
 						dragging = true;
 						drag_src = DRAG_SRC_INVENTORY;

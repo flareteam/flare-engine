@@ -283,14 +283,14 @@ TooltipData MenuInventory::checkTooltip(Point mouse) {
 /**
  * Click-start dragging in the inventory
  */
-ItemStack MenuInventory::click(InputState * input) {
+ItemStack MenuInventory::click(Point mouse) {
 	ItemStack item;
 	item.item = 0;
 	item.quantity = 0;
 
-	drag_prev_src = areaOver(input->mouse);
+	drag_prev_src = areaOver(mouse);
 	if( drag_prev_src > -1) {
-		item = inventory[drag_prev_src].click(input);
+		item = inventory[drag_prev_src].click(mouse);
 		// if dragging equipment, prepare to change stats/sprites
 		if (drag_prev_src == EQUIPMENT) {
 			if (stats->humanoid) {
@@ -432,13 +432,13 @@ void MenuInventory::drop(Point mouse, ItemStack stack) {
  * e.g. drink a potion
  * e.g. equip an item
  */
-void MenuInventory::activate(InputState * input) {
+void MenuInventory::activate(Point mouse) {
 	ItemStack stack;
 	Point nullpt;
 	nullpt.x = nullpt.y = 0;
 
 	// clicked a carried item
-	int slot = inventory[CARRIED].slotOver(input->mouse);
+	int slot = inventory[CARRIED].slotOver(mouse);
 	if (slot == -1)
 		return;
 
@@ -496,7 +496,7 @@ void MenuInventory::activate(InputState * input) {
 
 		if (equip_slot != -1) {
 			if (requirementsMet(inventory[CARRIED][slot].item)) {
-				stack = click( input);
+				stack = click(mouse);
 				if( inventory[EQUIPMENT][equip_slot].item == stack.item) {
 					// Merge the stacks
 					add( stack, EQUIPMENT, equip_slot);

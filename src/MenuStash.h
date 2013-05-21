@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
 
-class InputState;
 class NPC;
 class StatBlock;
 class WidgetButton;
@@ -54,7 +53,7 @@ public:
 	void update();
 	void logic();
 	void render();
-	ItemStack click(InputState * input);
+	ItemStack click(Point mouse);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
 	TooltipData checkTooltip(Point mouse);

@@ -210,8 +210,8 @@ void MenuStash::add(ItemStack stack, int slot) {
  * Start dragging a vendor item
  * Players can drag an item to their inventory.
  */
-ItemStack MenuStash::click(InputState * input) {
-	ItemStack stack = stock.click(input);
+ItemStack MenuStash::click(Point mouse) {
+	ItemStack stack = stock.click(mouse);
 	return stack;
 }
 
