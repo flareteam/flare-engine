@@ -137,6 +137,8 @@ void GameStateConfig::init() {
 	activemods_shiftdown_btn = new WidgetButton("images/menus/buttons/down.png");
 	activemods_deactivate_btn = new WidgetButton("images/menus/buttons/button_default.png");
 	inactivemods_activate_btn = new WidgetButton("images/menus/buttons/button_default.png");
+	joystick_deadzone_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
+	joystick_deadzone_lb = new WidgetLabel();
 
 	tabControl = new WidgetTabControl(6);
 	tabControl->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
@@ -229,6 +231,7 @@ void GameStateConfig::init() {
 	tablist.add(mouse_move_cb);
 	tablist.add(mouse_aim_cb);
 	tablist.add(no_mouse_cb);
+	tablist.add(joystick_deadzone_sl);
 	tablist.add(joystick_device_lstb);
 
 	tablist.add(input_scrollbox);
@@ -468,6 +471,19 @@ void GameStateConfig::readConfig () {
 				gamma_lb->setJustify(JUSTIFY_RIGHT);
 				child_widget.push_back(gamma_lb);
 				optiontab[child_widget.size()-1] = 0;
+			}
+			else if (infile.key == "joystick_deadzone") {
+				joystick_deadzone_sl->pos.x = frame.x + x2;
+				joystick_deadzone_sl->pos.y = frame.y + y2;
+				child_widget.push_back(joystick_deadzone_sl);
+				optiontab[child_widget.size()-1] = 3;
+
+				joystick_deadzone_lb->setX(frame.x + x1);
+				joystick_deadzone_lb->setY(frame.y + y1);
+				joystick_deadzone_lb->set(msg->get("Joystick Deadzone"));
+				joystick_deadzone_lb->setJustify(JUSTIFY_RIGHT);
+				child_widget.push_back(joystick_deadzone_lb);
+				optiontab[child_widget.size()-1] = 3;
 			}
 			//listboxes
 			else if (infile.key == "resolution") {
@@ -776,6 +792,8 @@ void GameStateConfig::update () {
 	}
 	joystick_device_lstb->refresh();
 
+	joystick_deadzone_sl->set(0,32768,JOY_DEADZONE);
+
 	if (!getLanguagesList()) fprintf(stderr, "Unable to get languages list!\n");
 	for (int i=0; i < getLanguagesNumber(); i++) {
 		language_lstb->append(language_full[i],"");
@@ -1019,7 +1037,6 @@ void GameStateConfig::logic () {
 		else if (enable_joystick_cb->checkClick()) {
 			if (enable_joystick_cb->isChecked()) {
 				ENABLE_JOYSTICK=true;
-				inpt->mouse_emulation = true;
 				if (SDL_NumJoysticks() > 0) {
 					JOYSTICK_DEVICE = 0;
 					SDL_JoystickClose(joy);
@@ -1029,18 +1046,19 @@ void GameStateConfig::logic () {
 			}
 			else {
 				ENABLE_JOYSTICK=false;
-				inpt->mouse_emulation = false;
 				for (int i=0; i<joystick_device_lstb->getSize(); i++)
 					joystick_device_lstb->selected[i] = false;
 			}
 			if (SDL_NumJoysticks() > 0) joystick_device_lstb->refresh();
+		}
+		else if (joystick_deadzone_sl->checkClick()) {
+			JOY_DEADZONE = joystick_deadzone_sl->getValue();
 		}
 		else if (joystick_device_lstb->checkClick()) {
 			JOYSTICK_DEVICE = joystick_device_lstb->getSelected();
 			if (JOYSTICK_DEVICE != -1) {
 				enable_joystick_cb->Check();
 				ENABLE_JOYSTICK=true;
-				inpt->mouse_emulation = true;
 				if (SDL_NumJoysticks() > 0) {
 					SDL_JoystickClose(joy);
 					joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
@@ -1049,7 +1067,6 @@ void GameStateConfig::logic () {
 			else {
 				enable_joystick_cb->unCheck();
 				ENABLE_JOYSTICK = false;
-				inpt->mouse_emulation = false;
 			}
 		}
 	}

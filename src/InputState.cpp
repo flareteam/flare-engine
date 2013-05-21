@@ -40,8 +40,7 @@ InputState::InputState(void)
 	, last_key(0)
 	, last_button(0)
 	, scroll_up(false)
-	, scroll_down(false)
-	, mouse_emulation(false) {
+	, scroll_down(false) {
 	SDL_EnableUNICODE(true);
 
 	defaultQwertyKeyBindings();
@@ -556,46 +555,12 @@ void InputState::handle(bool dump_event) {
 			joyHasMovedY = 0;
 			joyLastPosY = JOY_POS_CENTER;
 		}
-
-		mouseEmulation();
 	}
 }
 
 void InputState::resetScroll() {
 	scroll_up = false;
 	scroll_down = false;
-}
-
-void InputState::enableMouseEmulation() {
-	if (ENABLE_JOYSTICK && !mouse_emulation) {
-		mouse_emulation = true;
-		SDL_WarpMouse(VIEW_W_HALF,VIEW_H_HALF);
-	}
-}
-
-void InputState::disableMouseEmulation() {
-	if (ENABLE_JOYSTICK && mouse_emulation) {
-		mouse_emulation = false;
-		SDL_WarpMouse(VIEW_W-1,VIEW_H-1);
-	}
-}
-
-void InputState::mouseEmulation() {
-	if (!mouse_emulation) return;
-
-	if (pressing[UP] && my_vel > -MOUSE_EMU_VEL) my_vel--;
-	else if (!pressing[UP] && my_vel < 0) my_vel = 0;
-
-	if (pressing[DOWN] && my_vel < MOUSE_EMU_VEL) my_vel++;
-	else if (!pressing[DOWN] && my_vel > 0) my_vel = 0;
-
-	if (pressing[LEFT] && mx_vel > -MOUSE_EMU_VEL) mx_vel--;
-	else if (!pressing[LEFT] && mx_vel < 0) mx_vel = 0;
-
-	if (pressing[RIGHT] && mx_vel < MOUSE_EMU_VEL) mx_vel++;
-	else if (!pressing[RIGHT] && mx_vel > 0) mx_vel = 0;
-
-	if (mx_vel != 0 || my_vel != 0) SDL_WarpMouse(mouse.x+mx_vel,mouse.y+my_vel);
 }
 
 void InputState::lockActionBar() {
