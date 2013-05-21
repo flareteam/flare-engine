@@ -64,6 +64,7 @@ MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surfac
 
 	for (unsigned int i=0; i<12; i++) {
 		slots[i] = new WidgetSlot(icons, -1, ACTIONBAR);
+		slots[i]->continuous = true;
 		tablist.add(slots[i]);
 	}
 	for (unsigned int i=0; i<4; i++) {
