@@ -52,7 +52,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[134];
+	int optiontab[136];
 	SDL_Rect frame;
 	SDL_Rect* video_modes;
 
@@ -133,6 +133,8 @@ private:
 	WidgetButton        * activemods_shiftdown_btn;
 	WidgetButton        * activemods_deactivate_btn;
 	WidgetButton        * inactivemods_activate_btn;
+	WidgetSlider        * joystick_deadzone_sl;
+	WidgetLabel         * joystick_deadzone_lb;
 
 	WidgetLabel         * settings_lb[28];
 	WidgetButton        * settings_key[56];

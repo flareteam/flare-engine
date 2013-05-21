@@ -23,8 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-#define JOY_DEADZONE	100
-
 #define JOY_POS_CENTER	0
 #define JOY_POS_LEFT	-1
 #define JOY_POS_RIGHT	1

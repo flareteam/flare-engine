@@ -108,6 +108,7 @@ extern bool ENABLE_JOYSTICK;
 extern int JOYSTICK_DEVICE;
 extern bool MOUSE_AIM;
 extern bool NO_MOUSE;
+extern int JOY_DEADZONE;
 
 // User Options
 extern bool COMBAT_TEXT;
