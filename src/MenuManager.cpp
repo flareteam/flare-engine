@@ -478,9 +478,6 @@ void MenuManager::logic() {
 	}
 	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible);
 
-	if (ENABLE_JOYSTICK && (menus_open || exit->visible)) inpt->enableMouseEmulation();
-	else inpt->disableMouseEmulation();
-
 	if (stats->alive) {
 
 		// handle right-click

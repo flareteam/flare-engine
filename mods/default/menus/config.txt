@@ -34,6 +34,7 @@ enable_joystick=352,40,384,32
 mouse_move=352,72,384,64
 mouse_aim=352,104,384,96
 no_mouse=352,136,384,128
+joystick_deadzone=352,168,384,160
 handheld_note=416,136
 
 [key_bindings]

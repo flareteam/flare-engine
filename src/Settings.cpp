@@ -61,6 +61,7 @@ ConfigEntry config[] = {
 	{ "animated_tiles",   &typeid(ANIMATED_TILES),  "1",   &ANIMATED_TILES,  "animated tiles. Try disabling for performance. 1 enable, 0 disable."},
 	{ "enable_joystick",  &typeid(ENABLE_JOYSTICK), "0",   &ENABLE_JOYSTICK, "joystick settings."},
 	{ "joystick_device",  &typeid(JOYSTICK_DEVICE), "0",   &JOYSTICK_DEVICE, NULL},
+	{ "joystick_deadzone",&typeid(JOY_DEADZONE),    "100", &JOY_DEADZONE,    NULL},
 	{ "language",         &typeid(LANGUAGE),        "en",  &LANGUAGE,        "2-letter language code."},
 	{ "change_gamma",     &typeid(CHANGE_GAMMA),    "0",   &CHANGE_GAMMA,    "allow changing gamma (experimental). 1 enable, 0 disable."},
 	{ "gamma",            &typeid(GAMMA),           "1.0", &GAMMA,           "screen gamma (0.5 = darkest, 2.0 = lightest)"},
@@ -135,6 +136,7 @@ bool ENABLE_JOYSTICK;
 int JOYSTICK_DEVICE;
 bool MOUSE_AIM;
 bool NO_MOUSE;
+int JOY_DEADZONE;
 
 // Language Settings
 std::string LANGUAGE = "en";
