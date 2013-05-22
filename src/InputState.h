@@ -67,9 +67,6 @@ const int ACTIONBAR_FORWARD = 27;
  */
 
 class InputState {
-private:
-	int mx_vel;
-	int my_vel;
 public:
 	static const int key_count = 28;
 	int binding[key_count];
