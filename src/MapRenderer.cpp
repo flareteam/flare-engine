@@ -40,6 +40,7 @@ const int CLICK_RANGE = 3 * UNITS_PER_TILE; //for activating events
 
 MapRenderer::MapRenderer(CampaignManager *_camp)
 	: Map()
+	, index_objectlayer(0)
 	, music(NULL)
 	, tip(new WidgetTooltip())
 	, tip_pos()

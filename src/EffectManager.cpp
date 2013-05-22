@@ -75,6 +75,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	revive = emSource.revive;
 	convert = emSource.convert;
 	death_sentence = emSource.death_sentence;
+	fear = emSource.fear;
 	bonus_offense = emSource.bonus_offense;
 	bonus_defense = emSource.bonus_defense;
 	bonus_physical = emSource.bonus_physical;
