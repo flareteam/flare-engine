@@ -32,14 +32,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Point {
 public:
-	int x,y;
+	int x, y;
 	Point() : x(0), y(0) {}
 	Point(int _x, int _y) : x(_x), y(_y) {}
 };
 
 class FPoint {
 public:
-	float x,y;
+	float x, y;
+	FPoint(Point _p) : x(_p.x), y(_p.y) {}
+	FPoint() : x(0), y(0) {}
+	FPoint(float _x, float _y) : x(_x), y(_y) {}
 };
 
 // message passing struct for various sprites rendered map inline
@@ -84,17 +87,17 @@ public:
 // Utility Functions
 int round(float f);
 Point round(FPoint fp);
-Point screen_to_map(int x, int y, int camx, int camy);
+FPoint screen_to_map(int x, int y, int camx, int camy);
 Point map_to_screen(int x, int y, int camx, int camy);
 Point center_tile(Point p);
-Point map_to_collision(Point p);
-Point collision_to_map(Point p);
-FPoint calcVector(Point pos, int direction, int dist);
-float calcDist(Point p1, Point p2);
+Point map_to_collision(FPoint p);
+FPoint collision_to_map(Point p);
+FPoint calcVector(FPoint pos, int direction, int dist);
+float calcDist(FPoint p1, FPoint p2);
 float calcTheta(int x1, int y1, int x2, int y2);
-int calcDirection(int x0, int y0, int x1, int y1);
-int calcDirection(const Point &src, const Point &dst);
-bool isWithin(Point center, int radius, Point target);
+int calcDirection(float x0, float y0, float x1, float y1);
+int calcDirection(const FPoint &src, const FPoint &dst);
+bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(SDL_Rect r, Point target);
 
 Uint32 readPixel(SDL_Surface *screen, int x, int y);

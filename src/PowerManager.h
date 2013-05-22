@@ -314,18 +314,18 @@ private:
 
 	int loadSFX(const std::string& filename);
 
-	Point limitRange(int range, Point src, Point target);
-	Point targetNeighbor(Point target, int range);
-	Point targetNeighbor(Point target, int range, bool ignore_blocked);
-	void initHazard(int powernum, StatBlock *src_stats, Point target, Hazard *haz);
-	void buff(int power_index, StatBlock *src_stats, Point target);
+	FPoint limitRange(float range, FPoint src, FPoint target);
+	FPoint targetNeighbor(FPoint target, float range);
+	FPoint targetNeighbor(FPoint target, float range, bool ignore_blocked);
+	void initHazard(int powernum, StatBlock *src_stats, FPoint target, Hazard *haz);
+	void buff(int power_index, StatBlock *src_stats, FPoint target);
 	void playSound(int power_index, StatBlock *src_stats);
 
-	bool fixed(int powernum, StatBlock *src_stats, Point target);
-	bool missile(int powernum, StatBlock *src_stats, Point target);
-	bool repeater(int powernum, StatBlock *src_stats, Point target);
-	bool spawn(int powernum, StatBlock *src_stats, Point target);
-	bool transform(int powernum, StatBlock *src_stats, Point target);
+	bool fixed(int powernum, StatBlock *src_stats, FPoint target);
+	bool missile(int powernum, StatBlock *src_stats, FPoint target);
+	bool repeater(int powernum, StatBlock *src_stats, FPoint target);
+	bool spawn(int powernum, StatBlock *src_stats, FPoint target);
+	bool transform(int powernum, StatBlock *src_stats, FPoint target);
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
@@ -336,10 +336,10 @@ public:
 	std::string log_msg;
 
 	void handleNewMap(MapCollision *_collider);
-	bool activate(int power_index, StatBlock *src_stats, Point target);
+	bool activate(int power_index, StatBlock *src_stats, FPoint target);
 	const Power &getPower(unsigned id) 	{assert(id < powers.size()); return powers[id];}
 	bool canUsePower(unsigned id) const;
-	bool hasValidTarget(int power_index, StatBlock *src_stats, Point target);
+	bool hasValidTarget(int power_index, StatBlock *src_stats, FPoint target);
 	bool spawn(const std::string& enemy_type, Point target);
 	bool effect(StatBlock *src_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);

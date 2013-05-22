@@ -129,9 +129,9 @@ public:
 class Map_Enemy {
 public:
 	std::string type;
-	Point pos;
+	FPoint pos;
 	int direction;
-	std::queue<Point> waypoints;
+	std::queue<FPoint> waypoints;
 	bool wander;
 	SDL_Rect wander_area;
 	bool hero_ally;
@@ -141,7 +141,7 @@ public:
 	 : type(_type)
 	 , pos(_pos)
 	 , direction(rand() % 8)
-	 , waypoints(std::queue<Point>())
+	 , waypoints(std::queue<FPoint>())
 	 , wander(false)
 	 , hero_ally(false)
 	 , summon_power_index(0)
@@ -253,9 +253,9 @@ public:
 	void render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	void clearEvents();
-	void checkEvents(Point loc);
+	void checkEvents(FPoint loc);
 	void checkHotspots();
-	void checkNearestEvent(Point loc);
+	void checkNearestEvent(FPoint loc);
 	void checkTooltip();
 
 	// some events are triggered on exiting the map
@@ -267,10 +267,9 @@ public:
 	short h;
 
 	// cam(x,y) is where on the map the camera is pointing
-	// units found in Settings.h (UNITS_PER_TILE)
-	Point cam;
+	FPoint cam;
 	Point hero_tile;
-	Point spawn;
+	FPoint spawn;
 	int spawn_dir;
 
 	// indicates that the map was changed by an event, so the GameStatePlay

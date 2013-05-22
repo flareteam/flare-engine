@@ -100,8 +100,7 @@ void Avatar::init() {
 	stats.mental_additional = 0;
 	stats.offense_additional = 0;
 	stats.defense_additional = 0;
-	stats.speed = 14;
-	stats.dspeed = 10;
+	stats.speed = 0.2;
 	stats.recalc();
 
 	log_msg = "";
@@ -268,10 +267,10 @@ bool Avatar::pressing_move() {
 void Avatar::set_direction() {
 	// handle direction changes
 	if (MOUSE_MOVE) {
-		Point target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
+		FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
 		// if no line of movement to target, use pathfinder
 		if (!map->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
-			vector<Point> path;
+			vector<FPoint> path;
 
 			// target first waypoint
 			map->collider.compute_path(stats.pos, target, path, stats.movement_type);
@@ -300,7 +299,7 @@ void Avatar::set_direction() {
 void Avatar::handlePower(int actionbar_power) {
 	if (actionbar_power != 0 && stats.cooldown_ticks == 0) {
 		const Power &power = powers->getPower(actionbar_power);
-		Point target;
+		FPoint target;
 		if (MOUSE_AIM) {
 			if (power.aim_assist)
 				target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, stats.pos.x, stats.pos.y);
@@ -754,7 +753,6 @@ void Avatar::transform() {
 
 	// replace some hero stats
 	stats.speed = charmed_stats->speed;
-	stats.dspeed = charmed_stats->dspeed;
 	stats.flying = charmed_stats->flying;
 	stats.humanoid = charmed_stats->humanoid;
 	stats.animations = charmed_stats->animations;
@@ -815,7 +813,6 @@ void Avatar::untransform() {
 
 	// revert some hero stats to last saved
 	stats.speed = hero_stats->speed;
-	stats.dspeed = hero_stats->dspeed;
 	stats.flying = hero_stats->flying;
 	stats.humanoid = hero_stats->humanoid;
 	stats.animations = hero_stats->animations;
@@ -900,7 +897,7 @@ void Avatar::addRenders(vector<Renderable> &r) {
 			unsigned index = layer_def[stats.direction][i];
 			if (anims[index]) {
 				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
-				ren.map_pos = stats.pos;
+				ren.map_pos = round(stats.pos);
 				ren.prio = i+1;
 				r.push_back(ren);
 			}
@@ -908,14 +905,14 @@ void Avatar::addRenders(vector<Renderable> &r) {
 	}
 	else {
 		Renderable ren = activeAnimation->getCurrentFrame(stats.direction);
-		ren.map_pos = stats.pos;
+		ren.map_pos = round(stats.pos);
 		r.push_back(ren);
 	}
 	// add effects
 	for (unsigned i = 0; i < stats.effects.effect_list.size(); ++i) {
 		if (stats.effects.effect_list[i].animation && !stats.effects.effect_list[i].animation->isCompleted()) {
 			Renderable ren = stats.effects.effect_list[i].animation->getCurrentFrame(0);
-			ren.map_pos = stats.pos;
+			ren.map_pos = round(stats.pos);
 			if (stats.effects.effect_list[i].render_above) ren.prio = layer_def[stats.direction].size()+1;
 			else ren.prio = 0;
 			r.push_back(ren);

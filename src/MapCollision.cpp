@@ -49,11 +49,11 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
  * If we encounter an obstacle at 90 degrees, stop.
  * If we encounter an obstacle at 45 or 135 degrees, slide.
  */
-bool MapCollision::move(int &x, int &y, int step_x, int step_y, int dist, MOVEMENTTYPE movement_type, bool is_hero) {
+bool MapCollision::move(float &x, float &y, float step_x, float step_y, float dist, MOVEMENTTYPE movement_type, bool is_hero) {
 
 	bool diag = step_x && step_y;
 
-	for (int i = dist; i--;) {
+	for (float i = dist; i >= 0 ;i-= 0.5) {
 		if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
 			x+= step_x;
 			y+= step_y;
@@ -88,20 +88,21 @@ bool MapCollision::move(int &x, int &y, int step_x, int step_y, int dist, MOVEME
 /**
  * Determines whether the grid position is outside the map boundary
  */
-bool MapCollision::is_outside_map(int tile_x, int tile_y) const {
-	return (tile_x < 0 || tile_y < 0 || tile_x >= map_size.x || tile_y >= map_size.y);
+bool MapCollision::is_outside_map(float tile_x, float tile_y) const {
+	const int x = round(tile_x);
+	const int y = round(tile_y);
+	return (x < 0 || y < 0 || x >= map_size.x || y >= map_size.y);
 }
 
 /**
  * A map space is empty if it contains no blocking type
  * A position outside the map boundary is not empty
  */
-bool MapCollision::is_empty(int x, int y) const {
-	int tile_x = x >> TILE_SHIFT; // fast div
-	int tile_y = y >> TILE_SHIFT; // fast div
-
+bool MapCollision::is_empty(float x, float y) const {
 	// bounds check
-	if (is_outside_map(tile_x, tile_y)) return false;
+	const int tile_x = round(x);
+	const int tile_y = round(y);
+	if (is_outside_map(tile_y, tile_y)) return false;
 
 	// collision type check
 	return (colmap[tile_x][tile_y] == BLOCKS_NONE);
@@ -112,8 +113,8 @@ bool MapCollision::is_empty(int x, int y) const {
  * A position outside the map boundary is a wall
  */
 bool MapCollision::is_wall(int x, int y) const {
-	int tile_x = x >> TILE_SHIFT; // fast div
-	int tile_y = y >> TILE_SHIFT; // fast div
+	int tile_x = x;
+	int tile_y = y;
 
 	// bounds check
 	if (is_outside_map(tile_x, tile_y)) return true;
@@ -153,8 +154,8 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
  */
 bool MapCollision::is_valid_position(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
-	const int tile_x = x >> TILE_SHIFT; // fast div
-	const int tile_y = y >> TILE_SHIFT; // fast div
+	const int tile_x = x;
+	const int tile_y = y;
 
 	return is_valid_tile(tile_x, tile_y, movement_type, is_hero);
 }
@@ -175,9 +176,9 @@ bool inline MapCollision::is_sidestepable(int tile_x, int tile_y, int offx, int 
  *         (i.e., if xdir was zero and ydir was non-zero, the return value
  *         should be applied to xdir)
  */
-int MapCollision::is_one_step_around(int x, int y, int xdir, int ydir) {
-	int tile_x = x >> TILE_SHIFT; // fast div
-	int tile_y = y >> TILE_SHIFT; // fast div
+int MapCollision::is_one_step_around(float x, float y, int xdir, int ydir) {
+	int tile_x = x; // TODO better rounding
+	int tile_y = y;
 	int ret = 0;
 
 	if (xdir) {
@@ -192,7 +193,7 @@ int MapCollision::is_one_step_around(int x, int y, int xdir, int ydir) {
 			// translation: ret = y % UNITS_PER_TILE > UNITS_PER_TILE / 2 ? 1 : -1;
 			// realistically, if we were using compile time constants, the compiler
 			// would generate pretty much those instructions.
-			ret = (y & (UNITS_PER_TILE - 1)) < UNITS_PER_TILE >> 1 ? 1 : -1;
+			ret = (y-tile_y) < 0.5 ? 1 : -1;
 		}
 	}
 	else {
@@ -203,7 +204,7 @@ int MapCollision::is_one_step_around(int x, int y, int xdir, int ydir) {
 			ret |= 2;
 		}
 		if (ret == 3) {
-			ret = (x & (UNITS_PER_TILE - 1)) < UNITS_PER_TILE >> 1 ? 1 : -1;
+			ret = (x-tile_x) < 0.5 ? 1 : -1;
 		}
 	}
 
@@ -268,8 +269,8 @@ bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE
 	if (movement_type == MOVEMENT_INTANGIBLE) return true;
 
 	// if the target is blocking, clear it temporarily
-	int tile_x = x2 >> TILE_SHIFT;
-	int tile_y = y2 >> TILE_SHIFT;
+	int tile_x = x2;
+	int tile_y = y2;
 	bool target_blocks = false;
 	int target_blocks_type = colmap[tile_x][tile_y];
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES || colmap[tile_x][tile_y] == BLOCKS_ENEMIES) {
@@ -318,7 +319,7 @@ bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2) {
 * limit is the maximum number of explored node
 * @return true if a path is found
 */
-bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
+bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
 	if (limit == 0)
 		limit = 256;
@@ -442,8 +443,8 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 
 void MapCollision::block(const int x, const int y, bool is_ally) {
 
-	const int tile_x = x >> TILE_SHIFT; // fast div
-	const int tile_y = y >> TILE_SHIFT; // fast div
+	const int tile_x = x;
+	const int tile_y = y;
 
 	if (colmap[tile_x][tile_y] == BLOCKS_NONE) {
 		if(is_ally)
@@ -456,8 +457,8 @@ void MapCollision::block(const int x, const int y, bool is_ally) {
 
 void MapCollision::unblock(int x, int y) {
 
-	const int tile_x = x >> TILE_SHIFT; // fast div
-	const int tile_y = y >> TILE_SHIFT; // fast div
+	const int tile_x = x;
+	const int tile_y = y;
 
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES || colmap[tile_x][tile_y] == BLOCKS_ENEMIES) {
 		colmap[tile_x][tile_y] = BLOCKS_NONE;

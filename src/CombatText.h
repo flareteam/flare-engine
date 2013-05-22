@@ -49,7 +49,7 @@ class Combat_Text_Item {
 public:
 	WidgetLabel *label;
 	int lifespan;
-	Point pos;
+	FPoint pos;
 	int floating_offset;
 	std::string text;
 	int displaytype;
@@ -60,12 +60,12 @@ public:
 	CombatText();
 
 	void render();
-	void addMessage(std::string message, Point location, int displaytype);
-	void addMessage(int num, Point location, int displaytype);
-	void setCam(Point location);
+	void addMessage(std::string message, FPoint location, int displaytype);
+	void addMessage(int num, FPoint location, int displaytype);
+	void setCam(FPoint location);
 
 private:
-	Point cam;
+	FPoint cam;
 	std::vector<Combat_Text_Item> combat_text;
 
 	SDL_Color msg_color[5];

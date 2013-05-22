@@ -54,9 +54,9 @@ public:
 	void logic();
 	void addRenders(std::vector<Renderable> &r);
 	int getID(std::string npcName);
-	int checkNPCClick(Point mouse, Point cam);
-	int getNearestNPC(Point pos);
-	void renderTooltips(Point cam, Point mouse);
+	int checkNPCClick(Point mouse, FPoint cam);
+	int getNearestNPC(FPoint pos);
+	void renderTooltips(FPoint cam, Point mouse);
 };
 
 #endif

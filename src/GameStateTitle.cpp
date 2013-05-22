@@ -76,7 +76,7 @@ GameStateTitle::GameStateTitle() : GameState() {
 void GameStateTitle::logic() {
 	button_play->enabled = ENABLE_PLAYGAME;
 
-	snd->logic(Point(0,0));
+	snd->logic(FPoint(0,0));
 
 	if(inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
 		inpt->lock[CANCEL] = true;

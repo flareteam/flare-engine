@@ -69,18 +69,18 @@ public:
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP(CampaignManager *camp);
 	bool isCleared();
-	Enemy *enemyFocus(Point mouse, Point cam, bool alive_only);
+	Enemy *enemyFocus(Point mouse, FPoint cam, bool alive_only);
 
 	// vars
 	std::vector<Enemy*> enemies;
-	Point hero_pos;
+	FPoint hero_pos;
 	char hero_direction;
 	bool hero_alive;
 	int hero_stealth;
 	Avatar *pc;
 
 	bool player_blocked;
-    int player_blocked_ticks;
+	int player_blocked_ticks;
 };
 
 

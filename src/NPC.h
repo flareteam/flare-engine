@@ -58,7 +58,7 @@ public:
 	std::string name;
 	std::string filename;
 	std::string gfx; // filename of sprite.
-	Point pos; // map position
+	FPoint pos; // map position
 	int level; // used in determining item quality
 
 	int direction;

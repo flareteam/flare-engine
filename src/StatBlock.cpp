@@ -91,8 +91,7 @@ StatBlock::StatBlock()
 	, dmg_ranged_max_default(4)
 	, absorb_min_default(0)
 	, absorb_max_default(0)
-	, speed_default(14)
-	, dspeed_default(10)
+	, speed_default(0.2)
 	, dmg_melee_min_add(0)
 	, dmg_melee_max_add(0)
 	, dmg_ment_min_add(0)
@@ -101,8 +100,7 @@ StatBlock::StatBlock()
 	, dmg_ranged_max_add(0)
 	, absorb_min_add(0)
 	, absorb_max_add(0)
-	, speed(14)
-	, dspeed(10)
+	, speed(0.2)
 	, wielding_physical(false)
 	, wielding_mental(false)
 	, wielding_offense(false)
@@ -278,7 +276,6 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "waypoint_pause") waypoint_pause = num;
 
 		else if (infile.key == "speed") speed = speed_default = num;
-		else if (infile.key == "dspeed") dspeed = dspeed_default = num;
 		else if (infile.key == "turn_delay") turn_delay = num;
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		else if (infile.key == "chance_flee") chance_flee = num;
@@ -465,9 +462,9 @@ void StatBlock::applyEffects() {
 
 	calcBase();
 
-    for (int i=0; i<STAT_COUNT; i++) {
-        current[i] = base[i] + effects.bonus[i];
-    }
+	for (int i=0; i<STAT_COUNT; i++) {
+		current[i] = base[i] + effects.bonus[i];
+	}
 
 	for (unsigned i=0; i<effects.bonus_resist.size(); i++) {
 		vulnerable[i] = vulnerable_base[i] - effects.bonus_resist[i];
@@ -480,7 +477,6 @@ void StatBlock::applyEffects() {
 	if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
 
 	speed = speed_default;
-	dspeed = dspeed_default;
 }
 
 /**
@@ -601,9 +597,6 @@ void StatBlock::loadHeroStats() {
 		}
 		else if (infile.key == "speed") {
 			speed = speed_default = value;
-		}
-		else if (infile.key == "dspeed") {
-			dspeed = dspeed_default = value;
 		}
 		else if (infile.key == "sfx_step") {
 			sfx_step = infile.val;

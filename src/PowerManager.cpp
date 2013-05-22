@@ -359,7 +359,7 @@ void PowerManager::handleNewMap(MapCollision *_collider) {
 /**
  * Keep two points within a certain range
  */
-Point PowerManager::limitRange(int range, Point src, Point target) {
+FPoint PowerManager::limitRange(float range, FPoint src, FPoint target) {
 	if (range > 0) {
 		if (src.x+range < target.x)
 			target.x = src.x+range;
@@ -377,7 +377,7 @@ Point PowerManager::limitRange(int range, Point src, Point target) {
 /**
  * Check if the target is valid (not an empty area or a wall)
  */
-bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint target) {
 
 	if (!collider) return false;
 
@@ -392,7 +392,7 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, Point t
 	return true;
 }
 
-Point PowerManager::targetNeighbor(Point target, int range) {
+FPoint PowerManager::targetNeighbor(FPoint target, float range) {
 	return targetNeighbor(target,range,false);
 }
 
@@ -400,15 +400,15 @@ Point PowerManager::targetNeighbor(Point target, int range) {
  * Try to retarget the power to one of the 8 adjacent tiles
  * Returns the retargeted position on success, returns the original position on failure
  */
-Point PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked) {
-	Point new_target = target;
+FPoint PowerManager::targetNeighbor(FPoint target, float range, bool ignore_blocked) {
+	Point new_target = round(target);
 	std::vector<Point> valid_tiles;
 
 	for (int i=-range; i<=range; i++) {
 		for (int j=-range; j<=range; j++) {
 			if (i == 0 && j == 0) continue; // skip the middle tile
-			new_target.x = target.x+UNITS_PER_TILE*i;
-			new_target.y = target.y+UNITS_PER_TILE*j;
+			new_target.x = target.x + i;
+			new_target.y = target.y + j;
 			if (collider->is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
 				valid_tiles.push_back(new_target);
 		}
@@ -432,7 +432,7 @@ Point PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked)
  * @param target Aim position in map coordinates
  * @param haz A newly-initialized hazard
  */
-void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point target, Hazard *haz) {
+void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint target, Hazard *haz) {
 
 	//the hazard holds the statblock of its source
 	haz->src_stats = src_stats;
@@ -529,7 +529,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		Point new_target = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor,true);
+		FPoint new_target = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor,true);
 		haz->pos.x = (float)new_target.x;
 		haz->pos.y = (float)new_target.y;
 	}
@@ -563,13 +563,13 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
  * Any attack-based effects are handled by hazards.
  * Self-enhancements (buffs) are handled by this function.
  */
-void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
+void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
 		target = limitRange(powers[power_index].range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			Point new_target = targetNeighbor(target,powers[power_index].target_neighbor);
+			FPoint new_target = targetNeighbor(target,powers[power_index].target_neighbor);
 			if (new_target.x == target.x && new_target.y == target.y) {
 				src_stats->teleportation = false;
 			}
@@ -688,7 +688,7 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::fixed(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
 
 	if (powers[power_index].use_hazard) {
 		int delay_iterator = 0;
@@ -724,7 +724,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, Point target) {
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target) {
 	float pi = 3.1415926535898f;
 
 	Point src;
@@ -768,8 +768,8 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target) 
 		if (powers[power_index].directional)
 			haz->animationKind = calcDirection(
 									 src.x, src.y,
-									 static_cast<int>(src.x + UNITS_PER_TILE * haz->speed.x),
-									 static_cast<int>(src.y + UNITS_PER_TILE * haz->speed.y));
+									 static_cast<int>(src.x + haz->speed.x),
+									 static_cast<int>(src.y + haz->speed.y));
 
 		// add optional delay
 		haz->delay_frames = delay_iterator;
@@ -787,7 +787,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target) 
 /**
  * Repeaters are multiple hazards that spawn in a straight line
  */
-bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target) {
 
 	payPowerCost(power_index, src_stats);
 
@@ -837,7 +837,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target)
 /**
  * Spawn a creature. Does not create a hazard
  */
-bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 
 	// apply any buffs
 	buff(power_index, src_stats, target);
@@ -898,7 +898,7 @@ bool PowerManager::spawn(const std::string& enemy_type, Point target) {
 /**
  * Transform into a creature. Fully replaces entity characteristics
  */
-bool PowerManager::transform(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint target) {
 	// locking the actionbar prevents power usage until after the hero is transformed
 	inpt->lockActionBar();
 
@@ -943,7 +943,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, Point target
 /**
  * Activate is basically a switch/redirect to the appropriate function
  */
-bool PowerManager::activate(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target) {
 
 	if (src_stats->hero) {
 		if (powers[power_index].requires_mp > src_stats->mp)

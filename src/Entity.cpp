@@ -81,11 +81,11 @@ bool Entity::move() {
 
 	if (stats.effects.speed == 0) return false;
 
-	int speed_diagonal = stats.dspeed;
-	int speed_straight = stats.speed;
+	float speed_straight = stats.speed;
 
-	speed_diagonal = (speed_diagonal * stats.effects.speed) / 100;
 	speed_straight = (speed_straight * stats.effects.speed) / 100;
+
+	float speed_diagonal = speed_straight * M_SQRT2;
 
 	bool full_move = false;
 

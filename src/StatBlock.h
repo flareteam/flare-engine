@@ -192,8 +192,7 @@ public:
 	int absorb_min_default;
 	int absorb_max_default;
 
-	int speed_default;
-	int dspeed_default;
+	float speed_default;
 
 	// addition damage and absorb granted from items
 	int dmg_melee_min_add;
@@ -205,8 +204,7 @@ public:
 	int absorb_min_add;
 	int absorb_max_add;
 
-	int speed;
-	int dspeed;
+	float speed;
 
 	bool wielding_physical;
 	bool wielding_mental;
@@ -221,7 +219,7 @@ public:
 	bool transform_with_equipment;
 	EffectManager effects;
 
-	Point pos;
+	FPoint pos;
 	Point forced_speed;
 	char direction;
 	std::vector<int> hero_cooldown;
@@ -233,7 +231,7 @@ public:
 	int cur_state;
 
 	// waypoint patrolling
-	std::queue<Point> waypoints;
+	std::queue<FPoint> waypoints;
 	int waypoint_pause;
 	int waypoint_pause_ticks;
 
@@ -260,7 +258,7 @@ public:
 	int melee_range;
 	int threat_range;
 	bool passive_attacker;//enemy will not initiate combat unless attacked
-	Point hero_pos;
+	FPoint hero_pos;
 	char hero_direction;
 	bool hero_alive;
 	int hero_stealth;

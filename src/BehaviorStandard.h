@@ -40,7 +40,7 @@ private:
 protected:
 	int hero_dist;
 	int target_dist;
-	Point pursue_pos;
+	FPoint pursue_pos;
 	// targeting vars
 	bool los;
 	//when fleeing, the enemy moves away from the pursue_pos
