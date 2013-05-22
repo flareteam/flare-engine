@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemStorage.h"
 #include "WidgetSlot.h"
 
-class InputState;
 class TooltipData;
 
 class MenuItemStorage : public ItemStorage {
@@ -49,9 +48,9 @@ public:
 
 	// rendering
 	void render();
-	int slotOver(Point mouse);
-	TooltipData checkTooltip(Point mouse, StatBlock *stats, int context);
-	ItemStack click(InputState * input);
+	int slotOver(Point position);
+	TooltipData checkTooltip(Point position, StatBlock *stats, int context);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
 	void fillEquipmentSlots();
 	void highlightMatching(std::string type);
