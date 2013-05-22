@@ -64,7 +64,7 @@ public:
 	~MapCollision();
 
 	void setmap(const unsigned short _colmap[][256], unsigned short w, unsigned short h);
-	bool move(float &x, float &y, float step_x, float step_y, float dist, MOVEMENTTYPE movement_type, bool is_hero);
+	bool move(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 
 	bool is_outside_map(float tile_x, float tile_y) const;
 	bool is_empty(float x, float y) const;

@@ -897,7 +897,7 @@ void Avatar::addRenders(vector<Renderable> &r) {
 			unsigned index = layer_def[stats.direction][i];
 			if (anims[index]) {
 				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
-				ren.map_pos = round(stats.pos);
+				ren.map_pos = stats.pos;
 				ren.prio = i+1;
 				r.push_back(ren);
 			}

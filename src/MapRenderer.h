@@ -105,7 +105,7 @@ private:
 
 	void clearLayers();
 
-	Point shakycam;
+	FPoint shakycam;
 	TileSet tset;
 
 	// in case of animated tiles switched off, prerender background into this layer
@@ -115,7 +115,7 @@ private:
 	void createBackgroundSurface();
 
 	// point where the backgroundsurface was rendered. same coordinates as shakycam
-	Point backgroundsurfaceoffset;
+	FPoint backgroundsurfaceoffset;
 
 	// force a rendering of the background in the next render step.
 	bool repaint_background;

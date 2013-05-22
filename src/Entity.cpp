@@ -38,7 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
 const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
-const float speedMultiplyer[8] = { 1/M_SQRT2, 0, 1/M_SQRT2, 0, 1/M_SQRT2, 0, 1/M_SQRT2, 0};
+const float speedMultiplyer[8] = { 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0};
 
 using namespace std;
 
@@ -80,15 +80,16 @@ Entity::Entity(const Entity &e)
 bool Entity::move() {
 
 	if (stats.effects.forced_move)
-		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type, stats.hero);
+		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, stats.movement_type, stats.hero);
 
 	if (stats.effects.speed == 0) return false;
 
-	int dx = directionDeltaX[stats.direction];
-	int dy = directionDeltaY[stats.direction];
 	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
+	float dx = speed * directionDeltaX[stats.direction];
+	float dy = speed * directionDeltaY[stats.direction];
 
-	bool full_move = map->collider.move(stats.pos.x, stats.pos.y, dx, dy, speed, stats.movement_type, stats.hero);
+
+	bool full_move = map->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, stats.hero);
 
 	return full_move;
 }

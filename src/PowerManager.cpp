@@ -760,7 +760,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 		//calculate the missile velocity
 		int speed_var = 0;
 		if (powers[power_index].speed_variance != 0)
-			speed_var = (rand() % 2 - 0.5) * 2 * ((rand() % round(powers[power_index].speed_variance) + 1) - 1);
+			speed_var = (rand() % 2 - 0.5) * 2 * ((rand() % (int)round(powers[power_index].speed_variance) + 1) - 1);
 		haz->speed.x = (haz->base_speed + speed_var) * cos(alpha);
 		haz->speed.y = (haz->base_speed + speed_var) * sin(alpha);
 

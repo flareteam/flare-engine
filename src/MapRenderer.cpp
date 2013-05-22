@@ -46,7 +46,7 @@ MapRenderer::MapRenderer(CampaignManager *_camp)
 	, tip(new WidgetTooltip())
 	, tip_pos()
 	, show_tooltip(false)
-	, shakycam(Point())
+	, shakycam(FPoint())
 	, backgroundsurface(NULL)
 	, backgroundsurfaceoffset()
 	, repaint_background(false)
@@ -219,17 +219,24 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = it->map_pos.x;
-		const unsigned tiley = it->map_pos.y;
-		it->prio += (((uint64_t)(tilex + tiley)) << 48) + (((uint64_t)tilex) << 32) + ((it->map_pos.x + it->map_pos.y) << 16);
+		const unsigned tilex = round(it->map_pos.x);
+		const unsigned tiley = round(it->map_pos.y);
+		const unsigned commax = 256.0 * (float)(1.0 + it->map_pos.x - tilex);
+		const unsigned commay = 256.0 * (float)(1.0 + it->map_pos.y - tiley);
+
+		cout << "calculatePriosIso "<< tilex <<" "<<tiley<<"  "<<commax<< " "<<commay<<" " << it->map_pos.x<< " "<<it->map_pos.y<<" ";
+
+		it->prio += (((uint64_t)(tilex + tiley)) << 48) + (((uint64_t)tilex) << 32) + ((commax + commay) << 16);
+		cout << it->prio<<endl;
 	}
 }
 
 void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = it->map_pos.x;
-		const unsigned tiley = it->map_pos.y;
-		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (it->map_pos.y << 16);
+		const unsigned tilex = round(it->map_pos.x);
+		const unsigned tiley = round(it->map_pos.y);
+		const int commay = 1024 * it->map_pos.y;
+		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
 }
 
@@ -399,7 +406,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			}
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (r_cursor->map_pos.x) == i && (r_cursor->map_pos.y) == j) {
+			while (r_cursor != r_end && (round(r_cursor->map_pos.x)) == i && (round(r_cursor->map_pos.y)) == j) {
 				drawRenderable(r_cursor);
 				++r_cursor;
 			}
@@ -411,7 +418,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 		else
 			j++;
 
-		while (r_cursor != r_end && ((r_cursor->map_pos.x) + (r_cursor->map_pos.y) < i + j || (r_cursor->map_pos.x) <= i))
+		while (r_cursor != r_end && (round(r_cursor->map_pos.x) + round(r_cursor->map_pos.y) < i + j || round(r_cursor->map_pos.x) <= i))
 			++r_cursor;
 	}
 }
@@ -423,8 +430,8 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 			renderIsoLayer(screen, nulloffset, layers[i]);
 	}
 	else {
-		if (abs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender * TILE_W
-				|| abs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender * TILE_H
+		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender * TILE_W
+				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender * TILE_H
 				|| repaint_background) {
 
 			if (!backgroundsurface)

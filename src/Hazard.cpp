@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsParsing.h"
 
+#include <math.h>
+
 using namespace std;
 
 Hazard::Hazard(MapCollision *_collider)

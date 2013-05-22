@@ -51,7 +51,7 @@ public:
 	SDL_Surface *sprite; // image to be used
 	SDL_Rect src; // location on the sprite in pixel coordinates.
 
-	Point map_pos;     // The map location on the floor between someone's feet
+	FPoint map_pos;     // The map location on the floor between someone's feet
 	Point offset;      // offset from map_pos to topleft corner of sprite
 	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
 	Renderable()
@@ -85,10 +85,9 @@ public:
 };
 
 // Utility Functions
-int round(float f);
 Point round(FPoint fp);
 FPoint screen_to_map(int x, int y, int camx, int camy);
-Point map_to_screen(int x, int y, int camx, int camy);
+Point map_to_screen(float x, float y, int camx, int camy);
 Point center_tile(Point p);
 Point map_to_collision(FPoint p);
 FPoint collision_to_map(Point p);

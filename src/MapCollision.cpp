@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapCollision.h"
 #include "Settings.h"
 #include <cfloat>
+#include <math.h>
 
 using namespace std;
 
@@ -49,37 +50,35 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
  * If we encounter an obstacle at 90 degrees, stop.
  * If we encounter an obstacle at 45 or 135 degrees, slide.
  */
-bool MapCollision::move(float &x, float &y, float step_x, float step_y, float dist, MOVEMENTTYPE movement_type, bool is_hero) {
-
+bool MapCollision::move(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero) {
+	std::cout << "MapCollision::move"<< step_x << " "<<step_y <<std::endl;
 	bool diag = (step_x != 0) && (step_y != 0);
 
-	for (float i = dist; i >= 0 ;i-= 0.1) {
-		if (is_valid_position(x + 0.1 *step_x, y + 0.1 *step_y, movement_type, is_hero)) {
-			x+= 0.1 * step_x;
-			y+= 0.1 * step_y;
-		}
-		else if (diag && is_valid_position(x + 0.1 *step_x, y, movement_type, is_hero)) { // slide along wall
-			x+= 0.1 * step_x;
-		}
-		else if (diag && is_valid_position(x, y + 0.1 *step_y, movement_type, is_hero)) { // slide along wall
-			y+= 0.1 * step_y;
-		}
-		else { // is there a singular obstacle or corner we can step around?
-			// only works if we are moving straight
-			if (diag) return false;
+	if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
+		x += step_x;
+		y += step_y;
+	}
+	else if (diag && is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
+		x += step_x;
+	}
+	else if (diag && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
+		y += step_y;
+	}
+	else { // is there a singular obstacle or corner we can step around?
+		// only works if we are moving straight
+		if (diag) return false;
 
-			int way_around = is_one_step_around(x, y, step_x, step_y);
+		int way_around = is_one_step_around(x, y, step_x, step_y);
 
-			if (!way_around) {
-				return false;
-			}
+		if (!way_around) {
+			return false;
+		}
 
-			if (step_x) {
-				y+= way_around;
-			}
-			else {
-				x+= way_around;
-			}
+		if (step_x) {
+			y+= way_around;
+		}
+		else {
+			x+= way_around;
 		}
 	}
 	return true;
@@ -154,7 +153,9 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
  */
 bool MapCollision::is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
-	return is_valid_tile(round(x), round(y), movement_type, is_hero);
+	bool ret = is_valid_tile(round(x), round(y), movement_type, is_hero);
+	cout << "MapCollision::is_valid_position("<< x << ", "<<y<<") = "<<ret<<endl;
+	return ret;
 }
 
 

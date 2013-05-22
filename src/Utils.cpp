@@ -25,11 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-
-int round(float f) {
-	return (int)(f + 0.5);
-}
-
 Point round(FPoint fp) {
 	Point result;
 	result.x = round(fp.x);
@@ -38,10 +33,10 @@ Point round(FPoint fp) {
 }
 
 FPoint screen_to_map(int x, int y, int camx, int camy) {
-	Point r;
+	FPoint r;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		int scrx = (x - VIEW_W_HALF) /2;
-		int scry = (y - VIEW_H_HALF) /2;
+		float scrx = (x - VIEW_W_HALF) /2;
+		float scry = (y - VIEW_H_HALF) /2;
 
 		r.x = (UNITS_PER_PIXEL_X * scrx) + (UNITS_PER_PIXEL_Y * scry) + camx;
 		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
@@ -57,7 +52,7 @@ FPoint screen_to_map(int x, int y, int camx, int camy) {
  * Returns a point (in map units) of a given (x,y) tupel on the screen
  * when the camera is at a given position.
  */
-Point map_to_screen(int x, int y, int camx, int camy) {
+Point map_to_screen(float x, float y, int camx, int camy) {
 	Point r;
 
 	// adjust to the center of the viewport
