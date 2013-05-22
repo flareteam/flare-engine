@@ -33,9 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 InputState::InputState(void)
-	: mx_vel(0)
-	, my_vel(0)
-	, done(false)
+	: done(false)
 	, mouse()
 	, last_key(0)
 	, last_button(0)
