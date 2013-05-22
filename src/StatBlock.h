@@ -221,7 +221,7 @@ public:
 
 	FPoint pos;
 	FPoint forced_speed;
-	char direction;
+	unsigned char direction;
 	std::vector<int> hero_cooldown;
 
 	int cooldown_hit;

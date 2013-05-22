@@ -51,18 +51,18 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
  */
 bool MapCollision::move(float &x, float &y, float step_x, float step_y, float dist, MOVEMENTTYPE movement_type, bool is_hero) {
 
-	bool diag = step_x && step_y;
+	bool diag = (step_x != 0) && (step_y != 0);
 
-	for (float i = dist; i >= 0 ;i-= 0.5) {
-		if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
-			x+= step_x;
-			y+= step_y;
+	for (float i = dist; i >= 0 ;i-= 0.1) {
+		if (is_valid_position(x + 0.1 *step_x, y + 0.1 *step_y, movement_type, is_hero)) {
+			x+= 0.1 * step_x;
+			y+= 0.1 * step_y;
 		}
-		else if (diag && is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
-			x+= step_x;
+		else if (diag && is_valid_position(x + 0.1 *step_x, y, movement_type, is_hero)) { // slide along wall
+			x+= 0.1 * step_x;
 		}
-		else if (diag && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
-			y+= step_y;
+		else if (diag && is_valid_position(x, y + 0.1 *step_y, movement_type, is_hero)) { // slide along wall
+			y+= 0.1 * step_y;
 		}
 		else { // is there a singular obstacle or corner we can step around?
 			// only works if we are moving straight
