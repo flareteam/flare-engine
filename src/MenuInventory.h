@@ -43,7 +43,7 @@ private:
 	PowerManager *powers;
 
 	void loadGraphics();
-	int areaOver(Point mouse);
+	int areaOver(Point position);
 	void updateEquipment(int slot);
 
 	SDL_Surface *background;
@@ -68,12 +68,12 @@ public:
 	void update();
 	void logic();
 	void render();
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(Point position);
 
-	ItemStack click(Point mouse);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
-	void drop(Point mouse, ItemStack stack);
-	void activate(Point mouse);
+	void drop(Point position, ItemStack stack);
+	void activate(Point position);
 
 	void add( ItemStack stack, int area = CARRIED, int slot = -1);
 	void remove(int item);

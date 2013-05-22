@@ -183,8 +183,8 @@ void MenuVendor::render() {
  * Start dragging a vendor item
  * Players can drag an item to their inventory to purchase.
  */
-ItemStack MenuVendor::click(Point mouse) {
-	ItemStack stack = stock[activetab].click(mouse);
+ItemStack MenuVendor::click(Point position) {
+	ItemStack stack = stock[activetab].click(position);
 	saveInventory();
 	return stack;
 }
@@ -210,9 +210,9 @@ void MenuVendor::add(ItemStack stack) {
 	saveInventory();
 }
 
-TooltipData MenuVendor::checkTooltip(Point mouse) {
+TooltipData MenuVendor::checkTooltip(Point position) {
 	int vendor_view = (activetab == VENDOR_BUY) ? VENDOR_BUY : VENDOR_SELL;
-	return stock[activetab].checkTooltip( mouse, stats, vendor_view);
+	return stock[activetab].checkTooltip(position, stats, vendor_view);
 }
 
 /**

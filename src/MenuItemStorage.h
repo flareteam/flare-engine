@@ -48,9 +48,9 @@ public:
 
 	// rendering
 	void render();
-	int slotOver(Point mouse);
-	TooltipData checkTooltip(Point mouse, StatBlock *stats, int context);
-	ItemStack click(Point mouse);
+	int slotOver(Point position);
+	TooltipData checkTooltip(Point position, StatBlock *stats, int context);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
 	void fillEquipmentSlots();
 	void highlightMatching(std::string type);

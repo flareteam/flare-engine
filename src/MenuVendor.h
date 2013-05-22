@@ -65,10 +65,10 @@ public:
 	void setTab(int tab);
 	int getTab() {return activetab;}
 	void render();
-	ItemStack click(Point mouse);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(Point position);
 	void setInventory();
 	void saveInventory();
 	void sort(int type);

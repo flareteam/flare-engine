@@ -132,13 +132,13 @@ void MenuStash::render() {
 /**
  * Dragging and dropping an item can be used to rearrange the stash
  */
-void MenuStash::drop(Point mouse, ItemStack stack) {
+void MenuStash::drop(Point position, ItemStack stack) {
 	int slot;
 	int drag_prev_slot;
 
 	items->playSound(stack.item);
 
-	slot = stock.slotOver(mouse);
+	slot = stock.slotOver(position);
 	drag_prev_slot = stock.drag_prev_slot;
 
 	if (slot != drag_prev_slot) {
@@ -210,8 +210,8 @@ void MenuStash::add(ItemStack stack, int slot) {
  * Start dragging a vendor item
  * Players can drag an item to their inventory.
  */
-ItemStack MenuStash::click(Point mouse) {
-	ItemStack stack = stock.click(mouse);
+ItemStack MenuStash::click(Point position) {
+	ItemStack stack = stock.click(position);
 	return stack;
 }
 
@@ -228,8 +228,8 @@ void MenuStash::add(ItemStack stack) {
 	stock.add(stack);
 }
 
-TooltipData MenuStash::checkTooltip(Point mouse) {
-	return stock.checkTooltip( mouse, stats, PLAYER_INV);
+TooltipData MenuStash::checkTooltip(Point position) {
+	return stock.checkTooltip(position, stats, PLAYER_INV);
 }
 
 bool MenuStash::full(int item) {
