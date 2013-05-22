@@ -138,7 +138,7 @@ public:
 	int visual_random; // sprite sheet contains rows of random options
 	int visual_option; // sprite sheet contains rows of similar effects.  use a specific option
 	bool aim_assist;
-	int speed; // for missile hazards, map units per frame
+	float speed; // for missile hazards, tiles per frame
 	int lifespan; // how long the hazard/animation lasts
 	bool floor; // the hazard is drawn between the background and object layers
 	bool complete_animation;
@@ -150,7 +150,7 @@ public:
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
-	int range;
+	float range;
 	bool target_party;
 	std::vector<std::string> target_categories;
 
@@ -171,7 +171,7 @@ public:
 	//missile traits
 	int missile_angle;
 	int angle_variance;
-	int speed_variance;
+	float speed_variance;
 
 	//repeater traits
 	int delay;

@@ -152,12 +152,9 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
 /**
  * Is this a valid position for an entity with this movement type?
  */
-bool MapCollision::is_valid_position(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const {
+bool MapCollision::is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
-	const int tile_x = x;
-	const int tile_y = y;
-
-	return is_valid_tile(tile_x, tile_y, movement_type, is_hero);
+	return is_valid_tile(round(x), round(y), movement_type, is_hero);
 }
 
 

@@ -163,7 +163,7 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "aim_assist")
 			powers[input_id].aim_assist = toBool(infile.val);
 		else if (infile.key == "speed")
-			powers[input_id].speed = toInt(infile.val);
+			powers[input_id].speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
 		else if (infile.key == "lifespan")
 			powers[input_id].lifespan = parse_duration(infile.val);
 		else if (infile.key == "floor")
@@ -204,7 +204,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "range")
-			powers[input_id].range = toInt(infile.nextValue());
+			powers[input_id].range = toFloat(infile.nextValue());
 		//steal effects
 		else if (infile.key == "hp_steal")
 			powers[input_id].hp_steal = toInt(infile.val);
@@ -760,7 +760,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 		//calculate the missile velocity
 		int speed_var = 0;
 		if (powers[power_index].speed_variance != 0)
-			speed_var = (int)(pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].speed_variance + 1) - 1);
+			speed_var = (rand() % 2 - 0.5) * 2 * ((rand() % round(powers[power_index].speed_variance) + 1) - 1);
 		haz->speed.x = (haz->base_speed + speed_var) * cos(alpha);
 		haz->speed.y = (haz->base_speed + speed_var) * sin(alpha);
 

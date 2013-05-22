@@ -143,7 +143,7 @@ extern unsigned short TILESET_ORTHOGONAL;
 extern std::string LANGUAGE;
 
 // Autopickup Settings
-extern unsigned short AUTOPICKUP_RANGE;
+extern float AUTOPICKUP_RANGE;
 extern bool AUTOPICKUP_CURRENCY;
 
 // Combat calculation caps

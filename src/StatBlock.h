@@ -220,7 +220,7 @@ public:
 	EffectManager effects;
 
 	FPoint pos;
-	Point forced_speed;
+	FPoint forced_speed;
 	char direction;
 	std::vector<int> hero_cooldown;
 
@@ -255,8 +255,8 @@ public:
 
 	bool canUsePower(const Power &power, unsigned powerid) const;
 
-	int melee_range;
-	int threat_range;
+	float melee_range;
+	float threat_range;
 	bool passive_attacker;//enemy will not initiate combat unless attacked
 	FPoint hero_pos;
 	char hero_direction;

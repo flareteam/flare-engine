@@ -140,7 +140,7 @@ int JOY_DEADZONE;
 std::string LANGUAGE = "en";
 
 // Autopickup Settings
-unsigned short AUTOPICKUP_RANGE = 0;
+float AUTOPICKUP_RANGE = 0;
 bool AUTOPICKUP_CURRENCY = false;
 
 // Combat calculation caps (percentage)

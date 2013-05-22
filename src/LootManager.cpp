@@ -71,7 +71,7 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 				tooltip_margin = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "autopickup_range") {
-				AUTOPICKUP_RANGE = eatFirstInt(infile.val, ',');
+				AUTOPICKUP_RANGE = toFloat(infile.val);
 			}
 			else if (infile.key == "autopickup_currency") {
 				int currency = eatFirstInt(infile.val, ',');
