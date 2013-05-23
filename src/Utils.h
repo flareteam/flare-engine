@@ -86,8 +86,9 @@ public:
 
 // Utility Functions
 #ifdef _MSC_VER
-float round(float number);
+	float round(float number);
 #endif // _MSC_VER
+
 Point round(FPoint fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
 Point map_to_screen(float x, float y, float camx, float camy);
