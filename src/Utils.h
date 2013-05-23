@@ -40,7 +40,7 @@ public:
 class FPoint {
 public:
 	float x, y;
-	FPoint(Point _p) : x(_p.x), y(_p.y) {}
+	FPoint(Point _p) : x((float)_p.x), y((float)_p.y) {}
 	FPoint() : x(0), y(0) {}
 	FPoint(float _x, float _y) : x(_x), y(_y) {}
 };
@@ -85,6 +85,9 @@ public:
 };
 
 // Utility Functions
+#ifdef _MSC_VER
+float round(float number);
+#endif // _MSC_VER
 Point round(FPoint fp);
 FPoint screen_to_map(int x, int y, int camx, int camy);
 Point map_to_screen(float x, float y, int camx, int camy);

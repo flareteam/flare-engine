@@ -25,6 +25,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
+#ifdef _MSC_VER
+float round(float number)
+{
+	return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5);
+}
+#endif // _MSC_VER
+
 Point round(FPoint fp) {
 	Point result;
 	result.x = round(fp.x);

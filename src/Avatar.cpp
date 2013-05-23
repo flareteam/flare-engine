@@ -100,7 +100,7 @@ void Avatar::init() {
 	stats.mental_additional = 0;
 	stats.offense_additional = 0;
 	stats.defense_additional = 0;
-	stats.speed = 0.2;
+	stats.speed = 0.2f;
 	stats.recalc();
 
 	log_msg = "";
