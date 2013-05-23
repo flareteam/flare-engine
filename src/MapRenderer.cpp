@@ -363,7 +363,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	j = upperright.y - tset.max_size_y + tset.max_size_x;
 	i = upperright.x - tset.max_size_y - tset.max_size_x;
 
-	while (r_cursor != r_end && ((r_cursor->map_pos.x) + (r_cursor->map_pos.y) < i + j || (r_cursor->map_pos.x) < i))
+	while (r_cursor != r_end && (round(r_cursor->map_pos.x) + round(r_cursor->map_pos.y) < i + j || round(r_cursor->map_pos.x) < i))
 		++r_cursor;
 
 	maprow *objectlayer = layers[index_objectlayer];

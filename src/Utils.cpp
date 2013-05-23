@@ -39,7 +39,7 @@ Point round(FPoint fp) {
 	return result;
 }
 
-FPoint screen_to_map(int x, int y, int camx, int camy) {
+FPoint screen_to_map(int x, int y, float camx, float camy) {
 	FPoint r;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		float scrx = (x - VIEW_W_HALF) /2;
@@ -59,7 +59,7 @@ FPoint screen_to_map(int x, int y, int camx, int camy) {
  * Returns a point (in map units) of a given (x,y) tupel on the screen
  * when the camera is at a given position.
  */
-Point map_to_screen(float x, float y, int camx, int camy) {
+Point map_to_screen(float x, float y, float camx, float camy) {
 	Point r;
 
 	// adjust to the center of the viewport
