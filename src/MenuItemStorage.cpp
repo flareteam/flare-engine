@@ -20,9 +20,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuItemStorage
  */
 
-#include "InputState.h"
 #include "MenuItemStorage.h"
 #include "Settings.h"
+#include "SharedResources.h"
 
 using namespace std;
 
@@ -103,21 +103,21 @@ void MenuItemStorage::renderHighlight(int x, int y, int _icon_size) {
 	}
 }
 
-int MenuItemStorage::slotOver(Point mouse) {
-	if (isWithin(grid_area, mouse) && nb_cols > 0) {
-		return (mouse.x - grid_area.x) / slots[0]->pos.w + (mouse.y - grid_area.y) / slots[0]->pos.w * nb_cols;
+int MenuItemStorage::slotOver(Point position) {
+	if (isWithin(grid_area, position) && nb_cols > 0) {
+		return (position.x - grid_area.x) / slots[0]->pos.w + (position.y - grid_area.y) / slots[0]->pos.w * nb_cols;
 	}
 	else if (nb_cols == 0) {
 		for (unsigned int i=0; i<slots.size(); i++) {
-			if (isWithin(slots[i]->pos, mouse)) return i;
+			if (isWithin(slots[i]->pos, position)) return i;
 		}
 	}
 	return -1;
 }
 
-TooltipData MenuItemStorage::checkTooltip(Point mouse, StatBlock *stats, int context) {
+TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int context) {
 	TooltipData tip;
-	int slot = slotOver( mouse);
+	int slot = slotOver(position);
 
 	if (slot > -1 && storage[slot].item > 0) {
 		return items->getTooltip( storage[slot].item, stats, context);
@@ -125,12 +125,12 @@ TooltipData MenuItemStorage::checkTooltip(Point mouse, StatBlock *stats, int con
 	return tip;
 }
 
-ItemStack MenuItemStorage::click(InputState * input) {
+ItemStack MenuItemStorage::click(Point position) {
 	ItemStack item;
-	drag_prev_slot = slotOver(input->mouse);
+	drag_prev_slot = slotOver(position);
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
-		if (input->pressing[SHIFT]) {
+		if (inpt->pressing[SHIFT]) {
 			item.quantity = 1;
 		}
 		substract( drag_prev_slot, item.quantity);
