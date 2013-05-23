@@ -128,6 +128,16 @@ TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int 
 ItemStack MenuItemStorage::click(Point position) {
 	ItemStack item;
 	drag_prev_slot = slotOver(position);
+	if (drag_prev_slot == -1) {
+		// FIXME: What if mouse is over one slot and focused is another slot
+		for (unsigned int i=0; i<slots.size(); i++) {
+			if (slots[i]->in_focus) {
+				drag_prev_slot = i;
+				break;
+			}
+		}
+	}
+
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
 		if (inpt->pressing[SHIFT]) {
