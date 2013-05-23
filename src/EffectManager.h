@@ -103,10 +103,10 @@ public:
 	int damage;
 	int hpot;
 	int mpot;
-	int speed;
+	float speed;
 	bool immunity;
 	bool stun;
-	int forced_speed;
+	float forced_speed;
 	bool forced_move;
 	bool revive;
 	bool convert;

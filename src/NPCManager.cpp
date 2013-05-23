@@ -101,7 +101,7 @@ int NPCManager::getID(std::string npcName) {
 	return -1;
 }
 
-int NPCManager::checkNPCClick(Point mouse, Point cam) {
+int NPCManager::checkNPCClick(Point mouse, FPoint cam) {
 	Point p;
 	SDL_Rect r;
 	for (unsigned i=0; i<npcs.size(); i++) {
@@ -121,7 +121,7 @@ int NPCManager::checkNPCClick(Point mouse, Point cam) {
 	return -1;
 }
 
-int NPCManager::getNearestNPC(Point pos) {
+int NPCManager::getNearestNPC(FPoint pos) {
 	int nearest = -1;
 	int best_distance = std::numeric_limits<int>::max();
 
@@ -139,7 +139,7 @@ int NPCManager::getNearestNPC(Point pos) {
 /**
  * On mouseover, display NPC's name
  */
-void NPCManager::renderTooltips(Point cam, Point mouse) {
+void NPCManager::renderTooltips(FPoint cam, Point mouse) {
 	Point p;
 	SDL_Rect r;
 

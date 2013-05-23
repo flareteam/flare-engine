@@ -34,6 +34,8 @@ Map::Map()
 {
 }
 
+
+
 void Map::clearLayers() {
 
 	for (unsigned i = 0; i < layers.size(); ++i)
@@ -112,8 +114,8 @@ void Map::loadHeader(FileParser &infile) {
 		music_filename = infile.val;
 	}
 	else if (infile.key == "location") {
-		spawn.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		spawn.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		spawn.x = toInt(infile.nextValue()) + 0.5;
+		spawn.y = toInt(infile.nextValue()) + 0.5;
 		spawn_dir = toInt(infile.nextValue());
 	}
 }
@@ -147,8 +149,8 @@ void Map::loadEnemy(FileParser &infile) {
 		enemies.back().type = infile.val;
 	}
 	else if (infile.key == "location") {
-		enemies.back().pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		enemies.back().pos.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		enemies.back().pos.x = toInt(infile.nextValue()) + 0.5;
+		enemies.back().pos.y = toInt(infile.nextValue()) + 0.5;
 	}
 	else if (infile.key == "direction") {
 		enemies.back().direction = toInt(infile.val);
@@ -160,8 +162,8 @@ void Map::loadEnemy(FileParser &infile) {
 
 		while (a != none) {
 			Point p;
-			p.x = toInt(a) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-			p.y = toInt(b) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+			p.x = toInt(a) + 0.5;
+			p.y = toInt(b) + 0.5;
 			enemies.back().waypoints.push(p);
 			a = infile.nextValue();
 			b = infile.nextValue();
@@ -169,10 +171,10 @@ void Map::loadEnemy(FileParser &infile) {
 	}
 	else if (infile.key == "wander_area") {
 		enemies.back().wander = true;
-		enemies.back().wander_area.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-		enemies.back().wander_area.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-		enemies.back().wander_area.w = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-		enemies.back().wander_area.h = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+		enemies.back().wander_area.x = toInt(infile.nextValue()) + 0.5;
+		enemies.back().wander_area.y = toInt(infile.nextValue()) + 0.5;
+		enemies.back().wander_area.w = toInt(infile.nextValue()) + 0.5;
+		enemies.back().wander_area.h = toInt(infile.nextValue()) + 0.5;
 	}
 }
 
@@ -205,8 +207,8 @@ void Map::loadNPC(FileParser &infile) {
 		npcs.back().id = infile.val;
 	}
 	else if (infile.key == "location") {
-		npcs.back().pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		npcs.back().pos.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		npcs.back().pos.x = toInt(infile.nextValue()) + 0.5;
+		npcs.back().pos.y = toInt(infile.nextValue()) + 0.5;
 	}
 }
 
@@ -326,8 +328,8 @@ void Map::loadEventComponent(FileParser &infile) {
 	}
 	else if (infile.key == "loot") {
 		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		e->x = toInt(infile.nextValue()) + 0.5;
+		e->y = toInt(infile.nextValue()) + 0.5;
 
 		// drop chance
 		std::string chance = infile.nextValue();
@@ -347,8 +349,8 @@ void Map::loadEventComponent(FileParser &infile) {
 			e = &events.back().components.back();
 			e->type = infile.key;
 			e->s = repeat_val;
-			e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			e->x = toInt(infile.nextValue()) + 0.5;
+			e->y = toInt(infile.nextValue()) + 0.5;
 
 			chance = infile.nextValue();
 			if (chance == "fixed") e->z = 0;
@@ -467,8 +469,8 @@ void Map::loadEventComponent(FileParser &infile) {
 	else if (infile.key == "spawn") {
 
 		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+		e->x = toInt(infile.nextValue()) + 0.5;
+		e->y = toInt(infile.nextValue()) + 0.5;
 
 		// add repeating spawn
 		std::string repeat_val = infile.nextValue();
@@ -478,8 +480,8 @@ void Map::loadEventComponent(FileParser &infile) {
 			e->type = infile.key;
 
 			e->s = repeat_val;
-			e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			e->x = toInt(infile.nextValue()) + 0.5;
+			e->y = toInt(infile.nextValue()) + 0.5;
 
 			repeat_val = infile.nextValue();
 		}

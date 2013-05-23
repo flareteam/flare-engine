@@ -44,8 +44,8 @@ private:
 	WidgetLabel *label;
 
 	void createMapSurface();
-	void renderIso(Point hero_pos);
-	void renderOrtho(Point hero_pos);
+	void renderIso(FPoint hero_pos);
+	void renderOrtho(FPoint hero_pos);
 	void prerenderOrtho(MapCollision *collider);
 	void prerenderIso(MapCollision *collider);
 
@@ -54,7 +54,7 @@ public:
 	~MenuMiniMap();
 
 	void render();
-	void render(Point hero_pos);
+	void render(FPoint hero_pos);
 	void prerender(MapCollision *collider, int map_w, int map_h);
 	void getMapTitle(std::string map_title);
 };

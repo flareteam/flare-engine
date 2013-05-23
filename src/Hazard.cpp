@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsParsing.h"
 
+#include <math.h>
+
 using namespace std;
 
 Hazard::Hazard(MapCollision *_collider)
@@ -101,7 +103,7 @@ void Hazard::logic() {
 			lifespan = 0;
 			hit_wall = true;
 
-			if (collider->is_outside_map(round(pos.x) >> TILE_SHIFT, round(pos.y) >> TILE_SHIFT))
+			if (collider->is_outside_map(round(pos.x), round(pos.y)))
 				remove_now = true;
 		}
 	}

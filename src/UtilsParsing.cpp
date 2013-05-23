@@ -248,6 +248,14 @@ int toInt(const string& s, int default_value) {
 	return result;
 }
 
+float toFloat(const string& s, float default_value) {
+	float result;
+	if (!(stringstream(s) >> result))
+		result = default_value;
+
+	return result;
+}
+
 string &trim_right_inplace(string &s, const string& delimiters = " \f\n\r\t\v") {
 	return s.erase(s.find_last_not_of(delimiters) + 1);
 }

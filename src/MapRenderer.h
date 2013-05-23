@@ -105,7 +105,7 @@ private:
 
 	void clearLayers();
 
-	Point shakycam;
+	FPoint shakycam;
 	TileSet tset;
 
 	// in case of animated tiles switched off, prerender background into this layer
@@ -115,7 +115,7 @@ private:
 	void createBackgroundSurface();
 
 	// point where the backgroundsurface was rendered. same coordinates as shakycam
-	Point backgroundsurfaceoffset;
+	FPoint backgroundsurfaceoffset;
 
 	// force a rendering of the background in the next render step.
 	bool repaint_background;
@@ -134,17 +134,16 @@ public:
 	void logic();
 	void render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
-	void checkEvents(Point loc);
+	void checkEvents(FPoint loc);
 	void checkHotspots();
-	void checkNearestEvent(Point loc);
+	void checkNearestEvent(FPoint loc);
 	void checkTooltip();
 
 	// some events are triggered on exiting the map
 	void executeOnMapExitEvents();
 
 	// cam(x,y) is where on the map the camera is pointing
-	// units found in Settings.h (UNITS_PER_TILE)
-	Point cam;
+	FPoint cam;
 	Point hero_tile;
 
 	// indicates that the map was changed by an event, so the GameStatePlay
