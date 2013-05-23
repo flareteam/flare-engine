@@ -834,10 +834,10 @@ void MenuManager::logic() {
 void MenuManager::dragAndDropWithKeyboard() {
 	// handle right-click
 	if (inv->visible && inv->tablist.getCurrent() != -1 && inv->tablist.getCurrent() >= inv->getEquippedCount() && inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->checkClick() == ACTIVATED) {
-		inpt->mouse.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.x;
-		inpt->mouse.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.y;
-		// FIXME: do not edit inpt? 
-		inv->activate(inpt);
+		Point src_slot;
+		src_slot.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.x;
+		src_slot.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.y;
+		inv->activate(src_slot);
 	}
 
 	// pick up a power
