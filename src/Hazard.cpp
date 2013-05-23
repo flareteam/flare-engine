@@ -142,8 +142,8 @@ void Hazard::addEntity(Entity *ent) {
 void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	if (delay_frames == 0 && activeAnimation) {
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
-		re.map_pos.x = round(pos.x);
-		re.map_pos.y = round(pos.y);
+		re.map_pos.x = pos.x;
+		re.map_pos.y = pos.y;
 		(floor ? r_dead : r).push_back(re);
 	}
 }

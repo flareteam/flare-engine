@@ -403,7 +403,7 @@ void EnemyManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead)
 			for (unsigned i = 0; i < (*it)->stats.effects.effect_list.size(); ++i) {
 				if ((*it)->stats.effects.effect_list[i].animation) {
 					Renderable ren = (*it)->stats.effects.effect_list[i].animation->getCurrentFrame(0);
-					ren.map_pos = round((*it)->stats.pos);
+					ren.map_pos = (*it)->stats.pos;
 					if ((*it)->stats.effects.effect_list[i].render_above) ren.prio = 2;
 					else ren.prio = 0;
 					r.push_back(ren);
