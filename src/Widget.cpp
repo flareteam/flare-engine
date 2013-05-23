@@ -36,6 +36,10 @@ void Widget::activate()
 void Widget::deactivate()
 {}
 
+void Widget::defocus() {
+	in_focus = false;
+}
+
 bool Widget::getNext() {
 	return false;
 }
@@ -172,7 +176,7 @@ void TabList::activate() {
 
 void TabList::defocus() {
 	if (current_is_valid())
-		widgets.at(current)->in_focus = false;
+		widgets.at(current)->defocus();
 
 	current = -1;
 }

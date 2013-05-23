@@ -500,6 +500,10 @@ void MenuManager::logic() {
 
 		// handle left-click
 		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			// clear keyboard dragging
+			drag_src = -1;
+			keyboard_dragging = false;
+
 			// exit menu
 			if (exit->visible && isWithin(exit->window_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
