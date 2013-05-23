@@ -36,6 +36,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <math.h>
 
+#ifdef _MSC_VER
+#define M_SQRT2 sqrt(2.0)
+#endif
+
 const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
 const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
 const float speedMultiplyer[8] = { 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0};
