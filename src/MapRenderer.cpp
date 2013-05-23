@@ -184,7 +184,7 @@ void MapRenderer::loadMusic() {
 	if (AUDIO && MUSIC_VOLUME) {
 		music = Mix_LoadMUS(mods->locate("music/" + played_music_filename).c_str());
 		if(!music)
-			cout << "Mix_LoadMUS: "<< Mix_GetError()<<endl;
+			fprintf(stderr, "Mix_LoadMUS: %s\n", Mix_GetError());
 	}
 
 	if (music) {
@@ -223,11 +223,7 @@ void calculatePriosIso(vector<Renderable> &r) {
 		const unsigned tiley = round(it->map_pos.y);
 		const unsigned commax = 256.0 * (float)(1.0 + it->map_pos.x - tilex);
 		const unsigned commay = 256.0 * (float)(1.0 + it->map_pos.y - tiley);
-
-		cout << "calculatePriosIso "<< tilex <<" "<<tiley<<"  "<<commax<< " "<<commay<<" " << it->map_pos.x<< " "<<it->map_pos.y<<" ";
-
 		it->prio += (((uint64_t)(tilex + tiley)) << 48) + (((uint64_t)tilex) << 32) + ((commax + commay) << 16);
-		cout << it->prio<<endl;
 	}
 }
 

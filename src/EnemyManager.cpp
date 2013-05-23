@@ -212,10 +212,10 @@ void EnemyManager::handleSpawn() {
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation();
 			else
-				cout << "Warning: animations file could not be loaded for " << espawn.type << endl;
+				fprintf(stderr, "Warning: animations file could not be loaded for %s\n", espawn.type.c_str());
 		}
 		else {
-			cout << "Warning: no animation file specified for entity: " << espawn.type << endl;
+			fprintf(stderr, "Warning: no animation file specified for entity: %s\n", espawn.type.c_str());
 		}
 		loadSounds(e->stats.sfx_prefix);
 

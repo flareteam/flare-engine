@@ -51,7 +51,6 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
  * If we encounter an obstacle at 45 or 135 degrees, slide.
  */
 bool MapCollision::move(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero) {
-	std::cout << "MapCollision::move"<< step_x << " "<<step_y <<std::endl;
 	bool diag = (step_x != 0) && (step_y != 0);
 
 	if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
@@ -154,7 +153,6 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
 bool MapCollision::is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
 	bool ret = is_valid_tile(round(x), round(y), movement_type, is_hero);
-	cout << "MapCollision::is_valid_position("<< x << ", "<<y<<") = "<<ret<<endl;
 	return ret;
 }
 

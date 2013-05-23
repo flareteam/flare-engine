@@ -32,7 +32,7 @@ ImageManager::~ImageManager() {
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG
 	if (!sprites.empty()) {
-		cout << "ImageManager still holding these images:" << endl;
+		fprintf(stderr, "ImageManager still holding these images:\n");
 		for (unsigned i = 0; i < sprites.size(); ++i)
 			fprintf(stderr, "%s %d\n", names[i].c_str(), counts[i]);
 	}
