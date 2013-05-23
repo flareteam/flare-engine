@@ -276,7 +276,9 @@ void MenuManager::handleKeyboardNavigation() {
 					inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
 				inpt->lock[RIGHT] = true;
 				stash->tablist.lock();
+				stash->tablist.defocus();
 				inv->tablist.unlock();
+				inv->tablist.getNext();
 			}
 		}
 		if ((inv->tablist.getCurrent() - EQUIPPED_SLOTS) >= 0 && !inv->tablist.isLocked()) {
@@ -284,7 +286,9 @@ void MenuManager::handleKeyboardNavigation() {
 					inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
 				inpt->lock[LEFT] = true;
 				inv->tablist.lock();
+				inv->tablist.defocus();
 				stash->tablist.unlock();
+				stash->tablist.getPrev();
 			}
 		}
 	}
@@ -836,12 +840,57 @@ void MenuManager::logic() {
 }
 
 void MenuManager::dragAndDropWithKeyboard() {
-	// handle right-click
-	if (inv->visible && inv->tablist.getCurrent() != -1 && inv->tablist.getCurrent() >= inv->getEquippedCount() && inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->checkClick() == ACTIVATED) {
+	// inventory menu
+	if (inv->visible && inv->tablist.getCurrent() != -1) {
+		CLICK_TYPE slotClick;
 		Point src_slot;
-		src_slot.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.x;
-		src_slot.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.y;
-		inv->activate(src_slot);
+		WidgetSlot * inv_slot;
+		if (inv->tablist.getCurrent() < inv->getEquippedCount()) {
+			inv_slot = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()];
+		}
+		else {
+			inv_slot = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()];
+		}
+
+		src_slot.x = inv_slot->pos.x;
+		src_slot.y = inv_slot->pos.y;
+		slotClick = inv_slot->checkClick();
+
+		if (slotClick == CHECKED && drag_stack.item == 0) {
+			inv_slot->checked = false;
+			drag_stack = inv->click(src_slot);
+			if (drag_stack.item > 0) {
+				keyboard_dragging = true;
+				drag_src = DRAG_SRC_INVENTORY;
+			}
+		}
+		else if (slotClick == CHECKED && drag_stack.item > 0) {
+			inv_slot->checked = false;
+			inv->drop(src_slot, drag_stack);
+			drag_stack.item = 0;
+			keyboard_dragging = false;
+		}
+	}
+
+	// stash menu
+	if (stash->visible && stash->tablist.getCurrent() != -1) {
+		CLICK_TYPE slotClick = stash->stock.slots[stash->tablist.getCurrent()]->checkClick();
+		Point src_slot(stash->stock.slots[stash->tablist.getCurrent()]->pos.x, stash->stock.slots[stash->tablist.getCurrent()]->pos.y);
+
+		if (slotClick == CHECKED && drag_stack.item == 0) {
+			stash->stock.slots[stash->tablist.getCurrent()]->checked = false;
+			drag_stack = stash->click(src_slot);
+			if (drag_stack.item > 0) {
+				keyboard_dragging = true;
+				drag_src = DRAG_SRC_STASH;
+			}
+		}
+		else if (slotClick == CHECKED && drag_stack.item > 0) {
+			stash->stock.slots[stash->tablist.getCurrent()]->checked = false;
+			stash->drop(src_slot, drag_stack);
+			drag_stack.item = 0;
+			keyboard_dragging = false;
+		}
 	}
 
 	// pick up a power
@@ -995,7 +1044,7 @@ void MenuManager::handleKeyboardTooltips() {
 		}
 	}
 
-	if (inv->visible && !keyboard_dragging && inv->tablist.getCurrent() != -1) {
+	if (inv->visible && inv->tablist.getCurrent() != -1) {
 		if (inv->tablist.getCurrent() < inv->getEquippedCount()) {
 			inpt->mouse.x = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.x;
 			inpt->mouse.y = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.y;

@@ -175,8 +175,9 @@ void TabList::activate() {
 }
 
 void TabList::defocus() {
-	if (current_is_valid())
-		widgets.at(current)->defocus();
+	for (unsigned i=0; i < widgets.size(); ++i) {
+		widgets.at(i)->defocus();
+	}
 
 	current = -1;
 }
