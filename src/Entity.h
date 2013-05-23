@@ -69,9 +69,9 @@ public:
 	PowerManager *powers;
 };
 
-extern int directionDeltaX[];
-extern int directionDeltaY[];
-extern float speedMultiplyer[];
+extern const int directionDeltaX[];
+extern const int directionDeltaY[];
+extern const float speedMultiplyer[];
 
 #endif
 

@@ -31,6 +31,7 @@ BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior
 	target_dist = 0;
 	pursue_pos.x = pursue_pos.y = -1;
 	fleeing = false;
+	move_to_safe_dist = false;
 }
 
 /**
@@ -232,6 +233,12 @@ void BehaviorStandard::findTarget() {
 		los = false;
 
 	if(e->stats.effects.fear) fleeing = true;
+
+	// If we have a successful chance_flee roll, try to move to a safe distance
+	if (e->stats.cur_state == ENEMY_STANCE && !move_to_safe_dist && hero_dist < e->stats.threat_range/2 && hero_dist >= e->stats.melee_range && percentChance(e->stats.chance_flee))
+		move_to_safe_dist = true;
+
+	if (move_to_safe_dist) fleeing = true;
 }
 
 /**
@@ -409,6 +416,9 @@ void BehaviorStandard::checkMove() {
 
 void BehaviorStandard::checkMoveStateStance() {
 
+	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
+	if (hero_dist >= e->stats.threat_range/2 && e->stats.chance_flee > 0) return;
+
 	if ((hero_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
 
 		if (e->move()) {
@@ -429,9 +439,10 @@ void BehaviorStandard::checkMoveStateStance() {
 }
 
 void BehaviorStandard::checkMoveStateMove() {
-	// close enough to the hero
-	if (hero_dist < e->stats.melee_range) {
+	// close enough to the hero or is at a safe distance
+	if ((hero_dist < e->stats.melee_range) || (move_to_safe_dist && hero_dist >= e->stats.threat_range/2)) {
 		e->newState(ENEMY_STANCE);
+		move_to_safe_dist = false;
 	}
 
 	// try to continue moving

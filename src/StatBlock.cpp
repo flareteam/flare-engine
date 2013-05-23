@@ -124,7 +124,7 @@ StatBlock::StatBlock()
 	, wander_ticks(0)				// enemy only
 	, wander_pause_ticks(0)			// enemy only
 	, chance_pursue(0)
-	, chance_flee(0)				// read in, but unused in formulas.
+	, chance_flee(0) // enemy only
 	, powers_list()	// hero only
 	, powers_list_items()	// hero only
 	, powers_passive()
