@@ -412,8 +412,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		// cam is focused at player position
 		map->cam.x = stats.pos.x;
 		map->cam.y = stats.pos.y;
-		map->hero_tile.x = stats.pos.x / 32;
-		map->hero_tile.y = stats.pos.y / 32;
 
 		map->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
@@ -717,8 +715,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	// cam is focused at player position
 	map->cam.x = stats.pos.x;
 	map->cam.y = stats.pos.y;
-	map->hero_tile.x = stats.pos.x / 32;
-	map->hero_tile.y = stats.pos.y / 32;
 
 	// check for map events
 	map->checkEvents(stats.pos);

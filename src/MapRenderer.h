@@ -144,7 +144,6 @@ public:
 
 	// cam(x,y) is where on the map the camera is pointing
 	FPoint cam;
-	Point hero_tile;
 
 	// indicates that the map was changed by an event, so the GameStatePlay
 	// will tell the mini map to update.

@@ -53,7 +53,6 @@ MapRenderer::MapRenderer(CampaignManager *_camp)
 	, camp(_camp)
 	, powers(NULL)
 	, cam()
-	, hero_tile()
 	, map_change(false)
 	, teleportation(false)
 	, teleport_destination()
@@ -395,7 +394,6 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			p.x += TILE_W;
 
 			if (const uint_fast16_t current_tile = objectlayer[i][j]) {
-
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
