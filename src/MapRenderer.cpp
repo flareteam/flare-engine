@@ -46,7 +46,7 @@ MapRenderer::MapRenderer(CampaignManager *_camp)
 	, tip(new WidgetTooltip())
 	, tip_pos()
 	, show_tooltip(false)
-	, shakycam(FPoint())
+	, shakycam()
 	, backgroundsurface(NULL)
 	, backgroundsurfaceoffset()
 	, repaint_background(false)
@@ -222,11 +222,6 @@ void calculatePriosIso(vector<Renderable> &r) {
 		const unsigned tiley = round(it->map_pos.y);
 		const int commax = (float)(2<<16) * it->map_pos.x;
 		const int commay = (float)(2<<16) * it->map_pos.y;
-		assert(commax>0);
-		assert(commay>0);
-		assert(commax + commay < (2<<(45-16)));
-		assert(tilex < (2<<(54-45)));
-		assert(tilex + tiley < (2<<(64-54)));
 		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 45) + ((commax + commay) << 16);
 	}
 }
@@ -247,8 +242,8 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		shakycam.y = cam.y;
 	}
 	else {
-		shakycam.x = cam.x + (rand() % 16 - 8) /UNITS_PER_PIXEL_X;
-		shakycam.y = cam.y + (rand() % 16 - 8) /UNITS_PER_PIXEL_Y;
+		shakycam.x = cam.x + (rand() % 16 - 8) * 0.125;
+		shakycam.y = cam.y + (rand() % 16 - 8) * 0.125;
 	}
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
