@@ -217,6 +217,7 @@ void MenuNPCActions::setNPC(NPC *pnpc) {
 	is_selected = false;
 	int topics = 0;
 	first_dialog_node = -1;
+	current_action = -1;
 
 	npc = pnpc;
 
@@ -293,35 +294,47 @@ bool MenuNPCActions::selection() {
 void MenuNPCActions::logic() {
 	if (!visible) return;
 
-	if (inpt->lock[MAIN1])
-		return;
+	if (NO_MOUSE) {
+		if (inpt->lock[ACCEPT])
+			return;
+		keyboardLogic();
+	}
+	else {
+		inpt->lock[LEFT] = false;
+		inpt->lock[RIGHT] = false;
 
-	/* get action under mouse */
-	bool got_action = false;
-	for (size_t i=0; i<npc_actions.size(); i++) {
+		if (inpt->lock[MAIN1])
+			return;
 
-		if (!isWithin(npc_actions[i].rect, inpt->mouse))
-			continue;
+		/* get action under mouse */
+		bool got_action = false;
+		for (size_t i=0; i<npc_actions.size(); i++) {
 
-		got_action = true;
+			if (!isWithin(npc_actions[i].rect, inpt->mouse))
+				continue;
 
-		if (current_action != i) {
-			current_action = i;
-			update();
+			got_action = true;
+
+			if (current_action != i) {
+				current_action = i;
+				update();
+			}
+
+			break;
 		}
 
-		break;
-	}
-
-	/* if we dont have an action under mouse skip main1 check */
-	if (!got_action) {
-		current_action = -1;
-		return;
+		/* if we dont have an action under mouse skip main1 check */
+		if (!got_action) {
+			current_action = -1;
+			update();
+			return;
+		}
 	}
 
 	/* is main1 pressed */
-	if (inpt->pressing[MAIN1]) {
-		inpt->lock[MAIN1] = true;
+	if ((inpt->pressing[MAIN1] && !NO_MOUSE) || (inpt->pressing[ACCEPT] && NO_MOUSE)) {
+		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
+		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
 
 		if (npc_actions[current_action].label == NULL)
@@ -345,6 +358,30 @@ void MenuNPCActions::logic() {
 		visible = false;
 	}
 
+}
+
+void MenuNPCActions::keyboardLogic() {
+	inpt->lock[LEFT] = true;
+	inpt->lock[RIGHT] = true;
+
+	if (inpt->pressing[UP] && !inpt->lock[UP]) {
+		inpt->lock[UP] = true;
+		current_action--;
+
+		if ((int)current_action < 0)
+			current_action = npc_actions.size()-1;
+
+		update();
+	}
+	if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+		inpt->lock[DOWN] = true;
+		current_action++;
+
+		if (current_action >= npc_actions.size())
+			current_action = 0;
+
+		update();
+	}
 }
 
 void MenuNPCActions::render() {

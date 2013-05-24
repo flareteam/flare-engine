@@ -55,6 +55,8 @@ private:
 	SDL_Color background_color;
 	int background_alpha;
 
+	void keyboardLogic();
+
 public:
 	MenuNPCActions();
 	~MenuNPCActions();
