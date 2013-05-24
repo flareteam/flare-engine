@@ -109,14 +109,12 @@ void InputState::defaultJoystickBindings () {
 		binding_joy[key] = -1;
 	}
 
-	binding_joy[MAIN1] = 0;
-	binding_joy[MAIN2] = 1;
+	// TODO make these configurable from the config menu
+	binding_joy[ACTIONBAR] = 0;
+	binding_joy[CANCEL] = 1;
 	binding_joy[ACCEPT] = 2;
-	binding_joy[CANCEL] = 3;
-	binding_joy[CHARACTER] = 4;
-	binding_joy[INVENTORY] = 5;
-	binding_joy[LOG] = 6;
-	binding_joy[POWERS] = 7;
+	binding_joy[ACTIONBAR_BACK] = 6;
+	binding_joy[ACTIONBAR_FORWARD] = 7;
 }
 
 /**

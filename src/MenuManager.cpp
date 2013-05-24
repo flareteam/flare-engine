@@ -368,6 +368,7 @@ void MenuManager::handleKeyboardNavigation() {
 	// inventory always starts unlocked
 	if (!inv->visible) inv->tablist.unlock();
 
+	// position the drag hover icon depending on the last key press
 	if (!act_drag_hover && (inpt->pressing[ACTIONBAR_BACK] || inpt->pressing[ACTIONBAR_FORWARD]))
 		act_drag_hover = true;
 	else if (act_drag_hover && (inpt->pressing[LEFT] || inpt->pressing[RIGHT] || inpt->pressing[UP] || inpt->pressing[DOWN]))
