@@ -1012,6 +1012,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// rearrange item
 		else if (slotClick == CHECKED && drag_stack.item > 0) {
+			stash->stock.slots[stash->tablist.getCurrent()]->checked = false;
 			stash->drop(src_slot, drag_stack);
 			drag_src = 0;
 			drag_stack.item = 0;
