@@ -64,6 +64,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	, drag_power(0)
 	, drag_src(0)
 	, done(false)
+	, act_drag_hover(false)
 /*std::vector<Menu*> menus;*/
 	, items(_items)
 	, inv(NULL)
@@ -366,6 +367,11 @@ void MenuManager::handleKeyboardNavigation() {
 
 	// inventory always starts unlocked
 	if (!inv->visible) inv->tablist.unlock();
+
+	if (!act_drag_hover && (inpt->pressing[ACTIONBAR_BACK] || inpt->pressing[ACTIONBAR_FORWARD]))
+		act_drag_hover = true;
+	else if (act_drag_hover && (inpt->pressing[LEFT] || inpt->pressing[RIGHT] || inpt->pressing[UP] || inpt->pressing[DOWN]))
+		act_drag_hover = false;
 }
 void MenuManager::logic() {
 
@@ -1217,7 +1223,7 @@ void MenuManager::handleKeyboardTooltips() {
 		}
 	}
 
-	if (act->tablist.getCurrent() != -1) {
+	if (act_drag_hover && act->tablist.getCurrent() != -1) {
 		inpt->mouse.x = act->slots[act->tablist.getCurrent()]->pos.x;
 		inpt->mouse.y = act->slots[act->tablist.getCurrent()]->pos.y;
 		keyb_tip_new_act = act->checkTooltip(inpt->mouse);
