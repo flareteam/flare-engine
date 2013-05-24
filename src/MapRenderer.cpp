@@ -220,8 +220,12 @@ void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
 		const unsigned tilex = round(it->map_pos.x);
 		const unsigned tiley = round(it->map_pos.y);
-		const unsigned commax = 256.0 * (float)(1.0 + it->map_pos.x - tilex);
-		const unsigned commay = 256.0 * (float)(1.0 + it->map_pos.y - tiley);
+		const int commax = 1024.0 * (1.0 + (it->map_pos.x - tilex));
+		const int commay = 1024.0 * (1.0 + (it->map_pos.y - tiley));
+		assert(commax>0);
+		assert(commay>0);
+		assert(commax + commay < (2<<16));
+		assert(tilex < (2<<16));
 		it->prio += (((uint64_t)(tilex + tiley)) << 48) + (((uint64_t)tilex) << 32) + ((commax + commay) << 16);
 	}
 }
