@@ -509,12 +509,10 @@ void MenuManager::logic() {
 		// handle left-click
 		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 			// clear keyboard dragging
-			if (drag_src == DRAG_SRC_VENDOR) vendor->itemReturn(drag_stack);
-			else if (drag_src == DRAG_SRC_STASH) stash->itemReturn(drag_stack);
-			else if (drag_src == DRAG_SRC_INVENTORY) inv->itemReturn(drag_stack);
-			else if (drag_src == DRAG_SRC_ACTIONBAR) act->actionReturn(drag_power);
-			drag_src = 0;
-			keyboard_dragging = false;
+			if (keyboard_dragging) {
+				resetDrag();
+				keyboard_dragging = false;
+			}
 
 			// exit menu
 			if (exit->visible && isWithin(exit->window_area, inpt->mouse)) {
@@ -804,11 +802,7 @@ void MenuManager::logic() {
 	}
 	else {
 		if (mouse_dragging || keyboard_dragging) {
-			if (drag_src == DRAG_SRC_VENDOR) vendor->itemReturn(drag_stack);
-			else if (drag_src == DRAG_SRC_STASH) stash->itemReturn(drag_stack);
-			else if (drag_src == DRAG_SRC_INVENTORY) inv->itemReturn(drag_stack);
-			else if (drag_src == DRAG_SRC_ACTIONBAR) act->actionReturn(drag_power);
-			drag_src = 0;
+			resetDrag();
 			mouse_dragging = false;
 			keyboard_dragging = false;
 		}
@@ -853,12 +847,11 @@ void MenuManager::dragAndDropWithKeyboard() {
 		CLICK_TYPE slotClick;
 		Point src_slot;
 		WidgetSlot * inv_slot;
-		if (inv->tablist.getCurrent() < inv->getEquippedCount()) {
+
+		if (inv->tablist.getCurrent() < inv->getEquippedCount())
 			inv_slot = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()];
-		}
-		else {
+		else
 			inv_slot = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()];
-		}
 
 		src_slot.x = inv_slot->pos.x;
 		src_slot.y = inv_slot->pos.y;
@@ -901,9 +894,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 				}
 			}
 			inv_slot->checked = false;
+			drag_src = 0;
 			drag_stack.item = 0;
 			keyboard_dragging = false;
-			drag_src = 0;
 		}
 	}
 
@@ -912,12 +905,11 @@ void MenuManager::dragAndDropWithKeyboard() {
 		CLICK_TYPE slotClick;
 		Point src_slot;
 		WidgetSlot * vendor_slot;
-		if (vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2) {
+
+		if (vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2)
 			vendor_slot = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()];
-		}
-		else {
+		else
 			vendor_slot = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - vendor->tablist.size()/2];
-		}
 
 		src_slot.x = vendor_slot->pos.x;
 		src_slot.y = vendor_slot->pos.y;
@@ -966,17 +958,15 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// rearrange item
 		else if (slotClick == CHECKED && drag_stack.item > 0) {
 			if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_STASH) {
-				if (drag_src == DRAG_SRC_STASH && (inv->tablist.getCurrent() < inv->getEquippedCount() || stash->full(drag_stack.item))) {
+				if (drag_src == DRAG_SRC_STASH && (inv->tablist.getCurrent() < inv->getEquippedCount() || stash->full(drag_stack.item)))
 					stash->itemReturn(drag_stack);
-				}
-				else {
+				else
 					stash->drop(src_slot, drag_stack);
-				}
 			}
 			stash->stock.slots[stash->tablist.getCurrent()]->checked = false;
+			drag_src = 0;
 			drag_stack.item = 0;
 			keyboard_dragging = false;
-			drag_src = 0;
 		}
 	}
 
@@ -1001,26 +991,41 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// clear power dragging if power slot was pressed twice
 		else if (slotClick == ACTIVATED) {
+			drag_src = 0;
 			drag_power = 0;
 			keyboard_dragging = false;
-			drag_src = 0;
 		}
 	}
 
 	// handle dropping
 	if (keyboard_dragging) {
 		// putting a power on the Action Bar
-		if (drag_src == DRAG_SRC_POWERS) {
-			if (act->tablist.getCurrent() >= 0 && act->tablist.getCurrent() < 12 && act->slots[act->tablist.getCurrent()]->checkClick() == CHECKED) {
-				Point dest_slot(act->slots[act->tablist.getCurrent()]->pos.x, act->slots[act->tablist.getCurrent()]->pos.y);
+		if (act->tablist.getCurrent() >= 0 && act->tablist.getCurrent() < 12 && act->slots[act->tablist.getCurrent()]->checkClick() == CHECKED) {
+			Point dest_slot(act->slots[act->tablist.getCurrent()]->pos.x, act->slots[act->tablist.getCurrent()]->pos.y);
+			if (drag_src == DRAG_SRC_POWERS) {
 				act->drop(dest_slot, drag_power, 0);
-				act->slots[act->tablist.getCurrent()]->checked = false;
 				pow->slots[pow->tablist.getCurrent()]->checked = false;
-				keyboard_dragging = false;
-				drag_src = 0;
+			} else if (drag_src == DRAG_SRC_INVENTORY) {
+				if (items->items[drag_stack.item].power != 0) {
+					act->drop(dest_slot, items->items[drag_stack.item].power, false);
+				}
 			}
+			act->slots[act->tablist.getCurrent()]->checked = false;
+			resetDrag();
+			keyboard_dragging = false;
 		}
 	}
+}
+
+void MenuManager::resetDrag() {
+	if (drag_src == DRAG_SRC_VENDOR) vendor->itemReturn(drag_stack);
+	else if (drag_src == DRAG_SRC_STASH) stash->itemReturn(drag_stack);
+	else if (drag_src == DRAG_SRC_INVENTORY) inv->itemReturn(drag_stack);
+	else if (drag_src == DRAG_SRC_ACTIONBAR) act->actionReturn(drag_power);
+	drag_src = 0;
+	drag_stack.item = 0;
+	drag_stack.quantity = 0;
+	drag_power = 0;
 }
 
 void MenuManager::render() {

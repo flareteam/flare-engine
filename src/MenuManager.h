@@ -86,6 +86,7 @@ private:
 
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
+	void resetDrag();
 
 public:
 	MenuManager(PowerManager *powers, StatBlock *stats, CampaignManager *camp, ItemManager *items);
