@@ -140,7 +140,7 @@ ItemStack MenuItemStorage::click(Point position) {
 
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
-		if (inpt->pressing[SHIFT]) {
+		if (inpt->pressing[SHIFT] || NO_MOUSE) {
 			item.quantity = 1;
 		}
 		substract( drag_prev_slot, item.quantity);
