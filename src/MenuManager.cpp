@@ -243,7 +243,7 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 
 void MenuManager::handleKeyboardNavigation() {
 	// vendor/inventory switching
-	if (vendor->visible && inv->visible) {
+	if (vendor->visible && inv->visible && drag_src == 0) {
 		const int VENDOR_ROWS = vendor->getRowsCount() * 2; //Vendor Menu has two tabs
 		const int INVENTORY_ROWS = inv->getCarriedRows();
 		const int EQUIPPED_SLOTS = inv->getEquippedCount();
@@ -270,7 +270,7 @@ void MenuManager::handleKeyboardNavigation() {
 		}
 	}
 	// stash/inventory switching
-	if (stash->visible && inv->visible) {
+	if (stash->visible && inv->visible && drag_src == 0) {
 		const int STASH_ROWS = stash->getRowsCount();
 		const int INVENTORY_ROWS = inv->getCarriedRows();
 		const int EQUIPPED_SLOTS = inv->getEquippedCount();
@@ -296,19 +296,38 @@ void MenuManager::handleKeyboardNavigation() {
 			}
 		}
 	}
+
+	// lock left and right where buy/sell slots meet
+	if (vendor->visible && drag_src != 0) {
+		if (vendor->tablist.getCurrent() == 0 || vendor->tablist.getCurrent() == (int)vendor->tablist.size()/2)
+			inpt->lock[LEFT] = true;
+		if (vendor->tablist.getCurrent() == (int)vendor->tablist.size()-1 || vendor->tablist.getCurrent() == (int)vendor->tablist.size()/2 - 1)
+			inpt->lock[RIGHT] = true;
+	}
+
 	// UP/DOWN scrolling in vendor menu
 	if (vendor->visible && !vendor->tablist.isLocked()) {
 		int VENDOR_ROWS = vendor->getRowsCount() * 2;
+		int VENDOR_COLS = vendor->tablist.size()/VENDOR_ROWS;
+
+		bool buy_down = vendor->tablist.getCurrent() >= 0 && vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2-VENDOR_COLS;
+		bool sell_down = vendor->tablist.getCurrent() >= (int)vendor->tablist.size()/2 && vendor->tablist.getCurrent() < (int)vendor->tablist.size()-VENDOR_COLS;
+		bool buy_up = vendor->tablist.getCurrent() >= VENDOR_COLS && vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2;
+		bool sell_up = vendor->tablist.getCurrent() >= (int)vendor->tablist.size()/2+VENDOR_COLS && vendor->tablist.getCurrent() < (int)vendor->tablist.size();
 
 		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;
-			for (unsigned i = 0; i < vendor->tablist.size()/VENDOR_ROWS; i++)
-				vendor->tablist.getNext();
+			if (drag_src == 0 || buy_down || sell_down) {
+				for (unsigned i = 0; i < vendor->tablist.size()/VENDOR_ROWS; i++)
+					vendor->tablist.getNext();
+			}
 		}
 		if (inpt->pressing[UP] && !inpt->lock[UP]) {
 			inpt->lock[UP] = true;
-			for (unsigned i = 0; i < vendor->tablist.size()/VENDOR_ROWS; i++)
-				vendor->tablist.getPrev();
+			if (drag_src == 0 || buy_up || sell_up) {
+				for (unsigned i = 0; i < vendor->tablist.size()/VENDOR_ROWS; i++)
+					vendor->tablist.getPrev();
+			}
 		}
 	}
 	// UP/DOWN scrolling in inventory
@@ -340,6 +359,13 @@ void MenuManager::handleKeyboardNavigation() {
 				stash->tablist.getPrev();
 		}
 	}
+
+	// stash and vendor always start locked
+	if (!stash->visible) stash->tablist.lock();
+	if (!vendor->visible) vendor->tablist.lock();
+
+	// inventory always starts unlocked
+	if (!inv->visible) inv->tablist.unlock();
 }
 void MenuManager::logic() {
 
@@ -857,43 +883,35 @@ void MenuManager::dragAndDropWithKeyboard() {
 		src_slot.y = inv_slot->pos.y;
 		slotClick = inv_slot->checkClick();
 
-		// sell or pick up item
+		// pick up item
 		if (slotClick == CHECKED && drag_stack.item == 0) {
-			inv_slot->checked = false;
 			drag_stack = inv->click(src_slot);
-			drag_stack.quantity = 1;
 			if (drag_stack.item > 0) {
-				if (vendor->visible && inv->sell(drag_stack)) {
-					vendor->setTab(VENDOR_SELL);
-					vendor->add(drag_stack);
-					drag_stack.item = 0;
-				}
-				else if (!vendor->visible) {
-					keyboard_dragging = true;
-					drag_src = DRAG_SRC_INVENTORY;
-				}
-				else {
-					inv->itemReturn(drag_stack);
-					drag_stack.item = 0;
-				}
+				keyboard_dragging = true;
+				drag_src = DRAG_SRC_INVENTORY;
 			}
 		}
 		// rearrange item
 		else if (slotClick == CHECKED && drag_stack.item > 0) {
-			if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_STASH) {
-				if (drag_src == DRAG_SRC_STASH && inv->tablist.getCurrent() >= inv->getEquippedCount() && inv->full(drag_stack.item)) {
-					log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-					hudlog->add(msg->get("Inventory is full."));
-					drop_stack = drag_stack;
-				}
-				else if (drag_src == DRAG_SRC_STASH && inv->tablist.getCurrent() < inv->getEquippedCount()) {
-					stash->itemReturn(drag_stack);
-				}
-				else {
-					inv->drop(src_slot, drag_stack);
-				}
-			}
+			inv->drop(src_slot, drag_stack);
 			inv_slot->checked = false;
+			drag_src = 0;
+			drag_stack.item = 0;
+			keyboard_dragging = false;
+		}
+		// sell, stash, or use item
+		else if (slotClick == ACTIVATED && drag_stack.item > 0) {
+			if (vendor->visible && inv->sell(drag_stack)) {
+				vendor->setTab(VENDOR_SELL);
+				vendor->add(drag_stack);
+			}
+			else if (stash->visible && !stash->full(drag_stack.item)) {
+				stash->add(drag_stack);
+			}
+			else if (!vendor->visible && !stash->visible) {
+				inv->itemReturn(drag_stack);
+				inv->activate(src_slot);
+			}
 			drag_src = 0;
 			drag_stack.item = 0;
 			keyboard_dragging = false;
@@ -917,27 +935,38 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 		// buy item
 		if (slotClick == CHECKED && drag_stack.item == 0) {
-			vendor_slot->checked = false;
 			drag_stack = vendor->click(src_slot);
-			drag_stack.quantity = 1;
 			if (drag_stack.item > 0) {
-				if (!inv->buy(drag_stack,vendor->getTab())) {
-					log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
-					hudlog->add(msg->get("Not enough %s.", CURRENCY));
-					vendor->itemReturn(drag_stack);
+				keyboard_dragging = true;
+				drag_src = DRAG_SRC_VENDOR;
+			}
+		}
+		else if (slotClick == CHECKED && drag_stack.item > 0) {
+			vendor->itemReturn(drag_stack);
+			vendor_slot->checked = false;
+			drag_src = 0;
+			drag_stack.item = 0;
+			keyboard_dragging = false;
+		}
+		else if (slotClick == ACTIVATED && drag_stack.item > 0) {
+			if (!inv->buy(drag_stack,vendor->getTab())) {
+				log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
+				hudlog->add(msg->get("Not enough %s.", CURRENCY));
+				vendor->itemReturn(drag_stack);
+			}
+			else {
+				if (inv->full(drag_stack.item)) {
+					log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+					hudlog->add(msg->get("Inventory is full."));
+					drop_stack = drag_stack;
 				}
 				else {
-					if (inv->full(drag_stack.item)) {
-						log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-						hudlog->add(msg->get("Inventory is full."));
-						drop_stack = drag_stack;
-					}
-					else {
-						inv->add(drag_stack);
-					}
+					inv->add(drag_stack);
 				}
 			}
+			drag_src = 0;
 			drag_stack.item = 0;
+			keyboard_dragging = false;
 		}
 	}
 
@@ -948,7 +977,6 @@ void MenuManager::dragAndDropWithKeyboard() {
 
 		// pick up item
 		if (slotClick == CHECKED && drag_stack.item == 0) {
-			stash->stock.slots[stash->tablist.getCurrent()]->checked = false;
 			drag_stack = stash->click(src_slot);
 			if (drag_stack.item > 0) {
 				keyboard_dragging = true;
@@ -957,13 +985,21 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// rearrange item
 		else if (slotClick == CHECKED && drag_stack.item > 0) {
-			if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_STASH) {
-				if (drag_src == DRAG_SRC_STASH && (inv->tablist.getCurrent() < inv->getEquippedCount() || stash->full(drag_stack.item)))
-					stash->itemReturn(drag_stack);
-				else
-					stash->drop(src_slot, drag_stack);
+			stash->drop(src_slot, drag_stack);
+			drag_src = 0;
+			drag_stack.item = 0;
+			keyboard_dragging = false;
+		}
+		// send to inventory
+		else if (slotClick == ACTIVATED && drag_stack.item > 0) {
+			if (!inv->full(drag_stack.item)) {
+				inv->add(drag_stack);
 			}
-			stash->stock.slots[stash->tablist.getCurrent()]->checked = false;
+			else {
+				log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+				hudlog->add(msg->get("Inventory is full."));
+				stash->itemReturn(drag_stack);
+			}
 			drag_src = 0;
 			drag_stack.item = 0;
 			keyboard_dragging = false;
@@ -1006,6 +1042,11 @@ void MenuManager::dragAndDropWithKeyboard() {
 				act->drop(dest_slot, drag_power, 0);
 				pow->slots[pow->tablist.getCurrent()]->checked = false;
 			} else if (drag_src == DRAG_SRC_INVENTORY) {
+				if (inv->tablist.getCurrent() < inv->getEquippedCount())
+					inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->checked = false;
+				else
+					inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->checked = false;
+
 				if (items->items[drag_stack.item].power != 0) {
 					act->drop(dest_slot, items->items[drag_stack.item].power, false);
 				}
