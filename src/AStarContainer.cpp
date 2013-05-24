@@ -1,5 +1,6 @@
 #include "AStarContainer.h"
 #include <cstring>
+#include <cfloat>
 
 AStarContainer::AStarContainer(unsigned int map_width, unsigned int map_height, unsigned int node_limit)
     : size(0)
@@ -133,3 +134,57 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score){
     ///map_pos[pos.x + pos.y * map_width] = m;
 }
 
+AStarCloseContainer::AStarCloseContainer(unsigned int map_width, unsigned int map_height, unsigned int node_limit)
+    : size(0)
+    , map_width(0)
+{
+    this->map_width = map_width;
+
+    nodes = new AStarNode*[node_limit];
+    map_pos = new int[map_width * map_height + 1];
+
+    //initialise the map array. A -1 value will mean there is no node at that position
+    ///std::memset(map_pos, -1, sizeof(int) * (map_width + map_height));
+    std::fill(map_pos, map_pos + map_width * map_height, -1);
+}
+
+AStarCloseContainer::~AStarCloseContainer()
+{
+    for(int i=0; i<size; i++)
+        delete nodes[i];
+    delete [] nodes;
+    delete [] map_pos;
+}
+
+int AStarCloseContainer::getSize()
+{
+    return size;
+}
+
+void AStarCloseContainer::add(AStarNode* node)
+{
+    nodes[size] = node;
+    map_pos[node->getX() + node->getY() * map_width] = size;
+    size++;
+}
+
+bool AStarCloseContainer::exists(Point pos){
+    return map_pos[pos.x + pos.y * map_width] != -1;
+}
+
+AStarNode* AStarCloseContainer::get(int x, int y){
+    return nodes[map_pos[x + y * map_width]];
+}
+
+AStarNode* AStarCloseContainer::get_shortest_h()
+{
+    AStarNode *current;
+    float lowest_score = FLT_MAX;
+    for(int i = 0; i < size; i){
+        if(nodes[i]->getH() < lowest_score){
+            lowest_score = nodes[i]->getH();
+            current = nodes[i];
+        }
+    }
+    return current;
+}

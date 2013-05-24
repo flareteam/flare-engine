@@ -34,4 +34,26 @@ class AStarContainer
         int* map_pos;
 };
 
+class AStarCloseContainer
+{
+public:
+    AStarCloseContainer(unsigned int map_width, unsigned int map_height, unsigned int node_limit);
+    ~AStarCloseContainer();
+
+    int getSize();
+    void add(AStarNode* node);
+    bool exists(Point pos);
+    AStarNode* get(int x, int y);
+    AStarNode* get_shortest_h();
+
+private:
+
+    unsigned int size;
+    unsigned int map_width;
+    AStarNode** nodes;
+    //2d array linking map pos to the index needed for the nodes array
+    int* map_pos;
+
+};
+
 #endif // ASTARCONTAINER_H
