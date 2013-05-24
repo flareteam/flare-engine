@@ -428,6 +428,26 @@ void MenuManager::logic() {
 		}
 	}
 
+	// cancel dragging and defocus menu tablists
+	if (!key_lock && inpt->pressing[CANCEL] && !inpt->lock[CANCEL] && !stats->corpse) {
+		if (keyboard_dragging || mouse_dragging) {
+			inpt->lock[CANCEL] = true;
+			resetDrag();
+			keyboard_dragging = false;
+			mouse_dragging = false;
+		}
+		if (inv->tablist.getCurrent() != -1 || vendor->tablist.getCurrent() != -1 || stash->tablist.getCurrent() != -1 || act->tablist.getCurrent() != -1 || pow->tablist.getCurrent() != -1 || chr->tablist.getCurrent() != -1 || log->tablist.getCurrent() != -1) {
+			inpt->lock[CANCEL] = true;
+			inv->tablist.defocus();
+			vendor->tablist.defocus();
+			stash->tablist.defocus();
+			act->tablist.defocus();
+			pow->tablist.defocus();
+			chr->tablist.defocus();
+			log->tablist.defocus();
+		}
+	}
+
 	// exit menu toggle
 	if ((!key_lock && !mouse_dragging && !keyboard_dragging) && !(stats->corpse && stats->permadeath)) {
 		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
