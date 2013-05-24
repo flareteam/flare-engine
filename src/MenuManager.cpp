@@ -888,7 +888,12 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// rearrange item
 		else if (slotClick == CHECKED && drag_stack.item > 0) {
 			if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_STASH) {
-				if (drag_src == DRAG_SRC_STASH && inv->tablist.getCurrent() < inv->getEquippedCount()) {
+				if (drag_src == DRAG_SRC_STASH && inv->tablist.getCurrent() >= inv->getEquippedCount() && inv->full(drag_stack.item)) {
+					log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+					hudlog->add(msg->get("Inventory is full."));
+					drop_stack = drag_stack;
+				}
+				else if (drag_src == DRAG_SRC_STASH && inv->tablist.getCurrent() < inv->getEquippedCount()) {
 					stash->itemReturn(drag_stack);
 				}
 				else {
@@ -960,8 +965,15 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// rearrange item
 		else if (slotClick == CHECKED && drag_stack.item > 0) {
+			if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_STASH) {
+				if (drag_src == DRAG_SRC_STASH && (inv->tablist.getCurrent() < inv->getEquippedCount() || stash->full(drag_stack.item))) {
+					stash->itemReturn(drag_stack);
+				}
+				else {
+					stash->drop(src_slot, drag_stack);
+				}
+			}
 			stash->stock.slots[stash->tablist.getCurrent()]->checked = false;
-			stash->drop(src_slot, drag_stack);
 			drag_stack.item = 0;
 			keyboard_dragging = false;
 			drag_src = 0;
