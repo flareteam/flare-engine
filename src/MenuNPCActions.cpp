@@ -366,22 +366,23 @@ void MenuNPCActions::keyboardLogic() {
 
 	if (inpt->pressing[UP] && !inpt->lock[UP]) {
 		inpt->lock[UP] = true;
-		current_action--;
-
-		if ((int)current_action < 0)
-			current_action = npc_actions.size()-1;
-
-		update();
+		do {
+			current_action--;
+			if ((int)current_action < 0)
+				current_action = npc_actions.size()-1;
+		}
+		while (npc_actions[current_action].label == NULL);
 	}
 	if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 		inpt->lock[DOWN] = true;
-		current_action++;
-
-		if (current_action >= npc_actions.size())
-			current_action = 0;
-
-		update();
+		do {
+			current_action++;
+			if (current_action >= npc_actions.size())
+				current_action = 0;
+		}
+		while (npc_actions[current_action].label == NULL);
 	}
+	update();
 }
 
 void MenuNPCActions::render() {
