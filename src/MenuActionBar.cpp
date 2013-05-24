@@ -295,6 +295,9 @@ void MenuActionBar::render() {
 			if (slot_item_count[i] > -1) {
 				slots[i]->setAmount(slot_item_count[i]);
 			}
+			else {
+				slots[i]->setAmount(0,0);
+			}
 			slots[i]->render();
 		}
 		else {
