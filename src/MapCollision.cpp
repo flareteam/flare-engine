@@ -50,35 +50,66 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
  * If we encounter an obstacle at 90 degrees, stop.
  * If we encounter an obstacle at 45 or 135 degrees, slide.
  */
-bool MapCollision::move(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero) {
-	bool diag = (step_x != 0) && (step_y != 0);
+bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEMENTTYPE movement_type, bool is_hero) {
 
-	if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
-		x += step_x;
-		y += step_y;
-	}
-	else if (diag && is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
-		x += step_x;
-	}
-	else if (diag && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
-		y += step_y;
-	}
-	else { // is there a singular obstacle or corner we can step around?
-		// only works if we are moving straight
-		if (diag) return false;
+	while (_step_x != 0 || _step_y != 0) {
 
-		int way_around = is_one_step_around(x, y, step_x, step_y);
-
-		if (!way_around) {
-			return false;
+		float step_x = 0;
+		if (_step_x > 0) {
+			// find next interesting value, which is either the whole step, or the transition to the next tile
+			step_x = min((float)ceil(x) - x, _step_x);
+			// if we are standing on the edge of a tile (ceil(x) - x == 0), we need to look one tile ahead
+			if (step_x == 0) step_x	= min(1.f, _step_x);
+		} else if (_step_x < 0) {
+			step_x = max((float)floor(x) - x, _step_x);
+			if (step_x == 0) step_x = max(-1.f, _step_x);
 		}
 
-		if (step_x) {
-			y+= way_around;
+
+		float step_y = 0;
+		if (_step_y > 0) {
+			step_y = min((float)ceil(y) - y, _step_y);
+			if (step_y == 0) step_y	= min(1.f, _step_y);
+		} else if (_step_y < 0) {
+			step_y = max((float)floor(y) - y, _step_y);
+			if (step_y == 0) step_y	= max(-1.f, _step_y);
 		}
-		else {
-			x+= way_around;
+
+		_step_x -= step_x;
+		_step_y -= step_y;
+
+		bool diag = (step_x != 0) && (step_y != 0);
+
+		if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
+			x += step_x;
+			y += step_y;
 		}
+		else if (diag && is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
+			x += step_x;
+		}
+		else if (diag && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
+			y += step_y;
+		}
+		/*
+		else { // is there a singular obstacle or corner we can step around?
+			// only works if we are moving straight
+
+			if (diag) return false;
+
+			int way_around = is_one_step_around(x, y, step_x, step_y);
+
+			if (!way_around) {
+				return false;
+			}
+
+			if (step_x) {
+				y+= way_around;
+			}
+			else {
+				x+= way_around;
+			}
+		}
+		*/
 	}
 	return true;
 }
