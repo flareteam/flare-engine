@@ -199,13 +199,11 @@ void StatBlock::load(const string& filename) {
 	if (!infile.open(filename))
 		return;
 
-	int num = 0;
-	float fnum = 0.0;
 	string loot_token;
 
 	while (infile.next()) {
-		if (isInt(infile.val)) num = toInt(infile.val);
-		fnum = toFloat(infile.val);
+		int num = toInt(infile.val);
+		float fnum = toFloat(infile.val);
 		bool valid = false;
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
