@@ -476,8 +476,10 @@ AStarNode* node52 = open.nodes[4];
 postRemove = clock();
 removeTotal += postRemove - preRemove;
 
-		if ( current.x == end.x && current.y == end.y)
+		if ( current.x == end.x && current.y == end.y){
+            delete node;
 			break; //path found !
+		}
 
 		list<Point> neighbours = node->getNeighbours(256,256); //256 is map max size
 ///(map_size.x-1, map_size.y-1);///
