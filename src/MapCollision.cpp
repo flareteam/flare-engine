@@ -29,6 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AStarContainer.h"
 #include <cfloat>
 
+#include <time.h>
+
 using namespace std;
 
 MapCollision::MapCollision()
@@ -321,6 +323,47 @@ bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2) {
 */
 bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
+clock_t timeBegin = clock();
+clock_t timePreConstructor = 0;
+clock_t timePostConstructor = 0;
+clock_t timePreMainLoop = 0;
+clock_t timePostMainLoop = 0;
+clock_t timeEnd = 0;
+
+clock_t preFirstHalf = 0;
+clock_t postFirstHalf = 0;
+clock_t postSecondHalf = 0;
+int firstHalfTotal = 0;
+int secondHalfTotal = 0;
+
+clock_t preRemove = 0;
+clock_t postRemove = 0;
+int removeTotal = 0;
+
+int firstQuarterTotal = 0;
+int secondQuarterTotal = 0;
+
+clock_t postGetShortest = 0;
+int shortestTotal = 0;
+
+clock_t preAddClose = 0;
+int addCloseTotal = 0;
+
+clock_t preValidTile = 0;
+clock_t postValidTile = 0;
+clock_t postSearchClose = 0;
+
+int validTileTotal = 0;
+int searchCloseTotal = 0;
+
+clock_t preIfExists = 0;
+clock_t postIfExists = 0;
+int ifExistsTotal = 0;
+
+clock_t preIfNotExists = 0;
+clock_t postIfNotExists = 0;
+int ifNotExistsTotal = 0;
+
 	if (limit == 0)
 		limit = 256;
 
@@ -332,8 +375,12 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 	if (!path.empty())
 		path.clear();
 
+
+timePreConstructor = clock();
 	// convert start & end to MapCollision precision
 	Point start = map_to_collision(start_pos);
+timePostConstructor = clock();
+
 	Point end = map_to_collision(end_pos);
 
 	// if the target square has an entity, temporarily clear it to compute the path
@@ -356,8 +403,10 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
     open.add(node);
 	///open.push_back(node);
 
+timePreMainLoop = clock();
 	while (!open.isEmpty() && close.size() < limit) {
 
+preFirstHalf = clock();
 		/**float lowest_score = FLT_MAX;
 		// find lowest score available inside open, make it current node and move it to close
 		list<AStarNode>::iterator lowest_it;
@@ -369,58 +418,188 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 		}*/
 
 		AStarNode* lowest_it = open.get_shortest_f();
+postGetShortest = clock();
+shortestTotal += postGetShortest - preFirstHalf;
 
 		node = lowest_it;
 		current.x = node->getX();
 		current.y = node->getY();
+preAddClose = clock();
 		close.push_back(*node);
 		///open.erase(lowest_it);
+preRemove = clock();
+firstQuarterTotal += preRemove - preFirstHalf;
+addCloseTotal += preRemove - preAddClose;
+if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
+{
+    int x;
+    postRemove = clock();
+    x = 1;
+}
+int presize = open.size;
+AStarNode* node1 = open.nodes[0];
+int heap_indexv = open.map_pos[node1->getX() + node1->getY() * map_size.x] + 1;
+AStarNode* node2 = open.nodes[1];
+AStarNode* node3 = open.nodes[2];
+AStarNode* node4 = open.nodes[3];
+AStarNode* node5 = open.nodes[4];
+
 		open.remove(lowest_it);
+if(!open.isEmpty())
+    if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
+{
+    int x;
+    x = 0;
+    x = 1;
+    postRemove = clock();
+}
+
+if(!open.isEmpty())
+if(node == open.get_shortest_f())
+{
+    int i = open.size;
+    postRemove = clock();
+}
+
+if(open.size > 0)
+if(open.map_pos[open.nodes[0]->getX() + open.nodes[0]->getY() * map_size.x] != 0){
+int presize2 = open.size;
+AStarNode* node12 = open.nodes[0];
+int heap_indexv2 = open.map_pos[node12->getX() + node12->getY() * map_size.x] + 1;
+AStarNode* node22 = open.nodes[1];
+AStarNode* node32 = open.nodes[2];
+AStarNode* node42 = open.nodes[3];
+AStarNode* node52 = open.nodes[4];
+    postRemove = clock();
+}
+
+postRemove = clock();
+removeTotal += postRemove - preRemove;
 
 		if ( current.x == end.x && current.y == end.y)
 			break; //path found !
 
 		list<Point> neighbours = node->getNeighbours(256,256); //256 is map max size
+///(map_size.x-1, map_size.y-1);///
+
+postFirstHalf = clock();
+firstHalfTotal += postFirstHalf - preFirstHalf;
+secondQuarterTotal += postFirstHalf - postRemove;
 
 		// for every neighbour of current node
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
 			Point neighbour = *it;
 
+if(neighbour.x > map_size.x)
+    postRemove = clock();
+if(neighbour.y > map_size.y)
+    postRemove = clock();
+
+
+preValidTile = clock();
 			// if neighbour is not free of any collision, skip it
 			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false))
 				continue;
+postValidTile = clock();
+validTileTotal += postValidTile - preValidTile;
 			// if nabour is already in close, skip it
 			if(find(close.begin(), close.end(), neighbour)!=close.end())
 				continue;
-
+postSearchClose = clock();
+searchCloseTotal += postSearchClose - postValidTile;
 
 			///list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
 
 			// if neighbour isn't inside open, add it as a new Node
 			///if (i==open.end()) {
 			if(!open.exists(neighbour)){
+preIfExists = clock();
 				AStarNode* newNode = new AStarNode(neighbour.x,neighbour.y);
 				newNode->setActualCost(node->getActualCost()+(float)calcDist(current,neighbour));
 				newNode->setParent(current);
 				newNode->setEstimatedCost((float)calcDist(neighbour,end));
 				///open.push_back(newNode);
 				open.add(newNode);
+if(!open.isEmpty())
+if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
+{
+    int x;
+    postRemove = clock();
+    x = 1;
+}
+
+if(open.size > 1)
+if(open.nodes[0] == open.nodes[1]){
+    int dfskv = open.size;
+    postRemove = clock();
+}
+
+if(open.map_pos[open.nodes[0]->getX() + open.nodes[0]->getY() * map_size.x] != 0){
+    postRemove = clock();
+}
+
+postIfExists = clock();
+ifExistsTotal += postIfExists - preIfExists;
 			}
 			// else, update it's cost if better
 			else{
+preIfNotExists = clock();
                 AStarNode* i = open.get(neighbour.x, neighbour.y);
+
+if(i->x < 0 || i->x > 256 || i->y < 0 || i->y > 256)
+{
+    int x;
+    postRemove = clock();
+    x = 1;
+}
+
                 if (node->getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
                     Point pos(i->getX(), i->getY());
                     Point parent_pos(node->getX(), node->getY());
                     open.updateParent(pos, parent_pos, node->getActualCost()+(float)calcDist(current,neighbour));
                     ///i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
                     ///i->setParent(current);
+if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
+{
+    int x;
+    postRemove = clock();
+    x = 1;
+}
+
+if(open.size > 1)
+if(open.nodes[0] == open.nodes[1]){
+    int dfskv = open.size;
+    postRemove = clock();
+}
+
+if(open.map_pos[open.nodes[0]->getX() + open.nodes[0]->getY() * map_size.x] != 0){
+    postRemove = clock();
+}
+
                 }
+postIfNotExists = clock();
+ifNotExistsTotal += postIfNotExists - preIfNotExists;
 			}
 		}
-
+if(!open.isEmpty())
+if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
+{
+    int x;
+    postRemove = clock();
+    x = 1;
+}
 		delete node;
+if(!open.isEmpty())
+if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
+{
+    int x;
+    postRemove = clock();
+    x = 1;
+}
+postSecondHalf = clock();
+secondHalfTotal += postSecondHalf - postFirstHalf;
 	}
+timePostMainLoop = clock();
 
 	if (current.x != end.x || current.y != end.y) {
 
@@ -446,7 +625,7 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 			current = find(close.begin(), close.end(), current)->getParent();
 		}
 
-		return false;
+		///return false;
 	}
 	else {
 		// store path from end to start
@@ -459,6 +638,29 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 
 	// reblock target if needed
 	if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
+
+timeEnd = clock();
+
+fprintf(stderr, "--------------------------------\n");
+fprintf(stderr, "total time: %d\n", timeEnd - timeBegin);
+fprintf(stderr, "time to constructor: %d\n", timePreConstructor - timeBegin);
+fprintf(stderr, "time in constructor: %d\n", timePostConstructor - timePreConstructor);
+fprintf(stderr, "time to main loop: %d\n", timePreMainLoop - timePostConstructor);
+fprintf(stderr, "time in main loop: %d\n", timePostMainLoop - timePreMainLoop);
+fprintf(stderr, "time to end: %d\n", timeEnd - timePostMainLoop);
+fprintf(stderr, "first half: %d\n", firstHalfTotal);
+fprintf(stderr, "second half: %d\n", secondHalfTotal);
+fprintf(stderr, "remove: %d\n", removeTotal);
+fprintf(stderr, "first quarter: %d\n", firstQuarterTotal);
+fprintf(stderr, "second quarter: %d\n", secondQuarterTotal);
+fprintf(stderr, "get shortest: %d\n", shortestTotal);
+fprintf(stderr, "add close: %d\n", addCloseTotal);
+fprintf(stderr, "is valid tile: %d\n", validTileTotal);
+fprintf(stderr, "search close: %d\n", searchCloseTotal);
+fprintf(stderr, "if exists: %d\n", ifExistsTotal);
+fprintf(stderr, "if not exists: %d\n", ifNotExistsTotal);
+
+
 
 	return !path.empty();
 }

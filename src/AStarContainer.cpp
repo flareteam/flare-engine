@@ -8,7 +8,7 @@ AStarContainer::AStarContainer(unsigned int map_width, unsigned int map_height, 
     this->map_width = map_width;
 
     nodes = new AStarNode*[node_limit];
-    map_pos = new int[map_width * map_height];
+    map_pos = new int[map_width * map_height + 1];
 
     //initialise the map array. A -1 value will mean there is no node at that position
     ///std::memset(map_pos, -1, sizeof(int) * (map_width + map_height));
@@ -57,6 +57,8 @@ void AStarContainer::remove(AStarNode* node){
 
     //swap the last node in the list with the node being deleted
     nodes[heap_indexv-1] = nodes[size-1];
+    map_pos[nodes[heap_indexv-1]->getX() + nodes[heap_indexv-1]->getY() * map_width] = heap_indexv-1;
+
     size--;
 
     if(size == 0){

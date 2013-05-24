@@ -21,8 +21,11 @@ class AStarContainer
         //sorts the heap based on updated pos
         void updateParent(Point pos, Point parent_pos, float score);
 
-    private:
+
+    ///private:
+
         unsigned int size;
+
         unsigned int map_width;
         //AStarNode array -- binary heap ordered
         AStarNode** nodes;
