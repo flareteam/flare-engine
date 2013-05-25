@@ -859,6 +859,7 @@ void GameStateConfig::logic () {
 			loadDefaults();
 			loadMiscSettings();
 			inpt->defaultQwertyKeyBindings();
+			inpt->defaultJoystickBindings();
 			delete msg;
 			msg = new MessageEngine();
 			update();

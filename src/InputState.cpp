@@ -133,9 +133,17 @@ void InputState::loadKeyBindings() {
 	}
 
 	while (infile.next()) {
+		infile.val = infile.val + ',';
 
 		int key1 = eatFirstInt(infile.val, ',');
-		int key2 = toInt(infile.val);
+		int key2 = eatFirstInt(infile.val, ',');
+
+		// if we're loading an older keybindings file, we need to unbind all joystick bindings
+		int key3 = -1;
+		std::string temp = infile.val;
+		if (eatFirstString(temp, ',') != "") {
+			key3 = eatFirstInt(infile.val, ',');
+		}
 
 		int cursor = -1;
 
@@ -171,6 +179,7 @@ void InputState::loadKeyBindings() {
 		if (cursor != -1) {
 			binding[cursor] = key1;
 			binding_alt[cursor] = key2;
+			binding_joy[cursor] = key3;
 		}
 
 	}
@@ -186,34 +195,34 @@ void InputState::saveKeyBindings() {
 
 	if (outfile.is_open()) {
 
-		outfile << "cancel=" << binding[CANCEL] << "," << binding_alt[CANCEL] << "\n";
-		outfile << "accept=" << binding[ACCEPT] << "," << binding_alt[ACCEPT] << "\n";
-		outfile << "up=" << binding[UP] << "," << binding_alt[UP] << "\n";
-		outfile << "down=" << binding[DOWN] << "," << binding_alt[DOWN] << "\n";
-		outfile << "left=" << binding[LEFT] << "," << binding_alt[LEFT] << "\n";
-		outfile << "right=" << binding[RIGHT] << "," << binding_alt[RIGHT] << "\n";
-		outfile << "bar1=" << binding[BAR_1] << "," << binding_alt[BAR_1] << "\n";
-		outfile << "bar2=" << binding[BAR_2] << "," << binding_alt[BAR_2] << "\n";
-		outfile << "bar3=" << binding[BAR_3] << "," << binding_alt[BAR_3] << "\n";
-		outfile << "bar4=" << binding[BAR_4] << "," << binding_alt[BAR_4] << "\n";
-		outfile << "bar5=" << binding[BAR_5] << "," << binding_alt[BAR_5] << "\n";
-		outfile << "bar6=" << binding[BAR_6] << "," << binding_alt[BAR_6] << "\n";
-		outfile << "bar7=" << binding[BAR_7] << "," << binding_alt[BAR_7] << "\n";
-		outfile << "bar8=" << binding[BAR_8] << "," << binding_alt[BAR_8] << "\n";
-		outfile << "bar9=" << binding[BAR_9] << "," << binding_alt[BAR_9] << "\n";
-		outfile << "bar0=" << binding[BAR_0] << "," << binding_alt[BAR_0] << "\n";
-		outfile << "main1=" << binding[MAIN1] << "," << binding_alt[MAIN1] << "\n";
-		outfile << "main2=" << binding[MAIN2] << "," << binding_alt[MAIN2] << "\n";
-		outfile << "character=" << binding[CHARACTER] << "," << binding_alt[CHARACTER] << "\n";
-		outfile << "inventory=" << binding[INVENTORY] << "," << binding_alt[INVENTORY] << "\n";
-		outfile << "powers=" << binding[POWERS] << "," << binding_alt[POWERS] << "\n";
-		outfile << "log=" << binding[LOG] << "," << binding_alt[LOG] << "\n";
-		outfile << "ctrl=" << binding[CTRL] << "," << binding_alt[CTRL] << "\n";
-		outfile << "shift=" << binding[SHIFT] << "," << binding_alt[SHIFT] << "\n";
-		outfile << "delete=" << binding[DEL] << "," << binding_alt[DEL] << "\n";
-		outfile << "actionbar=" << binding[ACTIONBAR] << "," << binding_alt[ACTIONBAR] << "\n";
-		outfile << "actionbar_back=" << binding[ACTIONBAR_BACK] << "," << binding_alt[ACTIONBAR_BACK] << "\n";
-		outfile << "actionbar_forward=" << binding[ACTIONBAR_FORWARD] << "," << binding_alt[ACTIONBAR_FORWARD] << "\n";
+		outfile << "cancel=" << binding[CANCEL] << "," << binding_alt[CANCEL] << "," << binding_joy[CANCEL] << "\n";
+		outfile << "accept=" << binding[ACCEPT] << "," << binding_alt[ACCEPT] << "," << binding_joy[ACCEPT] << "\n";
+		outfile << "up=" << binding[UP] << "," << binding_alt[UP] << "," << binding_joy[UP] << "\n";
+		outfile << "down=" << binding[DOWN] << "," << binding_alt[DOWN] << "," << binding_joy[DOWN] << "\n";
+		outfile << "left=" << binding[LEFT] << "," << binding_alt[LEFT] << "," << binding_joy[LEFT] << "\n";
+		outfile << "right=" << binding[RIGHT] << "," << binding_alt[RIGHT] << "," << binding_joy[RIGHT] << "\n";
+		outfile << "bar1=" << binding[BAR_1] << "," << binding_alt[BAR_1] << "," << binding_joy[BAR_1] << "\n";
+		outfile << "bar2=" << binding[BAR_2] << "," << binding_alt[BAR_2] << "," << binding_joy[BAR_2] << "\n";
+		outfile << "bar3=" << binding[BAR_3] << "," << binding_alt[BAR_3] << "," << binding_joy[BAR_3] << "\n";
+		outfile << "bar4=" << binding[BAR_4] << "," << binding_alt[BAR_4] << "," << binding_joy[BAR_4] << "\n";
+		outfile << "bar5=" << binding[BAR_5] << "," << binding_alt[BAR_5] << "," << binding_joy[BAR_5] << "\n";
+		outfile << "bar6=" << binding[BAR_6] << "," << binding_alt[BAR_6] << "," << binding_joy[BAR_6] << "\n";
+		outfile << "bar7=" << binding[BAR_7] << "," << binding_alt[BAR_7] << "," << binding_joy[BAR_7] << "\n";
+		outfile << "bar8=" << binding[BAR_8] << "," << binding_alt[BAR_8] << "," << binding_joy[BAR_8] << "\n";
+		outfile << "bar9=" << binding[BAR_9] << "," << binding_alt[BAR_9] << "," << binding_joy[BAR_9] << "\n";
+		outfile << "bar0=" << binding[BAR_0] << "," << binding_alt[BAR_0] << "," << binding_joy[BAR_0] << "\n";
+		outfile << "main1=" << binding[MAIN1] << "," << binding_alt[MAIN1] << "," << binding_joy[MAIN1] << "\n";
+		outfile << "main2=" << binding[MAIN2] << "," << binding_alt[MAIN2] << "," << binding_joy[MAIN2] << "\n";
+		outfile << "character=" << binding[CHARACTER] << "," << binding_alt[CHARACTER] << "," << binding_joy[CHARACTER] << "\n";
+		outfile << "inventory=" << binding[INVENTORY] << "," << binding_alt[INVENTORY] << "," << binding_joy[INVENTORY] << "\n";
+		outfile << "powers=" << binding[POWERS] << "," << binding_alt[POWERS] << "," << binding_joy[POWERS] << "\n";
+		outfile << "log=" << binding[LOG] << "," << binding_alt[LOG] << "," << binding_joy[LOG] << "\n";
+		outfile << "ctrl=" << binding[CTRL] << "," << binding_alt[CTRL] << "," << binding_joy[CTRL] << "\n";
+		outfile << "shift=" << binding[SHIFT] << "," << binding_alt[SHIFT] << "," << binding_joy[SHIFT] << "\n";
+		outfile << "delete=" << binding[DEL] << "," << binding_alt[DEL] << "," << binding_joy[DEL] << "\n";
+		outfile << "actionbar=" << binding[ACTIONBAR] << "," << binding_alt[ACTIONBAR] << "," << binding_joy[ACTIONBAR] << "\n";
+		outfile << "actionbar_back=" << binding[ACTIONBAR_BACK] << "," << binding_alt[ACTIONBAR_BACK] << "," << binding_joy[ACTIONBAR_BACK] << "\n";
+		outfile << "actionbar_forward=" << binding[ACTIONBAR_FORWARD] << "," << binding_alt[ACTIONBAR_FORWARD] << "," << binding_joy[ACTIONBAR_FORWARD] << "\n";
 
 		if (outfile.bad()) fprintf(stderr, "Unable to write keybindings config file. No write access or disk is full!\n");
 		outfile.close();
