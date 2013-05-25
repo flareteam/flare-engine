@@ -24,33 +24,32 @@ AStarContainer::AStarContainer(unsigned int map_width, unsigned int map_height, 
     , map_width(0)
 {
     this->map_width = map_width;
-
     nodes = new AStarNode*[node_limit];
     map_pos = new int[map_width * map_height + 1];
-
     //initialise the map array. A -1 value will mean there is no node at that position
-    ///std::memset(map_pos, -1, sizeof(int) * (map_width + map_height));
     std::fill(map_pos, map_pos + map_width * map_height + 1, -1);
 }
 
 AStarContainer::~AStarContainer()
 {
-    for(int i=0; i<size; i++)
+    for(unsigned int i=0; i<size; i++)
         delete nodes[i];
     delete [] nodes;
     delete [] map_pos;
 }
 
 void AStarContainer::add(AStarNode* node){
-    nodes[size] = node;
 
+    //add the new node at the end and update its index
+    nodes[size] = node;
     map_pos[node->getX() + node->getY() * map_width] = size;
 
-    //reorder the heap
+    //reorder the heap based on f ordering, staring with thenewly added node and working up the tree from there
     int m = size;
 
     AStarNode* temp = NULL;
     while(m != 0){
+        //if the current nodes f value is shorter than its parent, they need to be swapped
         if(nodes[m]->getFinalCost() <= nodes[m/2]->getFinalCost()){
             temp = nodes[m/2];
             nodes[m/2] = nodes[m];
@@ -71,7 +70,7 @@ AStarNode* AStarContainer::get_shortest_f(){
 
 void AStarContainer::remove(AStarNode* node){
 
-    int heap_indexv = map_pos[node->getX() + node->getY() * map_width] + 1;
+    unsigned int heap_indexv = map_pos[node->getX() + node->getY() * map_width] + 1;
 
     //swap the last node in the list with the node being deleted
     nodes[heap_indexv-1] = nodes[size-1];
@@ -84,10 +83,11 @@ void AStarContainer::remove(AStarNode* node){
         return;
     }
 
-    //reorder the heap
-    int heap_indexu = heap_indexv;
+    //reorder the heap to maintain the f ordering, starting at the node which replaced the deleted node, and working down the tree
+    unsigned int heap_indexu = heap_indexv;
 
     while(true){
+        //start at the node which dropped down the tree on the previous iteration
         heap_indexu = heap_indexv;
         if(2*heap_indexu+1 <= size){//if both children exist
             //Select the lowest of the two children.
@@ -112,7 +112,7 @@ void AStarContainer::remove(AStarNode* node){
         }
     }//Repeat forever
 
-    //remove the node from the map array
+    //remove the node from the map pos index
     map_pos[node->getX() + node->getY() * map_width] = -1;
 }
 
@@ -132,10 +132,11 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score){
     get(pos.x, pos.y)->setParent(parent_pos);
     get(pos.x, pos.y)->setActualCost(score);
 
-    //reorder the heap
+    //reorder the heap based on the new f value of this node. starting at the updated node and working up the tree
     int m = map_pos[pos.x + pos.y * map_width];
     AStarNode* temp = NULL;
     while(m != 0){
+        //if the current node has a lower f value than its parent in the heap, swap them
         if(nodes[m]->getFinalCost() <= nodes[m/2]->getFinalCost()){
             temp = nodes[m/2];
             nodes[m/2] = nodes[m];
@@ -147,8 +148,6 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score){
         else
             break;
     }
-
-    ///map_pos[pos.x + pos.y * map_width] = m;
 }
 
 AStarCloseContainer::AStarCloseContainer(unsigned int map_width, unsigned int map_height, unsigned int node_limit)
@@ -156,18 +155,16 @@ AStarCloseContainer::AStarCloseContainer(unsigned int map_width, unsigned int ma
     , map_width(0)
 {
     this->map_width = map_width;
-
     nodes = new AStarNode*[node_limit];
     map_pos = new int[map_width * map_height + 1];
 
-    //initialise the map array. A -1 value will mean there is no node at that position
-    ///std::memset(map_pos, -1, sizeof(int) * (map_width + map_height));
+    //initialise the map index array. A -1 value will mean there is no node at that position
     std::fill(map_pos, map_pos + map_width * map_height + 1, -1);
 }
 
 AStarCloseContainer::~AStarCloseContainer()
 {
-    for(int i=0; i<size; i++)
+    for(unsigned int i=0; i<size; i++)
         delete nodes[i];
     delete [] nodes;
     delete [] map_pos;
@@ -197,7 +194,7 @@ AStarNode* AStarCloseContainer::get_shortest_h()
 {
     AStarNode *current;
     float lowest_score = FLT_MAX;
-    for(int i = 0; i < size; i++){
+    for(unsigned int i = 0; i < size; i++){
         if(nodes[i]->getH() < lowest_score){
             lowest_score = nodes[i]->getH();
             current = nodes[i];

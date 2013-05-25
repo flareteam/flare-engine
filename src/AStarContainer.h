@@ -20,7 +20,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "AStarNode.h"
 
-//designed to be used for the Open nodes. Unsuitable for Closed nodes
+/* Designed to be used for the Open nodes.
+Unsuitable for Closed nodes but a close node conatiner is declared below
+
+All code in the class assumes that the nodes and points provided are within the bounds of the map limits
+*/
 class AStarContainer
 {
     public:
@@ -28,6 +32,7 @@ class AStarContainer
         ~AStarContainer();
         //assumes that the node is not already in the collection
         void add(AStarNode* node);
+        //assumes that there is at least 1 node in the collection
         AStarNode* get_shortest_f();
         //assumes that the node exists in the collection
         void remove(AStarNode* node);
@@ -35,22 +40,46 @@ class AStarContainer
         //assumes that the node exists in the collection
         AStarNode* get(int x, int y);
         bool isEmpty();
-        //sorts the heap based on updated pos
         void updateParent(Point pos, Point parent_pos, float score);
 
-
     private:
-
         unsigned int size;
-
         unsigned int map_width;
-        //AStarNode array -- binary heap ordered
+
+        /* This is an array of AStarNode pointers. This is the main data for this collection.
+        The size of the array is based on the node limit.
+
+        The nodes in this array are ordered based on their f value and the node with the lowest f value is always at position 0.
+        The ordering is not liniar, so after positon 0, we cannot assume that position 1 has the second shortest f value.
+
+        The ordering is based on a binary heap structure.
+        Essentially, each node can have up to 2 child nodes and each child node must have a lower f value than its parent.
+        This rule must be maintained whenever nodes are added or removed or their f value changes
+
+        The tree is represented by a 1 dimentional array where position 0 has children at position 1 and 2
+        Node 1 would have children at position 3 and 4 and node 2 would have children at position 5 and 6 and so on
+
+        A more detailed explanation of the structure can be found at the below web address.
+        Please note that there is additional code found in this clas which is not mentioned in the article. This is to provide an index based on map position.
+        Also note that the code within the article is based on arrays with starting position 1
+        http://www.policyalmanac.org/games/binaryHeaps.htm
+        */
         AStarNode** nodes;
 
-        //2d array linking map pos to the index needed for the nodes array
+        /* This is an array of integers which acts as an index for the main node array.
+        This array is a one dimentional array but is used as a 2 dimentional array by using the map_width value
+        To access an element in this array, use map_pos[x_position + y_position * map_width]
+        To access an AStarNode based on map position use: nodes[map_pos[x_position + y_position * map_width]]
+
+        The data in this array is initialised as -1, which indicates hat there is no corresponding node for that position
+        This must be maintained when nodes are added, removed and re-ordered in the node array
+        */
         int* map_pos;
 };
 
+/* This class is used to store the closed list of a* nodes
+The nodes within this class have no ordering but stil have a map position index
+*/
 class AStarCloseContainer
 {
 public:
@@ -64,11 +93,9 @@ public:
     AStarNode* get_shortest_h();
 
 private:
-
     unsigned int size;
     unsigned int map_width;
     AStarNode** nodes;
-    //2d array linking map pos to the index needed for the nodes array
     int* map_pos;
 
 };

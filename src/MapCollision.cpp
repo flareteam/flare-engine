@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AStarContainer.h"
 #include <cfloat>
 
-#include <time.h>
-
 using namespace std;
 
 MapCollision::MapCollision()
@@ -354,20 +352,18 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
     open.add(node);
 
 	while (!open.isEmpty() && close.getSize() < limit) {
-		AStarNode* lowest_it = open.get_shortest_f();
+		node = open.get_shortest_f();
 
-		node = lowest_it;
 		current.x = node->getX();
 		current.y = node->getY();
         close.add(node);
-		open.remove(lowest_it);
+		open.remove(node);
 
-		if ( current.x == end.x && current.y == end.y){
-            ///delete node;
+		if ( current.x == end.x && current.y == end.y)
 			break; //path found !
-		}
 
-		list<Point> neighbours = node->getNeighbours(256,256); //256 is map max size
+        //limit evaluated nodes to the size of the map
+		list<Point> neighbours = node->getNeighbours(map_size.x, map_size.y);
 
 		// for every neighbour of current node
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
@@ -401,14 +397,12 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 	}
 
 	if (current.x != end.x || current.y != end.y) {
-		// reblock target if needed
-		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
 
+        //couldnt find the target so map a path to the closest node found
 		node = close.get_shortest_h();
 		current.x = node->getX();
 		current.y = node->getY();
 
-		//couldnt find the target so map a path to the closest node found
 		while (current.x != start.x || current.y != start.y) {
 			path.push_back(collision_to_map(current));
 			current = close.get(current.x, current.y)->getParent();
