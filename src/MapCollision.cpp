@@ -323,77 +323,15 @@ bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2) {
 */
 bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
-clock_t timeBegin = clock();
-clock_t timePreConstructor = 0;
-clock_t timePostConstructor = 0;
-clock_t timePreMainLoop = 0;
-clock_t timePostMainLoop = 0;
-clock_t timeEnd = 0;
-
-clock_t preFirstHalf = 0;
-clock_t postFirstHalf = 0;
-clock_t postSecondHalf = 0;
-int firstHalfTotal = 0;
-int secondHalfTotal = 0;
-
-clock_t preRemove = 0;
-clock_t postRemove = 0;
-int removeTotal = 0;
-
-int firstQuarterTotal = 0;
-int secondQuarterTotal = 0;
-
-clock_t postGetShortest = 0;
-int shortestTotal = 0;
-
-clock_t preAddClose = 0;
-int addCloseTotal = 0;
-
-clock_t preValidTile = 0;
-clock_t postValidTile = 0;
-clock_t postSearchClose = 0;
-
-int validTileTotal = 0;
-int searchCloseTotal = 0;
-
-clock_t preIfExists = 0;
-clock_t postIfExists = 0;
-int ifExistsTotal = 0;
-
-clock_t preIfNotExists = 0;
-clock_t postIfNotExists = 0;
-int ifNotExistsTotal = 0;
-
-clock_t preAddOpen = 0;
-clock_t postAddOpen = 0;
-int addOpenTotal = 0;
-
-clock_t preSetActualCost = 0;
-clock_t postSetActualCost = 0;
-int setActualCostTotal = 0;
-
-clock_t preSetEstimatedCost = 0;
-clock_t postSetEstimatedCost = 0;
-int setEstimatedCostTotal = 0;
-
-
 	if (limit == 0)
 		limit = 256;
-
-    //original:600
-    //with new collection:
-    limit = 1800;
 
 	// path must be empty
 	if (!path.empty())
 		path.clear();
 
-
-timePreConstructor = clock();
 	// convert start & end to MapCollision precision
 	Point start = map_to_collision(start_pos);
-timePostConstructor = clock();
-
 	Point end = map_to_collision(end_pos);
 
 	// if the target square has an entity, temporarily clear it to compute the path
@@ -412,44 +350,17 @@ timePostConstructor = clock();
 
 	AStarContainer open(map_size.x, map_size.y, limit);
 	AStarCloseContainer close(map_size.x, map_size.y, limit);
-	///list<AStarNode> close;
 
     open.add(node);
-	///open.push_back(node);
 
-timePreMainLoop = clock();
 	while (!open.isEmpty() && close.getSize() < limit) {
-
-preFirstHalf = clock();
-		/**float lowest_score = FLT_MAX;
-		// find lowest score available inside open, make it current node and move it to close
-		list<AStarNode>::iterator lowest_it;
-		for (list<AStarNode>::iterator it=open.begin(); it != open.end(); ++it) {
-			if (it->getFinalCost() < lowest_score) {
-				lowest_score = it->getFinalCost();
-				lowest_it = it;
-			}
-		}*/
-
 		AStarNode* lowest_it = open.get_shortest_f();
-postGetShortest = clock();
-shortestTotal += postGetShortest - preFirstHalf;
 
 		node = lowest_it;
 		current.x = node->getX();
 		current.y = node->getY();
-preAddClose = clock();
         close.add(node);
-		///close.push_back(*node);
-		///open.erase(lowest_it);
-preRemove = clock();
-firstQuarterTotal += preRemove - preFirstHalf;
-addCloseTotal += preRemove - preAddClose;
-
 		open.remove(lowest_it);
-
-postRemove = clock();
-removeTotal += postRemove - preRemove;
 
 		if ( current.x == end.x && current.y == end.y){
             ///delete node;
@@ -457,148 +368,62 @@ removeTotal += postRemove - preRemove;
 		}
 
 		list<Point> neighbours = node->getNeighbours(256,256); //256 is map max size
-///(map_size.x-1, map_size.y-1);///
-
-postFirstHalf = clock();
-firstHalfTotal += postFirstHalf - preFirstHalf;
-secondQuarterTotal += postFirstHalf - postRemove;
 
 		// for every neighbour of current node
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
 			Point neighbour = *it;
 
-
-preValidTile = clock();
 			// if neighbour is not free of any collision, skip it
 			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false))
 				continue;
-postValidTile = clock();
-validTileTotal += postValidTile - preValidTile;
 			// if nabour is already in close, skip it
 			if(close.exists(neighbour))
                 continue;
-			///if(find(close.begin(), close.end(), neighbour)!=close.end())
-				///continue;
-postSearchClose = clock();
-searchCloseTotal += postSearchClose - postValidTile;
-
-			///list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
 
 			// if neighbour isn't inside open, add it as a new Node
-			///if (i==open.end()) {
 			if(!open.exists(neighbour)){
-preIfExists = clock();
 				AStarNode* newNode = new AStarNode(neighbour.x,neighbour.y);
-
-preSetActualCost = clock();
 				newNode->setActualCost(node->getActualCost()+(float)calcDist(current,neighbour));
-postSetActualCost = clock();
-setActualCostTotal += postSetActualCost - preSetActualCost;
-
 				newNode->setParent(current);
-
-preSetEstimatedCost = clock();
 				newNode->setEstimatedCost((float)calcDist(neighbour,end));
-postSetEstimatedCost = clock();
-setEstimatedCostTotal += postSetEstimatedCost - preSetEstimatedCost;
-
-				///open.push_back(newNode);
-preAddOpen = clock();
 				open.add(newNode);
-postAddOpen = clock();
-addOpenTotal += postAddOpen - preAddOpen;
-
-postIfExists = clock();
-ifExistsTotal += postIfExists - preIfExists;
 			}
 			// else, update it's cost if better
 			else{
-preIfNotExists = clock();
                 AStarNode* i = open.get(neighbour.x, neighbour.y);
-
-
                 if (node->getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
                     Point pos(i->getX(), i->getY());
                     Point parent_pos(node->getX(), node->getY());
                     open.updateParent(pos, parent_pos, node->getActualCost()+(float)calcDist(current,neighbour));
-                    ///i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
-                    ///i->setParent(current);
                 }
-postIfNotExists = clock();
-ifNotExistsTotal += postIfNotExists - preIfNotExists;
 			}
 		}
-		///delete node;
-postSecondHalf = clock();
-secondHalfTotal += postSecondHalf - postFirstHalf;
 	}
-timePostMainLoop = clock();
 
 	if (current.x != end.x || current.y != end.y) {
-
 		// reblock target if needed
 		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
 
-		///float lowest_score = FLT_MAX;
-		// find the closed node which is closest to the target and create a path
-		///list<AStarNode>::iterator lowest_it;
-		///for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
-			///if (it->getH() < lowest_score) {
-				///lowest_score = it->getH();
-				///lowest_it = it;
-			///}
-		///}
-
 		node = close.get_shortest_h();
-
-		///node = &(*lowest_it);
 		current.x = node->getX();
 		current.y = node->getY();
 
 		//couldnt find the target so map a path to the closest node found
 		while (current.x != start.x || current.y != start.y) {
 			path.push_back(collision_to_map(current));
-			current = close.get(current.x, current.y)->getParent();/// find(close.begin(), close.end(), current)->getParent();
+			current = close.get(current.x, current.y)->getParent();
 		}
-
-		///return false;
 	}
 	else {
 		// store path from end to start
 		path.push_back(collision_to_map(end));
 		while (current.x != start.x || current.y != start.y) {
 			path.push_back(collision_to_map(current));
-			current = close.get(current.x, current.y)->getParent();///current = find(close.begin(), close.end(), current)->getParent();
+			current = close.get(current.x, current.y)->getParent();
 		}
 	}
-
 	// reblock target if needed
 	if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
-
-timeEnd = clock();
-
-fprintf(stderr, "--------------------------------\n");
-fprintf(stderr, "total time: %d\n", timeEnd - timeBegin);
-fprintf(stderr, "time to constructor: %d\n", timePreConstructor - timeBegin);
-fprintf(stderr, "time in constructor: %d\n", timePostConstructor - timePreConstructor);
-fprintf(stderr, "time to main loop: %d\n", timePreMainLoop - timePostConstructor);
-fprintf(stderr, "time in main loop: %d\n", timePostMainLoop - timePreMainLoop);
-fprintf(stderr, "time to end: %d\n", timeEnd - timePostMainLoop);
-fprintf(stderr, "first half: %d\n", firstHalfTotal);
-fprintf(stderr, "second half: %d\n", secondHalfTotal);
-fprintf(stderr, "remove: %d\n", removeTotal);
-fprintf(stderr, "first quarter: %d\n", firstQuarterTotal);
-fprintf(stderr, "second quarter: %d\n", secondQuarterTotal);
-fprintf(stderr, "get shortest: %d\n", shortestTotal);
-fprintf(stderr, "add close: %d\n", addCloseTotal);
-fprintf(stderr, "is valid tile: %d\n", validTileTotal);
-fprintf(stderr, "search close: %d\n", searchCloseTotal);
-fprintf(stderr, "if exists: %d\n", ifExistsTotal);
-fprintf(stderr, "if not exists: %d\n", ifNotExistsTotal);
-fprintf(stderr, "add open: %d\n", addOpenTotal);
-fprintf(stderr, "set actual cost: %d\n", setActualCostTotal);
-fprintf(stderr, "set estimated cost: %d\n", setEstimatedCostTotal);
-
 
 	return !path.empty();
 }

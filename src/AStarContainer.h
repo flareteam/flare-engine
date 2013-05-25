@@ -22,7 +22,7 @@ class AStarContainer
         void updateParent(Point pos, Point parent_pos, float score);
 
 
-    ///private:
+    private:
 
         unsigned int size;
 

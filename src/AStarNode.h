@@ -34,8 +34,7 @@ const int node_stride = 1; // minimal stride between nodes
 
 class AStarNode
 {
-///protected:
-    public:
+protected:
 	// position
 	int x;
 	int y;
@@ -47,7 +46,7 @@ class AStarNode
 	// Parent is where this Node come from.
 	Point parent;
 
-///public:
+public:
 	AStarNode();
 	AStarNode(const int a, const int b);
 	AStarNode(const Point &p);
