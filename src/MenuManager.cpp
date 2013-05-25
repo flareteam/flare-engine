@@ -65,6 +65,7 @@ MenuManager::MenuManager(PowerManager *_powers, StatBlock *_stats, CampaignManag
 	, drag_src(0)
 	, done(false)
 	, act_drag_hover(false)
+	, keydrag_pos(Point())
 /*std::vector<Menu*> menus;*/
 	, items(_items)
 	, inv(NULL)
@@ -375,7 +376,7 @@ void MenuManager::handleKeyboardNavigation() {
 		act_drag_hover = false;
 
 	// don't allow dropping actionbar items in other menus
-	if (drag_src == DRAG_SRC_ACTIONBAR) {
+	if (keyboard_dragging && drag_src == DRAG_SRC_ACTIONBAR) {
 		inpt->lock[ACCEPT] = true;
 	}
 }
@@ -749,7 +750,6 @@ void MenuManager::logic() {
 
 				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
 					inv->drop(inpt->mouse, drag_stack);
-					drag_stack.item = 0;
 				}
 				else if (isWithin(act->numberArea,inpt->mouse) || isWithin(act->mouseArea,inpt->mouse)) {
 					// The action bar is not storage!
@@ -768,7 +768,6 @@ void MenuManager::logic() {
 					else {
 						inv->itemReturn(drag_stack);
 					}
-					drag_stack.item = 0;
 				}
 				else if (stash->visible && isWithin(stash->slots_area, inpt->mouse)) {
 					if (inv->stashAdd( drag_stack) && !stash->full(drag_stack.item)) {
@@ -778,7 +777,6 @@ void MenuManager::logic() {
 					else {
 						inv->itemReturn(drag_stack);
 					}
-					drag_stack.item = 0;
 				}
 				else {
 					// if dragging and the source was inventory, drop item to the floor
@@ -786,8 +784,6 @@ void MenuManager::logic() {
 					// quest items cannot be dropped
 					if (items->items[drag_stack.item].type != "quest") {
 						drop_stack = drag_stack;
-						drag_stack.item = 0;
-						drag_stack.quantity = 0;
 						inv->clearHighlight();
 					}
 					else {
@@ -815,8 +811,6 @@ void MenuManager::logic() {
 							inv->drop(inpt->mouse,drag_stack);
 						}
 					}
-					drag_stack.item = 0;
-					drag_stack.quantity = 0;
 				}
 				else {
 					vendor->itemReturn(drag_stack);
@@ -842,8 +836,6 @@ void MenuManager::logic() {
 						inv->drop(inpt->mouse,drag_stack);
 					}
 					stash->updated = true;
-					drag_stack.item = 0;
-					drag_stack.quantity = 0;
 				}
 				else if (stash->visible && isWithin(stash->slots_area, inpt->mouse)) {
 					stash->drop(inpt->mouse,drag_stack);
@@ -853,11 +845,14 @@ void MenuManager::logic() {
 				}
 			}
 
+			drag_stack.item = 0;
+			drag_stack.quantity = 0;
+			drag_power = 0;
+			drag_src = 0;
 			mouse_dragging = false;
 		}
 		if (NO_MOUSE)
 			dragAndDropWithKeyboard();
-
 	}
 	else {
 		if (mouse_dragging || keyboard_dragging) {
@@ -1174,11 +1169,17 @@ void MenuManager::render() {
 		handleKeyboardTooltips();
 
 	// draw icon under cursor if dragging
-	if (mouse_dragging || keyboard_dragging) {
+	if (mouse_dragging) {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
 			items->renderIcon(drag_stack, inpt->mouse.x - ICON_SIZE/2, inpt->mouse.y - ICON_SIZE/2, ICON_SIZE);
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
 			renderIcon(powers->powers[drag_power].icon, inpt->mouse.x-ICON_SIZE/2, inpt->mouse.y-ICON_SIZE/2);
+	}
+	else if (keyboard_dragging) {
+		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
+			items->renderIcon(drag_stack, keydrag_pos.x - ICON_SIZE/2, keydrag_pos.y - ICON_SIZE/2, ICON_SIZE);
+		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
+			renderIcon(powers->powers[drag_power].icon, keydrag_pos.x-ICON_SIZE/2, keydrag_pos.y-ICON_SIZE/2);
 	}
 
 }
@@ -1193,78 +1194,78 @@ void MenuManager::handleKeyboardTooltips() {
 
 	if (vendor->visible && vendor->tablist.getCurrent() != -1) {
 		if (vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2) {
-			inpt->mouse.x = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.x;
-			inpt->mouse.y = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.y;
+			keydrag_pos.x = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.x;
+			keydrag_pos.y = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.y;
 		}
 		else {
-			inpt->mouse.x = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - (int)vendor->tablist.size()/2]->pos.x;
-			inpt->mouse.y = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - (int)vendor->tablist.size()/2]->pos.y;
+			keydrag_pos.x = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - (int)vendor->tablist.size()/2]->pos.x;
+			keydrag_pos.y = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - (int)vendor->tablist.size()/2]->pos.y;
 		}
-		keyb_tip_new_vendor = vendor->checkTooltip(inpt->mouse);
+		keyb_tip_new_vendor = vendor->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_vendor.isEmpty()) {
 			if (!keyb_tip_new_vendor.compare(&keyb_tip_buf_vendor)) {
 				keyb_tip_buf_vendor.clear();
 				keyb_tip_buf_vendor = keyb_tip_new_vendor;
 			}
-			tip->render(keyb_tip_buf_vendor, inpt->mouse, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_vendor, keydrag_pos, STYLE_FLOAT);
 		}
 	}
 
 	if (stash->visible && stash->tablist.getCurrent() != -1) {
-		inpt->mouse.x = stash->stock.slots[stash->tablist.getCurrent()]->pos.x;
-		inpt->mouse.y = stash->stock.slots[stash->tablist.getCurrent()]->pos.y;
-		keyb_tip_new_stash = stash->checkTooltip(inpt->mouse);
+		keydrag_pos.x = stash->stock.slots[stash->tablist.getCurrent()]->pos.x;
+		keydrag_pos.y = stash->stock.slots[stash->tablist.getCurrent()]->pos.y;
+		keyb_tip_new_stash = stash->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_stash.isEmpty()) {
 			if (!keyb_tip_new_stash.compare(&keyb_tip_buf_stash)) {
 				keyb_tip_buf_stash.clear();
 				keyb_tip_buf_stash = keyb_tip_new_stash;
 			}
-			tip->render(keyb_tip_buf_stash, inpt->mouse, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_stash, keydrag_pos, STYLE_FLOAT);
 		}
 	}
 
 	if (pow->visible && pow->tablist.getCurrent() != -1) {
-		inpt->mouse.x = pow->slots[pow->tablist.getCurrent()]->pos.x;
-		inpt->mouse.y = pow->slots[pow->tablist.getCurrent()]->pos.y;
-		keyb_tip_new_pow = pow->checkTooltip(inpt->mouse);
+		keydrag_pos.x = pow->slots[pow->tablist.getCurrent()]->pos.x;
+		keydrag_pos.y = pow->slots[pow->tablist.getCurrent()]->pos.y;
+		keyb_tip_new_pow = pow->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_pow.isEmpty()) {
 			if (!keyb_tip_new_pow.compare(&keyb_tip_buf_pow)) {
 				keyb_tip_buf_pow.clear();
 				keyb_tip_buf_pow = keyb_tip_new_pow;
 			}
-			tip->render(keyb_tip_buf_pow, inpt->mouse, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_pow, keydrag_pos, STYLE_FLOAT);
 		}
 	}
 
 	if (inv->visible && inv->tablist.getCurrent() != -1) {
 		if (inv->tablist.getCurrent() < inv->getEquippedCount()) {
-			inpt->mouse.x = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.x;
-			inpt->mouse.y = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.y;
+			keydrag_pos.x = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.x;
+			keydrag_pos.y = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.y;
 		}
 		else {
-			inpt->mouse.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.x;
-			inpt->mouse.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.y;
+			keydrag_pos.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.x;
+			keydrag_pos.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.y;
 		}
-		keyb_tip_new_inv = inv->checkTooltip(inpt->mouse);
+		keyb_tip_new_inv = inv->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_inv.isEmpty()) {
 			if (!keyb_tip_new_inv.compare(&keyb_tip_buf_inv)) {
 				keyb_tip_buf_inv.clear();
 				keyb_tip_buf_inv = keyb_tip_new_inv;
 			}
-			tip->render(keyb_tip_buf_inv, inpt->mouse, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_inv, keydrag_pos, STYLE_FLOAT);
 		}
 	}
 
 	if (act_drag_hover && act->tablist.getCurrent() != -1) {
-		inpt->mouse.x = act->slots[act->tablist.getCurrent()]->pos.x;
-		inpt->mouse.y = act->slots[act->tablist.getCurrent()]->pos.y;
-		keyb_tip_new_act = act->checkTooltip(inpt->mouse);
+		keydrag_pos.x = act->slots[act->tablist.getCurrent()]->pos.x;
+		keydrag_pos.y = act->slots[act->tablist.getCurrent()]->pos.y;
+		keyb_tip_new_act = act->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_act.isEmpty()) {
 			if (!keyb_tip_new_act.compare(&keyb_tip_buf_act)) {
 				keyb_tip_buf_act.clear();
 				keyb_tip_buf_act = keyb_tip_new_act;
 			}
-			tip->render(keyb_tip_buf_act, inpt->mouse, STYLE_FLOAT);
+			tip->render(keyb_tip_buf_act, keydrag_pos, STYLE_FLOAT);
 		}
 	}
 }

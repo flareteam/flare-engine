@@ -85,6 +85,7 @@ private:
 	bool done;
 
 	bool act_drag_hover;
+	Point keydrag_pos;
 
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
