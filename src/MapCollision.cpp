@@ -369,7 +369,7 @@ int ifNotExistsTotal = 0;
 
     //original:600
     //with new collection:
-    limit = 600;
+    limit = 1800;
 
 	// path must be empty
 	if (!path.empty())
@@ -398,13 +398,14 @@ timePostConstructor = clock();
 	node->setParent(current);
 
 	AStarContainer open(map_size.x, map_size.y, limit);
-	list<AStarNode> close;
+	AStarCloseContainer close(map_size.x, map_size.y, limit);
+	///list<AStarNode> close;
 
     open.add(node);
 	///open.push_back(node);
 
 timePreMainLoop = clock();
-	while (!open.isEmpty() && close.size() < limit) {
+	while (!open.isEmpty() && close.getSize() < limit) {
 
 preFirstHalf = clock();
 		/**float lowest_score = FLT_MAX;
@@ -425,7 +426,8 @@ shortestTotal += postGetShortest - preFirstHalf;
 		current.x = node->getX();
 		current.y = node->getY();
 preAddClose = clock();
-		close.push_back(*node);
+        close.add(node);
+		///close.push_back(*node);
 		///open.erase(lowest_it);
 preRemove = clock();
 firstQuarterTotal += preRemove - preFirstHalf;
@@ -477,7 +479,7 @@ postRemove = clock();
 removeTotal += postRemove - preRemove;
 
 		if ( current.x == end.x && current.y == end.y){
-            delete node;
+            ///delete node;
 			break; //path found !
 		}
 
@@ -505,8 +507,10 @@ preValidTile = clock();
 postValidTile = clock();
 validTileTotal += postValidTile - preValidTile;
 			// if nabour is already in close, skip it
-			if(find(close.begin(), close.end(), neighbour)!=close.end())
-				continue;
+			if(close.exists(neighbour))
+                continue;
+			///if(find(close.begin(), close.end(), neighbour)!=close.end())
+				///continue;
 postSearchClose = clock();
 searchCloseTotal += postSearchClose - postValidTile;
 
@@ -522,7 +526,7 @@ preIfExists = clock();
 				newNode->setEstimatedCost((float)calcDist(neighbour,end));
 				///open.push_back(newNode);
 				open.add(newNode);
-if(!open.isEmpty())
+/*if(!open.isEmpty())
 if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
 {
     int x;
@@ -539,7 +543,7 @@ if(open.nodes[0] == open.nodes[1]){
 if(open.map_pos[open.nodes[0]->getX() + open.nodes[0]->getY() * map_size.x] != 0){
     postRemove = clock();
 }
-
+*/
 postIfExists = clock();
 ifExistsTotal += postIfExists - preIfExists;
 			}
@@ -590,7 +594,7 @@ if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_sh
     postRemove = clock();
     x = 1;
 }
-		delete node;
+		///delete node;
 if(!open.isEmpty())
 if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
 {
@@ -608,23 +612,26 @@ timePostMainLoop = clock();
 		// reblock target if needed
 		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
 
-		float lowest_score = FLT_MAX;
+		///float lowest_score = FLT_MAX;
 		// find the closed node which is closest to the target and create a path
-		list<AStarNode>::iterator lowest_it;
-		for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
-			if (it->getH() < lowest_score) {
-				lowest_score = it->getH();
-				lowest_it = it;
-			}
-		}
-		node = &(*lowest_it);
+		///list<AStarNode>::iterator lowest_it;
+		///for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
+			///if (it->getH() < lowest_score) {
+				///lowest_score = it->getH();
+				///lowest_it = it;
+			///}
+		///}
+
+		node = close.get_shortest_h();
+
+		///node = &(*lowest_it);
 		current.x = node->getX();
 		current.y = node->getY();
 
 		//couldnt find the target so map a path to the closest node found
 		while (current.x != start.x || current.y != start.y) {
 			path.push_back(collision_to_map(current));
-			current = find(close.begin(), close.end(), current)->getParent();
+			current = close.get(current.x, current.y)->getParent();/// find(close.begin(), close.end(), current)->getParent();
 		}
 
 		///return false;
@@ -634,7 +641,7 @@ timePostMainLoop = clock();
 		path.push_back(collision_to_map(end));
 		while (current.x != start.x || current.y != start.y) {
 			path.push_back(collision_to_map(current));
-			current = find(close.begin(), close.end(), current)->getParent();
+			current = close.get(current.x, current.y)->getParent();///current = find(close.begin(), close.end(), current)->getParent();
 		}
 	}
 

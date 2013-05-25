@@ -13,7 +13,7 @@ AStarContainer::AStarContainer(unsigned int map_width, unsigned int map_height, 
 
     //initialise the map array. A -1 value will mean there is no node at that position
     ///std::memset(map_pos, -1, sizeof(int) * (map_width + map_height));
-    std::fill(map_pos, map_pos + map_width * map_height, -1);
+    std::fill(map_pos, map_pos + map_width * map_height + 1, -1);
 }
 
 AStarContainer::~AStarContainer()
@@ -145,7 +145,7 @@ AStarCloseContainer::AStarCloseContainer(unsigned int map_width, unsigned int ma
 
     //initialise the map array. A -1 value will mean there is no node at that position
     ///std::memset(map_pos, -1, sizeof(int) * (map_width + map_height));
-    std::fill(map_pos, map_pos + map_width * map_height, -1);
+    std::fill(map_pos, map_pos + map_width * map_height + 1, -1);
 }
 
 AStarCloseContainer::~AStarCloseContainer()
@@ -180,7 +180,7 @@ AStarNode* AStarCloseContainer::get_shortest_h()
 {
     AStarNode *current;
     float lowest_score = FLT_MAX;
-    for(int i = 0; i < size; i){
+    for(int i = 0; i < size; i++){
         if(nodes[i]->getH() < lowest_score){
             lowest_score = nodes[i]->getH();
             current = nodes[i];
