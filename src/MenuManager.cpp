@@ -935,9 +935,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 			else if (stash->visible && !stash->full(drag_stack.item)) {
 				stash->add(drag_stack);
 			}
-			else if (!vendor->visible && !stash->visible) {
+			else {
 				inv->itemReturn(drag_stack);
-				inv->activate(src_slot);
+				if (!vendor->visible && !stash->visible)
+					inv->activate(src_slot);
 			}
 			drag_src = 0;
 			drag_stack.item = 0;
