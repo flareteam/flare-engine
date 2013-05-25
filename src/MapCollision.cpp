@@ -364,6 +364,19 @@ clock_t preIfNotExists = 0;
 clock_t postIfNotExists = 0;
 int ifNotExistsTotal = 0;
 
+clock_t preAddOpen = 0;
+clock_t postAddOpen = 0;
+int addOpenTotal = 0;
+
+clock_t preSetActualCost = 0;
+clock_t postSetActualCost = 0;
+int setActualCostTotal = 0;
+
+clock_t preSetEstimatedCost = 0;
+clock_t postSetEstimatedCost = 0;
+int setEstimatedCostTotal = 0;
+
+
 	if (limit == 0)
 		limit = 256;
 
@@ -432,48 +445,8 @@ preAddClose = clock();
 preRemove = clock();
 firstQuarterTotal += preRemove - preFirstHalf;
 addCloseTotal += preRemove - preAddClose;
-if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
-{
-    int x;
-    postRemove = clock();
-    x = 1;
-}
-int presize = open.size;
-AStarNode* node1 = open.nodes[0];
-int heap_indexv = open.map_pos[node1->getX() + node1->getY() * map_size.x] + 1;
-AStarNode* node2 = open.nodes[1];
-AStarNode* node3 = open.nodes[2];
-AStarNode* node4 = open.nodes[3];
-AStarNode* node5 = open.nodes[4];
 
 		open.remove(lowest_it);
-if(!open.isEmpty())
-    if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
-{
-    int x;
-    x = 0;
-    x = 1;
-    postRemove = clock();
-}
-
-if(!open.isEmpty())
-if(node == open.get_shortest_f())
-{
-    int i = open.size;
-    postRemove = clock();
-}
-
-if(open.size > 0)
-if(open.map_pos[open.nodes[0]->getX() + open.nodes[0]->getY() * map_size.x] != 0){
-int presize2 = open.size;
-AStarNode* node12 = open.nodes[0];
-int heap_indexv2 = open.map_pos[node12->getX() + node12->getY() * map_size.x] + 1;
-AStarNode* node22 = open.nodes[1];
-AStarNode* node32 = open.nodes[2];
-AStarNode* node42 = open.nodes[3];
-AStarNode* node52 = open.nodes[4];
-    postRemove = clock();
-}
 
 postRemove = clock();
 removeTotal += postRemove - preRemove;
@@ -493,11 +466,6 @@ secondQuarterTotal += postFirstHalf - postRemove;
 		// for every neighbour of current node
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
 			Point neighbour = *it;
-
-if(neighbour.x > map_size.x)
-    postRemove = clock();
-if(neighbour.y > map_size.y)
-    postRemove = clock();
 
 
 preValidTile = clock();
@@ -521,29 +489,25 @@ searchCloseTotal += postSearchClose - postValidTile;
 			if(!open.exists(neighbour)){
 preIfExists = clock();
 				AStarNode* newNode = new AStarNode(neighbour.x,neighbour.y);
+
+preSetActualCost = clock();
 				newNode->setActualCost(node->getActualCost()+(float)calcDist(current,neighbour));
+postSetActualCost = clock();
+setActualCostTotal += postSetActualCost - preSetActualCost;
+
 				newNode->setParent(current);
+
+preSetEstimatedCost = clock();
 				newNode->setEstimatedCost((float)calcDist(neighbour,end));
+postSetEstimatedCost = clock();
+setEstimatedCostTotal += postSetEstimatedCost - preSetEstimatedCost;
+
 				///open.push_back(newNode);
+preAddOpen = clock();
 				open.add(newNode);
-/*if(!open.isEmpty())
-if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
-{
-    int x;
-    postRemove = clock();
-    x = 1;
-}
+postAddOpen = clock();
+addOpenTotal += postAddOpen - preAddOpen;
 
-if(open.size > 1)
-if(open.nodes[0] == open.nodes[1]){
-    int dfskv = open.size;
-    postRemove = clock();
-}
-
-if(open.map_pos[open.nodes[0]->getX() + open.nodes[0]->getY() * map_size.x] != 0){
-    postRemove = clock();
-}
-*/
 postIfExists = clock();
 ifExistsTotal += postIfExists - preIfExists;
 			}
@@ -552,12 +516,6 @@ ifExistsTotal += postIfExists - preIfExists;
 preIfNotExists = clock();
                 AStarNode* i = open.get(neighbour.x, neighbour.y);
 
-if(i->x < 0 || i->x > 256 || i->y < 0 || i->y > 256)
-{
-    int x;
-    postRemove = clock();
-    x = 1;
-}
 
                 if (node->getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
                     Point pos(i->getX(), i->getY());
@@ -565,43 +523,12 @@ if(i->x < 0 || i->x > 256 || i->y < 0 || i->y > 256)
                     open.updateParent(pos, parent_pos, node->getActualCost()+(float)calcDist(current,neighbour));
                     ///i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
                     ///i->setParent(current);
-if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
-{
-    int x;
-    postRemove = clock();
-    x = 1;
-}
-
-if(open.size > 1)
-if(open.nodes[0] == open.nodes[1]){
-    int dfskv = open.size;
-    postRemove = clock();
-}
-
-if(open.map_pos[open.nodes[0]->getX() + open.nodes[0]->getY() * map_size.x] != 0){
-    postRemove = clock();
-}
-
                 }
 postIfNotExists = clock();
 ifNotExistsTotal += postIfNotExists - preIfNotExists;
 			}
 		}
-if(!open.isEmpty())
-if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
-{
-    int x;
-    postRemove = clock();
-    x = 1;
-}
 		///delete node;
-if(!open.isEmpty())
-if(open.get_shortest_f()->x < 0 || open.get_shortest_f()->x > 256 || open.get_shortest_f()->y < 0 || open.get_shortest_f()->y > 256)
-{
-    int x;
-    postRemove = clock();
-    x = 1;
-}
 postSecondHalf = clock();
 secondHalfTotal += postSecondHalf - postFirstHalf;
 	}
@@ -668,7 +595,9 @@ fprintf(stderr, "is valid tile: %d\n", validTileTotal);
 fprintf(stderr, "search close: %d\n", searchCloseTotal);
 fprintf(stderr, "if exists: %d\n", ifExistsTotal);
 fprintf(stderr, "if not exists: %d\n", ifNotExistsTotal);
-
+fprintf(stderr, "add open: %d\n", addOpenTotal);
+fprintf(stderr, "set actual cost: %d\n", setActualCostTotal);
+fprintf(stderr, "set estimated cost: %d\n", setEstimatedCostTotal);
 
 
 	return !path.empty();
