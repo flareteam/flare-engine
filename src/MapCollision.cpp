@@ -90,26 +90,23 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		else if (diag && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
 			y += step_y;
 		}
-		/*
 		else { // is there a singular obstacle or corner we can step around?
 			// only works if we are moving straight
 
 			if (diag) return false;
 
-			int way_around = is_one_step_around(x, y, step_x, step_y);
+			int way_around = is_one_step_around(x, y, round(step_x), round(step_y));
 
-			if (!way_around) {
+			if (!way_around)
 				return false;
-			}
 
-			if (step_x) {
+			if (round(step_x)) {
 				y+= way_around;
 			}
 			else {
 				x+= way_around;
 			}
 		}
-		*/
 	}
 	return true;
 }
@@ -182,12 +179,8 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
  * Is this a valid position for an entity with this movement type?
  */
 bool MapCollision::is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const {
-
-	bool ret = is_valid_tile(round(x), round(y), movement_type, is_hero);
-	return ret;
+	return is_valid_tile(round(x), round(y), movement_type, is_hero);
 }
-
-
 
 bool inline MapCollision::is_sidestepable(int tile_x, int tile_y, int offx, int offy) {
 	return !is_outside_map(tile_x + offx, tile_y + offy) && !colmap[tile_x + offx][tile_y + offy];
@@ -204,38 +197,23 @@ bool inline MapCollision::is_sidestepable(int tile_x, int tile_y, int offx, int 
  *         should be applied to xdir)
  */
 int MapCollision::is_one_step_around(float x, float y, int xdir, int ydir) {
-	int tile_x = x; // TODO better rounding
+	int tile_x = x;
 	int tile_y = y;
-	int ret = 0;
 
 	if (xdir) {
-		if (is_sidestepable(tile_x, tile_y, xdir, -1)) {
-			ret = 1;
-		}
-		if (is_sidestepable(tile_x, tile_y, xdir,  1)) {
-			ret |= 2;
-		}
-		if (ret == 3) { // If we can go either way, choose the route that shortest
-
-			// translation: ret = y % UNITS_PER_TILE > UNITS_PER_TILE / 2 ? 1 : -1;
-			// realistically, if we were using compile time constants, the compiler
-			// would generate pretty much those instructions.
-			ret = (y-tile_y) < 0.5 ? 1 : -1;
-		}
+		if (is_sidestepable(tile_x, tile_y, xdir, -1) && (tile_x - x) > 0)
+			return 1;
+		if (is_sidestepable(tile_x, tile_y, xdir,  1) && (tile_x - x) < 0)
+			return 2;
 	}
-	else {
-		if (is_sidestepable(tile_x, tile_y, -1, ydir)) {
-			ret = 1;
-		}
-		if (is_sidestepable(tile_x, tile_y,  1, ydir)) {
-			ret |= 2;
-		}
-		if (ret == 3) {
-			ret = (x-tile_x) < 0.5 ? 1 : -1;
-		}
+	if (ydir) {
+		if (is_sidestepable(tile_x, tile_y, -1, ydir) && (tile_y - y) > 0)
+			return 1;
+		if (is_sidestepable(tile_x, tile_y,  1, ydir) && (tile_y - y) < 0)
+			return 2;
 	}
 
-	return !ret ? 0 : (ret == 1 ? -1 : 1);
+	return 0;
 }
 
 
