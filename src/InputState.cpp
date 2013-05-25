@@ -113,6 +113,7 @@ void InputState::defaultJoystickBindings () {
 	binding_joy[ACTIONBAR] = 0;
 	binding_joy[CANCEL] = 1;
 	binding_joy[ACCEPT] = 2;
+	binding_joy[BAR_1] = 3;
 	binding_joy[ACTIONBAR_BACK] = 6;
 	binding_joy[ACTIONBAR_FORWARD] = 7;
 }

@@ -373,6 +373,11 @@ void MenuManager::handleKeyboardNavigation() {
 		act_drag_hover = true;
 	else if (act_drag_hover && (inpt->pressing[LEFT] || inpt->pressing[RIGHT] || inpt->pressing[UP] || inpt->pressing[DOWN]))
 		act_drag_hover = false;
+
+	// don't allow dropping actionbar items in other menus
+	if (drag_src == DRAG_SRC_ACTIONBAR) {
+		inpt->lock[ACCEPT] = true;
+	}
 }
 void MenuManager::logic() {
 
@@ -736,6 +741,7 @@ void MenuManager::logic() {
 				else if (act->locked[act->drag_prev_slot]) {
 					act->hotkeys[act->drag_prev_slot] = drag_power;
 				}
+				drag_power = 0;
 			}
 
 			// rearranging inventory or dropping items
@@ -896,7 +902,7 @@ void MenuManager::logic() {
 
 void MenuManager::dragAndDropWithKeyboard() {
 	// inventory menu
-	if (inv->visible && inv->tablist.getCurrent() != -1) {
+	if (inv->visible && inv->tablist.getCurrent() != -1 && drag_src != DRAG_SRC_ACTIONBAR) {
 		CLICK_TYPE slotClick;
 		Point src_slot;
 		WidgetSlot * inv_slot;
@@ -947,7 +953,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// vendor menu
-	if (vendor->visible && vendor->tablist.getCurrent() != -1) {
+	if (vendor->visible && vendor->tablist.getCurrent() != -1 && drag_src != DRAG_SRC_ACTIONBAR) {
 		CLICK_TYPE slotClick;
 		Point src_slot;
 		WidgetSlot * vendor_slot;
@@ -999,7 +1005,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// stash menu
-	if (stash->visible && stash->tablist.getCurrent() != -1) {
+	if (stash->visible && stash->tablist.getCurrent() != -1 && drag_src != DRAG_SRC_ACTIONBAR) {
 		CLICK_TYPE slotClick = stash->stock.slots[stash->tablist.getCurrent()]->checkClick();
 		Point src_slot(stash->stock.slots[stash->tablist.getCurrent()]->pos.x, stash->stock.slots[stash->tablist.getCurrent()]->pos.y);
 
@@ -1035,8 +1041,8 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 	}
 
-	// pick up a power
-	if (pow->visible && pow->tablist.getCurrent() != -1) {
+	// powers menu
+	if (pow->visible && pow->tablist.getCurrent() != -1 && drag_src != DRAG_SRC_ACTIONBAR) {
 		CLICK_TYPE slotClick = pow->slots[pow->tablist.getCurrent()]->checkClick();
 		if (slotClick == CHECKED) {
 			// check for unlock first
@@ -1062,11 +1068,21 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 	}
 
-	// handle dropping
-	if (keyboard_dragging) {
-		// putting a power on the Action Bar
-		if (act->tablist.getCurrent() >= 0 && act->tablist.getCurrent() < 12 && act->slots[act->tablist.getCurrent()]->checkClick() == CHECKED) {
-			Point dest_slot(act->slots[act->tablist.getCurrent()]->pos.x, act->slots[act->tablist.getCurrent()]->pos.y);
+	// actionbar
+	if (act->tablist.getCurrent() >= 0 && act->tablist.getCurrent() < 12) {
+		CLICK_TYPE slotClick = act->slots[act->tablist.getCurrent()]->checkClick();
+		Point dest_slot(act->slots[act->tablist.getCurrent()]->pos.x, act->slots[act->tablist.getCurrent()]->pos.y);
+
+		// pick up power
+		if (slotClick == CHECKED && drag_stack.item == 0 && drag_power == 0) {
+			drag_power = act->checkDrag(dest_slot);
+			if (drag_power > 0) {
+				keyboard_dragging = true;
+				drag_src = DRAG_SRC_ACTIONBAR;
+			}
+		}
+		// drop power/item from other menu
+		else if (slotClick == CHECKED && drag_src != DRAG_SRC_ACTIONBAR && (drag_stack.item > 0 || drag_power > 0)) {
 			if (drag_src == DRAG_SRC_POWERS) {
 				act->drop(dest_slot, drag_power, 0);
 				pow->slots[pow->tablist.getCurrent()]->checked = false;
@@ -1084,6 +1100,15 @@ void MenuManager::dragAndDropWithKeyboard() {
 			resetDrag();
 			keyboard_dragging = false;
 		}
+		// rearrange actionbar
+		else if ((slotClick == CHECKED || slotClick == ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
+			if (slotClick == CHECKED) act->slots[act->tablist.getCurrent()]->checked = false;
+			act->drop(dest_slot, drag_power, 1);
+			drag_src = 0;
+			drag_power = 0;
+			keyboard_dragging = false;
+			inpt->lock[ACCEPT] = false;
+		}
 	}
 }
 
@@ -1096,6 +1121,10 @@ void MenuManager::resetDrag() {
 	drag_stack.item = 0;
 	drag_stack.quantity = 0;
 	drag_power = 0;
+
+	if (keyboard_dragging && DRAG_SRC_ACTIONBAR) {
+		inpt->lock[ACCEPT] = false;
+	}
 }
 
 void MenuManager::render() {
