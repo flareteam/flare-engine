@@ -315,7 +315,7 @@ void MenuManager::handleKeyboardNavigation() {
 					inv->tablist.defocus();
 					if (stash->visible) {
 						stash->tablist.unlock();
-						stash->tablist.getNext();
+						stash->tablist.getPrev();
 					}
 					else if (vendor->visible) {
 						vendor->tablist.unlock();
@@ -1004,6 +1004,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				if (!vendor->visible && !stash->visible)
 					inv->activate(src_slot);
 			}
+			inv->clearHighlight();
 			drag_src = 0;
 			drag_stack.item = 0;
 			keyboard_dragging = false;
