@@ -244,59 +244,121 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 }
 
 void MenuManager::handleKeyboardNavigation() {
-	// vendor/inventory switching
-	if (vendor->visible && inv->visible && drag_src == 0) {
+	// switching between menus
+	if (drag_src == 0) {
 		const int VENDOR_ROWS = vendor->getRowsCount() * 2; //Vendor Menu has two tabs
-		const int INVENTORY_ROWS = inv->getCarriedRows();
-		const int EQUIPPED_SLOTS = inv->getEquippedCount();
-
-		if (vendor->tablist.getCurrent() != -1 && !vendor->tablist.isLocked()) {
-			if (((vendor->tablist.getCurrent() + 1) % (vendor->tablist.size()/VENDOR_ROWS) == 0) &&
-					inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
-				inpt->lock[RIGHT] = true;
-				vendor->tablist.lock();
-				vendor->tablist.defocus();
-				inv->tablist.unlock();
-				inv->tablist.getNext();
-			}
-		}
-		if (inv->tablist.getCurrent() != -1 && !inv->tablist.isLocked()) {
-			if (((inv->tablist.getCurrent() - EQUIPPED_SLOTS + 1) % ((inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS) == 1) &&
-					inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
-				inpt->lock[LEFT] = true;
-				inv->tablist.lock();
-				inv->tablist.defocus();
-				vendor->tablist.unlock();
-				vendor->tablist.getPrev();
-			}
-		}
-	}
-	// stash/inventory switching
-	if (stash->visible && inv->visible && drag_src == 0) {
 		const int STASH_ROWS = stash->getRowsCount();
 		const int INVENTORY_ROWS = inv->getCarriedRows();
 		const int EQUIPPED_SLOTS = inv->getEquippedCount();
 
-		if (stash->tablist.getCurrent() != -1 && !stash->tablist.isLocked()) {
-			if (((stash->tablist.getCurrent() + 1) % (stash->tablist.size()/STASH_ROWS) == 0) &&
-					inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
-				inpt->lock[RIGHT] = true;
-				stash->tablist.lock();
-				stash->tablist.defocus();
-				inv->tablist.unlock();
-				inv->tablist.getNext();
+		// left -> right
+		if (inv->visible || pow->visible) {
+			if (vendor->visible && vendor->tablist.getCurrent() != -1 && !vendor->tablist.isLocked()) {
+				if (((vendor->tablist.getCurrent() + 1) % (vendor->tablist.size()/VENDOR_ROWS) == 0) &&
+						inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+					inpt->lock[RIGHT] = true;
+					vendor->tablist.lock();
+					vendor->tablist.defocus();
+					inv->tablist.unlock();
+					inv->tablist.getNext();
+				}
+			}
+			else if (stash->visible && stash->tablist.getCurrent() != -1 && !stash->tablist.isLocked()) {
+				if (((stash->tablist.getCurrent() + 1) % (stash->tablist.size()/STASH_ROWS) == 0) &&
+						inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+					inpt->lock[RIGHT] = true;
+					stash->tablist.lock();
+					stash->tablist.defocus();
+					inv->tablist.unlock();
+					inv->tablist.getNext();
+				}
+			}
+			else if (chr->visible && chr->tablist.getCurrent() != -1 && !chr->tablist.isLocked()) {
+				if ((chr->tablist.getCurrent() + 1 == (int)chr->tablist.size()) &&
+						inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+					inpt->lock[RIGHT] = true;
+					chr->tablist.lock();
+					chr->tablist.defocus();
+					if (inv->visible) {
+						inv->tablist.unlock();
+						inv->tablist.getNext();
+					}
+					else if (pow->visible) {
+						pow->tablist.unlock();
+						pow->tablist.getNext();
+					}
+				}
+			}
+			else if (log->visible && log->tablist.getCurrent() != -1 && !log->tablist.isLocked()) {
+				if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+					inpt->lock[RIGHT] = true;
+					log->tablist.lock();
+					log->tablist.defocus();
+					if (inv->visible) {
+						inv->tablist.unlock();
+						inv->tablist.getNext();
+					}
+					else if (pow->visible) {
+						pow->tablist.unlock();
+						pow->tablist.getNext();
+					}
+				}
 			}
 		}
-		if ((inv->tablist.getCurrent() - EQUIPPED_SLOTS) >= 0 && !inv->tablist.isLocked()) {
-			if (((inv->tablist.getCurrent() - EQUIPPED_SLOTS + 1) % ((inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS) == 1) &&
-					inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
-				inpt->lock[LEFT] = true;
-				inv->tablist.lock();
-				inv->tablist.defocus();
-				stash->tablist.unlock();
-				stash->tablist.getPrev();
+		// right -> left
+		if (vendor->visible || stash->visible || chr->visible || log->visible) {
+			if (inv->visible && (inv->tablist.getCurrent() - EQUIPPED_SLOTS) >= 0 && !inv->tablist.isLocked()) {
+				if (((inv->tablist.getCurrent() - EQUIPPED_SLOTS + 1) % ((inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS) == 1) &&
+						inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
+					inpt->lock[LEFT] = true;
+					inv->tablist.lock();
+					inv->tablist.defocus();
+					if (stash->visible) {
+						stash->tablist.unlock();
+						stash->tablist.getNext();
+					}
+					else if (vendor->visible) {
+						vendor->tablist.unlock();
+						vendor->tablist.getPrev();
+					}
+					else if (chr->visible) {
+						chr->tablist.unlock();
+						chr->tablist.getNext();
+					}
+					else if (log->visible) {
+						log->tablist.unlock();
+						log->tablist.getNext();
+					}
+				}
+			}
+			else if (pow->visible && pow->tablist.getCurrent() != -1 && !pow->tablist.isLocked()) {
+				if (pow->tablist.getCurrent() == 0 && inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
+					inpt->lock[LEFT] = true;
+					pow->tablist.lock();
+					pow->tablist.defocus();
+					if (chr->visible) {
+						chr->tablist.unlock();
+						chr->tablist.getNext();
+					}
+					else if (log->visible) {
+						log->tablist.unlock();
+						log->tablist.getNext();
+					}
+				}
 			}
 		}
+	}
+
+	// unlock menus if only one side is showing
+	if (!inv->visible && !pow->visible) {
+		stash->tablist.unlock();
+		vendor->tablist.unlock();
+		chr->tablist.unlock();
+		log->tablist.unlock();
+	}
+	else if (!vendor->visible && ! stash->visible && !chr->visible && !log->visible) {
+		inv->tablist.unlock();
+		pow->tablist.unlock();
 	}
 
 	// lock left and right where buy/sell slots meet
