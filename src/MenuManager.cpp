@@ -929,11 +929,12 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// sell, stash, or use item
 		else if (slotClick == ACTIVATED && drag_stack.item > 0) {
-			if (vendor->visible && inv->sell(drag_stack)) {
+			bool not_quest_item = items->items[drag_stack.item].type != "quest";
+			if (vendor->visible && inv->sell(drag_stack) && not_quest_item) {
 				vendor->setTab(VENDOR_SELL);
 				vendor->add(drag_stack);
 			}
-			else if (stash->visible && !stash->full(drag_stack.item)) {
+			else if (stash->visible && !stash->full(drag_stack.item) && not_quest_item) {
 				stash->add(drag_stack);
 			}
 			else {
