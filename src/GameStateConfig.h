@@ -52,7 +52,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[136];
+	int optiontab[138];
 	SDL_Rect frame;
 	SDL_Rect* video_modes;
 
@@ -136,8 +136,8 @@ private:
 	WidgetSlider        * joystick_deadzone_sl;
 	WidgetLabel         * joystick_deadzone_lb;
 
-	WidgetLabel         * settings_lb[28];
-	WidgetButton        * settings_key[56];
+	WidgetLabel         * settings_lb[29];
+	WidgetButton        * settings_key[58];
 
 	WidgetScrollBox     * input_scrollbox;
 	MenuConfirm         * input_confirm;

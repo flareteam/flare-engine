@@ -158,12 +158,12 @@ void GameStateConfig::init() {
 	resolution_confirm = new MenuConfirm(msg->get("OK"),msg->get("Use this resolution?"));
 
 	// Allocate KeyBindings
-	for (unsigned int i = 0; i < 28; i++) {
+	for (unsigned int i = 0; i < 29; i++) {
 		settings_lb[i] = new WidgetLabel();
 		settings_lb[i]->set(inpt->binding_name[i]);
 		settings_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
-	for (unsigned int i = 0; i < 56; i++) {
+	for (unsigned int i = 0; i < 58; i++) {
 		settings_key[i] = new WidgetButton("images/menus/buttons/button_default.png");
 	}
 
@@ -243,7 +243,7 @@ void GameStateConfig::init() {
 	tablist.add(activemods_shiftup_btn);
 	tablist.add(activemods_shiftdown_btn);
 
-	for (unsigned int i = 0; i < 56; i++) {
+	for (unsigned int i = 0; i < 58; i++) {
 		input_scrollbox->addChildWidget(settings_key[i]);
 	}
 }
@@ -576,6 +576,7 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "actionbar") setting_num = ACTIONBAR;
 			else if (infile.key == "actionbar_back") setting_num = ACTIONBAR_BACK;
 			else if (infile.key == "actionbar_forward") setting_num = ACTIONBAR_FORWARD;
+			else if (infile.key == "actionbar_use") setting_num = ACTIONBAR_USE;
 			// buttons end
 
 			else if (infile.key == "hws_note") {
@@ -664,7 +665,7 @@ void GameStateConfig::readConfig () {
 				scrollpane_contents = x1;
 			}
 
-			if (setting_num > -1 && setting_num < 28) {
+			if (setting_num > -1 && setting_num < 29) {
 				//keybindings
 				settings_lb[setting_num]->setX(x1);
 				settings_lb[setting_num]->setY(y1);
@@ -724,9 +725,9 @@ void GameStateConfig::readConfig () {
 	input_scrollbox->resize(scrollpane_contents);
 
 	// Set positions of secondary key bindings
-	for (unsigned int i = 28; i < 56; i++) {
-		settings_key[i]->pos.x = settings_key[i-28]->pos.x + offset_x;
-		settings_key[i]->pos.y = settings_key[i-28]->pos.y + offset_y;
+	for (unsigned int i = 29; i < 58; i++) {
+		settings_key[i]->pos.x = settings_key[i-29]->pos.x + offset_x;
+		settings_key[i]->pos.y = settings_key[i-29]->pos.y + offset_y;
 	}
 }
 
@@ -804,7 +805,7 @@ void GameStateConfig::update () {
 	activemods_lstb->refresh();
 	inactivemods_lstb->refresh();
 
-	for (unsigned int i = 0; i < 28; i++) {
+	for (unsigned int i = 0; i < 29; i++) {
 		if (inpt->binding[i] < 8) {
 			settings_key[i]->label = inpt->mouse_button[inpt->binding[i]-1];
 		}
@@ -813,12 +814,12 @@ void GameStateConfig::update () {
 		}
 		settings_key[i]->refresh();
 	}
-	for (unsigned int i = 28; i < 56; i++) {
-		if (inpt->binding_alt[i-28] < 8) {
-			settings_key[i]->label = inpt->mouse_button[inpt->binding_alt[i-28]-1];
+	for (unsigned int i = 29; i < 58; i++) {
+		if (inpt->binding_alt[i-29] < 8) {
+			settings_key[i]->label = inpt->mouse_button[inpt->binding_alt[i-29]-1];
 		}
 		else {
-			settings_key[i]->label = SDL_GetKeyName((SDLKey)inpt->binding_alt[i-28]);
+			settings_key[i]->label = SDL_GetKeyName((SDLKey)inpt->binding_alt[i-29]);
 		}
 		settings_key[i]->refresh();
 	}
@@ -1081,15 +1082,15 @@ void GameStateConfig::logic () {
 		}
 		else {
 			input_scrollbox->logic();
-			for (unsigned int i = 0; i < 56; i++) {
+			for (unsigned int i = 0; i < 58; i++) {
 				if (settings_key[i]->pressed || settings_key[i]->hover) input_scrollbox->update = true;
 				Point mouse = input_scrollbox->input_assist(inpt->mouse);
 				if (settings_key[i]->checkClick(mouse.x,mouse.y)) {
 					std::string confirm_msg;
-					if (i < 28)
+					if (i < 29)
 						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i];
 					else
-						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-28];
+						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-29];
 					delete input_confirm;
 					input_confirm = new MenuConfirm("",confirm_msg);
 					input_confirm->window_area = menuConfirm_area;
@@ -1154,7 +1155,7 @@ void GameStateConfig::render () {
 	if (active_tab == 4) {
 		if (input_scrollbox->update) {
 			input_scrollbox->refresh();
-			for (unsigned int i = 0; i < 28; i++) {
+			for (unsigned int i = 0; i < 29; i++) {
 				settings_lb[i]->render(input_scrollbox->contents);
 			}
 		}
@@ -1419,8 +1420,8 @@ bool GameStateConfig::setMods() {
 void GameStateConfig::scanKey(int button) {
 	if (input_confirm->visible) {
 		if (inpt->last_button != -1 && inpt->last_button < 8) {
-			if (button < 28) inpt->binding[button] = inpt->last_button;
-			else inpt->binding_alt[button-28] = inpt->last_button;
+			if (button < 29) inpt->binding[button] = inpt->last_button;
+			else inpt->binding_alt[button-29] = inpt->last_button;
 
 			settings_key[button]->label = inpt->mouse_button[inpt->last_button-1];
 			input_confirm->visible = false;
@@ -1429,8 +1430,8 @@ void GameStateConfig::scanKey(int button) {
 			return;
 		}
 		if (inpt->last_key != -1) {
-			if (button < 28) inpt->binding[button] = inpt->last_key;
-			else inpt->binding_alt[button-28] = inpt->last_key;
+			if (button < 29) inpt->binding[button] = inpt->last_key;
+			else inpt->binding_alt[button-29] = inpt->last_key;
 
 			settings_key[button]->label = SDL_GetKeyName((SDLKey)inpt->last_key);
 			input_confirm->visible = false;
@@ -1460,10 +1461,10 @@ GameStateConfig::~GameStateConfig() {
 	}
 	child_widget.clear();
 
-	for (unsigned int i = 0; i < 28; i++) {
+	for (unsigned int i = 0; i < 29; i++) {
 		delete settings_lb[i];
 	}
-	for (unsigned int i = 0; i < 56; i++) {
+	for (unsigned int i = 0; i < 58; i++) {
 		delete settings_key[i];
 	}
 

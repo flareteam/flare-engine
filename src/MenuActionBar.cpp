@@ -441,18 +441,18 @@ int MenuActionBar::checkAction() {
 	int current = tablist.getCurrent();
 
 	// check click and hotkey actions
-	if (((inpt->pressing[BAR_1] && current == -1) || (inpt->pressing[BAR_1] && current == 0)) && slot_enabled[0]) return hotkeys[0];
-	if (((inpt->pressing[BAR_2] && current == -1) || (inpt->pressing[BAR_1] && current == 1)) && slot_enabled[1]) return hotkeys[1];
-	if (((inpt->pressing[BAR_3] && current == -1) || (inpt->pressing[BAR_1] && current == 2)) && slot_enabled[2]) return hotkeys[2];
-	if (((inpt->pressing[BAR_4] && current == -1) || (inpt->pressing[BAR_1] && current == 3)) && slot_enabled[3]) return hotkeys[3];
-	if (((inpt->pressing[BAR_5] && current == -1) || (inpt->pressing[BAR_1] && current == 4)) && slot_enabled[4]) return hotkeys[4];
-	if (((inpt->pressing[BAR_6] && current == -1) || (inpt->pressing[BAR_1] && current == 5)) && slot_enabled[5]) return hotkeys[5];
-	if (((inpt->pressing[BAR_7] && current == -1) || (inpt->pressing[BAR_1] && current == 6)) && slot_enabled[6]) return hotkeys[6];
-	if (((inpt->pressing[BAR_8] && current == -1) || (inpt->pressing[BAR_1] && current == 7)) && slot_enabled[7]) return hotkeys[7];
-	if (((inpt->pressing[BAR_9] && current == -1) || (inpt->pressing[BAR_1] && current == 8)) && slot_enabled[8]) return hotkeys[8];
-	if (((inpt->pressing[BAR_0] && current == -1) || (inpt->pressing[BAR_1] && current == 9)) && slot_enabled[9]) return hotkeys[9];
-	if (((inpt->pressing[MAIN1] && current == -1) || (inpt->pressing[BAR_1] && current == 10)) && slot_enabled[10] && !inpt->lock[MAIN1]) return hotkeys[10];
-	if (((inpt->pressing[MAIN2] && current == -1) || (inpt->pressing[BAR_1] && current == 11)) && slot_enabled[11] && !inpt->lock[MAIN2]) return hotkeys[11];
+	if ((inpt->pressing[BAR_1] || (inpt->pressing[ACTIONBAR_USE] && current == 0)) && slot_enabled[0]) return hotkeys[0];
+	if ((inpt->pressing[BAR_2] || (inpt->pressing[ACTIONBAR_USE] && current == 1)) && slot_enabled[1]) return hotkeys[1];
+	if ((inpt->pressing[BAR_3] || (inpt->pressing[ACTIONBAR_USE] && current == 2)) && slot_enabled[2]) return hotkeys[2];
+	if ((inpt->pressing[BAR_4] || (inpt->pressing[ACTIONBAR_USE] && current == 3)) && slot_enabled[3]) return hotkeys[3];
+	if ((inpt->pressing[BAR_5] || (inpt->pressing[ACTIONBAR_USE] && current == 4)) && slot_enabled[4]) return hotkeys[4];
+	if ((inpt->pressing[BAR_6] || (inpt->pressing[ACTIONBAR_USE] && current == 5)) && slot_enabled[5]) return hotkeys[5];
+	if ((inpt->pressing[BAR_7] || (inpt->pressing[ACTIONBAR_USE] && current == 6)) && slot_enabled[6]) return hotkeys[6];
+	if ((inpt->pressing[BAR_8] || (inpt->pressing[ACTIONBAR_USE] && current == 7)) && slot_enabled[7]) return hotkeys[7];
+	if ((inpt->pressing[BAR_9] || (inpt->pressing[ACTIONBAR_USE] && current == 8)) && slot_enabled[8]) return hotkeys[8];
+	if ((inpt->pressing[BAR_0] || (inpt->pressing[ACTIONBAR_USE] && current == 9)) && slot_enabled[9]) return hotkeys[9];
+	if ((inpt->pressing[MAIN1] || (inpt->pressing[ACTIONBAR_USE] && current == 10)) && slot_enabled[10] && !inpt->lock[MAIN1]) return hotkeys[10];
+	if ((inpt->pressing[MAIN2] || (inpt->pressing[ACTIONBAR_USE] && current == 11)) && slot_enabled[11] && !inpt->lock[MAIN2]) return hotkeys[11];
 	return 0;
 }
 
