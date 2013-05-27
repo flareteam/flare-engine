@@ -425,21 +425,26 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	TooltipData tip;
 	SDL_Color color = color_normal;
-
+	string quality_desc = "";	
+	
 	if (item == 0) return tip;
 
 	// color quality
 	if (items[item].set > 0) {
 		color = item_sets[items[item].set].color;
+		quality_desc = "Normal";
 	}
 	else if (items[item].quality == ITEM_QUALITY_LOW) {
 		color = color_low;
+		quality_desc = "Low";
 	}
 	else if (items[item].quality == ITEM_QUALITY_HIGH) {
 		color = color_high;
+		quality_desc = "High";
 	}
 	else if (items[item].quality == ITEM_QUALITY_EPIC) {
 		color = color_epic;
+		quality_desc = "Epic";
 	}
 
 	// name
@@ -539,6 +544,11 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 			else color = color_normal;
 			tip.addText(msg->get("Requires Defense %d", items[item].req_val), color);
 		}
+	}
+
+	if (COLORBLIND && quality_desc != "") {
+		color = color_normal;
+		tip.addText(msg->get("Quality: %s", quality_desc), color);	
 	}
 
 	// flavor text
