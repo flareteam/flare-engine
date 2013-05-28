@@ -125,6 +125,7 @@ void BehaviorAlly::checkMoveStateStance() {
 			e->newState(ENEMY_MOVE);
 		}
 		else {
+            collided = true;
 			int prev_direction = e->stats.direction;
 
 			// hit an obstacle, try the next best angle
@@ -146,6 +147,7 @@ void BehaviorAlly::checkMoveStateMove() {
 
 	// try to continue moving
 	else if (!e->move()) {
+        collided = true;
 		int prev_direction = e->stats.direction;
 		// hit an obstacle.  Try the next best angle
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
