@@ -300,9 +300,6 @@ void MenuNPCActions::logic() {
 		keyboardLogic();
 	}
 	else {
-		inpt->lock[LEFT] = false;
-		inpt->lock[RIGHT] = false;
-
 		if (inpt->lock[MAIN1])
 			return;
 
@@ -361,8 +358,8 @@ void MenuNPCActions::logic() {
 }
 
 void MenuNPCActions::keyboardLogic() {
-	inpt->lock[LEFT] = true;
-	inpt->lock[RIGHT] = true;
+	if (inpt->pressing[LEFT]) inpt->lock[LEFT] = true;
+	if (inpt->pressing[RIGHT]) inpt->lock[RIGHT] = true;
 
 	if (inpt->pressing[UP] && !inpt->lock[UP]) {
 		inpt->lock[UP] = true;
