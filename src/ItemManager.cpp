@@ -435,19 +435,19 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	}
 	else if (items[item].quality == ITEM_QUALITY_LOW) {
 		color = color_low;
-		quality_desc = "Low";
+		quality_desc = msg->get("Low");
 	}
 	else if (items[item].quality == ITEM_QUALITY_NORMAL) {
 		color = color_normal;
-		quality_desc = "Normal";
+		quality_desc = msg->get("Normal");
 	}
 	else if (items[item].quality == ITEM_QUALITY_HIGH) {
 		color = color_high;
-		quality_desc = "High";
+		quality_desc = msg->get("High");
 	}
 	else if (items[item].quality == ITEM_QUALITY_EPIC) {
 		color = color_epic;
-		quality_desc = "Epic";
+		quality_desc = msg->get("Epic");
 	}
 
 	// name
