@@ -432,11 +432,14 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	// color quality
 	if (items[item].set > 0) {
 		color = item_sets[items[item].set].color;
-		quality_desc = "Normal";
 	}
 	else if (items[item].quality == ITEM_QUALITY_LOW) {
 		color = color_low;
 		quality_desc = "Low";
+	}
+	else if (items[item].quality == ITEM_QUALITY_NORMAL) {
+		color = color_normal;
+		quality_desc = "Normal";
 	}
 	else if (items[item].quality == ITEM_QUALITY_HIGH) {
 		color = color_high;
