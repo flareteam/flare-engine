@@ -116,6 +116,10 @@ void ModManager::loadModList() {
  * Use private loc_cache to prevent excessive disk I/O
  */
 string ModManager::locate(const string& filename) {
+	// set some flags if directories are identical
+	bool uniq_path_data = PATH_USER != PATH_DATA;
+	bool uniq_path_default_user = PATH_USER != PATH_DEFAULT_USER && PATH_DATA != PATH_DEFAULT_USER;
+	bool uniq_path_default_data = PATH_USER != PATH_DEFAULT_DATA && PATH_DATA != PATH_DEFAULT_DATA && PATH_DEFAULT_USER != PATH_DEFAULT_DATA;
 
 	// if we have this location already cached, return it
 	if (loc_cache.find(filename) != loc_cache.end()) {
@@ -131,20 +135,26 @@ string ModManager::locate(const string& filename) {
 			loc_cache[filename] = test_path;
 			return test_path;
 		}
-		test_path = PATH_DATA + "mods/" + mod_list[i-1] + "/" + filename;
-		if (fileExists(test_path)) {
-			loc_cache[filename] = test_path;
-			return test_path;
+		if (uniq_path_data) {
+			test_path = PATH_DATA + "mods/" + mod_list[i-1] + "/" + filename;
+			if (fileExists(test_path)) {
+				loc_cache[filename] = test_path;
+				return test_path;
+			}
 		}
-		test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i-1] + "/" + filename;
-		if (fileExists(test_path)) {
-			loc_cache[filename] = test_path;
-			return test_path;
+		if (uniq_path_default_user) {
+			test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i-1] + "/" + filename;
+			if (fileExists(test_path)) {
+				loc_cache[filename] = test_path;
+				return test_path;
+			}
 		}
-		test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i-1] + "/" + filename;
-		if (fileExists(test_path)) {
-			loc_cache[filename] = test_path;
-			return test_path;
+		if (uniq_path_default_data) {
+			test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i-1] + "/" + filename;
+			if (fileExists(test_path)) {
+				loc_cache[filename] = test_path;
+				return test_path;
+			}
 		}
 	}
 
@@ -164,19 +174,30 @@ void amendPathToVector(const string &path, std::vector<std::string> &vec) {
 }
 
 vector<string> ModManager::list(const string &path) {
+	// set some flags if directories are identical
+	bool uniq_path_data = PATH_USER != PATH_DATA;
+	bool uniq_path_default_user = PATH_USER != PATH_DEFAULT_USER && PATH_DATA != PATH_DEFAULT_USER;
+	bool uniq_path_default_data = PATH_USER != PATH_DEFAULT_DATA && PATH_DATA != PATH_DEFAULT_DATA && PATH_DEFAULT_USER != PATH_DEFAULT_DATA;
+
 	vector<string> ret;
 	string test_path = PATH_DATA + path;
 	amendPathToVector(test_path, ret);
 
 	for (unsigned int i = 0; i < mod_list.size(); ++i) {
-		test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i] + "/" + path;
-		amendPathToVector(test_path, ret);
+		if (uniq_path_default_data) {
+			test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i] + "/" + path;
+			amendPathToVector(test_path, ret);
+		}
 
-		test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i] + "/" + path;
-		amendPathToVector(test_path, ret);
+		if (uniq_path_default_user) {
+			test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i] + "/" + path;
+			amendPathToVector(test_path, ret);
+		}
 
-		test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + path;
-		amendPathToVector(test_path, ret);
+		if (uniq_path_data) {
+			test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + path;
+			amendPathToVector(test_path, ret);
+		}
 
 		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + path;
 		amendPathToVector(test_path, ret);
