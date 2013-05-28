@@ -57,6 +57,24 @@ void WidgetSlot::deactivate() {
 	checked = false;
 }
 
+void WidgetSlot::defocus() {
+	in_focus = false;
+	pressed = false;
+	checked = false;
+}
+
+bool WidgetSlot::getNext() {
+	pressed = false;
+	checked = false;
+	return false;
+}
+
+bool WidgetSlot::getPrev() {
+	pressed = false;
+	checked = false;
+	return false;
+}
+
 CLICK_TYPE WidgetSlot::checkClick() {
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }

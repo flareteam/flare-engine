@@ -52,6 +52,9 @@ public:
 
 	void activate();
 	void deactivate();
+	void defocus();
+	bool getNext();
+	bool getPrev();
 
 	CLICK_TYPE checkClick();
 	CLICK_TYPE checkClick(int x, int y);
