@@ -108,6 +108,8 @@ private:
 	WidgetLabel         * no_mouse_lb;
 	WidgetCheckBox      * show_fps_cb;
 	WidgetLabel         * show_fps_lb;
+	WidgetCheckBox      * colorblind_cb;
+	WidgetLabel         * colorblind_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;
