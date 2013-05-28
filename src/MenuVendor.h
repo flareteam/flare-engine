@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
 
-class InputState;
 class ItemStorage;
 class NPC;
 class StatBlock;
@@ -66,10 +65,10 @@ public:
 	void setTab(int tab);
 	int getTab() {return activetab;}
 	void render();
-	ItemStack click(InputState * input);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(Point position);
 	void setInventory();
 	void saveInventory();
 	void sort(int type);

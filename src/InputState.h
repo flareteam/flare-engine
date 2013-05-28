@@ -23,8 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-#define JOY_DEADZONE	100
-
 #define JOY_POS_CENTER	0
 #define JOY_POS_LEFT	-1
 #define JOY_POS_RIGHT	1
@@ -62,9 +60,6 @@ const int ACTIONBAR = 25;
 const int ACTIONBAR_BACK = 26;
 const int ACTIONBAR_FORWARD = 27;
 
-// Maxiumum mouse emulation movement speed
-const int MOUSE_EMU_VEL = 32;
-
 /**
  * class InputState
  *
@@ -72,10 +67,6 @@ const int MOUSE_EMU_VEL = 32;
  */
 
 class InputState {
-private:
-	int mx_vel;
-	int my_vel;
-	void mouseEmulation();
 public:
 	static const int key_count = 28;
 	int binding[key_count];
@@ -94,8 +85,6 @@ public:
 	void saveKeyBindings();
 	void handle(bool dump_event);
 	void resetScroll();
-	void enableMouseEmulation();
-	void disableMouseEmulation();
 	void lockActionBar();
 	void unlockActionBar();
 	void setKeybindNames();
@@ -110,7 +99,6 @@ public:
 	int last_button;
 	bool scroll_up;
 	bool scroll_down;
-	bool mouse_emulation;
 };
 
 #endif

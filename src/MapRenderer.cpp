@@ -39,28 +39,20 @@ using namespace std;
 const int CLICK_RANGE = 3 * UNITS_PER_TILE; //for activating events
 
 MapRenderer::MapRenderer(CampaignManager *_camp)
-	: music(NULL)
+	: Map()
+	, index_objectlayer(0)
+	, music(NULL)
 	, tip(new WidgetTooltip())
 	, tip_pos()
 	, show_tooltip(false)
-	, events()
-	, background(NULL)
-	, fringe(NULL)
-	, object(NULL)
-	, foreground(NULL)
-	, collision(NULL)
 	, shakycam(Point())
 	, backgroundsurface(NULL)
 	, backgroundsurfaceoffset()
 	, repaint_background(false)
 	, camp(_camp)
 	, powers(NULL)
-	, w(0)
-	, h(0)
 	, cam()
 	, hero_tile()
-	, spawn()
-	, spawn_dir(0)
 	, map_change(false)
 	, teleportation(false)
 	, teleport_destination()
@@ -74,8 +66,9 @@ MapRenderer::MapRenderer(CampaignManager *_camp)
 	, enemies_cleared(false) {
 }
 
-void MapRenderer::clearEvents() {
-	events.clear();
+void MapRenderer::clearQueues() {
+	Map::clearQueues();
+	loot.clear();
 }
 
 void MapRenderer::push_enemy_group(Map_Group g) {
@@ -123,16 +116,19 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 		g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn);
 }
 
-int MapRenderer::load(string filename) {
-	FileParser infile;
-	maprow *cur_layer = NULL;
+/**
+ * No guarantee that maps will use all layers
+ * Clear all tile layers (e.g. when loading a map)
+ */
+void MapRenderer::clearLayers() {
+	Map::clearLayers();
 
-	clearEvents();
-	clearLayers();
-	clearQueues();
+	SDL_FreeSurface(backgroundsurface);
+	backgroundsurface = 0;
+	index_objectlayer = 0;
+}
 
-	std::queue<Map_Group> enemy_groups;
-
+int MapRenderer::load(std::string filename) {
 	/* unload sounds */
 	snd->reset();
 	while (!sids.empty()) {
@@ -142,38 +138,20 @@ int MapRenderer::load(string filename) {
 
 	show_tooltip = false;
 
-	if (!infile.open("maps/" + filename))
-		return 0;
+	Map::load(filename);
 
-	while (infile.next()) {
-		if (infile.new_section) {
+	loadMusic();
 
-			// for sections that are stored in collections, add a new object here
-			if (infile.section == "enemy")
-				enemies.push(Map_Enemy());
-			else if (infile.section == "enemygroup")
-				enemy_groups.push(Map_Group());
-			else if (infile.section == "npc")
-				npcs.push(Map_NPC());
-			else if (infile.section == "event")
-				events.push_back(Map_Event());
-
+	for (unsigned i = 0; i < layers.size(); ++i) {
+		if (layernames[i] == "collision") {
+			collider.setmap(layers[i], w, h);
+			layernames.erase(layernames.begin() + i);
+			layers.erase(layers.begin() + i);
 		}
-		if (infile.section == "header")
-			loadHeader(infile);
-		else if (infile.section == "layer")
-			loadLayer(infile, &cur_layer);
-		else if (infile.section == "enemy")
-			loadEnemy(infile);
-		else if (infile.section == "enemygroup")
-			loadEnemyGroup(infile, &enemy_groups.back());
-		else if (infile.section == "npc")
-			loadNPC(infile);
-		else if (infile.section == "event")
-			loadEvent(infile);
 	}
-
-	infile.close();
+	for (unsigned i = 0; i < layers.size(); ++i)
+		if (layernames[i] == "object")
+			index_objectlayer = i;
 
 	while (!enemy_groups.empty()) {
 		push_enemy_group(enemy_groups.front());
@@ -189,454 +167,13 @@ int MapRenderer::load(string filename) {
 	return 0;
 }
 
-void MapRenderer::loadHeader(FileParser &infile) {
-	if (infile.key == "title") {
-		this->title = msg->get(infile.val);
-	}
-	else if (infile.key == "width") {
-		this->w = toInt(infile.val);
-	}
-	else if (infile.key == "height") {
-		this->h = toInt(infile.val);
-	}
-	else if (infile.key == "tileset") {
-		this->tileset = infile.val;
-	}
-	else if (infile.key == "music") {
-		loadMusic(infile.val);
-	}
-	else if (infile.key == "location") {
-		spawn.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		spawn.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		spawn_dir = toInt(infile.nextValue());
-	}
-}
-
-void MapRenderer::loadLayer(FileParser &infile, maprow **current_layer) {
-	if (infile.key == "type") {
-		*current_layer = new maprow[w];
-		if (infile.val == "background") background = *current_layer;
-		else if (infile.val == "fringe") fringe = *current_layer;
-		else if (infile.val == "object") object = *current_layer;
-		else if (infile.val == "foreground") foreground = *current_layer;
-		else if (infile.val == "collision") collision = *current_layer;
-	}
-	else if (infile.key == "format") {
-		if (infile.val != "dec") {
-			fprintf(stderr, "ERROR: maploading: The format of a layer must be \"dec\"!\n");
-			SDL_Quit();
-			exit(1);
-		}
-	}
-	else if (infile.key == "data") {
-		// layer map data handled as a special case
-		// The next h lines must contain layer data.  TODO: err
-		for (int j=0; j<h; j++) {
-			string val = infile.getRawLine() + ',';
-			for (int i=0; i<w; i++)
-				(*current_layer)[i][j] = eatFirstInt(val, ',');
-		}
-		if ((*current_layer) == collision)
-			collider.setmap(collision, w, h);
-	}
-}
-
-void MapRenderer::loadEnemy(FileParser &infile) {
-	if (infile.key == "type") {
-		enemies.back().type = infile.val;
-	}
-	else if (infile.key == "location") {
-		enemies.back().pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		enemies.back().pos.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-	}
-	else if (infile.key == "direction") {
-		enemies.back().direction = toInt(infile.val);
-	}
-	else if (infile.key == "waypoints") {
-		string none = "";
-		string a = infile.nextValue();
-		string b = infile.nextValue();
-
-		while (a != none) {
-			Point p;
-			p.x = toInt(a) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-			p.y = toInt(b) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-			enemies.back().waypoints.push(p);
-			a = infile.nextValue();
-			b = infile.nextValue();
-		}
-	}
-	else if (infile.key == "wander_area") {
-		enemies.back().wander = true;
-		enemies.back().wander_area.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-		enemies.back().wander_area.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-		enemies.back().wander_area.w = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-		enemies.back().wander_area.h = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-	}
-}
-
-void MapRenderer::loadEnemyGroup(FileParser &infile, Map_Group *group) {
-	if (infile.key == "type") {
-		group->category = infile.val;
-	}
-	else if (infile.key == "level") {
-		group->levelmin = toInt(infile.nextValue());
-		group->levelmax = toInt(infile.nextValue());
-	}
-	else if (infile.key == "location") {
-		group->pos.x = toInt(infile.nextValue());
-		group->pos.y = toInt(infile.nextValue());
-		group->area.x = toInt(infile.nextValue());
-		group->area.y = toInt(infile.nextValue());
-	}
-	else if (infile.key == "number") {
-		group->numbermin = toInt(infile.nextValue());
-		group->numbermax = toInt(infile.nextValue());
-	}
-	else if (infile.key == "chance") {
-		float n = toInt(infile.nextValue()) / 100.0f;
-		group->chance = min(1.0f, max(0.0f, n));
-	}
-}
-
-void MapRenderer::loadNPC(FileParser &infile) {
-	if (infile.key == "type") {
-		npcs.back().id = infile.val;
-	}
-	else if (infile.key == "location") {
-		npcs.back().pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		npcs.back().pos.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-	}
-}
-
-void MapRenderer::loadEvent(FileParser &infile) {
-	if (infile.key == "type") {
-		string type = infile.val;
-		events.back().type = type;
-
-		if      (type == "on_trigger");
-		else if (type == "on_mapexit"); // no need to set keep_after_trigger to false correctly, it's ignored anyway
-		else if (type == "on_leave");
-		else if (type == "on_load") {
-			events.back().keep_after_trigger = false;
-		}
-		else if (type == "on_clear") {
-			events.back().keep_after_trigger = false;
-		}
-		else {
-			fprintf(stderr, "MapRenderer: Loading event in file %s\nEvent type %s unknown, change to \"on_trigger\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
-		}
-	}
-	else if (infile.key == "location") {
-		events.back().location.x = toInt(infile.nextValue());
-		events.back().location.y = toInt(infile.nextValue());
-		events.back().location.w = toInt(infile.nextValue());
-		events.back().location.h = toInt(infile.nextValue());
-	}
-	else if (infile.key == "hotspot") {
-		if (infile.val == "location") {
-			events.back().hotspot.x = events.back().location.x;
-			events.back().hotspot.y = events.back().location.y;
-			events.back().hotspot.w = events.back().location.w;
-			events.back().hotspot.h = events.back().location.h;
-		}
-		else {
-			events.back().hotspot.x = toInt(infile.nextValue());
-			events.back().hotspot.y = toInt(infile.nextValue());
-			events.back().hotspot.w = toInt(infile.nextValue());
-			events.back().hotspot.h = toInt(infile.nextValue());
-		}
-	}
-	else if (infile.key == "cooldown") {
-		events.back().cooldown = parse_duration(infile.val);
-	}
-	else {
-		loadEventComponent(infile);
-	}
-}
-
-void MapRenderer::loadEventComponent(FileParser &infile) {
-	// new event component
-	events.back().components.push_back(Event_Component());
-	Event_Component *e = &events.back().components.back();
-	e->type = infile.key;
-
-	if (infile.key == "tooltip") {
-		e->s = msg->get(infile.val);
-	}
-	else if (infile.key == "power_path") {
-		// x,y are src, if s=="hero" we target the hero,
-		// else we'll use values in a,b as coordinates
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
-
-		string dest = infile.nextValue();
-		if (dest == "hero") {
-			e->s = "hero";
-		}
-		else {
-			e->a = toInt(dest);
-			e->b = toInt(infile.nextValue());
-		}
-	}
-	else if (infile.key == "power_damage") {
-		e->a = toInt(infile.nextValue());
-		e->b = toInt(infile.nextValue());
-	}
-	else if (infile.key == "intermap") {
-		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
-	}
-	else if (infile.key == "intramap") {
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
-	}
-	else if (infile.key == "mapmod") {
-		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
-		e->z = toInt(infile.nextValue());
-
-		// add repeating mapmods
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue());
-			e->y = toInt(infile.nextValue());
-			e->z = toInt(infile.nextValue());
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "soundfx") {
-		e->s = infile.nextValue();
-		e->x = e->y = -1;
-
-		std::string s = infile.nextValue();
-		if (s != "") e->x = toInt(s);
-
-		s = infile.nextValue();
-		if (s != "") e->y = toInt(s);
-
-	}
-	else if (infile.key == "loot") {
-		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-
-		// drop chance
-		string chance = infile.nextValue();
-		if (chance == "fixed") e->z = 0;
-		else e->z = toInt(chance);
-
-		// quantity min/max
-		e->a = toInt(infile.nextValue());
-		if (e->a < 1) e->a = 1;
-		e->b = toInt(infile.nextValue());
-		if (e->b < e->a) e->b = e->a;
-
-		// add repeating loot
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-
-			chance = infile.nextValue();
-			if (chance == "fixed") e->z = 0;
-			else e->z = toInt(chance);
-
-			e->a = toInt(infile.nextValue());
-			if (e->a < 1) e->a = 1;
-			e->b = toInt(infile.nextValue());
-			if (e->b < e->a) e->b = e->a;
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "msg") {
-		e->s = msg->get(infile.val);
-	}
-	else if (infile.key == "shakycam") {
-		e->x = toInt(infile.val);
-	}
-	else if (infile.key == "requires_status") {
-		e->s = infile.nextValue();
-
-		// add repeating requires_status
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "requires_not") {
-		e->s = infile.nextValue();
-
-		// add repeating requires_not
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "requires_level") {
-		e->x = toInt(infile.nextValue());
-	}
-	else if (infile.key == "requires_not_level") {
-		e->x = toInt(infile.nextValue());
-	}
-	else if (infile.key == "requires_item") {
-		e->x = toInt(infile.nextValue());
-
-		// add repeating requires_item
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-			e->x = toInt(repeat_val);
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "set_status") {
-		e->s = infile.nextValue();
-
-		// add repeating set_status
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "unset_status") {
-		e->s = infile.nextValue();
-
-		// add repeating unset_status
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "remove_item") {
-		e->x = toInt(infile.nextValue());
-
-		// add repeating remove_item
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-			e->x = toInt(repeat_val);
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "reward_xp") {
-		e->x = toInt(infile.val);
-	}
-	else if (infile.key == "power") {
-		e->x = toInt(infile.val);
-	}
-	else if (infile.key == "spawn") {
-
-		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-		e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-
-		// add repeating spawn
-		string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			events.back().components.push_back(Event_Component());
-			e = &events.back().components.back();
-			e->type = infile.key;
-
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			e->y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-
-			repeat_val = infile.nextValue();
-		}
-	}
-	else if (infile.key == "stash") {
-		e->s = infile.val;
-	}
-	else if (infile.key == "npc") {
-		e->s = infile.val;
-	}
-	else if (infile.key == "music") {
-		e->s = infile.val;
-	}
-	else if (infile.key == "cutscene") {
-		e->s = infile.val;
-	}
-	else if (infile.key == "repeat") {
-		e->s = infile.val;
-	}
-	else {
-		fprintf(stderr, "MapRenderer: Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
-	}
-}
-
-void MapRenderer::clearQueues() {
-	enemies = queue<Map_Enemy>();
-	npcs = queue<Map_NPC>();
-	loot.clear();
-}
-
-/**
- * No guarantee that maps will use all layers
- * Clear all tile layers (e.g. when loading a map)
- */
-void MapRenderer::clearLayers() {
-	delete[] background;
-	delete[] fringe;
-	delete[] object;
-	delete[] foreground;
-	delete[] collision;
-
-	background = 0;
-	fringe = 0;
-	object = 0;
-	foreground = 0;
-	collision = 0;
-
-	SDL_FreeSurface(backgroundsurface);
-	backgroundsurface = 0;
-}
-
-void MapRenderer::loadMusic(const std::string &new_music_filename) {
+void MapRenderer::loadMusic() {
 
 	// keep playing if already the correct track
-	if (music_filename == new_music_filename)
+	if (played_music_filename == music_filename)
 		return;
 
-	music_filename = new_music_filename;
+	played_music_filename = music_filename;
 
 	if (music) {
 		Mix_HaltMusic();
@@ -644,7 +181,7 @@ void MapRenderer::loadMusic(const std::string &new_music_filename) {
 		music = NULL;
 	}
 	if (AUDIO && MUSIC_VOLUME) {
-		music = Mix_LoadMUS(mods->locate("music/" + this->music_filename).c_str());
+		music = Mix_LoadMUS(mods->locate("music/" + played_music_filename).c_str());
 		if(!music)
 			cout << "Mix_LoadMUS: "<< Mix_GetError()<<endl;
 	}
@@ -826,6 +363,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	while (r_cursor != r_end && ((r_cursor->map_pos.x>>TILE_SHIFT) + (r_cursor->map_pos.y>>TILE_SHIFT) < i + j || (r_cursor->map_pos.x>>TILE_SHIFT) < i))
 		++r_cursor;
 
+	maprow *objectlayer = layers[index_objectlayer];
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
 		int_fast16_t tiles_width = 0;
 
@@ -852,7 +390,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			++tiles_width;
 			p.x += TILE_W;
 
-			if (const uint_fast16_t current_tile = object[i][j]) {
+			if (const uint_fast16_t current_tile = objectlayer[i][j]) {
 
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
@@ -880,8 +418,8 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	const Point nulloffset(0, 0);
 	if (ANIMATED_TILES) {
-		if (background) renderIsoLayer(screen, nulloffset, background);
-		if (fringe) renderIsoLayer(screen, nulloffset, fringe);
+		for (unsigned i = 0; i < index_objectlayer; ++i)
+			renderIsoLayer(screen, nulloffset, layers[i]);
 	}
 	else {
 		if (abs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender * TILE_W
@@ -897,8 +435,8 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 
 			SDL_FillRect(backgroundsurface, 0, 0);
 			Point off(VIEW_W_HALF, VIEW_H_HALF);
-			if (background) renderIsoLayer(backgroundsurface, off, background);
-			if (fringe) renderIsoLayer(backgroundsurface, off, fringe);
+			for (unsigned i = 0; i < index_objectlayer; ++i)
+					renderIsoLayer(backgroundsurface, off, layers[i]);
 		}
 		Point p = map_to_screen(shakycam.x, shakycam.y , backgroundsurfaceoffset.x, backgroundsurfaceoffset.y);
 		SDL_Rect src;
@@ -908,9 +446,12 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		src.h = 2 * VIEW_H;
 		SDL_BlitSurface(backgroundsurface, &src, screen , 0);
 	}
-	if (object) renderIsoBackObjects(r_dead);
-	if (object) renderIsoFrontObjects(r);
-	if (foreground) renderIsoLayer(screen, nulloffset, foreground);
+
+	renderIsoBackObjects(r_dead);
+	renderIsoFrontObjects(r);
+	for (unsigned i = index_objectlayer + 1; i < layers.size(); ++i)
+		renderIsoLayer(screen, nulloffset, layers[i]);
+
 	checkTooltip();
 }
 
@@ -967,12 +508,13 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	while (r_cursor != r_end && (r_cursor->map_pos.y>>TILE_SHIFT) < startj)
 		++r_cursor;
 
+	maprow *objectlayer = layers[index_objectlayer];
 	for (j = startj; j<max_tiles_height; j++) {
 		Point p = map_to_screen(starti * UNITS_PER_TILE, j * UNITS_PER_TILE, shakycam.x, shakycam.y);
 		p = center_tile(p);
 		for (i = starti; i<max_tiles_width; i++) {
 
-			if (const unsigned short current_tile = object[i][j]) {
+			if (const unsigned short current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
@@ -992,11 +534,18 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 }
 
 void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead) {
-	if (background) renderOrthoLayer(background);
-	if (fringe) renderOrthoLayer(fringe);
-	if (object) renderOrthoBackObjects(r_dead);
-	if (object) renderOrthoFrontObjects(r);
-	if (foreground) renderOrthoLayer(foreground);
+
+	unsigned index = 0;
+	while (index < index_objectlayer)
+		renderOrthoLayer(layers[index++]);
+
+	renderOrthoBackObjects(r_dead);
+	renderOrthoFrontObjects(r);
+	index++;
+
+	while (index < layers.size())
+		renderOrthoLayer(layers[index++]);
+
 	//render event tooltips
 	checkTooltip();
 }
@@ -1103,54 +652,39 @@ void MapRenderer::checkHotspots() {
 
 		for (int x=it->hotspot.x; x < it->hotspot.x + it->hotspot.w; ++x) {
 			for (int y=it->hotspot.y; y < it->hotspot.y + it->hotspot.h; ++y) {
+				bool matched = false;
+				for (unsigned index = 0; index <= index_objectlayer; ++index) {
+					maprow *current_layer = layers[index];
+					Point p = map_to_screen(x * UNITS_PER_TILE,
+											y * UNITS_PER_TILE,
+											shakycam.x,
+											shakycam.y);
+					p = center_tile(p);
 
-				bool backgroundmatch = false;
-				bool objectmatch = false;
+					if (const short current_tile = current_layer[x][y]) {
+						// first check if mouse pointer is in rectangle of that tile:
+						SDL_Rect dest;
+						dest.x = p.x - tset.tiles[current_tile].offset.x;
+						dest.y = p.y - tset.tiles[current_tile].offset.y;
+						dest.w = tset.tiles[current_tile].src.w;
+						dest.h = tset.tiles[current_tile].src.h;
 
-				Point p = map_to_screen(x * UNITS_PER_TILE,
-										y * UNITS_PER_TILE,
-										shakycam.x,
-										shakycam.y);
-				p = center_tile(p);
-
-				if (const short current_tile = background[x][y]) {
-					// first check if mouse pointer is in rectangle of that tile:
-					SDL_Rect dest;
-					dest.x = p.x - tset.tiles[current_tile].offset.x;
-					dest.y = p.y - tset.tiles[current_tile].offset.y;
-					dest.w = tset.tiles[current_tile].src.w;
-					dest.h = tset.tiles[current_tile].src.h;
-
-					if (isWithin(dest, inpt->mouse)) {
-						// Now that the mouse is within the rectangle of the tile, we can check for
-						// pixel precision. We need to have checked the rectangle first, because
-						// otherwise the pixel precise check might hit a neighbouring tile in the
-						// tileset. We need to calculate the point relative to the
-						Point p1;
-						p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].src.x;
-						p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].src.y;
-						backgroundmatch = checkPixel(p1, tset.sprites);
-						tip_pos.x = dest.x + dest.w/2;
-						tip_pos.y = dest.y;
+						if (isWithin(dest, inpt->mouse)) {
+							// Now that the mouse is within the rectangle of the tile, we can check for
+							// pixel precision. We need to have checked the rectangle first, because
+							// otherwise the pixel precise check might hit a neighbouring tile in the
+							// tileset. We need to calculate the point relative to the
+							Point p1;
+							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].src.x;
+							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].src.y;
+							matched |= checkPixel(p1, tset.sprites);
+							tip_pos.x = dest.x + dest.w/2;
+							tip_pos.y = dest.y;
+						}
 					}
 				}
-				if (const short current_tile = object[x][y]) {
-					SDL_Rect dest;
-					dest.x = p.x - tset.tiles[current_tile].offset.x;
-					dest.y = p.y - tset.tiles[current_tile].offset.y;
-					dest.w = tset.tiles[current_tile].src.w;
-					dest.h = tset.tiles[current_tile].src.h;
 
-					if (isWithin(dest, inpt->mouse)) {
-						Point p1;
-						p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].src.x;
-						p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].src.y;
-						objectmatch = checkPixel(p1, tset.sprites);
-						tip_pos.x = dest.x + dest.w/2;
-						tip_pos.y = dest.y;
-					}
-				}
-				if (backgroundmatch || objectmatch) {
+				if (matched) {
 					// skip inactive events
 					if (!isActive(*it)) continue;
 
@@ -1315,21 +849,14 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
-				collision[ec->x][ec->y] = ec->z;
 				collider.colmap[ec->x][ec->y] = ec->z;
 			}
-			else if (ec->s == "object") {
-				object[ec->x][ec->y] = ec->z;
-			}
-			else if (ec->s == "foreground") {
-				foreground[ec->x][ec->y] = ec->z;
-			}
-			else if (ec->s == "fringe") {
-				fringe[ec->x][ec->y] = ec->z;
-			}
-			else if (ec->s == "background") {
-				background[ec->x][ec->y] = ec->z;
-				repaint_background = false;
+			else {
+				int index = distance(layernames.begin(), find(layernames.begin(), layernames.end(), ec->s));
+				layers[index][ec->x][ec->y] = ec->z;
+
+				if (ec->a < (int)(index_objectlayer))
+					repaint_background = true;
 			}
 			map_change = true;
 		}
@@ -1436,10 +963,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			event_npc = ec->s;
 		}
 		else if (ec->type == "music") {
-			if (this->music_filename != ec->s) {
-				this->music_filename = ec->s;
-				loadMusic(ec->s);
-			}
+			music_filename = ec->s;
+			loadMusic();
 		}
 		else if (ec->type == "cutscene") {
 			cutscene = true;
