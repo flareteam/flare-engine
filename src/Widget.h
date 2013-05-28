@@ -35,6 +35,7 @@ public:
 	virtual void render(SDL_Surface *target = NULL) = 0;
 	virtual void activate();
 	virtual void deactivate();
+	virtual void defocus();
 	virtual bool getNext();  // getNext and getPrev should be implemented
 	virtual bool getPrev(); // if the widget has items internally that can be iterated
 	bool render_to_alpha;

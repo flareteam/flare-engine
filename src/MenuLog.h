@@ -60,8 +60,6 @@ private:
 	SDL_Color tab_bg;
 	SDL_Color color_normal;
 
-	TabList tablist;
-
 public:
 	MenuLog();
 	~MenuLog();
@@ -74,6 +72,8 @@ public:
 	void remove(int msg_index, int log_type);
 	void clear(int log_type);
 	void clear();
+
+	TabList tablist;
 };
 
 #endif
