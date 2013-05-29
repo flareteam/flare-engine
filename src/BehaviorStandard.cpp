@@ -399,8 +399,8 @@ void BehaviorStandard::checkMove() {
                 if(!path.empty()){
                     pursue_pos = path.back();
 
-                    //if distance to node is lower than the speed, the node is going to be passed and can be removed
-                    if(calcDist(e->stats.pos, pursue_pos) < e->stats.speed)
+                    //if distance to node is lower than a tile size, the node is going to be passed and can be removed
+                    if(calcDist(e->stats.pos, pursue_pos) <= 64)
                         path.pop_back();
                 }
 

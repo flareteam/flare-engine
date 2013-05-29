@@ -318,8 +318,8 @@ void Avatar::set_direction() {
 			if(!path.empty()){
 				target = path.back();
 
-                //if distance to node is lower than the speed, the node is going to be passed and can be removed
-                if(calcDist(stats.pos, target) < stats.speed)
+                //if distance to node is lower than a tile size, the node is going to be passed and can be removed
+                if(calcDist(stats.pos, target) < 64)
                     path.pop_back();
 			}
 		}
