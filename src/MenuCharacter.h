@@ -70,6 +70,7 @@ private:
 
 	void loadGraphics();
 	SDL_Color bonusColor(int stat);
+	std::string statTooltip(int stat);
 	int skill_points;
 	bool physical_up;
 	bool mental_up;
@@ -89,8 +90,6 @@ private:
 	bool show_upgrade[4];
 	bool show_stat[STATLIST_COUNT];
 
-	TabList tablist;
-
 public:
 	MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
@@ -103,6 +102,8 @@ public:
 	int getUnspent() { return skill_points; }
 
 	bool newPowerNotification;
+
+	TabList tablist;
 
 };
 

@@ -108,6 +108,7 @@ extern bool ENABLE_JOYSTICK;
 extern int JOYSTICK_DEVICE;
 extern bool MOUSE_AIM;
 extern bool NO_MOUSE;
+extern int JOY_DEADZONE;
 
 // User Options
 extern bool COMBAT_TEXT;
@@ -117,6 +118,7 @@ extern bool MENUS_PAUSE;
 extern bool SAVE_HPMP;
 extern bool ENABLE_PLAYGAME;
 extern bool SHOW_FPS;
+extern bool COLORBLIND;
 extern int CORPSE_TIMEOUT;
 extern bool SELL_WITHOUT_VENDOR;
 extern int AIM_ASSIST;

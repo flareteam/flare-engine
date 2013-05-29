@@ -61,13 +61,15 @@ ConfigEntry config[] = {
 	{ "animated_tiles",   &typeid(ANIMATED_TILES),  "1",   &ANIMATED_TILES,  "animated tiles. Try disabling for performance. 1 enable, 0 disable."},
 	{ "enable_joystick",  &typeid(ENABLE_JOYSTICK), "0",   &ENABLE_JOYSTICK, "joystick settings."},
 	{ "joystick_device",  &typeid(JOYSTICK_DEVICE), "0",   &JOYSTICK_DEVICE, NULL},
+	{ "joystick_deadzone",&typeid(JOY_DEADZONE),    "100", &JOY_DEADZONE,    NULL},
 	{ "language",         &typeid(LANGUAGE),        "en",  &LANGUAGE,        "2-letter language code."},
 	{ "change_gamma",     &typeid(CHANGE_GAMMA),    "0",   &CHANGE_GAMMA,    "allow changing gamma (experimental). 1 enable, 0 disable."},
 	{ "gamma",            &typeid(GAMMA),           "1.0", &GAMMA,           "screen gamma (0.5 = darkest, 2.0 = lightest)"},
 	{ "texture_quality",  &typeid(TEXTURE_QUALITY), "1",   &TEXTURE_QUALITY, "texture quality (0 = low quality, 1 = high quality)"},
 	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
 	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
-	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."}
+	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
+	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
@@ -135,6 +137,7 @@ bool ENABLE_JOYSTICK;
 int JOYSTICK_DEVICE;
 bool MOUSE_AIM;
 bool NO_MOUSE;
+int JOY_DEADZONE;
 
 // Language Settings
 std::string LANGUAGE = "en";
@@ -176,6 +179,7 @@ bool MENUS_PAUSE = false;
 bool SAVE_HPMP = false;
 bool ENABLE_PLAYGAME = false;
 bool SHOW_FPS = false;
+bool COLORBLIND = false;
 int CORPSE_TIMEOUT = 1800;
 bool SELL_WITHOUT_VENDOR = true;
 int AIM_ASSIST = 0;

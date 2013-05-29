@@ -25,7 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 EffectManager::EffectManager()
-	: bonus_resist(std::vector<int>(ELEMENTS.size(), 0))
+	: bonus()
+	, bonus_resist(std::vector<int>(ELEMENTS.size(), 0))
 	, triggered_others(false)
 	, triggered_block(false)
 	, triggered_hit(false)
@@ -74,24 +75,14 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	revive = emSource.revive;
 	convert = emSource.convert;
 	death_sentence = emSource.death_sentence;
-	bonus_hp = emSource.bonus_hp;
-	bonus_hp_regen = emSource.bonus_hp_regen;
-	bonus_hp_percent = emSource.bonus_hp_percent;
-	bonus_mp = emSource.bonus_mp;
-	bonus_mp_regen = emSource.bonus_mp_regen;
-	bonus_mp_percent = emSource.bonus_mp_percent;
-	bonus_accuracy = emSource.bonus_accuracy;
-	bonus_avoidance = emSource.bonus_avoidance;
-	bonus_crit = emSource.bonus_crit;
+	fear = emSource.fear;
 	bonus_offense = emSource.bonus_offense;
 	bonus_defense = emSource.bonus_defense;
 	bonus_physical = emSource.bonus_physical;
 	bonus_mental = emSource.bonus_mental;
-	bonus_xp = emSource.bonus_xp;
-	bonus_currency = emSource.bonus_currency;
-	bonus_item_find = emSource.bonus_item_find;
-	bonus_stealth = emSource.bonus_stealth;
-	bonus_poise = emSource.bonus_poise;
+	for (unsigned i=0; i<STAT_COUNT; i++) {
+		bonus[i] = emSource.bonus[i];
+	}
 	triggered_others = emSource.triggered_others;
 	triggered_block = emSource.triggered_block;
 	triggered_hit = emSource.triggered_hit;
@@ -116,25 +107,14 @@ void EffectManager::clearStatus() {
 	death_sentence = false;
 	fear = false;
 
-	bonus_hp = 0;
-	bonus_hp_regen = 0;
-	bonus_hp_percent = 0;
-	bonus_mp = 0;
-	bonus_mp_regen = 0;
-	bonus_mp_percent = 0;
-	bonus_accuracy = 0;
-	bonus_avoidance = 0;
-	bonus_crit = 0;
 	bonus_offense = 0;
 	bonus_defense = 0;
 	bonus_physical = 0;
 	bonus_mental = 0;
 
-	bonus_xp = 0;
-	bonus_currency = 0;
-	bonus_item_find = 0;
-	bonus_stealth = 0;
-	bonus_poise = 0;
+	for (unsigned i=0; i<STAT_COUNT; i++) {
+		bonus[i] = 0;
+	}
 
 	for (unsigned i=0; i<bonus_resist.size(); i++) {
 		bonus_resist[i] = 0;
@@ -160,28 +140,25 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == "revive") revive = true;
 			else if (effect_list[i].type == "convert") convert = true;
 			else if (effect_list[i].type == "fear") fear = true;
-			else if (effect_list[i].type == "hp") bonus_hp += effect_list[i].magnitude;
-			else if (effect_list[i].type == "hp_regen") bonus_hp_regen += effect_list[i].magnitude;
-			else if (effect_list[i].type == "hp_percent") bonus_hp_percent += effect_list[i].magnitude;
-			else if (effect_list[i].type == "mp") bonus_mp += effect_list[i].magnitude;
-			else if (effect_list[i].type == "mp_regen") bonus_mp_regen += effect_list[i].magnitude;
-			else if (effect_list[i].type == "mp_percent") bonus_mp_percent += effect_list[i].magnitude;
-			else if (effect_list[i].type == "accuracy") bonus_accuracy += effect_list[i].magnitude;
-			else if (effect_list[i].type == "avoidance") bonus_avoidance += effect_list[i].magnitude;
-			else if (effect_list[i].type == "crit") bonus_crit += effect_list[i].magnitude;
 			else if (effect_list[i].type == "offense") bonus_offense += effect_list[i].magnitude;
 			else if (effect_list[i].type == "defense") bonus_defense += effect_list[i].magnitude;
 			else if (effect_list[i].type == "physical") bonus_physical += effect_list[i].magnitude;
 			else if (effect_list[i].type == "mental") bonus_mental += effect_list[i].magnitude;
-			else if (effect_list[i].type == "xp") bonus_xp += effect_list[i].magnitude;
-			else if (effect_list[i].type == "currency") bonus_currency += effect_list[i].magnitude;
-			else if (effect_list[i].type == "item_find") bonus_item_find += effect_list[i].magnitude;
-			else if (effect_list[i].type == "stealth") bonus_stealth += effect_list[i].magnitude;
-			else if (effect_list[i].type == "poise") bonus_poise += effect_list[i].magnitude;
 			else {
-				for (unsigned j=0; j<bonus_resist.size(); j++) {
-					if (effect_list[i].type == ELEMENTS[j].name + "_resist")
-						bonus_resist[j] += effect_list[i].magnitude;
+				bool found_key = false;
+
+				for (unsigned j=0; j<STAT_COUNT; j++) {
+					if (effect_list[i].type == STAT_NAME[j]) {
+						bonus[j] += effect_list[i].magnitude;
+						found_key = true;
+					}
+				}
+
+				if (!found_key) {
+					for (unsigned j=0; j<bonus_resist.size(); j++) {
+						if (effect_list[i].type == ELEMENTS[j].name + "_resist")
+							bonus_resist[j] += effect_list[i].magnitude;
+					}
 				}
 			}
 

@@ -76,14 +76,20 @@ private:
 	bool key_lock;
 	void loadIcons();
 
-	bool dragging;
+	bool mouse_dragging;
+	bool keyboard_dragging;
 	ItemStack drag_stack;
 	int drag_power;
 	int drag_src;
 
 	bool done;
 
+	bool act_drag_hover;
+	Point keydrag_pos;
+
 	void handleKeyboardNavigation();
+	void dragAndDropWithKeyboard();
+	void resetDrag();
 
 public:
 	MenuManager(PowerManager *powers, StatBlock *stats, CampaignManager *camp, ItemManager *items);

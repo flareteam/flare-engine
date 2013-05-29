@@ -52,6 +52,9 @@ public:
 
 	void activate();
 	void deactivate();
+	void defocus();
+	bool getNext();
+	bool getPrev();
 
 	CLICK_TYPE checkClick();
 	CLICK_TYPE checkClick(int x, int y);
@@ -63,6 +66,7 @@ public:
 	bool enabled;
 	bool checked;
 	bool pressed;
+	bool continuous;	// allow holding key to keep slot activated
 };
 
 #endif

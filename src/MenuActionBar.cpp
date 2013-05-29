@@ -64,6 +64,7 @@ MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surfac
 
 	for (unsigned int i=0; i<12; i++) {
 		slots[i] = new WidgetSlot(icons, -1, ACTIONBAR);
+		slots[i]->continuous = true;
 		tablist.add(slots[i]);
 	}
 	for (unsigned int i=0; i<4; i++) {
@@ -294,6 +295,9 @@ void MenuActionBar::render() {
 			if (slot_item_count[i] > -1) {
 				slots[i]->setAmount(slot_item_count[i]);
 			}
+			else {
+				slots[i]->setAmount(0,0);
+			}
 			slots[i]->render();
 		}
 		else {
@@ -434,20 +438,21 @@ void MenuActionBar::remove(Point mouse) {
  * return that power's ID.
  */
 int MenuActionBar::checkAction() {
+	int current = tablist.getCurrent();
 
 	// check click and hotkey actions
-	if ((inpt->pressing[BAR_1] || slots[0]->checkClick() == ACTIVATED) && slot_enabled[0]) return hotkeys[0];
-	if ((inpt->pressing[BAR_2] || slots[1]->checkClick() == ACTIVATED) && slot_enabled[1]) return hotkeys[1];
-	if ((inpt->pressing[BAR_3] || slots[2]->checkClick() == ACTIVATED) && slot_enabled[2]) return hotkeys[2];
-	if ((inpt->pressing[BAR_4] || slots[3]->checkClick() == ACTIVATED) && slot_enabled[3]) return hotkeys[3];
-	if ((inpt->pressing[BAR_5] || slots[4]->checkClick() == ACTIVATED) && slot_enabled[4]) return hotkeys[4];
-	if ((inpt->pressing[BAR_6] || slots[5]->checkClick() == ACTIVATED) && slot_enabled[5]) return hotkeys[5];
-	if ((inpt->pressing[BAR_7] || slots[6]->checkClick() == ACTIVATED) && slot_enabled[6]) return hotkeys[6];
-	if ((inpt->pressing[BAR_8] || slots[7]->checkClick() == ACTIVATED) && slot_enabled[7]) return hotkeys[7];
-	if ((inpt->pressing[BAR_9] || slots[8]->checkClick() == ACTIVATED) && slot_enabled[8]) return hotkeys[8];
-	if ((inpt->pressing[BAR_0] || slots[9]->checkClick() == ACTIVATED) && slot_enabled[9]) return hotkeys[9];
-	if ((inpt->pressing[MAIN1] || slots[10]->checkClick() == ACTIVATED) && slot_enabled[10] && !inpt->lock[MAIN1]) return hotkeys[10];
-	if ((inpt->pressing[MAIN2] || slots[11]->checkClick() == ACTIVATED) && slot_enabled[11] && !inpt->lock[MAIN2]) return hotkeys[11];
+	if ((inpt->pressing[BAR_1] || (inpt->pressing[ACTIONBAR_USE] && current == 0)) && slot_enabled[0]) return hotkeys[0];
+	if ((inpt->pressing[BAR_2] || (inpt->pressing[ACTIONBAR_USE] && current == 1)) && slot_enabled[1]) return hotkeys[1];
+	if ((inpt->pressing[BAR_3] || (inpt->pressing[ACTIONBAR_USE] && current == 2)) && slot_enabled[2]) return hotkeys[2];
+	if ((inpt->pressing[BAR_4] || (inpt->pressing[ACTIONBAR_USE] && current == 3)) && slot_enabled[3]) return hotkeys[3];
+	if ((inpt->pressing[BAR_5] || (inpt->pressing[ACTIONBAR_USE] && current == 4)) && slot_enabled[4]) return hotkeys[4];
+	if ((inpt->pressing[BAR_6] || (inpt->pressing[ACTIONBAR_USE] && current == 5)) && slot_enabled[5]) return hotkeys[5];
+	if ((inpt->pressing[BAR_7] || (inpt->pressing[ACTIONBAR_USE] && current == 6)) && slot_enabled[6]) return hotkeys[6];
+	if ((inpt->pressing[BAR_8] || (inpt->pressing[ACTIONBAR_USE] && current == 7)) && slot_enabled[7]) return hotkeys[7];
+	if ((inpt->pressing[BAR_9] || (inpt->pressing[ACTIONBAR_USE] && current == 8)) && slot_enabled[8]) return hotkeys[8];
+	if ((inpt->pressing[BAR_0] || (inpt->pressing[ACTIONBAR_USE] && current == 9)) && slot_enabled[9]) return hotkeys[9];
+	if ((inpt->pressing[MAIN1] || (inpt->pressing[ACTIONBAR_USE] && current == 10)) && slot_enabled[10] && !inpt->lock[MAIN1]) return hotkeys[10];
+	if ((inpt->pressing[MAIN2] || (inpt->pressing[ACTIONBAR_USE] && current == 11)) && slot_enabled[11] && !inpt->lock[MAIN2]) return hotkeys[11];
 	return 0;
 }
 
@@ -502,7 +507,12 @@ MenuActionBar::~MenuActionBar() {
 	SDL_FreeSurface(disabled);
 	SDL_FreeSurface(attention);
 
-	for (unsigned int i=0; i<16; i++) {
+	for (unsigned i = 0; i < 16; i++)
 		delete labels[i];
-	}
+
+	for (unsigned i = 0; i < 12; i++)
+		delete slots[i];
+
+	for (unsigned int i=0; i<4; i++)
+		delete menus[i];
 }

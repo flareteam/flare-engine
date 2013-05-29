@@ -37,7 +37,8 @@ WidgetSlot::WidgetSlot(SDL_Surface *_icons, int _icon_id, int _ACTIVATE)
 	, ACTIVATE(_ACTIVATE)
 	, enabled(true)
 	, checked(false)
-	, pressed(false) {
+	, pressed(false)
+	, continuous(false) {
 	focusable = true;
 	pos.x = pos.y = 0;
 	pos.w = ICON_SIZE;
@@ -56,6 +57,24 @@ void WidgetSlot::deactivate() {
 	checked = false;
 }
 
+void WidgetSlot::defocus() {
+	in_focus = false;
+	pressed = false;
+	checked = false;
+}
+
+bool WidgetSlot::getNext() {
+	pressed = false;
+	checked = false;
+	return false;
+}
+
+bool WidgetSlot::getPrev() {
+	pressed = false;
+	checked = false;
+	return false;
+}
+
 CLICK_TYPE WidgetSlot::checkClick() {
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
@@ -65,6 +84,8 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 	// disabled slots can't be clicked;
 	if (!enabled) return NO_CLICK;
+
+	if (continuous && pressed && checked && (inpt->lock[MAIN2] || inpt->lock[ACTIVATE])) return ACTIVATED;
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return NO_CLICK;

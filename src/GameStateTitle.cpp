@@ -66,8 +66,6 @@ GameStateTitle::GameStateTitle() : GameState() {
 	label_version = new WidgetLabel();
 	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, msg->get("Flare Alpha v0.18"), font->getColor("menu_normal"));
 
-	inpt->enableMouseEmulation();
-
 	// Setup tab order
 	tablist.add(button_play);
 	tablist.add(button_cfg);

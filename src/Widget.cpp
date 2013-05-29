@@ -36,6 +36,10 @@ void Widget::activate()
 void Widget::deactivate()
 {}
 
+void Widget::defocus() {
+	in_focus = false;
+}
+
 bool Widget::getNext() {
 	return false;
 }
@@ -65,7 +69,7 @@ bool TabList::isLocked() {
 void TabList::lock() {
 	locked = true;
 	if (current_is_valid())
-		widgets.at(current)->in_focus = false;
+		widgets.at(current)->defocus();
 }
 
 void TabList::unlock() {
@@ -126,7 +130,7 @@ Widget* TabList::getNext(bool inner) {
 		if (inner && widgets.at(current)->getNext())
 			return NULL;
 
-		widgets.at(current)->in_focus = false;
+		widgets.at(current)->defocus();
 	}
 	++current;
 
@@ -145,7 +149,7 @@ Widget* TabList::getPrev(bool inner) {
 		if (inner && widgets.at(current)->getPrev())
 			return NULL;
 
-		widgets.at(current)->in_focus = false;
+		widgets.at(current)->defocus();
 	}
 
 	--current;
@@ -171,8 +175,9 @@ void TabList::activate() {
 }
 
 void TabList::defocus() {
-	if (current_is_valid())
-		widgets.at(current)->in_focus = false;
+	for (unsigned i=0; i < widgets.size(); ++i) {
+		widgets.at(i)->defocus();
+	}
 
 	current = -1;
 }

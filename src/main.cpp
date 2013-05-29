@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 #include "Settings.h"
+#include "Stats.h"
 #include "GameSwitcher.h"
 #include "SharedResources.h"
 
@@ -37,6 +38,7 @@ SDL_Surface *titlebar_icon;
 static void init() {
 
 	setPaths();
+	setStatNames();
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
