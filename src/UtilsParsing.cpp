@@ -194,7 +194,7 @@ bool tryParseValue(const type_info & type, const std::string & value, void * out
 		*((string *)output) = value;
 	}
 	else {
-		cout << __FUNCTION__ << ": a required type is not defined!" << endl;
+		fprintf(stderr, "%s: a required type is not defined!\n", __FUNCTION__);
 		return false;
 	}
 
@@ -234,7 +234,7 @@ std::string toString(const type_info & type, void * value) {
 		return (string &)*((string *)value);
 	}
 	else {
-		cout << __FUNCTION__ << ": a required type is not defined!" << endl;
+		fprintf(stderr, "%s: a required type is not defined!\n", __FUNCTION__);
 		return "";
 	}
 
@@ -245,6 +245,14 @@ int toInt(const string& s, int default_value) {
 	int result;
 	if (!(stringstream(s) >> result))
 		result = default_value;
+	return result;
+}
+
+float toFloat(const string& s, float default_value) {
+	float result;
+	if (!(stringstream(s) >> result))
+		result = default_value;
+
 	return result;
 }
 

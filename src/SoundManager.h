@@ -39,9 +39,9 @@ public:
 
 	SoundManager::SoundID load(const std::string& filename, const std::string& errormessage);
 	void unload(SoundManager::SoundID);
-	void play(SoundManager::SoundID, std::string channel = GLOBAL_VIRTUAL_CHANNEL, Point pos = Point(0,0), bool loop = false);
+	void play(SoundManager::SoundID, std::string channel = GLOBAL_VIRTUAL_CHANNEL, FPoint pos = FPoint(0,0), bool loop = false);
 
-	void logic(Point center);
+	void logic(FPoint center);
 	void reset();
 
 private:
@@ -60,7 +60,7 @@ private:
 	SoundMap sounds;
 	VirtualChannelMap channels;
 	PlaybackMap playback;
-	Point lastPos;
+	FPoint lastPos;
 };
 
 #endif

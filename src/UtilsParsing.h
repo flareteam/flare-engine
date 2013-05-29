@@ -38,6 +38,7 @@ bool tryParseValue(const std::type_info & type, const char * value, void * outpu
 bool tryParseValue(const std::type_info & type, const std::string & value, void * output);
 std::string toString(const std::type_info & type, void * value);
 int toInt(const std::string& s, int default_value = 0);
+float toFloat(const std::string &s, float default_value = 0.0);
 bool toBool(std::string value);
 
 #endif

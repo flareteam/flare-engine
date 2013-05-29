@@ -130,10 +130,8 @@ extern bool ENABLE_ALLY_COLLISION_AI;
 extern bool ENABLE_ALLY_COLLISION;
 
 // Tile Settings
-extern unsigned short UNITS_PER_TILE;
-extern unsigned short TILE_SHIFT;
-extern unsigned short UNITS_PER_PIXEL_X;
-extern unsigned short UNITS_PER_PIXEL_Y;
+extern float UNITS_PER_PIXEL_X;
+extern float UNITS_PER_PIXEL_Y;
 extern unsigned short TILE_W;
 extern unsigned short TILE_H;
 extern unsigned short TILE_W_HALF;
@@ -146,7 +144,7 @@ extern unsigned short TILESET_ORTHOGONAL;
 extern std::string LANGUAGE;
 
 // Autopickup Settings
-extern unsigned short AUTOPICKUP_RANGE;
+extern float AUTOPICKUP_RANGE;
 extern bool AUTOPICKUP_CURRENCY;
 
 // Combat calculation caps

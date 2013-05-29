@@ -212,10 +212,10 @@ void EnemyManager::handleSpawn() {
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation();
 			else
-				cout << "Warning: animations file could not be loaded for " << espawn.type << endl;
+				fprintf(stderr, "Warning: animations file could not be loaded for %s\n", espawn.type.c_str());
 		}
 		else {
-			cout << "Warning: no animation file specified for entity: " << espawn.type << endl;
+			fprintf(stderr, "Warning: no animation file specified for entity: %s\n", espawn.type.c_str());
 		}
 		loadSounds(e->stats.sfx_prefix);
 
@@ -334,7 +334,7 @@ void EnemyManager::logic() {
 	}
 }
 
-Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
+Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 	Point p;
 	SDL_Rect r;
 	for(unsigned int i = 0; i < enemies.size(); i++) {

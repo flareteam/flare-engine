@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 
 #include <limits>
+#include <math.h>
 
 using namespace std;
 
@@ -70,7 +71,7 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 				tooltip_margin = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "autopickup_range") {
-				AUTOPICKUP_RANGE = eatFirstInt(infile.val, ',');
+				AUTOPICKUP_RANGE = toFloat(infile.val);
 			}
 			else if (infile.key == "autopickup_currency") {
 				int currency = eatFirstInt(infile.val, ',');
@@ -158,7 +159,7 @@ void LootManager::logic() {
 /**
  * Show all tooltips for loot on the floor
  */
-void LootManager::renderTooltips(Point cam) {
+void LootManager::renderTooltips(FPoint cam) {
 	Point dest;
 	stringstream ss;
 
@@ -207,7 +208,7 @@ void LootManager::checkEnemiesForLoot() {
 		}
 		else { // random loot
 			//determine position
-			Point pos = hero->pos;
+			FPoint pos = hero->pos;
 			if (map->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false))
 				pos = e->stats.pos;
 
@@ -301,7 +302,7 @@ void LootManager::checkMapForLoot() {
  * This function is called when there definitely is a piece of loot dropping
  * calls addLoot()
  */
-void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
+void LootManager::determineLootByEnemy(const Enemy *e, FPoint pos) {
 	ItemStack new_loot;
 	std::vector<int> possible_ids;
 	std::vector<Point> possible_ranges;
@@ -359,7 +360,7 @@ void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 	}
 }
 
-void LootManager::addLoot(ItemStack stack, Point pos) {
+void LootManager::addLoot(ItemStack stack, FPoint pos) {
 	// TODO: z-sort insert?
 	Loot ld;
 	ld.stack = stack;
@@ -374,7 +375,7 @@ void LootManager::addLoot(ItemStack stack, Point pos) {
 	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
-void LootManager::addCurrency(int count, Point pos) {
+void LootManager::addCurrency(int count, FPoint pos) {
 	Loot ld;
 	ld.stack.item = 0;
 	ld.stack.quantity = 0;
@@ -402,7 +403,7 @@ void LootManager::addCurrency(int count, Point pos) {
  * screen coordinates to map locations.  We need the hero position because
  * the hero has to be within range to pick up an item.
  */
-ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, int &currency, MenuInventory *inv) {
+ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, int &currency, MenuInventory *inv) {
 	Point p;
 	SDL_Rect r;
 	ItemStack loot_stack;
@@ -418,7 +419,7 @@ ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, int &
 		--it;
 
 		// loot close enough to pickup?
-		if (abs(hero_pos.x - it->pos.x) < LOOT_RANGE && abs(hero_pos.y - it->pos.y) < LOOT_RANGE && !it->isFlying()) {
+		if (fabs(hero_pos.x - it->pos.x) < LOOT_RANGE && fabs(hero_pos.y - it->pos.y) < LOOT_RANGE && !it->isFlying()) {
 
 			p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 
@@ -455,7 +456,7 @@ ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, int &
  * Autopickup loot if enabled in the engine
  * Currently, only currency is checked for autopickup
  */
-ItemStack LootManager::checkAutoPickup(Point hero_pos, int &currency) {
+ItemStack LootManager::checkAutoPickup(FPoint hero_pos, int &currency) {
 	ItemStack loot_stack;
 	currency = 0;
 	loot_stack.item = 0;
@@ -464,7 +465,7 @@ ItemStack LootManager::checkAutoPickup(Point hero_pos, int &currency) {
 	vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
-		if (abs(hero_pos.x - it->pos.x) < AUTOPICKUP_RANGE && abs(hero_pos.y - it->pos.y) < AUTOPICKUP_RANGE && !it->isFlying()) {
+		if (fabs(hero_pos.x - it->pos.x) < AUTOPICKUP_RANGE && fabs(hero_pos.y - it->pos.y) < AUTOPICKUP_RANGE && !it->isFlying()) {
 			if (it->currency > 0 && AUTOPICKUP_CURRENCY) {
 				currency = it->currency;
 				it = loot.erase(it);
@@ -475,7 +476,7 @@ ItemStack LootManager::checkAutoPickup(Point hero_pos, int &currency) {
 	return loot_stack;
 }
 
-ItemStack LootManager::checkNearestPickup(Point hero_pos, int &currency, MenuInventory *inv) {
+ItemStack LootManager::checkNearestPickup(FPoint hero_pos, int &currency, MenuInventory *inv) {
 	ItemStack loot_stack;
 	currency = 0;
 	loot_stack.item = 0;

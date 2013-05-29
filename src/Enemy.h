@@ -44,7 +44,7 @@ public:
 	~Enemy();
 	bool lineOfSight();
 	void logic();
-	int faceNextBest(int mapx, int mapy);
+	int faceNextBest(float mapx, float mapy);
 	void newState(int state);
 	virtual void doRewards(int source_type);
 	void InstantDeath();

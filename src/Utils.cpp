@@ -25,10 +25,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-
-int round(float f) {
-	return (int)(f + 0.5);
+#ifdef _MSC_VER
+float round(float number) {
+	return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5);
 }
+#endif // _MSC_VER
 
 Point round(FPoint fp) {
 	Point result;
@@ -37,11 +38,11 @@ Point round(FPoint fp) {
 	return result;
 }
 
-Point screen_to_map(int x, int y, int camx, int camy) {
-	Point r;
+FPoint screen_to_map(int x, int y, float camx, float camy) {
+	FPoint r;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		int scrx = (x - VIEW_W_HALF) /2;
-		int scry = (y - VIEW_H_HALF) /2;
+		float scrx = (x - VIEW_W_HALF) /2;
+		float scry = (y - VIEW_H_HALF) /2;
 
 		r.x = (UNITS_PER_PIXEL_X * scrx) + (UNITS_PER_PIXEL_Y * scry) + camx;
 		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
@@ -57,7 +58,7 @@ Point screen_to_map(int x, int y, int camx, int camy) {
  * Returns a point (in map units) of a given (x,y) tupel on the screen
  * when the camera is at a given position.
  */
-Point map_to_screen(int x, int y, int camx, int camy) {
+Point map_to_screen(float x, float y, float camx, float camy) {
 	Point r;
 
 	// adjust to the center of the viewport
@@ -86,22 +87,23 @@ Point center_tile(Point p) {
 	return p;
 }
 
-Point collision_to_map(Point p) {
-	p.x = (p.x << TILE_SHIFT) + UNITS_PER_TILE/2;
-	p.y = (p.y << TILE_SHIFT) + UNITS_PER_TILE/2;
+FPoint collision_to_map(Point p) {
+	p.x = p.x + 0.5;
+	p.y = p.y + 0.5;
 	return p;
 }
 
-Point map_to_collision(Point p) {
-	p.x = p.x >> TILE_SHIFT;
-	p.y = p.y >> TILE_SHIFT;
-	return p;
+Point map_to_collision(FPoint p) {
+	Point ret;
+	ret.x = round(p.x);
+	ret.y = round(p.y);
+	return ret;
 }
 
 /**
  * Apply parameter distance to position and direction
  */
-FPoint calcVector(Point pos, int direction, int dist) {
+FPoint calcVector(FPoint pos, int direction, int dist) {
 	FPoint p;
 	p.x = (float)(pos.x);
 	p.y = (float)(pos.y);
@@ -142,7 +144,7 @@ FPoint calcVector(Point pos, int direction, int dist) {
 	return p;
 }
 
-float calcDist(Point p1, Point p2) {
+float calcDist(FPoint p1, FPoint p2) {
 	int x = p2.x - p1.x;
 	int y = p2.y - p1.y;
 	float step1 = x*x + y*y;
@@ -152,7 +154,7 @@ float calcDist(Point p1, Point p2) {
 /**
  * is target within the area defined by center and radius?
  */
-bool isWithin(Point center, int radius, Point target) {
+bool isWithin(FPoint center, float radius, FPoint target) {
 	return (calcDist(center, target) < radius);
 }
 
@@ -463,11 +465,11 @@ SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height) {
 	return _ret;
 }
 
-int calcDirection(const Point &src, const Point &dst) {
+int calcDirection(const FPoint &src, const FPoint &dst) {
 	return calcDirection(src.x, src.y, dst.x, dst.y);
 }
 
-int calcDirection(int x0, int y0, int x1, int y1) {
+int calcDirection(float x0, float y0, float x1, float y1) {
 	// TODO: use calcTheta instead and check for the areas between -PI and PI
 
 	// inverting Y to convert map coordinates to standard cartesian coordinates
