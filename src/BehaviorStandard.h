@@ -42,10 +42,10 @@ private:
 protected:
     //variables for patfinding
 	vector<Point> path;
-	int path_frames_elapsed;
 	Point prev_target;
 	bool collided;
 	bool path_found;
+	int chance_calc_path;
 
 	int hero_dist;
 	int target_dist;

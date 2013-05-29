@@ -27,10 +27,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior(_e, _em)
     , path()
-    , path_frames_elapsed(0)
     , prev_target()
     , collided(false)
-    , path_found(false){
+    , path_found(false)
+    , chance_calc_path(0){
 
 	los = false;
 	hero_dist = 0;
@@ -360,8 +360,6 @@ void BehaviorStandard::checkMove() {
 			if (!e->map->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, e->stats.hero_pos.x, e->stats.hero_pos.y, e->stats.movement_type)) {
 				// if a path is returned, target first waypoint
 
-				path_frames_elapsed++;
-
                 bool recalculate_path = false;
 
                 //if theres no path, it needs to be calculated
@@ -376,13 +374,15 @@ void BehaviorStandard::checkMove() {
                 if(collided)
                     recalculate_path = true;
 
-                //if too many frames have elapsed
-                if(path_frames_elapsed >= 30)
+                //add a 5% chance to recalculate on every frame. This prevents reclaulating lots of entities in the same frame
+                chance_calc_path += 5;
+
+                if(percentChance(chance_calc_path))
                     recalculate_path = true;
 
                 //dont recalculate if we were blocked and no path was found last time
                 //this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
-                if(!path_found && collided && path_frames_elapsed < 30)
+                if(!path_found && collided && !percentChance(chance_calc_path))
                     recalculate_path = false;
                 else//reset the collision flag only if we dont want the cooldown in place
                     collided = false;
@@ -391,7 +391,7 @@ void BehaviorStandard::checkMove() {
 
                 // target first waypoint
                 if(recalculate_path){
-                    path_frames_elapsed = 0;
+                    chance_calc_path = -100;
                     path.clear();
                     path_found = e->map->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
                 }
