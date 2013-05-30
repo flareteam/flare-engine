@@ -28,7 +28,7 @@ All code in the class assumes that the nodes and points provided are within the 
 class AStarContainer
 {
     public:
-        AStarContainer(unsigned int map_width, unsigned int map_height, unsigned int node_limit);
+        AStarContainer(unsigned int _map_width, unsigned int map_height, unsigned int node_limit);
         ~AStarContainer();
         //assumes that the node is not already in the collection
         void add(AStarNode* node);
@@ -83,7 +83,7 @@ The nodes within this class have no ordering but stil have a map position index
 class AStarCloseContainer
 {
 public:
-    AStarCloseContainer(unsigned int map_width, unsigned int map_height, unsigned int node_limit);
+    AStarCloseContainer(unsigned int _map_width, unsigned int map_height, unsigned int node_limit);
     ~AStarCloseContainer();
 
     int getSize();

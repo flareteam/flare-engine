@@ -85,6 +85,7 @@ Set (FLARE_SOURCES
 	./src/Animation.cpp
 	./src/AnimationManager.cpp
 	./src/AnimationSet.cpp
+	./src/AStarContainer.cpp
 	./src/AStarNode.cpp
 	./src/Avatar.cpp
 	./src/BehaviorStandard.cpp
