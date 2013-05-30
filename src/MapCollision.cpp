@@ -351,7 +351,7 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 
     open.add(node);
 
-	while (!open.isEmpty() && close.getSize() < limit) {
+	while (!open.isEmpty() && (unsigned)close.getSize() < limit) {
 		node = open.get_shortest_f();
 
 		current.x = node->getX();
