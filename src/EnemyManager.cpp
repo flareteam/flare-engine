@@ -28,17 +28,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorAlly.h"
 #include "Avatar.h"
 
-#include <iostream>
-#include <algorithm>
-
 using namespace std;
 
 EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
 	: map(_map)
 	, powers(_powers)
 	, enemies()
+	, hero_pos(0,0)
+	, hero_direction(0)
 	, hero_alive(true)
-	, hero_stealth(0) {
+	, hero_stealth(0)
+	, player_blocked(false)
+	, player_blocked_ticks(0) {
+
 	hero_pos.x = hero_pos.y = -1;
 	handleNewMap();
 }
@@ -153,7 +155,7 @@ void EnemyManager::handleNewMap () {
 
 		enemies.push_back(e);
 
-		map->collider.block(me.pos.x, me.pos.y);
+		map->collider.block(me.pos.x, me.pos.y, false);
 	}
 
 	while (!allies.empty()) {
@@ -170,7 +172,7 @@ void EnemyManager::handleNewMap () {
 
 		enemies.push_back(e);
 
-		map->collider.block(e->stats.pos.x, e->stats.pos.y);
+		map->collider.block(e->stats.pos.x, e->stats.pos.y, true);
 	}
 
 	anim->cleanUp();
@@ -218,7 +220,7 @@ void EnemyManager::handleSpawn() {
 		loadSounds(e->stats.sfx_prefix);
 
 
-		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type) || !e->stats.hero_ally) {
+		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
 			e->stats.pos.x = espawn.pos.x;
 			e->stats.pos.y = espawn.pos.y;
 		}
@@ -254,7 +256,7 @@ void EnemyManager::handleSpawn() {
 
 		enemies.push_back(e);
 
-		map->collider.block(espawn.pos.x, espawn.pos.y);
+		map->collider.block(espawn.pos.x, espawn.pos.y, e->stats.hero_ally);
 	}
 }
 
@@ -276,6 +278,12 @@ void EnemyManager::handlePartyBuff() {
  * perform logic() for all enemies
  */
 void EnemyManager::logic() {
+
+	if(player_blocked) {
+		player_blocked_ticks--;
+		if(player_blocked_ticks <= 0)
+			player_blocked = false;
+	}
 
 	handleSpawn();
 
@@ -318,6 +326,7 @@ void EnemyManager::logic() {
 
 		// new actions this round
 		(*it)->stats.hero_pos = hero_pos;
+		(*it)->stats.hero_direction = hero_direction;
 		(*it)->stats.hero_alive = hero_alive;
 		(*it)->stats.hero_stealth = hero_stealth;
 		(*it)->logic();
@@ -356,9 +365,9 @@ void EnemyManager::checkEnemiesforXP(CampaignManager *camp) {
 			//adjust for party exp if necessary
 			float xp_multiplier = 1;
 			if(enemies[i]->kill_source_type == SOURCE_TYPE_ALLY)
-				xp_multiplier = ((float)PARTY_EXP_PERCENTAGE) / (float)100;
+				xp_multiplier = (float)PARTY_EXP_PERCENTAGE / 100.0f;
 
-			camp->rewardXP(enemies[i]->stats.xp * xp_multiplier, false);
+			camp->rewardXP((int)(enemies[i]->stats.xp * xp_multiplier), false);
 			enemies[i]->reward_xp = false; // clear flag
 		}
 	}

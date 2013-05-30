@@ -19,21 +19,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class SoundManager
  */
 
-
 #pragma once
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
+#include "CommonIncludes.h"
 #include "Utils.h"
 
-#include <map>
-#include <string>
 #include <stdint.h>
-#include <vector>
 
 const std::string GLOBAL_VIRTUAL_CHANNEL = "__global__";
 
@@ -63,7 +56,6 @@ private:
 
 	static void channel_finished(int channel);
 	void on_channel_finished(int channel);
-	Uint8 calc_distance(const Point *s, const Point *d);
 
 	SoundMap sounds;
 	VirtualChannelMap channels;

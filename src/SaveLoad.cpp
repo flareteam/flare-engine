@@ -28,12 +28,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStatePlay.h"
 #include "MapRenderer.h"
-#include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
+#include "Menu.h"
 #include "MenuInventory.h"
 #include "MenuManager.h"
 #include "MenuStash.h"
@@ -42,9 +43,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include <fstream>
-#include <iostream>
-#include <sstream>
 
 using namespace std;
 
@@ -76,7 +74,7 @@ void GameStatePlay::saveGame() {
 		outfile << "permadeath=" << pc->stats.permadeath << "\n";
 
 		// hero visual option
-		outfile << "option=" << pc->stats.base << "," << pc->stats.head << "," << pc->stats.portrait << "\n";
+		outfile << "option=" << pc->stats.gfx_base << "," << pc->stats.gfx_head << "," << pc->stats.gfx_portrait << "\n";
 
 		// hero class
 		outfile << "class=" << pc->stats.character_class << "\n";
@@ -157,7 +155,10 @@ void GameStatePlay::saveGame() {
 	ss << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
 		ss << GAME_PREFIX << "_";
-	ss << "stash.txt";
+	ss << "stash";
+	if (pc->stats.permadeath)
+		ss << "_HC" << game_slot;
+	ss << ".txt";
 
 	outfile.open(ss.str().c_str(), ios::out);
 
@@ -197,19 +198,16 @@ void GameStatePlay::loadGame() {
 		ss << GAME_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
-	if (infile.open(ss.str())) {
+	if (infile.open(ss.str(), false)) {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
-				if (toInt(infile.val) == 1)
-					pc->stats.permadeath = true;
-				else
-					pc->stats.permadeath = false;
+				pc->stats.permadeath = (toInt(infile.val) == 1);
 			}
 			else if (infile.key == "option") {
-				pc->stats.base = infile.nextValue();
-				pc->stats.head = infile.nextValue();
-				pc->stats.portrait = infile.nextValue();
+				pc->stats.gfx_base = infile.nextValue();
+				pc->stats.gfx_head = infile.nextValue();
+				pc->stats.gfx_portrait = infile.nextValue();
 			}
 			else if (infile.key == "class") {
 				pc->stats.character_class = infile.nextValue();
@@ -333,21 +331,21 @@ void GameStatePlay::loadGame() {
 	// powers->activatePassives(pc->stats);
 	pc->stats.logic(); // run stat logic once to apply items bonuses
 	if (SAVE_HPMP) {
-		if (saved_hp < 0 || saved_hp > pc->stats.maxhp) {
+		if (saved_hp < 0 || saved_hp > pc->stats.get(STAT_HP_MAX)) {
 			fprintf(stderr, "HP value is out of bounds, setting to maximum\n");
-			pc->stats.hp = pc->stats.maxhp;
+			pc->stats.hp = pc->stats.get(STAT_HP_MAX);
 		}
 		else pc->stats.hp = saved_hp;
 
-		if (saved_mp < 0 || saved_mp > pc->stats.maxmp) {
+		if (saved_mp < 0 || saved_mp > pc->stats.get(STAT_MP_MAX)) {
 			fprintf(stderr, "MP value is out of bounds, setting to maximum\n");
-			pc->stats.mp = pc->stats.maxmp;
+			pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 		}
 		else pc->stats.mp = saved_mp;
 	}
 	else {
-		pc->stats.hp = pc->stats.maxhp;
-		pc->stats.mp = pc->stats.maxmp;
+		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
+		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 	}
 
 	// reset character menu
@@ -357,7 +355,7 @@ void GameStatePlay::loadGame() {
 	pc->stats.direction = 6;
 
 	// set up MenuTalker for this hero
-	menu->talker->setHero(pc->stats.name, pc->stats.portrait);
+	menu->talker->setHero(pc->stats.name, pc->stats.gfx_portrait);
 
 	// load sounds (gender specific)
 	pc->loadSounds();
@@ -407,9 +405,12 @@ void GameStatePlay::loadStash() {
 	ss << PATH_USER;
 	if (GAME_PREFIX.length() > 0)
 		ss << GAME_PREFIX << "_";
-	ss << "stash.txt";
+	ss << "stash";
+	if (pc->stats.permadeath)
+		ss << "_HC" << game_slot;
+	ss << ".txt";
 
-	if (infile.open(ss.str())) {
+	if (infile.open(ss.str(), false)) {
 		while (infile.next()) {
 			if (infile.key == "item") {
 				menu->stash->stock.setItems(infile.val);

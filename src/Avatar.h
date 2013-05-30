@@ -27,18 +27,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef AVATAR_H
 #define AVATAR_H
 
-
+#include "CommonIncludes.h"
 #include "Entity.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <math.h>
-#include <string>
 
 class Entity;
 class Hazard;
@@ -74,7 +67,6 @@ private:
 	bool lockSwing;
 	bool lockCast;
 	bool lockShoot;
-	bool animFwd;
 
 	SoundManager::SoundID sound_melee;
 	SoundManager::SoundID sound_mental;
@@ -122,7 +114,7 @@ public:
 	StatBlock *hero_stats;
 	StatBlock *charmed_stats;
 
-    virtual void resetActiveAnimation();
+	virtual void resetActiveAnimation();
 	virtual Renderable getRender() { return Renderable(); }
 	void addRenders(std::vector<Renderable> &r);
 

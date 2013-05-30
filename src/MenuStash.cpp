@@ -45,7 +45,7 @@ MenuStash::MenuStash(ItemManager *_items, StatBlock *_stats)
 
 	// Load config settings
 	FileParser infile;
-	if (infile.open(mods->locate("menus/stash.txt"))) {
+	if (infile.open("menus/stash.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -83,11 +83,18 @@ void MenuStash::update() {
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
+
+	for (int i = 0; i < STASH_SLOTS; i++) {
+		tablist.add(stock.slots[i]);
+	}
 }
 
 void MenuStash::logic() {
 	if (!visible) return;
 
+	if (NO_MOUSE) {
+		tablist.logic();
+	}
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);
@@ -125,13 +132,13 @@ void MenuStash::render() {
 /**
  * Dragging and dropping an item can be used to rearrange the stash
  */
-void MenuStash::drop(Point mouse, ItemStack stack) {
+void MenuStash::drop(Point position, ItemStack stack) {
 	int slot;
 	int drag_prev_slot;
 
 	items->playSound(stack.item);
 
-	slot = stock.slotOver(mouse);
+	slot = stock.slotOver(position);
 	drag_prev_slot = stock.drag_prev_slot;
 
 	if (slot != drag_prev_slot) {
@@ -203,8 +210,8 @@ void MenuStash::add(ItemStack stack, int slot) {
  * Start dragging a vendor item
  * Players can drag an item to their inventory.
  */
-ItemStack MenuStash::click(InputState * input) {
-	ItemStack stack = stock.click(input);
+ItemStack MenuStash::click(Point position) {
+	ItemStack stack = stock.click(position);
 	return stack;
 }
 
@@ -221,12 +228,16 @@ void MenuStash::add(ItemStack stack) {
 	stock.add(stack);
 }
 
-TooltipData MenuStash::checkTooltip(Point mouse) {
-	return stock.checkTooltip( mouse, stats, PLAYER_INV);
+TooltipData MenuStash::checkTooltip(Point position) {
+	return stock.checkTooltip(position, stats, PLAYER_INV);
 }
 
 bool MenuStash::full(int item) {
 	return stock.full(item);
+}
+
+int MenuStash::getRowsCount() {
+	return slots_rows;
 }
 
 MenuStash::~MenuStash() {

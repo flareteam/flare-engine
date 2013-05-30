@@ -1,7 +1,7 @@
 /*
-Copyright © 2012 Clint Bellanger
-Copyright © 2012 davidriod
-Copyright © 2012 Igor Paliychuk
+Copyright Â© 2012 Clint Bellanger
+Copyright Â© 2012 davidriod
+Copyright Â© 2012 Igor Paliychuk
 
 This file is part of FLARE.
 
@@ -23,17 +23,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle game Settings Menu
  */
 
-
 #pragma once
 #ifndef GAMESTATECONFIG_H
 #define GAMESTATECONFIG_H
 
-#include <vector>
+#include "CommonIncludes.h"
 #include "GameState.h"
-#include "WidgetTooltip.h"
-#include <string>
+#include "TooltipData.h"
 
-class TabList;
 class MenuConfirm;
 class Widget;
 class WidgetButton;
@@ -55,7 +52,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[124];
+	int optiontab[138];
 	SDL_Rect frame;
 	SDL_Rect* video_modes;
 
@@ -107,8 +104,12 @@ private:
 	WidgetLabel         * animated_tiles_lb;
 	WidgetCheckBox      * mouse_aim_cb;
 	WidgetLabel         * mouse_aim_lb;
+	WidgetCheckBox      * no_mouse_cb;
+	WidgetLabel         * no_mouse_lb;
 	WidgetCheckBox      * show_fps_cb;
 	WidgetLabel         * show_fps_lb;
+	WidgetCheckBox      * colorblind_cb;
+	WidgetLabel         * colorblind_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;
@@ -129,13 +130,16 @@ private:
 	WidgetLabel         * dbuf_note_lb;
 	WidgetLabel         * anim_tiles_note_lb;
 	WidgetLabel         * test_note_lb;
+	WidgetLabel         * handheld_note_lb;
 	WidgetButton        * activemods_shiftup_btn;
 	WidgetButton        * activemods_shiftdown_btn;
 	WidgetButton        * activemods_deactivate_btn;
 	WidgetButton        * inactivemods_activate_btn;
+	WidgetSlider        * joystick_deadzone_sl;
+	WidgetLabel         * joystick_deadzone_lb;
 
-	WidgetLabel         * settings_lb[25];
-	WidgetButton        * settings_key[50];
+	WidgetLabel         * settings_lb[29];
+	WidgetButton        * settings_key[58];
 
 	WidgetScrollBox     * input_scrollbox;
 	MenuConfirm         * input_confirm;
@@ -154,6 +158,7 @@ private:
 	int old_view_w;
 	int old_view_h;
 	int resolution_confirm_ticks;
+	int input_confirm_ticks;
 };
 
 #endif

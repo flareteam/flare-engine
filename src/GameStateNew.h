@@ -27,25 +27,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATENEW_H
 #define GAMESTATENEW_H
 
+#include "CommonIncludes.h"
 #include "GameState.h"
+#include "TooltipData.h"
 #include "WidgetLabel.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
-#include <sstream>
-#include <vector>
-
-#include "WidgetTooltip.h"
-
-class TabList;
 class WidgetButton;
 class WidgetCheckBox;
 class WidgetInput;
 class WidgetLabel;
 class WidgetListBox;
+class WidgetTooltip;
 
 class GameStateNew : public GameState {
 private:

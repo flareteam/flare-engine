@@ -29,7 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 #include <cstdio>
-#include <iostream>
 
 using namespace std;
 
@@ -74,7 +73,7 @@ void TileSet::load(const std::string& filename) {
 	FileParser infile;
 	string img;
 
-	if (infile.open(mods->locate("tilesetdefs/" + filename))) {
+	if (infile.open("tilesetdefs/" + filename)) {
 		while (infile.next()) {
 			if (infile.key == "tile") {
 

@@ -19,20 +19,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuVendor
  */
 
-
 #pragma once
 #ifndef MENU_VENDOR_H
 #define MENU_VENDOR_H
 
+#include "CommonIncludes.h"
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <string>
-
-class InputState;
 class ItemStorage;
 class NPC;
 class StatBlock;
@@ -46,9 +40,7 @@ private:
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
 
-	MenuItemStorage stock[2]; // items the vendor currently has in stock
-
-	int VENDOR_SLOTS;
+	unsigned VENDOR_SLOTS;
 
 	// label and widget positions
 	Point close_pos;
@@ -64,6 +56,7 @@ public:
 
 	NPC *npc;
 	ItemStorage buyback_stock;
+	MenuItemStorage stock[2]; // items the vendor currently has in stock
 
 	void update();
 	void loadMerchant(const std::string&);
@@ -72,16 +65,20 @@ public:
 	void setTab(int tab);
 	int getTab() {return activetab;}
 	void render();
-	ItemStack click(InputState * input);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(Point position);
 	void setInventory();
 	void saveInventory();
 	void sort(int type);
 
+	int getRowsCount();
+
 	bool talker_visible;
 	SDL_Rect slots_area;
+
+	TabList tablist;
 };
 
 

@@ -20,22 +20,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetListBox
  */
 
-
 #pragma once
 #ifndef WIDGET_ListBox_H
 #define WIDGET_ListBox_H
 
+#include "CommonIncludes.h"
 #include "Widget.h"
-#include "WidgetLabel.h"
-#include "WidgetScrollBar.h"
-#include "WidgetTooltip.h"
+#include "TooltipData.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
-
+class WidgetLabel;
+class WidgetScrollBar;
+class WidgetTooltip;
 
 class WidgetListBox : public Widget {
 private:

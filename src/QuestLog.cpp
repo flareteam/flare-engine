@@ -22,17 +22,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Helper text to remind the player of active quests
  */
 
-#include "QuestLog.h"
 #include "CampaignManager.h"
+#include "CommonIncludes.h"
+#include "FileParser.h"
 #include "Menu.h"
 #include "MenuLog.h"
-#include "SharedResources.h"
+#include "QuestLog.h"
 #include "Settings.h"
-#include "FileParser.h"
+#include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-
-#include <fstream>
 
 using namespace std;
 
@@ -53,24 +52,10 @@ QuestLog::~QuestLog() {
  * Load each [mod]/quests/index.txt file
  */
 void QuestLog::loadAll() {
-	string test_path;
-
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
-	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-
-		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/quests/index.txt";
-
-		if (fileExists(test_path)) {
-			this->loadIndex(test_path);
-		}
-
-		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/quests/index.txt";
-
-		if (fileExists(test_path)) {
-			this->loadIndex(test_path);
-		}
-	}
-
+	vector<string> files = mods->list("quests/index.txt");
+	for (unsigned int i = 0; i < files.size(); i++)
+		this->loadIndex(files[i]);
 }
 
 /**
@@ -107,7 +92,7 @@ void QuestLog::loadIndex(const std::string& filename) {
  */
 void QuestLog::load(const std::string& filename) {
 	FileParser infile;
-	if (!infile.open(mods->locate("quests/" + filename)))
+	if (!infile.open("quests/" + filename))
 		return;
 
 	while (infile.next()) {

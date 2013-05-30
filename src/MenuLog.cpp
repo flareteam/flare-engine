@@ -40,7 +40,7 @@ MenuLog::MenuLog() {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/log.txt"))) {
+	if(infile.open("menus/log.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -62,9 +62,11 @@ MenuLog::MenuLog() {
 	}
 
 	// Store the amount of displayed log messages on each log, and the maximum.
-	for (int i=0; i<LOG_TYPE_COUNT; i++) {
+	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		log_count[i] = 0;
 		msg_buffer[i] = new WidgetScrollBox(tab_area.w,tab_area.h);
+		msg_buffer[i]->line_height = font->getLineHeight();
+		tablist.add(msg_buffer[i]);
 	}
 
 	// Initialize the tab control.
@@ -90,7 +92,7 @@ void MenuLog::update() {
 	closeButton->pos.x = window_area.x + close_pos.x;
 	closeButton->pos.y = window_area.y + close_pos.y;
 
-	for (int i=0; i<LOG_TYPE_COUNT; i++) {
+	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		msg_buffer[i]->pos.x = window_area.x+tab_area.x;
 		msg_buffer[i]->pos.y = window_area.y+tab_area.y+tabControl->getTabHeight();
 	}
@@ -101,6 +103,18 @@ void MenuLog::update() {
  */
 void MenuLog::logic() {
 	if(!visible) return;
+
+	if (NO_MOUSE) {
+		tablist.logic();
+	}
+
+	// make shure keyboard navigation leads us to correct tab
+	for (unsigned i = 0; i < LOG_TYPE_COUNT; i++) {
+		if (msg_buffer[i]->in_focus) {
+			tabControl->setActiveTab(i);
+			break;
+		}
+	}
 
 	if (closeButton->checkClick()) {
 		visible = false;
@@ -213,14 +227,14 @@ void MenuLog::clear(int log_type) {
 }
 
 void MenuLog::clear() {
-	for (int i=0; i<LOG_TYPE_COUNT; i++) {
+	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		clear(i);
 	}
 }
 
 MenuLog::~MenuLog() {
 
-	for (int i=0; i<LOG_TYPE_COUNT; i++) {
+	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		log_count[i] = 0;
 		delete msg_buffer[i];
 	}

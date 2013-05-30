@@ -25,19 +25,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_ITEM_STORAGE_H
 #define MENU_ITEM_STORAGE_H
 
+#include "CommonIncludes.h"
 #include "ItemManager.h"
 #include "ItemStorage.h"
-#include <SDL.h>
+#include "WidgetSlot.h"
 
-class InputState;
 class TooltipData;
 
 class MenuItemStorage : public ItemStorage {
 protected:
+	SDL_Surface *icons;
 	void loadGraphics();
 	void renderHighlight(int x, int y, int _icon_size);
-	std::vector<SDL_Rect> area;
-	int * icon_size;
+	SDL_Rect grid_area;
 	int nb_cols;
 
 public:
@@ -48,9 +48,9 @@ public:
 
 	// rendering
 	void render();
-	int slotOver(Point mouse);
-	TooltipData checkTooltip(Point mouse, StatBlock *stats, int context);
-	ItemStack click(InputState * input);
+	int slotOver(Point position);
+	TooltipData checkTooltip(Point position, StatBlock *stats, int context);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
 	void fillEquipmentSlots();
 	void highlightMatching(std::string type);
@@ -58,6 +58,7 @@ public:
 	std::vector<std::string> slot_type;
 
 	int drag_prev_slot;
+	std::vector<WidgetSlot*> slots;
 
 	bool * highlight;
 	SDL_Surface * highlight_image;

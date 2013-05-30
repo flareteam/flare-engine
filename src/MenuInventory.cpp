@@ -22,21 +22,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuInventory
  */
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
-#include "LootManager.h"
 #include "Menu.h"
 #include "MenuInventory.h"
 #include "PowerManager.h"
-#include "SharedResources.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 
-#include <sstream>
-
 using namespace std;
-
 
 MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManager *_powers) {
 	items = _items;
@@ -59,7 +57,7 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 	// Load config settings
 	SDL_Rect equipment_slot;
 	FileParser infile;
-	if(infile.open(mods->locate("menus/inventory.txt"))) {
+	if(infile.open("menus/inventory.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -126,13 +124,69 @@ void MenuInventory::update() {
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
+
+	for (int i = 0; i < MAX_EQUIPPED; i++) {
+		tablist.add(inventory[EQUIPMENT].slots[i]);
+	}
+	for (int i = 0; i < MAX_CARRIED; i++) {
+		tablist.add(inventory[CARRIED].slots[i]);
+	}
 }
 
 void MenuInventory::logic() {
 
 	// if the player has just died, the penalty is half his current currency.
-	if (stats->death_penalty) {
-		currency = currency/2;
+	if (stats->death_penalty && DEATH_PENALTY) {
+		std::string death_message = "";
+
+		// remove a % of currency
+		if (DEATH_PENALTY_CURRENCY > 0) {
+			if (currency > 0)
+				currency -= (currency * DEATH_PENALTY_CURRENCY) / 100;
+			death_message += msg->get("Lost %d% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
+		}
+
+		// remove a % of either total xp or xp since the last level
+		if (DEATH_PENALTY_XP > 0) {
+			if (stats->xp > 0)
+				stats->xp -= (stats->xp * DEATH_PENALTY_XP) / 100;
+			death_message += msg->get("Lost %d% of total XP. ", DEATH_PENALTY_XP);
+		}
+		else if (DEATH_PENALTY_XP_CURRENT > 0) {
+			if (stats->xp - stats->xp_table[stats->level-1] > 0)
+				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * DEATH_PENALTY_XP_CURRENT) / 100;
+			death_message += msg->get("Lost %d% of current level XP. ", DEATH_PENALTY_XP_CURRENT);
+		}
+
+		// prevent down-leveling from removing too much xp
+		if (stats->xp < stats->xp_table[stats->level-1])
+			stats->xp = stats->xp_table[stats->level-1];
+
+		// remove a random carried item
+		if (DEATH_PENALTY_ITEM) {
+			std::vector<int> removable_items;
+			removable_items.clear();
+			for (int i=0; i < MAX_EQUIPPED; i++) {
+				if (inventory[EQUIPMENT][i].item > 0) {
+					if (items->items[inventory[EQUIPMENT][i].item].type != "quest")
+						removable_items.push_back(inventory[EQUIPMENT][i].item);
+				}
+			}
+			for (int i=0; i < MAX_CARRIED; i++) {
+				if (inventory[CARRIED][i].item > 0) {
+					if (items->items[inventory[CARRIED][i].item].type != "quest")
+						removable_items.push_back(inventory[CARRIED][i].item);
+				}
+			}
+			if (!removable_items.empty()) {
+				int random_item = rand() % removable_items.size();
+				remove(removable_items[random_item]);
+				death_message += msg->get("Lost %s.",items->items[removable_items[random_item]].name);
+			}
+		}
+
+		log_msg = death_message;
+
 		stats->death_penalty = false;
 	}
 
@@ -141,6 +195,9 @@ void MenuInventory::logic() {
 
 	// check close button
 	if (visible) {
+		if (NO_MOUSE) {
+			tablist.logic();
+		}
 		if (closeButton->checkClick()) {
 			visible = false;
 			snd->play(sfx_close);
@@ -176,13 +233,13 @@ void MenuInventory::render() {
 	inventory[CARRIED].render();
 }
 
-int MenuInventory::areaOver(Point mouse) {
-	if (isWithin(carried_area, mouse)) {
+int MenuInventory::areaOver(Point position) {
+	if (isWithin(carried_area, position)) {
 		return CARRIED;
 	}
 	else {
 		for (unsigned int i=0; i<equipped_area.size(); i++) {
-			if (isWithin(equipped_area[i], mouse)) {
+			if (isWithin(equipped_area[i], position)) {
 				return EQUIPMENT;
 			}
 		}
@@ -195,26 +252,26 @@ int MenuInventory::areaOver(Point mouse) {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData MenuInventory::checkTooltip(Point mouse) {
+TooltipData MenuInventory::checkTooltip(Point position) {
 	int area;
 	int slot;
 	TooltipData tip;
 
-	area = areaOver(mouse);
+	area = areaOver(position);
 	if (area == -1) {
-		if (mouse.x >= window_area.x + help_pos.x && mouse.y >= window_area.y+help_pos.y && mouse.x < window_area.x+help_pos.x+help_pos.w && mouse.y < window_area.y+help_pos.y+help_pos.h) {
+		if (position.x >= window_area.x + help_pos.x && position.y >= window_area.y+help_pos.y && position.x < window_area.x+help_pos.x+help_pos.w && position.y < window_area.y+help_pos.y+help_pos.h) {
 			tip.addText(msg->get("Use SHIFT to move only one item."));
 			tip.addText(msg->get("CTRL-click a carried item to sell it."));
 		}
 		return tip;
 	}
-	slot = inventory[area].slotOver(mouse);
+	slot = inventory[area].slotOver(position);
 
 	if (slot == -1)
 		return tip;
 
 	if (inventory[area][slot].item > 0) {
-		tip = inventory[area].checkTooltip( mouse, stats, PLAYER_INV);
+		tip = inventory[area].checkTooltip(position, stats, PLAYER_INV);
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].item == 0) {
 		tip.addText(msg->get(slot_desc[slot]));
@@ -226,14 +283,14 @@ TooltipData MenuInventory::checkTooltip(Point mouse) {
 /**
  * Click-start dragging in the inventory
  */
-ItemStack MenuInventory::click(InputState * input) {
+ItemStack MenuInventory::click(Point position) {
 	ItemStack item;
 	item.item = 0;
 	item.quantity = 0;
 
-	drag_prev_src = areaOver(input->mouse);
+	drag_prev_src = areaOver(position);
 	if( drag_prev_src > -1) {
-		item = inventory[drag_prev_src].click(input);
+		item = inventory[drag_prev_src].click(position);
 		// if dragging equipment, prepare to change stats/sprites
 		if (drag_prev_src == EQUIPMENT) {
 			if (stats->humanoid) {
@@ -270,17 +327,17 @@ void MenuInventory::itemReturn( ItemStack stack) {
  * Dragging and dropping an item can be used to rearrange the inventory
  * and equip items
  */
-void MenuInventory::drop(Point mouse, ItemStack stack) {
+void MenuInventory::drop(Point position, ItemStack stack) {
 	items->playSound(stack.item);
 
-	int area = areaOver(mouse);
+	int area = areaOver(position);
 	if (area == -1) {
 		// not dropped into a slot. Just return it to the previous slot.
 		itemReturn(stack);
 		return;
 	}
 
-	int slot = inventory[area].slotOver(mouse);
+	int slot = inventory[area].slotOver(position);
 	if (slot == -1) {
 		// not dropped into a slot. Just return it to the previous slot.
 		itemReturn(stack);
@@ -375,13 +432,13 @@ void MenuInventory::drop(Point mouse, ItemStack stack) {
  * e.g. drink a potion
  * e.g. equip an item
  */
-void MenuInventory::activate(InputState * input) {
+void MenuInventory::activate(Point position) {
 	ItemStack stack;
 	Point nullpt;
 	nullpt.x = nullpt.y = 0;
 
 	// clicked a carried item
-	int slot = inventory[CARRIED].slotOver(input->mouse);
+	int slot = inventory[CARRIED].slotOver(position);
 	if (slot == -1)
 		return;
 
@@ -439,7 +496,7 @@ void MenuInventory::activate(InputState * input) {
 
 		if (equip_slot != -1) {
 			if (requirementsMet(inventory[CARRIED][slot].item)) {
-				stack = click( input);
+				stack = click(position);
 				if( inventory[EQUIPMENT][equip_slot].item == stack.item) {
 					// Merge the stacks
 					add( stack, EQUIPMENT, equip_slot);
@@ -553,7 +610,7 @@ void MenuInventory::removeEquipped(int item) {
  */
 void MenuInventory::addCurrency(int count) {
 	currency += count;
-	LootManager::getInstance()->playCurrencySound();
+	loot->playCurrencySound();
 }
 
 /**
@@ -569,7 +626,7 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
 	if( currency >= count) {
 		currency -= count;
 
-		LootManager::getInstance()->playCurrencySound();
+		loot->playCurrencySound();
 		return true;
 	}
 	else {
@@ -597,7 +654,7 @@ bool MenuInventory::sell(ItemStack stack) {
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
 	currency += value;
-	LootManager::getInstance()->playCurrencySound();
+	loot->playCurrencySound();
 	drag_prev_src = -1;
 	return true;
 }
@@ -757,10 +814,6 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	}
 	stats->powers_list_items.clear();
 
-	// the default for weapons/absorb are not added to equipped items
-	// later this function they are applied if the defaults aren't met
-	stats->calcBaseDmgAndAbs();
-
 	// reset wielding vars
 	stats->wielding_physical = false;
 	stats->wielding_mental = false;
@@ -772,45 +825,31 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	applyItemStats(equipped);
 	applyItemSetBonuses(equipped);
 
-	// increase damage and absorb to minimum amounts
-	if (stats->dmg_melee_min < stats->dmg_melee_min_default)
-		stats->dmg_melee_min = stats->dmg_melee_min_default;
-	if (stats->dmg_melee_max < stats->dmg_melee_max_default)
-		stats->dmg_melee_max = stats->dmg_melee_max_default;
-	if (stats->dmg_ranged_min < stats->dmg_ranged_min_default)
-		stats->dmg_ranged_min = stats->dmg_ranged_min_default;
-	if (stats->dmg_ranged_max < stats->dmg_ranged_max_default)
-		stats->dmg_ranged_max = stats->dmg_ranged_max_default;
-	if (stats->dmg_ment_min < stats->dmg_ment_min_default)
-		stats->dmg_ment_min = stats->dmg_ment_min_default;
-	if (stats->dmg_ment_max < stats->dmg_ment_max_default)
-		stats->dmg_ment_max = stats->dmg_ment_max_default;
-	if (stats->absorb_min < stats->absorb_min_default)
-		stats->absorb_min = stats->absorb_min_default;
-	if (stats->absorb_max < stats->absorb_max_default)
-		stats->absorb_max = stats->absorb_max_default;
-
 	// update stat display
 	stats->refresh_stats = true;
 }
 
 void MenuInventory::applyItemStats(ItemStack *equipped) {
-	unsigned bonus_counter;
 	const vector<Item> &pc_items = items->items;
-	int item_id;
+
+	// reset additional values
+	stats->dmg_melee_min_add = stats->dmg_melee_max_add = 0;
+	stats->dmg_ment_min_add = stats->dmg_ment_max_add = 0;
+	stats->dmg_ranged_min_add = stats->dmg_ranged_max_add = 0;
+	stats->absorb_min_add = stats->absorb_max_add = 0;
 
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		item_id = equipped[i].item;
+		int item_id = equipped[i].item;
 		const Item &item = pc_items[item_id];
 
 		// apply base stats
-		stats->dmg_melee_min += item.dmg_melee_min;
-		stats->dmg_melee_max += item.dmg_melee_max;
-		stats->dmg_ranged_min += item.dmg_ranged_min;
-		stats->dmg_ranged_max += item.dmg_ranged_max;
-		stats->dmg_ment_min += item.dmg_ment_min;
-		stats->dmg_ment_max += item.dmg_ment_max;
+		stats->dmg_melee_min_add += item.dmg_melee_min;
+		stats->dmg_melee_max_add += item.dmg_melee_max;
+		stats->dmg_ranged_min_add += item.dmg_ranged_min;
+		stats->dmg_ranged_max_add += item.dmg_ranged_max;
+		stats->dmg_ment_min_add += item.dmg_ment_min;
+		stats->dmg_ment_max_add += item.dmg_ment_max;
 
 		// TODO: add a separate wielding stat to items
 		// e.g. we might want a ring that gives bonus ranged damage but
@@ -835,11 +874,11 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		}
 
 		// apply absorb bonus
-		stats->absorb_min += item.abs_min;
-		stats->absorb_max += item.abs_max;
+		stats->absorb_min_add += item.abs_min;
+		stats->absorb_max_add += item.abs_max;
 
 		// apply various bonuses
-		bonus_counter = 0;
+		unsigned bonus_counter = 0;
 		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
 			int id = powers->getIdFromTag(item.bonus_stat[bonus_counter]);
 
@@ -864,11 +903,9 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	vector<int> set;
 	vector<int> quantity;
 	vector<int>::iterator it;
-	unsigned bonus_counter = 0;
-	int item_id;
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		item_id = equipped[i].item;
+		int item_id = equipped[i].item;
 		it = find(set.begin(), set.end(), items->items[item_id].set);
 		if (items->items[item_id].set > 0 && it != set.end()) {
 			quantity[distance(set.begin(), it)] += 1;
@@ -882,6 +919,7 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	ItemSet temp_set;
 	for (unsigned k=0; k<set.size(); k++) {
 		temp_set = items->item_sets[set[k]];
+		unsigned bonus_counter = 0;
 		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 			if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
@@ -891,6 +929,14 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 				stats->effects.addEffect(id, powers->powers[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
 		}
 	}
+}
+
+int MenuInventory::getEquippedCount() {
+	return (int)equipped_area.size();
+}
+
+int MenuInventory::getCarriedRows() {
+	return carried_rows;
 }
 
 void MenuInventory::clearHighlight() {

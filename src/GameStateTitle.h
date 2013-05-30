@@ -15,16 +15,15 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-
 #pragma once
 #ifndef GAMESTATETITLE_H
 #define GAMESTATETITLE_H
 
 #include "GameState.h"
+#include "Widget.h"
 
 class WidgetButton;
 class WidgetLabel;
-class TabIndex;
 
 class GameStateTitle : public GameState {
 private:
@@ -32,6 +31,7 @@ private:
 	WidgetButton *button_play;
 	WidgetButton *button_exit;
 	WidgetButton *button_cfg;
+	WidgetButton *button_credits;
 	WidgetLabel *label_version;
 
 	TabList tablist;

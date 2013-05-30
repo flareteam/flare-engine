@@ -1,6 +1,6 @@
 /*
-Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Justin Jacobs
+Copyright Â© 2011-2012 Clint Bellanger
+Copyright Â© 2012 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -20,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetScrollBox
  */
 
-
 #pragma once
 #ifndef WIDGET_SCROLLBOX_H
 #define WIDGET_SCROLLBOX_H
@@ -36,6 +35,7 @@ public:
 	WidgetScrollBox (int width, int height);
 	~WidgetScrollBox ();
 
+	void addChildWidget(Widget* child);
 	Point input_assist(Point mouse);
 	void logic();
 	void logic(int x, int y);
@@ -47,9 +47,20 @@ public:
 	bool update;
 	SDL_Color bg;
 	bool transparent;
+	int line_height;
+
+	TabList tablist;
+	bool getNext();
+	bool getPrev();
+	void activate();
 
 private:
 	void scroll(int amount);
+	void scrollTo(int amount);
+	void scrollDown();
+	void scrollUp();
+	std::vector<Widget*> children;
+	int currentChild;
 
 	int cursor;
 	WidgetScrollBar * scrollbar;

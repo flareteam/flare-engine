@@ -15,13 +15,13 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <iostream>
-
+#include "CommonIncludes.h"
+#include "GameStateConfig.h"
+#include "GameStateCutscene.h"
 #include "GameStateLoad.h"
 #include "GameStateTitle.h"
-#include "GameStateConfig.h"
-#include "SharedResources.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 
@@ -36,10 +36,11 @@ GameStateTitle::GameStateTitle() : GameState() {
 	button_play = new WidgetButton("images/menus/buttons/button_default.png");
 	button_exit = new WidgetButton("images/menus/buttons/button_default.png");
 	button_cfg = new WidgetButton("images/menus/buttons/button_default.png");
+	button_credits = new WidgetButton("images/menus/buttons/button_default.png");
 
 	button_play->label = msg->get("Play Game");
 	button_play->pos.x = VIEW_W_HALF - button_play->pos.w/2;
-	button_play->pos.y = VIEW_H - (button_exit->pos.h*3);
+	button_play->pos.y = VIEW_H - (button_exit->pos.h*4);
 	if (!ENABLE_PLAYGAME) {
 		button_play->enabled = false;
 		button_play->tooltip = msg->get("Enable a core mod to continue");
@@ -48,8 +49,13 @@ GameStateTitle::GameStateTitle() : GameState() {
 
 	button_cfg->label = msg->get("Configuration");
 	button_cfg->pos.x = VIEW_W_HALF - button_cfg->pos.w/2;
-	button_cfg->pos.y = VIEW_H - (button_exit->pos.h*2);
+	button_cfg->pos.y = VIEW_H - (button_exit->pos.h*3);
 	button_cfg->refresh();
+
+	button_credits->label = msg->get("Credits");
+	button_credits->pos.x = VIEW_W_HALF - button_credits->pos.w/2;
+	button_credits->pos.y = VIEW_H - (button_exit->pos.h*2);
+	button_credits->refresh();
 
 	button_exit->label = msg->get("Exit Game");
 	button_exit->pos.x = VIEW_W_HALF - button_exit->pos.w/2;
@@ -60,11 +66,10 @@ GameStateTitle::GameStateTitle() : GameState() {
 	label_version = new WidgetLabel();
 	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, msg->get("Flare Alpha v0.18"), font->getColor("menu_normal"));
 
-	inpt->enableMouseEmulation();
-
 	// Setup tab order
 	tablist.add(button_play);
 	tablist.add(button_cfg);
+	tablist.add(button_credits);
 	tablist.add(button_exit);
 }
 
@@ -87,6 +92,19 @@ void GameStateTitle::logic() {
 	else if (button_cfg->checkClick()) {
 		delete requestedGameState;
 		requestedGameState = new GameStateConfig();
+	}
+	else if (button_credits->checkClick()) {
+		GameStateTitle *title = new GameStateTitle();
+		GameStateCutscene *credits = new GameStateCutscene(title);
+
+		if (!credits->load("credits.txt")) {
+			delete credits;
+			delete title;
+		}
+		else {
+			delete requestedGameState;
+			requestedGameState = credits;
+		}
 	}
 	else if (button_exit->checkClick()) {
 		exitRequested = true;
@@ -111,6 +129,7 @@ void GameStateTitle::render() {
 	// display buttons
 	button_play->render();
 	button_cfg->render();
+	button_credits->render();
 	button_exit->render();
 
 	// version number
@@ -120,6 +139,7 @@ void GameStateTitle::render() {
 GameStateTitle::~GameStateTitle() {
 	delete button_play;
 	delete button_cfg;
+	delete button_credits;
 	delete button_exit;
 	delete label_version;
 	SDL_FreeSurface(logo);

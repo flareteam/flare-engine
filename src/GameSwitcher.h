@@ -16,17 +16,12 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-
 #pragma once
 #ifndef GAME_SWITCHER_H
 #define GAME_SWITCHER_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
+#include "CommonIncludes.h"
 #include "Utils.h"
-#include "WidgetLabel.h"
 
 const int GAME_STATE_TITLE = 0;
 const int GAME_STATE_PLAY = 1;
@@ -34,7 +29,7 @@ const int GAME_STATE_LOAD = 2;
 const int GAME_STATE_NEW = 3;
 
 class GameState;
-
+class WidgetLabel;
 /**
  * class GameSwitcher
  *

@@ -17,14 +17,11 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "UtilsParsing.h"
 #include "Settings.h"
 #include <cstdlib>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <algorithm>
-#include <string>
+#include <typeinfo>
 
 using namespace std;
 
@@ -269,8 +266,10 @@ bool toBool(std::string value) {
 	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 	if (value == "true") return true;
 	if (value == "yes") return true;
+	if (value == "1") return true;
 	if (value == "false") return false;
 	if (value == "no") return false;
+	if (value == "0") return false;
 
 	fprintf(stderr, "%s %s doesn't know how to handle %s\n", __FILE__, __FUNCTION__, value.c_str());
 	return false;

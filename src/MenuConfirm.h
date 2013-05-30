@@ -21,9 +21,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_CONFIRM_H
 #define MENU_CONFIRM_H
 
+#include "CommonIncludes.h"
 #include "Menu.h"
 #include "WidgetButton.h"
-#include <SDL_image.h>
 
 class MenuConfirm : public Menu {
 protected:

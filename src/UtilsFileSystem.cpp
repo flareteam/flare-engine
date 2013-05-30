@@ -21,13 +21,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Various file system function wrappers. Abstracted here to hide OS-specific implementations
  */
 
+#include "CommonIncludes.h"
 #include "UtilsFileSystem.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
 #include <errno.h>
-#include <fstream>
 #include <stdlib.h>
 
 #ifndef _WIN32
@@ -37,7 +37,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Check to see if a directory/folder exists
  */
-bool dirExists(std::string path) {
+bool dirExists(const std::string &path) {
+	struct stat st;
+	return (stat(path.c_str(), &st) == 0);
+}
+
+bool pathExists(const std::string &path) {
 	struct stat st;
 	return (stat(path.c_str(), &st) == 0);
 }
@@ -58,6 +63,12 @@ void createDir(std::string path) {
 	std::string syscmd = "mkdir " + path;
 	system(syscmd.c_str());
 #endif
+}
+
+bool isDirectory(const std::string &path) {
+	struct stat st;
+	stat(path.c_str(), &st);
+	return st.st_mode & S_IFDIR;
 }
 
 /**
@@ -82,20 +93,15 @@ int getFileList(std::string dir, std::string ext, std::vector<std::string> &file
 	DIR *dp;
 	struct dirent *dirp;
 
-	if((dp  = opendir(dir.c_str())) == NULL) {
-		//cout << "Error(" << errno << ") opening " << dir << endl;
+	if((dp  = opendir(dir.c_str())) == NULL)
 		return errno;
-	}
 
 	size_t extlen = ext.length();
 	while ((dirp = readdir(dp)) != NULL) {
-		//	if(dirp->d_type == 0x8) { //0x4 for directories, 0x8 for files
 		std::string filename = std::string(dirp->d_name);
-		if(filename.length() > extlen) {
-			if(filename.substr(filename.length()-extlen,extlen) == ext) {
-				files.push_back(filename);
-			}
-		}
+		if (filename.length() > extlen)
+			if(filename.substr(filename.length() - extlen,extlen) == ext)
+				files.push_back(dir + "/" + filename);
 	}
 	closedir(dp);
 	return 0;

@@ -1,6 +1,6 @@
 /*
-Copyright © 2012 Clint Bellanger
-Copyright © 2012 davidriod
+Copyright Â© 2012 Clint Bellanger
+Copyright Â© 2012 davidriod
 
 This file is part of FLARE.
 
@@ -20,20 +20,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetCheckBox
  */
 
-#include <iostream>
-#include <string>
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include "Widget.h"
-#include "WidgetCheckBox.h"
-#include "SharedResources.h"
+#include "CommonIncludes.h"
 #include "SDL_gfxBlitFunc.h"
+#include "SharedResources.h"
+#include "WidgetCheckBox.h"
+#include "Widget.h"
 
 using namespace std;
 
 WidgetCheckBox::WidgetCheckBox (const string &fname)
-	: cb(NULL),
+	: enabled(true),
+	  cb(NULL),
 	  checked(false),
 	  pressed(false) {
 	focusable = true;
@@ -66,6 +63,7 @@ bool WidgetCheckBox::checkClick() {
 }
 
 bool WidgetCheckBox::checkClick (int x, int y) {
+	if (!enabled) return false;
 
 	Point mouse(x,y);
 
@@ -122,13 +120,7 @@ void WidgetCheckBox::render (SDL_Surface *target) {
 		bottomRight.y = pos.y + pos.h;
 		color = SDL_MapRGB(target->format, 255,248,220);
 
-		if (target == screen) {
-			SDL_LockSurface(screen);
-			drawRectangle(target, topLeft, bottomRight, color);
-			SDL_UnlockSurface(screen);
-		}
-		else
-			drawRectangle(target, topLeft, bottomRight, color);
+		drawRectangle(target, topLeft, bottomRight, color);
 	}
 }
 

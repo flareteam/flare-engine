@@ -15,20 +15,29 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "ModManager.h"
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
-#include <SDL.h>
-#include <fstream>
-#include <algorithm>
 
 using namespace std;
 
-
 ModManager::ModManager() {
 	loc_cache.clear();
+	mod_dirs.clear();
 	mod_list.clear();
+
+	vector<string> mod_dirs_other;
+	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs);
+	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
+	getDirList(PATH_DATA + "mods", mod_dirs_other);
+	getDirList(PATH_USER + "mods", mod_dirs_other);
+
+	for (unsigned i=0; i<mod_dirs_other.size(); ++i) {
+		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_other[i]) == mod_dirs.end())
+			mod_dirs.push_back(mod_dirs_other[i]);
+	}
 
 	loadModList();
 }
@@ -47,17 +56,7 @@ void ModManager::loadModList() {
 	ifstream infile;
 	string line;
 	string starts_with;
-	vector<string> mod_dirs;
-	vector<string> mod_dirs_local;
 	bool found_any_mod = false;
-
-	getDirList(PATH_DATA + "mods", mod_dirs);
-	getDirList(PATH_USER + "mods", mod_dirs_local);
-
-	for (unsigned i=0; i<mod_dirs_local.size(); ++i) {
-		if (find(mod_dirs.begin(), mod_dirs.end(), mod_dirs_local[i]) == mod_dirs.end())
-			mod_dirs.push_back(mod_dirs_local[i]);
-	}
 
 	// Add the fallback mod by default
 	if (find(mod_dirs.begin(), mod_dirs.end(), FALLBACK_MOD) != mod_dirs.end()) {
@@ -117,6 +116,10 @@ void ModManager::loadModList() {
  * Use private loc_cache to prevent excessive disk I/O
  */
 string ModManager::locate(const string& filename) {
+	// set some flags if directories are identical
+	bool uniq_path_data = PATH_USER != PATH_DATA;
+	bool uniq_path_default_user = PATH_USER != PATH_DEFAULT_USER && PATH_DATA != PATH_DEFAULT_USER;
+	bool uniq_path_default_data = PATH_USER != PATH_DEFAULT_DATA && PATH_DATA != PATH_DEFAULT_DATA && PATH_DEFAULT_USER != PATH_DEFAULT_DATA;
 
 	// if we have this location already cached, return it
 	if (loc_cache.find(filename) != loc_cache.end()) {
@@ -132,16 +135,77 @@ string ModManager::locate(const string& filename) {
 			loc_cache[filename] = test_path;
 			return test_path;
 		}
-		test_path = PATH_DATA + "mods/" + mod_list[i-1] + "/" + filename;
-		if (fileExists(test_path)) {
-			loc_cache[filename] = test_path;
-			return test_path;
+		if (uniq_path_data) {
+			test_path = PATH_DATA + "mods/" + mod_list[i-1] + "/" + filename;
+			if (fileExists(test_path)) {
+				loc_cache[filename] = test_path;
+				return test_path;
+			}
+		}
+		if (uniq_path_default_user) {
+			test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i-1] + "/" + filename;
+			if (fileExists(test_path)) {
+				loc_cache[filename] = test_path;
+				return test_path;
+			}
+		}
+		if (uniq_path_default_data) {
+			test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i-1] + "/" + filename;
+			if (fileExists(test_path)) {
+				loc_cache[filename] = test_path;
+				return test_path;
+			}
 		}
 	}
 
 	// all else failing, simply return the filename
 	return PATH_DATA + filename;
 }
+
+void amendPathToVector(const string &path, std::vector<std::string> &vec) {
+	if (pathExists(path)) {
+		if (isDirectory(path)) {
+			getFileList(path, "txt", vec);
+		}
+		else {
+			vec.push_back(path);
+		}
+	}
+}
+
+vector<string> ModManager::list(const string &path) {
+	// set some flags if directories are identical
+	bool uniq_path_data = PATH_USER != PATH_DATA;
+	bool uniq_path_default_user = PATH_USER != PATH_DEFAULT_USER && PATH_DATA != PATH_DEFAULT_USER;
+	bool uniq_path_default_data = PATH_USER != PATH_DEFAULT_DATA && PATH_DATA != PATH_DEFAULT_DATA && PATH_DEFAULT_USER != PATH_DEFAULT_DATA;
+
+	vector<string> ret;
+	string test_path = PATH_DATA + path;
+	amendPathToVector(test_path, ret);
+
+	for (unsigned int i = 0; i < mod_list.size(); ++i) {
+		if (uniq_path_default_data) {
+			test_path = PATH_DEFAULT_DATA + "mods/" + mod_list[i] + "/" + path;
+			amendPathToVector(test_path, ret);
+		}
+
+		if (uniq_path_default_user) {
+			test_path = PATH_DEFAULT_USER + "mods/" + mod_list[i] + "/" + path;
+			amendPathToVector(test_path, ret);
+		}
+
+		if (uniq_path_data) {
+			test_path = PATH_DATA + "mods/" + mod_list[i] + "/" + path;
+			amendPathToVector(test_path, ret);
+		}
+
+		test_path = PATH_USER + "mods/" + mod_list[i] + "/" + path;
+		amendPathToVector(test_path, ret);
+	}
+
+	return ret;
+}
+
 
 ModManager::~ModManager() {
 }

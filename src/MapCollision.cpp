@@ -49,19 +49,19 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
  * If we encounter an obstacle at 90 degrees, stop.
  * If we encounter an obstacle at 45 or 135 degrees, slide.
  */
-bool MapCollision::move(int &x, int &y, int step_x, int step_y, int dist, MOVEMENTTYPE movement_type) {
+bool MapCollision::move(int &x, int &y, int step_x, int step_y, int dist, MOVEMENTTYPE movement_type, bool is_hero) {
 
 	bool diag = step_x && step_y;
 
 	for (int i = dist; i--;) {
-		if (is_valid_position(x + step_x, y + step_y, movement_type)) {
+		if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
 			x+= step_x;
 			y+= step_y;
 		}
-		else if (diag && is_valid_position(x + step_x, y, movement_type)) { // slide along wall
+		else if (diag && is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
 			x+= step_x;
 		}
-		else if (diag && is_valid_position(x, y + step_y, movement_type)) { // slide along wall
+		else if (diag && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
 			y+= step_y;
 		}
 		else { // is there a singular obstacle or corner we can step around?
@@ -125,10 +125,13 @@ bool MapCollision::is_wall(int x, int y) const {
 /**
  * Is this a valid tile for an entity with this movement type?
  */
-bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_type) const {
+bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
 	// outside the map isn't valid
 	if (is_outside_map(tile_x,tile_y)) return false;
+
+	if(is_hero && colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !ENABLE_ALLY_COLLISION)
+		return true;
 
 	// occupied by an entity isn't valid
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES) return false;
@@ -148,12 +151,12 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
 /**
  * Is this a valid position for an entity with this movement type?
  */
-bool MapCollision::is_valid_position(int x, int y, MOVEMENTTYPE movement_type) const {
+bool MapCollision::is_valid_position(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
 	const int tile_x = x >> TILE_SHIFT; // fast div
 	const int tile_y = y >> TILE_SHIFT; // fast div
 
-	return is_valid_tile(tile_x, tile_y, movement_type);
+	return is_valid_tile(tile_x, tile_y, movement_type, is_hero);
 }
 
 
@@ -247,7 +250,7 @@ bool MapCollision::line_check(int x1, int y1, int x2, int y2, int check_type, MO
 		for (int i=0; i<steps; i++) {
 			x += step_x;
 			y += step_y;
-			if (!is_valid_position(round(x), round(y), movement_type))
+			if (!is_valid_position(round(x), round(y), movement_type, false))
 				return false;
 		}
 	}
@@ -268,16 +271,45 @@ bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE
 	int tile_x = x2 >> TILE_SHIFT;
 	int tile_y = y2 >> TILE_SHIFT;
 	bool target_blocks = false;
-	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES) {
+	int target_blocks_type = colmap[tile_x][tile_y];
+	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES || colmap[tile_x][tile_y] == BLOCKS_ENEMIES) {
 		target_blocks = true;
 		unblock(x2,y2);
 	}
 
 	bool has_movement = line_check(x1, y1, x2, y2, CHECK_MOVEMENT, movement_type);
 
-	if (target_blocks) block(x2,y2);
+	if (target_blocks) block(x2,y2, target_blocks_type == BLOCKS_ENEMIES);
 	return has_movement;
 
+}
+
+/**
+ * Checks whether the entity in pos 1 is facing the point at pos 2
+ * based on a 180 degree field of vision
+ */
+bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2) {
+
+	// 180 degree fov
+	switch (direction) {
+		case 2: //north west
+			return ((x2-x1) < ((-1 * y2)-(-1 * y1))) && (((-1 * x2)-(-1 * x1)) > (y2-y1));
+		case 3: //north
+			return y2 < y1;
+		case 4: //north east
+			return (((-1 * x2)-(-1 * x1)) < ((-1 * y2)-(-1 * y1))) && ((x2-x1) > (y2-y1));
+		case 5: //east
+			return x2 > x1;
+		case 6: //south east
+			return ((x2-x1) > ((-1 * y2)-(-1 * y1))) && (((-1 * x2)-(-1 * x1)) < (y2-y1));
+		case 7: //south
+			return y2 > y1;
+		case 0: //south west
+			return (((-1 * x2)-(-1 * x1)) > ((-1 * y2)-(-1 * y1))) && ((x2-x1) < (y2-y1));
+		case 1: //west
+			return x2 < x1;
+	}
+	return false;
 }
 
 /**
@@ -287,6 +319,9 @@ bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE
 * @return true if a path is found
 */
 bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
+
+	if (limit == 0)
+		limit = 256;
 
 	// path must be empty
 	if (!path.empty())
@@ -298,7 +333,8 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 
 	// if the target square has an entity, temporarily clear it to compute the path
 	bool target_blocks = false;
-	if (colmap[end.x][end.y] == BLOCKS_ENTITIES) {
+	int target_blocks_type = colmap[end.x][end.y];
+	if (colmap[end.x][end.y] == BLOCKS_ENTITIES || colmap[end.x][end.y] == BLOCKS_ENEMIES) {
 		target_blocks = true;
 		unblock(end_pos.x, end_pos.y);
 	}
@@ -339,8 +375,11 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
 			Point neighbour = *it;
 
-			// if neighbour is not free of any collision, or already in close, skip it
-			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type) || find(close.begin(), close.end(), neighbour)!=close.end())
+			// if neighbour is not free of any collision, skip it
+			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false))
+				continue;
+			// if nabour is already in close, skip it
+			if(find(close.begin(), close.end(), neighbour)!=close.end())
 				continue;
 
 			list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
@@ -353,8 +392,8 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 				open.push_back(newNode);
 			}
 			// else, update it's cost if better
-			else if (node.getActualCost()+node_stride < i->getActualCost()) {
-				i->setActualCost(node.getActualCost()+node_stride);
+			else if (node.getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
+				i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
 				i->setParent(current);
 			}
 		}
@@ -363,7 +402,26 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 	if (current.x != end.x || current.y != end.y) {
 
 		// reblock target if needed
-		if (target_blocks) block(end_pos.x, end_pos.y);
+		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
+
+		float lowest_score = FLT_MAX;
+		// find the closed node which is closest to the target and create a path
+		list<AStarNode>::iterator lowest_it;
+		for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
+			if (it->getH() < lowest_score) {
+				lowest_score = it->getH();
+				lowest_it = it;
+			}
+		}
+		node = *lowest_it;
+		current.x = node.getX();
+		current.y = node.getY();
+
+		//couldnt find the target so map a path to the closest node found
+		while (current.x != start.x || current.y != start.y) {
+			path.push_back(collision_to_map(current));
+			current = find(close.begin(), close.end(), current)->getParent();
+		}
 
 		return false;
 	}
@@ -377,18 +435,21 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 	}
 
 	// reblock target if needed
-	if (target_blocks) block(end_pos.x, end_pos.y);
+	if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
 
 	return !path.empty();
 }
 
-void MapCollision::block(const int x, const int y) {
+void MapCollision::block(const int x, const int y, bool is_ally) {
 
 	const int tile_x = x >> TILE_SHIFT; // fast div
 	const int tile_y = y >> TILE_SHIFT; // fast div
 
 	if (colmap[tile_x][tile_y] == BLOCKS_NONE) {
-		colmap[tile_x][tile_y] = BLOCKS_ENTITIES;
+		if(is_ally)
+			colmap[tile_x][tile_y] = BLOCKS_ENEMIES;
+		else
+			colmap[tile_x][tile_y] = BLOCKS_ENTITIES;
 	}
 
 }
@@ -398,7 +459,7 @@ void MapCollision::unblock(int x, int y) {
 	const int tile_x = x >> TILE_SHIFT; // fast div
 	const int tile_y = y >> TILE_SHIFT; // fast div
 
-	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES) {
+	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES || colmap[tile_x][tile_y] == BLOCKS_ENEMIES) {
 		colmap[tile_x][tile_y] = BLOCKS_NONE;
 	}
 

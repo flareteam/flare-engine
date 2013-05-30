@@ -1,6 +1,6 @@
 /*
-Copyright © 2012 Clint Bellanger
-Copyright © 2012 davidriod
+Copyright Â© 2012 Clint Bellanger
+Copyright Â© 2012 davidriod
 
 This file is part of FLARE.
 
@@ -20,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetCheckBox
  */
 
-
 #pragma once
 #ifndef WIDGET_CHECKBOX_H
 #define WIDGET_CHECKBOX_H
@@ -39,6 +38,7 @@ public:
 	bool checkClick (int x, int y);
 	bool isChecked () const;
 	void render (SDL_Surface *target = NULL);
+	bool enabled;
 
 private:
 	SDL_Surface * cb;

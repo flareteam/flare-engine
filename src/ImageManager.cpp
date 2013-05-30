@@ -15,21 +15,14 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <iostream>
-
-#include <assert.h>
-
-
+#include "CommonIncludes.h"
 #include "ImageManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 
-using namespace std;
+#include <assert.h>
 
-ImageManager* ImageManager_instance = 0;
+using namespace std;
 
 ImageManager::ImageManager()
 {}
