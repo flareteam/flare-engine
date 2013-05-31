@@ -766,10 +766,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 
 		//calculate direction based on trajectory, not actual target (UNITS_PER_TILE reduces round off error)
 		if (powers[power_index].directional)
-			haz->animationKind = calcDirection(
-									 src.x, src.y,
-									 static_cast<int>(src.x + haz->speed.x),
-									 static_cast<int>(src.y + haz->speed.y));
+			haz->animationKind = calcDirection(src.x, src.y, src.x + haz->speed.x, src.y + haz->speed.y);
 
 		// add optional delay
 		haz->delay_frames = delay_iterator;
@@ -795,13 +792,13 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 	FPoint location_iterator;
 	FPoint speed;
 	int delay_iterator = 0;
-	int map_speed = 64;
+	float map_speed = 32.0 / MAX_FRAMES_PER_SEC;
 
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
-	speed.x = (float)map_speed * cos(theta);
-	speed.y = (float)map_speed * sin(theta);
+	speed.x = map_speed * cos(theta);
+	speed.y = map_speed * sin(theta);
 
 	location_iterator.x = (float)src_stats->pos.x;
 	location_iterator.y = (float)src_stats->pos.y;

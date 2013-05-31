@@ -93,7 +93,7 @@ void Hazard::logic() {
 		activeAnimation->advanceFrame();
 
 	// handle movement
-	if (!(round(speed.x) == 0 && round(speed.y) == 0)) {
+	if (!(speed.x == 0 && speed.y == 0)) {
 		pos.x += speed.x;
 		pos.y += speed.y;
 
