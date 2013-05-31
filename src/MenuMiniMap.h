@@ -23,7 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_MINI_MAP_H
 #define MENU_MINI_MAP_H
 
-#include <SDL.h>
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
 

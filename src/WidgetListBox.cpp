@@ -20,9 +20,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetListBox
  */
 
-#include "WidgetListBox.h"
-#include "SharedResources.h"
 #include "SDL_gfxBlitFunc.h"
+#include "SharedResources.h"
+#include "WidgetLabel.h"
+#include "WidgetListBox.h"
+#include "WidgetScrollBar.h"
+#include "WidgetTooltip.h"
 
 using namespace std;
 
@@ -387,13 +390,7 @@ void WidgetListBox::render(SDL_Surface *target) {
 		bottomRight.y = rows[list_height - 1].y + rows[0].h;
 		color = SDL_MapRGB(target->format, 255,248,220);
 
-		if (target == screen) {
-			SDL_LockSurface(screen);
-			drawRectangle(target, topLeft, bottomRight, color);
-			SDL_UnlockSurface(screen);
-		}
-		else
-			drawRectangle(target, topLeft, bottomRight, color);
+		drawRectangle(target, topLeft, bottomRight, color);
 	}
 
 	if (has_scroll_bar)
@@ -475,9 +472,11 @@ bool WidgetListBox::getNext() {
 
 	if(sel == list_amount-1) {
 		selected[0] = true;
+		while (getSelected() < cursor) scrollUp();
 	}
 	else {
 		selected[sel+1] = true;
+		while (getSelected() > cursor+list_height-1) scrollDown();
 	}
 
 	return true;
@@ -490,9 +489,11 @@ bool WidgetListBox::getPrev() {
 
 	if(sel == 0) {
 		selected[list_amount-1] = true;
+		while (getSelected() > cursor+list_height-1) scrollDown();
 	}
 	else {
 		selected[sel-1] = true;
+		while (getSelected() < cursor) scrollUp();
 	}
 
 	return true;

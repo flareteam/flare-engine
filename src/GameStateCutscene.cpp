@@ -15,11 +15,12 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "GameStateCutscene.h"
 #include "GameStatePlay.h"
 #include "FileParser.h"
+#include "WidgetScrollBox.h"
 
-#include <iostream>
 using namespace std;
 
 Scene::Scene() : frame_counter(0)
@@ -27,23 +28,37 @@ Scene::Scene() : frame_counter(0)
 	, caption("")
 	, caption_size(0,0)
 	, art(NULL)
-	, sid(-1) {
+	, sid(-1)
+	, caption_box(NULL)
+	, done(false) {
 }
 
 Scene::~Scene() {
 
-	while(!components.empty())
-		components.pop();
+	SDL_FreeSurface(art);
+	delete caption_box;
 
+	while(!components.empty()) {
+		if (components.front().i != NULL) SDL_FreeSurface(components.front().i);
+		components.pop();
+	}
 }
 
 bool Scene::logic() {
+	if (done) return false;
 
-	/* TODO: handle cancel input to skip scene */
 	bool skip = false;
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 		inpt->lock[MAIN1] = true;
 		skip = true;
+	}
+	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		inpt->lock[ACCEPT] = true;
+		skip = true;
+	}
+	if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+		inpt->lock[CANCEL] = true;
+		done = true;
 	}
 
 	/* Pause until specified frame */
@@ -59,7 +74,17 @@ bool Scene::logic() {
 
 			font->setFont("font_captions");
 			caption = components.front().s;
-			caption_size = font->calc_size(caption, VIEW_W * 0.8f);
+			caption_size = font->calc_size(caption, (int)(VIEW_W * 0.8f));
+
+			delete caption_box;
+			caption_box = new WidgetScrollBox(screen->w,caption_size.y);
+			caption_box->pos.x = 0;
+			caption_box->pos.y = screen->h - caption_size.y;
+			font->renderShadowed(caption, screen->w / 2, 0,
+								 JUSTIFY_CENTER,
+								 caption_box->contents,
+								 (int)(VIEW_W * 0.8f),
+								 FONT_WHITE);
 
 		}
 		else if (components.front().type == "image") {
@@ -104,10 +129,7 @@ void Scene::render() {
 		SDL_BlitSurface(art, NULL, screen, &r);
 
 	if (caption != "") {
-		font->setFont("font_captions");
-		font->renderShadowed(caption, screen->w / 2, screen->h - (caption_size.y*2),
-							 JUSTIFY_CENTER,
-							 screen, FONT_WHITE);
+		caption_box->render();
 	}
 }
 
@@ -150,7 +172,7 @@ void GameStateCutscene::render() {
 bool GameStateCutscene::load(std::string filename) {
 	FileParser infile;
 
-	if (!infile.open(mods->locate("cutscenes/" + filename)))
+	if (!infile.open("cutscenes/" + filename, true, false))
 		return false;
 
 	// parse the cutscene file
@@ -165,8 +187,7 @@ bool GameStateCutscene::load(std::string filename) {
 			// allow having an empty section (globals such as scale_gfx might be set here
 		}
 		else if (infile.section == "scene") {
-			SceneComponent sc;
-			sc.type = "";
+			SceneComponent sc = SceneComponent();
 
 			if (infile.key == "caption") {
 				sc.type = infile.key;
@@ -219,7 +240,7 @@ SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
 	/* scale image to fit height */
 	if (scale_graphics) {
 		float ratio = image->h/(float)image->w;
-		SDL_Surface *art = scaleSurface(image, VIEW_W, VIEW_W*ratio);
+		SDL_Surface *art = scaleSurface(image, VIEW_W, (int)(VIEW_W*ratio));
 		if (art == NULL)
 			return image;
 

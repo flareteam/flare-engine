@@ -24,22 +24,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Special code for handling spells, special powers, item effects, etc.
  */
 
-
 #pragma once
 #ifndef POWER_MANAGER_H
 #define POWER_MANAGER_H
 
+#include "CommonIncludes.h"
 #include "MapRenderer.h"
 #include "Utils.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
 #include <queue>
 #include <cassert>
-#include <vector>
 
 class Animation;
 class AnimationSet;
@@ -154,7 +148,6 @@ public:
 	bool no_attack;
 	int radius;
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
-	int damage_multiplier; // % of base damage done by power (eg. 200 doubles damage and 50 halves it)
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
 	int range;
@@ -163,7 +156,6 @@ public:
 
 	int mod_accuracy_mode;
 	int mod_accuracy_value;
-	bool mod_accuracy_ignore_avoid;
 
 	int mod_crit_mode;
 	int mod_crit_value;
@@ -171,7 +163,6 @@ public:
 	int mod_damage_mode;
 	int mod_damage_value_min;
 	int mod_damage_value_max;//only used if mode is absolute
-	bool mod_damage_ignore_absorb;
 
 	//steal effects (in %, eg. hp_steal=50 turns 50% damage done into HP regain.)
 	int hp_steal;
@@ -188,6 +179,7 @@ public:
 	int trait_elemental; // enum. of elements
 	bool trait_armor_penetration;
 	int trait_crits_impaired; // crit bonus vs. movement impaired enemies (slowed, immobilized, stunned)
+	bool trait_avoidance_ignore;
 
 	int transform_duration;
 	bool manual_untransform; // true binds to the power another recurrence power
@@ -212,9 +204,9 @@ public:
 	std::string spawn_type;
 	int target_neighbor;
 	int spawn_limit_mode;
-    int spawn_limit_qty;
-    int spawn_limit_every;
-    int spawn_limit_stat;
+	int spawn_limit_qty;
+	int spawn_limit_every;
+	int spawn_limit_stat;
 
 	Power()
 		: type(-1)
@@ -260,20 +252,17 @@ public:
 		, no_attack(false)
 		, radius(0)
 		, base_damage(BASE_DAMAGE_NONE)
-		, damage_multiplier(100)
 		, starting_pos(STARTING_POS_SOURCE)
 		, multitarget(false)
 		, range(0)
 		, target_party(false)
-        , mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
-        , mod_accuracy_value(100)
-        , mod_accuracy_ignore_avoid(false)
-        , mod_crit_mode(STAT_MODIFIER_MODE_MULTIPLY)
-        , mod_crit_value(100)
-        , mod_damage_mode(STAT_MODIFIER_MODE_MULTIPLY)
-        , mod_damage_value_min(100)
-        , mod_damage_value_max(0)
-        , mod_damage_ignore_absorb(false)
+		, mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_accuracy_value(100)
+		, mod_crit_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_crit_value(100)
+		, mod_damage_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_damage_value_min(100)
+		, mod_damage_value_max(0)
 
 		, hp_steal(0)
 		, mp_steal(0)
@@ -287,6 +276,7 @@ public:
 		, trait_elemental(-1)
 		, trait_armor_penetration(false)
 		, trait_crits_impaired(0)
+		, trait_avoidance_ignore(false)
 
 		, transform_duration(0)
 		, manual_untransform(false)
@@ -294,8 +284,8 @@ public:
 
 		, buff(false)
 		, buff_teleport(false)
-        , buff_party(false)
-        , buff_party_power_id(0)
+		, buff_party(false)
+		, buff_party_power_id(0)
 
 		, effect_type("")
 		, effect_additive(false)
@@ -308,9 +298,9 @@ public:
 		, spawn_type("")
 		, target_neighbor(0)
 		, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)
-        , spawn_limit_qty(1)
-        , spawn_limit_every(1)
-        , spawn_limit_stat(SPAWN_LIMIT_STAT_MENTAL)
+		, spawn_limit_qty(1)
+		, spawn_limit_every(1)
+		, spawn_limit_stat(SPAWN_LIMIT_STAT_MENTAL)
 	{}
 
 };
@@ -320,8 +310,7 @@ private:
 
 	MapCollision *collider;
 
-	void loadAll();
-	void loadPowers(const std::string& filename);
+	void loadPowers();
 
 	int loadSFX(const std::string& filename);
 

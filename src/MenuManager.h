@@ -20,17 +20,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuManager
  */
 
-
 #pragma once
 #ifndef MENU_MANAGER_H
 #define MENU_MANAGER_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
+#include "CommonIncludes.h"
 #include "ItemManager.h"
-#include "WidgetTooltip.h"
 
 class Menu;
 class MenuInventory;
@@ -52,6 +47,7 @@ class CampaignManager;
 class ItemManager;
 class PowerManager;
 class StatBlock;
+class WidgetTooltip;
 
 const int DRAG_SRC_POWERS = 1;
 const int DRAG_SRC_INVENTORY = 2;
@@ -69,16 +65,31 @@ private:
 	CampaignManager *camp;
 
 	TooltipData tip_buf;
+	TooltipData keyb_tip_buf_vendor;
+	TooltipData keyb_tip_buf_stash;
+	TooltipData keyb_tip_buf_pow;
+	TooltipData keyb_tip_buf_inv;
+	TooltipData keyb_tip_buf_act;
+
+	void handleKeyboardTooltips();
 
 	bool key_lock;
 	void loadIcons();
 
-	bool dragging;
+	bool mouse_dragging;
+	bool keyboard_dragging;
 	ItemStack drag_stack;
 	int drag_power;
 	int drag_src;
 
 	bool done;
+
+	bool act_drag_hover;
+	Point keydrag_pos;
+
+	void handleKeyboardNavigation();
+	void dragAndDropWithKeyboard();
+	void resetDrag();
 
 public:
 	MenuManager(PowerManager *powers, StatBlock *stats, CampaignManager *camp, ItemManager *items);

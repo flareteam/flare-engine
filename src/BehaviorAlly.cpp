@@ -1,8 +1,11 @@
 #include "BehaviorAlly.h"
 #include "Enemy.h"
 
-const unsigned short MINIMUM_FOLLOW_DISTANCE = 200;
+const unsigned short MINIMUM_FOLLOW_DISTANCE_LOWER = 100;
+const unsigned short MINIMUM_FOLLOW_DISTANCE = 250;
 const unsigned short MAXIMUM_FOLLOW_DISTANCE = 2000;
+
+const unsigned short BLOCK_TICKS = 10;
 
 BehaviorAlly::BehaviorAlly(Enemy *_e, EnemyManager *_em) : BehaviorStandard(_e, _em) {
 }
@@ -16,7 +19,7 @@ void BehaviorAlly::findTarget() {
 
 	// check distance and line of sight between minion and hero
 	if (e->stats.hero_alive)
-		hero_dist = e->getDistance(e->stats.hero_pos);
+		hero_dist = calcDist(e->stats.pos, e->stats.hero_pos);
 	else
 		hero_dist = 0;
 
@@ -36,7 +39,7 @@ void BehaviorAlly::findTarget() {
 
 			//now work out the distance to the enemy and compare it to the distance to the current targer (we want to target the closest enemy)
 			if(enemies_in_combat) {
-				int enemy_dist = e->getDistance(enemy->stats.pos);
+				int enemy_dist = calcDist(e->stats.pos, enemy->stats.pos);
 				if(enemy_dist < target_dist) {
 					pursue_pos.x = enemy->stats.pos.x;
 					pursue_pos.y = enemy->stats.pos.y;
@@ -47,7 +50,7 @@ void BehaviorAlly::findTarget() {
 				//minion is not already chasig another enemy so chase this one
 				pursue_pos.x = enemy->stats.pos.x;
 				pursue_pos.y = enemy->stats.pos.y;
-				target_dist = e->getDistance(enemy->stats.pos);
+				target_dist = calcDist(e->stats.pos, enemy->stats.pos);
 			}
 
 			e->stats.in_combat = true;
@@ -73,14 +76,34 @@ void BehaviorAlly::findTarget() {
 	else
 		los = false;
 
+	//if the player is blocked, all summons which the player is facing to move away for the specified frames
+	//need to set the flag player_blocked so that other allies know to get out of the way as well
+	//if hero is facing the summon
+	if(ENABLE_ALLY_COLLISION_AI) {
+		if(!enemies->player_blocked && hero_dist < MINIMUM_FOLLOW_DISTANCE_LOWER
+				&& e->map->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)) {
+			enemies->player_blocked = true;
+			enemies->player_blocked_ticks = BLOCK_TICKS;
+		}
+
+		if(enemies->player_blocked && !e->stats.in_combat
+				&& e->map->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)) {
+			fleeing = true;
+			pursue_pos = e->stats.hero_pos;
+		}
+	}
+
+	if(e->stats.effects.fear) fleeing = true;
+
 }
+
 
 void BehaviorAlly::checkMoveStateStance() {
 
 	if(e->stats.in_combat && target_dist > e->stats.melee_range)
 		e->newState(ENEMY_MOVE);
 
-	if(!e->stats.in_combat && hero_dist > MINIMUM_FOLLOW_DISTANCE) {
+	if((!e->stats.in_combat && hero_dist > MINIMUM_FOLLOW_DISTANCE) || fleeing) {
 		if (e->move()) {
 			e->newState(ENEMY_MOVE);
 		}
@@ -97,9 +120,10 @@ void BehaviorAlly::checkMoveStateStance() {
 	}
 }
 
+
 void BehaviorAlly::checkMoveStateMove() {
 	//if close enough to hero, stop miving
-	if(hero_dist < MINIMUM_FOLLOW_DISTANCE && !e->stats.in_combat) {
+	if(hero_dist < MINIMUM_FOLLOW_DISTANCE && !e->stats.in_combat && !fleeing) {
 		e->newState(ENEMY_STANCE);
 	}
 
@@ -109,8 +133,16 @@ void BehaviorAlly::checkMoveStateMove() {
 		// hit an obstacle.  Try the next best angle
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 		if (!e->move()) {
-			//minion->newState(MINION_STANCE);
-			e->stats.direction = prev_direction;
+			//this prevents an ally trying to move perpendicular to a bridge if the player gets close to it in a certain position and gets blocked
+			if(enemies->player_blocked && !e->stats.in_combat) {
+				e->stats.direction = e->stats.hero_direction;
+				if (!e->move()) {
+					e->stats.direction = prev_direction;
+				}
+			}
+			else {
+				e->stats.direction = prev_direction;
+			}
 		}
 	}
 }

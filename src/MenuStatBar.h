@@ -22,16 +22,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of a status bar
  */
 
-
 #pragma once
 #ifndef MENU_STATBAR_H
 #define MENU_STATBAR_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
 
 class WidgetLabel;
 

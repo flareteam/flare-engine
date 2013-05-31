@@ -15,11 +15,10 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "SharedResources.h"
 
-#include <algorithm>
 #include <cassert>
-#include <string>
 
 using namespace std;
 

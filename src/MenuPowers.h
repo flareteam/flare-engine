@@ -21,25 +21,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuPowers
  */
 
-
 #pragma once
 #ifndef MENU_POWERS_H
 #define MENU_POWERS_H
 
+#include "CommonIncludes.h"
 #include "Menu.h"
 #include "Utils.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetTabControl.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <vector>
-
 class PowerManager;
 class StatBlock;
 class TooltipData;
+class WidgetSlot;
 
 class Power_Menu_Cell {
 public:
@@ -108,7 +104,6 @@ private:
 
 	void loadGraphics();
 	void displayBuild(int power_id);
-	void renderIcon(int icon_id, int x, int y);
 	bool powerUnlockable(int power_index);
 	void renderPowers(int tab_num);
 
@@ -118,7 +113,6 @@ private:
 	short id_by_powerIndex(short power_index);
 
 public:
-	static MenuPowers *getInstance();
 	MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons);
 	~MenuPowers();
 	void update();
@@ -132,8 +126,9 @@ public:
 	bool meetsUsageStats(unsigned powerid);
 	short getUnspent() { return points_left; }
 
-	std::vector<SDL_Rect> slots; // the location of power slots
+	std::vector<WidgetSlot*> slots; // power slot Widgets
+
+	TabList tablist;
 
 };
-extern MenuPowers *menuPowers;
 #endif

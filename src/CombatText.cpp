@@ -26,12 +26,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CombatText.h"
+#include "CommonIncludes.h"
 #include "FileParser.h"
-#include "SharedResources.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "UtilsParsing.h"
-#include <iostream>
-#include <sstream>
 
 CombatText::CombatText() {
 	msg_color[COMBAT_MESSAGE_GIVEDMG] = font->getColor("combat_givedmg");
@@ -45,7 +44,7 @@ CombatText::CombatText() {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("engine/combat_text.txt"))) {
+	if(infile.open("engine/combat_text.txt")) {
 		while(infile.next()) {
 			if(infile.key == "duration") {
 				duration = toInt(infile.val);

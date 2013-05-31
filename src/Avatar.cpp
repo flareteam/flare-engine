@@ -24,23 +24,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Contains logic and rendering routines for the player avatar.
  */
 
-
-#include "SDL_gfxBlitFunc.h"
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
 #include "Avatar.h"
+#include "CommonIncludes.h"
+#include "EnemyManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
+#include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "Utils.h"
-#include "UtilsParsing.h"
 #include "UtilsMath.h"
-#include "EnemyManager.h"
-
-#include <sstream>
+#include "UtilsParsing.h"
 
 using namespace std;
 
@@ -49,7 +47,6 @@ Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
 	, lockSwing(false)
 	, lockCast(false)
 	, lockShoot(false)
-	, animFwd(false)
 	, enemies(NULL)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
@@ -97,8 +94,8 @@ void Avatar::init() {
 	stats.xp = 0;
 	stats.physical_character = 1;
 	stats.mental_character = 1;
-	stats.offense_character = 1;
 	stats.defense_character = 1;
+	stats.offense_character = 1;
 	stats.physical_additional = 0;
 	stats.mental_additional = 0;
 	stats.offense_additional = 0;
@@ -144,7 +141,7 @@ void Avatar::loadLayerDefinitions() {
 	layer_reference_order = vector<string>();
 
 	FileParser infile;
-	if (infile.open(mods->locate("engine/hero_options.txt"))) {
+	if (infile.open("engine/hero_options.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -191,7 +188,7 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 
 	for (unsigned int i=0; i<_img_gfx.size(); i++) {
 		if (_img_gfx[i].gfx != "") {
-			string name = "animations/avatar/"+stats.base+"/"+_img_gfx[i].gfx+".txt";
+			string name = "animations/avatar/"+stats.gfx_base+"/"+_img_gfx[i].gfx+".txt";
 			anim->increaseCount(name);
 			animsets.push_back(anim->getAnimationSet(name));
 			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
@@ -221,8 +218,8 @@ void Avatar::loadSounds(const string& type_id) {
 	else {
 		sound_melee = snd->load("soundfx/melee_attack.ogg", "Avatar melee attack");
 		sound_mental = 0; // hero does not have this sound
-		sound_hit = snd->load("soundfx/" + stats.base + "_hit.ogg", "Avatar was hit");
-		sound_die = snd->load("soundfx/" + stats.base + "_die.ogg", "Avatar death");
+		sound_hit = snd->load("soundfx/" + stats.gfx_base + "_hit.ogg", "Avatar was hit");
+		sound_die = snd->load("soundfx/" + stats.gfx_base + "_die.ogg", "Avatar death");
 	}
 
 	sound_block = snd->load("soundfx/powers/block.ogg", "Avatar blocking");
@@ -257,44 +254,45 @@ void Avatar::loadStepFX(const string& stepname) {
 
 
 bool Avatar::pressing_move() {
-	if (inpt->mouse_emulation) return false;
 	if (MOUSE_MOVE) {
 		return inpt->pressing[MAIN1];
 	}
 	else {
-		return inpt->pressing[UP] || inpt->pressing[DOWN] || inpt->pressing[LEFT] || inpt->pressing[RIGHT];
+		return (inpt->pressing[UP] && !inpt->lock[UP]) ||
+			   (inpt->pressing[DOWN] && !inpt->lock[DOWN]) ||
+			   (inpt->pressing[LEFT] && !inpt->lock[LEFT]) ||
+			   (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]);
 	}
 }
 
 void Avatar::set_direction() {
 	// handle direction changes
-	if (inpt->mouse_emulation) return;
 	if (MOUSE_MOVE) {
 		Point target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
 		// if no line of movement to target, use pathfinder
 		if (!map->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
 			vector<Point> path;
 
-			// if a path is returned, target first waypoint
-			if (map->collider.compute_path(stats.pos, target, path, stats.movement_type, 1000)) {
+			// target first waypoint
+			map->collider.compute_path(stats.pos, target, path, stats.movement_type);
+			if(!path.empty())
 				target = path.back();
-			}
 		}
 		stats.direction = calcDirection(stats.pos, target);
 	}
 	else {
-		if (inpt->pressing[UP] && inpt->pressing[LEFT]) stats.direction = 1;
-		else if (inpt->pressing[UP] && inpt->pressing[RIGHT]) stats.direction = 3;
-		else if (inpt->pressing[DOWN] && inpt->pressing[RIGHT]) stats.direction = 5;
-		else if (inpt->pressing[DOWN] && inpt->pressing[LEFT]) stats.direction = 7;
-		else if (inpt->pressing[LEFT]) stats.direction = 0;
-		else if (inpt->pressing[UP]) stats.direction = 2;
-		else if (inpt->pressing[RIGHT]) stats.direction = 4;
-		else if (inpt->pressing[DOWN]) stats.direction = 6;
+		if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 1;
+		else if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 3;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 5;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 7;
+		else if (inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 0;
+		else if (inpt->pressing[UP] && !inpt->lock[UP]) stats.direction = 2;
+		else if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) stats.direction = 4;
+		else if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) stats.direction = 6;
 		// Adjust for ORTHO tilesets
 		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL &&
-				(inpt->pressing[UP] || inpt->pressing[DOWN] ||
-				 inpt->pressing[LEFT] || inpt->pressing[RIGHT]))
+				((inpt->pressing[UP] && !inpt->lock[UP]) || (inpt->pressing[DOWN] && !inpt->lock[UP]) ||
+				 (inpt->pressing[LEFT] && !inpt->lock[LEFT]) || (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])))
 			stats.direction = stats.direction == 7 ? 0 : stats.direction + 1;
 	}
 }
@@ -418,12 +416,12 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		map->hero_tile.x = stats.pos.x / 32;
 		map->hero_tile.y = stats.pos.y / 32;
 
-		map->collider.block(stats.pos.x, stats.pos.y);
+		map->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
 	}
 	if (stats.effects.stun) {
 
-		map->collider.block(stats.pos.x, stats.pos.y);
+		map->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
 	}
 
@@ -433,7 +431,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 	// check for revive
 	if (stats.hp <= 0 && stats.effects.revive) {
-		stats.hp = stats.maxhp;
+		stats.hp = stats.get(STAT_HP_MAX);
 		stats.alive = true;
 		stats.corpse = false;
 		stats.cur_state = AVATAR_STANCE;
@@ -677,7 +675,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 					log_msg = msg->get("You are defeated. Game over! Press Enter to exit to Title.");
 				}
 				else {
-					log_msg = msg->get("You are defeated.  You lose half your %s.  Press Enter to continue.", CURRENCY);
+					log_msg = msg->get("You are defeated. Press Enter to continue.");
 				}
 
 				//once the player dies, kill off any remaining summons
@@ -733,7 +731,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	}
 
 	// make the current square solid
-	map->collider.block(stats.pos.x, stats.pos.y);
+	map->collider.block(stats.pos.x, stats.pos.y, false);
 }
 
 void Avatar::transform() {
@@ -773,24 +771,24 @@ void Avatar::transform() {
 	stats.cur_state = AVATAR_STANCE;
 
 	// damage
-	clampFloor(stats.dmg_melee_min, charmed_stats->dmg_melee_min);
-	clampFloor(stats.dmg_melee_max, charmed_stats->dmg_melee_max);
+	clampFloor(stats.starting[STAT_DMG_MELEE_MIN], charmed_stats->starting[STAT_DMG_MELEE_MIN]);
+	clampFloor(stats.starting[STAT_DMG_MELEE_MAX], charmed_stats->starting[STAT_DMG_MELEE_MAX]);
 
-	clampFloor(stats.dmg_ment_min, charmed_stats->dmg_ment_min);
-	clampFloor(stats.dmg_ment_max, charmed_stats->dmg_ment_max);
+	clampFloor(stats.starting[STAT_DMG_MENT_MIN], charmed_stats->starting[STAT_DMG_MENT_MIN]);
+	clampFloor(stats.starting[STAT_DMG_MENT_MAX], charmed_stats->starting[STAT_DMG_MENT_MAX]);
 
-	clampFloor(stats.dmg_ranged_min, charmed_stats->dmg_ranged_min);
-	clampFloor(stats.dmg_ranged_max, charmed_stats->dmg_ranged_max);
+	clampFloor(stats.starting[STAT_DMG_RANGED_MIN], charmed_stats->starting[STAT_DMG_RANGED_MIN]);
+	clampFloor(stats.starting[STAT_DMG_RANGED_MAX], charmed_stats->starting[STAT_DMG_RANGED_MAX]);
 
 	// dexterity
-	clampFloor(stats.absorb_min, charmed_stats->absorb_min);
-	clampFloor(stats.absorb_max, charmed_stats->absorb_max);
+	clampFloor(stats.starting[STAT_ABS_MIN], charmed_stats->starting[STAT_ABS_MIN]);
+	clampFloor(stats.starting[STAT_ABS_MAX], charmed_stats->starting[STAT_ABS_MAX]);
 
-	clampFloor(stats.avoidance, charmed_stats->avoidance);
+	clampFloor(stats.starting[STAT_AVOIDANCE], charmed_stats->starting[STAT_AVOIDANCE]);
 
-	clampFloor(stats.accuracy, charmed_stats->accuracy);
+	clampFloor(stats.starting[STAT_ACCURACY], charmed_stats->starting[STAT_ACCURACY]);
 
-	clampFloor(stats.crit, charmed_stats->crit);
+	clampFloor(stats.starting[STAT_CRIT], charmed_stats->starting[STAT_CRIT]);
 
 	// resistances
 	for (unsigned int i=0; i<stats.vulnerable.size(); i++)
@@ -798,6 +796,8 @@ void Avatar::transform() {
 
 	loadSounds(charmed_stats->sfx_prefix);
 	loadStepFX("NULL");
+
+	stats.applyEffects();
 }
 
 void Avatar::untransform() {
@@ -805,7 +805,7 @@ void Avatar::untransform() {
 	inpt->unlockActionBar();
 
 	// Only allow untransform when on a valid tile
-	if (!map->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL)) return;
+	if (!map->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) return;
 
 	stats.transformed = false;
 	transform_triggered = true;
@@ -834,18 +834,18 @@ void Avatar::untransform() {
 	// In order to switch to the stance animation, we can't already be in a stance animation
 	setAnimation("run");
 
-	stats.dmg_melee_min = hero_stats->dmg_melee_min;
-	stats.dmg_melee_max = hero_stats->dmg_melee_max;
-	stats.dmg_ment_min = hero_stats->dmg_ment_min;
-	stats.dmg_ment_max = hero_stats->dmg_ment_max;
-	stats.dmg_ranged_min = hero_stats->dmg_ranged_min;
-	stats.dmg_ranged_max = hero_stats->dmg_ranged_max;
+	stats.starting[STAT_DMG_MELEE_MIN] = hero_stats->starting[STAT_DMG_MELEE_MIN];
+	stats.starting[STAT_DMG_MELEE_MAX] = hero_stats->starting[STAT_DMG_MELEE_MAX];
+	stats.starting[STAT_DMG_MENT_MIN] = hero_stats->starting[STAT_DMG_MENT_MIN];
+	stats.starting[STAT_DMG_MENT_MAX] = hero_stats->starting[STAT_DMG_MENT_MAX];
+	stats.starting[STAT_DMG_RANGED_MIN] = hero_stats->starting[STAT_DMG_RANGED_MIN];
+	stats.starting[STAT_DMG_RANGED_MAX] = hero_stats->starting[STAT_DMG_RANGED_MAX];
 
-	stats.absorb_min = hero_stats->absorb_min;
-	stats.absorb_max = hero_stats->absorb_max;
-	stats.avoidance = hero_stats->avoidance;
-	stats.accuracy = hero_stats->accuracy;
-	stats.crit = hero_stats->crit;
+	stats.starting[STAT_ABS_MIN] = hero_stats->starting[STAT_ABS_MIN];
+	stats.starting[STAT_ABS_MAX] = hero_stats->starting[STAT_ABS_MAX];
+	stats.starting[STAT_AVOIDANCE] = hero_stats->starting[STAT_AVOIDANCE];
+	stats.starting[STAT_ACCURACY] = hero_stats->starting[STAT_ACCURACY];
+	stats.starting[STAT_CRIT] = hero_stats->starting[STAT_CRIT];
 
 	for (unsigned int i=0; i<stats.vulnerable.size(); i++) {
 		stats.vulnerable[i] = hero_stats->vulnerable[i];
@@ -858,6 +858,8 @@ void Avatar::untransform() {
 	delete hero_stats;
 	charmed_stats = NULL;
 	hero_stats = NULL;
+
+	stats.applyEffects();
 }
 
 void Avatar::setAnimation(std::string name) {

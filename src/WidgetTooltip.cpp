@@ -34,7 +34,7 @@ WidgetTooltip::WidgetTooltip() {
 
 	FileParser infile;
 	// load tooltip settings from engine config file
-	if (infile.open(mods->locate("engine/tooltips.txt"))) {
+	if (infile.open("engine/tooltips.txt")) {
 		while (infile.next()) {
 			if (infile.key == "tooltip_offset")
 				offset = toInt(infile.val);
@@ -51,7 +51,7 @@ WidgetTooltip::WidgetTooltip() {
  * Knowing the total size of the text and the position of origin,
  * calculate the starting position of the background and text
  */
-Point WidgetTooltip::calcPosition(int style, Point pos, Point size) {
+Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
 
 	Point tip_pos;
 
@@ -93,7 +93,7 @@ Point WidgetTooltip::calcPosition(int style, Point pos, Point size) {
  * Tooltip position depends on the screen quadrant of the source.
  * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
  */
-void WidgetTooltip::render(TooltipData &tip, Point pos, int style, SDL_Surface *target) {
+void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style, SDL_Surface *target) {
 	if (target == NULL) {
 		target = screen;
 	}

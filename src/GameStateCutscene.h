@@ -15,23 +15,20 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <queue>
-#include <list>
-#include <string>
-#include <sstream>
-#include <iostream>
-#include <algorithm>
+#ifndef GAMESTATECUTSCENE_H
+#define GAMESTATECUTSCENE_H
 
+#include "CommonIncludes.h"
+#include "GameState.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
-#include "WidgetLabel.h"
 
-#ifndef GAMESTATECUTSCENE_H
-#define GAMESTATECUTSCENE_H
+#include <queue>
+#include <list>
 
-#include "GameState.h"
+class WidgetScrollBox;
 
 class SceneComponent {
 public:
@@ -39,6 +36,14 @@ public:
 	SDL_Surface *i;
 	std::string s;
 	int x,y,z;
+	SceneComponent()
+		: type("")
+		, i(NULL)
+		, s("")
+		, x(0)
+		, y(0)
+		, z(0)
+	{}
 };
 
 class Scene {
@@ -50,6 +55,8 @@ private:
 	SDL_Surface *art;
 	SDL_Rect art_dest;
 	SoundManager::SoundID sid;
+	WidgetScrollBox *caption_box;
+	bool done;
 
 public:
 	Scene();

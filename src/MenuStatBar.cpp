@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of a status bar
  */
 
+#include "CommonIncludes.h"
 #include "Menu.h"
 #include "MenuStatBar.h"
 #include "ModManager.h"
@@ -31,10 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
-
-#include <string>
-#include <sstream>
-
 
 using namespace std;
 
@@ -51,7 +48,7 @@ MenuStatBar::MenuStatBar(std::string type) {
 
 	// Load config settings
 	FileParser infile;
-	if(infile.open(mods->locate("menus/"+type+".txt"))) {
+	if(infile.open("menus/"+type+".txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

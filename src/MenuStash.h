@@ -19,20 +19,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuStash
  */
 
-
 #pragma once
 #ifndef MENU_STASH_H
 #define MENU_STASH_H
 
+#include "CommonIncludes.h"
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <string>
-
-class InputState;
 class NPC;
 class StatBlock;
 class WidgetButton;
@@ -59,17 +53,21 @@ public:
 	void update();
 	void logic();
 	void render();
-	ItemStack click(InputState * input);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(Point position);
 	bool full(int item);
-	void drop(Point mouse, ItemStack stack);
+	void drop(Point position, ItemStack stack);
 	void add(ItemStack stack, int slot);
+
+	int getRowsCount();
 
 	SDL_Rect slots_area;
 	MenuItemStorage stock;
 	bool updated;
+
+	TabList tablist;
 };
 
 

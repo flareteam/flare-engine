@@ -20,12 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ENEMYGROUPMANAGER_H
 #define ENEMYGROUPMANAGER_H
 
-#include <fstream>
-#include <string>
-#include <map>
-#include <vector>
-#include <iostream>
-
+#include "CommonIncludes.h"
 
 class Enemy_Level {
 public:
@@ -36,7 +31,6 @@ public:
 	Enemy_Level() : level(0), rarity("common") {}
 };
 
-
 /**
  * class EnemyGroupManager
  *
@@ -45,8 +39,8 @@ public:
  */
 class EnemyGroupManager {
 public:
-	/** Get instance of the Singleton */
-	static EnemyGroupManager& instance();
+	EnemyGroupManager();
+	~EnemyGroupManager();
 
 	/** To get a random enemy with the given characteristics
 	 *
@@ -59,25 +53,11 @@ public:
 	Enemy_Level getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const;
 
 private:
-	/** Instance of the Singleton */
-	static EnemyGroupManager* _instance;
-
 
 	/** Container to store enemy data */
 	std::map <std::string, std::vector<Enemy_Level> > _categories;
 
-
-	/** Constructor */
-	EnemyGroupManager();
-	/** Destructor */
-	~EnemyGroupManager();
-
-	/** Generate the list of categories, fills the container with the enemy
-	 * data */
-	void generate();
-
-	/** Get information stored on files and insert into container */
-	void parseEnemyFileAndStore(const std::string& filename);
+	void parseEnemyFilesAndStore();
 };
 
 #endif

@@ -19,8 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef __ANIMATION_SET__
 #define __ANIMATION_SET__
 
-#include <string>
-#include <vector>
+#include "CommonIncludes.h"
 
 class Animation;
 

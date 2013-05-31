@@ -22,21 +22,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the config, display, and usage of the 0-9 hotkeys, mouse buttons, and menu calls
  */
 
-
 #pragma once
 #ifndef MENU_ACTION_BAR_H
 #define MENU_ACTION_BAR_H
 
+#include "CommonIncludes.h"
+#include "Menu.h"
 #include "Utils.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
 #include "WidgetLabel.h"
 
 class PowerManager;
 class StatBlock;
 class TooltipData;
 class WidgetLabel;
+class WidgetSlot;
 
 const int MENU_CHARACTER = 0;
 const int MENU_INVENTORY = 1;
@@ -46,13 +45,12 @@ const int MENU_LOG = 3;
 class MenuActionBar : public Menu {
 private:
 	void renderCooldowns();
-	void renderItemCounts();
 
 	SDL_Surface *background;
 	SDL_Surface *emptyslot;
 	SDL_Surface *icons;
 	SDL_Surface *disabled;
-    SDL_Surface *attention;
+	SDL_Surface *attention;
 
 	StatBlock *hero;
 	PowerManager *powers;
@@ -66,13 +64,12 @@ public:
 	MenuActionBar(PowerManager *_powers, StatBlock *hero, SDL_Surface *icons);
 	~MenuActionBar();
 	void loadGraphics();
-	void renderIcon(int icon_id, int x, int y);
 	void renderAttention(int menu_id);
 	void logic();
 	void render();
-	int checkAction(Point mouse);
+	int checkAction();
 	int checkDrag(Point mouse);
-	void checkMenu(Point mouse, bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l);
+	void checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l);
 	void drop(Point mouse, int power_index, bool rearranging);
 	void actionReturn(int power_index);
 	void remove(Point mouse);
@@ -85,11 +82,11 @@ public:
 	int hotkeys[12]; // refer to power_index in PowerManager
 	int actionbar[12]; // temp for shapeshifting
 	bool locked[12]; // if slot is locked, you cannot drop it
-	SDL_Rect slots[12]; // the location of hotkey slots
-	SDL_Rect menus[4]; // the location of the menu buttons
+	WidgetSlot *slots[12]; // hotkey slots
+	WidgetSlot *menus[4]; // menu buttons
 	int slot_item_count[12]; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.
 	bool slot_enabled[12];
-    bool requires_attention[4];
+	bool requires_attention[4];
 
 	// these store the area occupied by these hotslot sections.
 	// useful for detecting mouse interactions on those locations
@@ -97,6 +94,8 @@ public:
 	SDL_Rect mouseArea;
 	SDL_Rect menuArea;
 	int drag_prev_slot;
+
+	TabList tablist;
 
 };
 

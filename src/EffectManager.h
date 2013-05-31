@@ -21,19 +21,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Holds the collection of hazards (active attacks, spells, etc) and handles group operations
  */
 
-
 #pragma once
 #ifndef EFFECT_MANAGER_H
 #define EFFECT_MANAGER_H
 
-#include "Animation.h"
-#include "SharedResources.h"
-#include "Utils.h"
+#include "CommonIncludes.h"
 #include "Hazard.h"
+#include "SharedResources.h"
+#include "Stats.h"
+#include "Utils.h"
 
-#include <string>
-#include <vector>
-
+class Animation;
 class Avatar;
 class EnemyManager;
 class Hazard;
@@ -113,25 +111,13 @@ public:
 	bool revive;
 	bool convert;
 	bool death_sentence;
+	bool fear;
 
-	int bonus_hp;
-	int bonus_hp_regen;
-	int bonus_hp_percent;
-	int bonus_mp;
-	int bonus_mp_regen;
-	int bonus_mp_percent;
-	int bonus_accuracy;
-	int bonus_avoidance;
-	int bonus_crit;
 	int bonus_offense;
 	int bonus_defense;
 	int bonus_physical;
 	int bonus_mental;
-	int bonus_xp;
-	int bonus_currency;
-	int bonus_item_find;
-	int bonus_stealth;
-	int bonus_poise;
+	int bonus[STAT_COUNT];
 	std::vector<int> bonus_resist;
 
 	bool triggered_others;

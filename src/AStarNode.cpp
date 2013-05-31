@@ -59,6 +59,10 @@ int AStarNode::getY() const {
 	return y;
 }
 
+int AStarNode::getH() const {
+	return h;
+}
+
 Point AStarNode::getParent() const {
 	return parent;
 }

@@ -27,8 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GET_TEXT_H
 #define GET_TEXT_H
 
-#include <fstream>
-#include <string>
+#include "CommonIncludes.h"
 
 class GetText {
 private:

@@ -21,21 +21,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class ItemManager
  */
 
-
 #pragma once
 #ifndef ITEM_MANAGER_H
 #define ITEM_MANAGER_H
 
-#include "WidgetTooltip.h"
+#include "CommonIncludes.h"
+#include "TooltipData.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <map>
-#include <string>
 #include <stdint.h>
-#include <vector>
 
 #define VENDOR_BUY 0
 #define VENDOR_SELL 1
@@ -176,9 +169,9 @@ class ItemManager {
 private:
 	SDL_Surface *icons;
 
-	void load(const std::string& filename);
-	void loadTypes(const std::string& filename);
-	void loadSets(const std::string& filename);
+	void loadItems();
+	void loadTypes();
+	void loadSets();
 	void loadAll();
 	void loadIcons();
 
@@ -194,6 +187,7 @@ private:
 public:
 	ItemManager();
 	~ItemManager();
+	SDL_Surface* getIcons();
 	void renderIcon(ItemStack stack, int x, int y, int size);
 	void playSound(int item, Point pos = Point(0,0));
 	TooltipData getTooltip(int item, StatBlock *stats, int context);

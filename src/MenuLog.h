@@ -19,21 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuLog
  */
 
-
 #pragma once
 #ifndef MENU_LOG_H
 #define MENU_LOG_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
-
-#include <string>
-#include <vector>
-
-#include "Utils.h"
 
 class WidgetButton;
 class WidgetScrollBox;
@@ -41,7 +33,7 @@ class WidgetTabControl;
 
 const unsigned int MAX_LOG_MESSAGES = 32;
 
-const int LOG_TYPE_COUNT = 2;
+const unsigned LOG_TYPE_COUNT = 2;
 const int LOG_TYPE_QUESTS = 0;
 const int LOG_TYPE_MESSAGES = 1;
 
@@ -80,6 +72,8 @@ public:
 	void remove(int msg_index, int log_type);
 	void clear(int log_type);
 	void clear();
+
+	TabList tablist;
 };
 
 #endif

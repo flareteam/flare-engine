@@ -19,73 +19,51 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyGroupManager.h"
 #include "FileParser.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 
+#include <cassert>
+
 using namespace std;
 
-
-EnemyGroupManager* EnemyGroupManager::_instance = 0;
-
-
 EnemyGroupManager::EnemyGroupManager() {
-	generate();
+	parseEnemyFilesAndStore();
 }
 
 EnemyGroupManager::~EnemyGroupManager() {
 }
 
-EnemyGroupManager& EnemyGroupManager::instance() {
-	if (_instance == 0) {
-		_instance = new EnemyGroupManager;
-	}
-	return *(_instance);
-}
-
-void EnemyGroupManager::generate() {
-
-	// load each enemies folder. Individual enemies can be overwritten with mods.
-	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-
-		string dir_local = PATH_USER + "mods/" + mods->mod_list[i] + "/enemies";
-
-		vector<string> files_local;
-		getFileList(dir_local, ".txt", files_local);
-		for (size_t j = 0; j < files_local.size(); ++j) {
-			parseEnemyFileAndStore(files_local[j]);
-		}
-
-		string dir = PATH_DATA + "mods/" + mods->mod_list[i] + "/enemies";
-
-		vector<string> files;
-		getFileList(dir, ".txt", files);
-		for (size_t j = 0; j < files.size(); ++j) {
-			parseEnemyFileAndStore(files[j]);
-		}
-	}
-}
-
-void EnemyGroupManager::parseEnemyFileAndStore(const string& filename) {
+void EnemyGroupManager::parseEnemyFilesAndStore() {
 	FileParser infile;
-	if (infile.open(mods->locate("enemies/" + filename))) {
-		Enemy_Level new_enemy;
-		new_enemy.type = filename.substr(0, filename.length()-4); //removes the ".txt" from the filename
-		while (infile.next()) {
-			if (infile.key == "level") {
-				new_enemy.level = atoi(infile.val.c_str());
-			}
-			else if (infile.key == "rarity") {
-				new_enemy.rarity = infile.val.c_str();
-			}
-			else if (infile.key == "categories") {
-				string cat;
-				while ( (cat = infile.nextValue()) != "") {
-					_categories[cat].push_back(new_enemy);
-				}
+
+	if (!infile.open("enemies", true, false))
+		return;
+
+	Enemy_Level new_enemy;
+	infile.new_section = true;
+	while (infile.next()) {
+		if (infile.new_section) {
+			const string fname = infile.getFileName();
+			const int firstpos = fname.rfind("/") + 1;
+			const int len = fname.length() - firstpos - 4; //removes the ".txt" from the filename
+			new_enemy.type = fname.substr(firstpos, len);
+		}
+
+		if (infile.key == "level") {
+			new_enemy.level = atoi(infile.val.c_str());
+		}
+		else if (infile.key == "rarity") {
+			new_enemy.rarity = infile.val.c_str();
+		}
+		else if (infile.key == "categories") {
+			string cat;
+			while ( (cat = infile.nextValue()) != "") {
+				_categories[cat].push_back(new_enemy);
 			}
 		}
-		infile.close();
 	}
+	infile.close();
 }
 
 Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {

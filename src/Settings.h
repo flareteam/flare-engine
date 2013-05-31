@@ -21,13 +21,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Settings
  */
 
-
 #pragma once
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <string>
-#include <vector>
+#include "CommonIncludes.h"
 
 typedef struct Element{
 	std::string name;
@@ -66,10 +64,13 @@ typedef struct HeroClass{
 
 // Path info
 extern std::string GAME_FOLDER;
+extern std::string DEFAULT_FOLDER;
 extern std::string PATH_CONF; // user-configurable settings files
 extern std::string PATH_USER; // important per-user data (saves)
 extern std::string PATH_DATA; // common game data
 extern std::string CUSTOM_PATH_DATA; // user-defined replacement for PATH_DATA
+extern std::string PATH_DEFAULT_USER; // similar to PATH_USER, except for the default game
+extern std::string PATH_DEFAULT_DATA; // similar to PATH_DATA, except for the default game
 
 // Filenames
 extern std::string FILE_SETTINGS;     // Name of the settings file (e.g. "settings.txt").
@@ -106,6 +107,8 @@ extern bool MOUSE_MOVE;
 extern bool ENABLE_JOYSTICK;
 extern int JOYSTICK_DEVICE;
 extern bool MOUSE_AIM;
+extern bool NO_MOUSE;
+extern int JOY_DEADZONE;
 
 // User Options
 extern bool COMBAT_TEXT;
@@ -115,6 +118,7 @@ extern bool MENUS_PAUSE;
 extern bool SAVE_HPMP;
 extern bool ENABLE_PLAYGAME;
 extern bool SHOW_FPS;
+extern bool COLORBLIND;
 extern int CORPSE_TIMEOUT;
 extern bool SELL_WITHOUT_VENDOR;
 extern int AIM_ASSIST;
@@ -122,6 +126,8 @@ extern std::string WINDOW_TITLE;
 extern std::string GAME_PREFIX;
 extern int SOUND_FALLOFF;
 extern int PARTY_EXP_PERCENTAGE;
+extern bool ENABLE_ALLY_COLLISION_AI;
+extern bool ENABLE_ALLY_COLLISION;
 
 // Tile Settings
 extern unsigned short UNITS_PER_TILE;
@@ -148,6 +154,10 @@ extern short MAX_ABSORB;
 extern short MAX_RESIST;
 extern short MAX_BLOCK;
 extern short MAX_AVOIDANCE;
+extern short MIN_ABSORB;
+extern short MIN_RESIST;
+extern short MIN_BLOCK;
+extern short MIN_AVOIDANCE;
 
 // Elemental types
 extern std::vector<Element> ELEMENTS;
@@ -159,12 +169,19 @@ extern std::vector<HeroClass> HERO_CLASSES;
 extern std::string CURRENCY;
 extern float VENDOR_RATIO;
 
+// Death penalty settings
+extern bool DEATH_PENALTY;
+extern bool DEATH_PENALTY_PERMADEATH;
+extern int DEATH_PENALTY_CURRENCY;
+extern int DEATH_PENALTY_XP;
+extern int DEATH_PENALTY_XP_CURRENT;
+extern bool DEATH_PENALTY_ITEM;
+
 void setPaths();
 void loadTilesetSettings();
 void loadMiscSettings();
 bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
-
 
 #endif

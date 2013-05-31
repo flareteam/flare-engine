@@ -20,9 +20,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetButton
  */
 
-#include "WidgetButton.h"
-#include "SharedResources.h"
 #include "SDL_gfxBlitFunc.h"
+#include "SharedResources.h"
+#include "WidgetButton.h"
+#include "WidgetTooltip.h"
 
 using namespace std;
 
@@ -30,7 +31,6 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
 	, buttons(NULL)
-	, click(NULL)
 	, wlabel()
 	, color_normal(font->getColor("widget_normal"))
 	, color_disabled(font->getColor("widget_disabled"))

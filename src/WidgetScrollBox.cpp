@@ -1,6 +1,6 @@
 /*
-Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Justin Jacobs
+Copyright Â© 2011-2012 Clint Bellanger
+Copyright Â© 2012 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -32,16 +32,33 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	cursor = 0;
 	bg.r = bg.g = bg.b = 0;
 	contents = NULL;
+	currentChild = -1;
 	scrollbar = new WidgetScrollBar("images/menus/buttons/scrollbar_default.png");
 	update = true;
 	render_to_alpha = false;
 	transparent = true;
+	line_height = 20;
 	resize(height);
+	tablist = TabList(VERTICAL);
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
 	if (contents != NULL) SDL_FreeSurface(contents);
 	delete scrollbar;
+}
+
+void WidgetScrollBox::addChildWidget(Widget* child) {
+
+	std::vector<Widget*>::iterator find = std::find(
+			children.begin(),
+			children.end(),
+			child);
+
+	if (find == children.end()) {
+		children.push_back(child);
+		tablist.add(child);
+	}
+
 }
 
 void WidgetScrollBox::scroll(int amount) {
@@ -55,6 +72,25 @@ void WidgetScrollBox::scroll(int amount) {
 	refresh();
 }
 
+void WidgetScrollBox::scrollTo(int amount) {
+	cursor = amount;
+	if (cursor < 0) {
+		cursor = 0;
+	}
+	else if (cursor > contents->h-pos.h) {
+		cursor = contents->h-pos.h;
+	}
+	refresh();
+}
+
+void WidgetScrollBox::scrollDown() {
+	scroll(line_height);
+}
+
+void WidgetScrollBox::scrollUp() {
+	scroll(-line_height);
+}
+
 Point WidgetScrollBox::input_assist(Point mouse) {
 	Point new_mouse;
 	new_mouse.x = mouse.x-pos.x;
@@ -64,6 +100,7 @@ Point WidgetScrollBox::input_assist(Point mouse) {
 
 void WidgetScrollBox::logic() {
 	logic(inpt->mouse.x,inpt->mouse.y);
+	tablist.logic();
 }
 
 void WidgetScrollBox::logic(int x, int y) {
@@ -71,11 +108,11 @@ void WidgetScrollBox::logic(int x, int y) {
 
 	if (isWithin(pos,mouse)) {
 		if (inpt->scroll_up) {
-			scroll(-20);
+			scrollUp();
 			inpt->resetScroll();
 		}
 		if (inpt->scroll_down) {
-			scroll(20);
+			scrollDown();
 			inpt->resetScroll();
 		}
 	}
@@ -87,10 +124,10 @@ void WidgetScrollBox::logic(int x, int y) {
 	if (contents->h > pos.h) {
 		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
 			case 1:
-				scroll(-20);
+				scrollUp();
 				break;
 			case 2:
-				scroll(20);
+				scrollDown();
 				break;
 			case 3:
 				cursor = scrollbar->getValue();
@@ -138,6 +175,10 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		target = screen;
 	}
 
+	for (unsigned i = 0; i < children.size(); i++) {
+		children[i]->render(contents);
+	}
+
 	SDL_Rect	src,dest;
 	dest = pos;
 	src.x = 0;
@@ -151,5 +192,69 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		SDL_BlitSurface(contents, &src, target, &dest);
 	if (contents->h > pos.h) scrollbar->render(target);
 	update = false;
+
+	if (in_focus) {
+		Point topLeft;
+		Point bottomRight;
+		Uint32 color;
+
+		topLeft.x = dest.x;
+		topLeft.y = dest.y;
+		bottomRight.x = dest.x + dest.w;
+		bottomRight.y = dest.y + dest.h;
+		color = SDL_MapRGB(target->format, 255,248,220);
+
+		drawRectangle(target, topLeft, bottomRight, color);
+	}
 }
 
+bool WidgetScrollBox::getNext() {
+	if (children.size() == 0) {
+		scrollDown();
+		return true;
+	}
+
+	if (currentChild != -1)
+		children[currentChild]->in_focus = false;
+	currentChild+=1;
+	currentChild = ((unsigned)currentChild == children.size()) ? 0 : currentChild;
+
+	if (children[currentChild]->pos.y > (cursor + pos.h) ||
+			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {
+		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+	}
+	if (children[currentChild]->pos.y < cursor ||
+			(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor) {
+		scrollTo(children[currentChild]->pos.y);
+	}
+	children[currentChild]->in_focus = true;
+	return true;
+}
+
+bool WidgetScrollBox::getPrev() {
+	if (children.size() == 0) {
+		scrollUp();
+		return true;
+	}
+
+	if (currentChild != -1)
+		children[currentChild]->in_focus = false;
+	currentChild-=1;
+	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
+
+	if (children[currentChild]->pos.y > (cursor + pos.h) ||
+			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {
+		scrollTo(children[currentChild]->pos.y+children[currentChild]->pos.h-pos.h);
+	}
+	if (children[currentChild]->pos.y < cursor ||
+			(children[currentChild]->pos.y + children[currentChild]->pos.h) < cursor) {
+		scrollTo(children[currentChild]->pos.y);
+	}
+	children[currentChild]->in_focus = true;
+	return true;
+}
+
+void WidgetScrollBox::activate() {
+	if (currentChild != -1)
+		children[currentChild]->activate();
+}

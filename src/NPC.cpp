@@ -73,7 +73,7 @@ void NPC::load(const string& npc_id, int hero_level) {
 
 	string filename_portrait = "";
 
-	if (infile.open(mods->locate("npcs/" + npc_id + ".txt"))) {
+	if (infile.open("npcs/" + npc_id + ".txt")) {
 		while (infile.next()) {
 			if (infile.section == "dialog") {
 				if (infile.new_section) {
@@ -276,13 +276,13 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 				break;
 			}
 			else if (dialog[i][j].type == "requires_level") {
-				if (!map->camp->hero->level < dialog[i][j].x)
+				if (map->camp->hero->level >= dialog[i][j].x)
 					continue;
 				is_available = false;
 				break;
 			}
 			else if (dialog[i][j].type == "requires_not_level") {
-				if (!map->camp->hero->level >= dialog[i][j].x)
+				if (map->camp->hero->level < dialog[i][j].x)
 					continue;
 				is_available = false;
 				break;

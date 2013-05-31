@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStatePlay.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "TooltipData.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
@@ -68,6 +69,10 @@ GameStateNew::GameStateNew() : GameState() {
 	button_next = new WidgetButton("images/menus/buttons/right.png");
 	input_name = new WidgetInput();
 	button_permadeath = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	if (DEATH_PENALTY_PERMADEATH) {
+		button_permadeath->enabled = false;
+		button_permadeath->Check();
+	}
 
 	class_list = new WidgetListBox (HERO_CLASSES.size(), 12, "images/menus/buttons/listbox_default.png");
 	class_list->can_deselect = false;
@@ -80,7 +85,7 @@ GameStateNew::GameStateNew() : GameState() {
 	// Read positions from config file
 	FileParser infile;
 
-	if (infile.open(mods->locate("menus/gamenew.txt"))) {
+	if (infile.open("menus/gamenew.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -208,7 +213,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
  */
 void GameStateNew::loadOptions(const string& filename) {
 	FileParser fin;
-	if (!fin.open(mods->locate("engine/" + filename))) return;
+	if (!fin.open("engine/" + filename)) return;
 
 	while (fin.next()) {
 		if (fin.key == "option") {
@@ -263,9 +268,9 @@ void GameStateNew::logic() {
 		// start the new game
 		GameStatePlay* play = new GameStatePlay();
 		Avatar *pc = play->getAvatar();
-		pc->stats.base = base[current_option];
-		pc->stats.head = head[current_option];
-		pc->stats.portrait = portrait[current_option];
+		pc->stats.gfx_base = base[current_option];
+		pc->stats.gfx_head = head[current_option];
+		pc->stats.gfx_portrait = portrait[current_option];
 		pc->stats.name = input_name->getText();
 		pc->stats.permadeath = button_permadeath->isChecked();
 		play->game_slot = game_slot;

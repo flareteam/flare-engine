@@ -22,24 +22,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle collisions between objects and the map
  */
 
-
 #pragma once
 #ifndef MAP_COLLISION_H
 #define MAP_COLLISION_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 
-#include <algorithm>
 #include <cstdlib>
-#include <vector>
 
 // collision tile types
+// The numbers 0..4 are the collision tiles as produced by tiled,
+// only 5 and 6 deal with entities on the map
 const int BLOCKS_NONE = 0;
 const int BLOCKS_ALL = 1;
 const int BLOCKS_MOVEMENT = 2;
 const int BLOCKS_ALL_HIDDEN = 3;
 const int BLOCKS_MOVEMENT_HIDDEN = 4;
-const int BLOCKS_ENTITIES = 5;
+const int BLOCKS_ENTITIES = 5; // hero or enemies are blocking this tile, so any other entity is blocked
+const int BLOCKS_ENEMIES = 6;  // an ally is standing on that tile, so the hero could pass if ENABLE_ALLY_COLLISION is false
 
 // collision check types
 const int CHECK_MOVEMENT = 1;
@@ -52,9 +53,6 @@ typedef enum {
 	MOVEMENT_INTANGIBLE = 2 // can move through BLOCKS_ALL (e.g. walls)
 } MOVEMENTTYPE;
 
-const unsigned int PATH_MAX_TILES = 256;
-
-
 class MapCollision {
 private:
 
@@ -66,22 +64,25 @@ public:
 	~MapCollision();
 
 	void setmap(const unsigned short _colmap[][256], unsigned short w, unsigned short h);
-	bool move(int &x, int &y, int step_x, int step_y, int dist, MOVEMENTTYPE movement_type);
+	bool move(int &x, int &y, int step_x, int step_y, int dist, MOVEMENTTYPE movement_type, bool is_hero);
 
 	bool is_outside_map(int tile_x, int tile_y) const;
 	bool is_empty(int x, int y) const;
 	bool is_wall(int x, int y) const;
-	bool is_valid_tile(int x, int y, MOVEMENTTYPE movement_type) const;
-	bool is_valid_position(int x, int y, MOVEMENTTYPE movement_type) const;
+
+	bool is_valid_tile(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const;
+	bool is_valid_position(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const;
 
 	int is_one_step_around(int x, int y, int xidr, int ydir);
 
 	bool line_of_sight(int x1, int y1, int x2, int y2);
 	bool line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE movement_type);
 
-	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = PATH_MAX_TILES);
+	bool is_facing(int x1, int y1, char direction, int x2, int y2);
 
-	void block(int map_x, int map_y);
+	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
+
+	void block(int map_x, int map_y, bool is_ally);
 	void unblock(int map_x, int map_y);
 
 	unsigned short colmap[256][256];

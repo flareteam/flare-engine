@@ -20,32 +20,26 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuTalker
  */
 
-
 #pragma once
 #ifndef MENU_TALKER_H
 #define MENU_TALKER_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
+#include "CommonIncludes.h"
 #include "Utils.h"
-
-#include <string>
-#include <sstream>
+#include "Widget.h"
 
 class CampaignManager;
 class MenuManager;
 class NPC;
 class WidgetButton;
+class WidgetLabel;
+class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
-	CampaignManager *camp;
 	MenuManager *menu;
 
 	SDL_Surface *portrait;
-	SDL_Surface *msg_buffer;
 	std::string hero_name;
 
 	int dialog_node;
@@ -64,8 +58,13 @@ private:
 
 	SDL_Color color_normal;
 
+	TabList tablist;
+
+	WidgetLabel *label_name;
+	WidgetScrollBox *textbox;
+
 public:
-	MenuTalker(MenuManager *menu,CampaignManager *camp);
+	MenuTalker(MenuManager *menu);
 	~MenuTalker();
 
 	NPC *npc;

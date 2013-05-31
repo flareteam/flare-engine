@@ -21,13 +21,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Settings
  */
 
-#include <fstream>
 #include <cstring>
-#include <string>
 #include <typeinfo>
 #include <cmath>
 using namespace std;
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "Settings.h"
 #include "Utils.h"
@@ -62,21 +61,27 @@ ConfigEntry config[] = {
 	{ "animated_tiles",   &typeid(ANIMATED_TILES),  "1",   &ANIMATED_TILES,  "animated tiles. Try disabling for performance. 1 enable, 0 disable."},
 	{ "enable_joystick",  &typeid(ENABLE_JOYSTICK), "0",   &ENABLE_JOYSTICK, "joystick settings."},
 	{ "joystick_device",  &typeid(JOYSTICK_DEVICE), "0",   &JOYSTICK_DEVICE, NULL},
+	{ "joystick_deadzone",&typeid(JOY_DEADZONE),    "100", &JOY_DEADZONE,    NULL},
 	{ "language",         &typeid(LANGUAGE),        "en",  &LANGUAGE,        "2-letter language code."},
 	{ "change_gamma",     &typeid(CHANGE_GAMMA),    "0",   &CHANGE_GAMMA,    "allow changing gamma (experimental). 1 enable, 0 disable."},
 	{ "gamma",            &typeid(GAMMA),           "1.0", &GAMMA,           "screen gamma (0.5 = darkest, 2.0 = lightest)"},
 	{ "texture_quality",  &typeid(TEXTURE_QUALITY), "1",   &TEXTURE_QUALITY, "texture quality (0 = low quality, 1 = high quality)"},
 	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
-	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."}
+	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
+	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
+	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
 // Paths
 string GAME_FOLDER = "default";
+string DEFAULT_FOLDER = "default";
 string PATH_CONF = "";
 string PATH_USER = "";
 string PATH_DATA = "";
 string CUSTOM_PATH_DATA = "";
+string PATH_DEFAULT_USER = "";
+string PATH_DEFAULT_DATA = "";
 
 // Filenames
 string FILE_SETTINGS	= "settings.txt";
@@ -131,6 +136,8 @@ bool MOUSE_MOVE;
 bool ENABLE_JOYSTICK;
 int JOYSTICK_DEVICE;
 bool MOUSE_AIM;
+bool NO_MOUSE;
+int JOY_DEADZONE;
 
 // Language Settings
 std::string LANGUAGE = "en";
@@ -144,6 +151,10 @@ short MAX_ABSORB = 90;
 short MAX_RESIST = 90;
 short MAX_BLOCK = 100;
 short MAX_AVOIDANCE = 99;
+short MIN_ABSORB = 0;
+short MIN_RESIST = 0;
+short MIN_BLOCK = 0;
+short MIN_AVOIDANCE = 0;
 
 // Elemental types
 std::vector<Element> ELEMENTS;
@@ -155,11 +166,20 @@ std::vector<HeroClass> HERO_CLASSES;
 std::string CURRENCY = "Gold";
 float VENDOR_RATIO = 0.25;
 
+// Death penalty settings
+bool DEATH_PENALTY = true;
+bool DEATH_PENALTY_PERMADEATH = false;
+int DEATH_PENALTY_CURRENCY = 50;
+int DEATH_PENALTY_XP = 0;
+int DEATH_PENALTY_XP_CURRENT = 0;
+bool DEATH_PENALTY_ITEM = false;
+
 // Other Settings
 bool MENUS_PAUSE = false;
 bool SAVE_HPMP = false;
 bool ENABLE_PLAYGAME = false;
 bool SHOW_FPS = false;
+bool COLORBLIND = false;
 int CORPSE_TIMEOUT = 1800;
 bool SELL_WITHOUT_VENDOR = true;
 int AIM_ASSIST = 0;
@@ -167,6 +187,8 @@ std::string GAME_PREFIX = "";
 std::string WINDOW_TITLE = "Flare";
 int SOUND_FALLOFF = 15;
 int PARTY_EXP_PERCENTAGE = 100;
+bool ENABLE_ALLY_COLLISION_AI = true;
+bool ENABLE_ALLY_COLLISION = true;
 
 /**
  * Set system paths
@@ -183,6 +205,8 @@ void setPaths() {
 	PATH_CONF = "config";
 	PATH_USER = "saves";
 	PATH_DATA = "";
+	PATH_DEFAULT_USER = "";
+	PATH_DEFAULT_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
@@ -199,6 +223,8 @@ void setPaths() {
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
+	PATH_DEFAULT_USER = "PROGDIR:";
+	PATH_DEFAULT_DATA = "PROGDIR:";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
@@ -238,9 +264,12 @@ void setPaths() {
 	if (getenv("XDG_DATA_HOME") != NULL) {
 		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
 		createDir(PATH_USER);
+		PATH_DEFAULT_USER = PATH_USER + DEFAULT_FOLDER + "/";
 		PATH_USER += GAME_FOLDER + "/";
 		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
+		createDir(PATH_DEFAULT_USER);
+		createDir(PATH_DEFAULT_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -250,14 +279,19 @@ void setPaths() {
 		createDir(PATH_USER);
 		PATH_USER += "flare/";
 		createDir(PATH_USER);
+		PATH_DEFAULT_USER = PATH_USER + DEFAULT_FOLDER + "/";
 		PATH_USER += GAME_FOLDER + "/";
 		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
+		createDir(PATH_DEFAULT_USER);
+		createDir(PATH_DEFAULT_USER + "mods/");
 	}
 	// ./saves/
 	else {
 		PATH_USER = "./saves/";
 		createDir(PATH_USER);
+		PATH_DEFAULT_USER = "./saves/";
+		createDir(PATH_DEFAULT_USER);
 	}
 
 	// data folder
@@ -269,19 +303,23 @@ void setPaths() {
 	// Official linux distros might put the executable and data files
 	// in a more standard location.
 
-	// NOTE: from here on out, the function exits early when the data dir is found
+	// these flags are set to true when a valid directory is found
+	bool path_data = false;
+	bool path_default_data = false;
 
 	// if the user specified a data path, try to use it
 	if (dirExists(CUSTOM_PATH_DATA)) {
-		PATH_DATA = CUSTOM_PATH_DATA;
-		return;
+		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
+		if (!path_default_data) PATH_DEFAULT_DATA = CUSTOM_PATH_DATA;
+		path_data = path_default_data = true;
 	}
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
-		PATH_DATA = "./";
-		return;
+		if (!path_data) PATH_DATA = "./";
+		if (!path_default_data) PATH_DEFAULT_DATA = "./";
+		path_data = path_default_data = true;
 	}
 
 	// check $XDG_DATA_DIRS options
@@ -291,33 +329,51 @@ void setPaths() {
 		string pathtest;
 		pathtest = eatFirstString(pathlist,':');
 		while (pathtest != "") {
-			PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
-			if (dirExists(PATH_DATA)) return; // NOTE: early exit
+			if (!path_data) {
+				PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
+				if (dirExists(PATH_DATA)) path_data = true;
+			}
+			if (!path_default_data) {
+				PATH_DEFAULT_DATA = pathtest + "/flare/" + DEFAULT_FOLDER + "/";
+				if (dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
+			}
+			if (path_data && path_default_data) break;
 			pathtest = eatFirstString(pathlist,':');
 		}
 	}
 
 #if defined DATA_INSTALL_DIR
-	PATH_DATA = DATA_INSTALL_DIR "/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = DATA_INSTALL_DIR "/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	PATH_DATA = "/usr/local/share/flare/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = "/usr/local/share/flare/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/local/share/flare/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
-	PATH_DATA = "/usr/share/flare/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = "/usr/share/flare/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/share/flare/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// check "games" variants of these
-	PATH_DATA = "/usr/local/share/games/flare/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/local/share/games/flare/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
-	PATH_DATA = "/usr/share/games/flare/" + GAME_FOLDER + "/";
-	if (dirExists(PATH_DATA)) return; // NOTE: early exit
+	if (!path_data) PATH_DATA = "/usr/share/games/flare/" + GAME_FOLDER + "/";
+	if (!path_data && dirExists(PATH_DATA)) path_data = true;
+	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/share/games/flare/" + DEFAULT_FOLDER + "/";
+	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// finally assume the local folder
-	PATH_DATA = "./";
+	if (!path_data)	PATH_DATA = "./";
+	if (!path_default_data) PATH_DEFAULT_DATA = "./";
 }
 #endif
 
@@ -336,7 +392,7 @@ static ConfigEntry * getConfigEntry(const std::string & name) {
 void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
-	if (infile.open(mods->locate("engine/tileset_config.txt"), "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
+	if (infile.open("engine/tileset_config.txt", true, true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
 		while (infile.next()) {
 			if (infile.key == "units_per_tile") {
 				UNITS_PER_TILE = toInt(infile.val);
@@ -370,7 +426,7 @@ void loadTilesetSettings() {
 		UNITS_PER_PIXEL_Y = UNITS_PER_TILE / TILE_H;
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
-		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", UNITS_PER_PIXEL_X, UNITS_PER_PIXEL_Y);
+		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);
 		SDL_Quit();
 		exit(1);
 	}
@@ -380,7 +436,7 @@ void loadMiscSettings() {
 	FileParser infile;
 	// load miscellaneous settings from engine config
 	// misc.txt
-	if (infile.open(mods->locate("engine/misc.txt"))) {
+	if (infile.open("engine/misc.txt")) {
 		while (infile.next()) {
 			if (infile.key == "save_hpmp") {
 				if (toInt(infile.val) == 1)
@@ -410,12 +466,18 @@ void loadMiscSettings() {
 			else if (infile.key == "party_exp_percentage") {
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
 			}
+			else if (infile.key == "enable_ally_collision") {
+				ENABLE_ALLY_COLLISION = (toInt(infile.val) == 1);
+			}
+			else if (infile.key == "enable_ally_collision_ai") {
+				ENABLE_ALLY_COLLISION_AI = (toInt(infile.val) == 1);
+			}
 
 		}
 		infile.close();
 	}
 	// resolutions.txt
-	if (infile.open(mods->locate("engine/resolutions.txt"))) {
+	if (infile.open("engine/resolutions.txt")) {
 		while (infile.next()) {
 			if (infile.key == "menu_frame_width")
 				FRAME_W = toInt(infile.val);
@@ -437,7 +499,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// gameplay.txt
-	if (infile.open(mods->locate("engine/gameplay.txt"))) {
+	if (infile.open("engine/gameplay.txt")) {
 		while (infile.next()) {
 			if (infile.key == "enable_playgame") {
 				if (toInt(infile.val) == 1)
@@ -449,25 +511,21 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// combat.txt
-	if (infile.open(mods->locate("engine/combat.txt"))) {
+	if (infile.open("engine/combat.txt")) {
 		while (infile.next()) {
-			if (infile.key == "max_absorb_percent") {
-				MAX_ABSORB = toInt(infile.val);
-			}
-			else if (infile.key == "max_resist_percent") {
-				MAX_RESIST = toInt(infile.val);
-			}
-			else if (infile.key == "max_block_percent") {
-				MAX_BLOCK = toInt(infile.val);
-			}
-			else if (infile.key == "max_avoidance_percent") {
-				MAX_AVOIDANCE = toInt(infile.val);
-			}
+			if (infile.key == "max_absorb_percent") MAX_ABSORB = toInt(infile.val);
+			else if (infile.key == "max_resist_percent") MAX_RESIST = toInt(infile.val);
+			else if (infile.key == "max_block_percent") MAX_BLOCK = toInt(infile.val);
+			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = toInt(infile.val);
+			else if (infile.key == "min_absorb_percent") MIN_ABSORB = toInt(infile.val);
+			else if (infile.key == "min_resist_percent") MIN_RESIST = toInt(infile.val);
+			else if (infile.key == "min_block_percent") MIN_BLOCK = toInt(infile.val);
+			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = toInt(infile.val);
 		}
 		infile.close();
 	}
 	// elements.txt
-	if (infile.open(mods->locate("engine/elements.txt"))) {
+	if (infile.open("engine/elements.txt")) {
 		Element e;
 		ELEMENTS.clear();
 		while (infile.next()) {
@@ -482,7 +540,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// classes.txt
-	if (infile.open(mods->locate("engine/classes.txt"))) {
+	if (infile.open("engine/classes.txt")) {
 		HeroClass c;
 		HERO_CLASSES.clear();
 		while (infile.next()) {
@@ -522,12 +580,24 @@ void loadMiscSettings() {
 		}
 		infile.close();
 	}
-
 	// Make a default hero class if none were found
 	if (HERO_CLASSES.empty()) {
 		HeroClass c;
 		c.name = msg->get("Adventurer");
 		HERO_CLASSES.push_back(c);
+	}
+
+	// death_penalty.txt
+	if (infile.open("engine/death_penalty.txt")) {
+		while (infile.next()) {
+			if (infile.key == "enable") DEATH_PENALTY = toBool(infile.val);
+			else if (infile.key == "permadeath") DEATH_PENALTY_PERMADEATH = toBool(infile.val);
+			else if (infile.key == "currency") DEATH_PENALTY_CURRENCY = toInt(infile.val);
+			else if (infile.key == "xp_total") DEATH_PENALTY_XP = toInt(infile.val);
+			else if (infile.key == "xp_current_level") DEATH_PENALTY_XP_CURRENT = toInt(infile.val);
+			else if (infile.key == "random_item") DEATH_PENALTY_ITEM = toBool(infile.val);
+		}
+		infile.close();
 	}
 }
 
@@ -542,8 +612,8 @@ bool loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS, "")) {
-		if (!infile.open(mods->locate("engine/default_settings.txt"), "")) {
+	if (!infile.open(PATH_CONF + FILE_SETTINGS, false, true,  "")) {
+		if (!infile.open("engine/default_settings.txt", true, true, "")) {
 			saveSettings();
 			return true;
 		}

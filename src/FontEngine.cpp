@@ -19,14 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class FontEngine
  */
 
+#include "CommonIncludes.h"
 #include "SDL_gfxBlitFunc.h"
 #include "FontEngine.h"
 #include "FileParser.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"
-#include <iostream>
-#include <sstream>
 
 using namespace std;
 
@@ -45,7 +44,7 @@ FontEngine::FontEngine()
 
 	// load the fonts
 	FileParser infile;
-	if (infile.open(mods->locate("engine/font_settings.txt"))) {
+	if (infile.open("engine/font_settings.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -83,7 +82,7 @@ FontEngine::FontEngine()
 	// RGB values, the last value is 'unused'. For info,
 	// see http://www.libsdl.org/cgi/docwiki.cgi/SDL_Color
 	SDL_Color color;
-	if (infile.open(mods->locate("engine/font_colors.txt"))) {
+	if (infile.open("engine/font_colors.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 			color.r = eatFirstInt(infile.val,',');

@@ -20,20 +20,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class NPC
  */
 
-
 #pragma once
 #ifndef NPC_H
 #define NPC_H
 
+#include "CommonIncludes.h"
 #include "Entity.h"
 #include "ItemStorage.h"
 #include "Utils.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include <string>
-#include <vector>
 
 class ItemManager;
 class MapRenderer;

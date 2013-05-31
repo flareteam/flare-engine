@@ -26,14 +26,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
+#include "Avatar.h"
+#include "CommonIncludes.h"
 #include "Entity.h"
 #include "MapRenderer.h"
-#include "SharedResources.h"
 #include "PowerManager.h"
-#include "Avatar.h"
+#include "SharedResources.h"
 #include "UtilsMath.h"
 
-#include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -75,7 +76,7 @@ Entity::Entity(const Entity &e)
 bool Entity::move() {
 
 	if (stats.effects.forced_move) {
-		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type);
+		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type, stats.hero);
 	}
 
 	if (stats.effects.speed == 0) return false;
@@ -90,28 +91,28 @@ bool Entity::move() {
 
 	switch (stats.direction) {
 		case 0:
-			full_move = map->collider.move(stats.pos.x, stats.pos.y, -1, 1, speed_diagonal, stats.movement_type);
+			full_move = map->collider.move(stats.pos.x, stats.pos.y, -1, 1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 1:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, 0, speed_straight, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, 0, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 2:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, -1, speed_diagonal, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, -1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 3:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, -1, speed_straight, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, -1, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 4:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, -1, speed_diagonal, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, -1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 5:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 0, speed_straight, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 0, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 6:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 1, speed_diagonal, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 7:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, 1, speed_straight, stats.movement_type);
+			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, 1, speed_straight, stats.movement_type, stats.hero);
 			break;
 	}
 
@@ -164,15 +165,15 @@ bool Entity::takeHit(const Hazard &h) {
 	// if it's a miss, do nothing
 	int accuracy = h.accuracy;
 	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		accuracy *= ((float)(powers->powers[h.power_index].mod_accuracy_value)) / (float)100;
+		accuracy = accuracy * powers->powers[h.power_index].mod_accuracy_value / 100;
 	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
 		accuracy += powers->powers[h.power_index].mod_accuracy_value;
 	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 		accuracy = powers->powers[h.power_index].mod_accuracy_value;
 
 	int avoidance = 0;
-	if(!powers->powers[h.power_index].mod_accuracy_ignore_avoid) {
-		avoidance = stats.avoidance;
+	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
+		avoidance = stats.get(STAT_AVOIDANCE);
 		if (stats.effects.triggered_block) avoidance *= 2;
 	}
 
@@ -180,6 +181,7 @@ bool Entity::takeHit(const Hazard &h) {
 	//if we are using an absolute accuracy, offset the constant 25 added to the accuracy
 	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 		true_avoidance += 25;
+	clampFloor(true_avoidance, MIN_AVOIDANCE);
 	clampCeil(true_avoidance, MAX_AVOIDANCE);
 
 	if (percentChance(true_avoidance)) {
@@ -191,7 +193,7 @@ bool Entity::takeHit(const Hazard &h) {
 	int dmg = randBetween(h.dmg_min, h.dmg_max);
 
 	if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		dmg *= ((float)(powers->powers[h.power_index].mod_damage_value_min)) / (float)100;
+		dmg = dmg * powers->powers[h.power_index].mod_damage_value_min / 100;
 	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
 		dmg += powers->powers[h.power_index].mod_damage_value_min;
 	else if(powers->powers[h.power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
@@ -201,23 +203,29 @@ bool Entity::takeHit(const Hazard &h) {
 	if (h.trait_elemental >= 0 && unsigned(h.trait_elemental) < stats.vulnerable.size()) {
 		unsigned i = h.trait_elemental;
 		int vulnerable = stats.vulnerable[i];
-		if (stats.vulnerable[i] > MAX_RESIST && stats.vulnerable[i] < 100)
-			vulnerable = MAX_RESIST;
+		clampFloor(vulnerable,MIN_RESIST);
+		if (stats.vulnerable[i] < 100)
+			clampCeil(vulnerable,MAX_RESIST);
 		dmg = (dmg * vulnerable) / 100;
 	}
 
-	if (!h.trait_armor_penetration && !powers->powers[h.power_index].mod_damage_ignore_absorb) { // armor penetration ignores all absorption
+	if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
 		// substract absorption from armor
-		int absorption = randBetween(stats.absorb_min, stats.absorb_max);
+		int absorption = randBetween(stats.get(STAT_ABS_MIN), stats.get(STAT_ABS_MAX));
 
 		if (stats.effects.triggered_block) {
-			absorption += absorption + stats.absorb_max; // blocking doubles your absorb amount
+			absorption += absorption + stats.get(STAT_ABS_MAX); // blocking doubles your absorb amount
 		}
 
 		if (absorption > 0 && dmg > 0) {
-			if ((absorption*100)/dmg > MAX_BLOCK)
+			int abs = absorption;
+			if ((abs*100)/dmg < MIN_BLOCK)
+				absorption = (dmg * MIN_BLOCK) /100;
+			if ((abs*100)/dmg > MAX_BLOCK)
 				absorption = (dmg * MAX_BLOCK) /100;
-			if ((absorption*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
+			if ((abs*100)/dmg < MIN_ABSORB && !stats.effects.triggered_block)
+				absorption = (dmg * MIN_ABSORB) /100;
+			if ((abs*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
 				absorption = (dmg * MAX_ABSORB) /100;
 
 			// Sometimes, the absorb limits cause absorbtion to drop to 1
@@ -245,7 +253,7 @@ bool Entity::takeHit(const Hazard &h) {
 	int true_crit_chance = h.crit_chance;
 
 	if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		true_crit_chance *= ((float)(powers->powers[h.power_index].mod_crit_value)) / (float)100;
+		true_crit_chance = true_crit_chance * powers->powers[h.power_index].mod_crit_value / 100;
 	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ADD)
 		true_crit_chance += powers->powers[h.power_index].mod_crit_value;
 	else if(powers->powers[h.power_index].mod_crit_mode == STAT_MODIFIER_MODE_ABSOLUTE)
@@ -292,13 +300,13 @@ bool Entity::takeHit(const Hazard &h) {
 				int steal_amt = (dmg * h.hp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->hp = min(h.src_stats->hp + steal_amt, h.src_stats->maxhp);
+				h.src_stats->hp = min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 			}
 			if (h.mp_steal != 0) {
 				int steal_amt = (dmg * h.mp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->mp = min(h.src_stats->mp + steal_amt, h.src_stats->maxmp);
+				h.src_stats->mp = min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
 			}
 		}
 	}
@@ -325,10 +333,10 @@ bool Entity::takeHit(const Hazard &h) {
 			}
 		}
 		// don't go through a hit animation if stunned
-		else if (!stats.effects.stun && !percentChance(stats.poise)) {
+		else if (!stats.effects.stun && !percentChance(stats.get(STAT_POISE))) {
 			sfx_hit = true;
 
-			if(!percentChance(stats.poise) && stats.cooldown_hit_ticks == 0) {
+			if(!percentChance(stats.get(STAT_POISE)) && stats.cooldown_hit_ticks == 0) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
 				else

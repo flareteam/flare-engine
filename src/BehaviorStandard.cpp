@@ -16,9 +16,9 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <vector>
 #include "Animation.h"
 #include "BehaviorStandard.h"
+#include "CommonIncludes.h"
 #include "Enemy.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
@@ -30,6 +30,8 @@ BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior
 	hero_dist = 0;
 	target_dist = 0;
 	pursue_pos.x = pursue_pos.y = -1;
+	fleeing = false;
+	move_to_safe_dist = false;
 }
 
 /**
@@ -49,6 +51,7 @@ void BehaviorStandard::logic() {
 	checkMove();
 	updateState();
 
+	fleeing = false;
 }
 
 /**
@@ -65,7 +68,7 @@ void BehaviorStandard::doUpkeep() {
 	if (!e->stats.in_combat && !e->stats.hero_ally) {
 		if (e->stats.alive && e->stats.hero_alive) {
 			e->stats.hp++;
-			if (e->stats.hp > e->stats.maxhp) e->stats.hp = e->stats.maxhp;
+			if (e->stats.hp > e->stats.get(STAT_HP_MAX)) e->stats.hp = e->stats.get(STAT_HP_MAX);
 		}
 	}
 
@@ -84,7 +87,7 @@ void BehaviorStandard::doUpkeep() {
 
 	// check for revive
 	if (e->stats.hp <= 0 && e->stats.effects.revive) {
-		e->stats.hp = e->stats.maxhp;
+		e->stats.hp = e->stats.get(STAT_HP_MAX);
 		e->stats.alive = true;
 		e->stats.corpse = false;
 		e->stats.cur_state = ENEMY_STANCE;
@@ -134,7 +137,7 @@ void BehaviorStandard::doUpkeep() {
 		e->stats.pos.x = e->stats.teleport_destination.x;
 		e->stats.pos.y = e->stats.teleport_destination.y;
 
-		e->map->collider.block(e->stats.pos.x,e->stats.pos.y);
+		e->map->collider.block(e->stats.pos.x,e->stats.pos.y, e->stats.hero_ally);
 
 		e->stats.teleportation = false;
 	}
@@ -151,7 +154,7 @@ void BehaviorStandard::findTarget() {
 
 	// check distance and line of sight between enemy and hero
 	if (e->stats.hero_alive)
-		hero_dist = e->getDistance(e->stats.hero_pos);
+		hero_dist = calcDist(e->stats.pos, e->stats.hero_pos);
 	else
 		hero_dist = 0;
 
@@ -168,7 +171,7 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check entering combat (because the player got too close)
-	if (!e->stats.in_combat && los && hero_dist < stealth_threat_range) {
+	if (!e->stats.in_combat && los && hero_dist < stealth_threat_range && !e->stats.passive_attacker) {
 
 		if (e->stats.in_combat) e->stats.join_combat = true;
 		e->stats.in_combat = true;
@@ -205,8 +208,8 @@ void BehaviorStandard::findTarget() {
 			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 				if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally) {
 					//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
-					int ally_dist = e->getDistance(enemies->enemies[i]->stats.pos);
-					if(ally_dist < target_dist) {
+					int ally_dist = calcDist(e->stats.pos, enemies->enemies[i]->stats.pos);
+					if (ally_dist < target_dist) {
 						pursue_pos.x = enemies->enemies[i]->stats.pos.x;
 						pursue_pos.y = enemies->enemies[i]->stats.pos.y;
 						target_dist = ally_dist;
@@ -228,8 +231,15 @@ void BehaviorStandard::findTarget() {
 		los = e->map->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 	else
 		los = false;
-}
 
+	if(e->stats.effects.fear) fleeing = true;
+
+	// If we have a successful chance_flee roll, try to move to a safe distance
+	if (e->stats.cur_state == ENEMY_STANCE && !move_to_safe_dist && hero_dist < e->stats.threat_range/2 && hero_dist >= e->stats.melee_range && percentChance(e->stats.chance_flee))
+		move_to_safe_dist = true;
+
+	if (move_to_safe_dist) fleeing = true;
+}
 
 /**
  * Begin using a power if idle, based on behavior % chances.
@@ -238,7 +248,7 @@ void BehaviorStandard::findTarget() {
 void BehaviorStandard::checkPower() {
 
 	// stunned enemies can't act
-	if (e->stats.effects.stun) return;
+	if (e->stats.effects.stun || fleeing) return;
 
 	// currently all enemy power use happens during combat
 	if (!e->stats.in_combat) return;
@@ -256,7 +266,7 @@ void BehaviorStandard::checkPower() {
 	if (los && (e->stats.cur_state == ENEMY_STANCE || e->stats.cur_state == ENEMY_MOVE)) {
 
 		// check half dead power use
-		if (!e->stats.on_half_dead_casted && e->stats.hp <= e->stats.maxhp/2) {
+		if (!e->stats.on_half_dead_casted && e->stats.hp <= e->stats.get(STAT_HP_MAX)/2) {
 			if (percentChance(e->stats.power_chance[ON_HALF_DEAD])) {
 				e->newState(ENEMY_POWER);
 				e->stats.activated_powerslot = ON_HALF_DEAD;
@@ -293,7 +303,6 @@ void BehaviorStandard::checkPower() {
 			}
 		}
 	}
-
 
 	// Activate Power:
 	// enemy has started the animation to use a power. Activate the power on the Active animation frame
@@ -354,12 +363,15 @@ void BehaviorStandard::checkMove() {
 				// if a path is returned, target first waypoint
 				std::vector<Point> path;
 
-				if ( e->map->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type) ) {
+				e->map->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
+				if(!path.empty())
 					pursue_pos = path.back();
-				}
 			}
 
-			e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+			if(fleeing)
+				e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
+			else
+				e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
 			e->stats.turn_ticks = 0;
 		}
 	}
@@ -398,17 +410,16 @@ void BehaviorStandard::checkMove() {
 	}
 
 	// re-block current space to allow correct movement
-	//if this is an ally and the player is adjacent to it, dont block
-	if(!(e->stats.hero_ally && hero_dist < 100))
-		e->map->collider.block(e->stats.pos.x, e->stats.pos.y);
+	e->map->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
 
 }
 
 void BehaviorStandard::checkMoveStateStance() {
-	if (hero_dist < e->stats.melee_range) {
-		// too close, do nothing
-	}
-	else if (percentChance(e->stats.chance_pursue)) {
+
+	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
+	if (hero_dist >= e->stats.threat_range/2 && e->stats.chance_flee > 0) return;
+
+	if ((hero_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
 
 		if (e->move()) {
 			e->newState(ENEMY_MOVE);
@@ -428,9 +439,10 @@ void BehaviorStandard::checkMoveStateStance() {
 }
 
 void BehaviorStandard::checkMoveStateMove() {
-	// close enough to the hero
-	if (hero_dist < e->stats.melee_range) {
+	// close enough to the hero or is at a safe distance
+	if ((hero_dist < e->stats.melee_range) || (move_to_safe_dist && hero_dist >= e->stats.threat_range/2)) {
 		e->newState(ENEMY_STANCE);
+		move_to_safe_dist = false;
 	}
 
 	// try to continue moving

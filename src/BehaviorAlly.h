@@ -3,7 +3,6 @@
 
 #include "BehaviorStandard.h"
 
-
 class BehaviorAlly : public BehaviorStandard
 {
     public:

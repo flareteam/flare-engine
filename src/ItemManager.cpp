@@ -22,10 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class ItemManager
  */
 
-#include "ItemManager.h"
+#include "CommonIncludes.h"
 #include "FileParser.h"
-#include "SharedResources.h"
+#include "ItemManager.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
@@ -34,8 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 #include <climits>
 #include <cstring>
-#include <fstream>
-#include <sstream>
 
 using namespace std;
 
@@ -86,48 +85,11 @@ ItemManager::ItemManager()
  * Load all items files in all mods
  */
 void ItemManager::loadAll() {
-	string test_path;
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
-	for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-		// check locally installed mods first
-		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/items.txt";
-
-		if (fileExists(test_path)) {
-			this->load(test_path);
-		}
-
-		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/types.txt";
-
-		if (fileExists(test_path)) {
-			this->loadTypes(test_path);
-		}
-
-		test_path = PATH_USER + "mods/" + mods->mod_list[i] + "/items/sets.txt";
-
-		if (fileExists(test_path)) {
-			this->loadSets(test_path);
-		}
-
-		// now check global mods
-		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/items.txt";
-
-		if (fileExists(test_path)) {
-			this->load(test_path);
-		}
-
-		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/types.txt";
-
-		if (fileExists(test_path)) {
-			this->loadTypes(test_path);
-		}
-
-		test_path = PATH_DATA + "mods/" + mods->mod_list[i] + "/items/sets.txt";
-
-		if (fileExists(test_path)) {
-			this->loadSets(test_path);
-		}
-	}
+	this->loadItems();
+	this->loadTypes();
+	this->loadSets();
 
 	/*
 	 * Shrinks the items vector to the absolute needed size.
@@ -151,9 +113,9 @@ void ItemManager::loadAll() {
  *
  * @param filename The full path and name of the file to load
  */
-void ItemManager::load(const string& filename) {
+void ItemManager::loadItems() {
 	FileParser infile;
-	if (!infile.open(filename))
+	if (!infile.open("items/items.txt", true, false))
 		return;
 
 	int id = 0;
@@ -293,12 +255,12 @@ void ItemManager::load(const string& filename) {
 	infile.close();
 }
 
-void ItemManager::loadTypes(const string& filename) {
+void ItemManager::loadTypes() {
 	FileParser infile;
 	string type,description;
 	type = description = "";
 
-	if (infile.open(filename)) {
+	if (infile.open("items/types.txt", true, false)) {
 		while (infile.next()) {
 			if (infile.key == "name") type = infile.val;
 			else if (infile.key == "description") description = infile.val;
@@ -321,9 +283,9 @@ string ItemManager::getItemType(std::string _type) {
 	return _type;
 }
 
-void ItemManager::loadSets(const string& filename) {
+void ItemManager::loadSets() {
 	FileParser infile;
-	if (!infile.open(filename))
+	if (!infile.open("items/sets.txt", true, false))
 		return;
 
 	int id = 0;
@@ -384,6 +346,10 @@ void ItemManager::loadSets(const string& filename) {
  */
 void ItemManager::loadIcons() {
 	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
+}
+
+SDL_Surface* ItemManager::getIcons() {
+	return icons;
 }
 
 /**
@@ -459,7 +425,8 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	TooltipData tip;
 	SDL_Color color = color_normal;
-
+	string quality_desc = "";	
+	
 	if (item == 0) return tip;
 
 	// color quality
@@ -468,12 +435,19 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	}
 	else if (items[item].quality == ITEM_QUALITY_LOW) {
 		color = color_low;
+		quality_desc = msg->get("Low");
+	}
+	else if (items[item].quality == ITEM_QUALITY_NORMAL) {
+		color = color_normal;
+		quality_desc = msg->get("Normal");
 	}
 	else if (items[item].quality == ITEM_QUALITY_HIGH) {
 		color = color_high;
+		quality_desc = msg->get("High");
 	}
 	else if (items[item].quality == ITEM_QUALITY_EPIC) {
 		color = color_epic;
+		quality_desc = msg->get("Epic");
 	}
 
 	// name
@@ -573,6 +547,11 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 			else color = color_normal;
 			tip.addText(msg->get("Requires Defense %d", items[item].req_val), color);
 		}
+	}
+
+	if (COLORBLIND && quality_desc != "") {
+		color = color_normal;
+		tip.addText(msg->get("Quality: %s", quality_desc), color);	
 	}
 
 	// flavor text
