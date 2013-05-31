@@ -242,8 +242,8 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		shakycam.y = cam.y;
 	}
 	else {
-		shakycam.x = cam.x + (rand() % 16 - 8) * 0.125;
-		shakycam.y = cam.y + (rand() % 16 - 8) * 0.125;
+		shakycam.x = cam.x + (rand() % 16 - 8) * 0.0078125;
+		shakycam.y = cam.y + (rand() % 16 - 8) * 0.0078125;
 	}
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
