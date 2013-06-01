@@ -588,8 +588,8 @@ void MapRenderer::executeOnMapExitEvents() {
 
 void MapRenderer::checkEvents(FPoint loc) {
 	Point maploc;
-	maploc.x = round(loc.x);
-	maploc.y = round(loc.y);
+	maploc.x = floor(loc.x);
+	maploc.y = floor(loc.y);
 	vector<Map_Event>::iterator it;
 
 	// loop in reverse because we may erase elements

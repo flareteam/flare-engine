@@ -51,6 +51,10 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
  * If we encounter an obstacle at 45 or 135 degrees, slide.
  */
 bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEMENTTYPE movement_type, bool is_hero) {
+	// when trying to slide against a bottom or right wall, step_x or step_y can become 0
+	// this causes diag to become false, making this function return false
+	// we try to catch such a scenario and return true early
+	bool force_slide = (_step_x != 0 && _step_y > 0) || (_step_x > 0 && _step_y != 0);
 
 	while (_step_x != 0 || _step_y != 0) {
 
@@ -84,13 +88,16 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 			x += step_x;
 			y += step_y;
 		}
-		else if (diag && is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
+		else if ((diag || force_slide) && is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
 			x += step_x;
+			if (!diag && force_slide) return true;
 		}
-		else if (diag && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
+		else if ((diag || force_slide)  && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
 			y += step_y;
+			if (!diag && force_slide) return true;
 		}
-		else { // is there a singular obstacle or corner we can step around?
+		else {
+			// is there a singular obstacle or corner we can step around?
 			// only works if we are moving straight
 
 			if (diag) return false;
@@ -179,7 +186,7 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
  * Is this a valid position for an entity with this movement type?
  */
 bool MapCollision::is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const {
-	return is_valid_tile(round(x), round(y), movement_type, is_hero);
+	return is_valid_tile(floor(x), floor(y), movement_type, is_hero);
 }
 
 bool inline MapCollision::is_sidestepable(int tile_x, int tile_y, int offx, int offy) {
