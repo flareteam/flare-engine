@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "PowerManager.h"
 #include "StatBlock.h"
 #include "UtilsMath.h"
+#include "SharedGameResources.h"
 
 BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior(_e, _em) {
 	los = false;
@@ -278,28 +279,56 @@ void BehaviorStandard::checkPower() {
 		if (target_dist > e->stats.melee_range) {
 
 			if (percentChance(e->stats.power_chance[RANGED_PHYS]) && e->stats.power_ticks[RANGED_PHYS] == 0) {
-				e->newState(ENEMY_POWER);
-				e->stats.activated_powerslot = RANGED_PHYS;
-				return;
+				bool can_use = true;
+				if(power_manager->powers[e->stats.power_index[RANGED_PHYS]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_PHYS]))
+                        can_use = false;
+
+				if(can_use){
+                    e->newState(ENEMY_POWER);
+                    e->stats.activated_powerslot = RANGED_PHYS;
+                    return;
+				}
 			}
 			if (percentChance(e->stats.power_chance[RANGED_MENT]) && e->stats.power_ticks[RANGED_MENT] == 0) {
-				e->newState(ENEMY_POWER);
-				e->stats.activated_powerslot = RANGED_MENT;
-				return;
+				bool can_use = true;
+				if(power_manager->powers[e->stats.power_index[RANGED_MENT]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_MENT]))
+                        can_use = false;
+
+				if(can_use){
+                    e->newState(ENEMY_POWER);
+                    e->stats.activated_powerslot = RANGED_MENT;
+                    return;
+				}
 			}
 
 		}
 		else { // check melee power use
 
 			if (percentChance(e->stats.power_chance[MELEE_PHYS]) && e->stats.power_ticks[MELEE_PHYS] == 0) {
-				e->newState(ENEMY_POWER);
-				e->stats.activated_powerslot = MELEE_PHYS;
-				return;
+				bool can_use = true;
+				if(power_manager->powers[e->stats.power_index[MELEE_PHYS]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_PHYS]))
+                        can_use = false;
+
+				if(can_use){
+                    e->newState(ENEMY_POWER);
+                    e->stats.activated_powerslot = MELEE_PHYS;
+                    return;
+				}
 			}
 			if (percentChance(e->stats.power_chance[MELEE_MENT]) && e->stats.power_ticks[MELEE_MENT] == 0) {
-				e->newState(ENEMY_POWER);
-				e->stats.activated_powerslot = MELEE_MENT;
-				return;
+				bool can_use = true;
+				if(power_manager->powers[e->stats.power_index[MELEE_MENT]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_MENT]))
+                        can_use = false;
+
+				if(can_use){
+                    e->newState(ENEMY_POWER);
+                    e->stats.activated_powerslot = MELEE_MENT;
+                    return;
+				}
 			}
 		}
 	}
@@ -513,7 +542,6 @@ void BehaviorStandard::updateState() {
 			//the second check is needed in case the entity does not have a spawn animation
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "spawn") {
 				e->newState(ENEMY_STANCE);
-				e->CheckSummonSustained();
 			}
 			break;
 

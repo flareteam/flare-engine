@@ -98,6 +98,8 @@ GameStatePlay::GameStatePlay()
 	pc->enemies = enemies;
 	enemies->pc = pc;
 
+	power_manager = powers;
+
 	enemyg = new EnemyGroupManager();
 	loot = new LootManager(items, map, &pc->stats);
 

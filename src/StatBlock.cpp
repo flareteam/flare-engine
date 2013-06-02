@@ -49,6 +49,8 @@ StatBlock::StatBlock()
 	, transformed(false)
 	, refresh_stats(false)
 	, converted(false)
+	, summoned(false)
+	, summoned_power_index(0)
 	, movement_type(MOVEMENT_NORMAL)
 	, flying(false)
 	, intangible(false)
@@ -172,7 +174,9 @@ StatBlock::StatBlock()
 	, prev_maxhp(0)
 	, prev_maxmp(0)
 	, pres_hp(0)
-	, pres_mp(0) {
+	, pres_mp(0)
+    , summons()
+	, summoner(NULL) {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
 
@@ -567,6 +571,7 @@ void StatBlock::logic() {
 }
 
 StatBlock::~StatBlock() {
+    removeFromSummons();
 }
 
 bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
@@ -583,7 +588,8 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 			   && mp >= power.requires_mp
 			   && (!power.sacrifice == false || hp > power.requires_hp)
 			   && menu_powers->meetsUsageStats(powerid)
-			   && !power.passive;
+			   && !power.passive
+			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
 
 }
 
@@ -643,3 +649,68 @@ void StatBlock::loadHeroStats() {
 	infile.close();
 }
 
+void StatBlock::removeFromSummons() {
+
+    if(summoner != NULL){
+        vector<StatBlock*>::iterator current = find(summoner->summons.begin(), summoner->summons.end(), this);
+
+        if(current != summoner->summons.end())
+            summoner->summons.erase(current);
+
+        summoner = NULL;
+    }
+
+    for (vector<StatBlock*>::iterator it=summons.begin(); it != summons.end(); ++it)
+        (*it)->summoner = NULL;
+
+    summons.clear();
+}
+
+bool StatBlock::summonLimitReached(int power_id) const{
+
+    //find the limit
+    Power *spawn_power = &power_manager->powers[power_id];
+
+    int max_summons = 0;
+
+    if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_FIXED)
+        max_summons = spawn_power->spawn_limit_qty;
+    else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
+        int stat_val = 1;
+        switch(spawn_power->spawn_limit_stat) {
+            case SPAWN_LIMIT_STAT_PHYSICAL:
+                stat_val = get_physical();
+                break;
+            case SPAWN_LIMIT_STAT_MENTAL:
+                stat_val = get_mental();
+                break;
+            case SPAWN_LIMIT_STAT_OFFENSE:
+                stat_val = get_offense();
+                break;
+            case SPAWN_LIMIT_STAT_DEFENSE:
+                stat_val = get_defense();
+                break;
+        }
+        max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
+    }
+    else
+        return false;//unlimited or unknown mode
+
+    //if the power is available, there should be at least 1 allowed summon
+    if(max_summons < 1) max_summons = 1;
+
+
+    //find out how many there are currently
+    int qty_summons = 0;
+
+    for (unsigned int i=0; i < summons.size(); i++) {
+        if(!summons[i]->corpse && summons[i]->summoned_power_index == power_id
+                && summons[i]->cur_state != ENEMY_SPAWN
+                && summons[i]->cur_state != ENEMY_DEAD
+                && summons[i]->cur_state != ENEMY_CRITDEAD) {
+            qty_summons++;
+        }
+    }
+
+    return qty_summons >= max_summons;
+}
