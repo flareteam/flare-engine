@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
-#include <algorithm>
-
 using namespace std;
 
 
@@ -227,7 +225,7 @@ void GameStateLoad::loadPortrait(int slot) {
 
 	if (stats[slot].name == "") return;
 
-	portrait = loadGraphicSurface("images/portraits/" + stats[slot].portrait + ".png");
+	portrait = loadGraphicSurface("images/portraits/" + stats[slot].gfx_portrait + ".png");
 }
 
 void GameStateLoad::readGameSlots() {
@@ -289,9 +287,9 @@ void GameStateLoad::readGameSlot(int slot) {
 			}
 		}
 		else if (infile.key == "option") {
-			stats[slot].base = infile.nextValue();
-			stats[slot].head = infile.nextValue();
-			stats[slot].portrait = infile.nextValue();
+			stats[slot].gfx_base = infile.nextValue();
+			stats[slot].gfx_head = infile.nextValue();
+			stats[slot].gfx_portrait = infile.nextValue();
 		}
 		else if (infile.key == "spawn") {
 			current_map[slot] = getMapName(infile.nextValue());
@@ -318,12 +316,12 @@ void GameStateLoad::loadPreview(int slot) {
 
 	// fall back to default if it exists
 	for (unsigned int i=0; i<preview_layer.size(); i++) {
-		bool exists = fileExists(mods->locate("animations/avatar/" + stats[slot].base + "/default_" + preview_layer[i] + ".txt"));
+		bool exists = fileExists(mods->locate("animations/avatar/" + stats[slot].gfx_base + "/default_" + preview_layer[i] + ".txt"));
 		if (exists) {
 			img_gfx.push_back("default_" + preview_layer[i]);
 		}
 		else if (preview_layer[i] == "head") {
-			img_gfx.push_back(stats[slot].head);
+			img_gfx.push_back(stats[slot].gfx_head);
 		}
 		else {
 			img_gfx.push_back("");
@@ -350,11 +348,11 @@ void GameStateLoad::loadPreview(int slot) {
 		sprites[slot].push_back(NULL);
 
 		if (!TEXTURE_QUALITY) {
-			string fname = "images/avatar/" + stats[slot].base + "/preview/noalpha/" + img_gfx[i] + ".png";
+			string fname = "images/avatar/" + stats[slot].gfx_base + "/preview/noalpha/" + img_gfx[i] + ".png";
 			sprites[slot].back() = loadGraphicSurface(fname, "Falling back to alpha version", false, true);
 		}
 		if (!sprites[slot].back()) {
-			sprites[slot].back() = loadGraphicSurface("images/avatar/" + stats[slot].base + "/preview/" + img_gfx[i] + ".png");
+			sprites[slot].back() = loadGraphicSurface("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png");
 		}
 	}
 

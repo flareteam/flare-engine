@@ -15,14 +15,13 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include <iostream>
-
-#include "GameStateLoad.h"
-#include "GameStateTitle.h"
+#include "CommonIncludes.h"
 #include "GameStateConfig.h"
 #include "GameStateCutscene.h"
-#include "SharedResources.h"
+#include "GameStateLoad.h"
+#include "GameStateTitle.h"
 #include "Settings.h"
+#include "SharedResources.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 
@@ -66,8 +65,6 @@ GameStateTitle::GameStateTitle() : GameState() {
 	// set up labels
 	label_version = new WidgetLabel();
 	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, msg->get("Flare Alpha v0.18"), font->getColor("menu_normal"));
-
-	inpt->enableMouseEmulation();
 
 	// Setup tab order
 	tablist.add(button_play);

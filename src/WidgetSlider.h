@@ -1,5 +1,5 @@
 /*
-Copyright © 2012 Justin Jacobs
+Copyright Â© 2012 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -18,7 +18,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * class WidgetSlider
  */
-
 
 #pragma once
 #ifndef WIDGET_SLIDER_H

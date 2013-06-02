@@ -24,143 +24,38 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * This class is capable of rendering isometric and orthogonal maps.
  */
 
-
 #pragma once
 #ifndef MAP_RENDERER_H
 #define MAP_RENDERER_H
 
-#include "Enemy.h"
+#include "CommonIncludes.h"
 #include "GameStatePlay.h"
-#include "Utils.h"
-#include "TileSet.h"
+#include "Map.h"
 #include "MapCollision.h"
 #include "Settings.h"
-#include "WidgetTooltip.h"
+#include "TileSet.h"
+#include "Utils.h"
+#include "StatBlock.h"
+#include "TooltipData.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
 #include <queue>
-#include <vector>
 
 class CampaignManager;
 class PowerManager;
-
 class FileParser;
+class WidgetTooltip;
 
 // TODO: Move these Map_* classes to its own file.
 
-class Map_Group {
-public:
-	std::string category;
-	Point pos;
-	Point area;
-	int levelmin;
-	int levelmax;
-	int numbermin;
-	int numbermax;
-	float chance;
-	Map_Group()
-		: category("")
-		, pos()
-		, area()
-		, levelmin(0)
-		, levelmax(0)
-		, numbermin(0)
-		, numbermax(0)
-		, chance(1.0f)
-	{}
-};
-
-class Map_NPC {
-public:
-	std::string id;
-	Point pos;
-	Map_NPC()
-	: id("")
-	, pos()
-	{}
-};
-
-class Map_Event {
-public:
-	std::string type;
-	std::vector<Event_Component> components;
-	SDL_Rect location;
-	SDL_Rect hotspot;
-	int cooldown; // events that run multiple times pause this long in frames
-	int cooldown_ticks;
-	StatBlock *stats;
-	bool keep_after_trigger; // if this event has been triggered once, should this event be kept? If so, this event can be triggered multiple times.
-
-	Map_Event()
-	 : type("")
-	 , components(std::vector<Event_Component>())
-	 , cooldown(0)
-	 , cooldown_ticks(0)
-	 , stats(NULL)
-	 , keep_after_trigger(true)
-	{
-		location.x = location.y = location.w = location.h = 0;
-		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
-	}
-
-	// returns a pointer to the event component within the components list
-	// no need to free the pointer by caller
-	// NULL will be returned if no such event is found
-	Event_Component *getComponent(const std::string &_type)
-	{
-		std::vector<Event_Component>::iterator it;
-		for (it = components.begin(); it != components.end(); ++it)
-			if (it->type == _type)
-				return &(*it);
-		return NULL;
-	}
-
-	void deleteAllComponents(const std::string &_type) {
-		std::vector<Event_Component>::iterator it;
-		for (it = components.begin(); it != components.end(); ++it)
-			if (it->type == _type)
-				it = components.erase(it);
-	}
-
-	~Map_Event()
-	{
-		delete stats; // may be NULL, but delete can deal with null pointers.
-	}
-};
-
-class Map_Enemy {
-public:
-	std::string type;
-	Point pos;
-	int direction;
-	std::queue<Point> waypoints;
-	bool wander;
-	SDL_Rect wander_area;
-	bool hero_ally;
-	int summon_power_index;
-
-	Map_Enemy(std::string _type="", Point _pos=Point())
-	 : type(_type)
-	 , pos(_pos)
-	 , direction(rand() % 8)
-	 , waypoints(std::queue<Point>())
-	 , wander(false)
-	 , hero_ally(false)
-	 , summon_power_index(0)
-	{
-		wander_area.x = 0;
-		wander_area.y = 0;
-		wander_area.w = 0;
-		wander_area.h = 0;
-	}
-};
-
-class MapRenderer {
+class MapRenderer : public Map {
 private:
+
+	/**
+	 * The index of the layer, which mixes with the objects on screen. Layers
+	 * before that are painted below objects; Layers after are painted on top.
+	 */
+	unsigned index_objectlayer;
+
 	Mix_Music *music;
 
 	WidgetTooltip *tip;
@@ -172,29 +67,13 @@ private:
 	void push_enemy_group(Map_Group g);
 	bool isActive(const Map_Event &e);
 
-	void loadMusic(const std::string &new_music_filename);
-
-	typedef unsigned short maprow[256];
-
-	void loadHeader(FileParser &infile);
-	void loadLayer(FileParser &infile, maprow **cur_layer);
-	void loadEnemy(FileParser &infile);
-	void loadEnemyGroup(FileParser &infile, Map_Group *group);
-	void loadNPC(FileParser &infile);
-	void loadEvent(FileParser &infile);
-	void loadEventComponent(FileParser &infile);
-
-	// map events
-	std::vector<Map_Event> events;
+	std::string played_music_filename;
+	void loadMusic();
 
 	// map soundids
 	std::vector<SoundManager::SoundID> sids;
 
-	maprow *background;
-	maprow *fringe;
-	maprow *object; // must exist in each map!
-	maprow *foreground;
-	maprow *collision; // must exist in each map!
+	void clearQueues();
 
 	// When the animated tiles are switched off, the background is
 	// not rendered all the time but everytime you have moved away too much.
@@ -225,12 +104,9 @@ private:
 	void renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	void clearLayers();
-	void clearQueues();
 
 	Point shakycam;
 	TileSet tset;
-	std::string tileset;
-	std::string music_filename;
 
 	// in case of animated tiles switched off, prerender background into this layer
 	SDL_Surface* backgroundsurface;
@@ -258,7 +134,6 @@ public:
 	void logic();
 	void render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
-	void clearEvents();
 	void checkEvents(Point loc);
 	void checkHotspots();
 	void checkNearestEvent(Point loc);
@@ -267,29 +142,16 @@ public:
 	// some events are triggered on exiting the map
 	void executeOnMapExitEvents();
 
-	// vars
-	std::string title;
-	short w;
-	short h;
-
 	// cam(x,y) is where on the map the camera is pointing
 	// units found in Settings.h (UNITS_PER_TILE)
 	Point cam;
 	Point hero_tile;
-	Point spawn;
-	int spawn_dir;
 
 	// indicates that the map was changed by an event, so the GameStatePlay
 	// will tell the mini map to update.
 	bool map_change;
 
 	MapCollision collider;
-
-	// enemy load handling
-	std::queue<Map_Enemy> enemies;
-
-	// npc load handling
-	std::queue<Map_NPC> npcs;
 
 	// event-created loot or items
 	std::vector<Event_Component> loot;

@@ -21,6 +21,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of the Enemy bar on the HUD
  */
 
+#include "CommonIncludes.h"
+#include "Enemy.h"
 #include "Menu.h"
 #include "MenuEnemy.h"
 #include "SharedResources.h"
@@ -29,11 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-#include <string>
-#include <sstream>
-
 using namespace std;
-
 
 MenuEnemy::MenuEnemy() {
 	custom_text_pos = false;
@@ -97,10 +95,10 @@ void MenuEnemy::render() {
 
 	SDL_BlitSurface(background, NULL, screen, &dest);
 
-	if (enemy->stats.maxhp == 0)
+	if (enemy->stats.get(STAT_HP_MAX) == 0)
 		hp_bar_length = 0;
 	else
-		hp_bar_length = (enemy->stats.hp * 100) / enemy->stats.maxhp;
+		hp_bar_length = (enemy->stats.hp * 100) / enemy->stats.get(STAT_HP_MAX);
 
 	// draw hp bar
 
@@ -114,7 +112,7 @@ void MenuEnemy::render() {
 	stringstream ss;
 	ss.str("");
 	if (enemy->stats.hp > 0)
-		ss << enemy->stats.hp << "/" << enemy->stats.maxhp;
+		ss << enemy->stats.hp << "/" << enemy->stats.get(STAT_HP_MAX);
 	else
 		ss << msg->get("Dead");
 

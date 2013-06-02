@@ -19,10 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef __IMAGE_MANAGER__
 #define __IMAGE_MANAGER__
 
-#include <string>
-#include <vector>
-
-#include <SDL_image.h>
+#include "CommonIncludes.h"
 
 /**
  * The image manager class is a manager for images of any kind.

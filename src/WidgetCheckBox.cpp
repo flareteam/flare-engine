@@ -1,6 +1,6 @@
 /*
-Copyright © 2012 Clint Bellanger
-Copyright © 2012 davidriod
+Copyright Â© 2012 Clint Bellanger
+Copyright Â© 2012 davidriod
 
 This file is part of FLARE.
 
@@ -20,15 +20,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetCheckBox
  */
 
-#include <iostream>
-#include <string>
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include "Widget.h"
-#include "WidgetCheckBox.h"
-#include "SharedResources.h"
+#include "CommonIncludes.h"
 #include "SDL_gfxBlitFunc.h"
+#include "SharedResources.h"
+#include "WidgetCheckBox.h"
+#include "Widget.h"
 
 using namespace std;
 

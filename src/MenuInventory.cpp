@@ -22,21 +22,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuInventory
  */
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
-#include "LootManager.h"
 #include "Menu.h"
 #include "MenuInventory.h"
 #include "PowerManager.h"
-#include "SharedResources.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 
-#include <sstream>
-
 using namespace std;
-
 
 MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManager *_powers) {
 	items = _items;
@@ -153,7 +151,8 @@ void MenuInventory::logic() {
 			if (stats->xp > 0)
 				stats->xp -= (stats->xp * DEATH_PENALTY_XP) / 100;
 			death_message += msg->get("Lost %d% of total XP. ", DEATH_PENALTY_XP);
-		} else if (DEATH_PENALTY_XP_CURRENT > 0) {
+		}
+		else if (DEATH_PENALTY_XP_CURRENT > 0) {
 			if (stats->xp - stats->xp_table[stats->level-1] > 0)
 				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * DEATH_PENALTY_XP_CURRENT) / 100;
 			death_message += msg->get("Lost %d% of current level XP. ", DEATH_PENALTY_XP_CURRENT);
@@ -196,8 +195,7 @@ void MenuInventory::logic() {
 
 	// check close button
 	if (visible) {
-		if (NO_MOUSE)
-		{
+		if (NO_MOUSE) {
 			tablist.logic();
 		}
 		if (closeButton->checkClick()) {
@@ -235,13 +233,13 @@ void MenuInventory::render() {
 	inventory[CARRIED].render();
 }
 
-int MenuInventory::areaOver(Point mouse) {
-	if (isWithin(carried_area, mouse)) {
+int MenuInventory::areaOver(Point position) {
+	if (isWithin(carried_area, position)) {
 		return CARRIED;
 	}
 	else {
 		for (unsigned int i=0; i<equipped_area.size(); i++) {
-			if (isWithin(equipped_area[i], mouse)) {
+			if (isWithin(equipped_area[i], position)) {
 				return EQUIPMENT;
 			}
 		}
@@ -254,26 +252,26 @@ int MenuInventory::areaOver(Point mouse) {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData MenuInventory::checkTooltip(Point mouse) {
+TooltipData MenuInventory::checkTooltip(Point position) {
 	int area;
 	int slot;
 	TooltipData tip;
 
-	area = areaOver(mouse);
+	area = areaOver(position);
 	if (area == -1) {
-		if (mouse.x >= window_area.x + help_pos.x && mouse.y >= window_area.y+help_pos.y && mouse.x < window_area.x+help_pos.x+help_pos.w && mouse.y < window_area.y+help_pos.y+help_pos.h) {
+		if (position.x >= window_area.x + help_pos.x && position.y >= window_area.y+help_pos.y && position.x < window_area.x+help_pos.x+help_pos.w && position.y < window_area.y+help_pos.y+help_pos.h) {
 			tip.addText(msg->get("Use SHIFT to move only one item."));
 			tip.addText(msg->get("CTRL-click a carried item to sell it."));
 		}
 		return tip;
 	}
-	slot = inventory[area].slotOver(mouse);
+	slot = inventory[area].slotOver(position);
 
 	if (slot == -1)
 		return tip;
 
 	if (inventory[area][slot].item > 0) {
-		tip = inventory[area].checkTooltip( mouse, stats, PLAYER_INV);
+		tip = inventory[area].checkTooltip(position, stats, PLAYER_INV);
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].item == 0) {
 		tip.addText(msg->get(slot_desc[slot]));
@@ -285,14 +283,14 @@ TooltipData MenuInventory::checkTooltip(Point mouse) {
 /**
  * Click-start dragging in the inventory
  */
-ItemStack MenuInventory::click(InputState * input) {
+ItemStack MenuInventory::click(Point position) {
 	ItemStack item;
 	item.item = 0;
 	item.quantity = 0;
 
-	drag_prev_src = areaOver(input->mouse);
+	drag_prev_src = areaOver(position);
 	if( drag_prev_src > -1) {
-		item = inventory[drag_prev_src].click(input);
+		item = inventory[drag_prev_src].click(position);
 		// if dragging equipment, prepare to change stats/sprites
 		if (drag_prev_src == EQUIPMENT) {
 			if (stats->humanoid) {
@@ -329,17 +327,17 @@ void MenuInventory::itemReturn( ItemStack stack) {
  * Dragging and dropping an item can be used to rearrange the inventory
  * and equip items
  */
-void MenuInventory::drop(Point mouse, ItemStack stack) {
+void MenuInventory::drop(Point position, ItemStack stack) {
 	items->playSound(stack.item);
 
-	int area = areaOver(mouse);
+	int area = areaOver(position);
 	if (area == -1) {
 		// not dropped into a slot. Just return it to the previous slot.
 		itemReturn(stack);
 		return;
 	}
 
-	int slot = inventory[area].slotOver(mouse);
+	int slot = inventory[area].slotOver(position);
 	if (slot == -1) {
 		// not dropped into a slot. Just return it to the previous slot.
 		itemReturn(stack);
@@ -434,13 +432,13 @@ void MenuInventory::drop(Point mouse, ItemStack stack) {
  * e.g. drink a potion
  * e.g. equip an item
  */
-void MenuInventory::activate(InputState * input) {
+void MenuInventory::activate(Point position) {
 	ItemStack stack;
 	Point nullpt;
 	nullpt.x = nullpt.y = 0;
 
 	// clicked a carried item
-	int slot = inventory[CARRIED].slotOver(input->mouse);
+	int slot = inventory[CARRIED].slotOver(position);
 	if (slot == -1)
 		return;
 
@@ -498,7 +496,7 @@ void MenuInventory::activate(InputState * input) {
 
 		if (equip_slot != -1) {
 			if (requirementsMet(inventory[CARRIED][slot].item)) {
-				stack = click( input);
+				stack = click(position);
 				if( inventory[EQUIPMENT][equip_slot].item == stack.item) {
 					// Merge the stacks
 					add( stack, EQUIPMENT, equip_slot);
@@ -612,7 +610,7 @@ void MenuInventory::removeEquipped(int item) {
  */
 void MenuInventory::addCurrency(int count) {
 	currency += count;
-	LootManager::getInstance()->playCurrencySound();
+	loot->playCurrencySound();
 }
 
 /**
@@ -628,7 +626,7 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
 	if( currency >= count) {
 		currency -= count;
 
-		LootManager::getInstance()->playCurrencySound();
+		loot->playCurrencySound();
 		return true;
 	}
 	else {
@@ -656,7 +654,7 @@ bool MenuInventory::sell(ItemStack stack) {
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
 	currency += value;
-	LootManager::getInstance()->playCurrencySound();
+	loot->playCurrencySound();
 	drag_prev_src = -1;
 	return true;
 }
@@ -933,13 +931,11 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	}
 }
 
-int MenuInventory::getEquippedCount()
-{
+int MenuInventory::getEquippedCount() {
 	return (int)equipped_area.size();
 }
 
-int MenuInventory::getCarriedRows()
-{
+int MenuInventory::getCarriedRows() {
 	return carried_rows;
 }
 

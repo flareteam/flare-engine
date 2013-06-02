@@ -114,6 +114,7 @@ Set (FLARE_SOURCES
 	./src/ItemStorage.cpp
 	./src/Loot.cpp
 	./src/LootManager.cpp
+	./src/Map.cpp
 	./src/MapCollision.cpp
 	./src/MapRenderer.cpp
 	./src/Menu.cpp
@@ -144,10 +145,13 @@ Set (FLARE_SOURCES
 	./src/SaveLoad.cpp
 	./src/SDL_gfxBlitFunc.c
 	./src/Settings.cpp
+	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
 	./src/StatBlock.cpp
+	./src/Stats.cpp
 	./src/SoundManager.cpp
 	./src/TileSet.cpp
+	./src/TooltipData.cpp
 	./src/Utils.cpp
 	./src/UtilsDebug.cpp
 	./src/UtilsFileSystem.cpp

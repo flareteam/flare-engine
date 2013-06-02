@@ -21,13 +21,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Settings
  */
 
-
 #pragma once
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <string>
-#include <vector>
+#include "CommonIncludes.h"
 
 typedef struct Element{
 	std::string name;
@@ -110,6 +108,7 @@ extern bool ENABLE_JOYSTICK;
 extern int JOYSTICK_DEVICE;
 extern bool MOUSE_AIM;
 extern bool NO_MOUSE;
+extern int JOY_DEADZONE;
 
 // User Options
 extern bool COMBAT_TEXT;
@@ -119,6 +118,7 @@ extern bool MENUS_PAUSE;
 extern bool SAVE_HPMP;
 extern bool ENABLE_PLAYGAME;
 extern bool SHOW_FPS;
+extern bool COLORBLIND;
 extern int CORPSE_TIMEOUT;
 extern bool SELL_WITHOUT_VENDOR;
 extern int AIM_ASSIST;
@@ -178,12 +178,10 @@ extern int DEATH_PENALTY_XP_CURRENT;
 extern bool DEATH_PENALTY_ITEM;
 
 void setPaths();
-void setDefaultPath();
 void loadTilesetSettings();
 void loadMiscSettings();
 bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
-
 
 #endif

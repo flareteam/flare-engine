@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-
 #pragma once
 #ifndef WIDGET_H
 #define WIDGET_H
@@ -24,8 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Base interface all widget needs to implement
  */
-#include <SDL.h>
-#include <vector>
+#include "CommonIncludes.h"
 
 enum ScrollType {VERTICAL, HORIZONTAL, TWO_DIRECTIONS};
 
@@ -37,15 +35,14 @@ public:
 	virtual void render(SDL_Surface *target = NULL) = 0;
 	virtual void activate();
 	virtual void deactivate();
+	virtual void defocus();
 	virtual bool getNext();  // getNext and getPrev should be implemented
 	virtual bool getPrev(); // if the widget has items internally that can be iterated
 	bool render_to_alpha;
 	bool in_focus;
 	bool focusable;
 	SDL_Rect pos; // This is the position of the button within the screen
-private:
 };
-
 
 class TabList {
 private:

@@ -22,15 +22,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * It has two images - one for focused and one for unfocused.
  */
 
-
 #pragma once
 #ifndef WIDGETINPUT_H
 #define WIDGETINPUT_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "Widget.h"
-#include <SDL.h>
-#include <string>
 
 class WidgetInput : public Widget {
 

@@ -114,21 +114,18 @@ void MenuVendor::loadMerchant(const std::string&) {
 void MenuVendor::logic() {
 	if (!visible) return;
 
-	if (NO_MOUSE)
-	{
+	if (NO_MOUSE) {
 		tablist.logic();
 	}
 
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
-		if (stock[VENDOR_BUY].slots[i]->in_focus)
-		{
+		if (stock[VENDOR_BUY].slots[i]->in_focus) {
 			tabControl->setActiveTab(0);
 			activetab = 0;
 			break;
 		}
-		else if (stock[VENDOR_SELL].slots[i]->in_focus)
-		{
+		else if (stock[VENDOR_SELL].slots[i]->in_focus) {
 			tabControl->setActiveTab(1);
 			activetab = 1;
 			break;
@@ -186,8 +183,8 @@ void MenuVendor::render() {
  * Start dragging a vendor item
  * Players can drag an item to their inventory to purchase.
  */
-ItemStack MenuVendor::click(InputState * input) {
-	ItemStack stack = stock[activetab].click(input);
+ItemStack MenuVendor::click(Point position) {
+	ItemStack stack = stock[activetab].click(position);
 	saveInventory();
 	return stack;
 }
@@ -213,9 +210,9 @@ void MenuVendor::add(ItemStack stack) {
 	saveInventory();
 }
 
-TooltipData MenuVendor::checkTooltip(Point mouse) {
+TooltipData MenuVendor::checkTooltip(Point position) {
 	int vendor_view = (activetab == VENDOR_BUY) ? VENDOR_BUY : VENDOR_SELL;
-	return stock[activetab].checkTooltip( mouse, stats, vendor_view);
+	return stock[activetab].checkTooltip(position, stats, vendor_view);
 }
 
 /**

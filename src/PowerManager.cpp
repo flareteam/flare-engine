@@ -39,7 +39,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 
 #include <cmath>
-#include <iostream>
 #include <climits>
 using namespace std;
 
@@ -195,7 +194,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].multitarget = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
-        else if (infile.key == "trait_avoidance_ignore")
+		else if (infile.key == "trait_avoidance_ignore")
 			powers[input_id].trait_avoidance_ignore = toBool(infile.val);
 		else if (infile.key == "trait_crits_impaired")
 			powers[input_id].trait_crits_impaired = toInt(infile.val);
@@ -298,8 +297,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
@@ -308,8 +307,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_damage_value_min = eatFirstInt(infile.val, ',');
@@ -319,8 +318,8 @@ void PowerManager::loadPowers() {
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
-			if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
-			if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
+			else if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
+			else if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_crit_value = eatFirstInt(infile.val, ',');
@@ -452,8 +451,8 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 	haz->target_party = powers[power_index].target_party;
 
 	// Hazard attributes based on power source
-	haz->crit_chance = src_stats->crit;
-	haz->accuracy = src_stats->accuracy;
+	haz->crit_chance = src_stats->get(STAT_CRIT);
+	haz->accuracy = src_stats->get(STAT_ACCURACY);
 
 	// If the hazard's damage isn't default (0), we are applying an item-based power mod.
 	// We don't allow equipment power mods to alter damage (mainly to preserve the base power's multiplier).
@@ -461,16 +460,16 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 
 		// base damage is by equipped item
 		if (powers[power_index].base_damage == BASE_DAMAGE_MELEE) {
-			haz->dmg_min = src_stats->dmg_melee_min;
-			haz->dmg_max = src_stats->dmg_melee_max;
+			haz->dmg_min = src_stats->get(STAT_DMG_MELEE_MIN);
+			haz->dmg_max = src_stats->get(STAT_DMG_MELEE_MAX);
 		}
 		else if (powers[power_index].base_damage == BASE_DAMAGE_RANGED) {
-			haz->dmg_min = src_stats->dmg_ranged_min;
-			haz->dmg_max = src_stats->dmg_ranged_max;
+			haz->dmg_min = src_stats->get(STAT_DMG_RANGED_MIN);
+			haz->dmg_max = src_stats->get(STAT_DMG_RANGED_MAX);
 		}
 		else if (powers[power_index].base_damage == BASE_DAMAGE_MENT) {
-			haz->dmg_min = src_stats->dmg_ment_min;
-			haz->dmg_max = src_stats->dmg_ment_max;
+			haz->dmg_min = src_stats->get(STAT_DMG_MENT_MIN);
+			haz->dmg_max = src_stats->get(STAT_DMG_MENT_MAX);
 		}
 	}
 
@@ -643,29 +642,29 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
 		if (effect_index > 0) {
 			if (powers[effect_index].effect_type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
-                if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-                    magnitude = src_stats->dmg_ment_max * powers[power_index].mod_damage_value_min / 100;
-                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-                    magnitude = src_stats->dmg_ment_max + powers[power_index].mod_damage_value_min;
-                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-                    magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
+				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
+					magnitude = src_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
+				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+					magnitude = src_stats->get(STAT_DMG_MENT_MAX) + powers[power_index].mod_damage_value_min;
+				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 
 				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
 			else if (powers[effect_index].effect_type == "heal") {
 				// heal for ment weapon damage * damage multiplier
-				magnitude = randBetween(src_stats->dmg_ment_min, src_stats->dmg_ment_max);
+				magnitude = randBetween(src_stats->get(STAT_DMG_MENT_MIN), src_stats->get(STAT_DMG_MENT_MAX));
 
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-                    magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
-                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-                    magnitude += powers[power_index].mod_damage_value_min;
-                else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-                    magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
+					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
+				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
+					magnitude += powers[power_index].mod_damage_value_min;
+				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 
 				comb->addMessage(msg->get("+%d HP",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 				src_stats->hp += magnitude;
-				if (src_stats->hp > src_stats->maxhp) src_stats->hp = src_stats->maxhp;
+				if (src_stats->hp > src_stats->get(STAT_HP_MAX)) src_stats->hp = src_stats->get(STAT_HP_MAX);
 			}
 
 			int passive_id = 0;
@@ -1011,7 +1010,7 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 			else if (trigger == TRIGGER_BLOCK && !src_stats->effects.triggered_block) continue;
 			else if (trigger == TRIGGER_HIT && !src_stats->effects.triggered_hit) continue;
 			else if (trigger == TRIGGER_HALFDEATH && !src_stats->effects.triggered_halfdeath) {
-				if (src_stats->hp > src_stats->maxhp/2) continue;
+				if (src_stats->hp > src_stats->get(STAT_HP_MAX)/2) continue;
 				else src_stats->effects.triggered_halfdeath = true;
 			}
 			else if (trigger == TRIGGER_JOINCOMBAT && !src_stats->effects.triggered_joincombat) {
@@ -1036,7 +1035,7 @@ void PowerManager::activatePassives(StatBlock *src_stats) {
 			else if (trigger == TRIGGER_BLOCK && !src_stats->effects.triggered_block) continue;
 			else if (trigger == TRIGGER_HIT && !src_stats->effects.triggered_hit) continue;
 			else if (trigger == TRIGGER_HALFDEATH && !src_stats->effects.triggered_halfdeath) {
-				if (src_stats->hp > src_stats->maxhp/2) continue;
+				if (src_stats->hp > src_stats->get(STAT_HP_MAX)/2) continue;
 				else src_stats->effects.triggered_halfdeath = true;
 			}
 			else if (trigger == TRIGGER_JOINCOMBAT && !src_stats->effects.triggered_joincombat) {

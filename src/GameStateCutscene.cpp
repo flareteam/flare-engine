@@ -15,12 +15,12 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "CommonIncludes.h"
 #include "GameStateCutscene.h"
 #include "GameStatePlay.h"
 #include "FileParser.h"
 #include "WidgetScrollBox.h"
 
-#include <iostream>
 using namespace std;
 
 Scene::Scene() : frame_counter(0)
@@ -29,7 +29,8 @@ Scene::Scene() : frame_counter(0)
 	, caption_size(0,0)
 	, art(NULL)
 	, sid(-1)
-	, caption_box(NULL) {
+	, caption_box(NULL)
+	, done(false) {
 }
 
 Scene::~Scene() {
@@ -44,12 +45,20 @@ Scene::~Scene() {
 }
 
 bool Scene::logic() {
+	if (done) return false;
 
-	/* TODO: handle cancel input to skip scene */
 	bool skip = false;
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 		inpt->lock[MAIN1] = true;
 		skip = true;
+	}
+	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		inpt->lock[ACCEPT] = true;
+		skip = true;
+	}
+	if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+		inpt->lock[CANCEL] = true;
+		done = true;
 	}
 
 	/* Pause until specified frame */
@@ -163,7 +172,7 @@ void GameStateCutscene::render() {
 bool GameStateCutscene::load(std::string filename) {
 	FileParser infile;
 
-	if (!infile.open("cutscenes/" + filename))
+	if (!infile.open("cutscenes/" + filename, true, false))
 		return false;
 
 	// parse the cutscene file

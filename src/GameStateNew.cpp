@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStatePlay.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "TooltipData.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
@@ -267,9 +268,9 @@ void GameStateNew::logic() {
 		// start the new game
 		GameStatePlay* play = new GameStatePlay();
 		Avatar *pc = play->getAvatar();
-		pc->stats.base = base[current_option];
-		pc->stats.head = head[current_option];
-		pc->stats.portrait = portrait[current_option];
+		pc->stats.gfx_base = base[current_option];
+		pc->stats.gfx_head = head[current_option];
+		pc->stats.gfx_portrait = portrait[current_option];
 		pc->stats.name = input_name->getText();
 		pc->stats.permadeath = button_permadeath->isChecked();
 		play->game_slot = game_slot;

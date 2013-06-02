@@ -24,29 +24,24 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
-#include "AnimationSet.h"
 #include "AnimationManager.h"
-
+#include "AnimationSet.h"
+#include "CommonIncludes.h"
 #include "EnemyManager.h"
 #include "FileParser.h"
 #include "LootManager.h"
 #include "Menu.h"
 #include "MenuInventory.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
-#include "UtilsParsing.h"
-#include "UtilsMath.h"
 #include "Utils.h"
+#include "UtilsMath.h"
+#include "UtilsParsing.h"
+#include "WidgetTooltip.h"
 
-#include <sstream>
-#include <iostream>
 #include <limits>
 
 using namespace std;
-
-LootManager *lootManager = 0;
-LootManager *LootManager::getInstance() {
-	return lootManager;
-}
 
 LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero) {
 	items = _items;
@@ -113,12 +108,6 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 	loadGraphics();
 
 	full_msg = false;
-
-	if (!lootManager)
-		lootManager = this;
-	else
-		exit(25);
-	// TODO: make sure only one instance of the lootmanager is created.
 }
 
 /**
@@ -272,7 +261,7 @@ void LootManager::checkMapForLoot() {
 
 		if (possible_ids.empty()) {
 			// find the rarest loot less than the chance roll
-			if (chance < (ec->z * (hero->effects.bonus_item_find + 100)) / 100) {
+			if (chance < (ec->z * (hero->get(STAT_ITEM_FIND) + 100)) / 100) {
 				possible_ids.push_back(i-1);
 				common_chance = ec->z;
 				i=map->loot.size(); // start searching from the beginning
@@ -324,7 +313,7 @@ void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 	for (unsigned i=0; i<e->stats.loot.size(); i++) {
 		if (possible_ids.empty()) {
 			// find the rarest loot less than the chance roll
-			if (chance < (e->stats.loot[i].chance * (hero->effects.bonus_item_find + 100)) / 100) {
+			if (chance < (e->stats.loot[i].chance * (hero->get(STAT_ITEM_FIND) + 100)) / 100) {
 				possible_ids.push_back(e->stats.loot[i].id);
 				common_chance = e->stats.loot[i].chance;
 
@@ -360,7 +349,7 @@ void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 
 			// calculate bonus currency
 			int currency = new_loot.quantity;
-			currency = (currency * (100 + hero->effects.bonus_currency)) / 100;
+			currency = (currency * (100 + hero->get(STAT_CURRENCY_FIND))) / 100;
 
 			addCurrency(currency, pos);
 		}
@@ -565,6 +554,5 @@ LootManager::~LootManager() {
 	snd->unload(sfx_loot);
 	snd->unload(sfx_currency);
 
-	lootManager = 0;
 	delete tip;
 }

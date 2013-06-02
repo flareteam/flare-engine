@@ -30,7 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EnemyManager.h"
 
-// fwd-declare Enemy class
 class Enemy;
 
 class EnemyBehavior {

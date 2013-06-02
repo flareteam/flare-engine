@@ -25,20 +25,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Animation.h"
 #include "FileParser.h"
+#include "ItemManager.h"
 #include "NPCManager.h"
 #include "NPC.h"
 #include "SharedResources.h"
 #include "MapRenderer.h"
-#include "LootManager.h"
 #include "StatBlock.h"
+#include "WidgetTooltip.h"
+
 #include <limits>
 
 using namespace std;
 
-NPCManager::NPCManager(MapRenderer *_map, LootManager *_loot, ItemManager *_items, StatBlock *_stats)
+NPCManager::NPCManager(MapRenderer *_map, ItemManager *_items, StatBlock *_stats)
 	: map(_map)
 	, tip(new WidgetTooltip())
-	, loot(_loot)
 	, items(_items)
 	, stats(_stats)
 	, tip_buf() {

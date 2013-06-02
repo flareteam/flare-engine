@@ -24,16 +24,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  */
 
-
 #pragma once
 #ifndef COMBAT_TEXT_H
 #define COMBAT_TEXT_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
-
-#include <vector>
-#include <string>
 
 #define COMBAT_MESSAGE_GIVEDMG 0
 #define COMBAT_MESSAGE_TAKEDMG 1

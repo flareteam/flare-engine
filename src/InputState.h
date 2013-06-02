@@ -20,13 +20,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef INPUT_STATE_H
 #define INPUT_STATE_H
 
+#include "CommonIncludes.h"
 #include "Utils.h"
-
-#include <SDL.h>
-#include <string>
-
-
-#define JOY_DEADZONE	100
 
 #define JOY_POS_CENTER	0
 #define JOY_POS_LEFT	-1
@@ -64,9 +59,7 @@ const int DEL = 24;
 const int ACTIONBAR = 25;
 const int ACTIONBAR_BACK = 26;
 const int ACTIONBAR_FORWARD = 27;
-
-// Maxiumum mouse emulation movement speed
-const int MOUSE_EMU_VEL = 32;
+const int ACTIONBAR_USE = 28;
 
 /**
  * class InputState
@@ -75,17 +68,13 @@ const int MOUSE_EMU_VEL = 32;
  */
 
 class InputState {
-private:
-	int mx_vel;
-	int my_vel;
-	void mouseEmulation();
 public:
-	static const int key_count = 28;
+	static const int key_count = 29;
 	int binding[key_count];
 	int binding_alt[key_count];
 	int binding_joy[key_count];
 
-	std::string binding_name[28];
+	std::string binding_name[29];
 	std::string mouse_button[7];
 
 	InputState(void);
@@ -97,8 +86,6 @@ public:
 	void saveKeyBindings();
 	void handle(bool dump_event);
 	void resetScroll();
-	void enableMouseEmulation();
-	void disableMouseEmulation();
 	void lockActionBar();
 	void unlockActionBar();
 	void setKeybindNames();
@@ -113,7 +100,6 @@ public:
 	int last_button;
 	bool scroll_up;
 	bool scroll_down;
-	bool mouse_emulation;
 };
 
 #endif

@@ -50,8 +50,7 @@ void MenuExit::update() {
 
 void MenuExit::logic() {
 	if (visible) {
-		if (NO_MOUSE)
-		{
+		if (NO_MOUSE) {
 			tablist.logic();
 		}
 

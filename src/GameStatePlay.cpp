@@ -34,7 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateCutscene.h"
 #include "Hazard.h"
 #include "HazardManager.h"
-#include "LootManager.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
@@ -52,6 +51,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPCManager.h"
 #include "QuestLog.h"
 #include "WidgetLabel.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "FileParser.h"
@@ -76,8 +76,7 @@ GameStatePlay::GameStatePlay()
 	, enemies(new EnemyManager(powers, map))
 	, hazards(new HazardManager(powers, pc, enemies))
 	, menu(new MenuManager(powers, &pc->stats, camp, items))
-	, loot(new LootManager(items, map, &pc->stats))
-	, npcs(new NPCManager(map, loot, items, &pc->stats))
+	, npcs(new NPCManager(map, items, &pc->stats))
 	, quests(new QuestLog(camp, menu->log))
 	, loading(new WidgetLabel())
 	// Load the loading screen image (we currently use the confirm dialog background):
@@ -98,6 +97,9 @@ GameStatePlay::GameStatePlay()
 	map->powers = powers;
 	pc->enemies = enemies;
 	enemies->pc = pc;
+
+	enemyg = new EnemyGroupManager();
+	loot = new LootManager(items, map, &pc->stats);
 
 	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
@@ -124,7 +126,7 @@ void GameStatePlay::resetGame() {
 	loadStash();
 
 	// Finalize new character settings
-	menu->talker->setHero(pc->stats.name, pc->stats.portrait);
+	menu->talker->setHero(pc->stats.name, pc->stats.gfx_portrait);
 	pc->loadSounds();
 }
 
@@ -270,9 +272,11 @@ void GameStatePlay::checkTeleport() {
 
 		// process intermap teleport
 		if (map->teleportation && map->teleport_mapname != "") {
+			std::string teleport_mapname = map->teleport_mapname;
+			map->teleport_mapname = "";
 			map->executeOnMapExitEvents();
 			showLoading();
-			map->load(map->teleport_mapname);
+			map->load(teleport_mapname);
 			enemies->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
@@ -288,7 +292,7 @@ void GameStatePlay::checkTeleport() {
 			npc_id = -1;
 
 			// store this as the new respawn point
-			map->respawn_map = map->teleport_mapname;
+			map->respawn_map = teleport_mapname;
 			map->respawn_point.x = pc->stats.pos.x;
 			map->respawn_point.y = pc->stats.pos.y;
 
@@ -322,10 +326,11 @@ void GameStatePlay::checkTeleport() {
 
 		map->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
-		map->teleportation = false;
 		pc->stats.teleportation = false; // teleport spell
 
 	}
+
+	if (map->teleport_mapname == "") map->teleportation = false;
 }
 
 /**
@@ -498,12 +503,12 @@ void GameStatePlay::checkEquipmentChange() {
 			}
 			// special case: if we don't have a head, use the portrait's head
 			if (gfx.gfx == "" && pc->layer_reference_order[j] == "head") {
-				gfx.gfx = pc->stats.head;
+				gfx.gfx = pc->stats.gfx_head;
 				gfx.type = "head";
 			}
 			// fall back to default if it exists
 			if (gfx.gfx == "") {
-				bool exists = fileExists(mods->locate("animations/avatar/" + pc->stats.base + "/default_" + gfx.type + ".txt"));
+				bool exists = fileExists(mods->locate("animations/avatar/" + pc->stats.gfx_base + "/default_" + gfx.type + ".txt"));
 				if (exists) gfx.gfx = "default_" + gfx.type;
 			}
 			img_gfx.push_back(gfx);
@@ -803,8 +808,8 @@ void GameStatePlay::logic() {
 		enemies->hero_pos = pc->stats.pos;
 		enemies->hero_direction = pc->stats.direction;
 		enemies->hero_alive = pc->stats.alive;
-		if (pc->stats.effects.bonus_stealth > 100) enemies->hero_stealth = 100;
-		else enemies->hero_stealth = pc->stats.effects.bonus_stealth;
+		if (pc->stats.get(STAT_STEALTH) > 100) enemies->hero_stealth = 100;
+		else enemies->hero_stealth = pc->stats.get(STAT_STEALTH);
 
 		enemies->logic();
 		hazards->logic();
@@ -965,6 +970,8 @@ GameStatePlay::~GameStatePlay() {
 	delete powers;
 
 	delete loading;
+
+	delete enemyg;
 
 	SDL_FreeSurface(loading_bg);
 }

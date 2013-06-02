@@ -1,6 +1,6 @@
 /*
-Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Justin Jacobs
+Copyright Â© 2011-2012 Clint Bellanger
+Copyright Â© 2012 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * class WidgetScrollBox
  */
-
 
 #pragma once
 #ifndef WIDGET_SCROLLBOX_H

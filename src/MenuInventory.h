@@ -20,20 +20,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuInventory
  */
 
-
 #pragma once
 #ifndef MENU_INVENTORY_H
 #define MENU_INVENTORY_H
 
+#include "CommonIncludes.h"
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-
-#include <string>
-
-class InputState;
 class ItemManager;
 class PowerManager;
 class StatBlock;
@@ -49,7 +43,7 @@ private:
 	PowerManager *powers;
 
 	void loadGraphics();
-	int areaOver(Point mouse);
+	int areaOver(Point position);
 	void updateEquipment(int slot);
 
 	SDL_Surface *background;
@@ -74,12 +68,12 @@ public:
 	void update();
 	void logic();
 	void render();
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(Point position);
 
-	ItemStack click(InputState * input);
+	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
-	void drop(Point mouse, ItemStack stack);
-	void activate(InputState * input);
+	void drop(Point position, ItemStack stack);
+	void activate(Point position);
 
 	void add( ItemStack stack, int area = CARRIED, int slot = -1);
 	void remove(int item);

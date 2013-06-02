@@ -24,22 +24,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle game Settings Menu
  */
 
+#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStateConfig.h"
 #include "GameStateTitle.h"
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
-#include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
+#include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetCheckBox.h"
 #include "WidgetListBox.h"
 #include "WidgetScrollBox.h"
 #include "WidgetSlider.h"
 #include "WidgetTabControl.h"
-
-#include <sstream>
+#include "WidgetTooltip.h"
 
 using namespace std;
 
@@ -114,6 +114,8 @@ void GameStateConfig::init() {
 	no_mouse_lb = new WidgetLabel();
 	show_fps_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	show_fps_lb = new WidgetLabel();
+	colorblind_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	colorblind_lb = new WidgetLabel();
 	music_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	music_volume_lb = new WidgetLabel();
 	sound_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
@@ -137,6 +139,8 @@ void GameStateConfig::init() {
 	activemods_shiftdown_btn = new WidgetButton("images/menus/buttons/down.png");
 	activemods_deactivate_btn = new WidgetButton("images/menus/buttons/button_default.png");
 	inactivemods_activate_btn = new WidgetButton("images/menus/buttons/button_default.png");
+	joystick_deadzone_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
+	joystick_deadzone_lb = new WidgetLabel();
 
 	tabControl = new WidgetTabControl(6);
 	tabControl->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
@@ -156,12 +160,12 @@ void GameStateConfig::init() {
 	resolution_confirm = new MenuConfirm(msg->get("OK"),msg->get("Use this resolution?"));
 
 	// Allocate KeyBindings
-	for (unsigned int i = 0; i < 28; i++) {
+	for (unsigned int i = 0; i < 29; i++) {
 		settings_lb[i] = new WidgetLabel();
 		settings_lb[i]->set(inpt->binding_name[i]);
 		settings_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
-	for (unsigned int i = 0; i < 56; i++) {
+	for (unsigned int i = 0; i < 58; i++) {
 		settings_key[i] = new WidgetButton("images/menus/buttons/button_default.png");
 	}
 
@@ -223,12 +227,14 @@ void GameStateConfig::init() {
 
 	tablist.add(combat_text_cb);
 	tablist.add(show_fps_cb);
+	tablist.add(colorblind_cb);
 	tablist.add(language_lstb);
 
 	tablist.add(enable_joystick_cb);
 	tablist.add(mouse_move_cb);
 	tablist.add(mouse_aim_cb);
 	tablist.add(no_mouse_cb);
+	tablist.add(joystick_deadzone_sl);
 	tablist.add(joystick_device_lstb);
 
 	tablist.add(input_scrollbox);
@@ -240,7 +246,7 @@ void GameStateConfig::init() {
 	tablist.add(activemods_shiftup_btn);
 	tablist.add(activemods_shiftdown_btn);
 
-	for (unsigned int i = 0; i < 56; i++) {
+	for (unsigned int i = 0; i < 58; i++) {
 		input_scrollbox->addChildWidget(settings_key[i]);
 	}
 }
@@ -429,6 +435,19 @@ void GameStateConfig::readConfig () {
 				child_widget.push_back(show_fps_lb);
 				optiontab[child_widget.size()-1] = 2;
 			}
+			else if (infile.key == "colorblind") {
+				colorblind_cb->pos.x = frame.x + x2;
+				colorblind_cb->pos.y = frame.y + y2;
+				child_widget.push_back(colorblind_cb);
+				optiontab[child_widget.size()-1] = 2;
+
+				colorblind_lb->setX(frame.x + x1);
+				colorblind_lb->setY(frame.y + y1);
+				colorblind_lb->set(msg->get("Colorblind Mode"));
+				colorblind_lb->setJustify(JUSTIFY_RIGHT);
+				child_widget.push_back(colorblind_lb);
+				optiontab[child_widget.size()-1] = 2;
+			}
 			//sliders
 			else if (infile.key == "music_volume") {
 				music_volume_sl->pos.x = frame.x + x2;
@@ -468,6 +487,19 @@ void GameStateConfig::readConfig () {
 				gamma_lb->setJustify(JUSTIFY_RIGHT);
 				child_widget.push_back(gamma_lb);
 				optiontab[child_widget.size()-1] = 0;
+			}
+			else if (infile.key == "joystick_deadzone") {
+				joystick_deadzone_sl->pos.x = frame.x + x2;
+				joystick_deadzone_sl->pos.y = frame.y + y2;
+				child_widget.push_back(joystick_deadzone_sl);
+				optiontab[child_widget.size()-1] = 3;
+
+				joystick_deadzone_lb->setX(frame.x + x1);
+				joystick_deadzone_lb->setY(frame.y + y1);
+				joystick_deadzone_lb->set(msg->get("Joystick Deadzone"));
+				joystick_deadzone_lb->setJustify(JUSTIFY_RIGHT);
+				child_widget.push_back(joystick_deadzone_lb);
+				optiontab[child_widget.size()-1] = 3;
 			}
 			//listboxes
 			else if (infile.key == "resolution") {
@@ -560,6 +592,7 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "actionbar") setting_num = ACTIONBAR;
 			else if (infile.key == "actionbar_back") setting_num = ACTIONBAR_BACK;
 			else if (infile.key == "actionbar_forward") setting_num = ACTIONBAR_FORWARD;
+			else if (infile.key == "actionbar_use") setting_num = ACTIONBAR_USE;
 			// buttons end
 
 			else if (infile.key == "hws_note") {
@@ -648,7 +681,7 @@ void GameStateConfig::readConfig () {
 				scrollpane_contents = x1;
 			}
 
-			if (setting_num > -1 && setting_num < 28) {
+			if (setting_num > -1 && setting_num < 29) {
 				//keybindings
 				settings_lb[setting_num]->setX(x1);
 				settings_lb[setting_num]->setY(y1);
@@ -708,9 +741,9 @@ void GameStateConfig::readConfig () {
 	input_scrollbox->resize(scrollpane_contents);
 
 	// Set positions of secondary key bindings
-	for (unsigned int i = 28; i < 56; i++) {
-		settings_key[i]->pos.x = settings_key[i-28]->pos.x + offset_x;
-		settings_key[i]->pos.y = settings_key[i-28]->pos.y + offset_y;
+	for (unsigned int i = 29; i < 58; i++) {
+		settings_key[i]->pos.x = settings_key[i-29]->pos.x + offset_x;
+		settings_key[i]->pos.y = settings_key[i-29]->pos.y + offset_y;
 	}
 }
 
@@ -756,6 +789,8 @@ void GameStateConfig::update () {
 	else no_mouse_cb->unCheck();
 	if (SHOW_FPS) show_fps_cb->Check();
 	else show_fps_cb->unCheck();
+	if (COLORBLIND) colorblind_cb->Check();
+	else colorblind_cb->unCheck();
 
 	std::stringstream list_mode;
 	unsigned int resolutions = getVideoModes();
@@ -776,6 +811,8 @@ void GameStateConfig::update () {
 	}
 	joystick_device_lstb->refresh();
 
+	joystick_deadzone_sl->set(0,32768,JOY_DEADZONE);
+
 	if (!getLanguagesList()) fprintf(stderr, "Unable to get languages list!\n");
 	for (int i=0; i < getLanguagesNumber(); i++) {
 		language_lstb->append(language_full[i],"");
@@ -786,7 +823,7 @@ void GameStateConfig::update () {
 	activemods_lstb->refresh();
 	inactivemods_lstb->refresh();
 
-	for (unsigned int i = 0; i < 28; i++) {
+	for (unsigned int i = 0; i < 29; i++) {
 		if (inpt->binding[i] < 8) {
 			settings_key[i]->label = inpt->mouse_button[inpt->binding[i]-1];
 		}
@@ -795,12 +832,12 @@ void GameStateConfig::update () {
 		}
 		settings_key[i]->refresh();
 	}
-	for (unsigned int i = 28; i < 56; i++) {
-		if (inpt->binding_alt[i-28] < 8) {
-			settings_key[i]->label = inpt->mouse_button[inpt->binding_alt[i-28]-1];
+	for (unsigned int i = 29; i < 58; i++) {
+		if (inpt->binding_alt[i-29] < 8) {
+			settings_key[i]->label = inpt->mouse_button[inpt->binding_alt[i-29]-1];
 		}
 		else {
-			settings_key[i]->label = SDL_GetKeyName((SDLKey)inpt->binding_alt[i-28]);
+			settings_key[i]->label = SDL_GetKeyName((SDLKey)inpt->binding_alt[i-29]);
 		}
 		settings_key[i]->refresh();
 	}
@@ -809,13 +846,11 @@ void GameStateConfig::update () {
 
 void GameStateConfig::logic () {
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
-		if (input_scrollbox->in_focus && !input_confirm->visible)
-		{
+		if (input_scrollbox->in_focus && !input_confirm->visible) {
 			tabControl->setActiveTab(4);
 			break;
 		}
-		else if (child_widget[i]->in_focus)
-		{
+		else if (child_widget[i]->in_focus) {
 			tabControl->setActiveTab(optiontab[i]);
 			break;
 		}
@@ -843,6 +878,7 @@ void GameStateConfig::logic () {
 			loadDefaults();
 			loadMiscSettings();
 			inpt->defaultQwertyKeyBindings();
+			inpt->defaultJoystickBindings();
 			delete msg;
 			msg = new MessageEngine();
 			update();
@@ -995,6 +1031,10 @@ void GameStateConfig::logic () {
 			if (show_fps_cb->isChecked()) SHOW_FPS=true;
 			else SHOW_FPS=false;
 		}
+		else if (colorblind_cb->checkClick()) {
+			if (colorblind_cb->isChecked()) COLORBLIND=true;
+			else COLORBLIND=false;
+		}
 	}
 	// tab 3 (input)
 	else if (active_tab == 3 && !defaults_confirm->visible) {
@@ -1021,7 +1061,6 @@ void GameStateConfig::logic () {
 		else if (enable_joystick_cb->checkClick()) {
 			if (enable_joystick_cb->isChecked()) {
 				ENABLE_JOYSTICK=true;
-				inpt->mouse_emulation = true;
 				if (SDL_NumJoysticks() > 0) {
 					JOYSTICK_DEVICE = 0;
 					SDL_JoystickClose(joy);
@@ -1031,18 +1070,19 @@ void GameStateConfig::logic () {
 			}
 			else {
 				ENABLE_JOYSTICK=false;
-				inpt->mouse_emulation = false;
 				for (int i=0; i<joystick_device_lstb->getSize(); i++)
 					joystick_device_lstb->selected[i] = false;
 			}
 			if (SDL_NumJoysticks() > 0) joystick_device_lstb->refresh();
+		}
+		else if (joystick_deadzone_sl->checkClick()) {
+			JOY_DEADZONE = joystick_deadzone_sl->getValue();
 		}
 		else if (joystick_device_lstb->checkClick()) {
 			JOYSTICK_DEVICE = joystick_device_lstb->getSelected();
 			if (JOYSTICK_DEVICE != -1) {
 				enable_joystick_cb->Check();
 				ENABLE_JOYSTICK=true;
-				inpt->mouse_emulation = true;
 				if (SDL_NumJoysticks() > 0) {
 					SDL_JoystickClose(joy);
 					joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
@@ -1051,7 +1091,6 @@ void GameStateConfig::logic () {
 			else {
 				enable_joystick_cb->unCheck();
 				ENABLE_JOYSTICK = false;
-				inpt->mouse_emulation = false;
 			}
 		}
 	}
@@ -1065,15 +1104,15 @@ void GameStateConfig::logic () {
 		}
 		else {
 			input_scrollbox->logic();
-			for (unsigned int i = 0; i < 56; i++) {
+			for (unsigned int i = 0; i < 58; i++) {
 				if (settings_key[i]->pressed || settings_key[i]->hover) input_scrollbox->update = true;
 				Point mouse = input_scrollbox->input_assist(inpt->mouse);
 				if (settings_key[i]->checkClick(mouse.x,mouse.y)) {
 					std::string confirm_msg;
-					if (i < 28)
+					if (i < 29)
 						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i];
 					else
-						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-28];
+						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-29];
 					delete input_confirm;
 					input_confirm = new MenuConfirm("",confirm_msg);
 					input_confirm->window_area = menuConfirm_area;
@@ -1138,7 +1177,7 @@ void GameStateConfig::render () {
 	if (active_tab == 4) {
 		if (input_scrollbox->update) {
 			input_scrollbox->refresh();
-			for (unsigned int i = 0; i < 28; i++) {
+			for (unsigned int i = 0; i < 29; i++) {
 				settings_lb[i]->render(input_scrollbox->contents);
 			}
 		}
@@ -1403,8 +1442,8 @@ bool GameStateConfig::setMods() {
 void GameStateConfig::scanKey(int button) {
 	if (input_confirm->visible) {
 		if (inpt->last_button != -1 && inpt->last_button < 8) {
-			if (button < 28) inpt->binding[button] = inpt->last_button;
-			else inpt->binding_alt[button-28] = inpt->last_button;
+			if (button < 29) inpt->binding[button] = inpt->last_button;
+			else inpt->binding_alt[button-29] = inpt->last_button;
 
 			settings_key[button]->label = inpt->mouse_button[inpt->last_button-1];
 			input_confirm->visible = false;
@@ -1413,8 +1452,8 @@ void GameStateConfig::scanKey(int button) {
 			return;
 		}
 		if (inpt->last_key != -1) {
-			if (button < 28) inpt->binding[button] = inpt->last_key;
-			else inpt->binding_alt[button-28] = inpt->last_key;
+			if (button < 29) inpt->binding[button] = inpt->last_key;
+			else inpt->binding_alt[button-29] = inpt->last_key;
 
 			settings_key[button]->label = SDL_GetKeyName((SDLKey)inpt->last_key);
 			input_confirm->visible = false;
@@ -1444,10 +1483,10 @@ GameStateConfig::~GameStateConfig() {
 	}
 	child_widget.clear();
 
-	for (unsigned int i = 0; i < 28; i++) {
+	for (unsigned int i = 0; i < 29; i++) {
 		delete settings_lb[i];
 	}
-	for (unsigned int i = 0; i < 56; i++) {
+	for (unsigned int i = 0; i < 58; i++) {
 		delete settings_key[i];
 	}
 

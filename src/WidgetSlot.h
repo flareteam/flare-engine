@@ -19,25 +19,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetSlot
  */
 
-
 #pragma once
 #ifndef WIDGET_SLOT_H
 #define WIDGET_SLOT_H
 
+#include "CommonIncludes.h"
+#include "InputState.h"
 #include "Widget.h"
-#include "WidgetTooltip.h"
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-
-#include <string>
 
 enum CLICK_TYPE {
 
 	NO_CLICK = 0,
 	CHECKED = 1,
-	ACTIVATED = 2,
+	ACTIVATED = 2
 };
 
 class WidgetSlot : public Widget {
@@ -58,6 +52,9 @@ public:
 
 	void activate();
 	void deactivate();
+	void defocus();
+	bool getNext();
+	bool getPrev();
 
 	CLICK_TYPE checkClick();
 	CLICK_TYPE checkClick(int x, int y);
@@ -69,6 +66,7 @@ public:
 	bool enabled;
 	bool checked;
 	bool pressed;
+	bool continuous;	// allow holding key to keep slot activated
 };
 
 #endif
