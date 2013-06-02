@@ -141,8 +141,7 @@ void MenuInventory::logic() {
 
 		// remove a % of currency
 		if (DEATH_PENALTY_CURRENCY > 0) {
-			if (currency > 0)
-				currency -= (currency * DEATH_PENALTY_CURRENCY) / 100;
+			removeCurrency((getCurrency() * DEATH_PENALTY_CURRENCY) / 100);
 			death_message += msg->get("Lost %d% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
 		}
 
@@ -191,7 +190,7 @@ void MenuInventory::logic() {
 	}
 
 	// a copy of currency is kept in stats, to help with various situations
-	stats->currency = currency;
+	stats->currency = currency = getCurrency();
 
 	// check close button
 	if (visible) {
@@ -606,11 +605,31 @@ void MenuInventory::removeEquipped(int item) {
 }
 
 /**
- * Add currency to the current total
+ * Add currency item
  */
 void MenuInventory::addCurrency(int count) {
-	currency += count;
+	ItemStack stack;
+	stack.item = CURRENCY_ID;
+	stack.quantity = count;
+	add(stack);
 	loot->playCurrencySound();
+}
+
+/**
+ * Remove currency item
+ */
+void MenuInventory::removeCurrency(int count) {
+	for (int i=0; i<count; i++) {
+		inventory[CARRIED].remove(CURRENCY_ID);
+	}
+	loot->playCurrencySound();
+}
+
+/**
+ * Count the number of currency items in the inventory
+ */
+int MenuInventory::getCurrency() {
+	return getItemCountCarried(CURRENCY_ID);
 }
 
 /**
@@ -623,10 +642,8 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
 	else value_each = items->items[stack.item].getSellPrice();
 
 	int count = value_each * stack.quantity;
-	if( currency >= count) {
-		currency -= count;
-
-		loot->playCurrencySound();
+	if( getCurrency() >= count) {
+		removeCurrency(count);
 		return true;
 	}
 	else {
@@ -648,13 +665,15 @@ bool MenuInventory::stashAdd(ItemStack stack) {
  * Sell a specific stack of items
  */
 bool MenuInventory::sell(ItemStack stack) {
+	// can't sell currency
+	if (stack.item == CURRENCY_ID) return false;
+
 	// items that have no price cannot be sold
 	if (items->items[stack.item].price == 0) return false;
 
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
-	currency += value;
-	loot->playCurrencySound();
+	addCurrency(value);
 	drag_prev_src = -1;
 	return true;
 }

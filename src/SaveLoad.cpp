@@ -88,9 +88,6 @@ void GameStatePlay::saveGame() {
 		// stat spec
 		outfile << "build=" << pc->stats.physical_character << "," << pc->stats.mental_character << "," << pc->stats.offense_character << "," << pc->stats.defense_character << "\n";
 
-		// current currency
-		outfile << "currency=" << menu->inv->currency << "\n";
-
 		// equipped gear
 		outfile << "equipped_quantity=" << menu->inv->inventory[EQUIPMENT].getQuantities() << "\n";
 		outfile << "equipped=" << menu->inv->inventory[EQUIPMENT].getItems() << "\n";
@@ -240,13 +237,6 @@ void GameStatePlay::loadGame() {
 					pc->stats.defense_character = 0;
 				}
 			}
-			else if (infile.key == "currency") {
-				menu->inv->currency = toInt(infile.val);
-				if (menu->inv->currency < 0) {
-					fprintf(stderr, "Currency value out of bounds, setting to zero\n");
-					menu->inv->currency = 0;
-				}
-			}
 			else if (infile.key == "equipped") {
 				menu->inv->inventory[EQUIPMENT].setItems(infile.val);
 			}
@@ -373,7 +363,7 @@ void GameStatePlay::loadClass(int index) {
 	pc->stats.mental_character += HERO_CLASSES[index].mental;
 	pc->stats.offense_character += HERO_CLASSES[index].offense;
 	pc->stats.defense_character += HERO_CLASSES[index].defense;
-	menu->inv->currency += HERO_CLASSES[index].currency;
+	menu->inv->addCurrency(HERO_CLASSES[index].currency);
 	menu->inv->inventory[EQUIPMENT].setItems(HERO_CLASSES[index].equipment);
 	for (unsigned i=0; i<HERO_CLASSES[index].powers.size(); i++) {
 		pc->stats.powers_list.push_back(HERO_CLASSES[index].powers[i]);

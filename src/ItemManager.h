@@ -34,6 +34,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define VENDOR_SELL 1
 #define PLAYER_INV 2
 
+// TODO set this to 1
+#define CURRENCY_ID 10
+
 class StatBlock;
 
 const int REQUIRES_PHYS = 0;

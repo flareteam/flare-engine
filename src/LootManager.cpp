@@ -178,11 +178,6 @@ void LootManager::renderTooltips(Point cam) {
 				if (it->stack.item > 0) {
 					it->tip = items->getShortTooltip(it->stack);
 				}
-				else {
-					ss.str("");
-					ss << msg->get("%d %s", it->currency, CURRENCY);
-					it->tip.addText(ss.str());
-				}
 			}
 
 			tip->render(it->tip, dest, STYLE_TOPLABEL);
@@ -369,15 +364,14 @@ void LootManager::addLoot(ItemStack stack, Point pos) {
 	const string anim_id = items->items[stack.item].loot_animation;
 	const string animationname = "animations/loot/" + anim_id + ".txt";
 	ld.loadAnimation(animationname);
-	ld.currency = 0;
 	loot.push_back(ld);
 	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
 void LootManager::addCurrency(int count, Point pos) {
 	Loot ld;
-	ld.stack.item = 0;
-	ld.stack.quantity = 0;
+	ld.stack.item = CURRENCY_ID;
+	ld.stack.quantity = count;
 	ld.pos.x = pos.x;
 	ld.pos.y = pos.y;
 
@@ -392,7 +386,6 @@ void LootManager::addCurrency(int count, Point pos) {
 	const string animationname = "animations/loot/" + anim_id + ".txt";
 	ld.loadAnimation(animationname);
 
-	ld.currency = count;
 	loot.push_back(ld);
 	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
@@ -439,12 +432,6 @@ ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, int &
 				else if (it->stack.item > 0) {
 					full_msg = true;
 				}
-				else if (it->currency > 0) {
-					currency = it->currency;
-					it = loot.erase(it);
-
-					return loot_stack;
-				}
 			}
 		}
 	}
@@ -465,8 +452,8 @@ ItemStack LootManager::checkAutoPickup(Point hero_pos, int &currency) {
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
 		if (abs(hero_pos.x - it->pos.x) < AUTOPICKUP_RANGE && abs(hero_pos.y - it->pos.y) < AUTOPICKUP_RANGE && !it->isFlying()) {
-			if (it->currency > 0 && AUTOPICKUP_CURRENCY) {
-				currency = it->currency;
+			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
+				currency = it->stack.quantity;
 				it = loot.erase(it);
 				return loot_stack;
 			}
@@ -504,12 +491,6 @@ ItemStack LootManager::checkNearestPickup(Point hero_pos, int &currency, MenuInv
 		}
 		else if (nearest->stack.item > 0) {
 			full_msg = true;
-		}
-		else if (nearest->currency > 0) {
-			currency = nearest->currency;
-			loot.erase(nearest);
-
-			return loot_stack;
 		}
 	}
 
