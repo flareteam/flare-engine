@@ -95,21 +95,21 @@ FPoint collision_to_map(Point p) {
 
 Point map_to_collision(FPoint p) {
 	Point ret;
-	ret.x = round(p.x);
-	ret.y = round(p.y);
+	ret.x = floor(p.x);
+	ret.y = floor(p.y);
 	return ret;
 }
 
 /**
  * Apply parameter distance to position and direction
  */
-FPoint calcVector(FPoint pos, int direction, int dist) {
+FPoint calcVector(FPoint pos, int direction, float dist) {
 	FPoint p;
-	p.x = (float)(pos.x);
-	p.y = (float)(pos.y);
+	p.x = pos.x;
+	p.y = pos.y;
 
-	float dist_straight = (float)dist;
-	float dist_diag = ((float)dist) * (float)(0.7071); //  1/sqrt(2)
+	float dist_straight = dist;
+	float dist_diag = dist * 0.7071f; //  1/sqrt(2)
 
 	switch (direction) {
 		case 0:
@@ -470,45 +470,23 @@ int calcDirection(const FPoint &src, const FPoint &dst) {
 }
 
 int calcDirection(float x0, float y0, float x1, float y1) {
-	// TODO: use calcTheta instead and check for the areas between -PI and PI
-
-	// inverting Y to convert map coordinates to standard cartesian coordinates
-	int dx = x1 - x0;
-	int dy = y0 - y1;
-
-	// avoid div by zero
-	if (dx == 0) {
-		if (dy > 0) return 3;
-		else return 7;
-	}
-
-	float slope = ((float)dy)/((float)dx);
-	if (0.5 <= slope && slope <= 2.0) {
-		if (dy > 0) return 4;
-		else return 0;
-	}
-	if (-0.5 <= slope && slope <= 0.5) {
-		if (dx > 0) return 5;
-		else return 1;
-	}
-	if (-2.0 <= slope && slope <= -0.5) {
-		if (dx > 0) return 6;
-		else return 2;
-	}
-	// now scope must be (2.0 <= slope || -2.0 >= slope)
-	if (dy > 0) return 3;
-	else return 7;
+	const float pi = 3.1415926535898f;
+	float theta = calcTheta(x0,y0,x1,y1);
+	int dir = ceil(theta / (pi/4)) + 4;
+	if (dir >= 0 && dir < 8)
+		return dir;
+	else
+		return 0;
 }
 
 // convert cartesian to polar theta where (x1,x2) is the origin
-float calcTheta(int x1, int y1, int x2, int y2) {
-
-	float pi = 3.1415926535898f;
+float calcTheta(float x1, float y1, float x2, float y2) {
+	const float pi = 3.1415926535898f;
 
 	// calculate base angle
 	float dx = (float)x2 - (float)x1;
 	float dy = (float)y2 - (float)y1;
-	int exact_dx = x2 - x1;
+	float exact_dx = x2 - x1;
 	float theta;
 
 	// convert cartesian to polar coordinates

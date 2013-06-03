@@ -308,8 +308,8 @@ void Avatar::handlePower(int actionbar_power) {
 		}
 		else {
 			FPoint ftarget = calcVector(stats.pos, stats.direction, stats.melee_range);
-			target.x = static_cast<int>(ftarget.x);
-			target.y = static_cast<int>(ftarget.y);
+			target.x = ftarget.x;
+			target.y = ftarget.y;
 		}
 
 		// check requirements

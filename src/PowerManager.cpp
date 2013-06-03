@@ -725,7 +725,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
  * return boolean true if successful
  */
 bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target) {
-	float pi = 3.1415926535898f;
+	const float pi = 3.1415926535898f;
 
 	Point src;
 	if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
@@ -856,8 +856,8 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		FPoint fpos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
-		espawn.pos.x = static_cast<int>(fpos.x);
-		espawn.pos.y = static_cast<int>(fpos.y);
+		espawn.pos.x = fpos.x;
+		espawn.pos.y = fpos.y;
 	}
 	if (powers[power_index].target_neighbor > 0) {
 		espawn.pos = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor);
