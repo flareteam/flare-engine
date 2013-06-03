@@ -90,8 +90,6 @@ private:
 	bool show_upgrade[4];
 	bool show_stat[STATLIST_COUNT];
 
-	TabList tablist;
-
 public:
 	MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
@@ -104,6 +102,8 @@ public:
 	int getUnspent() { return skill_points; }
 
 	bool newPowerNotification;
+
+	TabList tablist;
 
 };
 

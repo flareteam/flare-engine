@@ -52,7 +52,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[136];
+	int optiontab[138];
 	SDL_Rect frame;
 	SDL_Rect* video_modes;
 
@@ -108,6 +108,8 @@ private:
 	WidgetLabel         * no_mouse_lb;
 	WidgetCheckBox      * show_fps_cb;
 	WidgetLabel         * show_fps_lb;
+	WidgetCheckBox      * colorblind_cb;
+	WidgetLabel         * colorblind_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;
@@ -136,8 +138,8 @@ private:
 	WidgetSlider        * joystick_deadzone_sl;
 	WidgetLabel         * joystick_deadzone_lb;
 
-	WidgetLabel         * settings_lb[28];
-	WidgetButton        * settings_key[56];
+	WidgetLabel         * settings_lb[29];
+	WidgetButton        * settings_key[58];
 
 	WidgetScrollBox     * input_scrollbox;
 	MenuConfirm         * input_confirm;

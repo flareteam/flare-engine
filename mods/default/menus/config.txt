@@ -27,6 +27,7 @@ sound_volume=224,40,256,32
 language=64,16,32,32
 combat_text=352,40,384,32
 show_fps=352,72,384,64
+colorblind=352,104,384,96
 
 [input]
 joystick_device=64,16,32,32
@@ -75,6 +76,7 @@ delete=160,730,202,730
 actionbar=160,760,202,760
 actionbar_back=160,790,202,790
 actionbar_forward=160,820,202,820
+actionbar_use=160,850,202,850
 secondary_offset=145,0
 
 [mods]
