@@ -218,17 +218,17 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = round(it->map_pos.x);
-		const unsigned tiley = round(it->map_pos.y);
-		const int commax = (float)(2<<16) * it->map_pos.x;
-		const int commay = (float)(2<<16) * it->map_pos.y;
-		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 45) + ((commax + commay) << 16);
+		const unsigned tilex = it->map_pos.x; // implicit floor, just taking the integer part of the float
+		const unsigned tiley = it->map_pos.y;
+		const int commax = (float)(it->map_pos.x - tilex) * (2<<16);
+		const int commay = (float)(it->map_pos.y - tiley) * (2<<16);
+		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
 	}
 }
 
 void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = round(it->map_pos.x);
+		const unsigned tilex = floor(it->map_pos.x);
 		const unsigned tiley = round(it->map_pos.y);
 		const int commay = 1024 * it->map_pos.y;
 		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
@@ -363,7 +363,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	j = upperright.y - tset.max_size_y + tset.max_size_x;
 	i = upperright.x - tset.max_size_y - tset.max_size_x;
 
-	while (r_cursor != r_end && (round(r_cursor->map_pos.x) + round(r_cursor->map_pos.y) < i + j || round(r_cursor->map_pos.x) < i))
+	while (r_cursor != r_end && ((int)(r_cursor->map_pos.x) + (int)(r_cursor->map_pos.y) < i + j || (int)(r_cursor->map_pos.x) < i)) // implicit floor
 		++r_cursor;
 
 	maprow *objectlayer = layers[index_objectlayer];
@@ -400,7 +400,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			}
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (round(r_cursor->map_pos.x)) == i && (round(r_cursor->map_pos.y)) == j) {
+			while (r_cursor != r_end && ((int)r_cursor->map_pos.x == i && (int)r_cursor->map_pos.y == j)) { // implicit floor by int cast
 				drawRenderable(r_cursor);
 				++r_cursor;
 			}
@@ -412,7 +412,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 		else
 			j++;
 
-		while (r_cursor != r_end && (round(r_cursor->map_pos.x) + round(r_cursor->map_pos.y) < i + j || round(r_cursor->map_pos.x) <= i))
+		while (r_cursor != r_end && ((int)r_cursor->map_pos.x + (int)r_cursor->map_pos.y < i + j || (int)r_cursor->map_pos.x <= i)) // implicit floor by int cast
 			++r_cursor;
 	}
 }
