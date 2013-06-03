@@ -1,5 +1,5 @@
 /*
-Copyright © 2013 Ryan Dansie
+Copyright Â© 2013 Ryan Dansie
 
 This file is part of FLARE.
 
