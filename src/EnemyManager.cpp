@@ -26,21 +26,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyBehavior.h"
 #include "BehaviorStandard.h"
 #include "BehaviorAlly.h"
-#include "Avatar.h"
 #include "SharedGameResources.h"
 
 using namespace std;
 
 EnemyManager::EnemyManager()
 	: enemies()
-	, hero_pos(0,0)
-	, hero_direction(0)
-	, hero_alive(true)
 	, hero_stealth(0)
 	, player_blocked(false)
 	, player_blocked_ticks(0) {
-
-	hero_pos.x = hero_pos.y = -1;
 	handleNewMap();
 }
 
@@ -224,8 +218,8 @@ void EnemyManager::handleSpawn() {
 			e->stats.pos.y = espawn.pos.y;
 		}
 		else {
-			e->stats.pos.x = hero_pos.x;
-			e->stats.pos.y = hero_pos.y;
+			e->stats.pos.x = pc->stats.pos.x;
+			e->stats.pos.y = pc->stats.pos.y;
 		}
 		// special animation state for spawning enemies
 		e->stats.cur_state = ENEMY_SPAWN;
@@ -324,12 +318,8 @@ void EnemyManager::logic() {
 		}
 
 		// new actions this round
-		(*it)->stats.hero_pos = hero_pos;
-		(*it)->stats.hero_direction = hero_direction;
-		(*it)->stats.hero_alive = hero_alive;
 		(*it)->stats.hero_stealth = hero_stealth;
 		(*it)->logic();
-
 	}
 }
 
@@ -358,7 +348,7 @@ Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
 /**
  * If an enemy has died, reward the hero with experience points
  */
-void EnemyManager::checkEnemiesforXP(CampaignManager *camp) {
+void EnemyManager::checkEnemiesforXP() {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		if (enemies[i]->reward_xp) {
 			//adjust for party exp if necessary

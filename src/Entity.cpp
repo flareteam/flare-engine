@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
-#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "Entity.h"
 #include "SharedResources.h"
@@ -146,8 +145,8 @@ bool Entity::takeHit(const Hazard &h) {
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally) {
 		stats.join_combat = true;
 		stats.in_combat = true;
-		stats.last_seen.x = stats.hero_pos.x;
-		stats.last_seen.y = stats.hero_pos.y;
+		stats.last_seen.x = pc->stats.pos.x;
+		stats.last_seen.y = pc->stats.pos.y;
 		powers->activate(stats.power_index[BEACON], &stats, stats.pos); //emit beacon
 	}
 

@@ -40,8 +40,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <queue>
 
-class CampaignManager;
-class PowerManager;
 class FileParser;
 class WidgetTooltip;
 

@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyGroupManager.h"
 #include "PowerManager.h"
 #include "CampaignManager.h"
+#include "Avatar.h"
 
 extern MenuPowers *menu_powers;
 extern LootManager *loot;

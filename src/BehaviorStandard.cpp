@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Enemy.h"
 #include "MapRenderer.h"
-#include "PowerManager.h"
 #include "StatBlock.h"
 #include "UtilsMath.h"
 #include "SharedGameResources.h"
@@ -67,7 +66,7 @@ void BehaviorStandard::doUpkeep() {
 
 	// heal rapidly while not in combat
 	if (!e->stats.in_combat && !e->stats.hero_ally) {
-		if (e->stats.alive && e->stats.hero_alive) {
+		if (e->stats.alive && pc->stats.alive) {
 			e->stats.hp++;
 			if (e->stats.hp > e->stats.get(STAT_HP_MAX)) e->stats.hp = e->stats.get(STAT_HP_MAX);
 		}
@@ -154,8 +153,8 @@ void BehaviorStandard::findTarget() {
 	if (e->stats.effects.stun) return;
 
 	// check distance and line of sight between enemy and hero
-	if (e->stats.hero_alive)
-		hero_dist = calcDist(e->stats.pos, e->stats.hero_pos);
+	if (pc->stats.alive)
+		hero_dist = calcDist(e->stats.pos, pc->stats.pos);
 	else
 		hero_dist = 0;
 
@@ -185,7 +184,7 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check exiting combat (player or enemy died)
-	if (!e->stats.alive || !e->stats.hero_alive) {
+	if (!e->stats.alive || !pc->stats.alive) {
 		e->stats.in_combat = false;
 	}
 
@@ -199,8 +198,8 @@ void BehaviorStandard::findTarget() {
 	}
 	else {
 		// by default, the enemy pursues the hero directly
-		pursue_pos.x = e->stats.hero_pos.x;
-		pursue_pos.y = e->stats.hero_pos.y;
+		pursue_pos.x = pc->stats.pos.x;
+		pursue_pos.y = pc->stats.pos.y;
 		target_dist = hero_dist;
 
 
@@ -228,7 +227,7 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check line-of-sight
-	if (target_dist < e->stats.threat_range && e->stats.hero_alive)
+	if (target_dist < e->stats.threat_range && pc->stats.alive)
 		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 	else
 		los = false;
@@ -359,7 +358,7 @@ void BehaviorStandard::checkMove() {
 		if (++e->stats.turn_ticks > e->stats.turn_delay) {
 
 			// if blocked, face in pathfinder direction instead
-			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, e->stats.hero_pos.x, e->stats.hero_pos.y, e->stats.movement_type)) {
+			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y, e->stats.movement_type)) {
 
 				// if a path is returned, target first waypoint
 				std::vector<Point> path;

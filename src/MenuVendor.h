@@ -35,7 +35,6 @@ class WidgetTabControl;
 
 class MenuVendor : public Menu {
 private:
-	ItemManager *items;
 	StatBlock *stats;
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
@@ -51,7 +50,7 @@ private:
 	SDL_Color color_normal;
 
 public:
-	MenuVendor(ItemManager *items, StatBlock *stats);
+	MenuVendor(StatBlock *stats);
 	~MenuVendor();
 
 	NPC *npc;

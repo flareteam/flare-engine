@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetTabControl.h"
 
-class PowerManager;
 class StatBlock;
 class TooltipData;
 class WidgetSlot;

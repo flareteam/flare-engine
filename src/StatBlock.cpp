@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "StatBlock.h"
 #include "FileParser.h"
-#include "PowerManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
@@ -137,9 +136,6 @@ StatBlock::StatBlock()
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
 	, passive_attacker(false)//enemy
-	, hero_pos(-1, -1)
-	, hero_direction(0)
-	, hero_alive(true)
 	, hero_stealth(0)
 	, last_seen(-1, -1)  // no effects to gameplay?
 	, turn_delay(0)

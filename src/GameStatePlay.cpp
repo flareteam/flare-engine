@@ -63,8 +63,6 @@ using namespace std;
 const int MENU_ENEMY_TIMEOUT = MAX_FRAMES_PER_SEC * 10;
 
 
-
-
 GameStatePlay::GameStatePlay()
 	: GameState()
 	, enemy(NULL)
@@ -172,8 +170,6 @@ bool GameStatePlay::restrictPowerUse() {
 			}
 		}
 	}
-
-
 
 	return false;
 }
@@ -801,16 +797,13 @@ void GameStatePlay::logic() {
 		pc->logic(menu->act->checkAction(), restrictPowerUse());
 
 		// transfer hero data to enemies, for AI use
-		enemies->hero_pos = pc->stats.pos;
-		enemies->hero_direction = pc->stats.direction;
-		enemies->hero_alive = pc->stats.alive;
 		if (pc->stats.get(STAT_STEALTH) > 100) enemies->hero_stealth = 100;
 		else enemies->hero_stealth = pc->stats.get(STAT_STEALTH);
 
 		enemies->logic();
 		hazards->logic();
 		loot->logic();
-		enemies->checkEnemiesforXP(camp);
+		enemies->checkEnemiesforXP();
 		npcs->logic();
 
 		snd->logic(pc->stats.pos);

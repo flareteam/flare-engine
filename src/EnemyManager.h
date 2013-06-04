@@ -62,15 +62,12 @@ public:
 	void handlePartyBuff();
 	void logic();
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
-	void checkEnemiesforXP(CampaignManager *camp);
+	void checkEnemiesforXP();
 	bool isCleared();
 	Enemy *enemyFocus(Point mouse, Point cam, bool alive_only);
 
 	// vars
 	std::vector<Enemy*> enemies;
-	Point hero_pos;
-	char hero_direction;
-	bool hero_alive;
 	int hero_stealth;
 
 	bool player_blocked;

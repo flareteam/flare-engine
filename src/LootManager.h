@@ -46,7 +46,6 @@ public:
 	int high;
 };
 
-
 // this means that normal items are 10x more common than epic items
 // these numbers have to be balanced by various factors
 const int RARITY_LOW = 7;

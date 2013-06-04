@@ -102,7 +102,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(act); // menus[5]
 	enemy = new MenuEnemy();
 	menus.push_back(enemy); // menus[6]
-	vendor = new MenuVendor(items, stats);
+	vendor = new MenuVendor(stats);
 	menus.push_back(vendor); // menus[7]
 	talker = new MenuTalker(this);
 	menus.push_back(talker); // menus[8]
@@ -112,13 +112,13 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(mini); // menus[10]
 	chr = new MenuCharacter(stats);
 	menus.push_back(chr); // menus[11]
-	inv = new MenuInventory(items, stats);
+	inv = new MenuInventory(stats);
 	menus.push_back(inv); // menus[12]
 	pow = new MenuPowers(stats, icons);
 	menus.push_back(pow); // menus[13]
 	log = new MenuLog();
 	menus.push_back(log); // menus[14]
-	stash = new MenuStash(items, stats);
+	stash = new MenuStash(stats);
 	menus.push_back(stash); // menus[15]
 	npc = new MenuNPCActions();
 	menus.push_back(npc); // menus[16]
@@ -195,7 +195,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	// Some menus need to be updated to apply their new dimensions
 	act->update();
 	vendor->update();
-	vendor->buyback_stock.init(NPC_VENDOR_MAX_STOCK, items);
+	vendor->buyback_stock.init(NPC_VENDOR_MAX_STOCK);
 	talker->update();
 	exit->update();
 	chr->update();

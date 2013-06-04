@@ -75,7 +75,7 @@ void NPCManager::handleNewMap() {
 		mn = mapr->npcs.front();
 		mapr->npcs.pop();
 
-		NPC *npc = new NPC(items);
+		NPC *npc = new NPC();
 		npc->load(mn.id, stats->level);
 		npc->pos.x = mn.pos.x;
 		npc->pos.y = mn.pos.y;

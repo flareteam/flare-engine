@@ -42,9 +42,8 @@ std::vector<SoundManager::SoundID> vox_intro;
 std::vector<SoundManager::SoundID> vox_quests;
 std::vector<std::vector<Event_Component> > dialog;
 
-NPC::NPC(ItemManager *_items)
+NPC::NPC()
 	: Entity()
-	, items(_items)
 	, name("")
 	, gfx("")
 	, pos()
@@ -58,7 +57,7 @@ NPC::NPC(ItemManager *_items)
 	, vox_intro()
 	, vox_quests()
 	, dialog() {
-	stock.init(NPC_VENDOR_MAX_STOCK, _items);
+	stock.init(NPC_VENDOR_MAX_STOCK);
 }
 
 /**
