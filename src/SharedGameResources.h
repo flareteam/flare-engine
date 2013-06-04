@@ -21,9 +21,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "LootManager.h"
 #include "MenuPowers.h"
 #include "EnemyGroupManager.h"
+#include "PowerManager.h"
+#include "CampaignManager.h"
 
 extern MenuPowers *menu_powers;
 extern LootManager *loot;
 extern EnemyGroupManager *enemyg;
+extern PowerManager *powers;
+extern MapRenderer *mapr;
+extern EnemyManager *enemies;
+extern CampaignManager *camp;
+extern ItemManager *items;
+extern Avatar *pc;
 
 #endif // SHAREDGAMEOBJECTS_H

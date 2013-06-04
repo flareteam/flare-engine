@@ -31,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "WidgetLabel.h"
 
-class PowerManager;
 class StatBlock;
 class TooltipData;
 class WidgetLabel;
@@ -53,7 +52,6 @@ private:
 	SDL_Surface *attention;
 
 	StatBlock *hero;
-	PowerManager *powers;
 	SDL_Rect src;
 
 	WidgetLabel *labels[16];
@@ -61,7 +59,7 @@ private:
 
 public:
 
-	MenuActionBar(PowerManager *_powers, StatBlock *hero, SDL_Surface *icons);
+	MenuActionBar(StatBlock *hero, SDL_Surface *icons);
 	~MenuActionBar();
 	void loadGraphics();
 	void renderAttention(int menu_id);

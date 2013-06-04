@@ -77,7 +77,6 @@ public:
 class MenuPowers : public Menu {
 private:
 	StatBlock *stats;
-	PowerManager *powers;
 	std::vector<Power_Menu_Cell> power_cell;
 
 	SDL_Surface *background;
@@ -113,7 +112,7 @@ private:
 	short id_by_powerIndex(short power_index);
 
 public:
-	MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons);
+	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);
 	~MenuPowers();
 	void update();
 	void logic();

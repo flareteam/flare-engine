@@ -56,7 +56,6 @@ public:
 	ItemStack drop_stack;
 
 	// pointers to various info that can be changed
-	ItemManager *items;
 	MenuItemStorage *carried_items;
 	int *currency;
 	StatBlock *hero;

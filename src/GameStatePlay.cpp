@@ -68,16 +68,6 @@ const int MENU_ENEMY_TIMEOUT = MAX_FRAMES_PER_SEC * 10;
 GameStatePlay::GameStatePlay()
 	: GameState()
 	, enemy(NULL)
-	, powers(new PowerManager())
-	, items(new ItemManager())
-	, camp(new CampaignManager())
-	, map(new MapRenderer(camp))
-	, pc(new Avatar(powers, map))
-	, enemies(new EnemyManager(powers, map))
-	, hazards(new HazardManager(powers, pc, enemies))
-	, menu(new MenuManager(powers, &pc->stats, camp, items))
-	, npcs(new NPCManager(map, items, &pc->stats))
-	, quests(new QuestLog(camp, menu->log))
 	, loading(new WidgetLabel())
 	// Load the loading screen image (we currently use the confirm dialog background):
 	, loading_bg(loadGraphicSurface("images/menus/confirm_bg.png"))
@@ -89,17 +79,23 @@ GameStatePlay::GameStatePlay()
 	hasMusic = true;
 	// GameEngine scope variables
 
+    powers = new PowerManager();
+	items = new ItemManager();
+	camp = new CampaignManager();
+	mapr = new MapRenderer();
+	pc = new Avatar();
+	enemies = new EnemyManager();
+	hazards = new HazardManager();
+	menu = new MenuManager(&pc->stats);
+	npcs = new NPCManager(&pc->stats);
+    quests = new QuestLog(menu->log);
+	enemyg = new EnemyGroupManager();
+	loot = new LootManager(&pc->stats);
+
 	// assign some object pointers after object creation, based on dependency order
-	camp->items = items;
 	camp->carried_items = &menu->inv->inventory[CARRIED];
 	camp->currency = &menu->inv->currency;
 	camp->hero = &pc->stats;
-	map->powers = powers;
-	pc->enemies = enemies;
-	enemies->pc = pc;
-
-	enemyg = new EnemyGroupManager();
-	loot = new LootManager(items, map, &pc->stats);
 
 	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
@@ -111,7 +107,7 @@ GameStatePlay::GameStatePlay()
  * Reset all game states to a new game.
  */
 void GameStatePlay::resetGame() {
-	map->load("spawn.txt");
+	mapr->load("spawn.txt");
 	camp->clearAll();
 	pc->init();
 	pc->stats.currency = 0;
@@ -138,7 +134,7 @@ void GameStatePlay::resetGame() {
 void GameStatePlay::checkEnemyFocus() {
 	// determine enemies mouseover
 	// only check alive enemies for targeting
-	enemy = enemies->enemyFocus(inpt->mouse, map->cam, true);
+	enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
 
 	if (enemy != NULL) {
 
@@ -151,7 +147,7 @@ void GameStatePlay::checkEnemyFocus() {
 	else {
 
 		// if there's no living creature in focus, look for a dead one instead
-		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, map->cam, false);
+		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, false);
 		if (temp_enemy != NULL) {
 			menu->enemy->enemy = temp_enemy;
 			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
@@ -204,12 +200,12 @@ void GameStatePlay::checkLoot() {
 	// Pickup with mouse click
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 
-		pickup = loot->checkPickup(inpt->mouse, map->cam, pc->stats.pos, currency, menu->inv);
+		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, currency, menu->inv);
 		if (pickup.item > 0) {
 			inpt->lock[MAIN1] = true;
 			menu->inv->add(pickup);
 
-			camp->setStatus(menu->items->items[pickup.item].pickup_status);
+			camp->setStatus(items->items[pickup.item].pickup_status);
 		}
 		else if (currency > 0) {
 			inpt->lock[MAIN1] = true;
@@ -231,7 +227,7 @@ void GameStatePlay::checkLoot() {
 			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 			menu->inv->add(pickup);
 
-			camp->setStatus(menu->items->items[pickup.item].pickup_status);
+			camp->setStatus(items->items[pickup.item].pickup_status);
 		}
 		else if (currency > 0) {
 			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
@@ -249,38 +245,38 @@ void GameStatePlay::checkLoot() {
 void GameStatePlay::checkTeleport() {
 
 	// both map events and player powers can cause teleportation
-	if (map->teleportation || pc->stats.teleportation) {
+	if (mapr->teleportation || pc->stats.teleportation) {
 
-		map->collider.unblock(pc->stats.pos.x, pc->stats.pos.y);
+		mapr->collider.unblock(pc->stats.pos.x, pc->stats.pos.y);
 
-		if (map->teleportation) {
-			map->cam.x = pc->stats.pos.x = map->teleport_destination.x;
-			map->cam.y = pc->stats.pos.y = map->teleport_destination.y;
+		if (mapr->teleportation) {
+			mapr->cam.x = pc->stats.pos.x = mapr->teleport_destination.x;
+			mapr->cam.y = pc->stats.pos.y = mapr->teleport_destination.y;
 		}
 		else {
-			map->cam.x = pc->stats.pos.x = pc->stats.teleport_destination.x;
-			map->cam.y = pc->stats.pos.y = pc->stats.teleport_destination.y;
+			mapr->cam.x = pc->stats.pos.x = pc->stats.teleport_destination.x;
+			mapr->cam.y = pc->stats.pos.y = pc->stats.teleport_destination.y;
 		}
 
 		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 			if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
-				enemies->enemies[i]->map->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
+				mapr->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
 				enemies->enemies[i]->stats.pos.x = pc->stats.pos.x;
 				enemies->enemies[i]->stats.pos.y = pc->stats.pos.y;
 			}
 		}
 
 		// process intermap teleport
-		if (map->teleportation && map->teleport_mapname != "") {
-			std::string teleport_mapname = map->teleport_mapname;
-			map->teleport_mapname = "";
-			map->executeOnMapExitEvents();
+		if (mapr->teleportation && mapr->teleport_mapname != "") {
+			std::string teleport_mapname = mapr->teleport_mapname;
+			mapr->teleport_mapname = "";
+			mapr->executeOnMapExitEvents();
 			showLoading();
-			map->load(teleport_mapname);
+			mapr->load(teleport_mapname);
 			enemies->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
-			powers->handleNewMap(&map->collider);
+			powers->handleNewMap(&mapr->collider);
 			menu->enemy->handleNewMap();
 			npcs->handleNewMap();
 			menu->vendor->npc = NULL;
@@ -288,13 +284,13 @@ void GameStatePlay::checkTeleport() {
 			menu->talker->visible = false;
 			menu->stash->visible = false;
 			menu->npc->visible = false;
-			menu->mini->prerender(&map->collider, map->w, map->h);
+			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 			npc_id = -1;
 
 			// store this as the new respawn point
-			map->respawn_map = teleport_mapname;
-			map->respawn_point.x = pc->stats.pos.x;
-			map->respawn_point.y = pc->stats.pos.y;
+			mapr->respawn_map = teleport_mapname;
+			mapr->respawn_point.x = pc->stats.pos.x;
+			mapr->respawn_point.y = pc->stats.pos.y;
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
@@ -324,13 +320,13 @@ void GameStatePlay::checkTeleport() {
 			}
 		}
 
-		map->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
+		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
 		pc->stats.teleportation = false; // teleport spell
 
 	}
 
-	if (map->teleport_mapname == "") map->teleportation = false;
+	if (mapr->teleport_mapname == "") mapr->teleportation = false;
 }
 
 /**
@@ -366,10 +362,10 @@ void GameStatePlay::checkLog() {
 	}
 
 	// Map events can create messages
-	if (map->log_msg != "") {
-		menu->log->add(map->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(map->log_msg);
-		map->log_msg = "";
+	if (mapr->log_msg != "") {
+		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES);
+		menu->hudlog->add(mapr->log_msg);
+		mapr->log_msg = "";
 	}
 
 	// The avatar can create messages (e.g. level up)
@@ -497,7 +493,7 @@ void GameStatePlay::checkEquipmentChange() {
 			gfx.type = "";
 			for (int i=0; i<menu->inv->inventory[EQUIPMENT].getSlotNumber(); i++) {
 				if (pc->layer_reference_order[j] == menu->inv->inventory[EQUIPMENT].slot_type[i]) {
-					gfx.gfx = menu->items->items[menu->inv->inventory[EQUIPMENT][i].item].gfx;
+					gfx.gfx = items->items[menu->inv->inventory[EQUIPMENT][i].item].gfx;
 					gfx.type = menu->inv->inventory[EQUIPMENT].slot_type[i];
 				}
 			}
@@ -516,7 +512,7 @@ void GameStatePlay::checkEquipmentChange() {
 		assert(pc->layer_reference_order.size()==img_gfx.size());
 		pc->loadGraphics(img_gfx);
 
-		pc->loadStepFX(menu->items->items[menu->inv->inventory[EQUIPMENT][1].item].stepfx);
+		pc->loadStepFX(items->items[menu->inv->inventory[EQUIPMENT][1].item].stepfx);
 
 		menu->inv->changed_equipment = false;
 	}
@@ -545,7 +541,7 @@ void GameStatePlay::checkLootDrop() {
  */
 void GameStatePlay::checkConsumable() {
 	for (unsigned i=0; i<powers->used_items.size(); i++) {
-		if (menu->items->items[powers->used_items[i]].type == "consumable") {
+		if (items->items[powers->used_items[i]].type == "consumable") {
 			menu->inv->remove(powers->used_items[i]);
 		}
 	}
@@ -598,7 +594,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// check for clicking on an NPC
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-		npc_click = npcs->checkNPCClick(inpt->mouse, map->cam);
+		npc_click = npcs->checkNPCClick(inpt->mouse, mapr->cam);
 		if (npc_click != -1) npc_id = npc_click;
 	}
 	// if we press the ACCEPT key, find the nearest NPC to interact with
@@ -612,13 +608,13 @@ void GameStatePlay::checkNPCInteraction() {
 		interact_distance = (int)calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 	}
 
-	if (map->event_npc != "") {
-		npc_id = npcs->getID(map->event_npc);
+	if (mapr->event_npc != "") {
+		npc_id = npcs->getID(mapr->event_npc);
 		if (npc_id != -1) {
 			eventDialogOngoing = true;
 			eventPendingDialog = true;
 		}
-		map->event_npc = "";
+		mapr->event_npc = "";
 	}
 
 	// if close enough to the NPC, open the appropriate interaction screen
@@ -721,18 +717,18 @@ void GameStatePlay::checkStash() {
 	int max_interact_distance = UNITS_PER_TILE * 4;
 	int interact_distance = max_interact_distance+1;
 
-	if (map->stash) {
+	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
 		menu->inv->visible = true;
 		menu->stash->visible = true;
-		map->stash = false;
+		mapr->stash = false;
 	}
 	else {
 		// Close stash if inventory is closed
 		if (!menu->inv->visible) menu->stash->visible = false;
 
 		// If the player walks away from the stash, close its menu
-		interact_distance = (int)calcDist(pc->stats.pos, map->stash_pos);
+		interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
 		if (interact_distance > max_interact_distance || !pc->stats.alive) {
 			menu->stash->visible = false;
 		}
@@ -746,30 +742,30 @@ void GameStatePlay::checkStash() {
 }
 
 void GameStatePlay::checkCutscene() {
-	if (!map->cutscene)
+	if (!mapr->cutscene)
 		return;
 
 	GameStateCutscene *cutscene = new GameStateCutscene(NULL);
 
-	if (!cutscene->load(map->cutscene_file)) {
+	if (!cutscene->load(mapr->cutscene_file)) {
 		delete cutscene;
-		map->cutscene = false;
+		mapr->cutscene = false;
 		return;
 	}
 
 	// handle respawn point and set game play game_slot
 	cutscene->game_slot = game_slot;
 
-	if (map->teleportation) {
+	if (mapr->teleportation) {
 
-		if (map->teleport_mapname != "")
-			map->respawn_map = map->teleport_mapname;
+		if (mapr->teleport_mapname != "")
+			mapr->respawn_map = mapr->teleport_mapname;
 
-		map->respawn_point = map->teleport_destination;
+		mapr->respawn_point = mapr->teleport_destination;
 
 	}
 	else {
-		map->respawn_point = pc->stats.pos;
+		mapr->respawn_point = pc->stats.pos;
 	}
 
 	saveGame();
@@ -797,8 +793,8 @@ void GameStatePlay::logic() {
 		checkEnemyFocus();
 		if (pc->stats.alive) {
 			checkNPCInteraction();
-			map->checkHotspots();
-			map->checkNearestEvent(pc->stats.pos);
+			mapr->checkHotspots();
+			mapr->checkNearestEvent(pc->stats.pos);
 		}
 		checkTitle();
 
@@ -836,8 +832,8 @@ void GameStatePlay::logic() {
 	checkStash();
 	checkCancel();
 
-	map->logic();
-	map->enemies_cleared = enemies->isCleared();
+	mapr->logic();
+	mapr->enemies_cleared = enemies->isCleared();
 	quests->logic();
 
 
@@ -892,7 +888,7 @@ void GameStatePlay::logic() {
 		menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
 		menu->inv->changed_equipment = true;
 		checkEquipmentChange();
-		pc->powers->activatePassives(&pc->stats);
+		powers->activatePassives(&pc->stats);
 		pc->stats.logic();
 		pc->stats.recalc();
 		pc->respawn = false;
@@ -922,24 +918,24 @@ void GameStatePlay::render() {
 
 
 	// render the static map layers plus the renderables
-	map->render(rens, rens_dead);
+	mapr->render(rens, rens_dead);
 
 	// mouseover tooltips
-	loot->renderTooltips(map->cam);
-	npcs->renderTooltips(map->cam, inpt->mouse);
+	loot->renderTooltips(mapr->cam);
+	npcs->renderTooltips(mapr->cam, inpt->mouse);
 
-	if (map->map_change) {
-		menu->mini->prerender(&map->collider, map->w, map->h);
-		map->map_change = false;
+	if (mapr->map_change) {
+		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
+		mapr->map_change = false;
 	}
-	menu->mini->getMapTitle(map->title);
+	menu->mini->getMapTitle(mapr->title);
 	menu->mini->render(pc->stats.pos);
 	menu->render();
 
 	// render combat text last - this should make it obvious you're being
 	// attacked, even if you have menus open
 	CombatText *combat_text = comb;
-	combat_text->setCam(map->cam);
+	combat_text->setCam(mapr->cam);
 	combat_text->render();
 }
 
@@ -956,13 +952,15 @@ void GameStatePlay::showLoading() {
 	SDL_Flip(screen);
 }
 
+Avatar *GameStatePlay::getAvatar() const { return pc; }
+
 GameStatePlay::~GameStatePlay() {
 	delete quests;
 	delete npcs;
 	delete hazards;
 	delete enemies;
 	delete pc;
-	delete map;
+	delete mapr;
 	delete menu;
 	delete loot;
 	delete camp;

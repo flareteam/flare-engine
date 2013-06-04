@@ -1,5 +1,6 @@
 #include "BehaviorAlly.h"
 #include "Enemy.h"
+#include "SharedGameResources.h"
 
 const unsigned short MINIMUM_FOLLOW_DISTANCE_LOWER = 100;
 const unsigned short MINIMUM_FOLLOW_DISTANCE = 250;
@@ -7,7 +8,7 @@ const unsigned short MAXIMUM_FOLLOW_DISTANCE = 2000;
 
 const unsigned short BLOCK_TICKS = 10;
 
-BehaviorAlly::BehaviorAlly(Enemy *_e, EnemyManager *_em) : BehaviorStandard(_e, _em) {
+BehaviorAlly::BehaviorAlly(Enemy *_e) : BehaviorStandard(_e) {
 }
 
 BehaviorAlly::~BehaviorAlly() {
@@ -25,7 +26,7 @@ void BehaviorAlly::findTarget() {
 
 	//if the minion gets too far, transport it to the player pos
 	if(hero_dist > MAXIMUM_FOLLOW_DISTANCE && !e->stats.in_combat) {
-		e->map->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+		mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 		e->stats.pos.x = e->stats.hero_pos.x;
 		e->stats.pos.y = e->stats.hero_pos.y;
 		hero_dist = 0;
@@ -72,7 +73,7 @@ void BehaviorAlly::findTarget() {
 
 	// check line-of-sight
 	if (target_dist < e->stats.threat_range && e->stats.hero_alive)
-		los = e->map->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
+		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 	else
 		los = false;
 
@@ -81,13 +82,13 @@ void BehaviorAlly::findTarget() {
 	//if hero is facing the summon
 	if(ENABLE_ALLY_COLLISION_AI) {
 		if(!enemies->player_blocked && hero_dist < MINIMUM_FOLLOW_DISTANCE_LOWER
-				&& e->map->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)) {
+				&& mapr->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)) {
 			enemies->player_blocked = true;
 			enemies->player_blocked_ticks = BLOCK_TICKS;
 		}
 
 		if(enemies->player_blocked && !e->stats.in_combat
-				&& e->map->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)) {
+				&& mapr->collider.is_facing(e->stats.hero_pos.x,e->stats.hero_pos.y,e->stats.hero_direction,e->stats.pos.x,e->stats.pos.y)) {
 			fleeing = true;
 			pursue_pos = e->stats.hero_pos;
 		}

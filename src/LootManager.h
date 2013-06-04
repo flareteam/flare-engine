@@ -36,7 +36,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 
 class EnemyManager;
-class MapRenderer;
 class MenuInventory;
 class WidgetTooltip;
 
@@ -61,9 +60,7 @@ const int LOOT_RANGE = 3 * UNITS_PER_TILE;
 class LootManager {
 private:
 
-	ItemManager *items;
 	WidgetTooltip *tip;
-	MapRenderer *map;
 	StatBlock *hero;
 
 	// functions
@@ -83,7 +80,7 @@ private:
 	std::vector<const class Enemy*> enemiesDroppingLoot;
 
 public:
-	LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero);
+	LootManager(StatBlock *_hero);
 	LootManager(const LootManager &copy); // not implemented
 	~LootManager();
 

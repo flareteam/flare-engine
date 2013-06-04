@@ -27,17 +27,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ENEMY_MANAGER_H
 
 #include "Settings.h"
-#include "MapRenderer.h"
 #include "Enemy.h"
 #include "Utils.h"
-#include "PowerManager.h"
 #include "CampaignManager.h"
 
 class EnemyManager {
 private:
-
-	MapRenderer *map;
-	PowerManager *powers;
 
 	void loadSounds(const std::string& type_id);
 	void loadAnimations(Enemy *e);
@@ -60,7 +55,7 @@ private:
 	std::vector<Enemy> prototypes;
 
 public:
-	EnemyManager(PowerManager *_powers, MapRenderer *_map);
+	EnemyManager();
 	~EnemyManager();
 	void handleNewMap();
 	void handleSpawn();
@@ -77,7 +72,6 @@ public:
 	char hero_direction;
 	bool hero_alive;
 	int hero_stealth;
-	Avatar *pc;
 
 	bool player_blocked;
     int player_blocked_ticks;

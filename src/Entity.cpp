@@ -29,16 +29,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "CommonIncludes.h"
 #include "Entity.h"
-#include "MapRenderer.h"
-#include "PowerManager.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
+#include "SharedGameResources.h"
 
 #include <math.h>
 
 using namespace std;
 
-Entity::Entity(PowerManager *_powers, MapRenderer* _map)
+Entity::Entity()
 	: sprites(NULL)
 	, sfx_phys(false)
 	, sfx_ment(false)
@@ -47,9 +46,7 @@ Entity::Entity(PowerManager *_powers, MapRenderer* _map)
 	, sfx_critdie(false)
 	, sfx_block(false)
 	, activeAnimation(NULL)
-	, animationSet(NULL)
-	, map(_map)
-	, powers(_powers) {
+	, animationSet(NULL) {
 }
 
 Entity::Entity(const Entity &e)
@@ -62,9 +59,7 @@ Entity::Entity(const Entity &e)
 	, sfx_block(e.sfx_block)
 	, activeAnimation(new Animation(*e.activeAnimation))
 	, animationSet(e.animationSet)
-	, map(e.map)
-	, stats(StatBlock(e.stats))
-	, powers(e.powers) {
+	, stats(StatBlock(e.stats)) {
 }
 
 /**
@@ -76,7 +71,7 @@ Entity::Entity(const Entity &e)
 bool Entity::move() {
 
 	if (stats.effects.forced_move) {
-		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type, stats.hero);
+		return mapr->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type, stats.hero);
 	}
 
 	if (stats.effects.speed == 0) return false;
@@ -91,28 +86,28 @@ bool Entity::move() {
 
 	switch (stats.direction) {
 		case 0:
-			full_move = map->collider.move(stats.pos.x, stats.pos.y, -1, 1, speed_diagonal, stats.movement_type, stats.hero);
+			full_move = mapr->collider.move(stats.pos.x, stats.pos.y, -1, 1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 1:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, 0, speed_straight, stats.movement_type, stats.hero);
+			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, -1, 0, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 2:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, -1, -1, speed_diagonal, stats.movement_type, stats.hero);
+			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, -1, -1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 3:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, -1, speed_straight, stats.movement_type, stats.hero);
+			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 0, -1, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 4:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, -1, speed_diagonal, stats.movement_type, stats.hero);
+			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 1, -1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 5:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 0, speed_straight, stats.movement_type, stats.hero);
+			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 1, 0, speed_straight, stats.movement_type, stats.hero);
 			break;
 		case 6:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 1, 1, speed_diagonal, stats.movement_type, stats.hero);
+			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 1, 1, speed_diagonal, stats.movement_type, stats.hero);
 			break;
 		case 7:
-			full_move =  map->collider.move(stats.pos.x, stats.pos.y, 0, 1, speed_straight, stats.movement_type, stats.hero);
+			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 0, 1, speed_straight, stats.movement_type, stats.hero);
 			break;
 	}
 
@@ -266,7 +261,7 @@ bool Entity::takeHit(const Hazard &h) {
 	if (crit) {
 		dmg = dmg + h.dmg_max;
 		if(!stats.hero)
-			map->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
+			mapr->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
 	}
 
 	if(stats.hero)
@@ -329,7 +324,7 @@ bool Entity::takeHit(const Hazard &h) {
 					stats.cur_state = ENEMY_CRITDEAD;
 				else
 					stats.cur_state = ENEMY_DEAD;
-				map->collider.unblock(stats.pos.x,stats.pos.y);
+				mapr->collider.unblock(stats.pos.x,stats.pos.y);
 			}
 		}
 		// don't go through a hit animation if stunned

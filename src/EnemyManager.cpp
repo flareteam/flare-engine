@@ -27,13 +27,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorStandard.h"
 #include "BehaviorAlly.h"
 #include "Avatar.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
-EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
-	: map(_map)
-	, powers(_powers)
-	, enemies()
+EnemyManager::EnemyManager()
+	: enemies()
 	, hero_pos(0,0)
 	, hero_direction(0)
 	, hero_alive(true)
@@ -84,9 +83,9 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 			return new Enemy(prototypes[i]);
 		}
 
-	Enemy e = Enemy(powers, map, this);
+	Enemy e = Enemy();
 
-	e.eb = new BehaviorStandard(&e, this);
+	e.eb = new BehaviorStandard(&e);
 	e.stats.load("enemies/" + type_id + ".txt");
 	e.type = type_id;
 
@@ -140,9 +139,9 @@ void EnemyManager::handleNewMap () {
 	prototypes.clear();
 
 	// load new enemies
-	while (!map->enemies.empty()) {
-		me = map->enemies.front();
-		map->enemies.pop();
+	while (!mapr->enemies.empty()) {
+		me = mapr->enemies.front();
+		mapr->enemies.pop();
 
 		Enemy *e = getEnemyPrototype(me.type);
 
@@ -155,7 +154,7 @@ void EnemyManager::handleNewMap () {
 
 		enemies.push_back(e);
 
-		map->collider.block(me.pos.x, me.pos.y, false);
+		mapr->collider.block(me.pos.x, me.pos.y, false);
 	}
 
 	while (!allies.empty()) {
@@ -172,7 +171,7 @@ void EnemyManager::handleNewMap () {
 
 		enemies.push_back(e);
 
-		map->collider.block(e->stats.pos.x, e->stats.pos.y, true);
+		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, true);
 	}
 
 	anim->cleanUp();
@@ -190,12 +189,12 @@ void EnemyManager::handleSpawn() {
 		espawn = powers->enemies.front();
 		powers->enemies.pop();
 
-		Enemy *e = new Enemy(powers, map, this);
+		Enemy *e = new Enemy();
 		// factory
 		if(espawn.hero_ally)
-			e->eb = new BehaviorAlly(e, this);
+			e->eb = new BehaviorAlly(e);
 		else
-			e->eb = new BehaviorStandard(e, this);
+			e->eb = new BehaviorStandard(e);
 
 		e->stats.hero_ally = espawn.hero_ally;
 		e->summoned = true;
@@ -220,7 +219,7 @@ void EnemyManager::handleSpawn() {
 		loadSounds(e->stats.sfx_prefix);
 
 
-		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
+		if(mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
 			e->stats.pos.x = espawn.pos.x;
 			e->stats.pos.y = espawn.pos.y;
 		}
@@ -256,7 +255,7 @@ void EnemyManager::handleSpawn() {
 
 		enemies.push_back(e);
 
-		map->collider.block(espawn.pos.x, espawn.pos.y, e->stats.hero_ally);
+		mapr->collider.block(espawn.pos.x, espawn.pos.y, e->stats.hero_ally);
 	}
 }
 

@@ -40,7 +40,6 @@ class MenuInventory : public Menu {
 private:
 	ItemManager *items;
 	StatBlock *stats;
-	PowerManager *powers;
 
 	void loadGraphics();
 	int areaOver(Point position);
@@ -63,7 +62,7 @@ private:
 	SDL_Color color_high;
 
 public:
-	MenuInventory(ItemManager *items, StatBlock *stats, PowerManager *powers);
+	MenuInventory(ItemManager *items, StatBlock *stats);
 	~MenuInventory();
 	void update();
 	void logic();

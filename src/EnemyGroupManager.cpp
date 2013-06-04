@@ -68,7 +68,7 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 
 Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {
 	vector<Enemy_Level> enemyCategory;
-	map<string, vector<Enemy_Level> >::const_iterator it = _categories.find(category);
+	std::map<string, vector<Enemy_Level> >::const_iterator it = _categories.find(category);
 	if (it != _categories.end()) {
 		enemyCategory = it->second;
 	}

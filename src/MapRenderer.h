@@ -121,11 +121,8 @@ private:
 	bool repaint_background;
 
 public:
-	CampaignManager *camp;
-	PowerManager *powers;
-
 	// functions
-	MapRenderer(CampaignManager *_camp);
+	MapRenderer();
 	~MapRenderer();
 
 	MapRenderer(const MapRenderer &copy); // not implemented

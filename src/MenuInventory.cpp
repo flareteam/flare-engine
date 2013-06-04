@@ -36,10 +36,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManager *_powers) {
+MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats) {
 	items = _items;
 	stats = _stats;
-	powers = _powers;
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
