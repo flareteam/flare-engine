@@ -177,6 +177,7 @@ void GameStatePlay::saveGame() {
 void GameStatePlay::loadGame() {
 	int saved_hp = 0;
 	int saved_mp = 0;
+	int currency = 0;
 
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
@@ -236,6 +237,9 @@ void GameStatePlay::loadGame() {
 					pc->stats.offense_character = 0;
 					pc->stats.defense_character = 0;
 				}
+			}
+			else if (infile.key == "currency") {
+				currency = toInt(infile.val);
 			}
 			else if (infile.key == "equipped") {
 				menu->inv->inventory[EQUIPMENT].setItems(infile.val);
@@ -310,6 +314,7 @@ void GameStatePlay::loadGame() {
 
 
 	menu->inv->inventory[EQUIPMENT].fillEquipmentSlots();
+	menu->inv->addCurrency(currency);
 
 	// Load stash
 	loadStash();
