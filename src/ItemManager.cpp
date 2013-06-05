@@ -205,8 +205,14 @@ void ItemManager::loadItems() {
 		}
 		else if (infile.key == "gfx")
 			items[id].gfx = infile.val;
-		else if (infile.key == "loot_animation")
-			items[id].loot_animation = infile.val;
+		else if (infile.key == "loot_animation") {
+			infile.val = infile.val + ',';
+			LootAnimation la;
+			la.name = eatFirstString(infile.val, ',');
+			la.low = eatFirstInt(infile.val, ',');
+			la.high = eatFirstInt(infile.val, ',');
+			items[id].loot_animation.push_back(la);
+		}
 		else if (infile.key == "power") {
 			if (toInt(infile.val) > 0) {
 				items[id].power = toInt(infile.val);

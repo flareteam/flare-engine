@@ -191,29 +191,22 @@ void GameStatePlay::checkLoot() {
 		return;
 
 	ItemStack pickup;
-	int currency;
 
 	// Autopickup
 	if (AUTOPICKUP_CURRENCY) {
-		pickup = loot->checkAutoPickup(pc->stats.pos, currency);
-		if (currency > 0) {
-			menu->inv->addCurrency(currency);
-		}
+		pickup = loot->checkAutoPickup(pc->stats.pos);
+		if (pickup.item > 0) menu->inv->add(pickup);
 	}
 
 	// Pickup with mouse click
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 
-		pickup = loot->checkPickup(inpt->mouse, map->cam, pc->stats.pos, currency, menu->inv);
+		pickup = loot->checkPickup(inpt->mouse, map->cam, pc->stats.pos, menu->inv);
 		if (pickup.item > 0) {
 			inpt->lock[MAIN1] = true;
 			menu->inv->add(pickup);
 
 			camp->setStatus(menu->items->items[pickup.item].pickup_status);
-		}
-		else if (currency > 0) {
-			inpt->lock[MAIN1] = true;
-			menu->inv->addCurrency(currency);
 		}
 		if (loot->full_msg) {
 			inpt->lock[MAIN1] = true;
@@ -226,16 +219,12 @@ void GameStatePlay::checkLoot() {
 	// Pickup with ACCEPT key/button
 	if ((inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT])) {
 
-		pickup = loot->checkNearestPickup(pc->stats.pos, currency, menu->inv);
+		pickup = loot->checkNearestPickup(pc->stats.pos, menu->inv);
 		if (pickup.item > 0) {
 			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 			menu->inv->add(pickup);
 
 			camp->setStatus(menu->items->items[pickup.item].pickup_status);
-		}
-		else if (currency > 0) {
-			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-			menu->inv->addCurrency(currency);
 		}
 		if (loot->full_msg) {
 			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;

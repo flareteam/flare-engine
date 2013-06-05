@@ -533,7 +533,8 @@ void MenuInventory::activate(Point position) {
  * @param slot Slot number where it will try to store the item
  */
 void MenuInventory::add(ItemStack stack, int area, int slot) {
-	items->playSound(stack.item);
+	if (stack.quantity > 0 && area == CARRIED && slot == -1)
+		items->playSound(stack.item);
 
 	if (stack.item != 0) {
 		if (area < 0) {
@@ -612,7 +613,6 @@ void MenuInventory::addCurrency(int count) {
 	stack.item = CURRENCY_ID;
 	stack.quantity = count;
 	add(stack);
-	loot->playCurrencySound();
 }
 
 /**
@@ -622,7 +622,6 @@ void MenuInventory::removeCurrency(int count) {
 	for (int i=0; i<count; i++) {
 		inventory[CARRIED].remove(CURRENCY_ID);
 	}
-	loot->playCurrencySound();
 }
 
 /**
@@ -644,6 +643,7 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
 	int count = value_each * stack.quantity;
 	if( getCurrency() >= count) {
 		removeCurrency(count);
+		items->playSound(CURRENCY_ID);
 		return true;
 	}
 	else {
@@ -674,6 +674,7 @@ bool MenuInventory::sell(ItemStack stack) {
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
 	addCurrency(value);
+	items->playSound(CURRENCY_ID);
 	drag_prev_src = -1;
 	return true;
 }

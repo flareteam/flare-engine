@@ -152,7 +152,7 @@ void CampaignManager::rewardCurrency(int amount) {
 	stack.quantity = amount;
 	rewardItem(stack);
 	addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
-	loot->playCurrencySound();
+	items->playSound(CURRENCY_ID);
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
