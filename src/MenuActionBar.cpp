@@ -288,7 +288,7 @@ void MenuActionBar::render() {
 							  && (slot_item_count[i] != 0)
 							  && !hero->effects.stun
 							  && hero->alive
-							  && hero->canUsePower(power, hotkeys[i]); //see if the slot should be greyed out
+							  && hero->canUsePower(power, hotkeys[i], powers); //see if the slot should be greyed out
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
 			slots[i]->setIcon(power.icon + icon_offset);

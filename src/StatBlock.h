@@ -257,7 +257,7 @@ public:
 	std::vector<int> power_cooldown;
 	std::vector<int> power_ticks;
 
-	bool canUsePower(const Power &power, unsigned powerid) const;
+	bool canUsePower(const Power &power, unsigned powerid, PowerManager *powers) const;
 
 	int melee_range;
 	int threat_range;
@@ -328,7 +328,7 @@ public:
 
 	void removeFromSummons();
 
-	bool summonLimitReached(int power_id) const;
+	bool summonLimitReached(int power_id, PowerManager *powers) const;
 
 };
 

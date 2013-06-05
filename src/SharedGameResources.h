@@ -26,6 +26,5 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 extern MenuPowers *menu_powers;
 extern LootManager *loot;
 extern EnemyGroupManager *enemyg;
-extern PowerManager *power_manager;
 
 #endif // SHAREDGAMEOBJECTS_H

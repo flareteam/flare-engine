@@ -20,4 +20,3 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuPowers *menu_powers = NULL;
 LootManager *loot = NULL;
 EnemyGroupManager *enemyg = NULL;
-PowerManager *power_manager = NULL;

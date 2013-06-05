@@ -574,7 +574,7 @@ StatBlock::~StatBlock() {
     removeFromSummons();
 }
 
-bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
+bool StatBlock::canUsePower(const Power &power, unsigned powerid, PowerManager *powers) const {
 
 	// needed to unlock shapeshifter powers
 	if (transformed) return mp >= power.requires_mp;
@@ -589,7 +589,7 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 			   && (!power.sacrifice == false || hp > power.requires_hp)
 			   && menu_powers->meetsUsageStats(powerid)
 			   && !power.passive
-			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
+			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid, powers) : true);
 
 }
 
@@ -666,10 +666,10 @@ void StatBlock::removeFromSummons() {
     summons.clear();
 }
 
-bool StatBlock::summonLimitReached(int power_id) const{
+bool StatBlock::summonLimitReached(int power_id, PowerManager *powers) const{
 
     //find the limit
-    Power *spawn_power = &power_manager->powers[power_id];
+    Power *spawn_power = &powers->powers[power_id];
 
     int max_summons = 0;
 

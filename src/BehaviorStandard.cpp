@@ -280,8 +280,8 @@ void BehaviorStandard::checkPower() {
 
 			if (percentChance(e->stats.power_chance[RANGED_PHYS]) && e->stats.power_ticks[RANGED_PHYS] == 0) {
 				bool can_use = true;
-				if(power_manager->powers[e->stats.power_index[RANGED_PHYS]].type == POWTYPE_SPAWN)
-                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_PHYS]))
+				if(e->powers->powers[e->stats.power_index[RANGED_PHYS]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_PHYS], e->powers))
                         can_use = false;
 
 				if(can_use){
@@ -292,8 +292,8 @@ void BehaviorStandard::checkPower() {
 			}
 			if (percentChance(e->stats.power_chance[RANGED_MENT]) && e->stats.power_ticks[RANGED_MENT] == 0) {
 				bool can_use = true;
-				if(power_manager->powers[e->stats.power_index[RANGED_MENT]].type == POWTYPE_SPAWN)
-                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_MENT]))
+				if(e->powers->powers[e->stats.power_index[RANGED_MENT]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_MENT],e->powers))
                         can_use = false;
 
 				if(can_use){
@@ -308,8 +308,8 @@ void BehaviorStandard::checkPower() {
 
 			if (percentChance(e->stats.power_chance[MELEE_PHYS]) && e->stats.power_ticks[MELEE_PHYS] == 0) {
 				bool can_use = true;
-				if(power_manager->powers[e->stats.power_index[MELEE_PHYS]].type == POWTYPE_SPAWN)
-                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_PHYS]))
+				if(e->powers->powers[e->stats.power_index[MELEE_PHYS]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_PHYS],e->powers))
                         can_use = false;
 
 				if(can_use){
@@ -320,8 +320,8 @@ void BehaviorStandard::checkPower() {
 			}
 			if (percentChance(e->stats.power_chance[MELEE_MENT]) && e->stats.power_ticks[MELEE_MENT] == 0) {
 				bool can_use = true;
-				if(power_manager->powers[e->stats.power_index[MELEE_MENT]].type == POWTYPE_SPAWN)
-                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_MENT]))
+				if(e->powers->powers[e->stats.power_index[MELEE_MENT]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_MENT],e->powers))
                         can_use = false;
 
 				if(can_use){

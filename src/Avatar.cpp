@@ -314,7 +314,7 @@ void Avatar::handlePower(int actionbar_power) {
 		}
 
 		// check requirements
-		if (!stats.canUsePower(power, actionbar_power))
+		if (!stats.canUsePower(power, actionbar_power, powers))
 			return;
 		if (power.requires_los && !map->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
 			return;
