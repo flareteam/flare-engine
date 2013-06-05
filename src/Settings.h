@@ -128,6 +128,7 @@ extern int SOUND_FALLOFF;
 extern int PARTY_EXP_PERCENTAGE;
 extern bool ENABLE_ALLY_COLLISION_AI;
 extern bool ENABLE_ALLY_COLLISION;
+extern int CURRENCY_ID;
 
 // Tile Settings
 extern unsigned short UNITS_PER_TILE;
