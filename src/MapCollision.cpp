@@ -122,9 +122,7 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
  * Determines whether the grid position is outside the map boundary
  */
 bool MapCollision::is_outside_map(float tile_x, float tile_y) const {
-	const int x = round(tile_x);
-	const int y = round(tile_y);
-	return (x < 0 || y < 0 || x >= map_size.x || y >= map_size.y);
+	return (tile_x < 0 || tile_y < 0 || tile_x >= map_size.x || tile_y >= map_size.y);
 }
 
 /**
@@ -132,12 +130,12 @@ bool MapCollision::is_outside_map(float tile_x, float tile_y) const {
  * A position outside the map boundary is not empty
  */
 bool MapCollision::is_empty(float x, float y) const {
-	// bounds check
-	const int tile_x = round(x);
-	const int tile_y = round(y);
-	if (is_outside_map(tile_y, tile_y)) return false;
+	// map bounds check
+	if (is_outside_map(x, y)) return false;
 
 	// collision type check
+	const int tile_x = floor(x);
+	const int tile_y = floor(y);
 	return (colmap[tile_x][tile_y] == BLOCKS_NONE);
 }
 
@@ -146,14 +144,12 @@ bool MapCollision::is_empty(float x, float y) const {
  * A position outside the map boundary is a wall
  */
 bool MapCollision::is_wall(int x, int y) const {
-	int tile_x = x;
-	int tile_y = y;
 
 	// bounds check
-	if (is_outside_map(tile_x, tile_y)) return true;
+	if (is_outside_map(x, y)) return true;
 
 	// collision type check
-	return (colmap[tile_x][tile_y] == BLOCKS_ALL || colmap[tile_x][tile_y] == BLOCKS_ALL_HIDDEN);
+	return (colmap[x][y] == BLOCKS_ALL || colmap[x][y] == BLOCKS_ALL_HIDDEN);
 }
 
 /**
