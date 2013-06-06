@@ -1364,6 +1364,10 @@ void MenuManager::closeRight() {
 	}
 }
 
+bool MenuManager::isDragging() {
+	return drag_src != 0;
+}
+
 MenuManager::~MenuManager() {
 
 	tip_buf.clear();

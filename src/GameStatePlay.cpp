@@ -190,6 +190,9 @@ void GameStatePlay::checkLoot() {
 	if (!pc->stats.alive)
 		return;
 
+	if (menu->isDragging())
+		return;
+
 	ItemStack pickup;
 
 	// Autopickup
