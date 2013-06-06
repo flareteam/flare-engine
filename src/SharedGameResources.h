@@ -26,6 +26,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 
 extern MenuPowers *menu_powers;
+
+/* These objects are created in the GameStatePlay constructor and deleted in the GameStatePlay destructor
+*  so can be accessed safely anywhere in between. The objects must not be changed by any other class.
+*/
 extern LootManager *loot;
 extern EnemyGroupManager *enemyg;
 extern PowerManager *powers;
