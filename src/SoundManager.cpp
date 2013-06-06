@@ -90,18 +90,18 @@ void SoundManager::logic(Point c) {
 		}
 
 		/* control mixing playback depending on distance */
-		float v = 255.0f * (calcDist(c, it->second.location) / (SOUND_FALLOFF*UNITS_PER_TILE));
-		clamp(v, 0.f, 255.f);
-		Uint8 dist = v;
-
+		float v = calcDist(c, it->second.location) / (SOUND_FALLOFF*UNITS_PER_TILE);
 		if (it->second.loop) {
-			if (dist < (SOUND_FALLOFF*UNITS_PER_TILE))
+			if (v < 1.0)
 				Mix_Resume(it->first);
 			else
 				Mix_Pause(it->first);
 		}
 
 		/* update sound mix with new distance/location to hero */
+		clamp(v, 0.0, 1.0);
+		Uint8 dist = 255.0 * v;
+
 		Mix_SetPosition(it->first, 0, dist);
 		++it;
 	}
