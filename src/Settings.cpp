@@ -439,17 +439,13 @@ void loadMiscSettings() {
 	if (infile.open("engine/misc.txt")) {
 		while (infile.next()) {
 			if (infile.key == "save_hpmp") {
-				if (toInt(infile.val) == 1)
-					SAVE_HPMP = true;
+				SAVE_HPMP = toBool(infile.val);
 			}
 			else if (infile.key == "corpse_timeout") {
 				CORPSE_TIMEOUT = toInt(infile.val);
 			}
 			else if (infile.key == "sell_without_vendor") {
-				if (toInt(infile.val) == 1)
-					SELL_WITHOUT_VENDOR = true;
-				else
-					SELL_WITHOUT_VENDOR = false;
+				SELL_WITHOUT_VENDOR = toBool(infile.val);
 			}
 			else if (infile.key == "aim_assist") {
 				AIM_ASSIST = toInt(infile.val);
@@ -467,10 +463,10 @@ void loadMiscSettings() {
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
 			}
 			else if (infile.key == "enable_ally_collision") {
-				ENABLE_ALLY_COLLISION = (toInt(infile.val) == 1);
+				ENABLE_ALLY_COLLISION = toBool(infile.val);
 			}
 			else if (infile.key == "enable_ally_collision_ai") {
-				ENABLE_ALLY_COLLISION_AI = (toInt(infile.val) == 1);
+				ENABLE_ALLY_COLLISION_AI = toBool(infile.val);
 			}
 
 		}
