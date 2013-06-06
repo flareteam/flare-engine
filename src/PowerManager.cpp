@@ -392,16 +392,12 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint 
 	return true;
 }
 
-FPoint PowerManager::targetNeighbor(FPoint target, float range) {
-	return targetNeighbor(target,range,false);
-}
-
 /**
  * Try to retarget the power to one of the 8 adjacent tiles
  * Returns the retargeted position on success, returns the original position on failure
  */
-FPoint PowerManager::targetNeighbor(FPoint target, float range, bool ignore_blocked) {
-	Point new_target = round(target);
+FPoint PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked) {
+	Point new_target = target;
 	std::vector<Point> valid_tiles;
 
 	for (int i=-range; i<=range; i++) {
@@ -529,7 +525,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		FPoint new_target = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor,true);
+		FPoint new_target = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
 		haz->pos.x = (float)new_target.x;
 		haz->pos.y = (float)new_target.y;
 	}
@@ -569,7 +565,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 	if (powers[power_index].buff_teleport) {
 		target = limitRange(powers[power_index].range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			FPoint new_target = targetNeighbor(target,powers[power_index].target_neighbor);
+			FPoint new_target = targetNeighbor(floor(target), powers[power_index].target_neighbor);
 			if (new_target.x == target.x && new_target.y == target.y) {
 				src_stats->teleportation = false;
 			}
@@ -860,7 +856,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 		espawn.pos.y = fpos.y;
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		espawn.pos = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor);
+		espawn.pos = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor);
 	}
 
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);

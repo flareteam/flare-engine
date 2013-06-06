@@ -38,6 +38,13 @@ Point round(FPoint fp) {
 	return result;
 }
 
+Point floor(FPoint fp) {
+	Point result;
+	result.x = floor(fp.x);
+	result.y = floor(fp.y);
+	return result;
+}
+
 FPoint screen_to_map(int x, int y, float camx, float camy) {
 	FPoint r;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
