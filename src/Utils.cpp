@@ -145,10 +145,7 @@ FPoint calcVector(FPoint pos, int direction, float dist) {
 }
 
 float calcDist(FPoint p1, FPoint p2) {
-	int x = p2.x - p1.x;
-	int y = p2.y - p1.y;
-	float step1 = x*x + y*y;
-	return sqrt(step1);
+	return sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
 }
 
 /**
