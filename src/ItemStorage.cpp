@@ -23,12 +23,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "ItemStorage.h"
 #include "UtilsParsing.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
-void ItemStorage::init(int _slot_number, ItemManager *_items) {
+void ItemStorage::init(int _slot_number) {
 	slot_number = _slot_number;
-	items = _items;
 
 	storage = new ItemStack[slot_number];
 

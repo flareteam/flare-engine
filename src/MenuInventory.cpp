@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuInventory.h"
-#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -36,10 +35,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManager *_powers) {
-	items = _items;
+MenuInventory::MenuInventory(StatBlock *_stats) {
 	stats = _stats;
-	powers = _powers;
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
@@ -119,8 +116,8 @@ void MenuInventory::update() {
 	carried_area.w = carried_cols*ICON_SIZE;
 	carried_area.h = carried_rows*ICON_SIZE;
 
-	inventory[EQUIPMENT].init(MAX_EQUIPPED, items, equipped_area, slot_type);
-	inventory[CARRIED].init(MAX_CARRIED, items, carried_area, ICON_SIZE, carried_cols);
+	inventory[EQUIPMENT].init(MAX_EQUIPPED, equipped_area, slot_type);
+	inventory[CARRIED].init(MAX_CARRIED, carried_area, ICON_SIZE, carried_cols);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;

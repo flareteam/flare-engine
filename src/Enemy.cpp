@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyBehavior.h"
 #include "Enemy.h"
 #include "Hazard.h"
-#include "MapRenderer.h"
-#include "PowerManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
@@ -38,9 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Enemy::Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em) : Entity(_powers, _map) {
-	powers = _powers;
-	enemies = _em;
+Enemy::Enemy() : Entity() {
 
 	stats.cur_state = ENEMY_STANCE;
 	stats.turn_ticks = MAX_FRAMES_PER_SEC;
@@ -65,8 +61,7 @@ Enemy::Enemy(const Enemy& e)
 	: Entity(e)
 	, type(e.type)
 	, haz(NULL) // do not copy hazard. This constructor is used during mapload, so no hazard should be active.
-	, eb(new BehaviorStandard(this,e.enemies))
-	, enemies(e.enemies)
+	, eb(new BehaviorStandard(this))
 	, reward_xp(e.reward_xp)
 	, instant_power(e.instant_power)
 	, summoned(e.summoned)
@@ -129,7 +124,7 @@ void Enemy::logic() {
 	//cant do it in behaviour because the behaviour object would be replaced by this
 	if(stats.effects.convert != stats.converted) {
 		delete eb;
-		eb = stats.hero_ally ? new BehaviorStandard(this, enemies) : new BehaviorAlly(this, enemies);
+		eb = stats.hero_ally ? new BehaviorStandard(this) : new BehaviorAlly(this);
 		stats.converted = !stats.converted;
 		stats.hero_ally = !stats.hero_ally;
 	}
@@ -153,7 +148,7 @@ void Enemy::doRewards(int source_type) {
 
 		// the loot manager will check quest_loot_id
 		// if set (not zero), the loot manager will 100% generate that loot.
-		if (!(map->camp->checkStatus(stats.quest_loot_requires) && !map->camp->checkStatus(stats.quest_loot_not))) {
+		if (!(camp->checkStatus(stats.quest_loot_requires) && !camp->checkStatus(stats.quest_loot_not))) {
 			stats.quest_loot_id = 0;
 		}
 	}
@@ -161,14 +156,14 @@ void Enemy::doRewards(int source_type) {
 	// some creatures drop special loot the first time they are defeated
 	// this must be done in conjunction with defeat status
 	if (stats.first_defeat_loot > 0) {
-		if (!map->camp->checkStatus(stats.defeat_status)) {
+		if (!camp->checkStatus(stats.defeat_status)) {
 			stats.quest_loot_id = stats.first_defeat_loot;
 		}
 	}
 
 	// defeating some creatures (e.g. bosses) affects the story
 	if (stats.defeat_status != "") {
-		map->camp->setStatus(stats.defeat_status);
+		camp->setStatus(stats.defeat_status);
 	}
 
 	loot->addEnemyLoot(this);
@@ -198,16 +193,16 @@ void Enemy::CheckSummonSustained() {
 			int stat_val = 1;
 			switch(spawn_power->spawn_limit_stat) {
 				case SPAWN_LIMIT_STAT_PHYSICAL:
-					stat_val = enemies->pc->stats.get_physical();
+					stat_val = pc->stats.get_physical();
 					break;
 				case SPAWN_LIMIT_STAT_MENTAL:
-					stat_val = enemies->pc->stats.get_mental();
+					stat_val = pc->stats.get_mental();
 					break;
 				case SPAWN_LIMIT_STAT_OFFENSE:
-					stat_val = enemies->pc->stats.get_offense();
+					stat_val = pc->stats.get_offense();
 					break;
 				case SPAWN_LIMIT_STAT_DEFENSE:
-					stat_val = enemies->pc->stats.get_defense();
+					stat_val = pc->stats.get_defense();
 					break;
 			}
 			max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;

@@ -29,23 +29,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "TooltipData.h"
 
-class ItemManager;
-class MapRenderer;
 class StatBlock;
 class NPC;
 class WidgetTooltip;
 
 class NPCManager {
 private:
-	MapRenderer *map;
 	WidgetTooltip *tip;
-	ItemManager *items;
 	StatBlock *stats;
 	TooltipData tip_buf;
 	int tooltip_margin;
 
 public:
-	NPCManager(MapRenderer *_map, ItemManager *_items, StatBlock *stats);
+	NPCManager(StatBlock *stats);
 	NPCManager(const NPCManager &copy); // not implemented
 	~NPCManager();
 
