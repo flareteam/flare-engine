@@ -93,7 +93,6 @@ void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string
 void MenuStatBar::render() {
 	SDL_Rect src;
 	SDL_Rect dest;
-	int bar_length;
 
 	// position elements based on the window position
 	SDL_Rect bar_dest = bar_pos;
@@ -109,28 +108,25 @@ void MenuStatBar::render() {
 	src.h = bar_pos.h;
 	SDL_BlitSurface(background, &src, screen, &dest);
 
+	unsigned bar_length = (stat_max == 0) ? 0 : ((long)stat_cur * (long)bar_pos.h) / (long)stat_max;
 	// draw bar progress based on orientation
 	if (orientation == 0) {
-		if (stat_max == 0) bar_length = 0;
-		else bar_length = (stat_cur * bar_pos.w) / stat_max;
-		dest.x = bar_dest.x;
-		dest.y = bar_dest.y;
-		src.x = src.y = 0;
+		src.x = 0;
+		src.y = 0;
 		src.w = bar_length;
 		src.h = bar_pos.h;
-		SDL_BlitSurface(bar, &src, screen, &dest);
+		dest.x = bar_dest.x;
+		dest.y = bar_dest.y;
 	}
 	else if (orientation == 1) {
-		if (stat_max == 0) bar_length = 0;
-		else bar_length = (stat_cur * bar_pos.h) / stat_max;
 		src.x = 0;
 		src.y = bar_pos.h-bar_length;
 		src.w = bar_pos.w;
 		src.h = bar_length;
 		dest.x = bar_dest.x;
 		dest.y = bar_dest.y+src.y;
-		SDL_BlitSurface(bar, &src, screen, &dest);
 	}
+	SDL_BlitSurface(bar, &src, screen, &dest);
 
 	// if mouseover, draw text
 	if (!text_pos.hidden) {
