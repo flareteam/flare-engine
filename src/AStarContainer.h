@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class AStarContainer
 {
     public:
-        AStarContainer(unsigned int _map_width, unsigned int map_height, unsigned int node_limit);
+        AStarContainer(unsigned int map_height, unsigned int node_limit);
         ~AStarContainer();
         //assumes that the node is not already in the collection
         void add(AStarNode* node);
@@ -44,7 +44,6 @@ class AStarContainer
 
     private:
         unsigned int size;
-        unsigned int map_width;
 
         /* This is an array of AStarNode pointers. This is the main data for this collection.
         *  The size of the array is based on the node limit.
@@ -67,9 +66,10 @@ class AStarContainer
         AStarNode** nodes;
 
         /* This is an array of integers which acts as an index for the main node array.
-        *  This array is a one dimentional array but is used as a 2 dimentional array by using the map_width value
-        *  To access an element in this array, use map_pos[x_position + y_position * map_width]
-        *  To access an AStarNode based on map position use: nodes[map_pos[x_position + y_position * map_width]]
+        *  This array is a one dimentional array but is used as a 2 dimentional array by using the map_width value.
+        *  The map width is always assumed to be 256 even if it smaller. This allows the array index to be calculated faster.
+        *  To access an element in this array, use map_pos[x_position + (y_position << 8)]
+        *  To access an AStarNode based on map position use: nodes[map_pos[x_position + (y_position << 8)]]
         *
         *  The data in this array is initialised as -1, which indicates hat there is no corresponding node for that position
         *  This must be maintained when nodes are added, removed and re-ordered in the node array
@@ -83,7 +83,7 @@ class AStarContainer
 class AStarCloseContainer
 {
 public:
-    AStarCloseContainer(unsigned int _map_width, unsigned int map_height, unsigned int node_limit);
+    AStarCloseContainer(unsigned int map_height, unsigned int node_limit);
     ~AStarCloseContainer();
 
     int getSize();
@@ -94,7 +94,6 @@ public:
 
 private:
     unsigned int size;
-    unsigned int map_width;
     AStarNode** nodes;
     int* map_pos;
 
