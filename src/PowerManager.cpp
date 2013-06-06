@@ -42,6 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <climits>
 using namespace std;
 
+// @CLASS Power|Description about powers...
 
 /**
  * PowerManager constructor
@@ -66,6 +67,7 @@ void PowerManager::loadPowers() {
 		// id needs to be the first component of each power.  That is how we write
 		// data to the correct power.
 		if (infile.key == "id") {
+			// @ATTR id|integer|Uniq identifier for the power definition.
 			input_id = toInt(infile.val);
 			skippingEntry = input_id < 1;
 			if (skippingEntry)
@@ -78,6 +80,7 @@ void PowerManager::loadPowers() {
 			continue;
 
 		if (infile.key == "type") {
+			// @ATTR fixed|[missile, repeater, spawn, transform, effect]|Defines the type of power definiton
 			if (infile.val == "fixed") powers[input_id].type = POWTYPE_FIXED;
 			else if (infile.val == "missile") powers[input_id].type = POWTYPE_MISSILE;
 			else if (infile.val == "repeater") powers[input_id].type = POWTYPE_REPEATER;
@@ -87,10 +90,13 @@ void PowerManager::loadPowers() {
 			else fprintf(stderr, "unknown type %s\n", infile.val.c_str());
 		}
 		else if (infile.key == "name")
+			// @ATTR name|string|The name of the power
 			powers[input_id].name = msg->get(infile.val);
 		else if (infile.key == "description")
+			// @ATTR description|string|Description of the power
 			powers[input_id].description = msg->get(infile.val);
 		else if (infile.key == "tag")
+			// @ATTR tag|string|A uniq name for the power which is used to reference the power as item bonus within item definition.
 			powers[input_id].tag = infile.val;
 		else if (infile.key == "icon")
 			powers[input_id].icon = toInt(infile.val);

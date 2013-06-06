@@ -108,6 +108,8 @@ void ItemManager::loadAll() {
 	if (item_sets.empty()) printf("No item sets were found.\n");
 }
 
+// @CLASS Item|Description about the class and it usage...
+
 /**
  * Load a specific items file
  *
@@ -122,6 +124,7 @@ void ItemManager::loadItems() {
 	bool id_line = false;
 	while (infile.next()) {
 		if (infile.key == "id") {
+			// @ATTR id|integer|An uniq id of the item used as reference from other classes.
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(items, id+1);
@@ -137,15 +140,20 @@ void ItemManager::loadItems() {
 		assert(items.size() > std::size_t(id));
 
 		if (infile.key == "name")
+			// @ATTR name|string|Item name displayed on long and short tooltips.
 			items[id].name = msg->get(infile.val);
 		else if (infile.key == "flavor")
+			// @ATTR flavor|string|
 			items[id].flavor = msg->get(infile.val);
 		else if (infile.key == "level")
+			// @ATTR level|integer|
 			items[id].level = toInt(infile.val);
 		else if (infile.key == "icon") {
+			// @ATTR icon|integer|
 			items[id].icon = toInt(infile.nextValue());
 		}
 		else if (infile.key == "quality") {
+			// @ATTR quality|[low, high, epic]|Item quality, corresponds to item color.
 			if (infile.val == "low")
 				items[id].quality = ITEM_QUALITY_LOW;
 			else if (infile.val == "high")
@@ -154,6 +162,7 @@ void ItemManager::loadItems() {
 				items[id].quality = ITEM_QUALITY_EPIC;
 		}
 		else if (infile.key == "item_type") {
+			// @ATTR item_type|string|Equipment slot [artifact, head, chest, hands, legs, feets, main, off, ring] or base item type [gem, consumable]
 			items[id].type = infile.val;
 		}
 		else if (infile.key == "dmg_melee") {
