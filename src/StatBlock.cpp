@@ -652,10 +652,10 @@ void StatBlock::loadHeroStats() {
 void StatBlock::removeFromSummons() {
 
     if(summoner != NULL){
-        vector<StatBlock*>::iterator current = find(summoner->summons.begin(), summoner->summons.end(), this);
+        vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
 
-        if(current != summoner->summons.end())
-            summoner->summons.erase(current);
+        if(parent_ref != summoner->summons.end())
+            summoner->summons.erase(parent_ref);
 
         summoner = NULL;
     }
