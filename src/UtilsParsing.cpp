@@ -248,6 +248,13 @@ int toInt(const string& s, int default_value) {
 	return result;
 }
 
+unsigned long toUnsignedLong(const string& s, unsigned long  default_value) {
+	unsigned long result;
+	if (!(stringstream(s) >> result))
+		result = default_value;
+	return result;
+}
+
 string &trim_right_inplace(string &s, const string& delimiters = " \f\n\r\t\v") {
 	return s.erase(s.find_last_not_of(delimiters) + 1);
 }
