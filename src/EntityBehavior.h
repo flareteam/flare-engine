@@ -16,29 +16,28 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
- * class EnemyBehavior
+ * class EntityBehavior
  *
- * Interface for enemy behaviors.
- * The behavior object is a component of Enemy.
- * Make AI decisions (movement, actions) for enemies.
+ * Interface for entity behaviors.
+ * The behavior object is a component of Entities.
+ * Make AI decisions (movement, actions) for entities.
  */
 
-
 #pragma once
-#ifndef ENEMY_BEHAVIOR_H
-#define ENEMY_BEHAVIOR_H
+#ifndef ENTITY_BEHAVIOR_H
+#define ENTITY_BEHAVIOR_H
 
 #include "EnemyManager.h"
 
 class Enemy;
 
-class EnemyBehavior {
+class EntityBehavior {
 protected:
 	Enemy *e;
 	EnemyManager *enemies;
 public:
-	EnemyBehavior(Enemy *_e, EnemyManager *_em);
-	virtual ~EnemyBehavior();
+	EntityBehavior(Enemy *_e, EnemyManager *_em);
+	virtual ~EntityBehavior();
 	virtual void logic();
 };
 

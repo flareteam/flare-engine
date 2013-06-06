@@ -23,7 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "Animation.h"
 #include "SharedResources.h"
-#include "EnemyBehavior.h"
+#include "EntityBehavior.h"
 #include "BehaviorStandard.h"
 #include "BehaviorAlly.h"
 #include "Avatar.h"

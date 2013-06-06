@@ -92,7 +92,7 @@ Set (FLARE_SOURCES
 	./src/CombatText.cpp
 	./src/EffectManager.cpp
 	./src/Enemy.cpp
-	./src/EnemyBehavior.cpp
+	./src/EntityBehavior.cpp
 	./src/EnemyGroupManager.cpp
 	./src/EnemyManager.cpp
 	./src/FileParser.cpp

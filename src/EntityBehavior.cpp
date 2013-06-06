@@ -15,25 +15,17 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-/**
- * class EnemyBehavior
- *
- * Interface for enemy behaviors.
- * The behavior object is a component of Enemy.
- * Make AI decisions (movement, actions) for enemies.
- */
+#include "EntityBehavior.h"
 
-#include "EnemyBehavior.h"
-
-EnemyBehavior::EnemyBehavior(Enemy *_e, EnemyManager *_em) {
+EntityBehavior::EntityBehavior(Enemy *_e, EnemyManager *_em) {
 	e = _e;
 	enemies = _em;
 }
 
-void EnemyBehavior::logic() {
+void EntityBehavior::logic() {
 
 }
 
-EnemyBehavior::~EnemyBehavior() {
+EntityBehavior::~EntityBehavior() {
 
 }

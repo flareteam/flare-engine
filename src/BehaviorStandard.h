@@ -19,13 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef BEHAVIOR_STANDARD_H
 #define BEHAVIOR_STANDARD_H
 
-#include "EnemyBehavior.h"
+#include "EntityBehavior.h"
 #include "Utils.h"
 
 class Enemy;
 class Point;
 
-class BehaviorStandard : public EnemyBehavior {
+class BehaviorStandard : public EntityBehavior {
 private:
 
 	// logic steps
