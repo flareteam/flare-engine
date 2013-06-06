@@ -38,8 +38,8 @@ private:
 	void updateState();
 
 protected:
-	int hero_dist;
-	int target_dist;
+	float hero_dist;
+	float target_dist;
 	FPoint pursue_pos;
 	// targeting vars
 	bool los;

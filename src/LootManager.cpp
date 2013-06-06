@@ -482,7 +482,7 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, int &currency, MenuIn
 	loot_stack.item = 0;
 	loot_stack.quantity = 0;
 
-	int best_distance = std::numeric_limits<int>::max();
+	float best_distance = std::numeric_limits<float>::max();
 
 	vector<Loot>::iterator it;
 	vector<Loot>::iterator nearest = loot.end();
@@ -490,7 +490,7 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, int &currency, MenuIn
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
 
-		int distance = (int)calcDist(hero_pos,it->pos);
+		float distance = calcDist(hero_pos, it->pos);
 		if (distance < LOOT_RANGE && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;

@@ -736,7 +736,7 @@ void MapRenderer::checkNearestEvent(FPoint loc) {
 
 		vector<Map_Event>::iterator it;
 		vector<Map_Event>::iterator nearest = events.end();
-		int best_distance = std::numeric_limits<int>::max();
+		float best_distance = std::numeric_limits<float>::max();
 
 		// loop in reverse because we may erase elements
 		for (it = events.end(); it != events.begin(); ) {
@@ -754,7 +754,7 @@ void MapRenderer::checkNearestEvent(FPoint loc) {
 			FPoint ev_loc;
 			ev_loc.x = (*it).location.x;
 			ev_loc.y = (*it).location.y;
-			int distance = (int)calcDist(loc, ev_loc);
+			float distance = calcDist(loc, ev_loc);
 			if (distance < CLICK_RANGE && distance < best_distance) {
 				best_distance = distance;
 				nearest = it;

@@ -208,7 +208,7 @@ void BehaviorStandard::findTarget() {
 			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 				if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally) {
 					//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
-					int ally_dist = calcDist(e->stats.pos, enemies->enemies[i]->stats.pos);
+					float ally_dist = calcDist(e->stats.pos, enemies->enemies[i]->stats.pos);
 					if (ally_dist < target_dist) {
 						pursue_pos.x = enemies->enemies[i]->stats.pos.x;
 						pursue_pos.y = enemies->enemies[i]->stats.pos.y;
