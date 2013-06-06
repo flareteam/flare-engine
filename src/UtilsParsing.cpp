@@ -252,7 +252,13 @@ float toFloat(const string& s, float default_value) {
 	float result;
 	if (!(stringstream(s) >> result))
 		result = default_value;
+	return result;
+}
 
+unsigned long toUnsignedLong(const string& s, unsigned long  default_value) {
+	unsigned long result;
+	if (!(stringstream(s) >> result))
+		result = default_value;
 	return result;
 }
 

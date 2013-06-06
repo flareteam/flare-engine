@@ -125,8 +125,8 @@ public:
 	std::string sfx_prefix;
 
 	int level;
-	int xp;
-	int xp_table[MAX_CHARACTER_LEVEL+1];
+	unsigned long xp;
+	unsigned long xp_table[MAX_CHARACTER_LEVEL+1];
 	bool level_up;
 	bool check_title;
 	int stat_points_per_level;
