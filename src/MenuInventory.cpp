@@ -356,7 +356,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid) {
 			if( inventory[area][slot].item == stack.item) {
 				// Merge the stacks
-				add( stack, area, slot);
+				add(stack, area, slot, false);
 			}
 			else if( inventory[drag_prev_src][drag_prev_slot].item == 0) {
 				// Swap the two stacks
@@ -380,7 +380,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			if (slot != drag_prev_slot) {
 				if( inventory[area][slot].item == stack.item) {
 					// Merge the stacks
-					add( stack, area, slot);
+					add(stack, area, slot, false);
 				}
 				else if( inventory[area][slot].item == 0) {
 					// Drop the stack
@@ -404,7 +404,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			// also check to see if the hero meets the requirements
 			if (inventory[area][slot].item == stack.item || drag_prev_src == -1) {
 				// Merge the stacks
-				add( stack, area, slot);
+				add(stack, area, slot, false);
 			}
 			else if( inventory[area][slot].item == 0) {
 				// Drop the stack
@@ -501,7 +501,7 @@ void MenuInventory::activate(Point position) {
 				stack = click(position);
 				if( inventory[EQUIPMENT][equip_slot].item == stack.item) {
 					// Merge the stacks
-					add( stack, EQUIPMENT, equip_slot);
+					add(stack, EQUIPMENT, equip_slot, false);
 				}
 				else if( inventory[EQUIPMENT][equip_slot].item == 0) {
 					// Drop the stack
@@ -535,8 +535,8 @@ void MenuInventory::activate(Point position) {
  * @param area Area number where it will try to store the item
  * @param slot Slot number where it will try to store the item
  */
-void MenuInventory::add(ItemStack stack, int area, int slot) {
-	if (stack.quantity > 0 && area == CARRIED && slot == -1)
+void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
+	if (stack.quantity > 0 && play_sound)
 		items->playSound(stack.item);
 
 	if (stack.item != 0) {
@@ -580,7 +580,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot) {
 					itemReturn( stack);
 				}
 				else {
-					add( stack);
+					add(stack, CARRIED, -1, false);
 				}
 			}
 		}
@@ -617,7 +617,7 @@ void MenuInventory::addCurrency(int count) {
 	ItemStack stack;
 	stack.item = CURRENCY_ID;
 	stack.quantity = count;
-	add(stack);
+	add(stack, CARRIED, -1, false);
 }
 
 /**

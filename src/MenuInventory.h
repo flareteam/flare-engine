@@ -75,7 +75,7 @@ public:
 	void drop(Point position, ItemStack stack);
 	void activate(Point position);
 
-	void add( ItemStack stack, int area = CARRIED, int slot = -1);
+	void add( ItemStack stack, int area = CARRIED, int slot = -1, bool play_sound = true);
 	void remove(int item);
 	void removeEquipped(int item);
 	void addCurrency(int count);
