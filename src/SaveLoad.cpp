@@ -213,11 +213,7 @@ void GameStatePlay::loadGame() {
 				pc->stats.character_class = infile.nextValue();
 			}
 			else if (infile.key == "xp") {
-				pc->stats.xp = toInt(infile.val);
-				if (pc->stats.xp < 0) {
-					fprintf(stderr, "XP value is out of bounds, setting to zero\n");
-					pc->stats.xp = 0;
-				}
+				pc->stats.xp = toUnsignedLong(infile.val);
 			}
 			else if (infile.key == "hpmp") {
 				saved_hp = toInt(infile.nextValue());
