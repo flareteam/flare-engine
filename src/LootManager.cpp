@@ -417,7 +417,7 @@ ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, MenuI
  * Autopickup loot if enabled in the engine
  * Currently, only currency is checked for autopickup
  */
-ItemStack LootManager::checkAutoPickup(Point hero_pos) {
+ItemStack LootManager::checkAutoPickup(Point hero_pos, MenuInventory *inv) {
 	ItemStack loot_stack;
 	loot_stack.item = 0;
 	loot_stack.quantity = 0;
@@ -427,9 +427,11 @@ ItemStack LootManager::checkAutoPickup(Point hero_pos) {
 		--it;
 		if (abs(hero_pos.x - it->pos.x) < AUTOPICKUP_RANGE && abs(hero_pos.y - it->pos.y) < AUTOPICKUP_RANGE && !it->isFlying()) {
 			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
-				loot_stack = it->stack;
-				it = loot.erase(it);
-				return loot_stack;
+				if (!(inv->full(it->stack.item))) {
+					loot_stack = it->stack;
+					it = loot.erase(it);
+					return loot_stack;
+				}
 			}
 		}
 	}

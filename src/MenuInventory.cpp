@@ -52,6 +52,9 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 	changed_artifact = true;
 	log_msg = "";
 
+	drop_stack.item = 0;
+	drop_stack.quantity = 0;
+
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// Load config settings
@@ -583,6 +586,8 @@ void MenuInventory::add(ItemStack stack, int area, int slot) {
 		}
 		else {
 			// No available slot, drop
+			drop_stack.item = stack.item;
+			drop_stack.quantity = stack.quantity;
 		}
 	}
 }

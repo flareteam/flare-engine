@@ -115,6 +115,8 @@ public:
 
 	std::string log_msg;
 
+	ItemStack drop_stack;
+
 	TabList tablist;
 
 };

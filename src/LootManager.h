@@ -88,7 +88,7 @@ public:
 	void determineLootByEnemy(const Enemy *e, Point pos); // pick from enemy-specific loot table
 	void addLoot(ItemStack stack, Point pos);
 	ItemStack checkPickup(Point mouse, Point cam, Point hero_pos, MenuInventory *inv);
-	ItemStack checkAutoPickup(Point hero_pos);
+	ItemStack checkAutoPickup(Point hero_pos, MenuInventory *inv);
 	ItemStack checkNearestPickup(Point hero_pos, MenuInventory *inv);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);

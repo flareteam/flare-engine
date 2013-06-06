@@ -461,7 +461,10 @@ void loadMiscSettings() {
 				ENABLE_ALLY_COLLISION_AI = toBool(infile.val);
 			else if (infile.key == "currency_id") {
 				CURRENCY_ID = toInt(infile.val);
-				if (CURRENCY_ID < 1) CURRENCY_ID = 1;
+				if (CURRENCY_ID < 1) {
+					CURRENCY_ID = 1;
+					fprintf(stderr, "Currency ID below the minimum allowed value. Resetting it to %d\n", CURRENCY_ID);
+				}
 			}
 
 		}

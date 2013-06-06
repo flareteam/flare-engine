@@ -194,7 +194,7 @@ void GameStatePlay::checkLoot() {
 
 	// Autopickup
 	if (AUTOPICKUP_CURRENCY) {
-		pickup = loot->checkAutoPickup(pc->stats.pos);
+		pickup = loot->checkAutoPickup(pc->stats.pos, menu->inv);
 		if (pickup.item > 0) menu->inv->add(pickup);
 	}
 
@@ -527,6 +527,14 @@ void GameStatePlay::checkLootDrop() {
 		camp->drop_stack.quantity = 0;
 	}
 
+	// if the player been directly given items, but their inventory is full
+	// this happens when adding currency from older save files
+	if (menu->inv->drop_stack.item > 0) {
+		loot->addLoot(menu->inv->drop_stack, pc->stats.pos);
+		menu->inv->drop_stack.item = 0;
+		menu->inv->drop_stack.quantity = 0;
+	}
+
 }
 
 /**
@@ -816,13 +824,13 @@ void GameStatePlay::logic() {
 	}
 
 	// these actions occur whether the game is paused or not.
-	checkNotifications();
-	checkLootDrop();
 	checkTeleport();
+	checkLootDrop();
 	checkLog();
 	checkEquipmentChange();
 	checkConsumable();
 	checkStash();
+	checkNotifications();
 	checkCancel();
 
 	map->logic();

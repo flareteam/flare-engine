@@ -211,7 +211,7 @@ void ItemStorage::sort() {
 
 bool ItemStorage::full(int item) {
 	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item == item && items->items[item].max_quantity > 1) {
+		if (storage[i].item == item && storage[i].quantity < items->items[item].max_quantity) {
 			return false;
 		}
 		if (storage[i].item == 0) {

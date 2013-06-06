@@ -151,7 +151,8 @@ void CampaignManager::rewardCurrency(int amount) {
 	stack.item = CURRENCY_ID;
 	stack.quantity = amount;
 	rewardItem(stack);
-	addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
+	if (carried_items->full(stack.item))
+		addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
 	items->playSound(CURRENCY_ID);
 }
 
