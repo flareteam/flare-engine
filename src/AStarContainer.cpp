@@ -19,13 +19,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 #include <cfloat>
 
-AStarContainer::AStarContainer(unsigned int map_height, unsigned int node_limit)
+AStarContainer::AStarContainer(unsigned int map_width, unsigned int node_limit)
     : size(0)
 {
     nodes = new AStarNode*[node_limit];
-    map_pos = new short[(map_height << 8) + 1];
+    map_pos = new astar_mapcol[map_width];
+
     //initialise the map array. A -1 value will mean there is no node at that position
-    std::fill(map_pos, map_pos + (map_height << 8) + 1, -1);
+    for(unsigned i = 0; i < map_width; ++i)
+        std::fill(map_pos[i], map_pos[i] + 256, -1);
 }
 
 AStarContainer::~AStarContainer()
@@ -40,7 +42,7 @@ void AStarContainer::add(AStarNode* node){
 
     //add the new node at the end and update its index
     nodes[size] = node;
-    map_pos[node->getX() + (node->getY() << 8)] = size;
+    map_pos[node->getX()][node->getY()] = size;
 
     //reorder the heap based on f ordering, staring with thenewly added node and working up the tree from there
     int m = size;
@@ -51,9 +53,9 @@ void AStarContainer::add(AStarNode* node){
         if(nodes[m]->getFinalCost() <= nodes[m/2]->getFinalCost()){
             temp = nodes[m/2];
             nodes[m/2] = nodes[m];
-            map_pos[nodes[m/2]->getX() + (nodes[m/2]->getY() << 8)] = m/2;
+            map_pos[nodes[m/2]->getX()][nodes[m/2]->getY()] = m/2;
             nodes[m] = temp;
-            map_pos[nodes[m]->getX() + (nodes[m]->getY() << 8)] = m;
+            map_pos[nodes[m]->getX()][nodes[m]->getY()] = m;
             m=m/2;
         }
         else
@@ -68,16 +70,16 @@ AStarNode* AStarContainer::get_shortest_f(){
 
 void AStarContainer::remove(AStarNode* node){
 
-    unsigned int heap_indexv = map_pos[node->getX() + (node->getY() << 8)] + 1;
+    unsigned int heap_indexv = map_pos[node->getX()][node->getY()] + 1;
 
     //swap the last node in the list with the node being deleted
     nodes[heap_indexv-1] = nodes[size-1];
-    map_pos[nodes[heap_indexv-1]->getX() + (nodes[heap_indexv-1]->getY() << 8)] = heap_indexv-1;
+    map_pos[nodes[heap_indexv-1]->getX()][nodes[heap_indexv-1]->getY()] = heap_indexv-1;
 
     size--;
 
     if(size == 0){
-        map_pos[node->getX() + (node->getY() << 8)] = -1;
+        map_pos[node->getX()][node->getY()] = -1;
         return;
     }
 
@@ -100,9 +102,9 @@ void AStarContainer::remove(AStarNode* node){
         if(heap_indexu != heap_indexv){//If parent's F > one or both of its children, swap them
             AStarNode* temp = nodes[heap_indexu-1];
             nodes[heap_indexu-1] = nodes[heap_indexv-1];
-            map_pos[nodes[heap_indexu-1]->getX() + (nodes[heap_indexu-1]->getY() << 8)] = heap_indexu-1;
+            map_pos[nodes[heap_indexu-1]->getX()][nodes[heap_indexu-1]->getY()] = heap_indexu-1;
             nodes[heap_indexv-1] = temp;
-            map_pos[nodes[heap_indexv-1]->getX() + (nodes[heap_indexv-1]->getY() << 8)] = heap_indexv-1;
+            map_pos[nodes[heap_indexv-1]->getX()][nodes[heap_indexv-1]->getY()] = heap_indexv-1;
         }
         else{
             break;//if item <= both children, exit loop
@@ -110,15 +112,15 @@ void AStarContainer::remove(AStarNode* node){
     }//Repeat forever
 
     //remove the node from the map pos index
-    map_pos[node->getX() + (node->getY() << 8)] = -1;
+    map_pos[node->getX()][node->getY()] = -1;
 }
 
 bool AStarContainer::exists(Point pos){
-    return map_pos[pos.x + (pos.y << 8)] != -1;
+    return map_pos[pos.x][pos.y] != -1;
 }
 
 AStarNode* AStarContainer::get(int x, int y){
-    return nodes[map_pos[x + (y << 8)]];
+    return nodes[map_pos[x][y]];
 }
 
 bool AStarContainer::isEmpty(){
@@ -130,16 +132,16 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score){
     get(pos.x, pos.y)->setActualCost(score);
 
     //reorder the heap based on the new f value of this node. starting at the updated node and working up the tree
-    int m = map_pos[pos.x + (pos.y << 8)];
+    int m = map_pos[pos.x][pos.y];
     AStarNode* temp = NULL;
     while(m != 0){
         //if the current node has a lower f value than its parent in the heap, swap them
         if(nodes[m]->getFinalCost() <= nodes[m/2]->getFinalCost()){
             temp = nodes[m/2];
             nodes[m/2] = nodes[m];
-            map_pos[nodes[m/2]->getX() + (nodes[m/2]->getY() << 8)] = m/2;
+            map_pos[nodes[m/2]->getX()][nodes[m/2]->getY()] = m/2;
             nodes[m] = temp;
-            map_pos[nodes[m]->getX() + (nodes[m]->getY() << 8)] = m;
+            map_pos[nodes[m]->getX()][nodes[m]->getY()] = m;
             m=m/2;
         }
         else
@@ -147,14 +149,15 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score){
     }
 }
 
-AStarCloseContainer::AStarCloseContainer(unsigned int map_height, unsigned int node_limit)
+AStarCloseContainer::AStarCloseContainer(unsigned int map_width, unsigned int node_limit)
     : size(0)
 {
     nodes = new AStarNode*[node_limit];
-    map_pos = new short[(map_height << 8) + 1];
+    map_pos = new astar_mapcol[map_width];
 
     //initialise the map index array. A -1 value will mean there is no node at that position
-    std::fill(map_pos, map_pos + (map_height << 8) + 1, -1);
+    for (unsigned i = 0; i < map_width; ++i)
+        std::fill(map_pos[i], map_pos[i] + 256, -1);
 }
 
 AStarCloseContainer::~AStarCloseContainer()
@@ -173,16 +176,16 @@ int AStarCloseContainer::getSize()
 void AStarCloseContainer::add(AStarNode* node)
 {
     nodes[size] = node;
-    map_pos[node->getX() + (node->getY() << 8)] = size;
+    map_pos[node->getX()][node->getY()] = size;
     size++;
 }
 
 bool AStarCloseContainer::exists(Point pos){
-    return map_pos[pos.x + (pos.y << 8)] != -1;
+    return map_pos[pos.x][pos.y] != -1;
 }
 
 AStarNode* AStarCloseContainer::get(int x, int y){
-    return nodes[map_pos[x + (y << 8)]];
+    return nodes[map_pos[x][y]];
 }
 
 AStarNode* AStarCloseContainer::get_shortest_h()

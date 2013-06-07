@@ -346,8 +346,8 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 	node->setEstimatedCost((float)calcDist(start,end));
 	node->setParent(current);
 
-	AStarContainer open(map_size.y, limit);
-	AStarCloseContainer close(map_size.y, limit);
+	AStarContainer open(map_size.x, limit);
+	AStarCloseContainer close(map_size.x, limit);
 
     open.add(node);
 

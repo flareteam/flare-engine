@@ -25,10 +25,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 *
 *  All code in the class assumes that the nodes and points provided are within the bounds of the map limits
 */
+typedef short astar_mapcol[256];
 class AStarContainer
 {
     public:
-        AStarContainer(unsigned int map_height, unsigned int node_limit);
+        AStarContainer(unsigned int _map_width, unsigned int node_limit);
         ~AStarContainer();
         //assumes that the node is not already in the collection
         void add(AStarNode* node);
@@ -74,7 +75,7 @@ class AStarContainer
         *  The data in this array is initialised as -1, which indicates hat there is no corresponding node for that position
         *  This must be maintained when nodes are added, removed and re-ordered in the node array
         */
-        short* map_pos;
+        astar_mapcol* map_pos;
 };
 
 /* This class is used to store the closed list of a* nodes
@@ -83,7 +84,7 @@ class AStarContainer
 class AStarCloseContainer
 {
 public:
-    AStarCloseContainer(unsigned int map_height, unsigned int node_limit);
+    AStarCloseContainer(unsigned int _map_width, unsigned int node_limit);
     ~AStarCloseContainer();
 
     int getSize();
@@ -95,7 +96,7 @@ public:
 private:
     unsigned int size;
     AStarNode** nodes;
-    short* map_pos;
+    astar_mapcol* map_pos;
 
 };
 
