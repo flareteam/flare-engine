@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include <typeinfo>
 
-bool isInt(const std::string& s);
 std::string trim(const std::string& s, char c);
 int parse_duration(const std::string& s);
 std::string parse_section_title(const std::string& s);
