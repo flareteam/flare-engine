@@ -26,22 +26,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyBehavior.h"
 #include "BehaviorStandard.h"
 #include "BehaviorAlly.h"
-#include "Avatar.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
-EnemyManager::EnemyManager(PowerManager *_powers, MapRenderer *_map)
-	: map(_map)
-	, powers(_powers)
-	, enemies()
-	, hero_pos(0,0)
-	, hero_direction(0)
-	, hero_alive(true)
+EnemyManager::EnemyManager()
+	: enemies()
 	, hero_stealth(0)
 	, player_blocked(false)
 	, player_blocked_ticks(0) {
-
-	hero_pos.x = hero_pos.y = -1;
 	handleNewMap();
 }
 
@@ -84,9 +77,9 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 			return new Enemy(prototypes[i]);
 		}
 
-	Enemy e = Enemy(powers, map, this);
+	Enemy e = Enemy();
 
-	e.eb = new BehaviorStandard(&e, this);
+	e.eb = new BehaviorStandard(&e);
 	e.stats.load("enemies/" + type_id + ".txt");
 	e.type = type_id;
 
@@ -140,9 +133,9 @@ void EnemyManager::handleNewMap () {
 	prototypes.clear();
 
 	// load new enemies
-	while (!map->enemies.empty()) {
-		me = map->enemies.front();
-		map->enemies.pop();
+	while (!mapr->enemies.empty()) {
+		me = mapr->enemies.front();
+		mapr->enemies.pop();
 
 		Enemy *e = getEnemyPrototype(me.type);
 
@@ -155,7 +148,7 @@ void EnemyManager::handleNewMap () {
 
 		enemies.push_back(e);
 
-		map->collider.block(me.pos.x, me.pos.y, false);
+		mapr->collider.block(me.pos.x, me.pos.y, false);
 	}
 
 	while (!allies.empty()) {
@@ -172,7 +165,7 @@ void EnemyManager::handleNewMap () {
 
 		enemies.push_back(e);
 
-		map->collider.block(e->stats.pos.x, e->stats.pos.y, true);
+		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, true);
 	}
 
 	anim->cleanUp();
@@ -190,12 +183,12 @@ void EnemyManager::handleSpawn() {
 		espawn = powers->enemies.front();
 		powers->enemies.pop();
 
-		Enemy *e = new Enemy(powers, map, this);
+		Enemy *e = new Enemy();
 		// factory
 		if(espawn.hero_ally)
-			e->eb = new BehaviorAlly(e, this);
+			e->eb = new BehaviorAlly(e);
 		else
-			e->eb = new BehaviorStandard(e, this);
+			e->eb = new BehaviorStandard(e);
 
 		e->stats.hero_ally = espawn.hero_ally;
 		e->stats.summoned = true;
@@ -225,13 +218,13 @@ void EnemyManager::handleSpawn() {
 		loadSounds(e->stats.sfx_prefix);
 
 
-		if(map->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
+		if(mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
 			e->stats.pos.x = espawn.pos.x;
 			e->stats.pos.y = espawn.pos.y;
 		}
 		else {
-			e->stats.pos.x = hero_pos.x;
-			e->stats.pos.y = hero_pos.y;
+			e->stats.pos.x = pc->stats.pos.x;
+			e->stats.pos.y = pc->stats.pos.y;
 		}
 		// special animation state for spawning enemies
 		e->stats.cur_state = ENEMY_SPAWN;
@@ -261,7 +254,7 @@ void EnemyManager::handleSpawn() {
 
 		enemies.push_back(e);
 
-		map->collider.block(espawn.pos.x, espawn.pos.y, e->stats.hero_ally);
+		mapr->collider.block(espawn.pos.x, espawn.pos.y, e->stats.hero_ally);
 	}
 }
 
@@ -330,12 +323,8 @@ void EnemyManager::logic() {
 		}
 
 		// new actions this round
-		(*it)->stats.hero_pos = hero_pos;
-		(*it)->stats.hero_direction = hero_direction;
-		(*it)->stats.hero_alive = hero_alive;
 		(*it)->stats.hero_stealth = hero_stealth;
 		(*it)->logic();
-
 	}
 }
 
@@ -364,7 +353,7 @@ Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
 /**
  * If an enemy has died, reward the hero with experience points
  */
-void EnemyManager::checkEnemiesforXP(CampaignManager *camp) {
+void EnemyManager::checkEnemiesforXP() {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		if (enemies[i]->reward_xp) {
 			//adjust for party exp if necessary

@@ -38,7 +38,7 @@ using namespace std;
 
 const int CLICK_RANGE = 3 * UNITS_PER_TILE; //for activating events
 
-MapRenderer::MapRenderer(CampaignManager *_camp)
+MapRenderer::MapRenderer()
 	: Map()
 	, index_objectlayer(0)
 	, music(NULL)
@@ -49,8 +49,6 @@ MapRenderer::MapRenderer(CampaignManager *_camp)
 	, backgroundsurface(NULL)
 	, backgroundsurfaceoffset()
 	, repaint_background(false)
-	, camp(_camp)
-	, powers(NULL)
 	, cam()
 	, hero_tile()
 	, map_change(false)

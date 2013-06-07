@@ -27,13 +27,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
 
-MenuStash::MenuStash(ItemManager *_items, StatBlock *_stats)
+MenuStash::MenuStash(StatBlock *_stats)
 	: Menu()
-	, items(_items)
 	, stats(_stats)
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
 	, color_normal(font->getColor("menu_normal"))
@@ -79,7 +79,7 @@ void MenuStash::update() {
 	slots_area.w = slots_cols*ICON_SIZE;
 	slots_area.h = slots_rows*ICON_SIZE;
 
-	stock.init( STASH_SLOTS, items, slots_area, ICON_SIZE, slots_cols);
+	stock.init( STASH_SLOTS, slots_area, ICON_SIZE, slots_cols);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;

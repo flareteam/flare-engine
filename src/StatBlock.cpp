@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "StatBlock.h"
 #include "FileParser.h"
-#include "PowerManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
@@ -139,9 +138,6 @@ StatBlock::StatBlock()
 	, melee_range(64) //both
 	, threat_range(0)  // enemy
 	, passive_attacker(false)//enemy
-	, hero_pos(-1, -1)
-	, hero_direction(0)
-	, hero_alive(true)
 	, hero_stealth(0)
 	, last_seen(-1, -1)  // no effects to gameplay?
 	, turn_delay(0)
@@ -574,7 +570,7 @@ StatBlock::~StatBlock() {
     removeFromSummons();
 }
 
-bool StatBlock::canUsePower(const Power &power, unsigned powerid, PowerManager *powers) const {
+bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 
 	// needed to unlock shapeshifter powers
 	if (transformed) return mp >= power.requires_mp;
@@ -589,7 +585,7 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid, PowerManager *
 			   && (!power.sacrifice == false || hp > power.requires_hp)
 			   && menu_powers->meetsUsageStats(powerid)
 			   && !power.passive
-			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid, powers) : true);
+			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
 
 }
 
@@ -666,7 +662,7 @@ void StatBlock::removeFromSummons() {
     summons.clear();
 }
 
-bool StatBlock::summonLimitReached(int power_id, PowerManager *powers) const{
+bool StatBlock::summonLimitReached(int power_id) const{
 
     //find the limit
     Power *spawn_power = &powers->powers[power_id];

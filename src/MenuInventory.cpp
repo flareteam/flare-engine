@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuInventory.h"
-#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -36,10 +35,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManager *_powers) {
-	items = _items;
+MenuInventory::MenuInventory(StatBlock *_stats) {
 	stats = _stats;
-	powers = _powers;
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
@@ -119,8 +116,8 @@ void MenuInventory::update() {
 	carried_area.w = carried_cols*ICON_SIZE;
 	carried_area.h = carried_rows*ICON_SIZE;
 
-	inventory[EQUIPMENT].init(MAX_EQUIPPED, items, equipped_area, slot_type);
-	inventory[CARRIED].init(MAX_CARRIED, items, carried_area, ICON_SIZE, carried_cols);
+	inventory[EQUIPMENT].init(MAX_EQUIPPED, equipped_area, slot_type);
+	inventory[CARRIED].init(MAX_CARRIED, carried_area, ICON_SIZE, carried_cols);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
@@ -143,19 +140,19 @@ void MenuInventory::logic() {
 		if (DEATH_PENALTY_CURRENCY > 0) {
 			if (currency > 0)
 				currency -= (currency * DEATH_PENALTY_CURRENCY) / 100;
-			death_message += msg->get("Lost %d% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
+			death_message += msg->get("Lost %d%% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
 		}
 
 		// remove a % of either total xp or xp since the last level
 		if (DEATH_PENALTY_XP > 0) {
 			if (stats->xp > 0)
 				stats->xp -= (stats->xp * DEATH_PENALTY_XP) / 100;
-			death_message += msg->get("Lost %d% of total XP. ", DEATH_PENALTY_XP);
+			death_message += msg->get("Lost %d%% of total XP. ", DEATH_PENALTY_XP);
 		}
 		else if (DEATH_PENALTY_XP_CURRENT > 0) {
 			if (stats->xp - stats->xp_table[stats->level-1] > 0)
 				stats->xp -= ((stats->xp - stats->xp_table[stats->level-1]) * DEATH_PENALTY_XP_CURRENT) / 100;
-			death_message += msg->get("Lost %d% of current level XP. ", DEATH_PENALTY_XP_CURRENT);
+			death_message += msg->get("Lost %d%% of current level XP. ", DEATH_PENALTY_XP_CURRENT);
 		}
 
 		// prevent down-leveling from removing too much xp

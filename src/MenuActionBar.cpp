@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
-#include "PowerManager.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "StatBlock.h"
@@ -34,13 +33,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetSlot.h"
 #include "WidgetLabel.h"
+#include "SharedGameResources.h"
 
 #include <climits>
 
 using namespace std;
 
-MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surface *_icons) {
-	powers = _powers;
+MenuActionBar::MenuActionBar(StatBlock *_hero, SDL_Surface *_icons) {
 	hero = _hero;
 	icons = _icons;
 
@@ -288,7 +287,7 @@ void MenuActionBar::render() {
 							  && (slot_item_count[i] != 0)
 							  && !hero->effects.stun
 							  && hero->alive
-							  && hero->canUsePower(power, hotkeys[i], powers); //see if the slot should be greyed out
+							  && hero->canUsePower(power, hotkeys[i]); //see if the slot should be greyed out
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
 			slots[i]->setIcon(power.icon + icon_offset);
