@@ -81,7 +81,7 @@ void PowerManager::loadPowers() {
 			continue;
 
 		if (infile.key == "type") {
-			// @ATTR fixed|[missile, repeater, spawn, transform, effect]|Defines the type of power definiton
+			// @ATTR fixed|[missile:repeater:spawn:transform:effect]|Defines the type of power definiton
 			if (infile.val == "fixed") powers[input_id].type = POWTYPE_FIXED;
 			else if (infile.val == "missile") powers[input_id].type = POWTYPE_MISSILE;
 			else if (infile.val == "repeater") powers[input_id].type = POWTYPE_REPEATER;
@@ -103,7 +103,7 @@ void PowerManager::loadPowers() {
 			// @ATTR icon|string|The icon to visually represent the power eg. in skill tree or action bar.
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
-			// @ATTR new_state|[swing, shoot, cast, block, instant]|When power is used, hero or enemy will change to this state.
+			// @ATTR new_state|[swing:shoot:cast:block:instant]|When power is used, hero or enemy will change to this state.
 			if (infile.val == "swing") powers[input_id].new_state = POWSTATE_SWING;
 			else if (infile.val == "shoot") powers[input_id].new_state = POWSTATE_SHOOT;
 			else if (infile.val == "cast") powers[input_id].new_state = POWSTATE_CAST;
@@ -115,7 +115,7 @@ void PowerManager::loadPowers() {
 			// @ATTR face|bool|Power will make hero or enemy to face the target location.
 			powers[input_id].face = toBool(infile.val);
 		else if (infile.key == "source_type") {
-			// @ATTR source_type|[hero, neutral, enemy]|
+			// @ATTR source_type|[hero:neutral:enemy]|
 			if (infile.val == "hero") powers[input_id].source_type = SOURCE_TYPE_HERO;
 			else if (infile.val == "neutral") powers[input_id].source_type = SOURCE_TYPE_NEUTRAL;
 			else if (infile.val == "enemy") powers[input_id].source_type = SOURCE_TYPE_ENEMY;
@@ -131,7 +131,7 @@ void PowerManager::loadPowers() {
 			// @ATTR passive|bool|If power is unlocked when the hero or enemy spawns it will be automatically activated.
 			powers[input_id].passive = toBool(infile.val);
 		else if (infile.key == "passive_trigger") {
-			// @ATTR passive_trigger|[on_block, on_hit, on_halfdeath, on_joincombat, on_death]|This will only activate a passive power under a certain condition.
+			// @ATTR passive_trigger|[on_block:on_hit:on_halfdeath:on_joincombat:on_death]|This will only activate a passive power under a certain condition.
 			if (infile.val == "on_block") powers[input_id].passive_trigger = TRIGGER_BLOCK;
 			else if (infile.val == "on_hit") powers[input_id].passive_trigger = TRIGGER_HIT;
 			else if (infile.val == "on_halfdeath") powers[input_id].passive_trigger = TRIGGER_HALFDEATH;
@@ -218,7 +218,7 @@ void PowerManager::loadPowers() {
 			// @ATTR radius|integer|Radius in pixels
 			powers[input_id].radius = toInt(infile.val);
 		else if (infile.key == "base_damage") {
-			// @ATTR base_damage|[melee, ranged, ment]|
+			// @ATTR base_damage|[melee:ranged:ment]|
 			if (infile.val == "none")        powers[input_id].base_damage = BASE_DAMAGE_NONE;
 			else if (infile.val == "melee")  powers[input_id].base_damage = BASE_DAMAGE_MELEE;
 			else if (infile.val == "ranged") powers[input_id].base_damage = BASE_DAMAGE_RANGED;
@@ -333,7 +333,7 @@ void PowerManager::loadPowers() {
 			// @ATTR target_neighbor|int|Neigbor target.
 			powers[input_id].target_neighbor = toInt(infile.val);
 		else if (infile.key == "spawn_limit") {
-			// @ATTR spawn_limit|[fixed,stat,unlimited],stat[physical, mental,offense,defens]|.
+			// @ATTR spawn_limit|[fixed:stat:unlimited],stat[physical:mental:offense:defens]|
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val,',');
 			if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
@@ -367,7 +367,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "modifier_accuracy") {
-			// @ATTR modifier_accuracy|[multiply, add, absolute], integer|
+			// @ATTR modifier_accuracy|[multiply:add:absolute], integer|
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
@@ -378,7 +378,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
 		}
 		else if (infile.key == "modifier_damage") {
-			// @ATTR modifier_damage|[multiply, add, absolute], integer|
+			// @ATTR modifier_damage|[multiply:add:absolute], integer|
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
@@ -390,7 +390,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_damage_value_max = eatFirstInt(infile.val, ',');
 		}
 		else if (infile.key == "modifier_critical") {
-			// @ATTR modifier_critical|[multiply, add, absolute], integer|
+			// @ATTR modifier_critical|[multiply:add:absolute], integer|
 			infile.val = infile.val + ',';
 			std::string mode = eatFirstString(infile.val, ',');
 			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
