@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 IFS=$'\n'
 HAVE_CLASS=0
 echo "<?xml version=\"1.0\"?>"
