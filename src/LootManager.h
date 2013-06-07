@@ -39,13 +39,6 @@ class EnemyManager;
 class MenuInventory;
 class WidgetTooltip;
 
-class CurrencyRange {
-public:
-	std::string filename;
-	int low;
-	int high;
-};
-
 // this means that normal items are 10x more common than epic items
 // these numbers have to be balanced by various factors
 const int RARITY_LOW = 7;
@@ -65,7 +58,6 @@ private:
 	// functions
 	void loadGraphics();
 
-	SoundManager::SoundID sfx_currency;
 	SoundManager::SoundID sfx_loot;
 
 	// loot refers to ItemManager indices
@@ -73,7 +65,6 @@ private:
 
 	SDL_Rect animation_pos;
 	Point animation_offset;
-	std::vector<CurrencyRange> currency_range;
 
 	// enemies which should drop loot, but didnt yet.
 	std::vector<const class Enemy*> enemiesDroppingLoot;
@@ -88,17 +79,14 @@ public:
 	void renderTooltips(FPoint cam);
 	void checkEnemiesForLoot();
 
-	void playCurrencySound(Point loot_pos = Point(0,0));
-
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(const Enemy *e);
 	void checkMapForLoot();
 	void determineLootByEnemy(const Enemy *e, FPoint pos); // pick from enemy-specific loot table
 	void addLoot(ItemStack stack, FPoint pos);
-	void addCurrency(int count, FPoint pos);
-	ItemStack checkPickup(Point mouse, FPoint cam, FPoint hero_pos, int &currency, MenuInventory *inv);
-	ItemStack checkAutoPickup(FPoint hero_pos, int &currency);
-	ItemStack checkNearestPickup(FPoint hero_pos, int &currency, MenuInventory *inv);
+	ItemStack checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv);
+	ItemStack checkAutoPickup(FPoint hero_pos, MenuInventory *inv);
+	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 

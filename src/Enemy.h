@@ -46,7 +46,6 @@ public:
 	void newState(int state);
 	virtual void doRewards(int source_type);
 	void InstantDeath();
-	void CheckSummonSustained();
 
 	std::string type;
 
@@ -58,8 +57,6 @@ public:
 	// other flags
 	bool reward_xp;
 	bool instant_power;
-	bool summoned;
-	int summoned_power_index;
 	int kill_source_type;
 
 };

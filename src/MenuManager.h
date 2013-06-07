@@ -121,6 +121,7 @@ public:
 	bool menus_open;
 	ItemStack drop_stack;
 
+	bool isDragging();
 	bool requestingExit() { return done; }
 };
 

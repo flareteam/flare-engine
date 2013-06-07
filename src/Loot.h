@@ -33,7 +33,6 @@ public:
 	ItemStack stack;
 	Point pos;
 	Animation *animation;
-	int currency;
 	TooltipData tip;
 
 	Loot();
