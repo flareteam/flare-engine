@@ -43,9 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero) {
-	items = _items;
-	map = _map; // we need to be able to read loot that drops from map containers
+LootManager::LootManager(StatBlock *_hero) {
 	hero = _hero; // we need the player's position for dropping loot in a valid spot
 
 	tip = new WidgetTooltip();
@@ -182,7 +180,7 @@ void LootManager::checkEnemiesForLoot() {
 		else { // random loot
 			//determine position
 			Point pos = hero->pos;
-			if (map->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false))
+			if (mapr->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false))
 				pos = e->stats.pos;
 
 			determineLootByEnemy(e, pos);
@@ -209,8 +207,8 @@ void LootManager::checkMapForLoot() {
 	int chance = rand() % 100;
 
 	// first drop any 'fixed' (0% chance) items
-	for (unsigned i = map->loot.size(); i > 0; i--) {
-		ec = &map->loot[i-1];
+	for (unsigned i = mapr->loot.size(); i > 0; i--) {
+		ec = &mapr->loot[i-1];
 		if (ec->z == 0) {
 			p.x = ec->x;
 			p.y = ec->y;
@@ -228,13 +226,13 @@ void LootManager::checkMapForLoot() {
 
 			addLoot(new_loot, p);
 
-			map->loot.erase(map->loot.begin()+i-1);
+			mapr->loot.erase(mapr->loot.begin()+i-1);
 		}
 	}
 
 	// now pick up to 1 random item to drop
-	for (unsigned i = map->loot.size(); i > 0; i--) {
-		ec = &map->loot[i-1];
+	for (unsigned i = mapr->loot.size(); i > 0; i--) {
+		ec = &mapr->loot[i-1];
 
 		if (possible_ids.empty()) {
 			// Don't use item find bonus for currency
@@ -246,7 +244,7 @@ void LootManager::checkMapForLoot() {
 			if (chance < max_chance) {
 				possible_ids.push_back(i-1);
 				common_chance = ec->z;
-				i=map->loot.size(); // start searching from the beginning
+				i=mapr->loot.size(); // start searching from the beginning
 				continue;
 			}
 		}
@@ -261,7 +259,7 @@ void LootManager::checkMapForLoot() {
 		int chosen_loot = 0;
 		if (possible_ids.size() > 1) chosen_loot = rand() % possible_ids.size();
 
-		ec = &map->loot[chosen_loot];
+		ec = &mapr->loot[chosen_loot];
 		p.x = ec->x;
 		p.y = ec->y;
 
@@ -279,7 +277,7 @@ void LootManager::checkMapForLoot() {
 		addLoot(new_loot, p);
 	}
 
-	map->loot.clear();
+	mapr->loot.clear();
 }
 
 /**

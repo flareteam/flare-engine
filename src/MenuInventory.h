@@ -28,8 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuItemStorage.h"
 #include "WidgetLabel.h"
 
-class ItemManager;
-class PowerManager;
 class StatBlock;
 class WidgetButton;
 
@@ -38,9 +36,7 @@ const int CARRIED = 1;
 
 class MenuInventory : public Menu {
 private:
-	ItemManager *items;
 	StatBlock *stats;
-	PowerManager *powers;
 
 	void loadGraphics();
 	int areaOver(Point position);
@@ -63,7 +59,7 @@ private:
 	SDL_Color color_high;
 
 public:
-	MenuInventory(ItemManager *items, StatBlock *stats, PowerManager *powers);
+	MenuInventory(StatBlock *stats);
 	~MenuInventory();
 	void update();
 	void logic();

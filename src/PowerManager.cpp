@@ -847,6 +847,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 
 	Map_Enemy espawn;
 	espawn.type = powers[power_index].spawn_type;
+	espawn.summoner = src_stats;
 
 	// enemy spawning position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {

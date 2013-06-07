@@ -48,7 +48,7 @@ protected:
 	bool move_to_safe_dist;
 
 public:
-	BehaviorStandard(Enemy *_e, EnemyManager *_em);
+	BehaviorStandard(Enemy *_e);
 	void logic();
 
 };
