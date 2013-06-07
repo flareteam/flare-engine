@@ -208,12 +208,12 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->area.y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "number") {
-		// @ATTR number|[min(integer), max(integer]|Defines the range of enemies in group
+		// @ATTR enemygroup.number|[min(integer), max(integer]|Defines the range of enemies in group
 		group->numbermin = toInt(infile.nextValue());
 		group->numbermax = toInt(infile.nextValue());
 	}
 	else if (infile.key == "chance") {
-		// @ATTR chance|integer|Percentage of chance
+		// @ATTR enemygroup.chance|integer|Percentage of chance
 		float n = toInt(infile.nextValue()) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
@@ -258,7 +258,7 @@ void Map::loadEvent(FileParser &infile) {
 		events.back().location.h = toInt(infile.nextValue());
 	}
 	else if (infile.key == "hotspot") {
-		//  @ATTR event.hotspot|[[x,y,w,h]:location]|Event uses location as hotspot or defined by rect.
+		//  @ATTR event.hotspot|[ [x, y, w, h] : location ]|Event uses location as hotspot or defined by rect.
 		if (infile.val == "location") {
 			events.back().hotspot.x = events.back().location.x;
 			events.back().hotspot.y = events.back().location.y;
