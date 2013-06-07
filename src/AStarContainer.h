@@ -61,16 +61,18 @@ class AStarContainer
         *
         *  A more detailed explanation of the structure can be found at the below web address.
         *  Please note that there is additional code found in this class which is not mentioned in the article. This is to provide an index based on map position.
-        *  Also note that the code within the article is based on arrays with starting position 1
+        *  Also note that the code within the article is based on arrays with starting position 1, whereas we use 0 based arrays.
         *  http://www.policyalmanac.org/games/binaryHeaps.htm
         */
         AStarNode** nodes;
 
-        /* This is an array of integers which acts as an index for the main node array.
-        *  This array is a one dimentional array but is used as a 2 dimentional array by using the map_width value.
-        *  The map width is always assumed to be 256 even if it smaller. This allows the array index to be calculated faster.
-        *  To access an element in this array, use map_pos[x_position + (y_position << 8)]
-        *  To access an AStarNode based on map position use: nodes[map_pos[x_position + (y_position << 8)]]
+        /* This is an array of astar_mapcol (short[256]) which acts as an index for the main node array.
+        *  Its essentially a 2d array: short[map_width][256],
+        *  so elements can be accessed using cartesian coordinates e.g. map_pos[x][y]
+        *  To access an AStarNode based on map position use: nodes[map_pos[x][y]]
+        *
+        *  The map height is always set to 256 even if the actual map is smaller.
+        *  This helps with initialisation and potentially allows the compiler to optimise array access.
         *
         *  The data in this array is initialised as -1, which indicates hat there is no corresponding node for that position
         *  This must be maintained when nodes are added, removed and re-ordered in the node array
