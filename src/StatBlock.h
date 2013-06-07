@@ -125,8 +125,8 @@ public:
 	std::string sfx_prefix;
 
 	int level;
-	int xp;
-	int xp_table[MAX_CHARACTER_LEVEL+1];
+	unsigned long xp;
+	unsigned long xp_table[MAX_CHARACTER_LEVEL+1];
 	bool level_up;
 	bool check_title;
 	int stat_points_per_level;
@@ -260,9 +260,6 @@ public:
 	int melee_range;
 	int threat_range;
 	bool passive_attacker;//enemy will not initiate combat unless attacked
-	Point hero_pos;
-	char hero_direction;
-	bool hero_alive;
 	int hero_stealth;
 	Point last_seen;
 	int turn_delay;

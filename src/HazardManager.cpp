@@ -27,14 +27,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyManager.h"
 #include "Hazard.h"
 #include "HazardManager.h"
-#include "PowerManager.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
-HazardManager::HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies) {
-	powers = _powers;
-	hero = _hero;
-	enemies = _enemies;
+HazardManager::HazardManager() {
 }
 
 void HazardManager::logic() {
@@ -101,12 +98,12 @@ void HazardManager::logic() {
 
 			// process hazards that can hurt the hero
 			if (h[i]->source_type != SOURCE_TYPE_HERO && h[i]->source_type != SOURCE_TYPE_ALLY) { //enemy or neutral sources
-				if (hero->stats.hp > 0 && h[i]->active) {
-					if (isWithin(round(h[i]->pos), h[i]->radius, hero->stats.pos)) {
-						if (!h[i]->hasEntity(hero)) {
-							h[i]->addEntity(hero);
+				if (pc->stats.hp > 0 && h[i]->active) {
+					if (isWithin(round(h[i]->pos), h[i]->radius, pc->stats.pos)) {
+						if (!h[i]->hasEntity(pc)) {
+							h[i]->addEntity(pc);
 							// hit!
-							hit = hero->takeHit(*h[i]);
+							hit = pc->takeHit(*h[i]);
 							if (!h[i]->multitarget && hit) {
 								h[i]->active = false;
 								if (!h[i]->complete_animation) h[i]->lifespan = 0;
@@ -155,9 +152,9 @@ void HazardManager::checkNewHazards() {
 	}
 
 	// check hero hazards
-	if (hero->haz != NULL) {
-		h.push_back(hero->haz);
-		hero->haz = NULL;
+	if (pc->haz != NULL) {
+		h.push_back(pc->haz);
+		pc->haz = NULL;
 	}
 
 	// check monster hazards

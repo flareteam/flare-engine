@@ -35,9 +35,8 @@ class Enemy;
 class EnemyBehavior {
 protected:
 	Enemy *e;
-	EnemyManager *enemies;
 public:
-	EnemyBehavior(Enemy *_e, EnemyManager *_em);
+	EnemyBehavior(Enemy *_e);
 	virtual ~EnemyBehavior();
 	virtual void logic();
 };

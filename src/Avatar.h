@@ -37,7 +37,6 @@ using namespace std;
 
 class Entity;
 class Hazard;
-class PowerManager;
 class StatBlock;
 
 /**
@@ -96,10 +95,8 @@ private:
 	bool path_found;
 
 public:
-	Avatar(PowerManager *_powers, MapRenderer *_map);
+	Avatar();
 	~Avatar();
-
-	EnemyManager *enemies;
 
 	void init();
 	void loadLayerDefinitions();
