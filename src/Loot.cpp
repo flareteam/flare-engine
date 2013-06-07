@@ -25,7 +25,6 @@ Loot::Loot() {
 	pos.x = 0;
 	pos.y = 0;
 	animation = NULL;
-	currency = 0;
 	tip.clear();
 	gfx = "";
 }
@@ -37,7 +36,6 @@ Loot::Loot(const Loot &other) {
 	pos.y = other.pos.y;
 	loadAnimation(other.gfx);
 	animation->syncTo(other.animation);
-	currency = other.currency;
 	tip = other.tip;
 }
 
@@ -55,7 +53,6 @@ Loot& Loot::operator= (const Loot &other) {
 	stack.quantity = other.stack.quantity;
 	pos.x = other.pos.x;
 	pos.y = other.pos.y;
-	currency = other.currency;
 	tip = other.tip;
 
 	return *this;
