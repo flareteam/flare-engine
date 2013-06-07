@@ -71,10 +71,12 @@ public:
 	void drop(Point position, ItemStack stack);
 	void activate(Point position);
 
-	void add( ItemStack stack, int area = CARRIED, int slot = -1);
+	void add( ItemStack stack, int area = CARRIED, int slot = -1, bool play_sound = true);
 	void remove(int item);
 	void removeEquipped(int item);
 	void addCurrency(int count);
+	void removeCurrency(int count);
+	int getCurrency();
 	bool buy(ItemStack stack, int tab);
 	bool sell(ItemStack stack);
 	bool stashAdd(ItemStack stack);
@@ -108,6 +110,8 @@ public:
 	bool changed_artifact;
 
 	std::string log_msg;
+
+	ItemStack drop_stack;
 
 	TabList tablist;
 

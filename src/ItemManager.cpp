@@ -205,8 +205,14 @@ void ItemManager::loadItems() {
 		}
 		else if (infile.key == "gfx")
 			items[id].gfx = infile.val;
-		else if (infile.key == "loot_animation")
-			items[id].loot_animation = infile.val;
+		else if (infile.key == "loot_animation") {
+			infile.val = infile.val + ',';
+			LootAnimation la;
+			la.name = eatFirstString(infile.val, ',');
+			la.low = eatFirstInt(infile.val, ',');
+			la.high = eatFirstInt(infile.val, ',');
+			items[id].loot_animation.push_back(la);
+		}
 		else if (infile.key == "power") {
 			if (toInt(infile.val) > 0) {
 				items[id].power = toInt(infile.val);
@@ -425,8 +431,8 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	TooltipData tip;
 	SDL_Color color = color_normal;
-	string quality_desc = "";	
-	
+	string quality_desc = "";
+
 	if (item == 0) return tip;
 
 	// color quality
@@ -551,7 +557,7 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 
 	if (COLORBLIND && quality_desc != "") {
 		color = color_normal;
-		tip.addText(msg->get("Quality: %s", quality_desc), color);	
+		tip.addText(msg->get("Quality: %s", quality_desc), color);
 	}
 
 	// flavor text
@@ -560,7 +566,7 @@ TooltipData ItemManager::getTooltip(int item, StatBlock *stats, int context) {
 	}
 
 	// buy or sell price
-	if (items[item].price > 0) {
+	if (items[item].price > 0 && item != CURRENCY_ID) {
 
 		int price_per_unit;
 		if (context == VENDOR_BUY) {

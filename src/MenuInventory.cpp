@@ -49,6 +49,9 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	changed_artifact = true;
 	log_msg = "";
 
+	drop_stack.item = 0;
+	drop_stack.quantity = 0;
+
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// Load config settings
@@ -188,7 +191,7 @@ void MenuInventory::logic() {
 	}
 
 	// a copy of currency is kept in stats, to help with various situations
-	stats->currency = currency;
+	stats->currency = currency = getCurrency();
 
 	// check close button
 	if (visible) {
@@ -351,7 +354,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid) {
 			if( inventory[area][slot].item == stack.item) {
 				// Merge the stacks
-				add( stack, area, slot);
+				add(stack, area, slot, false);
 			}
 			else if( inventory[drag_prev_src][drag_prev_slot].item == 0) {
 				// Swap the two stacks
@@ -375,7 +378,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			if (slot != drag_prev_slot) {
 				if( inventory[area][slot].item == stack.item) {
 					// Merge the stacks
-					add( stack, area, slot);
+					add(stack, area, slot, false);
 				}
 				else if( inventory[area][slot].item == 0) {
 					// Drop the stack
@@ -399,7 +402,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			// also check to see if the hero meets the requirements
 			if (inventory[area][slot].item == stack.item || drag_prev_src == -1) {
 				// Merge the stacks
-				add( stack, area, slot);
+				add(stack, area, slot, false);
 			}
 			else if( inventory[area][slot].item == 0) {
 				// Drop the stack
@@ -496,7 +499,7 @@ void MenuInventory::activate(Point position) {
 				stack = click(position);
 				if( inventory[EQUIPMENT][equip_slot].item == stack.item) {
 					// Merge the stacks
-					add( stack, EQUIPMENT, equip_slot);
+					add(stack, EQUIPMENT, equip_slot, false);
 				}
 				else if( inventory[EQUIPMENT][equip_slot].item == 0) {
 					// Drop the stack
@@ -530,8 +533,9 @@ void MenuInventory::activate(Point position) {
  * @param area Area number where it will try to store the item
  * @param slot Slot number where it will try to store the item
  */
-void MenuInventory::add(ItemStack stack, int area, int slot) {
-	items->playSound(stack.item);
+void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
+	if (stack.quantity > 0 && play_sound)
+		items->playSound(stack.item);
 
 	if (stack.item != 0) {
 		if (area < 0) {
@@ -574,12 +578,14 @@ void MenuInventory::add(ItemStack stack, int area, int slot) {
 					itemReturn( stack);
 				}
 				else {
-					add( stack);
+					add(stack, CARRIED, -1, false);
 				}
 			}
 		}
 		else {
 			// No available slot, drop
+			drop_stack.item = stack.item;
+			drop_stack.quantity = stack.quantity;
 		}
 	}
 }
@@ -603,11 +609,29 @@ void MenuInventory::removeEquipped(int item) {
 }
 
 /**
- * Add currency to the current total
+ * Add currency item
  */
 void MenuInventory::addCurrency(int count) {
-	currency += count;
-	loot->playCurrencySound();
+	ItemStack stack;
+	stack.item = CURRENCY_ID;
+	stack.quantity = count;
+	add(stack, CARRIED, -1, false);
+}
+
+/**
+ * Remove currency item
+ */
+void MenuInventory::removeCurrency(int count) {
+	for (int i=0; i<count; i++) {
+		inventory[CARRIED].remove(CURRENCY_ID);
+	}
+}
+
+/**
+ * Count the number of currency items in the inventory
+ */
+int MenuInventory::getCurrency() {
+	return getItemCountCarried(CURRENCY_ID);
 }
 
 /**
@@ -620,10 +644,9 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
 	else value_each = items->items[stack.item].getSellPrice();
 
 	int count = value_each * stack.quantity;
-	if( currency >= count) {
-		currency -= count;
-
-		loot->playCurrencySound();
+	if( getCurrency() >= count) {
+		removeCurrency(count);
+		items->playSound(CURRENCY_ID);
 		return true;
 	}
 	else {
@@ -645,13 +668,16 @@ bool MenuInventory::stashAdd(ItemStack stack) {
  * Sell a specific stack of items
  */
 bool MenuInventory::sell(ItemStack stack) {
+	// can't sell currency
+	if (stack.item == CURRENCY_ID) return false;
+
 	// items that have no price cannot be sold
 	if (items->items[stack.item].price == 0) return false;
 
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
-	currency += value;
-	loot->playCurrencySound();
+	addCurrency(value);
+	items->playSound(CURRENCY_ID);
 	drag_prev_src = -1;
 	return true;
 }
