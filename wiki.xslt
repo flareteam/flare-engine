@@ -3,12 +3,14 @@
 <xsl:template match="/classes">
   <xsl:for-each select="class">
 <xsl:text>&#xa;</xsl:text>
+***
 #### <xsl:value-of select="@name"/>
 <xsl:text>&#xa;</xsl:text>
 <xsl:value-of select="description"/>
 <xsl:text>&#xa;</xsl:text>
     <xsl:for-each select="attributes/attribute">
 **<xsl:value-of select="@name"/>**, _<xsl:value-of select="@type"/>_, <xsl:value-of select="."/>
+<xsl:text>&#xa;</xsl:text>
     </xsl:for-each>
 <xsl:text>&#xa;</xsl:text>
   </xsl:for-each>
@@ -16,3 +18,4 @@
 </xsl:template>
 
 </xsl:stylesheet>
+
