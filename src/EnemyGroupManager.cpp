@@ -37,6 +37,7 @@ EnemyGroupManager::~EnemyGroupManager() {
 void EnemyGroupManager::parseEnemyFilesAndStore() {
 	FileParser infile;
 
+	// @CLASS enemies|Describing enemies files in enemies/
 	if (!infile.open("enemies", true, false))
 		return;
 
@@ -51,12 +52,15 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 		}
 
 		if (infile.key == "level") {
+			// @ATTR level|integer|Level of the enemy
 			new_enemy.level = atoi(infile.val.c_str());
 		}
 		else if (infile.key == "rarity") {
+			// @ATTR rarity|[common,uncommon,rare]|Enemy rarity
 			new_enemy.rarity = infile.val.c_str();
 		}
 		else if (infile.key == "categories") {
+			// @ATTR categories|string,...|Comma separated list of enemy categories
 			string cat;
 			while ( (cat = infile.nextValue()) != "") {
 				_categories[cat].push_back(new_enemy);
