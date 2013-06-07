@@ -138,7 +138,6 @@ void LootManager::logic() {
  */
 void LootManager::renderTooltips(FPoint cam) {
 	Point dest;
-	stringstream ss;
 
 	vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
