@@ -23,7 +23,7 @@ AStarContainer::AStarContainer(unsigned int map_height, unsigned int node_limit)
     : size(0)
 {
     nodes = new AStarNode*[node_limit];
-    map_pos = new int[(map_height << 8) + 1];
+    map_pos = new short[(map_height << 8) + 1];
     //initialise the map array. A -1 value will mean there is no node at that position
     std::fill(map_pos, map_pos + (map_height << 8) + 1, -1);
 }
@@ -151,7 +151,7 @@ AStarCloseContainer::AStarCloseContainer(unsigned int map_height, unsigned int n
     : size(0)
 {
     nodes = new AStarNode*[node_limit];
-    map_pos = new int[(map_height << 8) + 1];
+    map_pos = new short[(map_height << 8) + 1];
 
     //initialise the map index array. A -1 value will mean there is no node at that position
     std::fill(map_pos, map_pos + (map_height << 8) + 1, -1);
