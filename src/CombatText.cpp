@@ -52,7 +52,7 @@ CombatText::CombatText() {
 				duration = toInt(infile.val);
 			}
 			else if(infile.key == "speed") {
-				// @ATTR duration|integer|Motion speed of the combat text.
+				// @ATTR speed|integer|Motion speed of the combat text.
 				speed = toInt(infile.val);
 			}
 		}
