@@ -39,7 +39,7 @@ using namespace std;
 
 const float CLICK_RANGE = 3; //for activating events
 
-MapRenderer::MapRenderer(CampaignManager *_camp)
+MapRenderer::MapRenderer()
 	: Map()
 	, index_objectlayer(0)
 	, music(NULL)
@@ -50,8 +50,6 @@ MapRenderer::MapRenderer(CampaignManager *_camp)
 	, backgroundsurface(NULL)
 	, backgroundsurfaceoffset()
 	, repaint_background(false)
-	, camp(_camp)
-	, powers(NULL)
 	, cam()
 	, map_change(false)
 	, teleportation(false)

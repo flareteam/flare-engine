@@ -26,13 +26,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
-#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "Entity.h"
-#include "MapRenderer.h"
-#include "PowerManager.h"
 #include "SharedResources.h"
 #include "UtilsMath.h"
+#include "SharedGameResources.h"
 
 #include <math.h>
 
@@ -46,7 +44,7 @@ const float speedMultiplyer[8] = { 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQR
 
 using namespace std;
 
-Entity::Entity(PowerManager *_powers, MapRenderer* _map)
+Entity::Entity()
 	: sprites(NULL)
 	, sfx_phys(false)
 	, sfx_ment(false)
@@ -55,9 +53,7 @@ Entity::Entity(PowerManager *_powers, MapRenderer* _map)
 	, sfx_critdie(false)
 	, sfx_block(false)
 	, activeAnimation(NULL)
-	, animationSet(NULL)
-	, map(_map)
-	, powers(_powers) {
+	, animationSet(NULL) {
 }
 
 Entity::Entity(const Entity &e)
@@ -70,9 +66,7 @@ Entity::Entity(const Entity &e)
 	, sfx_block(e.sfx_block)
 	, activeAnimation(new Animation(*e.activeAnimation))
 	, animationSet(e.animationSet)
-	, map(e.map)
-	, stats(StatBlock(e.stats))
-	, powers(e.powers) {
+	, stats(StatBlock(e.stats)) {
 }
 
 /**
@@ -83,8 +77,9 @@ Entity::Entity(const Entity &e)
  */
 bool Entity::move() {
 
+
 	if (stats.effects.forced_move)
-		return map->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, stats.movement_type, stats.hero);
+		return mapr->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, stats.movement_type, stats.hero);
 
 	if (stats.effects.speed == 0) return false;
 
@@ -92,8 +87,7 @@ bool Entity::move() {
 	float dx = speed * directionDeltaX[stats.direction];
 	float dy = speed * directionDeltaY[stats.direction];
 
-
-	bool full_move = map->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, stats.hero);
+	bool full_move = mapr->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, stats.hero);
 
 	return full_move;
 }
@@ -130,8 +124,8 @@ bool Entity::takeHit(const Hazard &h) {
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally) {
 		stats.join_combat = true;
 		stats.in_combat = true;
-		stats.last_seen.x = stats.hero_pos.x;
-		stats.last_seen.y = stats.hero_pos.y;
+		stats.last_seen.x = pc->stats.pos.x;
+		stats.last_seen.y = pc->stats.pos.y;
 		powers->activate(stats.power_index[BEACON], &stats, stats.pos); //emit beacon
 	}
 
@@ -245,7 +239,7 @@ bool Entity::takeHit(const Hazard &h) {
 	if (crit) {
 		dmg = dmg + h.dmg_max;
 		if(!stats.hero)
-			map->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
+			mapr->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
 	}
 
 	if(stats.hero)
@@ -308,7 +302,7 @@ bool Entity::takeHit(const Hazard &h) {
 					stats.cur_state = ENEMY_CRITDEAD;
 				else
 					stats.cur_state = ENEMY_DEAD;
-				map->collider.unblock(stats.pos.x,stats.pos.y);
+				mapr->collider.unblock(stats.pos.x,stats.pos.y);
 			}
 		}
 		// don't go through a hit animation if stunned

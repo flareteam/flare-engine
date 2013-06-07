@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Helper text to remind the player of active quests
  */
 
-#include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
 #include "Menu.h"
@@ -32,12 +31,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
 
-QuestLog::QuestLog(CampaignManager *_camp, MenuLog *_log) {
-	camp = _camp;
+QuestLog::QuestLog(MenuLog *_log) {
 	log = _log;
 
 	newQuestNotification = false;

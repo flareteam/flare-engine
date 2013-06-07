@@ -26,8 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class GameStatePlay
  */
 
-#include "Avatar.h"
-#include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStatePlay.h"
@@ -39,10 +37,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
-#include "PowerManager.h"
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
@@ -100,7 +98,7 @@ void GameStatePlay::saveGame() {
 		outfile << "carried=" << menu->inv->inventory[CARRIED].getItems() << "\n";
 
 		// spawn point
-		outfile << "spawn=" << map->respawn_map << "," << map->respawn_point.x << "," << map->respawn_point.y << "\n";
+		outfile << "spawn=" << mapr->respawn_map << "," << mapr->respawn_point.x << "," << mapr->respawn_point.y << "\n";
 
 		// action bar
 		outfile << "actionbar=";
@@ -256,23 +254,20 @@ void GameStatePlay::loadGame() {
 				menu->inv->inventory[CARRIED].setQuantities(infile.val);
 			}
 			else if (infile.key == "spawn") {
-				map->teleport_mapname = infile.nextValue();
-
-				if (fileExists(mods->locate("maps/" + map->teleport_mapname))) {
-					map->teleport_destination.x = toInt(infile.nextValue()) + 0.5;
-					map->teleport_destination.y = toInt(infile.nextValue()) + 0.5;
-					map->teleportation = true;
-
+				mapr->teleport_mapname = infile.nextValue();
+				if (fileExists(mods->locate("maps/" + mapr->teleport_mapname))) {
+					mapr->teleport_destination.x = toInt(infile.nextValue()) + 0.5;
+					mapr->teleport_destination.y = toInt(infile.nextValue()) + 0.5;
+					mapr->teleportation = true;
 					// prevent spawn.txt from putting us on the starting map
-					map->clearEvents();
+					mapr->clearEvents();
 				}
 				else {
-					fprintf(stderr, "Unable to find maps/%s, loading spawn.txt\n", map->teleport_mapname.c_str());
-					map->teleport_mapname = "spawn.txt";
-					map->teleport_destination.x = 1;
-					map->teleport_destination.y = 1;
-					map->teleportation = true;
-
+					fprintf(stderr, "Unable to find maps/%s, loading spawn.txt\n", mapr->teleport_mapname.c_str());
+					mapr->teleport_mapname = "spawn.txt";
+					mapr->teleport_destination.x = 1;
+					mapr->teleport_destination.y = 1;
+					mapr->teleportation = true;
 				}
 			}
 			else if (infile.key == "actionbar") {

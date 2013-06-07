@@ -27,27 +27,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
-#include "Avatar.h"
 #include "CommonIncludes.h"
 #include "EnemyManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
-#include "PowerManager.h"
 #include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
-Avatar::Avatar(PowerManager *_powers, MapRenderer *_map)
-	: Entity(_powers, _map)
+Avatar::Avatar()
+	: Entity()
 	, lockSwing(false)
 	, lockCast(false)
 	, lockShoot(false)
-	, enemies(NULL)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -78,9 +76,9 @@ void Avatar::init() {
 	// other init
 	sprites = 0;
 	stats.cur_state = AVATAR_STANCE;
-	stats.pos.x = map->spawn.x;
-	stats.pos.y = map->spawn.y;
-	stats.direction = map->spawn_dir;
+	stats.pos.x = mapr->spawn.x;
+	stats.pos.y = mapr->spawn.y;
+	stats.direction = mapr->spawn_dir;
 	current_power = 0;
 	newLevelNotification = false;
 
@@ -269,11 +267,11 @@ void Avatar::set_direction() {
 	if (MOUSE_MOVE) {
 		FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
 		// if no line of movement to target, use pathfinder
-		if (!map->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
+		if (!mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
 			vector<FPoint> path;
 
 			// target first waypoint
-			map->collider.compute_path(stats.pos, target, path, stats.movement_type);
+			mapr->collider.compute_path(stats.pos, target, path, stats.movement_type);
 			if(!path.empty())
 				target = path.back();
 		}
@@ -315,9 +313,9 @@ void Avatar::handlePower(int actionbar_power) {
 		// check requirements
 		if (!stats.canUsePower(power, actionbar_power))
 			return;
-		if (power.requires_los && !map->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
+		if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
 			return;
-		if (power.requires_empty_target && !map->collider.is_empty(target.x, target.y))
+		if (power.requires_empty_target && !mapr->collider.is_empty(target.x, target.y))
 			return;
 		if (stats.hero_cooldown[actionbar_power] > 0)
 			return;
@@ -397,7 +395,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	}
 
 	// clear current space to allow correct movement
-	map->collider.unblock(stats.pos.x, stats.pos.y);
+	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 
 	// turn on all passive powers
 	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn && !transform_triggered) powers->activatePassives(&stats);
@@ -410,15 +408,15 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 		// calc new cam position from player position
 		// cam is focused at player position
-		map->cam.x = stats.pos.x;
-		map->cam.y = stats.pos.y;
+		mapr->cam.x = stats.pos.x;
+		mapr->cam.y = stats.pos.y;
 
-		map->collider.block(stats.pos.x, stats.pos.y, false);
+		mapr->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
 	}
 	if (stats.effects.stun) {
 
-		map->collider.block(stats.pos.x, stats.pos.y, false);
+		mapr->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
 	}
 
@@ -689,19 +687,19 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 			// allow respawn with Accept if not permadeath
 			if (inpt->pressing[ACCEPT]) {
 				inpt->lock[ACCEPT] = true;
-				map->teleportation = true;
-				map->teleport_mapname = map->respawn_map;
+				mapr->teleportation = true;
+				mapr->teleport_mapname = mapr->respawn_map;
 				if (stats.permadeath) {
 					// set these positions so it doesn't flash before jumping to Title
-					map->teleport_destination.x = stats.pos.x;
-					map->teleport_destination.y = stats.pos.y;
+					mapr->teleport_destination.x = stats.pos.x;
+					mapr->teleport_destination.y = stats.pos.y;
 				}
 				else {
 					respawn = true;
 
 					// set teleportation variables.  GameEngine acts on these.
-					map->teleport_destination.x = map->respawn_point.x;
-					map->teleport_destination.y = map->respawn_point.y;
+					mapr->teleport_destination.x = mapr->respawn_point.x;
+					mapr->teleport_destination.y = mapr->respawn_point.y;
 				}
 			}
 
@@ -713,11 +711,11 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 	// calc new cam position from player position
 	// cam is focused at player position
-	map->cam.x = stats.pos.x;
-	map->cam.y = stats.pos.y;
+	mapr->cam.x = stats.pos.x;
+	mapr->cam.y = stats.pos.y;
 
 	// check for map events
-	map->checkEvents(stats.pos);
+	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
 	for (int i = 0; i < POWER_COUNT; i++) {
@@ -726,7 +724,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	}
 
 	// make the current square solid
-	map->collider.block(stats.pos.x, stats.pos.y, false);
+	mapr->collider.block(stats.pos.x, stats.pos.y, false);
 }
 
 void Avatar::transform() {
@@ -799,7 +797,7 @@ void Avatar::untransform() {
 	inpt->unlockActionBar();
 
 	// Only allow untransform when on a valid tile
-	if (!map->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) return;
+	if (!mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) return;
 
 	stats.transformed = false;
 	transform_triggered = true;

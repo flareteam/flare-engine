@@ -32,14 +32,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Animation;
 class AnimationSet;
-class MapRenderer;
 
 class Entity {
 protected:
 	SDL_Surface *sprites;
 
 public:
-	Entity(PowerManager *_powers, MapRenderer*);
+	Entity();
 	Entity(const Entity&);
 	virtual ~Entity();
 
@@ -64,9 +63,7 @@ public:
 	Animation *activeAnimation;
 	AnimationSet *animationSet;
 
-	MapRenderer* map;
 	StatBlock stats;
-	PowerManager *powers;
 };
 
 extern const int directionDeltaX[];

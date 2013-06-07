@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
-#include "PowerManager.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "StatBlock.h"
@@ -34,13 +33,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetSlot.h"
 #include "WidgetLabel.h"
+#include "SharedGameResources.h"
 
 #include <climits>
 
 using namespace std;
 
-MenuActionBar::MenuActionBar(PowerManager *_powers, StatBlock *_hero, SDL_Surface *_icons) {
-	powers = _powers;
+MenuActionBar::MenuActionBar(StatBlock *_hero, SDL_Surface *_icons) {
 	hero = _hero;
 	icons = _icons;
 

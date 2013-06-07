@@ -40,8 +40,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <queue>
 
-class CampaignManager;
-class PowerManager;
 class FileParser;
 class WidgetTooltip;
 
@@ -121,11 +119,8 @@ private:
 	bool repaint_background;
 
 public:
-	CampaignManager *camp;
-	PowerManager *powers;
-
 	// functions
-	MapRenderer(CampaignManager *_camp);
+	MapRenderer();
 	~MapRenderer();
 
 	MapRenderer(const MapRenderer &copy); // not implemented
