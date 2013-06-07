@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 *
 *  All code in the class assumes that the nodes and points provided are within the bounds of the map limits
 */
+typedef int astar_maprow[256];
 class AStarContainer
 {
     public:
@@ -74,7 +75,7 @@ class AStarContainer
         *  The data in this array is initialised as -1, which indicates hat there is no corresponding node for that position
         *  This must be maintained when nodes are added, removed and re-ordered in the node array
         */
-        int* map_pos;
+        astar_maprow* map_pos;
 };
 
 /* This class is used to store the closed list of a* nodes
@@ -95,7 +96,7 @@ public:
 private:
     unsigned int size;
     AStarNode** nodes;
-    int* map_pos;
+    astar_maprow* map_pos;
 
 };
 
