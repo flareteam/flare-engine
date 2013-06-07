@@ -52,27 +52,33 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 
 	FileParser infile;
 	// load loot animation settings from engine config file
+	// @CLASS Loot|Description of engine/loot.txt
 	if (infile.open("engine/loot.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
 			if (infile.key == "loot_animation") {
+				// @ATTR loot_animation|x(int), y(int), w(int), h(int)|
 				animation_pos.x = eatFirstInt(infile.val, ',');
 				animation_pos.y = eatFirstInt(infile.val, ',');
 				animation_pos.w = eatFirstInt(infile.val, ',');
 				animation_pos.h = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "loot_animation_offset") {
+				// @ATTR loot_animation_offset|x (integer), y (integer)|
 				animation_offset.x = eatFirstInt(infile.val, ',');
 				animation_offset.y = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "tooltip_margin") {
+				// @ATTR tooltip_margin|integer|
 				tooltip_margin = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "autopickup_range") {
+// @ATTR autopickup_range|integer|Define the range for autopickup feature
 				AUTOPICKUP_RANGE = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "autopickup_currency") {
+				// @ATTR autopickup_currency|integer|Enable autopickup for currency
 				int currency = eatFirstInt(infile.val, ',');
 				if (currency == 1)
 					AUTOPICKUP_CURRENCY = true;
@@ -80,12 +86,15 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 					AUTOPICKUP_CURRENCY = false;
 			}
 			else if (infile.key == "currency_name") {
+				// @ATTR currenct_name|string|Define the name of currency in game
 				CURRENCY = msg->get(eatFirstString(infile.val, ','));
 			}
 			else if (infile.key == "vendor_ratio") {
+				// @ATTR vendor_ratio|integer|Prices ratio for vendors
 				VENDOR_RATIO = eatFirstInt(infile.val, ',') / 100.0f;
 			}
 			else if (infile.key == "currency_range") {
+				// @ATTR currency_range|filename (string),low (integer), high (integer)|
 				CurrencyRange cr;
 				cr.filename = eatFirstString(infile.val, ',');
 				cr.low = eatFirstInt(infile.val, ',');
@@ -93,9 +102,11 @@ LootManager::LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_her
 				currency_range.push_back(cr);
 			}
 			else if (infile.key == "sfx_loot") {
+				// @ATTR sfx_loot|string|Sound effect for dropping loot.
 				sfx_loot =  snd->load(eatFirstString(infile.val, ','), "LootManager dropping loot");
 			}
 			else if (infile.key == "sfx_currency") {
+				// @ATTR sfx_currency|string|Sound effect for dropping currency.
 				sfx_currency =  snd->load(eatFirstString(infile.val, ','), "LootManager currency");
 			}
 		}
