@@ -113,6 +113,8 @@ public:
 	bool transformed;
 	bool refresh_stats;
 	bool converted;
+	bool summoned;
+	int summoned_power_index;
 
 	MOVEMENTTYPE movement_type;
 	bool flying;
@@ -316,6 +318,15 @@ public:
 	int prev_maxmp;
 	int pres_hp;
 	int pres_mp;
+
+	// links to summoned creatures and the entity which summoned this
+	std::vector<StatBlock*> summons;
+	StatBlock* summoner;
+
+	void removeFromSummons();
+
+	bool summonLimitReached(int power_id) const;
+
 };
 
 #endif

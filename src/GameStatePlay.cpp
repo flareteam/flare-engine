@@ -182,30 +182,26 @@ void GameStatePlay::checkLoot() {
 	if (!pc->stats.alive)
 		return;
 
+	if (menu->isDragging())
+		return;
+
 	ItemStack pickup;
-	int currency;
 
 	// Autopickup
 	if (AUTOPICKUP_CURRENCY) {
-		pickup = loot->checkAutoPickup(pc->stats.pos, currency);
-		if (currency > 0) {
-			menu->inv->addCurrency(currency);
-		}
+		pickup = loot->checkAutoPickup(pc->stats.pos, menu->inv);
+		if (pickup.item > 0) menu->inv->add(pickup);
 	}
 
 	// Pickup with mouse click
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 
-		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, currency, menu->inv);
+		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, menu->inv);
 		if (pickup.item > 0) {
 			inpt->lock[MAIN1] = true;
 			menu->inv->add(pickup);
 
 			camp->setStatus(items->items[pickup.item].pickup_status);
-		}
-		else if (currency > 0) {
-			inpt->lock[MAIN1] = true;
-			menu->inv->addCurrency(currency);
 		}
 		if (loot->full_msg) {
 			inpt->lock[MAIN1] = true;
@@ -218,16 +214,12 @@ void GameStatePlay::checkLoot() {
 	// Pickup with ACCEPT key/button
 	if ((inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT])) {
 
-		pickup = loot->checkNearestPickup(pc->stats.pos, currency, menu->inv);
+		pickup = loot->checkNearestPickup(pc->stats.pos, menu->inv);
 		if (pickup.item > 0) {
 			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 			menu->inv->add(pickup);
 
 			camp->setStatus(items->items[pickup.item].pickup_status);
-		}
-		else if (currency > 0) {
-			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-			menu->inv->addCurrency(currency);
 		}
 		if (loot->full_msg) {
 			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
@@ -530,6 +522,14 @@ void GameStatePlay::checkLootDrop() {
 		camp->drop_stack.quantity = 0;
 	}
 
+	// if the player been directly given items, but their inventory is full
+	// this happens when adding currency from older save files
+	if (menu->inv->drop_stack.item > 0) {
+		loot->addLoot(menu->inv->drop_stack, pc->stats.pos);
+		menu->inv->drop_stack.item = 0;
+		menu->inv->drop_stack.quantity = 0;
+	}
+
 }
 
 /**
@@ -816,13 +816,13 @@ void GameStatePlay::logic() {
 	}
 
 	// these actions occur whether the game is paused or not.
-	checkNotifications();
-	checkLootDrop();
 	checkTeleport();
+	checkLootDrop();
 	checkLog();
 	checkEquipmentChange();
 	checkConsumable();
 	checkStash();
+	checkNotifications();
 	checkCancel();
 
 	mapr->logic();
