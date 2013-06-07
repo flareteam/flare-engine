@@ -28,12 +28,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 
-class CampaignManager;
 class MenuLog;
 
 class QuestLog {
 private:
-	CampaignManager *camp;
 	MenuLog *log;
 
 	// inner vector is a chain of events per quest, outer vector is a
@@ -41,7 +39,7 @@ private:
 	std::vector<std::vector<Event_Component> >quests;
 
 public:
-	QuestLog(CampaignManager *_camp, MenuLog *_log);
+	QuestLog(MenuLog *_log);
 	~QuestLog();
 	void loadAll();
 	void loadIndex(const std::string& filename);

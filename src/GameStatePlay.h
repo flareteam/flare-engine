@@ -31,15 +31,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameState.h"
 
 class Avatar;
-class CampaignManager;
 class Enemy;
-class EnemyManager;
 class HazardManager;
-class ItemManager;
-class MapRenderer;
 class MenuManager;
 class NPCManager;
-class PowerManager;
 class QuestLog;
 class WidgetLabel;
 
@@ -66,12 +61,6 @@ class GameStatePlay : public GameState {
 private:
 	Enemy *enemy;
 
-	PowerManager *powers;
-	ItemManager *items;
-	CampaignManager *camp;
-	MapRenderer *map;
-	Avatar *pc;
-	EnemyManager *enemies;
 	HazardManager *hazards;
 	MenuManager *menu;
 	NPCManager *npcs;
@@ -121,7 +110,7 @@ public:
 	void resetGame();
 	int game_slot;
 
-	Avatar *getAvatar() const { return pc; }
+	Avatar *getAvatar() const;
 };
 
 #endif
