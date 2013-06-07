@@ -52,6 +52,10 @@ void GameStatePlay::saveGame() {
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
 
+	// remove items with zero quantity from inventory
+	menu->inv->inventory[EQUIPMENT].clean();
+	menu->inv->inventory[CARRIED].clean();
+
 	ofstream outfile;
 
 	stringstream ss;
@@ -309,6 +313,10 @@ void GameStatePlay::loadGame() {
 
 	menu->inv->inventory[EQUIPMENT].fillEquipmentSlots();
 	menu->inv->addCurrency(currency);
+
+	// remove items with zero quantity from inventory
+	menu->inv->inventory[EQUIPMENT].clean();
+	menu->inv->inventory[CARRIED].clean();
 
 	// Load stash
 	loadStash();

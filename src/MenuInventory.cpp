@@ -534,7 +534,10 @@ void MenuInventory::activate(Point position) {
  * @param slot Slot number where it will try to store the item
  */
 void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
-	if (stack.quantity > 0 && play_sound)
+	if (stack.quantity < 1)
+		return;
+
+	if (play_sound)
 		items->playSound(stack.item);
 
 	if (stack.item != 0) {
