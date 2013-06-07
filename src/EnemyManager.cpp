@@ -84,9 +84,9 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 	e.type = type_id;
 
 	if (e.stats.animations == "")
-		cerr << "Warning: no animation file specified for entity: " << type_id << endl;
+		fprintf(stderr, "Warning: no animation file specified for entity: %s\n", type_id.c_str());
 	if (e.stats.sfx_prefix == "")
-		cerr << "Warning: no sfx_prefix specified for entity: " << type_id << endl;
+		fprintf(stderr, "Warning: no sfx_prefix specified for entity: %s\n", type_id.c_str());
 
 	loadAnimations(&e);
 	loadSounds(e.stats.sfx_prefix);
@@ -297,9 +297,9 @@ void EnemyManager::logic() {
 			unsigned pref_id = distance(sfx_prefixes.begin(), found);
 
 			if (pref_id >= sfx_prefixes.size()) {
-				cerr << "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '"
-					 << (*it)->stats.name << "', sfx_prefix: '"
-					 << (*it)->stats.sfx_prefix << "')" << endl;
+				fprintf(stderr, "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '%s', sfx_prefix: '%s')\n",
+						(*it)->stats.name.c_str(),
+						(*it)->stats.sfx_prefix.c_str());
 			}
 			else {
 				if ((*it)->sfx_phys)
