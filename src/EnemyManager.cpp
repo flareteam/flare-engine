@@ -140,8 +140,8 @@ void EnemyManager::handleNewMap () {
 		Enemy *e = getEnemyPrototype(me.type);
 
 		e->stats.waypoints = me.waypoints;
-		e->stats.pos.x = me.pos.x;
-		e->stats.pos.y = me.pos.y;
+		e->stats.pos.x = me.pos.x + 0.5;
+		e->stats.pos.y = me.pos.y + 0.5;
 		e->stats.direction = me.direction;
 		e->stats.wander = me.wander;
 		e->stats.wander_area = me.wander_area;
