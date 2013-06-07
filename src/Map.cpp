@@ -292,7 +292,7 @@ void Map::loadEventComponent(FileParser &infile) {
 		e->s = msg->get(infile.val);
 	}
 	else if (infile.key == "power_path") {
-		// @ATTR power_path|[hero:[x,y]]|Event power path
+		// @ATTR event.power_path|[hero:[x,y]]|Event power path
 		// x,y are src, if s=="hero" we target the hero,
 		// else we'll use values in a,b as coordinates
 		e->x = toInt(infile.nextValue());
