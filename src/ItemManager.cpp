@@ -379,14 +379,10 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 
 	if (stack.quantity > 1 || items[stack.item].max_quantity > 1) {
 		// stackable item : show the quantity
-		stringstream ss;
-		if (stack.quantity < 1000)
-			ss << stack.quantity;
-		else
-			ss << (stack.quantity/1000) << "K";
+		std::string quantity = abbreviateKilo(stack.quantity);
 
 		WidgetLabel label;
-		label.set(dest.x + 2, dest.y + 2, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), color_normal);
+		label.set(dest.x + 2, dest.y + 2, JUSTIFY_LEFT, VALIGN_TOP, quantity, color_normal);
 		label.render();
 	}
 }

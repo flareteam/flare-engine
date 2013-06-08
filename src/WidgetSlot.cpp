@@ -134,13 +134,7 @@ void WidgetSlot::setAmount(int _amount, int _max_amount) {
 	amount = _amount;
 	max_amount = _max_amount;
 
-	stringstream ss;
-	if (amount < 1000)
-		ss << amount;
-	else
-		ss << (amount/1000) << "K";
-
-	amount_str = ss.str();
+	amount_str = abbreviateKilo(amount);
 }
 
 void WidgetSlot::render(SDL_Surface *target) {
