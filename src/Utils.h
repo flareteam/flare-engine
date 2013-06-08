@@ -152,4 +152,6 @@ SDL_Surface* loadGraphicSurface(std::string filename,
 
 void setupSDLVideoMode(unsigned width, unsigned height);
 
+std::string abbreviateKilo(int amount);
+
 #endif
