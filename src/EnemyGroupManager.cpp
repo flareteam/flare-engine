@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
+#include "UtilsParsing.h"
 
 #include <cassert>
 
@@ -51,10 +52,10 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 		}
 
 		if (infile.key == "level") {
-			new_enemy.level = atoi(infile.val.c_str());
+			new_enemy.level = toInt(infile.val);
 		}
 		else if (infile.key == "rarity") {
-			new_enemy.rarity = infile.val.c_str();
+			new_enemy.rarity = infile.val;
 		}
 		else if (infile.key == "categories") {
 			string cat;

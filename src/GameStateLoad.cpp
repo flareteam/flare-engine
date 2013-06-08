@@ -272,12 +272,12 @@ void GameStateLoad::readGameSlot(int slot) {
 		else if (infile.key == "class")
 			stats[slot].character_class = infile.val;
 		else if (infile.key == "xp")
-			stats[slot].xp = atoi(infile.val.c_str());
+			stats[slot].xp = toInt(infile.val);
 		else if (infile.key == "build") {
-			stats[slot].physical_character = atoi(infile.nextValue().c_str());
-			stats[slot].mental_character = atoi(infile.nextValue().c_str());
-			stats[slot].offense_character = atoi(infile.nextValue().c_str());
-			stats[slot].defense_character = atoi(infile.nextValue().c_str());
+			stats[slot].physical_character = toInt(infile.nextValue());
+			stats[slot].mental_character = toInt(infile.nextValue());
+			stats[slot].offense_character = toInt(infile.nextValue());
+			stats[slot].defense_character = toInt(infile.nextValue());
 		}
 		else if (infile.key == "equipped") {
 			string repeat_val = infile.nextValue();
@@ -295,7 +295,7 @@ void GameStateLoad::readGameSlot(int slot) {
 			current_map[slot] = getMapName(infile.nextValue());
 		}
 		else if (infile.key == "permadeath") {
-			stats[slot].permadeath = (toInt(infile.val) == 1);
+			stats[slot].permadeath = toBool(infile.val);
 		}
 	}
 	infile.close();
