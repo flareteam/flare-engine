@@ -121,7 +121,7 @@ TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int 
 	int slot = slotOver(position);
 
 	if (slot > -1 && storage[slot].item > 0) {
-		return items->getTooltip( storage[slot].item, stats, context);
+		return items->getTooltip(storage[slot], stats, context);
 	}
 	return tip;
 }
