@@ -31,11 +31,10 @@ class ItemStack;
 
 class ItemStorage {
 protected:
-	ItemManager *items;
 	int slot_number;
 
 public:
-	void init(int _slot_number, ItemManager *_items);
+	void init(int _slot_number);
 	~ItemStorage();
 
 	ItemStack & operator [] (int slot);
@@ -50,6 +49,7 @@ public:
 	bool remove(int item);
 	void sort();
 	void clear();
+	void clean();
 
 	bool full(int item);
 	int count(int item);

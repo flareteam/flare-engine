@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuPowers.h"
-#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -40,12 +39,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons) {
+MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 
 	int id;
 
 	stats = _stats;
-	powers = _powers;
 	icons = _icons;
 
 	overlay_disabled = NULL;

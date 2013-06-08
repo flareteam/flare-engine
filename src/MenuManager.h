@@ -43,9 +43,6 @@ class MenuTalker;
 class MenuExit;
 class MenuActiveEffects;
 class MenuStash;
-class CampaignManager;
-class ItemManager;
-class PowerManager;
 class StatBlock;
 class WidgetTooltip;
 
@@ -60,9 +57,7 @@ private:
 
 	SDL_Surface *icons;
 
-	PowerManager *powers;
 	StatBlock *stats;
-	CampaignManager *camp;
 
 	TooltipData tip_buf;
 	TooltipData keyb_tip_buf_vendor;
@@ -92,7 +87,7 @@ private:
 	void resetDrag();
 
 public:
-	MenuManager(PowerManager *powers, StatBlock *stats, CampaignManager *camp, ItemManager *items);
+	MenuManager(StatBlock *stats);
 	MenuManager(const MenuManager &copy); // not implemented
 	~MenuManager();
 	void logic();
@@ -103,7 +98,6 @@ public:
 	void closeRight();
 
 	std::vector<Menu*> menus;
-	ItemManager *items;
 	MenuInventory *inv;
 	MenuPowers *pow;
 	MenuCharacter *chr;
@@ -127,6 +121,7 @@ public:
 	bool menus_open;
 	ItemStack drop_stack;
 
+	bool isDragging();
 	bool requestingExit() { return done; }
 };
 

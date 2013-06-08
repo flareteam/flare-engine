@@ -48,6 +48,18 @@ const int ITEM_QUALITY_EPIC = 3;
 
 const int ITEM_MAX_BONUSES = 8;
 
+class LootAnimation {
+public:
+	std::string name;
+	int low;
+	int high;
+	LootAnimation()
+		: name("")
+		, low(0)
+		, high(0)
+	{}
+};
+
 class Set_bonus {
 public:
 	int requirement;
@@ -83,7 +95,7 @@ public:
 	std::vector<int> bonus_val;       // amount to increase (used with bonus_stat)
 	SoundManager::SoundID sfx;        // the item sound when it hits the floor or inventory, etc
 	std::string gfx;           // the sprite layer shown when this item is equipped
-	std::string loot_animation;// the flying loot animation for this item
+	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
 	int power;            // this item can be dragged to the action bar and used as a power
 	int power_mod;        // alter powers when this item is equipped (e.g. shoot arrows from bows)
 	std::string power_desc;    // shows up in green text on the tooltip
@@ -117,7 +129,6 @@ public:
 	, req_val(0)
 	, sfx(0)
 	, gfx("")
-	, loot_animation("")
 	, power(0)
 	, power_mod(0)
 	, power_desc("")
@@ -190,7 +201,7 @@ public:
 	SDL_Surface* getIcons();
 	void renderIcon(ItemStack stack, int x, int y, int size);
 	void playSound(int item, Point pos = Point(0,0));
-	TooltipData getTooltip(int item, StatBlock *stats, int context);
+	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemType(std::string _type);
 

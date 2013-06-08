@@ -44,7 +44,7 @@ LabelInfo eatLabelInfo(string val) {
 	}
 	else {
 		info.hidden = false;
-		info.x = atoi(tmp.c_str());
+		info.x = toInt(tmp);
 		info.y = eatFirstInt(val,',');
 		justify = eatFirstString(val,',');
 		valign = eatFirstString(val,',');
