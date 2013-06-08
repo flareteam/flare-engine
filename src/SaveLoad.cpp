@@ -202,7 +202,7 @@ void GameStatePlay::loadGame() {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
-				pc->stats.permadeath = (toInt(infile.val) == 1);
+				pc->stats.permadeath = toBool(infile.val);
 			}
 			else if (infile.key == "option") {
 				pc->stats.gfx_base = infile.nextValue();
