@@ -245,6 +245,19 @@ bool ItemStorage::contain(int item) {
 	return false;
 }
 
+/**
+ * Clear slots that contain an item, but have a quantity of 0
+ */
+void ItemStorage::clean() {
+	for (int i=0; i<slot_number; i++) {
+		if (storage[i].item > 0 && storage[i].quantity < 1) {
+			fprintf(stderr,"Removing item with id %d, which has a quantity of 0\n",storage[i].item);
+			storage[i].item = 0;
+			storage[i].quantity = 0;
+		}
+	}
+}
+
 ItemStorage::~ItemStorage() {
 	delete[] storage;
 }

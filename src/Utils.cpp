@@ -518,3 +518,13 @@ void setupSDLVideoMode(unsigned width, unsigned height) {
 
 	screen = SDL_SetVideoMode (width, height, 0, flags);
 }
+
+std::string abbreviateKilo(int amount) {
+	stringstream ss;
+	if (amount < 1000)
+		ss << amount;
+	else
+		ss << (amount/1000) << msg->get("k");
+
+	return ss.str();
+}

@@ -49,6 +49,7 @@ public:
 	bool remove(int item);
 	void sort();
 	void clear();
+	void clean();
 
 	bool full(int item);
 	int count(int item);

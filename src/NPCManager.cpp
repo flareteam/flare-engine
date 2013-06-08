@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "WidgetTooltip.h"
 #include "SharedGameResources.h"
+#include "UtilsParsing.h"
 
 #include <limits>
 
@@ -46,7 +47,7 @@ NPCManager::NPCManager(StatBlock *_stats)
 	if (infile.open("engine/tooltips.txt")) {
 		while (infile.next()) {
 			if (infile.key == "npc_tooltip_margin") {
-				tooltip_margin = atoi(infile.val.c_str());
+				tooltip_margin = toInt(infile.val);
 			}
 		}
 		infile.close();
