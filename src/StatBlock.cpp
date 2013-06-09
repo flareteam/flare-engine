@@ -449,22 +449,14 @@ void StatBlock::calcBase() {
 	base[STAT_ABS_MAX] += absorb_max_add;
 
 	// increase damage and absorb to minimum amounts
-	if (base[STAT_DMG_MELEE_MIN] < dmg_melee_min_default)
-		base[STAT_DMG_MELEE_MIN] = dmg_melee_min_default;
-	if (base[STAT_DMG_MELEE_MAX] < dmg_melee_max_default)
-		base[STAT_DMG_MELEE_MAX] = dmg_melee_max_default;
-	if (base[STAT_DMG_RANGED_MIN] < dmg_ranged_min_default)
-		base[STAT_DMG_RANGED_MIN] = dmg_ranged_min_default;
-	if (base[STAT_DMG_RANGED_MAX] < dmg_ranged_max_default)
-		base[STAT_DMG_RANGED_MAX] = dmg_ranged_max_default;
-	if (base[STAT_DMG_MENT_MIN] < dmg_ment_min_default)
-		base[STAT_DMG_MENT_MIN] = dmg_ment_min_default;
-	if (base[STAT_DMG_MENT_MAX] < dmg_ment_max_default)
-		base[STAT_DMG_MENT_MAX] = dmg_ment_max_default;
-	if (base[STAT_ABS_MIN] < absorb_min_default)
-		base[STAT_ABS_MIN] = absorb_min_default;
-	if (base[STAT_ABS_MAX] < absorb_max_default)
-		base[STAT_ABS_MAX] = absorb_max_default;
+    clampFloor(base[STAT_DMG_MELEE_MIN], dmg_melee_min_default);
+    clampFloor(base[STAT_DMG_MELEE_MAX], dmg_melee_max_default);
+    clampFloor(base[STAT_DMG_RANGED_MIN], dmg_ranged_min_default);
+    clampFloor(base[STAT_DMG_RANGED_MAX], dmg_ranged_max_default);
+    clampFloor(base[STAT_DMG_MENT_MIN], dmg_ment_min_default);
+    clampFloor(base[STAT_DMG_MENT_MAX], dmg_ment_max_default);
+    clampFloor(base[STAT_ABS_MIN], absorb_min_default);
+    clampFloor(base[STAT_ABS_MAX], absorb_max_default);
 }
 
 /**
