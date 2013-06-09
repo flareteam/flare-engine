@@ -509,6 +509,9 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 	if (powers[power_index].trait_elemental != -1) {
 		haz->trait_elemental = powers[power_index].trait_elemental;
 	}
+	if (powers[power_index].beacon) {
+		haz->beacon = true;
+	}
 
 	// status effect durations
 	// steal effects
