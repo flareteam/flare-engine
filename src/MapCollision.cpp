@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include <cfloat>
 #include <math.h>
+#include <cassert>
 
 using namespace std;
 
@@ -45,6 +46,12 @@ void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w,
 	map_size.y = h;
 }
 
+int sgn(float f) {
+	if (f > 0)		return 1;
+	else if (f < 0)	return -1;
+	else			return 0;
+}
+
 /**
  * Process movement for cardinal (90 degree) and ordinal (45 degree) directions
  * If we encounter an obstacle at 90 degrees, stop.
@@ -54,7 +61,7 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 	// when trying to slide against a bottom or right wall, step_x or step_y can become 0
 	// this causes diag to become false, making this function return false
 	// we try to catch such a scenario and return true early
-	bool force_slide = (_step_x != 0 && _step_y > 0) || (_step_x > 0 && _step_y != 0);
+	bool force_slide = (_step_x != 0 && _step_y != 0);
 
 	while (_step_x != 0 || _step_y != 0) {
 
@@ -68,7 +75,6 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 			step_x = max((float)floor(x) - x, _step_x);
 			if (step_x == 0) step_x = max(-1.f, _step_x);
 		}
-
 
 		float step_y = 0;
 		if (_step_y > 0) {
@@ -87,31 +93,58 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
 			x += step_x;
 			y += step_y;
+			assert(is_valid_position(x,y,movement_type, is_hero));
 		}
-		else if ((diag || force_slide) && is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
-			x += step_x;
-			if (!diag && force_slide) return true;
-		}
-		else if ((diag || force_slide)  && is_valid_position(x, y + step_y, movement_type, is_hero)) { // slide along wall
-			y += step_y;
-			if (!diag && force_slide) return true;
+		else if (diag || force_slide) {
+			if (is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
+				x += step_x;
+				assert(is_valid_position(x,y,movement_type, is_hero));
+			} else if (is_valid_position(x, y + step_y, movement_type, is_hero)) {
+				y += step_y;
+				assert(is_valid_position(x,y,movement_type, is_hero));
+			} else {
+				return false;
+			}
 		}
 		else {
 			// is there a singular obstacle or corner we can step around?
 			// only works if we are moving straight
+			const float epsilon = 0.01;
+			if (step_x != 0) {
+				float dy = y - floor(y);
 
-			if (diag) return false;
+				if (is_valid_tile(floor(x), floor(y) + 1, movement_type, is_hero)
+						&& is_valid_tile(floor(x) + sgn(step_x), floor(y) + 1, movement_type, is_hero)
+						&& dy > 0.5) {
+					y += 1 - dy + epsilon;
+					x += step_x;
+				} else if (is_valid_tile(floor(x), floor(y) - 1, movement_type, is_hero)
+							&& is_valid_tile(floor(x) + sgn(step_x), floor(y) - 1, movement_type, is_hero)
+							&& dy < 0.5) {
+					y -= dy + epsilon;
+					x += step_x;
+				} else {
+					return false;
+				}
+				assert(is_valid_position(x,y,movement_type, is_hero));
+			} else if (step_y != 0) {
+				float dx = x - floor(x);
 
-			int way_around = is_one_step_around(x, y, round(step_x), round(step_y));
-
-			if (!way_around)
-				return false;
-
-			if (round(step_x)) {
-				y+= way_around;
-			}
-			else {
-				x+= way_around;
+				if (is_valid_tile(floor(x) + 1, floor(y), movement_type, is_hero)
+						&& is_valid_tile(floor(x) + 1, floor(y) + sgn(step_y), movement_type, is_hero)
+						&& dx > 0.5) {
+					x += 1 - dx + epsilon;
+					y += step_y;
+				} else if (is_valid_tile(floor(x) - 1, floor(y), movement_type, is_hero)
+						&& is_valid_tile(floor(x) - 1, floor(y) + sgn(step_y), movement_type, is_hero)
+						&& dx < 0.5) {
+					x -= dx + epsilon;
+					y += step_y;
+				} else {
+					return false;
+				}
+			} else {
+				assert(false);
 			}
 		}
 	}
@@ -184,41 +217,6 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
 bool MapCollision::is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const {
 	return is_valid_tile(floor(x), floor(y), movement_type, is_hero);
 }
-
-bool inline MapCollision::is_sidestepable(int tile_x, int tile_y, int offx, int offy) {
-	return !is_outside_map(tile_x + offx, tile_y + offy) && !colmap[tile_x + offx][tile_y + offy];
-}
-
-/**
- * If we have encountered a collision (i.e., is_empty(x, y) already said no), then see if we've
- * hit an object/wall where there is a path around it by one step.  This is to avoid getting
- * "caught" on the corners of a jagged wall.
- *
- * @return if no side-step path exists, the return value is zero.  Otherwise,
- *         it is the coodinate modifier value for the opposite coordinate
- *         (i.e., if xdir was zero and ydir was non-zero, the return value
- *         should be applied to xdir)
- */
-int MapCollision::is_one_step_around(float x, float y, int xdir, int ydir) {
-	int tile_x = x;
-	int tile_y = y;
-
-	if (xdir) {
-		if (is_sidestepable(tile_x, tile_y, xdir, -1) && (tile_x - x) > 0)
-			return 1;
-		if (is_sidestepable(tile_x, tile_y, xdir,  1) && (tile_x - x) < 0)
-			return 2;
-	}
-	if (ydir) {
-		if (is_sidestepable(tile_x, tile_y, -1, ydir) && (tile_y - y) > 0)
-			return 1;
-		if (is_sidestepable(tile_x, tile_y,  1, ydir) && (tile_y - y) < 0)
-			return 2;
-	}
-
-	return 0;
-}
-
 
 /**
  * Does not have the "slide" submovement that move() features

@@ -57,7 +57,6 @@ class MapCollision {
 private:
 
 	bool line_check(int x1, int y1, int x2, int y2, int check_type, MOVEMENTTYPE movement_type);
-	bool is_sidestepable(int tile_x, int tile_y, int offx2, int offy2);
 
 public:
 	MapCollision();
@@ -72,8 +71,6 @@ public:
 
 	bool is_valid_tile(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const;
 	bool is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const;
-
-	int is_one_step_around(float x, float y, int xidr, int ydir);
 
 	bool line_of_sight(int x1, int y1, int x2, int y2);
 	bool line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE movement_type);

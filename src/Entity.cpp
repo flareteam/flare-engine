@@ -77,7 +77,6 @@ Entity::Entity(const Entity &e)
  */
 bool Entity::move() {
 
-
 	if (stats.effects.forced_move)
 		return mapr->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, stats.movement_type, stats.hero);
 
