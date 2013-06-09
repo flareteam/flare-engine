@@ -35,7 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Entity;
 class Hazard;
-class PowerManager;
 class StatBlock;
 
 /**
@@ -87,10 +86,8 @@ private:
 	int getUntransformPower();
 
 public:
-	Avatar(PowerManager *_powers, MapRenderer *_map);
+	Avatar();
 	~Avatar();
-
-	EnemyManager *enemies;
 
 	void init();
 	void loadLayerDefinitions();

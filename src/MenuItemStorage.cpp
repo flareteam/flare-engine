@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuItemStorage.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
@@ -37,8 +38,8 @@ MenuItemStorage::MenuItemStorage()
 	, highlight_image(NULL)
 {}
 
-void MenuItemStorage::init(int _slot_number, ItemManager *_items, SDL_Rect _area, int _icon_size, int _nb_cols) {
-	ItemStorage::init( _slot_number, _items);
+void MenuItemStorage::init(int _slot_number, SDL_Rect _area, int _icon_size, int _nb_cols) {
+	ItemStorage::init( _slot_number);
 	icons = items->getIcons();
 	grid_area = _area;
 	for (int i = 0; i < _slot_number; i++) {
@@ -59,8 +60,8 @@ void MenuItemStorage::init(int _slot_number, ItemManager *_items, SDL_Rect _area
 /**
  * Overloaded function for case, if slot positions are predefined
  */
-void MenuItemStorage::init(int _slot_number, ItemManager *_items, vector<SDL_Rect> _area, vector<string> _slot_type) {
-	ItemStorage::init( _slot_number, _items);
+void MenuItemStorage::init(int _slot_number, vector<SDL_Rect> _area, vector<string> _slot_type) {
+	ItemStorage::init( _slot_number);
 	icons = items->getIcons();
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot(icons);
@@ -120,7 +121,7 @@ TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int 
 	int slot = slotOver(position);
 
 	if (slot > -1 && storage[slot].item > 0) {
-		return items->getTooltip( storage[slot].item, stats, context);
+		return items->getTooltip(storage[slot], stats, context);
 	}
 	return tip;
 }

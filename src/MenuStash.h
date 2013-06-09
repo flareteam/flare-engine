@@ -33,7 +33,6 @@ class WidgetButton;
 
 class MenuStash : public Menu {
 private:
-	ItemManager *items;
 	StatBlock *stats;
 	WidgetButton *closeButton;
 
@@ -47,7 +46,7 @@ private:
 	SDL_Color color_normal;
 
 public:
-	MenuStash(ItemManager *items, StatBlock *stats);
+	MenuStash(StatBlock *stats);
 	~MenuStash();
 
 	void update();

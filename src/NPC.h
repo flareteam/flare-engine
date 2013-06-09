@@ -29,20 +29,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemStorage.h"
 #include "Utils.h"
 
-class ItemManager;
-class MapRenderer;
-
 const int NPC_VENDOR_MAX_STOCK = 80;
 const int NPC_VOX_INTRO = 0;
 const int NPC_VOX_QUEST = 1;
 const int NPC_NO_DIALOG_AVAIL = -1;
 
 class NPC : public Entity {
-protected:
-	ItemManager *items;
-
 public:
-	NPC(MapRenderer *_map, ItemManager *_items);
+	NPC();
 	~NPC();
 	void load(const std::string& npc_id, int hero_level);
 	void loadGraphics(const std::string& filename_portrait);

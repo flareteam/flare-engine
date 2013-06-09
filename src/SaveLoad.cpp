@@ -26,8 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class GameStatePlay
  */
 
-#include "Avatar.h"
-#include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStatePlay.h"
@@ -39,10 +37,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
-#include "PowerManager.h"
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
@@ -53,6 +51,10 @@ void GameStatePlay::saveGame() {
 
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
+
+	// remove items with zero quantity from inventory
+	menu->inv->inventory[EQUIPMENT].clean();
+	menu->inv->inventory[CARRIED].clean();
 
 	ofstream outfile;
 
@@ -88,9 +90,6 @@ void GameStatePlay::saveGame() {
 		// stat spec
 		outfile << "build=" << pc->stats.physical_character << "," << pc->stats.mental_character << "," << pc->stats.offense_character << "," << pc->stats.defense_character << "\n";
 
-		// current currency
-		outfile << "currency=" << menu->inv->currency << "\n";
-
 		// equipped gear
 		outfile << "equipped_quantity=" << menu->inv->inventory[EQUIPMENT].getQuantities() << "\n";
 		outfile << "equipped=" << menu->inv->inventory[EQUIPMENT].getItems() << "\n";
@@ -100,7 +99,7 @@ void GameStatePlay::saveGame() {
 		outfile << "carried=" << menu->inv->inventory[CARRIED].getItems() << "\n";
 
 		// spawn point
-		outfile << "spawn=" << map->respawn_map << "," << map->respawn_point.x/UNITS_PER_TILE << "," << map->respawn_point.y/UNITS_PER_TILE << "\n";
+		outfile << "spawn=" << mapr->respawn_map << "," << mapr->respawn_point.x/UNITS_PER_TILE << "," << mapr->respawn_point.y/UNITS_PER_TILE << "\n";
 
 		// action bar
 		outfile << "actionbar=";
@@ -180,6 +179,7 @@ void GameStatePlay::saveGame() {
 void GameStatePlay::loadGame() {
 	int saved_hp = 0;
 	int saved_mp = 0;
+	int currency = 0;
 
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
@@ -202,7 +202,7 @@ void GameStatePlay::loadGame() {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
-				pc->stats.permadeath = (toInt(infile.val) == 1);
+				pc->stats.permadeath = toBool(infile.val);
 			}
 			else if (infile.key == "option") {
 				pc->stats.gfx_base = infile.nextValue();
@@ -213,11 +213,7 @@ void GameStatePlay::loadGame() {
 				pc->stats.character_class = infile.nextValue();
 			}
 			else if (infile.key == "xp") {
-				pc->stats.xp = toInt(infile.val);
-				if (pc->stats.xp < 0) {
-					fprintf(stderr, "XP value is out of bounds, setting to zero\n");
-					pc->stats.xp = 0;
-				}
+				pc->stats.xp = toUnsignedLong(infile.val);
 			}
 			else if (infile.key == "hpmp") {
 				saved_hp = toInt(infile.nextValue());
@@ -241,11 +237,7 @@ void GameStatePlay::loadGame() {
 				}
 			}
 			else if (infile.key == "currency") {
-				menu->inv->currency = toInt(infile.val);
-				if (menu->inv->currency < 0) {
-					fprintf(stderr, "Currency value out of bounds, setting to zero\n");
-					menu->inv->currency = 0;
-				}
+				currency = toInt(infile.val);
 			}
 			else if (infile.key == "equipped") {
 				menu->inv->inventory[EQUIPMENT].setItems(infile.val);
@@ -260,22 +252,22 @@ void GameStatePlay::loadGame() {
 				menu->inv->inventory[CARRIED].setQuantities(infile.val);
 			}
 			else if (infile.key == "spawn") {
-				map->teleport_mapname = infile.nextValue();
+				mapr->teleport_mapname = infile.nextValue();
 
-				if (fileExists(mods->locate("maps/" + map->teleport_mapname))) {
-					map->teleport_destination.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					map->teleport_destination.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					map->teleportation = true;
+				if (fileExists(mods->locate("maps/" + mapr->teleport_mapname))) {
+					mapr->teleport_destination.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					mapr->teleport_destination.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					mapr->teleportation = true;
 
 					// prevent spawn.txt from putting us on the starting map
-					map->clearEvents();
+					mapr->clearEvents();
 				}
 				else {
-					fprintf(stderr, "Unable to find maps/%s, loading spawn.txt\n", map->teleport_mapname.c_str());
-					map->teleport_mapname = "spawn.txt";
-					map->teleport_destination.x = 1;
-					map->teleport_destination.y = 1;
-					map->teleportation = true;
+					fprintf(stderr, "Unable to find maps/%s, loading spawn.txt\n", mapr->teleport_mapname.c_str());
+					mapr->teleport_mapname = "spawn.txt";
+					mapr->teleport_destination.x = 1;
+					mapr->teleport_destination.y = 1;
+					mapr->teleportation = true;
 
 				}
 			}
@@ -320,6 +312,11 @@ void GameStatePlay::loadGame() {
 
 
 	menu->inv->inventory[EQUIPMENT].fillEquipmentSlots();
+	menu->inv->addCurrency(currency);
+
+	// remove items with zero quantity from inventory
+	menu->inv->inventory[EQUIPMENT].clean();
+	menu->inv->inventory[CARRIED].clean();
 
 	// Load stash
 	loadStash();
@@ -373,7 +370,7 @@ void GameStatePlay::loadClass(int index) {
 	pc->stats.mental_character += HERO_CLASSES[index].mental;
 	pc->stats.offense_character += HERO_CLASSES[index].offense;
 	pc->stats.defense_character += HERO_CLASSES[index].defense;
-	menu->inv->currency += HERO_CLASSES[index].currency;
+	menu->inv->addCurrency(HERO_CLASSES[index].currency);
 	menu->inv->inventory[EQUIPMENT].setItems(HERO_CLASSES[index].equipment);
 	for (unsigned i=0; i<HERO_CLASSES[index].powers.size(); i++) {
 		pc->stats.powers_list.push_back(HERO_CLASSES[index].powers[i]);

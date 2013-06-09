@@ -29,18 +29,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPCManager.h"
 #include "NPC.h"
 #include "SharedResources.h"
-#include "MapRenderer.h"
 #include "StatBlock.h"
 #include "WidgetTooltip.h"
+#include "SharedGameResources.h"
+#include "UtilsParsing.h"
 
 #include <limits>
 
 using namespace std;
 
-NPCManager::NPCManager(MapRenderer *_map, ItemManager *_items, StatBlock *_stats)
-	: map(_map)
-	, tip(new WidgetTooltip())
-	, items(_items)
+NPCManager::NPCManager(StatBlock *_stats)
+	: tip(new WidgetTooltip())
 	, stats(_stats)
 	, tip_buf() {
 	FileParser infile;
@@ -48,7 +47,7 @@ NPCManager::NPCManager(MapRenderer *_map, ItemManager *_items, StatBlock *_stats
 	if (infile.open("engine/tooltips.txt")) {
 		while (infile.next()) {
 			if (infile.key == "npc_tooltip_margin") {
-				tooltip_margin = atoi(infile.val.c_str());
+				tooltip_margin = toInt(infile.val);
 			}
 		}
 		infile.close();
@@ -73,11 +72,11 @@ void NPCManager::handleNewMap() {
 	npcs.clear();
 
 	// read the queued NPCs in the map file
-	while (!map->npcs.empty()) {
-		mn = map->npcs.front();
-		map->npcs.pop();
+	while (!mapr->npcs.empty()) {
+		mn = mapr->npcs.front();
+		mapr->npcs.pop();
 
-		NPC *npc = new NPC(map, items);
+		NPC *npc = new NPC();
 		npc->load(mn.id, stats->level);
 		npc->pos.x = mn.pos.x;
 		npc->pos.y = mn.pos.y;
