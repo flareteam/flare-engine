@@ -285,6 +285,32 @@ void PowerManager::loadPowers() {
 				}
 			}
 		}
+		else if (infile.key == "spawn_level") {
+			infile.val = infile.val + ',';
+			std::string mode = eatFirstString(infile.val,',');
+			if (mode == "default") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_DEFAULT;
+			else if (mode == "fixed") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_FIXED;
+			else if (mode == "stat") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_STAT;
+			else if (mode == "level") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_LEVEL;
+			else fprintf(stderr, "unknown spawn_level_mode %s\n", mode.c_str());
+
+			if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_DEFAULT) {
+				powers[input_id].spawn_level_qty = eatFirstInt(infile.val,',');
+
+				if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_FIXED) {
+					powers[input_id].spawn_level_every = eatFirstInt(infile.val,',');
+
+                    if(powers[input_id].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
+                        std::string stat = eatFirstString(infile.val,',');
+                        if (stat == "physical") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_PHYSICAL;
+                        else if (stat == "mental") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_MENTAL;
+                        else if (stat == "offense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_OFFENSE;
+                        else if (stat == "defense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_DEFENSE;
+                        else fprintf(stderr, "unknown spawn_level_stat %s\n", stat.c_str());
+                    }
+				}
+			}
+		}
 		else if (infile.key == "target_party")
 			powers[input_id].target_party = toBool(infile.val);
 		else if (infile.key == "target_categories") {
