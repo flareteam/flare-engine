@@ -585,7 +585,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 	// handle all other effects
 	if (powers[power_index].buff || (powers[power_index].buff_party && src_stats->hero_ally)) {
 		int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
-		effect(src_stats, power_index, source_type);
+		effect(src_stats, src_stats, power_index, source_type);
 	}
 
 	if (powers[power_index].buff_party && !powers[power_index].passive) {
@@ -628,7 +628,7 @@ void PowerManager::playSound(int power_index, StatBlock *src_stats) {
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
 
-bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type) {
+bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
 		int effect_index = powers[power_index].post_effects[i].id;
@@ -639,9 +639,9 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
 			if (powers[effect_index].effect_type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-					magnitude = src_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
+					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-					magnitude = src_stats->get(STAT_DMG_MENT_MAX) + powers[power_index].mod_damage_value_min;
+					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) + powers[power_index].mod_damage_value_min;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 
@@ -649,7 +649,7 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
 			}
 			else if (powers[effect_index].effect_type == "heal") {
 				// heal for ment weapon damage * damage multiplier
-				magnitude = randBetween(src_stats->get(STAT_DMG_MENT_MIN), src_stats->get(STAT_DMG_MENT_MAX));
+				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
 
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
