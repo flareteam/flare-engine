@@ -14,8 +14,8 @@ Comment[fr]=Un jeu de rôle d'action monojoueur en 2D isométrique
 Comment[gl]=Xogo individual de acción e rol cunha vista isométrica en dúas dimensións.
 Comment[ru]=Изометрический ролевой боевик для одного игрока
 Comment[uk]=Ізометричний рольовий екшн (Action/RPG) для одного гравця
-TryExec=@FLARE_EXECUTABLE_PATH@
-Exec=@FLARE_EXECUTABLE_PATH@
+TryExec=@FLARE_EXECUTABLE_PATH@ --game=flare-game
+Exec=@FLARE_EXECUTABLE_PATH@ --game=flare-game
 Categories=Game;RolePlaying;
 Icon=flare
 Terminal=false
