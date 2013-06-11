@@ -118,7 +118,7 @@ public:
 	// vars
 	Hazard *haz;
 	int current_power;
-	Point act_target;
+	FPoint act_target;
 	bool attacking;
 	bool drag_walking;
 	bool newLevelNotification;

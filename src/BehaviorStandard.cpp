@@ -208,7 +208,7 @@ void BehaviorStandard::findTarget() {
 			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 				if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally) {
 					//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
-					int ally_dist = calcDist(e->stats.pos, enemies->enemies[i]->stats.pos);
+					float ally_dist = calcDist(e->stats.pos, enemies->enemies[i]->stats.pos);
 					if (ally_dist < target_dist) {
 						pursue_pos.x = enemies->enemies[i]->stats.pos.x;
 						pursue_pos.y = enemies->enemies[i]->stats.pos.y;
@@ -220,7 +220,7 @@ void BehaviorStandard::findTarget() {
 
 
 		if (!(e->stats.in_combat || e->stats.waypoints.empty())) {
-			Point waypoint = e->stats.waypoints.front();
+			FPoint waypoint = e->stats.waypoints.front();
 			pursue_pos.x = waypoint.x;
 			pursue_pos.y = waypoint.y;
 		}
@@ -389,7 +389,7 @@ void BehaviorStandard::checkMove() {
 			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y, e->stats.movement_type)) {
 
 				// if a path is returned, target first waypoint
-				std::vector<Point> path;
+				std::vector<FPoint> path;
 
 				mapr->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
 				if(!path.empty())
@@ -416,10 +416,10 @@ void BehaviorStandard::checkMove() {
 
 	// if patrolling waypoints and has reached a waypoint, cycle to the next one
 	if (!e->stats.waypoints.empty()) {
-		Point waypoint = e->stats.waypoints.front();
-		Point pos = e->stats.pos;
+		FPoint waypoint = e->stats.waypoints.front();
+		FPoint pos = e->stats.pos;
 		// if the patroller is close to the waypoint
-		if (abs(waypoint.x - pos.x) < UNITS_PER_TILE/2 && abs(waypoint.y - pos.y) < UNITS_PER_TILE/2) {
+		if (abs(waypoint.x - pos.x) < 0.5 && abs(waypoint.y - pos.y) < 0.5) {
 			e->stats.waypoints.pop();
 			e->stats.waypoints.push(waypoint);
 			e->stats.waypoint_pause_ticks = e->stats.waypoint_pause;
@@ -428,8 +428,8 @@ void BehaviorStandard::checkMove() {
 
 	// if a wandering enemy reaches its destination early, reset wander_ticks
 	if (e->stats.wander) {
-		Point pos = e->stats.pos;
-		if (abs(pursue_pos.x - pos.x) < UNITS_PER_TILE/2 && abs(pursue_pos.y - pos.y) < UNITS_PER_TILE/2) {
+		FPoint pos = e->stats.pos;
+		if (abs(pursue_pos.x - pos.x) < 0.5 && abs(pursue_pos.y - pos.y) < 0.5) {
 			e->stats.wander_ticks = 0;
 		}
 		if (e->stats.wander_ticks == 0 && e->stats.wander_pause_ticks == 0) {

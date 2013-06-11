@@ -64,14 +64,14 @@ public:
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP();
 	bool isCleared();
-	Enemy *enemyFocus(Point mouse, Point cam, bool alive_only);
+	Enemy *enemyFocus(Point mouse, FPoint cam, bool alive_only);
 
 	// vars
 	std::vector<Enemy*> enemies;
 	int hero_stealth;
 
 	bool player_blocked;
-    int player_blocked_ticks;
+	int player_blocked_ticks;
 };
 
 

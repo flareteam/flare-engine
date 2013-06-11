@@ -66,5 +66,9 @@ public:
 	StatBlock stats;
 };
 
+extern const int directionDeltaX[];
+extern const int directionDeltaY[];
+extern const float speedMultiplyer[];
+
 #endif
 

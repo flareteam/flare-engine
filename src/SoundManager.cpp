@@ -49,7 +49,7 @@ class Playback {
 public:
 	SoundManager::SoundID sid;
 	std::string virtual_channel;
-	Point location;
+	FPoint location;
 	bool loop;
 	bool finished;
 };
@@ -64,7 +64,7 @@ SoundManager::~SoundManager() {
 		unload(it->first);
 }
 
-void SoundManager::logic(Point c) {
+void SoundManager::logic(FPoint c) {
 
 	PlaybackMapIterator it = playback.begin();
 	if (it == playback.end())
@@ -90,7 +90,7 @@ void SoundManager::logic(Point c) {
 		}
 
 		/* control mixing playback depending on distance */
-		float v = calcDist(c, it->second.location) / (SOUND_FALLOFF*UNITS_PER_TILE);
+		float v = calcDist(c, it->second.location) / (SOUND_FALLOFF);
 		if (it->second.loop) {
 			if (v < 1.0)
 				Mix_Resume(it->first);
@@ -194,7 +194,7 @@ void SoundManager::unload(SoundManager::SoundID sid) {
 
 
 
-void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point pos, bool loop) {
+void SoundManager::play(SoundManager::SoundID sid, std::string channel, FPoint pos, bool loop) {
 
 	SoundMapIterator it;
 	VirtualChannelMapIterator vcit = channels.end();
@@ -236,7 +236,7 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point po
 	// precalculate mixing volume if sound has a location
 	Uint8 d = 0;
 	if (p.location.x != 0 || p.location.y != 0) {
-		float v = 255.0f * (calcDist(lastPos, p.location) / (SOUND_FALLOFF*UNITS_PER_TILE));
+		float v = 255.0f * (calcDist(lastPos, p.location) / (SOUND_FALLOFF));
 		clamp(v, 0.f, 255.f);
 		d = v;
 	}

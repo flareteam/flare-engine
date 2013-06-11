@@ -76,7 +76,7 @@ void MenuMiniMap::createMapSurface() {
 void MenuMiniMap::render() {
 }
 
-void MenuMiniMap::render(Point hero_pos) {
+void MenuMiniMap::render(FPoint hero_pos) {
 	if (!text_pos.hidden) label->render();
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
@@ -99,10 +99,10 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 /**
  * Render a top-down version of the map (90 deg angle)
  */
-void MenuMiniMap::renderOrtho(Point hero_pos) {
+void MenuMiniMap::renderOrtho(FPoint hero_pos) {
 
-	const int herox = hero_pos.x / UNITS_PER_TILE;
-	const int heroy = hero_pos.y / UNITS_PER_TILE;
+	const int herox = hero_pos.x;
+	const int heroy = hero_pos.y;
 
 	SDL_Rect clip;
 	clip.x = herox - pos.w/2;
@@ -130,10 +130,10 @@ void MenuMiniMap::renderOrtho(Point hero_pos) {
 /**
  * Render an "isometric" version of the map (45 deg angle)
  */
-void MenuMiniMap::renderIso(Point hero_pos) {
+void MenuMiniMap::renderIso(FPoint hero_pos) {
 
-	const int herox = hero_pos.x / UNITS_PER_TILE;
-	const int heroy = hero_pos.y / UNITS_PER_TILE;
+	const int herox = hero_pos.x;
+	const int heroy = hero_pos.y;
 	const int heroy_screen = herox + heroy;
 	const int herox_screen = herox - heroy + std::max(map_size.x, map_size.y);
 

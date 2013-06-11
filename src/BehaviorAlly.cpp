@@ -40,8 +40,8 @@ void BehaviorAlly::findTarget() {
 
 			//now work out the distance to the enemy and compare it to the distance to the current targer (we want to target the closest enemy)
 			if(enemies_in_combat) {
-				int enemy_dist = calcDist(e->stats.pos, enemy->stats.pos);
-				if(enemy_dist < target_dist) {
+				float enemy_dist = calcDist(e->stats.pos, enemy->stats.pos);
+				if (enemy_dist < target_dist) {
 					pursue_pos.x = enemy->stats.pos.x;
 					pursue_pos.y = enemy->stats.pos.y;
 					target_dist = enemy_dist;
