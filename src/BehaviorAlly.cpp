@@ -2,10 +2,10 @@
 #include "Enemy.h"
 #include "SharedGameResources.h"
 
-const unsigned short ALLY_FLEE_DISTANCE = 100;
-const unsigned short ALLY_FOLLOW_DISTANCE_WALK = 300;
-const unsigned short ALLY_FOLLOW_DISTANCE_STOP = 250;
-const unsigned short ALLY_TELEPORT_DISTANCE = 2000;
+const float ALLY_FLEE_DISTANCE = 2;
+const float ALLY_FOLLOW_DISTANCE_WALK = 5.5;
+const float ALLY_FOLLOW_DISTANCE_STOP = 5;
+const float ALLY_TELEPORT_DISTANCE = 40;
 
 const unsigned short BLOCK_TICKS = 10;
 
