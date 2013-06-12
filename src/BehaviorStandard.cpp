@@ -468,7 +468,7 @@ void BehaviorStandard::checkMoveStateStance() {
 
 void BehaviorStandard::checkMoveStateMove() {
 	// close enough to the hero or is at a safe distance
-	if ((hero_dist < e->stats.melee_range) || (move_to_safe_dist && hero_dist >= e->stats.threat_range/2)) {
+	if ((target_dist < e->stats.melee_range && !fleeing) || (move_to_safe_dist && target_dist >= e->stats.threat_range/2)) {
 		e->newState(ENEMY_STANCE);
 		move_to_safe_dist = false;
 	}
