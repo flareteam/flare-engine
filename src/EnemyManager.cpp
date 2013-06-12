@@ -195,8 +195,8 @@ void EnemyManager::handleSpawn() {
 		e->stats.summoned_power_index = espawn.summon_power_index;
 
 		if(espawn.summoner != NULL){
-            e->stats.summoner = espawn.summoner;
-            espawn.summoner->summons.push_back(&(e->stats));
+			e->stats.summoner = espawn.summoner;
+			espawn.summoner->summons.push_back(&(e->stats));
 		}
 
 		e->type = espawn.type;
@@ -218,9 +218,9 @@ void EnemyManager::handleSpawn() {
 		loadSounds(e->stats.sfx_prefix);
 
 
-		if(mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
-			e->stats.pos.x = espawn.pos.x;
-			e->stats.pos.y = espawn.pos.y;
+		if (mapr->collider.is_valid_position(espawn.pos.x + 0.5, espawn.pos.y + 0.5, e->stats.movement_type, false) || !e->stats.hero_ally) {
+			e->stats.pos.x = espawn.pos.x + 0.5;
+			e->stats.pos.y = espawn.pos.y + 0.5;
 		}
 		else {
 			e->stats.pos.x = pc->stats.pos.x;
