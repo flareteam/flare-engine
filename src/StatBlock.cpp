@@ -92,8 +92,7 @@ StatBlock::StatBlock()
 	, dmg_ranged_max_default(4)
 	, absorb_min_default(0)
 	, absorb_max_default(0)
-	, speed_default(14)
-	, dspeed_default(10)
+	, speed_default(0.2)
 	, dmg_melee_min_add(0)
 	, dmg_melee_max_add(0)
 	, dmg_ment_min_add(0)
@@ -102,8 +101,7 @@ StatBlock::StatBlock()
 	, dmg_ranged_max_add(0)
 	, absorb_min_add(0)
 	, absorb_max_add(0)
-	, speed(14)
-	, dspeed(10)
+	, speed(0.2)
 	, wielding_physical(false)
 	, wielding_mental(false)
 	, wielding_offense(false)
@@ -135,7 +133,7 @@ StatBlock::StatBlock()
 	, power_index(POWERSLOT_COUNT, 0)		// both
 	, power_cooldown(POWERSLOT_COUNT, 0)	// enemy only
 	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
-	, melee_range(64) //both
+	, melee_range(1.0) //both
 	, threat_range(0)  // enemy
 	, passive_attacker(false)//enemy
 	, hero_stealth(0)
@@ -201,11 +199,11 @@ void StatBlock::load(const string& filename) {
 	if (!infile.open(filename))
 		return;
 
-	int num = 0;
 	string loot_token;
 
 	while (infile.next()) {
-		if (isInt(infile.val)) num = toInt(infile.val);
+		int num = toInt(infile.val);
+		float fnum = toFloat(infile.val);
 		bool valid = false;
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
@@ -277,8 +275,7 @@ void StatBlock::load(const string& filename) {
 
 		else if (infile.key == "waypoint_pause") waypoint_pause = num;
 
-		else if (infile.key == "speed") speed = speed_default = num;
-		else if (infile.key == "dspeed") dspeed = dspeed_default = num;
+		else if (infile.key == "speed") speed = speed_default = fnum / MAX_FRAMES_PER_SEC;
 		else if (infile.key == "turn_delay") turn_delay = num;
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		else if (infile.key == "chance_flee") chance_flee = num;
@@ -316,8 +313,8 @@ void StatBlock::load(const string& filename) {
 			}
 		}
 
-		else if (infile.key == "melee_range") melee_range = num;
-		else if (infile.key == "threat_range") threat_range = num;
+		else if (infile.key == "melee_range") melee_range = fnum;
+		else if (infile.key == "threat_range") threat_range = fnum;
 		else if (infile.key == "passive_attacker") passive_attacker = toBool(infile.val);
 
 		// animation stats
@@ -465,9 +462,9 @@ void StatBlock::applyEffects() {
 
 	calcBase();
 
-    for (int i=0; i<STAT_COUNT; i++) {
-        current[i] = base[i] + effects.bonus[i];
-    }
+	for (int i=0; i<STAT_COUNT; i++) {
+		current[i] = base[i] + effects.bonus[i];
+	}
 
 	for (unsigned i=0; i<effects.bonus_resist.size(); i++) {
 		vulnerable[i] = vulnerable_base[i] - effects.bonus_resist[i];
@@ -480,7 +477,6 @@ void StatBlock::applyEffects() {
 	if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
 
 	speed = speed_default;
-	dspeed = dspeed_default;
 }
 
 /**
@@ -597,15 +593,13 @@ void StatBlock::loadHeroStats() {
 
 	while (infile.next()) {
 		int value = toInt(infile.val);
+		float fvalue = toFloat(infile.val);
 
 		if (infile.key == "max_points_per_stat") {
 			max_points_per_stat = value;
 		}
 		else if (infile.key == "speed") {
-			speed = speed_default = value;
-		}
-		else if (infile.key == "dspeed") {
-			dspeed = dspeed_default = value;
+			speed = speed_default = fvalue / MAX_FRAMES_PER_SEC;
 		}
 		else if (infile.key == "sfx_step") {
 			sfx_step = infile.val;

@@ -221,7 +221,7 @@ bool GameStateCutscene::load(std::string filename) {
 	}
 
 	if (scenes.empty()) {
-		cerr << "No scenes defined in cutscene file " << filename << endl;
+		fprintf(stderr, "No scenes defined in cutscene file %s\n", filename.c_str());
 		return false;
 	}
 
@@ -233,7 +233,7 @@ SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
 	std::string image_file = (mods->locate("images/"+ filename));
 	SDL_Surface *image = IMG_Load(image_file.c_str());
 	if (!image) {
-		std::cerr << "Missing cutscene art reference: " << image_file << std::endl;
+		fprintf(stderr, "Missing cutscene art reference: %s\n", image_file.c_str());
 		return NULL;
 	}
 

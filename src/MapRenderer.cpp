@@ -33,10 +33,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <stdint.h>
 #include <limits>
+#include <math.h>
 
 using namespace std;
 
-const int CLICK_RANGE = 3 * UNITS_PER_TILE; //for activating events
+const float CLICK_RANGE = 3; //for activating events
 
 MapRenderer::MapRenderer()
 	: Map()
@@ -45,12 +46,11 @@ MapRenderer::MapRenderer()
 	, tip(new WidgetTooltip())
 	, tip_pos()
 	, show_tooltip(false)
-	, shakycam(Point())
+	, shakycam()
 	, backgroundsurface(NULL)
 	, backgroundsurfaceoffset()
 	, repaint_background(false)
 	, cam()
-	, hero_tile()
 	, map_change(false)
 	, teleportation(false)
 	, teleport_destination()
@@ -90,8 +90,8 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 
 	while (enemies_to_spawn && allowed_misses) {
 
-		int x = (g.pos.x + (rand() % g.area.x)) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
-		int y = (g.pos.y + (rand() % g.area.y)) * UNITS_PER_TILE + UNITS_PER_TILE / 2;
+		float x = (g.pos.x + (rand() % g.area.x)) + 0.5;
+		float y = (g.pos.y + (rand() % g.area.y)) + 0.5;
 		bool success = false;
 
 		if (collider.is_empty(x, y)) {
@@ -181,7 +181,7 @@ void MapRenderer::loadMusic() {
 	if (AUDIO && MUSIC_VOLUME) {
 		music = Mix_LoadMUS(mods->locate("music/" + played_music_filename).c_str());
 		if(!music)
-			cout << "Mix_LoadMUS: "<< Mix_GetError()<<endl;
+			fprintf(stderr, "Mix_LoadMUS: %s\n", Mix_GetError());
 	}
 
 	if (music) {
@@ -216,17 +216,20 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = it->map_pos.x >> TILE_SHIFT;
-		const unsigned tiley = it->map_pos.y >> TILE_SHIFT;
-		it->prio += (((uint64_t)(tilex + tiley)) << 48) + (((uint64_t)tilex) << 32) + ((it->map_pos.x + it->map_pos.y) << 16);
+		const unsigned tilex = it->map_pos.x; // implicit floor, just taking the integer part of the float
+		const unsigned tiley = it->map_pos.y;
+		const int commax = (float)(it->map_pos.x - tilex) * (2<<16);
+		const int commay = (float)(it->map_pos.y - tiley) * (2<<16);
+		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
 	}
 }
 
 void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = it->map_pos.x >> TILE_SHIFT;
-		const unsigned tiley = it->map_pos.y >> TILE_SHIFT;
-		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (it->map_pos.y << 16);
+		const unsigned tilex = floor(it->map_pos.x);
+		const unsigned tiley = round(it->map_pos.y);
+		const int commay = 1024 * it->map_pos.y;
+		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
 }
 
@@ -237,8 +240,8 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		shakycam.y = cam.y;
 	}
 	else {
-		shakycam.x = cam.x + (rand() % 16 - 8) /UNITS_PER_PIXEL_X;
-		shakycam.y = cam.y + (rand() % 16 - 8) /UNITS_PER_PIXEL_Y;
+		shakycam.x = cam.x + (rand() % 16 - 8) * 0.0078125;
+		shakycam.y = cam.y + (rand() % 16 - 8) * 0.0078125;
 	}
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
@@ -280,12 +283,12 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	SDL_Rect dest;
-	const Point upperright = screen_to_map(0, 0, shakycam.x, shakycam.y);
+	const Point upperright = round(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((2 * VIEW_H / TILE_H) + 2 * tset.max_size_y) * 2;
 
-	j = upperright.y / UNITS_PER_TILE - tset.max_size_y + tset.max_size_x;
-	i = upperright.x / UNITS_PER_TILE - tset.max_size_y - tset.max_size_x;
+	j = upperright.y - tset.max_size_y + tset.max_size_x;
+	i = upperright.x - tset.max_size_y - tset.max_size_x;
 
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
 		int_fast16_t tiles_width = 0;
@@ -309,7 +312,7 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 		// lower left (south west) corner is caught by having 0 in there, so j>0
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1),	std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
-		Point p = map_to_screen(i * UNITS_PER_TILE, j * UNITS_PER_TILE, shakycam.x, shakycam.y);
+		Point p = map_to_screen(i, j, shakycam.x, shakycam.y);
 		p = center_tile(p);
 
 		// draw one horizontal line
@@ -347,7 +350,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	int_fast16_t i;
 	int_fast16_t j;
 	SDL_Rect dest;
-	const Point upperright = screen_to_map(0, 0, shakycam.x, shakycam.y);
+	const Point upperright = round(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
 
@@ -355,10 +358,10 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	vector<Renderable>::iterator r_end = r.end();
 
 	// object layer
-	j = upperright.y / UNITS_PER_TILE - tset.max_size_y + tset.max_size_x;
-	i = upperright.x / UNITS_PER_TILE - tset.max_size_y - tset.max_size_x;
+	j = upperright.y - tset.max_size_y + tset.max_size_x;
+	i = upperright.x - tset.max_size_y - tset.max_size_x;
 
-	while (r_cursor != r_end && ((r_cursor->map_pos.x>>TILE_SHIFT) + (r_cursor->map_pos.y>>TILE_SHIFT) < i + j || (r_cursor->map_pos.x>>TILE_SHIFT) < i))
+	while (r_cursor != r_end && ((int)(r_cursor->map_pos.x) + (int)(r_cursor->map_pos.y) < i + j || (int)(r_cursor->map_pos.x) < i)) // implicit floor
 		++r_cursor;
 
 	maprow *objectlayer = layers[index_objectlayer];
@@ -380,7 +383,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1), std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
 		// draw one horizontal line
-		Point p = map_to_screen(i * UNITS_PER_TILE, j * UNITS_PER_TILE, shakycam.x, shakycam.y);
+		Point p = map_to_screen(i, j, shakycam.x, shakycam.y);
 		p = center_tile(p);
 		while (j > j_end) {
 			--j;
@@ -389,14 +392,13 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			p.x += TILE_W;
 
 			if (const uint_fast16_t current_tile = objectlayer[i][j]) {
-
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
 			}
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (r_cursor->map_pos.x>>TILE_SHIFT) == i && (r_cursor->map_pos.y>>TILE_SHIFT) == j) {
+			while (r_cursor != r_end && ((int)r_cursor->map_pos.x == i && (int)r_cursor->map_pos.y == j)) { // implicit floor by int cast
 				drawRenderable(r_cursor);
 				++r_cursor;
 			}
@@ -408,7 +410,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 		else
 			j++;
 
-		while (r_cursor != r_end && ((r_cursor->map_pos.x>>TILE_SHIFT) + (r_cursor->map_pos.y>>TILE_SHIFT) < i + j || (r_cursor->map_pos.x>>TILE_SHIFT) <= i))
+		while (r_cursor != r_end && ((int)r_cursor->map_pos.x + (int)r_cursor->map_pos.y < i + j || (int)r_cursor->map_pos.x <= i)) // implicit floor by int cast
 			++r_cursor;
 	}
 }
@@ -420,8 +422,8 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 			renderIsoLayer(screen, nulloffset, layers[i]);
 	}
 	else {
-		if (abs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender * TILE_W
-				|| abs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender * TILE_H
+		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender * TILE_W
+				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender * TILE_H
 				|| repaint_background) {
 
 			if (!backgroundsurface)
@@ -455,10 +457,10 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 
 void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 
-	const Point upperright = screen_to_map(0, 0, shakycam.x, shakycam.y);
+	const Point upperright = round(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
-	short int startj = max(0, upperright.y / UNITS_PER_TILE);
-	short int starti = max(0, upperright.x / UNITS_PER_TILE);
+	short int startj = max(0, upperright.y);
+	short int starti = max(0, upperright.x);
 	const short max_tiles_width =  min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
@@ -466,7 +468,7 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 	short int j;
 
 	for (j = startj; j < max_tiles_height; j++) {
-		Point p = map_to_screen(starti * UNITS_PER_TILE, j * UNITS_PER_TILE, shakycam.x, shakycam.y);
+		Point p = map_to_screen(starti, j, shakycam.x, shakycam.y);
 		p = center_tile(p);
 		for (i = starti; i < max_tiles_width; i++) {
 
@@ -496,19 +498,19 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	vector<Renderable>::iterator r_cursor = r.begin();
 	vector<Renderable>::iterator r_end = r.end();
 
-	const Point upperright = screen_to_map(0, 0, shakycam.x, shakycam.y);
+	const Point upperright = round(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
-	short int startj = max(0, upperright.y / UNITS_PER_TILE);
-	short int starti = max(0, upperright.x / UNITS_PER_TILE);
+	short int startj = max(0, upperright.y);
+	short int starti = max(0, upperright.x);
 	const short max_tiles_width =  min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
-	while (r_cursor != r_end && (r_cursor->map_pos.y>>TILE_SHIFT) < startj)
+	while (r_cursor != r_end && (r_cursor->map_pos.y) < startj)
 		++r_cursor;
 
 	maprow *objectlayer = layers[index_objectlayer];
 	for (j = startj; j<max_tiles_height; j++) {
-		Point p = map_to_screen(starti * UNITS_PER_TILE, j * UNITS_PER_TILE, shakycam.x, shakycam.y);
+		Point p = map_to_screen(starti, j, shakycam.x, shakycam.y);
 		p = center_tile(p);
 		for (i = starti; i<max_tiles_width; i++) {
 
@@ -519,14 +521,14 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 			}
 			p.x += TILE_W;
 
-			while (r_cursor != r_end && (r_cursor->map_pos.y>>TILE_SHIFT) == j && (r_cursor->map_pos.x>>TILE_SHIFT) < i)
+			while (r_cursor != r_end && (r_cursor->map_pos.y) == j && (r_cursor->map_pos.x) < i)
 				++r_cursor;
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (r_cursor->map_pos.y>>TILE_SHIFT) == j && (r_cursor->map_pos.x>>TILE_SHIFT) == i)
+			while (r_cursor != r_end && (r_cursor->map_pos.y) == j && (r_cursor->map_pos.x) == i)
 				drawRenderable(r_cursor++);
 		}
-		while (r_cursor != r_end && (r_cursor->map_pos.y>>TILE_SHIFT) <= j)
+		while (r_cursor != r_end && (r_cursor->map_pos.y) <= j)
 			++r_cursor;
 	}
 }
@@ -582,10 +584,10 @@ void MapRenderer::executeOnMapExitEvents() {
 	}
 }
 
-void MapRenderer::checkEvents(Point loc) {
+void MapRenderer::checkEvents(FPoint loc) {
 	Point maploc;
-	maploc.x = loc.x >> TILE_SHIFT;
-	maploc.y = loc.y >> TILE_SHIFT;
+	maploc.x = floor(loc.x);
+	maploc.y = floor(loc.y);
 	vector<Map_Event>::iterator it;
 
 	// loop in reverse because we may erase elements
@@ -653,8 +655,8 @@ void MapRenderer::checkHotspots() {
 				bool matched = false;
 				for (unsigned index = 0; index <= index_objectlayer; ++index) {
 					maprow *current_layer = layers[index];
-					Point p = map_to_screen(x * UNITS_PER_TILE,
-											y * UNITS_PER_TILE,
+					Point p = map_to_screen(x,
+											y,
 											shakycam.x,
 											shakycam.y);
 					p = center_tile(p);
@@ -706,8 +708,8 @@ void MapRenderer::checkHotspots() {
 						TOOLTIP_CONTEXT = TOOLTIP_NONE;
 					}
 
-					if ((abs(cam.x - (*it).location.x * UNITS_PER_TILE) < CLICK_RANGE)
-							&& (abs(cam.y - (*it).location.y * UNITS_PER_TILE) < CLICK_RANGE)) {
+					if ((fabs(cam.x - (*it).location.x) < CLICK_RANGE)
+							&& (fabs(cam.y - (*it).location.y) < CLICK_RANGE)) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -726,13 +728,13 @@ void MapRenderer::checkHotspots() {
 	}
 }
 
-void MapRenderer::checkNearestEvent(Point loc) {
+void MapRenderer::checkNearestEvent(FPoint loc) {
 	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
 		vector<Map_Event>::iterator it;
 		vector<Map_Event>::iterator nearest = events.end();
-		int best_distance = std::numeric_limits<int>::max();
+		float best_distance = std::numeric_limits<float>::max();
 
 		// loop in reverse because we may erase elements
 		for (it = events.end(); it != events.begin(); ) {
@@ -747,10 +749,10 @@ void MapRenderer::checkNearestEvent(Point loc) {
 			// skip events on cooldown
 			if ((*it).cooldown_ticks != 0) continue;
 
-			Point ev_loc;
-			ev_loc.x = (*it).location.x * UNITS_PER_TILE;
-			ev_loc.y = (*it).location.y * UNITS_PER_TILE;
-			int distance = (int)calcDist(loc,ev_loc);
+			FPoint ev_loc;
+			ev_loc.x = (*it).location.x;
+			ev_loc.y = (*it).location.y;
+			float distance = calcDist(loc, ev_loc);
 			if (distance < CLICK_RANGE && distance < best_distance) {
 				best_distance = distance;
 				nearest = it;
@@ -831,8 +833,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			if (fileExists(mods->locate("maps/" + ec->s))) {
 				teleportation = true;
 				teleport_mapname = ec->s;
-				teleport_destination.x = ec->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				teleport_destination.y = ec->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				teleport_destination.x = ec->x + 0.5;
+				teleport_destination.y = ec->y + 0.5;
 			}
 			else {
 				ev.keep_after_trigger = false;
@@ -842,8 +844,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		else if (ec->type == "intramap") {
 			teleportation = true;
 			teleport_mapname = "";
-			teleport_destination.x = ec->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			teleport_destination.y = ec->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			teleport_destination.x = ec->x + 0.5;
+			teleport_destination.y = ec->y + 0.5;
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
@@ -864,13 +866,13 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 			if (ec->x != -1 && ec->y != -1) {
 				if (ec->x != 0 && ec->y != 0) {
-					pos.x = ec->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					pos.y = ec->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					pos.x = ec->x + 0.5;
+					pos.y = ec->y + 0.5;
 				}
 			}
 			else if (ev.location.x != 0 && ev.location.y != 0) {
-				pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-				pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+				pos.x = ev.location.x + 0.5;
+				pos.y = ev.location.y + 0.5;
 			}
 
 			if (ev.type == "on_load")
@@ -914,13 +916,13 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 				// if a power path was specified, place the source position there
 				if (ec_path) {
-					ev.stats->pos.x = ec_path->x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					ev.stats->pos.y = ec_path->y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					ev.stats->pos.x = ec_path->x + 0.5;
+					ev.stats->pos.y = ec_path->y + 0.5;
 				}
 				// otherwise the source position is the event position
 				else {
-					ev.stats->pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					ev.stats->pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					ev.stats->pos.x = ev.location.x + 0.5;
+					ev.stats->pos.y = ev.location.y + 0.5;
 				}
 
 				Event_Component *ec_damage = ev.getComponent("power_damage");
@@ -940,8 +942,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 				}
 				// targets fixed path option
 				else {
-					target.x = ec_path->a * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					target.y = ec_path->b * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					target.x = ec_path->a + 0.5;
+					target.y = ec_path->b + 0.5;
 				}
 			}
 			// no path specified, targets self location
@@ -954,8 +956,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		}
 		else if (ec->type == "stash") {
 			stash = true;
-			stash_pos.x = ev.location.x * UNITS_PER_TILE + UNITS_PER_TILE/2;
-			stash_pos.y = ev.location.y * UNITS_PER_TILE + UNITS_PER_TILE/2;
+			stash_pos.x = ev.location.x + 0.5;
+			stash_pos.y = ev.location.y + 0.5;
 		}
 		else if (ec->type == "npc") {
 			event_npc = ec->s;

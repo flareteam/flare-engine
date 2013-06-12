@@ -98,8 +98,7 @@ void Avatar::init() {
 	stats.mental_additional = 0;
 	stats.offense_additional = 0;
 	stats.defense_additional = 0;
-	stats.speed = 14;
-	stats.dspeed = 10;
+	stats.speed = 0.2f;
 	stats.recalc();
 
 	log_msg = "";
@@ -266,10 +265,10 @@ bool Avatar::pressing_move() {
 void Avatar::set_direction() {
 	// handle direction changes
 	if (MOUSE_MOVE) {
-		Point target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
+		FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
 		// if no line of movement to target, use pathfinder
 		if (!mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
-			vector<Point> path;
+			vector<FPoint> path;
 
 			// target first waypoint
 			mapr->collider.compute_path(stats.pos, target, path, stats.movement_type);
@@ -298,7 +297,7 @@ void Avatar::set_direction() {
 void Avatar::handlePower(int actionbar_power) {
 	if (actionbar_power != 0 && stats.cooldown_ticks == 0) {
 		const Power &power = powers->getPower(actionbar_power);
-		Point target;
+		FPoint target;
 		if (MOUSE_AIM) {
 			if (power.aim_assist)
 				target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, stats.pos.x, stats.pos.y);
@@ -307,8 +306,8 @@ void Avatar::handlePower(int actionbar_power) {
 		}
 		else {
 			FPoint ftarget = calcVector(stats.pos, stats.direction, stats.melee_range);
-			target.x = static_cast<int>(ftarget.x);
-			target.y = static_cast<int>(ftarget.y);
+			target.x = ftarget.x;
+			target.y = ftarget.y;
 		}
 
 		// check requirements
@@ -411,8 +410,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		// cam is focused at player position
 		mapr->cam.x = stats.pos.x;
 		mapr->cam.y = stats.pos.y;
-		mapr->hero_tile.x = stats.pos.x / 32;
-		mapr->hero_tile.y = stats.pos.y / 32;
 
 		mapr->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
@@ -716,8 +713,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	// cam is focused at player position
 	mapr->cam.x = stats.pos.x;
 	mapr->cam.y = stats.pos.y;
-	mapr->hero_tile.x = stats.pos.x / 32;
-	mapr->hero_tile.y = stats.pos.y / 32;
 
 	// check for map events
 	mapr->checkEvents(stats.pos);
@@ -752,7 +747,6 @@ void Avatar::transform() {
 
 	// replace some hero stats
 	stats.speed = charmed_stats->speed;
-	stats.dspeed = charmed_stats->dspeed;
 	stats.flying = charmed_stats->flying;
 	stats.humanoid = charmed_stats->humanoid;
 	stats.animations = charmed_stats->animations;
@@ -813,7 +807,6 @@ void Avatar::untransform() {
 
 	// revert some hero stats to last saved
 	stats.speed = hero_stats->speed;
-	stats.dspeed = hero_stats->dspeed;
 	stats.flying = hero_stats->flying;
 	stats.humanoid = hero_stats->humanoid;
 	stats.animations = hero_stats->animations;

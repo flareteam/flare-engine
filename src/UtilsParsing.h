@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include <typeinfo>
 
-bool isInt(const std::string& s);
 std::string trim(const std::string& s, char c);
 int parse_duration(const std::string& s);
 std::string parse_section_title(const std::string& s);
@@ -38,6 +37,7 @@ bool tryParseValue(const std::type_info & type, const char * value, void * outpu
 bool tryParseValue(const std::type_info & type, const std::string & value, void * output);
 std::string toString(const std::type_info & type, void * value);
 int toInt(const std::string& s, int default_value = 0);
+float toFloat(const std::string &s, float default_value = 0.0);
 unsigned long toUnsignedLong(const std::string& s, unsigned long default_value = 0);
 bool toBool(std::string value);
 

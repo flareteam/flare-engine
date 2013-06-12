@@ -76,7 +76,7 @@ public:
 
 	FPoint pos;
 	FPoint speed;
-	int base_speed;
+	float base_speed;
 	int lifespan; // ticks down to zero
 	int radius;
 	int power_index;

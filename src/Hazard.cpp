@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsParsing.h"
 
+#include <math.h>
+
 using namespace std;
 
 Hazard::Hazard(MapCollision *_collider)
@@ -91,7 +93,7 @@ void Hazard::logic() {
 		activeAnimation->advanceFrame();
 
 	// handle movement
-	if (!(round(speed.x) == 0 && round(speed.y) == 0)) {
+	if (!(speed.x == 0 && speed.y == 0)) {
 		pos.x += speed.x;
 		pos.y += speed.y;
 
@@ -101,7 +103,7 @@ void Hazard::logic() {
 			lifespan = 0;
 			hit_wall = true;
 
-			if (collider->is_outside_map(round(pos.x) >> TILE_SHIFT, round(pos.y) >> TILE_SHIFT))
+			if (collider->is_outside_map(pos.x, pos.y))
 				remove_now = true;
 		}
 	}
@@ -140,8 +142,8 @@ void Hazard::addEntity(Entity *ent) {
 void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	if (delay_frames == 0 && activeAnimation) {
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
-		re.map_pos.x = round(pos.x);
-		re.map_pos.y = round(pos.y);
+		re.map_pos.x = pos.x;
+		re.map_pos.y = pos.y;
 		(floor ? r_dead : r).push_back(re);
 	}
 }

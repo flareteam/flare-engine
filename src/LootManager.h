@@ -47,7 +47,7 @@ const int RARITY_HIGH = 3;
 const int RARITY_EPIC = 1;
 
 // how close (map units) does the hero have to be to pick up loot?
-const int LOOT_RANGE = 3 * UNITS_PER_TILE;
+const int LOOT_RANGE = 3;
 
 class LootManager {
 private:
@@ -76,17 +76,17 @@ public:
 
 	void handleNewMap();
 	void logic();
-	void renderTooltips(Point cam);
+	void renderTooltips(FPoint cam);
 	void checkEnemiesForLoot();
 
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(const Enemy *e);
 	void checkMapForLoot();
-	void determineLootByEnemy(const Enemy *e, Point pos); // pick from enemy-specific loot table
-	void addLoot(ItemStack stack, Point pos);
-	ItemStack checkPickup(Point mouse, Point cam, Point hero_pos, MenuInventory *inv);
-	ItemStack checkAutoPickup(Point hero_pos, MenuInventory *inv);
-	ItemStack checkNearestPickup(Point hero_pos, MenuInventory *inv);
+	void determineLootByEnemy(const Enemy *e, FPoint pos); // pick from enemy-specific loot table
+	void addLoot(ItemStack stack, FPoint pos);
+	ItemStack checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv);
+	ItemStack checkAutoPickup(FPoint hero_pos, MenuInventory *inv);
+	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 

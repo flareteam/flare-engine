@@ -585,7 +585,7 @@ void GameStatePlay::checkNPCInteraction() {
 	if (pc->attacking) return;
 
 	int npc_click = -1;
-	int max_interact_distance = UNITS_PER_TILE * 4;
+	int max_interact_distance = 4;
 	int interact_distance = max_interact_distance+1;
 
 	// check for clicking on an NPC
@@ -710,7 +710,7 @@ void GameStatePlay::checkNPCInteraction() {
 }
 
 void GameStatePlay::checkStash() {
-	int max_interact_distance = UNITS_PER_TILE * 4;
+	int max_interact_distance = 4;
 	int interact_distance = max_interact_distance+1;
 
 	if (mapr->stash) {
@@ -761,7 +761,7 @@ void GameStatePlay::checkCutscene() {
 
 	}
 	else {
-		mapr->respawn_point = pc->stats.pos;
+		mapr->respawn_point = floor(pc->stats.pos);
 	}
 
 	saveGame();
