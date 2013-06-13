@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <queue>
 
 class Power;
+class FileParser;
 
 const int POWERSLOT_COUNT = 10;
 const int MELEE_PHYS = 0;
@@ -89,6 +90,7 @@ public:
 
 class StatBlock {
 private:
+    bool loadCoreStat(FileParser *infile);
 	void loadHeroStats();
 	bool statsLoaded;
 
