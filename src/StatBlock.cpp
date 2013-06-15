@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "MapCollision.h"
 #include "MenuPowers.h"
+#include "UtilsMath.h"
 #include <limits>
 
 using namespace std;
@@ -191,6 +192,43 @@ bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
 	return a.chance < b.chance;
 }
 
+bool StatBlock::loadCoreStat(FileParser *infile){
+
+    int value = 0;
+    if (isInt(infile->val)) value = toInt(infile->val);
+
+    if (infile->key == "speed") {
+		speed = speed_default = toFloat(infile->val) / MAX_FRAMES_PER_SEC;
+        return true;
+    }
+    else if (infile->key == "categories") {
+        string cat;
+        while ((cat = infile->nextValue()) != "") {
+            categories.push_back(cat);
+        }
+        return true;
+    }
+    else {
+        for (unsigned i=0; i<STAT_COUNT; i++) {
+            if (infile->key == STAT_NAME[i]) {starting[i] = value;return true;}
+            else if (infile->key == STAT_NAME[i] + "_per_level") {per_level[i] = value;return true;}
+            else if (infile->key == STAT_NAME[i] + "_per_physical") {per_physical[i] = value;return true;}
+            else if (infile->key == STAT_NAME[i] + "_per_mental") {per_mental[i] = value;return true;}
+            else if (infile->key == STAT_NAME[i] + "_per_offense") {per_offense[i] = value;return true;}
+            else if (infile->key == STAT_NAME[i] + "_per_defense") {per_defense[i] = value;return true;}
+        }
+
+        for (unsigned int i=0; i<ELEMENTS.size(); i++) {
+			if (infile->key == "vulnerable_" + ELEMENTS[i].name) {
+				vulnerable[i] = vulnerable_base[i] = value;
+				return true;
+			}
+		}
+    }
+
+    return false;
+}
+
 /**
  * load a statblock, typically for an enemy definition
  */
@@ -206,19 +244,7 @@ void StatBlock::load(const string& filename) {
 		float fnum = toFloat(infile.val);
 		bool valid = false;
 
-		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (infile.key == STAT_NAME[i]) {
-				starting[i] = base[i] = current[i] = num;
-				valid = true;
-			}
-		}
-
-		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
-			if (infile.key == "vulnerable_" + ELEMENTS[i].name) {
-				vulnerable[i] = vulnerable_base[i] = num;
-				valid = true;
-			}
-		}
+		valid = loadCoreStat(&infile);
 
 		if (infile.key == "name") name = msg->get(infile.val);
 		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
@@ -275,7 +301,6 @@ void StatBlock::load(const string& filename) {
 
 		else if (infile.key == "waypoint_pause") waypoint_pause = num;
 
-		else if (infile.key == "speed") speed = speed_default = fnum / MAX_FRAMES_PER_SEC;
 		else if (infile.key == "turn_delay") turn_delay = num;
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		else if (infile.key == "chance_flee") chance_flee = num;
@@ -326,13 +351,6 @@ void StatBlock::load(const string& filename) {
 
 		// hide enemy HP bar
 		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
-
-		else if (infile.key == "categories") {
-			string cat;
-			while ((cat = infile.nextValue()) != "") {
-				categories.push_back(cat);
-			}
-		}
 		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
 		else if (infile.key == "rarity") valid = true;
@@ -348,6 +366,8 @@ void StatBlock::load(const string& filename) {
 
 	// sort loot table
 	std::sort(loot.begin(), loot.end(), sortLoot);
+
+	applyEffects();
 }
 
 /**
@@ -397,6 +417,12 @@ void StatBlock::calcBase() {
 	int off0 = get_offense() -1;
 	int def0 = get_defense() -1;
 
+	clampFloor(lev0,0);
+	clampFloor(phys0,0);
+	clampFloor(ment0,0);
+	clampFloor(off0,0);
+	clampFloor(def0,0);
+
 	for (int i=0; i<STAT_COUNT; i++) {
 		base[i] = starting[i];
 		base[i] += lev0 * per_level[i];
@@ -417,22 +443,14 @@ void StatBlock::calcBase() {
 	base[STAT_ABS_MAX] += absorb_max_add;
 
 	// increase damage and absorb to minimum amounts
-	if (base[STAT_DMG_MELEE_MIN] < dmg_melee_min_default)
-		base[STAT_DMG_MELEE_MIN] = dmg_melee_min_default;
-	if (base[STAT_DMG_MELEE_MAX] < dmg_melee_max_default)
-		base[STAT_DMG_MELEE_MAX] = dmg_melee_max_default;
-	if (base[STAT_DMG_RANGED_MIN] < dmg_ranged_min_default)
-		base[STAT_DMG_RANGED_MIN] = dmg_ranged_min_default;
-	if (base[STAT_DMG_RANGED_MAX] < dmg_ranged_max_default)
-		base[STAT_DMG_RANGED_MAX] = dmg_ranged_max_default;
-	if (base[STAT_DMG_MENT_MIN] < dmg_ment_min_default)
-		base[STAT_DMG_MENT_MIN] = dmg_ment_min_default;
-	if (base[STAT_DMG_MENT_MAX] < dmg_ment_max_default)
-		base[STAT_DMG_MENT_MAX] = dmg_ment_max_default;
-	if (base[STAT_ABS_MIN] < absorb_min_default)
-		base[STAT_ABS_MIN] = absorb_min_default;
-	if (base[STAT_ABS_MAX] < absorb_max_default)
-		base[STAT_ABS_MAX] = absorb_max_default;
+    clampFloor(base[STAT_DMG_MELEE_MIN], dmg_melee_min_default);
+    clampFloor(base[STAT_DMG_MELEE_MAX], dmg_melee_max_default);
+    clampFloor(base[STAT_DMG_RANGED_MIN], dmg_ranged_min_default);
+    clampFloor(base[STAT_DMG_RANGED_MAX], dmg_ranged_max_default);
+    clampFloor(base[STAT_DMG_MENT_MIN], dmg_ment_min_default);
+    clampFloor(base[STAT_DMG_MENT_MAX], dmg_ment_max_default);
+    clampFloor(base[STAT_ABS_MIN], absorb_min_default);
+    clampFloor(base[STAT_ABS_MAX], absorb_max_default);
 }
 
 /**
@@ -446,19 +464,17 @@ void StatBlock::applyEffects() {
 	pres_hp = hp;
 	pres_mp = mp;
 
-	if (hero) {
-		// calculate primary stats
-		// refresh the character menu if there has been a change
-		if (get_physical() != physical_character + effects.bonus_physical ||
-				get_mental() != mental_character + effects.bonus_mental ||
-				get_offense() != offense_character + effects.bonus_offense ||
-				get_defense() != defense_character + effects.bonus_defense) refresh_stats = true;
+    // calculate primary stats
+    // refresh the character menu if there has been a change
+    if (get_physical() != physical_character + effects.bonus_physical ||
+            get_mental() != mental_character + effects.bonus_mental ||
+            get_offense() != offense_character + effects.bonus_offense ||
+            get_defense() != defense_character + effects.bonus_defense) refresh_stats = true;
 
-		offense_additional = effects.bonus_offense;
-		defense_additional = effects.bonus_defense;
-		physical_additional = effects.bonus_physical;
-		mental_additional = effects.bonus_mental;
-	}
+    offense_additional = effects.bonus_offense;
+    defense_additional = effects.bonus_defense;
+    physical_additional = effects.bonus_physical;
+    mental_additional = effects.bonus_mental;
 
 	calcBase();
 
@@ -593,13 +609,11 @@ void StatBlock::loadHeroStats() {
 
 	while (infile.next()) {
 		int value = toInt(infile.val);
-		float fvalue = toFloat(infile.val);
+
+		loadCoreStat(&infile);
 
 		if (infile.key == "max_points_per_stat") {
 			max_points_per_stat = value;
-		}
-		else if (infile.key == "speed") {
-			speed = speed_default = fvalue / MAX_FRAMES_PER_SEC;
 		}
 		else if (infile.key == "sfx_step") {
 			sfx_step = infile.val;
@@ -612,16 +626,6 @@ void StatBlock::loadHeroStats() {
 		}
 		else if (infile.key == "cooldown_hit") {
 			cooldown_hit = value;
-		}
-		else {
-			for (unsigned i=0; i<STAT_COUNT; i++) {
-				if (infile.key == STAT_NAME[i]) starting[i] = value;
-				else if (infile.key == STAT_NAME[i] + "_per_level") per_level[i] = value;
-				else if (infile.key == STAT_NAME[i] + "_per_physical") per_physical[i] = value;
-				else if (infile.key == STAT_NAME[i] + "_per_mental") per_mental[i] = value;
-				else if (infile.key == STAT_NAME[i] + "_per_offense") per_offense[i] = value;
-				else if (infile.key == STAT_NAME[i] + "_per_defense") per_defense[i] = value;
-			}
 		}
 	}
 	infile.close();
