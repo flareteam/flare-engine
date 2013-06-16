@@ -144,6 +144,9 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
 		return (!(colmap[tile_x][tile_y] == BLOCKS_ALL || colmap[tile_x][tile_y] == BLOCKS_ALL_HIDDEN));
 	}
 
+	if (colmap[tile_x][tile_y] == MAP_ONLY || colmap[tile_x][tile_y] == MAP_ONLY_ALT)
+		return true;
+
 	// normal creatures can only be in empty spaces
 	return (colmap[tile_x][tile_y] == BLOCKS_NONE);
 }
