@@ -33,6 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "Utils.h"
 
+using namespace std;
+
 class Entity;
 class Hazard;
 class StatBlock;
@@ -84,6 +86,13 @@ private:
 	bool transform_triggered;
 	std::string last_transform;
 	int getUntransformPower();
+
+    //variables for patfinding
+	vector<Point> path;
+	int path_frames_elapsed;
+	Point prev_target;
+	bool collided;
+	bool path_found;
 
 public:
 	Avatar();
