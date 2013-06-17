@@ -46,6 +46,11 @@ Avatar::Avatar()
 	, lockSwing(false)
 	, lockCast(false)
 	, lockShoot(false)
+	, path()
+	, path_frames_elapsed(0)
+	, prev_target()
+	, collided(false)
+	, path_found(false)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -266,16 +271,59 @@ bool Avatar::pressing_move() {
 void Avatar::set_direction() {
 	// handle direction changes
 	if (MOUSE_MOVE) {
-		Point target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
+		Point target = screen_to_map(inpt->mouse.x, inpt->mouse.y, stats.pos.x, stats.pos.y);
 		// if no line of movement to target, use pathfinder
 		if (!mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
-			vector<Point> path;
+
+			path_frames_elapsed++;
+
+			bool recalculate_path = false;
+
+            //if theres no path, it needs to be calculated
+            if(path.empty())
+                recalculate_path = true;
+
+            //if the target moved more than 1 tile away, recalculate
+            if(calcDist(map_to_collision(prev_target), map_to_collision(target)) > 1)
+                recalculate_path = true;
+
+            //if a collision ocurred then recalculate
+            if(collided)
+                recalculate_path = true;
+
+            //if too many frames have elapsed
+            if(path_frames_elapsed >= 10)
+                recalculate_path = true;
+
+            //dont recalculate if we were blocked and no path was found last time
+            //this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
+            if(!path_found && collided && path_frames_elapsed < 10)
+                recalculate_path = false;
+            else//reset the collision flag only if we dont want the cooldown in place
+                collided = false;
+
+            prev_target = target;
 
 			// target first waypoint
-			mapr->collider.compute_path(stats.pos, target, path, stats.movement_type);
-			if(!path.empty())
+			if(recalculate_path){
+                path_frames_elapsed = 0;
+                path.clear();
+                path_found = mapr->collider.compute_path(stats.pos, target, path, stats.movement_type);
+			}
+
+			if(!path.empty()){
 				target = path.back();
+
+                //if distance to node is lower than a tile size, the node is going to be passed and can be removed
+                if(calcDist(stats.pos, target) < 64)
+                    path.pop_back();
+			}
 		}
+		else{
+            path.clear();
+		}
+
+
 		stats.direction = calcDirection(stats.pos, target);
 	}
 	else {
@@ -515,6 +563,9 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				if (move()) { // no collision
 					stats.cur_state = AVATAR_RUN;
 				}
+				else{
+                    collided = true;
+				}
 
 			}
 
@@ -556,6 +607,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				break;
 			}
 			else if (!move()) { // collide with wall
+                collided = true;
 				stats.cur_state = AVATAR_STANCE;
 				break;
 			}

@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AStarNode.h"
 #include "MapCollision.h"
 #include "Settings.h"
+#include "AStarContainer.h"
 #include <cfloat>
 
 using namespace std;
@@ -340,36 +341,29 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 	}
 
 	Point current = start;
-	AStarNode node(start);
-	node.setActualCost(0);
-	node.setEstimatedCost((float)calcDist(start,end));
-	node.setParent(current);
+	AStarNode* node = new AStarNode(start);
+	node->setActualCost(0);
+	node->setEstimatedCost((float)calcDist(start,end));
+	node->setParent(current);
 
-	list<AStarNode> open;
-	list<AStarNode> close;
+	AStarContainer open(map_size.x, limit);
+	AStarCloseContainer close(map_size.x, limit);
 
-	open.push_back(node);
+    open.add(node);
 
-	while (!open.empty() && close.size() < limit) {
-		float lowest_score = FLT_MAX;
-		// find lowest score available inside open, make it current node and move it to close
-		list<AStarNode>::iterator lowest_it;
-		for (list<AStarNode>::iterator it=open.begin(); it != open.end(); ++it) {
-			if (it->getFinalCost() < lowest_score) {
-				lowest_score = it->getFinalCost();
-				lowest_it = it;
-			}
-		}
-		node = *lowest_it;
-		current.x = node.getX();
-		current.y = node.getY();
-		close.push_back(node);
-		open.erase(lowest_it);
+	while (!open.isEmpty() && (unsigned)close.getSize() < limit) {
+		node = open.get_shortest_f();
+
+		current.x = node->getX();
+		current.y = node->getY();
+        close.add(node);
+		open.remove(node);
 
 		if ( current.x == end.x && current.y == end.y)
 			break; //path found !
 
-		list<Point> neighbours = node.getNeighbours(256,256); //256 is map max size
+        //limit evaluated nodes to the size of the map
+		list<Point> neighbours = node->getNeighbours(map_size.x, map_size.y);
 
 		// for every neighbour of current node
 		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
@@ -379,61 +373,49 @@ bool MapCollision::compute_path(Point start_pos, Point end_pos, vector<Point> &p
 			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false))
 				continue;
 			// if nabour is already in close, skip it
-			if(find(close.begin(), close.end(), neighbour)!=close.end())
-				continue;
+			if(close.exists(neighbour))
+                continue;
 
-			list<AStarNode>::iterator i = find(open.begin(), open.end(), neighbour);
 			// if neighbour isn't inside open, add it as a new Node
-			if (i==open.end()) {
-				AStarNode newNode(neighbour.x,neighbour.y);
-				newNode.setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
-				newNode.setParent(current);
-				newNode.setEstimatedCost((float)calcDist(neighbour,end));
-				open.push_back(newNode);
+			if(!open.exists(neighbour)){
+				AStarNode* newNode = new AStarNode(neighbour.x,neighbour.y);
+				newNode->setActualCost(node->getActualCost()+(float)calcDist(current,neighbour));
+				newNode->setParent(current);
+				newNode->setEstimatedCost((float)calcDist(neighbour,end));
+				open.add(newNode);
 			}
 			// else, update it's cost if better
-			else if (node.getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
-				i->setActualCost(node.getActualCost()+(float)calcDist(current,neighbour));
-				i->setParent(current);
+			else{
+                AStarNode* i = open.get(neighbour.x, neighbour.y);
+                if (node->getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
+                    Point pos(i->getX(), i->getY());
+                    Point parent_pos(node->getX(), node->getY());
+                    open.updateParent(pos, parent_pos, node->getActualCost()+(float)calcDist(current,neighbour));
+                }
 			}
 		}
 	}
 
 	if (current.x != end.x || current.y != end.y) {
 
-		// reblock target if needed
-		if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
+        //couldnt find the target so map a path to the closest node found
+		node = close.get_shortest_h();
+		current.x = node->getX();
+		current.y = node->getY();
 
-		float lowest_score = FLT_MAX;
-		// find the closed node which is closest to the target and create a path
-		list<AStarNode>::iterator lowest_it;
-		for (list<AStarNode>::iterator it=close.begin(); it != close.end(); ++it) {
-			if (it->getH() < lowest_score) {
-				lowest_score = it->getH();
-				lowest_it = it;
-			}
-		}
-		node = *lowest_it;
-		current.x = node.getX();
-		current.y = node.getY();
-
-		//couldnt find the target so map a path to the closest node found
 		while (current.x != start.x || current.y != start.y) {
 			path.push_back(collision_to_map(current));
-			current = find(close.begin(), close.end(), current)->getParent();
+			current = close.get(current.x, current.y)->getParent();
 		}
-
-		return false;
 	}
 	else {
 		// store path from end to start
 		path.push_back(collision_to_map(end));
 		while (current.x != start.x || current.y != start.y) {
 			path.push_back(collision_to_map(current));
-			current = find(close.begin(), close.end(), current)->getParent();
+			current = close.get(current.x, current.y)->getParent();
 		}
 	}
-
 	// reblock target if needed
 	if (target_blocks) block(end_pos.x, end_pos.y, target_blocks_type == BLOCKS_ENEMIES);
 
