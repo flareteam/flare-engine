@@ -85,11 +85,9 @@ void HazardManager::logic() {
 						if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
 								h[i]->addEntity(enemies->enemies[eindex]);
+								if (!h[i]->beacon) last_enemy = enemies->enemies[eindex];
 								// hit!
 								hit = enemies->enemies[eindex]->takeHit(*h[i]);
-								if (!h[i]->beacon) {
-									last_enemy = enemies->enemies[eindex];
-								}
 								if (!h[i]->multitarget && hit) {
 									h[i]->active = false;
 									if (!h[i]->complete_animation) h[i]->lifespan = 0;
