@@ -239,7 +239,8 @@ void GameStateNew:: setName(const string& default_name) {
 }
 
 void GameStateNew::logic() {
-	tablist.logic();
+	if (!input_name->inFocus)
+		tablist.logic();
 
 	button_permadeath->checkClick();
 	if (show_classlist) class_list->checkClick();
