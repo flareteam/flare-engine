@@ -59,12 +59,10 @@ void ModManager::loadModList() {
 	bool found_any_mod = false;
 
 	// Add the fallback mod by default
+	// Note: if a default mod is not found in mod_dirs, the game will exit
 	if (find(mod_dirs.begin(), mod_dirs.end(), FALLBACK_MOD) != mod_dirs.end()) {
 		mod_list.push_back(FALLBACK_MOD);
 		found_any_mod = true;
-	}
-	else {
-		fprintf(stderr, "Mod \"%s\" not found, skipping\n", FALLBACK_MOD);
 	}
 
 	// Add all other mods.
