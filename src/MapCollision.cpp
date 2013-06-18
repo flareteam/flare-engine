@@ -104,7 +104,7 @@ bool MapCollision::is_empty(int x, int y) const {
 	if (is_outside_map(tile_x, tile_y)) return false;
 
 	// collision type check
-	return (colmap[tile_x][tile_y] == BLOCKS_NONE);
+	return (colmap[tile_x][tile_y] == BLOCKS_NONE || colmap[tile_x][tile_y] == MAP_ONLY || colmap[tile_x][tile_y] == MAP_ONLY_ALT);
 }
 
 /**
