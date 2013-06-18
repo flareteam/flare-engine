@@ -493,22 +493,17 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 	haz->complete_animation = powers[power_index].complete_animation;
 
 	// combat traits
-	if (powers[power_index].no_attack) {
-		haz->active = false;
-	}
-	if (powers[power_index].multitarget) {
-		haz->multitarget = true;
-	}
 	if (powers[power_index].radius != 0) {
 		haz->radius = powers[power_index].radius;
 	}
-	if (powers[power_index].trait_armor_penetration) {
-		haz->trait_armor_penetration = true;
-	}
-	haz->trait_crits_impaired = powers[power_index].trait_crits_impaired;
 	if (powers[power_index].trait_elemental != -1) {
 		haz->trait_elemental = powers[power_index].trait_elemental;
 	}
+	haz->active = !powers[power_index].no_attack;
+	haz->multitarget = powers[power_index].multitarget;
+	haz->trait_armor_penetration = powers[power_index].trait_armor_penetration;
+	haz->trait_crits_impaired = powers[power_index].trait_crits_impaired;
+	haz->beacon = powers[power_index].beacon;
 
 	// status effect durations
 	// steal effects
