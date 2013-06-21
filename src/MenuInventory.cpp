@@ -877,22 +877,19 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		stats->dmg_ment_min_add += item.dmg_ment_min;
 		stats->dmg_ment_max_add += item.dmg_ment_max;
 
-		// TODO: add a separate wielding stat to items
-		// e.g. we might want a ring that gives bonus ranged damage but
-		// we still need a bow to shoot arrows.
-		if (item.dmg_melee_max > 0) {
+		if (find(item.weapon_type.begin(), item.weapon_type.end(), ITEM_WEAPON_TYPE_MELEE) != item.weapon_type.end()) {
 			stats->wielding_physical = true;
 			if (item.power_mod != 0) {
 				stats->melee_weapon_power = item.power_mod;
 			}
 		}
-		if (item.dmg_ranged_max > 0) {
+		if (find(item.weapon_type.begin(), item.weapon_type.end(), ITEM_WEAPON_TYPE_RANGED) != item.weapon_type.end()) {
 			stats->wielding_offense = true;
 			if (item.power_mod != 0) {
 				stats->ranged_weapon_power = item.power_mod;
 			}
 		}
-		if (item.dmg_ment_max > 0) {
+		if (find(item.weapon_type.begin(), item.weapon_type.end(), ITEM_WEAPON_TYPE_MENTAL) != item.weapon_type.end()) {
 			stats->wielding_mental = true;
 			if (item.power_mod != 0) {
 				stats->mental_weapon_power = item.power_mod;

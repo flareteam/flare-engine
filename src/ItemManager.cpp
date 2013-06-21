@@ -156,6 +156,21 @@ void ItemManager::loadItems() {
 		else if (infile.key == "item_type") {
 			items[id].type = infile.val;
 		}
+		else if (infile.key == "weapon_type") {
+			infile.val = infile.val + ',';
+			std::string tmp = eatFirstString(infile.val,',');
+
+			while (tmp != "") {
+				if (tmp == "melee")
+					items[id].weapon_type.push_back(ITEM_WEAPON_TYPE_MELEE);
+				else if (tmp == "ranged")
+					items[id].weapon_type.push_back(ITEM_WEAPON_TYPE_RANGED);
+				else if (tmp == "mental")
+					items[id].weapon_type.push_back(ITEM_WEAPON_TYPE_MENTAL);
+
+				tmp = eatFirstString(infile.val,',');
+			}
+		}
 		else if (infile.key == "dmg_melee") {
 			items[id].dmg_melee_min = toInt(infile.nextValue());
 			if (infile.val.length() > 0)

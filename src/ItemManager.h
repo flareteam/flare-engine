@@ -48,6 +48,10 @@ const int ITEM_QUALITY_EPIC = 3;
 
 const int ITEM_MAX_BONUSES = 8;
 
+const int ITEM_WEAPON_TYPE_MELEE = 0;
+const int ITEM_WEAPON_TYPE_RANGED = 1;
+const int ITEM_WEAPON_TYPE_MENTAL = 2;
+
 class LootAnimation {
 public:
 	std::string name;
@@ -80,6 +84,7 @@ public:
 	int set;              // item can be attached to item set
 	int quality;          // low, normal, high, epic; corresponds to item name color
 	std::string type;     // equipment slot or base item type
+	std::vector<int> weapon_type;   // melee, ranged, mental
 	int icon;             // icon index on small pixel sheet
 	int dmg_melee_min;    // minimum damage amount (melee)
 	int dmg_melee_max;    // maximum damage amount (melee)
