@@ -1,3 +1,20 @@
+/*
+Copyright © 2013 Ryan Dansie
+
+This file is part of FLARE.
+
+FLARE is free software: you can redistribute it and/or modify it under the terms
+of the GNU General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
+
+FLARE is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+FLARE.  If not, see http://www.gnu.org/licenses/
+*/
+
 #include "BehaviorAlly.h"
 #include "Enemy.h"
 #include "SharedGameResources.h"
@@ -109,6 +126,7 @@ void BehaviorAlly::checkMoveStateStance() {
 			e->newState(ENEMY_MOVE);
 		}
 		else {
+            collided = true;
 			int prev_direction = e->stats.direction;
 
 			// hit an obstacle, try the next best angle
@@ -129,6 +147,7 @@ void BehaviorAlly::checkMoveStateMove() {
 
 	// try to continue moving
 	else if (!e->move()) {
+        collided = true;
 		int prev_direction = e->stats.direction;
 		// hit an obstacle.  Try the next best angle
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);

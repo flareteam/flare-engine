@@ -22,6 +22,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyBehavior.h"
 #include "Utils.h"
 
+using namespace std;
+
 class Enemy;
 class Point;
 
@@ -38,6 +40,13 @@ private:
 	void updateState();
 
 protected:
+    //variables for patfinding
+	vector<FPoint> path;
+	FPoint prev_target;
+	bool collided;
+	bool path_found;
+	int chance_calc_path;
+
 	float hero_dist;
 	float target_dist;
 	FPoint pursue_pos;

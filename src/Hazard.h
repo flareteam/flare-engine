@@ -108,6 +108,7 @@ public:
 	bool trait_armor_penetration;
 	int trait_crits_impaired;
 	int trait_elemental;
+	bool beacon;
 
 	// pre/post power effects
 	int post_power;

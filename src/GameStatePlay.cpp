@@ -1,8 +1,8 @@
 /*
-Copyright 2011-2012 Clint Bellanger
-Copyright 2012 Igor Paliychuk
-Copyright 2012-2013 Henrik Andersson
-Copyright 2012 Stefan Beller
+Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012 Igor Paliychuk
+Copyright © 2012-2013 Henrik Andersson
+Copyright © 2012 Stefan Beller
 
 This file is part of FLARE.
 
@@ -140,6 +140,18 @@ void GameStatePlay::checkEnemyFocus() {
 		if (!enemy->stats.suppress_hp) {
 			menu->enemy->enemy = enemy;
 			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
+			hazards->last_enemy = NULL;
+		}
+	}
+	else if (hazards->last_enemy != NULL) {
+
+		// try to focus the last enemy hit
+		if (!hazards->last_enemy->stats.suppress_hp) {
+			menu->enemy->enemy = hazards->last_enemy;
+			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
+			if (!hazards->last_enemy->stats.alive) {
+				hazards->last_enemy = NULL;
+			}
 		}
 	}
 	else {
