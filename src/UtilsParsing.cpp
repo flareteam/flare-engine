@@ -26,6 +26,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 /**
+ * Check to see if this string represents an integer
+ * The first character can be a negative (-) sign.
+ */
+bool isInt(const string& s) {
+	if (s == "") return false;
+
+	int start=0;
+
+	// allow a negative sign as the first char
+	if (s.at(0) == '-') start=1;
+
+	for (unsigned int i=start; i<s.length(); i++) {
+		// if any character in this string is not a numeric digit, this string is not an integer
+		if (s.at(i) < 48 || s.at(i) > 57) return false;
+	}
+	return true;
+}
+
+/**
  * trim: remove leading and trailing c from s
  */
 string trim(const string& s, char c) {
