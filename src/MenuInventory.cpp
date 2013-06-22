@@ -841,9 +841,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	stats->powers_list_items.clear();
 
 	// reset wielding vars
-	stats->wielding_physical = false;
-	stats->wielding_mental = false;
-	stats->wielding_offense = false;
+	stats->equip_flags.clear();
 
 	// remove all effects and bonuses added by items
 	stats->effects.clearItemEffects();
@@ -877,22 +875,27 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		stats->dmg_ment_min_add += item.dmg_ment_min;
 		stats->dmg_ment_max_add += item.dmg_ment_max;
 
-		if (find(item.weapon_type.begin(), item.weapon_type.end(), ITEM_WEAPON_TYPE_MELEE) != item.weapon_type.end()) {
-			stats->wielding_physical = true;
+		// apply power mod
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "melee") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->melee_weapon_power = item.power_mod;
 			}
 		}
-		if (find(item.weapon_type.begin(), item.weapon_type.end(), ITEM_WEAPON_TYPE_RANGED) != item.weapon_type.end()) {
-			stats->wielding_offense = true;
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "ranged") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->ranged_weapon_power = item.power_mod;
 			}
 		}
-		if (find(item.weapon_type.begin(), item.weapon_type.end(), ITEM_WEAPON_TYPE_MENTAL) != item.weapon_type.end()) {
-			stats->wielding_mental = true;
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "mental") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->mental_weapon_power = item.power_mod;
+			}
+		}
+
+		// set equip flags
+		for (unsigned j=0; j<item.equip_flags.size(); ++j) {
+			if (find(stats->equip_flags.begin(), stats->equip_flags.end(), item.equip_flags[j]) == stats->equip_flags.end()) {
+				stats->equip_flags.push_back(item.equip_flags[j]);
 			}
 		}
 

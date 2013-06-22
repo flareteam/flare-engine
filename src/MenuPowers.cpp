@@ -485,12 +485,15 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
 			tip.addText(powers->powers[power_cell[i].id].description);
 
-			if (powers->powers[power_cell[i].id].requires_physical_weapon)
+			// TODO display proper "Requires ______" text for arbitrary flags
+			if (find(powers->powers[power_cell[i].id].requires_flags.begin(), powers->powers[power_cell[i].id].requires_flags.end(), "melee") != powers->powers[power_cell[i].id].requires_flags.end())
 				tip.addText(msg->get("Requires a physical weapon"));
-			else if (powers->powers[power_cell[i].id].requires_mental_weapon)
+			if (find(powers->powers[power_cell[i].id].requires_flags.begin(), powers->powers[power_cell[i].id].requires_flags.end(), "mental") != powers->powers[power_cell[i].id].requires_flags.end())
 				tip.addText(msg->get("Requires a mental weapon"));
-			else if (powers->powers[power_cell[i].id].requires_offense_weapon)
+			if (find(powers->powers[power_cell[i].id].requires_flags.begin(), powers->powers[power_cell[i].id].requires_flags.end(), "ranged") != powers->powers[power_cell[i].id].requires_flags.end())
 				tip.addText(msg->get("Requires an offense weapon"));
+			if (find(powers->powers[power_cell[i].id].requires_flags.begin(), powers->powers[power_cell[i].id].requires_flags.end(), "shield") != powers->powers[power_cell[i].id].requires_flags.end())
+				tip.addText(msg->get("Requires a shield"));
 
 
 			// add requirement

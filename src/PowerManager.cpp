@@ -125,12 +125,15 @@ void PowerManager::loadPowers() {
 			else fprintf(stderr, "unknown passive trigger %s\n", infile.val.c_str());
 		}
 		// power requirements
-		else if (infile.key == "requires_physical_weapon")
-			powers[input_id].requires_physical_weapon = toBool(infile.val);
-		else if (infile.key == "requires_mental_weapon")
-			powers[input_id].requires_mental_weapon = toBool(infile.val);
-		else if (infile.key == "requires_offense_weapon")
-			powers[input_id].requires_offense_weapon = toBool(infile.val);
+		else if (infile.key == "requires_flags") {
+			infile.val = infile.val + ',';
+			std::string flag = eatFirstString(infile.val,',');
+
+			while (flag != "") {
+				powers[input_id].requires_flags.push_back(flag);
+				flag = eatFirstString(infile.val,',');
+			}
+		}
 		else if (infile.key == "requires_mp")
 			powers[input_id].requires_mp = toInt(infile.val);
 		else if (infile.key == "requires_hp")

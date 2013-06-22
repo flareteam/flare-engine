@@ -212,9 +212,7 @@ public:
 	int speed;
 	int dspeed;
 
-	bool wielding_physical;
-	bool wielding_mental;
-	bool wielding_offense;
+	std::vector<std::string> equip_flags;
 	std::vector<int> vulnerable;
 	std::vector<int> vulnerable_base;
 
