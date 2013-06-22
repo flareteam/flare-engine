@@ -47,6 +47,7 @@ void BehaviorAlly::findTarget() {
 		mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 		e->stats.pos.x = pc->stats.pos.x;
 		e->stats.pos.y = pc->stats.pos.y;
+		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, true);
 		hero_dist = 0;
 	}
 
@@ -141,8 +142,11 @@ void BehaviorAlly::checkMoveStateStance() {
 
 void BehaviorAlly::checkMoveStateMove() {
 	//if close enough to hero, stop miving
-	if(hero_dist < ALLY_FOLLOW_DISTANCE_STOP && !e->stats.in_combat && !fleeing) {
-		e->newState(ENEMY_STANCE);
+	if((hero_dist < ALLY_FOLLOW_DISTANCE_STOP && !e->stats.in_combat && !fleeing)
+        || (target_dist < e->stats.melee_range && e->stats.in_combat && !fleeing)
+        || (move_to_safe_dist && target_dist >= e->stats.threat_range/2)) {
+            e->newState(ENEMY_STANCE);
+            move_to_safe_dist = false;
 	}
 
 	// try to continue moving
