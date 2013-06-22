@@ -196,8 +196,11 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
 	// outside the map isn't valid
 	if (is_outside_map(tile_x,tile_y)) return false;
 
-	if(is_hero && colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !ENABLE_ALLY_COLLISION)
-		return true;
+	if(is_hero){
+        if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !ENABLE_ALLY_COLLISION) return true;
+	}
+    else
+        if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES) return false;
 
 	// occupied by an entity isn't valid
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES) return false;
