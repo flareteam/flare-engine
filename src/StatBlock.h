@@ -212,7 +212,7 @@ public:
 	int speed;
 	int dspeed;
 
-	std::vector<std::string> equip_flags;
+	std::set<std::string> equip_flags;
 	std::vector<int> vulnerable;
 	std::vector<int> vulnerable_base;
 

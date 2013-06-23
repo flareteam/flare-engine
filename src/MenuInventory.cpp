@@ -894,9 +894,7 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 
 		// set equip flags
 		for (unsigned j=0; j<item.equip_flags.size(); ++j) {
-			if (find(stats->equip_flags.begin(), stats->equip_flags.end(), item.equip_flags[j]) == stats->equip_flags.end()) {
-				stats->equip_flags.push_back(item.equip_flags[j]);
-			}
+			stats->equip_flags.insert(item.equip_flags[j]);
 		}
 
 		// apply absorb bonus
