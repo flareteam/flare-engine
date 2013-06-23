@@ -44,23 +44,16 @@ bool isInt(const string& s) {
 	return true;
 }
 
-/**
- * trim: remove leading and trailing c from s
- */
-string trim(const string& s, char c) {
-	if (s.length() == 0) return "";
+string trim(string s, const string& delimiters) {
+	return trim_left_inplace(trim_right_inplace(s, delimiters), delimiters);
+}
 
-	unsigned int first = 0;
-	unsigned int last = s.length()-1;
+string trim_left_inplace(string s, const string& delimiters) {
+	return s.erase(0, s.find_first_not_of(delimiters));
+}
 
-	while (s.at(first) == c && first < s.length()-1) {
-		first++;
-	}
-	while (s.at(last) == c && last >= first && last > 0) {
-		last--;
-	}
-	if (first <= last) return s.substr(first,last-first+1);
-	return "";
+string trim_right_inplace(string s, const string& delimiters) {
+	return s.erase(s.find_last_not_of(delimiters) + 1);
 }
 
 /**
@@ -97,8 +90,8 @@ void parse_key_pair(const string& s, string &key, string &val) {
 	}
 	key = s.substr(0, separator);
 	val = s.substr(separator+1, s.length());
-	key = trim(key, ' ');
-	val = trim(val, ' ');
+	key = trim(key);
+	val = trim(val);
 }
 
 /**
@@ -253,18 +246,6 @@ unsigned long toUnsignedLong(const string& s, unsigned long  default_value) {
 	if (!(stringstream(s) >> result))
 		result = default_value;
 	return result;
-}
-
-string &trim_right_inplace(string &s, const string& delimiters = " \f\n\r\t\v") {
-	return s.erase(s.find_last_not_of(delimiters) + 1);
-}
-
-string& trim_left_inplace(string &s, const string& delimiters = " \f\n\r\t\v" ) {
-	return s.erase(0, s.find_first_not_of(delimiters));
-}
-
-string &trim(string &s, const string& delimiters = " \f\n\r\t\v") {
-	return trim_left_inplace(trim_right_inplace(s, delimiters), delimiters);
 }
 
 bool toBool(std::string value) {
