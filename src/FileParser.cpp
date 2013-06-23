@@ -94,7 +94,7 @@ bool FileParser::next() {
 	while (current_index < filenames.size()) {
 		while (infile.good()) {
 
-			line = getLine(infile);
+			line = trim(getLine(infile));
 
 			// skip ahead if this line is empty
 			if (line.length() == 0) continue;
