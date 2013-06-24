@@ -162,10 +162,10 @@ void MenuMiniMap::renderIso(Point hero_pos) {
 void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
 	for (int i=0; i<std::min(map_surface->w, map_size.x); i++) {
 		for (int j=0; j<std::min(map_surface->h, map_size.y); j++) {
-			if (collider->colmap[i][j] == 1 or collider->colmap[i][j] == 5) {
+			if (collider->colmap[i][j] == 1 || collider->colmap[i][j] == 5) {
 				drawPixel(map_surface, i, j, color_wall);
 			}
-			else if (collider->colmap[i][j] == 2 or collider->colmap[i][j] == 6) {
+			else if (collider->colmap[i][j] == 2 || collider->colmap[i][j] == 6) {
 				drawPixel(map_surface, i, j, color_obst);
 			}
 		}
@@ -196,8 +196,8 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 				bool draw_tile = true;
 
 				// walls and low obstacles show as different colors
-				if (tile_type == 1 or tile_type == 5) draw_color = color_wall;
-				else if (tile_type == 2 or tile_type == 6) draw_color = color_obst;
+				if (tile_type == 1 || tile_type == 5) draw_color = color_wall;
+				else if (tile_type == 2 || tile_type == 6) draw_color = color_obst;
 				else draw_tile = false;
 
 				if (draw_tile) {
