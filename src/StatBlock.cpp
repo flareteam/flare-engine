@@ -594,14 +594,7 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 	//don't use untransform power if hero is not transformed
 	else if (power.spawn_type == "untransform" && !transformed) return false;
 	else {
-		bool has_equip_flags = true;
-		for (unsigned i=0; i<power.requires_flags.size(); ++i) {
-			if (find(equip_flags.begin(), equip_flags.end(), power.requires_flags[i]) == equip_flags.end()) {
-				has_equip_flags = false;
-				break;
-			}
-		}
-		return has_equip_flags
+		return std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
 			   && mp >= power.requires_mp
 			   && (!power.sacrifice == false || hp > power.requires_hp)
 			   && menu_powers->meetsUsageStats(powerid)

@@ -117,7 +117,7 @@ public:
 	int passive_trigger; // only activate passive powers under certain conditions (block, hit, death, etc)
 
 	// power requirements
-	std::vector<std::string> requires_flags; // checked against equip_flags granted from items
+	std::set<std::string> requires_flags; // checked against equip_flags granted from items
 	int requires_mp;
 	int requires_hp;
 	bool sacrifice;

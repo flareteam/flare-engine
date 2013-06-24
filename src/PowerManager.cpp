@@ -130,7 +130,7 @@ void PowerManager::loadPowers() {
 			std::string flag = eatFirstString(infile.val,',');
 
 			while (flag != "") {
-				powers[input_id].requires_flags.push_back(flag);
+				powers[input_id].requires_flags.insert(flag);
 				flag = eatFirstString(infile.val,',');
 			}
 		}
