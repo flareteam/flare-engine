@@ -50,7 +50,8 @@ enum AvatarState {
 	AVATAR_HIT = 4,
 	AVATAR_DEAD = 5,
 	AVATAR_CAST = 6,
-	AVATAR_SHOOT = 7
+	AVATAR_SHOOT = 7,
+	AVATAR_THRUST = 8,
 };
 
 class Layer_gfx {
@@ -68,6 +69,7 @@ private:
 	bool lockSwing;
 	bool lockCast;
 	bool lockShoot;
+	bool lockThrust;
 
 	SoundManager::SoundID sound_melee;
 	SoundManager::SoundID sound_mental;
