@@ -569,10 +569,8 @@ void BehaviorStandard::updateState() {
 			power_state = powers->powers[power_id].new_state;
 
 			// animation based on power type
-			if (power_state == POWSTATE_SWING) e->setAnimation("melee");
-			else if (power_state == POWSTATE_SHOOT) e->setAnimation("ranged");
-			else if (power_state == POWSTATE_CAST) e->setAnimation("ment");
-			else if (power_state == POWSTATE_INSTANT) e->instant_power = true;
+			if (power_state == POWSTATE_INSTANT) e->instant_power = true;
+			else if (power_state == POWSTATE_CUSTOM) e->setAnimation(powers->powers[power_id].custom_anim);
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
