@@ -376,9 +376,7 @@ void Avatar::handlePower(int actionbar_power) {
 			stats.direction = calcDirection(stats.pos, target);
 		}
 
-		if (power.custom_anim != "") {
-			custom_anim = power.custom_anim;
-		}
+		custom_anim = power.custom_anim;
 
 		switch (power.new_state) {
 			case POWSTATE_CUSTOM:	// handle custom powers

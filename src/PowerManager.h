@@ -110,7 +110,7 @@ public:
 	std::string tag; // optional unique name used to get power id
 	int icon; // just the number.  The caller menu will have access to the surface.
 	int new_state; // when using this power the user (avatar/enemy) starts a new state
-	std::string custom_anim;
+	std::string custom_anim; // name of the animation to play when using this power, if it is not block
 	bool face; // does the user turn to face the mouse cursor when using this power?
 	int source_type; //hero, neutral, or enemy
 	bool beacon; //true if it's just an ememy calling its allies
