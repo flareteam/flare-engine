@@ -611,6 +611,12 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (MOUSE_MOVE) lockCustom = true;
 
+			if (activeAnimation->isFirstFrame() && custom_anim == "swing")
+				snd->play(sound_melee);
+
+			if (activeAnimation->isFirstFrame() && custom_anim == "cast")
+				snd->play(sound_mental);
+
 			// do power
 			if (activeAnimation->isActiveFrame()) {
 				powers->activate(current_power, &stats, act_target);

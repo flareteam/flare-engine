@@ -574,9 +574,8 @@ void BehaviorStandard::updateState() {
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (power_state == POWSTATE_SWING) e->sfx_phys = true;
-				else if (power_state == POWSTATE_SHOOT) e->sfx_phys = true;
-				else if (power_state == POWSTATE_CAST) e->sfx_ment = true;
+				if (powers->powers[power_id].custom_anim == "swing" || powers->powers[power_id].custom_anim == "shoot") e->sfx_phys = true;
+				else if (powers->powers[power_id].custom_anim == "cast") e->sfx_ment = true;
 			}
 
 			if (e->activeAnimation->isLastFrame()) e->newState(ENEMY_STANCE);
