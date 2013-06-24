@@ -172,7 +172,7 @@ bool MapCollision::is_empty(float x, float y) const {
 	// collision type check
 	const int tile_x = floor(x);
 	const int tile_y = floor(y);
-	return (colmap[tile_x][tile_y] == BLOCKS_NONE);
+	return (colmap[tile_x][tile_y] == BLOCKS_NONE || colmap[tile_x][tile_y] == MAP_ONLY || colmap[tile_x][tile_y] == MAP_ONLY_ALT);
 }
 
 /**
@@ -212,6 +212,9 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
 	if (movement_type == MOVEMENT_FLYING) {
 		return (!(colmap[tile_x][tile_y] == BLOCKS_ALL || colmap[tile_x][tile_y] == BLOCKS_ALL_HIDDEN));
 	}
+
+	if (colmap[tile_x][tile_y] == MAP_ONLY || colmap[tile_x][tile_y] == MAP_ONLY_ALT)
+		return true;
 
 	// normal creatures can only be in empty spaces
 	return (colmap[tile_x][tile_y] == BLOCKS_NONE);

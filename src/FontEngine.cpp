@@ -191,7 +191,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	}
 
 	height = height + getLineHeight();
-	builder.str(trim(builder.str(), ' ')); //removes whitespace that shouldn't be included in the size
+	builder.str(trim(builder.str())); //removes whitespace that shouldn't be included in the size
 	if (calc_width(builder.str()) > max_width) max_width = calc_width(builder.str());
 
 	Point size;
