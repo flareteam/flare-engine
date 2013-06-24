@@ -100,8 +100,10 @@ void PowerManager::loadPowers() {
 			else if (infile.val == "cast") powers[input_id].new_state = POWSTATE_CAST;
 			else if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
 			else if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
-			else if (infile.val == "thrust") powers[input_id].new_state = POWSTATE_THRUST;
-			else fprintf(stderr, "unknown new_state %s\n", infile.val.c_str());
+			else {
+				powers[input_id].new_state = POWSTATE_CUSTOM;
+				powers[input_id].custom_anim = infile.val;
+			}
 		}
 		else if (infile.key == "face")
 			powers[input_id].face = toBool(infile.val);

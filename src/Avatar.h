@@ -51,7 +51,7 @@ enum AvatarState {
 	AVATAR_DEAD = 5,
 	AVATAR_CAST = 6,
 	AVATAR_SHOOT = 7,
-	AVATAR_THRUST = 8,
+	AVATAR_CUSTOM = 8,
 };
 
 class Layer_gfx {
@@ -69,7 +69,7 @@ private:
 	bool lockSwing;
 	bool lockCast;
 	bool lockShoot;
-	bool lockThrust;
+	bool lockCustom;
 
 	SoundManager::SoundID sound_melee;
 	SoundManager::SoundID sound_mental;
@@ -112,6 +112,8 @@ public:
 	bool pressing_move();
 	void set_direction();
 	std::string log_msg;
+
+	std::string custom_anim;
 
 	// transformation handling
 	void transform();
