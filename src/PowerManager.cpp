@@ -95,10 +95,7 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "icon")
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
-			if (infile.val == "swing") powers[input_id].new_state = POWSTATE_SWING;
-			else if (infile.val == "shoot") powers[input_id].new_state = POWSTATE_SHOOT;
-			else if (infile.val == "cast") powers[input_id].new_state = POWSTATE_CAST;
-			else if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
+			if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
 			else if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
 			else {
 				powers[input_id].new_state = POWSTATE_CUSTOM;

@@ -43,9 +43,6 @@ using namespace std;
 
 Avatar::Avatar()
 	: Entity()
-	, lockSwing(false)
-	, lockCast(false)
-	, lockShoot(false)
 	, lockCustom(false)
 	, path()
 	, path_frames_elapsed(0)
@@ -88,9 +85,6 @@ void Avatar::init() {
 	current_power = 0;
 	newLevelNotification = false;
 
-	lockSwing = false;
-	lockCast = false;
-	lockShoot = false;
 	lockCustom = false;
 
 	stats.hero = true;
@@ -387,20 +381,8 @@ void Avatar::handlePower(int actionbar_power) {
 		}
 
 		switch (power.new_state) {
-			case POWSTATE_SWING:	// handle melee powers
-				stats.cur_state = AVATAR_MELEE;
-				break;
-
-			case POWSTATE_SHOOT:	// handle ranged powers
-				stats.cur_state = AVATAR_SHOOT;
-				break;
-
 			case POWSTATE_CUSTOM:	// handle custom powers
 				stats.cur_state = AVATAR_CUSTOM;
-				break;
-
-			case POWSTATE_CAST:		// handle ment powers
-				stats.cur_state = AVATAR_CAST;
 				break;
 
 			case POWSTATE_BLOCK:	// handle blocking
@@ -552,7 +534,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// allowed to move or use powers?
 			if (MOUSE_MOVE) {
-				allowed_to_move = restrictPowerUse && (!inpt->lock[MAIN1] || drag_walking) && !lockSwing && !lockShoot && !lockCast && !lockCustom;
+				allowed_to_move = restrictPowerUse && (!inpt->lock[MAIN1] || drag_walking) && !lockCustom;
 				allowed_to_use_power = !allowed_to_move;
 			}
 			else {
@@ -581,9 +563,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (MOUSE_MOVE && !inpt->pressing[MAIN1]) {
 				inpt->lock[MAIN1] = false;
-				lockSwing = false;
-				lockShoot = false;
-				lockCast = false;
 				lockCustom = false;
 			}
 
@@ -626,64 +605,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 			// handle power usage
 			if (allowed_to_use_power)
 				handlePower(actionbar_power);
-			break;
-
-		case AVATAR_MELEE:
-
-			setAnimation("melee");
-
-			if (MOUSE_MOVE) lockSwing = true;
-
-			if (activeAnimation->isFirstFrame())
-				snd->play(sound_melee);
-
-			// do power
-			if (activeAnimation->isActiveFrame()) {
-				powers->activate(current_power, &stats, act_target);
-			}
-
-			if (activeAnimation->getTimesPlayed() >= 1) {
-				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
-			}
-			break;
-
-		case AVATAR_CAST:
-
-			setAnimation("ment");
-
-			if (MOUSE_MOVE) lockCast = true;
-
-			if (activeAnimation->isFirstFrame())
-				snd->play(sound_mental);
-
-			// do power
-			if (activeAnimation->isActiveFrame()) {
-				powers->activate(current_power, &stats, act_target);
-			}
-
-			if (activeAnimation->getTimesPlayed() >= 1) {
-				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
-			}
-			break;
-
-
-		case AVATAR_SHOOT:
-
-			setAnimation("ranged");
-
-			if (MOUSE_MOVE) lockShoot = true;
-
-			// do power
-			if (activeAnimation->isActiveFrame()) {
-				powers->activate(current_power, &stats, act_target);
-			}
-
-			if (activeAnimation->getTimesPlayed() >= 1) {
-				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
-			}
 			break;
 
 		case AVATAR_CUSTOM:
