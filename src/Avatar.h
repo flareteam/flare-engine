@@ -48,7 +48,7 @@ enum AvatarState {
 	AVATAR_BLOCK = 2,
 	AVATAR_HIT = 3,
 	AVATAR_DEAD = 4,
-	AVATAR_CUSTOM = 5,
+	AVATAR_ATTACK = 5,
 };
 
 class Layer_gfx {
@@ -63,7 +63,7 @@ public:
 
 class Avatar : public Entity {
 private:
-	bool lockCustom;
+	bool lockAttack;
 
 	SoundManager::SoundID sound_melee;
 	SoundManager::SoundID sound_mental;
@@ -107,7 +107,7 @@ public:
 	void set_direction();
 	std::string log_msg;
 
-	std::string custom_anim;
+	std::string attack_anim;
 
 	// transformation handling
 	void transform();

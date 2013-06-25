@@ -98,8 +98,8 @@ void PowerManager::loadPowers() {
 			if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
 			else if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
 			else {
-				powers[input_id].new_state = POWSTATE_CUSTOM;
-				powers[input_id].custom_anim = infile.val;
+				powers[input_id].new_state = POWSTATE_ATTACK;
+				powers[input_id].attack_anim = infile.val;
 			}
 		}
 		else if (infile.key == "face")

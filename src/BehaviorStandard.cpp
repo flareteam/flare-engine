@@ -570,12 +570,12 @@ void BehaviorStandard::updateState() {
 
 			// animation based on power type
 			if (power_state == POWSTATE_INSTANT) e->instant_power = true;
-			else if (power_state == POWSTATE_CUSTOM) e->setAnimation(powers->powers[power_id].custom_anim);
+			else if (power_state == POWSTATE_ATTACK) e->setAnimation(powers->powers[power_id].attack_anim);
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (powers->powers[power_id].custom_anim == "swing" || powers->powers[power_id].custom_anim == "shoot") e->sfx_phys = true;
-				else if (powers->powers[power_id].custom_anim == "cast") e->sfx_ment = true;
+				if (powers->powers[power_id].attack_anim == "swing" || powers->powers[power_id].attack_anim == "shoot") e->sfx_phys = true;
+				else if (powers->powers[power_id].attack_anim == "cast") e->sfx_ment = true;
 			}
 
 			if (e->activeAnimation->isLastFrame()) e->newState(ENEMY_STANCE);

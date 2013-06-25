@@ -43,7 +43,7 @@ using namespace std;
 
 Avatar::Avatar()
 	: Entity()
-	, lockCustom(false)
+	, lockAttack(false)
 	, path()
 	, path_frames_elapsed(0)
 	, prev_target()
@@ -85,7 +85,7 @@ void Avatar::init() {
 	current_power = 0;
 	newLevelNotification = false;
 
-	lockCustom = false;
+	lockAttack = false;
 
 	stats.hero = true;
 	stats.humanoid = true;
@@ -376,11 +376,11 @@ void Avatar::handlePower(int actionbar_power) {
 			stats.direction = calcDirection(stats.pos, target);
 		}
 
-		custom_anim = power.custom_anim;
+		attack_anim = power.attack_anim;
 
 		switch (power.new_state) {
-			case POWSTATE_CUSTOM:	// handle custom powers
-				stats.cur_state = AVATAR_CUSTOM;
+			case POWSTATE_ATTACK:	// handle attack powers
+				stats.cur_state = AVATAR_ATTACK;
 				break;
 
 			case POWSTATE_BLOCK:	// handle blocking
@@ -532,7 +532,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// allowed to move or use powers?
 			if (MOUSE_MOVE) {
-				allowed_to_move = restrictPowerUse && (!inpt->lock[MAIN1] || drag_walking) && !lockCustom;
+				allowed_to_move = restrictPowerUse && (!inpt->lock[MAIN1] || drag_walking) && !lockAttack;
 				allowed_to_use_power = !allowed_to_move;
 			}
 			else {
@@ -561,7 +561,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (MOUSE_MOVE && !inpt->pressing[MAIN1]) {
 				inpt->lock[MAIN1] = false;
-				lockCustom = false;
+				lockAttack = false;
 			}
 
 			// handle power usage
@@ -605,16 +605,16 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				handlePower(actionbar_power);
 			break;
 
-		case AVATAR_CUSTOM:
+		case AVATAR_ATTACK:
 
-			setAnimation(custom_anim);
+			setAnimation(attack_anim);
 
-			if (MOUSE_MOVE) lockCustom = true;
+			if (MOUSE_MOVE) lockAttack = true;
 
-			if (activeAnimation->isFirstFrame() && custom_anim == "swing")
+			if (activeAnimation->isFirstFrame() && attack_anim == "swing")
 				snd->play(sound_melee);
 
-			if (activeAnimation->isFirstFrame() && custom_anim == "cast")
+			if (activeAnimation->isFirstFrame() && attack_anim == "cast")
 				snd->play(sound_mental);
 
 			// do power
