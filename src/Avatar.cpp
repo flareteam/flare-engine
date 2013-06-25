@@ -43,9 +43,7 @@ using namespace std;
 
 Avatar::Avatar()
 	: Entity()
-	, lockSwing(false)
-	, lockCast(false)
-	, lockShoot(false)
+	, lockAttack(false)
 	, path()
 	, path_frames_elapsed(0)
 	, prev_target()
@@ -87,9 +85,7 @@ void Avatar::init() {
 	current_power = 0;
 	newLevelNotification = false;
 
-	lockSwing = false;
-	lockCast = false;
-	lockShoot = false;
+	lockAttack = false;
 
 	stats.hero = true;
 	stats.humanoid = true;
@@ -380,17 +376,11 @@ void Avatar::handlePower(int actionbar_power) {
 			stats.direction = calcDirection(stats.pos, target);
 		}
 
+		attack_anim = power.attack_anim;
+
 		switch (power.new_state) {
-			case POWSTATE_SWING:	// handle melee powers
-				stats.cur_state = AVATAR_MELEE;
-				break;
-
-			case POWSTATE_SHOOT:	// handle ranged powers
-				stats.cur_state = AVATAR_SHOOT;
-				break;
-
-			case POWSTATE_CAST:		// handle ment powers
-				stats.cur_state = AVATAR_CAST;
+			case POWSTATE_ATTACK:	// handle attack powers
+				stats.cur_state = AVATAR_ATTACK;
 				break;
 
 			case POWSTATE_BLOCK:	// handle blocking
@@ -542,7 +532,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// allowed to move or use powers?
 			if (MOUSE_MOVE) {
-				allowed_to_move = restrictPowerUse && (!inpt->lock[MAIN1] || drag_walking) && !lockSwing && !lockShoot && !lockCast;
+				allowed_to_move = restrictPowerUse && (!inpt->lock[MAIN1] || drag_walking) && !lockAttack;
 				allowed_to_use_power = !allowed_to_move;
 			}
 			else {
@@ -571,9 +561,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			if (MOUSE_MOVE && !inpt->pressing[MAIN1]) {
 				inpt->lock[MAIN1] = false;
-				lockSwing = false;
-				lockShoot = false;
-				lockCast = false;
+				lockAttack = false;
 			}
 
 			// handle power usage
@@ -617,52 +605,17 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				handlePower(actionbar_power);
 			break;
 
-		case AVATAR_MELEE:
+		case AVATAR_ATTACK:
 
-			setAnimation("melee");
+			setAnimation(attack_anim);
 
-			if (MOUSE_MOVE) lockSwing = true;
+			if (MOUSE_MOVE) lockAttack = true;
 
-			if (activeAnimation->isFirstFrame())
+			if (activeAnimation->isFirstFrame() && attack_anim == "swing")
 				snd->play(sound_melee);
 
-			// do power
-			if (activeAnimation->isActiveFrame()) {
-				powers->activate(current_power, &stats, act_target);
-			}
-
-			if (activeAnimation->getTimesPlayed() >= 1) {
-				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
-			}
-			break;
-
-		case AVATAR_CAST:
-
-			setAnimation("ment");
-
-			if (MOUSE_MOVE) lockCast = true;
-
-			if (activeAnimation->isFirstFrame())
+			if (activeAnimation->isFirstFrame() && attack_anim == "cast")
 				snd->play(sound_mental);
-
-			// do power
-			if (activeAnimation->isActiveFrame()) {
-				powers->activate(current_power, &stats, act_target);
-			}
-
-			if (activeAnimation->getTimesPlayed() >= 1) {
-				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
-			}
-			break;
-
-
-		case AVATAR_SHOOT:
-
-			setAnimation("ranged");
-
-			if (MOUSE_MOVE) lockShoot = true;
 
 			// do power
 			if (activeAnimation->isActiveFrame()) {
