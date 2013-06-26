@@ -528,7 +528,7 @@ void MenuCharacter::logic() {
 	int spent = stats->physical_character + stats->mental_character + stats->offense_character + stats->defense_character -4;
 	skill_points = (stats->level * stats->stat_points_per_level) - spent;
 
-	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points && stats->humanoid ) {
+	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points && !stats->transformed ) {
 		if (stats->physical_character < stats->max_points_per_stat && show_upgrade[0]) {
 			upgradeButton[0]->enabled = true;
 			tablist.add(upgradeButton[0]);

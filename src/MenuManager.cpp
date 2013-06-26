@@ -551,7 +551,7 @@ void MenuManager::logic() {
 	}
 
 	// powers menu toggle
-	if (((inpt->pressing[POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && stats->humanoid) {
+	if (((inpt->pressing[POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !stats->transformed) {
 		key_lock = true;
 		if (pow->visible) {
 			snd->play(pow->sfx_close);
