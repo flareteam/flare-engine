@@ -841,9 +841,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	stats->powers_list_items.clear();
 
 	// reset wielding vars
-	stats->wielding_physical = false;
-	stats->wielding_mental = false;
-	stats->wielding_offense = false;
+	stats->equip_flags.clear();
 
 	// remove all effects and bonuses added by items
 	stats->effects.clearItemEffects();
@@ -877,26 +875,26 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		stats->dmg_ment_min_add += item.dmg_ment_min;
 		stats->dmg_ment_max_add += item.dmg_ment_max;
 
-		// TODO: add a separate wielding stat to items
-		// e.g. we might want a ring that gives bonus ranged damage but
-		// we still need a bow to shoot arrows.
-		if (item.dmg_melee_max > 0) {
-			stats->wielding_physical = true;
+		// apply power mod
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "melee") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->melee_weapon_power = item.power_mod;
 			}
 		}
-		if (item.dmg_ranged_max > 0) {
-			stats->wielding_offense = true;
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "ranged") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->ranged_weapon_power = item.power_mod;
 			}
 		}
-		if (item.dmg_ment_max > 0) {
-			stats->wielding_mental = true;
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "mental") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->mental_weapon_power = item.power_mod;
 			}
+		}
+
+		// set equip flags
+		for (unsigned j=0; j<item.equip_flags.size(); ++j) {
+			stats->equip_flags.insert(item.equip_flags[j]);
 		}
 
 		// apply absorb bonus

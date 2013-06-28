@@ -105,9 +105,6 @@ StatBlock::StatBlock()
 	, absorb_max_add(0)
 	, speed(14)
 	, dspeed(10)
-	, wielding_physical(false)
-	, wielding_mental(false)
-	, wielding_offense(false)
 	, transform_duration(0)
 	, transform_duration_total(0)
 	, manual_untransform(false)
@@ -594,15 +591,14 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 
 	//don't use untransform power if hero is not transformed
 	else if (power.spawn_type == "untransform" && !transformed) return false;
-	else
-		return (!power.requires_mental_weapon || wielding_mental)
-			   && (!power.requires_offense_weapon || wielding_offense)
-			   && (!power.requires_physical_weapon || wielding_physical)
+	else {
+		return std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
 			   && mp >= power.requires_mp
 			   && (!power.sacrifice == false || hp > power.requires_hp)
 			   && menu_powers->meetsUsageStats(powerid)
 			   && !power.passive
 			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
+	}
 
 }
 

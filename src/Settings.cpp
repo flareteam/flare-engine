@@ -159,6 +159,9 @@ short MIN_AVOIDANCE = 0;
 // Elemental types
 std::vector<Element> ELEMENTS;
 
+// Equipment flags
+std::map<std::string,std::string> EQUIP_FLAGS;
+
 // Hero classes
 std::vector<HeroClass> HERO_CLASSES;
 
@@ -516,6 +519,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// elements.txt
+	// TODO use a map for ELEMENTS?
 	if (infile.open("engine/elements.txt")) {
 		Element e;
 		ELEMENTS.clear();
@@ -526,6 +530,22 @@ void loadMiscSettings() {
 			if (e.name != "" && e.resist != "") {
 				ELEMENTS.push_back(e);
 				e.name = e.resist = "";
+			}
+		}
+		infile.close();
+	}
+	// equip_flags.txt
+	if (infile.open("engine/equip_flags.txt", true, false)) {
+		string type,description;
+		type = description = "";
+
+		while (infile.next()) {
+			if (infile.key == "name") type = infile.val;
+			else if (infile.key == "description") description = infile.val;
+
+			if (type != "" && description != "") {
+				EQUIP_FLAGS[type] = description;
+				type = description = "";
 			}
 		}
 		infile.close();
