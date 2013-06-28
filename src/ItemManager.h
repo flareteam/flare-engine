@@ -80,6 +80,7 @@ public:
 	int set;              // item can be attached to item set
 	int quality;          // low, normal, high, epic; corresponds to item name color
 	std::string type;     // equipment slot or base item type
+	std::vector<std::string> equip_flags;   // common values include: melee, ranged, mental, shield
 	int icon;             // icon index on small pixel sheet
 	int dmg_melee_min;    // minimum damage amount (melee)
 	int dmg_melee_max;    // maximum damage amount (melee)

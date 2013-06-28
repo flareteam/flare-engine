@@ -156,6 +156,15 @@ void ItemManager::loadItems() {
 		else if (infile.key == "item_type") {
 			items[id].type = infile.val;
 		}
+		else if (infile.key == "equip_flags") {
+			infile.val = infile.val + ',';
+			std::string flag = eatFirstString(infile.val,',');
+
+			while (flag != "") {
+				items[id].equip_flags.push_back(flag);
+				flag = eatFirstString(infile.val,',');
+			}
+		}
 		else if (infile.key == "dmg_melee") {
 			items[id].dmg_melee_min = toInt(infile.nextValue());
 			if (infile.val.length() > 0)
