@@ -300,14 +300,14 @@ void PowerManager::loadPowers() {
 				if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_FIXED) {
 					powers[input_id].spawn_level_every = eatFirstInt(infile.val,',');
 
-                    if(powers[input_id].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
-                        std::string stat = eatFirstString(infile.val,',');
-                        if (stat == "physical") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_PHYSICAL;
-                        else if (stat == "mental") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_MENTAL;
-                        else if (stat == "offense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_OFFENSE;
-                        else if (stat == "defense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_DEFENSE;
-                        else fprintf(stderr, "unknown spawn_level_stat %s\n", stat.c_str());
-                    }
+					if(powers[input_id].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
+						std::string stat = eatFirstString(infile.val,',');
+						if (stat == "physical") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_PHYSICAL;
+						else if (stat == "mental") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_MENTAL;
+						else if (stat == "offense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_OFFENSE;
+						else if (stat == "defense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_DEFENSE;
+						else fprintf(stderr, "unknown spawn_level_stat %s\n", stat.c_str());
+					}
 				}
 			}
 		}
