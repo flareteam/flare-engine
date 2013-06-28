@@ -248,9 +248,7 @@ void StatBlock::load(const string& filename) {
 
 	while (infile.next()) {
 		if (isInt(infile.val)) num = toInt(infile.val);
-		bool valid = false;
-
-		valid = loadCoreStat(&infile);
+		bool valid = loadCoreStat(&infile);
 
 		if (infile.key == "name") name = msg->get(infile.val);
 		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
