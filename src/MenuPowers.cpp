@@ -485,16 +485,10 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
 			tip.addText(powers->powers[power_cell[i].id].description);
 
-			// TODO display proper "Requires ______" text for arbitrary flags
-			if (find(powers->powers[power_cell[i].id].requires_flags.begin(), powers->powers[power_cell[i].id].requires_flags.end(), "melee") != powers->powers[power_cell[i].id].requires_flags.end())
-				tip.addText(msg->get("Requires a physical weapon"));
-			if (find(powers->powers[power_cell[i].id].requires_flags.begin(), powers->powers[power_cell[i].id].requires_flags.end(), "mental") != powers->powers[power_cell[i].id].requires_flags.end())
-				tip.addText(msg->get("Requires a mental weapon"));
-			if (find(powers->powers[power_cell[i].id].requires_flags.begin(), powers->powers[power_cell[i].id].requires_flags.end(), "ranged") != powers->powers[power_cell[i].id].requires_flags.end())
-				tip.addText(msg->get("Requires an offense weapon"));
-			if (find(powers->powers[power_cell[i].id].requires_flags.begin(), powers->powers[power_cell[i].id].requires_flags.end(), "shield") != powers->powers[power_cell[i].id].requires_flags.end())
-				tip.addText(msg->get("Requires a shield"));
-
+			std::set<std::string>::iterator it;
+			for (it = powers->powers[power_cell[i].id].requires_flags.begin(); it != powers->powers[power_cell[i].id].requires_flags.end(); ++it) {
+				tip.addText(msg->get("Requires a %s",EQUIP_FLAGS[(*it)]));
+			}
 
 			// add requirement
 			if ((power_cell[i].requires_physoff > 0) && (stats->physoff() < power_cell[i].requires_physoff)) {

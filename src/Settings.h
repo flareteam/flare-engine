@@ -163,6 +163,9 @@ extern short MIN_AVOIDANCE;
 // Elemental types
 extern std::vector<Element> ELEMENTS;
 
+// Equip flags
+extern std::map<std::string,std::string> EQUIP_FLAGS;
+
 // Hero classes
 extern std::vector<HeroClass> HERO_CLASSES;
 
