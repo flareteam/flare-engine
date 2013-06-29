@@ -27,12 +27,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-typedef struct Element{
+class Element{
+public:
 	std::string name;
-	std::string resist;
-}Element;
+	std::string description;
+};
 
-typedef struct HeroClass{
+class HeroClass{
+public:
 	std::string name;
 	std::string description;
 	int currency;
@@ -60,7 +62,7 @@ typedef struct HeroClass{
 		}
 		powers.clear();
 	}
-}HeroClass;
+};
 
 // Path info
 extern std::string GAME_FOLDER;
