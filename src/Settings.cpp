@@ -519,17 +519,16 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// elements.txt
-	// TODO use a map for ELEMENTS?
 	if (infile.open("engine/elements.txt")) {
 		Element e;
 		ELEMENTS.clear();
 		while (infile.next()) {
 			if (infile.key == "name") e.name = infile.val;
-			else if (infile.key == "resist") e.resist = infile.val;
+			else if (infile.key == "description") e.description = infile.val;
 
-			if (e.name != "" && e.resist != "") {
+			if (e.name != "" && e.description != "") {
 				ELEMENTS.push_back(e);
-				e.name = e.resist = "";
+				e.name = e.description = "";
 			}
 		}
 		infile.close();
