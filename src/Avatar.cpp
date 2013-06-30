@@ -140,11 +140,13 @@ void Avatar::loadLayerDefinitions() {
 	layer_reference_order = vector<string>();
 
 	FileParser infile;
+	// @CLASS Avatar|Description of engine/hero_options.txt
 	if (infile.open("engine/hero_options.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
 			if (infile.key == "layer") {
+				// @ATTR layer|direction (integer), string, ...]|Defines the hero avatar sprite layer
 				unsigned dir = eatFirstInt(infile.val,',');
 				if (dir>7) {
 					fprintf(stderr, "direction must be in range [0,7]\n");

@@ -115,6 +115,8 @@ void ItemManager::loadAll() {
  */
 void ItemManager::loadItems() {
 	FileParser infile;
+
+	// @CLASS Item|Description about the class and it usage, items/items.txt...
 	if (!infile.open("items/items.txt", true, false))
 		return;
 
@@ -122,6 +124,7 @@ void ItemManager::loadItems() {
 	bool id_line = false;
 	while (infile.next()) {
 		if (infile.key == "id") {
+			// @ATTR id|integer|An uniq id of the item used as reference from other classes.
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(items, id+1);
@@ -137,15 +140,20 @@ void ItemManager::loadItems() {
 		assert(items.size() > std::size_t(id));
 
 		if (infile.key == "name")
+			// @ATTR name|string|Item name displayed on long and short tooltips.
 			items[id].name = msg->get(infile.val);
 		else if (infile.key == "flavor")
+			// @ATTR flavor|string|
 			items[id].flavor = msg->get(infile.val);
 		else if (infile.key == "level")
+			// @ATTR level|integer|
 			items[id].level = toInt(infile.val);
 		else if (infile.key == "icon") {
+			// @ATTR icon|integer|
 			items[id].icon = toInt(infile.nextValue());
 		}
 		else if (infile.key == "quality") {
+			// @ATTR quality|[low:high:epic]|Item quality, corresponds to item color.
 			if (infile.val == "low")
 				items[id].quality = ITEM_QUALITY_LOW;
 			else if (infile.val == "high")
@@ -154,6 +162,7 @@ void ItemManager::loadItems() {
 				items[id].quality = ITEM_QUALITY_EPIC;
 		}
 		else if (infile.key == "item_type") {
+			// @ATTR item_type|string|Equipment slot [artifact, head, chest, hands, legs, feets, main, off, ring] or base item type [gem, consumable]
 			items[id].type = infile.val;
 		}
 		else if (infile.key == "equip_flags") {
@@ -166,6 +175,7 @@ void ItemManager::loadItems() {
 			}
 		}
 		else if (infile.key == "dmg_melee") {
+			// @ATTR dmg_melee|[min (integer), max (integer)]|Defines the item melee damage, if only min is specified the melee damage is fixed.
 			items[id].dmg_melee_min = toInt(infile.nextValue());
 			if (infile.val.length() > 0)
 				items[id].dmg_melee_max = toInt(infile.nextValue());
@@ -173,6 +183,7 @@ void ItemManager::loadItems() {
 				items[id].dmg_melee_max = items[id].dmg_melee_min;
 		}
 		else if (infile.key == "dmg_ranged") {
+			// @ATTR dmg_ranged|[min (integer), max (integer)]|Defines the item ranged damage, if only min is specified the ranged damage is fixed.
 			items[id].dmg_ranged_min = toInt(infile.nextValue());
 			if (infile.val.length() > 0)
 				items[id].dmg_ranged_max = toInt(infile.nextValue());
@@ -180,6 +191,7 @@ void ItemManager::loadItems() {
 				items[id].dmg_ranged_max = items[id].dmg_ranged_min;
 		}
 		else if (infile.key == "dmg_ment") {
+			// @ATTR dmg_ment|[min (integer), max (integer)]|Defines the item mental damage, if only min is specified the ranged damage is fixed.
 			items[id].dmg_ment_min = toInt(infile.nextValue());
 			if (infile.val.length() > 0)
 				items[id].dmg_ment_max = toInt(infile.nextValue());
@@ -187,6 +199,7 @@ void ItemManager::loadItems() {
 				items[id].dmg_ment_max = items[id].dmg_ment_min;
 		}
 		else if (infile.key == "abs") {
+			// @ATTR abs|[min (integer), max (integer)]|Defines the item absorb value, if only min is specified the absorb value is fixed.
 			items[id].abs_min = toInt(infile.nextValue());
 			if (infile.val.length() > 0)
 				items[id].abs_max = toInt(infile.nextValue());
@@ -194,6 +207,7 @@ void ItemManager::loadItems() {
 				items[id].abs_max = items[id].abs_min;
 		}
 		else if (infile.key == "req") {
+			// @ATTR req|[ [p:m:o:d], amount (integer) ]|Make item require specific stat level ex. req=p,6 will require hero to have level 6 in physical stats 
 			string s = infile.nextValue();
 			if (s == "p")
 				items[id].req_stat = REQUIRES_PHYS;
@@ -206,13 +220,16 @@ void ItemManager::loadItems() {
 			items[id].req_val = toInt(infile.nextValue());
 		}
 		else if (infile.key == "bonus") {
+			// @ATTR bonus|[power_tag (string), amount (integer)]|Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50
 			items[id].bonus_stat.push_back(infile.nextValue());
 			items[id].bonus_val.push_back(toInt(infile.nextValue()));
 		}
 		else if (infile.key == "soundfx") {
+			// @ATTR soundfx|string|Sound effect for the specific item.
 			items[id].sfx = snd->load(infile.val, "ItemManager");
 		}
 		else if (infile.key == "gfx")
+			// @ATTR gfx|string|Graphics for the specific item.
 			items[id].gfx = infile.val;
 		else if (infile.key == "loot_animation") {
 			infile.val = infile.val + ',';
@@ -223,30 +240,41 @@ void ItemManager::loadItems() {
 			items[id].loot_animation.push_back(la);
 		}
 		else if (infile.key == "power") {
+			// @ATTR power|power_id|Adds a specific power to the item which makes it usable as a power and can be placed in action bar.
 			if (toInt(infile.val) > 0) {
 				items[id].power = toInt(infile.val);
 			}
 			else fprintf(stderr, "Power index inside item %d definition out of bounds 1-%d, skipping item\n", id, INT_MAX);
 		}
 		else if (infile.key == "power_mod")
+			// @ATTR power_mod|integer|Power modifier of item.
 			items[id].power_mod = toInt(infile.val);
 		else if (infile.key == "power_desc")
+			// @ATTR power_desc|string|A string describing the additional power.
 			items[id].power_desc = msg->get(infile.val);
 		else if (infile.key == "price")
+			// @ATTR price|integer|The amount of currency the item costs, if set to 0 the item cannot be sold.
 			items[id].price = toInt(infile.val);
 		else if (infile.key == "price_sell")
+			// @ATTR sell_price|integer|The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.
 			items[id].price_sell = toInt(infile.val);
 		else if (infile.key == "max_quantity")
+			// @ATTR max_quantity|integer|Max item count per stack.
 			items[id].max_quantity = toInt(infile.val);
 		else if (infile.key == "rand_loot")
+			// @ATTR rand_loot|integer|Max amount appearing in loot stack.
 			items[id].rand_loot = toInt(infile.val);
 		else if (infile.key == "rand_vendor")
+			// @ATTR rand_vendor|integer|Max amount appearing in vendor stack.
 			items[id].rand_vendor = toInt(infile.val);
 		else if (infile.key == "pickup_status")
+			// @ATTR pickup_status|string|Set a campaign status when item is picked up, this is used for quest items.
 			items[id].pickup_status = infile.val;
 		else if (infile.key == "stepfx")
+			// @ATTR stepfx|string|Sound effect when walking, this applies only to armors.
 			items[id].stepfx = infile.val;
 		else if (infile.key == "class") {
+			// @ATTR class|[classname (string), ...]|A comma separated list of classes the item belongs too.
 			string classname = infile.nextValue();
 			while (classname != "") {
 				unsigned pos; // find the position where this classname is stored:
@@ -275,9 +303,12 @@ void ItemManager::loadTypes() {
 	string type,description;
 	type = description = "";
 
+	// @CLASS Item Type|Definition of a item types, items/types.txt...
 	if (infile.open("items/types.txt", true, false)) {
 		while (infile.next()) {
+			// @ATTR name|string|Item type name.
 			if (infile.key == "name") type = infile.val;
+			// @ATTR description|string|Item type description.
 			else if (infile.key == "description") description = infile.val;
 
 			if (type != "" && description != "") {
@@ -300,6 +331,8 @@ string ItemManager::getItemType(std::string _type) {
 
 void ItemManager::loadSets() {
 	FileParser infile;
+
+	// @CLASS Item Set|Definition of a item sets, items/sets.txt...
 	if (!infile.open("items/sets.txt", true, false))
 		return;
 
@@ -307,6 +340,7 @@ void ItemManager::loadSets() {
 	bool id_line;
 	while (infile.next()) {
 		if (infile.key == "id") {
+			// @ATTR id|integer|A uniq id for the item set.
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(item_sets, id+1);
@@ -322,9 +356,11 @@ void ItemManager::loadSets() {
 		assert(item_sets.size() > std::size_t(id));
 
 		if (infile.key == "name") {
+			// @ATTR name|string|Name of the item set.
 			item_sets[id].name = msg->get(infile.val);
 		}
 		else if (infile.key == "items") {
+			// @ATTR name|[item_id,...]|List of item id's that is part of the set.
 			string item_id = infile.nextValue();
 			while (item_id != "") {
 				int temp_id = toInt(item_id);
@@ -341,11 +377,13 @@ void ItemManager::loadSets() {
 			}
 		}
 		else if (infile.key == "color") {
+			// @ATTR color|color|A specific of color for the set.
 			item_sets[id].color.r = toInt(infile.nextValue());
 			item_sets[id].color.g = toInt(infile.nextValue());
 			item_sets[id].color.b = toInt(infile.nextValue());
 		}
 		else if (infile.key == "bonus") {
+			// @ATTR bonus|[requirements (integer), bonus stat (string), bonus (integer)]|Bonus to append to items in the set.
 			Set_bonus bonus;
 			bonus.requirement = toInt(infile.nextValue());
 			bonus.bonus_stat = infile.nextValue();
