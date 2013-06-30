@@ -44,6 +44,7 @@ private:
 	int icon_id;		// current slot id
 	int amount;			// entries amount in slot
 	int max_amount;		// if > 1 always display amount
+	std::string amount_str; // formatted display of amount
 	int ACTIVATE;
 
 public:

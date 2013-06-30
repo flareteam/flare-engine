@@ -30,13 +30,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetTabControl.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
 
-MenuVendor::MenuVendor(ItemManager *_items, StatBlock *_stats)
+MenuVendor::MenuVendor(StatBlock *_stats)
 	: Menu()
-	, items(_items)
 	, stats(_stats)
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
 	, tabControl(new WidgetTabControl(2))
@@ -94,8 +94,8 @@ void MenuVendor::update() {
 	tabControl->setMainArea(tabs_area.x, tabs_area.y-tabheight, tabs_area.w, tabs_area.h+tabheight);
 	tabControl->updateHeader();
 
-	stock[VENDOR_BUY].init( VENDOR_SLOTS, items, slots_area, ICON_SIZE, slots_cols);
-	stock[VENDOR_SELL].init( VENDOR_SLOTS, items, slots_area, ICON_SIZE, slots_cols);
+	stock[VENDOR_BUY].init( VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
+	stock[VENDOR_SELL].init( VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;

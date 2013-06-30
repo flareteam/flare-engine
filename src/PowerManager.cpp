@@ -103,13 +103,12 @@ void PowerManager::loadPowers() {
 			// @ATTR icon|string|The icon to visually represent the power eg. in skill tree or action bar.
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
-			// @ATTR new_state|[swing:shoot:cast:block:instant]|When power is used, hero or enemy will change to this state.
-			if (infile.val == "swing") powers[input_id].new_state = POWSTATE_SWING;
-			else if (infile.val == "shoot") powers[input_id].new_state = POWSTATE_SHOOT;
-			else if (infile.val == "cast") powers[input_id].new_state = POWSTATE_CAST;
-			else if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
+			if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
 			else if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
-			else fprintf(stderr, "unknown new_state %s\n", infile.val.c_str());
+			else {
+				powers[input_id].new_state = POWSTATE_ATTACK;
+				powers[input_id].attack_anim = infile.val;
+			}
 		}
 		else if (infile.key == "face")
 			// @ATTR face|bool|Power will make hero or enemy to face the target location.
@@ -140,15 +139,15 @@ void PowerManager::loadPowers() {
 			else fprintf(stderr, "unknown passive trigger %s\n", infile.val.c_str());
 		}
 		// power requirements
-		else if (infile.key == "requires_physical_weapon")
-			// @ATTR requires_physical_weapon|bool|Requires a physical weapon
-			powers[input_id].requires_physical_weapon = toBool(infile.val);
-		else if (infile.key == "requires_mental_weapon")
-			// @ATTR requires_mental_weapon|bool|Requires a mental weapon
-			powers[input_id].requires_mental_weapon = toBool(infile.val);
-		else if (infile.key == "requires_offense_weapon")
-			// @ATTR requires_offense_weapon|bool|Requires a offense weapon.
-			powers[input_id].requires_offense_weapon = toBool(infile.val);
+		else if (infile.key == "requires_flags") {
+			infile.val = infile.val + ',';
+			std::string flag = eatFirstString(infile.val,',');
+
+			while (flag != "") {
+				powers[input_id].requires_flags.insert(flag);
+				flag = eatFirstString(infile.val,',');
+			}
+		}
 		else if (infile.key == "requires_mp")
 			// @ATTR requires_mp|integer|Restrict power usage to a specified MP level.
 			powers[input_id].requires_mp = toInt(infile.val);
@@ -569,22 +568,17 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 	haz->complete_animation = powers[power_index].complete_animation;
 
 	// combat traits
-	if (powers[power_index].no_attack) {
-		haz->active = false;
-	}
-	if (powers[power_index].multitarget) {
-		haz->multitarget = true;
-	}
 	if (powers[power_index].radius != 0) {
 		haz->radius = powers[power_index].radius;
 	}
-	if (powers[power_index].trait_armor_penetration) {
-		haz->trait_armor_penetration = true;
-	}
-	haz->trait_crits_impaired = powers[power_index].trait_crits_impaired;
 	if (powers[power_index].trait_elemental != -1) {
 		haz->trait_elemental = powers[power_index].trait_elemental;
 	}
+	haz->active = !powers[power_index].no_attack;
+	haz->multitarget = powers[power_index].multitarget;
+	haz->trait_armor_penetration = powers[power_index].trait_armor_penetration;
+	haz->trait_crits_impaired = powers[power_index].trait_crits_impaired;
+	haz->beacon = powers[power_index].beacon;
 
 	// status effect durations
 	// steal effects
@@ -665,7 +659,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
 	// handle all other effects
 	if (powers[power_index].buff || (powers[power_index].buff_party && src_stats->hero_ally)) {
 		int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
-		effect(src_stats, power_index, source_type);
+		effect(src_stats, src_stats, power_index, source_type);
 	}
 
 	if (powers[power_index].buff_party && !powers[power_index].passive) {
@@ -708,7 +702,7 @@ void PowerManager::playSound(int power_index, StatBlock *src_stats) {
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
 
-bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type) {
+bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
 		int effect_index = powers[power_index].post_effects[i].id;
@@ -719,9 +713,9 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
 			if (powers[effect_index].effect_type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-					magnitude = src_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
+					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-					magnitude = src_stats->get(STAT_DMG_MENT_MAX) + powers[power_index].mod_damage_value_min;
+					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) + powers[power_index].mod_damage_value_min;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 
@@ -729,7 +723,7 @@ bool PowerManager::effect(StatBlock *src_stats, int power_index, int source_type
 			}
 			else if (powers[effect_index].effect_type == "heal") {
 				// heal for ment weapon damage * damage multiplier
-				magnitude = randBetween(src_stats->get(STAT_DMG_MENT_MIN), src_stats->get(STAT_DMG_MENT_MAX));
+				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
 
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
@@ -923,6 +917,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 
 	Map_Enemy espawn;
 	espawn.type = powers[power_index].spawn_type;
+	espawn.summoner = src_stats;
 
 	// enemy spawning position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {

@@ -36,17 +36,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 
 class EnemyManager;
-class MapRenderer;
 class MenuInventory;
 class WidgetTooltip;
-
-class CurrencyRange {
-public:
-	std::string filename;
-	int low;
-	int high;
-};
-
 
 // this means that normal items are 10x more common than epic items
 // these numbers have to be balanced by various factors
@@ -61,15 +52,12 @@ const int LOOT_RANGE = 3 * UNITS_PER_TILE;
 class LootManager {
 private:
 
-	ItemManager *items;
 	WidgetTooltip *tip;
-	MapRenderer *map;
 	StatBlock *hero;
 
 	// functions
 	void loadGraphics();
 
-	SoundManager::SoundID sfx_currency;
 	SoundManager::SoundID sfx_loot;
 
 	// loot refers to ItemManager indices
@@ -77,13 +65,12 @@ private:
 
 	SDL_Rect animation_pos;
 	Point animation_offset;
-	std::vector<CurrencyRange> currency_range;
 
 	// enemies which should drop loot, but didnt yet.
 	std::vector<const class Enemy*> enemiesDroppingLoot;
 
 public:
-	LootManager(ItemManager *_items, MapRenderer *_map, StatBlock *_hero);
+	LootManager(StatBlock *_hero);
 	LootManager(const LootManager &copy); // not implemented
 	~LootManager();
 
@@ -92,17 +79,14 @@ public:
 	void renderTooltips(Point cam);
 	void checkEnemiesForLoot();
 
-	void playCurrencySound(Point loot_pos = Point(0,0));
-
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(const Enemy *e);
 	void checkMapForLoot();
 	void determineLootByEnemy(const Enemy *e, Point pos); // pick from enemy-specific loot table
 	void addLoot(ItemStack stack, Point pos);
-	void addCurrency(int count, Point pos);
-	ItemStack checkPickup(Point mouse, Point cam, Point hero_pos, int &currency, MenuInventory *inv);
-	ItemStack checkAutoPickup(Point hero_pos, int &currency);
-	ItemStack checkNearestPickup(Point hero_pos, int &currency, MenuInventory *inv);
+	ItemStack checkPickup(Point mouse, Point cam, Point hero_pos, MenuInventory *inv);
+	ItemStack checkAutoPickup(Point hero_pos, MenuInventory *inv);
+	ItemStack checkNearestPickup(Point hero_pos, MenuInventory *inv);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 

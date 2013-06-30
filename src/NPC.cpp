@@ -29,9 +29,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CampaignManager.h"
 #include "FileParser.h"
 #include "ItemManager.h"
-#include "MapRenderer.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
@@ -42,9 +42,8 @@ std::vector<SoundManager::SoundID> vox_intro;
 std::vector<SoundManager::SoundID> vox_quests;
 std::vector<std::vector<Event_Component> > dialog;
 
-NPC::NPC(MapRenderer *_map, ItemManager *_items)
-	: Entity(NULL,_map)
-	, items(_items)
+NPC::NPC()
+	: Entity()
 	, name("")
 	, gfx("")
 	, pos()
@@ -58,7 +57,7 @@ NPC::NPC(MapRenderer *_map, ItemManager *_items)
 	, vox_intro()
 	, vox_quests()
 	, dialog() {
-	stock.init(NPC_VENDOR_MAX_STOCK, _items);
+	stock.init(NPC_VENDOR_MAX_STOCK);
 }
 
 /**
@@ -159,7 +158,7 @@ void NPC::load(const string& npc_id, int hero_level) {
 					}
 				}
 				else if (infile.key == "status_stock") {
-					if (map->camp->checkStatus(infile.nextValue())) {
+					if (camp->checkStatus(infile.nextValue())) {
 						stack.quantity = 1;
 						while (infile.val != "") {
 							stack.item = toInt(infile.nextValue());
@@ -258,31 +257,31 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 		for (unsigned int j=0; j<dialog[i].size(); j++) {
 
 			if (dialog[i][j].type == "requires_status") {
-				if (map->camp->checkStatus(dialog[i][j].s))
+				if (camp->checkStatus(dialog[i][j].s))
 					continue;
 				is_available = false;
 				break;
 			}
 			else if (dialog[i][j].type == "requires_not") {
-				if (!map->camp->checkStatus(dialog[i][j].s))
+				if (!camp->checkStatus(dialog[i][j].s))
 					continue;
 				is_available = false;
 				break;
 			}
 			else if (dialog[i][j].type == "requires_item") {
-				if (map->camp->checkItem(dialog[i][j].x))
+				if (camp->checkItem(dialog[i][j].x))
 					continue;
 				is_available = false;
 				break;
 			}
 			else if (dialog[i][j].type == "requires_level") {
-				if (map->camp->hero->level >= dialog[i][j].x)
+				if (camp->hero->level >= dialog[i][j].x)
 					continue;
 				is_available = false;
 				break;
 			}
 			else if (dialog[i][j].type == "requires_not_level") {
-				if (map->camp->hero->level < dialog[i][j].x)
+				if (camp->hero->level < dialog[i][j].x)
 					continue;
 				is_available = false;
 				break;
@@ -356,10 +355,10 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			// continue to next event component
 		}
 		else if (dialog[dialog_node][event_cursor].type == "set_status") {
-			map->camp->setStatus(dialog[dialog_node][event_cursor].s);
+			camp->setStatus(dialog[dialog_node][event_cursor].s);
 		}
 		else if (dialog[dialog_node][event_cursor].type == "unset_status") {
-			map->camp->unsetStatus(dialog[dialog_node][event_cursor].s);
+			camp->unsetStatus(dialog[dialog_node][event_cursor].s);
 		}
 		else if (dialog[dialog_node][event_cursor].type == "him") {
 			return true;
@@ -371,22 +370,22 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			return true;
 		}
 		else if (dialog[dialog_node][event_cursor].type == "reward_xp") {
-			map->camp->rewardXP(dialog[dialog_node][event_cursor].x, true);
+			camp->rewardXP(dialog[dialog_node][event_cursor].x, true);
 		}
 		else if (dialog[dialog_node][event_cursor].type == "restore") {
-			map->camp->restoreHPMP(dialog[dialog_node][event_cursor].s);
+			camp->restoreHPMP(dialog[dialog_node][event_cursor].s);
 		}
 		else if (dialog[dialog_node][event_cursor].type == "reward_currency") {
-			map->camp->rewardCurrency(dialog[dialog_node][event_cursor].x);
+			camp->rewardCurrency(dialog[dialog_node][event_cursor].x);
 		}
 		else if (dialog[dialog_node][event_cursor].type == "reward_item") {
 			ItemStack istack;
 			istack.item = dialog[dialog_node][event_cursor].x;
 			istack.quantity = dialog[dialog_node][event_cursor].y;
-			map->camp->rewardItem(istack);
+			camp->rewardItem(istack);
 		}
 		else if (dialog[dialog_node][event_cursor].type == "remove_item") {
-			map->camp->removeItem(dialog[dialog_node][event_cursor].x);
+			camp->removeItem(dialog[dialog_node][event_cursor].x);
 		}
 		else if (dialog[dialog_node][event_cursor].type == "voice") {
 			playSound(NPC_VOX_QUEST, dialog[dialog_node][event_cursor].x);

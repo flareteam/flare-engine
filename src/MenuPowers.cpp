@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuPowers.h"
-#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -40,12 +39,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, PowerManager *_powers, SDL_Surface *_icons) {
+MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 
 	int id;
 
 	stats = _stats;
-	powers = _powers;
 	icons = _icons;
 
 	overlay_disabled = NULL;
@@ -487,13 +485,10 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
 			tip.addText(powers->powers[power_cell[i].id].description);
 
-			if (powers->powers[power_cell[i].id].requires_physical_weapon)
-				tip.addText(msg->get("Requires a physical weapon"));
-			else if (powers->powers[power_cell[i].id].requires_mental_weapon)
-				tip.addText(msg->get("Requires a mental weapon"));
-			else if (powers->powers[power_cell[i].id].requires_offense_weapon)
-				tip.addText(msg->get("Requires an offense weapon"));
-
+			std::set<std::string>::iterator it;
+			for (it = powers->powers[power_cell[i].id].requires_flags.begin(); it != powers->powers[power_cell[i].id].requires_flags.end(); ++it) {
+				tip.addText(msg->get("Requires a %s",EQUIP_FLAGS[(*it)]));
+			}
 
 			// add requirement
 			if ((power_cell[i].requires_physoff > 0) && (stats->physoff() < power_cell[i].requires_physoff)) {

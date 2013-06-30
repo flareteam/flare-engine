@@ -38,11 +38,11 @@ CampaignManager::CampaignManager()
 	: status()
 	, log_msg("")
 	, drop_stack()
-	, items(NULL)
 	, carried_items(NULL)
 	, currency(NULL)
 	, hero(NULL)
 	, quest_update(true)
+	, bonus_xp(0.0)
 {}
 
 void CampaignManager::clearAll() {
@@ -135,23 +135,31 @@ void CampaignManager::rewardItem(ItemStack istack) {
 	else {
 		carried_items->add(istack);
 
-		if (istack.quantity <= 1)
-			addMsg(msg->get("You receive %s.", items->items[istack.item].name));
-		if (istack.quantity > 1)
-			addMsg(msg->get("You receive %s x%d.", istack.quantity, items->items[istack.item].name));
+		if (istack.item != CURRENCY_ID) {
+			if (istack.quantity <= 1)
+				addMsg(msg->get("You receive %s.", items->items[istack.item].name));
+			if (istack.quantity > 1)
+				addMsg(msg->get("You receive %s x%d.", istack.quantity, items->items[istack.item].name));
 
-		items->playSound(istack.item);
+			items->playSound(istack.item);
+		}
 	}
 }
 
 void CampaignManager::rewardCurrency(int amount) {
-	*currency += amount;
-	addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
-	loot->playCurrencySound();
+	ItemStack stack;
+	stack.item = CURRENCY_ID;
+	stack.quantity = amount;
+	rewardItem(stack);
+	if (carried_items->full(stack.item))
+		addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
+	items->playSound(CURRENCY_ID);
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
-	hero->xp += (amount * (100 + hero->get(STAT_XP_GAIN))) / 100;
+	bonus_xp += (amount * (100.0 + hero->get(STAT_XP_GAIN))) / 100.0;
+	hero->xp += (int)bonus_xp;
+	bonus_xp -= (int)bonus_xp;
 	hero->refresh_stats = true;
 	if (show_message) addMsg(msg->get("You receive %d XP.", amount));
 }

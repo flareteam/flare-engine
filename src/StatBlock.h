@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <queue>
 
 class Power;
+class FileParser;
 
 const int POWERSLOT_COUNT = 10;
 const int MELEE_PHYS = 0;
@@ -89,6 +90,7 @@ public:
 
 class StatBlock {
 private:
+    bool loadCoreStat(FileParser *infile);
 	void loadHeroStats();
 	bool statsLoaded;
 
@@ -113,6 +115,8 @@ public:
 	bool transformed;
 	bool refresh_stats;
 	bool converted;
+	bool summoned;
+	int summoned_power_index;
 
 	MOVEMENTTYPE movement_type;
 	bool flying;
@@ -208,9 +212,7 @@ public:
 	int speed;
 	int dspeed;
 
-	bool wielding_physical;
-	bool wielding_mental;
-	bool wielding_offense;
+	std::set<std::string> equip_flags;
 	std::vector<int> vulnerable;
 	std::vector<int> vulnerable_base;
 
@@ -260,9 +262,6 @@ public:
 	int melee_range;
 	int threat_range;
 	bool passive_attacker;//enemy will not initiate combat unless attacked
-	Point hero_pos;
-	char hero_direction;
-	bool hero_alive;
 	int hero_stealth;
 	Point last_seen;
 	int turn_delay;
@@ -319,6 +318,15 @@ public:
 	int prev_maxmp;
 	int pres_hp;
 	int pres_mp;
+
+	// links to summoned creatures and the entity which summoned this
+	std::vector<StatBlock*> summons;
+	StatBlock* summoner;
+
+	void removeFromSummons();
+
+	bool summonLimitReached(int power_id) const;
+
 };
 
 #endif

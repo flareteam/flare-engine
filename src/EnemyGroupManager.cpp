@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
+#include "UtilsParsing.h"
 
 #include <cassert>
 
@@ -53,11 +54,11 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 
 		if (infile.key == "level") {
 			// @ATTR level|integer|Level of the enemy
-			new_enemy.level = atoi(infile.val.c_str());
+			new_enemy.level = toInt(infile.val);
 		}
 		else if (infile.key == "rarity") {
 			// @ATTR rarity|[common,uncommon,rare]|Enemy rarity
-			new_enemy.rarity = infile.val.c_str();
+			new_enemy.rarity = infile.val;
 		}
 		else if (infile.key == "categories") {
 			// @ATTR categories|string,...|Comma separated list of enemy categories
@@ -72,7 +73,7 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 
 Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {
 	vector<Enemy_Level> enemyCategory;
-	map<string, vector<Enemy_Level> >::const_iterator it = _categories.find(category);
+	std::map<string, vector<Enemy_Level> >::const_iterator it = _categories.find(category);
 	if (it != _categories.end()) {
 		enemyCategory = it->second;
 	}

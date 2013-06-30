@@ -159,6 +159,9 @@ short MIN_AVOIDANCE = 0;
 // Elemental types
 std::vector<Element> ELEMENTS;
 
+// Equipment flags
+std::map<std::string,std::string> EQUIP_FLAGS;
+
 // Hero classes
 std::vector<HeroClass> HERO_CLASSES;
 
@@ -189,6 +192,7 @@ int SOUND_FALLOFF = 15;
 int PARTY_EXP_PERCENTAGE = 100;
 bool ENABLE_ALLY_COLLISION_AI = true;
 bool ENABLE_ALLY_COLLISION = true;
+int CURRENCY_ID = 1;
 
 /**
  * Set system paths
@@ -438,39 +442,32 @@ void loadMiscSettings() {
 	// misc.txt
 	if (infile.open("engine/misc.txt")) {
 		while (infile.next()) {
-			if (infile.key == "save_hpmp") {
-				if (toInt(infile.val) == 1)
-					SAVE_HPMP = true;
-			}
-			else if (infile.key == "corpse_timeout") {
+			if (infile.key == "save_hpmp")
+				SAVE_HPMP = toBool(infile.val);
+			else if (infile.key == "corpse_timeout")
 				CORPSE_TIMEOUT = toInt(infile.val);
-			}
-			else if (infile.key == "sell_without_vendor") {
-				if (toInt(infile.val) == 1)
-					SELL_WITHOUT_VENDOR = true;
-				else
-					SELL_WITHOUT_VENDOR = false;
-			}
-			else if (infile.key == "aim_assist") {
+			else if (infile.key == "sell_without_vendor")
+				SELL_WITHOUT_VENDOR = toBool(infile.val);
+			else if (infile.key == "aim_assist")
 				AIM_ASSIST = toInt(infile.val);
-			}
-			else if (infile.key == "window_title") {
+			else if (infile.key == "window_title")
 				WINDOW_TITLE = infile.val;
-			}
-			else if (infile.key == "game_prefix") {
+			else if (infile.key == "game_prefix")
 				GAME_PREFIX = infile.val;
-			}
-			else if (infile.key == "sound_falloff") {
+			else if (infile.key == "sound_falloff")
 				SOUND_FALLOFF = toInt(infile.val);
-			}
-			else if (infile.key == "party_exp_percentage") {
+			else if (infile.key == "party_exp_percentage")
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
-			}
-			else if (infile.key == "enable_ally_collision") {
-				ENABLE_ALLY_COLLISION = (toInt(infile.val) == 1);
-			}
-			else if (infile.key == "enable_ally_collision_ai") {
-				ENABLE_ALLY_COLLISION_AI = (toInt(infile.val) == 1);
+			else if (infile.key == "enable_ally_collision")
+				ENABLE_ALLY_COLLISION = toBool(infile.val);
+			else if (infile.key == "enable_ally_collision_ai")
+				ENABLE_ALLY_COLLISION_AI = toBool(infile.val);
+			else if (infile.key == "currency_id") {
+				CURRENCY_ID = toInt(infile.val);
+				if (CURRENCY_ID < 1) {
+					CURRENCY_ID = 1;
+					fprintf(stderr, "Currency ID below the minimum allowed value. Resetting it to %d\n", CURRENCY_ID);
+				}
 			}
 
 		}
@@ -502,10 +499,7 @@ void loadMiscSettings() {
 	if (infile.open("engine/gameplay.txt")) {
 		while (infile.next()) {
 			if (infile.key == "enable_playgame") {
-				if (toInt(infile.val) == 1)
-					ENABLE_PLAYGAME = true;
-				else
-					ENABLE_PLAYGAME = false;
+				ENABLE_PLAYGAME = toBool(infile.val);
 			}
 		}
 		infile.close();
@@ -525,6 +519,7 @@ void loadMiscSettings() {
 		infile.close();
 	}
 	// elements.txt
+	// TODO use a map for ELEMENTS?
 	if (infile.open("engine/elements.txt")) {
 		Element e;
 		ELEMENTS.clear();
@@ -535,6 +530,22 @@ void loadMiscSettings() {
 			if (e.name != "" && e.resist != "") {
 				ELEMENTS.push_back(e);
 				e.name = e.resist = "";
+			}
+		}
+		infile.close();
+	}
+	// equip_flags.txt
+	if (infile.open("engine/equip_flags.txt", true, false)) {
+		string type,description;
+		type = description = "";
+
+		while (infile.next()) {
+			if (infile.key == "name") type = infile.val;
+			else if (infile.key == "description") description = infile.val;
+
+			if (type != "" && description != "") {
+				EQUIP_FLAGS[type] = description;
+				type = description = "";
 			}
 		}
 		infile.close();

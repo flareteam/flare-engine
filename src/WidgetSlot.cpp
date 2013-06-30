@@ -34,6 +34,7 @@ WidgetSlot::WidgetSlot(SDL_Surface *_icons, int _icon_id, int _ACTIVATE)
 	, icon_id(_icon_id)
 	, amount(1)
 	, max_amount(1)
+	, amount_str("")
 	, ACTIVATE(_ACTIVATE)
 	, enabled(true)
 	, checked(false)
@@ -132,6 +133,8 @@ void WidgetSlot::setIcon(int _icon_id) {
 void WidgetSlot::setAmount(int _amount, int _max_amount) {
 	amount = _amount;
 	max_amount = _max_amount;
+
+	amount_str = abbreviateKilo(amount);
 }
 
 void WidgetSlot::render(SDL_Surface *target) {
@@ -155,7 +158,7 @@ void WidgetSlot::render(SDL_Surface *target) {
 
 		if (amount > 1 || max_amount > 1) {
 			stringstream ss;
-			ss << amount;
+			ss << amount_str;
 
 			WidgetLabel label;
 			label.set(pos.x + 2, pos.y + 2, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("item_normal"));

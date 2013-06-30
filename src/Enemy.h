@@ -33,13 +33,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class EnemyBehavior;
 class Hazard;
-class PowerManager;
-class MapRenderer;
 
 class Enemy : public Entity {
 
 public:
-	Enemy(PowerManager *_powers, MapRenderer *_map, EnemyManager *_em);
+	Enemy();
 	Enemy(const Enemy& e);
 	~Enemy();
 	bool lineOfSight();
@@ -48,7 +46,6 @@ public:
 	void newState(int state);
 	virtual void doRewards(int source_type);
 	void InstantDeath();
-	void CheckSummonSustained();
 
 	std::string type;
 
@@ -56,13 +53,10 @@ public:
 
 	Hazard *haz;
 	EnemyBehavior *eb;
-	EnemyManager *enemies;
 
 	// other flags
 	bool reward_xp;
 	bool instant_power;
-	bool summoned;
-	int summoned_power_index;
 	int kill_source_type;
 
 };

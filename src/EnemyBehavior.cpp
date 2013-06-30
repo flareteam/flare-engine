@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Clint Bellanger
+Copyright © 2012 Clint Bellanger
 
 This file is part of FLARE.
 
@@ -25,9 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EnemyBehavior.h"
 
-EnemyBehavior::EnemyBehavior(Enemy *_e, EnemyManager *_em) {
+EnemyBehavior::EnemyBehavior(Enemy *_e) {
 	e = _e;
-	enemies = _em;
 }
 
 void EnemyBehavior::logic() {

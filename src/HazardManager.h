@@ -30,18 +30,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 class Avatar;
-class EnemyManager;
 class Hazard;
-class MapCollision;
-class PowerManager;
 
 class HazardManager {
-private:
-	Avatar *hero;
-	EnemyManager *enemies;
-	PowerManager *powers;
 public:
-	HazardManager(PowerManager *_powers, Avatar *_hero, EnemyManager *_enemies);
+	HazardManager();
 	~HazardManager();
 	void logic();
 	void expire(int index);
@@ -50,6 +43,7 @@ public:
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	std::vector<Hazard*> h;
+	Enemy* last_enemy;
 };
 
 #endif

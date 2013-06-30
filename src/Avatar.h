@@ -33,9 +33,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "Utils.h"
 
+using namespace std;
+
 class Entity;
 class Hazard;
-class PowerManager;
 class StatBlock;
 
 /**
@@ -44,12 +45,10 @@ class StatBlock;
 enum AvatarState {
 	AVATAR_STANCE = 0,
 	AVATAR_RUN = 1,
-	AVATAR_MELEE = 2,
-	AVATAR_BLOCK = 3,
-	AVATAR_HIT = 4,
-	AVATAR_DEAD = 5,
-	AVATAR_CAST = 6,
-	AVATAR_SHOOT = 7
+	AVATAR_BLOCK = 2,
+	AVATAR_HIT = 3,
+	AVATAR_DEAD = 4,
+	AVATAR_ATTACK = 5,
 };
 
 class Layer_gfx {
@@ -64,9 +63,7 @@ public:
 
 class Avatar : public Entity {
 private:
-	bool lockSwing;
-	bool lockCast;
-	bool lockShoot;
+	bool lockAttack;
 
 	SoundManager::SoundID sound_melee;
 	SoundManager::SoundID sound_mental;
@@ -86,11 +83,16 @@ private:
 	std::string last_transform;
 	int getUntransformPower();
 
-public:
-	Avatar(PowerManager *_powers, MapRenderer *_map);
-	~Avatar();
+    //variables for patfinding
+	vector<Point> path;
+	int path_frames_elapsed;
+	Point prev_target;
+	bool collided;
+	bool path_found;
 
-	EnemyManager *enemies;
+public:
+	Avatar();
+	~Avatar();
 
 	void init();
 	void loadLayerDefinitions();
@@ -104,6 +106,8 @@ public:
 	bool pressing_move();
 	void set_direction();
 	std::string log_msg;
+
+	std::string attack_anim;
 
 	// transformation handling
 	void transform();

@@ -23,12 +23,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "ItemStorage.h"
 #include "UtilsParsing.h"
+#include "SharedGameResources.h"
 
 using namespace std;
 
-void ItemStorage::init(int _slot_number, ItemManager *_items) {
+void ItemStorage::init(int _slot_number) {
 	slot_number = _slot_number;
-	items = _items;
 
 	storage = new ItemStack[slot_number];
 
@@ -211,7 +211,7 @@ void ItemStorage::sort() {
 
 bool ItemStorage::full(int item) {
 	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item == item && items->items[item].max_quantity > 1) {
+		if (storage[i].item == item && storage[i].quantity < items->items[item].max_quantity) {
 			return false;
 		}
 		if (storage[i].item == 0) {
@@ -243,6 +243,19 @@ bool ItemStorage::contain(int item) {
 			return true;
 	}
 	return false;
+}
+
+/**
+ * Clear slots that contain an item, but have a quantity of 0
+ */
+void ItemStorage::clean() {
+	for (int i=0; i<slot_number; i++) {
+		if (storage[i].item > 0 && storage[i].quantity < 1) {
+			fprintf(stderr,"Removing item with id %d, which has a quantity of 0\n",storage[i].item);
+			storage[i].item = 0;
+			storage[i].quantity = 0;
+		}
+	}
 }
 
 ItemStorage::~ItemStorage() {

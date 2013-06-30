@@ -21,11 +21,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Enemy.h"
 #include "MapRenderer.h"
-#include "PowerManager.h"
 #include "StatBlock.h"
 #include "UtilsMath.h"
+#include "SharedGameResources.h"
 
-BehaviorStandard::BehaviorStandard(Enemy *_e, EnemyManager *_em) : EnemyBehavior(_e, _em) {
+BehaviorStandard::BehaviorStandard(Enemy *_e) : EnemyBehavior(_e)
+    , path()
+    , prev_target()
+    , collided(false)
+    , path_found(false)
+    , chance_calc_path(0){
 	los = false;
 	hero_dist = 0;
 	target_dist = 0;
@@ -60,13 +65,13 @@ void BehaviorStandard::logic() {
  */
 void BehaviorStandard::doUpkeep() {
 	// activate all passive powers
-	if (e->stats.hp > 0 || e->stats.effects.triggered_death) e->powers->activatePassives(&e->stats);
+	if (e->stats.hp > 0 || e->stats.effects.triggered_death) powers->activatePassives(&e->stats);
 
 	e->stats.logic();
 
 	// heal rapidly while not in combat
 	if (!e->stats.in_combat && !e->stats.hero_ally) {
-		if (e->stats.alive && e->stats.hero_alive) {
+		if (e->stats.alive && pc->stats.alive) {
 			e->stats.hp++;
 			if (e->stats.hp > e->stats.get(STAT_HP_MAX)) e->stats.hp = e->stats.get(STAT_HP_MAX);
 		}
@@ -121,7 +126,7 @@ void BehaviorStandard::doUpkeep() {
 
 		e->stats.effects.triggered_death = true;
 		e->stats.cur_state = ENEMY_DEAD;
-		e->map->collider.unblock(e->stats.pos.x,e->stats.pos.y);
+		mapr->collider.unblock(e->stats.pos.x,e->stats.pos.y);
 	}
 
 	// TEMP: check for bleeding spurt
@@ -132,12 +137,12 @@ void BehaviorStandard::doUpkeep() {
 	// check for teleport powers
 	if (e->stats.teleportation) {
 
-		e->map->collider.unblock(e->stats.pos.x,e->stats.pos.y);
+		mapr->collider.unblock(e->stats.pos.x,e->stats.pos.y);
 
 		e->stats.pos.x = e->stats.teleport_destination.x;
 		e->stats.pos.y = e->stats.teleport_destination.y;
 
-		e->map->collider.block(e->stats.pos.x,e->stats.pos.y, e->stats.hero_ally);
+		mapr->collider.block(e->stats.pos.x,e->stats.pos.y, e->stats.hero_ally);
 
 		e->stats.teleportation = false;
 	}
@@ -153,8 +158,8 @@ void BehaviorStandard::findTarget() {
 	if (e->stats.effects.stun) return;
 
 	// check distance and line of sight between enemy and hero
-	if (e->stats.hero_alive)
-		hero_dist = calcDist(e->stats.pos, e->stats.hero_pos);
+	if (pc->stats.alive)
+		hero_dist = calcDist(e->stats.pos, pc->stats.pos);
 	else
 		hero_dist = 0;
 
@@ -166,7 +171,7 @@ void BehaviorStandard::findTarget() {
 		}
 		else {
 			e->stats.in_combat = true;
-			e->powers->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
+			powers->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
 		}
 	}
 
@@ -175,7 +180,7 @@ void BehaviorStandard::findTarget() {
 
 		if (e->stats.in_combat) e->stats.join_combat = true;
 		e->stats.in_combat = true;
-		e->powers->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
+		powers->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
 	}
 
 	// check exiting combat (player died or got too far away)
@@ -184,7 +189,7 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check exiting combat (player or enemy died)
-	if (!e->stats.alive || !e->stats.hero_alive) {
+	if (!e->stats.alive || !pc->stats.alive) {
 		e->stats.in_combat = false;
 	}
 
@@ -198,8 +203,8 @@ void BehaviorStandard::findTarget() {
 	}
 	else {
 		// by default, the enemy pursues the hero directly
-		pursue_pos.x = e->stats.hero_pos.x;
-		pursue_pos.y = e->stats.hero_pos.y;
+		pursue_pos.x = pc->stats.pos.x;
+		pursue_pos.y = pc->stats.pos.y;
 		target_dist = hero_dist;
 
 
@@ -227,8 +232,8 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check line-of-sight
-	if (target_dist < e->stats.threat_range && e->stats.hero_alive)
-		los = e->map->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
+	if (target_dist < e->stats.threat_range && pc->stats.alive)
+		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 	else
 		los = false;
 
@@ -278,28 +283,56 @@ void BehaviorStandard::checkPower() {
 		if (target_dist > e->stats.melee_range) {
 
 			if (percentChance(e->stats.power_chance[RANGED_PHYS]) && e->stats.power_ticks[RANGED_PHYS] == 0) {
-				e->newState(ENEMY_POWER);
-				e->stats.activated_powerslot = RANGED_PHYS;
-				return;
+				bool can_use = true;
+				if(powers->powers[e->stats.power_index[RANGED_PHYS]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_PHYS]))
+                        can_use = false;
+
+				if(can_use){
+                    e->newState(ENEMY_POWER);
+                    e->stats.activated_powerslot = RANGED_PHYS;
+                    return;
+				}
 			}
 			if (percentChance(e->stats.power_chance[RANGED_MENT]) && e->stats.power_ticks[RANGED_MENT] == 0) {
-				e->newState(ENEMY_POWER);
-				e->stats.activated_powerslot = RANGED_MENT;
-				return;
+				bool can_use = true;
+				if(powers->powers[e->stats.power_index[RANGED_MENT]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_MENT]))
+                        can_use = false;
+
+				if(can_use){
+                    e->newState(ENEMY_POWER);
+                    e->stats.activated_powerslot = RANGED_MENT;
+                    return;
+				}
 			}
 
 		}
 		else { // check melee power use
 
 			if (percentChance(e->stats.power_chance[MELEE_PHYS]) && e->stats.power_ticks[MELEE_PHYS] == 0) {
-				e->newState(ENEMY_POWER);
-				e->stats.activated_powerslot = MELEE_PHYS;
-				return;
+				bool can_use = true;
+				if(powers->powers[e->stats.power_index[MELEE_PHYS]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_PHYS]))
+                        can_use = false;
+
+				if(can_use){
+                    e->newState(ENEMY_POWER);
+                    e->stats.activated_powerslot = MELEE_PHYS;
+                    return;
+				}
 			}
 			if (percentChance(e->stats.power_chance[MELEE_MENT]) && e->stats.power_ticks[MELEE_MENT] == 0) {
-				e->newState(ENEMY_POWER);
-				e->stats.activated_powerslot = MELEE_MENT;
-				return;
+				bool can_use = true;
+				if(powers->powers[e->stats.power_index[MELEE_MENT]].type == POWTYPE_SPAWN)
+                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_MENT]))
+                        can_use = false;
+
+				if(can_use){
+                    e->newState(ENEMY_POWER);
+                    e->stats.activated_powerslot = MELEE_MENT;
+                    return;
+				}
 			}
 		}
 	}
@@ -316,7 +349,7 @@ void BehaviorStandard::checkPower() {
 			int power_slot =  e->stats.activated_powerslot;
 			int power_id = e->stats.power_index[e->stats.activated_powerslot];
 
-			e->powers->activate(power_id, &e->stats, pursue_pos);
+			powers->activate(power_id, &e->stats, pursue_pos);
 			e->stats.power_ticks[power_slot] = e->stats.power_cooldown[power_slot];
 			e->stats.cooldown_ticks = e->stats.cooldown;
 
@@ -351,22 +384,64 @@ void BehaviorStandard::checkMove() {
 	}
 
 	// clear current space to allow correct movement
-	e->map->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+	mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
 	// update direction
 	if (e->stats.facing) {
 		if (++e->stats.turn_ticks > e->stats.turn_delay) {
 
 			// if blocked, face in pathfinder direction instead
-			if (!e->map->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, e->stats.hero_pos.x, e->stats.hero_pos.y, e->stats.movement_type)) {
+			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y, e->stats.movement_type)) {
 
 				// if a path is returned, target first waypoint
-				std::vector<Point> path;
+                bool recalculate_path = false;
 
-				e->map->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
-				if(!path.empty())
-					pursue_pos = path.back();
+                //if theres no path, it needs to be calculated
+                if(path.empty())
+                    recalculate_path = true;
+
+                //if the target moved more than 1 tile away, recalculate
+                if(calcDist(map_to_collision(prev_target), map_to_collision(pursue_pos)) > 1)
+                    recalculate_path = true;
+
+                //if a collision ocurred then recalculate
+                if(collided)
+                    recalculate_path = true;
+
+                //add a 5% chance to recalculate on every frame. This prevents reclaulating lots of entities in the same frame
+                chance_calc_path += 5;
+
+                if(percentChance(chance_calc_path))
+                    recalculate_path = true;
+
+                //dont recalculate if we were blocked and no path was found last time
+                //this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
+                if(!path_found && collided && !percentChance(chance_calc_path))
+                    recalculate_path = false;
+                else//reset the collision flag only if we dont want the cooldown in place
+                    collided = false;
+
+                prev_target = pursue_pos;
+
+                // target first waypoint
+                if(recalculate_path){
+                    chance_calc_path = -100;
+                    path.clear();
+                    path_found = mapr->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
+                }
+
+                if(!path.empty()){
+                    pursue_pos = path.back();
+
+                    //if distance to node is lower than a tile size, the node is going to be passed and can be removed
+                    if(calcDist(e->stats.pos, pursue_pos) <= 64)
+                        path.pop_back();
+                }
+
 			}
+			else{
+                path.clear();
+            }
 
 			if(fleeing)
 				e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
@@ -410,7 +485,7 @@ void BehaviorStandard::checkMove() {
 	}
 
 	// re-block current space to allow correct movement
-	e->map->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
+	mapr->collider.block(e->stats.pos.x, e->stats.pos.y, e->stats.hero_ally);
 
 }
 
@@ -425,7 +500,7 @@ void BehaviorStandard::checkMoveStateStance() {
 			e->newState(ENEMY_MOVE);
 		}
 		else {
-
+            collided = true;
 			int prev_direction = e->stats.direction;
 
 			// hit an obstacle, try the next best angle
@@ -433,26 +508,28 @@ void BehaviorStandard::checkMoveStateStance() {
 			if (e->move()) {
 				e->newState(ENEMY_MOVE);
 			}
-			else e->stats.direction = prev_direction;
+			else
+                e->stats.direction = prev_direction;
 		}
 	}
 }
 
 void BehaviorStandard::checkMoveStateMove() {
 	// close enough to the hero or is at a safe distance
-	if ((hero_dist < e->stats.melee_range) || (move_to_safe_dist && hero_dist >= e->stats.threat_range/2)) {
+	if ((target_dist < e->stats.melee_range && !fleeing) || (move_to_safe_dist && target_dist >= e->stats.threat_range/2)) {
 		e->newState(ENEMY_STANCE);
 		move_to_safe_dist = false;
 	}
 
 	// try to continue moving
 	else if (!e->move()) {
+        collided = true;
 		int prev_direction = e->stats.direction;
 		// hit an obstacle.  Try the next best angle
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-		if (!e->move()) {
-			e->newState(ENEMY_STANCE);
-			e->stats.direction = prev_direction;
+        if (!e->move()) {
+            e->newState(ENEMY_STANCE);
+            e->stats.direction = prev_direction;
 		}
 	}
 }
@@ -489,19 +566,16 @@ void BehaviorStandard::updateState() {
 		case ENEMY_POWER:
 
 			power_id = e->stats.power_index[e->stats.activated_powerslot];
-			power_state = e->powers->powers[power_id].new_state;
+			power_state = powers->powers[power_id].new_state;
 
 			// animation based on power type
-			if (power_state == POWSTATE_SWING) e->setAnimation("melee");
-			else if (power_state == POWSTATE_SHOOT) e->setAnimation("ranged");
-			else if (power_state == POWSTATE_CAST) e->setAnimation("ment");
-			else if (power_state == POWSTATE_INSTANT) e->instant_power = true;
+			if (power_state == POWSTATE_INSTANT) e->instant_power = true;
+			else if (power_state == POWSTATE_ATTACK) e->setAnimation(powers->powers[power_id].attack_anim);
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (power_state == POWSTATE_SWING) e->sfx_phys = true;
-				else if (power_state == POWSTATE_SHOOT) e->sfx_phys = true;
-				else if (power_state == POWSTATE_CAST) e->sfx_ment = true;
+				if (powers->powers[power_id].attack_anim == "swing" || powers->powers[power_id].attack_anim == "shoot") e->sfx_phys = true;
+				else if (powers->powers[power_id].attack_anim == "cast") e->sfx_ment = true;
 			}
 
 			if (e->activeAnimation->isLastFrame()) e->newState(ENEMY_STANCE);
@@ -513,7 +587,6 @@ void BehaviorStandard::updateState() {
 			//the second check is needed in case the entity does not have a spawn animation
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "spawn") {
 				e->newState(ENEMY_STANCE);
-				e->CheckSummonSustained();
 			}
 			break;
 
@@ -542,12 +615,12 @@ void BehaviorStandard::updateState() {
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				if (percentChance(e->stats.power_chance[ON_DEATH]))
-					e->powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
+					powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
 			if (e->activeAnimation->isLastFrame()) {
 				e->stats.corpse = true; // puts renderable under object layer
 				//allow free movement over the corpse
-				e->map->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 			}
 
 			break;
@@ -562,7 +635,7 @@ void BehaviorStandard::updateState() {
 			}
 			if (e->activeAnimation->isSecondLastFrame()) {
 				if (percentChance(e->stats.power_chance[ON_DEATH]))
-					e->powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
+					powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
 			if (e->activeAnimation->isLastFrame()) e->stats.corpse = true; // puts renderable under object layer
 

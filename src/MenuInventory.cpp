@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuInventory.h"
-#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -36,10 +35,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManager *_powers) {
-	items = _items;
+MenuInventory::MenuInventory(StatBlock *_stats) {
 	stats = _stats;
-	powers = _powers;
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
@@ -51,6 +48,9 @@ MenuInventory::MenuInventory(ItemManager *_items, StatBlock *_stats, PowerManage
 	changed_equipment = true;
 	changed_artifact = true;
 	log_msg = "";
+
+	drop_stack.item = 0;
+	drop_stack.quantity = 0;
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
@@ -119,8 +119,8 @@ void MenuInventory::update() {
 	carried_area.w = carried_cols*ICON_SIZE;
 	carried_area.h = carried_rows*ICON_SIZE;
 
-	inventory[EQUIPMENT].init(MAX_EQUIPPED, items, equipped_area, slot_type);
-	inventory[CARRIED].init(MAX_CARRIED, items, carried_area, ICON_SIZE, carried_cols);
+	inventory[EQUIPMENT].init(MAX_EQUIPPED, equipped_area, slot_type);
+	inventory[CARRIED].init(MAX_CARRIED, carried_area, ICON_SIZE, carried_cols);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
@@ -191,7 +191,7 @@ void MenuInventory::logic() {
 	}
 
 	// a copy of currency is kept in stats, to help with various situations
-	stats->currency = currency;
+	stats->currency = currency = getCurrency();
 
 	// check close button
 	if (visible) {
@@ -354,7 +354,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid) {
 			if( inventory[area][slot].item == stack.item) {
 				// Merge the stacks
-				add( stack, area, slot);
+				add(stack, area, slot, false);
 			}
 			else if( inventory[drag_prev_src][drag_prev_slot].item == 0) {
 				// Swap the two stacks
@@ -378,7 +378,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			if (slot != drag_prev_slot) {
 				if( inventory[area][slot].item == stack.item) {
 					// Merge the stacks
-					add( stack, area, slot);
+					add(stack, area, slot, false);
 				}
 				else if( inventory[area][slot].item == 0) {
 					// Drop the stack
@@ -402,7 +402,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			// also check to see if the hero meets the requirements
 			if (inventory[area][slot].item == stack.item || drag_prev_src == -1) {
 				// Merge the stacks
-				add( stack, area, slot);
+				add(stack, area, slot, false);
 			}
 			else if( inventory[area][slot].item == 0) {
 				// Drop the stack
@@ -499,7 +499,7 @@ void MenuInventory::activate(Point position) {
 				stack = click(position);
 				if( inventory[EQUIPMENT][equip_slot].item == stack.item) {
 					// Merge the stacks
-					add( stack, EQUIPMENT, equip_slot);
+					add(stack, EQUIPMENT, equip_slot, false);
 				}
 				else if( inventory[EQUIPMENT][equip_slot].item == 0) {
 					// Drop the stack
@@ -533,8 +533,12 @@ void MenuInventory::activate(Point position) {
  * @param area Area number where it will try to store the item
  * @param slot Slot number where it will try to store the item
  */
-void MenuInventory::add(ItemStack stack, int area, int slot) {
-	items->playSound(stack.item);
+void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
+	if (stack.quantity < 1)
+		return;
+
+	if (play_sound)
+		items->playSound(stack.item);
 
 	if (stack.item != 0) {
 		if (area < 0) {
@@ -577,12 +581,14 @@ void MenuInventory::add(ItemStack stack, int area, int slot) {
 					itemReturn( stack);
 				}
 				else {
-					add( stack);
+					add(stack, CARRIED, -1, false);
 				}
 			}
 		}
 		else {
 			// No available slot, drop
+			drop_stack.item = stack.item;
+			drop_stack.quantity = stack.quantity;
 		}
 	}
 }
@@ -606,11 +612,29 @@ void MenuInventory::removeEquipped(int item) {
 }
 
 /**
- * Add currency to the current total
+ * Add currency item
  */
 void MenuInventory::addCurrency(int count) {
-	currency += count;
-	loot->playCurrencySound();
+	ItemStack stack;
+	stack.item = CURRENCY_ID;
+	stack.quantity = count;
+	add(stack, CARRIED, -1, false);
+}
+
+/**
+ * Remove currency item
+ */
+void MenuInventory::removeCurrency(int count) {
+	for (int i=0; i<count; i++) {
+		inventory[CARRIED].remove(CURRENCY_ID);
+	}
+}
+
+/**
+ * Count the number of currency items in the inventory
+ */
+int MenuInventory::getCurrency() {
+	return getItemCountCarried(CURRENCY_ID);
 }
 
 /**
@@ -623,10 +647,9 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
 	else value_each = items->items[stack.item].getSellPrice();
 
 	int count = value_each * stack.quantity;
-	if( currency >= count) {
-		currency -= count;
-
-		loot->playCurrencySound();
+	if( getCurrency() >= count) {
+		removeCurrency(count);
+		items->playSound(CURRENCY_ID);
 		return true;
 	}
 	else {
@@ -648,13 +671,16 @@ bool MenuInventory::stashAdd(ItemStack stack) {
  * Sell a specific stack of items
  */
 bool MenuInventory::sell(ItemStack stack) {
+	// can't sell currency
+	if (stack.item == CURRENCY_ID) return false;
+
 	// items that have no price cannot be sold
 	if (items->items[stack.item].price == 0) return false;
 
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
-	currency += value;
-	loot->playCurrencySound();
+	addCurrency(value);
+	items->playSound(CURRENCY_ID);
 	drag_prev_src = -1;
 	return true;
 }
@@ -815,9 +841,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	stats->powers_list_items.clear();
 
 	// reset wielding vars
-	stats->wielding_physical = false;
-	stats->wielding_mental = false;
-	stats->wielding_offense = false;
+	stats->equip_flags.clear();
 
 	// remove all effects and bonuses added by items
 	stats->effects.clearItemEffects();
@@ -851,26 +875,26 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		stats->dmg_ment_min_add += item.dmg_ment_min;
 		stats->dmg_ment_max_add += item.dmg_ment_max;
 
-		// TODO: add a separate wielding stat to items
-		// e.g. we might want a ring that gives bonus ranged damage but
-		// we still need a bow to shoot arrows.
-		if (item.dmg_melee_max > 0) {
-			stats->wielding_physical = true;
+		// apply power mod
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "melee") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->melee_weapon_power = item.power_mod;
 			}
 		}
-		if (item.dmg_ranged_max > 0) {
-			stats->wielding_offense = true;
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "ranged") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->ranged_weapon_power = item.power_mod;
 			}
 		}
-		if (item.dmg_ment_max > 0) {
-			stats->wielding_mental = true;
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "mental") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->mental_weapon_power = item.power_mod;
 			}
+		}
+
+		// set equip flags
+		for (unsigned j=0; j<item.equip_flags.size(); ++j) {
+			stats->equip_flags.insert(item.equip_flags[j]);
 		}
 
 		// apply absorb bonus

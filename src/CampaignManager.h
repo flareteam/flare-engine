@@ -56,12 +56,12 @@ public:
 	ItemStack drop_stack;
 
 	// pointers to various info that can be changed
-	ItemManager *items;
 	MenuItemStorage *carried_items;
 	int *currency;
 	StatBlock *hero;
 
 	bool quest_update;
+	float bonus_xp;		// Fractional XP points not yet awarded (e.g. killing 1 XP enemies with a +25% ring)
 };
 
 
