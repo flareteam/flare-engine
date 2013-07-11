@@ -72,10 +72,11 @@ LootManager::LootManager(StatBlock *_hero) {
 				tooltip_margin = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "autopickup_range") {
-			  // @ATTR autopickup_range|integer|Define the range for autopickup feature
+				// @ATTR autopickup_range|integer|Define the range for autopickup feature
 				AUTOPICKUP_RANGE = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "autopickup_currency") {
+				// @ATTR autopickup_currency|boolean|Enable autopickup for currency
 				AUTOPICKUP_CURRENCY = toBool(eatFirstString(infile.val, ','));
 			}
 			else if (infile.key == "currency_name") {

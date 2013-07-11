@@ -103,6 +103,7 @@ void PowerManager::loadPowers() {
 			// @ATTR icon|string|The icon to visually represent the power eg. in skill tree or action bar.
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
+			// @ATTR new_state|string|When power is used, hero or enemy will change to this state. Must be one of the states [block, instant, user defined]
 			if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
 			else if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
 			else {

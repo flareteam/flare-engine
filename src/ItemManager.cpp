@@ -232,6 +232,7 @@ void ItemManager::loadItems() {
 			// @ATTR gfx|string|Graphics for the specific item.
 			items[id].gfx = infile.val;
 		else if (infile.key == "loot_animation") {
+			// @ATTR loot_animation|string|Specifies the loot animation for the item.
 			infile.val = infile.val + ',';
 			LootAnimation la;
 			la.name = eatFirstString(infile.val, ',');
