@@ -726,6 +726,7 @@ void GameStatePlay::checkStash() {
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
+		menu->closeAll();
 		menu->inv->visible = true;
 		menu->stash->visible = true;
 		mapr->stash = false;
