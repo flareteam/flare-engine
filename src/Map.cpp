@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Map::Map()
 	: layers()
 	, events()
+	, enemy_groups()
+	, filename("")
 	, w(0)
 	, h(0)
 	, spawn()
@@ -51,16 +53,19 @@ void Map::clearEvents() {
 	events.clear();
 }
 
-int Map::load(std::string filename) {
+int Map::load(std::string fname) {
 	FileParser infile;
 	maprow *cur_layer = NULL;
 
 	clearEvents();
 	clearLayers();
 	clearQueues();
+
 	// @CLASS Map|Description of maps/
-	if (!infile.open("maps/" + filename))
+	if (!infile.open("maps/" + fname))
 		return 0;
+
+	this->filename = fname;
 
 	while (infile.next()) {
 		if (infile.new_section) {
