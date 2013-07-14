@@ -684,7 +684,7 @@ void MenuManager::logic() {
 						if (inv->full(stack.item)) {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
-							drop_stack = stack;
+							splitStack(stack);
 						}
 						else {
 							inv->add(stack);
@@ -883,13 +883,7 @@ void MenuManager::logic() {
 					if (inv->full(drag_stack.item)) {
 						log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 						hudlog->add(msg->get("Inventory is full."));
-						// quest items cannot be dropped
-						if (items->items[drag_stack.item].type != "quest") {
-							drop_stack = drag_stack;
-						}
-						else {
-							stash->itemReturn(drag_stack);
-						}
+						splitStack(drag_stack);
 					}
 					else {
 						inv->drop(inpt->mouse,drag_stack);
@@ -1089,7 +1083,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			else {
 				log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 				hudlog->add(msg->get("Inventory is full."));
-				stash->itemReturn(drag_stack);
+				splitStack(drag_stack);
 			}
 			drag_src = 0;
 			drag_stack.item = 0;
@@ -1363,6 +1357,23 @@ void MenuManager::closeRight() {
 
 bool MenuManager::isDragging() {
 	return drag_src != 0;
+}
+
+/**
+ * Splits an item stack between the stash and the inventory when the latter is full
+ */
+void MenuManager::splitStack(ItemStack stack) {
+	if (stack.item == 0) return;
+
+	if (items->items[stack.item].max_quantity > 1) {
+		inv->add(stack);
+		stash->add(inv->drop_stack);
+		inv->drop_stack.item = 0;
+		inv->drop_stack.quantity = 0;
+	}
+	else {
+		stash->itemReturn(stack);
+	}
 }
 
 MenuManager::~MenuManager() {
