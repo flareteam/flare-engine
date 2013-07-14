@@ -900,7 +900,7 @@ void MenuManager::logic() {
 					stash->drop(inpt->mouse,drag_stack);
 				}
 				else {
-					stash->itemReturn( drag_stack);
+					drop_stack = drag_stack;
 				}
 			}
 

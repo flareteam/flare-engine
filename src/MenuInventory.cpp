@@ -591,6 +591,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 			drop_stack.quantity = stack.quantity;
 		}
 	}
+	drag_prev_src = -1;
 }
 
 /**
