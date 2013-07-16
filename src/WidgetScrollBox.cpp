@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetScrollBox
  */
 
+#include "Settings.h"
 #include "WidgetScrollBox.h"
 #include "SDL_gfxBlitFunc.h"
 
@@ -100,7 +101,9 @@ Point WidgetScrollBox::input_assist(Point mouse) {
 
 void WidgetScrollBox::logic() {
 	logic(inpt->mouse.x,inpt->mouse.y);
-	tablist.logic();
+	if (NO_MOUSE) {
+		tablist.logic();
+	}
 }
 
 void WidgetScrollBox::logic(int x, int y) {
