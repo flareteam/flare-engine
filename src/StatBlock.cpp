@@ -354,8 +354,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
 		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
-		else if (infile.key == "rarity") valid = true;
-
+		else if (infile.key == "rarity") ; // but do nothing
 		else if (!valid) {
 			fprintf(stderr, "%s=%s not a valid StatBlock parameter\n", infile.key.c_str(), infile.val.c_str());
 		}
