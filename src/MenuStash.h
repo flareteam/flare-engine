@@ -56,7 +56,7 @@ public:
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
 	TooltipData checkTooltip(Point position);
-	bool full(int item);
+	bool full(ItemStack stack);
 	void drop(Point position, ItemStack stack);
 	void add(ItemStack stack, int slot);
 

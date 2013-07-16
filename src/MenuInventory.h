@@ -81,7 +81,7 @@ public:
 	bool sell(ItemStack stack);
 	bool stashAdd(ItemStack stack);
 
-	bool full(int item);
+	bool full(ItemStack stack);
 	int getItemCountCarried(int item);
 	bool isItemEquipped(int item);
 	bool requirementsMet(int item);

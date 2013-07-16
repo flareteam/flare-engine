@@ -654,7 +654,7 @@ void MenuManager::logic() {
 							vendor->itemReturn( stack);
 						}
 						else {
-							if (inv->full(stack.item)) {
+							if (inv->full(stack)) {
 								log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 								hudlog->add(msg->get("Inventory is full."));
 								drop_stack = stack;
@@ -681,7 +681,7 @@ void MenuManager::logic() {
 					// take an item from the stash
 					stack = stash->click(inpt->mouse);
 					if (stack.item > 0) {
-						if (inv->full(stack.item)) {
+						if (inv->full(stack)) {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
 							splitStack(stack);
@@ -713,7 +713,7 @@ void MenuManager::logic() {
 					stack = inv->click(inpt->mouse);
 					if (stack.item > 0) {
 						if (stash->visible) {
-							if (inv->stashAdd(stack) && !stash->full(stack.item)) {
+							if (inv->stashAdd(stack) && !stash->full(stack)) {
 								stash->add(stack);
 								stash->updated = true;
 							}
@@ -829,7 +829,7 @@ void MenuManager::logic() {
 					}
 				}
 				else if (stash->visible && isWithin(stash->slots_area, inpt->mouse)) {
-					if (inv->stashAdd( drag_stack) && !stash->full(drag_stack.item)) {
+					if (inv->stashAdd( drag_stack) && !stash->full(drag_stack)) {
 						stash->drop(inpt->mouse, drag_stack);
 						stash->updated = true;
 					}
@@ -861,7 +861,7 @@ void MenuManager::logic() {
 						vendor->itemReturn( drag_stack);
 					}
 					else {
-						if (inv->full(drag_stack.item)) {
+						if (inv->full(drag_stack)) {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
 							drop_stack = drag_stack;
@@ -880,7 +880,7 @@ void MenuManager::logic() {
 
 				// dropping an item from stash (we only allow to drop into the carried area)
 				if (inv->visible && isWithin( inv->carried_area, inpt->mouse)) {
-					if (inv->full(drag_stack.item)) {
+					if (inv->full(drag_stack)) {
 						log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 						hudlog->add(msg->get("Inventory is full."));
 						splitStack(drag_stack);
@@ -987,7 +987,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				vendor->setTab(VENDOR_SELL);
 				vendor->add(drag_stack);
 			}
-			else if (stash->visible && !stash->full(drag_stack.item) && not_quest_item) {
+			else if (stash->visible && !stash->full(drag_stack) && not_quest_item) {
 				stash->add(drag_stack);
 			}
 			else {
@@ -1039,7 +1039,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				vendor->itemReturn(drag_stack);
 			}
 			else {
-				if (inv->full(drag_stack.item)) {
+				if (inv->full(drag_stack)) {
 					log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 					hudlog->add(msg->get("Inventory is full."));
 					drop_stack = drag_stack;
@@ -1077,7 +1077,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// send to inventory
 		else if (slotClick == ACTIVATED && drag_stack.item > 0) {
-			if (!inv->full(drag_stack.item)) {
+			if (!inv->full(drag_stack)) {
 				inv->add(drag_stack);
 			}
 			else {

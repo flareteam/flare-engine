@@ -51,7 +51,7 @@ public:
 	void clear();
 	void clean();
 
-	bool full(int item);
+	bool full(ItemStack stack);
 	int count(int item);
 	bool contain(int item);
 
