@@ -747,8 +747,6 @@ void MenuInventory::updateEquipment(int slot) {
  */
 void MenuInventory::applyEquipment(ItemStack *equipped) {
 
-	unsigned bonus_counter;
-
 	const vector<Item> &pc_items = items->items;
 	int item_id;
 
@@ -760,7 +758,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			item_id = equipped[i].item;
 			const Item &item = pc_items[item_id];
-			bonus_counter = 0;
+			unsigned bonus_counter = 0;
 			while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
 				if (item.bonus_stat[bonus_counter] == "offense")
 					stats->offense_additional += item.bonus_val[bonus_counter];
@@ -784,7 +782,6 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		vector<int> set;
 		vector<int> quantity;
 		vector<int>::iterator it;
-		bonus_counter = 0;
 
 		for (int i=0; i<MAX_EQUIPPED; i++) {
 			item_id = equipped[i].item;
@@ -801,7 +798,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		ItemSet temp_set;
 		for (unsigned k=0; k<set.size(); k++) {
 			temp_set = items->item_sets[set[k]];
-			for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
+			for (unsigned bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 				if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
 				if (temp_set.bonus[bonus_counter].bonus_stat == "offense")
