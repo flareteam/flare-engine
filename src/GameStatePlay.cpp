@@ -722,7 +722,6 @@ void GameStatePlay::checkNPCInteraction() {
 
 void GameStatePlay::checkStash() {
 	int max_interact_distance = UNITS_PER_TILE * 4;
-	int interact_distance = max_interact_distance+1;
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
@@ -736,7 +735,7 @@ void GameStatePlay::checkStash() {
 		if (!menu->inv->visible) menu->stash->visible = false;
 
 		// If the player walks away from the stash, close its menu
-		interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
+		int interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
 		if (interact_distance > max_interact_distance || !pc->stats.alive) {
 			menu->stash->visible = false;
 		}
