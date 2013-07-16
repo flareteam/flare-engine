@@ -158,7 +158,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 
 	// get displayable types list
 	bool found_layer = false;
-	if (infile.open("engine/hero_options.txt")) {
+	if (infile.open("engine/hero_options.txt", true, false)) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

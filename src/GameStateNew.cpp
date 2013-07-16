@@ -213,7 +213,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
  */
 void GameStateNew::loadOptions(const string& filename) {
 	FileParser fin;
-	if (!fin.open("engine/" + filename)) return;
+	if (!fin.open("engine/" + filename, true, false)) return;
 
 	while (fin.next()) {
 		if (fin.key == "option") {
