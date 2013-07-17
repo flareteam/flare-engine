@@ -405,7 +405,7 @@ ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, MenuI
 			if (mouse.x > r.x && mouse.x < r.x+r.w &&
 					mouse.y > r.y && mouse.y < r.y+r.h) {
 
-				if (it->stack.item > 0 && !(inv->full(it->stack))) {
+				if (it->stack.item > 0 && !(inv->full(it->stack.item))) {
 					loot_stack = it->stack;
 					it = loot.erase(it);
 					return loot_stack;
@@ -433,7 +433,7 @@ ItemStack LootManager::checkAutoPickup(Point hero_pos, MenuInventory *inv) {
 		--it;
 		if (abs(hero_pos.x - it->pos.x) < AUTOPICKUP_RANGE && abs(hero_pos.y - it->pos.y) < AUTOPICKUP_RANGE && !it->isFlying()) {
 			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
-				if (!(inv->full(it->stack))) {
+				if (!(inv->full(it->stack.item))) {
 					loot_stack = it->stack;
 					it = loot.erase(it);
 					return loot_stack;
@@ -465,7 +465,7 @@ ItemStack LootManager::checkNearestPickup(Point hero_pos, MenuInventory *inv) {
 	}
 
 	if (nearest != loot.end()) {
-		if (nearest->stack.item > 0 && !(inv->full(nearest->stack))) {
+		if (nearest->stack.item > 0 && !(inv->full(nearest->stack.item))) {
 			loot_stack = nearest->stack;
 			loot.erase(nearest);
 			return loot_stack;

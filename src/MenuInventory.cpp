@@ -695,6 +695,15 @@ bool MenuInventory::full(ItemStack stack) {
 }
 
 /**
+ * An alternative version of the above full() function
+ * This one only checks for a single item
+ * It's primarily used when checking LootManager pickups
+ */
+bool MenuInventory::full(int item) {
+	return inventory[CARRIED].full(item);
+}
+
+/**
  * Get the number of the specified item carried (not equipped)
  */
 int MenuInventory::getItemCountCarried(int item) {

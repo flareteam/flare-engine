@@ -52,6 +52,7 @@ public:
 	void clean();
 
 	bool full(ItemStack stack);
+	bool full(int item);
 	int count(int item);
 	bool contain(int item);
 

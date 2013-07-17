@@ -128,7 +128,7 @@ void CampaignManager::removeItem(int item_id) {
 
 void CampaignManager::rewardItem(ItemStack istack) {
 
-	if (carried_items->full(istack)) {
+	if (carried_items->full(istack.item)) {
 		drop_stack.item = istack.item;
 		drop_stack.quantity = istack.quantity;
 	}
@@ -151,7 +151,7 @@ void CampaignManager::rewardCurrency(int amount) {
 	stack.item = CURRENCY_ID;
 	stack.quantity = amount;
 	rewardItem(stack);
-	if (carried_items->full(stack))
+	if (carried_items->full(stack.item))
 		addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
 	items->playSound(CURRENCY_ID);
 }
