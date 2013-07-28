@@ -713,7 +713,7 @@ void MenuManager::logic() {
 					stack = inv->click(inpt->mouse);
 					if (stack.item > 0) {
 						if (stash->visible) {
-							if (inv->stashAdd(stack) && !stash->full(stack)) {
+							if (inv->stashAdd(stack) && !stash->full(stack.item)) {
 								stash->add(stack);
 								stash->updated = true;
 							}
@@ -829,7 +829,7 @@ void MenuManager::logic() {
 					}
 				}
 				else if (stash->visible && isWithin(stash->slots_area, inpt->mouse)) {
-					if (inv->stashAdd( drag_stack) && !stash->full(drag_stack)) {
+					if (inv->stashAdd( drag_stack) && !stash->full(drag_stack.item)) {
 						stash->drop(inpt->mouse, drag_stack);
 						stash->updated = true;
 					}
@@ -987,7 +987,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				vendor->setTab(VENDOR_SELL);
 				vendor->add(drag_stack);
 			}
-			else if (stash->visible && !stash->full(drag_stack) && not_quest_item) {
+			else if (stash->visible && !stash->full(drag_stack.item) && not_quest_item) {
 				stash->add(drag_stack);
 			}
 			else {

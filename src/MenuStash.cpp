@@ -232,8 +232,8 @@ TooltipData MenuStash::checkTooltip(Point position) {
 	return stock.checkTooltip(position, stats, PLAYER_INV);
 }
 
-bool MenuStash::full(ItemStack stack) {
-	return stock.full(stack);
+bool MenuStash::full(int item) {
+	return stock.full(item);
 }
 
 int MenuStash::getRowsCount() {
