@@ -225,7 +225,8 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, Point po
 	}
 
 	// Let playback own a reference to prevent unloading playbacked sound.
-	it->second->refCnt++;
+	if (!loop)
+		it->second->refCnt++;
 
 	Mix_ChannelFinished(&channel_finished);
 	int c = Mix_PlayChannel(-1, it->second->chunk, (loop ? -1 : 0));
