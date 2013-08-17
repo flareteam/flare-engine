@@ -1,8 +1,8 @@
 /*
-Copyright 2011-2012 Clint Bellanger
-Copyright 2012 Igor Paliychuk
-Copyright 2012-2013 Henrik Andersson
-Copyright 2012 Stefan Beller
+Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012 Igor Paliychuk
+Copyright © 2012-2013 Henrik Andersson
+Copyright © 2012 Stefan Beller
 
 This file is part of FLARE.
 
@@ -140,6 +140,18 @@ void GameStatePlay::checkEnemyFocus() {
 		if (!enemy->stats.suppress_hp) {
 			menu->enemy->enemy = enemy;
 			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
+			hazards->last_enemy = NULL;
+		}
+	}
+	else if (hazards->last_enemy != NULL) {
+
+		// try to focus the last enemy hit
+		if (!hazards->last_enemy->stats.suppress_hp) {
+			menu->enemy->enemy = hazards->last_enemy;
+			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
+			if (!hazards->last_enemy->stats.alive) {
+				hazards->last_enemy = NULL;
+			}
 		}
 	}
 	else {
@@ -569,9 +581,8 @@ void GameStatePlay::checkNotifications() {
 		menu->act->requires_attention[MENU_LOG] = true;
 	}
 
-	// if the player is transformed into a creature, don't show notifications for some menus
-	if (!pc->stats.humanoid) {
-		menu->act->requires_attention[MENU_CHARACTER] = false;
+	// if the player is transformed into a creature, don't notifications for the powers menu
+	if (pc->stats.transformed) {
 		menu->act->requires_attention[MENU_POWERS] = false;
 	}
 }
@@ -711,10 +722,10 @@ void GameStatePlay::checkNPCInteraction() {
 
 void GameStatePlay::checkStash() {
 	int max_interact_distance = UNITS_PER_TILE * 4;
-	int interact_distance = max_interact_distance+1;
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
+		menu->closeAll();
 		menu->inv->visible = true;
 		menu->stash->visible = true;
 		mapr->stash = false;
@@ -724,7 +735,7 @@ void GameStatePlay::checkStash() {
 		if (!menu->inv->visible) menu->stash->visible = false;
 
 		// If the player walks away from the stash, close its menu
-		interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
+		int interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
 		if (interact_distance > max_interact_distance || !pc->stats.alive) {
 			menu->stash->visible = false;
 		}

@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <queue>
 
 class Power;
+class FileParser;
 
 const int POWERSLOT_COUNT = 10;
 const int MELEE_PHYS = 0;
@@ -89,6 +90,7 @@ public:
 
 class StatBlock {
 private:
+    bool loadCoreStat(FileParser *infile);
 	void loadHeroStats();
 	bool statsLoaded;
 
@@ -210,9 +212,7 @@ public:
 	int speed;
 	int dspeed;
 
-	bool wielding_physical;
-	bool wielding_mental;
-	bool wielding_offense;
+	std::set<std::string> equip_flags;
 	std::vector<int> vulnerable;
 	std::vector<int> vulnerable_base;
 

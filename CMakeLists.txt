@@ -85,6 +85,7 @@ Set (FLARE_SOURCES
 	./src/Animation.cpp
 	./src/AnimationManager.cpp
 	./src/AnimationSet.cpp
+	./src/AStarContainer.cpp
 	./src/AStarNode.cpp
 	./src/Avatar.cpp
 	./src/BehaviorStandard.cpp
@@ -189,15 +190,6 @@ EndIf (NOT SDLMAIN_LIBRARY)
 Target_Link_Libraries (flare ${CMAKE_LD_FLAGS} ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} ${SDLMAIN_LIBRARY})
 
 
-# desktop file
-If(NOT IS_ABSOLUTE "${BINDIR}")
-	set(FLARE_EXECUTABLE_PATH ${CMAKE_INSTALL_PREFIX}/${BINDIR}/flare)
-Else(NOT IS_ABSOLUTE "${BINDIR}")
-	set(FLARE_EXECUTABLE_PATH ${BINDIR}/flare)
-EndIf(NOT IS_ABSOLUTE "${BINDIR}")
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop")
-
-
 # installing to the proper places
 install(PROGRAMS
   ${CMAKE_CURRENT_BINARY_DIR}/flare
@@ -205,13 +197,6 @@ install(PROGRAMS
 install(DIRECTORY
   "${CMAKE_CURRENT_SOURCE_DIR}/mods"
   DESTINATION ${DATADIR}/default)
-install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
-install(FILES
-  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
-  RENAME flare.svg)
 install(FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
   DESTINATION ${MANDIR}/man1

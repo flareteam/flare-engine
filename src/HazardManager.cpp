@@ -31,7 +31,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-HazardManager::HazardManager() {
+HazardManager::HazardManager()
+	: last_enemy(NULL)
+{
 }
 
 void HazardManager::logic() {
@@ -83,6 +85,7 @@ void HazardManager::logic() {
 						if (isWithin(round(h[i]->pos), h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
 								h[i]->addEntity(enemies->enemies[eindex]);
+								if (!h[i]->beacon) last_enemy = enemies->enemies[eindex];
 								// hit!
 								hit = enemies->enemies[eindex]->takeHit(*h[i]);
 								if (!h[i]->multitarget && hit) {

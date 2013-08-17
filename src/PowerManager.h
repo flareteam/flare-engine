@@ -50,11 +50,9 @@ const int POWTYPE_SPAWN = 3;
 const int POWTYPE_TRANSFORM = 4;
 const int POWTYPE_EFFECT = 5;
 
-const int POWSTATE_SWING = 0;
-const int POWSTATE_CAST = 1;
-const int POWSTATE_SHOOT = 2;
-const int POWSTATE_BLOCK = 3;
-const int POWSTATE_INSTANT = 4;
+const int POWSTATE_BLOCK = 1;
+const int POWSTATE_INSTANT = 2;
+const int POWSTATE_ATTACK = 3;
 
 const int BASE_DAMAGE_NONE = 0;
 const int BASE_DAMAGE_MELEE = 1;
@@ -119,6 +117,7 @@ public:
 	std::string tag; // optional unique name used to get power id
 	int icon; // just the number.  The caller menu will have access to the surface.
 	int new_state; // when using this power the user (avatar/enemy) starts a new state
+	std::string attack_anim; // name of the animation to play when using this power, if it is not block
 	bool face; // does the user turn to face the mouse cursor when using this power?
 	int source_type; //hero, neutral, or enemy
 	bool beacon; //true if it's just an ememy calling its allies
@@ -127,9 +126,7 @@ public:
 	int passive_trigger; // only activate passive powers under certain conditions (block, hit, death, etc)
 
 	// power requirements
-	bool requires_physical_weapon;
-	bool requires_offense_weapon;
-	bool requires_mental_weapon;
+	std::set<std::string> requires_flags; // checked against equip_flags granted from items
 	int requires_mp;
 	int requires_hp;
 	bool sacrifice;
@@ -230,16 +227,13 @@ public:
 		, tag("")
 		, icon(-1)
 		, new_state(-1)
+		, attack_anim("")
 		, face(false)
 		, source_type(-1)
 		, beacon(false)
 		, count(1)
 		, passive(false)
 		, passive_trigger(-1)
-
-		, requires_physical_weapon(false)
-		, requires_offense_weapon(false)
-		, requires_mental_weapon(false)
 
 		, requires_mp(0)
 		, requires_hp(0)
@@ -360,7 +354,7 @@ public:
 	bool canUsePower(unsigned id) const;
 	bool hasValidTarget(int power_index, StatBlock *src_stats, Point target);
 	bool spawn(const std::string& enemy_type, Point target);
-	bool effect(StatBlock *src_stats, int power_index, int source_type);
+	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
 	int getIdFromTag(std::string tag);
