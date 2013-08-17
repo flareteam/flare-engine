@@ -195,8 +195,8 @@ void EnemyManager::handleSpawn() {
 		e->stats.summoned_power_index = espawn.summon_power_index;
 
 		if(espawn.summoner != NULL){
-            e->stats.summoner = espawn.summoner;
-            espawn.summoner->summons.push_back(&(e->stats));
+			e->stats.summoner = espawn.summoner;
+			espawn.summoner->summons.push_back(&(e->stats));
 		}
 
 		e->type = espawn.type;
@@ -219,36 +219,36 @@ void EnemyManager::handleSpawn() {
 
 		//Set level
 		if(e->stats.summoned_power_index != 0){
-            if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_FIXED)
-                e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty;
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_FIXED)
+				e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty;
 
-            if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_LEVEL){
-                if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
-                    e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
-                        * (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
-                }
-            }
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_LEVEL){
+				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
+					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
+							* (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+				}
+			}
 
-            if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT){
-                if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
-                    int stat_val = 0;
-                    if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_DEFENSE)
-                        stat_val = e->stats.summoner->get_defense();
-                    if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_OFFENSE)
-                        stat_val = e->stats.summoner->get_offense();
-                    if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_MENTAL)
-                        stat_val = e->stats.summoner->get_mental();
-                    if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_PHYSICAL)
-                        stat_val = e->stats.summoner->get_physical();
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT){
+				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
+					int stat_val = 0;
+					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_DEFENSE)
+						stat_val = e->stats.summoner->get_defense();
+					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_OFFENSE)
+						stat_val = e->stats.summoner->get_offense();
+					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_MENTAL)
+						stat_val = e->stats.summoner->get_mental();
+					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_PHYSICAL)
+						stat_val = e->stats.summoner->get_physical();
 
-                    e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
-                        * (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);
-                }
-            }
+					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
+							* (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+				}
+			}
 
-            if(e->stats.level < 1) e->stats.level = 1;
+			if(e->stats.level < 1) e->stats.level = 1;
 
-            e->stats.applyEffects();
+			e->stats.applyEffects();
 		}
 
 		if(mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
