@@ -42,7 +42,6 @@ private:
 	int areaOver(Point position);
 	void updateEquipment(int slot);
 
-	SDL_Surface *background;
 	WidgetButton *closeButton;
 
 	int MAX_EQUIPPED;

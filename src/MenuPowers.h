@@ -78,7 +78,6 @@ private:
 	StatBlock *stats;
 	std::vector<Power_Menu_Cell> power_cell;
 
-	SDL_Surface *background;
 	SDL_Surface *icons;
 	std::vector<SDL_Surface*> tree_surf;
 	SDL_Surface *powers_unlock;
