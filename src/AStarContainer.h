@@ -30,6 +30,8 @@ class AStarContainer
 {
     public:
         AStarContainer(unsigned int _map_width, unsigned int node_limit);
+		AStarContainer(const AStarContainer&); // copy constructor not yet implemented
+
         ~AStarContainer();
         //assumes that the node is not already in the collection
         void add(AStarNode* node);
@@ -87,6 +89,7 @@ class AStarCloseContainer
 {
 public:
     AStarCloseContainer(unsigned int _map_width, unsigned int node_limit);
+	AStarCloseContainer(const AStarCloseContainer&); // copy constructor not yet implemented
     ~AStarCloseContainer();
 
     int getSize();
