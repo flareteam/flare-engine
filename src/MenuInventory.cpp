@@ -747,8 +747,6 @@ void MenuInventory::updateEquipment(int slot) {
  */
 void MenuInventory::applyEquipment(ItemStack *equipped) {
 
-	unsigned bonus_counter;
-
 	const vector<Item> &pc_items = items->items;
 	int item_id;
 
@@ -760,7 +758,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			item_id = equipped[i].item;
 			const Item &item = pc_items[item_id];
-			bonus_counter = 0;
+			unsigned bonus_counter = 0;
 			while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
 				if (item.bonus_stat[bonus_counter] == "offense")
 					stats->offense_additional += item.bonus_val[bonus_counter];
@@ -784,7 +782,6 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		vector<int> set;
 		vector<int> quantity;
 		vector<int>::iterator it;
-		bonus_counter = 0;
 
 		for (int i=0; i<MAX_EQUIPPED; i++) {
 			item_id = equipped[i].item;
@@ -801,7 +798,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		ItemSet temp_set;
 		for (unsigned k=0; k<set.size(); k++) {
 			temp_set = items->item_sets[set[k]];
-			for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
+			for (unsigned bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 				if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
 				if (temp_set.bonus[bonus_counter].bonus_stat == "offense")
@@ -841,9 +838,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	stats->powers_list_items.clear();
 
 	// reset wielding vars
-	stats->wielding_physical = false;
-	stats->wielding_mental = false;
-	stats->wielding_offense = false;
+	stats->equip_flags.clear();
 
 	// remove all effects and bonuses added by items
 	stats->effects.clearItemEffects();
@@ -877,26 +872,26 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		stats->dmg_ment_min_add += item.dmg_ment_min;
 		stats->dmg_ment_max_add += item.dmg_ment_max;
 
-		// TODO: add a separate wielding stat to items
-		// e.g. we might want a ring that gives bonus ranged damage but
-		// we still need a bow to shoot arrows.
-		if (item.dmg_melee_max > 0) {
-			stats->wielding_physical = true;
+		// apply power mod
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "melee") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->melee_weapon_power = item.power_mod;
 			}
 		}
-		if (item.dmg_ranged_max > 0) {
-			stats->wielding_offense = true;
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "ranged") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->ranged_weapon_power = item.power_mod;
 			}
 		}
-		if (item.dmg_ment_max > 0) {
-			stats->wielding_mental = true;
+		if (find(item.equip_flags.begin(), item.equip_flags.end(), "mental") != item.equip_flags.end()) {
 			if (item.power_mod != 0) {
 				stats->mental_weapon_power = item.power_mod;
 			}
+		}
+
+		// set equip flags
+		for (unsigned j=0; j<item.equip_flags.size(); ++j) {
+			stats->equip_flags.insert(item.equip_flags[j]);
 		}
 
 		// apply absorb bonus

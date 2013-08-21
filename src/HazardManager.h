@@ -43,6 +43,7 @@ public:
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	std::vector<Hazard*> h;
+	Enemy* last_enemy;
 };
 
 #endif

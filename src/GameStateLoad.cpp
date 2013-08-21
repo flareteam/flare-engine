@@ -82,7 +82,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 				button_action->pos.x = eatFirstInt(infile.val, ',');
 				button_action->pos.y = eatFirstInt(infile.val, ',');
 			}
-			else if (infile.key == "atlernate_button") {
+			else if (infile.key == "alternate_button") {
 				button_alternate->pos.x = eatFirstInt(infile.val, ',');
 				button_alternate->pos.y = eatFirstInt(infile.val, ',');
 			}
@@ -158,7 +158,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 
 	// get displayable types list
 	bool found_layer = false;
-	if (infile.open("engine/hero_options.txt")) {
+	if (infile.open("engine/hero_options.txt", true, false)) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 

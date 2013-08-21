@@ -28,6 +28,7 @@ using namespace std;
 #include "Stats.h"
 #include "GameSwitcher.h"
 #include "SharedResources.h"
+#include "UtilsFileSystem.h"
 
 GameSwitcher *gswitch;
 SDL_Surface *titlebar_icon;
@@ -49,6 +50,18 @@ static void init() {
 	// Shared Resources set-up
 
 	mods = new ModManager();
+
+	if (find(mods->mod_list.begin(), mods->mod_list.end(), FALLBACK_MOD) == mods->mod_list.end()) {
+		fprintf(stderr, "Could not find the default mod in the following locations:\n");
+		if (dirExists(PATH_DATA + "mods")) fprintf(stderr, "%smods/\n", PATH_DATA.c_str());
+		if (dirExists(PATH_DEFAULT_DATA + "mods")) fprintf(stderr, "%smods/\n", PATH_DEFAULT_DATA.c_str());
+		if (dirExists(PATH_USER + "mods")) fprintf(stderr, "%smods/\n", PATH_USER.c_str());
+		if (dirExists(PATH_DEFAULT_USER + "mods")) fprintf(stderr, "%smods/\n", PATH_DEFAULT_USER.c_str());
+		fprintf(stderr, "\nA copy of the default mod is in the \"mods\" directory of the flare-engine repo.\n");
+		fprintf(stderr, "The repo is located at: https://github.com/clintbellanger/flare-engine\n");
+		fprintf(stderr, "Try again after copying the default mod to one of the above directories.\nExiting.\n");
+		exit(1);
+	}
 
 	if (!loadSettings()) {
 		fprintf(stderr, "%s",

@@ -26,6 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Widget.h"
 #include "WidgetSlider.h"
 
+#include <assert.h>
+
 using namespace std;
 
 WidgetSlider::WidgetSlider (const string  & fname)
@@ -106,6 +108,7 @@ bool WidgetSlider::checkClick (int x, int y) {
 		int tmp = std::max(0, std::min(mouse.x - pos.x, static_cast<int>(pos.w)));
 
 		pos_knob.x = pos.x + tmp - (pos_knob.w/2);
+		assert(pos.w);
 		value = minimum + (tmp*(maximum-minimum))/pos.w;
 
 		return true;

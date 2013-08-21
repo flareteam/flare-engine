@@ -42,6 +42,7 @@ CampaignManager::CampaignManager()
 	, currency(NULL)
 	, hero(NULL)
 	, quest_update(true)
+	, bonus_xp(0.0)
 {}
 
 void CampaignManager::clearAll() {
@@ -156,7 +157,9 @@ void CampaignManager::rewardCurrency(int amount) {
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
-	hero->xp += (amount * (100 + hero->get(STAT_XP_GAIN))) / 100;
+	bonus_xp += (amount * (100.0 + hero->get(STAT_XP_GAIN))) / 100.0;
+	hero->xp += (int)bonus_xp;
+	bonus_xp -= (int)bonus_xp;
 	hero->refresh_stats = true;
 	if (show_message) addMsg(msg->get("You receive %d XP.", amount));
 }

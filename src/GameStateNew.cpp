@@ -213,7 +213,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
  */
 void GameStateNew::loadOptions(const string& filename) {
 	FileParser fin;
-	if (!fin.open("engine/" + filename)) return;
+	if (!fin.open("engine/" + filename, true, false)) return;
 
 	while (fin.next()) {
 		if (fin.key == "option") {
@@ -239,7 +239,8 @@ void GameStateNew:: setName(const string& default_name) {
 }
 
 void GameStateNew::logic() {
-	tablist.logic();
+	if (!input_name->inFocus)
+		tablist.logic();
 
 	button_permadeath->checkClick();
 	if (show_classlist) class_list->checkClick();
