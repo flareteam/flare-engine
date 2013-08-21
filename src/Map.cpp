@@ -229,6 +229,14 @@ void Map::loadNPC(FileParser &infile) {
 		// @ATTR npc.type|string|Type of NPC
 		npcs.back().id = infile.val;
 	}
+	if (infile.key == "requires_status") {
+		// @ATTR npc.type|string|Type of NPC
+		npcs.back().requires_status = infile.val;
+	}
+	if (infile.key == "requires_not") {
+		// @ATTR npc.type|string|Type of NPC
+		npcs.back().requires_not = infile.val;
+	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
 		npcs.back().pos.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;

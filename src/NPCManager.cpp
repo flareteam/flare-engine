@@ -76,6 +76,18 @@ void NPCManager::handleNewMap() {
 		mn = mapr->npcs.front();
 		mapr->npcs.pop();
 
+        if(mn.requires_status != "")
+        {
+            //if the requires ststus is not present, dont load the npc
+            if(!camp->checkStatus(mn.requires_status))
+                continue;
+        }
+        if(mn.requires_not != "")
+        {
+            if(camp->checkStatus(mn.requires_not))
+                continue;
+        }
+
 		NPC *npc = new NPC();
 		npc->load(mn.id, stats->level);
 		npc->pos.x = mn.pos.x;

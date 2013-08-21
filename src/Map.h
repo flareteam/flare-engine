@@ -55,9 +55,14 @@ class Map_NPC {
 public:
 	std::string id;
 	Point pos;
+	std::string requires_status;
+	std::string requires_not;
+
 	Map_NPC()
 	: id("")
 	, pos()
+	, requires_status("")
+	, requires_not("")
 	{}
 };
 
