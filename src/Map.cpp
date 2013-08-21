@@ -230,11 +230,11 @@ void Map::loadNPC(FileParser &infile) {
 		npcs.back().id = infile.val;
 	}
 	if (infile.key == "requires_status") {
-		// @ATTR npc.type|string|Type of NPC
+		// @ATTR npc.requires_status|string|Status required for NPC load
 		npcs.back().requires_status = infile.val;
 	}
 	if (infile.key == "requires_not") {
-		// @ATTR npc.type|string|Type of NPC
+		// @ATTR npc.requires_not|string|Status required to be missing for NPC load
 		npcs.back().requires_not = infile.val;
 	}
 	else if (infile.key == "location") {
