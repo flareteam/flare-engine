@@ -326,8 +326,10 @@ void MenuActionBar::render() {
 			renderAttention(i);
 
 	// draw hotkey labels
-	for (int i=0; i<16; i++) {
-		labels[i]->render();
+	if (SHOW_HOTKEYS) {
+		for (int i=0; i<16; i++) {
+			labels[i]->render();
+		}
 	}
 
 }
