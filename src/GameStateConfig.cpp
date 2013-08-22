@@ -229,6 +229,7 @@ void GameStateConfig::init() {
 
 	tablist.add(combat_text_cb);
 	tablist.add(show_fps_cb);
+	tablist.add(show_hotkeys_cb);
 	tablist.add(colorblind_cb);
 	tablist.add(language_lstb);
 
