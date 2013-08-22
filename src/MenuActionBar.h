@@ -57,8 +57,6 @@ private:
 	WidgetLabel *labels[16];
 	Point last_mouse;
 
-	bool drawHotkeyLabels;
-
 public:
 
 	MenuActionBar(StatBlock *hero, SDL_Surface *icons);
@@ -76,7 +74,6 @@ public:
 	void set(int power_id[12]);
 	void clear();
 	void update();
-	bool showHotkeys( bool show = true );
 
 	TooltipData checkTooltip(Point mouse);
 
