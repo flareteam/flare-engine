@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 MenuActionBar::MenuActionBar(StatBlock *_hero, SDL_Surface *_icons) {
+	drawHotkeyLabels = true;
 	hero = _hero;
 	icons = _icons;
 
@@ -325,11 +326,12 @@ void MenuActionBar::render() {
 		if (requires_attention[i])
 			renderAttention(i);
 
-	// draw hotkey labels
-	for (int i=0; i<16; i++) {
-		labels[i]->render();
+	if (drawHotkeyLabels) {
+		// draw hotkey labels
+		for (int i=0; i<16; i++) {
+			labels[i]->render();
+		}
 	}
-
 }
 
 /**
@@ -533,4 +535,9 @@ MenuActionBar::~MenuActionBar() {
 
 	for (unsigned int i=0; i<4; i++)
 		delete menus[i];
+}
+
+bool MenuActionBar::showHotkeys( bool show )
+{
+	return drawHotkeyLabels = show;
 }

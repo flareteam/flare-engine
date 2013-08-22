@@ -114,6 +114,8 @@ void GameStateConfig::init() {
 	no_mouse_lb = new WidgetLabel();
 	show_fps_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	show_fps_lb = new WidgetLabel();
+	show_hotkeys_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	show_hotkeys_lb = new WidgetLabel();
 	colorblind_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	colorblind_lb = new WidgetLabel();
 	music_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
@@ -278,175 +280,46 @@ void GameStateConfig::readConfig () {
 			}
 			//checkboxes
 			else if (infile.key == "fullscreen") {
-				fullscreen_cb->pos.x = frame.x + x2;
-				fullscreen_cb->pos.y = frame.y + y2;
-				child_widget.push_back(fullscreen_cb);
-				optiontab[child_widget.size()-1] = 0;
-
-				fullscreen_lb->setX(frame.x + x1);
-				fullscreen_lb->setY(frame.y + y1);
-				fullscreen_lb->set(msg->get("Full Screen Mode"));
-				fullscreen_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(fullscreen_lb);
-				optiontab[child_widget.size()-1] = 0;
+				placeLabelledCheckbox( fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), 0);
 			}
 			else if (infile.key == "mouse_move") {
-				mouse_move_cb->pos.x = frame.x + x2;
-				mouse_move_cb->pos.y = frame.y + y2;
-				child_widget.push_back(mouse_move_cb);
-				optiontab[child_widget.size()-1] = 3;
-
-				mouse_move_lb->setX(frame.x + x1);
-				mouse_move_lb->setY(frame.y + y1);
-				mouse_move_lb->set(msg->get("Move hero using mouse"));
-				mouse_move_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(mouse_move_lb);
-				optiontab[child_widget.size()-1] = 3;
+				placeLabelledCheckbox( mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), 3);
 			}
 			else if (infile.key == "combat_text") {
-				combat_text_cb->pos.x = frame.x + x2;
-				combat_text_cb->pos.y = frame.y + y2;
-				child_widget.push_back(combat_text_cb);
-				optiontab[child_widget.size()-1] = 2;
-
-				combat_text_lb->setX(frame.x + x1);
-				combat_text_lb->setY(frame.y + y1);
-				combat_text_lb->set(msg->get("Show combat text"));
-				combat_text_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(combat_text_lb);
-				optiontab[child_widget.size()-1] = 2;
-
+				placeLabelledCheckbox( combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), 2);
 			}
 			else if (infile.key == "hwsurface") {
-				hwsurface_cb->pos.x = frame.x + x2;
-				hwsurface_cb->pos.y = frame.y + y2;
-				child_widget.push_back(hwsurface_cb);
-				optiontab[child_widget.size()-1] = 0;
-
-				hwsurface_lb->setX(frame.x + x1);
-				hwsurface_lb->setY(frame.y + y1);
-				hwsurface_lb->set(msg->get("Hardware surfaces"));
-				hwsurface_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(hwsurface_lb);
-				optiontab[child_widget.size()-1] = 0;
+				placeLabelledCheckbox( hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), 0);
 			}
 			else if (infile.key == "doublebuf") {
-				doublebuf_cb->pos.x = frame.x + x2;
-				doublebuf_cb->pos.y = frame.y + y2;
-				child_widget.push_back(doublebuf_cb);
-				optiontab[child_widget.size()-1] = 0;
-
-				doublebuf_lb->setX(frame.x + x1);
-				doublebuf_lb->setY(frame.y + y1);
-				doublebuf_lb->set(msg->get("Double buffering"));
-				doublebuf_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(doublebuf_lb);
-				optiontab[child_widget.size()-1] = 0;
-
+				placeLabelledCheckbox( doublebuf_lb, doublebuf_cb, x1, y1, x2, y2, msg->get("Double buffering"), 0);
 			}
 			else if (infile.key == "enable_joystick") {
-				enable_joystick_cb->pos.x = frame.x + x2;
-				enable_joystick_cb->pos.y = frame.y + y2;
-				child_widget.push_back(enable_joystick_cb);
-				optiontab[child_widget.size()-1] = 3;
-
-				enable_joystick_lb->setX(frame.x + x1);
-				enable_joystick_lb->setY(frame.y + y1);
-				enable_joystick_lb->set(msg->get("Use joystick"));
-				enable_joystick_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(enable_joystick_lb);
-				optiontab[child_widget.size()-1] = 3;
+				placeLabelledCheckbox( enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), 3);
 			}
 			else if (infile.key == "texture_quality") {
-				texture_quality_cb->pos.x = frame.x + x2;
-				texture_quality_cb->pos.y = frame.y + y2;
-				child_widget.push_back(texture_quality_cb);
-				optiontab[child_widget.size()-1] = 0;
-
-				texture_quality_lb->setX(frame.x + x1);
-				texture_quality_lb->setY(frame.y + y1);
-				texture_quality_lb->set(msg->get("High Quality Textures"));
-				texture_quality_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(texture_quality_lb);
-				optiontab[child_widget.size()-1] = 0;
+				placeLabelledCheckbox( texture_quality_lb, texture_quality_cb, x1, y1, x2, y2, msg->get("High Quality Textures"), 0);
 			}
 			else if (infile.key == "change_gamma") {
-				change_gamma_cb->pos.x = frame.x + x2;
-				change_gamma_cb->pos.y = frame.y + y2;
-				child_widget.push_back(change_gamma_cb);
-				optiontab[child_widget.size()-1] = 0;
-
-				change_gamma_lb->setX(frame.x + x1);
-				change_gamma_lb->setY(frame.y + y1);
-				change_gamma_lb->set(msg->get("Allow changing gamma"));
-				change_gamma_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(change_gamma_lb);
-				optiontab[child_widget.size()-1] = 0;
+				placeLabelledCheckbox( change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), 0);
 			}
 			else if (infile.key == "animated_tiles") {
-				animated_tiles_cb->pos.x = frame.x + x2;
-				animated_tiles_cb->pos.y = frame.y + y2;
-				child_widget.push_back(animated_tiles_cb);
-				optiontab[child_widget.size()-1] = 0;
-
-				animated_tiles_lb->setX(frame.x + x1);
-				animated_tiles_lb->setY(frame.y + y1);
-				animated_tiles_lb->set(msg->get("Animated tiles"));
-				animated_tiles_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(animated_tiles_lb);
-				optiontab[child_widget.size()-1] = 0;
+				placeLabelledCheckbox( animated_tiles_lb, animated_tiles_cb, x1, y1, x2, y2, msg->get("Animated tiles"), 0);
 			}
 			else if (infile.key == "mouse_aim") {
-				mouse_aim_cb->pos.x = frame.x + x2;
-				mouse_aim_cb->pos.y = frame.y + y2;
-				child_widget.push_back(mouse_aim_cb);
-				optiontab[child_widget.size()-1] = 3;
-
-				mouse_aim_lb->setX(frame.x + x1);
-				mouse_aim_lb->setY(frame.y + y1);
-				mouse_aim_lb->set(msg->get("Mouse aim"));
-				mouse_aim_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(mouse_aim_lb);
-				optiontab[child_widget.size()-1] = 3;
+				placeLabelledCheckbox( mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), 3);
 			}
 			else if (infile.key == "no_mouse") {
-				no_mouse_cb->pos.x = frame.x + x2;
-				no_mouse_cb->pos.y = frame.y + y2;
-				child_widget.push_back(no_mouse_cb);
-				optiontab[child_widget.size()-1] = 3;
-
-				no_mouse_lb->setX(frame.x + x1);
-				no_mouse_lb->setY(frame.y + y1);
-				no_mouse_lb->set(msg->get("Do not use mouse"));
-				no_mouse_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(no_mouse_lb);
-				optiontab[child_widget.size()-1] = 3;
+				placeLabelledCheckbox( no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), 3);
 			}
 			else if (infile.key == "show_fps") {
-				show_fps_cb->pos.x = frame.x + x2;
-				show_fps_cb->pos.y = frame.y + y2;
-				child_widget.push_back(show_fps_cb);
-				optiontab[child_widget.size()-1] = 2;
-
-				show_fps_lb->setX(frame.x + x1);
-				show_fps_lb->setY(frame.y + y1);
-				show_fps_lb->set(msg->get("Show FPS"));
-				show_fps_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(show_fps_lb);
-				optiontab[child_widget.size()-1] = 2;
+				placeLabelledCheckbox( show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), 2);
+			}
+			else if (infile.key == "show_hotkeys") {
+				placeLabelledCheckbox( show_hotkeys_lb, show_hotkeys_cb, x1, y1, x2, y2, msg->get("Show Hotkeys Labels"), 2);
 			}
 			else if (infile.key == "colorblind") {
-				colorblind_cb->pos.x = frame.x + x2;
-				colorblind_cb->pos.y = frame.y + y2;
-				child_widget.push_back(colorblind_cb);
-				optiontab[child_widget.size()-1] = 2;
-
-				colorblind_lb->setX(frame.x + x1);
-				colorblind_lb->setY(frame.y + y1);
-				colorblind_lb->set(msg->get("Colorblind Mode"));
-				colorblind_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(colorblind_lb);
-				optiontab[child_widget.size()-1] = 2;
+				placeLabelledCheckbox( colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), 2);
 			}
 			//sliders
 			else if (infile.key == "music_volume") {
@@ -789,6 +662,8 @@ void GameStateConfig::update () {
 	else no_mouse_cb->unCheck();
 	if (SHOW_FPS) show_fps_cb->Check();
 	else show_fps_cb->unCheck();
+	if (SHOW_HOTKEYS) show_hotkeys_cb->Check();
+	else show_hotkeys_cb->unCheck();
 	if (COLORBLIND) colorblind_cb->Check();
 	else colorblind_cb->unCheck();
 
@@ -1030,6 +905,10 @@ void GameStateConfig::logic () {
 		else if (show_fps_cb->checkClick()) {
 			if (show_fps_cb->isChecked()) SHOW_FPS=true;
 			else SHOW_FPS=false;
+		}
+		else if (show_hotkeys_cb->checkClick()) {
+			if (show_hotkeys_cb->isChecked()) SHOW_HOTKEYS=true;
+			else SHOW_HOTKEYS=false;
 		}
 		else if (colorblind_cb->checkClick()) {
 			if (colorblind_cb->isChecked()) COLORBLIND=true;
@@ -1497,3 +1376,17 @@ GameStateConfig::~GameStateConfig() {
 		free(video_modes);
 }
 
+void GameStateConfig::placeLabelledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab )
+{
+	cb->pos.x = frame.x + x2;
+	cb->pos.y = frame.y + y2;
+	child_widget.push_back(cb);
+	optiontab[child_widget.size()-1] = tab;
+
+	lb->setX(frame.x + x1);
+	lb->setY(frame.y + y1);
+	lb->set(str);
+	lb->setJustify(JUSTIFY_RIGHT);
+	child_widget.push_back(lb);
+	optiontab[child_widget.size()-1] = tab;
+}
