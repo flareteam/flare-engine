@@ -27,9 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATECONFIG_H
 #define GAMESTATECONFIG_H
 
-#include <vector>
-#include <string>
-
 #include "CommonIncludes.h"
 #include "GameState.h"
 #include "TooltipData.h"
@@ -78,7 +75,7 @@ private:
 	void disableMods();
 	bool setMods();
 	void scanKey(int button);
-	void placeLabelledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab );
+	void placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab );
 
 	TabList tablist;
 	std::vector<Widget*>      child_widget;

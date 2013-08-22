@@ -114,7 +114,7 @@ void GameStateConfig::init() {
 	no_mouse_lb = new WidgetLabel();
 	show_fps_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	show_fps_lb = new WidgetLabel();
-	show_hotkeys_cb = new WidgetCheckBox(mods->locate("images/menus/buttons/checkbox_default.png"));
+	show_hotkeys_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	show_hotkeys_lb = new WidgetLabel();
 	colorblind_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	colorblind_lb = new WidgetLabel();
@@ -280,46 +280,46 @@ void GameStateConfig::readConfig () {
 			}
 			//checkboxes
 			else if (infile.key == "fullscreen") {
-				placeLabelledCheckbox( fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), 0);
+				placeLabeledCheckbox( fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), 0);
 			}
 			else if (infile.key == "mouse_move") {
-				placeLabelledCheckbox( mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), 3);
+				placeLabeledCheckbox( mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), 3);
 			}
 			else if (infile.key == "combat_text") {
-				placeLabelledCheckbox( combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), 2);
+				placeLabeledCheckbox( combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), 2);
 			}
 			else if (infile.key == "hwsurface") {
-				placeLabelledCheckbox( hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), 0);
+				placeLabeledCheckbox( hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), 0);
 			}
 			else if (infile.key == "doublebuf") {
-				placeLabelledCheckbox( doublebuf_lb, doublebuf_cb, x1, y1, x2, y2, msg->get("Double buffering"), 0);
+				placeLabeledCheckbox( doublebuf_lb, doublebuf_cb, x1, y1, x2, y2, msg->get("Double buffering"), 0);
 			}
 			else if (infile.key == "enable_joystick") {
-				placeLabelledCheckbox( enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), 3);
+				placeLabeledCheckbox( enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), 3);
 			}
 			else if (infile.key == "texture_quality") {
-				placeLabelledCheckbox( texture_quality_lb, texture_quality_cb, x1, y1, x2, y2, msg->get("High Quality Textures"), 0);
+				placeLabeledCheckbox( texture_quality_lb, texture_quality_cb, x1, y1, x2, y2, msg->get("High Quality Textures"), 0);
 			}
 			else if (infile.key == "change_gamma") {
-				placeLabelledCheckbox( change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), 0);
+				placeLabeledCheckbox( change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), 0);
 			}
 			else if (infile.key == "animated_tiles") {
-				placeLabelledCheckbox( animated_tiles_lb, animated_tiles_cb, x1, y1, x2, y2, msg->get("Animated tiles"), 0);
+				placeLabeledCheckbox( animated_tiles_lb, animated_tiles_cb, x1, y1, x2, y2, msg->get("Animated tiles"), 0);
 			}
 			else if (infile.key == "mouse_aim") {
-				placeLabelledCheckbox( mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), 3);
+				placeLabeledCheckbox( mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), 3);
 			}
 			else if (infile.key == "no_mouse") {
-				placeLabelledCheckbox( no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), 3);
+				placeLabeledCheckbox( no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), 3);
 			}
 			else if (infile.key == "show_fps") {
-				placeLabelledCheckbox( show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), 2);
+				placeLabeledCheckbox( show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), 2);
 			}
 			else if (infile.key == "show_hotkeys") {
-				placeLabelledCheckbox( show_hotkeys_lb, show_hotkeys_cb, x1, y1, x2, y2, msg->get("Show Hotkeys Labels"), 2);
+				placeLabeledCheckbox( show_hotkeys_lb, show_hotkeys_cb, x1, y1, x2, y2, msg->get("Show Hotkeys Labels"), 2);
 			}
 			else if (infile.key == "colorblind") {
-				placeLabelledCheckbox( colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), 2);
+				placeLabeledCheckbox( colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), 2);
 			}
 			//sliders
 			else if (infile.key == "music_volume") {
@@ -1376,7 +1376,7 @@ GameStateConfig::~GameStateConfig() {
 		free(video_modes);
 }
 
-void GameStateConfig::placeLabelledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab )
+void GameStateConfig::placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab )
 {
 	cb->pos.x = frame.x + x2;
 	cb->pos.y = frame.y + y2;
