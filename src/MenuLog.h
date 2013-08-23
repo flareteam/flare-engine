@@ -40,7 +40,6 @@ const int LOG_TYPE_MESSAGES = 1;
 class MenuLog : public Menu {
 private:
 
-	SDL_Surface *background;
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
 

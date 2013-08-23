@@ -239,7 +239,8 @@ bool Entity::takeHit(const Hazard &h) {
 				if (MAX_RESIST < 100) dmg = 1;
 			}
 			sfx_block = true;
-			resetActiveAnimation();
+			if (activeAnimation->getName() == "block")
+				resetActiveAnimation();
 		}
 	}
 
@@ -312,6 +313,7 @@ bool Entity::takeHit(const Hazard &h) {
 
 	// interrupted to new state
 	if (dmg > 0) {
+		bool chance_poise = percentChance(stats.get(STAT_POISE));
 
 		if(stats.hp <= 0) {
 			stats.effects.triggered_death = true;
@@ -327,10 +329,10 @@ bool Entity::takeHit(const Hazard &h) {
 			}
 		}
 		// don't go through a hit animation if stunned
-		else if (!stats.effects.stun && !percentChance(stats.get(STAT_POISE))) {
+		else if (!stats.effects.stun && !chance_poise) {
 			sfx_hit = true;
 
-			if(!percentChance(stats.get(STAT_POISE)) && stats.cooldown_hit_ticks == 0) {
+			if(!chance_poise && stats.cooldown_hit_ticks == 0) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
 				else

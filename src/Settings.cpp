@@ -69,6 +69,7 @@ ConfigEntry config[] = {
 	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
 	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
 	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
+	{ "show_hotkeys",     &typeid(SHOW_HOTKEYS),    "1",   &SHOW_HOTKEYS,    "show hotkeys names on power bar. 1 enable, 0 disable."},
 	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
@@ -182,6 +183,7 @@ bool MENUS_PAUSE = false;
 bool SAVE_HPMP = false;
 bool ENABLE_PLAYGAME = false;
 bool SHOW_FPS = false;
+bool SHOW_HOTKEYS = true;
 bool COLORBLIND = false;
 int CORPSE_TIMEOUT = 1800;
 bool SELL_WITHOUT_VENDOR = true;

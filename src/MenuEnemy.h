@@ -33,7 +33,6 @@ class Enemy;
 
 class MenuEnemy : public Menu {
 private:
-	SDL_Surface *background;
 	SDL_Surface *bar_hp;
 	SDL_Rect bar_pos;
 	LabelInfo text_pos;
