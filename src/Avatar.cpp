@@ -605,6 +605,10 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 			// handle power usage
 			if (allowed_to_use_power)
 				handlePower(actionbar_power);
+
+			if (activeAnimation->getName() != "run")
+				stats.cur_state = AVATAR_STANCE;
+
 			break;
 
 		case AVATAR_ATTACK:
@@ -624,7 +628,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				powers->activate(current_power, &stats, act_target);
 			}
 
-			if (activeAnimation->getTimesPlayed() >= 1) {
+			if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != attack_anim) {
 				stats.cur_state = AVATAR_STANCE;
 				stats.cooldown_ticks += stats.cooldown;
 			}
@@ -634,7 +638,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			setAnimation("block");
 
-			if (powers->powers[actionbar_power].new_state != POWSTATE_BLOCK) {
+			if (powers->powers[actionbar_power].new_state != POWSTATE_BLOCK || activeAnimation->getName() != "block") {
 				stats.cur_state = AVATAR_STANCE;
 				stats.effects.triggered_block = false;
 				stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
@@ -649,7 +653,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				stats.effects.triggered_hit = true;
 			}
 
-			if (activeAnimation->getTimesPlayed() >= 1) {
+			if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "hit") {
 				stats.cur_state = AVATAR_STANCE;
 			}
 
@@ -665,7 +669,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			setAnimation("die");
 
-			if (activeAnimation->isFirstFrame() && activeAnimation->getTimesPlayed() < 1) {
+			if (!stats.corpse && activeAnimation->isFirstFrame() && activeAnimation->getTimesPlayed() < 1) {
 				stats.effects.clearEffects();
 
 				// raise the death penalty flag.  Another module will read this and reset.
@@ -690,7 +694,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				}
 			}
 
-			if (activeAnimation->getTimesPlayed() >= 1) {
+			if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "die") {
 				stats.corpse = true;
 			}
 
