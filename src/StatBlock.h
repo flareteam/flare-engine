@@ -71,7 +71,7 @@ const int ENEMY_JOIN_COMBAT = 14;
 const int ENEMY_POWER = 15; // enemy performing a power. anim/sfx based on power
 
 
-const int MAX_CHARACTER_LEVEL = 32;
+const int MAX_CHARACTER_LEVEL = 64;
 
 class EnemyLoot {
 public:
