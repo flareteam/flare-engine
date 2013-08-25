@@ -70,9 +70,6 @@ const int ENEMY_JOIN_COMBAT = 14;
 // final shared states
 const int ENEMY_POWER = 15; // enemy performing a power. anim/sfx based on power
 
-
-const int MAX_CHARACTER_LEVEL = 32;
-
 class EnemyLoot {
 public:
 	int id;
@@ -129,8 +126,9 @@ public:
 	std::string sfx_prefix;
 
 	int level;
+	int level_max; // hero only
 	unsigned long xp;
-	unsigned long xp_table[MAX_CHARACTER_LEVEL+1];
+	std::vector<unsigned long> xp_table;
 	bool level_up;
 	bool check_title;
 	int stat_points_per_level;
