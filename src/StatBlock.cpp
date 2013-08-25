@@ -58,8 +58,8 @@ StatBlock::StatBlock()
 	, name("")
 	, sfx_prefix("")
 	, level(0)
+	, level_max(32)
 	, xp(0)
-	//int xp_table[MAX_CHARACTER_LEVEL+1];
 	, level_up(false)
 	, check_title(false)
 	, stat_points_per_level(1)
@@ -173,12 +173,6 @@ StatBlock::StatBlock()
 	, summoner(NULL) {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
-
-	// xp table
-	// default to MAX_INT
-	for (int i=0; i<MAX_CHARACTER_LEVEL; i++) {
-		xp_table[i] = std::numeric_limits<int>::max();
-	}
 
 	vulnerable = std::vector<int>(ELEMENTS.size(), 100);
 	vulnerable_base = std::vector<int>(ELEMENTS.size(), 100);
@@ -392,7 +386,7 @@ void StatBlock::recalc() {
 	refresh_stats = true;
 
 	level = 0;
-	for (int i=0; i<MAX_CHARACTER_LEVEL; i++) {
+	for (unsigned i=0; i<xp_table.size(); i++) {
 		if (xp >= xp_table[i]) {
 			level=i+1;
 			check_title = true;
@@ -627,17 +621,23 @@ void StatBlock::loadHeroStats() {
 		else if (infile.key == "cooldown_hit") {
 			cooldown_hit = value;
 		}
+		else if (infile.key == "max_level") {
+			level_max = value;
+		}
 	}
 	infile.close();
 	if (max_points_per_stat == 0) max_points_per_stat = max_spendable_stat_points / 4 + 1;
 	statsLoaded = true;
 
 	// Load the XP table as well
+	xp_table.resize(level_max, std::numeric_limits<int>::max());
 	if (!infile.open("engine/xp_table.txt"))
 		return;
 
 	while(infile.next()) {
-		xp_table[toInt(infile.key) - 1] = toInt(infile.val);
+		unsigned key = toInt(infile.key);
+		if (key > 0 && key <= xp_table.size())
+			xp_table[key - 1] = toInt(infile.val);
 	}
 	max_spendable_stat_points = toInt(infile.key) * stat_points_per_level;
 	infile.close();

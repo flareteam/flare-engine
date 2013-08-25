@@ -476,7 +476,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	}
 
 	// check level up
-	if (stats.xp >= stats.xp_table[stats.level] && stats.level < MAX_CHARACTER_LEVEL) {
+	if (stats.xp >= stats.xp_table[stats.level] && stats.level < stats.level_max) {
 		stats.level_up = true;
 		stats.level++;
 		stringstream ss;
