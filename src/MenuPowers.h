@@ -53,6 +53,8 @@ public:
 	short requires_power;
 	bool requires_point;
 	bool passive_on;
+	std::string visible_requires_status;
+	std::string visible_requires_not;
 	Power_Menu_Cell() {
 		id = -1;
 		tab = 0;
@@ -70,6 +72,8 @@ public:
 		requires_power = 0;
 		requires_point = false;
 		passive_on = false;
+		visible_requires_status = "";
+		visible_requires_not = "";
 	}
 };
 
@@ -108,6 +112,8 @@ private:
 	SDL_Color color_penalty;
 
 	short id_by_powerIndex(short power_index);
+
+	bool powerIsVisible(short power_index);
 
 public:
 	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);

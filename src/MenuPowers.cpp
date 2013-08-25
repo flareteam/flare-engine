@@ -151,6 +151,12 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 			else if (infile.key == "requires_power") {
 				power_cell.back().requires_power = eatFirstInt(infile.val, ',');
 			}
+			else if (infile.key == "visible_requires_status") {
+				power_cell.back().visible_requires_status = eatFirstString(infile.val, ',');
+			}
+			else if (infile.key == "visible_requires_not") {
+				power_cell.back().visible_requires_not = eatFirstString(infile.val, ',');
+			}
 
 		}
 		infile.close();
@@ -264,6 +270,8 @@ bool MenuPowers::requirementsMet(int power_index) {
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
 
+	if (!powerIsVisible(power_index)) return false;
+
 	// If power_id is saved into vector, it's unlocked anyway
 	if (find(stats->powers_list.begin(), stats->powers_list.end(), power_index) != stats->powers_list.end()) return true;
 
@@ -286,6 +294,8 @@ bool MenuPowers::powerUnlockable(int power_index) {
 
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
+
+	if (!powerIsVisible(power_index)) return false;
 
 	// If we already have a power, don't try to unlock it
 	if (requirementsMet(power_index)) return false;
@@ -480,6 +490,8 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 		if ((tabs_count > 1) && (tabControl->getActiveTab() != power_cell[i].tab)) continue;
 
+		if (!powerIsVisible(power_cell[i].id)) continue;
+
 		if (isWithin(slots[i]->pos, mouse)) {
 			tip.addText(powers->powers[power_cell[i].id].name);
 			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
@@ -644,6 +656,8 @@ void MenuPowers::renderPowers(int tab_num) {
 		// Continue if slot is not filled with data
 		if (power_cell[i].tab != tab_num) continue;
 
+		if (!powerIsVisible(power_cell[i].id)) continue;
+
 		if (find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) power_in_vector = true;
 
 		slots[i]->render();
@@ -660,3 +674,33 @@ void MenuPowers::renderPowers(int tab_num) {
 		slots[i]->renderSelection();
 	}
 }
+
+bool MenuPowers::powerIsVisible(short power_index) {
+
+    // power_index can be 0 during recursive call if requires_power is not defined.
+	// Power with index 0 doesn't exist and is always enabled
+	if (power_index == 0) return true;
+
+	// Find cell with our power
+	int id = id_by_powerIndex(power_index);
+
+	// If we didn't find power in power_menu, than it has no requirements
+	if (id == -1) return true;
+
+    if(power_cell[id].visible_requires_status != "")
+    {
+        if(!camp->checkStatus(power_cell[id].visible_requires_status))
+            return false;
+    }
+
+    if(power_cell[id].visible_requires_not != "")
+    {
+        if(camp->checkStatus(power_cell[id].visible_requires_not))
+            return false;
+    }
+
+    return true;
+}
+
+
+
