@@ -254,8 +254,8 @@ void GameStatePlay::loadGame() {
 			else if (infile.key == "spawn") {
 				mapr->teleport_mapname = infile.nextValue();
 				if (fileExists(mods->locate("maps/" + mapr->teleport_mapname))) {
-					mapr->teleport_destination.x = toInt(infile.nextValue()) + 0.5;
-					mapr->teleport_destination.y = toInt(infile.nextValue()) + 0.5;
+					mapr->teleport_destination.x = toInt(infile.nextValue());
+					mapr->teleport_destination.y = toInt(infile.nextValue());
 					mapr->teleportation = true;
 					// prevent spawn.txt from putting us on the starting map
 					mapr->clearEvents();

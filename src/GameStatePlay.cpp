@@ -250,12 +250,12 @@ void GameStatePlay::checkTeleport() {
 		mapr->collider.unblock(pc->stats.pos.x, pc->stats.pos.y);
 
 		if (mapr->teleportation) {
-			mapr->cam.x = pc->stats.pos.x = mapr->teleport_destination.x;
-			mapr->cam.y = pc->stats.pos.y = mapr->teleport_destination.y;
+			mapr->cam.x = pc->stats.pos.x = mapr->teleport_destination.x + 0.5;
+			mapr->cam.y = pc->stats.pos.y = mapr->teleport_destination.y + 0.5;
 		}
 		else {
-			mapr->cam.x = pc->stats.pos.x = pc->stats.teleport_destination.x;
-			mapr->cam.y = pc->stats.pos.y = pc->stats.teleport_destination.y;
+			mapr->cam.x = pc->stats.pos.x = pc->stats.teleport_destination.x + 0.5;
+			mapr->cam.y = pc->stats.pos.y = pc->stats.teleport_destination.y + 0.5;
 		}
 
 		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
