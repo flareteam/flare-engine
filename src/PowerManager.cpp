@@ -479,8 +479,8 @@ FPoint PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked
 	for (int i=-range; i<=range; i++) {
 		for (int j=-range; j<=range; j++) {
 			if (i == 0 && j == 0) continue; // skip the middle tile
-			new_target.x = target.x + i;
-			new_target.y = target.y + j;
+			new_target.x = target.x + i + 0.5;
+			new_target.y = target.y + j + 0.5;
 			if (collider->is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
 				valid_tiles.push_back(new_target);
 		}
