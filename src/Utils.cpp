@@ -352,13 +352,14 @@ SDL_Surface* createSurface(int width, int height) {
 
 	if(surface == NULL) {
 		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+	} else {
+
+		SDL_SetColorKey(surface, SDL_SRCCOLORKEY, SDL_MapRGB(surface->format,255,0,255));
+
+		SDL_Surface *cleanup = surface;
+		surface = SDL_DisplayFormat(surface);
+		SDL_FreeSurface(cleanup);
 	}
-
-	SDL_SetColorKey(surface, SDL_SRCCOLORKEY, SDL_MapRGB(surface->format,255,0,255));
-
-	SDL_Surface *cleanup = surface;
-	surface = SDL_DisplayFormat(surface);
-	SDL_FreeSurface(cleanup);
 
 	return surface;
 }

@@ -159,6 +159,7 @@ protected:
 	std::vector<Map_Event> events;
 	std::queue<Map_Group> enemy_groups;
 
+	std::string filename;
 	std::string tileset;
 	std::string music_filename;
 

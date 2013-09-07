@@ -34,7 +34,6 @@ class WidgetLabel;
 
 class MenuStatBar : public Menu {
 private:
-	SDL_Surface *background;
 	SDL_Surface *bar;
 	WidgetLabel *label;
 	int stat_cur;
