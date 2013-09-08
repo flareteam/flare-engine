@@ -833,8 +833,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			if (fileExists(mods->locate("maps/" + ec->s))) {
 				teleportation = true;
 				teleport_mapname = ec->s;
-				teleport_destination.x = ec->x;
-				teleport_destination.y = ec->y;
+				teleport_destination.x = ec->x + 0.5;
+				teleport_destination.y = ec->y + 0.5;
 			}
 			else {
 				ev.keep_after_trigger = false;
@@ -844,8 +844,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		else if (ec->type == "intramap") {
 			teleportation = true;
 			teleport_mapname = "";
-			teleport_destination.x = ec->x;
-			teleport_destination.y = ec->y;
+			teleport_destination.x = ec->x + 0.5;
+			teleport_destination.y = ec->y + 0.5;
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
