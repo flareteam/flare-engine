@@ -121,7 +121,7 @@ public:
 	int summon_power_index;
 	StatBlock* summoner;
 
-	Map_Enemy(std::string _type="", Point _pos=Point())
+	Map_Enemy(std::string _type="", FPoint _pos=FPoint())
 	 : type(_type)
 	 , pos(_pos)
 	 , direction(rand() % 8)

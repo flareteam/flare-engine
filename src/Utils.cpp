@@ -70,8 +70,8 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 
 	// adjust to the center of the viewport
 	// we do this calculation first to avoid negative integer division
-	int adjust_x = VIEW_W_HALF * UNITS_PER_PIXEL_X;
-	int adjust_y = VIEW_H_HALF * UNITS_PER_PIXEL_Y;
+	float adjust_x = (VIEW_W_HALF + 0.5) * UNITS_PER_PIXEL_X;
+	float adjust_y = (VIEW_H_HALF + 0.5) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		r.x = (x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X;

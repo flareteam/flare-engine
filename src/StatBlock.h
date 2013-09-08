@@ -274,7 +274,7 @@ public:
 
 	// for the teleport spell
 	bool teleportation;
-	Point teleport_destination;
+	FPoint teleport_destination;
 
 	// weapons can modify spells
 	int melee_weapon_power;

@@ -473,8 +473,8 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint 
  * Returns the retargeted position on success, returns the original position on failure
  */
 FPoint PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked) {
-	Point new_target = target;
-	std::vector<Point> valid_tiles;
+	FPoint new_target = target;
+	std::vector<FPoint> valid_tiles;
 
 	for (int i=-range; i<=range; i++) {
 		for (int j=-range; j<=range; j++) {
@@ -637,7 +637,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		target = limitRange(powers[power_index].range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
 			FPoint new_target = targetNeighbor(floor(target), powers[power_index].target_neighbor);
-			if (new_target.x == target.x && new_target.y == target.y) {
+			if (floor(new_target.x) == floor(target.x) && floor(new_target.y) == floor(target.y)) {
 				src_stats->teleportation = false;
 			}
 			else {
@@ -928,7 +928,9 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 		espawn.pos.y = fpos.y;
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		espawn.pos = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor);
+		FPoint fpos = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor);
+		espawn.pos.x = floor(fpos.x);
+		espawn.pos.y = floor(fpos.y);
 	}
 
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
