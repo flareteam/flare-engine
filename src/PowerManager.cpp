@@ -794,7 +794,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
 bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target) {
 	const float pi = 3.1415926535898f;
 
-	Point src;
+	FPoint src;
 	if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
 		src.x = target.x;
 		src.y = target.y;
