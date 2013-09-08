@@ -216,7 +216,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].no_attack = toBool(infile.val);
 		else if (infile.key == "radius")
 			// @ATTR radius|integer|Radius in pixels
-			powers[input_id].radius = toInt(infile.val);
+			powers[input_id].radius = toFloat(infile.val);
 		else if (infile.key == "base_damage") {
 			// @ATTR base_damage|[melee:ranged:ment]|
 			if (infile.val == "none")        powers[input_id].base_damage = BASE_DAMAGE_NONE;

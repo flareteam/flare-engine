@@ -143,7 +143,7 @@ public:
 	// hazard traits
 	bool use_hazard;
 	bool no_attack;
-	int radius;
+	float radius;
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
