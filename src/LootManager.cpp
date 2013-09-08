@@ -133,8 +133,12 @@ void LootManager::logic() {
 		it->animation->advanceFrame();
 
 		if (it->animation->isSecondLastFrame()) {
-			if (it->stack.item > 0)
-				items->playSound(it->stack.item, it->pos);
+			if (it->stack.item > 0) {
+				Point pos;
+				pos.x = (int)it->pos.x;
+				pos.y = (int)it->pos.y;
+				items->playSound(it->stack.item, pos);
+			}
 		}
 	}
 
@@ -207,7 +211,7 @@ void LootManager::addEnemyLoot(const Enemy *e) {
  * Loot is created at component x,y
  */
 void LootManager::checkMapForLoot() {
-	Point p;
+	FPoint p;
 	Event_Component *ec;
 	ItemStack new_loot;
 	std::vector<int> possible_ids;
@@ -219,8 +223,8 @@ void LootManager::checkMapForLoot() {
 	for (unsigned i = mapr->loot.size(); i > 0; i--) {
 		ec = &mapr->loot[i-1];
 		if (ec->z == 0) {
-			p.x = ec->x;
-			p.y = ec->y;
+			p.x = ec->x + 0.5;
+			p.y = ec->y + 0.5;
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
