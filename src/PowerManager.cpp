@@ -584,21 +584,16 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 
 	// hazard starting position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
-		haz->pos.x = (float)src_stats->pos.x;
-		haz->pos.y = (float)src_stats->pos.y;
+		haz->pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		target = limitRange(powers[power_index].range,src_stats->pos,target);
-		haz->pos.x = (float)target.x;
-		haz->pos.y = (float)target.y;
+		haz->pos = limitRange(powers[power_index].range,src_stats->pos,target);
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		FPoint new_target = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
-		haz->pos.x = (float)new_target.x;
-		haz->pos.y = (float)new_target.y;
+		haz->pos = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
 	}
 
 	// pre/post power effects
@@ -796,12 +791,10 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 
 	FPoint src;
 	if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		src.x = target.x;
-		src.y = target.y;
+		src = target;
 	}
 	else {
-		src.x = src_stats->pos.x;
-		src.y = src_stats->pos.y;
+		src = src_stats->pos;
 	}
 
 	// calculate polar coordinates angle
@@ -867,8 +860,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 	speed.x = map_speed * cos(theta);
 	speed.y = map_speed * sin(theta);
 
-	location_iterator.x = (float)src_stats->pos.x;
-	location_iterator.y = (float)src_stats->pos.y;
+	location_iterator = src_stats->pos;
 
 	playSound(power_index, src_stats);
 
@@ -885,8 +877,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 		Hazard *haz = new Hazard(collider);
 		initHazard(power_index, src_stats, target, haz);
 
-		haz->pos.x = location_iterator.x;
-		haz->pos.y = location_iterator.y;
+		haz->pos = location_iterator;
 		haz->delay_frames = delay_iterator;
 		delay_iterator += powers[power_index].delay;
 
@@ -915,22 +906,17 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 
 	// enemy spawning position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
-		espawn.pos.x = src_stats->pos.x;
-		espawn.pos.y = src_stats->pos.y;
+		espawn.pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		espawn.pos.x = target.x;
-		espawn.pos.y = target.y;
+		espawn.pos = target;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
-		FPoint fpos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
-		espawn.pos.x = fpos.x;
-		espawn.pos.y = fpos.y;
+		espawn.pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
+
 	if (powers[power_index].target_neighbor > 0) {
-		FPoint fpos = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor);
-		espawn.pos.x = floor(fpos.x);
-		espawn.pos.y = floor(fpos.y);
+		espawn.pos = floor(targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor));
 	}
 
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
