@@ -151,10 +151,10 @@ public:
 
 	// teleport handling
 	bool teleportation;
-	Point teleport_destination;
+	FPoint teleport_destination;
 	std::string teleport_mapname;
 	std::string respawn_map;
-	Point respawn_point;
+	FPoint respawn_point;
 
 	// cutscene handling
 	bool cutscene;

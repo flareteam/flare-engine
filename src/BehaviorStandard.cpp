@@ -492,7 +492,7 @@ void BehaviorStandard::checkMove() {
 void BehaviorStandard::checkMoveStateStance() {
 
 	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
-	if (hero_dist >= e->stats.threat_range/2 && e->stats.chance_flee > 0) return;
+	if (hero_dist >= e->stats.threat_range/2 && e->stats.chance_flee > 0 && e->stats.waypoints.empty()) return;
 
 	if ((hero_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
 
@@ -569,19 +569,17 @@ void BehaviorStandard::updateState() {
 			power_state = powers->powers[power_id].new_state;
 
 			// animation based on power type
-			if (power_state == POWSTATE_SWING) e->setAnimation("melee");
-			else if (power_state == POWSTATE_SHOOT) e->setAnimation("ranged");
-			else if (power_state == POWSTATE_CAST) e->setAnimation("ment");
-			else if (power_state == POWSTATE_INSTANT) e->instant_power = true;
+			if (power_state == POWSTATE_INSTANT) e->instant_power = true;
+			else if (power_state == POWSTATE_ATTACK) e->setAnimation(powers->powers[power_id].attack_anim);
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (power_state == POWSTATE_SWING) e->sfx_phys = true;
-				else if (power_state == POWSTATE_SHOOT) e->sfx_phys = true;
-				else if (power_state == POWSTATE_CAST) e->sfx_ment = true;
+				if (powers->powers[power_id].attack_anim == "swing" || powers->powers[power_id].attack_anim == "shoot") e->sfx_phys = true;
+				else if (powers->powers[power_id].attack_anim == "cast") e->sfx_ment = true;
 			}
 
-			if (e->activeAnimation->isLastFrame()) e->newState(ENEMY_STANCE);
+			if (e->activeAnimation->isLastFrame() || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim))
+				e->newState(ENEMY_STANCE);
 			break;
 
 		case ENEMY_SPAWN:
@@ -604,7 +602,8 @@ void BehaviorStandard::updateState() {
 			if (e->activeAnimation->isFirstFrame()) {
 				e->stats.effects.triggered_hit = true;
 			}
-			if (e->activeAnimation->isLastFrame()) e->newState(ENEMY_STANCE);
+			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "hit")
+				e->newState(ENEMY_STANCE);
 			break;
 
 		case ENEMY_DEAD:
@@ -620,7 +619,7 @@ void BehaviorStandard::updateState() {
 				if (percentChance(e->stats.power_chance[ON_DEATH]))
 					powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
-			if (e->activeAnimation->isLastFrame()) {
+			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "die") {
 				e->stats.corpse = true; // puts renderable under object layer
 				//allow free movement over the corpse
 				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
@@ -640,7 +639,8 @@ void BehaviorStandard::updateState() {
 				if (percentChance(e->stats.power_chance[ON_DEATH]))
 					powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
-			if (e->activeAnimation->isLastFrame()) e->stats.corpse = true; // puts renderable under object layer
+			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "critdie")
+				e->stats.corpse = true; // puts renderable under object layer
 
 			break;
 

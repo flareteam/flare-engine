@@ -444,7 +444,7 @@ void MenuCharacter::refreshStats() {
 	if (show_stat[16]) {
 		for (unsigned int j=0; j<stats->vulnerable.size(); j++) {
 			ss.str("");
-			ss << msg->get(ELEMENTS[j].resist) << ": " << (100 - stats->vulnerable[j]) << "%";
+			ss << msg->get(ELEMENTS[j].description) << ": " << (100 - stats->vulnerable[j]) << "%";
 			statList->set(visible_stats++, ss.str(),"");
 		}
 	}
@@ -457,7 +457,7 @@ void MenuCharacter::refreshStats() {
 
 	cstat[CSTAT_LEVEL].tip.clear();
 	cstat[CSTAT_LEVEL].tip.addText(msg->get("XP: %d", stats->xp));
-	if (stats->level < MAX_CHARACTER_LEVEL) {
+	if (stats->level < stats->level_max) {
 		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", stats->xp_table[stats->level]));
 	}
 
@@ -528,7 +528,7 @@ void MenuCharacter::logic() {
 	int spent = stats->physical_character + stats->mental_character + stats->offense_character + stats->defense_character -4;
 	skill_points = (stats->level * stats->stat_points_per_level) - spent;
 
-	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points && stats->humanoid ) {
+	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points) {
 		if (stats->physical_character < stats->max_points_per_stat && show_upgrade[0]) {
 			upgradeButton[0]->enabled = true;
 			tablist.add(upgradeButton[0]);

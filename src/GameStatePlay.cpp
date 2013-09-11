@@ -581,9 +581,8 @@ void GameStatePlay::checkNotifications() {
 		menu->act->requires_attention[MENU_LOG] = true;
 	}
 
-	// if the player is transformed into a creature, don't show notifications for some menus
-	if (!pc->stats.humanoid) {
-		menu->act->requires_attention[MENU_CHARACTER] = false;
+	// if the player is transformed into a creature, don't notifications for the powers menu
+	if (pc->stats.transformed) {
 		menu->act->requires_attention[MENU_POWERS] = false;
 	}
 }
@@ -727,6 +726,7 @@ void GameStatePlay::checkStash() {
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
+		menu->closeAll();
 		menu->inv->visible = true;
 		menu->stash->visible = true;
 		mapr->stash = false;

@@ -99,7 +99,7 @@ void GameStatePlay::saveGame() {
 		outfile << "carried=" << menu->inv->inventory[CARRIED].getItems() << "\n";
 
 		// spawn point
-		outfile << "spawn=" << mapr->respawn_map << "," << mapr->respawn_point.x << "," << mapr->respawn_point.y << "\n";
+		outfile << "spawn=" << mapr->respawn_map << "," << (int)mapr->respawn_point.x << "," << (int)mapr->respawn_point.y << "\n";
 
 		// action bar
 		outfile << "actionbar=";

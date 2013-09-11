@@ -97,7 +97,7 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 		if (collider.is_empty(x, y)) {
 			Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 			if (enemy_lev.type != "") {
-				Map_Enemy group_member = Map_Enemy(enemy_lev.type, Point(x, y));
+				Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
 				collider.block(x, y, false);
 				enemies.push(group_member);
 
@@ -110,8 +110,8 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 			allowed_misses--;
 	}
 	if (enemies_to_spawn)
-		fprintf(stderr, "Could not spawn all enemies in group at (x=%d,y=%d,w=%d,h=%d), %d missing\n",
-		g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn);
+		fprintf(stderr, "Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing\n",
+		filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn);
 }
 
 /**
@@ -126,7 +126,7 @@ void MapRenderer::clearLayers() {
 	index_objectlayer = 0;
 }
 
-int MapRenderer::load(std::string filename) {
+int MapRenderer::load(std::string fname) {
 	/* unload sounds */
 	snd->reset();
 	while (!sids.empty()) {
@@ -136,7 +136,7 @@ int MapRenderer::load(std::string filename) {
 
 	show_tooltip = false;
 
-	Map::load(filename);
+	Map::load(fname);
 
 	loadMusic();
 

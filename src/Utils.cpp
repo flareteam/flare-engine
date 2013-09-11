@@ -70,8 +70,8 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 
 	// adjust to the center of the viewport
 	// we do this calculation first to avoid negative integer division
-	int adjust_x = VIEW_W_HALF * UNITS_PER_PIXEL_X;
-	int adjust_y = VIEW_H_HALF * UNITS_PER_PIXEL_Y;
+	float adjust_x = (VIEW_W_HALF + 0.5) * UNITS_PER_PIXEL_X;
+	float adjust_y = (VIEW_H_HALF + 0.5) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		r.x = (x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X;
@@ -352,13 +352,14 @@ SDL_Surface* createSurface(int width, int height) {
 
 	if(surface == NULL) {
 		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+	} else {
+
+		SDL_SetColorKey(surface, SDL_SRCCOLORKEY, SDL_MapRGB(surface->format,255,0,255));
+
+		SDL_Surface *cleanup = surface;
+		surface = SDL_DisplayFormat(surface);
+		SDL_FreeSurface(cleanup);
 	}
-
-	SDL_SetColorKey(surface, SDL_SRCCOLORKEY, SDL_MapRGB(surface->format,255,0,255));
-
-	SDL_Surface *cleanup = surface;
-	surface = SDL_DisplayFormat(surface);
-	SDL_FreeSurface(cleanup);
 
 	return surface;
 }
@@ -476,7 +477,7 @@ int calcDirection(const FPoint &src, const FPoint &dst) {
 int calcDirection(float x0, float y0, float x1, float y1) {
 	const float pi = 3.1415926535898f;
 	float theta = calcTheta(x0,y0,x1,y1);
-	int dir = ceil(theta / (pi/4)) + 4;
+	int dir = round(theta / (pi/4)) + 4;
 	dir = (dir + 1) % 8;
 	if (dir >= 0 && dir < 8)
 		return dir;

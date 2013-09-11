@@ -51,36 +51,45 @@ LootManager::LootManager(StatBlock *_hero) {
 
 	FileParser infile;
 	// load loot animation settings from engine config file
+	// @CLASS Loot|Description of engine/loot.txt
 	if (infile.open("engine/loot.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
 			if (infile.key == "loot_animation") {
+				// @ATTR loot_animation|x(int), y(int), w(int), h(int)|
 				animation_pos.x = eatFirstInt(infile.val, ',');
 				animation_pos.y = eatFirstInt(infile.val, ',');
 				animation_pos.w = eatFirstInt(infile.val, ',');
 				animation_pos.h = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "loot_animation_offset") {
+				// @ATTR loot_animation_offset|x (integer), y (integer)|
 				animation_offset.x = eatFirstInt(infile.val, ',');
 				animation_offset.y = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "tooltip_margin") {
+				// @ATTR tooltip_margin|integer|
 				tooltip_margin = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "autopickup_range") {
+				// @ATTR autopickup_range|float|Define the range for autopickup feature
 				AUTOPICKUP_RANGE = toFloat(infile.val);
 			}
 			else if (infile.key == "autopickup_currency") {
+				// @ATTR autopickup_currency|boolean|Enable autopickup for currency
 				AUTOPICKUP_CURRENCY = toBool(eatFirstString(infile.val, ','));
 			}
 			else if (infile.key == "currency_name") {
+				// @ATTR currenct_name|string|Define the name of currency in game
 				CURRENCY = msg->get(eatFirstString(infile.val, ','));
 			}
 			else if (infile.key == "vendor_ratio") {
+				// @ATTR vendor_ratio|integer|Prices ratio for vendors
 				VENDOR_RATIO = eatFirstInt(infile.val, ',') / 100.0f;
 			}
 			else if (infile.key == "sfx_loot") {
+				// @ATTR sfx_loot|string|Sound effect for dropping loot.
 				sfx_loot =  snd->load(eatFirstString(infile.val, ','), "LootManager dropping loot");
 			}
 		}
@@ -124,8 +133,12 @@ void LootManager::logic() {
 		it->animation->advanceFrame();
 
 		if (it->animation->isSecondLastFrame()) {
-			if (it->stack.item > 0)
-				items->playSound(it->stack.item, it->pos);
+			if (it->stack.item > 0) {
+				Point pos;
+				pos.x = (int)it->pos.x;
+				pos.y = (int)it->pos.y;
+				items->playSound(it->stack.item, pos);
+			}
 		}
 	}
 
@@ -198,7 +211,7 @@ void LootManager::addEnemyLoot(const Enemy *e) {
  * Loot is created at component x,y
  */
 void LootManager::checkMapForLoot() {
-	Point p;
+	FPoint p;
 	Event_Component *ec;
 	ItemStack new_loot;
 	std::vector<int> possible_ids;
@@ -210,8 +223,8 @@ void LootManager::checkMapForLoot() {
 	for (unsigned i = mapr->loot.size(); i > 0; i--) {
 		ec = &mapr->loot[i-1];
 		if (ec->z == 0) {
-			p.x = ec->x;
-			p.y = ec->y;
+			p.x = ec->x + 0.5;
+			p.y = ec->y + 0.5;
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 

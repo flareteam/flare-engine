@@ -254,6 +254,13 @@ void MenuActionBar::renderAttention(int menu_id) {
 	dest.y = window_area.y+3;
 	dest.w = dest.h = ICON_SIZE;
 	SDL_BlitSurface(attention, NULL, screen, &dest);
+
+	// put an asterisk on this icon if in colorblind mode
+	if (COLORBLIND) {
+		WidgetLabel label;
+		label.set(dest.x + 2, dest.y + 2, JUSTIFY_LEFT, VALIGN_TOP, "*", font->getColor("menu_normal"));
+		label.render();
+	}
 }
 
 void MenuActionBar::logic() {
@@ -319,8 +326,10 @@ void MenuActionBar::render() {
 			renderAttention(i);
 
 	// draw hotkey labels
-	for (int i=0; i<16; i++) {
-		labels[i]->render();
+	if (SHOW_HOTKEYS) {
+		for (int i=0; i<16; i++) {
+			labels[i]->render();
+		}
 	}
 
 }
@@ -366,19 +375,31 @@ TooltipData MenuActionBar::checkTooltip(Point mouse) {
 	TooltipData tip;
 
 	if (isWithin(menus[MENU_CHARACTER]->pos, mouse)) {
-		tip.addText(msg->get("Character"));
+		if (COLORBLIND && requires_attention[MENU_CHARACTER])
+			tip.addText(msg->get("Character") + " (*)");
+		else
+			tip.addText(msg->get("Character"));
 		return tip;
 	}
 	if (isWithin(menus[MENU_INVENTORY]->pos, mouse)) {
-		tip.addText(msg->get("Inventory"));
+		if (COLORBLIND && requires_attention[MENU_INVENTORY])
+			tip.addText(msg->get("Inventory") + " (*)");
+		else
+			tip.addText(msg->get("Inventory"));
 		return tip;
 	}
 	if (isWithin(menus[MENU_POWERS]->pos, mouse)) {
-		tip.addText(msg->get("Powers"));
+		if (COLORBLIND && requires_attention[MENU_POWERS])
+			tip.addText(msg->get("Powers") + " (*)");
+		else
+			tip.addText(msg->get("Powers"));
 		return tip;
 	}
 	if (isWithin(menus[MENU_LOG]->pos, mouse)) {
-		tip.addText(msg->get("Log"));
+		if (COLORBLIND && requires_attention[MENU_LOG])
+			tip.addText(msg->get("Log") + " (*)");
+		else
+			tip.addText(msg->get("Log"));
 		return tip;
 	}
 	for (int i=0; i<12; i++) {

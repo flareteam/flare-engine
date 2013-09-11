@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Map::Map()
 	: layers()
 	, events()
+	, enemy_groups()
+	, filename("")
 	, w(0)
 	, h(0)
 	, spawn()
@@ -53,7 +55,7 @@ void Map::clearEvents() {
 	events.clear();
 }
 
-int Map::load(std::string filename) {
+int Map::load(std::string fname) {
 	FileParser infile;
 	maprow *cur_layer = NULL;
 
@@ -61,8 +63,11 @@ int Map::load(std::string filename) {
 	clearLayers();
 	clearQueues();
 
-	if (!infile.open("maps/" + filename))
+	// @CLASS Map|Description of maps/
+	if (!infile.open("maps/" + fname))
 		return 0;
+
+	this->filename = fname;
 
 	while (infile.next()) {
 		if (infile.new_section) {
@@ -99,21 +104,27 @@ int Map::load(std::string filename) {
 
 void Map::loadHeader(FileParser &infile) {
 	if (infile.key == "title") {
+		// @ATTR title|string|Title of map
 		this->title = msg->get(infile.val);
 	}
 	else if (infile.key == "width") {
+		// @ATTR width|integer|Width of map
 		this->w = toInt(infile.val);
 	}
 	else if (infile.key == "height") {
+		// @ATTR height|integer|Height of map
 		this->h = toInt(infile.val);
 	}
 	else if (infile.key == "tileset") {
+		// @ATTR tileset|string|Tileset to use for map
 		this->tileset = infile.val;
 	}
 	else if (infile.key == "music") {
+		// @ATTR music|string|Background music to use for map
 		music_filename = infile.val;
 	}
 	else if (infile.key == "location") {
+		// @ATTR location|[x(integer), y(integer), direction(integer))|Spawn point location in map
 		spawn.x = toInt(infile.nextValue()) + 0.5;
 		spawn.y = toInt(infile.nextValue()) + 0.5;
 		spawn_dir = toInt(infile.nextValue());
@@ -122,11 +133,13 @@ void Map::loadHeader(FileParser &infile) {
 
 void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 	if (infile.key == "type") {
+		// @ATTR layer.type|string|Map layer type.
 		*current_layer = new maprow[w];
 		layers.push_back(*current_layer);
 		layernames.push_back(infile.val);
 	}
 	else if (infile.key == "format") {
+		// @ATTR layer.format|string|Format for map layer, must be 'dec'
 		if (infile.val != "dec") {
 			fprintf(stderr, "ERROR: maploading: The format of a layer must be \"dec\"!\n");
 			SDL_Quit();
@@ -134,6 +147,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 		}
 	}
 	else if (infile.key == "data") {
+		// @ATTR layer.data|raw|Raw map layer data
 		// layer map data handled as a special case
 		// The next h lines must contain layer data.  TODO: err
 		for (int j=0; j<h; j++) {
@@ -146,16 +160,20 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 
 void Map::loadEnemy(FileParser &infile) {
 	if (infile.key == "type") {
+		// @ATTR enemy.type|string|Enemy type
 		enemies.back().type = infile.val;
 	}
 	else if (infile.key == "location") {
+		// @ATTR enemy.location|[x(integer), y(integer)]|Location of enemy
 		enemies.back().pos.x = toInt(infile.nextValue()) + 0.5;
 		enemies.back().pos.y = toInt(infile.nextValue()) + 0.5;
 	}
 	else if (infile.key == "direction") {
+		// @ATTR enemy.direction|integer|Direction of enemy
 		enemies.back().direction = toInt(infile.val);
 	}
 	else if (infile.key == "waypoints") {
+		// @ATTR enemy.waypoint|[x(integer), y(integer)]|Enemy waypoint
 		std::string none = "";
 		std::string a = infile.nextValue();
 		std::string b = infile.nextValue();
@@ -170,6 +188,7 @@ void Map::loadEnemy(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "wander_area") {
+		// @ATTR enemy.wander_area|[x(integer),y(integer),w(integer),h(integer)]|Wander area for the enemy.
 		enemies.back().wander = true;
 		enemies.back().wander_area.x = toInt(infile.nextValue()) + 0.5;
 		enemies.back().wander_area.y = toInt(infile.nextValue()) + 0.5;
@@ -180,23 +199,28 @@ void Map::loadEnemy(FileParser &infile) {
 
 void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	if (infile.key == "type") {
+		// @ATTR enemygroup.type|string|Type of enemy group
 		group->category = infile.val;
 	}
 	else if (infile.key == "level") {
+		// @ATTR enemygroup.level|[min(integer), max(integer)]|Defines the level range of enemies in group.
 		group->levelmin = toInt(infile.nextValue());
 		group->levelmax = toInt(infile.nextValue());
 	}
 	else if (infile.key == "location") {
+		// @ATTR enemygroup.location|[x(integer), y(integer), x2(integer), y2(integer)]|Location area for enemygroup
 		group->pos.x = toInt(infile.nextValue());
 		group->pos.y = toInt(infile.nextValue());
 		group->area.x = toInt(infile.nextValue());
 		group->area.y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "number") {
+		// @ATTR enemygroup.number|[min(integer), max(integer]|Defines the range of enemies in group
 		group->numbermin = toInt(infile.nextValue());
 		group->numbermax = toInt(infile.nextValue());
 	}
 	else if (infile.key == "chance") {
+		// @ATTR enemygroup.chance|integer|Percentage of chance
 		float n = toInt(infile.nextValue()) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
@@ -204,9 +228,11 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 
 void Map::loadNPC(FileParser &infile) {
 	if (infile.key == "type") {
+		// @ATTR npc.type|string|Type of NPC
 		npcs.back().id = infile.val;
 	}
 	else if (infile.key == "location") {
+		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
 		npcs.back().pos.x = toInt(infile.nextValue()) + 0.5;
 		npcs.back().pos.y = toInt(infile.nextValue()) + 0.5;
 	}
@@ -214,6 +240,7 @@ void Map::loadNPC(FileParser &infile) {
 
 void Map::loadEvent(FileParser &infile) {
 	if (infile.key == "type") {
+		// @ATTR event.type|[on_trigger:on_mapexit:on_leave:on_load:on_clear]|Type of map event.
 		std::string type = infile.val;
 		events.back().type = type;
 
@@ -231,12 +258,14 @@ void Map::loadEvent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "location") {
+		// @ATTR event.location|[x,y,w,h]|Defines the location area for the event.
 		events.back().location.x = toInt(infile.nextValue());
 		events.back().location.y = toInt(infile.nextValue());
 		events.back().location.w = toInt(infile.nextValue());
 		events.back().location.h = toInt(infile.nextValue());
 	}
 	else if (infile.key == "hotspot") {
+		//  @ATTR event.hotspot|[ [x, y, w, h] : location ]|Event uses location as hotspot or defined by rect.
 		if (infile.val == "location") {
 			events.back().hotspot.x = events.back().location.x;
 			events.back().hotspot.y = events.back().location.y;
@@ -251,6 +280,7 @@ void Map::loadEvent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "cooldown") {
+		// @ATTR event.cooldown|duration|Duration for event cooldown.
 		events.back().cooldown = parse_duration(infile.val);
 	}
 	else {
@@ -265,9 +295,11 @@ void Map::loadEventComponent(FileParser &infile) {
 	e->type = infile.key;
 
 	if (infile.key == "tooltip") {
+		// @ATTR event.tooltip|string|Tooltip for event
 		e->s = msg->get(infile.val);
 	}
 	else if (infile.key == "power_path") {
+		// @ATTR event.power_path|[hero:[x,y]]|Event power path
 		// x,y are src, if s=="hero" we target the hero,
 		// else we'll use values in a,b as coordinates
 		e->x = toInt(infile.nextValue());
@@ -283,19 +315,23 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "power_damage") {
+		// @ATTR event.power_damage|min(integer), max(integer)|Range of power damage
 		e->a = toInt(infile.nextValue());
 		e->b = toInt(infile.nextValue());
 	}
 	else if (infile.key == "intermap") {
+		// @ATTR event.intermap|[map(string),x(integer),y(integer)]|Jump to specific map at location specified.
 		e->s = infile.nextValue();
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "intramap") {
+		// @ATTR event.intramap|[x(integer),y(integer)]|Jump to specific position within current map.
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "mapmod") {
+		// @ATTR event.mapmod|[string,int,int,int],..|Modify map tiles
 		e->s = infile.nextValue();
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.nextValue());
@@ -316,6 +352,7 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "soundfx") {
+		// @ATTR event.soundfx|[soundfile(string),x(integer),y(integer)]|Play a sound at optional location
 		e->s = infile.nextValue();
 		e->x = e->y = -1;
 
@@ -327,6 +364,7 @@ void Map::loadEventComponent(FileParser &infile) {
 
 	}
 	else if (infile.key == "loot") {
+		// @ATTR event.loot|[string,x(integer),y(integer),drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
 		e->s = infile.nextValue();
 		e->x = toInt(infile.nextValue()) + 0.5;
 		e->y = toInt(infile.nextValue()) + 0.5;
@@ -365,12 +403,15 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "msg") {
+		// @ATTR event.msg|string|Adds a message to be displayed for the event.
 		e->s = msg->get(infile.val);
 	}
 	else if (infile.key == "shakycam") {
+		// @ATTR event.shakycam|integer|
 		e->x = toInt(infile.val);
 	}
 	else if (infile.key == "requires_status") {
+		// @ATTR event.requires_status|string,...|Event requires list of statuses
 		e->s = infile.nextValue();
 
 		// add repeating requires_status
@@ -385,6 +426,7 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "requires_not") {
+		// @ATTR event.requires_not|string,...|Event requires not list of statuses
 		e->s = infile.nextValue();
 
 		// add repeating requires_not
@@ -399,12 +441,15 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "requires_level") {
+		// @ATTR event.requires_level|integer|Event requires hero level
 		e->x = toInt(infile.nextValue());
 	}
 	else if (infile.key == "requires_not_level") {
+		// @ATTR event.requires_not_level|integer|Event requires not hero level
 		e->x = toInt(infile.nextValue());
 	}
 	else if (infile.key == "requires_item") {
+		// @ATTR event.requires_item|integer,...|Event requires specific item
 		e->x = toInt(infile.nextValue());
 
 		// add repeating requires_item
@@ -419,6 +464,7 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "set_status") {
+		// @ATTR event.set_status|string,...|Sets specified statuses
 		e->s = infile.nextValue();
 
 		// add repeating set_status
@@ -433,6 +479,7 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "unset_status") {
+		// @ATTR event.unset_status|string,...|Unsets specified statuses
 		e->s = infile.nextValue();
 
 		// add repeating unset_status
@@ -447,6 +494,7 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "remove_item") {
+		// @ATTR event.remove_item|integer,...|Removes specified itesm from hero inventory
 		e->x = toInt(infile.nextValue());
 
 		// add repeating remove_item
@@ -461,13 +509,15 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "reward_xp") {
+		// @ATTR event.reward_xp|integer|Reward hero with specified amount of experience points.
 		e->x = toInt(infile.val);
 	}
 	else if (infile.key == "power") {
+		// @ATTR event.power|power_id|Specify power coupled with event.
 		e->x = toInt(infile.val);
 	}
 	else if (infile.key == "spawn") {
-
+		// @ATTR event.spawn|[string,x(integer),y(integer)], ...|Spawn specified enemies at location
 		e->s = infile.nextValue();
 		e->x = toInt(infile.nextValue()) + 0.5;
 		e->y = toInt(infile.nextValue()) + 0.5;
@@ -487,18 +537,23 @@ void Map::loadEventComponent(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "stash") {
+		// @ATTR event.stash|string|
 		e->s = infile.val;
 	}
 	else if (infile.key == "npc") {
+		// @ATTR event.npc|string|
 		e->s = infile.val;
 	}
 	else if (infile.key == "music") {
+		// @ATTR event.music|string|Change background music to specified file.
 		e->s = infile.val;
 	}
 	else if (infile.key == "cutscene") {
+		// @ATTR event.cutscene|string|Show specified cutscene.
 		e->s = infile.val;
 	}
 	else if (infile.key == "repeat") {
+		// @ATTR event.repeat|string|
 		e->s = infile.val;
 	}
 	else {

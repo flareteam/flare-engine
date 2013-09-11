@@ -172,6 +172,7 @@ void GameStateCutscene::render() {
 bool GameStateCutscene::load(std::string filename) {
 	FileParser infile;
 
+	// @CLASS Cutscene|Description of cutscenes in cutscenes/
 	if (!infile.open("cutscenes/" + filename, true, false))
 		return false;
 
@@ -190,20 +191,24 @@ bool GameStateCutscene::load(std::string filename) {
 			SceneComponent sc = SceneComponent();
 
 			if (infile.key == "caption") {
+				// @ATTR scene.caption|string|A caption that will be shown.
 				sc.type = infile.key;
 				sc.s = msg->get(infile.val);
 			}
 			else if (infile.key == "image") {
+				// @ATTR scene.image|string|An image that will be shown.
 				sc.type = infile.key;
 				sc.i = loadImage(infile.val);
 				if (sc.i == NULL)
 					sc.type = "";
 			}
 			else if (infile.key == "pause") {
+				// @ATTR scene.pause|integer|Pause before next component
 				sc.type = infile.key;
 				sc.x = toInt(infile.val);
 			}
 			else if (infile.key == "soundfx") {
+				// @ATTR scene.soundfx|string|A sound that will be played
 				sc.type = infile.key;
 				sc.s = infile.val;
 			}
@@ -215,7 +220,9 @@ bool GameStateCutscene::load(std::string filename) {
 		else {
 			fprintf(stderr, "unknown section %s in file %s\n", infile.section.c_str(), infile.getFileName().c_str());
 		}
+
 		if (infile.key == "scale_gfx") {
+			// @ATTR scale_gfx|bool|The graphics will be scaled to fit screen width
 			scale_graphics = toBool(infile.val);
 		}
 	}

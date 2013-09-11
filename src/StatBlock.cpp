@@ -58,8 +58,8 @@ StatBlock::StatBlock()
 	, name("")
 	, sfx_prefix("")
 	, level(0)
+	, level_max(32)
 	, xp(0)
-	//int xp_table[MAX_CHARACTER_LEVEL+1];
 	, level_up(false)
 	, check_title(false)
 	, stat_points_per_level(1)
@@ -103,9 +103,6 @@ StatBlock::StatBlock()
 	, absorb_min_add(0)
 	, absorb_max_add(0)
 	, speed(0.2)
-	, wielding_physical(false)
-	, wielding_mental(false)
-	, wielding_offense(false)
 	, transform_duration(0)
 	, transform_duration_total(0)
 	, manual_untransform(false)
@@ -175,12 +172,6 @@ StatBlock::StatBlock()
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
 
-	// xp table
-	// default to MAX_INT
-	for (int i=0; i<MAX_CHARACTER_LEVEL; i++) {
-		xp_table[i] = std::numeric_limits<int>::max();
-	}
-
 	vulnerable = std::vector<int>(ELEMENTS.size(), 100);
 	vulnerable_base = std::vector<int>(ELEMENTS.size(), 100);
 
@@ -242,9 +233,7 @@ void StatBlock::load(const string& filename) {
 	while (infile.next()) {
 		int num = toInt(infile.val);
 		float fnum = toFloat(infile.val);
-		bool valid = false;
-
-		valid = loadCoreStat(&infile);
+		bool valid = loadCoreStat(&infile);
 
 		if (infile.key == "name") name = msg->get(infile.val);
 		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
@@ -353,8 +342,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
 		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
-		else if (infile.key == "rarity") valid = true;
-
+		else if (infile.key == "rarity") ; // but do nothing
 		else if (!valid) {
 			fprintf(stderr, "%s=%s not a valid StatBlock parameter\n", infile.key.c_str(), infile.val.c_str());
 		}
@@ -392,7 +380,7 @@ void StatBlock::recalc() {
 	refresh_stats = true;
 
 	level = 0;
-	for (int i=0; i<MAX_CHARACTER_LEVEL; i++) {
+	for (unsigned i=0; i<xp_table.size(); i++) {
 		if (xp >= xp_table[i]) {
 			level=i+1;
 			check_title = true;
@@ -589,15 +577,14 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 
 	//don't use untransform power if hero is not transformed
 	else if (power.spawn_type == "untransform" && !transformed) return false;
-	else
-		return (!power.requires_mental_weapon || wielding_mental)
-			   && (!power.requires_offense_weapon || wielding_offense)
-			   && (!power.requires_physical_weapon || wielding_physical)
+	else {
+		return std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
 			   && mp >= power.requires_mp
 			   && (!power.sacrifice == false || hp > power.requires_hp)
 			   && menu_powers->meetsUsageStats(powerid)
 			   && !power.passive
 			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
+	}
 
 }
 
@@ -627,17 +614,23 @@ void StatBlock::loadHeroStats() {
 		else if (infile.key == "cooldown_hit") {
 			cooldown_hit = value;
 		}
+		else if (infile.key == "max_level") {
+			level_max = value;
+		}
 	}
 	infile.close();
 	if (max_points_per_stat == 0) max_points_per_stat = max_spendable_stat_points / 4 + 1;
 	statsLoaded = true;
 
 	// Load the XP table as well
+	xp_table.resize(level_max, std::numeric_limits<int>::max());
 	if (!infile.open("engine/xp_table.txt"))
 		return;
 
 	while(infile.next()) {
-		xp_table[toInt(infile.key) - 1] = toInt(infile.val);
+		unsigned key = toInt(infile.key);
+		if (key > 0 && key <= xp_table.size())
+			xp_table[key - 1] = toInt(infile.val);
 	}
 	max_spendable_stat_points = toInt(infile.key) * stat_points_per_level;
 	infile.close();

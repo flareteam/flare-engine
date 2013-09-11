@@ -45,7 +45,6 @@ class MenuActionBar : public Menu {
 private:
 	void renderCooldowns();
 
-	SDL_Surface *background;
 	SDL_Surface *emptyslot;
 	SDL_Surface *icons;
 	SDL_Surface *disabled;
