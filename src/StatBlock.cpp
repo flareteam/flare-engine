@@ -630,8 +630,11 @@ void StatBlock::loadHeroStats() {
 
 	while(infile.next()) {
 		unsigned key = toInt(infile.key);
-		if (key > 0 && key <= xp_table.size())
+		if (key > 0) {
+			if (key > xp_table.size())
+				xp_table.resize(key);
 			xp_table[key - 1] = toInt(infile.val);
+		}
 	}
 	max_spendable_stat_points = toInt(infile.key) * stat_points_per_level;
 	infile.close();
