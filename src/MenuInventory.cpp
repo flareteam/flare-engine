@@ -142,7 +142,7 @@ void MenuInventory::logic() {
 		// remove a % of currency
 		if (DEATH_PENALTY_CURRENCY > 0) {
 			if (currency > 0)
-				currency -= (currency * DEATH_PENALTY_CURRENCY) / 100;
+				removeCurrency((currency * DEATH_PENALTY_CURRENCY) / 100);
 			death_message += msg->get("Lost %d%% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
 		}
 
