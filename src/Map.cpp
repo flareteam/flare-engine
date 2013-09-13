@@ -225,17 +225,20 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 }
 
 void Map::loadNPC(FileParser &infile) {
+	std::string s;
 	if (infile.key == "type") {
 		// @ATTR npc.type|string|Type of NPC
 		npcs.back().id = infile.val;
 	}
 	if (infile.key == "requires_status") {
-		// @ATTR npc.requires_status|string|Status required for NPC load
-		npcs.back().requires_status = infile.val;
+		// @ATTR npc.requires_status|string|Status required for NPC load. There can be multiple states, separated by comma
+		while ( (s = infile.nextValue()) != "")
+			npcs.back().requires_status.push_back(s);
 	}
-	if (infile.key == "requires_not") {
-		// @ATTR npc.requires_not|string|Status required to be missing for NPC load
-		npcs.back().requires_not = infile.val;
+	if (infile.key == "requires_not_status") {
+		// @ATTR npc.requires_not|string|Status required to be missing for NPC load. There can be multiple states, separated by comma
+		while ( (s = infile.nextValue()) != "")
+			npcs.back().requires_not_status.push_back(s);
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
