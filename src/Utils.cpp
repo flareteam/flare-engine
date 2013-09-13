@@ -95,9 +95,10 @@ Point center_tile(Point p) {
 }
 
 FPoint collision_to_map(Point p) {
-	p.x = p.x + 0.5;
-	p.y = p.y + 0.5;
-	return p;
+	FPoint ret;
+	ret.x = p.x + 0.5;
+	ret.y = p.y + 0.5;
+	return ret;
 }
 
 Point map_to_collision(FPoint p) {
