@@ -423,7 +423,7 @@ void Map::loadEventComponent(FileParser &infile) {
 			repeat_val = infile.nextValue();
 		}
 	}
-	else if (infile.key == "requires_not") {
+	else if (infile.key == "requires_not_status") {
 		// @ATTR event.requires_not|string,...|Event requires not list of statuses
 		e->s = infile.nextValue();
 

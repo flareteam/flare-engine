@@ -765,7 +765,7 @@ void MapRenderer::checkNearestEvent(Point loc) {
 
 bool MapRenderer::isActive(const Map_Event &e) {
 	for (unsigned i=0; i < e.components.size(); i++) {
-		if (e.components[i].type == "requires_not") {
+		if (e.components[i].type == "requires_not_status") {
 			if (camp->checkStatus(e.components[i].s)) {
 				return false;
 			}
