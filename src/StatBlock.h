@@ -126,7 +126,6 @@ public:
 	std::string sfx_prefix;
 
 	int level;
-	int level_max; // hero only
 	unsigned long xp;
 	std::vector<unsigned long> xp_table;
 	bool level_up;
