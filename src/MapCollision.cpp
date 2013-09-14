@@ -89,14 +89,12 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		_step_x -= step_x;
 		_step_y -= step_y;
 
-		bool diag = (step_x != 0) && (step_y != 0);
-
 		if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
 			x += step_x;
 			y += step_y;
 			assert(is_valid_position(x,y,movement_type, is_hero));
 		}
-		else if (diag || force_slide) {
+		else if (force_slide) {
 			if (is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
 				if (step_x == 0) return true;
 				x += step_x;
