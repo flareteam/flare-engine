@@ -60,6 +60,13 @@ private:
 
 	bool line_check(int x1, int y1, int x2, int y2, int check_type, MOVEMENTTYPE movement_type);
 
+	bool small_step_forced_slide_along_grid(
+			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+	bool small_step_forced_slide(
+			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+	bool small_step(
+			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+
 public:
 	MapCollision();
 	~MapCollision();
