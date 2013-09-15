@@ -53,6 +53,77 @@ int sgn(float f) {
 	else			return 0;
 }
 
+bool MapCollision::small_step(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero) {
+	if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
+		x += step_x;
+		y += step_y;
+		assert(is_valid_position(x,y,movement_type, is_hero));
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool MapCollision::small_step_forced_slide_along_grid(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero) {
+	if (is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
+		if (step_x == 0) return true;
+		x += step_x;
+		assert(is_valid_position(x,y,movement_type, is_hero));
+	} else if (is_valid_position(x, y + step_y, movement_type, is_hero)) {
+		if (step_y == 0) return true;
+		y += step_y;
+		assert(is_valid_position(x,y,movement_type, is_hero));
+	} else {
+		return false;
+	}
+	return true;
+}
+
+bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero) {
+	// is there a singular obstacle or corner we can step around?
+	// only works if we are moving straight
+	const float epsilon = 0.01;
+	if (step_x != 0) {
+		assert(step_y == 0);
+		float dy = y - floor(y);
+
+		if (is_valid_tile(floor(x), floor(y) + 1, movement_type, is_hero)
+				&& is_valid_tile(floor(x) + sgn(step_x), floor(y) + 1, movement_type, is_hero)
+				&& dy > 0.5) {
+			y += 1 - dy + epsilon;
+			x += step_x;
+		} else if (is_valid_tile(floor(x), floor(y) - 1, movement_type, is_hero)
+					&& is_valid_tile(floor(x) + sgn(step_x), floor(y) - 1, movement_type, is_hero)
+					&& dy < 0.5) {
+			y -= dy + epsilon;
+			x += step_x;
+		} else {
+			return false;
+		}
+		assert(is_valid_position(x,y,movement_type, is_hero));
+	} else if (step_y != 0) {
+		assert(step_x == 0);
+		float dx = x - floor(x);
+
+		if (is_valid_tile(floor(x) + 1, floor(y), movement_type, is_hero)
+				&& is_valid_tile(floor(x) + 1, floor(y) + sgn(step_y), movement_type, is_hero)
+				&& dx > 0.5) {
+			x += 1 - dx + epsilon;
+			y += step_y;
+		} else if (is_valid_tile(floor(x) - 1, floor(y), movement_type, is_hero)
+				&& is_valid_tile(floor(x) - 1, floor(y) + sgn(step_y), movement_type, is_hero)
+				&& dx < 0.5) {
+			x -= dx + epsilon;
+			y += step_y;
+		} else {
+			return false;
+		}
+	} else {
+		assert(false);
+	}
+	return true;
+}
+
 /**
  * Process movement for cardinal (90 degree) and ordinal (45 degree) directions
  * If we encounter an obstacle at 90 degrees, stop.
@@ -89,65 +160,13 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		_step_x -= step_x;
 		_step_y -= step_y;
 
-		bool diag = (step_x != 0) && (step_y != 0);
-
-		if (is_valid_position(x + step_x, y + step_y, movement_type, is_hero)) {
-			x += step_x;
-			y += step_y;
-			assert(is_valid_position(x,y,movement_type, is_hero));
-		}
-		else if (diag || force_slide) {
-			if (is_valid_position(x + step_x, y, movement_type, is_hero)) { // slide along wall
-				if (step_x == 0) return true;
-				x += step_x;
-				assert(is_valid_position(x,y,movement_type, is_hero));
-			} else if (is_valid_position(x, y + step_y, movement_type, is_hero)) {
-				if (step_y == 0) return true;
-				y += step_y;
-				assert(is_valid_position(x,y,movement_type, is_hero));
-			} else {
-				return false;
-			}
-		}
-		else {
-			// is there a singular obstacle or corner we can step around?
-			// only works if we are moving straight
-			const float epsilon = 0.01;
-			if (step_x != 0) {
-				float dy = y - floor(y);
-
-				if (is_valid_tile(floor(x), floor(y) + 1, movement_type, is_hero)
-						&& is_valid_tile(floor(x) + sgn(step_x), floor(y) + 1, movement_type, is_hero)
-						&& dy > 0.5) {
-					y += 1 - dy + epsilon;
-					x += step_x;
-				} else if (is_valid_tile(floor(x), floor(y) - 1, movement_type, is_hero)
-							&& is_valid_tile(floor(x) + sgn(step_x), floor(y) - 1, movement_type, is_hero)
-							&& dy < 0.5) {
-					y -= dy + epsilon;
-					x += step_x;
-				} else {
+		if (!small_step(x, y, step_x, step_y, movement_type, is_hero)) {
+			if (force_slide) {
+				if (!small_step_forced_slide_along_grid(x, y, step_x, step_y, movement_type, is_hero))
 					return false;
-				}
-				assert(is_valid_position(x,y,movement_type, is_hero));
-			} else if (step_y != 0) {
-				float dx = x - floor(x);
-
-				if (is_valid_tile(floor(x) + 1, floor(y), movement_type, is_hero)
-						&& is_valid_tile(floor(x) + 1, floor(y) + sgn(step_y), movement_type, is_hero)
-						&& dx > 0.5) {
-					x += 1 - dx + epsilon;
-					y += step_y;
-				} else if (is_valid_tile(floor(x) - 1, floor(y), movement_type, is_hero)
-						&& is_valid_tile(floor(x) - 1, floor(y) + sgn(step_y), movement_type, is_hero)
-						&& dx < 0.5) {
-					x -= dx + epsilon;
-					y += step_y;
-				} else {
-					return false;
-				}
 			} else {
-				assert(false);
+				if (!small_step_forced_slide(x, y, step_x, step_y, movement_type, is_hero))
+					return false;
 			}
 		}
 	}
