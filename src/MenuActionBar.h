@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_ACTION_BAR_H
 
 #include "CommonIncludes.h"
+#include "Avatar.h"
 #include "Menu.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
@@ -50,7 +51,7 @@ private:
 	SDL_Surface *disabled;
 	SDL_Surface *attention;
 
-	StatBlock *hero;
+	Avatar *hero;
 	SDL_Rect src;
 
 	WidgetLabel *labels[16];
@@ -58,7 +59,7 @@ private:
 
 public:
 
-	MenuActionBar(StatBlock *hero, SDL_Surface *icons);
+	MenuActionBar(Avatar *hero, SDL_Surface *icons);
 	~MenuActionBar();
 	void loadGraphics();
 	void renderAttention(int menu_id);

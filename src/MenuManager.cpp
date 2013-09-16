@@ -98,7 +98,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(effects); // menus[3]
 	hudlog = new MenuHUDLog();
 	menus.push_back(hudlog); // menus[4]
-	act = new MenuActionBar(stats, icons);
+	act = new MenuActionBar(pc, icons);
 	menus.push_back(act); // menus[5]
 	enemy = new MenuEnemy();
 	menus.push_back(enemy); // menus[6]

@@ -39,7 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuActionBar::MenuActionBar(StatBlock *_hero, SDL_Surface *_icons) {
+MenuActionBar::MenuActionBar(Avatar *_hero, SDL_Surface *_icons) {
 	hero = _hero;
 	icons = _icons;
 
@@ -287,14 +287,15 @@ void MenuActionBar::render() {
 	// draw hotkeyed icons
 	src.x = src.y = 0;
 	src.w = src.h = ICON_SIZE;
+
 	for (int i=0; i<12; i++) {
 		if (hotkeys[i] != 0) {
 			const Power &power = powers->getPower(hotkeys[i]);
 			slot_enabled[i] = (hero->hero_cooldown[hotkeys[i]] == 0)
 							  && (slot_item_count[i] != 0)
-							  && !hero->effects.stun
-							  && hero->alive
-							  && hero->canUsePower(power, hotkeys[i]); //see if the slot should be greyed out
+							  && !hero->stats.effects.stun
+							  && hero->stats.alive
+							  && hero->stats.canUsePower(power, hotkeys[i]); //see if the slot should be greyed out
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
 			slots[i]->setIcon(power.icon + icon_offset);

@@ -77,7 +77,7 @@ GameStatePlay::GameStatePlay()
 	hasMusic = true;
 	// GameEngine scope variables
 
-    powers = new PowerManager();
+	powers = new PowerManager();
 	items = new ItemManager();
 	camp = new CampaignManager();
 	mapr = new MapRenderer();
