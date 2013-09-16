@@ -72,8 +72,6 @@ Avatar::Avatar()
 
 void Avatar::init() {
 
-	stats.hero_cooldown.resize(POWER_COUNT);
-
 	// name, base, look are set by GameStateNew so don't reset it here
 
 	// other init
