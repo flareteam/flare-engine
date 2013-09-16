@@ -112,7 +112,6 @@ StatBlock::StatBlock()
 	, pos()
 	, forced_speed()
 	, direction(0)
-	, hero_cooldown(POWER_COUNT, 0) // hero only
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
