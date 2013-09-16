@@ -72,7 +72,7 @@ Avatar::Avatar()
 
 void Avatar::init() {
 
-	stats.hero_cooldown.resize(POWER_COUNT);
+	stats.hero_cooldown.resize(powers->powers.size());
 
 	// name, base, look are set by GameStateNew so don't reset it here
 
@@ -118,7 +118,7 @@ void Avatar::init() {
 	last_transform = "";
 	untransform_power = getUntransformPower();
 
-	stats.hero_cooldown = vector<int>(POWER_COUNT, 0);
+	stats.hero_cooldown = vector<int>(powers->powers.size(), 0);
 
 	for (int i=0; i<4; i++) {
 		sound_steps[i] = 0;
@@ -734,7 +734,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	for (int i = 0; i < POWER_COUNT; i++) {
+	for (unsigned i = 0; i < stats.hero_cooldown.size(); i++) {
 		stats.hero_cooldown[i]--;
 		if (stats.hero_cooldown[i] < 0) stats.hero_cooldown[i] = 0;
 	}

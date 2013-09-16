@@ -41,8 +41,6 @@ class Hazard;
 class MapCollision;
 class StatBlock;
 
-const int POWER_COUNT = 1024;
-
 const int POWTYPE_FIXED = 0;
 const int POWTYPE_MISSILE = 1;
 const int POWTYPE_REPEATER = 2;
