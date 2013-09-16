@@ -457,7 +457,7 @@ void MenuCharacter::refreshStats() {
 
 	cstat[CSTAT_LEVEL].tip.clear();
 	cstat[CSTAT_LEVEL].tip.addText(msg->get("XP: %d", stats->xp));
-	if (stats->level < MAX_CHARACTER_LEVEL) {
+	if (stats->level < (int)stats->xp_table.size()) {
 		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", stats->xp_table[stats->level]));
 	}
 
