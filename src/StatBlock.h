@@ -223,7 +223,7 @@ public:
 	Point pos;
 	Point forced_speed;
 	char direction;
-	std::vector<int> hero_cooldown;
+
 
 	int cooldown_hit;
 	int cooldown_hit_ticks;
