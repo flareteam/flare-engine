@@ -26,14 +26,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-int round(float f) {
+int float_round(float f) {
 	return (int)(f + 0.5);
 }
 
 Point round(FPoint fp) {
 	Point result;
-	result.x = round(fp.x);
-	result.y = round(fp.y);
+	result.x = float_round(fp.x);
+	result.y = float_round(fp.y);
 	return result;
 }
 
