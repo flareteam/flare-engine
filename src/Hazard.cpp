@@ -92,17 +92,17 @@ void Hazard::logic() {
 		activeAnimation->advanceFrame();
 
 	// handle movement
-	if (!(round(speed.x) == 0 && round(speed.y) == 0)) {
+	if (!(float_round(speed.x) == 0 && float_round(speed.y) == 0)) {
 		pos.x += speed.x;
 		pos.y += speed.y;
 
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
-		if (collider->is_wall(round(pos.x), round(pos.y))) {
+		if (collider->is_wall(float_round(pos.x), float_round(pos.y))) {
 			lifespan = 0;
 			hit_wall = true;
 
-			if (collider->is_outside_map(round(pos.x) >> TILE_SHIFT, round(pos.y) >> TILE_SHIFT))
+			if (collider->is_outside_map(float_round(pos.x) >> TILE_SHIFT, float_round(pos.y) >> TILE_SHIFT))
 				remove_now = true;
 		}
 	}
@@ -141,8 +141,8 @@ void Hazard::addEntity(Entity *ent) {
 void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	if (delay_frames == 0 && activeAnimation) {
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
-		re.map_pos.x = round(pos.x);
-		re.map_pos.y = round(pos.y);
+		re.map_pos.x = float_round(pos.x);
+		re.map_pos.y = float_round(pos.y);
 		(floor ? r_dead : r).push_back(re);
 	}
 }
