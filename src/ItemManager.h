@@ -46,8 +46,6 @@ const int ITEM_QUALITY_NORMAL = 1;
 const int ITEM_QUALITY_HIGH = 2;
 const int ITEM_QUALITY_EPIC = 3;
 
-const int ITEM_MAX_BONUSES = 8;
-
 class LootAnimation {
 public:
 	std::string name;
