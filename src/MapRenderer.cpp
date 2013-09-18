@@ -228,7 +228,7 @@ void calculatePriosIso(vector<Renderable> &r) {
 void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
 		const unsigned tilex = floor(it->map_pos.x);
-		const unsigned tiley = round(it->map_pos.y);
+		const unsigned tiley = floor(it->map_pos.y);
 		const int commay = 1024 * it->map_pos.y;
 		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
