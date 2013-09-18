@@ -819,9 +819,11 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 		initHazard(power_index, src_stats, target, haz);
 
 		//calculate the missile velocity
-		int speed_var = 0;
-		if (powers[power_index].speed_variance != 0)
-			speed_var = (rand() % 2 - 0.5) * 2 * ((rand() % (int)round(powers[power_index].speed_variance) + 1) - 1);
+		float speed_var = 0;
+		if (powers[power_index].speed_variance != 0) {
+			const float var = powers[power_index].speed_variance;
+			speed_var = ((var * 2.0f * rand()) / RAND_MAX) - var;
+		}
 		haz->speed.x = (haz->base_speed + speed_var) * cos(alpha);
 		haz->speed.y = (haz->base_speed + speed_var) * sin(alpha);
 
