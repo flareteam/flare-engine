@@ -126,7 +126,6 @@ public:
 	std::string sfx_prefix;
 
 	int level;
-	int level_max; // hero only
 	unsigned long xp;
 	std::vector<unsigned long> xp_table;
 	bool level_up;
@@ -222,7 +221,6 @@ public:
 	FPoint pos;
 	FPoint forced_speed;
 	unsigned char direction;
-	std::vector<int> hero_cooldown;
 
 	int cooldown_hit;
 	int cooldown_hit_ticks;

@@ -72,8 +72,6 @@ Avatar::Avatar()
 
 void Avatar::init() {
 
-	stats.hero_cooldown.resize(POWER_COUNT);
-
 	// name, base, look are set by GameStateNew so don't reset it here
 
 	// other init
@@ -117,7 +115,7 @@ void Avatar::init() {
 	last_transform = "";
 	untransform_power = getUntransformPower();
 
-	stats.hero_cooldown = vector<int>(POWER_COUNT, 0);
+	hero_cooldown = vector<int>(powers->powers.size(), 0);
 
 	for (int i=0; i<4; i++) {
 		sound_steps[i] = 0;
@@ -363,12 +361,12 @@ void Avatar::handlePower(int actionbar_power) {
 			return;
 		if (power.requires_empty_target && !mapr->collider.is_empty(target.x, target.y))
 			return;
-		if (stats.hero_cooldown[actionbar_power] > 0)
+		if (hero_cooldown[actionbar_power] > 0)
 			return;
 		if (!powers->hasValidTarget(actionbar_power,&stats,target))
 			return;
 
-		stats.hero_cooldown[actionbar_power] = power.cooldown; //set the cooldown timer
+		hero_cooldown[actionbar_power] = power.cooldown; //set the cooldown timer
 		current_power = actionbar_power;
 		act_target = target;
 
@@ -473,7 +471,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	}
 
 	// check level up
-	if (stats.xp >= stats.xp_table[stats.level] && stats.level < stats.level_max) {
+	if (stats.level < (int)stats.xp_table.size() && stats.xp >= stats.xp_table[stats.level]) {
 		stats.level_up = true;
 		stats.level++;
 		stringstream ss;
@@ -729,9 +727,9 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	for (int i = 0; i < POWER_COUNT; i++) {
-		stats.hero_cooldown[i]--;
-		if (stats.hero_cooldown[i] < 0) stats.hero_cooldown[i] = 0;
+	for (unsigned i = 0; i < hero_cooldown.size(); i++) {
+		hero_cooldown[i]--;
+		if (hero_cooldown[i] < 0) hero_cooldown[i] = 0;
 	}
 
 	// make the current square solid

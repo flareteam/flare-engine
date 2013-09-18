@@ -58,7 +58,6 @@ StatBlock::StatBlock()
 	, name("")
 	, sfx_prefix("")
 	, level(0)
-	, level_max(32)
 	, xp(0)
 	, level_up(false)
 	, check_title(false)
@@ -111,7 +110,6 @@ StatBlock::StatBlock()
 	, pos()
 	, forced_speed()
 	, direction(0)
-	, hero_cooldown(POWER_COUNT, 0) // hero only
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
@@ -614,23 +612,21 @@ void StatBlock::loadHeroStats() {
 		else if (infile.key == "cooldown_hit") {
 			cooldown_hit = value;
 		}
-		else if (infile.key == "max_level") {
-			level_max = value;
-		}
 	}
 	infile.close();
 	if (max_points_per_stat == 0) max_points_per_stat = max_spendable_stat_points / 4 + 1;
 	statsLoaded = true;
 
-	// Load the XP table as well
-	xp_table.resize(level_max, std::numeric_limits<int>::max());
 	if (!infile.open("engine/xp_table.txt"))
 		return;
 
 	while(infile.next()) {
 		unsigned key = toInt(infile.key);
-		if (key > 0 && key <= xp_table.size())
+		if (key > 0) {
+			if (key > xp_table.size())
+				xp_table.resize(key);
 			xp_table[key - 1] = toInt(infile.val);
+		}
 	}
 	max_spendable_stat_points = toInt(infile.key) * stat_points_per_level;
 	infile.close();

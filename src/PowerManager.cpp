@@ -401,7 +401,8 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_crit_value = eatFirstInt(infile.val, ',');
 		}
 		else
-			fprintf(stderr, "ignoring unknown key %s set to %s\n", infile.key.c_str(), infile.val.c_str());
+			fprintf(stderr, "ignoring unknown key %s set to %s in file %s\n",
+					infile.key.c_str(), infile.val.c_str(), infile.getFileName().c_str());
 	}
 	infile.close();
 }

@@ -144,6 +144,7 @@ int MapRenderer::load(std::string fname) {
 		if (layernames[i] == "collision") {
 			collider.setmap(layers[i], w, h);
 			layernames.erase(layernames.begin() + i);
+			delete[] layers[i];
 			layers.erase(layers.begin() + i);
 		}
 	}

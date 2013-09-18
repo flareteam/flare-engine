@@ -84,11 +84,7 @@ public:
 	{}
 };
 
-// Utility Functions
-#ifdef _MSC_VER
-	float round(float number);
-#endif // _MSC_VER
-
+int float_round(float);
 Point round(FPoint fp);
 Point floor(FPoint fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
