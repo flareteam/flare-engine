@@ -285,7 +285,7 @@ bool MapCollision::line_check(int x1, int y1, int x2, int y2, int check_type, MO
 		for (int i=0; i<steps; i++) {
 			x += step_x;
 			y += step_y;
-			if (!is_valid_position(float_round(x), float_round(y), movement_type, false))
+			if (!is_valid_position(x, y, movement_type, false))
 				return false;
 		}
 	}
