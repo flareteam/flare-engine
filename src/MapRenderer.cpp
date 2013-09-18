@@ -284,7 +284,7 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	SDL_Rect dest;
-	const Point upperright = round(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperright = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((2 * VIEW_H / TILE_H) + 2 * tset.max_size_y) * 2;
 
@@ -351,7 +351,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	int_fast16_t i;
 	int_fast16_t j;
 	SDL_Rect dest;
-	const Point upperright = round(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperright = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
 
@@ -458,7 +458,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 
 void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 
-	const Point upperright = round(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperright = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
 	short int startj = max(0, upperright.y);
 	short int starti = max(0, upperright.x);
@@ -499,7 +499,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	vector<Renderable>::iterator r_cursor = r.begin();
 	vector<Renderable>::iterator r_end = r.end();
 
-	const Point upperright = round(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperright = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
 	short int startj = max(0, upperright.y);
 	short int starti = max(0, upperright.x);
