@@ -25,17 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-int float_round(float number) {
-	return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5);
-}
-
-Point round(FPoint fp) {
-	Point result;
-	result.x = float_round(fp.x);
-	result.y = float_round(fp.y);
-	return result;
-}
-
 Point floor(FPoint fp) {
 	Point result;
 	result.x = floor(fp.x);

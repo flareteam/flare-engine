@@ -84,8 +84,6 @@ public:
 	{}
 };
 
-int float_round(float);
-Point round(FPoint fp);
 Point floor(FPoint fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
 Point map_to_screen(float x, float y, float camx, float camy);
