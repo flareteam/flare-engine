@@ -465,7 +465,8 @@ int calcDirection(const FPoint &src, const FPoint &dst) {
 int calcDirection(float x0, float y0, float x1, float y1) {
 	const float pi = 3.1415926535898f;
 	float theta = calcTheta(x0, y0, x1, y1);
-	int dir = floor(theta / (pi/4) + ((theta < 0) ? -0.5 : 0.5)) + 4;
+	float val = theta / (pi/4);
+	int dir = ((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4;
 	dir = (dir + 1) % 8;
 	if (dir >= 0 && dir < 8)
 		return dir;
