@@ -198,13 +198,15 @@ bool MapCollision::is_empty(float x, float y) const {
  * A map space is a wall if it contains a wall blocking type (normal or hidden)
  * A position outside the map boundary is a wall
  */
-bool MapCollision::is_wall(int x, int y) const {
+bool MapCollision::is_wall(float x, float y) const {
 
 	// bounds check
 	if (is_outside_map(x, y)) return true;
 
 	// collision type check
-	return (colmap[x][y] == BLOCKS_ALL || colmap[x][y] == BLOCKS_ALL_HIDDEN);
+	const int tile_x = floor(x);
+	const int tile_y = floor(y);
+	return (colmap[tile_x][tile_y] == BLOCKS_ALL || colmap[tile_x][tile_y] == BLOCKS_ALL_HIDDEN);
 }
 
 /**
@@ -277,7 +279,7 @@ bool MapCollision::line_check(int x1, int y1, int x2, int y2, int check_type, MO
 		for (int i=0; i<steps; i++) {
 			x += step_x;
 			y += step_y;
-			if (is_wall(float_round(x), float_round(y)))
+			if (is_wall(x, y))
 				return false;
 		}
 	}

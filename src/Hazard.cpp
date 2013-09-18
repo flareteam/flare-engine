@@ -100,7 +100,7 @@ void Hazard::logic() {
 
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
-		if (collider->is_wall(float_round(pos.x), float_round(pos.y))) {
+		if (collider->is_wall(pos.x, pos.y)) {
 			lifespan = 0;
 			hit_wall = true;
 

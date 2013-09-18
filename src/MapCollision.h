@@ -78,7 +78,7 @@ public:
 
 	bool is_outside_map(float tile_x, float tile_y) const;
 	bool is_empty(float x, float y) const;
-	bool is_wall(int x, int y) const;
+	bool is_wall(float x, float y) const;
 
 	bool is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const;
 

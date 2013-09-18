@@ -871,7 +871,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 		location_iterator.y += speed.y;
 
 		// only travels until it hits a wall
-		if (collider->is_wall((int)location_iterator.x, (int)location_iterator.y)) {
+		if (collider->is_wall(location_iterator.x, location_iterator.y)) {
 			break; // no more hazards
 		}
 
