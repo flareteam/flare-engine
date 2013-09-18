@@ -84,9 +84,9 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 	e.type = type_id;
 
 	if (e.stats.animations == "")
-		cerr << "Warning: no animation file specified for entity: " << type_id << endl;
+		fprintf(stderr, "Warning: no animation file specified for entity: %s\n", type_id.c_str());
 	if (e.stats.sfx_prefix == "")
-		cerr << "Warning: no sfx_prefix specified for entity: " << type_id << endl;
+		fprintf(stderr, "Warning: no sfx_prefix specified for entity: %s\n", type_id.c_str());
 
 	loadAnimations(&e);
 	loadSounds(e.stats.sfx_prefix);
@@ -195,8 +195,8 @@ void EnemyManager::handleSpawn() {
 		e->stats.summoned_power_index = espawn.summon_power_index;
 
 		if(espawn.summoner != NULL){
-            e->stats.summoner = espawn.summoner;
-            espawn.summoner->summons.push_back(&(e->stats));
+			e->stats.summoner = espawn.summoner;
+			espawn.summoner->summons.push_back(&(e->stats));
 		}
 
 		e->type = espawn.type;
@@ -210,17 +210,17 @@ void EnemyManager::handleSpawn() {
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation();
 			else
-				cout << "Warning: animations file could not be loaded for " << espawn.type << endl;
+				fprintf(stderr, "Warning: animations file could not be loaded for %s\n", espawn.type.c_str());
 		}
 		else {
-			cout << "Warning: no animation file specified for entity: " << espawn.type << endl;
+			fprintf(stderr, "Warning: no animation file specified for entity: %s\n", espawn.type.c_str());
 		}
 		loadSounds(e->stats.sfx_prefix);
 
 
-		if(mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
-			e->stats.pos.x = espawn.pos.x;
-			e->stats.pos.y = espawn.pos.y;
+		if (mapr->collider.is_valid_position(espawn.pos.x + 0.5, espawn.pos.y + 0.5, e->stats.movement_type, false) || !e->stats.hero_ally) {
+			e->stats.pos.x = espawn.pos.x + 0.5;
+			e->stats.pos.y = espawn.pos.y + 0.5;
 		}
 		else {
 			e->stats.pos.x = pc->stats.pos.x;
@@ -297,9 +297,9 @@ void EnemyManager::logic() {
 			unsigned pref_id = distance(sfx_prefixes.begin(), found);
 
 			if (pref_id >= sfx_prefixes.size()) {
-				cerr << "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '"
-					 << (*it)->stats.name << "', sfx_prefix: '"
-					 << (*it)->stats.sfx_prefix << "')" << endl;
+				fprintf(stderr, "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '%s', sfx_prefix: '%s')\n",
+						(*it)->stats.name.c_str(),
+						(*it)->stats.sfx_prefix.c_str());
 			}
 			else {
 				if ((*it)->sfx_phys)
@@ -328,7 +328,7 @@ void EnemyManager::logic() {
 	}
 }
 
-Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
+Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 	Point p;
 	SDL_Rect r;
 	for(unsigned int i = 0; i < enemies.size(); i++) {

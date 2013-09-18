@@ -32,14 +32,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Point {
 public:
-	int x,y;
+	int x, y;
 	Point() : x(0), y(0) {}
 	Point(int _x, int _y) : x(_x), y(_y) {}
 };
 
 class FPoint {
 public:
-	float x,y;
+	float x, y;
+	FPoint(Point _p) : x((float)_p.x), y((float)_p.y) {}
+	FPoint() : x(0), y(0) {}
+	FPoint(float _x, float _y) : x(_x), y(_y) {}
 };
 
 // message passing struct for various sprites rendered map inline
@@ -48,7 +51,7 @@ public:
 	SDL_Surface *sprite; // image to be used
 	SDL_Rect src; // location on the sprite in pixel coordinates.
 
-	Point map_pos;     // The map location on the floor between someone's feet
+	FPoint map_pos;     // The map location on the floor between someone's feet
 	Point offset;      // offset from map_pos to topleft corner of sprite
 	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
 	Renderable()
@@ -81,20 +84,18 @@ public:
 	{}
 };
 
-// Utility Functions
-int float_round(float f);
-Point round(FPoint fp);
-Point screen_to_map(int x, int y, int camx, int camy);
-Point map_to_screen(int x, int y, int camx, int camy);
+Point floor(FPoint fp);
+FPoint screen_to_map(int x, int y, float camx, float camy);
+Point map_to_screen(float x, float y, float camx, float camy);
 Point center_tile(Point p);
-Point map_to_collision(Point p);
-Point collision_to_map(Point p);
-FPoint calcVector(Point pos, int direction, int dist);
-float calcDist(Point p1, Point p2);
-float calcTheta(int x1, int y1, int x2, int y2);
-int calcDirection(int x0, int y0, int x1, int y1);
-int calcDirection(const Point &src, const Point &dst);
-bool isWithin(Point center, int radius, Point target);
+Point map_to_collision(FPoint p);
+FPoint collision_to_map(Point p);
+FPoint calcVector(FPoint pos, int direction, float dist);
+float calcDist(FPoint p1, FPoint p2);
+float calcTheta(float x1, float y1, float x2, float y2);
+int calcDirection(float x0, float y0, float x1, float y1);
+int calcDirection(const FPoint &src, const FPoint &dst);
+bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(SDL_Rect r, Point target);
 
 Uint32 readPixel(SDL_Surface *screen, int x, int y);

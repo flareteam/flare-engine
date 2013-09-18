@@ -19,10 +19,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Enemy.h"
 #include "SharedGameResources.h"
 
-const unsigned short ALLY_FLEE_DISTANCE = 100;
-const unsigned short ALLY_FOLLOW_DISTANCE_WALK = 300;
-const unsigned short ALLY_FOLLOW_DISTANCE_STOP = 250;
-const unsigned short ALLY_TELEPORT_DISTANCE = 2000;
+const float ALLY_FLEE_DISTANCE = 2;
+const float ALLY_FOLLOW_DISTANCE_WALK = 5.5;
+const float ALLY_FOLLOW_DISTANCE_STOP = 5;
+const float ALLY_TELEPORT_DISTANCE = 40;
 
 const unsigned short BLOCK_TICKS = 10;
 
@@ -59,8 +59,8 @@ void BehaviorAlly::findTarget() {
 
 			//now work out the distance to the enemy and compare it to the distance to the current targer (we want to target the closest enemy)
 			if(enemies_in_combat) {
-				int enemy_dist = calcDist(e->stats.pos, enemy->stats.pos);
-				if(enemy_dist < target_dist) {
+				float enemy_dist = calcDist(e->stats.pos, enemy->stats.pos);
+				if (enemy_dist < target_dist) {
 					pursue_pos.x = enemy->stats.pos.x;
 					pursue_pos.y = enemy->stats.pos.y;
 					target_dist = enemy_dist;

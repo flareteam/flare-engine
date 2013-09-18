@@ -353,7 +353,7 @@ void MenuActionBar::renderCooldowns() {
 			item_src.w = ICON_SIZE;
 
 			// Wipe from bottom to top
-			if (hero->hero_cooldown[hotkeys[i]]) {
+			if (hero->hero_cooldown[hotkeys[i]] && powers->powers[hotkeys[i]].cooldown) {
 				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys[i]]) / powers->powers[hotkeys[i]].cooldown;
 			}
 

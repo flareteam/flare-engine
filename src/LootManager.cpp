@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTooltip.h"
 
 #include <limits>
+#include <math.h>
 
 using namespace std;
 
@@ -72,8 +73,8 @@ LootManager::LootManager(StatBlock *_hero) {
 				tooltip_margin = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "autopickup_range") {
-				// @ATTR autopickup_range|integer|Define the range for autopickup feature
-				AUTOPICKUP_RANGE = eatFirstInt(infile.val, ',');
+				// @ATTR autopickup_range|float|Define the range for autopickup feature
+				AUTOPICKUP_RANGE = toFloat(infile.val);
 			}
 			else if (infile.key == "autopickup_currency") {
 				// @ATTR autopickup_currency|boolean|Enable autopickup for currency
@@ -132,8 +133,12 @@ void LootManager::logic() {
 		it->animation->advanceFrame();
 
 		if (it->animation->isSecondLastFrame()) {
-			if (it->stack.item > 0)
-				items->playSound(it->stack.item, it->pos);
+			if (it->stack.item > 0) {
+				Point pos;
+				pos.x = (int)it->pos.x;
+				pos.y = (int)it->pos.y;
+				items->playSound(it->stack.item, pos);
+			}
 		}
 	}
 
@@ -144,7 +149,7 @@ void LootManager::logic() {
 /**
  * Show all tooltips for loot on the floor
  */
-void LootManager::renderTooltips(Point cam) {
+void LootManager::renderTooltips(FPoint cam) {
 	Point dest;
 
 	vector<Loot>::iterator it;
@@ -187,7 +192,7 @@ void LootManager::checkEnemiesForLoot() {
 		}
 		else { // random loot
 			//determine position
-			Point pos = hero->pos;
+			FPoint pos = hero->pos;
 			if (mapr->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false))
 				pos = e->stats.pos;
 
@@ -206,7 +211,7 @@ void LootManager::addEnemyLoot(const Enemy *e) {
  * Loot is created at component x,y
  */
 void LootManager::checkMapForLoot() {
-	Point p;
+	FPoint p;
 	Event_Component *ec;
 	ItemStack new_loot;
 	std::vector<int> possible_ids;
@@ -218,8 +223,8 @@ void LootManager::checkMapForLoot() {
 	for (unsigned i = mapr->loot.size(); i > 0; i--) {
 		ec = &mapr->loot[i-1];
 		if (ec->z == 0) {
-			p.x = ec->x;
-			p.y = ec->y;
+			p.x = ec->x + 0.5;
+			p.y = ec->y + 0.5;
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
@@ -292,7 +297,7 @@ void LootManager::checkMapForLoot() {
  * This function is called when there definitely is a piece of loot dropping
  * calls addLoot()
  */
-void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
+void LootManager::determineLootByEnemy(const Enemy *e, FPoint pos) {
 	ItemStack new_loot;
 	std::vector<int> possible_ids;
 	std::vector<Point> possible_ranges;
@@ -351,7 +356,7 @@ void LootManager::determineLootByEnemy(const Enemy *e, Point pos) {
 	}
 }
 
-void LootManager::addLoot(ItemStack stack, Point pos) {
+void LootManager::addLoot(ItemStack stack, FPoint pos) {
 	// TODO: z-sort insert?
 	Loot ld;
 	ld.stack = stack;
@@ -377,8 +382,7 @@ void LootManager::addLoot(ItemStack stack, Point pos) {
  * screen coordinates to map locations.  We need the hero position because
  * the hero has to be within range to pick up an item.
  */
-ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, MenuInventory *inv) {
-	Point p;
+ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv) {
 	SDL_Rect r;
 	ItemStack loot_stack;
 	loot_stack.item = 0;
@@ -392,9 +396,9 @@ ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, MenuI
 		--it;
 
 		// loot close enough to pickup?
-		if (abs(hero_pos.x - it->pos.x) < LOOT_RANGE && abs(hero_pos.y - it->pos.y) < LOOT_RANGE && !it->isFlying()) {
+		if (fabs(hero_pos.x - it->pos.x) < LOOT_RANGE && fabs(hero_pos.y - it->pos.y) < LOOT_RANGE && !it->isFlying()) {
 
-			p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
+			Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 
 			r.w = 32;
 			r.h = 48;
@@ -423,7 +427,7 @@ ItemStack LootManager::checkPickup(Point mouse, Point cam, Point hero_pos, MenuI
  * Autopickup loot if enabled in the engine
  * Currently, only currency is checked for autopickup
  */
-ItemStack LootManager::checkAutoPickup(Point hero_pos, MenuInventory *inv) {
+ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
 	ItemStack loot_stack;
 	loot_stack.item = 0;
 	loot_stack.quantity = 0;
@@ -431,7 +435,7 @@ ItemStack LootManager::checkAutoPickup(Point hero_pos, MenuInventory *inv) {
 	vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
-		if (abs(hero_pos.x - it->pos.x) < AUTOPICKUP_RANGE && abs(hero_pos.y - it->pos.y) < AUTOPICKUP_RANGE && !it->isFlying()) {
+		if (fabs(hero_pos.x - it->pos.x) < AUTOPICKUP_RANGE && fabs(hero_pos.y - it->pos.y) < AUTOPICKUP_RANGE && !it->isFlying()) {
 			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
 				if (!(inv->full(it->stack.item))) {
 					loot_stack = it->stack;
@@ -444,12 +448,12 @@ ItemStack LootManager::checkAutoPickup(Point hero_pos, MenuInventory *inv) {
 	return loot_stack;
 }
 
-ItemStack LootManager::checkNearestPickup(Point hero_pos, MenuInventory *inv) {
+ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 	ItemStack loot_stack;
 	loot_stack.item = 0;
 	loot_stack.quantity = 0;
 
-	int best_distance = std::numeric_limits<int>::max();
+	float best_distance = std::numeric_limits<float>::max();
 
 	vector<Loot>::iterator it;
 	vector<Loot>::iterator nearest = loot.end();
@@ -457,7 +461,7 @@ ItemStack LootManager::checkNearestPickup(Point hero_pos, MenuInventory *inv) {
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
 
-		int distance = (int)calcDist(hero_pos,it->pos);
+		float distance = calcDist(hero_pos, it->pos);
 		if (distance < LOOT_RANGE && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;

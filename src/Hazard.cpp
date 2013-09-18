@@ -32,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsParsing.h"
 
+#include <math.h>
+
 using namespace std;
 
 Hazard::Hazard(MapCollision *_collider)
@@ -92,17 +94,17 @@ void Hazard::logic() {
 		activeAnimation->advanceFrame();
 
 	// handle movement
-	if (!(float_round(speed.x) == 0 && float_round(speed.y) == 0)) {
+	if (!(speed.x == 0 && speed.y == 0)) {
 		pos.x += speed.x;
 		pos.y += speed.y;
 
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
-		if (collider->is_wall(float_round(pos.x), float_round(pos.y))) {
+		if (collider->is_wall(pos.x, pos.y)) {
 			lifespan = 0;
 			hit_wall = true;
 
-			if (collider->is_outside_map(float_round(pos.x) >> TILE_SHIFT, float_round(pos.y) >> TILE_SHIFT))
+			if (collider->is_outside_map(pos.x, pos.y))
 				remove_now = true;
 		}
 	}
@@ -141,8 +143,8 @@ void Hazard::addEntity(Entity *ent) {
 void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	if (delay_frames == 0 && activeAnimation) {
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
-		re.map_pos.x = float_round(pos.x);
-		re.map_pos.y = float_round(pos.y);
+		re.map_pos.x = pos.x;
+		re.map_pos.y = pos.y;
 		(floor ? r_dead : r).push_back(re);
 	}
 }

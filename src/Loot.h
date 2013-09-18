@@ -31,7 +31,7 @@ private:
 
 public:
 	ItemStack stack;
-	Point pos;
+	FPoint pos;
 	Animation *animation;
 	TooltipData tip;
 

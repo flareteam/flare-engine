@@ -99,7 +99,7 @@ void GameStatePlay::saveGame() {
 		outfile << "carried=" << menu->inv->inventory[CARRIED].getItems() << "\n";
 
 		// spawn point
-		outfile << "spawn=" << mapr->respawn_map << "," << mapr->respawn_point.x/UNITS_PER_TILE << "," << mapr->respawn_point.y/UNITS_PER_TILE << "\n";
+		outfile << "spawn=" << mapr->respawn_map << "," << (int)mapr->respawn_point.x << "," << (int)mapr->respawn_point.y << "\n";
 
 		// action bar
 		outfile << "actionbar=";
@@ -253,12 +253,10 @@ void GameStatePlay::loadGame() {
 			}
 			else if (infile.key == "spawn") {
 				mapr->teleport_mapname = infile.nextValue();
-
 				if (fileExists(mods->locate("maps/" + mapr->teleport_mapname))) {
-					mapr->teleport_destination.x = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
-					mapr->teleport_destination.y = toInt(infile.nextValue()) * UNITS_PER_TILE + UNITS_PER_TILE/2;
+					mapr->teleport_destination.x = toInt(infile.nextValue()) + 0.5;
+					mapr->teleport_destination.y = toInt(infile.nextValue()) + 0.5;
 					mapr->teleportation = true;
-
 					// prevent spawn.txt from putting us on the starting map
 					mapr->clearEvents();
 				}
@@ -268,7 +266,6 @@ void GameStatePlay::loadGame() {
 					mapr->teleport_destination.x = 1;
 					mapr->teleport_destination.y = 1;
 					mapr->teleportation = true;
-
 				}
 			}
 			else if (infile.key == "actionbar") {
