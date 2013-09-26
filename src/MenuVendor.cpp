@@ -200,7 +200,7 @@ void MenuVendor::itemReturn(ItemStack stack) {
 
 void MenuVendor::add(ItemStack stack) {
 	// Remove the first item stack to make room
-	if (stock[VENDOR_SELL].full(stack.item)) {
+	if (stock[VENDOR_SELL].full(stack)) {
 		stock[VENDOR_SELL][0].item = 0;
 		stock[VENDOR_SELL][0].quantity = 0;
 		sort(VENDOR_SELL);

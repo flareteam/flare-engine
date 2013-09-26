@@ -591,6 +591,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 			drop_stack.quantity = stack.quantity;
 		}
 	}
+	drag_prev_src = -1;
 }
 
 /**
@@ -688,6 +689,15 @@ bool MenuInventory::sell(ItemStack stack) {
 /**
  * Cannot pick up new items if the inventory is full.
  * Full means no more carrying capacity (equipped capacity is ignored)
+ */
+bool MenuInventory::full(ItemStack stack) {
+	return inventory[CARRIED].full(stack);
+}
+
+/**
+ * An alternative version of the above full() function
+ * This one only checks for a single item
+ * It's primarily used when checking LootManager pickups
  */
 bool MenuInventory::full(int item) {
 	return inventory[CARRIED].full(item);
