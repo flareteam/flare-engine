@@ -117,7 +117,6 @@ int getDirList(std::string dir, std::vector<std::string> &dirs) {
 	struct stat st;
 
 	if((dp  = opendir(dir.c_str())) == NULL) {
-		//cout << "Error(" << errno << ") opening " << dir << endl;
 		return errno;
 	}
 

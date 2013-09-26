@@ -84,9 +84,9 @@ private:
 	int getUntransformPower();
 
 	//variables for patfinding
-	vector<Point> path;
+	vector<FPoint> path;
 	int path_frames_elapsed;
-	Point prev_target;
+	FPoint prev_target;
 	bool collided;
 	bool path_found;
 
@@ -127,7 +127,7 @@ public:
 	// vars
 	Hazard *haz;
 	int current_power;
-	Point act_target;
+	FPoint act_target;
 	bool attacking;
 	bool drag_walking;
 	bool newLevelNotification;
