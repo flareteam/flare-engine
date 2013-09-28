@@ -152,10 +152,10 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 				power_cell.back().requires_power = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "visible_requires_status") {
-				power_cell.back().visible_requires_status = eatFirstString(infile.val, ',');
+				power_cell.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
 			}
 			else if (infile.key == "visible_requires_not") {
-				power_cell.back().visible_requires_not = eatFirstString(infile.val, ',');
+				power_cell.back().visible_requires_not.push_back(eatFirstString(infile.val, ','));
 			}
 
 		}
@@ -677,7 +677,7 @@ void MenuPowers::renderPowers(int tab_num) {
 
 bool MenuPowers::powerIsVisible(short power_index) {
 
-    // power_index can be 0 during recursive call if requires_power is not defined.
+	// power_index can be 0 during recursive call if requires_power is not defined.
 	// Power with index 0 doesn't exist and is always enabled
 	if (power_index == 0) return true;
 
@@ -687,19 +687,15 @@ bool MenuPowers::powerIsVisible(short power_index) {
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
 
-    if(power_cell[id].visible_requires_status != "")
-    {
-        if(!camp->checkStatus(power_cell[id].visible_requires_status))
-            return false;
-    }
+	for (unsigned i = 0; i < power_cell[id].visible_requires_status.size(); ++i)
+		if (!camp->checkStatus(power_cell[id].visible_requires_status[i]))
+			return false;
 
-    if(power_cell[id].visible_requires_not != "")
-    {
-        if(camp->checkStatus(power_cell[id].visible_requires_not))
-            return false;
-    }
+	for (unsigned i = 0; i < power_cell[id].visible_requires_not.size(); ++i)
+		if (camp->checkStatus(power_cell[id].visible_requires_not[i]))
+			return false;
 
-    return true;
+	return true;
 }
 
 
