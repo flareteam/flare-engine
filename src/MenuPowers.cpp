@@ -677,7 +677,7 @@ void MenuPowers::renderPowers(int tab_num) {
 
 bool MenuPowers::powerIsVisible(short power_index) {
 
-    // power_index can be 0 during recursive call if requires_power is not defined.
+	// power_index can be 0 during recursive call if requires_power is not defined.
 	// Power with index 0 doesn't exist and is always enabled
 	if (power_index == 0) return true;
 
@@ -687,19 +687,15 @@ bool MenuPowers::powerIsVisible(short power_index) {
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
 
-    if(power_cell[id].visible_requires_status != "")
-    {
-        if(!camp->checkStatus(power_cell[id].visible_requires_status))
-            return false;
-    }
+	if (power_cell[id].visible_requires_status != "")
+		if(!camp->checkStatus(power_cell[id].visible_requires_status))
+			return false;
 
-    if(power_cell[id].visible_requires_not != "")
-    {
-        if(camp->checkStatus(power_cell[id].visible_requires_not))
-            return false;
-    }
+	if (power_cell[id].visible_requires_not != "")
+		if(camp->checkStatus(power_cell[id].visible_requires_not))
+			return false;
 
-    return true;
+	return true;
 }
 
 
