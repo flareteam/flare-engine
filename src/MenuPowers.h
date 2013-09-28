@@ -53,27 +53,24 @@ public:
 	short requires_power;
 	bool requires_point;
 	bool passive_on;
-	std::string visible_requires_status;
-	std::string visible_requires_not;
-	Power_Menu_Cell() {
-		id = -1;
-		tab = 0;
-		pos.x = 0;
-		pos.y = 0;
-		requires_mentdef = 0;
-		requires_mentoff = 0;
-		requires_physoff = 0;
-		requires_physdef = 0;
-		requires_defense = 0;
-		requires_offense = 0;
-		requires_physical = 0;
-		requires_mental = 0;
-		requires_level = 0;
-		requires_power = 0;
-		requires_point = false;
-		passive_on = false;
-		visible_requires_status = "";
-		visible_requires_not = "";
+	std::vector<std::string> visible_requires_status;
+	std::vector<std::string> visible_requires_not;
+	Power_Menu_Cell()
+		: id(-1)
+		, tab(0)
+		, requires_physoff(0)
+		, requires_physdef(0)
+		, requires_mentoff(0)
+		, requires_mentdef(0)
+		, requires_defense(0)
+		, requires_offense(0)
+		, requires_physical(0)
+		, requires_mental(0)
+		, requires_level(0)
+		, requires_power(0)
+		, requires_point(false)
+		, passive_on(false)
+	{
 	}
 };
 
