@@ -69,7 +69,18 @@ void MapRenderer::clearQueues() {
 	loot.clear();
 }
 
-void MapRenderer::push_enemy_group(Map_Group g) {
+bool MapRenderer::enemyGroupPlaceEnemy(int x, int y, Map_Group &g) {
+	if (collider.is_empty(x, y)) {
+		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
+		Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
+		collider.block(x, y, false);
+		enemies.push(group_member);
+		return true;
+	}
+	return false;
+}
+
+void MapRenderer::pushEnemyGroup(Map_Group g) {
 	// activate at all?
 	float activate_chance = (rand() % 100) / 100.0f;
 	if (activate_chance > g.chance) {
@@ -86,32 +97,35 @@ void MapRenderer::push_enemy_group(Map_Group g) {
 	int enemies_to_spawn = randBetween(g.numbermin, g.numbermax);
 
 	// pick an upper bound, which is definitely larger than threetimes the enemy number to spawn.
-	int allowed_misses = 3 * g.numbermax;
+	int allowed_misses = 5 * g.numbermax;
 
 	while (enemies_to_spawn && allowed_misses) {
 
 		float x = (g.pos.x + (rand() % g.area.x)) + 0.5;
 		float y = (g.pos.y + (rand() % g.area.y)) + 0.5;
-		bool success = false;
 
-		if (collider.is_empty(x, y)) {
-			Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
-			if (enemy_lev.type != "") {
-				Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
-				collider.block(x, y, false);
-				enemies.push(group_member);
-
-				success = true;
-			}
-		}
-		if (success)
+		if (enemyGroupPlaceEnemy(x, y, g))
 			enemies_to_spawn--;
 		else
 			allowed_misses--;
 	}
-	if (enemies_to_spawn)
-		fprintf(stderr, "Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing\n",
-		filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn);
+	if (enemies_to_spawn) {
+		// now that the fast method of spawning enemies doesn't work, but we
+		// still have enemies to place, do not place them randomly, but at the
+		// first free spot
+		for (int x = g.pos.x; x < g.pos.x + g.area.x; x++)
+			for (int y = g.pos.y; x < g.pos.y + g.area.y; y++)
+				if (enemyGroupPlaceEnemy(x, y, g)) {
+					enemies_to_spawn--;
+					// if we could place all the enemies now, abort fast
+					if (!enemies_to_spawn)
+							break;
+				}
+	}
+	if (enemies_to_spawn) {
+		fprintf(stderr, "Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)\n",
+		filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn, g.numbermin, g.numbermax);
+	}
 }
 
 /**
@@ -153,7 +167,7 @@ int MapRenderer::load(std::string fname) {
 			index_objectlayer = i;
 
 	while (!enemy_groups.empty()) {
-		push_enemy_group(enemy_groups.front());
+		pushEnemyGroup(enemy_groups.front());
 		enemy_groups.pop();
 	}
 
