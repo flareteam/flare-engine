@@ -137,6 +137,11 @@ void EnemyManager::handleNewMap () {
 		me = mapr->enemies.front();
 		mapr->enemies.pop();
 
+		if (me.type.empty()) {
+			fprintf(stderr, "Enemy doesn't have type attribute set, skipping\n");
+			continue;
+		}
+
 		Enemy *e = getEnemyPrototype(me.type);
 
 		e->stats.waypoints = me.waypoints;
