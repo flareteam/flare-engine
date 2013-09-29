@@ -138,7 +138,7 @@ void EnemyManager::handleNewMap () {
 		mapr->enemies.pop();
 
 		if (me.type.empty()) {
-			fprintf(stderr, "Enemy doesn't have type attribute set, skipping\n");
+			fprintf(stderr, "Enemy(%f, %f) doesn't have type attribute set, skipping\n", me.pos.x, me.pos.y);
 			continue;
 		}
 
