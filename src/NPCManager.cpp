@@ -76,6 +76,14 @@ void NPCManager::handleNewMap() {
 		mn = mapr->npcs.front();
 		mapr->npcs.pop();
 
+		for (unsigned i = 0; i < mn.requires_status.size(); ++i)
+			if (!camp->checkStatus(mn.requires_status[i]))
+				continue;
+
+		for (unsigned i = 0; i < mn.requires_not_status.size(); ++i)
+			if (camp->checkStatus(mn.requires_not_status[i]))
+				continue;
+
 		NPC *npc = new NPC();
 		npc->load(mn.id, stats->level);
 		npc->pos.x = mn.pos.x + 0.5;
