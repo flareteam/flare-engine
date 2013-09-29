@@ -348,9 +348,8 @@ void MapRenderer::renderIsoBackObjects(vector<Renderable> &r) {
 }
 
 void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
-	int_fast16_t i;
-	int_fast16_t j;
 	SDL_Rect dest;
+
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
@@ -359,11 +358,14 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	vector<Renderable>::iterator r_end = r.end();
 
 	// object layer
-	j = upperleft.y - tset.max_size_y + tset.max_size_x;
-	i = upperleft.x - tset.max_size_y - tset.max_size_x;
+	int_fast16_t j = upperleft.y - tset.max_size_y + tset.max_size_x;
+	int_fast16_t i = upperleft.x - tset.max_size_y - tset.max_size_x;
 
 	while (r_cursor != r_end && ((int)(r_cursor->map_pos.x) + (int)(r_cursor->map_pos.y) < i + j || (int)(r_cursor->map_pos.x) < i)) // implicit floor
 		++r_cursor;
+
+	if (index_objectlayer >= layers.size())
+		return;
 
 	maprow *objectlayer = layers[index_objectlayer];
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
@@ -508,6 +510,9 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	while (r_cursor != r_end && (r_cursor->map_pos.y) < startj)
 		++r_cursor;
+
+	if (index_objectlayer >= layers.size())
+		return;
 
 	maprow *objectlayer = layers[index_objectlayer];
 	for (j = startj; j<max_tiles_height; j++) {
