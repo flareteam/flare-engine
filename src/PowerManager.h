@@ -79,6 +79,16 @@ const int SPAWN_LIMIT_STAT_MENTAL = 1;
 const int SPAWN_LIMIT_STAT_OFFENSE = 2;
 const int SPAWN_LIMIT_STAT_DEFENSE = 3;
 
+const int SPAWN_LEVEL_MODE_DEFAULT = 0;
+const int SPAWN_LEVEL_MODE_FIXED = 1;
+const int SPAWN_LEVEL_MODE_STAT = 2;
+const int SPAWN_LEVEL_MODE_LEVEL = 3;
+
+const int SPAWN_LEVEL_STAT_PHYSICAL = 0;
+const int SPAWN_LEVEL_STAT_MENTAL = 1;
+const int SPAWN_LEVEL_STAT_OFFENSE = 2;
+const int SPAWN_LEVEL_STAT_DEFENSE = 3;
+
 const int STAT_MODIFIER_MODE_MULTIPLY = 0;
 const int STAT_MODIFIER_MODE_ADD = 1;
 const int STAT_MODIFIER_MODE_ABSOLUTE = 2;
@@ -203,6 +213,11 @@ public:
 	int spawn_limit_every;
 	int spawn_limit_stat;
 
+	int spawn_level_mode;
+	int spawn_level_qty;
+	int spawn_level_every;
+	int spawn_level_stat;
+
 	Power()
 		: type(-1)
 		, name("")
@@ -293,6 +308,10 @@ public:
 		, spawn_limit_qty(1)
 		, spawn_limit_every(1)
 		, spawn_limit_stat(SPAWN_LIMIT_STAT_MENTAL)
+		, spawn_level_mode(SPAWN_LEVEL_MODE_DEFAULT)
+		, spawn_level_qty(0)
+		, spawn_level_every(0)
+		, spawn_level_stat(SPAWN_LEVEL_STAT_MENTAL)
 	{}
 
 };
