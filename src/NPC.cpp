@@ -262,7 +262,7 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 				is_available = false;
 				break;
 			}
-			else if (dialog[i][j].type == "requires_not") {
+			else if (dialog[i][j].type == "requires_not_status") {
 				if (!camp->checkStatus(dialog[i][j].s))
 					continue;
 				is_available = false;
@@ -348,7 +348,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 		if (dialog[dialog_node][event_cursor].type == "requires_status") {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == "requires_not") {
+		else if (dialog[dialog_node][event_cursor].type == "requires_not_status") {
 			// continue to next event component
 		}
 		else if (dialog[dialog_node][event_cursor].type == "requires_item") {
