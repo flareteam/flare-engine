@@ -62,7 +62,9 @@ private:
 	bool show_tooltip;
 
 	bool executeEvent(Map_Event &e);
-	void push_enemy_group(Map_Group g);
+
+	bool enemyGroupPlaceEnemy(int x, int y, Map_Group &g);
+	void pushEnemyGroup(Map_Group g);
 	bool isActive(const Map_Event &e);
 
 	std::string played_music_filename;
