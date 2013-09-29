@@ -131,7 +131,7 @@ void QuestLog::createQuestList() {
 			if (quests[i][j].type == "requires_status") {
 				if (!camp->checkStatus(quests[i][j].s)) break;
 			}
-			else if (quests[i][j].type == "requires_not") {
+			else if (quests[i][j].type == "requires_not_status") {
 				if (camp->checkStatus(quests[i][j].s)) break;
 			}
 			else if (quests[i][j].type == "quest_text") {
