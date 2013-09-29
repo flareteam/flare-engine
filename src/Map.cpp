@@ -215,9 +215,9 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->area.y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "number") {
-		// @ATTR enemygroup.number|[min(integer), max(integer]|Defines the range of enemies in group
+		// @ATTR enemygroup.number|[min(integer), max(integer]|Defines the range of enemies in group. If only one number is given, it's the exact amount.
 		group->numbermin = toInt(infile.nextValue());
-		group->numbermax = toInt(infile.nextValue());
+		group->numbermax = toInt(infile.nextValue(), group->numbermin);
 	}
 	else if (infile.key == "chance") {
 		// @ATTR enemygroup.chance|integer|Percentage of chance
