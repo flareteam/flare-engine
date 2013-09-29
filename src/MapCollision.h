@@ -55,6 +55,10 @@ typedef enum {
 	MOVEMENT_INTANGIBLE = 2 // can move through BLOCKS_ALL (e.g. walls)
 } MOVEMENTTYPE;
 
+// this value is used to determine the greatest possible position within a tile before transitioning to the next tile
+// so if an entity has a position of (1-MIN_TILE_GAP, 0) and moves to the east, they will move to (1,0)
+const float MIN_TILE_GAP = 0.001;
+
 class MapCollision {
 private:
 
