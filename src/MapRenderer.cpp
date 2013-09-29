@@ -348,9 +348,8 @@ void MapRenderer::renderIsoBackObjects(vector<Renderable> &r) {
 }
 
 void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
-	int_fast16_t i;
-	int_fast16_t j;
 	SDL_Rect dest;
+
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
@@ -359,11 +358,14 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	vector<Renderable>::iterator r_end = r.end();
 
 	// object layer
-	j = upperleft.y - tset.max_size_y + tset.max_size_x;
-	i = upperleft.x - tset.max_size_y - tset.max_size_x;
+	int_fast16_t j = upperleft.y - tset.max_size_y + tset.max_size_x;
+	int_fast16_t i = upperleft.x - tset.max_size_y - tset.max_size_x;
 
 	while (r_cursor != r_end && ((int)(r_cursor->map_pos.x) + (int)(r_cursor->map_pos.y) < i + j || (int)(r_cursor->map_pos.x) < i)) // implicit floor
 		++r_cursor;
+
+	if (index_objectlayer >= layers.size())
+		return;
 
 	maprow *objectlayer = layers[index_objectlayer];
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
@@ -503,14 +505,17 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	short int startj = max(0, upperleft.y);
 	short int starti = max(0, upperleft.x);
-	const short max_tiles_width =  min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
+	const short max_tiles_width  = min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
-	while (r_cursor != r_end && (r_cursor->map_pos.y) < startj)
+	while (r_cursor != r_end && (int)(r_cursor->map_pos.y) < startj)
 		++r_cursor;
 
+	if (index_objectlayer >= layers.size())
+		return;
+
 	maprow *objectlayer = layers[index_objectlayer];
-	for (j = startj; j<max_tiles_height; j++) {
+	for (j = startj; j < max_tiles_height; j++) {
 		Point p = map_to_screen(starti, j, shakycam.x, shakycam.y);
 		p = center_tile(p);
 		for (i = starti; i<max_tiles_width; i++) {
@@ -522,14 +527,14 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 			}
 			p.x += TILE_W;
 
-			while (r_cursor != r_end && (r_cursor->map_pos.y) == j && (r_cursor->map_pos.x) < i)
+			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) < i) // implicit floor
 				++r_cursor;
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (r_cursor->map_pos.y) == j && (r_cursor->map_pos.x) == i)
+			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) == i) // implicit floor
 				drawRenderable(r_cursor++);
 		}
-		while (r_cursor != r_end && (r_cursor->map_pos.y) <= j)
+		while (r_cursor != r_end && (int)(r_cursor->map_pos.y) <= j) // implicit floor
 			++r_cursor;
 	}
 }
