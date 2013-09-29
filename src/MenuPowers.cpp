@@ -154,7 +154,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 			else if (infile.key == "visible_requires_status") {
 				power_cell.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
 			}
-			else if (infile.key == "visible_requires_not") {
+			else if (infile.key == "visible_requires_not_status") {
 				power_cell.back().visible_requires_not.push_back(eatFirstString(infile.val, ','));
 			}
 
