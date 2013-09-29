@@ -142,7 +142,7 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 			// find next interesting value, which is either the whole step, or the transition to the next tile
 			step_x = min((float)ceil(x) - x, _step_x);
 			// if we are standing on the edge of a tile (ceil(x) - x == 0), we need to look one tile ahead
-			if (step_x == 0) step_x	= min(1.f, _step_x);
+			if (step_x <= MIN_TILE_GAP) step_x = min(1.f, _step_x);
 		} else if (_step_x < 0) {
 			step_x = max((float)floor(x) - x, _step_x);
 			if (step_x == 0) step_x = max(-1.f, _step_x);
@@ -151,7 +151,7 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		float step_y = 0;
 		if (_step_y > 0) {
 			step_y = min((float)ceil(y) - y, _step_y);
-			if (step_y == 0) step_y	= min(1.f, _step_y);
+			if (step_y <= MIN_TILE_GAP) step_y = min(1.f, _step_y);
 		} else if (_step_y < 0) {
 			step_y = max((float)floor(y) - y, _step_y);
 			if (step_y == 0) step_y	= max(-1.f, _step_y);
