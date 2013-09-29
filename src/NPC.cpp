@@ -82,7 +82,7 @@ void NPC::load(const string& npc_id, int hero_level) {
 				e.type = infile.key;
 				if (infile.key == "requires_status")
 					e.s = infile.val;
-				else if (infile.key == "requires_not")
+				else if (infile.key == "requires_not_status")
 					e.s = infile.val;
 				else if (infile.key == "requires_level")
 					e.x = toInt(infile.val);
