@@ -114,7 +114,7 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 		// still have enemies to place, do not place them randomly, but at the
 		// first free spot
 		for (int x = g.pos.x; x < g.pos.x + g.area.x; x++) {
-			for (int y = g.pos.y; x < g.pos.y + g.area.y; y++) {
+			for (int y = g.pos.y; y < g.pos.y + g.area.y; y++) {
 				if (enemyGroupPlaceEnemy(x, y, g)) {
 					enemies_to_spawn--;
 					// if we could place all the enemies now, abort fast
