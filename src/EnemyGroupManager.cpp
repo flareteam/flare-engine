@@ -44,12 +44,14 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 
 	Enemy_Level new_enemy;
 	infile.new_section = true;
+	bool first = true;
 	while (infile.next()) {
-		if (infile.new_section) {
+		if (infile.new_section || first) {
 			const string fname = infile.getFileName();
 			const int firstpos = fname.rfind("/") + 1;
 			const int len = fname.length() - firstpos - 4; //removes the ".txt" from the filename
 			new_enemy.type = fname.substr(firstpos, len);
+			first = false;
 		}
 
 		if (infile.key == "level") {
@@ -78,6 +80,7 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 		enemyCategory = it->second;
 	}
 	else {
+		fprintf(stderr, "Could not find enemy category %s, returning empty enemy\n", category.c_str());
 		return Enemy_Level();
 	}
 
@@ -112,6 +115,7 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 	}
 
 	if (enemyCandidates.empty()) {
+		fprintf(stderr, "Could not find a suitable enemy category for (%s, %d, %d)\n", category.c_str(), minlevel, maxlevel);
 		return Enemy_Level();
 	}
 	else {
