@@ -73,7 +73,7 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 	infile.close();
 }
 
-Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {
+Enemy_Level *EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {
 	vector<Enemy_Level> enemyCategory;
 	std::map<string, vector<Enemy_Level> >::const_iterator it = _categories.find(category);
 	if (it != _categories.end()) {
@@ -81,7 +81,7 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 	}
 	else {
 		fprintf(stderr, "Could not find enemy category %s, returning empty enemy\n", category.c_str());
-		return Enemy_Level();
+		return 0;
 	}
 
 	// load only the data that fit the criteria
@@ -116,9 +116,9 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 
 	if (enemyCandidates.empty()) {
 		fprintf(stderr, "Could not find a suitable enemy category for (%s, %d, %d)\n", category.c_str(), minlevel, maxlevel);
-		return Enemy_Level();
+		return 0;
 	}
 	else {
-		return enemyCandidates[rand() % enemyCandidates.size()];
+		return &enemyCandidates[rand() % enemyCandidates.size()];
 	}
 }
