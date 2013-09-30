@@ -197,7 +197,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].aim_assist = toBool(infile.val);
 		else if (infile.key == "speed")
 			// @ATTR speed|integer|The speed of missile hazard, the unit is defined as map units per frame.
-			powers[input_id].speed = toInt(infile.val);
+			powers[input_id].speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
 		else if (infile.key == "lifespan")
 			// @ATTR lifespan|duration|How long the hazard/animation lasts.
 			powers[input_id].lifespan = parse_duration(infile.val);
@@ -216,7 +216,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].no_attack = toBool(infile.val);
 		else if (infile.key == "radius")
 			// @ATTR radius|integer|Radius in pixels
-			powers[input_id].radius = toInt(infile.val);
+			powers[input_id].radius = toFloat(infile.val);
 		else if (infile.key == "base_damage") {
 			// @ATTR base_damage|[melee:ranged:ment]|
 			if (infile.val == "none")        powers[input_id].base_damage = BASE_DAMAGE_NONE;
@@ -251,8 +251,8 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "range")
-			// @ATTR, range|integer|
-			powers[input_id].range = toInt(infile.nextValue());
+			// @ATTR, range|float|
+			powers[input_id].range = toFloat(infile.nextValue());
 		//steal effects
 		else if (infile.key == "hp_steal")
 			// @ATTR, hp_steal|integer|Percentage of damage to steal into HP
@@ -356,6 +356,32 @@ void PowerManager::loadPowers() {
 				}
 			}
 		}
+		else if (infile.key == "spawn_level") {
+			infile.val = infile.val + ',';
+			std::string mode = eatFirstString(infile.val,',');
+			if (mode == "default") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_DEFAULT;
+			else if (mode == "fixed") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_FIXED;
+			else if (mode == "stat") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_STAT;
+			else if (mode == "level") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_LEVEL;
+			else fprintf(stderr, "unknown spawn_level_mode %s\n", mode.c_str());
+
+			if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_DEFAULT) {
+				powers[input_id].spawn_level_qty = eatFirstInt(infile.val,',');
+
+				if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_FIXED) {
+					powers[input_id].spawn_level_every = eatFirstInt(infile.val,',');
+
+					if(powers[input_id].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
+						std::string stat = eatFirstString(infile.val,',');
+						if (stat == "physical") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_PHYSICAL;
+						else if (stat == "mental") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_MENTAL;
+						else if (stat == "offense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_OFFENSE;
+						else if (stat == "defense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_DEFENSE;
+						else fprintf(stderr, "unknown spawn_level_stat %s\n", stat.c_str());
+					}
+				}
+			}
+		}
 		else if (infile.key == "target_party")
 			// @ATTR target_party|bool|
 			powers[input_id].target_party = toBool(infile.val);
@@ -436,7 +462,7 @@ void PowerManager::handleNewMap(MapCollision *_collider) {
 /**
  * Keep two points within a certain range
  */
-Point PowerManager::limitRange(int range, Point src, Point target) {
+FPoint PowerManager::limitRange(float range, FPoint src, FPoint target) {
 	if (range > 0) {
 		if (src.x+range < target.x)
 			target.x = src.x+range;
@@ -454,7 +480,7 @@ Point PowerManager::limitRange(int range, Point src, Point target) {
 /**
  * Check if the target is valid (not an empty area or a wall)
  */
-bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint target) {
 
 	if (!collider) return false;
 
@@ -469,23 +495,19 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, Point t
 	return true;
 }
 
-Point PowerManager::targetNeighbor(Point target, int range) {
-	return targetNeighbor(target,range,false);
-}
-
 /**
  * Try to retarget the power to one of the 8 adjacent tiles
  * Returns the retargeted position on success, returns the original position on failure
  */
-Point PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked) {
-	Point new_target = target;
-	std::vector<Point> valid_tiles;
+FPoint PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked) {
+	FPoint new_target = target;
+	std::vector<FPoint> valid_tiles;
 
 	for (int i=-range; i<=range; i++) {
 		for (int j=-range; j<=range; j++) {
 			if (i == 0 && j == 0) continue; // skip the middle tile
-			new_target.x = target.x+UNITS_PER_TILE*i;
-			new_target.y = target.y+UNITS_PER_TILE*j;
+			new_target.x = target.x + i + 0.5;
+			new_target.y = target.y + j + 0.5;
 			if (collider->is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
 				valid_tiles.push_back(new_target);
 		}
@@ -509,7 +531,7 @@ Point PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked)
  * @param target Aim position in map coordinates
  * @param haz A newly-initialized hazard
  */
-void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point target, Hazard *haz) {
+void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint target, Hazard *haz) {
 
 	//the hazard holds the statblock of its source
 	haz->src_stats = src_stats;
@@ -589,21 +611,16 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
 
 	// hazard starting position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
-		haz->pos.x = (float)src_stats->pos.x;
-		haz->pos.y = (float)src_stats->pos.y;
+		haz->pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		target = limitRange(powers[power_index].range,src_stats->pos,target);
-		haz->pos.x = (float)target.x;
-		haz->pos.y = (float)target.y;
+		haz->pos = limitRange(powers[power_index].range,src_stats->pos,target);
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		Point new_target = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor,true);
-		haz->pos.x = (float)new_target.x;
-		haz->pos.y = (float)new_target.y;
+		haz->pos = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
 	}
 
 	// pre/post power effects
@@ -635,14 +652,14 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, Point targe
  * Any attack-based effects are handled by hazards.
  * Self-enhancements (buffs) are handled by this function.
  */
-void PowerManager::buff(int power_index, StatBlock *src_stats, Point target) {
+void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
 		target = limitRange(powers[power_index].range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			Point new_target = targetNeighbor(target,powers[power_index].target_neighbor);
-			if (new_target.x == target.x && new_target.y == target.y) {
+			FPoint new_target = targetNeighbor(floor(target), powers[power_index].target_neighbor);
+			if (floor(new_target.x) == floor(target.x) && floor(new_target.y) == floor(target.y)) {
 				src_stats->teleportation = false;
 			}
 			else {
@@ -760,7 +777,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::fixed(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
 
 	if (powers[power_index].use_hazard) {
 		int delay_iterator = 0;
@@ -796,17 +813,15 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, Point target) {
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target) {
-	float pi = 3.1415926535898f;
+bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target) {
+	const float pi = 3.1415926535898f;
 
-	Point src;
+	FPoint src;
 	if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		src.x = target.x;
-		src.y = target.y;
+		src = target;
 	}
 	else {
-		src.x = src_stats->pos.x;
-		src.y = src_stats->pos.y;
+		src = src_stats->pos;
 	}
 
 	// calculate polar coordinates angle
@@ -830,18 +845,17 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target) 
 		initHazard(power_index, src_stats, target, haz);
 
 		//calculate the missile velocity
-		int speed_var = 0;
-		if (powers[power_index].speed_variance != 0)
-			speed_var = (int)(pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].speed_variance + 1) - 1);
+		float speed_var = 0;
+		if (powers[power_index].speed_variance != 0) {
+			const float var = powers[power_index].speed_variance;
+			speed_var = ((var * 2.0f * rand()) / RAND_MAX) - var;
+		}
 		haz->speed.x = (haz->base_speed + speed_var) * cos(alpha);
 		haz->speed.y = (haz->base_speed + speed_var) * sin(alpha);
 
 		//calculate direction based on trajectory, not actual target (UNITS_PER_TILE reduces round off error)
 		if (powers[power_index].directional)
-			haz->animationKind = calcDirection(
-									 src.x, src.y,
-									 static_cast<int>(src.x + UNITS_PER_TILE * haz->speed.x),
-									 static_cast<int>(src.y + UNITS_PER_TILE * haz->speed.y));
+			haz->animationKind = calcDirection(src.x, src.y, src.x + haz->speed.x, src.y + haz->speed.y);
 
 		// add optional delay
 		haz->delay_frames = delay_iterator;
@@ -859,7 +873,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, Point target) 
 /**
  * Repeaters are multiple hazards that spawn in a straight line
  */
-bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target) {
 
 	payPowerCost(power_index, src_stats);
 
@@ -867,16 +881,15 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target)
 	FPoint location_iterator;
 	FPoint speed;
 	int delay_iterator = 0;
-	int map_speed = 64;
+	float map_speed = 32.0 / MAX_FRAMES_PER_SEC;
 
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
-	speed.x = (float)map_speed * cos(theta);
-	speed.y = (float)map_speed * sin(theta);
+	speed.x = map_speed * cos(theta);
+	speed.y = map_speed * sin(theta);
 
-	location_iterator.x = (float)src_stats->pos.x;
-	location_iterator.y = (float)src_stats->pos.y;
+	location_iterator = src_stats->pos;
 
 	playSound(power_index, src_stats);
 
@@ -886,15 +899,14 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target)
 		location_iterator.y += speed.y;
 
 		// only travels until it hits a wall
-		if (collider->is_wall((int)location_iterator.x, (int)location_iterator.y)) {
+		if (collider->is_wall(location_iterator.x, location_iterator.y)) {
 			break; // no more hazards
 		}
 
 		Hazard *haz = new Hazard(collider);
 		initHazard(power_index, src_stats, target, haz);
 
-		haz->pos.x = location_iterator.x;
-		haz->pos.y = location_iterator.y;
+		haz->pos = location_iterator;
 		haz->delay_frames = delay_iterator;
 		delay_iterator += powers[power_index].delay;
 
@@ -909,7 +921,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, Point target)
 /**
  * Spawn a creature. Does not create a hazard
  */
-bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 
 	// apply any buffs
 	buff(power_index, src_stats, target);
@@ -923,20 +935,17 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, Point target) {
 
 	// enemy spawning position
 	if (powers[power_index].starting_pos == STARTING_POS_SOURCE) {
-		espawn.pos.x = src_stats->pos.x;
-		espawn.pos.y = src_stats->pos.y;
+		espawn.pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		espawn.pos.x = target.x;
-		espawn.pos.y = target.y;
+		espawn.pos = target;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
-		FPoint fpos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
-		espawn.pos.x = static_cast<int>(fpos.x);
-		espawn.pos.y = static_cast<int>(fpos.y);
+		espawn.pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
+
 	if (powers[power_index].target_neighbor > 0) {
-		espawn.pos = targetNeighbor(src_stats->pos,powers[power_index].target_neighbor);
+		espawn.pos = floor(targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor));
 	}
 
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
@@ -971,7 +980,7 @@ bool PowerManager::spawn(const std::string& enemy_type, Point target) {
 /**
  * Transform into a creature. Fully replaces entity characteristics
  */
-bool PowerManager::transform(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint target) {
 	// locking the actionbar prevents power usage until after the hero is transformed
 	inpt->lockActionBar();
 
@@ -1016,7 +1025,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, Point target
 /**
  * Activate is basically a switch/redirect to the appropriate function
  */
-bool PowerManager::activate(int power_index, StatBlock *src_stats, Point target) {
+bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target) {
 
 	if (src_stats->hero) {
 		if (powers[power_index].requires_mp > src_stats->mp)

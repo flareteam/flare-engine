@@ -77,7 +77,7 @@ GameStatePlay::GameStatePlay()
 	hasMusic = true;
 	// GameEngine scope variables
 
-    powers = new PowerManager();
+	powers = new PowerManager();
 	items = new ItemManager();
 	camp = new CampaignManager();
 	mapr = new MapRenderer();
@@ -410,7 +410,7 @@ void GameStatePlay::loadTitles() {
 			else if (infile.key == "level") titles.back().level = toInt(infile.val);
 			else if (infile.key == "power") titles.back().power = toInt(infile.val);
 			else if (infile.key == "requires_status") titles.back().requires_status = infile.val;
-			else if (infile.key == "requires_not") titles.back().requires_not = infile.val;
+			else if (infile.key == "requires_not_status") titles.back().requires_not = infile.val;
 			else if (infile.key == "primary_stat") titles.back().primary_stat = infile.val;
 			else fprintf(stderr, "GameStatePlay: Unknown key value in title definitons: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
 		}
@@ -596,7 +596,7 @@ void GameStatePlay::checkNPCInteraction() {
 	if (pc->attacking) return;
 
 	int npc_click = -1;
-	int max_interact_distance = UNITS_PER_TILE * 4;
+	int max_interact_distance = 4;
 	int interact_distance = max_interact_distance+1;
 
 	// check for clicking on an NPC
@@ -721,7 +721,8 @@ void GameStatePlay::checkNPCInteraction() {
 }
 
 void GameStatePlay::checkStash() {
-	int max_interact_distance = UNITS_PER_TILE * 4;
+	int max_interact_distance = 4;
+	int interact_distance = max_interact_distance+1;
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
@@ -735,7 +736,7 @@ void GameStatePlay::checkStash() {
 		if (!menu->inv->visible) menu->stash->visible = false;
 
 		// If the player walks away from the stash, close its menu
-		int interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
+		interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
 		if (interact_distance > max_interact_distance || !pc->stats.alive) {
 			menu->stash->visible = false;
 		}
@@ -772,7 +773,7 @@ void GameStatePlay::checkCutscene() {
 
 	}
 	else {
-		mapr->respawn_point = pc->stats.pos;
+		mapr->respawn_point = floor(pc->stats.pos);
 	}
 
 	saveGame();

@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 #include <cstdlib>
 #include <algorithm> // for std::min()/std::max()
+#include "math.h"
 
 /**
  * Clamps value to floor.

@@ -453,8 +453,8 @@ void MenuInventory::activate(Point position) {
 		if (powers->powers[items->items[inventory[CARRIED][slot].item].power].spawn_type == "untransform" && !stats->transformed) return;
 
 		//check for power cooldown
-		if (stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] > 0) return;
-		else stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = powers->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
+		if (pc->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] > 0) return;
+		else pc->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = powers->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
 
 		// if this item requires targeting it can't be used this way
 		if (!powers->powers[items->items[inventory[CARRIED][slot].item].power].requires_targeting) {
@@ -591,6 +591,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 			drop_stack.quantity = stack.quantity;
 		}
 	}
+	drag_prev_src = -1;
 }
 
 /**
@@ -688,6 +689,15 @@ bool MenuInventory::sell(ItemStack stack) {
 /**
  * Cannot pick up new items if the inventory is full.
  * Full means no more carrying capacity (equipped capacity is ignored)
+ */
+bool MenuInventory::full(ItemStack stack) {
+	return inventory[CARRIED].full(stack);
+}
+
+/**
+ * An alternative version of the above full() function
+ * This one only checks for a single item
+ * It's primarily used when checking LootManager pickups
  */
 bool MenuInventory::full(int item) {
 	return inventory[CARRIED].full(item);

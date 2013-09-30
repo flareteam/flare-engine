@@ -41,8 +41,6 @@ class Hazard;
 class MapCollision;
 class StatBlock;
 
-const int POWER_COUNT = 1024;
-
 const int POWTYPE_FIXED = 0;
 const int POWTYPE_MISSILE = 1;
 const int POWTYPE_REPEATER = 2;
@@ -80,6 +78,16 @@ const int SPAWN_LIMIT_STAT_PHYSICAL = 0;
 const int SPAWN_LIMIT_STAT_MENTAL = 1;
 const int SPAWN_LIMIT_STAT_OFFENSE = 2;
 const int SPAWN_LIMIT_STAT_DEFENSE = 3;
+
+const int SPAWN_LEVEL_MODE_DEFAULT = 0;
+const int SPAWN_LEVEL_MODE_FIXED = 1;
+const int SPAWN_LEVEL_MODE_STAT = 2;
+const int SPAWN_LEVEL_MODE_LEVEL = 3;
+
+const int SPAWN_LEVEL_STAT_PHYSICAL = 0;
+const int SPAWN_LEVEL_STAT_MENTAL = 1;
+const int SPAWN_LEVEL_STAT_OFFENSE = 2;
+const int SPAWN_LEVEL_STAT_DEFENSE = 3;
 
 const int STAT_MODIFIER_MODE_MULTIPLY = 0;
 const int STAT_MODIFIER_MODE_ADD = 1;
@@ -135,7 +143,7 @@ public:
 	int visual_random; // sprite sheet contains rows of random options
 	int visual_option; // sprite sheet contains rows of similar effects.  use a specific option
 	bool aim_assist;
-	int speed; // for missile hazards, map units per frame
+	float speed; // for missile hazards, tiles per frame
 	int lifespan; // how long the hazard/animation lasts
 	bool floor; // the hazard is drawn between the background and object layers
 	bool complete_animation;
@@ -143,11 +151,11 @@ public:
 	// hazard traits
 	bool use_hazard;
 	bool no_attack;
-	int radius;
+	float radius;
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
-	int range;
+	float range;
 	bool target_party;
 	std::vector<std::string> target_categories;
 
@@ -168,7 +176,7 @@ public:
 	//missile traits
 	int missile_angle;
 	int angle_variance;
-	int speed_variance;
+	float speed_variance;
 
 	//repeater traits
 	int delay;
@@ -204,6 +212,11 @@ public:
 	int spawn_limit_qty;
 	int spawn_limit_every;
 	int spawn_limit_stat;
+
+	int spawn_level_mode;
+	int spawn_level_qty;
+	int spawn_level_every;
+	int spawn_level_stat;
 
 	Power()
 		: type(-1)
@@ -295,6 +308,10 @@ public:
 		, spawn_limit_qty(1)
 		, spawn_limit_every(1)
 		, spawn_limit_stat(SPAWN_LIMIT_STAT_MENTAL)
+		, spawn_level_mode(SPAWN_LEVEL_MODE_DEFAULT)
+		, spawn_level_qty(0)
+		, spawn_level_every(0)
+		, spawn_level_stat(SPAWN_LEVEL_STAT_MENTAL)
 	{}
 
 };
@@ -308,18 +325,17 @@ private:
 
 	int loadSFX(const std::string& filename);
 
-	Point limitRange(int range, Point src, Point target);
-	Point targetNeighbor(Point target, int range);
-	Point targetNeighbor(Point target, int range, bool ignore_blocked);
-	void initHazard(int powernum, StatBlock *src_stats, Point target, Hazard *haz);
-	void buff(int power_index, StatBlock *src_stats, Point target);
+	FPoint limitRange(float range, FPoint src, FPoint target);
+	FPoint targetNeighbor(Point target, int range, bool ignore_blocked = false);
+	void initHazard(int powernum, StatBlock *src_stats, FPoint target, Hazard *haz);
+	void buff(int power_index, StatBlock *src_stats, FPoint target);
 	void playSound(int power_index, StatBlock *src_stats);
 
-	bool fixed(int powernum, StatBlock *src_stats, Point target);
-	bool missile(int powernum, StatBlock *src_stats, Point target);
-	bool repeater(int powernum, StatBlock *src_stats, Point target);
-	bool spawn(int powernum, StatBlock *src_stats, Point target);
-	bool transform(int powernum, StatBlock *src_stats, Point target);
+	bool fixed(int powernum, StatBlock *src_stats, FPoint target);
+	bool missile(int powernum, StatBlock *src_stats, FPoint target);
+	bool repeater(int powernum, StatBlock *src_stats, FPoint target);
+	bool spawn(int powernum, StatBlock *src_stats, FPoint target);
+	bool transform(int powernum, StatBlock *src_stats, FPoint target);
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
@@ -330,10 +346,10 @@ public:
 	std::string log_msg;
 
 	void handleNewMap(MapCollision *_collider);
-	bool activate(int power_index, StatBlock *src_stats, Point target);
+	bool activate(int power_index, StatBlock *src_stats, FPoint target);
 	const Power &getPower(unsigned id) 	{assert(id < powers.size()); return powers[id];}
 	bool canUsePower(unsigned id) const;
-	bool hasValidTarget(int power_index, StatBlock *src_stats, Point target);
+	bool hasValidTarget(int power_index, StatBlock *src_stats, FPoint target);
 	bool spawn(const std::string& enemy_type, Point target);
 	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);

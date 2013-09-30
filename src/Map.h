@@ -55,9 +55,14 @@ class Map_NPC {
 public:
 	std::string id;
 	Point pos;
+	std::vector<std::string> requires_status;
+	std::vector<std::string> requires_not_status;
+
 	Map_NPC()
 	: id("")
 	, pos()
+	, requires_status()
+	, requires_not_status()
 	{}
 };
 
@@ -112,20 +117,20 @@ public:
 class Map_Enemy {
 public:
 	std::string type;
-	Point pos;
+	FPoint pos;
 	int direction;
-	std::queue<Point> waypoints;
+	std::queue<FPoint> waypoints;
 	bool wander;
 	SDL_Rect wander_area;
 	bool hero_ally;
 	int summon_power_index;
 	StatBlock* summoner;
 
-	Map_Enemy(std::string _type="", Point _pos=Point())
+	Map_Enemy(std::string _type="", FPoint _pos=FPoint())
 	 : type(_type)
 	 , pos(_pos)
 	 , direction(rand() % 8)
-	 , waypoints(std::queue<Point>())
+	 , waypoints(std::queue<FPoint>())
 	 , wander(false)
 	 , hero_ally(false)
 	 , summon_power_index(0)
@@ -179,7 +184,7 @@ public:
 	std::string title;
 	short w;
 	short h;
-	Point spawn;
+	FPoint spawn;
 	int spawn_dir;
 
 };

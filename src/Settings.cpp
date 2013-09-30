@@ -89,10 +89,8 @@ string FILE_SETTINGS	= "settings.txt";
 string FILE_KEYBINDINGS = "keybindings.txt";
 
 // Tile Settings
-unsigned short UNITS_PER_TILE = 64;
-unsigned short TILE_SHIFT = 6; // for fast bitshift divides
-unsigned short UNITS_PER_PIXEL_X = 2;
-unsigned short UNITS_PER_PIXEL_Y = 4;
+float UNITS_PER_PIXEL_X = 2;
+float UNITS_PER_PIXEL_Y = 4;
 unsigned short TILE_W = 64;
 unsigned short TILE_H = 32;
 unsigned short TILE_W_HALF = TILE_W/2;
@@ -144,7 +142,7 @@ int JOY_DEADZONE;
 std::string LANGUAGE = "en";
 
 // Autopickup Settings
-unsigned short AUTOPICKUP_RANGE = 0;
+float AUTOPICKUP_RANGE = 0;
 bool AUTOPICKUP_CURRENCY = false;
 
 // Combat calculation caps (percentage)
@@ -400,10 +398,7 @@ void loadTilesetSettings() {
 	// load tileset settings from engine config
 	if (infile.open("engine/tileset_config.txt", true, true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
 		while (infile.next()) {
-			if (infile.key == "units_per_tile") {
-				UNITS_PER_TILE = toInt(infile.val);
-			}
-			else if (infile.key == "tile_size") {
+			if (infile.key == "tile_size") {
 				TILE_W = toInt(infile.nextValue());
 				TILE_H = toInt(infile.nextValue());
 				TILE_W_HALF = TILE_W /2;
@@ -420,16 +415,15 @@ void loadTilesetSettings() {
 	}
 
 	// Init automatically calculated parameters
-	TILE_SHIFT = log2(UNITS_PER_TILE);
 	VIEW_W_HALF = VIEW_W / 2;
 	VIEW_H_HALF = VIEW_H / 2;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		UNITS_PER_PIXEL_X = (UNITS_PER_TILE * 2) / TILE_W;
-		UNITS_PER_PIXEL_Y = (UNITS_PER_TILE * 2) / TILE_H;
+		UNITS_PER_PIXEL_X = (2.0) / TILE_W;
+		UNITS_PER_PIXEL_Y = (2.0) / TILE_H;
 	}
 	else { // TILESET_ORTHOGONAL
-		UNITS_PER_PIXEL_X = UNITS_PER_TILE / TILE_W;
-		UNITS_PER_PIXEL_Y = UNITS_PER_TILE / TILE_H;
+		UNITS_PER_PIXEL_X = 1.0 / TILE_W;
+		UNITS_PER_PIXEL_Y = 1.0 / TILE_H;
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
 		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);

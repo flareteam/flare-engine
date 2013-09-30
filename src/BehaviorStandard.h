@@ -41,15 +41,15 @@ private:
 
 protected:
     //variables for patfinding
-	vector<Point> path;
-	Point prev_target;
+	vector<FPoint> path;
+	FPoint prev_target;
 	bool collided;
 	bool path_found;
 	int chance_calc_path;
 
-	int hero_dist;
-	int target_dist;
-	Point pursue_pos;
+	float hero_dist;
+	float target_dist;
+	FPoint pursue_pos;
 	// targeting vars
 	bool los;
 	//when fleeing, the enemy moves away from the pursue_pos

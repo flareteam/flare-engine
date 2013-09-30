@@ -25,23 +25,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-
-int round(float f) {
-	return (int)(f + 0.5);
-}
-
-Point round(FPoint fp) {
+Point floor(FPoint fp) {
 	Point result;
-	result.x = round(fp.x);
-	result.y = round(fp.y);
+	result.x = floor(fp.x);
+	result.y = floor(fp.y);
 	return result;
 }
 
-Point screen_to_map(int x, int y, int camx, int camy) {
-	Point r;
+FPoint screen_to_map(int x, int y, float camx, float camy) {
+	FPoint r;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		int scrx = (x - VIEW_W_HALF) /2;
-		int scry = (y - VIEW_H_HALF) /2;
+		float scrx = (x - VIEW_W_HALF) /2;
+		float scry = (y - VIEW_H_HALF) /2;
 
 		r.x = (UNITS_PER_PIXEL_X * scrx) + (UNITS_PER_PIXEL_Y * scry) + camx;
 		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
@@ -57,13 +52,13 @@ Point screen_to_map(int x, int y, int camx, int camy) {
  * Returns a point (in map units) of a given (x,y) tupel on the screen
  * when the camera is at a given position.
  */
-Point map_to_screen(int x, int y, int camx, int camy) {
+Point map_to_screen(float x, float y, float camx, float camy) {
 	Point r;
 
 	// adjust to the center of the viewport
 	// we do this calculation first to avoid negative integer division
-	int adjust_x = VIEW_W_HALF * UNITS_PER_PIXEL_X;
-	int adjust_y = VIEW_H_HALF * UNITS_PER_PIXEL_Y;
+	float adjust_x = (VIEW_W_HALF + 0.5) * UNITS_PER_PIXEL_X;
+	float adjust_y = (VIEW_H_HALF + 0.5) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		r.x = (x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X;
@@ -86,28 +81,30 @@ Point center_tile(Point p) {
 	return p;
 }
 
-Point collision_to_map(Point p) {
-	p.x = (p.x << TILE_SHIFT) + UNITS_PER_TILE/2;
-	p.y = (p.y << TILE_SHIFT) + UNITS_PER_TILE/2;
-	return p;
+FPoint collision_to_map(Point p) {
+	FPoint ret;
+	ret.x = p.x + 0.5;
+	ret.y = p.y + 0.5;
+	return ret;
 }
 
-Point map_to_collision(Point p) {
-	p.x = p.x >> TILE_SHIFT;
-	p.y = p.y >> TILE_SHIFT;
-	return p;
+Point map_to_collision(FPoint p) {
+	Point ret;
+	ret.x = floor(p.x);
+	ret.y = floor(p.y);
+	return ret;
 }
 
 /**
  * Apply parameter distance to position and direction
  */
-FPoint calcVector(Point pos, int direction, int dist) {
+FPoint calcVector(FPoint pos, int direction, float dist) {
 	FPoint p;
-	p.x = (float)(pos.x);
-	p.y = (float)(pos.y);
+	p.x = pos.x;
+	p.y = pos.y;
 
-	float dist_straight = (float)dist;
-	float dist_diag = ((float)dist) * (float)(0.7071); //  1/sqrt(2)
+	float dist_straight = dist;
+	float dist_diag = dist * 0.7071f; //  1/sqrt(2)
 
 	switch (direction) {
 		case 0:
@@ -142,17 +139,14 @@ FPoint calcVector(Point pos, int direction, int dist) {
 	return p;
 }
 
-float calcDist(Point p1, Point p2) {
-	int x = p2.x - p1.x;
-	int y = p2.y - p1.y;
-	float step1 = x*x + y*y;
-	return sqrt(step1);
+float calcDist(FPoint p1, FPoint p2) {
+	return sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
 }
 
 /**
  * is target within the area defined by center and radius?
  */
-bool isWithin(Point center, int radius, Point target) {
+bool isWithin(FPoint center, float radius, FPoint target) {
 	return (calcDist(center, target) < radius);
 }
 
@@ -464,50 +458,30 @@ SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height) {
 	return _ret;
 }
 
-int calcDirection(const Point &src, const Point &dst) {
+int calcDirection(const FPoint &src, const FPoint &dst) {
 	return calcDirection(src.x, src.y, dst.x, dst.y);
 }
 
-int calcDirection(int x0, int y0, int x1, int y1) {
-	// TODO: use calcTheta instead and check for the areas between -PI and PI
-
-	// inverting Y to convert map coordinates to standard cartesian coordinates
-	int dx = x1 - x0;
-	int dy = y0 - y1;
-
-	// avoid div by zero
-	if (dx == 0) {
-		if (dy > 0) return 3;
-		else return 7;
-	}
-
-	float slope = ((float)dy)/((float)dx);
-	if (0.5 <= slope && slope <= 2.0) {
-		if (dy > 0) return 4;
-		else return 0;
-	}
-	if (-0.5 <= slope && slope <= 0.5) {
-		if (dx > 0) return 5;
-		else return 1;
-	}
-	if (-2.0 <= slope && slope <= -0.5) {
-		if (dx > 0) return 6;
-		else return 2;
-	}
-	// now scope must be (2.0 <= slope || -2.0 >= slope)
-	if (dy > 0) return 3;
-	else return 7;
+int calcDirection(float x0, float y0, float x1, float y1) {
+	const float pi = 3.1415926535898f;
+	float theta = calcTheta(x0, y0, x1, y1);
+	float val = theta / (pi/4);
+	int dir = ((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4;
+	dir = (dir + 1) % 8;
+	if (dir >= 0 && dir < 8)
+		return dir;
+	else
+		return 0;
 }
 
 // convert cartesian to polar theta where (x1,x2) is the origin
-float calcTheta(int x1, int y1, int x2, int y2) {
-
-	float pi = 3.1415926535898f;
+float calcTheta(float x1, float y1, float x2, float y2) {
+	const float pi = 3.1415926535898f;
 
 	// calculate base angle
 	float dx = (float)x2 - (float)x1;
 	float dy = (float)y2 - (float)y1;
-	int exact_dx = x2 - x1;
+	float exact_dx = x2 - x1;
 	float theta;
 
 	// convert cartesian to polar coordinates

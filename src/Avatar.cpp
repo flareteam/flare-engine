@@ -72,8 +72,6 @@ Avatar::Avatar()
 
 void Avatar::init() {
 
-	stats.hero_cooldown.resize(POWER_COUNT);
-
 	// name, base, look are set by GameStateNew so don't reset it here
 
 	// other init
@@ -99,8 +97,7 @@ void Avatar::init() {
 	stats.mental_additional = 0;
 	stats.offense_additional = 0;
 	stats.defense_additional = 0;
-	stats.speed = 14;
-	stats.dspeed = 10;
+	stats.speed = 0.2f;
 	stats.recalc();
 
 	log_msg = "";
@@ -118,7 +115,7 @@ void Avatar::init() {
 	last_transform = "";
 	untransform_power = getUntransformPower();
 
-	stats.hero_cooldown = vector<int>(POWER_COUNT, 0);
+	hero_cooldown = vector<int>(powers->powers.size(), 0);
 
 	for (int i=0; i<4; i++) {
 		sound_steps[i] = 0;
@@ -269,7 +266,7 @@ bool Avatar::pressing_move() {
 void Avatar::set_direction() {
 	// handle direction changes
 	if (MOUSE_MOVE) {
-		Point target = screen_to_map(inpt->mouse.x, inpt->mouse.y, stats.pos.x, stats.pos.y);
+		FPoint target = screen_to_map(inpt->mouse.x, inpt->mouse.y, stats.pos.x, stats.pos.y);
 		// if no line of movement to target, use pathfinder
 		if (!mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, target.x, target.y, stats.movement_type)) {
 
@@ -344,7 +341,7 @@ void Avatar::set_direction() {
 void Avatar::handlePower(int actionbar_power) {
 	if (actionbar_power != 0 && stats.cooldown_ticks == 0) {
 		const Power &power = powers->getPower(actionbar_power);
-		Point target;
+		FPoint target;
 		if (MOUSE_AIM) {
 			if (power.aim_assist)
 				target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, stats.pos.x, stats.pos.y);
@@ -353,8 +350,8 @@ void Avatar::handlePower(int actionbar_power) {
 		}
 		else {
 			FPoint ftarget = calcVector(stats.pos, stats.direction, stats.melee_range);
-			target.x = static_cast<int>(ftarget.x);
-			target.y = static_cast<int>(ftarget.y);
+			target.x = ftarget.x;
+			target.y = ftarget.y;
 		}
 
 		// check requirements
@@ -364,12 +361,12 @@ void Avatar::handlePower(int actionbar_power) {
 			return;
 		if (power.requires_empty_target && !mapr->collider.is_empty(target.x, target.y))
 			return;
-		if (stats.hero_cooldown[actionbar_power] > 0)
+		if (hero_cooldown[actionbar_power] > 0)
 			return;
 		if (!powers->hasValidTarget(actionbar_power,&stats,target))
 			return;
 
-		stats.hero_cooldown[actionbar_power] = power.cooldown; //set the cooldown timer
+		hero_cooldown[actionbar_power] = power.cooldown; //set the cooldown timer
 		current_power = actionbar_power;
 		act_target = target;
 
@@ -451,8 +448,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		// cam is focused at player position
 		mapr->cam.x = stats.pos.x;
 		mapr->cam.y = stats.pos.y;
-		mapr->hero_tile.x = stats.pos.x / 32;
-		mapr->hero_tile.y = stats.pos.y / 32;
 
 		mapr->collider.block(stats.pos.x, stats.pos.y, false);
 		return;
@@ -727,16 +722,14 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	// cam is focused at player position
 	mapr->cam.x = stats.pos.x;
 	mapr->cam.y = stats.pos.y;
-	mapr->hero_tile.x = stats.pos.x / 32;
-	mapr->hero_tile.y = stats.pos.y / 32;
 
 	// check for map events
 	mapr->checkEvents(stats.pos);
 
 	// decrement all cooldowns
-	for (int i = 0; i < POWER_COUNT; i++) {
-		stats.hero_cooldown[i]--;
-		if (stats.hero_cooldown[i] < 0) stats.hero_cooldown[i] = 0;
+	for (unsigned i = 0; i < hero_cooldown.size(); i++) {
+		hero_cooldown[i]--;
+		if (hero_cooldown[i] < 0) hero_cooldown[i] = 0;
 	}
 
 	// make the current square solid
@@ -763,7 +756,6 @@ void Avatar::transform() {
 
 	// replace some hero stats
 	stats.speed = charmed_stats->speed;
-	stats.dspeed = charmed_stats->dspeed;
 	stats.flying = charmed_stats->flying;
 	stats.humanoid = charmed_stats->humanoid;
 	stats.animations = charmed_stats->animations;
@@ -824,7 +816,6 @@ void Avatar::untransform() {
 
 	// revert some hero stats to last saved
 	stats.speed = hero_stats->speed;
-	stats.dspeed = hero_stats->dspeed;
 	stats.flying = hero_stats->flying;
 	stats.humanoid = hero_stats->humanoid;
 	stats.animations = hero_stats->animations;

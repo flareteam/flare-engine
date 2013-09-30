@@ -83,12 +83,14 @@ private:
 	std::string last_transform;
 	int getUntransformPower();
 
-    //variables for patfinding
-	vector<Point> path;
+	//variables for patfinding
+	vector<FPoint> path;
 	int path_frames_elapsed;
-	Point prev_target;
+	FPoint prev_target;
 	bool collided;
 	bool path_found;
+
+	void handlePower(int actionbar_power);
 
 public:
 	Avatar();
@@ -125,15 +127,13 @@ public:
 	// vars
 	Hazard *haz;
 	int current_power;
-	Point act_target;
+	FPoint act_target;
 	bool attacking;
 	bool drag_walking;
 	bool newLevelNotification;
 	bool respawn;
 	bool close_menus;
-
-private:
-	void handlePower(int actionbar_power);
+	std::vector<int> hero_cooldown;
 };
 
 #endif

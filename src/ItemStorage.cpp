@@ -209,9 +209,16 @@ void ItemStorage::sort() {
 	qsort(storage, slot_number, sizeof(ItemStack), compareItemStack);
 }
 
-bool ItemStorage::full(int item) {
+bool ItemStorage::full(ItemStack stack) {
 	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item == item && storage[i].quantity < items->items[item].max_quantity) {
+		if (stack.quantity < 0) {
+			return false;
+		}
+		if (storage[i].item == stack.item && storage[i].quantity < items->items[stack.item].max_quantity) {
+			if (stack.quantity + storage[i].quantity >= items->items[stack.item].max_quantity) {
+				stack.quantity -= storage[i].quantity;
+				continue;
+			}
 			return false;
 		}
 		if (storage[i].item == 0) {
@@ -219,6 +226,13 @@ bool ItemStorage::full(int item) {
 		}
 	}
 	return true;
+}
+
+bool ItemStorage::full(int item) {
+	ItemStack stack;
+	stack.item = item;
+	stack.quantity = 1;
+	return full(stack);
 }
 
 /**

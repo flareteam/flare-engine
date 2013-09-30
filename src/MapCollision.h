@@ -55,34 +55,43 @@ typedef enum {
 	MOVEMENT_INTANGIBLE = 2 // can move through BLOCKS_ALL (e.g. walls)
 } MOVEMENTTYPE;
 
+// this value is used to determine the greatest possible position within a tile before transitioning to the next tile
+// so if an entity has a position of (1-MIN_TILE_GAP, 0) and moves to the east, they will move to (1,0)
+const float MIN_TILE_GAP = 0.001;
+
 class MapCollision {
 private:
 
 	bool line_check(int x1, int y1, int x2, int y2, int check_type, MOVEMENTTYPE movement_type);
-	bool is_sidestepable(int tile_x, int tile_y, int offx2, int offy2);
+
+	bool small_step_forced_slide_along_grid(
+			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+	bool small_step_forced_slide(
+			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+	bool small_step(
+			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+
+	bool is_valid_tile(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const;
 
 public:
 	MapCollision();
 	~MapCollision();
 
 	void setmap(const unsigned short _colmap[][256], unsigned short w, unsigned short h);
-	bool move(int &x, int &y, int step_x, int step_y, int dist, MOVEMENTTYPE movement_type, bool is_hero);
+	bool move(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 
-	bool is_outside_map(int tile_x, int tile_y) const;
-	bool is_empty(int x, int y) const;
-	bool is_wall(int x, int y) const;
+	bool is_outside_map(float tile_x, float tile_y) const;
+	bool is_empty(float x, float y) const;
+	bool is_wall(float x, float y) const;
 
-	bool is_valid_tile(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const;
-	bool is_valid_position(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const;
-
-	int is_one_step_around(int x, int y, int xidr, int ydir);
+	bool is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const;
 
 	bool line_of_sight(int x1, int y1, int x2, int y2);
 	bool line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE movement_type);
 
 	bool is_facing(int x1, int y1, char direction, int x2, int y2);
 
-	bool compute_path(Point start, Point end, std::vector<Point> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
+	bool compute_path(FPoint start, FPoint end, std::vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
 
 	void block(int map_x, int map_y, bool is_ally);
 	void unblock(int map_x, int map_y);

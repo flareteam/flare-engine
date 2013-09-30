@@ -76,10 +76,18 @@ void NPCManager::handleNewMap() {
 		mn = mapr->npcs.front();
 		mapr->npcs.pop();
 
+		for (unsigned i = 0; i < mn.requires_status.size(); ++i)
+			if (!camp->checkStatus(mn.requires_status[i]))
+				continue;
+
+		for (unsigned i = 0; i < mn.requires_not_status.size(); ++i)
+			if (camp->checkStatus(mn.requires_not_status[i]))
+				continue;
+
 		NPC *npc = new NPC();
 		npc->load(mn.id, stats->level);
-		npc->pos.x = mn.pos.x;
-		npc->pos.y = mn.pos.y;
+		npc->pos.x = mn.pos.x + 0.5;
+		npc->pos.y = mn.pos.y + 0.5;
 
 		npc->stock.sort();
 		npcs.push_back(npc);
@@ -100,7 +108,7 @@ int NPCManager::getID(std::string npcName) {
 	return -1;
 }
 
-int NPCManager::checkNPCClick(Point mouse, Point cam) {
+int NPCManager::checkNPCClick(Point mouse, FPoint cam) {
 	Point p;
 	SDL_Rect r;
 	for (unsigned i=0; i<npcs.size(); i++) {
@@ -120,12 +128,12 @@ int NPCManager::checkNPCClick(Point mouse, Point cam) {
 	return -1;
 }
 
-int NPCManager::getNearestNPC(Point pos) {
+int NPCManager::getNearestNPC(FPoint pos) {
 	int nearest = -1;
-	int best_distance = std::numeric_limits<int>::max();
+	float best_distance = std::numeric_limits<int>::max();
 
 	for (unsigned i=0; i<npcs.size(); i++) {
-		int distance = (int)calcDist(pos, npcs[i]->pos);
+		float distance = calcDist(pos, npcs[i]->pos);
 		if (distance < best_distance) {
 			best_distance = distance;
 			nearest = i;
@@ -138,7 +146,7 @@ int NPCManager::getNearestNPC(Point pos) {
 /**
  * On mouseover, display NPC's name
  */
-void NPCManager::renderTooltips(Point cam, Point mouse) {
+void NPCManager::renderTooltips(FPoint cam, Point mouse) {
 	Point p;
 	SDL_Rect r;
 

@@ -34,6 +34,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <math.h>
 
+#ifdef _MSC_VER
+#define M_SQRT2 sqrt(2.0)
+#endif
+
+const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
+const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
+const float speedMultiplyer[8] = { 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0};
+
 using namespace std;
 
 Entity::Entity()
@@ -69,46 +77,16 @@ Entity::Entity(const Entity &e)
  */
 bool Entity::move() {
 
-	if (stats.effects.forced_move) {
-		return mapr->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, 1, stats.movement_type, stats.hero);
-	}
+	if (stats.effects.forced_move)
+		return mapr->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, stats.movement_type, stats.hero);
 
 	if (stats.effects.speed == 0) return false;
 
-	int speed_diagonal = stats.dspeed;
-	int speed_straight = stats.speed;
+	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
+	float dx = speed * directionDeltaX[stats.direction];
+	float dy = speed * directionDeltaY[stats.direction];
 
-	speed_diagonal = (speed_diagonal * stats.effects.speed) / 100;
-	speed_straight = (speed_straight * stats.effects.speed) / 100;
-
-	bool full_move = false;
-
-	switch (stats.direction) {
-		case 0:
-			full_move = mapr->collider.move(stats.pos.x, stats.pos.y, -1, 1, speed_diagonal, stats.movement_type, stats.hero);
-			break;
-		case 1:
-			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, -1, 0, speed_straight, stats.movement_type, stats.hero);
-			break;
-		case 2:
-			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, -1, -1, speed_diagonal, stats.movement_type, stats.hero);
-			break;
-		case 3:
-			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 0, -1, speed_straight, stats.movement_type, stats.hero);
-			break;
-		case 4:
-			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 1, -1, speed_diagonal, stats.movement_type, stats.hero);
-			break;
-		case 5:
-			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 1, 0, speed_straight, stats.movement_type, stats.hero);
-			break;
-		case 6:
-			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 1, 1, speed_diagonal, stats.movement_type, stats.hero);
-			break;
-		case 7:
-			full_move =  mapr->collider.move(stats.pos.x, stats.pos.y, 0, 1, speed_straight, stats.movement_type, stats.hero);
-			break;
-	}
+	bool full_move = mapr->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, stats.hero);
 
 	return full_move;
 }
@@ -288,8 +266,8 @@ bool Entity::takeHit(const Hazard &h) {
 		if (!stats.effects.immunity) {
 			if (stats.effects.forced_move) {
 				float theta = calcTheta(h.src_stats->pos.x, h.src_stats->pos.y, stats.pos.x, stats.pos.y);
-				stats.forced_speed.x = static_cast<int>(ceil(stats.effects.forced_speed * cos(theta)));
-				stats.forced_speed.y = static_cast<int>(ceil(stats.effects.forced_speed * sin(theta)));
+				stats.forced_speed.x = stats.effects.forced_speed * cos(theta);
+				stats.forced_speed.y = stats.effects.forced_speed * sin(theta);
 			}
 			if (h.hp_steal != 0) {
 				int steal_amt = (dmg * h.hp_steal) / 100;

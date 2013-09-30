@@ -84,9 +84,9 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 	e.type = type_id;
 
 	if (e.stats.animations == "")
-		cerr << "Warning: no animation file specified for entity: " << type_id << endl;
+		fprintf(stderr, "Warning: no animation file specified for entity: %s\n", type_id.c_str());
 	if (e.stats.sfx_prefix == "")
-		cerr << "Warning: no sfx_prefix specified for entity: " << type_id << endl;
+		fprintf(stderr, "Warning: no sfx_prefix specified for entity: %s\n", type_id.c_str());
 
 	loadAnimations(&e);
 	loadSounds(e.stats.sfx_prefix);
@@ -136,6 +136,11 @@ void EnemyManager::handleNewMap () {
 	while (!mapr->enemies.empty()) {
 		me = mapr->enemies.front();
 		mapr->enemies.pop();
+
+		if (me.type.empty()) {
+			fprintf(stderr, "Enemy doesn't have type attribute set, skipping\n");
+			continue;
+		}
 
 		Enemy *e = getEnemyPrototype(me.type);
 
@@ -195,8 +200,8 @@ void EnemyManager::handleSpawn() {
 		e->stats.summoned_power_index = espawn.summon_power_index;
 
 		if(espawn.summoner != NULL){
-            e->stats.summoner = espawn.summoner;
-            espawn.summoner->summons.push_back(&(e->stats));
+			e->stats.summoner = espawn.summoner;
+			espawn.summoner->summons.push_back(&(e->stats));
 		}
 
 		e->type = espawn.type;
@@ -210,17 +215,50 @@ void EnemyManager::handleSpawn() {
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation();
 			else
-				cout << "Warning: animations file could not be loaded for " << espawn.type << endl;
+				fprintf(stderr, "Warning: animations file could not be loaded for %s\n", espawn.type.c_str());
 		}
 		else {
-			cout << "Warning: no animation file specified for entity: " << espawn.type << endl;
+			fprintf(stderr, "Warning: no animation file specified for entity: %s\n", espawn.type.c_str());
 		}
 		loadSounds(e->stats.sfx_prefix);
 
+		//Set level
+		if(e->stats.summoned_power_index != 0){
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_FIXED)
+				e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty;
 
-		if(mapr->collider.is_valid_position(espawn.pos.x, espawn.pos.y, e->stats.movement_type, false) || !e->stats.hero_ally) {
-			e->stats.pos.x = espawn.pos.x;
-			e->stats.pos.y = espawn.pos.y;
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_LEVEL){
+				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
+					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
+							* (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+				}
+			}
+
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT){
+				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
+					int stat_val = 0;
+					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_DEFENSE)
+						stat_val = e->stats.summoner->get_defense();
+					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_OFFENSE)
+						stat_val = e->stats.summoner->get_offense();
+					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_MENTAL)
+						stat_val = e->stats.summoner->get_mental();
+					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_PHYSICAL)
+						stat_val = e->stats.summoner->get_physical();
+
+					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
+							* (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+				}
+			}
+
+			if(e->stats.level < 1) e->stats.level = 1;
+
+			e->stats.applyEffects();
+		}
+
+		if (mapr->collider.is_valid_position(espawn.pos.x + 0.5, espawn.pos.y + 0.5, e->stats.movement_type, false) || !e->stats.hero_ally) {
+			e->stats.pos.x = espawn.pos.x + 0.5;
+			e->stats.pos.y = espawn.pos.y + 0.5;
 		}
 		else {
 			e->stats.pos.x = pc->stats.pos.x;
@@ -297,9 +335,9 @@ void EnemyManager::logic() {
 			unsigned pref_id = distance(sfx_prefixes.begin(), found);
 
 			if (pref_id >= sfx_prefixes.size()) {
-				cerr << "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '"
-					 << (*it)->stats.name << "', sfx_prefix: '"
-					 << (*it)->stats.sfx_prefix << "')" << endl;
+				fprintf(stderr, "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '%s', sfx_prefix: '%s')\n",
+						(*it)->stats.name.c_str(),
+						(*it)->stats.sfx_prefix.c_str());
 			}
 			else {
 				if ((*it)->sfx_phys)
@@ -328,7 +366,7 @@ void EnemyManager::logic() {
 	}
 }
 
-Enemy* EnemyManager::enemyFocus(Point mouse, Point cam, bool alive_only) {
+Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 	Point p;
 	SDL_Rect r;
 	for(unsigned int i = 0; i < enemies.size(); i++) {

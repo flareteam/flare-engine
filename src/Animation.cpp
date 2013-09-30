@@ -49,7 +49,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, SDL_Sur
 	, duration()
 	, active_frames() {
 	if (type == NONE)
-		cout << "Warning: animation type " << _type << " is unknown" << endl;
+		fprintf(stderr, "Warning: animation type %s is unknown\n", _type.c_str());
 }
 
 Animation::Animation(const Animation& a)
