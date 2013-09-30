@@ -115,18 +115,11 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 		// now that the fast method of spawning enemies doesn't work, but we
 		// still have enemies to place, do not place them randomly, but at the
 		// first free spot
-		for (int x = g.pos.x; x < g.pos.x + g.area.x; x++) {
-			for (int y = g.pos.y; y < g.pos.y + g.area.y; y++) {
-				if (enemyGroupPlaceEnemy(x, y, g)) {
+		for (int x = g.pos.x; x < g.pos.x + g.area.x && enemies_to_spawn; x++)
+			for (int y = g.pos.y; y < g.pos.y + g.area.y && enemies_to_spawn; y++)
+				if (enemyGroupPlaceEnemy(x, y, g))
 					enemies_to_spawn--;
-					// if we could place all the enemies now, abort fast
-					if (!enemies_to_spawn)
-						break;
-				}
-			}
-			if (!enemies_to_spawn)
-				break;
-		}
+
 	}
 	if (enemies_to_spawn) {
 		fprintf(stderr, "Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)\n",
