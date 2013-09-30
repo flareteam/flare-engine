@@ -50,7 +50,9 @@ public:
 	short requires_physical;
 	short requires_mental;
 	short requires_level;
-	short requires_power;
+
+	std::vector<short> requires_power;
+
 	bool requires_point;
 	bool passive_on;
 	std::vector<std::string> visible_requires_status;
@@ -67,7 +69,7 @@ public:
 		, requires_physical(0)
 		, requires_mental(0)
 		, requires_level(0)
-		, requires_power(0)
+		, requires_power()
 		, requires_point(false)
 		, passive_on(false)
 	{
