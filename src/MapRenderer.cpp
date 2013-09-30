@@ -71,9 +71,9 @@ void MapRenderer::clearQueues() {
 
 bool MapRenderer::enemyGroupPlaceEnemy(int x, int y, Map_Group &g) {
 	if (collider.is_empty(x, y)) {
-		Enemy_Level *enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
-		if (enemy_lev) {
-			Map_Enemy group_member = Map_Enemy(enemy_lev->type, FPoint(x, y));
+		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
+		if (!enemy_lev.type.empty()) {
+			Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
 			collider.block(x, y, false);
 			enemies.push(group_member);
 		}
