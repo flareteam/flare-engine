@@ -149,12 +149,12 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 				power_cell.back().requires_level = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "requires_power") {
-				power_cell.back().requires_power = eatFirstInt(infile.val, ',');
+				power_cell.back().requires_power.push_back(eatFirstInt(infile.val, ','));
 			}
 			else if (infile.key == "visible_requires_status") {
 				power_cell.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
 			}
-			else if (infile.key == "visible_requires_not") {
+			else if (infile.key == "visible_requires_not_status") {
 				power_cell.back().visible_requires_not.push_back(eatFirstString(infile.val, ','));
 			}
 
@@ -243,6 +243,10 @@ short MenuPowers::id_by_powerIndex(short power_index) {
 bool MenuPowers::baseRequirementsMet(int power_index) {
 	int id = id_by_powerIndex(power_index);
 
+	for (unsigned i = 0; i < power_cell[id].requires_power.size(); ++i)
+		if (!requirementsMet(power_cell[id].requires_power[i]))
+			return false;
+
 	if ((stats->physoff() >= power_cell[id].requires_physoff) &&
 			(stats->physdef() >= power_cell[id].requires_physdef) &&
 			(stats->mentoff() >= power_cell[id].requires_mentoff) &&
@@ -251,8 +255,7 @@ bool MenuPowers::baseRequirementsMet(int power_index) {
 			(stats->get_offense() >= power_cell[id].requires_offense) &&
 			(stats->get_physical() >= power_cell[id].requires_physical) &&
 			(stats->get_mental() >= power_cell[id].requires_mental) &&
-			(stats->level >= power_cell[id].requires_level) &&
-			requirementsMet(power_cell[id].requires_power)) return true;
+			(stats->level >= power_cell[id].requires_level)) return true;
 	return false;
 }
 
@@ -581,13 +584,17 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 			}
 
 
-			// Required Power Tooltip
-			if ((power_cell[i].requires_power != 0) && !(requirementsMet(power_cell[i].requires_power))) {
-				tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power].name), color_penalty);
-			}
-			else if ((power_cell[i].requires_power != 0) && (requirementsMet(power_cell[i].requires_power))) {
-				tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power].name));
-			}
+
+            for (unsigned j = 0; j < power_cell[i].requires_power.size(); ++j){
+                // Required Power Tooltip
+                if ((power_cell[i].requires_power[j] != 0) && !(requirementsMet(power_cell[i].requires_power[j]))) {
+                    tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power[j]].name), color_penalty);
+                }
+                else if ((power_cell[i].requires_power[j] != 0) && (requirementsMet(power_cell[i].requires_power[j]))) {
+                    tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power[j]].name));
+                }
+
+            }
 
 			// add mana cost
 			if (powers->powers[power_cell[i].id].requires_mp > 0) {

@@ -29,6 +29,7 @@ public:
 	std::string rarity;
 
 	Enemy_Level() : level(0), rarity("common") {}
+
 };
 
 /**
@@ -48,7 +49,8 @@ public:
 	 * @param minlevel Enemy of the desired level (minimum)
 	 * @param maxlevel Enemy of the desired level (maximum)
 	 *
-	 * @return A random enemy
+	 * @return A random enemy level description if a suitable was found.
+	 *         Null if none was found.
 	 */
 	Enemy_Level getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const;
 

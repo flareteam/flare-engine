@@ -74,6 +74,12 @@ public:
 	std::string getRawLine();
 	std::string getFileName();
 
+	/**
+	 * @brief new_section is set to true whenever a new [section] starts. If opening
+	 * multiple files it is also true whenever a new file is opened. Note: This
+	 * applies to only the second and any subsequent file. The first file doesn't
+	 * set new_section to true for the first line.
+	 */
 	bool new_section;
 	std::string section;
 	std::string key;
