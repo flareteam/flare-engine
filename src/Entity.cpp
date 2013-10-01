@@ -259,7 +259,6 @@ bool Entity::takeHit(const Hazard &h) {
 
 	// after effects
 	if (dmg > 0) {
-		int steal_amt = 0;
 
 		// damage always breaks stun
 		stats.effects.removeEffectType("stun");
@@ -276,19 +275,13 @@ bool Entity::takeHit(const Hazard &h) {
 				stats.forced_speed.y = stats.effects.forced_speed * sin(theta);
 			}
 			if (h.hp_steal != 0) {
-				if (stats.hp > 0)
-					steal_amt = (dmg * h.hp_steal) / 100;
-				else
-					steal_amt = (prev_hp * h.hp_steal) / 100;
+				int steal_amt = (min(dmg, prev_hp) * h.hp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 				h.src_stats->hp = min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 			}
 			if (h.mp_steal != 0) {
-				if (stats.hp > 0)
-					steal_amt = (dmg * h.mp_steal) / 100;
-				else
-					steal_amt = (prev_hp * h.mp_steal) / 100;
+				int steal_amt = (min(dmg, prev_hp) * h.mp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 				h.src_stats->mp = min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
