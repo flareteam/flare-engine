@@ -251,32 +251,44 @@ bool Entity::takeHit(const Hazard &h) {
 			combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_GIVEDMG);
 	}
 
+	// temporarily save the current HP for calculating HP/MP steal on final blow
+	int prev_hp = stats.hp;
+
 	// apply damage
 	stats.takeDamage(dmg);
 
-	// damage always breaks stun
-	if (dmg > 0) stats.effects.removeEffectType("stun");
-
 	// after effects
-	if (stats.hp > 0 && dmg > 0) {
+	if (dmg > 0) {
+		int steal_amt = 0;
 
-		if (h.mod_power > 0) powers->effect(&stats, h.src_stats, h.mod_power,h.source_type);
-		powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
+		// damage always breaks stun
+		stats.effects.removeEffectType("stun");
+
+		if (stats.hp > 0) {
+			if (h.mod_power > 0) powers->effect(&stats, h.src_stats, h.mod_power,h.source_type);
+			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
+		}
 
 		if (!stats.effects.immunity) {
-			if (stats.effects.forced_move) {
+			if (stats.effects.forced_move && stats.hp > 0) {
 				float theta = calcTheta(h.src_stats->pos.x, h.src_stats->pos.y, stats.pos.x, stats.pos.y);
 				stats.forced_speed.x = stats.effects.forced_speed * cos(theta);
 				stats.forced_speed.y = stats.effects.forced_speed * sin(theta);
 			}
 			if (h.hp_steal != 0) {
-				int steal_amt = (dmg * h.hp_steal) / 100;
+				if (stats.hp > 0)
+					steal_amt = (dmg * h.hp_steal) / 100;
+				else
+					steal_amt = (prev_hp * h.hp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 				h.src_stats->hp = min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 			}
 			if (h.mp_steal != 0) {
-				int steal_amt = (dmg * h.mp_steal) / 100;
+				if (stats.hp > 0)
+					steal_amt = (dmg * h.mp_steal) / 100;
+				else
+					steal_amt = (prev_hp * h.mp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 				h.src_stats->mp = min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
