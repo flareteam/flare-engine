@@ -52,6 +52,7 @@ public:
 	short requires_level;
 
 	std::vector<short> requires_power;
+	std::vector<short> replaced_by_power;
 
 	bool requires_point;
 	bool passive_on;
@@ -70,6 +71,7 @@ public:
 		, requires_mental(0)
 		, requires_level(0)
 		, requires_power()
+		, replaced_by_power()
 		, requires_point(false)
 		, passive_on(false)
 	{
@@ -113,6 +115,8 @@ private:
 	short id_by_powerIndex(short power_index);
 
 	bool powerIsVisible(short power_index);
+
+	bool powerIsReplaced(int power_index);
 
 public:
 	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);

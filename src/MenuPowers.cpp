@@ -151,6 +151,9 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 			else if (infile.key == "requires_power") {
 				power_cell.back().requires_power.push_back(eatFirstInt(infile.val, ','));
 			}
+			else if (infile.key == "replaced_by_power") {
+				power_cell.back().replaced_by_power.push_back(eatFirstInt(infile.val, ','));
+			}
 			else if (infile.key == "visible_requires_status") {
 				power_cell.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
 			}
@@ -243,7 +246,7 @@ short MenuPowers::id_by_powerIndex(short power_index) {
 bool MenuPowers::baseRequirementsMet(int power_index) {
 	int id = id_by_powerIndex(power_index);
 
-	for (unsigned i = 0; i < power_cell[id].requires_power.size(); ++i)
+    for (unsigned i = 0; i < power_cell[id].requires_power.size(); ++i)
 		if (!requirementsMet(power_cell[id].requires_power[i]))
 			return false;
 
@@ -318,7 +321,7 @@ int MenuPowers::click(Point mouse) {
 		int active_tab = tabControl->getActiveTab();
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
+				if (requirementsMet(power_cell[i].id) && !powerIsReplaced(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
 		}
@@ -327,7 +330,7 @@ int MenuPowers::click(Point mouse) {
 	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
+				if (requirementsMet(power_cell[i].id) && !powerIsReplaced(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
 		}
@@ -497,6 +500,10 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 		if (isWithin(slots[i]->pos, mouse)) {
 			tip.addText(powers->powers[power_cell[i].id].name);
+
+			if(powerIsReplaced(power_cell[i].id))
+                tip.addText(msg->get("Superseded by another power"), color_penalty);
+
 			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
 			tip.addText(powers->powers[power_cell[i].id].description);
 
@@ -583,8 +590,6 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 				tip.addText(msg->get("Click to Unlock"), color_bonus);
 			}
 
-
-
             for (unsigned j = 0; j < power_cell[i].requires_power.size(); ++j){
                 // Required Power Tooltip
                 if ((power_cell[i].requires_power[j] != 0) && !(requirementsMet(power_cell[i].requires_power[j]))) {
@@ -640,6 +645,9 @@ bool MenuPowers::meetsUsageStats(unsigned powerid) {
 	int id = id_by_powerIndex(powerid);
 	// If we didn't find power in power_menu, than it has no stats requirements
 	if (id == -1) return true;
+
+	if(powerIsReplaced(powerid))
+        return false;
 
 	return stats->physoff() >= power_cell[id].requires_physoff
 		   && stats->physdef() >= power_cell[id].requires_physdef
@@ -705,5 +713,15 @@ bool MenuPowers::powerIsVisible(short power_index) {
 	return true;
 }
 
+bool MenuPowers::powerIsReplaced(int power_index) {
 
+    int id = id_by_powerIndex(power_index);
+
+    //this is included here and not in baseRequirementsMet to avoid infinate recursion between requires_power and replaced_by_power
+	for (unsigned i = 0; i < power_cell[id].replaced_by_power.size(); ++i)
+		if (requirementsMet(power_cell[id].replaced_by_power[i]))
+			return true;
+
+    return false;
+}
 
