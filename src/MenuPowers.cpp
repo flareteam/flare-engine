@@ -717,7 +717,6 @@ bool MenuPowers::powerIsReplaced(int power_index) {
 
     int id = id_by_powerIndex(power_index);
 
-    //this is included here and not in baseRequirementsMet to avoid infinate recursion between requires_power and replaced_by_power
 	for (unsigned i = 0; i < power_cell[id].replaced_by_power.size(); ++i)
 		if (requirementsMet(power_cell[id].replaced_by_power[i]))
 			return true;
