@@ -34,17 +34,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
 #include "TooltipData.h"
+#include "MenuActionBar.h"
 
 #include <climits>
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
+MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar) {
 
 	int id;
 
 	stats = _stats;
 	icons = _icons;
+	action_bar = _action_bar;
 
 	overlay_disabled = NULL;
 
@@ -342,7 +344,6 @@ int MenuPowers::click(Point mouse) {
  * Unlock a power
  */
 bool MenuPowers::unlockClick(Point mouse) {
-
 	// if we have tabCOntrol
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
@@ -352,6 +353,19 @@ bool MenuPowers::unlockClick(Point mouse) {
 					&& power_cell[i].requires_point && power_cell[i].tab == active_tab) {
 				stats->powers_list.push_back(power_cell[i].id);
 				stats->check_title = true;
+
+				//if a power was replaced, check the action bar to see if the replaced power is in there, and swap it
+                for(int j = 0; j < 12; j++){
+                    if(action_bar->hotkeys[j] == 0)
+                        continue;
+                    int id = id_by_powerIndex(action_bar->hotkeys[j]);
+                    for(unsigned int k = 0; k < power_cell[id].replaced_by_power.size(); k++){
+                        if(power_cell[id].replaced_by_power[k] == power_cell[i].id)
+                            action_bar->hotkeys[j] = power_cell[i].id;
+
+                    }
+                }
+
 				return true;
 			}
 		}
@@ -364,6 +378,19 @@ bool MenuPowers::unlockClick(Point mouse) {
 					&& points_left > 0 && power_cell[i].requires_point) {
 				stats->powers_list.push_back(power_cell[i].id);
 				stats->check_title = true;
+
+				//if a power was replaced, check the action bar to see if the replaced power is in there, and swap it
+                for(int j = 0; j < 12; j++){
+                    if(action_bar->hotkeys[j] == 0)
+                        continue;
+                    int id = id_by_powerIndex(action_bar->hotkeys[j]);
+                    for(unsigned int k = 0; k < power_cell[id].replaced_by_power.size(); k++){
+                        if(power_cell[id].replaced_by_power[k] == power_cell[i].id)
+                            action_bar->hotkeys[j] = power_cell[i].id;
+
+                    }
+                }
+
 				return true;
 			}
 		}
