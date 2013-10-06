@@ -1098,13 +1098,7 @@ void GameStateConfig::render () {
 int GameStateConfig::getVideoModes() {
 	video_modes.clear();
 
-	int w,h;
-	if (MIN_VIEW_W != -1) w = MIN_VIEW_W;
-	else w = 640;
-	if (MIN_VIEW_H != -1) h = MIN_VIEW_H;
-	else h = 480;
-
-	/* Set predefined modes */
+	// Set predefined modes
 	const unsigned int cm_count = 5;
 	SDL_Rect common_modes[cm_count];
 	common_modes[0].w = 640;
@@ -1113,39 +1107,54 @@ int GameStateConfig::getVideoModes() {
 	common_modes[1].h = 600;
 	common_modes[2].w = 1024;
 	common_modes[2].h = 768;
-	common_modes[3].w = w;
-	common_modes[3].h = h;
+	common_modes[3].w = VIEW_W;
+	common_modes[3].h = VIEW_H;
 	common_modes[4].w = MIN_VIEW_W;
 	common_modes[4].h = MIN_VIEW_H;
 
-	/* Get available fullscreen/hardware modes */
+	// Get available fullscreen/hardware modes
 	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
 
-	/* Check if there are any modes available */
+	// Check if there are any modes available
 	if (detect_modes == (SDL_Rect**)0) {
 		fprintf(stderr, "No modes available!\n");
 		return 0;
 	}
 
-	/* Check if our resolution is restricted */
+	// Check if our resolution is restricted
 	if (detect_modes == (SDL_Rect**)-1) {
 		fprintf(stderr, "All resolutions available.\n");
 	}
 
 	for (unsigned i=0; detect_modes[i]; ++i) {
 		video_modes.push_back(*detect_modes[i]);
-		// check previous resolutions for duplicates. If one is found, drop the one we just added
-		for (unsigned j=0; j<video_modes.size()-1; ++j) {
-			if (video_modes[j].w == detect_modes[i]->w && video_modes[j].h == detect_modes[i]->h)
-				video_modes.pop_back();
+		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
+			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
+			video_modes.pop_back();
+		}
+		else {
+			// check previous resolutions for duplicates. If one is found, drop the one we just added
+			for (unsigned j=0; j<video_modes.size()-1; ++j) {
+				if (video_modes[j].w == detect_modes[i]->w && video_modes[j].h == detect_modes[i]->h) {
+					video_modes.pop_back();
+					break;
+				}
+			}
 		}
 	}
 
 	for (unsigned i=0; i<cm_count; ++i) {
 		video_modes.push_back(common_modes[i]);
-		for (unsigned j=0; j<video_modes.size()-1; ++j) {
-			if (video_modes[j].w == common_modes[i].w && video_modes[j].h == common_modes[i].h)
-				video_modes.pop_back();
+		if (common_modes[i].w < MIN_VIEW_W || common_modes[i].h < MIN_VIEW_H) {
+			video_modes.pop_back();
+		}
+		else {
+			for (unsigned j=0; j<video_modes.size()-1; ++j) {
+				if (video_modes[j].w == common_modes[i].w && video_modes[j].h == common_modes[i].h) {
+					video_modes.pop_back();
+					break;
+				}
+			}
 		}
 	}
 
