@@ -43,9 +43,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
+bool rescompare(const SDL_Rect &r1, const SDL_Rect &r2) {
+	if (r1.w == r2.w) return r1.h > r2.h;
+	return r1.w > r2.w;
+}
+
 GameStateConfig::GameStateConfig ()
 	: GameState()
-	, video_modes(NULL)
 	, child_widget()
 	, ok_button(NULL)
 	, defaults_button(NULL)
@@ -1092,14 +1096,10 @@ void GameStateConfig::render () {
 }
 
 int GameStateConfig::getVideoModes() {
-	int w,h;
-	if (MIN_VIEW_W != -1) w = MIN_VIEW_W;
-	else w = 640;
-	if (MIN_VIEW_H != -1) h = MIN_VIEW_H;
-	else h = 480;
+	video_modes.clear();
 
-	/* Set predefined modes */
-	const unsigned int cm_count = 4;
+	// Set predefined modes
+	const unsigned int cm_count = 5;
 	SDL_Rect common_modes[cm_count];
 	common_modes[0].w = 640;
 	common_modes[0].h = 480;
@@ -1107,92 +1107,60 @@ int GameStateConfig::getVideoModes() {
 	common_modes[1].h = 600;
 	common_modes[2].w = 1024;
 	common_modes[2].h = 768;
-	common_modes[3].w = w;
-	common_modes[3].h = h;
+	common_modes[3].w = VIEW_W;
+	common_modes[3].h = VIEW_H;
+	common_modes[4].w = MIN_VIEW_W;
+	common_modes[4].h = MIN_VIEW_H;
 
-	int modes = 0;
-
-	/* Get available fullscreen/hardware modes */
+	// Get available fullscreen/hardware modes
 	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
 
-	/* Check if there are any modes available */
+	// Check if there are any modes available
 	if (detect_modes == (SDL_Rect**)0) {
 		fprintf(stderr, "No modes available!\n");
 		return 0;
 	}
 
-	/* Check if our resolution is restricted */
+	// Check if our resolution is restricted
 	if (detect_modes == (SDL_Rect**)-1) {
 		fprintf(stderr, "All resolutions available.\n");
 	}
 
-	/* Determine the number of valid modes */
-	for (unsigned int i=0; detect_modes[i]; ++i) {
-		if (detect_modes[i]->w >= w && detect_modes[i]->h >= h) {
-			modes++;
+	for (unsigned i=0; detect_modes[i]; ++i) {
+		video_modes.push_back(*detect_modes[i]);
+		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
+			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
+			video_modes.pop_back();
 		}
-	}
-	for (unsigned int j=0; j<cm_count; ++j) {
-		for (unsigned int i=0; detect_modes[i]; i++) {
-			if(common_modes[j].w != 0) {
-				if (detect_modes[i]->w >= w && detect_modes[i]->h >= h) {
-					if ((common_modes[j].w == detect_modes[i]->w && common_modes[j].h == detect_modes[i]->h) || (common_modes[j].w*common_modes[j].h < w*h)) {
-						common_modes[j].w = 0;
-						break;
-					}
+		else {
+			// check previous resolutions for duplicates. If one is found, drop the one we just added
+			for (unsigned j=0; j<video_modes.size()-1; ++j) {
+				if (video_modes[j].w == detect_modes[i]->w && video_modes[j].h == detect_modes[i]->h) {
+					video_modes.pop_back();
+					break;
 				}
 			}
 		}
-		if (common_modes[j].w != 0) {
-			modes++;
-		}
 	}
 
-	if (video_modes)
-		free(video_modes);
-	/* Combine the detected modes and the common modes */
-	video_modes = (SDL_Rect*)calloc(modes,sizeof(SDL_Rect));
-	int k = 0;
-
-	for (unsigned int i=0; detect_modes[i]; ++i) {
-		if (detect_modes[i]->w >= w && detect_modes[i]->h >= h) {
-			video_modes[k].w = detect_modes[i]->w;
-			video_modes[k].h = detect_modes[i]->h;
-			k++;
+	for (unsigned i=0; i<cm_count; ++i) {
+		video_modes.push_back(common_modes[i]);
+		if (common_modes[i].w < MIN_VIEW_W || common_modes[i].h < MIN_VIEW_H) {
+			video_modes.pop_back();
 		}
-	}
-	for (unsigned int j=0; j<cm_count; ++j) {
-		for (unsigned int i=0; detect_modes[i]; i++) {
-			if(common_modes[j].w != 0) {
-				if (detect_modes[i]->w >= w && detect_modes[i]->h >= h) {
-					if ((common_modes[j].w == detect_modes[i]->w && common_modes[j].h == detect_modes[i]->h) || (common_modes[j].w*common_modes[j].h < w*h)) {
-						common_modes[j].w = 0;
-						break;
-					}
+		else {
+			for (unsigned j=0; j<video_modes.size()-1; ++j) {
+				if (video_modes[j].w == common_modes[i].w && video_modes[j].h == common_modes[i].h) {
+					video_modes.pop_back();
+					break;
 				}
 			}
 		}
-		if (common_modes[j].w != 0) {
-			video_modes[k].w = common_modes[j].w;
-			video_modes[k].h = common_modes[j].h;
-			k++;
-		}
 	}
 
-	/* Sort the new list */
-	for (int x=0; x<modes; x++) {
-		int index_of_min = x;
-		for (int y=x; y<modes; y++) {
-			if (video_modes[index_of_min].w*video_modes[index_of_min].h < video_modes[y].w*video_modes[y].h) {
-				index_of_min = y;
-			}
-		}
-		SDL_Rect temp = video_modes[x];
-		video_modes[x] = video_modes[index_of_min];
-		video_modes[index_of_min] = temp;
-	}
+	std::sort(video_modes.begin(), video_modes.end(), rescompare);
 
-	return modes;
+	return video_modes.size();
 }
 
 bool GameStateConfig::getLanguagesList() {
@@ -1373,8 +1341,6 @@ GameStateConfig::~GameStateConfig() {
 	language_ISO.clear();
 	language_full.clear();
 
-	if (video_modes)
-		free(video_modes);
 }
 
 void GameStateConfig::placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab )
