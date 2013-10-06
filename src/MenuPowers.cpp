@@ -405,14 +405,14 @@ void MenuPowers::logic() {
 			bool unlocked_power = find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 			vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
 			if (it != stats->powers_passive.end()) {
-				if (!baseRequirementsMet(power_cell[i].id) && power_cell[i].passive_on) {
+				if ((!baseRequirementsMet(power_cell[i].id) || powerIsReplaced(power_cell[i].id)) && power_cell[i].passive_on) {
 					stats->powers_passive.erase(it);
 					stats->effects.removeEffectPassive(power_cell[i].id);
 					power_cell[i].passive_on = false;
 					stats->refresh_stats = true;
 				}
 			}
-			else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
+			else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || (unlocked_power  && !powerIsReplaced(power_cell[i].id))) && !power_cell[i].passive_on) {
 				stats->powers_passive.push_back(power_cell[i].id);
 				power_cell[i].passive_on = true;
 				// for passives without special triggers, we need to trigger them here
