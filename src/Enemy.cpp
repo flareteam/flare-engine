@@ -123,6 +123,9 @@ void Enemy::logic() {
 		eb = stats.hero_ally ? new BehaviorStandard(this) : new BehaviorAlly(this);
 		stats.converted = !stats.converted;
 		stats.hero_ally = !stats.hero_ally;
+		if (stats.convert_status != "") {
+            camp->setStatus(stats.convert_status);
+        }
 	}
 
 	return;
