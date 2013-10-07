@@ -438,8 +438,8 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 			renderIsoLayer(screen, nulloffset, layers[i]);
 	}
 	else {
-		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender * TILE_W
-				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender * TILE_H
+		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender
+				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender
 				|| repaint_background) {
 
 			if (!backgroundsurface)
