@@ -151,6 +151,7 @@ StatBlock::StatBlock()
 	, currency(0)
 	, death_penalty(false)
 	, defeat_status("")			// enemy only
+	, convert_status("")		// enemy only
 	, quest_loot_requires("")	// enemy only
 	, quest_loot_not("")		// enemy only
 	, quest_loot_id(0)			// enemy only
