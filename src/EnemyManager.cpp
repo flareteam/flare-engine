@@ -142,6 +142,21 @@ void EnemyManager::handleNewMap () {
 			continue;
 		}
 
+
+		bool status_reqs_met = true;
+		//if the status requirements arent met, dont load the enemy
+		for(unsigned int i = 0; i < me.requires_status.size(); i++){
+            if (!camp->checkStatus(me.requires_status[i]))
+                status_reqs_met = false;
+		}
+		for(unsigned int i = 0; i < me.requires_not_status.size(); i++){
+            if (camp->checkStatus(me.requires_not_status[i]))
+                status_reqs_met = false;
+		}
+		if(!status_reqs_met)
+            continue;
+
+
 		Enemy *e = getEnemyPrototype(me.type);
 
 		e->stats.waypoints = me.waypoints;

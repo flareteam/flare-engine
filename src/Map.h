@@ -125,6 +125,8 @@ public:
 	bool hero_ally;
 	int summon_power_index;
 	StatBlock* summoner;
+	std::vector<std::string> requires_status;
+	std::vector<std::string> requires_not_status;
 
 	Map_Enemy(std::string _type="", FPoint _pos=FPoint())
 	 : type(_type)
@@ -135,6 +137,8 @@ public:
 	 , hero_ally(false)
 	 , summon_power_index(0)
 	 , summoner(NULL)
+	 , requires_status()
+	 , requires_not_status()
 	{
 		wander_area.x = 0;
 		wander_area.y = 0;

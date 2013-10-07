@@ -195,6 +195,12 @@ void Map::loadEnemy(FileParser &infile) {
 		enemies.back().wander_area.w = toInt(infile.nextValue()) + 0.5;
 		enemies.back().wander_area.h = toInt(infile.nextValue()) + 0.5;
 	}
+	// @ATTR enemy.requires_status|string|Status required for enemy load
+	else if (infile.key == "requires_status")
+        enemies.back().requires_status.push_back(infile.nextValue());
+    // @ATTR enemy.requires_not_status|string|Status required to be missing for enemy load
+	else if (infile.key == "requires_not_status")
+        enemies.back().requires_not_status.push_back(infile.nextValue());
 }
 
 void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
