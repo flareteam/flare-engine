@@ -529,7 +529,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 			tip.addText(powers->powers[power_cell[i].id].name);
 
 			if(powerIsReplaced(power_cell[i].id))
-                tip.addText(msg->get("Superseded by another power"), color_penalty);
+                tip.addText(msg->get("Newer power available"), color_penalty);
 
 			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
 			tip.addText(powers->powers[power_cell[i].id].description);
