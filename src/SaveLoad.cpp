@@ -254,8 +254,8 @@ void GameStatePlay::loadGame() {
 			else if (infile.key == "spawn") {
 				mapr->teleport_mapname = infile.nextValue();
 				if (fileExists(mods->locate("maps/" + mapr->teleport_mapname))) {
-					mapr->teleport_destination.x = toInt(infile.nextValue()) + 0.5;
-					mapr->teleport_destination.y = toInt(infile.nextValue()) + 0.5;
+					mapr->teleport_destination.x = toInt(infile.nextValue()) + 0.5f;
+					mapr->teleport_destination.y = toInt(infile.nextValue()) + 0.5f;
 					mapr->teleportation = true;
 					// prevent spawn.txt from putting us on the starting map
 					mapr->clearEvents();
@@ -290,7 +290,7 @@ void GameStatePlay::loadGame() {
 				pc->stats.transform_type = infile.nextValue();
 				if (pc->stats.transform_type != "") {
 					pc->stats.transform_duration = -1;
-					pc->stats.manual_untransform = toInt(infile.nextValue());
+					pc->stats.manual_untransform = toBool(infile.nextValue());
 				}
 			}
 			else if (infile.key == "powers") {

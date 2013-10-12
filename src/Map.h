@@ -54,7 +54,7 @@ public:
 class Map_NPC {
 public:
 	std::string id;
-	Point pos;
+	FPoint pos;
 	std::vector<std::string> requires_status;
 	std::vector<std::string> requires_not_status;
 

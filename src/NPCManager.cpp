@@ -86,8 +86,8 @@ void NPCManager::handleNewMap() {
 
 		NPC *npc = new NPC();
 		npc->load(mn.id, stats->level);
-		npc->pos.x = mn.pos.x + 0.5;
-		npc->pos.y = mn.pos.y + 0.5;
+		npc->pos.x = mn.pos.x + 0.5f;
+		npc->pos.y = mn.pos.y + 0.5f;
 
 		npc->stock.sort();
 		npcs.push_back(npc);
