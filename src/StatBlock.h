@@ -257,7 +257,6 @@ public:
 	float threat_range;
 	bool passive_attacker;//enemy will not initiate combat unless attacked
 	int hero_stealth;
-	Point last_seen;
 	int turn_delay;
 	int turn_ticks;
 	bool in_combat;

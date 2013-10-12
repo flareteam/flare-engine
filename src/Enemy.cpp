@@ -42,8 +42,6 @@ Enemy::Enemy() : Entity() {
 	stats.turn_ticks = MAX_FRAMES_PER_SEC;
 	//stats.patrol_ticks = 0; //no longer needed due to A*
 	stats.cooldown = 0;
-	stats.last_seen.x = -1;
-	stats.last_seen.y = -1;
 	stats.in_combat = false;
 	stats.join_combat = false;
 

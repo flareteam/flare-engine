@@ -133,7 +133,6 @@ StatBlock::StatBlock()
 	, threat_range(0)  // enemy
 	, passive_attacker(false)//enemy
 	, hero_stealth(0)
-	, last_seen(-1, -1)  // no effects to gameplay?
 	, turn_delay(0)
 	, turn_ticks(0)
 	, in_combat(false)  //enemy only
