@@ -42,8 +42,8 @@ CampaignManager::CampaignManager()
 	, currency(NULL)
 	, hero(NULL)
 	, quest_update(true)
-	, bonus_xp(0.0)
-{}
+	, bonus_xp(0.0) {
+}
 
 void CampaignManager::clearAll() {
 	// clear campaign data

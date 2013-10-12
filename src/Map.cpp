@@ -32,8 +32,7 @@ Map::Map()
 	, w(0)
 	, h(0)
 	, spawn()
-	, spawn_dir(0)
-{
+	, spawn_dir(0) {
 }
 
 

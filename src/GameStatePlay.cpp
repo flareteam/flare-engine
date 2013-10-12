@@ -86,7 +86,7 @@ GameStatePlay::GameStatePlay()
 	hazards = new HazardManager();
 	menu = new MenuManager(&pc->stats);
 	npcs = new NPCManager(&pc->stats);
-    quests = new QuestLog(menu->log);
+	quests = new QuestLog(menu->log);
 	enemyg = new EnemyGroupManager();
 	loot = new LootManager(&pc->stats);
 
@@ -957,7 +957,9 @@ void GameStatePlay::showLoading() {
 	SDL_Flip(screen);
 }
 
-Avatar *GameStatePlay::getAvatar() const { return pc; }
+Avatar *GameStatePlay::getAvatar() const {
+	return pc;
+}
 
 GameStatePlay::~GameStatePlay() {
 	delete quests;

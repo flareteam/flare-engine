@@ -123,7 +123,7 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 	}
 	if (enemies_to_spawn) {
 		fprintf(stderr, "Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)\n",
-		filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn, g.numbermin, g.numbermax);
+				filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn, g.numbermin, g.numbermax);
 	}
 }
 
@@ -452,7 +452,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 			SDL_FillRect(backgroundsurface, 0, 0);
 			Point off(VIEW_W_HALF, VIEW_H_HALF);
 			for (unsigned i = 0; i < index_objectlayer; ++i)
-					renderIsoLayer(backgroundsurface, off, layers[i]);
+				renderIsoLayer(backgroundsurface, off, layers[i]);
 		}
 		Point p = map_to_screen(shakycam.x, shakycam.y , backgroundsurfaceoffset.x, backgroundsurfaceoffset.y);
 		SDL_Rect src;

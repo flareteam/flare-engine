@@ -32,8 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 HazardManager::HazardManager()
-	: last_enemy(NULL)
-{
+	: last_enemy(NULL) {
 }
 
 void HazardManager::logic() {

@@ -207,7 +207,7 @@ void ItemManager::loadItems() {
 				items[id].abs_max = items[id].abs_min;
 		}
 		else if (infile.key == "req") {
-			// @ATTR req|[ [p:m:o:d], amount (integer) ]|Make item require specific stat level ex. req=p,6 will require hero to have level 6 in physical stats 
+			// @ATTR req|[ [p:m:o:d], amount (integer) ]|Make item require specific stat level ex. req=p,6 will require hero to have level 6 in physical stats
 			string s = infile.nextValue();
 			if (s == "p")
 				items[id].req_stat = REQUIRES_PHYS;

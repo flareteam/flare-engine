@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include <typeinfo>
 
-bool isInt(const std::string& s);
 std::string trim(std::string s, const std::string& delimiters = " \f\n\r\t\v");
 std::string trim_left_inplace(std::string s, const std::string& delimiters = " \f\n\r\t\v");
 std::string trim_right_inplace(std::string s, const std::string& delimiters = " \f\n\r\t\v");
