@@ -73,6 +73,7 @@ GameStatePlay::GameStatePlay()
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
+	, nearest_npc(-1)
 	, game_slot(0) {
 	hasMusic = true;
 	// GameEngine scope variables
@@ -285,7 +286,7 @@ void GameStatePlay::checkTeleport() {
 			menu->stash->visible = false;
 			menu->npc->visible = false;
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
-			npc_id = -1;
+			npc_id = nearest_npc = -1;
 
 			// store this as the new respawn point
 			mapr->respawn_map = teleport_mapname;
@@ -598,6 +599,7 @@ void GameStatePlay::checkNPCInteraction() {
 	int npc_click = -1;
 	int max_interact_distance = 4;
 	int interact_distance = max_interact_distance+1;
+	nearest_npc = npcs->getNearestNPC(pc->stats.pos);
 
 	// check for clicking on an NPC
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !NO_MOUSE) {
@@ -605,9 +607,8 @@ void GameStatePlay::checkNPCInteraction() {
 		if (npc_click != -1) npc_id = npc_click;
 	}
 	// if we press the ACCEPT key, find the nearest NPC to interact with
-	else if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		npc_click = npcs->getNearestNPC(pc->stats.pos);
-		if (npc_click != -1) npc_id = npc_click;
+	else if (nearest_npc != -1 && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		npc_id = npc_click = nearest_npc;
 	}
 
 	// check distance to this npc
@@ -927,7 +928,7 @@ void GameStatePlay::render() {
 
 	// mouseover tooltips
 	loot->renderTooltips(mapr->cam);
-	npcs->renderTooltips(mapr->cam, inpt->mouse);
+	npcs->renderTooltips(mapr->cam, inpt->mouse, nearest_npc);
 
 	if (mapr->map_change) {
 		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
