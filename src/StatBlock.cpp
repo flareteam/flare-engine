@@ -180,7 +180,7 @@ bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
 	return a.chance < b.chance;
 }
 
-bool StatBlock::loadCoreStat(FileParser *infile){
+bool StatBlock::loadCoreStat(FileParser *infile) {
 
 	int value = toInt(infile->val, 0);
 	float fvalue = toFloat(infile->val, 0);
@@ -198,12 +198,30 @@ bool StatBlock::loadCoreStat(FileParser *infile){
 	}
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (infile->key == STAT_NAME[i]) {starting[i] = value;return true;}
-			else if (infile->key == STAT_NAME[i] + "_per_level") {per_level[i] = value;return true;}
-			else if (infile->key == STAT_NAME[i] + "_per_physical") {per_physical[i] = value;return true;}
-			else if (infile->key == STAT_NAME[i] + "_per_mental") {per_mental[i] = value;return true;}
-			else if (infile->key == STAT_NAME[i] + "_per_offense") {per_offense[i] = value;return true;}
-			else if (infile->key == STAT_NAME[i] + "_per_defense") {per_defense[i] = value;return true;}
+			if (infile->key == STAT_NAME[i]) {
+				starting[i] = value;
+				return true;
+			}
+			else if (infile->key == STAT_NAME[i] + "_per_level") {
+				per_level[i] = value;
+				return true;
+			}
+			else if (infile->key == STAT_NAME[i] + "_per_physical") {
+				per_physical[i] = value;
+				return true;
+			}
+			else if (infile->key == STAT_NAME[i] + "_per_mental") {
+				per_mental[i] = value;
+				return true;
+			}
+			else if (infile->key == STAT_NAME[i] + "_per_offense") {
+				per_offense[i] = value;
+				return true;
+			}
+			else if (infile->key == STAT_NAME[i] + "_per_defense") {
+				per_defense[i] = value;
+				return true;
+			}
 		}
 
 		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
@@ -577,11 +595,11 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 	else if (power.spawn_type == "untransform" && !transformed) return false;
 	else {
 		return std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
-				&& mp >= power.requires_mp
-				&& (!power.sacrifice == false || hp > power.requires_hp)
-				&& menu_powers->meetsUsageStats(powerid)
-				&& !power.passive
-				&& (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
+			   && mp >= power.requires_mp
+			   && (!power.sacrifice == false || hp > power.requires_hp)
+			   && menu_powers->meetsUsageStats(powerid)
+			   && !power.passive
+			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
 	}
 
 }
@@ -634,7 +652,7 @@ void StatBlock::loadHeroStats() {
 
 void StatBlock::removeFromSummons() {
 
-	if(summoner != NULL){
+	if(summoner != NULL) {
 		vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
 
 		if(parent_ref != summoner->summons.end())
@@ -649,7 +667,7 @@ void StatBlock::removeFromSummons() {
 	summons.clear();
 }
 
-bool StatBlock::summonLimitReached(int power_id) const{
+bool StatBlock::summonLimitReached(int power_id) const {
 
 	//find the limit
 	Power *spawn_power = &powers->powers[power_id];
@@ -661,18 +679,18 @@ bool StatBlock::summonLimitReached(int power_id) const{
 	else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
 		int stat_val = 1;
 		switch(spawn_power->spawn_limit_stat) {
-		case SPAWN_LIMIT_STAT_PHYSICAL:
-			stat_val = get_physical();
-			break;
-		case SPAWN_LIMIT_STAT_MENTAL:
-			stat_val = get_mental();
-			break;
-		case SPAWN_LIMIT_STAT_OFFENSE:
-			stat_val = get_offense();
-			break;
-		case SPAWN_LIMIT_STAT_DEFENSE:
-			stat_val = get_defense();
-			break;
+			case SPAWN_LIMIT_STAT_PHYSICAL:
+				stat_val = get_physical();
+				break;
+			case SPAWN_LIMIT_STAT_MENTAL:
+				stat_val = get_mental();
+				break;
+			case SPAWN_LIMIT_STAT_OFFENSE:
+				stat_val = get_offense();
+				break;
+			case SPAWN_LIMIT_STAT_DEFENSE:
+				stat_val = get_defense();
+				break;
 		}
 		max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
 	}

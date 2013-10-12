@@ -1343,8 +1343,7 @@ GameStateConfig::~GameStateConfig() {
 
 }
 
-void GameStateConfig::placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab )
-{
+void GameStateConfig::placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab ) {
 	cb->pos.x = frame.x + x2;
 	cb->pos.y = frame.y + y2;
 	child_widget.push_back(cb);

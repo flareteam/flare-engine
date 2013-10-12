@@ -59,7 +59,8 @@ bool MapCollision::small_step(float &x, float &y, float step_x, float step_y, MO
 		y += step_y;
 		assert(is_valid_position(x,y,movement_type, is_hero));
 		return true;
-	} else {
+	}
+	else {
 		return false;
 	}
 }
@@ -69,11 +70,13 @@ bool MapCollision::small_step_forced_slide_along_grid(float &x, float &y, float 
 		if (step_x == 0) return true;
 		x += step_x;
 		assert(is_valid_position(x,y,movement_type, is_hero));
-	} else if (is_valid_position(x, y + step_y, movement_type, is_hero)) {
+	}
+	else if (is_valid_position(x, y + step_y, movement_type, is_hero)) {
 		if (step_y == 0) return true;
 		y += step_y;
 		assert(is_valid_position(x,y,movement_type, is_hero));
-	} else {
+	}
+	else {
 		return false;
 	}
 	return true;
@@ -92,16 +95,19 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 				&& dy > 0.5) {
 			y += 1 - dy + epsilon;
 			x += step_x;
-		} else if (is_valid_tile(floor(x), floor(y) - 1, movement_type, is_hero)
-					&& is_valid_tile(floor(x) + sgn(step_x), floor(y) - 1, movement_type, is_hero)
-					&& dy < 0.5) {
+		}
+		else if (is_valid_tile(floor(x), floor(y) - 1, movement_type, is_hero)
+				 && is_valid_tile(floor(x) + sgn(step_x), floor(y) - 1, movement_type, is_hero)
+				 && dy < 0.5) {
 			y -= dy + epsilon;
 			x += step_x;
-		} else {
+		}
+		else {
 			return false;
 		}
 		assert(is_valid_position(x,y,movement_type, is_hero));
-	} else if (step_y != 0) {
+	}
+	else if (step_y != 0) {
 		assert(step_x == 0);
 		float dx = x - floor(x);
 
@@ -110,15 +116,18 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 				&& dx > 0.5) {
 			x += 1 - dx + epsilon;
 			y += step_y;
-		} else if (is_valid_tile(floor(x) - 1, floor(y), movement_type, is_hero)
-				&& is_valid_tile(floor(x) - 1, floor(y) + sgn(step_y), movement_type, is_hero)
-				&& dx < 0.5) {
+		}
+		else if (is_valid_tile(floor(x) - 1, floor(y), movement_type, is_hero)
+				 && is_valid_tile(floor(x) - 1, floor(y) + sgn(step_y), movement_type, is_hero)
+				 && dx < 0.5) {
 			x -= dx + epsilon;
 			y += step_y;
-		} else {
+		}
+		else {
 			return false;
 		}
-	} else {
+	}
+	else {
 		assert(false);
 	}
 	return true;
@@ -143,7 +152,8 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 			step_x = min((float)ceil(x) - x, _step_x);
 			// if we are standing on the edge of a tile (ceil(x) - x == 0), we need to look one tile ahead
 			if (step_x <= MIN_TILE_GAP) step_x = min(1.f, _step_x);
-		} else if (_step_x < 0) {
+		}
+		else if (_step_x < 0) {
 			step_x = max((float)floor(x) - x, _step_x);
 			if (step_x == 0) step_x = max(-1.f, _step_x);
 		}
@@ -152,7 +162,8 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		if (_step_y > 0) {
 			step_y = min((float)ceil(y) - y, _step_y);
 			if (step_y <= MIN_TILE_GAP) step_y = min(1.f, _step_y);
-		} else if (_step_y < 0) {
+		}
+		else if (_step_y < 0) {
 			step_y = max((float)floor(y) - y, _step_y);
 			if (step_y == 0) step_y	= max(-1.f, _step_y);
 		}
@@ -164,7 +175,8 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 			if (force_slide) {
 				if (!small_step_forced_slide_along_grid(x, y, step_x, step_y, movement_type, is_hero))
 					return false;
-			} else {
+			}
+			else {
 				if (!small_step_forced_slide(x, y, step_x, step_y, movement_type, is_hero))
 					return false;
 			}
@@ -217,11 +229,10 @@ bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, MOVEMENTT
 	// outside the map isn't valid
 	if (is_outside_map(tile_x,tile_y)) return false;
 
-	if(is_hero){
-        if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !ENABLE_ALLY_COLLISION) return true;
+	if(is_hero) {
+		if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !ENABLE_ALLY_COLLISION) return true;
 	}
-    else
-        if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES) return false;
+	else if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES) return false;
 
 	// occupied by an entity isn't valid
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES) return false;
@@ -385,20 +396,20 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint>
 	AStarContainer open(map_size.x, limit);
 	AStarCloseContainer close(map_size.x, limit);
 
-    open.add(node);
+	open.add(node);
 
 	while (!open.isEmpty() && (unsigned)close.getSize() < limit) {
 		node = open.get_shortest_f();
 
 		current.x = node->getX();
 		current.y = node->getY();
-        close.add(node);
+		close.add(node);
 		open.remove(node);
 
 		if ( current.x == end.x && current.y == end.y)
 			break; //path found !
 
-        //limit evaluated nodes to the size of the map
+		//limit evaluated nodes to the size of the map
 		list<Point> neighbours = node->getNeighbours(map_size.x, map_size.y);
 
 		// for every neighbour of current node
@@ -410,10 +421,10 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint>
 				continue;
 			// if nabour is already in close, skip it
 			if(close.exists(neighbour))
-                continue;
+				continue;
 
 			// if neighbour isn't inside open, add it as a new Node
-			if(!open.exists(neighbour)){
+			if(!open.exists(neighbour)) {
 				AStarNode* newNode = new AStarNode(neighbour.x,neighbour.y);
 				newNode->setActualCost(node->getActualCost()+(float)calcDist(current,neighbour));
 				newNode->setParent(current);
@@ -421,20 +432,20 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint>
 				open.add(newNode);
 			}
 			// else, update it's cost if better
-			else{
-                AStarNode* i = open.get(neighbour.x, neighbour.y);
-                if (node->getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
-                    Point pos(i->getX(), i->getY());
-                    Point parent_pos(node->getX(), node->getY());
-                    open.updateParent(pos, parent_pos, node->getActualCost()+(float)calcDist(current,neighbour));
-                }
+			else {
+				AStarNode* i = open.get(neighbour.x, neighbour.y);
+				if (node->getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
+					Point pos(i->getX(), i->getY());
+					Point parent_pos(node->getX(), node->getY());
+					open.updateParent(pos, parent_pos, node->getActualCost()+(float)calcDist(current,neighbour));
+				}
 			}
 		}
 	}
 
 	if (current.x != end.x || current.y != end.y) {
 
-        //couldnt find the target so map a path to the closest node found
+		//couldnt find the target so map a path to the closest node found
 		node = close.get_shortest_h();
 		current.x = node->getX();
 		current.y = node->getY();
