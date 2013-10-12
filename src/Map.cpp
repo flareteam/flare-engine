@@ -179,7 +179,7 @@ void Map::loadEnemy(FileParser &infile) {
 		std::string b = infile.nextValue();
 
 		while (a != none) {
-			Point p;
+			FPoint p;
 			p.x = toInt(a) + 0.5;
 			p.y = toInt(b) + 0.5;
 			enemies.back().waypoints.push(p);
@@ -190,10 +190,10 @@ void Map::loadEnemy(FileParser &infile) {
 	else if (infile.key == "wander_area") {
 		// @ATTR enemy.wander_area|[x(integer),y(integer),w(integer),h(integer)]|Wander area for the enemy.
 		enemies.back().wander = true;
-		enemies.back().wander_area.x = toInt(infile.nextValue()) + 0.5;
-		enemies.back().wander_area.y = toInt(infile.nextValue()) + 0.5;
-		enemies.back().wander_area.w = toInt(infile.nextValue()) + 0.5;
-		enemies.back().wander_area.h = toInt(infile.nextValue()) + 0.5;
+		enemies.back().wander_area.x = toInt(infile.nextValue());
+		enemies.back().wander_area.y = toInt(infile.nextValue());
+		enemies.back().wander_area.w = toInt(infile.nextValue());
+		enemies.back().wander_area.h = toInt(infile.nextValue());
 	}
 }
 
@@ -377,8 +377,8 @@ void Map::loadEventComponent(FileParser &infile) {
 	else if (infile.key == "loot") {
 		// @ATTR event.loot|[string,x(integer),y(integer),drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
 		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue()) + 0.5;
-		e->y = toInt(infile.nextValue()) + 0.5;
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
 
 		// drop chance
 		std::string chance = infile.nextValue();
@@ -398,8 +398,8 @@ void Map::loadEventComponent(FileParser &infile) {
 			e = &events.back().components.back();
 			e->type = infile.key;
 			e->s = repeat_val;
-			e->x = toInt(infile.nextValue()) + 0.5;
-			e->y = toInt(infile.nextValue()) + 0.5;
+			e->x = toInt(infile.nextValue());
+			e->y = toInt(infile.nextValue());
 
 			chance = infile.nextValue();
 			if (chance == "fixed") e->z = 0;

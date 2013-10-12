@@ -196,8 +196,8 @@ void BehaviorStandard::findTarget() {
 	// if the creature is a wanderer, pick a random point within the wander area to travel to
 	if (e->stats.wander && !e->stats.in_combat && e->stats.wander_area.w > 0 && e->stats.wander_area.h > 0) {
 		if (e->stats.wander_ticks == 0) {
-			pursue_pos.x = e->stats.wander_area.x + (rand() % (e->stats.wander_area.w));
-			pursue_pos.y = e->stats.wander_area.y + (rand() % (e->stats.wander_area.h));
+			pursue_pos.x = e->stats.wander_area.x + (rand() % (e->stats.wander_area.w)) + 0.5;
+			pursue_pos.y = e->stats.wander_area.y + (rand() % (e->stats.wander_area.h)) + 0.5;
 			e->stats.wander_ticks = (rand() % 150) + 150;
 		}
 	}
