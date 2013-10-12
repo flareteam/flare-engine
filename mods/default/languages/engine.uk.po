@@ -566,9 +566,9 @@ msgid "Absorb: %d"
 msgstr "Поглинання: %d"
 
 #: ../../../src/ItemManager.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Speed"
-msgstr "%d\\% Швидкості"
+msgstr "%d%% Швидкості"
 
 #: ../../../src/ItemManager.cpp:560 ../../../src/ItemManager.cpp:659
 #, c-format
@@ -731,9 +731,8 @@ msgid "Reduces your chance of stumbling when hit"
 msgstr "Знижує ймовірність спотикання при попаданні"
 
 #: ../../../src/MenuCharacter.cpp:422
-#, fuzzy
 msgid "Bonus XP: "
-msgstr "Бонус"
+msgstr "Бонус ДВ: "
 
 #: ../../../src/MenuCharacter.cpp:423
 msgid "Increases the XP gained per kill"
