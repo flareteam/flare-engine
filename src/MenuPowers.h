@@ -35,6 +35,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class StatBlock;
 class TooltipData;
 class WidgetSlot;
+class MenuActionBar;
 
 class Power_Menu_Cell {
 public:
@@ -52,6 +53,7 @@ public:
 	short requires_level;
 
 	std::vector<short> requires_power;
+	std::vector<short> replaced_by_power;
 
 	bool requires_point;
 	bool passive_on;
@@ -70,6 +72,7 @@ public:
 		, requires_mental(0)
 		, requires_level(0)
 		, requires_power()
+		, replaced_by_power()
 		, requires_point(false)
 		, passive_on(false)
 	{
@@ -78,6 +81,7 @@ public:
 
 class MenuPowers : public Menu {
 private:
+    MenuActionBar *action_bar;
 	StatBlock *stats;
 	std::vector<Power_Menu_Cell> power_cell;
 
@@ -114,8 +118,10 @@ private:
 
 	bool powerIsVisible(short power_index);
 
+	bool powerIsReplaced(int power_index);
+
 public:
-	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);
+	MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar);
 	~MenuPowers();
 	void update();
 	void logic();

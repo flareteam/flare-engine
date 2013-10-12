@@ -34,17 +34,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
 #include "TooltipData.h"
+#include "MenuActionBar.h"
 
 #include <climits>
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
+MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar) {
 
 	int id;
 
 	stats = _stats;
 	icons = _icons;
+	action_bar = _action_bar;
 
 	overlay_disabled = NULL;
 
@@ -151,6 +153,9 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 			else if (infile.key == "requires_power") {
 				power_cell.back().requires_power.push_back(eatFirstInt(infile.val, ','));
 			}
+			else if (infile.key == "replaced_by_power") {
+				power_cell.back().replaced_by_power.push_back(eatFirstInt(infile.val, ','));
+			}
 			else if (infile.key == "visible_requires_status") {
 				power_cell.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
 			}
@@ -243,7 +248,7 @@ short MenuPowers::id_by_powerIndex(short power_index) {
 bool MenuPowers::baseRequirementsMet(int power_index) {
 	int id = id_by_powerIndex(power_index);
 
-	for (unsigned i = 0; i < power_cell[id].requires_power.size(); ++i)
+    for (unsigned i = 0; i < power_cell[id].requires_power.size(); ++i)
 		if (!requirementsMet(power_cell[id].requires_power[i]))
 			return false;
 
@@ -318,7 +323,7 @@ int MenuPowers::click(Point mouse) {
 		int active_tab = tabControl->getActiveTab();
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
+				if (requirementsMet(power_cell[i].id) && !powerIsReplaced(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
 		}
@@ -327,7 +332,7 @@ int MenuPowers::click(Point mouse) {
 	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
+				if (requirementsMet(power_cell[i].id) && !powerIsReplaced(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
 		}
@@ -339,7 +344,6 @@ int MenuPowers::click(Point mouse) {
  * Unlock a power
  */
 bool MenuPowers::unlockClick(Point mouse) {
-
 	// if we have tabCOntrol
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
@@ -349,6 +353,19 @@ bool MenuPowers::unlockClick(Point mouse) {
 					&& power_cell[i].requires_point && power_cell[i].tab == active_tab) {
 				stats->powers_list.push_back(power_cell[i].id);
 				stats->check_title = true;
+
+				//if a power was replaced, check the action bar to see if the replaced power is in there, and swap it
+                for(int j = 0; j < 12; j++){
+                    if(action_bar->hotkeys[j] == 0)
+                        continue;
+                    int id = id_by_powerIndex(action_bar->hotkeys[j]);
+                    for(unsigned int k = 0; k < power_cell[id].replaced_by_power.size(); k++){
+                        if(power_cell[id].replaced_by_power[k] == power_cell[i].id)
+                            action_bar->hotkeys[j] = power_cell[i].id;
+
+                    }
+                }
+
 				return true;
 			}
 		}
@@ -361,6 +378,19 @@ bool MenuPowers::unlockClick(Point mouse) {
 					&& points_left > 0 && power_cell[i].requires_point) {
 				stats->powers_list.push_back(power_cell[i].id);
 				stats->check_title = true;
+
+				//if a power was replaced, check the action bar to see if the replaced power is in there, and swap it
+                for(int j = 0; j < 12; j++){
+                    if(action_bar->hotkeys[j] == 0)
+                        continue;
+                    int id = id_by_powerIndex(action_bar->hotkeys[j]);
+                    for(unsigned int k = 0; k < power_cell[id].replaced_by_power.size(); k++){
+                        if(power_cell[id].replaced_by_power[k] == power_cell[i].id)
+                            action_bar->hotkeys[j] = power_cell[i].id;
+
+                    }
+                }
+
 				return true;
 			}
 		}
@@ -375,14 +405,14 @@ void MenuPowers::logic() {
 			bool unlocked_power = find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 			vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
 			if (it != stats->powers_passive.end()) {
-				if (!baseRequirementsMet(power_cell[i].id) && power_cell[i].passive_on) {
+				if ((!baseRequirementsMet(power_cell[i].id) || powerIsReplaced(power_cell[i].id)) && power_cell[i].passive_on) {
 					stats->powers_passive.erase(it);
 					stats->effects.removeEffectPassive(power_cell[i].id);
 					power_cell[i].passive_on = false;
 					stats->refresh_stats = true;
 				}
 			}
-			else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
+			else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || (unlocked_power  && !powerIsReplaced(power_cell[i].id))) && !power_cell[i].passive_on) {
 				stats->powers_passive.push_back(power_cell[i].id);
 				power_cell[i].passive_on = true;
 				// for passives without special triggers, we need to trigger them here
@@ -497,6 +527,10 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 		if (isWithin(slots[i]->pos, mouse)) {
 			tip.addText(powers->powers[power_cell[i].id].name);
+
+			if(powerIsReplaced(power_cell[i].id))
+                tip.addText(msg->get("Newer power available"), color_penalty);
+
 			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
 			tip.addText(powers->powers[power_cell[i].id].description);
 
@@ -583,8 +617,6 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 				tip.addText(msg->get("Click to Unlock"), color_bonus);
 			}
 
-
-
             for (unsigned j = 0; j < power_cell[i].requires_power.size(); ++j){
                 // Required Power Tooltip
                 if ((power_cell[i].requires_power[j] != 0) && !(requirementsMet(power_cell[i].requires_power[j]))) {
@@ -640,6 +672,9 @@ bool MenuPowers::meetsUsageStats(unsigned powerid) {
 	int id = id_by_powerIndex(powerid);
 	// If we didn't find power in power_menu, than it has no stats requirements
 	if (id == -1) return true;
+
+	if(powerIsReplaced(powerid))
+        return false;
 
 	return stats->physoff() >= power_cell[id].requires_physoff
 		   && stats->physdef() >= power_cell[id].requires_physdef
@@ -705,5 +740,14 @@ bool MenuPowers::powerIsVisible(short power_index) {
 	return true;
 }
 
+bool MenuPowers::powerIsReplaced(int power_index) {
 
+    int id = id_by_powerIndex(power_index);
+
+	for (unsigned i = 0; i < power_cell[id].replaced_by_power.size(); ++i)
+		if (requirementsMet(power_cell[id].replaced_by_power[i]))
+			return true;
+
+    return false;
+}
 
