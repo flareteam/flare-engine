@@ -223,8 +223,8 @@ void LootManager::checkMapForLoot() {
 	for (unsigned i = mapr->loot.size(); i > 0; i--) {
 		ec = &mapr->loot[i-1];
 		if (ec->z == 0) {
-			p.x = ec->x + 0.5;
-			p.y = ec->y + 0.5;
+			p.x = ec->x + 0.5f;
+			p.y = ec->y + 0.5f;
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 

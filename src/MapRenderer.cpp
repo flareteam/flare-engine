@@ -69,7 +69,7 @@ void MapRenderer::clearQueues() {
 	loot.clear();
 }
 
-bool MapRenderer::enemyGroupPlaceEnemy(int x, int y, Map_Group &g) {
+bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 	if (collider.is_empty(x, y)) {
 		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 		if (!enemy_lev.type.empty()) {
@@ -103,8 +103,8 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 
 	while (enemies_to_spawn && allowed_misses) {
 
-		float x = (g.pos.x + (rand() % g.area.x)) + 0.5;
-		float y = (g.pos.y + (rand() % g.area.y)) + 0.5;
+		float x = (g.pos.x + (rand() % g.area.x)) + 0.5f;
+		float y = (g.pos.y + (rand() % g.area.y)) + 0.5f;
 
 		if (enemyGroupPlaceEnemy(x, y, g))
 			enemies_to_spawn--;
@@ -254,8 +254,8 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		shakycam.y = cam.y;
 	}
 	else {
-		shakycam.x = cam.x + (rand() % 16 - 8) * 0.0078125;
-		shakycam.y = cam.y + (rand() % 16 - 8) * 0.0078125;
+		shakycam.x = cam.x + (rand() % 16 - 8) * 0.0078125f;
+		shakycam.y = cam.y + (rand() % 16 - 8) * 0.0078125f;
 	}
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
@@ -852,8 +852,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			if (fileExists(mods->locate("maps/" + ec->s))) {
 				teleportation = true;
 				teleport_mapname = ec->s;
-				teleport_destination.x = ec->x + 0.5;
-				teleport_destination.y = ec->y + 0.5;
+				teleport_destination.x = ec->x + 0.5f;
+				teleport_destination.y = ec->y + 0.5f;
 			}
 			else {
 				ev.keep_after_trigger = false;
@@ -863,8 +863,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		else if (ec->type == "intramap") {
 			teleportation = true;
 			teleport_mapname = "";
-			teleport_destination.x = ec->x + 0.5;
-			teleport_destination.y = ec->y + 0.5;
+			teleport_destination.x = ec->x + 0.5f;
+			teleport_destination.y = ec->y + 0.5f;
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
@@ -880,18 +880,18 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 			map_change = true;
 		}
 		else if (ec->type == "soundfx") {
-			Point pos(0,0);
+			FPoint pos(0,0);
 			bool loop = false;
 
 			if (ec->x != -1 && ec->y != -1) {
 				if (ec->x != 0 && ec->y != 0) {
-					pos.x = ec->x + 0.5;
-					pos.y = ec->y + 0.5;
+					pos.x = ec->x + 0.5f;
+					pos.y = ec->y + 0.5f;
 				}
 			}
 			else if (ev.location.x != 0 && ev.location.y != 0) {
-				pos.x = ev.location.x + 0.5;
-				pos.y = ev.location.y + 0.5;
+				pos.x = ev.location.x + 0.5f;
+				pos.y = ev.location.y + 0.5f;
 			}
 
 			if (ev.type == "on_load")
@@ -935,13 +935,13 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 
 				// if a power path was specified, place the source position there
 				if (ec_path) {
-					ev.stats->pos.x = ec_path->x + 0.5;
-					ev.stats->pos.y = ec_path->y + 0.5;
+					ev.stats->pos.x = ec_path->x + 0.5f;
+					ev.stats->pos.y = ec_path->y + 0.5f;
 				}
 				// otherwise the source position is the event position
 				else {
-					ev.stats->pos.x = ev.location.x + 0.5;
-					ev.stats->pos.y = ev.location.y + 0.5;
+					ev.stats->pos.x = ev.location.x + 0.5f;
+					ev.stats->pos.y = ev.location.y + 0.5f;
 				}
 
 				Event_Component *ec_damage = ev.getComponent("power_damage");
@@ -951,7 +951,7 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 				}
 			}
 
-			Point target;
+			FPoint target;
 
 			if (ec_path) {
 				// targets hero option
@@ -961,8 +961,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 				}
 				// targets fixed path option
 				else {
-					target.x = ec_path->a + 0.5;
-					target.y = ec_path->b + 0.5;
+					target.x = ec_path->a + 0.5f;
+					target.y = ec_path->b + 0.5f;
 				}
 			}
 			// no path specified, targets self location
@@ -975,8 +975,8 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		}
 		else if (ec->type == "stash") {
 			stash = true;
-			stash_pos.x = ev.location.x + 0.5;
-			stash_pos.y = ev.location.y + 0.5;
+			stash_pos.x = ev.location.x + 0.5f;
+			stash_pos.y = ev.location.y + 0.5f;
 		}
 		else if (ec->type == "npc") {
 			event_npc = ec->s;

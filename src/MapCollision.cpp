@@ -82,7 +82,7 @@ bool MapCollision::small_step_forced_slide_along_grid(float &x, float &y, float 
 bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero) {
 	// is there a singular obstacle or corner we can step around?
 	// only works if we are moving straight
-	const float epsilon = 0.01;
+	const float epsilon = 0.01f;
 	if (step_x != 0) {
 		assert(step_y == 0);
 		float dy = y - floor(y);
@@ -176,7 +176,7 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 /**
  * Determines whether the grid position is outside the map boundary
  */
-bool MapCollision::is_outside_map(float tile_x, float tile_y) const {
+bool MapCollision::is_outside_map(const int& tile_x, const int& tile_y) const {
 	return (tile_x < 0 || tile_y < 0 || tile_x >= map_size.x || tile_y >= map_size.y);
 }
 
@@ -184,7 +184,7 @@ bool MapCollision::is_outside_map(float tile_x, float tile_y) const {
  * A map space is empty if it contains no blocking type
  * A position outside the map boundary is not empty
  */
-bool MapCollision::is_empty(float x, float y) const {
+bool MapCollision::is_empty(const float& x, const float& y) const {
 	// map bounds check
 	if (is_outside_map(x, y)) return false;
 
@@ -198,7 +198,7 @@ bool MapCollision::is_empty(float x, float y) const {
  * A map space is a wall if it contains a wall blocking type (normal or hidden)
  * A position outside the map boundary is a wall
  */
-bool MapCollision::is_wall(float x, float y) const {
+bool MapCollision::is_wall(const float& x, const float& y) const {
 
 	// bounds check
 	if (is_outside_map(x, y)) return true;
@@ -212,7 +212,7 @@ bool MapCollision::is_wall(float x, float y) const {
 /**
  * Is this a valid tile for an entity with this movement type?
  */
-bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_type, bool is_hero) const {
+bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, MOVEMENTTYPE movement_type, bool is_hero) const {
 
 	// outside the map isn't valid
 	if (is_outside_map(tile_x,tile_y)) return false;
@@ -244,7 +244,7 @@ bool MapCollision::is_valid_tile(int tile_x, int tile_y, MOVEMENTTYPE movement_t
 /**
  * Is this a valid position for an entity with this movement type?
  */
-bool MapCollision::is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const {
+bool MapCollision::is_valid_position(const float& x, const float& y, MOVEMENTTYPE movement_type, bool is_hero) const {
 	return is_valid_tile(floor(x), floor(y), movement_type, is_hero);
 }
 
@@ -252,11 +252,11 @@ bool MapCollision::is_valid_position(float x, float y, MOVEMENTTYPE movement_typ
  * Does not have the "slide" submovement that move() features
  * Line can be arbitrary angles.
  */
-bool MapCollision::line_check(int x1, int y1, int x2, int y2, int check_type, MOVEMENTTYPE movement_type) {
-	float x = (float)x1;
-	float y = (float)y1;
-	float dx = (float)abs(x2 - x1);
-	float dy = (float)abs(y2 - y1);
+bool MapCollision::line_check(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, MOVEMENTTYPE movement_type) {
+	float x = x1;
+	float y = y1;
+	float dx = abs(x2 - x1);
+	float dy = abs(y2 - y1);
 	float step_x;
 	float step_y;
 	int steps = (int)max(dx, dy);
@@ -295,11 +295,11 @@ bool MapCollision::line_check(int x1, int y1, int x2, int y2, int check_type, MO
 	return true;
 }
 
-bool MapCollision::line_of_sight(int x1, int y1, int x2, int y2) {
+bool MapCollision::line_of_sight(const float& x1, const float& y1, const float& x2, const float& y2) {
 	return line_check(x1, y1, x2, y2, CHECK_SIGHT, MOVEMENT_NORMAL);
 }
 
-bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE movement_type) {
+bool MapCollision::line_of_movement(const float& x1, const float& y1, const float& x2, const float& y2, MOVEMENTTYPE movement_type) {
 
 	// intangible entities can always move
 	if (movement_type == MOVEMENT_INTANGIBLE) return true;
@@ -325,7 +325,7 @@ bool MapCollision::line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE
  * Checks whether the entity in pos 1 is facing the point at pos 2
  * based on a 180 degree field of vision
  */
-bool MapCollision::is_facing(int x1, int y1, char direction, int x2, int y2) {
+bool MapCollision::is_facing(const float& x1, const float& y1, char direction, const float& x2, const float& y2) {
 
 	// 180 degree fov
 	switch (direction) {
@@ -458,10 +458,10 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint>
 	return !path.empty();
 }
 
-void MapCollision::block(const int x, const int y, bool is_ally) {
+void MapCollision::block(const float& map_x, const float& map_y, bool is_ally) {
 
-	const int tile_x = x;
-	const int tile_y = y;
+	const int tile_x = map_x;
+	const int tile_y = map_y;
 
 	if (colmap[tile_x][tile_y] == BLOCKS_NONE) {
 		if(is_ally)
@@ -472,10 +472,10 @@ void MapCollision::block(const int x, const int y, bool is_ally) {
 
 }
 
-void MapCollision::unblock(int x, int y) {
+void MapCollision::unblock(const float& map_x, const float& map_y) {
 
-	const int tile_x = x;
-	const int tile_y = y;
+	const int tile_x = map_x;
+	const int tile_y = map_y;
 
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES || colmap[tile_x][tile_y] == BLOCKS_ENEMIES) {
 		colmap[tile_x][tile_y] = BLOCKS_NONE;

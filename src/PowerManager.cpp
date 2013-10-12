@@ -269,7 +269,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].angle_variance = toInt(infile.val);
 		else if (infile.key == "speed_variance")
 			// @ATTR speed_variance|integer|Percentage of variance added to missile speed
-			powers[input_id].speed_variance = toInt(infile.val);
+			powers[input_id].speed_variance = toFloat(infile.val);
 		//repeater modifiers
 		else if (infile.key == "delay")
 			// @ATTR delay|duration|Delay between repeats
@@ -506,8 +506,8 @@ FPoint PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked
 	for (int i=-range; i<=range; i++) {
 		for (int j=-range; j<=range; j++) {
 			if (i == 0 && j == 0) continue; // skip the middle tile
-			new_target.x = target.x + i + 0.5;
-			new_target.y = target.y + j + 0.5;
+			new_target.x = target.x + i + 0.5f;
+			new_target.y = target.y + j + 0.5f;
 			if (collider->is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
 				valid_tiles.push_back(new_target);
 		}
@@ -881,7 +881,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 	FPoint location_iterator;
 	FPoint speed;
 	int delay_iterator = 0;
-	float map_speed = 32.0 / MAX_FRAMES_PER_SEC;
+	float map_speed = 32.0f / MAX_FRAMES_PER_SEC;
 
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
