@@ -102,6 +102,8 @@ StatBlock::StatBlock()
 	, absorb_min_add(0)
 	, absorb_max_add(0)
 	, speed(0.2)
+	, vulnerable(ELEMENTS.size(), 100)
+	, vulnerable_base(ELEMENTS.size(), 100)
 	, transform_duration(0)
 	, transform_duration_total(0)
 	, manual_untransform(false)
@@ -169,9 +171,6 @@ StatBlock::StatBlock()
 	, summoner(NULL) {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
-
-	vulnerable = std::vector<int>(ELEMENTS.size(), 100);
-	vulnerable_base = std::vector<int>(ELEMENTS.size(), 100);
 
 	activated_powerslot = 0;
 	on_half_dead_casted = false;
