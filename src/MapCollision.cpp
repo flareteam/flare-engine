@@ -255,8 +255,8 @@ bool MapCollision::is_valid_position(const float& x, const float& y, MOVEMENTTYP
 bool MapCollision::line_check(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, MOVEMENTTYPE movement_type) {
 	float x = x1;
 	float y = y1;
-	float dx = abs(x2 - x1);
-	float dy = abs(y2 - y1);
+	float dx = fabs(x2 - x1);
+	float dy = fabs(y2 - y1);
 	float step_x;
 	float step_y;
 	int steps = (int)max(dx, dy);
