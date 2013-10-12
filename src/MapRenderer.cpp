@@ -660,6 +660,8 @@ void MapRenderer::checkEvents(FPoint loc) {
  * executes
  */
 void MapRenderer::checkHotspots() {
+	if (NO_MOUSE) return;
+
 	show_tooltip = false;
 
 	vector<Map_Event>::iterator it;
@@ -748,36 +750,58 @@ void MapRenderer::checkHotspots() {
 }
 
 void MapRenderer::checkNearestEvent(FPoint loc) {
-	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+	if (NO_MOUSE) show_tooltip = false;
 
-		vector<Map_Event>::iterator it;
-		vector<Map_Event>::iterator nearest = events.end();
-		float best_distance = std::numeric_limits<float>::max();
+	vector<Map_Event>::iterator it;
+	vector<Map_Event>::iterator nearest = events.end();
+	float best_distance = std::numeric_limits<float>::max();
 
-		// loop in reverse because we may erase elements
-		for (it = events.end(); it != events.begin(); ) {
-			--it;
+	// loop in reverse because we may erase elements
+	for (it = events.end(); it != events.begin(); ) {
+		--it;
 
-			// skip inactive events
-			if (!isActive(*it)) continue;
+		// skip inactive events
+		if (!isActive(*it)) continue;
 
-			// skip events without hotspots
-			if ((*it).hotspot.h == 0) continue;
+		// skip events without hotspots
+		if ((*it).hotspot.h == 0) continue;
 
-			// skip events on cooldown
-			if ((*it).cooldown_ticks != 0) continue;
+		// skip events on cooldown
+		if ((*it).cooldown_ticks != 0) continue;
 
-			FPoint ev_loc;
-			ev_loc.x = (*it).location.x;
-			ev_loc.y = (*it).location.y;
-			float distance = calcDist(loc, ev_loc);
-			if (distance < CLICK_RANGE && distance < best_distance) {
-				best_distance = distance;
-				nearest = it;
+		FPoint ev_loc;
+		ev_loc.x = (*it).location.x + (*it).location.w/2;
+		ev_loc.y = (*it).location.y + (*it).location.h/2;
+		float distance = calcDist(loc, ev_loc);
+		if (distance < CLICK_RANGE && distance < best_distance) {
+			best_distance = distance;
+			nearest = it;
+		}
+
+	}
+
+	if (nearest != events.end()) {
+		if (NO_MOUSE) {
+			// new tooltip?
+			Event_Component *ec = (*nearest).getComponent("tooltip");
+			if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+				show_tooltip = true;
+				tip_pos = map_to_screen((*nearest).location.x+(*nearest).location.w/2, (*nearest).location.y+(*nearest).location.h/2, shakycam.x, shakycam.y);
+				tip_pos.y -= TILE_H;
+				if (!tip_buf.compareFirstLine(ec->s)) {
+					tip_buf.clear();
+					tip_buf.addText(ec->s);
+				}
+				TOOLTIP_CONTEXT = TOOLTIP_MAP;
+			}
+			else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+				TOOLTIP_CONTEXT = TOOLTIP_NONE;
 			}
 		}
-		if (nearest != events.end()) {
+
+		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+
 			if(executeEvent(*nearest))
 				events.erase(nearest);
 		}
