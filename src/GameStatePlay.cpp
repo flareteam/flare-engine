@@ -206,7 +206,7 @@ void GameStatePlay::checkLoot() {
 	}
 
 	// Pickup with mouse click
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !NO_MOUSE) {
 
 		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, menu->inv);
 		if (pickup.item > 0) {
@@ -600,7 +600,7 @@ void GameStatePlay::checkNPCInteraction() {
 	int interact_distance = max_interact_distance+1;
 
 	// check for clicking on an NPC
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !NO_MOUSE) {
 		npc_click = npcs->checkNPCClick(inpt->mouse, mapr->cam);
 		if (npc_click != -1) npc_id = npc_click;
 	}
@@ -628,7 +628,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	if (npc_id != -1 && ((npc_click != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
 
-		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
+		if (inpt->pressing[MAIN1] && !NO_MOUSE) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
 		menu->npc->setNPC(npcs->npcs[npc_id]);
