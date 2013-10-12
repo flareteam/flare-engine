@@ -167,7 +167,7 @@ StatBlock::StatBlock()
 	, prev_maxmp(0)
 	, pres_hp(0)
 	, pres_mp(0)
-    , summons()
+	, summons()
 	, summoner(NULL) {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
@@ -185,36 +185,36 @@ bool StatBlock::loadCoreStat(FileParser *infile){
 	int value = toInt(infile->val, 0);
 	float fvalue = toFloat(infile->val, 0);
 
-    if (infile->key == "speed") {
+	if (infile->key == "speed") {
 		speed = speed_default = fvalue / MAX_FRAMES_PER_SEC;
-        return true;
-    }
-    else if (infile->key == "categories") {
-        string cat;
-        while ((cat = infile->nextValue()) != "") {
-            categories.push_back(cat);
-        }
-        return true;
-    }
-    else {
-        for (unsigned i=0; i<STAT_COUNT; i++) {
-            if (infile->key == STAT_NAME[i]) {starting[i] = value;return true;}
-            else if (infile->key == STAT_NAME[i] + "_per_level") {per_level[i] = value;return true;}
-            else if (infile->key == STAT_NAME[i] + "_per_physical") {per_physical[i] = value;return true;}
-            else if (infile->key == STAT_NAME[i] + "_per_mental") {per_mental[i] = value;return true;}
-            else if (infile->key == STAT_NAME[i] + "_per_offense") {per_offense[i] = value;return true;}
-            else if (infile->key == STAT_NAME[i] + "_per_defense") {per_defense[i] = value;return true;}
-        }
+		return true;
+	}
+	else if (infile->key == "categories") {
+		string cat;
+		while ((cat = infile->nextValue()) != "") {
+			categories.push_back(cat);
+		}
+		return true;
+	}
+	else {
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (infile->key == STAT_NAME[i]) {starting[i] = value;return true;}
+			else if (infile->key == STAT_NAME[i] + "_per_level") {per_level[i] = value;return true;}
+			else if (infile->key == STAT_NAME[i] + "_per_physical") {per_physical[i] = value;return true;}
+			else if (infile->key == STAT_NAME[i] + "_per_mental") {per_mental[i] = value;return true;}
+			else if (infile->key == STAT_NAME[i] + "_per_offense") {per_offense[i] = value;return true;}
+			else if (infile->key == STAT_NAME[i] + "_per_defense") {per_defense[i] = value;return true;}
+		}
 
-        for (unsigned int i=0; i<ELEMENTS.size(); i++) {
+		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
 			if (infile->key == "vulnerable_" + ELEMENTS[i].name) {
 				vulnerable[i] = vulnerable_base[i] = value;
 				return true;
 			}
 		}
-    }
+	}
 
-    return false;
+	return false;
 }
 
 /**
@@ -429,14 +429,14 @@ void StatBlock::calcBase() {
 	base[STAT_ABS_MAX] += absorb_max_add;
 
 	// increase damage and absorb to minimum amounts
-    clampFloor(base[STAT_DMG_MELEE_MIN], dmg_melee_min_default);
-    clampFloor(base[STAT_DMG_MELEE_MAX], dmg_melee_max_default);
-    clampFloor(base[STAT_DMG_RANGED_MIN], dmg_ranged_min_default);
-    clampFloor(base[STAT_DMG_RANGED_MAX], dmg_ranged_max_default);
-    clampFloor(base[STAT_DMG_MENT_MIN], dmg_ment_min_default);
-    clampFloor(base[STAT_DMG_MENT_MAX], dmg_ment_max_default);
-    clampFloor(base[STAT_ABS_MIN], absorb_min_default);
-    clampFloor(base[STAT_ABS_MAX], absorb_max_default);
+	clampFloor(base[STAT_DMG_MELEE_MIN], dmg_melee_min_default);
+	clampFloor(base[STAT_DMG_MELEE_MAX], dmg_melee_max_default);
+	clampFloor(base[STAT_DMG_RANGED_MIN], dmg_ranged_min_default);
+	clampFloor(base[STAT_DMG_RANGED_MAX], dmg_ranged_max_default);
+	clampFloor(base[STAT_DMG_MENT_MIN], dmg_ment_min_default);
+	clampFloor(base[STAT_DMG_MENT_MAX], dmg_ment_max_default);
+	clampFloor(base[STAT_ABS_MIN], absorb_min_default);
+	clampFloor(base[STAT_ABS_MAX], absorb_max_default);
 }
 
 /**
@@ -450,17 +450,17 @@ void StatBlock::applyEffects() {
 	pres_hp = hp;
 	pres_mp = mp;
 
-    // calculate primary stats
-    // refresh the character menu if there has been a change
-    if (get_physical() != physical_character + effects.bonus_physical ||
-            get_mental() != mental_character + effects.bonus_mental ||
-            get_offense() != offense_character + effects.bonus_offense ||
-            get_defense() != defense_character + effects.bonus_defense) refresh_stats = true;
+	// calculate primary stats
+	// refresh the character menu if there has been a change
+	if (get_physical() != physical_character + effects.bonus_physical ||
+			get_mental() != mental_character + effects.bonus_mental ||
+			get_offense() != offense_character + effects.bonus_offense ||
+			get_defense() != defense_character + effects.bonus_defense) refresh_stats = true;
 
-    offense_additional = effects.bonus_offense;
-    defense_additional = effects.bonus_defense;
-    physical_additional = effects.bonus_physical;
-    mental_additional = effects.bonus_mental;
+	offense_additional = effects.bonus_offense;
+	defense_additional = effects.bonus_defense;
+	physical_additional = effects.bonus_physical;
+	mental_additional = effects.bonus_mental;
 
 	calcBase();
 
@@ -565,7 +565,7 @@ void StatBlock::logic() {
 }
 
 StatBlock::~StatBlock() {
-    removeFromSummons();
+	removeFromSummons();
 }
 
 bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
@@ -577,11 +577,11 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 	else if (power.spawn_type == "untransform" && !transformed) return false;
 	else {
 		return std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
-			   && mp >= power.requires_mp
-			   && (!power.sacrifice == false || hp > power.requires_hp)
-			   && menu_powers->meetsUsageStats(powerid)
-			   && !power.passive
-			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
+				&& mp >= power.requires_mp
+				&& (!power.sacrifice == false || hp > power.requires_hp)
+				&& menu_powers->meetsUsageStats(powerid)
+				&& !power.passive
+				&& (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
 	}
 
 }
@@ -634,66 +634,66 @@ void StatBlock::loadHeroStats() {
 
 void StatBlock::removeFromSummons() {
 
-    if(summoner != NULL){
-        vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
+	if(summoner != NULL){
+		vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
 
-        if(parent_ref != summoner->summons.end())
-            summoner->summons.erase(parent_ref);
+		if(parent_ref != summoner->summons.end())
+			summoner->summons.erase(parent_ref);
 
-        summoner = NULL;
-    }
+		summoner = NULL;
+	}
 
-    for (vector<StatBlock*>::iterator it=summons.begin(); it != summons.end(); ++it)
-        (*it)->summoner = NULL;
+	for (vector<StatBlock*>::iterator it=summons.begin(); it != summons.end(); ++it)
+		(*it)->summoner = NULL;
 
-    summons.clear();
+	summons.clear();
 }
 
 bool StatBlock::summonLimitReached(int power_id) const{
 
-    //find the limit
-    Power *spawn_power = &powers->powers[power_id];
+	//find the limit
+	Power *spawn_power = &powers->powers[power_id];
 
-    int max_summons = 0;
+	int max_summons = 0;
 
-    if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_FIXED)
-        max_summons = spawn_power->spawn_limit_qty;
-    else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
-        int stat_val = 1;
-        switch(spawn_power->spawn_limit_stat) {
-            case SPAWN_LIMIT_STAT_PHYSICAL:
-                stat_val = get_physical();
-                break;
-            case SPAWN_LIMIT_STAT_MENTAL:
-                stat_val = get_mental();
-                break;
-            case SPAWN_LIMIT_STAT_OFFENSE:
-                stat_val = get_offense();
-                break;
-            case SPAWN_LIMIT_STAT_DEFENSE:
-                stat_val = get_defense();
-                break;
-        }
-        max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
-    }
-    else
-        return false;//unlimited or unknown mode
+	if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_FIXED)
+		max_summons = spawn_power->spawn_limit_qty;
+	else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
+		int stat_val = 1;
+		switch(spawn_power->spawn_limit_stat) {
+		case SPAWN_LIMIT_STAT_PHYSICAL:
+			stat_val = get_physical();
+			break;
+		case SPAWN_LIMIT_STAT_MENTAL:
+			stat_val = get_mental();
+			break;
+		case SPAWN_LIMIT_STAT_OFFENSE:
+			stat_val = get_offense();
+			break;
+		case SPAWN_LIMIT_STAT_DEFENSE:
+			stat_val = get_defense();
+			break;
+		}
+		max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
+	}
+	else
+		return false;//unlimited or unknown mode
 
-    //if the power is available, there should be at least 1 allowed summon
-    if(max_summons < 1) max_summons = 1;
+	//if the power is available, there should be at least 1 allowed summon
+	if(max_summons < 1) max_summons = 1;
 
 
-    //find out how many there are currently
-    int qty_summons = 0;
+	//find out how many there are currently
+	int qty_summons = 0;
 
-    for (unsigned int i=0; i < summons.size(); i++) {
-        if(!summons[i]->corpse && summons[i]->summoned_power_index == power_id
-                && summons[i]->cur_state != ENEMY_SPAWN
-                && summons[i]->cur_state != ENEMY_DEAD
-                && summons[i]->cur_state != ENEMY_CRITDEAD) {
-            qty_summons++;
-        }
-    }
+	for (unsigned int i=0; i < summons.size(); i++) {
+		if(!summons[i]->corpse && summons[i]->summoned_power_index == power_id
+				&& summons[i]->cur_state != ENEMY_SPAWN
+				&& summons[i]->cur_state != ENEMY_DEAD
+				&& summons[i]->cur_state != ENEMY_CRITDEAD) {
+			qty_summons++;
+		}
+	}
 
-    return qty_summons >= max_summons;
+	return qty_summons >= max_summons;
 }
