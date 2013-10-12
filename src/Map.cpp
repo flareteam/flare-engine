@@ -125,8 +125,8 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR location|[x(integer), y(integer), direction(integer))|Spawn point location in map
-		spawn.x = toInt(infile.nextValue()) + 0.5;
-		spawn.y = toInt(infile.nextValue()) + 0.5;
+		spawn.x = toFloat(infile.nextValue()) + 0.5f;
+		spawn.y = toFloat(infile.nextValue()) + 0.5f;
 		spawn_dir = toInt(infile.nextValue());
 	}
 }
@@ -165,8 +165,8 @@ void Map::loadEnemy(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR enemy.location|[x(integer), y(integer)]|Location of enemy
-		enemies.back().pos.x = toInt(infile.nextValue()) + 0.5;
-		enemies.back().pos.y = toInt(infile.nextValue()) + 0.5;
+		enemies.back().pos.x = toFloat(infile.nextValue()) + 0.5f;
+		enemies.back().pos.y = toFloat(infile.nextValue()) + 0.5f;
 	}
 	else if (infile.key == "direction") {
 		// @ATTR enemy.direction|integer|Direction of enemy
@@ -180,8 +180,8 @@ void Map::loadEnemy(FileParser &infile) {
 
 		while (a != none) {
 			FPoint p;
-			p.x = toInt(a) + 0.5;
-			p.y = toInt(b) + 0.5;
+			p.x = toFloat(a) + 0.5f;
+			p.y = toFloat(b) + 0.5f;
 			enemies.back().waypoints.push(p);
 			a = infile.nextValue();
 			b = infile.nextValue();
@@ -244,8 +244,8 @@ void Map::loadNPC(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
-		npcs.back().pos.x = toInt(infile.nextValue()) + 0.5;
-		npcs.back().pos.y = toInt(infile.nextValue()) + 0.5;
+		npcs.back().pos.x = toFloat(infile.nextValue()) + 0.5f;
+		npcs.back().pos.y = toFloat(infile.nextValue()) + 0.5f;
 	}
 }
 
