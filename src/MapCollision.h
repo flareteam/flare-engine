@@ -57,12 +57,12 @@ typedef enum {
 
 // this value is used to determine the greatest possible position within a tile before transitioning to the next tile
 // so if an entity has a position of (1-MIN_TILE_GAP, 0) and moves to the east, they will move to (1,0)
-const float MIN_TILE_GAP = 0.001;
+const float MIN_TILE_GAP = 0.001f;
 
 class MapCollision {
 private:
 
-	bool line_check(int x1, int y1, int x2, int y2, int check_type, MOVEMENTTYPE movement_type);
+	bool line_check(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, MOVEMENTTYPE movement_type);
 
 	bool small_step_forced_slide_along_grid(
 			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
@@ -71,7 +71,7 @@ private:
 	bool small_step(
 			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 
-	bool is_valid_tile(int x, int y, MOVEMENTTYPE movement_type, bool is_hero) const;
+	bool is_valid_tile(const int& x, const int& y, MOVEMENTTYPE movement_type, bool is_hero) const;
 
 public:
 	MapCollision();
@@ -80,21 +80,21 @@ public:
 	void setmap(const unsigned short _colmap[][256], unsigned short w, unsigned short h);
 	bool move(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 
-	bool is_outside_map(float tile_x, float tile_y) const;
-	bool is_empty(float x, float y) const;
-	bool is_wall(float x, float y) const;
+	bool is_outside_map(const int& tile_x, const int& tile_y) const;
+	bool is_empty(const float& x, const float& y) const;
+	bool is_wall(const float& x, const float& y) const;
 
-	bool is_valid_position(float x, float y, MOVEMENTTYPE movement_type, bool is_hero) const;
+	bool is_valid_position(const float& x, const float& y, MOVEMENTTYPE movement_type, bool is_hero) const;
 
-	bool line_of_sight(int x1, int y1, int x2, int y2);
-	bool line_of_movement(int x1, int y1, int x2, int y2, MOVEMENTTYPE movement_type);
+	bool line_of_sight(const float& x1, const float& y1, const float& x2, const float& y2);
+	bool line_of_movement(const float& x1, const float& y1, const float& x2, const float& y2, MOVEMENTTYPE movement_type);
 
-	bool is_facing(int x1, int y1, char direction, int x2, int y2);
+	bool is_facing(const float& x1, const float& y1, char direction, const float& x2, const float& y2);
 
 	bool compute_path(FPoint start, FPoint end, std::vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
 
-	void block(int map_x, int map_y, bool is_ally);
-	void unblock(int map_x, int map_y);
+	void block(const float& map_x, const float& map_y, bool is_ally);
+	void unblock(const float& map_x, const float& map_y);
 
 	unsigned short colmap[256][256];
 	Point map_size;

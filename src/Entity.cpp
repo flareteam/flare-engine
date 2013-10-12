@@ -40,7 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
 const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
-const float speedMultiplyer[8] = { 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0};
+const float speedMultiplyer[8] = { (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f};
 
 using namespace std;
 

@@ -63,7 +63,7 @@ private:
 
 	bool executeEvent(Map_Event &e);
 
-	bool enemyGroupPlaceEnemy(int x, int y, Map_Group &g);
+	bool enemyGroupPlaceEnemy(float x, float y, Map_Group &g);
 	void pushEnemyGroup(Map_Group g);
 	bool isActive(const Map_Event &e);
 
@@ -170,7 +170,7 @@ public:
 
 	// stash handling
 	bool stash;
-	Point stash_pos;
+	FPoint stash_pos;
 
 	// enemy clear
 	bool enemies_cleared;
