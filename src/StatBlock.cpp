@@ -151,6 +151,7 @@ StatBlock::StatBlock()
 	, currency(0)
 	, death_penalty(false)
 	, defeat_status("")			// enemy only
+	, convert_status("")		// enemy only
 	, quest_loot_requires("")	// enemy only
 	, quest_loot_not("")		// enemy only
 	, quest_loot_id(0)			// enemy only
@@ -272,6 +273,7 @@ void StatBlock::load(const string& filename) {
 			loot.push_back(el);
 		}
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
+		else if (infile.key == "convert_status") convert_status = infile.val;
 		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
 		else if (infile.key == "quest_loot") {
 			quest_loot_requires = infile.nextValue();
