@@ -923,7 +923,11 @@ void GameStateConfig::logic () {
 	// tab 3 (input)
 	else if (active_tab == 3 && !defaults_confirm->visible) {
 		if (mouse_move_cb->checkClick()) {
-			if (mouse_move_cb->isChecked()) MOUSE_MOVE=true;
+			if (mouse_move_cb->isChecked()) {
+				MOUSE_MOVE=true;
+				no_mouse_cb->unCheck();
+				NO_MOUSE=false;
+			}
 			else MOUSE_MOVE=false;
 		}
 		else if (mouse_aim_cb->checkClick()) {
@@ -939,6 +943,8 @@ void GameStateConfig::logic () {
 				NO_MOUSE=true;
 				mouse_aim_cb->unCheck();
 				MOUSE_AIM=false;
+				mouse_move_cb->unCheck();
+				MOUSE_MOVE=false;
 			}
 			else NO_MOUSE=false;
 		}
