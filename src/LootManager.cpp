@@ -273,8 +273,8 @@ void LootManager::checkMapForLoot() {
 		if (possible_ids.size() > 1) chosen_loot = rand() % possible_ids.size();
 
 		ec = &mapr->loot[chosen_loot];
-		p.x = ec->x;
-		p.y = ec->y;
+		p.x = ec->x + 0.5f;
+		p.y = ec->y + 0.5f;
 
 		new_loot.quantity = randBetween(ec->a,ec->b);
 
