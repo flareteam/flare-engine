@@ -257,7 +257,6 @@ public:
 	float threat_range;
 	bool passive_attacker;//enemy will not initiate combat unless attacked
 	int hero_stealth;
-	Point last_seen;
 	int turn_delay;
 	int turn_ticks;
 	bool in_combat;
@@ -287,6 +286,7 @@ public:
 
 	// Campaign event interaction
 	std::string defeat_status;
+	std::string convert_status;
 	std::string quest_loot_requires;
 	std::string quest_loot_not;
 	int quest_loot_id;
