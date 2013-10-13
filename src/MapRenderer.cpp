@@ -716,18 +716,7 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					Event_Component *ec = (*it).getComponent("tooltip");
-					if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-						show_tooltip = true;
-						if (!tip_buf.compareFirstLine(ec->s)) {
-							tip_buf.clear();
-							tip_buf.addText(ec->s);
-						}
-						TOOLTIP_CONTEXT = TOOLTIP_MAP;
-					}
-					else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-						TOOLTIP_CONTEXT = TOOLTIP_NONE;
-					}
+					createTooltip((*it).getComponent("tooltip"));
 
 					if ((fabs(cam.x - (*it).location.x) < CLICK_RANGE)
 							&& (fabs(cam.y - (*it).location.y) < CLICK_RANGE)) {
@@ -783,20 +772,9 @@ void MapRenderer::checkNearestEvent(FPoint loc) {
 	if (nearest != events.end()) {
 		if (NO_MOUSE) {
 			// new tooltip?
-			Event_Component *ec = (*nearest).getComponent("tooltip");
-			if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-				show_tooltip = true;
-				tip_pos = map_to_screen((*nearest).location.x+(*nearest).location.w/2, (*nearest).location.y+(*nearest).location.h/2, shakycam.x, shakycam.y);
-				tip_pos.y -= TILE_H;
-				if (!tip_buf.compareFirstLine(ec->s)) {
-					tip_buf.clear();
-					tip_buf.addText(ec->s);
-				}
-				TOOLTIP_CONTEXT = TOOLTIP_MAP;
-			}
-			else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-				TOOLTIP_CONTEXT = TOOLTIP_NONE;
-			}
+			createTooltip((*nearest).getComponent("tooltip"));
+			tip_pos = map_to_screen((*nearest).location.x+(*nearest).location.w/2, (*nearest).location.y+(*nearest).location.h/2, shakycam.x, shakycam.y);
+			tip_pos.y -= TILE_H;
 		}
 
 		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
@@ -1018,6 +996,20 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		}
 	}
 	return !ev.keep_after_trigger;
+}
+
+void MapRenderer::createTooltip(Event_Component *ec) {
+	if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+		show_tooltip = true;
+		if (!tip_buf.compareFirstLine(ec->s)) {
+			tip_buf.clear();
+			tip_buf.addText(ec->s);
+		}
+		TOOLTIP_CONTEXT = TOOLTIP_MAP;
+	}
+	else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+		TOOLTIP_CONTEXT = TOOLTIP_NONE;
+	}
 }
 
 MapRenderer::~MapRenderer() {

@@ -105,6 +105,8 @@ private:
 
 	void clearLayers();
 
+	void createTooltip(Event_Component *ec);
+
 	FPoint shakycam;
 	TileSet tset;
 
