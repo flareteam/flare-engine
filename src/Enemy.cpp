@@ -122,8 +122,8 @@ void Enemy::logic() {
 		stats.converted = !stats.converted;
 		stats.hero_ally = !stats.hero_ally;
 		if (stats.convert_status != "") {
-            camp->setStatus(stats.convert_status);
-        }
+			camp->setStatus(stats.convert_status);
+		}
 	}
 
 	return;

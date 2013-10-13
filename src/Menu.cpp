@@ -29,8 +29,8 @@ Menu::Menu()
 	: background(NULL)
 	, visible(false)
 	, sfx_open(0)
-	, sfx_close(0)
-{}
+	, sfx_close(0) {
+}
 
 Menu::~Menu() {
 }

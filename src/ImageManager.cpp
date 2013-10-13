@@ -24,8 +24,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-ImageManager::ImageManager()
-{}
+ImageManager::ImageManager() {
+}
 
 ImageManager::~ImageManager() {
 	cleanUp();

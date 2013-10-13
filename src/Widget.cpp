@@ -27,14 +27,14 @@ Widget::Widget()
 	pos.x = pos.y = pos.w = pos.h = 0;
 }
 
-Widget::~Widget()
-{}
+Widget::~Widget() {
+}
 
-void Widget::activate()
-{}
+void Widget::activate() {
+}
 
-void Widget::deactivate()
-{}
+void Widget::deactivate() {
+}
 
 void Widget::defocus() {
 	in_focus = false;
@@ -56,11 +56,11 @@ TabList::TabList(ScrollType _scrolltype, int _LEFT, int _RIGHT, int _ACTIVATE)
 	, scrolltype(_scrolltype)
 	, MV_LEFT(_LEFT)
 	, MV_RIGHT(_RIGHT)
-	, ACTIVATE(_ACTIVATE)
-{}
+	, ACTIVATE(_ACTIVATE) {
+}
 
-TabList::~TabList()
-{}
+TabList::~TabList() {
+}
 
 bool TabList::isLocked() {
 	return locked;

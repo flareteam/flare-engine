@@ -199,7 +199,7 @@ void EnemyManager::handleSpawn() {
 		e->stats.summoned = true;
 		e->stats.summoned_power_index = espawn.summon_power_index;
 
-		if(espawn.summoner != NULL){
+		if(espawn.summoner != NULL) {
 			e->stats.summoner = espawn.summoner;
 			espawn.summoner->summons.push_back(&(e->stats));
 		}
@@ -223,19 +223,19 @@ void EnemyManager::handleSpawn() {
 		loadSounds(e->stats.sfx_prefix);
 
 		//Set level
-		if(e->stats.summoned_power_index != 0){
+		if(e->stats.summoned_power_index != 0) {
 			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_FIXED)
 				e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty;
 
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_LEVEL){
-				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_LEVEL) {
+				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
 					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
-							* (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+									 * (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
 				}
 			}
 
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT){
-				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
+				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
 					int stat_val = 0;
 					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_DEFENSE)
 						stat_val = e->stats.summoner->get_defense();
@@ -247,7 +247,7 @@ void EnemyManager::handleSpawn() {
 						stat_val = e->stats.summoner->get_physical();
 
 					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
-							* (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+									 * (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);
 				}
 			}
 
