@@ -871,7 +871,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 		haz->speed.x = (haz->base_speed + speed_var) * cos(alpha);
 		haz->speed.y = (haz->base_speed + speed_var) * sin(alpha);
 
-		//calculate direction based on trajectory, not actual target (UNITS_PER_TILE reduces round off error)
+		// calculate direction based on trajectory, not actual target
 		if (powers[power_index].directional)
 			haz->animationKind = calcDirection(src.x, src.y, src.x + haz->speed.x, src.y + haz->speed.y);
 
