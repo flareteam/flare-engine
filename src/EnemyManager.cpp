@@ -257,8 +257,8 @@ void EnemyManager::handleSpawn() {
 		}
 
 		if (mapr->collider.is_valid_position(espawn.pos.x + 0.5f, espawn.pos.y + 0.5f, e->stats.movement_type, false) || !e->stats.hero_ally) {
-			e->stats.pos.x = espawn.pos.x + 0.5;
-			e->stats.pos.y = espawn.pos.y + 0.5;
+			e->stats.pos.x = espawn.pos.x + 0.5f;
+			e->stats.pos.y = espawn.pos.y + 0.5f;
 		}
 		else {
 			e->stats.pos.x = pc->stats.pos.x;

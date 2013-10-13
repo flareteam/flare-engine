@@ -104,7 +104,7 @@ void Hazard::logic() {
 			lifespan = 0;
 			hit_wall = true;
 
-			if (collider->is_outside_map(pos.x, pos.y))
+			if (collider->is_outside_map((int)std::floor(pos.x), (int)std::floor(pos.y)))
 				remove_now = true;
 		}
 	}
