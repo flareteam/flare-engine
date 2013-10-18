@@ -722,7 +722,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 void GameStatePlay::checkStash() {
 	int max_interact_distance = 4;
-	int interact_distance = max_interact_distance+1;
+	int interact_distance;
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
