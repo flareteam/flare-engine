@@ -312,6 +312,8 @@ bool MapCollision::line_of_sight(const float& x1, const float& y1, const float& 
 
 bool MapCollision::line_of_movement(const float& x1, const float& y1, const float& x2, const float& y2, MOVEMENTTYPE movement_type) {
 
+	if (is_outside_map(x2, y2)) return false;
+
 	// intangible entities can always move
 	if (movement_type == MOVEMENT_INTANGIBLE) return true;
 
@@ -367,6 +369,8 @@ bool MapCollision::is_facing(const float& x1, const float& y1, char direction, c
 * @return true if a path is found
 */
 bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
+
+	if (is_outside_map(end_pos.x, end_pos.y)) return false;
 
 	if (limit == 0)
 		limit = 256;
