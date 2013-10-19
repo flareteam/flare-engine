@@ -27,8 +27,8 @@ using namespace std;
 
 Point floor(FPoint fp) {
 	Point result;
-	result.x = floor(fp.x);
-	result.y = floor(fp.y);
+	result.x = (int)floor(fp.x);
+	result.y = (int)floor(fp.y);
 	return result;
 }
 
@@ -57,8 +57,8 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 
 	// adjust to the center of the viewport
 	// we do this calculation first to avoid negative integer division
-	float adjust_x = (VIEW_W_HALF + 0.5) * UNITS_PER_PIXEL_X;
-	float adjust_y = (VIEW_H_HALF + 0.5) * UNITS_PER_PIXEL_Y;
+	float adjust_x = (VIEW_W_HALF + 0.5f) * UNITS_PER_PIXEL_X;
+	float adjust_y = (VIEW_H_HALF + 0.5f) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		r.x = (x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X;
@@ -90,8 +90,8 @@ FPoint collision_to_map(Point p) {
 
 Point map_to_collision(FPoint p) {
 	Point ret;
-	ret.x = floor(p.x);
-	ret.y = floor(p.y);
+	ret.x = (int)floor(p.x);
+	ret.y = (int)floor(p.y);
 	return ret;
 }
 

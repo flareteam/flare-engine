@@ -721,7 +721,7 @@ void GameStatePlay::checkNPCInteraction() {
 }
 
 void GameStatePlay::checkStash() {
-	int interact_distance;
+	float interact_distance;
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus

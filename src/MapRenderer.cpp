@@ -228,8 +228,8 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = it->map_pos.x; // implicit floor, just taking the integer part of the float
-		const unsigned tiley = it->map_pos.y;
+		const unsigned tilex = (int)floor(it->map_pos.x);
+		const unsigned tiley = (int)floor(it->map_pos.y);
 		const int commax = (float)(it->map_pos.x - tilex) * (2<<16);
 		const int commay = (float)(it->map_pos.y - tiley) * (2<<16);
 		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
@@ -238,8 +238,8 @@ void calculatePriosIso(vector<Renderable> &r) {
 
 void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = floor(it->map_pos.x);
-		const unsigned tiley = floor(it->map_pos.y);
+		const unsigned tilex = (int)floor(it->map_pos.x);
+		const unsigned tiley = (int)floor(it->map_pos.y);
 		const int commay = 1024 * it->map_pos.y;
 		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
@@ -603,8 +603,8 @@ void MapRenderer::executeOnMapExitEvents() {
 
 void MapRenderer::checkEvents(FPoint loc) {
 	Point maploc;
-	maploc.x = floor(loc.x);
-	maploc.y = floor(loc.y);
+	maploc.x = (int)floor(loc.x);
+	maploc.y = (int)floor(loc.y);
 	vector<Map_Event>::iterator it;
 
 	// loop in reverse because we may erase elements
