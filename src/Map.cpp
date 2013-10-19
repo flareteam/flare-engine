@@ -529,8 +529,8 @@ void Map::loadEventComponent(FileParser &infile) {
 	else if (infile.key == "spawn") {
 		// @ATTR event.spawn|[string,x(integer),y(integer)], ...|Spawn specified enemies at location
 		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue()) + 0.5;
-		e->y = toInt(infile.nextValue()) + 0.5;
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
 
 		// add repeating spawn
 		std::string repeat_val = infile.nextValue();
@@ -540,8 +540,8 @@ void Map::loadEventComponent(FileParser &infile) {
 			e->type = infile.key;
 
 			e->s = repeat_val;
-			e->x = toInt(infile.nextValue()) + 0.5;
-			e->y = toInt(infile.nextValue()) + 0.5;
+			e->x = toInt(infile.nextValue());
+			e->y = toInt(infile.nextValue());
 
 			repeat_val = infile.nextValue();
 		}
