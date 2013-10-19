@@ -135,7 +135,7 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == "stun") stun = true;
 			else if (effect_list[i].type == "forced_move") {
 				forced_move = true;
-				forced_speed = effect_list[i].magnitude;
+				forced_speed = (float)effect_list[i].magnitude;
 			}
 			else if (effect_list[i].type == "revive") revive = true;
 			else if (effect_list[i].type == "convert") convert = true;

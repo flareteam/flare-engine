@@ -90,14 +90,14 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 		assert(step_y == 0);
 		float dy = y - floor(y);
 
-		if (is_valid_tile(floor(x), floor(y) + 1, movement_type, is_hero)
-				&& is_valid_tile(floor(x) + sgn(step_x), floor(y) + 1, movement_type, is_hero)
+		if (is_valid_tile((int)floor(x), (int)floor(y) + 1, movement_type, is_hero)
+				&& is_valid_tile((int)floor(x) + sgn(step_x), (int)floor(y) + 1, movement_type, is_hero)
 				&& dy > 0.5) {
 			y += 1 - dy + epsilon;
 			x += step_x;
 		}
-		else if (is_valid_tile(floor(x), floor(y) - 1, movement_type, is_hero)
-				 && is_valid_tile(floor(x) + sgn(step_x), floor(y) - 1, movement_type, is_hero)
+		else if (is_valid_tile((int)floor(x), (int)floor(y) - 1, movement_type, is_hero)
+				 && is_valid_tile((int)floor(x) + sgn(step_x), (int)floor(y) - 1, movement_type, is_hero)
 				 && dy < 0.5) {
 			y -= dy + epsilon;
 			x += step_x;
@@ -111,14 +111,14 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 		assert(step_x == 0);
 		float dx = x - floor(x);
 
-		if (is_valid_tile(floor(x) + 1, floor(y), movement_type, is_hero)
-				&& is_valid_tile(floor(x) + 1, floor(y) + sgn(step_y), movement_type, is_hero)
+		if (is_valid_tile((int)floor(x) + 1, (int)floor(y), movement_type, is_hero)
+				&& is_valid_tile((int)floor(x) + 1, (int)floor(y) + sgn(step_y), movement_type, is_hero)
 				&& dx > 0.5) {
 			x += 1 - dx + epsilon;
 			y += step_y;
 		}
-		else if (is_valid_tile(floor(x) - 1, floor(y), movement_type, is_hero)
-				 && is_valid_tile(floor(x) - 1, floor(y) + sgn(step_y), movement_type, is_hero)
+		else if (is_valid_tile((int)floor(x) - 1, (int)floor(y), movement_type, is_hero)
+				 && is_valid_tile((int)floor(x) - 1, (int)floor(y) + sgn(step_y), movement_type, is_hero)
 				 && dx < 0.5) {
 			x -= dx + epsilon;
 			y += step_y;
@@ -198,11 +198,11 @@ bool MapCollision::is_outside_map(const int& tile_x, const int& tile_y) const {
  */
 bool MapCollision::is_empty(const float& x, const float& y) const {
 	// map bounds check
-	if (is_outside_map(x, y)) return false;
+	const int tile_x = (int)floor(x);
+	const int tile_y = (int)floor(y);
+	if (is_outside_map(tile_x, tile_y)) return false;
 
 	// collision type check
-	const int tile_x = floor(x);
-	const int tile_y = floor(y);
 	return (colmap[tile_x][tile_y] == BLOCKS_NONE || colmap[tile_x][tile_y] == MAP_ONLY || colmap[tile_x][tile_y] == MAP_ONLY_ALT);
 }
 
@@ -213,11 +213,11 @@ bool MapCollision::is_empty(const float& x, const float& y) const {
 bool MapCollision::is_wall(const float& x, const float& y) const {
 
 	// bounds check
-	if (is_outside_map(x, y)) return true;
+	const int tile_x = (int)floor(x);
+	const int tile_y = (int)floor(y);
+	if (is_outside_map(tile_x, tile_y)) return true;
 
 	// collision type check
-	const int tile_x = floor(x);
-	const int tile_y = floor(y);
 	return (colmap[tile_x][tile_y] == BLOCKS_ALL || colmap[tile_x][tile_y] == BLOCKS_ALL_HIDDEN);
 }
 
@@ -256,7 +256,7 @@ bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, MOVEMENTT
  * Is this a valid position for an entity with this movement type?
  */
 bool MapCollision::is_valid_position(const float& x, const float& y, MOVEMENTTYPE movement_type, bool is_hero) const {
-	return is_valid_tile(floor(x), floor(y), movement_type, is_hero);
+	return is_valid_tile((int)floor(x), (int)floor(y), movement_type, is_hero);
 }
 
 /**
@@ -318,8 +318,8 @@ bool MapCollision::line_of_movement(const float& x1, const float& y1, const floa
 	if (movement_type == MOVEMENT_INTANGIBLE) return true;
 
 	// if the target is blocking, clear it temporarily
-	int tile_x = x2;
-	int tile_y = y2;
+	int tile_x = (int)floor(x2);
+	int tile_y = (int)floor(y2);
 	bool target_blocks = false;
 	int target_blocks_type = colmap[tile_x][tile_y];
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES || colmap[tile_x][tile_y] == BLOCKS_ENEMIES) {
@@ -475,8 +475,8 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint>
 
 void MapCollision::block(const float& map_x, const float& map_y, bool is_ally) {
 
-	const int tile_x = map_x;
-	const int tile_y = map_y;
+	const int tile_x = (int)floor(map_x);
+	const int tile_y = (int)floor(map_y);
 
 	if (colmap[tile_x][tile_y] == BLOCKS_NONE) {
 		if(is_ally)
@@ -489,8 +489,8 @@ void MapCollision::block(const float& map_x, const float& map_y, bool is_ally) {
 
 void MapCollision::unblock(const float& map_x, const float& map_y) {
 
-	const int tile_x = map_x;
-	const int tile_y = map_y;
+	const int tile_x = (int)floor(map_x);
+	const int tile_y = (int)floor(map_y);
 
 	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES || colmap[tile_x][tile_y] == BLOCKS_ENEMIES) {
 		colmap[tile_x][tile_y] = BLOCKS_NONE;

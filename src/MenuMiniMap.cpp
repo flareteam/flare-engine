@@ -29,6 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
+#include <cmath>
+
 using namespace std;
 
 MenuMiniMap::MenuMiniMap() {
@@ -101,8 +103,8 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
  */
 void MenuMiniMap::renderOrtho(FPoint hero_pos) {
 
-	const int herox = hero_pos.x;
-	const int heroy = hero_pos.y;
+	const int herox = (int)floor(hero_pos.x);
+	const int heroy = (int)floor(hero_pos.y);
 
 	SDL_Rect clip;
 	clip.x = herox - pos.w/2;
@@ -132,8 +134,8 @@ void MenuMiniMap::renderOrtho(FPoint hero_pos) {
  */
 void MenuMiniMap::renderIso(FPoint hero_pos) {
 
-	const int herox = hero_pos.x;
-	const int heroy = hero_pos.y;
+	const int herox = (int)floor(hero_pos.x);
+	const int heroy = (int)floor(hero_pos.y);
 	const int heroy_screen = herox + heroy;
 	const int herox_screen = herox - heroy + std::max(map_size.x, map_size.y);
 

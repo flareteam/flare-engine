@@ -587,7 +587,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	else if (powers[power_index].visual_option)
 		haz->animationKind = powers[power_index].visual_option;
 
-	haz->floor = powers[power_index].floor;
+	haz->on_floor = powers[power_index].floor;
 	haz->base_speed = powers[power_index].speed;
 	haz->complete_animation = powers[power_index].complete_animation;
 

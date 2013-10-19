@@ -59,7 +59,7 @@ int AStarNode::getY() const {
 	return y;
 }
 
-int AStarNode::getH() const {
+float AStarNode::getH() const {
 	return h;
 }
 
