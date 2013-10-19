@@ -37,8 +37,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-const float CLICK_RANGE = 3; //for activating events
-
 MapRenderer::MapRenderer()
 	: Map()
 	, index_objectlayer(0)
@@ -654,7 +652,7 @@ void MapRenderer::checkEvents(FPoint loc) {
  * Some events have a hotspot (rectangle screen area) where the user can click
  * to trigger the event.
  *
- * The hero must be within range (CLICK_RANGE) to activate an event.
+ * The hero must be within range (INTERACT_RANGE) to activate an event.
  *
  * This function checks valid mouse clicks against all clickable events, and
  * executes
@@ -718,8 +716,8 @@ void MapRenderer::checkHotspots() {
 					// new tooltip?
 					createTooltip((*it).getComponent("tooltip"));
 
-					if ((fabs(cam.x - (*it).location.x) < CLICK_RANGE)
-							&& (fabs(cam.y - (*it).location.y) < CLICK_RANGE)) {
+					if ((fabs(cam.x - (*it).location.x) < INTERACT_RANGE)
+							&& (fabs(cam.y - (*it).location.y) < INTERACT_RANGE)) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -762,7 +760,7 @@ void MapRenderer::checkNearestEvent(FPoint loc) {
 		ev_loc.x = (*it).location.x + (*it).location.w/2;
 		ev_loc.y = (*it).location.y + (*it).location.h/2;
 		float distance = calcDist(loc, ev_loc);
-		if (distance < CLICK_RANGE && distance < best_distance) {
+		if (distance < INTERACT_RANGE && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
 		}

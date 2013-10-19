@@ -46,9 +46,6 @@ const int RARITY_NORMAL = 10;
 const int RARITY_HIGH = 3;
 const int RARITY_EPIC = 1;
 
-// how close (map units) does the hero have to be to pick up loot?
-const int LOOT_RANGE = 3;
-
 class LootManager {
 private:
 

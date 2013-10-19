@@ -597,8 +597,7 @@ void GameStatePlay::checkNPCInteraction() {
 	if (pc->attacking) return;
 
 	int npc_click = -1;
-	int max_interact_distance = 4;
-	int interact_distance = max_interact_distance+1;
+	float interact_distance = 0;
 	nearest_npc = npcs->getNearestNPC(pc->stats.pos);
 
 	// check for clicking on an NPC
@@ -613,7 +612,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// check distance to this npc
 	if (npc_id != -1) {
-		interact_distance = (int)calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 	}
 
 	if (mapr->event_npc != "") {
@@ -627,7 +626,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// if close enough to the NPC, open the appropriate interaction screen
 
-	if (npc_id != -1 && ((npc_click != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
+	if (npc_id != -1 && ((npc_click != -1 && interact_distance < INTERACT_RANGE && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
 
 		if (inpt->pressing[MAIN1] && !NO_MOUSE) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
@@ -654,7 +653,7 @@ void GameStatePlay::checkNPCInteraction() {
 		menu->npc->setNPC(NULL);
 	}
 
-	if (npc_id != -1 && ((interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
+	if (npc_id != -1 && ((interact_distance < INTERACT_RANGE && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
 
 		if (menu->talker->vendor_visible && !menu->vendor->talker_visible) {
 
@@ -703,7 +702,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// check for walking away from an NPC
 	if (npc_id != -1 && !eventDialogOngoing) {
-		if (interact_distance > max_interact_distance || !pc->stats.alive) {
+		if (interact_distance > INTERACT_RANGE || !pc->stats.alive) {
 			menu->npc->setNPC(NULL);
 			menu->vendor->npc = NULL;
 			menu->talker->npc = NULL;
@@ -722,8 +721,7 @@ void GameStatePlay::checkNPCInteraction() {
 }
 
 void GameStatePlay::checkStash() {
-	int max_interact_distance = 4;
-	int interact_distance = max_interact_distance+1;
+	int interact_distance;
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
@@ -737,8 +735,8 @@ void GameStatePlay::checkStash() {
 		if (!menu->inv->visible) menu->stash->visible = false;
 
 		// If the player walks away from the stash, close its menu
-		interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
-		if (interact_distance > max_interact_distance || !pc->stats.alive) {
+		interact_distance = calcDist(pc->stats.pos, mapr->stash_pos);
+		if (interact_distance > INTERACT_RANGE || !pc->stats.alive) {
 			menu->stash->visible = false;
 		}
 

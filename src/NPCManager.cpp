@@ -140,7 +140,7 @@ int NPCManager::getNearestNPC(FPoint pos) {
 		}
 	}
 
-	if (best_distance > 4) nearest = -1;
+	if (best_distance > INTERACT_RANGE) nearest = -1;
 
 	return nearest;
 }

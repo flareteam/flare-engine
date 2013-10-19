@@ -132,6 +132,7 @@ extern int PARTY_EXP_PERCENTAGE;
 extern bool ENABLE_ALLY_COLLISION_AI;
 extern bool ENABLE_ALLY_COLLISION;
 extern int CURRENCY_ID;
+extern float INTERACT_RANGE;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;
@@ -148,7 +149,6 @@ extern unsigned short TILESET_ORTHOGONAL;
 extern std::string LANGUAGE;
 
 // Autopickup Settings
-extern float AUTOPICKUP_RANGE;
 extern bool AUTOPICKUP_CURRENCY;
 
 // Combat calculation caps
