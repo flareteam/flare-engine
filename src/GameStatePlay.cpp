@@ -131,40 +131,41 @@ void GameStatePlay::resetGame() {
  * This function also sets enemy mouseover for Menu Enemy.
  */
 void GameStatePlay::checkEnemyFocus() {
-	// determine enemies mouseover
-	// only check alive enemies for targeting
+	// check the last hit enemy first
+	// if there's none, then either get the nearest enemy or one under the mouse (depending on mouse mode)
 	if (NO_MOUSE) {
-		enemy = enemies->getNearestEnemy(pc->stats.pos);
+		if (hazards->last_enemy) {
+			if (enemy == hazards->last_enemy) {
+				if (menu->enemy->timeout > 0) return;
+				else hazards->last_enemy = NULL;
+			}
+			enemy = hazards->last_enemy;
+		}
+		else {
+			enemy = enemies->getNearestEnemy(pc->stats.pos);
+		}
 	}
 	else {
-		enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
+		if (hazards->last_enemy) {
+			enemy = hazards->last_enemy;
+			hazards->last_enemy = NULL;
+		}
+		else {
+			enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
+		}
 	}
 
-	if (enemy != NULL) {
-
-		// if there's a living creature in focus, display its stats
+	if (enemy) {
+		// set the actual menu with the enemy selected above
 		if (!enemy->stats.suppress_hp) {
 			menu->enemy->enemy = enemy;
 			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
-			hazards->last_enemy = NULL;
-		}
-	}
-	else if (hazards->last_enemy != NULL) {
-
-		// try to focus the last enemy hit
-		if (!hazards->last_enemy->stats.suppress_hp) {
-			menu->enemy->enemy = hazards->last_enemy;
-			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
-			if (!hazards->last_enemy->stats.alive) {
-				hazards->last_enemy = NULL;
-			}
 		}
 	}
 	else if (!NO_MOUSE) {
-
-		// if there's no living creature in focus, look for a dead one instead
+		// if we're using a mouse and we didn't select an enemy, try selecting a dead one instead
 		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, false);
-		if (temp_enemy != NULL) {
+		if (temp_enemy) {
 			menu->enemy->enemy = temp_enemy;
 			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
 		}
