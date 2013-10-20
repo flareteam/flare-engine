@@ -94,6 +94,8 @@ private:
 
 	std::vector<Title> titles;
 
+	int nearest_npc;
+
 public:
 	GameStatePlay();
 	~GameStatePlay();

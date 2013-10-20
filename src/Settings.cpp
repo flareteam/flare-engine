@@ -142,7 +142,6 @@ int JOY_DEADZONE;
 std::string LANGUAGE = "en";
 
 // Autopickup Settings
-float AUTOPICKUP_RANGE = 0;
 bool AUTOPICKUP_CURRENCY = false;
 
 // Combat calculation caps (percentage)
@@ -193,6 +192,7 @@ int PARTY_EXP_PERCENTAGE = 100;
 bool ENABLE_ALLY_COLLISION_AI = true;
 bool ENABLE_ALLY_COLLISION = true;
 int CURRENCY_ID = 1;
+float INTERACT_RANGE = 3;
 
 /**
  * Set system paths
@@ -465,6 +465,8 @@ void loadMiscSettings() {
 					fprintf(stderr, "Currency ID below the minimum allowed value. Resetting it to %d\n", CURRENCY_ID);
 				}
 			}
+			else if (infile.key == "interact_range")
+				INTERACT_RANGE = toFloat(infile.val);
 
 		}
 		infile.close();

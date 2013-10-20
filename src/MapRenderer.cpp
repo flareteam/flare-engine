@@ -37,8 +37,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-const float CLICK_RANGE = 3; //for activating events
-
 MapRenderer::MapRenderer()
 	: Map()
 	, index_objectlayer(0)
@@ -654,12 +652,14 @@ void MapRenderer::checkEvents(FPoint loc) {
  * Some events have a hotspot (rectangle screen area) where the user can click
  * to trigger the event.
  *
- * The hero must be within range (CLICK_RANGE) to activate an event.
+ * The hero must be within range (INTERACT_RANGE) to activate an event.
  *
  * This function checks valid mouse clicks against all clickable events, and
  * executes
  */
 void MapRenderer::checkHotspots() {
+	if (NO_MOUSE) return;
+
 	show_tooltip = false;
 
 	vector<Map_Event>::iterator it;
@@ -714,21 +714,10 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					Event_Component *ec = (*it).getComponent("tooltip");
-					if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-						show_tooltip = true;
-						if (!tip_buf.compareFirstLine(ec->s)) {
-							tip_buf.clear();
-							tip_buf.addText(ec->s);
-						}
-						TOOLTIP_CONTEXT = TOOLTIP_MAP;
-					}
-					else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-						TOOLTIP_CONTEXT = TOOLTIP_NONE;
-					}
+					createTooltip((*it).getComponent("tooltip"));
 
-					if ((fabs(cam.x - (*it).location.x) < CLICK_RANGE)
-							&& (fabs(cam.y - (*it).location.y) < CLICK_RANGE)) {
+					if ((fabs(cam.x - (*it).location.x) < INTERACT_RANGE)
+							&& (fabs(cam.y - (*it).location.y) < INTERACT_RANGE)) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -748,36 +737,47 @@ void MapRenderer::checkHotspots() {
 }
 
 void MapRenderer::checkNearestEvent(FPoint loc) {
-	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+	if (NO_MOUSE) show_tooltip = false;
 
-		vector<Map_Event>::iterator it;
-		vector<Map_Event>::iterator nearest = events.end();
-		float best_distance = std::numeric_limits<float>::max();
+	vector<Map_Event>::iterator it;
+	vector<Map_Event>::iterator nearest = events.end();
+	float best_distance = std::numeric_limits<float>::max();
 
-		// loop in reverse because we may erase elements
-		for (it = events.end(); it != events.begin(); ) {
-			--it;
+	// loop in reverse because we may erase elements
+	for (it = events.end(); it != events.begin(); ) {
+		--it;
 
-			// skip inactive events
-			if (!isActive(*it)) continue;
+		// skip inactive events
+		if (!isActive(*it)) continue;
 
-			// skip events without hotspots
-			if ((*it).hotspot.h == 0) continue;
+		// skip events without hotspots
+		if ((*it).hotspot.h == 0) continue;
 
-			// skip events on cooldown
-			if ((*it).cooldown_ticks != 0) continue;
+		// skip events on cooldown
+		if ((*it).cooldown_ticks != 0) continue;
 
-			FPoint ev_loc;
-			ev_loc.x = (*it).location.x;
-			ev_loc.y = (*it).location.y;
-			float distance = calcDist(loc, ev_loc);
-			if (distance < CLICK_RANGE && distance < best_distance) {
-				best_distance = distance;
-				nearest = it;
-			}
+		FPoint ev_loc;
+		ev_loc.x = (*it).location.x + (*it).location.w/2;
+		ev_loc.y = (*it).location.y + (*it).location.h/2;
+		float distance = calcDist(loc, ev_loc);
+		if (distance < INTERACT_RANGE && distance < best_distance) {
+			best_distance = distance;
+			nearest = it;
 		}
-		if (nearest != events.end()) {
+
+	}
+
+	if (nearest != events.end()) {
+		if (NO_MOUSE) {
+			// new tooltip?
+			createTooltip((*nearest).getComponent("tooltip"));
+			tip_pos = map_to_screen((*nearest).location.x+(*nearest).location.w/2, (*nearest).location.y+(*nearest).location.h/2, shakycam.x, shakycam.y);
+			tip_pos.y -= TILE_H;
+		}
+
+		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+
 			if(executeEvent(*nearest))
 				events.erase(nearest);
 		}
@@ -994,6 +994,20 @@ bool MapRenderer::executeEvent(Map_Event &ev) {
 		}
 	}
 	return !ev.keep_after_trigger;
+}
+
+void MapRenderer::createTooltip(Event_Component *ec) {
+	if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+		show_tooltip = true;
+		if (!tip_buf.compareFirstLine(ec->s)) {
+			tip_buf.clear();
+			tip_buf.addText(ec->s);
+		}
+		TOOLTIP_CONTEXT = TOOLTIP_MAP;
+	}
+	else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+		TOOLTIP_CONTEXT = TOOLTIP_NONE;
+	}
 }
 
 MapRenderer::~MapRenderer() {

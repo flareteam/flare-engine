@@ -130,7 +130,7 @@ int NPCManager::checkNPCClick(Point mouse, FPoint cam) {
 
 int NPCManager::getNearestNPC(FPoint pos) {
 	int nearest = -1;
-	float best_distance = std::numeric_limits<int>::max();
+	float best_distance = std::numeric_limits<float>::max();
 
 	for (unsigned i=0; i<npcs.size(); i++) {
 		float distance = calcDist(pos, npcs[i]->pos);
@@ -140,17 +140,21 @@ int NPCManager::getNearestNPC(FPoint pos) {
 		}
 	}
 
+	if (best_distance > INTERACT_RANGE) nearest = -1;
+
 	return nearest;
 }
 
 /**
  * On mouseover, display NPC's name
  */
-void NPCManager::renderTooltips(FPoint cam, Point mouse) {
+void NPCManager::renderTooltips(FPoint cam, Point mouse, int nearest) {
 	Point p;
 	SDL_Rect r;
+	int id = -1;
 
 	for (unsigned i=0; i<npcs.size(); i++) {
+		if (NO_MOUSE && nearest != -1 && (unsigned)nearest != i) continue;
 
 		p = map_to_screen(npcs[i]->pos.x, npcs[i]->pos.y, cam.x, cam.y);
 
@@ -160,25 +164,31 @@ void NPCManager::renderTooltips(FPoint cam, Point mouse) {
 		r.x = p.x - ren.offset.x;
 		r.y = p.y - ren.offset.y;
 
-		if (isWithin(r, mouse) && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-
-			// adjust dest.y so that the tooltip floats above the item
-			p.y -= tooltip_margin;
-
-			// use current tip or make a new one?
-			if (!tip_buf.compareFirstLine(npcs[i]->name)) {
-				tip_buf.clear();
-				tip_buf.addText(npcs[i]->name);
-			}
-
-			tip->render(tip_buf, p, STYLE_TOPLABEL);
-			TOOLTIP_CONTEXT = TOOLTIP_MAP;
-
-			break; // display only one NPC tooltip at a time
+		if (NO_MOUSE && nearest != -1 && (unsigned)nearest == i) {
+			id = nearest;
+			break;
 		}
-		else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-			TOOLTIP_CONTEXT = TOOLTIP_NONE;
+		else if (!NO_MOUSE && isWithin(r, mouse)) {
+			id = i;
+			break;
 		}
+	}
+	if (id != -1 && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+
+		// adjust dest.y so that the tooltip floats above the item
+		p.y -= tooltip_margin;
+
+		// use current tip or make a new one?
+		if (!tip_buf.compareFirstLine(npcs[id]->name)) {
+			tip_buf.clear();
+			tip_buf.addText(npcs[id]->name);
+		}
+
+		tip->render(tip_buf, p, STYLE_TOPLABEL);
+		TOOLTIP_CONTEXT = TOOLTIP_MAP;
+	}
+	else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+		TOOLTIP_CONTEXT = TOOLTIP_NONE;
 	}
 }
 
