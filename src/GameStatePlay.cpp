@@ -133,7 +133,12 @@ void GameStatePlay::resetGame() {
 void GameStatePlay::checkEnemyFocus() {
 	// determine enemies mouseover
 	// only check alive enemies for targeting
-	enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
+	if (NO_MOUSE) {
+		enemy = enemies->getNearestEnemy(pc->stats.pos);
+	}
+	else {
+		enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
+	}
 
 	if (enemy != NULL) {
 
@@ -155,7 +160,7 @@ void GameStatePlay::checkEnemyFocus() {
 			}
 		}
 	}
-	else {
+	else if (!NO_MOUSE) {
 
 		// if there's no living creature in focus, look for a dead one instead
 		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, false);

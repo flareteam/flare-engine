@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorAlly.h"
 #include "SharedGameResources.h"
 
+#include <limits>
+
 using namespace std;
 
 EnemyManager::EnemyManager()
@@ -401,6 +403,27 @@ Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 		}
 	}
 	return NULL;
+}
+
+Enemy* EnemyManager::getNearestEnemy(FPoint pos) {
+	Enemy* nearest = NULL;
+	float best_distance = std::numeric_limits<float>::max();
+
+	for (unsigned i=0; i<enemies.size(); i++) {
+		if(enemies[i]->stats.cur_state == ENEMY_DEAD || enemies[i]->stats.cur_state == ENEMY_CRITDEAD) {
+			continue;
+		}
+
+		float distance = calcDist(pos, enemies[i]->stats.pos);
+		if (distance < best_distance) {
+			best_distance = distance;
+			nearest = enemies[i];
+		}
+	}
+
+	if (best_distance > INTERACT_RANGE) nearest = NULL;
+
+	return nearest;
 }
 
 /**

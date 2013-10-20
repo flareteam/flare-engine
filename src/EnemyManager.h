@@ -65,6 +65,7 @@ public:
 	void checkEnemiesforXP();
 	bool isCleared();
 	Enemy *enemyFocus(Point mouse, FPoint cam, bool alive_only);
+	Enemy *getNearestEnemy(FPoint pos);
 
 	// vars
 	std::vector<Enemy*> enemies;
