@@ -130,7 +130,7 @@ int NPCManager::checkNPCClick(Point mouse, FPoint cam) {
 
 int NPCManager::getNearestNPC(FPoint pos) {
 	int nearest = -1;
-	float best_distance = std::numeric_limits<int>::max();
+	float best_distance = std::numeric_limits<float>::max();
 
 	for (unsigned i=0; i<npcs.size(); i++) {
 		float distance = calcDist(pos, npcs[i]->pos);
