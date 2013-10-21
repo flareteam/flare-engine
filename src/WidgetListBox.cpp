@@ -467,6 +467,8 @@ void WidgetListBox::refresh() {
 }
 
 bool WidgetListBox::getNext() {
+	if (list_amount < 1) return false;
+
 	int sel = getSelected();
 	if (sel != -1) selected[sel] = false;
 
@@ -483,6 +485,8 @@ bool WidgetListBox::getNext() {
 }
 
 bool WidgetListBox::getPrev() {
+	if (list_amount < 1) return false;
+
 	int sel = getSelected();
 	if (sel == -1) sel = 0;
 	selected[sel] = false;
