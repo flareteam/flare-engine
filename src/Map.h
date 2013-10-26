@@ -76,6 +76,8 @@ public:
 	int cooldown_ticks;
 	StatBlock *stats;
 	bool keep_after_trigger; // if this event has been triggered once, should this event be kept? If so, this event can be triggered multiple times.
+	FPoint center;
+	SDL_Rect reachable_from;
 
 	Map_Event()
 	 : type("")
@@ -84,9 +86,11 @@ public:
 	 , cooldown_ticks(0)
 	 , stats(NULL)
 	 , keep_after_trigger(true)
+	 , center(FPoint())
 	{
 		location.x = location.y = location.w = location.h = 0;
 		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
+		reachable_from.x = reachable_from.y = reachable_from.w = reachable_from.h = 0;
 	}
 
 	// returns a pointer to the event component within the components list

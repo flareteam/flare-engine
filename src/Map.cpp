@@ -279,6 +279,9 @@ void Map::loadEvent(FileParser &infile) {
 		events.back().location.y = toInt(infile.nextValue());
 		events.back().location.w = toInt(infile.nextValue());
 		events.back().location.h = toInt(infile.nextValue());
+
+		events.back().center.x = events.back().location.x + (float)events.back().location.w/2;
+		events.back().center.y = events.back().location.y + (float)events.back().location.h/2;
 	}
 	else if (infile.key == "hotspot") {
 		//  @ATTR event.hotspot|[ [x, y, w, h] : location ]|Event uses location as hotspot or defined by rect.
@@ -298,6 +301,13 @@ void Map::loadEvent(FileParser &infile) {
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown.
 		events.back().cooldown = parse_duration(infile.val);
+	}
+	else if (infile.key == "reachable_from") {
+		// @ATTR event.reachable_from|[x,y,w,h]|If the hero is inside this rectangle, they can activate the event.
+		events.back().reachable_from.x = toInt(infile.nextValue());
+		events.back().reachable_from.y = toInt(infile.nextValue());
+		events.back().reachable_from.w = toInt(infile.nextValue());
+		events.back().reachable_from.h = toInt(infile.nextValue());
 	}
 	else {
 		loadEventComponent(infile);
