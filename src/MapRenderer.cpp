@@ -716,8 +716,7 @@ void MapRenderer::checkHotspots() {
 					// new tooltip?
 					createTooltip((*it).getComponent("tooltip"));
 
-					if ((fabs(cam.x - (*it).location.x) < INTERACT_RANGE)
-							&& (fabs(cam.y - (*it).location.y) < INTERACT_RANGE)) {
+					if (calcDist(cam, (*it).center) < INTERACT_RANGE) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -736,7 +735,7 @@ void MapRenderer::checkHotspots() {
 	}
 }
 
-void MapRenderer::checkNearestEvent(FPoint loc) {
+void MapRenderer::checkNearestEvent() {
 	if (NO_MOUSE) show_tooltip = false;
 
 	vector<Map_Event>::iterator it;
@@ -756,10 +755,7 @@ void MapRenderer::checkNearestEvent(FPoint loc) {
 		// skip events on cooldown
 		if ((*it).cooldown_ticks != 0) continue;
 
-		FPoint ev_loc;
-		ev_loc.x = (*it).location.x + (*it).location.w/2;
-		ev_loc.y = (*it).location.y + (*it).location.h/2;
-		float distance = calcDist(loc, ev_loc);
+		float distance = calcDist(cam, (*it).center);
 		if (distance < INTERACT_RANGE && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
@@ -771,7 +767,7 @@ void MapRenderer::checkNearestEvent(FPoint loc) {
 		if (NO_MOUSE) {
 			// new tooltip?
 			createTooltip((*nearest).getComponent("tooltip"));
-			tip_pos = map_to_screen((*nearest).location.x+(*nearest).location.w/2, (*nearest).location.y+(*nearest).location.h/2, shakycam.x, shakycam.y);
+			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
 			tip_pos.y -= TILE_H;
 		}
 

@@ -279,6 +279,9 @@ void Map::loadEvent(FileParser &infile) {
 		events.back().location.y = toInt(infile.nextValue());
 		events.back().location.w = toInt(infile.nextValue());
 		events.back().location.h = toInt(infile.nextValue());
+
+		events.back().center.x = events.back().location.x + (float)events.back().location.w/2;
+		events.back().center.y = events.back().location.y + (float)events.back().location.h/2;
 	}
 	else if (infile.key == "hotspot") {
 		//  @ATTR event.hotspot|[ [x, y, w, h] : location ]|Event uses location as hotspot or defined by rect.

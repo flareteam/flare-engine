@@ -807,7 +807,7 @@ void GameStatePlay::logic() {
 		if (pc->stats.alive) {
 			checkNPCInteraction();
 			mapr->checkHotspots();
-			mapr->checkNearestEvent(pc->stats.pos);
+			mapr->checkNearestEvent();
 		}
 		checkTitle();
 

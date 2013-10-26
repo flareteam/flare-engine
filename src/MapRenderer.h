@@ -135,7 +135,7 @@ public:
 
 	void checkEvents(FPoint loc);
 	void checkHotspots();
-	void checkNearestEvent(FPoint loc);
+	void checkNearestEvent();
 	void checkTooltip();
 
 	// some events are triggered on exiting the map
