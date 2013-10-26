@@ -716,7 +716,8 @@ void MapRenderer::checkHotspots() {
 					// new tooltip?
 					createTooltip((*it).getComponent("tooltip"));
 
-					if (calcDist(cam, (*it).center) < INTERACT_RANGE) {
+					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, floor(cam)))
+							&& calcDist(cam, (*it).center) < INTERACT_RANGE) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -756,7 +757,8 @@ void MapRenderer::checkNearestEvent() {
 		if ((*it).cooldown_ticks != 0) continue;
 
 		float distance = calcDist(cam, (*it).center);
-		if (distance < INTERACT_RANGE && distance < best_distance) {
+		if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, floor(cam)))
+				&& distance < INTERACT_RANGE && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
 		}

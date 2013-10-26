@@ -302,6 +302,13 @@ void Map::loadEvent(FileParser &infile) {
 		// @ATTR event.cooldown|duration|Duration for event cooldown.
 		events.back().cooldown = parse_duration(infile.val);
 	}
+	else if (infile.key == "reachable_from") {
+		// @ATTR event.reachable_from|[x,y,w,h]|If the hero is inside this rectangle, they can activate the event.
+		events.back().reachable_from.x = toInt(infile.nextValue());
+		events.back().reachable_from.y = toInt(infile.nextValue());
+		events.back().reachable_from.w = toInt(infile.nextValue());
+		events.back().reachable_from.h = toInt(infile.nextValue());
+	}
 	else {
 		loadEventComponent(infile);
 	}
