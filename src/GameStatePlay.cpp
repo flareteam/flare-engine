@@ -818,10 +818,7 @@ void GameStatePlay::logic() {
 		// so we need to prevent accidental clicks if a new power is placed under the slot we clicked on.
 		// It's a bit hacky, but it works
 		if (powers->powers[actionbar_power].type == POWTYPE_TRANSFORM) {
-			for (int i=0; i < 12; ++i) {
-				menu->act->slots[i]->checked = false;
-				menu->act->slots[i]->pressed = false;
-			}
+			menu->act->resetSlots();
 		}
 
 		// transfer hero data to enemies, for AI use
