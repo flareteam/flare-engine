@@ -250,9 +250,9 @@ void PowerManager::loadPowers() {
 				if (infile.val == ELEMENTS[i].name) powers[input_id].trait_elemental = i;
 			}
 		}
-		else if (infile.key == "range")
-			// @ATTR, range|float|
-			powers[input_id].range = toFloat(infile.nextValue());
+		else if (infile.key == "target_range")
+			// @ATTR, target_range|float||The distance from the caster that the power can be activated
+			powers[input_id].target_range = toFloat(infile.nextValue());
 		//steal effects
 		else if (infile.key == "hp_steal")
 			// @ATTR, hp_steal|integer|Percentage of damage to steal into HP
@@ -484,7 +484,7 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint 
 
 	if (!collider) return false;
 
-	target = limitRange(powers[power_index].range,src_stats->pos,target);
+	target = limitRange(powers[power_index].target_range,src_stats->pos,target);
 
 	if (!collider->is_empty(target.x, target.y) || collider->is_wall(target.x,target.y)) {
 		if (powers[power_index].buff_teleport) {
@@ -614,7 +614,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 		haz->pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		haz->pos = limitRange(powers[power_index].range,src_stats->pos,target);
+		haz->pos = limitRange(powers[power_index].target_range,src_stats->pos,target);
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
@@ -656,7 +656,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
-		target = limitRange(powers[power_index].range,src_stats->pos,target);
+		target = limitRange(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
 			FPoint new_target = targetNeighbor(floor(target), powers[power_index].target_neighbor);
 			if (floor(new_target.x) == floor(target.x) && floor(new_target.y) == floor(target.y)) {
