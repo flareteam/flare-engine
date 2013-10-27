@@ -153,8 +153,8 @@ StatBlock::StatBlock()
 	, death_penalty(false)
 	, defeat_status("")			// enemy only
 	, convert_status("")		// enemy only
-	, quest_loot_requires("")	// enemy only
-	, quest_loot_not("")		// enemy only
+	, quest_loot_requires_status("")	// enemy only
+	, quest_loot_requires_not_status("")		// enemy only
 	, quest_loot_id(0)			// enemy only
 	, first_defeat_loot(0)		// enemy only
 	, gfx_base("male")
@@ -292,8 +292,8 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "convert_status") convert_status = infile.val;
 		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
 		else if (infile.key == "quest_loot") {
-			quest_loot_requires = infile.nextValue();
-			quest_loot_not = infile.nextValue();
+			quest_loot_requires_status = infile.nextValue();
+			quest_loot_requires_not_status = infile.nextValue();
 			quest_loot_id = toInt(infile.nextValue());
 		}
 		// combat stats

@@ -287,8 +287,8 @@ public:
 	// Campaign event interaction
 	std::string defeat_status;
 	std::string convert_status;
-	std::string quest_loot_requires;
-	std::string quest_loot_not;
+	std::string quest_loot_requires_status;
+	std::string quest_loot_requires_not_status;
 	int quest_loot_id;
 	int first_defeat_loot;
 
