@@ -74,6 +74,7 @@ public:
 	void set(int power_id[12]);
 	void clear();
 	void update();
+	void resetSlots();
 
 	TooltipData checkTooltip(Point mouse);
 

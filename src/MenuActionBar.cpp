@@ -522,6 +522,13 @@ void MenuActionBar::set(int power_id[12]) {
 		hotkeys[i] = power_id[i];
 }
 
+void MenuActionBar::resetSlots() {
+	for (int i=0; i<12; i++) {
+		slots[i]->checked = false;
+		slots[i]->pressed = false;
+	}
+}
+
 MenuActionBar::~MenuActionBar() {
 	SDL_FreeSurface(emptyslot);
 	SDL_FreeSurface(background);

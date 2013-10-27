@@ -811,7 +811,15 @@ void GameStatePlay::logic() {
 		}
 		checkTitle();
 
-		pc->logic(menu->act->checkAction(), restrictPowerUse());
+		int actionbar_power = menu->act->checkAction();
+		pc->logic(actionbar_power, restrictPowerUse());
+
+		// Transform powers change the actionbar layout,
+		// so we need to prevent accidental clicks if a new power is placed under the slot we clicked on.
+		// It's a bit hacky, but it works
+		if (powers->powers[actionbar_power].type == POWTYPE_TRANSFORM) {
+			menu->act->resetSlots();
+		}
 
 		// transfer hero data to enemies, for AI use
 		if (pc->stats.get(STAT_STEALTH) > 100) enemies->hero_stealth = 100;
