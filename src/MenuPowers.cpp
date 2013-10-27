@@ -502,7 +502,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 			std::set<std::string>::iterator it;
 			for (it = powers->powers[power_cell[i].id].requires_flags.begin(); it != powers->powers[power_cell[i].id].requires_flags.end(); ++it) {
-				tip.addText(msg->get("Requires a %s",EQUIP_FLAGS[(*it)]));
+				tip.addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[(*it)])));
 			}
 
 			// add requirement
