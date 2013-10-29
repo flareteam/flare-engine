@@ -598,11 +598,29 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	if (powers[power_index].trait_elemental != -1) {
 		haz->trait_elemental = powers[power_index].trait_elemental;
 	}
-	haz->active = !powers[power_index].no_attack;
-	haz->multitarget = powers[power_index].multitarget;
-	haz->trait_armor_penetration = powers[power_index].trait_armor_penetration;
-	haz->trait_crits_impaired = powers[power_index].trait_crits_impaired;
-	haz->beacon = powers[power_index].beacon;
+	
+	if (powers[power_index].no_attack) {
+		haz->active = false;
+	}
+	
+	// note: it may look like this line would be more efficient:
+	// haz->multitarget = powers[power_index].multitarget
+	// but as mentioned above, only apply traits that are not the default!
+	// If haz->multitarget is already true, don't reset it to false.
+	// otherwise a base power with multitarget will lose multitarget from a power mod
+	// e.g. Piercing Shot in flare-game has multitarget
+	// but the generic Arrow missile or Sling Stone missile does not.
+	if (powers[power_index].multitarget) {
+		haz->multitarget = true;
+	}
+	if (powers[power_index].trait_armor_penetration) {
+		haz->trait_armor_penetration = true;
+	}
+	haz->trait_crits_impaired += powers[power_index].trait_crits_impaired;
+
+    if (powers[power_index].beacon) {	
+	  haz->beacon = true;
+	}
 
 	// status effect durations
 	// steal effects
