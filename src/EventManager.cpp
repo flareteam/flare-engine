@@ -26,21 +26,22 @@ EventManager::~EventManager() {
 
 }
 
-Map_Event EventManager::loadEvent(FileParser &infile) {
-	Map_Event evnt;
+void EventManager::loadEvent(FileParser &infile, Map_Event* evnt) {
+	if (!evnt) return;
+
 	if (infile.key == "type") {
 		// @ATTR event.type|[on_trigger:on_mapexit:on_leave:on_load:on_clear]|Type of map event.
 		std::string type = infile.val;
-		evnt.type = type;
+		evnt->type = type;
 
 		if      (type == "on_trigger");
 		else if (type == "on_mapexit"); // no need to set keep_after_trigger to false correctly, it's ignored anyway
 		else if (type == "on_leave");
 		else if (type == "on_load") {
-			evnt.keep_after_trigger = false;
+			evnt->keep_after_trigger = false;
 		}
 		else if (type == "on_clear") {
-			evnt.keep_after_trigger = false;
+			evnt->keep_after_trigger = false;
 		}
 		else {
 			fprintf(stderr, "EventManager: Loading event in file %s\nEvent type %s unknown, change to \"on_trigger\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
@@ -48,48 +49,48 @@ Map_Event EventManager::loadEvent(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR event.location|[x,y,w,h]|Defines the location area for the event.
-		evnt.location.x = toInt(infile.nextValue());
-		evnt.location.y = toInt(infile.nextValue());
-		evnt.location.w = toInt(infile.nextValue());
-		evnt.location.h = toInt(infile.nextValue());
+		evnt->location.x = toInt(infile.nextValue());
+		evnt->location.y = toInt(infile.nextValue());
+		evnt->location.w = toInt(infile.nextValue());
+		evnt->location.h = toInt(infile.nextValue());
 
-		evnt.center.x = evnt.location.x + (float)evnt.location.w/2;
-		evnt.center.y = evnt.location.y + (float)evnt.location.h/2;
+		evnt->center.x = evnt->location.x + (float)evnt->location.w/2;
+		evnt->center.y = evnt->location.y + (float)evnt->location.h/2;
 	}
 	else if (infile.key == "hotspot") {
 		//  @ATTR event.hotspot|[ [x, y, w, h] : location ]|Event uses location as hotspot or defined by rect.
 		if (infile.val == "location") {
-			evnt.hotspot.x = evnt.location.x;
-			evnt.hotspot.y = evnt.location.y;
-			evnt.hotspot.w = evnt.location.w;
-			evnt.hotspot.h = evnt.location.h;
+			evnt->hotspot.x = evnt->location.x;
+			evnt->hotspot.y = evnt->location.y;
+			evnt->hotspot.w = evnt->location.w;
+			evnt->hotspot.h = evnt->location.h;
 		}
 		else {
-			evnt.hotspot.x = toInt(infile.nextValue());
-			evnt.hotspot.y = toInt(infile.nextValue());
-			evnt.hotspot.w = toInt(infile.nextValue());
-			evnt.hotspot.h = toInt(infile.nextValue());
+			evnt->hotspot.x = toInt(infile.nextValue());
+			evnt->hotspot.y = toInt(infile.nextValue());
+			evnt->hotspot.w = toInt(infile.nextValue());
+			evnt->hotspot.h = toInt(infile.nextValue());
 		}
 	}
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown.
-		evnt.cooldown = parse_duration(infile.val);
+		evnt->cooldown = parse_duration(infile.val);
 	}
 	else if (infile.key == "reachable_from") {
 		// @ATTR event.reachable_from|[x,y,w,h]|If the hero is inside this rectangle, they can activate the event.
-		evnt.reachable_from.x = toInt(infile.nextValue());
-		evnt.reachable_from.y = toInt(infile.nextValue());
-		evnt.reachable_from.w = toInt(infile.nextValue());
-		evnt.reachable_from.h = toInt(infile.nextValue());
+		evnt->reachable_from.x = toInt(infile.nextValue());
+		evnt->reachable_from.y = toInt(infile.nextValue());
+		evnt->reachable_from.w = toInt(infile.nextValue());
+		evnt->reachable_from.h = toInt(infile.nextValue());
 	}
 	else {
-		loadEventComponent(&evnt, infile);
+		loadEventComponent(infile, evnt);
 	}
-
-	return evnt;
 }
 
-void EventManager::loadEventComponent(Map_Event* evnt, FileParser &infile) {
+void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
+	if (!evnt) return;
+
 	// new event component
 	evnt->components.push_back(Event_Component());
 	Event_Component *e = &evnt->components.back();

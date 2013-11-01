@@ -81,12 +81,12 @@ public:
 
 class EventManager {
 private:
-	static void loadEventComponent(Map_Event* evnt, FileParser &infile);
+	static void loadEventComponent(FileParser &infile, Map_Event* evnt);
 
 public:
 	EventManager();
 	~EventManager();
-	static Map_Event loadEvent(FileParser &infile);
+	static void loadEvent(FileParser &infile, Map_Event* evnt);
 };
 
 
