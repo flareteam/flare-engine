@@ -96,6 +96,7 @@ Set (FLARE_SOURCES
 	./src/EnemyBehavior.cpp
 	./src/EnemyGroupManager.cpp
 	./src/EnemyManager.cpp
+	./src/EventManager.cpp
 	./src/FileParser.cpp
 	./src/FontEngine.cpp
 	./src/GameState.cpp
