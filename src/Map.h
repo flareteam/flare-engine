@@ -103,9 +103,6 @@ public:
 class Map
 {
 protected:
-	std::vector<maprow*> layers; // visible layers in maprenderer
-	std::vector<std::string> layernames;
-
 	void loadHeader(FileParser &infile);
 	void loadLayer(FileParser &infile, maprow **cur_layer);
 	void loadEnemy(FileParser &infile);
@@ -121,11 +118,15 @@ protected:
 
 	std::string filename;
 	std::string tileset;
-	std::string music_filename;
 
 	int load(std::string filename);
 public:
 	Map();
+
+	std::string music_filename;
+
+	std::vector<maprow*> layers; // visible layers in maprenderer
+	std::vector<std::string> layernames;
 
 	void clearEvents();
 

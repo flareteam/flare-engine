@@ -48,12 +48,6 @@ class WidgetTooltip;
 class MapRenderer : public Map {
 private:
 
-	/**
-	 * The index of the layer, which mixes with the objects on screen. Layers
-	 * before that are painted below objects; Layers after are painted on top.
-	 */
-	unsigned index_objectlayer;
-
 	Mix_Music *music;
 
 	WidgetTooltip *tip;
@@ -61,17 +55,10 @@ private:
 	Point tip_pos;
 	bool show_tooltip;
 
-	bool executeEvent(Map_Event &e);
-
 	bool enemyGroupPlaceEnemy(float x, float y, Map_Group &g);
 	void pushEnemyGroup(Map_Group g);
-	bool isActive(const Map_Event &e);
 
 	std::string played_music_filename;
-	void loadMusic();
-
-	// map soundids
-	std::vector<SoundManager::SoundID> sids;
 
 	void clearQueues();
 
@@ -118,9 +105,6 @@ private:
 
 	// point where the backgroundsurface was rendered. same coordinates as shakycam
 	FPoint backgroundsurfaceoffset;
-
-	// force a rendering of the background in the next render step.
-	bool repaint_background;
 
 public:
 	// functions
@@ -179,6 +163,21 @@ public:
 
 	// event talker
 	std::string event_npc;
+
+	// map soundids
+	std::vector<SoundManager::SoundID> sids;
+
+	void loadMusic();
+
+	// force a rendering of the background in the next render step.
+	bool repaint_background;
+
+	/**
+	 * The index of the layer, which mixes with the objects on screen. Layers
+	 * before that are painted below objects; Layers after are painted on top.
+	 */
+	unsigned index_objectlayer;
+
 };
 
 
