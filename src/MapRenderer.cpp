@@ -39,7 +39,6 @@ using namespace std;
 
 MapRenderer::MapRenderer()
 	: Map()
-	, index_objectlayer(0)
 	, music(NULL)
 	, tip(new WidgetTooltip())
 	, tip_pos()
@@ -47,7 +46,6 @@ MapRenderer::MapRenderer()
 	, shakycam()
 	, backgroundsurface(NULL)
 	, backgroundsurfaceoffset()
-	, repaint_background(false)
 	, cam()
 	, map_change(false)
 	, teleportation(false)
@@ -59,7 +57,9 @@ MapRenderer::MapRenderer()
 	, shaky_cam_ticks(0)
 	, stash(false)
 	, stash_pos()
-	, enemies_cleared(false) {
+	, enemies_cleared(false)
+	, repaint_background(false)
+	, index_objectlayer(0) {
 }
 
 void MapRenderer::clearQueues() {
