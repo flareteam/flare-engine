@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "StatBlock.h"
 
-class Map_Event {
+class Event {
 public:
 	std::string type;
 	std::vector<Event_Component> components;
@@ -40,7 +40,7 @@ public:
 	FPoint center;
 	SDL_Rect reachable_from;
 
-	Map_Event()
+	Event()
 	 : type("")
 	 , components(std::vector<Event_Component>())
 	 , cooldown(0)
@@ -73,20 +73,21 @@ public:
 				it = components.erase(it);
 	}
 
-	~Map_Event()
+	~Event()
 	{
 		delete stats; // may be NULL, but delete can deal with null pointers.
 	}
 };
 
 class EventManager {
-private:
-	static void loadEventComponent(FileParser &infile, Map_Event* evnt);
-
 public:
 	EventManager();
 	~EventManager();
-	static void loadEvent(FileParser &infile, Map_Event* evnt);
+	static void loadEvent(FileParser &infile, Event* evnt);
+	static void loadEventComponent(FileParser &infile, Event* evnt, Event_Component* ec);
+
+	static bool executeEvent(Event &e);
+	static bool isActive(const Event &e);
 };
 
 

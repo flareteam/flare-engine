@@ -17,6 +17,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EventManager.h"
 #include "UtilsParsing.h"
+#include "SharedGameResources.h"
+#include "UtilsFileSystem.h"
+
+using namespace std;
 
 EventManager::EventManager() {
 
@@ -26,7 +30,7 @@ EventManager::~EventManager() {
 
 }
 
-void EventManager::loadEvent(FileParser &infile, Map_Event* evnt) {
+void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	if (!evnt) return;
 
 	if (infile.key == "type") {
@@ -84,16 +88,22 @@ void EventManager::loadEvent(FileParser &infile, Map_Event* evnt) {
 		evnt->reachable_from.h = toInt(infile.nextValue());
 	}
 	else {
-		loadEventComponent(infile, evnt);
+		loadEventComponent(infile, evnt, NULL);
 	}
 }
 
-void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
-	if (!evnt) return;
+void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Component* ec) {
+	Event_Component *e = NULL;
+	if (evnt) {
+		evnt->components.push_back(Event_Component());
+		e = &evnt->components.back();
+	}
+	else if (ec) {
+		e = ec;
+	}
 
-	// new event component
-	evnt->components.push_back(Event_Component());
-	Event_Component *e = &evnt->components.back();
+	if (!e) return;
+
 	e->type = infile.key;
 
 	if (infile.key == "tooltip") {
@@ -140,17 +150,19 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->z = toInt(infile.nextValue());
 
 		// add repeating mapmods
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue());
-			e->y = toInt(infile.nextValue());
-			e->z = toInt(infile.nextValue());
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
+				e->x = toInt(infile.nextValue());
+				e->y = toInt(infile.nextValue());
+				e->z = toInt(infile.nextValue());
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "soundfx") {
@@ -183,25 +195,27 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		if (e->b < e->a) e->b = e->a;
 
 		// add repeating loot
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue());
-			e->y = toInt(infile.nextValue());
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
+				e->x = toInt(infile.nextValue());
+				e->y = toInt(infile.nextValue());
 
-			chance = infile.nextValue();
-			if (chance == "fixed") e->z = 0;
-			else e->z = toInt(chance);
+				chance = infile.nextValue();
+				if (chance == "fixed") e->z = 0;
+				else e->z = toInt(chance);
 
-			e->a = toInt(infile.nextValue());
-			if (e->a < 1) e->a = 1;
-			e->b = toInt(infile.nextValue());
-			if (e->b < e->a) e->b = e->a;
+				e->a = toInt(infile.nextValue());
+				if (e->a < 1) e->a = 1;
+				e->b = toInt(infile.nextValue());
+				if (e->b < e->a) e->b = e->a;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "msg") {
@@ -217,14 +231,16 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->s = infile.nextValue();
 
 		// add repeating requires_status
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "requires_not_status") {
@@ -232,14 +248,16 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->s = infile.nextValue();
 
 		// add repeating requires_not
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "requires_level") {
@@ -255,14 +273,16 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->x = toInt(infile.nextValue());
 
 		// add repeating requires_item
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->x = toInt(repeat_val);
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->x = toInt(repeat_val);
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "set_status") {
@@ -270,14 +290,16 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->s = infile.nextValue();
 
 		// add repeating set_status
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "unset_status") {
@@ -285,34 +307,51 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->s = infile.nextValue();
 
 		// add repeating unset_status
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "remove_item") {
-		// @ATTR event.remove_item|integer,...|Removes specified itesm from hero inventory
+		// @ATTR event.remove_item|integer,...|Removes specified item from hero inventory
 		e->x = toInt(infile.nextValue());
 
 		// add repeating remove_item
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->x = toInt(repeat_val);
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->x = toInt(repeat_val);
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "reward_xp") {
 		// @ATTR event.reward_xp|integer|Reward hero with specified amount of experience points.
 		e->x = toInt(infile.val);
+	}
+	else if (infile.key == "reward_currency") {
+		// @ATTR event.reward_currency|integer|Reward hero with specified amount of currency.
+		e->x = toInt(infile.val);
+	}
+	else if (infile.key == "reward_item") {
+		// @ATTR event.reward_item|x(integer),y(integer)|Reward hero with y number of item x.
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.val);
+	}
+	else if (infile.key == "restore") {
+		// @ATTR event.restore|string|Restore the hero's HP, MP, and/or status.
+		e->s = infile.val;
 	}
 	else if (infile.key == "power") {
 		// @ATTR event.power|power_id|Specify power coupled with event.
@@ -325,17 +364,19 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->y = toInt(infile.nextValue());
 
 		// add repeating spawn
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
 
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue());
-			e->y = toInt(infile.nextValue());
+				e->s = repeat_val;
+				e->x = toInt(infile.nextValue());
+				e->y = toInt(infile.nextValue());
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "stash") {
@@ -362,3 +403,224 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		fprintf(stderr, "EventManager: Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
 	}
 }
+
+/**
+ * A particular event has been triggered.
+ * Process all of this events components.
+ *
+ * @param The triggered event
+ * @return Returns true if the event shall not be run again.
+ */
+bool EventManager::executeEvent(Event &ev) {
+	if(&ev == NULL) return false;
+
+	// skip executing events that are on cooldown
+	if (ev.cooldown_ticks > 0) return false;
+
+	// set cooldown
+	ev.cooldown_ticks = ev.cooldown;
+
+	const Event_Component *ec;
+
+	for (unsigned i = 0; i < ev.components.size(); ++i) {
+		ec = &ev.components[i];
+
+		if (ec->type == "set_status") {
+			camp->setStatus(ec->s);
+		}
+		else if (ec->type == "unset_status") {
+			camp->unsetStatus(ec->s);
+		}
+		else if (ec->type == "intermap") {
+
+			if (fileExists(mods->locate("maps/" + ec->s))) {
+				mapr->teleportation = true;
+				mapr->teleport_mapname = ec->s;
+				mapr->teleport_destination.x = ec->x + 0.5f;
+				mapr->teleport_destination.y = ec->y + 0.5f;
+			}
+			else {
+				ev.keep_after_trigger = false;
+				mapr->log_msg = msg->get("Unknown destination");
+			}
+		}
+		else if (ec->type == "intramap") {
+			mapr->teleportation = true;
+			mapr->teleport_mapname = "";
+			mapr->teleport_destination.x = ec->x + 0.5f;
+			mapr->teleport_destination.y = ec->y + 0.5f;
+		}
+		else if (ec->type == "mapmod") {
+			if (ec->s == "collision") {
+				mapr->collider.colmap[ec->x][ec->y] = ec->z;
+			}
+			else {
+				int index = distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s));
+				mapr->layers[index][ec->x][ec->y] = ec->z;
+
+				if (ec->a < (int)(mapr->index_objectlayer))
+					mapr->repaint_background = true;
+			}
+			mapr->map_change = true;
+		}
+		else if (ec->type == "soundfx") {
+			FPoint pos(0,0);
+			bool loop = false;
+
+			if (ec->x != -1 && ec->y != -1) {
+				if (ec->x != 0 && ec->y != 0) {
+					pos.x = ec->x + 0.5f;
+					pos.y = ec->y + 0.5f;
+				}
+			}
+			else if (ev.location.x != 0 && ev.location.y != 0) {
+				pos.x = ev.location.x + 0.5f;
+				pos.y = ev.location.y + 0.5f;
+			}
+
+			if (ev.type == "on_load")
+				loop = true;
+
+			SoundManager::SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
+
+			snd->play(sid, GLOBAL_VIRTUAL_CHANNEL, pos, loop);
+			mapr->sids.push_back(sid);
+		}
+		else if (ec->type == "loot") {
+			mapr->loot.push_back(*ec);
+		}
+		else if (ec->type == "msg") {
+			mapr->log_msg = ec->s;
+		}
+		else if (ec->type == "shakycam") {
+			mapr->shaky_cam_ticks = ec->x;
+		}
+		else if (ec->type == "remove_item") {
+			camp->removeItem(ec->x);
+		}
+		else if (ec->type == "reward_xp") {
+			camp->rewardXP(ec->x, true);
+		}
+		else if (ec->type == "reward_currency") {
+			camp->rewardCurrency(ec->x);
+		}
+		else if (ec->type == "reward_item") {
+			ItemStack istack;
+			istack.item = ec->x;
+			istack.quantity = ec->y;
+			camp->rewardItem(istack);
+		}
+		else if (ec->type == "restore") {
+			camp->restoreHPMP(ec->s);
+		}
+		else if (ec->type == "spawn") {
+			Point spawn_pos;
+			spawn_pos.x = ec->x;
+			spawn_pos.y = ec->y;
+			powers->spawn(ec->s, spawn_pos);
+		}
+		else if (ec->type == "power") {
+
+			int power_index = ec->x;
+
+			Event_Component *ec_path = ev.getComponent("power_path");
+			if (ev.stats == NULL) {
+				ev.stats = new StatBlock();
+
+				ev.stats->current[STAT_ACCURACY] = 1000; //always hits its target
+
+				// if a power path was specified, place the source position there
+				if (ec_path) {
+					ev.stats->pos.x = ec_path->x + 0.5f;
+					ev.stats->pos.y = ec_path->y + 0.5f;
+				}
+				// otherwise the source position is the event position
+				else {
+					ev.stats->pos.x = ev.location.x + 0.5f;
+					ev.stats->pos.y = ev.location.y + 0.5f;
+				}
+
+				Event_Component *ec_damage = ev.getComponent("power_damage");
+				if (ec_damage) {
+					ev.stats->current[STAT_DMG_MELEE_MIN] = ev.stats->current[STAT_DMG_RANGED_MIN] = ev.stats->current[STAT_DMG_MENT_MIN] = ec_damage->a;
+					ev.stats->current[STAT_DMG_MELEE_MAX] = ev.stats->current[STAT_DMG_RANGED_MAX] = ev.stats->current[STAT_DMG_MENT_MAX] = ec_damage->b;
+				}
+			}
+
+			FPoint target;
+
+			if (ec_path) {
+				// targets hero option
+				if (ec_path->s == "hero") {
+					target.x = mapr->cam.x;
+					target.y = mapr->cam.y;
+				}
+				// targets fixed path option
+				else {
+					target.x = ec_path->a + 0.5f;
+					target.y = ec_path->b + 0.5f;
+				}
+			}
+			// no path specified, targets self location
+			else {
+				target.x = ev.stats->pos.x;
+				target.y = ev.stats->pos.y;
+			}
+
+			powers->activate(power_index, ev.stats, target);
+		}
+		else if (ec->type == "stash") {
+			mapr->stash = true;
+			mapr->stash_pos.x = ev.location.x + 0.5f;
+			mapr->stash_pos.y = ev.location.y + 0.5f;
+		}
+		else if (ec->type == "npc") {
+			mapr->event_npc = ec->s;
+		}
+		else if (ec->type == "music") {
+			mapr->music_filename = ec->s;
+			mapr->loadMusic();
+		}
+		else if (ec->type == "cutscene") {
+			mapr->cutscene = true;
+			mapr->cutscene_file = ec->s;
+		}
+		else if (ec->type == "repeat") {
+			ev.keep_after_trigger = toBool(ec->s);
+		}
+	}
+	return !ev.keep_after_trigger;
+}
+
+
+bool EventManager::isActive(const Event &e) {
+	for (unsigned i=0; i < e.components.size(); i++) {
+		if (e.components[i].type == "requires_not_status") {
+			if (camp->checkStatus(e.components[i].s)) {
+				return false;
+			}
+		}
+		else if (e.components[i].type == "requires_status") {
+			if (!camp->checkStatus(e.components[i].s)) {
+				return false;
+			}
+		}
+		else if (e.components[i].type == "requires_item") {
+			if (!camp->checkItem(e.components[i].x)) {
+				return false;
+			}
+		}
+		else if (e.components[i].type == "requires_level") {
+			if (camp->hero->level < e.components[i].x) {
+				return false;
+			}
+		}
+		else if (e.components[i].type == "requires_not_level") {
+			if (camp->hero->level >= e.components[i].x) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+

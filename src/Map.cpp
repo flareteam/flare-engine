@@ -25,10 +25,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 Map::Map()
-	: layers()
-	, events()
+	: events()
 	, enemy_groups()
 	, filename("")
+	, layers()
 	, w(0)
 	, h(0)
 	, spawn()
@@ -79,7 +79,7 @@ int Map::load(std::string fname) {
 			else if (infile.section == "npc")
 				npcs.push(Map_NPC());
 			else if (infile.section == "event")
-				events.push_back(Map_Event());
+				events.push_back(Event());
 
 		}
 		if (infile.section == "header")
