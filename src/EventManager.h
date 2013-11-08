@@ -80,13 +80,11 @@ public:
 };
 
 class EventManager {
-private:
-	static void loadEventComponent(FileParser &infile, Map_Event* evnt);
-
 public:
 	EventManager();
 	~EventManager();
 	static void loadEvent(FileParser &infile, Map_Event* evnt);
+	static void loadEventComponent(FileParser &infile, Map_Event* evnt, Event_Component* ec);
 
 	static bool executeEvent(Map_Event &e);
 	static bool isActive(const Map_Event &e);

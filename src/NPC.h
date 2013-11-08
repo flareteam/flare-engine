@@ -35,6 +35,8 @@ const int NPC_VOX_QUEST = 1;
 const int NPC_NO_DIALOG_AVAIL = -1;
 
 class NPC : public Entity {
+private:
+	bool isDialogType(const std::string &type);
 public:
 	NPC();
 	~NPC();
@@ -46,6 +48,7 @@ public:
 	void getDialogNodes(std::vector<int> &result);
 	std::string getDialogTopic(unsigned int dialog_node);
 	bool processDialog(unsigned int dialog_node, unsigned int& event_cursor);
+	void processEvent(unsigned int dialog_node, unsigned int cursor);
 	virtual Renderable getRender();
 
 	// general info

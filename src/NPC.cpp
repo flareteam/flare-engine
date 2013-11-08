@@ -80,37 +80,10 @@ void NPC::load(const string& npc_id, int hero_level) {
 				}
 				Event_Component e;
 				e.type = infile.key;
-				if (infile.key == "requires_status")
-					e.s = infile.val;
-				else if (infile.key == "requires_not_status")
-					e.s = infile.val;
-				else if (infile.key == "requires_level")
-					e.x = toInt(infile.val);
-				else if (infile.key == "requires_not_level")
-					e.x = toInt(infile.val);
-				else if (infile.key == "requires_item")
-					e.x = toInt(infile.val);
-				else if (infile.key == "him" || infile.key == "her")
+				if (infile.key == "him" || infile.key == "her")
 					e.s = msg->get(infile.val);
 				else if (infile.key == "you")
 					e.s = msg->get(infile.val);
-				else if (infile.key == "reward_item") {
-					// id,count
-					e.x = toInt(infile.nextValue());
-					e.y = toInt(infile.val);
-				}
-				else if (infile.key == "reward_xp")
-					e.x = toInt(infile.val);
-				else if (infile.key == "restore")
-					e.s = infile.val;
-				else if (infile.key == "reward_currency")
-					e.x = toInt(infile.val);
-				else if (infile.key == "remove_item")
-					e.x = toInt(infile.val);
-				else if (infile.key == "set_status")
-					e.s = infile.val;
-				else if (infile.key == "unset_status")
-					e.s = infile.val;
 				else if (infile.key == "voice") {
 					e.x = loadSound(infile.val, NPC_VOX_QUEST);
 				}
@@ -119,6 +92,9 @@ void NPC::load(const string& npc_id, int hero_level) {
 				}
 				else if (infile.key == "group") {
 					e.s = infile.val;
+				}
+				else {
+					EventManager::loadEventComponent(infile, NULL, &e);
 				}
 
 				dialog.back().push_back(e);
@@ -354,12 +330,6 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 		else if (dialog[dialog_node][event_cursor].type == "requires_item") {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == "set_status") {
-			camp->setStatus(dialog[dialog_node][event_cursor].s);
-		}
-		else if (dialog[dialog_node][event_cursor].type == "unset_status") {
-			camp->unsetStatus(dialog[dialog_node][event_cursor].s);
-		}
 		else if (dialog[dialog_node][event_cursor].type == "him") {
 			return true;
 		}
@@ -368,24 +338,6 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 		}
 		else if (dialog[dialog_node][event_cursor].type == "you") {
 			return true;
-		}
-		else if (dialog[dialog_node][event_cursor].type == "reward_xp") {
-			camp->rewardXP(dialog[dialog_node][event_cursor].x, true);
-		}
-		else if (dialog[dialog_node][event_cursor].type == "restore") {
-			camp->restoreHPMP(dialog[dialog_node][event_cursor].s);
-		}
-		else if (dialog[dialog_node][event_cursor].type == "reward_currency") {
-			camp->rewardCurrency(dialog[dialog_node][event_cursor].x);
-		}
-		else if (dialog[dialog_node][event_cursor].type == "reward_item") {
-			ItemStack istack;
-			istack.item = dialog[dialog_node][event_cursor].x;
-			istack.quantity = dialog[dialog_node][event_cursor].y;
-			camp->rewardItem(istack);
-		}
-		else if (dialog[dialog_node][event_cursor].type == "remove_item") {
-			camp->removeItem(dialog[dialog_node][event_cursor].x);
 		}
 		else if (dialog[dialog_node][event_cursor].type == "voice") {
 			playSound(NPC_VOX_QUEST, dialog[dialog_node][event_cursor].x);
@@ -400,6 +352,22 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 	return false;
 }
 
+void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
+
+	Map_Event ev;
+
+	if (cursor < dialog[dialog_node].size() && isDialogType(dialog[dialog_node][cursor].type)) {
+		cursor++;
+	}
+
+	while (cursor < dialog[dialog_node].size() && !isDialogType(dialog[dialog_node][cursor].type)) {
+		ev.components.push_back(dialog[dialog_node][cursor]);
+		cursor++;
+	}
+
+	EventManager::executeEvent(ev);
+}
+
 Renderable NPC::getRender() {
 	Renderable r = activeAnimation->getCurrentFrame(direction);
 	r.map_pos.x = pos.x;
@@ -408,6 +376,9 @@ Renderable NPC::getRender() {
 	return r;
 }
 
+bool NPC::isDialogType(const std::string &type) {
+	return type == "him" || type == "her" || type == "you" || type == "voice";
+}
 
 NPC::~NPC() {
 	if (gfx != "") {

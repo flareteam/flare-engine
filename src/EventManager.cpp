@@ -88,16 +88,22 @@ void EventManager::loadEvent(FileParser &infile, Map_Event* evnt) {
 		evnt->reachable_from.h = toInt(infile.nextValue());
 	}
 	else {
-		loadEventComponent(infile, evnt);
+		loadEventComponent(infile, evnt, NULL);
 	}
 }
 
-void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
-	if (!evnt) return;
+void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt, Event_Component* ec) {
+	Event_Component *e = NULL;
+	if (evnt) {
+		evnt->components.push_back(Event_Component());
+		e = &evnt->components.back();
+	}
+	else if (ec) {
+		e = ec;
+	}
 
-	// new event component
-	evnt->components.push_back(Event_Component());
-	Event_Component *e = &evnt->components.back();
+	if (!e) return;
+
 	e->type = infile.key;
 
 	if (infile.key == "tooltip") {
@@ -144,17 +150,19 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->z = toInt(infile.nextValue());
 
 		// add repeating mapmods
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue());
-			e->y = toInt(infile.nextValue());
-			e->z = toInt(infile.nextValue());
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
+				e->x = toInt(infile.nextValue());
+				e->y = toInt(infile.nextValue());
+				e->z = toInt(infile.nextValue());
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "soundfx") {
@@ -187,25 +195,27 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		if (e->b < e->a) e->b = e->a;
 
 		// add repeating loot
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue());
-			e->y = toInt(infile.nextValue());
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
+				e->x = toInt(infile.nextValue());
+				e->y = toInt(infile.nextValue());
 
-			chance = infile.nextValue();
-			if (chance == "fixed") e->z = 0;
-			else e->z = toInt(chance);
+				chance = infile.nextValue();
+				if (chance == "fixed") e->z = 0;
+				else e->z = toInt(chance);
 
-			e->a = toInt(infile.nextValue());
-			if (e->a < 1) e->a = 1;
-			e->b = toInt(infile.nextValue());
-			if (e->b < e->a) e->b = e->a;
+				e->a = toInt(infile.nextValue());
+				if (e->a < 1) e->a = 1;
+				e->b = toInt(infile.nextValue());
+				if (e->b < e->a) e->b = e->a;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "msg") {
@@ -221,14 +231,16 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->s = infile.nextValue();
 
 		// add repeating requires_status
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "requires_not_status") {
@@ -236,14 +248,16 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->s = infile.nextValue();
 
 		// add repeating requires_not
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "requires_level") {
@@ -259,14 +273,16 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->x = toInt(infile.nextValue());
 
 		// add repeating requires_item
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->x = toInt(repeat_val);
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->x = toInt(repeat_val);
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "set_status") {
@@ -274,14 +290,16 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->s = infile.nextValue();
 
 		// add repeating set_status
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "unset_status") {
@@ -289,34 +307,51 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->s = infile.nextValue();
 
 		// add repeating unset_status
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->s = repeat_val;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->s = repeat_val;
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "remove_item") {
-		// @ATTR event.remove_item|integer,...|Removes specified itesm from hero inventory
+		// @ATTR event.remove_item|integer,...|Removes specified item from hero inventory
 		e->x = toInt(infile.nextValue());
 
 		// add repeating remove_item
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
-			e->x = toInt(repeat_val);
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->x = toInt(repeat_val);
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "reward_xp") {
 		// @ATTR event.reward_xp|integer|Reward hero with specified amount of experience points.
 		e->x = toInt(infile.val);
+	}
+	else if (infile.key == "reward_currency") {
+		// @ATTR event.reward_currency|integer|Reward hero with specified amount of currency.
+		e->x = toInt(infile.val);
+	}
+	else if (infile.key == "reward_item") {
+		// @ATTR event.reward_item|x(integer),y(integer)|Reward hero with y number of item x.
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.val);
+	}
+	else if (infile.key == "restore") {
+		// @ATTR event.restore|string|Restore the hero's HP, MP, and/or status.
+		e->s = infile.val;
 	}
 	else if (infile.key == "power") {
 		// @ATTR event.power|power_id|Specify power coupled with event.
@@ -329,17 +364,19 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt) {
 		e->y = toInt(infile.nextValue());
 
 		// add repeating spawn
-		std::string repeat_val = infile.nextValue();
-		while (repeat_val != "") {
-			evnt->components.push_back(Event_Component());
-			e = &evnt->components.back();
-			e->type = infile.key;
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
 
-			e->s = repeat_val;
-			e->x = toInt(infile.nextValue());
-			e->y = toInt(infile.nextValue());
+				e->s = repeat_val;
+				e->x = toInt(infile.nextValue());
+				e->y = toInt(infile.nextValue());
 
-			repeat_val = infile.nextValue();
+				repeat_val = infile.nextValue();
+			}
 		}
 	}
 	else if (infile.key == "stash") {
@@ -463,6 +500,18 @@ bool EventManager::executeEvent(Map_Event &ev) {
 		}
 		else if (ec->type == "reward_xp") {
 			camp->rewardXP(ec->x, true);
+		}
+		else if (ec->type == "reward_currency") {
+			camp->rewardCurrency(ec->x);
+		}
+		else if (ec->type == "reward_item") {
+			ItemStack istack;
+			istack.item = ec->x;
+			istack.quantity = ec->y;
+			camp->rewardItem(istack);
+		}
+		else if (ec->type == "restore") {
+			camp->restoreHPMP(ec->s);
 		}
 		else if (ec->type == "spawn") {
 			Point spawn_pos;
