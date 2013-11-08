@@ -354,7 +354,7 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 
 void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
 
-	Map_Event ev;
+	Event ev;
 
 	if (cursor < dialog[dialog_node].size() && isDialogType(dialog[dialog_node][cursor].type)) {
 		cursor++;

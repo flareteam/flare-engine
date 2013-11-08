@@ -113,7 +113,7 @@ protected:
 	void clearQueues();
 
 	// map events
-	std::vector<Map_Event> events;
+	std::vector<Event> events;
 	std::queue<Map_Group> enemy_groups;
 
 	std::string filename;

@@ -211,7 +211,7 @@ void MapRenderer::logic() {
 	tset.logic();
 
 	// handle event cooldowns
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 	for (it = events.begin(); it < events.end(); ++it) {
 		if ((*it).cooldown_ticks > 0) (*it).cooldown_ticks--;
 	}
@@ -568,7 +568,7 @@ void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead)
 }
 
 void MapRenderer::executeOnLoadEvents() {
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 
 	// loop in reverse because we may erase elements
 	for (it = events.end(); it != events.begin(); ) {
@@ -585,7 +585,7 @@ void MapRenderer::executeOnLoadEvents() {
 }
 
 void MapRenderer::executeOnMapExitEvents() {
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 
 	// We're leaving the map, so the events of this map are removed anyway in
 	// the next frame (Reminder: We're about to load a new map ;),
@@ -605,7 +605,7 @@ void MapRenderer::checkEvents(FPoint loc) {
 	Point maploc;
 	maploc.x = (int)floor(loc.x);
 	maploc.y = (int)floor(loc.y);
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 
 	// loop in reverse because we may erase elements
 	for (it = events.end(); it != events.begin(); ) {
@@ -662,7 +662,7 @@ void MapRenderer::checkHotspots() {
 
 	show_tooltip = false;
 
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 
 	// work backwards through events because events can be erased in the loop.
 	// this prevents the iterator from becoming invalid.
@@ -739,8 +739,8 @@ void MapRenderer::checkHotspots() {
 void MapRenderer::checkNearestEvent() {
 	if (NO_MOUSE) show_tooltip = false;
 
-	vector<Map_Event>::iterator it;
-	vector<Map_Event>::iterator nearest = events.end();
+	vector<Event>::iterator it;
+	vector<Event>::iterator nearest = events.end();
 	float best_distance = std::numeric_limits<float>::max();
 
 	// loop in reverse because we may erase elements

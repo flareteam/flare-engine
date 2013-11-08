@@ -30,7 +30,7 @@ EventManager::~EventManager() {
 
 }
 
-void EventManager::loadEvent(FileParser &infile, Map_Event* evnt) {
+void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	if (!evnt) return;
 
 	if (infile.key == "type") {
@@ -92,7 +92,7 @@ void EventManager::loadEvent(FileParser &infile, Map_Event* evnt) {
 	}
 }
 
-void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt, Event_Component* ec) {
+void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Component* ec) {
 	Event_Component *e = NULL;
 	if (evnt) {
 		evnt->components.push_back(Event_Component());
@@ -411,7 +411,7 @@ void EventManager::loadEventComponent(FileParser &infile, Map_Event* evnt, Event
  * @param The triggered event
  * @return Returns true if the event shall not be run again.
  */
-bool EventManager::executeEvent(Map_Event &ev) {
+bool EventManager::executeEvent(Event &ev) {
 	if(&ev == NULL) return false;
 
 	// skip executing events that are on cooldown
@@ -593,7 +593,7 @@ bool EventManager::executeEvent(Map_Event &ev) {
 }
 
 
-bool EventManager::isActive(const Map_Event &e) {
+bool EventManager::isActive(const Event &e) {
 	for (unsigned i=0; i < e.components.size(); i++) {
 		if (e.components[i].type == "requires_not_status") {
 			if (camp->checkStatus(e.components[i].s)) {
