@@ -93,6 +93,9 @@ void NPC::load(const string& npc_id, int hero_level) {
 				else if (infile.key == "group") {
 					e.s = infile.val;
 				}
+				else if (infile.key == "allow_movement") {
+					e.s = infile.val;
+				}
 				else {
 					EventManager::loadEventComponent(infile, NULL, &e);
 				}
@@ -309,6 +312,17 @@ std::string NPC::getDialogTopic(unsigned int dialog_node) {
 	}
 
 	return "";
+}
+
+/**
+ * Check if the hero can move during this dialog branch
+ */
+bool NPC::checkMovement(unsigned int dialog_node) {
+	for (unsigned int i=0; i<dialog[dialog_node].size(); i++) {
+		if (dialog[dialog_node][i].type == "allow_movement")
+			return toBool(dialog[dialog_node][i].s);
+	}
+	return true;
 }
 
 /**

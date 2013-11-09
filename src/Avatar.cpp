@@ -55,7 +55,8 @@ Avatar::Avatar()
 	, attacking (false)
 	, drag_walking(false)
 	, respawn(false)
-	, close_menus(false) {
+	, close_menus(false)
+	, allow_movement(true) {
 
 	init();
 
@@ -252,7 +253,10 @@ void Avatar::loadStepFX(const string& stepname) {
 
 
 bool Avatar::pressing_move() {
-	if (MOUSE_MOVE) {
+	if (!allow_movement) {
+		return false;
+	}
+	else if (MOUSE_MOVE) {
 		return inpt->pressing[MAIN1];
 	}
 	else {
