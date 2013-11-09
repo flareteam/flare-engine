@@ -692,6 +692,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 			menu->talker->npc = npcs->npcs[npc_id];
 			menu->talker->chooseDialogNode(menu->npc->selected_dialog_node);
+			pc->allow_movement = npcs->npcs[npc_id]->checkMovement(menu->npc->selected_dialog_node);
 
 			menu->closeAll();
 			menu->talker->visible = true;
@@ -724,6 +725,10 @@ void GameStatePlay::checkNPCInteraction() {
 		eventDialogOngoing = false;
 	}
 
+	// reset movement restrictions when we're not in dialog
+	if (!menu->talker->visible) {
+		pc->allow_movement = true;
+	}
 }
 
 void GameStatePlay::checkStash() {
