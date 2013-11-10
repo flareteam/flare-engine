@@ -341,6 +341,12 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 		else if (dialog[dialog_node][event_cursor].type == "requires_not_status") {
 			// continue to next event component
 		}
+		else if (dialog[dialog_node][event_cursor].type == "requires_level") {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == "requires_not_level") {
+			// continue to next event component
+		}
 		else if (dialog[dialog_node][event_cursor].type == "requires_item") {
 			// continue to next event component
 		}
