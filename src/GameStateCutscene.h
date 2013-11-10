@@ -61,7 +61,7 @@ private:
 public:
 	Scene();
 	~Scene();
-	bool logic();
+	bool logic(FPoint *caption_margins);
 	void render();
 
 	std::queue<SceneComponent> components;
@@ -74,6 +74,7 @@ private:
 	std::string dest_map;
 	Point dest_pos;
 	bool scale_graphics;
+	FPoint caption_margins;
 
 	std::queue<Scene> scenes;
 

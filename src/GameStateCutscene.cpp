@@ -44,7 +44,7 @@ Scene::~Scene() {
 	}
 }
 
-bool Scene::logic() {
+bool Scene::logic(FPoint *caption_margins) {
 	if (done) return false;
 
 	bool skip = false;
@@ -72,18 +72,19 @@ bool Scene::logic() {
 
 		if (components.front().type == "caption") {
 
+			int caption_width = screen->w - (screen->w * (caption_margins->x * 2));
 			font->setFont("font_captions");
 			caption = components.front().s;
-			caption_size = font->calc_size(caption, (int)(VIEW_W * 0.8f));
+			caption_size = font->calc_size(caption, caption_width);
 
 			delete caption_box;
 			caption_box = new WidgetScrollBox(screen->w,caption_size.y);
 			caption_box->pos.x = 0;
-			caption_box->pos.y = screen->h - caption_size.y;
+			caption_box->pos.y = screen->h - caption_size.y - (int)(VIEW_H * caption_margins->y);
 			font->renderShadowed(caption, screen->w / 2, 0,
 								 JUSTIFY_CENTER,
 								 caption_box->contents,
-								 (int)(VIEW_W * 0.8f),
+								 caption_width,
 								 FONT_WHITE);
 
 		}
@@ -135,8 +136,9 @@ void Scene::render() {
 
 GameStateCutscene::GameStateCutscene(GameState *game_state)
 	: previous_gamestate(game_state)
+	, scale_graphics(false)
+	, caption_margins(0.1, 0)
 	, game_slot(-1) {
-	scale_graphics = false;
 }
 
 GameStateCutscene::~GameStateCutscene() {
@@ -160,7 +162,7 @@ void GameStateCutscene::logic() {
 		return;
 	}
 
-	while (!scenes.empty() && !scenes.front().logic())
+	while (!scenes.empty() && !scenes.front().logic(&caption_margins))
 		scenes.pop();
 }
 
@@ -224,6 +226,11 @@ bool GameStateCutscene::load(std::string filename) {
 		if (infile.key == "scale_gfx") {
 			// @ATTR scale_gfx|bool|The graphics will be scaled to fit screen width
 			scale_graphics = toBool(infile.val);
+		}
+		else if (infile.key == "caption_margins") {
+			// @ATTR caption_margins|[x,y]|Percentage-based margins for the caption text based on screen size
+			caption_margins.x = toFloat(infile.nextValue())/100.0f;
+			caption_margins.y = toFloat(infile.val)/100.0f;
 		}
 	}
 
