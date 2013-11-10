@@ -118,12 +118,26 @@ void CampaignManager::unsetStatus(std::string s) {
 	}
 }
 
+bool CampaignManager::checkCurrency(int quantity) {
+	return carried_items->contain(CURRENCY_ID, quantity);
+}
+
 bool CampaignManager::checkItem(int item_id) {
 	return carried_items->contain(item_id);
 }
 
+void CampaignManager::removeCurrency(int quantity) {
+	for (int i=0; i<quantity; ++i) {
+		carried_items->remove(CURRENCY_ID);
+	}
+	addMsg(msg->get("%d %s removed.", quantity, CURRENCY));
+	items->playSound(CURRENCY_ID);
+}
+
 void CampaignManager::removeItem(int item_id) {
 	carried_items->remove(item_id);
+	addMsg(msg->get("%s removed.", items->items[item_id].name));
+	items->playSound(item_id);
 }
 
 void CampaignManager::rewardItem(ItemStack istack) {
