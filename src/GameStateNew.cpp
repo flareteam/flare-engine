@@ -326,10 +326,10 @@ void GameStateNew::render() {
 	if (!portrait_label.hidden) label_portrait->render();
 	if (!name_label.hidden) label_name->render();
 	if (!permadeath_label.hidden) label_permadeath->render();
-	if (!classlist_label.hidden) label_classlist->render();
 
 	// display class list
 	if (show_classlist) {
+        if (!classlist_label.hidden) label_classlist->render();
 		class_list->render();
 
 		TooltipData tip_new = class_list->checkTooltip(inpt->mouse);
