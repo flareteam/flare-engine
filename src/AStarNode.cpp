@@ -24,32 +24,32 @@ AStarNode::AStarNode()
 	, y(0)
 	, g(0)
 	, h(0)
-	, parent()
-{}
+	, parent() {
+}
 
 AStarNode::AStarNode(const int a, const int b)
 	: x(a)
 	, y(b)
 	, g(0)
 	, h(0)
-	, parent()
-{}
+	, parent() {
+}
 
 AStarNode::AStarNode(const Point &p)
 	: x(p.x)
 	, y(p.y)
 	, g(0)
 	, h(0)
-	, parent(Point())
-{}
+	, parent(Point()) {
+}
 
 AStarNode::AStarNode(const AStarNode& copy)
 	: x(copy.x)
 	, y(copy.y)
 	, g(copy.g)
 	, h(copy.h)
-	, parent(copy.parent)
-{}
+	, parent(copy.parent) {
+}
 
 int AStarNode::getX() const {
 	return x;
@@ -59,7 +59,7 @@ int AStarNode::getY() const {
 	return y;
 }
 
-int AStarNode::getH() const {
+float AStarNode::getH() const {
 	return h;
 }
 

@@ -39,8 +39,8 @@ AnimationSet *AnimationManager::getAnimationSet(const string& filename) {
 	}
 }
 
-AnimationManager::AnimationManager()
-{}
+AnimationManager::AnimationManager() {
+}
 
 AnimationManager::~AnimationManager() {
 	cleanUp();

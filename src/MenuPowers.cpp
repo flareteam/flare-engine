@@ -502,7 +502,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 			std::set<std::string>::iterator it;
 			for (it = powers->powers[power_cell[i].id].requires_flags.begin(); it != powers->powers[power_cell[i].id].requires_flags.end(); ++it) {
-				tip.addText(msg->get("Requires a %s",EQUIP_FLAGS[(*it)]));
+				tip.addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[(*it)])));
 			}
 
 			// add requirement
@@ -585,16 +585,16 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 
 
-            for (unsigned j = 0; j < power_cell[i].requires_power.size(); ++j){
-                // Required Power Tooltip
-                if ((power_cell[i].requires_power[j] != 0) && !(requirementsMet(power_cell[i].requires_power[j]))) {
-                    tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power[j]].name), color_penalty);
-                }
-                else if ((power_cell[i].requires_power[j] != 0) && (requirementsMet(power_cell[i].requires_power[j]))) {
-                    tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power[j]].name));
-                }
+			for (unsigned j = 0; j < power_cell[i].requires_power.size(); ++j) {
+				// Required Power Tooltip
+				if ((power_cell[i].requires_power[j] != 0) && !(requirementsMet(power_cell[i].requires_power[j]))) {
+					tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power[j]].name), color_penalty);
+				}
+				else if ((power_cell[i].requires_power[j] != 0) && (requirementsMet(power_cell[i].requires_power[j]))) {
+					tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power[j]].name));
+				}
 
-            }
+			}
 
 			// add mana cost
 			if (powers->powers[power_cell[i].id].requires_mp > 0) {

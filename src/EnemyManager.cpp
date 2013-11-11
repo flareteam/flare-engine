@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorAlly.h"
 #include "SharedGameResources.h"
 
+#include <limits>
+
 using namespace std;
 
 EnemyManager::EnemyManager()
@@ -142,6 +144,21 @@ void EnemyManager::handleNewMap () {
 			continue;
 		}
 
+
+		bool status_reqs_met = true;
+		//if the status requirements arent met, dont load the enemy
+		for(unsigned int i = 0; i < me.requires_status.size(); i++){
+            if (!camp->checkStatus(me.requires_status[i]))
+                status_reqs_met = false;
+		}
+		for(unsigned int i = 0; i < me.requires_not_status.size(); i++){
+            if (camp->checkStatus(me.requires_not_status[i]))
+                status_reqs_met = false;
+		}
+		if(!status_reqs_met)
+            continue;
+
+
 		Enemy *e = getEnemyPrototype(me.type);
 
 		e->stats.waypoints = me.waypoints;
@@ -199,7 +216,7 @@ void EnemyManager::handleSpawn() {
 		e->stats.summoned = true;
 		e->stats.summoned_power_index = espawn.summon_power_index;
 
-		if(espawn.summoner != NULL){
+		if(espawn.summoner != NULL) {
 			e->stats.summoner = espawn.summoner;
 			espawn.summoner->summons.push_back(&(e->stats));
 		}
@@ -223,19 +240,19 @@ void EnemyManager::handleSpawn() {
 		loadSounds(e->stats.sfx_prefix);
 
 		//Set level
-		if(e->stats.summoned_power_index != 0){
+		if(e->stats.summoned_power_index != 0) {
 			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_FIXED)
 				e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty;
 
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_LEVEL){
-				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_LEVEL) {
+				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
 					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
-							* (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+									 * (e->stats.summoner->level / powers->powers[e->stats.summoned_power_index].spawn_level_every);
 				}
 			}
 
-			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT){
-				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0){
+			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
+				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
 					int stat_val = 0;
 					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_DEFENSE)
 						stat_val = e->stats.summoner->get_defense();
@@ -247,7 +264,7 @@ void EnemyManager::handleSpawn() {
 						stat_val = e->stats.summoner->get_physical();
 
 					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
-							* (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);
+									 * (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);
 				}
 			}
 
@@ -256,9 +273,9 @@ void EnemyManager::handleSpawn() {
 			e->stats.applyEffects();
 		}
 
-		if (mapr->collider.is_valid_position(espawn.pos.x + 0.5, espawn.pos.y + 0.5, e->stats.movement_type, false) || !e->stats.hero_ally) {
-			e->stats.pos.x = espawn.pos.x + 0.5;
-			e->stats.pos.y = espawn.pos.y + 0.5;
+		if (mapr->collider.is_valid_position(espawn.pos.x + 0.5f, espawn.pos.y + 0.5f, e->stats.movement_type, false) || !e->stats.hero_ally) {
+			e->stats.pos.x = espawn.pos.x + 0.5f;
+			e->stats.pos.y = espawn.pos.y + 0.5f;
 		}
 		else {
 			e->stats.pos.x = pc->stats.pos.x;
@@ -386,6 +403,27 @@ Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 		}
 	}
 	return NULL;
+}
+
+Enemy* EnemyManager::getNearestEnemy(FPoint pos) {
+	Enemy* nearest = NULL;
+	float best_distance = std::numeric_limits<float>::max();
+
+	for (unsigned i=0; i<enemies.size(); i++) {
+		if(enemies[i]->stats.cur_state == ENEMY_DEAD || enemies[i]->stats.cur_state == ENEMY_CRITDEAD) {
+			continue;
+		}
+
+		float distance = calcDist(pos, enemies[i]->stats.pos);
+		if (distance < best_distance) {
+			best_distance = distance;
+			nearest = enemies[i];
+		}
+	}
+
+	if (best_distance > INTERACT_RANGE) nearest = NULL;
+
+	return nearest;
 }
 
 /**

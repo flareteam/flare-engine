@@ -32,8 +32,8 @@ FileParser::FileParser()
 	, new_section(false)
 	, section("")
 	, key("")
-	, val("")
-{}
+	, val("") {
+}
 
 bool FileParser::open(const string& _filename, bool locateFileName, bool stopAfterFirstFile, const string &_errormessage) {
 	filenames.clear();

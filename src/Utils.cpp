@@ -27,8 +27,8 @@ using namespace std;
 
 Point floor(FPoint fp) {
 	Point result;
-	result.x = floor(fp.x);
-	result.y = floor(fp.y);
+	result.x = (int)floor(fp.x);
+	result.y = (int)floor(fp.y);
 	return result;
 }
 
@@ -57,8 +57,8 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 
 	// adjust to the center of the viewport
 	// we do this calculation first to avoid negative integer division
-	float adjust_x = (VIEW_W_HALF + 0.5) * UNITS_PER_PIXEL_X;
-	float adjust_y = (VIEW_H_HALF + 0.5) * UNITS_PER_PIXEL_Y;
+	float adjust_x = (VIEW_W_HALF + 0.5f) * UNITS_PER_PIXEL_X;
+	float adjust_y = (VIEW_H_HALF + 0.5f) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		r.x = (x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X;
@@ -83,15 +83,15 @@ Point center_tile(Point p) {
 
 FPoint collision_to_map(Point p) {
 	FPoint ret;
-	ret.x = p.x + 0.5;
-	ret.y = p.y + 0.5;
+	ret.x = p.x + 0.5f;
+	ret.y = p.y + 0.5f;
 	return ret;
 }
 
 Point map_to_collision(FPoint p) {
 	Point ret;
-	ret.x = floor(p.x);
-	ret.y = floor(p.y);
+	ret.x = (int)floor(p.x);
+	ret.y = (int)floor(p.y);
 	return ret;
 }
 
@@ -340,7 +340,8 @@ SDL_Surface* createSurface(int width, int height) {
 
 	if(surface == NULL) {
 		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
-	} else {
+	}
+	else {
 
 		SDL_SetColorKey(surface, SDL_SRCCOLORKEY, SDL_MapRGB(surface->format,255,0,255));
 

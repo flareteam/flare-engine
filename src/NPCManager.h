@@ -52,7 +52,7 @@ public:
 	int getID(std::string npcName);
 	int checkNPCClick(Point mouse, FPoint cam);
 	int getNearestNPC(FPoint pos);
-	void renderTooltips(FPoint cam, Point mouse);
+	void renderTooltips(FPoint cam, Point mouse, int nearest);
 };
 
 #endif

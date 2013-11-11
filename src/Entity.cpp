@@ -40,7 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
 const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
-const float speedMultiplyer[8] = { 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0, 1.0/M_SQRT2, 1.0};
+const float speedMultiplyer[8] = { (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f};
 
 using namespace std;
 
@@ -123,8 +123,6 @@ bool Entity::takeHit(const Hazard &h) {
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally) {
 		stats.join_combat = true;
 		stats.in_combat = true;
-		stats.last_seen.x = pc->stats.pos.x;
-		stats.last_seen.y = pc->stats.pos.y;
 		powers->activate(stats.power_index[BEACON], &stats, stats.pos); //emit beacon
 	}
 
@@ -251,32 +249,37 @@ bool Entity::takeHit(const Hazard &h) {
 			combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_GIVEDMG);
 	}
 
+	// temporarily save the current HP for calculating HP/MP steal on final blow
+	int prev_hp = stats.hp;
+
 	// apply damage
 	stats.takeDamage(dmg);
 
-	// damage always breaks stun
-	if (dmg > 0) stats.effects.removeEffectType("stun");
-
 	// after effects
-	if (stats.hp > 0 && dmg > 0) {
+	if (dmg > 0) {
 
-		if (h.mod_power > 0) powers->effect(&stats, h.src_stats, h.mod_power,h.source_type);
-		powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
+		// damage always breaks stun
+		stats.effects.removeEffectType("stun");
+
+		if (stats.hp > 0) {
+			if (h.mod_power > 0) powers->effect(&stats, h.src_stats, h.mod_power,h.source_type);
+			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
+		}
 
 		if (!stats.effects.immunity) {
-			if (stats.effects.forced_move) {
+			if (stats.effects.forced_move && stats.hp > 0) {
 				float theta = calcTheta(h.src_stats->pos.x, h.src_stats->pos.y, stats.pos.x, stats.pos.y);
 				stats.forced_speed.x = stats.effects.forced_speed * cos(theta);
 				stats.forced_speed.y = stats.effects.forced_speed * sin(theta);
 			}
 			if (h.hp_steal != 0) {
-				int steal_amt = (dmg * h.hp_steal) / 100;
+				int steal_amt = (min(dmg, prev_hp) * h.hp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 				h.src_stats->hp = min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 			}
 			if (h.mp_steal != 0) {
-				int steal_amt = (dmg * h.mp_steal) / 100;
+				int steal_amt = (min(dmg, prev_hp) * h.mp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 				h.src_stats->mp = min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));

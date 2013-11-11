@@ -133,6 +133,7 @@ public:
 	bool newLevelNotification;
 	bool respawn;
 	bool close_menus;
+	bool allow_movement;
 	std::vector<int> hero_cooldown;
 };
 

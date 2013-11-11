@@ -66,8 +66,8 @@ Animation::Animation(const Animation& a)
 	, gfx(std::vector<SDL_Rect>(a.gfx))
 	, render_offset(std::vector<Point>(a.render_offset))
 	, duration(std::vector<unsigned short>(a.duration))
-	, active_frames(std::vector<short>(a.active_frames))
-{}
+	, active_frames(std::vector<short>(a.active_frames)) {
+}
 
 void Animation::setupUncompressed(Point _render_size, Point _render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds) {
 	setup(_frames, _duration, _maxkinds);

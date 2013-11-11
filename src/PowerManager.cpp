@@ -250,9 +250,9 @@ void PowerManager::loadPowers() {
 				if (infile.val == ELEMENTS[i].name) powers[input_id].trait_elemental = i;
 			}
 		}
-		else if (infile.key == "range")
-			// @ATTR, range|float|
-			powers[input_id].range = toFloat(infile.nextValue());
+		else if (infile.key == "target_range")
+			// @ATTR, target_range|float||The distance from the caster that the power can be activated
+			powers[input_id].target_range = toFloat(infile.nextValue());
 		//steal effects
 		else if (infile.key == "hp_steal")
 			// @ATTR, hp_steal|integer|Percentage of damage to steal into HP
@@ -269,7 +269,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].angle_variance = toInt(infile.val);
 		else if (infile.key == "speed_variance")
 			// @ATTR speed_variance|integer|Percentage of variance added to missile speed
-			powers[input_id].speed_variance = toInt(infile.val);
+			powers[input_id].speed_variance = toFloat(infile.val);
 		//repeater modifiers
 		else if (infile.key == "delay")
 			// @ATTR delay|duration|Delay between repeats
@@ -484,7 +484,7 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint 
 
 	if (!collider) return false;
 
-	target = limitRange(powers[power_index].range,src_stats->pos,target);
+	target = limitRange(powers[power_index].target_range,src_stats->pos,target);
 
 	if (!collider->is_empty(target.x, target.y) || collider->is_wall(target.x,target.y)) {
 		if (powers[power_index].buff_teleport) {
@@ -506,8 +506,8 @@ FPoint PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked
 	for (int i=-range; i<=range; i++) {
 		for (int j=-range; j<=range; j++) {
 			if (i == 0 && j == 0) continue; // skip the middle tile
-			new_target.x = target.x + i + 0.5;
-			new_target.y = target.y + j + 0.5;
+			new_target.x = target.x + i + 0.5f;
+			new_target.y = target.y + j + 0.5f;
 			if (collider->is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
 				valid_tiles.push_back(new_target);
 		}
@@ -587,7 +587,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	else if (powers[power_index].visual_option)
 		haz->animationKind = powers[power_index].visual_option;
 
-	haz->floor = powers[power_index].floor;
+	haz->on_floor = powers[power_index].floor;
 	haz->base_speed = powers[power_index].speed;
 	haz->complete_animation = powers[power_index].complete_animation;
 
@@ -598,11 +598,29 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	if (powers[power_index].trait_elemental != -1) {
 		haz->trait_elemental = powers[power_index].trait_elemental;
 	}
-	haz->active = !powers[power_index].no_attack;
-	haz->multitarget = powers[power_index].multitarget;
-	haz->trait_armor_penetration = powers[power_index].trait_armor_penetration;
-	haz->trait_crits_impaired = powers[power_index].trait_crits_impaired;
-	haz->beacon = powers[power_index].beacon;
+	
+	if (powers[power_index].no_attack) {
+		haz->active = false;
+	}
+	
+	// note: it may look like this line would be more efficient:
+	// haz->multitarget = powers[power_index].multitarget
+	// but as mentioned above, only apply traits that are not the default!
+	// If haz->multitarget is already true, don't reset it to false.
+	// otherwise a base power with multitarget will lose multitarget from a power mod
+	// e.g. Piercing Shot in flare-game has multitarget
+	// but the generic Arrow missile or Sling Stone missile does not.
+	if (powers[power_index].multitarget) {
+		haz->multitarget = true;
+	}
+	if (powers[power_index].trait_armor_penetration) {
+		haz->trait_armor_penetration = true;
+	}
+	haz->trait_crits_impaired += powers[power_index].trait_crits_impaired;
+
+    if (powers[power_index].beacon) {	
+	  haz->beacon = true;
+	}
 
 	// status effect durations
 	// steal effects
@@ -614,7 +632,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 		haz->pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		haz->pos = limitRange(powers[power_index].range,src_stats->pos,target);
+		haz->pos = limitRange(powers[power_index].target_range,src_stats->pos,target);
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
@@ -656,7 +674,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
-		target = limitRange(powers[power_index].range,src_stats->pos,target);
+		target = limitRange(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
 			FPoint new_target = targetNeighbor(floor(target), powers[power_index].target_neighbor);
 			if (floor(new_target.x) == floor(target.x) && floor(new_target.y) == floor(target.y)) {
@@ -881,7 +899,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 	FPoint location_iterator;
 	FPoint speed;
 	int delay_iterator = 0;
-	float map_speed = 32.0 / MAX_FRAMES_PER_SEC;
+	float map_speed = 32.0f / MAX_FRAMES_PER_SEC;
 
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);

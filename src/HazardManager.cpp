@@ -32,8 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 HazardManager::HazardManager()
-	: last_enemy(NULL)
-{
+	: last_enemy(NULL) {
 }
 
 void HazardManager::logic() {
@@ -176,6 +175,7 @@ void HazardManager::handleNewMap() {
 	for (unsigned int i = 0; i < h.size(); i++)
 		delete h[i];
 	h.clear();
+	last_enemy = NULL;
 }
 
 /**
@@ -192,4 +192,5 @@ HazardManager::~HazardManager() {
 	for (unsigned int i = 0; i < h.size(); i++)
 		delete h[i];
 	// h.clear(); not needed in destructor
+	last_enemy = NULL;
 }

@@ -155,7 +155,7 @@ public:
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
 	int starting_pos; // enum. (source, target, or melee)
 	bool multitarget;
-	float range;
+	float target_range;
 	bool target_party;
 	std::vector<std::string> target_categories;
 
@@ -261,7 +261,7 @@ public:
 		, base_damage(BASE_DAMAGE_NONE)
 		, starting_pos(STARTING_POS_SOURCE)
 		, multitarget(false)
-		, range(0)
+		, target_range(0)
 		, target_party(false)
 		, mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
 		, mod_accuracy_value(100)

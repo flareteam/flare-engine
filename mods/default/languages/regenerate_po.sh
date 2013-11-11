@@ -1,5 +1,4 @@
 #!/bin/sh
-# This is both readme and an executable script at once.
 # Run this script in the language directory to update the pot and all *.po files
 
 # For the engine

@@ -1136,7 +1136,8 @@ void MenuManager::dragAndDropWithKeyboard() {
 			if (drag_src == DRAG_SRC_POWERS) {
 				act->drop(dest_slot, drag_power, 0);
 				pow->slots[pow->tablist.getCurrent()]->checked = false;
-			} else if (drag_src == DRAG_SRC_INVENTORY) {
+			}
+			else if (drag_src == DRAG_SRC_INVENTORY) {
 				if (inv->tablist.getCurrent() < inv->getEquippedCount())
 					inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->checked = false;
 				else

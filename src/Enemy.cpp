@@ -42,8 +42,6 @@ Enemy::Enemy() : Entity() {
 	stats.turn_ticks = MAX_FRAMES_PER_SEC;
 	//stats.patrol_ticks = 0; //no longer needed due to A*
 	stats.cooldown = 0;
-	stats.last_seen.x = -1;
-	stats.last_seen.y = -1;
 	stats.in_combat = false;
 	stats.join_combat = false;
 
@@ -123,6 +121,9 @@ void Enemy::logic() {
 		eb = stats.hero_ally ? new BehaviorStandard(this) : new BehaviorAlly(this);
 		stats.converted = !stats.converted;
 		stats.hero_ally = !stats.hero_ally;
+		if (stats.convert_status != "") {
+			camp->setStatus(stats.convert_status);
+		}
 	}
 
 	return;
@@ -140,11 +141,11 @@ void Enemy::doRewards(int source_type) {
 	kill_source_type = source_type;
 
 	// some creatures create special loot if we're on a quest
-	if (stats.quest_loot_requires != "") {
+	if (stats.quest_loot_requires_status != "") {
 
 		// the loot manager will check quest_loot_id
 		// if set (not zero), the loot manager will 100% generate that loot.
-		if (!(camp->checkStatus(stats.quest_loot_requires) && !camp->checkStatus(stats.quest_loot_not))) {
+		if (!(camp->checkStatus(stats.quest_loot_requires_status) && !camp->checkStatus(stats.quest_loot_requires_not_status))) {
 			stats.quest_loot_id = 0;
 		}
 	}

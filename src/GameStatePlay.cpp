@@ -73,6 +73,7 @@ GameStatePlay::GameStatePlay()
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
+	, nearest_npc(-1)
 	, game_slot(0) {
 	hasMusic = true;
 	// GameEngine scope variables
@@ -86,7 +87,7 @@ GameStatePlay::GameStatePlay()
 	hazards = new HazardManager();
 	menu = new MenuManager(&pc->stats);
 	npcs = new NPCManager(&pc->stats);
-    quests = new QuestLog(menu->log);
+	quests = new QuestLog(menu->log);
 	enemyg = new EnemyGroupManager();
 	loot = new LootManager(&pc->stats);
 
@@ -130,35 +131,41 @@ void GameStatePlay::resetGame() {
  * This function also sets enemy mouseover for Menu Enemy.
  */
 void GameStatePlay::checkEnemyFocus() {
-	// determine enemies mouseover
-	// only check alive enemies for targeting
-	enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
-
-	if (enemy != NULL) {
-
-		// if there's a living creature in focus, display its stats
-		if (!enemy->stats.suppress_hp) {
-			menu->enemy->enemy = enemy;
-			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
-			hazards->last_enemy = NULL;
-		}
-	}
-	else if (hazards->last_enemy != NULL) {
-
-		// try to focus the last enemy hit
-		if (!hazards->last_enemy->stats.suppress_hp) {
-			menu->enemy->enemy = hazards->last_enemy;
-			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
-			if (!hazards->last_enemy->stats.alive) {
-				hazards->last_enemy = NULL;
+	// check the last hit enemy first
+	// if there's none, then either get the nearest enemy or one under the mouse (depending on mouse mode)
+	if (NO_MOUSE) {
+		if (hazards->last_enemy) {
+			if (enemy == hazards->last_enemy) {
+				if (menu->enemy->timeout > 0) return;
+				else hazards->last_enemy = NULL;
 			}
+			enemy = hazards->last_enemy;
+		}
+		else {
+			enemy = enemies->getNearestEnemy(pc->stats.pos);
 		}
 	}
 	else {
+		if (hazards->last_enemy) {
+			enemy = hazards->last_enemy;
+			hazards->last_enemy = NULL;
+		}
+		else {
+			enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
+		}
+	}
 
-		// if there's no living creature in focus, look for a dead one instead
+	if (enemy) {
+		// set the actual menu with the enemy selected above
+		if (!enemy->stats.suppress_hp) {
+			menu->enemy->enemy = enemy;
+			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
+		}
+	}
+	else if (!NO_MOUSE) {
+		// if we're using a mouse and we didn't select an enemy, try selecting a dead one instead
 		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, false);
-		if (temp_enemy != NULL) {
+		if (temp_enemy) {
 			menu->enemy->enemy = temp_enemy;
 			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
 		}
@@ -206,7 +213,7 @@ void GameStatePlay::checkLoot() {
 	}
 
 	// Pickup with mouse click
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !NO_MOUSE) {
 
 		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, menu->inv);
 		if (pickup.item > 0) {
@@ -285,7 +292,7 @@ void GameStatePlay::checkTeleport() {
 			menu->stash->visible = false;
 			menu->npc->visible = false;
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
-			npc_id = -1;
+			npc_id = nearest_npc = -1;
 
 			// store this as the new respawn point
 			mapr->respawn_map = teleport_mapname;
@@ -596,23 +603,22 @@ void GameStatePlay::checkNPCInteraction() {
 	if (pc->attacking) return;
 
 	int npc_click = -1;
-	int max_interact_distance = 4;
-	int interact_distance = max_interact_distance+1;
+	float interact_distance = 0;
+	nearest_npc = npcs->getNearestNPC(pc->stats.pos);
 
 	// check for clicking on an NPC
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !NO_MOUSE) {
 		npc_click = npcs->checkNPCClick(inpt->mouse, mapr->cam);
 		if (npc_click != -1) npc_id = npc_click;
 	}
 	// if we press the ACCEPT key, find the nearest NPC to interact with
-	else if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		npc_click = npcs->getNearestNPC(pc->stats.pos);
-		if (npc_click != -1) npc_id = npc_click;
+	else if (nearest_npc != -1 && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		npc_id = npc_click = nearest_npc;
 	}
 
 	// check distance to this npc
 	if (npc_id != -1) {
-		interact_distance = (int)calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 	}
 
 	if (mapr->event_npc != "") {
@@ -626,9 +632,9 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// if close enough to the NPC, open the appropriate interaction screen
 
-	if (npc_id != -1 && ((npc_click != -1 && interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
+	if (npc_id != -1 && ((npc_click != -1 && interact_distance < INTERACT_RANGE && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
 
-		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
+		if (inpt->pressing[MAIN1] && !NO_MOUSE) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
 		menu->npc->setNPC(npcs->npcs[npc_id]);
@@ -653,7 +659,7 @@ void GameStatePlay::checkNPCInteraction() {
 		menu->npc->setNPC(NULL);
 	}
 
-	if (npc_id != -1 && ((interact_distance < max_interact_distance && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
+	if (npc_id != -1 && ((interact_distance < INTERACT_RANGE && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
 
 		if (menu->talker->vendor_visible && !menu->vendor->talker_visible) {
 
@@ -686,6 +692,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 			menu->talker->npc = npcs->npcs[npc_id];
 			menu->talker->chooseDialogNode(menu->npc->selected_dialog_node);
+			pc->allow_movement = npcs->npcs[npc_id]->checkMovement(menu->npc->selected_dialog_node);
 
 			menu->closeAll();
 			menu->talker->visible = true;
@@ -702,7 +709,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// check for walking away from an NPC
 	if (npc_id != -1 && !eventDialogOngoing) {
-		if (interact_distance > max_interact_distance || !pc->stats.alive) {
+		if (interact_distance > INTERACT_RANGE || !pc->stats.alive) {
 			menu->npc->setNPC(NULL);
 			menu->vendor->npc = NULL;
 			menu->talker->npc = NULL;
@@ -718,11 +725,14 @@ void GameStatePlay::checkNPCInteraction() {
 		eventDialogOngoing = false;
 	}
 
+	// reset movement restrictions when we're not in dialog
+	if (!menu->talker->visible) {
+		pc->allow_movement = true;
+	}
 }
 
 void GameStatePlay::checkStash() {
-	int max_interact_distance = 4;
-	int interact_distance = max_interact_distance+1;
+	float interact_distance;
 
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
@@ -736,8 +746,8 @@ void GameStatePlay::checkStash() {
 		if (!menu->inv->visible) menu->stash->visible = false;
 
 		// If the player walks away from the stash, close its menu
-		interact_distance = (int)calcDist(pc->stats.pos, mapr->stash_pos);
-		if (interact_distance > max_interact_distance || !pc->stats.alive) {
+		interact_distance = calcDist(pc->stats.pos, mapr->stash_pos);
+		if (interact_distance > INTERACT_RANGE || !pc->stats.alive) {
 			menu->stash->visible = false;
 		}
 
@@ -802,11 +812,19 @@ void GameStatePlay::logic() {
 		if (pc->stats.alive) {
 			checkNPCInteraction();
 			mapr->checkHotspots();
-			mapr->checkNearestEvent(pc->stats.pos);
+			mapr->checkNearestEvent();
 		}
 		checkTitle();
 
-		pc->logic(menu->act->checkAction(), restrictPowerUse());
+		int actionbar_power = menu->act->checkAction();
+		pc->logic(actionbar_power, restrictPowerUse());
+
+		// Transform powers change the actionbar layout,
+		// so we need to prevent accidental clicks if a new power is placed under the slot we clicked on.
+		// It's a bit hacky, but it works
+		if (powers->powers[actionbar_power].type == POWTYPE_TRANSFORM) {
+			menu->act->resetSlots();
+		}
 
 		// transfer hero data to enemies, for AI use
 		if (pc->stats.get(STAT_STEALTH) > 100) enemies->hero_stealth = 100;
@@ -927,7 +945,7 @@ void GameStatePlay::render() {
 
 	// mouseover tooltips
 	loot->renderTooltips(mapr->cam);
-	npcs->renderTooltips(mapr->cam, inpt->mouse);
+	npcs->renderTooltips(mapr->cam, inpt->mouse, nearest_npc);
 
 	if (mapr->map_change) {
 		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
@@ -957,7 +975,9 @@ void GameStatePlay::showLoading() {
 	SDL_Flip(screen);
 }
 
-Avatar *GameStatePlay::getAvatar() const { return pc; }
+Avatar *GameStatePlay::getAvatar() const {
+	return pc;
+}
 
 GameStatePlay::~GameStatePlay() {
 	delete quests;

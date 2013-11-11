@@ -54,7 +54,7 @@ public:
 
 	int getX() const;
 	int getY() const;
-	int getH() const;
+	float getH() const;
 
 	Point getParent() const;
 	void setParent(const Point& p);

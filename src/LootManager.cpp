@@ -72,10 +72,6 @@ LootManager::LootManager(StatBlock *_hero) {
 				// @ATTR tooltip_margin|integer|
 				tooltip_margin = eatFirstInt(infile.val, ',');
 			}
-			else if (infile.key == "autopickup_range") {
-				// @ATTR autopickup_range|float|Define the range for autopickup feature
-				AUTOPICKUP_RANGE = toFloat(infile.val);
-			}
 			else if (infile.key == "autopickup_currency") {
 				// @ATTR autopickup_currency|boolean|Enable autopickup for currency
 				AUTOPICKUP_CURRENCY = toBool(eatFirstString(infile.val, ','));
@@ -223,8 +219,8 @@ void LootManager::checkMapForLoot() {
 	for (unsigned i = mapr->loot.size(); i > 0; i--) {
 		ec = &mapr->loot[i-1];
 		if (ec->z == 0) {
-			p.x = ec->x + 0.5;
-			p.y = ec->y + 0.5;
+			p.x = ec->x + 0.5f;
+			p.y = ec->y + 0.5f;
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
@@ -273,8 +269,8 @@ void LootManager::checkMapForLoot() {
 		if (possible_ids.size() > 1) chosen_loot = rand() % possible_ids.size();
 
 		ec = &mapr->loot[chosen_loot];
-		p.x = ec->x;
-		p.y = ec->y;
+		p.x = ec->x + 0.5f;
+		p.y = ec->y + 0.5f;
 
 		new_loot.quantity = randBetween(ec->a,ec->b);
 
@@ -396,7 +392,7 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 		--it;
 
 		// loot close enough to pickup?
-		if (fabs(hero_pos.x - it->pos.x) < LOOT_RANGE && fabs(hero_pos.y - it->pos.y) < LOOT_RANGE && !it->isFlying()) {
+		if (fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
 
 			Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 
@@ -435,7 +431,7 @@ ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
 	vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
-		if (fabs(hero_pos.x - it->pos.x) < AUTOPICKUP_RANGE && fabs(hero_pos.y - it->pos.y) < AUTOPICKUP_RANGE && !it->isFlying()) {
+		if (fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
 			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
 				if (!(inv->full(it->stack.item))) {
 					loot_stack = it->stack;
@@ -462,7 +458,7 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 		--it;
 
 		float distance = calcDist(hero_pos, it->pos);
-		if (distance < LOOT_RANGE && distance < best_distance) {
+		if (distance < INTERACT_RANGE && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;
 		}

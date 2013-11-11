@@ -37,11 +37,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-const float CLICK_RANGE = 3; //for activating events
-
 MapRenderer::MapRenderer()
 	: Map()
-	, index_objectlayer(0)
 	, music(NULL)
 	, tip(new WidgetTooltip())
 	, tip_pos()
@@ -49,7 +46,6 @@ MapRenderer::MapRenderer()
 	, shakycam()
 	, backgroundsurface(NULL)
 	, backgroundsurfaceoffset()
-	, repaint_background(false)
 	, cam()
 	, map_change(false)
 	, teleportation(false)
@@ -61,7 +57,9 @@ MapRenderer::MapRenderer()
 	, shaky_cam_ticks(0)
 	, stash(false)
 	, stash_pos()
-	, enemies_cleared(false) {
+	, enemies_cleared(false)
+	, repaint_background(false)
+	, index_objectlayer(0) {
 }
 
 void MapRenderer::clearQueues() {
@@ -69,7 +67,7 @@ void MapRenderer::clearQueues() {
 	loot.clear();
 }
 
-bool MapRenderer::enemyGroupPlaceEnemy(int x, int y, Map_Group &g) {
+bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 	if (collider.is_empty(x, y)) {
 		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 		if (!enemy_lev.type.empty()) {
@@ -103,8 +101,8 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 
 	while (enemies_to_spawn && allowed_misses) {
 
-		float x = (g.pos.x + (rand() % g.area.x)) + 0.5;
-		float y = (g.pos.y + (rand() % g.area.y)) + 0.5;
+		float x = (g.pos.x + (rand() % g.area.x)) + 0.5f;
+		float y = (g.pos.y + (rand() % g.area.y)) + 0.5f;
 
 		if (enemyGroupPlaceEnemy(x, y, g))
 			enemies_to_spawn--;
@@ -123,7 +121,7 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 	}
 	if (enemies_to_spawn) {
 		fprintf(stderr, "Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)\n",
-		filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn, g.numbermin, g.numbermax);
+				filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn, g.numbermin, g.numbermax);
 	}
 }
 
@@ -213,7 +211,7 @@ void MapRenderer::logic() {
 	tset.logic();
 
 	// handle event cooldowns
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 	for (it = events.begin(); it < events.end(); ++it) {
 		if ((*it).cooldown_ticks > 0) (*it).cooldown_ticks--;
 	}
@@ -230,8 +228,8 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = it->map_pos.x; // implicit floor, just taking the integer part of the float
-		const unsigned tiley = it->map_pos.y;
+		const unsigned tilex = (int)floor(it->map_pos.x);
+		const unsigned tiley = (int)floor(it->map_pos.y);
 		const int commax = (float)(it->map_pos.x - tilex) * (2<<16);
 		const int commay = (float)(it->map_pos.y - tiley) * (2<<16);
 		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
@@ -240,8 +238,8 @@ void calculatePriosIso(vector<Renderable> &r) {
 
 void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = floor(it->map_pos.x);
-		const unsigned tiley = floor(it->map_pos.y);
+		const unsigned tilex = (int)floor(it->map_pos.x);
+		const unsigned tiley = (int)floor(it->map_pos.y);
 		const int commay = 1024 * it->map_pos.y;
 		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
@@ -254,8 +252,8 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		shakycam.y = cam.y;
 	}
 	else {
-		shakycam.x = cam.x + (rand() % 16 - 8) * 0.0078125;
-		shakycam.y = cam.y + (rand() % 16 - 8) * 0.0078125;
+		shakycam.x = cam.x + (rand() % 16 - 8) * 0.0078125f;
+		shakycam.y = cam.y + (rand() % 16 - 8) * 0.0078125f;
 	}
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
@@ -438,8 +436,8 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 			renderIsoLayer(screen, nulloffset, layers[i]);
 	}
 	else {
-		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender * TILE_W
-				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender * TILE_H
+		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender
+				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender
 				|| repaint_background) {
 
 			if (!backgroundsurface)
@@ -452,7 +450,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 			SDL_FillRect(backgroundsurface, 0, 0);
 			Point off(VIEW_W_HALF, VIEW_H_HALF);
 			for (unsigned i = 0; i < index_objectlayer; ++i)
-					renderIsoLayer(backgroundsurface, off, layers[i]);
+				renderIsoLayer(backgroundsurface, off, layers[i]);
 		}
 		Point p = map_to_screen(shakycam.x, shakycam.y , backgroundsurfaceoffset.x, backgroundsurfaceoffset.y);
 		SDL_Rect src;
@@ -570,24 +568,24 @@ void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead)
 }
 
 void MapRenderer::executeOnLoadEvents() {
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 
 	// loop in reverse because we may erase elements
 	for (it = events.end(); it != events.begin(); ) {
 		--it;
 
 		// skip inactive events
-		if (!isActive(*it)) continue;
+		if (!EventManager::isActive(*it)) continue;
 
 		if ((*it).type == "on_load") {
-			if (executeEvent(*it))
+			if (EventManager::executeEvent(*it))
 				it = events.erase(it);
 		}
 	}
 }
 
 void MapRenderer::executeOnMapExitEvents() {
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 
 	// We're leaving the map, so the events of this map are removed anyway in
 	// the next frame (Reminder: We're about to load a new map ;),
@@ -596,28 +594,28 @@ void MapRenderer::executeOnMapExitEvents() {
 	for (it = events.begin(); it != events.end(); ++it) {
 
 		// skip inactive events
-		if (!isActive(*it)) continue;
+		if (!EventManager::isActive(*it)) continue;
 
 		if ((*it).type == "on_mapexit")
-			executeEvent(*it); // ignore repeat value
+			EventManager::executeEvent(*it); // ignore repeat value
 	}
 }
 
 void MapRenderer::checkEvents(FPoint loc) {
 	Point maploc;
-	maploc.x = floor(loc.x);
-	maploc.y = floor(loc.y);
-	vector<Map_Event>::iterator it;
+	maploc.x = (int)floor(loc.x);
+	maploc.y = (int)floor(loc.y);
+	vector<Event>::iterator it;
 
 	// loop in reverse because we may erase elements
 	for (it = events.end(); it != events.begin(); ) {
 		--it;
 
 		// skip inactive events
-		if (!isActive(*it)) continue;
+		if (!EventManager::isActive(*it)) continue;
 
 		if ((*it).type == "on_clear") {
-			if (enemies_cleared && executeEvent(*it))
+			if (enemies_cleared && EventManager::executeEvent(*it))
 				it = events.erase(it);
 			continue;
 		}
@@ -637,14 +635,14 @@ void MapRenderer::checkEvents(FPoint loc) {
 			else {
 				if ((*it).getComponent("wasInsideEventArea")) {
 					(*it).deleteAllComponents("wasInsideEventArea");
-					if (executeEvent(*it))
+					if (EventManager::executeEvent(*it))
 						it = events.erase(it);
 				}
 			}
 		}
 		else {
 			if (inside)
-				if (executeEvent(*it))
+				if (EventManager::executeEvent(*it))
 					it = events.erase(it);
 		}
 	}
@@ -654,15 +652,17 @@ void MapRenderer::checkEvents(FPoint loc) {
  * Some events have a hotspot (rectangle screen area) where the user can click
  * to trigger the event.
  *
- * The hero must be within range (CLICK_RANGE) to activate an event.
+ * The hero must be within range (INTERACT_RANGE) to activate an event.
  *
  * This function checks valid mouse clicks against all clickable events, and
  * executes
  */
 void MapRenderer::checkHotspots() {
+	if (NO_MOUSE) return;
+
 	show_tooltip = false;
 
-	vector<Map_Event>::iterator it;
+	vector<Event>::iterator it;
 
 	// work backwards through events because events can be erased in the loop.
 	// this prevents the iterator from becoming invalid.
@@ -705,7 +705,7 @@ void MapRenderer::checkHotspots() {
 
 				if (matched) {
 					// skip inactive events
-					if (!isActive(*it)) continue;
+					if (!EventManager::isActive(*it)) continue;
 
 					// skip events without hotspots
 					if ((*it).hotspot.h == 0) continue;
@@ -714,21 +714,10 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					Event_Component *ec = (*it).getComponent("tooltip");
-					if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-						show_tooltip = true;
-						if (!tip_buf.compareFirstLine(ec->s)) {
-							tip_buf.clear();
-							tip_buf.addText(ec->s);
-						}
-						TOOLTIP_CONTEXT = TOOLTIP_MAP;
-					}
-					else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-						TOOLTIP_CONTEXT = TOOLTIP_NONE;
-					}
+					createTooltip((*it).getComponent("tooltip"));
 
-					if ((fabs(cam.x - (*it).location.x) < CLICK_RANGE)
-							&& (fabs(cam.y - (*it).location.y) < CLICK_RANGE)) {
+					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, floor(cam)))
+							&& calcDist(cam, (*it).center) < INTERACT_RANGE) {
 
 						// only check events if the player is clicking
 						// and allowed to click
@@ -736,7 +725,7 @@ void MapRenderer::checkHotspots() {
 						else if (inpt->lock[MAIN1]) return;
 
 						inpt->lock[MAIN1] = true;
-						if (executeEvent(*it))
+						if (EventManager::executeEvent(*it))
 							it = events.erase(it);
 					}
 					return;
@@ -747,72 +736,50 @@ void MapRenderer::checkHotspots() {
 	}
 }
 
-void MapRenderer::checkNearestEvent(FPoint loc) {
-	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+void MapRenderer::checkNearestEvent() {
+	if (NO_MOUSE) show_tooltip = false;
 
-		vector<Map_Event>::iterator it;
-		vector<Map_Event>::iterator nearest = events.end();
-		float best_distance = std::numeric_limits<float>::max();
+	vector<Event>::iterator it;
+	vector<Event>::iterator nearest = events.end();
+	float best_distance = std::numeric_limits<float>::max();
 
-		// loop in reverse because we may erase elements
-		for (it = events.end(); it != events.begin(); ) {
-			--it;
+	// loop in reverse because we may erase elements
+	for (it = events.end(); it != events.begin(); ) {
+		--it;
 
-			// skip inactive events
-			if (!isActive(*it)) continue;
+		// skip inactive events
+		if (!EventManager::isActive(*it)) continue;
 
-			// skip events without hotspots
-			if ((*it).hotspot.h == 0) continue;
+		// skip events without hotspots
+		if ((*it).hotspot.h == 0) continue;
 
-			// skip events on cooldown
-			if ((*it).cooldown_ticks != 0) continue;
+		// skip events on cooldown
+		if ((*it).cooldown_ticks != 0) continue;
 
-			FPoint ev_loc;
-			ev_loc.x = (*it).location.x;
-			ev_loc.y = (*it).location.y;
-			float distance = calcDist(loc, ev_loc);
-			if (distance < CLICK_RANGE && distance < best_distance) {
-				best_distance = distance;
-				nearest = it;
-			}
+		float distance = calcDist(cam, (*it).center);
+		if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, floor(cam)))
+				&& distance < INTERACT_RANGE && distance < best_distance) {
+			best_distance = distance;
+			nearest = it;
 		}
-		if (nearest != events.end()) {
-			if(executeEvent(*nearest))
+
+	}
+
+	if (nearest != events.end()) {
+		if (NO_MOUSE) {
+			// new tooltip?
+			createTooltip((*nearest).getComponent("tooltip"));
+			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
+			tip_pos.y -= TILE_H;
+		}
+
+		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+
+			if(EventManager::executeEvent(*nearest))
 				events.erase(nearest);
 		}
 	}
-}
-
-bool MapRenderer::isActive(const Map_Event &e) {
-	for (unsigned i=0; i < e.components.size(); i++) {
-		if (e.components[i].type == "requires_not_status") {
-			if (camp->checkStatus(e.components[i].s)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == "requires_status") {
-			if (!camp->checkStatus(e.components[i].s)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == "requires_item") {
-			if (!camp->checkItem(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == "requires_level") {
-			if (camp->hero->level < e.components[i].x) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == "requires_not_level") {
-			if (camp->hero->level >= e.components[i].x) {
-				return false;
-			}
-		}
-	}
-	return true;
 }
 
 void MapRenderer::checkTooltip() {
@@ -820,180 +787,18 @@ void MapRenderer::checkTooltip() {
 		tip->render(tip_buf, tip_pos, STYLE_TOPLABEL);
 }
 
-/**
- * A particular event has been triggered.
- * Process all of this events components.
- *
- * @param The triggered event
- * @return Returns true if the event shall not be run again.
- */
-bool MapRenderer::executeEvent(Map_Event &ev) {
-	if(&ev == NULL) return false;
-
-	// skip executing events that are on cooldown
-	if (ev.cooldown_ticks > 0) return false;
-
-	// set cooldown
-	ev.cooldown_ticks = ev.cooldown;
-
-	const Event_Component *ec;
-
-	for (unsigned i = 0; i < ev.components.size(); ++i) {
-		ec = &ev.components[i];
-
-		if (ec->type == "set_status") {
-			camp->setStatus(ec->s);
+void MapRenderer::createTooltip(Event_Component *ec) {
+	if (ec && !ec->s.empty() && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+		show_tooltip = true;
+		if (!tip_buf.compareFirstLine(ec->s)) {
+			tip_buf.clear();
+			tip_buf.addText(ec->s);
 		}
-		else if (ec->type == "unset_status") {
-			camp->unsetStatus(ec->s);
-		}
-		else if (ec->type == "intermap") {
-
-			if (fileExists(mods->locate("maps/" + ec->s))) {
-				teleportation = true;
-				teleport_mapname = ec->s;
-				teleport_destination.x = ec->x + 0.5;
-				teleport_destination.y = ec->y + 0.5;
-			}
-			else {
-				ev.keep_after_trigger = false;
-				log_msg = msg->get("Unknown destination");
-			}
-		}
-		else if (ec->type == "intramap") {
-			teleportation = true;
-			teleport_mapname = "";
-			teleport_destination.x = ec->x + 0.5;
-			teleport_destination.y = ec->y + 0.5;
-		}
-		else if (ec->type == "mapmod") {
-			if (ec->s == "collision") {
-				collider.colmap[ec->x][ec->y] = ec->z;
-			}
-			else {
-				int index = distance(layernames.begin(), find(layernames.begin(), layernames.end(), ec->s));
-				layers[index][ec->x][ec->y] = ec->z;
-
-				if (ec->a < (int)(index_objectlayer))
-					repaint_background = true;
-			}
-			map_change = true;
-		}
-		else if (ec->type == "soundfx") {
-			Point pos(0,0);
-			bool loop = false;
-
-			if (ec->x != -1 && ec->y != -1) {
-				if (ec->x != 0 && ec->y != 0) {
-					pos.x = ec->x + 0.5;
-					pos.y = ec->y + 0.5;
-				}
-			}
-			else if (ev.location.x != 0 && ev.location.y != 0) {
-				pos.x = ev.location.x + 0.5;
-				pos.y = ev.location.y + 0.5;
-			}
-
-			if (ev.type == "on_load")
-				loop = true;
-
-			SoundManager::SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
-
-			snd->play(sid, GLOBAL_VIRTUAL_CHANNEL, pos, loop);
-			sids.push_back(sid);
-		}
-		else if (ec->type == "loot") {
-			loot.push_back(*ec);
-		}
-		else if (ec->type == "msg") {
-			log_msg = ec->s;
-		}
-		else if (ec->type == "shakycam") {
-			shaky_cam_ticks = ec->x;
-		}
-		else if (ec->type == "remove_item") {
-			camp->removeItem(ec->x);
-		}
-		else if (ec->type == "reward_xp") {
-			camp->rewardXP(ec->x, true);
-		}
-		else if (ec->type == "spawn") {
-			Point spawn_pos;
-			spawn_pos.x = ec->x;
-			spawn_pos.y = ec->y;
-			powers->spawn(ec->s, spawn_pos);
-		}
-		else if (ec->type == "power") {
-
-			int power_index = ec->x;
-
-			Event_Component *ec_path = ev.getComponent("power_path");
-			if (ev.stats == NULL) {
-				ev.stats = new StatBlock();
-
-				ev.stats->current[STAT_ACCURACY] = 1000; //always hits its target
-
-				// if a power path was specified, place the source position there
-				if (ec_path) {
-					ev.stats->pos.x = ec_path->x + 0.5;
-					ev.stats->pos.y = ec_path->y + 0.5;
-				}
-				// otherwise the source position is the event position
-				else {
-					ev.stats->pos.x = ev.location.x + 0.5;
-					ev.stats->pos.y = ev.location.y + 0.5;
-				}
-
-				Event_Component *ec_damage = ev.getComponent("power_damage");
-				if (ec_damage) {
-					ev.stats->current[STAT_DMG_MELEE_MIN] = ev.stats->current[STAT_DMG_RANGED_MIN] = ev.stats->current[STAT_DMG_MENT_MIN] = ec_damage->a;
-					ev.stats->current[STAT_DMG_MELEE_MAX] = ev.stats->current[STAT_DMG_RANGED_MAX] = ev.stats->current[STAT_DMG_MENT_MAX] = ec_damage->b;
-				}
-			}
-
-			Point target;
-
-			if (ec_path) {
-				// targets hero option
-				if (ec_path->s == "hero") {
-					target.x = cam.x;
-					target.y = cam.y;
-				}
-				// targets fixed path option
-				else {
-					target.x = ec_path->a + 0.5;
-					target.y = ec_path->b + 0.5;
-				}
-			}
-			// no path specified, targets self location
-			else {
-				target.x = ev.stats->pos.x;
-				target.y = ev.stats->pos.y;
-			}
-
-			powers->activate(power_index, ev.stats, target);
-		}
-		else if (ec->type == "stash") {
-			stash = true;
-			stash_pos.x = ev.location.x + 0.5;
-			stash_pos.y = ev.location.y + 0.5;
-		}
-		else if (ec->type == "npc") {
-			event_npc = ec->s;
-		}
-		else if (ec->type == "music") {
-			music_filename = ec->s;
-			loadMusic();
-		}
-		else if (ec->type == "cutscene") {
-			cutscene = true;
-			cutscene_file = ec->s;
-		}
-		else if (ec->type == "repeat") {
-			ev.keep_after_trigger = toBool(ec->s);
-		}
+		TOOLTIP_CONTEXT = TOOLTIP_MAP;
 	}
-	return !ev.keep_after_trigger;
+	else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
+		TOOLTIP_CONTEXT = TOOLTIP_NONE;
+	}
 }
 
 MapRenderer::~MapRenderer() {

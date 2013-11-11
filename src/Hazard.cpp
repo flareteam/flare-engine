@@ -32,7 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsParsing.h"
 
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
@@ -54,7 +54,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, radius(0)
 	, power_index(0)
 	, animationKind(0)
-	, floor(false)
+	, on_floor(false)
 	, delay_frames(0)
 	, complete_animation(false)
 	, multitarget(false)
@@ -104,7 +104,7 @@ void Hazard::logic() {
 			lifespan = 0;
 			hit_wall = true;
 
-			if (collider->is_outside_map(pos.x, pos.y))
+			if (collider->is_outside_map((int)floor(pos.x), (int)floor(pos.y)))
 				remove_now = true;
 		}
 	}
@@ -145,6 +145,6 @@ void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
 		re.map_pos.x = pos.x;
 		re.map_pos.y = pos.y;
-		(floor ? r_dead : r).push_back(re);
+		(on_floor ? r_dead : r).push_back(re);
 	}
 }

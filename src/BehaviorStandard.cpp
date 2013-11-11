@@ -26,11 +26,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 
 BehaviorStandard::BehaviorStandard(Enemy *_e) : EnemyBehavior(_e)
-    , path()
-    , prev_target()
-    , collided(false)
-    , path_found(false)
-    , chance_calc_path(0){
+	, path()
+	, prev_target()
+	, collided(false)
+	, path_found(false)
+	, chance_calc_path(0) {
 	los = false;
 	hero_dist = 0;
 	target_dist = 0;
@@ -152,7 +152,7 @@ void BehaviorStandard::doUpkeep() {
  * Locate the player and set various targeting info
  */
 void BehaviorStandard::findTarget() {
-	int stealth_threat_range = (e->stats.threat_range * (100 - e->stats.hero_stealth)) / 100;
+	float stealth_threat_range = (e->stats.threat_range * (100 - e->stats.hero_stealth)) / 100;
 
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
@@ -196,8 +196,8 @@ void BehaviorStandard::findTarget() {
 	// if the creature is a wanderer, pick a random point within the wander area to travel to
 	if (e->stats.wander && !e->stats.in_combat && e->stats.wander_area.w > 0 && e->stats.wander_area.h > 0) {
 		if (e->stats.wander_ticks == 0) {
-			pursue_pos.x = e->stats.wander_area.x + (rand() % (e->stats.wander_area.w));
-			pursue_pos.y = e->stats.wander_area.y + (rand() % (e->stats.wander_area.h));
+			pursue_pos.x = e->stats.wander_area.x + (rand() % (e->stats.wander_area.w)) + 0.5f;
+			pursue_pos.y = e->stats.wander_area.y + (rand() % (e->stats.wander_area.h)) + 0.5f;
 			e->stats.wander_ticks = (rand() % 150) + 150;
 		}
 	}
@@ -285,25 +285,25 @@ void BehaviorStandard::checkPower() {
 			if (percentChance(e->stats.power_chance[RANGED_PHYS]) && e->stats.power_ticks[RANGED_PHYS] == 0) {
 				bool can_use = true;
 				if(powers->powers[e->stats.power_index[RANGED_PHYS]].type == POWTYPE_SPAWN)
-                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_PHYS]))
-                        can_use = false;
+					if(e->stats.summonLimitReached(e->stats.power_index[RANGED_PHYS]))
+						can_use = false;
 
-				if(can_use){
-                    e->newState(ENEMY_POWER);
-                    e->stats.activated_powerslot = RANGED_PHYS;
-                    return;
+				if(can_use) {
+					e->newState(ENEMY_POWER);
+					e->stats.activated_powerslot = RANGED_PHYS;
+					return;
 				}
 			}
 			if (percentChance(e->stats.power_chance[RANGED_MENT]) && e->stats.power_ticks[RANGED_MENT] == 0) {
 				bool can_use = true;
 				if(powers->powers[e->stats.power_index[RANGED_MENT]].type == POWTYPE_SPAWN)
-                    if(e->stats.summonLimitReached(e->stats.power_index[RANGED_MENT]))
-                        can_use = false;
+					if(e->stats.summonLimitReached(e->stats.power_index[RANGED_MENT]))
+						can_use = false;
 
-				if(can_use){
-                    e->newState(ENEMY_POWER);
-                    e->stats.activated_powerslot = RANGED_MENT;
-                    return;
+				if(can_use) {
+					e->newState(ENEMY_POWER);
+					e->stats.activated_powerslot = RANGED_MENT;
+					return;
 				}
 			}
 
@@ -313,25 +313,25 @@ void BehaviorStandard::checkPower() {
 			if (percentChance(e->stats.power_chance[MELEE_PHYS]) && e->stats.power_ticks[MELEE_PHYS] == 0) {
 				bool can_use = true;
 				if(powers->powers[e->stats.power_index[MELEE_PHYS]].type == POWTYPE_SPAWN)
-                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_PHYS]))
-                        can_use = false;
+					if(e->stats.summonLimitReached(e->stats.power_index[MELEE_PHYS]))
+						can_use = false;
 
-				if(can_use){
-                    e->newState(ENEMY_POWER);
-                    e->stats.activated_powerslot = MELEE_PHYS;
-                    return;
+				if(can_use) {
+					e->newState(ENEMY_POWER);
+					e->stats.activated_powerslot = MELEE_PHYS;
+					return;
 				}
 			}
 			if (percentChance(e->stats.power_chance[MELEE_MENT]) && e->stats.power_ticks[MELEE_MENT] == 0) {
 				bool can_use = true;
 				if(powers->powers[e->stats.power_index[MELEE_MENT]].type == POWTYPE_SPAWN)
-                    if(e->stats.summonLimitReached(e->stats.power_index[MELEE_MENT]))
-                        can_use = false;
+					if(e->stats.summonLimitReached(e->stats.power_index[MELEE_MENT]))
+						can_use = false;
 
-				if(can_use){
-                    e->newState(ENEMY_POWER);
-                    e->stats.activated_powerslot = MELEE_MENT;
-                    return;
+				if(can_use) {
+					e->newState(ENEMY_POWER);
+					e->stats.activated_powerslot = MELEE_MENT;
+					return;
 				}
 			}
 		}
@@ -395,53 +395,53 @@ void BehaviorStandard::checkMove() {
 
 				// if a path is returned, target first waypoint
 
-                bool recalculate_path = false;
+				bool recalculate_path = false;
 
-                //if theres no path, it needs to be calculated
-                if(path.empty())
-                    recalculate_path = true;
+				//if theres no path, it needs to be calculated
+				if(path.empty())
+					recalculate_path = true;
 
-                //if the target moved more than 1 tile away, recalculate
-                if(calcDist(map_to_collision(prev_target), map_to_collision(pursue_pos)) > 1)
-                    recalculate_path = true;
+				//if the target moved more than 1 tile away, recalculate
+				if(calcDist(map_to_collision(prev_target), map_to_collision(pursue_pos)) > 1)
+					recalculate_path = true;
 
-                //if a collision ocurred then recalculate
-                if(collided)
-                    recalculate_path = true;
+				//if a collision ocurred then recalculate
+				if(collided)
+					recalculate_path = true;
 
-                //add a 5% chance to recalculate on every frame. This prevents reclaulating lots of entities in the same frame
-                chance_calc_path += 5;
+				//add a 5% chance to recalculate on every frame. This prevents reclaulating lots of entities in the same frame
+				chance_calc_path += 5;
 
-                if(percentChance(chance_calc_path))
-                    recalculate_path = true;
+				if(percentChance(chance_calc_path))
+					recalculate_path = true;
 
-                //dont recalculate if we were blocked and no path was found last time
-                //this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
-                if(!path_found && collided && !percentChance(chance_calc_path))
-                    recalculate_path = false;
-                else//reset the collision flag only if we dont want the cooldown in place
-                    collided = false;
+				//dont recalculate if we were blocked and no path was found last time
+				//this makes sure that pathfinding calculation is not spammed when the target is unreachable and the entity is as close as its going to get
+				if(!path_found && collided && !percentChance(chance_calc_path))
+					recalculate_path = false;
+				else//reset the collision flag only if we dont want the cooldown in place
+					collided = false;
 
-                prev_target = pursue_pos;
+				prev_target = pursue_pos;
 
-                // target first waypoint
-                if(recalculate_path){
-                    chance_calc_path = -100;
-                    path.clear();
-                    path_found = mapr->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
-                }
+				// target first waypoint
+				if(recalculate_path) {
+					chance_calc_path = -100;
+					path.clear();
+					path_found = mapr->collider.compute_path(e->stats.pos, pursue_pos, path, e->stats.movement_type);
+				}
 
-                if(!path.empty()){
-                    pursue_pos = path.back();
+				if(!path.empty()) {
+					pursue_pos = path.back();
 
-                    //if distance to node is lower than a tile size, the node is going to be passed and can be removed
-                    if(calcDist(e->stats.pos, pursue_pos) <= 64)
-                        path.pop_back();
-                }
+					//if distance to node is lower than a tile size, the node is going to be passed and can be removed
+					if(calcDist(e->stats.pos, pursue_pos) <= 64)
+						path.pop_back();
+				}
 			}
-			else{
-                path.clear();
-            }
+			else {
+				path.clear();
+			}
 
 			if(fleeing)
 				e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
@@ -500,7 +500,7 @@ void BehaviorStandard::checkMoveStateStance() {
 			e->newState(ENEMY_MOVE);
 		}
 		else {
-            collided = true;
+			collided = true;
 			int prev_direction = e->stats.direction;
 
 			// hit an obstacle, try the next best angle
@@ -509,7 +509,7 @@ void BehaviorStandard::checkMoveStateStance() {
 				e->newState(ENEMY_MOVE);
 			}
 			else
-                e->stats.direction = prev_direction;
+				e->stats.direction = prev_direction;
 		}
 	}
 }
@@ -523,13 +523,13 @@ void BehaviorStandard::checkMoveStateMove() {
 
 	// try to continue moving
 	else if (!e->move()) {
-        collided = true;
+		collided = true;
 		int prev_direction = e->stats.direction;
 		// hit an obstacle.  Try the next best angle
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-        if (!e->move()) {
-            e->newState(ENEMY_STANCE);
-            e->stats.direction = prev_direction;
+		if (!e->move()) {
+			e->newState(ENEMY_STANCE);
+			e->stats.direction = prev_direction;
 		}
 	}
 }

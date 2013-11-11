@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Utils.h"
 #include "StatBlock.h"
+#include "EventManager.h"
 
 typedef unsigned short maprow[256];
 
@@ -54,7 +55,7 @@ public:
 class Map_NPC {
 public:
 	std::string id;
-	Point pos;
+	FPoint pos;
 	std::vector<std::string> requires_status;
 	std::vector<std::string> requires_not_status;
 
@@ -64,54 +65,6 @@ public:
 	, requires_status()
 	, requires_not_status()
 	{}
-};
-
-class Map_Event {
-public:
-	std::string type;
-	std::vector<Event_Component> components;
-	SDL_Rect location;
-	SDL_Rect hotspot;
-	int cooldown; // events that run multiple times pause this long in frames
-	int cooldown_ticks;
-	StatBlock *stats;
-	bool keep_after_trigger; // if this event has been triggered once, should this event be kept? If so, this event can be triggered multiple times.
-
-	Map_Event()
-	 : type("")
-	 , components(std::vector<Event_Component>())
-	 , cooldown(0)
-	 , cooldown_ticks(0)
-	 , stats(NULL)
-	 , keep_after_trigger(true)
-	{
-		location.x = location.y = location.w = location.h = 0;
-		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
-	}
-
-	// returns a pointer to the event component within the components list
-	// no need to free the pointer by caller
-	// NULL will be returned if no such event is found
-	Event_Component *getComponent(const std::string &_type)
-	{
-		std::vector<Event_Component>::iterator it;
-		for (it = components.begin(); it != components.end(); ++it)
-			if (it->type == _type)
-				return &(*it);
-		return NULL;
-	}
-
-	void deleteAllComponents(const std::string &_type) {
-		std::vector<Event_Component>::iterator it;
-		for (it = components.begin(); it != components.end(); ++it)
-			if (it->type == _type)
-				it = components.erase(it);
-	}
-
-	~Map_Event()
-	{
-		delete stats; // may be NULL, but delete can deal with null pointers.
-	}
 };
 
 class Map_Enemy {
@@ -125,6 +78,8 @@ public:
 	bool hero_ally;
 	int summon_power_index;
 	StatBlock* summoner;
+	std::vector<std::string> requires_status;
+	std::vector<std::string> requires_not_status;
 
 	Map_Enemy(std::string _type="", FPoint _pos=FPoint())
 	 : type(_type)
@@ -135,6 +90,8 @@ public:
 	 , hero_ally(false)
 	 , summon_power_index(0)
 	 , summoner(NULL)
+	 , requires_status()
+	 , requires_not_status()
 	{
 		wander_area.x = 0;
 		wander_area.y = 0;
@@ -146,31 +103,30 @@ public:
 class Map
 {
 protected:
-	std::vector<maprow*> layers; // visible layers in maprenderer
-	std::vector<std::string> layernames;
-
 	void loadHeader(FileParser &infile);
 	void loadLayer(FileParser &infile, maprow **cur_layer);
 	void loadEnemy(FileParser &infile);
 	void loadEnemyGroup(FileParser &infile, Map_Group *group);
 	void loadNPC(FileParser &infile);
-	void loadEvent(FileParser &infile);
-	void loadEventComponent(FileParser &infile);
 
 	void clearLayers();
 	void clearQueues();
 
 	// map events
-	std::vector<Map_Event> events;
+	std::vector<Event> events;
 	std::queue<Map_Group> enemy_groups;
 
 	std::string filename;
 	std::string tileset;
-	std::string music_filename;
 
 	int load(std::string filename);
 public:
 	Map();
+
+	std::string music_filename;
+
+	std::vector<maprow*> layers; // visible layers in maprenderer
+	std::vector<std::string> layernames;
 
 	void clearEvents();
 

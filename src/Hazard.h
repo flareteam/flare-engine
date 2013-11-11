@@ -88,7 +88,7 @@ public:
 	bool isDangerousNow();
 	void addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
-	bool floor; // rendererable goes on the floor layer
+	bool on_floor; // rendererable goes on the floor layer
 	int delay_frames;
 	bool complete_animation; // if not multitarget but hitting a creature, still complete the animation?
 

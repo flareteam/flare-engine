@@ -120,6 +120,7 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 		return;
 
 	dialog_node = request_dialog_node;
+	npc->processEvent(dialog_node, event_cursor);
 	npc->processDialog(dialog_node, event_cursor);
 	createBuffer();
 }
@@ -173,12 +174,14 @@ void MenuTalker::logic() {
 	bool more;
 	if (advanceButton->checkClick() || closeButton->checkClick()) {
 		// button was clicked
+		npc->processEvent(dialog_node, event_cursor);
 		event_cursor++;
 		more = npc->processDialog(dialog_node, event_cursor);
 	}
 	else if	(inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 		inpt->lock[ACCEPT] = true;
 		// pressed next/more
+		npc->processEvent(dialog_node, event_cursor);
 		event_cursor++;
 		more = npc->processDialog(dialog_node, event_cursor);
 	}
@@ -206,6 +209,7 @@ void MenuTalker::logic() {
 }
 
 void MenuTalker::createBuffer() {
+	if (event_cursor >= npc->dialog[dialog_node].size()) return;
 
 	string line;
 

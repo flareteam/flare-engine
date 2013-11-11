@@ -42,8 +42,8 @@ CampaignManager::CampaignManager()
 	, currency(NULL)
 	, hero(NULL)
 	, quest_update(true)
-	, bonus_xp(0.0)
-{}
+	, bonus_xp(0.0) {
+}
 
 void CampaignManager::clearAll() {
 	// clear campaign data
@@ -150,14 +150,14 @@ void CampaignManager::rewardCurrency(int amount) {
 	ItemStack stack;
 	stack.item = CURRENCY_ID;
 	stack.quantity = amount;
-	rewardItem(stack);
-	if (carried_items->full(stack.item))
+	if (!carried_items->full(stack.item))
 		addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
+	rewardItem(stack);
 	items->playSound(CURRENCY_ID);
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
-	bonus_xp += (amount * (100.0 + hero->get(STAT_XP_GAIN))) / 100.0;
+	bonus_xp += (amount * (100.0f + hero->get(STAT_XP_GAIN))) / 100.0f;
 	hero->xp += (int)bonus_xp;
 	bonus_xp -= (int)bonus_xp;
 	hero->refresh_stats = true;
