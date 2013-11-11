@@ -43,7 +43,9 @@ public:
 	bool checkStatus(std::string s);
 	void setStatus(std::string s);
 	void unsetStatus(std::string s);
+	bool checkCurrency(int quantity);
 	bool checkItem(int item_id);
+	void removeCurrency(int quantity);
 	void removeItem(int item_id);
 	void rewardItem(ItemStack istack);
 	void rewardCurrency(int amount);

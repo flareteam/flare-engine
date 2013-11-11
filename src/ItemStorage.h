@@ -54,7 +54,7 @@ public:
 	bool full(ItemStack stack);
 	bool full(int item);
 	int count(int item);
-	bool contain(int item);
+	bool contain(int item, int quantity = 1);
 
 	ItemStack * storage;
 };

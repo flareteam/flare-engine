@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 #include "UtilsFileSystem.h"
+#include "UtilsMath.h"
 
 using namespace std;
 
@@ -268,6 +269,10 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.requires_not_level|integer|Event requires not hero level
 		e->x = toInt(infile.nextValue());
 	}
+	else if (infile.key == "requires_currency") {
+		// @ATTR event.requires_currency|integer|Event requires atleast this much currency
+		e->x = toInt(infile.nextValue());
+	}
 	else if (infile.key == "requires_item") {
 		// @ATTR event.requires_item|integer,...|Event requires specific item
 		e->x = toInt(infile.nextValue());
@@ -319,6 +324,11 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 			}
 		}
 	}
+	else if (infile.key == "remove_currency") {
+		// @ATTR event.remove_currency|integer|Removes specified amount of currency from hero inventory
+		e->x = toInt(infile.val);
+		clampFloor(e->x, 0);
+	}
 	else if (infile.key == "remove_item") {
 		// @ATTR event.remove_item|integer,...|Removes specified item from hero inventory
 		e->x = toInt(infile.nextValue());
@@ -339,15 +349,18 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 	else if (infile.key == "reward_xp") {
 		// @ATTR event.reward_xp|integer|Reward hero with specified amount of experience points.
 		e->x = toInt(infile.val);
+		clampFloor(e->x, 0);
 	}
 	else if (infile.key == "reward_currency") {
 		// @ATTR event.reward_currency|integer|Reward hero with specified amount of currency.
 		e->x = toInt(infile.val);
+		clampFloor(e->x, 0);
 	}
 	else if (infile.key == "reward_item") {
 		// @ATTR event.reward_item|x(integer),y(integer)|Reward hero with y number of item x.
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.val);
+		clampFloor(e->y, 0);
 	}
 	else if (infile.key == "restore") {
 		// @ATTR event.restore|string|Restore the hero's HP, MP, and/or status.
@@ -495,6 +508,9 @@ bool EventManager::executeEvent(Event &ev) {
 		else if (ec->type == "shakycam") {
 			mapr->shaky_cam_ticks = ec->x;
 		}
+		else if (ec->type == "remove_currency") {
+			camp->removeCurrency(ec->x);
+		}
 		else if (ec->type == "remove_item") {
 			camp->removeItem(ec->x);
 		}
@@ -602,6 +618,11 @@ bool EventManager::isActive(const Event &e) {
 		}
 		else if (e.components[i].type == "requires_status") {
 			if (!camp->checkStatus(e.components[i].s)) {
+				return false;
+			}
+		}
+		else if (e.components[i].type == "requires_currency") {
+			if (!camp->checkCurrency(e.components[i].x)) {
 				return false;
 			}
 		}

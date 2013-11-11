@@ -247,6 +247,12 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 				is_available = false;
 				break;
 			}
+			else if (dialog[i][j].type == "requires_currency") {
+				if (camp->checkCurrency(dialog[i][j].x))
+					continue;
+				is_available = false;
+				break;
+			}
 			else if (dialog[i][j].type == "requires_item") {
 				if (camp->checkItem(dialog[i][j].x))
 					continue;
@@ -339,6 +345,15 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 			// continue to next event component
 		}
 		else if (dialog[dialog_node][event_cursor].type == "requires_not_status") {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == "requires_level") {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == "requires_not_level") {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == "requires_currency") {
 			// continue to next event component
 		}
 		else if (dialog[dialog_node][event_cursor].type == "requires_item") {

@@ -251,9 +251,12 @@ int ItemStorage::count(int item) {
 /**
  * Check to see if the given item is equipped
  */
-bool ItemStorage::contain(int item) {
+bool ItemStorage::contain(int item, int quantity) {
+	int total_quantity = 0;
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item)
+			total_quantity += storage[i].quantity;
+		if (total_quantity >= quantity)
 			return true;
 	}
 	return false;
