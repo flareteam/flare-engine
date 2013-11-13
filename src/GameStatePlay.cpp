@@ -121,7 +121,7 @@ void GameStatePlay::resetGame() {
 	loadStash();
 
 	// Finalize new character settings
-	menu->talker->setHero(pc->stats.name, pc->stats.gfx_portrait);
+	menu->talker->setHero(pc->stats.name, pc->stats.character_class, pc->stats.gfx_portrait);
 	pc->loadSounds();
 }
 

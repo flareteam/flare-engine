@@ -226,7 +226,7 @@ void MenuTalker::createBuffer() {
 
 	label_name->set(who);
 
-	line = npc->dialog[dialog_node][event_cursor].s;
+	line = parseLine(npc->dialog[dialog_node][event_cursor].s);
 
 	// render dialog text to the scrollbox buffer
 	Point line_size = font->calc_size(line,textbox->pos.w-(text_offset.x*2));
@@ -293,11 +293,26 @@ void MenuTalker::render() {
 	}
 }
 
-void MenuTalker::setHero(const string& name, const string& portrait_filename) {
+void MenuTalker::setHero(const string& name, const string& class_name, const string& portrait_filename) {
 	hero_name = name;
+	hero_class = msg->get(class_name);
 
 	SDL_FreeSurface(portrait);
 	portrait = loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait");
+}
+
+string MenuTalker::parseLine(const string &line) {
+	string new_line = line;
+
+	// name
+	size_t index = new_line.find("%N");
+	if (index != string::npos) new_line = new_line.replace(index, 2, hero_name);
+
+	// class
+	index = new_line.find("%C");
+	if (index != string::npos) new_line.replace(index, 2, hero_class);
+
+	return new_line;
 }
 
 MenuTalker::~MenuTalker() {
