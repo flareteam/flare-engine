@@ -37,10 +37,13 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
+	std::string parseLine(const std::string &line);
+
 	MenuManager *menu;
 
 	SDL_Surface *portrait;
 	std::string hero_name;
+	std::string hero_class;
 
 	int dialog_node;
 	unsigned int event_cursor;
@@ -73,7 +76,7 @@ public:
 	void update();
 	void logic();
 	void render();
-	void setHero(const std::string& name, const std::string& portrait_filename);
+	void setHero(const std::string& name, const std::string& class_name, const std::string& portrait_filename);
 	void createBuffer();
 
 	bool vendor_visible;
