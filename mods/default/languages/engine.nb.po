@@ -31,7 +31,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:682
 msgid "You are defeated. Press Enter to continue."
-msgstr ""
+msgstr "Du har blitt beseiret. Trykk Enter for å fortsette."
 
 #: ../../../src/CampaignManager.cpp:140
 #, c-format
@@ -94,7 +94,7 @@ msgstr "Ok"
 
 #: ../../../src/GameStateConfig.cpp:79 ../../../src/GameStateConfig.cpp:165
 msgid "Defaults"
-msgstr "Standardinnstillinger"
+msgstr "Standard"
 
 #: ../../../src/GameStateConfig.cpp:84 ../../../src/GameStateNew.cpp:56
 #: ../../../src/InputState.cpp:622 ../../../src/MenuNPCActions.cpp:71
@@ -111,7 +111,7 @@ msgstr "Lyd"
 
 #: ../../../src/GameStateConfig.cpp:158
 msgid "Interface"
-msgstr ""
+msgstr "Grensesnitt"
 
 #: ../../../src/GameStateConfig.cpp:159
 msgid "Input"
@@ -128,7 +128,7 @@ msgstr ""
 #: ../../../src/GameStateConfig.cpp:164 ../../../src/GameStateConfig.cpp:997
 #: ../../../src/GameStateConfig.cpp:999
 msgid "Assign: "
-msgstr ""
+msgstr "Tildel: "
 
 #: ../../../src/GameStateConfig.cpp:165
 msgid "Reset ALL settings?"
@@ -144,11 +144,11 @@ msgstr "Fullskjerm"
 
 #: ../../../src/GameStateConfig.cpp:291
 msgid "Move hero using mouse"
-msgstr ""
+msgstr "Flytt helten med musepeker"
 
 #: ../../../src/GameStateConfig.cpp:294
 msgid "Show combat text"
-msgstr ""
+msgstr "Vis tekst i kamp"
 
 #: ../../../src/GameStateConfig.cpp:297
 msgid "Hardware surfaces"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: ../../../src/GameStateConfig.cpp:303
 msgid "Use joystick"
-msgstr ""
+msgstr "Bruk joystick"
 
 #: ../../../src/GameStateConfig.cpp:306
 msgid "High Quality Textures"
@@ -176,11 +176,11 @@ msgstr "Animerte fliser"
 
 #: ../../../src/GameStateConfig.cpp:315
 msgid "Mouse aim"
-msgstr ""
+msgstr "Sikte med musepekeren"
 
 #: ../../../src/GameStateConfig.cpp:318
 msgid "Do not use mouse"
-msgstr ""
+msgstr "Ikke bruk mus"
 
 #: ../../../src/GameStateConfig.cpp:321
 msgid "Show FPS"
@@ -188,11 +188,11 @@ msgstr ""
 
 #: ../../../src/GameStateConfig.cpp:324
 msgid "Show Hotkeys Labels"
-msgstr ""
+msgstr "Vis hurtigtaster"
 
 #: ../../../src/GameStateConfig.cpp:327
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "Modus for fargeblinde"
 
 #: ../../../src/GameStateConfig.cpp:338
 msgid "Music Volume"
@@ -224,7 +224,7 @@ msgstr ""
 
 #: ../../../src/GameStateConfig.cpp:428
 msgid "Joystick"
-msgstr ""
+msgstr "Joystick"
 
 #: ../../../src/GameStateConfig.cpp:440
 msgid "Language"
@@ -241,7 +241,7 @@ msgstr "Eksperimentell"
 
 #: ../../../src/GameStateConfig.cpp:507
 msgid "For handheld devices"
-msgstr ""
+msgstr "For håndholdte enheter"
 
 #: ../../../src/GameStateConfig.cpp:527
 msgid "<< Disable"
@@ -261,11 +261,11 @@ msgstr "Slett dette spillet?"
 
 #: ../../../src/GameStateLoad.cpp:57
 msgid "Exit to Title"
-msgstr ""
+msgstr "Avslutt til hovedmeny"
 
 #: ../../../src/GameStateLoad.cpp:63
 msgid "Choose a Slot"
-msgstr ""
+msgstr "Velg en plass"
 
 #: ../../../src/GameStateLoad.cpp:482
 msgid "New Game"
@@ -281,7 +281,7 @@ msgstr "Last spill"
 
 #: ../../../src/GameStateLoad.cpp:551
 msgid "Entering game world..."
-msgstr ""
+msgstr "Åpner spillverden..."
 
 #: ../../../src/GameStateLoad.cpp:554
 msgid "Loading saved game..."
@@ -302,7 +302,7 @@ msgstr "Ledig plass"
 
 #: ../../../src/GameStateNew.cpp:62
 msgid "Create"
-msgstr ""
+msgstr "Opprett"
 
 #: ../../../src/GameStateNew.cpp:173
 msgid "Choose a Portrait"
@@ -333,11 +333,11 @@ msgstr "Laster..."
 #: ../../../src/MenuManager.cpp:1043 ../../../src/MenuManager.cpp:1044
 #: ../../../src/MenuManager.cpp:1084 ../../../src/MenuManager.cpp:1085
 msgid "Inventory is full."
-msgstr ""
+msgstr "Du har ikke plass til flere gjenstander."
 
 #: ../../../src/GameStateTitle.cpp:41
 msgid "Play Game"
-msgstr ""
+msgstr "Start spill"
 
 #: ../../../src/GameStateTitle.cpp:46
 msgid "Enable a core mod to continue"
@@ -361,7 +361,7 @@ msgstr "Flare alfa v0.19"
 
 #: ../../../src/InputState.cpp:623
 msgid "Accept"
-msgstr ""
+msgstr "Godta"
 
 #: ../../../src/InputState.cpp:624
 msgid "Up"
@@ -478,47 +478,47 @@ msgstr ""
 
 #: ../../../src/InputState.cpp:652
 msgid "lmb"
-msgstr ""
+msgstr "venstre museknapp"
 
 #: ../../../src/InputState.cpp:653
 msgid "mmb"
-msgstr ""
+msgstr "midterste museknapp"
 
 #: ../../../src/InputState.cpp:654
 msgid "rmb"
-msgstr ""
+msgstr "høyre museknapp"
 
 #: ../../../src/InputState.cpp:655
 msgid "wheel up"
-msgstr ""
+msgstr "hjul opp"
 
 #: ../../../src/InputState.cpp:656
 msgid "wheel down"
-msgstr ""
+msgstr "hjul ned"
 
 #: ../../../src/InputState.cpp:657
 msgid "mbx1"
-msgstr ""
+msgstr "museknappx1"
 
 #: ../../../src/InputState.cpp:658
 msgid "mbx2"
-msgstr ""
+msgstr "museknappx2"
 
 #: ../../../src/ItemManager.cpp:488
 msgid "Low"
-msgstr ""
+msgstr "Dårlig"
 
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: ../../../src/ItemManager.cpp:496
 msgid "High"
-msgstr ""
+msgstr "Høy"
 
 #: ../../../src/ItemManager.cpp:500
 msgid "Epic"
-msgstr ""
+msgstr "Episk"
 
 #: ../../../src/ItemManager.cpp:513
 #, c-format
@@ -548,12 +548,12 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:536
 #, c-format
 msgid "Mental damage: %d-%d"
-msgstr ""
+msgstr "Mental skade: %d-%d"
 
 #: ../../../src/ItemManager.cpp:538
 #, c-format
 msgid "Mental damage: %d"
-msgstr ""
+msgstr "Mental skade: %d"
 
 #: ../../../src/ItemManager.cpp:544
 #, c-format
@@ -607,7 +607,7 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:609
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Kvalitet: %s"
 
 #: ../../../src/ItemManager.cpp:626 ../../../src/ItemManager.cpp:635
 #, c-format
@@ -636,11 +636,11 @@ msgstr "Sett: "
 #: ../../../src/ItemManager.cpp:659 ../../../src/ItemManager.cpp:662
 #, c-format
 msgid "%d items: "
-msgstr ""
+msgstr "%d gjenstander: "
 
 #: ../../../src/MapRenderer.cpp:860
 msgid "Unknown destination"
-msgstr ""
+msgstr "Ukjent destinasjon"
 
 #: ../../../src/MenuCharacter.cpp:275
 msgid "Name"
@@ -712,7 +712,7 @@ msgstr ""
 
 #: ../../../src/MenuCharacter.cpp:390
 msgid "Mental Damage:"
-msgstr ""
+msgstr "Mental skade:"
 
 #: ../../../src/MenuCharacter.cpp:400
 msgid "Crit:"
@@ -724,11 +724,11 @@ msgstr "Absorberer:"
 
 #: ../../../src/MenuCharacter.cpp:416
 msgid "Poise: "
-msgstr ""
+msgstr "Holdning: "
 
 #: ../../../src/MenuCharacter.cpp:417
 msgid "Reduces your chance of stumbling when hit"
-msgstr ""
+msgstr "Reduserer sjansen for å snuble når du blir truffet"
 
 #: ../../../src/MenuCharacter.cpp:422
 msgid "Bonus XP: "
@@ -798,7 +798,7 @@ msgstr ""
 #: ../../../src/MenuCharacter.cpp:498
 #, c-format
 msgid "Each level grants %d. "
-msgstr ""
+msgstr "Hvert nivå gir %d. "
 
 #: ../../../src/MenuCharacter.cpp:500
 #, c-format
@@ -840,7 +840,7 @@ msgstr "Lagre og gå til hovedmeny?"
 #: ../../../src/MenuInventory.cpp:146
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr ""
+msgstr "Mistet %d%% of %s. "
 
 #: ../../../src/MenuInventory.cpp:153
 #, c-format
@@ -855,7 +855,7 @@ msgstr ""
 #: ../../../src/MenuInventory.cpp:184
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Mistet %s."
 
 #: ../../../src/MenuInventory.cpp:228
 #, c-format
@@ -905,7 +905,7 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:505
 #, c-format
 msgid "Requires a %s"
-msgstr ""
+msgstr "Krever en %s"
 
 #: ../../../src/MenuPowers.cpp:510 ../../../src/MenuPowers.cpp:513
 #, c-format
@@ -990,33 +990,3 @@ msgstr "Eventyrer"
 #,
 msgid "k"
 msgstr ""
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Karaktermeny (C)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Loggmeny (L)"
-
-#~ msgid "Flare"
-#~ msgstr "Flare"
-
-#~ msgid "Stats"
-#~ msgstr "Statistikk"
-
-#~ msgid "Grand Master"
-#~ msgstr "Stormester"
-
-#~ msgid "Master"
-#~ msgstr "Mester"
-
-#~ msgid "Warrior"
-#~ msgstr "Kriger"
-
-#~ msgid "Paladin"
-#~ msgstr "Paladin"
-
-#~ msgid "Knight"
-#~ msgstr "Ridder"
-
-#~ msgid "Shaman"
-#~ msgstr "Sjaman"
