@@ -4,7 +4,7 @@
 # Hans Joachim Desserud <github@desserud.org>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Flare 0.17\n"
+"Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-12 15:08+0300\n"
 "PO-Revision-Date: 2012-12-24 14:36+0100\n"
@@ -293,9 +293,8 @@ msgid "Level %d %s"
 msgstr "Nivå %d %s"
 
 #: ../../../src/GameStateLoad.cpp:579
-#, fuzzy
 msgid "Permadeath"
-msgstr "Permanent død?"
+msgstr "Permanent død"
 
 #: ../../../src/GameStateLoad.cpp:603
 msgid "Empty Slot"
@@ -357,9 +356,8 @@ msgid "Exit Game"
 msgstr "Avslutt spill"
 
 #: ../../../src/GameStateTitle.cpp:67
-#, fuzzy
 msgid "Flare Alpha v0.19"
-msgstr "Flare alfa v0.18"
+msgstr "Flare alfa v0.19"
 
 #: ../../../src/InputState.cpp:623
 msgid "Accept"
@@ -507,9 +505,8 @@ msgid "mbx2"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:488
-#, fuzzy
 msgid "Low"
-msgstr "Logg"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
@@ -893,9 +890,9 @@ msgstr ""
 #: ../../../src/MenuManager.cpp:652 ../../../src/MenuManager.cpp:653
 #: ../../../src/MenuManager.cpp:859 ../../../src/MenuManager.cpp:860
 #: ../../../src/MenuManager.cpp:1037 ../../../src/MenuManager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Not enough %s."
-msgstr "Ikke nok penger."
+msgstr "Ikke nok %s."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
@@ -906,9 +903,9 @@ msgid "Unspent skill points:"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Requires a %s"
-msgstr "Krever nivå %d"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:510 ../../../src/MenuPowers.cpp:513
 #, c-format
@@ -990,9 +987,9 @@ msgid "Adventurer"
 msgstr "Eventyrer"
 
 #: ../../../src/Utils.cpp:518
-#, fuzzy
+#,
 msgid "k"
-msgstr "Ok"
+msgstr ""
 
 #~ msgid "Character Menu (C)"
 #~ msgstr "Karaktermeny (C)"
