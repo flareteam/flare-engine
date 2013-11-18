@@ -41,6 +41,7 @@ public:
 	short id;
 	short tab;
 	Point pos;
+	WidgetButton* upgradeButton; //not used
 	short requires_physoff;
 	short requires_physdef;
 	short requires_mentoff;
@@ -50,6 +51,7 @@ public:
 	short requires_physical;
 	short requires_mental;
 	short requires_level;
+	short next_level; // not used
 
 	std::vector<short> requires_power;
 
@@ -60,6 +62,8 @@ public:
 	Power_Menu_Cell()
 		: id(-1)
 		, tab(0)
+		, pos(Point())
+		, upgradeButton(NULL)
 		, requires_physoff(0)
 		, requires_physdef(0)
 		, requires_mentoff(0)
@@ -69,6 +73,7 @@ public:
 		, requires_physical(0)
 		, requires_mental(0)
 		, requires_level(0)
+		, next_level(0)
 		, requires_power()
 		, requires_point(false)
 		, passive_on(false)
@@ -121,6 +126,7 @@ public:
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point mouse);
+	void generatePowerDescription(TooltipData* tip, unsigned slot);
 	bool baseRequirementsMet(int power_index);
 	bool requirementsMet(int power_index);
 	int click(Point mouse);
