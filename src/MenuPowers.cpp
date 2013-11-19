@@ -148,6 +148,9 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 			else if (infile.key == "requires_level") {
 				power_cell.back().requires_level = eatFirstInt(infile.val, ',');
 			}
+			else if (infile.key == "next_level") {
+				power_cell.back().next_level = eatFirstInt(infile.val, ',');
+			}
 			else if (infile.key == "requires_power") {
 				power_cell.back().requires_power.push_back(eatFirstInt(infile.val, ','));
 			}
@@ -496,117 +499,12 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 		if (!powerIsVisible(power_cell[i].id)) continue;
 
 		if (isWithin(slots[i]->pos, mouse)) {
-			tip.addText(powers->powers[power_cell[i].id].name);
-			if (powers->powers[power_cell[i].id].passive) tip.addText("Passive");
-			tip.addText(powers->powers[power_cell[i].id].description);
+			generatePowerDescription(&tip, i);
 
-			std::set<std::string>::iterator it;
-			for (it = powers->powers[power_cell[i].id].requires_flags.begin(); it != powers->powers[power_cell[i].id].requires_flags.end(); ++it) {
-				tip.addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[(*it)])));
-			}
-
-			// add requirement
-			if ((power_cell[i].requires_physoff > 0) && (stats->physoff() < power_cell[i].requires_physoff)) {
-				tip.addText(msg->get("Requires Physical Offense %d", power_cell[i].requires_physoff), color_penalty);
-			}
-			else if((power_cell[i].requires_physoff > 0) && (stats->physoff() >= power_cell[i].requires_physoff)) {
-				tip.addText(msg->get("Requires Physical Offense %d", power_cell[i].requires_physoff));
-			}
-			if ((power_cell[i].requires_physdef > 0) && (stats->physdef() < power_cell[i].requires_physdef)) {
-				tip.addText(msg->get("Requires Physical Defense %d", power_cell[i].requires_physdef), color_penalty);
-			}
-			else if ((power_cell[i].requires_physdef > 0) && (stats->physdef() >= power_cell[i].requires_physdef)) {
-				tip.addText(msg->get("Requires Physical Defense %d", power_cell[i].requires_physdef));
-			}
-			if ((power_cell[i].requires_mentoff > 0) && (stats->mentoff() < power_cell[i].requires_mentoff)) {
-				tip.addText(msg->get("Requires Mental Offense %d", power_cell[i].requires_mentoff), color_penalty);
-			}
-			else if ((power_cell[i].requires_mentoff > 0) && (stats->mentoff() >= power_cell[i].requires_mentoff)) {
-				tip.addText(msg->get("Requires Mental Offense %d", power_cell[i].requires_mentoff));
-			}
-			if ((power_cell[i].requires_mentdef > 0) && (stats->mentdef() < power_cell[i].requires_mentdef)) {
-				tip.addText(msg->get("Requires Mental Defense %d", power_cell[i].requires_mentdef), color_penalty);
-			}
-			else if ((power_cell[i].requires_mentdef > 0) && (stats->mentdef() >= power_cell[i].requires_mentdef)) {
-				tip.addText(msg->get("Requires Mental Defense %d", power_cell[i].requires_mentdef));
-			}
-			if ((power_cell[i].requires_offense > 0) && (stats->get_offense() < power_cell[i].requires_offense)) {
-				tip.addText(msg->get("Requires Offense %d", power_cell[i].requires_offense), color_penalty);
-			}
-			else if ((power_cell[i].requires_offense > 0) && (stats->get_offense() >= power_cell[i].requires_offense)) {
-				tip.addText(msg->get("Requires Offense %d", power_cell[i].requires_offense));
-			}
-			if ((power_cell[i].requires_defense > 0) && (stats->get_defense() < power_cell[i].requires_defense)) {
-				tip.addText(msg->get("Requires Defense %d", power_cell[i].requires_defense), color_penalty);
-			}
-			else if ((power_cell[i].requires_defense > 0) && (stats->get_defense() >= power_cell[i].requires_defense)) {
-				tip.addText(msg->get("Requires Defense %d", power_cell[i].requires_defense));
-			}
-			if ((power_cell[i].requires_physical > 0) && (stats->get_physical() < power_cell[i].requires_physical)) {
-				tip.addText(msg->get("Requires Physical %d", power_cell[i].requires_physical), color_penalty);
-			}
-			else if ((power_cell[i].requires_physical > 0) && (stats->get_physical() >= power_cell[i].requires_physical)) {
-				tip.addText(msg->get("Requires Physical %d", power_cell[i].requires_physical));
-			}
-			if ((power_cell[i].requires_mental > 0) && (stats->get_mental() < power_cell[i].requires_mental)) {
-				tip.addText(msg->get("Requires Mental %d", power_cell[i].requires_mental), color_penalty);
-			}
-			else if ((power_cell[i].requires_mental > 0) && (stats->get_mental() >= power_cell[i].requires_mental)) {
-				tip.addText(msg->get("Requires Mental %d", power_cell[i].requires_mental));
-			}
-
-			// Draw required Level Tooltip
-			if ((power_cell[i].requires_level > 0) && stats->level < power_cell[i].requires_level) {
-				tip.addText(msg->get("Requires Level %d", power_cell[i].requires_level), color_penalty);
-			}
-			else if ((power_cell[i].requires_level > 0) && stats->level >= power_cell[i].requires_level) {
-				tip.addText(msg->get("Requires Level %d", power_cell[i].requires_level));
-			}
-
-			// Draw required Skill Point Tooltip
-			if ((power_cell[i].requires_point) &&
-					!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) &&
-					(points_left < 1)) {
-				tip.addText(msg->get("Requires %d Skill Point", power_cell[i].requires_point), color_penalty);
-			}
-			else if ((power_cell[i].requires_point) &&
-					 !(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) &&
-					 (points_left > 0)) {
-				tip.addText(msg->get("Requires %d Skill Point", power_cell[i].requires_point));
-			}
-
-			// Draw unlock power Tooltip
-			if (power_cell[i].requires_point &&
-					!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) &&
-					(points_left > 0) &&
-					powerUnlockable(power_cell[i].id) && (points_left > 0)) {
-				tip.addText(msg->get("Click to Unlock"), color_bonus);
-			}
-
-
-
-			for (unsigned j = 0; j < power_cell[i].requires_power.size(); ++j) {
-				// Required Power Tooltip
-				if ((power_cell[i].requires_power[j] != 0) && !(requirementsMet(power_cell[i].requires_power[j]))) {
-					tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power[j]].name), color_penalty);
-				}
-				else if ((power_cell[i].requires_power[j] != 0) && (requirementsMet(power_cell[i].requires_power[j]))) {
-					tip.addText(msg->get("Requires Power: %s", powers->powers[power_cell[i].requires_power[j]].name));
-				}
-
-			}
-
-			// add mana cost
-			if (powers->powers[power_cell[i].id].requires_mp > 0) {
-				tip.addText(msg->get("Costs %d MP", powers->powers[power_cell[i].id].requires_mp));
-			}
-			// add health cost
-			if (powers->powers[power_cell[i].id].requires_hp > 0) {
-				tip.addText(msg->get("Costs %d HP", powers->powers[power_cell[i].id].requires_hp));
-			}
-			// add cooldown time
-			if (powers->powers[power_cell[i].id].cooldown > 0) {
-				tip.addText(msg->get("Cooldown: %d seconds", powers->powers[power_cell[i].id].cooldown / MAX_FRAMES_PER_SEC));
+			if (power_cell[i].next_level != 0) {
+				tip.addText(msg->get("\nNext Level:"));
+				short next_level_cell = id_by_powerIndex(power_cell[i].next_level);
+				generatePowerDescription(&tip, next_level_cell);
 			}
 
 			return tip;
@@ -614,6 +512,122 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 	}
 
 	return tip;
+}
+
+void MenuPowers::generatePowerDescription(TooltipData* tip, unsigned slot)
+{
+	tip->addText(powers->powers[power_cell[slot].id].name);
+	if (powers->powers[power_cell[slot].id].passive) tip->addText("Passive");
+	tip->addText(powers->powers[power_cell[slot].id].description);
+
+	std::set<std::string>::iterator it;
+	for (it = powers->powers[power_cell[slot].id].requires_flags.begin(); it != powers->powers[power_cell[slot].id].requires_flags.end(); ++it) {
+		tip->addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[(*it)])));
+	}
+
+	// add requirement
+	if ((power_cell[slot].requires_physoff > 0) && (stats->physoff() < power_cell[slot].requires_physoff)) {
+		tip->addText(msg->get("Requires Physical Offense %d", power_cell[slot].requires_physoff), color_penalty);
+	}
+	else if((power_cell[slot].requires_physoff > 0) && (stats->physoff() >= power_cell[slot].requires_physoff)) {
+		tip->addText(msg->get("Requires Physical Offense %d", power_cell[slot].requires_physoff));
+	}
+	if ((power_cell[slot].requires_physdef > 0) && (stats->physdef() < power_cell[slot].requires_physdef)) {
+		tip->addText(msg->get("Requires Physical Defense %d", power_cell[slot].requires_physdef), color_penalty);
+	}
+	else if ((power_cell[slot].requires_physdef > 0) && (stats->physdef() >= power_cell[slot].requires_physdef)) {
+		tip->addText(msg->get("Requires Physical Defense %d", power_cell[slot].requires_physdef));
+	}
+	if ((power_cell[slot].requires_mentoff > 0) && (stats->mentoff() < power_cell[slot].requires_mentoff)) {
+		tip->addText(msg->get("Requires Mental Offense %d", power_cell[slot].requires_mentoff), color_penalty);
+	}
+	else if ((power_cell[slot].requires_mentoff > 0) && (stats->mentoff() >= power_cell[slot].requires_mentoff)) {
+		tip->addText(msg->get("Requires Mental Offense %d", power_cell[slot].requires_mentoff));
+	}
+	if ((power_cell[slot].requires_mentdef > 0) && (stats->mentdef() < power_cell[slot].requires_mentdef)) {
+		tip->addText(msg->get("Requires Mental Defense %d", power_cell[slot].requires_mentdef), color_penalty);
+	}
+	else if ((power_cell[slot].requires_mentdef > 0) && (stats->mentdef() >= power_cell[slot].requires_mentdef)) {
+		tip->addText(msg->get("Requires Mental Defense %d", power_cell[slot].requires_mentdef));
+	}
+	if ((power_cell[slot].requires_offense > 0) && (stats->get_offense() < power_cell[slot].requires_offense)) {
+		tip->addText(msg->get("Requires Offense %d", power_cell[slot].requires_offense), color_penalty);
+	}
+	else if ((power_cell[slot].requires_offense > 0) && (stats->get_offense() >= power_cell[slot].requires_offense)) {
+		tip->addText(msg->get("Requires Offense %d", power_cell[slot].requires_offense));
+	}
+	if ((power_cell[slot].requires_defense > 0) && (stats->get_defense() < power_cell[slot].requires_defense)) {
+		tip->addText(msg->get("Requires Defense %d", power_cell[slot].requires_defense), color_penalty);
+	}
+	else if ((power_cell[slot].requires_defense > 0) && (stats->get_defense() >= power_cell[slot].requires_defense)) {
+		tip->addText(msg->get("Requires Defense %d", power_cell[slot].requires_defense));
+	}
+	if ((power_cell[slot].requires_physical > 0) && (stats->get_physical() < power_cell[slot].requires_physical)) {
+		tip->addText(msg->get("Requires Physical %d", power_cell[slot].requires_physical), color_penalty);
+	}
+	else if ((power_cell[slot].requires_physical > 0) && (stats->get_physical() >= power_cell[slot].requires_physical)) {
+		tip->addText(msg->get("Requires Physical %d", power_cell[slot].requires_physical));
+	}
+	if ((power_cell[slot].requires_mental > 0) && (stats->get_mental() < power_cell[slot].requires_mental)) {
+		tip->addText(msg->get("Requires Mental %d", power_cell[slot].requires_mental), color_penalty);
+	}
+	else if ((power_cell[slot].requires_mental > 0) && (stats->get_mental() >= power_cell[slot].requires_mental)) {
+		tip->addText(msg->get("Requires Mental %d", power_cell[slot].requires_mental));
+	}
+
+	// Draw required Level Tooltip
+	if ((power_cell[slot].requires_level > 0) && stats->level < power_cell[slot].requires_level) {
+		tip->addText(msg->get("Requires Level %d", power_cell[slot].requires_level), color_penalty);
+	}
+	else if ((power_cell[slot].requires_level > 0) && stats->level >= power_cell[slot].requires_level) {
+		tip->addText(msg->get("Requires Level %d", power_cell[slot].requires_level));
+	}
+
+	// Draw required Skill Point Tooltip
+	if ((power_cell[slot].requires_point) &&
+			!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[slot].id) != stats->powers_list.end()) &&
+			(points_left < 1)) {
+		tip->addText(msg->get("Requires %d Skill Point", power_cell[slot].requires_point), color_penalty);
+	}
+	else if ((power_cell[slot].requires_point) &&
+				!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[slot].id) != stats->powers_list.end()) &&
+				(points_left > 0)) {
+		tip->addText(msg->get("Requires %d Skill Point", power_cell[slot].requires_point));
+	}
+
+	// Draw unlock power Tooltip
+	if (power_cell[slot].requires_point &&
+			!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[slot].id) != stats->powers_list.end()) &&
+			(points_left > 0) &&
+			powerUnlockable(power_cell[slot].id) && (points_left > 0)) {
+		tip->addText(msg->get("Click to Unlock"), color_bonus);
+	}
+
+
+
+	for (unsigned j = 0; j < power_cell[slot].requires_power.size(); ++j) {
+		// Required Power Tooltip
+		if ((power_cell[slot].requires_power[j] != 0) && !(requirementsMet(power_cell[slot].requires_power[j]))) {
+			tip->addText(msg->get("Requires Power: %s", powers->powers[power_cell[slot].requires_power[j]].name), color_penalty);
+		}
+		else if ((power_cell[slot].requires_power[j] != 0) && (requirementsMet(power_cell[slot].requires_power[j]))) {
+			tip->addText(msg->get("Requires Power: %s", powers->powers[power_cell[slot].requires_power[j]].name));
+		}
+
+	}
+
+	// add mana cost
+	if (powers->powers[power_cell[slot].id].requires_mp > 0) {
+		tip->addText(msg->get("Costs %d MP", powers->powers[power_cell[slot].id].requires_mp));
+	}
+	// add health cost
+	if (powers->powers[power_cell[slot].id].requires_hp > 0) {
+		tip->addText(msg->get("Costs %d HP", powers->powers[power_cell[slot].id].requires_hp));
+	}
+	// add cooldown time
+	if (powers->powers[power_cell[slot].id].cooldown > 0) {
+		tip->addText(msg->get("Cooldown: %d seconds", powers->powers[power_cell[slot].id].cooldown / MAX_FRAMES_PER_SEC));
+	}
 }
 
 MenuPowers::~MenuPowers() {
