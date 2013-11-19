@@ -191,7 +191,7 @@ void MapRenderer::loadMusic() {
 		music = NULL;
 	}
 	if (AUDIO && MUSIC_VOLUME) {
-		music = Mix_LoadMUS(mods->locate("music/" + played_music_filename).c_str());
+		music = Mix_LoadMUS(mods->locate(played_music_filename).c_str());
 		if(!music)
 			fprintf(stderr, "Mix_LoadMUS: %s\n", Mix_GetError());
 	}
