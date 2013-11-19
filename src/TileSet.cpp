@@ -73,7 +73,7 @@ void TileSet::load(const std::string& filename) {
 	FileParser infile;
 	string img;
 
-	if (infile.open("tilesetdefs/" + filename)) {
+	if (infile.open(filename)) {
 		while (infile.next()) {
 			if (infile.key == "tile") {
 
