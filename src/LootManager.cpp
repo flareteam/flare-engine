@@ -111,8 +111,7 @@ void LootManager::loadGraphics() {
 		if (items->items[i].loot_animation.empty()) continue;
 
 		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
-			string animationname = items->items[i].loot_animation[j].name;
-			anim->increaseCount(animationname);
+			anim->increaseCount(items->items[i].loot_animation[j].name);
 		}
 	}
 }
@@ -366,8 +365,7 @@ void LootManager::addLoot(ItemStack stack, FPoint pos) {
 			break;
 		}
 	}
-	const string animationname = items->items[stack.item].loot_animation[index].name;
-	ld.loadAnimation(animationname);
+	ld.loadAnimation(items->items[stack.item].loot_animation[index].name);
 	loot.push_back(ld);
 	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
@@ -494,8 +492,7 @@ LootManager::~LootManager() {
 		if (items->items[i].loot_animation.empty()) continue;
 
 		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
-			string animationname = items->items[i].loot_animation[j].name;
-			anim->decreaseCount(animationname);
+			anim->decreaseCount(items->items[i].loot_animation[j].name);
 		}
 	}
 

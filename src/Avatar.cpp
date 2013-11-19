@@ -715,10 +715,9 @@ void Avatar::transform() {
 	stats.powers_passive = charmed_stats->powers_passive;
 	stats.effects.clearEffects();
 
-	string animationname = charmed_stats->animations;
 	anim->decreaseCount("animations/hero.txt");
-	anim->increaseCount(animationname);
-	animationSet = anim->getAnimationSet(animationname);
+	anim->increaseCount(charmed_stats->animations);
+	animationSet = anim->getAnimationSet(charmed_stats->animations);
 	delete activeAnimation;
 	activeAnimation = animationSet->getAnimation();
 	stats.cur_state = AVATAR_STANCE;

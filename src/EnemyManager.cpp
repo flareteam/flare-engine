@@ -65,17 +65,15 @@ void EnemyManager::loadSounds(const string& type_id) {
 }
 
 void EnemyManager::loadAnimations(Enemy *e) {
-	string animationsname = e->stats.animations;
-	anim->increaseCount(animationsname);
-	e->animationSet = anim->getAnimationSet(animationsname);
+	anim->increaseCount(e->stats.animations);
+	e->animationSet = anim->getAnimationSet(e->stats.animations);
 	e->activeAnimation = e->animationSet->getAnimation();
 }
 
 Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 	for (size_t i = 0; i < prototypes.size(); i++)
 		if (prototypes[i].type == type_id) {
-			string animationsname = prototypes[i].stats.animations;
-			anim->increaseCount(animationsname);
+			anim->increaseCount(prototypes[i].stats.animations);
 			return new Enemy(prototypes[i]);
 		}
 
@@ -226,9 +224,8 @@ void EnemyManager::handleSpawn() {
 		e->stats.load("enemies/" + espawn.type + ".txt");
 		if (e->stats.animations != "") {
 			// load the animation file if specified
-			string animationname = e->stats.animations;
-			anim->increaseCount(animationname);
-			e->animationSet = anim->getAnimationSet(animationname);
+			anim->increaseCount(e->stats.animations);
+			e->animationSet = anim->getAnimationSet(e->stats.animations);
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation();
 			else
