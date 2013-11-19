@@ -177,7 +177,7 @@ void NPC::loadGraphics(const string& filename_portrait) {
  */
 int NPC::loadSound(const string& fname, int type) {
 
-	SoundManager::SoundID a = snd->load("soundfx/npcs/" + fname, "NPC voice");
+	SoundManager::SoundID a = snd->load(fname, "NPC voice");
 
 	if (!a)
 		return -1;
