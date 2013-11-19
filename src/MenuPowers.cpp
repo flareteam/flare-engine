@@ -223,7 +223,7 @@ void MenuPowers::loadGraphics() {
 	}
 	else {
 		for (unsigned int i = 0; i < tree_image_files.size(); ++i)
-			tree_surf.push_back(loadGraphicSurface("images/menus/" + tree_image_files[i]));
+			tree_surf.push_back(loadGraphicSurface(tree_image_files[i]));
 	}
 	for (unsigned int i=0; i<slots.size(); i++) {
 
