@@ -10,13 +10,14 @@ msgstr ""
 "Project-Id-Version: flare-engine 0.18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-03-29 22:24+0600\n"
-"Last-Translator: Evgen Pavlov <sonjekua@gmail.com>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"PO-Revision-Date: 2013-11-20 19:56+0100\n"
+"Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
+"Language-Team: Russian https://github.com/SBasalaev/flare-game/wiki/\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../../../src/Avatar.cpp:430
 #, c-format
@@ -32,19 +33,18 @@ msgid "You are defeated. Game over! Press Enter to exit to Title."
 msgstr "Вы убиты.  Игра окончена! Нажмите Ввод, чтобы выйти в Меню."
 
 #: ../../../src/Avatar.cpp:634
-#, fuzzy
 msgid "You are defeated. Press Enter to continue."
-msgstr "Вы убиты.  Вы теряете половину своего %s.  Нажмите Ввод для продолжения."
+msgstr "Вы потерпели поражение.  Нажмите Ввод для продолжения."
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s удалено."
 
 #: ../../../src/CampaignManager.cpp:139
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "%s удалено."
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
@@ -196,9 +196,8 @@ msgid "Mouse aim"
 msgstr "Прицел мышью"
 
 #: ../../../src/GameStateConfig.cpp:318
-#, fuzzy
 msgid "Do not use mouse"
-msgstr "Перемещать героя мышью"
+msgstr "Не использовать мышь"
 
 #: ../../../src/GameStateConfig.cpp:321
 msgid "Show FPS"
@@ -206,11 +205,11 @@ msgstr "Показывать FPS"
 
 #: ../../../src/GameStateConfig.cpp:324
 msgid "Show Hotkeys Labels"
-msgstr ""
+msgstr "Показывать метки горячих клавиш"
 
 #: ../../../src/GameStateConfig.cpp:327
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "Режим цветовой слепоты"
 
 #: ../../../src/GameStateConfig.cpp:338
 msgid "Music Volume"
@@ -225,9 +224,8 @@ msgid "Gamma"
 msgstr "Гамма"
 
 #: ../../../src/GameStateConfig.cpp:377
-#, fuzzy
 msgid "Joystick Deadzone"
-msgstr "Джойстик"
+msgstr "Мёртвая зона джойстика"
 
 #: ../../../src/GameStateConfig.cpp:391
 msgid "Resolution"
@@ -260,7 +258,7 @@ msgstr "Экспериментальное"
 
 #: ../../../src/GameStateConfig.cpp:507
 msgid "For handheld devices"
-msgstr ""
+msgstr "Для наладонных устройств"
 
 #: ../../../src/GameStateConfig.cpp:527
 msgid "<< Disable"
@@ -312,9 +310,8 @@ msgid "Level %d %s"
 msgstr "Уровень %d %s"
 
 #: ../../../src/GameStateLoad.cpp:579
-#, fuzzy
 msgid "Permadeath"
-msgstr "Одна жизнь?"
+msgstr "Одна жизнь"
 
 #: ../../../src/GameStateLoad.cpp:603
 msgid "Empty Slot"
@@ -369,16 +366,15 @@ msgstr "Настройки"
 
 #: ../../../src/GameStateTitle.cpp:55
 msgid "Credits"
-msgstr ""
+msgstr "Авторы"
 
 #: ../../../src/GameStateTitle.cpp:60
 msgid "Exit Game"
 msgstr "Выйти"
 
 #: ../../../src/GameStateTitle.cpp:67
-#, fuzzy
 msgid "Flare Alpha v0.19"
-msgstr "Flare Alpha v0.18"
+msgstr "Flare Alpha v0.19"
 
 #: ../../../src/InputState.cpp:623
 msgid "Accept"
@@ -483,19 +479,19 @@ msgstr "Удалить"
 
 #: ../../../src/InputState.cpp:647
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "Принять на панель действий"
 
 #: ../../../src/InputState.cpp:648
 msgid "ActionBar Left"
-msgstr ""
+msgstr "Влево на панели действий"
 
 #: ../../../src/InputState.cpp:649
 msgid "ActionBar Right"
-msgstr ""
+msgstr "Вправо на панели действий"
 
 #: ../../../src/InputState.cpp:650
 msgid "ActionBar Use"
-msgstr ""
+msgstr "Использовать на панели действий"
 
 #: ../../../src/InputState.cpp:652
 msgid "lmb"
@@ -525,22 +521,25 @@ msgstr "КМx1"
 msgid "mbx2"
 msgstr "КМx2"
 
+# качество - средний род
 #: ../../../src/ItemManager.cpp:488
-#, fuzzy
 msgid "Low"
-msgstr "Журнал"
+msgstr "Низкое"
 
+# качество - средний род
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
-msgstr ""
+msgstr "Среднее"
 
+# качество - средний род
 #: ../../../src/ItemManager.cpp:496
 msgid "High"
-msgstr ""
+msgstr "Высокое"
 
+# качество - средний род
 #: ../../../src/ItemManager.cpp:500
 msgid "Epic"
-msgstr ""
+msgstr "Эпическое"
 
 #: ../../../src/ItemManager.cpp:513
 #, c-format
@@ -588,7 +587,7 @@ msgid "Absorb: %d"
 msgstr "Поглощение: %d"
 
 #: ../../../src/ItemManager.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "%d% Speed"
 msgstr "%d%% скорости"
 
@@ -629,7 +628,7 @@ msgstr "Требуется защита %d"
 #: ../../../src/ItemManager.cpp:609
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Качество: %s"
 
 #: ../../../src/ItemManager.cpp:626 ../../../src/ItemManager.cpp:635
 #, c-format
@@ -698,7 +697,7 @@ msgstr "Восстановление здоровья:"
 
 #: ../../../src/MenuCharacter.cpp:341
 msgid "Ticks of HP regen per minute. "
-msgstr ""
+msgstr "Восстановливается единиц здоровья в минуту."
 
 #: ../../../src/MenuCharacter.cpp:346
 msgid "Max MP:"
@@ -710,7 +709,7 @@ msgstr "Восстановление маны:"
 
 #: ../../../src/MenuCharacter.cpp:353
 msgid "Ticks of MP regen per minute. "
-msgstr ""
+msgstr "Восстанавливается единиц маны в минуту."
 
 #: ../../../src/MenuCharacter.cpp:358
 msgid "Accuracy:"
@@ -816,27 +815,27 @@ msgstr "Защита (З) увеличивает владение бронёй �
 #: ../../../src/MenuCharacter.cpp:498
 #, c-format
 msgid "Each level grants %d. "
-msgstr ""
+msgstr "Каждый уровень даёт %d. "
 
 #: ../../../src/MenuCharacter.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of Physical grants %d. "
-msgstr "Каждое очко силы даёт +%d здоровья. Каждый уровень даёт +%d здоровья"
+msgstr "Каждое очко силы даёт %d. "
 
 #: ../../../src/MenuCharacter.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of Mental grants %d. "
-msgstr "Каждое очко интеллекта даёт +%d маны. Каждый уровень даёт +%d маны"
+msgstr "Каждое очко интеллекта даёт %d. "
 
 #: ../../../src/MenuCharacter.cpp:504
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of Offense grants %d. "
-msgstr "Каждое очко интеллекта даёт +%d маны. Каждый уровень даёт +%d маны"
+msgstr "Каждое очко ловкости даёт %d. "
 
 #: ../../../src/MenuCharacter.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of Defense grants %d. "
-msgstr "Каждое очко интеллекта даёт +%d маны. Каждый уровень даёт +%d маны"
+msgstr "Каждое очко защиты даёт %d. "
 
 #: ../../../src/MenuEnemy.cpp:117
 msgid "Dead"
@@ -858,22 +857,22 @@ msgstr "Сохранить и выйти в меню?"
 #: ../../../src/MenuInventory.cpp:146
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr ""
+msgstr "Потеряно %d%% из %s. "
 
 #: ../../../src/MenuInventory.cpp:153
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr ""
+msgstr "Потеряно %d%% полного опыта. "
 
 #: ../../../src/MenuInventory.cpp:158
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr ""
+msgstr "Потеряно %d%% опыта текущего уровня. "
 
 #: ../../../src/MenuInventory.cpp:184
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Потеряно %s."
 
 #: ../../../src/MenuInventory.cpp:228
 #, c-format
@@ -908,9 +907,9 @@ msgstr "Опыт: %d/%d"
 #: ../../../src/MenuManager.cpp:652 ../../../src/MenuManager.cpp:653
 #: ../../../src/MenuManager.cpp:859 ../../../src/MenuManager.cpp:860
 #: ../../../src/MenuManager.cpp:1037 ../../../src/MenuManager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Not enough %s."
-msgstr "Недостаточно денег."
+msgstr "Недостаточно %s."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
@@ -925,11 +924,13 @@ msgid ""
 "\n"
 "Next Level:"
 msgstr ""
+"\n"
+"Следующий уровень:"
 
 #: ../../../src/MenuPowers.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Requires a %s"
-msgstr "Требуется интеллект %d"
+msgstr "Требуется %s"
 
 #: ../../../src/MenuPowers.cpp:530 ../../../src/MenuPowers.cpp:533
 #, c-format
@@ -1010,33 +1011,10 @@ msgstr "Вы уже трансформированы, сперва растра�
 msgid "Adventurer"
 msgstr "Приключенец"
 
+# сокращение для «кило»
 #: ../../../src/Utils.cpp:519
 msgid "k"
-msgstr ""
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Меню персонажа (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "Меню инвентаря (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Меню сил (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Меню журнала (L)"
-
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "Восстановление здоровья в минуту. Каждое очко силы даёт +%d регенерации. Каждый уровень даёт +%d регенерации"
-
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "Восстановление маны в минуту. Каждое очко интеллекта даёт +%d регенерации. Каждый уровень даёт +%d регенерации"
-
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Каждое очко ловкости даёт +%d к меткости. Каждый уровень даёт +%d к меткости"
-
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Каждое очко защиты даёт +%d к уклонению. Каждый уровень даёт +%d к уклонению"
+msgstr "к"
 
 #~ msgid "Requires a physical weapon"
 #~ msgstr "Требуется оружие ближнего боя"
