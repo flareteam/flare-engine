@@ -179,7 +179,7 @@ void PowerManager::loadPowers() {
 		// animation info
 		else if (infile.key == "animation")
 			// @ATTR animation|string|The name of power animation.
-			powers[input_id].animation_name = "animations/powers/" + infile.val;
+			powers[input_id].animation_name = infile.val;
 		else if (infile.key == "soundfx")
 			// @ATTR soundfx|string|Sound effect to play when use of power.
 			powers[input_id].sfx_index = loadSFX(infile.val);
@@ -441,7 +441,7 @@ void PowerManager::loadPowers() {
  */
 int PowerManager::loadSFX(const string& filename) {
 
-	SoundManager::SoundID sid = snd->load("soundfx/powers/" + filename, "PowerManager sfx");
+	SoundManager::SoundID sid = snd->load(filename, "PowerManager sfx");
 	vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
 	if (it == sfx.end()) {
 		sfx.push_back(sid);
@@ -598,11 +598,11 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	if (powers[power_index].trait_elemental != -1) {
 		haz->trait_elemental = powers[power_index].trait_elemental;
 	}
-	
+
 	if (powers[power_index].no_attack) {
 		haz->active = false;
 	}
-	
+
 	// note: it may look like this line would be more efficient:
 	// haz->multitarget = powers[power_index].multitarget
 	// but as mentioned above, only apply traits that are not the default!
@@ -618,7 +618,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	}
 	haz->trait_crits_impaired += powers[power_index].trait_crits_impaired;
 
-    if (powers[power_index].beacon) {	
+    if (powers[power_index].beacon) {
 	  haz->beacon = true;
 	}
 

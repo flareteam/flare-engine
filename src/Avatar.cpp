@@ -715,10 +715,9 @@ void Avatar::transform() {
 	stats.powers_passive = charmed_stats->powers_passive;
 	stats.effects.clearEffects();
 
-	string animationname = "animations/enemies/"+charmed_stats->animations + ".txt";
 	anim->decreaseCount("animations/hero.txt");
-	anim->increaseCount(animationname);
-	animationSet = anim->getAnimationSet(animationname);
+	anim->increaseCount(charmed_stats->animations);
+	animationSet = anim->getAnimationSet(charmed_stats->animations);
 	delete activeAnimation;
 	activeAnimation = animationSet->getAnimation();
 	stats.cur_state = AVATAR_STANCE;
@@ -776,7 +775,7 @@ void Avatar::untransform() {
 	stats.powers_passive = hero_stats->powers_passive;
 
 	anim->increaseCount("animations/hero.txt");
-	anim->decreaseCount("animations/enemies/"+charmed_stats->animations + ".txt");
+	anim->decreaseCount(charmed_stats->animations);
 	animationSet = anim->getAnimationSet("animations/hero.txt");
 	delete activeAnimation;
 	activeAnimation = animationSet->getAnimation();
@@ -878,7 +877,7 @@ void Avatar::addRenders(vector<Renderable> &r) {
 Avatar::~Avatar() {
 
 	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
-		anim->decreaseCount("animations/enemies/"+charmed_stats->animations + ".txt");
+		anim->decreaseCount(charmed_stats->animations);
 	}
 	else {
 		anim->decreaseCount("animations/hero.txt");

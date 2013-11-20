@@ -160,9 +160,8 @@ void NPC::load(const string& npc_id, int hero_level) {
 void NPC::loadGraphics(const string& filename_portrait) {
 
 	if (gfx != "") {
-		std::string anim_name = "animations/npcs/" + gfx + ".txt";
-		anim->increaseCount(anim_name);
-		animationSet = anim->getAnimationSet(anim_name);
+		anim->increaseCount(gfx);
+		animationSet = anim->getAnimationSet(gfx);
 		activeAnimation = animationSet->getAnimation();
 	}
 	if (filename_portrait != "")
@@ -177,7 +176,7 @@ void NPC::loadGraphics(const string& filename_portrait) {
  */
 int NPC::loadSound(const string& fname, int type) {
 
-	SoundManager::SoundID a = snd->load("soundfx/npcs/" + fname, "NPC voice");
+	SoundManager::SoundID a = snd->load(fname, "NPC voice");
 
 	if (!a)
 		return -1;
@@ -411,8 +410,7 @@ bool NPC::isDialogType(const std::string &type) {
 
 NPC::~NPC() {
 	if (gfx != "") {
-		const string anim_name = "animations/npcs/" + gfx + ".txt";
-		anim->decreaseCount(anim_name);
+		anim->decreaseCount(gfx);
 	}
 
 	if (portrait != NULL) SDL_FreeSurface(portrait);
