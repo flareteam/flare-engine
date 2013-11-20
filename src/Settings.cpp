@@ -467,6 +467,8 @@ void loadMiscSettings() {
 			}
 			else if (infile.key == "interact_range")
 				INTERACT_RANGE = toFloat(infile.val);
+			else if (infile.key == "menus_pause")
+				MENUS_PAUSE = toBool(infile.val);
 
 		}
 		infile.close();

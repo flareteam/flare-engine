@@ -601,10 +601,8 @@ void MenuManager::logic() {
 		}
 	}
 
-	if (MENUS_PAUSE) {
-		pause = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible);
-	}
 	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible);
+	pause = (MENUS_PAUSE && menus_open) || exit->visible;
 
 	if (stats->alive) {
 
