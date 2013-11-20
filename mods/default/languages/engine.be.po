@@ -1,4 +1,4 @@
-# Belarussian translation of Flare engine. v0.18 
+# Belarussian translation of Flare engine. v0.18
 # (Я толькі вучуся. Выбачайце.)
 # Copyright (C) 2013 Clint Bellanger
 # This file is distributed under the same license as the PACKAGE package.
@@ -15,7 +15,7 @@ msgstr ""
 "Language-Team: Belarussian <be@li.org>\n"
 "Language: be\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../../../src/Avatar.cpp:411
