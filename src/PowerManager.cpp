@@ -51,7 +51,55 @@ PowerManager::PowerManager()
 	, log_msg("")
 	, used_items()
 	, used_equipped_items() {
+	loadEffects();
 	loadPowers();
+}
+
+void PowerManager::loadEffects() {
+	FileParser infile;
+
+	if (!infile.open("powers/effects.txt", true, false))
+		return;
+
+	std::string input_name = "";
+	bool skippingEntry = false;
+
+	while (infile.next()) {
+		// name needs to be the first component of each power.  That is how we write
+		// data to the correct power.
+		if (infile.key == "name") {
+			// @ATTR name|string|Uniq identifier for the effect definition.
+			input_name = infile.val;
+			skippingEntry = input_name == "";
+			if (skippingEntry)
+				fprintf(stderr, "Effect without a name, skipping\n");
+			continue;
+		}
+		if (skippingEntry)
+			continue;
+
+		if (infile.key == "type") {
+			// @ATTR type|string|Defines the type of effect
+			effects[input_name].type = infile.val;
+		}
+		else if (infile.key == "icon") {
+			// @ATTR icon|integer|The icon to visually represent the effect in the status area
+			effects[input_name].icon = toInt(infile.val);
+		}
+		else if (infile.key == "animation") {
+			// @ATTR animation|string|The name of effect animation.
+			effects[input_name].animation = infile.val;
+		}
+		else if (infile.key == "additive") {
+			// @ATTR additive|bool|Effect is additive
+			effects[input_name].additive = toBool(infile.val);
+		}
+		else if (infile.key == "render_above") {
+			// @ATTR render_above|bool|Effect is rendered above
+			effects[input_name].render_above = toBool(infile.val);
+		}
+	}
+	infile.close();
 }
 
 void PowerManager::loadPowers() {
@@ -81,13 +129,12 @@ void PowerManager::loadPowers() {
 			continue;
 
 		if (infile.key == "type") {
-			// @ATTR fixed|[missile:repeater:spawn:transform:effect]|Defines the type of power definiton
+			// @ATTR type|[fixed:missile:repeater:spawn:transform]|Defines the type of power definiton
 			if (infile.val == "fixed") powers[input_id].type = POWTYPE_FIXED;
 			else if (infile.val == "missile") powers[input_id].type = POWTYPE_MISSILE;
 			else if (infile.val == "repeater") powers[input_id].type = POWTYPE_REPEATER;
 			else if (infile.val == "spawn") powers[input_id].type = POWTYPE_SPAWN;
 			else if (infile.val == "transform") powers[input_id].type = POWTYPE_TRANSFORM;
-			else if (infile.val == "effect") powers[input_id].type = POWTYPE_EFFECT;
 			else fprintf(stderr, "unknown type %s\n", infile.val.c_str());
 		}
 		else if (infile.key == "name")
@@ -96,9 +143,6 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "description")
 			// @ATTR description|string|Description of the power
 			powers[input_id].description = msg->get(infile.val);
-		else if (infile.key == "tag")
-			// @ATTR tag|string|A uniq name for the power which is used to reference the power as item bonus within item definition.
-			powers[input_id].tag = infile.val;
 		else if (infile.key == "icon")
 			// @ATTR icon|string|The icon to visually represent the power eg. in skill tree or action bar.
 			powers[input_id].icon = toInt(infile.val);
@@ -301,20 +345,11 @@ void PowerManager::loadPowers() {
 			// @ATTR post_effect|[effect_id, magnitude (integer), duration (integer)]|Post effect.
 			infile.val = infile.val + ',';
 			PostEffect pe;
-			pe.id = eatFirstInt(infile.val, ',');
+			pe.id = eatFirstString(infile.val, ',');
 			pe.magnitude = eatFirstInt(infile.val, ',');
 			pe.duration = eatFirstInt(infile.val, ',');
 			powers[input_id].post_effects.push_back(pe);
 		}
-		else if (infile.key == "effect_type")
-			// @ATTR effect_type|string|Effect type name.
-			powers[input_id].effect_type = infile.val;
-		else if (infile.key == "effect_additive")
-			// @ATTR effect_additive|bool|Effect is additive
-			powers[input_id].effect_additive = toBool(infile.val);
-		else if (infile.key == "effect_render_above")
-			// @ATTR effect_render_above|bool|Effect is rendered above
-			powers[input_id].effect_render_above = toBool(infile.val);
 		// pre and post power effects
 		else if (infile.key == "post_power")
 			// @ATTR post_power|power_id|Post power
@@ -742,12 +777,12 @@ void PowerManager::playSound(int power_index, StatBlock *src_stats) {
 bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
-		int effect_index = powers[power_index].post_effects[i].id;
+		std::string effect_index = powers[power_index].post_effects[i].id;
 		int magnitude = powers[power_index].post_effects[i].magnitude;
 		int duration = powers[power_index].post_effects[i].duration;
 
-		if (effect_index > 0) {
-			if (powers[effect_index].effect_type == "shield") {
+		if (effects.find(effect_index) != effects.end()) {
+			if (effects[effect_index].type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
@@ -758,7 +793,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 
 				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
-			else if (powers[effect_index].effect_type == "heal") {
+			else if (effects[effect_index].type == "heal") {
 				// heal for ment weapon damage * damage multiplier
 				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
 
@@ -777,7 +812,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 			int passive_id = 0;
 			if (powers[power_index].passive) passive_id = power_index;
 
-			src_stats->effects.addEffect(effect_index, powers[effect_index].icon, duration, magnitude, powers[effect_index].effect_type, powers[effect_index].animation_name, powers[effect_index].effect_additive, false, powers[power_index].passive_trigger, powers[effect_index].effect_render_above, passive_id, source_type);
+			src_stats->effects.addEffect(effect_index, effects[effect_index].icon, duration, magnitude, effects[effect_index].type, effects[effect_index].animation, effects[effect_index].additive, false, powers[power_index].passive_trigger, effects[effect_index].render_above, passive_id, source_type);
 		}
 
 		// If there's a sound effect, play it here
@@ -1055,7 +1090,6 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target
 
 	// logic for different types of powers are very different.  We allow these
 	// separate functions to handle the details.
-	// POWTYPE_EFFECT is never cast as itself, so it is ignored
 	switch(powers[power_index].type) {
 		case POWTYPE_FIXED:
 			return fixed(power_index, src_stats, target);
@@ -1169,18 +1203,6 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, int id) {
 		src_stats->refresh_stats = true;
 		src_stats->effects.triggered_others = true;
 	}
-}
-
-/**
- * Find the first power id for a given tag
- * returns 0 if no tag is found
- */
-int PowerManager::getIdFromTag(std::string tag) {
-	if (tag == "") return 0;
-	for (unsigned i=1; i<powers.size(); i++) {
-		if (powers[i].tag == tag) return i;
-	}
-	return 0;
 }
 
 PowerManager::~PowerManager() {

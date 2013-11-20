@@ -93,17 +93,36 @@ const int STAT_MODIFIER_MODE_MULTIPLY = 0;
 const int STAT_MODIFIER_MODE_ADD = 1;
 const int STAT_MODIFIER_MODE_ABSOLUTE = 2;
 
+class EffectDef {
+public:
+	std::string name;
+	std::string type;
+	int icon;
+	std::string animation;
+	bool additive;
+	bool render_above;
+
+	EffectDef()
+		: name("")
+		, type("")
+		, icon(-1)
+		, animation("")
+		, additive(false)
+		, render_above(false)
+	{}
+};
+
 class PostEffect {
 public:
-	int id;
+	std::string id;
 	int magnitude;
 	int duration;
 
-	PostEffect() {
-		id = 0;
-		magnitude = 0;
-		duration = 0;
-	}
+	PostEffect()
+		: id("")
+		, magnitude(0)
+		, duration(0)
+	{}
 };
 
 class Power {
@@ -112,7 +131,6 @@ public:
 	int type; // what kind of activate() this is
 	std::string name;
 	std::string description;
-	std::string tag; // optional unique name used to get power id
 	int icon; // just the number.  The caller menu will have access to the surface.
 	int new_state; // when using this power the user (avatar/enemy) starts a new state
 	std::string attack_anim; // name of the animation to play when using this power, if it is not block
@@ -197,9 +215,6 @@ public:
 	int buff_party_power_id;
 
 	std::vector<PostEffect> post_effects;
-	std::string effect_type;
-	bool effect_additive;
-	bool effect_render_above;
 
 	int post_power;
 	int wall_power;
@@ -222,7 +237,6 @@ public:
 		: type(-1)
 		, name("")
 		, description("")
-		, tag("")
 		, icon(-1)
 		, new_state(-1)
 		, attack_anim("")
@@ -294,10 +308,6 @@ public:
 		, buff_party(false)
 		, buff_party_power_id(0)
 
-		, effect_type("")
-		, effect_additive(false)
-		, effect_render_above(false)
-
 		, post_power(0)
 		, wall_power(0)
 
@@ -321,6 +331,7 @@ private:
 
 	MapCollision *collider;
 
+	void loadEffects();
 	void loadPowers();
 
 	int loadSFX(const std::string& filename);
@@ -354,8 +365,8 @@ public:
 	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
-	int getIdFromTag(std::string tag);
 
+	std::map<std::string,EffectDef> effects;
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> enemies; // output; read by PowerManager

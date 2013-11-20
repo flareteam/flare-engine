@@ -911,10 +911,10 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		// apply various bonuses
 		unsigned bonus_counter = 0;
 		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
-			int id = powers->getIdFromTag(item.bonus_stat[bonus_counter]);
+			std::string id = item.bonus_stat[bonus_counter];
 
-			if (id > 0)
-				stats->effects.addEffect(id, powers->powers[id].icon, 0, item.bonus_val[bonus_counter], powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
+			if (powers->effects.find(id) != powers->effects.end())
+				stats->effects.addEffect(id, powers->effects[id].icon, 0, item.bonus_val[bonus_counter], powers->effects[id].type, powers->effects[id].animation, powers->effects[id].additive, true, -1, powers->effects[id].render_above, 0, SOURCE_TYPE_HERO);
 
 			bonus_counter++;
 		}
@@ -954,10 +954,10 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 			if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
-			int id = powers->getIdFromTag(temp_set.bonus[bonus_counter].bonus_stat);
+			std::string id = temp_set.bonus[bonus_counter].bonus_stat;
 
-			if (id > 0)
-				stats->effects.addEffect(id, powers->powers[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, powers->powers[id].effect_type, powers->powers[id].animation_name, powers->powers[id].effect_additive, true, -1, powers->powers[id].effect_render_above, 0, SOURCE_TYPE_HERO);
+			if (powers->effects.find(id) != powers->effects.end())
+				stats->effects.addEffect(id, powers->effects[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, powers->effects[id].type, powers->effects[id].animation, powers->effects[id].additive, true, -1, powers->effects[id].render_above, 0, SOURCE_TYPE_HERO);
 		}
 	}
 }

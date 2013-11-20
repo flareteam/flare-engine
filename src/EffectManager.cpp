@@ -198,7 +198,7 @@ void EffectManager::logic() {
 	}
 }
 
-void EffectManager::addEffect(int id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type) {
+void EffectManager::addEffect(std::string id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type) {
 	// if we're already immune, don't add negative effects
 	if (immunity) {
 		if (type == "damage") return;
