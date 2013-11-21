@@ -66,6 +66,9 @@ MenuStash::MenuStash(StatBlock *_stats)
 			else if (infile.key == "caption") {
 				title =  eatLabelInfo(infile.val);
 			}
+			else if (infile.key == "currency") {
+				currency =  eatLabelInfo(infile.val);
+			}
 		}
 		infile.close();
 	}
@@ -119,11 +122,16 @@ void MenuStash::render() {
 	closeButton->render();
 
 	// text overlay
+	WidgetLabel label;
 	if (!title.hidden) {
-		WidgetLabel label;
 		label.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Shared Stash"), color_normal, title.font_style);
 		label.render();
 	}
+	if (!currency.hidden) {
+		label.set(window_area.x+currency.x, window_area.y+currency.y, currency.justify, currency.valign, msg->get("%d %s", stock.count(CURRENCY_ID), CURRENCY), color_normal, currency.font_style);
+		label.render();
+	}
+
 
 	// show stock
 	stock.render();
