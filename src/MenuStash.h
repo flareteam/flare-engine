@@ -41,6 +41,7 @@ private:
 	// label and widget positions
 	Point close_pos;
 	LabelInfo title;
+	LabelInfo currency;
 	int slots_cols;
 	int slots_rows;
 	SDL_Color color_normal;
