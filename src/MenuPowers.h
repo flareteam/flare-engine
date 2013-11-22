@@ -118,7 +118,7 @@ private:
 	SDL_Color color_bonus;
 	SDL_Color color_penalty;
 
-	short id_by_powerIndex(short power_index, std::vector<Power_Menu_Cell>& cell);
+	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
 
 	bool powerIsVisible(short power_index);
 	void loadHeader(FileParser &infile);
@@ -132,7 +132,7 @@ public:
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point mouse);
-	void generatePowerDescription(TooltipData* tip, Power_Menu_Cell& slot);
+	void generatePowerDescription(TooltipData* tip, const Power_Menu_Cell& slot);
 	bool baseRequirementsMet(int power_index);
 	bool requirementsMet(int power_index);
 	int click(Point mouse);

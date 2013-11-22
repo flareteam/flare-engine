@@ -153,7 +153,7 @@ void MenuPowers::loadGraphics() {
 	}
 }
 
-short MenuPowers::id_by_powerIndex(short power_index, std::vector<Power_Menu_Cell>& cell) {
+short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell) {
 	// Find cell with our power
 	for (unsigned i=0; i<cell.size(); i++)
 		if (cell[i].id == power_index)
@@ -435,7 +435,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 	return tip;
 }
 
-void MenuPowers::generatePowerDescription(TooltipData* tip, Power_Menu_Cell& slot)
+void MenuPowers::generatePowerDescription(TooltipData* tip, const Power_Menu_Cell& slot)
 {
 	tip->addText(powers->powers[slot.id].name);
 	if (powers->powers[slot.id].passive) tip->addText("Passive");
