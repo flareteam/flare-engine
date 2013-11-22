@@ -23,7 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
-#include "FileParser.h"
 #include "Menu.h"
 #include "MenuPowers.h"
 #include "Settings.h"
@@ -41,8 +40,6 @@ using namespace std;
 
 MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 
-	int id;
-
 	stats = _stats;
 	icons = _icons;
 
@@ -53,7 +50,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 	points_left = 0;
 	tabs_count = 1;
 	pressed = false;
-	id = 0;
+	skip_section = false;
 
 	tabControl = NULL;
 
@@ -62,105 +59,23 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 	// Read powers data from config file
 	FileParser infile;
 	if (infile.open("menus/powers.txt")) {
-		bool id_line = false;
 		while (infile.next()) {
-			infile.val = infile.val + ',';
-
-			if (infile.key == "tab_title") {
-				tab_titles.push_back(eatFirstString(infile.val, ','));
-			}
-			else if (infile.key == "tab_tree") {
-				tree_image_files.push_back(eatFirstString(infile.val, ','));
-			}
-			else if (infile.key == "caption") {
-				title = eatLabelInfo(infile.val);
-			}
-			else if (infile.key == "unspent_points") {
-				unspent_points = eatLabelInfo(infile.val);
-			}
-			else if (infile.key == "close") {
-				close_pos.x = eatFirstInt(infile.val, ',');
-				close_pos.y = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "tab_area") {
-				tab_area.x = eatFirstInt(infile.val, ',');
-				tab_area.y = eatFirstInt(infile.val, ',');
-				tab_area.w = eatFirstInt(infile.val, ',');
-				tab_area.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "tabs") {
-				tabs_count = eatFirstInt(infile.val, ',');
-				if (tabs_count < 1) tabs_count = 1;
-			}
-
-			if (infile.key == "id") {
-				id = eatFirstInt(infile.val, ',');
-				id_line = true;
-				if (id > 0) {
-					power_cell.push_back(Power_Menu_Cell());
+			if (infile.new_section) {
+				// for sections that are stored in collections, add a new object here
+				if (infile.section == "power")
+				{
 					slots.push_back(NULL);
-					power_cell.back().id = id;
+					power_cell.push_back(Power_Menu_Cell());
 				}
+				else if (infile.section == "upgrade")
+					upgrade.push_back(Power_Menu_Cell());
 			}
-			else id_line = false;
-
-			if (id < 1) {
-				if (id_line) fprintf(stderr, "Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
-				continue;
-			}
-			if (id_line) continue;
-
-			if (infile.key == "tab") {
-				power_cell.back().tab = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "position") {
-				power_cell.back().pos.x = eatFirstInt(infile.val, ',');
-				power_cell.back().pos.y = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_physoff") {
-				power_cell.back().requires_physoff = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_physdef") {
-				power_cell.back().requires_physdef = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_mentoff") {
-				power_cell.back().requires_mentoff = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_mentdef") {
-				power_cell.back().requires_mentdef = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_defense") {
-				power_cell.back().requires_defense = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_offense") {
-				power_cell.back().requires_offense = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_physical") {
-				power_cell.back().requires_physical = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_mental") {
-				power_cell.back().requires_mental = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_point") {
-				if (infile.val == "true,")
-					power_cell.back().requires_point = true;
-			}
-			else if (infile.key == "requires_level") {
-				power_cell.back().requires_level = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "next_level") {
-				power_cell.back().next_level = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "requires_power") {
-				power_cell.back().requires_power.push_back(eatFirstInt(infile.val, ','));
-			}
-			else if (infile.key == "visible_requires_status") {
-				power_cell.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
-			}
-			else if (infile.key == "visible_requires_not_status") {
-				power_cell.back().visible_requires_not.push_back(eatFirstString(infile.val, ','));
-			}
-
+			if (infile.section == "header")
+				loadHeader(infile);
+			else if (infile.section == "power")
+				loadPower(infile);
+			else if (infile.section == "upgrade")
+				loadUpgrade(infile);
 		}
 		infile.close();
 	}
@@ -189,6 +104,10 @@ void MenuPowers::update() {
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		slots[i]->pos.x = window_area.x + power_cell[i].pos.x;
 		slots[i]->pos.y = window_area.y + power_cell[i].pos.y;
+		if (power_cell[i].upgradeButton != NULL) {
+			power_cell[i].upgradeButton->pos.x = slots[i]->pos.x + ICON_SIZE;
+			power_cell[i].upgradeButton->pos.y = slots[i]->pos.y;
+		}
 	}
 
 	label_powers.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Powers"), font->getColor("menu_normal"), title.font_style);
@@ -234,17 +153,17 @@ void MenuPowers::loadGraphics() {
 	}
 }
 
-short MenuPowers::id_by_powerIndex(short power_index) {
+short MenuPowers::id_by_powerIndex(short power_index, std::vector<Power_Menu_Cell>& cell) {
 	// Find cell with our power
-	for (unsigned i=0; i<power_cell.size(); i++)
-		if (power_cell[i].id == power_index)
+	for (unsigned i=0; i<cell.size(); i++)
+		if (cell[i].id == power_index)
 			return i;
 
 	return -1;
 }
 
 bool MenuPowers::baseRequirementsMet(int power_index) {
-	int id = id_by_powerIndex(power_index);
+	int id = id_by_powerIndex(power_index, power_cell);
 
 	for (unsigned i = 0; i < power_cell[id].requires_power.size(); ++i)
 		if (!requirementsMet(power_cell[id].requires_power[i]))
@@ -271,7 +190,7 @@ bool MenuPowers::requirementsMet(int power_index) {
 	// Power with index 0 doesn't exist and is always enabled
 	if (power_index == 0) return true;
 
-	int id = id_by_powerIndex(power_index);
+	int id = id_by_powerIndex(power_index, power_cell);
 
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
@@ -296,7 +215,7 @@ bool MenuPowers::powerUnlockable(int power_index) {
 	if (power_index == 0) return true;
 
 	// Find cell with our power
-	int id = id_by_powerIndex(power_index);
+	int id = id_by_powerIndex(power_index, power_cell);
 
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
@@ -499,12 +418,14 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 		if (!powerIsVisible(power_cell[i].id)) continue;
 
 		if (isWithin(slots[i]->pos, mouse)) {
-			generatePowerDescription(&tip, i);
-
-			if (power_cell[i].next_level != 0) {
-				tip.addText(msg->get("\nNext Level:"));
-				short next_level_cell = id_by_powerIndex(power_cell[i].next_level);
-				generatePowerDescription(&tip, next_level_cell);
+			generatePowerDescription(&tip, power_cell[i]);
+			// TODO: we should take info about next power
+			if (!power_cell[i].upgrades.empty()) {
+				short next_level = id_by_powerIndex(power_cell[i].upgrades.back(), upgrade);
+				if (next_level != -1) {
+					tip.addText(msg->get("\nNext Level:"));
+					generatePowerDescription(&tip, upgrade[next_level]);
+				}
 			}
 
 			return tip;
@@ -514,119 +435,119 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 	return tip;
 }
 
-void MenuPowers::generatePowerDescription(TooltipData* tip, unsigned slot)
+void MenuPowers::generatePowerDescription(TooltipData* tip, Power_Menu_Cell& slot)
 {
-	tip->addText(powers->powers[power_cell[slot].id].name);
-	if (powers->powers[power_cell[slot].id].passive) tip->addText("Passive");
-	tip->addText(powers->powers[power_cell[slot].id].description);
+	tip->addText(powers->powers[slot.id].name);
+	if (powers->powers[slot.id].passive) tip->addText("Passive");
+	tip->addText(powers->powers[slot.id].description);
 
 	std::set<std::string>::iterator it;
-	for (it = powers->powers[power_cell[slot].id].requires_flags.begin(); it != powers->powers[power_cell[slot].id].requires_flags.end(); ++it) {
+	for (it = powers->powers[slot.id].requires_flags.begin(); it != powers->powers[slot.id].requires_flags.end(); ++it) {
 		tip->addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[(*it)])));
 	}
 
 	// add requirement
-	if ((power_cell[slot].requires_physoff > 0) && (stats->physoff() < power_cell[slot].requires_physoff)) {
-		tip->addText(msg->get("Requires Physical Offense %d", power_cell[slot].requires_physoff), color_penalty);
+	if ((slot.requires_physoff > 0) && (stats->physoff() < slot.requires_physoff)) {
+		tip->addText(msg->get("Requires Physical Offense %d", slot.requires_physoff), color_penalty);
 	}
-	else if((power_cell[slot].requires_physoff > 0) && (stats->physoff() >= power_cell[slot].requires_physoff)) {
-		tip->addText(msg->get("Requires Physical Offense %d", power_cell[slot].requires_physoff));
+	else if((slot.requires_physoff > 0) && (stats->physoff() >= slot.requires_physoff)) {
+		tip->addText(msg->get("Requires Physical Offense %d", slot.requires_physoff));
 	}
-	if ((power_cell[slot].requires_physdef > 0) && (stats->physdef() < power_cell[slot].requires_physdef)) {
-		tip->addText(msg->get("Requires Physical Defense %d", power_cell[slot].requires_physdef), color_penalty);
+	if ((slot.requires_physdef > 0) && (stats->physdef() < slot.requires_physdef)) {
+		tip->addText(msg->get("Requires Physical Defense %d", slot.requires_physdef), color_penalty);
 	}
-	else if ((power_cell[slot].requires_physdef > 0) && (stats->physdef() >= power_cell[slot].requires_physdef)) {
-		tip->addText(msg->get("Requires Physical Defense %d", power_cell[slot].requires_physdef));
+	else if ((slot.requires_physdef > 0) && (stats->physdef() >= slot.requires_physdef)) {
+		tip->addText(msg->get("Requires Physical Defense %d", slot.requires_physdef));
 	}
-	if ((power_cell[slot].requires_mentoff > 0) && (stats->mentoff() < power_cell[slot].requires_mentoff)) {
-		tip->addText(msg->get("Requires Mental Offense %d", power_cell[slot].requires_mentoff), color_penalty);
+	if ((slot.requires_mentoff > 0) && (stats->mentoff() < slot.requires_mentoff)) {
+		tip->addText(msg->get("Requires Mental Offense %d", slot.requires_mentoff), color_penalty);
 	}
-	else if ((power_cell[slot].requires_mentoff > 0) && (stats->mentoff() >= power_cell[slot].requires_mentoff)) {
-		tip->addText(msg->get("Requires Mental Offense %d", power_cell[slot].requires_mentoff));
+	else if ((slot.requires_mentoff > 0) && (stats->mentoff() >= slot.requires_mentoff)) {
+		tip->addText(msg->get("Requires Mental Offense %d", slot.requires_mentoff));
 	}
-	if ((power_cell[slot].requires_mentdef > 0) && (stats->mentdef() < power_cell[slot].requires_mentdef)) {
-		tip->addText(msg->get("Requires Mental Defense %d", power_cell[slot].requires_mentdef), color_penalty);
+	if ((slot.requires_mentdef > 0) && (stats->mentdef() < slot.requires_mentdef)) {
+		tip->addText(msg->get("Requires Mental Defense %d", slot.requires_mentdef), color_penalty);
 	}
-	else if ((power_cell[slot].requires_mentdef > 0) && (stats->mentdef() >= power_cell[slot].requires_mentdef)) {
-		tip->addText(msg->get("Requires Mental Defense %d", power_cell[slot].requires_mentdef));
+	else if ((slot.requires_mentdef > 0) && (stats->mentdef() >= slot.requires_mentdef)) {
+		tip->addText(msg->get("Requires Mental Defense %d", slot.requires_mentdef));
 	}
-	if ((power_cell[slot].requires_offense > 0) && (stats->get_offense() < power_cell[slot].requires_offense)) {
-		tip->addText(msg->get("Requires Offense %d", power_cell[slot].requires_offense), color_penalty);
+	if ((slot.requires_offense > 0) && (stats->get_offense() < slot.requires_offense)) {
+		tip->addText(msg->get("Requires Offense %d", slot.requires_offense), color_penalty);
 	}
-	else if ((power_cell[slot].requires_offense > 0) && (stats->get_offense() >= power_cell[slot].requires_offense)) {
-		tip->addText(msg->get("Requires Offense %d", power_cell[slot].requires_offense));
+	else if ((slot.requires_offense > 0) && (stats->get_offense() >= slot.requires_offense)) {
+		tip->addText(msg->get("Requires Offense %d", slot.requires_offense));
 	}
-	if ((power_cell[slot].requires_defense > 0) && (stats->get_defense() < power_cell[slot].requires_defense)) {
-		tip->addText(msg->get("Requires Defense %d", power_cell[slot].requires_defense), color_penalty);
+	if ((slot.requires_defense > 0) && (stats->get_defense() < slot.requires_defense)) {
+		tip->addText(msg->get("Requires Defense %d", slot.requires_defense), color_penalty);
 	}
-	else if ((power_cell[slot].requires_defense > 0) && (stats->get_defense() >= power_cell[slot].requires_defense)) {
-		tip->addText(msg->get("Requires Defense %d", power_cell[slot].requires_defense));
+	else if ((slot.requires_defense > 0) && (stats->get_defense() >= slot.requires_defense)) {
+		tip->addText(msg->get("Requires Defense %d", slot.requires_defense));
 	}
-	if ((power_cell[slot].requires_physical > 0) && (stats->get_physical() < power_cell[slot].requires_physical)) {
-		tip->addText(msg->get("Requires Physical %d", power_cell[slot].requires_physical), color_penalty);
+	if ((slot.requires_physical > 0) && (stats->get_physical() < slot.requires_physical)) {
+		tip->addText(msg->get("Requires Physical %d", slot.requires_physical), color_penalty);
 	}
-	else if ((power_cell[slot].requires_physical > 0) && (stats->get_physical() >= power_cell[slot].requires_physical)) {
-		tip->addText(msg->get("Requires Physical %d", power_cell[slot].requires_physical));
+	else if ((slot.requires_physical > 0) && (stats->get_physical() >= slot.requires_physical)) {
+		tip->addText(msg->get("Requires Physical %d", slot.requires_physical));
 	}
-	if ((power_cell[slot].requires_mental > 0) && (stats->get_mental() < power_cell[slot].requires_mental)) {
-		tip->addText(msg->get("Requires Mental %d", power_cell[slot].requires_mental), color_penalty);
+	if ((slot.requires_mental > 0) && (stats->get_mental() < slot.requires_mental)) {
+		tip->addText(msg->get("Requires Mental %d", slot.requires_mental), color_penalty);
 	}
-	else if ((power_cell[slot].requires_mental > 0) && (stats->get_mental() >= power_cell[slot].requires_mental)) {
-		tip->addText(msg->get("Requires Mental %d", power_cell[slot].requires_mental));
+	else if ((slot.requires_mental > 0) && (stats->get_mental() >= slot.requires_mental)) {
+		tip->addText(msg->get("Requires Mental %d", slot.requires_mental));
 	}
 
 	// Draw required Level Tooltip
-	if ((power_cell[slot].requires_level > 0) && stats->level < power_cell[slot].requires_level) {
-		tip->addText(msg->get("Requires Level %d", power_cell[slot].requires_level), color_penalty);
+	if ((slot.requires_level > 0) && stats->level < slot.requires_level) {
+		tip->addText(msg->get("Requires Level %d", slot.requires_level), color_penalty);
 	}
-	else if ((power_cell[slot].requires_level > 0) && stats->level >= power_cell[slot].requires_level) {
-		tip->addText(msg->get("Requires Level %d", power_cell[slot].requires_level));
+	else if ((slot.requires_level > 0) && stats->level >= slot.requires_level) {
+		tip->addText(msg->get("Requires Level %d", slot.requires_level));
 	}
 
 	// Draw required Skill Point Tooltip
-	if ((power_cell[slot].requires_point) &&
-			!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[slot].id) != stats->powers_list.end()) &&
+	if ((slot.requires_point) &&
+			!(find(stats->powers_list.begin(), stats->powers_list.end(), slot.id) != stats->powers_list.end()) &&
 			(points_left < 1)) {
-		tip->addText(msg->get("Requires %d Skill Point", power_cell[slot].requires_point), color_penalty);
+		tip->addText(msg->get("Requires %d Skill Point", slot.requires_point), color_penalty);
 	}
-	else if ((power_cell[slot].requires_point) &&
-				!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[slot].id) != stats->powers_list.end()) &&
+	else if ((slot.requires_point) &&
+				!(find(stats->powers_list.begin(), stats->powers_list.end(), slot.id) != stats->powers_list.end()) &&
 				(points_left > 0)) {
-		tip->addText(msg->get("Requires %d Skill Point", power_cell[slot].requires_point));
+		tip->addText(msg->get("Requires %d Skill Point", slot.requires_point));
 	}
 
 	// Draw unlock power Tooltip
-	if (power_cell[slot].requires_point &&
-			!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[slot].id) != stats->powers_list.end()) &&
+	if (slot.requires_point &&
+			!(find(stats->powers_list.begin(), stats->powers_list.end(), slot.id) != stats->powers_list.end()) &&
 			(points_left > 0) &&
-			powerUnlockable(power_cell[slot].id) && (points_left > 0)) {
+			powerUnlockable(slot.id) && (points_left > 0)) {
 		tip->addText(msg->get("Click to Unlock"), color_bonus);
 	}
 
 
 
-	for (unsigned j = 0; j < power_cell[slot].requires_power.size(); ++j) {
+	for (unsigned j = 0; j < slot.requires_power.size(); ++j) {
 		// Required Power Tooltip
-		if ((power_cell[slot].requires_power[j] != 0) && !(requirementsMet(power_cell[slot].requires_power[j]))) {
-			tip->addText(msg->get("Requires Power: %s", powers->powers[power_cell[slot].requires_power[j]].name), color_penalty);
+		if ((slot.requires_power[j] != 0) && !(requirementsMet(slot.requires_power[j]))) {
+			tip->addText(msg->get("Requires Power: %s", powers->powers[slot.requires_power[j]].name), color_penalty);
 		}
-		else if ((power_cell[slot].requires_power[j] != 0) && (requirementsMet(power_cell[slot].requires_power[j]))) {
-			tip->addText(msg->get("Requires Power: %s", powers->powers[power_cell[slot].requires_power[j]].name));
+		else if ((slot.requires_power[j] != 0) && (requirementsMet(slot.requires_power[j]))) {
+			tip->addText(msg->get("Requires Power: %s", powers->powers[slot.requires_power[j]].name));
 		}
 
 	}
 
 	// add mana cost
-	if (powers->powers[power_cell[slot].id].requires_mp > 0) {
-		tip->addText(msg->get("Costs %d MP", powers->powers[power_cell[slot].id].requires_mp));
+	if (powers->powers[slot.id].requires_mp > 0) {
+		tip->addText(msg->get("Costs %d MP", powers->powers[slot.id].requires_mp));
 	}
 	// add health cost
-	if (powers->powers[power_cell[slot].id].requires_hp > 0) {
-		tip->addText(msg->get("Costs %d HP", powers->powers[power_cell[slot].id].requires_hp));
+	if (powers->powers[slot.id].requires_hp > 0) {
+		tip->addText(msg->get("Costs %d HP", powers->powers[slot.id].requires_hp));
 	}
 	// add cooldown time
-	if (powers->powers[power_cell[slot].id].cooldown > 0) {
-		tip->addText(msg->get("Cooldown: %d seconds", powers->powers[power_cell[slot].id].cooldown / MAX_FRAMES_PER_SEC));
+	if (powers->powers[slot.id].cooldown > 0) {
+		tip->addText(msg->get("Cooldown: %d seconds", powers->powers[slot.id].cooldown / MAX_FRAMES_PER_SEC));
 	}
 }
 
@@ -651,7 +572,7 @@ MenuPowers::~MenuPowers() {
 bool MenuPowers::meetsUsageStats(unsigned powerid) {
 
 	// Find cell with our power
-	int id = id_by_powerIndex(powerid);
+	int id = id_by_powerIndex(powerid, power_cell);
 	// If we didn't find power in power_menu, than it has no stats requirements
 	if (id == -1) return true;
 
@@ -693,6 +614,9 @@ void MenuPowers::renderPowers(int tab_num) {
 			}
 		}
 		slots[i]->renderSelection();
+		// upgrade buttons
+		if (power_cell[i].upgradeButton != NULL)
+			power_cell[i].upgradeButton->render();
 	}
 }
 
@@ -703,7 +627,7 @@ bool MenuPowers::powerIsVisible(short power_index) {
 	if (power_index == 0) return true;
 
 	// Find cell with our power
-	int id = id_by_powerIndex(power_index);
+	int id = id_by_powerIndex(power_index, power_cell);
 
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
@@ -719,5 +643,174 @@ bool MenuPowers::powerIsVisible(short power_index) {
 	return true;
 }
 
+void MenuPowers::loadHeader(FileParser &infile) {
+	infile.val = infile.val + ',';
 
+	if (infile.key == "tab_title") {
+		tab_titles.push_back(eatFirstString(infile.val, ','));
+	}
+	else if (infile.key == "tab_tree") {
+		tree_image_files.push_back(eatFirstString(infile.val, ','));
+	}
+	else if (infile.key == "caption") {
+		title = eatLabelInfo(infile.val);
+	}
+	else if (infile.key == "unspent_points") {
+		unspent_points = eatLabelInfo(infile.val);
+	}
+	else if (infile.key == "close") {
+		close_pos.x = eatFirstInt(infile.val, ',');
+		close_pos.y = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "tab_area") {
+		tab_area.x = eatFirstInt(infile.val, ',');
+		tab_area.y = eatFirstInt(infile.val, ',');
+		tab_area.w = eatFirstInt(infile.val, ',');
+		tab_area.h = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "tabs") {
+		tabs_count = eatFirstInt(infile.val, ',');
+		if (tabs_count < 1) tabs_count = 1;
+	}
+}
 
+void MenuPowers::loadPower(FileParser &infile) {
+	infile.val = infile.val + ',';
+
+	if (infile.key == "id") {
+		int id = eatFirstInt(infile.val, ',');
+		if (id > 0) {
+			skip_section = false;
+			power_cell.back().id = id;
+		}
+		else
+		{
+			skip_section = true;
+			power_cell.pop_back();
+			slots.pop_back();
+			fprintf(stderr, "Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
+		}
+	}
+
+	if (skip_section)
+		return;
+
+	if (infile.key == "tab") {
+		power_cell.back().tab = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "position") {
+		power_cell.back().pos.x = eatFirstInt(infile.val, ',');
+		power_cell.back().pos.y = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_physoff") {
+		power_cell.back().requires_physoff = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_physdef") {
+		power_cell.back().requires_physdef = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_mentoff") {
+		power_cell.back().requires_mentoff = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_mentdef") {
+		power_cell.back().requires_mentdef = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_defense") {
+		power_cell.back().requires_defense = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_offense") {
+		power_cell.back().requires_offense = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_physical") {
+		power_cell.back().requires_physical = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_mental") {
+		power_cell.back().requires_mental = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_point") {
+		if (infile.val == "true,")
+			power_cell.back().requires_point = true;
+	}
+	else if (infile.key == "requires_level") {
+		power_cell.back().requires_level = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "upgrades") {
+		// FIXME: implement buttons dectruction
+		power_cell.back().upgradeButton = new WidgetButton("images/menus/buttons/button_plus.png");
+		string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			power_cell.back().upgrades.push_back(toInt(repeat_val));
+			repeat_val = infile.nextValue();
+		}
+	}
+	else if (infile.key == "requires_power") {
+		power_cell.back().requires_power.push_back(eatFirstInt(infile.val, ','));
+	}
+	else if (infile.key == "visible_requires_status") {
+		power_cell.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
+	}
+	else if (infile.key == "visible_requires_not_status") {
+		power_cell.back().visible_requires_not.push_back(eatFirstString(infile.val, ','));
+	}
+}
+
+void MenuPowers::loadUpgrade(FileParser &infile) {
+	infile.val = infile.val + ',';
+
+	if (infile.key == "id") {
+		int id = eatFirstInt(infile.val, ',');
+		if (id > 0) {
+			skip_section = false;
+			upgrade.back().id = id;
+		}
+		else
+		{
+			skip_section = true;
+			upgrade.pop_back();
+			fprintf(stderr, "Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
+		}
+	}
+
+	if (skip_section)
+		return;
+
+	if (infile.key == "requires_physoff") {
+		upgrade.back().requires_physoff = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_physdef") {
+		upgrade.back().requires_physdef = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_mentoff") {
+		upgrade.back().requires_mentoff = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_mentdef") {
+		upgrade.back().requires_mentdef = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_defense") {
+		upgrade.back().requires_defense = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_offense") {
+		upgrade.back().requires_offense = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_physical") {
+		upgrade.back().requires_physical = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_mental") {
+		upgrade.back().requires_mental = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_point") {
+		if (infile.val == "true,")
+			upgrade.back().requires_point = true;
+	}
+	else if (infile.key == "requires_level") {
+		upgrade.back().requires_level = eatFirstInt(infile.val, ',');
+	}
+	else if (infile.key == "requires_power") {
+		upgrade.back().requires_power.push_back(eatFirstInt(infile.val, ','));
+	}
+	else if (infile.key == "visible_requires_status") {
+		upgrade.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
+	}
+	else if (infile.key == "visible_requires_not_status") {
+		upgrade.back().visible_requires_not.push_back(eatFirstString(infile.val, ','));
+	}
+}
