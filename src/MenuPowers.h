@@ -126,7 +126,6 @@ private:
 	void loadHeader(FileParser &infile);
 	void loadPower(FileParser &infile);
 	void loadUpgrade(FileParser &infile);
-	void applyPowerUpgrades();
 
 public:
 	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);
@@ -140,6 +139,7 @@ public:
 	bool requirementsMet(int power_index);
 	int click(Point mouse);
 	bool unlockClick(Point mouse);
+	void applyPowerUpgrades();
 	bool meetsUsageStats(unsigned powerid);
 	short getUnspent() { return points_left; }
 

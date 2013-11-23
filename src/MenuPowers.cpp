@@ -130,8 +130,6 @@ void MenuPowers::update() {
 			tabControl->setTabTitle(i, msg->get(tab_titles[i]));
 		tabControl->updateHeader();
 	}
-	// FIXME: at this point stats->powers_list is undefined. 
-	applyPowerUpgrades();
 }
 
 void MenuPowers::loadGraphics() {
