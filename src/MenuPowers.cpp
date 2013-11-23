@@ -65,6 +65,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
 				if (infile.section == "power")
 				{
 					slots.push_back(NULL);
+					upgradeButtons.push_back(NULL);
 					power_cell.push_back(Power_Menu_Cell());
 				}
 				else if (infile.section == "upgrade")
@@ -104,9 +105,9 @@ void MenuPowers::update() {
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		slots[i]->pos.x = window_area.x + power_cell[i].pos.x;
 		slots[i]->pos.y = window_area.y + power_cell[i].pos.y;
-		if (power_cell[i].upgradeButton != NULL) {
-			power_cell[i].upgradeButton->pos.x = slots[i]->pos.x + ICON_SIZE;
-			power_cell[i].upgradeButton->pos.y = slots[i]->pos.y;
+		if (upgradeButtons[i] != NULL) {
+			upgradeButtons[i]->pos.x = slots[i]->pos.x + ICON_SIZE;
+			upgradeButtons[i]->pos.y = slots[i]->pos.y;
 		}
 	}
 
@@ -160,6 +161,21 @@ short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Me
 			return i;
 
 	return -1;
+}
+
+/**
+ * Find cell in upgrades with next upgrade for current power_cell
+ */
+short MenuPowers::nextLevel(short power_cell_index) {
+	// TODO: implement this
+	return -1;
+}
+
+/**
+ * Replace data in power_cell[cell_index] by data in upgrades
+ */
+void MenuPowers::upgradePower(short power_cell_index) {
+	// TODO: implement this
 }
 
 bool MenuPowers::baseRequirementsMet(int power_index) {
@@ -315,6 +331,13 @@ void MenuPowers::logic() {
 		if (power_cell[i].requires_point &&
 				(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()))
 			points_used++;
+
+		//upgrade buttons logic
+		if (upgradeButtons[i] != NULL) {
+			if (upgradeButtons[i]->checkClick()) {
+				upgradePower(i);
+			}
+		}
 	}
 	points_left = (stats->level * stats->power_points_per_level) - points_used;
 
@@ -419,9 +442,8 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 		if (isWithin(slots[i]->pos, mouse)) {
 			generatePowerDescription(&tip, power_cell[i]);
-			// TODO: we should take info about next power
 			if (!power_cell[i].upgrades.empty()) {
-				short next_level = id_by_powerIndex(power_cell[i].upgrades.back(), upgrade);
+				short next_level = nextLevel(i);
 				if (next_level != -1) {
 					tip.addText(msg->get("\nNext Level:"));
 					generatePowerDescription(&tip, upgrade[next_level]);
@@ -556,8 +578,10 @@ MenuPowers::~MenuPowers() {
 	for (unsigned int i=0; i<tree_surf.size(); i++) SDL_FreeSurface(tree_surf[i]);
 	for (unsigned int i=0; i<slots.size(); i++) {
 		delete slots.at(i);
+		delete upgradeButtons.at(i);
 	}
 	slots.clear();
+	upgradeButtons.clear();
 	SDL_FreeSurface(powers_unlock);
 	SDL_FreeSurface(overlay_disabled);
 
@@ -615,8 +639,8 @@ void MenuPowers::renderPowers(int tab_num) {
 		}
 		slots[i]->renderSelection();
 		// upgrade buttons
-		if (power_cell[i].upgradeButton != NULL)
-			power_cell[i].upgradeButton->render();
+		if (upgradeButtons[i] != NULL)
+			upgradeButtons[i]->render();
 	}
 }
 
@@ -688,6 +712,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 			skip_section = true;
 			power_cell.pop_back();
 			slots.pop_back();
+			upgradeButtons.pop_back();
 			fprintf(stderr, "Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
 		}
 	}
@@ -734,8 +759,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		power_cell.back().requires_level = eatFirstInt(infile.val, ',');
 	}
 	else if (infile.key == "upgrades") {
-		// FIXME: implement buttons dectruction
-		power_cell.back().upgradeButton = new WidgetButton("images/menus/buttons/button_plus.png");
+		upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
 		string repeat_val = infile.nextValue();
 		while (repeat_val != "") {
 			power_cell.back().upgrades.push_back(toInt(repeat_val));

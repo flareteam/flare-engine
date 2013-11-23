@@ -42,7 +42,6 @@ public:
 	short id;
 	short tab;
 	Point pos;
-	WidgetButton* upgradeButton; //not used
 	short requires_physoff;
 	short requires_physdef;
 	short requires_mentoff;
@@ -64,7 +63,6 @@ public:
 		: id(-1)
 		, tab(0)
 		, pos(Point())
-		, upgradeButton(NULL)
 		, requires_physoff(0)
 		, requires_physdef(0)
 		, requires_mentoff(0)
@@ -87,6 +85,7 @@ private:
 	StatBlock *stats;
 	std::vector<Power_Menu_Cell> power_cell;
 	std::vector<Power_Menu_Cell> upgrade;
+	std::vector<WidgetButton*> upgradeButtons;
 	bool skip_section;
 
 	SDL_Surface *icons;
@@ -119,6 +118,8 @@ private:
 	SDL_Color color_penalty;
 
 	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
+	short nextLevel(short power_cell_index);
+	void upgradePower(short power_cell_index);
 
 	bool powerIsVisible(short power_index);
 	void loadHeader(FileParser &infile);
