@@ -39,12 +39,12 @@ msgstr "Вас забілі. Вы губляеце палову вашага %s.
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s перанесена."
 
 #: ../../../src/CampaignManager.cpp:139
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "%s перанесена."
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
@@ -206,11 +206,11 @@ msgstr "Паказваць FPS"
 
 #: ../../../src/GameStateConfig.cpp:324
 msgid "Show Hotkeys Labels"
-msgstr ""
+msgstr "Паказаць гарачыя клавішы"
 
 #: ../../../src/GameStateConfig.cpp:327
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "Рэжым дальтанізма"
 
 #: ../../../src/GameStateConfig.cpp:338
 msgid "Music Volume"
@@ -260,7 +260,7 @@ msgstr "Эксперыментальна"
 
 #: ../../../src/GameStateConfig.cpp:507
 msgid "For handheld devices"
-msgstr ""
+msgstr "Для мабільных прылад"
 
 #: ../../../src/GameStateConfig.cpp:527
 msgid "<< Disable"
@@ -369,7 +369,7 @@ msgstr "Канфігурацыя"
 
 #: ../../../src/GameStateTitle.cpp:55
 msgid "Credits"
-msgstr ""
+msgstr "Стваральнікі"
 
 #: ../../../src/GameStateTitle.cpp:60
 msgid "Exit Game"
@@ -378,7 +378,7 @@ msgstr "Выхад"
 #: ../../../src/GameStateTitle.cpp:67
 #, fuzzy
 msgid "Flare Alpha v0.19"
-msgstr "Flare Alpha v0.18"
+msgstr "Flare Alpha v0.19"
 
 #: ../../../src/InputState.cpp:623
 msgid "Accept"
@@ -483,19 +483,19 @@ msgstr "Delete"
 
 #: ../../../src/InputState.cpp:647
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "МенюДзей Прыняць"
 
 #: ../../../src/InputState.cpp:648
 msgid "ActionBar Left"
-msgstr ""
+msgstr "МенюДзей Лева"
 
 #: ../../../src/InputState.cpp:649
 msgid "ActionBar Right"
-msgstr ""
+msgstr "МенюДзей Права"
 
 #: ../../../src/InputState.cpp:650
 msgid "ActionBar Use"
-msgstr ""
+msgstr "МенюДзей Выкарыстаць"
 
 #: ../../../src/InputState.cpp:652
 msgid "lmb"
@@ -528,19 +528,19 @@ msgstr "mbx2"
 #: ../../../src/ItemManager.cpp:488
 #, fuzzy
 msgid "Low"
-msgstr "Нататнік"
+msgstr "Нізкі"
 
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
-msgstr ""
+msgstr "Нармальны"
 
 #: ../../../src/ItemManager.cpp:496
 msgid "High"
-msgstr ""
+msgstr "Высокі"
 
 #: ../../../src/ItemManager.cpp:500
 msgid "Epic"
-msgstr ""
+msgstr "Эпічны"
 
 #: ../../../src/ItemManager.cpp:513
 #, c-format
@@ -629,7 +629,7 @@ msgstr "Патрабуе абарону %d"
 #: ../../../src/ItemManager.cpp:609
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Якасць: %s"
 
 #: ../../../src/ItemManager.cpp:626 ../../../src/ItemManager.cpp:635
 #, c-format
@@ -698,7 +698,7 @@ msgstr "Аднаўленне HP:"
 
 #: ../../../src/MenuCharacter.cpp:341
 msgid "Ticks of HP regen per minute. "
-msgstr ""
+msgstr "Аднаўленне HP за хвіліну. "
 
 #: ../../../src/MenuCharacter.cpp:346
 msgid "Max MP:"
@@ -710,7 +710,7 @@ msgstr "Аднаўлен МР:"
 
 #: ../../../src/MenuCharacter.cpp:353
 msgid "Ticks of MP regen per minute. "
-msgstr ""
+msgstr "Аднаўленне MP за хвіліну. "
 
 #: ../../../src/MenuCharacter.cpp:358
 msgid "Accuracy:"
@@ -751,7 +751,7 @@ msgstr "Зніжае ваш шанец натыкнуцца пры ўдары"
 #: ../../../src/MenuCharacter.cpp:422
 #, fuzzy
 msgid "Bonus XP: "
-msgstr "Бонус"
+msgstr "Бонус XP: "
 
 #: ../../../src/MenuCharacter.cpp:423
 msgid "Increases the XP gained per kill"
@@ -817,27 +817,27 @@ msgstr "Абарона (D) павялічвае шчыт і ухіленне."
 #: ../../../src/MenuCharacter.cpp:498
 #, c-format
 msgid "Each level grants %d. "
-msgstr ""
+msgstr "Кожны ўзровень дае %d. "
 
 #: ../../../src/MenuCharacter.cpp:500
 #, fuzzy, c-format
 msgid "Each point of Physical grants %d. "
-msgstr "Кожны пункт сілы павялічвае +%d HP. Кожны ўзровень павялічвае +%d HP"
+msgstr "Кожны пункт сілы дае +%d HP. Кожны ўзровень павялічвае +%d HP"
 
 #: ../../../src/MenuCharacter.cpp:502
 #, fuzzy, c-format
 msgid "Each point of Mental grants %d. "
-msgstr "Кожны пункт магіі павялічвае +%d MP. Кожны ўзровень павялічвае +%d MP"
+msgstr "Кожны пункт магіі дае +%d MP. Кожны ўзровень павялічвае +%d MP"
 
 #: ../../../src/MenuCharacter.cpp:504
 #, fuzzy, c-format
 msgid "Each point of Offense grants %d. "
-msgstr "Кожны пункт магіі павялічвае +%d MP. Кожны ўзровень павялічвае +%d MP"
+msgstr "Кожны пункт магіі дае +%d MP. Кожны ўзровень павялічвае +%d MP"
 
 #: ../../../src/MenuCharacter.cpp:506
 #, fuzzy, c-format
 msgid "Each point of Defense grants %d. "
-msgstr "Кожны пункт магіі павялічвае +%d MP. Кожны ўзровень павялічвае +%d MP"
+msgstr "Кожны пункт магіі дае +%d MP. Кожны ўзровень павялічвае +%d MP"
 
 #: ../../../src/MenuEnemy.cpp:117
 msgid "Dead"
@@ -859,22 +859,22 @@ msgstr "Захаваць і выйсці ў меню?"
 #: ../../../src/MenuInventory.cpp:146
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr ""
+msgstr "Загублена %d%% з %s. "
 
 #: ../../../src/MenuInventory.cpp:153
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr ""
+msgstr "Загублена %d%% з усяго XP. "
 
 #: ../../../src/MenuInventory.cpp:158
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr ""
+msgstr "Загублена %d%% з бягучага ўзроўня XP. "
 
 #: ../../../src/MenuInventory.cpp:184
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Загублена %s."
 
 #: ../../../src/MenuInventory.cpp:228
 #, c-format
@@ -911,7 +911,7 @@ msgstr "XP: %d/%d"
 #: ../../../src/MenuManager.cpp:1037 ../../../src/MenuManager.cpp:1038
 #, fuzzy, c-format
 msgid "Not enough %s."
-msgstr "Недастаткова грошаў."
+msgstr "Недастаткова %s."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
@@ -926,6 +926,8 @@ msgid ""
 "\n"
 "Next Level:"
 msgstr ""
+"\n"
+"Наступны ўзровень:"
 
 #: ../../../src/MenuPowers.cpp:525
 #, fuzzy, c-format
@@ -1013,7 +1015,7 @@ msgstr "Шукальнік прыгод"
 
 #: ../../../src/Utils.cpp:519
 msgid "k"
-msgstr ""
+msgstr "k"
 
 #~ msgid "Character Menu (C)"
 #~ msgstr "Персанаж (C)"
