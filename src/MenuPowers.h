@@ -51,7 +51,7 @@ public:
 	short requires_physical;
 	short requires_mental;
 	short requires_level;
-	std::vector<short> upgrades; // not used
+	std::vector<short> upgrades;
 
 	std::vector<short> requires_power;
 
@@ -120,11 +120,13 @@ private:
 	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
 	short nextLevel(short power_cell_index);
 	void upgradePower(short power_cell_index);
+	void replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index);
 
 	bool powerIsVisible(short power_index);
 	void loadHeader(FileParser &infile);
 	void loadPower(FileParser &infile);
 	void loadUpgrade(FileParser &infile);
+	void applyPowerUpgrades();
 
 public:
 	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);

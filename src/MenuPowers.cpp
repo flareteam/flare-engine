@@ -130,6 +130,8 @@ void MenuPowers::update() {
 			tabControl->setTabTitle(i, msg->get(tab_titles[i]));
 		tabControl->updateHeader();
 	}
+	// FIXME: at this point stats->powers_list is undefined. 
+	applyPowerUpgrades();
 }
 
 void MenuPowers::loadGraphics() {
@@ -164,18 +166,91 @@ short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Me
 }
 
 /**
+ * Apply power upgrades on savegame loading
+ */
+void MenuPowers::applyPowerUpgrades()
+{
+	for (unsigned i = 0; i < power_cell.size(); i++) {
+		if (!power_cell[i].upgrades.empty()) {
+			vector<short>::iterator it;
+			for (it = power_cell[i].upgrades.end(); it != power_cell[i].upgrades.begin(); ) {
+				--it;
+				vector<int>::iterator upgrade_it;
+				upgrade_it = find(stats->powers_list.begin(), stats->powers_list.end(), *it);
+				if (upgrade_it != stats->powers_list.end()) {
+					short upgrade_index = id_by_powerIndex(*upgrade_it, upgrade);
+					replacePowerCellDataByUpgrade(i, upgrade_index);
+					break;
+				}
+			}
+		}
+	}
+}
+
+/**
  * Find cell in upgrades with next upgrade for current power_cell
  */
 short MenuPowers::nextLevel(short power_cell_index) {
-	// TODO: implement this
-	return -1;
+	vector<short>::iterator level_it;
+	level_it = find(power_cell[power_cell_index].upgrades.begin(),
+								power_cell[power_cell_index].upgrades.end(),
+								power_cell[power_cell_index].id);
+
+	if (level_it == power_cell[power_cell_index].upgrades.end()){
+		// current power is base power, take first upgrade
+		return 0;
+	}
+	short index = id_by_powerIndex(*level_it, upgrade);
+	if ((short)upgrade.size() > index + 1) {
+		// current power is an upgrade, take next upgrade if avaliable
+		return index + 1;
+	}
+	else {
+		return -1;
+	}
 }
 
 /**
  * Replace data in power_cell[cell_index] by data in upgrades
  */
 void MenuPowers::upgradePower(short power_cell_index) {
-	// TODO: implement this
+	short i = nextLevel(power_cell_index);
+	if (i == -1)
+		return;
+	// if we have tabCOntrol
+	if (tabs_count > 1) {
+		int active_tab = tabControl->getActiveTab();
+		if (powerUnlockable(upgrade[i].id) && points_left > 0
+			&& upgrade[i].requires_point && upgrade[i].tab == active_tab) {
+				replacePowerCellDataByUpgrade(power_cell_index, i);
+				stats->powers_list.push_back(upgrade[i].id);
+				stats->check_title = true;
+		}
+	}
+	// if have don't have tabs
+	else if (powerUnlockable(upgrade[i].id)
+			&& points_left > 0 && upgrade[i].requires_point) {
+				replacePowerCellDataByUpgrade(power_cell_index, i);
+				stats->powers_list.push_back(upgrade[i].id);
+				stats->check_title = true;
+	}
+}
+
+void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index)
+{
+	power_cell[power_cell_index].id = upgrade[upgrade_cell_index].id;
+	power_cell[power_cell_index].requires_physoff = upgrade[upgrade_cell_index].requires_physoff;
+	power_cell[power_cell_index].requires_physdef = upgrade[upgrade_cell_index].requires_physdef;
+	power_cell[power_cell_index].requires_mentoff = upgrade[upgrade_cell_index].requires_mentoff;
+	power_cell[power_cell_index].requires_mentdef = upgrade[upgrade_cell_index].requires_mentdef;
+	power_cell[power_cell_index].requires_defense = upgrade[upgrade_cell_index].requires_defense;
+	power_cell[power_cell_index].requires_offense = upgrade[upgrade_cell_index].requires_offense;
+	power_cell[power_cell_index].requires_physical = upgrade[upgrade_cell_index].requires_physical;
+	power_cell[power_cell_index].requires_mental = upgrade[upgrade_cell_index].requires_mental;
+	power_cell[power_cell_index].requires_level = upgrade[upgrade_cell_index].requires_level;
+	power_cell[power_cell_index].requires_power = upgrade[upgrade_cell_index].requires_power;
+	power_cell[power_cell_index].requires_point = upgrade[upgrade_cell_index].requires_point;
+	power_cell[power_cell_index].passive_on = upgrade[upgrade_cell_index].passive_on;
 }
 
 bool MenuPowers::baseRequirementsMet(int power_index) {
@@ -639,8 +714,10 @@ void MenuPowers::renderPowers(int tab_num) {
 		}
 		slots[i]->renderSelection();
 		// upgrade buttons
-		if (upgradeButtons[i] != NULL)
+		if (upgradeButtons[i] != NULL && nextLevel(i) != -1) {
+			if (powerUnlockable(upgrade[nextLevel(i)].id) && points_left > 0 && upgrade[nextLevel(i)].requires_point)
 			upgradeButtons[i]->render();
+		}
 	}
 }
 
