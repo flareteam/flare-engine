@@ -36,12 +36,12 @@ msgstr "Вас перемогли. Натисніть Enter щоб продов�
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s втрачено."
 
 #: ../../../src/CampaignManager.cpp:139
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "%s втрачено."
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
@@ -580,9 +580,9 @@ msgid "Absorb: %d"
 msgstr "Поглинання: %d"
 
 #: ../../../src/ItemManager.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "%d% Speed"
-msgstr "%d%% Швидкості"
+msgstr "%d% Швидкості"
 
 #: ../../../src/ItemManager.cpp:560 ../../../src/ItemManager.cpp:659
 #, c-format
@@ -917,6 +917,8 @@ msgid ""
 "\n"
 "Next Level:"
 msgstr ""
+"\n"
+"Наступний рівень:"
 
 #: ../../../src/MenuPowers.cpp:525
 #, c-format
