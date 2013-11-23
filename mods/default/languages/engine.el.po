@@ -2,14 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Γιάννης <yannanth@gmail.com>, 2012.
+# Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2012-07-07 15:17+0100\n"
-"Last-Translator: Γιάννης <yannanth@gmail.com>\n"
-"Language-Team: Ιωάννης Ανθυμίδης\n"
+"PO-Revision-Date: 2013-11-24 00:36+0300\n"
+"Last-Translator: Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>\n"
+"Language-Team: Ιωάννης Ανθυμίδης, Μιχάλης Παπαγεωργίου\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,85 +21,85 @@ msgstr ""
 #: ../../../src/Avatar.cpp:430
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Συγχαρητήρια, φτάσατε το επίπεδο %d!"
+msgstr "Συγχαρητήρια, έφτασες στο επίπεδο %d!"
 
 #: ../../../src/Avatar.cpp:432
 msgid "You may increase one attribute through the Character Menu."
-msgstr "Μπορείτε να αυξήσετε ένα χαρακτηριστηκό μέσω του Μενού Χαρακτήρα."
+msgstr "Μπορείς να αυξήσεις ένα χαρακτηριστικό μέσω του Μενού Χαρακτήρα."
 
 #: ../../../src/Avatar.cpp:631
 msgid "You are defeated. Game over! Press Enter to exit to Title."
-msgstr "Ηττηθήκατε. Τέλως παιχνιδιού! Πατήστε Enter για να επιστρέψετε στον Τίτλο."
+msgstr ""
+"Ηττήθηκες. Τέλος παιχνιδιού! Πάτησε Enter για να επιστρέψεις στον Τίτλο."
 
 #: ../../../src/Avatar.cpp:634
-#, fuzzy
 msgid "You are defeated. Press Enter to continue."
-msgstr "Ηττηθήκατε. Χάνετε το μισό σας χρυσάφι. Πατήστε Enter για να συνεχίσετε."
+msgstr "Ηττήθηκες. Πάτησε Enter για να συνεχίσεις."
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s αφαιρέθηκαν."
 
 #: ../../../src/CampaignManager.cpp:139
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "Αφαιρέθηκε: %s"
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
 msgid "You receive %s."
-msgstr "Λαμβάνετε %s."
+msgstr "Λαμβάνεις %s."
 
 #: ../../../src/CampaignManager.cpp:156
 #, c-format
 msgid "You receive %s x%d."
-msgstr "Λαμβάνετε %s x%d."
+msgstr "Λαμβάνεις %s x%d."
 
 #: ../../../src/CampaignManager.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "You receive %d %s."
-msgstr "Λαμβάνετε %s."
+msgstr "Λαμβάνεις %d %s."
 
 #: ../../../src/CampaignManager.cpp:178
 #, c-format
 msgid "You receive %d XP."
-msgstr "Λαμβάνετε %d εμπηρεία."
+msgstr "Λαμβάνεις %d XP."
 
 #: ../../../src/CampaignManager.cpp:184
 msgid "HP restored."
-msgstr ""
+msgstr "HP αναζωογονήθηκαν."
 
 #: ../../../src/CampaignManager.cpp:188
 msgid "MP restored."
-msgstr ""
+msgstr "MP αναζωογονήθηκαν."
 
 #: ../../../src/CampaignManager.cpp:193
 msgid "HP and MP restored."
-msgstr ""
+msgstr "HP και MP αναζωογονήθηκαν."
 
 #: ../../../src/CampaignManager.cpp:197
 msgid "Negative effects removed."
-msgstr ""
+msgstr "Αρνητικές επιδράσεις αφαιρέθηκαν."
 
 #: ../../../src/CampaignManager.cpp:203
 msgid "HP and MP restored, negative effects removed"
-msgstr ""
+msgstr "HP και MP αναζωογονήθηκαν, αρνητικές επιδράσεις αφαιρέθηκαν."
 
 #: ../../../src/Entity.cpp:158
 msgid "miss"
-msgstr ""
+msgstr "αστοχία"
 
 #: ../../../src/Entity.cpp:278 ../../../src/PowerManager.cpp:772
 #: ../../../src/StatBlock.cpp:568
 #, c-format
 msgid "+%d HP"
-msgstr ""
+msgstr "+%d HP"
 
 #: ../../../src/Entity.cpp:284 ../../../src/StatBlock.cpp:573
 #, c-format
 msgid "+%d MP"
-msgstr ""
+msgstr "+%d MP"
 
 #: ../../../src/EventManager.cpp:457
 msgid "Unknown destination"
@@ -106,7 +107,7 @@ msgstr "Άγνωστος προορισμός"
 
 #: ../../../src/GameStateConfig.cpp:74 ../../../src/GameStateConfig.cpp:166
 msgid "OK"
-msgstr ""
+msgstr "Εντάξει"
 
 #: ../../../src/GameStateConfig.cpp:79 ../../../src/GameStateConfig.cpp:165
 msgid "Defaults"
@@ -139,22 +140,20 @@ msgstr "Πλήκτρα"
 
 #: ../../../src/GameStateConfig.cpp:161
 msgid "Mods"
-msgstr "Τροποποίησεις"
+msgstr "Πρόσθετα"
 
 #: ../../../src/GameStateConfig.cpp:164 ../../../src/GameStateConfig.cpp:1003
 #: ../../../src/GameStateConfig.cpp:1005
 msgid "Assign: "
-msgstr ""
+msgstr "Ανάθεση: "
 
 #: ../../../src/GameStateConfig.cpp:165
-#, fuzzy
 msgid "Reset ALL settings?"
-msgstr "Θέση ΟΛΩΝ των ρυθμίσεων στα προκαθορισμένα;"
+msgstr "Επαναφορά ΌΛΩΝ των ρυθμίσεων;"
 
 #: ../../../src/GameStateConfig.cpp:166
-#, fuzzy
 msgid "Use this resolution?"
-msgstr "Ανάλυση"
+msgstr "Χρήση αυτής της ανάλυσης;"
 
 #: ../../../src/GameStateConfig.cpp:288
 msgid "Full Screen Mode"
@@ -166,14 +165,13 @@ msgstr "Κίνηση ήρωα με ποντίκι"
 
 #: ../../../src/GameStateConfig.cpp:294
 msgid "Show combat text"
-msgstr "Προβολή κείμενο μάχης"
+msgstr "Προβολή κειμένου μάχης"
 
 #: ../../../src/GameStateConfig.cpp:297
 msgid "Hardware surfaces"
-msgstr ""
+msgstr "Χρήση κάρτας γραφικών για επιφάνειες"
 
 #: ../../../src/GameStateConfig.cpp:300
-#, fuzzy
 msgid "Double buffering"
 msgstr "Διπλή ενδιάμεση μνήμη"
 
@@ -183,36 +181,35 @@ msgstr "Χρήση χειριστηρίου"
 
 #: ../../../src/GameStateConfig.cpp:306
 msgid "High Quality Textures"
-msgstr ""
+msgstr "Υφές Υψηλής Ποιότητας"
 
 #: ../../../src/GameStateConfig.cpp:309
 msgid "Allow changing gamma"
-msgstr ""
+msgstr "Επιτρέπετε η αλλαγή Φωτεινότητας"
 
 #: ../../../src/GameStateConfig.cpp:312
 msgid "Animated tiles"
-msgstr ""
+msgstr "Κινούμενα πλακίδια"
 
 #: ../../../src/GameStateConfig.cpp:315
 msgid "Mouse aim"
-msgstr ""
+msgstr "Σκόπευση με το ποντίκι"
 
 #: ../../../src/GameStateConfig.cpp:318
-#, fuzzy
 msgid "Do not use mouse"
-msgstr "Κίνηση ήρωα με ποντίκι"
+msgstr "Απενεργοποίηση του ποντικιού"
 
 #: ../../../src/GameStateConfig.cpp:321
 msgid "Show FPS"
-msgstr ""
+msgstr "Εμφάνιση καρέ ανά δευτερόλεπτο"
 
 #: ../../../src/GameStateConfig.cpp:324
 msgid "Show Hotkeys Labels"
-msgstr ""
+msgstr "Εμφάνιση Ετικετών Πλήκτρων"
 
 #: ../../../src/GameStateConfig.cpp:327
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "Ρύθμιση Δυσχρωματοψίας"
 
 #: ../../../src/GameStateConfig.cpp:338
 msgid "Music Volume"
@@ -224,12 +221,11 @@ msgstr "Ένταση Ήχου"
 
 #: ../../../src/GameStateConfig.cpp:364
 msgid "Gamma"
-msgstr "Γάμμα"
+msgstr "Φωτεινότητα"
 
 #: ../../../src/GameStateConfig.cpp:377
-#, fuzzy
 msgid "Joystick Deadzone"
-msgstr "Χειριστήριο"
+msgstr "Νεκρή Ζώνη Χειριστηρίου"
 
 #: ../../../src/GameStateConfig.cpp:391
 msgid "Resolution"
@@ -237,12 +233,11 @@ msgstr "Ανάλυση"
 
 #: ../../../src/GameStateConfig.cpp:402
 msgid "Active Mods"
-msgstr "Ενεργές Τροποποίησεις"
+msgstr "Ενεργά Πρόσθετα"
 
 #: ../../../src/GameStateConfig.cpp:412
-#, fuzzy
 msgid "Available Mods"
-msgstr "Διαθέσιμες Τροποποίησεις"
+msgstr "Διαθέσιμα Πρόσθετα"
 
 #: ../../../src/GameStateConfig.cpp:428
 msgid "Joystick"
@@ -254,34 +249,32 @@ msgstr "Γλώσσα"
 
 #: ../../../src/GameStateConfig.cpp:479 ../../../src/GameStateConfig.cpp:486
 #: ../../../src/GameStateConfig.cpp:493
-#, fuzzy
 msgid "Disable for performance"
 msgstr "Απενεργοποίηση για καλύτερες επιδόσεις"
 
 #: ../../../src/GameStateConfig.cpp:500
 msgid "Experimental"
-msgstr ""
+msgstr "Πειραματικό"
 
 #: ../../../src/GameStateConfig.cpp:507
 msgid "For handheld devices"
-msgstr ""
+msgstr "Για φορητές συσκευές"
 
 #: ../../../src/GameStateConfig.cpp:527
-#, fuzzy
 msgid "<< Disable"
 msgstr "<< Απενεργοποίηση"
 
 #: ../../../src/GameStateConfig.cpp:535
 msgid "Enable >>"
-msgstr ""
+msgstr "Ενεργοποίηση >>"
 
 #: ../../../src/GameStateLoad.cpp:55 ../../../src/GameStateLoad.cpp:67
 msgid "Delete Save"
-msgstr "Διαγραφή Αποθήκευσης"
+msgstr "Διαγραφή"
 
 #: ../../../src/GameStateLoad.cpp:55
 msgid "Delete this save?"
-msgstr "Διαγραφή αυτού του αποθηκευμένου παιχνιδιού;"
+msgstr "Διαγραφή παιχνιδιού;"
 
 #: ../../../src/GameStateLoad.cpp:57
 msgid "Exit to Title"
@@ -289,7 +282,7 @@ msgstr "Έξοδος προς Τίτλο"
 
 #: ../../../src/GameStateLoad.cpp:63
 msgid "Choose a Slot"
-msgstr ""
+msgstr "Επέλεξε μία Θέση"
 
 #: ../../../src/GameStateLoad.cpp:482
 msgid "New Game"
@@ -297,7 +290,7 @@ msgstr "Νέο Παιχνίδι"
 
 #: ../../../src/GameStateLoad.cpp:486 ../../../src/GameStateLoad.cpp:501
 msgid "Enable a story mod to continue"
-msgstr ""
+msgstr "Ενεργοποίησε ένα πρόσθετο με σενάριο για να συνεχίσεις"
 
 #: ../../../src/GameStateLoad.cpp:496
 msgid "Load Game"
@@ -317,18 +310,16 @@ msgid "Level %d %s"
 msgstr "Επίπεδο %d %s"
 
 #: ../../../src/GameStateLoad.cpp:579
-#, fuzzy
 msgid "Permadeath"
-msgstr "Μόνιμος θάνατος;"
+msgstr "Μόνιμος θάνατος"
 
 #: ../../../src/GameStateLoad.cpp:603
 msgid "Empty Slot"
-msgstr ""
+msgstr "Κενή Θέση"
 
 #: ../../../src/GameStateNew.cpp:62
-#, fuzzy
 msgid "Create"
-msgstr "Χαρακτήρας"
+msgstr "Δημιουργία"
 
 #: ../../../src/GameStateNew.cpp:173
 msgid "Choose a Portrait"
@@ -343,14 +334,12 @@ msgid "Permadeath?"
 msgstr "Μόνιμος θάνατος;"
 
 #: ../../../src/GameStateNew.cpp:179
-#, fuzzy
 msgid "Choose a Class"
-msgstr "Επιλογή Ονόματος"
+msgstr "Επιλογή Κλάσης"
 
 #: ../../../src/GameStatePlay.cpp:99
-#, fuzzy
 msgid "Loading..."
-msgstr "Φόρτωση αποθηκευμένου παιχνιδιού..."
+msgstr "Φόρτωση..."
 
 #: ../../../src/GameStatePlay.cpp:227 ../../../src/GameStatePlay.cpp:228
 #: ../../../src/GameStatePlay.cpp:245 ../../../src/GameStatePlay.cpp:246
@@ -361,27 +350,27 @@ msgstr "Φόρτωση αποθηκευμένου παιχνιδιού..."
 #: ../../../src/MenuManager.cpp:1043 ../../../src/MenuManager.cpp:1044
 #: ../../../src/MenuManager.cpp:1084 ../../../src/MenuManager.cpp:1085
 msgid "Inventory is full."
-msgstr ""
+msgstr "Έχεις παραφορτωθεί."
 
 #: ../../../src/GameStateTitle.cpp:41
 msgid "Play Game"
-msgstr ""
+msgstr "Έναρξη Παιχνιδιού"
 
 #: ../../../src/GameStateTitle.cpp:46
 msgid "Enable a core mod to continue"
-msgstr ""
+msgstr "Ενεργοποίησε ένα πρόσθετο πυρήνα για να συνεχίσεις"
 
 #: ../../../src/GameStateTitle.cpp:50
 msgid "Configuration"
-msgstr ""
+msgstr "Ρυθμίσεις"
 
 #: ../../../src/GameStateTitle.cpp:55
 msgid "Credits"
-msgstr ""
+msgstr "Μνεία"
 
 #: ../../../src/GameStateTitle.cpp:60
 msgid "Exit Game"
-msgstr ""
+msgstr "Έξοδος"
 
 #: ../../../src/GameStateTitle.cpp:67
 msgid "Flare Alpha v0.19"
@@ -389,64 +378,63 @@ msgstr ""
 
 #: ../../../src/InputState.cpp:623
 msgid "Accept"
-msgstr ""
+msgstr "Αποδοχή"
 
 #: ../../../src/InputState.cpp:624
 msgid "Up"
-msgstr ""
+msgstr "Πάνω"
 
 #: ../../../src/InputState.cpp:625
 msgid "Down"
-msgstr ""
+msgstr "Κάτω"
 
 #: ../../../src/InputState.cpp:626
 msgid "Left"
-msgstr ""
+msgstr "Αριστερά"
 
 #: ../../../src/InputState.cpp:627
-#, fuzzy
 msgid "Right"
-msgstr "Ιππότης"
+msgstr "Δεξιά"
 
 #: ../../../src/InputState.cpp:628
 msgid "Bar1"
-msgstr ""
+msgstr "Μπάρα 1"
 
 #: ../../../src/InputState.cpp:629
 msgid "Bar2"
-msgstr ""
+msgstr "Μπάρα 2"
 
 #: ../../../src/InputState.cpp:630
 msgid "Bar3"
-msgstr ""
+msgstr "Μπάρα 3"
 
 #: ../../../src/InputState.cpp:631
 msgid "Bar4"
-msgstr ""
+msgstr "Μπάρα 4"
 
 #: ../../../src/InputState.cpp:632
 msgid "Bar5"
-msgstr ""
+msgstr "Μπάρα 5"
 
 #: ../../../src/InputState.cpp:633
 msgid "Bar6"
-msgstr ""
+msgstr "Μπάρα 6"
 
 #: ../../../src/InputState.cpp:634
 msgid "Bar7"
-msgstr ""
+msgstr "Μπάρα 7"
 
 #: ../../../src/InputState.cpp:635
 msgid "Bar8"
-msgstr ""
+msgstr "Μπάρα 8"
 
 #: ../../../src/InputState.cpp:636
 msgid "Bar9"
-msgstr ""
+msgstr "Μπάρα 9"
 
 #: ../../../src/InputState.cpp:637
 msgid "Bar0"
-msgstr ""
+msgstr "Μπάρα 0"
 
 #: ../../../src/InputState.cpp:638 ../../../src/MenuActionBar.cpp:380
 #: ../../../src/MenuActionBar.cpp:382 ../../../src/MenuCharacter.cpp:262
@@ -457,7 +445,7 @@ msgstr "Χαρακτήρας"
 #: ../../../src/MenuActionBar.cpp:389 ../../../src/MenuInventory.cpp:224
 #: ../../../src/MenuVendor.cpp:50
 msgid "Inventory"
-msgstr "Αποθέματα"
+msgstr "Εξοπλισμός"
 
 #: ../../../src/InputState.cpp:640 ../../../src/MenuActionBar.cpp:394
 #: ../../../src/MenuActionBar.cpp:396 ../../../src/MenuPowers.cpp:194
@@ -467,88 +455,87 @@ msgstr "Δυνάμεις"
 #: ../../../src/InputState.cpp:641 ../../../src/MenuActionBar.cpp:401
 #: ../../../src/MenuActionBar.cpp:403 ../../../src/MenuLog.cpp:152
 msgid "Log"
-msgstr ""
+msgstr "Ημερολόγιο"
 
 #: ../../../src/InputState.cpp:642
 msgid "Main1"
-msgstr ""
+msgstr "Κύρια Ενέργεια 1"
 
 #: ../../../src/InputState.cpp:643
 msgid "Main2"
-msgstr ""
+msgstr "Κύρια Ενέργεια 2"
 
 #: ../../../src/InputState.cpp:644
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: ../../../src/InputState.cpp:645
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: ../../../src/InputState.cpp:646
-#, fuzzy
 msgid "Delete"
-msgstr "Διαγραφή Αποθήκευσης"
+msgstr "Διαγραφή"
 
 #: ../../../src/InputState.cpp:647
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "Μπάρα Ενεργειών Αποδοχή"
 
 #: ../../../src/InputState.cpp:648
 msgid "ActionBar Left"
-msgstr ""
+msgstr "Μπάρα Ενεργειών Αριστερά"
 
 #: ../../../src/InputState.cpp:649
 msgid "ActionBar Right"
-msgstr ""
+msgstr "Μπάρα Ενεργειών Δεξιά"
 
 #: ../../../src/InputState.cpp:650
 msgid "ActionBar Use"
-msgstr ""
+msgstr "Μπάρα Ενεργειών Χρήση"
 
 #: ../../../src/InputState.cpp:652
 msgid "lmb"
-msgstr ""
+msgstr "ακπ"
 
 #: ../../../src/InputState.cpp:653
 msgid "mmb"
-msgstr ""
+msgstr "μκπ"
 
 #: ../../../src/InputState.cpp:654
 msgid "rmb"
-msgstr ""
+msgstr "δκπ"
 
 #: ../../../src/InputState.cpp:655
 msgid "wheel up"
-msgstr ""
+msgstr "Ροδέλα προς τα πάνω"
 
 #: ../../../src/InputState.cpp:656
 msgid "wheel down"
-msgstr ""
+msgstr "Ροδέλα προς τα κάτω"
 
 #: ../../../src/InputState.cpp:657
 msgid "mbx1"
-msgstr ""
+msgstr "εκπ1"
 
 #: ../../../src/InputState.cpp:658
 msgid "mbx2"
-msgstr ""
+msgstr "εκπ2"
 
 #: ../../../src/ItemManager.cpp:488
 msgid "Low"
-msgstr ""
+msgstr "Χαμηλή"
 
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
-msgstr ""
+msgstr "Κανονική"
 
 #: ../../../src/ItemManager.cpp:496
 msgid "High"
-msgstr ""
+msgstr "Υψηλή"
 
 #: ../../../src/ItemManager.cpp:500
 msgid "Epic"
-msgstr ""
+msgstr "Επική"
 
 #: ../../../src/ItemManager.cpp:513
 #, c-format
@@ -558,116 +545,115 @@ msgstr "Επίπεδο %d"
 #: ../../../src/ItemManager.cpp:524
 #, c-format
 msgid "Melee damage: %d-%d"
-msgstr ""
+msgstr "Ζημιά εξ επαφής: %d-%d"
 
 #: ../../../src/ItemManager.cpp:526
 #, c-format
 msgid "Melee damage: %d"
-msgstr ""
+msgstr "Ζημιά εξ επαφής: %d"
 
 #: ../../../src/ItemManager.cpp:530
 #, c-format
 msgid "Ranged damage: %d-%d"
-msgstr ""
+msgstr "Ζημιά από απόσταση: %d-%d"
 
 #: ../../../src/ItemManager.cpp:532
 #, c-format
 msgid "Ranged damage: %d"
-msgstr ""
+msgstr "Ζημιά από απόσταση: %d"
 
 #: ../../../src/ItemManager.cpp:536
 #, c-format
 msgid "Mental damage: %d-%d"
-msgstr ""
+msgstr "Πνευματική ζημιά: %d-%d"
 
 #: ../../../src/ItemManager.cpp:538
 #, c-format
 msgid "Mental damage: %d"
-msgstr ""
+msgstr "Πνευματική ζημιά: %d"
 
 #: ../../../src/ItemManager.cpp:544
 #, c-format
 msgid "Absorb: %d-%d"
-msgstr ""
+msgstr "Απορρόφηση: %d-%d"
 
 #: ../../../src/ItemManager.cpp:546
 #, c-format
 msgid "Absorb: %d"
-msgstr ""
+msgstr "Απορρόφηση: %d"
 
 #: ../../../src/ItemManager.cpp:554
 #, c-format
 msgid "%d% Speed"
-msgstr ""
+msgstr "%d% Ταχύτητα"
 
 #: ../../../src/ItemManager.cpp:560 ../../../src/ItemManager.cpp:659
 #, c-format
 msgid "Increases %s by %d"
-msgstr "Αυξάνει %s επί %d"
+msgstr "Αυξάνει %s κατά %d"
 
 #: ../../../src/ItemManager.cpp:567 ../../../src/ItemManager.cpp:662
 #, c-format
 msgid "Decreases %s by %d"
-msgstr "Μειώνει %s επί %d"
+msgstr "Μειώνει %s κατά %d"
 
 #: ../../../src/ItemManager.cpp:588 ../../../src/MenuPowers.cpp:566
 #: ../../../src/MenuPowers.cpp:569
 #, c-format
 msgid "Requires Physical %d"
-msgstr "Χρειάζεται %d Φυσικό"
+msgstr "Χρειάζεται %d Πυγμή"
 
 #: ../../../src/ItemManager.cpp:593 ../../../src/MenuPowers.cpp:572
 #: ../../../src/MenuPowers.cpp:575
 #, c-format
 msgid "Requires Mental %d"
-msgstr ""
+msgstr "Χρειάζεται %d Πνευματικότητα"
 
 #: ../../../src/ItemManager.cpp:598 ../../../src/MenuPowers.cpp:554
 #: ../../../src/MenuPowers.cpp:557
 #, c-format
 msgid "Requires Offense %d"
-msgstr ""
+msgstr "Χρειάζεται %d Επίθεση"
 
 #: ../../../src/ItemManager.cpp:603 ../../../src/MenuPowers.cpp:560
 #: ../../../src/MenuPowers.cpp:563
 #, c-format
 msgid "Requires Defense %d"
-msgstr ""
+msgstr "Χρειάζεται %d Άμυνα"
 
 #: ../../../src/ItemManager.cpp:609
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Ποιότητα: %s"
 
 #: ../../../src/ItemManager.cpp:626 ../../../src/ItemManager.cpp:635
-#, fuzzy, c-format
+#, c-format
 msgid "Buy Price: %d %s"
-msgstr "Τιμή Αγοράς: %d χρυσάφι"
+msgstr "Τιμή Αγοράς: %d %s"
 
 #: ../../../src/ItemManager.cpp:628 ../../../src/ItemManager.cpp:637
-#, fuzzy, c-format
+#, c-format
 msgid "Buy Price: %d %s each"
-msgstr "Τιμή Αγοράς: %d χρυσάφι το καθένα"
+msgstr "Τιμή Αγοράς: %d %s έκαστο"
 
 #: ../../../src/ItemManager.cpp:643
-#, fuzzy, c-format
+#, c-format
 msgid "Sell Price: %d %s"
-msgstr "Τιμή Πόλησης: %d χρυσάφι"
+msgstr "Τιμή Πώλησης: %d %s"
 
 #: ../../../src/ItemManager.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Sell Price: %d %s each"
-msgstr "Τιμή Πόλησης: %d χρυσάφι το καθένα"
+msgstr "Τιμή Πώλησης: %d %s έκαστο"
 
 #: ../../../src/ItemManager.cpp:655
-#, fuzzy
 msgid "Set: "
-msgstr "Επόμενο: %d"
+msgstr "Σύνολο: "
 
 #: ../../../src/ItemManager.cpp:659 ../../../src/ItemManager.cpp:662
 #, c-format
 msgid "%d items: "
-msgstr ""
+msgstr "%d αντικείμενα: "
 
 #: ../../../src/MenuCharacter.cpp:275
 msgid "Name"
@@ -679,7 +665,7 @@ msgstr "Επίπεδο"
 
 #: ../../../src/MenuCharacter.cpp:277
 msgid "Physical"
-msgstr "Φυσικό"
+msgstr "Πυγμή"
 
 #: ../../../src/MenuCharacter.cpp:278
 msgid "Mental"
@@ -695,108 +681,105 @@ msgstr "Άμυνα"
 
 #: ../../../src/MenuCharacter.cpp:324
 msgid "points remaining"
-msgstr ""
+msgstr "εναπομείναντες πόντοι"
 
 #: ../../../src/MenuCharacter.cpp:334
 msgid "Max HP:"
-msgstr ""
+msgstr "Μέγιστα ΗΡ (πόντοι ζωής):"
 
 #: ../../../src/MenuCharacter.cpp:340
-#, fuzzy
 msgid "HP Regen:"
-msgstr "Αναγέννηση"
+msgstr "Αναγέννηση ΗΡ:"
 
 #: ../../../src/MenuCharacter.cpp:341
 msgid "Ticks of HP regen per minute. "
-msgstr ""
+msgstr "Επαναλήψεις αναγέννησης ΗΡ ανά λεπτό. "
 
 #: ../../../src/MenuCharacter.cpp:346
 msgid "Max MP:"
-msgstr ""
+msgstr "Μέγιστα ΜΡ (πόντοι μαγείας):"
 
 #: ../../../src/MenuCharacter.cpp:352
-#, fuzzy
 msgid "MP Regen:"
-msgstr "Αναγέννηση"
+msgstr "Αναγέννηση ΜΡ:"
 
 #: ../../../src/MenuCharacter.cpp:353
 msgid "Ticks of MP regen per minute. "
-msgstr ""
+msgstr "Επαναλήψεις αναγέννησης ΜΡ ανά λεπτό. "
 
 #: ../../../src/MenuCharacter.cpp:358
 msgid "Accuracy:"
-msgstr ""
+msgstr "Ακρίβεια:"
 
 #: ../../../src/MenuCharacter.cpp:364
 msgid "Avoidance:"
-msgstr ""
+msgstr "Αποφυγή:"
 
 #: ../../../src/MenuCharacter.cpp:370
 msgid "Melee Damage:"
-msgstr ""
+msgstr "Ζημιά εξ επαφής:"
 
 #: ../../../src/MenuCharacter.cpp:380
 msgid "Ranged Damage:"
-msgstr ""
+msgstr "Ζημιά από απόσταση:"
 
 #: ../../../src/MenuCharacter.cpp:390
-#, fuzzy
 msgid "Mental Damage:"
-msgstr "Πνευματικότητα"
+msgstr "Πνευματική ζημιά:"
 
 #: ../../../src/MenuCharacter.cpp:400
 msgid "Crit:"
-msgstr ""
+msgstr "Πιθανότητα Κρίσιμου Χτυπήματος:"
 
 #: ../../../src/MenuCharacter.cpp:406
 msgid "Absorb:"
-msgstr ""
+msgstr "Απορρόφηση:"
 
 #: ../../../src/MenuCharacter.cpp:416
 msgid "Poise: "
-msgstr ""
+msgstr "Ισορροπία: "
 
 #: ../../../src/MenuCharacter.cpp:417
 msgid "Reduces your chance of stumbling when hit"
-msgstr ""
+msgstr "Μειώνει το ενδεχόμενο να παραπατήσεις όταν χτυπηθείς"
 
 #: ../../../src/MenuCharacter.cpp:422
 msgid "Bonus XP: "
-msgstr ""
+msgstr "Μπόνους ΧΡ: "
 
 #: ../../../src/MenuCharacter.cpp:423
 msgid "Increases the XP gained per kill"
-msgstr ""
+msgstr "Αυξάνει τα ΧΡ που αποκτάς ανά σκοτωμό"
 
 #: ../../../src/MenuCharacter.cpp:428
 msgid "Bonus"
-msgstr ""
+msgstr "Μπόνους"
 
 #: ../../../src/MenuCharacter.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop"
-msgstr "Αυξάνει %s επί %d"
+msgstr "Αυξάνει τα %s που βρίσκεις στα πτώματα"
 
 #: ../../../src/MenuCharacter.cpp:434
 msgid "Bonus Item Find: "
-msgstr ""
+msgstr "Μπόνους Εύρεσης Αντικειμένων: "
 
 #: ../../../src/MenuCharacter.cpp:435
 msgid "Increases the chance that an enemy will drop an item when killed"
-msgstr ""
+msgstr "Αυξάνει το ενδεχόμενο να ρίξει ένα αντικείμενο ο εχθρός όταν σκοτωθεί"
 
 #: ../../../src/MenuCharacter.cpp:440
 msgid "Stealth: "
-msgstr ""
+msgstr "Δολιότητα: "
 
 #: ../../../src/MenuCharacter.cpp:441
 msgid "Increases your ability to move undetected"
-msgstr ""
+msgstr "Αυξάνει την ικανότητά σου να περνάς απαρατήρητος"
 
 #: ../../../src/MenuCharacter.cpp:459
 #, c-format
 msgid "XP: %d"
-msgstr ""
+msgstr "XP (Πόντοι Εμπειρίας): %d"
 
 #: ../../../src/MenuCharacter.cpp:461
 #, c-format
@@ -805,50 +788,52 @@ msgstr "Επόμενο: %d"
 
 #: ../../../src/MenuCharacter.cpp:465
 msgid "Physical (P) increases melee weapon proficiency and total HP."
-msgstr ""
+msgstr "Η Πυγμή (Π) αυξάνει την εξοικείωση με κοντινά όπλα και τα συνολικά ΗΡ."
 
 #: ../../../src/MenuCharacter.cpp:466 ../../../src/MenuCharacter.cpp:470
 #: ../../../src/MenuCharacter.cpp:474 ../../../src/MenuCharacter.cpp:478
 #, c-format
 msgid "base (%d), bonus (%d)"
-msgstr ""
+msgstr "βάση (%d), μπόνους (%d)"
 
 #: ../../../src/MenuCharacter.cpp:469
 msgid "Mental (M) increases mental weapon proficiency and total MP."
 msgstr ""
+"Η Πνευματικότητα (Π) αυξάνει την εξοικείωση με πνευματικά όπλα και τα "
+"συνολικά ΜΡ."
 
 #: ../../../src/MenuCharacter.cpp:473
 msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-msgstr ""
+msgstr "Η Επίθεση (Ε) αυξάνει την εξοικείωση με μακρινά όπλα και την ακρίβεια."
 
 #: ../../../src/MenuCharacter.cpp:477
 msgid "Defense (D) increases armor proficiency and avoidance."
-msgstr ""
+msgstr "Η Άμυνα (Α) αυξάνει την εξοικείωση με πανοπλίες και την αποφυγή."
 
 #: ../../../src/MenuCharacter.cpp:498
 #, c-format
 msgid "Each level grants %d. "
-msgstr ""
+msgstr "Κάθε επίπεδο παρέχει %d. "
 
 #: ../../../src/MenuCharacter.cpp:500
 #, c-format
 msgid "Each point of Physical grants %d. "
-msgstr ""
+msgstr "Κάθε πόντος Πυγμής παρέχει %d. "
 
 #: ../../../src/MenuCharacter.cpp:502
 #, c-format
 msgid "Each point of Mental grants %d. "
-msgstr ""
+msgstr "Κάθε πόντος Πνευματικότητας παρέχει %d. "
 
 #: ../../../src/MenuCharacter.cpp:504
 #, c-format
 msgid "Each point of Offense grants %d. "
-msgstr ""
+msgstr "Κάθε πόντος Επίθεσης παρέχει %d. "
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
 msgid "Each point of Defense grants %d. "
-msgstr ""
+msgstr "Κάθε πόντος Άμυνας παρέχει %d. "
 
 #: ../../../src/MenuEnemy.cpp:117
 msgid "Dead"
@@ -857,7 +842,7 @@ msgstr "Νεκρός"
 #: ../../../src/MenuEnemy.cpp:123 ../../../src/MenuEnemy.cpp:126
 #, c-format
 msgid "%s level %d"
-msgstr ""
+msgstr "%s επιπέδου %d"
 
 #: ../../../src/MenuExit.cpp:31
 msgid "Exit"
@@ -865,48 +850,50 @@ msgstr "Έξοδος"
 
 #: ../../../src/MenuExit.cpp:48
 msgid "Save and exit to title?"
-msgstr "Αποθήκευση και έξοδος προς τίτλο;"
+msgstr "Αποθήκευση και έξοδος;"
 
 #: ../../../src/MenuInventory.cpp:146
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr ""
+msgstr "Έχασες %d%% από τα %s. "
 
 #: ../../../src/MenuInventory.cpp:153
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr ""
+msgstr "Έχασες %d%% του συνολικού XP. "
 
 #: ../../../src/MenuInventory.cpp:158
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr ""
+msgstr "Έχασες %d%% του XP αυτού του επιπέδου. "
 
 #: ../../../src/MenuInventory.cpp:184
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Έχασες %s."
 
 #: ../../../src/MenuInventory.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "%d %s"
-msgstr "Επίπεδο %d %s"
+msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:263
 msgid "Use SHIFT to move only one item."
-msgstr ""
+msgstr "Πάτα το SHIFT για να μετακινήσεις μόνο ένα αντικείμενο."
 
 #: ../../../src/MenuInventory.cpp:264
 msgid "CTRL-click a carried item to sell it."
 msgstr ""
+"CTRL-κλικ ποντικιού σε ένα αντικείμενο που κουβαλάς για να το πουλήσεις."
 
 #: ../../../src/MenuInventory.cpp:472
 msgid "This item can only be used from the action bar."
 msgstr ""
+"Αυτό το αντικείμενο μπορεί να χρησιμοποιηθεί μόνο από την μπάρα ενεργειών."
 
 #: ../../../src/MenuLog.cpp:76
 msgid "Notes"
-msgstr ""
+msgstr "Σημειώσεις"
 
 #: ../../../src/MenuLog.cpp:77
 msgid "Quests"
@@ -915,14 +902,14 @@ msgstr "Αποστολές"
 #: ../../../src/MenuManager.cpp:452
 #, c-format
 msgid "XP: %d/%d"
-msgstr ""
+msgstr "XP: %d/%d"
 
 #: ../../../src/MenuManager.cpp:652 ../../../src/MenuManager.cpp:653
 #: ../../../src/MenuManager.cpp:859 ../../../src/MenuManager.cpp:860
 #: ../../../src/MenuManager.cpp:1037 ../../../src/MenuManager.cpp:1038
 #, c-format
 msgid "Not enough %s."
-msgstr ""
+msgstr "Έλλειψη από %s."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
@@ -930,28 +917,30 @@ msgstr "Εμπόριο"
 
 #: ../../../src/MenuPowers.cpp:463
 msgid "Unspent skill points:"
-msgstr ""
+msgstr "Εναπομείναντες πόντοι ικανότητας:"
 
 #: ../../../src/MenuPowers.cpp:505
 msgid ""
 "\n"
 "Next Level:"
 msgstr ""
+"\n"
+"Επόμενο Επίπεδο:"
 
 #: ../../../src/MenuPowers.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Requires a %s"
-msgstr "Χρειάζεται %d Φυσικό"
+msgstr "Χρειάζεται ένα %s"
 
 #: ../../../src/MenuPowers.cpp:530 ../../../src/MenuPowers.cpp:533
 #, c-format
 msgid "Requires Physical Offense %d"
-msgstr "Χρειάζεται %d Φυσική Επίθεση"
+msgstr "Χρειάζεται %d Σωματική Επίθεση"
 
 #: ../../../src/MenuPowers.cpp:536 ../../../src/MenuPowers.cpp:539
 #, c-format
 msgid "Requires Physical Defense %d"
-msgstr "Χρειάζεται %d Φυσική Άμυνα"
+msgstr "Χρειάζεται %d Σωματική Άμυνα"
 
 #: ../../../src/MenuPowers.cpp:542 ../../../src/MenuPowers.cpp:545
 #, c-format
@@ -964,68 +953,67 @@ msgid "Requires Mental Defense %d"
 msgstr "Χρειάζεται %d Πνευματική Άμυνα"
 
 #: ../../../src/MenuPowers.cpp:580 ../../../src/MenuPowers.cpp:583
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Level %d"
-msgstr "Χρειάζεται %d Φυσικό"
+msgstr "Χρειάζεται Επίπεδο %d"
 
 #: ../../../src/MenuPowers.cpp:590 ../../../src/MenuPowers.cpp:595
 #, c-format
 msgid "Requires %d Skill Point"
-msgstr ""
+msgstr "Χρειάζεται %d Πόντο Ικανότητας"
 
 #: ../../../src/MenuPowers.cpp:603
 msgid "Click to Unlock"
-msgstr ""
+msgstr "Κάντε κλικ για Ξεκλείδωμα"
 
 #: ../../../src/MenuPowers.cpp:611 ../../../src/MenuPowers.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Requires Power: %s"
-msgstr "Χρειάζεται %d Φυσικό"
+msgstr "Χρειάζεται Δύναμη: %s"
 
 #: ../../../src/MenuPowers.cpp:621
 #, c-format
 msgid "Costs %d MP"
-msgstr ""
+msgstr "Κοστίζει %d MP"
 
 #: ../../../src/MenuPowers.cpp:625
 #, c-format
 msgid "Costs %d HP"
-msgstr ""
+msgstr "Κοστίζει %d ΗP"
 
 #: ../../../src/MenuPowers.cpp:629
 #, c-format
 msgid "Cooldown: %d seconds"
-msgstr ""
+msgstr "Επανάκτηση: %d δευτερόλεπτα"
 
 #: ../../../src/MenuStash.cpp:124
 msgid "Shared Stash"
-msgstr ""
+msgstr "Από κοινού Αποθήκη"
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
-msgstr ""
+msgstr "Επαναγορά"
 
 #: ../../../src/MenuVendor.cpp:171
 msgid "Vendor"
-msgstr ""
+msgstr "Πωλητής"
 
 #: ../../../src/PowerManager.cpp:759
 #, c-format
 msgid "+%d Shield"
-msgstr ""
+msgstr "+%d Άμυνα"
 
 #: ../../../src/PowerManager.cpp:1006
 msgid "You are already transformed, untransform first."
-msgstr ""
+msgstr "Έχεις ήδη μεταμορφωθεί, απομεταμορφώσου πρώτα."
 
 #: ../../../src/Settings.cpp:594
 msgid "Adventurer"
-msgstr ""
+msgstr "Τυχοδιώκτης"
 
 #: ../../../src/Utils.cpp:519
-#, fuzzy
 msgid "k"
-msgstr "ΟΚ"
+msgstr "κ"
 
 #~ msgid "Character Menu (C)"
 #~ msgstr "Μενού Χαρακτήρα (C)"
