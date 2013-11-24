@@ -250,6 +250,8 @@ void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upg
 	power_cell[power_cell_index].requires_power = upgrade[upgrade_cell_index].requires_power;
 	power_cell[power_cell_index].requires_point = upgrade[upgrade_cell_index].requires_point;
 	power_cell[power_cell_index].passive_on = upgrade[upgrade_cell_index].passive_on;
+
+	slots[power_cell_index]->setIcon(powers->powers[upgrade[upgrade_cell_index].id].icon);
 }
 
 bool MenuPowers::baseRequirementsMet(int power_index) {
