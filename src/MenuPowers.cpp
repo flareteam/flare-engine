@@ -202,7 +202,7 @@ short MenuPowers::nextLevel(short power_cell_index) {
 	// current power is an upgrade, take next upgrade if avaliable
 	short index = distance(power_cell[power_cell_index].upgrades.begin(), level_it);
 	if (power_cell[power_cell_index].upgrades.size() > index + 1) {
-		return id_by_powerIndex(*(level_it++), upgrade);;
+		return id_by_powerIndex(*(level_it++), upgrade);
 	}
 	else {
 		return -1;
