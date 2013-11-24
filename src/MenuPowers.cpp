@@ -219,19 +219,17 @@ void MenuPowers::upgradePower(short power_cell_index) {
 	// if we have tabCOntrol
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
-		if (powerUnlockable(upgrade[i].id) && points_left > 0
-			&& upgrade[i].requires_point && upgrade[i].tab == active_tab) {
-				replacePowerCellDataByUpgrade(power_cell_index, i);
-				stats->powers_list.push_back(upgrade[i].id);
-				stats->check_title = true;
+		if (upgrade[i].tab == active_tab) {
+			replacePowerCellDataByUpgrade(power_cell_index, i);
+			stats->powers_list.push_back(upgrade[i].id);
+			stats->check_title = true;
 		}
 	}
 	// if have don't have tabs
-	else if (powerUnlockable(upgrade[i].id)
-			&& points_left > 0 && upgrade[i].requires_point) {
-				replacePowerCellDataByUpgrade(power_cell_index, i);
-				stats->powers_list.push_back(upgrade[i].id);
-				stats->check_title = true;
+	else {
+			replacePowerCellDataByUpgrade(power_cell_index, i);
+			stats->powers_list.push_back(upgrade[i].id);
+			stats->check_title = true;
 	}
 }
 
