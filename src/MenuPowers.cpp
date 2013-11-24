@@ -194,14 +194,15 @@ short MenuPowers::nextLevel(short power_cell_index) {
 								power_cell[power_cell_index].upgrades.end(),
 								power_cell[power_cell_index].id);
 
-	if (level_it == power_cell[power_cell_index].upgrades.end()){
+	if (level_it == power_cell[power_cell_index].upgrades.end()) {
 		// current power is base power, take first upgrade
-		return 0;
+		short index = power_cell[power_cell_index].upgrades[0];
+		return id_by_powerIndex(index, upgrade);
 	}
-	short index = id_by_powerIndex(*level_it, upgrade);
-	if ((short)upgrade.size() > index + 1) {
-		// current power is an upgrade, take next upgrade if avaliable
-		return index + 1;
+	// current power is an upgrade, take next upgrade if avaliable
+	short index = distance(power_cell[power_cell_index].upgrades.begin(), level_it);
+	if (power_cell[power_cell_index].upgrades.size() > index + 1) {
+		return id_by_powerIndex(*(level_it++), upgrade);;
 	}
 	else {
 		return -1;
