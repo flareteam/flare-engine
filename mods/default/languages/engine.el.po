@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-11-24 00:36+0300\n"
+"PO-Revision-Date: 2013-11-24 09:02+0300\n"
 "Last-Translator: Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>\n"
 "Language-Team: Ιωάννης Ανθυμίδης, Μιχάλης Παπαγεωργίου\n"
 "Language: el\n"
@@ -935,12 +935,12 @@ msgstr "Χρειάζεται ένα %s"
 #: ../../../src/MenuPowers.cpp:530 ../../../src/MenuPowers.cpp:533
 #, c-format
 msgid "Requires Physical Offense %d"
-msgstr "Χρειάζεται %d Σωματική Επίθεση"
+msgstr "Χρειάζεται %d Υλική Επίθεση"
 
 #: ../../../src/MenuPowers.cpp:536 ../../../src/MenuPowers.cpp:539
 #, c-format
 msgid "Requires Physical Defense %d"
-msgstr "Χρειάζεται %d Σωματική Άμυνα"
+msgstr "Χρειάζεται %d Υλική Άμυνα"
 
 #: ../../../src/MenuPowers.cpp:542 ../../../src/MenuPowers.cpp:545
 #, c-format
@@ -988,7 +988,7 @@ msgstr "Επανάκτηση: %d δευτερόλεπτα"
 
 #: ../../../src/MenuStash.cpp:124
 msgid "Shared Stash"
-msgstr "Από κοινού Αποθήκη"
+msgstr "Κοινόχρηστη Αποθήκη"
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
