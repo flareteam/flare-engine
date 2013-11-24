@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class StatBlock;
 class TooltipData;
 class WidgetSlot;
+class MenuActionBar;
 
 class Power_Menu_Cell {
 public:
@@ -83,6 +84,7 @@ public:
 class MenuPowers : public Menu {
 private:
 	StatBlock *stats;
+	MenuActionBar *action_bar;
 	std::vector<Power_Menu_Cell> power_cell;
 	std::vector<Power_Menu_Cell> upgrade;
 	std::vector<WidgetButton*> upgradeButtons;
@@ -128,7 +130,7 @@ private:
 	void loadUpgrade(FileParser &infile);
 
 public:
-	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);
+	MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar);
 	~MenuPowers();
 	void update();
 	void logic();

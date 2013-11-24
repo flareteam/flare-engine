@@ -33,15 +33,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
 #include "TooltipData.h"
+#include "MenuActionBar.h"
 
 #include <climits>
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
+MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar) {
 
 	stats = _stats;
 	icons = _icons;
+	action_bar = _action_bar;
 
 	overlay_disabled = NULL;
 
@@ -216,7 +218,14 @@ void MenuPowers::upgradePower(short power_cell_index) {
 	short i = nextLevel(power_cell_index);
 	if (i == -1)
 		return;
-	// if we have tabCOntrol
+
+	// if power was present in ActionBar, update it there
+	for(int j = 0; j < 12; j++){
+		if(action_bar->hotkeys[j] == power_cell[power_cell_index].id) {
+			action_bar->hotkeys[j] = upgrade[i].id;
+		}
+	}
+	// if we have tabControl
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
 		if (upgrade[i].tab == active_tab) {
@@ -352,7 +361,7 @@ int MenuPowers::click(Point mouse) {
  */
 bool MenuPowers::unlockClick(Point mouse) {
 
-	// if we have tabCOntrol
+	// if we have tabControl
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
 		for (unsigned i=0; i<power_cell.size(); i++) {
