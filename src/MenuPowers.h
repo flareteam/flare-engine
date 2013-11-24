@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetTabControl.h"
+#include "FileParser.h"
 
 class StatBlock;
 class TooltipData;
@@ -41,7 +42,6 @@ public:
 	short id;
 	short tab;
 	Point pos;
-	WidgetButton* upgradeButton; //not used
 	short requires_physoff;
 	short requires_physdef;
 	short requires_mentoff;
@@ -51,7 +51,7 @@ public:
 	short requires_physical;
 	short requires_mental;
 	short requires_level;
-	short next_level; // not used
+	std::vector<short> upgrades; // not used
 
 	std::vector<short> requires_power;
 
@@ -63,7 +63,6 @@ public:
 		: id(-1)
 		, tab(0)
 		, pos(Point())
-		, upgradeButton(NULL)
 		, requires_physoff(0)
 		, requires_physdef(0)
 		, requires_mentoff(0)
@@ -73,7 +72,7 @@ public:
 		, requires_physical(0)
 		, requires_mental(0)
 		, requires_level(0)
-		, next_level(0)
+		, upgrades()
 		, requires_power()
 		, requires_point(false)
 		, passive_on(false)
@@ -85,6 +84,9 @@ class MenuPowers : public Menu {
 private:
 	StatBlock *stats;
 	std::vector<Power_Menu_Cell> power_cell;
+	std::vector<Power_Menu_Cell> upgrade;
+	std::vector<WidgetButton*> upgradeButtons;
+	bool skip_section;
 
 	SDL_Surface *icons;
 	std::vector<SDL_Surface*> tree_surf;
@@ -115,9 +117,14 @@ private:
 	SDL_Color color_bonus;
 	SDL_Color color_penalty;
 
-	short id_by_powerIndex(short power_index);
+	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
+	short nextLevel(short power_cell_index);
+	void upgradePower(short power_cell_index);
 
 	bool powerIsVisible(short power_index);
+	void loadHeader(FileParser &infile);
+	void loadPower(FileParser &infile);
+	void loadUpgrade(FileParser &infile);
 
 public:
 	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);
@@ -126,7 +133,7 @@ public:
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point mouse);
-	void generatePowerDescription(TooltipData* tip, unsigned slot);
+	void generatePowerDescription(TooltipData* tip, const Power_Menu_Cell& slot);
 	bool baseRequirementsMet(int power_index);
 	bool requirementsMet(int power_index);
 	int click(Point mouse);
