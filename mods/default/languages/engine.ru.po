@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: flare-engine 0.18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-11-20 19:56+0100\n"
+"PO-Revision-Date: 2013-11-26 00:36+0100\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian https://github.com/SBasalaev/flare-game/wiki/\n"
 "Language: ru\n"
@@ -205,7 +205,7 @@ msgstr "Показывать FPS"
 
 #: ../../../src/GameStateConfig.cpp:324
 msgid "Show Hotkeys Labels"
-msgstr "Показывать метки горячих клавиш"
+msgstr "Метки горячих клавиш"
 
 #: ../../../src/GameStateConfig.cpp:327
 msgid "Colorblind Mode"
@@ -479,19 +479,19 @@ msgstr "Удалить"
 
 #: ../../../src/InputState.cpp:647
 msgid "ActionBar Accept"
-msgstr "Принять на панель действий"
+msgstr "Панель действий: принять"
 
 #: ../../../src/InputState.cpp:648
 msgid "ActionBar Left"
-msgstr "Влево на панели действий"
+msgstr "Панель действий: влево"
 
 #: ../../../src/InputState.cpp:649
 msgid "ActionBar Right"
-msgstr "Вправо на панели действий"
+msgstr "Панель действий: вправо"
 
 #: ../../../src/InputState.cpp:650
 msgid "ActionBar Use"
-msgstr "Использовать на панели действий"
+msgstr "Панель действий: использовать"
 
 #: ../../../src/InputState.cpp:652
 msgid "lmb"
@@ -697,7 +697,7 @@ msgstr "Восстановление здоровья:"
 
 #: ../../../src/MenuCharacter.cpp:341
 msgid "Ticks of HP regen per minute. "
-msgstr "Восстановливается единиц здоровья в минуту."
+msgstr "Восстановливается единиц здоровья в минуту. "
 
 #: ../../../src/MenuCharacter.cpp:346
 msgid "Max MP:"
@@ -709,7 +709,7 @@ msgstr "Восстановление маны:"
 
 #: ../../../src/MenuCharacter.cpp:353
 msgid "Ticks of MP regen per minute. "
-msgstr "Восстанавливается единиц маны в минуту."
+msgstr "Восстанавливается единиц маны в минуту. "
 
 #: ../../../src/MenuCharacter.cpp:358
 msgid "Accuracy:"
