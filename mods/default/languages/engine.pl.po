@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.18\n"
+"Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
 "PO-Revision-Date: 2013-03-22 11:58+0100\n"
@@ -37,12 +37,12 @@ msgstr "Pokonano Cię. Tracisz połowę swojego %s. Wciśnij Enter, aby kontynuo
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "Usunięto %d %s."
 
 #: ../../../src/CampaignManager.cpp:139
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "Usunięto %s."
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
@@ -204,11 +204,11 @@ msgstr "Pokaż klatki na sekundę"
 
 #: ../../../src/GameStateConfig.cpp:324
 msgid "Show Hotkeys Labels"
-msgstr ""
+msgstr "Pokaż etykiety klawiszy szybkiego dostępu"
 
 #: ../../../src/GameStateConfig.cpp:327
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "Minimalizacja kolorów"
 
 #: ../../../src/GameStateConfig.cpp:338
 msgid "Music Volume"
@@ -258,7 +258,7 @@ msgstr "Eksperymentalne"
 
 #: ../../../src/GameStateConfig.cpp:507
 msgid "For handheld devices"
-msgstr ""
+msgstr "Dla urządzeń przenośnych"
 
 #: ../../../src/GameStateConfig.cpp:527
 msgid "<< Disable"
@@ -367,7 +367,7 @@ msgstr "Konfiguracja"
 
 #: ../../../src/GameStateTitle.cpp:55
 msgid "Credits"
-msgstr ""
+msgstr "Lista płac"
 
 #: ../../../src/GameStateTitle.cpp:60
 msgid "Exit Game"
@@ -376,7 +376,7 @@ msgstr "Wyjdź z Gry"
 #: ../../../src/GameStateTitle.cpp:67
 #, fuzzy
 msgid "Flare Alpha v0.19"
-msgstr "Flare Alpha v0.18"
+msgstr "Flare Alpha v0.19"
 
 #: ../../../src/InputState.cpp:623
 msgid "Accept"
@@ -481,19 +481,19 @@ msgstr "Delete"
 
 #: ../../../src/InputState.cpp:647
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "Wybór elementu na Pasku Akcji"
 
 #: ../../../src/InputState.cpp:648
 msgid "ActionBar Left"
-msgstr ""
+msgstr "Kursor na Pasku Akcji w lewo"
 
 #: ../../../src/InputState.cpp:649
 msgid "ActionBar Right"
-msgstr ""
+msgstr "Kursor na Pasku Akcji w prawo"
 
 #: ../../../src/InputState.cpp:650
 msgid "ActionBar Use"
-msgstr ""
+msgstr "Użycie elementu na Pasku Akcji"
 
 #: ../../../src/InputState.cpp:652
 msgid "lmb"
@@ -530,15 +530,15 @@ msgstr "Dziennik"
 
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
-msgstr ""
+msgstr "Normalny"
 
 #: ../../../src/ItemManager.cpp:496
 msgid "High"
-msgstr ""
+msgstr "Trudny"
 
 #: ../../../src/ItemManager.cpp:500
 msgid "Epic"
-msgstr ""
+msgstr "Epicki"
 
 #: ../../../src/ItemManager.cpp:513
 #, c-format
@@ -588,17 +588,17 @@ msgstr "Absorbcja: %d"
 #: ../../../src/ItemManager.cpp:554
 #, fuzzy, c-format
 msgid "%d% Speed"
-msgstr "%d%% Szybkość"
+msgstr "%d% Szybkość"
 
 #: ../../../src/ItemManager.cpp:560 ../../../src/ItemManager.cpp:659
 #, c-format
 msgid "Increases %s by %d"
-msgstr "%s +%d"
+msgstr "%s zwiększona o %d"
 
 #: ../../../src/ItemManager.cpp:567 ../../../src/ItemManager.cpp:662
 #, c-format
 msgid "Decreases %s by %d"
-msgstr "%s -%d"
+msgstr "%s zmniejszona o %d"
 
 #: ../../../src/ItemManager.cpp:588 ../../../src/MenuPowers.cpp:566
 #: ../../../src/MenuPowers.cpp:569
@@ -627,7 +627,7 @@ msgstr "Wymaga %d Obrony"
 #: ../../../src/ItemManager.cpp:609
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Jakość: %s"
 
 #: ../../../src/ItemManager.cpp:626 ../../../src/ItemManager.cpp:635
 #, c-format
@@ -695,8 +695,8 @@ msgid "HP Regen:"
 msgstr "Regeneracja PŻ:"
 
 #: ../../../src/MenuCharacter.cpp:341
-msgid "Ticks of HP regen per minute. "
-msgstr ""
+msgid "Ticks of HP regen per minute."
+msgstr "Liczba przywróconych PŻ na minutę."
 
 #: ../../../src/MenuCharacter.cpp:346
 msgid "Max MP:"
@@ -708,7 +708,7 @@ msgstr "Regeneracja PM:"
 
 #: ../../../src/MenuCharacter.cpp:353
 msgid "Ticks of MP regen per minute. "
-msgstr ""
+msgstr "Liczba przywróconych PM na minutę."
 
 #: ../../../src/MenuCharacter.cpp:358
 msgid "Accuracy:"
@@ -815,7 +815,7 @@ msgstr "Obrona (D) zwiększa skuteczność działania zbroi i szansę na unik."
 #: ../../../src/MenuCharacter.cpp:498
 #, c-format
 msgid "Each level grants %d. "
-msgstr ""
+msgstr "Każdy poziom zapewnia %d. "
 
 #: ../../../src/MenuCharacter.cpp:500
 #, fuzzy, c-format
@@ -857,22 +857,22 @@ msgstr "Zapisać i wyjść do menu?"
 #: ../../../src/MenuInventory.cpp:146
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr ""
+msgstr "Utracono %d%% %s. "
 
 #: ../../../src/MenuInventory.cpp:153
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr ""
+msgstr "Utracono %d%% PD. "
 
 #: ../../../src/MenuInventory.cpp:158
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr ""
+msgstr "Utracono %d%% PD z obecnego poziomu. "
 
 #: ../../../src/MenuInventory.cpp:184
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Utracono %s."
 
 #: ../../../src/MenuInventory.cpp:228
 #, c-format
@@ -924,6 +924,8 @@ msgid ""
 "\n"
 "Next Level:"
 msgstr ""
+"\n"
+"Następny poziom:"
 
 #: ../../../src/MenuPowers.cpp:525
 #, fuzzy, c-format
