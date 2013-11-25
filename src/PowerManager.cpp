@@ -934,13 +934,12 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 	FPoint location_iterator;
 	FPoint speed;
 	int delay_iterator = 0;
-	float map_speed = 32.0f / MAX_FRAMES_PER_SEC;
 
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
-	speed.x = map_speed * cos(theta);
-	speed.y = map_speed * sin(theta);
+	speed.x = powers[power_index].speed * cos(theta);
+	speed.y = powers[power_index].speed * sin(theta);
 
 	location_iterator = src_stats->pos;
 
