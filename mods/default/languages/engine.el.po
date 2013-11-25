@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-11-24 09:02+0300\n"
+"PO-Revision-Date: 2013-11-25 13:11+0300\n"
 "Last-Translator: Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>\n"
-"Language-Team: Ιωάννης Ανθυμίδης, Μιχάλης Παπαγεωργίου\n"
+"Language-Team: Μιχάλης Παπαγεωργίου\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +25,7 @@ msgstr "Συγχαρητήρια, έφτασες στο επίπεδο %d!"
 
 #: ../../../src/Avatar.cpp:432
 msgid "You may increase one attribute through the Character Menu."
-msgstr "Μπορείς να αυξήσεις ένα χαρακτηριστικό μέσω του Μενού Χαρακτήρα."
+msgstr "Μπορείς να αυξήσεις μία ικανότητα μέσω του Μενού Χαρακτήρα."
 
 #: ../../../src/Avatar.cpp:631
 msgid "You are defeated. Game over! Press Enter to exit to Title."
@@ -607,13 +607,13 @@ msgstr "Χρειάζεται %d Πυγμή"
 #: ../../../src/MenuPowers.cpp:575
 #, c-format
 msgid "Requires Mental %d"
-msgstr "Χρειάζεται %d Πνευματικότητα"
+msgstr "Χρειάζεται %d Πνεύμα"
 
 #: ../../../src/ItemManager.cpp:598 ../../../src/MenuPowers.cpp:554
 #: ../../../src/MenuPowers.cpp:557
 #, c-format
 msgid "Requires Offense %d"
-msgstr "Χρειάζεται %d Επίθεση"
+msgstr "Χρειάζεται %d Επιδεξιότητα"
 
 #: ../../../src/ItemManager.cpp:603 ../../../src/MenuPowers.cpp:560
 #: ../../../src/MenuPowers.cpp:563
@@ -669,11 +669,11 @@ msgstr "Πυγμή"
 
 #: ../../../src/MenuCharacter.cpp:278
 msgid "Mental"
-msgstr "Πνευματικότητα"
+msgstr "Πνεύμα"
 
 #: ../../../src/MenuCharacter.cpp:279
 msgid "Offense"
-msgstr "Επίθεση"
+msgstr "Επιδεξιότητα"
 
 #: ../../../src/MenuCharacter.cpp:280
 msgid "Defense"
@@ -709,7 +709,7 @@ msgstr "Επαναλήψεις αναγέννησης ΜΡ ανά λεπτό. "
 
 #: ../../../src/MenuCharacter.cpp:358
 msgid "Accuracy:"
-msgstr "Ακρίβεια:"
+msgstr "Σημάδι:"
 
 #: ../../../src/MenuCharacter.cpp:364
 msgid "Avoidance:"
@@ -799,12 +799,13 @@ msgstr "βάση (%d), μπόνους (%d)"
 #: ../../../src/MenuCharacter.cpp:469
 msgid "Mental (M) increases mental weapon proficiency and total MP."
 msgstr ""
-"Η Πνευματικότητα (Π) αυξάνει την εξοικείωση με πνευματικά όπλα και τα "
-"συνολικά ΜΡ."
+"Το Πνεύμα (Μ) αυξάνει την εξοικείωση με τα πνευματικά όπλα και τα συνολικά "
+"ΜΡ."
 
 #: ../../../src/MenuCharacter.cpp:473
 msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-msgstr "Η Επίθεση (Ε) αυξάνει την εξοικείωση με μακρινά όπλα και την ακρίβεια."
+msgstr ""
+"Η Επιδεξιότητα (Ε) αυξάνει την εξοικείωση με μακρινά όπλα και το σημάδι."
 
 #: ../../../src/MenuCharacter.cpp:477
 msgid "Defense (D) increases armor proficiency and avoidance."
@@ -823,12 +824,12 @@ msgstr "Κάθε πόντος Πυγμής παρέχει %d. "
 #: ../../../src/MenuCharacter.cpp:502
 #, c-format
 msgid "Each point of Mental grants %d. "
-msgstr "Κάθε πόντος Πνευματικότητας παρέχει %d. "
+msgstr "Κάθε πόντος Πνεύματος παρέχει %d. "
 
 #: ../../../src/MenuCharacter.cpp:504
 #, c-format
 msgid "Each point of Offense grants %d. "
-msgstr "Κάθε πόντος Επίθεσης παρέχει %d. "
+msgstr "Κάθε πόντος Επιδεξιότητας παρέχει %d. "
 
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
