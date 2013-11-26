@@ -23,7 +23,7 @@ msgstr "Gratulacje, twoja postać wstąpiła na %d poziom!"
 
 #: ../../../src/Avatar.cpp:432
 msgid "You may increase one attribute through the Character Menu."
-msgstr "Możesz ęksększyć jeden ze swoich atrybutów w Menu Postaci."
+msgstr "Możesz zwiększyć jeden ze swoich atrybutów w Menu Postaci."
 
 #: ../../../src/Avatar.cpp:631
 msgid "You are defeated. Game over! Press Enter to exit to Title."
@@ -32,7 +32,7 @@ msgstr "Pokonano Cię. Koniec gry! Wciśnij Enter, aby wrócić do Menu Główne
 #: ../../../src/Avatar.cpp:634
 #, fuzzy
 msgid "You are defeated. Press Enter to continue."
-msgstr "Pokonano Cię. Tracisz połowę swojego %s. Wciśnij Enter, aby kontynuować."
+msgstr "Pokonano Cię. Wciśnij Enter, aby kontynuować."
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
@@ -196,7 +196,7 @@ msgstr "Celowanie myszką"
 #: ../../../src/GameStateConfig.cpp:318
 #, fuzzy
 msgid "Do not use mouse"
-msgstr "Poruszaj się używając myszki"
+msgstr "Nie używaj myszy"
 
 #: ../../../src/GameStateConfig.cpp:321
 msgid "Show FPS"
@@ -225,7 +225,7 @@ msgstr "Jasność"
 #: ../../../src/GameStateConfig.cpp:377
 #, fuzzy
 msgid "Joystick Deadzone"
-msgstr "Joystick"
+msgstr "Martwa strefa Joystick-a"
 
 #: ../../../src/GameStateConfig.cpp:391
 msgid "Resolution"
@@ -298,7 +298,7 @@ msgstr "Wczytaj Grę"
 
 #: ../../../src/GameStateLoad.cpp:551
 msgid "Entering game world..."
-msgstr "Wchodzenie do świata gry..."
+msgstr "Wkraczanie do świata gry..."
 
 #: ../../../src/GameStateLoad.cpp:554
 msgid "Loading saved game..."
@@ -312,7 +312,7 @@ msgstr "Poziom %d %s"
 #: ../../../src/GameStateLoad.cpp:579
 #, fuzzy
 msgid "Permadeath"
-msgstr "Jedno życie?"
+msgstr "Tryb ze śmiercią permamentną"
 
 #: ../../../src/GameStateLoad.cpp:603
 msgid "Empty Slot"
@@ -526,7 +526,7 @@ msgstr "mbx2"
 #: ../../../src/ItemManager.cpp:488
 #, fuzzy
 msgid "Low"
-msgstr "Dziennik"
+msgstr "Łatwy"
 
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
@@ -788,7 +788,7 @@ msgstr "PD: %d"
 #: ../../../src/MenuCharacter.cpp:461
 #, c-format
 msgid "Next: %d"
-msgstr "Następny poziom: %d"
+msgstr "Następny: %d"
 
 #: ../../../src/MenuCharacter.cpp:465
 msgid "Physical (P) increases melee weapon proficiency and total HP."
@@ -820,22 +820,22 @@ msgstr "Każdy poziom zapewnia %d. "
 #: ../../../src/MenuCharacter.cpp:500
 #, fuzzy, c-format
 msgid "Each point of Physical grants %d. "
-msgstr "Każdy punkt Siły Fizycznej dodaje +%d PŻ. Każdy poziom dodaje +%d PŻ"
+msgstr "Każdy punkt Siły Fizycznej dodaje +%d. "
 
 #: ../../../src/MenuCharacter.cpp:502
 #, fuzzy, c-format
 msgid "Each point of Mental grants %d. "
-msgstr "Każdy punkt Siły Umysłu dodaje +%d PM. Każdy poziom dodaje +%d PM"
+msgstr "Każdy punkt Siły Umysłu dodaje +%d. "
 
 #: ../../../src/MenuCharacter.cpp:504
 #, fuzzy, c-format
 msgid "Each point of Offense grants %d. "
-msgstr "Każdy punkt Siły Umysłu dodaje +%d PM. Każdy poziom dodaje +%d PM"
+msgstr "Każdy punkt Siły Umysłu dodaje +%d. "
 
 #: ../../../src/MenuCharacter.cpp:506
 #, fuzzy, c-format
 msgid "Each point of Defense grants %d. "
-msgstr "Każdy punkt Siły Umysłu dodaje +%d PM. Każdy poziom dodaje +%d PM"
+msgstr "Każdy punkt Siły Umysłu dodaje +%d. "
 
 #: ../../../src/MenuEnemy.cpp:117
 msgid "Dead"
@@ -909,7 +909,7 @@ msgstr "PD: %d/%d"
 #: ../../../src/MenuManager.cpp:1037 ../../../src/MenuManager.cpp:1038
 #, fuzzy, c-format
 msgid "Not enough %s."
-msgstr "Za mało pieniędzy."
+msgstr "Za mało %s."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
@@ -930,7 +930,7 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:525
 #, fuzzy, c-format
 msgid "Requires a %s"
-msgstr "Wymaga %d Siły Umysłu"
+msgstr "Wymaga %s"
 
 #: ../../../src/MenuPowers.cpp:530 ../../../src/MenuPowers.cpp:533
 #, c-format
