@@ -228,7 +228,7 @@ void MenuPowers::upgradePower(short power_cell_index) {
 	// if we have tabControl
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
-		if (upgrade[i].tab == active_tab) {
+		if (power_cell[power_cell_index].tab == active_tab) {
 			replacePowerCellDataByUpgrade(power_cell_index, i);
 			stats->powers_list.push_back(upgrade[i].id);
 			stats->check_title = true;
@@ -416,7 +416,7 @@ void MenuPowers::logic() {
 			points_used++;
 
 		//upgrade buttons logic
-		if (upgradeButtons[i] != NULL) {
+		if (upgradeButtons[i] != NULL && power_cell[i].tab == tabControl->getActiveTab()) {
 			if (upgradeButtons[i]->checkClick()) {
 				upgradePower(i);
 			}
