@@ -625,7 +625,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, const Power_Menu_Cel
 	if (slot.requires_point &&
 			!(find(stats->powers_list.begin(), stats->powers_list.end(), slot.id) != stats->powers_list.end()) &&
 			(points_left > 0) &&
-			powerUnlockable(slot.id) && (points_left > 0)) {
+			powerUnlockable(slot.id)) {
 		tip->addText(msg->get("Click to Unlock"), color_bonus);
 	}
 
@@ -724,7 +724,7 @@ void MenuPowers::renderPowers(int tab_num) {
 		// upgrade buttons
 		if (upgradeButtons[i] != NULL && nextLevel(i) != -1) {
 			// draw button only if current level is unlocked and next level can be unlocked
-			if (requirementsMet(power_cell[i].id) && powerUnlockable(upgrade[nextLevel(i)].id) && points_left > 0 && upgrade[nextLevel(i)].requires_point) {
+			if (powerUnlockable(upgrade[nextLevel(i)].id) && points_left > 0 && upgrade[nextLevel(i)].requires_point) {
 				upgradeButtons[i]->enabled = true;
 				upgradeButtons[i]->render();
 			}
