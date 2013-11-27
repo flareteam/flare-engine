@@ -138,8 +138,7 @@ static void init() {
 static void mainLoop (bool debug_event) {
 
 	bool done = false;
-	int max_fps = MAX_FRAMES_PER_SEC;
-	int delay = 1000/max_fps;
+	int delay = 1000/MAX_FRAMES_PER_SEC;
 	int prevTicks = SDL_GetTicks();
 
 	while ( !done ) {
