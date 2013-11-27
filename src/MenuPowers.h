@@ -113,7 +113,7 @@ private:
 
 	void loadGraphics();
 	void displayBuild(int power_id);
-	bool powerUnlockable(int power_index);
+	bool powerUnlockable(int power_index, const std::vector<Power_Menu_Cell>& powers);
 	void renderPowers(int tab_num);
 
 	SDL_Color color_bonus;
@@ -124,7 +124,7 @@ private:
 	void upgradePower(short power_cell_index);
 	void replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index);
 
-	bool powerIsVisible(short power_index);
+	bool powerIsVisible(short power_index, const std::vector<Power_Menu_Cell>& powers);
 	void loadHeader(FileParser &infile);
 	void loadPower(FileParser &infile);
 	void loadUpgrade(FileParser &infile);
@@ -136,9 +136,9 @@ public:
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point mouse);
-	void generatePowerDescription(TooltipData* tip, const Power_Menu_Cell& slot);
-	bool baseRequirementsMet(int power_index);
-	bool requirementsMet(int power_index);
+	void generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& slots);
+	bool baseRequirementsMet(int power_index, const std::vector<Power_Menu_Cell>& powers);
+	bool requirementsMet(int power_index, const std::vector<Power_Menu_Cell>& powers);
 	int click(Point mouse);
 	bool unlockClick(Point mouse);
 	void applyPowerUpgrades();
