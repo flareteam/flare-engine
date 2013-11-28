@@ -724,7 +724,7 @@ void MenuPowers::renderPowers(int tab_num) {
 		// upgrade buttons
 		if (upgradeButtons[i] != NULL && nextLevel(i) != -1) {
 			// draw button only if current level is unlocked and next level can be unlocked
-			if (powerUnlockable(upgrade[nextLevel(i)].id, upgrade) && points_left > 0 && upgrade[nextLevel(i)].requires_point) {
+			if (requirementsMet(power_cell[i].id, power_cell) && powerUnlockable(upgrade[nextLevel(i)].id, upgrade) && points_left > 0 && upgrade[nextLevel(i)].requires_point) {
 				upgradeButtons[i]->enabled = true;
 				upgradeButtons[i]->render();
 			}
