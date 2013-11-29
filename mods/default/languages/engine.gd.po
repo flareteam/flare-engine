@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-11-28 23:15+0100\n"
+"PO-Revision-Date: 2013-11-29 07:42+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig http://www.foramnagaidhlig.net\n"
 "Language: gd\n"
@@ -515,11 +515,11 @@ msgstr "cuibhle sìos"
 
 #: ../../../src/InputState.cpp:657
 msgid "mbx1"
-msgstr ""
+msgstr "luchx1"
 
 #: ../../../src/InputState.cpp:658
 msgid "mbx2"
-msgstr ""
+msgstr "luchx2"
 
 #: ../../../src/ItemManager.cpp:488
 msgid "Low"
