@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-11-29 11:33+0100\n"
+"PO-Revision-Date: 2013-11-29 19:38+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig http://www.foramnagaidhlig.net\n"
 "Language: gd\n"
@@ -49,7 +49,7 @@ msgstr "Chaidh %s a thoirt air falbh."
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
 msgid "You receive %s."
-msgstr "Gheibh thu %s."
+msgstr "Fhuair thu %s."
 
 #: ../../../src/CampaignManager.cpp:156
 #, c-format
@@ -888,7 +888,7 @@ msgstr "Cleachd SHIFT gus nì a-mhàin a ghluasad."
 
 #: ../../../src/MenuInventory.cpp:264
 msgid "CTRL-click a carried item to sell it."
-msgstr "Dèan CTRL-briogadh air nì a ghiùlaineas tu gus a reis."
+msgstr "Dèan CTRL-briogadh air nì a ghiùlaineas tu gus a reic."
 
 #: ../../../src/MenuInventory.cpp:472
 msgid "This item can only be used from the action bar."
