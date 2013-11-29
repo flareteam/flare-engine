@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-11-29 07:42+0100\n"
+"PO-Revision-Date: 2013-11-29 11:33+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig http://www.foramnagaidhlig.net\n"
 "Language: gd\n"
@@ -479,19 +479,19 @@ msgstr "Sguab às"
 
 #: ../../../src/InputState.cpp:647
 msgid "ActionBar Accept"
-msgstr "ActionBar Gabh ris"
+msgstr "Bàr-ghnìomh - Gabh ris"
 
 #: ../../../src/InputState.cpp:648
 msgid "ActionBar Left"
-msgstr "ActionBar Gu clì"
+msgstr "Bàr-ghnìomh - Gu clì"
 
 #: ../../../src/InputState.cpp:649
 msgid "ActionBar Right"
-msgstr "ActionBar Gu deas"
+msgstr "Bàr-ghnìomh - Gu deas"
 
 #: ../../../src/InputState.cpp:650
 msgid "ActionBar Use"
-msgstr "ActionBar Cleachd"
+msgstr "Bàr-ghnìomh - Cleachd"
 
 #: ../../../src/InputState.cpp:652
 msgid "lmb"
