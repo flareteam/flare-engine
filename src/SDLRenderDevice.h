@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Provide an SDL_BlitSurface implementation for renderning a Renderable to
  * the screen.  Simply dispatches rendering to SDL_BlitSurface().
  *
- * As this is for the FLARE engine, the implementation use the the engine's
+ * As this is for the FLARE engine, the implementation uses the engine's
  * global settings context, which is included by the interface.
  *
  * @class SDLBlitRenderDevice

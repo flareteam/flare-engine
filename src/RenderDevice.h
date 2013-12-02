@@ -31,11 +31,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  * Provide an abstract interface for renderning a Renderable to the screen.
  * Each rendering device implementation must fully implement the interface.
- * The idea is that the render() method replicates the behaviour of
- * SDL_BlitSurface() with different rendering backends, but bases on the
- * information carried in a Renderable struct.
+ * The idea is that the render() method can use different rendering
+ * backends, but bases on the information carried in a Renderable struct.
  *
- * As this is for the FLARE engine, implementations use the the engine's global
+ * As this is for the FLARE engine, implementations use the engine's global
  * settings context.
  *
  * @class RenderDevice
