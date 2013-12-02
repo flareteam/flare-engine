@@ -353,6 +353,9 @@ void GameStatePlay::loadGame() {
 
 	// load sounds (gender specific)
 	pc->loadSounds();
+
+	// apply power upgrades 
+	menu->pow->applyPowerUpgrades();
 }
 
 /**

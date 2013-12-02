@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class StatBlock;
 class TooltipData;
 class WidgetSlot;
+class MenuActionBar;
 
 class Power_Menu_Cell {
 public:
@@ -51,7 +52,7 @@ public:
 	short requires_physical;
 	short requires_mental;
 	short requires_level;
-	std::vector<short> upgrades; // not used
+	std::vector<short> upgrades;
 
 	std::vector<short> requires_power;
 
@@ -83,6 +84,7 @@ public:
 class MenuPowers : public Menu {
 private:
 	StatBlock *stats;
+	MenuActionBar *action_bar;
 	std::vector<Power_Menu_Cell> power_cell;
 	std::vector<Power_Menu_Cell> upgrade;
 	std::vector<WidgetButton*> upgradeButtons;
@@ -111,7 +113,7 @@ private:
 
 	void loadGraphics();
 	void displayBuild(int power_id);
-	bool powerUnlockable(int power_index);
+	bool powerUnlockable(int power_index, const std::vector<Power_Menu_Cell>& powers);
 	void renderPowers(int tab_num);
 
 	SDL_Color color_bonus;
@@ -120,24 +122,26 @@ private:
 	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
 	short nextLevel(short power_cell_index);
 	void upgradePower(short power_cell_index);
+	void replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index);
 
-	bool powerIsVisible(short power_index);
+	bool powerIsVisible(short power_index, const std::vector<Power_Menu_Cell>& powers);
 	void loadHeader(FileParser &infile);
 	void loadPower(FileParser &infile);
 	void loadUpgrade(FileParser &infile);
 
 public:
-	MenuPowers(StatBlock *_stats, SDL_Surface *_icons);
+	MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar);
 	~MenuPowers();
 	void update();
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point mouse);
-	void generatePowerDescription(TooltipData* tip, const Power_Menu_Cell& slot);
-	bool baseRequirementsMet(int power_index);
-	bool requirementsMet(int power_index);
+	void generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& slots);
+	bool baseRequirementsMet(int power_index, const std::vector<Power_Menu_Cell>& powers);
+	bool requirementsMet(int power_index, const std::vector<Power_Menu_Cell>& powers);
 	int click(Point mouse);
 	bool unlockClick(Point mouse);
+	void applyPowerUpgrades();
 	bool meetsUsageStats(unsigned powerid);
 	short getUnspent() { return points_left; }
 

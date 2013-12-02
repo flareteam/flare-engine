@@ -33,15 +33,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetSlot.h"
 #include "TooltipData.h"
+#include "MenuActionBar.h"
 
 #include <climits>
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons) {
+MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar) {
 
 	stats = _stats;
 	icons = _icons;
+	action_bar = _action_bar;
 
 	overlay_disabled = NULL;
 
@@ -164,85 +166,166 @@ short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Me
 }
 
 /**
+ * Apply power upgrades on savegame loading
+ */
+void MenuPowers::applyPowerUpgrades()
+{
+	for (unsigned i = 0; i < power_cell.size(); i++) {
+		if (!power_cell[i].upgrades.empty()) {
+			vector<short>::iterator it;
+			for (it = power_cell[i].upgrades.end(); it != power_cell[i].upgrades.begin(); ) {
+				--it;
+				vector<int>::iterator upgrade_it;
+				upgrade_it = find(stats->powers_list.begin(), stats->powers_list.end(), *it);
+				if (upgrade_it != stats->powers_list.end()) {
+					short upgrade_index = id_by_powerIndex(*upgrade_it, upgrade);
+					replacePowerCellDataByUpgrade(i, upgrade_index);
+					break;
+				}
+			}
+		}
+	}
+}
+
+/**
  * Find cell in upgrades with next upgrade for current power_cell
  */
 short MenuPowers::nextLevel(short power_cell_index) {
-	// TODO: implement this
-	return -1;
+	vector<short>::iterator level_it;
+	level_it = find(power_cell[power_cell_index].upgrades.begin(),
+								power_cell[power_cell_index].upgrades.end(),
+								power_cell[power_cell_index].id);
+
+	if (level_it == power_cell[power_cell_index].upgrades.end()) {
+		// current power is base power, take first upgrade
+		short index = power_cell[power_cell_index].upgrades[0];
+		return id_by_powerIndex(index, upgrade);
+	}
+	// current power is an upgrade, take next upgrade if avaliable
+	short index = distance(power_cell[power_cell_index].upgrades.begin(), level_it);
+	if ((short)power_cell[power_cell_index].upgrades.size() > index + 1) {
+		return id_by_powerIndex(*(level_it++), upgrade);
+	}
+	else {
+		return -1;
+	}
 }
 
 /**
  * Replace data in power_cell[cell_index] by data in upgrades
  */
 void MenuPowers::upgradePower(short power_cell_index) {
-	// TODO: implement this
+	short i = nextLevel(power_cell_index);
+	if (i == -1)
+		return;
+
+	// if power was present in ActionBar, update it there
+	for(int j = 0; j < 12; j++){
+		if(action_bar->hotkeys[j] == power_cell[power_cell_index].id) {
+			action_bar->hotkeys[j] = upgrade[i].id;
+		}
+	}
+	// if we have tabControl
+	if (tabs_count > 1) {
+		int active_tab = tabControl->getActiveTab();
+		if (power_cell[power_cell_index].tab == active_tab) {
+			replacePowerCellDataByUpgrade(power_cell_index, i);
+			stats->powers_list.push_back(upgrade[i].id);
+			stats->check_title = true;
+		}
+	}
+	// if have don't have tabs
+	else {
+			replacePowerCellDataByUpgrade(power_cell_index, i);
+			stats->powers_list.push_back(upgrade[i].id);
+			stats->check_title = true;
+	}
 }
 
-bool MenuPowers::baseRequirementsMet(int power_index) {
-	int id = id_by_powerIndex(power_index, power_cell);
+void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index)
+{
+	power_cell[power_cell_index].id = upgrade[upgrade_cell_index].id;
+	power_cell[power_cell_index].requires_physoff = upgrade[upgrade_cell_index].requires_physoff;
+	power_cell[power_cell_index].requires_physdef = upgrade[upgrade_cell_index].requires_physdef;
+	power_cell[power_cell_index].requires_mentoff = upgrade[upgrade_cell_index].requires_mentoff;
+	power_cell[power_cell_index].requires_mentdef = upgrade[upgrade_cell_index].requires_mentdef;
+	power_cell[power_cell_index].requires_defense = upgrade[upgrade_cell_index].requires_defense;
+	power_cell[power_cell_index].requires_offense = upgrade[upgrade_cell_index].requires_offense;
+	power_cell[power_cell_index].requires_physical = upgrade[upgrade_cell_index].requires_physical;
+	power_cell[power_cell_index].requires_mental = upgrade[upgrade_cell_index].requires_mental;
+	power_cell[power_cell_index].requires_level = upgrade[upgrade_cell_index].requires_level;
+	power_cell[power_cell_index].requires_power = upgrade[upgrade_cell_index].requires_power;
+	power_cell[power_cell_index].requires_point = upgrade[upgrade_cell_index].requires_point;
+	power_cell[power_cell_index].passive_on = upgrade[upgrade_cell_index].passive_on;
 
-	for (unsigned i = 0; i < power_cell[id].requires_power.size(); ++i)
-		if (!requirementsMet(power_cell[id].requires_power[i]))
+	slots[power_cell_index]->setIcon(powers->powers[upgrade[upgrade_cell_index].id].icon);
+}
+
+bool MenuPowers::baseRequirementsMet(int power_index, const vector<Power_Menu_Cell>& powers) {
+	int id = id_by_powerIndex(power_index, powers);
+
+	for (unsigned i = 0; i < powers[id].requires_power.size(); ++i)
+		if (!requirementsMet(powers[id].requires_power[i], powers))
 			return false;
 
-	if ((stats->physoff() >= power_cell[id].requires_physoff) &&
-			(stats->physdef() >= power_cell[id].requires_physdef) &&
-			(stats->mentoff() >= power_cell[id].requires_mentoff) &&
-			(stats->mentdef() >= power_cell[id].requires_mentdef) &&
-			(stats->get_defense() >= power_cell[id].requires_defense) &&
-			(stats->get_offense() >= power_cell[id].requires_offense) &&
-			(stats->get_physical() >= power_cell[id].requires_physical) &&
-			(stats->get_mental() >= power_cell[id].requires_mental) &&
-			(stats->level >= power_cell[id].requires_level)) return true;
+	if ((stats->physoff() >= powers[id].requires_physoff) &&
+			(stats->physdef() >= powers[id].requires_physdef) &&
+			(stats->mentoff() >= powers[id].requires_mentoff) &&
+			(stats->mentdef() >= powers[id].requires_mentdef) &&
+			(stats->get_defense() >= powers[id].requires_defense) &&
+			(stats->get_offense() >= powers[id].requires_offense) &&
+			(stats->get_physical() >= powers[id].requires_physical) &&
+			(stats->get_mental() >= powers[id].requires_mental) &&
+			(stats->level >= powers[id].requires_level)) return true;
 	return false;
 }
 
 /**
  * With great power comes great stat requirements.
  */
-bool MenuPowers::requirementsMet(int power_index) {
+bool MenuPowers::requirementsMet(int power_index, const vector<Power_Menu_Cell>& powers) {
 
 	// power_index can be 0 during recursive call if requires_power is not defined.
 	// Power with index 0 doesn't exist and is always enabled
 	if (power_index == 0) return true;
 
-	int id = id_by_powerIndex(power_index, power_cell);
+	int id = id_by_powerIndex(power_index, powers);
 
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
 
-	if (!powerIsVisible(power_index)) return false;
+	if (!powerIsVisible(power_index, powers)) return false;
 
 	// If power_id is saved into vector, it's unlocked anyway
 	if (find(stats->powers_list.begin(), stats->powers_list.end(), power_index) != stats->powers_list.end()) return true;
 
 	// Check the rest requirements
-	if (baseRequirementsMet(power_index) && !power_cell[id].requires_point) return true;
+	if (baseRequirementsMet(power_index, powers) && !powers[id].requires_point) return true;
 	return false;
 }
 
 /**
  * Check if we can unlock power.
  */
-bool MenuPowers::powerUnlockable(int power_index) {
+bool MenuPowers::powerUnlockable(int power_index, const vector<Power_Menu_Cell>& powers) {
 
 	// power_index can be 0 during recursive call if requires_power is not defined.
 	// Power with index 0 doesn't exist and is always enabled
 	if (power_index == 0) return true;
 
 	// Find cell with our power
-	int id = id_by_powerIndex(power_index, power_cell);
+	int id = id_by_powerIndex(power_index, powers);
 
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
 
-	if (!powerIsVisible(power_index)) return false;
+	if (!powerIsVisible(power_index, powers)) return false;
 
 	// If we already have a power, don't try to unlock it
-	if (requirementsMet(power_index)) return false;
+	if (requirementsMet(power_index, powers)) return false;
 
 	// Check requirements
-	if (baseRequirementsMet(power_index)) return true;
+	if (baseRequirementsMet(power_index, powers)) return true;
 	return false;
 }
 
@@ -256,7 +339,7 @@ int MenuPowers::click(Point mouse) {
 		int active_tab = tabControl->getActiveTab();
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
+				if (requirementsMet(power_cell[i].id, power_cell) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
 		}
@@ -265,7 +348,7 @@ int MenuPowers::click(Point mouse) {
 	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
+				if (requirementsMet(power_cell[i].id, power_cell) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
 				else return 0;
 			}
 		}
@@ -278,12 +361,12 @@ int MenuPowers::click(Point mouse) {
  */
 bool MenuPowers::unlockClick(Point mouse) {
 
-	// if we have tabCOntrol
+	// if we have tabControl
 	if (tabs_count > 1) {
 		int active_tab = tabControl->getActiveTab();
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse)
-					&& (powerUnlockable(power_cell[i].id)) && points_left > 0
+					&& (powerUnlockable(power_cell[i].id, power_cell)) && points_left > 0
 					&& power_cell[i].requires_point && power_cell[i].tab == active_tab) {
 				stats->powers_list.push_back(power_cell[i].id);
 				stats->check_title = true;
@@ -295,7 +378,7 @@ bool MenuPowers::unlockClick(Point mouse) {
 	else {
 		for (unsigned i=0; i<power_cell.size(); i++) {
 			if (isWithin(slots[i]->pos, mouse)
-					&& (powerUnlockable(power_cell[i].id))
+					&& (powerUnlockable(power_cell[i].id, power_cell))
 					&& points_left > 0 && power_cell[i].requires_point) {
 				stats->powers_list.push_back(power_cell[i].id);
 				stats->check_title = true;
@@ -313,14 +396,14 @@ void MenuPowers::logic() {
 			bool unlocked_power = find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 			vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
 			if (it != stats->powers_passive.end()) {
-				if (!baseRequirementsMet(power_cell[i].id) && power_cell[i].passive_on) {
+				if (!baseRequirementsMet(power_cell[i].id, power_cell) && power_cell[i].passive_on) {
 					stats->powers_passive.erase(it);
 					stats->effects.removeEffectPassive(power_cell[i].id);
 					power_cell[i].passive_on = false;
 					stats->refresh_stats = true;
 				}
 			}
-			else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
+			else if (((baseRequirementsMet(power_cell[i].id, power_cell) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
 				stats->powers_passive.push_back(power_cell[i].id);
 				power_cell[i].passive_on = true;
 				// for passives without special triggers, we need to trigger them here
@@ -333,7 +416,7 @@ void MenuPowers::logic() {
 			points_used++;
 
 		//upgrade buttons logic
-		if (upgradeButtons[i] != NULL) {
+		if (upgradeButtons[i] != NULL && power_cell[i].tab == tabControl->getActiveTab()) {
 			if (upgradeButtons[i]->checkClick()) {
 				upgradePower(i);
 			}
@@ -438,15 +521,15 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 		if ((tabs_count > 1) && (tabControl->getActiveTab() != power_cell[i].tab)) continue;
 
-		if (!powerIsVisible(power_cell[i].id)) continue;
+		if (!powerIsVisible(power_cell[i].id, power_cell)) continue;
 
 		if (isWithin(slots[i]->pos, mouse)) {
-			generatePowerDescription(&tip, power_cell[i]);
+			generatePowerDescription(&tip, i, power_cell);
 			if (!power_cell[i].upgrades.empty()) {
 				short next_level = nextLevel(i);
 				if (next_level != -1) {
 					tip.addText(msg->get("\nNext Level:"));
-					generatePowerDescription(&tip, upgrade[next_level]);
+					generatePowerDescription(&tip, next_level, upgrade);
 				}
 			}
 
@@ -457,119 +540,119 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 	return tip;
 }
 
-void MenuPowers::generatePowerDescription(TooltipData* tip, const Power_Menu_Cell& slot)
+void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const vector<Power_Menu_Cell>& slots)
 {
-	tip->addText(powers->powers[slot.id].name);
-	if (powers->powers[slot.id].passive) tip->addText("Passive");
-	tip->addText(powers->powers[slot.id].description);
+	tip->addText(powers->powers[slots[slot_num].id].name);
+	if (powers->powers[slots[slot_num].id].passive) tip->addText("Passive");
+	tip->addText(powers->powers[slots[slot_num].id].description);
 
 	std::set<std::string>::iterator it;
-	for (it = powers->powers[slot.id].requires_flags.begin(); it != powers->powers[slot.id].requires_flags.end(); ++it) {
+	for (it = powers->powers[slots[slot_num].id].requires_flags.begin(); it != powers->powers[slots[slot_num].id].requires_flags.end(); ++it) {
 		tip->addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[(*it)])));
 	}
 
 	// add requirement
-	if ((slot.requires_physoff > 0) && (stats->physoff() < slot.requires_physoff)) {
-		tip->addText(msg->get("Requires Physical Offense %d", slot.requires_physoff), color_penalty);
+	if ((slots[slot_num].requires_physoff > 0) && (stats->physoff() < slots[slot_num].requires_physoff)) {
+		tip->addText(msg->get("Requires Physical Offense %d", slots[slot_num].requires_physoff), color_penalty);
 	}
-	else if((slot.requires_physoff > 0) && (stats->physoff() >= slot.requires_physoff)) {
-		tip->addText(msg->get("Requires Physical Offense %d", slot.requires_physoff));
+	else if((slots[slot_num].requires_physoff > 0) && (stats->physoff() >= slots[slot_num].requires_physoff)) {
+		tip->addText(msg->get("Requires Physical Offense %d", slots[slot_num].requires_physoff));
 	}
-	if ((slot.requires_physdef > 0) && (stats->physdef() < slot.requires_physdef)) {
-		tip->addText(msg->get("Requires Physical Defense %d", slot.requires_physdef), color_penalty);
+	if ((slots[slot_num].requires_physdef > 0) && (stats->physdef() < slots[slot_num].requires_physdef)) {
+		tip->addText(msg->get("Requires Physical Defense %d", slots[slot_num].requires_physdef), color_penalty);
 	}
-	else if ((slot.requires_physdef > 0) && (stats->physdef() >= slot.requires_physdef)) {
-		tip->addText(msg->get("Requires Physical Defense %d", slot.requires_physdef));
+	else if ((slots[slot_num].requires_physdef > 0) && (stats->physdef() >= slots[slot_num].requires_physdef)) {
+		tip->addText(msg->get("Requires Physical Defense %d", slots[slot_num].requires_physdef));
 	}
-	if ((slot.requires_mentoff > 0) && (stats->mentoff() < slot.requires_mentoff)) {
-		tip->addText(msg->get("Requires Mental Offense %d", slot.requires_mentoff), color_penalty);
+	if ((slots[slot_num].requires_mentoff > 0) && (stats->mentoff() < slots[slot_num].requires_mentoff)) {
+		tip->addText(msg->get("Requires Mental Offense %d", slots[slot_num].requires_mentoff), color_penalty);
 	}
-	else if ((slot.requires_mentoff > 0) && (stats->mentoff() >= slot.requires_mentoff)) {
-		tip->addText(msg->get("Requires Mental Offense %d", slot.requires_mentoff));
+	else if ((slots[slot_num].requires_mentoff > 0) && (stats->mentoff() >= slots[slot_num].requires_mentoff)) {
+		tip->addText(msg->get("Requires Mental Offense %d", slots[slot_num].requires_mentoff));
 	}
-	if ((slot.requires_mentdef > 0) && (stats->mentdef() < slot.requires_mentdef)) {
-		tip->addText(msg->get("Requires Mental Defense %d", slot.requires_mentdef), color_penalty);
+	if ((slots[slot_num].requires_mentdef > 0) && (stats->mentdef() < slots[slot_num].requires_mentdef)) {
+		tip->addText(msg->get("Requires Mental Defense %d", slots[slot_num].requires_mentdef), color_penalty);
 	}
-	else if ((slot.requires_mentdef > 0) && (stats->mentdef() >= slot.requires_mentdef)) {
-		tip->addText(msg->get("Requires Mental Defense %d", slot.requires_mentdef));
+	else if ((slots[slot_num].requires_mentdef > 0) && (stats->mentdef() >= slots[slot_num].requires_mentdef)) {
+		tip->addText(msg->get("Requires Mental Defense %d", slots[slot_num].requires_mentdef));
 	}
-	if ((slot.requires_offense > 0) && (stats->get_offense() < slot.requires_offense)) {
-		tip->addText(msg->get("Requires Offense %d", slot.requires_offense), color_penalty);
+	if ((slots[slot_num].requires_offense > 0) && (stats->get_offense() < slots[slot_num].requires_offense)) {
+		tip->addText(msg->get("Requires Offense %d", slots[slot_num].requires_offense), color_penalty);
 	}
-	else if ((slot.requires_offense > 0) && (stats->get_offense() >= slot.requires_offense)) {
-		tip->addText(msg->get("Requires Offense %d", slot.requires_offense));
+	else if ((slots[slot_num].requires_offense > 0) && (stats->get_offense() >= slots[slot_num].requires_offense)) {
+		tip->addText(msg->get("Requires Offense %d", slots[slot_num].requires_offense));
 	}
-	if ((slot.requires_defense > 0) && (stats->get_defense() < slot.requires_defense)) {
-		tip->addText(msg->get("Requires Defense %d", slot.requires_defense), color_penalty);
+	if ((slots[slot_num].requires_defense > 0) && (stats->get_defense() < slots[slot_num].requires_defense)) {
+		tip->addText(msg->get("Requires Defense %d", slots[slot_num].requires_defense), color_penalty);
 	}
-	else if ((slot.requires_defense > 0) && (stats->get_defense() >= slot.requires_defense)) {
-		tip->addText(msg->get("Requires Defense %d", slot.requires_defense));
+	else if ((slots[slot_num].requires_defense > 0) && (stats->get_defense() >= slots[slot_num].requires_defense)) {
+		tip->addText(msg->get("Requires Defense %d", slots[slot_num].requires_defense));
 	}
-	if ((slot.requires_physical > 0) && (stats->get_physical() < slot.requires_physical)) {
-		tip->addText(msg->get("Requires Physical %d", slot.requires_physical), color_penalty);
+	if ((slots[slot_num].requires_physical > 0) && (stats->get_physical() < slots[slot_num].requires_physical)) {
+		tip->addText(msg->get("Requires Physical %d", slots[slot_num].requires_physical), color_penalty);
 	}
-	else if ((slot.requires_physical > 0) && (stats->get_physical() >= slot.requires_physical)) {
-		tip->addText(msg->get("Requires Physical %d", slot.requires_physical));
+	else if ((slots[slot_num].requires_physical > 0) && (stats->get_physical() >= slots[slot_num].requires_physical)) {
+		tip->addText(msg->get("Requires Physical %d", slots[slot_num].requires_physical));
 	}
-	if ((slot.requires_mental > 0) && (stats->get_mental() < slot.requires_mental)) {
-		tip->addText(msg->get("Requires Mental %d", slot.requires_mental), color_penalty);
+	if ((slots[slot_num].requires_mental > 0) && (stats->get_mental() < slots[slot_num].requires_mental)) {
+		tip->addText(msg->get("Requires Mental %d", slots[slot_num].requires_mental), color_penalty);
 	}
-	else if ((slot.requires_mental > 0) && (stats->get_mental() >= slot.requires_mental)) {
-		tip->addText(msg->get("Requires Mental %d", slot.requires_mental));
+	else if ((slots[slot_num].requires_mental > 0) && (stats->get_mental() >= slots[slot_num].requires_mental)) {
+		tip->addText(msg->get("Requires Mental %d", slots[slot_num].requires_mental));
 	}
 
 	// Draw required Level Tooltip
-	if ((slot.requires_level > 0) && stats->level < slot.requires_level) {
-		tip->addText(msg->get("Requires Level %d", slot.requires_level), color_penalty);
+	if ((slots[slot_num].requires_level > 0) && stats->level < slots[slot_num].requires_level) {
+		tip->addText(msg->get("Requires Level %d", slots[slot_num].requires_level), color_penalty);
 	}
-	else if ((slot.requires_level > 0) && stats->level >= slot.requires_level) {
-		tip->addText(msg->get("Requires Level %d", slot.requires_level));
+	else if ((slots[slot_num].requires_level > 0) && stats->level >= slots[slot_num].requires_level) {
+		tip->addText(msg->get("Requires Level %d", slots[slot_num].requires_level));
 	}
 
 	// Draw required Skill Point Tooltip
-	if ((slot.requires_point) &&
-			!(find(stats->powers_list.begin(), stats->powers_list.end(), slot.id) != stats->powers_list.end()) &&
+	if ((slots[slot_num].requires_point) &&
+			!(find(stats->powers_list.begin(), stats->powers_list.end(), slots[slot_num].id) != stats->powers_list.end()) &&
 			(points_left < 1)) {
-		tip->addText(msg->get("Requires %d Skill Point", slot.requires_point), color_penalty);
+		tip->addText(msg->get("Requires %d Skill Point", slots[slot_num].requires_point), color_penalty);
 	}
-	else if ((slot.requires_point) &&
-				!(find(stats->powers_list.begin(), stats->powers_list.end(), slot.id) != stats->powers_list.end()) &&
+	else if ((slots[slot_num].requires_point) &&
+				!(find(stats->powers_list.begin(), stats->powers_list.end(), slots[slot_num].id) != stats->powers_list.end()) &&
 				(points_left > 0)) {
-		tip->addText(msg->get("Requires %d Skill Point", slot.requires_point));
+		tip->addText(msg->get("Requires %d Skill Point", slots[slot_num].requires_point));
 	}
 
 	// Draw unlock power Tooltip
-	if (slot.requires_point &&
-			!(find(stats->powers_list.begin(), stats->powers_list.end(), slot.id) != stats->powers_list.end()) &&
+	if (slots[slot_num].requires_point &&
+			!(find(stats->powers_list.begin(), stats->powers_list.end(), slots[slot_num].id) != stats->powers_list.end()) &&
 			(points_left > 0) &&
-			powerUnlockable(slot.id) && (points_left > 0)) {
+			powerUnlockable(slots[slot_num].id, slots)) {
 		tip->addText(msg->get("Click to Unlock"), color_bonus);
 	}
 
 
 
-	for (unsigned j = 0; j < slot.requires_power.size(); ++j) {
+	for (unsigned j = 0; j < slots[slot_num].requires_power.size(); ++j) {
 		// Required Power Tooltip
-		if ((slot.requires_power[j] != 0) && !(requirementsMet(slot.requires_power[j]))) {
-			tip->addText(msg->get("Requires Power: %s", powers->powers[slot.requires_power[j]].name), color_penalty);
+		if ((slots[slot_num].requires_power[j] != 0) && !(requirementsMet(slots[slot_num].requires_power[j], slots))) {
+			tip->addText(msg->get("Requires Power: %s", powers->powers[slots[slot_num].requires_power[j]].name), color_penalty);
 		}
-		else if ((slot.requires_power[j] != 0) && (requirementsMet(slot.requires_power[j]))) {
-			tip->addText(msg->get("Requires Power: %s", powers->powers[slot.requires_power[j]].name));
+		else if ((slots[slot_num].requires_power[j] != 0) && (requirementsMet(slots[slot_num].requires_power[j], slots))) {
+			tip->addText(msg->get("Requires Power: %s", powers->powers[slots[slot_num].requires_power[j]].name));
 		}
 
 	}
 
 	// add mana cost
-	if (powers->powers[slot.id].requires_mp > 0) {
-		tip->addText(msg->get("Costs %d MP", powers->powers[slot.id].requires_mp));
+	if (powers->powers[slots[slot_num].id].requires_mp > 0) {
+		tip->addText(msg->get("Costs %d MP", powers->powers[slots[slot_num].id].requires_mp));
 	}
 	// add health cost
-	if (powers->powers[slot.id].requires_hp > 0) {
-		tip->addText(msg->get("Costs %d HP", powers->powers[slot.id].requires_hp));
+	if (powers->powers[slots[slot_num].id].requires_hp > 0) {
+		tip->addText(msg->get("Costs %d HP", powers->powers[slots[slot_num].id].requires_hp));
 	}
 	// add cooldown time
-	if (powers->powers[slot.id].cooldown > 0) {
-		tip->addText(msg->get("Cooldown: %d seconds", powers->powers[slot.id].cooldown / MAX_FRAMES_PER_SEC));
+	if (powers->powers[slots[slot_num].id].cooldown > 0) {
+		tip->addText(msg->get("Cooldown: %d seconds", powers->powers[slots[slot_num].id].cooldown / MAX_FRAMES_PER_SEC));
 	}
 }
 
@@ -622,14 +705,14 @@ void MenuPowers::renderPowers(int tab_num) {
 		// Continue if slot is not filled with data
 		if (power_cell[i].tab != tab_num) continue;
 
-		if (!powerIsVisible(power_cell[i].id)) continue;
+		if (!powerIsVisible(power_cell[i].id, power_cell)) continue;
 
 		if (find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) power_in_vector = true;
 
 		slots[i]->render();
 
 		// highlighting
-		if (power_in_vector || requirementsMet(power_cell[i].id)) {
+		if (power_in_vector || requirementsMet(power_cell[i].id, power_cell)) {
 			displayBuild(power_cell[i].id);
 		}
 		else {
@@ -639,29 +722,37 @@ void MenuPowers::renderPowers(int tab_num) {
 		}
 		slots[i]->renderSelection();
 		// upgrade buttons
-		if (upgradeButtons[i] != NULL)
-			upgradeButtons[i]->render();
+		if (upgradeButtons[i] != NULL && nextLevel(i) != -1) {
+			// draw button only if current level is unlocked and next level can be unlocked
+			if (requirementsMet(power_cell[i].id, power_cell) && powerUnlockable(upgrade[nextLevel(i)].id, upgrade) && points_left > 0 && upgrade[nextLevel(i)].requires_point) {
+				upgradeButtons[i]->enabled = true;
+				upgradeButtons[i]->render();
+			}
+			else {
+				upgradeButtons[i]->enabled = false;
+			}
+		}
 	}
 }
 
-bool MenuPowers::powerIsVisible(short power_index) {
+bool MenuPowers::powerIsVisible(short power_index, const std::vector<Power_Menu_Cell>& powers) {
 
 	// power_index can be 0 during recursive call if requires_power is not defined.
 	// Power with index 0 doesn't exist and is always enabled
 	if (power_index == 0) return true;
 
 	// Find cell with our power
-	int id = id_by_powerIndex(power_index, power_cell);
+	int id = id_by_powerIndex(power_index, powers);
 
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
 
-	for (unsigned i = 0; i < power_cell[id].visible_requires_status.size(); ++i)
-		if (!camp->checkStatus(power_cell[id].visible_requires_status[i]))
+	for (unsigned i = 0; i < powers[id].visible_requires_status.size(); ++i)
+		if (!camp->checkStatus(powers[id].visible_requires_status[i]))
 			return false;
 
-	for (unsigned i = 0; i < power_cell[id].visible_requires_not.size(); ++i)
-		if (camp->checkStatus(power_cell[id].visible_requires_not[i]))
+	for (unsigned i = 0; i < powers[id].visible_requires_not.size(); ++i)
+		if (camp->checkStatus(powers[id].visible_requires_not[i]))
 			return false;
 
 	return true;
