@@ -81,7 +81,7 @@ bool Scene::logic(FPoint *caption_margins) {
 			caption_box->pos.y = screen->h - caption_size.y - (int)(VIEW_H * caption_margins->y);
 			font->renderShadowed(caption, screen->w / 2, 0,
 								 JUSTIFY_CENTER,
-								 caption_box->contents,
+								 caption_box->contents.sprite,
 								 caption_width,
 								 FONT_WHITE);
 

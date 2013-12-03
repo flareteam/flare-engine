@@ -144,7 +144,7 @@ void MenuInventory::logic() {
 		// remove a % of currency
 		if (DEATH_PENALTY_CURRENCY > 0) {
 			if (currency > 0)
-				currency -= (currency * DEATH_PENALTY_CURRENCY) / 100;
+				removeCurrency((currency * DEATH_PENALTY_CURRENCY) / 100);
 			death_message += msg->get("Lost %d%% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
 		}
 
@@ -454,8 +454,8 @@ void MenuInventory::activate(Point position) {
 		if (powers->powers[items->items[inventory[CARRIED][slot].item].power].spawn_type == "untransform" && !stats->transformed) return;
 
 		//check for power cooldown
-		if (stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] > 0) return;
-		else stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = powers->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
+		if (pc->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] > 0) return;
+		else pc->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = powers->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
 
 		// if this item requires targeting it can't be used this way
 		if (!powers->powers[items->items[inventory[CARRIED][slot].item].power].requires_targeting) {
@@ -592,6 +592,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 			drop_stack.quantity = stack.quantity;
 		}
 	}
+	drag_prev_src = -1;
 }
 
 /**

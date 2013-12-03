@@ -316,7 +316,6 @@ void MenuTalker::setHero(const string& name, const string& class_name, const str
 	hero_name = name;
 	hero_class = msg->get(class_name);
 
-	SDL_FreeSurface(portrait);
 	portrait.clear_graphics();
 	portrait.set_graphics(loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait"));
 }

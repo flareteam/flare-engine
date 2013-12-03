@@ -60,7 +60,7 @@ private:
 
 public:
 
-	MenuActionBar(Avatar *hero, SDL_Surface *icons);
+	MenuActionBar(Avatar *hero);
 	~MenuActionBar();
 	void loadGraphics();
 	void renderAttention(int menu_id);

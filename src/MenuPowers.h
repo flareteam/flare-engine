@@ -130,7 +130,7 @@ private:
 	void loadUpgrade(FileParser &infile);
 
 public:
-	MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar);
+	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();
 	void update();
 	void logic();

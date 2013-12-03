@@ -87,7 +87,7 @@ public:
 						// some hazard animations have random/varietal options
 
 	bool isDangerousNow();
-	void addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void addRenderable(std::vector<Renderable*>& r, std::vector<Renderable*>& r_dead);
 
 	bool on_floor; // rendererable goes on the floor layer
 	int delay_frames;

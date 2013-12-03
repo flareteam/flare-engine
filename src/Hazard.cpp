@@ -146,6 +146,6 @@ void Hazard::addRenderable(vector<Renderable*>& r, vector<Renderable*>& r_dead) 
 		Renderable& re = activeAnimation->getCurrentFrame(animationKind);
 		re.map_pos.x = pos.x;
 		re.map_pos.y = pos.y;
-		(on_floor ? r_dead : r).push_back(re);
+		(on_floor ? r_dead : r).push_back(&re);
 	}
 }

@@ -39,7 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar) {
+MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar) {
 
 	stats = _stats;
 	action_bar = _action_bar;

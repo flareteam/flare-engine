@@ -229,20 +229,20 @@ bool priocompare(const Renderable *r1, const Renderable *r2) {
  */
 void calculatePriosIso(vector<Renderable*> &r) {
 	for (vector<Renderable*>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (int)floor(it->map_pos.x);
-		const unsigned tiley = (int)floor(it->map_pos.y);
-		const int commax = (float)(it->map_pos.x - tilex) * (2<<16);
-		const int commay = (float)(it->map_pos.y - tiley) * (2<<16);
-		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
+		const unsigned tilex = (int)floor((*it)->map_pos.x);
+		const unsigned tiley = (int)floor((*it)->map_pos.y);
+		const int commax = (float)((*it)->map_pos.x - tilex) * (2<<16);
+		const int commay = (float)((*it)->map_pos.y - tiley) * (2<<16);
+		(*it)->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
 	}
 }
 
 void calculatePriosOrtho(vector<Renderable*> &r) {
 	for (vector<Renderable*>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (int)floor(it->map_pos.x);
-		const unsigned tiley = (int)floor(it->map_pos.y);
-		const int commay = 1024 * it->map_pos.y;
-		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
+		const unsigned tilex = (int)floor((*it)->map_pos.x);
+		const unsigned tiley = (int)floor((*it)->map_pos.y);
+		const int commay = 1024 * (*it)->map_pos.y;
+		(*it)->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
 }
 
@@ -377,7 +377,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable*> &r) {
 	int_fast16_t j = upperleft.y - tset.max_size_y + tset.max_size_x;
 	int_fast16_t i = upperleft.x - tset.max_size_y - tset.max_size_x;
 
-	while (r_cursor != r_end && ((int)(r_cursor->map_pos.x) + (int)(r_cursor->map_pos.y) < i + j || (int)(r_cursor->map_pos.x) < i)) // implicit floor
+	while (r_cursor != r_end && ((int)((*r_cursor)->map_pos.x) + (int)((*r_cursor)->map_pos.y) < i + j || (int)((*r_cursor)->map_pos.x) < i)) // implicit floor
 		++r_cursor;
 
 	if (index_objectlayer >= layers.size())
@@ -418,7 +418,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable*> &r) {
 			}
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && ((int)r_cursor->map_pos.x == i && (int)r_cursor->map_pos.y == j)) { // implicit floor by int cast
+			while (r_cursor != r_end && ((int)(*r_cursor)->map_pos.x == i && (int)(*r_cursor)->map_pos.y == j)) { // implicit floor by int cast
 				drawRenderable(r_cursor);
 				++r_cursor;
 			}
@@ -430,16 +430,16 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable*> &r) {
 		else
 			j++;
 
-		while (r_cursor != r_end && ((int)r_cursor->map_pos.x + (int)r_cursor->map_pos.y < i + j || (int)r_cursor->map_pos.x <= i)) // implicit floor by int cast
+		while (r_cursor != r_end && ((int)(*r_cursor)->map_pos.x + (int)(*r_cursor)->map_pos.y < i + j || (int)(*r_cursor)->map_pos.x <= i)) // implicit floor by int cast
 			++r_cursor;
 	}
 }
 
-void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void MapRenderer::renderIso(vector<Renderable*> &r, vector<Renderable*> &r_dead) {
 	const Point nulloffset(0, 0);
 	if (ANIMATED_TILES) {
 		for (unsigned i = 0; i < index_objectlayer; ++i)
-			renderIsoLayer(screen, nulloffset, layers[i]);
+			renderIsoLayer(NULL, nulloffset, layers[i]);
 	}
 	else {
 		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender
@@ -470,7 +470,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
 	for (unsigned i = index_objectlayer + 1; i < layers.size(); ++i)
-		renderIsoLayer(screen, nulloffset, layers[i]);
+		renderIsoLayer(NULL, nulloffset, layers[i]);
 
 	checkTooltip();
 }
@@ -526,7 +526,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable*> &r) {
 	const short max_tiles_width  = min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
-	while (r_cursor != r_end && (int)(r_cursor->map_pos.y) < startj)
+	while (r_cursor != r_end && (int)((*r_cursor)->map_pos.y) < startj)
 		++r_cursor;
 
 	if (index_objectlayer >= layers.size())
@@ -546,14 +546,14 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable*> &r) {
 			}
 			p.x += TILE_W;
 
-			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) < i) // implicit floor
+			while (r_cursor != r_end && (int)((*r_cursor)->map_pos.y) == j && (int)((*r_cursor)->map_pos.x) < i) // implicit floor
 				++r_cursor;
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) == i) // implicit floor
+			while (r_cursor != r_end && (int)((*r_cursor)->map_pos.y) == j && (int)((*r_cursor)->map_pos.x) == i) // implicit floor
 				drawRenderable(r_cursor++);
 		}
-		while (r_cursor != r_end && (int)(r_cursor->map_pos.y) <= j) // implicit floor
+		while (r_cursor != r_end && (int)((*r_cursor)->map_pos.y) <= j) // implicit floor
 			++r_cursor;
 	}
 }
@@ -693,8 +693,8 @@ void MapRenderer::checkHotspots() {
 						SDL_Rect dest;
 						dest.x = p.x - tset.tiles[current_tile].offset.x;
 						dest.y = p.y - tset.tiles[current_tile].offset.y;
-						dest.w = tset.tiles[current_tile].src.w;
-						dest.h = tset.tiles[current_tile].src.h;
+						dest.w = tset.tiles[current_tile].tile.src.w;
+						dest.h = tset.tiles[current_tile].tile.src.h;
 
 						if (isWithin(dest, inpt->mouse)) {
 							// Now that the mouse is within the rectangle of the tile, we can check for
@@ -702,8 +702,8 @@ void MapRenderer::checkHotspots() {
 							// otherwise the pixel precise check might hit a neighbouring tile in the
 							// tileset. We need to calculate the point relative to the
 							Point p1;
-							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].src.x;
-							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].src.y;
+							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile.src.x;
+							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile.src.y;
 							matched |= checkPixel(p1, tset.sprites);
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;

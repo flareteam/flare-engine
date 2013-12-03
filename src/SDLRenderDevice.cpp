@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 SDLRenderDevice::SDLRenderDevice() {
-	cout << "Using Render Device: SDLBlitRenderDevice" << endl;
+	cout << "Using Render Device: SDLRenderDevice" << endl;
 }
 
 SDL_Surface *SDLRenderDevice::create_context(

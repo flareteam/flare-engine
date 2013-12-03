@@ -1075,13 +1075,13 @@ void GameStateConfig::render () {
 	if (active_tab == 4) {
 		if (input_scrollbox->update) {
 			input_scrollbox->refresh();
-			for (unsigned int i = 0; i < 29; i++) {
-				settings_lb[i]->local_frame = input_scrollbox->pos;
-				settings_lb[i]->local_offset.y = input_scrollbox->getCursor();
-				settings_lb[i]->render();
-			}
 		}
 		input_scrollbox->render();
+		for (unsigned int i = 0; i < 29; i++) {
+			settings_lb[i]->local_frame = input_scrollbox->pos;
+			settings_lb[i]->local_offset.y = input_scrollbox->getCursor();
+			settings_lb[i]->render();
+		}
 	}
 
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
