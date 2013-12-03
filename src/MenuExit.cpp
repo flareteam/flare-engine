@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 kitano
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -32,7 +33,7 @@ MenuExit::MenuExit() : Menu() {
 
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 
-	background = loadGraphicSurface("images/menus/confirm_bg.png");
+	background.set_graphics(loadGraphicSurface("images/menus/confirm_bg.png"));
 	tablist.add(buttonExit);
 	tablist.add(buttonClose);
 }
@@ -65,14 +66,8 @@ void MenuExit::logic() {
 
 void MenuExit::render() {
 	if (visible) {
-		SDL_Rect src;
-
 		// background
-		src.x = 0;
-		src.y = 0;
-		src.w = window_area.w;
-		src.h = window_area.h;
-		SDL_BlitSurface(background, &src, screen, &window_area);
+		render_device->render(background);
 
 		label.render();
 
@@ -84,6 +79,6 @@ void MenuExit::render() {
 MenuExit::~MenuExit() {
 	delete buttonExit;
 	delete buttonClose;
-	SDL_FreeSurface(background);
+	background.clear_graphics();
 }
 

@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -24,6 +25,57 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 
 using namespace std;
+
+/**
+ * Set the graphics context of a Renderable.
+ * Initialize graphics resources. That is the SLD_surface buffer
+ *
+ * It is important that, if the client owns the graphics resources,
+ * clear_graphics() method is called first in case this Renderable holds the
+ * last references to avoid resource leaks.
+ */
+void Renderable::set_graphics(SDL_Surface *s, SDL_Rect *texture_clip) {
+
+	sprite = s;
+}
+/**
+ * Clear the graphics context of a Renderable.
+ * Release graphics resources. That is the SLD_surface buffer
+ *
+ * It is important that this method is only called by clients who own the
+ * graphics resources.
+ */
+void Renderable::clear_graphics() {
+
+	if (sprite != NULL) {
+		SDL_FreeSurface(sprite);
+		sprite = NULL;
+	}
+}
+
+/* Clear only the texture of a Renderable.
+ *
+ * Do nothing if we compile and/or run in SDL blit mode.
+ */
+void Renderable::clear_texture() {
+}
+
+/**
+ * Set the clipping rectangle for the sprite
+ */
+void Renderable::set_clip(const SDL_Rect& clip) {
+	src = clip;
+}
+
+/**
+ * Set the clipping rectangle for the sprite
+ */
+void Renderable::set_clip(const int x, const int y, const int w, const int h) {
+	src.x = x;
+	src.y = y;
+	src.w = w;
+	src.h = h;
+}
 
 Point floor(FPoint fp) {
 	Point result;
@@ -498,19 +550,6 @@ float calcTheta(float x1, float y1, float x2, float y2) {
 	return theta;
 }
 
-void setupSDLVideoMode(unsigned width, unsigned height) {
-	Uint32 flags = 0;
-
-	if (FULLSCREEN) flags = flags | SDL_FULLSCREEN;
-	if (DOUBLEBUF) flags = flags | SDL_DOUBLEBUF;
-	if (HWSURFACE)
-		flags = flags | SDL_HWSURFACE | SDL_HWACCEL;
-	else
-		flags = flags | SDL_SWSURFACE;
-
-	screen = SDL_SetVideoMode (width, height, 0, flags);
-}
-
 std::string abbreviateKilo(int amount) {
 	stringstream ss;
 	if (amount < 1000)
@@ -519,4 +558,14 @@ std::string abbreviateKilo(int amount) {
 		ss << (amount/1000) << msg->get("k");
 
 	return ss.str();
+}
+
+Renderable loadIcons() {
+	if (icon_atlas == NULL) {
+		icon_atlas = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
+	}
+
+	Renderable r;
+	r.sprite = icon_atlas;
+	return r;
 }

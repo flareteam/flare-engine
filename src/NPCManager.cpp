@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -54,9 +55,9 @@ NPCManager::NPCManager(StatBlock *_stats)
 	}
 }
 
-void NPCManager::addRenders(std::vector<Renderable> &r) {
+void NPCManager::addRenders(std::vector<Renderable*> &r) {
 	for (unsigned i=0; i<npcs.size(); i++) {
-		r.push_back(npcs[i]->getRender());
+		r.push_back(&(npcs[i]->getRender()));
 	}
 }
 

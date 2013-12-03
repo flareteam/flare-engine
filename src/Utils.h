@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -46,9 +47,9 @@ public:
 };
 
 // message passing struct for various sprites rendered map inline
-class Renderable {
-public:
+struct Renderable {
 	SDL_Surface *sprite; // image to be used
+	SDL_Rect local_frame;
 	SDL_Rect src; // location on the sprite in pixel coordinates.
 
 	FPoint map_pos;     // The map location on the floor between someone's feet
@@ -56,11 +57,29 @@ public:
 	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
 	Renderable()
 		: sprite(0)
+		, local_frame(SDL_Rect())
 		, src(SDL_Rect())
 		, map_pos()
 		, offset()
 		, prio(0)
 	{}
+	void set_graphics(SDL_Surface *s, SDL_Rect *texture_clip=0);
+	void clear_graphics();
+	void clear_texture();
+	void set_clip(const SDL_Rect& clip);
+	void set_clip(const int x, const int y, const int w, const int h);
+	void set_dest(const SDL_Rect& dest) {
+		map_pos.x = (float)dest.x;
+		map_pos.y = (float)dest.y;
+	}
+	void set_dest(const Point& dest) {
+		map_pos.x = (float)dest.x;
+		map_pos.y = (float)dest.y;
+	}
+	void set_dest(int x, int y) {
+		map_pos.x = (float)x;
+		map_pos.y = (float)y;
+	}
 };
 
 class Event_Component {
@@ -151,8 +170,7 @@ SDL_Surface* loadGraphicSurface(std::string filename,
 								bool IfNotFoundExit = false,
 								bool HavePinkColorKey = false);
 
-void setupSDLVideoMode(unsigned width, unsigned height);
-
 std::string abbreviateKilo(int amount);
 
+Renderable loadIcons();
 #endif

@@ -1,5 +1,6 @@
 /*
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -23,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuNPCActions.h"
 #include "NPC.h"
-#include "SDL_gfxBlitFunc.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
@@ -66,7 +66,6 @@ MenuNPCActions::MenuNPCActions()
 	, is_empty(true)
 	, first_dialog_node(-1)
 	, current_action(-1)
-	, action_menu(NULL)
 	, vendor_label(msg->get("Trade"))
 	, cancel_label(msg->get("Cancel"))
 	, dialog_selected(false)
@@ -121,8 +120,6 @@ MenuNPCActions::MenuNPCActions()
 }
 
 void MenuNPCActions::update() {
-	if (action_menu)
-		SDL_FreeSurface(action_menu);
 
 	/* get max width and height of action menu */
 	int w = 0, h = 0;
@@ -192,17 +189,22 @@ void MenuNPCActions::update() {
 	w += (MENU_BORDER*2);
 	h += (MENU_BORDER*2);
 
-	/* render action menu surface */
-	action_menu = createAlphaSurface(w,h);
-	Uint32 bg = SDL_MapRGBA(action_menu->format,
-							background_color.r, background_color.g,
-							background_color.b, background_alpha);
-	SDL_FillRect(action_menu, NULL, bg);
-
-	for(size_t i=0; i<npc_actions.size(); i++) {
-		if (npc_actions[i].label) {
-			npc_actions[i].label->render(action_menu);
-		}
+	int old_w = -1, old_h = -1;
+	if (NULL != action_menu.sprite) {
+		old_w = action_menu.sprite->w;
+		old_h = action_menu.sprite->h;
+	}
+	// create background surface if necessary
+	if ( old_w != w || old_h != h ) {
+		action_menu.clear_graphics();
+		SDL_Surface *surface;
+		surface = createAlphaSurface(w,h);
+		Uint32 bg = SDL_MapRGBA(surface->format,
+								background_color.r, background_color.g,
+								background_color.b, background_alpha);
+		SDL_FillRect(surface, NULL, bg);
+		action_menu.set_graphics(surface);
+		action_menu.set_clip(0,0,surface->w,surface->h);
 	}
 
 }
@@ -384,14 +386,20 @@ void MenuNPCActions::keyboardLogic() {
 
 void MenuNPCActions::render() {
 	if (!visible) return;
+	if (!action_menu.sprite) return;
 
-	if (!action_menu) return;
-
-	SDL_BlitSurface(action_menu, NULL, screen, &window_area);
-
+	action_menu.set_dest(window_area);
+	render_device->render(action_menu);
+	for(size_t i=0; i<npc_actions.size(); i++) {
+		if (npc_actions[i].label) {
+			npc_actions[i].label->local_frame.x = window_area.x;
+			npc_actions[i].label->local_frame.y = window_area.y;
+			npc_actions[i].label->render();
+		}
+	}
 }
 
 MenuNPCActions::~MenuNPCActions() {
-	SDL_FreeSurface(action_menu);
+	action_menu.clear_graphics();
 }
 

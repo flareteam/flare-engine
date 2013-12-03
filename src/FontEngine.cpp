@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -33,8 +34,7 @@ FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), ttfont(NULL
 }
 
 FontEngine::FontEngine()
-	: ttf(NULL)
-	, active_font(NULL)
+	: active_font(NULL)
 	, cursor_y(0) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
@@ -229,18 +229,25 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 
 	// render and blit the text
 	if (active_font->blend && target != screen) {
-		ttf = TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color);
+		ttf.sprite = TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color);
 
 		// preserve alpha transparency of text buffers
-		if (ttf != NULL) SDL_gfxBlitRGBA(ttf, NULL, target, &dest_rect);
+		if (ttf.sprite != NULL) SDL_gfxBlitRGBA(ttf.sprite, NULL, target, &dest_rect);
+	}
+	else if (target == NULL) {
+		render_device->render_text(
+			active_font->ttfont,
+			text,
+			color,
+			dest_rect
+		);
 	}
 	else {
-		ttf = TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color);
-		if (ttf != NULL) SDL_BlitSurface(ttf, NULL, target, &dest_rect);
+		ttf.sprite = TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color);
+		if (ttf.sprite != NULL) SDL_BlitSurface(ttf.sprite, NULL, target, &dest_rect);
 	}
+	ttf.clear_graphics();
 
-	SDL_FreeSurface(ttf);
-	ttf = NULL;
 }
 
 /**
@@ -297,7 +304,7 @@ void FontEngine::renderShadowed(const std::string& text, int x, int y, int justi
 }
 
 FontEngine::~FontEngine() {
-	SDL_FreeSurface(ttf);
+	ttf.clear_graphics();
 	for (unsigned int i=0; i<font_styles.size(); ++i) TTF_CloseFont(font_styles[i].ttfont);
 	TTF_Quit();
 }

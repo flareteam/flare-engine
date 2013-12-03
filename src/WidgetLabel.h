@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -58,12 +59,12 @@ private:
 	int justify;
 	int valign;
 	std::string font_style;
-	SDL_Surface *text_buffer;
+	Renderable renderable;
 
 public:
 	WidgetLabel();
 	~WidgetLabel();
-	void render(SDL_Surface *target = NULL);
+	void render();
 	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, SDL_Color _color);
 	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, SDL_Color _color, std::string _font);
 	void setX(int _x);

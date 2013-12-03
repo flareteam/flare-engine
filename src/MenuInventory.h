@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -42,6 +43,7 @@ private:
 	int areaOver(Point position);
 	void updateEquipment(int slot);
 
+	Renderable background;
 	WidgetButton *closeButton;
 
 	int MAX_EQUIPPED;

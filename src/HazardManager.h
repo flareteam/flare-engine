@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -40,7 +41,7 @@ public:
 	void expire(int index);
 	void checkNewHazards();
 	void handleNewMap();
-	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void addRenders(std::vector<Renderable*> &r, std::vector<Renderable*> &r_dead);
 
 	std::vector<Hazard*> h;
 	Enemy* last_enemy;

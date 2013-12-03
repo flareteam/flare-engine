@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012-2013 Henrik Andersson
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -49,7 +50,6 @@ NPC::NPC()
 	, pos()
 	, level(1)
 	, direction(0)
-	, portrait(NULL)
 	, talker(false)
 	, vendor(false)
 	, stock()
@@ -165,7 +165,7 @@ void NPC::loadGraphics(const string& filename_portrait) {
 		activeAnimation = animationSet->getAnimation();
 	}
 	if (filename_portrait != "")
-		portrait = loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true);
+		portrait.set_graphics(loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true));
 }
 
 /**
@@ -396,10 +396,11 @@ void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
 	EventManager::executeEvent(ev);
 }
 
-Renderable NPC::getRender() {
-	Renderable r = activeAnimation->getCurrentFrame(direction);
+Renderable& NPC::getRender() {
+	Renderable& r = activeAnimation->getCurrentFrame(direction);
 	r.map_pos.x = pos.x;
 	r.map_pos.y = pos.y;
+	r.prio = 1;
 
 	return r;
 }
@@ -413,7 +414,7 @@ NPC::~NPC() {
 		anim->decreaseCount(gfx);
 	}
 
-	if (portrait != NULL) SDL_FreeSurface(portrait);
+	portrait.clear_graphics();
 	while (!vox_intro.empty()) {
 		snd->unload(vox_intro.back());
 		vox_intro.pop_back();

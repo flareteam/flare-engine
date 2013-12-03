@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -47,7 +48,6 @@ GameStateNew::GameStateNew() : GameState() {
 	game_slot = 0;
 	current_option = 0;
 	option_count = 0;
-	portrait_image = NULL;
 	tip_buf.clear();
 	modified_name = false;
 
@@ -202,12 +202,19 @@ GameStateNew::GameStateNew() : GameState() {
 }
 
 void GameStateNew::loadGraphics() {
-	portrait_border = loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true);
+	portrait_border.set_graphics(
+		loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true)
+	);
+	portrait_border.set_clip(0,0,portrait_border.sprite->w,portrait_border.sprite->h);
 }
 
 void GameStateNew::loadPortrait(const string& portrait_filename) {
-	SDL_FreeSurface(portrait_image);
-	portrait_image = loadGraphicSurface("images/portraits/" + portrait_filename + ".png");
+	portrait_image.clear_graphics();
+	portrait_image.set_graphics(
+		loadGraphicSurface("images/portraits/" + portrait_filename + ".png")
+	);
+	portrait_image.set_clip(0,0,portrait_image.sprite->w,portrait_image.sprite->h);
+	portrait_image.set_dest(portrait_pos);
 }
 
 /**
@@ -323,8 +330,12 @@ void GameStateNew::render() {
 	dest.x = portrait_pos.x + (VIEW_W - FRAME_W)/2;
 	dest.y = portrait_pos.y + (VIEW_H - FRAME_H)/2;
 
-	SDL_BlitSurface(portrait_image, &src, screen, &dest);
-	SDL_BlitSurface(portrait_border, &src, screen, &dest);
+	portrait_image.set_clip(src);
+	portrait_image.set_dest(dest);
+	render_device->render(portrait_image);
+	portrait_border.set_clip(src);
+	portrait_border.set_dest(dest);
+	render_device->render(portrait_border);
 
 	// display labels
 	if (!portrait_label.hidden) label_portrait->render();
@@ -360,8 +371,8 @@ std::string GameStateNew::getClassTooltip(int index) {
 }
 
 GameStateNew::~GameStateNew() {
-	SDL_FreeSurface(portrait_image);
-	SDL_FreeSurface(portrait_border);
+	portrait_image.clear_graphics();
+	portrait_border.clear_graphics();
 	delete button_exit;
 	delete button_create;
 	delete button_next;

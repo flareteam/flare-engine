@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -37,11 +38,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 class Tile_Def {
 public:
-	SDL_Rect src;
 	Point offset;
+	Renderable tile;
 	Tile_Def() {
-		src.x = src.y = src.w = src.h = 0;
-		offset.x = offset.y = 0;
 	}
 };
 

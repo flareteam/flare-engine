@@ -16,8 +16,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #pragma once
-#ifndef SDLBLITRENDERDEVICE_H
-#define SDLBLITRENDERDEVICE_H
+#ifndef SDLRENDERDEVICE_H
+#define SDLRENDERDEVICE_H
 
 #include "RenderDevice.h"
 
@@ -35,13 +35,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * @date 2013-07-06
  *
  */
-class SDLBlitRenderDevice : public RenderDevice {
+class SDLRenderDevice : public RenderDevice {
 
 public:
 
 	/** Initialize base class and report rendering device in use.
 	 */
-	SDLBlitRenderDevice();
+	SDLRenderDevice();
 
 	/** Create context on startup.
 	 */
@@ -129,4 +129,4 @@ private:
 	Renderable m_ttf_renderable;
 };
 
-#endif // SDLBLITRENDERDEVICE_H
+#endif // SDLRENDERDEVICE_H

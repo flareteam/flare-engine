@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -35,11 +36,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuActiveEffects::MenuActiveEffects(SDL_Surface *_icons) {
-	stats = NULL;
-	icons = _icons;
-	orientation = 0; // horizontal
-
+MenuActiveEffects::MenuActiveEffects()
+	: icons(loadIcons())
+	, stats(NULL)
+	, orientation(false) { // horizontal
 	// Load config settings
 	FileParser infile;
 	if(infile.open("menus/activeeffects.txt")) {
@@ -61,8 +61,7 @@ MenuActiveEffects::MenuActiveEffects(SDL_Surface *_icons) {
 }
 
 void MenuActiveEffects::loadGraphics() {
-
-	timer = loadGraphicSurface("images/menus/disabled.png");
+	timer.set_graphics(loadGraphicSurface("images/menus/disabled.png"));
 }
 
 void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max) {
@@ -77,12 +76,14 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 			pos.y = window_area.y + (index * ICON_SIZE);
 		}
 
-		int columns = icons->w / ICON_SIZE;
+		int columns = icons.sprite->w / ICON_SIZE;
 		src.x = (icon_id % columns) * ICON_SIZE;
 		src.y = (icon_id / columns) * ICON_SIZE;
 		src.w = src.h = ICON_SIZE;
 
-		SDL_BlitSurface(icons,&src,screen,&pos);
+		icons.set_clip(src);
+		icons.set_dest(pos);
+		render_device->render(icons);
 
 		if (max > 0) {
 			overlay.x = 0;
@@ -90,7 +91,9 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 			overlay.w = ICON_SIZE;
 			overlay.h = ICON_SIZE - overlay.y;
 
-			SDL_BlitSurface(timer,&overlay,screen,&pos);
+			timer.set_clip(overlay);
+			timer.set_dest(pos);
+			render_device->render(timer);
 		}
 	}
 }
@@ -123,5 +126,5 @@ void MenuActiveEffects::render() {
 }
 
 MenuActiveEffects::~MenuActiveEffects() {
-	SDL_FreeSurface(timer);
+	timer.clear_graphics();
 }

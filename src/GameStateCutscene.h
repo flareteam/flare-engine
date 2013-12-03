@@ -1,5 +1,6 @@
 /*
 Copyright © 2012-2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -33,12 +34,11 @@ class WidgetScrollBox;
 class SceneComponent {
 public:
 	std::string type;
-	SDL_Surface *i;
+	Renderable i;
 	std::string s;
 	int x,y,z;
 	SceneComponent()
 		: type("")
-		, i(NULL)
 		, s("")
 		, x(0)
 		, y(0)
@@ -52,7 +52,7 @@ private:
 	int pause_frames;
 	std::string caption;
 	Point caption_size;
-	SDL_Surface *art;
+	Renderable art;
 	SDL_Rect art_dest;
 	SoundManager::SoundID sid;
 	WidgetScrollBox *caption_box;

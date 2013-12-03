@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -34,7 +35,6 @@ class TooltipData;
 
 class MenuItemStorage : public ItemStorage {
 protected:
-	SDL_Surface *icons;
 	void loadGraphics();
 	void renderHighlight(int x, int y, int _icon_size);
 	SDL_Rect grid_area;
@@ -61,7 +61,7 @@ public:
 	std::vector<WidgetSlot*> slots;
 
 	bool * highlight;
-	SDL_Surface * highlight_image;
+	Renderable highlight_image;
 };
 
 #endif

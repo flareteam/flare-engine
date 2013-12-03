@@ -25,7 +25,9 @@ using namespace std;
  *
  * @param amount  Amount of tabs the control will have.
  */
-WidgetTabControl::WidgetTabControl(int amount) {
+WidgetTabControl::WidgetTabControl(int amount)
+	: active_labels(amount)
+	, inactive_labels(amount) {
 
 	// Based on given amount:
 	tabsAmount = amount;
@@ -47,8 +49,8 @@ WidgetTabControl::WidgetTabControl(int amount) {
  * Class destructor.
  */
 WidgetTabControl::~WidgetTabControl() {
-	SDL_FreeSurface(activeTabSurface);
-	SDL_FreeSurface(inactiveTabSurface);
+	activeTabSurface.clear_graphics();
+	inactiveTabSurface.clear_graphics();
 	delete[] titles;
 	delete[] tabs;
 }
@@ -86,7 +88,7 @@ void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
 	tabsArea.x = x;
 	tabsArea.y = y;
 	tabsArea.w = width;
-	tabsArea.h = activeTabSurface->h;
+	tabsArea.h = activeTabSurface.sprite->h;
 
 	// Set content area.
 	contentArea.x = x + 8;
@@ -110,6 +112,21 @@ void WidgetTabControl::updateHeader() {
 
 		tabs[i].w = tabPadding.x + font->calc_width(titles[i]) + tabPadding.x;
 
+		active_labels[i].set(
+			tabs[i].x + tabPadding.x,
+			tabs[i].y + tabs[i].h/2,
+			JUSTIFY_LEFT,
+			VALIGN_CENTER,
+			titles[i],
+			color_normal);
+
+		inactive_labels[i].set(
+			tabs[i].x + tabPadding.x,
+			tabs[i].y + tabs[i].h/2,
+			JUSTIFY_LEFT,
+			VALIGN_CENTER,
+			titles[i],
+			color_disabled);
 	}
 }
 
@@ -117,10 +134,10 @@ void WidgetTabControl::updateHeader() {
  * Load the graphics for the control.
  */
 void WidgetTabControl::loadGraphics() {
-	activeTabSurface = loadGraphicSurface("images/menus/tab_active.png");
-	inactiveTabSurface = loadGraphicSurface("images/menus/tab_inactive.png");
+	activeTabSurface.set_graphics(loadGraphicSurface("images/menus/tab_active.png"));
+	inactiveTabSurface.set_graphics(loadGraphicSurface("images/menus/tab_inactive.png"));
 
-	if (!activeTabSurface || !inactiveTabSurface) {
+	if (!activeTabSurface.sprite || !inactiveTabSurface.sprite) {
 		SDL_Quit();
 		exit(1);
 	}
@@ -154,19 +171,16 @@ void WidgetTabControl::logic(int x, int y) {
  *
  * Remember to render then on top of it the actual content of the {@link getActiveTab() active tab}.
  */
-void WidgetTabControl::render(SDL_Surface *target) {
-	if (target == NULL) {
-		target = screen;
-	}
+void WidgetTabControl::render() {
 	for (int i=0; i<tabsAmount; i++) {
-		renderTab(i,target);
+		renderTab(i);
 	}
 }
 
 /**
  * Renders the given tab on the widget header.
  */
-void WidgetTabControl::renderTab(int number, SDL_Surface *target) {
+void WidgetTabControl::renderTab(int number) {
 	int i = number;
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -178,30 +192,40 @@ void WidgetTabControl::renderTab(int number, SDL_Surface *target) {
 	src.w = tabs[i].w;
 	src.h = tabs[i].h;
 
-	if (i == activeTab)
-		SDL_BlitSurface(activeTabSurface, &src, target, &dest);
-	else
-		SDL_BlitSurface(inactiveTabSurface, &src, target, &dest);
+	if (i == activeTab) {
+		activeTabSurface.set_clip(src);
+		activeTabSurface.set_dest(dest);
+		render_device->render(activeTabSurface);
+	}
+	else {
+		inactiveTabSurface.set_clip(src);
+		inactiveTabSurface.set_dest(dest);
+		render_device->render(inactiveTabSurface);
+	}
 
 	// Draw tab’s right edge.
-	src.x = activeTabSurface->w - tabPadding.x;
+	src.x = activeTabSurface.sprite->w - tabPadding.x;
 	src.w = tabPadding.x;
 	dest.x = tabs[i].x + tabs[i].w - tabPadding.x;
 
-	if (i == activeTab)
-		SDL_BlitSurface(activeTabSurface, &src, target, &dest);
-	else
-		SDL_BlitSurface(inactiveTabSurface, &src, target, &dest);
+	if (i == activeTab) {
+		activeTabSurface.set_clip(src);
+		activeTabSurface.set_dest(dest);
+		render_device->render(activeTabSurface);
+	}
+	else {
+		inactiveTabSurface.set_clip(src);
+		inactiveTabSurface.set_dest(dest);
+		render_device->render(inactiveTabSurface);
+	}
 
-	// Set tab’s label font color.
-	SDL_Color fontColor;
-	if (i == activeTab) fontColor = color_normal;
-	else fontColor = color_disabled;
-
-	// Draw tab’s label.
-	WidgetLabel label;
-	label.set(tabs[i].x + tabPadding.x, tabs[i].y + tabs[i].h/2, JUSTIFY_LEFT, VALIGN_CENTER, titles[i], fontColor);
-	label.render(target);
+	// Render labels
+	if (i == activeTab) {
+		active_labels[i].render();
+	}
+	else {
+		inactive_labels[i].render();
+	}
 }
 
 /**

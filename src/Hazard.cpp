@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -140,9 +141,9 @@ void Hazard::addEntity(Entity *ent) {
 	entitiesCollided.push_back(ent);
 }
 
-void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void Hazard::addRenderable(vector<Renderable*>& r, vector<Renderable*>& r_dead) {
 	if (delay_frames == 0 && activeAnimation) {
-		Renderable re = activeAnimation->getCurrentFrame(animationKind);
+		Renderable& re = activeAnimation->getCurrentFrame(animationKind);
 		re.map_pos.x = pos.x;
 		re.map_pos.y = pos.y;
 		(on_floor ? r_dead : r).push_back(re);

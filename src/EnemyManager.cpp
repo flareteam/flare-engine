@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -455,25 +456,25 @@ bool EnemyManager::isCleared() {
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-void EnemyManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void EnemyManager::addRenders(vector<Renderable*>& r, vector<Renderable*>& r_dead) {
 	vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
 		bool dead = (*it)->stats.corpse;
 		if (!dead || (dead && (*it)->stats.corpse_ticks > 0)) {
-			Renderable re = (*it)->getRender();
+			Renderable& re = (*it)->getRender();
 			re.prio = 1;
 
 			// draw corpses below objects so that floor loot is more visible
-			(dead ? r_dead : r).push_back(re);
+			(dead ? r_dead : r).push_back(&re);
 
 			// add effects
 			for (unsigned i = 0; i < (*it)->stats.effects.effect_list.size(); ++i) {
 				if ((*it)->stats.effects.effect_list[i].animation) {
-					Renderable ren = (*it)->stats.effects.effect_list[i].animation->getCurrentFrame(0);
+					Renderable& ren = (*it)->stats.effects.effect_list[i].animation->getCurrentFrame(0);
 					ren.map_pos = (*it)->stats.pos;
 					if ((*it)->stats.effects.effect_list[i].render_above) ren.prio = 2;
 					else ren.prio = 0;
-					r.push_back(ren);
+					r.push_back(&ren);
 				}
 			}
 		}

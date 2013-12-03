@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Pavel Kirpichyov (Cheshire)
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -33,7 +34,8 @@ class Enemy;
 
 class MenuEnemy : public Menu {
 private:
-	SDL_Surface *bar_hp;
+	Renderable background;
+	Renderable bar_hp;
 	SDL_Rect bar_pos;
 	LabelInfo text_pos;
 	bool custom_text_pos;

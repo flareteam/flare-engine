@@ -19,15 +19,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_TAB_CONTROL_H
 #define MENU_TAB_CONTROL_H
 
+#include <vector>
+
 #include "CommonIncludes.h"
 #include "SharedResources.h"
+#include "WidgetLabel.h"
 
 class WidgetTabControl {
 
 private:
 
-	SDL_Surface *activeTabSurface;
-	SDL_Surface *inactiveTabSurface;
+
+	Renderable activeTabSurface;
+	Renderable inactiveTabSurface;
+
+	std::vector<WidgetLabel> active_labels;
+	std::vector<WidgetLabel> inactive_labels;
 
 	std::string *titles;  /** Titles of the tabs. */
 	int activeTab;        /** Index of the currently active tab. */
@@ -42,7 +49,7 @@ private:
 
 	void loadGraphics();
 
-	void renderTab(int number, SDL_Surface *target);
+	void renderTab(int number);
 
 public:
 
@@ -56,13 +63,13 @@ public:
 	int getActiveTab();
 	void setActiveTab(int tab) { activeTab = tab; }
 	SDL_Rect getContentArea();
-	int getTabHeight() { return activeTabSurface->h; }
+	int getTabHeight() { return activeTabSurface.sprite->h; }
 
 	void updateHeader();
 
 	void logic();
 	void logic(int x, int y);
-	void render(SDL_Surface *target = NULL);
+	void render();
 };
 
 #endif

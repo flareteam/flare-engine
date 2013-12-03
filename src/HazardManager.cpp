@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -183,7 +184,7 @@ void HazardManager::handleNewMap() {
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-void HazardManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void HazardManager::addRenders(vector<Renderable*> &r, vector<Renderable*> &r_dead) {
 	for (unsigned int i=0; i<h.size(); i++)
 		h[i]->addRenderable(r, r_dead);
 }

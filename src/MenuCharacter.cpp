@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -249,7 +250,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
 
-	background = loadGraphicSurface("images/menus/character.png");
+	background.set_graphics(loadGraphicSurface("images/menus/character.png"));
 }
 
 void MenuCharacter::update() {
@@ -562,16 +563,8 @@ void MenuCharacter::logic() {
 void MenuCharacter::render() {
 	if (!visible) return;
 
-	SDL_Rect src;
-	SDL_Rect dest;
-
 	// background
-	dest = window_area;
-	src.x = 0;
-	src.y = 0;
-	src.w = window_area.w;
-	src.h = window_area.h;
-	SDL_BlitSurface(background, &src, screen, &dest);
+	render_device->render(background);
 
 	// close button
 	closeButton->render();
@@ -661,7 +654,7 @@ bool MenuCharacter::checkUpgrade() {
 }
 
 MenuCharacter::~MenuCharacter() {
-	SDL_FreeSurface(background);
+	background.clear_graphics();
 	delete closeButton;
 
 	delete labelCharacter;

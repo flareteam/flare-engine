@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -40,7 +41,8 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
-	background = loadGraphicSurface("images/menus/inventory.png");
+	background.set_graphics(loadGraphicSurface("images/menus/inventory.png"));
+	background.set_clip(0,0,background.sprite->w,background.sprite->h);
 
 	currency = 0;
 
@@ -142,7 +144,7 @@ void MenuInventory::logic() {
 		// remove a % of currency
 		if (DEATH_PENALTY_CURRENCY > 0) {
 			if (currency > 0)
-				removeCurrency((currency * DEATH_PENALTY_CURRENCY) / 100);
+				currency -= (currency * DEATH_PENALTY_CURRENCY) / 100;
 			death_message += msg->get("Lost %d%% of %s. ", DEATH_PENALTY_CURRENCY, CURRENCY);
 		}
 
@@ -211,9 +213,8 @@ void MenuInventory::logic() {
 void MenuInventory::render() {
 	if (!visible) return;
 
-	// background
-	SDL_Rect dest = window_area;
-	SDL_BlitSurface(background, NULL, screen, &dest);
+	background.set_dest(window_area);
+	render_device->render(background);
 
 	// close button
 	closeButton->render();
@@ -453,8 +454,8 @@ void MenuInventory::activate(Point position) {
 		if (powers->powers[items->items[inventory[CARRIED][slot].item].power].spawn_type == "untransform" && !stats->transformed) return;
 
 		//check for power cooldown
-		if (pc->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] > 0) return;
-		else pc->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = powers->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
+		if (stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] > 0) return;
+		else stats->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = powers->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
 
 		// if this item requires targeting it can't be used this way
 		if (!powers->powers[items->items[inventory[CARRIED][slot].item].power].requires_targeting) {
@@ -591,7 +592,6 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 			drop_stack.quantity = stack.quantity;
 		}
 	}
-	drag_prev_src = -1;
 }
 
 /**
@@ -976,6 +976,6 @@ void MenuInventory::clearHighlight() {
 }
 
 MenuInventory::~MenuInventory() {
-	SDL_FreeSurface(background);
+	background.clear_graphics();
 	delete closeButton;
 }

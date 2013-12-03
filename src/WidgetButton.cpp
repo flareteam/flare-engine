@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -20,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetButton
  */
 
-#include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "WidgetButton.h"
 #include "WidgetTooltip.h"
@@ -30,7 +30,7 @@ using namespace std;
 WidgetButton::WidgetButton(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
-	, buttons(NULL)
+	, buttons()
 	, wlabel()
 	, color_normal(font->getColor("widget_normal"))
 	, color_disabled(font->getColor("widget_disabled"))
@@ -44,9 +44,9 @@ WidgetButton::WidgetButton(const std::string& _fileName)
 	, hover(false) {
 	focusable = true;
 	pos.x = pos.y = pos.w = pos.h = 0;
+	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
+	local_offset.x = local_offset.y = 0;
 	loadArt();
-	pos.w = buttons->w;
-	pos.h = (buttons->h / 4); //height of one button
 }
 
 void WidgetButton::activate() {
@@ -54,14 +54,22 @@ void WidgetButton::activate() {
 }
 
 void WidgetButton::loadArt() {
-
 	// load button images
-	buttons = loadGraphicSurface(fileName);
-
-	if (!buttons) {
+	SDL_Surface *surface = loadGraphicSurface(fileName);
+	if (!surface) {
 		SDL_Quit();
 		exit(1); // or abort ??
 	}
+
+	buttons.set_graphics(surface);
+	buttons.set_clip(
+		0,
+		0,
+		buttons.sprite->w,
+		buttons.sprite->h/4
+	);
+	pos.w = buttons.sprite->w;
+	pos.h = buttons.sprite->h/4; // height of one button
 }
 
 bool WidgetButton::checkClick() {
@@ -109,37 +117,36 @@ bool WidgetButton::checkClick(int x, int y) {
 
 }
 
-void WidgetButton::render(SDL_Surface *target) {
-	if (target == NULL) {
-		target = screen;
-	}
-	SDL_Rect src;
-	src.x = 0;
-	src.w = pos.w;
-	src.h = pos.h;
-
+void WidgetButton::render() {
 	// the "button" surface contains button variations.
 	// choose which variation to display.
+	int y;
 	if (!enabled)
-		src.y = BUTTON_GFX_DISABLED * pos.h;
+		y = BUTTON_GFX_DISABLED * pos.h;
 	else if (pressed)
-		src.y = BUTTON_GFX_PRESSED * pos.h;
+		y = BUTTON_GFX_PRESSED * pos.h;
 	else if (hover)
-		src.y = BUTTON_GFX_HOVER * pos.h;
+		y = BUTTON_GFX_HOVER * pos.h;
 	else if(in_focus)
-		src.y = BUTTON_GFX_HOVER * pos.h;
+		y = BUTTON_GFX_HOVER * pos.h;
 	else
-		src.y = BUTTON_GFX_NORMAL * pos.h;
+		y = BUTTON_GFX_NORMAL * pos.h;
 
-	// create a temporary rect so we don't modify pos
-	SDL_Rect offset = pos;
+	buttons.local_frame = local_frame;
+	buttons.offset = local_offset;
+	buttons.set_clip(
+		buttons.src.x,
+		y,
+		buttons.src.w,
+		buttons.src.h
+	);
+	buttons.set_dest(pos);
+	render_device->render(buttons);
 
-	if (render_to_alpha)
-		SDL_gfxBlitRGBA(buttons, &src, target, &offset);
-	else
-		SDL_BlitSurface(buttons, &src, target, &offset);
-
-	wlabel.render(target);
+	// render label
+	wlabel.local_frame = local_frame;
+	wlabel.local_offset = local_offset;
+	wlabel.render();
 
 	// render the tooltip
 	// TODO move this to menu rendering
@@ -148,7 +155,7 @@ void WidgetButton::render(SDL_Surface *target) {
 			tip_buf.clear();
 			tip_buf = tip_new;
 		}
-		tip->render(tip_buf, inpt->mouse, STYLE_FLOAT, target);
+		tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
 	}
 }
 
@@ -184,7 +191,7 @@ TooltipData WidgetButton::checkTooltip(Point mouse) {
 }
 
 WidgetButton::~WidgetButton() {
-	SDL_FreeSurface(buttons);
+	buttons.clear_graphics();
 	tip_buf.clear();
 	delete tip;
 }

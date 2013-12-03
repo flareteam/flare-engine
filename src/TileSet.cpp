@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -55,14 +56,21 @@ void TileSet::reset() {
 }
 
 void TileSet::loadGraphics(const std::string& filename) {
-	if (sprites)
+	if (sprites) {
 		SDL_FreeSurface(sprites);
+		tiles.clear();
+	}
 
 	if (!TEXTURE_QUALITY)
 		sprites = loadGraphicSurface("images/tilesets/noalpha/" + filename, "Couldn't load image", false, true);
 
 	if (!sprites)
 		sprites = loadGraphicSurface("images/tilesets/" + filename);
+
+	for (unsigned int t=0; t<tiles.size(); ++t) {
+		Renderable& r = tiles[t].tile;
+		r.sprite = sprites;
+	}
 }
 
 void TileSet::load(const std::string& filename) {
@@ -83,14 +91,14 @@ void TileSet::load(const std::string& filename) {
 				if (index >= tiles.size())
 					tiles.resize(index + 1);
 
-				tiles[index].src.x = eatFirstInt(infile.val, ',');
-				tiles[index].src.y = eatFirstInt(infile.val, ',');
-				tiles[index].src.w = eatFirstInt(infile.val, ',');
-				tiles[index].src.h = eatFirstInt(infile.val, ',');
+				tiles[index].tile.src.x = eatFirstInt(infile.val, ',');
+				tiles[index].tile.src.y = eatFirstInt(infile.val, ',');
+				tiles[index].tile.src.w = eatFirstInt(infile.val, ',');
+				tiles[index].tile.src.h = eatFirstInt(infile.val, ',');
 				tiles[index].offset.x = eatFirstInt(infile.val, ',');
 				tiles[index].offset.y = eatFirstInt(infile.val, ',');
-				max_size_x = std::max(max_size_x, (tiles[index].src.w / TILE_W) + 1);
-				max_size_y = std::max(max_size_y, (tiles[index].src.h / TILE_H) + 1);
+				max_size_x = std::max(max_size_x, (tiles[index].tile.src.w / TILE_W) + 1);
+				max_size_y = std::max(max_size_y, (tiles[index].tile.src.h / TILE_H) + 1);
 			}
 			else if (infile.key == "img") {
 				img = infile.val;
@@ -140,8 +148,8 @@ void TileSet::logic() {
 			if (!an.frames)
 				continue;
 			if (an.duration >= an.frame_duration[an.current_frame]) {
-				tiles[i].src.x = an.pos[an.current_frame].x;
-				tiles[i].src.y = an.pos[an.current_frame].y;
+				tiles[i].tile.src.x = an.pos[an.current_frame].x;
+				tiles[i].tile.src.y = an.pos[an.current_frame].y;
 				an.duration = 0;
 				an.current_frame = (an.current_frame + 1) % an.frames;
 			}

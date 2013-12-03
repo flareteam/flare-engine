@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -55,7 +56,7 @@ const int DRAG_SRC_STASH = 5;
 class MenuManager {
 private:
 
-	SDL_Surface *icons;
+	Renderable icons;
 
 	StatBlock *stats;
 
@@ -69,7 +70,6 @@ private:
 	void handleKeyboardTooltips();
 
 	bool key_lock;
-	void loadIcons();
 
 	bool mouse_dragging;
 	bool keyboard_dragging;
@@ -85,7 +85,6 @@ private:
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
 	void resetDrag();
-	void splitStack(ItemStack stack);
 
 public:
 	MenuManager(StatBlock *stats);

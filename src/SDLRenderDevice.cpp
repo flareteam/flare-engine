@@ -22,15 +22,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "SharedResources.h"
 
-#include "SDLBlitRenderDevice.h"
+#include "SDLRenderDevice.h"
 
 using namespace std;
 
-SDLBlitRenderDevice::SDLBlitRenderDevice() {
+SDLRenderDevice::SDLRenderDevice() {
 	cout << "Using Render Device: SDLBlitRenderDevice" << endl;
 }
 
-SDL_Surface *SDLBlitRenderDevice::create_context(
+SDL_Surface *SDLRenderDevice::create_context(
 	int width,
 	int height,
 	bool full_screen
@@ -117,7 +117,7 @@ SDL_Surface *SDLBlitRenderDevice::create_context(
 	return view;
 }
 
-int SDLBlitRenderDevice::render(Renderable& r) {
+int SDLRenderDevice::render(Renderable& r) {
 	// Drawing order is recalculated every frame.
 	r.prio = 0;
 
@@ -131,7 +131,7 @@ int SDLBlitRenderDevice::render(Renderable& r) {
 	return SDL_BlitSurface(r.sprite, &m_clip, screen, &m_dest);
 }
 
-int SDLBlitRenderDevice::render_text(
+int SDLRenderDevice::render_text(
 	TTF_Font *ttf_font,
 	const std::string& text,
 	SDL_Color color,
@@ -161,7 +161,7 @@ int SDLBlitRenderDevice::render_text(
 
 
 
-void SDLBlitRenderDevice::draw_pixel(
+void SDLRenderDevice::draw_pixel(
 	int x,
 	int y,
 	Uint32 color
@@ -205,7 +205,7 @@ void SDLBlitRenderDevice::draw_pixel(
 	return;
 }
 
-void SDLBlitRenderDevice::draw_line(
+void SDLRenderDevice::draw_line(
 	int x0,
 	int y0,
 	int x1,
@@ -237,7 +237,7 @@ void SDLBlitRenderDevice::draw_line(
 	while(x0 != x1 || y0 != y1);
 }
 
-void SDLBlitRenderDevice::draw_line(
+void SDLRenderDevice::draw_line(
 	const Point& p0,
 	const Point& p1,
 	Uint32 color
@@ -251,7 +251,7 @@ void SDLBlitRenderDevice::draw_line(
 	}
 }
 
-void SDLBlitRenderDevice::draw_rectangle(
+void SDLRenderDevice::draw_rectangle(
 	const Point& p0,
 	const Point& p1,
 	Uint32 color
@@ -268,23 +268,23 @@ void SDLBlitRenderDevice::draw_rectangle(
 	}
 }
 
-void SDLBlitRenderDevice::blank_screen() {
+void SDLRenderDevice::blank_screen() {
 	SDL_FillRect(screen, NULL, 0);
 	return;
 }
 
-void SDLBlitRenderDevice::commit_frame() {
+void SDLRenderDevice::commit_frame() {
 	SDL_Flip(screen);
 	return;
 }
 
-void SDLBlitRenderDevice::destroy_context() {
+void SDLRenderDevice::destroy_context() {
 	// Nothing to be done; SDL_Quit() will handle it all
 	// for this render device.
 	return;
 }
 
-bool SDLBlitRenderDevice::local_to_global(Renderable& r) {
+bool SDLRenderDevice::local_to_global(Renderable& r) {
 	m_clip = r.src;
 
 	int left = r.map_pos.x - r.offset.x;

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -52,7 +53,7 @@ public:
 
 class FontEngine {
 private:
-	SDL_Surface *ttf;
+	Renderable ttf;
 	std::map<std::string,SDL_Color> color_map;
 	std::vector<FontStyle> font_styles;
 	FontStyle *active_font;

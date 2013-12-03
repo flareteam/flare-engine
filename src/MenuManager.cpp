@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -47,7 +48,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 
 MenuManager::MenuManager(StatBlock *_stats)
-	: icons(NULL)
+	: icons(loadIcons())
 	, stats(_stats)
 	, tip_buf()
 	, keyb_tip_buf_vendor()
@@ -94,11 +95,11 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(mp); // menus[1]
 	xp = new MenuStatBar("xp");
 	menus.push_back(xp); // menus[2]
-	effects = new MenuActiveEffects(icons);
+	effects = new MenuActiveEffects();
 	menus.push_back(effects); // menus[3]
 	hudlog = new MenuHUDLog();
 	menus.push_back(hudlog); // menus[4]
-	act = new MenuActionBar(pc, icons);
+	act = new MenuActionBar(pc);
 	menus.push_back(act); // menus[5]
 	enemy = new MenuEnemy();
 	menus.push_back(enemy); // menus[6]
@@ -114,7 +115,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(chr); // menus[11]
 	inv = new MenuInventory(stats);
 	menus.push_back(inv); // menus[12]
-	pow = new MenuPowers(stats, icons, act);
+	pow = new MenuPowers(stats, act);
 	menus.push_back(pow); // menus[13]
 	log = new MenuLog();
 	menus.push_back(log); // menus[14]
@@ -219,13 +220,6 @@ MenuManager::MenuManager(StatBlock *_stats)
 	closeAll(); // make sure all togglable menus start closed
 }
 
-/**
- * Icon set shared by all menus
- */
-void MenuManager::loadIcons() {
-	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
-}
-
 void MenuManager::renderIcon(int icon_id, int x, int y) {
 	SDL_Rect src;
 	SDL_Rect dest;
@@ -233,11 +227,13 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 	dest.y = y;
 	src.w = src.h = dest.w = dest.h = ICON_SIZE;
 
-	int columns = icons->w / ICON_SIZE;
+	int columns = icons.sprite->w / ICON_SIZE;
 	src.x = (icon_id % columns) * ICON_SIZE;
 	src.y = (icon_id / columns) * ICON_SIZE;
 
-	SDL_BlitSurface(icons, &src, screen, &dest);
+	icons.set_clip(src);
+	icons.set_dest(dest);
+	render_device->render(icons);
 }
 
 void MenuManager::handleKeyboardNavigation() {
@@ -1397,6 +1393,4 @@ MenuManager::~MenuManager() {
 	delete effects;
 	delete stash;
 	delete npc;
-
-	SDL_FreeSurface(icons);
 }

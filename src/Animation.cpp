@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -25,6 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * The intention with the class is to keep it as flexible as possible so that the animations
  * can be used not only for character animations but any animated in-game objects.
  */
+#include "Settings.h"
+#include "SharedResources.h"
 
 #include "Animation.h"
 
@@ -44,8 +47,6 @@ Animation::Animation(const std::string &_name, const std::string &_type, SDL_Sur
 	, max_kinds(0)
 	, additional_data(0)
 	, times_played(0)
-	, gfx()
-	, render_offset()
 	, duration()
 	, active_frames() {
 	if (type == NONE)
@@ -63,10 +64,10 @@ Animation::Animation(const Animation& a)
 	, max_kinds(a.max_kinds)
 	, additional_data(a.additional_data)
 	, times_played(0)
-	, gfx(std::vector<SDL_Rect>(a.gfx))
-	, render_offset(std::vector<Point>(a.render_offset))
-	, duration(std::vector<unsigned short>(a.duration))
-	, active_frames(std::vector<short>(a.active_frames)) {
+	, frames(a.frames)
+	, duration(a.duration)
+	, active_frames(a.active_frames) {
+	;
 }
 
 void Animation::setupUncompressed(Point _render_size, Point _render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds) {
@@ -75,12 +76,14 @@ void Animation::setupUncompressed(Point _render_size, Point _render_offset, int 
 	for (unsigned short i = 0 ; i < _frames; i++) {
 		int base_index = max_kinds*i;
 		for (unsigned short kind = 0 ; kind < max_kinds; kind++) {
-			gfx[base_index + kind].x = _render_size.x * (_position + i);
-			gfx[base_index + kind].y = _render_size.y * kind;
-			gfx[base_index + kind].w = _render_size.x;
-			gfx[base_index + kind].h = _render_size.y;
-			render_offset[base_index + kind].x = _render_offset.x;
-			render_offset[base_index + kind].y = _render_offset.y;
+			Renderable& f = frames[base_index + kind];
+			f.src.x = _render_size.x * (_position + i);
+			f.src.y = _render_size.y * kind;
+			f.src.w = _render_size.x;
+			f.src.h = _render_size.y;
+			f.offset.x = _render_offset.x;
+			f.offset.y = _render_offset.y;
+			f.set_graphics(sprite,&f.src); // remember we own the sprite!
 		}
 	}
 }
@@ -106,8 +109,7 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 
 	active_frames.push_back(number_frames/2);
 
-	gfx.resize(max_kinds*_frames);
-	render_offset.resize(max_kinds*_frames);
+	frames.resize(max_kinds*_frames);
 	duration.resize(max_kinds*_frames);
 	for (unsigned short i = 0; i < duration.size(); i++)
 		duration[i] = _duration;
@@ -118,9 +120,9 @@ void Animation::addFrame(	unsigned short index,
 							SDL_Rect sdl_rect,
 							Point _render_offset) {
 
-	if (index > gfx.size()/max_kinds) {
+	if (index > frames.size()/max_kinds) {
 		fprintf(stderr, "WARNING: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]\n",
-				name.c_str(), sdl_rect.x, sdl_rect.y, sdl_rect.w, sdl_rect.h, index, (int)gfx.size()/max_kinds);
+				name.c_str(), sdl_rect.x, sdl_rect.y, sdl_rect.w, sdl_rect.h, index, (int)frames.size()/max_kinds);
 		return;
 	}
 	if (kind > max_kinds-1) {
@@ -128,8 +130,10 @@ void Animation::addFrame(	unsigned short index,
 				name.c_str(), sdl_rect.x, sdl_rect.y, sdl_rect.w, sdl_rect.h, index, kind, max_kinds-1);
 		return;
 	}
-	gfx[max_kinds*index+kind] = sdl_rect;
-	render_offset[max_kinds*index+kind] = _render_offset;
+	Renderable& f = frames[max_kinds*index+kind];
+	f.src = sdl_rect;
+	f.offset = _render_offset;
+	f.set_graphics(sprite,&f.src); // remember we own the sprite!
 }
 
 void Animation::advanceFrame() {
@@ -145,7 +149,7 @@ void Animation::advanceFrame() {
 
 	if (cur_frame_duration >= duration[cur_frame_index]) {
 		cur_frame_duration = 0;
-		unsigned short last_base_index = (gfx.size()/max_kinds)-1;
+		unsigned short last_base_index = (frames.size()/max_kinds)-1;
 		switch(type) {
 			case PLAY_ONCE:
 
@@ -191,19 +195,9 @@ void Animation::advanceFrame() {
 	}
 }
 
-Renderable Animation::getCurrentFrame(int kind) {
-	Renderable r;
-	if (this) {
-		const int index = (max_kinds*cur_frame_index) + kind;
-		r.src.x = gfx[index].x;
-		r.src.y = gfx[index].y;
-		r.src.w = gfx[index].w;
-		r.src.h = gfx[index].h;
-		r.offset.x = render_offset[index].x;
-		r.offset.y = render_offset[index].y;
-		r.sprite = sprite;
-	}
-	return r;
+Renderable& Animation::getCurrentFrame(int kind) {
+	const int index = (max_kinds*cur_frame_index) + kind;
+	return frames[index];
 }
 
 void Animation::reset() {
@@ -258,5 +252,11 @@ std::string Animation::getName() {
 
 bool Animation::isCompleted() {
 	return (type == PLAY_ONCE && times_played > 0);
+}
+
+void Animation::deleteTextures() {
+	for (unsigned int i = 0; i<frames.size(); ++i) {
+		frames[i].clear_texture();
+	}
 }
 

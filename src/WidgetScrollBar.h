@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -30,9 +31,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class WidgetScrollBar : public Widget {
 private:
 
-	std::string fileName; // the path to the ScrollBars background image
+	std::string fileName; // the path to the ScrollBar's atlas
 
-	SDL_Surface *scrollbars;
+	Renderable scrollbars;
 	Mix_Chunk *click;
 
 	int value;
@@ -48,7 +49,7 @@ public:
 	int checkClick(int x, int y);
 	void set();
 	int getValue();
-	void render(SDL_Surface *target = NULL);
+	void render();
 	void refresh(int x, int y, int h, int val, int max);
 
 	SDL_Rect pos_up;

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and kitano
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -57,7 +58,7 @@ public:
 	bool sfx_block;
 
 	// Each child of Entity defines its own rendering method
-	virtual Renderable getRender() = 0;
+	virtual Renderable& getRender() = 0;
 
 	bool setAnimation(const std::string& animation);
 	Animation *activeAnimation;

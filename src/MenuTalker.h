@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and morris989
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -41,7 +42,7 @@ private:
 
 	MenuManager *menu;
 
-	SDL_Surface *portrait;
+	Renderable portrait;
 	std::string hero_name;
 	std::string hero_class;
 

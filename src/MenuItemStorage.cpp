@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -28,22 +29,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 MenuItemStorage::MenuItemStorage()
-	: icons(NULL)
-	, grid_area()
+	: grid_area()
 	, nb_cols(0)
 	, slot_type()
 	, drag_prev_slot(-1)
 	, slots()
 	, highlight(NULL)
-	, highlight_image(NULL) {
-}
+{}
 
 void MenuItemStorage::init(int _slot_number, SDL_Rect _area, int _icon_size, int _nb_cols) {
 	ItemStorage::init( _slot_number);
-	icons = items->getIcons();
 	grid_area = _area;
 	for (int i = 0; i < _slot_number; i++) {
-		WidgetSlot *slot = new WidgetSlot(icons);
+		WidgetSlot *slot = new WidgetSlot();
 		slots.push_back(slot);
 	}
 	nb_cols = _nb_cols;
@@ -62,9 +60,8 @@ void MenuItemStorage::init(int _slot_number, SDL_Rect _area, int _icon_size, int
  */
 void MenuItemStorage::init(int _slot_number, vector<SDL_Rect> _area, vector<string> _slot_type) {
 	ItemStorage::init( _slot_number);
-	icons = items->getIcons();
 	for (int i = 0; i < _slot_number; i++) {
-		WidgetSlot *slot = new WidgetSlot(icons);
+		WidgetSlot *slot = new WidgetSlot();
 		slot->pos = _area[i];
 		slots.push_back(slot);
 	}
@@ -78,7 +75,8 @@ void MenuItemStorage::init(int _slot_number, vector<SDL_Rect> _area, vector<stri
 }
 
 void MenuItemStorage::loadGraphics() {
-	highlight_image = loadGraphicSurface("images/menus/attention_glow.png", "Couldn't load icon highlight image");
+	highlight_image.set_graphics(loadGraphicSurface("images/menus/attention_glow.png", "Couldn't load icon highlight image"));
+	highlight_image.set_clip(0,0,highlight_image.sprite->w,highlight_image.sprite->h);
 }
 
 void MenuItemStorage::render() {
@@ -100,7 +98,8 @@ void MenuItemStorage::renderHighlight(int x, int y, int _icon_size) {
 		SDL_Rect dest;
 		dest.x = x;
 		dest.y = y;
-		SDL_BlitSurface(highlight_image,NULL,screen,&dest);
+		highlight_image.set_dest(dest);
+		render_device->render(highlight_image);
 	}
 }
 
@@ -207,7 +206,7 @@ void MenuItemStorage::highlightClear() {
 
 MenuItemStorage::~MenuItemStorage() {
 	delete[] highlight;
-	SDL_FreeSurface(highlight_image);
+	highlight_image.clear_graphics();
 	for (unsigned i=0; i<slots.size(); i++)
 		delete slots[i];
 }

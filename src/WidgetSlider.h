@@ -1,5 +1,6 @@
 /*
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -34,7 +35,7 @@ public:
 	bool checkClick (int x, int y);
 	void set (int min, int max, int val);
 	int getValue () const;
-	void render (SDL_Surface *target = NULL);
+	void render ();
 	bool enabled;
 
 	SDL_Rect pos_knob; // This is the position of the slider's knob within the screen
@@ -43,7 +44,7 @@ public:
 	bool getPrev();
 
 private:
-	SDL_Surface * sl;
+	Renderable sl;
 	bool pressed;
 	int minimum;
 	int maximum;

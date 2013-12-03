@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -23,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "WidgetLabel.h"
 #include "SharedResources.h"
-#include "SDL_gfxBlitFunc.h"
 #include "UtilsParsing.h"
 
 using namespace std;
@@ -71,12 +71,12 @@ WidgetLabel::WidgetLabel()
 	, y_origin(0)
 	, justify(JUSTIFY_LEFT)
 	, valign(VALIGN_TOP)
-	, font_style("font_regular")
-	, text_buffer(NULL)
-
-{
+	, font_style("font_regular") {
 	bounds.x = bounds.y = 0;
 	bounds.w = bounds.h = 0;
+
+	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
+	local_offset.x = local_offset.y = 0;
 
 	render_to_alpha = false;
 }
@@ -84,25 +84,11 @@ WidgetLabel::WidgetLabel()
 /**
  * Draw the buffered string surface to the screen
  */
-void WidgetLabel::render(SDL_Surface *target) {
-	if (target == NULL) {
-		target = screen;
-	}
-
-	SDL_Rect dest;
-	dest.x = bounds.x;
-	dest.y = bounds.y;
-	dest.w = bounds.w;
-	dest.h = bounds.h;
-
-	if (text_buffer != NULL) {
-		if (render_to_alpha)
-			SDL_gfxBlitRGBA(text_buffer, NULL, target, &dest);
-		else
-			SDL_BlitSurface(text_buffer, NULL, target, &dest);
-	}
+void WidgetLabel::render() {
+	renderable.local_frame = local_frame;
+	renderable.offset = local_offset;
+	render_device->render(renderable);
 }
-
 
 void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, SDL_Color _color) {
 	set(_x, _y, _justify, _valign, _text, _color, "font_regular");
@@ -226,6 +212,8 @@ void WidgetLabel::applyOffsets() {
 		bounds.y = y_origin - bounds.h/2;
 	}
 
+	renderable.map_pos.x = bounds.x;
+	renderable.map_pos.y = bounds.y;
 }
 
 /**
@@ -244,15 +232,19 @@ void WidgetLabel::set(const string& _text) {
  * This function refreshes the buffer.
  */
 void WidgetLabel::refresh() {
-
-	SDL_FreeSurface(text_buffer);
-	text_buffer = createAlphaSurface(bounds.w, bounds.h);
+	renderable.clear_graphics();
+	SDL_Surface *surface = createAlphaSurface(bounds.w, bounds.h);
 	font->setFont(font_style);
-	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, text_buffer, color);
-
+	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, surface, color);
+	renderable.set_graphics(surface);
+	renderable.set_clip(
+		0,
+		0,
+		renderable.sprite->w,
+		renderable.sprite->h
+	);
 }
 
-
 WidgetLabel::~WidgetLabel() {
-	SDL_FreeSurface(text_buffer);
+	renderable.clear_graphics();
 }
