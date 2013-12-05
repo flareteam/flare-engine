@@ -180,7 +180,7 @@ static void cleanup() {
 	delete msg;
 	delete snd;
 
-	if (NULL != icon_atlas) {
+	if (icon_atlas != NULL) {
 		Renderable icons = loadIcons();
 		icons.clear_graphics();
 	}

@@ -673,8 +673,10 @@ MenuPowers::~MenuPowers() {
 	for (unsigned int i=0; i<tree_surf.size(); i++) tree_surf[i].clear_graphics();
 	for (unsigned int i=0; i<slots.size(); i++) {
 		delete slots.at(i);
+		delete upgradeButtons.at(i);
 	}
 	slots.clear();
+	upgradeButtons.clear();
 
 	delete closeButton;
 	if (tabs_count > 1) delete tabControl;

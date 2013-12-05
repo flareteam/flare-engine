@@ -324,8 +324,10 @@ void MenuActionBar::render() {
 			renderAttention(i);
 
 	// draw hotkey labels
-	for (int i=0; i<16; i++) {
-		labels[i]->render();
+	if (SHOW_HOTKEYS) {
+		for (int i=0; i<16; i++) {
+			labels[i]->render();
+		}
 	}
 
 }
@@ -344,7 +346,7 @@ void MenuActionBar::renderCooldowns() {
 		if (!slot_enabled[i]) {
 
 			// Wipe from bottom to top
-			if (hero->hero_cooldown[hotkeys[i]]) {
+			if (hero->hero_cooldown[hotkeys[i]] && powers->powers[hotkeys[i]].cooldown) {
 				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys[i]]) / powers->powers[hotkeys[i]].cooldown;
 			}
 

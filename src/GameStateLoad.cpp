@@ -87,9 +87,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 			}
 			else if (infile.key == "portrait") {
 				portrait.map_pos.x = eatFirstInt(infile.val, ',');
-				portrait.map_pos.x += (VIEW_W - FRAME_W)/2;
 				portrait.map_pos.y = eatFirstInt(infile.val, ',');
-				portrait.map_pos.y += (VIEW_H - FRAME_H)/2;
 				portrait.src.w = eatFirstInt(infile.val, ',');
 				portrait.src.h = eatFirstInt(infile.val, ',');
 			}

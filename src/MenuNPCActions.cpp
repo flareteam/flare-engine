@@ -190,7 +190,7 @@ void MenuNPCActions::update() {
 	h += (MENU_BORDER*2);
 
 	int old_w = -1, old_h = -1;
-	if (NULL != action_menu.sprite) {
+	if (action_menu.sprite != NULL) {
 		old_w = action_menu.sprite->w;
 		old_h = action_menu.sprite->h;
 	}

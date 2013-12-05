@@ -283,7 +283,7 @@ void MenuTalker::render() {
 		}
 	}
 	else if (etype == "you") {
-		if (NULL != portrait.sprite) {
+		if (portrait.sprite != NULL) {
 			src.w = dest.w = portrait_you.w;
 			src.h = dest.h = portrait_you.h;
 			dest.x = offset_x + portrait_you.x;

@@ -26,8 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * The intention with the class is to keep it as flexible as possible so that the animations
  * can be used not only for character animations but any animated in-game objects.
  */
-#include "Settings.h"
-#include "SharedResources.h"
 
 #include "Animation.h"
 

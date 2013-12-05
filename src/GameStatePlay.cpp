@@ -73,6 +73,7 @@ GameStatePlay::GameStatePlay()
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
+	, nearest_npc(-1)
 	, game_slot(0) {
 	hasMusic = true;
 	// GameEngine scope variables
