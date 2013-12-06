@@ -19,11 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef RENDERDEVICE_H
 #define RENDERDEVICE_H
 
-#include <iostream>
-
-#include <SDL.h>
-
-#include "Settings.h"
+#include <SDL_ttf.h>
 #include "Utils.h"
 
 
@@ -43,6 +39,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * @date 2013-07-06
  *
  */
+
+class Renderable;
+
 class RenderDevice {
 
 public:
@@ -134,5 +133,7 @@ protected:
 
 	bool is_initialized; ///< true if a context was created once
 };
+
+Renderable loadIcons();
 
 #endif // RENDERDEVICE_H

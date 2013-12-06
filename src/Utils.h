@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "CommonIncludes.h"
+#include <SDL.h>
 #include <stdint.h>
 
 class Point {
@@ -44,42 +44,6 @@ public:
 	FPoint(Point _p) : x((float)_p.x), y((float)_p.y) {}
 	FPoint() : x(0), y(0) {}
 	FPoint(float _x, float _y) : x(_x), y(_y) {}
-};
-
-// message passing struct for various sprites rendered map inline
-struct Renderable {
-	SDL_Surface *sprite; // image to be used
-	SDL_Rect local_frame;
-	SDL_Rect src; // location on the sprite in pixel coordinates.
-
-	FPoint map_pos;     // The map location on the floor between someone's feet
-	Point offset;      // offset from map_pos to topleft corner of sprite
-	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
-	Renderable()
-		: sprite(0)
-		, local_frame(SDL_Rect())
-		, src(SDL_Rect())
-		, map_pos()
-		, offset()
-		, prio(0)
-	{}
-	void setGraphics(SDL_Surface *s, SDL_Rect *texture_clip=0);
-	void clearGraphics();
-	void clearTexture();
-	void setClip(const SDL_Rect& clip);
-	void setClip(const int x, const int y, const int w, const int h);
-	void setDest(const SDL_Rect& dest) {
-		map_pos.x = (float)dest.x;
-		map_pos.y = (float)dest.y;
-	}
-	void setDest(const Point& dest) {
-		map_pos.x = (float)dest.x;
-		map_pos.y = (float)dest.y;
-	}
-	void setDest(int x, int y) {
-		map_pos.x = (float)x;
-		map_pos.y = (float)y;
-	}
 };
 
 class Event_Component {
@@ -117,60 +81,6 @@ int calcDirection(const FPoint &src, const FPoint &dst);
 bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(SDL_Rect r, Point target);
 
-Uint32 readPixel(SDL_Surface *screen, int x, int y);
-void drawPixel(SDL_Surface *screen, int x, int y, Uint32 color);
-void drawLine(SDL_Surface *screen, int x0, int y0, int x1, int y1, Uint32 color);
-void drawLine(SDL_Surface *screen, Point pos0, Point pos1, Uint32 color);
-void drawRectangle(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color);
-bool checkPixel(Point px, SDL_Surface *surface);
-
-
-/**
- * Creates a SDL_Surface.
- * The SDL_HWSURFACE or SDL_SWSURFACE flag is set according
- * to settings. The result is a surface which has the same format as the
- * screen surface.
- * Additionally the alpha flag is set, so transparent blits are possible.
- */
-SDL_Surface* createAlphaSurface(int width, int height);
-
-/**
- * Creates a SDL_Surface.
- * The SDL_HWSURFACE or SDL_SWSURFACE flag is set according
- * to settings. The result is a surface which has the same format as the
- * screen surface.
- * The bright pink (rgb 0xff00ff) is set as transparent color.
- */
-SDL_Surface* createSurface(int width, int height);
-
-SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height);
-
-/**
- * @brief loadGraphicSurface loads an image from a file.
- * @param filename
- *        The parameter filename is mandatory and specifies the image to be
- *        loaded. The filename will be located via the modmanager.
- * @param errormessage
- *        This is an optional parameter, which defines which error message
- *        should be displayed. If the errormessage is an empty string, no error
- *        message will be printed at all.
- * @param IfNotFoundExit
- *        If this optional boolean parameter is set to true, the program will
- *        shutdown sdl and quit, if the specified image is not found.
- * @param HavePinkColorKey
- *        This optional parameter specifies whether a color key with
- *        RGB(0xff, 0, 0xff) should be applied to the image.
- * @return
- *        Returns the SDL_Surface of the specified image or NULL if not
- *        successful
- */
-
-SDL_Surface* loadGraphicSurface(std::string filename,
-								std::string errormessage = "Couldn't load image",
-								bool IfNotFoundExit = false,
-								bool HavePinkColorKey = false);
-
 std::string abbreviateKilo(int amount);
 
-Renderable loadIcons();
 #endif
