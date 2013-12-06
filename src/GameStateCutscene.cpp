@@ -37,7 +37,7 @@ Scene::~Scene() {
 
 	delete caption_box;
 	while(!components.empty()) {
-		components.front().i.clear_graphics();
+		components.front().i.clearGraphics();
 		components.pop();
 	}
 }
@@ -118,7 +118,7 @@ bool Scene::logic(FPoint *caption_margins) {
 
 void Scene::render() {
 	if (art.sprite != NULL) {
-		art.set_dest(art_dest);
+		art.setDest(art_dest);
 		render_device->render(art);
 	}
 
@@ -193,13 +193,13 @@ bool GameStateCutscene::load(std::string filename) {
 			else if (infile.key == "image") {
 				// @ATTR scene.image|string|An image that will be shown.
 				sc.type = infile.key;
-				sc.i.set_graphics(loadImage(infile.val));
+				sc.i.setGraphics(loadImage(infile.val));
 				if (sc.i.sprite == NULL) {
 					sc.type = "";
 				}
 				else {
 					Renderable& r = sc.i;
-					r.set_clip(0,0,r.sprite->w,r.sprite->h);
+					r.setClip(0,0,r.sprite->w,r.sprite->h);
 				}
 			}
 			else if (infile.key == "pause") {

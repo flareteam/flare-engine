@@ -81,7 +81,7 @@ void Animation::setupUncompressed(Point _render_size, Point _render_offset, int 
 			f.src.h = _render_size.y;
 			f.offset.x = _render_offset.x;
 			f.offset.y = _render_offset.y;
-			f.set_graphics(sprite,&f.src); // remember we own the sprite!
+			f.setGraphics(sprite,&f.src); // remember we own the sprite!
 		}
 	}
 }
@@ -131,7 +131,7 @@ void Animation::addFrame(	unsigned short index,
 	Renderable& f = frames[max_kinds*index+kind];
 	f.src = sdl_rect;
 	f.offset = _render_offset;
-	f.set_graphics(sprite,&f.src); // remember we own the sprite!
+	f.setGraphics(sprite,&f.src); // remember we own the sprite!
 }
 
 void Animation::advanceFrame() {
@@ -254,7 +254,7 @@ bool Animation::isCompleted() {
 
 void Animation::deleteTextures() {
 	for (unsigned int i = 0; i<frames.size(); ++i) {
-		frames[i].clear_texture();
+		frames[i].clearTexture();
 	}
 }
 

@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * As this is for the FLARE engine, the implementation uses the engine's
  * global settings context, which is included by the interface.
  *
- * @class SDLBlitRenderDevice
+ * @class SDLRenderDevice
  * @see RenderDevice
  * @author Kurt Rinnert
  * @date 2013-07-06
@@ -45,7 +45,7 @@ public:
 
 	/** Create context on startup.
 	 */
-	virtual SDL_Surface *create_context(
+	virtual SDL_Surface *createContext(
 		int width,
 		int height,
 		bool full_screen
@@ -57,7 +57,7 @@ public:
 
 	/** Render text to the screen.
 	 */
-	virtual int render_text(
+	virtual int renderText(
 		TTF_Font *ttf_font,
 		const std::string& text,
 		SDL_Color color,
@@ -66,7 +66,7 @@ public:
 
 	/** Draw pixel to screen.
 	 */
-	virtual void draw_pixel(
+	virtual void drawPixel(
 		int x,
 		int y,
 		Uint32 color
@@ -76,7 +76,7 @@ public:
 	 *
 	 *  Draw line connecting (x0,y0) and (x1,y1) to screen.
 	 */
-	virtual void draw_line(
+	virtual void drawLine(
 		int x0,
 		int y0,
 		int x1,
@@ -88,7 +88,7 @@ public:
 	 *
 	 *  Draw line connecting p0 and p1 to screen.
 	 */
-	virtual void draw_line(
+	virtual void drawLine(
 		const Point& p0,
 		const Point& p1,
 		Uint32 color
@@ -98,7 +98,7 @@ public:
 	 *
 	 *  Draw rectangle defined by p0 and p1 to screen.
 	 */
-	virtual void draw_rectangle(
+	virtual void drawRectangle(
 		const Point& p0,
 		const Point& p1,
 		Uint32 color
@@ -106,15 +106,15 @@ public:
 
 	/** Blank the screen.
 	 */
-	virtual void blank_screen();
+	virtual void blankScreen();
 
 	/** Commit the next frame to dispay.
 	 */
-	virtual void commit_frame();
+	virtual void commitFrame();
 
 	/** Destroy context on exit.
 	 */
-	virtual void destroy_context();
+	virtual void destroyContext();
 
 private:
 

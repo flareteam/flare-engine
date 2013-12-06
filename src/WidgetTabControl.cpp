@@ -49,8 +49,8 @@ WidgetTabControl::WidgetTabControl(int amount)
  * Class destructor.
  */
 WidgetTabControl::~WidgetTabControl() {
-	activeTabSurface.clear_graphics();
-	inactiveTabSurface.clear_graphics();
+	activeTabSurface.clearGraphics();
+	inactiveTabSurface.clearGraphics();
 	delete[] titles;
 	delete[] tabs;
 }
@@ -134,8 +134,8 @@ void WidgetTabControl::updateHeader() {
  * Load the graphics for the control.
  */
 void WidgetTabControl::loadGraphics() {
-	activeTabSurface.set_graphics(loadGraphicSurface("images/menus/tab_active.png"));
-	inactiveTabSurface.set_graphics(loadGraphicSurface("images/menus/tab_inactive.png"));
+	activeTabSurface.setGraphics(loadGraphicSurface("images/menus/tab_active.png"));
+	inactiveTabSurface.setGraphics(loadGraphicSurface("images/menus/tab_inactive.png"));
 
 	if (!activeTabSurface.sprite || !inactiveTabSurface.sprite) {
 		SDL_Quit();
@@ -193,13 +193,13 @@ void WidgetTabControl::renderTab(int number) {
 	src.h = tabs[i].h;
 
 	if (i == activeTab) {
-		activeTabSurface.set_clip(src);
-		activeTabSurface.set_dest(dest);
+		activeTabSurface.setClip(src);
+		activeTabSurface.setDest(dest);
 		render_device->render(activeTabSurface);
 	}
 	else {
-		inactiveTabSurface.set_clip(src);
-		inactiveTabSurface.set_dest(dest);
+		inactiveTabSurface.setClip(src);
+		inactiveTabSurface.setDest(dest);
 		render_device->render(inactiveTabSurface);
 	}
 
@@ -209,13 +209,13 @@ void WidgetTabControl::renderTab(int number) {
 	dest.x = tabs[i].x + tabs[i].w - tabPadding.x;
 
 	if (i == activeTab) {
-		activeTabSurface.set_clip(src);
-		activeTabSurface.set_dest(dest);
+		activeTabSurface.setClip(src);
+		activeTabSurface.setDest(dest);
 		render_device->render(activeTabSurface);
 	}
 	else {
-		inactiveTabSurface.set_clip(src);
-		inactiveTabSurface.set_dest(dest);
+		inactiveTabSurface.setClip(src);
+		inactiveTabSurface.setDest(dest);
 		render_device->render(inactiveTabSurface);
 	}
 

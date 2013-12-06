@@ -49,10 +49,10 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	SDL_Rect src;
 	src.x = src.y = 0;
 	src.w = src.h = ICON_SIZE;
-	slot_selected.set_graphics(loadGraphicSurface("images/menus/slot_selected.png"));
-	slot_selected.set_clip(src);
-	slot_checked.set_graphics(loadGraphicSurface("images/menus/slot_checked.png"));
-	slot_checked.set_clip(src);
+	slot_selected.setGraphics(loadGraphicSurface("images/menus/slot_selected.png"));
+	slot_selected.setClip(src);
+	slot_checked.setGraphics(loadGraphicSurface("images/menus/slot_checked.png"));
+	slot_checked.setClip(src);
 	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
 	local_offset.x = local_offset.y = 0;
 }
@@ -158,8 +158,8 @@ void WidgetSlot::render() {
 
 		icons.local_frame = local_frame;
 		icons.offset = local_offset;
-		icons.set_clip(src);
-		icons.set_dest(pos);
+		icons.setClip(src);
+		icons.setDest(pos);
 		render_device->render(icons);
 
 		if (amount > 1 || max_amount > 1) {
@@ -184,19 +184,19 @@ void WidgetSlot::renderSelection() {
 		if (checked) {
 			slot_checked.local_frame = local_frame;
 			slot_checked.offset = local_offset;
-			slot_checked.set_dest(pos);
+			slot_checked.setDest(pos);
 			render_device->render(slot_checked);
 		}
 		else {
 			slot_selected.local_frame = local_frame;
 			slot_selected.offset = local_offset;
-			slot_selected.set_dest(pos);
+			slot_selected.setDest(pos);
 			render_device->render(slot_selected);
 		}
 	}
 }
 
 WidgetSlot::~WidgetSlot() {
-	slot_selected.clear_graphics();
-	slot_checked.clear_graphics();
+	slot_selected.clearGraphics();
+	slot_checked.clearGraphics();
 }

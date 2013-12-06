@@ -58,7 +58,7 @@ TooltipData& TooltipData::operator= (const TooltipData &tdSource) {
 void TooltipData::clear() {
 	lines.clear();
 	colors.clear();
-	renderable.clear_graphics();
+	renderable.clearGraphics();
 }
 
 void TooltipData::addText(const std::string &text, SDL_Color color) {

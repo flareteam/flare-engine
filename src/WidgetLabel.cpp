@@ -232,12 +232,12 @@ void WidgetLabel::set(const string& _text) {
  * This function refreshes the buffer.
  */
 void WidgetLabel::refresh() {
-	renderable.clear_graphics();
+	renderable.clearGraphics();
 	SDL_Surface *surface = createAlphaSurface(bounds.w, bounds.h);
 	font->setFont(font_style);
 	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, surface, color);
-	renderable.set_graphics(surface);
-	renderable.set_clip(
+	renderable.setGraphics(surface);
+	renderable.setClip(
 		0,
 		0,
 		renderable.sprite->w,
@@ -246,5 +246,5 @@ void WidgetLabel::refresh() {
 }
 
 WidgetLabel::~WidgetLabel() {
-	renderable.clear_graphics();
+	renderable.clearGraphics();
 }

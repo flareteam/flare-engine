@@ -235,7 +235,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 		if (ttf.sprite != NULL) SDL_gfxBlitRGBA(ttf.sprite, NULL, target, &dest_rect);
 	}
 	else if (target == NULL) {
-		render_device->render_text(
+		render_device->renderText(
 			active_font->ttfont,
 			text,
 			color,
@@ -246,7 +246,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 		ttf.sprite = TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color);
 		if (ttf.sprite != NULL) SDL_BlitSurface(ttf.sprite, NULL, target, &dest_rect);
 	}
-	ttf.clear_graphics();
+	ttf.clearGraphics();
 
 }
 
@@ -304,7 +304,7 @@ void FontEngine::renderShadowed(const std::string& text, int x, int y, int justi
 }
 
 FontEngine::~FontEngine() {
-	ttf.clear_graphics();
+	ttf.clearGraphics();
 	for (unsigned int i=0; i<font_styles.size(); ++i) TTF_CloseFont(font_styles[i].ttfont);
 	TTF_Quit();
 }

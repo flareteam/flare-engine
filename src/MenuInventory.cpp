@@ -41,8 +41,8 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
-	background.set_graphics(loadGraphicSurface("images/menus/inventory.png"));
-	background.set_clip(0,0,background.sprite->w,background.sprite->h);
+	background.setGraphics(loadGraphicSurface("images/menus/inventory.png"));
+	background.setClip(0,0,background.sprite->w,background.sprite->h);
 
 	currency = 0;
 
@@ -213,7 +213,7 @@ void MenuInventory::logic() {
 void MenuInventory::render() {
 	if (!visible) return;
 
-	background.set_dest(window_area);
+	background.setDest(window_area);
 	render_device->render(background);
 
 	// close button
@@ -977,6 +977,6 @@ void MenuInventory::clearHighlight() {
 }
 
 MenuInventory::~MenuInventory() {
-	background.clear_graphics();
+	background.clearGraphics();
 	delete closeButton;
 }

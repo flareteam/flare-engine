@@ -285,7 +285,7 @@ void MapRenderer::createBackgroundSurface() {
 void MapRenderer::drawRenderable(vector<Renderable*>::iterator r_cursor) {
 	if ((*r_cursor)->sprite) {
 		Point p = map_to_screen((*r_cursor)->map_pos.x, (*r_cursor)->map_pos.y, shakycam.x, shakycam.y);
-		(*r_cursor)->set_dest(p);
+		(*r_cursor)->setDest(p);
 		render_device->render(*(*r_cursor));
 	}
 }
@@ -339,7 +339,7 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
 				if (NULL == wheretorender) {
-					tset.tiles[current_tile].tile.set_dest(dest);
+					tset.tiles[current_tile].tile.setDest(dest);
 					render_device->render(tset.tiles[current_tile].tile);
 				}
 				else {
@@ -413,7 +413,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable*> &r) {
 			if (const uint_fast16_t current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile.set_dest(dest);
+				tset.tiles[current_tile].tile.setDest(dest);
 				render_device->render(tset.tiles[current_tile].tile);
 			}
 
@@ -496,7 +496,7 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				SDL_Rect dest;
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile.set_dest(dest);
+				tset.tiles[current_tile].tile.setDest(dest);
 				render_device->render(tset.tiles[current_tile].tile);
 			}
 			p.x += TILE_W;
@@ -541,7 +541,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable*> &r) {
 			if (const unsigned short current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile.set_dest(dest);
+				tset.tiles[current_tile].tile.setDest(dest);
 				render_device->render(tset.tiles[current_tile].tile);
 			}
 			p.x += TILE_W;

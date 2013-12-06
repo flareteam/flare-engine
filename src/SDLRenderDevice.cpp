@@ -15,10 +15,10 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include<iostream>
+#include <iostream>
 
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "SharedResources.h"
 
@@ -30,7 +30,7 @@ SDLRenderDevice::SDLRenderDevice() {
 	cout << "Using Render Device: SDLRenderDevice" << endl;
 }
 
-SDL_Surface *SDLRenderDevice::create_context(
+SDL_Surface *SDLRenderDevice::createContext(
 	int width,
 	int height,
 	bool full_screen
@@ -121,7 +121,7 @@ int SDLRenderDevice::render(Renderable& r) {
 	// Drawing order is recalculated every frame.
 	r.prio = 0;
 
-	if (NULL == r.sprite) {
+	if (r.sprite == NULL) {
 		return -1;
 	}
 	if ( !local_to_global(r) ) {
@@ -131,7 +131,7 @@ int SDLRenderDevice::render(Renderable& r) {
 	return SDL_BlitSurface(r.sprite, &m_clip, screen, &m_dest);
 }
 
-int SDLRenderDevice::render_text(
+int SDLRenderDevice::renderText(
 	TTF_Font *ttf_font,
 	const std::string& text,
 	SDL_Color color,
@@ -161,7 +161,7 @@ int SDLRenderDevice::render_text(
 
 
 
-void SDLRenderDevice::draw_pixel(
+void SDLRenderDevice::drawPixel(
 	int x,
 	int y,
 	Uint32 color
@@ -205,7 +205,7 @@ void SDLRenderDevice::draw_pixel(
 	return;
 }
 
-void SDLRenderDevice::draw_line(
+void SDLRenderDevice::drawLine(
 	int x0,
 	int y0,
 	int x1,
@@ -221,7 +221,7 @@ void SDLRenderDevice::draw_line(
 	do {
 		//skip draw if outside screen
 		if (x0 > 0 && y0 > 0 && x0 < VIEW_W && y0 < VIEW_H) {
-			this->draw_pixel(x0,y0,color);
+			this->drawPixel(x0,y0,color);
 		}
 
 		int e2 = 2*err;
@@ -237,7 +237,7 @@ void SDLRenderDevice::draw_line(
 	while(x0 != x1 || y0 != y1);
 }
 
-void SDLRenderDevice::draw_line(
+void SDLRenderDevice::drawLine(
 	const Point& p0,
 	const Point& p1,
 	Uint32 color
@@ -245,13 +245,13 @@ void SDLRenderDevice::draw_line(
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_LockSurface(screen);
 	}
-	this->draw_line(p0.x, p0.y, p1.x, p1.y, color);
+	this->drawLine(p0.x, p0.y, p1.x, p1.y, color);
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_UnlockSurface(screen);
 	}
 }
 
-void SDLRenderDevice::draw_rectangle(
+void SDLRenderDevice::drawRectangle(
 	const Point& p0,
 	const Point& p1,
 	Uint32 color
@@ -259,26 +259,26 @@ void SDLRenderDevice::draw_rectangle(
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_LockSurface(screen);
 	}
-	this->draw_line(p0.x, p0.y, p1.x, p0.y, color);
-	this->draw_line(p1.x, p0.y, p1.x, p1.y, color);
-	this->draw_line(p0.x, p0.y, p0.x, p1.y, color);
-	this->draw_line(p0.x, p1.y, p1.x, p1.y, color);
+	this->drawLine(p0.x, p0.y, p1.x, p0.y, color);
+	this->drawLine(p1.x, p0.y, p1.x, p1.y, color);
+	this->drawLine(p0.x, p0.y, p0.x, p1.y, color);
+	this->drawLine(p0.x, p1.y, p1.x, p1.y, color);
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_UnlockSurface(screen);
 	}
 }
 
-void SDLRenderDevice::blank_screen() {
+void SDLRenderDevice::blankScreen() {
 	SDL_FillRect(screen, NULL, 0);
 	return;
 }
 
-void SDLRenderDevice::commit_frame() {
+void SDLRenderDevice::commitFrame() {
 	SDL_Flip(screen);
 	return;
 }
 
-void SDLRenderDevice::destroy_context() {
+void SDLRenderDevice::destroyContext() {
 	// Nothing to be done; SDL_Quit() will handle it all
 	// for this render device.
 	return;

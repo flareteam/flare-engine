@@ -250,7 +250,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
 
-	background.set_graphics(loadGraphicSurface("images/menus/character.png"));
+	background.setGraphics(loadGraphicSurface("images/menus/character.png"));
 }
 
 void MenuCharacter::update() {
@@ -654,7 +654,7 @@ bool MenuCharacter::checkUpgrade() {
 }
 
 MenuCharacter::~MenuCharacter() {
-	background.clear_graphics();
+	background.clearGraphics();
 	delete closeButton;
 
 	delete labelCharacter;

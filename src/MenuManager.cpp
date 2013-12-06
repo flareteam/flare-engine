@@ -231,8 +231,8 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 	src.x = (icon_id % columns) * ICON_SIZE;
 	src.y = (icon_id / columns) * ICON_SIZE;
 
-	icons.set_clip(src);
-	icons.set_dest(dest);
+	icons.setClip(src);
+	icons.setDest(dest);
 	render_device->render(icons);
 }
 

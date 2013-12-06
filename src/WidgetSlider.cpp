@@ -36,7 +36,7 @@ WidgetSlider::WidgetSlider (const string  & fname)
 	, minimum(0)
 	, maximum(0)
 	, value(0) {
-	sl.set_graphics(loadGraphicSurface(fname));
+	sl.setGraphics(loadGraphicSurface(fname));
 	if (!sl.sprite) {
 		SDL_Quit();
 		exit(1);
@@ -55,7 +55,7 @@ WidgetSlider::WidgetSlider (const string  & fname)
 }
 
 WidgetSlider::~WidgetSlider () {
-	sl.clear_graphics();
+	sl.clearGraphics();
 }
 
 
@@ -149,11 +149,11 @@ void WidgetSlider::render () {
 
 	sl.local_frame = local_frame;
 	sl.offset = local_offset;
-	sl.set_clip(base);
-	sl.set_dest(pos);
+	sl.setClip(base);
+	sl.setDest(pos);
 	render_device->render(sl);
-	sl.set_clip(knob);
-	sl.set_dest(pos_knob);
+	sl.setClip(knob);
+	sl.setDest(pos_knob);
 	render_device->render(sl);
 
 	if (in_focus) {
@@ -178,7 +178,7 @@ void WidgetSlider::render () {
 			draw = false;
 		}
 		if (draw) {
-			render_device->draw_rectangle(topLeft, bottomRight, color);
+			render_device->drawRectangle(topLeft, bottomRight, color);
 		}
 	}
 }

@@ -45,7 +45,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
-	contents.clear_graphics();
+	contents.clearGraphics();
 	delete scrollbar;
 }
 
@@ -153,13 +153,13 @@ void WidgetScrollBox::resize(int h) {
 
 	if (pos.h > h) h = pos.h;
 
-	contents.clear_graphics();
+	contents.clearGraphics();
 	contents.sprite = createAlphaSurface(pos.w,h);
 	if (!transparent) {
 		SDL_FillRect(contents.sprite,NULL,SDL_MapRGB(contents.sprite->format,bg.r,bg.g,bg.b));
 		SDL_SetAlpha(contents.sprite, 0, SDL_ALPHA_OPAQUE);
 	}
-	contents.set_graphics(contents.sprite);
+	contents.setGraphics(contents.sprite);
 
 	cursor = 0;
 	refresh();
@@ -172,13 +172,13 @@ void WidgetScrollBox::refresh() {
 			h = contents.sprite->h;
 		}
 
-		contents.clear_graphics();
+		contents.clearGraphics();
 		contents.sprite = createAlphaSurface(pos.w,h);
 		if (!transparent) {
 			SDL_FillRect(contents.sprite,NULL,SDL_MapRGB(contents.sprite->format,bg.r,bg.g,bg.b));
 			SDL_SetAlpha(contents.sprite, 0, SDL_ALPHA_OPAQUE);
 		}
-		contents.set_graphics(contents.sprite);
+		contents.setGraphics(contents.sprite);
 	}
 
 	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor, contents.sprite->h-pos.h-scrollbar->pos_knob.h);
@@ -194,8 +194,8 @@ void WidgetScrollBox::render() {
 
 	contents.local_frame = local_frame;
 	contents.offset = local_offset;
-	contents.set_clip(src);
-	contents.set_dest(dest);
+	contents.setClip(src);
+	contents.setDest(dest);
 	render_device->render(contents);
 
 	for (unsigned i = 0; i < children.size(); i++) {
@@ -233,7 +233,7 @@ void WidgetScrollBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->draw_rectangle(topLeft, bottomRight, color);
+			render_device->drawRectangle(topLeft, bottomRight, color);
 		}
 	}
 }

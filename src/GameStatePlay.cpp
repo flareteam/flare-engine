@@ -78,8 +78,8 @@ GameStatePlay::GameStatePlay()
 	hasMusic = true;
 	// GameEngine scope variables
 
-	loading_bg.set_graphics(loadGraphicSurface("images/menus/confirm_bg.png"));
-	loading_bg.set_clip(0,0,loading_bg.sprite->w,loading_bg.sprite->h);
+	loading_bg.setGraphics(loadGraphicSurface("images/menus/confirm_bg.png"));
+	loading_bg.setClip(0,0,loading_bg.sprite->w,loading_bg.sprite->h);
 	powers = new PowerManager();
 	items = new ItemManager();
 	camp = new CampaignManager();
@@ -971,11 +971,11 @@ void GameStatePlay::showLoading() {
 	dest.x = VIEW_W_HALF - loading_bg.sprite->w/2;
 	dest.y = VIEW_H_HALF - loading_bg.sprite->h/2;
 
-	loading_bg.set_dest(dest);
+	loading_bg.setDest(dest);
 	render_device->render(loading_bg);
 	loading->render();
 
-	render_device->commit_frame();
+	render_device->commitFrame();
 }
 
 Avatar *GameStatePlay::getAvatar() const {
@@ -999,6 +999,6 @@ GameStatePlay::~GameStatePlay() {
 
 	delete enemyg;
 
-	loading_bg.clear_graphics();
+	loading_bg.clearGraphics();
 }
 

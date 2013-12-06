@@ -30,10 +30,10 @@ GameStateTitle::GameStateTitle() : GameState() {
 	exit_game = false;
 	load_game = false;
 
-	logo.set_graphics(loadGraphicSurface("images/menus/logo.png"));
+	logo.setGraphics(loadGraphicSurface("images/menus/logo.png"));
 	// display logo centered
 	if (logo.sprite) {
-		logo.set_clip(
+		logo.setClip(
 			0,
 			0,
 			logo.sprite->w,
@@ -142,5 +142,5 @@ GameStateTitle::~GameStateTitle() {
 	delete button_credits;
 	delete button_exit;
 	delete label_version;
-	logo.clear_graphics();
+	logo.clearGraphics();
 }

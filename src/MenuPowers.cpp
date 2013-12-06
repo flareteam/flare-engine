@@ -133,18 +133,18 @@ void MenuPowers::update() {
 
 void MenuPowers::loadGraphics() {
 
-	background.set_graphics(loadGraphicSurface("images/menus/powers.png"));
-	powers_unlock.set_graphics(loadGraphicSurface("images/menus/powers_unlock.png"));
-	overlay_disabled.set_graphics(loadGraphicSurface("images/menus/disabled.png"));
+	background.setGraphics(loadGraphicSurface("images/menus/powers.png"));
+	powers_unlock.setGraphics(loadGraphicSurface("images/menus/powers_unlock.png"));
+	overlay_disabled.setGraphics(loadGraphicSurface("images/menus/disabled.png"));
 
 	if (tree_image_files.empty()) {
 		tree_surf.push_back(Renderable());
-		tree_surf.back().set_graphics(loadGraphicSurface("images/menus/powers_tree.png"));
+		tree_surf.back().setGraphics(loadGraphicSurface("images/menus/powers_tree.png"));
 	}
 	else {
 		for (unsigned int i = 0; i < tree_image_files.size(); ++i) {
 			tree_surf.push_back(Renderable());
-			tree_surf.back().set_graphics(loadGraphicSurface("images/menus/" + tree_image_files[i]));
+			tree_surf.back().setGraphics(loadGraphicSurface("images/menus/" + tree_image_files[i]));
 		}
 	}
 	for (unsigned int i=0; i<slots.size(); i++) {
@@ -454,8 +454,8 @@ void MenuPowers::render() {
 	src.y = 0;
 	src.w = window_area.w;
 	src.h = window_area.h;
-	background.set_clip(src);
-	background.set_dest(dest);
+	background.setClip(src);
+	background.setDest(dest);
 	render_device->render(background);
 
 	if (tabs_count > 1) {
@@ -465,8 +465,8 @@ void MenuPowers::render() {
 			if (active_tab == i) {
 				// power tree
 				Renderable& r = tree_surf[i];
-				r.set_clip(src);
-				r.set_dest(dest);
+				r.setClip(src);
+				r.setDest(dest);
 				render_device->render(r);
 				// power icons
 				renderPowers(active_tab);
@@ -475,8 +475,8 @@ void MenuPowers::render() {
 	}
 	else {
 		Renderable& r = tree_surf[0];
-		r.set_clip(src);
-		r.set_dest(dest);
+		r.setClip(src);
+		r.setDest(dest);
 		render_device->render(r);
 		renderPowers(0);
 	}
@@ -513,8 +513,8 @@ void MenuPowers::displayBuild(int power_id) {
 
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		if (power_cell[i].id == power_id) {
-			powers_unlock.set_clip(src_unlock);
-			powers_unlock.set_dest(slots[i]->pos);
+			powers_unlock.setClip(src_unlock);
+			powers_unlock.setDest(slots[i]->pos);
 			render_device->render(powers_unlock);
 		}
 	}
@@ -667,10 +667,10 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 }
 
 MenuPowers::~MenuPowers() {
-	background.clear_graphics();
-	powers_unlock.clear_graphics();
-	overlay_disabled.clear_graphics();
-	for (unsigned int i=0; i<tree_surf.size(); i++) tree_surf[i].clear_graphics();
+	background.clearGraphics();
+	powers_unlock.clearGraphics();
+	overlay_disabled.clearGraphics();
+	for (unsigned int i=0; i<tree_surf.size(); i++) tree_surf[i].clearGraphics();
 	for (unsigned int i=0; i<slots.size(); i++) {
 		delete slots.at(i);
 		delete upgradeButtons.at(i);
@@ -727,8 +727,8 @@ void MenuPowers::renderPowers(int tab_num) {
 		}
 		else {
 			if (overlay_disabled.sprite != NULL) {
-				overlay_disabled.set_clip(disabled_src);
-				overlay_disabled.set_dest(slots[i]->pos);
+				overlay_disabled.setClip(disabled_src);
+				overlay_disabled.setDest(slots[i]->pos);
 				render_device->render(overlay_disabled);
 			}
 		}

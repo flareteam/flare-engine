@@ -80,8 +80,8 @@ MenuStatBar::MenuStatBar(std::string type) {
 }
 
 void MenuStatBar::loadGraphics(std::string type) {
-	background.set_graphics(loadGraphicSurface("images/menus/bar_" + type + "_background.png"));
-	bar.set_graphics(loadGraphicSurface("images/menus/bar_" + type + ".png"));
+	background.setGraphics(loadGraphicSurface("images/menus/bar_" + type + "_background.png"));
+	bar.setGraphics(loadGraphicSurface("images/menus/bar_" + type + ".png"));
 }
 
 void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string) {
@@ -107,8 +107,8 @@ void MenuStatBar::render() {
 	src.y = 0;
 	src.w = bar_pos.w;
 	src.h = bar_pos.h;
-	background.set_clip(src);
-	background.set_dest(dest);
+	background.setClip(src);
+	background.setDest(dest);
 	render_device->render(background);
 
 	// draw bar progress based on orientation
@@ -131,8 +131,8 @@ void MenuStatBar::render() {
 		dest.y = bar_dest.y+src.y;
 	}
 
-	bar.set_clip(src);
-	bar.set_dest(dest);
+	bar.setClip(src);
+	bar.setDest(dest);
 	render_device->render(bar);
 
 	// if mouseover, draw text
@@ -155,7 +155,7 @@ void MenuStatBar::render() {
 }
 
 MenuStatBar::~MenuStatBar() {
-	background.clear_graphics();
-	bar.clear_graphics();
+	background.clearGraphics();
+	bar.clearGraphics();
 	delete label;
 }

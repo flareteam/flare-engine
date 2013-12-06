@@ -63,20 +63,20 @@ struct Renderable {
 		, offset()
 		, prio(0)
 	{}
-	void set_graphics(SDL_Surface *s, SDL_Rect *texture_clip=0);
-	void clear_graphics();
-	void clear_texture();
-	void set_clip(const SDL_Rect& clip);
-	void set_clip(const int x, const int y, const int w, const int h);
-	void set_dest(const SDL_Rect& dest) {
+	void setGraphics(SDL_Surface *s, SDL_Rect *texture_clip=0);
+	void clearGraphics();
+	void clearTexture();
+	void setClip(const SDL_Rect& clip);
+	void setClip(const int x, const int y, const int w, const int h);
+	void setDest(const SDL_Rect& dest) {
 		map_pos.x = (float)dest.x;
 		map_pos.y = (float)dest.y;
 	}
-	void set_dest(const Point& dest) {
+	void setDest(const Point& dest) {
 		map_pos.x = (float)dest.x;
 		map_pos.y = (float)dest.y;
 	}
-	void set_dest(int x, int y) {
+	void setDest(int x, int y) {
 		map_pos.x = (float)x;
 		map_pos.y = (float)y;
 	}

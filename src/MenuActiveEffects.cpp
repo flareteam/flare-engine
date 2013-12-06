@@ -61,7 +61,7 @@ MenuActiveEffects::MenuActiveEffects()
 }
 
 void MenuActiveEffects::loadGraphics() {
-	timer.set_graphics(loadGraphicSurface("images/menus/disabled.png"));
+	timer.setGraphics(loadGraphicSurface("images/menus/disabled.png"));
 }
 
 void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max) {
@@ -81,8 +81,8 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 		src.y = (icon_id / columns) * ICON_SIZE;
 		src.w = src.h = ICON_SIZE;
 
-		icons.set_clip(src);
-		icons.set_dest(pos);
+		icons.setClip(src);
+		icons.setDest(pos);
 		render_device->render(icons);
 
 		if (max > 0) {
@@ -91,8 +91,8 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 			overlay.w = ICON_SIZE;
 			overlay.h = ICON_SIZE - overlay.y;
 
-			timer.set_clip(overlay);
-			timer.set_dest(pos);
+			timer.setClip(overlay);
+			timer.setDest(pos);
 			render_device->render(timer);
 		}
 	}
@@ -126,5 +126,5 @@ void MenuActiveEffects::render() {
 }
 
 MenuActiveEffects::~MenuActiveEffects() {
-	timer.clear_graphics();
+	timer.clearGraphics();
 }

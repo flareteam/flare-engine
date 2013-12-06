@@ -90,7 +90,7 @@ static void init() {
 
 	// Create render Device and Rendering Context.
 	render_device = new SDLRenderDevice();
-	screen = render_device->create_context(VIEW_W, VIEW_H, FULLSCREEN);
+	screen = render_device->createContext(VIEW_W, VIEW_H, FULLSCREEN);
 
 	if (screen == NULL) {
 
@@ -151,7 +151,7 @@ static void mainLoop (bool debug_event) {
 		gswitch->logic();
 
 		// black out
-		render_device->blank_screen();
+		render_device->blankScreen();
 
 		gswitch->render();
 
@@ -164,7 +164,7 @@ static void mainLoop (bool debug_event) {
 		gswitch->showFPS(1000 / (SDL_GetTicks() - prevTicks));
 		prevTicks = SDL_GetTicks();
 
-		render_device->commit_frame();
+		render_device->commitFrame();
 	}
 }
 
@@ -182,14 +182,14 @@ static void cleanup() {
 
 	if (icon_atlas != NULL) {
 		Renderable icons = loadIcons();
-		icons.clear_graphics();
+		icons.clearGraphics();
 	}
 
 	SDL_FreeSurface(titlebar_icon);
 
 	Mix_CloseAudio();
 
-	render_device->destroy_context();
+	render_device->destroyContext();
 	delete render_device;
 
 	SDL_Quit();

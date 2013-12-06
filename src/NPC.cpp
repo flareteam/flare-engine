@@ -165,7 +165,7 @@ void NPC::loadGraphics(const string& filename_portrait) {
 		activeAnimation = animationSet->getAnimation();
 	}
 	if (filename_portrait != "")
-		portrait.set_graphics(loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true));
+		portrait.setGraphics(loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true));
 }
 
 /**
@@ -414,7 +414,7 @@ NPC::~NPC() {
 		anim->decreaseCount(gfx);
 	}
 
-	portrait.clear_graphics();
+	portrait.clearGraphics();
 	while (!vox_intro.empty()) {
 		snd->unload(vox_intro.back());
 		vox_intro.pop_back();

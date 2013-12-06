@@ -31,10 +31,10 @@ using namespace std;
  * Initialize graphics resources. That is the SLD_surface buffer
  *
  * It is important that, if the client owns the graphics resources,
- * clear_graphics() method is called first in case this Renderable holds the
+ * clearGraphics() method is called first in case this Renderable holds the
  * last references to avoid resource leaks.
  */
-void Renderable::set_graphics(SDL_Surface *s, SDL_Rect *texture_clip) {
+void Renderable::setGraphics(SDL_Surface *s, SDL_Rect *texture_clip) {
 
 	sprite = s;
 }
@@ -45,7 +45,7 @@ void Renderable::set_graphics(SDL_Surface *s, SDL_Rect *texture_clip) {
  * It is important that this method is only called by clients who own the
  * graphics resources.
  */
-void Renderable::clear_graphics() {
+void Renderable::clearGraphics() {
 
 	if (sprite != NULL) {
 		SDL_FreeSurface(sprite);
@@ -57,20 +57,20 @@ void Renderable::clear_graphics() {
  *
  * Do nothing if we compile and/or run in SDL blit mode.
  */
-void Renderable::clear_texture() {
+void Renderable::clearTexture() {
 }
 
 /**
  * Set the clipping rectangle for the sprite
  */
-void Renderable::set_clip(const SDL_Rect& clip) {
+void Renderable::setClip(const SDL_Rect& clip) {
 	src = clip;
 }
 
 /**
  * Set the clipping rectangle for the sprite
  */
-void Renderable::set_clip(const int x, const int y, const int w, const int h) {
+void Renderable::setClip(const int x, const int y, const int w, const int h) {
 	src.x = x;
 	src.y = y;
 	src.w = w;

@@ -202,19 +202,19 @@ GameStateNew::GameStateNew() : GameState() {
 }
 
 void GameStateNew::loadGraphics() {
-	portrait_border.set_graphics(
+	portrait_border.setGraphics(
 		loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true)
 	);
-	portrait_border.set_clip(0,0,portrait_border.sprite->w,portrait_border.sprite->h);
+	portrait_border.setClip(0,0,portrait_border.sprite->w,portrait_border.sprite->h);
 }
 
 void GameStateNew::loadPortrait(const string& portrait_filename) {
-	portrait_image.clear_graphics();
-	portrait_image.set_graphics(
+	portrait_image.clearGraphics();
+	portrait_image.setGraphics(
 		loadGraphicSurface("images/portraits/" + portrait_filename + ".png")
 	);
-	portrait_image.set_clip(0,0,portrait_image.sprite->w,portrait_image.sprite->h);
-	portrait_image.set_dest(portrait_pos);
+	portrait_image.setClip(0,0,portrait_image.sprite->w,portrait_image.sprite->h);
+	portrait_image.setDest(portrait_pos);
 }
 
 /**
@@ -330,11 +330,11 @@ void GameStateNew::render() {
 	dest.x = portrait_pos.x + (VIEW_W - FRAME_W)/2;
 	dest.y = portrait_pos.y + (VIEW_H - FRAME_H)/2;
 
-	portrait_image.set_clip(src);
-	portrait_image.set_dest(dest);
+	portrait_image.setClip(src);
+	portrait_image.setDest(dest);
 	render_device->render(portrait_image);
-	portrait_border.set_clip(src);
-	portrait_border.set_dest(dest);
+	portrait_border.setClip(src);
+	portrait_border.setDest(dest);
 	render_device->render(portrait_border);
 
 	// display labels
@@ -371,8 +371,8 @@ std::string GameStateNew::getClassTooltip(int index) {
 }
 
 GameStateNew::~GameStateNew() {
-	portrait_image.clear_graphics();
-	portrait_border.clear_graphics();
+	portrait_image.clearGraphics();
+	portrait_border.clearGraphics();
 	delete button_exit;
 	delete button_create;
 	delete button_next;

@@ -33,7 +33,7 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 	  checked(false),
 	  pressed(false) {
 	focusable = true;
-	cb.set_graphics(loadGraphicSurface(fname, "Couldn't load image", true, false));
+	cb.setGraphics(loadGraphicSurface(fname, "Couldn't load image", true, false));
 
 	pos.w = cb.sprite->w;
 	pos.h = cb.sprite->h / 2;
@@ -41,7 +41,7 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
 	local_offset.x = local_offset.y = 0;
 
-	cb.set_clip(
+	cb.setClip(
 		0,
 		0,
 		pos.w,
@@ -55,22 +55,22 @@ void WidgetCheckBox::activate() {
 }
 
 WidgetCheckBox::~WidgetCheckBox () {
-	cb.clear_graphics();
+	cb.clearGraphics();
 }
 
 void WidgetCheckBox::Check () {
 	checked = true;
-	cb.set_clip(0,pos.h,pos.w,pos.h);
+	cb.setClip(0,pos.h,pos.w,pos.h);
 }
 
 void WidgetCheckBox::unCheck () {
 	checked = false;
-	cb.set_clip(0,0,pos.w,pos.h);
+	cb.setClip(0,0,pos.w,pos.h);
 }
 
 void WidgetCheckBox::toggleCheck () {
 	checked = !checked;
-	cb.set_clip(0,(checked ? pos.h : 0),pos.w,pos.h);
+	cb.setClip(0,(checked ? pos.h : 0),pos.w,pos.h);
 }
 
 bool WidgetCheckBox::checkClick() {
@@ -109,7 +109,7 @@ bool WidgetCheckBox::isChecked () const {
 void WidgetCheckBox::render() {
 	cb.local_frame = local_frame;
 	cb.offset = local_offset;
-	cb.set_dest(pos);
+	cb.setDest(pos);
 	render_device->render(cb);
 
 	if (in_focus) {
@@ -134,7 +134,7 @@ void WidgetCheckBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->draw_rectangle(topLeft, bottomRight, color);
+			render_device->drawRectangle(topLeft, bottomRight, color);
 		}
 	}
 }

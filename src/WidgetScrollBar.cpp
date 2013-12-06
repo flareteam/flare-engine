@@ -47,7 +47,7 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 }
 
 void WidgetScrollBar::loadArt() {
-	scrollbars.set_graphics(loadGraphicSurface(fileName, "Couldn't load image", true));
+	scrollbars.setGraphics(loadGraphicSurface(fileName, "Couldn't load image", true));
 }
 
 int WidgetScrollBar::checkClick() {
@@ -148,14 +148,14 @@ void WidgetScrollBar::render() {
 
 	scrollbars.local_frame = local_frame;
 	scrollbars.offset = local_offset;
-	scrollbars.set_clip(src_up);
-	scrollbars.set_dest(pos_up);
+	scrollbars.setClip(src_up);
+	scrollbars.setDest(pos_up);
 	render_device->render(scrollbars);
-	scrollbars.set_clip(src_down);
-	scrollbars.set_dest(pos_down);
+	scrollbars.setClip(src_down);
+	scrollbars.setDest(pos_down);
 	render_device->render(scrollbars);
-	scrollbars.set_clip(src_knob);
-	scrollbars.set_dest(pos_knob);
+	scrollbars.setClip(src_knob);
+	scrollbars.setDest(pos_knob);
 	render_device->render(scrollbars);
 }
 
@@ -173,6 +173,6 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 }
 
 WidgetScrollBar::~WidgetScrollBar() {
-	scrollbars.clear_graphics();
+	scrollbars.clearGraphics();
 }
 

@@ -412,8 +412,8 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 		int columns = icons.sprite->w / ICON_SIZE;
 		src.x = (items[stack.item].icon % columns) * size;
 		src.y = (items[stack.item].icon / columns) * size;
-		icons.set_clip(src);
-		icons.set_dest(dest);
+		icons.setClip(src);
+		icons.setDest(dest);
 		render_device->render(icons);
 	}
 

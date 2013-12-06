@@ -70,7 +70,7 @@ void MenuMiniMap::getMapTitle(std::string map_title) {
 }
 
 void MenuMiniMap::createMapSurface() {
-	map_surface.clear_graphics();
+	map_surface.clearGraphics();
 	map_surface.sprite = createAlphaSurface(512, 512);
 	SDL_SetAlpha(map_surface.sprite, SDL_SRCALPHA, SDL_ALPHA_TRANSPARENT);
 }
@@ -90,7 +90,7 @@ void MenuMiniMap::render(FPoint hero_pos) {
 void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 	map_size.x = map_w;
 	map_size.y = map_h;
-	map_surface.clear_texture();
+	map_surface.clearTexture();
 	SDL_FillRect(map_surface.sprite, 0, SDL_MapRGBA(map_surface.sprite->format,0,0,0,0));
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
@@ -98,7 +98,7 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 	else // TILESET_ORTHOGONAL
 		prerenderOrtho(collider);
 
-	map_surface.set_graphics(map_surface.sprite);
+	map_surface.setGraphics(map_surface.sprite);
 }
 
 /**
@@ -121,15 +121,15 @@ void MenuMiniMap::renderOrtho(FPoint hero_pos) {
 	map_area.w = pos.w;
 	map_area.h = pos.h;
 
-	map_surface.set_clip(clip);
-	map_surface.set_dest(map_area);
+	map_surface.setClip(clip);
+	map_surface.setDest(map_area);
 	render_device->render(map_surface);
 
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2 + 1, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2 - 1, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 + 1, color_hero);
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 - 1, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2 + 1, window_area.y + pos.y + pos.h/2, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2 - 1, window_area.y + pos.y + pos.h/2, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 + 1, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 - 1, color_hero);
 }
 
 /**
@@ -154,15 +154,15 @@ void MenuMiniMap::renderIso(FPoint hero_pos) {
 	map_area.w = pos.w;
 	map_area.h = pos.h;
 
-	map_surface.set_clip(clip);
-	map_surface.set_dest(map_area);
+	map_surface.setClip(clip);
+	map_surface.setDest(map_area);
 	render_device->render(map_surface);
 
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2 + 1, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2 - 1, window_area.y + pos.y + pos.h/2, color_hero);
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 + 1, color_hero);
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 - 1, color_hero);
-	render_device->draw_pixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2 + 1, window_area.y + pos.y + pos.h/2, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2 - 1, window_area.y + pos.y + pos.h/2, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 + 1, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 - 1, color_hero);
+	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2, color_hero);
 }
 
 void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
@@ -238,6 +238,6 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 }
 
 MenuMiniMap::~MenuMiniMap() {
-	map_surface.clear_graphics();
+	map_surface.clearGraphics();
 	delete label;
 }

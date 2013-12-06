@@ -52,7 +52,7 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png")) {
 
-	background.set_graphics(loadGraphicSurface("images/menus/dialog_box.png"));
+	background.setGraphics(loadGraphicSurface("images/menus/dialog_box.png"));
 
 	// Load config settings
 	FileParser infile;
@@ -243,7 +243,7 @@ void MenuTalker::createBuffer() {
 		text_pos.w - text_offset.x*2,
 		color_normal
 	);
-	textbox->contents.set_graphics(textbox->contents.sprite);
+	textbox->contents.setGraphics(textbox->contents.sprite);
 
 }
 
@@ -263,8 +263,8 @@ void MenuTalker::render() {
 	src.w = dest.w = dialog_pos.w;
 	src.h = dest.h = dialog_pos.h;
 
-	background.set_clip(src);
-	background.set_dest(dest);
+	background.setClip(src);
+	background.setDest(dest);
 	render_device->render(background);
 
 	// show active portrait
@@ -277,8 +277,8 @@ void MenuTalker::render() {
 			dest.x = offset_x + portrait_he.x;
 			dest.y = offset_y + portrait_he.y;
 
-			r.set_clip(src);
-			r.set_dest(dest);
+			r.setClip(src);
+			r.setDest(dest);
 			render_device->render(r);
 		}
 	}
@@ -288,8 +288,8 @@ void MenuTalker::render() {
 			src.h = dest.h = portrait_you.h;
 			dest.x = offset_x + portrait_you.x;
 			dest.y = offset_y + portrait_you.y;
-			portrait.set_clip(src);
-			portrait.set_dest(dest);
+			portrait.setClip(src);
+			portrait.setDest(dest);
 			render_device->render(portrait);
 		}
 	}
@@ -316,8 +316,8 @@ void MenuTalker::setHero(const string& name, const string& class_name, const str
 	hero_name = name;
 	hero_class = msg->get(class_name);
 
-	portrait.clear_graphics();
-	portrait.set_graphics(loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait"));
+	portrait.clearGraphics();
+	portrait.setGraphics(loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait"));
 }
 
 string MenuTalker::parseLine(const string &line) {
@@ -335,8 +335,8 @@ string MenuTalker::parseLine(const string &line) {
 }
 
 MenuTalker::~MenuTalker() {
-	background.clear_graphics();
-	portrait.clear_graphics();
+	background.clearGraphics();
+	portrait.clearGraphics();
 	delete label_name;
 	delete textbox;
 	delete advanceButton;

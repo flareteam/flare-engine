@@ -76,12 +76,12 @@ void Menu::align() {
 	}
 
 	if (background.sprite != NULL) {
-		background.set_clip(
+		background.setClip(
 			0,
 			0,
 			window_area.w,
 			window_area.h
 		);
-		background.set_dest(window_area);
+		background.setDest(window_area);
 	}
 }

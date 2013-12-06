@@ -54,7 +54,7 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 	, can_select(true)
 	, scrollbar_offset(0) {
 	// load ListBox images
-	listboxs.set_graphics(loadGraphicSurface(fileName, "Couldn't load image", true));
+	listboxs.setGraphics(loadGraphicSurface(fileName, "Couldn't load image", true));
 	click = NULL;
 
 	for (int i=0; i<list_amount; i++) {
@@ -372,8 +372,8 @@ void WidgetListBox::render() {
 		else
 			src.y = pos.h;
 
-		listboxs.set_clip(src);
-		listboxs.set_dest(rows[i]);
+		listboxs.setClip(src);
+		listboxs.setDest(rows[i]);
 		render_device->render(listboxs);
 
 		if (i<list_amount) {
@@ -405,7 +405,7 @@ void WidgetListBox::render() {
 			draw = false;
 		}
 		if (draw) {
-			render_device->draw_rectangle(topLeft, bottomRight, color);
+			render_device->drawRectangle(topLeft, bottomRight, color);
 		}
 	}
 
@@ -523,7 +523,7 @@ bool WidgetListBox::getPrev() {
 }
 
 WidgetListBox::~WidgetListBox() {
-	listboxs.clear_graphics();
+	listboxs.clearGraphics();
 	delete[] values;
 	delete[] tooltips;
 	delete[] vlabels;

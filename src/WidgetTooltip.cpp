@@ -134,7 +134,7 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 	Point size = font->calc_size(fulltext, width);
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
-	tip.renderable.clear_graphics();
+	tip.renderable.clearGraphics();
 	SDL_Surface *surface =
 		createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
 
@@ -152,8 +152,8 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 		cursor_y = font->cursor_y;
 	}
 
-	tip.renderable.set_graphics(surface);
-	tip.renderable.set_clip(
+	tip.renderable.setGraphics(surface);
+	tip.renderable.setClip(
 		0,
 		0,
 		tip.renderable.sprite->w,

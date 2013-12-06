@@ -79,7 +79,7 @@ MenuLog::MenuLog() {
 	font->setFont("font_regular");
 	paragraph_spacing = font->getLineHeight()/2;
 
-	background.set_graphics(loadGraphicSurface("images/menus/log.png"));
+	background.setGraphics(loadGraphicSurface("images/menus/log.png"));
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
@@ -141,8 +141,8 @@ void MenuLog::render() {
 	src.y = 0;
 	src.w = window_area.w;
 	src.h = window_area.h;
-	background.set_clip(src);
-	background.set_dest(dest);
+	background.setClip(src);
+	background.setDest(dest);
 	render_device->render(background);
 
 	// Close button.
@@ -241,7 +241,7 @@ MenuLog::~MenuLog() {
 		delete msg_buffer[i];
 	}
 
-	background.clear_graphics();
+	background.clearGraphics();
 	delete closeButton;
 	delete tabControl;
 }

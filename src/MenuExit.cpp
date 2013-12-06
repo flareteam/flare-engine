@@ -33,7 +33,7 @@ MenuExit::MenuExit() : Menu() {
 
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 
-	background.set_graphics(loadGraphicSurface("images/menus/confirm_bg.png"));
+	background.setGraphics(loadGraphicSurface("images/menus/confirm_bg.png"));
 	tablist.add(buttonExit);
 	tablist.add(buttonClose);
 }
@@ -79,6 +79,6 @@ void MenuExit::render() {
 MenuExit::~MenuExit() {
 	delete buttonExit;
 	delete buttonClose;
-	background.clear_graphics();
+	background.clearGraphics();
 }
 

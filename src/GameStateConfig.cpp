@@ -58,8 +58,8 @@ GameStateConfig::GameStateConfig ()
 	, tip_buf()
 	, input_key(0)
 	, check_resolution(true) {
-	background.set_graphics(loadGraphicSurface("images/menus/config.png"));
-	background.set_clip(
+	background.setGraphics(loadGraphicSurface("images/menus/config.png"));
+	background.setClip(
 		0,
 		0,
 		background.sprite->w,
@@ -1059,7 +1059,7 @@ void GameStateConfig::render () {
 	pos.x = (VIEW_W-FRAME_W)/2;
 	pos.y = (VIEW_H-FRAME_H)/2 + tabheight - tabheight/16;
 
-	background.set_dest(pos);
+	background.setDest(pos);
 	render_device->render(background);
 
 	tabControl->render();
@@ -1216,7 +1216,7 @@ void GameStateConfig::refreshFont() {
  * Tries to apply the selected video settings, reverting back to the old settings upon failure
  */
 bool GameStateConfig::applyVideoSettings(int width, int height) {
-	if (render_device->create_context(width, height, FULLSCREEN) == NULL) {
+	if (render_device->createContext(width, height, FULLSCREEN) == NULL) {
 		return false;
 
 	}
@@ -1328,7 +1328,7 @@ GameStateConfig::~GameStateConfig() {
 	delete defaults_confirm;
 	delete resolution_confirm;
 
-	background.clear_graphics();
+	background.clearGraphics();
 
 	for (std::vector<Widget*>::iterator iter = child_widget.begin(); iter != child_widget.end(); ++iter) {
 		delete (*iter);

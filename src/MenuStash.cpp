@@ -42,7 +42,7 @@ MenuStash::MenuStash(StatBlock *_stats)
 	, updated(false)
 
 {
-	background.set_graphics(loadGraphicSurface("images/menus/stash.png"));
+	background.setGraphics(loadGraphicSurface("images/menus/stash.png"));
 
 	// Load config settings
 	FileParser infile;
@@ -242,7 +242,7 @@ int MenuStash::getRowsCount() {
 }
 
 MenuStash::~MenuStash() {
-	background.clear_graphics();
+	background.clearGraphics();
 	delete closeButton;
 }
 

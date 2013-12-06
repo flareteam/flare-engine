@@ -196,15 +196,15 @@ void MenuNPCActions::update() {
 	}
 	// create background surface if necessary
 	if ( old_w != w || old_h != h ) {
-		action_menu.clear_graphics();
+		action_menu.clearGraphics();
 		SDL_Surface *surface;
 		surface = createAlphaSurface(w,h);
 		Uint32 bg = SDL_MapRGBA(surface->format,
 								background_color.r, background_color.g,
 								background_color.b, background_alpha);
 		SDL_FillRect(surface, NULL, bg);
-		action_menu.set_graphics(surface);
-		action_menu.set_clip(0,0,surface->w,surface->h);
+		action_menu.setGraphics(surface);
+		action_menu.setClip(0,0,surface->w,surface->h);
 	}
 
 }
@@ -388,7 +388,7 @@ void MenuNPCActions::render() {
 	if (!visible) return;
 	if (!action_menu.sprite) return;
 
-	action_menu.set_dest(window_area);
+	action_menu.setDest(window_area);
 	render_device->render(action_menu);
 	for(size_t i=0; i<npc_actions.size(); i++) {
 		if (npc_actions[i].label) {
@@ -400,6 +400,6 @@ void MenuNPCActions::render() {
 }
 
 MenuNPCActions::~MenuNPCActions() {
-	action_menu.clear_graphics();
+	action_menu.clearGraphics();
 }
 

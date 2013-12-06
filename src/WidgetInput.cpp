@@ -50,7 +50,7 @@ WidgetInput::WidgetInput() {
 
 void WidgetInput::loadGraphics(const string& filename) {
 	// load input background image
-	background.set_graphics(loadGraphicSurface(filename, "Couldn't load image", true));
+	background.setGraphics(loadGraphicSurface(filename, "Couldn't load image", true));
 }
 
 void WidgetInput::logic() {
@@ -112,8 +112,8 @@ void WidgetInput::render() {
 
 	background.local_frame = local_frame;
 	background.offset = local_offset;
-	background.set_clip(src);
-	background.set_dest(pos);
+	background.setClip(src);
+	background.setDest(pos);
 	render_device->render(background);
 
 	font->setFont("font_regular");
@@ -174,6 +174,6 @@ bool WidgetInput::checkClick() {
 }
 
 WidgetInput::~WidgetInput() {
-	background.clear_graphics();
+	background.clearGraphics();
 }
 

@@ -61,8 +61,8 @@ void WidgetButton::loadArt() {
 		exit(1); // or abort ??
 	}
 
-	buttons.set_graphics(surface);
-	buttons.set_clip(
+	buttons.setGraphics(surface);
+	buttons.setClip(
 		0,
 		0,
 		buttons.sprite->w,
@@ -134,13 +134,13 @@ void WidgetButton::render() {
 
 	buttons.local_frame = local_frame;
 	buttons.offset = local_offset;
-	buttons.set_clip(
+	buttons.setClip(
 		buttons.src.x,
 		y,
 		buttons.src.w,
 		buttons.src.h
 	);
-	buttons.set_dest(pos);
+	buttons.setDest(pos);
 	render_device->render(buttons);
 
 	// render label
@@ -191,7 +191,7 @@ TooltipData WidgetButton::checkTooltip(Point mouse) {
 }
 
 WidgetButton::~WidgetButton() {
-	buttons.clear_graphics();
+	buttons.clearGraphics();
 	tip_buf.clear();
 	delete tip;
 }
