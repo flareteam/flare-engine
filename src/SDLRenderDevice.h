@@ -45,10 +45,9 @@ public:
 
 	/** Create context on startup.
 	 */
-	virtual SDL_Surface *createContext(
+	virtual void createContext(
 		int width,
-		int height,
-		bool full_screen
+		int height
 	);
 
 	/** Render surface to screen.

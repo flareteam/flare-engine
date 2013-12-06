@@ -30,91 +30,32 @@ SDLRenderDevice::SDLRenderDevice() {
 	cout << "Using Render Device: SDLRenderDevice" << endl;
 }
 
-SDL_Surface *SDLRenderDevice::createContext(
-	int width,
-	int height,
-	bool full_screen
-) {
-	// Is there anything to do? If not, simply return the
-	// current context.
-	if (width == VIEW_W &&
-			height == VIEW_H &&
-			full_screen == FULLSCREEN &&
-			is_initialized
-	   ) {
-		return screen;
-	}
+void SDLRenderDevice::createContext(int width, int height) {
 
-	// Check all mods support the requested resolution.
-	if (MIN_VIEW_W > width && MIN_VIEW_H > height) {
-		fprintf (
-			stderr,
-			"A mod is requiring a minimum resolution of %dx%d\n",
-			MIN_VIEW_W,
-			MIN_VIEW_H
-		);
-		if (width < MIN_VIEW_W) width = MIN_VIEW_W;
-		if (height < MIN_VIEW_H) height = MIN_VIEW_H;
-	}
-
-	// Make sure we free the resources if this is not
-	// the first request for a context.
 	if (is_initialized) {
 		SDL_FreeSurface(screen);
 	}
 
 	Uint32 flags = 0;
-	if (full_screen) {
-		flags |= SDL_FULLSCREEN;
-	}
-	if (DOUBLEBUF) {
-		flags |= SDL_DOUBLEBUF;
-	}
-	if (HWSURFACE) {
-		flags |= SDL_HWSURFACE | SDL_HWACCEL;
-	}
-	else {
-		flags |= SDL_SWSURFACE;
-	}
 
-	SDL_Surface *view = SDL_SetVideoMode (width, height, 0, flags);
-	if (view == NULL) {
+	if (FULLSCREEN) flags = flags | SDL_FULLSCREEN;
+	if (DOUBLEBUF) flags = flags | SDL_DOUBLEBUF;
+	if (HWSURFACE)
+		flags = flags | SDL_HWSURFACE | SDL_HWACCEL;
+	else
+		flags = flags | SDL_SWSURFACE;
 
-		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
+	screen = SDL_SetVideoMode (width, height, 0, flags);
 
-		if (!is_initialized) {
+	if (screen == NULL && !is_initialized) {
 			// If this is the first attempt and it failed we are not
 			// getting anywhere.
 			SDL_Quit();
 			exit(1);
-		}
-		else {
-			// We had a working context before, revert to it.
-			//
-			// TODO 2013-07-08: while this method is prepared to handle errors when
-			// trying to toggle full screen mode, so far no client code actually uses
-			// this. How to handle this in clients is a design decision to be made by
-			// the community.
-			flags &= (~SDL_FULLSCREEN);
-			if (FULLSCREEN) {
-				flags |= SDL_FULLSCREEN;
-			}
-			view = SDL_SetVideoMode (VIEW_W, VIEW_H, 0, flags);
-		}
 	}
-	else if (is_initialized) {
-		// We succeeded in setting a new video mode.
-		VIEW_W = width;
-		VIEW_W_HALF = width/2;
-		VIEW_H = height;
-		VIEW_H_HALF = height/2;
-		FULLSCREEN = full_screen;
+	else {
+		is_initialized = true;
 	}
-
-	screen = view;
-	is_initialized = true;
-
-	return view;
 }
 
 int SDLRenderDevice::render(Renderable& r) {

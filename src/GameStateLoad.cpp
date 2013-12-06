@@ -87,7 +87,9 @@ GameStateLoad::GameStateLoad() : GameState() {
 			}
 			else if (infile.key == "portrait") {
 				portrait.map_pos.x = eatFirstInt(infile.val, ',');
+				portrait.map_pos.x += (VIEW_W - FRAME_W)/2;
 				portrait.map_pos.y = eatFirstInt(infile.val, ',');
+				portrait.map_pos.y += (VIEW_H - FRAME_H)/2;
 				portrait.src.w = eatFirstInt(infile.val, ',');
 				portrait.src.h = eatFirstInt(infile.val, ',');
 			}
@@ -533,9 +535,6 @@ void GameStateLoad::render() {
 
 	// display selection
 	if (selected_slot >= 0) {
-		//src.w = gameslot_pos.w;
-		//src.h = gameslot_pos.h;
-		//src.x = src.y = 0;
 		selection.setDest(slot_pos[selected_slot]);
 		render_device->render(selection);
 	}
@@ -544,9 +543,6 @@ void GameStateLoad::render() {
 	// portrait
 	if (selected_slot >= 0 && portrait.sprite != NULL) {
 		render_device->render(portrait);
-
-		//src.w = portrait.src.w;
-		//src.h = portrait.src.h;
 		dest.x = portrait.map_pos.x;
 		dest.y = portrait.map_pos.y;
 		portrait_border.setDest(dest);

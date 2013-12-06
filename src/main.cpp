@@ -90,7 +90,7 @@ static void init() {
 
 	// Create render Device and Rendering Context.
 	render_device = new SDLRenderDevice();
-	screen = render_device->createContext(VIEW_W, VIEW_H, FULLSCREEN);
+	render_device->createContext(VIEW_W, VIEW_H);
 
 	if (screen == NULL) {
 

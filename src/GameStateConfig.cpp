@@ -1216,7 +1216,19 @@ void GameStateConfig::refreshFont() {
  * Tries to apply the selected video settings, reverting back to the old settings upon failure
  */
 bool GameStateConfig::applyVideoSettings(int width, int height) {
-	if (render_device->createContext(width, height, FULLSCREEN) == NULL) {
+	if (MIN_VIEW_W > width && MIN_VIEW_H > height) {
+		fprintf (stderr, "A mod is requiring a minimum resolution of %dx%d\n", MIN_VIEW_W, MIN_VIEW_H);
+		if (width < MIN_VIEW_W) width = MIN_VIEW_W;
+		if (height < MIN_VIEW_H) height = MIN_VIEW_H;
+	}
+
+	// Attempt to apply the new settings
+	render_device->createContext(width, height);
+
+	// If the new settings fail, revert to the old ones
+	if (!screen) {
+		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
+		render_device->createContext(VIEW_W, VIEW_H);
 		return false;
 
 	}
