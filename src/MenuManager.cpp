@@ -48,8 +48,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 
 MenuManager::MenuManager(StatBlock *_stats)
-	: icons(loadIcons())
-	, stats(_stats)
+	: stats(_stats)
 	, tip_buf()
 	, keyb_tip_buf_vendor()
 	, keyb_tip_buf_stash()
@@ -87,7 +86,6 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, pause(false)
 	, menus_open(false)
 	, drop_stack() {
-	loadIcons();
 
 	hp = new MenuStatBar("hp");
 	menus.push_back(hp); // menus[0]

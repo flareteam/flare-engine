@@ -44,8 +44,6 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	pos.w = ICON_SIZE;
 	pos.h = ICON_SIZE;
 
-	icons = loadIcons();
-
 	SDL_Rect src;
 	src.x = src.y = 0;
 	src.w = src.h = ICON_SIZE;

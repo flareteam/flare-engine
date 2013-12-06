@@ -36,6 +36,10 @@ Renderable::Renderable()
 		, prio(0)
 {}
 
+// TODO: implement destructor, copy constructor and operator=
+Renderable::~Renderable() {
+}
+
 /**
  * Set the graphics context of a Renderable.
  * Initialize graphics resources. That is the SLD_surface buffer
@@ -650,12 +654,8 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #endif
 }
 
-Renderable loadIcons() {
-	if (icon_atlas == NULL) {
-		icon_atlas = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
+void loadIcons() {
+	if (icons.sprite == NULL) {
+		icons.sprite = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
 	}
-
-	Renderable r;
-	r.sprite = icon_atlas;
-	return r;
 }

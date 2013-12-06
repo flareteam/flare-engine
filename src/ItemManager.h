@@ -178,8 +178,6 @@ public:
 
 class ItemManager {
 private:
-	Renderable icons;
-
 	void loadItems();
 	void loadTypes();
 	void loadSets();
@@ -197,9 +195,6 @@ private:
 public:
 	ItemManager();
 	~ItemManager();
-	Renderable& getIcons() {
-		return icons;
-	}
 	void renderIcon(ItemStack stack, int x, int y, int size);
 	void playSound(int item, Point pos = Point(0,0));
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);

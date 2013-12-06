@@ -56,8 +56,6 @@ const int DRAG_SRC_STASH = 5;
 class MenuManager {
 private:
 
-	Renderable icons;
-
 	StatBlock *stats;
 
 	TooltipData tip_buf;

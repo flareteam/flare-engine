@@ -77,6 +77,7 @@ static void init() {
 	comb = new CombatText();
 	imag = new ImageManager();
 	inpt = new InputState();
+	loadIcons();
 
 	// Load tileset options (must be after ModManager is initialized)
 	loadTilesetSettings();
@@ -180,10 +181,7 @@ static void cleanup() {
 	delete msg;
 	delete snd;
 
-	if (icon_atlas != NULL) {
-		Renderable icons = loadIcons();
-		icons.clearGraphics();
-	}
+	icons.clearGraphics();
 
 	SDL_FreeSurface(titlebar_icon);
 

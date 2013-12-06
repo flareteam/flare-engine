@@ -37,8 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 MenuActiveEffects::MenuActiveEffects()
-	: icons(loadIcons())
-	, stats(NULL)
+	: stats(NULL)
 	, orientation(false) { // horizontal
 	// Load config settings
 	FileParser infile;

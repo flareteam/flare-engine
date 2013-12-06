@@ -134,6 +134,6 @@ protected:
 	bool is_initialized; ///< true if a context was created once
 };
 
-Renderable loadIcons();
+void loadIcons();
 
 #endif // RENDERDEVICE_H

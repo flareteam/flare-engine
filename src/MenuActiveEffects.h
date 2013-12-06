@@ -36,7 +36,6 @@ class StatBlock;
 
 class MenuActiveEffects : public Menu {
 private:
-	Renderable icons;
 	Renderable timer;
 	StatBlock *stats;
 	bool orientation;

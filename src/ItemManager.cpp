@@ -66,8 +66,7 @@ static inline void shrinkVecToFit(std::vector<Ty_>& vec) {
 }
 
 ItemManager::ItemManager()
-	: icons(loadIcons())
-	, color_normal(font->getColor("item_normal"))
+	: color_normal(font->getColor("item_normal"))
 	, color_low(font->getColor("item_low"))
 	, color_high(font->getColor("item_high"))
 	, color_epic(font->getColor("item_epic"))

@@ -52,7 +52,7 @@ extern InputState *inpt;
 extern MessageEngine *msg;
 extern ModManager *mods;
 extern SoundManager *snd;
-extern SDL_Surface *icon_atlas;
+extern Renderable icons;
 extern RenderDevice *render_device;
 
 #endif

@@ -38,5 +38,5 @@ FontEngine *font;
 CombatText *comb;
 SoundManager *snd;
 SDL_Joystick *joy;
-SDL_Surface *icon_atlas = NULL;
+Renderable icons;
 RenderDevice *render_device;

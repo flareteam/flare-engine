@@ -41,6 +41,8 @@ class Renderable {
 public:
 	Renderable();
 
+	~Renderable();
+
 	SDL_Surface *sprite; // image to be used
 	SDL_Rect local_frame;
 	SDL_Rect src; // location on the sprite in pixel coordinates.
