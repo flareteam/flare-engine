@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <SDL.h>
 #include <stdint.h>
+#include <string>
 
 class Point {
 public:
