@@ -767,7 +767,7 @@ void MenuPowers::loadHeader(FileParser &infile) {
 	else if (infile.key == "tab_tree") {
 		tree_image_files.push_back(eatFirstString(infile.val, ','));
 	}
-	else if (infile.key == "caption") {
+	else if (infile.key == "label_title") {
 		title = eatLabelInfo(infile.val);
 	}
 	else if (infile.key == "unspent_points") {
