@@ -120,8 +120,10 @@ static void init() {
 	for(int i = 0; i < SDL_NumJoysticks(); i++) {
 		printf("  Joy %d) %s\n", i, SDL_JoystickName(i));
 	}
-	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-	printf("Using joystick #%d.\n", JOYSTICK_DEVICE);
+	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
+		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
+		printf("Using joystick #%d.\n", JOYSTICK_DEVICE);
+	}
 
 	// Set sound effects volume from settings file
 	if (AUDIO)
@@ -213,6 +215,7 @@ string parseArgValue(const string &arg) {
 
 int main(int argc, char *argv[]) {
 	bool debug_event = false;
+	bool done = false;
 
 	for (int i = 1 ; i < argc; i++) {
 		string arg = string(argv[i]);
@@ -227,12 +230,28 @@ int main(int argc, char *argv[]) {
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";
 		}
+		else if (parseArg(arg) == "version") {
+			printf("%s\n", RELEASE_VERSION.c_str());
+			done = true;
+		}
+		else if (parseArg(arg) == "help") {
+			printf("\
+--help           Prints this message.\n\n\
+--version        Prints the release version.\n\n\
+--game           Specifies which 'game' to use when launching. A game\n\
+                 determines which parent folder to look for mods in, as well\n\
+                 as where user settings and save data are stored.\n\n\
+--data-path      Specifies an exact path to look for mod data.\n\n\
+--debug-event    Prints verbose hardware input information.\n");
+			done = true;
+		}
 	}
 
-	srand((unsigned int)time(NULL));
-
-	init();
-	mainLoop(debug_event);
+	if (!done) {
+		srand((unsigned int)time(NULL));
+		init();
+		mainLoop(debug_event);
+	}
 	cleanup();
 
 	return 0;
