@@ -216,6 +216,7 @@ string parseArgValue(const string &arg) {
 int main(int argc, char *argv[]) {
 	bool debug_event = false;
 	bool done = false;
+	bool game_warning = true;
 
 	for (int i = 1 ; i < argc; i++) {
 		string arg = string(argv[i]);
@@ -224,6 +225,7 @@ int main(int argc, char *argv[]) {
 		}
 		else if (parseArg(arg) == "game") {
 			GAME_FOLDER = parseArgValue(arg);
+			game_warning = false;
 		}
 		else if (parseArg(arg) == "data-path") {
 			CUSTOM_PATH_DATA = parseArgValue(arg);
@@ -245,6 +247,11 @@ int main(int argc, char *argv[]) {
 --debug-event    Prints verbose hardware input information.\n");
 			done = true;
 		}
+	}
+
+	// if a game isn't specified, display a warning
+	if (game_warning) {
+		printf("Warning: A game wasn't specified, falling back to the 'default' game.\nDid you forget the --game flag? (e.g. --game=flare-game).\nSee --help for more details.\n\n");
 	}
 
 	if (!done) {
