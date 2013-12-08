@@ -68,20 +68,18 @@ Animation::Animation(const Animation& a)
 	;
 }
 
+Animation::~Animation() {
+
+}
+
 void Animation::setupUncompressed(Point _render_size, Point _render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds) {
 	setup(_frames, _duration, _maxkinds);
 
 	for (unsigned short i = 0 ; i < _frames; i++) {
 		int base_index = max_kinds*i;
 		for (unsigned short kind = 0 ; kind < max_kinds; kind++) {
-			Renderable& f = frames[base_index + kind];
-			f.src.x = _render_size.x * (_position + i);
-			f.src.y = _render_size.y * kind;
-			f.src.w = _render_size.x;
-			f.src.h = _render_size.y;
-			f.offset.x = _render_offset.x;
-			f.offset.y = _render_offset.y;
-			f.setGraphics(sprite,&f.src); // remember we own the sprite!
+			frames[base_index + kind].setClip(_render_size.x * (_position + i), _render_size.y * kind, _render_size.x, _render_size.y);
+			frames[base_index + kind].setOffset(_render_offset);
 		}
 	}
 }
@@ -128,10 +126,8 @@ void Animation::addFrame(	unsigned short index,
 				name.c_str(), sdl_rect.x, sdl_rect.y, sdl_rect.w, sdl_rect.h, index, kind, max_kinds-1);
 		return;
 	}
-	Renderable& f = frames[max_kinds*index+kind];
-	f.src = sdl_rect;
-	f.offset = _render_offset;
-	f.setGraphics(sprite,&f.src); // remember we own the sprite!
+	frames[max_kinds*index+kind].setClip(sdl_rect);
+	frames[max_kinds*index+kind].setOffset( _render_offset);
 }
 
 void Animation::advanceFrame() {
@@ -194,8 +190,14 @@ void Animation::advanceFrame() {
 }
 
 Renderable& Animation::getCurrentFrame(int kind) {
-	const int index = (max_kinds*cur_frame_index) + kind;
-	return frames[index];
+	//FIXME
+	Renderable r;
+	if (this) {
+		const int index = (max_kinds*cur_frame_index) + kind;
+		r = frames[index];
+		r.setGraphics(SDL_DisplayFormatAlpha(sprite), false);
+	}
+	return r;
 }
 
 void Animation::reset() {

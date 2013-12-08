@@ -37,16 +37,16 @@ WidgetSlider::WidgetSlider (const string  & fname)
 	, maximum(0)
 	, value(0) {
 	sl.setGraphics(loadGraphicSurface(fname));
-	if (!sl.sprite) {
+	if (sl.graphicsIsNull()) {
 		SDL_Quit();
 		exit(1);
 	}
 
-	pos.w = sl.sprite->w;
-	pos.h = sl.sprite->h / 2;
+	pos.w = sl.getGraphicsWidth();
+	pos.h = sl.getGraphicsHeight() / 2;
 
-	pos_knob.w = sl.sprite->w / 8;
-	pos_knob.h = sl.sprite->h / 2;
+	pos_knob.w = sl.getGraphicsWidth() / 8;
+	pos_knob.h = sl.getGraphicsHeight() / 2;
 
 	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
 	local_offset.x = local_offset.y = 0;
@@ -55,7 +55,6 @@ WidgetSlider::WidgetSlider (const string  & fname)
 }
 
 WidgetSlider::~WidgetSlider () {
-	sl.clearGraphics();
 }
 
 
@@ -148,7 +147,7 @@ void WidgetSlider::render () {
 	knob.w = pos_knob.w;
 
 	sl.local_frame = local_frame;
-	sl.offset = local_offset;
+	sl.setOffset(local_offset);
 	sl.setClip(base);
 	sl.setDest(pos);
 	render_device->render(sl);

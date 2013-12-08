@@ -86,7 +86,7 @@ WidgetLabel::WidgetLabel()
  */
 void WidgetLabel::render() {
 	renderable.local_frame = local_frame;
-	renderable.offset = local_offset;
+	renderable.setOffset(local_offset);
 	render_device->render(renderable);
 }
 
@@ -237,14 +237,7 @@ void WidgetLabel::refresh() {
 	font->setFont(font_style);
 	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, surface, color);
 	renderable.setGraphics(surface);
-	renderable.setClip(
-		0,
-		0,
-		renderable.sprite->w,
-		renderable.sprite->h
-	);
 }
 
 WidgetLabel::~WidgetLabel() {
-	renderable.clearGraphics();
 }

@@ -45,7 +45,6 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
-	contents.clearGraphics();
 	delete scrollbar;
 }
 
@@ -69,8 +68,8 @@ void WidgetScrollBox::scroll(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (cursor > contents.sprite->h-pos.h) {
-		cursor = contents.sprite->h-pos.h;
+	else if (cursor > contents.getGraphicsHeight()-pos.h) {
+		cursor = contents.getGraphicsHeight()-pos.h;
 	}
 	refresh();
 }
@@ -80,8 +79,8 @@ void WidgetScrollBox::scrollTo(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (cursor > contents.sprite->h-pos.h) {
-		cursor = contents.sprite->h-pos.h;
+	else if (cursor > contents.getGraphicsHeight()-pos.h) {
+		cursor = contents.getGraphicsHeight()-pos.h;
 	}
 	refresh();
 }
@@ -132,7 +131,7 @@ void WidgetScrollBox::logic(int x, int y) {
 	}
 
 	// check ScrollBar clicks
-	if (contents.sprite->h > pos.h) {
+	if (contents.getGraphicsHeight() > pos.h) {
 		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
 			case 1:
 				scrollUp();
@@ -154,12 +153,11 @@ void WidgetScrollBox::resize(int h) {
 	if (pos.h > h) h = pos.h;
 
 	contents.clearGraphics();
-	contents.sprite = createAlphaSurface(pos.w,h);
+	contents.setGraphics(createAlphaSurface(pos.w,h), false);
 	if (!transparent) {
-		SDL_FillRect(contents.sprite,NULL,SDL_MapRGB(contents.sprite->format,bg.r,bg.g,bg.b));
-		SDL_SetAlpha(contents.sprite, 0, SDL_ALPHA_OPAQUE);
+		SDL_FillRect(contents.getGraphics(),NULL,SDL_MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
+		SDL_SetAlpha(contents.getGraphics(), 0, SDL_ALPHA_OPAQUE);
 	}
-	contents.setGraphics(contents.sprite);
 
 	cursor = 0;
 	refresh();
@@ -168,20 +166,20 @@ void WidgetScrollBox::resize(int h) {
 void WidgetScrollBox::refresh() {
 	if (update) {
 		int h = pos.h;
-		if (contents.sprite != NULL) {
-			h = contents.sprite->h;
+		if (!contents.graphicsIsNull()) {
+			h = contents.getGraphicsHeight();
 		}
 
 		contents.clearGraphics();
-		contents.sprite = createAlphaSurface(pos.w,h);
+		contents.setGraphics(createAlphaSurface(pos.w,h), false);
 		if (!transparent) {
-			SDL_FillRect(contents.sprite,NULL,SDL_MapRGB(contents.sprite->format,bg.r,bg.g,bg.b));
-			SDL_SetAlpha(contents.sprite, 0, SDL_ALPHA_OPAQUE);
+			SDL_FillRect(contents.getGraphics(),NULL,SDL_MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
+			SDL_SetAlpha(contents.getGraphics(), 0, SDL_ALPHA_OPAQUE);
 		}
-		contents.setGraphics(contents.sprite);
+		contents.setGraphics(contents.getGraphics());
 	}
 
-	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor, contents.sprite->h-pos.h-scrollbar->pos_knob.h);
+	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor, contents.getGraphicsHeight()-pos.h-scrollbar->pos_knob.h);
 }
 
 void WidgetScrollBox::render() {
@@ -193,7 +191,7 @@ void WidgetScrollBox::render() {
 	src.h = pos.h;
 
 	contents.local_frame = local_frame;
-	contents.offset = local_offset;
+	contents.setOffset(local_offset);
 	contents.setClip(src);
 	contents.setDest(dest);
 	render_device->render(contents);
@@ -204,7 +202,7 @@ void WidgetScrollBox::render() {
 		children[i]->render();
 	}
 
-	if (contents.sprite->h > pos.h) {
+	if (contents.getGraphicsHeight() > pos.h) {
 		scrollbar->local_frame = local_frame;
 		scrollbar->local_offset = local_offset;
 		scrollbar->render();

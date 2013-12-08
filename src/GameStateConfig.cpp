@@ -59,12 +59,6 @@ GameStateConfig::GameStateConfig ()
 	, input_key(0)
 	, check_resolution(true) {
 	background.setGraphics(loadGraphicSurface("images/menus/config.png"));
-	background.setClip(
-		0,
-		0,
-		background.sprite->w,
-		background.sprite->h
-	);
 
 	init();
 	update();
@@ -1339,8 +1333,6 @@ GameStateConfig::~GameStateConfig() {
 	delete input_confirm;
 	delete defaults_confirm;
 	delete resolution_confirm;
-
-	background.clearGraphics();
 
 	for (std::vector<Widget*>::iterator iter = child_widget.begin(); iter != child_widget.end(); ++iter) {
 		delete (*iter);

@@ -28,16 +28,48 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 Renderable::Renderable()
-		: sprite(NULL)
-		, local_frame(SDL_Rect())
-		, src(SDL_Rect())
-		, map_pos()
-		, offset()
-		, prio(0)
+	: sprite(NULL)
+	, local_frame(SDL_Rect())
+	, src(SDL_Rect())
+	, map_pos()
+	, offset()
+	, prio(0)
 {}
 
-// TODO: implement destructor, copy constructor and operator=
+Renderable::Renderable(const Renderable& other)
+	: local_frame(other.local_frame)
+	, src(other.src)
+	, map_pos(other.map_pos)
+	, offset(other.offset)
+	, prio(other.prio)
+{
+	if (other.sprite != NULL) {
+		sprite = SDL_DisplayFormatAlpha(other.sprite);
+	} else {
+		sprite = NULL;
+	}
+}
+
+Renderable& Renderable::operator=(const Renderable& other) {
+	if (other.sprite != NULL) {
+		sprite = SDL_DisplayFormatAlpha(other.sprite);
+	} else {
+		sprite = NULL;
+	}
+	local_frame = other.local_frame;
+	src = other.src;
+	map_pos = other.map_pos;
+	offset = other.offset;
+	prio = other.prio;
+
+	return *this;
+}
+
 Renderable::~Renderable() {
+	if (sprite != NULL) {
+		SDL_FreeSurface(sprite);
+		sprite = NULL;
+	}
 }
 
 /**
@@ -48,9 +80,27 @@ Renderable::~Renderable() {
  * clearGraphics() method is called first in case this Renderable holds the
  * last references to avoid resource leaks.
  */
-void Renderable::setGraphics(SDL_Surface *s, SDL_Rect *texture_clip) {
+void Renderable::setGraphics(SDL_Surface *s, bool setClipToFull) {
 
 	sprite = s;
+
+	if (setClipToFull && s != NULL) {
+		src.x = 0;
+		src.y = 0;
+		src.w = sprite->w;
+		src.h = sprite->h;
+	}
+
+}
+
+SDL_Surface * Renderable::getGraphics() {
+
+	return sprite;
+}
+
+bool Renderable::graphicsIsNull() {
+
+	return (sprite == NULL);
 }
 
 /**
@@ -75,6 +125,19 @@ void Renderable::clearGraphics() {
 void Renderable::clearTexture() {
 }
 
+void Renderable::setOffset(const Point& offet) {
+	this->offset = offset;
+}
+
+void Renderable::setOffset(const int x, const int y) {
+	this->offset.x = x;
+	this->offset.y = y;
+}
+
+Point Renderable::getOffset() {
+
+	return offset;
+}
 /**
  * Set the clipping rectangle for the sprite
  */
@@ -92,6 +155,26 @@ void Renderable::setClip(const int x, const int y, const int w, const int h) {
 	src.h = h;
 }
 
+void Renderable::setClipX(const int x) {
+	src.x = x;
+}
+
+void Renderable::setClipY(const int y) {
+	src.y = y;
+}
+
+void Renderable::setClipW(const int w) {
+	src.w = w;
+}
+
+void Renderable::setClipH(const int h) {
+	src.h = h;
+}
+
+
+SDL_Rect Renderable::getClip() {
+	return src;
+}
 void Renderable::setDest(const SDL_Rect& dest) {
 	map_pos.x = (float)dest.x;
 	map_pos.y = (float)dest.y;
@@ -105,6 +188,18 @@ void Renderable::setDest(const Point& dest) {
 void Renderable::setDest(int x, int y) {
 	map_pos.x = (float)x;
 	map_pos.y = (float)y;
+}
+
+FPoint Renderable::getDest() {
+	return map_pos;
+}
+
+int Renderable::getGraphicsWidth() {
+	return sprite->w;
+}
+
+int Renderable::getGraphicsHeight() {
+	return sprite->h;
 }
 
 SDLRenderDevice::SDLRenderDevice() {
@@ -143,14 +238,14 @@ int SDLRenderDevice::render(Renderable& r) {
 	// Drawing order is recalculated every frame.
 	r.prio = 0;
 
-	if (r.sprite == NULL) {
+	if (r.graphicsIsNull()) {
 		return -1;
 	}
 	if ( !local_to_global(r) ) {
 		return -1;
 	}
 
-	return SDL_BlitSurface(r.sprite, &m_clip, screen, &m_dest);
+	return SDL_BlitSurface(r.getGraphics(), &m_clip, screen, &m_dest);
 }
 
 int SDLRenderDevice::renderText(
@@ -160,19 +255,15 @@ int SDLRenderDevice::renderText(
 	SDL_Rect& dest
 ) {
 	int ret = 0;
-	m_ttf_renderable.sprite = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), color);
-	if (m_ttf_renderable.sprite != NULL) {
-		m_ttf_renderable.src.x = 0;
-		m_ttf_renderable.src.y = 0;
-		m_ttf_renderable.src.w = m_ttf_renderable.sprite->w;
-		m_ttf_renderable.src.h = m_ttf_renderable.sprite->h;
+	m_ttf_renderable.setGraphics(TTF_RenderUTF8_Blended(ttf_font, text.c_str(), color));
+	if (!m_ttf_renderable.graphicsIsNull()) {
 		ret = SDL_BlitSurface(
-				  m_ttf_renderable.sprite,
-				  &m_ttf_renderable.src,
+				  m_ttf_renderable.getGraphics(),
+				  &m_ttf_renderable.getClip(),
 				  screen,
 				  &dest
 			  );
-		SDL_FreeSurface(m_ttf_renderable.sprite);
+		SDL_FreeSurface(m_ttf_renderable.getGraphics());
 	}
 	else {
 		ret = -1;
@@ -307,12 +398,12 @@ void SDLRenderDevice::destroyContext() {
 }
 
 bool SDLRenderDevice::local_to_global(Renderable& r) {
-	m_clip = r.src;
+	m_clip = r.getClip();
 
-	int left = r.map_pos.x - r.offset.x;
-	int right = left + r.src.w;
-	int up = r.map_pos.y - r.offset.y;
-	int down = up + r.src.h;
+	int left = r.map_pos.x - r.getOffset().x;
+	int right = left + r.getClip().w;
+	int up = r.map_pos.y - r.getOffset().y;
+	int down = up + r.getClip().h;
 
 	// Check whether we need to render.
 	// If so, compute the correct clipping.
@@ -324,7 +415,7 @@ bool SDLRenderDevice::local_to_global(Renderable& r) {
 			return false;
 		}
 		if (left < 0) {
-			m_clip.x = r.src.x - left;
+			m_clip.x = r.getClip().x - left;
 			left = 0;
 		};
 		right = (right < r.local_frame.w ? right : r.local_frame.w);
@@ -338,7 +429,7 @@ bool SDLRenderDevice::local_to_global(Renderable& r) {
 			return false;
 		}
 		if (up < 0) {
-			m_clip.y = r.src.y - up;
+			m_clip.y = r.getClip().y - up;
 			up = 0;
 		};
 		down = (down < r.local_frame.h ? down : r.local_frame.h);
@@ -655,7 +746,7 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 }
 
 void loadIcons() {
-	if (icons.sprite == NULL) {
-		icons.sprite = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
+	if (icons.graphicsIsNull()) {
+		icons.setGraphics(loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
 	}
 }

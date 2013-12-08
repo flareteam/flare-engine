@@ -79,7 +79,6 @@ GameStatePlay::GameStatePlay()
 	// GameEngine scope variables
 
 	loading_bg.setGraphics(loadGraphicSurface("images/menus/confirm_bg.png"));
-	loading_bg.setClip(0,0,loading_bg.sprite->w,loading_bg.sprite->h);
 	powers = new PowerManager();
 	items = new ItemManager();
 	camp = new CampaignManager();
@@ -965,11 +964,11 @@ void GameStatePlay::render() {
 }
 
 void GameStatePlay::showLoading() {
-	if (!loading_bg.sprite) return;
+	if (loading_bg.graphicsIsNull()) return;
 
 	SDL_Rect dest;
-	dest.x = VIEW_W_HALF - loading_bg.sprite->w/2;
-	dest.y = VIEW_H_HALF - loading_bg.sprite->h/2;
+	dest.x = VIEW_W_HALF - loading_bg.getGraphicsWidth()/2;
+	dest.y = VIEW_H_HALF - loading_bg.getGraphicsHeight()/2;
 
 	loading_bg.setDest(dest);
 	render_device->render(loading_bg);
@@ -998,7 +997,5 @@ GameStatePlay::~GameStatePlay() {
 	delete loading;
 
 	delete enemyg;
-
-	loading_bg.clearGraphics();
 }
 

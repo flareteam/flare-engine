@@ -42,7 +42,6 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	MAX_CARRIED = 64;
 	visible = false;
 	background.setGraphics(loadGraphicSurface("images/menus/inventory.png"));
-	background.setClip(0,0,background.sprite->w,background.sprite->h);
 
 	currency = 0;
 
@@ -977,6 +976,5 @@ void MenuInventory::clearHighlight() {
 }
 
 MenuInventory::~MenuInventory() {
-	background.clearGraphics();
 	delete closeButton;
 }

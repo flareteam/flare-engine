@@ -146,8 +146,8 @@ void WidgetSlot::setAmount(int _amount, int _max_amount) {
 void WidgetSlot::render() {
 	SDL_Rect src;
 
-	if (icon_id != -1 && icons.sprite != NULL) {
-		int columns = icons.sprite->w / ICON_SIZE;
+	if (icon_id != -1 && !icons.graphicsIsNull()) {
+		int columns = icons.getGraphicsWidth() / ICON_SIZE;
 		src.x = (icon_id % columns) * ICON_SIZE;
 		src.y = (icon_id / columns) * ICON_SIZE;
 
@@ -155,7 +155,7 @@ void WidgetSlot::render() {
 		src.h = pos.h;
 
 		icons.local_frame = local_frame;
-		icons.offset = local_offset;
+		icons.setOffset(local_offset);
 		icons.setClip(src);
 		icons.setDest(pos);
 		render_device->render(icons);
@@ -181,13 +181,13 @@ void WidgetSlot::renderSelection() {
 	if (in_focus) {
 		if (checked) {
 			slot_checked.local_frame = local_frame;
-			slot_checked.offset = local_offset;
+			slot_checked.setOffset(local_offset);
 			slot_checked.setDest(pos);
 			render_device->render(slot_checked);
 		}
 		else {
 			slot_selected.local_frame = local_frame;
-			slot_selected.offset = local_offset;
+			slot_selected.setOffset(local_offset);
 			slot_selected.setDest(pos);
 			render_device->render(slot_selected);
 		}
@@ -195,6 +195,4 @@ void WidgetSlot::renderSelection() {
 }
 
 WidgetSlot::~WidgetSlot() {
-	slot_selected.clearGraphics();
-	slot_checked.clearGraphics();
 }

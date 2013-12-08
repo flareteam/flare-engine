@@ -65,11 +65,11 @@ void WidgetButton::loadArt() {
 	buttons.setClip(
 		0,
 		0,
-		buttons.sprite->w,
-		buttons.sprite->h/4
+		buttons.getGraphicsWidth(),
+		buttons.getGraphicsHeight()/4
 	);
-	pos.w = buttons.sprite->w;
-	pos.h = buttons.sprite->h/4; // height of one button
+	pos.w = buttons.getGraphicsWidth();
+	pos.h = buttons.getGraphicsHeight()/4; // height of one button
 }
 
 bool WidgetButton::checkClick() {
@@ -133,12 +133,12 @@ void WidgetButton::render() {
 		y = BUTTON_GFX_NORMAL * pos.h;
 
 	buttons.local_frame = local_frame;
-	buttons.offset = local_offset;
+	buttons.setOffset(local_offset);
 	buttons.setClip(
-		buttons.src.x,
+		buttons.getClip().x,
 		y,
-		buttons.src.w,
-		buttons.src.h
+		buttons.getClip().w,
+		buttons.getClip().h
 	);
 	buttons.setDest(pos);
 	render_device->render(buttons);
@@ -191,7 +191,6 @@ TooltipData WidgetButton::checkTooltip(Point mouse) {
 }
 
 WidgetButton::~WidgetButton() {
-	buttons.clearGraphics();
 	tip_buf.clear();
 	delete tip;
 }

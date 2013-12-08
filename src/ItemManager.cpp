@@ -400,7 +400,7 @@ void ItemManager::loadSets() {
  * Also display the stack size
  */
 void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
-	if (!icons.sprite) return;
+	if (icons.graphicsIsNull()) return;
 
 	SDL_Rect src, dest;
 	dest.x = x;
@@ -408,7 +408,7 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 	src.w = src.h = dest.w = dest.h = size;
 
 	if (stack.item > 0) {
-		int columns = icons.sprite->w / ICON_SIZE;
+		int columns = icons.getGraphicsWidth() / ICON_SIZE;
 		src.x = (items[stack.item].icon % columns) * size;
 		src.y = (items[stack.item].icon / columns) * size;
 		icons.setClip(src);

@@ -40,25 +40,40 @@ class Renderable {
 
 public:
 	Renderable();
-
+	Renderable(const Renderable& other);
+	Renderable& operator=(const Renderable& other);
 	~Renderable();
 
-	SDL_Surface *sprite; // image to be used
-	SDL_Rect local_frame;
-	SDL_Rect src; // location on the sprite in pixel coordinates.
-
 	FPoint map_pos;     // The map location on the floor between someone's feet
-	Point offset;      // offset from map_pos to topleft corner of sprite
+	SDL_Rect local_frame;
 	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
 
-	void setGraphics(SDL_Surface *s, SDL_Rect *texture_clip=0);
+	void setGraphics(SDL_Surface *s, bool setClipToFull = true);
+	SDL_Surface * getGraphics();
+	bool graphicsIsNull();
 	void clearGraphics();
 	void clearTexture();
+	void setOffset(const Point& offset);
+	void setOffset(const int x, const int y);
+	Point getOffset();
 	void setClip(const SDL_Rect& clip);
 	void setClip(const int x, const int y, const int w, const int h);
+	void setClipX(const int x);
+	void setClipY(const int y);
+	void setClipW(const int w);
+	void setClipH(const int h);
+	SDL_Rect getClip();
 	void setDest(const SDL_Rect& dest);
 	void setDest(const Point& dest);
 	void setDest(int x, int y);
+	FPoint getDest();
+	int getGraphicsWidth();
+	int getGraphicsHeight();
+
+private:
+	SDL_Surface *sprite; // image to be used
+	SDL_Rect src; // location on the sprite in pixel coordinates.
+	Point offset;      // offset from map_pos to topleft corner of sprite
 };
 
 class SDLRenderDevice : public RenderDevice {

@@ -39,8 +39,8 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 
 	loadArt();
 
-	pos_up.w = pos_down.w  = pos_knob.w = scrollbars.sprite->w;
-	pos_up.h = pos_down.h = pos_knob.h = (scrollbars.sprite->h / 5); //height of one button
+	pos_up.w = pos_down.w  = pos_knob.w = scrollbars.getGraphicsWidth();
+	pos_up.h = pos_down.h = pos_knob.h = (scrollbars.getGraphicsHeight() / 5); //height of one button
 
 	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
 	local_offset.x = local_offset.y = 0;
@@ -147,7 +147,7 @@ void WidgetScrollBar::render() {
 	src_knob.h = pos_knob.h;
 
 	scrollbars.local_frame = local_frame;
-	scrollbars.offset = local_offset;
+	scrollbars.setOffset(local_offset);
 	scrollbars.setClip(src_up);
 	scrollbars.setDest(pos_up);
 	render_device->render(scrollbars);
@@ -173,6 +173,5 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 }
 
 WidgetScrollBar::~WidgetScrollBar() {
-	scrollbars.clearGraphics();
 }
 

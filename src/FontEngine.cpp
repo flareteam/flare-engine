@@ -229,10 +229,10 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 
 	// render and blit the text
 	if (active_font->blend && target != screen) {
-		ttf.sprite = TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color);
+		ttf.setGraphics(TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color), false);
 
 		// preserve alpha transparency of text buffers
-		if (ttf.sprite != NULL) SDL_gfxBlitRGBA(ttf.sprite, NULL, target, &dest_rect);
+		if (!ttf.graphicsIsNull()) SDL_gfxBlitRGBA(ttf.getGraphics(), NULL, target, &dest_rect);
 	}
 	else if (target == NULL) {
 		render_device->renderText(
@@ -243,8 +243,8 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 		);
 	}
 	else {
-		ttf.sprite = TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color);
-		if (ttf.sprite != NULL) SDL_BlitSurface(ttf.sprite, NULL, target, &dest_rect);
+		ttf.setGraphics(TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color), false);
+		if (!ttf.graphicsIsNull()) SDL_BlitSurface(ttf.getGraphics(), NULL, target, &dest_rect);
 	}
 	ttf.clearGraphics();
 
@@ -304,7 +304,6 @@ void FontEngine::renderShadowed(const std::string& text, int x, int y, int justi
 }
 
 FontEngine::~FontEngine() {
-	ttf.clearGraphics();
 	for (unsigned int i=0; i<font_styles.size(); ++i) TTF_CloseFont(font_styles[i].ttfont);
 	TTF_Quit();
 }

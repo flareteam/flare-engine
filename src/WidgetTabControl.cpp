@@ -49,8 +49,6 @@ WidgetTabControl::WidgetTabControl(int amount)
  * Class destructor.
  */
 WidgetTabControl::~WidgetTabControl() {
-	activeTabSurface.clearGraphics();
-	inactiveTabSurface.clearGraphics();
 	delete[] titles;
 	delete[] tabs;
 }
@@ -88,7 +86,7 @@ void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
 	tabsArea.x = x;
 	tabsArea.y = y;
 	tabsArea.w = width;
-	tabsArea.h = activeTabSurface.sprite->h;
+	tabsArea.h = activeTabSurface.getGraphicsHeight();
 
 	// Set content area.
 	contentArea.x = x + 8;
@@ -137,7 +135,7 @@ void WidgetTabControl::loadGraphics() {
 	activeTabSurface.setGraphics(loadGraphicSurface("images/menus/tab_active.png"));
 	inactiveTabSurface.setGraphics(loadGraphicSurface("images/menus/tab_inactive.png"));
 
-	if (!activeTabSurface.sprite || !inactiveTabSurface.sprite) {
+	if (activeTabSurface.graphicsIsNull() || inactiveTabSurface.graphicsIsNull()) {
 		SDL_Quit();
 		exit(1);
 	}
@@ -204,7 +202,7 @@ void WidgetTabControl::renderTab(int number) {
 	}
 
 	// Draw tab’s right edge.
-	src.x = activeTabSurface.sprite->w - tabPadding.x;
+	src.x = activeTabSurface.getGraphicsWidth() - tabPadding.x;
 	src.w = tabPadding.x;
 	dest.x = tabs[i].x + tabs[i].w - tabPadding.x;
 

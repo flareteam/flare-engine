@@ -667,9 +667,6 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 }
 
 MenuPowers::~MenuPowers() {
-	background.clearGraphics();
-	powers_unlock.clearGraphics();
-	overlay_disabled.clearGraphics();
 	for (unsigned int i=0; i<tree_surf.size(); i++) tree_surf[i].clearGraphics();
 	for (unsigned int i=0; i<slots.size(); i++) {
 		delete slots.at(i);
@@ -726,7 +723,7 @@ void MenuPowers::renderPowers(int tab_num) {
 			displayBuild(power_cell[i].id);
 		}
 		else {
-			if (overlay_disabled.sprite != NULL) {
+			if (!overlay_disabled.graphicsIsNull()) {
 				overlay_disabled.setClip(disabled_src);
 				overlay_disabled.setDest(slots[i]->pos);
 				render_device->render(overlay_disabled);

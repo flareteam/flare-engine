@@ -117,10 +117,10 @@ int NPCManager::checkNPCClick(Point mouse, FPoint cam) {
 		p = map_to_screen(npcs[i]->pos.x, npcs[i]->pos.y, cam.x, cam.y);
 
 		Renderable ren = npcs[i]->activeAnimation->getCurrentFrame(npcs[i]->direction);
-		r.w = ren.src.w;
-		r.h = ren.src.h;
-		r.x = p.x - ren.offset.x;
-		r.y = p.y - ren.offset.y;
+		r.w = ren.getClip().w;
+		r.h = ren.getClip().h;
+		r.x = p.x - ren.getOffset().x;
+		r.y = p.y - ren.getOffset().y;
 
 		if (isWithin(r, mouse)) {
 			return i;
@@ -160,10 +160,10 @@ void NPCManager::renderTooltips(FPoint cam, Point mouse, int nearest) {
 		p = map_to_screen(npcs[i]->pos.x, npcs[i]->pos.y, cam.x, cam.y);
 
 		Renderable ren = npcs[i]->activeAnimation->getCurrentFrame(npcs[i]->direction);
-		r.w = ren.src.w;
-		r.h = ren.src.h;
-		r.x = p.x - ren.offset.x;
-		r.y = p.y - ren.offset.y;
+		r.w = ren.getClip().w;
+		r.h = ren.getClip().h;
+		r.x = p.x - ren.getOffset().x;
+		r.y = p.y - ren.getOffset().y;
 
 		if (NO_MOUSE && nearest != -1 && (unsigned)nearest == i) {
 			id = nearest;

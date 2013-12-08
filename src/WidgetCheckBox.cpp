@@ -35,8 +35,8 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 	focusable = true;
 	cb.setGraphics(loadGraphicSurface(fname, "Couldn't load image", true, false));
 
-	pos.w = cb.sprite->w;
-	pos.h = cb.sprite->h / 2;
+	pos.w = cb.getGraphicsWidth();
+	pos.h = cb.getGraphicsHeight() / 2;
 
 	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
 	local_offset.x = local_offset.y = 0;
@@ -55,7 +55,6 @@ void WidgetCheckBox::activate() {
 }
 
 WidgetCheckBox::~WidgetCheckBox () {
-	cb.clearGraphics();
 }
 
 void WidgetCheckBox::Check () {
@@ -108,7 +107,7 @@ bool WidgetCheckBox::isChecked () const {
 
 void WidgetCheckBox::render() {
 	cb.local_frame = local_frame;
-	cb.offset = local_offset;
+	cb.setOffset(local_offset);
 	cb.setDest(pos);
 	render_device->render(cb);
 

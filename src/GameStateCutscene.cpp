@@ -81,17 +81,21 @@ bool Scene::logic(FPoint *caption_margins) {
 			caption_box->pos.y = screen->h - caption_size.y - (int)(VIEW_H * caption_margins->y);
 			font->renderShadowed(caption, screen->w / 2, 0,
 								 JUSTIFY_CENTER,
-								 caption_box->contents.sprite,
+								 caption_box->contents.getGraphics(),
 								 caption_width,
 								 FONT_WHITE);
 
 		}
 		else if (components.front().type == "image") {
+
+			if (!art.graphicsIsNull())
+				art.clearGraphics();
+
 			art = components.front().i;
-			art_dest.x = (VIEW_W/2) - (art.sprite->w/2);
-			art_dest.y = (VIEW_H/2) - (art.sprite->h/2);
-			art_dest.w = art.sprite->w;
-			art_dest.h = art.sprite->h;
+			art_dest.x = (VIEW_W/2) - (art.getGraphicsWidth()/2);
+			art_dest.y = (VIEW_H/2) - (art.getGraphicsHeight()/2);
+			art_dest.w = art.getGraphicsWidth();
+			art_dest.h = art.getGraphicsHeight();
 		}
 		else if (components.front().type == "soundfx") {
 			if (sid != 0)
@@ -117,7 +121,7 @@ bool Scene::logic(FPoint *caption_margins) {
 }
 
 void Scene::render() {
-	if (art.sprite != NULL) {
+	if (!art.graphicsIsNull()) {
 		art.setDest(art_dest);
 		render_device->render(art);
 	}
@@ -194,12 +198,12 @@ bool GameStateCutscene::load(std::string filename) {
 				// @ATTR scene.image|string|An image that will be shown.
 				sc.type = infile.key;
 				sc.i.setGraphics(loadImage(infile.val));
-				if (sc.i.sprite == NULL) {
+				if (sc.i.graphicsIsNull()) {
 					sc.type = "";
 				}
 				else {
 					Renderable& r = sc.i;
-					r.setClip(0,0,r.sprite->w,r.sprite->h);
+					r.setClip(0,0,r.getGraphicsWidth(),r.getGraphicsHeight());
 				}
 			}
 			else if (infile.key == "pause") {

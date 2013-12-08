@@ -79,6 +79,5 @@ void MenuExit::render() {
 MenuExit::~MenuExit() {
 	delete buttonExit;
 	delete buttonClose;
-	background.clearGraphics();
 }
 

@@ -75,7 +75,7 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 			pos.y = window_area.y + (index * ICON_SIZE);
 		}
 
-		int columns = icons.sprite->w / ICON_SIZE;
+		int columns = icons.getGraphicsWidth() / ICON_SIZE;
 		src.x = (icon_id % columns) * ICON_SIZE;
 		src.y = (icon_id / columns) * ICON_SIZE;
 		src.w = src.h = ICON_SIZE;
@@ -125,5 +125,4 @@ void MenuActiveEffects::render() {
 }
 
 MenuActiveEffects::~MenuActiveEffects() {
-	timer.clearGraphics();
 }

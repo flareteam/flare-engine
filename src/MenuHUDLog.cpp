@@ -74,7 +74,7 @@ void MenuHUDLog::render() {
 	// go through new messages
 	for (int i = msg_age.size() - 1; i >= 0; i--) {
 		if (msg_age[i] > 0 && dest.y > 64) {
-			dest.y -= msg_buffer[i].sprite->h + paragraph_spacing;
+			dest.y -= msg_buffer[i].getGraphicsHeight() + paragraph_spacing;
 			msg_buffer[i].setDest(dest);
 			render_device->render(msg_buffer[i]);
 		}
@@ -107,7 +107,6 @@ void MenuHUDLog::add(const string& s) {
 	msg_buffer.push_back(Renderable());
 	Renderable& r = msg_buffer.back();
 	r.setGraphics(surface);
-	r.setClip(0,0,r.sprite->w,r.sprite->h);
 }
 
 /**

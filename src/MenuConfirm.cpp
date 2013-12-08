@@ -94,6 +94,5 @@ void MenuConfirm::render() {
 MenuConfirm::~MenuConfirm() {
 	if (hasConfirmButton) delete buttonConfirm;
 	delete buttonClose;
-	background.clearGraphics();
 }
 

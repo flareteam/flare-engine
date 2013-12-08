@@ -39,7 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Tile_Def {
 public:
 	Point offset;
-	Renderable tile;
+	Renderable tile;// inside graphics not used
 	Tile_Def() {
 	}
 };
@@ -80,7 +80,7 @@ public:
 
 	std::vector<Tile_Def> tiles;
 	std::vector<Tile_Anim> anim;
-	SDL_Surface *sprites;
+	Renderable sprites;
 
 	// oversize of the largest tile available, in number of tiles.
 	int max_size_x;

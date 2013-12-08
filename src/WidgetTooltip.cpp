@@ -95,13 +95,13 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
  * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
  */
 void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
-	if (tip.renderable.sprite == NULL) {
+	if (tip.renderable.graphicsIsNull()) {
 		createBuffer(tip);
 	}
 
 	Point size;
-	size.x = tip.renderable.sprite->w;
-	size.y = tip.renderable.sprite->h;
+	size.x = tip.renderable.getGraphicsWidth();
+	size.y = tip.renderable.getGraphicsHeight();
 
 	Point tip_pos = calcPosition(style, pos, size);
 
@@ -153,11 +153,5 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 	}
 
 	tip.renderable.setGraphics(surface);
-	tip.renderable.setClip(
-		0,
-		0,
-		tip.renderable.sprite->w,
-		tip.renderable.sprite->h
-	);
 }
 

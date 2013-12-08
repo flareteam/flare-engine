@@ -239,11 +239,10 @@ void MenuTalker::createBuffer() {
 		text_offset.x,
 		0,
 		JUSTIFY_LEFT,
-		textbox->contents.sprite,
+		textbox->contents.getGraphics(),
 		text_pos.w - text_offset.x*2,
 		color_normal
 	);
-	textbox->contents.setGraphics(textbox->contents.sprite);
 
 }
 
@@ -271,7 +270,7 @@ void MenuTalker::render() {
 	string etype = npc->dialog[dialog_node][event_cursor].type;
 	if (etype == "him" || etype == "her") {
 		Renderable& r = npc->portrait;
-		if (r.sprite != NULL) {
+		if (!r.graphicsIsNull()) {
 			src.w = dest.w = portrait_he.w;
 			src.h = dest.h = portrait_he.h;
 			dest.x = offset_x + portrait_he.x;
@@ -283,7 +282,7 @@ void MenuTalker::render() {
 		}
 	}
 	else if (etype == "you") {
-		if (portrait.sprite != NULL) {
+		if (!portrait.graphicsIsNull()) {
 			src.w = dest.w = portrait_you.w;
 			src.h = dest.h = portrait_you.h;
 			dest.x = offset_x + portrait_you.x;
@@ -335,8 +334,6 @@ string MenuTalker::parseLine(const string &line) {
 }
 
 MenuTalker::~MenuTalker() {
-	background.clearGraphics();
-	portrait.clearGraphics();
 	delete label_name;
 	delete textbox;
 	delete advanceButton;

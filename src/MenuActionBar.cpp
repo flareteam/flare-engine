@@ -246,7 +246,6 @@ void MenuActionBar::loadGraphics() {
 	disabled.setGraphics(loadGraphicSurface("images/menus/disabled.png"));
 	disabled.setClip(0,0,ICON_SIZE,ICON_SIZE);
 	attention.setGraphics(loadGraphicSurface("images/menus/attention_glow.png"));
-	attention.setClip(0,0,attention.sprite->w,attention.sprite->h);
 }
 
 // Renders the "needs attention" icon over the appropriate log menu
@@ -519,11 +518,6 @@ void MenuActionBar::resetSlots() {
 }
 
 MenuActionBar::~MenuActionBar() {
-	emptyslot.clearGraphics();
-	background.clearGraphics();
-	disabled.clearGraphics();
-	attention.clearGraphics();
-
 	for (unsigned i = 0; i < 16; i++)
 		delete labels[i];
 

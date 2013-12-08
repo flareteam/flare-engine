@@ -242,7 +242,6 @@ int MenuStash::getRowsCount() {
 }
 
 MenuStash::~MenuStash() {
-	background.clearGraphics();
 	delete closeButton;
 }
 

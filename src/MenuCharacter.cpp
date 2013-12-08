@@ -654,7 +654,6 @@ bool MenuCharacter::checkUpgrade() {
 }
 
 MenuCharacter::~MenuCharacter() {
-	background.clearGraphics();
 	delete closeButton;
 
 	delete labelCharacter;

@@ -75,7 +75,7 @@ void Menu::align() {
 		window_area.y = (VIEW_H-temp.h)+temp.y;
 	}
 
-	if (background.sprite != NULL) {
+	if (!background.graphicsIsNull()) {
 		background.setClip(
 			0,
 			0,

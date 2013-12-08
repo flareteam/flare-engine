@@ -90,8 +90,8 @@ GameStateLoad::GameStateLoad() : GameState() {
 				portrait.map_pos.x += (VIEW_W - FRAME_W)/2;
 				portrait.map_pos.y = eatFirstInt(infile.val, ',');
 				portrait.map_pos.y += (VIEW_H - FRAME_H)/2;
-				portrait.src.w = eatFirstInt(infile.val, ',');
-				portrait.src.h = eatFirstInt(infile.val, ',');
+				portrait.setClipW(eatFirstInt(infile.val, ','));
+				portrait.setClipH(eatFirstInt(infile.val, ','));
 			}
 			else if (infile.key == "gameslot") {
 				gameslot_pos.x = eatFirstInt(infile.val, ',');
@@ -214,11 +214,8 @@ GameStateLoad::GameStateLoad() : GameState() {
 
 void GameStateLoad::loadGraphics() {
 	background.setGraphics(loadGraphicSurface("images/menus/game_slots.png"));
-	background.setClip(0,0,background.sprite->w,background.sprite->h);
 	selection.setGraphics(loadGraphicSurface("images/menus/game_slot_select.png", "Couldn't load image", false, true));
-	selection.setClip(0,0,selection.sprite->w,selection.sprite->h);
 	portrait_border.setGraphics(loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load image", false, true));
-	portrait_border.setClip(0,0,portrait_border.sprite->w,portrait_border.sprite->h);
 }
 
 void GameStateLoad::loadPortrait(int slot) {
@@ -231,7 +228,6 @@ void GameStateLoad::loadPortrait(int slot) {
 	portrait.setGraphics(
 		loadGraphicSurface("images/portraits/" + stats[slot].gfx_portrait + ".png")
 	);
-	portrait.setClip(0,0,portrait.sprite->w,portrait.sprite->h);
 }
 
 void GameStateLoad::readGameSlots() {
@@ -360,12 +356,12 @@ void GameStateLoad::loadPreview(int slot) {
 				loadGraphicSurface(fname, "Falling back to alpha version", false, true)
 			);
 		}
-		if (NULL == r.sprite) {
+		if (r.graphicsIsNull()) {
 			r.setGraphics(
 				loadGraphicSurface("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png")
 			);
 		}
-		r.setClip(0,0,r.sprite->w,r.sprite->h);
+		r.setClip(0,0,r.getGraphicsWidth(),r.getGraphicsHeight());
 	}
 
 }
@@ -541,7 +537,7 @@ void GameStateLoad::render() {
 
 
 	// portrait
-	if (selected_slot >= 0 && portrait.sprite != NULL) {
+	if (selected_slot >= 0 && !portrait.graphicsIsNull()) {
 		render_device->render(portrait);
 		dest.x = portrait.map_pos.x;
 		dest.y = portrait.map_pos.y;
@@ -626,10 +622,6 @@ void GameStateLoad::render() {
 }
 
 GameStateLoad::~GameStateLoad() {
-	background.clearGraphics();
-	selection.clearGraphics();
-	portrait_border.clearGraphics();
-	portrait.clearGraphics();
 	delete button_exit;
 	delete button_action;
 	delete button_alternate;

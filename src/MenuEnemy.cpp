@@ -66,7 +66,6 @@ MenuEnemy::MenuEnemy() {
 
 void MenuEnemy::loadGraphics() {
 	background.setGraphics(loadGraphicSurface("images/menus/enemy_bar.png"));
-	background.setClip(0,0,background.sprite->w,background.sprite->h);
 	bar_hp.setGraphics(loadGraphicSurface("images/menus/enemy_bar_hp.png"));
 }
 
@@ -141,6 +140,4 @@ void MenuEnemy::render() {
 }
 
 MenuEnemy::~MenuEnemy() {
-	background.clearGraphics();
-	bar_hp.clearGraphics();
 }

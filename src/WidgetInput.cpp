@@ -35,8 +35,8 @@ WidgetInput::WidgetInput() {
 	loadGraphics("images/menus/input.png");
 
 	// position
-	pos.w = background.sprite->w;
-	pos.h = background.sprite->h/2;
+	pos.w = background.getGraphicsWidth();
+	pos.h = background.getGraphicsHeight()/2;
 
 	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
 	local_offset.x = local_offset.y = 0;
@@ -111,7 +111,7 @@ void WidgetInput::render() {
 	src.h = pos.h;
 
 	background.local_frame = local_frame;
-	background.offset = local_offset;
+	background.setOffset(local_offset);
 	background.setClip(src);
 	background.setDest(pos);
 	render_device->render(background);
@@ -174,6 +174,5 @@ bool WidgetInput::checkClick() {
 }
 
 WidgetInput::~WidgetInput() {
-	background.clearGraphics();
 }
 

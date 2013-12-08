@@ -77,7 +77,6 @@ static void init() {
 	comb = new CombatText();
 	imag = new ImageManager();
 	inpt = new InputState();
-	loadIcons();
 
 	// Load tileset options (must be after ModManager is initialized)
 	loadTilesetSettings();
@@ -100,6 +99,7 @@ static void init() {
 		exit(1);
 	}
 
+	loadIcons();
 	// Set Gamma
 	if (CHANGE_GAMMA)
 		SDL_SetGamma(GAMMA,GAMMA,GAMMA);
@@ -180,8 +180,6 @@ static void cleanup() {
 	delete mods;
 	delete msg;
 	delete snd;
-
-	icons.clearGraphics();
 
 	SDL_FreeSurface(titlebar_icon);
 

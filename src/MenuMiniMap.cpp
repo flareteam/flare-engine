@@ -37,9 +37,9 @@ using namespace std;
 MenuMiniMap::MenuMiniMap() {
 
 	createMapSurface();
-	color_wall = SDL_MapRGB(map_surface.sprite->format, 128,128,128);
-	color_obst = SDL_MapRGB(map_surface.sprite->format, 64,64,64);
-	color_hero = SDL_MapRGB(map_surface.sprite->format, 255,255,255);
+	color_wall = SDL_MapRGB(map_surface.getGraphics()->format, 128,128,128);
+	color_obst = SDL_MapRGB(map_surface.getGraphics()->format, 64,64,64);
+	color_hero = SDL_MapRGB(map_surface.getGraphics()->format, 255,255,255);
 
 	// Load config settings
 	FileParser infile;
@@ -71,8 +71,8 @@ void MenuMiniMap::getMapTitle(std::string map_title) {
 
 void MenuMiniMap::createMapSurface() {
 	map_surface.clearGraphics();
-	map_surface.sprite = createAlphaSurface(512, 512);
-	SDL_SetAlpha(map_surface.sprite, SDL_SRCALPHA, SDL_ALPHA_TRANSPARENT);
+	map_surface.setGraphics(createAlphaSurface(512, 512));
+	SDL_SetAlpha(map_surface.getGraphics(), SDL_SRCALPHA, SDL_ALPHA_TRANSPARENT);
 }
 
 void MenuMiniMap::render() {
@@ -91,14 +91,12 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 	map_size.x = map_w;
 	map_size.y = map_h;
 	map_surface.clearTexture();
-	SDL_FillRect(map_surface.sprite, 0, SDL_MapRGBA(map_surface.sprite->format,0,0,0,0));
+	SDL_FillRect(map_surface.getGraphics(), 0, SDL_MapRGBA(map_surface.getGraphics()->format,0,0,0,0));
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
 		prerenderIso(collider);
 	else // TILESET_ORTHOGONAL
 		prerenderOrtho(collider);
-
-	map_surface.setGraphics(map_surface.sprite);
 }
 
 /**
@@ -166,13 +164,13 @@ void MenuMiniMap::renderIso(FPoint hero_pos) {
 }
 
 void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
-	for (int i=0; i<std::min(map_surface.sprite->w, map_size.x); i++) {
-		for (int j=0; j<std::min(map_surface.sprite->h, map_size.y); j++) {
+	for (int i=0; i<std::min(map_surface.getGraphicsWidth(), map_size.x); i++) {
+		for (int j=0; j<std::min(map_surface.getGraphicsHeight(), map_size.y); j++) {
 			if (collider->colmap[i][j] == 1 || collider->colmap[i][j] == 5) {
-				drawPixel(map_surface.sprite, i, j, color_wall);
+				drawPixel(map_surface.getGraphics(), i, j, color_wall);
 			}
 			else if (collider->colmap[i][j] == 2 || collider->colmap[i][j] == 6) {
-				drawPixel(map_surface.sprite, i, j, color_obst);
+				drawPixel(map_surface.getGraphics(), i, j, color_obst);
 			}
 		}
 	}
@@ -190,10 +188,10 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 	bool odd_row = false;
 
 	// for each pixel row
-	for (int j=0; j<map_surface.sprite->h; j++) {
+	for (int j=0; j<map_surface.getGraphicsHeight(); j++) {
 
 		// for each 2-px wide column
-		for (int i=0; i<map_surface.sprite->w; i+=2) {
+		for (int i=0; i<map_surface.getGraphicsWidth(); i+=2) {
 
 			// if this tile is the max map size
 			if (tile_cursor.x >= 0 && tile_cursor.y >= 0 && tile_cursor.x < map_size.x && tile_cursor.y < map_size.y) {
@@ -208,12 +206,12 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 
 				if (draw_tile) {
 					if (odd_row) {
-						drawPixel(map_surface.sprite, i, j, draw_color);
-						drawPixel(map_surface.sprite, i+1, j, draw_color);
+						drawPixel(map_surface.getGraphics(), i, j, draw_color);
+						drawPixel(map_surface.getGraphics(), i+1, j, draw_color);
 					}
 					else {
-						drawPixel(map_surface.sprite, i-1, j, draw_color);
-						drawPixel(map_surface.sprite, i, j, draw_color);
+						drawPixel(map_surface.getGraphics(), i-1, j, draw_color);
+						drawPixel(map_surface.getGraphics(), i, j, draw_color);
 					}
 				}
 			}
@@ -226,13 +224,13 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 		// return tile cursor to next row of tiles
 		if (odd_row) {
 			odd_row = false;
-			tile_cursor.x -= map_surface.sprite->w/2;
-			tile_cursor.y += (map_surface.sprite->w/2 +1);
+			tile_cursor.x -= map_surface.getGraphicsWidth()/2;
+			tile_cursor.y += (map_surface.getGraphicsWidth()/2 +1);
 		}
 		else {
 			odd_row = true;
-			tile_cursor.x -= (map_surface.sprite->w/2 -1);
-			tile_cursor.y += map_surface.sprite->w/2;
+			tile_cursor.x -= (map_surface.getGraphicsWidth()/2 -1);
+			tile_cursor.y += map_surface.getGraphicsWidth()/2;
 		}
 	}
 }

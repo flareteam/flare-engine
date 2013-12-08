@@ -62,8 +62,8 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 		values[i] = "";
 	}
 
-	pos.w = listboxs.sprite->w;
-	pos.h = (listboxs.sprite->h / 3); // height of one item
+	pos.w = listboxs.getGraphicsWidth();
+	pos.h = (listboxs.getGraphicsHeight() / 3); // height of one item
 
 	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
 	local_offset.x = local_offset.y = 0;
@@ -362,7 +362,7 @@ void WidgetListBox::render() {
 	src.h = pos.h;
 
 	listboxs.local_frame = local_frame;
-	listboxs.offset = local_offset;
+	listboxs.setOffset(local_offset);
 
 	for(int i=0; i<list_height; i++) {
 		if(i==0)
@@ -523,7 +523,6 @@ bool WidgetListBox::getPrev() {
 }
 
 WidgetListBox::~WidgetListBox() {
-	listboxs.clearGraphics();
 	delete[] values;
 	delete[] tooltips;
 	delete[] vlabels;

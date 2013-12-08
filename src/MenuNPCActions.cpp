@@ -120,6 +120,7 @@ MenuNPCActions::MenuNPCActions()
 }
 
 void MenuNPCActions::update() {
+	action_menu.clearGraphics();
 
 	/* get max width and height of action menu */
 	int w = 0, h = 0;
@@ -190,9 +191,9 @@ void MenuNPCActions::update() {
 	h += (MENU_BORDER*2);
 
 	int old_w = -1, old_h = -1;
-	if (action_menu.sprite != NULL) {
-		old_w = action_menu.sprite->w;
-		old_h = action_menu.sprite->h;
+	if (!action_menu.graphicsIsNull()) {
+		old_w = action_menu.getGraphicsWidth();
+		old_h = action_menu.getGraphicsHeight();
 	}
 	// create background surface if necessary
 	if ( old_w != w || old_h != h ) {
@@ -386,7 +387,7 @@ void MenuNPCActions::keyboardLogic() {
 
 void MenuNPCActions::render() {
 	if (!visible) return;
-	if (!action_menu.sprite) return;
+	if (action_menu.graphicsIsNull()) return;
 
 	action_menu.setDest(window_area);
 	render_device->render(action_menu);
@@ -400,6 +401,5 @@ void MenuNPCActions::render() {
 }
 
 MenuNPCActions::~MenuNPCActions() {
-	action_menu.clearGraphics();
 }
 

@@ -63,7 +63,7 @@ public:
 	int getActiveTab();
 	void setActiveTab(int tab) { activeTab = tab; }
 	SDL_Rect getContentArea();
-	int getTabHeight() { return activeTabSurface.sprite->h; }
+	int getTabHeight() { return activeTabSurface.getGraphicsHeight(); }
 
 	void updateHeader();
 

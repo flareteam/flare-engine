@@ -283,10 +283,12 @@ void MapRenderer::createBackgroundSurface() {
 }
 
 void MapRenderer::drawRenderable(vector<Renderable*>::iterator r_cursor) {
-	if ((*r_cursor)->sprite) {
+	if (!(*r_cursor)->graphicsIsNull()) {
 		Point p = map_to_screen((*r_cursor)->map_pos.x, (*r_cursor)->map_pos.y, shakycam.x, shakycam.y);
 		(*r_cursor)->setDest(p);
+		(*r_cursor)->setGraphics(tset.sprites.getGraphics());
 		render_device->render(*(*r_cursor));
+		(*r_cursor)->setGraphics(NULL);
 	}
 }
 
@@ -338,12 +340,14 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 				dest.y = p.y - tset.tiles[current_tile].offset.y + offset.y;
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
-				if (NULL == wheretorender) {
+				if (wheretorender == NULL) {
 					tset.tiles[current_tile].tile.setDest(dest);
+					tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics());
 					render_device->render(tset.tiles[current_tile].tile);
+					tset.tiles[current_tile].tile.setGraphics(NULL);
 				}
 				else {
-					SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].tile.src), wheretorender, &dest);
+					SDL_BlitSurface(tset.sprites.getGraphics(), &(tset.tiles[current_tile].tile.getClip()), wheretorender, &dest);
 				}
 			}
 		}
@@ -414,7 +418,10 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable*> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
+				// FIXME
+				//tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics());
 				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}
 
 			// some renderable entities go in this layer
@@ -497,7 +504,9 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics());
 				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}
 			p.x += TILE_W;
 		}
@@ -542,7 +551,9 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable*> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics());
 				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}
 			p.x += TILE_W;
 
@@ -693,8 +704,8 @@ void MapRenderer::checkHotspots() {
 						SDL_Rect dest;
 						dest.x = p.x - tset.tiles[current_tile].offset.x;
 						dest.y = p.y - tset.tiles[current_tile].offset.y;
-						dest.w = tset.tiles[current_tile].tile.src.w;
-						dest.h = tset.tiles[current_tile].tile.src.h;
+						dest.w = tset.tiles[current_tile].tile.getClip().w;
+						dest.h = tset.tiles[current_tile].tile.getClip().h;
 
 						if (isWithin(dest, inpt->mouse)) {
 							// Now that the mouse is within the rectangle of the tile, we can check for
@@ -702,9 +713,9 @@ void MapRenderer::checkHotspots() {
 							// otherwise the pixel precise check might hit a neighbouring tile in the
 							// tileset. We need to calculate the point relative to the
 							Point p1;
-							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile.src.x;
-							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile.src.y;
-							matched |= checkPixel(p1, tset.sprites);
+							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile.getClip().x;
+							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile.getClip().y;
+							matched |= checkPixel(p1, tset.sprites.getGraphics());
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;
 						}

@@ -225,7 +225,7 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 	dest.y = y;
 	src.w = src.h = dest.w = dest.h = ICON_SIZE;
 
-	int columns = icons.sprite->w / ICON_SIZE;
+	int columns = icons.getGraphicsWidth() / ICON_SIZE;
 	src.x = (icon_id % columns) * ICON_SIZE;
 	src.y = (icon_id / columns) * ICON_SIZE;
 

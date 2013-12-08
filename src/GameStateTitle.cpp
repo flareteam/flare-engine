@@ -32,15 +32,9 @@ GameStateTitle::GameStateTitle() : GameState() {
 
 	logo.setGraphics(loadGraphicSurface("images/menus/logo.png"));
 	// display logo centered
-	if (logo.sprite) {
-		logo.setClip(
-			0,
-			0,
-			logo.sprite->w,
-			logo.sprite->h
-		);
-		logo.map_pos.x = VIEW_W_HALF - (logo.sprite->w/2);
-		logo.map_pos.y = VIEW_H_HALF - (logo.sprite->h/2);
+	if (!logo.graphicsIsNull()) {
+		logo.map_pos.x = VIEW_W_HALF - (logo.getGraphicsWidth()/2);
+		logo.map_pos.y = VIEW_H_HALF - (logo.getGraphicsWidth()/2);
 	}
 
 	// set up buttons
@@ -142,5 +136,4 @@ GameStateTitle::~GameStateTitle() {
 	delete button_credits;
 	delete button_exit;
 	delete label_version;
-	logo.clearGraphics();
 }

@@ -76,7 +76,6 @@ void MenuItemStorage::init(int _slot_number, vector<SDL_Rect> _area, vector<stri
 
 void MenuItemStorage::loadGraphics() {
 	highlight_image.setGraphics(loadGraphicSurface("images/menus/attention_glow.png", "Couldn't load icon highlight image"));
-	highlight_image.setClip(0,0,highlight_image.sprite->w,highlight_image.sprite->h);
 }
 
 void MenuItemStorage::render() {
@@ -206,7 +205,6 @@ void MenuItemStorage::highlightClear() {
 
 MenuItemStorage::~MenuItemStorage() {
 	delete[] highlight;
-	highlight_image.clearGraphics();
 	for (unsigned i=0; i<slots.size(); i++)
 		delete slots[i];
 }
