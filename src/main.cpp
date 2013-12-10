@@ -249,12 +249,12 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	// if a game isn't specified, display a warning
-	if (game_warning) {
-		printf("Warning: A game wasn't specified, falling back to the 'default' game.\nDid you forget the --game flag? (e.g. --game=flare-game).\nSee --help for more details.\n\n");
-	}
-
 	if (!done) {
+		// if a game isn't specified, display a warning
+		if (game_warning) {
+			printf("Warning: A game wasn't specified, falling back to the 'default' game.\nDid you forget the --game flag? (e.g. --game=flare-game).\nSee --help for more details.\n\n");
+		}
+
 		srand((unsigned int)time(NULL));
 		init();
 		mainLoop(debug_event);
