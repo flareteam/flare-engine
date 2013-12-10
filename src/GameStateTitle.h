@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class WidgetButton;
 class WidgetLabel;
+class WidgetScrollBox;
 
 class GameStateTitle : public GameState {
 private:
@@ -33,6 +34,7 @@ private:
 	WidgetButton *button_cfg;
 	WidgetButton *button_credits;
 	WidgetLabel *label_version;
+	WidgetScrollBox *warning_box;
 
 	TabList tablist;
 
