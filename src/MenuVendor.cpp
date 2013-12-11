@@ -73,7 +73,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 			else if (infile.key == "vendor_rows") {
 				slots_rows = eatFirstInt(infile.val,',');
 			}
-			else if (infile.key == "caption") {
+			else if (infile.key == "label_title") {
 				title =  eatLabelInfo(infile.val);
 			}
 		}

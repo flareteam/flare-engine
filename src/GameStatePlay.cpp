@@ -733,21 +733,18 @@ void GameStatePlay::checkNPCInteraction() {
 }
 
 void GameStatePlay::checkStash() {
-	float interact_distance;
-
 	if (mapr->stash) {
 		// If triggered, open the stash and inventory menus
 		menu->closeAll();
 		menu->inv->visible = true;
 		menu->stash->visible = true;
 		mapr->stash = false;
-	}
-	else {
+	} else {
 		// Close stash if inventory is closed
 		if (!menu->inv->visible) menu->stash->visible = false;
 
 		// If the player walks away from the stash, close its menu
-		interact_distance = calcDist(pc->stats.pos, mapr->stash_pos);
+		float interact_distance = calcDist(pc->stats.pos, mapr->stash_pos);
 		if (interact_distance > INTERACT_RANGE || !pc->stats.alive) {
 			menu->stash->visible = false;
 		}
