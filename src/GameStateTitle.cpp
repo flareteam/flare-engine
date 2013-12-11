@@ -91,7 +91,7 @@ GameStateTitle::GameStateTitle() : GameState() {
 		warning_box->resize(warning_size.y);
 
 		font->setFont("font_normal");
-		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents, VIEW_W/2, FONT_WHITE);
+		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents.getGraphics(), VIEW_W/2, FONT_WHITE);
 	}
 }
 
