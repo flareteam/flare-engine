@@ -195,7 +195,7 @@ Renderable& Animation::getCurrentFrame(int kind) {
 	if (this) {
 		const int index = (max_kinds*cur_frame_index) + kind;
 		r = frames[index];
-		r.setGraphics(SDL_DisplayFormatAlpha(sprite), false);
+		// r.setGraphics(sprite, false);
 	}
 	return r;
 }

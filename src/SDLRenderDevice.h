@@ -53,7 +53,7 @@ public:
 	bool graphicsIsNull();
 	void clearGraphics();
 	void clearTexture();
-	void setOffset(const Point& offset);
+	void setOffset(const Point& _offset);
 	void setOffset(const int x, const int y);
 	Point getOffset();
 	void setClip(const SDL_Rect& clip);
