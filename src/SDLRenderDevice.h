@@ -47,13 +47,14 @@ public:
 	FPoint map_pos;     // The map location on the floor between someone's feet
 	SDL_Rect local_frame;
 	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
+	bool keep_graphics; // don't free the sprite surface when deconstructing, used primarily for animations
 
 	void setGraphics(SDL_Surface *s, bool setClipToFull = true);
 	SDL_Surface * getGraphics();
 	bool graphicsIsNull();
 	void clearGraphics();
 	void clearTexture();
-	void setOffset(const Point& offset);
+	void setOffset(const Point& _offset);
 	void setOffset(const int x, const int y);
 	Point getOffset();
 	void setClip(const SDL_Rect& clip);

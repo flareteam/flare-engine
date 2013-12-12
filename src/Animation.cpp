@@ -46,7 +46,8 @@ Animation::Animation(const std::string &_name, const std::string &_type, SDL_Sur
 	, additional_data(0)
 	, times_played(0)
 	, duration()
-	, active_frames() {
+	, active_frames()
+	, dummy_renderable(Renderable()) {
 	if (type == NONE)
 		fprintf(stderr, "Warning: animation type %s is unknown\n", _type.c_str());
 }
@@ -64,7 +65,8 @@ Animation::Animation(const Animation& a)
 	, times_played(0)
 	, frames(a.frames)
 	, duration(a.duration)
-	, active_frames(a.active_frames) {
+	, active_frames(a.active_frames)
+	, dummy_renderable(Renderable()) {
 	;
 }
 
@@ -190,14 +192,15 @@ void Animation::advanceFrame() {
 }
 
 Renderable& Animation::getCurrentFrame(int kind) {
-	//FIXME
-	Renderable r;
 	if (this) {
 		const int index = (max_kinds*cur_frame_index) + kind;
-		r = frames[index];
-		r.setGraphics(SDL_DisplayFormatAlpha(sprite), false);
+		frames[index].keep_graphics = true;
+		frames[index].setGraphics(sprite, false);
+		return frames[index];
 	}
-	return r;
+	else {
+		return dummy_renderable;
+	}
 }
 
 void Animation::reset() {

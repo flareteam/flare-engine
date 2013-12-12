@@ -286,9 +286,7 @@ void MapRenderer::drawRenderable(vector<Renderable*>::iterator r_cursor) {
 	if (!(*r_cursor)->graphicsIsNull()) {
 		Point p = map_to_screen((*r_cursor)->map_pos.x, (*r_cursor)->map_pos.y, shakycam.x, shakycam.y);
 		(*r_cursor)->setDest(p);
-		(*r_cursor)->setGraphics(tset.sprites.getGraphics());
 		render_device->render(*(*r_cursor));
-		(*r_cursor)->setGraphics(NULL);
 	}
 }
 
@@ -342,12 +340,13 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 				// by SDL_BlitSurface
 				if (wheretorender == NULL) {
 					tset.tiles[current_tile].tile.setDest(dest);
-					tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics());
+					tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
 					render_device->render(tset.tiles[current_tile].tile);
 					tset.tiles[current_tile].tile.setGraphics(NULL);
 				}
 				else {
-					SDL_BlitSurface(tset.sprites.getGraphics(), &(tset.tiles[current_tile].tile.getClip()), wheretorender, &dest);
+					SDL_Rect clip = tset.tiles[current_tile].tile.getClip();
+					SDL_BlitSurface(tset.sprites.getGraphics(), &clip, wheretorender, &dest);
 				}
 			}
 		}
@@ -418,8 +417,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable*> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
-				// FIXME
-				//tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics());
+				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
 				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}
@@ -504,7 +502,7 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics());
+				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
 				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}
@@ -551,7 +549,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable*> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics());
+				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
 				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}

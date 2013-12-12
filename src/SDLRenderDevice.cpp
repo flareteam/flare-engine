@@ -28,20 +28,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 Renderable::Renderable()
-	: sprite(NULL)
+	: map_pos()
 	, local_frame(SDL_Rect())
-	, src(SDL_Rect())
-	, map_pos()
-	, offset()
 	, prio(0)
+	, keep_graphics(false)
+	, sprite(NULL)
+	, src(SDL_Rect())
+	, offset()
 {}
 
 Renderable::Renderable(const Renderable& other)
-	: local_frame(other.local_frame)
-	, src(other.src)
-	, map_pos(other.map_pos)
-	, offset(other.offset)
+	: map_pos(other.map_pos)
+	, local_frame(other.local_frame)
 	, prio(other.prio)
+	, keep_graphics(false)
+	, src(other.src)
+	, offset(other.offset)
 {
 	if (other.sprite != NULL) {
 		sprite = SDL_DisplayFormatAlpha(other.sprite);
@@ -56,17 +58,18 @@ Renderable& Renderable::operator=(const Renderable& other) {
 	} else {
 		sprite = NULL;
 	}
-	local_frame = other.local_frame;
-	src = other.src;
 	map_pos = other.map_pos;
-	offset = other.offset;
+	local_frame = other.local_frame;
 	prio = other.prio;
+	keep_graphics = other.keep_graphics;
+	src = other.src;
+	offset = other.offset;
 
 	return *this;
 }
 
 Renderable::~Renderable() {
-	if (sprite != NULL) {
+	if (sprite != NULL && !keep_graphics) {
 		SDL_FreeSurface(sprite);
 		sprite = NULL;
 	}
@@ -125,8 +128,8 @@ void Renderable::clearGraphics() {
 void Renderable::clearTexture() {
 }
 
-void Renderable::setOffset(const Point& offet) {
-	this->offset = offset;
+void Renderable::setOffset(const Point& _offset) {
+	this->offset = _offset;
 }
 
 void Renderable::setOffset(const int x, const int y) {
@@ -257,9 +260,10 @@ int SDLRenderDevice::renderText(
 	int ret = 0;
 	m_ttf_renderable.setGraphics(TTF_RenderUTF8_Blended(ttf_font, text.c_str(), color));
 	if (!m_ttf_renderable.graphicsIsNull()) {
+		SDL_Rect clip = m_ttf_renderable.getClip();
 		ret = SDL_BlitSurface(
 				  m_ttf_renderable.getGraphics(),
-				  &m_ttf_renderable.getClip(),
+				  &clip,
 				  screen,
 				  &dest
 			  );
