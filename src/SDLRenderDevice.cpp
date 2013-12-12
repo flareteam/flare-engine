@@ -121,13 +121,6 @@ void Renderable::clearGraphics() {
 	}
 }
 
-/* Clear only the texture of a Renderable.
- *
- * Do nothing if we compile and/or run in SDL blit mode.
- */
-void Renderable::clearTexture() {
-}
-
 void Renderable::setOffset(const Point& _offset) {
 	this->offset = _offset;
 }

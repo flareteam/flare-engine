@@ -257,9 +257,4 @@ bool Animation::isCompleted() {
 	return (type == PLAY_ONCE && times_played > 0);
 }
 
-void Animation::deleteTextures() {
-	for (unsigned int i = 0; i<frames.size(); ++i) {
-		frames[i].clearTexture();
-	}
-}
 

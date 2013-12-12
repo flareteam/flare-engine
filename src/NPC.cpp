@@ -400,7 +400,6 @@ Renderable& NPC::getRender() {
 	Renderable& r = activeAnimation->getCurrentFrame(direction);
 	r.map_pos.x = pos.x;
 	r.map_pos.y = pos.y;
-	r.prio = 1;
 
 	return r;
 }

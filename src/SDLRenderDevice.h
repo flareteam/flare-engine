@@ -53,7 +53,6 @@ public:
 	SDL_Surface * getGraphics();
 	bool graphicsIsNull();
 	void clearGraphics();
-	void clearTexture();
 	void setOffset(const Point& _offset);
 	void setOffset(const int x, const int y);
 	Point getOffset();

@@ -284,7 +284,12 @@ void MapRenderer::createBackgroundSurface() {
 
 void MapRenderer::drawRenderable(vector<Renderable*>::iterator r_cursor) {
 	if (!(*r_cursor)->graphicsIsNull()) {
+		//SDL_Rect dest;
 		Point p = map_to_screen((*r_cursor)->map_pos.x, (*r_cursor)->map_pos.y, shakycam.x, shakycam.y);
+		// FIXME add this back?
+		//dest.x = p.x - (*r_cursor)->getOffset().x;
+		//dest.y = p.y - (*r_cursor)->getOffset().y;
+		//(*r_cursor)->setDest(dest);
 		(*r_cursor)->setDest(p);
 		render_device->render(*(*r_cursor));
 	}

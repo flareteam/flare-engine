@@ -127,9 +127,6 @@ public:
 	void setActiveFrames(const std::vector<short> &_active_frames);
 
 	bool isCompleted();
-
-	void deleteTextures();
-
 };
 
 #endif
