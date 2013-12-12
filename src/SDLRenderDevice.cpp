@@ -31,6 +31,7 @@ Renderable::Renderable()
 	: map_pos()
 	, local_frame(SDL_Rect())
 	, prio(0)
+	, keep_graphics(false)
 	, sprite(NULL)
 	, src(SDL_Rect())
 	, offset()
@@ -40,6 +41,7 @@ Renderable::Renderable(const Renderable& other)
 	: map_pos(other.map_pos)
 	, local_frame(other.local_frame)
 	, prio(other.prio)
+	, keep_graphics(false)
 	, src(other.src)
 	, offset(other.offset)
 {
@@ -56,17 +58,18 @@ Renderable& Renderable::operator=(const Renderable& other) {
 	} else {
 		sprite = NULL;
 	}
-	local_frame = other.local_frame;
-	src = other.src;
 	map_pos = other.map_pos;
-	offset = other.offset;
+	local_frame = other.local_frame;
 	prio = other.prio;
+	keep_graphics = other.keep_graphics;
+	src = other.src;
+	offset = other.offset;
 
 	return *this;
 }
 
 Renderable::~Renderable() {
-	if (sprite != NULL) {
+	if (sprite != NULL && !keep_graphics) {
 		SDL_FreeSurface(sprite);
 		sprite = NULL;
 	}

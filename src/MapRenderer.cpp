@@ -286,10 +286,7 @@ void MapRenderer::drawRenderable(vector<Renderable*>::iterator r_cursor) {
 	if (!(*r_cursor)->graphicsIsNull()) {
 		Point p = map_to_screen((*r_cursor)->map_pos.x, (*r_cursor)->map_pos.y, shakycam.x, shakycam.y);
 		(*r_cursor)->setDest(p);
-		//FIXME
-		// (*r_cursor)->setGraphics(tset.sprites.getGraphics(), false);
 		render_device->render(*(*r_cursor));
-		// (*r_cursor)->setGraphics(NULL);
 	}
 }
 

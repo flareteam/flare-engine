@@ -190,14 +190,17 @@ void Animation::advanceFrame() {
 }
 
 Renderable& Animation::getCurrentFrame(int kind) {
-	//FIXME
-	Renderable r;
 	if (this) {
 		const int index = (max_kinds*cur_frame_index) + kind;
-		r = frames[index];
-		// r.setGraphics(sprite, false);
+		frames[index].keep_graphics = true;
+		frames[index].setGraphics(sprite, false);
+		return frames[index];
 	}
-	return r;
+	else {
+		//FIXME Don't return a reference to a local variable
+		Renderable r;
+		return r;
+	}
 }
 
 void Animation::reset() {
