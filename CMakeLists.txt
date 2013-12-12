@@ -40,6 +40,12 @@ set(BINDIR  "games"             CACHE STRING "Directory from CMAKE_INSTALL_PREFI
 set(DATADIR "share/games/flare" CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where game data files will be installed.")
 set(MANDIR  "share/man"         CACHE STRING "Directory from CMAKE_INSTALL_PREFIX where manual pages will be installed.")
 
+If(NOT IS_ABSOLUTE "${BINDIR}")
+	set(FLARE_EXECUTABLE_PATH ${CMAKE_INSTALL_PREFIX}/${BINDIR}/flare)
+Else(NOT IS_ABSOLUTE "${BINDIR}")
+	set(FLARE_EXECUTABLE_PATH ${BINDIR}/flare)
+EndIf(NOT IS_ABSOLUTE "${BINDIR}")
+
 If(NOT IS_ABSOLUTE "${DATADIR}")
 	add_definitions(-DDATA_INSTALL_DIR="${CMAKE_INSTALL_PREFIX}/${DATADIR}")
 Else(NOT IS_ABSOLUTE "${DATADIR}")
