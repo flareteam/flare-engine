@@ -46,7 +46,8 @@ Animation::Animation(const std::string &_name, const std::string &_type, SDL_Sur
 	, additional_data(0)
 	, times_played(0)
 	, duration()
-	, active_frames() {
+	, active_frames()
+	, dummy_renderable(Renderable()) {
 	if (type == NONE)
 		fprintf(stderr, "Warning: animation type %s is unknown\n", _type.c_str());
 }
@@ -64,7 +65,8 @@ Animation::Animation(const Animation& a)
 	, times_played(0)
 	, frames(a.frames)
 	, duration(a.duration)
-	, active_frames(a.active_frames) {
+	, active_frames(a.active_frames)
+	, dummy_renderable(Renderable()) {
 	;
 }
 
@@ -197,9 +199,7 @@ Renderable& Animation::getCurrentFrame(int kind) {
 		return frames[index];
 	}
 	else {
-		//FIXME Don't return a reference to a local variable
-		Renderable r;
-		return r;
+		return dummy_renderable;
 	}
 }
 

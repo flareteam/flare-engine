@@ -71,6 +71,8 @@ protected:
 												// This should contain indexes of the gfx vector.
 												// Assume it is sorted, one index occurs at max once.
 
+	Renderable dummy_renderable;  // A blank renderable we can reference when getCurrentFrame() fails
+
 public:
 	Animation(const std::string &_name, const std::string &_type, SDL_Surface *_sprite);
 
