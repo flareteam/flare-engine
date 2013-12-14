@@ -133,7 +133,7 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 void MapRenderer::clearLayers() {
 	Map::clearLayers();
 
-	SDL_FreeSurface(backgroundsurface);
+	freeImage(backgroundsurface);
 	backgroundsurface = 0;
 	index_objectlayer = 0;
 }
@@ -274,7 +274,7 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 }
 
 void MapRenderer::createBackgroundSurface() {
-	SDL_FreeSurface(backgroundsurface);
+	freeImage(backgroundsurface);
 	backgroundsurface = createSurface(
 							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
 							VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
@@ -288,13 +288,11 @@ void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 		dest.x = p.x - r_cursor->offset.x;
 		dest.y = p.y - r_cursor->offset.y;
-		//dest.x = p.x;
-		//dest.y = p.y;
 		render_device->render(*r_cursor, dest);
 	}
 }
 
-void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const unsigned short layerdata[256][256]) {
+void MapRenderer::renderIsoLayer(Image *wheretorender, Point offset, const unsigned short layerdata[256][256]) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	SDL_Rect dest;
@@ -350,7 +348,7 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 				}
 				else {
 					SDL_Rect clip = tset.tiles[current_tile].tile.getClip();
-					SDL_BlitSurface(tset.sprites.getGraphics(), &clip, wheretorender, &dest);
+					render_device->renderToImage(tset.sprites.getGraphics(), clip, wheretorender, dest);
 				}
 			}
 		}
@@ -473,7 +471,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		src.y = p.y;
 		src.w = 2 * VIEW_W;
 		src.h = 2 * VIEW_H;
-		SDL_BlitSurface(backgroundsurface, &src, screen , 0);
+		render_device->renderImage(backgroundsurface, src);
 	}
 
 	renderIsoBackObjects(r_dead);

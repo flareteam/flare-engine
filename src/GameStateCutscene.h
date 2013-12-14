@@ -78,7 +78,7 @@ private:
 
 	std::queue<Scene> scenes;
 
-	SDL_Surface *loadImage(std::string filename);
+	Image *loadImage(std::string filename);
 
 public:
 	GameStateCutscene(GameState *game_state);

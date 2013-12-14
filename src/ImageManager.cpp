@@ -40,7 +40,7 @@ ImageManager::~ImageManager() {
 #endif
 }
 
-SDL_Surface *ImageManager::getSurface(const std::string &name) {
+Image *ImageManager::getSurface(const std::string &name) {
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -86,7 +86,7 @@ void ImageManager::cleanUp() {
 	int i = sprites.size() - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {
-			SDL_FreeSurface(sprites[i]);
+			freeImage(sprites[i]);
 			counts.erase(counts.begin()+i);
 			sprites.erase(sprites.begin()+i);
 			names.erase(names.begin()+i);

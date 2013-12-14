@@ -55,7 +55,7 @@ void WidgetButton::activate() {
 
 void WidgetButton::loadArt() {
 	// load button images
-	SDL_Surface *surface = loadGraphicSurface(fileName);
+	Image *surface = loadGraphicSurface(fileName);
 	if (!surface) {
 		SDL_Quit();
 		exit(1); // or abort ??

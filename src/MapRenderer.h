@@ -76,7 +76,7 @@ private:
 
 	// renders one layer into the given sdl surface with offset
 	// offset in screen/surface coordinates.
-	void renderIsoLayer(SDL_Surface *wheretorender, Point offset, const unsigned short layerdata[][256]);
+	void renderIsoLayer(Image *wheretorender, Point offset, const unsigned short layerdata[][256]);
 
 	// renders only objects
 	void renderIsoBackObjects(std::vector<Renderable> &r);
@@ -98,7 +98,7 @@ private:
 	TileSet tset;
 
 	// in case of animated tiles switched off, prerender background into this layer
-	SDL_Surface* backgroundsurface;
+	Image* backgroundsurface;
 
 	// only called if the background surface is actually used, i.e. ANIMATED_TILES = false;
 	void createBackgroundSurface();

@@ -20,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Avatar.h"
-#include "SDL_gfxBlitFunc.h"
 #include "FileParser.h"
 #include "GameStateLoad.h"
 #include "GameStateTitle.h"

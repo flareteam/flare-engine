@@ -239,10 +239,10 @@ bool GameStateCutscene::load(std::string filename) {
 	return true;
 }
 
-SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
+Image *GameStateCutscene::loadImage(std::string filename) {
 
 	std::string image_file = (mods->locate("images/"+ filename));
-	SDL_Surface *image = IMG_Load(image_file.c_str());
+	Image *image = IMG_Load(image_file.c_str());
 	if (!image) {
 		fprintf(stderr, "Missing cutscene art reference: %s\n", image_file.c_str());
 		return NULL;
@@ -251,11 +251,11 @@ SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
 	/* scale image to fit height */
 	if (scale_graphics) {
 		float ratio = image->h/(float)image->w;
-		SDL_Surface *art = scaleSurface(image, VIEW_W, (int)(VIEW_W*ratio));
+		Image *art = scaleSurface(image, VIEW_W, (int)(VIEW_W*ratio));
 		if (art == NULL)
 			return image;
 
-		SDL_FreeSurface(image);
+		freeImage(image);
 		image = art;
 	}
 

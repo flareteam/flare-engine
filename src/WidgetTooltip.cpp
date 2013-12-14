@@ -135,7 +135,7 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
 	tip.tip_buffer.clearGraphics();
-	SDL_Surface *surface =
+	Image *surface =
 		createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
 
 	// Currently tooltips are always opaque

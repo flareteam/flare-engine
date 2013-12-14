@@ -66,8 +66,8 @@ public:
 	SDL_Rect local_frame;
 	bool keep_graphics; // don't free the sprite surface when deconstructing, used primarily for animations
 
-	void setGraphics(SDL_Surface *s, bool setClipToFull = true);
-	SDL_Surface * getGraphics();
+	void setGraphics(Image *s, bool setClipToFull = true);
+	Image * getGraphics();
 	bool graphicsIsNull();
 	void clearGraphics();
 	void setOffset(const Point& _offset);
@@ -112,6 +112,8 @@ public:
 	 */
 	virtual int render(Renderable& r, SDL_Rect dest);
 	virtual int render(Sprite& r);
+	virtual int renderImage(Image* image, SDL_Rect& src);
+	virtual int renderToImage(Image* src_image, SDL_Rect& src, Image* dest_image, SDL_Rect& dest);
 
 	/** Render text to the screen.
 	 */
@@ -187,12 +189,12 @@ private:
 	Sprite m_ttf_renderable;
 };
 
-Uint32 readPixel(SDL_Surface *screen, int x, int y);
-void drawPixel(SDL_Surface *screen, int x, int y, Uint32 color);
-void drawLine(SDL_Surface *screen, int x0, int y0, int x1, int y1, Uint32 color);
-void drawLine(SDL_Surface *screen, Point pos0, Point pos1, Uint32 color);
-void drawRectangle(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color);
-bool checkPixel(Point px, SDL_Surface *surface);
+Uint32 readPixel(Image *screen, int x, int y);
+void drawPixel(Image *screen, int x, int y, Uint32 color);
+void drawLine(Image *screen, int x0, int y0, int x1, int y1, Uint32 color);
+void drawLine(Image *screen, Point pos0, Point pos1, Uint32 color);
+void drawRectangle(Image *surface, Point pos0, Point pos1, Uint32 color);
+bool checkPixel(Point px, Image *surface);
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
 
 /**
@@ -202,7 +204,7 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
  * screen surface.
  * Additionally the alpha flag is set, so transparent blits are possible.
  */
-SDL_Surface* createAlphaSurface(int width, int height);
+Image* createAlphaSurface(int width, int height);
 
 /**
  * Creates a SDL_Surface.
@@ -211,9 +213,9 @@ SDL_Surface* createAlphaSurface(int width, int height);
  * screen surface.
  * The bright pink (rgb 0xff00ff) is set as transparent color.
  */
-SDL_Surface* createSurface(int width, int height);
+Image* createSurface(int width, int height);
 
-SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height);
+Image* scaleSurface(Image *source, int width, int height);
 
 /**
  * @brief loadGraphicSurface loads an image from a file.
@@ -235,9 +237,11 @@ SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height);
  *        successful
  */
 
-SDL_Surface* loadGraphicSurface(std::string filename,
+Image* loadGraphicSurface(std::string filename,
 								std::string errormessage = "Couldn't load image",
 								bool IfNotFoundExit = false,
 								bool HavePinkColorKey = false);
+
+void freeImage(Image* image);
 
 #endif // SDLRENDERDEVICE_H

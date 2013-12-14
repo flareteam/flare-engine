@@ -80,7 +80,7 @@ Sprite::~Sprite() {
  * clearGraphics() method is called first in case this Sprite holds the
  * last references to avoid resource leaks.
  */
-void Sprite::setGraphics(SDL_Surface *s, bool setClipToFull) {
+void Sprite::setGraphics(Image *s, bool setClipToFull) {
 
 	sprite = s;
 
@@ -93,7 +93,7 @@ void Sprite::setGraphics(SDL_Surface *s, bool setClipToFull) {
 
 }
 
-SDL_Surface * Sprite::getGraphics() {
+Image * Sprite::getGraphics() {
 
 	return sprite;
 }
@@ -240,6 +240,14 @@ int SDLRenderDevice::render(Sprite& r) {
 	}
 
 	return SDL_BlitSurface(r.getGraphics(), &m_clip, screen, &m_dest);
+}
+
+int SDLRenderDevice::renderImage(Image* image, SDL_Rect& src) {
+	return SDL_BlitSurface(image, &src, screen , 0);
+}
+
+int SDLRenderDevice::renderToImage(Image* src_image, SDL_Rect& src, Image* dest_image, SDL_Rect& dest) {
+	return SDL_BlitSurface(src_image, &src, dest_image, &dest);
 }
 
 int SDLRenderDevice::renderText(
@@ -438,7 +446,7 @@ bool SDLRenderDevice::local_to_global(Sprite& r) {
 }
 
 
-Uint32 readPixel(SDL_Surface *surface, int x, int y) {
+Uint32 readPixel(Image *surface, int x, int y) {
 	SDL_LockSurface(surface);
 	int bpp = surface->format->BytesPerPixel;
 	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
@@ -480,7 +488,7 @@ Uint32 readPixel(SDL_Surface *surface, int x, int y) {
  * Source: SDL Documentation
  * http://www.libsdl.org/docs/html/guidevideo.html
  */
-void drawPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
+void drawPixel(Image *surface, int x, int y, Uint32 pixel) {
 	int bpp = surface->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to set */
 	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
@@ -520,7 +528,7 @@ void drawPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
  *
  * from http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Simplification
  */
-void drawLine(SDL_Surface *surface, int x0, int y0, int x1, int y1, Uint32 color) {
+void drawLine(Image *surface, int x0, int y0, int x1, int y1, Uint32 color) {
 	const int dx = abs(x1-x0);
 	const int dy = abs(y1-y0);
 	const int sx = x0 < x1 ? 1 : -1;
@@ -545,7 +553,7 @@ void drawLine(SDL_Surface *surface, int x0, int y0, int x1, int y1, Uint32 color
 	while(x0 != x1 || y0 != y1);
 }
 
-void drawLine(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
+void drawLine(Image *surface, Point pos0, Point pos1, Uint32 color) {
 	if (SDL_MUSTLOCK(surface))
 		SDL_LockSurface(surface);
 	drawLine(surface, pos0.x, pos0.y, pos1.x, pos1.y, color);
@@ -553,7 +561,7 @@ void drawLine(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
 		SDL_UnlockSurface(surface);
 }
 
-void drawRectangle(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
+void drawRectangle(Image *surface, Point pos0, Point pos1, Uint32 color) {
 	if (SDL_MUSTLOCK(surface))
 		SDL_LockSurface(surface);
 	drawLine(surface, pos0.x, pos0.y, pos1.x, pos0.y, color);
@@ -569,7 +577,7 @@ void drawRectangle(SDL_Surface *surface, Point pos0, Point pos1, Uint32 color) {
  * create blank surface
  * based on example: http://www.libsdl.org/docs/html/sdlcreatergbsurface.html
  */
-SDL_Surface* createAlphaSurface(int width, int height) {
+Image* createAlphaSurface(int width, int height) {
 
 	SDL_Surface *surface;
 	Uint32 rmask, gmask, bmask, amask;
@@ -593,7 +601,7 @@ SDL_Surface* createAlphaSurface(int width, int height) {
 	return surface;
 }
 
-SDL_Surface* createSurface(int width, int height) {
+Image* createSurface(int width, int height) {
 
 	SDL_Surface *surface;
 	Uint32 rmask, gmask, bmask, amask;
@@ -620,7 +628,7 @@ SDL_Surface* createSurface(int width, int height) {
 	return surface;
 }
 
-SDL_Surface* loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
+Image* loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
 	SDL_Surface *ret = NULL;
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
 	if(!cleanup) {
@@ -646,7 +654,7 @@ SDL_Surface* loadGraphicSurface(std::string filename, std::string errormessage, 
  * Source: SDL Documentation
  * http://www.libsdl.org/cgi/docwiki.cgi/Introduction_to_SDL_Video#getpixel
  */
-bool checkPixel(Point px, SDL_Surface *surface) {
+bool checkPixel(Point px, Image *surface) {
 	SDL_LockSurface(surface);
 
 	int bpp = surface->format->BytesPerPixel;
@@ -697,7 +705,7 @@ bool checkPixel(Point px, SDL_Surface *surface) {
 	return true;
 }
 
-SDL_Surface* scaleSurface(SDL_Surface *source, int width, int height) {
+Image* scaleSurface(Image *source, int width, int height) {
 	if(!source || !width || !height)
 		return 0;
 
@@ -743,4 +751,11 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 void loadIcons() {
 	icons.clearGraphics();
 	icons.setGraphics(loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
+}
+
+void freeImage(Image* image) {
+	if (image != NULL) {
+		SDL_FreeSurface(image);
+		image = NULL;
+	}
 }
