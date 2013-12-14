@@ -743,7 +743,6 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 }
 
 void loadIcons() {
-	if (icons.graphicsIsNull()) {
-		icons.setGraphics(loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
-	}
+	icons.clearGraphics();
+	icons.setGraphics(loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
 }
