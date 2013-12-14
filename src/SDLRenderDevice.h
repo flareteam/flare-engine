@@ -62,9 +62,8 @@ public:
 	Sprite& operator=(const Sprite& other);
 	~Sprite();
 
-	FPoint map_pos;     // The map location on the floor between someone's feet
+	FPoint dest;
 	SDL_Rect local_frame;
-	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
 	bool keep_graphics; // don't free the sprite surface when deconstructing, used primarily for animations
 
 	void setGraphics(SDL_Surface *s, bool setClipToFull = true);
@@ -81,8 +80,8 @@ public:
 	void setClipW(const int w);
 	void setClipH(const int h);
 	SDL_Rect getClip();
-	void setDest(const SDL_Rect& dest);
-	void setDest(const Point& dest);
+	void setDest(const SDL_Rect& _dest);
+	void setDest(const Point& _dest);
 	void setDest(int x, int y);
 	FPoint getDest();
 	int getGraphicsWidth();

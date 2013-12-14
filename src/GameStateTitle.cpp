@@ -35,8 +35,8 @@ GameStateTitle::GameStateTitle() : GameState() {
 	logo.setGraphics(loadGraphicSurface("images/menus/logo.png"));
 	// display logo centered
 	if (!logo.graphicsIsNull()) {
-		logo.map_pos.x = VIEW_W_HALF - (logo.getGraphicsWidth()/2);
-		logo.map_pos.y = VIEW_H_HALF - (logo.getGraphicsHeight()/2);
+		logo.dest.x = VIEW_W_HALF - (logo.getGraphicsWidth()/2);
+		logo.dest.y = VIEW_H_HALF - (logo.getGraphicsHeight()/2);
 	}
 
 	// set up buttons

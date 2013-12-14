@@ -212,8 +212,8 @@ void WidgetLabel::applyOffsets() {
 		bounds.y = y_origin - bounds.h/2;
 	}
 
-	renderable.map_pos.x = bounds.x;
-	renderable.map_pos.y = bounds.y;
+	renderable.dest.x = bounds.x;
+	renderable.dest.y = bounds.y;
 }
 
 /**

@@ -198,13 +198,8 @@ bool GameStateCutscene::load(std::string filename) {
 				// @ATTR scene.image|string|An image that will be shown.
 				sc.type = infile.key;
 				sc.i.setGraphics(loadImage(infile.val));
-				if (sc.i.graphicsIsNull()) {
+				if (sc.i.graphicsIsNull())
 					sc.type = "";
-				}
-				//else {
-				//	Renderable& r = sc.i;
-				//	r.setClip(0,0,r.getGraphicsWidth(),r.getGraphicsHeight());
-				//}
 			}
 			else if (infile.key == "pause") {
 				// @ATTR scene.pause|integer|Pause before next component

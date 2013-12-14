@@ -86,10 +86,10 @@ GameStateLoad::GameStateLoad() : GameState() {
 				button_alternate->pos.y = eatFirstInt(infile.val, ',');
 			}
 			else if (infile.key == "portrait") {
-				portrait.map_pos.x = eatFirstInt(infile.val, ',');
-				portrait.map_pos.x += (VIEW_W - FRAME_W)/2;
-				portrait.map_pos.y = eatFirstInt(infile.val, ',');
-				portrait.map_pos.y += (VIEW_H - FRAME_H)/2;
+				portrait.dest.x = eatFirstInt(infile.val, ',');
+				portrait.dest.x += (VIEW_W - FRAME_W)/2;
+				portrait.dest.y = eatFirstInt(infile.val, ',');
+				portrait.dest.y += (VIEW_H - FRAME_H)/2;
 				portrait.setClipW(eatFirstInt(infile.val, ','));
 				portrait.setClipH(eatFirstInt(infile.val, ','));
 			}
@@ -538,8 +538,8 @@ void GameStateLoad::render() {
 	// portrait
 	if (selected_slot >= 0 && !portrait.graphicsIsNull()) {
 		render_device->render(portrait);
-		dest.x = portrait.map_pos.x;
-		dest.y = portrait.map_pos.y;
+		dest.x = portrait.dest.x;
+		dest.y = portrait.dest.y;
 		portrait_border.setDest(dest);
 		render_device->render(portrait_border);
 	}

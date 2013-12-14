@@ -28,9 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 Sprite::Sprite()
-	: map_pos()
+	: dest()
 	, local_frame(SDL_Rect())
-	, prio(0)
 	, keep_graphics(false)
 	, sprite(NULL)
 	, src(SDL_Rect())
@@ -38,9 +37,8 @@ Sprite::Sprite()
 {}
 
 Sprite::Sprite(const Sprite& other)
-	: map_pos(other.map_pos)
+	: dest(other.dest)
 	, local_frame(other.local_frame)
-	, prio(other.prio)
 	, keep_graphics(false)
 	, src(other.src)
 	, offset(other.offset)
@@ -58,9 +56,8 @@ Sprite& Sprite::operator=(const Sprite& other) {
 	} else {
 		sprite = NULL;
 	}
-	map_pos = other.map_pos;
+	dest = other.dest;
 	local_frame = other.local_frame;
-	prio = other.prio;
 	keep_graphics = other.keep_graphics;
 	src = other.src;
 	offset = other.offset;
@@ -171,23 +168,23 @@ void Sprite::setClipH(const int h) {
 SDL_Rect Sprite::getClip() {
 	return src;
 }
-void Sprite::setDest(const SDL_Rect& dest) {
-	map_pos.x = (float)dest.x;
-	map_pos.y = (float)dest.y;
+void Sprite::setDest(const SDL_Rect& _dest) {
+	dest.x = (float)_dest.x;
+	dest.y = (float)_dest.y;
 }
 
-void Sprite::setDest(const Point& dest) {
-	map_pos.x = (float)dest.x;
-	map_pos.y = (float)dest.y;
+void Sprite::setDest(const Point& _dest) {
+	dest.x = (float)_dest.x;
+	dest.y = (float)_dest.y;
 }
 
 void Sprite::setDest(int x, int y) {
-	map_pos.x = (float)x;
-	map_pos.y = (float)y;
+	dest.x = (float)x;
+	dest.y = (float)y;
 }
 
 FPoint Sprite::getDest() {
-	return map_pos;
+	return dest;
 }
 
 int Sprite::getGraphicsWidth() {
@@ -235,9 +232,6 @@ int SDLRenderDevice::render(Renderable& r, SDL_Rect dest) {
 }
 
 int SDLRenderDevice::render(Sprite& r) {
-	// Drawing order is recalculated every frame.
-	r.prio = 0;
-
 	if (r.graphicsIsNull()) {
 		return -1;
 	}
@@ -401,9 +395,9 @@ void SDLRenderDevice::destroyContext() {
 bool SDLRenderDevice::local_to_global(Sprite& r) {
 	m_clip = r.getClip();
 
-	int left = r.map_pos.x - r.getOffset().x;
+	int left = r.dest.x - r.getOffset().x;
 	int right = left + r.getClip().w;
-	int up = r.map_pos.y - r.getOffset().y;
+	int up = r.dest.y - r.getOffset().y;
 	int down = up + r.getClip().h;
 
 	// Check whether we need to render.

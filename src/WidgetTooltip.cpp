@@ -105,8 +105,8 @@ void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
 
 	Point tip_pos = calcPosition(style, pos, size);
 
-	tip.tip_buffer.map_pos.x = tip_pos.x;
-	tip.tip_buffer.map_pos.y = tip_pos.y;
+	tip.tip_buffer.dest.x = tip_pos.x;
+	tip.tip_buffer.dest.y = tip_pos.y;
 	render_device->render(tip.tip_buffer);
 }
 
