@@ -139,7 +139,7 @@ void Avatar::loadLayerDefinitions() {
 
 	FileParser infile;
 	// @CLASS Avatar|Description of engine/hero_options.txt
-	if (infile.open("engine/hero_options.txt", true, false)) {
+	if (infile.open("engine/hero_options.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
