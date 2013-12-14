@@ -3,6 +3,7 @@ Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -57,7 +58,7 @@ GameStateConfig::GameStateConfig ()
 	, tip_buf()
 	, input_key(0)
 	, check_resolution(true) {
-	background = loadGraphicSurface("images/menus/config.png");
+	background.setGraphics(loadGraphicSurface("images/menus/config.png"));
 
 	init();
 	update();
@@ -796,6 +797,7 @@ void GameStateConfig::logic () {
 				delete mods;
 				mods = new ModManager();
 				loadTilesetSettings();
+				loadIcons();
 			}
 			loadMiscSettings();
 			refreshFont();
@@ -1052,7 +1054,8 @@ void GameStateConfig::render () {
 	pos.x = (VIEW_W-FRAME_W)/2;
 	pos.y = (VIEW_H-FRAME_H)/2 + tabheight - tabheight/16;
 
-	SDL_BlitSurface(background,NULL,screen,&pos);
+	background.setDest(pos);
+	render_device->render(background);
 
 	tabControl->render();
 
@@ -1067,11 +1070,13 @@ void GameStateConfig::render () {
 	if (active_tab == 4) {
 		if (input_scrollbox->update) {
 			input_scrollbox->refresh();
-			for (unsigned int i = 0; i < 29; i++) {
-				settings_lb[i]->render(input_scrollbox->contents);
-			}
 		}
 		input_scrollbox->render();
+		for (unsigned int i = 0; i < 29; i++) {
+			settings_lb[i]->local_frame = input_scrollbox->pos;
+			settings_lb[i]->local_offset.y = input_scrollbox->getCursor();
+			settings_lb[i]->render();
+		}
 	}
 
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
@@ -1213,12 +1218,12 @@ bool GameStateConfig::applyVideoSettings(int width, int height) {
 	}
 
 	// Attempt to apply the new settings
-	setupSDLVideoMode(width, height);
+	render_device->createContext(width, height);
 
 	// If the new settings fail, revert to the old ones
 	if (!screen) {
 		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
-		setupSDLVideoMode(VIEW_W, VIEW_H);
+		render_device->createContext(VIEW_W, VIEW_H);
 		return false;
 
 	}
@@ -1329,8 +1334,6 @@ GameStateConfig::~GameStateConfig() {
 	delete input_confirm;
 	delete defaults_confirm;
 	delete resolution_confirm;
-
-	SDL_FreeSurface(background);
 
 	for (std::vector<Widget*>::iterator iter = child_widget.begin(); iter != child_widget.end(); ++iter) {
 		delete (*iter);

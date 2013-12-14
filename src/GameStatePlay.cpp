@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012-2013 Henrik Andersson
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -68,7 +69,6 @@ GameStatePlay::GameStatePlay()
 	, enemy(NULL)
 	, loading(new WidgetLabel())
 	// Load the loading screen image (we currently use the confirm dialog background):
-	, loading_bg(loadGraphicSurface("images/menus/confirm_bg.png"))
 	, npc_id(-1)
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
@@ -78,6 +78,7 @@ GameStatePlay::GameStatePlay()
 	hasMusic = true;
 	// GameEngine scope variables
 
+	loading_bg.setGraphics(loadGraphicSurface("images/menus/confirm_bg.png"));
 	powers = new PowerManager();
 	items = new ItemManager();
 	camp = new CampaignManager();
@@ -923,8 +924,8 @@ void GameStatePlay::render() {
 
 	// Create a list of Renderables from all objects not already on the map.
 	// split the list into the beings alive (may move) and dead beings (must not move)
-	vector<Renderable> rens;
-	vector<Renderable> rens_dead;
+	rens.clear();
+	rens_dead.clear();
 
 	pc->addRenders(rens);
 
@@ -960,16 +961,17 @@ void GameStatePlay::render() {
 }
 
 void GameStatePlay::showLoading() {
-	if (!loading_bg) return;
+	if (loading_bg.graphicsIsNull()) return;
 
 	SDL_Rect dest;
-	dest.x = VIEW_W_HALF - loading_bg->w/2;
-	dest.y = VIEW_H_HALF - loading_bg->h/2;
+	dest.x = VIEW_W_HALF - loading_bg.getGraphicsWidth()/2;
+	dest.y = VIEW_H_HALF - loading_bg.getGraphicsHeight()/2;
 
-	SDL_BlitSurface(loading_bg,NULL,screen,&dest);
+	loading_bg.setDest(dest);
+	render_device->render(loading_bg);
 	loading->render();
 
-	SDL_Flip(screen);
+	render_device->commitFrame();
 }
 
 Avatar *GameStatePlay::getAvatar() const {
@@ -992,7 +994,5 @@ GameStatePlay::~GameStatePlay() {
 	delete loading;
 
 	delete enemyg;
-
-	SDL_FreeSurface(loading_bg);
 }
 

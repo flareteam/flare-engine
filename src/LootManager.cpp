@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -475,14 +476,14 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 	return loot_stack;
 }
 
-void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_dead) {
+void LootManager::addRenders(vector<Renderable*> &ren, vector<Renderable*> &ren_dead) {
 	vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
-		Renderable r = it->animation->getCurrentFrame(0);
+		Renderable& r = it->animation->getCurrentFrame(0);
 		r.map_pos.x = it->pos.x;
 		r.map_pos.y = it->pos.y;
 
-		(it->animation->isLastFrame() ? ren_dead : ren).push_back(r);
+		(it->animation->isLastFrame() ? ren_dead : ren).push_back(&r);
 	}
 }
 

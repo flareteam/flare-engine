@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -55,8 +56,8 @@ private:
 	int option_count;
 	int current_option;
 
-	SDL_Surface *portrait_image;
-	SDL_Surface *portrait_border;
+	Renderable portrait_image;
+	Renderable portrait_border;
 	WidgetButton *button_exit;
 	WidgetButton *button_create;
 	WidgetButton *button_next;

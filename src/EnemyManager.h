@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -61,7 +62,7 @@ public:
 	void handleSpawn();
 	void handlePartyBuff();
 	void logic();
-	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void addRenders(std::vector<Renderable*>& r, std::vector<Renderable*>& r_dead);
 	void checkEnemiesforXP();
 	bool isCleared();
 	Enemy *enemyFocus(Point mouse, FPoint cam, bool alive_only);

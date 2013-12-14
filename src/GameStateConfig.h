@@ -2,6 +2,7 @@
 Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2012 Igor Paliychuk
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -83,7 +84,7 @@ private:
 	WidgetButton        * ok_button;
 	WidgetButton        * defaults_button;
 	WidgetButton        * cancel_button;
-	SDL_Surface         * background;
+	Renderable            background;
 
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;

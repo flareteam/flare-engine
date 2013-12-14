@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -48,7 +49,7 @@ public:
 	std::vector<NPC*> npcs;
 	void handleNewMap();
 	void logic();
-	void addRenders(std::vector<Renderable> &r);
+	void addRenders(std::vector<Renderable*> &r);
 	int getID(std::string npcName);
 	int checkNPCClick(Point mouse, FPoint cam);
 	int getNearestNPC(FPoint pos);

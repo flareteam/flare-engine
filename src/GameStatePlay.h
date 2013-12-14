@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -29,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "GameState.h"
+#include "Utils.h"
 
 class Avatar;
 class Enemy;
@@ -67,7 +69,7 @@ private:
 	QuestLog *quests;
 
 	WidgetLabel *loading;
-	SDL_Surface *loading_bg;
+	Renderable loading_bg;
 
 	bool restrictPowerUse();
 	void checkEnemyFocus();
@@ -93,6 +95,8 @@ private:
 	SDL_Color color_normal;
 
 	std::vector<Title> titles;
+	std::vector<Renderable*> rens;
+	std::vector<Renderable*> rens_dead;
 
 	int nearest_npc;
 

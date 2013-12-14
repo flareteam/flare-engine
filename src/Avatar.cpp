@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -845,31 +846,31 @@ void Avatar::resetActiveAnimation() {
 			anims[i]->reset();
 }
 
-void Avatar::addRenders(vector<Renderable> &r) {
+void Avatar::addRenders(vector<Renderable*>& r) {
 	if (!stats.transformed) {
 		for (unsigned i = 0; i < layer_def[stats.direction].size(); ++i) {
 			unsigned index = layer_def[stats.direction][i];
 			if (anims[index]) {
-				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
+				Renderable& ren = anims[index]->getCurrentFrame(stats.direction);
 				ren.map_pos = stats.pos;
 				ren.prio = i+1;
-				r.push_back(ren);
+				r.push_back(&ren);
 			}
 		}
 	}
 	else {
-		Renderable ren = activeAnimation->getCurrentFrame(stats.direction);
+		Renderable& ren = activeAnimation->getCurrentFrame(stats.direction);
 		ren.map_pos = stats.pos;
-		r.push_back(ren);
+		r.push_back(&ren);
 	}
 	// add effects
 	for (unsigned i = 0; i < stats.effects.effect_list.size(); ++i) {
 		if (stats.effects.effect_list[i].animation && !stats.effects.effect_list[i].animation->isCompleted()) {
-			Renderable ren = stats.effects.effect_list[i].animation->getCurrentFrame(0);
+			Renderable& ren = stats.effects.effect_list[i].animation->getCurrentFrame(0);
 			ren.map_pos = stats.pos;
 			if (stats.effects.effect_list[i].render_above) ren.prio = layer_def[stats.direction].size()+1;
 			else ren.prio = 0;
-			r.push_back(ren);
+			r.push_back(&ren);
 		}
 	}
 }

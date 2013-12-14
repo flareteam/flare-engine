@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -181,8 +182,8 @@ void Enemy::InstantDeath() {
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-Renderable Enemy::getRender() {
-	Renderable r = activeAnimation->getCurrentFrame(stats.direction);
+Renderable& Enemy::getRender() {
+	Renderable& r = activeAnimation->getCurrentFrame(stats.direction);
 	r.map_pos.x = stats.pos.x;
 	r.map_pos.y = stats.pos.y;
 	return r;

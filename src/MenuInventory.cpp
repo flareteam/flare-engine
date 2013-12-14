@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -40,7 +41,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
-	background = loadGraphicSurface("images/menus/inventory.png");
+	background.setGraphics(loadGraphicSurface("images/menus/inventory.png"));
 
 	currency = 0;
 
@@ -211,9 +212,8 @@ void MenuInventory::logic() {
 void MenuInventory::render() {
 	if (!visible) return;
 
-	// background
-	SDL_Rect dest = window_area;
-	SDL_BlitSurface(background, NULL, screen, &dest);
+	background.setDest(window_area);
+	render_device->render(background);
 
 	// close button
 	closeButton->render();
@@ -976,6 +976,5 @@ void MenuInventory::clearHighlight() {
 }
 
 MenuInventory::~MenuInventory() {
-	SDL_FreeSurface(background);
 	delete closeButton;
 }

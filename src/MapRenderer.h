@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -72,23 +73,23 @@ private:
 	// some events are automatically triggered when the map is loaded
 	void executeOnLoadEvents();
 
-	void drawRenderable(std::vector<Renderable>::iterator r_cursor);
+	void drawRenderable(std::vector<Renderable*>::iterator r_cursor);
 
 	// renders one layer into the given sdl surface with offset
 	// offset in screen/surface coordinates.
 	void renderIsoLayer(SDL_Surface *wheretorender, Point offset, const unsigned short layerdata[][256]);
 
 	// renders only objects
-	void renderIsoBackObjects(std::vector<Renderable> &r);
+	void renderIsoBackObjects(std::vector<Renderable*> &r);
 
 	// renders interleaved objects and layer
-	void renderIsoFrontObjects(std::vector<Renderable> &r);
-	void renderIso(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void renderIsoFrontObjects(std::vector<Renderable*> &r);
+	void renderIso(std::vector<Renderable*> &r, std::vector<Renderable*> &r_dead);
 
 	void renderOrthoLayer(const unsigned short layerdata[][256]);
-	void renderOrthoBackObjects(std::vector<Renderable> &r);
-	void renderOrthoFrontObjects(std::vector<Renderable> &r);
-	void renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void renderOrthoBackObjects(std::vector<Renderable*> &r);
+	void renderOrthoFrontObjects(std::vector<Renderable*> &r);
+	void renderOrtho(std::vector<Renderable*> &r, std::vector<Renderable*> &r_dead);
 
 	void clearLayers();
 
@@ -115,7 +116,7 @@ public:
 
 	int load(std::string filename);
 	void logic();
-	void render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void render(std::vector<Renderable*> &r, std::vector<Renderable*> &r_dead);
 
 	void checkEvents(FPoint loc);
 	void checkHotspots();

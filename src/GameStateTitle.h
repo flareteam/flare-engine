@@ -28,7 +28,7 @@ class WidgetScrollBox;
 
 class GameStateTitle : public GameState {
 private:
-	SDL_Surface *logo;
+	Renderable logo;
 	WidgetButton *button_play;
 	WidgetButton *button_exit;
 	WidgetButton *button_cfg;

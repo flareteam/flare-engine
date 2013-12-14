@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -32,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Menu {
 protected:
 
-	SDL_Surface *background;
+	Renderable background;
 
 public:
 	Menu();

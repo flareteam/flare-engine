@@ -1,5 +1,6 @@
 /*
 Copyright © 2013 Igor Paliychuk
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -37,9 +38,8 @@ enum CLICK_TYPE {
 class WidgetSlot : public Widget {
 private:
 
-	SDL_Surface *icons;	// icons surface
-	SDL_Surface *slot_selected;
-	SDL_Surface *slot_checked;
+	Renderable slot_selected;
+	Renderable slot_checked;
 
 	int icon_id;		// current slot id
 	int amount;			// entries amount in slot
@@ -48,7 +48,7 @@ private:
 	int ACTIVATE;
 
 public:
-	WidgetSlot(SDL_Surface *_icon, int _icon_id = -1, int _ACTIVATE = ACCEPT);
+	WidgetSlot(int _icon_id = -1, int _ACTIVATE = ACCEPT);
 	~WidgetSlot();
 
 	void activate();
@@ -61,8 +61,8 @@ public:
 	CLICK_TYPE checkClick(int x, int y);
 	void setIcon(int _icon_id);
 	void setAmount(int _amount, int _max_amount = 1);
-	void render(SDL_Surface *target = NULL);
-	void renderSelection(SDL_Surface *target = NULL);
+	void render();
+	void renderSelection();
 
 	bool enabled;
 	bool checked;

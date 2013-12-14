@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -35,15 +36,14 @@ class StatBlock;
 
 class MenuActiveEffects : public Menu {
 private:
-	SDL_Surface *icons;
-	SDL_Surface *timer;
+	Renderable timer;
 	StatBlock *stats;
 	bool orientation;
 
 	void renderIcon(int icon_id, int index, int current, int max);
 
 public:
-	MenuActiveEffects(SDL_Surface *_icons);
+	MenuActiveEffects();
 	~MenuActiveEffects();
 	void loadGraphics();
 	void update(StatBlock *_stats);

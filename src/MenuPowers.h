@@ -90,10 +90,10 @@ private:
 	std::vector<WidgetButton*> upgradeButtons;
 	bool skip_section;
 
-	SDL_Surface *icons;
-	std::vector<SDL_Surface*> tree_surf;
-	SDL_Surface *powers_unlock;
-	SDL_Surface *overlay_disabled;
+	Renderable background;
+	Renderable powers_unlock;
+	Renderable overlay_disabled;
+	std::vector<Renderable> tree_surf;
 	WidgetButton *closeButton;
 	bool pressed;
 
@@ -130,7 +130,7 @@ private:
 	void loadUpgrade(FileParser &infile);
 
 public:
-	MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar);
+	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();
 	void update();
 	void logic();

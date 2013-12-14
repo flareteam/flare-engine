@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -85,7 +86,7 @@ public:
 	ItemStack checkAutoPickup(FPoint hero_pos, MenuInventory *inv);
 	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);
 
-	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
+	void addRenders(std::vector<Renderable*> &ren, std::vector<Renderable*> &ren_dead);
 
 	int tooltip_margin; // pixels between loot drop center and label
 	bool full_msg;

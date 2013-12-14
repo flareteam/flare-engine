@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -389,10 +390,10 @@ Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 		}
 		p = map_to_screen(enemies[i]->stats.pos.x, enemies[i]->stats.pos.y, cam.x, cam.y);
 
-		r.w = enemies[i]->getRender().src.w;
-		r.h = enemies[i]->getRender().src.h;
-		r.x = p.x - enemies[i]->getRender().offset.x;
-		r.y = p.y - enemies[i]->getRender().offset.y;
+		r.w = enemies[i]->getRender().getClip().w;
+		r.h = enemies[i]->getRender().getClip().h;
+		r.x = p.x - enemies[i]->getRender().getOffset().x;
+		r.y = p.y - enemies[i]->getRender().getOffset().y;
 
 		if (isWithin(r, mouse)) {
 			Enemy *enemy = enemies[i];
@@ -455,25 +456,25 @@ bool EnemyManager::isCleared() {
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-void EnemyManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void EnemyManager::addRenders(vector<Renderable*>& r, vector<Renderable*>& r_dead) {
 	vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
 		bool dead = (*it)->stats.corpse;
 		if (!dead || (dead && (*it)->stats.corpse_ticks > 0)) {
-			Renderable re = (*it)->getRender();
+			Renderable& re = (*it)->getRender();
 			re.prio = 1;
 
 			// draw corpses below objects so that floor loot is more visible
-			(dead ? r_dead : r).push_back(re);
+			(dead ? r_dead : r).push_back(&re);
 
 			// add effects
 			for (unsigned i = 0; i < (*it)->stats.effects.effect_list.size(); ++i) {
 				if ((*it)->stats.effects.effect_list[i].animation) {
-					Renderable ren = (*it)->stats.effects.effect_list[i].animation->getCurrentFrame(0);
+					Renderable& ren = (*it)->stats.effects.effect_list[i].animation->getCurrentFrame(0);
 					ren.map_pos = (*it)->stats.pos;
 					if ((*it)->stats.effects.effect_list[i].render_above) ren.prio = 2;
 					else ren.prio = 0;
-					r.push_back(ren);
+					r.push_back(&ren);
 				}
 			}
 		}

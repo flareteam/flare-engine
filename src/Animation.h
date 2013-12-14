@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -63,19 +64,22 @@ protected:
 
 	// Frame data, all vectors must have the same length:
 	// These are indexed as 8*cur_frame_index + direction.
-	std::vector<SDL_Rect> gfx; // position on the spritesheet to be used.
-	std::vector<Point> render_offset; // "virtual point on the floor"
+	std::vector<Renderable> frames; // cached frames
 	std::vector<unsigned short> duration; // duration of each individual image
 
 	std::vector<short> active_frames;	// which of the visible diffferent frames are active?
 												// This should contain indexes of the gfx vector.
 												// Assume it is sorted, one index occurs at max once.
 
+	Renderable dummy_renderable;  // A blank renderable we can reference when getCurrentFrame() fails
+
 public:
 	Animation(const std::string &_name, const std::string &_type, SDL_Surface *_sprite);
 
 	// returns a copy of this:
 	Animation(const Animation&);
+
+	~Animation();
 
 	// Traditional way to create an animation.
 	// The frames are stored in a grid like fashion, so the individual frame
@@ -101,7 +105,7 @@ public:
 	bool isHoveredBy(const Point &);
 
 	// return the Renderable of the current frame
-	Renderable getCurrentFrame(int direction);
+	Renderable& getCurrentFrame(int direction);
 
 	bool isFirstFrame();
 	bool isLastFrame();

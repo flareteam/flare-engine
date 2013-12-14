@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -218,34 +219,34 @@ void MapRenderer::logic() {
 
 }
 
-bool priocompare(const Renderable &r1, const Renderable &r2) {
-	return r1.prio < r2.prio;
+bool priocompare(const Renderable *r1, const Renderable *r2) {
+	return r1->prio < r2->prio;
 }
 
 /**
  * Sort in the same order as the tiles are drawn
  * Depends upon the map implementation
  */
-void calculatePriosIso(vector<Renderable> &r) {
-	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (int)floor(it->map_pos.x);
-		const unsigned tiley = (int)floor(it->map_pos.y);
-		const int commax = (float)(it->map_pos.x - tilex) * (2<<16);
-		const int commay = (float)(it->map_pos.y - tiley) * (2<<16);
-		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
+void calculatePriosIso(vector<Renderable*> &r) {
+	for (vector<Renderable*>::iterator it = r.begin(); it != r.end(); ++it) {
+		const unsigned tilex = (int)floor((*it)->map_pos.x);
+		const unsigned tiley = (int)floor((*it)->map_pos.y);
+		const int commax = (float)((*it)->map_pos.x - tilex) * (2<<16);
+		const int commay = (float)((*it)->map_pos.y - tiley) * (2<<16);
+		(*it)->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
 	}
 }
 
-void calculatePriosOrtho(vector<Renderable> &r) {
-	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (int)floor(it->map_pos.x);
-		const unsigned tiley = (int)floor(it->map_pos.y);
-		const int commay = 1024 * it->map_pos.y;
-		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
+void calculatePriosOrtho(vector<Renderable*> &r) {
+	for (vector<Renderable*>::iterator it = r.begin(); it != r.end(); ++it) {
+		const unsigned tilex = (int)floor((*it)->map_pos.x);
+		const unsigned tiley = (int)floor((*it)->map_pos.y);
+		const int commay = 1024 * (*it)->map_pos.y;
+		(*it)->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
 }
 
-void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void MapRenderer::render(vector<Renderable*> &r, vector<Renderable*> &r_dead) {
 
 	if (shaky_cam_ticks == 0) {
 		shakycam.x = cam.x;
@@ -281,13 +282,16 @@ void MapRenderer::createBackgroundSurface() {
 	SDL_SetColorKey(backgroundsurface, 0, 0);
 }
 
-void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
-	if (r_cursor->sprite) {
-		SDL_Rect dest;
-		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
-		dest.x = p.x - r_cursor->offset.x;
-		dest.y = p.y - r_cursor->offset.y;
-		SDL_BlitSurface(r_cursor->sprite, &r_cursor->src, screen, &dest);
+void MapRenderer::drawRenderable(vector<Renderable*>::iterator r_cursor) {
+	if (!(*r_cursor)->graphicsIsNull()) {
+		//SDL_Rect dest;
+		Point p = map_to_screen((*r_cursor)->map_pos.x, (*r_cursor)->map_pos.y, shakycam.x, shakycam.y);
+		// FIXME add this back?
+		//dest.x = p.x - (*r_cursor)->getOffset().x;
+		//dest.y = p.y - (*r_cursor)->getOffset().y;
+		//(*r_cursor)->setDest(dest);
+		(*r_cursor)->setDest(p);
+		render_device->render(*(*r_cursor));
 	}
 }
 
@@ -339,7 +343,16 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 				dest.y = p.y - tset.tiles[current_tile].offset.y + offset.y;
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
-				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), wheretorender, &dest);
+				if (wheretorender == NULL) {
+					tset.tiles[current_tile].tile.setDest(dest);
+					tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
+					render_device->render(tset.tiles[current_tile].tile);
+					tset.tiles[current_tile].tile.setGraphics(NULL);
+				}
+				else {
+					SDL_Rect clip = tset.tiles[current_tile].tile.getClip();
+					SDL_BlitSurface(tset.sprites.getGraphics(), &clip, wheretorender, &dest);
+				}
 			}
 		}
 		j += tiles_width;
@@ -352,27 +365,27 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 	}
 }
 
-void MapRenderer::renderIsoBackObjects(vector<Renderable> &r) {
-	vector<Renderable>::iterator it;
+void MapRenderer::renderIsoBackObjects(vector<Renderable*> &r) {
+	vector<Renderable*>::iterator it;
 	for (it = r.begin(); it != r.end(); ++it)
 		drawRenderable(it);
 }
 
-void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
+void MapRenderer::renderIsoFrontObjects(vector<Renderable*> &r) {
 	SDL_Rect dest;
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
 
-	vector<Renderable>::iterator r_cursor = r.begin();
-	vector<Renderable>::iterator r_end = r.end();
+	vector<Renderable*>::iterator r_cursor = r.begin();
+	vector<Renderable*>::iterator r_end = r.end();
 
 	// object layer
 	int_fast16_t j = upperleft.y - tset.max_size_y + tset.max_size_x;
 	int_fast16_t i = upperleft.x - tset.max_size_y - tset.max_size_x;
 
-	while (r_cursor != r_end && ((int)(r_cursor->map_pos.x) + (int)(r_cursor->map_pos.y) < i + j || (int)(r_cursor->map_pos.x) < i)) // implicit floor
+	while (r_cursor != r_end && ((int)((*r_cursor)->map_pos.x) + (int)((*r_cursor)->map_pos.y) < i + j || (int)((*r_cursor)->map_pos.x) < i)) // implicit floor
 		++r_cursor;
 
 	if (index_objectlayer >= layers.size())
@@ -408,11 +421,14 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			if (const uint_fast16_t current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
+				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
+				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && ((int)r_cursor->map_pos.x == i && (int)r_cursor->map_pos.y == j)) { // implicit floor by int cast
+			while (r_cursor != r_end && ((int)(*r_cursor)->map_pos.x == i && (int)(*r_cursor)->map_pos.y == j)) { // implicit floor by int cast
 				drawRenderable(r_cursor);
 				++r_cursor;
 			}
@@ -424,16 +440,16 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 		else
 			j++;
 
-		while (r_cursor != r_end && ((int)r_cursor->map_pos.x + (int)r_cursor->map_pos.y < i + j || (int)r_cursor->map_pos.x <= i)) // implicit floor by int cast
+		while (r_cursor != r_end && ((int)(*r_cursor)->map_pos.x + (int)(*r_cursor)->map_pos.y < i + j || (int)(*r_cursor)->map_pos.x <= i)) // implicit floor by int cast
 			++r_cursor;
 	}
 }
 
-void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void MapRenderer::renderIso(vector<Renderable*> &r, vector<Renderable*> &r_dead) {
 	const Point nulloffset(0, 0);
 	if (ANIMATED_TILES) {
 		for (unsigned i = 0; i < index_objectlayer; ++i)
-			renderIsoLayer(screen, nulloffset, layers[i]);
+			renderIsoLayer(NULL, nulloffset, layers[i]);
 	}
 	else {
 		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender
@@ -464,7 +480,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
 	for (unsigned i = index_objectlayer + 1; i < layers.size(); ++i)
-		renderIsoLayer(screen, nulloffset, layers[i]);
+		renderIsoLayer(NULL, nulloffset, layers[i]);
 
 	checkTooltip();
 }
@@ -490,27 +506,30 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				SDL_Rect dest;
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
+				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
+				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}
 			p.x += TILE_W;
 		}
 	}
 }
 
-void MapRenderer::renderOrthoBackObjects(std::vector<Renderable> &r) {
+void MapRenderer::renderOrthoBackObjects(std::vector<Renderable*> &r) {
 	// some renderables are drawn above the background and below the objects
-	vector<Renderable>::iterator it;
+	vector<Renderable*>::iterator it;
 	for (it = r.begin(); it != r.end(); ++it)
 		drawRenderable(it);
 }
 
-void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
+void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable*> &r) {
 
 	short int i;
 	short int j;
 	SDL_Rect dest;
-	vector<Renderable>::iterator r_cursor = r.begin();
-	vector<Renderable>::iterator r_end = r.end();
+	vector<Renderable*>::iterator r_cursor = r.begin();
+	vector<Renderable*>::iterator r_end = r.end();
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
@@ -519,7 +538,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	const short max_tiles_width  = min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
-	while (r_cursor != r_end && (int)(r_cursor->map_pos.y) < startj)
+	while (r_cursor != r_end && (int)((*r_cursor)->map_pos.y) < startj)
 		++r_cursor;
 
 	if (index_objectlayer >= layers.size())
@@ -534,23 +553,26 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 			if (const unsigned short current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
+				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
+				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(NULL);
 			}
 			p.x += TILE_W;
 
-			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) < i) // implicit floor
+			while (r_cursor != r_end && (int)((*r_cursor)->map_pos.y) == j && (int)((*r_cursor)->map_pos.x) < i) // implicit floor
 				++r_cursor;
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) == i) // implicit floor
+			while (r_cursor != r_end && (int)((*r_cursor)->map_pos.y) == j && (int)((*r_cursor)->map_pos.x) == i) // implicit floor
 				drawRenderable(r_cursor++);
 		}
-		while (r_cursor != r_end && (int)(r_cursor->map_pos.y) <= j) // implicit floor
+		while (r_cursor != r_end && (int)((*r_cursor)->map_pos.y) <= j) // implicit floor
 			++r_cursor;
 	}
 }
 
-void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void MapRenderer::renderOrtho(vector<Renderable*> &r, vector<Renderable*> &r_dead) {
 
 	unsigned index = 0;
 	while (index < index_objectlayer)
@@ -685,8 +707,8 @@ void MapRenderer::checkHotspots() {
 						SDL_Rect dest;
 						dest.x = p.x - tset.tiles[current_tile].offset.x;
 						dest.y = p.y - tset.tiles[current_tile].offset.y;
-						dest.w = tset.tiles[current_tile].src.w;
-						dest.h = tset.tiles[current_tile].src.h;
+						dest.w = tset.tiles[current_tile].tile.getClip().w;
+						dest.h = tset.tiles[current_tile].tile.getClip().h;
 
 						if (isWithin(dest, inpt->mouse)) {
 							// Now that the mouse is within the rectangle of the tile, we can check for
@@ -694,9 +716,9 @@ void MapRenderer::checkHotspots() {
 							// otherwise the pixel precise check might hit a neighbouring tile in the
 							// tileset. We need to calculate the point relative to the
 							Point p1;
-							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].src.x;
-							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].src.y;
-							matched |= checkPixel(p1, tset.sprites);
+							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile.getClip().x;
+							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile.getClip().y;
+							matched |= checkPixel(p1, tset.sprites.getGraphics());
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;
 						}

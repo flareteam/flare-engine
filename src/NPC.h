@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -50,7 +51,7 @@ public:
 	bool checkMovement(unsigned int dialog_node);
 	bool processDialog(unsigned int dialog_node, unsigned int& event_cursor);
 	void processEvent(unsigned int dialog_node, unsigned int cursor);
-	virtual Renderable getRender();
+	virtual Renderable& getRender();
 
 	// general info
 	std::string name;
@@ -62,7 +63,7 @@ public:
 	int direction;
 
 	// talker info
-	SDL_Surface *portrait;
+	Renderable portrait;
 	bool talker;
 
 	// vendor info

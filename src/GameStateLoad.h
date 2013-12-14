@@ -62,11 +62,11 @@ private:
 
 	MenuConfirm *confirm;
 
-	SDL_Surface *background;
-	SDL_Surface *selection;
-	SDL_Surface *portrait_border;
-	SDL_Surface *portrait;
-	std::vector<SDL_Surface *> sprites[GAME_SLOT_MAX];
+	Renderable background;
+	Renderable selection;
+	Renderable portrait_border;
+	Renderable portrait;
+	std::vector<Renderable> sprites[GAME_SLOT_MAX];
 	StatBlock stats[GAME_SLOT_MAX];
 	std::vector<int> equipped[GAME_SLOT_MAX];
 	std::vector<std::string> preview_layer;
@@ -87,7 +87,6 @@ private:
 	int current_frame;
 	int frame_ticker;
 
-	SDL_Rect portrait_pos;
 	SDL_Rect gameslot_pos;
 	SDL_Rect preview_pos;
 

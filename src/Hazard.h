@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -86,7 +87,7 @@ public:
 						// some hazard animations have random/varietal options
 
 	bool isDangerousNow();
-	void addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void addRenderable(std::vector<Renderable*>& r, std::vector<Renderable*>& r_dead);
 
 	bool on_floor; // rendererable goes on the floor layer
 	int delay_frames;
