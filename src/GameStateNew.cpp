@@ -224,7 +224,7 @@ void GameStateNew::loadOptions(const string& filename) {
 			base.push_back(fin.nextValue());
 			head.push_back(fin.nextValue());
 			portrait.push_back(fin.nextValue());
-			name.push_back(fin.nextValue());
+			name.push_back(msg->get(fin.nextValue()));
 		}
 	}
 	fin.close();
