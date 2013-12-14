@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Pavel Kirpichyov (Cheshire)
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -64,8 +65,8 @@ MenuEnemy::MenuEnemy() {
 }
 
 void MenuEnemy::loadGraphics() {
-	background = loadGraphicSurface("images/menus/enemy_bar.png");
-	bar_hp = loadGraphicSurface("images/menus/enemy_bar_hp.png");
+	background.setGraphics(loadGraphicSurface("images/menus/enemy_bar.png"));
+	bar_hp.setGraphics(loadGraphicSurface("images/menus/enemy_bar_hp.png"));
 }
 
 void MenuEnemy::handleNewMap() {
@@ -93,7 +94,8 @@ void MenuEnemy::render() {
 	dest.w = bar_pos.w;
 	dest.h = bar_pos.h;
 
-	SDL_BlitSurface(background, NULL, screen, &dest);
+	background.setDest(dest);
+	render_device->render(background);
 
 	if (enemy->stats.get(STAT_HP_MAX) == 0)
 		hp_bar_length = 0;
@@ -107,7 +109,9 @@ void MenuEnemy::render() {
 	src.h = bar_pos.h;
 	src.w = hp_bar_length;
 
-	SDL_BlitSurface(bar_hp, &src, screen, &dest);
+	bar_hp.setClip(src);
+	bar_hp.setDest(dest);
+	render_device->render(bar_hp);
 
 	stringstream ss;
 	ss.str("");
@@ -136,6 +140,4 @@ void MenuEnemy::render() {
 }
 
 MenuEnemy::~MenuEnemy() {
-	SDL_FreeSurface(background);
-	SDL_FreeSurface(bar_hp);
 }

@@ -62,7 +62,7 @@ public:
 	int direction;
 
 	// talker info
-	SDL_Surface *portrait;
+	Sprite portrait;
 	bool talker;
 
 	// vendor info

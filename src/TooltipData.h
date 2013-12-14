@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define TOOLTIPDATA_H
 
 #include "SharedResources.h"
+#include "Utils.h"
 
 enum STYLE {
 	STYLE_FLOAT,
@@ -40,8 +41,8 @@ class TooltipData {
 public:
 	std::vector<std::string> lines;
 	std::vector<SDL_Color> colors;
-	SDL_Surface *tip_buffer;
 	SDL_Color default_color;
+	Sprite tip_buffer;
 
 	TooltipData();
 	~TooltipData();

@@ -1,6 +1,7 @@
 /*
 Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -34,14 +35,15 @@ public:
 	void activate();
 	void Check ();
 	void unCheck ();
+	void toggleCheck ();
 	bool checkClick ();
 	bool checkClick (int x, int y);
 	bool isChecked () const;
-	void render (SDL_Surface *target = NULL);
+	void render ();
 	bool enabled;
 
 private:
-	SDL_Surface * cb;
+	Sprite cb;
 	bool checked;
 	bool pressed;
 };

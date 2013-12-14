@@ -55,8 +55,8 @@ private:
 	int option_count;
 	int current_option;
 
-	SDL_Surface *portrait_image;
-	SDL_Surface *portrait_border;
+	Sprite portrait_image;
+	Sprite portrait_border;
 	WidgetButton *button_exit;
 	WidgetButton *button_create;
 	WidgetButton *button_next;

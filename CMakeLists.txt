@@ -153,6 +153,7 @@ Set (FLARE_SOURCES
 	./src/SaveLoad.cpp
 	./src/SDL_gfxBlitFunc.c
 	./src/Settings.cpp
+	./src/SDLRenderDevice.cpp
 	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
 	./src/StatBlock.cpp

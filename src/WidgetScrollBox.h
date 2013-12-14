@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -41,9 +42,9 @@ public:
 	void logic(int x, int y);
 	void resize(int h);
 	void refresh();
-	void render(SDL_Surface *target = NULL);
+	void render();
 
-	SDL_Surface * contents;
+	Sprite contents;
 	bool update;
 	SDL_Color bg;
 	bool transparent;
@@ -53,6 +54,9 @@ public:
 	bool getNext();
 	bool getPrev();
 	void activate();
+	int getCursor() {
+		return cursor;
+	}
 
 private:
 	void scroll(int amount);

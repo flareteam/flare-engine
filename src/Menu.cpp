@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -26,8 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 Menu::Menu()
-	: background(NULL)
-	, visible(false)
+	: visible(false)
 	, sfx_open(0)
 	, sfx_close(0) {
 }
@@ -73,5 +73,15 @@ void Menu::align() {
 	else if (alignment == "bottomright") {
 		window_area.x = (VIEW_W-temp.w)+temp.x;
 		window_area.y = (VIEW_H-temp.h)+temp.y;
+	}
+
+	if (!background.graphicsIsNull()) {
+		background.setClip(
+			0,
+			0,
+			window_area.w,
+			window_area.h
+		);
+		background.setDest(window_area);
 	}
 }

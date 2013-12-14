@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "GameState.h"
+#include "Utils.h"
 
 class Avatar;
 class Enemy;
@@ -67,7 +68,7 @@ private:
 	QuestLog *quests;
 
 	WidgetLabel *loading;
-	SDL_Surface *loading_bg;
+	Sprite loading_bg;
 
 	bool restrictPowerUse();
 	void checkEnemyFocus();

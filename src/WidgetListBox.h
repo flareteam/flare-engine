@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -37,7 +38,7 @@ private:
 
 	std::string fileName; // the path to the ListBoxs background image
 
-	SDL_Surface *listboxs;
+	Sprite listboxs;
 	Mix_Chunk *click;
 
 	int list_amount;
@@ -75,7 +76,7 @@ public:
 	int getSize();
 	void scrollUp();
 	void scrollDown();
-	void render(SDL_Surface *target = NULL);
+	void render();
 	void refresh();
 
 	bool getNext();

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -40,7 +41,7 @@ private:
 
 	std::string fileName; // the path to the buttons background image
 
-	SDL_Surface *buttons;
+	Sprite buttons;
 
 	WidgetLabel wlabel;
 
@@ -61,7 +62,7 @@ public:
 	void loadArt();
 	bool checkClick();
 	bool checkClick(int x, int y);
-	void render(SDL_Surface *target = NULL);
+	void render();
 	void refresh();
 
 	std::string label;

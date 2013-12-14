@@ -49,7 +49,6 @@ NPC::NPC()
 	, pos()
 	, level(1)
 	, direction(0)
-	, portrait(NULL)
 	, talker(false)
 	, vendor(false)
 	, stock()
@@ -165,7 +164,7 @@ void NPC::loadGraphics(const string& filename_portrait) {
 		activeAnimation = animationSet->getAnimation();
 	}
 	if (filename_portrait != "")
-		portrait = loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true);
+		portrait.setGraphics(loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true));
 }
 
 /**
@@ -413,7 +412,6 @@ NPC::~NPC() {
 		anim->decreaseCount(gfx);
 	}
 
-	if (portrait != NULL) SDL_FreeSurface(portrait);
 	while (!vox_intro.empty()) {
 		snd->unload(vox_intro.back());
 		vox_intro.pop_back();

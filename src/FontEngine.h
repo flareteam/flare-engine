@@ -52,7 +52,7 @@ public:
 
 class FontEngine {
 private:
-	SDL_Surface *ttf;
+	Sprite ttf;
 	std::map<std::string,SDL_Color> color_map;
 	std::vector<FontStyle> font_styles;
 	FontStyle *active_font;

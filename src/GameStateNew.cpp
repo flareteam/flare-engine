@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -47,7 +48,6 @@ GameStateNew::GameStateNew() : GameState() {
 	game_slot = 0;
 	current_option = 0;
 	option_count = 0;
-	portrait_image = NULL;
 	tip_buf.clear();
 	modified_name = false;
 
@@ -202,12 +202,17 @@ GameStateNew::GameStateNew() : GameState() {
 }
 
 void GameStateNew::loadGraphics() {
-	portrait_border = loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true);
+	portrait_border.setGraphics(
+		loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true)
+	);
 }
 
 void GameStateNew::loadPortrait(const string& portrait_filename) {
-	SDL_FreeSurface(portrait_image);
-	portrait_image = loadGraphicSurface("images/portraits/" + portrait_filename + ".png");
+	portrait_image.clearGraphics();
+	portrait_image.setGraphics(
+		loadGraphicSurface("images/portraits/" + portrait_filename + ".png")
+	);
+	portrait_image.setDest(portrait_pos);
 }
 
 /**
@@ -323,8 +328,12 @@ void GameStateNew::render() {
 	dest.x = portrait_pos.x + (VIEW_W - FRAME_W)/2;
 	dest.y = portrait_pos.y + (VIEW_H - FRAME_H)/2;
 
-	SDL_BlitSurface(portrait_image, &src, screen, &dest);
-	SDL_BlitSurface(portrait_border, &src, screen, &dest);
+	portrait_image.setClip(src);
+	portrait_image.setDest(dest);
+	render_device->render(portrait_image);
+	portrait_border.setClip(src);
+	portrait_border.setDest(dest);
+	render_device->render(portrait_border);
 
 	// display labels
 	if (!portrait_label.hidden) label_portrait->render();
@@ -360,8 +369,6 @@ std::string GameStateNew::getClassTooltip(int index) {
 }
 
 GameStateNew::~GameStateNew() {
-	SDL_FreeSurface(portrait_image);
-	SDL_FreeSurface(portrait_border);
 	delete button_exit;
 	delete button_create;
 	delete button_next;
