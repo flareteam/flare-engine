@@ -62,7 +62,6 @@ public:
 	Sprite& operator=(const Sprite& other);
 	~Sprite();
 
-	FPoint dest;
 	SDL_Rect local_frame;
 	bool keep_graphics; // don't free the sprite surface when deconstructing, used primarily for animations
 
@@ -83,6 +82,8 @@ public:
 	void setDest(const SDL_Rect& _dest);
 	void setDest(const Point& _dest);
 	void setDest(int x, int y);
+	void setDestX(int x);
+	void setDestY(int y);
 	FPoint getDest();
 	int getGraphicsWidth();
 	int getGraphicsHeight();
@@ -91,6 +92,7 @@ private:
 	SDL_Surface *sprite; // image to be used
 	SDL_Rect src; // location on the sprite in pixel coordinates.
 	Point offset;      // offset from map_pos to topleft corner of sprite
+	FPoint dest;
 };
 
 class SDLRenderDevice : public RenderDevice {
@@ -177,6 +179,8 @@ public:
 	/** Destroy context on exit.
 	 */
 	virtual void destroyContext();
+
+	virtual void fillImageWithColor(Image *dst, SDL_Rect *dstrect, Uint32 color);
 
 	/**
 	 * Map a RGB color value to a pixel format.

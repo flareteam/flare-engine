@@ -153,9 +153,9 @@ void WidgetScrollBox::resize(int h) {
 	if (pos.h > h) h = pos.h;
 
 	contents.clearGraphics();
-	contents.setGraphics(createAlphaSurface(pos.w,h), false);
+	contents.setGraphics(createAlphaSurface(pos.w,h));
 	if (!transparent) {
-		SDL_FillRect(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
+		render_device->fillImageWithColor(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
 		SDL_SetAlpha(contents.getGraphics(), 0, SDL_ALPHA_OPAQUE);
 	}
 
@@ -171,9 +171,9 @@ void WidgetScrollBox::refresh() {
 		}
 
 		contents.clearGraphics();
-		contents.setGraphics(createAlphaSurface(pos.w,h), false);
+		contents.setGraphics(createAlphaSurface(pos.w,h));
 		if (!transparent) {
-			SDL_FillRect(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
+			render_device->fillImageWithColor(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
 			SDL_SetAlpha(contents.getGraphics(), 0, SDL_ALPHA_OPAQUE);
 		}
 		contents.setGraphics(contents.getGraphics());

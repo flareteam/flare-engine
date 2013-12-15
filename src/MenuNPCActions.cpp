@@ -203,7 +203,7 @@ void MenuNPCActions::update() {
 		Uint32 bg = render_device->MapRGBA(surface->format,
 											background_color.r, background_color.g,
 											background_color.b, background_alpha);
-		SDL_FillRect(surface, NULL, bg);
+		render_device->fillImageWithColor(surface, NULL, bg);
 		action_menu.setGraphics(surface);
 		action_menu.setClip(0,0,surface->w,surface->h);
 	}

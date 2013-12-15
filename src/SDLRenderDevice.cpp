@@ -184,6 +184,14 @@ void Sprite::setDest(int x, int y) {
 	dest.y = (float)y;
 }
 
+void Sprite::setDestX(int x) {
+	dest.x = (float)x;
+}
+
+void Sprite::setDestY(int y) {
+	dest.y = (float)y;
+}
+
 FPoint Sprite::getDest() {
 	return dest;
 }
@@ -415,6 +423,10 @@ void SDLRenderDevice::destroyContext() {
 	return;
 }
 
+void SDLRenderDevice::fillImageWithColor(Image *dst, SDL_Rect *dstrect, Uint32 color) {
+	SDL_FillRect(dst, dstrect, color);
+}
+
 Uint32 SDLRenderDevice::MapRGB(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b)
 {
 	return SDL_MapRGB(fmt, r, g, b);
@@ -438,9 +450,9 @@ Uint32 SDLRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 bool SDLRenderDevice::local_to_global(Sprite& r) {
 	m_clip = r.getClip();
 
-	int left = r.dest.x - r.getOffset().x;
+	int left = r.getDest().x - r.getOffset().x;
 	int right = left + r.getClip().w;
-	int up = r.dest.y - r.getOffset().y;
+	int up = r.getDest().y - r.getOffset().y;
 	int down = up + r.getClip().h;
 
 	// Check whether we need to render.

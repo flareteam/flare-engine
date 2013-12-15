@@ -460,7 +460,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 
 			backgroundsurfaceoffset = shakycam;
 
-			SDL_FillRect(backgroundsurface, 0, 0);
+			render_device->fillImageWithColor(backgroundsurface, NULL, 0);
 			Point off(VIEW_W_HALF, VIEW_H_HALF);
 			for (unsigned i = 0; i < index_objectlayer; ++i)
 				renderIsoLayer(backgroundsurface, off, layers[i]);

@@ -138,6 +138,8 @@ public:
 	 */
 	virtual void destroyContext() = 0;
 
+	virtual void fillImageWithColor(Image *dst, SDL_Rect *dstrect, Uint32 color) = 0;
+
 	/**
 	 * Map a RGB color value to a pixel format.
 	 */

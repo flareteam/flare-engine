@@ -90,7 +90,7 @@ void MenuMiniMap::render(FPoint hero_pos) {
 void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 	map_size.x = map_w;
 	map_size.y = map_h;
-	SDL_FillRect(map_surface.getGraphics(), 0, render_device->MapRGBA(map_surface.getGraphics()->format,0,0,0,0));
+	render_device->fillImageWithColor(map_surface.getGraphics(), NULL, render_device->MapRGBA(map_surface.getGraphics()->format,0,0,0,0));
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
 		prerenderIso(collider);

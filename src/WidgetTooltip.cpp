@@ -105,8 +105,8 @@ void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
 
 	Point tip_pos = calcPosition(style, pos, size);
 
-	tip.tip_buffer.dest.x = tip_pos.x;
-	tip.tip_buffer.dest.y = tip_pos.y;
+	tip.tip_buffer.setDestX(tip_pos.x);
+	tip.tip_buffer.setDestY(tip_pos.y);
 	render_device->render(tip.tip_buffer);
 }
 
@@ -143,7 +143,7 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	// style the tooltip background
 	// currently this is plain black
-	SDL_FillRect(surface, NULL, render_device->MapRGB(surface->format,0,0,0));
+	render_device->fillImageWithColor(surface, NULL, render_device->MapRGB(surface->format,0,0,0));
 
 	int cursor_y = margin;
 
