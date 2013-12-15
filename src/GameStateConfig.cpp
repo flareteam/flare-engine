@@ -797,7 +797,7 @@ void GameStateConfig::logic () {
 				delete mods;
 				mods = new ModManager();
 				loadTilesetSettings();
-				loadIcons();
+				render_device->loadIcons();
 			}
 			loadMiscSettings();
 			refreshFont();

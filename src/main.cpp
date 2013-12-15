@@ -99,7 +99,7 @@ static void init() {
 		exit(1);
 	}
 
-	loadIcons();
+	render_device->loadIcons();
 	// Set Gamma
 	if (CHANGE_GAMMA)
 		SDL_SetGamma(GAMMA,GAMMA,GAMMA);

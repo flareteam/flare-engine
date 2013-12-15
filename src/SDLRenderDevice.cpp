@@ -1,5 +1,6 @@
 /*
 Copyright © 2013 Kurt Rinnert
+Copyright © 2013 Igor Paliychuk
 
 This file is part of FLARE.
 
@@ -28,22 +29,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Sprite::Sprite()
-	: dest()
-	, local_frame(SDL_Rect())
-	, keep_graphics(false)
-	, sprite(NULL)
-	, src(SDL_Rect())
-	, offset()
-{}
-
 Sprite::Sprite(const Sprite& other)
-	: dest(other.dest)
-	, local_frame(other.local_frame)
-	, keep_graphics(false)
-	, src(other.src)
-	, offset(other.offset)
 {
+	local_frame = other.local_frame;
+	keep_graphics = other.keep_graphics;
+	src = other.src;
+	offset = other.offset;
+	dest = other.dest;
+
 	if (other.sprite != NULL) {
 		sprite = SDL_DisplayFormatAlpha(other.sprite);
 	} else {
@@ -57,11 +50,11 @@ Sprite& Sprite::operator=(const Sprite& other) {
 	} else {
 		sprite = NULL;
 	}
-	dest = other.dest;
 	local_frame = other.local_frame;
 	keep_graphics = other.keep_graphics;
 	src = other.src;
 	offset = other.offset;
+	dest = other.dest;
 
 	return *this;
 }
@@ -251,7 +244,7 @@ int SDLRenderDevice::render(Renderable& r, SDL_Rect dest) {
 	return SDL_BlitSurface(r.sprite, &r.src, screen, &dest);
 }
 
-int SDLRenderDevice::render(Sprite& r) {
+int SDLRenderDevice::render(ISprite& r) {
 	if (r.graphicsIsNull()) {
 		return -1;
 	}
@@ -447,7 +440,12 @@ Uint32 SDLRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 	return SDL_MapRGBA(screen->format, r, g, b, a);
 }
 
-bool SDLRenderDevice::local_to_global(Sprite& r) {
+void SDLRenderDevice::loadIcons() {
+	icons.clearGraphics();
+	icons.setGraphics(loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
+}
+
+bool SDLRenderDevice::local_to_global(ISprite& r) {
 	m_clip = r.getClip();
 
 	int left = r.getDest().x - r.getOffset().x;
@@ -793,11 +791,6 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 	*bmask = 0x00ff0000;
 	*amask = 0xff000000;
 #endif
-}
-
-void loadIcons() {
-	icons.clearGraphics();
-	icons.setGraphics(loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
 }
 
 void freeImage(Image* image) {
