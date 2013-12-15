@@ -27,6 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
+const std::string RELEASE_VERSION = "Flare Alpha v0.19";
+
 class Element{
 public:
 	std::string name;

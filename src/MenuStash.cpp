@@ -63,7 +63,7 @@ MenuStash::MenuStash(StatBlock *_stats)
 			else if (infile.key == "stash_rows") {
 				slots_rows = eatFirstInt(infile.val,',');
 			}
-			else if (infile.key == "caption") {
+			else if (infile.key == "label_title") {
 				title =  eatLabelInfo(infile.val);
 			}
 			else if (infile.key == "currency") {

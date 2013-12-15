@@ -528,7 +528,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 			if (!power_cell[i].upgrades.empty()) {
 				short next_level = nextLevel(i);
 				if (next_level != -1) {
-					tip.addText(msg->get("\nNext Level:"));
+					tip.addText("\n" + msg->get("Next Level:"));
 					generatePowerDescription(&tip, next_level, upgrade);
 				}
 			}
@@ -767,7 +767,7 @@ void MenuPowers::loadHeader(FileParser &infile) {
 	else if (infile.key == "tab_tree") {
 		tree_image_files.push_back(eatFirstString(infile.val, ','));
 	}
-	else if (infile.key == "caption") {
+	else if (infile.key == "label_title") {
 		title = eatLabelInfo(infile.val);
 	}
 	else if (infile.key == "unspent_points") {
