@@ -231,14 +231,16 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 		ttf.setGraphics(TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color));
 
 		// preserve alpha transparency of text buffers
-		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), ttf.getClip(), target, dest_rect, true);
+		SDL_Rect clip = ttf.getClip();
+		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect, true);
 	}
 	else if (target == NULL) {
 		render_device->renderText(active_font->ttfont, text, color, dest_rect);
 	}
 	else {
+		SDL_Rect clip = ttf.getClip();
 		ttf.setGraphics(TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color));
-		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), ttf.getClip(), target, dest_rect);
+		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect);
 	}
 	ttf.clearGraphics();
 
