@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
-#include "SDL_gfxBlitFunc.h"
 #include "FontEngine.h"
 #include "FileParser.h"
 #include "SharedResources.h"
@@ -205,7 +204,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
  * Render the given text at (x,y) on the target image.
  * Justify is left, right, or center
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_Surface *target, SDL_Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color) {
 	SDL_Rect dest_rect;
 
 	// calculate actual starting x,y based on justify
@@ -229,10 +228,10 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 
 	// render and blit the text
 	if (active_font->blend && target != screen) {
-		ttf.setGraphics(TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color), false);
+		ttf.setGraphics(TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color));
 
 		// preserve alpha transparency of text buffers
-		if (!ttf.graphicsIsNull()) SDL_gfxBlitRGBA(ttf.getGraphics(), NULL, target, &dest_rect);
+		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), ttf.getClip(), target, dest_rect, true);
 	}
 	else if (target == NULL) {
 		render_device->renderText(
@@ -243,8 +242,8 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 		);
 	}
 	else {
-		ttf.setGraphics(TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color), false);
-		if (!ttf.graphicsIsNull()) SDL_BlitSurface(ttf.getGraphics(), NULL, target, &dest_rect);
+		ttf.setGraphics(TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color));
+		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), ttf.getClip(), target, dest_rect);
 	}
 	ttf.clearGraphics();
 
@@ -253,7 +252,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 /**
  * Word wrap to width
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_Surface *target, int width, SDL_Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, SDL_Color color) {
 
 	string fulltext = text + " ";
 	cursor_y = y;
@@ -293,12 +292,12 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, SDL_Surface *target, SDL_Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color) {
 	render(text, x+1, y+1, justify, target, FONT_BLACK);
 	render(text, x, y, justify, target, color);
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, SDL_Surface *target, int width, SDL_Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, SDL_Color color) {
 	render(text, x+1, y+1, justify, target, width, FONT_BLACK);
 	render(text, x, y, justify, target, width, color);
 }

@@ -72,7 +72,7 @@ public:
 	virtual int render(Sprite& r) = 0;
 	virtual int render(Renderable& r, SDL_Rect dest) = 0;
 	virtual int renderImage(Image* image, SDL_Rect& src) = 0;
-	virtual int renderToImage(Image* src_image, SDL_Rect& src, Image* dest_image, SDL_Rect& dest) = 0;
+	virtual int renderToImage(Image* src_image, SDL_Rect& src, Image* dest_image, SDL_Rect& dest, bool dest_is_transparent = false) = 0;
 
 	/** Render text to the screen.
 	 */
