@@ -143,7 +143,7 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	// style the tooltip background
 	// currently this is plain black
-	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format,0,0,0));
+	SDL_FillRect(surface, NULL, render_device->MapRGB(surface->format,0,0,0));
 
 	int cursor_y = margin;
 

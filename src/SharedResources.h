@@ -41,7 +41,6 @@ Created and destroyed by main.cpp
 #include "SoundManager.h"
 #include "RenderDevice.h"
 
-extern SDL_Surface *screen;
 extern SDL_Joystick *joy;
 
 extern AnimationManager *anim;

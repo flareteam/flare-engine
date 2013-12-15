@@ -200,9 +200,9 @@ void MenuNPCActions::update() {
 		action_menu.clearGraphics();
 		Image *surface;
 		surface = createAlphaSurface(w,h);
-		Uint32 bg = SDL_MapRGBA(surface->format,
-								background_color.r, background_color.g,
-								background_color.b, background_alpha);
+		Uint32 bg = render_device->MapRGBA(surface->format,
+											background_color.r, background_color.g,
+											background_color.b, background_alpha);
 		SDL_FillRect(surface, NULL, bg);
 		action_menu.setGraphics(surface);
 		action_menu.setClip(0,0,surface->w,surface->h);

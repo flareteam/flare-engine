@@ -200,7 +200,7 @@ SDLRenderDevice::SDLRenderDevice() {
 	cout << "Using Render Device: SDLRenderDevice" << endl;
 }
 
-void SDLRenderDevice::createContext(int width, int height) {
+int SDLRenderDevice::createContext(int width, int height) {
 
 	if (is_initialized) {
 		SDL_FreeSurface(screen);
@@ -226,6 +226,17 @@ void SDLRenderDevice::createContext(int width, int height) {
 	else {
 		is_initialized = true;
 	}
+
+	return (screen != NULL ? 0 : -1);
+}
+
+SDL_Rect SDLRenderDevice::getContextSize()
+{
+	SDL_Rect size;
+	size.x = size.y = 0;
+	size.h = screen->h;
+	size.w = screen->w;
+	return size;
 }
 
 int SDLRenderDevice::render(Renderable& r, SDL_Rect dest) {
@@ -402,6 +413,26 @@ void SDLRenderDevice::destroyContext() {
 	// Nothing to be done; SDL_Quit() will handle it all
 	// for this render device.
 	return;
+}
+
+Uint32 SDLRenderDevice::MapRGB(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b)
+{
+	return SDL_MapRGB(fmt, r, g, b);
+}
+
+Uint32 SDLRenderDevice::MapRGB(Uint8 r, Uint8 g, Uint8 b)
+{
+	return SDL_MapRGB(screen->format, r, g, b);
+}
+
+Uint32 SDLRenderDevice::MapRGBA(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+	return SDL_MapRGBA(fmt, r, g, b, a);
+}
+
+Uint32 SDLRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+	return SDL_MapRGBA(screen->format, r, g, b, a);
 }
 
 bool SDLRenderDevice::local_to_global(Sprite& r) {
@@ -622,7 +653,7 @@ Image* createSurface(int width, int height) {
 	}
 	else {
 
-		SDL_SetColorKey(surface, SDL_SRCCOLORKEY, SDL_MapRGB(surface->format,255,0,255));
+		SDL_SetColorKey(surface, SDL_SRCCOLORKEY, render_device->MapRGB(surface->format,255,0,255));
 
 		SDL_Surface *cleanup = surface;
 		surface = SDL_DisplayFormat(surface);
@@ -645,7 +676,7 @@ Image* loadGraphicSurface(std::string filename, std::string errormessage, bool I
 	}
 	else {
 		if (HavePinkColorKey)
-			SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, SDL_MapRGB(cleanup->format, 255, 0, 255));
+			SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, render_device->MapRGB(cleanup->format, 255, 0, 255));
 		ret = SDL_DisplayFormatAlpha(cleanup);
 		SDL_FreeSurface(cleanup);
 	}

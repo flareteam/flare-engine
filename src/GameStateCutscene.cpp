@@ -70,16 +70,16 @@ bool Scene::logic(FPoint *caption_margins) {
 
 		if (components.front().type == "caption") {
 
-			int caption_width = screen->w - (screen->w * (caption_margins->x * 2));
+			int caption_width = render_device->getContextSize().w - (render_device->getContextSize().w * (caption_margins->x * 2));
 			font->setFont("font_captions");
 			caption = components.front().s;
 			caption_size = font->calc_size(caption, caption_width);
 
 			delete caption_box;
-			caption_box = new WidgetScrollBox(screen->w,caption_size.y);
+			caption_box = new WidgetScrollBox(render_device->getContextSize().w,caption_size.y);
 			caption_box->pos.x = 0;
-			caption_box->pos.y = screen->h - caption_size.y - (int)(VIEW_H * caption_margins->y);
-			font->renderShadowed(caption, screen->w / 2, 0,
+			caption_box->pos.y = render_device->getContextSize().h - caption_size.y - (int)(VIEW_H * caption_margins->y);
+			font->renderShadowed(caption, render_device->getContextSize().w / 2, 0,
 								 JUSTIFY_CENTER,
 								 caption_box->contents.getGraphics(),
 								 caption_width,

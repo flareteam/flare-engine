@@ -103,10 +103,12 @@ public:
 
 	/** Create context on startup.
 	 */
-	virtual void createContext(
+	virtual int createContext(
 		int width,
 		int height
 	);
+
+	virtual SDL_Rect getContextSize();
 
 	/** Render surface to screen.
 	 */
@@ -176,12 +178,34 @@ public:
 	 */
 	virtual void destroyContext();
 
+	/**
+	 * Map a RGB color value to a pixel format.
+	 */
+	virtual Uint32 MapRGB(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b);
+
+	/**
+	 * Map a RGB color value to a screen pixel format.
+	 */
+	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
+
+	/**
+	 * Map a RGBA color value to a pixel format.
+	 */
+	virtual Uint32 MapRGBA(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
+	/**
+	 * Map a RGBA color value to a screen pixel format.
+	 */
+	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
+
 private:
 
 	// Compute clipping and global position from local frame.
 	bool local_to_global(Sprite& r);
 
 private:
+	SDL_Surface* screen;
 
 	// These are for keeping the render stack frame small.
 	SDL_Rect m_clip;

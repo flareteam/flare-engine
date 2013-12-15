@@ -392,7 +392,7 @@ void WidgetListBox::render() {
 		topLeft.y = rows[0].y + local_frame.y - local_offset.y;
 		bottomRight.x = rows[list_height - 1].x + rows[0].w + local_frame.x - local_offset.x;
 		bottomRight.y = rows[list_height - 1].y + rows[0].h + local_frame.y - local_offset.y;
-		color = SDL_MapRGB(screen->format, 255,248,220);
+		color = render_device->MapRGB(255,248,220);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;

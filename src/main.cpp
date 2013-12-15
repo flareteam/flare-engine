@@ -90,9 +90,9 @@ static void init() {
 
 	// Create render Device and Rendering Context.
 	render_device = new SDLRenderDevice();
-	render_device->createContext(VIEW_W, VIEW_H);
+	int status = render_device->createContext(VIEW_W, VIEW_H);
 
-	if (screen == NULL) {
+	if (status == -1) {
 
 		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
 		SDL_Quit();

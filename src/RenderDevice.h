@@ -62,9 +62,12 @@ public:
 
 	/** Create context on startup.
 	 */
-	virtual void createContext(
+	virtual int createContext(
 		int width,
 		int height
+	) = 0;
+
+	virtual SDL_Rect getContextSize(
 	) = 0;
 
 	/** Render a Renderable to the screen.
@@ -134,6 +137,26 @@ public:
 	/** Destroy context on exit.
 	 */
 	virtual void destroyContext() = 0;
+
+	/**
+	 * Map a RGB color value to a pixel format.
+	 */
+	virtual Uint32 MapRGB(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b) = 0;
+
+	/**
+	 * Map a RGB color value to a screen pixel format.
+	 */
+	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b) = 0;
+
+	/**
+	 * Map a RGBA color value to a pixel format.
+	 */
+	virtual Uint32 MapRGBA(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
+
+	/**
+	 * Map a RGBA color value to a screen pixel format.
+	 */
+	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
 
 protected:
 

@@ -164,7 +164,7 @@ void WidgetSlider::render () {
 		topLeft.y = pos.y + local_frame.y - local_offset.y;
 		bottomRight.x = topLeft.x + pos.w;
 		bottomRight.y = topLeft.y + pos.h;
-		color = SDL_MapRGB(screen->format, 255,248,220);
+		color = render_device->MapRGB(255,248,220);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;

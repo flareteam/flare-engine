@@ -30,7 +30,6 @@ Created and destroyed by main.cpp
 
 AnimationManager *anim;
 ImageManager *imag;
-SDL_Surface *screen;
 ModManager *mods;
 MessageEngine *msg;
 InputState *inpt;

@@ -155,7 +155,7 @@ void WidgetScrollBox::resize(int h) {
 	contents.clearGraphics();
 	contents.setGraphics(createAlphaSurface(pos.w,h), false);
 	if (!transparent) {
-		SDL_FillRect(contents.getGraphics(),NULL,SDL_MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
+		SDL_FillRect(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
 		SDL_SetAlpha(contents.getGraphics(), 0, SDL_ALPHA_OPAQUE);
 	}
 
@@ -173,7 +173,7 @@ void WidgetScrollBox::refresh() {
 		contents.clearGraphics();
 		contents.setGraphics(createAlphaSurface(pos.w,h), false);
 		if (!transparent) {
-			SDL_FillRect(contents.getGraphics(),NULL,SDL_MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
+			SDL_FillRect(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics()->format,bg.r,bg.g,bg.b));
 			SDL_SetAlpha(contents.getGraphics(), 0, SDL_ALPHA_OPAQUE);
 		}
 		contents.setGraphics(contents.getGraphics());
@@ -218,7 +218,7 @@ void WidgetScrollBox::render() {
 		topLeft.y = dest.y + local_frame.y - local_offset.y;
 		bottomRight.x = topLeft.x + dest.w;
 		bottomRight.y = topLeft.y + dest.h;
-		color = SDL_MapRGB(screen->format, 255,248,220);
+		color = render_device->MapRGB(255,248,220);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;

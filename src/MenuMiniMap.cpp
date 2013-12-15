@@ -37,9 +37,9 @@ using namespace std;
 MenuMiniMap::MenuMiniMap() {
 
 	createMapSurface();
-	color_wall = SDL_MapRGB(map_surface.getGraphics()->format, 128,128,128);
-	color_obst = SDL_MapRGB(map_surface.getGraphics()->format, 64,64,64);
-	color_hero = SDL_MapRGB(map_surface.getGraphics()->format, 255,255,255);
+	color_wall = render_device->MapRGB(map_surface.getGraphics()->format, 128,128,128);
+	color_obst = render_device->MapRGB(map_surface.getGraphics()->format, 64,64,64);
+	color_hero = render_device->MapRGB(map_surface.getGraphics()->format, 255,255,255);
 
 	// Load config settings
 	FileParser infile;
@@ -90,7 +90,7 @@ void MenuMiniMap::render(FPoint hero_pos) {
 void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 	map_size.x = map_w;
 	map_size.y = map_h;
-	SDL_FillRect(map_surface.getGraphics(), 0, SDL_MapRGBA(map_surface.getGraphics()->format,0,0,0,0));
+	SDL_FillRect(map_surface.getGraphics(), 0, render_device->MapRGBA(map_surface.getGraphics()->format,0,0,0,0));
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
 		prerenderIso(collider);

@@ -1218,10 +1218,10 @@ bool GameStateConfig::applyVideoSettings(int width, int height) {
 	}
 
 	// Attempt to apply the new settings
-	render_device->createContext(width, height);
+	int status = render_device->createContext(width, height);
 
 	// If the new settings fail, revert to the old ones
-	if (!screen) {
+	if (status == -1) {
 		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
 		render_device->createContext(VIEW_W, VIEW_H);
 		return false;

@@ -227,19 +227,14 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 	}
 
 	// render and blit the text
-	if (active_font->blend && target != screen) {
+	if (active_font->blend && target != NULL) {
 		ttf.setGraphics(TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color));
 
 		// preserve alpha transparency of text buffers
 		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), ttf.getClip(), target, dest_rect, true);
 	}
 	else if (target == NULL) {
-		render_device->renderText(
-			active_font->ttfont,
-			text,
-			color,
-			dest_rect
-		);
+		render_device->renderText(active_font->ttfont, text, color, dest_rect);
 	}
 	else {
 		ttf.setGraphics(TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color));
