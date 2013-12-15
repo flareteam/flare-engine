@@ -183,16 +183,6 @@ public:
 	int mp;
 	int mp_ticker;
 
-	// default equipment stats
-	int dmg_melee_min_default;
-	int dmg_melee_max_default;
-	int dmg_ment_min_default;
-	int dmg_ment_max_default;
-	int dmg_ranged_min_default;
-	int dmg_ranged_max_default;
-	int absorb_min_default;
-	int absorb_max_default;
-
 	float speed_default;
 
 	// addition damage and absorb granted from items
