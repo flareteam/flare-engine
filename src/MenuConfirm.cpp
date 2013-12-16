@@ -41,7 +41,7 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 	tablist.add(buttonClose);
 
-	background.setGraphics(loadGraphicSurface("images/menus/confirm_bg.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
 }
 
 void MenuConfirm::update() {

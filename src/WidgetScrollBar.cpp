@@ -47,7 +47,7 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 }
 
 void WidgetScrollBar::loadArt() {
-	scrollbars.setGraphics(loadGraphicSurface(fileName, "Couldn't load image", true));
+	scrollbars.setGraphics(render_device->loadGraphicSurface(fileName, "Couldn't load image", true));
 }
 
 int WidgetScrollBar::checkClick() {

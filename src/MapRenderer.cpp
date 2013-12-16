@@ -279,7 +279,7 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 
 void MapRenderer::createBackgroundSurface() {
 	freeImage(&backgroundsurface);
-	backgroundsurface = createSurface(
+	backgroundsurface = render_device->createSurface(
 							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
 							VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
 	// background has no alpha:

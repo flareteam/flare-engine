@@ -81,8 +81,8 @@ void Sprite::setGraphics(Image s, bool setClipToFull) {
 	if (setClipToFull && sprite.surface != NULL) {
 		src.x = 0;
 		src.y = 0;
-		src.w = sprite.surface->w;
-		src.h = sprite.surface->h;
+		src.w = sprite.getWidth();
+		src.h = sprite.getHeight();
 	}
 
 }
@@ -190,11 +190,11 @@ FPoint Sprite::getDest() {
 }
 
 int Sprite::getGraphicsWidth() {
-	return (sprite.surface ? sprite.surface->w : 0);
+	return (sprite.surface ? sprite.getWidth() : 0);
 }
 
 int Sprite::getGraphicsHeight() {
-	return (sprite.surface ? sprite.surface->h : 0);
+	return (sprite.surface ? sprite.getHeight() : 0);
 }
 
 SDLRenderDevice::SDLRenderDevice() {
@@ -205,6 +205,10 @@ int SDLRenderDevice::createContext(int width, int height) {
 	if (is_initialized) {
 		SDL_FreeSurface(screen);
 	}
+
+	// Add Window Titlebar Icon
+	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
+	SDL_WM_SetIcon(titlebar_icon, NULL);
 
 	Uint32 flags = 0;
 
@@ -226,6 +230,10 @@ int SDLRenderDevice::createContext(int width, int height) {
 	else {
 		is_initialized = true;
 	}
+
+	// Window title
+	const char* title = msg->get(WINDOW_TITLE).c_str();
+	SDL_WM_SetCaption(title, title);
 
 	return (screen != NULL ? 0 : -1);
 }
@@ -347,6 +355,48 @@ void SDLRenderDevice::drawPixel(
 	return;
 }
 
+/*
+ * Set the pixel at (x, y) to the given value
+ * NOTE: The surface must be locked before calling this!
+ *
+ * Source: SDL Documentation
+ * http://www.libsdl.org/docs/html/guidevideo.html
+ */
+void SDLRenderDevice::drawPixel(Image *image, int x, int y, Uint32 pixel) {
+	if (!image || !image->surface) return;
+	SDL_Surface *surface = image->surface;
+
+	int bpp = surface->format->BytesPerPixel;
+	/* Here p is the address to the pixel we want to set */
+	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+	switch(bpp) {
+		case 1:
+			*p = pixel;
+			break;
+
+		case 2:
+			*(Uint16 *)p = pixel;
+			break;
+
+		case 3:
+#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			p[0] = (pixel >> 16) & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = pixel & 0xff;
+#else
+			p[0] = pixel & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = (pixel >> 16) & 0xff;
+#endif
+			break;
+
+		case 4:
+			*(Uint32 *)p = pixel;
+			break;
+	}
+}
+
 void SDLRenderDevice::drawLine(
 	int x0,
 	int y0,
@@ -393,6 +443,64 @@ void SDLRenderDevice::drawLine(
 	}
 }
 
+/**
+ * draw line to the screen
+ * NOTE: The surface must be locked before calling this!
+ *
+ * from http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Simplification
+ */
+void SDLRenderDevice::drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color) {
+	if (!image || !image->surface) return;
+
+	const int dx = abs(x1-x0);
+	const int dy = abs(y1-y0);
+	const int sx = x0 < x1 ? 1 : -1;
+	const int sy = y0 < y1 ? 1 : -1;
+	int err = dx-dy;
+
+	do {
+		//skip draw if outside screen
+		if (x0 > 0 && y0 > 0 && x0 < VIEW_W && y0 < VIEW_H)
+			render_device->drawPixel(image,x0,y0,color);
+
+		int e2 = 2*err;
+		if (e2 > -dy) {
+			err = err - dy;
+			x0 = x0 + sx;
+		}
+		if (e2 <  dx) {
+			err = err + dx;
+			y0 = y0 + sy;
+		}
+	}
+	while(x0 != x1 || y0 != y1);
+}
+
+void SDLRenderDevice::drawLine(Image *image, Point pos0, Point pos1, Uint32 color) {
+	if (!image || !image->surface) return;
+	SDL_Surface *surface = image->surface;
+
+	if (SDL_MUSTLOCK(surface))
+		SDL_LockSurface(surface);
+	drawLine(image, pos0.x, pos0.y, pos1.x, pos1.y, color);
+	if (SDL_MUSTLOCK(surface))
+		SDL_UnlockSurface(surface);
+}
+
+void SDLRenderDevice::drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color) {
+	if (!image || !image->surface) return;
+	SDL_Surface *surface = image->surface;
+
+	if (SDL_MUSTLOCK(surface))
+		SDL_LockSurface(surface);
+	drawLine(image, pos0.x, pos0.y, pos1.x, pos0.y, color);
+	drawLine(image, pos1.x, pos0.y, pos1.x, pos1.y, color);
+	drawLine(image, pos0.x, pos0.y, pos0.x, pos1.y, color);
+	drawLine(image, pos0.x, pos1.y, pos1.x, pos1.y, color);
+	if (SDL_MUSTLOCK(surface))
+		SDL_UnlockSurface(surface);
+}
+
 void SDLRenderDevice::drawRectangle(
 	const Point& p0,
 	const Point& p1,
@@ -421,8 +529,9 @@ void SDLRenderDevice::commitFrame() {
 }
 
 void SDLRenderDevice::destroyContext() {
-	// Nothing to be done; SDL_Quit() will handle it all
-	// for this render device.
+	SDL_FreeSurface(titlebar_icon);
+	SDL_FreeSurface(screen);
+
 	return;
 }
 
@@ -499,6 +608,114 @@ bool SDLRenderDevice::local_to_global(ISprite& r) {
 	return true;
 }
 
+/**
+ * create blank surface
+ * based on example: http://www.libsdl.org/docs/html/sdlcreatergbsurface.html
+ */
+Image SDLRenderDevice::createAlphaSurface(int width, int height) {
+
+	Image image;
+	Uint32 rmask, gmask, bmask, amask;
+
+	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
+
+	if (HWSURFACE)
+		image.surface = SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+	else
+		image.surface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+
+	if(image.surface == NULL) {
+		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+	}
+
+	// optimize
+	SDL_Surface *cleanup = image.surface;
+	image.surface = SDL_DisplayFormatAlpha(image.surface);
+	SDL_FreeSurface(cleanup);
+
+	return image;
+}
+
+Image SDLRenderDevice::createSurface(int width, int height) {
+
+	Image image;
+	Uint32 rmask, gmask, bmask, amask;
+
+	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
+
+	if (HWSURFACE)
+		image.surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+	else
+		image.surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+
+	if(image.surface == NULL) {
+		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+	}
+	else {
+
+		SDL_SetColorKey(image.surface, SDL_SRCCOLORKEY, SDL_MapRGB(image.surface->format,255,0,255));
+
+		SDL_Surface *cleanup = image.surface;
+		image.surface = SDL_DisplayFormat(image.surface);
+		SDL_FreeSurface(cleanup);
+	}
+
+	return image;
+}
+
+Image SDLRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
+	Image image;
+	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
+	if(!cleanup) {
+		if (!errormessage.empty())
+			fprintf(stderr, "%s: %s\n", errormessage.c_str(), IMG_GetError());
+		if (IfNotFoundExit) {
+			SDL_Quit();
+			exit(1);
+		}
+	}
+	else {
+		if (HavePinkColorKey)
+			SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, SDL_MapRGB(cleanup->format, 255, 0, 255));
+		image.surface = SDL_DisplayFormatAlpha(cleanup);
+		SDL_FreeSurface(cleanup);
+	}
+	return image;
+}
+
+void SDLRenderDevice::scaleSurface(Image *source, int width, int height) {
+	if(!source || !width || !height)
+		return;
+
+	double _stretch_factor_x, _stretch_factor_y;
+	Image ret;
+	ret.surface = SDL_CreateRGBSurface(source->surface->flags, width, height,
+						source->surface->format->BitsPerPixel,
+						source->surface->format->Rmask,
+						source->surface->format->Gmask,
+						source->surface->format->Bmask,
+						source->surface->format->Amask);
+
+	if (ret.surface) {
+		_stretch_factor_x = width / (double)source->surface->w;
+		_stretch_factor_y = height / (double)source->surface->h;
+
+		for(Uint32 y = 0; y < (Uint32)source->surface->h; y++) {
+			for(Uint32 x = 0; x < (Uint32)source->surface->w; x++) {
+				Uint32 spixel = readPixel(source, x, y);
+				for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
+					for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
+						Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
+						Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
+						drawPixel(&ret, dx, dy, spixel);
+					}
+				}
+			}
+		}
+		SDL_FreeSurface(source->surface);
+		*source = ret;
+	}
+}
 
 Uint32 readPixel(Image *image, int x, int y) {
 	if (!image || !image->surface) return 0;
@@ -536,184 +753,6 @@ Uint32 readPixel(Image *image, int x, int y) {
 
 	SDL_UnlockSurface(surface);
 	return pixel;
-}
-
-/*
- * Set the pixel at (x, y) to the given value
- * NOTE: The surface must be locked before calling this!
- *
- * Source: SDL Documentation
- * http://www.libsdl.org/docs/html/guidevideo.html
- */
-void drawPixel(Image *image, int x, int y, Uint32 pixel) {
-	if (!image || !image->surface) return;
-	SDL_Surface *surface = image->surface;
-
-	int bpp = surface->format->BytesPerPixel;
-	/* Here p is the address to the pixel we want to set */
-	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
-
-	switch(bpp) {
-		case 1:
-			*p = pixel;
-			break;
-
-		case 2:
-			*(Uint16 *)p = pixel;
-			break;
-
-		case 3:
-#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-			p[0] = (pixel >> 16) & 0xff;
-			p[1] = (pixel >> 8) & 0xff;
-			p[2] = pixel & 0xff;
-#else
-			p[0] = pixel & 0xff;
-			p[1] = (pixel >> 8) & 0xff;
-			p[2] = (pixel >> 16) & 0xff;
-#endif
-			break;
-
-		case 4:
-			*(Uint32 *)p = pixel;
-			break;
-	}
-}
-
-
-
-/**
- * draw line to the screen
- * NOTE: The surface must be locked before calling this!
- *
- * from http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Simplification
- */
-void drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color) {
-	if (!image || !image->surface) return;
-
-	const int dx = abs(x1-x0);
-	const int dy = abs(y1-y0);
-	const int sx = x0 < x1 ? 1 : -1;
-	const int sy = y0 < y1 ? 1 : -1;
-	int err = dx-dy;
-
-	do {
-		//skip draw if outside screen
-		if (x0 > 0 && y0 > 0 && x0 < VIEW_W && y0 < VIEW_H)
-			drawPixel(image,x0,y0,color);
-
-		int e2 = 2*err;
-		if (e2 > -dy) {
-			err = err - dy;
-			x0 = x0 + sx;
-		}
-		if (e2 <  dx) {
-			err = err + dx;
-			y0 = y0 + sy;
-		}
-	}
-	while(x0 != x1 || y0 != y1);
-}
-
-void drawLine(Image *image, Point pos0, Point pos1, Uint32 color) {
-	if (!image || !image->surface) return;
-	SDL_Surface *surface = image->surface;
-
-	if (SDL_MUSTLOCK(surface))
-		SDL_LockSurface(surface);
-	drawLine(image, pos0.x, pos0.y, pos1.x, pos1.y, color);
-	if (SDL_MUSTLOCK(surface))
-		SDL_UnlockSurface(surface);
-}
-
-void drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color) {
-	if (!image || !image->surface) return;
-	SDL_Surface *surface = image->surface;
-
-	if (SDL_MUSTLOCK(surface))
-		SDL_LockSurface(surface);
-	drawLine(image, pos0.x, pos0.y, pos1.x, pos0.y, color);
-	drawLine(image, pos1.x, pos0.y, pos1.x, pos1.y, color);
-	drawLine(image, pos0.x, pos0.y, pos0.x, pos1.y, color);
-	drawLine(image, pos0.x, pos1.y, pos1.x, pos1.y, color);
-	if (SDL_MUSTLOCK(surface))
-		SDL_UnlockSurface(surface);
-}
-
-
-/**
- * create blank surface
- * based on example: http://www.libsdl.org/docs/html/sdlcreatergbsurface.html
- */
-Image createAlphaSurface(int width, int height) {
-
-	Image image;
-	Uint32 rmask, gmask, bmask, amask;
-
-	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
-
-	if (HWSURFACE)
-		image.surface = SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-	else
-		image.surface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-
-	if(image.surface == NULL) {
-		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
-	}
-
-	// optimize
-	SDL_Surface *cleanup = image.surface;
-	image.surface = SDL_DisplayFormatAlpha(image.surface);
-	SDL_FreeSurface(cleanup);
-
-	return image;
-}
-
-Image createSurface(int width, int height) {
-
-	Image image;
-	Uint32 rmask, gmask, bmask, amask;
-
-	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
-
-	if (HWSURFACE)
-		image.surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-	else
-		image.surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-
-	if(image.surface == NULL) {
-		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
-	}
-	else {
-
-		SDL_SetColorKey(image.surface, SDL_SRCCOLORKEY, SDL_MapRGB(image.surface->format,255,0,255));
-
-		SDL_Surface *cleanup = image.surface;
-		image.surface = SDL_DisplayFormat(image.surface);
-		SDL_FreeSurface(cleanup);
-	}
-
-	return image;
-}
-
-Image loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
-	Image image;
-	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
-	if(!cleanup) {
-		if (!errormessage.empty())
-			fprintf(stderr, "%s: %s\n", errormessage.c_str(), IMG_GetError());
-		if (IfNotFoundExit) {
-			SDL_Quit();
-			exit(1);
-		}
-	}
-	else {
-		if (HavePinkColorKey)
-			SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, SDL_MapRGB(cleanup->format, 255, 0, 255));
-		image.surface = SDL_DisplayFormatAlpha(cleanup);
-		SDL_FreeSurface(cleanup);
-	}
-	return image;
 }
 
 /*
@@ -774,40 +813,6 @@ bool checkPixel(Point px, Image *image) {
 	SDL_UnlockSurface(surface);
 
 	return true;
-}
-
-void scaleSurface(Image *source, int width, int height) {
-	if(!source || !width || !height)
-		return;
-
-	double _stretch_factor_x, _stretch_factor_y;
-	Image ret;
-	ret.surface = SDL_CreateRGBSurface(source->surface->flags, width, height,
-						source->surface->format->BitsPerPixel,
-						source->surface->format->Rmask,
-						source->surface->format->Gmask,
-						source->surface->format->Bmask,
-						source->surface->format->Amask);
-
-	if (ret.surface) {
-		_stretch_factor_x = width / (double)source->surface->w;
-		_stretch_factor_y = height / (double)source->surface->h;
-
-		for(Uint32 y = 0; y < (Uint32)source->surface->h; y++) {
-			for(Uint32 x = 0; x < (Uint32)source->surface->w; x++) {
-				Uint32 spixel = readPixel(source, x, y);
-				for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
-					for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
-						Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
-						Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
-						drawPixel(&ret, dx, dy, spixel);
-					}
-				}
-			}
-		}
-		SDL_FreeSurface(source->surface);
-		*source = ret;
-	}
 }
 
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {

@@ -46,7 +46,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	, npc(NULL)
 	, buyback_stock()
 	, talker_visible(false) {
-	background.setGraphics(loadGraphicSurface("images/menus/vendor.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/vendor.png"));
 
 	tabControl->setTabTitle(VENDOR_BUY,msg->get("Inventory"));
 	tabControl->setTabTitle(VENDOR_SELL,msg->get("Buyback"));

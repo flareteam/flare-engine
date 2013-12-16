@@ -132,8 +132,8 @@ void WidgetTabControl::updateHeader() {
  * Load the graphics for the control.
  */
 void WidgetTabControl::loadGraphics() {
-	activeTabSurface.setGraphics(loadGraphicSurface("images/menus/tab_active.png"));
-	inactiveTabSurface.setGraphics(loadGraphicSurface("images/menus/tab_inactive.png"));
+	activeTabSurface.setGraphics(render_device->loadGraphicSurface("images/menus/tab_active.png"));
+	inactiveTabSurface.setGraphics(render_device->loadGraphicSurface("images/menus/tab_inactive.png"));
 
 	if (activeTabSurface.graphicsIsNull() || inactiveTabSurface.graphicsIsNull()) {
 		SDL_Quit();

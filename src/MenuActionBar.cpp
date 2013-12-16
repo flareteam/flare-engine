@@ -238,14 +238,14 @@ void MenuActionBar::clear() {
 }
 
 void MenuActionBar::loadGraphics() {
-	emptyslot.setGraphics(loadGraphicSurface("images/menus/slot_empty.png"));
+	emptyslot.setGraphics(render_device->loadGraphicSurface("images/menus/slot_empty.png"));
 	emptyslot.setClip(0,0,ICON_SIZE,ICON_SIZE);
-	background.setGraphics(loadGraphicSurface("images/menus/actionbar_trim.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/actionbar_trim.png"));
 	background.setClip(0,0,window_area.w,window_area.h);
 	background.setDest(window_area);
-	disabled.setGraphics(loadGraphicSurface("images/menus/disabled.png"));
+	disabled.setGraphics(render_device->loadGraphicSurface("images/menus/disabled.png"));
 	disabled.setClip(0,0,ICON_SIZE,ICON_SIZE);
-	attention.setGraphics(loadGraphicSurface("images/menus/attention_glow.png"));
+	attention.setGraphics(render_device->loadGraphicSurface("images/menus/attention_glow.png"));
 }
 
 // Renders the "needs attention" icon over the appropriate log menu

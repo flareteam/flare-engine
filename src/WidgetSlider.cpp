@@ -36,7 +36,7 @@ WidgetSlider::WidgetSlider (const string  & fname)
 	, minimum(0)
 	, maximum(0)
 	, value(0) {
-	sl.setGraphics(loadGraphicSurface(fname));
+	sl.setGraphics(render_device->loadGraphicSurface(fname));
 	if (sl.graphicsIsNull()) {
 		SDL_Quit();
 		exit(1);

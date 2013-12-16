@@ -78,7 +78,7 @@ GameStatePlay::GameStatePlay()
 	hasMusic = true;
 	// GameEngine scope variables
 
-	loading_bg.setGraphics(loadGraphicSurface("images/menus/confirm_bg.png"));
+	loading_bg.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
 	powers = new PowerManager();
 	items = new ItemManager();
 	camp = new CampaignManager();

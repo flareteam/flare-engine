@@ -242,12 +242,12 @@ bool GameStateCutscene::load(std::string filename) {
 Image GameStateCutscene::loadImage(std::string filename) {
 
 	std::string image_file = (mods->locate("images/"+ filename));
-	Image image = loadGraphicSurface(image_file);
+	Image image = render_device->loadGraphicSurface(image_file);
 
 	/* scale image to fit height */
 	if (scale_graphics) {
 		float ratio = image.getHeight()/(float)image.getWidth();
-		scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
+		render_device->scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
 	}
 
 	return image;

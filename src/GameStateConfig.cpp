@@ -58,7 +58,7 @@ GameStateConfig::GameStateConfig ()
 	, tip_buf()
 	, input_key(0)
 	, check_resolution(true) {
-	background.setGraphics(loadGraphicSurface("images/menus/config.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/config.png"));
 
 	init();
 	update();

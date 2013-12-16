@@ -42,7 +42,7 @@ MenuStash::MenuStash(StatBlock *_stats)
 	, updated(false)
 
 {
-	background.setGraphics(loadGraphicSurface("images/menus/stash.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/stash.png"));
 
 	// Load config settings
 	FileParser infile;

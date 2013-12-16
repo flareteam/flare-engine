@@ -163,6 +163,10 @@ public:
 	 */
 	virtual void drawPixel(int x, int y, Uint32 color) = 0;
 
+	/** Draw pixel to Image.
+	 */
+	virtual void drawPixel(Image *image, int x, int y, Uint32 color) = 0;
+
 	/** Draw line to screen.
 	 *
 	 *  Draw line connecting (x0,y0) and (x1,y1) to screen.
@@ -175,11 +179,29 @@ public:
 	 */
 	virtual void drawLine(const Point& p0, const Point& p1, Uint32 color) = 0;
 
+	/** Draw line to screen.
+	 *
+	 *  Draw line connecting (x0,y0) and (x1,y1) to screen.
+	 */
+	virtual void drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color) = 0;
+
+	/** Draw line to screen.
+	 *
+	 *  Draw line connecting p0 and p1 to Image.
+	 */
+	virtual void drawLine(Image *image, Point pos0, Point pos1, Uint32 color) = 0;
+
 	/** Draw rectangle to screen.
 	 *
 	 *  Draw rectangle defined by p0 and p1 to screen.
 	 */
 	virtual void drawRectangle(const Point& p0, const Point& p1, Uint32 color) = 0;
+
+	/** Draw rectangle to screen.
+	 *
+	 *  Draw rectangle defined by p0 and p1 to Image.
+	 */
+	virtual void drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color) = 0;
 
 	/** Blank the screen.
 	 */
@@ -217,66 +239,60 @@ public:
 
 	virtual void loadIcons() = 0;
 
+	/**
+	 * Creates a SDL_Surface.
+	 * The SDL_HWSURFACE or SDL_SWSURFACE flag is set according
+	 * to settings. The result is a surface which has the same format as the
+	 * screen surface.
+	 * Additionally the alpha flag is set, so transparent blits are possible.
+	 */
+	virtual Image createAlphaSurface(int width, int height) = 0;
+
+	/**
+	 * Creates a SDL_Surface.
+	 * The SDL_HWSURFACE or SDL_SWSURFACE flag is set according
+	 * to settings. The result is a surface which has the same format as the
+	 * screen surface.
+	 * The bright pink (rgb 0xff00ff) is set as transparent color.
+	 */
+	virtual Image createSurface(int width, int height) = 0;
+
+	virtual void scaleSurface(Image *source, int width, int height) = 0;
+
+	/**
+	 * @brief loadGraphicSurface loads an image from a file.
+	 * @param filename
+	 *        The parameter filename is mandatory and specifies the image to be
+	 *        loaded. The filename will be located via the modmanager.
+	 * @param errormessage
+	 *        This is an optional parameter, which defines which error message
+	 *        should be displayed. If the errormessage is an empty string, no error
+	 *        message will be printed at all.
+	 * @param IfNotFoundExit
+	 *        If this optional boolean parameter is set to true, the program will
+	 *        shutdown sdl and quit, if the specified image is not found.
+	 * @param HavePinkColorKey
+	 *        This optional parameter specifies whether a color key with
+	 *        RGB(0xff, 0, 0xff) should be applied to the image.
+	 * @return
+	 *        Returns the SDL_Surface of the specified image or NULL if not
+	 *        successful
+	 */
+	virtual Image loadGraphicSurface(std::string filename,
+								std::string errormessage = "Couldn't load image",
+								bool IfNotFoundExit = false,
+								bool HavePinkColorKey = false) = 0;
+
 protected:
 
 	bool is_initialized; ///< true if a context was created once
 };
 
 Uint32 readPixel(Image *image, int x, int y);
-void drawPixel(Image *image, int x, int y, Uint32 color);
-void drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color);
-void drawLine(Image *image, Point pos0, Point pos1, Uint32 color);
-void drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color);
 bool checkPixel(Point px, Image *image);
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
 void setColorKey(Image *image, int flag, int key);
 void setAlpha(Image *image, int flag, int alpha);
-
-/**
- * Creates a SDL_Surface.
- * The SDL_HWSURFACE or SDL_SWSURFACE flag is set according
- * to settings. The result is a surface which has the same format as the
- * screen surface.
- * Additionally the alpha flag is set, so transparent blits are possible.
- */
-Image createAlphaSurface(int width, int height);
-
-/**
- * Creates a SDL_Surface.
- * The SDL_HWSURFACE or SDL_SWSURFACE flag is set according
- * to settings. The result is a surface which has the same format as the
- * screen surface.
- * The bright pink (rgb 0xff00ff) is set as transparent color.
- */
-Image createSurface(int width, int height);
-
-void scaleSurface(Image *source, int width, int height);
-
-/**
- * @brief loadGraphicSurface loads an image from a file.
- * @param filename
- *        The parameter filename is mandatory and specifies the image to be
- *        loaded. The filename will be located via the modmanager.
- * @param errormessage
- *        This is an optional parameter, which defines which error message
- *        should be displayed. If the errormessage is an empty string, no error
- *        message will be printed at all.
- * @param IfNotFoundExit
- *        If this optional boolean parameter is set to true, the program will
- *        shutdown sdl and quit, if the specified image is not found.
- * @param HavePinkColorKey
- *        This optional parameter specifies whether a color key with
- *        RGB(0xff, 0, 0xff) should be applied to the image.
- * @return
- *        Returns the SDL_Surface of the specified image or NULL if not
- *        successful
- */
-
-Image loadGraphicSurface(std::string filename,
-								std::string errormessage = "Couldn't load image",
-								bool IfNotFoundExit = false,
-								bool HavePinkColorKey = false);
-
 void freeImage(Image *image);
 
 #endif // RENDERDEVICE_H

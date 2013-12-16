@@ -75,7 +75,7 @@ void MenuItemStorage::init(int _slot_number, vector<SDL_Rect> _area, vector<stri
 }
 
 void MenuItemStorage::loadGraphics() {
-	highlight_image.setGraphics(loadGraphicSurface("images/menus/attention_glow.png", "Couldn't load icon highlight image"));
+	highlight_image.setGraphics(render_device->loadGraphicSurface("images/menus/attention_glow.png", "Couldn't load icon highlight image"));
 }
 
 void MenuItemStorage::render() {

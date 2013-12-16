@@ -88,11 +88,19 @@ public:
 
 	void drawPixel(int x, int y, Uint32 color);
 
+	void drawPixel(Image *image, int x, int y, Uint32 pixel);
+
 	void drawLine(int x0, int y0, int x1, int y1, Uint32 color);
 
 	void drawLine(const Point& p0, const Point& p1, Uint32 color);
 
+	void drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color);
+
+	void drawLine(Image *image, Point pos0, Point pos1, Uint32 color);
+
 	void drawRectangle(const Point& p0, const Point& p1, Uint32 color);
+
+	void drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color);
 
 	void blankScreen();
 
@@ -111,12 +119,24 @@ public:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 	void loadIcons();
+
+	Image createAlphaSurface(int width, int height);
+
+	Image createSurface(int width, int height);
+
+	void scaleSurface(Image *source, int width, int height);
+
+	Image loadGraphicSurface(std::string filename,
+								std::string errormessage = "Couldn't load image",
+								bool IfNotFoundExit = false,
+								bool HavePinkColorKey = false);
 private:
 
 	// Compute clipping and global position from local frame.
 	bool local_to_global(ISprite& r);
 
 	SDL_Surface* screen;
+	SDL_Surface* titlebar_icon;
 
 	// These are for keeping the render stack frame small.
 	SDL_Rect m_clip;

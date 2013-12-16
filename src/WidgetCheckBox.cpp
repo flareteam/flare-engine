@@ -33,7 +33,7 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 	  checked(false),
 	  pressed(false) {
 	focusable = true;
-	cb.setGraphics(loadGraphicSurface(fname, "Couldn't load image", true, false));
+	cb.setGraphics(render_device->loadGraphicSurface(fname, "Couldn't load image", true, false));
 
 	pos.w = cb.getGraphicsWidth();
 	pos.h = cb.getGraphicsHeight() / 2;

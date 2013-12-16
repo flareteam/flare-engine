@@ -80,8 +80,8 @@ MenuStatBar::MenuStatBar(std::string type) {
 }
 
 void MenuStatBar::loadGraphics(std::string type) {
-	background.setGraphics(loadGraphicSurface("images/menus/bar_" + type + "_background.png"));
-	bar.setGraphics(loadGraphicSurface("images/menus/bar_" + type + ".png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/bar_" + type + "_background.png"));
+	bar.setGraphics(render_device->loadGraphicSurface("images/menus/bar_" + type + ".png"));
 }
 
 void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string) {

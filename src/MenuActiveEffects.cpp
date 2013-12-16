@@ -60,7 +60,7 @@ MenuActiveEffects::MenuActiveEffects()
 }
 
 void MenuActiveEffects::loadGraphics() {
-	timer.setGraphics(loadGraphicSurface("images/menus/disabled.png"));
+	timer.setGraphics(render_device->loadGraphicSurface("images/menus/disabled.png"));
 }
 
 void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max) {

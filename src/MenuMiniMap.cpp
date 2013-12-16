@@ -71,7 +71,7 @@ void MenuMiniMap::getMapTitle(std::string map_title) {
 
 void MenuMiniMap::createMapSurface() {
 	map_surface.clearGraphics();
-	map_surface.setGraphics(createAlphaSurface(512, 512));
+	map_surface.setGraphics(render_device->createAlphaSurface(512, 512));
 	setAlpha(map_surface.getGraphics(), SDL_SRCALPHA, SDL_ALPHA_TRANSPARENT);
 }
 
@@ -166,10 +166,10 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
 	for (int i=0; i<std::min(map_surface.getGraphicsWidth(), map_size.x); i++) {
 		for (int j=0; j<std::min(map_surface.getGraphicsHeight(), map_size.y); j++) {
 			if (collider->colmap[i][j] == 1 || collider->colmap[i][j] == 5) {
-				drawPixel(map_surface.getGraphics(), i, j, color_wall);
+				render_device->drawPixel(map_surface.getGraphics(), i, j, color_wall);
 			}
 			else if (collider->colmap[i][j] == 2 || collider->colmap[i][j] == 6) {
-				drawPixel(map_surface.getGraphics(), i, j, color_obst);
+				render_device->drawPixel(map_surface.getGraphics(), i, j, color_obst);
 			}
 		}
 	}
@@ -205,12 +205,12 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 
 				if (draw_tile) {
 					if (odd_row) {
-						drawPixel(map_surface.getGraphics(), i, j, draw_color);
-						drawPixel(map_surface.getGraphics(), i+1, j, draw_color);
+						render_device->drawPixel(map_surface.getGraphics(), i, j, draw_color);
+						render_device->drawPixel(map_surface.getGraphics(), i+1, j, draw_color);
 					}
 					else {
-						drawPixel(map_surface.getGraphics(), i-1, j, draw_color);
-						drawPixel(map_surface.getGraphics(), i, j, draw_color);
+						render_device->drawPixel(map_surface.getGraphics(), i-1, j, draw_color);
+						render_device->drawPixel(map_surface.getGraphics(), i, j, draw_color);
 					}
 				}
 			}

@@ -212,9 +212,9 @@ GameStateLoad::GameStateLoad() : GameState() {
 }
 
 void GameStateLoad::loadGraphics() {
-	background.setGraphics(loadGraphicSurface("images/menus/game_slots.png"));
-	selection.setGraphics(loadGraphicSurface("images/menus/game_slot_select.png", "Couldn't load image", false, true));
-	portrait_border.setGraphics(loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load image", false, true));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/game_slots.png"));
+	selection.setGraphics(render_device->loadGraphicSurface("images/menus/game_slot_select.png", "Couldn't load image", false, true));
+	portrait_border.setGraphics(render_device->loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load image", false, true));
 }
 
 void GameStateLoad::loadPortrait(int slot) {
@@ -225,7 +225,7 @@ void GameStateLoad::loadPortrait(int slot) {
 	if (stats[slot].name == "") return;
 
 	portrait.setGraphics(
-		loadGraphicSurface("images/portraits/" + stats[slot].gfx_portrait + ".png")
+		render_device->loadGraphicSurface("images/portraits/" + stats[slot].gfx_portrait + ".png")
 	);
 }
 
@@ -351,12 +351,12 @@ void GameStateLoad::loadPreview(int slot) {
 		if (!TEXTURE_QUALITY) {
 			string fname = "images/avatar/" + stats[slot].gfx_base + "/preview/noalpha/" + img_gfx[i] + ".png";
 			sprites[slot].back().setGraphics(
-				loadGraphicSurface(fname, "Falling back to alpha version", false, true)
+				render_device->loadGraphicSurface(fname, "Falling back to alpha version", false, true)
 			);
 		}
 		if (sprites[slot].back().graphicsIsNull()) {
 			sprites[slot].back().setGraphics(
-				loadGraphicSurface("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png")
+				render_device->loadGraphicSurface("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png")
 			);
 		}
 		sprites[slot].back().setClip(0,0,sprites[slot].back().getGraphicsWidth(),sprites[slot].back().getGraphicsHeight());

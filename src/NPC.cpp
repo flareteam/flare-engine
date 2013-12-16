@@ -164,7 +164,7 @@ void NPC::loadGraphics(const string& filename_portrait) {
 		activeAnimation = animationSet->getAnimation();
 	}
 	if (filename_portrait != "")
-		portrait.setGraphics(loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true));
+		portrait.setGraphics(render_device->loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true));
 }
 
 /**

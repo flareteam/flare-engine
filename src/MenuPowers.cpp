@@ -133,18 +133,18 @@ void MenuPowers::update() {
 
 void MenuPowers::loadGraphics() {
 
-	background.setGraphics(loadGraphicSurface("images/menus/powers.png"));
-	powers_unlock.setGraphics(loadGraphicSurface("images/menus/powers_unlock.png"));
-	overlay_disabled.setGraphics(loadGraphicSurface("images/menus/disabled.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/powers.png"));
+	powers_unlock.setGraphics(render_device->loadGraphicSurface("images/menus/powers_unlock.png"));
+	overlay_disabled.setGraphics(render_device->loadGraphicSurface("images/menus/disabled.png"));
 
 	if (tree_image_files.empty()) {
 		tree_surf.push_back(Sprite());
-		tree_surf.back().setGraphics(loadGraphicSurface("images/menus/powers_tree.png"));
+		tree_surf.back().setGraphics(render_device->loadGraphicSurface("images/menus/powers_tree.png"));
 	}
 	else {
 		for (unsigned int i = 0; i < tree_image_files.size(); ++i) {
 			tree_surf.push_back(Sprite());
-			tree_surf.back().setGraphics(loadGraphicSurface(tree_image_files[i]));
+			tree_surf.back().setGraphics(render_device->loadGraphicSurface(tree_image_files[i]));
 		}
 	}
 	for (unsigned int i=0; i<slots.size(); i++) {

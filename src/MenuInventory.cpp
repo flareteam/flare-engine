@@ -41,7 +41,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
-	background.setGraphics(loadGraphicSurface("images/menus/inventory.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/inventory.png"));
 
 	currency = 0;
 

@@ -54,7 +54,7 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 	, can_select(true)
 	, scrollbar_offset(0) {
 	// load ListBox images
-	listboxs.setGraphics(loadGraphicSurface(fileName, "Couldn't load image", true));
+	listboxs.setGraphics(render_device->loadGraphicSurface(fileName, "Couldn't load image", true));
 	click = NULL;
 
 	for (int i=0; i<list_amount; i++) {

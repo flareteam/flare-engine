@@ -79,7 +79,7 @@ MenuLog::MenuLog() {
 	font->setFont("font_regular");
 	paragraph_spacing = font->getLineHeight()/2;
 
-	background.setGraphics(loadGraphicSurface("images/menus/log.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/log.png"));
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 

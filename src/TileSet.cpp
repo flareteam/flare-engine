@@ -60,10 +60,10 @@ void TileSet::loadGraphics(const std::string& filename) {
 	}
 
 	if (!TEXTURE_QUALITY)
-		sprites.setGraphics(loadGraphicSurface("images/tilesets/noalpha/" + filename, "Couldn't load image", false, true));
+		sprites.setGraphics(render_device->loadGraphicSurface("images/tilesets/noalpha/" + filename, "Couldn't load image", false, true));
 
 	if (sprites.graphicsIsNull())
-		sprites.setGraphics(loadGraphicSurface("images/tilesets/" + filename));
+		sprites.setGraphics(render_device->loadGraphicSurface("images/tilesets/" + filename));
 }
 
 void TileSet::load(const std::string& filename) {

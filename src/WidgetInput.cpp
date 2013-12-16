@@ -50,7 +50,7 @@ WidgetInput::WidgetInput() {
 
 void WidgetInput::loadGraphics(const string& filename) {
 	// load input background image
-	background.setGraphics(loadGraphicSurface(filename, "Couldn't load image", true));
+	background.setGraphics(render_device->loadGraphicSurface(filename, "Couldn't load image", true));
 }
 
 void WidgetInput::logic() {

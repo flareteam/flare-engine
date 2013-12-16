@@ -32,7 +32,7 @@ GameStateTitle::GameStateTitle() : GameState() {
 	exit_game = false;
 	load_game = false;
 
-	logo.setGraphics(loadGraphicSurface("images/menus/logo.png"));
+	logo.setGraphics(render_device->loadGraphicSurface("images/menus/logo.png"));
 	// display logo centered
 	if (!logo.graphicsIsNull()) {
 		logo.setDestX(VIEW_W_HALF - (logo.getGraphicsWidth()/2));

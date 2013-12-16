@@ -250,7 +250,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
 
-	background.setGraphics(loadGraphicSurface("images/menus/character.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/character.png"));
 }
 
 void MenuCharacter::update() {

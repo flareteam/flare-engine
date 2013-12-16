@@ -198,7 +198,7 @@ void MenuNPCActions::update() {
 	// create background surface if necessary
 	if ( old_w != w || old_h != h ) {
 		action_menu.clearGraphics();
-		Image surface = createAlphaSurface(w,h);
+		Image surface = render_device->createAlphaSurface(w,h);
 		Uint32 bg = render_device->MapRGBA(&surface,
 											background_color.r, background_color.g,
 											background_color.b, background_alpha);

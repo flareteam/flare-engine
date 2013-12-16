@@ -233,7 +233,7 @@ void WidgetLabel::set(const string& _text) {
  */
 void WidgetLabel::refresh() {
 	renderable.clearGraphics();
-	Image surface = createAlphaSurface(bounds.w, bounds.h);
+	Image surface = render_device->createAlphaSurface(bounds.w, bounds.h);
 	font->setFont(font_style);
 	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, &surface, color);
 	renderable.setGraphics(surface);

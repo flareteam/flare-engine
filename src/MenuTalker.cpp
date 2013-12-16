@@ -52,7 +52,7 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png")) {
 
-	background.setGraphics(loadGraphicSurface("images/menus/dialog_box.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/dialog_box.png"));
 
 	// Load config settings
 	FileParser infile;
@@ -316,7 +316,7 @@ void MenuTalker::setHero(const string& name, const string& class_name, const str
 	hero_class = msg->get(class_name);
 
 	portrait.clearGraphics();
-	portrait.setGraphics(loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait"));
+	portrait.setGraphics(render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait"));
 }
 
 string MenuTalker::parseLine(const string &line) {

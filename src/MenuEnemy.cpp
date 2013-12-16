@@ -65,8 +65,8 @@ MenuEnemy::MenuEnemy() {
 }
 
 void MenuEnemy::loadGraphics() {
-	background.setGraphics(loadGraphicSurface("images/menus/enemy_bar.png"));
-	bar_hp.setGraphics(loadGraphicSurface("images/menus/enemy_bar_hp.png"));
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/enemy_bar.png"));
+	bar_hp.setGraphics(render_device->loadGraphicSurface("images/menus/enemy_bar_hp.png"));
 }
 
 void MenuEnemy::handleNewMap() {

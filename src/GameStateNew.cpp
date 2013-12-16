@@ -203,14 +203,14 @@ GameStateNew::GameStateNew() : GameState() {
 
 void GameStateNew::loadGraphics() {
 	portrait_border.setGraphics(
-		loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true)
+		render_device->loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true)
 	);
 }
 
 void GameStateNew::loadPortrait(const string& portrait_filename) {
 	portrait_image.clearGraphics();
 	portrait_image.setGraphics(
-		loadGraphicSurface("images/portraits/" + portrait_filename + ".png")
+		render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png")
 	);
 	portrait_image.setDest(portrait_pos);
 }

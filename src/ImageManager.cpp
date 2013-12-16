@@ -47,10 +47,10 @@ Image ImageManager::getSurface(const std::string &name) {
 		if (!TEXTURE_QUALITY) {
 			string newname = string(name);
 			newname.replace(name.rfind("/"), 0, "/noalpha");
-			sprites[index] = loadGraphicSurface(newname, "Falling back to alpha version", false, true);
+			sprites[index] = render_device->loadGraphicSurface(newname, "Falling back to alpha version", false, true);
 		}
 		else {
-			sprites[index] = loadGraphicSurface(name);
+			sprites[index] = render_device->loadGraphicSurface(name);
 		}
 		return sprites[index];
 	}

@@ -33,7 +33,6 @@ using namespace std;
 #include "SDLRenderDevice.h"
 
 GameSwitcher *gswitch;
-SDL_Surface *titlebar_icon;
 
 /**
  * Game initialization.
@@ -84,10 +83,6 @@ static void init() {
 	// Load miscellaneous settings
 	loadMiscSettings();
 
-	// Add Window Titlebar Icon
-	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
-	SDL_WM_SetIcon(titlebar_icon, NULL);
-
 	// Create render Device and Rendering Context.
 	render_device = new SDLRenderDevice();
 	int status = render_device->createContext(VIEW_W, VIEW_H);
@@ -133,11 +128,6 @@ static void init() {
 	if (AUDIO)
 		Mix_Volume(-1, SOUND_VOLUME);
 
-	// Window title
-	const char* title = msg->get(WINDOW_TITLE).c_str();
-	SDL_WM_SetCaption(title, title);
-
-
 	gswitch = new GameSwitcher();
 }
 
@@ -182,8 +172,6 @@ static void cleanup() {
 	delete mods;
 	delete msg;
 	delete snd;
-
-	SDL_FreeSurface(titlebar_icon);
 
 	Mix_CloseAudio();
 

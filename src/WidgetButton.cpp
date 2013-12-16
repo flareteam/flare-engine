@@ -55,7 +55,7 @@ void WidgetButton::activate() {
 
 void WidgetButton::loadArt() {
 	// load button images
-	buttons.setGraphics(loadGraphicSurface(fileName, "Couldn't load button image", true));
+	buttons.setGraphics(render_device->loadGraphicSurface(fileName, "Couldn't load button image", true));
 	buttons.setClip(
 		0,
 		0,
