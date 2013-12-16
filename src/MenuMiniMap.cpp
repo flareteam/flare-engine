@@ -72,7 +72,7 @@ void MenuMiniMap::getMapTitle(std::string map_title) {
 void MenuMiniMap::createMapSurface() {
 	map_surface.clearGraphics();
 	map_surface.setGraphics(createAlphaSurface(512, 512));
-	SDL_SetAlpha(map_surface.getGraphics(), SDL_SRCALPHA, SDL_ALPHA_TRANSPARENT);
+	setAlpha(map_surface.getGraphics(), SDL_SRCALPHA, SDL_ALPHA_TRANSPARENT);
 }
 
 void MenuMiniMap::render() {

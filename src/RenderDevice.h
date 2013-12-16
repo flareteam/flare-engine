@@ -206,6 +206,8 @@ void drawLine(Image *screen, Point pos0, Point pos1, Uint32 color);
 void drawRectangle(Image *surface, Point pos0, Point pos1, Uint32 color);
 bool checkPixel(Point px, Image *surface);
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
+void setColorKey(Image *surface, int flag, int key);
+void setAlpha(Image *surface, int flag, int alpha);
 
 /**
  * Creates a SDL_Surface.

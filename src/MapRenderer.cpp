@@ -279,7 +279,7 @@ void MapRenderer::createBackgroundSurface() {
 							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
 							VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
 	// background has no alpha:
-	SDL_SetColorKey(backgroundsurface, 0, 0);
+	setColorKey(backgroundsurface, 0, 0);
 }
 
 void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {

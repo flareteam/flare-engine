@@ -793,6 +793,16 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #endif
 }
 
+void setColorKey(Image* surface, int flag, int key) {
+	if (!surface) return;
+	SDL_SetColorKey(surface, flag, key);
+}
+
+void setAlpha(Image* surface, int flag, int alpha) {
+	if (!surface) return;
+	SDL_SetAlpha(surface, flag, alpha);
+}
+
 void freeImage(Image* image) {
 	if (image != NULL) {
 		SDL_FreeSurface(image);
