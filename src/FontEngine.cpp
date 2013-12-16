@@ -228,7 +228,8 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 	// render and blit the text
 	if (active_font->blend && target != NULL) {
-		ttf.setGraphics(TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color));
+		render_device->renderTextToImage(ttf.getGraphics(), active_font->ttfont, text, color, true);
+		ttf.setGraphics(*ttf.getGraphics());
 
 		// preserve alpha transparency of text buffers
 		SDL_Rect clip = ttf.getClip();
@@ -239,7 +240,8 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 	}
 	else {
 		SDL_Rect clip = ttf.getClip();
-		ttf.setGraphics(TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color));
+		render_device->renderTextToImage(ttf.getGraphics(), active_font->ttfont, text, color, false);
+		ttf.setGraphics(*ttf.getGraphics());
 		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect);
 	}
 	ttf.clearGraphics();

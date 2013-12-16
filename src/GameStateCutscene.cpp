@@ -239,24 +239,15 @@ bool GameStateCutscene::load(std::string filename) {
 	return true;
 }
 
-Image *GameStateCutscene::loadImage(std::string filename) {
+Image GameStateCutscene::loadImage(std::string filename) {
 
 	std::string image_file = (mods->locate("images/"+ filename));
-	Image *image = IMG_Load(image_file.c_str());
-	if (!image) {
-		fprintf(stderr, "Missing cutscene art reference: %s\n", image_file.c_str());
-		return NULL;
-	}
+	Image image = loadGraphicSurface(image_file);
 
 	/* scale image to fit height */
 	if (scale_graphics) {
-		float ratio = image->h/(float)image->w;
-		Image *art = scaleSurface(image, VIEW_W, (int)(VIEW_W*ratio));
-		if (art == NULL)
-			return image;
-
-		freeImage(image);
-		image = art;
+		float ratio = image.getHeight()/(float)image.getWidth();
+		scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
 	}
 
 	return image;

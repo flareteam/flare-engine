@@ -41,18 +41,37 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  */
 
-#define Image SDL_Surface
+class Image {
+public:
+	Image()
+		: surface(NULL)
+	{}
+	~Image() {}
+
+	int getWidth() {
+		return (surface ? surface->w : 0);
+	}
+	int getHeight() {
+		return (surface ? surface->h : 0);
+	}
+	bool graphicIsNull() {
+		return surface == NULL;
+	}
+
+	// TODO Only use this in a derivative class in SDLRenderDevice
+	SDL_Surface *surface;
+};
 
 struct Renderable {
 public:
-	Image *sprite; // image to be used
+	Image sprite; // image to be used
 	SDL_Rect src; // location on the sprite in pixel coordinates.
 
 	FPoint map_pos;     // The map location on the floor between someone's feet
 	Point offset;      // offset from map_pos to topleft corner of sprite
 	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
 	Renderable()
-		: sprite(0)
+		: sprite(Image())
 		, src(SDL_Rect())
 		, map_pos()
 		, offset()
@@ -66,7 +85,7 @@ public:
 	ISprite()
 		: local_frame(SDL_Rect())
 		, keep_graphics(false)
-		, sprite(NULL)
+		, sprite(Image())
 		, src(SDL_Rect())
 		, offset()
 		, dest()
@@ -76,7 +95,7 @@ public:
 	SDL_Rect local_frame;
 	bool keep_graphics; // don't free the sprite surface when deconstructing, used primarily for animations
 
-	virtual void setGraphics(Image *s, bool setClipToFull = true) = 0;
+	virtual void setGraphics(Image s, bool setClipToFull = true) = 0;
 	virtual Image * getGraphics() = 0;
 	virtual bool graphicsIsNull() = 0;
 	virtual void clearGraphics() = 0;
@@ -100,7 +119,7 @@ public:
 	virtual int getGraphicsHeight() = 0;
 
 protected:
-	Image *sprite; // image to be used
+	Image sprite; // image to be used
 	SDL_Rect src; // location on the sprite in pixel coordinates.
 	Point offset;      // offset from map_pos to topleft corner of sprite
 	FPoint dest;
@@ -135,6 +154,10 @@ public:
 	/** Render text to the screen.
 	 */
 	virtual int renderText(TTF_Font *ttf_font, const std::string& text, SDL_Color color, SDL_Rect& dest) = 0;
+
+	/** Renders text to an image, but does not actually blit it
+	 */
+	virtual void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, SDL_Color color, bool blended = true) = 0;
 
 	/** Draw pixel to screen.
 	 */
@@ -175,7 +198,7 @@ public:
 	/**
 	 * Map a RGB color value to a pixel format.
 	 */
-	virtual Uint32 MapRGB(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b) = 0;
+	virtual Uint32 MapRGB(Image *src, Uint8 r, Uint8 g, Uint8 b) = 0;
 
 	/**
 	 * Map a RGB color value to a screen pixel format.
@@ -185,7 +208,7 @@ public:
 	/**
 	 * Map a RGBA color value to a pixel format.
 	 */
-	virtual Uint32 MapRGBA(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
+	virtual Uint32 MapRGBA(Image *src, Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
 
 	/**
 	 * Map a RGBA color value to a screen pixel format.
@@ -199,15 +222,15 @@ protected:
 	bool is_initialized; ///< true if a context was created once
 };
 
-Uint32 readPixel(Image *screen, int x, int y);
-void drawPixel(Image *screen, int x, int y, Uint32 color);
-void drawLine(Image *screen, int x0, int y0, int x1, int y1, Uint32 color);
-void drawLine(Image *screen, Point pos0, Point pos1, Uint32 color);
-void drawRectangle(Image *surface, Point pos0, Point pos1, Uint32 color);
-bool checkPixel(Point px, Image *surface);
+Uint32 readPixel(Image *image, int x, int y);
+void drawPixel(Image *image, int x, int y, Uint32 color);
+void drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color);
+void drawLine(Image *image, Point pos0, Point pos1, Uint32 color);
+void drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color);
+bool checkPixel(Point px, Image *image);
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
-void setColorKey(Image *surface, int flag, int key);
-void setAlpha(Image *surface, int flag, int alpha);
+void setColorKey(Image *image, int flag, int key);
+void setAlpha(Image *image, int flag, int alpha);
 
 /**
  * Creates a SDL_Surface.
@@ -216,7 +239,7 @@ void setAlpha(Image *surface, int flag, int alpha);
  * screen surface.
  * Additionally the alpha flag is set, so transparent blits are possible.
  */
-Image* createAlphaSurface(int width, int height);
+Image createAlphaSurface(int width, int height);
 
 /**
  * Creates a SDL_Surface.
@@ -225,9 +248,9 @@ Image* createAlphaSurface(int width, int height);
  * screen surface.
  * The bright pink (rgb 0xff00ff) is set as transparent color.
  */
-Image* createSurface(int width, int height);
+Image createSurface(int width, int height);
 
-Image* scaleSurface(Image *source, int width, int height);
+void scaleSurface(Image *source, int width, int height);
 
 /**
  * @brief loadGraphicSurface loads an image from a file.
@@ -249,11 +272,11 @@ Image* scaleSurface(Image *source, int width, int height);
  *        successful
  */
 
-Image* loadGraphicSurface(std::string filename,
+Image loadGraphicSurface(std::string filename,
 								std::string errormessage = "Couldn't load image",
 								bool IfNotFoundExit = false,
 								bool HavePinkColorKey = false);
 
-void freeImage(Image* image);
+void freeImage(Image *image);
 
 #endif // RENDERDEVICE_H

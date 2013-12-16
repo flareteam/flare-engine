@@ -40,22 +40,21 @@ ImageManager::~ImageManager() {
 #endif
 }
 
-Image *ImageManager::getSurface(const std::string &name) {
+Image ImageManager::getSurface(const std::string &name) {
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
-		if (!sprites[index]) {
-			if (!TEXTURE_QUALITY) {
-				string newname = string(name);
-				newname.replace(name.rfind("/"), 0, "/noalpha");
-				sprites[index] = loadGraphicSurface(newname, "Falling back to alpha version", false, true);
-			}
-			if (!sprites[index])
-				sprites[index] = loadGraphicSurface(name);
+		if (!TEXTURE_QUALITY) {
+			string newname = string(name);
+			newname.replace(name.rfind("/"), 0, "/noalpha");
+			sprites[index] = loadGraphicSurface(newname, "Falling back to alpha version", false, true);
+		}
+		else {
+			sprites[index] = loadGraphicSurface(name);
 		}
 		return sprites[index];
 	}
-	return 0;
+	return Image();
 }
 
 void ImageManager::increaseCount(const std::string &name) {
@@ -65,7 +64,7 @@ void ImageManager::increaseCount(const std::string &name) {
 		counts[index]++;
 	}
 	else {
-		sprites.push_back(0);
+		sprites.push_back(Image());
 		names.push_back(name);
 		counts.push_back(1);
 	}
@@ -86,7 +85,7 @@ void ImageManager::cleanUp() {
 	int i = sprites.size() - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {
-			freeImage(sprites[i]);
+			freeImage(&sprites[i]);
 			counts.erase(counts.begin()+i);
 			sprites.erase(sprites.begin()+i);
 			names.erase(names.begin()+i);

@@ -135,20 +135,19 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
 	tip.tip_buffer.clearGraphics();
-	Image *surface =
-		createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
+	Image surface = createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
 
 	// Currently tooltips are always opaque
-	setAlpha(surface, 0, SDL_ALPHA_OPAQUE);
+	setAlpha(&surface, 0, SDL_ALPHA_OPAQUE);
 
 	// style the tooltip background
 	// currently this is plain black
-	render_device->fillImageWithColor(surface, NULL, render_device->MapRGB(surface->format,0,0,0));
+	render_device->fillImageWithColor(&surface, NULL, render_device->MapRGB(&surface,0,0,0));
 
 	int cursor_y = margin;
 
 	for (unsigned int i=0; i<tip.lines.size(); i++) {
-		font->render(tip.lines[i], margin, cursor_y, JUSTIFY_LEFT, surface, size.x, tip.colors[i]);
+		font->render(tip.lines[i], margin, cursor_y, JUSTIFY_LEFT, &surface, size.x, tip.colors[i]);
 		cursor_y = font->cursor_y;
 	}
 

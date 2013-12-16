@@ -98,7 +98,7 @@ private:
 	TileSet tset;
 
 	// in case of animated tiles switched off, prerender background into this layer
-	Image* backgroundsurface;
+	Image backgroundsurface;
 
 	// only called if the background surface is actually used, i.e. ANIMATED_TILES = false;
 	void createBackgroundSurface();

@@ -55,13 +55,7 @@ void WidgetButton::activate() {
 
 void WidgetButton::loadArt() {
 	// load button images
-	Image *surface = loadGraphicSurface(fileName);
-	if (!surface) {
-		SDL_Quit();
-		exit(1); // or abort ??
-	}
-
-	buttons.setGraphics(surface);
+	buttons.setGraphics(loadGraphicSurface(fileName, "Couldn't load button image", true));
 	buttons.setClip(
 		0,
 		0,

@@ -45,7 +45,7 @@ public:
 	Sprite& operator=(const Sprite& other);
 	~Sprite();
 
-	void setGraphics(Image *s, bool setClipToFull = true);
+	void setGraphics(Image s, bool setClipToFull = true);
 	Image * getGraphics();
 	bool graphicsIsNull();
 	void clearGraphics();
@@ -84,6 +84,8 @@ public:
 
 	int renderText(TTF_Font *ttf_font, const std::string& text, SDL_Color color, SDL_Rect& dest);
 
+	void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, SDL_Color color, bool blended = true);
+
 	void drawPixel(int x, int y, Uint32 color);
 
 	void drawLine(int x0, int y0, int x1, int y1, Uint32 color);
@@ -100,11 +102,11 @@ public:
 
 	void fillImageWithColor(Image *dst, SDL_Rect *dstrect, Uint32 color);
 
-	Uint32 MapRGB(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b);
+	Uint32 MapRGB(Image *src, Uint8 r, Uint8 g, Uint8 b);
 
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 
-	Uint32 MapRGBA(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	Uint32 MapRGBA(Image *src, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 

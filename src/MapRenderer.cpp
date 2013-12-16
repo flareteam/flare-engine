@@ -45,7 +45,7 @@ MapRenderer::MapRenderer()
 	, tip_pos()
 	, show_tooltip(false)
 	, shakycam()
-	, backgroundsurface(NULL)
+	, backgroundsurface(Image())
 	, backgroundsurfaceoffset()
 	, cam()
 	, map_change(false)
@@ -133,8 +133,7 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 void MapRenderer::clearLayers() {
 	Map::clearLayers();
 
-	freeImage(backgroundsurface);
-	backgroundsurface = 0;
+	freeImage(&backgroundsurface);
 	index_objectlayer = 0;
 }
 
@@ -174,6 +173,11 @@ int MapRenderer::load(std::string fname) {
 	// some events automatically trigger when the map loads
 	// e.g. change map state based on campaign status
 	executeOnLoadEvents();
+
+	// when we have disabled animated tiles, we use a surface to cache the background layer
+	// that surface is created here
+	if (!ANIMATED_TILES)
+		createBackgroundSurface();
 
 	return 0;
 }
@@ -274,16 +278,16 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 }
 
 void MapRenderer::createBackgroundSurface() {
-	freeImage(backgroundsurface);
+	freeImage(&backgroundsurface);
 	backgroundsurface = createSurface(
 							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
 							VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
 	// background has no alpha:
-	setColorKey(backgroundsurface, 0, 0);
+	setColorKey(&backgroundsurface, 0, 0);
 }
 
 void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
-	if (r_cursor->sprite) {
+	if (r_cursor->sprite.graphicIsNull() == false) {
 		SDL_Rect dest;
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 		dest.x = p.x - r_cursor->offset.x;
@@ -342,9 +346,9 @@ void MapRenderer::renderIsoLayer(Image *wheretorender, Point offset, const unsig
 				// by SDL_BlitSurface
 				if (wheretorender == NULL) {
 					tset.tiles[current_tile].tile.setDest(dest);
-					tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
+					tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 					render_device->render(tset.tiles[current_tile].tile);
-					tset.tiles[current_tile].tile.setGraphics(NULL);
+					tset.tiles[current_tile].tile.setGraphics(Image());
 				}
 				else {
 					SDL_Rect clip = tset.tiles[current_tile].tile.getClip();
@@ -419,9 +423,9 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
+				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				tset.tiles[current_tile].tile.setGraphics(NULL);
+				tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 
 			// some renderable entities go in this layer
@@ -453,17 +457,14 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender
 				|| repaint_background) {
 
-			if (!backgroundsurface)
-				createBackgroundSurface();
-
 			repaint_background = false;
 
 			backgroundsurfaceoffset = shakycam;
 
-			render_device->fillImageWithColor(backgroundsurface, NULL, 0);
+			render_device->fillImageWithColor(&backgroundsurface, NULL, 0);
 			Point off(VIEW_W_HALF, VIEW_H_HALF);
 			for (unsigned i = 0; i < index_objectlayer; ++i)
-				renderIsoLayer(backgroundsurface, off, layers[i]);
+				renderIsoLayer(&backgroundsurface, off, layers[i]);
 		}
 		Point p = map_to_screen(shakycam.x, shakycam.y , backgroundsurfaceoffset.x, backgroundsurfaceoffset.y);
 		SDL_Rect src;
@@ -471,7 +472,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		src.y = p.y;
 		src.w = 2 * VIEW_W;
 		src.h = 2 * VIEW_H;
-		render_device->renderImage(backgroundsurface, src);
+		render_device->renderImage(&backgroundsurface, src);
 	}
 
 	renderIsoBackObjects(r_dead);
@@ -504,9 +505,9 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
+				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				tset.tiles[current_tile].tile.setGraphics(NULL);
+				tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 		}
@@ -551,9 +552,9 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(tset.sprites.getGraphics(), false);
+				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				tset.tiles[current_tile].tile.setGraphics(NULL);
+				tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 
