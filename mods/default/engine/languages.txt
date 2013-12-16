@@ -1,4 +1,4 @@
-# If default font should be overriden, specify it in mod_name/engine/font_settings.txt
+﻿# If default font should be overriden, specify it in mod_name/engine/font_settings.txt
 be=Беларуская
 cs=Čeština
 de=Deutsch
@@ -13,6 +13,7 @@ ja=Japanese
 nb=Norsk Bokmål
 nl=Nederlands
 pl=Polski
+pt=Português
 ru=Русский
 sk=Slovenčina
 sv=Svenska
