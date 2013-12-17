@@ -663,6 +663,54 @@ Image SDLRenderDevice::createSurface(int width, int height) {
 	return image;
 }
 
+void SDLRenderDevice::setGamma(float g) {
+	SDL_SetGamma(g, g, g);
+}
+
+void SDLRenderDevice::listModes(std::vector<SDL_Rect> &modes) {
+	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
+
+	// Check if there are any modes available
+	if (detect_modes == (SDL_Rect**)0) {
+		fprintf(stderr, "No modes available!\n");
+		return;
+	}
+
+	// Check if our resolution is restricted
+	if (detect_modes == (SDL_Rect**)-1) {
+		fprintf(stderr, "All resolutions available.\n");
+	}
+
+	for (unsigned i=0; detect_modes[i]; ++i) {
+		modes.push_back(*detect_modes[i]);
+		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
+			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
+			modes.pop_back();
+		}
+		else {
+			// check previous resolutions for duplicates. If one is found, drop the one we just added
+			for (unsigned j=0; j<modes.size()-1; ++j) {
+				if (modes[j].w == detect_modes[i]->w && modes[j].h == detect_modes[i]->h) {
+					modes.pop_back();
+					break;
+				}
+			}
+		}
+	}
+
+}
+
+void SDLRenderDevice::setColorKey(Image* image, Uint32 flag, Uint32 key) {
+	if (!image) return;
+	SDL_SetColorKey(image->surface, flag, key);
+}
+
+void SDLRenderDevice:: setAlpha(Image* image, Uint32 flag, Uint8 alpha) {
+	if (!image) return;
+	SDL_SetAlpha(image->surface, flag, alpha);
+}
+
+
 Image SDLRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
 	Image image;
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
@@ -717,7 +765,7 @@ void SDLRenderDevice::scaleSurface(Image *source, int width, int height) {
 	}
 }
 
-Uint32 readPixel(Image *image, int x, int y) {
+Uint32 SDLRenderDevice::readPixel(Image *image, int x, int y) {
 	if (!image || !image->surface) return 0;
 	SDL_Surface *surface = image->surface;
 
@@ -761,7 +809,7 @@ Uint32 readPixel(Image *image, int x, int y) {
  * Source: SDL Documentation
  * http://www.libsdl.org/cgi/docwiki.cgi/Introduction_to_SDL_Video#getpixel
  */
-bool checkPixel(Point px, Image *image) {
+bool SDLRenderDevice::checkPixel(Point px, Image *image) {
 	if (!image || !image->surface) return false;
 	SDL_Surface *surface = image->surface;
 
@@ -815,6 +863,11 @@ bool checkPixel(Point px, Image *image) {
 	return true;
 }
 
+void SDLRenderDevice::freeImage(Image *image) {
+	if (image && image->surface)
+		SDL_FreeSurface(image->surface);
+}
+
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	*rmask = 0xff000000;
@@ -829,17 +882,3 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #endif
 }
 
-void setColorKey(Image* image, int flag, int key) {
-	if (!image) return;
-	SDL_SetColorKey(image->surface, flag, key);
-}
-
-void setAlpha(Image* image, int flag, int alpha) {
-	if (!image) return;
-	SDL_SetAlpha(image->surface, flag, alpha);
-}
-
-void freeImage(Image *image) {
-	if (image && image->surface)
-		SDL_FreeSurface(image->surface);
-}

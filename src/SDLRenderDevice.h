@@ -126,6 +126,20 @@ public:
 
 	void scaleSurface(Image *source, int width, int height);
 
+	void setGamma(float g);
+
+	void listModes(std::vector<SDL_Rect> &modes);
+
+	void setColorKey(Image* image, Uint32 flag, Uint32 key);
+
+	void setAlpha(Image* image, Uint32 flag, Uint8 alpha);
+
+	Uint32 readPixel(Image *image, int x, int y);
+
+	bool checkPixel(Point px, Image *image);
+
+	void freeImage(Image *image);
+
 	Image loadGraphicSurface(std::string filename,
 								std::string errormessage = "Couldn't load image",
 								bool IfNotFoundExit = false,

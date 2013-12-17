@@ -658,7 +658,7 @@ void GameStateConfig::update () {
 		gamma_sl->enabled = false;
 	}
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
-	SDL_SetGamma(GAMMA,GAMMA,GAMMA);
+	render_device->setGamma(GAMMA);
 
 	if (ANIMATED_TILES) animated_tiles_cb->Check();
 	else animated_tiles_cb->unCheck();
@@ -865,7 +865,7 @@ void GameStateConfig::logic () {
 				GAMMA = 1.0;
 				gamma_sl->enabled = false;
 				gamma_sl->set(5,20,(int)(GAMMA*10.0));
-				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
+				render_device->setGamma(GAMMA);
 			}
 		}
 		else if (animated_tiles_cb->checkClick()) {
@@ -879,6 +879,7 @@ void GameStateConfig::logic () {
 			gamma_sl->enabled = true;
 			if (gamma_sl->checkClick()) {
 				GAMMA=(gamma_sl->getValue())*0.1f;
+				render_device->setGamma(GAMMA);
 				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
 			}
 		}
@@ -1124,35 +1125,7 @@ int GameStateConfig::getVideoModes() {
 	common_modes[4].h = MIN_VIEW_H;
 
 	// Get available fullscreen/hardware modes
-	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
-
-	// Check if there are any modes available
-	if (detect_modes == (SDL_Rect**)0) {
-		fprintf(stderr, "No modes available!\n");
-		return 0;
-	}
-
-	// Check if our resolution is restricted
-	if (detect_modes == (SDL_Rect**)-1) {
-		fprintf(stderr, "All resolutions available.\n");
-	}
-
-	for (unsigned i=0; detect_modes[i]; ++i) {
-		video_modes.push_back(*detect_modes[i]);
-		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
-			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
-			video_modes.pop_back();
-		}
-		else {
-			// check previous resolutions for duplicates. If one is found, drop the one we just added
-			for (unsigned j=0; j<video_modes.size()-1; ++j) {
-				if (video_modes[j].w == detect_modes[i]->w && video_modes[j].h == detect_modes[i]->h) {
-					video_modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
+	render_device->listModes(video_modes);
 
 	for (unsigned i=0; i<cm_count; ++i) {
 		video_modes.push_back(common_modes[i]);
