@@ -85,7 +85,7 @@ void ImageManager::cleanUp() {
 	int i = sprites.size() - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {
-			freeImage(&sprites[i]);
+			render_device->freeImage(&sprites[i]);
 			counts.erase(counts.begin()+i);
 			sprites.erase(sprites.begin()+i);
 			names.erase(names.begin()+i);

@@ -765,7 +765,7 @@ void SDLRenderDevice::scaleSurface(Image *source, int width, int height) {
 	}
 }
 
-Uint32 readPixel(Image *image, int x, int y) {
+Uint32 SDLRenderDevice::readPixel(Image *image, int x, int y) {
 	if (!image || !image->surface) return 0;
 	SDL_Surface *surface = image->surface;
 
@@ -809,7 +809,7 @@ Uint32 readPixel(Image *image, int x, int y) {
  * Source: SDL Documentation
  * http://www.libsdl.org/cgi/docwiki.cgi/Introduction_to_SDL_Video#getpixel
  */
-bool checkPixel(Point px, Image *image) {
+bool SDLRenderDevice::checkPixel(Point px, Image *image) {
 	if (!image || !image->surface) return false;
 	SDL_Surface *surface = image->surface;
 
@@ -863,6 +863,11 @@ bool checkPixel(Point px, Image *image) {
 	return true;
 }
 
+void SDLRenderDevice::freeImage(Image *image) {
+	if (image && image->surface)
+		SDL_FreeSurface(image->surface);
+}
+
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	*rmask = 0xff000000;
@@ -877,7 +882,3 @@ void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #endif
 }
 
-void freeImage(Image *image) {
-	if (image && image->surface)
-		SDL_FreeSurface(image->surface);
-}

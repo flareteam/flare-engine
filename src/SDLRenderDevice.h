@@ -134,6 +134,12 @@ public:
 
 	void setAlpha(Image* image, Uint32 flag, Uint8 alpha);
 
+	Uint32 readPixel(Image *image, int x, int y);
+
+	bool checkPixel(Point px, Image *image);
+
+	void freeImage(Image *image);
+
 	Image loadGraphicSurface(std::string filename,
 								std::string errormessage = "Couldn't load image",
 								bool IfNotFoundExit = false,

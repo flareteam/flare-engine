@@ -267,6 +267,12 @@ public:
 
 	virtual void setAlpha(Image* image, Uint32 flag, Uint8 alpha) = 0;
 
+	virtual Uint32 readPixel(Image *image, int x, int y) = 0;
+
+	virtual bool checkPixel(Point px, Image *image) = 0;
+
+	virtual void freeImage(Image *image) = 0;
+
 	/**
 	 * @brief loadGraphicSurface loads an image from a file.
 	 * @param filename
@@ -296,9 +302,6 @@ protected:
 	bool is_initialized; ///< true if a context was created once
 };
 
-Uint32 readPixel(Image *image, int x, int y);
-bool checkPixel(Point px, Image *image);
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
-void freeImage(Image *image);
 
 #endif // RENDERDEVICE_H

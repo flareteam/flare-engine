@@ -133,7 +133,7 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 void MapRenderer::clearLayers() {
 	Map::clearLayers();
 
-	freeImage(&backgroundsurface);
+	render_device->freeImage(&backgroundsurface);
 	index_objectlayer = 0;
 }
 
@@ -278,7 +278,7 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 }
 
 void MapRenderer::createBackgroundSurface() {
-	freeImage(&backgroundsurface);
+	render_device->freeImage(&backgroundsurface);
 	backgroundsurface = render_device->createSurface(
 							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
 							VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
@@ -716,7 +716,7 @@ void MapRenderer::checkHotspots() {
 							Point p1;
 							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile.getClip().x;
 							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile.getClip().y;
-							matched |= checkPixel(p1, tset.sprites.getGraphics());
+							matched |= render_device->checkPixel(p1, tset.sprites.getGraphics());
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;
 						}
