@@ -259,6 +259,14 @@ public:
 
 	virtual void scaleSurface(Image *source, int width, int height) = 0;
 
+	virtual void setGamma(float g) = 0;
+
+	virtual void listModes(std::vector<SDL_Rect> &modes) = 0;
+
+	virtual void setColorKey(Image* image, Uint32 flag, Uint32 key) = 0;
+
+	virtual void setAlpha(Image* image, Uint32 flag, Uint8 alpha) = 0;
+
 	/**
 	 * @brief loadGraphicSurface loads an image from a file.
 	 * @param filename
@@ -291,8 +299,6 @@ protected:
 Uint32 readPixel(Image *image, int x, int y);
 bool checkPixel(Point px, Image *image);
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
-void setColorKey(Image *image, int flag, int key);
-void setAlpha(Image *image, int flag, int alpha);
 void freeImage(Image *image);
 
 #endif // RENDERDEVICE_H
