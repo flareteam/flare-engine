@@ -49,8 +49,8 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	: name(animationname)
 	, loaded(false)
 	, animations()
-	, sprite(NULL) {
-	defaultAnimation = new Animation("default", "play_once", NULL);
+	, sprite(Image()) {
+	defaultAnimation = new Animation("default", "play_once", Image());
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
@@ -93,7 +93,7 @@ void AnimationSet::load() {
 			compressed_loading = false;
 		}
 		if (parser.key == "image") {
-			if (sprite) {
+			if (sprite.graphicIsNull() == false) {
 				printf("multiple images specified in %s, dragons be here!\n", name.c_str());
 				SDL_Quit();
 				exit(128);

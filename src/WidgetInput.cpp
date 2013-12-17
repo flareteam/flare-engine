@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -19,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetInput.h"
 #include "SharedResources.h"
 #include "Settings.h"
-#include "SDL_gfxBlitFunc.h"
 
 using namespace std;
 
@@ -35,8 +35,11 @@ WidgetInput::WidgetInput() {
 	loadGraphics("images/menus/input.png");
 
 	// position
-	pos.w = background->w;
-	pos.h = background->h/2;
+	pos.w = background.getGraphicsWidth();
+	pos.h = background.getGraphicsHeight()/2;
+
+	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
+	local_offset.x = local_offset.y = 0;
 
 	cursor_frame = 0;
 
@@ -46,9 +49,8 @@ WidgetInput::WidgetInput() {
 }
 
 void WidgetInput::loadGraphics(const string& filename) {
-
 	// load input background image
-	background = loadGraphicSurface(filename, "Couldn't load image", true);
+	background.setGraphics(render_device->loadGraphicSurface(filename, "Couldn't load image", true));
 }
 
 void WidgetInput::logic() {
@@ -101,45 +103,37 @@ bool WidgetInput::logic(int x, int y) {
 	return true;
 }
 
-void WidgetInput::render(SDL_Surface *target) {
-	if (target == NULL) {
-		target = screen;
-	}
-
+void WidgetInput::render() {
 	SDL_Rect src;
 	src.x = 0;
-	src.y = 0;
+	src.y = (inFocus ? pos.h : 0);
 	src.w = pos.w;
 	src.h = pos.h;
 
-	if (!inFocus)
-		src.y = 0;
-	else
-		src.y = pos.h;
-
-	if (render_to_alpha)
-		SDL_gfxBlitRGBA(background, &src, target, &pos);
-	else
-		SDL_BlitSurface(background, &src, target, &pos);
+	background.local_frame = local_frame;
+	background.setOffset(local_offset);
+	background.setClip(src);
+	background.setDest(pos);
+	render_device->render(background);
 
 	font->setFont("font_regular");
 
 	if (!inFocus) {
-		font->render(text, font_pos.x, font_pos.y, JUSTIFY_LEFT, target, color_normal);
+		font->render(text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
 	}
 	else {
 		if (cursor_frame < MAX_FRAMES_PER_SEC) {
-			font->renderShadowed(text + "|", font_pos.x, font_pos.y, JUSTIFY_LEFT, target, color_normal);
+			font->renderShadowed(text + "|", font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
 		}
 		else {
-			font->renderShadowed(text, font_pos.x, font_pos.y, JUSTIFY_LEFT, target, color_normal);
+			font->renderShadowed(text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
 		}
 	}
 }
 
 void WidgetInput::setPosition(int x, int y) {
-	pos.x = x;
-	pos.y = y;
+	pos.x = x + local_frame.x - local_offset.x;
+	pos.y = y + local_frame.y - local_offset.y;
 
 	font->setFont("font_regular");
 	font_pos.x = pos.x  + (font->getFontHeight()/2);
@@ -180,6 +174,5 @@ bool WidgetInput::checkClick() {
 }
 
 WidgetInput::~WidgetInput() {
-	SDL_FreeSurface(background);
 }
 

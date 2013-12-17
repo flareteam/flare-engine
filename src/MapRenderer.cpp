@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -44,7 +45,7 @@ MapRenderer::MapRenderer()
 	, tip_pos()
 	, show_tooltip(false)
 	, shakycam()
-	, backgroundsurface(NULL)
+	, backgroundsurface(Image())
 	, backgroundsurfaceoffset()
 	, cam()
 	, map_change(false)
@@ -132,8 +133,7 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 void MapRenderer::clearLayers() {
 	Map::clearLayers();
 
-	SDL_FreeSurface(backgroundsurface);
-	backgroundsurface = 0;
+	render_device->freeImage(&backgroundsurface);
 	index_objectlayer = 0;
 }
 
@@ -185,6 +185,11 @@ int MapRenderer::load(std::string fname) {
 	// some events automatically trigger when the map loads
 	// e.g. change map state based on campaign status
 	executeOnLoadEvents();
+
+	// when we have disabled animated tiles, we use a surface to cache the background layer
+	// that surface is created here
+	if (!ANIMATED_TILES)
+		createBackgroundSurface();
 
 	return 0;
 }
@@ -285,25 +290,25 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 }
 
 void MapRenderer::createBackgroundSurface() {
-	SDL_FreeSurface(backgroundsurface);
-	backgroundsurface = createSurface(
+	render_device->freeImage(&backgroundsurface);
+	backgroundsurface = render_device->createSurface(
 							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
 							VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
 	// background has no alpha:
-	SDL_SetColorKey(backgroundsurface, 0, 0);
+	render_device->setColorKey(&backgroundsurface, 0, 0);
 }
 
 void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
-	if (r_cursor->sprite) {
+	if (r_cursor->sprite.graphicIsNull() == false) {
 		SDL_Rect dest;
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 		dest.x = p.x - r_cursor->offset.x;
 		dest.y = p.y - r_cursor->offset.y;
-		SDL_BlitSurface(r_cursor->sprite, &r_cursor->src, screen, &dest);
+		render_device->render(*r_cursor, dest);
 	}
 }
 
-void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const unsigned short layerdata[256][256]) {
+void MapRenderer::renderIsoLayer(Image *wheretorender, Point offset, const unsigned short layerdata[256][256]) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	SDL_Rect dest;
@@ -351,7 +356,16 @@ void MapRenderer::renderIsoLayer(SDL_Surface *wheretorender, Point offset, const
 				dest.y = p.y - tset.tiles[current_tile].offset.y + offset.y;
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
-				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), wheretorender, &dest);
+				if (wheretorender == NULL) {
+					tset.tiles[current_tile].tile.setDest(dest);
+					tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+					render_device->render(tset.tiles[current_tile].tile);
+					tset.tiles[current_tile].tile.setGraphics(Image());
+				}
+				else {
+					SDL_Rect clip = tset.tiles[current_tile].tile.getClip();
+					render_device->renderToImage(tset.sprites.getGraphics(), clip, wheretorender, dest);
+				}
 			}
 		}
 		j += tiles_width;
@@ -420,7 +434,10 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			if (const uint_fast16_t current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
+				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 
 			// some renderable entities go in this layer
@@ -445,24 +462,21 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	const Point nulloffset(0, 0);
 	if (ANIMATED_TILES) {
 		for (unsigned i = 0; i < index_objectlayer; ++i)
-			renderIsoLayer(screen, nulloffset, layers[i]);
+			renderIsoLayer(NULL, nulloffset, layers[i]);
 	}
 	else {
 		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender
 				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender
 				|| repaint_background) {
 
-			if (!backgroundsurface)
-				createBackgroundSurface();
-
 			repaint_background = false;
 
 			backgroundsurfaceoffset = shakycam;
 
-			SDL_FillRect(backgroundsurface, 0, 0);
+			render_device->fillImageWithColor(&backgroundsurface, NULL, 0);
 			Point off(VIEW_W_HALF, VIEW_H_HALF);
 			for (unsigned i = 0; i < index_objectlayer; ++i)
-				renderIsoLayer(backgroundsurface, off, layers[i]);
+				renderIsoLayer(&backgroundsurface, off, layers[i]);
 		}
 		Point p = map_to_screen(shakycam.x, shakycam.y , backgroundsurfaceoffset.x, backgroundsurfaceoffset.y);
 		SDL_Rect src;
@@ -470,13 +484,13 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 		src.y = p.y;
 		src.w = 2 * VIEW_W;
 		src.h = 2 * VIEW_H;
-		SDL_BlitSurface(backgroundsurface, &src, screen , 0);
+		render_device->renderImage(&backgroundsurface, src);
 	}
 
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
 	for (unsigned i = index_objectlayer + 1; i < layers.size(); ++i)
-		renderIsoLayer(screen, nulloffset, layers[i]);
+		renderIsoLayer(NULL, nulloffset, layers[i]);
 
 	checkTooltip();
 }
@@ -502,7 +516,10 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				SDL_Rect dest;
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
+				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 		}
@@ -546,7 +563,10 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 			if (const unsigned short current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				SDL_BlitSurface(tset.sprites, &(tset.tiles[current_tile].src), screen, &dest);
+				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 
@@ -697,8 +717,8 @@ void MapRenderer::checkHotspots() {
 						SDL_Rect dest;
 						dest.x = p.x - tset.tiles[current_tile].offset.x;
 						dest.y = p.y - tset.tiles[current_tile].offset.y;
-						dest.w = tset.tiles[current_tile].src.w;
-						dest.h = tset.tiles[current_tile].src.h;
+						dest.w = tset.tiles[current_tile].tile.getClip().w;
+						dest.h = tset.tiles[current_tile].tile.getClip().h;
 
 						if (isWithin(dest, inpt->mouse)) {
 							// Now that the mouse is within the rectangle of the tile, we can check for
@@ -706,9 +726,9 @@ void MapRenderer::checkHotspots() {
 							// otherwise the pixel precise check might hit a neighbouring tile in the
 							// tileset. We need to calculate the point relative to the
 							Point p1;
-							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].src.x;
-							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].src.y;
-							matched |= checkPixel(p1, tset.sprites);
+							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile.getClip().x;
+							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile.getClip().y;
+							matched |= render_device->checkPixel(p1, tset.sprites.getGraphics());
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;
 						}

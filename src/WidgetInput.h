@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 kitano
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -36,7 +37,7 @@ protected:
 
 	void loadGraphics(const std::string& filename);
 
-	SDL_Surface *background;
+	Sprite background;
 
 	bool enabled;
 	bool pressed;
@@ -56,7 +57,7 @@ public:
 
 	void logic();
 	bool logic(int x, int y);
-	void render(SDL_Surface *target = NULL);
+	void render();
 	bool checkClick();
 	std::string getText() { return text; }
 	void setText(std::string _text) { text = _text; }

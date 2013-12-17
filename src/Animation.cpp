@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Animation::Animation(const std::string &_name, const std::string &_type, SDL_Surface *_sprite)
+Animation::Animation(const std::string &_name, const std::string &_type, Image _sprite)
 	: name(_name)
 	, type(	_type == "play_once" ? PLAY_ONCE :
 			_type == "back_forth" ? BACK_FORTH :

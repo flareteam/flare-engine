@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -42,7 +43,7 @@ private:
 public:
 	WidgetTooltip();
 	Point calcPosition(STYLE style, Point pos, Point size);
-	void render(TooltipData &tip, Point pos, STYLE style, SDL_Surface *target = NULL);
+	void render(TooltipData &tip, Point pos, STYLE style);
 	void createBuffer(TooltipData &tip);
 };
 

@@ -41,7 +41,7 @@ private:
 	int first_dialog_node;
 	size_t current_action;
 
-	SDL_Surface *action_menu;
+	Sprite action_menu;
 	SDL_Color topic_normal_color;
 	SDL_Color topic_hilight_color;
 	SDL_Color vendor_normal_color;

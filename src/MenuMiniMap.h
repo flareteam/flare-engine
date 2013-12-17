@@ -36,7 +36,7 @@ private:
 	Uint32 color_obst;
 	Uint32 color_hero;
 
-	SDL_Surface *map_surface;
+	Sprite map_surface;
 	Point map_size;
 
 	SDL_Rect pos;

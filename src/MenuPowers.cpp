@@ -39,13 +39,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, SDL_Surface *_icons, MenuActionBar *_action_bar) {
+MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar) {
 
 	stats = _stats;
-	icons = _icons;
 	action_bar = _action_bar;
-
-	overlay_disabled = NULL;
 
 	visible = false;
 
@@ -136,20 +133,23 @@ void MenuPowers::update() {
 
 void MenuPowers::loadGraphics() {
 
-	background = loadGraphicSurface("images/menus/powers.png");
-	powers_unlock = loadGraphicSurface("images/menus/powers_unlock.png");
-	overlay_disabled = loadGraphicSurface("images/menus/disabled.png");
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/powers.png"));
+	powers_unlock.setGraphics(render_device->loadGraphicSurface("images/menus/powers_unlock.png"));
+	overlay_disabled.setGraphics(render_device->loadGraphicSurface("images/menus/disabled.png"));
 
 	if (tree_image_files.empty()) {
-		tree_surf.push_back(loadGraphicSurface("images/menus/powers_tree.png"));
+		tree_surf.push_back(Sprite());
+		tree_surf.back().setGraphics(render_device->loadGraphicSurface("images/menus/powers_tree.png"));
 	}
 	else {
-		for (unsigned int i = 0; i < tree_image_files.size(); ++i)
-			tree_surf.push_back(loadGraphicSurface(tree_image_files[i]));
+		for (unsigned int i = 0; i < tree_image_files.size(); ++i) {
+			tree_surf.push_back(Sprite());
+			tree_surf.back().setGraphics(render_device->loadGraphicSurface(tree_image_files[i]));
+		}
 	}
 	for (unsigned int i=0; i<slots.size(); i++) {
 
-		slots[i] = new WidgetSlot(icons, powers->powers[power_cell[i].id].icon);
+		slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
 		slots[i]->pos.x = power_cell[i].pos.x;
 		slots[i]->pos.y = power_cell[i].pos.y;
 		tablist.add(slots[i]);
@@ -454,7 +454,9 @@ void MenuPowers::render() {
 	src.y = 0;
 	src.w = window_area.w;
 	src.h = window_area.h;
-	SDL_BlitSurface(background, &src, screen, &dest);
+	background.setClip(src);
+	background.setDest(dest);
+	render_device->render(background);
 
 	if (tabs_count > 1) {
 		tabControl->render();
@@ -462,14 +464,20 @@ void MenuPowers::render() {
 		for (int i=0; i<tabs_count; i++) {
 			if (active_tab == i) {
 				// power tree
-				SDL_BlitSurface(tree_surf[i], &src, screen, &dest);
+				Sprite r = tree_surf[i];
+				r.setClip(src);
+				r.setDest(dest);
+				render_device->render(r);
 				// power icons
 				renderPowers(active_tab);
 			}
 		}
 	}
 	else {
-		SDL_BlitSurface(tree_surf[0], &src, screen, &dest);
+		Sprite r = tree_surf[0];
+		r.setClip(src);
+		r.setDest(dest);
+		render_device->render(r);
 		renderPowers(0);
 	}
 
@@ -505,7 +513,9 @@ void MenuPowers::displayBuild(int power_id) {
 
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		if (power_cell[i].id == power_id) {
-			SDL_BlitSurface(powers_unlock, &src_unlock, screen, &slots[i]->pos);
+			powers_unlock.setClip(src_unlock);
+			powers_unlock.setDest(slots[i]->pos);
+			render_device->render(powers_unlock);
 		}
 	}
 }
@@ -657,16 +667,13 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 }
 
 MenuPowers::~MenuPowers() {
-	SDL_FreeSurface(background);
-	for (unsigned int i=0; i<tree_surf.size(); i++) SDL_FreeSurface(tree_surf[i]);
+	for (unsigned int i=0; i<tree_surf.size(); i++) tree_surf[i].clearGraphics();
 	for (unsigned int i=0; i<slots.size(); i++) {
 		delete slots.at(i);
 		delete upgradeButtons.at(i);
 	}
 	slots.clear();
 	upgradeButtons.clear();
-	SDL_FreeSurface(powers_unlock);
-	SDL_FreeSurface(overlay_disabled);
 
 	delete closeButton;
 	if (tabs_count > 1) delete tabControl;
@@ -716,8 +723,10 @@ void MenuPowers::renderPowers(int tab_num) {
 			displayBuild(power_cell[i].id);
 		}
 		else {
-			if (overlay_disabled != NULL) {
-				SDL_BlitSurface(overlay_disabled, &disabled_src, screen, &slots[i]->pos);
+			if (!overlay_disabled.graphicsIsNull()) {
+				overlay_disabled.setClip(disabled_src);
+				overlay_disabled.setDest(slots[i]->pos);
+				render_device->render(overlay_disabled);
 			}
 		}
 		slots[i]->renderSelection();

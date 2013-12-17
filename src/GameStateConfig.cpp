@@ -3,6 +3,7 @@ Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -57,7 +58,7 @@ GameStateConfig::GameStateConfig ()
 	, tip_buf()
 	, input_key(0)
 	, check_resolution(true) {
-	background = loadGraphicSurface("images/menus/config.png");
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/config.png"));
 
 	init();
 	update();
@@ -657,7 +658,7 @@ void GameStateConfig::update () {
 		gamma_sl->enabled = false;
 	}
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
-	SDL_SetGamma(GAMMA,GAMMA,GAMMA);
+	render_device->setGamma(GAMMA);
 
 	if (ANIMATED_TILES) animated_tiles_cb->Check();
 	else animated_tiles_cb->unCheck();
@@ -796,6 +797,7 @@ void GameStateConfig::logic () {
 				delete mods;
 				mods = new ModManager();
 				loadTilesetSettings();
+				render_device->loadIcons();
 			}
 			loadMiscSettings();
 			refreshFont();
@@ -863,7 +865,7 @@ void GameStateConfig::logic () {
 				GAMMA = 1.0;
 				gamma_sl->enabled = false;
 				gamma_sl->set(5,20,(int)(GAMMA*10.0));
-				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
+				render_device->setGamma(GAMMA);
 			}
 		}
 		else if (animated_tiles_cb->checkClick()) {
@@ -877,6 +879,7 @@ void GameStateConfig::logic () {
 			gamma_sl->enabled = true;
 			if (gamma_sl->checkClick()) {
 				GAMMA=(gamma_sl->getValue())*0.1f;
+				render_device->setGamma(GAMMA);
 				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
 			}
 		}
@@ -1052,7 +1055,8 @@ void GameStateConfig::render () {
 	pos.x = (VIEW_W-FRAME_W)/2;
 	pos.y = (VIEW_H-FRAME_H)/2 + tabheight - tabheight/16;
 
-	SDL_BlitSurface(background,NULL,screen,&pos);
+	background.setDest(pos);
+	render_device->render(background);
 
 	tabControl->render();
 
@@ -1067,11 +1071,13 @@ void GameStateConfig::render () {
 	if (active_tab == 4) {
 		if (input_scrollbox->update) {
 			input_scrollbox->refresh();
-			for (unsigned int i = 0; i < 29; i++) {
-				settings_lb[i]->render(input_scrollbox->contents);
-			}
 		}
 		input_scrollbox->render();
+		for (unsigned int i = 0; i < 29; i++) {
+			settings_lb[i]->local_frame = input_scrollbox->pos;
+			settings_lb[i]->local_offset.y = input_scrollbox->getCursor();
+			settings_lb[i]->render();
+		}
 	}
 
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
@@ -1119,35 +1125,7 @@ int GameStateConfig::getVideoModes() {
 	common_modes[4].h = MIN_VIEW_H;
 
 	// Get available fullscreen/hardware modes
-	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
-
-	// Check if there are any modes available
-	if (detect_modes == (SDL_Rect**)0) {
-		fprintf(stderr, "No modes available!\n");
-		return 0;
-	}
-
-	// Check if our resolution is restricted
-	if (detect_modes == (SDL_Rect**)-1) {
-		fprintf(stderr, "All resolutions available.\n");
-	}
-
-	for (unsigned i=0; detect_modes[i]; ++i) {
-		video_modes.push_back(*detect_modes[i]);
-		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
-			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
-			video_modes.pop_back();
-		}
-		else {
-			// check previous resolutions for duplicates. If one is found, drop the one we just added
-			for (unsigned j=0; j<video_modes.size()-1; ++j) {
-				if (video_modes[j].w == detect_modes[i]->w && video_modes[j].h == detect_modes[i]->h) {
-					video_modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
+	render_device->listModes(video_modes);
 
 	for (unsigned i=0; i<cm_count; ++i) {
 		video_modes.push_back(common_modes[i]);
@@ -1213,12 +1191,12 @@ bool GameStateConfig::applyVideoSettings(int width, int height) {
 	}
 
 	// Attempt to apply the new settings
-	setupSDLVideoMode(width, height);
+	int status = render_device->createContext(width, height);
 
 	// If the new settings fail, revert to the old ones
-	if (!screen) {
+	if (status == -1) {
 		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
-		setupSDLVideoMode(VIEW_W, VIEW_H);
+		render_device->createContext(VIEW_W, VIEW_H);
 		return false;
 
 	}
@@ -1329,8 +1307,6 @@ GameStateConfig::~GameStateConfig() {
 	delete input_confirm;
 	delete defaults_confirm;
 	delete resolution_confirm;
-
-	SDL_FreeSurface(background);
 
 	for (std::vector<Widget*>::iterator iter = child_widget.begin(); iter != child_widget.end(); ++iter) {
 		delete (*iter);

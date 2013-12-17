@@ -35,7 +35,7 @@ class AnimationSet;
 
 class Entity {
 protected:
-	SDL_Surface *sprites;
+	Image *sprites;
 
 public:
 	Entity();

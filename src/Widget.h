@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Joseph Bleau
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -24,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Base interface all widget needs to implement
  */
 #include "CommonIncludes.h"
+#include "Utils.h"
 
 enum ScrollType {VERTICAL, HORIZONTAL, TWO_DIRECTIONS};
 
@@ -32,7 +34,7 @@ public:
 	Widget();
 
 	virtual ~Widget();
-	virtual void render(SDL_Surface *target = NULL) = 0;
+	virtual void render() = 0;
 	virtual void activate();
 	virtual void deactivate();
 	virtual void defocus();
@@ -42,6 +44,8 @@ public:
 	bool in_focus;
 	bool focusable;
 	SDL_Rect pos; // This is the position of the button within the screen
+	SDL_Rect local_frame; // Local reference frame is this is a daughter widget
+	Point local_offset; // Offset in local frame is this is a daughter widget
 };
 
 class TabList {

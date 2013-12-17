@@ -1,5 +1,6 @@
 /*
 Copyright © 2012-2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -27,7 +28,6 @@ Scene::Scene() : frame_counter(0)
 	, pause_frames(0)
 	, caption("")
 	, caption_size(0,0)
-	, art(NULL)
 	, sid(-1)
 	, caption_box(NULL)
 	, done(false) {
@@ -35,11 +35,9 @@ Scene::Scene() : frame_counter(0)
 
 Scene::~Scene() {
 
-	SDL_FreeSurface(art);
 	delete caption_box;
-
 	while(!components.empty()) {
-		if (components.front().i != NULL) SDL_FreeSurface(components.front().i);
+		components.front().i.clearGraphics();
 		components.pop();
 	}
 }
@@ -72,34 +70,32 @@ bool Scene::logic(FPoint *caption_margins) {
 
 		if (components.front().type == "caption") {
 
-			int caption_width = screen->w - (screen->w * (caption_margins->x * 2));
+			int caption_width = render_device->getContextSize().w - (render_device->getContextSize().w * (caption_margins->x * 2));
 			font->setFont("font_captions");
 			caption = components.front().s;
 			caption_size = font->calc_size(caption, caption_width);
 
 			delete caption_box;
-			caption_box = new WidgetScrollBox(screen->w,caption_size.y);
+			caption_box = new WidgetScrollBox(render_device->getContextSize().w,caption_size.y);
 			caption_box->pos.x = 0;
-			caption_box->pos.y = screen->h - caption_size.y - (int)(VIEW_H * caption_margins->y);
-			font->renderShadowed(caption, screen->w / 2, 0,
+			caption_box->pos.y = render_device->getContextSize().h - caption_size.y - (int)(VIEW_H * caption_margins->y);
+			font->renderShadowed(caption, render_device->getContextSize().w / 2, 0,
 								 JUSTIFY_CENTER,
-								 caption_box->contents,
+								 caption_box->contents.getGraphics(),
 								 caption_width,
 								 FONT_WHITE);
 
 		}
 		else if (components.front().type == "image") {
 
-			if (art)
-				SDL_FreeSurface(art);
+			if (!art.graphicsIsNull())
+				art.clearGraphics();
 
 			art = components.front().i;
-
-			art_dest.x = (VIEW_W/2) - (art->w/2);
-			art_dest.y = (VIEW_H/2) - (art->h/2);
-			art_dest.w = art->w;
-			art_dest.h = art->h;
-
+			art_dest.x = (VIEW_W/2) - (art.getGraphicsWidth()/2);
+			art_dest.y = (VIEW_H/2) - (art.getGraphicsHeight()/2);
+			art_dest.w = art.getGraphicsWidth();
+			art_dest.h = art.getGraphicsHeight();
 		}
 		else if (components.front().type == "soundfx") {
 			if (sid != 0)
@@ -125,9 +121,10 @@ bool Scene::logic(FPoint *caption_margins) {
 }
 
 void Scene::render() {
-	SDL_Rect r = art_dest;
-	if (art != NULL)
-		SDL_BlitSurface(art, NULL, screen, &r);
+	if (!art.graphicsIsNull()) {
+		art.setDest(art_dest);
+		render_device->render(art);
+	}
 
 	if (caption != "") {
 		caption_box->render();
@@ -200,8 +197,8 @@ bool GameStateCutscene::load(std::string filename) {
 			else if (infile.key == "image") {
 				// @ATTR scene.image|string|An image that will be shown.
 				sc.type = infile.key;
-				sc.i = loadImage(infile.val);
-				if (sc.i == NULL)
+				sc.i.setGraphics(loadImage(infile.val));
+				if (sc.i.graphicsIsNull())
 					sc.type = "";
 			}
 			else if (infile.key == "pause") {
@@ -242,24 +239,15 @@ bool GameStateCutscene::load(std::string filename) {
 	return true;
 }
 
-SDL_Surface *GameStateCutscene::loadImage(std::string filename) {
+Image GameStateCutscene::loadImage(std::string filename) {
 
 	std::string image_file = (mods->locate("images/"+ filename));
-	SDL_Surface *image = IMG_Load(image_file.c_str());
-	if (!image) {
-		fprintf(stderr, "Missing cutscene art reference: %s\n", image_file.c_str());
-		return NULL;
-	}
+	Image image = render_device->loadGraphicSurface(image_file);
 
 	/* scale image to fit height */
 	if (scale_graphics) {
-		float ratio = image->h/(float)image->w;
-		SDL_Surface *art = scaleSurface(image, VIEW_W, (int)(VIEW_W*ratio));
-		if (art == NULL)
-			return image;
-
-		SDL_FreeSurface(image);
-		image = art;
+		float ratio = image.getHeight()/(float)image.getWidth();
+		render_device->scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
 	}
 
 	return image;

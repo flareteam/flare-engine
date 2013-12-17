@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -78,7 +79,6 @@ ItemManager::ItemManager()
 	item_sets.reserve(5);
 
 	loadAll();
-	loadIcons();
 }
 
 /**
@@ -396,22 +396,11 @@ void ItemManager::loadSets() {
 }
 
 /**
- * Icon sets
- */
-void ItemManager::loadIcons() {
-	icons = loadGraphicSurface("images/icons/icons.png", "Couldn't load icons");
-}
-
-SDL_Surface* ItemManager::getIcons() {
-	return icons;
-}
-
-/**
  * Renders icons at small size or large size
  * Also display the stack size
  */
 void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
-	if (!icons) return;
+	if (icons.graphicsIsNull()) return;
 
 	SDL_Rect src, dest;
 	dest.x = x;
@@ -419,10 +408,12 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 	src.w = src.h = dest.w = dest.h = size;
 
 	if (stack.item > 0) {
-		int columns = icons->w / ICON_SIZE;
+		int columns = icons.getGraphicsWidth() / ICON_SIZE;
 		src.x = (items[stack.item].icon % columns) * size;
 		src.y = (items[stack.item].icon / columns) * size;
-		SDL_BlitSurface(icons, &src, screen, &dest);
+		icons.setClip(src);
+		icons.setDest(dest);
+		render_device->render(icons);
 	}
 
 	if (stack.quantity > 1 || items[stack.item].max_quantity > 1) {
@@ -670,7 +661,6 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 }
 
 ItemManager::~ItemManager() {
-	SDL_FreeSurface(icons);
 }
 
 /**

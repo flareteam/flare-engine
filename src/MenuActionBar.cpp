@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -39,9 +40,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuActionBar::MenuActionBar(Avatar *_hero, SDL_Surface *_icons) {
+MenuActionBar::MenuActionBar(Avatar *_hero) {
 	hero = _hero;
-	icons = _icons;
 
 	src.x = 0;
 	src.y = 0;
@@ -62,12 +62,12 @@ MenuActionBar::MenuActionBar(Avatar *_hero, SDL_Surface *_icons) {
 	tablist = TabList(HORIZONTAL, ACTIONBAR_BACK, ACTIONBAR_FORWARD, ACTIONBAR);
 
 	for (unsigned int i=0; i<12; i++) {
-		slots[i] = new WidgetSlot(icons, -1, ACTIONBAR);
+		slots[i] = new WidgetSlot(-1, ACTIONBAR);
 		slots[i]->continuous = true;
 		tablist.add(slots[i]);
 	}
 	for (unsigned int i=0; i<4; i++) {
-		menus[i] = new WidgetSlot(icons, -1, ACTIONBAR);
+		menus[i] = new WidgetSlot(-1, ACTIONBAR);
 		tablist.add(menus[i]);
 	}
 }
@@ -238,11 +238,14 @@ void MenuActionBar::clear() {
 }
 
 void MenuActionBar::loadGraphics() {
-
-	emptyslot = loadGraphicSurface("images/menus/slot_empty.png");
-	background = loadGraphicSurface("images/menus/actionbar_trim.png");
-	disabled = loadGraphicSurface("images/menus/disabled.png");
-	attention = loadGraphicSurface("images/menus/attention_glow.png");
+	emptyslot.setGraphics(render_device->loadGraphicSurface("images/menus/slot_empty.png"));
+	emptyslot.setClip(0,0,ICON_SIZE,ICON_SIZE);
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/actionbar_trim.png"));
+	background.setClip(0,0,window_area.w,window_area.h);
+	background.setDest(window_area);
+	disabled.setGraphics(render_device->loadGraphicSurface("images/menus/disabled.png"));
+	disabled.setClip(0,0,ICON_SIZE,ICON_SIZE);
+	attention.setGraphics(render_device->loadGraphicSurface("images/menus/attention_glow.png"));
 }
 
 // Renders the "needs attention" icon over the appropriate log menu
@@ -253,7 +256,8 @@ void MenuActionBar::renderAttention(int menu_id) {
 	dest.x = window_area.x + (menu_id * ICON_SIZE) + ICON_SIZE*15;
 	dest.y = window_area.y+3;
 	dest.w = dest.h = ICON_SIZE;
-	SDL_BlitSurface(attention, NULL, screen, &dest);
+	attention.setDest(dest);
+	render_device->render(attention);
 
 	// put an asterisk on this icon if in colorblind mode
 	if (COLORBLIND) {
@@ -273,21 +277,11 @@ void MenuActionBar::logic() {
 
 void MenuActionBar::render() {
 
-	SDL_Rect dest;
-	SDL_Rect trimsrc;
-
-	dest = window_area;
-	trimsrc.x = 0;
-	trimsrc.y = 0;
-	trimsrc.w = window_area.w;
-	trimsrc.h = window_area.h;
-
-	SDL_BlitSurface(background, &trimsrc, screen, &dest);
+	background.setClip(0,0,window_area.w,window_area.h);
+	background.setDest(window_area);
+	render_device->render(background);
 
 	// draw hotkeyed icons
-	src.x = src.y = 0;
-	src.w = src.h = ICON_SIZE;
-
 	for (int i=0; i<12; i++) {
 		if (hotkeys[i] != 0) {
 			const Power &power = powers->getPower(hotkeys[i]);
@@ -308,10 +302,12 @@ void MenuActionBar::render() {
 			slots[i]->render();
 		}
 		else {
+			SDL_Rect dest;
 			dest.x = slots[i]->pos.x;
 			dest.y = slots[i]->pos.y;
 			dest.h = dest.w = ICON_SIZE;
-			SDL_BlitSurface(emptyslot, &src, screen, &dest);
+			emptyslot.setDest(dest);
+			render_device->render(emptyslot);
 			slots[i]->renderSelection();
 		}
 	}
@@ -342,28 +338,20 @@ void MenuActionBar::render() {
 void MenuActionBar::renderCooldowns() {
 
 	SDL_Rect item_src;
-	SDL_Rect item_dest;
+	item_src.x = item_src.y = 0;
+	item_src.w = item_src.h = ICON_SIZE;
 
 	for (int i=0; i<12; i++) {
 		if (!slot_enabled[i]) {
-
-			item_src.x = 0;
-			item_src.y = 0;
-			item_src.h = ICON_SIZE;
-			item_src.w = ICON_SIZE;
 
 			// Wipe from bottom to top
 			if (hero->hero_cooldown[hotkeys[i]] && powers->powers[hotkeys[i]].cooldown) {
 				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys[i]]) / powers->powers[hotkeys[i]].cooldown;
 			}
 
-			// SDL_BlitSurface will write to these Rects, so make a copy
-			item_dest.x = slots[i]->pos.x;
-			item_dest.y = slots[i]->pos.y;
-			item_dest.w = slots[i]->pos.w;
-			item_dest.h = slots[i]->pos.h;
-
-			SDL_BlitSurface(disabled, &item_src, screen, &item_dest);
+			disabled.setClip(item_src);
+			disabled.setDest(slots[i]->pos);
+			render_device->render(disabled);
 			slots[i]->renderSelection();
 		}
 	}
@@ -530,11 +518,6 @@ void MenuActionBar::resetSlots() {
 }
 
 MenuActionBar::~MenuActionBar() {
-	SDL_FreeSurface(emptyslot);
-	SDL_FreeSurface(background);
-	SDL_FreeSurface(disabled);
-	SDL_FreeSurface(attention);
-
 	for (unsigned i = 0; i < 16; i++)
 		delete labels[i];
 

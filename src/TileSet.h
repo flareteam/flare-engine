@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -37,11 +38,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 class Tile_Def {
 public:
-	SDL_Rect src;
 	Point offset;
+	Sprite tile;// inside graphics not used
 	Tile_Def() {
-		src.x = src.y = src.w = src.h = 0;
-		offset.x = offset.y = 0;
 	}
 };
 
@@ -81,7 +80,7 @@ public:
 
 	std::vector<Tile_Def> tiles;
 	std::vector<Tile_Anim> anim;
-	SDL_Surface *sprites;
+	Sprite sprites;
 
 	// oversize of the largest tile available, in number of tiles.
 	int max_size_x;

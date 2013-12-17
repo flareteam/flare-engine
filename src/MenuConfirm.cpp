@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -40,7 +41,7 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 	tablist.add(buttonClose);
 
-	background = loadGraphicSurface("images/menus/confirm_bg.png");
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
 }
 
 void MenuConfirm::update() {
@@ -81,14 +82,8 @@ void MenuConfirm::logic() {
 }
 
 void MenuConfirm::render() {
-	SDL_Rect src;
-
 	// background
-	src.x = 0;
-	src.y = 0;
-	src.w = window_area.w;
-	src.h = window_area.h;
-	SDL_BlitSurface(background, &src, screen, &window_area);
+	render_device->render(background);
 
 	label.render();
 
@@ -99,6 +94,5 @@ void MenuConfirm::render() {
 MenuConfirm::~MenuConfirm() {
 	if (hasConfirmButton) delete buttonConfirm;
 	delete buttonClose;
-	SDL_FreeSurface(background);
 }
 

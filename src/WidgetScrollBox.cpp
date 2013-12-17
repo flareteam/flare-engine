@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -22,7 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Settings.h"
 #include "WidgetScrollBox.h"
-#include "SDL_gfxBlitFunc.h"
 
 using namespace std;
 
@@ -32,7 +32,6 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	pos.h = height;
 	cursor = 0;
 	bg.r = bg.g = bg.b = 0;
-	contents = NULL;
 	currentChild = -1;
 	scrollbar = new WidgetScrollBar("images/menus/buttons/scrollbar_default.png");
 	update = true;
@@ -41,10 +40,11 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 	line_height = 20;
 	resize(height);
 	tablist = TabList(VERTICAL);
+	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
+	local_offset.x = local_offset.y = 0;
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
-	if (contents != NULL) SDL_FreeSurface(contents);
 	delete scrollbar;
 }
 
@@ -58,6 +58,7 @@ void WidgetScrollBox::addChildWidget(Widget* child) {
 	if (find == children.end()) {
 		children.push_back(child);
 		tablist.add(child);
+		child->local_frame = pos;
 	}
 
 }
@@ -67,8 +68,8 @@ void WidgetScrollBox::scroll(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (cursor > contents->h-pos.h) {
-		cursor = contents->h-pos.h;
+	else if (cursor > contents.getGraphicsHeight()-pos.h) {
+		cursor = contents.getGraphicsHeight()-pos.h;
 	}
 	refresh();
 }
@@ -78,8 +79,8 @@ void WidgetScrollBox::scrollTo(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (cursor > contents->h-pos.h) {
-		cursor = contents->h-pos.h;
+	else if (cursor > contents.getGraphicsHeight()-pos.h) {
+		cursor = contents.getGraphicsHeight()-pos.h;
 	}
 	refresh();
 }
@@ -130,7 +131,7 @@ void WidgetScrollBox::logic(int x, int y) {
 	}
 
 	// check ScrollBar clicks
-	if (contents->h > pos.h) {
+	if (contents.getGraphicsHeight() > pos.h) {
 		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
 			case 1:
 				scrollUp();
@@ -148,13 +149,14 @@ void WidgetScrollBox::logic(int x, int y) {
 }
 
 void WidgetScrollBox::resize(int h) {
-	if (contents != NULL) SDL_FreeSurface(contents);
 
 	if (pos.h > h) h = pos.h;
-	contents = createAlphaSurface(pos.w,h);
+
+	contents.clearGraphics();
+	contents.setGraphics(render_device->createAlphaSurface(pos.w,h));
 	if (!transparent) {
-		SDL_FillRect(contents,NULL,SDL_MapRGB(contents->format,bg.r,bg.g,bg.b));
-		SDL_SetAlpha(contents, 0, 0);
+		render_device->fillImageWithColor(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics(),bg.r,bg.g,bg.b));
+		render_device->setAlpha(contents.getGraphics(), 0, SDL_ALPHA_OPAQUE);
 	}
 
 	cursor = 0;
@@ -164,42 +166,47 @@ void WidgetScrollBox::resize(int h) {
 void WidgetScrollBox::refresh() {
 	if (update) {
 		int h = pos.h;
-		if (contents != NULL) {
-			h = contents->h;
-			SDL_FreeSurface(contents);
+		if (!contents.graphicsIsNull()) {
+			h = contents.getGraphicsHeight();
 		}
 
-		contents = createAlphaSurface(pos.w,h);
+		contents.clearGraphics();
+		contents.setGraphics(render_device->createAlphaSurface(pos.w,h));
 		if (!transparent) {
-			SDL_FillRect(contents,NULL,SDL_MapRGB(contents->format,bg.r,bg.g,bg.b));
-			SDL_SetAlpha(contents, 0, 0);
+			render_device->fillImageWithColor(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics(),bg.r,bg.g,bg.b));
+			render_device->setAlpha(contents.getGraphics(), 0, SDL_ALPHA_OPAQUE);
 		}
+		contents.setGraphics(*contents.getGraphics());
 	}
 
-	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor, contents->h-pos.h-scrollbar->pos_knob.h);
+	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor, contents.getGraphicsHeight()-pos.h-scrollbar->pos_knob.h);
 }
 
-void WidgetScrollBox::render(SDL_Surface *target) {
-	if (target == NULL) {
-		target = screen;
-	}
-
-	for (unsigned i = 0; i < children.size(); i++) {
-		children[i]->render(contents);
-	}
-
+void WidgetScrollBox::render() {
 	SDL_Rect	src,dest;
 	dest = pos;
 	src.x = 0;
 	src.y = cursor;
-	src.w = contents->w;
+	src.w = pos.w;
 	src.h = pos.h;
 
-	if (render_to_alpha)
-		SDL_gfxBlitRGBA(contents, &src, target, &dest);
-	else
-		SDL_BlitSurface(contents, &src, target, &dest);
-	if (contents->h > pos.h) scrollbar->render(target);
+	contents.local_frame = local_frame;
+	contents.setOffset(local_offset);
+	contents.setClip(src);
+	contents.setDest(dest);
+	render_device->render(contents);
+
+	for (unsigned i = 0; i < children.size(); i++) {
+		children[i]->local_frame = pos;
+		children[i]->local_offset.y = cursor;
+		children[i]->render();
+	}
+
+	if (contents.getGraphicsHeight() > pos.h) {
+		scrollbar->local_frame = local_frame;
+		scrollbar->local_offset = local_offset;
+		scrollbar->render();
+	}
 	update = false;
 
 	if (in_focus) {
@@ -207,13 +214,25 @@ void WidgetScrollBox::render(SDL_Surface *target) {
 		Point bottomRight;
 		Uint32 color;
 
-		topLeft.x = dest.x;
-		topLeft.y = dest.y;
-		bottomRight.x = dest.x + dest.w;
-		bottomRight.y = dest.y + dest.h;
-		color = SDL_MapRGB(target->format, 255,248,220);
+		topLeft.x = dest.x + local_frame.x - local_offset.x;
+		topLeft.y = dest.y + local_frame.y - local_offset.y;
+		bottomRight.x = topLeft.x + dest.w;
+		bottomRight.y = topLeft.y + dest.h;
+		color = render_device->MapRGB(255,248,220);
 
-		drawRectangle(target, topLeft, bottomRight, color);
+		// Only draw rectangle if it fits in local frame
+		bool draw = true;
+		if (local_frame.w &&
+				(topLeft.x<local_frame.x || bottomRight.x>(local_frame.x+local_frame.w))) {
+			draw = false;
+		}
+		if (local_frame.h &&
+				(topLeft.y<local_frame.y || bottomRight.y>(local_frame.y+local_frame.h))) {
+			draw = false;
+		}
+		if (draw) {
+			render_device->drawRectangle(topLeft, bottomRight, color);
+		}
 	}
 }
 

@@ -32,7 +32,12 @@ GameStateTitle::GameStateTitle() : GameState() {
 	exit_game = false;
 	load_game = false;
 
-	logo = loadGraphicSurface("images/menus/logo.png");
+	logo.setGraphics(render_device->loadGraphicSurface("images/menus/logo.png"));
+	// display logo centered
+	if (!logo.graphicsIsNull()) {
+		logo.setDestX(VIEW_W_HALF - (logo.getGraphicsWidth()/2));
+		logo.setDestY(VIEW_H_HALF - (logo.getGraphicsHeight()/2));
+	}
 
 	// set up buttons
 	button_play = new WidgetButton("images/menus/buttons/button_default.png");
@@ -86,7 +91,7 @@ GameStateTitle::GameStateTitle() : GameState() {
 		warning_box->resize(warning_size.y);
 
 		font->setFont("font_normal");
-		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents, VIEW_W/2, FONT_WHITE);
+		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents.getGraphics(), VIEW_W/2, FONT_WHITE);
 	}
 }
 
@@ -133,19 +138,8 @@ void GameStateTitle::logic() {
 }
 
 void GameStateTitle::render() {
-
-	SDL_Rect src;
-	SDL_Rect dest;
-
-	// display logo centered
-	if (logo) {
-		src.x = src.y = 0;
-		src.w = dest.w = logo->w;
-		src.h = dest.h = logo->h;
-		dest.x = VIEW_W_HALF - (logo->w/2);
-		dest.y = VIEW_H_HALF - (logo->h/2);
-		SDL_BlitSurface(logo, &src, screen, &dest);
-	}
+	// display logo
+	render_device->render(logo);
 
 	// display buttons
 	button_play->render();
@@ -169,5 +163,4 @@ GameStateTitle::~GameStateTitle() {
 	delete button_exit;
 	delete label_version;
 	delete warning_box;
-	SDL_FreeSurface(logo);
 }

@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class ImageManager {
 private:
-	std::vector<SDL_Surface*> sprites;
+	std::vector<Image> sprites;
 	std::vector<std::string> names;
 	std::vector<int> counts;
 
@@ -46,7 +46,7 @@ public:
 	 * The image must be in the pool already, i.e. the increaseCount
 	 * function with the same parameter must be called before.
 	 */
-	SDL_Surface *getSurface(const std::string &name);
+	Image getSurface(const std::string &name);
 
 	/**
 	 * Decreases the count for this image.

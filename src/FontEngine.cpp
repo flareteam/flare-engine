@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -20,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
-#include "SDL_gfxBlitFunc.h"
 #include "FontEngine.h"
 #include "FileParser.h"
 #include "SharedResources.h"
@@ -33,8 +33,7 @@ FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), ttfont(NULL
 }
 
 FontEngine::FontEngine()
-	: ttf(NULL)
-	, active_font(NULL)
+	: active_font(NULL)
 	, cursor_y(0) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
@@ -205,7 +204,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
  * Render the given text at (x,y) on the target image.
  * Justify is left, right, or center
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_Surface *target, SDL_Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color) {
 	SDL_Rect dest_rect;
 
 	// calculate actual starting x,y based on justify
@@ -228,25 +227,31 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 	}
 
 	// render and blit the text
-	if (active_font->blend && target != screen) {
-		ttf = TTF_RenderUTF8_Blended(active_font->ttfont, text.c_str(), color);
+	if (active_font->blend && target != NULL) {
+		render_device->renderTextToImage(ttf.getGraphics(), active_font->ttfont, text, color, true);
+		ttf.setGraphics(*ttf.getGraphics());
 
 		// preserve alpha transparency of text buffers
-		if (ttf != NULL) SDL_gfxBlitRGBA(ttf, NULL, target, &dest_rect);
+		SDL_Rect clip = ttf.getClip();
+		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect, true);
+	}
+	else if (target == NULL) {
+		render_device->renderText(active_font->ttfont, text, color, dest_rect);
 	}
 	else {
-		ttf = TTF_RenderUTF8_Solid(active_font->ttfont, text.c_str(), color);
-		if (ttf != NULL) SDL_BlitSurface(ttf, NULL, target, &dest_rect);
+		SDL_Rect clip = ttf.getClip();
+		render_device->renderTextToImage(ttf.getGraphics(), active_font->ttfont, text, color, false);
+		ttf.setGraphics(*ttf.getGraphics());
+		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect);
 	}
+	ttf.clearGraphics();
 
-	SDL_FreeSurface(ttf);
-	ttf = NULL;
 }
 
 /**
  * Word wrap to width
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_Surface *target, int width, SDL_Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, SDL_Color color) {
 
 	string fulltext = text + " ";
 	cursor_y = y;
@@ -286,18 +291,17 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, SDL_
 
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, SDL_Surface *target, SDL_Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color) {
 	render(text, x+1, y+1, justify, target, FONT_BLACK);
 	render(text, x, y, justify, target, color);
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, SDL_Surface *target, int width, SDL_Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, SDL_Color color) {
 	render(text, x+1, y+1, justify, target, width, FONT_BLACK);
 	render(text, x, y, justify, target, width, color);
 }
 
 FontEngine::~FontEngine() {
-	SDL_FreeSurface(ttf);
 	for (unsigned int i=0; i<font_styles.size(); ++i) TTF_CloseFont(font_styles[i].ttfont);
 	TTF_Quit();
 }

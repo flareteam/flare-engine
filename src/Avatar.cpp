@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Hazard.h"
 #include "MapRenderer.h"
-#include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsMath.h"

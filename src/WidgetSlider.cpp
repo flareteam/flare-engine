@@ -1,5 +1,6 @@
 /*
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -20,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
-#include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "UtilsDebug.h"
 #include "Widget.h"
@@ -32,28 +32,29 @@ using namespace std;
 
 WidgetSlider::WidgetSlider (const string  & fname)
 	: enabled(true)
-	, sl(NULL)
 	, pressed(false)
 	, minimum(0)
 	, maximum(0)
 	, value(0) {
-	sl = loadGraphicSurface(fname);
-	if (!sl) {
+	sl.setGraphics(render_device->loadGraphicSurface(fname));
+	if (sl.graphicsIsNull()) {
 		SDL_Quit();
 		exit(1);
 	}
 
-	pos.w = sl->w;
-	pos.h = sl->h / 2;
+	pos.w = sl.getGraphicsWidth();
+	pos.h = sl.getGraphicsHeight() / 2;
 
-	pos_knob.w = sl->w / 8;
-	pos_knob.h = sl->h / 2;
+	pos_knob.w = sl.getGraphicsWidth() / 8;
+	pos_knob.h = sl.getGraphicsHeight() / 2;
+
+	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
+	local_offset.x = local_offset.y = 0;
 
 	render_to_alpha = false;
 }
 
 WidgetSlider::~WidgetSlider () {
-	SDL_FreeSurface(sl);
 }
 
 
@@ -132,11 +133,7 @@ int WidgetSlider::getValue () const {
 }
 
 
-void WidgetSlider::render (SDL_Surface *target) {
-	if (target == NULL) {
-		target = screen;
-	}
-
+void WidgetSlider::render () {
 	SDL_Rect	base;
 	base.x = 0;
 	base.y = 0;
@@ -149,27 +146,39 @@ void WidgetSlider::render (SDL_Surface *target) {
 	knob.h = pos_knob.h;
 	knob.w = pos_knob.w;
 
-	if (render_to_alpha) {
-		SDL_gfxBlitRGBA(sl, &base, target, &pos);
-		SDL_gfxBlitRGBA(sl, &knob, target, &pos_knob);
-	}
-	else {
-		SDL_BlitSurface(sl, &base, target, &pos);
-		SDL_BlitSurface(sl, &knob, target, &pos_knob);
-	}
+	sl.local_frame = local_frame;
+	sl.setOffset(local_offset);
+	sl.setClip(base);
+	sl.setDest(pos);
+	render_device->render(sl);
+	sl.setClip(knob);
+	sl.setDest(pos_knob);
+	render_device->render(sl);
 
 	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
 		Uint32 color;
 
-		topLeft.x = pos.x;
-		topLeft.y = pos.y;
-		bottomRight.x = pos.x + pos.w;
-		bottomRight.y = pos.y + pos.h;
-		color = SDL_MapRGB(target->format, 255,248,220);
+		topLeft.x = pos.x + local_frame.x - local_offset.x;
+		topLeft.y = pos.y + local_frame.y - local_offset.y;
+		bottomRight.x = topLeft.x + pos.w;
+		bottomRight.y = topLeft.y + pos.h;
+		color = render_device->MapRGB(255,248,220);
 
-		drawRectangle(target, topLeft, bottomRight, color);
+		// Only draw rectangle if it fits in local frame
+		bool draw = true;
+		if (local_frame.w &&
+				(topLeft.x<local_frame.x || bottomRight.x>(local_frame.x+local_frame.w))) {
+			draw = false;
+		}
+		if (local_frame.h &&
+				(topLeft.y<local_frame.y || bottomRight.y>(local_frame.y+local_frame.h))) {
+			draw = false;
+		}
+		if (draw) {
+			render_device->drawRectangle(topLeft, bottomRight, color);
+		}
 	}
 }
 

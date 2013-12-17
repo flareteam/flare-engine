@@ -33,7 +33,7 @@ private:
 
 	std::vector<std::string> log_msg;
 	std::vector<int> msg_age;
-	std::vector<SDL_Surface*> msg_buffer;
+	std::vector<Sprite> msg_buffer;
 
 	int paragraph_spacing;
 

@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -93,26 +94,20 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
  * Tooltip position depends on the screen quadrant of the source.
  * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
  */
-void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style, SDL_Surface *target) {
-	if (target == NULL) {
-		target = screen;
-	}
-
-	if (tip.tip_buffer == NULL) {
+void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
+	if (tip.tip_buffer.graphicsIsNull()) {
 		createBuffer(tip);
 	}
 
 	Point size;
-	size.x = tip.tip_buffer->w;
-	size.y = tip.tip_buffer->h;
+	size.x = tip.tip_buffer.getGraphicsWidth();
+	size.y = tip.tip_buffer.getGraphicsHeight();
 
 	Point tip_pos = calcPosition(style, pos, size);
 
-	SDL_Rect dest;
-	dest.x = tip_pos.x;
-	dest.y = tip_pos.y;
-
-	SDL_BlitSurface(tip.tip_buffer, NULL, target, &dest);
+	tip.tip_buffer.setDestX(tip_pos.x);
+	tip.tip_buffer.setDestY(tip_pos.y);
+	render_device->render(tip.tip_buffer);
 }
 
 /**
@@ -139,21 +134,23 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 	Point size = font->calc_size(fulltext, width);
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
-	tip.tip_buffer = createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
+	tip.tip_buffer.clearGraphics();
+	Image surface = render_device->createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
 
 	// Currently tooltips are always opaque
-	SDL_SetAlpha(tip.tip_buffer, 0, 0);
+	render_device->setAlpha(&surface, 0, SDL_ALPHA_OPAQUE);
 
 	// style the tooltip background
 	// currently this is plain black
-	SDL_FillRect(tip.tip_buffer, NULL, 0);
+	render_device->fillImageWithColor(&surface, NULL, render_device->MapRGB(&surface,0,0,0));
 
 	int cursor_y = margin;
 
 	for (unsigned int i=0; i<tip.lines.size(); i++) {
-		font->render(tip.lines[i], margin, cursor_y, JUSTIFY_LEFT, tip.tip_buffer, size.x, tip.colors[i]);
+		font->render(tip.lines[i], margin, cursor_y, JUSTIFY_LEFT, &surface, size.x, tip.colors[i]);
 		cursor_y = font->cursor_y;
 	}
 
+	tip.tip_buffer.setGraphics(surface);
 }
 

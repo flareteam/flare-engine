@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -20,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetListBox
  */
 
-#include "SDL_gfxBlitFunc.h"
 #include "SharedResources.h"
 #include "WidgetLabel.h"
 #include "WidgetListBox.h"
@@ -54,7 +54,7 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 	, can_select(true)
 	, scrollbar_offset(0) {
 	// load ListBox images
-	listboxs = loadGraphicSurface(fileName, "Couldn't load image", true);
+	listboxs.setGraphics(render_device->loadGraphicSurface(fileName, "Couldn't load image", true));
 	click = NULL;
 
 	for (int i=0; i<list_amount; i++) {
@@ -62,8 +62,11 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 		values[i] = "";
 	}
 
-	pos.w = listboxs->w;
-	pos.h = (listboxs->h / 3); // height of one item
+	pos.w = listboxs.getGraphicsWidth();
+	pos.h = (listboxs.getGraphicsHeight() / 3); // height of one item
+
+	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
+	local_offset.x = local_offset.y = 0;
 }
 
 bool WidgetListBox::checkClick() {
@@ -352,15 +355,14 @@ void WidgetListBox::scrollDown() {
 	refresh();
 }
 
-void WidgetListBox::render(SDL_Surface *target) {
-	if (target == NULL) {
-		target = screen;
-	}
-
+void WidgetListBox::render() {
 	SDL_Rect src;
 	src.x = 0;
 	src.w = pos.w;
 	src.h = pos.h;
+
+	listboxs.local_frame = local_frame;
+	listboxs.setOffset(local_offset);
 
 	for(int i=0; i<list_height; i++) {
 		if(i==0)
@@ -370,12 +372,14 @@ void WidgetListBox::render(SDL_Surface *target) {
 		else
 			src.y = pos.h;
 
-		if (render_to_alpha)
-			SDL_gfxBlitRGBA(listboxs, &src, target, &rows[i]);
-		else
-			SDL_BlitSurface(listboxs, &src, target, &rows[i]);
+		listboxs.setClip(src);
+		listboxs.setDest(rows[i]);
+		render_device->render(listboxs);
+
 		if (i<list_amount) {
-			vlabels[i].render(target);
+			vlabels[i].local_frame = local_frame;
+			vlabels[i].local_offset = local_offset;
+			vlabels[i].render();
 		}
 	}
 
@@ -384,17 +388,32 @@ void WidgetListBox::render(SDL_Surface *target) {
 		Point bottomRight;
 		Uint32 color;
 
-		topLeft.x = rows[0].x;
-		topLeft.y = rows[0].y;
-		bottomRight.x = rows[list_height - 1].x + rows[0].w;
-		bottomRight.y = rows[list_height - 1].y + rows[0].h;
-		color = SDL_MapRGB(target->format, 255,248,220);
+		topLeft.x = rows[0].x + local_frame.x - local_offset.x;
+		topLeft.y = rows[0].y + local_frame.y - local_offset.y;
+		bottomRight.x = rows[list_height - 1].x + rows[0].w + local_frame.x - local_offset.x;
+		bottomRight.y = rows[list_height - 1].y + rows[0].h + local_frame.y - local_offset.y;
+		color = render_device->MapRGB(255,248,220);
 
-		drawRectangle(target, topLeft, bottomRight, color);
+		// Only draw rectangle if it fits in local frame
+		bool draw = true;
+		if (local_frame.w &&
+				(topLeft.x<local_frame.x || bottomRight.x>(local_frame.x+local_frame.w))) {
+			draw = false;
+		}
+		if (local_frame.h &&
+				(topLeft.y<local_frame.y || bottomRight.y>(local_frame.y+local_frame.h))) {
+			draw = false;
+		}
+		if (draw) {
+			render_device->drawRectangle(topLeft, bottomRight, color);
+		}
 	}
 
-	if (has_scroll_bar)
-		scrollbar->render(target);
+	if (has_scroll_bar) {
+		scrollbar->local_frame = local_frame;
+		scrollbar->local_offset = local_offset;
+		scrollbar->render();
+	}
 }
 
 /**
@@ -504,7 +523,6 @@ bool WidgetListBox::getPrev() {
 }
 
 WidgetListBox::~WidgetListBox() {
-	SDL_FreeSurface(listboxs);
 	delete[] values;
 	delete[] tooltips;
 	delete[] vlabels;

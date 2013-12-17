@@ -42,7 +42,7 @@ public:
 
 	std::vector<Animation*> animations;
 
-	SDL_Surface *sprite;
+	Image sprite;
 
 	AnimationSet(const std::string &animationname);
 	AnimationSet(const AnimationSet &a); // copy constructor not implemented.

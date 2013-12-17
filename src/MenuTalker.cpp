@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger and morris989
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
 
@@ -41,7 +42,6 @@ using namespace std;
 MenuTalker::MenuTalker(MenuManager *_menu)
 	: Menu()
 	, menu(_menu)
-	, portrait(NULL)
 	, dialog_node(0)
 	, event_cursor(0)
 	, font_who("font_regular")
@@ -51,7 +51,8 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	, vendor_visible(false)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png")) {
-	background = loadGraphicSurface("images/menus/dialog_box.png");
+
+	background.setGraphics(render_device->loadGraphicSurface("images/menus/dialog_box.png"));
 
 	// Load config settings
 	FileParser infile;
@@ -233,7 +234,15 @@ void MenuTalker::createBuffer() {
 	textbox->resize(line_size.y);
 	textbox->line_height = font->getLineHeight();
 	font->setFont(font_dialog);
-	font->render(line, text_offset.x, 0, JUSTIFY_LEFT, textbox->contents, text_pos.w - text_offset.x*2, color_normal);
+	font->render(
+		line,
+		text_offset.x,
+		0,
+		JUSTIFY_LEFT,
+		textbox->contents.getGraphics(),
+		text_pos.w - text_offset.x*2,
+		color_normal
+	);
 
 }
 
@@ -252,26 +261,35 @@ void MenuTalker::render() {
 	dest.y = offset_y + dialog_pos.y;
 	src.w = dest.w = dialog_pos.w;
 	src.h = dest.h = dialog_pos.h;
-	SDL_BlitSurface(background, &src, screen, &dest);
+
+	background.setClip(src);
+	background.setDest(dest);
+	render_device->render(background);
 
 	// show active portrait
 	string etype = npc->dialog[dialog_node][event_cursor].type;
 	if (etype == "him" || etype == "her") {
-		if (npc->portrait != NULL) {
+		Sprite r = npc->portrait;
+		if (!r.graphicsIsNull()) {
 			src.w = dest.w = portrait_he.w;
 			src.h = dest.h = portrait_he.h;
 			dest.x = offset_x + portrait_he.x;
 			dest.y = offset_y + portrait_he.y;
-			SDL_BlitSurface(npc->portrait, &src, screen, &dest);
+
+			r.setClip(src);
+			r.setDest(dest);
+			render_device->render(r);
 		}
 	}
 	else if (etype == "you") {
-		if (portrait != NULL) {
+		if (!portrait.graphicsIsNull()) {
 			src.w = dest.w = portrait_you.w;
 			src.h = dest.h = portrait_you.h;
 			dest.x = offset_x + portrait_you.x;
 			dest.y = offset_y + portrait_you.y;
-			SDL_BlitSurface(portrait, &src, screen, &dest);
+			portrait.setClip(src);
+			portrait.setDest(dest);
+			render_device->render(portrait);
 		}
 	}
 
@@ -297,8 +315,8 @@ void MenuTalker::setHero(const string& name, const string& class_name, const str
 	hero_name = name;
 	hero_class = msg->get(class_name);
 
-	SDL_FreeSurface(portrait);
-	portrait = loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait");
+	portrait.clearGraphics();
+	portrait.setGraphics(render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait"));
 }
 
 string MenuTalker::parseLine(const string &line) {
@@ -316,8 +334,6 @@ string MenuTalker::parseLine(const string &line) {
 }
 
 MenuTalker::~MenuTalker() {
-	SDL_FreeSurface(background);
-	SDL_FreeSurface(portrait);
 	delete label_name;
 	delete textbox;
 	delete advanceButton;

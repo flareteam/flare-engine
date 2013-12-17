@@ -32,7 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Menu {
 protected:
 
-	SDL_Surface *background;
+	Sprite background;
 
 public:
 	Menu();

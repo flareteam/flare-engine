@@ -41,7 +41,7 @@ private:
 
 	MenuManager *menu;
 
-	SDL_Surface *portrait;
+	Sprite portrait;
 	std::string hero_name;
 	std::string hero_class;
 
