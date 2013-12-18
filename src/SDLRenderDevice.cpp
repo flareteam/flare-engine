@@ -705,7 +705,7 @@ void SDLRenderDevice::setColorKey(Image* image, Uint32 flag, Uint32 key) {
 	SDL_SetColorKey(image->surface, flag, key);
 }
 
-void SDLRenderDevice:: setAlpha(Image* image, Uint32 flag, Uint8 alpha) {
+void SDLRenderDevice::setAlpha(Image* image, Uint32 flag, Uint8 alpha) {
 	if (!image) return;
 	SDL_SetAlpha(image->surface, flag, alpha);
 }
