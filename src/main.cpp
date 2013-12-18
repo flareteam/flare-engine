@@ -97,7 +97,7 @@ static void init() {
 	render_device->loadIcons();
 	// Set Gamma
 	if (CHANGE_GAMMA)
-		SDL_SetGamma(GAMMA,GAMMA,GAMMA);
+		render_device->setGamma(GAMMA);
 
 	if (AUDIO && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
 		fprintf (stderr, "Error during Mix_OpenAudio: %s\n", SDL_GetError());

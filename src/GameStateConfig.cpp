@@ -880,7 +880,6 @@ void GameStateConfig::logic () {
 			if (gamma_sl->checkClick()) {
 				GAMMA=(gamma_sl->getValue())*0.1f;
 				render_device->setGamma(GAMMA);
-				SDL_SetGamma(GAMMA,GAMMA,GAMMA);
 			}
 		}
 	}
