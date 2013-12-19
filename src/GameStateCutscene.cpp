@@ -241,8 +241,7 @@ bool GameStateCutscene::load(std::string filename) {
 
 Image GameStateCutscene::loadImage(std::string filename) {
 
-	std::string image_file = (mods->locate("images/"+ filename));
-	Image image = render_device->loadGraphicSurface(image_file);
+	Image image = render_device->loadGraphicSurface("images/"+filename);
 
 	/* scale image to fit height */
 	if (scale_graphics) {
