@@ -263,10 +263,6 @@ public:
 
 	virtual void listModes(std::vector<SDL_Rect> &modes) = 0;
 
-	virtual void setColorKey(Image* image, Uint32 flag, Uint32 key) = 0;
-
-	virtual void setAlpha(Image* image, Uint32 flag, Uint8 alpha) = 0;
-
 	virtual Uint32 readPixel(Image *image, int x, int y) = 0;
 
 	virtual bool checkPixel(Point px, Image *image) = 0;

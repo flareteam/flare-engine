@@ -137,9 +137,6 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 	tip.tip_buffer.clearGraphics();
 	Image surface = render_device->createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
 
-	// Currently tooltips are always opaque
-	render_device->setAlpha(&surface, 0, SDL_ALPHA_OPAQUE);
-
 	// style the tooltip background
 	// currently this is plain black
 	render_device->fillImageWithColor(&surface, NULL, render_device->MapRGB(&surface,0,0,0));

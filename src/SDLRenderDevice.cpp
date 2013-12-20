@@ -704,16 +704,6 @@ void SDLRenderDevice::listModes(std::vector<SDL_Rect> &modes) {
 
 }
 
-void SDLRenderDevice::setColorKey(Image* image, Uint32 flag, Uint32 key) {
-	if (!image) return;
-	SDL_SetColorKey(image->surface, flag, key);
-}
-
-void SDLRenderDevice::setAlpha(Image* image, Uint32 flag, Uint8 alpha) {
-	if (!image) return;
-	SDL_SetAlpha(image->surface, flag, alpha);
-}
-
 
 Image SDLRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
 	Image image;
