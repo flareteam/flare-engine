@@ -1245,6 +1245,7 @@ void GameStateConfig::disableMods() {
 bool GameStateConfig::setMods() {
 	vector<string> temp_list = mods->mod_list;
 	mods->mod_list.clear();
+	mods->mod_list.push_back(FALLBACK_MOD);
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
 		if (activemods_lstb->getValue(i) != "") mods->mod_list.push_back(activemods_lstb->getValue(i));
 	}
