@@ -37,24 +37,28 @@ Sprite::Sprite(const Sprite& other)
 	offset = other.offset;
 	dest = other.dest;
 
-	if (other.sprite.surface != NULL) {
-		sprite.surface = SDL_DisplayFormatAlpha(other.sprite.surface);
+	// Warning: Sprites flagged with keep_graphics will need to have their surfaces
+	// freed with clearGraphics() when they are no longer needed.
+	if (keep_graphics) {
+		sprite.surface = other.sprite.surface;
 	} else {
 		sprite.surface = NULL;
 	}
 }
 
 Sprite& Sprite::operator=(const Sprite& other) {
-	if (other.sprite.surface != NULL) {
-		sprite.surface = SDL_DisplayFormatAlpha(other.sprite.surface);
-	} else {
-		sprite.surface = NULL;
-	}
 	local_frame = other.local_frame;
 	keep_graphics = other.keep_graphics;
 	src = other.src;
 	offset = other.offset;
 	dest = other.dest;
+
+	// copy surface pointer
+	if (keep_graphics) {
+		sprite.surface = other.sprite.surface;
+	} else {
+		sprite.surface = NULL;
+	}
 
 	return *this;
 }
