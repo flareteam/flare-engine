@@ -137,8 +137,8 @@ void Avatar::loadLayerDefinitions() {
 	layer_reference_order = vector<string>();
 
 	FileParser infile;
-	// @CLASS Avatar|Description of engine/hero_options.txt
-	if (infile.open("engine/hero_options.txt")) {
+	// @CLASS Avatar|Description of engine/hero_layers.txt
+	if (infile.open("engine/hero_layers.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
