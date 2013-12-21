@@ -90,7 +90,7 @@ void ModManager::loadModList() {
 		if (starts_with == "#") continue;
 
 		// add the mod if it exists in the mods folder
-		if (find(mod_dirs.begin(), mod_dirs.end(), line) != mod_dirs.end()) {
+		if (find(mod_dirs.begin(), mod_dirs.end(), line) != mod_dirs.end() && line != FALLBACK_MOD) {
 			mod_list.push_back(line);
 			found_any_mod = true;
 		}
