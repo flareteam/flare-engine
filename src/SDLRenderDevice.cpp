@@ -297,6 +297,8 @@ int SDLRenderDevice::renderText(
 				  &dest
 			  );
 		SDL_FreeSurface(m_ttf_renderable.getGraphics()->surface);
+		ttf.surface = NULL;
+		m_ttf_renderable.setGraphics(ttf);
 	}
 	else {
 		ret = -1;
