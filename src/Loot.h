@@ -34,6 +34,7 @@ public:
 	FPoint pos;
 	Animation *animation;
 	TooltipData tip;
+	bool dropped_by_hero;
 
 	Loot();
 	Loot(const Loot &other);

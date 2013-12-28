@@ -351,12 +351,13 @@ void LootManager::determineLootByEnemy(const Enemy *e, FPoint pos) {
 	}
 }
 
-void LootManager::addLoot(ItemStack stack, FPoint pos) {
+void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
 	// TODO: z-sort insert?
 	Loot ld;
 	ld.stack = stack;
 	ld.pos.x = pos.x;
 	ld.pos.y = pos.y;
+	ld.dropped_by_hero = dropped_by_hero;
 
 	int index = items->items[stack.item].loot_animation.size()-1;
 	for (unsigned int i=0; i<items->items[stack.item].loot_animation.size(); i++) {
@@ -428,7 +429,7 @@ ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
 	vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
-		if (fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
+		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
 			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
 				if (!(inv->full(it->stack.item))) {
 					loot_stack = it->stack;
