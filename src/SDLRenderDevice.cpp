@@ -37,24 +37,28 @@ Sprite::Sprite(const Sprite& other)
 	offset = other.offset;
 	dest = other.dest;
 
-	if (other.sprite.surface != NULL) {
-		sprite.surface = SDL_DisplayFormatAlpha(other.sprite.surface);
+	// Warning: Sprites flagged with keep_graphics will need to have their surfaces
+	// freed with clearGraphics() when they are no longer needed.
+	if (keep_graphics) {
+		sprite.surface = other.sprite.surface;
 	} else {
 		sprite.surface = NULL;
 	}
 }
 
 Sprite& Sprite::operator=(const Sprite& other) {
-	if (other.sprite.surface != NULL) {
-		sprite.surface = SDL_DisplayFormatAlpha(other.sprite.surface);
-	} else {
-		sprite.surface = NULL;
-	}
 	local_frame = other.local_frame;
 	keep_graphics = other.keep_graphics;
 	src = other.src;
 	offset = other.offset;
 	dest = other.dest;
+
+	// copy surface pointer
+	if (keep_graphics) {
+		sprite.surface = other.sprite.surface;
+	} else {
+		sprite.surface = NULL;
+	}
 
 	return *this;
 }
@@ -293,6 +297,8 @@ int SDLRenderDevice::renderText(
 				  &dest
 			  );
 		SDL_FreeSurface(m_ttf_renderable.getGraphics()->surface);
+		ttf.surface = NULL;
+		m_ttf_renderable.setGraphics(ttf);
 	}
 	else {
 		ret = -1;
@@ -698,16 +704,6 @@ void SDLRenderDevice::listModes(std::vector<SDL_Rect> &modes) {
 		}
 	}
 
-}
-
-void SDLRenderDevice::setColorKey(Image* image, Uint32 flag, Uint32 key) {
-	if (!image) return;
-	SDL_SetColorKey(image->surface, flag, key);
-}
-
-void SDLRenderDevice::setAlpha(Image* image, Uint32 flag, Uint8 alpha) {
-	if (!image) return;
-	SDL_SetAlpha(image->surface, flag, alpha);
 }
 
 

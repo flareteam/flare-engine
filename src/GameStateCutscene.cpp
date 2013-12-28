@@ -198,6 +198,7 @@ bool GameStateCutscene::load(std::string filename) {
 				// @ATTR scene.image|string|An image that will be shown.
 				sc.type = infile.key;
 				sc.i.setGraphics(loadImage(infile.val));
+				sc.i.keep_graphics = true;
 				if (sc.i.graphicsIsNull())
 					sc.type = "";
 			}

@@ -360,6 +360,7 @@ void GameStateLoad::loadPreview(int slot) {
 			);
 		}
 		sprites[slot].back().setClip(0,0,sprites[slot].back().getGraphicsWidth(),sprites[slot].back().getGraphicsHeight());
+		sprites[slot].back().keep_graphics = true;
 	}
 
 }
