@@ -89,15 +89,15 @@ string FILE_SETTINGS	= "settings.txt";
 string FILE_KEYBINDINGS = "keybindings.txt";
 
 // Tile Settings
-float UNITS_PER_PIXEL_X = 2;
-float UNITS_PER_PIXEL_Y = 4;
-unsigned short TILE_W = 64;
-unsigned short TILE_H = 32;
-unsigned short TILE_W_HALF = TILE_W/2;
-unsigned short TILE_H_HALF = TILE_H/2;
-unsigned short TILESET_ISOMETRIC = 0;
-unsigned short TILESET_ORTHOGONAL = 1;
-unsigned short TILESET_ORIENTATION = TILESET_ISOMETRIC;
+float UNITS_PER_PIXEL_X;
+float UNITS_PER_PIXEL_Y;
+unsigned short TILE_W;
+unsigned short TILE_H;
+unsigned short TILE_W_HALF;
+unsigned short TILE_H_HALF;
+unsigned short TILESET_ISOMETRIC;
+unsigned short TILESET_ORTHOGONAL;
+unsigned short TILESET_ORIENTATION;
 
 // Main Menu frame size
 unsigned short FRAME_W;
@@ -142,17 +142,17 @@ int JOY_DEADZONE;
 std::string LANGUAGE = "en";
 
 // Autopickup Settings
-bool AUTOPICKUP_CURRENCY = false;
+bool AUTOPICKUP_CURRENCY;
 
 // Combat calculation caps (percentage)
-short MAX_ABSORB = 90;
-short MAX_RESIST = 90;
-short MAX_BLOCK = 100;
-short MAX_AVOIDANCE = 99;
-short MIN_ABSORB = 0;
-short MIN_RESIST = 0;
-short MIN_BLOCK = 0;
-short MIN_AVOIDANCE = 0;
+short MAX_ABSORB;
+short MAX_RESIST;
+short MAX_BLOCK;
+short MAX_AVOIDANCE;
+short MIN_ABSORB;
+short MIN_RESIST;
+short MIN_BLOCK;
+short MIN_AVOIDANCE;
 
 // Elemental types
 std::vector<Element> ELEMENTS;
@@ -164,35 +164,35 @@ std::map<std::string,std::string> EQUIP_FLAGS;
 std::vector<HeroClass> HERO_CLASSES;
 
 // Currency settings
-std::string CURRENCY = "Gold";
-float VENDOR_RATIO = 0.25;
+std::string CURRENCY;
+float VENDOR_RATIO;
 
 // Death penalty settings
-bool DEATH_PENALTY = true;
-bool DEATH_PENALTY_PERMADEATH = false;
-int DEATH_PENALTY_CURRENCY = 50;
-int DEATH_PENALTY_XP = 0;
-int DEATH_PENALTY_XP_CURRENT = 0;
-bool DEATH_PENALTY_ITEM = false;
+bool DEATH_PENALTY;
+bool DEATH_PENALTY_PERMADEATH;
+int DEATH_PENALTY_CURRENCY;
+int DEATH_PENALTY_XP;
+int DEATH_PENALTY_XP_CURRENT;
+bool DEATH_PENALTY_ITEM;
 
 // Other Settings
-bool MENUS_PAUSE = false;
-bool SAVE_HPMP = false;
-bool ENABLE_PLAYGAME = false;
+bool MENUS_PAUSE;
+bool SAVE_HPMP;
+bool ENABLE_PLAYGAME;
 bool SHOW_FPS = false;
 bool SHOW_HOTKEYS = true;
 bool COLORBLIND = false;
-int CORPSE_TIMEOUT = 1800;
-bool SELL_WITHOUT_VENDOR = true;
-int AIM_ASSIST = 0;
+int CORPSE_TIMEOUT;
+bool SELL_WITHOUT_VENDOR;
+int AIM_ASSIST;
 std::string GAME_PREFIX = "";
-std::string WINDOW_TITLE = "Flare";
-int SOUND_FALLOFF = 15;
-int PARTY_EXP_PERCENTAGE = 100;
-bool ENABLE_ALLY_COLLISION_AI = true;
-bool ENABLE_ALLY_COLLISION = true;
-int CURRENCY_ID = 1;
-float INTERACT_RANGE = 3;
+std::string WINDOW_TITLE;
+int SOUND_FALLOFF;
+int PARTY_EXP_PERCENTAGE;
+bool ENABLE_ALLY_COLLISION_AI;
+bool ENABLE_ALLY_COLLISION;
+int CURRENCY_ID;
+float INTERACT_RANGE;
 
 /**
  * Set system paths
@@ -394,6 +394,17 @@ static ConfigEntry * getConfigEntry(const std::string & name) {
 }
 
 void loadTilesetSettings() {
+	// reset defaults
+	UNITS_PER_PIXEL_X = 2;
+	UNITS_PER_PIXEL_Y = 4;
+	TILE_W = 64;
+	TILE_H = 32;
+	TILE_W_HALF = TILE_W/2;
+	TILE_H_HALF = TILE_H/2;
+	TILESET_ISOMETRIC = 0;
+	TILESET_ORTHOGONAL = 1;
+	TILESET_ORIENTATION = TILESET_ISOMETRIC;
+
 	FileParser infile;
 	// load tileset settings from engine config
 	if (infile.open("engine/tileset_config.txt", true, true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
@@ -433,6 +444,44 @@ void loadTilesetSettings() {
 }
 
 void loadMiscSettings() {
+	// reset to defaults
+	ELEMENTS.clear();
+	EQUIP_FLAGS.clear();
+	HERO_CLASSES.clear();
+	FRAME_W = 0;
+	FRAME_H = 0;
+	ICON_SIZE = 0;
+	AUTOPICKUP_CURRENCY = false;
+	MAX_ABSORB = 90;
+	MAX_RESIST = 90;
+	MAX_BLOCK = 100;
+	MAX_AVOIDANCE = 99;
+	MIN_ABSORB = 0;
+	MIN_RESIST = 0;
+	MIN_BLOCK = 0;
+	MIN_AVOIDANCE = 0;
+	CURRENCY = "Gold";
+	VENDOR_RATIO = 0.25;
+	DEATH_PENALTY = true;
+	DEATH_PENALTY_PERMADEATH = false;
+	DEATH_PENALTY_CURRENCY = 50;
+	DEATH_PENALTY_XP = 0;
+	DEATH_PENALTY_XP_CURRENT = 0;
+	DEATH_PENALTY_ITEM = false;
+	MENUS_PAUSE = false;
+	SAVE_HPMP = false;
+	ENABLE_PLAYGAME = false;
+	CORPSE_TIMEOUT = 1800;
+	SELL_WITHOUT_VENDOR = true;
+	AIM_ASSIST = 0;
+	WINDOW_TITLE = "Flare";
+	SOUND_FALLOFF = 15;
+	PARTY_EXP_PERCENTAGE = 100;
+	ENABLE_ALLY_COLLISION_AI = true;
+	ENABLE_ALLY_COLLISION = true;
+	CURRENCY_ID = 1;
+	INTERACT_RANGE = 3;
+
 	FileParser infile;
 	// load miscellaneous settings from engine config
 	// misc.txt
@@ -521,7 +570,6 @@ void loadMiscSettings() {
 	// elements.txt
 	if (infile.open("engine/elements.txt")) {
 		Element e;
-		ELEMENTS.clear();
 		while (infile.next()) {
 			if (infile.key == "name") e.name = infile.val;
 			else if (infile.key == "description") e.description = infile.val;
@@ -552,7 +600,6 @@ void loadMiscSettings() {
 	// classes.txt
 	if (infile.open("engine/classes.txt")) {
 		HeroClass c;
-		HERO_CLASSES.clear();
 		while (infile.next()) {
 			if (infile.key == "name") c.name = infile.val;
 
