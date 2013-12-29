@@ -80,7 +80,7 @@ public:
 	void addEnemyLoot(const Enemy *e);
 	void checkMapForLoot();
 	void determineLootByEnemy(const Enemy *e, FPoint pos); // pick from enemy-specific loot table
-	void addLoot(ItemStack stack, FPoint pos);
+	void addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero = false);
 	ItemStack checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv);
 	ItemStack checkAutoPickup(FPoint hero_pos, MenuInventory *inv);
 	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);

@@ -26,6 +26,7 @@ Loot::Loot() {
 	pos.y = 0;
 	animation = NULL;
 	tip.clear();
+	dropped_by_hero = false;
 	gfx = "";
 }
 
@@ -37,6 +38,7 @@ Loot::Loot(const Loot &other) {
 	loadAnimation(other.gfx);
 	animation->syncTo(other.animation);
 	tip = other.tip;
+	dropped_by_hero = other.dropped_by_hero;
 }
 
 // The assignment operator mainly used in internal vector managing,
@@ -54,6 +56,7 @@ Loot& Loot::operator= (const Loot &other) {
 	pos.x = other.pos.x;
 	pos.y = other.pos.y;
 	tip = other.tip;
+	dropped_by_hero = other.dropped_by_hero;
 
 	return *this;
 }
