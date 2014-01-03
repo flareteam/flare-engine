@@ -1,4 +1,4 @@
-/* 
+/*
 
 SDL_gfxBlitFunc.c: custom blitters
 
@@ -29,10 +29,10 @@ Andreas Schiffler -- aschiffler at ferzkopp dot net
 
 #include "SDL_gfxBlitFunc.h"
 
-/*!  
+/*!
 \brief Alpha adjustment table for custom blitter.
 
-The table provides values for a modified, non-linear 
+The table provides values for a modified, non-linear
 transfer function which maintain brightness.
 
 */
@@ -356,13 +356,13 @@ Sets up the blitter info based on the 'src' and 'dst' surfaces and rectangles.
 int _SDL_gfxBlitRGBACall(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SDL_Rect * dstrect)
 {
 	/*
-	* Set up source and destination buffer pointers, then blit 
+	* Set up source and destination buffer pointers, then blit
 	*/
 	if (srcrect->w && srcrect->h) {
 		SDL_gfxBlitInfo info;
 
 		/*
-		* Set up the blit information 
+		* Set up the blit information
 		*/
 #if (SDL_MINOR_VERSION == 3)
 		info.s_pixels = (Uint8 *) src->pixels               + (Uint16) srcrect->y * src->pitch + (Uint16) srcrect->x * src->format->BytesPerPixel;
@@ -386,7 +386,7 @@ int _SDL_gfxBlitRGBACall(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * ds
 		info.dst = dst->format;
 
 		/*
-		* Run the actual software blitter 
+		* Run the actual software blitter
 		*/
 		_SDL_gfxBlitBlitterRGBA(&info);
 		return 1;
@@ -414,7 +414,7 @@ int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SD
 	int       srcx, srcy, w, h;
 
 	/*
-	* Make sure the surfaces aren't locked 
+	* Make sure the surfaces aren't locked
 	*/
 	if (!src || !dst) {
 		SDL_SetError("SDL_UpperBlit: passed a NULL surface");
@@ -426,7 +426,7 @@ int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SD
 	}
 
 	/*
-	* If the destination rectangle is NULL, use the entire dest surface 
+	* If the destination rectangle is NULL, use the entire dest surface
 	*/
 	if (dstrect == NULL) {
 		dr.x = dr.y = 0;
@@ -437,7 +437,7 @@ int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SD
 	}
 
 	/*
-	* Clip the source rectangle to the source surface 
+	* Clip the source rectangle to the source surface
 	*/
 	if (srcrect) {
 		int       maxw, maxh;
@@ -471,7 +471,7 @@ int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SD
 	}
 
 	/*
-	* Clip the destination rectangle against the clip rectangle 
+	* Clip the destination rectangle against the clip rectangle
 	*/
 	{
 		SDL_Rect *clip = &dst->clip_rect;
@@ -509,131 +509,3 @@ int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SD
 	return 0;
 }
 
-/*!
-\brief Sets the alpha channel in a 32 bit surface.
-
-Helper function that sets the alpha channel in a 32 bit surface
-to a constant value.
-Only 32 bit surfaces can be used with this function.
-
-\param src Pointer to the target surface to change.
-\param a The alpha value to set.
-
-\return Returns 1 if alpha was changed, -1 otherwise.
-*/
-int SDL_gfxSetAlpha(SDL_Surface *src, Uint8 a)
-{
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	const int alpha_offset = 0;
-#else
-	const int alpha_offset = 3;
-#endif
-	int i, j, row_skip;
-	Uint8 *pixels;
-	
-	/* Check if we have a 32bit surface */
-	if ( (src==NULL) || 
-	     (src->format==NULL) || 
-	     (src->format->BytesPerPixel!=4) ) {
-          SDL_SetError("SDL_gfxSetAlpha: Invalid input surface.");
-	  return -1;
-        }
-
-	/*
-	* Lock the surface 
-	*/
-	if (SDL_MUSTLOCK(src)) {
-		if (SDL_LockSurface(src) < 0) {
-			return (-1);
-		}
-	}
-        
-        /* Process */
-        pixels = (Uint8 *)src->pixels;
-        row_skip = (src->pitch - (4*src->w));
-        pixels += alpha_offset;
-        for ( i=0; i<src->h; i++ ) {
-          for ( j=0; j<src->w; j++  ) {
-            *pixels = a; 
-            pixels += 4;
-          }
-          pixels += row_skip;
-        }
-
-	/*
-	* Unlock surface 
-	*/
-	if (SDL_MUSTLOCK(src)) {
-		SDL_UnlockSurface(src);
-	}
-        
-        return 1; 
-}
-
-/*!
-\brief Multiply the alpha channel in a 32bit surface.
-
-Helper function that multiplies the alpha channel in a 32 bit surface
-with a constant value. The final alpha is always scaled to the range 
-0-255 (i.e. the factor is a/256).
-
-Only 32 bit surfaces can be used with this function.
-
-\param src Pointer to the target surface to change.
-\param a The alpha value to multiply with. When a is 255, this function is a NoOp.
-
-\return Returns 1 if alpha was changed, 0 otherwise. Returns -1 if input surface is invalid.
-*/
-int SDL_gfxMultiplyAlpha(SDL_Surface *src, Uint8 a)
-{
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	const int alpha_offset = 0;
-#else
-	const int alpha_offset = 3;
-#endif
-	int i, j, row_skip;
-	Uint8 *pixels;
-        
-	/* Check if we have a 32bit surface */
-	if ( (src==NULL) || 
-	     (src->format==NULL) || 
-	     (src->format->BytesPerPixel!=4) ) {
-          SDL_SetError("SDL_gfxMultiplyAlpha: Invalid input surface.");
-	  return -1;
-        }
-        
-        /* Check if multiplication is needed */
-        if (a==255) {
-          return 0;
-        }
-
-	/*
-	* Lock the surface 
-	*/
-	if (SDL_MUSTLOCK(src)) {
-		if (SDL_LockSurface(src) < 0) {
-			return (-1);
-		}
-	}
-        
-        /* Process */
-        pixels = (Uint8 *)src->pixels;
-        row_skip = (src->pitch - (4*src->w));
-        pixels += alpha_offset;
-        for ( i=0; i<src->h; i++ ) {
-  	  for ( j=0; j<src->w; j++  ) {
-            *pixels = (Uint8)(((int)(*pixels)*a)>>8);
-            pixels += 4;
-          }
-          pixels += row_skip;
-        }
-
-	/*
-	* Unlock surface 
-	*/
-	if (SDL_MUSTLOCK(src)) {
-		SDL_UnlockSurface(src);
-	}
-		
-        return 1;
-}
