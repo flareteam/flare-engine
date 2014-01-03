@@ -43,7 +43,6 @@ private:
 	int areaOver(Point position);
 	void updateEquipment(int slot);
 
-	Sprite background;
 	WidgetButton *closeButton;
 
 	int MAX_EQUIPPED;

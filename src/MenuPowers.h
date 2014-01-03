@@ -90,7 +90,6 @@ private:
 	std::vector<WidgetButton*> upgradeButtons;
 	bool skip_section;
 
-	Sprite background;
 	Sprite powers_unlock;
 	Sprite overlay_disabled;
 	std::vector<Sprite> tree_surf;

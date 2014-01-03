@@ -29,8 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Sprite::Sprite(const Sprite& other)
-{
+Sprite::Sprite(const Sprite& other) {
 	local_frame = other.local_frame;
 	keep_graphics = other.keep_graphics;
 	src = other.src;
@@ -201,7 +200,9 @@ int Sprite::getGraphicsHeight() {
 	return (sprite.surface ? sprite.getHeight() : 0);
 }
 
-SDLRenderDevice::SDLRenderDevice() {
+SDLRenderDevice::SDLRenderDevice()
+	: screen(NULL)
+	, titlebar_icon(NULL) {
 	cout << "Using Render Device: SDLRenderDevice" << endl;
 }
 
@@ -731,7 +732,6 @@ void SDLRenderDevice::scaleSurface(Image *source, int width, int height) {
 	if(!source || !width || !height)
 		return;
 
-	double _stretch_factor_x, _stretch_factor_y;
 	Image ret;
 	ret.surface = SDL_CreateRGBSurface(source->surface->flags, width, height,
 						source->surface->format->BitsPerPixel,
@@ -741,6 +741,7 @@ void SDLRenderDevice::scaleSurface(Image *source, int width, int height) {
 						source->surface->format->Amask);
 
 	if (ret.surface) {
+		double _stretch_factor_x, _stretch_factor_y;
 		_stretch_factor_x = width / (double)source->surface->w;
 		_stretch_factor_y = height / (double)source->surface->h;
 
