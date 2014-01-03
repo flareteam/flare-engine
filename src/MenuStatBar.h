@@ -34,7 +34,6 @@ class WidgetLabel;
 
 class MenuStatBar : public Menu {
 private:
-	Sprite background;
 	Sprite bar;
 	WidgetLabel *label;
 	int stat_cur;

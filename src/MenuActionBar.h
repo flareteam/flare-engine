@@ -47,7 +47,6 @@ class MenuActionBar : public Menu {
 private:
 	void renderCooldowns();
 
-	Sprite background;
 	Sprite emptyslot;
 	Sprite disabled;
 	Sprite attention;
