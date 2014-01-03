@@ -27,12 +27,12 @@ TooltipData::~TooltipData() {
 	clear();
 }
 
-TooltipData::TooltipData(const TooltipData &tdSource) {
+TooltipData::TooltipData(const TooltipData &tdSource)
+	: tip_buffer(Sprite()) {
 
 	// DO NOT copy the buffered text render
 	// Allow the new copy to create its own buffer
 	// Otherwise the same buffer will be deleted twice, causing a mem error
-	tip_buffer = Sprite();
 
 	lines.clear();
 	colors.clear();
