@@ -163,8 +163,10 @@ void NPC::loadGraphics(const string& filename_portrait) {
 		animationSet = anim->getAnimationSet(gfx);
 		activeAnimation = animationSet->getAnimation();
 	}
-	if (filename_portrait != "")
+	if (filename_portrait != "") {
 		portrait.setGraphics(render_device->loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true));
+		portrait.keep_graphics = true;
+	}
 }
 
 /**
@@ -420,4 +422,6 @@ NPC::~NPC() {
 		snd->unload(vox_quests.back());
 		vox_quests.pop_back();
 	}
+
+	portrait.clearGraphics();
 }
