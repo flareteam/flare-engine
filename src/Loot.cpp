@@ -47,9 +47,11 @@ Loot& Loot::operator= (const Loot &other) {
 	if (gfx != "")
 		anim->decreaseCount(gfx);
 	delete animation;
+	animation = 0;
 
 	loadAnimation(other.gfx);
-	animation->syncTo(other.animation);
+	if (animation)
+		animation->syncTo(other.animation);
 
 	stack.item = other.stack.item;
 	stack.quantity = other.stack.quantity;
@@ -57,7 +59,6 @@ Loot& Loot::operator= (const Loot &other) {
 	pos.y = other.pos.y;
 	tip = other.tip;
 	dropped_by_hero = other.dropped_by_hero;
-
 	return *this;
 }
 
@@ -67,6 +68,8 @@ void Loot::loadAnimation(std::string _gfx) {
 		anim->increaseCount(gfx);
 		AnimationSet *as = anim->getAnimationSet(gfx);
 		animation = as->getAnimation();
+	} else {
+		animation = 0;
 	}
 }
 
