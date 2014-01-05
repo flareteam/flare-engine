@@ -76,9 +76,7 @@ void AnimationSet::load() {
 	vector<short> active_frames;
 
 	// Parse the file and on each new section create an animation object from the data parsed previously
-	parser.next();
-
-	do {
+	while (parser.next()) {
 		// create the animation if finished parsing a section
 		if (parser.new_section) {
 			if (!first_section && !compressed_loading) {
@@ -172,7 +170,6 @@ void AnimationSet::load() {
 		}
 		_name = parser.section;
 	}
-	while (parser.next());
 
 	if (!compressed_loading) {
 		// add final animation
