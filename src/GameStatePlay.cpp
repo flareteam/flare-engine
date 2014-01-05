@@ -107,7 +107,7 @@ GameStatePlay::GameStatePlay()
  * Reset all game states to a new game.
  */
 void GameStatePlay::resetGame() {
-	mapr->load("spawn.txt");
+	mapr->load("maps/spawn.txt");
 	camp->clearAll();
 	pc->init();
 	pc->stats.currency = 0;

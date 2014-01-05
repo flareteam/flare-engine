@@ -446,7 +446,7 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "intermap") {
 
-			if (fileExists(mods->locate("maps/" + ec->s))) {
+			if (fileExists(mods->locate(ec->s))) {
 				mapr->teleportation = true;
 				mapr->teleport_mapname = ec->s;
 				mapr->teleport_destination.x = ec->x + 0.5f;

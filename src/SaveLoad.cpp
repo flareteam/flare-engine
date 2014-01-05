@@ -253,7 +253,7 @@ void GameStatePlay::loadGame() {
 			}
 			else if (infile.key == "spawn") {
 				mapr->teleport_mapname = infile.nextValue();
-				if (fileExists(mods->locate("maps/" + mapr->teleport_mapname))) {
+				if (fileExists(mods->locate(mapr->teleport_mapname))) {
 					mapr->teleport_destination.x = toInt(infile.nextValue()) + 0.5f;
 					mapr->teleport_destination.y = toInt(infile.nextValue()) + 0.5f;
 					mapr->teleportation = true;
@@ -261,8 +261,8 @@ void GameStatePlay::loadGame() {
 					mapr->clearEvents();
 				}
 				else {
-					fprintf(stderr, "Unable to find maps/%s, loading spawn.txt\n", mapr->teleport_mapname.c_str());
-					mapr->teleport_mapname = "spawn.txt";
+					fprintf(stderr, "Unable to find %s, loading maps/spawn.txt\n", mapr->teleport_mapname.c_str());
+					mapr->teleport_mapname = "maps/spawn.txt";
 					mapr->teleport_destination.x = 1;
 					mapr->teleport_destination.y = 1;
 					mapr->teleportation = true;
@@ -354,7 +354,7 @@ void GameStatePlay::loadGame() {
 	// load sounds (gender specific)
 	pc->loadSounds();
 
-	// apply power upgrades 
+	// apply power upgrades
 	menu->pow->applyPowerUpgrades();
 }
 

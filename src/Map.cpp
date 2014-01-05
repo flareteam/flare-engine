@@ -63,7 +63,7 @@ int Map::load(std::string fname) {
 	clearQueues();
 
 	// @CLASS Map|Description of maps/
-	if (!infile.open("maps/" + fname))
+	if (!infile.open(fname))
 		return 0;
 
 	this->filename = fname;
