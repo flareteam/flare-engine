@@ -84,7 +84,6 @@ class ISprite {
 public:
 	ISprite()
 		: local_frame(SDL_Rect())
-		, keep_graphics(false)
 		, sprite(Image())
 		, src(SDL_Rect())
 		, offset()
@@ -93,7 +92,6 @@ public:
 	virtual ~ISprite() {}
 
 	SDL_Rect local_frame;
-	bool keep_graphics; // don't free the sprite surface when deconstructing, used primarily for animations
 
 	virtual void setGraphics(Image s, bool setClipToFull = true) = 0;
 	virtual Image * getGraphics() = 0;

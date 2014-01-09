@@ -31,39 +31,38 @@ using namespace std;
 
 Sprite::Sprite(const Sprite& other) {
 	local_frame = other.local_frame;
-	keep_graphics = other.keep_graphics;
 	src = other.src;
 	offset = other.offset;
 	dest = other.dest;
 
-	// Warning: Sprites flagged with keep_graphics will need to have their surfaces
-	// freed with clearGraphics() when they are no longer needed.
-	if (keep_graphics) {
-		sprite.surface = other.sprite.surface;
-	} else {
-		sprite.surface = NULL;
+	// Warning: Some graphics APIs don't support deep copying image data
+	// So we'll make sure image data is deleted here
+	if (sprite.surface != NULL) {
+		SDL_FreeSurface(sprite.surface);
+		fprintf(stderr, "Warning: Copying Sprite object is not supported\n");
 	}
+	sprite.surface = NULL;
 }
 
 Sprite& Sprite::operator=(const Sprite& other) {
 	local_frame = other.local_frame;
-	keep_graphics = other.keep_graphics;
 	src = other.src;
 	offset = other.offset;
 	dest = other.dest;
 
-	// copy surface pointer
-	if (keep_graphics) {
-		sprite.surface = other.sprite.surface;
-	} else {
-		sprite.surface = NULL;
+	// Warning: Some graphics APIs don't support deep copying image data
+	// So we'll make sure image data is deleted here
+	if (sprite.surface != NULL) {
+		SDL_FreeSurface(sprite.surface);
+		fprintf(stderr, "Warning: Assignment operator for Sprite object is not supported\n");
 	}
+	sprite.surface = NULL;
 
 	return *this;
 }
 
 Sprite::~Sprite() {
-	if (sprite.surface != NULL && !keep_graphics) {
+	if (sprite.surface != NULL) {
 		SDL_FreeSurface(sprite.surface);
 		sprite.surface = NULL;
 	}

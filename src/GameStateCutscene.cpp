@@ -37,12 +37,24 @@ Scene::~Scene() {
 
 	delete caption_box;
 	while(!components.empty()) {
-		components.front().i.clearGraphics();
 		components.pop();
 	}
 }
 
-bool Scene::logic(FPoint *caption_margins) {
+Image Scene::loadImage(std::string filename, bool scale_graphics) {
+
+	Image image = render_device->loadGraphicSurface("images/"+filename);
+
+	/* scale image to fit height */
+	if (scale_graphics) {
+		float ratio = image.getHeight()/(float)image.getWidth();
+		render_device->scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
+	}
+
+	return image;
+}
+
+bool Scene::logic(FPoint *caption_margins, bool scale_graphics) {
 	if (done) return false;
 
 	bool skip = false;
@@ -91,11 +103,14 @@ bool Scene::logic(FPoint *caption_margins) {
 			if (!art.graphicsIsNull())
 				art.clearGraphics();
 
-			art = components.front().i;
-			art_dest.x = (VIEW_W/2) - (art.getGraphicsWidth()/2);
-			art_dest.y = (VIEW_H/2) - (art.getGraphicsHeight()/2);
-			art_dest.w = art.getGraphicsWidth();
-			art_dest.h = art.getGraphicsHeight();
+			art.setGraphics(loadImage(components.front().s, scale_graphics));
+
+			if (!art.graphicsIsNull()) {
+				art_dest.x = (VIEW_W/2) - (art.getGraphicsWidth()/2);
+				art_dest.y = (VIEW_H/2) - (art.getGraphicsHeight()/2);
+				art_dest.w = art.getGraphicsWidth();
+				art_dest.h = art.getGraphicsHeight();
+			}
 		}
 		else if (components.front().type == "soundfx") {
 			if (sid != 0)
@@ -159,7 +174,7 @@ void GameStateCutscene::logic() {
 		return;
 	}
 
-	while (!scenes.empty() && !scenes.front().logic(&caption_margins))
+	while (!scenes.empty() && !scenes.front().logic(&caption_margins, scale_graphics))
 		scenes.pop();
 }
 
@@ -197,10 +212,7 @@ bool GameStateCutscene::load(std::string filename) {
 			else if (infile.key == "image") {
 				// @ATTR scene.image|string|An image that will be shown.
 				sc.type = infile.key;
-				sc.i.setGraphics(loadImage(infile.val));
-				sc.i.keep_graphics = true;
-				if (sc.i.graphicsIsNull())
-					sc.type = "";
+				sc.s = infile.val;
 			}
 			else if (infile.key == "pause") {
 				// @ATTR scene.pause|integer|Pause before next component
@@ -238,18 +250,5 @@ bool GameStateCutscene::load(std::string filename) {
 	}
 
 	return true;
-}
-
-Image GameStateCutscene::loadImage(std::string filename) {
-
-	Image image = render_device->loadGraphicSurface("images/"+filename);
-
-	/* scale image to fit height */
-	if (scale_graphics) {
-		float ratio = image.getHeight()/(float)image.getWidth();
-		render_device->scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
-	}
-
-	return image;
 }
 

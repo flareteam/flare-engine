@@ -34,7 +34,6 @@ class WidgetScrollBox;
 class SceneComponent {
 public:
 	std::string type;
-	Sprite i;
 	std::string s;
 	int x,y,z;
 	SceneComponent()
@@ -48,6 +47,8 @@ public:
 
 class Scene {
 private:
+	Image loadImage(std::string filename, bool scale_graphics);
+
 	int frame_counter;
 	int pause_frames;
 	std::string caption;
@@ -61,7 +62,7 @@ private:
 public:
 	Scene();
 	~Scene();
-	bool logic(FPoint *caption_margins);
+	bool logic(FPoint *caption_margins, bool scale_graphics);
 	void render();
 
 	std::queue<SceneComponent> components;
@@ -77,8 +78,6 @@ private:
 	FPoint caption_margins;
 
 	std::queue<Scene> scenes;
-
-	Image loadImage(std::string filename);
 
 public:
 	GameStateCutscene(GameState *game_state);
