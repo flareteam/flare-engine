@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# GunChleoc <fios@foramnagaidhlig.net>, 2013.
+# GunChleoc <fios@foramnagaidhlig.net>, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-12-14 09:28+0100\n"
+"PO-Revision-Date: 2014-01-15 14:49+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig http://www.foramnagaidhlig.net\n"
 "Language: gd\n"
@@ -565,12 +565,12 @@ msgstr "Dochann astair: %d"
 #: ../../../src/ItemManager.cpp:536
 #, c-format
 msgid "Mental damage: %d-%d"
-msgstr "Dochann inntinneil: %d-%d"
+msgstr "Dochann inntinne: %d-%d"
 
 #: ../../../src/ItemManager.cpp:538
 #, c-format
 msgid "Mental damage: %d"
-msgstr "Dochann inntinneil: %d"
+msgstr "Dochann inntinne: %d"
 
 #: ../../../src/ItemManager.cpp:544
 #, c-format
@@ -601,13 +601,13 @@ msgstr "Lùghdaichidh seo %s le %d"
 #: ../../../src/MenuPowers.cpp:569
 #, c-format
 msgid "Requires Physical %d"
-msgstr "Feum air buadh fhiosaigeach de %d"
+msgstr "Feum air buadh bodhaige de %d"
 
 #: ../../../src/ItemManager.cpp:593 ../../../src/MenuPowers.cpp:572
 #: ../../../src/MenuPowers.cpp:575
 #, c-format
 msgid "Requires Mental %d"
-msgstr "Feum air buadh inntinneil de %d"
+msgstr "Feum air buadh inntinne de %d"
 
 #: ../../../src/ItemManager.cpp:598 ../../../src/MenuPowers.cpp:554
 #: ../../../src/MenuPowers.cpp:557
@@ -665,11 +665,11 @@ msgstr "Leibheil"
 
 #: ../../../src/MenuCharacter.cpp:277
 msgid "Physical"
-msgstr "Fiosaigeach"
+msgstr "Bodhaig"
 
 #: ../../../src/MenuCharacter.cpp:278
 msgid "Mental"
-msgstr "Inntinneil"
+msgstr "Inntinn"
 
 #: ../../../src/MenuCharacter.cpp:279
 msgid "Offense"
@@ -725,7 +725,7 @@ msgstr "Dochann astair:"
 
 #: ../../../src/MenuCharacter.cpp:390
 msgid "Mental Damage:"
-msgstr "Dochann inntinneil:"
+msgstr "Dochann inntinne:"
 
 #: ../../../src/MenuCharacter.cpp:400
 msgid "Crit:"
@@ -790,7 +790,7 @@ msgstr "An ath-fhear: %d"
 #: ../../../src/MenuCharacter.cpp:465
 msgid "Physical (P) increases melee weapon proficiency and total HP."
 msgstr ""
-"Cuiridh a' bhuadh fhiosaigeach (F) ri do chomas air airm dlùtha agus ris na "
+"Cuiridh a' bhuadh bodhaige (B) ri do chomas air airm dlùtha agus ris na "
 "puingean-beatha iomlan agad."
 
 #: ../../../src/MenuCharacter.cpp:466 ../../../src/MenuCharacter.cpp:470
@@ -802,8 +802,8 @@ msgstr "bunait (%d), duais (%d)"
 #: ../../../src/MenuCharacter.cpp:469
 msgid "Mental (M) increases mental weapon proficiency and total MP."
 msgstr ""
-"Cuiridh a' bhuadh inntinneil (N) ri do chomas air airm inntinneil agus ris "
-"na puingean-gluasaid iomlan agad."
+"Cuiridh a' bhuadh inntinne (N) ri do chomas air airm inntinne agus ris na "
+"puingean-gluasaid iomlan agad."
 
 #: ../../../src/MenuCharacter.cpp:473
 msgid "Offense (O) increases ranged weapon proficiency and accuracy."
@@ -823,12 +823,12 @@ msgstr "Bheir gach leibheil %d dhut. "
 #: ../../../src/MenuCharacter.cpp:500
 #, c-format
 msgid "Each point of Physical grants %d. "
-msgstr "Bheir gach puing dhen bhuadh fhiosaigeach %d dhut. "
+msgstr "Bheir gach puing dhen bhuadh bodhaige %d dhut. "
 
 #: ../../../src/MenuCharacter.cpp:502
 #, c-format
 msgid "Each point of Mental grants %d. "
-msgstr "Bheir gach puing dhen bhuadh inntinneil %d dhut. "
+msgstr "Bheir gach puing dhen bhuadh inntinne %d dhut. "
 
 #: ../../../src/MenuCharacter.cpp:504
 #, c-format
@@ -938,22 +938,22 @@ msgstr "Feum air %s"
 #: ../../../src/MenuPowers.cpp:530 ../../../src/MenuPowers.cpp:533
 #, c-format
 msgid "Requires Physical Offense %d"
-msgstr "Feum air ionnsaigh fiosaigeach de %d"
+msgstr "Feum air ionnsaigh bodhaige de %d"
 
 #: ../../../src/MenuPowers.cpp:536 ../../../src/MenuPowers.cpp:539
 #, c-format
 msgid "Requires Physical Defense %d"
-msgstr "Feum air dìon fiosaigeach de %d"
+msgstr "Feum air dìon bodhaige de %d"
 
 #: ../../../src/MenuPowers.cpp:542 ../../../src/MenuPowers.cpp:545
 #, c-format
 msgid "Requires Mental Offense %d"
-msgstr "Feum air ionnsaigh inntinneil de %d"
+msgstr "Feum air ionnsaigh inntinne de %d"
 
 #: ../../../src/MenuPowers.cpp:548 ../../../src/MenuPowers.cpp:551
 #, c-format
 msgid "Requires Mental Defense %d"
-msgstr "Feum air dìon inntinneil de %d"
+msgstr "Feum air dìon inntinne de %d"
 
 #: ../../../src/MenuPowers.cpp:580 ../../../src/MenuPowers.cpp:583
 #, c-format
