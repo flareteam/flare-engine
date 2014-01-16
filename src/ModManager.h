@@ -33,8 +33,10 @@ mods in priority order when loading data files.
 class ModManager {
 private:
 	void loadModList();
+	void setPaths();
 
 	std::map<std::string,std::string> loc_cache;
+	std::vector<std::string> mod_paths;
 
 public:
 	ModManager();
