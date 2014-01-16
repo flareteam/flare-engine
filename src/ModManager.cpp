@@ -23,6 +23,27 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
+Mod::Mod()
+	: name("")
+	, description("") {
+}
+
+Mod::~Mod() {
+}
+
+Mod::Mod(const Mod &mod) {
+	name = mod.name;
+	description = mod.description;
+}
+
+bool Mod::operator== (const Mod &mod) const {
+	return this->name == mod.name;
+}
+
+bool Mod::operator!= (const Mod &mod) const {
+	return !(*this == mod);
+}
+
 ModManager::ModManager() {
 	loc_cache.clear();
 	mod_dirs.clear();
@@ -62,7 +83,7 @@ void ModManager::loadModList() {
 	// Add the fallback mod by default
 	// Note: if a default mod is not found in mod_dirs, the game will exit
 	if (find(mod_dirs.begin(), mod_dirs.end(), FALLBACK_MOD) != mod_dirs.end()) {
-		mod_list.push_back(FALLBACK_MOD);
+		mod_list.push_back(loadMod(FALLBACK_MOD));
 		found_any_mod = true;
 	}
 
@@ -93,7 +114,7 @@ void ModManager::loadModList() {
 		// add the mod if it exists in the mods folder
 		if (line != FALLBACK_MOD) {
 			if (find(mod_dirs.begin(), mod_dirs.end(), line) != mod_dirs.end()) {
-				mod_list.push_back(line);
+				mod_list.push_back(loadMod(line));
 				found_any_mod = true;
 			}
 			else {
@@ -127,7 +148,7 @@ string ModManager::locate(const string& filename) {
 
 	for (unsigned int i = mod_list.size(); i > 0; i--) {
 		for (unsigned int j = 0; j < mod_paths.size(); j++) {
-			test_path = mod_paths[j] + "mods/" + mod_list[i-1] + "/" + filename;
+			test_path = mod_paths[j] + "mods/" + mod_list[i-1].name + "/" + filename;
 			if (fileExists(test_path)) {
 				loc_cache[filename] = test_path;
 				return test_path;
@@ -157,7 +178,7 @@ vector<string> ModManager::list(const string &path) {
 
 	for (unsigned int i = 0; i < mod_list.size(); ++i) {
 		for (unsigned int j = mod_paths.size(); j > 0; j--) {
-			test_path = mod_paths[j-1] + "mods/" + mod_list[i] + "/" + path;
+			test_path = mod_paths[j-1] + "mods/" + mod_list[i].name + "/" + path;
 			amendPathToVector(test_path, ret);
 		}
 	}
@@ -175,6 +196,59 @@ void ModManager::setPaths() {
 	if (uniq_path_data) mod_paths.push_back(PATH_DATA);
 	if (uniq_path_default_user) mod_paths.push_back(PATH_DEFAULT_USER);
 	if (uniq_path_default_data) mod_paths.push_back(PATH_DEFAULT_DATA);
+}
+
+Mod ModManager::loadMod(std::string name) {
+	Mod mod;
+	ifstream infile;
+	std::string starts_with, line, key, val;
+
+	mod.name = name;
+
+	for (unsigned i=0; i<mod_paths.size(); ++i) {
+		std::string path = mod_paths[i] + "mods/" + name + "/settings.txt";
+		infile.open(path.c_str(), ios::in);
+
+		while (infile.good()) {
+			line = getLine(infile);
+			key = "";
+			val = "";
+
+			// skip ahead if this line is empty
+			if (line.length() == 0) continue;
+
+			// skip comments
+			starts_with = line.at(0);
+			if (starts_with == "#") continue;
+
+			parse_key_pair(line, key, val);
+
+			if (key == "description") {
+				mod.description = val;
+			}
+		}
+		if (infile.good()) {
+			infile.close();
+			break;
+		}
+		else {
+			infile.close();
+		}
+	}
+
+	return mod;
+}
+
+void ModManager::applyDepends() {
+	// TODO implement this
+}
+
+bool ModManager::haveFallbackMod() {
+	for (unsigned i=0; i<mod_list.size(); ++i) {
+		if (mod_list[i].name == FALLBACK_MOD)
+			return true;
+	}
+	return false;
 }
 
 ModManager::~ModManager() {

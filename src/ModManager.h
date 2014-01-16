@@ -30,6 +30,18 @@ mods in priority order when loading data files.
 
 #include "CommonIncludes.h"
 
+class Mod {
+public:
+	Mod();
+	~Mod();
+	Mod(const Mod &mod);
+	bool operator== (const Mod &mod) const;
+	bool operator!= (const Mod &mod) const;
+	std::string name;
+	std::string description;
+	// std::vector<std::string> depends;
+};
+
 class ModManager {
 private:
 	void loadModList();
@@ -41,6 +53,9 @@ private:
 public:
 	ModManager();
 	~ModManager();
+	Mod loadMod(std::string name);
+	void applyDepends();
+	bool haveFallbackMod();
 
 	// Returns the filename within the latest mod, in which the provided generic
 	// filename was found.
@@ -53,7 +68,7 @@ public:
 	std::vector<std::string> list(const std::string& path);
 
 	std::vector<std::string> mod_dirs;
-	std::vector<std::string> mod_list;
+	std::vector<Mod> mod_list;
 };
 
 #endif

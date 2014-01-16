@@ -52,7 +52,7 @@ static void init() {
 
 	mods = new ModManager();
 
-	if (find(mods->mod_list.begin(), mods->mod_list.end(), FALLBACK_MOD) == mods->mod_list.end()) {
+	if (!mods->haveFallbackMod()) {
 		fprintf(stderr, "Could not find the default mod in the following locations:\n");
 		if (dirExists(PATH_DATA + "mods")) fprintf(stderr, "%smods/\n", PATH_DATA.c_str());
 		if (dirExists(PATH_DEFAULT_DATA + "mods")) fprintf(stderr, "%smods/\n", PATH_DEFAULT_DATA.c_str());
