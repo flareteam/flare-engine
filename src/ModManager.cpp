@@ -273,14 +273,14 @@ void ModManager::applyDepends() {
 					if (find(mod_dirs.begin(), mod_dirs.end(), mod_list[i].depends[j]) != mod_dirs.end()) {
 						Mod new_depend = loadMod(mod_list[i].depends[j]);
 						if (find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
-							printf("Mod \"%s\" requires the \"%s\" mod. Enabling it now.\n", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str());
+							printf("Mod \"%s\" requires the \"%s\" mod. Enabling \"%s\" now.\n", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str(), mod_list[i].depends[j].c_str());
 							new_mods.push_back(new_depend);
 							finished = false;
 							break;
 						}
 					}
 					else {
-						fprintf(stderr, "Could not find mod \"%s\", which is required by mod \"%s\". Disabling it now.\n", mod_list[i].depends[j].c_str(), mod_list[i].name.c_str());
+						fprintf(stderr, "Could not find mod \"%s\", which is required by mod \"%s\". Disabling \"%s\" now.\n", mod_list[i].depends[j].c_str(), mod_list[i].name.c_str(), mod_list[i].name.c_str());
 						depends_met = false;
 						break;
 					}
