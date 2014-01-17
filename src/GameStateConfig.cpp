@@ -88,12 +88,6 @@ void GameStateConfig::init() {
 	cancel_button->refresh();
 
 	mods_total = mods->mod_dirs.size();
-	// Remove active mods from the available mods list
-	for (unsigned int i = 0; i<mods->mod_list.size(); i++) {
-		for (unsigned int j = 0; j<mods->mod_dirs.size(); j++) {
-			if (mods->mod_list[i] == mods->mod_dirs[j] || FALLBACK_MOD == mods->mod_dirs[j]) mods->mod_dirs[j].erase();
-		}
-	}
 
 	fullscreen_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	fullscreen_lb = new WidgetLabel();
@@ -196,15 +190,25 @@ void GameStateConfig::init() {
 	// Finish Mods ListBoxes setup
 	activemods_lstb->multi_select = true;
 	for (unsigned int i = 0; i < mods->mod_list.size() ; i++) {
-		if (mods->mod_list[i] != FALLBACK_MOD)
-			activemods_lstb->append(mods->mod_list[i],"");
+		if (mods->mod_list[i].name != FALLBACK_MOD)
+			activemods_lstb->append(mods->mod_list[i].name,createModTooltip(&mods->mod_list[i]));
 	}
 	child_widget.push_back(activemods_lstb);
 	optiontab[child_widget.size()-1] = 5;
 
 	inactivemods_lstb->multi_select = true;
-	for (unsigned int i = 0; i < mods->mod_dirs.size(); i++) {
-		inactivemods_lstb->append(mods->mod_dirs[i],"");
+	for (unsigned int i = 0; i<mods->mod_dirs.size(); i++) {
+		bool skip_mod = false;
+		for (unsigned int j = 0; j<mods->mod_list.size(); j++) {
+			if (mods->mod_dirs[i] == mods->mod_list[j].name) {
+				skip_mod = true;
+				break;
+			}
+		}
+		if (!skip_mod && mods->mod_dirs[i] != FALLBACK_MOD) {
+			Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
+			inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
+		}
 	}
 	child_widget.push_back(inactivemods_lstb);
 	optiontab[child_widget.size()-1] = 5;
@@ -1243,12 +1247,14 @@ void GameStateConfig::disableMods() {
  * Save new mods list. Return true if modlist was changed. Else return false
  */
 bool GameStateConfig::setMods() {
-	vector<string> temp_list = mods->mod_list;
+	vector<Mod> temp_list = mods->mod_list;
 	mods->mod_list.clear();
-	mods->mod_list.push_back(FALLBACK_MOD);
+	mods->mod_list.push_back(mods->loadMod(FALLBACK_MOD));
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
-		if (activemods_lstb->getValue(i) != "") mods->mod_list.push_back(activemods_lstb->getValue(i));
+		if (activemods_lstb->getValue(i) != "")
+			mods->mod_list.push_back(mods->loadMod(activemods_lstb->getValue(i)));
 	}
+	mods->applyDepends();
 	ofstream outfile;
 	outfile.open((PATH_CONF + "mods.txt").c_str(), ios::out);
 
@@ -1258,7 +1264,8 @@ bool GameStateConfig::setMods() {
 		outfile<<"\n";
 
 		for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-			outfile<<mods->mod_list[i]<<"\n";
+			if (mods->mod_list[i].name != FALLBACK_MOD)
+				outfile<<mods->mod_list[i].name<<"\n";
 		}
 	}
 	if (outfile.bad()) fprintf(stderr, "Unable to save mod list into file. No write access or disk is full!\n");
@@ -1337,4 +1344,21 @@ void GameStateConfig::placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb,
 	lb->setJustify(JUSTIFY_RIGHT);
 	child_widget.push_back(lb);
 	optiontab[child_widget.size()-1] = tab;
+}
+
+std::string GameStateConfig::createModTooltip(Mod *mod) {
+	std::string ret = "";
+	if (mod) {
+		ret = mod->description;
+		if (mod->depends.size() > 0) {
+			if (ret != "") ret += '\n';
+			ret += msg->get("Requires: ");
+			for (unsigned i=0; i<mod->depends.size(); ++i) {
+				ret += mod->depends[i];
+				if (i < mod->depends.size()-1)
+					ret += ", ";
+			}
+		}
+	}
+	return ret;
 }
