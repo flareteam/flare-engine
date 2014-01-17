@@ -77,6 +77,7 @@ private:
 	bool setMods();
 	void scanKey(int button);
 	void placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab );
+	std::string createModTooltip(Mod *mod);
 
 	TabList tablist;
 	std::vector<Widget*>      child_widget;

@@ -191,7 +191,7 @@ void GameStateConfig::init() {
 	activemods_lstb->multi_select = true;
 	for (unsigned int i = 0; i < mods->mod_list.size() ; i++) {
 		if (mods->mod_list[i].name != FALLBACK_MOD)
-			activemods_lstb->append(mods->mod_list[i].name,mods->mod_list[i].description);
+			activemods_lstb->append(mods->mod_list[i].name,createModTooltip(&mods->mod_list[i]));
 	}
 	child_widget.push_back(activemods_lstb);
 	optiontab[child_widget.size()-1] = 5;
@@ -207,7 +207,7 @@ void GameStateConfig::init() {
 		}
 		if (!skip_mod && mods->mod_dirs[i] != FALLBACK_MOD) {
 			Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
-			inactivemods_lstb->append(mods->mod_dirs[i],temp_mod.description);
+			inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
 		}
 	}
 	child_widget.push_back(inactivemods_lstb);
@@ -1344,4 +1344,21 @@ void GameStateConfig::placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb,
 	lb->setJustify(JUSTIFY_RIGHT);
 	child_widget.push_back(lb);
 	optiontab[child_widget.size()-1] = tab;
+}
+
+std::string GameStateConfig::createModTooltip(Mod *mod) {
+	std::string ret = "";
+	if (mod) {
+		ret = mod->description;
+		if (mod->depends.size() > 0) {
+			ret += '\n';
+			ret += msg->get("Requires: ");
+			for (unsigned i=0; i<mod->depends.size(); ++i) {
+				ret += mod->depends[i];
+				if (i < mod->depends.size()-1)
+					ret += ", ";
+			}
+		}
+	}
+	return ret;
 }
