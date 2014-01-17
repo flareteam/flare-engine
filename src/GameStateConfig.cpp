@@ -88,12 +88,6 @@ void GameStateConfig::init() {
 	cancel_button->refresh();
 
 	mods_total = mods->mod_dirs.size();
-	// Remove active mods from the available mods list
-	for (unsigned int i = 0; i<mods->mod_list.size(); i++) {
-		for (unsigned int j = 0; j<mods->mod_dirs.size(); j++) {
-			if (mods->mod_list[i].name == mods->mod_dirs[j] || FALLBACK_MOD == mods->mod_dirs[j]) mods->mod_dirs[j].erase();
-		}
-	}
 
 	fullscreen_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	fullscreen_lb = new WidgetLabel();
@@ -203,9 +197,18 @@ void GameStateConfig::init() {
 	optiontab[child_widget.size()-1] = 5;
 
 	inactivemods_lstb->multi_select = true;
-	for (unsigned int i = 0; i < mods->mod_dirs.size(); i++) {
-		Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
-		inactivemods_lstb->append(mods->mod_dirs[i],temp_mod.description);
+	for (unsigned int i = 0; i<mods->mod_dirs.size(); i++) {
+		bool skip_mod = false;
+		for (unsigned int j = 0; j<mods->mod_list.size(); j++) {
+			if (mods->mod_dirs[i] == mods->mod_list[j].name) {
+				skip_mod = true;
+				break;
+			}
+		}
+		if (!skip_mod && mods->mod_dirs[i] != FALLBACK_MOD) {
+			Mod temp_mod = mods->loadMod(mods->mod_dirs[i]);
+			inactivemods_lstb->append(mods->mod_dirs[i],temp_mod.description);
+		}
 	}
 	child_widget.push_back(inactivemods_lstb);
 	optiontab[child_widget.size()-1] = 5;
@@ -1251,6 +1254,7 @@ bool GameStateConfig::setMods() {
 		if (activemods_lstb->getValue(i) != "")
 			mods->mod_list.push_back(mods->loadMod(activemods_lstb->getValue(i)));
 	}
+	mods->applyDepends();
 	ofstream outfile;
 	outfile.open((PATH_CONF + "mods.txt").c_str(), ios::out);
 
@@ -1260,7 +1264,8 @@ bool GameStateConfig::setMods() {
 		outfile<<"\n";
 
 		for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-			outfile<<mods->mod_list[i].name<<"\n";
+			if (mods->mod_list[i].name != FALLBACK_MOD)
+				outfile<<mods->mod_list[i].name<<"\n";
 		}
 	}
 	if (outfile.bad()) fprintf(stderr, "Unable to save mod list into file. No write access or disk is full!\n");

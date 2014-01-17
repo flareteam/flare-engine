@@ -34,6 +34,7 @@ Mod::~Mod() {
 Mod::Mod(const Mod &mod) {
 	name = mod.name;
 	description = mod.description;
+	depends = mod.depends;
 }
 
 bool Mod::operator== (const Mod &mod) const {
@@ -62,6 +63,7 @@ ModManager::ModManager() {
 	}
 
 	loadModList();
+	applyDepends();
 }
 
 /**
@@ -226,6 +228,13 @@ Mod ModManager::loadMod(std::string name) {
 			if (key == "description") {
 				mod.description = val;
 			}
+			else if (key == "requires") {
+				std::string dep;
+				val = val + ',';
+				while ((dep = eatFirstString(val, ',')) != "") {
+					mod.depends.push_back(dep);
+				}
+			}
 		}
 		if (infile.good()) {
 			infile.close();
@@ -240,7 +249,58 @@ Mod ModManager::loadMod(std::string name) {
 }
 
 void ModManager::applyDepends() {
-	// TODO implement this
+	std::vector<Mod> new_mods;
+	bool finished = true;
+
+	for (unsigned i=0; i<mod_list.size(); i++) {
+		// skip the mod if it's already in the new_mods list
+		if (find(new_mods.begin(), new_mods.end(), mod_list[i]) != new_mods.end()) {
+			continue;
+		}
+
+		bool depends_met = true;
+
+		for (unsigned j=0; j<mod_list[i].depends.size(); j++) {
+			bool found_depend = false;
+
+			// try to add the dependecy to the new_mods list
+			for (unsigned k=0; k<new_mods.size(); k++) {
+				if (new_mods[k].name == mod_list[i].depends[j]) {
+					found_depend = true;
+				}
+				if (!found_depend) {
+					// if we don't already have this dependency, try to load it from the list of available mods
+					if (find(mod_dirs.begin(), mod_dirs.end(), mod_list[i].depends[j]) != mod_dirs.end()) {
+						Mod new_depend = loadMod(mod_list[i].depends[j]);
+						if (find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
+							printf("Mod \"%s\" requires the \"%s\" mod. Enabling it now.\n", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str());
+							new_mods.push_back(new_depend);
+							finished = false;
+							break;
+						}
+					}
+					else {
+						fprintf(stderr, "Could not find mod \"%s\", which is required by mod \"%s\". Disabling it now.\n", mod_list[i].depends[j].c_str(), mod_list[i].name.c_str());
+						depends_met = false;
+						break;
+					}
+				}
+			}
+			if (!depends_met) break;
+		}
+
+		if (depends_met) {
+			if (find(new_mods.begin(), new_mods.end(), mod_list[i]) == new_mods.end()) {
+				new_mods.push_back(mod_list[i]);
+			}
+		}
+	}
+
+	mod_list = new_mods;
+
+	// run recursivly until no more dependencies need to be met
+	if (!finished)
+		applyDepends();
 }
 
 bool ModManager::haveFallbackMod() {

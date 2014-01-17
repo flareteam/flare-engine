@@ -39,7 +39,7 @@ public:
 	bool operator!= (const Mod &mod) const;
 	std::string name;
 	std::string description;
-	// std::vector<std::string> depends;
+	std::vector<std::string> depends;
 };
 
 class ModManager {
