@@ -1351,7 +1351,7 @@ std::string GameStateConfig::createModTooltip(Mod *mod) {
 	if (mod) {
 		ret = mod->description;
 		if (mod->depends.size() > 0) {
-			ret += '\n';
+			if (ret != "") ret += '\n';
 			ret += msg->get("Requires: ");
 			for (unsigned i=0; i<mod->depends.size(); ++i) {
 				ret += mod->depends[i];
