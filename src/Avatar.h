@@ -85,10 +85,8 @@ private:
 
 	//variables for patfinding
 	vector<FPoint> path;
-	int path_frames_elapsed;
 	FPoint prev_target;
 	bool collided;
-	bool path_found;
 
 	void handlePower(int actionbar_power);
 
