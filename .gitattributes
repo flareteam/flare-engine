@@ -3,12 +3,17 @@
 .gitignore export-ignore
 .mailmap export-ignore
 
+# formatting
 astyle_flare.sh export-ignore
 
+# related to coding and testing
 .travis.yml export-ignore
 qt.xml export-ignore
+
 # do not export the language recreation script
 mods/default/languages/regenerate_po.sh export-ignore
+mods/default/languages/xgettext.py export-ignore
 
+# regenerating the wiki pages
 extract_xml.sh export-ignore
 wiki.xslt export-ignore
