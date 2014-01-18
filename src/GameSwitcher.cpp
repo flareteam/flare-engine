@@ -106,10 +106,12 @@ void GameSwitcher::logic() {
 }
 
 void GameSwitcher::showFPS(int fps) {
-	if (!SHOW_FPS) return;
-	string sfps = toString(typeid(fps), &fps) + string(" fps");
-	label_fps->set(fps_position.x, fps_position.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
-	label_fps->render();
+	if (SHOW_FPS) {
+		if (!label_fps) label_fps = new WidgetLabel();
+		string sfps = toString(typeid(fps), &fps) + string(" fps");
+		label_fps->set(fps_position.x, fps_position.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
+		label_fps->render();
+	}
 }
 
 void GameSwitcher::loadFPS() {
@@ -152,6 +154,11 @@ void GameSwitcher::loadFPS() {
 		fps_position.y += VIEW_H-h;
 	}
 
+	// Delete the label object if it exists (we'll recreate this with showFPS())
+	if (label_fps) {
+		delete label_fps;
+		label_fps = NULL;
+	}
 }
 
 void GameSwitcher::render() {
