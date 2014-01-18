@@ -518,6 +518,9 @@ void MenuActionBar::resetSlots() {
 }
 
 MenuActionBar::~MenuActionBar() {
+	emptyslot.clearGraphics();
+	disabled.clearGraphics();
+	attention.clearGraphics();
 	for (unsigned i = 0; i < 16; i++)
 		delete labels[i];
 

@@ -334,6 +334,7 @@ string MenuTalker::parseLine(const string &line) {
 }
 
 MenuTalker::~MenuTalker() {
+	portrait.clearGraphics();
 	delete label_name;
 	delete textbox;
 	delete advanceButton;

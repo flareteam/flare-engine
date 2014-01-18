@@ -667,7 +667,12 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 }
 
 MenuPowers::~MenuPowers() {
-	for (unsigned int i=0; i<tree_surf.size(); i++) tree_surf[i].clearGraphics();
+	powers_unlock.clearGraphics();
+	overlay_disabled.clearGraphics();
+
+	for (unsigned int i=0; i<tree_surf.size(); i++) {
+		tree_surf[i].clearGraphics();
+	}
 	for (unsigned int i=0; i<slots.size(); i++) {
 		delete slots.at(i);
 		delete upgradeButtons.at(i);

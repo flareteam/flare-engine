@@ -55,6 +55,7 @@ WidgetSlider::WidgetSlider (const string  & fname)
 }
 
 WidgetSlider::~WidgetSlider () {
+	sl.clearGraphics();
 }
 
 

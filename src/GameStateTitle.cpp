@@ -157,6 +157,7 @@ void GameStateTitle::render() {
 }
 
 GameStateTitle::~GameStateTitle() {
+	logo.clearGraphics();
 	delete button_play;
 	delete button_cfg;
 	delete button_credits;

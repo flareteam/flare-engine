@@ -185,6 +185,7 @@ TooltipData WidgetButton::checkTooltip(Point mouse) {
 }
 
 WidgetButton::~WidgetButton() {
+	buttons.clearGraphics();
 	tip_buf.clear();
 	delete tip;
 }

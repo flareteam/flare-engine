@@ -369,6 +369,8 @@ std::string GameStateNew::getClassTooltip(int index) {
 }
 
 GameStateNew::~GameStateNew() {
+	portrait_image.clearGraphics();
+	portrait_border.clearGraphics();
 	delete button_exit;
 	delete button_create;
 	delete button_next;
