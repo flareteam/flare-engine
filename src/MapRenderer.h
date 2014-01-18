@@ -74,9 +74,7 @@ private:
 
 	void drawRenderable(std::vector<Renderable>::iterator r_cursor);
 
-	// renders one layer into the given sdl surface with offset
-	// offset in screen/surface coordinates.
-	void renderIsoLayer(Image *wheretorender, Point offset, const unsigned short layerdata[][256]);
+	void renderIsoLayer(const unsigned short layerdata[][256]);
 
 	// renders only objects
 	void renderIsoBackObjects(std::vector<Renderable> &r);
@@ -96,15 +94,6 @@ private:
 
 	FPoint shakycam;
 	TileSet tset;
-
-	// in case of animated tiles switched off, prerender background into this layer
-	Image backgroundsurface;
-
-	// only called if the background surface is actually used, i.e. ANIMATED_TILES = false;
-	void createBackgroundSurface();
-
-	// point where the backgroundsurface was rendered. same coordinates as shakycam
-	FPoint backgroundsurfaceoffset;
 
 public:
 	// functions
