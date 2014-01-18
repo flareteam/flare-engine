@@ -204,6 +204,7 @@ void MenuItemStorage::highlightClear() {
 }
 
 MenuItemStorage::~MenuItemStorage() {
+	highlight_image.clearGraphics();
 	delete[] highlight;
 	for (unsigned i=0; i<slots.size(); i++)
 		delete slots[i];

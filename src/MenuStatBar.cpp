@@ -155,5 +155,6 @@ void MenuStatBar::render() {
 }
 
 MenuStatBar::~MenuStatBar() {
+	bar.clearGraphics();
 	delete label;
 }

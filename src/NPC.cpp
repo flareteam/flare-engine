@@ -408,6 +408,8 @@ bool NPC::isDialogType(const std::string &type) {
 }
 
 NPC::~NPC() {
+	portrait.clearGraphics();
+
 	if (gfx != "") {
 		anim->decreaseCount(gfx);
 	}

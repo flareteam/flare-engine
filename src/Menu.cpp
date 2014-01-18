@@ -33,6 +33,7 @@ Menu::Menu()
 }
 
 Menu::~Menu() {
+	background.clearGraphics();
 }
 
 void Menu::align() {

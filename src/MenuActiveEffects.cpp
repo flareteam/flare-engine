@@ -125,4 +125,5 @@ void MenuActiveEffects::render() {
 }
 
 MenuActiveEffects::~MenuActiveEffects() {
+	timer.clearGraphics();
 }

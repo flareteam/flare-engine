@@ -1304,6 +1304,7 @@ void GameStateConfig::scanKey(int button) {
 }
 
 GameStateConfig::~GameStateConfig() {
+	background.clearGraphics();
 	tip_buf.clear();
 	delete tip;
 	delete tabControl;

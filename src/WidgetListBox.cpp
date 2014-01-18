@@ -523,6 +523,7 @@ bool WidgetListBox::getPrev() {
 }
 
 WidgetListBox::~WidgetListBox() {
+	listboxs.clearGraphics();
 	delete[] values;
 	delete[] tooltips;
 	delete[] vlabels;

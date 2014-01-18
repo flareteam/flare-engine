@@ -979,6 +979,8 @@ Avatar *GameStatePlay::getAvatar() const {
 }
 
 GameStatePlay::~GameStatePlay() {
+	loading_bg.clearGraphics();
+
 	delete quests;
 	delete npcs;
 	delete hazards;

@@ -31,41 +31,23 @@ using namespace std;
 
 Sprite::Sprite(const Sprite& other) {
 	local_frame = other.local_frame;
+	sprite = other.sprite;
 	src = other.src;
 	offset = other.offset;
 	dest = other.dest;
-
-	// Warning: Some graphics APIs don't support deep copying image data
-	// So we'll make sure image data is deleted here
-	if (sprite.surface != NULL) {
-		SDL_FreeSurface(sprite.surface);
-		fprintf(stderr, "Warning: Copying Sprite object is not supported\n");
-	}
-	sprite.surface = NULL;
 }
 
 Sprite& Sprite::operator=(const Sprite& other) {
 	local_frame = other.local_frame;
+	sprite = other.sprite;
 	src = other.src;
 	offset = other.offset;
 	dest = other.dest;
-
-	// Warning: Some graphics APIs don't support deep copying image data
-	// So we'll make sure image data is deleted here
-	if (sprite.surface != NULL) {
-		SDL_FreeSurface(sprite.surface);
-		fprintf(stderr, "Warning: Assignment operator for Sprite object is not supported\n");
-	}
-	sprite.surface = NULL;
 
 	return *this;
 }
 
 Sprite::~Sprite() {
-	if (sprite.surface != NULL) {
-		SDL_FreeSurface(sprite.surface);
-		sprite.surface = NULL;
-	}
 }
 
 /**
@@ -90,12 +72,10 @@ void Sprite::setGraphics(Image s, bool setClipToFull) {
 }
 
 Image* Sprite::getGraphics() {
-
 	return &sprite;
 }
 
 bool Sprite::graphicsIsNull() {
-
 	return (sprite.surface == NULL);
 }
 
@@ -107,7 +87,6 @@ bool Sprite::graphicsIsNull() {
  * graphics resources.
  */
 void Sprite::clearGraphics() {
-
 	if (sprite.surface != NULL) {
 		SDL_FreeSurface(sprite.surface);
 		sprite.surface = NULL;
@@ -211,6 +190,9 @@ int SDLRenderDevice::createContext(int width, int height) {
 	}
 
 	// Add Window Titlebar Icon
+	if (titlebar_icon) {
+		SDL_FreeSurface(titlebar_icon);
+	}
 	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
 	SDL_WM_SetIcon(titlebar_icon, NULL);
 
@@ -235,9 +217,14 @@ int SDLRenderDevice::createContext(int width, int height) {
 		is_initialized = true;
 	}
 
-	// Window title
-	const char* title = msg->get(WINDOW_TITLE).c_str();
-	SDL_WM_SetCaption(title, title);
+	if (is_initialized) {
+		// Window title
+		const char* title = msg->get(WINDOW_TITLE).c_str();
+		SDL_WM_SetCaption(title, title);
+
+		// Icons
+		loadIcons();
+	}
 
 	return (screen != NULL ? 0 : -1);
 }
@@ -535,8 +522,11 @@ void SDLRenderDevice::commitFrame() {
 }
 
 void SDLRenderDevice::destroyContext() {
-	SDL_FreeSurface(titlebar_icon);
-	SDL_FreeSurface(screen);
+	icons.clearGraphics();
+	if (titlebar_icon)
+		SDL_FreeSurface(titlebar_icon);
+	if (screen)
+		SDL_FreeSurface(screen);
 
 	return;
 }

@@ -45,6 +45,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
+	contents.clearGraphics();
 	delete scrollbar;
 }
 

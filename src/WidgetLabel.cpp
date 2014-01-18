@@ -240,4 +240,5 @@ void WidgetLabel::refresh() {
 }
 
 WidgetLabel::~WidgetLabel() {
+	renderable.clearGraphics();
 }

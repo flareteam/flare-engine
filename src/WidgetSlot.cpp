@@ -195,4 +195,6 @@ void WidgetSlot::renderSelection() {
 }
 
 WidgetSlot::~WidgetSlot() {
+	slot_selected.clearGraphics();
+	slot_checked.clearGraphics();
 }

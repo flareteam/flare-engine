@@ -34,7 +34,7 @@ Scene::Scene() : frame_counter(0)
 }
 
 Scene::~Scene() {
-
+	art.clearGraphics();
 	delete caption_box;
 	while(!components.empty()) {
 		components.pop();

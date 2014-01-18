@@ -618,6 +618,11 @@ void GameStateLoad::render() {
 }
 
 GameStateLoad::~GameStateLoad() {
+	background.clearGraphics();
+	selection.clearGraphics();
+	portrait_border.clearGraphics();
+	portrait.clearGraphics();
+
 	delete button_exit;
 	delete button_action;
 	delete button_alternate;

@@ -173,5 +173,6 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 }
 
 WidgetScrollBar::~WidgetScrollBar() {
+	scrollbars.clearGraphics();
 }
 

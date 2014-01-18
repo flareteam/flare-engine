@@ -94,7 +94,6 @@ static void init() {
 		exit(1);
 	}
 
-	render_device->loadIcons();
 	// Set Gamma
 	if (CHANGE_GAMMA)
 		render_device->setGamma(GAMMA);

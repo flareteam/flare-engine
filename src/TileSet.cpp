@@ -152,4 +152,5 @@ void TileSet::logic() {
 }
 
 TileSet::~TileSet() {
+	sprites.clearGraphics();
 }

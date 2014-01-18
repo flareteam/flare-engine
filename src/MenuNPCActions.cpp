@@ -400,5 +400,6 @@ void MenuNPCActions::render() {
 }
 
 MenuNPCActions::~MenuNPCActions() {
+	action_menu.clearGraphics();
 }
 

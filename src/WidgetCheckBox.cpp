@@ -55,6 +55,7 @@ void WidgetCheckBox::activate() {
 }
 
 WidgetCheckBox::~WidgetCheckBox () {
+	cb.clearGraphics();
 }
 
 void WidgetCheckBox::Check () {

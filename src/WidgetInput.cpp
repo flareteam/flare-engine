@@ -174,5 +174,6 @@ bool WidgetInput::checkClick() {
 }
 
 WidgetInput::~WidgetInput() {
+	background.clearGraphics();
 }
 

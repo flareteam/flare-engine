@@ -140,4 +140,5 @@ void MenuEnemy::render() {
 }
 
 MenuEnemy::~MenuEnemy() {
+	bar_hp.clearGraphics();
 }

@@ -49,6 +49,8 @@ WidgetTabControl::WidgetTabControl(int amount)
  * Class destructor.
  */
 WidgetTabControl::~WidgetTabControl() {
+	activeTabSurface.clearGraphics();
+	inactiveTabSurface.clearGraphics();
 	delete[] titles;
 	delete[] tabs;
 }
