@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "GameStateConfig.h"
 #include "GameStateTitle.h"
+#include "GameStateResolution.h"
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -158,7 +159,6 @@ void GameStateConfig::init() {
 
 	input_confirm = new MenuConfirm("",msg->get("Assign: "));
 	defaults_confirm = new MenuConfirm(msg->get("Defaults"),msg->get("Reset ALL settings?"));
-	resolution_confirm = new MenuConfirm(msg->get("OK"),msg->get("Use this resolution?"));
 
 	// Allocate KeyBindings
 	for (unsigned int i = 0; i < 29; i++) {
@@ -213,11 +213,10 @@ void GameStateConfig::init() {
 	child_widget.push_back(inactivemods_lstb);
 	optiontab[child_widget.size()-1] = 5;
 
-	// Save the current resolution in case we want to revert back to it
-	old_view_w = VIEW_W;
-	old_view_h = VIEW_H;
+	fullscreen = FULLSCREEN;
+	hwsurface = HWSURFACE;
+	doublebuf = DOUBLEBUF;
 
-	resolution_confirm_ticks = 0;
 	input_confirm_ticks = 0;
 
 	// Set up tab list
@@ -608,11 +607,6 @@ void GameStateConfig::readConfig () {
 	defaults_confirm->align();
 	defaults_confirm->update();
 
-	resolution_confirm->window_area = menuConfirm_area;
-	resolution_confirm->alignment = menuConfirm_align;
-	resolution_confirm->align();
-	resolution_confirm->update();
-
 	// Allocate KeyBindings ScrollBox
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
 	input_scrollbox->pos.x = scrollpane.x + frame.x;
@@ -772,23 +766,7 @@ void GameStateConfig::logic () {
 		}
 	}
 
-	if (resolution_confirm->visible || resolution_confirm->cancelClicked) {
-		resolution_confirm->logic();
-		resolution_confirm_ticks--;
-		if (resolution_confirm->confirmClicked) {
-			saveSettings();
-			delete requestedGameState;
-			requestedGameState = new GameStateTitle();
-		}
-		else if (resolution_confirm->cancelClicked || resolution_confirm_ticks == 0) {
-			applyVideoSettings(old_view_w, old_view_h);
-			saveSettings();
-			delete requestedGameState;
-			requestedGameState = new GameStateConfig();
-		}
-	}
-
-	if (!input_confirm->visible && !defaults_confirm->visible && !resolution_confirm->visible) {
+	if (!input_confirm->visible && !defaults_confirm->visible) {
 		tabControl->logic();
 		tablist.logic();
 
@@ -809,18 +787,12 @@ void GameStateConfig::logic () {
 				SDL_JoystickClose(joy);
 				joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 			}
-			applyVideoSettings(width, height);
-			if (width != old_view_w || height != old_view_h) {
-				resolution_confirm->window_area = menuConfirm_area;
-				resolution_confirm->align();
-				resolution_confirm->update();
-				resolution_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
-			}
-			else {
-				saveSettings();
-				delete requestedGameState;
-				requestedGameState = new GameStateTitle();
-			}
+			cleanup();
+			saveSettings();
+			delete requestedGameState;
+			requestedGameState = new GameStateResolution(width, height, fullscreen, hwsurface, doublebuf);
+			// FIXME Can we do this safely?
+			return;
 		}
 		else if (defaults_button->checkClick()) {
 			defaults_confirm->visible = true;
@@ -1048,10 +1020,8 @@ void GameStateConfig::logic () {
 }
 
 void GameStateConfig::render () {
-	if (resolution_confirm->visible) {
-		resolution_confirm->render();
+	if (requestedGameState != NULL)
 		return;
-	}
 
 	int tabheight = tabControl->getTabHeight();
 	SDL_Rect	pos;
@@ -1184,40 +1154,6 @@ void GameStateConfig::refreshFont() {
 }
 
 /**
- * Tries to apply the selected video settings, reverting back to the old settings upon failure
- */
-bool GameStateConfig::applyVideoSettings(int width, int height) {
-	if (MIN_VIEW_W > width && MIN_VIEW_H > height) {
-		fprintf (stderr, "A mod is requiring a minimum resolution of %dx%d\n", MIN_VIEW_W, MIN_VIEW_H);
-		if (width < MIN_VIEW_W) width = MIN_VIEW_W;
-		if (height < MIN_VIEW_H) height = MIN_VIEW_H;
-	}
-
-	// Attempt to apply the new settings
-	int status = render_device->createContext(width, height);
-
-	// If the new settings fail, revert to the old ones
-	if (status == -1) {
-		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
-		render_device->createContext(VIEW_W, VIEW_H);
-		return false;
-
-	}
-	else {
-
-		// If the new settings succeed, adjust the view area
-		VIEW_W = width;
-		VIEW_W_HALF = width/2;
-		VIEW_H = height;
-		VIEW_H_HALF = height/2;
-
-		resolution_confirm->visible = true;
-
-		return true;
-	}
-}
-
-/**
  * Activate mods
  */
 void GameStateConfig::enableMods() {
@@ -1303,34 +1239,69 @@ void GameStateConfig::scanKey(int button) {
 	}
 }
 
-GameStateConfig::~GameStateConfig() {
+void GameStateConfig::cleanup() {
 	background.clearGraphics();
 	tip_buf.clear();
-	delete tip;
-	delete tabControl;
-	delete ok_button;
-	delete defaults_button;
-	delete cancel_button;
-	delete input_scrollbox;
-	delete input_confirm;
-	delete defaults_confirm;
-	delete resolution_confirm;
+	if (tip != NULL) {
+		delete tip;
+		tip = NULL;
+	}
+	if (tabControl != NULL) {
+		delete tabControl;
+		tabControl = NULL;
+	}
+	if (ok_button != NULL) {
+		delete ok_button;
+		ok_button = NULL;
+	}
+	if (defaults_button != NULL) {
+		delete defaults_button;
+		defaults_button = NULL;
+	}
+	if (cancel_button != NULL) {
+		delete cancel_button;
+		cancel_button = NULL;
+	}
+	if (input_scrollbox != NULL) {
+		delete input_scrollbox;
+		input_scrollbox = NULL;
+	}
+	if (input_confirm != NULL) {
+		delete input_confirm;
+		input_confirm = NULL;
+	}
+	if (defaults_confirm != NULL) {
+		delete defaults_confirm;
+		defaults_confirm = NULL;
+	}
 
 	for (std::vector<Widget*>::iterator iter = child_widget.begin(); iter != child_widget.end(); ++iter) {
-		delete (*iter);
+		if (*iter != NULL) {
+			delete (*iter);
+			*iter = NULL;
+		}
 	}
 	child_widget.clear();
 
 	for (unsigned int i = 0; i < 29; i++) {
-		delete settings_lb[i];
+		if (settings_lb[i] != NULL) {
+			delete settings_lb[i];
+			settings_lb[i] = NULL;
+		}
 	}
 	for (unsigned int i = 0; i < 58; i++) {
-		delete settings_key[i];
+		if (settings_key[i] != NULL) {
+			delete settings_key[i];
+			settings_key[i] = NULL;
+		}
 	}
 
 	language_ISO.clear();
 	language_full.clear();
+}
 
+GameStateConfig::~GameStateConfig() {
+	cleanup();
 }
 
 void GameStateConfig::placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab ) {

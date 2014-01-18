@@ -67,11 +67,11 @@ private:
 	bool getLanguagesList(void);
 	int getLanguagesNumber(void);
 	void init();
+	void cleanup();
 	void readConfig();
 	void update();
 	void setDefaultResolution();
 	void refreshFont();
-	bool applyVideoSettings(int width, int height);
 	void enableMods();
 	void disableMods();
 	bool setMods();
@@ -149,7 +149,6 @@ private:
 	WidgetScrollBox     * input_scrollbox;
 	MenuConfirm         * input_confirm;
 	MenuConfirm         * defaults_confirm;
-	MenuConfirm         * resolution_confirm;
 
 	WidgetTooltip       * tip;
 	TooltipData         tip_buf;
@@ -160,9 +159,9 @@ private:
 	SDL_Rect scrollpane;
 	SDL_Color scrollpane_color;
 	int scrollpane_contents;
-	int old_view_w;
-	int old_view_h;
-	int resolution_confirm_ticks;
+	bool fullscreen;
+	bool hwsurface;
+	bool doublebuf;
 	int input_confirm_ticks;
 };
 
