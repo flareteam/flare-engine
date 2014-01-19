@@ -105,13 +105,13 @@ void MenuMiniMap::renderOrtho(FPoint hero_pos) {
 	const int herox = (int)floor(hero_pos.x);
 	const int heroy = (int)floor(hero_pos.y);
 
-	SDL_Rect clip;
+	Rect clip;
 	clip.x = herox - pos.w/2;
 	clip.y = heroy - pos.h/2;
 	clip.w = pos.w;
 	clip.h = pos.h;
 
-	SDL_Rect map_area;
+	Rect map_area;
 	map_area.x = window_area.x + pos.x;
 	map_area.y = window_area.y + pos.y;
 	map_area.w = pos.w;
@@ -138,13 +138,13 @@ void MenuMiniMap::renderIso(FPoint hero_pos) {
 	const int heroy_screen = herox + heroy;
 	const int herox_screen = herox - heroy + std::max(map_size.x, map_size.y);
 
-	SDL_Rect clip;
+	Rect clip;
 	clip.x = herox_screen - pos.w/2;
 	clip.y = heroy_screen - pos.h/2;
 	clip.w = pos.w;
 	clip.h = pos.h;
 
-	SDL_Rect map_area;
+	Rect map_area;
 	map_area.x = window_area.x + pos.x;
 	map_area.y = window_area.y + pos.y;
 	map_area.w = pos.w;

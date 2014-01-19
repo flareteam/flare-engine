@@ -63,7 +63,7 @@ Animation::Animation(const Animation& a)
 	, max_kinds(a.max_kinds)
 	, additional_data(a.additional_data)
 	, times_played(0)
-	, gfx(std::vector<SDL_Rect>(a.gfx))
+	, gfx(std::vector<Rect>(a.gfx))
 	, render_offset(std::vector<Point>(a.render_offset))
 	, duration(std::vector<unsigned short>(a.duration))
 	, active_frames(std::vector<short>(a.active_frames)) {
@@ -115,20 +115,20 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 
 void Animation::addFrame(	unsigned short index,
 							unsigned short kind,
-							SDL_Rect sdl_rect,
+							Rect rect,
 							Point _render_offset) {
 
 	if (index > gfx.size()/max_kinds) {
 		fprintf(stderr, "WARNING: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]\n",
-				name.c_str(), sdl_rect.x, sdl_rect.y, sdl_rect.w, sdl_rect.h, index, (int)gfx.size()/max_kinds);
+				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, (int)gfx.size()/max_kinds);
 		return;
 	}
 	if (kind > max_kinds-1) {
 		fprintf(stderr, "WARNING: Animation(%s) adding rect(%d, %d, %d, %d) to frame(%u) kind(%u) out of bounds. must be in [0, %d]\n",
-				name.c_str(), sdl_rect.x, sdl_rect.y, sdl_rect.w, sdl_rect.h, index, kind, max_kinds-1);
+				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, kind, max_kinds-1);
 		return;
 	}
-	gfx[max_kinds*index+kind] = sdl_rect;
+	gfx[max_kinds*index+kind] = rect;
 	render_offset[max_kinds*index+kind] = _render_offset;
 }
 

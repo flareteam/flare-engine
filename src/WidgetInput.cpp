@@ -101,7 +101,7 @@ bool WidgetInput::logic(int x, int y) {
 }
 
 void WidgetInput::render() {
-	SDL_Rect src;
+	Rect src;
 	src.x = 0;
 	src.y = (inFocus ? pos.h : 0);
 	src.w = pos.w;

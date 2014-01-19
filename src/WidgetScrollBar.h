@@ -52,9 +52,9 @@ public:
 	void render();
 	void refresh(int x, int y, int h, int val, int max);
 
-	SDL_Rect pos_up;
-	SDL_Rect pos_down;
-	SDL_Rect pos_knob;
+	Rect pos_up;
+	Rect pos_down;
+	Rect pos_knob;
 	bool pressed_up;
 	bool pressed_down;
 	bool pressed_knob;

@@ -963,7 +963,7 @@ void GameStatePlay::render() {
 void GameStatePlay::showLoading() {
 	if (loading_bg.graphicsIsNull()) return;
 
-	SDL_Rect dest;
+	Rect dest;
 	dest.x = VIEW_W_HALF - loading_bg.getGraphicsWidth()/2;
 	dest.y = VIEW_H_HALF - loading_bg.getGraphicsHeight()/2;
 

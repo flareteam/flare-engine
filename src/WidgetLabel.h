@@ -76,7 +76,7 @@ public:
 	void set(const std::string& _text);
 	std::string get() {return text;}
 
-	SDL_Rect bounds;
+	Rect bounds;
 };
 
 #endif

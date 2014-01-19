@@ -248,7 +248,7 @@ operator<< (ostream & os, const SDL_ExposeEvent &) {
 }
 
 ostream &
-operator<< (ostream & os, const SDL_Rect & rect) {
+operator<< (ostream & os, const Rect & rect) {
 	os << "(x,y,h,w) = (" << rect.x << "," << rect.y << "," << rect.h << "," << rect.w << ")";
 	return os;
 }

@@ -148,7 +148,7 @@ void AnimationSet::load() {
 				compressed_loading = true;
 			}
 			// frame = index, direction, x, y, w, h, offsetx, offsety
-			SDL_Rect r;
+			Rect r;
 			Point offset;
 			const int index = toInt(parser.nextValue());
 			const int direction = toInt(parser.nextValue());

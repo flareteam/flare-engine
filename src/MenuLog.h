@@ -49,13 +49,13 @@ private:
 	WidgetScrollBox *msg_buffer[LOG_TYPE_COUNT];
 	int log_count[LOG_TYPE_COUNT];
 	std::string tab_labels[LOG_TYPE_COUNT];
-	SDL_Rect tab_rect[LOG_TYPE_COUNT];
+	Rect tab_rect[LOG_TYPE_COUNT];
 	int paragraph_spacing;
 
 	LabelInfo title;
 	Point close_pos;
 	int tab_content_indent;
-	SDL_Rect tab_area;
+	Rect tab_area;
 	SDL_Color tab_bg;
 	SDL_Color color_normal;
 

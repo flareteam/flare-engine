@@ -219,8 +219,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 }
 
 void MenuManager::renderIcon(int icon_id, int x, int y) {
-	SDL_Rect src;
-	SDL_Rect dest;
+	Rect src;
+	Rect dest;
 	dest.x = x;
 	dest.y = y;
 	src.w = src.h = dest.w = dest.h = ICON_SIZE;

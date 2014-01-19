@@ -59,7 +59,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// Load config settings
-	SDL_Rect equipment_slot;
+	Rect equipment_slot;
 	FileParser infile;
 	if (infile.open("menus/inventory.txt")) {
 		while(infile.next()) {

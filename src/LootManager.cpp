@@ -377,7 +377,7 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
  * the hero has to be within range to pick up an item.
  */
 ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv) {
-	SDL_Rect r;
+	Rect r;
 	ItemStack loot_stack;
 	loot_stack.item = 0;
 	loot_stack.quantity = 0;

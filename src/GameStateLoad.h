@@ -70,7 +70,7 @@ private:
 	StatBlock stats[GAME_SLOT_MAX];
 	std::vector<int> equipped[GAME_SLOT_MAX];
 	std::vector<std::string> preview_layer;
-	SDL_Rect slot_pos[GAME_SLOT_MAX];
+	Rect slot_pos[GAME_SLOT_MAX];
 	std::string current_map[GAME_SLOT_MAX];
 
 	bool loading_requested;
@@ -87,8 +87,8 @@ private:
 	int current_frame;
 	int frame_ticker;
 
-	SDL_Rect gameslot_pos;
-	SDL_Rect preview_pos;
+	Rect gameslot_pos;
+	Rect preview_pos;
 
 	SDL_Color color_normal;
 

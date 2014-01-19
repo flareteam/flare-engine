@@ -50,7 +50,7 @@ private:
 	std::string *values;
 	std::string *tooltips;
 	WidgetLabel *vlabels;
-	SDL_Rect *rows;
+	Rect *rows;
 	WidgetTooltip *tip;
 	WidgetScrollBar *scrollbar;
 	SDL_Color color_normal;
@@ -82,7 +82,7 @@ public:
 	bool getNext();
 	bool getPrev();
 
-	SDL_Rect pos_scroll;
+	Rect pos_scroll;
 	bool pressed;
 	bool *selected;
 	bool multi_select;

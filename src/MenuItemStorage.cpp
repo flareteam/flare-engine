@@ -37,7 +37,7 @@ MenuItemStorage::MenuItemStorage()
 	, highlight(NULL)
 {}
 
-void MenuItemStorage::init(int _slot_number, SDL_Rect _area, int _icon_size, int _nb_cols) {
+void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb_cols) {
 	ItemStorage::init( _slot_number);
 	grid_area = _area;
 	for (int i = 0; i < _slot_number; i++) {
@@ -58,7 +58,7 @@ void MenuItemStorage::init(int _slot_number, SDL_Rect _area, int _icon_size, int
 /**
  * Overloaded function for case, if slot positions are predefined
  */
-void MenuItemStorage::init(int _slot_number, vector<SDL_Rect> _area, vector<string> _slot_type) {
+void MenuItemStorage::init(int _slot_number, vector<Rect> _area, vector<string> _slot_type) {
 	ItemStorage::init( _slot_number);
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot();
@@ -94,7 +94,7 @@ void MenuItemStorage::render() {
 
 void MenuItemStorage::renderHighlight(int x, int y, int _icon_size) {
 	if (_icon_size == ICON_SIZE) {
-		SDL_Rect dest;
+		Rect dest;
 		dest.x = x;
 		dest.y = y;
 		highlight_image.setDest(dest);

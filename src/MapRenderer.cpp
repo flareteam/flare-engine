@@ -298,7 +298,7 @@ void MapRenderer::createBackgroundSurface() {
 
 void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
 	if (r_cursor->sprite.graphicIsNull() == false) {
-		SDL_Rect dest;
+		Rect dest;
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 		dest.x = p.x - r_cursor->offset.x;
 		dest.y = p.y - r_cursor->offset.y;
@@ -309,7 +309,7 @@ void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
 void MapRenderer::renderIsoLayer(Image *wheretorender, Point offset, const unsigned short layerdata[256][256]) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
-	SDL_Rect dest;
+	Rect dest;
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((2 * VIEW_H / TILE_H) + 2 * tset.max_size_y) * 2;
@@ -361,7 +361,7 @@ void MapRenderer::renderIsoLayer(Image *wheretorender, Point offset, const unsig
 					tset.tiles[current_tile].tile.setGraphics(Image());
 				}
 				else {
-					SDL_Rect clip = tset.tiles[current_tile].tile.getClip();
+					Rect clip = tset.tiles[current_tile].tile.getClip();
 					render_device->renderToImage(tset.sprites.getGraphics(), clip, wheretorender, dest);
 				}
 			}
@@ -383,7 +383,7 @@ void MapRenderer::renderIsoBackObjects(vector<Renderable> &r) {
 }
 
 void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
-	SDL_Rect dest;
+	Rect dest;
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
@@ -477,7 +477,7 @@ void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
 				renderIsoLayer(&backgroundsurface, off, layers[i]);
 		}
 		Point p = map_to_screen(shakycam.x, shakycam.y , backgroundsurfaceoffset.x, backgroundsurfaceoffset.y);
-		SDL_Rect src;
+		Rect src;
 		src.x = p.x;
 		src.y = p.y;
 		src.w = 2 * VIEW_W;
@@ -511,7 +511,7 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 		for (i = starti; i < max_tiles_width; i++) {
 
 			if (const unsigned short current_tile = layerdata[i][j]) {
-				SDL_Rect dest;
+				Rect dest;
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile.setDest(dest);
@@ -535,7 +535,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	short int i;
 	short int j;
-	SDL_Rect dest;
+	Rect dest;
 	vector<Renderable>::iterator r_cursor = r.begin();
 	vector<Renderable>::iterator r_end = r.end();
 
@@ -712,7 +712,7 @@ void MapRenderer::checkHotspots() {
 
 					if (const short current_tile = current_layer[x][y]) {
 						// first check if mouse pointer is in rectangle of that tile:
-						SDL_Rect dest;
+						Rect dest;
 						dest.x = p.x - tset.tiles[current_tile].offset.x;
 						dest.y = p.y - tset.tiles[current_tile].offset.y;
 						dest.w = tset.tiles[current_tile].tile.getClip().w;

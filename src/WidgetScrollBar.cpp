@@ -126,7 +126,7 @@ int WidgetScrollBar::getValue() {
 }
 
 void WidgetScrollBar::render() {
-	SDL_Rect src_up, src_down, src_knob;
+	Rect src_up, src_down, src_knob;
 
 	src_up.x = 0;
 	src_up.y = (pressed_up ? pos_up.h : 0);

@@ -63,7 +63,7 @@ public:
 
 	int getRowsCount();
 
-	SDL_Rect slots_area;
+	Rect slots_area;
 	MenuItemStorage stock;
 	bool updated;
 

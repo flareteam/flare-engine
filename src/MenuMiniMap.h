@@ -39,7 +39,7 @@ private:
 	Sprite map_surface;
 	Point map_size;
 
-	SDL_Rect pos;
+	Rect pos;
 	LabelInfo text_pos;
 	WidgetLabel *label;
 

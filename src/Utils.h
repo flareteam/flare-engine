@@ -47,6 +47,21 @@ public:
 	FPoint(float _x, float _y) : x(_x), y(_y) {}
 };
 
+class Rect {
+public:
+	int x, y, w, h;
+	Rect() : x(0), y(0), w(0), h(0) {}
+	Rect(SDL_Rect _r) : x(_r.x), y(_r.y), w(_r.w), h(_r.h) {}
+	operator SDL_Rect() {
+		SDL_Rect r;
+		r.x = x;
+		r.y = y;
+		r.w = w;
+		r.h = h;
+		return r;
+	}
+};
+
 class Event_Component {
 public:
 	std::string type;
@@ -80,7 +95,7 @@ float calcTheta(float x1, float y1, float x2, float y2);
 int calcDirection(float x0, float y0, float x1, float y1);
 int calcDirection(const FPoint &src, const FPoint &dst);
 bool isWithin(FPoint center, float radius, FPoint target);
-bool isWithin(SDL_Rect r, Point target);
+bool isWithin(Rect r, Point target);
 
 std::string abbreviateKilo(int amount);
 

@@ -45,7 +45,7 @@ class CharStat {
 public:
 	WidgetLabel *label;
 	WidgetLabel *value;
-	SDL_Rect hover;
+	Rect hover;
 	TooltipData tip;
 	bool visible;
 
@@ -86,7 +86,7 @@ private:
 	int statlist_scrollbar_offset;
 	LabelInfo unspent_pos;
 	LabelInfo label_pos[CSTAT_COUNT];
-	SDL_Rect value_pos[CSTAT_COUNT];
+	Rect value_pos[CSTAT_COUNT];
 	bool show_upgrade[4];
 	bool show_stat[STATLIST_COUNT];
 

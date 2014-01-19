@@ -66,7 +66,7 @@ void MenuHUDLog::logic() {
  */
 void MenuHUDLog::render() {
 
-	SDL_Rect dest;
+	Rect dest;
 	dest.x = window_area.x;
 	dest.y = window_area.y;
 

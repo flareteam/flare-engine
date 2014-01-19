@@ -92,11 +92,11 @@ void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string
 }
 
 void MenuStatBar::render() {
-	SDL_Rect src;
-	SDL_Rect dest;
+	Rect src;
+	Rect dest;
 
 	// position elements based on the window position
-	SDL_Rect bar_dest = bar_pos;
+	Rect bar_dest = bar_pos;
 	bar_dest.x = bar_pos.x+window_area.x;
 	bar_dest.y = bar_pos.y+window_area.y;
 

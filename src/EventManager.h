@@ -31,14 +31,14 @@ class Event {
 public:
 	std::string type;
 	std::vector<Event_Component> components;
-	SDL_Rect location;
-	SDL_Rect hotspot;
+	Rect location;
+	Rect hotspot;
 	int cooldown; // events that run multiple times pause this long in frames
 	int cooldown_ticks;
 	StatBlock *stats;
 	bool keep_after_trigger; // if this event has been triggered once, should this event be kept? If so, this event can be triggered multiple times.
 	FPoint center;
-	SDL_Rect reachable_from;
+	Rect reachable_from;
 
 	Event()
 	 : type("")

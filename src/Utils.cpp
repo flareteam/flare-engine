@@ -154,7 +154,7 @@ bool isWithin(FPoint center, float radius, FPoint target) {
 /**
  * is target within the area defined by rectangle r?
  */
-bool isWithin(SDL_Rect r, Point target) {
+bool isWithin(Rect r, Point target) {
 	return target.x >= r.x && target.y >= r.y && target.x < r.x+r.w && target.y < r.y+r.h;
 }
 

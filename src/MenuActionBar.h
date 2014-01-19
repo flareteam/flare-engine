@@ -52,7 +52,7 @@ private:
 	Sprite attention;
 
 	Avatar *hero;
-	SDL_Rect src;
+	Rect src;
 
 	WidgetLabel *labels[16];
 	Point last_mouse;
@@ -89,9 +89,9 @@ public:
 
 	// these store the area occupied by these hotslot sections.
 	// useful for detecting mouse interactions on those locations
-	SDL_Rect numberArea;
-	SDL_Rect mouseArea;
-	SDL_Rect menuArea;
+	Rect numberArea;
+	Rect mouseArea;
+	Rect menuArea;
 	int drag_prev_slot;
 
 	TabList tablist;

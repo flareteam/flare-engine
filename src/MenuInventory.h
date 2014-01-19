@@ -52,7 +52,7 @@ private:
 	Point close_pos;
 	LabelInfo title;
 	LabelInfo currency_lbl;
-	SDL_Rect help_pos;
+	Rect help_pos;
 	int carried_cols;
 	int carried_rows;
 	SDL_Color color_normal;
@@ -96,8 +96,8 @@ public:
 
 	void clearHighlight();
 
-	SDL_Rect carried_area;
-	std::vector<SDL_Rect> equipped_area;
+	Rect carried_area;
+	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;
 	std::vector<std::string> slot_desc;
 

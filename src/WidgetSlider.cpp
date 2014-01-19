@@ -88,8 +88,8 @@ bool WidgetSlider::checkClick (int x, int y) {
 		//
 		// The knob has been released
 		//
-		// create a temporary SDL_Rect slightly wider than the slider
-		SDL_Rect tmp_pos;
+		// create a temporary Rect slightly wider than the slider
+		Rect tmp_pos;
 		tmp_pos.x = pos.x - (pos_knob.w*2);
 		tmp_pos.y = pos.y;
 		tmp_pos.w = pos.w + (pos_knob.w*4);
@@ -132,13 +132,13 @@ int WidgetSlider::getValue () const {
 
 
 void WidgetSlider::render () {
-	SDL_Rect	base;
+	Rect	base;
 	base.x = 0;
 	base.y = 0;
 	base.h = pos.h;
 	base.w = pos.w;
 
-	SDL_Rect	knob;
+	Rect	knob;
 	knob.x = 0;
 	knob.y = pos.h;
 	knob.h = pos_knob.h;

@@ -74,7 +74,7 @@ public:
 	int direction;
 	std::queue<FPoint> waypoints;
 	bool wander;
-	SDL_Rect wander_area;
+	Rect wander_area;
 	bool hero_ally;
 	int summon_power_index;
 	StatBlock* summoner;

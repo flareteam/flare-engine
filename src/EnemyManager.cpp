@@ -382,7 +382,7 @@ void EnemyManager::logic() {
 
 Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 	Point p;
-	SDL_Rect r;
+	Rect r;
 	for(unsigned int i = 0; i < enemies.size(); i++) {
 		if(alive_only && (enemies[i]->stats.cur_state == ENEMY_DEAD || enemies[i]->stats.cur_state == ENEMY_CRITDEAD)) {
 			continue;

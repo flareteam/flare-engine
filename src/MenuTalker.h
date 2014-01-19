@@ -50,11 +50,11 @@ private:
 
 	Point close_pos;
 	Point advance_pos;
-	SDL_Rect dialog_pos;
-	SDL_Rect text_pos;
+	Rect dialog_pos;
+	Rect text_pos;
 	Point text_offset;
-	SDL_Rect portrait_he;
-	SDL_Rect portrait_you;
+	Rect portrait_he;
+	Rect portrait_you;
 
 	std::string font_who;
 	std::string font_dialog;

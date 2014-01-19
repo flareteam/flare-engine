@@ -75,7 +75,7 @@ public:
 	int getRowsCount();
 
 	bool talker_visible;
-	SDL_Rect slots_area;
+	Rect slots_area;
 
 	TabList tablist;
 };

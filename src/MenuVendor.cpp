@@ -89,7 +89,7 @@ void MenuVendor::update() {
 	slots_area.w = slots_cols*ICON_SIZE;
 	slots_area.h = slots_rows*ICON_SIZE;
 
-	SDL_Rect tabs_area = slots_area;
+	Rect tabs_area = slots_area;
 
 	int tabheight = tabControl->getTabHeight();
 	tabControl->setMainArea(tabs_area.x, tabs_area.y-tabheight, tabs_area.w, tabs_area.h+tabheight);

@@ -77,7 +77,7 @@ private:
 	LabelInfo name_label;
 	LabelInfo permadeath_label;
 	LabelInfo classlist_label;
-	SDL_Rect portrait_pos;
+	Rect portrait_pos;
 	bool show_classlist;
 	TooltipData tip_buf;
 	bool modified_name;

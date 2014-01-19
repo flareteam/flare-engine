@@ -54,10 +54,10 @@ public:
 
 private:
 	int optiontab[138];
-	SDL_Rect frame;
-	std::vector<SDL_Rect> video_modes;
+	Rect frame;
+	std::vector<Rect> video_modes;
 
-	SDL_Rect menuConfirm_area;
+	Rect menuConfirm_area;
 	std::string menuConfirm_align;
 
 	std::vector<std::string> language_ISO;
@@ -156,7 +156,7 @@ private:
 	int input_key;
 	int mods_total;
 	bool check_resolution;
-	SDL_Rect scrollpane;
+	Rect scrollpane;
 	SDL_Color scrollpane_color;
 	int scrollpane_contents;
 	bool fullscreen;

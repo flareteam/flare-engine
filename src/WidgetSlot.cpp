@@ -44,7 +44,7 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	pos.w = ICON_SIZE;
 	pos.h = ICON_SIZE;
 
-	SDL_Rect src;
+	Rect src;
 	src.x = src.y = 0;
 	src.w = src.h = ICON_SIZE;
 	slot_selected.setGraphics(render_device->loadGraphicSurface("images/menus/slot_selected.png"));
@@ -142,7 +142,7 @@ void WidgetSlot::setAmount(int _amount, int _max_amount) {
 }
 
 void WidgetSlot::render() {
-	SDL_Rect src;
+	Rect src;
 
 	if (icon_id != -1 && !icons.graphicsIsNull()) {
 		int columns = icons.getGraphicsWidth() / ICON_SIZE;

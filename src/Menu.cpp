@@ -37,7 +37,7 @@ Menu::~Menu() {
 }
 
 void Menu::align() {
-	SDL_Rect temp = window_area;
+	Rect temp = window_area;
 
 	if (alignment == "topleft") {
 		window_area.x = 0+temp.x;
