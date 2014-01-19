@@ -44,6 +44,9 @@ MenuStash::MenuStash(StatBlock *_stats)
 {
 	background.setGraphics(render_device->loadGraphicSurface("images/menus/stash.png"));
 
+	slots_cols = 8; // default if menus/stash.txt::stash_cols not set
+	slots_rows = 8; // default if menus/stash.txt::slots_rows not set
+
 	// Load config settings
 	FileParser infile;
 	if (infile.open("menus/stash.txt")) {

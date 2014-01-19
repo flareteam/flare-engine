@@ -38,9 +38,6 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 	pos.w = cb.getGraphicsWidth();
 	pos.h = cb.getGraphicsHeight() / 2;
 
-	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
-	local_offset.x = local_offset.y = 0;
-
 	cb.setClip(
 		0,
 		0,

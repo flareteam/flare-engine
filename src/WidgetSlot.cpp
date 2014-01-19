@@ -51,8 +51,6 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	slot_selected.setClip(src);
 	slot_checked.setGraphics(render_device->loadGraphicSurface("images/menus/slot_checked.png"));
 	slot_checked.setClip(src);
-	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
-	local_offset.x = local_offset.y = 0;
 }
 
 void WidgetSlot::activate() {

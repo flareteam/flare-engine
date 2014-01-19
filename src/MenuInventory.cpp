@@ -45,6 +45,9 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 
 	currency = 0;
 
+	carried_cols = 4; // default to 4 if menus/inventory.txt::carried_cols not set
+	carried_rows = 4; // default to 4 if menus/inventory.txt::carried_rows not set
+
 	drag_prev_src = -1;
 	changed_equipment = true;
 	changed_artifact = true;
@@ -58,7 +61,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	// Load config settings
 	SDL_Rect equipment_slot;
 	FileParser infile;
-	if(infile.open("menus/inventory.txt")) {
+	if (infile.open("menus/inventory.txt")) {
 		while(infile.next()) {
 			infile.val = infile.val + ',';
 
@@ -289,12 +292,12 @@ ItemStack MenuInventory::click(Point position) {
 	item.quantity = 0;
 
 	drag_prev_src = areaOver(position);
-	if( drag_prev_src > -1) {
+	if (drag_prev_src > -1) {
 		item = inventory[drag_prev_src].click(position);
 		// if dragging equipment, prepare to change stats/sprites
 		if (drag_prev_src == EQUIPMENT) {
 			if (stats->humanoid) {
-				updateEquipment( inventory[EQUIPMENT].drag_prev_slot);
+				updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
 			}
 			else {
 				itemReturn(item);
@@ -313,9 +316,10 @@ ItemStack MenuInventory::click(Point position) {
 /**
  * Return dragged item to previous slot
  */
-void MenuInventory::itemReturn( ItemStack stack) {
-	if (drag_prev_src == -1) return;
-	inventory[drag_prev_src].itemReturn( stack);
+void MenuInventory::itemReturn(ItemStack stack) {
+	if (drag_prev_src == -1)
+		return;
+	inventory[drag_prev_src].itemReturn(stack);
 	// if returning equipment, prepare to change stats/sprites
 	if (drag_prev_src == EQUIPMENT) {
 		updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
@@ -344,7 +348,9 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		return;
 	}
 
-	int drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
+	int drag_prev_slot = -1;
+	if (drag_prev_src != -1)
+			drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
 
 	if (area == EQUIPMENT) { // dropped onto equipped item
 
@@ -352,23 +358,23 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		// note: equipment slots 0-3 correspond with item types 0-3
 		// also check to see if the hero meets the requirements
 		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid) {
-			if( inventory[area][slot].item == stack.item) {
+			if (inventory[area][slot].item == stack.item) {
 				// Merge the stacks
 				add(stack, area, slot, false);
 			}
-			else if( inventory[drag_prev_src][drag_prev_slot].item == 0) {
+			else if (inventory[drag_prev_src][drag_prev_slot].item == 0) {
 				// Swap the two stacks
-				itemReturn( inventory[area][slot]);
+				itemReturn(inventory[area][slot]);
 				inventory[area][slot] = stack;
-				updateEquipment( slot);
+				updateEquipment(slot);
 			}
 			else {
-				itemReturn( stack);
+				itemReturn(stack);
 			}
 		}
 		else {
 			// equippable items only belong to one slot, for the moment
-			itemReturn( stack); // cancel
+			itemReturn(stack); // cancel
 		}
 	}
 	else if (area == CARRIED) {
@@ -376,15 +382,15 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 
 		if (drag_prev_src == CARRIED) {
 			if (slot != drag_prev_slot) {
-				if( inventory[area][slot].item == stack.item) {
+				if (inventory[area][slot].item == stack.item) {
 					// Merge the stacks
 					add(stack, area, slot, false);
 				}
-				else if( inventory[area][slot].item == 0) {
+				else if (inventory[area][slot].item == 0) {
 					// Drop the stack
 					inventory[area][slot] = stack;
 				}
-				else if( inventory[drag_prev_src][drag_prev_slot].item == 0) { // Check if the previous slot is free (could still be used if SHIFT was used).
+				else if (inventory[drag_prev_src][drag_prev_slot].item == 0) { // Check if the previous slot is free (could still be used if SHIFT was used).
 					// Swap the two stacks
 					itemReturn( inventory[area][slot]);
 					inventory[area][slot] = stack;
@@ -404,7 +410,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 				// Merge the stacks
 				add(stack, area, slot, false);
 			}
-			else if( inventory[area][slot].item == 0) {
+			else if (inventory[area][slot].item == 0) {
 				// Drop the stack
 				inventory[area][slot] = stack;
 			}
@@ -415,11 +421,11 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 				&& requirementsMet(inventory[CARRIED][slot].item)
 			) { // The whole equipped stack is dropped on an empty carried slot or on a wearable item
 				// Swap the two stacks
-				itemReturn( inventory[area][slot]);
+				itemReturn(inventory[area][slot]);
 				inventory[area][slot] = stack;
 			}
 			else {
-				itemReturn( stack); // cancel
+				itemReturn(stack); // cancel
 			}
 		}
 	}

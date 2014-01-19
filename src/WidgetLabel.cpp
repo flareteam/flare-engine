@@ -75,9 +75,6 @@ WidgetLabel::WidgetLabel()
 	bounds.x = bounds.y = 0;
 	bounds.w = bounds.h = 0;
 
-	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
-	local_offset.x = local_offset.y = 0;
-
 	render_to_alpha = false;
 }
 

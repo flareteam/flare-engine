@@ -25,6 +25,8 @@ Widget::Widget()
 	, focusable(false)
 	, pos() {
 	pos.x = pos.y = pos.w = pos.h = 0;
+	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
+	local_offset.x = local_offset.y = 0;
 }
 
 Widget::~Widget() {

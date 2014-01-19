@@ -48,9 +48,6 @@ WidgetSlider::WidgetSlider (const string  & fname)
 	pos_knob.w = sl.getGraphicsWidth() / 8;
 	pos_knob.h = sl.getGraphicsHeight() / 2;
 
-	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
-	local_offset.x = local_offset.y = 0;
-
 	render_to_alpha = false;
 }
 
