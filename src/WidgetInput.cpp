@@ -38,9 +38,6 @@ WidgetInput::WidgetInput() {
 	pos.w = background.getGraphicsWidth();
 	pos.h = background.getGraphicsHeight()/2;
 
-	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
-	local_offset.x = local_offset.y = 0;
-
 	cursor_frame = 0;
 
 	render_to_alpha = false;

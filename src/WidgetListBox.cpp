@@ -64,9 +64,6 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 
 	pos.w = listboxs.getGraphicsWidth();
 	pos.h = (listboxs.getGraphicsHeight() / 3); // height of one item
-
-	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
-	local_offset.x = local_offset.y = 0;
 }
 
 bool WidgetListBox::checkClick() {
