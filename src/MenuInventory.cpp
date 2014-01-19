@@ -45,6 +45,9 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 
 	currency = 0;
 
+	carried_cols = 4; // default to 4 if menus/inventory.txt::carried_cols not set
+	carried_rows = 4; // default to 4 if menus/inventory.txt::carried_rows not set
+
 	drag_prev_src = -1;
 	changed_equipment = true;
 	changed_artifact = true;
