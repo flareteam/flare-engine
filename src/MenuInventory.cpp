@@ -348,7 +348,9 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		return;
 	}
 
-	int drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
+	int drag_prev_slot = -1;
+	if (drag_prev_src != -1)
+			drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
 
 	if (area == EQUIPMENT) { // dropped onto equipped item
 
