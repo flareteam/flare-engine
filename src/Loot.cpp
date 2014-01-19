@@ -36,7 +36,8 @@ Loot::Loot(const Loot &other) {
 	pos.x = other.pos.x;
 	pos.y = other.pos.y;
 	loadAnimation(other.gfx);
-	animation->syncTo(other.animation);
+	if (animation)
+		animation->syncTo(other.animation);
 	tip = other.tip;
 	dropped_by_hero = other.dropped_by_hero;
 }
