@@ -40,9 +40,9 @@ private:
 	int activeTab;        /** Index of the currently active tab. */
 	int tabsAmount;       /** Amount of tabs in the control. */
 
-	SDL_Rect *tabs;       /** Rectangles for each tab title on the tab header. */
-	SDL_Rect tabsArea;    /** Area the tab titles are displayed. */
-	SDL_Rect contentArea; /** Area where the content of the {@link activeTab active tab} is displayed. */
+	Rect *tabs;       /** Rectangles for each tab title on the tab header. */
+	Rect tabsArea;    /** Area the tab titles are displayed. */
+	Rect contentArea; /** Area where the content of the {@link activeTab active tab} is displayed. */
 	Point tabPadding;     /** Padding between tab titles. */
 	SDL_Color color_normal;
 	SDL_Color color_disabled;
@@ -62,7 +62,7 @@ public:
 
 	int getActiveTab();
 	void setActiveTab(int tab) { activeTab = tab; }
-	SDL_Rect getContentArea();
+	Rect getContentArea();
 	int getTabHeight() { return activeTabSurface.getGraphicsHeight(); }
 
 	void updateHeader();

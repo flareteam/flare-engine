@@ -65,7 +65,7 @@ void MenuActiveEffects::loadGraphics() {
 
 void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max) {
 	if (icon_id > -1) {
-		SDL_Rect pos,src,overlay;
+		Rect pos,src,overlay;
 		if (orientation == 0) {
 			pos.x = window_area.x + (index * ICON_SIZE);
 			pos.y = window_area.y;

@@ -513,8 +513,8 @@ void GameStateLoad::updateButtons() {
 
 void GameStateLoad::render() {
 
-	SDL_Rect src;
-	SDL_Rect dest;
+	Rect src;
+	Rect dest;
 
 	// display background
 	src.w = gameslot_pos.w;

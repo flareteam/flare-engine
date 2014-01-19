@@ -39,7 +39,7 @@ private:
 	int stat_cur;
 	int stat_max;
 	Point mouse;
-	SDL_Rect bar_pos;
+	Rect bar_pos;
 	LabelInfo text_pos;
 	bool orientation;
 	bool custom_text_pos;

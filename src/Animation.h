@@ -63,7 +63,7 @@ protected:
 
 	// Frame data, all vectors must have the same length:
 	// These are indexed as 8*cur_frame_index + direction.
-	std::vector<SDL_Rect> gfx; // position on the spritesheet to be used.
+	std::vector<Rect> gfx; // position on the spritesheet to be used.
 	std::vector<Point> render_offset; // "virtual point on the floor"
 	std::vector<unsigned short> duration; // duration of each individual image
 
@@ -90,7 +90,7 @@ public:
 	void setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
 
 	// kind can be used for direction(enemies, hero) or randomness(powers)
-	void addFrame(unsigned short index, unsigned short kind, SDL_Rect sdl_rect, Point _render_offset);
+	void addFrame(unsigned short index, unsigned short kind, Rect rect, Point _render_offset);
 
 	// advance the animation one frame
 	void advanceFrame();

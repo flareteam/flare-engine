@@ -110,7 +110,7 @@ int NPCManager::getID(std::string npcName) {
 
 int NPCManager::checkNPCClick(Point mouse, FPoint cam) {
 	Point p;
-	SDL_Rect r;
+	Rect r;
 	for (unsigned i=0; i<npcs.size(); i++) {
 
 		p = map_to_screen(npcs[i]->pos.x, npcs[i]->pos.y, cam.x, cam.y);
@@ -150,7 +150,7 @@ int NPCManager::getNearestNPC(FPoint pos) {
  */
 void NPCManager::renderTooltips(FPoint cam, Point mouse, int nearest) {
 	Point p;
-	SDL_Rect r;
+	Rect r;
 	int id = -1;
 
 	for (unsigned i=0; i<npcs.size(); i++) {

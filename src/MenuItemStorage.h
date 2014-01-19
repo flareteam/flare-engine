@@ -37,13 +37,13 @@ class MenuItemStorage : public ItemStorage {
 protected:
 	void loadGraphics();
 	void renderHighlight(int x, int y, int _icon_size);
-	SDL_Rect grid_area;
+	Rect grid_area;
 	int nb_cols;
 
 public:
 	MenuItemStorage();
-	void init(int _slot_number, SDL_Rect _area, int icon_size, int nb_cols);
-	void init(int _slot_number, std::vector<SDL_Rect> _area, std::vector<std::string> _slot_type);
+	void init(int _slot_number, Rect _area, int icon_size, int nb_cols);
+	void init(int _slot_number, std::vector<Rect> _area, std::vector<std::string> _slot_type);
 	~MenuItemStorage();
 
 	// rendering

@@ -39,7 +39,7 @@ public:
 	virtual ~Menu();
 
 	bool visible;
-	SDL_Rect window_area;
+	Rect window_area;
 	std::string alignment;
 
 	virtual void align();

@@ -109,7 +109,7 @@ Point Sprite::getOffset() {
 /**
  * Set the clipping rectangle for the sprite
  */
-void Sprite::setClip(const SDL_Rect& clip) {
+void Sprite::setClip(const Rect& clip) {
 	src = clip;
 }
 
@@ -140,10 +140,10 @@ void Sprite::setClipH(const int h) {
 }
 
 
-SDL_Rect Sprite::getClip() {
+Rect Sprite::getClip() {
 	return src;
 }
-void Sprite::setDest(const SDL_Rect& _dest) {
+void Sprite::setDest(const Rect& _dest) {
 	dest.x = (float)_dest.x;
 	dest.y = (float)_dest.y;
 }
@@ -229,16 +229,18 @@ int SDLRenderDevice::createContext(int width, int height) {
 	return (screen != NULL ? 0 : -1);
 }
 
-SDL_Rect SDLRenderDevice::getContextSize() {
-	SDL_Rect size;
+Rect SDLRenderDevice::getContextSize() {
+	Rect size;
 	size.x = size.y = 0;
 	size.h = screen->h;
 	size.w = screen->w;
 	return size;
 }
 
-int SDLRenderDevice::render(Renderable& r, SDL_Rect dest) {
-	return SDL_BlitSurface(r.sprite.surface, &r.src, screen, &dest);
+int SDLRenderDevice::render(Renderable& r, Rect dest) {
+	SDL_Rect src = r.src;
+	SDL_Rect _dest = dest;
+	return SDL_BlitSurface(r.sprite.surface, &src, screen, &_dest);
 }
 
 int SDLRenderDevice::render(ISprite& r) {
@@ -249,27 +251,34 @@ int SDLRenderDevice::render(ISprite& r) {
 		return -1;
 	}
 
-	return SDL_BlitSurface(r.getGraphics()->surface, &m_clip, screen, &m_dest);
+	SDL_Rect src = m_clip;
+	SDL_Rect dest = m_dest;
+	return SDL_BlitSurface(r.getGraphics()->surface, &src, screen, &dest);
 }
 
-int SDLRenderDevice::renderImage(Image* image, SDL_Rect& src) {
+int SDLRenderDevice::renderImage(Image* image, Rect& src) {
 	if (!image) return -1;
-	return SDL_BlitSurface(image->surface, &src, screen , 0);
+	SDL_Rect _src = src;
+	return SDL_BlitSurface(image->surface, &_src, screen , 0);
 }
 
-int SDLRenderDevice::renderToImage(Image* src_image, SDL_Rect& src, Image* dest_image, SDL_Rect& dest, bool dest_is_transparent) {
+int SDLRenderDevice::renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent) {
 	if (!src_image || !dest_image) return -1;
+
+	SDL_Rect _src = src;
+	SDL_Rect _dest = dest;
+
 	if (dest_is_transparent)
-		return SDL_gfxBlitRGBA(src_image->surface, &src, dest_image->surface, &dest);
+		return SDL_gfxBlitRGBA(src_image->surface, &_src, dest_image->surface, &_dest);
 	else
-		return SDL_BlitSurface(src_image->surface, &src, dest_image->surface, &dest);
+		return SDL_BlitSurface(src_image->surface, &_src, dest_image->surface, &_dest);
 }
 
 int SDLRenderDevice::renderText(
 	TTF_Font *ttf_font,
 	const std::string& text,
 	SDL_Color color,
-	SDL_Rect& dest
+	Rect& dest
 ) {
 	int ret = 0;
 	Image ttf;
@@ -277,11 +286,12 @@ int SDLRenderDevice::renderText(
 	m_ttf_renderable.setGraphics(ttf);
 	if (!m_ttf_renderable.graphicsIsNull()) {
 		SDL_Rect clip = m_ttf_renderable.getClip();
+		SDL_Rect _dest = dest;
 		ret = SDL_BlitSurface(
 				  m_ttf_renderable.getGraphics()->surface,
 				  &clip,
 				  screen,
-				  &dest
+				  &_dest
 			  );
 		SDL_FreeSurface(m_ttf_renderable.getGraphics()->surface);
 		ttf.surface = NULL;
@@ -531,9 +541,15 @@ void SDLRenderDevice::destroyContext() {
 	return;
 }
 
-void SDLRenderDevice::fillImageWithColor(Image *dst, SDL_Rect *dstrect, Uint32 color) {
+void SDLRenderDevice::fillImageWithColor(Image *dst, Rect *dstrect, Uint32 color) {
 	if (!dst) return;
-	SDL_FillRect(dst->surface, dstrect, color);
+	if (dstrect) {
+		SDL_Rect dest = *dstrect;
+		SDL_FillRect(dst->surface, &dest, color);
+	}
+	else {
+		SDL_FillRect(dst->surface, NULL, color);
+	}
 }
 
 Uint32 SDLRenderDevice::MapRGB(Image *src, Uint8 r, Uint8 g, Uint8 b) {
@@ -663,7 +679,7 @@ void SDLRenderDevice::setGamma(float g) {
 	SDL_SetGamma(g, g, g);
 }
 
-void SDLRenderDevice::listModes(std::vector<SDL_Rect> &modes) {
+void SDLRenderDevice::listModes(std::vector<Rect> &modes) {
 	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
 
 	// Check if there are any modes available
@@ -678,7 +694,7 @@ void SDLRenderDevice::listModes(std::vector<SDL_Rect> &modes) {
 	}
 
 	for (unsigned i=0; detect_modes[i]; ++i) {
-		modes.push_back(*detect_modes[i]);
+		modes.push_back(Rect(*detect_modes[i]));
 		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
 			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
 			modes.pop_back();

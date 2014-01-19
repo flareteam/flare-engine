@@ -319,8 +319,8 @@ void GameStateNew::render() {
 	button_permadeath->render();
 
 	// display portrait option
-	SDL_Rect src;
-	SDL_Rect dest;
+	Rect src;
+	Rect dest;
 
 	src.w = dest.w = portrait_pos.w;
 	src.h = dest.h = portrait_pos.h;

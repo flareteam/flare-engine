@@ -45,7 +45,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-bool rescompare(const SDL_Rect &r1, const SDL_Rect &r2) {
+bool rescompare(const Rect &r1, const Rect &r2) {
 	if (r1.w == r2.w) return r1.h > r2.h;
 	return r1.w > r2.w;
 }
@@ -1024,7 +1024,7 @@ void GameStateConfig::render () {
 		return;
 
 	int tabheight = tabControl->getTabHeight();
-	SDL_Rect	pos;
+	Rect	pos;
 	pos.x = (VIEW_W-FRAME_W)/2;
 	pos.y = (VIEW_H-FRAME_H)/2 + tabheight - tabheight/16;
 
@@ -1085,7 +1085,7 @@ int GameStateConfig::getVideoModes() {
 
 	// Set predefined modes
 	const unsigned int cm_count = 5;
-	SDL_Rect common_modes[cm_count];
+	Rect common_modes[cm_count];
 	common_modes[0].w = 640;
 	common_modes[0].h = 480;
 	common_modes[1].w = 800;

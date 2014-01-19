@@ -250,7 +250,7 @@ void MenuActionBar::loadGraphics() {
 
 // Renders the "needs attention" icon over the appropriate log menu
 void MenuActionBar::renderAttention(int menu_id) {
-	SDL_Rect dest;
+	Rect dest;
 
 	// x-value is 12 hotkeys and 4 empty slots over
 	dest.x = window_area.x + (menu_id * ICON_SIZE) + ICON_SIZE*15;
@@ -302,7 +302,7 @@ void MenuActionBar::render() {
 			slots[i]->render();
 		}
 		else {
-			SDL_Rect dest;
+			Rect dest;
 			dest.x = slots[i]->pos.x;
 			dest.y = slots[i]->pos.y;
 			dest.h = dest.w = ICON_SIZE;
@@ -337,7 +337,7 @@ void MenuActionBar::render() {
  */
 void MenuActionBar::renderCooldowns() {
 
-	SDL_Rect item_src;
+	Rect item_src;
 	item_src.x = item_src.y = 0;
 	item_src.w = item_src.h = ICON_SIZE;
 

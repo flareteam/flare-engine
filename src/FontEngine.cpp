@@ -205,7 +205,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
  * Justify is left, right, or center
  */
 void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color) {
-	SDL_Rect dest_rect;
+	Rect dest_rect;
 
 	// calculate actual starting x,y based on justify
 	if (justify == JUSTIFY_LEFT) {
@@ -232,14 +232,14 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 		ttf.setGraphics(*ttf.getGraphics());
 
 		// preserve alpha transparency of text buffers
-		SDL_Rect clip = ttf.getClip();
+		Rect clip = ttf.getClip();
 		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect, true);
 	}
 	else if (target == NULL) {
 		render_device->renderText(active_font->ttfont, text, color, dest_rect);
 	}
 	else {
-		SDL_Rect clip = ttf.getClip();
+		Rect clip = ttf.getClip();
 		render_device->renderTextToImage(ttf.getGraphics(), active_font->ttfont, text, color, false);
 		ttf.setGraphics(*ttf.getGraphics());
 		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect);

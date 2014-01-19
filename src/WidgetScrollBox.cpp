@@ -180,7 +180,7 @@ void WidgetScrollBox::refresh() {
 }
 
 void WidgetScrollBox::render() {
-	SDL_Rect	src,dest;
+	Rect	src,dest;
 	dest = pos;
 	src.x = 0;
 	src.y = cursor;

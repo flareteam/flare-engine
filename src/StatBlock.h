@@ -225,7 +225,7 @@ public:
 
 	// wandering area
 	bool wander;
-	SDL_Rect wander_area;
+	Rect wander_area;
 	int wander_ticks;
 	int wander_pause_ticks;
 

@@ -56,7 +56,7 @@ public:
 
 	std::string id;
 	WidgetLabel *label;
-	SDL_Rect rect;
+	Rect rect;
 };
 
 MenuNPCActions::MenuNPCActions()

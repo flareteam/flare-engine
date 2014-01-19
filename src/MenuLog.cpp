@@ -133,7 +133,7 @@ void MenuLog::render() {
 
 	if (!visible) return;
 
-	SDL_Rect src,dest;
+	Rect src,dest;
 
 	// Background.
 	dest = window_area;

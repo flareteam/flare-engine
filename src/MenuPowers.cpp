@@ -445,8 +445,8 @@ void MenuPowers::logic() {
 void MenuPowers::render() {
 	if (!visible) return;
 
-	SDL_Rect src;
-	SDL_Rect dest;
+	Rect src;
+	Rect dest;
 
 	// background
 	dest = window_area;
@@ -504,7 +504,7 @@ void MenuPowers::render() {
  * Highlight unlocked powers
  */
 void MenuPowers::displayBuild(int power_id) {
-	SDL_Rect src_unlock;
+	Rect src_unlock;
 
 	src_unlock.x = 0;
 	src_unlock.y = 0;
@@ -707,7 +707,7 @@ bool MenuPowers::meetsUsageStats(unsigned powerid) {
 
 void MenuPowers::renderPowers(int tab_num) {
 
-	SDL_Rect disabled_src;
+	Rect disabled_src;
 	disabled_src.x = disabled_src.y = 0;
 	disabled_src.w = disabled_src.h = ICON_SIZE;
 

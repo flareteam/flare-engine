@@ -54,7 +54,7 @@ private:
 	std::string caption;
 	Point caption_size;
 	Sprite art;
-	SDL_Rect art_dest;
+	Rect art_dest;
 	SoundManager::SoundID sid;
 	WidgetScrollBox *caption_box;
 	bool done;

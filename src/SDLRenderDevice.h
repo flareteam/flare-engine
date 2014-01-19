@@ -52,14 +52,14 @@ public:
 	void setOffset(const Point& _offset);
 	void setOffset(const int x, const int y);
 	Point getOffset();
-	void setClip(const SDL_Rect& clip);
+	void setClip(const Rect& clip);
 	void setClip(const int x, const int y, const int w, const int h);
 	void setClipX(const int x);
 	void setClipY(const int y);
 	void setClipW(const int w);
 	void setClipH(const int h);
-	SDL_Rect getClip();
-	void setDest(const SDL_Rect& _dest);
+	Rect getClip();
+	void setDest(const Rect& _dest);
 	void setDest(const Point& _dest);
 	void setDest(int x, int y);
 	void setDestX(int x);
@@ -75,14 +75,14 @@ public:
 
 	SDLRenderDevice();
 	int createContext(int width, int height);
-	SDL_Rect getContextSize();
+	Rect getContextSize();
 
-	virtual int render(Renderable& r, SDL_Rect dest);
+	virtual int render(Renderable& r, Rect dest);
 	virtual int render(ISprite& r);
-	virtual int renderImage(Image* image, SDL_Rect& src);
-	virtual int renderToImage(Image* src_image, SDL_Rect& src, Image* dest_image, SDL_Rect& dest, bool dest_is_transparent = false);
+	virtual int renderImage(Image* image, Rect& src);
+	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent = false);
 
-	int renderText(TTF_Font *ttf_font, const std::string& text, SDL_Color color, SDL_Rect& dest);
+	int renderText(TTF_Font *ttf_font, const std::string& text, SDL_Color color, Rect& dest);
 
 	void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, SDL_Color color, bool blended = true);
 
@@ -108,7 +108,7 @@ public:
 
 	void destroyContext();
 
-	void fillImageWithColor(Image *dst, SDL_Rect *dstrect, Uint32 color);
+	void fillImageWithColor(Image *dst, Rect *dstrect, Uint32 color);
 
 	Uint32 MapRGB(Image *src, Uint8 r, Uint8 g, Uint8 b);
 
@@ -128,7 +128,7 @@ public:
 
 	void setGamma(float g);
 
-	void listModes(std::vector<SDL_Rect> &modes);
+	void listModes(std::vector<Rect> &modes);
 
 	Uint32 readPixel(Image *image, int x, int y);
 
@@ -149,8 +149,8 @@ private:
 	SDL_Surface* titlebar_icon;
 
 	// These are for keeping the render stack frame small.
-	SDL_Rect m_clip;
-	SDL_Rect m_dest;
+	Rect m_clip;
+	Rect m_dest;
 	Sprite m_ttf_renderable;
 };
 

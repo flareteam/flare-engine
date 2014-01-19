@@ -32,7 +32,7 @@ WidgetTabControl::WidgetTabControl(int amount)
 	// Based on given amount:
 	tabsAmount = amount;
 	titles = new std::string[tabsAmount];
-	tabs = new SDL_Rect[tabsAmount];
+	tabs = new Rect[tabsAmount];
 
 	// Predefined:
 	activeTab = 0;
@@ -182,8 +182,8 @@ void WidgetTabControl::render() {
  */
 void WidgetTabControl::renderTab(int number) {
 	int i = number;
-	SDL_Rect src;
-	SDL_Rect dest;
+	Rect src;
+	Rect dest;
 
 	// Draw tab’s background.
 	src.x = src.y = 0;
@@ -231,6 +231,6 @@ void WidgetTabControl::renderTab(int number) {
 /**
  * Returns the height in pixels of the widget.
  */
-SDL_Rect WidgetTabControl::getContentArea() {
+Rect WidgetTabControl::getContentArea() {
 	return contentArea;
 }

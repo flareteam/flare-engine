@@ -248,8 +248,8 @@ void MenuTalker::createBuffer() {
 
 void MenuTalker::render() {
 	if (!visible) return;
-	SDL_Rect src;
-	SDL_Rect dest;
+	Rect src;
+	Rect dest;
 
 	int offset_x = window_area.x;
 	int offset_y = window_area.y;

@@ -99,7 +99,7 @@ private:
 	LabelInfo title;
 	LabelInfo unspent_points;
 	Point close_pos;
-	SDL_Rect tab_area;
+	Rect tab_area;
 
 	short points_left;
 	short tabs_count;

@@ -38,7 +38,7 @@ public:
 	void render ();
 	bool enabled;
 
-	SDL_Rect pos_knob; // This is the position of the slider's knob within the screen
+	Rect pos_knob; // This is the position of the slider's knob within the screen
 
 	bool getNext();
 	bool getPrev();
