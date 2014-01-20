@@ -174,7 +174,8 @@ static void cleanup() {
 
 	Mix_CloseAudio();
 
-	render_device->destroyContext();
+	if (render_device)
+		render_device->destroyContext();
 	delete render_device;
 
 	SDL_Quit();
