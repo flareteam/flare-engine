@@ -53,7 +53,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[138];
+	int optiontab[135];
 	Rect frame;
 	std::vector<Rect> video_modes;
 
@@ -103,8 +103,6 @@ private:
 	WidgetLabel         * texture_quality_lb;
 	WidgetCheckBox      * change_gamma_cb;
 	WidgetLabel         * change_gamma_lb;
-	WidgetCheckBox      * animated_tiles_cb;
-	WidgetLabel         * animated_tiles_lb;
 	WidgetCheckBox      * mouse_aim_cb;
 	WidgetLabel         * mouse_aim_lb;
 	WidgetCheckBox      * no_mouse_cb;
@@ -133,7 +131,6 @@ private:
 	WidgetLabel         * language_lb;
 	WidgetLabel         * hws_note_lb;
 	WidgetLabel         * dbuf_note_lb;
-	WidgetLabel         * anim_tiles_note_lb;
 	WidgetLabel         * test_note_lb;
 	WidgetLabel         * handheld_note_lb;
 	WidgetButton        * activemods_shiftup_btn;

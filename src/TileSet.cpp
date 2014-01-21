@@ -134,20 +134,17 @@ void TileSet::load(const std::string& filename) {
 }
 
 void TileSet::logic() {
-
-	if (ANIMATED_TILES) {
-		for (unsigned i = 0; i < anim.size() ; i++) {
-			Tile_Anim &an = anim[i];
-			if (!an.frames)
-				continue;
-			if (an.duration >= an.frame_duration[an.current_frame]) {
-				tiles[i].tile.setClipX(an.pos[an.current_frame].x);
-				tiles[i].tile.setClipY(an.pos[an.current_frame].y);
-				an.duration = 0;
-				an.current_frame = (an.current_frame + 1) % an.frames;
-			}
-			an.duration++;
+	for (unsigned i = 0; i < anim.size() ; i++) {
+		Tile_Anim &an = anim[i];
+		if (!an.frames)
+			continue;
+		if (an.duration >= an.frame_duration[an.current_frame]) {
+			tiles[i].tile.setClipX(an.pos[an.current_frame].x);
+			tiles[i].tile.setClipY(an.pos[an.current_frame].y);
+			an.duration = 0;
+			an.current_frame = (an.current_frame + 1) % an.frames;
 		}
+		an.duration++;
 	}
 }
 

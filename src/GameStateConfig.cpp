@@ -106,8 +106,6 @@ void GameStateConfig::init() {
 	texture_quality_lb = new WidgetLabel();
 	change_gamma_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	change_gamma_lb = new WidgetLabel();
-	animated_tiles_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
-	animated_tiles_lb = new WidgetLabel();
 	mouse_aim_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	mouse_aim_lb = new WidgetLabel();
 	no_mouse_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
@@ -134,7 +132,6 @@ void GameStateConfig::init() {
 	language_lb = new WidgetLabel();
 	hws_note_lb = new WidgetLabel();
 	dbuf_note_lb = new WidgetLabel();
-	anim_tiles_note_lb = new WidgetLabel();
 	test_note_lb = new WidgetLabel();
 	handheld_note_lb = new WidgetLabel();
 	activemods_shiftup_btn = new WidgetButton("images/menus/buttons/up.png");
@@ -229,7 +226,6 @@ void GameStateConfig::init() {
 	tablist.add(change_gamma_cb);
 	tablist.add(gamma_sl);
 	tablist.add(texture_quality_cb);
-	tablist.add(animated_tiles_cb);
 	tablist.add(resolution_lstb);
 
 	tablist.add(music_volume_sl);
@@ -311,9 +307,6 @@ void GameStateConfig::readConfig () {
 			}
 			else if (infile.key == "change_gamma") {
 				placeLabeledCheckbox( change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), 0);
-			}
-			else if (infile.key == "animated_tiles") {
-				placeLabeledCheckbox( animated_tiles_lb, animated_tiles_cb, x1, y1, x2, y2, msg->get("Animated tiles"), 0);
 			}
 			else if (infile.key == "mouse_aim") {
 				placeLabeledCheckbox( mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), 3);
@@ -491,13 +484,6 @@ void GameStateConfig::readConfig () {
 				child_widget.push_back(dbuf_note_lb);
 				optiontab[child_widget.size()-1] = 0;
 			}
-			else if (infile.key == "anim_tiles_note") {
-				anim_tiles_note_lb->setX(frame.x + x1);
-				anim_tiles_note_lb->setY(frame.y + y1);
-				anim_tiles_note_lb->set(msg->get("Disable for performance"));
-				child_widget.push_back(anim_tiles_note_lb);
-				optiontab[child_widget.size()-1] = 0;
-			}
 			else if (infile.key == "test_note") {
 				test_note_lb->setX(frame.x + x1);
 				test_note_lb->setY(frame.y + y1);
@@ -658,8 +644,6 @@ void GameStateConfig::update () {
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
 	render_device->setGamma(GAMMA);
 
-	if (ANIMATED_TILES) animated_tiles_cb->Check();
-	else animated_tiles_cb->unCheck();
 	if (MOUSE_AIM) mouse_aim_cb->Check();
 	else mouse_aim_cb->unCheck();
 	if (NO_MOUSE) no_mouse_cb->Check();
@@ -843,10 +827,6 @@ void GameStateConfig::logic () {
 				gamma_sl->set(5,20,(int)(GAMMA*10.0));
 				render_device->setGamma(GAMMA);
 			}
-		}
-		else if (animated_tiles_cb->checkClick()) {
-			if (animated_tiles_cb->isChecked()) ANIMATED_TILES=true;
-			else ANIMATED_TILES=false;
 		}
 		else if (resolution_lstb->checkClick()) {
 			; // nothing to do here: resolution value changes next frame.
