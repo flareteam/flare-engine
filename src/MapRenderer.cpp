@@ -45,8 +45,6 @@ MapRenderer::MapRenderer()
 	, tip_pos()
 	, show_tooltip(false)
 	, shakycam()
-	, backgroundsurface(Image())
-	, backgroundsurfaceoffset()
 	, cam()
 	, map_change(false)
 	, teleportation(false)
@@ -132,8 +130,6 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
  */
 void MapRenderer::clearLayers() {
 	Map::clearLayers();
-
-	render_device->freeImage(&backgroundsurface);
 	index_objectlayer = 0;
 }
 
@@ -185,11 +181,6 @@ int MapRenderer::load(std::string fname) {
 	// some events automatically trigger when the map loads
 	// e.g. change map state based on campaign status
 	executeOnLoadEvents();
-
-	// when we have disabled animated tiles, we use a surface to cache the background layer
-	// that surface is created here
-	if (!ANIMATED_TILES)
-		createBackgroundSurface();
 
 	return 0;
 }
@@ -289,13 +280,6 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	}
 }
 
-void MapRenderer::createBackgroundSurface() {
-	render_device->freeImage(&backgroundsurface);
-	backgroundsurface = render_device->createSurface(
-							VIEW_W + 2 * movedistance_to_rerender * TILE_W * tset.max_size_x,
-							VIEW_H + 2 * movedistance_to_rerender * TILE_H * tset.max_size_y);
-}
-
 void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
 	if (r_cursor->sprite.graphicIsNull() == false) {
 		Rect dest;
@@ -306,7 +290,7 @@ void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
 	}
 }
 
-void MapRenderer::renderIsoLayer(Image *wheretorender, Point offset, const unsigned short layerdata[256][256]) {
+void MapRenderer::renderIsoLayer(const unsigned short layerdata[256][256]) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	Rect dest;
@@ -350,20 +334,14 @@ void MapRenderer::renderIsoLayer(Image *wheretorender, Point offset, const unsig
 			p.x += TILE_W;
 
 			if (const uint_fast16_t current_tile = layerdata[i][j]) {
-				dest.x = p.x - tset.tiles[current_tile].offset.x + offset.x;
-				dest.y = p.y - tset.tiles[current_tile].offset.y + offset.y;
+				dest.x = p.x - tset.tiles[current_tile].offset.x;
+				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
-				if (wheretorender == NULL) {
-					tset.tiles[current_tile].tile.setDest(dest);
-					tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
-					render_device->render(tset.tiles[current_tile].tile);
-					tset.tiles[current_tile].tile.setGraphics(Image());
-				}
-				else {
-					Rect clip = tset.tiles[current_tile].tile.getClip();
-					render_device->renderToImage(tset.sprites.getGraphics(), clip, wheretorender, dest);
-				}
+				tset.tiles[current_tile].tile.setDest(dest);
+				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+				render_device->render(tset.tiles[current_tile].tile);
+				tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 		}
 		j += tiles_width;
@@ -457,38 +435,16 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 }
 
 void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
-	const Point nulloffset(0, 0);
-	if (ANIMATED_TILES) {
-		for (unsigned i = 0; i < index_objectlayer; ++i)
-			renderIsoLayer(NULL, nulloffset, layers[i]);
-	}
-	else {
-		if (fabs(shakycam.x - backgroundsurfaceoffset.x) > movedistance_to_rerender
-				|| fabs(shakycam.y - backgroundsurfaceoffset.y) > movedistance_to_rerender
-				|| repaint_background) {
-
-			repaint_background = false;
-
-			backgroundsurfaceoffset = shakycam;
-
-			render_device->fillImageWithColor(&backgroundsurface, NULL, 0);
-			Point off(VIEW_W_HALF, VIEW_H_HALF);
-			for (unsigned i = 0; i < index_objectlayer; ++i)
-				renderIsoLayer(&backgroundsurface, off, layers[i]);
-		}
-		Point p = map_to_screen(shakycam.x, shakycam.y , backgroundsurfaceoffset.x, backgroundsurfaceoffset.y);
-		Rect src;
-		src.x = p.x;
-		src.y = p.y;
-		src.w = 2 * VIEW_W;
-		src.h = 2 * VIEW_H;
-		render_device->renderImage(&backgroundsurface, src);
-	}
+	size_t index = 0;
+	while (index < index_objectlayer)
+		renderIsoLayer(layers[index++]);
 
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
-	for (unsigned i = index_objectlayer + 1; i < layers.size(); ++i)
-		renderIsoLayer(NULL, nulloffset, layers[i]);
+
+	index++;
+	while (index < layers.size())
+		renderIsoLayer(layers[index++]);
 
 	checkTooltip();
 }
@@ -581,7 +537,6 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 }
 
 void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead) {
-
 	unsigned index = 0;
 	while (index < index_objectlayer)
 		renderOrthoLayer(layers[index++]);
@@ -593,7 +548,6 @@ void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead)
 	while (index < layers.size())
 		renderOrthoLayer(layers[index++]);
 
-	//render event tooltips
 	checkTooltip();
 }
 
