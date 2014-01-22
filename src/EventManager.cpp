@@ -465,7 +465,8 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
-				mapr->collider.colmap[ec->x][ec->y] = ec->z;
+				if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
+					mapr->collider.colmap[ec->x][ec->y] = ec->z;
 			}
 			else {
 				int index = distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s));
