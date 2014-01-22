@@ -56,8 +56,8 @@ private:
 	Point close_pos;
 	int tab_content_indent;
 	Rect tab_area;
-	SDL_Color tab_bg;
-	SDL_Color color_normal;
+	Color tab_bg;
+	Color color_normal;
 
 public:
 	MenuLog();

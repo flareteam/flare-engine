@@ -51,7 +51,7 @@ private:
 
 	WidgetLabel *label_fps;
 	Point fps_position;
-	SDL_Color fps_color;
+	Color fps_color;
 	std::string fps_corner;
 
 public:

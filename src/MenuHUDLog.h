@@ -37,7 +37,7 @@ private:
 
 	int paragraph_spacing;
 
-	SDL_Color color_normal;
+	Color color_normal;
 
 public:
 

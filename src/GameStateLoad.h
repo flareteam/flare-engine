@@ -90,7 +90,7 @@ private:
 	Rect gameslot_pos;
 	Rect preview_pos;
 
-	SDL_Color color_normal;
+	Color color_normal;
 
 public:
 	GameStateLoad();

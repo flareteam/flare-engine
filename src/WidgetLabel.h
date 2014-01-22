@@ -53,7 +53,7 @@ private:
 	void applyOffsets();
 
 	std::string text;
-	SDL_Color color;
+	Color color;
 	int x_origin;
 	int y_origin;
 	int justify;
@@ -65,8 +65,8 @@ public:
 	WidgetLabel();
 	~WidgetLabel();
 	void render();
-	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, SDL_Color _color);
-	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, SDL_Color _color, std::string _font);
+	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color);
+	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, std::string _font);
 	void setX(int _x);
 	void setY(int _y);
 	int getX();

@@ -151,11 +151,11 @@ public:
 
 	/** Render text to the screen.
 	 */
-	virtual int renderText(TTF_Font *ttf_font, const std::string& text, SDL_Color color, Rect& dest) = 0;
+	virtual int renderText(TTF_Font *ttf_font, const std::string& text, Color color, Rect& dest) = 0;
 
 	/** Renders text to an image, but does not actually blit it
 	 */
-	virtual void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, SDL_Color color, bool blended = true) = 0;
+	virtual void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true) = 0;
 
 	/** Draw pixel to screen.
 	 */

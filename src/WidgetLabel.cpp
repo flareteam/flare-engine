@@ -87,14 +87,14 @@ void WidgetLabel::render() {
 	render_device->render(renderable);
 }
 
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, SDL_Color _color) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, Color _color) {
 	set(_x, _y, _justify, _valign, _text, _color, "font_regular");
 }
 
 /**
  * A shortcut function to set all attributes simultaneously.
  */
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, SDL_Color _color, std::string _font) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, Color _color, std::string _font) {
 
 	bool changed = false;
 

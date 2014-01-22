@@ -49,7 +49,7 @@ protected:
 
 	Point font_pos;
 
-	SDL_Color color_normal;
+	Color color_normal;
 
 public:
 	WidgetInput();

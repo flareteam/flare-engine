@@ -42,17 +42,17 @@ private:
 	size_t current_action;
 
 	Sprite action_menu;
-	SDL_Color topic_normal_color;
-	SDL_Color topic_hilight_color;
-	SDL_Color vendor_normal_color;
-	SDL_Color vendor_hilight_color;
-	SDL_Color cancel_normal_color;
-	SDL_Color cancel_hilight_color;
+	Color topic_normal_color;
+	Color topic_hilight_color;
+	Color vendor_normal_color;
+	Color vendor_hilight_color;
+	Color cancel_normal_color;
+	Color cancel_hilight_color;
 
 	std::string vendor_label;
 	std::string cancel_label;
 
-	SDL_Color background_color;
+	Color background_color;
 	int background_alpha;
 
 	void keyboardLogic();

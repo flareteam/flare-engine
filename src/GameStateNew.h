@@ -82,7 +82,7 @@ private:
 	TooltipData tip_buf;
 	bool modified_name;
 
-	SDL_Color color_normal;
+	Color color_normal;
 
 public:
 	GameStateNew();

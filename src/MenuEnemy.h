@@ -37,7 +37,7 @@ private:
 	Rect bar_pos;
 	LabelInfo text_pos;
 	bool custom_text_pos;
-	SDL_Color color_normal;
+	Color color_normal;
 public:
 	MenuEnemy();
 	~MenuEnemy();

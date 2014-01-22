@@ -62,6 +62,23 @@ public:
 	}
 };
 
+class Color {
+public:
+	Uint8 r, g, b, a;
+	Color() : r(0), g(0), b(0), a(255) {}
+	Color(Uint8 _r, Uint8 _g, Uint8 _b) : r(_r), g(_g), b(_b), a(255) {}
+	Color(Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a) : r(_r), g(_g), b(_b), a(_a) {}
+	operator SDL_Color() {
+		SDL_Color c;
+		c.r = r;
+		c.g = g;
+		c.b = b;
+		// Warning: SDL 1.2 only
+		c.unused = a;
+		return c;
+	}
+};
+
 class Event_Component {
 public:
 	std::string type;

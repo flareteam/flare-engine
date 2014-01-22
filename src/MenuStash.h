@@ -44,7 +44,7 @@ private:
 	LabelInfo currency;
 	int slots_cols;
 	int slots_rows;
-	SDL_Color color_normal;
+	Color color_normal;
 
 public:
 	MenuStash(StatBlock *stats);

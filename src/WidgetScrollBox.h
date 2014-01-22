@@ -46,7 +46,7 @@ public:
 
 	Sprite contents;
 	bool update;
-	SDL_Color bg;
+	Color bg;
 	bool transparent;
 	int line_height;
 

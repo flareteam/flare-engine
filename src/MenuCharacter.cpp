@@ -483,7 +483,7 @@ void MenuCharacter::refreshStats() {
 /**
  * Color-coding for positive/negative/no bonus
  */
-SDL_Color MenuCharacter::bonusColor(int stat) {
+Color MenuCharacter::bonusColor(int stat) {
 	if (stat > 0) return font->getColor("menu_bonus");
 	if (stat < 0) return font->getColor("menu_penalty");
 	return font->getColor("menu_label");

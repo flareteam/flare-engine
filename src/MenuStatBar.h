@@ -44,7 +44,7 @@ private:
 	bool orientation;
 	bool custom_text_pos;
 	std::string custom_string;
-	SDL_Color color_normal;
+	Color color_normal;
 
 public:
 	MenuStatBar(std::string type);
