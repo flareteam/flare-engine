@@ -41,7 +41,8 @@ using namespace std;
 NPCManager::NPCManager(StatBlock *_stats)
 	: tip(new WidgetTooltip())
 	, stats(_stats)
-	, tip_buf() {
+	, tip_buf()
+	, tooltip_margin(0) {
 	FileParser infile;
 	// load tooltip_margin from engine config file
 	if (infile.open("engine/tooltips.txt")) {

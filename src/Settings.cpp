@@ -427,12 +427,12 @@ void loadTilesetSettings() {
 	VIEW_W_HALF = VIEW_W / 2;
 	VIEW_H_HALF = VIEW_H / 2;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		UNITS_PER_PIXEL_X = 2.0f / TILE_W;
-		UNITS_PER_PIXEL_Y = 2.0f / TILE_H;
+		if (TILE_W > 0) UNITS_PER_PIXEL_X = 2.0f / TILE_W;
+		if (TILE_H > 0) UNITS_PER_PIXEL_Y = 2.0f / TILE_H;
 	}
 	else { // TILESET_ORTHOGONAL
-		UNITS_PER_PIXEL_X = 1.0f / TILE_W;
-		UNITS_PER_PIXEL_Y = 1.0f / TILE_H;
+		if (TILE_W > 0) UNITS_PER_PIXEL_X = 1.0f / TILE_W;
+		if (TILE_H > 0) UNITS_PER_PIXEL_Y = 1.0f / TILE_H;
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
 		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);

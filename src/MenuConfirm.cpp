@@ -24,11 +24,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg) : Menu() {
-	confirmClicked = false;
-	cancelClicked = false;
-	hasConfirmButton = true;
-	if (_buttonMsg == "") hasConfirmButton = false;
+MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
+	: Menu()
+	, buttonConfirm(NULL)
+	, buttonClose(NULL)
+	, hasConfirmButton(false)
+	, confirmClicked(false)
+	, cancelClicked(false) {
+
+	if (_buttonMsg != "") hasConfirmButton = true;
 	// Text to display in confirmation box
 	boxMsg = _boxMsg;
 

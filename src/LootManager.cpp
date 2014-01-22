@@ -44,7 +44,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-LootManager::LootManager(StatBlock *_hero) {
+LootManager::LootManager(StatBlock *_hero)
+	: sfx_loot(0)
+	, tooltip_margin(0) {
 	hero = _hero; // we need the player's position for dropping loot in a valid spot
 
 	tip = new WidgetTooltip();

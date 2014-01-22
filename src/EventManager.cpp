@@ -469,7 +469,8 @@ bool EventManager::executeEvent(Event &ev) {
 			}
 			else {
 				int index = distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s));
-				mapr->layers[index][ec->x][ec->y] = ec->z;
+				if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
+					mapr->layers[index][ec->x][ec->y] = ec->z;
 
 				if (ec->a < (int)(mapr->index_objectlayer))
 					mapr->repaint_background = true;

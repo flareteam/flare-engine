@@ -31,7 +31,10 @@ using namespace std;
 
 int TOOLTIP_CONTEXT = TOOLTIP_NONE;
 
-WidgetTooltip::WidgetTooltip() {
+WidgetTooltip::WidgetTooltip()
+	: offset(0)
+	, width(0)
+	, margin(0) {
 
 	FileParser infile;
 	// load tooltip settings from engine config file
