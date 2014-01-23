@@ -91,7 +91,7 @@ private:
 	bool eventDialogOngoing;
 	bool eventPendingDialog;
 
-	SDL_Color color_normal;
+	Color color_normal;
 
 	std::vector<Title> titles;
 

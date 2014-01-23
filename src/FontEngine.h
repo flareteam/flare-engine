@@ -28,8 +28,8 @@ const int JUSTIFY_LEFT = 0;
 const int JUSTIFY_RIGHT = 1;
 const int JUSTIFY_CENTER = 2;
 
-const SDL_Color FONT_WHITE = {255,255,255,0};
-const SDL_Color FONT_BLACK = {0,0,0,0};
+const Color FONT_WHITE = Color(255,255,255);
+const Color FONT_BLACK = Color(0,0,0);
 
 class FontStyle {
 public:
@@ -53,7 +53,7 @@ public:
 class FontEngine {
 private:
 	Sprite ttf;
-	std::map<std::string,SDL_Color> color_map;
+	std::map<std::string,Color> color_map;
 	std::vector<FontStyle> font_styles;
 	FontStyle *active_font;
 
@@ -64,16 +64,16 @@ public:
 	int getLineHeight() { return active_font->line_height; }
 	int getFontHeight() { return active_font->font_height; }
 
-	SDL_Color getColor(std::string _color);
+	Color getColor(std::string _color);
 	void setFont(std::string _font);
 
 	int calc_width(const std::string& text);
 	Point calc_size(const std::string& text_with_newlines, int width);
 
-	void render(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color);
-	void render(const std::string& text, int x, int y, int justify, Image *target, int width, SDL_Color color);
-	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color);
-	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, SDL_Color color);
+	void render(const std::string& text, int x, int y, int justify, Image *target, Color color);
+	void render(const std::string& text, int x, int y, int justify, Image *target, int width, Color color);
+	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, Color color);
+	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, Color color);
 
 	int cursor_y;
 };

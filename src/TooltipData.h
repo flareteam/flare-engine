@@ -40,8 +40,8 @@ enum STYLE {
 class TooltipData {
 public:
 	std::vector<std::string> lines;
-	std::vector<SDL_Color> colors;
-	SDL_Color default_color;
+	std::vector<Color> colors;
+	Color default_color;
 	Sprite tip_buffer;
 
 	TooltipData();
@@ -53,7 +53,7 @@ public:
 	void clear();
 
 	// add text with support for new lines
-	void addText(const std::string &text, SDL_Color color);
+	void addText(const std::string &text, Color color);
 	void addText(const std::string &text);
 
 	bool isEmpty();

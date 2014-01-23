@@ -55,8 +55,8 @@ private:
 	Rect help_pos;
 	int carried_cols;
 	int carried_rows;
-	SDL_Color color_normal;
-	SDL_Color color_high;
+	Color color_normal;
+	Color color_high;
 
 public:
 	MenuInventory(StatBlock *stats);

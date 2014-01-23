@@ -150,7 +150,7 @@ public:
 	std::string name;            // item set name displayed on long and short tool tips
 	std::vector<int> items;      // items, included into set
 	std::vector<Set_bonus> bonus;// vector with stats to increase/decrease
-	SDL_Color color;
+	Color color;
 
 	ItemSet()
 	: name("")
@@ -183,14 +183,14 @@ private:
 	void loadSets();
 	void loadAll();
 
-	SDL_Color color_normal;
-	SDL_Color color_low;
-	SDL_Color color_high;
-	SDL_Color color_epic;
-	SDL_Color color_bonus;
-	SDL_Color color_penalty;
-	SDL_Color color_requirements_not_met;
-	SDL_Color color_flavor;
+	Color color_normal;
+	Color color_low;
+	Color color_high;
+	Color color_epic;
+	Color color_bonus;
+	Color color_penalty;
+	Color color_requirements_not_met;
+	Color color_flavor;
 
 public:
 	ItemManager();

@@ -69,7 +69,7 @@ private:
 	CharStat cstat[CSTAT_COUNT];
 
 	void loadGraphics();
-	SDL_Color bonusColor(int stat);
+	Color bonusColor(int stat);
 	std::string statTooltip(int stat);
 	int skill_points;
 	bool physical_up;

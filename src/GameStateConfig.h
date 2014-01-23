@@ -154,7 +154,7 @@ private:
 	int mods_total;
 	bool check_resolution;
 	Rect scrollpane;
-	SDL_Color scrollpane_color;
+	Color scrollpane_color;
 	int scrollpane_contents;
 	bool fullscreen;
 	bool hwsurface;

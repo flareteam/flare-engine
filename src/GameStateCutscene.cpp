@@ -46,9 +46,14 @@ Image Scene::loadImage(std::string filename, bool scale_graphics) {
 	Image image = render_device->loadGraphicSurface("images/"+filename);
 
 	/* scale image to fit height */
-	if (scale_graphics) {
-		float ratio = image.getHeight()/(float)image.getWidth();
-		render_device->scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
+	if (scale_graphics && !image.graphicIsNull()) {
+		if (image.getWidth() > 0) {
+			float ratio = image.getHeight()/(float)image.getWidth();
+			render_device->scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
+		}
+		else {
+			fprintf(stderr, "Error: Can not scale cutscene image with a width of 0.\n");
+		}
 	}
 
 	return image;

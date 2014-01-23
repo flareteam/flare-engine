@@ -277,12 +277,13 @@ int SDLRenderDevice::renderToImage(Image* src_image, Rect& src, Image* dest_imag
 int SDLRenderDevice::renderText(
 	TTF_Font *ttf_font,
 	const std::string& text,
-	SDL_Color color,
+	Color color,
 	Rect& dest
 ) {
 	int ret = 0;
+	SDL_Color _color = color;
 	Image ttf;
-	ttf.surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), color);
+	ttf.surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), _color);
 	m_ttf_renderable.setGraphics(ttf);
 	if (!m_ttf_renderable.graphicsIsNull()) {
 		SDL_Rect clip = m_ttf_renderable.getClip();
@@ -304,12 +305,13 @@ int SDLRenderDevice::renderText(
 	return ret;
 }
 
-void SDLRenderDevice::renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, SDL_Color color, bool blended) {
+void SDLRenderDevice::renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, Color color, bool blended) {
 	if (!image) return;
+	SDL_Color _color = color;
 	if (blended)
-		image->surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), color);
+		image->surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), _color);
 	else
-		image->surface = TTF_RenderUTF8_Solid(ttf_font, text.c_str(), color);
+		image->surface = TTF_RenderUTF8_Solid(ttf_font, text.c_str(), _color);
 }
 
 

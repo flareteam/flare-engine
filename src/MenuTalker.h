@@ -59,7 +59,7 @@ private:
 	std::string font_who;
 	std::string font_dialog;
 
-	SDL_Color color_normal;
+	Color color_normal;
 
 	TabList tablist;
 

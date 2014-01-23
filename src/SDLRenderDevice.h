@@ -82,9 +82,9 @@ public:
 	virtual int renderImage(Image* image, Rect& src);
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent = false);
 
-	int renderText(TTF_Font *ttf_font, const std::string& text, SDL_Color color, Rect& dest);
+	int renderText(TTF_Font *ttf_font, const std::string& text, Color color, Rect& dest);
 
-	void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, SDL_Color color, bool blended = true);
+	void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true);
 
 	void drawPixel(int x, int y, Uint32 color);
 

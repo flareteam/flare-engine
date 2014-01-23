@@ -44,8 +44,8 @@ private:
 	Rect tabsArea;    /** Area the tab titles are displayed. */
 	Rect contentArea; /** Area where the content of the {@link activeTab active tab} is displayed. */
 	Point tabPadding;     /** Padding between tab titles. */
-	SDL_Color color_normal;
-	SDL_Color color_disabled;
+	Color color_normal;
+	Color color_disabled;
 
 	void loadGraphics();
 

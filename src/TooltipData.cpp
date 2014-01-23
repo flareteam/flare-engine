@@ -61,7 +61,7 @@ void TooltipData::clear() {
 	tip_buffer.clearGraphics();
 }
 
-void TooltipData::addText(const std::string &text, SDL_Color color) {
+void TooltipData::addText(const std::string &text, Color color) {
 	lines.push_back("");
 	colors.push_back(color);
 	for (unsigned int i=0; i<lines.size(); i++) {

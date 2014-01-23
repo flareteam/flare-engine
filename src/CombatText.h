@@ -68,7 +68,7 @@ private:
 	FPoint cam;
 	std::vector<Combat_Text_Item> combat_text;
 
-	SDL_Color msg_color[5];
+	Color msg_color[5];
 	int duration;
 	int speed;
 };

@@ -560,11 +560,11 @@ void GameStateLoad::render() {
 		label_loading->render();
 	}
 
-	SDL_Color color_permadeath_enabled = font->getColor("hardcore_color_name");
+	Color color_permadeath_enabled = font->getColor("hardcore_color_name");
 	// display text
 	for (int slot=0; slot<GAME_SLOT_MAX; slot++) {
 		if (stats[slot].name != "") {
-			SDL_Color color_used = stats[slot].permadeath ? color_permadeath_enabled : color_normal;
+			Color color_used = stats[slot].permadeath ? color_permadeath_enabled : color_normal;
 
 			// name
 			label.x = slot_pos[slot].x + name_pos.x;

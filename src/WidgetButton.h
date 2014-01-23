@@ -45,8 +45,8 @@ private:
 
 	WidgetLabel wlabel;
 
-	SDL_Color color_normal;
-	SDL_Color color_disabled;
+	Color color_normal;
+	Color color_disabled;
 
 	TooltipData tip_buf;
 	TooltipData tip_new;

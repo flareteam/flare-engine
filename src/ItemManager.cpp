@@ -430,7 +430,7 @@ void ItemManager::playSound(int item, Point pos) {
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	stringstream ss;
 	TooltipData tip;
-	SDL_Color color = color_normal;
+	Color color = color_normal;
 
 	if (stack.item == 0) return tip;
 
@@ -465,7 +465,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
  */
 TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int context) {
 	TooltipData tip;
-	SDL_Color color = color_normal;
+	Color color = color_normal;
 	string quality_desc = "";
 
 	if (stack.item == 0) return tip;

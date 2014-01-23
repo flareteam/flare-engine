@@ -68,6 +68,7 @@ MenuNPCActions::MenuNPCActions()
 	, current_action(-1)
 	, vendor_label(msg->get("Trade"))
 	, cancel_label(msg->get("Cancel"))
+	, background_alpha(0)
 	, dialog_selected(false)
 	, vendor_selected(false)
 	, cancel_selected(false)
@@ -144,7 +145,7 @@ void MenuNPCActions::update() {
 
 	/* update all action menu items */
 	int yoffs = MENU_BORDER;
-	SDL_Color text_color;
+	Color text_color;
 	for(size_t i=0; i<npc_actions.size(); i++) {
 		npc_actions[i].rect.x = window_area.x + MENU_BORDER;
 		npc_actions[i].rect.y = window_area.y + yoffs;

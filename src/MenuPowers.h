@@ -115,8 +115,8 @@ private:
 	bool powerUnlockable(int power_index, const std::vector<Power_Menu_Cell>& power_cells);
 	void renderPowers(int tab_num);
 
-	SDL_Color color_bonus;
-	SDL_Color color_penalty;
+	Color color_bonus;
+	Color color_penalty;
 
 	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
 	short nextLevel(short power_cell_index);

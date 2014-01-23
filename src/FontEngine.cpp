@@ -78,9 +78,7 @@ FontEngine::FontEngine()
 	}
 
 	// set the font colors
-	// RGB values, the last value is 'unused'. For info,
-	// see http://www.libsdl.org/cgi/docwiki.cgi/SDL_Color
-	SDL_Color color;
+	Color color;
 	if (infile.open("engine/font_colors.txt")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
@@ -101,8 +99,8 @@ FontEngine::FontEngine()
 	}
 }
 
-SDL_Color FontEngine::getColor(string _color) {
-	map<string,SDL_Color>::iterator it,end;
+Color FontEngine::getColor(string _color) {
+	map<string,Color>::iterator it,end;
 	for (it=color_map.begin(), end=color_map.end(); it!=end; ++it) {
 		if (_color.compare(it->first) == 0) return it->second;
 	}
@@ -204,7 +202,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
  * Render the given text at (x,y) on the target image.
  * Justify is left, right, or center
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, Color color) {
 	Rect dest_rect;
 
 	// calculate actual starting x,y based on justify
@@ -251,7 +249,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 /**
  * Word wrap to width
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, SDL_Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, Color color) {
 
 	string fulltext = text + " ";
 	cursor_y = y;
@@ -291,12 +289,12 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, SDL_Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, Color color) {
 	render(text, x+1, y+1, justify, target, FONT_BLACK);
 	render(text, x, y, justify, target, color);
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, SDL_Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, Color color) {
 	render(text, x+1, y+1, justify, target, width, FONT_BLACK);
 	render(text, x, y, justify, target, width, color);
 }
