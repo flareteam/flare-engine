@@ -31,10 +31,11 @@ Mod::Mod()
 Mod::~Mod() {
 }
 
-Mod::Mod(const Mod &mod) {
-	name = mod.name;
-	description = mod.description;
-	depends = mod.depends;
+Mod::Mod(const Mod &mod)
+	: name(mod.name)
+	, description(mod.description)
+	, depends(mod.depends)
+{
 }
 
 bool Mod::operator== (const Mod &mod) const {

@@ -208,6 +208,6 @@ install(DIRECTORY
   DESTINATION ${DATADIR}/default)
 install(FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
-  DESTINATION ${MANDIR}/man1
-  RENAME flare.1)
+  DESTINATION ${MANDIR}/man6
+  RENAME flare.6)
 
