@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2014-01-24 16:48+0100\n"
+"PO-Revision-Date: 2014-01-24 17:00+0100\n"
 "Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
 "Language-Team: SWEDISH <LL@li.org>\n"
 "Language: sv_SE\n"
@@ -663,11 +663,11 @@ msgstr "Nivå"
 
 #: ../../../src/MenuCharacter.cpp:277
 msgid "Physical"
-msgstr "Fysik"
+msgstr "Fysisk"
 
 #: ../../../src/MenuCharacter.cpp:278
 msgid "Mental"
-msgstr "Mental styrka"
+msgstr "Mental"
 
 #: ../../../src/MenuCharacter.cpp:279
 msgid "Offense"
@@ -747,7 +747,7 @@ msgstr "Bonus XP:"
 
 #: ../../../src/MenuCharacter.cpp:423
 msgid "Increases the XP gained per kill"
-msgstr "Ökar XP erhållet per död fiende"
+msgstr "Ökar erhållet XP per död fiende"
 
 #: ../../../src/MenuCharacter.cpp:428
 msgid "Bonus"
@@ -756,7 +756,7 @@ msgstr "Bonus"
 #: ../../../src/MenuCharacter.cpp:429
 #, c-format
 msgid "Increases the %s found per drop"
-msgstr "Ökar %s som död fiende lämnar efter sig"
+msgstr "Ökar %s som fiende lämnar efter sig när de dör"
 
 #: ../../../src/MenuCharacter.cpp:434
 msgid "Bonus Item Find: "
@@ -764,7 +764,7 @@ msgstr "Bonus objekt funnet:"
 
 #: ../../../src/MenuCharacter.cpp:435
 msgid "Increases the chance that an enemy will drop an item when killed"
-msgstr "Ökar chansen att fiender lämnar efter sig något vid död"
+msgstr "Ökar chansen att fienden lämnar efter sig något när de dör"
 
 #: ../../../src/MenuCharacter.cpp:440
 msgid "Stealth: "
@@ -829,7 +829,7 @@ msgstr "Varje poäng i Anfall ger %d."
 #: ../../../src/MenuCharacter.cpp:506
 #, c-format
 msgid "Each point of Defense grants %d. "
-msgstr "Varje poäng i försvar ger %d."
+msgstr "Varje poäng i Försvar ger %d."
 
 #: ../../../src/MenuEnemy.cpp:117
 msgid "Dead"
@@ -846,7 +846,7 @@ msgstr "Avsluta"
 
 #: ../../../src/MenuExit.cpp:48
 msgid "Save and exit to title?"
-msgstr "Spara och gå till huvudmenyn?"
+msgstr "Spara och gå till titelmenyn?"
 
 #: ../../../src/MenuInventory.cpp:146
 #, c-format
@@ -879,7 +879,7 @@ msgstr "Använd SHIFT för att flytta enstaka föremål."
 
 #: ../../../src/MenuInventory.cpp:264
 msgid "CTRL-click a carried item to sell it."
-msgstr "CTRL-klicka på ett föremål du har för att sälja det."
+msgstr "CTRL-klicka på ett föremål för att sälja det."
 
 #: ../../../src/MenuInventory.cpp:472
 msgid "This item can only be used from the action bar."
@@ -911,7 +911,7 @@ msgstr "Handel"
 
 #: ../../../src/MenuPowers.cpp:463
 msgid "Unspent skill points:"
-msgstr "Outnyttjade attributpoäng:"
+msgstr "Outnyttjade skicklighetspoäng:"
 
 #: ../../../src/MenuPowers.cpp:505
 msgid ""
@@ -990,7 +990,7 @@ msgstr "Återköp"
 
 #: ../../../src/MenuVendor.cpp:171
 msgid "Vendor"
-msgstr "Affärsman"
+msgstr "Tillverkare"
 
 #: ../../../src/PowerManager.cpp:759
 #, c-format
