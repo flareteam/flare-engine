@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2014-01-24 11:55+0100\n"
+"PO-Revision-Date: 2014-01-24 16:48+0100\n"
 "Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
 "Language-Team: SWEDISH <LL@li.org>\n"
 "Language: sv_SE\n"
@@ -27,7 +27,8 @@ msgstr "Du får nu öka på en egenskap i karaktärsmenyn."
 
 #: ../../../src/Avatar.cpp:631
 msgid "You are defeated. Game over! Press Enter to exit to Title."
-msgstr "Du är besegrad. Spelet är över! Tryck Retur för att fortsätta."
+msgstr ""
+"Du är besegrad. Spelet är över! Tryck Retur för att gå till titelmenyn."
 
 #: ../../../src/Avatar.cpp:634
 msgid "You are defeated. Press Enter to continue."
