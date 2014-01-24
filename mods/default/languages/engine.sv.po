@@ -4,18 +4,17 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: Flare 0.17\n"
+"Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-03-24 14:10+0100\n"
+"PO-Revision-Date: 2014-01-24 11:55+0100\n"
 "Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
 "Language-Team: SWEDISH <LL@li.org>\n"
-"Language: \n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Swedish\n"
-"X-Poedit-Country: SWEDEN\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../../../src/Avatar.cpp:430
 #, c-format
@@ -31,19 +30,18 @@ msgid "You are defeated. Game over! Press Enter to exit to Title."
 msgstr "Du är besegrad. Spelet är över! Tryck Retur för att fortsätta."
 
 #: ../../../src/Avatar.cpp:634
-#, fuzzy
 msgid "You are defeated. Press Enter to continue."
-msgstr "Du är besegrad. Du förlorar hälften av ditt %s. Tryck Retur för att fortsätta."
+msgstr "Du är besegrad. Tryck Retur för att fortsätta."
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s borttaget."
 
 #: ../../../src/CampaignManager.cpp:139
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "%s borttaget."
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
@@ -195,9 +193,8 @@ msgid "Mouse aim"
 msgstr "Sikta med muspekaren"
 
 #: ../../../src/GameStateConfig.cpp:318
-#, fuzzy
 msgid "Do not use mouse"
-msgstr "Flytta hjälten med muspekaren"
+msgstr "Använd inte muspekare"
 
 #: ../../../src/GameStateConfig.cpp:321
 msgid "Show FPS"
@@ -209,7 +206,7 @@ msgstr ""
 
 #: ../../../src/GameStateConfig.cpp:327
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "Läge för färgblinda"
 
 #: ../../../src/GameStateConfig.cpp:338
 msgid "Music Volume"
@@ -224,9 +221,8 @@ msgid "Gamma"
 msgstr "Gamma"
 
 #: ../../../src/GameStateConfig.cpp:377
-#, fuzzy
 msgid "Joystick Deadzone"
-msgstr "Joystick"
+msgstr "Joystick Dödzon"
 
 #: ../../../src/GameStateConfig.cpp:391
 msgid "Resolution"
@@ -259,7 +255,7 @@ msgstr "Experimentell"
 
 #: ../../../src/GameStateConfig.cpp:507
 msgid "For handheld devices"
-msgstr ""
+msgstr "För handhållna neheter"
 
 #: ../../../src/GameStateConfig.cpp:527
 msgid "<< Disable"
@@ -311,9 +307,8 @@ msgid "Level %d %s"
 msgstr "Nivå %d %s"
 
 #: ../../../src/GameStateLoad.cpp:579
-#, fuzzy
 msgid "Permadeath"
-msgstr "Permanent död?"
+msgstr "Permanent död"
 
 #: ../../../src/GameStateLoad.cpp:603
 msgid "Empty Slot"
@@ -375,9 +370,8 @@ msgid "Exit Game"
 msgstr "Avsluta spelet"
 
 #: ../../../src/GameStateTitle.cpp:67
-#, fuzzy
 msgid "Flare Alpha v0.19"
-msgstr "Flare Alpha v0.18"
+msgstr "Flare Alpha v0.19"
 
 #: ../../../src/InputState.cpp:623
 msgid "Accept"
@@ -385,15 +379,15 @@ msgstr "Acceptera"
 
 #: ../../../src/InputState.cpp:624
 msgid "Up"
-msgstr ""
+msgstr "Upp"
 
 #: ../../../src/InputState.cpp:625
 msgid "Down"
-msgstr ""
+msgstr "Ner"
 
 #: ../../../src/InputState.cpp:626
 msgid "Left"
-msgstr ""
+msgstr "Vänster"
 
 #: ../../../src/InputState.cpp:627
 msgid "Right"
@@ -525,21 +519,20 @@ msgid "mbx2"
 msgstr ""
 
 #: ../../../src/ItemManager.cpp:488
-#, fuzzy
 msgid "Low"
-msgstr "Logg"
+msgstr "Låg"
 
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: ../../../src/ItemManager.cpp:496
 msgid "High"
-msgstr ""
+msgstr "Hög"
 
 #: ../../../src/ItemManager.cpp:500
 msgid "Epic"
-msgstr ""
+msgstr "Episk"
 
 #: ../../../src/ItemManager.cpp:513
 #, c-format
@@ -628,7 +621,7 @@ msgstr "Kräver försvar %d"
 #: ../../../src/ItemManager.cpp:609
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Kvalitet: %s"
 
 #: ../../../src/ItemManager.cpp:626 ../../../src/ItemManager.cpp:635
 #, c-format
@@ -696,7 +689,6 @@ msgid "HP Regen:"
 msgstr "HP Regenerering:"
 
 #: ../../../src/MenuCharacter.cpp:341
-#, fuzzy
 msgid "Ticks of HP regen per minute. "
 msgstr "HP-regenereringar per minut"
 
@@ -709,7 +701,6 @@ msgid "MP Regen:"
 msgstr "MP Regenerering:"
 
 #: ../../../src/MenuCharacter.cpp:353
-#, fuzzy
 msgid "Ticks of MP regen per minute. "
 msgstr "MP-regenereringar per minut"
 
@@ -815,29 +806,29 @@ msgid "Defense (D) increases armor proficiency and avoidance."
 msgstr "Försvar (D) ökar färdighet med rustning och undvikande."
 
 #: ../../../src/MenuCharacter.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Each level grants %d. "
-msgstr "Varje nivå ger +2 HP"
+msgstr "Varje nivå ger %d."
 
 #: ../../../src/MenuCharacter.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of Physical grants %d. "
-msgstr "Varje fysikpoäng ger +8 HP"
+msgstr "Varje poäng i Fysisk styrka ger %d."
 
 #: ../../../src/MenuCharacter.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of Mental grants %d. "
-msgstr "Varje poäng i mental styrka ger +8 MP"
+msgstr "Varje poäng i Mental styrka ger %d."
 
 #: ../../../src/MenuCharacter.cpp:504
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of Offense grants %d. "
-msgstr "Varje poäng i mental styrka ger +8 MP"
+msgstr "Varje poäng i Anfall ger %d."
 
 #: ../../../src/MenuCharacter.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of Defense grants %d. "
-msgstr "Varje poäng i mental styrka ger +8 MP"
+msgstr "Varje poäng i försvar ger %d."
 
 #: ../../../src/MenuEnemy.cpp:117
 msgid "Dead"
@@ -859,22 +850,22 @@ msgstr "Spara och gå till huvudmenyn?"
 #: ../../../src/MenuInventory.cpp:146
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr ""
+msgstr "Förlorade %d%% utav %s"
 
 #: ../../../src/MenuInventory.cpp:153
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr ""
+msgstr "Förlorade %d%% av total XP"
 
 #: ../../../src/MenuInventory.cpp:158
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr ""
+msgstr "Förlorade %d%% av nuvarande XP."
 
 #: ../../../src/MenuInventory.cpp:184
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Förlorade %s."
 
 #: ../../../src/MenuInventory.cpp:228
 #, c-format
@@ -909,9 +900,9 @@ msgstr "XP: %d/%d"
 #: ../../../src/MenuManager.cpp:652 ../../../src/MenuManager.cpp:653
 #: ../../../src/MenuManager.cpp:859 ../../../src/MenuManager.cpp:860
 #: ../../../src/MenuManager.cpp:1037 ../../../src/MenuManager.cpp:1038
-#, fuzzy, c-format
+#, c-format
 msgid "Not enough %s."
-msgstr "Inte tillräckligr med pengar."
+msgstr "Inte tillräckligt med %s."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
@@ -926,11 +917,13 @@ msgid ""
 "\n"
 "Next Level:"
 msgstr ""
+"\n"
+"Nästa Nivå:"
 
 #: ../../../src/MenuPowers.cpp:525
-#, fuzzy, c-format
+#, c-format
 msgid "Requires a %s"
-msgstr "Kräver mental styrka %d"
+msgstr "Kräver %s"
 
 #: ../../../src/MenuPowers.cpp:530 ../../../src/MenuPowers.cpp:533
 #, c-format
@@ -1012,9 +1005,8 @@ msgid "Adventurer"
 msgstr "Äventyrare"
 
 #: ../../../src/Utils.cpp:519
-#, fuzzy
 msgid "k"
-msgstr "Ok"
+msgstr "k"
 
 #~ msgid "Character Menu (C)"
 #~ msgstr "Karaktärsmenyn (C)"
@@ -1031,20 +1023,36 @@ msgstr "Ok"
 #~ msgid "Each point of Physical grants +%d HP. Each level grants +%d HP"
 #~ msgstr "Varje poäng i fysik ger +%d HP. Varje nivå ger +%d HP"
 
-#~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "Mängd av HP regenerering per minut. Varje poäng av fysisk styrka ger +%d HP regenerering. Varje nivå ger +%d HP regenerering"
+#~ msgid ""
+#~ "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. "
+#~ "Each level grants +%d HP regen"
+#~ msgstr ""
+#~ "Mängd av HP regenerering per minut. Varje poäng av fysisk styrka ger +%d "
+#~ "HP regenerering. Varje nivå ger +%d HP regenerering"
 
 #~ msgid "Each point of Mental grants +%d MP. Each level grants +%d MP"
-#~ msgstr "Varje poäng i mental styrka ger +%d MP regenerering. Varje nivå ger +%d MP"
+#~ msgstr ""
+#~ "Varje poäng i mental styrka ger +%d MP regenerering. Varje nivå ger +%d MP"
 
-#~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "Mängd av MP regenerering per minut, Varje poäng av mental styrka ger +%d MP regenerering. Varje nivå ger +%d MP regenerering"
+#~ msgid ""
+#~ "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. "
+#~ "Each level grants +%d MP regen"
+#~ msgstr ""
+#~ "Mängd av MP regenerering per minut, Varje poäng av mental styrka ger +%d "
+#~ "MP regenerering. Varje nivå ger +%d MP regenerering"
 
-#~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "Varje poäng i anfall ger +%d i noggrannhet. Varje nivå ger +%d i noggrannhet"
+#~ msgid ""
+#~ "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
+#~ msgstr ""
+#~ "Varje poäng i anfall ger +%d i noggrannhet. Varje nivå ger +%d i "
+#~ "noggrannhet"
 
-#~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "Varje poäng i försvar ger +%d i undvikande. Varje nivå ger +%d i undvikande."
+#~ msgid ""
+#~ "Each point of Defense grants +%d avoidance. Each level grants +%d "
+#~ "avoidance"
+#~ msgstr ""
+#~ "Varje poäng i försvar ger +%d i undvikande. Varje nivå ger +%d i "
+#~ "undvikande."
 
 #~ msgid "Requires a physical weapon"
 #~ msgstr "Kräver ett fysiskt vapen"

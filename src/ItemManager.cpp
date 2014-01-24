@@ -2,7 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -542,7 +542,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	string modifier;
 	while (bonus_counter < items[stack.item].bonus_val.size() && items[stack.item].bonus_stat[bonus_counter] != "") {
 		if (items[stack.item].bonus_stat[bonus_counter] == "speed") {
-			modifier = msg->get("%d% Speed", items[stack.item].bonus_val[bonus_counter]);
+			modifier = msg->get("%d%% Speed", items[stack.item].bonus_val[bonus_counter]);
 			if (items[stack.item].bonus_val[bonus_counter] >= 100) color = color_bonus;
 			else color = color_penalty;
 		}
