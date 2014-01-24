@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -254,8 +254,8 @@ int main(int argc, char *argv[]) {
 		srand((unsigned int)time(NULL));
 		init();
 		mainLoop(debug_event);
+		cleanup();
 	}
-	cleanup();
 
 	return 0;
 }
