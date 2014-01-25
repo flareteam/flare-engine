@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Entity.h"
 #include "Utils.h"
 
-#include <queue>
-
 class EnemyBehavior;
 class Hazard;
 

@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Stats.h"
 #include "Utils.h"
 
-#include <queue>
-
 class Power;
 class FileParser;
 

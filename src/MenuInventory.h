@@ -112,7 +112,7 @@ public:
 
 	std::string log_msg;
 
-	ItemStack drop_stack;
+	std::queue<ItemStack> drop_stack;
 
 	TabList tablist;
 
