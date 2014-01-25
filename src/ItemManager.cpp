@@ -293,6 +293,8 @@ void ItemManager::loadItems() {
 				item_class_items[pos].push_back(id);
 				classname = infile.nextValue();
 			}
+		} else {
+			fprintf(stderr, "unknown item(%d, %s) attribute: %s\n",id, items[id].name.c_str(), infile.key.c_str());
 		}
 
 	}
