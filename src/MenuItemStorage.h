@@ -52,7 +52,6 @@ public:
 	TooltipData checkTooltip(Point position, StatBlock *stats, int context);
 	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
-	void fillEquipmentSlots();
 	void highlightMatching(std::string type);
 	void highlightClear();
 	std::vector<std::string> slot_type;

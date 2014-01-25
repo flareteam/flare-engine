@@ -96,6 +96,8 @@ public:
 
 	void clearHighlight();
 
+	void fillEquipmentSlots();
+
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;
