@@ -51,6 +51,7 @@ public:
 	std::string virtual_channel;
 	FPoint location;
 	bool loop;
+	bool paused;
 	bool finished;
 };
 
@@ -92,10 +93,16 @@ void SoundManager::logic(FPoint c) {
 		/* control mixing playback depending on distance */
 		float v = calcDist(c, it->second.location) / (SOUND_FALLOFF);
 		if (it->second.loop) {
-			if (v < 1.0)
+			if (v < 1.0 && it->second.paused) {
 				Mix_Resume(it->first);
-			else
+				it->second.paused = false;
+			}
+			else if (v > 1.0 && !it->second.paused) {
 				Mix_Pause(it->first);
+				it->second.paused = true;
+				++it;
+				continue;
+			}
 		}
 
 		/* update sound mix with new distance/location to hero */
