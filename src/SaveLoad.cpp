@@ -308,7 +308,7 @@ void GameStatePlay::loadGame() {
 	else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
 
 
-	menu->inv->inventory[EQUIPMENT].fillEquipmentSlots();
+	menu->inv->fillEquipmentSlots();
 	menu->inv->addCurrency(currency);
 
 	// remove items with zero quantity from inventory
@@ -380,7 +380,7 @@ void GameStatePlay::loadClass(int index) {
 	}
 	menu->act->set(HERO_CLASSES[index].hotkeys);
 
-	menu->inv->inventory[EQUIPMENT].fillEquipmentSlots();
+	menu->inv->fillEquipmentSlots();
 
 	// initialize vars
 	pc->stats.recalc();

@@ -35,6 +35,8 @@ public:
 	Animation *animation;
 	TooltipData tip;
 	bool dropped_by_hero;
+	bool on_ground;
+	bool sound_played;
 
 	Loot();
 	Loot(const Loot &other);

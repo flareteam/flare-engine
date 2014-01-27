@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "Utils.h"
 
-#include <queue>
 #include <cassert>
 
 class Animation;

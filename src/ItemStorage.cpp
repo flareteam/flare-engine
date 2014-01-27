@@ -56,14 +56,12 @@ void ItemStorage::setItems(string s) {
 			storage[i].quantity = 0;
 		}
 		else if ((unsigned)storage[i].item > items->items.size()-1) {
-			fprintf(stderr, "Item id (%d) out of bounds 1-%d, skipping\n", storage[i].item, (int)items->items.size());
-			storage[i].item = 0;
-			storage[i].quantity = 0;
+			fprintf(stderr, "Item id (%d) out of bounds 1-%d, marking as unknown\n", storage[i].item, (int)items->items.size());
+			items->addUnknownItem(storage[i].item);
 		}
 		else if (storage[i].item != 0 && items->items[storage[i].item].name == "") {
-			fprintf(stderr, "Item with id=%d. found on position %d does not exist, skipping\n", storage[i].item, i);
-			storage[i].item = 0;
-			storage[i].quantity = 0;
+			fprintf(stderr, "Item with id=%d. found on position %d does not exist, marking as unknown\n", storage[i].item, i);
+			items->addUnknownItem(storage[i].item);
 		}
 	}
 }

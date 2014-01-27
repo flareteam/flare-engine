@@ -55,7 +55,7 @@ public:
 
 	std::vector<std::string> status;
 	std::string log_msg;
-	ItemStack drop_stack;
+	std::queue<ItemStack> drop_stack;
 
 	// pointers to various info that can be changed
 	MenuItemStorage *carried_items;

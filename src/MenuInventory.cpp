@@ -53,9 +53,6 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	changed_artifact = true;
 	log_msg = "";
 
-	drop_stack.item = 0;
-	drop_stack.quantity = 0;
-
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// Load config settings
@@ -593,8 +590,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 		}
 		else {
 			// No available slot, drop
-			drop_stack.item = stack.item;
-			drop_stack.quantity = stack.quantity;
+			drop_stack.push(stack);
 		}
 	}
 	drag_prev_src = -1;
@@ -980,6 +976,47 @@ void MenuInventory::clearHighlight() {
 	inventory[EQUIPMENT].highlightClear();
 	inventory[CARRIED].highlightClear();
 }
+
+/**
+ * Sort equipment storage array, so items order matches slots order
+ */
+void MenuInventory::fillEquipmentSlots() {
+	// create temporary arrays
+	int slot_number = MAX_EQUIPPED;
+	int *equip_item = new int[slot_number];
+	int *equip_quantity = new int[slot_number];;
+
+	// initialize arrays
+	for (int i=0; i<slot_number; i++) {
+		equip_item[i] = inventory[EQUIPMENT].storage[i].item;
+		equip_quantity[i] = inventory[EQUIPMENT].storage[i].quantity;
+	}
+	// clean up storage[]
+	for (int i=0; i<slot_number; i++) {
+		inventory[EQUIPMENT].storage[i].item = 0;
+		inventory[EQUIPMENT].storage[i].quantity = 0;
+	}
+
+	// fill slots with items
+	for (int i=0; i<slot_number; i++) {
+		// search for empty slot with needed type. If item is not NULL, put it there
+		if (equip_item[i] > 0 && inventory[EQUIPMENT].storage[i].item == 0) {
+			if (items->items[equip_item[i]].type == slot_type[i]) {
+				inventory[EQUIPMENT].storage[i].item = equip_item[i];
+				inventory[EQUIPMENT].storage[i].quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
+			}
+			else {
+				ItemStack stack;
+				stack.item = equip_item[i];
+				stack.quantity = equip_quantity[i];
+				add(stack, CARRIED, -1, false);
+			}
+		}
+	}
+	delete [] equip_item;
+	delete [] equip_quantity;
+}
+
 
 MenuInventory::~MenuInventory() {
 	delete closeButton;

@@ -37,7 +37,6 @@ using namespace std;
 CampaignManager::CampaignManager()
 	: status()
 	, log_msg("")
-	, drop_stack()
 	, carried_items(NULL)
 	, currency(NULL)
 	, hero(NULL)
@@ -143,8 +142,7 @@ void CampaignManager::removeItem(int item_id) {
 void CampaignManager::rewardItem(ItemStack istack) {
 
 	if (carried_items->full(istack.item)) {
-		drop_stack.item = istack.item;
-		drop_stack.quantity = istack.quantity;
+		drop_stack.push(istack);
 	}
 	else {
 		carried_items->add(istack);

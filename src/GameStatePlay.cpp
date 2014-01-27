@@ -529,25 +529,28 @@ void GameStatePlay::checkEquipmentChange() {
 void GameStatePlay::checkLootDrop() {
 
 	// if the player has dropped an item from the inventory
-	if (menu->drop_stack.item > 0) {
-		loot->addLoot(menu->drop_stack, pc->stats.pos, true);
-		menu->drop_stack.item = 0;
-		menu->drop_stack.quantity = 0;
+	while (!menu->drop_stack.empty()) {
+		if (menu->drop_stack.front().item > 0) {
+			loot->addLoot(menu->drop_stack.front(), pc->stats.pos, true);
+		}
+		menu->drop_stack.pop();
 	}
 
-	// if the player has dropped a quest rward because inventory full
-	if (camp->drop_stack.item > 0) {
-		loot->addLoot(camp->drop_stack, pc->stats.pos, true);
-		camp->drop_stack.item = 0;
-		camp->drop_stack.quantity = 0;
+	// if the player has dropped a quest reward because inventory full
+	while (!camp->drop_stack.empty()) {
+		if (camp->drop_stack.front().item > 0) {
+			loot->addLoot(camp->drop_stack.front(), pc->stats.pos, true);
+		}
+		camp->drop_stack.pop();
 	}
 
 	// if the player been directly given items, but their inventory is full
 	// this happens when adding currency from older save files
-	if (menu->inv->drop_stack.item > 0) {
-		loot->addLoot(menu->inv->drop_stack, pc->stats.pos, true);
-		menu->inv->drop_stack.item = 0;
-		menu->inv->drop_stack.quantity = 0;
+	while (!menu->inv->drop_stack.empty()) {
+		if (menu->inv->drop_stack.front().item > 0) {
+			loot->addLoot(menu->inv->drop_stack.front(), pc->stats.pos, true);
+		}
+		menu->inv->drop_stack.pop();
 	}
 
 }

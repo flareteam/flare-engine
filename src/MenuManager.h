@@ -118,7 +118,7 @@ public:
 
 	bool pause;
 	bool menus_open;
-	ItemStack drop_stack;
+	std::queue<ItemStack> drop_stack;
 
 	bool isDragging();
 	bool requestingExit() { return done; }

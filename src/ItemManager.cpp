@@ -332,6 +332,11 @@ string ItemManager::getItemType(std::string _type) {
 	return _type;
 }
 
+void ItemManager::addUnknownItem(int id) {
+	ensureFitsId(items, id);
+	items[id].name = msg->get("Unknown Item");
+}
+
 void ItemManager::loadSets() {
 	FileParser infile;
 
