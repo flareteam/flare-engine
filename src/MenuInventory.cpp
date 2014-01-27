@@ -998,19 +998,26 @@ void MenuInventory::fillEquipmentSlots() {
 	}
 
 	// fill slots with items
+	bool found_slot;
 	for (int i=0; i<slot_number; i++) {
-		// search for empty slot with needed type. If item is not NULL, put it there
-		if (equip_item[i] > 0 && inventory[EQUIPMENT].storage[i].item == 0) {
-			if (items->items[equip_item[i]].type == slot_type[i]) {
-				inventory[EQUIPMENT].storage[i].item = equip_item[i];
-				inventory[EQUIPMENT].storage[i].quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
+		found_slot = false;
+		for (int j=0; j<slot_number; j++) {
+			// search for empty slot with needed type. If item is not NULL, put it there
+			if (equip_item[i] > 0 && inventory[EQUIPMENT].storage[j].item == 0) {
+				if (items->items[equip_item[i]].type == slot_type[j]) {
+					inventory[EQUIPMENT].storage[j].item = equip_item[i];
+					inventory[EQUIPMENT].storage[j].quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
+					found_slot = true;
+					break;
+				}
 			}
-			else {
-				ItemStack stack;
-				stack.item = equip_item[i];
-				stack.quantity = equip_quantity[i];
-				add(stack, CARRIED, -1, false);
-			}
+		}
+		// couldn't find a slot, adding to inventory
+		if (!found_slot && equip_item[i] > 0) {
+			ItemStack stack;
+			stack.item = equip_item[i];
+			stack.quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
+			add(stack, CARRIED, -1, false);
 		}
 	}
 	delete [] equip_item;
