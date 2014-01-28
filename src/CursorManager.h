@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define CURSORMANAGER_H
 
 #include "CommonIncludes.h"
+#include "Utils.h"
 
 typedef	enum {
 	CURSOR_NORMAL,
@@ -42,7 +43,13 @@ private:
 	Sprite cursor_talk;
 	Sprite cursor_attack;
 
+	Point offset_normal;
+	Point offset_interact;
+	Point offset_talk;
+	Point offset_attack;
+
 	Sprite* cursor_current;
+	Point* offset_current;
 };
 
 #endif
