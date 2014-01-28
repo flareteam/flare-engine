@@ -33,6 +33,7 @@ Created and destroyed by main.cpp
 #include "CommonIncludes.h"
 #include "AnimationManager.h"
 #include "CombatText.h"
+#include "CursorManager.h"
 #include "FontEngine.h"
 #include "ImageManager.h"
 #include "InputState.h"
@@ -45,6 +46,7 @@ extern SDL_Joystick *joy;
 
 extern AnimationManager *anim;
 extern CombatText *comb;
+extern CursorManager *curs;
 extern FontEngine *font;
 extern ImageManager *imag;
 extern InputState *inpt;

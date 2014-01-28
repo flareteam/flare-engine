@@ -89,6 +89,8 @@ public:
 	void lockActionBar();
 	void unlockActionBar();
 	void setKeybindNames();
+	void hideCursor();
+	void showCursor();
 
 	bool pressing[key_count];
 	bool lock[key_count];

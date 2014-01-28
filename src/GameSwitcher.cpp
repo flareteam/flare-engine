@@ -78,6 +78,9 @@ void GameSwitcher::loadMusic() {
 }
 
 void GameSwitcher::logic() {
+	// reset the mouse cursor
+	curs->logic();
+
 	// Check if a the game state is to be changed and change it if necessary, deleting the old state
 	GameState* newState = currentState->getRequestedGameState();
 	if (newState != NULL) {
@@ -163,6 +166,7 @@ void GameSwitcher::loadFPS() {
 
 void GameSwitcher::render() {
 	currentState->render();
+	curs->render();
 }
 
 GameSwitcher::~GameSwitcher() {
