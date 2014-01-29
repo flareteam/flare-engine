@@ -1,5 +1,5 @@
 /*
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -47,6 +47,14 @@ private:
 
 class Playback {
 public:
+        Playback()
+	  : sid(-1)
+	  , location(FPoint())
+	  , loop(false)
+	  , paused(false)
+	  , finished(false)
+        {}
+
 	SoundManager::SoundID sid;
 	std::string virtual_channel;
 	FPoint location;
