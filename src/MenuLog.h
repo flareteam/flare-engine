@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -40,6 +41,7 @@ const int LOG_TYPE_MESSAGES = 1;
 class MenuLog : public Menu {
 private:
 
+	WidgetLabel label_log;
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
 

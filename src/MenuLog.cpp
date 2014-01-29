@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -92,6 +92,8 @@ void MenuLog::update() {
 	closeButton->pos.x = window_area.x + close_pos.x;
 	closeButton->pos.y = window_area.y + close_pos.y;
 
+	label_log.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Log"), font->getColor("menu_normal"), title.font_style);
+
 	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		msg_buffer[i]->pos.x = window_area.x+tab_area.x;
 		msg_buffer[i]->pos.y = window_area.y+tab_area.y+tabControl->getTabHeight();
@@ -149,11 +151,7 @@ void MenuLog::render() {
 	closeButton->render();
 
 	// Text overlay.
-	if (!title.hidden) {
-		WidgetLabel label;
-		label.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Log"), color_normal, title.font_style);
-		label.render();
-	}
+	if (!title.hidden) label_log.render();
 
 	// Tab control.
 	tabControl->render();
