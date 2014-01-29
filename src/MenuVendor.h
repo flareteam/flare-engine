@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -38,6 +39,7 @@ private:
 	StatBlock *stats;
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
+	WidgetLabel label_vendor;
 
 	unsigned VENDOR_SLOTS;
 

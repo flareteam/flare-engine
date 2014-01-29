@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -162,9 +162,8 @@ void MenuVendor::render() {
 
 	// text overlay
 	if (!title.hidden) {
-		WidgetLabel label;
-		label.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Vendor") + " - " + npc->name, color_normal, title.font_style);
-		label.render();
+		label_vendor.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Vendor") + " - " + npc->name, color_normal, title.font_style);
+		label_vendor.render();
 	}
 
 	// render tabs
