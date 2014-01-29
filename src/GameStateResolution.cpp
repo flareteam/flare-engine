@@ -37,8 +37,7 @@ GameStateResolution::GameStateResolution(int width, int height, bool fullscreen,
 	, old_doublebuf(doublebuf)
 	, new_w(width)
 	, new_h(height)
-	, initialized(false)
-{
+	, initialized(false) {
 }
 
 void GameStateResolution::logic() {
@@ -165,9 +164,9 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
  */
 bool GameStateResolution::compareVideoSettings() {
 	return (!(old_w == new_w && old_h == new_h) ||
-			 FULLSCREEN != old_fullscreen ||
-			 HWSURFACE != old_hwsurface ||
-			 DOUBLEBUF != old_doublebuf);
+			FULLSCREEN != old_fullscreen ||
+			HWSURFACE != old_hwsurface ||
+			DOUBLEBUF != old_doublebuf);
 }
 
 void GameStateResolution::cleanup() {

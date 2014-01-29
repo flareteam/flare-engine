@@ -201,8 +201,8 @@ void MenuNPCActions::update() {
 		action_menu.clearGraphics();
 		Image surface = render_device->createAlphaSurface(w,h);
 		Uint32 bg = render_device->MapRGBA(&surface,
-											background_color.r, background_color.g,
-											background_color.b, background_alpha);
+										   background_color.r, background_color.g,
+										   background_color.b, background_alpha);
 		render_device->fillImageWithColor(&surface, NULL, bg);
 		action_menu.setGraphics(surface);
 		action_menu.setClip(0,0,surface.getWidth(),surface.getHeight());

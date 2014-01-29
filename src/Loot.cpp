@@ -76,7 +76,8 @@ void Loot::loadAnimation(std::string _gfx) {
 		anim->increaseCount(gfx);
 		AnimationSet *as = anim->getAnimationSet(gfx);
 		animation = as->getAnimation();
-	} else {
+	}
+	else {
 		animation = 0;
 	}
 }

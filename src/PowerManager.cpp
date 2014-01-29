@@ -653,8 +653,8 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	}
 	haz->trait_crits_impaired += powers[power_index].trait_crits_impaired;
 
-    if (powers[power_index].beacon) {
-	  haz->beacon = true;
+	if (powers[power_index].beacon) {
+		haz->beacon = true;
 	}
 
 	// status effect durations

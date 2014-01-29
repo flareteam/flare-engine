@@ -61,8 +61,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar) {
 		while (infile.next()) {
 			if (infile.new_section) {
 				// for sections that are stored in collections, add a new object here
-				if (infile.section == "power")
-				{
+				if (infile.section == "power") {
 					slots.push_back(NULL);
 					upgradeButtons.push_back(NULL);
 					power_cell.push_back(Power_Menu_Cell());
@@ -168,8 +167,7 @@ short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Me
 /**
  * Apply power upgrades on savegame loading
  */
-void MenuPowers::applyPowerUpgrades()
-{
+void MenuPowers::applyPowerUpgrades() {
 	for (unsigned i = 0; i < power_cell.size(); i++) {
 		if (!power_cell[i].upgrades.empty()) {
 			vector<short>::iterator it;
@@ -193,8 +191,8 @@ void MenuPowers::applyPowerUpgrades()
 short MenuPowers::nextLevel(short power_cell_index) {
 	vector<short>::iterator level_it;
 	level_it = find(power_cell[power_cell_index].upgrades.begin(),
-								power_cell[power_cell_index].upgrades.end(),
-								power_cell[power_cell_index].id);
+					power_cell[power_cell_index].upgrades.end(),
+					power_cell[power_cell_index].id);
 
 	if (level_it == power_cell[power_cell_index].upgrades.end()) {
 		// current power is base power, take first upgrade
@@ -220,7 +218,7 @@ void MenuPowers::upgradePower(short power_cell_index) {
 		return;
 
 	// if power was present in ActionBar, update it there
-	for(int j = 0; j < 12; j++){
+	for(int j = 0; j < 12; j++) {
 		if(action_bar->hotkeys[j] == power_cell[power_cell_index].id) {
 			action_bar->hotkeys[j] = upgrade[i].id;
 		}
@@ -236,14 +234,13 @@ void MenuPowers::upgradePower(short power_cell_index) {
 	}
 	// if have don't have tabs
 	else {
-			replacePowerCellDataByUpgrade(power_cell_index, i);
-			stats->powers_list.push_back(upgrade[i].id);
-			stats->check_title = true;
+		replacePowerCellDataByUpgrade(power_cell_index, i);
+		stats->powers_list.push_back(upgrade[i].id);
+		stats->check_title = true;
 	}
 }
 
-void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index)
-{
+void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index) {
 	power_cell[power_cell_index].id = upgrade[upgrade_cell_index].id;
 	power_cell[power_cell_index].requires_physoff = upgrade[upgrade_cell_index].requires_physoff;
 	power_cell[power_cell_index].requires_physdef = upgrade[upgrade_cell_index].requires_physdef;
@@ -550,8 +547,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 	return tip;
 }
 
-void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const vector<Power_Menu_Cell>& power_cells)
-{
+void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const vector<Power_Menu_Cell>& power_cells) {
 	tip->addText(powers->powers[power_cells[slot_num].id].name);
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
 	tip->addText(powers->powers[power_cells[slot_num].id].description);
@@ -626,8 +622,8 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 		tip->addText(msg->get("Requires %d Skill Point", power_cells[slot_num].requires_point), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_point) &&
-				!(find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end()) &&
-				(points_left > 0)) {
+			 !(find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end()) &&
+			 (points_left > 0)) {
 		tip->addText(msg->get("Requires %d Skill Point", power_cells[slot_num].requires_point));
 	}
 
@@ -812,8 +808,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 			skip_section = false;
 			power_cell.back().id = id;
 		}
-		else
-		{
+		else {
 			skip_section = true;
 			power_cell.pop_back();
 			slots.pop_back();
@@ -891,8 +886,7 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 			skip_section = false;
 			upgrade.back().id = id;
 		}
-		else
-		{
+		else {
 			skip_section = true;
 			upgrade.pop_back();
 			fprintf(stderr, "Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
