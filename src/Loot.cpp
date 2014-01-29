@@ -27,6 +27,8 @@ Loot::Loot() {
 	animation = NULL;
 	tip.clear();
 	dropped_by_hero = false;
+	on_ground = false;
+	sound_played = false;
 	gfx = "";
 }
 
@@ -40,6 +42,8 @@ Loot::Loot(const Loot &other) {
 		animation->syncTo(other.animation);
 	tip = other.tip;
 	dropped_by_hero = other.dropped_by_hero;
+	on_ground = other.on_ground;
+	sound_played = other.sound_played;
 }
 
 // The assignment operator mainly used in internal vector managing,
@@ -78,7 +82,7 @@ void Loot::loadAnimation(std::string _gfx) {
 }
 
 bool Loot::isFlying() {
-	return !animation->isLastFrame();
+	return animation && !animation->isLastFrame();
 }
 
 Loot::~Loot() {

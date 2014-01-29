@@ -157,40 +157,6 @@ void MenuItemStorage::itemReturn(ItemStack stack) {
 	drag_prev_slot = -1;
 }
 
-/**
- * Sort storage array, so items order matches slots order
- */
-void MenuItemStorage::fillEquipmentSlots() {
-	// create temporary arrays
-	int *equip_item = new int[slot_number];
-	int *equip_quantity = new int[slot_number];;
-
-	// initialize arrays
-	for (int i=0; i<slot_number; i++) {
-		equip_item[i] = storage[i].item;
-		equip_quantity[i] = storage[i].quantity;
-	}
-	// clean up storage[]
-	for (int i=0; i<slot_number; i++) {
-		storage[i].item = 0;
-		storage[i].quantity = 0;
-	}
-
-	// fill slots with items
-	for (int i=0; i<slot_number; i++) {
-		for (int j=0; j<slot_number; j++) {
-			// search for empty slot with needed type. If item is not NULL, put it there
-			if (items->items[equip_item[i]].type == slot_type[j] && equip_item[i] > 0 && storage[j].item == 0) {
-				storage[j].item = equip_item[i];
-				storage[j].quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
-				break;
-			}
-		}
-	}
-	delete [] equip_item;
-	delete [] equip_quantity;
-}
-
 void MenuItemStorage::highlightMatching(string type) {
 	for (int i=0; i<slot_number; i++) {
 		if (slot_type[i] == type) highlight[i] = true;

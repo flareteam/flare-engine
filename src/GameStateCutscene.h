@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsParsing.h"
 
-#include <queue>
 #include <list>
 
 class WidgetScrollBox;

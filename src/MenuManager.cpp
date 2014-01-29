@@ -84,8 +84,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, effects(NULL)
 	, stash(NULL)
 	, pause(false)
-	, menus_open(false)
-	, drop_stack() {
+	, menus_open(false) {
 
 	hp = new MenuStatBar("hp");
 	menus.push_back(hp); // menus[0]
@@ -210,8 +209,6 @@ MenuManager::MenuManager(StatBlock *_stats)
 	drag_stack.quantity = 0;
 	drag_power = 0;
 	drag_src = 0;
-	drop_stack.item = 0;
-	drop_stack.quantity = 0;
 
 	done = false;
 
@@ -649,7 +646,7 @@ void MenuManager::logic() {
 							if (inv->full(stack)) {
 								log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 								hudlog->add(msg->get("Inventory is full."));
-								drop_stack = stack;
+								drop_stack.push(stack);
 							}
 							else {
 								inv->add(stack);
@@ -834,7 +831,7 @@ void MenuManager::logic() {
 
 					// quest items cannot be dropped
 					if (items->items[drag_stack.item].type != "quest") {
-						drop_stack = drag_stack;
+						drop_stack.push(drag_stack);
 						inv->clearHighlight();
 					}
 					else {
@@ -856,7 +853,7 @@ void MenuManager::logic() {
 						if (inv->full(drag_stack)) {
 							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
-							drop_stack = drag_stack;
+							drop_stack.push(drag_stack);
 						}
 						else {
 							inv->drop(inpt->mouse,drag_stack);
@@ -886,7 +883,7 @@ void MenuManager::logic() {
 					stash->drop(inpt->mouse,drag_stack);
 				}
 				else {
-					drop_stack = drag_stack;
+					drop_stack.push(drag_stack);
 				}
 			}
 
@@ -1034,7 +1031,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				if (inv->full(drag_stack)) {
 					log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 					hudlog->add(msg->get("Inventory is full."));
-					drop_stack = drag_stack;
+					drop_stack.push(drag_stack);
 				}
 				else {
 					inv->add(drag_stack);
@@ -1360,9 +1357,8 @@ void MenuManager::splitStack(ItemStack stack) {
 
 	if (items->items[stack.item].max_quantity > 1) {
 		inv->add(stack);
-		stash->add(inv->drop_stack);
-		inv->drop_stack.item = 0;
-		inv->drop_stack.quantity = 0;
+		stash->add(inv->drop_stack.front());
+		inv->drop_stack.pop();
 	}
 	else {
 		stash->itemReturn(stack);

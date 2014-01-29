@@ -127,15 +127,19 @@ void LootManager::logic() {
 	for (it = loot.begin(); it != loot.end(); ++it) {
 
 		// animate flying loot
-		it->animation->advanceFrame();
-
-		if (it->animation->isSecondLastFrame()) {
-			if (it->stack.item > 0) {
-				Point pos;
-				pos.x = (int)it->pos.x;
-				pos.y = (int)it->pos.y;
-				items->playSound(it->stack.item, pos);
+		if (it->animation) {
+			it->animation->advanceFrame();
+			if (it->animation->isSecondLastFrame()) {
+				it->on_ground = true;
 			}
+		}
+
+		if (it->on_ground && !it->sound_played && it->stack.item > 0) {
+			Point pos;
+			pos.x = (int)it->pos.x;
+			pos.y = (int)it->pos.y;
+			items->playSound(it->stack.item, pos);
+			it->sound_played = true;
 		}
 	}
 
@@ -151,7 +155,7 @@ void LootManager::renderTooltips(FPoint cam) {
 
 	vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
-		if (it->animation->isLastFrame()) {
+		if (it->on_ground) {
 			Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 			dest.x = p.x;
 			dest.y = p.y + TILE_H_HALF;
@@ -362,13 +366,22 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
 	ld.dropped_by_hero = dropped_by_hero;
 
 	int index = items->items[stack.item].loot_animation.size()-1;
-	for (unsigned int i=0; i<items->items[stack.item].loot_animation.size(); i++) {
-		if (stack.quantity >= items->items[stack.item].loot_animation[i].low && (stack.quantity <= items->items[stack.item].loot_animation[i].high || items->items[stack.item].loot_animation[i].high == 0)) {
-			index = i;
-			break;
+	if (index >= 0) {
+		for (unsigned int i=0; i<items->items[stack.item].loot_animation.size(); i++) {
+			int low = items->items[stack.item].loot_animation[i].low;
+			int high = items->items[stack.item].loot_animation[i].high;
+			if (stack.quantity >= low && (stack.quantity <= high || high == 0)) {
+				index = i;
+				break;
+			}
 		}
+		ld.loadAnimation(items->items[stack.item].loot_animation[index].name);
 	}
-	ld.loadAnimation(items->items[stack.item].loot_animation[index].name);
+	else {
+		// immediately place the loot on the ground if there's no animation
+		ld.on_ground = true;
+	}
+
 	loot.push_back(ld);
 	snd->play(sfx_loot, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
@@ -481,11 +494,13 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_dead) {
 	vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
-		Renderable r = it->animation->getCurrentFrame(0);
-		r.map_pos.x = it->pos.x;
-		r.map_pos.y = it->pos.y;
+		if (it->animation) {
+			Renderable r = it->animation->getCurrentFrame(0);
+			r.map_pos.x = it->pos.x;
+			r.map_pos.y = it->pos.y;
 
-		(it->animation->isLastFrame() ? ren_dead : ren).push_back(r);
+			(it->animation->isLastFrame() ? ren_dead : ren).push_back(r);
+		}
 	}
 }
 
