@@ -2,7 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -126,6 +126,8 @@ void MenuInventory::update() {
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
 
+	label_inventory.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Inventory"), color_normal, title.font_style);
+
 	for (int i = 0; i < MAX_EQUIPPED; i++) {
 		tablist.add(inventory[EQUIPMENT].slots[i]);
 	}
@@ -219,14 +221,11 @@ void MenuInventory::render() {
 	closeButton->render();
 
 	// text overlay
-	WidgetLabel label;
-	if (!title.hidden) {
-		label.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Inventory"), color_normal, title.font_style);
-		label.render();
-	}
+	if (!title.hidden) label_inventory.render();
+
 	if (!currency_lbl.hidden) {
-		label.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, CURRENCY), color_normal, currency_lbl.font_style);
-		label.render();
+	        label_currency.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, CURRENCY), color_normal, currency_lbl.font_style);
+		label_currency.render();
 	}
 
 	inventory[EQUIPMENT].render();
@@ -637,6 +636,7 @@ void MenuInventory::removeCurrency(int count) {
  * Count the number of currency items in the inventory
  */
 int MenuInventory::getCurrency() {
+
 	return getItemCountCarried(CURRENCY_ID);
 }
 
