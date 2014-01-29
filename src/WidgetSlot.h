@@ -1,6 +1,7 @@
 /*
 Copyright © 2013 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -27,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "InputState.h"
 #include "Widget.h"
+#include "WidgetLabel.h"
 
 enum CLICK_TYPE {
 
@@ -41,6 +43,7 @@ private:
 	Sprite slot_selected;
 	Sprite slot_checked;
 
+	WidgetLabel label_amount;
 	int icon_id;		// current slot id
 	int amount;			// entries amount in slot
 	int max_amount;		// if > 1 always display amount

@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -161,12 +162,10 @@ void WidgetSlot::render() {
 		if (amount > 1 || max_amount > 1) {
 			stringstream ss;
 			ss << amount_str;
-
-			WidgetLabel label;
-			label.set(pos.x + 2, pos.y + 2, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("item_normal"));
-			label.local_frame = local_frame;
-			label.local_offset = local_offset;
-			label.render();
+			label_amount.set(pos.x + 2, pos.y + 2, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("item_normal"));
+			label_amount.local_frame = local_frame;
+			label_amount.local_offset = local_offset;
+			label_amount.render();
 		}
 	}
 	renderSelection();
