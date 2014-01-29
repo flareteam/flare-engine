@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -43,6 +44,8 @@ private:
 	int areaOver(Point position);
 	void updateEquipment(int slot);
 
+	WidgetLabel label_inventory;
+	WidgetLabel label_currency;
 	WidgetButton *closeButton;
 
 	int MAX_EQUIPPED;
