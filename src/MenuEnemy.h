@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Pavel Kirpichyov (Cheshire)
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -38,6 +39,8 @@ private:
 	LabelInfo text_pos;
 	bool custom_text_pos;
 	Color color_normal;
+	WidgetLabel label_text;
+	WidgetLabel label_stats;
 public:
 	MenuEnemy();
 	~MenuEnemy();
