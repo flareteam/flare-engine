@@ -208,10 +208,10 @@ int SDLRenderDevice::createContext(int width, int height) {
 	screen = SDL_SetVideoMode (width, height, 0, flags);
 
 	if (screen == NULL && !is_initialized) {
-			// If this is the first attempt and it failed we are not
-			// getting anywhere.
-			SDL_Quit();
-			exit(1);
+		// If this is the first attempt and it failed we are not
+		// getting anywhere.
+		SDL_Quit();
+		exit(1);
 	}
 	else {
 		is_initialized = true;
@@ -741,11 +741,11 @@ void SDLRenderDevice::scaleSurface(Image *source, int width, int height) {
 
 	Image ret;
 	ret.surface = SDL_CreateRGBSurface(source->surface->flags, width, height,
-						source->surface->format->BitsPerPixel,
-						source->surface->format->Rmask,
-						source->surface->format->Gmask,
-						source->surface->format->Bmask,
-						source->surface->format->Amask);
+									   source->surface->format->BitsPerPixel,
+									   source->surface->format->Rmask,
+									   source->surface->format->Gmask,
+									   source->surface->format->Bmask,
+									   source->surface->format->Amask);
 
 	if (ret.surface) {
 		double _stretch_factor_x, _stretch_factor_y;

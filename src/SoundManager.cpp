@@ -47,13 +47,13 @@ private:
 
 class Playback {
 public:
-        Playback()
-	  : sid(-1)
-	  , location(FPoint())
-	  , loop(false)
-	  , paused(false)
-	  , finished(false)
-        {}
+	Playback()
+		: sid(-1)
+		, location(FPoint())
+		, loop(false)
+		, paused(false)
+		, finished(false) {
+	}
 
 	SoundManager::SoundID sid;
 	std::string virtual_channel;

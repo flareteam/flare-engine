@@ -224,7 +224,7 @@ void MenuInventory::render() {
 	if (!title.hidden) label_inventory.render();
 
 	if (!currency_lbl.hidden) {
-	        label_currency.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, CURRENCY), color_normal, currency_lbl.font_style);
+		label_currency.set(window_area.x+currency_lbl.x, window_area.y+currency_lbl.y, currency_lbl.justify, currency_lbl.valign, msg->get("%d %s", currency, CURRENCY), color_normal, currency_lbl.font_style);
 		label_currency.render();
 	}
 
@@ -346,7 +346,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 
 	int drag_prev_slot = -1;
 	if (drag_prev_src != -1)
-			drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
+		drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
 
 	if (area == EQUIPMENT) { // dropped onto equipped item
 
