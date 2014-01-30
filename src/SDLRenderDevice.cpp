@@ -1,6 +1,7 @@
 /*
 Copyright © 2013 Kurt Rinnert
 Copyright © 2013 Igor Paliychuk
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -221,9 +222,6 @@ int SDLRenderDevice::createContext(int width, int height) {
 		// Window title
 		const char* title = msg->get(WINDOW_TITLE).c_str();
 		SDL_WM_SetCaption(title, title);
-
-		// Icons
-		loadIcons();
 	}
 
 	return (screen != NULL ? 0 : -1);
@@ -570,11 +568,6 @@ Uint32 SDLRenderDevice::MapRGBA(Image *src, Uint8 r, Uint8 g, Uint8 b, Uint8 a) 
 
 Uint32 SDLRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	return SDL_MapRGBA(screen->format, r, g, b, a);
-}
-
-void SDLRenderDevice::loadIcons() {
-	icons.clearGraphics();
-	icons.setGraphics(loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
 }
 
 bool SDLRenderDevice::local_to_global(ISprite& r) {

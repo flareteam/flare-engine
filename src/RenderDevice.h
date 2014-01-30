@@ -1,6 +1,7 @@
 /*
 Copyright © 2013 Kurt Rinnert
 Copyright © 2013 Igor Paliychuk
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -234,8 +235,6 @@ public:
 	 * Map a RGBA color value to a screen pixel format.
 	 */
 	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
-
-	virtual void loadIcons() = 0;
 
 	/**
 	 * Creates a SDL_Surface.

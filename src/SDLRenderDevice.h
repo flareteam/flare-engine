@@ -1,6 +1,7 @@
 /*
 Copyright © 2013 Kurt Rinnert
 Copyright © 2013 Igor Paliychuk
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -117,8 +118,6 @@ public:
 	Uint32 MapRGBA(Image *src, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-
-	void loadIcons();
 
 	Image createAlphaSurface(int width, int height);
 

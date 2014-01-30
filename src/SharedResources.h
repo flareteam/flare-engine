@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -53,5 +53,17 @@ extern ModManager *mods;
 extern SoundManager *snd;
 extern Sprite icons;
 extern RenderDevice *render_device;
+
+class SharedResources {
+public:
+	static void loadIcons() {
+
+		if (!render_device)
+			return;
+
+		icons.clearGraphics();
+		icons.setGraphics(render_device->loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
+	}
+};
 
 #endif

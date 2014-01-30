@@ -4,6 +4,7 @@ Copyright © 2012 davidriod
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -763,7 +764,7 @@ void GameStateConfig::logic () {
 				delete mods;
 				mods = new ModManager();
 				loadTilesetSettings();
-				render_device->loadIcons();
+				SharedResources::loadIcons();
 			}
 			loadMiscSettings();
 			refreshFont();
