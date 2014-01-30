@@ -94,6 +94,9 @@ static void init() {
 		exit(1);
 	}
 
+	// initialize share icons resource
+	SharedResources::loadIcons();
+
 	// Set Gamma
 	if (CHANGE_GAMMA)
 		render_device->setGamma(GAMMA);
