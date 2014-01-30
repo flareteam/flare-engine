@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -16,6 +17,8 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
+
+#include <string>
 
 #include "MenuConfirm.h"
 #include "Settings.h"
@@ -45,7 +48,7 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 	tablist.add(buttonClose);
 
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
+	setBackground("images/menus/confirm_bg.png");
 }
 
 void MenuConfirm::update() {
@@ -87,7 +90,7 @@ void MenuConfirm::logic() {
 
 void MenuConfirm::render() {
 	// background
-	render_device->render(background);
+	Menu::render();
 
 	label.render();
 

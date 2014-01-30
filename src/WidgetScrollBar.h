@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -33,7 +34,7 @@ private:
 
 	std::string fileName; // the path to the ScrollBar's atlas
 
-	Sprite scrollbars;
+	Sprite *scrollbars;
 	Mix_Chunk *click;
 
 	int value;

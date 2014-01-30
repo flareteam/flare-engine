@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -55,8 +56,8 @@ private:
 	int option_count;
 	int current_option;
 
-	Sprite portrait_image;
-	Sprite portrait_border;
+	Sprite *portrait_image;
+	Sprite *portrait_border;
 	WidgetButton *button_exit;
 	WidgetButton *button_create;
 	WidgetButton *button_next;

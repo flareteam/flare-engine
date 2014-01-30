@@ -68,7 +68,7 @@ private:
 	QuestLog *quests;
 
 	WidgetLabel *loading;
-	Sprite loading_bg;
+	Sprite *loading_bg;
 
 	bool restrictPowerUse();
 	void checkEnemyFocus();

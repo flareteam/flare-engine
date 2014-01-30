@@ -1,5 +1,6 @@
 /*
 Copyright © 2012 Stefan Beller
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -49,8 +50,8 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	: name(animationname)
 	, loaded(false)
 	, animations()
-	, sprite(Image()) {
-	defaultAnimation = new Animation("default", "play_once", Image());
+	, sprite(NULL) {
+	defaultAnimation = new Animation("default", "play_once", NULL);
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
@@ -91,7 +92,7 @@ void AnimationSet::load() {
 			compressed_loading = false;
 		}
 		if (parser.key == "image") {
-			if (sprite.graphicIsNull() == false) {
+			if (sprite != NULL) {
 				printf("multiple images specified in %s, dragons be here!\n", name.c_str());
 				SDL_Quit();
 				exit(128);

@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -52,15 +53,15 @@ void WidgetButton::activate() {
 
 void WidgetButton::loadArt() {
 	// load button images
-	buttons.setGraphics(render_device->loadGraphicSurface(fileName, "Couldn't load button image", true));
-	buttons.setClip(
-		0,
-		0,
-		buttons.getGraphicsWidth(),
-		buttons.getGraphicsHeight()/4
-	);
-	pos.w = buttons.getGraphicsWidth();
-	pos.h = buttons.getGraphicsHeight()/4; // height of one button
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface(fileName, "Couldn't load button image", true);
+	if (graphics) {
+		buttons = graphics->createSprite();
+		pos.w = buttons->getGraphicsWidth();
+		pos.h = buttons->getGraphicsHeight()/4; // height of one button
+		buttons->setClip(0, 0, pos.w, pos.h);
+		graphics->unref();
+	};
 }
 
 bool WidgetButton::checkClick() {
@@ -123,16 +124,18 @@ void WidgetButton::render() {
 	else
 		y = BUTTON_GFX_NORMAL * pos.h;
 
-	buttons.local_frame = local_frame;
-	buttons.setOffset(local_offset);
-	buttons.setClip(
-		buttons.getClip().x,
-		y,
-		buttons.getClip().w,
-		buttons.getClip().h
-	);
-	buttons.setDest(pos);
-	render_device->render(buttons);
+	if (buttons) {
+		buttons->local_frame = local_frame;
+		buttons->setOffset(local_offset);
+		buttons->setClip(
+			buttons->getClip().x,
+			y,
+			buttons->getClip().w,
+			buttons->getClip().h
+		);
+		buttons->setDest(pos);
+		render_device->render(buttons);
+	}
 
 	// render label
 	wlabel.local_frame = local_frame;
@@ -182,7 +185,7 @@ TooltipData WidgetButton::checkTooltip(Point mouse) {
 }
 
 WidgetButton::~WidgetButton() {
-	buttons.clearGraphics();
+	if (buttons) delete buttons;
 	tip_buf.clear();
 	delete tip;
 }

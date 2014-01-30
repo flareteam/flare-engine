@@ -36,7 +36,7 @@ class StatBlock;
 
 class MenuActiveEffects : public Menu {
 private:
-	Sprite timer;
+	Sprite *timer;
 	StatBlock *stats;
 	bool orientation;
 

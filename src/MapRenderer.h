@@ -1,7 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 
 This file is part of FLARE.
 

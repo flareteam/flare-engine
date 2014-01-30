@@ -238,14 +238,29 @@ void MenuActionBar::clear() {
 }
 
 void MenuActionBar::loadGraphics() {
-	emptyslot.setGraphics(render_device->loadGraphicSurface("images/menus/slot_empty.png"));
-	emptyslot.setClip(0,0,ICON_SIZE,ICON_SIZE);
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/actionbar_trim.png"));
-	background.setClip(0,0,window_area.w,window_area.h);
-	background.setDest(window_area);
-	disabled.setGraphics(render_device->loadGraphicSurface("images/menus/disabled.png"));
-	disabled.setClip(0,0,ICON_SIZE,ICON_SIZE);
-	attention.setGraphics(render_device->loadGraphicSurface("images/menus/attention_glow.png"));
+	Image *graphics;
+
+	setBackground("images/menus/actionbar_trim.png");
+
+	graphics = render_device->loadGraphicSurface("images/menus/slot_empty.png");
+	if (graphics) {
+		emptyslot = graphics->createSprite();
+		emptyslot->setClip(0,0,ICON_SIZE,ICON_SIZE);
+		graphics->unref();
+	}
+
+	graphics = render_device->loadGraphicSurface("images/menus/disabled.png");
+	if (graphics) {
+		disabled = graphics->createSprite();
+		disabled->setClip(0,0,ICON_SIZE,ICON_SIZE);
+		graphics->unref();
+	}
+
+	graphics = render_device->loadGraphicSurface("images/menus/attention_glow.png");
+	if (graphics) {
+		attention = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 // Renders the "needs attention" icon over the appropriate log menu
@@ -256,8 +271,10 @@ void MenuActionBar::renderAttention(int menu_id) {
 	dest.x = window_area.x + (menu_id * ICON_SIZE) + ICON_SIZE*15;
 	dest.y = window_area.y+3;
 	dest.w = dest.h = ICON_SIZE;
-	attention.setDest(dest);
-	render_device->render(attention);
+	if (attention) {
+		attention->setDest(dest);
+		render_device->render(attention);
+	}
 
 	// put an asterisk on this icon if in colorblind mode
 	if (COLORBLIND) {
@@ -277,9 +294,7 @@ void MenuActionBar::logic() {
 
 void MenuActionBar::render() {
 
-	background.setClip(0,0,window_area.w,window_area.h);
-	background.setDest(window_area);
-	render_device->render(background);
+	Menu::render();
 
 	// draw hotkeyed icons
 	for (int i=0; i<12; i++) {
@@ -306,8 +321,10 @@ void MenuActionBar::render() {
 			dest.x = slots[i]->pos.x;
 			dest.y = slots[i]->pos.y;
 			dest.h = dest.w = ICON_SIZE;
-			emptyslot.setDest(dest);
-			render_device->render(emptyslot);
+			if (emptyslot) {
+				emptyslot->setDest(dest);
+				render_device->render(emptyslot);
+			}
 			slots[i]->renderSelection();
 		}
 	}
@@ -349,9 +366,11 @@ void MenuActionBar::renderCooldowns() {
 				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys[i]]) / powers->powers[hotkeys[i]].cooldown;
 			}
 
-			disabled.setClip(item_src);
-			disabled.setDest(slots[i]->pos);
-			render_device->render(disabled);
+			if (disabled) {
+				disabled->setClip(item_src);
+				disabled->setDest(slots[i]->pos);
+				render_device->render(disabled);
+			}
 			slots[i]->renderSelection();
 		}
 	}
@@ -518,9 +537,14 @@ void MenuActionBar::resetSlots() {
 }
 
 MenuActionBar::~MenuActionBar() {
-	emptyslot.clearGraphics();
-	disabled.clearGraphics();
-	attention.clearGraphics();
+
+	if (emptyslot)
+		delete emptyslot;
+	if (disabled)
+		delete disabled;
+	if (attention)
+		delete attention;
+
 	for (unsigned i = 0; i < 16; i++)
 		delete labels[i];
 

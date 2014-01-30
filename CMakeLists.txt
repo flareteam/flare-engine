@@ -151,6 +151,7 @@ Set (FLARE_SOURCES
 	./src/NPCManager.cpp
 	./src/PowerManager.cpp
 	./src/QuestLog.cpp
+	./src/RenderDevice.cpp
 	./src/SaveLoad.cpp
 	./src/SDL_gfxBlitFunc.c
 	./src/Settings.cpp

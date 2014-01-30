@@ -2,6 +2,7 @@
 Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -43,7 +44,7 @@ public:
 	bool enabled;
 
 private:
-	Sprite cb;
+	Sprite *cb;
 	bool checked;
 	bool pressed;
 };

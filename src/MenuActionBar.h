@@ -47,9 +47,9 @@ class MenuActionBar : public Menu {
 private:
 	void renderCooldowns();
 
-	Sprite emptyslot;
-	Sprite disabled;
-	Sprite attention;
+	Sprite *emptyslot;
+	Sprite *disabled;
+	Sprite *attention;
 
 	Avatar *hero;
 	Rect src;

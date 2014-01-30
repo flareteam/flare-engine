@@ -51,18 +51,26 @@ extern InputState *inpt;
 extern MessageEngine *msg;
 extern ModManager *mods;
 extern SoundManager *snd;
-extern Sprite icons;
+extern Sprite *icons;
 extern RenderDevice *render_device;
 
 class SharedResources {
 public:
 	static void loadIcons() {
+  	        Image *graphics;
 
 		if (!render_device)
 			return;
 
-		icons.clearGraphics();
-		icons.setGraphics(render_device->loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
+		if (icons) {
+		  delete icons;
+		  icons = NULL;
+		}
+
+		graphics = render_device->loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false);
+		if (graphics)
+		  icons = graphics->createSprite();
+		graphics->unref();
 	}
 };
 

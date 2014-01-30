@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -28,7 +29,7 @@ class WidgetScrollBox;
 
 class GameStateTitle : public GameState {
 private:
-	Sprite logo;
+	Sprite *logo;
 	WidgetButton *button_play;
 	WidgetButton *button_exit;
 	WidgetButton *button_cfg;

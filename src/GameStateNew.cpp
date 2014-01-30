@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -202,17 +203,27 @@ GameStateNew::GameStateNew() : GameState() {
 }
 
 void GameStateNew::loadGraphics() {
-	portrait_border.setGraphics(
-		render_device->loadGraphicSurface("images/menus/portrait_border.png", "Couldn't load portrait border image", false, true)
-	);
+	Image *graphics;
+
+	graphics = render_device->loadGraphicSurface("images/menus/portrait_border.png",
+			   "Couldn't load portrait border image", false, true);
+	if (graphics)
+		portrait_border = graphics->createSprite();
 }
 
 void GameStateNew::loadPortrait(const string& portrait_filename) {
-	portrait_image.clearGraphics();
-	portrait_image.setGraphics(
-		render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png")
-	);
-	portrait_image.setDest(portrait_pos);
+
+	Image *graphics;
+
+	if (portrait_image)
+		delete portrait_image;
+
+	portrait_image = NULL;
+	graphics = render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png");
+	if (graphics) {
+		portrait_image = graphics->createSprite();
+		portrait_image->setDest(portrait_pos);
+	}
 }
 
 /**
@@ -328,12 +339,14 @@ void GameStateNew::render() {
 	dest.x = portrait_pos.x + (VIEW_W - FRAME_W)/2;
 	dest.y = portrait_pos.y + (VIEW_H - FRAME_H)/2;
 
-	portrait_image.setClip(src);
-	portrait_image.setDest(dest);
-	render_device->render(portrait_image);
-	portrait_border.setClip(src);
-	portrait_border.setDest(dest);
-	render_device->render(portrait_border);
+	if (portrait_image) {
+		portrait_image->setClip(src);
+		portrait_image->setDest(dest);
+		render_device->render(portrait_image);
+		portrait_border->setClip(src);
+		portrait_border->setDest(dest);
+		render_device->render(portrait_border);
+	}
 
 	// display labels
 	if (!portrait_label.hidden) label_portrait->render();
@@ -369,8 +382,12 @@ std::string GameStateNew::getClassTooltip(int index) {
 }
 
 GameStateNew::~GameStateNew() {
-	portrait_image.clearGraphics();
-	portrait_border.clearGraphics();
+	if (portrait_image)
+		delete portrait_image;
+
+	if (portrait_border)
+		delete portrait_border;
+
 	delete button_exit;
 	delete button_create;
 	delete button_next;

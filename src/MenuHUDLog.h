@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -33,7 +34,7 @@ private:
 
 	std::vector<std::string> log_msg;
 	std::vector<int> msg_age;
-	std::vector<Sprite> msg_buffer;
+	std::vector<Sprite *> msg_buffer;
 
 	int paragraph_spacing;
 

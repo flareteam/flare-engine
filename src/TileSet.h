@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -39,8 +40,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Tile_Def {
 public:
 	Point offset;
-	Sprite tile;// inside graphics not used
-	Tile_Def() {
+	Sprite *tile;// inside graphics not used
+        Tile_Def()
+	  : tile(NULL) {
 	}
 };
 
@@ -80,7 +82,7 @@ public:
 
 	std::vector<Tile_Def> tiles;
 	std::vector<Tile_Anim> anim;
-	Sprite sprites;
+	Sprite *sprites;
 
 	// oversize of the largest tile available, in number of tiles.
 	int max_size_x;

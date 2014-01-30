@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -42,7 +43,7 @@ public:
 	std::vector<std::string> lines;
 	std::vector<Color> colors;
 	Color default_color;
-	Sprite tip_buffer;
+	Sprite *tip_buffer;
 
 	TooltipData();
 	~TooltipData();

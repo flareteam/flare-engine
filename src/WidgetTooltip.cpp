@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -98,18 +99,18 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
  * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
  */
 void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
-	if (tip.tip_buffer.graphicsIsNull()) {
+	if (tip.tip_buffer == NULL) {
 		createBuffer(tip);
 	}
 
 	Point size;
-	size.x = tip.tip_buffer.getGraphicsWidth();
-	size.y = tip.tip_buffer.getGraphicsHeight();
+	size.x = tip.tip_buffer->getGraphicsWidth();
+	size.y = tip.tip_buffer->getGraphicsHeight();
 
 	Point tip_pos = calcPosition(style, pos, size);
 
-	tip.tip_buffer.setDestX(tip_pos.x);
-	tip.tip_buffer.setDestY(tip_pos.y);
+	tip.tip_buffer->setDestX(tip_pos.x);
+	tip.tip_buffer->setDestY(tip_pos.y);
 	render_device->render(tip.tip_buffer);
 }
 
@@ -137,20 +138,26 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 	Point size = font->calc_size(fulltext, width);
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
-	tip.tip_buffer.clearGraphics();
-	Image surface = render_device->createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
+	if (tip.tip_buffer) {
+		delete tip.tip_buffer;
+		tip.tip_buffer = NULL;
+	}
+
+	Image *graphics;
+	graphics = render_device->createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
 
 	// style the tooltip background
 	// currently this is plain black
-	render_device->fillImageWithColor(&surface, NULL, render_device->MapRGB(&surface,0,0,0));
+	render_device->fillImageWithColor(graphics, NULL, render_device->MapRGB(graphics,0,0,0));
 
 	int cursor_y = margin;
 
 	for (unsigned int i=0; i<tip.lines.size(); i++) {
-		font->render(tip.lines[i], margin, cursor_y, JUSTIFY_LEFT, &surface, size.x, tip.colors[i]);
+		font->render(tip.lines[i], margin, cursor_y, JUSTIFY_LEFT, graphics, size.x, tip.colors[i]);
 		cursor_y = font->cursor_y;
 	}
 
-	tip.tip_buffer.setGraphics(surface);
+	tip.tip_buffer = graphics->createSprite();
+	graphics->unref();
 }
 

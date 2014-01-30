@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -39,12 +40,17 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 
 	loadArt();
 
-	pos_up.w = pos_down.w  = pos_knob.w = scrollbars.getGraphicsWidth();
-	pos_up.h = pos_down.h = pos_knob.h = (scrollbars.getGraphicsHeight() / 5); //height of one button
+	pos_up.w = pos_down.w  = pos_knob.w = scrollbars->getGraphicsWidth();
+	pos_up.h = pos_down.h = pos_knob.h = (scrollbars->getGraphicsHeight() / 5); //height of one button
 }
 
 void WidgetScrollBar::loadArt() {
-	scrollbars.setGraphics(render_device->loadGraphicSurface(fileName, "Couldn't load image", true));
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface(fileName, "Couldn't load image", true);
+	if (graphics) {
+		scrollbars = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 int WidgetScrollBar::checkClick() {
@@ -143,17 +149,21 @@ void WidgetScrollBar::render() {
 	src_knob.w = pos_knob.w;
 	src_knob.h = pos_knob.h;
 
-	scrollbars.local_frame = local_frame;
-	scrollbars.setOffset(local_offset);
-	scrollbars.setClip(src_up);
-	scrollbars.setDest(pos_up);
-	render_device->render(scrollbars);
-	scrollbars.setClip(src_down);
-	scrollbars.setDest(pos_down);
-	render_device->render(scrollbars);
-	scrollbars.setClip(src_knob);
-	scrollbars.setDest(pos_knob);
-	render_device->render(scrollbars);
+	if (scrollbars) {
+		scrollbars->local_frame = local_frame;
+		scrollbars->setOffset(local_offset);
+		scrollbars->setClip(src_up);
+		scrollbars->setDest(pos_up);
+		render_device->render(scrollbars);
+
+		scrollbars->setClip(src_down);
+		scrollbars->setDest(pos_down);
+		render_device->render(scrollbars);
+
+		scrollbars->setClip(src_knob);
+		scrollbars->setDest(pos_knob);
+		render_device->render(scrollbars);
+	}
 }
 
 /**
@@ -170,6 +180,6 @@ void WidgetScrollBar::refresh(int x, int y, int h, int val, int max) {
 }
 
 WidgetScrollBar::~WidgetScrollBar() {
-	scrollbars.clearGraphics();
+	if (scrollbars) delete scrollbars;
 }
 

@@ -49,8 +49,8 @@ WidgetTabControl::WidgetTabControl(int amount)
  * Class destructor.
  */
 WidgetTabControl::~WidgetTabControl() {
-	activeTabSurface.clearGraphics();
-	inactiveTabSurface.clearGraphics();
+	if (activeTabSurface) delete activeTabSurface;
+	if (inactiveTabSurface) delete inactiveTabSurface;
 	delete[] titles;
 	delete[] tabs;
 }
@@ -88,7 +88,7 @@ void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
 	tabsArea.x = x;
 	tabsArea.y = y;
 	tabsArea.w = width;
-	tabsArea.h = activeTabSurface.getGraphicsHeight();
+	tabsArea.h = activeTabSurface->getGraphicsHeight();
 
 	// Set content area.
 	contentArea.x = x + 8;
@@ -134,12 +134,19 @@ void WidgetTabControl::updateHeader() {
  * Load the graphics for the control.
  */
 void WidgetTabControl::loadGraphics() {
-	activeTabSurface.setGraphics(render_device->loadGraphicSurface("images/menus/tab_active.png"));
-	inactiveTabSurface.setGraphics(render_device->loadGraphicSurface("images/menus/tab_inactive.png"));
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface("images/menus/tab_active.png",
+			   "loading tab_active.png", true);
+	if (graphics) {
+		activeTabSurface = graphics->createSprite();
+		graphics->unref();
+	}
 
-	if (activeTabSurface.graphicsIsNull() || inactiveTabSurface.graphicsIsNull()) {
-		SDL_Quit();
-		exit(1);
+	graphics = render_device->loadGraphicSurface("images/menus/tab_inactive.png",
+			   "loading tab_inactive.png", true);
+	if (graphics) {
+		inactiveTabSurface = graphics->createSprite();
+		graphics->unref();
 	}
 }
 
@@ -193,29 +200,29 @@ void WidgetTabControl::renderTab(int number) {
 	src.h = tabs[i].h;
 
 	if (i == activeTab) {
-		activeTabSurface.setClip(src);
-		activeTabSurface.setDest(dest);
+		activeTabSurface->setClip(src);
+		activeTabSurface->setDest(dest);
 		render_device->render(activeTabSurface);
 	}
 	else {
-		inactiveTabSurface.setClip(src);
-		inactiveTabSurface.setDest(dest);
+		inactiveTabSurface->setClip(src);
+		inactiveTabSurface->setDest(dest);
 		render_device->render(inactiveTabSurface);
 	}
 
 	// Draw tab’s right edge.
-	src.x = activeTabSurface.getGraphicsWidth() - tabPadding.x;
+	src.x = activeTabSurface->getGraphicsWidth() - tabPadding.x;
 	src.w = tabPadding.x;
 	dest.x = tabs[i].x + tabs[i].w - tabPadding.x;
 
 	if (i == activeTab) {
-		activeTabSurface.setClip(src);
-		activeTabSurface.setDest(dest);
+		activeTabSurface->setClip(src);
+		activeTabSurface->setDest(dest);
 		render_device->render(activeTabSurface);
 	}
 	else {
-		inactiveTabSurface.setClip(src);
-		inactiveTabSurface.setDest(dest);
+		inactiveTabSurface->setClip(src);
+		inactiveTabSurface->setDest(dest);
 		render_device->render(inactiveTabSurface);
 	}
 

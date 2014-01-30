@@ -44,7 +44,7 @@ public:
 	void refresh();
 	void render();
 
-	Sprite contents;
+	Sprite *contents;
 	bool update;
 	Color bg;
 	bool transparent;

@@ -21,8 +21,129 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef RENDERDEVICE_H
 #define RENDERDEVICE_H
 
+#include <vector>
 #include <SDL_ttf.h>
 #include "Utils.h"
+
+class Image;
+class RenderDevice;
+
+/** A Sprite representation
+ *
+ * A Sprite is instantiated from a Image instance using
+ * Image::createSprite() which will increase the reference counter of
+ * the image. Sprite::~Sprite() will release the reference to the
+ * source image instance.
+ *
+ * A Sprite represents an area in a Image, it can be the full image or
+ * just parts of the image such as an image atlas / spritemap.
+ *
+ * Sprite constructor is private to prevent creation of Sprites
+ * outside of Image instance.
+ *
+ * @class Sprite
+ * @author Henrik Andersson
+ * @date 2014-01-30
+ *
+ */
+class Sprite {
+
+public:
+        virtual ~Sprite();
+
+	Rect local_frame;
+
+	virtual Image * getGraphics();
+	virtual void setOffset(const Point& _offset);
+	virtual void setOffset(const int x, const int y);
+	virtual Point getOffset();
+	virtual void setClip(const Rect& clip);
+	virtual void setClip(const int x, const int y, const int w, const int h);
+	virtual void setClipX(const int x);
+	virtual void setClipY(const int y);
+	virtual void setClipW(const int w);
+	virtual void setClipH(const int h);
+	virtual Rect getClip();
+	virtual void setDest(const Rect& _dest);
+	virtual void setDest(const Point& _dest);
+	virtual void setDest(int x, int y);
+	virtual void setDestX(int x);
+	virtual void setDestY(int y);
+	virtual FPoint getDest();
+	virtual int getGraphicsWidth();
+	virtual int getGraphicsHeight();
+private:
+        Sprite(Image *);
+	friend class Image;
+
+protected:
+	/** reference to source image */
+	Image *image;
+	Rect src; // location on the sprite in pixel coordinates.
+	Point offset;      // offset from map_pos to topleft corner of sprite
+	FPoint dest;
+};
+
+/** An image representation
+ * An image can only be instantiated, and is owned, by a RenderDevice
+ * For a SDL render device this means SDL_Surface or a SDL_Texture, and
+ * by OpenGL render device this is a texture.
+ * 
+ * Image uses a refrence counter to control when to free the resource, when the
+ * last reference is released, the Image is freed using RenderDevice::freeImage().
+ *
+ * The caller who instantiates an Image is responsible for release the reference
+ * to the image when not used anymore. 
+ *
+ * Image is a source for a Sprite and is therefor responsible for instantiating
+ * Sprites using Image::createSprite().
+ * 
+ * Creating a Sprite of a Image increases the reference counter, destructor of a
+ * Sprite will release the reference to the image.
+ *
+ * @class Image
+ * @author Henrik Andersson
+ * @date 2014-01-30 
+ */
+class Image {
+public:
+  void ref();
+  void unref();
+  int getWidth() const;
+  int getHeight() const;
+
+  class Sprite *createSprite(bool clipToSize = true);
+
+  // TODO Only use this in a derivative class in SDLRenderDevice
+  SDL_Surface *surface;
+
+private:
+  Image(RenderDevice *device);
+  ~Image();
+  friend class SDLRenderDevice;
+
+private:
+  RenderDevice *device;
+  uint32_t ref_counter;
+};
+
+struct Renderable {
+public:
+	Image *sprite; // image to be used
+	Rect src; // location on the sprite in pixel coordinates.
+
+	FPoint map_pos;     // The map location on the floor between someone's feet
+	Point offset;      // offset from map_pos to topleft corner of sprite
+	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
+	Renderable()
+		: sprite(NULL)
+		, src(Rect())
+		, map_pos()
+		, offset()
+		, prio(0)
+	{}
+};
+
 
 
 /** Provide abstract interface for FLARE engine rendering devices.
@@ -38,104 +159,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  * @class RenderDevice
  * @author Kurt Rinnert
+ * @author Henrik Andersson
  * @date 2013-07-06
  *
  */
-
-class Image {
-public:
-	Image()
-		: surface(NULL)
-	{}
-	~Image() {}
-
-	int getWidth() {
-		return (surface ? surface->w : 0);
-	}
-	int getHeight() {
-		return (surface ? surface->h : 0);
-	}
-	bool graphicIsNull() {
-		return surface == NULL;
-	}
-
-	// TODO Only use this in a derivative class in SDLRenderDevice
-	SDL_Surface *surface;
-};
-
-struct Renderable {
-public:
-	Image sprite; // image to be used
-	Rect src; // location on the sprite in pixel coordinates.
-
-	FPoint map_pos;     // The map location on the floor between someone's feet
-	Point offset;      // offset from map_pos to topleft corner of sprite
-	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
-	Renderable()
-		: sprite(Image())
-		, src(Rect())
-		, map_pos()
-		, offset()
-		, prio(0)
-	{}
-};
-
-class ISprite {
-
-public:
-	ISprite()
-		: local_frame(Rect())
-		, sprite(Image())
-		, src(Rect())
-		, offset()
-		, dest()
-	{}
-	virtual ~ISprite() {}
-
-	Rect local_frame;
-
-	virtual void setGraphics(Image s, bool setClipToFull = true) = 0;
-	virtual Image * getGraphics() = 0;
-	virtual bool graphicsIsNull() = 0;
-	virtual void clearGraphics() = 0;
-	virtual void setOffset(const Point& _offset) = 0;
-	virtual void setOffset(const int x, const int y) = 0;
-	virtual Point getOffset() = 0;
-	virtual void setClip(const Rect& clip) = 0;
-	virtual void setClip(const int x, const int y, const int w, const int h) = 0;
-	virtual void setClipX(const int x) = 0;
-	virtual void setClipY(const int y) = 0;
-	virtual void setClipW(const int w) = 0;
-	virtual void setClipH(const int h) = 0;
-	virtual Rect getClip() = 0;
-	virtual void setDest(const Rect& _dest) = 0;
-	virtual void setDest(const Point& _dest) = 0;
-	virtual void setDest(int x, int y) = 0;
-	virtual void setDestX(int x) = 0;
-	virtual void setDestY(int y) = 0;
-	virtual FPoint getDest() = 0;
-	virtual int getGraphicsWidth() = 0;
-	virtual int getGraphicsHeight() = 0;
-
-protected:
-	Image sprite; // image to be used
-	Rect src; // location on the sprite in pixel coordinates.
-	Point offset;      // offset from map_pos to topleft corner of sprite
-	FPoint dest;
-};
-
-// inherit this class and implement it as xRenderDevice class
 class RenderDevice {
 
 public:
-
-	/** Constuctor.
-	 */
-	RenderDevice() : is_initialized(false) {}
-
-	/** Destructor.
-	 */
-	virtual ~RenderDevice() {}
+        RenderDevice();
+	virtual ~RenderDevice();
 
 	/** Create context on startup.
 	 */
@@ -145,7 +177,7 @@ public:
 
 	/** Render a Renderable to the screen.
 	 */
-	virtual int render(ISprite& r) = 0;
+	virtual int render(Sprite* r) = 0;
 	virtual int render(Renderable& r, Rect dest) = 0;
 	virtual int renderImage(Image* image, Rect& src) = 0;
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent = false) = 0;
@@ -156,7 +188,7 @@ public:
 
 	/** Renders text to an image, but does not actually blit it
 	 */
-	virtual void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true) = 0;
+	virtual Image *renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true) = 0;
 
 	/** Draw pixel to screen.
 	 */
@@ -243,7 +275,7 @@ public:
 	 * screen surface.
 	 * Additionally the alpha flag is set, so transparent blits are possible.
 	 */
-	virtual Image createAlphaSurface(int width, int height) = 0;
+	virtual Image *createAlphaSurface(int width, int height) = 0;
 
 	/**
 	 * Creates a SDL_Surface.
@@ -252,7 +284,7 @@ public:
 	 * screen surface.
 	 * The bright pink (rgb 0xff00ff) is set as transparent color.
 	 */
-	virtual Image createSurface(int width, int height) = 0;
+	virtual Image *createSurface(int width, int height) = 0;
 
 	virtual void scaleSurface(Image *source, int width, int height) = 0;
 
@@ -282,13 +314,13 @@ public:
 	 *        This optional parameter specifies whether a color key with
 	 *        RGB(0xff, 0, 0xff) should be applied to the image.
 	 * @return
-	 *        Returns the SDL_Surface of the specified image or NULL if not
+	 *        Returns the an Image * of the specified image or NULL if not
 	 *        successful
 	 */
-	virtual Image loadGraphicSurface(std::string filename,
-								std::string errormessage = "Couldn't load image",
-								bool IfNotFoundExit = false,
-								bool HavePinkColorKey = false) = 0;
+	virtual Image *loadGraphicSurface(std::string filename,
+					  std::string errormessage = "Couldn't load image",
+					  bool IfNotFoundExit = false,
+					  bool HavePinkColorKey = false) = 0;
 
 protected:
 

@@ -60,7 +60,12 @@ MenuActiveEffects::MenuActiveEffects()
 }
 
 void MenuActiveEffects::loadGraphics() {
-	timer.setGraphics(render_device->loadGraphicSurface("images/menus/disabled.png"));
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface("images/menus/disabled.png");
+	if (graphics) {
+		timer = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max) {
@@ -75,13 +80,13 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 			pos.y = window_area.y + (index * ICON_SIZE);
 		}
 
-		int columns = icons.getGraphicsWidth() / ICON_SIZE;
+		int columns = icons->getGraphicsWidth() / ICON_SIZE;
 		src.x = (icon_id % columns) * ICON_SIZE;
 		src.y = (icon_id / columns) * ICON_SIZE;
 		src.w = src.h = ICON_SIZE;
 
-		icons.setClip(src);
-		icons.setDest(pos);
+		icons->setClip(src);
+		icons->setDest(pos);
 		render_device->render(icons);
 
 		if (max > 0) {
@@ -90,9 +95,11 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 			overlay.w = ICON_SIZE;
 			overlay.h = ICON_SIZE - overlay.y;
 
-			timer.setClip(overlay);
-			timer.setDest(pos);
-			render_device->render(timer);
+			if (timer) {
+				timer->setClip(overlay);
+				timer->setDest(pos);
+				render_device->render(timer);
+			}
 		}
 	}
 }
@@ -125,5 +132,6 @@ void MenuActiveEffects::render() {
 }
 
 MenuActiveEffects::~MenuActiveEffects() {
-	timer.clearGraphics();
+	if (timer)
+		delete timer;
 }

@@ -30,154 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Sprite::Sprite(const Sprite& other) {
-	local_frame = other.local_frame;
-	sprite = other.sprite;
-	src = other.src;
-	offset = other.offset;
-	dest = other.dest;
-}
-
-Sprite& Sprite::operator=(const Sprite& other) {
-	local_frame = other.local_frame;
-	sprite = other.sprite;
-	src = other.src;
-	offset = other.offset;
-	dest = other.dest;
-
-	return *this;
-}
-
-Sprite::~Sprite() {
-}
-
-/**
- * Set the graphics context of a Sprite.
- * Initialize graphics resources. That is the SLD_surface buffer
- *
- * It is important that, if the client owns the graphics resources,
- * clearGraphics() method is called first in case this Sprite holds the
- * last references to avoid resource leaks.
- */
-void Sprite::setGraphics(Image s, bool setClipToFull) {
-
-	sprite = s;
-
-	if (setClipToFull && sprite.surface != NULL) {
-		src.x = 0;
-		src.y = 0;
-		src.w = sprite.getWidth();
-		src.h = sprite.getHeight();
-	}
-
-}
-
-Image* Sprite::getGraphics() {
-	return &sprite;
-}
-
-bool Sprite::graphicsIsNull() {
-	return (sprite.surface == NULL);
-}
-
-/**
- * Clear the graphics context of a Sprite.
- * Release graphics resources. That is the SLD_surface buffer
- *
- * It is important that this method is only called by clients who own the
- * graphics resources.
- */
-void Sprite::clearGraphics() {
-	if (sprite.surface != NULL) {
-		SDL_FreeSurface(sprite.surface);
-		sprite.surface = NULL;
-	}
-}
-
-void Sprite::setOffset(const Point& _offset) {
-	this->offset = _offset;
-}
-
-void Sprite::setOffset(const int x, const int y) {
-	this->offset.x = x;
-	this->offset.y = y;
-}
-
-Point Sprite::getOffset() {
-
-	return offset;
-}
-/**
- * Set the clipping rectangle for the sprite
- */
-void Sprite::setClip(const Rect& clip) {
-	src = clip;
-}
-
-/**
- * Set the clipping rectangle for the sprite
- */
-void Sprite::setClip(const int x, const int y, const int w, const int h) {
-	src.x = x;
-	src.y = y;
-	src.w = w;
-	src.h = h;
-}
-
-void Sprite::setClipX(const int x) {
-	src.x = x;
-}
-
-void Sprite::setClipY(const int y) {
-	src.y = y;
-}
-
-void Sprite::setClipW(const int w) {
-	src.w = w;
-}
-
-void Sprite::setClipH(const int h) {
-	src.h = h;
-}
-
-
-Rect Sprite::getClip() {
-	return src;
-}
-void Sprite::setDest(const Rect& _dest) {
-	dest.x = (float)_dest.x;
-	dest.y = (float)_dest.y;
-}
-
-void Sprite::setDest(const Point& _dest) {
-	dest.x = (float)_dest.x;
-	dest.y = (float)_dest.y;
-}
-
-void Sprite::setDest(int x, int y) {
-	dest.x = (float)x;
-	dest.y = (float)y;
-}
-
-void Sprite::setDestX(int x) {
-	dest.x = (float)x;
-}
-
-void Sprite::setDestY(int y) {
-	dest.y = (float)y;
-}
-
-FPoint Sprite::getDest() {
-	return dest;
-}
-
-int Sprite::getGraphicsWidth() {
-	return (sprite.surface ? sprite.getWidth() : 0);
-}
-
-int Sprite::getGraphicsHeight() {
-	return (sprite.surface ? sprite.getHeight() : 0);
-}
 
 SDLRenderDevice::SDLRenderDevice()
 	: screen(NULL)
@@ -238,20 +90,21 @@ Rect SDLRenderDevice::getContextSize() {
 int SDLRenderDevice::render(Renderable& r, Rect dest) {
 	SDL_Rect src = r.src;
 	SDL_Rect _dest = dest;
-	return SDL_BlitSurface(r.sprite.surface, &src, screen, &_dest);
+	return SDL_BlitSurface(r.sprite->surface, &src, screen, &_dest);
 }
 
-int SDLRenderDevice::render(ISprite& r) {
-	if (r.graphicsIsNull()) {
+int SDLRenderDevice::render(Sprite *r) {
+	if (r == NULL) {
 		return -1;
 	}
+
 	if ( !local_to_global(r) ) {
 		return -1;
 	}
 
 	SDL_Rect src = m_clip;
 	SDL_Rect dest = m_dest;
-	return SDL_BlitSurface(r.getGraphics()->surface, &src, screen, &dest);
+	return SDL_BlitSurface(r->getGraphics()->surface, &src, screen, &dest);
 }
 
 int SDLRenderDevice::renderImage(Image* image, Rect& src) {
@@ -280,36 +133,38 @@ int SDLRenderDevice::renderText(
 ) {
 	int ret = 0;
 	SDL_Color _color = color;
-	Image ttf;
-	ttf.surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), _color);
-	m_ttf_renderable.setGraphics(ttf);
-	if (!m_ttf_renderable.graphicsIsNull()) {
-		SDL_Rect clip = m_ttf_renderable.getClip();
-		SDL_Rect _dest = dest;
-		ret = SDL_BlitSurface(
-				  m_ttf_renderable.getGraphics()->surface,
-				  &clip,
-				  screen,
-				  &_dest
-			  );
-		SDL_FreeSurface(m_ttf_renderable.getGraphics()->surface);
-		ttf.surface = NULL;
-		m_ttf_renderable.setGraphics(ttf);
-	}
-	else {
-		ret = -1;
-	}
+
+	SDL_Surface *surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), _color);
+	if (surface == NULL)
+		return -1;
+
+	SDL_Rect _dest = dest;
+	ret = SDL_BlitSurface(
+			  m_ttf_renderable->getGraphics()->surface,
+			  NULL,
+			  screen,
+			  &_dest
+		  );
+
+	SDL_FreeSurface(surface);
 
 	return ret;
 }
 
-void SDLRenderDevice::renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, Color color, bool blended) {
-	if (!image) return;
+Image * SDLRenderDevice::renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended) {
+	Image *image = new Image(this);
 	SDL_Color _color = color;
+
 	if (blended)
 		image->surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), _color);
 	else
 		image->surface = TTF_RenderUTF8_Solid(ttf_font, text.c_str(), _color);
+
+	if (image->surface)
+		return image;
+
+	delete image;
+	return NULL;
 }
 
 
@@ -532,7 +387,7 @@ void SDLRenderDevice::commitFrame() {
 }
 
 void SDLRenderDevice::destroyContext() {
-	icons.clearGraphics();
+	if (icons) delete icons;
 	if (titlebar_icon)
 		SDL_FreeSurface(titlebar_icon);
 	if (screen)
@@ -570,47 +425,47 @@ Uint32 SDLRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	return SDL_MapRGBA(screen->format, r, g, b, a);
 }
 
-bool SDLRenderDevice::local_to_global(ISprite& r) {
-	m_clip = r.getClip();
+bool SDLRenderDevice::local_to_global(Sprite *r) {
+	m_clip = r->getClip();
 
-	int left = r.getDest().x - r.getOffset().x;
-	int right = left + r.getClip().w;
-	int up = r.getDest().y - r.getOffset().y;
-	int down = up + r.getClip().h;
+	int left = r->getDest().x - r->getOffset().x;
+	int right = left + r->getClip().w;
+	int up = r->getDest().y - r->getOffset().y;
+	int down = up + r->getClip().h;
 
 	// Check whether we need to render.
 	// If so, compute the correct clipping.
-	if (r.local_frame.w) {
-		if (left > r.local_frame.w) {
+	if (r->local_frame.w) {
+		if (left > r->local_frame.w) {
 			return false;
 		}
 		if (right < 0) {
 			return false;
 		}
 		if (left < 0) {
-			m_clip.x = r.getClip().x - left;
+			m_clip.x = r->getClip().x - left;
 			left = 0;
 		};
-		right = (right < r.local_frame.w ? right : r.local_frame.w);
+		right = (right < r->local_frame.w ? right : r->local_frame.w);
 		m_clip.w = right - left;
 	}
-	if (r.local_frame.h) {
-		if (up > r.local_frame.h) {
+	if (r->local_frame.h) {
+		if (up > r->local_frame.h) {
 			return false;
 		}
 		if (down < 0) {
 			return false;
 		}
 		if (up < 0) {
-			m_clip.y = r.getClip().y - up;
+			m_clip.y = r->getClip().y - up;
 			up = 0;
 		};
-		down = (down < r.local_frame.h ? down : r.local_frame.h);
+		down = (down < r->local_frame.h ? down : r->local_frame.h);
 		m_clip.h = down - up;
 	}
 
-	m_dest.x = left + r.local_frame.x;
-	m_dest.y = up + r.local_frame.y;
+	m_dest.x = left + r->local_frame.x;
+	m_dest.y = up + r->local_frame.y;
 
 	return true;
 }
@@ -619,53 +474,54 @@ bool SDLRenderDevice::local_to_global(ISprite& r) {
  * create blank surface
  * based on example: http://www.libsdl.org/docs/html/sdlcreatergbsurface.html
  */
-Image SDLRenderDevice::createAlphaSurface(int width, int height) {
+Image *SDLRenderDevice::createAlphaSurface(int width, int height) {
 
-	Image image;
+	Image *image = new Image(this);
 	Uint32 rmask, gmask, bmask, amask;
 
 	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
 
 	if (HWSURFACE)
-		image.surface = SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+		image->surface = SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 	else
-		image.surface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+		image->surface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 
-	if(image.surface == NULL) {
+	if(image->surface == NULL) {
 		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+		delete image;
+		return NULL;
 	}
 
 	// optimize
-	SDL_Surface *cleanup = image.surface;
-	image.surface = SDL_DisplayFormatAlpha(image.surface);
+	SDL_Surface *cleanup = image->surface;
+	image->surface = SDL_DisplayFormatAlpha(image->surface);
 	SDL_FreeSurface(cleanup);
 
 	return image;
 }
 
-Image SDLRenderDevice::createSurface(int width, int height) {
+Image *SDLRenderDevice::createSurface(int width, int height) {
 
-	Image image;
+	Image *image = new Image(this);
 	Uint32 rmask, gmask, bmask, amask;
 
 	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
 
 	if (HWSURFACE)
-		image.surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+		image->surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 	else
-		image.surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
+		image->surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 
-	if(image.surface == NULL) {
+	if(image->surface == NULL) {
 		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+		delete image;
+		return NULL;
 	}
-	else {
 
-		SDL_SetColorKey(image.surface, SDL_SRCCOLORKEY, SDL_MapRGB(image.surface->format,255,0,255));
-
-		SDL_Surface *cleanup = image.surface;
-		image.surface = SDL_DisplayFormat(image.surface);
-		SDL_FreeSurface(cleanup);
-	}
+	SDL_SetColorKey(image->surface, SDL_SRCCOLORKEY, SDL_MapRGB(image->surface->format,255,0,255));
+	SDL_Surface *cleanup = image->surface;
+	image->surface = SDL_DisplayFormat(image->surface);
+	SDL_FreeSurface(cleanup);
 
 	return image;
 }
@@ -708,8 +564,10 @@ void SDLRenderDevice::listModes(std::vector<Rect> &modes) {
 }
 
 
-Image SDLRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
-	Image image;
+Image *SDLRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
+	Image *image;
+
+	image = NULL;
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
 	if(!cleanup) {
 		if (!errormessage.empty())
@@ -722,7 +580,8 @@ Image SDLRenderDevice::loadGraphicSurface(std::string filename, std::string erro
 	else {
 		if (HavePinkColorKey)
 			SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, SDL_MapRGB(cleanup->format, 255, 0, 255));
-		image.surface = SDL_DisplayFormatAlpha(cleanup);
+		image = new Image(this);
+		image->surface = SDL_DisplayFormatAlpha(cleanup);
 		SDL_FreeSurface(cleanup);
 	}
 	return image;
@@ -732,15 +591,15 @@ void SDLRenderDevice::scaleSurface(Image *source, int width, int height) {
 	if(!source || !width || !height)
 		return;
 
-	Image ret;
-	ret.surface = SDL_CreateRGBSurface(source->surface->flags, width, height,
-									   source->surface->format->BitsPerPixel,
-									   source->surface->format->Rmask,
-									   source->surface->format->Gmask,
-									   source->surface->format->Bmask,
-									   source->surface->format->Amask);
+	Image *scaled = new Image(this);
+	scaled->surface = SDL_CreateRGBSurface(source->surface->flags, width, height,
+										   source->surface->format->BitsPerPixel,
+										   source->surface->format->Rmask,
+										   source->surface->format->Gmask,
+										   source->surface->format->Bmask,
+										   source->surface->format->Amask);
 
-	if (ret.surface) {
+	if (scaled->surface) {
 		double _stretch_factor_x, _stretch_factor_y;
 		_stretch_factor_x = width / (double)source->surface->w;
 		_stretch_factor_y = height / (double)source->surface->h;
@@ -752,13 +611,16 @@ void SDLRenderDevice::scaleSurface(Image *source, int width, int height) {
 					for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
 						Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
 						Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
-						drawPixel(&ret, dx, dy, spixel);
+						drawPixel(scaled, dx, dy, spixel);
 					}
 				}
 			}
 		}
+		/* swap surface from scaled to source */
 		SDL_FreeSurface(source->surface);
-		*source = ret;
+		source->surface = scaled->surface;
+		scaled->surface = NULL;
+		scaled->unref();
 	}
 }
 

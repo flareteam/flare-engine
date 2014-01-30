@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -37,7 +38,7 @@ protected:
 
 	void loadGraphics(const std::string& filename);
 
-	Sprite background;
+	Sprite *background;
 
 	bool enabled;
 	bool pressed;

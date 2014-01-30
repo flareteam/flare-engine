@@ -30,8 +30,8 @@ class WidgetTabControl {
 private:
 
 
-	Sprite activeTabSurface;
-	Sprite inactiveTabSurface;
+	Sprite *activeTabSurface;
+	Sprite *inactiveTabSurface;
 
 	std::vector<WidgetLabel> active_labels;
 	std::vector<WidgetLabel> inactive_labels;
@@ -63,7 +63,7 @@ public:
 	int getActiveTab();
 	void setActiveTab(int tab) { activeTab = tab; }
 	Rect getContentArea();
-	int getTabHeight() { return activeTabSurface.getGraphicsHeight(); }
+	int getTabHeight() { return activeTabSurface->getGraphicsHeight(); }
 
 	void updateHeader();
 

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -32,11 +33,12 @@ GameStateTitle::GameStateTitle() : GameState() {
 	exit_game = false;
 	load_game = false;
 
-	logo.setGraphics(render_device->loadGraphicSurface("images/menus/logo.png"));
-	// display logo centered
-	if (!logo.graphicsIsNull()) {
-		logo.setDestX(VIEW_W_HALF - (logo.getGraphicsWidth()/2));
-		logo.setDestY(VIEW_H_HALF - (logo.getGraphicsHeight()/2));
+	Image *graphics = render_device->loadGraphicSurface("images/menus/logo.png");
+	if (graphics) {
+		logo = graphics->createSprite();
+		logo->setDestX(VIEW_W_HALF - (logo->getGraphicsWidth()/2));
+		logo->setDestY(VIEW_H_HALF - (logo->getGraphicsHeight()/2));
+		graphics->unref();
 	}
 
 	// set up buttons
@@ -91,7 +93,7 @@ GameStateTitle::GameStateTitle() : GameState() {
 		warning_box->resize(warning_size.y);
 
 		font->setFont("font_normal");
-		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents.getGraphics(), VIEW_W/2, FONT_WHITE);
+		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents->getGraphics(), VIEW_W/2, FONT_WHITE);
 	}
 }
 
@@ -157,7 +159,7 @@ void GameStateTitle::render() {
 }
 
 GameStateTitle::~GameStateTitle() {
-	logo.clearGraphics();
+	if (logo) delete logo;
 	delete button_play;
 	delete button_cfg;
 	delete button_credits;

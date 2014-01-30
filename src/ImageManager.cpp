@@ -1,5 +1,6 @@
 /*
 Copyright © 2012 Stefan Beller
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -40,7 +41,7 @@ ImageManager::~ImageManager() {
 #endif
 }
 
-Image ImageManager::getSurface(const std::string &name) {
+Image *ImageManager::getSurface(const std::string &name) {
 	vector<string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
@@ -54,7 +55,7 @@ Image ImageManager::getSurface(const std::string &name) {
 		}
 		return sprites[index];
 	}
-	return Image();
+	return NULL;
 }
 
 void ImageManager::increaseCount(const std::string &name) {
@@ -64,7 +65,7 @@ void ImageManager::increaseCount(const std::string &name) {
 		counts[index]++;
 	}
 	else {
-		sprites.push_back(Image());
+		sprites.push_back(NULL);
 		names.push_back(name);
 		counts.push_back(1);
 	}
@@ -85,7 +86,7 @@ void ImageManager::cleanUp() {
 	int i = sprites.size() - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {
-			render_device->freeImage(&sprites[i]);
+			sprites[i]->unref();
 			counts.erase(counts.begin()+i);
 			sprites.erase(sprites.begin()+i);
 			names.erase(names.begin()+i);

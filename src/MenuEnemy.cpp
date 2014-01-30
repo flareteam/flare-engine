@@ -66,8 +66,15 @@ MenuEnemy::MenuEnemy() {
 }
 
 void MenuEnemy::loadGraphics() {
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/enemy_bar.png"));
-	bar_hp.setGraphics(render_device->loadGraphicSurface("images/menus/enemy_bar_hp.png"));
+	Image *graphics;
+
+	setBackground("images/menus/enemy_bar.png");
+
+	graphics = render_device->loadGraphicSurface("images/menus/enemy_bar_hp.png");
+	if (graphics) {
+		bar_hp = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 void MenuEnemy::handleNewMap() {
@@ -94,9 +101,8 @@ void MenuEnemy::render() {
 	dest.y = window_area.y+bar_pos.y;
 	dest.w = bar_pos.w;
 	dest.h = bar_pos.h;
-
-	background.setDest(dest);
-	render_device->render(background);
+	setBackgroundDest(dest);
+	Menu::render();
 
 	if (enemy->stats.get(STAT_HP_MAX) == 0)
 		hp_bar_length = 0;
@@ -104,15 +110,15 @@ void MenuEnemy::render() {
 		hp_bar_length = (enemy->stats.hp * 100) / enemy->stats.get(STAT_HP_MAX);
 
 	// draw hp bar
-
 	src.x = 0;
 	src.y = 0;
 	src.h = bar_pos.h;
 	src.w = hp_bar_length;
-
-	bar_hp.setClip(src);
-	bar_hp.setDest(dest);
-	render_device->render(bar_hp);
+	if (bar_hp) {
+		bar_hp->setClip(src);
+		bar_hp->setDest(dest);
+		render_device->render(bar_hp);
+	}
 
 	stringstream ss;
 	ss.str("");
@@ -140,5 +146,6 @@ void MenuEnemy::render() {
 }
 
 MenuEnemy::~MenuEnemy() {
-	bar_hp.clearGraphics();
+	if (bar_hp)
+		delete bar_hp;
 }
