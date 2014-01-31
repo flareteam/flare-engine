@@ -54,13 +54,10 @@ SDLRenderDevice::SDLRenderDevice()
 
 int SDLRenderDevice::createContext(int width, int height) {
 	if (is_initialized) {
-		SDL_FreeSurface(screen);
+		destroyContext();
 	}
 
 	// Add Window Titlebar Icon
-	if (titlebar_icon) {
-		SDL_FreeSurface(titlebar_icon);
-	}
 	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
 	SDL_WM_SetIcon(titlebar_icon, NULL);
 
@@ -403,7 +400,6 @@ void SDLRenderDevice::commitFrame() {
 }
 
 void SDLRenderDevice::destroyContext() {
-	if (icons) delete icons;
 	if (titlebar_icon)
 		SDL_FreeSurface(titlebar_icon);
 	if (screen)
