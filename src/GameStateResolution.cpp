@@ -48,6 +48,7 @@ void GameStateResolution::logic() {
 		// Clean up shared resources
 		if (settings_changed) {
 			icons.clearGraphics();
+			delete curs;
 		}
 
 		// Apply the new resolution
@@ -150,6 +151,7 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
 		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
 		render_device->createContext(VIEW_W, VIEW_H);
 		SharedResources::loadIcons();
+		curs = new CursorManager();
 		return false;
 
 	}
@@ -160,6 +162,7 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
 		VIEW_H = height;
 		VIEW_H_HALF = height/2;
 		SharedResources::loadIcons();
+		curs = new CursorManager();
 		return true;
 	}
 }
