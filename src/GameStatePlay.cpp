@@ -153,6 +153,7 @@ void GameStatePlay::checkEnemyFocus() {
 		}
 		else {
 			enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
+			if (enemy) curs->setCursor(CURSOR_ATTACK);
 		}
 	}
 
@@ -213,41 +214,22 @@ void GameStatePlay::checkLoot() {
 		if (pickup.item > 0) menu->inv->add(pickup);
 	}
 
-	// Pickup with mouse click
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !NO_MOUSE) {
-
+	// Normal pickups
+	if (!pc->attacking)
 		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, menu->inv);
-		if (pickup.item > 0) {
-			inpt->lock[MAIN1] = true;
-			menu->inv->add(pickup);
 
-			camp->setStatus(items->items[pickup.item].pickup_status);
-		}
-		if (loot->full_msg) {
-			inpt->lock[MAIN1] = true;
-			menu->log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-			menu->hudlog->add(msg->get("Inventory is full."));
-			loot->full_msg = false;
-		}
+	if (pickup.item > 0) {
+		menu->inv->add(pickup);
+		camp->setStatus(items->items[pickup.item].pickup_status);
+	}
+	if (loot->full_msg) {
+		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
+		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+		menu->log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+		menu->hudlog->add(msg->get("Inventory is full."));
+		loot->full_msg = false;
 	}
 
-	// Pickup with ACCEPT key/button
-	if ((inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT])) {
-
-		pickup = loot->checkNearestPickup(pc->stats.pos, menu->inv);
-		if (pickup.item > 0) {
-			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-			menu->inv->add(pickup);
-
-			camp->setStatus(items->items[pickup.item].pickup_status);
-		}
-		if (loot->full_msg) {
-			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-			menu->log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-			menu->hudlog->add(msg->get("Inventory is full."));
-			loot->full_msg = false;
-		}
-	}
 }
 
 void GameStatePlay::checkTeleport() {
@@ -606,13 +588,16 @@ void GameStatePlay::checkNotifications() {
 void GameStatePlay::checkNPCInteraction() {
 	if (pc->attacking) return;
 
-	int npc_click = -1;
+	bool player_ok = pc->stats.alive && pc->stats.humanoid;
 	float interact_distance = 0;
+	int npc_click = -1;
 	nearest_npc = npcs->getNearestNPC(pc->stats.pos);
+
+	int npc_hover = npcs->checkNPCClick(inpt->mouse, mapr->cam);
 
 	// check for clicking on an NPC
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !NO_MOUSE) {
-		npc_click = npcs->checkNPCClick(inpt->mouse, mapr->cam);
+		npc_click = npc_hover;
 		if (npc_click != -1) npc_id = npc_click;
 	}
 	// if we press the ACCEPT key, find the nearest NPC to interact with
@@ -621,7 +606,13 @@ void GameStatePlay::checkNPCInteraction() {
 	}
 
 	// check distance to this npc
-	if (npc_id != -1) {
+	if (npc_hover != -1) {
+		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_hover]->pos);
+		if (interact_distance < INTERACT_RANGE && player_ok) {
+			curs->setCursor(CURSOR_TALK);
+		}
+	}
+	else if (npc_id != -1) {
 		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 	}
 
@@ -636,7 +627,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// if close enough to the NPC, open the appropriate interaction screen
 
-	if (npc_id != -1 && ((npc_click != -1 && interact_distance < INTERACT_RANGE && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
+	if (npc_id != -1 && ((npc_click != -1 && interact_distance < INTERACT_RANGE && player_ok) || eventPendingDialog)) {
 
 		if (inpt->pressing[MAIN1] && !NO_MOUSE) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
@@ -663,7 +654,7 @@ void GameStatePlay::checkNPCInteraction() {
 		menu->npc->setNPC(NULL);
 	}
 
-	if (npc_id != -1 && ((interact_distance < INTERACT_RANGE && pc->stats.alive && pc->stats.humanoid) || eventPendingDialog)) {
+	if (npc_id != -1 && ((interact_distance < INTERACT_RANGE && player_ok) || eventPendingDialog)) {
 
 		if (menu->talker->vendor_visible && !menu->vendor->talker_visible) {
 
@@ -713,7 +704,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// check for walking away from an NPC
 	if (npc_id != -1 && !eventDialogOngoing) {
-		if (interact_distance > INTERACT_RANGE || !pc->stats.alive) {
+		if (interact_distance > INTERACT_RANGE || !player_ok) {
 			menu->npc->setNPC(NULL);
 			menu->vendor->npc = NULL;
 			menu->talker->npc = NULL;
@@ -917,6 +908,11 @@ void GameStatePlay::logic() {
 		pc->stats.logic();
 		pc->stats.recalc();
 		pc->respawn = false;
+	}
+
+	// use a normal mouse cursor is menus are open
+	if (menu->menus_open) {
+		curs->setCursor(CURSOR_NORMAL);
 	}
 }
 
