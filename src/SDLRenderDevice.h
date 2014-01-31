@@ -38,6 +38,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  */
 
+
+/** SDL Image */
+class SDLImage : public Image {
+public:
+  SDLImage(RenderDevice *device);
+  virtual ~SDLImage();
+  int getWidth() const;
+  int getHeight() const;
+
+  SDL_Surface *surface;
+};
+
 class SDLRenderDevice : public RenderDevice {
 
 public:

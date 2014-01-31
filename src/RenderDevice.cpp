@@ -22,8 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Image
  */
 Image::Image(RenderDevice *_device)
-	: surface(NULL)
-	, device(_device)
+	: device(_device)
 	, ref_counter(1) {
 }
 
@@ -43,11 +42,11 @@ void Image::unref() {
 }
 
 int Image::getWidth() const {
-	return (surface ? surface->w : 0);
+	return 0;
 }
 
 int Image::getHeight() const {
-	return (surface ? surface->h : 0);
+	return 0;
 }
 
 Sprite *Image::createSprite(bool clipToSize) {
