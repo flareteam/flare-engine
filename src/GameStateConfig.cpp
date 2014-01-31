@@ -765,6 +765,8 @@ void GameStateConfig::logic () {
 				mods = new ModManager();
 				loadTilesetSettings();
 				SharedResources::loadIcons();
+				delete curs;
+				curs = new CursorManager();
 			}
 			loadMiscSettings();
 			refreshFont();
