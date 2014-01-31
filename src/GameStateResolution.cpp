@@ -43,10 +43,16 @@ GameStateResolution::GameStateResolution(int width, int height, bool fullscreen,
 void GameStateResolution::logic() {
 	if (!initialized) {
 		initialized = true;
+		bool settings_changed = compareVideoSettings();
+
+		// Clean up shared resources
+		if (settings_changed) {
+			icons.clearGraphics();
+		}
 
 		// Apply the new resolution
 		// if it fails, don't create the dialog box (this will make the game continue straight to the title screen)
-		if (compareVideoSettings() && applyVideoSettings(new_w, new_h))
+		if (settings_changed && applyVideoSettings(new_w, new_h))
 			confirm = new MenuConfirm(msg->get("OK"),msg->get("Use this resolution?"));
 
 		if (confirm) {
@@ -143,17 +149,17 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
 	if (status == -1) {
 		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
 		render_device->createContext(VIEW_W, VIEW_H);
+		SharedResources::loadIcons();
 		return false;
 
 	}
 	else {
-
 		// If the new settings succeed, adjust the view area
 		VIEW_W = width;
 		VIEW_W_HALF = width/2;
 		VIEW_H = height;
 		VIEW_H_HALF = height/2;
-
+		SharedResources::loadIcons();
 		return true;
 	}
 }
