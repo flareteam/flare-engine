@@ -1232,7 +1232,10 @@ void GameStateConfig::scanKey(int button) {
 }
 
 void GameStateConfig::cleanup() {
-	if(background) delete background;
+	if (background) {
+		delete background;
+		background = NULL;
+	}
 	tip_buf.clear();
 	if (tip != NULL) {
 		delete tip;
