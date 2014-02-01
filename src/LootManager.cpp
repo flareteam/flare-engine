@@ -397,38 +397,51 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 	loot_stack.item = 0;
 	loot_stack.quantity = 0;
 
-	// I'm starting at the end of the loot list so that more recently-dropped
-	// loot is picked up first.  If a player drops several loot in the same
-	// location, picking it back up will work like a stack.
-	vector<Loot>::iterator it;
-	for (it = loot.end(); it != loot.begin(); ) {
-		--it;
+	// check left mouse click
+	if (!NO_MOUSE) {
+		// I'm starting at the end of the loot list so that more recently-dropped
+		// loot is picked up first.  If a player drops several loot in the same
+		// location, picking it back up will work like a stack.
+		vector<Loot>::iterator it;
+		for (it = loot.end(); it != loot.begin(); ) {
+			--it;
 
-		// loot close enough to pickup?
-		if (fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
+			// loot close enough to pickup?
+			if (fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
+				Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 
-			Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
+				r.w = 32;
+				r.h = 48;
+				r.x = p.x - 16;
+				r.y = p.y - 32;
 
-			r.w = 32;
-			r.h = 48;
-			r.x = p.x - 16;
-			r.y = p.y - 32;
-
-			// clicked in pickup hotspot?
-			if (mouse.x > r.x && mouse.x < r.x+r.w &&
-					mouse.y > r.y && mouse.y < r.y+r.h) {
-
-				if (it->stack.item > 0 && !(inv->full(it->stack.item))) {
-					loot_stack = it->stack;
-					it = loot.erase(it);
-					return loot_stack;
-				}
-				else if (it->stack.item > 0) {
-					full_msg = true;
+				// clicked in pickup hotspot?
+				if (isWithin(r, mouse)) {
+					curs->setCursor(CURSOR_INTERACT);
+					if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+						inpt->lock[MAIN1] = true;
+						if (it->stack.item > 0 && !(inv->full(it->stack.item))) {
+							loot_stack = it->stack;
+							it = loot.erase(it);
+							return loot_stack;
+						}
+						else if (it->stack.item > 0) {
+							full_msg = true;
+						}
+					}
 				}
 			}
 		}
 	}
+
+	// check pressing Enter/Return
+	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		loot_stack = checkNearestPickup(hero_pos, inv);
+		if (loot_stack.item > 0) {
+			inpt->lock[ACCEPT] = true;
+		}
+	}
+
 	return loot_stack;
 }
 

@@ -97,6 +97,7 @@ Set (FLARE_SOURCES
 	./src/BehaviorStandard.cpp
 	./src/CampaignManager.cpp
 	./src/CombatText.cpp
+	./src/CursorManager.cpp
 	./src/EffectManager.cpp
 	./src/Enemy.cpp
 	./src/EnemyBehavior.cpp

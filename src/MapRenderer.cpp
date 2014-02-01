@@ -705,6 +705,7 @@ void MapRenderer::checkHotspots() {
 
 						// only check events if the player is clicking
 						// and allowed to click
+						curs->setCursor(CURSOR_INTERACT);
 						if (!inpt->pressing[MAIN1]) return;
 						else if (inpt->lock[MAIN1]) return;
 

@@ -131,6 +131,8 @@ static void init() {
 		Mix_Volume(-1, SOUND_VOLUME);
 
 	gswitch = new GameSwitcher();
+
+	curs = new CursorManager();
 }
 
 static void mainLoop (bool debug_event) {
@@ -173,6 +175,7 @@ static void cleanup() {
 	delete mods;
 	delete msg;
 	delete snd;
+	delete curs;
 
 	Mix_CloseAudio();
 

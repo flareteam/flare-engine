@@ -658,5 +658,13 @@ void InputState::setKeybindNames() {
 	mouse_button[6] = msg->get("mbx2");
 }
 
+void InputState::hideCursor() {
+	SDL_ShowCursor(SDL_DISABLE);
+}
+
+void InputState::showCursor() {
+	SDL_ShowCursor(SDL_ENABLE);
+}
+
 InputState::~InputState() {
 }
