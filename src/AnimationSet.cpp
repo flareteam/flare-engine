@@ -21,10 +21,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "AnimationManager.h"
 
-#include "ImageManager.h"
 #include "FileParser.h"
 #include "SharedResources.h"
 #include "Settings.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 
 #include <cassert>
@@ -97,9 +97,8 @@ void AnimationSet::load() {
 				SDL_Quit();
 				exit(128);
 			}
-			imagefile = parser.val;
-			imag->increaseCount(imagefile);
-			sprite = imag->getSurface(imagefile);
+
+			sprite = loadTextureImage(parser.val);
 		}
 		else if (parser.key == "position") {
 			position = toInt(parser.val);
@@ -190,7 +189,7 @@ void AnimationSet::load() {
 }
 
 AnimationSet::~AnimationSet() {
-	if (imagefile != "") imag->decreaseCount(imagefile);
+	if (sprite) sprite->unref();
 	for (unsigned i = 0; i < animations.size(); ++i)
 		delete animations[i];
 	delete defaultAnimation;

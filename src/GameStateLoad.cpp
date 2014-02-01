@@ -381,26 +381,14 @@ void GameStateLoad::loadPreview(int slot) {
 		if (img_gfx[i] == "")
 			continue;
 
-		if (!TEXTURE_QUALITY) {
-			string fname = "images/avatar/" + stats[slot].gfx_base + "/preview/noalpha/" + img_gfx[i] + ".png";
-			graphics = render_device->loadGraphicSurface(fname, "Falling back to alpha version", false, true);
-			if (graphics) {
-				sprites[slot][i] = graphics->createSprite();
-				graphics->unref();
-			}
-
+		graphics = loadTextureImage("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png");
+		if (graphics) {
+			sprites[slot][i] = graphics->createSprite();
+			sprites[slot][i]->setClip(0, 0,
+									  sprites[slot][i]->getGraphicsWidth(),
+									  sprites[slot][i]->getGraphicsHeight());
+			graphics->unref();
 		}
-
-		if (sprites[slot][i] == NULL) {
-			graphics = render_device->loadGraphicSurface("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png");
-			if (graphics) {
-				sprites[slot][i] = graphics->createSprite();
-				graphics->unref();
-			}
-		}
-		sprites[slot][i]->setClip(0, 0,
-								  sprites[slot][i]->getGraphicsWidth(),
-								  sprites[slot][i]->getGraphicsHeight());
 	}
 
 }

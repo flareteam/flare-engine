@@ -42,6 +42,7 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 		pos.w = cb->getGraphicsWidth();
 		pos.h = cb->getGraphicsHeight() / 2;
 		cb->setClip(0, 0, pos.w, pos.h);
+		graphics->unref();
 	}
 	render_to_alpha = false;
 }

@@ -29,7 +29,6 @@ Created and destroyed by main.cpp
 #include "SharedResources.h"
 
 AnimationManager *anim;
-ImageManager *imag;
 ModManager *mods;
 MessageEngine *msg;
 InputState *inpt;

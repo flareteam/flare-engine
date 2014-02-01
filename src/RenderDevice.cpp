@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include <assert.h>
 #include "RenderDevice.h"
 
 
@@ -39,6 +40,10 @@ void Image::unref() {
 	--ref_counter;
 	if (ref_counter == 0)
 		delete this;
+}
+
+uint32_t Image::getRefCount() const {
+	return ref_counter;
 }
 
 int Image::getWidth() const {
@@ -167,4 +172,47 @@ RenderDevice::RenderDevice()
 }
 
 RenderDevice::~RenderDevice() {
+}
+
+void RenderDevice::destroyContext() {
+	if (!cache.empty()) {
+		IMAGE_CACHE_CONTAINER_ITER it;
+		fprintf(stderr, "Image cache still holding these images:\n");
+		it = cache.begin();
+		while (it != cache.end()) {
+			fprintf(stderr, "%s %d\n", it->first.c_str(), it->second->getRefCount());
+			++it;
+		}
+	}
+	assert(cache.size() == 0);
+}
+
+Image * RenderDevice::cacheLookup(std::string &filename) {
+	IMAGE_CACHE_CONTAINER_ITER it;
+	it = cache.find(filename);
+	if (it != cache.end()) {
+		// fprintf(stderr, "%p %s reused from image cache.\n", it->second, filename.c_str());
+		it->second->ref();
+		return it->second;
+	}
+	return NULL;
+}
+
+void RenderDevice::cacheStore(std::string &filename, Image *image) {
+	cache[filename] = image;
+	// fprintf(stderr, "%p %s stored in image cache.\n", image, filename.c_str());
+}
+
+void RenderDevice::cacheRemove(Image *image) {
+	IMAGE_CACHE_CONTAINER_ITER it = cache.begin();
+	while (it != cache.end()) {
+		if (it->second == image)
+			break;
+		++it;
+	}
+
+	if (it != cache.end()) {
+		// fprintf(stderr, "%p %s removed from image cache.\n", it->second, it->first.c_str());
+		cache.erase(it);
+	}
 }

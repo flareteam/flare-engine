@@ -34,7 +34,6 @@ Created and destroyed by main.cpp
 #include "AnimationManager.h"
 #include "CombatText.h"
 #include "FontEngine.h"
-#include "ImageManager.h"
 #include "InputState.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
@@ -46,7 +45,6 @@ extern SDL_Joystick *joy;
 extern AnimationManager *anim;
 extern CombatText *comb;
 extern FontEngine *font;
-extern ImageManager *imag;
 extern InputState *inpt;
 extern MessageEngine *msg;
 extern ModManager *mods;
@@ -68,9 +66,10 @@ public:
 		}
 
 		graphics = render_device->loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false);
-		if (graphics)
+		if (graphics) {
 		  icons = graphics->createSprite();
-		graphics->unref();
+		  graphics->unref();
+		}
 	}
 };
 

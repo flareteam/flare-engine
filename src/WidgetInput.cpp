@@ -50,6 +50,7 @@ void WidgetInput::loadGraphics(const string& filename) {
 		background = graphics->createSprite();
 		pos.w = background->getGraphicsWidth();
 		pos.h = background->getGraphicsHeight()/2;
+		graphics->unref();
 	}
 }
 

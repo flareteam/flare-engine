@@ -1,6 +1,7 @@
 /*
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -45,6 +46,7 @@ WidgetSlider::WidgetSlider (const string  & fname)
 		pos.h = sl->getGraphicsHeight() / 2;
 		pos_knob.w = sl->getGraphicsWidth() / 8;
 		pos_knob.h = sl->getGraphicsHeight() / 2;
+		graphics->unref();
 	}
 
 	render_to_alpha = false;

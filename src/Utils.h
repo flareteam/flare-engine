@@ -116,4 +116,6 @@ bool isWithin(Rect r, Point target);
 
 std::string abbreviateKilo(int amount);
 
+class Image * loadTextureImage(std::string filename);
+
 #endif

@@ -93,5 +93,4 @@ void AnimationManager::cleanUp() {
 		}
 		--i;
 	}
-	imag->cleanUp();
 }

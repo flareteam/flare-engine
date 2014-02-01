@@ -577,8 +577,13 @@ void SDLRenderDevice::listModes(std::vector<Rect> &modes) {
 
 
 Image *SDLRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
-	SDLImage *image;
+	// lookup image in cache
+	Image *img;
+	img = cacheLookup(filename);
+	if (img != NULL) return img;
 
+	// load image
+	SDLImage *image;
 	image = NULL;
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
 	if(!cleanup) {
@@ -596,6 +601,9 @@ Image *SDLRenderDevice::loadGraphicSurface(std::string filename, std::string err
 		image->surface = SDL_DisplayFormatAlpha(cleanup);
 		SDL_FreeSurface(cleanup);
 	}
+
+	// store image to cache
+	cacheStore(filename, image);
 	return image;
 }
 
@@ -736,7 +744,11 @@ bool SDLRenderDevice::checkPixel(Point px, Image *image) {
 }
 
 void SDLRenderDevice::freeImage(Image *image) {
-	if (image && static_cast<SDLImage *>(image)->surface)
+	if (!image) return;
+
+	cacheRemove(image);
+
+	if (static_cast<SDLImage *>(image)->surface)
 		SDL_FreeSurface(static_cast<SDLImage *>(image)->surface);
 }
 

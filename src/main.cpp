@@ -74,8 +74,8 @@ static void init() {
 	font = new FontEngine();
 	anim = new AnimationManager();
 	comb = new CombatText();
-	imag = new ImageManager();
 	inpt = new InputState();
+	icons = NULL;
 
 	// Load tileset options (must be after ModManager is initialized)
 	loadTilesetSettings();
@@ -169,7 +169,6 @@ static void cleanup() {
 	delete anim;
 	delete comb;
 	delete font;
-	delete imag;
 	delete inpt;
 	delete mods;
 	delete msg;

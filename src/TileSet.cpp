@@ -69,18 +69,12 @@ void TileSet::loadGraphics(const std::string& filename) {
 	}
 
 	for (unsigned i = 0; i < tiles.size(); i++) {
-	    if (tiles[i].tile) delete tiles[i].tile;
+		if (tiles[i].tile) delete tiles[i].tile;
 	}
 	tiles.clear();
 
-
 	Image *graphics = NULL;
-	if (!TEXTURE_QUALITY)
-		graphics = render_device->loadGraphicSurface("images/tilesets/noalpha/" + filename,
-				   "Couldn't load image", false, true);
-	if (!graphics)
-		graphics = render_device->loadGraphicSurface("images/tilesets/" + filename);
-
+	graphics = loadTextureImage("images/tilesets/" + filename);
 	if (graphics) {
 		sprites = graphics->createSprite();
 		graphics->unref();

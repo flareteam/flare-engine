@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define RENDERDEVICE_H
 
 #include <vector>
+#include <map>
 #include <SDL_ttf.h>
 #include "Utils.h"
 
@@ -109,6 +110,7 @@ class Image {
 public:
   void ref();
   void unref();
+  uint32_t getRefCount() const;
 
   virtual int getWidth() const;
   virtual int getHeight() const;
@@ -214,7 +216,19 @@ public:
 	virtual bool checkPixel(Point px, Image *image) = 0;
 
 protected:
+	/* Image cache operations */
+	Image *cacheLookup(std::string &filename);
+	void cacheStore(std::string &filename, Image *);
+	void cacheRemove(Image *image);
+
 	bool is_initialized;
+
+private:
+	typedef std::map<std::string, Image *> IMAGE_CACHE_CONTAINER;
+	typedef IMAGE_CACHE_CONTAINER::iterator IMAGE_CACHE_CONTAINER_ITER;
+
+	IMAGE_CACHE_CONTAINER cache;
+
 };
 
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
