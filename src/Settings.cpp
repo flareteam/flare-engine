@@ -69,7 +69,8 @@ ConfigEntry config[] = {
 	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
 	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
 	{ "show_hotkeys",     &typeid(SHOW_HOTKEYS),    "1",   &SHOW_HOTKEYS,    "show hotkeys names on power bar. 1 enable, 0 disable."},
-	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"}
+	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"},
+	{ "hardware_cursor",  &typeid(HARDWARE_CURSOR), "0",   &HARDWARE_CURSOR, "use the system mouse cursor. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
@@ -191,6 +192,7 @@ bool ENABLE_ALLY_COLLISION_AI;
 bool ENABLE_ALLY_COLLISION;
 int CURRENCY_ID;
 float INTERACT_RANGE;
+bool HARDWARE_CURSOR = false;
 
 /**
  * Set system paths
