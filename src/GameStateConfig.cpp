@@ -117,6 +117,8 @@ void GameStateConfig::init() {
 	show_hotkeys_lb = new WidgetLabel();
 	colorblind_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	colorblind_lb = new WidgetLabel();
+	hardware_cursor_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	hardware_cursor_lb = new WidgetLabel();
 	music_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	music_volume_lb = new WidgetLabel();
 	sound_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
@@ -236,6 +238,7 @@ void GameStateConfig::init() {
 	tablist.add(show_fps_cb);
 	tablist.add(show_hotkeys_cb);
 	tablist.add(colorblind_cb);
+	tablist.add(hardware_cursor_cb);
 	tablist.add(language_lstb);
 
 	tablist.add(enable_joystick_cb);
@@ -323,6 +326,9 @@ void GameStateConfig::readConfig () {
 			}
 			else if (infile.key == "colorblind") {
 				placeLabeledCheckbox( colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), 2);
+			}
+			else if (infile.key == "hardware_cursor") {
+				placeLabeledCheckbox( hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), 2);
 			}
 			//sliders
 			else if (infile.key == "music_volume") {
@@ -655,6 +661,8 @@ void GameStateConfig::update () {
 	else show_hotkeys_cb->unCheck();
 	if (COLORBLIND) colorblind_cb->Check();
 	else colorblind_cb->unCheck();
+	if (HARDWARE_CURSOR) hardware_cursor_cb->Check();
+	else hardware_cursor_cb->unCheck();
 
 	std::stringstream list_mode;
 	unsigned int resolutions = getVideoModes();
@@ -879,6 +887,10 @@ void GameStateConfig::logic () {
 		else if (colorblind_cb->checkClick()) {
 			if (colorblind_cb->isChecked()) COLORBLIND=true;
 			else COLORBLIND=false;
+		}
+		else if (hardware_cursor_cb->checkClick()) {
+			if (hardware_cursor_cb->isChecked()) HARDWARE_CURSOR=true;
+			else HARDWARE_CURSOR=false;
 		}
 	}
 	// tab 3 (input)

@@ -17,6 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CursorManager.h"
 #include "FileParser.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
@@ -62,6 +63,11 @@ CursorManager::~CursorManager() {
 }
 
 void CursorManager::logic() {
+	if (HARDWARE_CURSOR) {
+		inpt->showCursor();
+		return;
+	}
+
 	cursor_current = NULL;
 	offset_current = NULL;
 
@@ -77,6 +83,8 @@ void CursorManager::logic() {
 }
 
 void CursorManager::render() {
+	if (HARDWARE_CURSOR) return;
+
 	if (cursor_current != NULL) {
 		if (offset_current != NULL) {
 			cursor_current->setDest(inpt->mouse.x+offset_current->x, inpt->mouse.y+offset_current->y);
@@ -90,6 +98,8 @@ void CursorManager::render() {
 }
 
 void CursorManager::setCursor(CURSOR_TYPE type) {
+	if (HARDWARE_CURSOR) return;
+
 	if (type == CURSOR_INTERACT && !cursor_interact.graphicsIsNull()) {
 		inpt->hideCursor();
 		cursor_current = &cursor_interact;
