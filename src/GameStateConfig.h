@@ -53,7 +53,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[135];
+	int optiontab[137];
 	Rect frame;
 	std::vector<Rect> video_modes;
 
@@ -111,6 +111,8 @@ private:
 	WidgetLabel         * show_fps_lb;
 	WidgetCheckBox      * show_hotkeys_cb;
 	WidgetLabel         * show_hotkeys_lb;
+	WidgetCheckBox      * hardware_cursor_cb;
+	WidgetLabel         * hardware_cursor_lb;
 	WidgetCheckBox      * colorblind_cb;
 	WidgetLabel         * colorblind_lb;
 	WidgetSlider        * music_volume_sl;
