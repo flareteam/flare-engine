@@ -35,6 +35,8 @@ public:
 	bool hasMusic;
 	bool reload_music;
 
+	int load_counter;
+
 protected:
 
 	GameState* requestedGameState;

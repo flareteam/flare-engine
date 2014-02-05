@@ -147,14 +147,13 @@ static void mainLoop (bool debug_event) {
 		int prev_ticks = now_ticks;
 
 		while (now_ticks > logic_ticks && loops < MAX_FRAMES_PER_SEC) {
-			// This is a bit of a hack to compensate for when a frame takes too long.
-			// It's mostly used for frames where loading game resources takes place,
-			// which typically take longer than two seconds due to disk i/o.
-			// This has a side effect of disabling frame skipping when we go above this
-			// threshold. However, if we were skipping that many frames, the game would
-			// be hard to play, so we accept the slowdown here.
-			if (now_ticks - logic_ticks > delay*2) {
-				logic_ticks = now_ticks-delay*2;
+			// Frames where data loading happens (GameState switching and map loading)
+			// take a long time, so our loop here will think that the game "lagged" and
+			// try to compensate. To prevent this compensation, we mark those frames as
+			// "loading frames" and update the logic ticker without actually executing logic.
+			if (gswitch->isLoadingFrame()) {
+				logic_ticks = now_ticks;
+				break;
 			}
 
 			SDL_PumpEvents();
