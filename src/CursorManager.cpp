@@ -26,7 +26,7 @@ CursorManager::CursorManager()
 	, offset_current(NULL)
 {
 	FileParser infile;
-	if (infile.open("engine/mouse_cursor.txt")) {
+	if (infile.open("engine/mouse_cursor.txt", true, true, "")) {
 		while (infile.next()) {
 			infile.val = infile.val + ',';
 
