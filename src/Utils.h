@@ -115,5 +115,6 @@ bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(Rect r, Point target);
 
 std::string abbreviateKilo(int amount);
+void alignToScreenEdge(std::string alignment, Rect *r);
 
 #endif

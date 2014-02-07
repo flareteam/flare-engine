@@ -206,3 +206,42 @@ std::string abbreviateKilo(int amount) {
 
 	return ss.str();
 }
+
+void alignToScreenEdge(std::string alignment, Rect *r) {
+	if (!r) return;
+
+	if (alignment == "topleft") {
+		// do nothing
+	}
+	else if (alignment == "top") {
+		r->x = (VIEW_W_HALF-r->w/2)+r->x;
+	}
+	else if (alignment == "topright") {
+		r->x = (VIEW_W-r->w)+r->x;
+	}
+	else if (alignment == "left") {
+		r->y = (VIEW_H_HALF-r->h/2)+r->y;
+	}
+	else if (alignment == "center") {
+		r->x = (VIEW_W_HALF-r->w/2)+r->x;
+		r->y = (VIEW_H_HALF-r->h/2)+r->y;
+	}
+	else if (alignment == "right") {
+		r->x = (VIEW_W-r->w)+r->x;
+		r->y = (VIEW_H_HALF-r->h/2)+r->y;
+	}
+	else if (alignment == "bottomleft") {
+		r->y = (VIEW_H-r->h)+r->y;
+	}
+	else if (alignment == "bottom") {
+		r->x = (VIEW_W_HALF-r->w/2)+r->x;
+		r->y = (VIEW_H-r->h)+r->y;
+	}
+	else if (alignment == "bottomright") {
+		r->x = (VIEW_W-r->w)+r->x;
+		r->y = (VIEW_H-r->h)+r->y;
+	}
+	else {
+		// do nothing
+	}
+}
