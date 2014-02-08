@@ -68,8 +68,6 @@ LabelInfo eatLabelInfo(string val) {
 WidgetLabel::WidgetLabel()
 	: text("")
 	, color(font->getColor("widget_normal"))
-	, x_origin(0)
-	, y_origin(0)
 	, justify(JUSTIFY_LEFT)
 	, valign(VALIGN_TOP)
 	, font_style("font_regular")
@@ -118,12 +116,12 @@ void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _
 		color = _color;
 		changed = true;
 	}
-	if (x_origin != _x) {
-		x_origin = _x;
+	if (pos.x != _x) {
+		pos.x = _x;
 		changed = true;
 	}
-	if (y_origin != _y) {
-		y_origin = _y;
+	if (pos.y != _y) {
+		pos.y = _y;
 		changed = true;
 	}
 	if (font_style != _font) {
@@ -141,8 +139,8 @@ void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _
  * Set initial X position of label.
  */
 void WidgetLabel::setX(int _x) {
-	if (x_origin != _x) {
-		x_origin = _x;
+	if (pos.x != _x) {
+		pos.x = _x;
 		applyOffsets();
 		refresh();
 	}
@@ -152,8 +150,8 @@ void WidgetLabel::setX(int _x) {
  * Set initial Y position of label.
  */
 void WidgetLabel::setY(int _y) {
-	if (y_origin != _y) {
-		y_origin = _y;
+	if (pos.y != _y) {
+		pos.y = _y;
 		applyOffsets();
 		refresh();
 	}
@@ -163,14 +161,14 @@ void WidgetLabel::setY(int _y) {
  * Get X position of label.
  */
 int WidgetLabel::getX() {
-	return x_origin;
+	return pos.x;
 }
 
 /**
  * Get Y position of label.
  */
 int WidgetLabel::getY() {
-	return y_origin;
+	return pos.y;
 }
 
 /**
@@ -196,21 +194,21 @@ void WidgetLabel::applyOffsets() {
 
 	// apply JUSTIFY
 	if (justify == JUSTIFY_LEFT)
-		bounds.x = x_origin;
+		bounds.x = pos.x;
 	else if (justify == JUSTIFY_RIGHT)
-		bounds.x = x_origin - bounds.w;
+		bounds.x = pos.x - bounds.w;
 	else if (justify == JUSTIFY_CENTER)
-		bounds.x = x_origin - bounds.w/2;
+		bounds.x = pos.x - bounds.w/2;
 
 	// apply VALIGN
 	if (valign == VALIGN_TOP) {
-		bounds.y = y_origin;
+		bounds.y = pos.y;
 	}
 	else if (valign == VALIGN_BOTTOM) {
-		bounds.y = y_origin - bounds.h;;
+		bounds.y = pos.y - bounds.h;;
 	}
 	else if (valign == VALIGN_CENTER) {
-		bounds.y = y_origin - bounds.h/2;
+		bounds.y = pos.y - bounds.h/2;
 	}
 
 	if (label) {

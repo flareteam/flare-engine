@@ -66,9 +66,21 @@ GameSwitcher::GameSwitcher() {
 void GameSwitcher::loadMusic() {
 	if (AUDIO && MUSIC_VOLUME) {
 		Mix_FreeMusic(music);
-		music = Mix_LoadMUS((mods->locate("music/title_theme.ogg")).c_str());
-		if (!music)
-			printf("Mix_LoadMUS: %s\n", Mix_GetError());
+
+		std::string music_filename = "";
+		FileParser infile;
+		if (infile.open("engine/default_music.txt", true, true, "")) {
+			while (infile.next()) {
+				if (infile.key == "music") music_filename = infile.val;
+			}
+			infile.close();
+		}
+
+		if (music_filename != "") {
+			music = Mix_LoadMUS((mods->locate(music_filename)).c_str());
+			if (!music)
+				printf("Mix_LoadMUS: %s\n", Mix_GetError());
+		}
 	}
 
 	if (music) {

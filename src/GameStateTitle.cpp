@@ -17,6 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "GameStateConfig.h"
 #include "GameStateCutscene.h"
 #include "GameStateLoad.h"
@@ -27,19 +28,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetScrollBox.h"
 #include "UtilsMath.h"
+#include "UtilsParsing.h"
 
 GameStateTitle::GameStateTitle() : GameState() {
 
 	exit_game = false;
 	load_game = false;
-
-	Image *graphics = render_device->loadGraphicSurface("images/menus/logo.png");
-	if (graphics) {
-		logo = graphics->createSprite();
-		logo->setDestX(VIEW_W_HALF - (logo->getGraphicsWidth()/2));
-		logo->setDestY(VIEW_H_HALF - (logo->getGraphicsHeight()/2));
-		graphics->unref();
-	}
 
 	// set up buttons
 	button_play = new WidgetButton("images/menus/buttons/button_default.png");
@@ -47,9 +41,52 @@ GameStateTitle::GameStateTitle() : GameState() {
 	button_cfg = new WidgetButton("images/menus/buttons/button_default.png");
 	button_credits = new WidgetButton("images/menus/buttons/button_default.png");
 
+	FileParser infile;
+	if (infile.open("menus/gametitle.txt")) {
+		while (infile.next()) {
+			infile.val = infile.val + ',';
+
+			if (infile.key == "logo") {
+  			        Image *graphics;
+				graphics = render_device->loadGraphicSurface(eatFirstString(infile.val, ','), "");			       
+				if (graphics) {
+					Rect r;
+ 				        logo = graphics->createSprite();
+					r.x = eatFirstInt(infile.val, ',');
+					r.y = eatFirstInt(infile.val, ',');
+					r.w = logo->getGraphicsWidth();
+					r.h = logo->getGraphicsHeight();
+					alignToScreenEdge(eatFirstString(infile.val, ','), &r);
+					logo->setDestX(r.x);
+					logo->setDestY(r.y);
+					graphics->unref();
+				}
+			}
+			else if (infile.key == "play_pos") {
+				button_play->pos.x = eatFirstInt(infile.val, ',');
+				button_play->pos.y = eatFirstInt(infile.val, ',');
+				alignToScreenEdge(eatFirstString(infile.val, ','), &(button_play->pos));
+			}
+			else if (infile.key == "config_pos") {
+				button_cfg->pos.x = eatFirstInt(infile.val, ',');
+				button_cfg->pos.y = eatFirstInt(infile.val, ',');
+				alignToScreenEdge(eatFirstString(infile.val, ','), &(button_cfg->pos));
+			}
+			else if (infile.key == "credits_pos") {
+				button_credits->pos.x = eatFirstInt(infile.val, ',');
+				button_credits->pos.y = eatFirstInt(infile.val, ',');
+				alignToScreenEdge(eatFirstString(infile.val, ','), &(button_credits->pos));
+			}
+			else if (infile.key == "exit_pos") {
+				button_exit->pos.x = eatFirstInt(infile.val, ',');
+				button_exit->pos.y = eatFirstInt(infile.val, ',');
+				alignToScreenEdge(eatFirstString(infile.val, ','), &(button_exit->pos));
+			}
+		}
+		infile.close();
+	}
+
 	button_play->label = msg->get("Play Game");
-	button_play->pos.x = VIEW_W_HALF - button_play->pos.w/2;
-	button_play->pos.y = VIEW_H - (button_exit->pos.h*4);
 	if (!ENABLE_PLAYGAME) {
 		button_play->enabled = false;
 		button_play->tooltip = msg->get("Enable a core mod to continue");
@@ -57,18 +94,12 @@ GameStateTitle::GameStateTitle() : GameState() {
 	button_play->refresh();
 
 	button_cfg->label = msg->get("Configuration");
-	button_cfg->pos.x = VIEW_W_HALF - button_cfg->pos.w/2;
-	button_cfg->pos.y = VIEW_H - (button_exit->pos.h*3);
 	button_cfg->refresh();
 
 	button_credits->label = msg->get("Credits");
-	button_credits->pos.x = VIEW_W_HALF - button_credits->pos.w/2;
-	button_credits->pos.y = VIEW_H - (button_exit->pos.h*2);
 	button_credits->refresh();
 
 	button_exit->label = msg->get("Exit Game");
-	button_exit->pos.x = VIEW_W_HALF - button_exit->pos.w/2;
-	button_exit->pos.y = VIEW_H - button_exit->pos.h;
 	button_exit->refresh();
 
 	// set up labels
