@@ -54,8 +54,6 @@ private:
 
 	std::string text;
 	Color color;
-	int x_origin;
-	int y_origin;
 	int justify;
 	int valign;
 	std::string font_style;
