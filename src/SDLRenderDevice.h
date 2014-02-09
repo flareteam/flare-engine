@@ -121,15 +121,10 @@ public:
 								bool HavePinkColorKey = false);
 private:
 
-	// Compute clipping and global position from local frame.
-	bool local_to_global(Sprite *r);
-
 	SDL_Surface* screen;
 	SDL_Surface* titlebar_icon;
 
 	// These are for keeping the render stack frame small.
-	Rect m_clip;
-	Rect m_dest;
 	Sprite *m_ttf_renderable;
 };
 

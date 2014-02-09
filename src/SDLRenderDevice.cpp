@@ -110,7 +110,7 @@ int SDLRenderDevice::render(Sprite *r) {
 		return -1;
 	}
 
-	if ( !local_to_global(r) ) {
+	if ( !localToGlobal(r) ) {
 		return -1;
 	}
 
@@ -435,51 +435,6 @@ Uint32 SDLRenderDevice::MapRGBA(Image *src, Uint8 r, Uint8 g, Uint8 b, Uint8 a) 
 
 Uint32 SDLRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	return SDL_MapRGBA(screen->format, r, g, b, a);
-}
-
-bool SDLRenderDevice::local_to_global(Sprite *r) {
-	m_clip = r->getClip();
-
-	int left = r->getDest().x - r->getOffset().x;
-	int right = left + r->getClip().w;
-	int up = r->getDest().y - r->getOffset().y;
-	int down = up + r->getClip().h;
-
-	// Check whether we need to render.
-	// If so, compute the correct clipping.
-	if (r->local_frame.w) {
-		if (left > r->local_frame.w) {
-			return false;
-		}
-		if (right < 0) {
-			return false;
-		}
-		if (left < 0) {
-			m_clip.x = r->getClip().x - left;
-			left = 0;
-		};
-		right = (right < r->local_frame.w ? right : r->local_frame.w);
-		m_clip.w = right - left;
-	}
-	if (r->local_frame.h) {
-		if (up > r->local_frame.h) {
-			return false;
-		}
-		if (down < 0) {
-			return false;
-		}
-		if (up < 0) {
-			m_clip.y = r->getClip().y - up;
-			up = 0;
-		};
-		down = (down < r->local_frame.h ? down : r->local_frame.h);
-		m_clip.h = down - up;
-	}
-
-	m_dest.x = left + r->local_frame.x;
-	m_dest.y = up + r->local_frame.y;
-
-	return true;
 }
 
 /**

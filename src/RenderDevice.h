@@ -216,6 +216,9 @@ public:
 	virtual bool checkPixel(Point px, Image *image) = 0;
 
 protected:
+	/* Compute clipping and global position from local frame. */
+	bool localToGlobal(Sprite *r);
+
 	/* Image cache operations */
 	Image *cacheLookup(std::string &filename);
 	void cacheStore(std::string &filename, Image *);
@@ -223,12 +226,14 @@ protected:
 
 	bool is_initialized;
 
+	Rect m_clip;
+	Rect m_dest;
+
 private:
 	typedef std::map<std::string, Image *> IMAGE_CACHE_CONTAINER;
 	typedef IMAGE_CACHE_CONTAINER::iterator IMAGE_CACHE_CONTAINER_ITER;
 
 	IMAGE_CACHE_CONTAINER cache;
-
 };
 
 void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
