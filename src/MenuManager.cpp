@@ -133,7 +133,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 
 			if (infile.key == "id") {
 
-				/* finalize previously parsed menu */
+				// finalize previously parsed menu
 				if (menu_index != -1)
 					menus[menu_index]->align();
 
@@ -188,6 +188,11 @@ MenuManager::MenuManager(StatBlock *_stats)
 		}
 
 		infile.close();
+
+		// finalize the last parsed menu
+		if (menu_index != -1)
+			menus[menu_index]->align();
+
 	}
 
 	// Some menus need to be updated to apply their new dimensions
