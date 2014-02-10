@@ -76,7 +76,6 @@ public:
 
 	int getRowsCount();
 
-	bool talker_visible;
 	Rect slots_area;
 
 	TabList tablist;

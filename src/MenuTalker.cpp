@@ -48,7 +48,6 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	, font_dialog("font_regular")
 	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
-	, vendor_visible(false)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png")) {
 

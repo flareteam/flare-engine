@@ -82,7 +82,6 @@ private:
 
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
-	void resetDrag();
 	void splitStack(ItemStack stack);
 
 public:
@@ -95,6 +94,7 @@ public:
 	void closeAll();
 	void closeLeft();
 	void closeRight();
+	void resetDrag();
 
 	std::vector<Menu*> menus;
 	MenuInventory *inv;

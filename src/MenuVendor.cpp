@@ -46,8 +46,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	, activetab(VENDOR_BUY)
 	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
-	, buyback_stock()
-	, talker_visible(false) {
+	, buyback_stock() {
 	background.setGraphics(render_device->loadGraphicSurface("images/menus/vendor.png"));
 
 	tabControl->setTabTitle(VENDOR_BUY,msg->get("Inventory"));
