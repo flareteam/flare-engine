@@ -37,6 +37,9 @@ using namespace std;
 
 
 GameStateLoad::GameStateLoad() : GameState()
+	, background(NULL)
+	, selection(NULL)
+	, portrait_border(NULL)
 	, portrait(NULL) {
 	items = new ItemManager();
 	loading_requested = false;
