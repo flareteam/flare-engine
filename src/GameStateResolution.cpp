@@ -28,7 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameStateResolution::GameStateResolution(int width, int height, bool fullscreen, bool hwsurface, bool doublebuf)
 	: GameState()
 	, confirm(NULL)
-	, confirm_align("")
 	, confirm_ticks(0)
 	, old_w(VIEW_W)
 	, old_h(VIEW_H)
@@ -57,40 +56,7 @@ void GameStateResolution::logic() {
 			confirm = new MenuConfirm(msg->get("OK"),msg->get("Use this resolution?"));
 
 		if (confirm) {
-			// Load the MenuConfirm positions and alignments from menus/menus.txt
-			FileParser infile;
-			if (infile.open("menus/menus.txt")) {
-				int menu_index = -1;
-				while (infile.next()) {
-					if (infile.key == "id") {
-						if (infile.val == "confirm") menu_index = 0;
-						else menu_index = -1;
-					}
-
-					if (menu_index == -1)
-						continue;
-
-					if (infile.key == "layout") {
-						infile.val = infile.val + ',';
-						confirm_area.x = eatFirstInt(infile.val, ',');
-						confirm_area.y = eatFirstInt(infile.val, ',');
-						confirm_area.w = eatFirstInt(infile.val, ',');
-						confirm_area.h = eatFirstInt(infile.val, ',');
-					}
-
-					if (infile.key == "align") {
-						confirm_align = infile.val;
-					}
-				}
-				infile.close();
-			}
-
 			confirm->visible = true;
-			confirm->window_area = confirm_area;
-			confirm->alignment = confirm_align;
-			confirm->align();
-			confirm->update();
-
 			confirm_ticks = MAX_FRAMES_PER_SEC * 10;
 		}
 		else {

@@ -20,11 +20,22 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuExit
  */
 
+#include "FileParser.h"
 #include "MenuExit.h"
 #include "SharedResources.h"
 #include "Settings.h"
 
 MenuExit::MenuExit() : Menu() {
+
+	// Load config settings
+	FileParser infile;
+	if(infile.open("menus/exit.txt")) {
+		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+		}
+		infile.close();
+	}
 
 	exitClicked = false;
 
@@ -36,11 +47,14 @@ MenuExit::MenuExit() : Menu() {
 	background.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
 	tablist.add(buttonExit);
 	tablist.add(buttonClose);
+
+	align();
+	alignElements();
 }
 
-void MenuExit::update() {
-	buttonExit->pos.x = VIEW_W_HALF - buttonExit->pos.w/2;
-	buttonExit->pos.y = VIEW_H/2;
+void MenuExit::alignElements() {
+	buttonExit->pos.x = window_area.x + window_area.w/2 - buttonExit->pos.w/2;
+	buttonExit->pos.y = window_area.y + window_area.h/2;
 	buttonExit->refresh();
 
 	buttonClose->pos.x = window_area.x + window_area.w;

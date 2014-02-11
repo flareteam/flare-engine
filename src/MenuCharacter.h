@@ -59,6 +59,8 @@ public:
 
 class MenuCharacter : public Menu {
 private:
+	void alignElements();
+
 	StatBlock *stats;
 
 	WidgetButton *closeButton;
@@ -90,10 +92,11 @@ private:
 	bool show_upgrade[4];
 	bool show_stat[STATLIST_COUNT];
 
+	std::string cstat_labels[CSTAT_COUNT];
+
 public:
 	MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
-	void update();
 	void logic();
 	void render();
 	void refreshStats();

@@ -54,6 +54,7 @@ private:
 
 	Color background_color;
 	int background_alpha;
+	Point base_pos;
 
 	void keyboardLogic();
 

@@ -251,4 +251,32 @@ bool toBool(std::string value) {
 	return false;
 }
 
+Point toPoint(std::string value) {
+	Point p;
+	if (value.empty())
+		return p;
 
+	// Make sure the string ends with a delimeter
+	if (!value.empty() && value.at(value.size()-1) != ',')
+		value = value + ',';
+
+	p.x = eatFirstInt(value, ',');
+	p.y = eatFirstInt(value, ',');
+	return p;
+}
+
+Rect toRect(std::string value) {
+	Rect r;
+	if (value.empty())
+		return r;
+
+	// Make sure the string ends with a delimeter
+	if (!value.empty() && value.at(value.size()-1) != ',')
+		value = value + ',';
+
+	r.x = eatFirstInt(value, ',');
+	r.y = eatFirstInt(value, ',');
+	r.w = eatFirstInt(value, ',');
+	r.h = eatFirstInt(value, ',');
+	return r;
+}

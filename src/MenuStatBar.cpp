@@ -51,24 +51,18 @@ MenuStatBar::MenuStatBar(std::string type) {
 	FileParser infile;
 	if(infile.open("menus/"+type+".txt")) {
 		while(infile.next()) {
-			infile.val = infile.val + ',';
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
 
-			if(infile.key == "pos") {
-				bar_pos.x = eatFirstInt(infile.val,',');
-				bar_pos.y = eatFirstInt(infile.val,',');
-				bar_pos.w = eatFirstInt(infile.val,',');
-				bar_pos.h = eatFirstInt(infile.val,',');
+			if(infile.key == "bar_pos") {
+				bar_pos = toRect(infile.val);
 			}
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
 			}
 			else if(infile.key == "orientation") {
-				int orient = eatFirstInt(infile.val,',');
-				if (orient == 1)
-					orientation = true;
-				else
-					orientation = false;
+				orientation = toBool(infile.val);
 			}
 		}
 		infile.close();
@@ -77,6 +71,8 @@ MenuStatBar::MenuStatBar(std::string type) {
 	loadGraphics(type);
 
 	color_normal = font->getColor("menu_normal");
+
+	align();
 }
 
 void MenuStatBar::loadGraphics(std::string type) {

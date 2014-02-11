@@ -568,38 +568,6 @@ void GameStateConfig::readConfig () {
 		infile.close();
 	}
 
-	// Load the MenuConfirm positions and alignments from menus/menus.txt
-	if (infile.open("menus/menus.txt")) {
-		int menu_index = -1;
-		while (infile.next()) {
-			if (infile.key == "id") {
-				if (infile.val == "confirm") menu_index = 0;
-				else menu_index = -1;
-			}
-
-			if (menu_index == -1)
-				continue;
-
-			if (infile.key == "layout") {
-				infile.val = infile.val + ',';
-				menuConfirm_area.x = eatFirstInt(infile.val, ',');
-				menuConfirm_area.y = eatFirstInt(infile.val, ',');
-				menuConfirm_area.w = eatFirstInt(infile.val, ',');
-				menuConfirm_area.h = eatFirstInt(infile.val, ',');
-			}
-
-			if (infile.key == "align") {
-				menuConfirm_align = infile.val;
-			}
-		}
-		infile.close();
-	}
-
-	defaults_confirm->window_area = menuConfirm_area;
-	defaults_confirm->alignment = menuConfirm_align;
-	defaults_confirm->align();
-	defaults_confirm->update();
-
 	// Allocate KeyBindings ScrollBox
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
 	input_scrollbox->pos.x = scrollpane.x + frame.x;
@@ -978,10 +946,6 @@ void GameStateConfig::logic () {
 						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-29];
 					delete input_confirm;
 					input_confirm = new MenuConfirm("",confirm_msg);
-					input_confirm->window_area = menuConfirm_area;
-					input_confirm->alignment = menuConfirm_align;
-					input_confirm->align();
-					input_confirm->update();
 					input_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
 					input_confirm->visible = true;
 					input_key = i;

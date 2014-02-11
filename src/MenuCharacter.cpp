@@ -34,9 +34,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-
 MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	stats = _stats;
+
+	// Labels for major stats
+	cstat_labels[CSTAT_NAME] = "Name";
+	cstat_labels[CSTAT_LEVEL] = "Level";
+	cstat_labels[CSTAT_PHYSICAL] = "Physical";
+	cstat_labels[CSTAT_MENTAL] = "Mental";
+	cstat_labels[CSTAT_OFFENSE] = "Offense";
+	cstat_labels[CSTAT_DEFENSE] = "Defense";
 
 	skill_points = 0;
 
@@ -79,41 +86,18 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	FileParser infile;
 	if (infile.open("menus/character.txt")) {
 		while(infile.next()) {
-			infile.val = infile.val + ',';
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
 
-			if(infile.key == "close") {
-				close_pos.x = eatFirstInt(infile.val,',');
-				close_pos.y = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "label_title") {
-				title = eatLabelInfo(infile.val);
-			}
-			else if(infile.key == "upgrade_physical") {
-				upgrade_pos[0].x = eatFirstInt(infile.val,',');
-				upgrade_pos[0].y = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "upgrade_mental") {
-				upgrade_pos[1].x = eatFirstInt(infile.val,',');
-				upgrade_pos[1].y = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "upgrade_offense") {
-				upgrade_pos[2].x = eatFirstInt(infile.val,',');
-				upgrade_pos[2].y = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "upgrade_defense") {
-				upgrade_pos[3].x = eatFirstInt(infile.val,',');
-				upgrade_pos[3].y = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "statlist") {
-				statlist_pos.x = eatFirstInt(infile.val,',');
-				statlist_pos.y = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "statlist_rows") {
-				statlist_rows = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "statlist_scrollbar_offset") {
-				statlist_scrollbar_offset = eatFirstInt(infile.val,',');
-			}
+			if(infile.key == "close") close_pos = toPoint(infile.val);
+			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
+			else if(infile.key == "upgrade_physical") upgrade_pos[0] = toPoint(infile.val);
+			else if(infile.key == "upgrade_mental")	upgrade_pos[1] = toPoint(infile.val);
+			else if(infile.key == "upgrade_offense") upgrade_pos[2] = toPoint(infile.val);
+			else if(infile.key == "upgrade_defense") upgrade_pos[3] = toPoint(infile.val);
+			else if(infile.key == "statlist") statlist_pos = toPoint(infile.val);
+			else if (infile.key == "statlist_rows") statlist_rows = toInt(infile.val);
+			else if (infile.key == "statlist_scrollbar_offset") statlist_scrollbar_offset = toInt(infile.val);
 			else if(infile.key == "label_name") {
 				label_pos[0] = eatLabelInfo(infile.val);
 				cstat[CSTAT_NAME].visible = !label_pos[0].hidden;
@@ -138,108 +122,34 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 				label_pos[5] = eatLabelInfo(infile.val);
 				cstat[CSTAT_DEFENSE].visible = !label_pos[5].hidden;
 			}
-			else if(infile.key == "name") {
-				value_pos[0].x = eatFirstInt(infile.val,',');
-				value_pos[0].y = eatFirstInt(infile.val,',');
-				value_pos[0].w = eatFirstInt(infile.val,',');
-				value_pos[0].h = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "level") {
-				value_pos[1].x = eatFirstInt(infile.val,',');
-				value_pos[1].y = eatFirstInt(infile.val,',');
-				value_pos[1].w = eatFirstInt(infile.val,',');
-				value_pos[1].h = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "physical") {
-				value_pos[2].x = eatFirstInt(infile.val,',');
-				value_pos[2].y = eatFirstInt(infile.val,',');
-				value_pos[2].w = eatFirstInt(infile.val,',');
-				value_pos[2].h = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "mental") {
-				value_pos[3].x = eatFirstInt(infile.val,',');
-				value_pos[3].y = eatFirstInt(infile.val,',');
-				value_pos[3].w = eatFirstInt(infile.val,',');
-				value_pos[3].h = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "offense") {
-				value_pos[4].x = eatFirstInt(infile.val,',');
-				value_pos[4].y = eatFirstInt(infile.val,',');
-				value_pos[4].w = eatFirstInt(infile.val,',');
-				value_pos[4].h = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "defense") {
-				value_pos[5].x = eatFirstInt(infile.val,',');
-				value_pos[5].y = eatFirstInt(infile.val,',');
-				value_pos[5].w = eatFirstInt(infile.val,',');
-				value_pos[5].h = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "unspent") {
-				unspent_pos = eatLabelInfo(infile.val);
-			}
-			else if (infile.key == "show_upgrade_physical") {
-				if (eatFirstInt(infile.val,',') == 0) show_upgrade[0] = false;
-			}
-			else if (infile.key == "show_upgrade_mental") {
-				if (eatFirstInt(infile.val,',') == 0) show_upgrade[1] = false;
-			}
-			else if (infile.key == "show_upgrade_offense") {
-				if (eatFirstInt(infile.val,',') == 0) show_upgrade[2] = false;
-			}
-			else if (infile.key == "show_upgrade_defense") {
-				if (eatFirstInt(infile.val,',') == 0) show_upgrade[3] = false;
-			}
-			else if (infile.key == "show_maxhp") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[0] = false;
-			}
-			else if (infile.key == "show_hpregen") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[1] = false;
-			}
-			else if (infile.key == "show_maxmp") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[2] = false;
-			}
-			else if (infile.key == "show_mpregen") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[3] = false;
-			}
-			else if (infile.key == "show_accuracy") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[4] = false;
-			}
-			else if (infile.key == "show_avoidance") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[5] = false;
-			}
-			else if (infile.key == "show_melee") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[6] = false;
-			}
-			else if (infile.key == "show_ranged") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[7] = false;
-			}
-			else if (infile.key == "show_mental") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[8] = false;
-			}
-			else if (infile.key == "show_crit") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[9] = false;
-			}
-			else if (infile.key == "show_absorb") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[10] = false;
-			}
-			else if (infile.key == "show_poise") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[11] = false;
-			}
-			else if (infile.key == "show_bonus_xp") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[12] = false;
-			}
-			else if (infile.key == "show_bonus_currency") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[13] = false;
-			}
-			else if (infile.key == "show_bonus_itemfind") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[14] = false;
-			}
-			else if (infile.key == "show_bonus_stealth") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[15] = false;
-			}
-			else if (infile.key == "show_resists") {
-				if (eatFirstInt(infile.val,',') == 0) show_stat[16] = false;
-			}
+			else if(infile.key == "name") value_pos[0] = toRect(infile.val);
+			else if(infile.key == "level") value_pos[1] = toRect(infile.val);
+			else if(infile.key == "physical") value_pos[2] = toRect(infile.val);
+			else if(infile.key == "mental") value_pos[3] = toRect(infile.val);
+			else if(infile.key == "offense") value_pos[4] = toRect(infile.val);
+			else if(infile.key == "defense") value_pos[5] = toRect(infile.val);
+			else if(infile.key == "unspent") unspent_pos = eatLabelInfo(infile.val);
+			else if (infile.key == "show_upgrade_physical") show_upgrade[0] = toBool(infile.val);
+			else if (infile.key == "show_upgrade_mental") show_upgrade[1] = toBool(infile.val);
+			else if (infile.key == "show_upgrade_offense") show_upgrade[2] = toBool(infile.val);
+			else if (infile.key == "show_upgrade_defense") show_upgrade[3] = toBool(infile.val);
+			else if (infile.key == "show_maxhp") show_stat[0] = toBool(infile.val);
+			else if (infile.key == "show_hpregen") show_stat[1] = toBool(infile.val);
+			else if (infile.key == "show_maxmp") show_stat[2] = toBool(infile.val);
+			else if (infile.key == "show_mpregen") show_stat[3] = toBool(infile.val);
+			else if (infile.key == "show_accuracy") show_stat[4] = toBool(infile.val);
+			else if (infile.key == "show_avoidance") show_stat[5] = toBool(infile.val);
+			else if (infile.key == "show_melee") show_stat[6] = toBool(infile.val);
+			else if (infile.key == "show_ranged") show_stat[7] = toBool(infile.val);
+			else if (infile.key == "show_mental") show_stat[8] = toBool(infile.val);
+			else if (infile.key == "show_crit") show_stat[9] = toBool(infile.val);
+			else if (infile.key == "show_absorb") show_stat[10] = toBool(infile.val);
+			else if (infile.key == "show_poise") show_stat[11] = toBool(infile.val);
+			else if (infile.key == "show_bonus_xp") show_stat[12] = toBool(infile.val);
+			else if (infile.key == "show_bonus_currency") show_stat[13] = toBool(infile.val);
+			else if (infile.key == "show_bonus_itemfind") show_stat[14] = toBool(infile.val);
+			else if (infile.key == "show_bonus_stealth") show_stat[15] = toBool(infile.val);
+			else if (infile.key == "show_resists") show_stat[16] = toBool(infile.val);
 		}
 		infile.close();
 	}
@@ -251,9 +161,12 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	statList->scrollbar_offset = statlist_scrollbar_offset;
 
 	background.setGraphics(render_device->loadGraphicSurface("images/menus/character.png"));
+
+	align();
+	alignElements();
 }
 
-void MenuCharacter::update() {
+void MenuCharacter::alignElements() {
 
 	// close button
 	closeButton->pos.x = window_area.x + close_pos.x;
@@ -272,21 +185,13 @@ void MenuCharacter::update() {
 	statList->pos.x = window_area.x+statlist_pos.x;
 	statList->pos.y = window_area.y+statlist_pos.y;
 
-	// setup static labels
-	cstat[CSTAT_NAME].label->set(window_area.x+label_pos[0].x, window_area.y+label_pos[0].y, label_pos[0].justify, label_pos[0].valign, msg->get("Name"), font->getColor("menu_normal"), label_pos[0].font_style);
-	cstat[CSTAT_LEVEL].label->set(window_area.x+label_pos[1].x, window_area.y+label_pos[1].y, label_pos[1].justify, label_pos[1].valign, msg->get("Level"), font->getColor("menu_normal"), label_pos[1].font_style);
-	cstat[CSTAT_PHYSICAL].label->set(window_area.x+label_pos[2].x, window_area.y+label_pos[2].y, label_pos[2].justify, label_pos[2].valign, msg->get("Physical"), font->getColor("menu_normal"), label_pos[2].font_style);
-	cstat[CSTAT_MENTAL].label->set(window_area.x+label_pos[3].x, window_area.y+label_pos[3].y, label_pos[3].justify, label_pos[3].valign, msg->get("Mental"), font->getColor("menu_normal"), label_pos[3].font_style);
-	cstat[CSTAT_OFFENSE].label->set(window_area.x+label_pos[4].x, window_area.y+label_pos[4].y, label_pos[4].justify, label_pos[4].valign, msg->get("Offense"), font->getColor("menu_normal"), label_pos[4].font_style);
-	cstat[CSTAT_DEFENSE].label->set(window_area.x+label_pos[5].x, window_area.y+label_pos[5].y, label_pos[5].justify, label_pos[5].valign, msg->get("Defense"), font->getColor("menu_normal"), label_pos[5].font_style);
+	for (int i=0; i<CSTAT_COUNT; i++) {
+		// setup static labels
+		cstat[i].label->set(window_area.x+label_pos[i].x, window_area.y+label_pos[i].y, label_pos[i].justify, label_pos[i].valign, msg->get(cstat_labels[i]), font->getColor("menu_normal"), label_pos[i].font_style);
 
-	// setup hotspot locations
-	cstat[CSTAT_NAME].setHover(window_area.x+value_pos[0].x, window_area.y+value_pos[0].y, value_pos[0].w, value_pos[0].h);
-	cstat[CSTAT_LEVEL].setHover(window_area.x+value_pos[1].x, window_area.y+value_pos[1].y, value_pos[1].w, value_pos[1].h);
-	cstat[CSTAT_PHYSICAL].setHover(window_area.x+value_pos[2].x, window_area.y+value_pos[2].y, value_pos[2].w, value_pos[2].h);
-	cstat[CSTAT_MENTAL].setHover(window_area.x+value_pos[3].x, window_area.y+value_pos[3].y, value_pos[3].w, value_pos[3].h);
-	cstat[CSTAT_OFFENSE].setHover(window_area.x+value_pos[4].x, window_area.y+value_pos[4].y, value_pos[4].w, value_pos[4].h);
-	cstat[CSTAT_DEFENSE].setHover(window_area.x+value_pos[5].x, window_area.y+value_pos[5].y, value_pos[5].w, value_pos[5].h);
+		// setup hotspot locations
+		cstat[i].setHover(window_area.x+value_pos[i].x, window_area.y+value_pos[i].y, value_pos[i].w, value_pos[i].h);
+	}
 }
 
 /**

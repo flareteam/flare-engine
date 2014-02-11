@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define UTILS_PARSING_H
 
 #include "CommonIncludes.h"
+#include "Utils.h"
 #include <typeinfo>
 
 std::string trim(std::string s, const std::string& delimiters = " \f\n\r\t\v");
@@ -42,5 +43,7 @@ int toInt(const std::string& s, int default_value = 0);
 float toFloat(const std::string &s, float default_value = 0.0);
 unsigned long toUnsignedLong(const std::string& s, unsigned long default_value = 0);
 bool toBool(std::string value);
+Point toPoint(std::string value);
+Rect toRect(std::string value);
 
 #endif

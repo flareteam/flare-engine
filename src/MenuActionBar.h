@@ -45,6 +45,7 @@ const int MENU_LOG = 3;
 
 class MenuActionBar : public Menu {
 private:
+	void alignElements();
 	void renderCooldowns();
 
 	Sprite emptyslot;
@@ -73,7 +74,6 @@ public:
 	void remove(Point mouse);
 	void set(int power_id[12]);
 	void clear();
-	void update();
 	void resetSlots();
 
 	TooltipData checkTooltip(Point mouse);

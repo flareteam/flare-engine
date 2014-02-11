@@ -42,20 +42,17 @@ MenuLog::MenuLog() {
 	FileParser infile;
 	if(infile.open("menus/log.txt")) {
 		while(infile.next()) {
-			infile.val = infile.val + ',';
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
 
 			if(infile.key == "label_title") {
 				title = eatLabelInfo(infile.val);
 			}
 			else if(infile.key == "close") {
-				close_pos.x = eatFirstInt(infile.val,',');
-				close_pos.y = eatFirstInt(infile.val,',');
+				close_pos = toPoint(infile.val);
 			}
 			else if(infile.key == "tab_area") {
-				tab_area.x = eatFirstInt(infile.val,',');
-				tab_area.y = eatFirstInt(infile.val,',');
-				tab_area.w = eatFirstInt(infile.val,',');
-				tab_area.h = eatFirstInt(infile.val,',');
+				tab_area = toRect(infile.val);
 			}
 		}
 		infile.close();
@@ -84,9 +81,12 @@ MenuLog::MenuLog() {
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	color_normal = font->getColor("menu_normal");
+
+	align();
+	alignElements();
 }
 
-void MenuLog::update() {
+void MenuLog::alignElements() {
 	tabControl->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y, tab_area.w, tab_area.h);
 	tabControl->updateHeader();
 	closeButton->pos.x = window_area.x + close_pos.x;

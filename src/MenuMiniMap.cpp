@@ -45,13 +45,11 @@ MenuMiniMap::MenuMiniMap() {
 	FileParser infile;
 	if (infile.open("menus/minimap.txt")) {
 		while(infile.next()) {
-			infile.val = infile.val + ',';
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
 
-			if(infile.key == "pos") {
-				pos.x = eatFirstInt(infile.val,',');
-				pos.y = eatFirstInt(infile.val,',');
-				pos.w = eatFirstInt(infile.val,',');
-				pos.h = eatFirstInt(infile.val,',');
+			if(infile.key == "map_pos") {
+				pos = toRect(infile.val);
 			}
 			else if(infile.key == "text_pos") {
 				text_pos = eatLabelInfo(infile.val);
@@ -63,6 +61,7 @@ MenuMiniMap::MenuMiniMap() {
 	// label for map name
 	label = new WidgetLabel();
 
+	align();
 }
 
 void MenuMiniMap::getMapTitle(std::string map_title) {

@@ -29,8 +29,6 @@ private:
 	bool compareVideoSettings();
 	void cleanup();
 	MenuConfirm *confirm;
-	Rect confirm_area;
-	std::string confirm_align;
 	int confirm_ticks;
 	int old_w;
 	int old_h;

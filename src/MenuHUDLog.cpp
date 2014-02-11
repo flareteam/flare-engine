@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuHUDLog
  */
 
+#include "FileParser.h"
 #include "Menu.h"
 #include "MenuHUDLog.h"
 #include "SharedResources.h"
@@ -30,8 +31,18 @@ using namespace std;
 
 MenuHUDLog::MenuHUDLog() {
 
-	list_area.x = 224;
-	list_area.y = 416;
+	// Load config settings
+	FileParser infile;
+	if(infile.open("menus/hudlog.txt")) {
+		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+		}
+		infile.close();
+	}
+
+	align();
+
 	font->setFont("font_regular");
 	paragraph_spacing = font->getLineHeight()/2;
 
@@ -68,8 +79,7 @@ void MenuHUDLog::render() {
 
 	Rect dest;
 	dest.x = window_area.x;
-	dest.y = window_area.y;
-
+	dest.y = window_area.y+window_area.h;
 
 	// go through new messages
 	for (int i = msg_age.size() - 1; i >= 0; i--) {

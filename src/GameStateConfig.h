@@ -57,9 +57,6 @@ private:
 	Rect frame;
 	std::vector<Rect> video_modes;
 
-	Rect menuConfirm_area;
-	std::string menuConfirm_align;
-
 	std::vector<std::string> language_ISO;
 	std::vector<std::string> language_full;
 
