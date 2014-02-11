@@ -45,9 +45,12 @@ MenuMiniMap::MenuMiniMap() {
 	FileParser infile;
 	if (infile.open("menus/minimap.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
-			if(infile.key == "pos") {
+			if(infile.key == "map_pos") {
 				pos.x = eatFirstInt(infile.val,',');
 				pos.y = eatFirstInt(infile.val,',');
 				pos.w = eatFirstInt(infile.val,',');
@@ -59,6 +62,8 @@ MenuMiniMap::MenuMiniMap() {
 		}
 		infile.close();
 	}
+
+	align();
 
 	// label for map name
 	label = new WidgetLabel();

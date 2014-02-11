@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "FileParser.h"
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -32,6 +33,16 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	, confirmClicked(false)
 	, cancelClicked(false) {
 
+	// Load config settings
+	FileParser infile;
+	if(infile.open("menus/confirm.txt")) {
+		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+		}
+		infile.close();
+	}
+
 	if (_buttonMsg != "") hasConfirmButton = true;
 	// Text to display in confirmation box
 	boxMsg = _boxMsg;
@@ -46,6 +57,9 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	tablist.add(buttonClose);
 
 	background.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
+
+	align();
+	update();
 }
 
 void MenuConfirm::update() {

@@ -58,6 +58,9 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	FileParser infile;
 	if(infile.open("menus/talker.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
 			if(infile.key == "close") {
@@ -112,6 +115,9 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	tablist.add(advanceButton);
 	tablist.add(closeButton);
 	tablist.add(textbox);
+
+	align();
+	update();
 }
 
 void MenuTalker::chooseDialogNode(int request_dialog_node) {

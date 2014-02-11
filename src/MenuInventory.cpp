@@ -60,6 +60,9 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	FileParser infile;
 	if (infile.open("menus/inventory.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
 			if(infile.key == "close") {
@@ -107,6 +110,9 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 
 	color_normal = font->getColor("menu_normal");
 	color_high = font->getColor("menu_bonus");
+
+	align();
+	update();
 }
 
 void MenuInventory::update() {

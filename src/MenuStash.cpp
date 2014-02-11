@@ -51,6 +51,9 @@ MenuStash::MenuStash(StatBlock *_stats)
 	FileParser infile;
 	if (infile.open("menus/stash.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
 			if (infile.key == "close") {
@@ -78,6 +81,9 @@ MenuStash::MenuStash(StatBlock *_stats)
 	}
 
 	STASH_SLOTS = slots_cols * slots_rows;
+
+	align();
+	update();
 }
 
 void MenuStash::update() {

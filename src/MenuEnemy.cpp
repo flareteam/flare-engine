@@ -42,9 +42,12 @@ MenuEnemy::MenuEnemy() {
 	FileParser infile;
 	if(infile.open("menus/enemy.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
-			if(infile.key == "pos") {
+			if(infile.key == "bar_pos") {
 				bar_pos.x = eatFirstInt(infile.val,',');
 				bar_pos.y = eatFirstInt(infile.val,',');
 				bar_pos.w = eatFirstInt(infile.val,',');
@@ -57,6 +60,8 @@ MenuEnemy::MenuEnemy() {
 		}
 		infile.close();
 	}
+
+	align();
 
 	loadGraphics();
 	enemy = NULL;

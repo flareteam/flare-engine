@@ -42,6 +42,9 @@ MenuLog::MenuLog() {
 	FileParser infile;
 	if(infile.open("menus/log.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
 			if(infile.key == "label_title") {
@@ -84,6 +87,9 @@ MenuLog::MenuLog() {
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	color_normal = font->getColor("menu_normal");
+
+	align();
+	update();
 }
 
 void MenuLog::update() {

@@ -43,6 +43,9 @@ MenuActiveEffects::MenuActiveEffects()
 	FileParser infile;
 	if(infile.open("menus/activeeffects.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
 			if(infile.key == "orientation") {
@@ -55,6 +58,8 @@ MenuActiveEffects::MenuActiveEffects()
 		}
 		infile.close();
 	}
+
+	align();
 
 	loadGraphics();
 }

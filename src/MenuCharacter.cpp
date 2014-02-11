@@ -79,6 +79,9 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	FileParser infile;
 	if (infile.open("menus/character.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
 			if(infile.key == "close") {
@@ -251,6 +254,9 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	statList->scrollbar_offset = statlist_scrollbar_offset;
 
 	background.setGraphics(render_device->loadGraphicSurface("images/menus/character.png"));
+
+	align();
+	update();
 }
 
 void MenuCharacter::update() {

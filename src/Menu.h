@@ -43,6 +43,7 @@ public:
 	std::string alignment;
 
 	virtual void align();
+	virtual bool parseMenuKey(const std::string &key, const std::string &val);
 	virtual void render() = 0;
 
 	SoundManager::SoundID sfx_open;

@@ -97,6 +97,9 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar) {
 
 	color_bonus = font->getColor("menu_bonus");
 	color_penalty = font->getColor("menu_penalty");
+
+	align();
+	update();
 }
 
 void MenuPowers::update() {
@@ -769,6 +772,9 @@ bool MenuPowers::powerIsVisible(short power_index, const std::vector<Power_Menu_
 }
 
 void MenuPowers::loadHeader(FileParser &infile) {
+	if (parseMenuKey(infile.key, infile.val))
+		return;
+
 	infile.val = infile.val + ',';
 
 	if (infile.key == "tab_title") {

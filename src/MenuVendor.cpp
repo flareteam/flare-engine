@@ -59,6 +59,9 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	FileParser infile;
 	if(infile.open("menus/vendor.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
 			if(infile.key == "close") {
@@ -83,6 +86,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	}
 
 	VENDOR_SLOTS = slots_cols * slots_rows;
+	align();
+	update();
 }
 
 void MenuVendor::update() {
@@ -99,6 +104,7 @@ void MenuVendor::update() {
 
 	stock[VENDOR_BUY].init( VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
 	stock[VENDOR_SELL].init( VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
+	buyback_stock.init(NPC_VENDOR_MAX_STOCK);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;

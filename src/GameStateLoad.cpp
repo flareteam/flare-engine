@@ -126,36 +126,6 @@ GameStateLoad::GameStateLoad() : GameState() {
 		infile.close();
 	}
 
-	// Load the MenuConfirm positions and alignments from menus/menus.txt
-	if (infile.open("menus/menus.txt")) {
-		int menu_index = -1;
-		while (infile.next()) {
-			if (infile.key == "id") {
-				if (infile.val == "confirm") menu_index = 0;
-				else menu_index = -1;
-			}
-
-			if (menu_index == -1)
-				continue;
-
-			if (infile.key == "layout") {
-				infile.val = infile.val + ',';
-				confirm->window_area.x = eatFirstInt(infile.val, ',');
-				confirm->window_area.y = eatFirstInt(infile.val, ',');
-				confirm->window_area.w = eatFirstInt(infile.val, ',');
-				confirm->window_area.h = eatFirstInt(infile.val, ',');
-			}
-
-			if (infile.key == "align") {
-				confirm->alignment = infile.val;
-			}
-		}
-		infile.close();
-	}
-
-	confirm->align();
-	confirm->update();
-
 	// get displayable types list
 	bool found_layer = false;
 	if (infile.open("engine/hero_layers.txt")) {
