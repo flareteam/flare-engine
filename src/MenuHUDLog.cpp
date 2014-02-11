@@ -43,9 +43,6 @@ MenuHUDLog::MenuHUDLog() {
 
 	align();
 
-	// TODO remove hardcoding here
-	list_area.x = 224;
-	list_area.y = 416;
 	font->setFont("font_regular");
 	paragraph_spacing = font->getLineHeight()/2;
 
@@ -82,8 +79,7 @@ void MenuHUDLog::render() {
 
 	Rect dest;
 	dest.x = window_area.x;
-	dest.y = window_area.y;
-
+	dest.y = window_area.y+window_area.h;
 
 	// go through new messages
 	for (int i = msg_age.size() - 1; i >= 0; i--) {

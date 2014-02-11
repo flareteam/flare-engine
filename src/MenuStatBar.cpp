@@ -54,24 +54,15 @@ MenuStatBar::MenuStatBar(std::string type) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
 			if(infile.key == "bar_pos") {
-				bar_pos.x = eatFirstInt(infile.val,',');
-				bar_pos.y = eatFirstInt(infile.val,',');
-				bar_pos.w = eatFirstInt(infile.val,',');
-				bar_pos.h = eatFirstInt(infile.val,',');
+				bar_pos = toRect(infile.val);
 			}
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
 			}
 			else if(infile.key == "orientation") {
-				int orient = eatFirstInt(infile.val,',');
-				if (orient == 1)
-					orientation = true;
-				else
-					orientation = false;
+				orientation = toBool(infile.val);
 			}
 		}
 		infile.close();

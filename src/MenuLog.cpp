@@ -45,20 +45,14 @@ MenuLog::MenuLog() {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
 			if(infile.key == "label_title") {
 				title = eatLabelInfo(infile.val);
 			}
 			else if(infile.key == "close") {
-				close_pos.x = eatFirstInt(infile.val,',');
-				close_pos.y = eatFirstInt(infile.val,',');
+				close_pos = toPoint(infile.val);
 			}
 			else if(infile.key == "tab_area") {
-				tab_area.x = eatFirstInt(infile.val,',');
-				tab_area.y = eatFirstInt(infile.val,',');
-				tab_area.w = eatFirstInt(infile.val,',');
-				tab_area.h = eatFirstInt(infile.val,',');
+				tab_area = toRect(infile.val);
 			}
 		}
 		infile.close();

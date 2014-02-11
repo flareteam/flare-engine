@@ -775,13 +775,11 @@ void MenuPowers::loadHeader(FileParser &infile) {
 	if (parseMenuKey(infile.key, infile.val))
 		return;
 
-	infile.val = infile.val + ',';
-
 	if (infile.key == "tab_title") {
-		tab_titles.push_back(eatFirstString(infile.val, ','));
+		tab_titles.push_back(infile.val);
 	}
 	else if (infile.key == "tab_tree") {
-		tree_image_files.push_back(eatFirstString(infile.val, ','));
+		tree_image_files.push_back(infile.val);
 	}
 	else if (infile.key == "label_title") {
 		title = eatLabelInfo(infile.val);
@@ -790,17 +788,13 @@ void MenuPowers::loadHeader(FileParser &infile) {
 		unspent_points = eatLabelInfo(infile.val);
 	}
 	else if (infile.key == "close") {
-		close_pos.x = eatFirstInt(infile.val, ',');
-		close_pos.y = eatFirstInt(infile.val, ',');
+		close_pos = toPoint(infile.val);
 	}
 	else if (infile.key == "tab_area") {
-		tab_area.x = eatFirstInt(infile.val, ',');
-		tab_area.y = eatFirstInt(infile.val, ',');
-		tab_area.w = eatFirstInt(infile.val, ',');
-		tab_area.h = eatFirstInt(infile.val, ',');
+		tab_area = toRect(infile.val);
 	}
 	else if (infile.key == "tabs") {
-		tabs_count = eatFirstInt(infile.val, ',');
+		tabs_count = toInt(infile.val);
 		if (tabs_count < 1) tabs_count = 1;
 	}
 }

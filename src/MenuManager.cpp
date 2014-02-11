@@ -92,7 +92,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(mp); // menus[1]
 	xp = new MenuStatBar("xp");
 	menus.push_back(xp); // menus[2]
-	effects = new MenuActiveEffects();
+	effects = new MenuActiveEffects(stats);
 	menus.push_back(effects); // menus[3]
 	hudlog = new MenuHUDLog();
 	menus.push_back(hudlog); // menus[4]
@@ -359,10 +359,9 @@ void MenuManager::logic() {
 	bool clicking_log = false;
 	ItemStack stack;
 
-	hp->update(stats->hp,stats->get(STAT_HP_MAX),inpt->mouse,"");
-	mp->update(stats->mp,stats->get(STAT_MP_MAX),inpt->mouse,"");
+	hp->update(stats->hp,stats->get(STAT_HP_MAX),inpt->mouse);
+	mp->update(stats->mp,stats->get(STAT_MP_MAX),inpt->mouse);
 	xp->update((stats->xp - stats->xp_table[stats->level-1]),(stats->xp_table[stats->level] - stats->xp_table[stats->level-1]),inpt->mouse,msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
-	effects->update(stats);
 
 	if (NO_MOUSE)
 		handleKeyboardNavigation();

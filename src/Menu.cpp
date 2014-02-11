@@ -65,16 +65,7 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 
 	if (key == "pos") {
 		value = value + ',';
-		int x = eatFirstInt(value, ',');
-		int y = eatFirstInt(value, ',');
-		int w = eatFirstInt(value, ',');
-		int h = eatFirstInt(value, ',');
-
-		window_area.x = x;
-		window_area.y = y;
-		window_area.w = w;
-		window_area.h = h;
-
+		window_area = toRect(value);
 	}
 	else if (key == "align") {
 		alignment = value;

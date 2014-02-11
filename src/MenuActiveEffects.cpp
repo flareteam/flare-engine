@@ -36,8 +36,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuActiveEffects::MenuActiveEffects()
-	: stats(NULL)
+MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
+	: stats(_stats)
 	, orientation(false) { // horizontal
 	// Load config settings
 	FileParser infile;
@@ -46,22 +46,15 @@ MenuActiveEffects::MenuActiveEffects()
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
 			if(infile.key == "orientation") {
-				int orient = eatFirstInt(infile.val,',');
-				if (orient == 1)
-					orientation = true;
-				else
-					orientation = false;
+				orientation = toBool(infile.val);
 			}
 		}
 		infile.close();
 	}
 
-	align();
-
 	loadGraphics();
+	align();
 }
 
 void MenuActiveEffects::loadGraphics() {
@@ -100,10 +93,6 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 			render_device->render(timer);
 		}
 	}
-}
-
-void MenuActiveEffects::update(StatBlock *_stats) {
-	stats = _stats;
 }
 
 void MenuActiveEffects::render() {

@@ -61,50 +61,15 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
-			if(infile.key == "close") {
-				close_pos.x = eatFirstInt(infile.val,',');
-				close_pos.y = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "advance") {
-				advance_pos.x = eatFirstInt(infile.val,',');
-				advance_pos.y = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "dialogbox") {
-				dialog_pos.x = eatFirstInt(infile.val,',');
-				dialog_pos.y = eatFirstInt(infile.val,',');
-				dialog_pos.w = eatFirstInt(infile.val,',');
-				dialog_pos.h = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "dialogtext") {
-				text_pos.x = eatFirstInt(infile.val,',');
-				text_pos.y = eatFirstInt(infile.val,',');
-				text_pos.w = eatFirstInt(infile.val,',');
-				text_pos.h = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "text_offset") {
-				text_offset.x = eatFirstInt(infile.val,',');
-				text_offset.y = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "portrait_he") {
-				portrait_he.x = eatFirstInt(infile.val,',');
-				portrait_he.y = eatFirstInt(infile.val,',');
-				portrait_he.w = eatFirstInt(infile.val,',');
-				portrait_he.h = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "portrait_you") {
-				portrait_you.x = eatFirstInt(infile.val,',');
-				portrait_you.y = eatFirstInt(infile.val,',');
-				portrait_you.w = eatFirstInt(infile.val,',');
-				portrait_you.h = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "font_who") {
-				font_who = eatFirstString(infile.val,',');
-			}
-			else if (infile.key == "font_dialog") {
-				font_dialog = eatFirstString(infile.val,',');
-			}
+			if(infile.key == "close") close_pos = toPoint(infile.val);
+			else if(infile.key == "advance") advance_pos = toPoint(infile.val);
+			else if (infile.key == "dialogbox") dialog_pos = toRect(infile.val);
+			else if (infile.key == "dialogtext") text_pos = toRect(infile.val);
+			else if (infile.key == "text_offset") text_offset = toPoint(infile.val);
+			else if (infile.key == "portrait_he") portrait_he = toRect(infile.val);
+			else if (infile.key == "portrait_you") portrait_you = toRect(infile.val);
+			else if (infile.key == "font_who") font_who = infile.val;
+			else if (infile.key == "font_dialog") font_dialog = infile.val;
 		}
 		infile.close();
 	}

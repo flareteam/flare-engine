@@ -48,10 +48,7 @@ MenuEnemy::MenuEnemy() {
 			infile.val = infile.val + ',';
 
 			if(infile.key == "bar_pos") {
-				bar_pos.x = eatFirstInt(infile.val,',');
-				bar_pos.y = eatFirstInt(infile.val,',');
-				bar_pos.w = eatFirstInt(infile.val,',');
-				bar_pos.h = eatFirstInt(infile.val,',');
+				bar_pos = toRect(infile.val);
 			}
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
@@ -61,13 +58,13 @@ MenuEnemy::MenuEnemy() {
 		infile.close();
 	}
 
-	align();
-
 	loadGraphics();
 	enemy = NULL;
 	timeout = 0;
 
 	color_normal = font->getColor("menu_normal");
+
+	align();
 }
 
 void MenuEnemy::loadGraphics() {

@@ -63,44 +63,22 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
-			if(infile.key == "close") {
-				close_pos.x = eatFirstInt(infile.val,',');
-				close_pos.y = eatFirstInt(infile.val,',');
-			}
+			if(infile.key == "close") close_pos = toPoint(infile.val);
 			else if(infile.key == "equipment_slot") {
+				infile.val = infile.val + ',';
 				equipment_slot.x = eatFirstInt(infile.val,',');
 				equipment_slot.y = eatFirstInt(infile.val,',');
 				equipment_slot.w = equipment_slot.h = eatFirstInt(infile.val,',');
 				equipped_area.push_back(equipment_slot);
 				slot_type.push_back(eatFirstString(infile.val,','));
 			}
-			else if(infile.key == "slot_name") {
-				slot_desc.push_back(eatFirstString(infile.val,','));
-			}
-			else if(infile.key == "carried_area") {
-				carried_area.x = eatFirstInt(infile.val,',');
-				carried_area.y = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "carried_cols") {
-				carried_cols = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "carried_rows") {
-				carried_rows = eatFirstInt(infile.val,',');
-			}
-			else if (infile.key == "label_title") {
-				title =  eatLabelInfo(infile.val);
-			}
-			else if (infile.key == "currency") {
-				currency_lbl =  eatLabelInfo(infile.val);
-			}
-			else if (infile.key == "help") {
-				help_pos.x = eatFirstInt(infile.val,',');
-				help_pos.y = eatFirstInt(infile.val,',');
-				help_pos.w = eatFirstInt(infile.val,',');
-				help_pos.h = eatFirstInt(infile.val,',');
-			}
+			else if(infile.key == "slot_name") slot_desc.push_back(infile.val);
+			else if(infile.key == "carried_area") carried_area = toRect(infile.val);
+			else if (infile.key == "carried_cols") carried_cols = toInt(infile.val);
+			else if (infile.key == "carried_rows") carried_rows = toInt(infile.val);
+			else if (infile.key == "label_title") title =  eatLabelInfo(infile.val);
+			else if (infile.key == "currency") currency_lbl =  eatLabelInfo(infile.val);
+			else if (infile.key == "help") help_pos = toRect(infile.val);
 		}
 		infile.close();
 	}

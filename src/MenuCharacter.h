@@ -90,6 +90,8 @@ private:
 	bool show_upgrade[4];
 	bool show_stat[STATLIST_COUNT];
 
+	std::string cstat_labels[CSTAT_COUNT];
+
 public:
 	MenuCharacter(StatBlock *stats);
 	~MenuCharacter();

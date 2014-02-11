@@ -48,13 +48,8 @@ MenuMiniMap::MenuMiniMap() {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
 			if(infile.key == "map_pos") {
-				pos.x = eatFirstInt(infile.val,',');
-				pos.y = eatFirstInt(infile.val,',');
-				pos.w = eatFirstInt(infile.val,',');
-				pos.h = eatFirstInt(infile.val,',');
+				pos = toRect(infile.val);
 			}
 			else if(infile.key == "text_pos") {
 				text_pos = eatLabelInfo(infile.val);
@@ -63,11 +58,10 @@ MenuMiniMap::MenuMiniMap() {
 		infile.close();
 	}
 
-	align();
-
 	// label for map name
 	label = new WidgetLabel();
 
+	align();
 }
 
 void MenuMiniMap::getMapTitle(std::string map_title) {

@@ -77,120 +77,25 @@ MenuActionBar::MenuActionBar(Avatar *_hero) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
-			if (infile.key == "slot1") {
-				slots[0]->pos.x = eatFirstInt(infile.val, ',');
-				slots[0]->pos.y = eatFirstInt(infile.val, ',');
-				slots[0]->pos.w = eatFirstInt(infile.val, ',');
-				slots[0]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot2") {
-				slots[1]->pos.x = eatFirstInt(infile.val, ',');
-				slots[1]->pos.y = eatFirstInt(infile.val, ',');
-				slots[1]->pos.w = eatFirstInt(infile.val, ',');
-				slots[1]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot3") {
-				slots[2]->pos.x = eatFirstInt(infile.val, ',');
-				slots[2]->pos.y = eatFirstInt(infile.val, ',');
-				slots[2]->pos.w = eatFirstInt(infile.val, ',');
-				slots[2]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot4") {
-				slots[3]->pos.x = eatFirstInt(infile.val, ',');
-				slots[3]->pos.y = eatFirstInt(infile.val, ',');
-				slots[3]->pos.w = eatFirstInt(infile.val, ',');
-				slots[3]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot5") {
-				slots[4]->pos.x = eatFirstInt(infile.val, ',');
-				slots[4]->pos.y = eatFirstInt(infile.val, ',');
-				slots[4]->pos.w = eatFirstInt(infile.val, ',');
-				slots[4]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot6") {
-				slots[5]->pos.x = eatFirstInt(infile.val, ',');
-				slots[5]->pos.y = eatFirstInt(infile.val, ',');
-				slots[5]->pos.w = eatFirstInt(infile.val, ',');
-				slots[5]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot7") {
-				slots[6]->pos.x = eatFirstInt(infile.val, ',');
-				slots[6]->pos.y = eatFirstInt(infile.val, ',');
-				slots[6]->pos.w = eatFirstInt(infile.val, ',');
-				slots[6]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot8") {
-				slots[7]->pos.x = eatFirstInt(infile.val, ',');
-				slots[7]->pos.y = eatFirstInt(infile.val, ',');
-				slots[7]->pos.w = eatFirstInt(infile.val, ',');
-				slots[7]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot9") {
-				slots[8]->pos.x = eatFirstInt(infile.val, ',');
-				slots[8]->pos.y = eatFirstInt(infile.val, ',');
-				slots[8]->pos.w = eatFirstInt(infile.val, ',');
-				slots[8]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot10") {
-				slots[9]->pos.x = eatFirstInt(infile.val, ',');
-				slots[9]->pos.y = eatFirstInt(infile.val, ',');
-				slots[9]->pos.w = eatFirstInt(infile.val, ',');
-				slots[9]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot_M1") {
-				slots[10]->pos.x = eatFirstInt(infile.val, ',');
-				slots[10]->pos.y = eatFirstInt(infile.val, ',');
-				slots[10]->pos.w = eatFirstInt(infile.val, ',');
-				slots[10]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "slot_M2") {
-				slots[11]->pos.x = eatFirstInt(infile.val, ',');
-				slots[11]->pos.y = eatFirstInt(infile.val, ',');
-				slots[11]->pos.w = eatFirstInt(infile.val, ',');
-				slots[11]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "char_menu") {
-				menus[MENU_CHARACTER]->pos.x = eatFirstInt(infile.val, ',');
-				menus[MENU_CHARACTER]->pos.y = eatFirstInt(infile.val, ',');
-				menus[MENU_CHARACTER]->pos.w = eatFirstInt(infile.val, ',');
-				menus[MENU_CHARACTER]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "inv_menu") {
-				menus[MENU_INVENTORY]->pos.x = eatFirstInt(infile.val, ',');
-				menus[MENU_INVENTORY]->pos.y = eatFirstInt(infile.val, ',');
-				menus[MENU_INVENTORY]->pos.w = eatFirstInt(infile.val, ',');
-				menus[MENU_INVENTORY]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "powers_menu") {
-				menus[MENU_POWERS]->pos.x = eatFirstInt(infile.val, ',');
-				menus[MENU_POWERS]->pos.y = eatFirstInt(infile.val, ',');
-				menus[MENU_POWERS]->pos.w = eatFirstInt(infile.val, ',');
-				menus[MENU_POWERS]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "log_menu") {
-				menus[MENU_LOG]->pos.x = eatFirstInt(infile.val, ',');
-				menus[MENU_LOG]->pos.y = eatFirstInt(infile.val, ',');
-				menus[MENU_LOG]->pos.w = eatFirstInt(infile.val, ',');
-				menus[MENU_LOG]->pos.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "numberArea") {
-				numberArea.x = eatFirstInt(infile.val, ',');
-				numberArea.w = eatFirstInt(infile.val, ',');
-				numberArea.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "mouseArea") {
-				mouseArea.x = eatFirstInt(infile.val, ',');
-				mouseArea.w = eatFirstInt(infile.val, ',');
-				mouseArea.h = eatFirstInt(infile.val, ',');
-			}
-			else if (infile.key == "menuArea") {
-				menuArea.x = eatFirstInt(infile.val, ',');
-				menuArea.w = eatFirstInt(infile.val, ',');
-				menuArea.h = eatFirstInt(infile.val, ',');
-			}
-
+			if (infile.key == "slot1") slots[0]->pos = toRect(infile.val);
+			else if (infile.key == "slot2") slots[1]->pos = toRect(infile.val);
+			else if (infile.key == "slot3") slots[2]->pos = toRect(infile.val);
+			else if (infile.key == "slot4") slots[3]->pos = toRect(infile.val);
+			else if (infile.key == "slot5") slots[4]->pos = toRect(infile.val);
+			else if (infile.key == "slot6") slots[5]->pos = toRect(infile.val);
+			else if (infile.key == "slot7") slots[6]->pos = toRect(infile.val);
+			else if (infile.key == "slot8") slots[7]->pos = toRect(infile.val);
+			else if (infile.key == "slot9") slots[8]->pos = toRect(infile.val);
+			else if (infile.key == "slot10") slots[9]->pos = toRect(infile.val);
+			else if (infile.key == "slot_M1") slots[10]->pos = toRect(infile.val);
+			else if (infile.key == "slot_M2") slots[11]->pos = toRect(infile.val);
+			else if (infile.key == "char_menu") menus[MENU_CHARACTER]->pos = toRect(infile.val);
+			else if (infile.key == "inv_menu") menus[MENU_INVENTORY]->pos = toRect(infile.val);
+			else if (infile.key == "powers_menu") menus[MENU_POWERS]->pos = toRect(infile.val);
+			else if (infile.key == "log_menu") menus[MENU_LOG]->pos = toRect(infile.val);
+			else if (infile.key == "numberArea") numberArea = toRect(infile.val);
+			else if (infile.key == "mouseArea") mouseArea = toRect(infile.val);
+			else if (infile.key == "menuArea") menuArea = toRect(infile.val);
 		}
 		infile.close();
 	}
