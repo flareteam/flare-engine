@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -68,7 +69,7 @@ void WidgetScrollBox::scroll(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (cursor > contents->getGraphicsHeight() - pos.h) {
+	else if (contents && cursor > contents->getGraphicsHeight() - pos.h) {
 		cursor = contents->getGraphicsHeight() - pos.h;
 	}
 	refresh();
@@ -79,7 +80,7 @@ void WidgetScrollBox::scrollTo(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (cursor > contents->getGraphicsHeight() - pos.h) {
+	else if (contents && cursor > contents->getGraphicsHeight() - pos.h) {
 		cursor = contents->getGraphicsHeight() - pos.h;
 	}
 	refresh();
@@ -131,7 +132,7 @@ void WidgetScrollBox::logic(int x, int y) {
 	}
 
 	// check ScrollBar clicks
-	if (contents->getGraphicsHeight() > pos.h) {
+	if (contents && contents->getGraphicsHeight() > pos.h) {
 		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
 			case 1:
 				scrollUp();
@@ -152,8 +153,10 @@ void WidgetScrollBox::resize(int h) {
 
 	if (pos.h > h) h = pos.h;
 
-	if (contents)
+	if (contents) {
 		delete contents;
+		contents = NULL;
+	}
 
 	Image *graphics;
 	graphics = render_device->createAlphaSurface(pos.w,h);
