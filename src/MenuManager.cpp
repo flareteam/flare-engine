@@ -473,9 +473,7 @@ void MenuManager::logic() {
 	// only allow the vendor window to be open if the inventory is open
 	if (vendor->visible && !(inv->visible)) {
 		snd->play(vendor->sfx_close);
-		closeLeft();
-		if (vendor->talker_visible && !(inv->visible))
-			closeRight();
+		closeAll();
 	}
 
 	if (!inpt->pressing[INVENTORY] && !inpt->pressing[POWERS] && !inpt->pressing[CHARACTER] && !inpt->pressing[LOG])
@@ -1321,33 +1319,28 @@ void MenuManager::handleKeyboardTooltips() {
 }
 
 void MenuManager::closeAll() {
-	if (!mouse_dragging && !keyboard_dragging) {
-		closeLeft();
-		closeRight();
-		vendor->talker_visible = false;
-	}
+	closeLeft();
+	closeRight();
 }
 
 void MenuManager::closeLeft() {
-	if (!mouse_dragging && !keyboard_dragging) {
-		chr->visible = false;
-		log->visible = false;
-		vendor->visible = false;
-		talker->visible = false;
-		exit->visible = false;
-		stash->visible = false;
-		npc->visible = false;
-	}
+	resetDrag();
+	chr->visible = false;
+	log->visible = false;
+	vendor->visible = false;
+	talker->visible = false;
+	exit->visible = false;
+	stash->visible = false;
+	npc->visible = false;
 }
 
 void MenuManager::closeRight() {
-	if (!mouse_dragging && !keyboard_dragging) {
-		inv->visible = false;
-		pow->visible = false;
-		talker->visible = false;
-		exit->visible = false;
-		npc->visible = false;
-	}
+	resetDrag();
+	inv->visible = false;
+	pow->visible = false;
+	talker->visible = false;
+	exit->visible = false;
+	npc->visible = false;
 }
 
 bool MenuManager::isDragging() {

@@ -640,79 +640,41 @@ void GameStatePlay::checkNPCInteraction() {
 	}
 
 	// check if a NPC action selection is made
-	if (menu->npc->selection()) {
+	if (npc_id != -1 && (menu->npc->selection() || eventPendingDialog)) {
 		if (menu->npc->vendor_selected) {
-			menu->vendor->talker_visible = false;
-			menu->talker->vendor_visible = true;
-			npcs->npcs[npc_id]->playSound(NPC_VOX_INTRO);
-		}
-		else if (menu->npc->dialog_selected) {
-			menu->vendor->talker_visible = true;
-			menu->talker->vendor_visible = false;
-		}
-
-		menu->npc->setNPC(NULL);
-	}
-
-	if (npc_id != -1 && ((interact_distance < INTERACT_RANGE && player_ok) || eventPendingDialog)) {
-
-		if (menu->talker->vendor_visible && !menu->vendor->talker_visible) {
-
 			// begin trading
 			menu->vendor->setTab(0); // Show the NPC's inventory as opposed to the buyback tab
 			menu->vendor->npc = npcs->npcs[npc_id];
 			menu->vendor->setInventory();
 			menu->closeAll();
-			menu->talker->visible = false;
 			menu->vendor->visible = true;
 			menu->inv->visible = true;
-
-			// if this vendor has voice-over, play it
-			if (!npcs->npcs[npc_id]->talker)
-				npcs->npcs[npc_id]->playSound(NPC_VOX_INTRO);
-
 			snd->play(menu->vendor->sfx_open);
-
-			menu->talker->vendor_visible = false;
-			menu->vendor->talker_visible = false;
-
+			npcs->npcs[npc_id]->playSound(NPC_VOX_INTRO);
 		}
-		else if (!menu->talker->vendor_visible && menu->vendor->talker_visible && npcs->npcs[npc_id]->talker) {
-
+		else if (menu->npc->dialog_selected) {
 			// begin talking
-			if (npcs->npcs[npc_id]->vendor) {
-				menu->talker->vendor_visible = false;
-				menu->vendor->talker_visible = true;
-			}
-
 			menu->talker->npc = npcs->npcs[npc_id];
 			menu->talker->chooseDialogNode(menu->npc->selected_dialog_node);
 			pc->allow_movement = npcs->npcs[npc_id]->checkMovement(menu->npc->selected_dialog_node);
 
 			menu->closeAll();
 			menu->talker->visible = true;
-			menu->vendor->visible = false;
-			menu->inv->visible = false;
-
-			menu->talker->vendor_visible = false;
-			menu->vendor->talker_visible = false;
 		}
 
-		if (eventPendingDialog) eventPendingDialog = false;
-
+		menu->npc->setNPC(NULL);
+		eventPendingDialog = false;
 	}
 
 	// check for walking away from an NPC
 	if (npc_id != -1 && !eventDialogOngoing) {
 		if (interact_distance > INTERACT_RANGE || !player_ok) {
+			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {
+				menu->closeAll();
+			}
 			menu->npc->setNPC(NULL);
 			menu->vendor->npc = NULL;
 			menu->talker->npc = NULL;
-			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {
-				menu->vendor->visible = false;
-				menu->talker->visible = false;
-				menu->npc->visible = false;
-			}
 			npc_id = -1;
 		}
 	}
@@ -734,21 +696,26 @@ void GameStatePlay::checkStash() {
 		menu->stash->visible = true;
 		mapr->stash = false;
 	}
-	else {
+	else if (menu->stash->visible) {
 		// Close stash if inventory is closed
-		if (!menu->inv->visible) menu->stash->visible = false;
+		if (!menu->inv->visible) {
+			menu->resetDrag();
+			menu->stash->visible = false;
+		}
 
 		// If the player walks away from the stash, close its menu
 		float interact_distance = calcDist(pc->stats.pos, mapr->stash_pos);
 		if (interact_distance > INTERACT_RANGE || !pc->stats.alive) {
+			menu->resetDrag();
 			menu->stash->visible = false;
 		}
 
-		// If the stash has been updated, save the game
-		if (menu->stash->updated) {
-			menu->stash->updated = false;
-			saveGame();
-		}
+	}
+
+	// If the stash has been updated, save the game
+	if (menu->stash->updated) {
+		menu->stash->updated = false;
+		saveGame();
 	}
 }
 
