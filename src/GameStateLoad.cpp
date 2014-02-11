@@ -382,6 +382,7 @@ void GameStateLoad::loadPreview(int slot) {
 			continue;
 
 		graphics = loadTextureImage("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png");
+		sprites[slot][i] = NULL;
 		if (graphics) {
 			sprites[slot][i] = graphics->createSprite();
 			sprites[slot][i]->setClip(0, 0,
@@ -568,7 +569,7 @@ void GameStateLoad::render() {
 
 
 	// portrait
-	if (selected_slot >= 0 && portrait != NULL) {
+	if (selected_slot >= 0 && portrait != NULL && portrait_border != NULL) {
 		render_device->render(portrait);
 		dest.x = portrait->getDest().x;
 		dest.y = portrait->getDest().y;
@@ -630,6 +631,7 @@ void GameStateLoad::render() {
 			src.w = src.h = preview_pos.h;
 
 			for (unsigned int i=0; i<sprites[slot].size(); i++) {
+				if (sprites[slot][i] == NULL) continue;
 				sprites[slot][i]->setClip(src);
 				sprites[slot][i]->setDest(dest);
 				render_device->render(sprites[slot][i]);
