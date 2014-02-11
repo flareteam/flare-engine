@@ -77,6 +77,9 @@ MenuNPCActions::MenuNPCActions()
 	FileParser infile;
 	if (infile.open("menus/npc.txt")) {
 		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
 			infile.val = infile.val + ',';
 
 			if(infile.key == "background_color") {
@@ -118,6 +121,10 @@ MenuNPCActions::MenuNPCActions()
 		}
 		infile.close();
 	}
+
+	// save the x/y pos coordinates here, since we call align() during each update() call
+	base_pos.x = window_area.x;
+	base_pos.y = window_area.y;
 }
 
 void MenuNPCActions::update() {
@@ -138,10 +145,12 @@ void MenuNPCActions::update() {
 	}
 
 	/* set action menu position */
-	window_area.x = VIEW_W_HALF - (w / 2);
-	window_area.y = max(40, VIEW_H_HALF - h - 2);
-	window_area.w = w;
-	window_area.h = h;
+	window_area.x = base_pos.x;
+	window_area.y = base_pos.y;
+	window_area.w = w+(MENU_BORDER*2);
+	window_area.h = h+(MENU_BORDER*2);
+
+	align();
 
 	/* update all action menu items */
 	int yoffs = MENU_BORDER;
