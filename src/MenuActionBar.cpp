@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -40,7 +41,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuActionBar::MenuActionBar(Avatar *_hero) {
+MenuActionBar::MenuActionBar(Avatar *_hero)
+	: emptyslot(NULL)
+	, disabled(NULL)
+	, attention(NULL)
+	, hero(_hero) {
 	hero = _hero;
 
 	src.x = 0;
