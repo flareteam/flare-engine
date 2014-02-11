@@ -99,10 +99,10 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar) {
 	color_penalty = font->getColor("menu_penalty");
 
 	align();
-	update();
+	alignElements();
 }
 
-void MenuPowers::update() {
+void MenuPowers::alignElements() {
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		slots[i]->pos.x = window_area.x + power_cell[i].pos.x;
 		slots[i]->pos.y = window_area.y + power_cell[i].pos.y;

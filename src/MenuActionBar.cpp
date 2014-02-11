@@ -103,10 +103,10 @@ MenuActionBar::MenuActionBar(Avatar *_hero) {
 	loadGraphics();
 
 	align();
-	update();
+	alignElements();
 }
 
-void MenuActionBar::update() {
+void MenuActionBar::alignElements() {
 	for (unsigned int i=0; i<12; i++) {
 		slots[i]->pos.x += window_area.x;
 		slots[i]->pos.y += window_area.y;

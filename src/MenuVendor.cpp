@@ -83,10 +83,10 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 
 	VENDOR_SLOTS = slots_cols * slots_rows;
 	align();
-	update();
+	alignElements();
 }
 
-void MenuVendor::update() {
+void MenuVendor::alignElements() {
 	slots_area.x += window_area.x;
 	slots_area.y += window_area.y;
 	slots_area.w = slots_cols*ICON_SIZE;

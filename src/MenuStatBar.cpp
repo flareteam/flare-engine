@@ -68,11 +68,11 @@ MenuStatBar::MenuStatBar(std::string type) {
 		infile.close();
 	}
 
-	align();
-
 	loadGraphics(type);
 
 	color_normal = font->getColor("menu_normal");
+
+	align();
 }
 
 void MenuStatBar::loadGraphics(std::string type) {

@@ -79,10 +79,10 @@ MenuStash::MenuStash(StatBlock *_stats)
 	STASH_SLOTS = slots_cols * slots_rows;
 
 	align();
-	update();
+	alignElements();
 }
 
-void MenuStash::update() {
+void MenuStash::alignElements() {
 	slots_area.x += window_area.x;
 	slots_area.y += window_area.y;
 	slots_area.w = slots_cols*ICON_SIZE;

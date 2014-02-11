@@ -59,10 +59,10 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	background.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
 
 	align();
-	update();
+	alignElements();
 }
 
-void MenuConfirm::update() {
+void MenuConfirm::alignElements() {
 	if (hasConfirmButton) {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;

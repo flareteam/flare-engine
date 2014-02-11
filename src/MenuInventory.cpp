@@ -90,10 +90,10 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	color_high = font->getColor("menu_bonus");
 
 	align();
-	update();
+	alignElements();
 }
 
-void MenuInventory::update() {
+void MenuInventory::alignElements() {
 	for (int i=0; i<MAX_EQUIPPED; i++) {
 		equipped_area[i].x += window_area.x;
 		equipped_area[i].y += window_area.y;

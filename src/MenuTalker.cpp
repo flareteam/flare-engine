@@ -82,7 +82,7 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	tablist.add(textbox);
 
 	align();
-	update();
+	alignElements();
 }
 
 void MenuTalker::chooseDialogNode(int request_dialog_node) {
@@ -97,7 +97,7 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 	createBuffer();
 }
 
-void MenuTalker::update() {
+void MenuTalker::alignElements() {
 	advanceButton->pos.x = window_area.x + advance_pos.x;
 	advanceButton->pos.y = window_area.y + advance_pos.y;
 

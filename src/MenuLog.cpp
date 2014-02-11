@@ -83,10 +83,10 @@ MenuLog::MenuLog() {
 	color_normal = font->getColor("menu_normal");
 
 	align();
-	update();
+	alignElements();
 }
 
-void MenuLog::update() {
+void MenuLog::alignElements() {
 	tabControl->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y, tab_area.w, tab_area.h);
 	tabControl->updateHeader();
 	closeButton->pos.x = window_area.x + close_pos.x;

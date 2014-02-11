@@ -59,6 +59,8 @@ public:
 
 class MenuCharacter : public Menu {
 private:
+	void alignElements();
+
 	StatBlock *stats;
 
 	WidgetButton *closeButton;
@@ -95,7 +97,6 @@ private:
 public:
 	MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
-	void update();
 	void logic();
 	void render();
 	void refreshStats();

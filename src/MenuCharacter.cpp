@@ -163,10 +163,10 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	background.setGraphics(render_device->loadGraphicSurface("images/menus/character.png"));
 
 	align();
-	update();
+	alignElements();
 }
 
-void MenuCharacter::update() {
+void MenuCharacter::alignElements() {
 
 	// close button
 	closeButton->pos.x = window_area.x + close_pos.x;
