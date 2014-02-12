@@ -65,15 +65,17 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 
 			if(infile.key == "close") close_pos = toPoint(infile.val);
 			else if(infile.key == "equipment_slot") {
-				infile.val = infile.val + ',';
-				equipment_slot.x = eatFirstInt(infile.val,',');
-				equipment_slot.y = eatFirstInt(infile.val,',');
-				equipment_slot.w = equipment_slot.h = eatFirstInt(infile.val,',');
+				equipment_slot.x = eatFirstInt(infile.val);
+				equipment_slot.y = eatFirstInt(infile.val);
+				equipment_slot.w = equipment_slot.h = eatFirstInt(infile.val);
 				equipped_area.push_back(equipment_slot);
-				slot_type.push_back(eatFirstString(infile.val,','));
+				slot_type.push_back(eatFirstString(infile.val));
 			}
 			else if(infile.key == "slot_name") slot_desc.push_back(infile.val);
-			else if(infile.key == "carried_area") carried_area = toRect(infile.val);
+			else if(infile.key == "carried_area") {
+				carried_area.x = eatFirstInt(infile.val);
+				carried_area.y = eatFirstInt(infile.val);
+			}
 			else if (infile.key == "carried_cols") carried_cols = toInt(infile.val);
 			else if (infile.key == "carried_rows") carried_rows = toInt(infile.val);
 			else if (infile.key == "label_title") title =  eatLabelInfo(infile.val);

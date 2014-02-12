@@ -65,7 +65,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 				close_pos = toPoint(infile.val);
 			}
 			else if(infile.key == "slots_area") {
-				slots_area = toRect(infile.val);
+				slots_area.x = eatFirstInt(infile.val);
+				slots_area.y = eatFirstInt(infile.val);
 			}
 			else if (infile.key == "vendor_cols") {
 				slots_cols = toInt(infile.val);

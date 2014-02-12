@@ -45,8 +45,6 @@ FontEngine::FontEngine()
 	FileParser infile;
 	if (infile.open("engine/font_settings.txt")) {
 		while (infile.next()) {
-			infile.val = infile.val + ',';
-
 			if (infile.new_section) {
 				FontStyle f;
 				f.name = infile.section;
@@ -57,20 +55,17 @@ FontEngine::FontEngine()
 
 			FontStyle *style = &(font_styles.back());
 			if ((infile.key == "default" && style->path == "") || infile.key == LANGUAGE) {
-				style->path = eatFirstString(infile.val,',');
-				style->ptsize = eatFirstInt(infile.val,',');
-				int blend = eatFirstInt(infile.val,',');
-				if (blend == 1)
-					style->blend = true;
-				else
-					style->blend = false;
+				style->path = eatFirstString(infile.val);
+				style->ptsize = eatFirstInt(infile.val);
+				style->blend = toBool(eatFirstString(infile.val));
 				style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
 				if(style->ttfont == NULL) {
 					printf("TTF_OpenFont: %s\n", TTF_GetError());
 				}
 				else {
-					style->line_height = TTF_FontLineSkip(style->ttfont);
-					style->font_height = TTF_FontLineSkip(style->ttfont);
+					int lineskip = TTF_FontLineSkip(style->ttfont);
+					style->line_height = lineskip;
+					style->font_height = lineskip;
 				}
 			}
 		}
@@ -81,10 +76,10 @@ FontEngine::FontEngine()
 	Color color;
 	if (infile.open("engine/font_colors.txt")) {
 		while (infile.next()) {
-			infile.val = infile.val + ',';
-			color.r = eatFirstInt(infile.val,',');
-			color.g = eatFirstInt(infile.val,',');
-			color.b = eatFirstInt(infile.val,',');
+			// TODO use toRGB()
+			color.r = eatFirstInt(infile.val);
+			color.g = eatFirstInt(infile.val);
+			color.b = eatFirstInt(infile.val);
 			color_map[infile.key] = color;
 		}
 		infile.close();

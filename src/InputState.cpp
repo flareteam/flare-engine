@@ -136,16 +136,14 @@ void InputState::loadKeyBindings() {
 	}
 
 	while (infile.next()) {
-		infile.val = infile.val + ',';
-
-		int key1 = eatFirstInt(infile.val, ',');
-		int key2 = eatFirstInt(infile.val, ',');
+		int key1 = eatFirstInt(infile.val);
+		int key2 = eatFirstInt(infile.val);
 
 		// if we're loading an older keybindings file, we need to unbind all joystick bindings
 		int key3 = -1;
 		std::string temp = infile.val;
-		if (eatFirstString(temp, ',') != "") {
-			key3 = eatFirstInt(infile.val, ',');
+		if (eatFirstString(temp) != "") {
+			key3 = eatFirstInt(infile.val);
 		}
 
 		int cursor = -1;

@@ -272,11 +272,10 @@ void GameStateConfig::readConfig () {
 	if (infile.open("menus/config.txt")) {
 		while (infile.next()) {
 
-			infile.val = infile.val + ',';
-			int x1 = eatFirstInt(infile.val, ',');
-			int y1 = eatFirstInt(infile.val, ',');
-			int x2 = eatFirstInt(infile.val, ',');
-			int y2 = eatFirstInt(infile.val, ',');
+			int x1 = eatFirstInt(infile.val);
+			int y1 = eatFirstInt(infile.val);
+			int x2 = eatFirstInt(infile.val);
+			int y2 = eatFirstInt(infile.val);
 
 			int setting_num = -1;
 
@@ -698,8 +697,7 @@ void GameStateConfig::logic () {
 
 	check_resolution = true;
 
-	std::string resolution_value;
-	resolution_value = resolution_lstb->getValue() + 'x'; // add x to have last element readable
+	std::string resolution_value = resolution_lstb->getValue();
 	int width = eatFirstInt(resolution_value, 'x');
 	int height = eatFirstInt(resolution_value, 'x');
 

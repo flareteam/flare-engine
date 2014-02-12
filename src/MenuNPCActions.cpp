@@ -80,43 +80,42 @@ MenuNPCActions::MenuNPCActions()
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
+			// TODO use toRGBA()
 			if(infile.key == "background_color") {
-				background_color.r = eatFirstInt(infile.val,',');
-				background_color.g = eatFirstInt(infile.val,',');
-				background_color.b = eatFirstInt(infile.val,',');
-				background_alpha = eatFirstInt(infile.val,',');
+				background_color.r = eatFirstInt(infile.val);
+				background_color.g = eatFirstInt(infile.val);
+				background_color.b = eatFirstInt(infile.val);
+				background_alpha = eatFirstInt(infile.val);
 			}
 			else if(infile.key == "topic_normal_color") {
-				topic_normal_color.r = eatFirstInt(infile.val,',');
-				topic_normal_color.g = eatFirstInt(infile.val,',');
-				topic_normal_color.b = eatFirstInt(infile.val,',');
+				topic_normal_color.r = eatFirstInt(infile.val);
+				topic_normal_color.g = eatFirstInt(infile.val);
+				topic_normal_color.b = eatFirstInt(infile.val);
 			}
 			else if(infile.key == "topic_hilight_color") {
-				topic_hilight_color.r = eatFirstInt(infile.val,',');
-				topic_hilight_color.g = eatFirstInt(infile.val,',');
-				topic_hilight_color.b = eatFirstInt(infile.val,',');
+				topic_hilight_color.r = eatFirstInt(infile.val);
+				topic_hilight_color.g = eatFirstInt(infile.val);
+				topic_hilight_color.b = eatFirstInt(infile.val);
 			}
 			else if(infile.key == "vendor_normal_color") {
-				vendor_normal_color.r = eatFirstInt(infile.val,',');
-				vendor_normal_color.g = eatFirstInt(infile.val,',');
-				vendor_normal_color.b = eatFirstInt(infile.val,',');
+				vendor_normal_color.r = eatFirstInt(infile.val);
+				vendor_normal_color.g = eatFirstInt(infile.val);
+				vendor_normal_color.b = eatFirstInt(infile.val);
 			}
 			else if(infile.key == "vendor_hilight_color") {
-				vendor_hilight_color.r = eatFirstInt(infile.val,',');
-				vendor_hilight_color.g = eatFirstInt(infile.val,',');
-				vendor_hilight_color.b = eatFirstInt(infile.val,',');
+				vendor_hilight_color.r = eatFirstInt(infile.val);
+				vendor_hilight_color.g = eatFirstInt(infile.val);
+				vendor_hilight_color.b = eatFirstInt(infile.val);
 			}
 			else if(infile.key == "cancel_normal_color") {
-				cancel_normal_color.r = eatFirstInt(infile.val,',');
-				cancel_normal_color.g = eatFirstInt(infile.val,',');
-				cancel_normal_color.b = eatFirstInt(infile.val,',');
+				cancel_normal_color.r = eatFirstInt(infile.val);
+				cancel_normal_color.g = eatFirstInt(infile.val);
+				cancel_normal_color.b = eatFirstInt(infile.val);
 			}
 			else if(infile.key == "cancel_hilight_color") {
-				cancel_hilight_color.r = eatFirstInt(infile.val,',');
-				cancel_hilight_color.g = eatFirstInt(infile.val,',');
-				cancel_hilight_color.b = eatFirstInt(infile.val,',');
+				cancel_hilight_color.r = eatFirstInt(infile.val);
+				cancel_hilight_color.g = eatFirstInt(infile.val);
+				cancel_hilight_color.b = eatFirstInt(infile.val);
 			}
 		}
 		infile.close();
