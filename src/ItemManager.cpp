@@ -166,11 +166,11 @@ void ItemManager::loadItems() {
 			items[id].type = infile.val;
 		}
 		else if (infile.key == "equip_flags") {
-			std::string flag = eatFirstString(infile.val);
+			std::string flag = popFirstString(infile.val);
 
 			while (flag != "") {
 				items[id].equip_flags.push_back(flag);
-				flag = eatFirstString(infile.val);
+				flag = popFirstString(infile.val);
 			}
 		}
 		else if (infile.key == "dmg_melee") {
@@ -233,9 +233,9 @@ void ItemManager::loadItems() {
 		else if (infile.key == "loot_animation") {
 			// @ATTR loot_animation|string|Specifies the loot animation for the item.
 			LootAnimation la;
-			la.name = eatFirstString(infile.val);
-			la.low = eatFirstInt(infile.val);
-			la.high = eatFirstInt(infile.val);
+			la.name = popFirstString(infile.val);
+			la.low = popFirstInt(infile.val);
+			la.high = popFirstInt(infile.val);
 			items[id].loot_animation.push_back(la);
 		}
 		else if (infile.key == "power") {

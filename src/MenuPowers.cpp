@@ -789,7 +789,7 @@ void MenuPowers::loadHeader(FileParser &infile) {
 
 void MenuPowers::loadPower(FileParser &infile) {
 	if (infile.key == "id") {
-		int id = eatFirstInt(infile.val);
+		int id = popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
 			power_cell.back().id = id;
@@ -833,7 +833,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 
 void MenuPowers::loadUpgrade(FileParser &infile) {
 	if (infile.key == "id") {
-		int id = eatFirstInt(infile.val);
+		int id = popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
 			upgrade.back().id = id;

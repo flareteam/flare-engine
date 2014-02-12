@@ -75,12 +75,12 @@ GameStateLoad::GameStateLoad() : GameState() {
 	if (infile.open("menus/gameload.txt")) {
 		while (infile.next()) {
 			if (infile.key == "action_button") {
-				button_action->pos.x = eatFirstInt(infile.val);
-				button_action->pos.y = eatFirstInt(infile.val);
+				button_action->pos.x = popFirstInt(infile.val);
+				button_action->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "alternate_button") {
-				button_alternate->pos.x = eatFirstInt(infile.val);
-				button_alternate->pos.y = eatFirstInt(infile.val);
+				button_alternate->pos.x = popFirstInt(infile.val);
+				button_alternate->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "portrait") {
 				Rect p_rect = toRect(infile.val);
@@ -121,14 +121,14 @@ GameStateLoad::GameStateLoad() : GameState() {
 	if (infile.open("engine/hero_layers.txt")) {
 		while(infile.next()) {
 			if (infile.key == "layer") {
-				unsigned dir = eatFirstInt(infile.val);
+				unsigned dir = popFirstInt(infile.val);
 				if (dir != 6) continue;
 				else found_layer = true;
 
-				string layer = eatFirstString(infile.val);
+				string layer = popFirstString(infile.val);
 				while (layer != "") {
 					preview_layer.push_back(layer);
-					layer = eatFirstString(infile.val);
+					layer = popFirstString(infile.val);
 				}
 			}
 		}

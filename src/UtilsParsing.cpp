@@ -81,7 +81,7 @@ void parse_key_pair(const string& s, string &key, string &val) {
  *
  * This is basically a really lazy "split" replacement
  */
-int eatFirstInt(string &s, char separator) {
+int popFirstInt(string &s, char separator) {
 	int num = 0;
 	size_t seppos = s.find_first_of(separator);
 	if (seppos == string::npos) {
@@ -95,7 +95,7 @@ int eatFirstInt(string &s, char separator) {
 	return num;
 }
 
-string eatFirstString(string &s, char separator) {
+string popFirstString(string &s, char separator) {
 	string outs = "";
 	size_t seppos = s.find_first_of(separator);
 	if (seppos == string::npos) {
@@ -109,7 +109,7 @@ string eatFirstString(string &s, char separator) {
 	return outs;
 }
 
-// similar to eatFirstString but does not alter the input string
+// similar to popFirstString but does not alter the input string
 string getNextToken(const string& s, size_t &cursor, char separator) {
 	size_t seppos = s.find_first_of(separator, cursor);
 	if (seppos == string::npos) { // not found
@@ -262,33 +262,33 @@ bool toBool(std::string value) {
 
 Point toPoint(std::string value) {
 	Point p;
-	p.x = eatFirstInt(value);
-	p.y = eatFirstInt(value);
+	p.x = popFirstInt(value);
+	p.y = popFirstInt(value);
 	return p;
 }
 
 Rect toRect(std::string value) {
 	Rect r;
-	r.x = eatFirstInt(value);
-	r.y = eatFirstInt(value);
-	r.w = eatFirstInt(value);
-	r.h = eatFirstInt(value);
+	r.x = popFirstInt(value);
+	r.y = popFirstInt(value);
+	r.w = popFirstInt(value);
+	r.h = popFirstInt(value);
 	return r;
 }
 
 Color toRGB(std::string value) {
 	Color c;
-	c.r = eatFirstInt(value);
-	c.g = eatFirstInt(value);
-	c.b = eatFirstInt(value);
+	c.r = popFirstInt(value);
+	c.g = popFirstInt(value);
+	c.b = popFirstInt(value);
 	return c;
 }
 
 Color toRGBA(std::string value) {
 	Color c;
-	c.r = eatFirstInt(value);
-	c.g = eatFirstInt(value);
-	c.b = eatFirstInt(value);
-	c.a = eatFirstInt(value);
+	c.r = popFirstInt(value);
+	c.g = popFirstInt(value);
+	c.b = popFirstInt(value);
+	c.a = popFirstInt(value);
 	return c;
 }

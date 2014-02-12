@@ -55,9 +55,9 @@ FontEngine::FontEngine()
 
 			FontStyle *style = &(font_styles.back());
 			if ((infile.key == "default" && style->path == "") || infile.key == LANGUAGE) {
-				style->path = eatFirstString(infile.val);
-				style->ptsize = eatFirstInt(infile.val);
-				style->blend = toBool(eatFirstString(infile.val));
+				style->path = popFirstString(infile.val);
+				style->ptsize = popFirstInt(infile.val);
+				style->blend = toBool(popFirstString(infile.val));
 				style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
 				if(style->ttfont == NULL) {
 					printf("TTF_OpenFont: %s\n", TTF_GetError());

@@ -136,9 +136,9 @@ void GameSwitcher::loadFPS() {
 	if (infile.open("menus/fps.txt")) {
 		while(infile.next()) {
 			if(infile.key == "position") {
-				fps_position.x = eatFirstInt(infile.val);
-				fps_position.y = eatFirstInt(infile.val);
-				fps_corner = eatFirstString(infile.val);
+				fps_position.x = popFirstInt(infile.val);
+				fps_position.y = popFirstInt(infile.val);
+				fps_corner = popFirstString(infile.val);
 			}
 			else if(infile.key == "color") {
 				fps_color = toRGB(infile.val);
