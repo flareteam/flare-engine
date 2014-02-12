@@ -136,32 +136,60 @@ static void init() {
 }
 
 static void mainLoop (bool debug_event) {
-
 	bool done = false;
 	int delay = 1000/MAX_FRAMES_PER_SEC;
-	int prevTicks = SDL_GetTicks();
+	int logic_ticks = SDL_GetTicks();
+	int loops = 0;
 
 	while ( !done ) {
+		loops = 0;
+		int now_ticks = SDL_GetTicks();
+		int prev_ticks = now_ticks;
 
-		SDL_PumpEvents();
-		inpt->handle(debug_event);
-		gswitch->logic();
+		while (now_ticks > logic_ticks && loops < MAX_FRAMES_PER_SEC) {
+			// Frames where data loading happens (GameState switching and map loading)
+			// take a long time, so our loop here will think that the game "lagged" and
+			// try to compensate. To prevent this compensation, we mark those frames as
+			// "loading frames" and update the logic ticker without actually executing logic.
+			if (gswitch->isLoadingFrame()) {
+				logic_ticks = now_ticks;
+				break;
+			}
 
-		// black out
+			SDL_PumpEvents();
+			inpt->handle(debug_event);
+			gswitch->logic();
+
+			// Engine done means the user escapes the main game menu.
+			// Input done means the user closes the window.
+			done = gswitch->done || inpt->done;
+
+			logic_ticks += delay;
+			loops++;
+		}
+
 		render_device->blankScreen();
-
 		gswitch->render();
 
-		// Engine done means the user escapes the main game menu.
-		// Input done means the user closes the window.
-		done = gswitch->done || inpt->done;
-
-		int nowTicks = SDL_GetTicks();
-		if (nowTicks - prevTicks < delay) SDL_Delay(delay - (nowTicks - prevTicks));
-		gswitch->showFPS(1000 / (SDL_GetTicks() - prevTicks));
-		prevTicks = SDL_GetTicks();
+		// display the FPS counter
+		// if the frame completed quickly, we estimate the delay here
+		now_ticks = SDL_GetTicks();
+		int delay_ticks = 0;
+		if (now_ticks - prev_ticks < delay) {
+			delay_ticks = delay - (now_ticks - prev_ticks);
+		}
+		if (now_ticks+delay_ticks - prev_ticks != 0) {
+			gswitch->showFPS(1000 / (now_ticks+delay_ticks - prev_ticks));
+		}
 
 		render_device->commitFrame();
+
+		// delay quick frames
+		now_ticks = SDL_GetTicks();
+		if (now_ticks - prev_ticks < delay) {
+			SDL_Delay(delay - (now_ticks - prev_ticks));
+		}
+
 	}
 }
 

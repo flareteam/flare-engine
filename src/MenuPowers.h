@@ -111,6 +111,7 @@ private:
 	WidgetLabel stat_up;
 	WidgetTabControl *tabControl;
 
+	void alignElements();
 	void loadGraphics();
 	void displayBuild(int power_id);
 	bool powerUnlockable(int power_index, const std::vector<Power_Menu_Cell>& power_cells);
@@ -132,7 +133,6 @@ private:
 public:
 	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();
-	void update();
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point mouse);

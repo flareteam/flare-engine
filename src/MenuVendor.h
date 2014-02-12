@@ -36,6 +36,8 @@ class WidgetTabControl;
 
 class MenuVendor : public Menu {
 private:
+	void alignElements();
+
 	StatBlock *stats;
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
@@ -59,7 +61,6 @@ public:
 	ItemStorage buyback_stock;
 	MenuItemStorage stock[2]; // items the vendor currently has in stock
 
-	void update();
 	void loadMerchant(const std::string&);
 	void logic();
 	void tabsLogic();
@@ -76,7 +77,6 @@ public:
 
 	int getRowsCount();
 
-	bool talker_visible;
 	Rect slots_area;
 
 	TabList tablist;

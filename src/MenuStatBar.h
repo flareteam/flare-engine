@@ -51,7 +51,7 @@ public:
 	MenuStatBar(std::string type);
 	~MenuStatBar();
 	void loadGraphics(std::string type);
-	void update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string);
+	void update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string = "");
 	void render();
 };
 

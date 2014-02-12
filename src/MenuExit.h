@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MenuExit : public Menu {
 protected:
+	void alignElements();
 	void loadGraphics();
 
 	WidgetButton *buttonExit;
@@ -43,7 +44,6 @@ public:
 	MenuExit();
 	~MenuExit();
 
-	void update();
 	void logic();
 	virtual void render();
 

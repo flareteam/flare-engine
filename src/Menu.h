@@ -43,6 +43,9 @@ public:
 	bool visible;
 	Rect window_area;
 	std::string alignment;
+
+	virtual bool parseMenuKey(const std::string &key, const std::string &val);
+
 	SoundManager::SoundID sfx_open;
 	SoundManager::SoundID sfx_close;
 

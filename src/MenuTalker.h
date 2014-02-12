@@ -37,6 +37,7 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
+	void alignElements();
 	std::string parseLine(const std::string &line);
 
 	MenuManager *menu;
@@ -73,13 +74,10 @@ public:
 	NPC *npc;
 
 	void chooseDialogNode(int requested_node = -1);
-	void update();
 	void logic();
 	void render();
 	void setHero(const std::string& name, const std::string& class_name, const std::string& portrait_filename);
 	void createBuffer();
-
-	bool vendor_visible;
 
 	WidgetButton *advanceButton;
 	WidgetButton *closeButton;

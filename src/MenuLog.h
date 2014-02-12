@@ -45,6 +45,7 @@ private:
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
 
+	void alignElements();
 	void loadGraphics();
 
 	std::vector<std::string> log_msg[LOG_TYPE_COUNT];
@@ -65,7 +66,6 @@ public:
 	MenuLog();
 	~MenuLog();
 
-	void update();
 	void logic();
 	void render();
 	void refresh(int log_type);

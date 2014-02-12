@@ -49,8 +49,6 @@ public:
 	void add(const std::string& s);
 	void remove(int msg_index);
 	void clear();
-
-	Point list_area;
 };
 
 #endif

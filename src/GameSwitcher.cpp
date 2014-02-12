@@ -98,6 +98,7 @@ void GameSwitcher::logic() {
 	if (newState != NULL) {
 		delete currentState;
 		currentState = newState;
+		currentState->load_counter++;
 
 		// reload the fps meter position
 		loadFPS();
@@ -174,6 +175,15 @@ void GameSwitcher::loadFPS() {
 		delete label_fps;
 		label_fps = NULL;
 	}
+}
+
+bool GameSwitcher::isLoadingFrame() {
+	if (currentState->load_counter > 0) {
+		currentState->load_counter--;
+		return true;
+	}
+
+	return false;
 }
 
 void GameSwitcher::render() {

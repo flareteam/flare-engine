@@ -46,9 +46,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	, activetab(VENDOR_BUY)
 	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
-	, buyback_stock()
-	, talker_visible(false) {
-
+	, buyback_stock() {
 	setBackground("images/menus/vendor.png");
 
 	tabControl->setTabTitle(VENDOR_BUY,msg->get("Inventory"));
@@ -60,21 +58,20 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	FileParser infile;
 	if(infile.open("menus/vendor.txt")) {
 		while(infile.next()) {
-			infile.val = infile.val + ',';
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
 
 			if(infile.key == "close") {
-				close_pos.x = eatFirstInt(infile.val,',');
-				close_pos.y = eatFirstInt(infile.val,',');
+				close_pos = toPoint(infile.val);
 			}
 			else if(infile.key == "slots_area") {
-				slots_area.x = eatFirstInt(infile.val,',');
-				slots_area.y = eatFirstInt(infile.val,',');
+				slots_area = toRect(infile.val);
 			}
 			else if (infile.key == "vendor_cols") {
-				slots_cols = eatFirstInt(infile.val,',');
+				slots_cols = toInt(infile.val);
 			}
 			else if (infile.key == "vendor_rows") {
-				slots_rows = eatFirstInt(infile.val,',');
+				slots_rows = toInt(infile.val);
 			}
 			else if (infile.key == "label_title") {
 				title =  eatLabelInfo(infile.val);
@@ -84,9 +81,11 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	}
 
 	VENDOR_SLOTS = slots_cols * slots_rows;
+	align();
+	alignElements();
 }
 
-void MenuVendor::update() {
+void MenuVendor::alignElements() {
 	slots_area.x += window_area.x;
 	slots_area.y += window_area.y;
 	slots_area.w = slots_cols*ICON_SIZE;
@@ -100,6 +99,7 @@ void MenuVendor::update() {
 
 	stock[VENDOR_BUY].init( VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
 	stock[VENDOR_SELL].init( VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
+	buyback_stock.init(NPC_VENDOR_MAX_STOCK);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;

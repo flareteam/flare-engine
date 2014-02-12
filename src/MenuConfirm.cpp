@@ -19,7 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include <string>
-
+#include "FileParser.h"
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -35,6 +35,16 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	, confirmClicked(false)
 	, cancelClicked(false) {
 
+	// Load config settings
+	FileParser infile;
+	if(infile.open("menus/confirm.txt")) {
+		while(infile.next()) {
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+		}
+		infile.close();
+	}
+
 	if (_buttonMsg != "") hasConfirmButton = true;
 	// Text to display in confirmation box
 	boxMsg = _boxMsg;
@@ -49,9 +59,11 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	tablist.add(buttonClose);
 
 	setBackground("images/menus/confirm_bg.png");
+	align();
+	alignElements();
 }
 
-void MenuConfirm::update() {
+void MenuConfirm::alignElements() {
 	if (hasConfirmButton) {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;

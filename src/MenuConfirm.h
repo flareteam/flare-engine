@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MenuConfirm : public Menu {
 protected:
+	void alignElements();
 
 	WidgetButton *buttonConfirm;
 	WidgetButton *buttonClose;
@@ -36,11 +37,11 @@ protected:
 
 	std::string boxMsg;
 	bool hasConfirmButton;
+
 public:
 	MenuConfirm(const std::string&, const std::string&);
 	~MenuConfirm();
 
-	void update();
 	void logic();
 	virtual void render();
 

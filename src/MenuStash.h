@@ -33,6 +33,8 @@ class WidgetButton;
 
 class MenuStash : public Menu {
 private:
+	void alignElements();
+
 	StatBlock *stats;
 	WidgetButton *closeButton;
 
@@ -50,7 +52,6 @@ public:
 	MenuStash(StatBlock *stats);
 	~MenuStash();
 
-	void update();
 	void logic();
 	void render();
 	ItemStack click(Point position);

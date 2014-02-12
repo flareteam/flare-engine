@@ -40,6 +40,7 @@ class MenuInventory : public Menu {
 private:
 	StatBlock *stats;
 
+	void alignElements();
 	void loadGraphics();
 	int areaOver(Point position);
 	void updateEquipment(int slot);
@@ -64,7 +65,6 @@ private:
 public:
 	MenuInventory(StatBlock *stats);
 	~MenuInventory();
-	void update();
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point position);

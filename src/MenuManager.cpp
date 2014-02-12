@@ -92,7 +92,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(mp); // menus[1]
 	xp = new MenuStatBar("xp");
 	menus.push_back(xp); // menus[2]
-	effects = new MenuActiveEffects();
+	effects = new MenuActiveEffects(stats);
 	menus.push_back(effects); // menus[3]
 	hudlog = new MenuHUDLog();
 	menus.push_back(hudlog); // menus[4]
@@ -122,90 +122,6 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(npc); // menus[16]
 
 	tip = new WidgetTooltip();
-
-	// Load the menu layout and sound effects from menus/menus.txt
-	FileParser infile;
-	if (infile.open("menus/menus.txt")) {
-
-		int menu_index = -1;
-
-		while (infile.next()) {
-
-			if (infile.key == "id") {
-
-				// finalize previously parsed menu
-				if (menu_index != -1)
-					menus[menu_index]->align();
-
-				if (infile.val == "hp") menu_index = 0;
-				else if (infile.val == "mp") menu_index = 1;
-				else if (infile.val == "xp") menu_index = 2;
-				else if (infile.val == "effects") menu_index = 3;
-				else if (infile.val == "hudlog") menu_index = 4;
-				else if (infile.val == "actionbar") menu_index = 5;
-				else if (infile.val == "enemy") menu_index = 6;
-				else if (infile.val == "vendor") menu_index = 7;
-				else if (infile.val == "talker") menu_index = 8;
-				else if (infile.val == "exit") menu_index = 9;
-				else if (infile.val == "minimap") menu_index = 10;
-				else if (infile.val == "character") menu_index = 11;
-				else if (infile.val == "inventory") menu_index = 12;
-				else if (infile.val == "powers") menu_index = 13;
-				else if (infile.val == "log") menu_index = 14;
-				else if (infile.val == "stash") menu_index = 15;
-				else if (infile.val == "npc") menu_index = 16;
-				else menu_index = -1;
-
-			}
-
-			if (menu_index == -1)
-				continue;
-
-			if (infile.key == "layout") {
-
-				infile.val = infile.val + ',';
-				int x = eatFirstInt(infile.val, ',');
-				int y = eatFirstInt(infile.val, ',');
-				int w = eatFirstInt(infile.val, ',');
-				int h = eatFirstInt(infile.val, ',');
-
-				menus[menu_index]->window_area.x = x;
-				menus[menu_index]->window_area.y = y;
-				menus[menu_index]->window_area.w = w;
-				menus[menu_index]->window_area.h = h;
-
-			}
-			else if (infile.key == "align") {
-				menus[menu_index]->alignment = infile.val;
-			}
-			else if (infile.key == "soundfx_open") {
-				menus[menu_index]->sfx_open = snd->load(infile.val, "MenuManager open tab");
-			}
-			else if (infile.key == "soundfx_close") {
-				menus[menu_index]->sfx_close = snd->load(infile.val, "MenuManager close tab");
-			}
-
-		}
-
-		infile.close();
-
-		// finalize the last parsed menu
-		if (menu_index != -1)
-			menus[menu_index]->align();
-
-	}
-
-	// Some menus need to be updated to apply their new dimensions
-	act->update();
-	vendor->update();
-	vendor->buyback_stock.init(NPC_VENDOR_MAX_STOCK);
-	talker->update();
-	exit->update();
-	chr->update();
-	inv->update();
-	pow->update();
-	log->update();
-	stash->update();
 
 	pause = false;
 	mouse_dragging = false;
@@ -443,10 +359,9 @@ void MenuManager::logic() {
 	bool clicking_log = false;
 	ItemStack stack;
 
-	hp->update(stats->hp,stats->get(STAT_HP_MAX),inpt->mouse,"");
-	mp->update(stats->mp,stats->get(STAT_MP_MAX),inpt->mouse,"");
+	hp->update(stats->hp,stats->get(STAT_HP_MAX),inpt->mouse);
+	mp->update(stats->mp,stats->get(STAT_MP_MAX),inpt->mouse);
 	xp->update((stats->xp - stats->xp_table[stats->level-1]),(stats->xp_table[stats->level] - stats->xp_table[stats->level-1]),inpt->mouse,msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
-	effects->update(stats);
 
 	if (NO_MOUSE)
 		handleKeyboardNavigation();
@@ -473,9 +388,7 @@ void MenuManager::logic() {
 	// only allow the vendor window to be open if the inventory is open
 	if (vendor->visible && !(inv->visible)) {
 		snd->play(vendor->sfx_close);
-		closeLeft();
-		if (vendor->talker_visible && !(inv->visible))
-			closeRight();
+		closeAll();
 	}
 
 	if (!inpt->pressing[INVENTORY] && !inpt->pressing[POWERS] && !inpt->pressing[CHARACTER] && !inpt->pressing[LOG])
@@ -1321,33 +1234,28 @@ void MenuManager::handleKeyboardTooltips() {
 }
 
 void MenuManager::closeAll() {
-	if (!mouse_dragging && !keyboard_dragging) {
-		closeLeft();
-		closeRight();
-		vendor->talker_visible = false;
-	}
+	closeLeft();
+	closeRight();
 }
 
 void MenuManager::closeLeft() {
-	if (!mouse_dragging && !keyboard_dragging) {
-		chr->visible = false;
-		log->visible = false;
-		vendor->visible = false;
-		talker->visible = false;
-		exit->visible = false;
-		stash->visible = false;
-		npc->visible = false;
-	}
+	resetDrag();
+	chr->visible = false;
+	log->visible = false;
+	vendor->visible = false;
+	talker->visible = false;
+	exit->visible = false;
+	stash->visible = false;
+	npc->visible = false;
 }
 
 void MenuManager::closeRight() {
-	if (!mouse_dragging && !keyboard_dragging) {
-		inv->visible = false;
-		pow->visible = false;
-		talker->visible = false;
-		exit->visible = false;
-		npc->visible = false;
-	}
+	resetDrag();
+	inv->visible = false;
+	pow->visible = false;
+	talker->visible = false;
+	exit->visible = false;
+	npc->visible = false;
 }
 
 bool MenuManager::isDragging() {
