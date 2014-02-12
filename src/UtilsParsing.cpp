@@ -82,21 +82,30 @@ void parse_key_pair(const string& s, string &key, string &val) {
  * This is basically a really lazy "split" replacement
  */
 int eatFirstInt(string &s, char separator) {
+	int num = 0;
 	size_t seppos = s.find_first_of(separator);
 	if (seppos == string::npos) {
+		num = toInt(s);
 		s = "";
-		return 0; // not found
 	}
-	int num = toInt(s.substr(0, seppos));
-	s = s.substr(seppos+1, s.length());
+	else {
+		num = toInt(s.substr(0, seppos));
+		s = s.substr(seppos+1, s.length());
+	}
 	return num;
 }
 
 string eatFirstString(string &s, char separator) {
+	string outs = "";
 	size_t seppos = s.find_first_of(separator);
-	if (seppos == string::npos) return ""; // not found
-	string outs = s.substr(0, seppos);
-	s = s.substr(seppos+1, s.length());
+	if (seppos == string::npos) {
+		outs = s;
+		s = "";
+	}
+	else {
+		outs = s.substr(0, seppos);
+		s = s.substr(seppos+1, s.length());
+	}
 	return outs;
 }
 
@@ -256,12 +265,8 @@ Point toPoint(std::string value) {
 	if (value.empty())
 		return p;
 
-	// Make sure the string ends with a delimeter
-	if (!value.empty() && value.at(value.size()-1) != ',')
-		value = value + ',';
-
-	p.x = eatFirstInt(value, ',');
-	p.y = eatFirstInt(value, ',');
+	p.x = eatFirstInt(value);
+	p.y = eatFirstInt(value);
 	return p;
 }
 
@@ -270,13 +275,9 @@ Rect toRect(std::string value) {
 	if (value.empty())
 		return r;
 
-	// Make sure the string ends with a delimeter
-	if (!value.empty() && value.at(value.size()-1) != ',')
-		value = value + ',';
-
-	r.x = eatFirstInt(value, ',');
-	r.y = eatFirstInt(value, ',');
-	r.w = eatFirstInt(value, ',');
-	r.h = eatFirstInt(value, ',');
+	r.x = eatFirstInt(value);
+	r.y = eatFirstInt(value);
+	r.w = eatFirstInt(value);
+	r.h = eatFirstInt(value);
 	return r;
 }
