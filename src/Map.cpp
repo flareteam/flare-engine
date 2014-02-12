@@ -152,7 +152,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 		for (int j=0; j<h; j++) {
 			std::string val = infile.getRawLine() + ',';
 			for (int i=0; i<w; i++)
-				(*current_layer)[i][j] = eatFirstInt(val, ',');
+				(*current_layer)[i][j] = popFirstInt(val, ',');
 		}
 	}
 }

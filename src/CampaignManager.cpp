@@ -56,7 +56,7 @@ void CampaignManager::setAll(std::string s) {
 	string str = s + ',';
 	string token;
 	while (str != "") {
-		token = eatFirstString(str, ',');
+		token = popFirstString(str, ',');
 		if (token != "") this->setStatus(token);
 	}
 	quest_update = true;

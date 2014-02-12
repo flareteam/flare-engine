@@ -48,7 +48,7 @@ ItemStack & ItemStorage::operator [] (int slot) {
 void ItemStorage::setItems(string s) {
 	s = s + ',';
 	for (int i=0; i<slot_number; i++) {
-		storage[i].item = eatFirstInt(s, ',');
+		storage[i].item = popFirstInt(s, ',');
 		// check if such item exists to avoid crash if savegame was modified manually
 		if (storage[i].item < 0) {
 			fprintf(stderr, "Item on position %d has negative id, skipping\n", i);
@@ -72,7 +72,7 @@ void ItemStorage::setItems(string s) {
 void ItemStorage::setQuantities(string s) {
 	s = s + ',';
 	for (int i=0; i<slot_number; i++) {
-		storage[i].quantity = eatFirstInt(s, ',');
+		storage[i].quantity = popFirstInt(s, ',');
 		if (storage[i].quantity < 0) {
 			fprintf(stderr, "Items quantity on position %d is negative, setting to zero\n", i);
 			storage[i].quantity = 0;

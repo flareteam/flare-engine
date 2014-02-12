@@ -31,8 +31,8 @@ std::string trim_right_inplace(std::string s, const std::string& delimiters = " 
 int parse_duration(const std::string& s);
 std::string parse_section_title(const std::string& s);
 void parse_key_pair(const std::string& s, std::string& key, std::string& val);
-int eatFirstInt(std::string& s, char separator);
-std::string eatFirstString(std::string& s, char separator);
+int popFirstInt(std::string& s, char separator = ',');
+std::string popFirstString(std::string& s, char separator = ',');
 std::string getNextToken(const std::string& s, size_t& cursor, char separator);
 std::string stripCarriageReturn(const std::string& line);
 std::string getLine(std::ifstream& infile);
@@ -45,5 +45,7 @@ unsigned long toUnsignedLong(const std::string& s, unsigned long default_value =
 bool toBool(std::string value);
 Point toPoint(std::string value);
 Rect toRect(std::string value);
+Color toRGB(std::string value);
+Color toRGBA(std::string value);
 
 #endif

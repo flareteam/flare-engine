@@ -185,12 +185,11 @@ void PowerManager::loadPowers() {
 		}
 		// power requirements
 		else if (infile.key == "requires_flags") {
-			infile.val = infile.val + ',';
-			std::string flag = eatFirstString(infile.val,',');
+			std::string flag = popFirstString(infile.val);
 
 			while (flag != "") {
 				powers[input_id].requires_flags.insert(flag);
-				flag = eatFirstString(infile.val,',');
+				flag = popFirstString(infile.val);
 			}
 		}
 		else if (infile.key == "requires_mp")
@@ -343,11 +342,10 @@ void PowerManager::loadPowers() {
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
 			// @ATTR post_effect|[effect_id, magnitude (integer), duration (integer)]|Post effect.
-			infile.val = infile.val + ',';
 			PostEffect pe;
-			pe.id = eatFirstString(infile.val, ',');
-			pe.magnitude = eatFirstInt(infile.val, ',');
-			pe.duration = eatFirstInt(infile.val, ',');
+			pe.id = popFirstString(infile.val);
+			pe.magnitude = popFirstInt(infile.val);
+			pe.duration = popFirstInt(infile.val);
 			powers[input_id].post_effects.push_back(pe);
 		}
 		// pre and post power effects
@@ -369,20 +367,19 @@ void PowerManager::loadPowers() {
 			powers[input_id].target_neighbor = toInt(infile.val);
 		else if (infile.key == "spawn_limit") {
 			// @ATTR spawn_limit|[fixed:stat:unlimited],stat[physical:mental:offense:defens]|
-			infile.val = infile.val + ',';
-			std::string mode = eatFirstString(infile.val,',');
+			std::string mode = popFirstString(infile.val);
 			if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
 			else if (mode == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
 			else if (mode == "unlimited") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_UNLIMITED;
 			else fprintf(stderr, "unknown spawn_limit_mode %s\n", mode.c_str());
 
 			if(powers[input_id].spawn_limit_mode != SPAWN_LIMIT_MODE_UNLIMITED) {
-				powers[input_id].spawn_limit_qty = eatFirstInt(infile.val,',');
+				powers[input_id].spawn_limit_qty = popFirstInt(infile.val);
 
 				if(powers[input_id].spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
-					powers[input_id].spawn_limit_every = eatFirstInt(infile.val,',');
+					powers[input_id].spawn_limit_every = popFirstInt(infile.val);
 
-					std::string stat = eatFirstString(infile.val,',');
+					std::string stat = popFirstString(infile.val);
 					if (stat == "physical") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_PHYSICAL;
 					else if (stat == "mental") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_MENTAL;
 					else if (stat == "offense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_OFFENSE;
@@ -392,8 +389,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "spawn_level") {
-			infile.val = infile.val + ',';
-			std::string mode = eatFirstString(infile.val,',');
+			std::string mode = popFirstString(infile.val);
 			if (mode == "default") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_DEFAULT;
 			else if (mode == "fixed") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_FIXED;
 			else if (mode == "stat") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_STAT;
@@ -401,13 +397,13 @@ void PowerManager::loadPowers() {
 			else fprintf(stderr, "unknown spawn_level_mode %s\n", mode.c_str());
 
 			if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_DEFAULT) {
-				powers[input_id].spawn_level_qty = eatFirstInt(infile.val,',');
+				powers[input_id].spawn_level_qty = popFirstInt(infile.val);
 
 				if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_FIXED) {
-					powers[input_id].spawn_level_every = eatFirstInt(infile.val,',');
+					powers[input_id].spawn_level_every = popFirstInt(infile.val);
 
 					if(powers[input_id].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
-						std::string stat = eatFirstString(infile.val,',');
+						std::string stat = popFirstString(infile.val);
 						if (stat == "physical") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_PHYSICAL;
 						else if (stat == "mental") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_MENTAL;
 						else if (stat == "offense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_OFFENSE;
@@ -429,37 +425,34 @@ void PowerManager::loadPowers() {
 		}
 		else if (infile.key == "modifier_accuracy") {
 			// @ATTR modifier_accuracy|[multiply:add:absolute], integer|
-			infile.val = infile.val + ',';
-			std::string mode = eatFirstString(infile.val, ',');
+			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
 			else if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
-			powers[input_id].mod_accuracy_value = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_accuracy_value = popFirstInt(infile.val);
 		}
 		else if (infile.key == "modifier_damage") {
 			// @ATTR modifier_damage|[multiply:add:absolute], integer|
-			infile.val = infile.val + ',';
-			std::string mode = eatFirstString(infile.val, ',');
+			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
 			else if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
-			powers[input_id].mod_damage_value_min = eatFirstInt(infile.val, ',');
-			powers[input_id].mod_damage_value_max = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_damage_value_min = popFirstInt(infile.val);
+			powers[input_id].mod_damage_value_max = popFirstInt(infile.val);
 		}
 		else if (infile.key == "modifier_critical") {
 			// @ATTR modifier_critical|[multiply:add:absolute], integer|
-			infile.val = infile.val + ',';
-			std::string mode = eatFirstString(infile.val, ',');
+			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
 			else if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
 			else fprintf(stderr, "unknown stat_modifier_mode %s\n", mode.c_str());
 
-			powers[input_id].mod_crit_value = eatFirstInt(infile.val, ',');
+			powers[input_id].mod_crit_value = popFirstInt(infile.val);
 		}
 		else
 			fprintf(stderr, "ignoring unknown key %s set to %s in file %s\n",

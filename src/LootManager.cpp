@@ -56,39 +56,33 @@ LootManager::LootManager(StatBlock *_hero)
 	// @CLASS Loot|Description of engine/loot.txt
 	if (infile.open("engine/loot.txt")) {
 		while (infile.next()) {
-			infile.val = infile.val + ',';
-
 			if (infile.key == "loot_animation") {
 				// @ATTR loot_animation|x(int), y(int), w(int), h(int)|
-				animation_pos.x = eatFirstInt(infile.val, ',');
-				animation_pos.y = eatFirstInt(infile.val, ',');
-				animation_pos.w = eatFirstInt(infile.val, ',');
-				animation_pos.h = eatFirstInt(infile.val, ',');
+				animation_pos = toRect(infile.val);
 			}
 			else if (infile.key == "loot_animation_offset") {
 				// @ATTR loot_animation_offset|x (integer), y (integer)|
-				animation_offset.x = eatFirstInt(infile.val, ',');
-				animation_offset.y = eatFirstInt(infile.val, ',');
+				animation_offset = toPoint(infile.val);
 			}
 			else if (infile.key == "tooltip_margin") {
 				// @ATTR tooltip_margin|integer|
-				tooltip_margin = eatFirstInt(infile.val, ',');
+				tooltip_margin = toInt(infile.val);
 			}
 			else if (infile.key == "autopickup_currency") {
 				// @ATTR autopickup_currency|boolean|Enable autopickup for currency
-				AUTOPICKUP_CURRENCY = toBool(eatFirstString(infile.val, ','));
+				AUTOPICKUP_CURRENCY = toBool(infile.val);
 			}
 			else if (infile.key == "currency_name") {
 				// @ATTR currenct_name|string|Define the name of currency in game
-				CURRENCY = msg->get(eatFirstString(infile.val, ','));
+				CURRENCY = msg->get(infile.val);
 			}
 			else if (infile.key == "vendor_ratio") {
 				// @ATTR vendor_ratio|integer|Prices ratio for vendors
-				VENDOR_RATIO = eatFirstInt(infile.val, ',') / 100.0f;
+				VENDOR_RATIO = toInt(infile.val) / 100.0f;
 			}
 			else if (infile.key == "sfx_loot") {
 				// @ATTR sfx_loot|string|Sound effect for dropping loot.
-				sfx_loot =  snd->load(eatFirstString(infile.val, ','), "LootManager dropping loot");
+				sfx_loot =  snd->load(infile.val, "LootManager dropping loot");
 			}
 		}
 		infile.close();
