@@ -74,35 +74,26 @@ GameStateLoad::GameStateLoad() : GameState() {
 
 	if (infile.open("menus/gameload.txt")) {
 		while (infile.next()) {
-			infile.val = infile.val + ',';
-
 			if (infile.key == "action_button") {
-				button_action->pos.x = eatFirstInt(infile.val, ',');
-				button_action->pos.y = eatFirstInt(infile.val, ',');
+				button_action->pos.x = popFirstInt(infile.val);
+				button_action->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "alternate_button") {
-				button_alternate->pos.x = eatFirstInt(infile.val, ',');
-				button_alternate->pos.y = eatFirstInt(infile.val, ',');
+				button_alternate->pos.x = popFirstInt(infile.val);
+				button_alternate->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "portrait") {
-				portrait.setDestX(eatFirstInt(infile.val, ','));
-				portrait.setDestX(portrait.getDest().x + (VIEW_W - FRAME_W)/2);
-				portrait.setDestY(eatFirstInt(infile.val, ','));
-				portrait.setDestY(portrait.getDest().y + (VIEW_H - FRAME_H)/2);
-				portrait.setClipW(eatFirstInt(infile.val, ','));
-				portrait.setClipH(eatFirstInt(infile.val, ','));
+				Rect p_rect = toRect(infile.val);
+				portrait.setDestX(p_rect.x + (VIEW_W - FRAME_W)/2);
+				portrait.setDestY(p_rect.y + (VIEW_H - FRAME_H)/2);
+				portrait.setClipW(p_rect.w);
+				portrait.setClipH(p_rect.h);
 			}
 			else if (infile.key == "gameslot") {
-				gameslot_pos.x = eatFirstInt(infile.val, ',');
-				gameslot_pos.y = eatFirstInt(infile.val, ',');
-				gameslot_pos.w = eatFirstInt(infile.val, ',');
-				gameslot_pos.h = eatFirstInt(infile.val, ',');
+				gameslot_pos = toRect(infile.val);
 			}
 			else if (infile.key == "preview") {
-				preview_pos.x = eatFirstInt(infile.val, ',');
-				preview_pos.y = eatFirstInt(infile.val, ',');
-				preview_pos.w = eatFirstInt(infile.val, ',');
-				preview_pos.h = eatFirstInt(infile.val, ',');
+				preview_pos = toRect(infile.val);
 				// label positions within each slot
 			}
 			else if (infile.key == "name") {
@@ -119,8 +110,7 @@ GameStateLoad::GameStateLoad() : GameState() {
 				// Position for the avatar preview image in each slot
 			}
 			else if (infile.key == "sprite") {
-				sprites_pos.x = eatFirstInt(infile.val, ',');
-				sprites_pos.y = eatFirstInt(infile.val, ',');
+				sprites_pos = toPoint(infile.val);
 			}
 		}
 		infile.close();
@@ -130,17 +120,15 @@ GameStateLoad::GameStateLoad() : GameState() {
 	bool found_layer = false;
 	if (infile.open("engine/hero_layers.txt")) {
 		while(infile.next()) {
-			infile.val = infile.val + ',';
-
 			if (infile.key == "layer") {
-				unsigned dir = eatFirstInt(infile.val,',');
+				unsigned dir = popFirstInt(infile.val);
 				if (dir != 6) continue;
 				else found_layer = true;
 
-				string layer = eatFirstString(infile.val,',');
+				string layer = popFirstString(infile.val);
 				while (layer != "") {
 					preview_layer.push_back(layer);
-					layer = eatFirstString(infile.val,',');
+					layer = popFirstString(infile.val);
 				}
 			}
 		}

@@ -43,40 +43,38 @@ GameStateTitle::GameStateTitle() : GameState() {
 	FileParser infile;
 	if (infile.open("menus/gametitle.txt")) {
 		while (infile.next()) {
-			infile.val = infile.val + ',';
-
 			if (infile.key == "logo") {
-				logo.setGraphics(render_device->loadGraphicSurface(eatFirstString(infile.val, ','), ""));
+				logo.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val), ""));
 				if (!logo.graphicsIsNull()) {
 					Rect r;
-					r.x = eatFirstInt(infile.val, ',');
-					r.y = eatFirstInt(infile.val, ',');
+					r.x = popFirstInt(infile.val);
+					r.y = popFirstInt(infile.val);
 					r.w = logo.getGraphicsWidth();
 					r.h = logo.getGraphicsHeight();
-					alignToScreenEdge(eatFirstString(infile.val, ','), &r);
+					alignToScreenEdge(popFirstString(infile.val), &r);
 					logo.setDestX(r.x);
 					logo.setDestY(r.y);
 				}
 			}
 			else if (infile.key == "play_pos") {
-				button_play->pos.x = eatFirstInt(infile.val, ',');
-				button_play->pos.y = eatFirstInt(infile.val, ',');
-				alignToScreenEdge(eatFirstString(infile.val, ','), &(button_play->pos));
+				button_play->pos.x = popFirstInt(infile.val);
+				button_play->pos.y = popFirstInt(infile.val);
+				alignToScreenEdge(popFirstString(infile.val), &(button_play->pos));
 			}
 			else if (infile.key == "config_pos") {
-				button_cfg->pos.x = eatFirstInt(infile.val, ',');
-				button_cfg->pos.y = eatFirstInt(infile.val, ',');
-				alignToScreenEdge(eatFirstString(infile.val, ','), &(button_cfg->pos));
+				button_cfg->pos.x = popFirstInt(infile.val);
+				button_cfg->pos.y = popFirstInt(infile.val);
+				alignToScreenEdge(popFirstString(infile.val), &(button_cfg->pos));
 			}
 			else if (infile.key == "credits_pos") {
-				button_credits->pos.x = eatFirstInt(infile.val, ',');
-				button_credits->pos.y = eatFirstInt(infile.val, ',');
-				alignToScreenEdge(eatFirstString(infile.val, ','), &(button_credits->pos));
+				button_credits->pos.x = popFirstInt(infile.val);
+				button_credits->pos.y = popFirstInt(infile.val);
+				alignToScreenEdge(popFirstString(infile.val), &(button_credits->pos));
 			}
 			else if (infile.key == "exit_pos") {
-				button_exit->pos.x = eatFirstInt(infile.val, ',');
-				button_exit->pos.y = eatFirstInt(infile.val, ',');
-				alignToScreenEdge(eatFirstString(infile.val, ','), &(button_exit->pos));
+				button_exit->pos.x = popFirstInt(infile.val);
+				button_exit->pos.y = popFirstInt(infile.val);
+				alignToScreenEdge(popFirstString(infile.val), &(button_exit->pos));
 			}
 		}
 		infile.close();

@@ -53,7 +53,6 @@ private:
 	std::string cancel_label;
 
 	Color background_color;
-	int background_alpha;
 	Point base_pos;
 
 	void keyboardLogic();

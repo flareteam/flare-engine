@@ -331,7 +331,7 @@ void setPaths() {
 	if (getenv("XDG_DATA_DIRS") != NULL) {
 		string pathlist = (string)getenv("XDG_DATA_DIRS");
 		string pathtest;
-		pathtest = eatFirstString(pathlist,':');
+		pathtest = popFirstString(pathlist,':');
 		while (pathtest != "") {
 			if (!path_data) {
 				PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
@@ -342,7 +342,7 @@ void setPaths() {
 				if (dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 			}
 			if (path_data && path_default_data) break;
-			pathtest = eatFirstString(pathlist,':');
+			pathtest = popFirstString(pathlist,':');
 		}
 	}
 

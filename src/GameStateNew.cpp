@@ -87,23 +87,20 @@ GameStateNew::GameStateNew() : GameState() {
 
 	if (infile.open("menus/gamenew.txt")) {
 		while (infile.next()) {
-			infile.val = infile.val + ',';
-
 			if (infile.key == "button_prev") {
-				button_prev->pos.x = eatFirstInt(infile.val, ',');
-				button_prev->pos.y = eatFirstInt(infile.val, ',');
+				button_prev->pos.x = popFirstInt(infile.val);
+				button_prev->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "button_next") {
-				button_next->pos.x = eatFirstInt(infile.val, ',');
-				button_next->pos.y = eatFirstInt(infile.val, ',');
+				button_next->pos.x = popFirstInt(infile.val);
+				button_next->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "button_permadeath") {
-				button_permadeath->pos.x = eatFirstInt(infile.val, ',');
-				button_permadeath->pos.y = eatFirstInt(infile.val, ',');
+				button_permadeath->pos.x = popFirstInt(infile.val);
+				button_permadeath->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "name_input") {
-				name_pos.x = eatFirstInt(infile.val, ',');
-				name_pos.y = eatFirstInt(infile.val, ',');
+				name_pos = toPoint(infile.val);
 			}
 			else if (infile.key == "portrait_label") {
 				portrait_label = eatLabelInfo(infile.val);
@@ -118,21 +115,14 @@ GameStateNew::GameStateNew() : GameState() {
 				classlist_label = eatLabelInfo(infile.val);
 			}
 			else if (infile.key == "portrait") {
-				portrait_pos.x = eatFirstInt(infile.val, ',');
-				portrait_pos.y = eatFirstInt(infile.val, ',');
-				portrait_pos.w = eatFirstInt(infile.val, ',');
-				portrait_pos.h = eatFirstInt(infile.val, ',');
+				portrait_pos = toRect(infile.val);
 			}
 			else if (infile.key == "class_list") {
-				class_list->pos.x = eatFirstInt(infile.val, ',');
-				class_list->pos.y = eatFirstInt(infile.val, ',');
+				class_list->pos.x = popFirstInt(infile.val);
+				class_list->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "show_classlist") {
-				int show_cl = eatFirstInt(infile.val, ',');
-				if (show_cl == 1)
-					show_classlist = true;
-				else
-					show_classlist = false;
+				show_classlist = toBool(infile.val);
 			}
 		}
 		infile.close();

@@ -775,24 +775,12 @@ void MenuPowers::loadHeader(FileParser &infile) {
 	if (parseMenuKey(infile.key, infile.val))
 		return;
 
-	if (infile.key == "tab_title") {
-		tab_titles.push_back(infile.val);
-	}
-	else if (infile.key == "tab_tree") {
-		tree_image_files.push_back(infile.val);
-	}
-	else if (infile.key == "label_title") {
-		title = eatLabelInfo(infile.val);
-	}
-	else if (infile.key == "unspent_points") {
-		unspent_points = eatLabelInfo(infile.val);
-	}
-	else if (infile.key == "close") {
-		close_pos = toPoint(infile.val);
-	}
-	else if (infile.key == "tab_area") {
-		tab_area = toRect(infile.val);
-	}
+	if (infile.key == "tab_title") tab_titles.push_back(infile.val);
+	else if (infile.key == "tab_tree") tree_image_files.push_back(infile.val);
+	else if (infile.key == "label_title") title = eatLabelInfo(infile.val);
+	else if (infile.key == "unspent_points") unspent_points = eatLabelInfo(infile.val);
+	else if (infile.key == "close") close_pos = toPoint(infile.val);
+	else if (infile.key == "tab_area") tab_area = toRect(infile.val);
 	else if (infile.key == "tabs") {
 		tabs_count = toInt(infile.val);
 		if (tabs_count < 1) tabs_count = 1;
@@ -800,10 +788,8 @@ void MenuPowers::loadHeader(FileParser &infile) {
 }
 
 void MenuPowers::loadPower(FileParser &infile) {
-	infile.val = infile.val + ',';
-
 	if (infile.key == "id") {
-		int id = eatFirstInt(infile.val, ',');
+		int id = popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
 			power_cell.back().id = id;
@@ -820,44 +806,18 @@ void MenuPowers::loadPower(FileParser &infile) {
 	if (skip_section)
 		return;
 
-	if (infile.key == "tab") {
-		power_cell.back().tab = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "position") {
-		power_cell.back().pos.x = eatFirstInt(infile.val, ',');
-		power_cell.back().pos.y = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_physoff") {
-		power_cell.back().requires_physoff = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_physdef") {
-		power_cell.back().requires_physdef = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_mentoff") {
-		power_cell.back().requires_mentoff = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_mentdef") {
-		power_cell.back().requires_mentdef = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_defense") {
-		power_cell.back().requires_defense = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_offense") {
-		power_cell.back().requires_offense = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_physical") {
-		power_cell.back().requires_physical = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_mental") {
-		power_cell.back().requires_mental = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_point") {
-		if (infile.val == "true,")
-			power_cell.back().requires_point = true;
-	}
-	else if (infile.key == "requires_level") {
-		power_cell.back().requires_level = eatFirstInt(infile.val, ',');
-	}
+	if (infile.key == "tab") power_cell.back().tab = toInt(infile.val);
+	else if (infile.key == "position") power_cell.back().pos = toPoint(infile.val);
+	else if (infile.key == "requires_physoff") power_cell.back().requires_physoff = toInt(infile.val);
+	else if (infile.key == "requires_physdef") power_cell.back().requires_physdef = toInt(infile.val);
+	else if (infile.key == "requires_mentoff") power_cell.back().requires_mentoff = toInt(infile.val);
+	else if (infile.key == "requires_mentdef") power_cell.back().requires_mentdef = toInt(infile.val);
+	else if (infile.key == "requires_defense") power_cell.back().requires_defense = toInt(infile.val);
+	else if (infile.key == "requires_offense") power_cell.back().requires_offense = toInt(infile.val);
+	else if (infile.key == "requires_physical") power_cell.back().requires_physical = toInt(infile.val);
+	else if (infile.key == "requires_mental") power_cell.back().requires_mental = toInt(infile.val);
+	else if (infile.key == "requires_point") power_cell.back().requires_point = toBool(infile.val);
+	else if (infile.key == "requires_level") power_cell.back().requires_level = toInt(infile.val);
 	else if (infile.key == "upgrades") {
 		upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
 		string repeat_val = infile.nextValue();
@@ -866,22 +826,14 @@ void MenuPowers::loadPower(FileParser &infile) {
 			repeat_val = infile.nextValue();
 		}
 	}
-	else if (infile.key == "requires_power") {
-		power_cell.back().requires_power.push_back(eatFirstInt(infile.val, ','));
-	}
-	else if (infile.key == "visible_requires_status") {
-		power_cell.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
-	}
-	else if (infile.key == "visible_requires_not_status") {
-		power_cell.back().visible_requires_not.push_back(eatFirstString(infile.val, ','));
-	}
+	else if (infile.key == "requires_power") power_cell.back().requires_power.push_back(toInt(infile.val));
+	else if (infile.key == "visible_requires_status") power_cell.back().visible_requires_status.push_back(infile.val);
+	else if (infile.key == "visible_requires_not_status") power_cell.back().visible_requires_not.push_back(infile.val);
 }
 
 void MenuPowers::loadUpgrade(FileParser &infile) {
-	infile.val = infile.val + ',';
-
 	if (infile.key == "id") {
-		int id = eatFirstInt(infile.val, ',');
+		int id = popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
 			upgrade.back().id = id;
@@ -896,44 +848,17 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 	if (skip_section)
 		return;
 
-	if (infile.key == "requires_physoff") {
-		upgrade.back().requires_physoff = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_physdef") {
-		upgrade.back().requires_physdef = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_mentoff") {
-		upgrade.back().requires_mentoff = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_mentdef") {
-		upgrade.back().requires_mentdef = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_defense") {
-		upgrade.back().requires_defense = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_offense") {
-		upgrade.back().requires_offense = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_physical") {
-		upgrade.back().requires_physical = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_mental") {
-		upgrade.back().requires_mental = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_point") {
-		if (infile.val == "true,")
-			upgrade.back().requires_point = true;
-	}
-	else if (infile.key == "requires_level") {
-		upgrade.back().requires_level = eatFirstInt(infile.val, ',');
-	}
-	else if (infile.key == "requires_power") {
-		upgrade.back().requires_power.push_back(eatFirstInt(infile.val, ','));
-	}
-	else if (infile.key == "visible_requires_status") {
-		upgrade.back().visible_requires_status.push_back(eatFirstString(infile.val, ','));
-	}
-	else if (infile.key == "visible_requires_not_status") {
-		upgrade.back().visible_requires_not.push_back(eatFirstString(infile.val, ','));
-	}
+	if (infile.key == "requires_physoff") upgrade.back().requires_physoff = toInt(infile.val);
+	else if (infile.key == "requires_physdef") upgrade.back().requires_physdef = toInt(infile.val);
+	else if (infile.key == "requires_mentoff") upgrade.back().requires_mentoff = toInt(infile.val);
+	else if (infile.key == "requires_mentdef") upgrade.back().requires_mentdef = toInt(infile.val);
+	else if (infile.key == "requires_defense") upgrade.back().requires_defense = toInt(infile.val);
+	else if (infile.key == "requires_offense") upgrade.back().requires_offense = toInt(infile.val);
+	else if (infile.key == "requires_physical") upgrade.back().requires_physical = toInt(infile.val);
+	else if (infile.key == "requires_mental") upgrade.back().requires_mental = toInt(infile.val);
+	else if (infile.key == "requires_point") upgrade.back().requires_point = toBool(infile.val);
+	else if (infile.key == "requires_level") upgrade.back().requires_level = toInt(infile.val);
+	else if (infile.key == "requires_power") upgrade.back().requires_power.push_back(toInt(infile.val));
+	else if (infile.key == "visible_requires_status") upgrade.back().visible_requires_status.push_back(infile.val);
+	else if (infile.key == "visible_requires_not_status") upgrade.back().visible_requires_not.push_back(infile.val);
 }

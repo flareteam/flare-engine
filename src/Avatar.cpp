@@ -138,17 +138,15 @@ void Avatar::loadLayerDefinitions() {
 	// @CLASS Avatar|Description of engine/hero_layers.txt
 	if (infile.open("engine/hero_layers.txt")) {
 		while(infile.next()) {
-			infile.val = infile.val + ',';
-
 			if (infile.key == "layer") {
 				// @ATTR layer|direction (integer), string, ...]|Defines the hero avatar sprite layer
-				unsigned dir = eatFirstInt(infile.val,',');
+				unsigned dir = popFirstInt(infile.val);
 				if (dir>7) {
 					fprintf(stderr, "direction must be in range [0,7]\n");
 					SDL_Quit();
 					exit(1);
 				}
-				string layer = eatFirstString(infile.val,',');
+				string layer = popFirstString(infile.val);
 				while (layer != "") {
 					// check if already in layer_reference:
 					unsigned ref_pos;
@@ -159,7 +157,7 @@ void Avatar::loadLayerDefinitions() {
 						layer_reference_order.push_back(layer);
 					layer_def[dir].push_back(ref_pos);
 
-					layer = eatFirstString(infile.val,',');
+					layer = popFirstString(infile.val);
 				}
 			}
 		}

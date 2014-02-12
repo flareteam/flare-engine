@@ -77,19 +77,17 @@ void TileSet::load(const std::string& filename) {
 	if (infile.open(filename)) {
 		while (infile.next()) {
 			if (infile.key == "tile") {
-
-				infile.val = infile.val + ',';
-				unsigned index = eatFirstInt(infile.val, ',');
+				unsigned index = popFirstInt(infile.val);
 
 				if (index >= tiles.size())
 					tiles.resize(index + 1);
 
-				tiles[index].tile.setClipX(eatFirstInt(infile.val, ','));
-				tiles[index].tile.setClipY(eatFirstInt(infile.val, ','));
-				tiles[index].tile.setClipW(eatFirstInt(infile.val, ','));
-				tiles[index].tile.setClipH(eatFirstInt(infile.val, ','));
-				tiles[index].offset.x = eatFirstInt(infile.val, ',');
-				tiles[index].offset.y = eatFirstInt(infile.val, ',');
+				tiles[index].tile.setClipX(popFirstInt(infile.val));
+				tiles[index].tile.setClipY(popFirstInt(infile.val));
+				tiles[index].tile.setClipW(popFirstInt(infile.val));
+				tiles[index].tile.setClipH(popFirstInt(infile.val));
+				tiles[index].offset.x = popFirstInt(infile.val);
+				tiles[index].offset.y = popFirstInt(infile.val);
 				max_size_x = std::max(max_size_x, (tiles[index].tile.getClip().w / TILE_W) + 1);
 				max_size_y = std::max(max_size_y, (tiles[index].tile.getClip().h / TILE_H) + 1);
 			}
@@ -99,10 +97,9 @@ void TileSet::load(const std::string& filename) {
 			else if (infile.key == "transparency") {
 				alpha_background = false;
 
-				infile.val = infile.val + ',';
-				trans_r = (Uint8)eatFirstInt(infile.val, ',');
-				trans_g = (Uint8)eatFirstInt(infile.val, ',');
-				trans_b = (Uint8)eatFirstInt(infile.val, ',');
+				trans_r = (Uint8)popFirstInt(infile.val);
+				trans_g = (Uint8)popFirstInt(infile.val);
+				trans_b = (Uint8)popFirstInt(infile.val);
 
 			}
 			else if (infile.key == "animation") {

@@ -68,7 +68,6 @@ MenuNPCActions::MenuNPCActions()
 	, current_action(-1)
 	, vendor_label(msg->get("Trade"))
 	, cancel_label(msg->get("Cancel"))
-	, background_alpha(0)
 	, dialog_selected(false)
 	, vendor_selected(false)
 	, cancel_selected(false)
@@ -80,44 +79,13 @@ MenuNPCActions::MenuNPCActions()
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			infile.val = infile.val + ',';
-
-			if(infile.key == "background_color") {
-				background_color.r = eatFirstInt(infile.val,',');
-				background_color.g = eatFirstInt(infile.val,',');
-				background_color.b = eatFirstInt(infile.val,',');
-				background_alpha = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "topic_normal_color") {
-				topic_normal_color.r = eatFirstInt(infile.val,',');
-				topic_normal_color.g = eatFirstInt(infile.val,',');
-				topic_normal_color.b = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "topic_hilight_color") {
-				topic_hilight_color.r = eatFirstInt(infile.val,',');
-				topic_hilight_color.g = eatFirstInt(infile.val,',');
-				topic_hilight_color.b = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "vendor_normal_color") {
-				vendor_normal_color.r = eatFirstInt(infile.val,',');
-				vendor_normal_color.g = eatFirstInt(infile.val,',');
-				vendor_normal_color.b = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "vendor_hilight_color") {
-				vendor_hilight_color.r = eatFirstInt(infile.val,',');
-				vendor_hilight_color.g = eatFirstInt(infile.val,',');
-				vendor_hilight_color.b = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "cancel_normal_color") {
-				cancel_normal_color.r = eatFirstInt(infile.val,',');
-				cancel_normal_color.g = eatFirstInt(infile.val,',');
-				cancel_normal_color.b = eatFirstInt(infile.val,',');
-			}
-			else if(infile.key == "cancel_hilight_color") {
-				cancel_hilight_color.r = eatFirstInt(infile.val,',');
-				cancel_hilight_color.g = eatFirstInt(infile.val,',');
-				cancel_hilight_color.b = eatFirstInt(infile.val,',');
-			}
+			if(infile.key == "background_color") background_color = toRGBA(infile.val);
+			else if(infile.key == "topic_normal_color") topic_normal_color = toRGB(infile.val);
+			else if(infile.key == "topic_hilight_color") topic_hilight_color = toRGB(infile.val);
+			else if(infile.key == "vendor_normal_color") vendor_normal_color = toRGB(infile.val);
+			else if(infile.key == "vendor_hilight_color") vendor_hilight_color = toRGB(infile.val);
+			else if(infile.key == "cancel_normal_color") cancel_normal_color = toRGB(infile.val);
+			else if(infile.key == "cancel_hilight_color") cancel_hilight_color = toRGB(infile.val);
 		}
 		infile.close();
 	}
@@ -211,7 +179,7 @@ void MenuNPCActions::update() {
 		Image surface = render_device->createAlphaSurface(w,h);
 		Uint32 bg = render_device->MapRGBA(&surface,
 										   background_color.r, background_color.g,
-										   background_color.b, background_alpha);
+										   background_color.b, background_color.a);
 		render_device->fillImageWithColor(&surface, NULL, bg);
 		action_menu.setGraphics(surface);
 		action_menu.setClip(0,0,surface.getWidth(),surface.getHeight());

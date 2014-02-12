@@ -28,27 +28,21 @@ CursorManager::CursorManager()
 	FileParser infile;
 	if (infile.open("engine/mouse_cursor.txt", true, true, "")) {
 		while (infile.next()) {
-			infile.val = infile.val + ',';
-
 			if (infile.key == "normal") {
-				cursor_normal.setGraphics(render_device->loadGraphicSurface(eatFirstString(infile.val,',')));
-				offset_normal.x = eatFirstInt(infile.val, ',');
-				offset_normal.y = eatFirstInt(infile.val, ',');
+				cursor_normal.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+				offset_normal = toPoint(infile.val);
 			}
 			else if (infile.key == "interact") {
-				cursor_interact.setGraphics(render_device->loadGraphicSurface(eatFirstString(infile.val,',')));
-				offset_interact.x = eatFirstInt(infile.val, ',');
-				offset_interact.y = eatFirstInt(infile.val, ',');
+				cursor_interact.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+				offset_interact = toPoint(infile.val);
 			}
 			else if (infile.key == "talk") {
-				cursor_talk.setGraphics(render_device->loadGraphicSurface(eatFirstString(infile.val,',')));
-				offset_talk.x = eatFirstInt(infile.val, ',');
-				offset_talk.y = eatFirstInt(infile.val, ',');
+				cursor_talk.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+				offset_talk = toPoint(infile.val);
 			}
 			else if (infile.key == "attack") {
-				cursor_attack.setGraphics(render_device->loadGraphicSurface(eatFirstString(infile.val,',')));
-				offset_attack.x = eatFirstInt(infile.val, ',');
-				offset_attack.y = eatFirstInt(infile.val, ',');
+				cursor_attack.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+				offset_attack = toPoint(infile.val);
 			}
 		}
 		infile.close();

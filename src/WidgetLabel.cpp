@@ -36,26 +36,19 @@ LabelInfo::LabelInfo() : x(0), y(0), justify(JUSTIFY_LEFT), valign(VALIGN_TOP), 
  */
 LabelInfo eatLabelInfo(string val) {
 	LabelInfo info;
-	if (val.empty())
-		return info;
-
-	// Make sure the string ends with a delimeter
-	if (!val.empty() && val.at(val.size()-1) != ',')
-		val = val + ',';
-
 	std::string justify,valign,style;
 
-	std::string tmp = eatFirstString(val,',');
+	std::string tmp = popFirstString(val,',');
 	if (tmp == "hidden") {
 		info.hidden = true;
 	}
 	else {
 		info.hidden = false;
 		info.x = toInt(tmp);
-		info.y = eatFirstInt(val,',');
-		justify = eatFirstString(val,',');
-		valign = eatFirstString(val,',');
-		style = eatFirstString(val,',');
+		info.y = popFirstInt(val,',');
+		justify = popFirstString(val,',');
+		valign = popFirstString(val,',');
+		style = popFirstString(val,',');
 
 		if (justify == "left") info.justify = JUSTIFY_LEFT;
 		else if (justify == "center") info.justify = JUSTIFY_CENTER;

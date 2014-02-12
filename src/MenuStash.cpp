@@ -58,7 +58,8 @@ MenuStash::MenuStash(StatBlock *_stats)
 				close_pos = toPoint(infile.val);
 			}
 			else if (infile.key == "slots_area") {
-				slots_area = toRect(infile.val);
+				slots_area.x = popFirstInt(infile.val);
+				slots_area.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "stash_cols") {
 				slots_cols = toInt(infile.val);

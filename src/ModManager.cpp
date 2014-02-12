@@ -231,7 +231,7 @@ Mod ModManager::loadMod(std::string name) {
 			else if (key == "requires") {
 				std::string dep;
 				val = val + ',';
-				while ((dep = eatFirstString(val, ',')) != "") {
+				while ((dep = popFirstString(val, ',')) != "") {
 					mod.depends.push_back(dep);
 				}
 			}
