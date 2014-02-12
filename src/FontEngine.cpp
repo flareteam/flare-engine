@@ -76,11 +76,7 @@ FontEngine::FontEngine()
 	Color color;
 	if (infile.open("engine/font_colors.txt")) {
 		while (infile.next()) {
-			// TODO use toRGB()
-			color.r = eatFirstInt(infile.val);
-			color.g = eatFirstInt(infile.val);
-			color.b = eatFirstInt(infile.val);
-			color_map[infile.key] = color;
+			color_map[infile.key] = toRGB(infile.val);
 		}
 		infile.close();
 	}

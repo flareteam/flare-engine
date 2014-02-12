@@ -141,10 +141,7 @@ void GameSwitcher::loadFPS() {
 				fps_corner = eatFirstString(infile.val);
 			}
 			else if(infile.key == "color") {
-				// TODO use toRGB()
-				fps_color.r = eatFirstInt(infile.val);
-				fps_color.g = eatFirstInt(infile.val);
-				fps_color.b = eatFirstInt(infile.val);
+				fps_color = toRGB(infile.val);
 			}
 		}
 		infile.close();

@@ -45,5 +45,7 @@ unsigned long toUnsignedLong(const std::string& s, unsigned long default_value =
 bool toBool(std::string value);
 Point toPoint(std::string value);
 Rect toRect(std::string value);
+Color toRGB(std::string value);
+Color toRGBA(std::string value);
 
 #endif

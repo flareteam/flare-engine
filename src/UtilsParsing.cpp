@@ -262,9 +262,6 @@ bool toBool(std::string value) {
 
 Point toPoint(std::string value) {
 	Point p;
-	if (value.empty())
-		return p;
-
 	p.x = eatFirstInt(value);
 	p.y = eatFirstInt(value);
 	return p;
@@ -272,12 +269,26 @@ Point toPoint(std::string value) {
 
 Rect toRect(std::string value) {
 	Rect r;
-	if (value.empty())
-		return r;
-
 	r.x = eatFirstInt(value);
 	r.y = eatFirstInt(value);
 	r.w = eatFirstInt(value);
 	r.h = eatFirstInt(value);
 	return r;
+}
+
+Color toRGB(std::string value) {
+	Color c;
+	c.r = eatFirstInt(value);
+	c.g = eatFirstInt(value);
+	c.b = eatFirstInt(value);
+	return c;
+}
+
+Color toRGBA(std::string value) {
+	Color c;
+	c.r = eatFirstInt(value);
+	c.g = eatFirstInt(value);
+	c.b = eatFirstInt(value);
+	c.a = eatFirstInt(value);
+	return c;
 }
