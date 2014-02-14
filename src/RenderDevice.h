@@ -206,9 +206,6 @@ public:
 					 bool blended = true) = 0;
 	virtual void fillImageWithColor(Image *dst, Rect *dstrect, Uint32 color) = 0;
 	virtual void drawPixel(Image *image, int x, int y, Uint32 color) = 0;
-	virtual void drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color) = 0;
-	virtual void drawLine(Image *image, Point pos0, Point pos1, Uint32 color) = 0;
-	virtual void drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color) = 0;
 	virtual Uint32 MapRGB(Image *src, Uint8 r, Uint8 g, Uint8 b) = 0;
 	virtual Uint32 MapRGBA(Image *src, Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
 	virtual void scaleSurface(Image *source, int width, int height) = 0;

@@ -314,64 +314,6 @@ void SDLRenderDevice::drawLine(
 	}
 }
 
-/**
- * draw line to the screen
- * NOTE: The surface must be locked before calling this!
- *
- * from http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#Simplification
- */
-void SDLRenderDevice::drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color) {
-	if (!image || !static_cast<SDLImage *>(image)->surface) return;
-
-	const int dx = abs(x1-x0);
-	const int dy = abs(y1-y0);
-	const int sx = x0 < x1 ? 1 : -1;
-	const int sy = y0 < y1 ? 1 : -1;
-	int err = dx-dy;
-
-	do {
-		//skip draw if outside screen
-		if (x0 > 0 && y0 > 0 && x0 < VIEW_W && y0 < VIEW_H)
-			render_device->drawPixel(image,x0,y0,color);
-
-		int e2 = 2*err;
-		if (e2 > -dy) {
-			err = err - dy;
-			x0 = x0 + sx;
-		}
-		if (e2 <  dx) {
-			err = err + dx;
-			y0 = y0 + sy;
-		}
-	}
-	while(x0 != x1 || y0 != y1);
-}
-
-void SDLRenderDevice::drawLine(Image *image, Point pos0, Point pos1, Uint32 color) {
-	if (!image || !static_cast<SDLImage *>(image)->surface) return;
-	SDL_Surface *surface = static_cast<SDLImage *>(image)->surface;
-
-	if (SDL_MUSTLOCK(surface))
-		SDL_LockSurface(surface);
-	drawLine(image, pos0.x, pos0.y, pos1.x, pos1.y, color);
-	if (SDL_MUSTLOCK(surface))
-		SDL_UnlockSurface(surface);
-}
-
-void SDLRenderDevice::drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color) {
-	if (!image || !static_cast<SDLImage *>(image)->surface) return;
-	SDL_Surface *surface = static_cast<SDLImage *>(image)->surface;
-
-	if (SDL_MUSTLOCK(surface))
-		SDL_LockSurface(surface);
-	drawLine(image, pos0.x, pos0.y, pos1.x, pos0.y, color);
-	drawLine(image, pos1.x, pos0.y, pos1.x, pos1.y, color);
-	drawLine(image, pos0.x, pos0.y, pos0.x, pos1.y, color);
-	drawLine(image, pos0.x, pos1.y, pos1.x, pos1.y, color);
-	if (SDL_MUSTLOCK(surface))
-		SDL_UnlockSurface(surface);
-}
-
 void SDLRenderDevice::drawRectangle(
 	const Point& p0,
 	const Point& p1,

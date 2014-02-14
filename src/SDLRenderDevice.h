@@ -75,13 +75,7 @@ public:
 
 	void drawLine(const Point& p0, const Point& p1, Uint32 color);
 
-	void drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color);
-
-	void drawLine(Image *image, Point pos0, Point pos1, Uint32 color);
-
 	void drawRectangle(const Point& p0, const Point& p1, Uint32 color);
-
-	void drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color);
 
 	void blankScreen();
 
