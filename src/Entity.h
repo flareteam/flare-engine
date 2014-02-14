@@ -45,7 +45,7 @@ public:
 	bool move();
 	bool takeHit(const Hazard &h);
 	virtual void resetActiveAnimation();
-	virtual void doRewards(int){}
+	virtual void doRewards(int) {}
 
 	// sound effects flags
 	bool sfx_phys;
