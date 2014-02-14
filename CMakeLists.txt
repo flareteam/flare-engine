@@ -130,6 +130,7 @@ Set (FLARE_SOURCES
 	./src/Menu.cpp
 	./src/MenuActionBar.cpp
 	./src/MenuActiveEffects.cpp
+	./src/MenuBook.cpp
 	./src/MenuCharacter.cpp
 	./src/MenuConfirm.cpp
 	./src/MenuEnemy.cpp

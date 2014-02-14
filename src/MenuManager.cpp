@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 #include "Menu.h"
+#include "MenuBook.h"
 #include "MenuManager.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
@@ -71,6 +72,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, log(NULL)
 	, hudlog(NULL)
 	, act(NULL)
+	, book(NULL)
 	, hp(NULL)
 	, mp(NULL)
 	, xp(NULL)
@@ -120,6 +122,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(stash); // menus[15]
 	npc = new MenuNPCActions();
 	menus.push_back(npc); // menus[16]
+	book = new MenuBook();
+	menus.push_back(book); // menus[17]
 
 	tip = new WidgetTooltip();
 
@@ -376,6 +380,7 @@ void MenuManager::logic() {
 	log->logic();
 	talker->logic();
 	stash->logic();
+	book->logic();
 
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
@@ -417,7 +422,7 @@ void MenuManager::logic() {
 			keyboard_dragging = false;
 			mouse_dragging = false;
 		}
-		if (inv->tablist.getCurrent() != -1 || vendor->tablist.getCurrent() != -1 || stash->tablist.getCurrent() != -1 || act->tablist.getCurrent() != -1 || pow->tablist.getCurrent() != -1 || chr->tablist.getCurrent() != -1 || log->tablist.getCurrent() != -1) {
+		if (inv->tablist.getCurrent() != -1 || vendor->tablist.getCurrent() != -1 || stash->tablist.getCurrent() != -1 || act->tablist.getCurrent() != -1 || pow->tablist.getCurrent() != -1 || chr->tablist.getCurrent() != -1 || log->tablist.getCurrent() != -1 || book->tablist.getCurrent() != -1) {
 			inpt->lock[CANCEL] = true;
 			inv->tablist.defocus();
 			vendor->tablist.defocus();
@@ -426,6 +431,7 @@ void MenuManager::logic() {
 			pow->tablist.defocus();
 			chr->tablist.defocus();
 			log->tablist.defocus();
+			book->tablist.defocus();
 		}
 	}
 
@@ -510,7 +516,7 @@ void MenuManager::logic() {
 		}
 	}
 
-	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible);
+	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible || book->visible);
 	pause = (MENUS_PAUSE && menus_open) || exit->visible;
 
 	if (stats->alive) {
@@ -519,6 +525,11 @@ void MenuManager::logic() {
 		if (!mouse_dragging && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
 			// exit menu
 			if (exit->visible && isWithin(exit->window_area, inpt->mouse)) {
+				inpt->lock[MAIN2] = true;
+			}
+
+			// book menu
+			if (book->visible && isWithin(book->window_area, inpt->mouse)) {
 				inpt->lock[MAIN2] = true;
 			}
 
@@ -541,6 +552,11 @@ void MenuManager::logic() {
 
 			// exit menu
 			if (exit->visible && isWithin(exit->window_area, inpt->mouse)) {
+				inpt->lock[MAIN1] = true;
+			}
+
+			// book menu
+			if (book->visible && isWithin(book->window_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 			}
 
@@ -1247,6 +1263,8 @@ void MenuManager::closeLeft() {
 	exit->visible = false;
 	stash->visible = false;
 	npc->visible = false;
+	book->visible = false;
+	book->book_name = "";
 }
 
 void MenuManager::closeRight() {
@@ -1256,6 +1274,8 @@ void MenuManager::closeRight() {
 	talker->visible = false;
 	exit->visible = false;
 	npc->visible = false;
+	book->visible = false;
+	book->book_name = "";
 }
 
 bool MenuManager::isDragging() {
@@ -1300,4 +1320,5 @@ MenuManager::~MenuManager() {
 	delete effects;
 	delete stash;
 	delete npc;
+	delete book;
 }

@@ -38,6 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
+#include "MenuBook.h"
 #include "MenuEnemy.h"
 #include "MenuHUDLog.h"
 #include "MenuInventory.h"
@@ -384,6 +385,18 @@ void GameStatePlay::checkLog() {
 	if (powers->log_msg != "") {
 		menu->hudlog->add(powers->log_msg);
 		powers->log_msg = "";
+	}
+}
+
+/**
+ * Check if we need to open book
+ */
+void GameStatePlay::checkBook() {
+	// Map events can open books
+	if (mapr->show_book != "") {
+		menu->closeAll();
+		menu->book->book_name = mapr->show_book;
+		mapr->show_book = "";
 	}
 }
 
@@ -811,6 +824,7 @@ void GameStatePlay::logic() {
 	checkTeleport();
 	checkLootDrop();
 	checkLog();
+	checkBook();
 	checkEquipmentChange();
 	checkConsumable();
 	checkStash();

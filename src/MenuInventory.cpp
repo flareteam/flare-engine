@@ -434,6 +434,10 @@ void MenuInventory::activate(Point position) {
 	if (items->items[inventory[CARRIED][slot].item].type == "quest") {
 		return;
 	}
+	else if (items->items[inventory[CARRIED][slot].item].type == "book") {
+		snd->play(sfx_open);
+		mapr->show_book = items->items[inventory[CARRIED][slot].item].book;
+	}
 	// use a consumable item
 	else if (items->items[inventory[CARRIED][slot].item].type == "consumable") {
 

@@ -38,17 +38,17 @@ LabelInfo eatLabelInfo(string val) {
 	LabelInfo info;
 	std::string justify,valign,style;
 
-	std::string tmp = popFirstString(val,',');
+	std::string tmp = popFirstString(val);
 	if (tmp == "hidden") {
 		info.hidden = true;
 	}
 	else {
 		info.hidden = false;
 		info.x = toInt(tmp);
-		info.y = popFirstInt(val,',');
-		justify = popFirstString(val,',');
-		valign = popFirstString(val,',');
-		style = popFirstString(val,',');
+		info.y = popFirstInt(val);
+		justify = popFirstString(val);
+		valign = popFirstString(val);
+		style = popFirstString(val);
 
 		if (justify == "left") info.justify = JUSTIFY_LEFT;
 		else if (justify == "center") info.justify = JUSTIFY_CENTER;
