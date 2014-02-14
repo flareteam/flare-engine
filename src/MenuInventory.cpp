@@ -984,9 +984,8 @@ void MenuInventory::fillEquipmentSlots() {
 	}
 
 	// fill slots with items
-	bool found_slot;
 	for (int i=0; i<slot_number; i++) {
-		found_slot = false;
+		bool found_slot = false;
 		for (int j=0; j<slot_number; j++) {
 			// search for empty slot with needed type. If item is not NULL, put it there
 			if (equip_item[i] > 0 && inventory[EQUIPMENT].storage[j].item == 0) {
