@@ -28,7 +28,7 @@ typedef	enum {
 	CURSOR_INTERACT,
 	CURSOR_TALK,
 	CURSOR_ATTACK
-}CURSOR_TYPE;
+} CURSOR_TYPE;
 
 class CursorManager {
 public:

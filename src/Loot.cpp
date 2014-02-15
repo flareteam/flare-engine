@@ -67,6 +67,8 @@ Loot& Loot::operator= (const Loot &other) {
 	pos.y = other.pos.y;
 	tip = other.tip;
 	dropped_by_hero = other.dropped_by_hero;
+	on_ground = other.on_ground;
+	sound_played = other.sound_played;
 	return *this;
 }
 

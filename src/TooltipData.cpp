@@ -21,9 +21,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "TooltipData.h"
 
 TooltipData::TooltipData()
-	: tip_buffer(NULL) {
-	default_color = font->getColor("widget_normal");
-}
+	: tip_buffer(NULL)
+	, default_color(font->getColor("widget_normal"))
+{}
 
 TooltipData::~TooltipData() {
 	clear();

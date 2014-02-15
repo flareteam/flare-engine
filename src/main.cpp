@@ -30,7 +30,6 @@ using namespace std;
 #include "GameSwitcher.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
-#include "SDLRenderDevice.h"
 
 GameSwitcher *gswitch;
 
