@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ENTITY_H
 
 #include "CommonIncludes.h"
+#include "SoundManager.h"
 #include "StatBlock.h"
 
 class Animation;
@@ -42,10 +43,21 @@ public:
 	Entity(const Entity&);
 	virtual ~Entity();
 
+	void loadSounds(StatBlock *src_stats = NULL);
+	void unloadSounds();
 	bool move();
 	bool takeHit(const Hazard &h);
 	virtual void resetActiveAnimation();
 	virtual void doRewards(int) {}
+
+	// sound effects
+	SoundManager::SoundID sound_melee;
+	SoundManager::SoundID sound_mental;
+	SoundManager::SoundID sound_hit;
+	SoundManager::SoundID sound_die;
+	SoundManager::SoundID sound_critdie;
+	SoundManager::SoundID sound_block;
+	SoundManager::SoundID sound_levelup;
 
 	// sound effects flags
 	bool play_sfx_phys;

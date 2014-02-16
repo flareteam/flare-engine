@@ -34,15 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class EnemyManager {
 private:
 
-	void loadSounds(const std::string& type_id);
 	void loadAnimations(Enemy *e);
-
-	std::vector<std::string> sfx_prefixes;
-	std::vector<SoundManager::SoundID> sound_phys;
-	std::vector<SoundManager::SoundID> sound_ment;
-	std::vector<SoundManager::SoundID> sound_hit;
-	std::vector<SoundManager::SoundID> sound_die;
-	std::vector<SoundManager::SoundID> sound_critdie;
 
 	std::vector<std::string> anim_prefixes;
 	std::vector<std::vector<Animation*> > anim_entities;

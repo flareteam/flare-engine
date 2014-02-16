@@ -122,7 +122,6 @@ public:
 	std::vector<std::string> categories;
 
 	std::string name;
-	std::string sfx_prefix;
 
 	int level;
 	unsigned long xp;

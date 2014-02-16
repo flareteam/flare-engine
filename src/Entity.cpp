@@ -46,6 +46,13 @@ using namespace std;
 
 Entity::Entity()
 	: sprites(NULL)
+	, sound_melee(0)
+	, sound_mental(0)
+	, sound_hit(0)
+	, sound_die(0)
+	, sound_critdie(0)
+	, sound_block(0)
+	, sound_levelup(0)
 	, play_sfx_phys(false)
 	, play_sfx_ment(false)
 	, play_sfx_hit(false)
@@ -58,6 +65,13 @@ Entity::Entity()
 
 Entity::Entity(const Entity &e)
 	: sprites(e.sprites)
+	, sound_melee(e.sound_melee)
+	, sound_mental(e.sound_mental)
+	, sound_hit(e.sound_hit)
+	, sound_die(e.sound_die)
+	, sound_critdie(e.sound_critdie)
+	, sound_block(e.sound_block)
+	, sound_levelup(e.sound_levelup)
 	, play_sfx_phys(e.play_sfx_phys)
 	, play_sfx_ment(e.play_sfx_ment)
 	, play_sfx_hit(e.play_sfx_hit)
@@ -67,6 +81,43 @@ Entity::Entity(const Entity &e)
 	, activeAnimation(new Animation(*e.activeAnimation))
 	, animationSet(e.animationSet)
 	, stats(StatBlock(e.stats)) {
+}
+
+void Entity::loadSounds(StatBlock *src_stats) {
+	snd->unload(sound_melee);
+	snd->unload(sound_mental);
+	snd->unload(sound_hit);
+	snd->unload(sound_die);
+	snd->unload(sound_critdie);
+	snd->unload(sound_block);
+	snd->unload(sound_levelup);
+
+	if (!src_stats) src_stats = &stats;
+
+	if (src_stats->sfx_phys != "")
+		sound_melee = snd->load(src_stats->sfx_phys, "Entity melee attack");
+	if (src_stats->sfx_ment != "")
+		sound_mental = snd->load(src_stats->sfx_ment, "Entity mental attack");
+	if (src_stats->sfx_hit != "")
+		sound_hit = snd->load(src_stats->sfx_hit, "Entity was hit");
+	if (src_stats->sfx_die != "")
+		sound_die = snd->load(src_stats->sfx_die, "Entity died");
+	if (src_stats->sfx_critdie != "")
+		sound_critdie = snd->load(src_stats->sfx_critdie, "Entity died from critial hit");
+	if (src_stats->sfx_block != "")
+		sound_block = snd->load(src_stats->sfx_block, "Entity blocked");
+	if (src_stats->sfx_levelup != "")
+		sound_levelup = snd->load(src_stats->sfx_levelup, "Entity leveled up");
+}
+
+void Entity::unloadSounds() {
+	snd->unload(sound_melee);
+	snd->unload(sound_mental);
+	snd->unload(sound_hit);
+	snd->unload(sound_die);
+	snd->unload(sound_critdie);
+	snd->unload(sound_block);
+	snd->unload(sound_levelup);
 }
 
 /**
@@ -356,7 +407,6 @@ bool Entity::setAnimation(const string& animationName) {
 }
 
 Entity::~Entity () {
-
 	delete activeAnimation;
 }
 

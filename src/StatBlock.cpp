@@ -56,7 +56,6 @@ StatBlock::StatBlock()
 	, intangible(false)
 	, facing(true)
 	, name("")
-	, sfx_prefix("")
 	, level(0)
 	, xp(0)
 	, level_up(false)
@@ -161,6 +160,7 @@ StatBlock::StatBlock()
 	, sfx_die("")
 	, sfx_critdie("")
 	, sfx_block("")
+	, sfx_levelup("")
 	, prev_maxhp(0)
 	, prev_maxmp(0)
 	, pres_hp(0)
@@ -266,7 +266,6 @@ void StatBlock::load(const string& filename) {
 
 		if (infile.key == "name") name = msg->get(infile.val);
 		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
-		else if (infile.key == "sfx_prefix") sfx_prefix = infile.val;
 
 		else if (infile.key == "level") level = num;
 
@@ -664,7 +663,7 @@ void StatBlock::loadHeroStats() {
 	max_spendable_stat_points = xp_table.size() * stat_points_per_level;
 
 	// load the paths to base sound effects
-	if (infile.open("engine/avatar/"+gfx_base+"/sounds.txt", true, true, "")) {
+	if (infile.open("engine/avatar/"+gfx_base+".txt", true, true, "")) {
 		while(infile.next()) {
 			loadSfxStat(&infile);
 		}
