@@ -354,24 +354,24 @@ void EnemyManager::logic() {
 						(*it)->stats.sfx_prefix.c_str());
 			}
 			else {
-				if ((*it)->sfx_phys)
+				if ((*it)->play_sfx_phys)
 					snd->play(sound_phys[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-				if ((*it)->sfx_ment)
+				if ((*it)->play_sfx_ment)
 					snd->play(sound_ment[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-				if ((*it)->sfx_hit)
+				if ((*it)->play_sfx_hit)
 					snd->play(sound_hit[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-				if ((*it)->sfx_die)
+				if ((*it)->play_sfx_die)
 					snd->play(sound_die[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-				if ((*it)->sfx_critdie)
+				if ((*it)->play_sfx_critdie)
 					snd->play(sound_critdie[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
 			}
 
 			// clear sound flags
-			(*it)->sfx_hit = false;
-			(*it)->sfx_phys = false;
-			(*it)->sfx_ment = false;
-			(*it)->sfx_die = false;
-			(*it)->sfx_critdie = false;
+			(*it)->play_sfx_hit = false;
+			(*it)->play_sfx_phys = false;
+			(*it)->play_sfx_ment = false;
+			(*it)->play_sfx_die = false;
+			(*it)->play_sfx_critdie = false;
 		}
 
 		// new actions this round

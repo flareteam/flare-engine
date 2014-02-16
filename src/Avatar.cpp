@@ -357,26 +357,26 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	// so process and clear sound effects from previous frames
 	// check sound effects
 	if (AUDIO) {
-		if (sfx_phys)
+		if (play_sfx_phys)
 			snd->play(sound_melee, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (sfx_ment)
+		if (play_sfx_ment)
 			snd->play(sound_mental, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (sfx_hit)
+		if (play_sfx_hit)
 			snd->play(sound_hit, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (sfx_die)
+		if (play_sfx_die)
 			snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (sfx_critdie)
+		if (play_sfx_critdie)
 			snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if(sfx_block)
+		if(play_sfx_block)
 			snd->play(sound_block, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
 
 		// clear sound flags
-		sfx_hit = false;
-		sfx_phys = false;
-		sfx_ment = false;
-		sfx_die = false;
-		sfx_critdie = false;
-		sfx_block = false;
+		play_sfx_hit = false;
+		play_sfx_phys = false;
+		play_sfx_ment = false;
+		play_sfx_die = false;
+		play_sfx_critdie = false;
+		play_sfx_block = false;
 	}
 
 	// clear current space to allow correct movement

@@ -46,24 +46,24 @@ using namespace std;
 
 Entity::Entity()
 	: sprites(NULL)
-	, sfx_phys(false)
-	, sfx_ment(false)
-	, sfx_hit(false)
-	, sfx_die(false)
-	, sfx_critdie(false)
-	, sfx_block(false)
+	, play_sfx_phys(false)
+	, play_sfx_ment(false)
+	, play_sfx_hit(false)
+	, play_sfx_die(false)
+	, play_sfx_critdie(false)
+	, play_sfx_block(false)
 	, activeAnimation(NULL)
 	, animationSet(NULL) {
 }
 
 Entity::Entity(const Entity &e)
 	: sprites(e.sprites)
-	, sfx_phys(e.sfx_phys)
-	, sfx_ment(e.sfx_ment)
-	, sfx_hit(e.sfx_hit)
-	, sfx_die(e.sfx_die)
-	, sfx_critdie(e.sfx_critdie)
-	, sfx_block(e.sfx_block)
+	, play_sfx_phys(e.play_sfx_phys)
+	, play_sfx_ment(e.play_sfx_ment)
+	, play_sfx_hit(e.play_sfx_hit)
+	, play_sfx_die(e.play_sfx_die)
+	, play_sfx_critdie(e.play_sfx_critdie)
+	, play_sfx_block(e.play_sfx_block)
 	, activeAnimation(new Animation(*e.activeAnimation))
 	, animationSet(e.animationSet)
 	, stats(StatBlock(e.stats)) {
@@ -214,7 +214,7 @@ bool Entity::takeHit(const Hazard &h) {
 			else {
 				if (MAX_RESIST < 100) dmg = 1;
 			}
-			sfx_block = true;
+			play_sfx_block = true;
 			if (activeAnimation->getName() == "block")
 				resetActiveAnimation();
 		}
@@ -311,7 +311,7 @@ bool Entity::takeHit(const Hazard &h) {
 		}
 		// don't go through a hit animation if stunned
 		else if (!stats.effects.stun && !chance_poise) {
-			sfx_hit = true;
+			play_sfx_hit = true;
 
 			if(!chance_poise && stats.cooldown_hit_ticks == 0) {
 				if(stats.hero)
@@ -327,7 +327,7 @@ bool Entity::takeHit(const Hazard &h) {
 		}
 		// just play the hit sound
 		else
-			sfx_hit = true;
+			play_sfx_hit = true;
 	}
 
 	return true;

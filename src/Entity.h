@@ -48,13 +48,13 @@ public:
 	virtual void doRewards(int) {}
 
 	// sound effects flags
-	bool sfx_phys;
-	bool sfx_ment;
+	bool play_sfx_phys;
+	bool play_sfx_ment;
 
-	bool sfx_hit;
-	bool sfx_die;
-	bool sfx_critdie;
-	bool sfx_block;
+	bool play_sfx_hit;
+	bool play_sfx_die;
+	bool play_sfx_critdie;
+	bool play_sfx_block;
 
 	// Each child of Entity defines its own rendering method
 	virtual Renderable getRender() = 0;
