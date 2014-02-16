@@ -297,6 +297,7 @@ public:
 	std::string sfx_die;
 	std::string sfx_critdie;
 	std::string sfx_block;
+	std::string sfx_levelup;
 
 	// formula numbers
 	int max_spendable_stat_points;

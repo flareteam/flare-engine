@@ -243,6 +243,7 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 	else if (infile->key == "sfx_die") sfx_die = infile->val;
 	else if (infile->key == "sfx_critdie") sfx_critdie = infile->val;
 	else if (infile->key == "sfx_block") sfx_block = infile->val;
+	else if (infile->key == "sfx_levelup") sfx_levelup = infile->val;
 	else return false;
 
 	return true;
