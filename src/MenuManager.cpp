@@ -370,6 +370,7 @@ void MenuManager::logic() {
 	if (NO_MOUSE)
 		handleKeyboardNavigation();
 
+	book->logic();
 	act->logic();
 	hudlog->logic();
 	enemy->logic();
@@ -380,7 +381,6 @@ void MenuManager::logic() {
 	log->logic();
 	talker->logic();
 	stash->logic();
-	book->logic();
 
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
@@ -542,6 +542,13 @@ void MenuManager::logic() {
 			}
 		}
 
+		// handle left-click for book menu first
+		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			if (book->visible && isWithin(book->window_area, inpt->mouse)) {
+				inpt->lock[MAIN1] = true;
+			}
+		}
+
 		// handle left-click
 		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 			// clear keyboard dragging
@@ -555,10 +562,6 @@ void MenuManager::logic() {
 				inpt->lock[MAIN1] = true;
 			}
 
-			// book menu
-			if (book->visible && isWithin(book->window_area, inpt->mouse)) {
-				inpt->lock[MAIN1] = true;
-			}
 
 			if (chr->visible && isWithin(chr->window_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
@@ -1109,20 +1112,22 @@ void MenuManager::render() {
 	TooltipData tip_new;
 
 	// Find tooltips depending on mouse position
-	if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
-		tip_new = chr->checkTooltip();
-	}
-	if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
-		tip_new = vendor->checkTooltip(inpt->mouse);
-	}
-	if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
-		tip_new = stash->checkTooltip(inpt->mouse);
-	}
-	if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
-		tip_new = pow->checkTooltip(inpt->mouse);
-	}
-	if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
-		tip_new = inv->checkTooltip(inpt->mouse);
+	if (!book->visible) {
+		if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
+			tip_new = chr->checkTooltip();
+		}
+		if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
+			tip_new = vendor->checkTooltip(inpt->mouse);
+		}
+		if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
+			tip_new = stash->checkTooltip(inpt->mouse);
+		}
+		if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
+			tip_new = pow->checkTooltip(inpt->mouse);
+		}
+		if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
+			tip_new = inv->checkTooltip(inpt->mouse);
+		}
 	}
 	if (isWithin(act->window_area,inpt->mouse)) {
 		tip_new = act->checkTooltip(inpt->mouse);

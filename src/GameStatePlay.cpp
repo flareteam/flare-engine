@@ -394,7 +394,6 @@ void GameStatePlay::checkLog() {
 void GameStatePlay::checkBook() {
 	// Map events can open books
 	if (mapr->show_book != "") {
-		menu->closeAll();
 		menu->book->book_name = mapr->show_book;
 		mapr->show_book = "";
 	}

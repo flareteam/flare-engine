@@ -188,7 +188,9 @@ void MenuBook::logic() {
 	if (NO_MOUSE) {
 		tablist.logic();
 	}
-	if (closeButton->checkClick()) {
+	if (closeButton->checkClick() || (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT])) {
+		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+
 		clearBook();
 		background.clearGraphics();
 
