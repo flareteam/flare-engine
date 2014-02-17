@@ -66,6 +66,26 @@ Avatar::Avatar()
 	activeAnimation = animationSet->getAnimation();
 
 	loadLayerDefinitions();
+
+	// load foot-step definitions
+	FileParser infile;
+	if (infile.open("items/step_sounds.txt", true, true, "")) {
+		while (infile.next()) {
+			if (infile.key == "id") {
+				step_def.push_back(Step_sfx());
+				step_def.back().id = infile.val;
+			}
+
+			if (step_def.empty()) continue;
+
+			if (infile.key == "step") {
+				step_def.back().steps.push_back(infile.val);
+			}
+		}
+		infile.close();
+	}
+
+	loadStepFX(stats.sfx_step);
 }
 
 void Avatar::init() {
@@ -114,10 +134,6 @@ void Avatar::init() {
 	untransform_power = getUntransformPower();
 
 	hero_cooldown = vector<int>(powers->powers.size(), 0);
-
-	for (int i=0; i<4; i++) {
-		sound_steps[i] = 0;
-	}
 
 }
 
@@ -194,26 +210,34 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
  * Walking/running steps sound depends on worn armor
  */
 void Avatar::loadStepFX(const string& stepname) {
-
 	string filename = stats.sfx_step;
 	if (stepname != "") {
 		filename = stepname;
 	}
 
 	// clear previous sounds
-	for (int i=0; i<4; i++) {
+	for (unsigned i=0; i<sound_steps.size(); i++) {
 		snd->unload(sound_steps[i]);
 	}
+	sound_steps.clear();
 
 	// A literal "NULL" means we don't want to load any new sounds
 	// This is used when transforming, since creatures don't have step sound effects
 	if (stepname == "NULL") return;
 
 	// load new sounds
-	sound_steps[0] = snd->load("soundfx/steps/step_" + filename + "1.ogg", "Avatar loading foot steps");
-	sound_steps[1] = snd->load("soundfx/steps/step_" + filename + "2.ogg", "Avatar loading foot steps");
-	sound_steps[2] = snd->load("soundfx/steps/step_" + filename + "3.ogg", "Avatar loading foot steps");
-	sound_steps[3] = snd->load("soundfx/steps/step_" + filename + "4.ogg", "Avatar loading foot steps");
+	for (unsigned i=0; i<step_def.size(); i++) {
+		if (step_def[i].id == filename) {
+			sound_steps.resize(step_def[i].steps.size());
+			for (unsigned j=0; j<sound_steps.size(); j++) {
+				sound_steps[j] = snd->load(step_def[i].steps[j], "Avatar loading foot steps");
+			}
+			return;
+		}
+	}
+
+	// Could not find step sound fx
+	fprintf(stderr, "Error: Could not find footstep sounds for '%s'.\n", filename.c_str());
 }
 
 
@@ -487,10 +511,12 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			setAnimation("run");
 
-			stepfx = rand() % 4;
+			if (sound_steps.size() > 0) {
+				stepfx = rand() % sound_steps.size();
 
-			if (activeAnimation->isFirstFrame() || activeAnimation->isActiveFrame())
-				snd->play(sound_steps[stepfx]);
+				if (activeAnimation->isFirstFrame() || activeAnimation->isActiveFrame())
+					snd->play(sound_steps[stepfx]);
+			}
 
 			// allowed to move or use powers?
 			if (MOUSE_MOVE) {
@@ -860,7 +886,7 @@ Avatar::~Avatar() {
 
 	unloadSounds();
 
-	for (int i = 0; i < 4; i++)
+	for (unsigned i=0; i<sound_steps.size(); i++)
 		snd->unload(sound_steps[i]);
 
 	delete haz;

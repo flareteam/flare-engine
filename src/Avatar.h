@@ -61,11 +61,19 @@ public:
 	{}
 };
 
+class Step_sfx {
+public:
+	std::string id;
+	std::vector<std::string> steps;
+};
+
 class Avatar : public Entity {
 private:
 	bool lockAttack;
 
-	SoundManager::SoundID sound_steps[4];
+	std::vector<Step_sfx> step_def;
+
+	std::vector<SoundManager::SoundID> sound_steps;
 
 	void setAnimation(std::string name);
 	std::vector<AnimationSet*> animsets; // hold the animations for all equipped items in the right order of drawing.
