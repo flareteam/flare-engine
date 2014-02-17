@@ -32,6 +32,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
+Combat_Text_Item::Combat_Text_Item()
+	: label(NULL)
+	, lifespan(0)
+	, pos(FPoint())
+	, floating_offset(0)
+	, text("")
+	, displaytype(0)
+{}
+
+Combat_Text_Item::~Combat_Text_Item() {
+}
+
 CombatText::CombatText() {
 	msg_color[COMBAT_MESSAGE_GIVEDMG] = font->getColor("combat_givedmg");
 	msg_color[COMBAT_MESSAGE_TAKEDMG] = font->getColor("combat_takedmg");
@@ -57,6 +69,14 @@ CombatText::CombatText() {
 			}
 		}
 		infile.close();
+	}
+}
+
+CombatText::~CombatText() {
+	// delete all messages
+	while (combat_text.size() > 0) {
+		delete combat_text.begin()->label;
+		combat_text.erase(combat_text.begin());
 	}
 }
 
