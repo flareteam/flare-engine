@@ -223,10 +223,6 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.msg|string|Adds a message to be displayed for the event.
 		e->s = msg->get(infile.val);
 	}
-	else if (infile.key == "book") {
-		// @ATTR event.book|string|Opens a book to be displayed for the event.
-		e->s = infile.val;
-	}
 	else if (infile.key == "shakycam") {
 		// @ATTR event.shakycam|integer|
 		e->x = toInt(infile.val);
@@ -514,9 +510,6 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "msg") {
 			mapr->log_msg = ec->s;
-		}
-		else if (ec->type == "book") {
-			mapr->show_book = ec->s;
 		}
 		else if (ec->type == "shakycam") {
 			mapr->shaky_cam_ticks = ec->x;

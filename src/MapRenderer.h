@@ -137,7 +137,6 @@ public:
 
 	// message handling
 	std::string log_msg;
-	std::string show_book;
 
 	// shaky cam
 	int shaky_cam_ticks;

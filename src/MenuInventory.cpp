@@ -52,6 +52,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	changed_equipment = true;
 	changed_artifact = true;
 	log_msg = "";
+	show_book = "";
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
@@ -436,7 +437,7 @@ void MenuInventory::activate(Point position) {
 	}
 	else if (items->items[inventory[CARRIED][slot].item].type == "book") {
 		snd->play(sfx_open);
-		mapr->show_book = items->items[inventory[CARRIED][slot].item].book;
+		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
 	// use a consumable item
 	else if (items->items[inventory[CARRIED][slot].item].type == "consumable") {
