@@ -86,6 +86,7 @@ public:
 class StatBlock {
 private:
     bool loadCoreStat(FileParser *infile);
+	bool loadSfxStat(FileParser *infile);
 	void loadHeroStats();
 	bool statsLoaded;
 
@@ -121,7 +122,6 @@ public:
 	std::vector<std::string> categories;
 
 	std::string name;
-	std::string sfx_prefix;
 
 	int level;
 	unsigned long xp;
@@ -290,6 +290,13 @@ public:
 
 	// default sounds
 	std::string sfx_step;
+	std::string sfx_phys;
+	std::string sfx_ment;
+	std::string sfx_hit;
+	std::string sfx_die;
+	std::string sfx_critdie;
+	std::string sfx_block;
+	std::string sfx_levelup;
 
 	// formula numbers
 	int max_spendable_stat_points;

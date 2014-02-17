@@ -40,30 +40,6 @@ EnemyManager::EnemyManager()
 	handleNewMap();
 }
 
-void EnemyManager::loadSounds(const string& type_id) {
-
-	// first check to make sure the sfx isn't already loaded
-	if (find(sfx_prefixes.begin(), sfx_prefixes.end(), type_id) != sfx_prefixes.end())
-		return;
-
-	if (type_id != "none") {
-		sound_phys.push_back(snd->load("soundfx/enemies/" + type_id + "_phys.ogg", "EnemyManager physical attack sound"));
-		sound_ment.push_back(snd->load("soundfx/enemies/" + type_id + "_ment.ogg", "EnemyManager mental attack sound"));
-		sound_hit.push_back(snd->load("soundfx/enemies/" + type_id + "_hit.ogg", "EnemyManager physical hit sound"));
-		sound_die.push_back(snd->load("soundfx/enemies/" + type_id + "_die.ogg", "EnemyManager die sound"));
-		sound_critdie.push_back(snd->load("soundfx/enemies/" + type_id + "_critdie.ogg", "EnemyManager critdeath sound"));
-	}
-	else {
-		sound_phys.push_back(0);
-		sound_ment.push_back(0);
-		sound_hit.push_back(0);
-		sound_die.push_back(0);
-		sound_critdie.push_back(0);
-	}
-
-	sfx_prefixes.push_back(type_id);
-}
-
 void EnemyManager::loadAnimations(Enemy *e) {
 	anim->increaseCount(e->stats.animations);
 	e->animationSet = anim->getAnimationSet(e->stats.animations);
@@ -85,11 +61,9 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 
 	if (e.stats.animations == "")
 		fprintf(stderr, "Warning: no animation file specified for entity: %s\n", type_id.c_str());
-	if (e.stats.sfx_prefix == "")
-		fprintf(stderr, "Warning: no sfx_prefix specified for entity: %s\n", type_id.c_str());
 
 	loadAnimations(&e);
-	loadSounds(e.stats.sfx_prefix);
+	e.loadSounds();
 
 	prototypes.push_back(e);
 
@@ -111,24 +85,11 @@ void EnemyManager::handleNewMap () {
 		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != ENEMY_DEAD && enemies[i]->stats.cur_state != ENEMY_CRITDEAD)
 			allies.push(enemies[i]);
 		else {
+			enemies[i]->unloadSounds();
 			delete enemies[i];
 		}
 	}
 	enemies.clear();
-
-	for (unsigned j=0; j<sound_phys.size(); j++) {
-		snd->unload(sound_phys[j]);
-		snd->unload(sound_ment[j]);
-		snd->unload(sound_hit[j]);
-		snd->unload(sound_die[j]);
-		snd->unload(sound_critdie[j]);
-	}
-	sfx_prefixes.clear();
-	sound_phys.clear();
-	sound_ment.clear();
-	sound_hit.clear();
-	sound_die.clear();
-	sound_critdie.clear();
 
 	prototypes.clear();
 
@@ -234,7 +195,7 @@ void EnemyManager::handleSpawn() {
 		else {
 			fprintf(stderr, "Warning: no animation file specified for entity: %s\n", espawn.type.c_str());
 		}
-		loadSounds(e->stats.sfx_prefix);
+		e->loadSounds();
 
 		//Set level
 		if(e->stats.summoned_power_index != 0) {
@@ -345,33 +306,23 @@ void EnemyManager::logic() {
 		// so process and clear sound effects from previous frames
 		// check sound effects
 		if (AUDIO) {
-			vector<string>::iterator found = find (sfx_prefixes.begin(), sfx_prefixes.end(), (*it)->stats.sfx_prefix);
-			unsigned pref_id = distance(sfx_prefixes.begin(), found);
-
-			if (pref_id >= sfx_prefixes.size()) {
-				fprintf(stderr, "ERROR: enemy sfx_prefix doesn't match registered prefixes (enemy: '%s', sfx_prefix: '%s')\n",
-						(*it)->stats.name.c_str(),
-						(*it)->stats.sfx_prefix.c_str());
-			}
-			else {
-				if ((*it)->sfx_phys)
-					snd->play(sound_phys[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-				if ((*it)->sfx_ment)
-					snd->play(sound_ment[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-				if ((*it)->sfx_hit)
-					snd->play(sound_hit[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-				if ((*it)->sfx_die)
-					snd->play(sound_die[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-				if ((*it)->sfx_critdie)
-					snd->play(sound_critdie[pref_id], GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-			}
+			if ((*it)->play_sfx_phys)
+				snd->play((*it)->sound_melee, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
+			if ((*it)->play_sfx_ment)
+				snd->play((*it)->sound_mental, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
+			if ((*it)->play_sfx_hit)
+				snd->play((*it)->sound_hit, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
+			if ((*it)->play_sfx_die)
+				snd->play((*it)->sound_die, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
+			if ((*it)->play_sfx_critdie)
+				snd->play((*it)->sound_critdie, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
 
 			// clear sound flags
-			(*it)->sfx_hit = false;
-			(*it)->sfx_phys = false;
-			(*it)->sfx_ment = false;
-			(*it)->sfx_die = false;
-			(*it)->sfx_critdie = false;
+			(*it)->play_sfx_hit = false;
+			(*it)->play_sfx_phys = false;
+			(*it)->play_sfx_ment = false;
+			(*it)->play_sfx_die = false;
+			(*it)->play_sfx_critdie = false;
 		}
 
 		// new actions this round
@@ -483,14 +434,7 @@ void EnemyManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead)
 EnemyManager::~EnemyManager() {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		anim->decreaseCount(enemies[i]->animationSet->getName());
+		enemies[i]->unloadSounds();
 		delete enemies[i];
-	}
-
-	for (unsigned i=0; i<sound_phys.size(); i++) {
-		snd->unload(sound_phys[i]);
-		snd->unload(sound_ment[i]);
-		snd->unload(sound_hit[i]);
-		snd->unload(sound_die[i]);
-		snd->unload(sound_critdie[i]);
 	}
 }
