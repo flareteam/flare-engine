@@ -489,6 +489,7 @@ void GameStatePlay::checkTitle() {
 void GameStatePlay::checkEquipmentChange() {
 	if (menu->inv->changed_equipment) {
 
+		int feet_index = -1;
 		vector<Layer_gfx> img_gfx;
 		// load only displayable layers
 		for (unsigned int j=0; j<pc->layer_reference_order.size(); j++) {
@@ -499,6 +500,9 @@ void GameStatePlay::checkEquipmentChange() {
 				if (pc->layer_reference_order[j] == menu->inv->inventory[EQUIPMENT].slot_type[i]) {
 					gfx.gfx = items->items[menu->inv->inventory[EQUIPMENT][i].item].gfx;
 					gfx.type = menu->inv->inventory[EQUIPMENT].slot_type[i];
+				}
+				if (menu->inv->inventory[EQUIPMENT].slot_type[i] == "feet") {
+					feet_index = i;
 				}
 			}
 			// special case: if we don't have a head, use the portrait's head
@@ -516,7 +520,8 @@ void GameStatePlay::checkEquipmentChange() {
 		assert(pc->layer_reference_order.size()==img_gfx.size());
 		pc->loadGraphics(img_gfx);
 
-		pc->loadStepFX(items->items[menu->inv->inventory[EQUIPMENT][1].item].stepfx);
+		if (feet_index != -1)
+			pc->loadStepFX(items->items[menu->inv->inventory[EQUIPMENT][feet_index].item].stepfx);
 
 		menu->inv->changed_equipment = false;
 	}

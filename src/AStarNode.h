@@ -32,8 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 const int node_stride = 1; // minimal stride between nodes
 
-class AStarNode
-{
+class AStarNode {
 protected:
 	// position
 	int x;

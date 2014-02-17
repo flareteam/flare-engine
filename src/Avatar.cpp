@@ -66,6 +66,26 @@ Avatar::Avatar()
 	activeAnimation = animationSet->getAnimation();
 
 	loadLayerDefinitions();
+
+	// load foot-step definitions
+	FileParser infile;
+	if (infile.open("items/step_sounds.txt", true, true, "")) {
+		while (infile.next()) {
+			if (infile.key == "id") {
+				step_def.push_back(Step_sfx());
+				step_def.back().id = infile.val;
+			}
+
+			if (step_def.empty()) continue;
+
+			if (infile.key == "step") {
+				step_def.back().steps.push_back(infile.val);
+			}
+		}
+		infile.close();
+	}
+
+	loadStepFX(stats.sfx_step);
 }
 
 void Avatar::init() {
@@ -115,16 +135,6 @@ void Avatar::init() {
 
 	hero_cooldown = vector<int>(powers->powers.size(), 0);
 
-	for (int i=0; i<4; i++) {
-		sound_steps[i] = 0;
-	}
-
-	sound_melee = 0;
-	sound_mental = 0;
-	sound_hit = 0;
-	sound_die = 0;
-	sound_block = 0;
-	level_up = 0;
 }
 
 /**
@@ -196,54 +206,38 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 	anim->cleanUp();
 }
 
-void Avatar::loadSounds(const string& type_id) {
-	// unload any sounds that are common between creatures and the hero
-	snd->unload(sound_melee);
-	snd->unload(sound_mental);
-	snd->unload(sound_hit);
-	snd->unload(sound_die);
-
-	if (type_id != "none") {
-		sound_melee = snd->load("soundfx/enemies/" + type_id + "_phys.ogg", "Avatar melee attack");
-		sound_mental = snd->load("soundfx/enemies/" + type_id + "_ment.ogg", "Avatar mental attack");
-		sound_hit = snd->load("soundfx/enemies/" + type_id + "_hit.ogg", "Avatar was hit");
-		sound_die = snd->load("soundfx/enemies/" + type_id + "_die.ogg", "Avatar death");
-	}
-	else {
-		sound_melee = snd->load("soundfx/melee_attack.ogg", "Avatar melee attack");
-		sound_mental = 0; // hero does not have this sound
-		sound_hit = snd->load("soundfx/" + stats.gfx_base + "_hit.ogg", "Avatar was hit");
-		sound_die = snd->load("soundfx/" + stats.gfx_base + "_die.ogg", "Avatar death");
-	}
-
-	sound_block = snd->load("soundfx/powers/block.ogg", "Avatar blocking");
-	level_up = snd->load("soundfx/level_up.ogg", "Avatar leveling up");
-}
-
 /**
  * Walking/running steps sound depends on worn armor
  */
 void Avatar::loadStepFX(const string& stepname) {
-
 	string filename = stats.sfx_step;
 	if (stepname != "") {
 		filename = stepname;
 	}
 
 	// clear previous sounds
-	for (int i=0; i<4; i++) {
+	for (unsigned i=0; i<sound_steps.size(); i++) {
 		snd->unload(sound_steps[i]);
 	}
+	sound_steps.clear();
 
 	// A literal "NULL" means we don't want to load any new sounds
 	// This is used when transforming, since creatures don't have step sound effects
 	if (stepname == "NULL") return;
 
 	// load new sounds
-	sound_steps[0] = snd->load("soundfx/steps/step_" + filename + "1.ogg", "Avatar loading foot steps");
-	sound_steps[1] = snd->load("soundfx/steps/step_" + filename + "2.ogg", "Avatar loading foot steps");
-	sound_steps[2] = snd->load("soundfx/steps/step_" + filename + "3.ogg", "Avatar loading foot steps");
-	sound_steps[3] = snd->load("soundfx/steps/step_" + filename + "4.ogg", "Avatar loading foot steps");
+	for (unsigned i=0; i<step_def.size(); i++) {
+		if (step_def[i].id == filename) {
+			sound_steps.resize(step_def[i].steps.size());
+			for (unsigned j=0; j<sound_steps.size(); j++) {
+				sound_steps[j] = snd->load(step_def[i].steps[j], "Avatar loading foot steps");
+			}
+			return;
+		}
+	}
+
+	// Could not find step sound fx
+	fprintf(stderr, "Error: Could not find footstep sounds for '%s'.\n", filename.c_str());
 }
 
 
@@ -357,26 +351,26 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	// so process and clear sound effects from previous frames
 	// check sound effects
 	if (AUDIO) {
-		if (sfx_phys)
+		if (play_sfx_phys)
 			snd->play(sound_melee, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (sfx_ment)
+		if (play_sfx_ment)
 			snd->play(sound_mental, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (sfx_hit)
+		if (play_sfx_hit)
 			snd->play(sound_hit, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (sfx_die)
+		if (play_sfx_die)
 			snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (sfx_critdie)
+		if (play_sfx_critdie)
 			snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if(sfx_block)
+		if(play_sfx_block)
 			snd->play(sound_block, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
 
 		// clear sound flags
-		sfx_hit = false;
-		sfx_phys = false;
-		sfx_ment = false;
-		sfx_die = false;
-		sfx_critdie = false;
-		sfx_block = false;
+		play_sfx_hit = false;
+		play_sfx_phys = false;
+		play_sfx_ment = false;
+		play_sfx_die = false;
+		play_sfx_critdie = false;
+		play_sfx_block = false;
 	}
 
 	// clear current space to allow correct movement
@@ -429,7 +423,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 		}
 		log_msg = ss.str();
 		stats.recalc();
-		snd->play(level_up);
+		snd->play(sound_levelup);
 
 		// if the player managed to level up while dead (e.g. via a bleeding creature), restore to life
 		if (stats.cur_state == AVATAR_DEAD) {
@@ -517,10 +511,12 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			setAnimation("run");
 
-			stepfx = rand() % 4;
+			if (sound_steps.size() > 0) {
+				stepfx = rand() % sound_steps.size();
 
-			if (activeAnimation->isFirstFrame() || activeAnimation->isActiveFrame())
-				snd->play(sound_steps[stepfx]);
+				if (activeAnimation->isFirstFrame() || activeAnimation->isActiveFrame())
+					snd->play(sound_steps[stepfx]);
+			}
 
 			// allowed to move or use powers?
 			if (MOUSE_MOVE) {
@@ -741,7 +737,7 @@ void Avatar::transform() {
 	for (unsigned int i=0; i<stats.vulnerable.size(); i++)
 		clampCeil(stats.vulnerable[i], charmed_stats->vulnerable[i]);
 
-	loadSounds(charmed_stats->sfx_prefix);
+	loadSounds(charmed_stats);
 	loadStepFX("NULL");
 
 	stats.applyEffects();
@@ -888,16 +884,10 @@ Avatar::~Avatar() {
 	delete charmed_stats;
 	delete hero_stats;
 
-	snd->unload(sound_melee);
-	snd->unload(sound_mental);
-	snd->unload(sound_hit);
-	snd->unload(sound_die);
-	snd->unload(sound_block);
+	unloadSounds();
 
-	for (int i = 0; i < 4; i++)
+	for (unsigned i=0; i<sound_steps.size(); i++)
 		snd->unload(sound_steps[i]);
-
-	snd->unload(level_up);
 
 	delete haz;
 }

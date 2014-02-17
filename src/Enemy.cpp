@@ -171,7 +171,7 @@ void Enemy::InstantDeath() {
 	stats.cur_state = ENEMY_DEAD;
 
 	stats.hp = 0;
-	sfx_die = true;
+	play_sfx_die = true;
 	stats.corpse_ticks = CORPSE_TIMEOUT;
 	stats.effects.clearEffects();
 }
