@@ -116,6 +116,7 @@ public:
 	bool changed_artifact;
 
 	std::string log_msg;
+	std::string show_book;
 
 	std::queue<ItemStack> drop_stack;
 

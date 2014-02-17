@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 #include "Menu.h"
+#include "MenuBook.h"
 #include "MenuManager.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
@@ -71,6 +72,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, log(NULL)
 	, hudlog(NULL)
 	, act(NULL)
+	, book(NULL)
 	, hp(NULL)
 	, mp(NULL)
 	, xp(NULL)
@@ -120,6 +122,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(stash); // menus[15]
 	npc = new MenuNPCActions();
 	menus.push_back(npc); // menus[16]
+	book = new MenuBook();
+	menus.push_back(book); // menus[17]
 
 	tip = new WidgetTooltip();
 
@@ -366,6 +370,7 @@ void MenuManager::logic() {
 	if (NO_MOUSE)
 		handleKeyboardNavigation();
 
+	book->logic();
 	act->logic();
 	hudlog->logic();
 	enemy->logic();
@@ -417,7 +422,7 @@ void MenuManager::logic() {
 			keyboard_dragging = false;
 			mouse_dragging = false;
 		}
-		if (inv->tablist.getCurrent() != -1 || vendor->tablist.getCurrent() != -1 || stash->tablist.getCurrent() != -1 || act->tablist.getCurrent() != -1 || pow->tablist.getCurrent() != -1 || chr->tablist.getCurrent() != -1 || log->tablist.getCurrent() != -1) {
+		if (inv->tablist.getCurrent() != -1 || vendor->tablist.getCurrent() != -1 || stash->tablist.getCurrent() != -1 || act->tablist.getCurrent() != -1 || pow->tablist.getCurrent() != -1 || chr->tablist.getCurrent() != -1 || log->tablist.getCurrent() != -1 || book->tablist.getCurrent() != -1) {
 			inpt->lock[CANCEL] = true;
 			inv->tablist.defocus();
 			vendor->tablist.defocus();
@@ -426,6 +431,7 @@ void MenuManager::logic() {
 			pow->tablist.defocus();
 			chr->tablist.defocus();
 			log->tablist.defocus();
+			book->tablist.defocus();
 		}
 	}
 
@@ -510,7 +516,7 @@ void MenuManager::logic() {
 		}
 	}
 
-	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible);
+	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible || book->visible);
 	pause = (MENUS_PAUSE && menus_open) || exit->visible;
 
 	if (stats->alive) {
@@ -522,12 +528,24 @@ void MenuManager::logic() {
 				inpt->lock[MAIN2] = true;
 			}
 
+			// book menu
+			if (book->visible && isWithin(book->window_area, inpt->mouse)) {
+				inpt->lock[MAIN2] = true;
+			}
+
 			// activate inventory item
 			else if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
 				inpt->lock[MAIN2] = true;
 				if (isWithin(inv->carried_area, inpt->mouse)) {
 					inv->activate(inpt->mouse);
 				}
+			}
+		}
+
+		// handle left-click for book menu first
+		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			if (book->visible && isWithin(book->window_area, inpt->mouse)) {
+				inpt->lock[MAIN1] = true;
 			}
 		}
 
@@ -543,6 +561,7 @@ void MenuManager::logic() {
 			if (exit->visible && isWithin(exit->window_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 			}
+
 
 			if (chr->visible && isWithin(chr->window_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
@@ -1093,20 +1112,22 @@ void MenuManager::render() {
 	TooltipData tip_new;
 
 	// Find tooltips depending on mouse position
-	if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
-		tip_new = chr->checkTooltip();
-	}
-	if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
-		tip_new = vendor->checkTooltip(inpt->mouse);
-	}
-	if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
-		tip_new = stash->checkTooltip(inpt->mouse);
-	}
-	if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
-		tip_new = pow->checkTooltip(inpt->mouse);
-	}
-	if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
-		tip_new = inv->checkTooltip(inpt->mouse);
+	if (!book->visible) {
+		if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
+			tip_new = chr->checkTooltip();
+		}
+		if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
+			tip_new = vendor->checkTooltip(inpt->mouse);
+		}
+		if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
+			tip_new = stash->checkTooltip(inpt->mouse);
+		}
+		if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
+			tip_new = pow->checkTooltip(inpt->mouse);
+		}
+		if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
+			tip_new = inv->checkTooltip(inpt->mouse);
+		}
 	}
 	if (isWithin(act->window_area,inpt->mouse)) {
 		tip_new = act->checkTooltip(inpt->mouse);
@@ -1247,6 +1268,8 @@ void MenuManager::closeLeft() {
 	exit->visible = false;
 	stash->visible = false;
 	npc->visible = false;
+	book->visible = false;
+	book->book_name = "";
 }
 
 void MenuManager::closeRight() {
@@ -1256,6 +1279,8 @@ void MenuManager::closeRight() {
 	talker->visible = false;
 	exit->visible = false;
 	npc->visible = false;
+	book->visible = false;
+	book->book_name = "";
 }
 
 bool MenuManager::isDragging() {
@@ -1300,4 +1325,5 @@ MenuManager::~MenuManager() {
 	delete effects;
 	delete stash;
 	delete npc;
+	delete book;
 }

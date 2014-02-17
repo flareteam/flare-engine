@@ -81,6 +81,7 @@ public:
 	std::string type;     // equipment slot or base item type
 	std::vector<std::string> equip_flags;   // common values include: melee, ranged, mental, shield
 	int icon;             // icon index on small pixel sheet
+	std::string book;     // book file location
 	int dmg_melee_min;    // minimum damage amount (melee)
 	int dmg_melee_max;    // maximum damage amount (melee)
 	int dmg_ranged_min;   // minimum damage amount (ranged)

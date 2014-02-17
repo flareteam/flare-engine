@@ -35,6 +35,7 @@ class MenuCharacter;
 class MenuLog;
 class MenuHUDLog;
 class MenuActionBar;
+class MenuBook;
 class MenuStatBar;
 class MenuMiniMap;
 class MenuNPCActions;
@@ -103,6 +104,7 @@ public:
 	MenuLog *log;
 	MenuHUDLog *hudlog;
 	MenuActionBar *act;
+	MenuBook *book;
 	MenuStatBar *hp;
 	MenuStatBar *mp;
 	MenuStatBar *xp;
