@@ -47,6 +47,9 @@ class WidgetLabel;
 
 class Combat_Text_Item {
 public:
+	Combat_Text_Item();
+	~Combat_Text_Item();
+
 	WidgetLabel *label;
 	int lifespan;
 	FPoint pos;
@@ -58,6 +61,7 @@ public:
 class CombatText {
 public:
 	CombatText();
+	~CombatText();
 
 	void render();
 	void addMessage(std::string message, FPoint location, int displaytype);
