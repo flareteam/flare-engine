@@ -152,6 +152,10 @@ void ItemManager::loadItems() {
 			// @ATTR icon|integer|
 			items[id].icon = toInt(infile.nextValue());
 		}
+		else if (infile.key == "book") {
+			// @ATTR book|string|
+			items[id].book = infile.val;
+		}
 		else if (infile.key == "quality") {
 			// @ATTR quality|[low:high:epic]|Item quality, corresponds to item color.
 			if (infile.val == "low")
@@ -511,7 +515,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// type
-	if (items[stack.item].type != "other") {
+	if (items[stack.item].type != "other" && items[stack.item].type != "book") {
 		tip.addText(msg->get(getItemType(items[stack.item].type)));
 	}
 

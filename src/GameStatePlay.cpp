@@ -38,6 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
+#include "MenuBook.h"
 #include "MenuEnemy.h"
 #include "MenuHUDLog.h"
 #include "MenuInventory.h"
@@ -394,6 +395,17 @@ void GameStatePlay::checkLog() {
 	}
 }
 
+/**
+ * Check if we need to open book
+ */
+void GameStatePlay::checkBook() {
+	// Map events can open books
+	if (menu->inv->show_book != "") {
+		menu->book->book_name = menu->inv->show_book;
+		menu->inv->show_book = "";
+	}
+}
+
 void GameStatePlay::loadTitles() {
 	FileParser infile;
 	if (infile.open("engine/titles.txt")) {
@@ -484,6 +496,7 @@ void GameStatePlay::checkTitle() {
 void GameStatePlay::checkEquipmentChange() {
 	if (menu->inv->changed_equipment) {
 
+		int feet_index = -1;
 		vector<Layer_gfx> img_gfx;
 		// load only displayable layers
 		for (unsigned int j=0; j<pc->layer_reference_order.size(); j++) {
@@ -494,6 +507,9 @@ void GameStatePlay::checkEquipmentChange() {
 				if (pc->layer_reference_order[j] == menu->inv->inventory[EQUIPMENT].slot_type[i]) {
 					gfx.gfx = items->items[menu->inv->inventory[EQUIPMENT][i].item].gfx;
 					gfx.type = menu->inv->inventory[EQUIPMENT].slot_type[i];
+				}
+				if (menu->inv->inventory[EQUIPMENT].slot_type[i] == "feet") {
+					feet_index = i;
 				}
 			}
 			// special case: if we don't have a head, use the portrait's head
@@ -511,7 +527,8 @@ void GameStatePlay::checkEquipmentChange() {
 		assert(pc->layer_reference_order.size()==img_gfx.size());
 		pc->loadGraphics(img_gfx);
 
-		pc->loadStepFX(items->items[menu->inv->inventory[EQUIPMENT][1].item].stepfx);
+		if (feet_index != -1)
+			pc->loadStepFX(items->items[menu->inv->inventory[EQUIPMENT][feet_index].item].stepfx);
 
 		menu->inv->changed_equipment = false;
 	}
@@ -818,6 +835,7 @@ void GameStatePlay::logic() {
 	checkTeleport();
 	checkLootDrop();
 	checkLog();
+	checkBook();
 	checkEquipmentChange();
 	checkConsumable();
 	checkStash();

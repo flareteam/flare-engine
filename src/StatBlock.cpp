@@ -56,7 +56,6 @@ StatBlock::StatBlock()
 	, intangible(false)
 	, facing(true)
 	, name("")
-	, sfx_prefix("")
 	, level(0)
 	, xp(0)
 	, level_up(false)
@@ -154,7 +153,14 @@ StatBlock::StatBlock()
 	, gfx_portrait("male01")
 	, transform_type("")
 	, animations("")
-	, sfx_step("cloth")
+	, sfx_step("")
+	, sfx_phys("")
+	, sfx_ment("")
+	, sfx_hit("")
+	, sfx_die("")
+	, sfx_critdie("")
+	, sfx_block("")
+	, sfx_levelup("")
 	, prev_maxhp(0)
 	, prev_maxmp(0)
 	, pres_hp(0)
@@ -228,6 +234,22 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 }
 
 /**
+ * Set paths for sound effects
+ */
+bool StatBlock::loadSfxStat(FileParser *infile) {
+	if (infile->key == "sfx_phys") sfx_phys = infile->val;
+	else if (infile->key == "sfx_ment") sfx_ment = infile->val;
+	else if (infile->key == "sfx_hit") sfx_hit = infile->val;
+	else if (infile->key == "sfx_die") sfx_die = infile->val;
+	else if (infile->key == "sfx_critdie") sfx_critdie = infile->val;
+	else if (infile->key == "sfx_block") sfx_block = infile->val;
+	else if (infile->key == "sfx_levelup") sfx_levelup = infile->val;
+	else return false;
+
+	return true;
+}
+
+/**
  * load a statblock, typically for an enemy definition
  */
 void StatBlock::load(const string& filename) {
@@ -240,11 +262,10 @@ void StatBlock::load(const string& filename) {
 	while (infile.next()) {
 		int num = toInt(infile.val);
 		float fnum = toFloat(infile.val);
-		bool valid = loadCoreStat(&infile);
+		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile);
 
 		if (infile.key == "name") name = msg->get(infile.val);
 		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
-		else if (infile.key == "sfx_prefix") sfx_prefix = infile.val;
 
 		else if (infile.key == "level") level = num;
 
@@ -599,47 +620,55 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 void StatBlock::loadHeroStats() {
 	// Redefine numbers from config file if present
 	FileParser infile;
-	if (!infile.open("engine/stats.txt"))
-		return;
+	if (infile.open("engine/stats.txt")) {
+		while (infile.next()) {
+			int value = toInt(infile.val);
 
-	while (infile.next()) {
-		int value = toInt(infile.val);
+			loadCoreStat(&infile);
 
-		loadCoreStat(&infile);
-
-		if (infile.key == "max_points_per_stat") {
-			max_points_per_stat = value;
+			if (infile.key == "max_points_per_stat") {
+				max_points_per_stat = value;
+			}
+			else if (infile.key == "sfx_step") {
+				sfx_step = infile.val;
+			}
+			else if (infile.key == "stat_points_per_level") {
+				stat_points_per_level = value;
+			}
+			else if (infile.key == "power_points_per_level") {
+				power_points_per_level = value;
+			}
+			else if (infile.key == "cooldown_hit") {
+				cooldown_hit = value;
+			}
 		}
-		else if (infile.key == "sfx_step") {
-			sfx_step = infile.val;
-		}
-		else if (infile.key == "stat_points_per_level") {
-			stat_points_per_level = value;
-		}
-		else if (infile.key == "power_points_per_level") {
-			power_points_per_level = value;
-		}
-		else if (infile.key == "cooldown_hit") {
-			cooldown_hit = value;
-		}
+		infile.close();
 	}
-	infile.close();
+
 	if (max_points_per_stat == 0) max_points_per_stat = max_spendable_stat_points / 4 + 1;
 	statsLoaded = true;
 
-	if (!infile.open("engine/xp_table.txt"))
-		return;
-
-	while(infile.next()) {
-		unsigned key = toInt(infile.key);
-		if (key > 0) {
-			if (key > xp_table.size())
-				xp_table.resize(key);
-			xp_table[key - 1] = toInt(infile.val);
+	// load the XP table
+	if (infile.open("engine/xp_table.txt")) {
+		while(infile.next()) {
+			unsigned key = toInt(infile.key);
+			if (key > 0) {
+				if (key > xp_table.size())
+					xp_table.resize(key);
+				xp_table[key - 1] = toInt(infile.val);
+			}
 		}
+		infile.close();
 	}
-	max_spendable_stat_points = toInt(infile.key) * stat_points_per_level;
-	infile.close();
+	max_spendable_stat_points = xp_table.size() * stat_points_per_level;
+
+	// load the paths to base sound effects
+	if (infile.open("engine/avatar/"+gfx_base+".txt", true, true, "")) {
+		while(infile.next()) {
+			loadSfxStat(&infile);
+		}
+		infile.close();
+	}
 }
 
 void StatBlock::removeFromSummons() {

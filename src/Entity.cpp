@@ -46,27 +46,78 @@ using namespace std;
 
 Entity::Entity()
 	: sprites(NULL)
-	, sfx_phys(false)
-	, sfx_ment(false)
-	, sfx_hit(false)
-	, sfx_die(false)
-	, sfx_critdie(false)
-	, sfx_block(false)
+	, sound_melee(0)
+	, sound_mental(0)
+	, sound_hit(0)
+	, sound_die(0)
+	, sound_critdie(0)
+	, sound_block(0)
+	, sound_levelup(0)
+	, play_sfx_phys(false)
+	, play_sfx_ment(false)
+	, play_sfx_hit(false)
+	, play_sfx_die(false)
+	, play_sfx_critdie(false)
+	, play_sfx_block(false)
 	, activeAnimation(NULL)
 	, animationSet(NULL) {
 }
 
 Entity::Entity(const Entity &e)
 	: sprites(e.sprites)
-	, sfx_phys(e.sfx_phys)
-	, sfx_ment(e.sfx_ment)
-	, sfx_hit(e.sfx_hit)
-	, sfx_die(e.sfx_die)
-	, sfx_critdie(e.sfx_critdie)
-	, sfx_block(e.sfx_block)
+	, sound_melee(e.sound_melee)
+	, sound_mental(e.sound_mental)
+	, sound_hit(e.sound_hit)
+	, sound_die(e.sound_die)
+	, sound_critdie(e.sound_critdie)
+	, sound_block(e.sound_block)
+	, sound_levelup(e.sound_levelup)
+	, play_sfx_phys(e.play_sfx_phys)
+	, play_sfx_ment(e.play_sfx_ment)
+	, play_sfx_hit(e.play_sfx_hit)
+	, play_sfx_die(e.play_sfx_die)
+	, play_sfx_critdie(e.play_sfx_critdie)
+	, play_sfx_block(e.play_sfx_block)
 	, activeAnimation(new Animation(*e.activeAnimation))
 	, animationSet(e.animationSet)
 	, stats(StatBlock(e.stats)) {
+}
+
+void Entity::loadSounds(StatBlock *src_stats) {
+	snd->unload(sound_melee);
+	snd->unload(sound_mental);
+	snd->unload(sound_hit);
+	snd->unload(sound_die);
+	snd->unload(sound_critdie);
+	snd->unload(sound_block);
+	snd->unload(sound_levelup);
+
+	if (!src_stats) src_stats = &stats;
+
+	if (src_stats->sfx_phys != "")
+		sound_melee = snd->load(src_stats->sfx_phys, "Entity melee attack");
+	if (src_stats->sfx_ment != "")
+		sound_mental = snd->load(src_stats->sfx_ment, "Entity mental attack");
+	if (src_stats->sfx_hit != "")
+		sound_hit = snd->load(src_stats->sfx_hit, "Entity was hit");
+	if (src_stats->sfx_die != "")
+		sound_die = snd->load(src_stats->sfx_die, "Entity died");
+	if (src_stats->sfx_critdie != "")
+		sound_critdie = snd->load(src_stats->sfx_critdie, "Entity died from critial hit");
+	if (src_stats->sfx_block != "")
+		sound_block = snd->load(src_stats->sfx_block, "Entity blocked");
+	if (src_stats->sfx_levelup != "")
+		sound_levelup = snd->load(src_stats->sfx_levelup, "Entity leveled up");
+}
+
+void Entity::unloadSounds() {
+	snd->unload(sound_melee);
+	snd->unload(sound_mental);
+	snd->unload(sound_hit);
+	snd->unload(sound_die);
+	snd->unload(sound_critdie);
+	snd->unload(sound_block);
+	snd->unload(sound_levelup);
 }
 
 /**
@@ -214,7 +265,7 @@ bool Entity::takeHit(const Hazard &h) {
 			else {
 				if (MAX_RESIST < 100) dmg = 1;
 			}
-			sfx_block = true;
+			play_sfx_block = true;
 			if (activeAnimation->getName() == "block")
 				resetActiveAnimation();
 		}
@@ -311,7 +362,7 @@ bool Entity::takeHit(const Hazard &h) {
 		}
 		// don't go through a hit animation if stunned
 		else if (!stats.effects.stun && !chance_poise) {
-			sfx_hit = true;
+			play_sfx_hit = true;
 
 			if(!chance_poise && stats.cooldown_hit_ticks == 0) {
 				if(stats.hero)
@@ -327,7 +378,7 @@ bool Entity::takeHit(const Hazard &h) {
 		}
 		// just play the hit sound
 		else
-			sfx_hit = true;
+			play_sfx_hit = true;
 	}
 
 	return true;
@@ -356,7 +407,6 @@ bool Entity::setAnimation(const string& animationName) {
 }
 
 Entity::~Entity () {
-
 	delete activeAnimation;
 }
 

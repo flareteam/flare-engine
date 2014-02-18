@@ -77,6 +77,7 @@ private:
 	void checkTeleport();
 	void checkCancel();
 	void checkLog();
+	void checkBook();
 	void checkEquipmentChange();
 	void checkTitle();
 	void checkConsumable();
