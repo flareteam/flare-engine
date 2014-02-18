@@ -50,6 +50,7 @@ public:
 private:
 	WidgetButton *closeButton;
 	std::vector<Sprite*> image;
+	std::vector<Point> image_dest;
 
 	std::vector<Sprite*> text;
 	std::vector<std::string> textData;
