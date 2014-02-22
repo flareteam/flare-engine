@@ -1,0 +1,11 @@
+# Hero classes
+# name must be first
+# physical/mental/offense/defense points should total to no greater than the max available points
+
+# Example:
+#[class]
+#name=Wanderer
+#description=Wanderers choose their own paths. Primary attribute: custom
+#currency=37
+#equipment=64,66,67
+#actionbar=0,0,0,0,0,0,0,0,0,0,1,0
