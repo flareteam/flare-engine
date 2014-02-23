@@ -198,8 +198,10 @@ void GameStateNew::loadGraphics() {
 
 	graphics = render_device->loadGraphicSurface("images/menus/portrait_border.png",
 			   "Couldn't load portrait border image", false, true);
-	if (graphics)
+	if (graphics) {
 		portrait_border = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 void GameStateNew::loadPortrait(const string& portrait_filename) {
@@ -214,6 +216,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
 	if (graphics) {
 		portrait_image = graphics->createSprite();
 		portrait_image->setDest(portrait_pos);
+		graphics->unref();
 	}
 }
 
