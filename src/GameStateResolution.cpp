@@ -47,7 +47,10 @@ void GameStateResolution::logic() {
 		// Clean up shared resources
 		if (settings_changed) {
 			delete icons;
+			icons = NULL;
+
 			delete curs;
+			curs = NULL;
 		}
 
 		// Apply the new resolution

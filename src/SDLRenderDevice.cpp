@@ -149,15 +149,12 @@ int SDLRenderDevice::renderText(
 	SDL_Color _color = color;
 
 	SDL_Surface *surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), _color);
+
 	if (surface == NULL)
 		return -1;
 
 	SDL_Rect _dest = dest;
-	ret = SDL_BlitSurface(static_cast<SDLImage *>(m_ttf_renderable->getGraphics())->surface,
-						  NULL,
-						  screen,
-						  &_dest
-						 );
+	ret = SDL_BlitSurface(surface, NULL, screen, &_dest);
 
 	SDL_FreeSurface(surface);
 

@@ -117,9 +117,6 @@ private:
 
 	SDL_Surface* screen;
 	SDL_Surface* titlebar_icon;
-
-	// These are for keeping the render stack frame small.
-	Sprite *m_ttf_renderable;
 };
 
 #endif // SDLRENDERDEVICE_H
