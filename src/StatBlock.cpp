@@ -83,7 +83,7 @@ StatBlock::StatBlock()
 	, hp_ticker(0)
 	, mp(0)
 	, mp_ticker(0)
-	, speed_default(0.2)
+	, speed_default(0.2f)
 	, dmg_melee_min_add(0)
 	, dmg_melee_max_add(0)
 	, dmg_ment_min_add(0)
@@ -92,7 +92,7 @@ StatBlock::StatBlock()
 	, dmg_ranged_max_add(0)
 	, absorb_min_add(0)
 	, absorb_max_add(0)
-	, speed(0.2)
+	, speed(0.2f)
 	, vulnerable(ELEMENTS.size(), 100)
 	, vulnerable_base(ELEMENTS.size(), 100)
 	, transform_duration(0)
@@ -122,7 +122,7 @@ StatBlock::StatBlock()
 	, power_index(POWERSLOT_COUNT, 0)		// both
 	, power_cooldown(POWERSLOT_COUNT, 0)	// enemy only
 	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
-	, melee_range(1.0) //both
+	, melee_range(1.0f) //both
 	, threat_range(0)  // enemy
 	, passive_attacker(false)//enemy
 	, hero_stealth(0)
