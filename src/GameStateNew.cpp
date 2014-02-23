@@ -45,13 +45,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-GameStateNew::GameStateNew() : GameState() {
-	game_slot = 0;
-	current_option = 0;
-	option_count = 0;
-	tip_buf.clear();
-	modified_name = false;
-
+GameStateNew::GameStateNew()
+	: GameState()
+	, option_count(0)
+	, current_option(0)
+	, portrait_image(Sprite())
+	, portrait_border(Sprite())
+	, show_classlist(true)
+	, modified_name(false)
+	, game_slot(0)
+{
 	// set up buttons
 	button_exit = new WidgetButton("images/menus/buttons/button_default.png");
 	button_exit->label = msg->get("Cancel");
@@ -78,8 +81,6 @@ GameStateNew::GameStateNew() : GameState() {
 	class_list = new WidgetListBox (HERO_CLASSES.size(), 12, "images/menus/buttons/listbox_default.png");
 	class_list->can_deselect = false;
 	class_list->selected[0] = true;
-
-	show_classlist = true;
 
 	tip = new WidgetTooltip();
 
