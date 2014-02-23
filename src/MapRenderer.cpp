@@ -339,9 +339,7 @@ void MapRenderer::renderIsoLayer(const unsigned short layerdata[256][256]) {
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
 				tset.tiles[current_tile].tile->setDest(dest);
-				//tset.tiles[current_tile].tile->setGraphics(*tset.sprites->getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 		}
 		j += tiles_width;
