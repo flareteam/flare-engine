@@ -1,0 +1,16 @@
+# This is a cutscene that plays when launching the game
+# Use it for displaying developer logos, age ratings, etc.
+# This is an example, so everything has been commented out
+
+#this scales art to width of flare window
+#scale_gfx=true
+
+[scene]
+pause=0
+#image=menus/logo.png
+#caption=Flare, the...
+#soundfx=soundfx/level_up.ogg
+#pause=60
+#caption=Free Libre Action Roleplaying Engine
+#pause=120
+
