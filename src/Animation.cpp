@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2012 Stefan Beller
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -30,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-Animation::Animation(const std::string &_name, const std::string &_type, Image _sprite)
+Animation::Animation(const std::string &_name, const std::string &_type, Image *_sprite)
 	: name(_name)
 	, type(	_type == "play_once" ? PLAY_ONCE :
 			_type == "back_forth" ? BACK_FORTH :

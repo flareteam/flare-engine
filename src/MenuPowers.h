@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -90,9 +91,9 @@ private:
 	std::vector<WidgetButton*> upgradeButtons;
 	bool skip_section;
 
-	Sprite powers_unlock;
-	Sprite overlay_disabled;
-	std::vector<Sprite> tree_surf;
+	Sprite *powers_unlock;
+	Sprite *overlay_disabled;
+	std::vector<Sprite *> tree_surf;
 	WidgetButton *closeButton;
 	bool pressed;
 

@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -32,11 +32,10 @@ AnimationManager *anim;
 CombatText *comb;
 CursorManager *curs;
 FontEngine *font;
-ImageManager *imag;
 InputState *inpt;
 MessageEngine *msg;
 ModManager *mods;
 RenderDevice *render_device;
 SDL_Joystick *joy;
 SoundManager *snd;
-Sprite icons;
+Sprite *icons;

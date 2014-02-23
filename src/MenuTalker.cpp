@@ -1,7 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and morris989
 Copyright © 2012 Stefan Beller
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -42,6 +42,7 @@ using namespace std;
 MenuTalker::MenuTalker(MenuManager *_menu)
 	: Menu()
 	, menu(_menu)
+	, portrait(NULL)
 	, dialog_node(0)
 	, event_cursor(0)
 	, font_who("font_regular")
@@ -51,7 +52,7 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	, advanceButton(new WidgetButton("images/menus/buttons/right.png"))
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png")) {
 
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/dialog_box.png"));
+	setBackground("images/menus/dialog_box.png");
 
 	// Load config settings
 	FileParser infile;
@@ -209,7 +210,7 @@ void MenuTalker::createBuffer() {
 		text_offset.x,
 		0,
 		JUSTIFY_LEFT,
-		textbox->contents.getGraphics(),
+		textbox->contents->getGraphics(),
 		text_pos.w - text_offset.x*2,
 		color_normal
 	);
@@ -232,15 +233,15 @@ void MenuTalker::render() {
 	src.w = dest.w = dialog_pos.w;
 	src.h = dest.h = dialog_pos.h;
 
-	background.setClip(src);
-	background.setDest(dest);
-	render_device->render(background);
+	setBackgroundClip(src);
+	setBackgroundDest(dest);
+	Menu::render();
 
 	// show active portrait
 	string etype = npc->dialog[dialog_node][event_cursor].type;
 	if (etype == "him" || etype == "her") {
-		Sprite *r = &npc->portrait;
-		if (r && !r->graphicsIsNull()) {
+		Sprite *r = npc->portrait;
+		if (r) {
 			src.w = dest.w = portrait_he.w;
 			src.h = dest.h = portrait_he.h;
 			dest.x = offset_x + portrait_he.x;
@@ -248,17 +249,17 @@ void MenuTalker::render() {
 
 			r->setClip(src);
 			r->setDest(dest);
-			render_device->render(*r);
+			render_device->render(r);
 		}
 	}
 	else if (etype == "you") {
-		if (!portrait.graphicsIsNull()) {
+		if (portrait) {
 			src.w = dest.w = portrait_you.w;
 			src.h = dest.h = portrait_you.h;
 			dest.x = offset_x + portrait_you.x;
 			dest.y = offset_y + portrait_you.y;
-			portrait.setClip(src);
-			portrait.setDest(dest);
+			portrait->setClip(src);
+			portrait->setDest(dest);
 			render_device->render(portrait);
 		}
 	}
@@ -285,8 +286,16 @@ void MenuTalker::setHero(const string& name, const string& class_name, const str
 	hero_name = name;
 	hero_class = msg->get(class_name);
 
-	portrait.clearGraphics();
-	portrait.setGraphics(render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png", "Couldn't load portrait"));
+	if (portrait)
+		delete portrait;
+
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png",
+			   "Couldn't load portrait");
+	if (graphics) {
+		portrait = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 string MenuTalker::parseLine(const string &line) {
@@ -304,7 +313,7 @@ string MenuTalker::parseLine(const string &line) {
 }
 
 MenuTalker::~MenuTalker() {
-	portrait.clearGraphics();
+	if (portrait) delete portrait;
 	delete label_name;
 	delete textbox;
 	delete advanceButton;

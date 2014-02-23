@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -33,13 +34,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-TileSet::TileSet() {
+TileSet::TileSet()
+	: sprites(NULL) {
 	reset();
 }
 
 void TileSet::reset() {
 
-	sprites.clearGraphics();
+	if (sprites) {
+		delete sprites;
+		sprites = NULL;
+	}
+
+	for (unsigned i = 0; i < tiles.size(); i++) {
+		if (tiles[i].tile) delete tiles[i].tile;
+	}
 
 	alpha_background = true;
 	trans_r = 255;
@@ -54,16 +63,22 @@ void TileSet::reset() {
 }
 
 void TileSet::loadGraphics(const std::string& filename) {
-	if (!sprites.graphicsIsNull()) {
-		sprites.clearGraphics();
-		tiles.clear();
+	if (sprites) {
+		delete sprites;
+		sprites = NULL;
 	}
 
-	if (!TEXTURE_QUALITY)
-		sprites.setGraphics(render_device->loadGraphicSurface("images/tilesets/noalpha/" + filename, "Couldn't load image", false, true));
+	for (unsigned i = 0; i < tiles.size(); i++) {
+		if (tiles[i].tile) delete tiles[i].tile;
+	}
+	tiles.clear();
 
-	if (sprites.graphicsIsNull())
-		sprites.setGraphics(render_device->loadGraphicSurface("images/tilesets/" + filename));
+	Image *graphics = NULL;
+	graphics = loadTextureImage("images/tilesets/" + filename);
+	if (graphics) {
+		sprites = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 void TileSet::load(const std::string& filename) {
@@ -72,27 +87,35 @@ void TileSet::load(const std::string& filename) {
 	reset();
 
 	FileParser infile;
-	string img;
 
 	if (infile.open(filename)) {
 		while (infile.next()) {
-			if (infile.key == "tile") {
+			if (infile.key == "img") {
+				loadGraphics(infile.val);
+			}
+			else if (infile.key == "tile") {
+
+				// Verify that we have graphics for tiles
+				if (!sprites) {
+					std::cerr << "No graphics for tileset definition '" << filename << "', aborting." << std::endl;
+					exit(0);
+				}
+
 				unsigned index = popFirstInt(infile.val);
 
 				if (index >= tiles.size())
 					tiles.resize(index + 1);
 
-				tiles[index].tile.setClipX(popFirstInt(infile.val));
-				tiles[index].tile.setClipY(popFirstInt(infile.val));
-				tiles[index].tile.setClipW(popFirstInt(infile.val));
-				tiles[index].tile.setClipH(popFirstInt(infile.val));
+				tiles[index].tile = sprites->getGraphics()->createSprite();
+
+				tiles[index].tile->setClipX(popFirstInt(infile.val));
+				tiles[index].tile->setClipY(popFirstInt(infile.val));
+				tiles[index].tile->setClipW(popFirstInt(infile.val));
+				tiles[index].tile->setClipH(popFirstInt(infile.val));
 				tiles[index].offset.x = popFirstInt(infile.val);
 				tiles[index].offset.y = popFirstInt(infile.val);
-				max_size_x = std::max(max_size_x, (tiles[index].tile.getClip().w / TILE_W) + 1);
-				max_size_y = std::max(max_size_y, (tiles[index].tile.getClip().h / TILE_H) + 1);
-			}
-			else if (infile.key == "img") {
-				img = infile.val;
+				max_size_x = std::max(max_size_x, (tiles[index].tile->getClip().w / TILE_W) + 1);
+				max_size_y = std::max(max_size_y, (tiles[index].tile->getClip().h / TILE_H) + 1);
 			}
 			else if (infile.key == "transparency") {
 				alpha_background = false;
@@ -124,7 +147,6 @@ void TileSet::load(const std::string& filename) {
 			}
 		}
 		infile.close();
-		loadGraphics(img);
 	}
 
 	current_map = filename;
@@ -136,8 +158,8 @@ void TileSet::logic() {
 		if (!an.frames)
 			continue;
 		if (an.duration >= an.frame_duration[an.current_frame]) {
-			tiles[i].tile.setClipX(an.pos[an.current_frame].x);
-			tiles[i].tile.setClipY(an.pos[an.current_frame].y);
+			tiles[i].tile->setClipX(an.pos[an.current_frame].x);
+			tiles[i].tile->setClipY(an.pos[an.current_frame].y);
 			an.duration = 0;
 			an.current_frame = (an.current_frame + 1) % an.frames;
 		}
@@ -146,5 +168,8 @@ void TileSet::logic() {
 }
 
 TileSet::~TileSet() {
-	sprites.clearGraphics();
+	if (sprites) delete sprites;
+	for (unsigned i = 0; i < tiles.size(); i++) {
+		if (tiles[i].tile) delete tiles[i].tile;
+	}
 }

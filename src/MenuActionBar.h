@@ -48,9 +48,9 @@ private:
 	void alignElements();
 	void renderCooldowns();
 
-	Sprite emptyslot;
-	Sprite disabled;
-	Sprite attention;
+	Sprite *emptyslot;
+	Sprite *disabled;
+	Sprite *attention;
 
 	Avatar *hero;
 	Rect src;

@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -147,12 +147,12 @@ void MenuManager::renderIcon(int icon_id, int x, int y) {
 	dest.y = y;
 	src.w = src.h = dest.w = dest.h = ICON_SIZE;
 
-	int columns = icons.getGraphicsWidth() / ICON_SIZE;
+	int columns = icons->getGraphicsWidth() / ICON_SIZE;
 	src.x = (icon_id % columns) * ICON_SIZE;
 	src.y = (icon_id / columns) * ICON_SIZE;
 
-	icons.setClip(src);
-	icons.setDest(dest);
+	icons->setClip(src);
+	icons->setDest(dest);
 	render_device->render(icons);
 }
 

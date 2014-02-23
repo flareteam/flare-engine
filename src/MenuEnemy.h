@@ -34,7 +34,7 @@ class Enemy;
 
 class MenuEnemy : public Menu {
 private:
-	Sprite bar_hp;
+	Sprite *bar_hp;
 	Rect bar_pos;
 	LabelInfo text_pos;
 	bool custom_text_pos;

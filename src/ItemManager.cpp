@@ -410,7 +410,7 @@ void ItemManager::loadSets() {
  * Also display the stack size
  */
 void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
-	if (icons.graphicsIsNull()) return;
+	if (icons == NULL) return;
 
 	Rect src, dest;
 	dest.x = x;
@@ -418,11 +418,11 @@ void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
 	src.w = src.h = dest.w = dest.h = size;
 
 	if (stack.item > 0) {
-		int columns = icons.getGraphicsWidth() / ICON_SIZE;
+		int columns = icons->getGraphicsWidth() / ICON_SIZE;
 		src.x = (items[stack.item].icon % columns) * size;
 		src.y = (items[stack.item].icon / columns) * size;
-		icons.setClip(src);
-		icons.setDest(dest);
+		icons->setClip(src);
+		icons->setDest(dest);
 		render_device->render(icons);
 	}
 

@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -57,7 +58,7 @@ private:
 	int justify;
 	int valign;
 	std::string font_style;
-	Sprite renderable;
+	Sprite *label;
 
 public:
 	WidgetLabel();

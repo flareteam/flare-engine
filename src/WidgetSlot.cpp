@@ -48,10 +48,22 @@ WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	Rect src;
 	src.x = src.y = 0;
 	src.w = src.h = ICON_SIZE;
-	slot_selected.setGraphics(render_device->loadGraphicSurface("images/menus/slot_selected.png"));
-	slot_selected.setClip(src);
-	slot_checked.setGraphics(render_device->loadGraphicSurface("images/menus/slot_checked.png"));
-	slot_checked.setClip(src);
+
+
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface("images/menus/slot_selected.png");
+	if (graphics) {
+		slot_selected = graphics->createSprite();
+		slot_selected->setClip(src);
+		graphics->unref();
+	}
+
+	graphics = render_device->loadGraphicSurface("images/menus/slot_checked.png");
+	if (graphics) {
+		slot_checked = graphics->createSprite();
+		slot_checked->setClip(src);
+		graphics->unref();
+	}
 }
 
 void WidgetSlot::activate() {
@@ -145,18 +157,18 @@ void WidgetSlot::setAmount(int _amount, int _max_amount) {
 void WidgetSlot::render() {
 	Rect src;
 
-	if (icon_id != -1 && !icons.graphicsIsNull()) {
-		int columns = icons.getGraphicsWidth() / ICON_SIZE;
+	if (icon_id != -1 && icons) {
+		int columns = icons->getGraphicsWidth() / ICON_SIZE;
 		src.x = (icon_id % columns) * ICON_SIZE;
 		src.y = (icon_id / columns) * ICON_SIZE;
 
 		src.w = pos.w;
 		src.h = pos.h;
 
-		icons.local_frame = local_frame;
-		icons.setOffset(local_offset);
-		icons.setClip(src);
-		icons.setDest(pos);
+		icons->local_frame = local_frame;
+		icons->setOffset(local_offset);
+		icons->setClip(src);
+		icons->setDest(pos);
 		render_device->render(icons);
 
 		if (amount > 1 || max_amount > 1) {
@@ -176,22 +188,22 @@ void WidgetSlot::render() {
  */
 void WidgetSlot::renderSelection() {
 	if (in_focus) {
-		if (checked) {
-			slot_checked.local_frame = local_frame;
-			slot_checked.setOffset(local_offset);
-			slot_checked.setDest(pos);
+		if (slot_checked && checked) {
+			slot_checked->local_frame = local_frame;
+			slot_checked->setOffset(local_offset);
+			slot_checked->setDest(pos);
 			render_device->render(slot_checked);
 		}
-		else {
-			slot_selected.local_frame = local_frame;
-			slot_selected.setOffset(local_offset);
-			slot_selected.setDest(pos);
+		else if (slot_selected) {
+			slot_selected->local_frame = local_frame;
+			slot_selected->setOffset(local_offset);
+			slot_selected->setDest(pos);
 			render_device->render(slot_selected);
 		}
 	}
 }
 
 WidgetSlot::~WidgetSlot() {
-	slot_selected.clearGraphics();
-	slot_checked.clearGraphics();
+	if (slot_selected) delete slot_selected;
+	if (slot_checked) delete slot_checked;
 }

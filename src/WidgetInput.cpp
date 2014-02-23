@@ -2,6 +2,7 @@
 Copyright © 2011-2012 kitano
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -34,10 +35,6 @@ WidgetInput::WidgetInput() {
 
 	loadGraphics("images/menus/input.png");
 
-	// position
-	pos.w = background.getGraphicsWidth();
-	pos.h = background.getGraphicsHeight()/2;
-
 	cursor_frame = 0;
 
 	render_to_alpha = false;
@@ -47,7 +44,14 @@ WidgetInput::WidgetInput() {
 
 void WidgetInput::loadGraphics(const string& filename) {
 	// load input background image
-	background.setGraphics(render_device->loadGraphicSurface(filename, "Couldn't load image", true));
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface(filename, "Couldn't load image", true);
+	if (graphics) {
+		background = graphics->createSprite();
+		pos.w = background->getGraphicsWidth();
+		pos.h = background->getGraphicsHeight()/2;
+		graphics->unref();
+	}
 }
 
 void WidgetInput::logic() {
@@ -107,11 +111,13 @@ void WidgetInput::render() {
 	src.w = pos.w;
 	src.h = pos.h;
 
-	background.local_frame = local_frame;
-	background.setOffset(local_offset);
-	background.setClip(src);
-	background.setDest(pos);
-	render_device->render(background);
+	if (background) {
+		background->local_frame = local_frame;
+		background->setOffset(local_offset);
+		background->setClip(src);
+		background->setDest(pos);
+		render_device->render(background);
+	}
 
 	font->setFont("font_regular");
 
@@ -171,6 +177,6 @@ bool WidgetInput::checkClick() {
 }
 
 WidgetInput::~WidgetInput() {
-	background.clearGraphics();
+	if (background) delete background;
 }
 

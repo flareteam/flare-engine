@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -69,7 +70,8 @@ WidgetLabel::WidgetLabel()
 	, color(font->getColor("widget_normal"))
 	, justify(JUSTIFY_LEFT)
 	, valign(VALIGN_TOP)
-	, font_style("font_regular") {
+	, font_style("font_regular")
+	, label(NULL) {
 	bounds.x = bounds.y = 0;
 	bounds.w = bounds.h = 0;
 
@@ -80,9 +82,11 @@ WidgetLabel::WidgetLabel()
  * Draw the buffered string surface to the screen
  */
 void WidgetLabel::render() {
-	renderable.local_frame = local_frame;
-	renderable.setOffset(local_offset);
-	render_device->render(renderable);
+	if (label) {
+		label->local_frame = local_frame;
+		label->setOffset(local_offset);
+		render_device->render(label);
+	}
 }
 
 void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, Color _color) {
@@ -207,8 +211,10 @@ void WidgetLabel::applyOffsets() {
 		bounds.y = pos.y - bounds.h/2;
 	}
 
-	renderable.setDestX(bounds.x);
-	renderable.setDestY(bounds.y);
+	if (label) {
+		label->setDestX(bounds.x);
+		label->setDestY(bounds.y);
+	}
 }
 
 /**
@@ -227,13 +233,25 @@ void WidgetLabel::set(const string& _text) {
  * This function refreshes the buffer.
  */
 void WidgetLabel::refresh() {
-	renderable.clearGraphics();
-	Image surface = render_device->createAlphaSurface(bounds.w, bounds.h);
+	Image *image;
+
+	if (label) {
+		delete label;
+		label = NULL;
+	}
+
+	image = render_device->createAlphaSurface(bounds.w, bounds.h);
+	if (!image) return;
+
 	font->setFont(font_style);
-	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, &surface, color);
-	renderable.setGraphics(surface);
+	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, image, color);
+	label = image->createSprite();
+	image->unref();
+
+	label->setDestX(bounds.x);
+	label->setDestY(bounds.y);
 }
 
 WidgetLabel::~WidgetLabel() {
-	renderable.clearGraphics();
+	if (label) delete label;
 }

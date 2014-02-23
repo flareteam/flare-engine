@@ -1,5 +1,5 @@
 /*
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -41,7 +41,7 @@ private:
 	int first_dialog_node;
 	size_t current_action;
 
-	Sprite action_menu;
+	Sprite *action_menu;
 	Color topic_normal_color;
 	Color topic_hilight_color;
 	Color vendor_normal_color;

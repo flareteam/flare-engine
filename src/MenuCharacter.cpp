@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -20,6 +20,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * class MenuCharacter
  */
+
+#include <string>
 
 #include "FileParser.h"
 #include "Menu.h"
@@ -160,7 +162,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
 
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/character.png"));
+	setBackground("images/menus/character.png");
 
 	align();
 	alignElements();
@@ -469,7 +471,7 @@ void MenuCharacter::render() {
 	if (!visible) return;
 
 	// background
-	render_device->render(background);
+	Menu::render();
 
 	// close button
 	closeButton->render();
@@ -560,7 +562,6 @@ bool MenuCharacter::checkUpgrade() {
 
 MenuCharacter::~MenuCharacter() {
 	delete closeButton;
-
 	delete labelCharacter;
 	delete labelUnspent;
 	for (int i=0; i<CSTAT_COUNT; i++) {

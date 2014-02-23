@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -60,7 +61,7 @@ public:
 	std::vector<WidgetSlot*> slots;
 
 	bool * highlight;
-	Sprite highlight_image;
+	Sprite *highlight_image;
 };
 
 #endif

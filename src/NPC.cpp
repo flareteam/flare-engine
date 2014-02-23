@@ -49,6 +49,7 @@ NPC::NPC()
 	, pos()
 	, level(1)
 	, direction(0)
+	, portrait(NULL)
 	, talker(false)
 	, vendor(false)
 	, stock()
@@ -163,8 +164,16 @@ void NPC::loadGraphics(const string& filename_portrait) {
 		animationSet = anim->getAnimationSet(gfx);
 		activeAnimation = animationSet->getAnimation();
 	}
-	if (filename_portrait != "")
-		portrait.setGraphics(render_device->loadGraphicSurface("images/portraits/" + filename_portrait + ".png", "Couldn't load NPC portrait", false, true));
+
+	if (filename_portrait != "") {
+		Image *graphics;
+		graphics = render_device->loadGraphicSurface("images/portraits/" + filename_portrait + ".png",
+				   "Couldn't load NPC portrait", false, true);
+		if (graphics) {
+			portrait = graphics->createSprite();
+			graphics->unref();
+		}
+	}
 }
 
 /**
@@ -408,7 +417,8 @@ bool NPC::isDialogType(const std::string &type) {
 }
 
 NPC::~NPC() {
-	portrait.clearGraphics();
+
+	if (portrait) delete portrait;
 
 	if (gfx != "") {
 		anim->decreaseCount(gfx);

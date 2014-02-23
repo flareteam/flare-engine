@@ -38,36 +38,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  */
 
-class Sprite : public ISprite {
 
+/** SDL Image */
+class SDLImage : public Image {
 public:
-	Sprite() {};
-	Sprite(const Sprite& other);
-	Sprite& operator=(const Sprite& other);
-	~Sprite();
+  SDLImage(RenderDevice *device);
+  virtual ~SDLImage();
+  int getWidth() const;
+  int getHeight() const;
 
-	void setGraphics(Image s, bool setClipToFull = true);
-	Image * getGraphics();
-	bool graphicsIsNull();
-	void clearGraphics();
-	void setOffset(const Point& _offset);
-	void setOffset(const int x, const int y);
-	Point getOffset();
-	void setClip(const Rect& clip);
-	void setClip(const int x, const int y, const int w, const int h);
-	void setClipX(const int x);
-	void setClipY(const int y);
-	void setClipW(const int w);
-	void setClipH(const int h);
-	Rect getClip();
-	void setDest(const Rect& _dest);
-	void setDest(const Point& _dest);
-	void setDest(int x, int y);
-	void setDestX(int x);
-	void setDestY(int y);
-	FPoint getDest();
-	int getGraphicsWidth();
-	int getGraphicsHeight();
+  SDL_Surface *surface;
 };
 
 class SDLRenderDevice : public RenderDevice {
@@ -79,13 +59,13 @@ public:
 	Rect getContextSize();
 
 	virtual int render(Renderable& r, Rect dest);
-	virtual int render(ISprite& r);
+	virtual int render(Sprite* r);
 	virtual int renderImage(Image* image, Rect& src);
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent = false);
 
 	int renderText(TTF_Font *ttf_font, const std::string& text, Color color, Rect& dest);
 
-	void renderTextToImage(Image* image, TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true);
+	Image *renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true);
 
 	void drawPixel(int x, int y, Uint32 color);
 
@@ -95,13 +75,7 @@ public:
 
 	void drawLine(const Point& p0, const Point& p1, Uint32 color);
 
-	void drawLine(Image *image, int x0, int y0, int x1, int y1, Uint32 color);
-
-	void drawLine(Image *image, Point pos0, Point pos1, Uint32 color);
-
 	void drawRectangle(const Point& p0, const Point& p1, Uint32 color);
-
-	void drawRectangle(Image *image, Point pos0, Point pos1, Uint32 color);
 
 	void blankScreen();
 
@@ -119,9 +93,9 @@ public:
 
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-	Image createAlphaSurface(int width, int height);
+	Image *createAlphaSurface(int width, int height);
 
-	Image createSurface(int width, int height);
+	Image *createSurface(int width, int height);
 
 	void scaleSurface(Image *source, int width, int height);
 
@@ -135,22 +109,14 @@ public:
 
 	void freeImage(Image *image);
 
-	Image loadGraphicSurface(std::string filename,
+	Image* loadGraphicSurface(std::string filename,
 								std::string errormessage = "Couldn't load image",
 								bool IfNotFoundExit = false,
 								bool HavePinkColorKey = false);
 private:
 
-	// Compute clipping and global position from local frame.
-	bool local_to_global(ISprite& r);
-
 	SDL_Surface* screen;
 	SDL_Surface* titlebar_icon;
-
-	// These are for keeping the render stack frame small.
-	Rect m_clip;
-	Rect m_dest;
-	Sprite m_ttf_renderable;
 };
 
 #endif // SDLRENDERDEVICE_H

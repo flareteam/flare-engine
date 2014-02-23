@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 kitano
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 

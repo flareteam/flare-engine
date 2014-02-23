@@ -1,7 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
-Copyright © 2012-2013 Henrik Andersson
+Copyright © 2012-2014 Henrik Andersson
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
 
@@ -76,10 +76,17 @@ GameStatePlay::GameStatePlay()
 	, color_normal(font->getColor("menu_normal"))
 	, nearest_npc(-1)
 	, game_slot(0) {
+
+	Image *graphics;
 	hasMusic = true;
 	// GameEngine scope variables
 
-	loading_bg.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
+	graphics = render_device->loadGraphicSurface("images/menus/confirm_bg.png");
+	if (graphics) {
+		loading_bg = graphics->createSprite();
+		graphics->unref();
+	}
+
 	powers = new PowerManager();
 	items = new ItemManager();
 	camp = new CampaignManager();
@@ -948,13 +955,13 @@ void GameStatePlay::render() {
 }
 
 void GameStatePlay::showLoading() {
-	if (loading_bg.graphicsIsNull()) return;
+	if (loading_bg == NULL) return;
 
 	Rect dest;
-	dest.x = VIEW_W_HALF - loading_bg.getGraphicsWidth()/2;
-	dest.y = VIEW_H_HALF - loading_bg.getGraphicsHeight()/2;
+	dest.x = VIEW_W_HALF - loading_bg->getGraphicsWidth()/2;
+	dest.y = VIEW_H_HALF - loading_bg->getGraphicsHeight()/2;
 
-	loading_bg.setDest(dest);
+	loading_bg->setDest(dest);
 	render_device->render(loading_bg);
 	loading->render();
 
@@ -966,8 +973,7 @@ Avatar *GameStatePlay::getAvatar() const {
 }
 
 GameStatePlay::~GameStatePlay() {
-	loading_bg.clearGraphics();
-
+	if (loading_bg)	delete loading_bg;
 	delete quests;
 	delete npcs;
 	delete hazards;

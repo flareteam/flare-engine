@@ -2,6 +2,7 @@
 Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -33,17 +34,16 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 	  checked(false),
 	  pressed(false) {
 	focusable = true;
-	cb.setGraphics(render_device->loadGraphicSurface(fname, "Couldn't load image", true, false));
 
-	pos.w = cb.getGraphicsWidth();
-	pos.h = cb.getGraphicsHeight() / 2;
-
-	cb.setClip(
-		0,
-		0,
-		pos.w,
-		pos.h
-	);
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface(fname, "Couldn't load image", true, false);
+	if (graphics) {
+		cb = graphics->createSprite();
+		pos.w = cb->getGraphicsWidth();
+		pos.h = cb->getGraphicsHeight() / 2;
+		cb->setClip(0, 0, pos.w, pos.h);
+		graphics->unref();
+	}
 	render_to_alpha = false;
 }
 
@@ -52,22 +52,22 @@ void WidgetCheckBox::activate() {
 }
 
 WidgetCheckBox::~WidgetCheckBox () {
-	cb.clearGraphics();
+	if (cb) delete cb;
 }
 
 void WidgetCheckBox::Check () {
 	checked = true;
-	cb.setClip(0,pos.h,pos.w,pos.h);
+	if (cb) cb->setClip(0,pos.h,pos.w,pos.h);
 }
 
 void WidgetCheckBox::unCheck () {
 	checked = false;
-	cb.setClip(0,0,pos.w,pos.h);
+	if (cb)	cb->setClip(0,0,pos.w,pos.h);
 }
 
 void WidgetCheckBox::toggleCheck () {
 	checked = !checked;
-	cb.setClip(0,(checked ? pos.h : 0),pos.w,pos.h);
+	if (cb)	cb->setClip(0,(checked ? pos.h : 0), pos.w, pos.h);
 }
 
 bool WidgetCheckBox::checkClick() {
@@ -104,10 +104,12 @@ bool WidgetCheckBox::isChecked () const {
 }
 
 void WidgetCheckBox::render() {
-	cb.local_frame = local_frame;
-	cb.setOffset(local_offset);
-	cb.setDest(pos);
-	render_device->render(cb);
+	if (cb) {
+		cb->local_frame = local_frame;
+		cb->setOffset(local_offset);
+		cb->setDest(pos);
+		render_device->render(cb);
+	}
 
 	if (in_focus) {
 		Point topLeft;

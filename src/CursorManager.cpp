@@ -1,5 +1,6 @@
 /*
 Copyright © 2014 Justin Jacobs
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -22,26 +23,46 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 
 CursorManager::CursorManager()
-	: cursor_current(NULL)
-	, offset_current(NULL)
-{
+	: cursor_normal(NULL)
+	, cursor_interact(NULL)
+	, cursor_talk(NULL)
+	, cursor_attack(NULL)
+	, cursor_current(NULL)
+	, offset_current(NULL) {
+	Image *graphics;
 	FileParser infile;
 	if (infile.open("engine/mouse_cursor.txt", true, true, "")) {
 		while (infile.next()) {
 			if (infile.key == "normal") {
-				cursor_normal.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+				graphics = render_device->loadGraphicSurface(popFirstString(infile.val));
+				if (graphics) {
+					cursor_normal = graphics->createSprite();
+					graphics->unref();
+				}
 				offset_normal = toPoint(infile.val);
 			}
 			else if (infile.key == "interact") {
-				cursor_interact.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+				graphics = render_device->loadGraphicSurface(popFirstString(infile.val));
+				if (graphics) {
+					cursor_interact = graphics->createSprite();
+					graphics->unref();
+				}
 				offset_interact = toPoint(infile.val);
 			}
 			else if (infile.key == "talk") {
-				cursor_talk.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+				graphics = render_device->loadGraphicSurface(popFirstString(infile.val));
+				if (graphics) {
+					cursor_talk = graphics->createSprite();
+					graphics->unref();
+				}
 				offset_talk = toPoint(infile.val);
 			}
 			else if (infile.key == "attack") {
-				cursor_attack.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+				graphics = render_device->loadGraphicSurface(popFirstString(infile.val));
+				if (graphics) {
+					cursor_attack = graphics->createSprite();
+					graphics->unref();
+				}
 				offset_attack = toPoint(infile.val);
 			}
 		}
@@ -50,10 +71,10 @@ CursorManager::CursorManager()
 }
 
 CursorManager::~CursorManager() {
-	cursor_normal.clearGraphics();
-	cursor_interact.clearGraphics();
-	cursor_talk.clearGraphics();
-	cursor_attack.clearGraphics();
+	if (cursor_normal) delete cursor_normal;
+	if (cursor_interact) delete cursor_interact;
+	if (cursor_talk) delete cursor_talk;
+	if (cursor_attack) delete cursor_attack;
 }
 
 void CursorManager::logic() {
@@ -65,9 +86,9 @@ void CursorManager::logic() {
 	cursor_current = NULL;
 	offset_current = NULL;
 
-	if (!cursor_normal.graphicsIsNull()) {
+	if (cursor_normal) {
 		inpt->hideCursor();
-		cursor_current = &cursor_normal;
+		cursor_current = cursor_normal;
 		offset_current = &offset_normal;
 	}
 	else {
@@ -87,31 +108,31 @@ void CursorManager::render() {
 			cursor_current->setDest(inpt->mouse.x, inpt->mouse.y);
 		}
 
-		render_device->render(*cursor_current);
+		render_device->render(cursor_current);
 	}
 }
 
 void CursorManager::setCursor(CURSOR_TYPE type) {
 	if (HARDWARE_CURSOR) return;
 
-	if (type == CURSOR_INTERACT && !cursor_interact.graphicsIsNull()) {
+	if (type == CURSOR_INTERACT && cursor_interact) {
 		inpt->hideCursor();
-		cursor_current = &cursor_interact;
+		cursor_current = cursor_interact;
 		offset_current = &offset_interact;
 	}
-	else if (type == CURSOR_TALK && !cursor_talk.graphicsIsNull()) {
+	else if (type == CURSOR_TALK && cursor_talk) {
 		inpt->hideCursor();
-		cursor_current = &cursor_talk;
+		cursor_current = cursor_talk;
 		offset_current = &offset_talk;
 	}
-	else if (type == CURSOR_ATTACK && !cursor_attack.graphicsIsNull()) {
+	else if (type == CURSOR_ATTACK && cursor_attack) {
 		inpt->hideCursor();
-		cursor_current = &cursor_attack;
+		cursor_current = cursor_attack;
 		offset_current = &offset_attack;
 	}
-	else if (!cursor_normal.graphicsIsNull()) {
+	else if (cursor_normal) {
 		inpt->hideCursor();
-		cursor_current = &cursor_normal;
+		cursor_current = cursor_normal;
 		offset_current = &offset_normal;
 	}
 	else {

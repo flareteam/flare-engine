@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -21,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 TooltipData::TooltipData()
 	: default_color(font->getColor("widget_normal"))
+	, tip_buffer(NULL)
 {}
 
 TooltipData::~TooltipData() {
@@ -28,7 +30,7 @@ TooltipData::~TooltipData() {
 }
 
 TooltipData::TooltipData(const TooltipData &tdSource)
-	: tip_buffer(Sprite()) {
+	: tip_buffer(NULL) {
 
 	// DO NOT copy the buffered text render
 	// Allow the new copy to create its own buffer
@@ -52,13 +54,18 @@ TooltipData& TooltipData::operator= (const TooltipData &tdSource) {
 		colors.push_back(tdSource.colors[i]);
 	}
 
+	tip_buffer = tdSource.tip_buffer;
+
 	return *this;
 }
 
 void TooltipData::clear() {
 	lines.clear();
 	colors.clear();
-	tip_buffer.clearGraphics();
+	if (tip_buffer) {
+		delete tip_buffer;
+		tip_buffer = NULL;
+	}
 }
 
 void TooltipData::addText(const std::string &text, Color color) {

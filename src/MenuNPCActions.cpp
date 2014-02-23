@@ -1,5 +1,5 @@
 /*
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -66,6 +66,7 @@ MenuNPCActions::MenuNPCActions()
 	, is_empty(true)
 	, first_dialog_node(-1)
 	, current_action(-1)
+	, action_menu(NULL)
 	, vendor_label(msg->get("Trade"))
 	, cancel_label(msg->get("Cancel"))
 	, dialog_selected(false)
@@ -96,7 +97,11 @@ MenuNPCActions::MenuNPCActions()
 }
 
 void MenuNPCActions::update() {
-	action_menu.clearGraphics();
+
+	if (action_menu) {
+		delete action_menu;
+		action_menu = NULL;
+	}
 
 	/* get max width and height of action menu */
 	int w = 0, h = 0;
@@ -169,20 +174,22 @@ void MenuNPCActions::update() {
 	h += (MENU_BORDER*2);
 
 	int old_w = -1, old_h = -1;
-	if (!action_menu.graphicsIsNull()) {
-		old_w = action_menu.getGraphicsWidth();
-		old_h = action_menu.getGraphicsHeight();
+	if (action_menu) {
+		old_w = action_menu->getGraphicsWidth();
+		old_h = action_menu->getGraphicsHeight();
 	}
 	// create background surface if necessary
 	if ( old_w != w || old_h != h ) {
-		action_menu.clearGraphics();
-		Image surface = render_device->createAlphaSurface(w,h);
-		Uint32 bg = render_device->MapRGBA(&surface,
+		if (action_menu) {
+			delete action_menu;
+			action_menu = NULL;
+		}
+		Image *graphics = render_device->createAlphaSurface(w,h);
+		Uint32 bg = render_device->MapRGBA(graphics,
 										   background_color.r, background_color.g,
 										   background_color.b, background_color.a);
-		render_device->fillImageWithColor(&surface, NULL, bg);
-		action_menu.setGraphics(surface);
-		action_menu.setClip(0,0,surface.getWidth(),surface.getHeight());
+		render_device->fillImageWithColor(graphics, NULL, bg);
+		action_menu = graphics->createSprite();
 	}
 
 }
@@ -364,9 +371,9 @@ void MenuNPCActions::keyboardLogic() {
 
 void MenuNPCActions::render() {
 	if (!visible) return;
-	if (action_menu.graphicsIsNull()) return;
+	if (!action_menu) return;
 
-	action_menu.setDest(window_area);
+	action_menu->setDest(window_area);
 	render_device->render(action_menu);
 	for(size_t i=0; i<npc_actions.size(); i++) {
 		if (npc_actions[i].label) {
@@ -378,6 +385,7 @@ void MenuNPCActions::render() {
 }
 
 MenuNPCActions::~MenuNPCActions() {
-	action_menu.clearGraphics();
+	if (action_menu)
+		delete action_menu;
 }
 

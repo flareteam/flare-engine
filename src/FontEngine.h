@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -52,7 +53,6 @@ public:
 
 class FontEngine {
 private:
-	Sprite ttf;
 	std::map<std::string,Color> color_map;
 	std::vector<FontStyle> font_styles;
 	FontStyle *active_font;

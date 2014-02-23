@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -76,8 +77,15 @@ MenuStatBar::MenuStatBar(std::string type) {
 }
 
 void MenuStatBar::loadGraphics(std::string type) {
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/bar_" + type + "_background.png"));
-	bar.setGraphics(render_device->loadGraphicSurface("images/menus/bar_" + type + ".png"));
+	Image *graphics;
+
+	setBackground("images/menus/bar_" + type + "_background.png");
+
+	graphics = render_device->loadGraphicSurface("images/menus/bar_" + type + ".png");
+	if (graphics) {
+		bar = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string) {
@@ -103,9 +111,9 @@ void MenuStatBar::render() {
 	src.y = 0;
 	src.w = bar_pos.w;
 	src.h = bar_pos.h;
-	background.setClip(src);
-	background.setDest(dest);
-	render_device->render(background);
+	setBackgroundClip(src);
+	setBackgroundDest(dest);
+	Menu::render();
 
 	// draw bar progress based on orientation
 	if (orientation == 0) {
@@ -127,9 +135,11 @@ void MenuStatBar::render() {
 		dest.y = bar_dest.y+src.y;
 	}
 
-	bar.setClip(src);
-	bar.setDest(dest);
-	render_device->render(bar);
+	if (bar) {
+		bar->setClip(src);
+		bar->setDest(dest);
+		render_device->render(bar);
+	}
 
 	// if mouseover, draw text
 	if (!text_pos.hidden) {
@@ -151,6 +161,6 @@ void MenuStatBar::render() {
 }
 
 MenuStatBar::~MenuStatBar() {
-	bar.clearGraphics();
+	if (bar) delete bar;
 	delete label;
 }

@@ -1,5 +1,6 @@
 /*
 Copyright © 2012 Stefan Beller
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -20,10 +21,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "AnimationSet.h"
 #include "AnimationManager.h"
 
-#include "ImageManager.h"
 #include "FileParser.h"
 #include "SharedResources.h"
 #include "Settings.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 
 #include <cassert>
@@ -49,8 +50,8 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	: name(animationname)
 	, loaded(false)
 	, animations()
-	, sprite(Image()) {
-	defaultAnimation = new Animation("default", "play_once", Image());
+	, sprite(NULL) {
+	defaultAnimation = new Animation("default", "play_once", NULL);
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
@@ -91,14 +92,13 @@ void AnimationSet::load() {
 			compressed_loading = false;
 		}
 		if (parser.key == "image") {
-			if (sprite.graphicIsNull() == false) {
+			if (sprite != NULL) {
 				printf("multiple images specified in %s, dragons be here!\n", name.c_str());
 				SDL_Quit();
 				exit(128);
 			}
-			imagefile = parser.val;
-			imag->increaseCount(imagefile);
-			sprite = imag->getSurface(imagefile);
+
+			sprite = loadTextureImage(parser.val);
 		}
 		else if (parser.key == "position") {
 			position = toInt(parser.val);
@@ -189,7 +189,7 @@ void AnimationSet::load() {
 }
 
 AnimationSet::~AnimationSet() {
-	if (imagefile != "") imag->decreaseCount(imagefile);
+	if (sprite) sprite->unref();
 	for (unsigned i = 0; i < animations.size(); ++i)
 		delete animations[i];
 	delete defaultAnimation;

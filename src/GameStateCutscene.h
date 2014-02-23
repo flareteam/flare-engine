@@ -46,13 +46,13 @@ public:
 
 class Scene {
 private:
-	Image loadImage(std::string filename, bool scale_graphics);
+	Image *loadImage(std::string filename, bool scale_graphics);
 
 	int frame_counter;
 	int pause_frames;
 	std::string caption;
 	Point caption_size;
-	Sprite art;
+	Sprite *art;
 	Rect art_dest;
 	SoundManager::SoundID sid;
 	WidgetScrollBox *caption_box;

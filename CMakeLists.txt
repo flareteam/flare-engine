@@ -118,7 +118,6 @@ Set (FLARE_SOURCES
 	./src/GetText.cpp
 	./src/Hazard.cpp
 	./src/HazardManager.cpp
-	./src/ImageManager.cpp
 	./src/InputState.cpp
 	./src/ItemManager.cpp
 	./src/ItemStorage.cpp
@@ -153,6 +152,7 @@ Set (FLARE_SOURCES
 	./src/NPCManager.cpp
 	./src/PowerManager.cpp
 	./src/QuestLog.cpp
+	./src/RenderDevice.cpp
 	./src/SaveLoad.cpp
 	./src/SDL_gfxBlitFunc.c
 	./src/Settings.cpp

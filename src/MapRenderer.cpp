@@ -1,7 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -281,7 +281,7 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 }
 
 void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
-	if (r_cursor->sprite.graphicIsNull() == false) {
+	if (r_cursor->sprite != NULL) {
 		Rect dest;
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 		dest.x = p.x - r_cursor->offset.x;
@@ -338,10 +338,8 @@ void MapRenderer::renderIsoLayer(const unsigned short layerdata[256][256]) {
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
-				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+				tset.tiles[current_tile].tile->setDest(dest);
 				render_device->render(tset.tiles[current_tile].tile);
-				tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 		}
 		j += tiles_width;
@@ -410,10 +408,10 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 			if (const uint_fast16_t current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+				tset.tiles[current_tile].tile->setDest(dest);
+				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				tset.tiles[current_tile].tile.setGraphics(Image());
+				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 
 			// some renderable entities go in this layer
@@ -470,10 +468,10 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				Rect dest;
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+				tset.tiles[current_tile].tile->setDest(dest);
+				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				tset.tiles[current_tile].tile.setGraphics(Image());
+				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 		}
@@ -517,10 +515,10 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 			if (const unsigned short current_tile = objectlayer[i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile.setDest(dest);
-				tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
+				tset.tiles[current_tile].tile->setDest(dest);
+				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				tset.tiles[current_tile].tile.setGraphics(Image());
+				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 
@@ -669,8 +667,8 @@ void MapRenderer::checkHotspots() {
 						Rect dest;
 						dest.x = p.x - tset.tiles[current_tile].offset.x;
 						dest.y = p.y - tset.tiles[current_tile].offset.y;
-						dest.w = tset.tiles[current_tile].tile.getClip().w;
-						dest.h = tset.tiles[current_tile].tile.getClip().h;
+						dest.w = tset.tiles[current_tile].tile->getClip().w;
+						dest.h = tset.tiles[current_tile].tile->getClip().h;
 
 						if (isWithin(dest, inpt->mouse)) {
 							// Now that the mouse is within the rectangle of the tile, we can check for
@@ -678,9 +676,9 @@ void MapRenderer::checkHotspots() {
 							// otherwise the pixel precise check might hit a neighbouring tile in the
 							// tileset. We need to calculate the point relative to the
 							Point p1;
-							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile.getClip().x;
-							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile.getClip().y;
-							matched |= render_device->checkPixel(p1, tset.sprites.getGraphics());
+							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile->getClip().x;
+							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile->getClip().y;
+							matched |= render_device->checkPixel(p1, tset.sprites->getGraphics());
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;
 						}

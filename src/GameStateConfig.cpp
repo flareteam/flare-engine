@@ -57,10 +57,17 @@ GameStateConfig::GameStateConfig ()
 	, ok_button(NULL)
 	, defaults_button(NULL)
 	, cancel_button(NULL)
+	, background(NULL)
 	, tip_buf()
 	, input_key(0)
 	, check_resolution(true) {
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/config.png"));
+
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface("images/menus/config.png");
+	if (graphics) {
+		background = graphics->createSprite();
+		graphics->unref();
+	}
 
 	init();
 	update();
@@ -985,8 +992,10 @@ void GameStateConfig::render () {
 	pos.x = (VIEW_W-FRAME_W)/2;
 	pos.y = (VIEW_H-FRAME_H)/2 + tabheight - tabheight/16;
 
-	background.setDest(pos);
-	render_device->render(background);
+	if (background) {
+		background->setDest(pos);
+		render_device->render(background);
+	}
 
 	tabControl->render();
 
@@ -1197,7 +1206,10 @@ void GameStateConfig::scanKey(int button) {
 }
 
 void GameStateConfig::cleanup() {
-	background.clearGraphics();
+	if (background) {
+		delete background;
+		background = NULL;
+	}
 	tip_buf.clear();
 	if (tip != NULL) {
 		delete tip;

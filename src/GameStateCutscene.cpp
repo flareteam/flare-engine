@@ -1,5 +1,5 @@
 /*
-Copyright © 2012-2013 Henrik Andersson
+Copyright © 2012-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -28,28 +28,32 @@ Scene::Scene() : frame_counter(0)
 	, pause_frames(0)
 	, caption("")
 	, caption_size(0,0)
+	, art(NULL)
 	, sid(-1)
 	, caption_box(NULL)
 	, done(false) {
 }
 
 Scene::~Scene() {
-	art.clearGraphics();
+	if (art) delete art;
 	delete caption_box;
 	while(!components.empty()) {
 		components.pop();
 	}
 }
 
-Image Scene::loadImage(std::string filename, bool scale_graphics) {
+Image *Scene::loadImage(std::string filename, bool scale_graphics) {
 
-	Image image = render_device->loadGraphicSurface("images/"+filename);
+	Image *image = render_device->loadGraphicSurface("images/"+filename);
+
+	if (image == NULL)
+		return NULL;
 
 	/* scale image to fit height */
-	if (scale_graphics && !image.graphicIsNull()) {
-		if (image.getWidth() > 0) {
-			float ratio = image.getHeight()/(float)image.getWidth();
-			render_device->scaleSurface(&image, VIEW_W, (int)(VIEW_W*ratio));
+	if (scale_graphics) {
+		if (image->getWidth() > 0) {
+			float ratio = image->getHeight()/(float)image->getWidth();
+			render_device->scaleSurface(image, VIEW_W, (int)(VIEW_W*ratio));
 		}
 		else {
 			fprintf(stderr, "Error: Can not scale cutscene image with a width of 0.\n");
@@ -98,23 +102,26 @@ bool Scene::logic(FPoint *caption_margins, bool scale_graphics) {
 			caption_box->pos.y = render_device->getContextSize().h - caption_size.y - (int)(VIEW_H * caption_margins->y);
 			font->renderShadowed(caption, render_device->getContextSize().w / 2, 0,
 								 JUSTIFY_CENTER,
-								 caption_box->contents.getGraphics(),
+								 caption_box->contents->getGraphics(),
 								 caption_width,
 								 FONT_WHITE);
 
 		}
 		else if (components.front().type == "image") {
 
-			if (!art.graphicsIsNull())
-				art.clearGraphics();
-
-			art.setGraphics(loadImage(components.front().s, scale_graphics));
-
-			if (!art.graphicsIsNull()) {
-				art_dest.x = (VIEW_W/2) - (art.getGraphicsWidth()/2);
-				art_dest.y = (VIEW_H/2) - (art.getGraphicsHeight()/2);
-				art_dest.w = art.getGraphicsWidth();
-				art_dest.h = art.getGraphicsHeight();
+			Image *graphics;
+			if (art) {
+				delete art;
+				art = NULL;
+			}
+			graphics = loadImage(components.front().s, scale_graphics);
+			if (graphics != NULL) {
+				art = graphics->createSprite();
+				art_dest.x = (VIEW_W/2) - (art->getGraphicsWidth()/2);
+				art_dest.y = (VIEW_H/2) - (art->getGraphicsHeight()/2);
+				art_dest.w = art->getGraphicsWidth();
+				art_dest.h = art->getGraphicsHeight();
+				graphics->unref();
 			}
 		}
 		else if (components.front().type == "soundfx") {
@@ -141,8 +148,8 @@ bool Scene::logic(FPoint *caption_margins, bool scale_graphics) {
 }
 
 void Scene::render() {
-	if (!art.graphicsIsNull()) {
-		art.setDest(art_dest);
+	if (art != NULL) {
+		art->setDest(art_dest);
 		render_device->render(art);
 	}
 

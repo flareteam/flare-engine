@@ -62,7 +62,7 @@ public:
 	int direction;
 
 	// talker info
-	Sprite portrait;
+	Sprite *portrait;
 	bool talker;
 
 	// vendor info

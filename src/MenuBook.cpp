@@ -1,5 +1,6 @@
 /*
 Copyright © 2014 Igor Paliychuk
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -59,22 +60,24 @@ void MenuBook::loadBook() {
 				closeButton->pos.y = popFirstInt(infile.val);
 			}
 			else if (infile.key == "background") {
-				background.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+			        setBackground(popFirstString(infile.val));
 			}
 
 			if (infile.new_section) {
 
 				// for sections that are stored in collections, add a new object here
 				if (infile.section == "text") {
-					text.push_back(new Sprite());
+					text.push_back(NULL);
 					textData.push_back("");
 					textColor.push_back(Color());
 					justify.push_back(0);
 					textFont.push_back("");
 					size.push_back(Rect());
 				}
-				else if (infile.section == "image")
-					image.push_back(new Sprite());
+				else if (infile.section == "image") {
+					image.push_back(NULL);
+					image_dest.push_back(Point());
+				}
 
 			}
 			if (infile.section == "text")
@@ -86,20 +89,25 @@ void MenuBook::loadBook() {
 		infile.close();
 	}
 
+	// setup image dest
+	for (unsigned i=0; i < image.size(); i++) {
+	       image[i]->setDest(image_dest[i]);
+	}
+
 	// render text to surface
 	for (unsigned i=0; i<text.size(); i++) {
 		font->setFont(textFont[i]);
 		Point pSize = font->calc_size(textData[i], size[i].w);
-		Image surface = render_device->createAlphaSurface(size[i].w, pSize.y);
+		Image *graphics = render_device->createAlphaSurface(size[i].w, pSize.y);
 
 		if (justify[i] == JUSTIFY_CENTER)
-			font->render(textData[i], size[i].w/2, 0, justify[i], &surface, size[i].w, textColor[i]);
+			font->render(textData[i], size[i].w/2, 0, justify[i], graphics, size[i].w, textColor[i]);
 		else if (justify[i] == JUSTIFY_RIGHT)
-			font->render(textData[i], size[i].w, 0, justify[i], &surface, size[i].w, textColor[i]);
+			font->render(textData[i], size[i].w, 0, justify[i], graphics, size[i].w, textColor[i]);
 		else
-			font->render(textData[i], 0, 0, justify[i], &surface, size[i].w, textColor[i]);
-
-		text[i]->setGraphics(surface);
+			font->render(textData[i], 0, 0, justify[i], graphics, size[i].w, textColor[i]);
+		text[i] = graphics->createSprite();
+		graphics->unref();
 	}
 
 	align();
@@ -110,10 +118,15 @@ void MenuBook::loadBook() {
 
 void MenuBook::loadImage(FileParser &infile) {
 	if (infile.key == "image_pos") {
-		image.back()->setDest(toPoint(infile.val));
+		image_dest.back() = toPoint(infile.val);
 	}
 	else if (infile.key == "image") {
-		image.back()->setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val)));
+	        Image *graphics;
+		graphics = render_device->loadGraphicSurface(popFirstString(infile.val));
+		if (graphics) {
+		  image.back() = graphics->createSprite();
+		  graphics->unref();
+		}
 	}
 }
 
@@ -147,8 +160,13 @@ void MenuBook::alignElements() {
 	closeButton->pos.x += window_area.x;
 	closeButton->pos.y += window_area.y;
 
-	background.setClip(0,0,window_area.w,window_area.h);
-	background.setDest(window_area);
+	Rect clip;
+	clip.x = clip.y = 0;
+	clip.w = window_area.w;
+	clip.h = window_area.h;
+
+	setBackgroundClip(clip);
+	setBackgroundDest(window_area);
 
 	for (unsigned i=0; i<text.size(); i++) {
 		text[i]->setDestX(size[i].x + window_area.x);
@@ -162,17 +180,17 @@ void MenuBook::alignElements() {
 
 void MenuBook::clearBook() {
 	for (unsigned i=0; i<text.size(); i++) {
-		text[i]->clearGraphics();
 		delete text[i];
 	}
 	text.clear();
+
 	textData.clear();
 	textColor.clear();
 	textFont.clear();
 	size.clear();
+	image_dest.clear();
 
 	for (unsigned i=0; i<image.size(); i++) {
-		image[i]->clearGraphics();
 		delete image[i];
 	}
 	image.clear();
@@ -192,7 +210,6 @@ void MenuBook::logic() {
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
 		clearBook();
-		background.clearGraphics();
 
 		snd->play(sfx_close);
 
@@ -205,14 +222,14 @@ void MenuBook::logic() {
 void MenuBook::render() {
 	if (!visible) return;
 
-	render_device->render(background);
+	Menu::render();
 
 	closeButton->render();
 	for (unsigned i=0; i<text.size(); i++) {
-		render_device->render(*text[i]);
+		render_device->render(text[i]);
 	}
 	for (unsigned i=0; i<image.size(); i++) {
-		render_device->render(*image[i]);
+		render_device->render(image[i]);
 	}
 }
 

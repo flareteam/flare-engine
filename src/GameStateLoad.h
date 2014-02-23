@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -62,11 +63,11 @@ private:
 
 	MenuConfirm *confirm;
 
-	Sprite background;
-	Sprite selection;
-	Sprite portrait_border;
-	Sprite portrait;
-	std::vector<Sprite> sprites[GAME_SLOT_MAX];
+	Sprite *background;
+	Sprite *selection;
+	Sprite *portrait_border;
+	Sprite *portrait;
+	std::vector<Sprite *> sprites[GAME_SLOT_MAX];
 	StatBlock stats[GAME_SLOT_MAX];
 	std::vector<int> equipped[GAME_SLOT_MAX];
 	std::vector<std::string> preview_layer;
@@ -82,6 +83,8 @@ private:
 	LabelInfo map_pos;
 	LabelInfo loading_pos;
 	Point sprites_pos;
+
+	Rect portrait_dest;
 
 	// animation info
 	int current_frame;

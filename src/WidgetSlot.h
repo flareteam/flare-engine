@@ -40,8 +40,8 @@ enum CLICK_TYPE {
 class WidgetSlot : public Widget {
 private:
 
-	Sprite slot_selected;
-	Sprite slot_checked;
+	Sprite *slot_selected;
+	Sprite *slot_checked;
 
 	WidgetLabel label_amount;
 	int icon_id;		// current slot id

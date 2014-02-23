@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -83,9 +84,9 @@ void MenuHUDLog::render() {
 
 	// go through new messages
 	for (int i = msg_age.size() - 1; i >= 0; i--) {
-		if (msg_age[i] > 0 && dest.y > 64) {
-			dest.y -= msg_buffer[i].getGraphicsHeight() + paragraph_spacing;
-			msg_buffer[i].setDest(dest);
+		if (msg_age[i] > 0 && dest.y > 64 && msg_buffer[i]) {
+			dest.y -= msg_buffer[i]->getGraphicsHeight() + paragraph_spacing;
+			msg_buffer[i]->setDest(dest);
 			render_device->render(msg_buffer[i]);
 		}
 		else return; // no more new messages
@@ -112,17 +113,17 @@ void MenuHUDLog::add(const string& s) {
 	// render the log entry and store it in a buffer
 	font->setFont("font_regular");
 	Point size = font->calc_size(s, window_area.w);
-	Image surface = render_device->createAlphaSurface(size.x, size.y);
-	font->renderShadowed(s, 0, 0, JUSTIFY_LEFT, &surface, window_area.w, color_normal);
-	msg_buffer.push_back(Sprite());
-	msg_buffer.back().setGraphics(surface);
+	Image *graphics = render_device->createAlphaSurface(size.x, size.y);
+	font->renderShadowed(s, 0, 0, JUSTIFY_LEFT, graphics, window_area.w, color_normal);
+	msg_buffer.push_back(graphics->createSprite());
 }
 
 /**
  * Remove the given message from the list
  */
 void MenuHUDLog::remove(int msg_index) {
-	msg_buffer.at(msg_index).clearGraphics();
+	if (msg_buffer.at(msg_index))
+		delete msg_buffer.at(msg_index);
 	msg_buffer.erase(msg_buffer.begin()+msg_index);
 	msg_age.erase(msg_age.begin()+msg_index);
 	log_msg.erase(log_msg.begin()+msg_index);
@@ -130,7 +131,8 @@ void MenuHUDLog::remove(int msg_index) {
 
 void MenuHUDLog::clear() {
 	for (unsigned i=0; i<msg_buffer.size(); i++) {
-		msg_buffer[i].clearGraphics();
+		if (msg_buffer[i])
+			delete msg_buffer[i];
 	}
 	msg_buffer.clear();
 	msg_age.clear();
@@ -139,6 +141,7 @@ void MenuHUDLog::clear() {
 
 MenuHUDLog::~MenuHUDLog() {
 	for (unsigned i=0; i<msg_buffer.size(); i++) {
-		msg_buffer[i].clearGraphics();
+		if (msg_buffer[i])
+			delete msg_buffer[i];
 	}
 }

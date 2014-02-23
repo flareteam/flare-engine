@@ -1,5 +1,6 @@
 /*
 Copyright © 2012 Stefan Beller
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -42,7 +43,7 @@ public:
 
 	std::vector<Animation*> animations;
 
-	Image sprite;
+	Image *sprite;
 
 	AnimationSet(const std::string &animationname);
 	AnimationSet(const AnimationSet &a); // copy constructor not implemented.

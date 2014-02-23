@@ -41,7 +41,8 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	MAX_EQUIPPED = 4;
 	MAX_CARRIED = 64;
 	visible = false;
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/inventory.png"));
+
+	setBackground("images/menus/inventory.png");
 
 	currency = 0;
 
@@ -201,8 +202,8 @@ void MenuInventory::logic() {
 void MenuInventory::render() {
 	if (!visible) return;
 
-	background.setDest(window_area);
-	render_device->render(background);
+	// background
+	Menu::render();
 
 	// close button
 	closeButton->render();

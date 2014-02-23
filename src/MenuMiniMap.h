@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -36,7 +37,7 @@ private:
 	Uint32 color_obst;
 	Uint32 color_hero;
 
-	Sprite map_surface;
+	Sprite *map_surface;
 	Point map_size;
 
 	Rect pos;

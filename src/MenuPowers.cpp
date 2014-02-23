@@ -2,7 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -135,18 +135,36 @@ void MenuPowers::alignElements() {
 
 void MenuPowers::loadGraphics() {
 
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/powers.png"));
-	powers_unlock.setGraphics(render_device->loadGraphicSurface("images/menus/powers_unlock.png"));
-	overlay_disabled.setGraphics(render_device->loadGraphicSurface("images/menus/disabled.png"));
+	Image *graphics;
+
+	setBackground("images/menus/powers.png");
+
+	graphics = render_device->loadGraphicSurface("images/menus/powers_unlock.png");
+	if (graphics) {
+		powers_unlock = graphics->createSprite();
+		graphics->unref();
+	}
+
+	graphics = render_device->loadGraphicSurface("images/menus/disabled.png");
+	if (graphics) {
+		overlay_disabled = graphics->createSprite();
+		graphics->unref();
+	}
 
 	if (tree_image_files.empty()) {
-		tree_surf.push_back(Sprite());
-		tree_surf.back().setGraphics(render_device->loadGraphicSurface("images/menus/powers_tree.png"));
+		graphics = render_device->loadGraphicSurface("images/menus/powers_tree.png");
+		if (graphics) {
+			tree_surf.push_back(graphics->createSprite());
+			graphics->unref();
+		}
 	}
 	else {
 		for (unsigned int i = 0; i < tree_image_files.size(); ++i) {
-			tree_surf.push_back(Sprite());
-			tree_surf.back().setGraphics(render_device->loadGraphicSurface(tree_image_files[i]));
+			graphics = render_device->loadGraphicSurface(tree_image_files[i]);
+			if (graphics) {
+				tree_surf.push_back(graphics->createSprite());
+				graphics->unref();
+			}
 		}
 	}
 	for (unsigned int i=0; i<slots.size(); i++) {
@@ -454,9 +472,11 @@ void MenuPowers::render() {
 	src.y = 0;
 	src.w = window_area.w;
 	src.h = window_area.h;
-	background.setClip(src);
-	background.setDest(dest);
-	render_device->render(background);
+
+	setBackgroundClip(src);
+	setBackgroundDest(dest);
+	Menu::render();
+
 
 	if (tabs_count > 1) {
 		tabControl->render();
@@ -464,20 +484,25 @@ void MenuPowers::render() {
 		for (int i=0; i<tabs_count; i++) {
 			if (active_tab == i) {
 				// power tree
-				Sprite r = tree_surf[i];
-				r.setClip(src);
-				r.setDest(dest);
-				render_device->render(r);
+				Sprite *r = tree_surf[i];
+				if (r) {
+					r->setClip(src);
+					r->setDest(dest);
+					render_device->render(r);
+				}
+
 				// power icons
 				renderPowers(active_tab);
 			}
 		}
 	}
 	else {
-		Sprite r = tree_surf[0];
-		r.setClip(src);
-		r.setDest(dest);
-		render_device->render(r);
+		Sprite *r = tree_surf[0];
+		if (r) {
+			r->setClip(src);
+			r->setDest(dest);
+			render_device->render(r);
+		}
 		renderPowers(0);
 	}
 
@@ -512,9 +537,9 @@ void MenuPowers::displayBuild(int power_id) {
 	src_unlock.h = ICON_SIZE;
 
 	for (unsigned i=0; i<power_cell.size(); i++) {
-		if (power_cell[i].id == power_id) {
-			powers_unlock.setClip(src_unlock);
-			powers_unlock.setDest(slots[i]->pos);
+		if (power_cell[i].id == power_id && powers_unlock) {
+			powers_unlock->setClip(src_unlock);
+			powers_unlock->setDest(slots[i]->pos);
 			render_device->render(powers_unlock);
 		}
 	}
@@ -666,11 +691,11 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 }
 
 MenuPowers::~MenuPowers() {
-	powers_unlock.clearGraphics();
-	overlay_disabled.clearGraphics();
+	if (powers_unlock) delete powers_unlock;
+	if (overlay_disabled) delete overlay_disabled;
 
 	for (unsigned int i=0; i<tree_surf.size(); i++) {
-		tree_surf[i].clearGraphics();
+		if (tree_surf[i]) delete tree_surf[i];
 	}
 	for (unsigned int i=0; i<slots.size(); i++) {
 		delete slots.at(i);
@@ -727,9 +752,9 @@ void MenuPowers::renderPowers(int tab_num) {
 			displayBuild(power_cell[i].id);
 		}
 		else {
-			if (!overlay_disabled.graphicsIsNull()) {
-				overlay_disabled.setClip(disabled_src);
-				overlay_disabled.setDest(slots[i]->pos);
+			if (overlay_disabled) {
+				overlay_disabled->setClip(disabled_src);
+				overlay_disabled->setDest(slots[i]->pos);
 				render_device->render(overlay_disabled);
 			}
 		}

@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -34,12 +35,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuMiniMap::MenuMiniMap() {
+MenuMiniMap::MenuMiniMap()
+	: map_surface(NULL) {
 
 	createMapSurface();
-	color_wall = render_device->MapRGB(map_surface.getGraphics(), 128,128,128);
-	color_obst = render_device->MapRGB(map_surface.getGraphics(), 64,64,64);
-	color_hero = render_device->MapRGB(map_surface.getGraphics(), 255,255,255);
+	color_wall = render_device->MapRGB(map_surface->getGraphics(), 128,128,128);
+	color_obst = render_device->MapRGB(map_surface->getGraphics(), 64,64,64);
+	color_hero = render_device->MapRGB(map_surface->getGraphics(), 255,255,255);
 
 	// Load config settings
 	FileParser infile;
@@ -69,8 +71,17 @@ void MenuMiniMap::getMapTitle(std::string map_title) {
 }
 
 void MenuMiniMap::createMapSurface() {
-	map_surface.clearGraphics();
-	map_surface.setGraphics(render_device->createAlphaSurface(512, 512));
+	if (map_surface) {
+		delete map_surface;
+		map_surface = NULL;
+	}
+
+	Image *graphics;
+	graphics = render_device->createAlphaSurface(512, 512);
+	if (graphics) {
+		map_surface = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 void MenuMiniMap::render() {
@@ -88,7 +99,7 @@ void MenuMiniMap::render(FPoint hero_pos) {
 void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 	map_size.x = map_w;
 	map_size.y = map_h;
-	render_device->fillImageWithColor(map_surface.getGraphics(), NULL, render_device->MapRGBA(map_surface.getGraphics(),0,0,0,0));
+	render_device->fillImageWithColor(map_surface->getGraphics(), NULL, render_device->MapRGBA(map_surface->getGraphics(),0,0,0,0));
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
 		prerenderIso(collider);
@@ -116,15 +127,18 @@ void MenuMiniMap::renderOrtho(FPoint hero_pos) {
 	map_area.w = pos.w;
 	map_area.h = pos.h;
 
-	map_surface.setClip(clip);
-	map_surface.setDest(map_area);
-	render_device->render(map_surface);
+	if (map_surface) {
+		map_surface->setClip(clip);
+		map_surface->setDest(map_area);
+		render_device->render(map_surface);
+	}
 
 	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2, color_hero);
 	render_device->drawPixel(window_area.x + pos.x + pos.w/2 + 1, window_area.y + pos.y + pos.h/2, color_hero);
 	render_device->drawPixel(window_area.x + pos.x + pos.w/2 - 1, window_area.y + pos.y + pos.h/2, color_hero);
 	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 + 1, color_hero);
 	render_device->drawPixel(window_area.x + pos.x + pos.w/2, window_area.y + pos.y + pos.h/2 - 1, color_hero);
+
 }
 
 /**
@@ -149,9 +163,11 @@ void MenuMiniMap::renderIso(FPoint hero_pos) {
 	map_area.w = pos.w;
 	map_area.h = pos.h;
 
-	map_surface.setClip(clip);
-	map_surface.setDest(map_area);
-	render_device->render(map_surface);
+	if (map_surface) {
+		map_surface->setClip(clip);
+		map_surface->setDest(map_area);
+		render_device->render(map_surface);
+	}
 
 	render_device->drawPixel(window_area.x + pos.x + pos.w/2 + 1, window_area.y + pos.y + pos.h/2, color_hero);
 	render_device->drawPixel(window_area.x + pos.x + pos.w/2 - 1, window_area.y + pos.y + pos.h/2, color_hero);
@@ -161,13 +177,13 @@ void MenuMiniMap::renderIso(FPoint hero_pos) {
 }
 
 void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
-	for (int i=0; i<std::min(map_surface.getGraphicsWidth(), map_size.x); i++) {
-		for (int j=0; j<std::min(map_surface.getGraphicsHeight(), map_size.y); j++) {
+	for (int i=0; i<std::min(map_surface->getGraphicsWidth(), map_size.x); i++) {
+		for (int j=0; j<std::min(map_surface->getGraphicsHeight(), map_size.y); j++) {
 			if (collider->colmap[i][j] == 1 || collider->colmap[i][j] == 5) {
-				render_device->drawPixel(map_surface.getGraphics(), i, j, color_wall);
+				render_device->drawPixel(map_surface->getGraphics(), i, j, color_wall);
 			}
 			else if (collider->colmap[i][j] == 2 || collider->colmap[i][j] == 6) {
-				render_device->drawPixel(map_surface.getGraphics(), i, j, color_obst);
+				render_device->drawPixel(map_surface->getGraphics(), i, j, color_obst);
 			}
 		}
 	}
@@ -185,10 +201,10 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 	bool odd_row = false;
 
 	// for each pixel row
-	for (int j=0; j<map_surface.getGraphicsHeight(); j++) {
+	for (int j=0; j<map_surface->getGraphicsHeight(); j++) {
 
 		// for each 2-px wide column
-		for (int i=0; i<map_surface.getGraphicsWidth(); i+=2) {
+		for (int i=0; i<map_surface->getGraphicsWidth(); i+=2) {
 
 			// if this tile is the max map size
 			if (tile_cursor.x >= 0 && tile_cursor.y >= 0 && tile_cursor.x < map_size.x && tile_cursor.y < map_size.y) {
@@ -203,12 +219,12 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 
 				if (draw_tile) {
 					if (odd_row) {
-						render_device->drawPixel(map_surface.getGraphics(), i, j, draw_color);
-						render_device->drawPixel(map_surface.getGraphics(), i+1, j, draw_color);
+						render_device->drawPixel(map_surface->getGraphics(), i, j, draw_color);
+						render_device->drawPixel(map_surface->getGraphics(), i+1, j, draw_color);
 					}
 					else {
-						render_device->drawPixel(map_surface.getGraphics(), i-1, j, draw_color);
-						render_device->drawPixel(map_surface.getGraphics(), i, j, draw_color);
+						render_device->drawPixel(map_surface->getGraphics(), i-1, j, draw_color);
+						render_device->drawPixel(map_surface->getGraphics(), i, j, draw_color);
 					}
 				}
 			}
@@ -221,18 +237,20 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 		// return tile cursor to next row of tiles
 		if (odd_row) {
 			odd_row = false;
-			tile_cursor.x -= map_surface.getGraphicsWidth()/2;
-			tile_cursor.y += (map_surface.getGraphicsWidth()/2 +1);
+			tile_cursor.x -= map_surface->getGraphicsWidth()/2;
+			tile_cursor.y += (map_surface->getGraphicsWidth()/2 +1);
 		}
 		else {
 			odd_row = true;
-			tile_cursor.x -= (map_surface.getGraphicsWidth()/2 -1);
-			tile_cursor.y += map_surface.getGraphicsWidth()/2;
+			tile_cursor.x -= (map_surface->getGraphicsWidth()/2 -1);
+			tile_cursor.y += map_surface->getGraphicsWidth()/2;
 		}
 	}
 }
 
 MenuMiniMap::~MenuMiniMap() {
-	map_surface.clearGraphics();
+	if (map_surface)
+		delete map_surface;
+
 	delete label;
 }

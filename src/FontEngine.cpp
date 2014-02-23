@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -194,7 +195,9 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
  * Justify is left, right, or center
  */
 void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, Color color) {
-	Rect dest_rect;
+	Rect clip, dest_rect;
+	Image *graphics;
+	Sprite *temp;
 
 	// calculate actual starting x,y based on justify
 	if (justify == JUSTIFY_LEFT) {
@@ -215,26 +218,25 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 		dest_rect.y = y;
 	}
 
-	// render and blit the text
-	if (active_font->blend && target != NULL) {
-		render_device->renderTextToImage(ttf.getGraphics(), active_font->ttfont, text, color, true);
-		ttf.setGraphics(*ttf.getGraphics());
-
-		// preserve alpha transparency of text buffers
-		Rect clip = ttf.getClip();
-		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect, true);
-	}
-	else if (target == NULL) {
+	// Render text directly onto screen
+	if (!target) {
 		render_device->renderText(active_font->ttfont, text, color, dest_rect);
+		return;
 	}
-	else {
-		Rect clip = ttf.getClip();
-		render_device->renderTextToImage(ttf.getGraphics(), active_font->ttfont, text, color, false);
-		ttf.setGraphics(*ttf.getGraphics());
-		if (!ttf.graphicsIsNull()) render_device->renderToImage(ttf.getGraphics(), clip, target, dest_rect);
-	}
-	ttf.clearGraphics();
 
+	// Render text into target Image
+	graphics = render_device->renderTextToImage(active_font->ttfont, text, color, active_font->blend);
+	if (!graphics) return;
+	temp = graphics->createSprite();
+	graphics->unref();
+
+	// Render text graphics into target
+	clip = temp->getClip();
+	render_device->renderToImage(temp->getGraphics(), clip,
+								 target, dest_rect, active_font->blend);
+
+	// text is cached, we can free temp resource
+	delete temp;
 }
 
 /**

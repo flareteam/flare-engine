@@ -76,7 +76,7 @@ MenuLog::MenuLog() {
 	font->setFont("font_regular");
 	paragraph_spacing = font->getLineHeight()/2;
 
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/log.png"));
+	setBackground("images/menus/log.png");
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
@@ -143,9 +143,9 @@ void MenuLog::render() {
 	src.y = 0;
 	src.w = window_area.w;
 	src.h = window_area.h;
-	background.setClip(src);
-	background.setDest(dest);
-	render_device->render(background);
+	setBackgroundClip(src);
+	setBackgroundDest(dest);
+	Menu::render();
 
 	// Close button.
 	closeButton->render();
@@ -167,7 +167,7 @@ void MenuLog::render() {
 		for (unsigned int i = log_msg[active_log].size(); i > 0; i--) {
 			int widthLimit = tabControl->getContentArea().w;
 			Point size = font->calc_size(log_msg[active_log][i-1], widthLimit);
-			font->renderShadowed(log_msg[active_log][i-1], tab_content_indent, total_size, JUSTIFY_LEFT, msg_buffer[active_log]->contents.getGraphics(), widthLimit, color_normal);
+			font->renderShadowed(log_msg[active_log][i-1], tab_content_indent, total_size, JUSTIFY_LEFT, msg_buffer[active_log]->contents->getGraphics(), widthLimit, color_normal);
 			total_size+=size.y+paragraph_spacing;
 		}
 	}

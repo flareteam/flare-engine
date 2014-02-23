@@ -44,7 +44,7 @@ public:
 	bool getPrev();
 
 private:
-	Sprite sl;
+	Sprite *sl;
 	bool pressed;
 	int minimum;
 	int maximum;

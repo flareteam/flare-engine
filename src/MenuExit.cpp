@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -44,7 +45,8 @@ MenuExit::MenuExit() : Menu() {
 
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/confirm_bg.png"));
+	setBackground("images/menus/confirm_bg.png");
+
 	tablist.add(buttonExit);
 	tablist.add(buttonClose);
 
@@ -81,7 +83,7 @@ void MenuExit::logic() {
 void MenuExit::render() {
 	if (visible) {
 		// background
-		render_device->render(background);
+		Menu::render();
 
 		label.render();
 

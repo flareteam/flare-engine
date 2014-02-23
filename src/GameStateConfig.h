@@ -82,7 +82,7 @@ private:
 	WidgetButton        * ok_button;
 	WidgetButton        * defaults_button;
 	WidgetButton        * cancel_button;
-	Sprite            background;
+	Sprite              * background;
 
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;

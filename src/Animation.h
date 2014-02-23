@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2012 Stefan Beller
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -44,7 +45,7 @@ class Animation {
 protected:
 	const std::string name;
 	const animation_type type;
-	Image sprite;
+	Image *sprite;
 
 	unsigned short number_frames; // how many ticks this animation lasts.
 	unsigned short cur_frame;     // counts up until reaching number_frames.
@@ -72,7 +73,7 @@ protected:
 												// Assume it is sorted, one index occurs at max once.
 
 public:
-	Animation(const std::string &_name, const std::string &_type, Image _sprite);
+	Animation(const std::string &_name, const std::string &_type, Image *_sprite);
 
 	// returns a copy of this:
 	Animation(const Animation&);

@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -42,7 +43,8 @@ MenuStash::MenuStash(StatBlock *_stats)
 	, updated(false)
 
 {
-	background.setGraphics(render_device->loadGraphicSurface("images/menus/stash.png"));
+
+	setBackground("images/menus/stash.png");
 
 	slots_cols = 8; // default if menus/stash.txt::stash_cols not set
 	slots_rows = 8; // default if menus/stash.txt::slots_rows not set
@@ -115,7 +117,7 @@ void MenuStash::render() {
 	if (!visible) return;
 
 	// background
-	render_device->render(background);
+	Menu::render();
 
 	// close button
 	closeButton->render();

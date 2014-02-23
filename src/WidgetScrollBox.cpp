@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -26,7 +27,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-WidgetScrollBox::WidgetScrollBox(int width, int height) {
+WidgetScrollBox::WidgetScrollBox(int width, int height)
+	: contents(NULL) {
 	pos.x = pos.y = 0;
 	pos.w = width;
 	pos.h = height;
@@ -43,7 +45,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height) {
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
-	contents.clearGraphics();
+	if (contents) delete contents;
 	delete scrollbar;
 }
 
@@ -67,8 +69,8 @@ void WidgetScrollBox::scroll(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (cursor > contents.getGraphicsHeight()-pos.h) {
-		cursor = contents.getGraphicsHeight()-pos.h;
+	else if (contents && cursor > contents->getGraphicsHeight() - pos.h) {
+		cursor = contents->getGraphicsHeight() - pos.h;
 	}
 	refresh();
 }
@@ -78,8 +80,8 @@ void WidgetScrollBox::scrollTo(int amount) {
 	if (cursor < 0) {
 		cursor = 0;
 	}
-	else if (cursor > contents.getGraphicsHeight()-pos.h) {
-		cursor = contents.getGraphicsHeight()-pos.h;
+	else if (contents && cursor > contents->getGraphicsHeight() - pos.h) {
+		cursor = contents->getGraphicsHeight() - pos.h;
 	}
 	refresh();
 }
@@ -130,7 +132,7 @@ void WidgetScrollBox::logic(int x, int y) {
 	}
 
 	// check ScrollBar clicks
-	if (contents.getGraphicsHeight() > pos.h) {
+	if (contents && contents->getGraphicsHeight() > pos.h) {
 		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
 			case 1:
 				scrollUp();
@@ -151,10 +153,21 @@ void WidgetScrollBox::resize(int h) {
 
 	if (pos.h > h) h = pos.h;
 
-	contents.clearGraphics();
-	contents.setGraphics(render_device->createAlphaSurface(pos.w,h));
-	if (!transparent) {
-		render_device->fillImageWithColor(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics(),bg.r,bg.g,bg.b));
+	if (contents) {
+		delete contents;
+		contents = NULL;
+	}
+
+	Image *graphics;
+	graphics = render_device->createAlphaSurface(pos.w,h);
+	if (graphics) {
+		contents = graphics->createSprite();
+		graphics->unref();
+	}
+
+	if (contents && !transparent) {
+		render_device->fillImageWithColor(contents->getGraphics(),NULL,
+										  render_device->MapRGB(contents->getGraphics(),bg.r,bg.g,bg.b));
 	}
 
 	cursor = 0;
@@ -164,19 +177,30 @@ void WidgetScrollBox::resize(int h) {
 void WidgetScrollBox::refresh() {
 	if (update) {
 		int h = pos.h;
-		if (!contents.graphicsIsNull()) {
-			h = contents.getGraphicsHeight();
+		if (contents) {
+			h = contents->getGraphicsHeight();
 		}
 
-		contents.clearGraphics();
-		contents.setGraphics(render_device->createAlphaSurface(pos.w,h));
-		if (!transparent) {
-			render_device->fillImageWithColor(contents.getGraphics(),NULL,render_device->MapRGB(contents.getGraphics(),bg.r,bg.g,bg.b));
+		if (contents) {
+			delete contents;
+			contents = NULL;
 		}
-		contents.setGraphics(*contents.getGraphics());
+
+		Image *graphics;
+		graphics = render_device->createAlphaSurface(pos.w,h);
+		if (graphics) {
+			contents = graphics->createSprite();
+			graphics->unref();
+		}
+
+		if (contents && !transparent) {
+			render_device->fillImageWithColor(contents->getGraphics(),NULL,
+											  render_device->MapRGB(contents->getGraphics(),bg.r,bg.g,bg.b));
+		}
 	}
 
-	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor, contents.getGraphicsHeight()-pos.h-scrollbar->pos_knob.h);
+	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor,
+					   contents->getGraphicsHeight()-pos.h-scrollbar->pos_knob.h);
 }
 
 void WidgetScrollBox::render() {
@@ -187,11 +211,13 @@ void WidgetScrollBox::render() {
 	src.w = pos.w;
 	src.h = pos.h;
 
-	contents.local_frame = local_frame;
-	contents.setOffset(local_offset);
-	contents.setClip(src);
-	contents.setDest(dest);
-	render_device->render(contents);
+	if (contents) {
+		contents->local_frame = local_frame;
+		contents->setOffset(local_offset);
+		contents->setClip(src);
+		contents->setDest(dest);
+		render_device->render(contents);
+	}
 
 	for (unsigned i = 0; i < children.size(); i++) {
 		children[i]->local_frame = pos;
@@ -199,7 +225,7 @@ void WidgetScrollBox::render() {
 		children[i]->render();
 	}
 
-	if (contents.getGraphicsHeight() > pos.h) {
+	if (contents->getGraphicsHeight() > pos.h) {
 		scrollbar->local_frame = local_frame;
 		scrollbar->local_offset = local_offset;
 		scrollbar->render();

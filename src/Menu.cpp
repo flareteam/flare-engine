@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 kitano
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -27,16 +27,48 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
+#include "SharedResources.h"
 #include "UtilsParsing.h"
 
 Menu::Menu()
 	: visible(false)
 	, sfx_open(0)
-	, sfx_close(0) {
+	, sfx_close(0)
+	, background(NULL) {
 }
 
 Menu::~Menu() {
-	background.clearGraphics();
+	if (background) delete background;
+}
+
+void Menu::setBackground(std::string background_image) {
+	Image *graphics;
+
+	if (background) {
+		delete background;
+		background = NULL;
+	}
+
+	graphics = render_device->loadGraphicSurface(background_image);
+	if (graphics) {
+		background = graphics->createSprite();
+		background->setClip(0,0,window_area.w,window_area.h);
+		background->setDest(window_area);
+		graphics->unref();
+	}
+}
+
+void Menu::setBackgroundDest(Rect &dest) {
+	if (background) background->setDest(dest);
+}
+
+void Menu::setBackgroundClip(Rect &clip) {
+	if (background) background->setClip(clip);
+}
+
+void Menu::render() {
+	if (background)
+		render_device->render(background);
 }
 
 /**
@@ -46,14 +78,14 @@ Menu::~Menu() {
 void Menu::align() {
 	alignToScreenEdge(alignment, &window_area);
 
-	if (!background.graphicsIsNull()) {
-		background.setClip(
+	if (background) {
+		background->setClip(
 			0,
 			0,
 			window_area.w,
 			window_area.h
 		);
-		background.setDest(window_area);
+		background->setDest(window_area);
 	}
 }
 

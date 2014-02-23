@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 kitano
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -30,24 +30,28 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 
 class Menu {
-protected:
-
-	Sprite background;
-
 public:
-	Menu();
+        Menu();
 	virtual ~Menu();
+
+	void setBackground(std::string background_image);
+	void setBackgroundDest(Rect &dest);
+	void setBackgroundClip(Rect &clip);
+	virtual void align();
+	virtual void render();
 
 	bool visible;
 	Rect window_area;
 	std::string alignment;
 
-	virtual void align();
 	virtual bool parseMenuKey(const std::string &key, const std::string &val);
-	virtual void render() = 0;
 
 	SoundManager::SoundID sfx_open;
 	SoundManager::SoundID sfx_close;
+
+private:
+	Sprite *background;
+
 };
 
 #endif

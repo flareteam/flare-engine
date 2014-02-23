@@ -35,7 +35,6 @@ Created and destroyed by main.cpp
 #include "CombatText.h"
 #include "CursorManager.h"
 #include "FontEngine.h"
-#include "ImageManager.h"
 #include "InputState.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
@@ -48,23 +47,31 @@ extern AnimationManager *anim;
 extern CombatText *comb;
 extern CursorManager *curs;
 extern FontEngine *font;
-extern ImageManager *imag;
 extern InputState *inpt;
 extern MessageEngine *msg;
 extern ModManager *mods;
 extern SoundManager *snd;
-extern Sprite icons;
+extern Sprite *icons;
 extern RenderDevice *render_device;
 
 class SharedResources {
 public:
 	static void loadIcons() {
+  	        Image *graphics;
 
 		if (!render_device)
 			return;
 
-		icons.clearGraphics();
-		icons.setGraphics(render_device->loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false), false);
+		if (icons) {
+		  delete icons;
+		  icons = NULL;
+		}
+
+		graphics = render_device->loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false);
+		if (graphics) {
+		  icons = graphics->createSprite();
+		  graphics->unref();
+		}
 	}
 };
 

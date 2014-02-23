@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -44,16 +45,20 @@ GameStateTitle::GameStateTitle() : GameState() {
 	if (infile.open("menus/gametitle.txt")) {
 		while (infile.next()) {
 			if (infile.key == "logo") {
-				logo.setGraphics(render_device->loadGraphicSurface(popFirstString(infile.val), ""));
-				if (!logo.graphicsIsNull()) {
+  			        Image *graphics;
+				graphics = render_device->loadGraphicSurface(popFirstString(infile.val), "");			       
+				if (graphics) {
 					Rect r;
+ 				        logo = graphics->createSprite();
+
 					r.x = popFirstInt(infile.val);
 					r.y = popFirstInt(infile.val);
-					r.w = logo.getGraphicsWidth();
-					r.h = logo.getGraphicsHeight();
+					r.w = logo->getGraphicsWidth();
+					r.h = logo->getGraphicsHeight();
 					alignToScreenEdge(popFirstString(infile.val), &r);
-					logo.setDestX(r.x);
-					logo.setDestY(r.y);
+					logo->setDestX(r.x);
+					logo->setDestY(r.y);
+					graphics->unref();
 				}
 			}
 			else if (infile.key == "play_pos") {
@@ -118,7 +123,7 @@ GameStateTitle::GameStateTitle() : GameState() {
 		warning_box->resize(warning_size.y);
 
 		font->setFont("font_normal");
-		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents.getGraphics(), VIEW_W/2, FONT_WHITE);
+		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents->getGraphics(), VIEW_W/2, FONT_WHITE);
 	}
 }
 
@@ -184,7 +189,7 @@ void GameStateTitle::render() {
 }
 
 GameStateTitle::~GameStateTitle() {
-	logo.clearGraphics();
+	if (logo) delete logo;
 	delete button_play;
 	delete button_cfg;
 	delete button_credits;

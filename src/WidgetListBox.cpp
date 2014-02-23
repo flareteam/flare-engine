@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -53,17 +54,23 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 	, can_deselect(true)
 	, can_select(true)
 	, scrollbar_offset(0) {
+
 	// load ListBox images
-	listboxs.setGraphics(render_device->loadGraphicSurface(fileName, "Couldn't load image", true));
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface(fileName, "Couldn't load image", true);
+	if (graphics) {
+		listboxs = graphics->createSprite();
+		pos.w = listboxs->getGraphicsWidth();
+		pos.h = (listboxs->getGraphicsHeight() / 3); // height of one item
+		graphics->unref();
+	}
+
 	click = NULL;
 
 	for (int i=0; i<list_amount; i++) {
 		selected[i] = false;
 		values[i] = "";
 	}
-
-	pos.w = listboxs.getGraphicsWidth();
-	pos.h = (listboxs.getGraphicsHeight() / 3); // height of one item
 }
 
 bool WidgetListBox::checkClick() {
@@ -358,8 +365,10 @@ void WidgetListBox::render() {
 	src.w = pos.w;
 	src.h = pos.h;
 
-	listboxs.local_frame = local_frame;
-	listboxs.setOffset(local_offset);
+	if (listboxs) {
+		listboxs->local_frame = local_frame;
+		listboxs->setOffset(local_offset);
+	}
 
 	for(int i=0; i<list_height; i++) {
 		if(i==0)
@@ -369,9 +378,11 @@ void WidgetListBox::render() {
 		else
 			src.y = pos.h;
 
-		listboxs.setClip(src);
-		listboxs.setDest(rows[i]);
-		render_device->render(listboxs);
+		if (listboxs) {
+			listboxs->setClip(src);
+			listboxs->setDest(rows[i]);
+			render_device->render(listboxs);
+		}
 
 		if (i<list_amount) {
 			vlabels[i].local_frame = local_frame;
@@ -520,7 +531,7 @@ bool WidgetListBox::getPrev() {
 }
 
 WidgetListBox::~WidgetListBox() {
-	listboxs.clearGraphics();
+	if (listboxs) delete listboxs;
 	delete[] values;
 	delete[] tooltips;
 	delete[] vlabels;

@@ -207,6 +207,25 @@ std::string abbreviateKilo(int amount) {
 	return ss.str();
 }
 
+Image * loadTextureImage(std::string filename) {
+	Image *graphics;
+	graphics = NULL;
+
+	if (!TEXTURE_QUALITY) {
+		// try to load noalpa image
+		string newname = filename;
+		newname.replace(filename.rfind("/"), 0, "/noalpha");
+		graphics = render_device->loadGraphicSurface(newname,
+				   "Couldn't load image", false, true);
+	}
+
+	// Fallback to loading alpha image
+	if (!graphics)
+		graphics = render_device->loadGraphicSurface(filename);
+
+	return graphics;
+}
+
 void alignToScreenEdge(std::string alignment, Rect *r) {
 	if (!r) return;
 

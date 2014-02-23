@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -34,7 +35,7 @@ class WidgetLabel;
 
 class MenuStatBar : public Menu {
 private:
-	Sprite bar;
+	Sprite *bar;
 	WidgetLabel *label;
 	int stat_cur;
 	int stat_max;

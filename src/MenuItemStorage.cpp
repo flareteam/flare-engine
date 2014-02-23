@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -75,7 +76,13 @@ void MenuItemStorage::init(int _slot_number, vector<Rect> _area, vector<string> 
 }
 
 void MenuItemStorage::loadGraphics() {
-	highlight_image.setGraphics(render_device->loadGraphicSurface("images/menus/attention_glow.png", "Couldn't load icon highlight image"));
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface("images/menus/attention_glow.png",
+			   "Couldn't load icon highlight image");
+	if (graphics) {
+		highlight_image = graphics->createSprite();
+		graphics->unref();
+	}
 }
 
 void MenuItemStorage::render() {
@@ -97,8 +104,10 @@ void MenuItemStorage::renderHighlight(int x, int y, int _icon_size) {
 		Rect dest;
 		dest.x = x;
 		dest.y = y;
-		highlight_image.setDest(dest);
-		render_device->render(highlight_image);
+		if (highlight_image) {
+			highlight_image->setDest(dest);
+			render_device->render(highlight_image);
+		}
 	}
 }
 
@@ -170,7 +179,8 @@ void MenuItemStorage::highlightClear() {
 }
 
 MenuItemStorage::~MenuItemStorage() {
-	highlight_image.clearGraphics();
+	if (highlight_image)
+		delete highlight_image;
 	delete[] highlight;
 	for (unsigned i=0; i<slots.size(); i++)
 		delete slots[i];

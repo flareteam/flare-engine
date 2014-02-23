@@ -1,5 +1,6 @@
 /*
 Copyright © 2014 Justin Jacobs
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -38,17 +39,17 @@ public:
 	void setCursor(CURSOR_TYPE type);
 
 private:
-	Sprite cursor_normal;
-	Sprite cursor_interact;
-	Sprite cursor_talk;
-	Sprite cursor_attack;
+	Sprite *cursor_normal;
+	Sprite *cursor_interact;
+	Sprite *cursor_talk;
+	Sprite *cursor_attack;
 
 	Point offset_normal;
 	Point offset_interact;
 	Point offset_talk;
 	Point offset_attack;
 
-	Sprite* cursor_current;
+	Sprite *cursor_current;
 	Point* offset_current;
 };
 

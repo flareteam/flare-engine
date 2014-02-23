@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and morris989
-Copyright © 2013 Henrik Andersson
+Copyright © 2013-2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -42,7 +42,7 @@ private:
 
 	MenuManager *menu;
 
-	Sprite portrait;
+	Sprite *portrait;
 	std::string hero_name;
 	std::string hero_class;
 

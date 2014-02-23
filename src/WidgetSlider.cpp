@@ -1,6 +1,7 @@
 /*
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Henrik Andersson
 
 This file is part of FLARE.
 
@@ -36,23 +37,23 @@ WidgetSlider::WidgetSlider (const string  & fname)
 	, minimum(0)
 	, maximum(0)
 	, value(0) {
-	sl.setGraphics(render_device->loadGraphicSurface(fname));
-	if (sl.graphicsIsNull()) {
-		SDL_Quit();
-		exit(1);
+
+	Image *graphics;
+	graphics = render_device->loadGraphicSurface(fname, "loading slider graphics", true);
+	if (graphics) {
+		sl = graphics->createSprite();
+		pos.w = sl->getGraphicsWidth();
+		pos.h = sl->getGraphicsHeight() / 2;
+		pos_knob.w = sl->getGraphicsWidth() / 8;
+		pos_knob.h = sl->getGraphicsHeight() / 2;
+		graphics->unref();
 	}
-
-	pos.w = sl.getGraphicsWidth();
-	pos.h = sl.getGraphicsHeight() / 2;
-
-	pos_knob.w = sl.getGraphicsWidth() / 8;
-	pos_knob.h = sl.getGraphicsHeight() / 2;
 
 	render_to_alpha = false;
 }
 
 WidgetSlider::~WidgetSlider () {
-	sl.clearGraphics();
+	if (sl) delete sl;
 }
 
 
@@ -144,14 +145,16 @@ void WidgetSlider::render () {
 	knob.h = pos_knob.h;
 	knob.w = pos_knob.w;
 
-	sl.local_frame = local_frame;
-	sl.setOffset(local_offset);
-	sl.setClip(base);
-	sl.setDest(pos);
-	render_device->render(sl);
-	sl.setClip(knob);
-	sl.setDest(pos_knob);
-	render_device->render(sl);
+	if (sl) {
+		sl->local_frame = local_frame;
+		sl->setOffset(local_offset);
+		sl->setClip(base);
+		sl->setDest(pos);
+		render_device->render(sl);
+		sl->setClip(knob);
+		sl->setDest(pos_knob);
+		render_device->render(sl);
+	}
 
 	if (in_focus) {
 		Point topLeft;
