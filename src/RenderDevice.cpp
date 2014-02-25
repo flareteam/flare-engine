@@ -192,8 +192,10 @@ Image * RenderDevice::cacheLookup(std::string &filename) {
 	it = cache.find(filename);
 	if (it != cache.end()) {
 		// fprintf(stderr, "%p %s reused from image cache.\n", it->second, filename.c_str());
-		it->second->ref();
-		return it->second;
+		if (it->second) {
+			it->second->ref();
+			return it->second;
+		}
 	}
 	return NULL;
 }
