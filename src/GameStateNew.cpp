@@ -212,7 +212,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
 		delete portrait_image;
 
 	portrait_image = NULL;
-	graphics = render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png");
+	graphics = render_device->loadGraphicSurface(portrait_filename);
 	if (graphics) {
 		portrait_image = graphics->createSprite();
 		portrait_image->setDest(portrait_pos);

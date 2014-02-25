@@ -209,7 +209,7 @@ void GameStateLoad::loadPortrait(int slot) {
 
 	if (stats[slot].name == "") return;
 
-	graphics = render_device->loadGraphicSurface("images/portraits/" + stats[slot].gfx_portrait + ".png");
+	graphics = render_device->loadGraphicSurface(stats[slot].gfx_portrait);
 	if (graphics) {
 		portrait = graphics->createSprite();
 		portrait->setDestX(portrait_dest.x);

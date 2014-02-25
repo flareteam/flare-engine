@@ -290,7 +290,7 @@ void MenuTalker::setHero(const string& name, const string& class_name, const str
 		delete portrait;
 
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface("images/portraits/" + portrait_filename + ".png",
+	graphics = render_device->loadGraphicSurface(portrait_filename,
 			   "Couldn't load portrait");
 	if (graphics) {
 		portrait = graphics->createSprite();
