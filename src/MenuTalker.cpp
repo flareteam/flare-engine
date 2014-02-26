@@ -289,6 +289,8 @@ void MenuTalker::setHero(const string& name, const string& class_name, const str
 	if (portrait)
 		delete portrait;
 
+	if (portrait_filename == "") return;
+
 	Image *graphics;
 	graphics = render_device->loadGraphicSurface(portrait_filename,
 			   "Couldn't load portrait");
