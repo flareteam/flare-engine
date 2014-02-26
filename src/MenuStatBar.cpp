@@ -37,16 +37,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuStatBar::MenuStatBar(std::string type) {
+MenuStatBar::MenuStatBar(std::string type)
+	: bar(NULL)
+	, stat_cur(0)
+	, stat_max(0)
+	, orientation(0) // horizontal
+	, custom_text_pos(false) // label will be placed in the middle of the bar
+	, custom_string("")
+	, bar_gfx("")
+	, bar_gfx_background("")
+{
 
 	label = new WidgetLabel();
-
-	orientation = 0; // horizontal
-	custom_text_pos = false; // label will be placed in the middle of the bar
-	custom_string = "";
-
-	stat_cur = 0;
-	stat_max = 0;
 
 	// Load config settings
 	FileParser infile;
@@ -65,26 +67,36 @@ MenuStatBar::MenuStatBar(std::string type) {
 			else if(infile.key == "orientation") {
 				orientation = toBool(infile.val);
 			}
+			else if (infile.key == "bar_gfx") {
+				bar_gfx = infile.val;
+			}
+			else if (infile.key == "bar_gfx_background") {
+				bar_gfx_background = infile.val;
+			}
 		}
 		infile.close();
 	}
 
-	loadGraphics(type);
+	loadGraphics();
 
 	color_normal = font->getColor("menu_normal");
 
 	align();
 }
 
-void MenuStatBar::loadGraphics(std::string type) {
+void MenuStatBar::loadGraphics() {
 	Image *graphics;
 
-	setBackground("images/menus/bar_" + type + "_background.png");
+	if (bar_gfx_background != "") {
+		setBackground(bar_gfx_background);
+	}
 
-	graphics = render_device->loadGraphicSurface("images/menus/bar_" + type + ".png");
-	if (graphics) {
-		bar = graphics->createSprite();
-		graphics->unref();
+	if (bar_gfx != "") {
+		graphics = render_device->loadGraphicSurface(bar_gfx);
+		if (graphics) {
+			bar = graphics->createSprite();
+			graphics->unref();
+		}
 	}
 }
 

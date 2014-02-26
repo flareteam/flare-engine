@@ -46,11 +46,13 @@ private:
 	bool custom_text_pos;
 	std::string custom_string;
 	Color color_normal;
+	std::string bar_gfx;
+	std::string bar_gfx_background;
 
 public:
 	MenuStatBar(std::string type);
 	~MenuStatBar();
-	void loadGraphics(std::string type);
+	void loadGraphics();
 	void update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string = "");
 	void render();
 };
