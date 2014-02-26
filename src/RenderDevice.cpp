@@ -199,9 +199,8 @@ Image * RenderDevice::cacheLookup(std::string &filename) {
 }
 
 void RenderDevice::cacheStore(std::string &filename, Image *image) {
-	if (image != NULL) {
-		cache[filename] = image;
-	}
+	if (image == NULL) return;
+	cache[filename] = image;
 	// fprintf(stderr, "%p %s stored in image cache.\n", image, filename.c_str());
 }
 

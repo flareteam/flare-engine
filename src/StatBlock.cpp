@@ -150,7 +150,7 @@ StatBlock::StatBlock()
 	, first_defeat_loot(0)		// enemy only
 	, gfx_base("male")
 	, gfx_head("head_short")
-	, gfx_portrait("male01")
+	, gfx_portrait("")
 	, transform_type("")
 	, animations("")
 	, sfx_step("")
