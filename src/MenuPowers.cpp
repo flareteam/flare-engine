@@ -419,6 +419,10 @@ short MenuPowers::getPointsUsed(Power_Menu_Cell *cell) {
 	// only upgradable powers
 	else {
 		short used = 0;
+
+		// if the base level of a power requires a point, we count it here
+		if (cell->requires_point_base) used++;
+
 		for (unsigned i=0; i<cell->upgrades.size(); i++) {
 			// upgrade is the current power
 			if (cell->id == cell->upgrades[i]) {
@@ -872,7 +876,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 	else if (infile.key == "requires_offense") power_cell.back().requires_offense = toInt(infile.val);
 	else if (infile.key == "requires_physical") power_cell.back().requires_physical = toInt(infile.val);
 	else if (infile.key == "requires_mental") power_cell.back().requires_mental = toInt(infile.val);
-	else if (infile.key == "requires_point") power_cell.back().requires_point = toBool(infile.val);
+	else if (infile.key == "requires_point") power_cell.back().requires_point = power_cell.back().requires_point_base = toBool(infile.val);
 	else if (infile.key == "requires_level") power_cell.back().requires_level = toInt(infile.val);
 	else if (infile.key == "upgrades") {
 		upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");

@@ -58,6 +58,7 @@ public:
 	std::vector<short> requires_power;
 
 	bool requires_point;
+	bool requires_point_base;
 	bool passive_on;
 	std::vector<std::string> visible_requires_status;
 	std::vector<std::string> visible_requires_not;
@@ -77,6 +78,7 @@ public:
 		, upgrades()
 		, requires_power()
 		, requires_point(false)
+		, requires_point_base(false)
 		, passive_on(false)
 	{
 	}
