@@ -58,6 +58,7 @@ public:
 	std::vector<short> requires_power;
 
 	bool requires_point;
+	bool requires_point_base;
 	bool passive_on;
 	std::vector<std::string> visible_requires_status;
 	std::vector<std::string> visible_requires_not;
@@ -77,6 +78,7 @@ public:
 		, upgrades()
 		, requires_power()
 		, requires_point(false)
+		, requires_point_base(false)
 		, passive_on(false)
 	{
 	}
@@ -124,6 +126,7 @@ private:
 	short nextLevel(short power_cell_index);
 	void upgradePower(short power_cell_index);
 	void replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index);
+	short getPointsUsed(Power_Menu_Cell *cell);
 
 	bool powerIsVisible(short power_index, const std::vector<Power_Menu_Cell>& power_cells);
 	void loadHeader(FileParser &infile);

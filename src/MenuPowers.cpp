@@ -223,7 +223,7 @@ short MenuPowers::nextLevel(short power_cell_index) {
 	// current power is an upgrade, take next upgrade if avaliable
 	short index = distance(power_cell[power_cell_index].upgrades.begin(), level_it);
 	if ((short)power_cell[power_cell_index].upgrades.size() > index + 1) {
-		return id_by_powerIndex(*(level_it++), upgrade);
+		return id_by_powerIndex(*(++level_it), upgrade);
 	}
 	else {
 		return -1;
@@ -407,6 +407,42 @@ bool MenuPowers::unlockClick(Point mouse) {
 	return false;
 }
 
+short MenuPowers::getPointsUsed(Power_Menu_Cell *cell) {
+	if (!cell) return 0;
+
+	// first level power, upgradable or otherwise
+	if (find(cell->upgrades.begin(), cell->upgrades.end(), cell->id) == cell->upgrades.end()) {
+		if (cell->requires_point && find(stats->powers_list.begin(), stats->powers_list.end(), cell->id) != stats->powers_list.end()) {
+			return 1;
+		}
+	}
+	// only upgradable powers
+	else {
+		short used = 0;
+
+		// if the base level of a power requires a point, we count it here
+		if (cell->requires_point_base) used++;
+
+		for (unsigned i=0; i<cell->upgrades.size(); i++) {
+			// upgrade is the current power
+			if (cell->id == cell->upgrades[i]) {
+				if (cell->requires_point) used++;
+				break;
+			}
+
+			for (unsigned j=0; j<upgrade.size(); j++) {
+				if (cell->upgrades[i] == upgrade[j].id) {
+					if (upgrade[j].requires_point) used++;
+					break;
+				}
+			}
+		}
+		return used;
+	}
+
+	return 0;
+}
+
 void MenuPowers::logic() {
 	short points_used = 0;
 	for (unsigned i=0; i<power_cell.size(); i++) {
@@ -429,9 +465,8 @@ void MenuPowers::logic() {
 					powers->activateSinglePassive(stats, power_cell[i].id);
 			}
 		}
-		if (power_cell[i].requires_point &&
-				(find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()))
-			points_used++;
+
+		points_used += getPointsUsed(&power_cell[i]);
 
 		//upgrade buttons logic
 		if (upgradeButtons[i] != NULL && power_cell[i].tab == tabControl->getActiveTab()) {
@@ -841,7 +876,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 	else if (infile.key == "requires_offense") power_cell.back().requires_offense = toInt(infile.val);
 	else if (infile.key == "requires_physical") power_cell.back().requires_physical = toInt(infile.val);
 	else if (infile.key == "requires_mental") power_cell.back().requires_mental = toInt(infile.val);
-	else if (infile.key == "requires_point") power_cell.back().requires_point = toBool(infile.val);
+	else if (infile.key == "requires_point") power_cell.back().requires_point = power_cell.back().requires_point_base = toBool(infile.val);
 	else if (infile.key == "requires_level") power_cell.back().requires_level = toInt(infile.val);
 	else if (infile.key == "upgrades") {
 		upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
