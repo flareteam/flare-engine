@@ -38,7 +38,8 @@ InputState::InputState(void)
 	, last_key(0)
 	, last_button(0)
 	, scroll_up(false)
-	, scroll_down(false) {
+	, scroll_down(false)
+	, lock_scroll(false) {
 	SDL_EnableUNICODE(true);
 
 	defaultQwertyKeyBindings();
@@ -241,6 +242,15 @@ void InputState::handle(bool dump_event) {
 
 	inkeys = "";
 
+	// mouse-wheel up/down presses normally happen within a single event window
+	// in order to properly read these events in game logic, we delay the resetting
+	// of their state (done here) until the next frame
+	while (!wheel_binds.empty()) {
+		pressing[wheel_binds.back()] = false;
+		lock[wheel_binds.back()] = false;
+		wheel_binds.pop_back();
+	}
+
 	/* Check for events */
 	while (SDL_PollEvent (&event)) {
 
@@ -275,7 +285,7 @@ void InputState::handle(bool dump_event) {
 				else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
 					scroll_down = true;
 				}
-				else {
+				if (!lock_scroll || (event.button.button != SDL_BUTTON_WHEELUP && event.button.button != SDL_BUTTON_WHEELDOWN)) {
 					for (int key=0; key<key_count; key++) {
 						if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
 							pressing[key] = true;
@@ -285,7 +295,11 @@ void InputState::handle(bool dump_event) {
 				break;
 			case SDL_MOUSEBUTTONUP:
 				for (int key=0; key<key_count; key++) {
-					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+					if ((scroll_up && (binding[key] == SDL_BUTTON_WHEELUP || binding_alt[key] == SDL_BUTTON_WHEELUP)) ||
+					    (scroll_down && (binding[key] == SDL_BUTTON_WHEELDOWN || binding_alt[key] == SDL_BUTTON_WHEELDOWN))) {
+						wheel_binds.push_back(key);
+					}
+					else if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
 						pressing[key] = false;
 						lock[key] = false;
 					}

@@ -118,17 +118,12 @@ void WidgetScrollBox::logic(int x, int y) {
 	Point mouse(x, y);
 
 	if (isWithin(pos,mouse)) {
-		if (inpt->scroll_up) {
-			scrollUp();
-			inpt->resetScroll();
-		}
-		if (inpt->scroll_down) {
-			scrollDown();
-			inpt->resetScroll();
-		}
+		inpt->lock_scroll = true;
+		if (inpt->scroll_up) scrollUp();
+		if (inpt->scroll_down) scrollDown();
 	}
 	else {
-		inpt->resetScroll();
+		inpt->lock_scroll = false;
 	}
 
 	// check ScrollBar clicks
