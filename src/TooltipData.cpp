@@ -47,14 +47,17 @@ TooltipData::TooltipData(const TooltipData &tdSource)
 
 TooltipData& TooltipData::operator= (const TooltipData &tdSource) {
 
+	// DO NOT copy the buffered text render
+	// Allow the new copy to create its own buffer
+	// Otherwise the same buffer will be deleted twice, causing a mem error
+
+	tip_buffer = NULL;
 	clear();
 
 	for (unsigned int i=0; i<tdSource.lines.size(); i++) {
 		lines.push_back(tdSource.lines[i]);
 		colors.push_back(tdSource.colors[i]);
 	}
-
-	tip_buffer = tdSource.tip_buffer;
 
 	return *this;
 }
