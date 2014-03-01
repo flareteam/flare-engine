@@ -100,7 +100,7 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
  */
 void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
 	if (tip.tip_buffer == NULL) {
-		createBuffer(tip);
+		if (!createBuffer(tip)) return;
 	}
 
 	Point size;
@@ -118,7 +118,7 @@ void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
  * Rendering a wordy tooltip (TTF to raster) can be expensive.
  * Instead of doing this each frame, do it once and cache the result.
  */
-void WidgetTooltip::createBuffer(TooltipData &tip) {
+bool WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	if (tip.lines.empty()) {
 		tip.lines.resize(1);
@@ -146,6 +146,11 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 	Image *graphics;
 	graphics = render_device->createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
 
+	if (!graphics) {
+		fprintf(stderr, "Error: Could not create tooltip buffer.\n");
+		return false;
+	}
+
 	// style the tooltip background
 	// currently this is plain black
 	render_device->fillImageWithColor(graphics, NULL, render_device->MapRGB(graphics,0,0,0));
@@ -159,5 +164,7 @@ void WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	tip.tip_buffer = graphics->createSprite();
 	graphics->unref();
+
+	return true;
 }
 
