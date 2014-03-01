@@ -112,10 +112,14 @@ void MapRenderer::pushEnemyGroup(Map_Group g) {
 		// now that the fast method of spawning enemies doesn't work, but we
 		// still have enemies to place, do not place them randomly, but at the
 		// first free spot
-		for (int x = g.pos.x; x < g.pos.x + g.area.x && enemies_to_spawn; x++)
-			for (int y = g.pos.y; y < g.pos.y + g.area.y && enemies_to_spawn; y++)
-				if (enemyGroupPlaceEnemy(x, y, g))
+		for (int x = g.pos.x; x < g.pos.x + g.area.x && enemies_to_spawn; x++) {
+			for (int y = g.pos.y; y < g.pos.y + g.area.y && enemies_to_spawn; y++) {
+				float xpos = x + 0.5f;
+				float ypos = y + 0.5f;
+				if (enemyGroupPlaceEnemy(xpos, ypos, g))
 					enemies_to_spawn--;
+			}
+		}
 
 	}
 	if (enemies_to_spawn) {
@@ -236,19 +240,19 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (int)floor(it->map_pos.x);
-		const unsigned tiley = (int)floor(it->map_pos.y);
-		const int commax = (float)(it->map_pos.x - tilex) * (2<<16);
-		const int commay = (float)(it->map_pos.y - tiley) * (2<<16);
+		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
+		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
+		const int commax = (const int)((float)(it->map_pos.x - tilex) * (2<<16));
+		const int commay = (const int)((float)(it->map_pos.y - tiley) * (2<<16));
 		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
 	}
 }
 
 void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (int)floor(it->map_pos.x);
-		const unsigned tiley = (int)floor(it->map_pos.y);
-		const int commay = 1024 * it->map_pos.y;
+		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
+		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
+		const int commay = (const int)(1024 * it->map_pos.y);
 		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
 }
@@ -397,7 +401,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1), std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
 		// draw one horizontal line
-		Point p = map_to_screen(i, j, shakycam.x, shakycam.y);
+		Point p = map_to_screen(float(i), float(j), shakycam.x, shakycam.y);
 		p = center_tile(p);
 		while (j > j_end) {
 			--j;
@@ -656,8 +660,8 @@ void MapRenderer::checkHotspots() {
 				bool matched = false;
 				for (unsigned index = 0; index <= index_objectlayer; ++index) {
 					maprow *current_layer = layers[index];
-					Point p = map_to_screen(x,
-											y,
+					Point p = map_to_screen(float(x),
+											float(y),
 											shakycam.x,
 											shakycam.y);
 					p = center_tile(p);

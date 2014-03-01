@@ -91,7 +91,7 @@ bool Scene::logic(FPoint *caption_margins, bool scale_graphics) {
 
 		if (components.front().type == "caption") {
 
-			int caption_width = render_device->getContextSize().w - (render_device->getContextSize().w * (caption_margins->x * 2));
+			int caption_width = render_device->getContextSize().w - (render_device->getContextSize().w * (caption_margins->x * 2.0f));
 			font->setFont("font_captions");
 			caption = components.front().s;
 			caption_size = font->calc_size(caption, caption_width);
@@ -161,7 +161,7 @@ void Scene::render() {
 GameStateCutscene::GameStateCutscene(GameState *game_state)
 	: previous_gamestate(game_state)
 	, scale_graphics(false)
-	, caption_margins(0.1, 0)
+	, caption_margins(0.1f, 0.0f)
 	, game_slot(-1) {
 }
 
