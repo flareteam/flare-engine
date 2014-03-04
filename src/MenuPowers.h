@@ -58,7 +58,6 @@ public:
 	std::vector<short> requires_power;
 
 	bool requires_point;
-	bool requires_point_base;
 	bool passive_on;
 	std::vector<std::string> visible_requires_status;
 	std::vector<std::string> visible_requires_not;
@@ -78,7 +77,6 @@ public:
 		, upgrades()
 		, requires_power()
 		, requires_point(false)
-		, requires_point_base(false)
 		, passive_on(false)
 	{
 	}
@@ -88,8 +86,11 @@ class MenuPowers : public Menu {
 private:
 	StatBlock *stats;
 	MenuActionBar *action_bar;
-	std::vector<Power_Menu_Cell> power_cell;
-	std::vector<Power_Menu_Cell> upgrade;
+	std::vector<Power_Menu_Cell> power_cell;           // the current visible power cells
+	std::vector<Power_Menu_Cell> power_cell_base;      // only base powers
+	std::vector<Power_Menu_Cell> power_cell_upgrade;   // only upgrades
+	std::vector<Power_Menu_Cell> power_cell_all;       // power_cell_base + power_cell_upgrade
+	std::vector<Power_Menu_Cell> power_cell_unlocked;  // only base powers and upgrades that have been unlocked
 	std::vector<WidgetButton*> upgradeButtons;
 	bool skip_section;
 
@@ -116,7 +117,7 @@ private:
 	void alignElements();
 	void loadGraphics();
 	void displayBuild(int power_id);
-	bool powerUnlockable(int power_index, const std::vector<Power_Menu_Cell>& power_cells);
+	bool powerUnlockable(int power_index);
 	void renderPowers(int tab_num);
 
 	Color color_bonus;
@@ -126,9 +127,10 @@ private:
 	short nextLevel(short power_cell_index);
 	void upgradePower(short power_cell_index);
 	void replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index);
-	short getPointsUsed(Power_Menu_Cell *cell);
+	short getPointsUsed();
+	void setUnlockedPowers();
 
-	bool powerIsVisible(short power_index, const std::vector<Power_Menu_Cell>& power_cells);
+	bool powerIsVisible(short power_index);
 	void loadHeader(FileParser &infile);
 	void loadPower(FileParser &infile);
 	void loadUpgrade(FileParser &infile);
@@ -140,8 +142,8 @@ public:
 	void render();
 	TooltipData checkTooltip(Point mouse);
 	void generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells);
-	bool baseRequirementsMet(int power_index, const std::vector<Power_Menu_Cell>& power_cells);
-	bool requirementsMet(int power_index, const std::vector<Power_Menu_Cell>& power_cells);
+	bool baseRequirementsMet(int power_index);
+	bool requirementsMet(int power_index);
 	int click(Point mouse);
 	bool unlockClick(Point mouse);
 	void applyPowerUpgrades();
