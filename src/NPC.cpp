@@ -63,7 +63,7 @@ NPC::NPC()
 /**
  * NPCs are stored in simple config files
  *
- * @param npc_id Config file loaded at npcs/[npc_id].txt
+ * @param npc_id Config file for npc
  */
 void NPC::load(const string& npc_id, int hero_level) {
 
@@ -72,7 +72,7 @@ void NPC::load(const string& npc_id, int hero_level) {
 
 	string filename_portrait = "";
 
-	if (infile.open("npcs/" + npc_id + ".txt")) {
+	if (infile.open(npc_id)) {
 		while (infile.next()) {
 			if (infile.section == "dialog") {
 				if (infile.new_section) {
