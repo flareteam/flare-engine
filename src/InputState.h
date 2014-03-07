@@ -68,6 +68,9 @@ const int ACTIONBAR_USE = 28;
  */
 
 class InputState {
+private:
+	std::vector<int> wheel_binds;
+
 public:
 	static const int key_count = 29;
 	int binding[key_count];
@@ -102,6 +105,7 @@ public:
 	int last_button;
 	bool scroll_up;
 	bool scroll_down;
+	bool lock_scroll;
 };
 
 #endif

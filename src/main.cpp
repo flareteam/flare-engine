@@ -158,6 +158,7 @@ static void mainLoop (bool debug_event) {
 			SDL_PumpEvents();
 			inpt->handle(debug_event);
 			gswitch->logic();
+			inpt->resetScroll();
 
 			// Engine done means the user escapes the main game menu.
 			// Input done means the user closes the window.
