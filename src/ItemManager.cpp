@@ -405,34 +405,6 @@ void ItemManager::loadSets() {
 	infile.close();
 }
 
-/**
- * Renders icons at small size or large size
- * Also display the stack size
- */
-void ItemManager::renderIcon(ItemStack stack, int x, int y, int size) {
-	if (icons == NULL) return;
-
-	Rect src, dest;
-	dest.x = x;
-	dest.y = y;
-	src.w = src.h = dest.w = dest.h = size;
-
-	if (stack.item > 0) {
-		int columns = icons->getGraphicsWidth() / ICON_SIZE;
-		src.x = (items[stack.item].icon % columns) * size;
-		src.y = (items[stack.item].icon / columns) * size;
-		icons->setClip(src);
-		icons->setDest(dest);
-		render_device->render(icons);
-	}
-
-	if (stack.quantity > 1 || items[stack.item].max_quantity > 1) {
-		WidgetLabel label;
-		label.set(dest.x + 2, dest.y + 2, JUSTIFY_LEFT, VALIGN_TOP, abbreviateKilo(stack.quantity), color_normal);
-		label.render();
-	}
-}
-
 void ItemManager::playSound(int item, Point pos) {
 	snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
