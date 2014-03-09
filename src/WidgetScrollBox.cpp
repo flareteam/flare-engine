@@ -127,7 +127,7 @@ void WidgetScrollBox::logic(int x, int y) {
 	}
 
 	// check ScrollBar clicks
-	if (contents && contents->getGraphicsHeight() > pos.h) {
+	if (contents && contents->getGraphicsHeight() > pos.h && scrollbar) {
 		switch (scrollbar->checkClick(mouse.x,mouse.y)) {
 			case 1:
 				scrollUp();
@@ -194,12 +194,14 @@ void WidgetScrollBox::refresh() {
 		}
 	}
 
-	scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor,
-					   contents->getGraphicsHeight()-pos.h-scrollbar->pos_knob.h);
+	if (contents && scrollbar) {
+		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor,
+						   contents->getGraphicsHeight()-pos.h-scrollbar->pos_knob.h);
+	}
 }
 
 void WidgetScrollBox::render() {
-	Rect	src,dest;
+	Rect src,dest;
 	dest = pos;
 	src.x = 0;
 	src.y = cursor;
@@ -220,7 +222,7 @@ void WidgetScrollBox::render() {
 		children[i]->render();
 	}
 
-	if (contents->getGraphicsHeight() > pos.h) {
+	if (contents && contents->getGraphicsHeight() > pos.h && scrollbar) {
 		scrollbar->local_frame = local_frame;
 		scrollbar->local_offset = local_offset;
 		scrollbar->render();
