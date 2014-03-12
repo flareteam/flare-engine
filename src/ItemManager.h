@@ -196,7 +196,6 @@ private:
 public:
 	ItemManager();
 	~ItemManager();
-	void renderIcon(ItemStack stack, int x, int y, int size);
 	void playSound(int item, Point pos = Point(0,0));
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);
 	TooltipData getShortTooltip(ItemStack item);
