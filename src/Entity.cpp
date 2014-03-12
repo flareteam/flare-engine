@@ -138,8 +138,8 @@ bool Entity::move() {
 	// Here, we limit the speed to the nearest multiple of UNITS_PER_PIXEL_*
 	// By doing this, we make it possible for map_to_screen() to cleanly round the resulting position for rendering
 	// In short, it prevents the "jumping" corpses bug described in #968
-	float dx = round((speed * directionDeltaX[stats.direction]) / UNITS_PER_PIXEL_X) * UNITS_PER_PIXEL_X;
-	float dy = round((speed * directionDeltaY[stats.direction]) / UNITS_PER_PIXEL_Y) * UNITS_PER_PIXEL_Y;
+	float dx = round_float((speed * directionDeltaX[stats.direction]) / UNITS_PER_PIXEL_X) * UNITS_PER_PIXEL_X;
+	float dy = round_float((speed * directionDeltaY[stats.direction]) / UNITS_PER_PIXEL_Y) * UNITS_PER_PIXEL_Y;
 
 	bool full_move = mapr->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, stats.hero);
 
