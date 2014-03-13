@@ -75,11 +75,16 @@ private:
 	ItemStack drag_stack;
 	int drag_power;
 	int drag_src;
+	Sprite *drag_icon;
 
 	bool done;
 
 	bool act_drag_hover;
 	Point keydrag_pos;
+
+	void renderIcon(int x, int y);
+	void setDragIcon(int icon_id);
+	void setDragIconItem(ItemStack stack);
 
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
@@ -91,7 +96,6 @@ public:
 	~MenuManager();
 	void logic();
 	void render();
-	void renderIcon(int icon_id, int x, int y);
 	void closeAll();
 	void closeLeft();
 	void closeRight();

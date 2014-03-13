@@ -62,6 +62,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, drag_stack()
 	, drag_power(0)
 	, drag_src(0)
+	, drag_icon(NULL)
 	, done(false)
 	, act_drag_hover(false)
 	, keydrag_pos(Point())
@@ -140,20 +141,50 @@ MenuManager::MenuManager(StatBlock *_stats)
 	closeAll(); // make sure all togglable menus start closed
 }
 
-void MenuManager::renderIcon(int icon_id, int x, int y) {
-	Rect src;
-	Rect dest;
-	dest.x = x;
-	dest.y = y;
-	src.w = src.h = dest.w = dest.h = ICON_SIZE;
+void MenuManager::renderIcon(int x, int y) {
+	if (drag_icon) {
+		drag_icon->setDest(x,y);
+		render_device->render(drag_icon);
+	}
+}
 
-	int columns = icons->getGraphicsWidth() / ICON_SIZE;
-	src.x = (icon_id % columns) * ICON_SIZE;
-	src.y = (icon_id / columns) * ICON_SIZE;
+void MenuManager::setDragIcon(int icon_id) {
+	if (!icons) return;
 
-	icons->setClip(src);
-	icons->setDest(dest);
-	render_device->render(icons);
+	if (!drag_icon) {
+		Image *graphics = render_device->createAlphaSurface(ICON_SIZE, ICON_SIZE);
+
+		if (!graphics) return;
+		drag_icon = graphics->createSprite();
+		graphics->unref();
+
+		Rect src, dest;
+		src.w = src.h = dest.w = dest.h = ICON_SIZE;
+
+		int columns = icons->getGraphicsWidth() / ICON_SIZE;
+		src.x = (icon_id % columns) * ICON_SIZE;
+		src.y = (icon_id / columns) * ICON_SIZE;
+
+		icons->setClip(src);
+		icons->setDest(dest);
+		render_device->renderToImage(icons->getGraphics(), src, drag_icon->getGraphics(), dest, true);
+	}
+}
+
+void MenuManager::setDragIconItem(ItemStack stack) {
+	if (!drag_icon) {
+		if (stack.item == 0) return;
+
+		setDragIcon(items->items[stack.item].icon);
+
+		if (!drag_icon) return;
+
+		if (stack.quantity > 1 || items->items[stack.item].max_quantity > 1) {
+			stringstream ss;
+			ss << stack.quantity;
+			font->renderShadowed(ss.str(), 2, 2, JUSTIFY_LEFT, drag_icon->getGraphics(), font->getColor("item_normal"));
+		}
+	}
 }
 
 void MenuManager::handleKeyboardNavigation() {
@@ -872,6 +903,10 @@ void MenuManager::logic() {
 		}
 	}
 
+	if (drag_icon && !(mouse_dragging || keyboard_dragging)) {
+		delete drag_icon;
+		drag_icon = NULL;
+	}
 }
 
 void MenuManager::dragAndDropWithKeyboard() {
@@ -1102,6 +1137,11 @@ void MenuManager::resetDrag() {
 	if (keyboard_dragging && DRAG_SRC_ACTIONBAR) {
 		inpt->lock[ACCEPT] = false;
 	}
+
+	if (drag_icon) {
+		delete drag_icon;
+		drag_icon = NULL;
+	}
 }
 
 void MenuManager::render() {
@@ -1155,15 +1195,19 @@ void MenuManager::render() {
 	// draw icon under cursor if dragging
 	if (mouse_dragging) {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
-			items->renderIcon(drag_stack, inpt->mouse.x - ICON_SIZE/2, inpt->mouse.y - ICON_SIZE/2, ICON_SIZE);
+			setDragIconItem(drag_stack);
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
-			renderIcon(powers->powers[drag_power].icon, inpt->mouse.x-ICON_SIZE/2, inpt->mouse.y-ICON_SIZE/2);
+			setDragIcon(powers->powers[drag_power].icon);
+
+		renderIcon(inpt->mouse.x - ICON_SIZE/2, inpt->mouse.y - ICON_SIZE/2);
 	}
 	else if (keyboard_dragging) {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
-			items->renderIcon(drag_stack, keydrag_pos.x - ICON_SIZE/2, keydrag_pos.y - ICON_SIZE/2, ICON_SIZE);
+			setDragIconItem(drag_stack);
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
-			renderIcon(powers->powers[drag_power].icon, keydrag_pos.x-ICON_SIZE/2, keydrag_pos.y-ICON_SIZE/2);
+			setDragIcon(powers->powers[drag_power].icon);
+
+		renderIcon(keydrag_pos.x - ICON_SIZE/2, keydrag_pos.y - ICON_SIZE/2);
 	}
 
 }
@@ -1326,4 +1370,6 @@ MenuManager::~MenuManager() {
 	delete stash;
 	delete npc;
 	delete book;
+
+	if (drag_icon) delete drag_icon;
 }
