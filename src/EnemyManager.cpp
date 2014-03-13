@@ -56,7 +56,7 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 	Enemy e = Enemy();
 
 	e.eb = new BehaviorStandard(&e);
-	e.stats.load("enemies/" + type_id + ".txt");
+	e.stats.load(type_id);
 	e.type = type_id;
 
 	if (e.stats.animations == "")
