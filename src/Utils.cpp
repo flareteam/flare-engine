@@ -264,3 +264,14 @@ void alignToScreenEdge(std::string alignment, Rect *r) {
 		// do nothing
 	}
 }
+
+/**
+ * Given a floating Point pos, the decimal is rounded to the nearest multiple of 1/(2^4)
+ * 1/(2^4) was chosen because it's a "nice" floating point number, removing 99% of rounding errors
+ */
+void alignFPoint(FPoint *pos) {
+	if (!pos) return;
+
+	pos->x = floor(pos->x / 0.0625) * 0.0625;
+	pos->y = floor(pos->y / 0.0625) * 0.0625;
+}

@@ -620,9 +620,14 @@ void BehaviorStandard::updateState() {
 					powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "die") {
-				e->stats.corpse = true; // puts renderable under object layer
+				// puts renderable under object layer
+				e->stats.corpse = true;
+
 				//allow free movement over the corpse
 				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+
+				// prevent "jumping" when rendering
+				alignFPoint(&e->stats.pos);
 			}
 
 			break;
@@ -639,8 +644,16 @@ void BehaviorStandard::updateState() {
 				if (percentChance(e->stats.power_chance[ON_DEATH]))
 					powers->activate(e->stats.power_index[ON_DEATH], &e->stats, e->stats.pos);
 			}
-			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "critdie")
-				e->stats.corpse = true; // puts renderable under object layer
+			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "critdie") {
+				// puts renderable under object layer
+				e->stats.corpse = true;
+
+				//allow free movement over the corpse
+				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
+
+				// prevent "jumping" when rendering
+				alignFPoint(&e->stats.pos);
+			}
 
 			break;
 
