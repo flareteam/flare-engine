@@ -82,12 +82,4 @@ inline bool percentChance(int percent)
 	return rand() % 100 < percent;
 }
 
-/**
- * Round a floating point number
- * We need this since MSVC doesn't provide round()
- */
-inline int round_float(float val) {
-	return int(val < 0 ? val-0.5 : val+0.5);
-}
-
 #endif // UTILS_MATH_H
