@@ -689,7 +689,7 @@ void Avatar::transform() {
 
 	delete charmed_stats;
 	charmed_stats = new StatBlock();
-	charmed_stats->load("enemies/" + stats.transform_type + ".txt");
+	charmed_stats->load(stats.transform_type);
 
 	// temporary save hero stats
 	delete hero_stats;

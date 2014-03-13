@@ -182,7 +182,7 @@ void EnemyManager::handleSpawn() {
 
 		e->type = espawn.type;
 		e->stats.direction = espawn.direction;
-		e->stats.load("enemies/" + espawn.type + ".txt");
+		e->stats.load(espawn.type);
 		if (e->stats.animations != "") {
 			// load the animation file if specified
 			anim->increaseCount(e->stats.animations);
