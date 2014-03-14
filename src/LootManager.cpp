@@ -357,6 +357,7 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
 	ld.stack = stack;
 	ld.pos.x = pos.x;
 	ld.pos.y = pos.y;
+	alignFPoint(&ld.pos);
 	ld.dropped_by_hero = dropped_by_hero;
 
 	int index = items->items[stack.item].loot_animation.size()-1;

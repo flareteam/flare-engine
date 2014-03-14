@@ -116,6 +116,7 @@ bool isWithin(Rect r, Point target);
 
 std::string abbreviateKilo(int amount);
 void alignToScreenEdge(std::string alignment, Rect *r);
+void alignFPoint(FPoint *pos);
 
 class Image * loadTextureImage(std::string filename);
 
