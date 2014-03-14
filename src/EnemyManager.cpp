@@ -56,7 +56,7 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 	Enemy e = Enemy();
 
 	e.eb = new BehaviorStandard(&e);
-	e.stats.load("enemies/" + type_id + ".txt");
+	e.stats.load(type_id);
 	e.type = type_id;
 
 	if (e.stats.animations == "")
@@ -182,7 +182,7 @@ void EnemyManager::handleSpawn() {
 
 		e->type = espawn.type;
 		e->stats.direction = espawn.direction;
-		e->stats.load("enemies/" + espawn.type + ".txt");
+		e->stats.load(espawn.type);
 		if (e->stats.animations != "") {
 			// load the animation file if specified
 			anim->increaseCount(e->stats.animations);

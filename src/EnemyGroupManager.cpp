@@ -49,8 +49,7 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 		if (infile.new_section || first) {
 			const string fname = infile.getFileName();
 			const int firstpos = fname.rfind("/") + 1;
-			const int len = fname.length() - firstpos - 4; //removes the ".txt" from the filename
-			new_enemy.type = fname.substr(firstpos, len);
+			new_enemy.type = "enemies/" + fname.substr(firstpos, fname.length());
 			first = false;
 		}
 
