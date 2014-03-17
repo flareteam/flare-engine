@@ -93,19 +93,24 @@ void Menu::align() {
  * When reading menu config files, we use this to set common variables
  */
 bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
+	// @CLASS Menu|Description of menus in menus/
 	std::string value = val;
 
 	if (key == "pos") {
+		// @ATTR pos|x (integer), y (integer), w (integer), h (integer)|Menu position and dimensions
 		value = value + ',';
 		window_area = toRect(value);
 	}
 	else if (key == "align") {
+		// @ATTR align|alignment|Position relative to screen edges
 		alignment = value;
 	}
 	else if (key == "soundfx_open") {
+		// @ATTR soundfx_open|string|Filename of a sound to play when opening this menu.
 		sfx_open = snd->load(value, "Menu open tab");
 	}
 	else if (key == "soundfx_close") {
+		// @ATTR soundfx_close|string|Filename of a sound to play when closing this menu.
 		sfx_close = snd->load(value, "Menu close tab");
 	}
 	else {

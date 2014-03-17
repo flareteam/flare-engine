@@ -40,17 +40,21 @@ MenuLog::MenuLog() {
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuLog|Description of menus/log.txt
 	if(infile.open("menus/log.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR label_title|label|Position of the "Log" text.
 			if(infile.key == "label_title") {
 				title = eatLabelInfo(infile.val);
 			}
+			// @ATTR close|x (integer), y (integer)|Position of the close button.
 			else if(infile.key == "close") {
 				close_pos = toPoint(infile.val);
 			}
+			// @ATTR tab_area|x (integer), y (integer), w (integer), h (integer)|The position of the row of tabs, followed by the dimensions of the log text area.
 			else if(infile.key == "tab_area") {
 				tab_area = toRect(infile.val);
 			}

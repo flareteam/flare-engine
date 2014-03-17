@@ -86,71 +86,120 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuCharacter|Description of menus/character.txt
 	if (infile.open("menus/character.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR close|x (integer), y (integer)|Position of the close button.
 			if(infile.key == "close") close_pos = toPoint(infile.val);
+			// @ATTR label_title|label|Position of the "Character" text.
 			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
+			// @ATTR upgrade_physical|x (integer), y (integer)|Position of the button used to add a stat point to Physical.
 			else if(infile.key == "upgrade_physical") upgrade_pos[0] = toPoint(infile.val);
+			// @ATTR upgrade_mental|x (integer), y (integer)|Position of the button used to add a stat point to Mental.
 			else if(infile.key == "upgrade_mental")	upgrade_pos[1] = toPoint(infile.val);
+			// @ATTR upgrade_offense|x (integer), y (integer)|Position of the button used to add a stat point to Offense.
 			else if(infile.key == "upgrade_offense") upgrade_pos[2] = toPoint(infile.val);
+			// @ATTR upgrade_defense|x (integer), y (integer)|Position of the button used to add a stat point to Defense.
 			else if(infile.key == "upgrade_defense") upgrade_pos[3] = toPoint(infile.val);
+			// @ATTR statlist|x (integer), y (integer)|Position of the scrollbox containing non-primary stats.
 			else if(infile.key == "statlist") statlist_pos = toPoint(infile.val);
+			// @ATTR statlist_rows|integer|The height of the statlist in rows.
 			else if (infile.key == "statlist_rows") statlist_rows = toInt(infile.val);
+			// @ATTR statlist_scrollbar_offset|integer|Right margin in pixels for the statlist's scrollbar.
 			else if (infile.key == "statlist_scrollbar_offset") statlist_scrollbar_offset = toInt(infile.val);
+
+			// @ATTR label_name|label|Position of the "Name" text.
 			else if(infile.key == "label_name") {
 				label_pos[0] = eatLabelInfo(infile.val);
 				cstat[CSTAT_NAME].visible = !label_pos[0].hidden;
 			}
+			// @ATTR label_level|label|Position of the "Level" text.
 			else if(infile.key == "label_level") {
 				label_pos[1] = eatLabelInfo(infile.val);
 				cstat[CSTAT_LEVEL].visible = !label_pos[1].hidden;
 			}
+			// @ATTR label_physical|label|Position of the "Physical" text.
 			else if(infile.key == "label_physical") {
 				label_pos[2] = eatLabelInfo(infile.val);
 				cstat[CSTAT_PHYSICAL].visible = !label_pos[2].hidden;
 			}
+			// @ATTR label_mental|label|Position of the "Mental" text.
 			else if(infile.key == "label_mental") {
 				label_pos[3] = eatLabelInfo(infile.val);
 				cstat[CSTAT_MENTAL].visible = !label_pos[3].hidden;
 			}
+			// @ATTR label_offense|label|Position of the "Offense" text.
 			else if(infile.key == "label_offense") {
 				label_pos[4] = eatLabelInfo(infile.val);
 				cstat[CSTAT_OFFENSE].visible = !label_pos[4].hidden;
 			}
+			// @ATTR label_defense|label|Position of the "Defense" text.
 			else if(infile.key == "label_defense") {
 				label_pos[5] = eatLabelInfo(infile.val);
 				cstat[CSTAT_DEFENSE].visible = !label_pos[5].hidden;
 			}
+
+			// @ATTR name|x (integer), y (integer), w (integer), h (integer)|Position of the player's name and dimensions of the tooltip hotspot.
 			else if(infile.key == "name") value_pos[0] = toRect(infile.val);
+			// @ATTR level|x (integer), y (integer), w (integer), h (integer)|Position of the player's level and dimensions of the tooltip hotspot.
 			else if(infile.key == "level") value_pos[1] = toRect(infile.val);
+			// @ATTR physical|x (integer), y (integer), w (integer), h (integer)|Position of the player's physical stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "physical") value_pos[2] = toRect(infile.val);
+			// @ATTR mental|x (integer), y (integer), w (integer), h (integer)|Position of the player's mental stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "mental") value_pos[3] = toRect(infile.val);
+			// @ATTR offense|x (integer), y (integer), w (integer), h (integer)|Position of the player's offense stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "offense") value_pos[4] = toRect(infile.val);
+			// @ATTR defense|x (integer), y (integer), w (integer), h (integer)|Position of the player's defense stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "defense") value_pos[5] = toRect(infile.val);
+
+			// @ATTR upspent|label|Position of the label showing the number of unspent stat points.
 			else if(infile.key == "unspent") unspent_pos = eatLabelInfo(infile.val);
+
+			// @ATTR show_upgrade_physical|boolean|Hide the Physical upgrade button if set to false.
 			else if (infile.key == "show_upgrade_physical") show_upgrade[0] = toBool(infile.val);
+			// @ATTR show_upgrade_mental|boolean|Hide the Mental upgrade button if set to false.
 			else if (infile.key == "show_upgrade_mental") show_upgrade[1] = toBool(infile.val);
+			// @ATTR show_upgrade_offense|boolean|Hide the Offense upgrade button if set to false.
 			else if (infile.key == "show_upgrade_offense") show_upgrade[2] = toBool(infile.val);
+			// @ATTR show_upgrade_defense|boolean|Hide the Defense upgrade button if set to false.
 			else if (infile.key == "show_upgrade_defense") show_upgrade[3] = toBool(infile.val);
+
+			// @ATTR show_maxhp|boolean|Hide the "Max HP" stat in the statlist if set to false.
 			else if (infile.key == "show_maxhp") show_stat[0] = toBool(infile.val);
+			// @ATTR show_hpregen|boolean|Hide the "HP Regen" stat in the statlist if set to false.
 			else if (infile.key == "show_hpregen") show_stat[1] = toBool(infile.val);
+			// @ATTR show_maxmp|boolean|Hide the "Max MP" stat in the statlist if set to false.
 			else if (infile.key == "show_maxmp") show_stat[2] = toBool(infile.val);
+			// @ATTR show_mpregen|boolean|Hide the "MP Regen" stat in the statlist if set to false.
 			else if (infile.key == "show_mpregen") show_stat[3] = toBool(infile.val);
+			// @ATTR show_accuracy|boolean|Hide the "Accuracy" stat in the statlist if set to false.
 			else if (infile.key == "show_accuracy") show_stat[4] = toBool(infile.val);
+			// @ATTR show_avoidance|boolean|Hide the "Avoidance" stat in the statlist if set to false.
 			else if (infile.key == "show_avoidance") show_stat[5] = toBool(infile.val);
+			// @ATTR show_melee|boolean|Hide the "Melee Damage" stat in the statlist if set to false.
 			else if (infile.key == "show_melee") show_stat[6] = toBool(infile.val);
+			// @ATTR show_ranged|boolean|Hide the "Ranged Damage" stat in the statlist if set to false.
 			else if (infile.key == "show_ranged") show_stat[7] = toBool(infile.val);
+			// @ATTR show_mental|boolean|Hide the "Mental Damage" stat in the statlist if set to false.
 			else if (infile.key == "show_mental") show_stat[8] = toBool(infile.val);
+			// @ATTR show_crit|boolean|Hide the "Crit" stat in the statlist if set to false.
 			else if (infile.key == "show_crit") show_stat[9] = toBool(infile.val);
+			// @ATTR show_absorb|boolean|Hide the "Absorb" stat in the statlist if set to false.
 			else if (infile.key == "show_absorb") show_stat[10] = toBool(infile.val);
+			// @ATTR show_poise|boolean|Hide the "Poise" stat in the statlist if set to false.
 			else if (infile.key == "show_poise") show_stat[11] = toBool(infile.val);
+			// @ATTR show_bonus_xp|boolean|Hide the "Bonus XP" stat in the statlist if set to false.
 			else if (infile.key == "show_bonus_xp") show_stat[12] = toBool(infile.val);
+			// @ATTR show_bonus_currency|boolean|Hide the "Bonus Gold" stat in the statlist if set to false.
 			else if (infile.key == "show_bonus_currency") show_stat[13] = toBool(infile.val);
+			// @ATTR show_bonus_itemfind|boolean|Hide the "Bonus Item Find" stat in the statlist if set to false.
 			else if (infile.key == "show_bonus_itemfind") show_stat[14] = toBool(infile.val);
+			// @ATTR show_bonus_stealth|boolean|Hide the "Stealth" stat in the statlist if set to false.
 			else if (infile.key == "show_bonus_stealth") show_stat[15] = toBool(infile.val);
+			// @ATTR show_resists|boolean|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_stat[16] = toBool(infile.val);
 		}
 		infile.close();

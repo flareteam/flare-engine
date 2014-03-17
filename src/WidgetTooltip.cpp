@@ -39,12 +39,16 @@ WidgetTooltip::WidgetTooltip()
 
 	FileParser infile;
 	// load tooltip settings from engine config file
+	// @CLASS WidgetTooltip|Description of engine/tooltips.txt
 	if (infile.open("engine/tooltips.txt")) {
 		while (infile.next()) {
+			// @ATTR tooltip_offset|integer|Offset in pixels from the origin point (usually mouse cursor).
 			if (infile.key == "tooltip_offset")
 				offset = toInt(infile.val);
+			// @ATTR tooltip_width|integer|Maximum width of tooltip in pixels.
 			else if (infile.key == "tooltip_width")
 				width = toInt(infile.val);
+			// @ATTR tooltip_margin|integer|Padding between the text and the tooltip borders.
 			else if (infile.key == "tooltip_margin")
 				margin = toInt(infile.val);
 		}

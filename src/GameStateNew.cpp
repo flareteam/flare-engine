@@ -87,42 +87,54 @@ GameStateNew::GameStateNew()
 	// Read positions from config file
 	FileParser infile;
 
+	// @CLASS GameStateNew: Layout|Description of menus/gamenew.txt
 	if (infile.open("menus/gamenew.txt")) {
 		while (infile.next()) {
+			// @ATTR button_prev|x (integer), y (integer)|Position of button to choose the previous preset hero.
 			if (infile.key == "button_prev") {
 				button_prev->pos.x = popFirstInt(infile.val);
 				button_prev->pos.y = popFirstInt(infile.val);
 			}
+			// @ATTR button_next|x (integer), y (integer)|Position of button to choose the next preset hero.
 			else if (infile.key == "button_next") {
 				button_next->pos.x = popFirstInt(infile.val);
 				button_next->pos.y = popFirstInt(infile.val);
 			}
+			// @ATTR button_permadeath|x (integer), y (integer)|Position of checkbox for toggling permadeath.
 			else if (infile.key == "button_permadeath") {
 				button_permadeath->pos.x = popFirstInt(infile.val);
 				button_permadeath->pos.y = popFirstInt(infile.val);
 			}
+			// @ATTR name_input|x (integer), y (integer)|Position of the hero name textbox.
 			else if (infile.key == "name_input") {
 				name_pos = toPoint(infile.val);
 			}
+			// @ATTR portrait_label|label|Label for the "Choose a Portrait" text.
 			else if (infile.key == "portrait_label") {
 				portrait_label = eatLabelInfo(infile.val);
 			}
+			// @ATTR name_label|label|Label for the "Choose a Name" text.
 			else if (infile.key == "name_label") {
 				name_label = eatLabelInfo(infile.val);
 			}
+			// @ATTR permadeath_label|label|Label for the "Permadeath?" text.
 			else if (infile.key == "permadeath_label") {
 				permadeath_label = eatLabelInfo(infile.val);
 			}
+			// @ATTR class_label|label|Label for the "Choose a Class" text.
 			else if (infile.key == "classlist_label") {
 				classlist_label = eatLabelInfo(infile.val);
 			}
+			// @ATTR portrait|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
 				portrait_pos = toRect(infile.val);
 			}
+			// @ATTR class_list|x (integer), y (integer)|Position of the class list.
 			else if (infile.key == "class_list") {
 				class_list->pos.x = popFirstInt(infile.val);
 				class_list->pos.y = popFirstInt(infile.val);
 			}
+			// @ATTR show_classlist|boolean|Allows hiding the class list.
 			else if (infile.key == "show_classlist") {
 				show_classlist = toBool(infile.val);
 			}
@@ -227,9 +239,11 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
  */
 void GameStateNew::loadOptions(const string& filename) {
 	FileParser fin;
+	// @CLASS GameStateNew: Hero options|Description of engine/hero_options.txt
 	if (!fin.open("engine/" + filename, true, false)) return;
 
 	while (fin.next()) {
+		// @ATTR option|base (string), head (string), portrait (string), name (string)|A default body, head, portrait, and name for a hero.
 		if (fin.key == "option") {
 			base.push_back(fin.nextValue());
 			head.push_back(fin.nextValue());

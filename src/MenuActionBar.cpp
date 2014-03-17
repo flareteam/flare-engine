@@ -77,29 +77,55 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	// Read data from config file
 	FileParser infile;
 
+	// @CLASS MenuActionBar|Description of menus/actionbar.txt
 	if (infile.open("menus/actionbar.txt")) {
 		while (infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// numberArea
+			// @ATTR slot1|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 1.
 			if (infile.key == "slot1") slots[0]->pos = toRect(infile.val);
+			// @ATTR slot2|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 2.
 			else if (infile.key == "slot2") slots[1]->pos = toRect(infile.val);
+			// @ATTR slot3|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 3.
 			else if (infile.key == "slot3") slots[2]->pos = toRect(infile.val);
+			// @ATTR slot4|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 4.
 			else if (infile.key == "slot4") slots[3]->pos = toRect(infile.val);
+			// @ATTR slot5|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 5.
 			else if (infile.key == "slot5") slots[4]->pos = toRect(infile.val);
+			// @ATTR slot6|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 6.
 			else if (infile.key == "slot6") slots[5]->pos = toRect(infile.val);
+			// @ATTR slot7|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 7.
 			else if (infile.key == "slot7") slots[6]->pos = toRect(infile.val);
+			// @ATTR slot8|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 8.
 			else if (infile.key == "slot8") slots[7]->pos = toRect(infile.val);
+			// @ATTR slot9|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 9.
 			else if (infile.key == "slot9") slots[8]->pos = toRect(infile.val);
+			// @ATTR slot10|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 10.
 			else if (infile.key == "slot10") slots[9]->pos = toRect(infile.val);
+
+			// mouseArea
+			// @ATTR slot_M1|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 11.
 			else if (infile.key == "slot_M1") slots[10]->pos = toRect(infile.val);
+			// @ATTR slot_M2|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 12.
 			else if (infile.key == "slot_M2") slots[11]->pos = toRect(infile.val);
+
+			// menuArea
+			// @ATTR char_menu|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for the Character menu button.
 			else if (infile.key == "char_menu") menus[MENU_CHARACTER]->pos = toRect(infile.val);
+			// @ATTR inv_menu|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for the Inventory menu button.
 			else if (infile.key == "inv_menu") menus[MENU_INVENTORY]->pos = toRect(infile.val);
+			// @ATTR powers_menu|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for the Powers menu button.
 			else if (infile.key == "powers_menu") menus[MENU_POWERS]->pos = toRect(infile.val);
+			// @ATTR log_menu|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for the Log menu button.
 			else if (infile.key == "log_menu") menus[MENU_LOG]->pos = toRect(infile.val);
+
+			// @ATTR numberArea|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the area containing slots 1-10.
 			else if (infile.key == "numberArea") numberArea = toRect(infile.val);
+			// @ATTR mouseArea|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the area containing slots M1 and M2.
 			else if (infile.key == "mouseArea") mouseArea = toRect(infile.val);
+			// @ATTR menuArea|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the area containing the menu buttons.
 			else if (infile.key == "menuArea") menuArea = toRect(infile.val);
 		}
 		infile.close();

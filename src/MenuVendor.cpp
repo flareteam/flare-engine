@@ -56,24 +56,30 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuVendor|Description of menus/vendor.txt
 	if(infile.open("menus/vendor.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR close|x (integer), y (integer)|Position of the close button.
 			if(infile.key == "close") {
 				close_pos = toPoint(infile.val);
 			}
+			// @ATTR slots_area|x (integer), y (integer)|Position of the top-left slot.
 			else if(infile.key == "slots_area") {
 				slots_area.x = popFirstInt(infile.val);
 				slots_area.y = popFirstInt(infile.val);
 			}
+			// @ATTR vendor_cols|integer|The number of columns in the grid of slots.
 			else if (infile.key == "vendor_cols") {
 				slots_cols = toInt(infile.val);
 			}
+			// @ATTR vendor_rows|integer|The number of rows in the grid of slots.
 			else if (infile.key == "vendor_rows") {
 				slots_rows = toInt(infile.val);
 			}
+			// @ATTR label_title|label|The position of the text that displays the NPC's name.
 			else if (infile.key == "label_title") {
 				title =  eatLabelInfo(infile.val);
 			}

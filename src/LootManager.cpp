@@ -56,16 +56,8 @@ LootManager::LootManager(StatBlock *_hero)
 	// @CLASS Loot|Description of engine/loot.txt
 	if (infile.open("engine/loot.txt")) {
 		while (infile.next()) {
-			if (infile.key == "loot_animation") {
-				// @ATTR loot_animation|x(int), y(int), w(int), h(int)|
-				animation_pos = toRect(infile.val);
-			}
-			else if (infile.key == "loot_animation_offset") {
-				// @ATTR loot_animation_offset|x (integer), y (integer)|
-				animation_offset = toPoint(infile.val);
-			}
-			else if (infile.key == "tooltip_margin") {
-				// @ATTR tooltip_margin|integer|
+			if (infile.key == "tooltip_margin") {
+				// @ATTR tooltip_margin|integer|Vertical offset of the loot tooltip from the loot itself.
 				tooltip_margin = toInt(infile.val);
 			}
 			else if (infile.key == "autopickup_currency") {

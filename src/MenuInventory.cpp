@@ -60,12 +60,15 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	// Load config settings
 	Rect equipment_slot;
 	FileParser infile;
+	// @CLASS MenuInventory|Description of menus/inventory.txt
 	if (infile.open("menus/inventory.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR close|x (integer), y (integer)|Position of the close button.
 			if(infile.key == "close") close_pos = toPoint(infile.val);
+			// @ATTR equipment_slot|x (integer), y (integer), size (integer), slot_type (string)|Position and item type of an equipment slot.
 			else if(infile.key == "equipment_slot") {
 				equipment_slot.x = popFirstInt(infile.val);
 				equipment_slot.y = popFirstInt(infile.val);
@@ -73,15 +76,22 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 				equipped_area.push_back(equipment_slot);
 				slot_type.push_back(popFirstString(infile.val));
 			}
+			// @ATTR slot_name|string|The displayed name of the last defined equipment slot.
 			else if(infile.key == "slot_name") slot_desc.push_back(infile.val);
+			// @ATTR carried_area|x (integer), y (integer)|Position of the first normal inventory slot.
 			else if(infile.key == "carried_area") {
 				carried_area.x = popFirstInt(infile.val);
 				carried_area.y = popFirstInt(infile.val);
 			}
+			// @ATTR carried_cols|integer|The number of columns for the normal inventory.
 			else if (infile.key == "carried_cols") carried_cols = toInt(infile.val);
+			// @ATTR carried_rows|integer|The number of rows for the normal inventory.
 			else if (infile.key == "carried_rows") carried_rows = toInt(infile.val);
+			// @ATTR label_title|label|Position of the "Inventory" label.
 			else if (infile.key == "label_title") title =  eatLabelInfo(infile.val);
+			// @ATTR currency|label|Position of the label that displays the total currency being carried.
 			else if (infile.key == "currency") currency_lbl =  eatLabelInfo(infile.val);
+			// @ATTR help|x (integer), y (integer), w (integer), h (integer)|A mouse-over area that displays some help text for inventory shortcuts.
 			else if (infile.key == "help") help_pos = toRect(infile.val);
 		}
 		infile.close();

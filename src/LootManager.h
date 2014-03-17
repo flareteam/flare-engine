@@ -60,9 +60,6 @@ private:
 	// loot refers to ItemManager indices
 	std::vector<Loot> loot;
 
-	Rect animation_pos;
-	Point animation_offset;
-
 	// enemies which should drop loot, but didnt yet.
 	std::vector<const class Enemy*> enemiesDroppingLoot;
 

@@ -67,10 +67,12 @@ Avatar::Avatar()
 	loadLayerDefinitions();
 
 	// load foot-step definitions
+	// @CLASS Avatar: Step sounds|Description of items/step_sounds.txt
 	FileParser infile;
 	if (infile.open("items/step_sounds.txt", true, true, "")) {
 		while (infile.next()) {
 			if (infile.key == "id") {
+				// @ATTR id|string|An identifier name for a set of step sounds.
 				step_def.push_back(Step_sfx());
 				step_def.back().id = infile.val;
 			}
@@ -78,6 +80,7 @@ Avatar::Avatar()
 			if (step_def.empty()) continue;
 
 			if (infile.key == "step") {
+				// @ATTR step|string|Filename of a step sound effect.
 				step_def.back().steps.push_back(infile.val);
 			}
 		}
@@ -144,7 +147,7 @@ void Avatar::loadLayerDefinitions() {
 	layer_reference_order = vector<string>();
 
 	FileParser infile;
-	// @CLASS Avatar|Description of engine/hero_layers.txt
+	// @CLASS Avatar: Hero layers|Description of engine/hero_layers.txt
 	if (infile.open("engine/hero_layers.txt")) {
 		while(infile.next()) {
 			if (infile.key == "layer") {

@@ -72,6 +72,7 @@ void NPC::load(const string& npc_id, int hero_level) {
 
 	string filename_portrait = "";
 
+	// @CLASS NPC|Description of NPCs in npcs/
 	if (infile.open(npc_id)) {
 		while (infile.next()) {
 			if (infile.section == "dialog") {
@@ -81,19 +82,25 @@ void NPC::load(const string& npc_id, int hero_level) {
 				Event_Component e;
 				e.type = infile.key;
 				if (infile.key == "him" || infile.key == "her")
+					// @ATTR dialog.him, dialog.her|string|A line of dialog from the NPC.
 					e.s = msg->get(infile.val);
 				else if (infile.key == "you")
+					// @ATTR dialog.you|string|A line of dialog from the player.
 					e.s = msg->get(infile.val);
 				else if (infile.key == "voice") {
+					// @ATTR dialog.voice|string|Filename of a voice sound file to play.
 					e.x = loadSound(infile.val, NPC_VOX_QUEST);
 				}
 				else if (infile.key == "topic") {
+					// @ATTR dialog.topic|string|The name of this dialog topic. Displayed when picking a dialog tree.
 					e.s = msg->get(infile.val);
 				}
 				else if (infile.key == "group") {
+					// @ATTR dialog.group|string|Dialog group.
 					e.s = infile.val;
 				}
 				else if (infile.key == "allow_movement") {
+					// @ATTR dialog.allow_movement|boolean|Restrict the player's mvoement during dialog.
 					e.s = infile.val;
 				}
 				else {
@@ -105,31 +112,38 @@ void NPC::load(const string& npc_id, int hero_level) {
 			else {
 				filename = npc_id;
 				if (infile.key == "name") {
+					// @ATTR name|string|NPC's name.
 					name = msg->get(infile.val);
 				}
 				else if (infile.key == "level") {
+					// @ATTR level|[hero, level (integer)]|NPC's level. Can be "hero" to match the player's level.
 					if (infile.val == "hero")
 						level = hero_level;
 					else
 						level = toInt(infile.val);
 				}
 				else if (infile.key == "gfx") {
+					// @ATTR gfx|string|Filename of an animation definition.
 					gfx = infile.val;
 				}
 
 				// handle talkers
 				else if (infile.key == "talker") {
-					if (infile.val == "true") talker = true;
+					// @ATTR talker|boolean|Allows this NPC to be talked to.
+					talker = toBool(infile.val);
 				}
 				else if (infile.key == "portrait") {
+					// @ATTR portrait|string|Filename of a portrait image.
 					filename_portrait = infile.val;
 				}
 
 				// handle vendors
 				else if (infile.key == "vendor") {
-					if (infile.val == "true") vendor = true;
+					// @ATTR vendor|string|Allows this NPC to buy/sell items.
+					vendor = toBool(infile.val);
 				}
 				else if (infile.key == "constant_stock") {
+					// @ATTR constant_stock|item (integer), ...|A list of items this vendor has for sale.
 					stack.quantity = 1;
 					while (infile.val != "") {
 						stack.item = toInt(infile.nextValue());
@@ -137,6 +151,7 @@ void NPC::load(const string& npc_id, int hero_level) {
 					}
 				}
 				else if (infile.key == "status_stock") {
+					// @ATTR status_stock|status (string), item (integer), ...|A list of items this vendor will have for sale if the required status is met.
 					if (camp->checkStatus(infile.nextValue())) {
 						stack.quantity = 1;
 						while (infile.val != "") {
@@ -148,6 +163,7 @@ void NPC::load(const string& npc_id, int hero_level) {
 
 				// handle vocals
 				else if (infile.key == "vox_intro") {
+					// @ATTR vox_intro|string|Filename of a sound file to play when initially interacting with the NPC.
 					loadSound(infile.val, NPC_VOX_INTRO);
 				}
 			}

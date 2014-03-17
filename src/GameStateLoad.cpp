@@ -77,41 +77,50 @@ GameStateLoad::GameStateLoad() : GameState()
 	// Read positions from config file
 	FileParser infile;
 
+	// @CLASS GameStateLoad|Description of menus/gameload.txt
 	if (infile.open("menus/gameload.txt")) {
 		while (infile.next()) {
+			// @ATTR action_button|x (integer), y (integer)|Position of the "New Game"/"Load Game" button.
 			if (infile.key == "action_button") {
 				button_action->pos.x = popFirstInt(infile.val);
 				button_action->pos.y = popFirstInt(infile.val);
 			}
+			// @ATTR alternate_button|x (integer), y (integer)|Position of the "Delete Save" button.
 			else if (infile.key == "alternate_button") {
 				button_alternate->pos.x = popFirstInt(infile.val);
 				button_alternate->pos.y = popFirstInt(infile.val);
 			}
+			// @ATTR portrait|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
 				portrait_dest = toRect(infile.val);
 				portrait_dest.x += (VIEW_W - FRAME_W) / 2;
 				portrait_dest.y += (VIEW_H - FRAME_H) / 2;
 			}
+			// @ATTR gameslot|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the first game slot.
 			else if (infile.key == "gameslot") {
 				gameslot_pos = toRect(infile.val);
 			}
+			// @ATTR preview|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the preview area in the first game slot. Only 'h' is used?
 			else if (infile.key == "preview") {
 				preview_pos = toRect(infile.val);
-				// label positions within each slot
 			}
+			// @ATTR name|label|The label for the hero's name. Position is relative to game slot position.
 			else if (infile.key == "name") {
 				name_pos = eatLabelInfo(infile.val);
 			}
+			// @ATTR level|label|The label for the hero's level. Position is relative to game slot position.
 			else if (infile.key == "level") {
 				level_pos = eatLabelInfo(infile.val);
 			}
+			// @ATTR map|label|The label for the hero's current location. Position is relative to game slot position.
 			else if (infile.key == "map") {
 				map_pos = eatLabelInfo(infile.val);
 			}
+			// @ATTR loading_label|label|The label for the "Entering game world..."/"Loading saved game..." text.
 			else if (infile.key == "loading_label") {
 				loading_pos = eatLabelInfo(infile.val);
-				// Position for the avatar preview image in each slot
 			}
+			// @ATTR sprite|x (integer), y (integer)|Position for the avatar preview image in each slot
 			else if (infile.key == "sprite") {
 				sprites_pos = toPoint(infile.val);
 			}
