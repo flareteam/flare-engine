@@ -307,23 +307,14 @@ void GameStatePlay::loadGame() {
 	}
 	else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
 
-
-	menu->inv->fillEquipmentSlots();
+	// add legacy currency to inventory
 	menu->inv->addCurrency(currency);
 
-	// remove items with zero quantity from inventory
-	menu->inv->inventory[EQUIPMENT].clean();
-	menu->inv->inventory[CARRIED].clean();
+	// apply stats, inventory, and powers
+	applyPlayerData();
 
-	// Load stash
-	loadStash();
-
-	// initialize vars
-	pc->stats.recalc();
-	menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
 	// trigger passive effects here? Saved HP/MP values might depend on passively boosted HP/MP
 	// powers->activatePassives(pc->stats);
-	pc->stats.logic(); // run stat logic once to apply items bonuses
 	if (SAVE_HPMP) {
 		if (saved_hp < 0 || saved_hp > pc->stats.get(STAT_HP_MAX)) {
 			fprintf(stderr, "HP value is out of bounds, setting to maximum\n");
@@ -344,18 +335,6 @@ void GameStatePlay::loadGame() {
 
 	// reset character menu
 	menu->chr->refreshStats();
-
-	// just for aesthetics, turn the hero to face the camera
-	pc->stats.direction = 6;
-
-	// set up MenuTalker for this hero
-	menu->talker->setHero(pc->stats.name, pc->stats.character_class, pc->stats.gfx_portrait);
-
-	// load sounds (gender specific)
-	pc->loadSounds();
-
-	// apply power upgrades
-	menu->pow->applyPowerUpgrades();
 }
 
 /**
@@ -380,18 +359,14 @@ void GameStatePlay::loadClass(int index) {
 	}
 	menu->act->set(HERO_CLASSES[index].hotkeys);
 
-	menu->inv->fillEquipmentSlots();
-
-	// initialize vars
-	pc->stats.recalc();
-	menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
+	// apply stats, inventory, and powers
+	applyPlayerData();
 
 	// reset character menu
 	menu->chr->refreshStats();
-
 }
 
-/*
+/**
  * This is used to load the stash when starting a new game
  */
 void GameStatePlay::loadStash() {
@@ -420,3 +395,35 @@ void GameStatePlay::loadStash() {
 	}
 	else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
 }
+
+/**
+ * Performs final calculations after loading a save or a new class
+ */
+void GameStatePlay::applyPlayerData() {
+	menu->inv->fillEquipmentSlots();
+
+	// remove items with zero quantity from inventory
+	menu->inv->inventory[EQUIPMENT].clean();
+	menu->inv->inventory[CARRIED].clean();
+
+	// Load stash
+	loadStash();
+
+	// initialize vars
+	pc->stats.recalc();
+	menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
+	pc->stats.logic(); // run stat logic once to apply items bonuses
+
+	// just for aesthetics, turn the hero to face the camera
+	pc->stats.direction = 6;
+
+	// set up MenuTalker for this hero
+	menu->talker->setHero(pc->stats.name, pc->stats.character_class, pc->stats.gfx_portrait);
+
+	// load sounds (gender specific)
+	pc->loadSounds();
+
+	// apply power upgrades
+	menu->pow->applyPowerUpgrades();
+}
+
