@@ -112,6 +112,7 @@ public:
 	void loadClass(int index);
 	void loadStash();
 	void resetGame();
+	void applyPlayerData();
 	int game_slot;
 
 	Avatar *getAvatar() const;
