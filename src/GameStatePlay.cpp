@@ -224,7 +224,7 @@ void GameStatePlay::checkLoot() {
 	}
 
 	// Normal pickups
-	if (!pc->attacking)
+	if (!pc->stats.attacking)
 		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, menu->inv);
 
 	if (pickup.item > 0) {
@@ -612,7 +612,7 @@ void GameStatePlay::checkNotifications() {
  * If an NPC is giving a reward, process it
  */
 void GameStatePlay::checkNPCInteraction() {
-	if (pc->attacking) return;
+	if (pc->stats.attacking) return;
 
 	bool player_ok = pc->stats.alive && pc->stats.humanoid;
 	float interact_distance = 0;

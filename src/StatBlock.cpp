@@ -166,7 +166,8 @@ StatBlock::StatBlock()
 	, pres_hp(0)
 	, pres_mp(0)
 	, summons()
-	, summoner(NULL) {
+	, summoner(NULL)
+	, attacking(false) {
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
 

@@ -127,7 +127,6 @@ public:
 	Hazard *haz;
 	int current_power;
 	FPoint act_target;
-	bool attacking;
 	bool drag_walking;
 	bool newLevelNotification;
 	bool respawn;

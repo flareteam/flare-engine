@@ -312,6 +312,8 @@ public:
 	std::vector<StatBlock*> summons;
 	StatBlock* summoner;
 
+	bool attacking;
+
 	void removeFromSummons();
 
 	bool summonLimitReached(int power_id) const;
