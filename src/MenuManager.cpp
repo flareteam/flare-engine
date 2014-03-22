@@ -401,6 +401,23 @@ void MenuManager::logic() {
 	if (NO_MOUSE)
 		handleKeyboardNavigation();
 
+	// Stop attacking if the cursor is inside an interactable menu
+	if (stats->attacking) {
+		if (isWithin(act->window_area, inpt->mouse) ||
+			(book->visible && isWithin(book->window_area, inpt->mouse)) ||
+			(chr->visible && isWithin(chr->window_area, inpt->mouse)) ||
+			(inv->visible && isWithin(inv->window_area, inpt->mouse)) ||
+			(vendor->visible && isWithin(vendor->window_area, inpt->mouse)) ||
+			(pow->visible && isWithin(pow->window_area, inpt->mouse)) ||
+			(log->visible && isWithin(log->window_area, inpt->mouse)) ||
+			(talker->visible && isWithin(talker->window_area, inpt->mouse)) ||
+			(stash->visible && isWithin(stash->window_area, inpt->mouse)))
+		{
+			inpt->pressing[MAIN1] = false;
+			inpt->pressing[MAIN2] = false;
+		}
+	}
+
 	book->logic();
 	act->logic();
 	hudlog->logic();

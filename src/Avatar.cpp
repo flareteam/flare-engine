@@ -49,7 +49,6 @@ Avatar::Avatar()
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
-	, attacking (false)
 	, drag_walking(false)
 	, respawn(false)
 	, close_menus(false)
@@ -445,12 +444,14 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	// assist mouse movement
 	if (!inpt->pressing[MAIN1]) {
 		drag_walking = false;
-		attacking = false;
 	}
-	else {
-		if(!inpt->lock[MAIN1]) {
-			attacking = true;
-		}
+
+	// block some interactions when attacking
+	if (!inpt->pressing[MAIN1] && !inpt->pressing[MAIN2]) {
+		stats.attacking = false;
+	}
+	else if((inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) || (inpt->pressing[MAIN2] && !inpt->lock[MAIN2])) {
+		stats.attacking = true;
 	}
 
 	// handle animation
