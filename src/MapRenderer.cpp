@@ -170,20 +170,27 @@ int MapRenderer::load(std::string fname) {
 
 	tset.load(this->tileset);
 
-	bool corrupted = false;
+	std::vector<unsigned> corrupted;
 	for (unsigned i = 0; i < layers.size(); ++i) {
 		for (int x = 0; x < w; ++x) {
 			for (int y = 0; y < h; ++y) {
 				const unsigned tile_id = layers[i][x][y];
-				if (tile_id >= tset.tiles.size() || tset.tiles[tile_id].tile == NULL)
-					layers[i][x][y] = 0, corrupted = true;
+				if (tile_id > 0 && (tile_id >= tset.tiles.size() || tset.tiles[tile_id].tile == NULL)) {
+					if (find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
+						corrupted.push_back(tile_id);
+					}
+					layers[i][x][y] = 0;
+				}
 			}
 		}
 	}
 
-	if (corrupted) {
+	if (!corrupted.empty()) {
 		fprintf(stderr, "Tileset or Map corrupted. A tile has a larger id than the tileset allows or is undefined.\n");
-		fprintf(stderr, "Remove offending tile(s).\n");
+		while (!corrupted.empty()) {
+			fprintf(stderr, "Removing offending tile id %d.\n", corrupted.back());
+			corrupted.pop_back();
+		}
 	}
 
 	// some events automatically trigger when the map loads
