@@ -64,7 +64,6 @@ ConfigEntry config[] = {
 	{ "language",         &typeid(LANGUAGE),        "en",  &LANGUAGE,        "2-letter language code."},
 	{ "change_gamma",     &typeid(CHANGE_GAMMA),    "0",   &CHANGE_GAMMA,    "allow changing gamma (experimental). 1 enable, 0 disable."},
 	{ "gamma",            &typeid(GAMMA),           "1.0", &GAMMA,           "screen gamma (0.5 = darkest, 2.0 = lightest)"},
-	{ "texture_quality",  &typeid(TEXTURE_QUALITY), "1",   &TEXTURE_QUALITY, "texture quality (0 = low quality, 1 = high quality)"},
 	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
 	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
 	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
@@ -119,7 +118,6 @@ bool DOUBLEBUF;
 bool HWSURFACE;
 bool CHANGE_GAMMA;
 float GAMMA;
-bool TEXTURE_QUALITY;
 
 // Audio Settings
 bool AUDIO;

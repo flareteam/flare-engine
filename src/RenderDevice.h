@@ -89,22 +89,22 @@ protected:
  * An image can only be instantiated, and is owned, by a RenderDevice
  * For a SDL render device this means SDL_Surface or a SDL_Texture, and
  * by OpenGL render device this is a texture.
- * 
+ *
  * Image uses a refrence counter to control when to free the resource, when the
  * last reference is released, the Image is freed using RenderDevice::freeImage().
  *
  * The caller who instantiates an Image is responsible for release the reference
- * to the image when not used anymore. 
+ * to the image when not used anymore.
  *
  * Image is a source for a Sprite and is therefor responsible for instantiating
  * Sprites using Image::createSprite().
- * 
+ *
  * Creating a Sprite of a Image increases the reference counter, destructor of a
  * Sprite will release the reference to the image.
  *
  * @class Image
  * @author Henrik Andersson
- * @date 2014-01-30 
+ * @date 2014-01-30
  */
 class Image {
 public:
@@ -179,9 +179,7 @@ public:
 	/** factory functions for Image */
 	virtual Image *loadGraphicSurface(std::string filename,
 					  std::string errormessage = "Couldn't load image",
-					  bool IfNotFoundExit = false,
-					  bool HavePinkColorKey = false) = 0;
-	virtual Image *createSurface(int width, int height) = 0;
+					  bool IfNotFoundExit = false) = 0;
 	virtual Image *createAlphaSurface(int width, int height) = 0;
 	virtual void freeImage(Image *image) = 0;
 

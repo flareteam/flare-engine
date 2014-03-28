@@ -406,32 +406,6 @@ Image *SDLRenderDevice::createAlphaSurface(int width, int height) {
 	return image;
 }
 
-Image *SDLRenderDevice::createSurface(int width, int height) {
-
-	SDLImage *image = new SDLImage(this);
-	Uint32 rmask, gmask, bmask, amask;
-
-	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
-
-	if (HWSURFACE)
-		image->surface = SDL_CreateRGBSurface(SDL_HWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-	else
-		image->surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-
-	if(image->surface == NULL) {
-		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
-		delete image;
-		return NULL;
-	}
-
-	SDL_SetColorKey(image->surface, SDL_SRCCOLORKEY, SDL_MapRGB(image->surface->format,255,0,255));
-	SDL_Surface *cleanup = image->surface;
-	image->surface = SDL_DisplayFormat(image->surface);
-	SDL_FreeSurface(cleanup);
-
-	return image;
-}
-
 void SDLRenderDevice::setGamma(float g) {
 	SDL_SetGamma(g, g, g);
 }
@@ -470,7 +444,7 @@ void SDLRenderDevice::listModes(std::vector<Rect> &modes) {
 }
 
 
-Image *SDLRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit, bool HavePinkColorKey) {
+Image *SDLRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit) {
 	// lookup image in cache
 	Image *img;
 	img = cacheLookup(filename);
@@ -489,8 +463,6 @@ Image *SDLRenderDevice::loadGraphicSurface(std::string filename, std::string err
 		}
 	}
 	else {
-		if (HavePinkColorKey)
-			SDL_SetColorKey(cleanup, SDL_SRCCOLORKEY, SDL_MapRGB(cleanup->format, 255, 0, 255));
 		image = new SDLImage(this);
 		image->surface = SDL_DisplayFormatAlpha(cleanup);
 		SDL_FreeSurface(cleanup);

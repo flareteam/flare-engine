@@ -14,7 +14,6 @@ hws_note=416,72
 dbuf_note=416,104
 change_gamma=352,136,384,128
 gamma=352,168,384,160
-texture_quality=352,200,384,192
 test_note=416,136
 
 [audio]
