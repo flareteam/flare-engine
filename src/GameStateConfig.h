@@ -53,7 +53,7 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[137];
+	int optiontab[135];
 	Rect frame;
 	std::vector<Rect> video_modes;
 
@@ -96,8 +96,6 @@ private:
 	WidgetLabel         * doublebuf_lb;
 	WidgetCheckBox      * enable_joystick_cb;
 	WidgetLabel         * enable_joystick_lb;
-	WidgetCheckBox      * texture_quality_cb;
-	WidgetLabel         * texture_quality_lb;
 	WidgetCheckBox      * change_gamma_cb;
 	WidgetLabel         * change_gamma_lb;
 	WidgetCheckBox      * mouse_aim_cb;

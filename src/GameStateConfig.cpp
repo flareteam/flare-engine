@@ -110,8 +110,6 @@ void GameStateConfig::init() {
 	doublebuf_lb = new WidgetLabel();
 	enable_joystick_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	enable_joystick_lb = new WidgetLabel();
-	texture_quality_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
-	texture_quality_lb = new WidgetLabel();
 	change_gamma_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	change_gamma_lb = new WidgetLabel();
 	mouse_aim_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
@@ -235,7 +233,6 @@ void GameStateConfig::init() {
 	tablist.add(doublebuf_cb);
 	tablist.add(change_gamma_cb);
 	tablist.add(gamma_sl);
-	tablist.add(texture_quality_cb);
 	tablist.add(resolution_lstb);
 
 	tablist.add(music_volume_sl);
@@ -311,9 +308,6 @@ void GameStateConfig::readConfig () {
 			}
 			else if (infile.key == "enable_joystick") {
 				placeLabeledCheckbox( enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), 3);
-			}
-			else if (infile.key == "texture_quality") {
-				placeLabeledCheckbox( texture_quality_lb, texture_quality_cb, x1, y1, x2, y2, msg->get("High Quality Textures"), 0);
 			}
 			else if (infile.key == "change_gamma") {
 				placeLabeledCheckbox( change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), 0);
@@ -614,8 +608,6 @@ void GameStateConfig::update () {
 	else doublebuf_cb->unCheck();
 	if (ENABLE_JOYSTICK) enable_joystick_cb->Check();
 	else enable_joystick_cb->unCheck();
-	if (TEXTURE_QUALITY) texture_quality_cb->Check();
-	else texture_quality_cb->unCheck();
 	if (CHANGE_GAMMA) change_gamma_cb->Check();
 	else {
 		change_gamma_cb->unCheck();
@@ -794,10 +786,6 @@ void GameStateConfig::logic () {
 		else if (doublebuf_cb->checkClick()) {
 			if (doublebuf_cb->isChecked()) DOUBLEBUF=true;
 			else DOUBLEBUF=false;
-		}
-		else if (texture_quality_cb->checkClick()) {
-			if (texture_quality_cb->isChecked()) TEXTURE_QUALITY=true;
-			else TEXTURE_QUALITY=false;
 		}
 		else if (change_gamma_cb->checkClick()) {
 			if (change_gamma_cb->isChecked()) {

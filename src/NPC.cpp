@@ -184,7 +184,7 @@ void NPC::loadGraphics(const string& filename_portrait) {
 	if (filename_portrait != "") {
 		Image *graphics;
 		graphics = render_device->loadGraphicSurface(filename_portrait,
-				   "Couldn't load NPC portrait", false, true);
+				   "Couldn't load NPC portrait", false);
 		if (graphics) {
 			portrait = graphics->createSprite();
 			graphics->unref();

@@ -103,7 +103,6 @@ extern bool DOUBLEBUF;
 extern bool HWSURFACE;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
-extern bool TEXTURE_QUALITY;
 
 // Input Settings
 extern bool MOUSE_MOVE;

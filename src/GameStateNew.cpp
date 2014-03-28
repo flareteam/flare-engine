@@ -209,7 +209,7 @@ void GameStateNew::loadGraphics() {
 	Image *graphics;
 
 	graphics = render_device->loadGraphicSurface("images/menus/portrait_border.png",
-			   "Couldn't load portrait border image", false, true);
+			   "Couldn't load portrait border image", false);
 	if (graphics) {
 		portrait_border = graphics->createSprite();
 		graphics->unref();

@@ -100,7 +100,7 @@ void AnimationSet::load() {
 				exit(128);
 			}
 
-			sprite = loadTextureImage(parser.val);
+			sprite = render_device->loadGraphicSurface(parser.val);
 		}
 		else if (parser.key == "position") {
 			// @ATTR position|integer|Number of frames to the right to use as the first frame. Unpacked animations only.
