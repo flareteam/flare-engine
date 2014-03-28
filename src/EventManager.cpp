@@ -33,6 +33,7 @@ EventManager::~EventManager() {
 
 void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	if (!evnt) return;
+	// @CLASS EventManager|Description of events in maps/ and npcs/
 
 	if (infile.key == "type") {
 		// @ATTR event.type|[on_trigger:on_mapexit:on_leave:on_load:on_clear]|Type of map event.

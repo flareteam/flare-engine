@@ -116,7 +116,7 @@ void ItemManager::loadAll() {
 void ItemManager::loadItems() {
 	FileParser infile;
 
-	// @CLASS Item|Description about the class and it usage, items/items.txt...
+	// @CLASS ItemManager: Items|Description about the class and it usage, items/items.txt...
 	if (!infile.open("items/items.txt", true, false))
 		return;
 
@@ -310,7 +310,7 @@ void ItemManager::loadTypes() {
 	string type,description;
 	type = description = "";
 
-	// @CLASS Item Type|Definition of a item types, items/types.txt...
+	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
 	if (infile.open("items/types.txt", true, false)) {
 		while (infile.next()) {
 			// @ATTR name|string|Item type name.
@@ -344,7 +344,7 @@ void ItemManager::addUnknownItem(int id) {
 void ItemManager::loadSets() {
 	FileParser infile;
 
-	// @CLASS Item Set|Definition of a item sets, items/sets.txt...
+	// @CLASS ItemManager: Sets|Definition of a item sets, items/sets.txt...
 	if (!infile.open("items/sets.txt", true, false))
 		return;
 
