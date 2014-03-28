@@ -75,17 +75,25 @@ MenuNPCActions::MenuNPCActions()
 	, selected_dialog_node(-1) {
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuNPCActions/Description of menus/npc.txt
 	if (infile.open("menus/npc.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR background_color|r (integer), g (integer), b (integer), a (integer)|Color and alpha of the menu's background.
 			if(infile.key == "background_color") background_color = toRGBA(infile.val);
+			// @ATTR topic_normal_color|r (integer), g (integer), b (integer)|The normal color of a generic topic text.
 			else if(infile.key == "topic_normal_color") topic_normal_color = toRGB(infile.val);
+			// @ATTR topic_hilight_color|r (integer), g (integer), b (integer)|The color of generic topic text when it's hovered over or selected.
 			else if(infile.key == "topic_hilight_color") topic_hilight_color = toRGB(infile.val);
+			// @ATTR vendor_normal_color|r (integer), g (integer), b (integer)|The normal color of the vendor option text.
 			else if(infile.key == "vendor_normal_color") vendor_normal_color = toRGB(infile.val);
+			// @ATTR vendor_hilight_color|r (integer), g (integer), b (integer)|The color of vendor option text when it's hovered over or selected.
 			else if(infile.key == "vendor_hilight_color") vendor_hilight_color = toRGB(infile.val);
+			// @ATTR cancel_normal_color|r (integer), g (integer), b (integer)|The normal color of the option to close the menu.
 			else if(infile.key == "cancel_normal_color") cancel_normal_color = toRGB(infile.val);
+			// @ATTR cancel_hilight_color|r (integer), g (integer), b (integer)|The color of the option to close the menu when it's hovered over or selected.
 			else if(infile.key == "cancel_hilight_color") cancel_hilight_color = toRGB(infile.val);
 		}
 		infile.close();

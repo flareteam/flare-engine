@@ -58,6 +58,7 @@ PowerManager::PowerManager()
 void PowerManager::loadEffects() {
 	FileParser infile;
 
+	// @CLASS Effects|Description of powers/effects.txt
 	if (!infile.open("powers/effects.txt", true, false))
 		return;
 
@@ -87,11 +88,11 @@ void PowerManager::loadEffects() {
 			effects[input_name].icon = toInt(infile.val);
 		}
 		else if (infile.key == "animation") {
-			// @ATTR animation|string|The name of effect animation.
+			// @ATTR animation|string|The filename of effect animation.
 			effects[input_name].animation = infile.val;
 		}
 		else if (infile.key == "additive") {
-			// @ATTR additive|bool|Effect is additive
+			// @ATTR additive|bool|Effect is cumulative
 			effects[input_name].additive = toBool(infile.val);
 		}
 		else if (infile.key == "render_above") {
@@ -105,7 +106,7 @@ void PowerManager::loadEffects() {
 void PowerManager::loadPowers() {
 	FileParser infile;
 
-	// @CLASS Power|Description about powers...
+	// @CLASS Powers|Description of powers/powers.txt
 	if (!infile.open("powers/powers.txt", true, false))
 		return;
 
@@ -159,7 +160,7 @@ void PowerManager::loadPowers() {
 			// @ATTR face|bool|Power will make hero or enemy to face the target location.
 			powers[input_id].face = toBool(infile.val);
 		else if (infile.key == "source_type") {
-			// @ATTR source_type|[hero:neutral:enemy]|
+			// @ATTR source_type|[hero:neutral:enemy]|Determines which entities the power can effect.
 			if (infile.val == "hero") powers[input_id].source_type = SOURCE_TYPE_HERO;
 			else if (infile.val == "neutral") powers[input_id].source_type = SOURCE_TYPE_NEUTRAL;
 			else if (infile.val == "enemy") powers[input_id].source_type = SOURCE_TYPE_ENEMY;
@@ -185,6 +186,7 @@ void PowerManager::loadPowers() {
 		}
 		// power requirements
 		else if (infile.key == "requires_flags") {
+			// @ATTR requires_flags|flag (string), ...|A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt
 			std::string flag = popFirstString(infile.val);
 
 			while (flag != "") {
@@ -199,7 +201,7 @@ void PowerManager::loadPowers() {
 			// @ATTR requires_hp|integer|Restrict power usage to a specified HP level.
 			powers[input_id].requires_hp = toInt(infile.val);
 		else if (infile.key == "sacrifice")
-			// @ATTR sacrifice|bool|
+			// @ATTR sacrifice|bool|If the power has requires_hp, allow it to kill the caster.
 			powers[input_id].sacrifice = toBool(infile.val);
 		else if (infile.key == "requires_los")
 			// @ATTR requires_los|bool|Requires a line-of-sight to target.
@@ -221,7 +223,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].cooldown = parse_duration(infile.val);
 		// animation info
 		else if (infile.key == "animation")
-			// @ATTR animation|string|The name of power animation.
+			// @ATTR animation|string|The filename of the power animation.
 			powers[input_id].animation_name = infile.val;
 		else if (infile.key == "soundfx")
 			// @ATTR soundfx|string|Sound effect to play when use of power.
@@ -248,14 +250,14 @@ void PowerManager::loadPowers() {
 			// @ATTR floor|bool|The hazard is drawn between the background and the object layer.
 			powers[input_id].floor = toBool(infile.val);
 		else if (infile.key == "complete_animation")
-			// @ATTR complete_animation|bool|
+			// @ATTR complete_animation|bool|For hazards; Play the entire animation, even if the hazard has hit a target.
 			powers[input_id].complete_animation = toBool(infile.val);
 		// hazard traits
 		else if (infile.key == "use_hazard")
 			// @ATTR use_hazard|bool|Power uses hazard.
 			powers[input_id].use_hazard = toBool(infile.val);
 		else if (infile.key == "no_attack")
-			// @ATTR no_attack|bool|
+			// @ATTR no_attack|bool|Hazard won't affect other entities.
 			powers[input_id].no_attack = toBool(infile.val);
 		else if (infile.key == "radius")
 			// @ATTR radius|integer|Radius in pixels
@@ -276,32 +278,32 @@ void PowerManager::loadPowers() {
 			else fprintf(stderr, "unknown starting_pos %s\n", infile.val.c_str());
 		}
 		else if (infile.key == "multitarget")
-			// @ATTR multitarget|bool|
+			// @ATTR multitarget|bool|Allows a hazard power to hit more than one entity.
 			powers[input_id].multitarget = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
-			// @ATTR trait_armor_penetration|bool|
+			// @ATTR trait_armor_penetration|bool|Ignores the target's Absorbtion stat
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
 		else if (infile.key == "trait_avoidance_ignore")
-			// @ATTR trait_avoidance_ignore|bool|
+			// @ATTR trait_avoidance_ignore|bool|Ignores the target's Avoidance stat
 			powers[input_id].trait_avoidance_ignore = toBool(infile.val);
 		else if (infile.key == "trait_crits_impaired")
-			// @ATTR trait_crits_impaired|bool|
+			// @ATTR trait_crits_impaired|integer|Increases critical hit percentage for slowed/immobile targets
 			powers[input_id].trait_crits_impaired = toInt(infile.val);
 		else if (infile.key == "trait_elemental") {
-			// @ATTR, trait_elemental|string|
+			// @ATTR trait_elemental|string|Damage done is elemental. See engine/elements.txt
 			for (unsigned int i=0; i<ELEMENTS.size(); i++) {
 				if (infile.val == ELEMENTS[i].name) powers[input_id].trait_elemental = i;
 			}
 		}
 		else if (infile.key == "target_range")
-			// @ATTR, target_range|float||The distance from the caster that the power can be activated
+			// @ATTR target_range|float||The distance from the caster that the power can be activated
 			powers[input_id].target_range = toFloat(infile.nextValue());
 		//steal effects
 		else if (infile.key == "hp_steal")
-			// @ATTR, hp_steal|integer|Percentage of damage to steal into HP
+			// @ATTR hp_steal|integer|Percentage of damage to steal into HP
 			powers[input_id].hp_steal = toInt(infile.val);
 		else if (infile.key == "mp_steal")
-			// @ATTR, mp_steal|integer|Percentage of damage to steal into MP
+			// @ATTR mp_steal|integer|Percentage of damage to steal into MP
 			powers[input_id].mp_steal = toInt(infile.val);
 		//missile modifiers
 		else if (infile.key == "missile_angle")
@@ -322,23 +324,23 @@ void PowerManager::loadPowers() {
 			// @ATTR transform_duration|duration|Duration for transform
 			powers[input_id].transform_duration = toInt(infile.val);
 		else if (infile.key == "manual_untransform")
-			// @ATTR transform_duration|bool|Force manual untranform
+			// @ATTR manual_untransform|bool|Force manual untranform
 			powers[input_id].manual_untransform = toBool(infile.val);
 		else if (infile.key == "keep_equipment")
 			// @ATTR keep_equipment|bool|Keep  equipment while transformed
 			powers[input_id].keep_equipment = toBool(infile.val);
 		// buffs
 		else if (infile.key == "buff")
-			// @ATTR buff|bool|
+			// @ATTR buff|bool|Power is cast upon the caster.
 			powers[input_id].buff= toBool(infile.val);
 		else if (infile.key == "buff_teleport")
-			// @ATTR buff_teleport|bool|
+			// @ATTR buff_teleport|bool|Power is a teleportation power.
 			powers[input_id].buff_teleport = toBool(infile.val);
 		else if (infile.key == "buff_party")
-			// @ATTR buff_part|bool|
+			// @ATTR buff_part|bool|Power is cast upon party members
 			powers[input_id].buff_party = toBool(infile.val);
 		else if (infile.key == "buff_party_power_id")
-			// @ATTR buff_part_power_id|bool|
+			// @ATTR buff_part_power_id|integer|Buffs a power id for all party members
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
 			// @ATTR post_effect|[effect_id, magnitude (integer), duration (integer)]|Post effect.
@@ -350,10 +352,10 @@ void PowerManager::loadPowers() {
 		}
 		// pre and post power effects
 		else if (infile.key == "post_power")
-			// @ATTR post_power|power_id|Post power
+			// @ATTR post_power|power_id|Trigger a power if the hazard did damage.
 			powers[input_id].post_power = toInt(infile.val);
 		else if (infile.key == "wall_power")
-			// @ATTR wall_power|power_id|Wall power
+			// @ATTR wall_power|power_id|Trigger a power if the hazard hit a wall.
 			powers[input_id].wall_power = toInt(infile.val);
 		else if (infile.key == "allow_power_mod")
 			// @ATTR allow_power_mod|bool|Allow power modifiers
@@ -363,7 +365,7 @@ void PowerManager::loadPowers() {
 			// @ATTR spawn_type|string|Type of spawn.
 			powers[input_id].spawn_type = infile.val;
 		else if (infile.key == "target_neighbor")
-			// @ATTR target_neighbor|int|Neigbor target.
+			// @ATTR target_neighbor|int|Target is changed to an adjacent tile within a radius.
 			powers[input_id].target_neighbor = toInt(infile.val);
 		else if (infile.key == "spawn_limit") {
 			// @ATTR spawn_limit|[fixed:stat:unlimited],stat[physical:mental:offense:defens]|
@@ -389,6 +391,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "spawn_level") {
+			// @ATTR spawn_level|[default:fixed:stat:level],stat[physical:mental:offense:defens]|
 			std::string mode = popFirstString(infile.val);
 			if (mode == "default") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_DEFAULT;
 			else if (mode == "fixed") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_FIXED;
@@ -414,17 +417,17 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "target_party")
-			// @ATTR target_party|bool|
+			// @ATTR target_party|bool|Hazard will only affect party members.
 			powers[input_id].target_party = toBool(infile.val);
 		else if (infile.key == "target_categories") {
-			// @ATTR target_categories|string,...|
+			// @ATTR target_categories|string,...|Hazard will only affect enemies in these categories.
 			string cat;
 			while ((cat = infile.nextValue()) != "") {
 				powers[input_id].target_categories.push_back(cat);
 			}
 		}
 		else if (infile.key == "modifier_accuracy") {
-			// @ATTR modifier_accuracy|[multiply:add:absolute], integer|
+			// @ATTR modifier_accuracy|[multiply:add:absolute], integer|Changes this power's accuracy.
 			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
@@ -434,7 +437,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_accuracy_value = popFirstInt(infile.val);
 		}
 		else if (infile.key == "modifier_damage") {
-			// @ATTR modifier_damage|[multiply:add:absolute], integer|
+			// @ATTR modifier_damage|[multiply:add:absolute], integer|Changes this power's damage.
 			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
@@ -445,7 +448,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_damage_value_max = popFirstInt(infile.val);
 		}
 		else if (infile.key == "modifier_critical") {
-			// @ATTR modifier_critical|[multiply:add:absolute], integer|
+			// @ATTR modifier_critical|[multiply:add:absolute], integer|Changes the chance that this power will land a critical hit.
 			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;

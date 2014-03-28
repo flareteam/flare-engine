@@ -48,6 +48,7 @@ void MenuBook::loadBook() {
 	// Read data from config file
 	FileParser infile;
 
+	// @CLASS MenuBook|Description of books in books/
 	if (infile.open(book_name)) {
 		while (infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
@@ -55,12 +56,14 @@ void MenuBook::loadBook() {
 
 			infile.val = infile.val + ',';
 
+			// @ATTR close|x (integer), y (integer)|Position of the close button.
 			if(infile.key == "close") {
 				closeButton->pos.x = popFirstInt(infile.val);
 				closeButton->pos.y = popFirstInt(infile.val);
 			}
+			// @ATTR background|string|Filename for the background image.
 			else if (infile.key == "background") {
-			        setBackground(popFirstString(infile.val));
+				setBackground(popFirstString(infile.val));
 			}
 
 			if (infile.new_section) {
@@ -117,11 +120,13 @@ void MenuBook::loadBook() {
 }
 
 void MenuBook::loadImage(FileParser &infile) {
+	// @ATTR image.image_pos|x (integer), y (integer)|Position of the image.
 	if (infile.key == "image_pos") {
 		image_dest.back() = toPoint(infile.val);
 	}
+	// @ATTR image.image|string|Filename of the image.
 	else if (infile.key == "image") {
-	        Image *graphics;
+		Image *graphics;
 		graphics = render_device->loadGraphicSurface(popFirstString(infile.val));
 		if (graphics) {
 		  image.back() = graphics->createSprite();
@@ -131,6 +136,7 @@ void MenuBook::loadImage(FileParser &infile) {
 }
 
 void MenuBook::loadText(FileParser &infile) {
+	// @ATTR text.text_pos|x (integer), y (integer), w (integer), [left:center:right]|Position of the text.
 	if (infile.key == "text_pos") {
 		size.back().x = popFirstInt(infile.val);
 		size.back().y = popFirstInt(infile.val);
@@ -141,6 +147,7 @@ void MenuBook::loadText(FileParser &infile) {
 		else if (_justify == "center") justify.back() = JUSTIFY_CENTER;
 		else if (_justify == "right") justify.back() = JUSTIFY_RIGHT;
 	}
+	// @ATTR text.text_font|r (integer), g (integer), b (integer), style (string)|Font color and style.
 	else if (infile.key == "text_font") {
 		Color color;
 		color.r = popFirstInt(infile.val);
@@ -149,6 +156,7 @@ void MenuBook::loadText(FileParser &infile) {
 		textColor.back() = color;
 		textFont.back() = popFirstString(infile.val);
 	}
+	// @ATTR text.text|string|The text to be displayed.
 	else if (infile.key == "text") {
 		textData.back() = infile.val;
 		// remove comma from the end

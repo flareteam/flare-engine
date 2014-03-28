@@ -40,6 +40,7 @@ MenuEnemy::MenuEnemy() {
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuEnemy|Description of menus/enemy.txt
 	if(infile.open("menus/enemy.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
@@ -47,9 +48,11 @@ MenuEnemy::MenuEnemy() {
 
 			infile.val = infile.val + ',';
 
+			// @ATTR bar_pos|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the health bar.
 			if(infile.key == "bar_pos") {
 				bar_pos = toRect(infile.val);
 			}
+			// @ATTR text_pos|label|Position of the "$ENEMY level $LEVEL" text. Optional.
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);

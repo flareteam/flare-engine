@@ -45,9 +45,11 @@ NPCManager::NPCManager(StatBlock *_stats)
 	, tooltip_margin(0) {
 	FileParser infile;
 	// load tooltip_margin from engine config file
+	// @CLASS NPCManager|Description of engine/tooltips.txt
 	if (infile.open("engine/tooltips.txt")) {
 		while (infile.next()) {
 			if (infile.key == "npc_tooltip_margin") {
+				// @ATTR npc_tooltip_margin|integer|Vertical offset for NPC labels.
 				tooltip_margin = toInt(infile.val);
 			}
 		}

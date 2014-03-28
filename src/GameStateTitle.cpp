@@ -42,11 +42,13 @@ GameStateTitle::GameStateTitle() : GameState() {
 	button_credits = new WidgetButton("images/menus/buttons/button_default.png");
 
 	FileParser infile;
+	// @CLASS GameStateTitle|Description of menus/gametitle.txt
 	if (infile.open("menus/gametitle.txt")) {
 		while (infile.next()) {
+			// @ATTR logo|filename (string), x (integer), y (integer), align (alignment)|Filename and position of the main logo image.
 			if (infile.key == "logo") {
-  			        Image *graphics;
-				graphics = render_device->loadGraphicSurface(popFirstString(infile.val), "");			       
+				Image *graphics;
+				graphics = render_device->loadGraphicSurface(popFirstString(infile.val), "");
 				if (graphics) {
 					Rect r;
  				        logo = graphics->createSprite();
@@ -61,21 +63,25 @@ GameStateTitle::GameStateTitle() : GameState() {
 					graphics->unref();
 				}
 			}
+			// @ATTR play_pos|x (integer), y (integer), align (alignment)|Position of the "Play Game" button.
 			else if (infile.key == "play_pos") {
 				button_play->pos.x = popFirstInt(infile.val);
 				button_play->pos.y = popFirstInt(infile.val);
 				alignToScreenEdge(popFirstString(infile.val), &(button_play->pos));
 			}
+			// @ATTR config_pos|x (integer), y (integer), align (alignment)|Position of the "Configuration" button.
 			else if (infile.key == "config_pos") {
 				button_cfg->pos.x = popFirstInt(infile.val);
 				button_cfg->pos.y = popFirstInt(infile.val);
 				alignToScreenEdge(popFirstString(infile.val), &(button_cfg->pos));
 			}
+			// @ATTR credits_pos|x (integer), y (integer), align (alignment)|Position of the "Credits" button.
 			else if (infile.key == "credits_pos") {
 				button_credits->pos.x = popFirstInt(infile.val);
 				button_credits->pos.y = popFirstInt(infile.val);
 				alignToScreenEdge(popFirstString(infile.val), &(button_credits->pos));
 			}
+			// @ATTR exit_pos|x (integer), y (integer), align (alignment)|Position of the "Exit Game" button.
 			else if (infile.key == "exit_pos") {
 				button_exit->pos.x = popFirstInt(infile.val);
 				button_exit->pos.y = popFirstInt(infile.val);

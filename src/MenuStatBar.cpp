@@ -52,24 +52,30 @@ MenuStatBar::MenuStatBar(std::string type)
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuStatBar|Description of menus/hp.txt, menus/mp.txt, menus/xp.txt
 	if(infile.open("menus/"+type+".txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR bar_pos|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the bar graphics.
 			if(infile.key == "bar_pos") {
 				bar_pos = toRect(infile.val);
 			}
+			// @ATTR text_pos|label|Position of the "$CURRENT/$TOTAL" text.
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
 			}
+			// @ATTR orientation|boolean|True is vertical orientation; false is horizontal.
 			else if(infile.key == "orientation") {
 				orientation = toBool(infile.val);
 			}
+			// @ATTR bar_gfx|string|Filename of the image to use for the "fill" of the bar.
 			else if (infile.key == "bar_gfx") {
 				bar_gfx = infile.val;
 			}
+			// @ATTR bar_gfx_background|string|Filename of the image to use for the base of the bar.
 			else if (infile.key == "bar_gfx_background") {
 				bar_gfx_background = infile.val;
 			}

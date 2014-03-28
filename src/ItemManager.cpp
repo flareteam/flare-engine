@@ -143,17 +143,17 @@ void ItemManager::loadItems() {
 			// @ATTR name|string|Item name displayed on long and short tooltips.
 			items[id].name = msg->get(infile.val);
 		else if (infile.key == "flavor")
-			// @ATTR flavor|string|
+			// @ATTR flavor|string|A description of the item.
 			items[id].flavor = msg->get(infile.val);
 		else if (infile.key == "level")
-			// @ATTR level|integer|
+			// @ATTR level|integer|The item's level. Has no gameplay impact. (Deprecated?)
 			items[id].level = toInt(infile.val);
 		else if (infile.key == "icon") {
-			// @ATTR icon|integer|
+			// @ATTR icon|integer|An id for the icon to display for this item.
 			items[id].icon = toInt(infile.nextValue());
 		}
 		else if (infile.key == "book") {
-			// @ATTR book|string|
+			// @ATTR book|string|A book file to open when this item is activated.
 			items[id].book = infile.val;
 		}
 		else if (infile.key == "quality") {
@@ -170,6 +170,7 @@ void ItemManager::loadItems() {
 			items[id].type = infile.val;
 		}
 		else if (infile.key == "equip_flags") {
+			// @ATTR equip_flags|flag (string), ...|A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.
 			std::string flag = popFirstString(infile.val);
 
 			while (flag != "") {
@@ -235,7 +236,7 @@ void ItemManager::loadItems() {
 			// @ATTR gfx|string|Graphics for the specific item.
 			items[id].gfx = infile.val;
 		else if (infile.key == "loot_animation") {
-			// @ATTR loot_animation|string|Specifies the loot animation for the item.
+			// @ATTR loot_animation|filename (string), min quantity (int), max quantity (int)|Specifies the loot animation for the item. The max quantity, or both quantity values, may be omitted.
 			LootAnimation la;
 			la.name = popFirstString(infile.val);
 			la.low = popFirstInt(infile.val);

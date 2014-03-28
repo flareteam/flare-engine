@@ -159,7 +159,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 
 void Map::loadEnemy(FileParser &infile) {
 	if (infile.key == "type") {
-		// @ATTR enemy.type|string|Enemy type
+		// @ATTR enemy.type|string|Filename of an enemy definition.
 		enemies.back().type = infile.val;
 	}
 	else if (infile.key == "location") {
@@ -204,7 +204,7 @@ void Map::loadEnemy(FileParser &infile) {
 
 void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	if (infile.key == "type") {
-		// @ATTR enemygroup.type|string|Type of enemy group
+		// @ATTR enemygroup.type|string|The category of enemies that will spawn in this group.
 		group->category = infile.val;
 	}
 	else if (infile.key == "level") {
@@ -234,7 +234,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 void Map::loadNPC(FileParser &infile) {
 	std::string s;
 	if (infile.key == "type") {
-		// @ATTR npc.type|string|Type of NPC
+		// @ATTR npc.type|string|Filename of an NPC definition.
 		npcs.back().id = infile.val;
 	}
 	if (infile.key == "requires_status") {

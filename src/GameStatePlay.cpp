@@ -408,6 +408,7 @@ void GameStatePlay::checkBook() {
 
 void GameStatePlay::loadTitles() {
 	FileParser infile;
+	// @CLASS GameStatePlay: Titles|Description of engine/titles.txt
 	if (infile.open("engine/titles.txt")) {
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "title") {
@@ -417,11 +418,17 @@ void GameStatePlay::loadTitles() {
 
 			if (titles.empty()) continue;
 
+			// @ATTR title.title|string|The displayed title.
 			if (infile.key == "title") titles.back().title = infile.val;
+			// @ATTR title.level|integer|Requires level.
 			else if (infile.key == "level") titles.back().level = toInt(infile.val);
+			// @ATTR title.power|integer|Requires power.
 			else if (infile.key == "power") titles.back().power = toInt(infile.val);
+			// @ATTR title.requires_status|string|Requires status.
 			else if (infile.key == "requires_status") titles.back().requires_status = infile.val;
+			// @ATTR title.requires_not_status|string|Requires not status.
 			else if (infile.key == "requires_not_status") titles.back().requires_not = infile.val;
+			// @ATTR title.primary_stat|[physical, mental, offense, defense, physoff, physment, physdef, mentoff, offdef, mentdef]|Required primary stat.
 			else if (infile.key == "primary_stat") titles.back().primary_stat = infile.val;
 			else fprintf(stderr, "GameStatePlay: Unknown key value in title definitons: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
 		}

@@ -224,7 +224,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = msg->get(infile.val);
 	}
 	else if (infile.key == "shakycam") {
-		// @ATTR event.shakycam|integer|
+		// @ATTR event.shakycam|integer|Makes the camera shake for this duration.
 		e->x = toInt(infile.val);
 	}
 	else if (infile.key == "requires_status") {
@@ -393,11 +393,11 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "stash") {
-		// @ATTR event.stash|string|
+		// @ATTR event.stash|string|Opens the Stash menu.
 		e->s = infile.val;
 	}
 	else if (infile.key == "npc") {
-		// @ATTR event.npc|string|
+		// @ATTR event.npc|string|Filename of an NPC to start dialog with.
 		e->s = infile.val;
 	}
 	else if (infile.key == "music") {
@@ -409,7 +409,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = infile.val;
 	}
 	else if (infile.key == "repeat") {
-		// @ATTR event.repeat|string|
+		// @ATTR event.repeat|string|Allows the event to be triggered again.
 		e->s = infile.val;
 	}
 	else {

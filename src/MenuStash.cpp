@@ -51,27 +51,34 @@ MenuStash::MenuStash(StatBlock *_stats)
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuStash|Description of menus/stash.txt
 	if (infile.open("menus/stash.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR close|x (integer), y (integer)|Position of the close button.
 			if (infile.key == "close") {
 				close_pos = toPoint(infile.val);
 			}
+			// @ATTR slots_area|x (integer), y (integer)|Position of the top-left slot.
 			else if (infile.key == "slots_area") {
 				slots_area.x = popFirstInt(infile.val);
 				slots_area.y = popFirstInt(infile.val);
 			}
+			// @ATTR stash_cols|integer|The number of columns for the grid of slots.
 			else if (infile.key == "stash_cols") {
 				slots_cols = toInt(infile.val);
 			}
+			// @ATTR stash_rows|integer|The number of rows for the grid of slots.
 			else if (infile.key == "stash_rows") {
 				slots_rows = toInt(infile.val);
 			}
+			// @ATTR label_title|label|Position of the "Stash" label.
 			else if (infile.key == "label_title") {
 				title =  eatLabelInfo(infile.val);
 			}
+			// @ATTR currency|label|Position of the label displaying the amount of currency stored in the stash.
 			else if (infile.key == "currency") {
 				currency =  eatLabelInfo(infile.val);
 			}

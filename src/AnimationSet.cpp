@@ -60,6 +60,7 @@ void AnimationSet::load() {
 	loaded = true;
 
 	FileParser parser;
+	// @CLASS Animation|Description of animations in animations/
 	if (!parser.open(name, true, true, "Error loading animation definition: " + name))
 		return;
 
@@ -92,6 +93,7 @@ void AnimationSet::load() {
 			compressed_loading = false;
 		}
 		if (parser.key == "image") {
+			// @ATTR image|string|Filename of sprite-sheet image.
 			if (sprite != NULL) {
 				printf("multiple images specified in %s, dragons be here!\n", name.c_str());
 				SDL_Quit();
@@ -101,28 +103,35 @@ void AnimationSet::load() {
 			sprite = loadTextureImage(parser.val);
 		}
 		else if (parser.key == "position") {
+			// @ATTR position|integer|Number of frames to the right to use as the first frame. Unpacked animations only.
 			position = toInt(parser.val);
 		}
 		else if (parser.key == "frames") {
+			// @ATTR frames|integer|The total number of frames
 			frames = toInt(parser.val);
 		}
 		else if (parser.key == "duration") {
+			// @ATTR duration|integer|The duration of each frame.
 			duration = toInt(parser.val);
 
 			// TEMP: if an animation is too fast, display one frame per fps anyway
 			if (duration < 1) duration=1;
 		}
 		else if (parser.key == "type")
+			// @ATTR type|[play_once, back_forth, looped]|How to loop (or not loop) this animation.
 			type = parser.val;
 		else if (parser.key == "render_size") {
+			// @ATTR render_size|w (integer), h (integer)|Width and height of animation.
 			render_size.x = toInt(parser.nextValue());
 			render_size.y = toInt(parser.nextValue());
 		}
 		else if (parser.key == "render_offset") {
+			// @ATTR render_offset|x (integer), y (integer)|Render x/y offset.
 			render_offset.x = toInt(parser.nextValue());
 			render_offset.y = toInt(parser.nextValue());
 		}
 		else if (parser.key == "active_frame") {
+			// @ATTR active_frame|[all:frame (integer), ...]|A list of frames marked as "active". Also, "all" can be used to mark all frames as active.
 			active_frames.clear();
 			string nv = parser.nextValue();
 			if (nv == "all") {
@@ -138,6 +147,7 @@ void AnimationSet::load() {
 			}
 		}
 		else if (parser.key == "frame") {
+			// @ATTR frame|index (integer), direction (integer), x (integer), y (integer), w (integer), h (integer), x offset (integer), y offset (integer)|A single frame of a compressed animation.
 			if (compressed_loading == false) { // first frame statement in section
 				newanim = new Animation(_name, type, sprite);
 				newanim->setup(frames, duration);

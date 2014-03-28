@@ -41,11 +41,13 @@ MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 	, orientation(false) { // horizontal
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuActiveEffects|Description of menus/activeeffects.txt
 	if(infile.open("menus/activeeffects.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR orientation|boolean|True is vertical orientation; False is horizontal orientation.
 			if(infile.key == "orientation") {
 				orientation = toBool(infile.val);
 			}

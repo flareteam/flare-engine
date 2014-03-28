@@ -180,44 +180,45 @@ bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
 }
 
 bool StatBlock::loadCoreStat(FileParser *infile) {
+	// @CLASS StatBlock: Core stats|Description of engine/stats.txt and enemies in enemies/
 
 	int value = toInt(infile->val, 0);
 	float fvalue = toFloat(infile->val, 0);
 
 	if (infile->key == "speed") {
+		// @ATTR speed|float|Movement speed
 		speed = speed_default = fvalue / MAX_FRAMES_PER_SEC;
-		return true;
-	}
-	else if (infile->key == "categories") {
-		string cat;
-		while ((cat = infile->nextValue()) != "") {
-			categories.push_back(cat);
-		}
 		return true;
 	}
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (infile->key == STAT_NAME[i]) {
+				// @ATTR $STATNAME|integer|The starting value for this stat.
 				starting[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_NAME[i] + "_per_level") {
+				// @ATTR $STATNAME_per_level|integer|The value for this stat added per level.
 				per_level[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_NAME[i] + "_per_physical") {
+				// @ATTR $STATNAME_per_physical|integer|The value for this stat added per Physical.
 				per_physical[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_NAME[i] + "_per_mental") {
+				// @ATTR $STATNAME_per_mental|integer|The value for this stat added per Mental.
 				per_mental[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_NAME[i] + "_per_offense") {
+				// @ATTR $STATNAME_per_offense|integer|The value for this stat added per Offense.
 				per_offense[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_NAME[i] + "_per_defense") {
+				// @ATTR $STATNAME_per_defense|integer|The value for this stat added per Defense.
 				per_defense[i] = value;
 				return true;
 			}
@@ -225,6 +226,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
 			if (infile->key == "vulnerable_" + ELEMENTS[i].name) {
+				// @ATTR vulnerable_$ELEMENT|integer|Percentage weakness to this element.
 				vulnerable[i] = vulnerable_base[i] = value;
 				return true;
 			}
@@ -238,12 +240,21 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
  * Set paths for sound effects
  */
 bool StatBlock::loadSfxStat(FileParser *infile) {
+	// @CLASS StatBlock: Sound effects|Description of heroes in engine/avatar/ and enemies in enemies/
+
+	// @ATTR sfx_phys|string|Filename of sound effect for physical attack.
 	if (infile->key == "sfx_phys") sfx_phys = infile->val;
+	// @ATTR sfx_ment|string|Filename of sound effect for mental attack.
 	else if (infile->key == "sfx_ment") sfx_ment = infile->val;
+	// @ATTR sfx_hit|string|Filename of sound effect for being hit.
 	else if (infile->key == "sfx_hit") sfx_hit = infile->val;
+	// @ATTR sfx_die|string|Filename of sound effect for dying.
 	else if (infile->key == "sfx_die") sfx_die = infile->val;
+	// @ATTR sfx_critdie|string|Filename of sound effect for dying to a critical hit.
 	else if (infile->key == "sfx_critdie") sfx_critdie = infile->val;
+	// @ATTR sfx_block|string|Filename of sound effect for blocking an incoming hit.
 	else if (infile->key == "sfx_block") sfx_block = infile->val;
+	// @ATTR sfx_levelup|string|Filename of sound effect for leveling up.
 	else if (infile->key == "sfx_levelup") sfx_levelup = infile->val;
 	else return false;
 
@@ -254,6 +265,7 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
  * load a statblock, typically for an enemy definition
  */
 void StatBlock::load(const string& filename) {
+	// @CLASS StatBlock: Enemies|Description of enemies in enemies/
 	FileParser infile;
 	if (!infile.open(filename))
 		return;
@@ -265,14 +277,19 @@ void StatBlock::load(const string& filename) {
 		float fnum = toFloat(infile.val);
 		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile);
 
+		// @ATTR name|string|Name
 		if (infile.key == "name") name = msg->get(infile.val);
+		// @ATTR humanoid|boolean|This creature gives human traits when transformed into, such as the ability to talk with NPCs.
 		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
 
+		// @ATTR level|integer|Level
 		else if (infile.key == "level") level = num;
 
 		// enemy death rewards and events
+		// @ATTR xp|integer|XP awarded upon death.
 		else if (infile.key == "xp") xp = num;
 		else if (infile.key == "loot") {
+			// @ATTR loot|[currency:item (integer)], chance (integer), min (integer), max (integer)|Possible loot that can be dropped on death.
 
 			// loot entries format:
 			// loot=[id],[percent_chance]
@@ -302,54 +319,91 @@ void StatBlock::load(const string& filename) {
 
 			loot.push_back(el);
 		}
+		// @ATTR defeat_status|string|Campaign status to set upon death.
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
+		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
 		else if (infile.key == "convert_status") convert_status = infile.val;
+		// @ATTR first_defeat_loot|integer|Drops this item upon first death.
 		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
+		// @ATTR quest_loot|[requires status (string), requires not status (string), item (integer)|Drops this item when campaign status is met.
 		else if (infile.key == "quest_loot") {
 			quest_loot_requires_status = infile.nextValue();
 			quest_loot_requires_not_status = infile.nextValue();
 			quest_loot_id = toInt(infile.nextValue());
 		}
 		// combat stats
+		// @ATTR cooldown|integer|Cooldown between attacks.
 		else if (infile.key == "cooldown") cooldown = parse_duration(infile.val);
 
 		// behavior stats
+		// @ATTR flying|boolean|Creature can move over gaps/water.
 		else if (infile.key == "flying") flying = toBool(infile.val);
+		// @ATTR intangible|boolean|Creature can move through walls.
 		else if (infile.key == "intangible") intangible = toBool(infile.val);
+		// @ATTR facing|boolean|Creature can turn to face their target.
 		else if (infile.key == "facing") facing = toBool(infile.val);
 
+		// @ATTR waypoint_pause|integer|Duration to wait at each waypoint.
 		else if (infile.key == "waypoint_pause") waypoint_pause = num;
 
+		// @ATTR turn_delay|integer|Duration it takes for this creature to turn and face their target.
 		else if (infile.key == "turn_delay") turn_delay = num;
+		// @ATTR chance_pursue|integer|Percentage change that the creature will chase their target.
 		else if (infile.key == "chance_pursue") chance_pursue = num;
+		// @ATTR chance_flee|integer|Percentage chance that the creature will run away from their target.
 		else if (infile.key == "chance_flee") chance_flee = num;
 
+		// @ATTR chance_melee_phys|integer|Percentage chance that the creature will use their physical melee power.
 		else if (infile.key == "chance_melee_phys") power_chance[MELEE_PHYS] = num;
+		// @ATTR chance_melee_ment|integer|Percentage chance that the creature will use their mental melee power.
 		else if (infile.key == "chance_melee_ment") power_chance[MELEE_MENT] = num;
+		// @ATTR chance_ranged_phys|integer|Percentage chance that the creature will use their physical ranged power.
 		else if (infile.key == "chance_ranged_phys") power_chance[RANGED_PHYS] = num;
+		// @ATTR chance_ranged_ment|integer|Percentage chance that the creature will use their mental ranged power.
 		else if (infile.key == "chance_ranged_ment") power_chance[RANGED_MENT] = num;
+		// @ATTR power_melee_phys|integer|Power index for the physical melee power.
 		else if (infile.key == "power_melee_phys") power_index[MELEE_PHYS] = num;
+		// @ATTR power_melee_ment|integer|Power index for the mental melee power.
 		else if (infile.key == "power_melee_ment") power_index[MELEE_MENT] = num;
+		// @ATTR power_ranged_phys|integer|Power index for the physical ranged power.
 		else if (infile.key == "power_ranged_phys") power_index[RANGED_PHYS] = num;
+		// @ATTR power_ranged_ment|integer|Power index for the mental ranged power.
 		else if (infile.key == "power_ranged_ment") power_index[RANGED_MENT] = num;
+		// @ATTR power_beacon|integer|Power index of a "beacon" power used to aggro nearby creatures.
 		else if (infile.key == "power_beacon") power_index[BEACON] = num;
+		// @ATTR cooldown_melee_phys|duration|Cooldown after using the physical melee power.
 		else if (infile.key == "cooldown_melee_phys") power_cooldown[MELEE_PHYS] = parse_duration(infile.val);
+		// @ATTR cooldown_melee_ment|duration|Cooldown after using the mental melee power.
 		else if (infile.key == "cooldown_melee_ment") power_cooldown[MELEE_MENT] = parse_duration(infile.val);
+		// @ATTR cooldown_ranged_phys|duration|Cooldown after using the physical ranged power.
 		else if (infile.key == "cooldown_ranged_phys") power_cooldown[RANGED_PHYS] = parse_duration(infile.val);
+		// @ATTR cooldown_ranged_ment|duration|Cooldown after using the mental ranged power.
 		else if (infile.key == "cooldown_ranged_ment") power_cooldown[RANGED_MENT] = parse_duration(infile.val);
+		// @ATTR power_on_hit|integer|Power index that is triggered when hit.
 		else if (infile.key == "power_on_hit") power_index[ON_HIT] = num;
+		// @ATTR power_on_death|integer|Power index that is triggered when dead.
 		else if (infile.key == "power_on_death") power_index[ON_DEATH] = num;
+		// @ATTR power_on_half_dead|integer|Power index that is triggered when at half health.
 		else if (infile.key == "power_on_half_dead") power_index[ON_HALF_DEAD] = num;
+		// @ATTR power_on_debuff|integer|Power index that is triggered when under a negative status effect.
 		else if (infile.key == "power_on_debuff") power_index[ON_DEBUFF] = num;
+		// @ATTR power_on_join_combat|integer|Power index that is triggered when initiating combat.
 		else if (infile.key == "power_on_join_combat") power_index[ON_JOIN_COMBAT] = num;
+		// @ATTR chance_on_hit|integer|Percentage chance that power_on_hit will be triggered.
 		else if (infile.key == "chance_on_hit") power_chance[ON_HIT] = num;
+		// @ATTR chance_on_death|integer|Percentage chance that power_on_death will be triggered.
 		else if (infile.key == "chance_on_death") power_chance[ON_DEATH] = num;
+		// @ATTR chance_on_half_dead|integer|Percentage chance that power_on_half_dead will be triggered.
 		else if (infile.key == "chance_on_half_dead") power_chance[ON_HALF_DEAD] = num;
+		// @ATTR chance_on_debuff|integer|Percentage chance that power_on_debuff will be triggered.
 		else if (infile.key == "chance_on_debuff") power_chance[ON_DEBUFF] = num;
+		// @ATTR chance_on_join_combat|integer|Percentage chance that power_on_join_combat will be triggered.
 		else if (infile.key == "chance_on_join_combat") power_chance[ON_JOIN_COMBAT] = num;
+		// @ATTR cooldown_hit|integer|Duration of cooldown after being hit.
 		else if (infile.key == "cooldown_hit") cooldown_hit = num;
 
 		else if (infile.key == "passive_powers") {
+			// @ATTR passive_powers|power (integer), ...|A list of passive powers this creature has.
 			std::string p = infile.nextValue();
 			while (p != "") {
 				powers_passive.push_back(toInt(p));
@@ -357,22 +411,38 @@ void StatBlock::load(const string& filename) {
 			}
 		}
 
+		// @ATTR melee_range|float|Minimum distance from target required to use melee powers.
 		else if (infile.key == "melee_range") melee_range = fnum;
+		// @ATTR threat_range|float|Radius of the area this creature will be able to start chasing the hero.
 		else if (infile.key == "threat_range") threat_range = fnum;
+		// @ATTR passive_attacker|boolean|Won't initiate combat until attacked.
 		else if (infile.key == "passive_attacker") passive_attacker = toBool(infile.val);
 
-		// animation stats
+		// @ATTR melee_weapon_power|integer|Power index of a melee power that can be affected by power mod.
 		else if (infile.key == "melee_weapon_power") melee_weapon_power = num;
+		// @ATTR mental_weapon_power|integer|Power index of a mental power that can be affected by power mod.
 		else if (infile.key == "mental_weapon_power") mental_weapon_power = num;
+		// @ATTR ranged_weapon_power|integer|Power index of a ranged power that can be affected by power mod.
 		else if (infile.key == "ranged_weapon_power") ranged_weapon_power = num;
 
+		// @ATTR animations|string|Filename of an animation definition.
 		else if (infile.key == "animations") animations = infile.val;
 
-		// hide enemy HP bar
+		// @ATTR supress_hp|boolean|Hides the enemy HP bar for this creature.
 		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
+
+		else if (infile.key == "categories") {
+			// @ATTR categories|category (string), ...|Categories that this enemy belongs to.
+			string cat;
+			while ((cat = infile.nextValue()) != "") {
+				categories.push_back(cat);
+			}
+		}
+
 		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid
 		else if (infile.key == "rarity") ; // but do nothing
+
 		else if (!valid) {
 			fprintf(stderr, "%s=%s not a valid StatBlock parameter\n", infile.key.c_str(), infile.val.c_str());
 		}
@@ -621,6 +691,7 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 void StatBlock::loadHeroStats() {
 	// Redefine numbers from config file if present
 	FileParser infile;
+	// @CLASS StatBlock: Hero stats|Description of engine/stats.txt
 	if (infile.open("engine/stats.txt")) {
 		while (infile.next()) {
 			int value = toInt(infile.val);
@@ -628,18 +699,23 @@ void StatBlock::loadHeroStats() {
 			loadCoreStat(&infile);
 
 			if (infile.key == "max_points_per_stat") {
+				// @ATTR max_points_per_stat|integer|Maximum points for each primary stat.
 				max_points_per_stat = value;
 			}
 			else if (infile.key == "sfx_step") {
+				// @ATTR sfx_step|string|An id for a set of step sound effects. See items/step_sounds.txt.
 				sfx_step = infile.val;
 			}
 			else if (infile.key == "stat_points_per_level") {
+				// @ATTR stat_points_per_level|integer|The amount of stat points awarded each level.
 				stat_points_per_level = value;
 			}
 			else if (infile.key == "power_points_per_level") {
+				// @ATTR power_points_per_level|integer|The amount of power points awarded each level.
 				power_points_per_level = value;
 			}
 			else if (infile.key == "cooldown_hit") {
+				// @ATTR cooldown_hit|integer|Cooldown after being hit.
 				cooldown_hit = value;
 			}
 		}
@@ -650,10 +726,12 @@ void StatBlock::loadHeroStats() {
 	statsLoaded = true;
 
 	// load the XP table
+	// @CLASS StatBlock: XP table|Description of engine/xp_table.txt
 	if (infile.open("engine/xp_table.txt")) {
 		while(infile.next()) {
 			unsigned key = toInt(infile.key);
 			if (key > 0) {
+				// @ATTR $LEVEL|integer|The amount of XP required for this level.
 				if (key > xp_table.size())
 					xp_table.resize(key);
 				xp_table[key - 1] = toInt(infile.val);

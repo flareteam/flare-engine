@@ -47,14 +47,17 @@ MenuMiniMap::MenuMiniMap()
 
 	// Load config settings
 	FileParser infile;
+	// @CLASS MenuMiniMap|Description of menus/minimap.txt
 	if (infile.open("menus/minimap.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
+			// @ATTR map_pos|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the map.
 			if(infile.key == "map_pos") {
 				pos = toRect(infile.val);
 			}
+			// @ATTR text_pos|label|Position of the text label with the map name.
 			else if(infile.key == "text_pos") {
 				text_pos = eatLabelInfo(infile.val);
 			}

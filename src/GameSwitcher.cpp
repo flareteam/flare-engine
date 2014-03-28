@@ -69,8 +69,10 @@ void GameSwitcher::loadMusic() {
 
 		std::string music_filename = "";
 		FileParser infile;
+		// @CLASS GameSwitcher: Default music|Description of engine/default_music.txt
 		if (infile.open("engine/default_music.txt", true, true, "")) {
 			while (infile.next()) {
+				// @ATTR music|string|Filename of a music file to play during game states that don't already have music.
 				if (infile.key == "music") music_filename = infile.val;
 			}
 			infile.close();
@@ -133,13 +135,16 @@ void GameSwitcher::showFPS(int fps) {
 void GameSwitcher::loadFPS() {
 	// Load FPS rendering settings
 	FileParser infile;
+	// @CLASS GameSwitcher: FPS counter|Description of menus/fps.txt
 	if (infile.open("menus/fps.txt")) {
 		while(infile.next()) {
+			// @ATTR position|x (integer), y (integer), align (alignment)|Position of the fps counter.
 			if(infile.key == "position") {
 				fps_position.x = popFirstInt(infile.val);
 				fps_position.y = popFirstInt(infile.val);
 				fps_corner = popFirstString(infile.val);
 			}
+			// @ATTR color|r (integer), g (integer), b (integer)|Color of the fps counter text.
 			else if(infile.key == "color") {
 				fps_color = toRGB(infile.val);
 			}
@@ -149,22 +154,10 @@ void GameSwitcher::loadFPS() {
 
 	// this is a dummy string used to approximate the fps position when aligned to the right
 	font->setFont("font_regular");
-	int w = font->calc_width("00 fps");
-	int h = font->getLineHeight();
+	fps_position.w = font->calc_width("00 fps");
+	fps_position.h = font->getLineHeight();
 
-	if (fps_corner == "top_left") {
-		// relative to {0,0}, so no changes
-	}
-	else if (fps_corner == "top_right") {
-		fps_position.x += VIEW_W-w;
-	}
-	else if (fps_corner == "bottom_left") {
-		fps_position.y += VIEW_H-h;
-	}
-	else if (fps_corner == "bottom_right") {
-		fps_position.x += VIEW_W-w;
-		fps_position.y += VIEW_H-h;
-	}
+	alignToScreenEdge(fps_corner, &fps_position);
 
 	// Delete the label object if it exists (we'll recreate this with showFPS())
 	if (label_fps) {

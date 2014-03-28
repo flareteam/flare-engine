@@ -50,7 +50,7 @@ private:
 	GameState *currentState;
 
 	WidgetLabel *label_fps;
-	Point fps_position;
+	Rect fps_position;
 	Color fps_color;
 	std::string fps_corner;
 
