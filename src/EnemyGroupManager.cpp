@@ -38,7 +38,7 @@ EnemyGroupManager::~EnemyGroupManager() {
 void EnemyGroupManager::parseEnemyFilesAndStore() {
 	FileParser infile;
 
-	// @CLASS enemies|Describing enemies files in enemies/
+	// @CLASS EnemyGroupManager|Description of enemies in enemies/
 	if (!infile.open("enemies", true, false))
 		return;
 

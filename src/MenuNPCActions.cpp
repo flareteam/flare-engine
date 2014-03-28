@@ -75,7 +75,7 @@ MenuNPCActions::MenuNPCActions()
 	, selected_dialog_node(-1) {
 	// Load config settings
 	FileParser infile;
-	// @CLASS MenuNPCActions/Description of menus/npc.txt
+	// @CLASS MenuNPCActions|Description of menus/npc.txt
 	if (infile.open("menus/npc.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
