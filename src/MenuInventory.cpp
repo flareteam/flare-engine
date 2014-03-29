@@ -241,7 +241,13 @@ int MenuInventory::areaOver(Point position) {
 			}
 		}
 	}
-	return -1;
+
+	// point is inside the inventory menu, but not over a slot
+	if (isWithin(window_area, position)) {
+		return INV_WINDOW;
+	}
+
+	return -2;
 }
 
 /**
@@ -255,7 +261,7 @@ TooltipData MenuInventory::checkTooltip(Point position) {
 	TooltipData tip;
 
 	area = areaOver(position);
-	if (area == -1) {
+	if (area < 0) {
 		if (position.x >= window_area.x + help_pos.x && position.y >= window_area.y+help_pos.y && position.x < window_area.x+help_pos.x+help_pos.w && position.y < window_area.y+help_pos.y+help_pos.h) {
 			tip.addText(msg->get("Use SHIFT to move only one item."));
 			tip.addText(msg->get("CTRL-click a carried item to sell it."));
@@ -299,9 +305,6 @@ ItemStack MenuInventory::click(Point position) {
 				item.quantity = 0;
 			}
 		}
-		else if (drag_prev_src == CARRIED && !inpt->pressing[CTRL] && !inpt->pressing[MAIN2]) {
-			inventory[EQUIPMENT].highlightMatching(items->items[item.item].type);
-		}
 	}
 
 	return item;
@@ -329,7 +332,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 	items->playSound(stack.item);
 
 	int area = areaOver(position);
-	if (area == -1) {
+	if (area < 0) {
 		// not dropped into a slot. Just return it to the previous slot.
 		itemReturn(stack);
 		return;

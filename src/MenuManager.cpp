@@ -181,7 +181,7 @@ void MenuManager::setDragIconItem(ItemStack stack) {
 
 		if (stack.quantity > 1 || items->items[stack.item].max_quantity > 1) {
 			stringstream ss;
-			ss << stack.quantity;
+			ss << abbreviateKilo(stack.quantity);
 			font->renderShadowed(ss.str(), 2, 2, JUSTIFY_LEFT, drag_icon->getGraphics(), font->getColor("item_normal"));
 		}
 	}
@@ -756,6 +756,11 @@ void MenuManager::logic() {
 			}
 		}
 
+		// highlight matching inventory slots based on what we're dragging
+		if (inv->visible && (mouse_dragging || keyboard_dragging)) {
+			inv->inventory[EQUIPMENT].highlightMatching(items->items[drag_stack.item].type);
+		}
+
 		// handle dropping
 		if (mouse_dragging && !inpt->pressing[MAIN1]) {
 
@@ -793,7 +798,7 @@ void MenuManager::logic() {
 						act->drop(inpt->mouse, items->items[drag_stack.item].power, false);
 					}
 				}
-				else if (vendor->visible && isWithin(vendor->slots_area, inpt->mouse)) {
+				else if (vendor->visible && isWithin(vendor->window_area, inpt->mouse)) {
 					if (inv->sell( drag_stack)) {
 						vendor->setTab(VENDOR_SELL);
 						vendor->add( drag_stack);
@@ -802,9 +807,14 @@ void MenuManager::logic() {
 						inv->itemReturn(drag_stack);
 					}
 				}
-				else if (stash->visible && isWithin(stash->slots_area, inpt->mouse)) {
+				else if (stash->visible && isWithin(stash->window_area, inpt->mouse)) {
 					if (inv->stashAdd( drag_stack) && !stash->full(drag_stack.item)) {
-						stash->drop(inpt->mouse, drag_stack);
+						if (isWithin(stash->slots_area, inpt->mouse)) {
+							stash->drop(inpt->mouse, drag_stack);
+						}
+						else {
+							stash->add(drag_stack);
+						}
 						stash->updated = true;
 					}
 					else {
@@ -828,7 +838,7 @@ void MenuManager::logic() {
 			else if (drag_src == DRAG_SRC_VENDOR) {
 
 				// dropping an item from vendor (we only allow to drop into the carried area)
-				if (inv->visible && isWithin( inv->carried_area, inpt->mouse)) {
+				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
 					if (!inv->buy(drag_stack,vendor->getTab())) {
 						log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
 						hudlog->add(msg->get("Not enough %s.", CURRENCY));
@@ -841,7 +851,10 @@ void MenuManager::logic() {
 							drop_stack.push(drag_stack);
 						}
 						else {
-							inv->drop(inpt->mouse,drag_stack);
+							if (inv->areaOver(inpt->mouse) == CARRIED)
+								inv->drop(inpt->mouse,drag_stack);
+							else
+								inv->add(drag_stack);
 						}
 					}
 				}
@@ -853,18 +866,21 @@ void MenuManager::logic() {
 			else if (drag_src == DRAG_SRC_STASH) {
 
 				// dropping an item from stash (we only allow to drop into the carried area)
-				if (inv->visible && isWithin( inv->carried_area, inpt->mouse)) {
+				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
 					if (inv->full(drag_stack)) {
 						log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 						hudlog->add(msg->get("Inventory is full."));
 						splitStack(drag_stack);
 					}
 					else {
-						inv->drop(inpt->mouse,drag_stack);
+						if (inv->areaOver(inpt->mouse) == CARRIED)
+							inv->drop(inpt->mouse,drag_stack);
+						else
+							inv->add(drag_stack);
 					}
 					stash->updated = true;
 				}
-				else if (stash->visible && isWithin(stash->slots_area, inpt->mouse)) {
+				else if (stash->visible && isWithin(stash->window_area, inpt->mouse)) {
 					stash->drop(inpt->mouse,drag_stack);
 				}
 				else {

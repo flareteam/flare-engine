@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class StatBlock;
 class WidgetButton;
 
+const int INV_WINDOW = -1;
 const int EQUIPMENT = 0;
 const int CARRIED = 1;
 
@@ -42,7 +43,6 @@ private:
 
 	void alignElements();
 	void loadGraphics();
-	int areaOver(Point position);
 	void updateEquipment(int slot);
 
 	WidgetLabel label_inventory;
@@ -68,6 +68,7 @@ public:
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point position);
+	int areaOver(Point position);
 
 	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
