@@ -173,15 +173,31 @@ void amendPathToVector(const string &path, std::vector<std::string> &vec) {
 	}
 }
 
-vector<string> ModManager::list(const string &path) {
+vector<string> ModManager::list(const string &path, bool full_paths) {
 	vector<string> ret;
-	string test_path = PATH_DATA + path;
-	amendPathToVector(test_path, ret);
+	string test_path;
 
 	for (unsigned int i = 0; i < mod_list.size(); ++i) {
 		for (unsigned int j = mod_paths.size(); j > 0; j--) {
 			test_path = mod_paths[j-1] + "mods/" + mod_list[i].name + "/" + path;
 			amendPathToVector(test_path, ret);
+		}
+	}
+
+	if (!full_paths) {
+		// reduce the each file path down to be relative to mods/
+		for (unsigned i=0; i<ret.size(); ++i) {
+			ret[i] = ret[i].substr(ret[i].rfind(path), ret[i].length());
+		}
+
+		// remove duplicates
+		for (unsigned i=ret.size(); i>0; i--) {
+			for (unsigned j=0; j<i-1; j++) {
+				if (ret[i-1] == ret[j]) {
+					ret.erase(ret.begin()+j);
+					j--;
+				}
+			}
 		}
 	}
 

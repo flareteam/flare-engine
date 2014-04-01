@@ -36,40 +36,42 @@ EnemyGroupManager::~EnemyGroupManager() {
 }
 
 void EnemyGroupManager::parseEnemyFilesAndStore() {
-	FileParser infile;
+	std::vector<std::string> enemy_paths = mods->list("enemies", false);
 
-	// @CLASS EnemyGroupManager|Description of enemies in enemies/
-	if (!infile.open("enemies", true, false))
-		return;
+	for (unsigned i=0; i<enemy_paths.size(); ++i) {
+		FileParser infile;
 
-	Enemy_Level new_enemy;
-	infile.new_section = true;
-	bool first = true;
-	while (infile.next()) {
-		if (infile.new_section || first) {
-			const string fname = infile.getFileName();
-			const int firstpos = fname.rfind("/") + 1;
-			new_enemy.type = "enemies/" + fname.substr(firstpos, fname.length());
-			first = false;
-		}
+		// @CLASS EnemyGroupManager|Description of enemies in enemies/
+		if (!infile.open(enemy_paths[i]))
+			return;
 
-		if (infile.key == "level") {
-			// @ATTR level|integer|Level of the enemy
-			new_enemy.level = toInt(infile.val);
-		}
-		else if (infile.key == "rarity") {
-			// @ATTR rarity|[common,uncommon,rare]|Enemy rarity
-			new_enemy.rarity = infile.val;
-		}
-		else if (infile.key == "categories") {
-			// @ATTR categories|string,...|Comma separated list of enemy categories
-			string cat;
-			while ( (cat = infile.nextValue()) != "") {
-				_categories[cat].push_back(new_enemy);
+		Enemy_Level new_enemy;
+		infile.new_section = true;
+		bool first = true;
+		while (infile.next()) {
+			if (infile.new_section || first) {
+				new_enemy.type = enemy_paths[i];
+				first = false;
+			}
+
+			if (infile.key == "level") {
+				// @ATTR level|integer|Level of the enemy
+				new_enemy.level = toInt(infile.val);
+			}
+			else if (infile.key == "rarity") {
+				// @ATTR rarity|[common,uncommon,rare]|Enemy rarity
+				new_enemy.rarity = infile.val;
+			}
+			else if (infile.key == "categories") {
+				// @ATTR categories|string,...|Comma separated list of enemy categories
+				string cat;
+				while ( (cat = infile.nextValue()) != "") {
+					_categories[cat].push_back(new_enemy);
+				}
 			}
 		}
+		infile.close();
 	}
-	infile.close();
 }
 
 Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {
