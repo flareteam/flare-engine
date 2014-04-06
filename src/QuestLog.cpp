@@ -58,6 +58,8 @@ void QuestLog::loadAll() {
 }
 
 /**
+ * TODO Deprecate this? We could load all files in "quests/" instead.
+ *
  * Load all the quest files from the given index
  * It simply contains a list of quest files
  * Generally each quest arc has its own file
@@ -91,7 +93,8 @@ void QuestLog::loadIndex(const std::string& filename) {
  */
 void QuestLog::load(const std::string& filename) {
 	FileParser infile;
-	if (!infile.open("quests/" + filename))
+	// @CLASS QuestLog|Description of quest files in quests/
+	if (!infile.open(filename))
 		return;
 
 	while (infile.next()) {
@@ -99,6 +102,9 @@ void QuestLog::load(const std::string& filename) {
 			if (infile.section == "quest")
 				quests.push_back(vector<Event_Component>());
 		}
+		// @ATTR quest.requires_status|string|Quest requires this campaign status
+		// @ATTR quest.requires_not_status|string|Quest requires not having this campaign status.
+		// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.
 		Event_Component ev;
 		ev.type = infile.key;
 		ev.s = msg->get(infile.val);

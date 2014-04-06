@@ -7,7 +7,7 @@
 
 [scene]
 pause=0
-#image=menus/logo.png
+#image=images/menus/logo.png
 #caption=Flare, the...
 #soundfx=soundfx/level_up.ogg
 #pause=60

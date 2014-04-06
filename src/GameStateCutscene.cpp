@@ -44,7 +44,7 @@ Scene::~Scene() {
 
 Image *Scene::loadImage(std::string filename, bool scale_graphics) {
 
-	Image *image = render_device->loadGraphicSurface("images/"+filename);
+	Image *image = render_device->loadGraphicSurface(filename);
 
 	if (image == NULL)
 		return NULL;
@@ -199,7 +199,7 @@ bool GameStateCutscene::load(std::string filename) {
 	FileParser infile;
 
 	// @CLASS Cutscene|Description of cutscenes in cutscenes/
-	if (!infile.open("cutscenes/" + filename, true, false))
+	if (!infile.open(filename, true, false))
 		return false;
 
 	// parse the cutscene file
