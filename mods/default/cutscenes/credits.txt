@@ -2,7 +2,7 @@
 #scale_gfx=true
 
 [scene]
-image=menus/logo.png
+image=images/menus/logo.png
 caption=Flare Engine Credits
 pause=60
 caption=Lead Programmers - Clint Bellanger, Henrik Andersson, Igor Paliychuk, Justin Jacobs, Stefan Beller, and Thane Brimhall

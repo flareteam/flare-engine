@@ -51,7 +51,7 @@ GameSwitcher::GameSwitcher() {
 
 	currentState = intro;
 
-	if (!intro->load("intro.txt")) {
+	if (!intro->load("cutscenes/intro.txt")) {
 		delete intro;
 		currentState = title;
 	}

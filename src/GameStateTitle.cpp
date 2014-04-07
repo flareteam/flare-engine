@@ -161,7 +161,7 @@ void GameStateTitle::logic() {
 		GameStateTitle *title = new GameStateTitle();
 		GameStateCutscene *credits = new GameStateCutscene(title);
 
-		if (!credits->load("credits.txt")) {
+		if (!credits->load("cutscenes/credits.txt")) {
 			delete credits;
 			delete title;
 		}
