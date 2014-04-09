@@ -157,7 +157,10 @@ void MenuStash::drop(Point position, ItemStack stack) {
 	slot = stock.slotOver(position);
 	drag_prev_slot = stock.drag_prev_slot;
 
-	if (slot != drag_prev_slot) {
+	if (slot == -1) {
+		itemReturn(stack);
+	}
+	else if (slot != drag_prev_slot) {
 		if (stock[slot].item == stack.item) {
 			// Merge the stacks
 			add(stack, slot);
