@@ -199,7 +199,7 @@ bool GameStateCutscene::load(std::string filename) {
 	FileParser infile;
 
 	// @CLASS Cutscene|Description of cutscenes in cutscenes/
-	if (!infile.open(filename, true, false))
+	if (!infile.open(filename))
 		return false;
 
 	// parse the cutscene file

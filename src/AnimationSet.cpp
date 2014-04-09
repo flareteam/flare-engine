@@ -61,7 +61,7 @@ void AnimationSet::load() {
 
 	FileParser parser;
 	// @CLASS Animation|Description of animations in animations/
-	if (!parser.open(name, true, true, "Error loading animation definition: " + name))
+	if (!parser.open(name, true, "Error loading animation definition: " + name))
 		return;
 
 	string _name = "";

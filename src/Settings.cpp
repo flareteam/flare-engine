@@ -406,7 +406,7 @@ void loadTilesetSettings() {
 	FileParser infile;
 	// load tileset settings from engine config
 	// @CLASS Settings: Tileset config|Description of engine/tileset_config.txt
-	if (infile.open("engine/tileset_config.txt", true, true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
+	if (infile.open("engine/tileset_config.txt", true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.\n")) {
 		while (infile.next()) {
 			if (infile.key == "tile_size") {
 				// @ATTR tile_size|w (integet), h (integer)|The width and height of a tile.
@@ -630,7 +630,7 @@ void loadMiscSettings() {
 	}
 
 	// @CLASS Settings: Equip flags|Description of engine/equip_flags.txt
-	if (infile.open("engine/equip_flags.txt", true, false)) {
+	if (infile.open("engine/equip_flags.txt")) {
 		string type,description;
 		type = description = "";
 
@@ -738,8 +738,8 @@ bool loadSettings() {
 
 	// try read from file
 	FileParser infile;
-	if (!infile.open(PATH_CONF + FILE_SETTINGS, false, true,  "")) {
-		if (!infile.open("engine/default_settings.txt", true, true, "")) {
+	if (!infile.open(PATH_CONF + FILE_SETTINGS, false, "")) {
+		if (!infile.open("engine/default_settings.txt", true, "")) {
 			saveSettings();
 			return true;
 		}

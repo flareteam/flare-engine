@@ -58,15 +58,9 @@ public:
 	 * actual filename before opening the file. It is true by default.
 	 * If this is set to false, then the filename is interpreted as is.
 	 *
-	 * @param stopAfterFirstFile
-	 * If this is set, the newest file is being read. This is the default.
-	 * If it is set to false, all possible files are parsed and delivered as
-	 * one big stream. Also if using direct directory pathes, these will be
-	 * expanded and parsed.
-	 *
 	 * @return true if file could be opened successfully for reading.
 	 */
-	bool open(const std::string& filename, bool locateFileName = true, bool stopAfterFirstFile = true, const std::string &errormessage = "Could not open text file");
+	bool open(const std::string& filename, bool locateFileName = true, const std::string &errormessage = "Could not open text file");
 
 	void close();
 	bool next();

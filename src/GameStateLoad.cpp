@@ -238,7 +238,7 @@ void GameStateLoad::readGameSlots() {
 
 string GameStateLoad::getMapName(const string& map_filename) {
 	FileParser infile;
-	if (!infile.open(map_filename, true, true, "")) return "";
+	if (!infile.open(map_filename, true, "")) return "";
 	string map_name = "";
 
 	while (map_name == "" && infile.next()) {
@@ -264,7 +264,7 @@ void GameStateLoad::readGameSlot(int slot) {
 		filename << GAME_PREFIX << "_";
 	filename << "save" << (slot+1) << ".txt";
 
-	if (!infile.open(filename.str(),false, true, "")) return;
+	if (!infile.open(filename.str(),false, "")) return;
 
 	while (infile.next()) {
 

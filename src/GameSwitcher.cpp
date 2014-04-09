@@ -70,7 +70,7 @@ void GameSwitcher::loadMusic() {
 		std::string music_filename = "";
 		FileParser infile;
 		// @CLASS GameSwitcher: Default music|Description of engine/default_music.txt
-		if (infile.open("engine/default_music.txt", true, true, "")) {
+		if (infile.open("engine/default_music.txt", true, "")) {
 			while (infile.next()) {
 				// @ATTR music|string|Filename of a music file to play during game states that don't already have music.
 				if (infile.key == "music") music_filename = infile.val;
