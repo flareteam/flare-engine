@@ -52,37 +52,9 @@ QuestLog::~QuestLog() {
  */
 void QuestLog::loadAll() {
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
-	vector<string> files = mods->list("quests/index.txt");
+	vector<string> files = mods->list("quests", false);
 	for (unsigned int i = 0; i < files.size(); i++)
-		this->loadIndex(files[i]);
-}
-
-/**
- * TODO Deprecate this? We could load all files in "quests/" instead.
- *
- * Load all the quest files from the given index
- * It simply contains a list of quest files
- * Generally each quest arc has its own file
- *
- * @param filename The full path and filename to the [mod]/quests/index.txt file
- */
-void QuestLog::loadIndex(const std::string& filename) {
-	ifstream infile;
-	string line;
-
-	infile.open(filename.c_str(), ios::in);
-
-	if (infile.is_open()) {
-		while (infile.good()) {
-			line = getLine(infile);
-			if (line.length() > 0) {
-
-				// each line contains a quest file name
-				load(line);
-			}
-		}
-		infile.close();
-	}
+		load(files[i]);
 }
 
 /**
@@ -105,10 +77,12 @@ void QuestLog::load(const std::string& filename) {
 		// @ATTR quest.requires_status|string|Quest requires this campaign status
 		// @ATTR quest.requires_not_status|string|Quest requires not having this campaign status.
 		// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.
-		Event_Component ev;
-		ev.type = infile.key;
-		ev.s = msg->get(infile.val);
-		quests.back().push_back(ev);
+		if (!quests.empty()) {
+			Event_Component ev;
+			ev.type = infile.key;
+			ev.s = msg->get(infile.val);
+			quests.back().push_back(ev);
+		}
 	}
 	infile.close();
 }
