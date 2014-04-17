@@ -890,12 +890,16 @@ void MenuPowers::loadPower(FileParser &infile) {
 			power_cell.back().id = id;
 		}
 		else {
-			skip_section = true;
-			power_cell.pop_back();
-			slots.pop_back();
-			upgradeButtons.pop_back();
-			fprintf(stderr, "Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
+			fprintf(stderr, "Power index %d inside power menu definition out of bounds 1-%d, skipping\n", id, INT_MAX);
 		}
+	}
+
+	if (power_cell.back().id <= 0) {
+		skip_section = true;
+		power_cell.pop_back();
+		slots.pop_back();
+		upgradeButtons.pop_back();
+		fprintf(stderr, "There is a power without a valid id as the first attribute.\nIDs must be the first attribute in the power menu definition.\n");
 	}
 
 	if (skip_section)
