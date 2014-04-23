@@ -42,11 +42,11 @@ The following links are specific to the engine
 
 Settings are stored in one of these places:
 
-    $XDG_CONFIG_HOME/$GAMENAME
-    $HOME/.config/$GAMENAME
+    $XDG_CONFIG_HOME/flare/$GAMENAME
+    $HOME/.config/flare/$GAMENAME
     ./config
 
-whereas $GAMENAME is defaulting to ```flare``` in this repository or in flare-game.
+whereas $GAMENAME is something like `default` or `flare-game`.
 Here you can enable fullscreen, change the game resolution, enable mouse-move, and change keybindings. The settings files are created the first time you run Flare.
 
 
@@ -54,8 +54,8 @@ Here you can enable fullscreen, change the game resolution, enable mouse-move, a
 
 Save files are stored in one of these places:
 
-    $XDG_DATA_HOME/$GAMENAME
-    $HOME/.local/share/$GAMENAME
+    $XDG_DATA_HOME/flare/$GAMENAME
+    $HOME/.local/share/flare/$GAMENAME
     ./saves
 
-If permissions are correct, the game is automatically saved when you exit.
+If permissions are correct, the game is automatically saved when you exit. In addition, there is a `mods` directory in this location, which can be used to override system-wide mods.
