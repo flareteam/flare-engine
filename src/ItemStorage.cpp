@@ -119,11 +119,12 @@ void ItemStorage::clear() {
 
 /**
  * Insert item into first available carried slot, preferably in the optionnal specified slot
+ * Returns an ItemStack containing anything that couldn't fit
  *
  * @param ItemStack Stack of items
  * @param slot Slot number where it will try to store the item
  */
-void ItemStorage::add( ItemStack stack, int slot) {
+ItemStack ItemStorage::add( ItemStack stack, int slot) {
 
 	if (stack.item != 0) {
 		int max_quantity = items->items[stack.item].max_quantity;
@@ -158,15 +159,20 @@ void ItemStorage::add( ItemStack stack, int slot) {
 			storage[slot].item = stack.item;
 			storage[slot].quantity += quantity_added;
 			stack.quantity -= quantity_added;
-			// Add back the remaining
+			// Add back the remaining, recursivly, until there's no more left to add or we run out of space.
 			if (stack.quantity > 0) {
-				add( stack);
+				return add(stack);
 			}
+			// everything added successfully, so return an empty ItemStack
+			return ItemStack();
 		}
 		else {
-			// No available slot, drop
+			// Returns an ItemStack containing the remaining quantity if we run out of space.
+			// This stack will likely be dropped on the ground
+			return stack;
 		}
 	}
+	return ItemStack();
 }
 
 /**
