@@ -551,50 +551,11 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 		if (area < 0) {
 			area = CARRIED;
 		}
-		int max_quantity = items->items[stack.item].max_quantity;
-		if (slot > -1 && inventory[area][slot].item != 0 && inventory[area][slot].item != stack.item) {
-			// the proposed slot isn't available, search for another one
-			slot = -1;
-		}
 		if (area == CARRIED) {
-			// first search of stack to complete if the item is stackable
-			if (slot == -1 && max_quantity > 1) {
-				int i = 0;
-				while (i < MAX_CARRIED &&
-						(inventory[area][i].item != stack.item
-						 || inventory[area][i].quantity >= max_quantity))
-					++i;
-				if (i < MAX_CARRIED)
-					slot = i;
+			ItemStack leftover = inventory[CARRIED].add(stack, slot);
+			if (leftover.quantity > 0) {
+				drop_stack.push(leftover);
 			}
-			// then an empty slot
-			if (slot == -1) {
-				int i = 0;
-				while (inventory[area][i].item != 0 && i < MAX_CARRIED)
-					i++;
-				if (i < MAX_CARRIED)
-					slot = i;
-			}
-		}
-		if (slot != -1) {
-			// Add
-			int quantity_added = min( stack.quantity, max_quantity - inventory[area][slot].quantity);
-			inventory[area][slot].item = stack.item;
-			inventory[area][slot].quantity += quantity_added;
-			stack.quantity -= quantity_added;
-			// Add back the remaining
-			if( stack.quantity > 0) {
-				if( drag_prev_src > -1) {
-					itemReturn( stack);
-				}
-				else {
-					add(stack, CARRIED, -1, false);
-				}
-			}
-		}
-		else {
-			// No available slot, drop
-			drop_stack.push(stack);
 		}
 	}
 	drag_prev_src = -1;
