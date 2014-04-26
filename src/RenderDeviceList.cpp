@@ -1,5 +1,5 @@
 /*
-Copyright © 2013 Stefan Beller
+Copyright © 2014 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -15,23 +15,23 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#pragma once
-#ifndef SHARED_INCLUDES
-#define SHARED_INCLUDES
-
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <queue>
-#include <set>
-#include <sstream>
+#include <stdio.h>
 #include <string>
-#include <vector>
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
 #include "RenderDeviceList.h"
 
-#endif
+#include "SDLRenderDevice.h"
+
+RenderDevice* getRenderDevice(std::string name) {
+	// "sdl" is the default
+	if (name != "") {
+		if (name == "sdl") return new SDLRenderDevice();
+		else {
+			fprintf(stderr, "Render device '%s' not found. Falling back to the default.\n", name.c_str());
+			return new SDLRenderDevice();
+		}
+	}
+	else {
+		return new SDLRenderDevice();
+	}
+}

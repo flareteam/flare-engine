@@ -204,6 +204,7 @@ Set (FLARE_SOURCES
 	./src/PowerManager.cpp
 	./src/QuestLog.cpp
 	./src/RenderDevice.cpp
+	./src/RenderDeviceList.cpp
 	./src/SaveLoad.cpp
 	./src/SDL_gfxBlitFunc.c
 	./src/SDLRenderDevice.cpp

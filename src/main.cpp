@@ -36,7 +36,7 @@ GameSwitcher *gswitch;
 /**
  * Game initialization.
  */
-static void init() {
+static void init(const std::string render_device_name) {
 
 	setPaths();
 	setStatNames();
@@ -83,7 +83,7 @@ static void init() {
 	loadMiscSettings();
 
 	// Create render Device and Rendering Context.
-	render_device = new SDLRenderDevice();
+	render_device = getRenderDevice(render_device_name);
 	int status = render_device->createContext(VIEW_W, VIEW_H);
 
 	if (status == -1) {
@@ -246,6 +246,7 @@ int main(int argc, char *argv[]) {
 	bool debug_event = false;
 	bool done = false;
 	bool game_warning = true;
+	std::string render_device_name = "";
 
 	for (int i = 1 ; i < argc; i++) {
 		string arg = string(argv[i]);
@@ -265,6 +266,9 @@ int main(int argc, char *argv[]) {
 			printf("%s\n", RELEASE_VERSION.c_str());
 			done = true;
 		}
+		else if (parseArg(arg) == "renderer") {
+			render_device_name = parseArgValue(arg);
+		}
 		else if (parseArg(arg) == "help") {
 			printf("\
 --help           Prints this message.\n\n\
@@ -273,7 +277,8 @@ int main(int argc, char *argv[]) {
                  determines which parent folder to look for mods in, as well\n\
                  as where user settings and save data are stored.\n\n\
 --data-path      Specifies an exact path to look for mod data.\n\n\
---debug-event    Prints verbose hardware input information.\n");
+--debug-event    Prints verbose hardware input information.\n\n\
+--renderer       Specifies the rendering backend to use. The default is 'sdl'.\n");
 			done = true;
 		}
 	}
@@ -285,7 +290,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		srand((unsigned int)time(NULL));
-		init();
+		init(render_device_name);
 		mainLoop(debug_event);
 		cleanup();
 	}
