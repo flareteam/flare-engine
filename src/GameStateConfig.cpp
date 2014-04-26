@@ -421,8 +421,9 @@ void GameStateConfig::readConfig () {
 				joystick_device_lstb->pos.x = frame.x + x2;
 				joystick_device_lstb->pos.y = frame.y + y2;
 				for(int i = 0; i < SDL_NumJoysticks(); i++) {
-					if (SDL_JoystickName(i) != NULL)
-						joystick_device_lstb->append(SDL_JoystickName(i),SDL_JoystickName(i));
+					std::string joystick_name = inpt->getJoystickName(i);
+					if (joystick_name != "")
+						joystick_device_lstb->append(joystick_name, joystick_name);
 				}
 				child_widget.push_back(joystick_device_lstb);
 				optiontab[child_widget.size()-1] = 3;
@@ -666,7 +667,7 @@ void GameStateConfig::update () {
 			settings_key[i]->label = inpt->mouse_button[inpt->binding[i]-1];
 		}
 		else {
-			settings_key[i]->label = SDL_GetKeyName((SDLKey)inpt->binding[i]);
+			settings_key[i]->label = inpt->getKeyName(inpt->binding[i]);
 		}
 		settings_key[i]->refresh();
 	}
@@ -675,7 +676,7 @@ void GameStateConfig::update () {
 			settings_key[i]->label = inpt->mouse_button[inpt->binding_alt[i-29]-1];
 		}
 		else {
-			settings_key[i]->label = SDL_GetKeyName((SDLKey)inpt->binding_alt[i-29]);
+			settings_key[i]->label = inpt->getKeyName(inpt->binding_alt[i-29]);
 		}
 		settings_key[i]->refresh();
 	}
@@ -1184,7 +1185,7 @@ void GameStateConfig::scanKey(int button) {
 			if (button < 29) inpt->binding[button] = inpt->last_key;
 			else inpt->binding_alt[button-29] = inpt->last_key;
 
-			settings_key[button]->label = SDL_GetKeyName((SDLKey)inpt->last_key);
+			settings_key[button]->label = inpt->getKeyName(inpt->last_key);
 			input_confirm->visible = false;
 			input_confirm_ticks = 0;
 			settings_key[button]->refresh();

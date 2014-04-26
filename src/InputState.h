@@ -91,6 +91,8 @@ public:
 	void setKeybindNames();
 	void hideCursor();
 	void showCursor();
+	std::string getJoystickName(int index);
+	std::string getKeyName(int key);
 
 	bool pressing[key_count];
 	bool lock[key_count];

@@ -118,7 +118,7 @@ static void init() {
 		printf("No joysticks were found.\n");
 	}
 	for(int i = 0; i < SDL_NumJoysticks(); i++) {
-		printf("  Joy %d) %s\n", i, SDL_JoystickName(i));
+		printf("  Joy %d) %s\n", i, inpt->getJoystickName(i).c_str());
 	}
 	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);

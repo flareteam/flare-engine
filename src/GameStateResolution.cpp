@@ -118,6 +118,9 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
 	// If the new settings fail, revert to the old ones
 	if (status == -1) {
 		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
+		FULLSCREEN = old_fullscreen;
+		HWSURFACE = old_hwsurface;
+		DOUBLEBUF = old_doublebuf;
 		render_device->createContext(VIEW_W, VIEW_H);
 		SharedResources::loadIcons();
 		curs = new CursorManager();

@@ -40,7 +40,11 @@ InputState::InputState(void)
 	, scroll_up(false)
 	, scroll_down(false)
 	, lock_scroll(false) {
+#if SDL_VERSION_ATLEAST(2,0,0)
+	SDL_StartTextInput();
+#else
 	SDL_EnableUNICODE(true);
+#endif
 
 	defaultQwertyKeyBindings();
 	defaultJoystickBindings();
@@ -264,6 +268,11 @@ void InputState::handle(bool dump_event) {
 		}
 
 		// grab symbol keys
+#if SDL_VERSION_ATLEAST(2,0,0)
+		if (event.type == SDL_TEXTINPUT) {
+			inkeys += event.text.text;
+		}
+#else
 		if (event.type == SDL_KEYDOWN) {
 			int ch = event.key.keysym.unicode;
 			// if it is printable char then write its utf-8 representation
@@ -280,9 +289,34 @@ void InputState::handle(bool dump_event) {
 				inkeys += (char)ch;
 			}
 		}
+#endif
 
 		switch (event.type) {
 
+#if SDL_VERSION_ATLEAST(2,0,0)
+			case SDL_MOUSEWHEEL:
+				if (event.wheel.y > 0) {
+					scroll_up = true;
+				} else if (event.wheel.y < 0) {
+					scroll_down = true;
+				}
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				for (int key=0; key<key_count; key++) {
+					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+						pressing[key] = true;
+					}
+				}
+				break;
+			case SDL_MOUSEBUTTONUP:
+				for (int key=0; key<key_count; key++) {
+					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+						un_press[key] = true;
+					}
+				}
+				last_button = event.button.button;
+				break;
+#else
 			case SDL_MOUSEBUTTONDOWN:
 				if (event.button.button == SDL_BUTTON_WHEELUP) {
 					scroll_up = true;
@@ -311,6 +345,7 @@ void InputState::handle(bool dump_event) {
 				}
 				last_button = event.button.button;
 				break;
+#endif
 			case SDL_KEYDOWN:
 				for (int key=0; key<key_count; key++) {
 					if (event.key.keysym.sym == binding[key] || event.key.keysym.sym == binding_alt[key]) {
@@ -693,6 +728,22 @@ void InputState::hideCursor() {
 
 void InputState::showCursor() {
 	SDL_ShowCursor(SDL_ENABLE);
+}
+
+std::string InputState::getJoystickName(int index) {
+#if SDL_VERSION_ATLEAST(2,0,0)
+	return std::string(SDL_JoystickNameForIndex(index));
+#else
+	return std::string(SDL_JoystickName(index));
+#endif
+}
+
+std::string InputState::getKeyName(int key) {
+#if SDL_VERSION_ATLEAST(2,0,0)
+	return std::string(SDL_GetKeyName((SDL_Keycode)key));
+#else
+	return std::string(SDL_GetKeyName((SDLKey)key));
+#endif
 }
 
 InputState::~InputState() {

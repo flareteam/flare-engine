@@ -111,8 +111,12 @@ public:
 								std::string errormessage = "Couldn't load image",
 								bool IfNotFoundExit = false);
 private:
-
 	SDL_Surface* screen;
+#if SDL_VERSION_ATLEAST(2,0,0)
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+	SDL_Texture* texture;
+#endif
 	SDL_Surface* titlebar_icon;
 };
 

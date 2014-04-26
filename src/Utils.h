@@ -73,8 +73,12 @@ public:
 		c.r = r;
 		c.g = g;
 		c.b = b;
+#if SDL_VERSION_ATLEAST(2,0,0)
+        c.a = a;
+#else
 		// Warning: SDL 1.2 only
 		c.unused = a;
+#endif
 		return c;
 	}
 };
