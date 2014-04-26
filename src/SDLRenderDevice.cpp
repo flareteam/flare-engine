@@ -735,7 +735,7 @@ void SDLRenderDevice::freeImage(Image *image) {
 		SDL_FreeSurface(static_cast<SDLImage *>(image)->surface);
 }
 
-void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
+void SDLRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	*rmask = 0xff000000;
 	*gmask = 0x00ff0000;
