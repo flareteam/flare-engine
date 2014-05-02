@@ -1,5 +1,5 @@
 /*
-Copyright © 2013 Stefan Beller
+Copyright © 2014 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -16,22 +16,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #pragma once
-#ifndef SHARED_INCLUDES
-#define SHARED_INCLUDES
+#ifndef RENDERDEVICELIST_H
+#define RENDERDEVICELIST_H
 
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <queue>
-#include <set>
-#include <sstream>
 #include <string>
-#include <vector>
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include "RenderDeviceList.h"
+#include "RenderDevice.h"
+
+RenderDevice* getRenderDevice(std::string name);
 
 #endif
