@@ -1,68 +1,67 @@
 # FLARE (Free/Libre Action RPG Engine)
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
-# Paul Wortmann (RoboPaul) <paul.wortmann@gmail.com>, 2011.
+# Paul Wortmann <paul.wortmann@gmail.com>, 2011-2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.17\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-20 16:48+0100\n"
-"PO-Revision-Date: 2013-03-21 11:18+0900\n"
+"PO-Revision-Date: 2014-05-03 21:36+0900\n"
 "Last-Translator: Paul Wortmann <paul.wortmann@gmail.com>\n"
 "Language-Team: Paul Wortmann <www.physhexgames.co.nr>\n"
 "Language: Japanese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Langedit 4.13\n"
 
 #: ../../../src/Avatar.cpp:430
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "おめでとう、あなたはレベル %d に達している!"
+msgstr "おめでとうレベル %d に達している!"
 
 #: ../../../src/Avatar.cpp:432
 msgid "You may increase one attribute through the Character Menu."
-msgstr "あなたは、文字のメニューを介して1つの属性を高める可能性があります。"
+msgstr "文字のメニューを介して1つの属性を高める可能性があります。"
 
 #: ../../../src/Avatar.cpp:631
 msgid "You are defeated. Game over! Press Enter to exit to Title."
-msgstr "あなたは敗北している。ゲームオーバー！ Enterキーを押して続行します。"
+msgstr "死んじゃった。ゲームオーバー！ エンターキーを押して続行します。"
 
 #: ../../../src/Avatar.cpp:634
-#, fuzzy
 msgid "You are defeated. Press Enter to continue."
-msgstr "あなたは敗北している。あなたは半分自分の%sを失う。 Enterキーを押して続行します。"
+msgstr "あなたは敗北している。あなたは半分自分の%sを失う。エンターキーを押して続行します。"
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s 除去された。"
 
 #: ../../../src/CampaignManager.cpp:139
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "%s 除去された。"
 
 #: ../../../src/CampaignManager.cpp:154
 #, c-format
 msgid "You receive %s."
-msgstr "あなたは %s を受け取る。"
+msgstr "%s を受け取る。"
 
 #: ../../../src/CampaignManager.cpp:156
 #, c-format
 msgid "You receive %s x%d."
-msgstr "あなたは %s %d の を受け取る。"
+msgstr "%s %d の を受け取る。"
 
 #: ../../../src/CampaignManager.cpp:168
 #, c-format
 msgid "You receive %d %s."
-msgstr "あなたは %d %s を受け取る。"
+msgstr "%d %s を受け取る。"
 
 #: ../../../src/CampaignManager.cpp:178
 #, c-format
 msgid "You receive %d XP."
-msgstr "あなたは %d XPを受け取ります。"
+msgstr "%d XPを受け取ります。"
 
 #: ../../../src/CampaignManager.cpp:184
 msgid "HP restored."
@@ -204,11 +203,11 @@ msgstr "FPSを表示"
 
 #: ../../../src/GameStateConfig.cpp:324
 msgid "Show Hotkeys Labels"
-msgstr ""
+msgstr "ホットキーのラベルを表示。"
 
 #: ../../../src/GameStateConfig.cpp:327
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "色盲モード"
 
 #: ../../../src/GameStateConfig.cpp:338
 msgid "Music Volume"
@@ -258,7 +257,7 @@ msgstr "実験的"
 
 #: ../../../src/GameStateConfig.cpp:507
 msgid "For handheld devices"
-msgstr ""
+msgstr "携帯電話モード"
 
 #: ../../../src/GameStateConfig.cpp:527
 msgid "<< Disable"
@@ -294,7 +293,7 @@ msgstr "継続する話モッズを有効に"
 
 #: ../../../src/GameStateLoad.cpp:496
 msgid "Load Game"
-msgstr "ロードゲーム。"
+msgstr "ゲームをロード。"
 
 #: ../../../src/GameStateLoad.cpp:551
 msgid "Entering game world..."
@@ -310,9 +309,8 @@ msgid "Level %d %s"
 msgstr "レベル %d %s"
 
 #: ../../../src/GameStateLoad.cpp:579
-#, fuzzy
 msgid "Permadeath"
-msgstr "死永久?"
+msgstr "死永久"
 
 #: ../../../src/GameStateLoad.cpp:603
 msgid "Empty Slot"
@@ -351,7 +349,7 @@ msgstr "読み込んでいます..."
 #: ../../../src/MenuManager.cpp:1043 ../../../src/MenuManager.cpp:1044
 #: ../../../src/MenuManager.cpp:1084 ../../../src/MenuManager.cpp:1085
 msgid "Inventory is full."
-msgstr "インベントリがいっぱいです。"
+msgstr "完全なインベントリ。"
 
 #: ../../../src/GameStateTitle.cpp:41
 msgid "Play Game"
@@ -367,16 +365,15 @@ msgstr "設定"
 
 #: ../../../src/GameStateTitle.cpp:55
 msgid "Credits"
-msgstr ""
+msgstr "クレジット"
 
 #: ../../../src/GameStateTitle.cpp:60
 msgid "Exit Game"
 msgstr "ゲームを終了します"
 
 #: ../../../src/GameStateTitle.cpp:67
-#, fuzzy
 msgid "Flare Alpha v0.19"
-msgstr "フレア 0.18 (アルファ)"
+msgstr "フレア 0.19 (アルファ)"
 
 #: ../../../src/InputState.cpp:623
 msgid "Accept"
@@ -481,19 +478,19 @@ msgstr "削除する"
 
 #: ../../../src/InputState.cpp:647
 msgid "ActionBar Accept"
-msgstr ""
+msgstr "アクションバー受け入れ。"
 
 #: ../../../src/InputState.cpp:648
 msgid "ActionBar Left"
-msgstr ""
+msgstr "アクションバーを左"
 
 #: ../../../src/InputState.cpp:649
 msgid "ActionBar Right"
-msgstr ""
+msgstr "アクションバーを右"
 
 #: ../../../src/InputState.cpp:650
 msgid "ActionBar Use"
-msgstr ""
+msgstr "アクションバーを使用する。"
 
 #: ../../../src/InputState.cpp:652
 msgid "lmb"
@@ -530,15 +527,15 @@ msgstr "ログ"
 
 #: ../../../src/ItemManager.cpp:492
 msgid "Normal"
-msgstr ""
+msgstr "ノーマル"
 
 #: ../../../src/ItemManager.cpp:496
 msgid "High"
-msgstr ""
+msgstr "ハイ"
 
 #: ../../../src/ItemManager.cpp:500
 msgid "Epic"
-msgstr ""
+msgstr "超ハイ"
 
 #: ../../../src/ItemManager.cpp:513
 #, c-format
@@ -627,7 +624,7 @@ msgstr "%d 防衛が必要です。"
 #: ../../../src/ItemManager.cpp:609
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "品質: %s"
 
 #: ../../../src/ItemManager.cpp:626 ../../../src/ItemManager.cpp:635
 #, c-format
@@ -854,27 +851,27 @@ msgstr "終了"
 
 #: ../../../src/MenuExit.cpp:48
 msgid "Save and exit to title?"
-msgstr "保存し、タイトルメニューに終了しますか"
+msgstr "保存しタイトルメニューに終了しますか"
 
 #: ../../../src/MenuInventory.cpp:146
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr ""
+msgstr "%sの%d%%を失った"
 
 #: ../../../src/MenuInventory.cpp:153
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr ""
+msgstr "%sの%d%%の合計経験を失った"
 
 #: ../../../src/MenuInventory.cpp:158
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr ""
+msgstr "%sの%d%%の現在経験を失った"
 
 #: ../../../src/MenuInventory.cpp:184
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "%sを失った"
 
 #: ../../../src/MenuInventory.cpp:228
 #, c-format
@@ -915,7 +912,7 @@ msgstr "お金が足りない"
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
-msgstr ""
+msgstr "通商"
 
 #: ../../../src/MenuPowers.cpp:463
 msgid "Unspent skill points:"
@@ -925,7 +922,7 @@ msgstr "未使用のスキルポイント："
 msgid ""
 "\n"
 "Next Level:"
-msgstr ""
+msgstr "次のレベル:"
 
 #: ../../../src/MenuPowers.cpp:525
 #, fuzzy, c-format
