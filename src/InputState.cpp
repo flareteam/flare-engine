@@ -133,8 +133,8 @@ void InputState::loadKeyBindings() {
 
 	FileParser infile;
 
-	if (!infile.open(PATH_CONF + FILE_KEYBINDINGS, false, true, "")) {
-		if (!infile.open("engine/default_keybindings.txt", true, true, "")) {
+	if (!infile.open(PATH_CONF + FILE_KEYBINDINGS, false, "")) {
+		if (!infile.open("engine/default_keybindings.txt", true, "")) {
 			saveKeyBindings();
 			return;
 		}

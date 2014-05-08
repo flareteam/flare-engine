@@ -240,7 +240,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
 void GameStateNew::loadOptions(const string& filename) {
 	FileParser fin;
 	// @CLASS GameStateNew: Hero options|Description of engine/hero_options.txt
-	if (!fin.open("engine/" + filename, true, false)) return;
+	if (!fin.open("engine/" + filename)) return;
 
 	while (fin.next()) {
 		// @ATTR option|base (string), head (string), portrait (string), name (string)|A default body, head, portrait, and name for a hero.

@@ -42,7 +42,6 @@ public:
 	QuestLog(MenuLog *_log);
 	~QuestLog();
 	void loadAll();
-	void loadIndex(const std::string& filename);
 	void load(const std::string& filename);
 	void logic();
 	void createQuestList();

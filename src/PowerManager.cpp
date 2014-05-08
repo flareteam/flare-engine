@@ -59,7 +59,7 @@ void PowerManager::loadEffects() {
 	FileParser infile;
 
 	// @CLASS Effects|Description of powers/effects.txt
-	if (!infile.open("powers/effects.txt", true, false))
+	if (!infile.open("powers/effects.txt"))
 		return;
 
 	std::string input_name = "";
@@ -107,7 +107,7 @@ void PowerManager::loadPowers() {
 	FileParser infile;
 
 	// @CLASS Powers|Description of powers/powers.txt
-	if (!infile.open("powers/powers.txt", true, false))
+	if (!infile.open("powers/powers.txt"))
 		return;
 
 	int input_id = 0;

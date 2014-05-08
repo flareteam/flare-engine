@@ -32,7 +32,7 @@ CursorManager::CursorManager()
 	Image *graphics;
 	FileParser infile;
 	// @CLASS CursorManager|Description of engine/mouse_cursor.txt
-	if (infile.open("engine/mouse_cursor.txt", true, true, "")) {
+	if (infile.open("engine/mouse_cursor.txt", true, "")) {
 		while (infile.next()) {
 			if (infile.key == "normal") {
 				// @ATTR normal|string|Filename of an image for the normal cursor.

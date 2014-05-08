@@ -65,7 +65,10 @@ public:
 	// generic filename is found.
 	// The list is ordered the same way as locate() is searching for files, so
 	// files being at later positions in the list should overwrite previous files
-	std::vector<std::string> list(const std::string& path);
+	//
+	// Setting full_paths to false will populate the list with relative filenames,
+	// that can be passed to locate() later
+	std::vector<std::string> list(const std::string& path, bool full_paths = true);
 
 	std::vector<std::string> mod_dirs;
 	std::vector<Mod> mod_list;

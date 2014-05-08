@@ -35,43 +35,47 @@ FileParser::FileParser()
 	, val("") {
 }
 
-bool FileParser::open(const string& _filename, bool locateFileName, bool stopAfterFirstFile, const string &_errormessage) {
+bool FileParser::open(const string& _filename, bool locateFileName, const string &_errormessage) {
 	filenames.clear();
 	if (locateFileName) {
-		if (stopAfterFirstFile) {
-			filenames.push_back(mods->locate(_filename));
-		}
-		else {
-			filenames = mods->list(_filename);
-		}
+		filenames = mods->list(_filename);
 	}
 	else {
-		if (!stopAfterFirstFile && isDirectory(_filename)) {
-			getFileList(_filename, "txt", filenames);
-		}
-		else {
-			filenames.push_back(_filename);
-		}
+		filenames.push_back(_filename);
 	}
 	current_index = 0;
 	this->errormessage = _errormessage;
-
-	// This should never happen, because when stopAfterFirstFile is set, we
-	// expect to have only one file added above.
-	if (stopAfterFirstFile)
-		if (filenames.size() > 1)
-			fprintf(stderr, "Error in FileParser::open logic. More files detected, although stopAfterFirstFile was set\n");
 
 	if (filenames.size() == 0 && !errormessage.empty()) {
 		fprintf(stderr, "%s: %s: No such file or directory!\n", _filename.c_str(), errormessage.c_str());
 		return false;
 	}
 
-	const string current_filename = filenames[0];
-	infile.open(current_filename.c_str(), ios::in);
-	bool ret = infile.is_open();
-	if (!ret && !errormessage.empty())
-		fprintf(stderr, "%s: %s\n", errormessage.c_str(), current_filename.c_str());
+	bool ret = false;
+
+	// Cycle through all filenames from the end, stopping when a file is to overwrite all further files.
+	for (unsigned i=filenames.size(); i>0; i--) {
+		infile.open(filenames[i-1].c_str(), ios::in);
+		ret = infile.is_open();
+
+		if (ret) {
+			// This will be the first file to be parsed. Seek to the start of the file and leave it open.
+			if (infile.good() && trim(getLine(infile)) != "APPEND") {
+				current_index = i-1;
+				infile.seekg(ios::beg);
+				break;
+			}
+
+			// don't close the final file if it's the only one with an "APPEND" line
+			if (i > 1)
+				infile.close();
+		}
+		else {
+			if (!errormessage.empty())
+				fprintf(stderr, "%s: %s\n", errormessage.c_str(), filenames[i-1].c_str());
+		}
+	}
+
 	return ret;
 }
 
@@ -112,6 +116,9 @@ bool FileParser::next() {
 				// keep searching for a key-pair
 				continue;
 			}
+
+			// skip the string used to combine files
+			if (line == "APPEND") continue;
 
 			// this is a keypair. Perform basic parsing and return
 			parse_key_pair(line, key, val);
