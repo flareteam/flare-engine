@@ -18,8 +18,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #pragma once
-#ifndef SDLRENDERDEVICE_H
-#define SDLRENDERDEVICE_H
+#ifndef SDLSOFTWARERENDERDEVICE_H
+#define SDLSOFTWARERENDERDEVICE_H
 
 #include "RenderDevice.h"
 
@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * As this is for the FLARE engine, the implementation uses the engine's
  * global settings context, which is included by the interface.
  *
- * @class SDLRenderDevice
+ * @class SDLSoftwareRenderDevice
  * @see RenderDevice
  * @author Kurt Rinnert
  * @date 2013-07-06
@@ -40,21 +40,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 /** SDL Image */
-class SDLImage : public Image {
+class SDLSoftwareImage : public Image {
 public:
-  SDLImage(RenderDevice *device);
-  virtual ~SDLImage();
+  SDLSoftwareImage(RenderDevice *device);
+  virtual ~SDLSoftwareImage();
   int getWidth() const;
   int getHeight() const;
 
   SDL_Surface *surface;
 };
 
-class SDLRenderDevice : public RenderDevice {
+class SDLSoftwareRenderDevice : public RenderDevice {
 
 public:
 
-	SDLRenderDevice();
+	SDLSoftwareRenderDevice();
 	int createContext(int width, int height);
 	Rect getContextSize();
 
@@ -122,4 +122,4 @@ private:
 	SDL_Surface* titlebar_icon;
 };
 
-#endif // SDLRENDERDEVICE_H
+#endif // SDLSOFTWARERENDERDEVICE_H
