@@ -192,7 +192,7 @@ Set (FLARE_SOURCES
 	./src/RenderDeviceList.cpp
 	./src/SaveLoad.cpp
 	./src/SDL_gfxBlitFunc.c
-	./src/SDLRenderDevice.cpp
+	./src/SDLSoftwareRenderDevice.cpp
 	./src/Settings.cpp
 	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp

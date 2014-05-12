@@ -120,7 +120,7 @@ public:
 private:
   Image(RenderDevice *device);
   virtual ~Image();
-  friend class SDLImage;
+  friend class SDLSoftwareImage;
 
 private:
   RenderDevice *device;
