@@ -28,8 +28,8 @@ using namespace std;
 
 Point floor(FPoint fp) {
 	Point result;
-	result.x = (int)floor(fp.x);
-	result.y = (int)floor(fp.y);
+	result.x = int(fp.x);
+	result.y = int(fp.y);
 	return result;
 }
 
@@ -91,8 +91,8 @@ FPoint collision_to_map(Point p) {
 
 Point map_to_collision(FPoint p) {
 	Point ret;
-	ret.x = (int)floor(p.x);
-	ret.y = (int)floor(p.y);
+	ret.x = int(p.x);
+	ret.y = int(p.y);
 	return ret;
 }
 
