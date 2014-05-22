@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cfloat>
 #include <math.h>
 #include <cassert>
+#include <cstring>
 
 using namespace std;
 
