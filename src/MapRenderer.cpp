@@ -296,7 +296,7 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 }
 
 void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
-	if (r_cursor->sprite != NULL) {
+	if (r_cursor->image != NULL) {
 		Rect dest;
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 		dest.x = p.x - r_cursor->offset.x;

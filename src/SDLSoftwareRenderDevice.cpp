@@ -344,7 +344,7 @@ Rect SDLSoftwareRenderDevice::getContextSize() {
 int SDLSoftwareRenderDevice::render(Renderable& r, Rect dest) {
 	SDL_Rect src = r.src;
 	SDL_Rect _dest = dest;
-	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r.sprite)->surface, &src, screen, &_dest);
+	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r.image)->surface, &src, screen, &_dest);
 }
 
 int SDLSoftwareRenderDevice::render(Sprite *r) {
