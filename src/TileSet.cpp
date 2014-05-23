@@ -74,7 +74,7 @@ void TileSet::loadGraphics(const std::string& filename) {
 	tiles.clear();
 
 	Image *graphics = NULL;
-	graphics = render_device->loadGraphicSurface(filename);
+	graphics = render_device->loadImage(filename);
 	if (graphics) {
 		sprites = graphics->createSprite();
 		graphics->unref();

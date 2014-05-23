@@ -77,7 +77,7 @@ void MenuItemStorage::init(int _slot_number, vector<Rect> _area, vector<string> 
 
 void MenuItemStorage::loadGraphics() {
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface("images/menus/attention_glow.png",
+	graphics = render_device->loadImage("images/menus/attention_glow.png",
 			   "Couldn't load icon highlight image");
 	if (graphics) {
 		highlight_image = graphics->createSprite();

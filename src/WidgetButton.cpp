@@ -54,7 +54,7 @@ void WidgetButton::activate() {
 void WidgetButton::loadArt() {
 	// load button images
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface(fileName, "Couldn't load button image", true);
+	graphics = render_device->loadImage(fileName, "Couldn't load button image", true);
 	if (graphics) {
 		buttons = graphics->createSprite();
 		pos.w = buttons->getGraphicsWidth();

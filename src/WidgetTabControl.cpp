@@ -135,14 +135,14 @@ void WidgetTabControl::updateHeader() {
  */
 void WidgetTabControl::loadGraphics() {
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface("images/menus/tab_active.png",
+	graphics = render_device->loadImage("images/menus/tab_active.png",
 			   "loading tab_active.png", true);
 	if (graphics) {
 		activeTabSurface = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadGraphicSurface("images/menus/tab_inactive.png",
+	graphics = render_device->loadImage("images/menus/tab_inactive.png",
 			   "loading tab_inactive.png", true);
 	if (graphics) {
 		inactiveTabSurface = graphics->createSprite();

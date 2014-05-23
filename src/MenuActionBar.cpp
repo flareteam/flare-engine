@@ -195,21 +195,21 @@ void MenuActionBar::loadGraphics() {
 
 	setBackground("images/menus/actionbar_trim.png");
 
-	graphics = render_device->loadGraphicSurface("images/menus/slot_empty.png");
+	graphics = render_device->loadImage("images/menus/slot_empty.png");
 	if (graphics) {
 		emptyslot = graphics->createSprite();
 		emptyslot->setClip(0,0,ICON_SIZE,ICON_SIZE);
 		graphics->unref();
 	}
 
-	graphics = render_device->loadGraphicSurface("images/menus/disabled.png");
+	graphics = render_device->loadImage("images/menus/disabled.png");
 	if (graphics) {
 		disabled = graphics->createSprite();
 		disabled->setClip(0,0,ICON_SIZE,ICON_SIZE);
 		graphics->unref();
 	}
 
-	graphics = render_device->loadGraphicSurface("images/menus/attention_glow.png");
+	graphics = render_device->loadImage("images/menus/attention_glow.png");
 	if (graphics) {
 		attention = graphics->createSprite();
 		graphics->unref();

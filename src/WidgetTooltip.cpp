@@ -148,7 +148,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	}
 
 	Image *graphics;
-	graphics = render_device->createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
+	graphics = render_device->createImage(size.x + margin+margin, size.y + margin+margin);
 
 	if (!graphics) {
 		fprintf(stderr, "Error: Could not create tooltip buffer.\n");

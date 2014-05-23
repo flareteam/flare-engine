@@ -109,7 +109,7 @@ Uint32 SDLSoftwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	return SDL_MapRGBA(surface->format, r, g, b, a);
 }
 
-void SDLSoftwareImage::scaleSurface(int width, int height) {
+void SDLSoftwareImage::resize(int width, int height) {
 	if(!surface || width <= 0 || height <= 0)
 		return;
 
@@ -570,7 +570,7 @@ Uint32 SDLSoftwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
  * create blank surface
  * based on example: http://www.libsdl.org/docs/html/sdlcreatergbsurface.html
  */
-Image *SDLSoftwareRenderDevice::createAlphaSurface(int width, int height) {
+Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
 	Uint32 rmask, gmask, bmask, amask;
@@ -677,7 +677,7 @@ void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
 }
 
 
-Image *SDLSoftwareRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit) {
+Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
 	// lookup image in cache
 	Image *img;
 	img = cacheLookup(filename);

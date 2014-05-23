@@ -51,7 +51,7 @@ public:
 	void drawPixel(int x, int y, Uint32 color);
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-	void scaleSurface(int width, int height);
+	void resize(int width, int height);
 	bool checkPixel(Point px);
 
 	SDL_Surface *surface;
@@ -82,12 +82,12 @@ public:
 	void destroyContext();
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-	Image *createAlphaSurface(int width, int height);
+	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void listModes(std::vector<Rect> &modes);
 	void freeImage(Image *image);
 
-	Image* loadGraphicSurface(std::string filename,
+	Image* loadImage(std::string filename,
 								std::string errormessage = "Couldn't load image",
 								bool IfNotFoundExit = false);
 private:

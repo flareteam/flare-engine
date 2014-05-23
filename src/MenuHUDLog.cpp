@@ -113,7 +113,7 @@ void MenuHUDLog::add(const string& s) {
 	// render the log entry and store it in a buffer
 	font->setFont("font_regular");
 	Point size = font->calc_size(s, window_area.w);
-	Image *graphics = render_device->createAlphaSurface(size.x, size.y);
+	Image *graphics = render_device->createImage(size.x, size.y);
 	font->renderShadowed(s, 0, 0, JUSTIFY_LEFT, graphics, window_area.w, color_normal);
 	msg_buffer.push_back(graphics->createSprite());
 }

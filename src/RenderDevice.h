@@ -119,7 +119,7 @@ public:
 	virtual void drawPixel(int x, int y, Uint32 color) = 0;
 	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b) = 0;
 	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
-	virtual void scaleSurface(int width, int height) = 0;
+	virtual void resize(int width, int height) = 0;
 	virtual bool checkPixel(Point px) = 0;
 
 	class Sprite *createSprite(bool clipToSize = true);
@@ -185,10 +185,10 @@ public:
 	virtual void setGamma(float g) = 0;
 
 	/** factory functions for Image */
-	virtual Image *loadGraphicSurface(std::string filename,
+	virtual Image *loadImage(std::string filename,
 					  std::string errormessage = "Couldn't load image",
 					  bool IfNotFoundExit = false) = 0;
-	virtual Image *createAlphaSurface(int width, int height) = 0;
+	virtual Image *createImage(int width, int height) = 0;
 	virtual void freeImage(Image *image) = 0;
 
 	/** Screen operations */

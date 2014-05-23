@@ -82,7 +82,7 @@ void MenuMiniMap::createMapSurface() {
 	}
 
 	Image *graphics;
-	graphics = render_device->createAlphaSurface(512, 512);
+	graphics = render_device->createImage(512, 512);
 	if (graphics) {
 		map_surface = graphics->createSprite();
 		graphics->unref();

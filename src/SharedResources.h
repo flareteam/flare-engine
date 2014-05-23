@@ -67,7 +67,7 @@ public:
 		  icons = NULL;
 		}
 
-		graphics = render_device->loadGraphicSurface("images/icons/icons.png", "Couldn't load icons", false);
+		graphics = render_device->loadImage("images/icons/icons.png", "Couldn't load icons", false);
 		if (graphics) {
 		  icons = graphics->createSprite();
 		  graphics->unref();

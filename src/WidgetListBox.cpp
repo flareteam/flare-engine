@@ -57,7 +57,7 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 
 	// load ListBox images
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface(fileName, "Couldn't load image", true);
+	graphics = render_device->loadImage(fileName, "Couldn't load image", true);
 	if (graphics) {
 		listboxs = graphics->createSprite();
 		pos.w = listboxs->getGraphicsWidth();

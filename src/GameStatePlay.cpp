@@ -81,7 +81,7 @@ GameStatePlay::GameStatePlay()
 	hasMusic = true;
 	// GameEngine scope variables
 
-	graphics = render_device->loadGraphicSurface("images/menus/confirm_bg.png");
+	graphics = render_device->loadImage("images/menus/confirm_bg.png");
 	if (graphics) {
 		loading_bg = graphics->createSprite();
 		graphics->unref();

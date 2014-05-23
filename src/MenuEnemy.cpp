@@ -75,7 +75,7 @@ void MenuEnemy::loadGraphics() {
 
 	setBackground("images/menus/enemy_bar.png");
 
-	graphics = render_device->loadGraphicSurface("images/menus/enemy_bar_hp.png");
+	graphics = render_device->loadImage("images/menus/enemy_bar_hp.png");
 	if (graphics) {
 		bar_hp = graphics->createSprite();
 		graphics->unref();

@@ -151,20 +151,20 @@ void MenuPowers::loadGraphics() {
 
 	setBackground("images/menus/powers.png");
 
-	graphics = render_device->loadGraphicSurface("images/menus/powers_unlock.png");
+	graphics = render_device->loadImage("images/menus/powers_unlock.png");
 	if (graphics) {
 		powers_unlock = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadGraphicSurface("images/menus/disabled.png");
+	graphics = render_device->loadImage("images/menus/disabled.png");
 	if (graphics) {
 		overlay_disabled = graphics->createSprite();
 		graphics->unref();
 	}
 
 	if (tree_image_files.empty()) {
-		graphics = render_device->loadGraphicSurface("images/menus/powers_tree.png");
+		graphics = render_device->loadImage("images/menus/powers_tree.png");
 		if (graphics) {
 			tree_surf.push_back(graphics->createSprite());
 			graphics->unref();
@@ -172,7 +172,7 @@ void MenuPowers::loadGraphics() {
 	}
 	else {
 		for (unsigned int i = 0; i < tree_image_files.size(); ++i) {
-			graphics = render_device->loadGraphicSurface(tree_image_files[i]);
+			graphics = render_device->loadImage(tree_image_files[i]);
 			if (graphics) {
 				tree_surf.push_back(graphics->createSprite());
 				graphics->unref();

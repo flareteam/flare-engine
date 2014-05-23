@@ -154,7 +154,7 @@ void WidgetScrollBox::resize(int h) {
 	}
 
 	Image *graphics;
-	graphics = render_device->createAlphaSurface(pos.w,h);
+	graphics = render_device->createImage(pos.w,h);
 	if (graphics) {
 		contents = graphics->createSprite();
 		graphics->unref();
@@ -181,7 +181,7 @@ void WidgetScrollBox::refresh() {
 		}
 
 		Image *graphics;
-		graphics = render_device->createAlphaSurface(pos.w,h);
+		graphics = render_device->createImage(pos.w,h);
 		if (graphics) {
 			contents = graphics->createSprite();
 			graphics->unref();

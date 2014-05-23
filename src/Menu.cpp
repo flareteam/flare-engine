@@ -49,7 +49,7 @@ void Menu::setBackground(std::string background_image) {
 		background = NULL;
 	}
 
-	graphics = render_device->loadGraphicSurface(background_image);
+	graphics = render_device->loadImage(background_image);
 	if (graphics) {
 		background = graphics->createSprite();
 		background->setClip(0,0,window_area.w,window_area.h);

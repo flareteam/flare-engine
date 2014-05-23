@@ -36,7 +36,7 @@ WidgetCheckBox::WidgetCheckBox (const string &fname)
 	focusable = true;
 
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface(fname, "Couldn't load image", true);
+	graphics = render_device->loadImage(fname, "Couldn't load image", true);
 	if (graphics) {
 		cb = graphics->createSprite();
 		pos.w = cb->getGraphicsWidth();

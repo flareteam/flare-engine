@@ -152,7 +152,7 @@ void MenuManager::setDragIcon(int icon_id) {
 	if (!icons) return;
 
 	if (!drag_icon) {
-		Image *graphics = render_device->createAlphaSurface(ICON_SIZE, ICON_SIZE);
+		Image *graphics = render_device->createImage(ICON_SIZE, ICON_SIZE);
 
 		if (!graphics) return;
 		drag_icon = graphics->createSprite();
