@@ -693,7 +693,7 @@ void MapRenderer::checkHotspots() {
 							Point p1;
 							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile->getClip().x;
 							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile->getClip().y;
-							matched |= render_device->checkPixel(p1, tset.sprites->getGraphics());
+							matched |= tset.sprites->getGraphics()->checkPixel(p1);
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;
 						}

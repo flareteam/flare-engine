@@ -161,8 +161,7 @@ void WidgetScrollBox::resize(int h) {
 	}
 
 	if (contents && !transparent) {
-		render_device->fillImageWithColor(contents->getGraphics(),NULL,
-										  render_device->MapRGB(contents->getGraphics(),bg.r,bg.g,bg.b));
+		contents->getGraphics()->fillWithColor(NULL, contents->getGraphics()->MapRGB(bg.r,bg.g,bg.b));
 	}
 
 	cursor = 0;
@@ -189,8 +188,7 @@ void WidgetScrollBox::refresh() {
 		}
 
 		if (contents && !transparent) {
-			render_device->fillImageWithColor(contents->getGraphics(),NULL,
-											  render_device->MapRGB(contents->getGraphics(),bg.r,bg.g,bg.b));
+			contents->getGraphics()->fillWithColor(NULL, contents->getGraphics()->MapRGB(bg.r,bg.g,bg.b));
 		}
 	}
 
