@@ -39,7 +39,7 @@ WidgetSlider::WidgetSlider (const string  & fname)
 	, value(0) {
 
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface(fname, "loading slider graphics", true);
+	graphics = render_device->loadImage(fname, "loading slider graphics", true);
 	if (graphics) {
 		sl = graphics->createSprite();
 		pos.w = sl->getGraphicsWidth();

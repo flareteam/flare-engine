@@ -148,7 +148,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	}
 
 	Image *graphics;
-	graphics = render_device->createAlphaSurface(size.x + margin+margin, size.y + margin+margin);
+	graphics = render_device->createImage(size.x + margin+margin, size.y + margin+margin);
 
 	if (!graphics) {
 		fprintf(stderr, "Error: Could not create tooltip buffer.\n");
@@ -157,7 +157,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	// style the tooltip background
 	// currently this is plain black
-	render_device->fillImageWithColor(graphics, NULL, render_device->MapRGB(graphics,0,0,0));
+	graphics->fillWithColor(NULL, graphics->MapRGB(0,0,0));
 
 	int cursor_y = margin;
 

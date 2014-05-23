@@ -101,7 +101,7 @@ void MenuBook::loadBook() {
 	for (unsigned i=0; i<text.size(); i++) {
 		font->setFont(textFont[i]);
 		Point pSize = font->calc_size(textData[i], size[i].w);
-		Image *graphics = render_device->createAlphaSurface(size[i].w, pSize.y);
+		Image *graphics = render_device->createImage(size[i].w, pSize.y);
 
 		if (justify[i] == JUSTIFY_CENTER)
 			font->render(textData[i], size[i].w/2, 0, justify[i], graphics, size[i].w, textColor[i]);
@@ -127,7 +127,7 @@ void MenuBook::loadImage(FileParser &infile) {
 	// @ATTR image.image|string|Filename of the image.
 	else if (infile.key == "image") {
 		Image *graphics;
-		graphics = render_device->loadGraphicSurface(popFirstString(infile.val));
+		graphics = render_device->loadImage(popFirstString(infile.val));
 		if (graphics) {
 		  image.back() = graphics->createSprite();
 		  graphics->unref();

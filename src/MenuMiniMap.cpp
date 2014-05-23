@@ -40,9 +40,9 @@ MenuMiniMap::MenuMiniMap()
 
 	createMapSurface();
 	if (map_surface) {
-		color_wall = render_device->MapRGB(map_surface->getGraphics(), 128,128,128);
-		color_obst = render_device->MapRGB(map_surface->getGraphics(), 64,64,64);
-		color_hero = render_device->MapRGB(map_surface->getGraphics(), 255,255,255);
+		color_wall = map_surface->getGraphics()->MapRGB(128,128,128);
+		color_obst = map_surface->getGraphics()->MapRGB(64,64,64);
+		color_hero = map_surface->getGraphics()->MapRGB(255,255,255);
 	}
 
 	// Load config settings
@@ -82,7 +82,7 @@ void MenuMiniMap::createMapSurface() {
 	}
 
 	Image *graphics;
-	graphics = render_device->createAlphaSurface(512, 512);
+	graphics = render_device->createImage(512, 512);
 	if (graphics) {
 		map_surface = graphics->createSprite();
 		graphics->unref();
@@ -108,7 +108,7 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 
 	map_size.x = map_w;
 	map_size.y = map_h;
-	render_device->fillImageWithColor(map_surface->getGraphics(), NULL, render_device->MapRGBA(map_surface->getGraphics(),0,0,0,0));
+	map_surface->getGraphics()->fillWithColor(NULL, map_surface->getGraphics()->MapRGBA(0,0,0,0));
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
 		prerenderIso(collider);
@@ -189,10 +189,10 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
 	for (int i=0; i<std::min(map_surface->getGraphicsWidth(), map_size.x); i++) {
 		for (int j=0; j<std::min(map_surface->getGraphicsHeight(), map_size.y); j++) {
 			if (collider->colmap[i][j] == 1 || collider->colmap[i][j] == 5) {
-				render_device->drawPixel(map_surface->getGraphics(), i, j, color_wall);
+				map_surface->getGraphics()->drawPixel(i, j, color_wall);
 			}
 			else if (collider->colmap[i][j] == 2 || collider->colmap[i][j] == 6) {
-				render_device->drawPixel(map_surface->getGraphics(), i, j, color_obst);
+				map_surface->getGraphics()->drawPixel(i, j, color_obst);
 			}
 		}
 	}
@@ -228,12 +228,12 @@ void MenuMiniMap::prerenderIso(MapCollision *collider) {
 
 				if (draw_tile) {
 					if (odd_row) {
-						render_device->drawPixel(map_surface->getGraphics(), i, j, draw_color);
-						render_device->drawPixel(map_surface->getGraphics(), i+1, j, draw_color);
+						map_surface->getGraphics()->drawPixel(i, j, draw_color);
+						map_surface->getGraphics()->drawPixel(i+1, j, draw_color);
 					}
 					else {
-						render_device->drawPixel(map_surface->getGraphics(), i-1, j, draw_color);
-						render_device->drawPixel(map_surface->getGraphics(), i, j, draw_color);
+						map_surface->getGraphics()->drawPixel(i-1, j, draw_color);
+						map_surface->getGraphics()->drawPixel(i, j, draw_color);
 					}
 				}
 			}

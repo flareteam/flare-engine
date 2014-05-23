@@ -45,7 +45,7 @@ WidgetInput::WidgetInput() {
 void WidgetInput::loadGraphics(const string& filename) {
 	// load input background image
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface(filename, "Couldn't load image", true);
+	graphics = render_device->loadImage(filename, "Couldn't load image", true);
 	if (graphics) {
 		background = graphics->createSprite();
 		pos.w = background->getGraphicsWidth();

@@ -46,6 +46,203 @@ int SDLSoftwareImage::getHeight() const {
 	return surface ? surface->h : 0;
 }
 
+void SDLSoftwareImage::fillWithColor(Rect *dstrect, Uint32 color) {
+	if (!surface) return;
+
+	if (dstrect) {
+		SDL_Rect dest = *dstrect;
+		SDL_FillRect(surface, &dest, color);
+	}
+	else {
+		SDL_FillRect(surface, NULL, color);
+	}
+}
+
+/*
+ * Set the pixel at (x, y) to the given value
+ * NOTE: The surface must be locked before calling this!
+ *
+ * Source: SDL Documentation
+ * http://www.libsdl.org/docs/html/guidevideo.html
+ */
+void SDLSoftwareImage::drawPixel(int x, int y, Uint32 pixel) {
+	if (!surface) return;
+
+	int bpp = surface->format->BytesPerPixel;
+	/* Here p is the address to the pixel we want to set */
+	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+	switch(bpp) {
+		case 1:
+			*p = pixel;
+			break;
+
+		case 2:
+			*(Uint16 *)p = pixel;
+			break;
+
+		case 3:
+#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			p[0] = (pixel >> 16) & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = pixel & 0xff;
+#else
+			p[0] = pixel & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = (pixel >> 16) & 0xff;
+#endif
+			break;
+
+		case 4:
+			*(Uint32 *)p = pixel;
+			break;
+	}
+}
+
+Uint32 SDLSoftwareImage::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
+	if (!surface) return 0;
+	return SDL_MapRGB(surface->format, r, g, b);
+}
+
+Uint32 SDLSoftwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+	if (!surface) return 0;
+	return SDL_MapRGBA(surface->format, r, g, b, a);
+}
+
+void SDLSoftwareImage::resize(int width, int height) {
+	if(!surface || width <= 0 || height <= 0)
+		return;
+
+	SDLSoftwareImage *scaled = new SDLSoftwareImage(device);
+	scaled->surface = SDL_CreateRGBSurface(surface->flags, width, height,
+										   surface->format->BitsPerPixel,
+										   surface->format->Rmask,
+										   surface->format->Gmask,
+										   surface->format->Bmask,
+										   surface->format->Amask);
+
+	if (scaled->surface) {
+		double _stretch_factor_x, _stretch_factor_y;
+		_stretch_factor_x = width / (double)surface->w;
+		_stretch_factor_y = height / (double)surface->h;
+
+		for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
+			for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
+				Uint32 spixel = readPixel(x, y);
+				for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
+					for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
+						Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
+						Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
+						scaled->drawPixel(dx, dy, spixel);
+					}
+				}
+			}
+		}
+		/* swap surface from scaled to source */
+		SDL_FreeSurface(surface);
+		surface = scaled->surface;
+		scaled->surface = NULL;
+		scaled->unref();
+	}
+}
+
+Uint32 SDLSoftwareImage::readPixel(int x, int y) {
+	if (!surface) return 0;
+
+	SDL_LockSurface(surface);
+	int bpp = surface->format->BytesPerPixel;
+	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+	Uint32 pixel;
+
+	switch (bpp) {
+		case 1:
+			pixel = *p;
+			break;
+
+		case 2:
+			pixel = *(Uint16 *)p;
+			break;
+
+		case 3:
+			if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+				pixel = p[0] << 16 | p[1] << 8 | p[2];
+			else
+				pixel = p[0] | p[1] << 8 | p[2] << 16;
+			break;
+
+		case 4:
+			pixel = *(Uint32 *)p;
+			break;
+
+		default:
+			SDL_UnlockSurface(surface);
+			return 0;
+	}
+
+	SDL_UnlockSurface(surface);
+	return pixel;
+}
+
+/*
+ * Returns false if a pixel at Point px is transparent
+ *
+ * Source: SDL Documentation
+ * http://www.libsdl.org/cgi/docwiki.cgi/Introduction_to_SDL_Video#getpixel
+ */
+bool SDLSoftwareImage::checkPixel(Point px) {
+	if (!surface) return false;
+
+	SDL_LockSurface(surface);
+
+	int bpp = surface->format->BytesPerPixel;
+	/* Here p is the address to the pixel we want to retrieve */
+	Uint8 *p = (Uint8 *)surface->pixels + px.y * surface->pitch + px.x * bpp;
+	Uint32 pixel;
+
+	switch (bpp) {
+		case 1:
+			pixel = *p;
+			break;
+
+		case 2:
+			pixel = *(Uint16 *)p;
+			break;
+
+		case 3:
+#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			pixel = p[0] << 16 | p[1] << 8 | p[2];
+#else
+			pixel = p[0] | p[1] << 8 | p[2] << 16;
+#endif
+			break;
+
+		case 4:
+			pixel = *(Uint32 *)p;
+			break;
+
+		default:
+			SDL_UnlockSurface(surface);
+			return false;
+	}
+
+	Uint8 r,g,b,a;
+	SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
+
+	if (r == 255 && g == 0 && b ==255 && a == 255) {
+		SDL_UnlockSurface(surface);
+		return false;
+	}
+	if (a == 0) {
+		SDL_UnlockSurface(surface);
+		return false;
+	}
+
+	SDL_UnlockSurface(surface);
+
+	return true;
+}
+
+
 SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	: screen(NULL)
 #if SDL_VERSION_ATLEAST(2,0,0)
@@ -147,7 +344,7 @@ Rect SDLSoftwareRenderDevice::getContextSize() {
 int SDLSoftwareRenderDevice::render(Renderable& r, Rect dest) {
 	SDL_Rect src = r.src;
 	SDL_Rect _dest = dest;
-	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r.sprite)->surface, &src, screen, &_dest);
+	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r.image)->surface, &src, screen, &_dest);
 }
 
 int SDLSoftwareRenderDevice::render(Sprite *r) {
@@ -206,8 +403,10 @@ int SDLSoftwareRenderDevice::renderText(
 	return ret;
 }
 
-Image * SDLSoftwareRenderDevice::renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended) {
+Image* SDLSoftwareRenderDevice::renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended) {
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
+	if (!image) return NULL;
+
 	SDL_Color _color = color;
 
 	if (blended)
@@ -221,8 +420,6 @@ Image * SDLSoftwareRenderDevice::renderTextToImage(TTF_Font* ttf_font, const std
 	delete image;
 	return NULL;
 }
-
-
 
 void SDLSoftwareRenderDevice::drawPixel(
 	int x,
@@ -268,48 +465,6 @@ void SDLSoftwareRenderDevice::drawPixel(
 	return;
 }
 
-/*
- * Set the pixel at (x, y) to the given value
- * NOTE: The surface must be locked before calling this!
- *
- * Source: SDL Documentation
- * http://www.libsdl.org/docs/html/guidevideo.html
- */
-void SDLSoftwareRenderDevice::drawPixel(Image *image, int x, int y, Uint32 pixel) {
-	if (!image || !static_cast<SDLSoftwareImage *>(image)->surface) return;
-	SDL_Surface *surface = static_cast<SDLSoftwareImage *>(image)->surface;
-
-	int bpp = surface->format->BytesPerPixel;
-	/* Here p is the address to the pixel we want to set */
-	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
-
-	switch(bpp) {
-		case 1:
-			*p = pixel;
-			break;
-
-		case 2:
-			*(Uint16 *)p = pixel;
-			break;
-
-		case 3:
-#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-			p[0] = (pixel >> 16) & 0xff;
-			p[1] = (pixel >> 8) & 0xff;
-			p[2] = pixel & 0xff;
-#else
-			p[0] = pixel & 0xff;
-			p[1] = (pixel >> 8) & 0xff;
-			p[2] = (pixel >> 16) & 0xff;
-#endif
-			break;
-
-		case 4:
-			*(Uint32 *)p = pixel;
-			break;
-	}
-}
-
 void SDLSoftwareRenderDevice::drawLine(
 	int x0,
 	int y0,
@@ -340,20 +495,6 @@ void SDLSoftwareRenderDevice::drawLine(
 		}
 	}
 	while(x0 != x1 || y0 != y1);
-}
-
-void SDLSoftwareRenderDevice::drawLine(
-	const Point& p0,
-	const Point& p1,
-	Uint32 color
-) {
-	if (SDL_MUSTLOCK(screen)) {
-		SDL_LockSurface(screen);
-	}
-	this->drawLine(p0.x, p0.y, p1.x, p1.y, color);
-	if (SDL_MUSTLOCK(screen)) {
-		SDL_UnlockSurface(screen);
-	}
 }
 
 void SDLSoftwareRenderDevice::drawRectangle(
@@ -417,29 +558,8 @@ void SDLSoftwareRenderDevice::destroyContext() {
 	return;
 }
 
-void SDLSoftwareRenderDevice::fillImageWithColor(Image *dst, Rect *dstrect, Uint32 color) {
-	if (!dst) return;
-	if (dstrect) {
-		SDL_Rect dest = *dstrect;
-		SDL_FillRect(static_cast<SDLSoftwareImage *>(dst)->surface, &dest, color);
-	}
-	else {
-		SDL_FillRect(static_cast<SDLSoftwareImage *>(dst)->surface, NULL, color);
-	}
-}
-
-Uint32 SDLSoftwareRenderDevice::MapRGB(Image *src, Uint8 r, Uint8 g, Uint8 b) {
-	if (!src || !static_cast<SDLSoftwareImage *>(src)->surface) return 0;
-	return SDL_MapRGB(static_cast<SDLSoftwareImage *>(src)->surface->format, r, g, b);
-}
-
 Uint32 SDLSoftwareRenderDevice::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
 	return SDL_MapRGB(screen->format, r, g, b);
-}
-
-Uint32 SDLSoftwareRenderDevice::MapRGBA(Image *src, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	if (!src || !static_cast<SDLSoftwareImage *>(src)->surface) return 0;
-	return SDL_MapRGBA(static_cast<SDLSoftwareImage *>(src)->surface->format, r, g, b, a);
 }
 
 Uint32 SDLSoftwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
@@ -450,7 +570,7 @@ Uint32 SDLSoftwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
  * create blank surface
  * based on example: http://www.libsdl.org/docs/html/sdlcreatergbsurface.html
  */
-Image *SDLSoftwareRenderDevice::createAlphaSurface(int width, int height) {
+Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
 	Uint32 rmask, gmask, bmask, amask;
@@ -557,7 +677,7 @@ void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
 }
 
 
-Image *SDLSoftwareRenderDevice::loadGraphicSurface(std::string filename, std::string errormessage, bool IfNotFoundExit) {
+Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
 	// lookup image in cache
 	Image *img;
 	img = cacheLookup(filename);
@@ -588,142 +708,6 @@ Image *SDLSoftwareRenderDevice::loadGraphicSurface(std::string filename, std::st
 	// store image to cache
 	cacheStore(filename, image);
 	return image;
-}
-
-void SDLSoftwareRenderDevice::scaleSurface(Image *source, int width, int height) {
-	if(!source || !width || !height)
-		return;
-
-	SDLSoftwareImage *scaled = new SDLSoftwareImage(this);
-	SDL_Surface *surface = static_cast<SDLSoftwareImage *>(source)->surface;
-	scaled->surface = SDL_CreateRGBSurface(surface->flags, width, height,
-										   surface->format->BitsPerPixel,
-										   surface->format->Rmask,
-										   surface->format->Gmask,
-										   surface->format->Bmask,
-										   surface->format->Amask);
-
-	if (scaled->surface) {
-		double _stretch_factor_x, _stretch_factor_y;
-		_stretch_factor_x = width / (double)surface->w;
-		_stretch_factor_y = height / (double)surface->h;
-
-		for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
-			for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
-				Uint32 spixel = readPixel(source, x, y);
-				for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
-					for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
-						Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
-						Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
-						drawPixel(scaled, dx, dy, spixel);
-					}
-				}
-			}
-		}
-		/* swap surface from scaled to source */
-		SDL_FreeSurface(surface);
-		static_cast<SDLSoftwareImage *>(source)->surface = scaled->surface;
-		scaled->surface = NULL;
-		scaled->unref();
-	}
-}
-
-Uint32 SDLSoftwareRenderDevice::readPixel(Image *image, int x, int y) {
-	if (!image || !static_cast<SDLSoftwareImage *>(image)->surface) return 0;
-	SDL_Surface *surface = static_cast<SDLSoftwareImage *>(image)->surface;
-
-	SDL_LockSurface(surface);
-	int bpp = surface->format->BytesPerPixel;
-	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
-	Uint32 pixel;
-
-	switch (bpp) {
-		case 1:
-			pixel = *p;
-			break;
-
-		case 2:
-			pixel = *(Uint16 *)p;
-			break;
-
-		case 3:
-			if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-				pixel = p[0] << 16 | p[1] << 8 | p[2];
-			else
-				pixel = p[0] | p[1] << 8 | p[2] << 16;
-			break;
-
-		case 4:
-			pixel = *(Uint32 *)p;
-			break;
-
-		default:
-			SDL_UnlockSurface(surface);
-			return 0;
-	}
-
-	SDL_UnlockSurface(surface);
-	return pixel;
-}
-
-/*
- * Returns false if a pixel at Point px is transparent
- *
- * Source: SDL Documentation
- * http://www.libsdl.org/cgi/docwiki.cgi/Introduction_to_SDL_Video#getpixel
- */
-bool SDLSoftwareRenderDevice::checkPixel(Point px, Image *image) {
-	if (!image || !static_cast<SDLSoftwareImage *>(image)->surface) return false;
-	SDL_Surface *surface = static_cast<SDLSoftwareImage *>(image)->surface;
-
-	SDL_LockSurface(surface);
-
-	int bpp = surface->format->BytesPerPixel;
-	/* Here p is the address to the pixel we want to retrieve */
-	Uint8 *p = (Uint8 *)surface->pixels + px.y * surface->pitch + px.x * bpp;
-	Uint32 pixel;
-
-	switch (bpp) {
-		case 1:
-			pixel = *p;
-			break;
-
-		case 2:
-			pixel = *(Uint16 *)p;
-			break;
-
-		case 3:
-#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-			pixel = p[0] << 16 | p[1] << 8 | p[2];
-#else
-			pixel = p[0] | p[1] << 8 | p[2] << 16;
-#endif
-			break;
-
-		case 4:
-			pixel = *(Uint32 *)p;
-			break;
-
-		default:
-			SDL_UnlockSurface(surface);
-			return false;
-	}
-
-	Uint8 r,g,b,a;
-	SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
-
-	if (r == 255 && g == 0 && b ==255 && a == 255) {
-		SDL_UnlockSurface(surface);
-		return false;
-	}
-	if (a == 0) {
-		SDL_UnlockSurface(surface);
-		return false;
-	}
-
-	SDL_UnlockSurface(surface);
-
-	return true;
 }
 
 void SDLSoftwareRenderDevice::freeImage(Image *image) {

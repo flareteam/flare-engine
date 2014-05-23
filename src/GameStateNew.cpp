@@ -208,7 +208,7 @@ GameStateNew::GameStateNew()
 void GameStateNew::loadGraphics() {
 	Image *graphics;
 
-	graphics = render_device->loadGraphicSurface("images/menus/portrait_border.png",
+	graphics = render_device->loadImage("images/menus/portrait_border.png",
 			   "Couldn't load portrait border image", false);
 	if (graphics) {
 		portrait_border = graphics->createSprite();
@@ -224,7 +224,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
 		delete portrait_image;
 
 	portrait_image = NULL;
-	graphics = render_device->loadGraphicSurface(portrait_filename);
+	graphics = render_device->loadImage(portrait_filename);
 	if (graphics) {
 		portrait_image = graphics->createSprite();
 		portrait_image->setDest(portrait_pos);

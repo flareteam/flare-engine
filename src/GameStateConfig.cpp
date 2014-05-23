@@ -63,7 +63,7 @@ GameStateConfig::GameStateConfig ()
 	, check_resolution(true) {
 
 	Image *graphics;
-	graphics = render_device->loadGraphicSurface("images/menus/config.png");
+	graphics = render_device->loadImage("images/menus/config.png");
 	if (graphics) {
 		background = graphics->createSprite();
 		graphics->unref();

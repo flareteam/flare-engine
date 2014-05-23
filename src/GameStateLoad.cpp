@@ -184,20 +184,20 @@ GameStateLoad::GameStateLoad() : GameState()
 void GameStateLoad::loadGraphics() {
 	Image *graphics;
 
-	graphics = render_device->loadGraphicSurface("images/menus/game_slots.png");
+	graphics = render_device->loadImage("images/menus/game_slots.png");
 	if (graphics) {
 		background = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadGraphicSurface("images/menus/game_slot_select.png",
+	graphics = render_device->loadImage("images/menus/game_slot_select.png",
 			   "Couldn't load image", false);
 	if (graphics) {
 		selection = graphics->createSprite();
 		graphics->unref();
 	}
 
-	graphics = render_device->loadGraphicSurface("images/menus/portrait_border.png",
+	graphics = render_device->loadImage("images/menus/portrait_border.png",
 			   "Couldn't load image", false);
 	if (graphics) {
 		portrait_border = graphics->createSprite();
@@ -218,7 +218,7 @@ void GameStateLoad::loadPortrait(int slot) {
 
 	if (stats[slot].name == "") return;
 
-	graphics = render_device->loadGraphicSurface(stats[slot].gfx_portrait);
+	graphics = render_device->loadImage(stats[slot].gfx_portrait);
 	if (graphics) {
 		portrait = graphics->createSprite();
 		portrait->setDestX(portrait_dest.x);
@@ -349,7 +349,7 @@ void GameStateLoad::loadPreview(int slot) {
 		if (img_gfx[i] == "")
 			continue;
 
-		graphics = render_device->loadGraphicSurface("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png");
+		graphics = render_device->loadImage("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png");
 		sprites[slot][i] = NULL;
 		if (graphics) {
 			sprites[slot][i] = graphics->createSprite();

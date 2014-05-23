@@ -108,35 +108,43 @@ protected:
  */
 class Image {
 public:
-  void ref();
-  void unref();
-  uint32_t getRefCount() const;
+	void ref();
+	void unref();
+	uint32_t getRefCount() const;
 
-  virtual int getWidth() const;
-  virtual int getHeight() const;
+	virtual int getWidth() const;
+	virtual int getHeight() const;
 
-  class Sprite *createSprite(bool clipToSize = true);
+	virtual void fillWithColor(Rect *dstrect, Uint32 color) = 0;
+	virtual void drawPixel(int x, int y, Uint32 color) = 0;
+	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b) = 0;
+	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
+	virtual void resize(int width, int height) = 0;
+	virtual bool checkPixel(Point px) = 0;
+
+	class Sprite *createSprite(bool clipToSize = true);
 
 private:
-  Image(RenderDevice *device);
-  virtual ~Image();
-  friend class SDLSoftwareImage;
+	Image(RenderDevice *device);
+	virtual ~Image();
+	virtual Uint32 readPixel(int x, int y) = 0;
+	friend class SDLSoftwareImage;
 
 private:
-  RenderDevice *device;
-  uint32_t ref_counter;
+	RenderDevice *device;
+	uint32_t ref_counter;
 };
 
 struct Renderable {
 public:
-	Image *sprite; // image to be used
+	Image *image; // image to be used
 	Rect src; // location on the sprite in pixel coordinates.
 
 	FPoint map_pos;     // The map location on the floor between someone's feet
 	Point offset;      // offset from map_pos to topleft corner of sprite
 	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
 	Renderable()
-		: sprite(NULL)
+		: image(NULL)
 		, src(Rect())
 		, map_pos()
 		, offset()
@@ -166,7 +174,7 @@ public:
 class RenderDevice {
 
 public:
-        RenderDevice();
+	RenderDevice();
 	virtual ~RenderDevice();
 
 	/** Context operations */
@@ -177,10 +185,10 @@ public:
 	virtual void setGamma(float g) = 0;
 
 	/** factory functions for Image */
-	virtual Image *loadGraphicSurface(std::string filename,
+	virtual Image *loadImage(std::string filename,
 					  std::string errormessage = "Couldn't load image",
 					  bool IfNotFoundExit = false) = 0;
-	virtual Image *createAlphaSurface(int width, int height) = 0;
+	virtual Image *createImage(int width, int height) = 0;
 	virtual void freeImage(Image *image) = 0;
 
 	/** Screen operations */
@@ -190,25 +198,13 @@ public:
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest,
 				  bool dest_is_transparent = false) = 0;
 	virtual int renderText(TTF_Font *ttf_font, const std::string& text, Color color, Rect& dest) = 0;
+	virtual Image* renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true) = 0;
 	virtual void blankScreen() = 0;
 	virtual void commitFrame() = 0;
 	virtual void drawPixel(int x, int y, Uint32 color) = 0;
-	virtual void drawLine(int x0, int y0, int x1, int y1, Uint32 color) = 0;
-	virtual void drawLine(const Point& p0, const Point& p1, Uint32 color) = 0;
 	virtual void drawRectangle(const Point& p0, const Point& p1, Uint32 color) = 0;
 	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b) = 0;
 	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
-
-	/** Image operations */
-	virtual Image *renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color,
-					 bool blended = true) = 0;
-	virtual void fillImageWithColor(Image *dst, Rect *dstrect, Uint32 color) = 0;
-	virtual void drawPixel(Image *image, int x, int y, Uint32 color) = 0;
-	virtual Uint32 MapRGB(Image *src, Uint8 r, Uint8 g, Uint8 b) = 0;
-	virtual Uint32 MapRGBA(Image *src, Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
-	virtual void scaleSurface(Image *source, int width, int height) = 0;
-	virtual Uint32 readPixel(Image *image, int x, int y) = 0;
-	virtual bool checkPixel(Point px, Image *image) = 0;
 
 protected:
 	/* Compute clipping and global position from local frame. */
@@ -229,6 +225,8 @@ private:
 	typedef IMAGE_CACHE_CONTAINER::iterator IMAGE_CACHE_CONTAINER_ITER;
 
 	IMAGE_CACHE_CONTAINER cache;
+
+	virtual void drawLine(int x0, int y0, int x1, int y1, Uint32 color) = 0;
 };
 
 #endif // RENDERDEVICE_H

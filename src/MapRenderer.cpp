@@ -296,7 +296,7 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 }
 
 void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
-	if (r_cursor->sprite != NULL) {
+	if (r_cursor->image != NULL) {
 		Rect dest;
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
 		dest.x = p.x - r_cursor->offset.x;
@@ -693,7 +693,7 @@ void MapRenderer::checkHotspots() {
 							Point p1;
 							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile->getClip().x;
 							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile->getClip().y;
-							matched |= render_device->checkPixel(p1, tset.sprites->getGraphics());
+							matched |= tset.sprites->getGraphics()->checkPixel(p1);
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;
 						}

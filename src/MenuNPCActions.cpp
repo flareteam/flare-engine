@@ -192,12 +192,12 @@ void MenuNPCActions::update() {
 			delete action_menu;
 			action_menu = NULL;
 		}
-		Image *graphics = render_device->createAlphaSurface(w,h);
-		Uint32 bg = render_device->MapRGBA(graphics,
-										   background_color.r, background_color.g,
-										   background_color.b, background_color.a);
-		render_device->fillImageWithColor(graphics, NULL, bg);
-		action_menu = graphics->createSprite();
+		Image *graphics = render_device->createImage(w,h);
+		if (graphics) {
+			Uint32 bg = graphics->MapRGBA(background_color.r, background_color.g, background_color.b, background_color.a);
+			graphics->fillWithColor(NULL, bg);
+			action_menu = graphics->createSprite();
+		}
 	}
 
 }

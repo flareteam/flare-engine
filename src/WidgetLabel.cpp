@@ -240,7 +240,7 @@ void WidgetLabel::refresh() {
 		label = NULL;
 	}
 
-	image = render_device->createAlphaSurface(bounds.w, bounds.h);
+	image = render_device->createImage(bounds.w, bounds.h);
 	if (!image) return;
 
 	font->setFont(font_style);

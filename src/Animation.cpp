@@ -202,7 +202,7 @@ Renderable Animation::getCurrentFrame(int kind) {
 		r.src.h = gfx[index].h;
 		r.offset.x = render_offset[index].x;
 		r.offset.y = render_offset[index].y;
-		r.sprite = sprite;
+		r.image = sprite;
 	}
 	return r;
 }
