@@ -58,7 +58,7 @@ if(NOT SDL2_BUILDING_LIBRARY)
     # seem to provide SDLmain for compatibility even though they don't
     # necessarily need it.
     find_library(SDL2MAIN_LIBRARY
-      NAMES SDLmain
+      NAMES SDL2main
       HINTS
         ENV SDLDIR
       PATH_SUFFIXES lib

@@ -16,6 +16,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include <assert.h>
+#include <stdio.h>
 #include "RenderDevice.h"
 
 
