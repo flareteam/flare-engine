@@ -119,7 +119,7 @@ public:
 	virtual void drawPixel(int x, int y, Uint32 color) = 0;
 	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b) = 0;
 	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
-	virtual void resize(int width, int height) = 0;
+	virtual Image* resize(int width, int height) = 0;
 	virtual bool checkPixel(Point px) = 0;
 
 	class Sprite *createSprite(bool clipToSize = true);
