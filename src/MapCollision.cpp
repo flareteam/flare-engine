@@ -94,14 +94,12 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 		if (is_valid_tile(int(x), int(y) + 1, movement_type, is_hero)
 				&& is_valid_tile(int(x) + sgn(step_x), int(y) + 1, movement_type, is_hero)
 				&& dy > 0.5) {
-			y += 1 - dy + epsilon;
-			x += step_x;
+			y += min(1 - dy + epsilon, float(fabs(step_x)));
 		}
 		else if (is_valid_tile(int(x), int(y) - 1, movement_type, is_hero)
 				 && is_valid_tile(int(x) + sgn(step_x), int(y) - 1, movement_type, is_hero)
 				 && dy < 0.5) {
-			y -= dy + epsilon;
-			x += step_x;
+			y -= min(dy + epsilon, float(fabs(step_x)));
 		}
 		else {
 			return false;
@@ -115,14 +113,12 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 		if (is_valid_tile(int(x) + 1, int(y), movement_type, is_hero)
 				&& is_valid_tile(int(x) + 1, int(y) + sgn(step_y), movement_type, is_hero)
 				&& dx > 0.5) {
-			x += 1 - dx + epsilon;
-			y += step_y;
+			x += min(1 - dx + epsilon, float(fabs(step_y)));
 		}
 		else if (is_valid_tile(int(x) - 1, int(y), movement_type, is_hero)
 				 && is_valid_tile(int(x) - 1, int(y) + sgn(step_y), movement_type, is_hero)
 				 && dx < 0.5) {
-			x -= dx + epsilon;
-			y += step_y;
+			x -= min(dx + epsilon, float(fabs(step_y)));
 		}
 		else {
 			return false;
