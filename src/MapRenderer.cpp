@@ -424,9 +424,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile->setDest(dest);
-				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 
 			// some renderable entities go in this layer
@@ -484,9 +482,7 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile->setDest(dest);
-				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 		}
@@ -531,9 +527,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile->setDest(dest);
-				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 
