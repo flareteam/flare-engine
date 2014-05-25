@@ -109,9 +109,13 @@ Uint32 SDLSoftwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	return SDL_MapRGBA(surface->format, r, g, b, a);
 }
 
-void SDLSoftwareImage::resize(int width, int height) {
+/**
+ * Resizes an image
+ * Deletes the original image and returns a pointer to the resized version
+ */
+Image* SDLSoftwareImage::resize(int width, int height) {
 	if(!surface || width <= 0 || height <= 0)
-		return;
+		return NULL;
 
 	SDLSoftwareImage *scaled = new SDLSoftwareImage(device);
 	scaled->surface = SDL_CreateRGBSurface(surface->flags, width, height,
@@ -138,12 +142,12 @@ void SDLSoftwareImage::resize(int width, int height) {
 				}
 			}
 		}
-		/* swap surface from scaled to source */
-		SDL_FreeSurface(surface);
-		surface = scaled->surface;
-		scaled->surface = NULL;
-		scaled->unref();
+		// delete the old image and return the new one
+		this->unref();
+		return scaled;
 	}
+
+	return NULL;
 }
 
 Uint32 SDLSoftwareImage::readPixel(int x, int y) {

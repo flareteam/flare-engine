@@ -51,7 +51,7 @@ public:
 	void drawPixel(int x, int y, Uint32 color);
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-	void resize(int width, int height);
+	Image* resize(int width, int height);
 	bool checkPixel(Point px);
 
 	SDL_Surface *surface;

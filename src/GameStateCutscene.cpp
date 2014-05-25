@@ -53,7 +53,9 @@ Image *Scene::loadImage(std::string filename, bool scale_graphics) {
 	if (scale_graphics) {
 		if (image->getWidth() > 0) {
 			float ratio = image->getHeight()/(float)image->getWidth();
-			image->resize(VIEW_W, (int)(VIEW_W*ratio));
+			Image *resized = image->resize(VIEW_W, (int)(VIEW_W*ratio));
+			if (resized)
+				image = resized;
 		}
 		else {
 			fprintf(stderr, "Error: Can not scale cutscene image with a width of 0.\n");
