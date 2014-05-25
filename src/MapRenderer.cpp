@@ -310,11 +310,11 @@ void MapRenderer::renderIsoLayer(const unsigned short layerdata[256][256]) {
 	int_fast16_t j; // second index of the map array
 	Rect dest;
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
-	const int_fast16_t max_tiles_height = ((2 * VIEW_H / TILE_H) + 2 * tset.max_size_y) * 2;
+	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2*tset.max_size_x;
+	const int_fast16_t max_tiles_height = (2 * VIEW_H / TILE_H) + 2*tset.max_size_y;
 
-	j = upperleft.y - tset.max_size_y + tset.max_size_x;
-	i = upperleft.x - tset.max_size_y - tset.max_size_x;
+	j = upperleft.y - tset.max_size_y/2 + tset.max_size_x;
+	i = upperleft.x - tset.max_size_y/2 - tset.max_size_x;
 
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
 		int_fast16_t tiles_width = 0;
@@ -424,9 +424,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile->setDest(dest);
-				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 
 			// some renderable entities go in this layer
@@ -484,9 +482,7 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile->setDest(dest);
-				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 		}
@@ -531,9 +527,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile->setDest(dest);
-				//tset.tiles[current_tile].tile.setGraphics(*tset.sprites.getGraphics(), false);
 				render_device->render(tset.tiles[current_tile].tile);
-				//tset.tiles[current_tile].tile.setGraphics(Image());
 			}
 			p.x += TILE_W;
 
