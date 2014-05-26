@@ -60,7 +60,8 @@ GameStateConfig::GameStateConfig ()
 	, background(NULL)
 	, tip_buf()
 	, input_key(0)
-	, check_resolution(true) {
+	, check_resolution(true)
+	, key_count(0) {
 
 	Image *graphics;
 	graphics = render_device->loadImage("images/menus/config.png");
@@ -166,14 +167,16 @@ void GameStateConfig::init() {
 	defaults_confirm = new MenuConfirm(msg->get("Defaults"),msg->get("Reset ALL settings?"));
 
 	// Allocate KeyBindings
-	for (unsigned int i = 0; i < 29; i++) {
-		settings_lb[i] = new WidgetLabel();
-		settings_lb[i]->set(inpt->binding_name[i]);
-		settings_lb[i]->setJustify(JUSTIFY_RIGHT);
+	for (unsigned int i = 0; i < inpt->key_count; i++) {
+		keybinds_lb.push_back(new WidgetLabel());
+		keybinds_lb[i]->set(inpt->binding_name[i]);
+		keybinds_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
-	for (unsigned int i = 0; i < 58; i++) {
-		settings_key[i] = new WidgetButton("images/menus/buttons/button_default.png");
+	for (unsigned int i = 0; i < inpt->key_count * 2; i++) {
+		keybinds_btn.push_back(new WidgetButton("images/menus/buttons/button_default.png"));
 	}
+
+	key_count = keybinds_btn.size()/2;
 
 	// Allocate resolution list box
 	int resolutions = getVideoModes();
@@ -198,8 +201,6 @@ void GameStateConfig::init() {
 		if (mods->mod_list[i].name != FALLBACK_MOD)
 			activemods_lstb->append(mods->mod_list[i].name,createModTooltip(&mods->mod_list[i]));
 	}
-	child_widget.push_back(activemods_lstb);
-	optiontab[child_widget.size()-1] = 5;
 
 	inactivemods_lstb->multi_select = true;
 	for (unsigned int i = 0; i<mods->mod_dirs.size(); i++) {
@@ -215,8 +216,6 @@ void GameStateConfig::init() {
 			inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
 		}
 	}
-	child_widget.push_back(inactivemods_lstb);
-	optiontab[child_widget.size()-1] = 5;
 
 	fullscreen = FULLSCREEN;
 	hwsurface = HWSURFACE;
@@ -224,7 +223,65 @@ void GameStateConfig::init() {
 
 	input_confirm_ticks = 0;
 
-	// Set up tab list
+	// child widgets; aka everything except the tabs, OK, Defaults, and Cancel
+	addChildWidget(fullscreen_cb, VIDEO_TAB);
+	addChildWidget(fullscreen_lb, VIDEO_TAB);
+	addChildWidget(hwsurface_cb, VIDEO_TAB);
+	addChildWidget(hwsurface_lb, VIDEO_TAB);
+	addChildWidget(doublebuf_cb, VIDEO_TAB);
+	addChildWidget(doublebuf_lb, VIDEO_TAB);
+	addChildWidget(change_gamma_cb, VIDEO_TAB);
+	addChildWidget(change_gamma_lb, VIDEO_TAB);
+	addChildWidget(gamma_sl, VIDEO_TAB);
+	addChildWidget(gamma_lb, VIDEO_TAB);
+	addChildWidget(resolution_lstb, VIDEO_TAB);
+	addChildWidget(resolution_lb, VIDEO_TAB);
+	addChildWidget(hws_note_lb, VIDEO_TAB);
+	addChildWidget(dbuf_note_lb, VIDEO_TAB);
+	addChildWidget(test_note_lb, VIDEO_TAB);
+
+	addChildWidget(music_volume_sl, AUDIO_TAB);
+	addChildWidget(music_volume_lb, AUDIO_TAB);
+	addChildWidget(sound_volume_sl, AUDIO_TAB);
+	addChildWidget(sound_volume_lb, AUDIO_TAB);
+
+	addChildWidget(combat_text_cb, INTERFACE_TAB);
+	addChildWidget(combat_text_lb, INTERFACE_TAB);
+	addChildWidget(show_fps_cb, INTERFACE_TAB);
+	addChildWidget(show_fps_lb, INTERFACE_TAB);
+	addChildWidget(show_hotkeys_cb, INTERFACE_TAB);
+	addChildWidget(show_hotkeys_lb, INTERFACE_TAB);
+	addChildWidget(colorblind_cb, INTERFACE_TAB);
+	addChildWidget(colorblind_lb, INTERFACE_TAB);
+	addChildWidget(hardware_cursor_cb, INTERFACE_TAB);
+	addChildWidget(hardware_cursor_lb, INTERFACE_TAB);
+	addChildWidget(language_lstb, INTERFACE_TAB);
+	addChildWidget(language_lb, INTERFACE_TAB);
+
+	addChildWidget(mouse_move_cb, INPUT_TAB);
+	addChildWidget(mouse_move_lb, INPUT_TAB);
+	addChildWidget(enable_joystick_cb, INPUT_TAB);
+	addChildWidget(enable_joystick_lb, INPUT_TAB);
+	addChildWidget(mouse_aim_cb, INPUT_TAB);
+	addChildWidget(mouse_aim_lb, INPUT_TAB);
+	addChildWidget(no_mouse_cb, INPUT_TAB);
+	addChildWidget(no_mouse_lb, INPUT_TAB);
+	addChildWidget(joystick_deadzone_sl, INPUT_TAB);
+	addChildWidget(joystick_deadzone_lb, INPUT_TAB);
+	addChildWidget(joystick_device_lstb, INPUT_TAB);
+	addChildWidget(joystick_device_lb, INPUT_TAB);
+	addChildWidget(handheld_note_lb, INPUT_TAB);
+
+	addChildWidget(activemods_lstb, MODS_TAB);
+	addChildWidget(activemods_lb, MODS_TAB);
+	addChildWidget(inactivemods_lstb, MODS_TAB);
+	addChildWidget(inactivemods_lb, MODS_TAB);
+	addChildWidget(activemods_shiftup_btn, MODS_TAB);
+	addChildWidget(activemods_shiftdown_btn, MODS_TAB);
+	addChildWidget(activemods_deactivate_btn, MODS_TAB);
+	addChildWidget(inactivemods_activate_btn, MODS_TAB);
+
+	// Set up tab list for keyboard navigation
 	tablist.add(ok_button);
 	tablist.add(defaults_button);
 	tablist.add(cancel_button);
@@ -240,8 +297,8 @@ void GameStateConfig::init() {
 
 	tablist.add(combat_text_cb);
 	tablist.add(show_fps_cb);
-	tablist.add(show_hotkeys_cb);
 	tablist.add(colorblind_cb);
+	tablist.add(show_hotkeys_cb);
 	tablist.add(hardware_cursor_cb);
 	tablist.add(language_lstb);
 
@@ -261,8 +318,8 @@ void GameStateConfig::init() {
 	tablist.add(activemods_shiftup_btn);
 	tablist.add(activemods_shiftdown_btn);
 
-	for (unsigned int i = 0; i < 58; i++) {
-		input_scrollbox->addChildWidget(settings_key[i]);
+	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
+		input_scrollbox->addChildWidget(keybinds_btn[i]);
 	}
 }
 
@@ -281,7 +338,7 @@ void GameStateConfig::readConfig () {
 			int x2 = popFirstInt(infile.val);
 			int y2 = popFirstInt(infile.val);
 
-			int setting_num = -1;
+			int keybind_num = -1;
 
 			if (infile.key == "listbox_scrollbar_offset") {
 				activemods_lstb->scrollbar_offset = x1;
@@ -292,250 +349,153 @@ void GameStateConfig::readConfig () {
 			}
 			//checkboxes
 			else if (infile.key == "fullscreen") {
-				placeLabeledCheckbox( fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), 0);
+				placeLabeledWidget(fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "mouse_move") {
-				placeLabeledCheckbox( mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), 3);
+				placeLabeledWidget(mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "combat_text") {
-				placeLabeledCheckbox( combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), 2);
+				placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "hwsurface") {
-				placeLabeledCheckbox( hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), 0);
+				placeLabeledWidget(hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "doublebuf") {
-				placeLabeledCheckbox( doublebuf_lb, doublebuf_cb, x1, y1, x2, y2, msg->get("Double buffering"), 0);
+				placeLabeledWidget(doublebuf_lb, doublebuf_cb, x1, y1, x2, y2, msg->get("Double buffering"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "enable_joystick") {
-				placeLabeledCheckbox( enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), 3);
+				placeLabeledWidget(enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "change_gamma") {
-				placeLabeledCheckbox( change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), 0);
+				placeLabeledWidget(change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "mouse_aim") {
-				placeLabeledCheckbox( mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), 3);
+				placeLabeledWidget(mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "no_mouse") {
-				placeLabeledCheckbox( no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), 3);
+				placeLabeledWidget(no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "show_fps") {
-				placeLabeledCheckbox( show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), 2);
+				placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "show_hotkeys") {
-				placeLabeledCheckbox( show_hotkeys_lb, show_hotkeys_cb, x1, y1, x2, y2, msg->get("Show Hotkeys Labels"), 2);
+				placeLabeledWidget(show_hotkeys_lb, show_hotkeys_cb, x1, y1, x2, y2, msg->get("Show Hotkeys Labels"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "colorblind") {
-				placeLabeledCheckbox( colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), 2);
+				placeLabeledWidget(colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "hardware_cursor") {
-				placeLabeledCheckbox( hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), 2);
+				placeLabeledWidget(hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), JUSTIFY_RIGHT);
 			}
 			//sliders
 			else if (infile.key == "music_volume") {
-				music_volume_sl->pos.x = frame.x + x2;
-				music_volume_sl->pos.y = frame.y + y2;
-				child_widget.push_back(music_volume_sl);
-				optiontab[child_widget.size()-1] = 1;
-
-				music_volume_lb->setX(frame.x + x1);
-				music_volume_lb->setY(frame.y + y1);
-				music_volume_lb->set(msg->get("Music Volume"));
-				music_volume_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(music_volume_lb);
-				optiontab[child_widget.size()-1] = 1;
+				placeLabeledWidget(music_volume_lb, music_volume_sl, x1, y1, x2, y2, msg->get("Music Volume"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "sound_volume") {
-				sound_volume_sl->pos.x = frame.x + x2;
-				sound_volume_sl->pos.y = frame.y + y2;
-				child_widget.push_back(sound_volume_sl);
-				optiontab[child_widget.size()-1] = 1;
-
-				sound_volume_lb->setX(frame.x + x1);
-				sound_volume_lb->setY(frame.y + y1);
-				sound_volume_lb->set(msg->get("Sound Volume"));
-				sound_volume_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(sound_volume_lb);
-				optiontab[child_widget.size()-1] = 1;
+				placeLabeledWidget(sound_volume_lb, sound_volume_sl, x1, y1, x2, y2, msg->get("Sound Volume"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "gamma") {
-				gamma_sl->pos.x = frame.x + x2;
-				gamma_sl->pos.y = frame.y + y2;
-				child_widget.push_back(gamma_sl);
-				optiontab[child_widget.size()-1] = 0;
-
-				gamma_lb->setX(frame.x + x1);
-				gamma_lb->setY(frame.y + y1);
-				gamma_lb->set(msg->get("Gamma"));
-				gamma_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(gamma_lb);
-				optiontab[child_widget.size()-1] = 0;
+				placeLabeledWidget(gamma_lb, gamma_sl, x1, y1, x2, y2, msg->get("Gamma"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "joystick_deadzone") {
-				joystick_deadzone_sl->pos.x = frame.x + x2;
-				joystick_deadzone_sl->pos.y = frame.y + y2;
-				child_widget.push_back(joystick_deadzone_sl);
-				optiontab[child_widget.size()-1] = 3;
-
-				joystick_deadzone_lb->setX(frame.x + x1);
-				joystick_deadzone_lb->setY(frame.y + y1);
-				joystick_deadzone_lb->set(msg->get("Joystick Deadzone"));
-				joystick_deadzone_lb->setJustify(JUSTIFY_RIGHT);
-				child_widget.push_back(joystick_deadzone_lb);
-				optiontab[child_widget.size()-1] = 3;
+				placeLabeledWidget(joystick_deadzone_lb, joystick_deadzone_sl, x1, y1, x2, y2, msg->get("Joystick Deadzone"), JUSTIFY_RIGHT);
 			}
 			//listboxes
 			else if (infile.key == "resolution") {
-				resolution_lstb->pos.x = frame.x + x2;
-				resolution_lstb->pos.y = frame.y + y2;
-				child_widget.push_back(resolution_lstb);
-				optiontab[child_widget.size()-1] = 0;
-
-				resolution_lb->setX(frame.x + x1);
-				resolution_lb->setY(frame.y + y1);
-				resolution_lb->set(msg->get("Resolution"));
-				child_widget.push_back(resolution_lb);
-				optiontab[child_widget.size()-1] = 0;
-
+				placeLabeledWidget(resolution_lb, resolution_lstb, x1, y1, x2, y2, msg->get("Resolution"));
 			}
 			else if (infile.key == "activemods") {
-				activemods_lstb->pos.x = frame.x + x2;
-				activemods_lstb->pos.y = frame.y + y2;
-
-				activemods_lb->setX(frame.x + x1);
-				activemods_lb->setY(frame.y + y1);
-				activemods_lb->set(msg->get("Active Mods"));
-				child_widget.push_back(activemods_lb);
-				optiontab[child_widget.size()-1] = 5;
+				placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
 			}
 			else if (infile.key == "inactivemods") {
-				inactivemods_lstb->pos.x = frame.x + x2;
-				inactivemods_lstb->pos.y = frame.y + y2;
-
-				inactivemods_lb->setX(frame.x + x1);
-				inactivemods_lb->setY(frame.y + y1);
-				inactivemods_lb->set(msg->get("Available Mods"));
-				child_widget.push_back(inactivemods_lb);
-				optiontab[child_widget.size()-1] = 5;
+				placeLabeledWidget(inactivemods_lb, inactivemods_lstb, x1, y1, x2, y2, msg->get("Available Mods"));
 			}
 			else if (infile.key == "joystick_device") {
-				joystick_device_lstb->pos.x = frame.x + x2;
-				joystick_device_lstb->pos.y = frame.y + y2;
+				placeLabeledWidget(joystick_device_lb, joystick_device_lstb, x1, y1, x2, y2, msg->get("Joystick"));
+
 				for(int i = 0; i < SDL_NumJoysticks(); i++) {
 					std::string joystick_name = inpt->getJoystickName(i);
 					if (joystick_name != "")
 						joystick_device_lstb->append(joystick_name, joystick_name);
 				}
-				child_widget.push_back(joystick_device_lstb);
-				optiontab[child_widget.size()-1] = 3;
-
-				joystick_device_lb->setX(frame.x + x1);
-				joystick_device_lb->setY(frame.y + y1);
-				joystick_device_lb->set(msg->get("Joystick"));
-				child_widget.push_back(joystick_device_lb);
-				optiontab[child_widget.size()-1] = 3;
 			}
 			else if (infile.key == "language") {
-				language_lstb->pos.x = frame.x + x2;
-				language_lstb->pos.y = frame.y + y2;
-				child_widget.push_back(language_lstb);
-				optiontab[child_widget.size()-1] = 2;
-
-				language_lb->setX(frame.x + x1);
-				language_lb->setY(frame.y + y1);
-				language_lb->set(msg->get("Language"));
-				child_widget.push_back(language_lb);
-				optiontab[child_widget.size()-1] = 2;
+				placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
 			}
 			// buttons begin
-			else if (infile.key == "cancel") setting_num = CANCEL;
-			else if (infile.key == "accept") setting_num = ACCEPT;
-			else if (infile.key == "up") setting_num = UP;
-			else if (infile.key == "down") setting_num = DOWN;
-			else if (infile.key == "left") setting_num = LEFT;
-			else if (infile.key == "right") setting_num = RIGHT;
-			else if (infile.key == "bar1") setting_num = BAR_1;
-			else if (infile.key == "bar2") setting_num = BAR_2;
-			else if (infile.key == "bar3") setting_num = BAR_3;
-			else if (infile.key == "bar4") setting_num = BAR_4;
-			else if (infile.key == "bar5") setting_num = BAR_5;
-			else if (infile.key == "bar6") setting_num = BAR_6;
-			else if (infile.key == "bar7") setting_num = BAR_7;
-			else if (infile.key == "bar8") setting_num = BAR_8;
-			else if (infile.key == "bar9") setting_num = BAR_9;
-			else if (infile.key == "bar0") setting_num = BAR_0;
-			else if (infile.key == "main1") setting_num = MAIN1;
-			else if (infile.key == "main2") setting_num = MAIN2;
-			else if (infile.key == "character") setting_num = CHARACTER;
-			else if (infile.key == "inventory") setting_num = INVENTORY;
-			else if (infile.key == "powers") setting_num = POWERS;
-			else if (infile.key == "log") setting_num = LOG;
-			else if (infile.key == "ctrl") setting_num = CTRL;
-			else if (infile.key == "shift") setting_num = SHIFT;
-			else if (infile.key == "delete") setting_num = DEL;
-			else if (infile.key == "actionbar") setting_num = ACTIONBAR;
-			else if (infile.key == "actionbar_back") setting_num = ACTIONBAR_BACK;
-			else if (infile.key == "actionbar_forward") setting_num = ACTIONBAR_FORWARD;
-			else if (infile.key == "actionbar_use") setting_num = ACTIONBAR_USE;
+			else if (infile.key == "cancel") keybind_num = CANCEL;
+			else if (infile.key == "accept") keybind_num = ACCEPT;
+			else if (infile.key == "up") keybind_num = UP;
+			else if (infile.key == "down") keybind_num = DOWN;
+			else if (infile.key == "left") keybind_num = LEFT;
+			else if (infile.key == "right") keybind_num = RIGHT;
+			else if (infile.key == "bar1") keybind_num = BAR_1;
+			else if (infile.key == "bar2") keybind_num = BAR_2;
+			else if (infile.key == "bar3") keybind_num = BAR_3;
+			else if (infile.key == "bar4") keybind_num = BAR_4;
+			else if (infile.key == "bar5") keybind_num = BAR_5;
+			else if (infile.key == "bar6") keybind_num = BAR_6;
+			else if (infile.key == "bar7") keybind_num = BAR_7;
+			else if (infile.key == "bar8") keybind_num = BAR_8;
+			else if (infile.key == "bar9") keybind_num = BAR_9;
+			else if (infile.key == "bar0") keybind_num = BAR_0;
+			else if (infile.key == "main1") keybind_num = MAIN1;
+			else if (infile.key == "main2") keybind_num = MAIN2;
+			else if (infile.key == "character") keybind_num = CHARACTER;
+			else if (infile.key == "inventory") keybind_num = INVENTORY;
+			else if (infile.key == "powers") keybind_num = POWERS;
+			else if (infile.key == "log") keybind_num = LOG;
+			else if (infile.key == "ctrl") keybind_num = CTRL;
+			else if (infile.key == "shift") keybind_num = SHIFT;
+			else if (infile.key == "delete") keybind_num = DEL;
+			else if (infile.key == "actionbar") keybind_num = ACTIONBAR;
+			else if (infile.key == "actionbar_back") keybind_num = ACTIONBAR_BACK;
+			else if (infile.key == "actionbar_forward") keybind_num = ACTIONBAR_FORWARD;
+			else if (infile.key == "actionbar_use") keybind_num = ACTIONBAR_USE;
 			// buttons end
 
 			else if (infile.key == "hws_note") {
 				hws_note_lb->setX(frame.x + x1);
 				hws_note_lb->setY(frame.y + y1);
 				hws_note_lb->set(msg->get("Disable for performance"));
-				child_widget.push_back(hws_note_lb);
-				optiontab[child_widget.size()-1] = 0;
 			}
 			else if (infile.key == "dbuf_note") {
 				dbuf_note_lb->setX(frame.x + x1);
 				dbuf_note_lb->setY(frame.y + y1);
 				dbuf_note_lb->set(msg->get("Disable for performance"));
-				child_widget.push_back(dbuf_note_lb);
-				optiontab[child_widget.size()-1] = 0;
 			}
 			else if (infile.key == "test_note") {
 				test_note_lb->setX(frame.x + x1);
 				test_note_lb->setY(frame.y + y1);
 				test_note_lb->set(msg->get("Experimental"));
-				child_widget.push_back(test_note_lb);
-				optiontab[child_widget.size()-1] = 0;
 			}
 			else if (infile.key == "handheld_note") {
 				handheld_note_lb->setX(frame.x + x1);
 				handheld_note_lb->setY(frame.y + y1);
 				handheld_note_lb->set(msg->get("For handheld devices"));
-				child_widget.push_back(handheld_note_lb);
-				optiontab[child_widget.size()-1] = 3;
 			}
 			//buttons
 			else if (infile.key == "activemods_shiftup") {
 				activemods_shiftup_btn->pos.x = frame.x + x1;
 				activemods_shiftup_btn->pos.y = frame.y + y1;
 				activemods_shiftup_btn->refresh();
-				child_widget.push_back(activemods_shiftup_btn);
-				optiontab[child_widget.size()-1] = 5;
 			}
 			else if (infile.key == "activemods_shiftdown") {
 				activemods_shiftdown_btn->pos.x = frame.x + x1;
 				activemods_shiftdown_btn->pos.y = frame.y + y1;
 				activemods_shiftdown_btn->refresh();
-				child_widget.push_back(activemods_shiftdown_btn);
-				optiontab[child_widget.size()-1] = 5;
 			}
 			else if (infile.key == "activemods_deactivate") {
 				activemods_deactivate_btn->label = msg->get("<< Disable");
 				activemods_deactivate_btn->pos.x = frame.x + x1;
 				activemods_deactivate_btn->pos.y = frame.y + y1;
 				activemods_deactivate_btn->refresh();
-				child_widget.push_back(activemods_deactivate_btn);
-				optiontab[child_widget.size()-1] = 5;
 			}
 			else if (infile.key == "inactivemods_activate") {
 				inactivemods_activate_btn->label = msg->get("Enable >>");
 				inactivemods_activate_btn->pos.x = frame.x + x1;
 				inactivemods_activate_btn->pos.y = frame.y + y1;
 				inactivemods_activate_btn->refresh();
-				child_widget.push_back(inactivemods_activate_btn);
-				optiontab[child_widget.size()-1] = 5;
 			}
 			else if (infile.key == "secondary_offset") {
 				offset_x = x1;
@@ -557,12 +517,12 @@ void GameStateConfig::readConfig () {
 				scrollpane_contents = x1;
 			}
 
-			if (setting_num > -1 && setting_num < 29) {
+			if (keybind_num > -1 && (unsigned)keybind_num < keybinds_lb.size() && (unsigned)keybind_num < keybinds_btn.size()) {
 				//keybindings
-				settings_lb[setting_num]->setX(x1);
-				settings_lb[setting_num]->setY(y1);
-				settings_key[setting_num]->pos.x = x2;
-				settings_key[setting_num]->pos.y = y2;
+				keybinds_lb[keybind_num]->setX(x1);
+				keybinds_lb[keybind_num]->setY(y1);
+				keybinds_btn[keybind_num]->pos.x = x2;
+				keybinds_btn[keybind_num]->pos.y = y2;
 			}
 
 		}
@@ -580,9 +540,9 @@ void GameStateConfig::readConfig () {
 	input_scrollbox->resize(scrollpane_contents);
 
 	// Set positions of secondary key bindings
-	for (unsigned int i = 29; i < 58; i++) {
-		settings_key[i]->pos.x = settings_key[i-29]->pos.x + offset_x;
-		settings_key[i]->pos.y = settings_key[i-29]->pos.y + offset_y;
+	for (unsigned int i = key_count; i < keybinds_btn.size(); i++) {
+		keybinds_btn[i]->pos.x = keybinds_btn[i-key_count]->pos.x + offset_x;
+		keybinds_btn[i]->pos.y = keybinds_btn[i-key_count]->pos.y + offset_y;
 	}
 }
 
@@ -662,23 +622,23 @@ void GameStateConfig::update () {
 	activemods_lstb->refresh();
 	inactivemods_lstb->refresh();
 
-	for (unsigned int i = 0; i < 29; i++) {
+	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
 		if (inpt->binding[i] < 8) {
-			settings_key[i]->label = inpt->mouse_button[inpt->binding[i]-1];
+			keybinds_btn[i]->label = inpt->mouse_button[inpt->binding[i]-1];
 		}
 		else {
-			settings_key[i]->label = inpt->getKeyName(inpt->binding[i]);
+			keybinds_btn[i]->label = inpt->getKeyName(inpt->binding[i]);
 		}
-		settings_key[i]->refresh();
+		keybinds_btn[i]->refresh();
 	}
-	for (unsigned int i = 29; i < 58; i++) {
-		if (inpt->binding_alt[i-29] < 8) {
-			settings_key[i]->label = inpt->mouse_button[inpt->binding_alt[i-29]-1];
+	for (unsigned int i = key_count; i < keybinds_btn.size(); i++) {
+		if (inpt->binding_alt[i-key_count] < 8) {
+			keybinds_btn[i]->label = inpt->mouse_button[inpt->binding_alt[i-key_count]-1];
 		}
 		else {
-			settings_key[i]->label = inpt->getKeyName(inpt->binding_alt[i-29]);
+			keybinds_btn[i]->label = inpt->getKeyName(inpt->binding_alt[i-key_count]);
 		}
-		settings_key[i]->refresh();
+		keybinds_btn[i]->refresh();
 	}
 	input_scrollbox->refresh();
 }
@@ -686,7 +646,7 @@ void GameStateConfig::update () {
 void GameStateConfig::logic () {
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
 		if (input_scrollbox->in_focus && !input_confirm->visible) {
-			tabControl->setActiveTab(4);
+			tabControl->setActiveTab(KEYBINDS_TAB);
 			break;
 		}
 		else if (child_widget[i]->in_focus) {
@@ -775,7 +735,7 @@ void GameStateConfig::logic () {
 	int active_tab = tabControl->getActiveTab();
 
 	// tab 0 (video)
-	if (active_tab == 0 && !defaults_confirm->visible) {
+	if (active_tab == VIDEO_TAB && !defaults_confirm->visible) {
 		if (fullscreen_cb->checkClick()) {
 			if (fullscreen_cb->isChecked()) FULLSCREEN=true;
 			else FULLSCREEN=false;
@@ -813,7 +773,7 @@ void GameStateConfig::logic () {
 		}
 	}
 	// tab 1 (audio)
-	else if (active_tab == 1 && !defaults_confirm->visible) {
+	else if (active_tab == AUDIO_TAB && !defaults_confirm->visible) {
 		if (AUDIO) {
 			if (music_volume_sl->checkClick()) {
 				if (MUSIC_VOLUME == 0)
@@ -828,7 +788,7 @@ void GameStateConfig::logic () {
 		}
 	}
 	// tab 2 (interface)
-	else if (active_tab == 2 && !defaults_confirm->visible) {
+	else if (active_tab == INTERFACE_TAB && !defaults_confirm->visible) {
 		if (combat_text_cb->checkClick()) {
 			if (combat_text_cb->isChecked()) COMBAT_TEXT=true;
 			else COMBAT_TEXT=false;
@@ -856,7 +816,7 @@ void GameStateConfig::logic () {
 		}
 	}
 	// tab 3 (input)
-	else if (active_tab == 3 && !defaults_confirm->visible) {
+	else if (active_tab == INPUT_TAB && !defaults_confirm->visible) {
 		if (mouse_move_cb->checkClick()) {
 			if (mouse_move_cb->isChecked()) {
 				MOUSE_MOVE=true;
@@ -920,7 +880,7 @@ void GameStateConfig::logic () {
 		}
 	}
 	// tab 4 (keybindings)
-	else if (active_tab == 4 && !defaults_confirm->visible) {
+	else if (active_tab == KEYBINDS_TAB && !defaults_confirm->visible) {
 		if (input_confirm->visible) {
 			input_confirm->logic();
 			scanKey(input_key);
@@ -929,15 +889,15 @@ void GameStateConfig::logic () {
 		}
 		else {
 			input_scrollbox->logic();
-			for (unsigned int i = 0; i < 58; i++) {
-				if (settings_key[i]->pressed || settings_key[i]->hover) input_scrollbox->update = true;
+			for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
+				if (keybinds_btn[i]->pressed || keybinds_btn[i]->hover) input_scrollbox->update = true;
 				Point mouse = input_scrollbox->input_assist(inpt->mouse);
-				if (settings_key[i]->checkClick(mouse.x,mouse.y)) {
+				if (keybinds_btn[i]->checkClick(mouse.x,mouse.y)) {
 					std::string confirm_msg;
-					if (i < 29)
+					if (i < key_count)
 						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i];
 					else
-						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-29];
+						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-key_count];
 					delete input_confirm;
 					input_confirm = new MenuConfirm("",confirm_msg);
 					input_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
@@ -950,7 +910,7 @@ void GameStateConfig::logic () {
 		}
 	}
 	// tab 5 (mods)
-	else if (active_tab == 5 && !defaults_confirm->visible) {
+	else if (active_tab == MODS_TAB && !defaults_confirm->visible) {
 		if (activemods_lstb->checkClick()) {
 			//do nothing
 		}
@@ -1001,10 +961,10 @@ void GameStateConfig::render () {
 			input_scrollbox->refresh();
 		}
 		input_scrollbox->render();
-		for (unsigned int i = 0; i < 29; i++) {
-			settings_lb[i]->local_frame = input_scrollbox->pos;
-			settings_lb[i]->local_offset.y = input_scrollbox->getCursor();
-			settings_lb[i]->render();
+		for (unsigned int i = 0; i < keybinds_lb.size(); i++) {
+			keybinds_lb[i]->local_frame = input_scrollbox->pos;
+			keybinds_lb[i]->local_offset.y = input_scrollbox->getCursor();
+			keybinds_lb[i]->render();
 		}
 	}
 
@@ -1172,23 +1132,23 @@ bool GameStateConfig::setMods() {
 void GameStateConfig::scanKey(int button) {
 	if (input_confirm->visible) {
 		if (inpt->last_button != -1 && inpt->last_button < 8) {
-			if (button < 29) inpt->binding[button] = inpt->last_button;
-			else inpt->binding_alt[button-29] = inpt->last_button;
+			if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_button;
+			else inpt->binding_alt[button-key_count] = inpt->last_button;
 
-			settings_key[button]->label = inpt->mouse_button[inpt->last_button-1];
+			keybinds_btn[button]->label = inpt->mouse_button[inpt->last_button-1];
 			input_confirm->visible = false;
 			input_confirm_ticks = 0;
-			settings_key[button]->refresh();
+			keybinds_btn[button]->refresh();
 			return;
 		}
 		if (inpt->last_key != -1) {
-			if (button < 29) inpt->binding[button] = inpt->last_key;
-			else inpt->binding_alt[button-29] = inpt->last_key;
+			if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_key;
+			else inpt->binding_alt[button-key_count] = inpt->last_key;
 
-			settings_key[button]->label = inpt->getKeyName(inpt->last_key);
+			keybinds_btn[button]->label = inpt->getKeyName(inpt->last_key);
 			input_confirm->visible = false;
 			input_confirm_ticks = 0;
-			settings_key[button]->refresh();
+			keybinds_btn[button]->refresh();
 			return;
 		}
 	}
@@ -1241,16 +1201,16 @@ void GameStateConfig::cleanup() {
 	}
 	child_widget.clear();
 
-	for (unsigned int i = 0; i < 29; i++) {
-		if (settings_lb[i] != NULL) {
-			delete settings_lb[i];
-			settings_lb[i] = NULL;
+	for (unsigned int i = 0; i < keybinds_lb.size(); i++) {
+		if (keybinds_lb[i] != NULL) {
+			delete keybinds_lb[i];
+			keybinds_lb[i] = NULL;
 		}
 	}
-	for (unsigned int i = 0; i < 58; i++) {
-		if (settings_key[i] != NULL) {
-			delete settings_key[i];
-			settings_key[i] = NULL;
+	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
+		if (keybinds_btn[i] != NULL) {
+			delete keybinds_btn[i];
+			keybinds_btn[i] = NULL;
 		}
 	}
 
@@ -1262,18 +1222,14 @@ GameStateConfig::~GameStateConfig() {
 	cleanup();
 }
 
-void GameStateConfig::placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab ) {
-	cb->pos.x = frame.x + x2;
-	cb->pos.y = frame.y + y2;
-	child_widget.push_back(cb);
-	optiontab[child_widget.size()-1] = tab;
+void GameStateConfig::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str, int justify) {
+	w->pos.x = frame.x + x2;
+	w->pos.y = frame.y + y2;
 
 	lb->setX(frame.x + x1);
 	lb->setY(frame.y + y1);
 	lb->set(str);
-	lb->setJustify(JUSTIFY_RIGHT);
-	child_widget.push_back(lb);
-	optiontab[child_widget.size()-1] = tab;
+	lb->setJustify(justify);
 }
 
 std::string GameStateConfig::createModTooltip(Mod *mod) {
@@ -1292,3 +1248,9 @@ std::string GameStateConfig::createModTooltip(Mod *mod) {
 	}
 	return ret;
 }
+
+void GameStateConfig::addChildWidget(Widget *w, int tab) {
+	child_widget.push_back(w);
+	optiontab.push_back(tab);
+}
+
