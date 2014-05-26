@@ -32,6 +32,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameState.h"
 #include "TooltipData.h"
 
+enum CONFIG_TAB {
+	VIDEO_TAB = 0,
+	AUDIO_TAB = 1,
+	INTERFACE_TAB = 2,
+	INPUT_TAB = 3,
+	KEYBINDS_TAB = 4,
+	MODS_TAB = 5
+};
+
 class MenuConfirm;
 class Widget;
 class WidgetButton;
@@ -53,7 +62,6 @@ public:
 	void    render  ();
 
 private:
-	int optiontab[135];
 	Rect frame;
 	std::vector<Rect> video_modes;
 
@@ -73,10 +81,12 @@ private:
 	void disableMods();
 	bool setMods();
 	void scanKey(int button);
-	void placeLabeledCheckbox( WidgetLabel* lb, WidgetCheckBox* cb, int x1, int y1, int x2, int y2, std::string const& str, int tab );
+	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = JUSTIFY_LEFT);
 	std::string createModTooltip(Mod *mod);
+	void addChildWidget(Widget *w, int tab);
 
 	TabList tablist;
+	std::vector<int> optiontab;
 	std::vector<Widget*>      child_widget;
 	WidgetTabControl    * tabControl;
 	WidgetButton        * ok_button;
@@ -137,8 +147,8 @@ private:
 	WidgetSlider        * joystick_deadzone_sl;
 	WidgetLabel         * joystick_deadzone_lb;
 
-	WidgetLabel         * settings_lb[29];
-	WidgetButton        * settings_key[58];
+	std::vector<WidgetLabel *> keybinds_lb;
+	std::vector<WidgetButton *> keybinds_btn;
 
 	WidgetScrollBox     * input_scrollbox;
 	MenuConfirm         * input_confirm;
@@ -157,6 +167,7 @@ private:
 	bool hwsurface;
 	bool doublebuf;
 	int input_confirm_ticks;
+	unsigned key_count;
 };
 
 #endif
