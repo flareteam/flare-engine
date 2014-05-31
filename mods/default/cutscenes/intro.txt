@@ -10,7 +10,7 @@ pause=0
 #image=images/menus/logo.png
 #caption=Flare, the...
 #soundfx=soundfx/level_up.ogg
-#pause=60
+#pause=2s
 #caption=Free Libre Action Roleplaying Engine
-#pause=120
+#pause=4s
 

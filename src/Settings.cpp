@@ -486,7 +486,7 @@ void loadMiscSettings() {
 	MENUS_PAUSE = false;
 	SAVE_HPMP = false;
 	ENABLE_PLAYGAME = false;
-	CORPSE_TIMEOUT = 1800;
+	CORPSE_TIMEOUT = 60*MAX_FRAMES_PER_SEC;
 	SELL_WITHOUT_VENDOR = true;
 	AIM_ASSIST = 0;
 	WINDOW_TITLE = "Flare";
@@ -504,9 +504,9 @@ void loadMiscSettings() {
 			// @ATTR save_hpmp|boolean|When saving the game, keep the hero's current HP and MP.
 			if (infile.key == "save_hpmp")
 				SAVE_HPMP = toBool(infile.val);
-			// @ATTR corpse_timeout|integer|Duration that a corpse can exist on the map.
+			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map.
 			else if (infile.key == "corpse_timeout")
-				CORPSE_TIMEOUT = toInt(infile.val);
+				CORPSE_TIMEOUT = parse_duration(infile.val);
 			// @ATTR sell_without_vendor|boolean|Allows selling items when not at a vendor via CTRL-Click.
 			else if (infile.key == "sell_without_vendor")
 				SELL_WITHOUT_VENDOR = toBool(infile.val);

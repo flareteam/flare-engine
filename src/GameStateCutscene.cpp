@@ -229,9 +229,9 @@ bool GameStateCutscene::load(std::string filename) {
 				sc.s = infile.val;
 			}
 			else if (infile.key == "pause") {
-				// @ATTR scene.pause|integer|Pause before next component
+				// @ATTR scene.pause|duration|Pause before next component
 				sc.type = infile.key;
-				sc.x = toInt(infile.val);
+				sc.x = parse_duration(infile.val);
 			}
 			else if (infile.key == "soundfx") {
 				// @ATTR scene.soundfx|string|A sound that will be played

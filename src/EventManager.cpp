@@ -225,8 +225,8 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = msg->get(infile.val);
 	}
 	else if (infile.key == "shakycam") {
-		// @ATTR event.shakycam|integer|Makes the camera shake for this duration.
-		e->x = toInt(infile.val);
+		// @ATTR event.shakycam|duration|Makes the camera shake for this duration.
+		e->x = parse_duration(infile.val);
 	}
 	else if (infile.key == "requires_status") {
 		// @ATTR event.requires_status|string,...|Event requires list of statuses

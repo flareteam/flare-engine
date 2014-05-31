@@ -48,10 +48,18 @@ int parse_duration(const std::string& s) {
 	ss >> val;
 	ss >> suffix;
 
-	if (suffix == "s")
+	if (val == 0)
+		return val;
+	else if (suffix == "s")
 		val *= MAX_FRAMES_PER_SEC;
-	else if (suffix == "ms")
-		val = (val*MAX_FRAMES_PER_SEC) / 1000;
+	else {
+		if (suffix != "ms")
+			fprintf(stderr, "Duration of '%d' does not have a suffix. Assuming 'ms'.\n", val);
+		val = floor(((val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f);
+	}
+
+	// round back up to 1 if we rounded down to 0 for ms
+	if (val < 1) val = 1;
 
 	return val;
 }

@@ -51,7 +51,7 @@ CombatText::CombatText() {
 	msg_color[COMBAT_MESSAGE_BUFF] = font->getColor("combat_buff");
 	msg_color[COMBAT_MESSAGE_MISS] = font->getColor("combat_miss");
 
-	duration = 30;
+	duration = MAX_FRAMES_PER_SEC; // 1 second
 	speed = 1;
 
 	// Load config settings
@@ -60,8 +60,8 @@ CombatText::CombatText() {
 	if(infile.open("engine/combat_text.txt")) {
 		while(infile.next()) {
 			if(infile.key == "duration") {
-				// @ATTR duration|integer|Duration of the combat text.
-				duration = toInt(infile.val);
+				// @ATTR duration|duration|Duration of the combat text.
+				duration = parse_duration(infile.val);
 			}
 			else if(infile.key == "speed") {
 				// @ATTR speed|integer|Motion speed of the combat text.

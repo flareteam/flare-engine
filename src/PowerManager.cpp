@@ -322,7 +322,7 @@ void PowerManager::loadPowers() {
 		// buff/debuff durations
 		else if (infile.key == "transform_duration")
 			// @ATTR transform_duration|duration|Duration for transform
-			powers[input_id].transform_duration = toInt(infile.val);
+			powers[input_id].transform_duration = parse_duration(infile.val);
 		else if (infile.key == "manual_untransform")
 			// @ATTR manual_untransform|bool|Force manual untranform
 			powers[input_id].manual_untransform = toBool(infile.val);
@@ -343,11 +343,11 @@ void PowerManager::loadPowers() {
 			// @ATTR buff_part_power_id|integer|Buffs a power id for all party members
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
-			// @ATTR post_effect|[effect_id, magnitude (integer), duration (integer)]|Post effect.
+			// @ATTR post_effect|[effect_id, magnitude (integer), duration (duration)]|Post effect.
 			PostEffect pe;
 			pe.id = popFirstString(infile.val);
 			pe.magnitude = popFirstInt(infile.val);
-			pe.duration = popFirstInt(infile.val);
+			pe.duration = parse_duration(popFirstString(infile.val));
 			powers[input_id].post_effects.push_back(pe);
 		}
 		// pre and post power effects
