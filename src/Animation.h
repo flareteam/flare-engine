@@ -44,7 +44,7 @@ enum animation_type {
 class Animation {
 protected:
 	void calculateFrames(std::vector<unsigned short> &fvec, const unsigned short &_frames, const unsigned short &_duration);
-	unsigned short getLastFrameIndex(const unsigned short &frame); // given a frame, gets the last index of frames that matches
+	unsigned short getLastFrameIndex(const short &frame); // given a frame, gets the last index of frames that matches
 
 	const std::string name;
 	const animation_type type;
@@ -74,6 +74,8 @@ protected:
 	std::vector<short> active_frames;	// which of the visible diffferent frames are active?
 												// This should contain indexes of the gfx vector.
 												// Assume it is sorted, one index occurs at max once.
+
+	unsigned short elapsed_frames; // counts the total number of frames for back-forth animations
 
 public:
 	Animation(const std::string &_name, const std::string &_type, Image *_sprite);

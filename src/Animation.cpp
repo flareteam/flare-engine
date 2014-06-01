@@ -47,7 +47,8 @@ Animation::Animation(const std::string &_name, const std::string &_type, Image *
 	, gfx()
 	, render_offset()
 	, frames()
-	, active_frames() {
+	, active_frames()
+	, elapsed_frames(0) {
 	if (type == NONE)
 		fprintf(stderr, "Warning: animation type %s is unknown\n", _type.c_str());
 }
@@ -65,7 +66,8 @@ Animation::Animation(const Animation& a)
 	, gfx(std::vector<Rect>(a.gfx))
 	, render_offset(std::vector<Point>(a.render_offset))
 	, frames(std::vector<unsigned short>(a.frames))
-	, active_frames(std::vector<short>(a.active_frames)) {
+	, active_frames(std::vector<short>(a.active_frames))
+	, elapsed_frames(0) {
 }
 
 void Animation::setupUncompressed(Point _render_size, Point _render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds) {
@@ -87,16 +89,16 @@ void Animation::setupUncompressed(Point _render_size, Point _render_offset, int 
 void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds) {
 	calculateFrames(frames, _frames, _duration);
 
+	if (!frames.empty()) number_frames = frames.back()+1;
+
 	if (type == PLAY_ONCE) {
-		number_frames = _frames;
 		additional_data = 0;
 	}
 	else if (type == LOOPED) {
-		number_frames = _frames;
 		additional_data = 0;
 	}
 	else if (type == BACK_FORTH) {
-		number_frames = 2 * _frames;
+		number_frames = 2 * number_frames;
 		additional_data = 1;
 	}
 	cur_frame = 0;
@@ -134,9 +136,6 @@ void Animation::advanceFrame() {
 	if (!this)
 		return;
 
-	// Some entity state changes are triggered when the current frame is the last frame.
-	// Even if those state changes are not handled properly, do not permit current frame to exceed last frame.
-	if (cur_frame < frames.back()) cur_frame = frames[cur_frame_index];
 
 	unsigned short last_base_index = frames.size()-1;
 	switch(type) {
@@ -154,7 +153,6 @@ void Animation::advanceFrame() {
 			}
 			else {
 				cur_frame_index = 0;
-				cur_frame = 0;
 				times_played++;
 			}
 			break;
@@ -172,7 +170,6 @@ void Animation::advanceFrame() {
 					cur_frame_index--;
 				else {
 					additional_data = 1;
-					cur_frame = 0;
 					times_played++;
 				}
 			}
@@ -181,6 +178,9 @@ void Animation::advanceFrame() {
 		case NONE:
 			break;
 	}
+
+	if (cur_frame != frames[cur_frame_index]) elapsed_frames++;
+	cur_frame = frames[cur_frame_index];
 }
 
 Renderable Animation::getCurrentFrame(int kind) {
@@ -203,6 +203,7 @@ void Animation::reset() {
 	cur_frame_index = 0;
 	times_played = 0;
 	additional_data = 1;
+	elapsed_frames = 0;
 }
 
 void Animation::syncTo(const Animation *other) {
@@ -210,6 +211,7 @@ void Animation::syncTo(const Animation *other) {
 	cur_frame_index = other->cur_frame_index;
 	times_played = other->times_played;
 	additional_data = other->additional_data;
+	elapsed_frames = other->elapsed_frames;
 }
 
 void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
@@ -227,22 +229,24 @@ bool Animation::isFirstFrame() {
 }
 
 bool Animation::isLastFrame() {
-	return cur_frame_index == getLastFrameIndex(number_frames-1);
+	return cur_frame_index == getLastFrameIndex((short)number_frames-1);
 }
 
 bool Animation::isSecondLastFrame() {
-	return cur_frame_index == getLastFrameIndex(number_frames-2);
+	return cur_frame_index == getLastFrameIndex((short)number_frames-2);
 }
 
 bool Animation::isActiveFrame() {
-	unsigned short frame = cur_frame;
-	if (type == BACK_FORTH && cur_frame > 0)
-		frame = (number_frames/2) + ((number_frames/2) - cur_frame); // fixme
-
-	if (std::find(active_frames.begin(), active_frames.end(), frame) != active_frames.end())
-		return cur_frame_index == getLastFrameIndex(frame);
-	else
-		return false;
+	// TODO account for when the number_frames > frames.back()
+	if (type == BACK_FORTH) {
+		if (std::find(active_frames.begin(), active_frames.end(), elapsed_frames) != active_frames.end())
+			return cur_frame_index == getLastFrameIndex(cur_frame);
+	}
+	else {
+		if (std::find(active_frames.begin(), active_frames.end(), cur_frame) != active_frames.end())
+			return cur_frame_index == getLastFrameIndex(cur_frame);
+	}
+	return false;
 }
 
 int Animation::getTimesPlayed() {
@@ -270,15 +274,52 @@ void Animation::calculateFrames(std::vector<unsigned short> &fvec, const unsigne
 	}
 	else {
 		// we can't evenly space frames, so we try using Bresenham's line algorithm to lay them out
+		// TODO the plain Bresenham algorithm isn't ideal and can cause weird results. Experimentation is needed here
+		int x0 = 0;
+		int y0 = 0;
+		int x1 = _duration-1;
+		int y1 = _frames-1;
+
+		int dx = x1-x0;
+		int dy = y1-y0;
+
+		int D= 2*dy - dx;
+
+		fvec.push_back(y0);
+
+		int x = x0+1;
+		int y = y0;
+
+		while (x<=x1) {
+			if (D > 0) {
+				y++;
+				fvec.push_back(y);
+				D = D + ((2*dy)-(2*dx));
+			}
+			else {
+				fvec.push_back(y);
+				D = D + (2*dy);
+			}
+			x++;
+		}
 	}
 }
 
-unsigned short Animation::getLastFrameIndex(const unsigned short &frame) {
-	if (frames.empty()) return 0;
+unsigned short Animation::getLastFrameIndex(const short &frame) {
+	if (frames.empty() || frame < 0) return 0;
 
-	for (unsigned i=frames.size(); i>0; i--) {
-		if (frames[i-1] == frame) return i-1;
+	if (type == BACK_FORTH && additional_data == -1) {
+		// since the animation is advancing backwards here, the first frame index is actually the last
+		for (unsigned i=0; i<frames.size(); i++) {
+			if (frames[i] == frame) return i;
+		}
+		return 0;
 	}
-
-	return 0;
+	else {
+		// normal animation
+		for (unsigned i=frames.size(); i>0; i--) {
+			if (frames[i-1] == frame) return i-1;
+		}
+		return frames.size()-1;
+	}
 }
