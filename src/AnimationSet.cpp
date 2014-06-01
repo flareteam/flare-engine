@@ -112,10 +112,7 @@ void AnimationSet::load() {
 		}
 		else if (parser.key == "duration") {
 			// @ATTR duration|integer|The duration of each frame.
-			duration = toInt(parser.val);
-
-			// TEMP: if an animation is too fast, display one frame per fps anyway
-			if (duration < 1) duration=1;
+			duration = parse_duration(parser.val);
 		}
 		else if (parser.key == "type")
 			// @ATTR type|[play_once, back_forth, looped]|How to loop (or not loop) this animation.
