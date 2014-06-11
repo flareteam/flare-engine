@@ -222,6 +222,21 @@ void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
 	else {
 		active_frames = std::vector<short>(_active_frames);
 	}
+
+	// verify that each active frame is not out of bounds
+	// this works under the assumption that frames are not dropped from the middle of animations
+	// if an animation has too many frames to display in a specified duration, they are dropped from the end of the frame list
+	bool have_last_frame = std::find(active_frames.begin(), active_frames.end(), number_frames-1) != active_frames.end();
+	for (unsigned i=0; i<active_frames.size(); ++i) {
+		if (active_frames[i] >= number_frames) {
+			if (have_last_frame)
+				active_frames.erase(active_frames.begin()+i);
+			else {
+				active_frames[i] = number_frames-1;
+				have_last_frame = true;
+			}
+		}
+	}
 }
 
 bool Animation::isFirstFrame() {
@@ -237,7 +252,6 @@ bool Animation::isSecondLastFrame() {
 }
 
 bool Animation::isActiveFrame() {
-	// TODO account for when the number_frames > frames.back()
 	if (type == BACK_FORTH) {
 		if (std::find(active_frames.begin(), active_frames.end(), elapsed_frames) != active_frames.end())
 			return cur_frame_index == getLastFrameIndex(cur_frame);
