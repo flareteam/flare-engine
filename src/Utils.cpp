@@ -62,8 +62,8 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 	float adjust_y = (VIEW_H_HALF + 0.5f) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		r.x = (x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X;
-		r.y = (x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y;
+		r.x = floor(((x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X)+0.5f);
+		r.y = floor(((x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y)+0.5f);
 	}
 	else { //TILESET_ORTHOGONAL
 		r.x = (x - camx + adjust_x)/UNITS_PER_PIXEL_X;
