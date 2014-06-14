@@ -53,7 +53,6 @@ private:
 	std::vector<std::string> head;
 	std::vector<std::string> portrait;
 	std::vector<std::string> name;
-	int option_count;
 	int current_option;
 
 	Sprite *portrait_image;

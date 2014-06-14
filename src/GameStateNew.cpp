@@ -47,7 +47,6 @@ using namespace std;
 
 GameStateNew::GameStateNew()
 	: GameState()
-	, option_count(0)
 	, current_option(0)
 	, portrait_image(NULL)
 	, portrait_border(NULL)
