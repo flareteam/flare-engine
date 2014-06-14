@@ -382,7 +382,7 @@ void BehaviorStandard::checkMove() {
 		if (++e->stats.turn_ticks > e->stats.turn_delay) {
 
 			// if blocked, face in pathfinder direction instead
-			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y, e->stats.movement_type)) {
+			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y, e->stats.movement_type)) {
 
 				// if a path is returned, target first waypoint
 
