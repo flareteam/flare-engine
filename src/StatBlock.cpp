@@ -83,7 +83,7 @@ StatBlock::StatBlock()
 	, hp_ticker(0)
 	, mp(0)
 	, mp_ticker(0)
-	, speed_default(0.2f)
+	, speed_default(0.1f)
 	, dmg_melee_min_add(0)
 	, dmg_melee_max_add(0)
 	, dmg_ment_min_add(0)
@@ -92,7 +92,7 @@ StatBlock::StatBlock()
 	, dmg_ranged_max_add(0)
 	, absorb_min_add(0)
 	, absorb_max_add(0)
-	, speed(0.2f)
+	, speed(0.1f)
 	, vulnerable(ELEMENTS.size(), 100)
 	, vulnerable_base(ELEMENTS.size(), 100)
 	, transform_duration(0)
@@ -343,11 +343,11 @@ void StatBlock::load(const string& filename) {
 		// @ATTR facing|boolean|Creature can turn to face their target.
 		else if (infile.key == "facing") facing = toBool(infile.val);
 
-		// @ATTR waypoint_pause|integer|Duration to wait at each waypoint.
-		else if (infile.key == "waypoint_pause") waypoint_pause = num;
+		// @ATTR waypoint_pause|duration|Duration to wait at each waypoint.
+		else if (infile.key == "waypoint_pause") waypoint_pause = parse_duration(infile.val);
 
-		// @ATTR turn_delay|integer|Duration it takes for this creature to turn and face their target.
-		else if (infile.key == "turn_delay") turn_delay = num;
+		// @ATTR turn_delay|duration|Duration it takes for this creature to turn and face their target.
+		else if (infile.key == "turn_delay") turn_delay = parse_duration(infile.val);
 		// @ATTR chance_pursue|integer|Percentage change that the creature will chase their target.
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		// @ATTR chance_flee|integer|Percentage chance that the creature will run away from their target.
@@ -399,8 +399,8 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "chance_on_debuff") power_chance[ON_DEBUFF] = num;
 		// @ATTR chance_on_join_combat|integer|Percentage chance that power_on_join_combat will be triggered.
 		else if (infile.key == "chance_on_join_combat") power_chance[ON_JOIN_COMBAT] = num;
-		// @ATTR cooldown_hit|integer|Duration of cooldown after being hit.
-		else if (infile.key == "cooldown_hit") cooldown_hit = num;
+		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit.
+		else if (infile.key == "cooldown_hit") cooldown_hit = parse_duration(infile.val);
 
 		else if (infile.key == "passive_powers") {
 			// @ATTR passive_powers|power (integer), ...|A list of passive powers this creature has.
@@ -713,10 +713,6 @@ void StatBlock::loadHeroStats() {
 			else if (infile.key == "power_points_per_level") {
 				// @ATTR power_points_per_level|integer|The amount of power points awarded each level.
 				power_points_per_level = value;
-			}
-			else if (infile.key == "cooldown_hit") {
-				// @ATTR cooldown_hit|integer|Cooldown after being hit.
-				cooldown_hit = value;
 			}
 		}
 		infile.close();

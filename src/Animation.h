@@ -43,6 +43,9 @@ enum animation_type {
 
 class Animation {
 protected:
+	void calculateFrames(std::vector<unsigned short> &fvec, const unsigned short &_frames, const unsigned short &_duration);
+	unsigned short getLastFrameIndex(const short &frame); // given a frame, gets the last index of frames that matches
+
 	const std::string name;
 	const animation_type type;
 	Image *sprite;
@@ -66,11 +69,13 @@ protected:
 	// These are indexed as 8*cur_frame_index + direction.
 	std::vector<Rect> gfx; // position on the spritesheet to be used.
 	std::vector<Point> render_offset; // "virtual point on the floor"
-	std::vector<unsigned short> duration; // duration of each individual image
+	std::vector<unsigned short> frames; // a list of frames to play on each tick
 
 	std::vector<short> active_frames;	// which of the visible diffferent frames are active?
 												// This should contain indexes of the gfx vector.
 												// Assume it is sorted, one index occurs at max once.
+
+	unsigned short elapsed_frames; // counts the total number of frames for back-forth animations
 
 public:
 	Animation(const std::string &_name, const std::string &_type, Image *_sprite);
