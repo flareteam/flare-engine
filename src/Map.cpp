@@ -185,7 +185,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->direction = std::min(std::max(0, toInt(infile.val)), 7);
 	}
 	else if (infile.key == "waypoints") {
-		// @ATTR enemygroup.waypoint|[x(integer), y(integer)]|Enemy waypoint; single enemy only
+		// @ATTR enemygroup.waypoint|[x(integer), y(integer)]|Enemy waypoint; single enemy only; negates wander_radius
 		std::string none = "";
 		std::string a = infile.nextValue();
 		std::string b = infile.nextValue();
@@ -198,14 +198,18 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 			a = infile.nextValue();
 			b = infile.nextValue();
 		}
+
+		// disable wander radius, since we can't have waypoints and wandering at the same time
+		group->wander_radius = 0;
 	}
-	else if (infile.key == "wander_area") {
-		// @ATTR enemygroup.wander_area|[x(integer),y(integer),w(integer),h(integer)]|Wander area for the enemy; single enemy only
-		group->wander = true;
-		group->wander_area.x = toInt(infile.nextValue());
-		group->wander_area.y = toInt(infile.nextValue());
-		group->wander_area.w = toInt(infile.nextValue());
-		group->wander_area.h = toInt(infile.nextValue());
+	else if (infile.key == "wander_radius") {
+		// @ATTR enemygroup.wander_radius|integer|The radius (in tiles) that an enemy will wander around randomly; negates waypoints
+		group->wander_radius = std::max(0, toInt(infile.nextValue()));
+
+		// clear waypoints, since wandering will use the waypoint queue
+		while (!group->waypoints.empty()) {
+			group->waypoints.pop();
+		}
 	}
 	else if (infile.key == "requires_status") {
 		// @ATTR enemygroup.requires_status|string|Status required for loading enemies

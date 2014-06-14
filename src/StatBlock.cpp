@@ -107,12 +107,10 @@ StatBlock::StatBlock()
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
 	, waypoints()		// enemy only
-	, waypoint_pause(0)				// enemy only
+	, waypoint_pause(MAX_FRAMES_PER_SEC)	// enemy only
 	, waypoint_pause_ticks(0)		// enemy only
 	, wander(false)					// enemy only
 	, wander_area()		// enemy only
-	, wander_ticks(0)				// enemy only
-	, wander_pause_ticks(0)			// enemy only
 	, chance_pursue(0)
 	, chance_flee(0) // enemy only
 	, powers_list()	// hero only
@@ -810,4 +808,10 @@ bool StatBlock::summonLimitReached(int power_id) const {
 	}
 
 	return qty_summons >= max_summons;
+}
+
+void StatBlock::setWanderArea(int r) {
+	wander_area.x = floor(pos.x) - r;
+	wander_area.y = floor(pos.y) - r;
+	wander_area.w = wander_area.h = (r*2) + 1;
 }

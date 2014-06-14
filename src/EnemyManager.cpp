@@ -124,8 +124,8 @@ void EnemyManager::handleNewMap () {
 		e->stats.pos.x = me.pos.x;
 		e->stats.pos.y = me.pos.y;
 		e->stats.direction = me.direction;
-		e->stats.wander = me.wander;
-		e->stats.wander_area = me.wander_area;
+		e->stats.wander = me.wander_radius > 0;
+		e->stats.setWanderArea(me.wander_radius);
 
 		enemies.push_back(e);
 

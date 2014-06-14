@@ -42,8 +42,7 @@ public:
 	float chance;
 	int direction;
 	std::queue<FPoint> waypoints;
-	bool wander;
-	Rect wander_area;
+	int wander_radius;
 	std::vector<std::string> requires_status;
 	std::vector<std::string> requires_not_status;
 
@@ -58,8 +57,7 @@ public:
 		, chance(1.0f)
 		, direction(rand() % 8)
 		, waypoints(std::queue<FPoint>())
-		, wander(false)
-		, wander_area(Rect())
+		, wander_radius(4)
 		, requires_status()
 		, requires_not_status()
 	{}
@@ -86,8 +84,7 @@ public:
 	FPoint pos;
 	int direction;
 	std::queue<FPoint> waypoints;
-	bool wander;
-	Rect wander_area;
+	int wander_radius;
 	bool hero_ally;
 	int summon_power_index;
 	StatBlock* summoner;
@@ -99,8 +96,7 @@ public:
 	 , pos(_pos)
 	 , direction(rand() % 8)
 	 , waypoints(std::queue<FPoint>())
-	 , wander(false)
-	 , wander_area(Rect())
+	 , wander_radius(4)
 	 , hero_ally(false)
 	 , summon_power_index(0)
 	 , summoner(NULL)
