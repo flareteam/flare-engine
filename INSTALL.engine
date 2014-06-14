@@ -1,9 +1,10 @@
 ## Dependencies
 
-To build flare you need the 1.2 Development Libraries for SDL, SDL_image, SDL_mixer, and SDL_ttf.
-To run flare you need the equivalent 1.2 Runtime Libraries.
+To build flare you need either the 1.2 or 2.0 Development Libraries for SDL, SDL_image, SDL_mixer, and SDL_ttf
+To run flare you need the equivalent 1.2 or 2.0 Runtime Libraries.
 
 http://www.libsdl.org/download-1.2.php
+http://www.libsdl.org/download-2.0.php
 
 For easy building I recommend using cmake and make.
 
@@ -17,6 +18,8 @@ from http://softagalleria.net/dirent.php and copy it to "Microsoft Visual C++ fo
 Installing dependencies on debian based systems (debian, Ubuntu, Kubuntu, etc):
 
     sudo apt-get install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
+    # or if using sdl version 2:
+    sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
     # for development you'll also need:
     sudo apt-get install cmake make g++ git
 
@@ -46,6 +49,8 @@ http://software.opensuse.org/download.html?project=games&package=flare
 Installing dependencies on Fedora
 
     yum install git make cmake gcc-c++ SDL-devel SDL_image-devel SDL_mixer-devel SDL_ttf-devel
+    # or when using SDL2:
+    yum install git make cmake gcc-c++ SDL2-devel SDL2_image-devel SDL2_mixer-devel SDL2_ttf-devel
 
 ## Building from Source
 
@@ -56,7 +61,8 @@ trying to run a flare based game on an obscure platform as you only need a c++ c
 
 To build the game executable, go to the main directory/folder and run the following commands:
 
-    cmake .
+    cmake . # This will build with SDL 2.0, the alternative would be
+    cmake . -DUSE_SDL2=OFF # use the older SDL 1.2
     make
 
 The executable is called ```flare``` in this repository or in the flare-game repository, but it is subject to change if you're running another game based on the engine (such as polymorphable).
@@ -67,8 +73,6 @@ If you want the game installed system-wide, as root, install with:
 The game will be installed into '/usr/local' by default.  You can set different paths in the cmake step, like:
 
     cmake -DCMAKE_INSTALL_PREFIX:STRING="/usr" ..
-
-
 
 ### Building with g++
 
