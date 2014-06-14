@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include <cstdlib>
 #include <typeinfo>
+#include <math.h>
 
 using namespace std;
 
