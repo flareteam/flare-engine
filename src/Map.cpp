@@ -159,9 +159,9 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->category = infile.val;
 	}
 	else if (infile.key == "level") {
-		// @ATTR enemygroup.level|[min(integer), max(integer)]|Defines the level range of enemies in group.
-		group->levelmin = toInt(infile.nextValue());
-		group->levelmax = toInt(infile.nextValue(), group->levelmin);
+		// @ATTR enemygroup.level|[min(integer), max(integer)]|Defines the level range of enemies in group. If only one number is given, it's the exact level.
+		group->levelmin = std::max(0, toInt(infile.nextValue()));
+		group->levelmax = std::max(0, toInt(infile.nextValue(), group->levelmin));
 	}
 	else if (infile.key == "location") {
 		// @ATTR enemygroup.location|[x(integer), y(integer), x2(integer), y2(integer)]|Location area for enemygroup
@@ -172,17 +172,17 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "number") {
 		// @ATTR enemygroup.number|[min(integer), max(integer]|Defines the range of enemies in group. If only one number is given, it's the exact amount.
-		group->numbermin = toInt(infile.nextValue());
-		group->numbermax = toInt(infile.nextValue(), group->numbermin);
+		group->numbermin = std::max(0, toInt(infile.nextValue()));
+		group->numbermax = std::max(0, toInt(infile.nextValue(), group->numbermin));
 	}
 	else if (infile.key == "chance") {
 		// @ATTR enemygroup.chance|integer|Percentage of chance
-		float n = toInt(infile.nextValue()) / 100.0f;
+		float n = std::max(0, toInt(infile.nextValue())) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
 	else if (infile.key == "direction") {
 		// @ATTR enemygroup.direction|integer|Direction of enemies
-		group->direction = toInt(infile.val);
+		group->direction = std::min(std::max(0, toInt(infile.val)), 7);
 	}
 	else if (infile.key == "waypoints") {
 		// @ATTR enemygroup.waypoint|[x(integer), y(integer)]|Enemy waypoint; single enemy only
