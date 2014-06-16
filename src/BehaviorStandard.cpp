@@ -224,7 +224,7 @@ void BehaviorStandard::findTarget() {
 
 	// check line-of-sight
 	if (target_dist < e->stats.threat_range && pc->stats.alive)
-		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
+		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y);
 	else
 		los = false;
 
