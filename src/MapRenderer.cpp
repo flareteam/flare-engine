@@ -71,6 +71,17 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 		Enemy_Level enemy_lev = enemyg->getRandomEnemy(g.category, g.levelmin, g.levelmax);
 		if (!enemy_lev.type.empty()) {
 			Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
+
+			group_member.direction = g.direction;
+			group_member.wander_radius = g.wander_radius;
+			group_member.requires_status = g.requires_status;
+			group_member.requires_not_status = g.requires_not_status;
+
+			if (g.area.x == 1 && g.area.y == 1) {
+				// this is a single enemy
+				group_member.waypoints = g.waypoints;
+			}
+
 			collider.block(x, y, false);
 			enemies.push(group_member);
 		}

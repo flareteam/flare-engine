@@ -84,12 +84,6 @@ void BehaviorStandard::doUpkeep() {
 	if (e->stats.waypoint_pause_ticks > 0)
 		e->stats.waypoint_pause_ticks--;
 
-	if (e->stats.wander_ticks > 0)
-		e->stats.wander_ticks--;
-
-	if (e->stats.wander_pause_ticks > 0)
-		e->stats.wander_pause_ticks--;
-
 	// check for revive
 	if (e->stats.hp <= 0 && e->stats.effects.revive) {
 		e->stats.hp = e->stats.get(STAT_HP_MAX);
@@ -193,47 +187,44 @@ void BehaviorStandard::findTarget() {
 		e->stats.in_combat = false;
 	}
 
-	// if the creature is a wanderer, pick a random point within the wander area to travel to
-	if (e->stats.wander && !e->stats.in_combat && e->stats.wander_area.w > 0 && e->stats.wander_area.h > 0) {
-		if (e->stats.wander_ticks == 0) {
-			pursue_pos.x = e->stats.wander_area.x + (rand() % (e->stats.wander_area.w)) + 0.5f;
-			pursue_pos.y = e->stats.wander_area.y + (rand() % (e->stats.wander_area.h)) + 0.5f;
-			e->stats.wander_ticks = (rand() % 150) + 150;
-		}
-	}
-	else {
-		// by default, the enemy pursues the hero directly
-		pursue_pos.x = pc->stats.pos.x;
-		pursue_pos.y = pc->stats.pos.y;
-		target_dist = hero_dist;
+	// by default, the enemy pursues the hero directly
+	pursue_pos.x = pc->stats.pos.x;
+	pursue_pos.y = pc->stats.pos.y;
+	target_dist = hero_dist;
 
 
-		//if there are player allies closer than the hero, target an ally instead
-		if(e->stats.in_combat) {
-			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-				if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally) {
-					//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
-					float ally_dist = calcDist(e->stats.pos, enemies->enemies[i]->stats.pos);
-					if (ally_dist < target_dist) {
-						pursue_pos.x = enemies->enemies[i]->stats.pos.x;
-						pursue_pos.y = enemies->enemies[i]->stats.pos.y;
-						target_dist = ally_dist;
-					}
+	//if there are player allies closer than the hero, target an ally instead
+	if(e->stats.in_combat) {
+		for (unsigned int i=0; i < enemies->enemies.size(); i++) {
+			if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally) {
+				//now work out the distance to the minion and compare it to the distance to the current targer (we want to target the closest ally)
+				float ally_dist = calcDist(e->stats.pos, enemies->enemies[i]->stats.pos);
+				if (ally_dist < target_dist) {
+					pursue_pos.x = enemies->enemies[i]->stats.pos.x;
+					pursue_pos.y = enemies->enemies[i]->stats.pos.y;
+					target_dist = ally_dist;
 				}
 			}
 		}
+	}
 
+	// if we just started wandering, set the first waypoint
+	if (e->stats.wander && e->stats.waypoints.empty()) {
+		FPoint waypoint = getWanderPoint();
+		e->stats.waypoints.push(waypoint);
+		e->stats.waypoint_pause_ticks = e->stats.waypoint_pause;
+	}
 
-		if (!(e->stats.in_combat || e->stats.waypoints.empty())) {
-			FPoint waypoint = e->stats.waypoints.front();
-			pursue_pos.x = waypoint.x;
-			pursue_pos.y = waypoint.y;
-		}
+	// if we're not in combat, pursue the next waypoint
+	if (!(e->stats.in_combat || e->stats.waypoints.empty())) {
+		FPoint waypoint = e->stats.waypoints.front();
+		pursue_pos.x = waypoint.x;
+		pursue_pos.y = waypoint.y;
 	}
 
 	// check line-of-sight
 	if (target_dist < e->stats.threat_range && pc->stats.alive)
-		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
+		los = mapr->collider.line_of_sight(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y);
 	else
 		los = false;
 
@@ -373,7 +364,7 @@ void BehaviorStandard::checkMove() {
 	if (e->stats.effects.stun) return;
 
 	// handle not being in combat and (not patrolling waypoints or waiting at waypoint)
-	if (!e->stats.hero_ally && !e->stats.in_combat && (e->stats.waypoints.empty() || e->stats.waypoint_pause_ticks > 0) && (!e->stats.wander || e->stats.wander_pause_ticks > 0)) {
+	if (!e->stats.hero_ally && !e->stats.in_combat && (e->stats.waypoints.empty() || e->stats.waypoint_pause_ticks > 0)) {
 
 		if (e->stats.cur_state == ENEMY_MOVE) {
 			e->newState(ENEMY_STANCE);
@@ -391,7 +382,7 @@ void BehaviorStandard::checkMove() {
 		if (++e->stats.turn_ticks > e->stats.turn_delay) {
 
 			// if blocked, face in pathfinder direction instead
-			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pc->stats.pos.x, pc->stats.pos.y, e->stats.movement_type)) {
+			if (!mapr->collider.line_of_movement(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y, e->stats.movement_type)) {
 
 				// if a path is returned, target first waypoint
 
@@ -402,7 +393,7 @@ void BehaviorStandard::checkMove() {
 					recalculate_path = true;
 
 				//if the target moved more than 1 tile away, recalculate
-				if(calcDist(map_to_collision(prev_target), map_to_collision(pursue_pos)) > 1)
+				if(calcDist(map_to_collision(prev_target), map_to_collision(pursue_pos)) > 1.f)
 					recalculate_path = true;
 
 				//if a collision ocurred then recalculate
@@ -435,7 +426,7 @@ void BehaviorStandard::checkMove() {
 					pursue_pos = path.back();
 
 					//if distance to node is lower than a tile size, the node is going to be passed and can be removed
-					if(calcDist(e->stats.pos, pursue_pos) <= 64)
+					if(calcDist(e->stats.pos, pursue_pos) <= 1.f)
 						path.pop_back();
 				}
 			}
@@ -466,21 +457,14 @@ void BehaviorStandard::checkMove() {
 		FPoint waypoint = e->stats.waypoints.front();
 		FPoint pos = e->stats.pos;
 		// if the patroller is close to the waypoint
-		if (fabs(waypoint.x - pos.x) < 0.5 && fabs(waypoint.y - pos.y) < 0.5) {
+		if (fabs(waypoint.x - pos.x) <= 0.5f && fabs(waypoint.y - pos.y) <= 0.5f) {
 			e->stats.waypoints.pop();
+			// pick a new random point if we're wandering
+			if (e->stats.wander) {
+				waypoint = getWanderPoint();
+			}
 			e->stats.waypoints.push(waypoint);
 			e->stats.waypoint_pause_ticks = e->stats.waypoint_pause;
-		}
-	}
-
-	// if a wandering enemy reaches its destination early, reset wander_ticks
-	if (e->stats.wander) {
-		FPoint pos = e->stats.pos;
-		if (fabs(pursue_pos.x - pos.x) < 0.5 && fabs(pursue_pos.y - pos.y) < 0.5) {
-			e->stats.wander_ticks = 0;
-		}
-		if (e->stats.wander_ticks == 0 && e->stats.wander_pause_ticks == 0) {
-			e->stats.wander_pause_ticks = rand() % 60;
 		}
 	}
 
@@ -662,4 +646,16 @@ void BehaviorStandard::updateState() {
 	}
 }
 
+FPoint BehaviorStandard::getWanderPoint() {
+	FPoint waypoint;
+	waypoint.x = e->stats.wander_area.x + (rand() % (e->stats.wander_area.w)) + 0.5f;
+	waypoint.y = e->stats.wander_area.y + (rand() % (e->stats.wander_area.h)) + 0.5f;
 
+	if (mapr->collider.is_valid_position(waypoint.x, waypoint.y, e->stats.movement_type, e->stats.hero)) {
+		return waypoint;
+	}
+	else {
+		// didn't get a valid waypoint, so keep our current position
+		return e->stats.pos;
+	}
+}

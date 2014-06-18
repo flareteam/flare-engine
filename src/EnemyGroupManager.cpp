@@ -89,7 +89,7 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 	vector<Enemy_Level> enemyCandidates;
 	for (size_t i = 0; i < enemyCategory.size(); ++i) {
 		Enemy_Level new_enemy = enemyCategory[i];
-		if ((new_enemy.level >= minlevel) && (new_enemy.level <= maxlevel)) {
+		if ((new_enemy.level >= minlevel && new_enemy.level <= maxlevel) || (minlevel == 0 && maxlevel == 0)) {
 			// add more than one time to increase chance of getting
 			// this enemy as result, "rarity" property
 			int add_times = 0;

@@ -40,15 +40,26 @@ public:
 	int numbermin;
 	int numbermax;
 	float chance;
+	int direction;
+	std::queue<FPoint> waypoints;
+	int wander_radius;
+	std::vector<std::string> requires_status;
+	std::vector<std::string> requires_not_status;
+
 	Map_Group()
 		: category("")
 		, pos()
-		, area()
+		, area(1,1)
 		, levelmin(0)
 		, levelmax(0)
-		, numbermin(0)
-		, numbermax(0)
+		, numbermin(1)
+		, numbermax(1)
 		, chance(1.0f)
+		, direction(rand() % 8)
+		, waypoints(std::queue<FPoint>())
+		, wander_radius(4)
+		, requires_status()
+		, requires_not_status()
 	{}
 };
 
@@ -73,8 +84,7 @@ public:
 	FPoint pos;
 	int direction;
 	std::queue<FPoint> waypoints;
-	bool wander;
-	Rect wander_area;
+	int wander_radius;
 	bool hero_ally;
 	int summon_power_index;
 	StatBlock* summoner;
@@ -86,17 +96,13 @@ public:
 	 , pos(_pos)
 	 , direction(rand() % 8)
 	 , waypoints(std::queue<FPoint>())
-	 , wander(false)
+	 , wander_radius(4)
 	 , hero_ally(false)
 	 , summon_power_index(0)
 	 , summoner(NULL)
 	 , requires_status()
 	 , requires_not_status()
 	{
-		wander_area.x = 0;
-		wander_area.y = 0;
-		wander_area.w = 0;
-		wander_area.h = 0;
 	}
 };
 
@@ -105,7 +111,6 @@ class Map
 protected:
 	void loadHeader(FileParser &infile);
 	void loadLayer(FileParser &infile, maprow **cur_layer);
-	void loadEnemy(FileParser &infile);
 	void loadEnemyGroup(FileParser &infile, Map_Group *group);
 	void loadNPC(FileParser &infile);
 

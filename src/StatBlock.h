@@ -224,8 +224,6 @@ public:
 	// wandering area
 	bool wander;
 	Rect wander_area;
-	int wander_ticks;
-	int wander_pause_ticks;
 
 	// enemy behavioral stats
 	int chance_pursue;
@@ -318,6 +316,7 @@ public:
 
 	bool summonLimitReached(int power_id) const;
 
+	void setWanderArea(int r);
 };
 
 #endif

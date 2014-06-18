@@ -73,8 +73,6 @@ int Map::load(std::string fname) {
 
 			// for sections that are stored in collections, add a new object here
 			if (infile.section == "enemy")
-				enemies.push(Map_Enemy());
-			else if (infile.section == "enemygroup")
 				enemy_groups.push(Map_Group());
 			else if (infile.section == "npc")
 				npcs.push(Map_NPC());
@@ -87,8 +85,6 @@ int Map::load(std::string fname) {
 		else if (infile.section == "layer")
 			loadLayer(infile, &cur_layer);
 		else if (infile.section == "enemy")
-			loadEnemy(infile);
-		else if (infile.section == "enemygroup")
 			loadEnemyGroup(infile, &enemy_groups.back());
 		else if (infile.section == "npc")
 			loadNPC(infile);
@@ -157,60 +153,15 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 	}
 }
 
-void Map::loadEnemy(FileParser &infile) {
-	if (infile.key == "type") {
-		// @ATTR enemy.type|string|Filename of an enemy definition.
-		enemies.back().type = infile.val;
-	}
-	else if (infile.key == "location") {
-		// @ATTR enemy.location|[x(integer), y(integer)]|Location of enemy
-		enemies.back().pos.x = toInt(infile.nextValue()) + 0.5f;
-		enemies.back().pos.y = toInt(infile.nextValue()) + 0.5f;
-	}
-	else if (infile.key == "direction") {
-		// @ATTR enemy.direction|integer|Direction of enemy
-		enemies.back().direction = toInt(infile.val);
-	}
-	else if (infile.key == "waypoints") {
-		// @ATTR enemy.waypoint|[x(integer), y(integer)]|Enemy waypoint
-		std::string none = "";
-		std::string a = infile.nextValue();
-		std::string b = infile.nextValue();
-
-		while (a != none) {
-			FPoint p;
-			p.x = toInt(a) + 0.5f;
-			p.y = toInt(b) + 0.5f;
-			enemies.back().waypoints.push(p);
-			a = infile.nextValue();
-			b = infile.nextValue();
-		}
-	}
-	else if (infile.key == "wander_area") {
-		// @ATTR enemy.wander_area|[x(integer),y(integer),w(integer),h(integer)]|Wander area for the enemy.
-		enemies.back().wander = true;
-		enemies.back().wander_area.x = toInt(infile.nextValue());
-		enemies.back().wander_area.y = toInt(infile.nextValue());
-		enemies.back().wander_area.w = toInt(infile.nextValue());
-		enemies.back().wander_area.h = toInt(infile.nextValue());
-	}
-	// @ATTR enemy.requires_status|string|Status required for enemy load
-	else if (infile.key == "requires_status")
-		enemies.back().requires_status.push_back(infile.nextValue());
-	// @ATTR enemy.requires_not_status|string|Status required to be missing for enemy load
-	else if (infile.key == "requires_not_status")
-		enemies.back().requires_not_status.push_back(infile.nextValue());
-}
-
 void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	if (infile.key == "type") {
 		// @ATTR enemygroup.type|string|The category of enemies that will spawn in this group.
 		group->category = infile.val;
 	}
 	else if (infile.key == "level") {
-		// @ATTR enemygroup.level|[min(integer), max(integer)]|Defines the level range of enemies in group.
-		group->levelmin = toInt(infile.nextValue());
-		group->levelmax = toInt(infile.nextValue());
+		// @ATTR enemygroup.level|[min(integer), max(integer)]|Defines the level range of enemies in group. If only one number is given, it's the exact level.
+		group->levelmin = std::max(0, toInt(infile.nextValue()));
+		group->levelmax = std::max(0, toInt(infile.nextValue(), group->levelmin));
 	}
 	else if (infile.key == "location") {
 		// @ATTR enemygroup.location|[x(integer), y(integer), x2(integer), y2(integer)]|Location area for enemygroup
@@ -221,13 +172,52 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "number") {
 		// @ATTR enemygroup.number|[min(integer), max(integer]|Defines the range of enemies in group. If only one number is given, it's the exact amount.
-		group->numbermin = toInt(infile.nextValue());
-		group->numbermax = toInt(infile.nextValue(), group->numbermin);
+		group->numbermin = std::max(0, toInt(infile.nextValue()));
+		group->numbermax = std::max(0, toInt(infile.nextValue(), group->numbermin));
 	}
 	else if (infile.key == "chance") {
 		// @ATTR enemygroup.chance|integer|Percentage of chance
-		float n = toInt(infile.nextValue()) / 100.0f;
+		float n = std::max(0, toInt(infile.nextValue())) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
+	}
+	else if (infile.key == "direction") {
+		// @ATTR enemygroup.direction|integer|Direction of enemies
+		group->direction = std::min(std::max(0, toInt(infile.val)), 7);
+	}
+	else if (infile.key == "waypoints") {
+		// @ATTR enemygroup.waypoint|[x(integer), y(integer)]|Enemy waypoint; single enemy only; negates wander_radius
+		std::string none = "";
+		std::string a = infile.nextValue();
+		std::string b = infile.nextValue();
+
+		while (a != none) {
+			FPoint p;
+			p.x = toInt(a) + 0.5f;
+			p.y = toInt(b) + 0.5f;
+			group->waypoints.push(p);
+			a = infile.nextValue();
+			b = infile.nextValue();
+		}
+
+		// disable wander radius, since we can't have waypoints and wandering at the same time
+		group->wander_radius = 0;
+	}
+	else if (infile.key == "wander_radius") {
+		// @ATTR enemygroup.wander_radius|integer|The radius (in tiles) that an enemy will wander around randomly; negates waypoints
+		group->wander_radius = std::max(0, toInt(infile.nextValue()));
+
+		// clear waypoints, since wandering will use the waypoint queue
+		while (!group->waypoints.empty()) {
+			group->waypoints.pop();
+		}
+	}
+	else if (infile.key == "requires_status") {
+		// @ATTR enemygroup.requires_status|string|Status required for loading enemies
+		group->requires_status.push_back(infile.nextValue());
+	}
+	else if (infile.key == "requires_not_status") {
+		// @ATTR enemygroup.requires_not_status|string|Status required to be missing for loading enemies
+		group->requires_not_status.push_back(infile.nextValue());
 	}
 }
 
