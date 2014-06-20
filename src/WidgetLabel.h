@@ -73,7 +73,9 @@ public:
 	void setJustify(int _justify);
 
 	void set(const std::string& _text);
-	std::string get() {return text;}
+	std::string get() {
+		return text;
+	}
 
 	Rect bounds;
 };

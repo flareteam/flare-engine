@@ -34,7 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class Hazard;
 
-class Effect{
+class Effect {
 public:
 	std::string id;
 	int icon;
@@ -52,21 +52,21 @@ public:
 	int source_type;
 
 	Effect()
-	 : id("")
-	 , icon(-1)
-	 , ticks(0)
-	 , duration(-1)
-	 , type("")
-	 , magnitude(0)
-	 , magnitude_max(0)
-	 , animation_name("")
-	 , animation(NULL)
-	 , item(false)
-	 , trigger(-1)
-	 , render_above(false)
-	 , passive_id(0)
-	 , source_type(SOURCE_TYPE_HERO)
-	{}
+		: id("")
+		, icon(-1)
+		, ticks(0)
+		, duration(-1)
+		, type("")
+		, magnitude(0)
+		, magnitude_max(0)
+		, animation_name("")
+		, animation(NULL)
+		, item(false)
+		, trigger(-1)
+		, render_above(false)
+		, passive_id(0)
+		, source_type(SOURCE_TYPE_HERO) {
+	}
 
 	~Effect() {
 	}

@@ -57,20 +57,20 @@ extern RenderDevice *render_device;
 class SharedResources {
 public:
 	static void loadIcons() {
-  	        Image *graphics;
+		Image *graphics;
 
 		if (!render_device)
 			return;
 
 		if (icons) {
-		  delete icons;
-		  icons = NULL;
+			delete icons;
+			icons = NULL;
 		}
 
 		graphics = render_device->loadImage("images/icons/icons.png", "Couldn't load icons", false);
 		if (graphics) {
-		  icons = graphics->createSprite();
-		  graphics->unref();
+			icons = graphics->createSprite();
+			graphics->unref();
 		}
 	}
 };

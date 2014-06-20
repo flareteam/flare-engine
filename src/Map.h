@@ -59,8 +59,8 @@ public:
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
 		, requires_status()
-		, requires_not_status()
-	{}
+		, requires_not_status() {
+	}
 };
 
 class Map_NPC {
@@ -71,11 +71,11 @@ public:
 	std::vector<std::string> requires_not_status;
 
 	Map_NPC()
-	: id("")
-	, pos()
-	, requires_status()
-	, requires_not_status()
-	{}
+		: id("")
+		, pos()
+		, requires_status()
+		, requires_not_status() {
+	}
 };
 
 class Map_Enemy {
@@ -92,22 +92,20 @@ public:
 	std::vector<std::string> requires_not_status;
 
 	Map_Enemy(std::string _type="", FPoint _pos=FPoint())
-	 : type(_type)
-	 , pos(_pos)
-	 , direction(rand() % 8)
-	 , waypoints(std::queue<FPoint>())
-	 , wander_radius(4)
-	 , hero_ally(false)
-	 , summon_power_index(0)
-	 , summoner(NULL)
-	 , requires_status()
-	 , requires_not_status()
-	{
+		: type(_type)
+		, pos(_pos)
+		, direction(rand() % 8)
+		, waypoints(std::queue<FPoint>())
+		, wander_radius(4)
+		, hero_ally(false)
+		, summon_power_index(0)
+		, summoner(NULL)
+		, requires_status()
+		, requires_not_status() {
 	}
 };
 
-class Map
-{
+class Map {
 protected:
 	void loadHeader(FileParser &infile);
 	void loadLayer(FileParser &infile, maprow **cur_layer);

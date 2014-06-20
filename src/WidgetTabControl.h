@@ -61,9 +61,13 @@ public:
 	void setMainArea(int x, int y, int width, int height);
 
 	int getActiveTab();
-	void setActiveTab(int tab) { activeTab = tab; }
+	void setActiveTab(int tab) {
+		activeTab = tab;
+	}
 	Rect getContentArea();
-	int getTabHeight() { return activeTabSurface->getGraphicsHeight(); }
+	int getTabHeight() {
+		return activeTabSurface->getGraphicsHeight();
+	}
 
 	void updateHeader();
 

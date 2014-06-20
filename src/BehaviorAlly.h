@@ -21,16 +21,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "BehaviorStandard.h"
 
-class BehaviorAlly : public BehaviorStandard
-{
-    public:
-        BehaviorAlly(Enemy *_e);
-        virtual ~BehaviorAlly();
-    protected:
-    private:
-        virtual void findTarget();
-        virtual void checkMoveStateStance();
-        virtual void checkMoveStateMove();
+class BehaviorAlly : public BehaviorStandard {
+public:
+	BehaviorAlly(Enemy *_e);
+	virtual ~BehaviorAlly();
+protected:
+private:
+	virtual void findTarget();
+	virtual void checkMoveStateStance();
+	virtual void checkMoveStateMove();
 };
 
 #endif // BEHAVIORALLY_H

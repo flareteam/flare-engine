@@ -39,7 +39,7 @@ class NPCManager;
 class QuestLog;
 class WidgetLabel;
 
-class Title{
+class Title {
 public:
 	std::string title;
 	int level;
@@ -49,13 +49,13 @@ public:
 	std::string primary_stat;
 
 	Title()
-	 : title("")
-	 , level(0)
-	 , power(0)
-	 , requires_status("")
-	 , requires_not("")
-	 , primary_stat("")
-	{}
+		: title("")
+		, level(0)
+		, power(0)
+		, requires_status("")
+		, requires_not("")
+		, primary_stat("") {
+	}
 };
 
 class GameStatePlay : public GameState {

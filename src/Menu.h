@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Menu {
 public:
-        Menu();
+	Menu();
 	virtual ~Menu();
 
 	void setBackground(std::string background_image);

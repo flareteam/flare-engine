@@ -79,13 +79,13 @@ public:
 		: id(0)
 		, chance(0)
 		, count_min(1)
-		, count_max(1)
-	{}
+		, count_max(1) {
+	}
 };
 
 class StatBlock {
 private:
-    bool loadCoreStat(FileParser *infile);
+	bool loadCoreStat(FileParser *infile);
 	bool loadSfxStat(FileParser *infile);
 	void loadHeroStats();
 	bool statsLoaded;
@@ -147,7 +147,9 @@ public:
 	int per_offense[STAT_COUNT];
 	int per_defense[STAT_COUNT];
 
-	int get(STAT stat) {return current[stat];}
+	int get(STAT stat) {
+		return current[stat];
+	}
 
 	// additional values to base stats, given by items
 	int offense_additional;
@@ -156,18 +158,38 @@ public:
 	int mental_additional;
 
 	// getters for full base stats (character + additional)
-	int get_offense()  const { return offense_character + offense_additional; }
-	int get_defense()  const { return defense_character + defense_additional; }
-	int get_physical() const { return physical_character + physical_additional; }
-	int get_mental()   const { return mental_character + mental_additional; }
+	int get_offense()  const {
+		return offense_character + offense_additional;
+	}
+	int get_defense()  const {
+		return defense_character + defense_additional;
+	}
+	int get_physical() const {
+		return physical_character + physical_additional;
+	}
+	int get_mental()   const {
+		return mental_character + mental_additional;
+	}
 
 	// derived stats ("disciplines")
-	int physoff() { return get_physical() + get_offense(); }
-	int physdef() { return get_physical() + get_defense(); }
-	int mentoff() { return get_mental() + get_offense(); }
-	int mentdef() { return get_mental() + get_defense(); }
-	int physment() { return get_physical() + get_mental(); }
-	int offdef() { return get_offense() + get_defense(); }
+	int physoff() {
+		return get_physical() + get_offense();
+	}
+	int physdef() {
+		return get_physical() + get_defense();
+	}
+	int mentoff() {
+		return get_mental() + get_offense();
+	}
+	int mentdef() {
+		return get_mental() + get_defense();
+	}
+	int physment() {
+		return get_physical() + get_mental();
+	}
+	int offdef() {
+		return get_offense() + get_defense();
+	}
 
 	// in Flare there are no distinct character classes.
 	// instead each class is given a descriptor based on their base stat builds

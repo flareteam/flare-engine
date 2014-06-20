@@ -88,8 +88,8 @@ public:
 	void freeImage(Image *image);
 
 	Image* loadImage(std::string filename,
-								std::string errormessage = "Couldn't load image",
-								bool IfNotFoundExit = false);
+					 std::string errormessage = "Couldn't load image",
+					 bool IfNotFoundExit = false);
 private:
 	void drawLine(int x0, int y0, int x1, int y1, Uint32 color);
 	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);

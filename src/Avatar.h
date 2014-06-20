@@ -56,9 +56,9 @@ public:
 	std::string gfx;
 	std::string type;
 	Layer_gfx()
-	 : gfx("")
-	 , type("")
-	{}
+		: gfx("")
+		, type("") {
+	}
 };
 
 class Step_sfx {
@@ -120,7 +120,9 @@ public:
 	StatBlock *charmed_stats;
 
 	virtual void resetActiveAnimation();
-	virtual Renderable getRender() { return Renderable(); }
+	virtual Renderable getRender() {
+		return Renderable();
+	}
 	void addRenders(std::vector<Renderable> &r);
 
 	// vars
