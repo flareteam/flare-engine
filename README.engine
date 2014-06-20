@@ -37,6 +37,9 @@ The following links are specific to the engine
 * polymorphable A game made for "The Liberated Pixel cup", which was a competition about game art and making a game thereof. The pixel art is 32x32 orthogonal perspective featuring a medival setting. The development has finished.
 * concordia     Another game using the art created during "The liberated pixel cup". While this started without stress regarding the timeline for the pixel cup, this story is more thought through and the content is more organized.
 
+## Building from Source
+
+Please see the [INSTALL.engine](https://github.com/clintbellanger/flare-engine/blob/master/INSTALL.engine) file for instructions.
 
 ## Settings
 
