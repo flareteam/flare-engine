@@ -16,12 +16,18 @@ action role-playing engine. It uses simple file formats (INI-style config files)
 for most of the game data, allowing anyone to easily modify game contents.
 
 .SH OPTIONS
-.IP "\fB\-\-debug-event\fP"
-Switch on event debugging information.
-.IP "\fB\-\-data-path \fIpath\fP"
-Set an alternate path to the game data.
+.IP "\fB\-\-help\fP"
+Prints a description of command line flags.
+.IP "\fB\-\-version\fP"
+Prints the release version.
 .IP "\fB\-\-game \fIgame\fP"
-Set the game that the flare engine should use.
+Specifies which 'game' to use when launching. A game determines which parent folder to look for mods in, as well as where user settings and save data are stored.
+.IP "\fB\-\-data-path \fIpath\fP"
+Specifies an exact path to look for mod data.
+.IP "\fB\-\-debug-event\fP"
+Prints verbose hardware input information.
+.IP "\fB\-\-renderer \fIrenderer\fP"
+Specifies the rendering backend to use. The default is 'sdl'.
 
 
 .SH FILES
