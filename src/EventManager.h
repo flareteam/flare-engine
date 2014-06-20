@@ -41,14 +41,13 @@ public:
 	Rect reachable_from;
 
 	Event()
-	 : type("")
-	 , components(std::vector<Event_Component>())
-	 , cooldown(0)
-	 , cooldown_ticks(0)
-	 , stats(NULL)
-	 , keep_after_trigger(true)
-	 , center(FPoint())
-	{
+		: type("")
+		, components(std::vector<Event_Component>())
+		, cooldown(0)
+		, cooldown_ticks(0)
+		, stats(NULL)
+		, keep_after_trigger(true)
+		, center(FPoint()) {
 		location.x = location.y = location.w = location.h = 0;
 		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
 		reachable_from.x = reachable_from.y = reachable_from.w = reachable_from.h = 0;
@@ -57,8 +56,7 @@ public:
 	// returns a pointer to the event component within the components list
 	// no need to free the pointer by caller
 	// NULL will be returned if no such event is found
-	Event_Component *getComponent(const std::string &_type)
-	{
+	Event_Component *getComponent(const std::string &_type) {
 		std::vector<Event_Component>::iterator it;
 		for (it = components.begin(); it != components.end(); ++it)
 			if (it->type == _type)
@@ -73,8 +71,7 @@ public:
 				it = components.erase(it);
 	}
 
-	~Event()
-	{
+	~Event() {
 		delete stats; // may be NULL, but delete can deal with null pointers.
 	}
 };

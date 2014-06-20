@@ -107,8 +107,8 @@ public:
 		, icon(-1)
 		, animation("")
 		, additive(false)
-		, render_above(false)
-	{}
+		, render_above(false) {
+	}
 };
 
 class PostEffect {
@@ -120,8 +120,8 @@ public:
 	PostEffect()
 		: id("")
 		, magnitude(0)
-		, duration(0)
-	{}
+		, duration(0) {
+	}
 };
 
 class Power {
@@ -320,8 +320,8 @@ public:
 		, spawn_level_mode(SPAWN_LEVEL_MODE_DEFAULT)
 		, spawn_level_qty(0)
 		, spawn_level_every(0)
-		, spawn_level_stat(SPAWN_LEVEL_STAT_MENTAL)
-	{}
+		, spawn_level_stat(SPAWN_LEVEL_STAT_MENTAL) {
+	}
 
 };
 
@@ -357,7 +357,10 @@ public:
 
 	void handleNewMap(MapCollision *_collider);
 	bool activate(int power_index, StatBlock *src_stats, FPoint target);
-	const Power &getPower(unsigned id) 	{assert(id < powers.size()); return powers[id];}
+	const Power &getPower(unsigned id) 	{
+		assert(id < powers.size());
+		return powers[id];
+	}
 	bool canUsePower(unsigned id) const;
 	bool hasValidTarget(int power_index, StatBlock *src_stats, FPoint target);
 	bool spawn(const std::string& enemy_type, Point target);

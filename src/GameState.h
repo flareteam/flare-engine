@@ -31,7 +31,9 @@ public:
 	virtual void render();
 
 	GameState* getRequestedGameState();
-	bool isExitRequested() { return exitRequested; }
+	bool isExitRequested() {
+		return exitRequested;
+	}
 	bool hasMusic;
 	bool reload_music;
 

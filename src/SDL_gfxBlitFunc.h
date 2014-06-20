@@ -42,7 +42,7 @@ extern    "C" {
 #include <SDL.h>
 #include <SDL_video.h>
 
-	/* ---- Function Prototypes */
+/* ---- Function Prototypes */
 
 #ifdef _MSC_VER
 #  if defined(DLL_EXPORT) && !defined(LIBSDL_GFX_DLL_IMPORT)
@@ -58,30 +58,30 @@ extern    "C" {
 #endif
 
 
-	SDL_GFXBLITFUNC_SCOPE int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SDL_Rect * dstrect);
+SDL_GFXBLITFUNC_SCOPE int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SDL_Rect * dstrect);
 
-	/* -------- Macros */
+/* -------- Macros */
 
-	/* Define SDL macros locally as a substitute for an #include "SDL_blit.h", */
-	/* which doesn't work since the include file doesn't get installed.       */
+/* Define SDL macros locally as a substitute for an #include "SDL_blit.h", */
+/* which doesn't work since the include file doesn't get installed.       */
 
 /*!
 \brief The structure passed to the low level blit functions.
 */
-	typedef struct {
-		Uint8    *s_pixels;
-		int       s_width;
-		int       s_height;
-		int       s_skip;
-		Uint8    *d_pixels;
-		int       d_width;
-		int       d_height;
-		int       d_skip;
-		void     *aux_data;
-		SDL_PixelFormat *src;
-		Uint8    *table;
-		SDL_PixelFormat *dst;
-	} SDL_gfxBlitInfo;
+typedef struct {
+	Uint8    *s_pixels;
+	int       s_width;
+	int       s_height;
+	int       s_skip;
+	Uint8    *d_pixels;
+	int       d_width;
+	int       d_height;
+	int       d_skip;
+	void     *aux_data;
+	SDL_PixelFormat *src;
+	Uint8    *table;
+	SDL_PixelFormat *dst;
+} SDL_gfxBlitInfo;
 
 /*!
 \brief Unwrap RGBA values from a pixel using mask, shift and loss for surface.
@@ -154,7 +154,7 @@ This is a very useful loop for optimizing blitters.
 
 
 
-	/* Ends C function definitions when using C++ */
+/* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif

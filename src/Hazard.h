@@ -82,8 +82,8 @@ public:
 	int power_index;
 
 	int animationKind;	// direction or other, it is a specific value according to
-						// some hazard animations are 8-directional
-						// some hazard animations have random/varietal options
+	// some hazard animations are 8-directional
+	// some hazard animations have random/varietal options
 
 	bool isDangerousNow();
 	void addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);

@@ -41,8 +41,8 @@ class Tile_Def {
 public:
 	Point offset;
 	Sprite *tile;// inside graphics not used
-        Tile_Def()
-	  : tile(NULL) {
+	Tile_Def()
+		: tile(NULL) {
 	}
 };
 

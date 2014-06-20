@@ -65,7 +65,9 @@ public:
 	void logic();
 	void tabsLogic();
 	void setTab(int tab);
-	int getTab() {return activetab;}
+	int getTab() {
+		return activetab;
+	}
 	void render();
 	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);

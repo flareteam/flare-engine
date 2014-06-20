@@ -60,8 +60,12 @@ public:
 	bool logic(int x, int y);
 	void render();
 	bool checkClick();
-	std::string getText() { return text; }
-	void setText(std::string _text) { text = _text; }
+	std::string getText() {
+		return text;
+	}
+	void setText(std::string _text) {
+		text = _text;
+	}
 	void setPosition(int x, int y);
 
 	bool inFocus;

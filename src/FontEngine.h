@@ -61,8 +61,12 @@ public:
 	FontEngine();
 	~FontEngine();
 
-	int getLineHeight() { return active_font->line_height; }
-	int getFontHeight() { return active_font->font_height; }
+	int getLineHeight() {
+		return active_font->line_height;
+	}
+	int getFontHeight() {
+		return active_font->font_height;
+	}
 
 	Color getColor(std::string _color);
 	void setFont(std::string _font);

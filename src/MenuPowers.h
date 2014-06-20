@@ -77,8 +77,7 @@ public:
 		, upgrades()
 		, requires_power()
 		, requires_point(false)
-		, passive_on(false)
-	{
+		, passive_on(false) {
 	}
 };
 
@@ -148,7 +147,9 @@ public:
 	bool unlockClick(Point mouse);
 	void applyPowerUpgrades();
 	bool meetsUsageStats(unsigned powerid);
-	short getUnspent() { return points_left; }
+	short getUnspent() {
+		return points_left;
+	}
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 

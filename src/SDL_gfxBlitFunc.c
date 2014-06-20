@@ -303,8 +303,7 @@ to the destination 'a' values.
 
 \param info The blit info to use.
 */
-void _SDL_gfxBlitBlitterRGBA(SDL_gfxBlitInfo * info)
-{
+void _SDL_gfxBlitBlitterRGBA(SDL_gfxBlitInfo * info) {
 	int       width = info->d_width;
 	int       height = info->d_height;
 	Uint8    *src = info->s_pixels;
@@ -353,8 +352,7 @@ Sets up the blitter info based on the 'src' and 'dst' surfaces and rectangles.
 
 \returns Returns 1 if blit was performed, 0 otherwise.
 */
-int _SDL_gfxBlitRGBACall(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SDL_Rect * dstrect)
-{
+int _SDL_gfxBlitRGBACall(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SDL_Rect * dstrect) {
 	/*
 	* Set up source and destination buffer pointers, then blit
 	*/
@@ -408,8 +406,7 @@ The destination clip rectangle is honored.
 
 \returns Returns 1 if blit was performed, 0 otherwise, or -1 if an error occured.
 */
-int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SDL_Rect * dstrect)
-{
+int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SDL_Rect * dstrect) {
 	SDL_Rect  sr, dr;
 	int       srcx, srcy, w, h;
 
@@ -432,7 +429,8 @@ int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SD
 		dr.x = dr.y = 0;
 		dr.w = dst->w;
 		dr.h = dst->h;
-	} else {
+	}
+	else {
 		dr = *dstrect;
 	}
 
@@ -464,7 +462,8 @@ int SDL_gfxBlitRGBA(SDL_Surface * src, SDL_Rect * srcrect, SDL_Surface * dst, SD
 		if (maxh < h)
 			h = maxh;
 
-	} else {
+	}
+	else {
 		srcx = srcy = 0;
 		w = src->w;
 		h = src->h;

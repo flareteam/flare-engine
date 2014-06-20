@@ -59,16 +59,14 @@ inline void clamp(Ty1_& value, Ty2_ floor, Ty2_ ceiling) {
  * Returns sign of value.
  */
 template <typename Ty_>
-inline Ty_ signum(Ty_ value)
-{
+inline Ty_ signum(Ty_ value) {
 	return (Ty_(0) < value) - (value < Ty_(0));
 }
 
 /**
  * Returns random number between minVal and maxVal.
  */
-inline int randBetween(int minVal, int maxVal)
-{
+inline int randBetween(int minVal, int maxVal) {
 	if (minVal == maxVal) return minVal;
 	int d = maxVal - minVal;
 	return minVal + (rand() % (d + signum(d)));
@@ -77,8 +75,7 @@ inline int randBetween(int minVal, int maxVal)
 /**
  * Returns true with random percent chance.
  */
-inline bool percentChance(int percent)
-{
+inline bool percentChance(int percent) {
 	return rand() % 100 < percent;
 }
 

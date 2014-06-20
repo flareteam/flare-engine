@@ -65,11 +65,11 @@ private:
 	bool line_check(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, MOVEMENTTYPE movement_type);
 
 	bool small_step_forced_slide_along_grid(
-			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+		float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 	bool small_step_forced_slide(
-			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+		float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 	bool small_step(
-			float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
+		float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 
 	bool is_valid_tile(const int& x, const int& y, MOVEMENTTYPE movement_type, bool is_hero) const;
 

@@ -74,7 +74,7 @@ public:
 		c.g = g;
 		c.b = b;
 #if SDL_VERSION_ATLEAST(2,0,0)
-        c.a = a;
+		c.a = a;
 #else
 		// Warning: SDL 1.2 only
 		c.unused = a;
@@ -100,8 +100,8 @@ public:
 		, y(0)
 		, z(0)
 		, a(0)
-		, b(0)
-	{}
+		, b(0) {
+	}
 };
 
 Point floor(FPoint fp);
