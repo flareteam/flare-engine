@@ -24,3 +24,6 @@ perf.data
 
 # from astyle:
 *.orig
+
+# from regenerate_wiki_attributepage.sh
+Attribute-Reference.md

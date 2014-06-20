@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DESTINATION=../flare-wiki/Attribute-Reference.md
+DESTINATION=./Attribute-Reference.md
 
 cat << "EOF" > ${DESTINATION}
 ### Attribute description
@@ -32,3 +32,6 @@ _label_, specified as: "hidden" or as: x (integer), y (integer), justify (string
 EOF
 
 ./extract_xml.sh  | xsltproc wiki.xslt -  |awk '{if (NR!=1) {print}}' >> ${DESTINATION}
+
+echo "Created ${DESTINATION}"
+echo "Now move it to the wiki."
