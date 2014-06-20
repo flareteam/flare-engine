@@ -17,6 +17,7 @@ mods/default/languages/xgettext.py export-ignore
 # regenerating the wiki pages
 extract_xml.sh export-ignore
 wiki.xslt export-ignore
+regenerate_wiki_attributepage.sh export-ignore
 
 # the script to generate tar balls
-distribution/create_release_tarball.sh
+distribution/create_release_tarball.sh export-ignore
