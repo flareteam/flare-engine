@@ -184,6 +184,9 @@ vector<string> ModManager::list(const string &path, bool full_paths) {
 		}
 	}
 
+	// we don't need to check for duplicates if there are no paths
+	if (ret.empty()) return ret;
+
 	if (!full_paths) {
 		// reduce the each file path down to be relative to mods/
 		for (unsigned i=0; i<ret.size(); ++i) {
@@ -191,11 +194,11 @@ vector<string> ModManager::list(const string &path, bool full_paths) {
 		}
 
 		// remove duplicates
-		for (unsigned i=ret.size()-1; i != 0; i--) {
-			for (unsigned j = i; j != 0; j--) {
-				if (ret[i] == ret[j]) {
+		for (unsigned i=ret.size(); i != 0; i--) {
+			for (unsigned j=0; j<i-1; j++) {
+				if (ret[i-1] == ret[j]) {
 					ret.erase(ret.begin()+j);
-					break;
+					j--;
 				}
 			}
 		}
