@@ -45,7 +45,6 @@ Avatar::Avatar()
 	, lockAttack(false)
 	, path()
 	, prev_target()
-	, collided(false)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -495,10 +494,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				if (move()) { // no collision
 					stats.cur_state = AVATAR_RUN;
 				}
-				else {
-					collided = true;
-				}
-
 			}
 
 			if (MOUSE_MOVE && !inpt->pressing[MAIN1]) {
@@ -539,7 +534,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				break;
 			}
 			else if (!move()) { // collide with wall
-				collided = true;
 				stats.cur_state = AVATAR_STANCE;
 				break;
 			}
