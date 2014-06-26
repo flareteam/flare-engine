@@ -38,6 +38,8 @@ class Entity {
 protected:
 	Image *sprites;
 
+	void move_from_offending_tile();
+
 public:
 	Entity();
 	Entity(const Entity&);
