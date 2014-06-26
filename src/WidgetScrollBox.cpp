@@ -194,7 +194,7 @@ void WidgetScrollBox::refresh() {
 
 	if (contents && scrollbar) {
 		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor,
-						   contents->getGraphicsHeight()-pos.h-scrollbar->pos_knob.h);
+						   contents->getGraphicsHeight()-pos.h);
 	}
 }
 
