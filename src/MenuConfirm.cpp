@@ -33,7 +33,8 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	, buttonClose(NULL)
 	, hasConfirmButton(false)
 	, confirmClicked(false)
-	, cancelClicked(false) {
+	, cancelClicked(false)
+	, isWithinClose(false) {
 
 	// Load config settings
 	FileParser infile;
@@ -82,21 +83,19 @@ void MenuConfirm::logic() {
 	if (visible) {
 		tablist.logic();
 		confirmClicked = false;
-	}
-	if (visible && hasConfirmButton) {
-		if(buttonConfirm->checkClick()) {
+
+		if (hasConfirmButton && buttonConfirm->checkClick()) {
 			confirmClicked = true;
 		}
-		if(buttonClose->checkClick()) {
+		if (buttonClose->checkClick()) {
 			visible = false;
+			confirmClicked = false;
 			cancelClicked = true;
 		}
-	}
-	else if (visible && !hasConfirmButton) {
-		if(buttonClose->checkClick()) {
-			visible = false;
-			cancelClicked = true;
-		}
+
+		// check if the mouse cursor is hovering over the close button
+		// this is for the confirm dialog that shows when changing keybinds
+		isWithinClose = isWithin(buttonClose->pos, inpt->mouse);
 	}
 }
 

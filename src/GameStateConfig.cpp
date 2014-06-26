@@ -1130,7 +1130,7 @@ bool GameStateConfig::setMods() {
  * Scan key binding
  */
 void GameStateConfig::scanKey(int button) {
-	if (input_confirm->visible) {
+	if (input_confirm->visible && !input_confirm->isWithinClose) {
 		if (inpt->last_button != -1 && inpt->last_button < 8) {
 			if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_button;
 			else inpt->binding_alt[button-key_count] = inpt->last_button;
