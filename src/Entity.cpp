@@ -120,6 +120,52 @@ void Entity::unloadSounds() {
 	snd->unload(sound_levelup);
 }
 
+
+void Entity::move_from_offending_tile() {
+
+	// If we got stuck on a tile, which we're not allowed to be on, move away
+	// This is just a workaround as we cannot reproduce being stuck easily nor find the
+	// errornous code, check https://github.com/clintbellanger/flare-engine/issues/1058
+
+	// As this method should do nothing while regular gameplay, but only in case of bugs
+	// we don't need to care about nice graphical effects, so we may just jump out of the
+	// offending tile. The idea is simple: We can only be stuck on a tile by accident,
+	// so we got here somehow. We'll try to push this entity to the nearest valid place
+	while (!mapr->collider.is_valid_position(stats.pos.x, stats.pos.y, stats.movement_type, stats.hero)) {
+		fprintf(stderr, "%s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!\n",
+				stats.hero ? "The hero" : "An entity");
+
+		float pushx = 0;
+		float pushy = 0;
+
+		if (mapr->collider.is_valid_position(stats.pos.x + 1, stats.pos.y, stats.movement_type, stats.hero))
+			pushx += 0.1 * (2 - (int(stats.pos.x + 1) + 0.5 - stats.pos.x));
+
+		if (mapr->collider.is_valid_position(stats.pos.x - 1, stats.pos.y, stats.movement_type, stats.hero))
+			pushx -= 0.1 * (2 - (stats.pos.x - (int(stats.pos.x - 1) + 0.5)));
+
+		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y + 1, stats.movement_type, stats.hero))
+			pushy += 0.1 * (2 - (int(stats.pos.y + 1) + 0.5 - stats.pos.y));
+
+		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y- 1, stats.movement_type, stats.hero))
+			pushy -= 0.1 * (2 - (stats.pos.y - (int(stats.pos.y - 1) + 0.5)));
+
+		stats.pos.x += pushx;
+		stats.pos.y += pushy;
+
+		// we don't move, but we're still stuck on an invalid tile,
+		// the final life saver before being crushed by an invalid tile:
+		// just blink away. This will seriously irritate the player, but there
+		// is probably no other easy way to repair the game
+		if (pushx == 0 && pushy == 0) {
+			stats.pos.x = randBetween(1, mapr->w-1);
+			stats.pos.y = randBetween(1, mapr->h-1);
+			fprintf(stderr, "%s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!\n",
+					stats.hero ? "The hero" : "An entity");
+		}
+	}
+}
+
 /**
  * move()
  * Apply speed to the direction faced.
@@ -127,6 +173,8 @@ void Entity::unloadSounds() {
  * @return Returns false if wall collision, otherwise true.
  */
 bool Entity::move() {
+
+	move_from_offending_tile();
 
 	if (stats.effects.forced_move)
 		return mapr->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, stats.movement_type, stats.hero);
