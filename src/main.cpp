@@ -116,6 +116,7 @@ static void init(const std::string render_device_name) {
 	}
 	else {
 		printf("No joysticks were found.\n");
+		ENABLE_JOYSTICK = false;
 	}
 	for(int i = 0; i < SDL_NumJoysticks(); i++) {
 		printf("  Joy %d) %s\n", i, inpt->getJoystickName(i).c_str());
