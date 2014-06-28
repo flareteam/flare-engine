@@ -57,10 +57,10 @@ Enemy::Enemy(const Enemy& e)
 	: Entity(e)
 	, type(e.type)
 	, haz(NULL) // do not copy hazard. This constructor is used during mapload, so no hazard should be active.
-	, eb(new BehaviorStandard(this))
 	, reward_xp(e.reward_xp)
 	, instant_power(e.instant_power)
 	, kill_source_type(e.kill_source_type) {
+	eb = new BehaviorStandard(this);
 	assert(e.haz == NULL);
 }
 

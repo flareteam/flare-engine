@@ -177,12 +177,12 @@ void MenuBook::alignElements() {
 	setBackgroundDest(window_area);
 
 	for (unsigned i=0; i<text.size(); i++) {
-		text[i]->setDestX(float(size[i].x + window_area.x));
-		text[i]->setDestY(float(size[i].y + window_area.y));
+		text[i]->setDestX(size[i].x + window_area.x);
+		text[i]->setDestY(size[i].y + window_area.y);
 	}
 	for (unsigned i=0; i<image.size(); i++) {
-		image[i]->setDestX(image[i]->getDest().x + window_area.x);
-		image[i]->setDestY(image[i]->getDest().y + window_area.y);
+		image[i]->setDestX(int(image[i]->getDest().x) + window_area.x);
+		image[i]->setDestY(int(image[i]->getDest().y) + window_area.y);
 	}
 }
 
