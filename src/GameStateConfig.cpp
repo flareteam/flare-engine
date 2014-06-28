@@ -172,11 +172,11 @@ void GameStateConfig::init() {
 		keybinds_lb[i]->set(inpt->binding_name[i]);
 		keybinds_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
-	for (unsigned int i = 0; i < inpt->key_count * 2; i++) {
+	for (unsigned int i = 0; i < inpt->key_count * 3; i++) {
 		keybinds_btn.push_back(new WidgetButton("images/menus/buttons/button_default.png"));
 	}
 
-	key_count = keybinds_btn.size()/2;
+	key_count = keybinds_btn.size()/3;
 
 	// Allocate resolution list box
 	int resolutions = getVideoModes();
@@ -540,9 +540,15 @@ void GameStateConfig::readConfig () {
 	input_scrollbox->resize(scrollpane_contents);
 
 	// Set positions of secondary key bindings
-	for (unsigned int i = key_count; i < keybinds_btn.size(); i++) {
+	for (unsigned int i = key_count; i < key_count*2; i++) {
 		keybinds_btn[i]->pos.x = keybinds_btn[i-key_count]->pos.x + offset_x;
 		keybinds_btn[i]->pos.y = keybinds_btn[i-key_count]->pos.y + offset_y;
+	}
+
+	// Set positions of joystick bindings
+	for (unsigned int i = key_count*2; i < keybinds_btn.size(); i++) {
+		keybinds_btn[i]->pos.x = keybinds_btn[i-(key_count*2)]->pos.x + (offset_x*2);
+		keybinds_btn[i]->pos.y = keybinds_btn[i-(key_count*2)]->pos.y + (offset_y*2);
 	}
 }
 
@@ -622,21 +628,37 @@ void GameStateConfig::update () {
 	activemods_lstb->refresh();
 	inactivemods_lstb->refresh();
 
+	// reset all keybind labels to "(none)"
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if (inpt->binding[i] < 8) {
-			keybinds_btn[i]->label = inpt->mouse_button[inpt->binding[i]-1];
-		}
-		else {
-			keybinds_btn[i]->label = inpt->getKeyName(inpt->binding[i]);
+		keybinds_btn[i]->label = msg->get("(none)");
+	}
+
+	// now do labels for keybinds that are set
+	for (unsigned int i = 0; i < key_count; i++) {
+		if (inpt->binding[i] >= 0) {
+			if (inpt->binding[i] < 8) {
+				keybinds_btn[i]->label = inpt->mouse_button[inpt->binding[i]-1];
+			}
+			else {
+				keybinds_btn[i]->label = inpt->getKeyName(inpt->binding[i]);
+			}
 		}
 		keybinds_btn[i]->refresh();
 	}
-	for (unsigned int i = key_count; i < keybinds_btn.size(); i++) {
-		if (inpt->binding_alt[i-key_count] < 8) {
-			keybinds_btn[i]->label = inpt->mouse_button[inpt->binding_alt[i-key_count]-1];
+	for (unsigned int i = key_count; i < key_count*2; i++) {
+		if (inpt->binding_alt[i-key_count] >= 0) {
+			if (inpt->binding_alt[i-key_count] < 8) {
+				keybinds_btn[i]->label = inpt->mouse_button[inpt->binding_alt[i-key_count]-1];
+			}
+			else {
+				keybinds_btn[i]->label = inpt->getKeyName(inpt->binding_alt[i-key_count]);
+			}
 		}
-		else {
-			keybinds_btn[i]->label = inpt->getKeyName(inpt->binding_alt[i-key_count]);
+		keybinds_btn[i]->refresh();
+	}
+	for (unsigned int i = key_count*2; i < keybinds_btn.size(); i++) {
+		if (inpt->binding_joy[i-(key_count*2)] >= 0) {
+			keybinds_btn[i]->label = msg->get("Button %d", inpt->binding_joy[i-(key_count*2)]);
 		}
 		keybinds_btn[i]->refresh();
 	}
@@ -894,10 +916,7 @@ void GameStateConfig::logic () {
 				Point mouse = input_scrollbox->input_assist(inpt->mouse);
 				if (keybinds_btn[i]->checkClick(mouse.x,mouse.y)) {
 					std::string confirm_msg;
-					if (i < key_count)
-						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i];
-					else
-						confirm_msg = msg->get("Assign: ") + inpt->binding_name[i-key_count];
+					confirm_msg = msg->get("Assign: ") + inpt->binding_name[i%key_count];
 					delete input_confirm;
 					input_confirm = new MenuConfirm("",confirm_msg);
 					input_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
@@ -905,6 +924,7 @@ void GameStateConfig::logic () {
 					input_key = i;
 					inpt->last_button = -1;
 					inpt->last_key = -1;
+					inpt->last_joybutton = -1;
 				}
 			}
 		}
@@ -1130,26 +1150,63 @@ bool GameStateConfig::setMods() {
  * Scan key binding
  */
 void GameStateConfig::scanKey(int button) {
-	if (input_confirm->visible) {
-		if (inpt->last_button != -1 && inpt->last_button < 8) {
-			if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_button;
-			else inpt->binding_alt[button-key_count] = inpt->last_button;
+	// clear the keybind if the user presses CTRL+Delete
+	// TODO display a message in-game to expose this functionality?
+	if (input_confirm->visible && inpt->pressing[CTRL] && inpt->pressing[DEL]) {
+		if ((unsigned)button < key_count) inpt->binding[button] = -1;
+		else if ((unsigned)button < key_count*2) inpt->binding_alt[button%key_count] = -1;
+		else if ((unsigned)button < key_count*3) inpt->binding_joy[button%key_count] = -1;
 
-			keybinds_btn[button]->label = inpt->mouse_button[inpt->last_button-1];
-			input_confirm->visible = false;
-			input_confirm_ticks = 0;
-			keybinds_btn[button]->refresh();
-			return;
+		inpt->pressing[CTRL] = false;
+		inpt->pressing[DEL] = false;
+
+		inpt->pressing[button%key_count] = false;
+		inpt->lock[button%key_count] = false;
+
+		keybinds_btn[button]->label = msg->get("(none)");
+		input_confirm->visible = false;
+		input_confirm_ticks = 0;
+		keybinds_btn[button]->refresh();
+	}
+
+	if (input_confirm->visible && !input_confirm->isWithinClose) {
+		// keyboard & mouse
+		if ((unsigned)button < key_count*2) {
+			if (inpt->last_button != -1 && inpt->last_button < 8) {
+				if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_button;
+				else inpt->binding_alt[button-key_count] = inpt->last_button;
+
+				inpt->pressing[button%key_count] = false;
+				inpt->lock[button%key_count] = false;
+
+				keybinds_btn[button]->label = inpt->mouse_button[inpt->last_button-1];
+				input_confirm->visible = false;
+				input_confirm_ticks = 0;
+				keybinds_btn[button]->refresh();
+				return;
+			}
+			if (inpt->last_key != -1) {
+				if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_key;
+				else inpt->binding_alt[button-key_count] = inpt->last_key;
+
+				inpt->pressing[button%key_count] = false;
+				inpt->lock[button%key_count] = false;
+
+				keybinds_btn[button]->label = inpt->getKeyName(inpt->last_key);
+				input_confirm->visible = false;
+				input_confirm_ticks = 0;
+				keybinds_btn[button]->refresh();
+				return;
+			}
 		}
-		if (inpt->last_key != -1) {
-			if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_key;
-			else inpt->binding_alt[button-key_count] = inpt->last_key;
+		// joystick
+		else if ((unsigned)button >= key_count*2 && inpt->last_joybutton != -1) {
+			inpt->binding_joy[button-(key_count*2)] = inpt->last_joybutton;
 
-			keybinds_btn[button]->label = inpt->getKeyName(inpt->last_key);
+			keybinds_btn[button]->label = msg->get("Button %d", inpt->binding_joy[button-(key_count*2)]);
 			input_confirm->visible = false;
 			input_confirm_ticks = 0;
 			keybinds_btn[button]->refresh();
-			return;
 		}
 	}
 }

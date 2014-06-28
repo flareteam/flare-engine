@@ -37,6 +37,7 @@ InputState::InputState(void)
 	, mouse()
 	, last_key(0)
 	, last_button(0)
+	, last_joybutton(0)
 	, scroll_up(false)
 	, scroll_down(false)
 	, lock_scroll(false) {
@@ -475,6 +476,7 @@ void InputState::handle(bool dump_event) {
 						if (event.jbutton.button == binding_joy[key]) {
 							un_press[key] = true;
 						}
+						last_joybutton = event.jbutton.button;
 					}
 				}
 				break;

@@ -102,6 +102,7 @@ public:
 	std::string inkeys;
 	int last_key;
 	int last_button;
+	int last_joybutton;
 	bool scroll_up;
 	bool scroll_down;
 	bool lock_scroll;

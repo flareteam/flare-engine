@@ -47,6 +47,7 @@ public:
 
 	bool confirmClicked;
 	bool cancelClicked;
+	bool isWithinClose;
 };
 
 #endif
