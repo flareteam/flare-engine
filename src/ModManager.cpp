@@ -194,11 +194,11 @@ vector<string> ModManager::list(const string &path, bool full_paths) {
 		}
 
 		// remove duplicates
-		for (unsigned i=ret.size(); i != 0; i--) {
-			for (unsigned j=0; j<i-1; j++) {
-				if (ret[i-1] == ret[j]) {
+		for (unsigned i = 0; i < ret.size(); ++i) {
+			for (unsigned j = 0; j < i; ++j) {
+				if (ret[i] == ret[j]) {
 					ret.erase(ret.begin()+j);
-					j--;
+					break;
 				}
 			}
 		}
