@@ -222,9 +222,9 @@ void RenderDevice::cacheRemove(Image *image) {
 bool RenderDevice::localToGlobal(Sprite *r) {
 	m_clip = r->getClip();
 
-	int left = r->getDest().x - r->getOffset().x;
+	int left = int(r->getDest().x - r->getOffset().x);
 	int right = left + r->getClip().w;
-	int up = r->getDest().y - r->getOffset().y;
+	int up = int(r->getDest().y - r->getOffset().y);
 	int down = up + r->getClip().h;
 
 	// Check whether we need to render.

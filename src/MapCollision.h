@@ -81,6 +81,7 @@ public:
 	bool move(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 
 	bool is_outside_map(const int& tile_x, const int& tile_y) const;
+	bool is_outside_map(const float& tile_x, const float& tile_y) const;
 	bool is_empty(const float& x, const float& y) const;
 	bool is_wall(const float& x, const float& y) const;
 

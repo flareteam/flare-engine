@@ -66,14 +66,14 @@ StatBlock::StatBlock()
 	, defense_character(0)
 	, physical_character(0)
 	, mental_character(0)
-	, starting()
-	, base()
-	, current()
-	, per_level()
-	, per_physical()
-	, per_mental()
-	, per_offense()
-	, per_defense()
+	, starting(std::vector<int>(STAT_COUNT,0))
+	, base(std::vector<int>(STAT_COUNT,0))
+	, current(std::vector<int>(STAT_COUNT,0))
+	, per_level(std::vector<int>(STAT_COUNT,0))
+	, per_physical(std::vector<int>(STAT_COUNT,0))
+	, per_mental(std::vector<int>(STAT_COUNT,0))
+	, per_offense(std::vector<int>(STAT_COUNT,0))
+	, per_defense(std::vector<int>(STAT_COUNT,0))
 	, offense_additional(0)
 	, defense_additional(0)
 	, physical_additional(0)
@@ -166,6 +166,8 @@ StatBlock::StatBlock()
 	, summons()
 	, summoner(NULL)
 	, attacking(false) {
+
+	// todo: move to init list:
 	max_spendable_stat_points = 0;
 	max_points_per_stat = 0;
 
@@ -811,7 +813,7 @@ bool StatBlock::summonLimitReached(int power_id) const {
 }
 
 void StatBlock::setWanderArea(int r) {
-	wander_area.x = floor(pos.x) - r;
-	wander_area.y = floor(pos.y) - r;
+	wander_area.x = int(floor(pos.x)) - r;
+	wander_area.y = int(floor(pos.y)) - r;
 	wander_area.w = wander_area.h = (r*2) + 1;
 }

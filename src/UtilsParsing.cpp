@@ -56,7 +56,7 @@ int parse_duration(const std::string& s) {
 	else {
 		if (suffix != "ms")
 			fprintf(stderr, "Duration of '%d' does not have a suffix. Assuming 'ms'.\n", val);
-		val = floor(((val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f);
+		val = int(floor(((val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
 	}
 
 	// round back up to 1 if we rounded down to 0 for ms

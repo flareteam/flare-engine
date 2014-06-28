@@ -36,8 +36,8 @@ Point floor(FPoint fp) {
 FPoint screen_to_map(int x, int y, float camx, float camy) {
 	FPoint r;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		float scrx = (x - VIEW_W_HALF) /2;
-		float scry = (y - VIEW_H_HALF) /2;
+		float scrx = float(x - VIEW_W_HALF) * 0.5f;
+		float scry = float(y - VIEW_H_HALF) * 0.5f;
 
 		r.x = (UNITS_PER_PIXEL_X * scrx) + (UNITS_PER_PIXEL_Y * scry) + camx;
 		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
@@ -62,12 +62,12 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 	float adjust_y = (VIEW_H_HALF + 0.5f) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		r.x = floor(((x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X)+0.5f);
-		r.y = floor(((x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y)+0.5f);
+		r.x = int(floor(((x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X)+0.5f));
+		r.y = int(floor(((x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y)+0.5f));
 	}
 	else { //TILESET_ORTHOGONAL
-		r.x = (x - camx + adjust_x)/UNITS_PER_PIXEL_X;
-		r.y = (y - camy + adjust_y)/UNITS_PER_PIXEL_Y;
+		r.x = int((x - camx + adjust_x)/UNITS_PER_PIXEL_X);
+		r.y = int((y - camy + adjust_y)/UNITS_PER_PIXEL_Y);
 	}
 	return r;
 }
@@ -166,7 +166,7 @@ int calcDirection(float x0, float y0, float x1, float y1) {
 	const float pi = 3.1415926535898f;
 	float theta = calcTheta(x0, y0, x1, y1);
 	float val = theta / (pi/4);
-	int dir = ((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4;
+	int dir = int(((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4);
 	dir = (dir + 1) % 8;
 	if (dir >= 0 && dir < 8)
 		return dir;
@@ -253,6 +253,6 @@ void alignToScreenEdge(std::string alignment, Rect *r) {
 void alignFPoint(FPoint *pos) {
 	if (!pos) return;
 
-	pos->x = floor(pos->x / 0.0625) * 0.0625;
-	pos->y = floor(pos->y / 0.0625) * 0.0625;
+	pos->x = floor(pos->x / 0.0625f) * 0.0625f;
+	pos->y = floor(pos->y / 0.0625f) * 0.0625f;
 }

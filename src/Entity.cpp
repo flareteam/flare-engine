@@ -139,16 +139,16 @@ void Entity::move_from_offending_tile() {
 		float pushy = 0;
 
 		if (mapr->collider.is_valid_position(stats.pos.x + 1, stats.pos.y, stats.movement_type, stats.hero))
-			pushx += 0.1 * (2 - (int(stats.pos.x + 1) + 0.5 - stats.pos.x));
+			pushx += 0.1f * (2 - (int(stats.pos.x + 1) + 0.5f - stats.pos.x));
 
 		if (mapr->collider.is_valid_position(stats.pos.x - 1, stats.pos.y, stats.movement_type, stats.hero))
-			pushx -= 0.1 * (2 - (stats.pos.x - (int(stats.pos.x - 1) + 0.5)));
+			pushx -= 0.1f * (2 - (stats.pos.x - (int(stats.pos.x - 1) + 0.5f)));
 
 		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y + 1, stats.movement_type, stats.hero))
-			pushy += 0.1 * (2 - (int(stats.pos.y + 1) + 0.5 - stats.pos.y));
+			pushy += 0.1f * (2 - (int(stats.pos.y + 1) + 0.5f - stats.pos.y));
 
 		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y- 1, stats.movement_type, stats.hero))
-			pushy -= 0.1 * (2 - (stats.pos.y - (int(stats.pos.y - 1) + 0.5)));
+			pushy -= 0.1f * (2 - (stats.pos.y - (int(stats.pos.y - 1) + 0.5f)));
 
 		stats.pos.x += pushx;
 		stats.pos.y += pushy;
@@ -158,8 +158,8 @@ void Entity::move_from_offending_tile() {
 		// just blink away. This will seriously irritate the player, but there
 		// is probably no other easy way to repair the game
 		if (pushx == 0 && pushy == 0) {
-			stats.pos.x = randBetween(1, mapr->w-1);
-			stats.pos.y = randBetween(1, mapr->h-1);
+			stats.pos.x = randBetween(1, mapr->w-1) + 0.5f;
+			stats.pos.y = randBetween(1, mapr->h-1) + 0.5f;
 			fprintf(stderr, "%s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!\n",
 					stats.hero ? "The hero" : "An entity");
 		}

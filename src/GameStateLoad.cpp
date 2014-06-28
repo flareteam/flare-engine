@@ -539,8 +539,8 @@ void GameStateLoad::render() {
 	// portrait
 	if (selected_slot >= 0 && portrait != NULL && portrait_border != NULL) {
 		render_device->render(portrait);
-		dest.x = portrait->getDest().x;
-		dest.y = portrait->getDest().y;
+		dest.x = int(portrait->getDest().x);
+		dest.y = int(portrait->getDest().y);
 		portrait_border->setDest(dest);
 		render_device->render(portrait_border);
 	}
