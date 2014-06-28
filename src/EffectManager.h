@@ -113,7 +113,7 @@ public:
 	int bonus_defense;
 	int bonus_physical;
 	int bonus_mental;
-	int bonus[STAT_COUNT];
+	std::vector<int> bonus;
 	std::vector<int> bonus_resist;
 
 	bool triggered_others;

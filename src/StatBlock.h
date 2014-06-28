@@ -138,14 +138,14 @@ public:
 	int mental_character;
 
 	// combat stats
-	int starting[STAT_COUNT]; // default level 1 values per stat. Read from file and never changes at runtime.
-	int base[STAT_COUNT]; // values before any active effects are applied
-	int current[STAT_COUNT]; // values after all active effects are applied
-	int per_level[STAT_COUNT]; // value increases each level after level 1
-	int per_physical[STAT_COUNT];
-	int per_mental[STAT_COUNT];
-	int per_offense[STAT_COUNT];
-	int per_defense[STAT_COUNT];
+	std::vector<int> starting; // default level 1 values per stat. Read from file and never changes at runtime.
+	std::vector<int> base; // values before any active effects are applied
+	std::vector<int> current; // values after all active effects are applied
+	std::vector<int> per_level; // value increases each level after level 1
+	std::vector<int> per_physical;
+	std::vector<int> per_mental;
+	std::vector<int> per_offense;
+	std::vector<int> per_defense;
 
 	int get(STAT stat) {
 		return current[stat];

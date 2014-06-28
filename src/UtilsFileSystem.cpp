@@ -68,7 +68,7 @@ void createDir(std::string path) {
 bool isDirectory(const std::string &path) {
 	struct stat st;
 	stat(path.c_str(), &st);
-	return st.st_mode & S_IFDIR;
+	return (st.st_mode & S_IFDIR) != 0;
 }
 
 /**

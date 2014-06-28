@@ -189,6 +189,10 @@ bool MapCollision::is_outside_map(const int& tile_x, const int& tile_y) const {
 	return (tile_x < 0 || tile_y < 0 || tile_x >= map_size.x || tile_y >= map_size.y);
 }
 
+bool MapCollision::is_outside_map(const float& tile_x, const float& tile_y) const {
+	return is_outside_map((int)(tile_x), (int)(tile_y));
+}
+
 /**
  * A map space is empty if it contains no blocking type
  * A position outside the map boundary is not empty

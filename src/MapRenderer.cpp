@@ -349,7 +349,7 @@ void MapRenderer::renderIsoLayer(const unsigned short layerdata[256][256]) {
 		// lower left (south west) corner is caught by having 0 in there, so j>0
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1),	std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
-		Point p = map_to_screen(i, j, shakycam.x, shakycam.y);
+		Point p = map_to_screen(float(i), float(j), shakycam.x, shakycam.y);
 		p = center_tile(p);
 
 		// draw one horizontal line

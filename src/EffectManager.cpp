@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 EffectManager::EffectManager()
-	: bonus()
+	: bonus(std::vector<int>(STAT_COUNT, 0))
 	, bonus_resist(std::vector<int>(ELEMENTS.size(), 0))
 	, triggered_others(false)
 	, triggered_block(false)

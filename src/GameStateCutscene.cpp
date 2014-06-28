@@ -93,7 +93,7 @@ bool Scene::logic(FPoint *caption_margins, bool scale_graphics) {
 
 		if (components.front().type == "caption") {
 
-			int caption_width = render_device->getContextSize().w - (render_device->getContextSize().w * (caption_margins->x * 2.0f));
+			int caption_width = render_device->getContextSize().w - (int)(render_device->getContextSize().w * (caption_margins->x * 2.0f));
 			font->setFont("font_captions");
 			caption = components.front().s;
 			caption_size = font->calc_size(caption, caption_width);

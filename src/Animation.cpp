@@ -279,9 +279,10 @@ void Animation::calculateFrames(std::vector<unsigned short> &fvec, const unsigne
 	fvec.clear();
 
 	if (_frames > 0 && _duration % _frames == 0) {
+		const unsigned short divided = _duration/_frames;
 		// if we can evenly space frames among the duration, do it
-		for (unsigned i=0; i<_frames; ++i) {
-			for (unsigned j=0; j<_duration/_frames; ++j) {
+		for (unsigned i = 0; i < _frames; ++i) {
+			for (unsigned j = 0; j < divided; ++j) {
 				fvec.push_back(i);
 			}
 		}
