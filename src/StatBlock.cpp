@@ -159,6 +159,8 @@ StatBlock::StatBlock()
 	, sfx_critdie("")
 	, sfx_block("")
 	, sfx_levelup("")
+	, max_spendable_stat_points(0)
+	, max_points_per_stat(0)
 	, prev_maxhp(0)
 	, prev_maxmp(0)
 	, pres_hp(0)
@@ -166,13 +168,6 @@ StatBlock::StatBlock()
 	, summons()
 	, summoner(NULL)
 	, attacking(false) {
-
-	// todo: move to init list:
-	max_spendable_stat_points = 0;
-	max_points_per_stat = 0;
-
-	activated_powerslot = 0;
-	on_half_dead_casted = false;
 }
 
 bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
