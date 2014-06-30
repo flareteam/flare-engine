@@ -109,7 +109,7 @@ GameStateTitle::GameStateTitle() : GameState() {
 
 	// set up labels
 	label_version = new WidgetLabel();
-	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, RELEASE_VERSION, font->getColor("menu_normal"));
+	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, getVersionString(), font->getColor("menu_normal"));
 
 	// Setup tab order
 	tablist.add(button_play);

@@ -257,7 +257,7 @@ int main(int argc, char *argv[]) {
 				CUSTOM_PATH_DATA += "/";
 		}
 		else if (parseArg(arg) == "version") {
-			printf("%s\n", RELEASE_VERSION.c_str());
+			printf("%s\n", getVersionString().c_str());
 			done = true;
 		}
 		else if (parseArg(arg) == "renderer") {

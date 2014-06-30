@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 #include <typeinfo>
 #include <cmath>
+#include <iomanip>
 using namespace std;
 
 #include "CommonIncludes.h"
@@ -761,4 +762,23 @@ bool loadDefaults() {
 	VIEW_H_HALF = VIEW_H / 2;
 
 	return true;
+}
+
+/**
+ * Return a string of version name + version number
+ */
+std::string getVersionString() {
+	std::stringstream ss;
+	ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << std::setfill('0') << std::setw(2) << VERSION_MINOR;
+	return ss.str();
+}
+
+/**
+ * Compare version numbers. Returns true if the first number is larger than the second
+ */
+bool compareVersions(int maj0, int min0, int maj1, int min1) {
+	if (maj0 == maj1)
+		return min0 >= min1;
+	else
+		return maj0 >= maj1;
 }

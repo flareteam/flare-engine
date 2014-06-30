@@ -27,7 +27,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-const std::string RELEASE_VERSION = "Flare Alpha v0.19";
+const std::string VERSION_NAME = "Flare Alpha";
+const int VERSION_MAJOR = 0;
+const int VERSION_MINOR = 19;
 
 class Element {
 public:
@@ -184,5 +186,9 @@ void loadMiscSettings();
 bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
+
+// version information
+std::string getVersionString();
+bool compareVersions(int maj0, int min0, int maj1, int min1);
 
 #endif
