@@ -43,6 +43,16 @@ Else(NOT IS_ABSOLUTE "${DATADIR}")
 	add_definitions(-DDATA_INSTALL_DIR="${DATADIR}")
 EndIf(NOT IS_ABSOLUTE "${DATADIR}")
 
+
+# desktop file
+If(NOT IS_ABSOLUTE "${BINDIR}")
+	set(FLARE_EXECUTABLE_PATH ${CMAKE_INSTALL_PREFIX}/${BINDIR}/flare)
+Else(NOT IS_ABSOLUTE "${BINDIR}")
+	set(FLARE_EXECUTABLE_PATH ${BINDIR}/flare)
+EndIf(NOT IS_ABSOLUTE "${BINDIR}")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop")
+
+
 # Detect missing dependencies
 # First, search for SDL2 modules, provided USE_SDL 2 is enabled
 # If any of these modules can't be found, we'll try to fall back to SDL 1.2
@@ -252,7 +262,6 @@ Else (USE_SDL2)
 EndIF (USE_SDL2)
 
 
-
 # installing to the proper places
 install(PROGRAMS
   ${CMAKE_CURRENT_BINARY_DIR}/flare
@@ -264,4 +273,10 @@ install(FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
   DESTINATION ${MANDIR}/man6
   RENAME flare.6)
-
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+install(FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
+  RENAME flare.svg)
