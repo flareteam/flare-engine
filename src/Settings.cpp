@@ -778,7 +778,7 @@ std::string getVersionString() {
  */
 bool compareVersions(int maj0, int min0, int maj1, int min1) {
 	if (maj0 == maj1)
-		return min0 >= min1;
+		return min0 > min1;
 	else
-		return maj0 >= maj1;
+		return maj0 > maj1;
 }
