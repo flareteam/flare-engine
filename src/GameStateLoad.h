@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATELOAD_H
 #define GAMESTATELOAD_H
 
+#include "Animation.h"
 #include "CommonIncludes.h"
 #include "GameState.h"
 #include "StatBlock.h"
@@ -89,6 +90,9 @@ private:
 	// animation info
 	int current_frame;
 	int frame_ticker;
+	int stance_ticks_per_frame;
+	int stance_duration;
+	animation_type stance_type;
 
 	Rect gameslot_pos;
 	Rect preview_pos;
