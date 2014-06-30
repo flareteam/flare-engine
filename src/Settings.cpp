@@ -179,7 +179,7 @@ bool COLORBLIND = false;
 int CORPSE_TIMEOUT;
 bool SELL_WITHOUT_VENDOR;
 int AIM_ASSIST;
-std::string GAME_PREFIX = "";
+std::string SAVE_PREFIX = "";
 std::string WINDOW_TITLE;
 int SOUND_FALLOFF;
 int PARTY_EXP_PERCENTAGE;
@@ -473,9 +473,9 @@ void loadMiscSettings() {
 			// @ATTR window_title|string|Sets the text in the window's titlebar.
 			else if (infile.key == "window_title")
 				WINDOW_TITLE = infile.val;
-			// @ATTR game_prefix|string|A string that's prepended to save filenames to prevent conflicts between mods.
-			else if (infile.key == "game_prefix")
-				GAME_PREFIX = infile.val;
+			// @ATTR save_prefix|string|A string that's prepended to save filenames to prevent conflicts between mods.
+			else if (infile.key == "save_prefix")
+				SAVE_PREFIX = infile.val;
 			// @ATTR sound_falloff|integer|The maximum radius in tiles that any single sound is audible.
 			else if (infile.key == "sound_falloff")
 				SOUND_FALLOFF = toInt(infile.val);

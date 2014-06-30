@@ -61,8 +61,8 @@ void GameStatePlay::saveGame() {
 	stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		ss << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		ss << SAVE_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
 	outfile.open(ss.str().c_str(), ios::out);
@@ -152,8 +152,8 @@ void GameStatePlay::saveGame() {
 	// Save stash
 	ss.str("");
 	ss << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		ss << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		ss << SAVE_PREFIX << "_";
 	ss << "stash";
 	if (pc->stats.permadeath)
 		ss << "_HC" << game_slot;
@@ -194,8 +194,8 @@ void GameStatePlay::loadGame() {
 	stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		ss << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		ss << SAVE_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
 	if (infile.open(ss.str(), false)) {
@@ -375,8 +375,8 @@ void GameStatePlay::loadStash() {
 	stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		ss << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		ss << SAVE_PREFIX << "_";
 	ss << "stash";
 	if (pc->stats.permadeath)
 		ss << "_HC" << game_slot;

@@ -123,7 +123,7 @@ extern int CORPSE_TIMEOUT;
 extern bool SELL_WITHOUT_VENDOR;
 extern int AIM_ASSIST;
 extern std::string WINDOW_TITLE;
-extern std::string GAME_PREFIX;
+extern std::string SAVE_PREFIX;
 extern int SOUND_FALLOFF;
 extern int PARTY_EXP_PERCENTAGE;
 extern bool ENABLE_ALLY_COLLISION_AI;
