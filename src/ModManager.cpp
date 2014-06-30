@@ -53,8 +53,6 @@ ModManager::ModManager() {
 	setPaths();
 
 	vector<string> mod_dirs_other;
-	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs);
-	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
 	getDirList(PATH_DATA + "mods", mod_dirs_other);
 	getDirList(PATH_USER + "mods", mod_dirs_other);
 
@@ -211,13 +209,9 @@ vector<string> ModManager::list(const string &path, bool full_paths) {
 void ModManager::setPaths() {
 	// set some flags if directories are identical
 	bool uniq_path_data = PATH_USER != PATH_DATA;
-	bool uniq_path_default_user = PATH_USER != PATH_DEFAULT_USER && PATH_DATA != PATH_DEFAULT_USER;
-	bool uniq_path_default_data = PATH_USER != PATH_DEFAULT_DATA && PATH_DATA != PATH_DEFAULT_DATA && PATH_DEFAULT_USER != PATH_DEFAULT_DATA;
 
 	mod_paths.push_back(PATH_USER);
 	if (uniq_path_data) mod_paths.push_back(PATH_DATA);
-	if (uniq_path_default_user) mod_paths.push_back(PATH_DEFAULT_USER);
-	if (uniq_path_default_data) mod_paths.push_back(PATH_DEFAULT_DATA);
 }
 
 Mod ModManager::loadMod(std::string name) {
@@ -274,7 +268,9 @@ Mod ModManager::loadMod(std::string name) {
 void ModManager::applyDepends() {
 	std::vector<Mod> new_mods;
 	bool finished = true;
-	std::string game = mod_list.back().game;
+	std::string game;
+	if (!mod_list.empty())
+		game = mod_list.back().game;
 
 	for (unsigned i=0; i<mod_list.size(); i++) {
 		// skip the mod if the game doesn't match

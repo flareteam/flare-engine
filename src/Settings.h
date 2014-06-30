@@ -66,14 +66,10 @@ public:
 };
 
 // Path info
-extern std::string GAME_FOLDER;
-extern std::string DEFAULT_FOLDER;
 extern std::string PATH_CONF; // user-configurable settings files
 extern std::string PATH_USER; // important per-user data (saves)
 extern std::string PATH_DATA; // common game data
 extern std::string CUSTOM_PATH_DATA; // user-defined replacement for PATH_DATA
-extern std::string PATH_DEFAULT_USER; // similar to PATH_USER, except for the default game
-extern std::string PATH_DEFAULT_DATA; // similar to PATH_DATA, except for the default game
 
 // Filenames
 extern std::string FILE_SETTINGS;     // Name of the settings file (e.g. "settings.txt").

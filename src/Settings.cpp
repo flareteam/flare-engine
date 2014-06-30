@@ -74,14 +74,10 @@ ConfigEntry config[] = {
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
 // Paths
-string GAME_FOLDER = "default";
-string DEFAULT_FOLDER = "default";
 string PATH_CONF = "";
 string PATH_USER = "";
 string PATH_DATA = "";
 string CUSTOM_PATH_DATA = "";
-string PATH_DEFAULT_USER = "";
-string PATH_DEFAULT_DATA = "";
 
 // Filenames
 string FILE_SETTINGS	= "settings.txt";
@@ -207,8 +203,6 @@ void setPaths() {
 	PATH_CONF = "config";
 	PATH_USER = "saves";
 	PATH_DATA = "";
-	PATH_DEFAULT_USER = "";
-	PATH_DEFAULT_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
@@ -225,8 +219,6 @@ void setPaths() {
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
-	PATH_DEFAULT_USER = "PROGDIR:";
-	PATH_DEFAULT_DATA = "PROGDIR:";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
@@ -236,14 +228,10 @@ void setPaths() {
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 
-	// Note: If the GAME_FOLDER isn't defined, we fall back to using the current directory
-
 	// set config path (settings, keybindings)
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
 		PATH_CONF = (string)getenv("XDG_CONFIG_HOME") + "/flare/";
-		createDir(PATH_CONF);
-		PATH_CONF += GAME_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// $HOME/.config/flare/
@@ -251,8 +239,6 @@ void setPaths() {
 		PATH_CONF = (string)getenv("HOME") + "/.config/";
 		createDir(PATH_CONF);
 		PATH_CONF += "flare/";
-		createDir(PATH_CONF);
-		PATH_CONF += GAME_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// ./config/
@@ -266,12 +252,7 @@ void setPaths() {
 	if (getenv("XDG_DATA_HOME") != NULL) {
 		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
 		createDir(PATH_USER);
-		PATH_DEFAULT_USER = PATH_USER + DEFAULT_FOLDER + "/";
-		PATH_USER += GAME_FOLDER + "/";
-		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
-		createDir(PATH_DEFAULT_USER);
-		createDir(PATH_DEFAULT_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -281,19 +262,12 @@ void setPaths() {
 		createDir(PATH_USER);
 		PATH_USER += "flare/";
 		createDir(PATH_USER);
-		PATH_DEFAULT_USER = PATH_USER + DEFAULT_FOLDER + "/";
-		PATH_USER += GAME_FOLDER + "/";
-		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
-		createDir(PATH_DEFAULT_USER);
-		createDir(PATH_DEFAULT_USER + "mods/");
 	}
 	// ./saves/
 	else {
 		PATH_USER = "./saves/";
 		createDir(PATH_USER);
-		PATH_DEFAULT_USER = "./saves/";
-		createDir(PATH_DEFAULT_USER);
 	}
 
 	// data folder
@@ -307,21 +281,18 @@ void setPaths() {
 
 	// these flags are set to true when a valid directory is found
 	bool path_data = false;
-	bool path_default_data = false;
 
 	// if the user specified a data path, try to use it
 	if (dirExists(CUSTOM_PATH_DATA)) {
 		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
-		if (!path_default_data) PATH_DEFAULT_DATA = CUSTOM_PATH_DATA;
-		path_data = path_default_data = true;
+		path_data = true;
 	}
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
 		if (!path_data) PATH_DATA = "./";
-		if (!path_default_data) PATH_DEFAULT_DATA = "./";
-		path_data = path_default_data = true;
+		path_data = true;
 	}
 
 	// check $XDG_DATA_DIRS options
@@ -332,50 +303,35 @@ void setPaths() {
 		pathtest = popFirstString(pathlist,':');
 		while (pathtest != "") {
 			if (!path_data) {
-				PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
+				PATH_DATA = pathtest + "/flare/";
 				if (dirExists(PATH_DATA)) path_data = true;
 			}
-			if (!path_default_data) {
-				PATH_DEFAULT_DATA = pathtest + "/flare/" + DEFAULT_FOLDER + "/";
-				if (dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
-			}
-			if (path_data && path_default_data) break;
+			if (path_data) break;
 			pathtest = popFirstString(pathlist,':');
 		}
 	}
 
 #if defined DATA_INSTALL_DIR
-	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = DATA_INSTALL_DIR "/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	if (!path_data) PATH_DATA = "/usr/local/share/flare/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = "/usr/local/share/flare/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/local/share/flare/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
-	if (!path_data) PATH_DATA = "/usr/share/flare/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = "/usr/share/flare/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/share/flare/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// check "games" variants of these
-	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/local/share/games/flare/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
-	if (!path_data) PATH_DATA = "/usr/share/games/flare/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = "/usr/share/games/flare/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/share/games/flare/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// finally assume the local folder
 	if (!path_data)	PATH_DATA = "./";
-	if (!path_default_data) PATH_DEFAULT_DATA = "./";
 }
 #endif
 
