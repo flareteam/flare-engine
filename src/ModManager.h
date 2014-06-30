@@ -39,6 +39,7 @@ public:
 	bool operator!= (const Mod &mod) const;
 	std::string name;
 	std::string description;
+	std::string game;
 	std::vector<std::string> depends;
 };
 

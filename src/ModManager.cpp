@@ -34,6 +34,7 @@ Mod::~Mod() {
 Mod::Mod(const Mod &mod)
 	: name(mod.name)
 	, description(mod.description)
+	, game(mod.game)
 	, depends(mod.depends) {
 }
 
@@ -254,6 +255,9 @@ Mod ModManager::loadMod(std::string name) {
 					mod.depends.push_back(dep);
 				}
 			}
+			else if (key == "game") {
+				mod.game = val;
+			}
 		}
 		if (infile.good()) {
 			infile.close();
@@ -270,8 +274,15 @@ Mod ModManager::loadMod(std::string name) {
 void ModManager::applyDepends() {
 	std::vector<Mod> new_mods;
 	bool finished = true;
+	std::string game = mod_list.back().game;
 
 	for (unsigned i=0; i<mod_list.size(); i++) {
+		// skip the mod if the game doesn't match
+		if (mod_list[i].game != game && mod_list[i].name != FALLBACK_MOD) {
+			fprintf(stderr, "Tried to enable \"%s\", but failed. Game does not match \"%s\".\n", mod_list[i].name.c_str(), game.c_str());
+			continue;
+		}
+
 		// skip the mod if it's already in the new_mods list
 		if (find(new_mods.begin(), new_mods.end(), mod_list[i]) != new_mods.end()) {
 			continue;
@@ -291,7 +302,12 @@ void ModManager::applyDepends() {
 					// if we don't already have this dependency, try to load it from the list of available mods
 					if (find(mod_dirs.begin(), mod_dirs.end(), mod_list[i].depends[j]) != mod_dirs.end()) {
 						Mod new_depend = loadMod(mod_list[i].depends[j]);
-						if (find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
+						if (new_depend.game != game) {
+							fprintf(stderr, "Tried to enable dependency \"%s\", but failed. Game does not match \"%s\".\n", new_depend.name.c_str(), game.c_str());
+							depends_met = false;
+							break;
+						}
+						else if (find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
 							printf("Mod \"%s\" requires the \"%s\" mod. Enabling \"%s\" now.\n", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str(), mod_list[i].depends[j].c_str());
 							new_mods.push_back(new_depend);
 							finished = false;
