@@ -118,7 +118,6 @@ void InputState::defaultJoystickBindings () {
 		binding_joy[key] = -1;
 	}
 
-	// TODO make these configurable from the config menu
 	binding_joy[CANCEL] = 0;
 	binding_joy[ACCEPT] = 1;
 	binding_joy[ACTIONBAR] = 2;

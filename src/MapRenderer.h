@@ -41,8 +41,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class FileParser;
 class WidgetTooltip;
 
-// TODO: Move these Map_* classes to its own file.
-
 class MapRenderer : public Map {
 private:
 
