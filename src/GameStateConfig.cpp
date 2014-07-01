@@ -734,7 +734,9 @@ void GameStateConfig::logic () {
 			saveSettings();
 			delete requestedGameState;
 			requestedGameState = new GameStateResolution(width, height, fullscreen, hwsurface, doublebuf);
-			// FIXME Can we do this safely?
+
+			// We need to be carful here. GameStateConfig has been deconstructed,
+			// so we need to avoid accessing any dynamically allocated objects
 			return;
 		}
 		else if (defaults_button->checkClick()) {
@@ -953,8 +955,10 @@ void GameStateConfig::logic () {
 }
 
 void GameStateConfig::render () {
-	if (requestedGameState != NULL)
+	if (requestedGameState != NULL) {
+		// we're in the process of switching game states, so skip rendering
 		return;
+	}
 
 	int tabheight = tabControl->getTabHeight();
 	Rect	pos;
