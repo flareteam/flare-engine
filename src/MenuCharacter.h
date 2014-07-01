@@ -106,8 +106,6 @@ public:
 		return skill_points;
 	}
 
-	bool newPowerNotification;
-
 	TabList tablist;
 
 };
