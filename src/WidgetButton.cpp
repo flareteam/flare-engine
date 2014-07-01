@@ -143,7 +143,6 @@ void WidgetButton::render() {
 	wlabel.render();
 
 	// render the tooltip
-	// TODO move this to menu rendering
 	if (!tip_new.isEmpty()) {
 		if (!tip_new.compare(&tip_buf)) {
 			tip_buf.clear();
