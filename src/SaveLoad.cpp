@@ -411,6 +411,7 @@ void GameStatePlay::applyPlayerData() {
 
 	// initialize vars
 	pc->stats.recalc();
+	pc->stats.loadHeroSFX();
 	menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
 	pc->stats.logic(); // run stat logic once to apply items bonuses
 
