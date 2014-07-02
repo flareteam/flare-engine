@@ -260,7 +260,8 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	, renderer(NULL)
 	, texture(NULL)
 #endif
-	, titlebar_icon(NULL) {
+	, titlebar_icon(NULL)
+	, title(NULL) {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	cout << "Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)" << endl;
 #else
@@ -276,7 +277,7 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 	bool window_created = false;
 
 	// window title and icon
-	const char* title = msg->get(WINDOW_TITLE).c_str();
+	title = strdup(msg->get(WINDOW_TITLE).c_str());
 	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
 
 #if SDL_VERSION_ATLEAST(2,0,0)
@@ -562,6 +563,10 @@ void SDLSoftwareRenderDevice::destroyContext() {
 	if (window) {
 		SDL_DestroyWindow(window);
 		window = NULL;
+	}
+	if (title) {
+		free(title);
+		title = NULL;
 	}
 #endif
 
