@@ -35,7 +35,8 @@ MenuItemStorage::MenuItemStorage()
 	, slot_type()
 	, drag_prev_slot(-1)
 	, slots()
-	, highlight(NULL) {
+	, highlight(NULL)
+	, highlight_image(NULL) {
 }
 
 void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb_cols) {
