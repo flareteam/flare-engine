@@ -731,8 +731,11 @@ void StatBlock::loadHeroStats() {
 		infile.close();
 	}
 	max_spendable_stat_points = xp_table.size() * stat_points_per_level;
+}
 
+void StatBlock::loadHeroSFX() {
 	// load the paths to base sound effects
+	FileParser infile;
 	if (infile.open("engine/avatar/"+gfx_base+".txt", true, "")) {
 		while(infile.next()) {
 			loadSfxStat(&infile);
