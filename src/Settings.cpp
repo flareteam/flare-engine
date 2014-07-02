@@ -384,6 +384,8 @@ static ConfigEntry * getConfigEntry(const char * name) {
 	for (int i = 0; i < config_size; i++) {
 		if (std::strcmp(config[i].name, name) == 0) return config + i;
 	}
+
+	fprintf(stderr, "Error: '%s' is not a valid configuration key.\n", name);
 	return NULL;
 }
 
@@ -731,7 +733,6 @@ bool loadSettings() {
 
 	// init defaults
 	for (int i = 0; i < config_size; i++) {
-		// TODO: handle errors
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
@@ -750,7 +751,6 @@ bool loadSettings() {
 
 		ConfigEntry * entry = getConfigEntry(infile.key);
 		if (entry) {
-			// TODO: handle errors
 			tryParseValue(*entry->type, infile.val, entry->storage);
 		}
 	}
@@ -795,7 +795,6 @@ bool loadDefaults() {
 
 	// HACK init defaults except video
 	for (int i = 3; i < config_size; i++) {
-		// TODO: handle errors
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
