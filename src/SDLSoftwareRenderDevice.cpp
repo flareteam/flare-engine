@@ -118,33 +118,39 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 		return NULL;
 
 	SDLSoftwareImage *scaled = new SDLSoftwareImage(device);
-	scaled->surface = SDL_CreateRGBSurface(surface->flags, width, height,
-										   surface->format->BitsPerPixel,
-										   surface->format->Rmask,
-										   surface->format->Gmask,
-										   surface->format->Bmask,
-										   surface->format->Amask);
 
-	if (scaled->surface) {
-		double _stretch_factor_x, _stretch_factor_y;
-		_stretch_factor_x = width / (double)surface->w;
-		_stretch_factor_y = height / (double)surface->h;
+	if (scaled) {
+		scaled->surface = SDL_CreateRGBSurface(surface->flags, width, height,
+											   surface->format->BitsPerPixel,
+											   surface->format->Rmask,
+											   surface->format->Gmask,
+											   surface->format->Bmask,
+											   surface->format->Amask);
 
-		for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
-			for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
-				Uint32 spixel = readPixel(x, y);
-				for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
-					for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
-						Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
-						Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
-						scaled->drawPixel(dx, dy, spixel);
+		if (scaled->surface) {
+			double _stretch_factor_x, _stretch_factor_y;
+			_stretch_factor_x = width / (double)surface->w;
+			_stretch_factor_y = height / (double)surface->h;
+
+			for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
+				for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
+					Uint32 spixel = readPixel(x, y);
+					for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
+						for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
+							Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
+							Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
+							scaled->drawPixel(dx, dy, spixel);
+						}
 					}
 				}
 			}
+			// delete the old image and return the new one
+			this->unref();
+			return scaled;
 		}
-		// delete the old image and return the new one
-		this->unref();
-		return scaled;
+		else {
+			delete scaled;
+		}
 	}
 
 	return NULL;
