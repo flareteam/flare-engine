@@ -594,8 +594,8 @@ void GameStatePlay::checkNotifications() {
 		pc->newLevelNotification = false;
 		menu->act->requires_attention[MENU_CHARACTER] = true;
 	}
-	if (menu->chr->newPowerNotification) {
-		menu->chr->newPowerNotification = false;
+	if (menu->pow->newPowerNotification) {
+		menu->pow->newPowerNotification = false;
 		menu->act->requires_attention[MENU_POWERS] = true;
 	}
 	if (quests->resetQuestNotification) { //remove if no quests

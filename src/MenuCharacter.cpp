@@ -50,7 +50,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	skill_points = 0;
 
 	visible = false;
-	newPowerNotification = false;
 
 	for (int i=0; i<CSTAT_COUNT; i++) {
 		cstat[i].label = new WidgetLabel();
@@ -576,7 +575,6 @@ bool MenuCharacter::checkUpgrade() {
 		if (physical_up) {
 			stats->physical_character++;
 			stats->recalc(); // equipment applied by MenuManager
-			newPowerNotification = true; //TODO: Only show if a NEW power is unlocked...
 			physical_up = false;
 			return true;
 		}
@@ -584,7 +582,6 @@ bool MenuCharacter::checkUpgrade() {
 		else if (mental_up) {
 			stats->mental_character++;
 			stats->recalc(); // equipment applied by MenuManager
-			newPowerNotification = true;
 			mental_up = false;
 			return true;
 		}
@@ -592,7 +589,6 @@ bool MenuCharacter::checkUpgrade() {
 		else if (offense_up) {
 			stats->offense_character++;
 			stats->recalc(); // equipment applied by MenuManager
-			newPowerNotification = true;
 			offense_up = false;
 			return true;
 		}
@@ -600,7 +596,6 @@ bool MenuCharacter::checkUpgrade() {
 		else if (defense_up) {
 			stats->defense_character++;
 			stats->recalc(); // equipment applied by MenuManager
-			newPowerNotification = true;
 			defense_up = false;
 			return true;
 		}

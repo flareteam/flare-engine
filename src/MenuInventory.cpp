@@ -349,10 +349,14 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 	if (drag_prev_src != -1)
 		drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
 
+	// abort if we don't have a valid source slot
+	if (drag_prev_slot == -1)
+		return;
+
 	if (area == EQUIPMENT) { // dropped onto equipped item
 
 		// make sure the item is going to the correct slot
-		// note: equipment slots 0-3 correspond with item types 0-3
+		// we match slot_type to stack.item's type to place items in the proper slots
 		// also check to see if the hero meets the requirements
 		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid) {
 			if (inventory[area][slot].item == stack.item) {
@@ -708,9 +712,8 @@ bool MenuInventory::requirementsMet(int item) {
 void MenuInventory::updateEquipment(int slot) {
 
 	if (slot == -1) {
-		//FIXME What todo here
-		//return;
-		changed_equipment = true;
+		// This should never happen, but ignore it if it does
+		return;
 	}
 	else if (slot_type[slot] != "artifact") {
 		changed_equipment = true;

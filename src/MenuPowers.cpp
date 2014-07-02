@@ -50,6 +50,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar) {
 	tabs_count = 1;
 	pressed = false;
 	skip_section = false;
+	newPowerNotification = false;
 
 	tabControl = NULL;
 
@@ -503,6 +504,9 @@ void MenuPowers::logic() {
 	}
 
 	points_left = (stats->level * stats->power_points_per_level) - getPointsUsed();
+	if (points_left > 0) {
+		newPowerNotification = true;
+	}
 
 	if (!visible) return;
 

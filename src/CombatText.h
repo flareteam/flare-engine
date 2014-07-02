@@ -38,11 +38,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define COMBAT_MESSAGE_MISS 3
 #define COMBAT_MESSAGE_BUFF 4
 
-// TODO: move this to the combat text engine file
-// Map positions are between the feet of the entity at the floor level.
-// This offset starts combat text "above" the common enemy height.
-#define COMBAT_TEXT_STARTING_OFFSET 48;
-
 class WidgetLabel;
 
 class Combat_Text_Item {
@@ -75,6 +70,7 @@ private:
 	Color msg_color[5];
 	int duration;
 	int speed;
+	int offset;
 };
 
 #endif

@@ -53,6 +53,7 @@ CombatText::CombatText() {
 
 	duration = MAX_FRAMES_PER_SEC; // 1 second
 	speed = 1;
+	offset = 48; // average height of flare-game enemies, so a sensible default
 
 	// Load config settings
 	FileParser infile;
@@ -66,6 +67,10 @@ CombatText::CombatText() {
 			else if(infile.key == "speed") {
 				// @ATTR speed|integer|Motion speed of the combat text.
 				speed = toInt(infile.val);
+			}
+			else if (infile.key == "offset") {
+				// @ATTR offset|integer|The vertical offset for the combat text's starting position.
+				offset = toInt(infile.val);
 			}
 		}
 		infile.close();
@@ -90,7 +95,7 @@ void CombatText::addMessage(std::string message, FPoint location, int displaytyp
 		WidgetLabel *label = new WidgetLabel();
 		c->pos.x = location.x;
 		c->pos.y = location.y;
-		c->floating_offset = COMBAT_TEXT_STARTING_OFFSET;
+		c->floating_offset = offset;
 		c->label = label;
 		c->text = message;
 		c->lifespan = duration;
