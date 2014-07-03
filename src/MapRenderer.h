@@ -52,7 +52,7 @@ private:
 	bool show_tooltip;
 
 	bool enemyGroupPlaceEnemy(float x, float y, Map_Group &g);
-	void pushEnemyGroup(Map_Group g);
+	void pushEnemyGroup(Map_Group &g);
 
 	std::string played_music_filename;
 
