@@ -41,6 +41,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, Image *
 	, number_frames(0)
 	, cur_frame(0)
 	, cur_frame_index(0)
+	, cur_frame_duration(0)
 	, max_kinds(0)
 	, additional_data(0)
 	, times_played(0)

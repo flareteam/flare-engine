@@ -84,9 +84,9 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 				carried_area.y = popFirstInt(infile.val);
 			}
 			// @ATTR carried_cols|integer|The number of columns for the normal inventory.
-			else if (infile.key == "carried_cols") carried_cols = toInt(infile.val);
+			else if (infile.key == "carried_cols") carried_cols = max(1, toInt(infile.val));
 			// @ATTR carried_rows|integer|The number of rows for the normal inventory.
-			else if (infile.key == "carried_rows") carried_rows = toInt(infile.val);
+			else if (infile.key == "carried_rows") carried_rows = max(1, toInt(infile.val));
 			// @ATTR label_title|label|Position of the "Inventory" label.
 			else if (infile.key == "label_title") title =  eatLabelInfo(infile.val);
 			// @ATTR currency|label|Position of the label that displays the total currency being carried.

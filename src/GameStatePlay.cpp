@@ -69,6 +69,7 @@ GameStatePlay::GameStatePlay()
 	: GameState()
 	, enemy(NULL)
 	, loading(new WidgetLabel())
+	, loading_bg(NULL)
 	// Load the loading screen image (we currently use the confirm dialog background):
 	, npc_id(-1)
 	, eventDialogOngoing(false)

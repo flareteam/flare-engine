@@ -39,20 +39,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar) {
-
-	stats = _stats;
-	action_bar = _action_bar;
-
-	visible = false;
-
-	points_left = 0;
-	tabs_count = 1;
-	pressed = false;
-	skip_section = false;
-	newPowerNotification = false;
-
-	tabControl = NULL;
+MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
+	: stats(_stats)
+	, action_bar(_action_bar)
+	, skip_section(false)
+	, powers_unlock(NULL)
+	, overlay_disabled(NULL)
+	, pressed(false)
+	, points_left(0)
+	, tabs_count(1)
+	, tabControl(NULL)
+	, newPowerNotification(false)
+{
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 

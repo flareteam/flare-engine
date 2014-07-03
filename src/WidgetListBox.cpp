@@ -33,6 +33,7 @@ using namespace std;
 WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
+	, listboxs(NULL)
 	, list_amount(amount)
 	, list_height(height)
 	, cursor(0)

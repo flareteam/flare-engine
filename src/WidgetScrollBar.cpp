@@ -30,6 +30,7 @@ using namespace std;
 WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
+	, scrollbars(NULL)
 	, value(0)
 	, bar_height(0)
 	, maximum(0)

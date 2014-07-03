@@ -30,10 +30,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
-GameStateTitle::GameStateTitle() : GameState() {
-
-	exit_game = false;
-	load_game = false;
+GameStateTitle::GameStateTitle()
+	: GameState()
+	, logo(NULL)
+	, exit_game(false)
+	, load_game(false)
+{
 
 	// set up buttons
 	button_play = new WidgetButton("images/menus/buttons/button_default.png");

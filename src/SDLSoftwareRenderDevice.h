@@ -101,6 +101,7 @@ private:
 	SDL_Texture* texture;
 #endif
 	SDL_Surface* titlebar_icon;
+	char* title;
 };
 
 #endif // SDLSOFTWARERENDERDEVICE_H
