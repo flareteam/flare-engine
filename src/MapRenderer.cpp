@@ -90,7 +90,7 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 	return false;
 }
 
-void MapRenderer::pushEnemyGroup(Map_Group g) {
+void MapRenderer::pushEnemyGroup(Map_Group &g) {
 	// activate at all?
 	float activate_chance = (rand() % 100) / 100.0f;
 	if (activate_chance > g.chance) {
