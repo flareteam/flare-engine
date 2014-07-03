@@ -21,11 +21,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
+#include <limits.h>
+
 using namespace std;
 
 Mod::Mod()
 	: name("")
-	, description("") {
+	, description("")
+	, game("")
+	, min_version_major(0)
+	, min_version_minor(0)
+	, max_version_major(INT_MAX)
+	, max_version_minor(INT_MAX) {
 }
 
 Mod::~Mod() {
@@ -34,6 +41,11 @@ Mod::~Mod() {
 Mod::Mod(const Mod &mod)
 	: name(mod.name)
 	, description(mod.description)
+	, game(mod.game)
+	, min_version_major(mod.min_version_major)
+	, min_version_minor(mod.min_version_minor)
+	, max_version_major(mod.max_version_major)
+	, max_version_minor(mod.max_version_minor)
 	, depends(mod.depends) {
 }
 
@@ -52,8 +64,6 @@ ModManager::ModManager() {
 	setPaths();
 
 	vector<string> mod_dirs_other;
-	getDirList(PATH_DEFAULT_DATA + "mods", mod_dirs);
-	getDirList(PATH_DEFAULT_USER + "mods", mod_dirs_other);
 	getDirList(PATH_DATA + "mods", mod_dirs_other);
 	getDirList(PATH_USER + "mods", mod_dirs_other);
 
@@ -210,13 +220,9 @@ vector<string> ModManager::list(const string &path, bool full_paths) {
 void ModManager::setPaths() {
 	// set some flags if directories are identical
 	bool uniq_path_data = PATH_USER != PATH_DATA;
-	bool uniq_path_default_user = PATH_USER != PATH_DEFAULT_USER && PATH_DATA != PATH_DEFAULT_USER;
-	bool uniq_path_default_data = PATH_USER != PATH_DEFAULT_DATA && PATH_DATA != PATH_DEFAULT_DATA && PATH_DEFAULT_USER != PATH_DEFAULT_DATA;
 
 	mod_paths.push_back(PATH_USER);
 	if (uniq_path_data) mod_paths.push_back(PATH_DATA);
-	if (uniq_path_default_user) mod_paths.push_back(PATH_DEFAULT_USER);
-	if (uniq_path_default_data) mod_paths.push_back(PATH_DEFAULT_DATA);
 }
 
 Mod ModManager::loadMod(std::string name) {
@@ -254,6 +260,19 @@ Mod ModManager::loadMod(std::string name) {
 					mod.depends.push_back(dep);
 				}
 			}
+			else if (key == "game") {
+				mod.game = val;
+			}
+			else if (key == "version_min") {
+				val = val + '.';
+				mod.min_version_major = popFirstInt(val, '.');
+				mod.min_version_minor = popFirstInt(val, '.');
+			}
+			else if (key == "version_max") {
+				val = val + '.';
+				mod.max_version_major = popFirstInt(val, '.');
+				mod.max_version_minor = popFirstInt(val, '.');
+			}
 		}
 		if (infile.good()) {
 			infile.close();
@@ -270,8 +289,25 @@ Mod ModManager::loadMod(std::string name) {
 void ModManager::applyDepends() {
 	std::vector<Mod> new_mods;
 	bool finished = true;
+	std::string game;
+	if (!mod_list.empty())
+		game = mod_list.back().game;
 
 	for (unsigned i=0; i<mod_list.size(); i++) {
+		// skip the mod if the game doesn't match
+		if (mod_list[i].game != game && mod_list[i].name != FALLBACK_MOD) {
+			fprintf(stderr, "Tried to enable \"%s\", but failed. Game does not match \"%s\".\n", mod_list[i].name.c_str(), game.c_str());
+			continue;
+		}
+
+		// skip the mod if it's incompatible with this engine version
+		if (compareVersions(mod_list[i].min_version_major, mod_list[i].min_version_minor, VERSION_MAJOR, VERSION_MINOR) ||
+		    compareVersions(VERSION_MAJOR, VERSION_MINOR, mod_list[i].max_version_major, mod_list[i].max_version_minor)) {
+
+			fprintf(stderr, "Tried to enable \"%s\", but failed. Not compatible with engine version %d.%02d.\n", mod_list[i].name.c_str(), VERSION_MAJOR, VERSION_MINOR);
+			continue;
+		}
+
 		// skip the mod if it's already in the new_mods list
 		if (find(new_mods.begin(), new_mods.end(), mod_list[i]) != new_mods.end()) {
 			continue;
@@ -291,7 +327,19 @@ void ModManager::applyDepends() {
 					// if we don't already have this dependency, try to load it from the list of available mods
 					if (find(mod_dirs.begin(), mod_dirs.end(), mod_list[i].depends[j]) != mod_dirs.end()) {
 						Mod new_depend = loadMod(mod_list[i].depends[j]);
-						if (find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
+						if (new_depend.game != game) {
+							fprintf(stderr, "Tried to enable dependency \"%s\" for \"%s\", but failed. Game does not match \"%s\".\n", new_depend.name.c_str(), mod_list[i].name.c_str(), game.c_str());
+							depends_met = false;
+							break;
+						}
+						else if (compareVersions(new_depend.min_version_major, new_depend.min_version_minor, VERSION_MAJOR, VERSION_MINOR) ||
+						         compareVersions(VERSION_MAJOR, VERSION_MINOR, new_depend.max_version_major, new_depend.max_version_minor)) {
+
+							fprintf(stderr, "Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %d.%02d.\n", new_depend.name.c_str(), mod_list[i].name.c_str(), VERSION_MAJOR, VERSION_MINOR);
+							depends_met = false;
+							break;
+						}
+						else if (find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
 							printf("Mod \"%s\" requires the \"%s\" mod. Enabling \"%s\" now.\n", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str(), mod_list[i].depends[j].c_str());
 							new_mods.push_back(new_depend);
 							finished = false;

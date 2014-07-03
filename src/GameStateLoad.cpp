@@ -285,8 +285,8 @@ void GameStateLoad::readGameSlot(int slot) {
 
 	// save slots are named save#.txt
 	filename << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		filename << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		filename << SAVE_PREFIX << "_";
 	filename << "save" << (slot+1) << ".txt";
 
 	if (!infile.open(filename.str(),false, "")) return;
@@ -471,8 +471,8 @@ void GameStateLoad::logic() {
 			stringstream filename;
 			filename.str("");
 			filename << PATH_USER;
-			if (GAME_PREFIX.length() > 0)
-				filename << GAME_PREFIX << "_";
+			if (SAVE_PREFIX.length() > 0)
+				filename << SAVE_PREFIX << "_";
 			filename << "save" << (selected_slot+1) << ".txt";
 
 			if (remove(filename.str().c_str()) != 0)
@@ -483,8 +483,8 @@ void GameStateLoad::logic() {
 				stringstream ss;
 				ss.str("");
 				ss << PATH_USER;
-				if (GAME_PREFIX.length() > 0)
-					ss << GAME_PREFIX << "_";
+				if (SAVE_PREFIX.length() > 0)
+					ss << SAVE_PREFIX << "_";
 				ss << "stash_HC" << (selected_slot+1) << ".txt";
 				if (remove(ss.str().c_str()) != 0)
 					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", selected_slot+1);

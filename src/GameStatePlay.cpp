@@ -297,8 +297,8 @@ void GameStatePlay::checkTeleport() {
 			if (pc->stats.permadeath && pc->stats.corpse) {
 				stringstream filename;
 				filename << PATH_USER;
-				if (GAME_PREFIX.length() > 0)
-					filename << GAME_PREFIX << "_";
+				if (SAVE_PREFIX.length() > 0)
+					filename << SAVE_PREFIX << "_";
 				filename << "save" << game_slot << ".txt";
 				if (remove(filename.str().c_str()) != 0)
 					perror("Error deleting save from path");
@@ -307,8 +307,8 @@ void GameStatePlay::checkTeleport() {
 				stringstream ss;
 				ss.str("");
 				ss << PATH_USER;
-				if (GAME_PREFIX.length() > 0)
-					ss << GAME_PREFIX << "_";
+				if (SAVE_PREFIX.length() > 0)
+					ss << SAVE_PREFIX << "_";
 				ss << "stash_HC" << game_slot << ".txt";
 				if (remove(ss.str().c_str()) != 0)
 					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", game_slot);

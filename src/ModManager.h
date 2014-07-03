@@ -37,8 +37,14 @@ public:
 	Mod(const Mod &mod);
 	bool operator== (const Mod &mod) const;
 	bool operator!= (const Mod &mod) const;
+
 	std::string name;
 	std::string description;
+	std::string game;
+	int min_version_major;
+	int min_version_minor;
+	int max_version_major;
+	int max_version_minor;
 	std::vector<std::string> depends;
 };
 

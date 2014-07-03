@@ -44,6 +44,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTabControl.h"
 #include "WidgetTooltip.h"
 
+#include <limits.h>
+#include <iomanip>
+
 using namespace std;
 
 bool rescompare(const Rect &r1, const Rect &r2) {
@@ -1296,10 +1299,46 @@ void GameStateConfig::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int
 std::string GameStateConfig::createModTooltip(Mod *mod) {
 	std::string ret = "";
 	if (mod) {
+		std::string min_version = "";
+		std::string max_version = "";
+		std::stringstream ss;
+
+		if (mod->min_version_major > 0 || mod->min_version_minor > 0) {
+			ss << mod->min_version_major << "." << std::setfill('0') << std::setw(2) << mod->min_version_minor;
+			min_version = ss.str();
+			ss.str("");
+		}
+
+
+		if (mod->max_version_major < INT_MAX || mod->max_version_minor < INT_MAX) {
+			ss << mod->max_version_major << "." << std::setfill('0') << std::setw(2) << mod->max_version_minor;
+			max_version = ss.str();
+			ss.str("");
+		}
+
 		ret = mod->description;
+		if (mod->game != "") {
+			if (ret != "") ret += '\n';
+			ret += msg->get("Game: ");
+			ret += mod->game;
+		}
+		if (min_version != "" || max_version != "") {
+			if (ret != "") ret += '\n';
+			ret += msg->get("Requires version: ");
+			if (min_version != "" && min_version != max_version) {
+				ret += min_version;
+				if (max_version != "") {
+					ret += " - ";
+					ret += max_version;
+				}
+			}
+			else if (max_version != "") {
+				ret += max_version;
+			}
+		}
 		if (mod->depends.size() > 0) {
 			if (ret != "") ret += '\n';
-			ret += msg->get("Requires: ");
+			ret += msg->get("Requires mods: ");
 			for (unsigned i=0; i<mod->depends.size(); ++i) {
 				ret += mod->depends[i];
 				if (i < mod->depends.size()-1)
