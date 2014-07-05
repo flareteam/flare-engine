@@ -102,8 +102,6 @@ public:
 	float speed;
 	bool immunity;
 	bool stun;
-	float forced_speed;
-	bool forced_move;
 	bool revive;
 	bool convert;
 	bool death_sentence;

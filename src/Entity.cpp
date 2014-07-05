@@ -176,9 +176,6 @@ bool Entity::move() {
 
 	move_from_offending_tile();
 
-	if (stats.effects.forced_move)
-		return mapr->collider.move(stats.pos.x, stats.pos.y, stats.forced_speed.x, stats.forced_speed.y, stats.movement_type, stats.hero);
-
 	if (stats.effects.speed == 0) return false;
 
 	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
@@ -366,11 +363,6 @@ bool Entity::takeHit(const Hazard &h) {
 		}
 
 		if (!stats.effects.immunity) {
-			if (stats.effects.forced_move && stats.hp > 0) {
-				float theta = calcTheta(h.src_stats->pos.x, h.src_stats->pos.y, stats.pos.x, stats.pos.y);
-				stats.forced_speed.x = stats.effects.forced_speed * cos(theta);
-				stats.forced_speed.y = stats.effects.forced_speed * sin(theta);
-			}
 			if (h.hp_steal != 0) {
 				int steal_amt = (min(dmg, prev_hp) * h.hp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;

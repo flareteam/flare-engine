@@ -77,10 +77,6 @@ void BehaviorStandard::doUpkeep() {
 		}
 	}
 
-	if (e->stats.effects.forced_move) {
-		e->move();
-	}
-
 	if (e->stats.waypoint_pause_ticks > 0)
 		e->stats.waypoint_pause_ticks--;
 
