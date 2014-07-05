@@ -166,7 +166,7 @@ void GameStateConfig::init() {
 	tabControl->setTabTitle(5, msg->get("Mods"));
 	tabControl->updateHeader();
 
-	input_confirm = new MenuConfirm("",msg->get("Assign: "));
+	input_confirm = new MenuConfirm(msg->get("Clear"),msg->get("Assign: "));
 	defaults_confirm = new MenuConfirm(msg->get("Defaults"),msg->get("Reset ALL settings?"));
 
 	// Allocate KeyBindings
@@ -923,7 +923,7 @@ void GameStateConfig::logic () {
 					std::string confirm_msg;
 					confirm_msg = msg->get("Assign: ") + inpt->binding_name[i%key_count];
 					delete input_confirm;
-					input_confirm = new MenuConfirm("",confirm_msg);
+					input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
 					input_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
 					input_confirm->visible = true;
 					input_key = i;
@@ -1158,14 +1158,10 @@ bool GameStateConfig::setMods() {
  */
 void GameStateConfig::scanKey(int button) {
 	// clear the keybind if the user presses CTRL+Delete
-	// TODO display a message in-game to expose this functionality?
-	if (input_confirm->visible && inpt->pressing[CTRL] && inpt->pressing[DEL]) {
+	if (input_confirm->visible && input_confirm->confirmClicked) {
 		if ((unsigned)button < key_count) inpt->binding[button] = -1;
 		else if ((unsigned)button < key_count*2) inpt->binding_alt[button%key_count] = -1;
 		else if ((unsigned)button < key_count*3) inpt->binding_joy[button%key_count] = -1;
-
-		inpt->pressing[CTRL] = false;
-		inpt->pressing[DEL] = false;
 
 		inpt->pressing[button%key_count] = false;
 		inpt->lock[button%key_count] = false;
@@ -1174,9 +1170,10 @@ void GameStateConfig::scanKey(int button) {
 		input_confirm->visible = false;
 		input_confirm_ticks = 0;
 		keybinds_btn[button]->refresh();
+		return;
 	}
 
-	if (input_confirm->visible && !input_confirm->isWithinClose) {
+	if (input_confirm->visible && !input_confirm->isWithinButtons) {
 		// keyboard & mouse
 		if ((unsigned)button < key_count*2) {
 			if (inpt->last_button != -1 && inpt->last_button < 8) {
