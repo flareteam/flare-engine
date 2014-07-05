@@ -344,7 +344,6 @@ void LootManager::determineLootByEnemy(const Enemy *e, FPoint pos) {
 }
 
 void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
-	// TODO: z-sort insert?
 	Loot ld;
 	ld.stack = stack;
 	ld.pos.x = pos.x;
