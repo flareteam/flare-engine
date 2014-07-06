@@ -383,23 +383,6 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 	int stepfx;
 	stats.logic();
-	if (stats.effects.forced_move) {
-		move();
-
-		// calc new cam position from player position
-		// cam is focused at player position
-		mapr->cam.x = stats.pos.x;
-		mapr->cam.y = stats.pos.y;
-
-		mapr->collider.block(stats.pos.x, stats.pos.y, false);
-		return;
-	}
-	if (stats.effects.stun) {
-
-		mapr->collider.block(stats.pos.x, stats.pos.y, false);
-		return;
-	}
-
 
 	bool allowed_to_move;
 	bool allowed_to_use_power;

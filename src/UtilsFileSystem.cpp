@@ -73,8 +73,11 @@ bool isDirectory(const std::string &path) {
 	struct stat st;
 	if (stat(path.c_str(), &st) == -1) {
 		perror("isDirectory");
+		return false;
 	}
-	return (st.st_mode & S_IFDIR) != 0;
+	else {
+		return (st.st_mode & S_IFDIR) != 0;
+	}
 }
 
 /**

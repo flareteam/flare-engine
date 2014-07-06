@@ -233,7 +233,6 @@ public:
 	EffectManager effects;
 
 	FPoint pos;
-	FPoint forced_speed;
 	unsigned char direction;
 
 	int cooldown_hit;

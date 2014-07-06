@@ -34,7 +34,7 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	, hasConfirmButton(false)
 	, confirmClicked(false)
 	, cancelClicked(false)
-	, isWithinClose(false) {
+	, isWithinButtons(false) {
 
 	// Load config settings
 	FileParser infile;
@@ -95,7 +95,7 @@ void MenuConfirm::logic() {
 
 		// check if the mouse cursor is hovering over the close button
 		// this is for the confirm dialog that shows when changing keybinds
-		isWithinClose = isWithin(buttonClose->pos, inpt->mouse);
+		isWithinButtons = isWithin(buttonClose->pos, inpt->mouse) || (hasConfirmButton && isWithin(buttonConfirm->pos, inpt->mouse));
 	}
 }
 
