@@ -349,10 +349,6 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 	if (drag_prev_src != -1)
 		drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
 
-	// abort if we don't have a valid source slot
-	if (drag_prev_slot == -1)
-		return;
-
 	if (area == EQUIPMENT) { // dropped onto equipped item
 
 		// make sure the item is going to the correct slot
@@ -363,7 +359,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 				// Merge the stacks
 				add(stack, area, slot, false);
 			}
-			else if (inventory[drag_prev_src][drag_prev_slot].item == 0) {
+			else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].item == 0) {
 				// Swap the two stacks
 				itemReturn(inventory[area][slot]);
 				inventory[area][slot] = stack;
@@ -391,7 +387,8 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 					// Drop the stack
 					inventory[area][slot] = stack;
 				}
-				else if (inventory[drag_prev_src][drag_prev_slot].item == 0) { // Check if the previous slot is free (could still be used if SHIFT was used).
+				else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].item == 0) {
+					// Check if the previous slot is free (could still be used if SHIFT was used).
 					// Swap the two stacks
 					itemReturn( inventory[area][slot]);
 					inventory[area][slot] = stack;
