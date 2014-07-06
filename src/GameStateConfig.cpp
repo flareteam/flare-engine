@@ -170,12 +170,12 @@ void GameStateConfig::init() {
 	defaults_confirm = new MenuConfirm(msg->get("Defaults"),msg->get("Reset ALL settings?"));
 
 	// Allocate KeyBindings
-	for (unsigned int i = 0; i < inpt->key_count; i++) {
+	for (int i = 0; i < inpt->key_count; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
 		keybinds_lb[i]->set(inpt->binding_name[i]);
 		keybinds_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
-	for (unsigned int i = 0; i < inpt->key_count * 3; i++) {
+	for (int i = 0; i < inpt->key_count * 3; i++) {
 		keybinds_btn.push_back(new WidgetButton("images/menus/buttons/button_default.png"));
 	}
 
