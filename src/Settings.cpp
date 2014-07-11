@@ -188,6 +188,8 @@ bool ENABLE_ALLY_COLLISION;
 int CURRENCY_ID;
 float INTERACT_RANGE;
 bool HARDWARE_CURSOR = false;
+bool SAVE_ONLOAD = true;
+bool SAVE_ONEXIT = true;
 
 /**
  * Set system paths
@@ -466,6 +468,8 @@ void loadMiscSettings() {
 	ENABLE_ALLY_COLLISION = true;
 	CURRENCY_ID = 1;
 	INTERACT_RANGE = 3;
+	SAVE_ONLOAD = true;
+	SAVE_ONEXIT = true;
 
 	FileParser infile;
 	// @CLASS Settings: Misc|Description of engine/misc.txt
@@ -515,6 +519,12 @@ void loadMiscSettings() {
 			// @ATTR menus_pause|boolean|Opening any menu will pause the game.
 			else if (infile.key == "menus_pause")
 				MENUS_PAUSE = toBool(infile.val);
+			// @ATTR save_onload|boolean|Save the game upon changing maps.
+			else if (infile.key == "save_onload")
+				SAVE_ONLOAD = toBool(infile.val);
+			// @ATTR save_onexit|boolean|Save the game upon quitting to the title screen or desktop.
+			else if (infile.key == "save_onexit")
+				SAVE_ONEXIT = toBool(infile.val);
 
 		}
 		infile.close();

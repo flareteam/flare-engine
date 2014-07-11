@@ -316,7 +316,7 @@ void GameStatePlay::checkTeleport() {
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
 			}
-			else {
+			else if (SAVE_ONLOAD) {
 				saveGame();
 			}
 		}
@@ -338,7 +338,9 @@ void GameStatePlay::checkCancel() {
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
-		saveGame();
+		if (SAVE_ONEXIT)
+			saveGame();
+
 		Mix_HaltMusic();
 		delete requestedGameState;
 		requestedGameState = new GameStateTitle();
@@ -346,7 +348,9 @@ void GameStatePlay::checkCancel() {
 
 	// if user closes the window
 	if (inpt->done) {
-		saveGame();
+		if (SAVE_ONEXIT)
+			saveGame();
+
 		Mix_HaltMusic();
 		exitRequested = true;
 	}
@@ -780,7 +784,8 @@ void GameStatePlay::checkCutscene() {
 		mapr->respawn_point = floor(pc->stats.pos);
 	}
 
-	saveGame();
+	if (SAVE_ONLOAD)
+		saveGame();
 
 	delete requestedGameState;
 	requestedGameState = cutscene;

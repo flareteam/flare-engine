@@ -131,6 +131,8 @@ extern bool ENABLE_ALLY_COLLISION;
 extern int CURRENCY_ID;
 extern float INTERACT_RANGE;
 extern bool HARDWARE_CURSOR;
+extern bool SAVE_ONLOAD;
+extern bool SAVE_ONEXIT;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;
