@@ -197,9 +197,9 @@ void MenuLog::refresh(int log_type) {
 /**
  * Add a new message to the log.
  */
-void MenuLog::add(const string& s, int log_type) {
+void MenuLog::add(const string& s, int log_type, bool prevent_spam) {
 	// First, make sure we're not repeating the last log message, to avoid spam
-	if (log_msg[log_type].empty() || log_msg[log_type].back() != s) {
+	if (log_msg[log_type].empty() || log_msg[log_type].back() != s || !prevent_spam) {
 		// If we have too many messages, remove the oldest ones
 		while (log_msg[log_type].size() >= MAX_LOG_MESSAGES) {
 			log_msg[log_type].erase(log_msg[log_type].begin());

@@ -115,7 +115,7 @@ void QuestLog::createQuestList() {
 				if (camp->checkStatus(quests[i][j].s)) break;
 			}
 			else if (quests[i][j].type == "quest_text") {
-				log->add(quests[i][j].s, LOG_TYPE_QUESTS);
+				log->add(quests[i][j].s, LOG_TYPE_QUESTS, false);
 				newQuestNotification = true;
 				break;
 			}

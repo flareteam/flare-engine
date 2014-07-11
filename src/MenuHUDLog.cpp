@@ -97,9 +97,9 @@ void MenuHUDLog::render() {
 /**
  * Add a new message to the log
  */
-void MenuHUDLog::add(const string& s) {
+void MenuHUDLog::add(const string& s, bool prevent_spam) {
 	// Make sure we don't spam the same message repeatedly
-	if (log_msg.empty() || log_msg.back() != s) {
+	if (log_msg.empty() || log_msg.back() != s || !prevent_spam) {
 		// add new message
 		log_msg.push_back(s);
 		msg_age.push_back(calcDuration(s));

@@ -368,8 +368,8 @@ void GameStatePlay::checkLog() {
 
 	// Map events can create messages
 	if (mapr->log_msg != "") {
-		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(mapr->log_msg);
+		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->hudlog->add(mapr->log_msg, false);
 		mapr->log_msg = "";
 	}
 
@@ -382,8 +382,8 @@ void GameStatePlay::checkLog() {
 
 	// Campaign events can create messages (e.g. quest rewards)
 	if (camp->log_msg != "") {
-		menu->log->add(camp->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(camp->log_msg);
+		menu->log->add(camp->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->hudlog->add(camp->log_msg, false);
 		camp->log_msg = "";
 	}
 
