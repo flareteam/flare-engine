@@ -149,6 +149,9 @@ public:
 	// event talker
 	std::string event_npc;
 
+	// trigger for save game events
+	bool save_game;
+
 	// map soundids
 	std::vector<SoundManager::SoundID> sids;
 

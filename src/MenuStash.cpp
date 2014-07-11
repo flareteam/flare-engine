@@ -182,10 +182,12 @@ void MenuStash::drop(Point position, ItemStack stack) {
 		itemReturn(stack); // cancel
 	}
 
+	updated = true;
 }
 
 void MenuStash::add(ItemStack stack, int slot) {
 	stock.add(stack, slot);
+	updated = true;
 }
 
 /**
@@ -206,8 +208,8 @@ void MenuStash::itemReturn(ItemStack stack) {
 
 void MenuStash::add(ItemStack stack) {
 	items->playSound(stack.item);
-
 	stock.add(stack);
+	updated = true;
 }
 
 TooltipData MenuStash::checkTooltip(Point position) {

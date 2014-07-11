@@ -197,18 +197,21 @@ void MenuLog::refresh(int log_type) {
 /**
  * Add a new message to the log.
  */
-void MenuLog::add(const string& s, int log_type) {
-	// If we have too many messages, remove the oldest ones
-	while (log_msg[log_type].size() >= MAX_LOG_MESSAGES) {
-		log_msg[log_type].erase(log_msg[log_type].begin());
+void MenuLog::add(const string& s, int log_type, bool prevent_spam) {
+	// First, make sure we're not repeating the last log message, to avoid spam
+	if (log_msg[log_type].empty() || log_msg[log_type].back() != s || !prevent_spam) {
+		// If we have too many messages, remove the oldest ones
+		while (log_msg[log_type].size() >= MAX_LOG_MESSAGES) {
+			log_msg[log_type].erase(log_msg[log_type].begin());
+		}
+
+		// Add the new message.
+		log_msg[log_type].push_back(s);
+		msg_buffer[log_type]->update = true;
+		refresh(log_type);
+
+		log_count[log_type]++;
 	}
-
-	// Add the new message.
-	log_msg[log_type].push_back(s);
-	msg_buffer[log_type]->update = true;
-	refresh(log_type);
-
-	log_count[log_type]++;
 }
 
 /**

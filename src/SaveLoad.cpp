@@ -33,7 +33,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
 #include "Menu.h"
+#include "MenuHUDLog.h"
 #include "MenuInventory.h"
+#include "MenuLog.h"
 #include "MenuManager.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
@@ -171,6 +173,10 @@ void GameStatePlay::saveGame() {
 		outfile.close();
 		outfile.clear();
 	}
+
+	// display a log message saying that we saved the game
+	menu->log->add(msg->get("Game saved."), LOG_TYPE_MESSAGES);
+	menu->hudlog->add(msg->get("Game saved."));
 }
 
 /**

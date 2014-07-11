@@ -41,7 +41,11 @@ MenuExit::MenuExit() : Menu() {
 	exitClicked = false;
 
 	buttonExit = new WidgetButton("images/menus/buttons/button_default.png");
-	buttonExit->label = msg->get("Exit");
+
+	if (SAVE_ONEXIT)
+		buttonExit->label = msg->get("Save & Exit");
+	else
+		buttonExit->label = msg->get("Exit");
 
 	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
 
@@ -62,7 +66,7 @@ void MenuExit::alignElements() {
 	buttonClose->pos.x = window_area.x + window_area.w;
 	buttonClose->pos.y = window_area.y;
 
-	label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonExit->pos.h * 2), JUSTIFY_CENTER, VALIGN_TOP, msg->get("Save and exit to title?"), font->getColor("menu_normal"));
+	label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonExit->pos.h * 2), JUSTIFY_CENTER, VALIGN_TOP, msg->get("Exit to title?"), font->getColor("menu_normal"));
 }
 
 void MenuExit::logic() {

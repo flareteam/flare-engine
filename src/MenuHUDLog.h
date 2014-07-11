@@ -46,7 +46,7 @@ public:
 	~MenuHUDLog();
 	void logic();
 	void render();
-	void add(const std::string& s);
+	void add(const std::string& s, bool prevent_spam = true);
 	void remove(int msg_index);
 	void clear();
 };

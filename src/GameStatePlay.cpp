@@ -316,7 +316,7 @@ void GameStatePlay::checkTeleport() {
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
 			}
-			else {
+			else if (SAVE_ONLOAD) {
 				saveGame();
 			}
 		}
@@ -338,7 +338,9 @@ void GameStatePlay::checkCancel() {
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
-		saveGame();
+		if (SAVE_ONEXIT)
+			saveGame();
+
 		Mix_HaltMusic();
 		delete requestedGameState;
 		requestedGameState = new GameStateTitle();
@@ -346,7 +348,9 @@ void GameStatePlay::checkCancel() {
 
 	// if user closes the window
 	if (inpt->done) {
-		saveGame();
+		if (SAVE_ONEXIT)
+			saveGame();
+
 		Mix_HaltMusic();
 		exitRequested = true;
 	}
@@ -364,8 +368,8 @@ void GameStatePlay::checkLog() {
 
 	// Map events can create messages
 	if (mapr->log_msg != "") {
-		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(mapr->log_msg);
+		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->hudlog->add(mapr->log_msg, false);
 		mapr->log_msg = "";
 	}
 
@@ -378,8 +382,8 @@ void GameStatePlay::checkLog() {
 
 	// Campaign events can create messages (e.g. quest rewards)
 	if (camp->log_msg != "") {
-		menu->log->add(camp->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(camp->log_msg);
+		menu->log->add(camp->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->hudlog->add(camp->log_msg, false);
 		camp->log_msg = "";
 	}
 
@@ -780,12 +784,20 @@ void GameStatePlay::checkCutscene() {
 		mapr->respawn_point = floor(pc->stats.pos);
 	}
 
-	saveGame();
+	if (SAVE_ONLOAD)
+		saveGame();
 
 	delete requestedGameState;
 	requestedGameState = cutscene;
 }
 
+void GameStatePlay::checkSaveEvent() {
+	if (mapr->save_game) {
+		mapr->respawn_point = floor(pc->stats.pos);
+		saveGame();
+		mapr->save_game = false;
+	}
+}
 
 /**
  * Process all actions for a single frame
@@ -847,6 +859,7 @@ void GameStatePlay::logic() {
 	checkEquipmentChange();
 	checkConsumable();
 	checkStash();
+	checkSaveEvent();
 	checkNotifications();
 	checkCancel();
 
