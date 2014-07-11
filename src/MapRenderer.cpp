@@ -57,6 +57,7 @@ MapRenderer::MapRenderer()
 	, stash(false)
 	, stash_pos()
 	, enemies_cleared(false)
+	, save_game(false)
 	, repaint_background(false)
 	, index_objectlayer(0) {
 }

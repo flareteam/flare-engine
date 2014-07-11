@@ -791,6 +791,13 @@ void GameStatePlay::checkCutscene() {
 	requestedGameState = cutscene;
 }
 
+void GameStatePlay::checkSaveEvent() {
+	if (mapr->save_game) {
+		mapr->respawn_point = floor(pc->stats.pos);
+		saveGame();
+		mapr->save_game = false;
+	}
+}
 
 /**
  * Process all actions for a single frame
@@ -852,6 +859,7 @@ void GameStatePlay::logic() {
 	checkEquipmentChange();
 	checkConsumable();
 	checkStash();
+	checkSaveEvent();
 	checkNotifications();
 	checkCancel();
 
