@@ -354,7 +354,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		// make sure the item is going to the correct slot
 		// we match slot_type to stack.item's type to place items in the proper slots
 		// also check to see if the hero meets the requirements
-		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid) {
+		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
 			if (inventory[area][slot].item == stack.item) {
 				// Merge the stacks
 				add(stack, area, slot, false);
@@ -824,6 +824,23 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	applyItemStats(equipped);
 	applyItemSetBonuses(equipped);
 
+
+	// disable any incompatible slots, unequipping items if neccessary
+	for (int i=0; i<MAX_EQUIPPED; ++i) {
+		inventory[EQUIPMENT].slots[i]->enabled = true;
+
+		int id = inventory[EQUIPMENT][i].item;
+		for (unsigned j=0; j<items->items[id].disable_slots.size(); ++j) {
+			for (int k=0; k<MAX_EQUIPPED; ++k) {
+				if (slot_type[k] == items->items[id].disable_slots[j]) {
+					add(inventory[EQUIPMENT].storage[k]);
+					inventory[EQUIPMENT].storage[k].item = 0;
+					inventory[EQUIPMENT].storage[k].quantity = 0;
+					inventory[EQUIPMENT].slots[k]->enabled = false;
+				}
+			}
+		}
+	}
 	// update stat display
 	stats->refresh_stats = true;
 }

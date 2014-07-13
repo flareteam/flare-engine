@@ -297,6 +297,15 @@ void ItemManager::loadItems() {
 				classname = infile.nextValue();
 			}
 		}
+		else if (infile.key == "disable_slots") {
+			// @ATTR disable_slots|type (string), ...|A comma separated list of slot types to disable when this item is equipped.
+			std::string slot_type = popFirstString(infile.val);
+
+			while (slot_type != "") {
+				items[id].disable_slots.push_back(slot_type);
+				slot_type = popFirstString(infile.val);
+			}
+		}
 		else {
 			fprintf(stderr, "unknown item(%d, %s) attribute: %s\n",id, items[id].name.c_str(), infile.key.c_str());
 		}
