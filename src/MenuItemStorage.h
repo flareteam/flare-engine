@@ -62,6 +62,7 @@ public:
 
 	bool * highlight;
 	Sprite *highlight_image;
+	Sprite *overlay_disabled;
 };
 
 #endif
