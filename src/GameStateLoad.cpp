@@ -177,7 +177,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	}
 
 	// animation data
-	int stance_frames;
+	int stance_frames = 0;
 	if (infile.open("animations/hero.txt")) {
 		while (infile.next()) {
 			if (infile.section == "stance") {
