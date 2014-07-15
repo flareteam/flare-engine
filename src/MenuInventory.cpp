@@ -372,6 +372,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		else {
 			// equippable items only belong to one slot, for the moment
 			itemReturn(stack); // cancel
+			updateEquipment(slot);
 		}
 	}
 	else if (area == CARRIED) {
