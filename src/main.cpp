@@ -137,10 +137,9 @@ static void mainLoop (bool debug_event) {
 	bool done = false;
 	int delay = int(floor((1000.f/MAX_FRAMES_PER_SEC)+0.5f));
 	int logic_ticks = SDL_GetTicks();
-	int loops = 0;
 
 	while ( !done ) {
-		loops = 0;
+		int loops = 0;
 		int now_ticks = SDL_GetTicks();
 		int prev_ticks = now_ticks;
 

@@ -185,7 +185,7 @@ void RenderDevice::destroyContext() {
 			++it;
 		}
 	}
-	assert(cache.size() == 0);
+	assert(cache.empty());
 }
 
 Image * RenderDevice::cacheLookup(std::string &filename) {
