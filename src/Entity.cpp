@@ -358,7 +358,6 @@ bool Entity::takeHit(const Hazard &h) {
 		stats.effects.removeEffectType("stun");
 
 		if (stats.hp > 0) {
-			if (h.mod_power > 0) powers->effect(&stats, h.src_stats, h.mod_power,h.source_type);
 			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
 		}
 

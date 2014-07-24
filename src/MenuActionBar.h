@@ -79,7 +79,8 @@ public:
 	TooltipData checkTooltip(Point mouse);
 
 	int hotkeys[12]; // refer to power_index in PowerManager
-	int actionbar[12]; // temp for shapeshifting
+	int hotkeys_temp[12]; // temp for shapeshifting
+	int hotkeys_mod[12]; // hotkeys can be changed by items
 	bool locked[12]; // if slot is locked, you cannot drop it
 	WidgetSlot *slots[12]; // hotkey slots
 	WidgetSlot *menus[4]; // menu buttons
@@ -93,6 +94,7 @@ public:
 	Rect mouseArea;
 	Rect menuArea;
 	int drag_prev_slot;
+	bool updated;
 
 	TabList tablist;
 

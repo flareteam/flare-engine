@@ -250,9 +250,13 @@ void ItemManager::loadItems() {
 			}
 			else fprintf(stderr, "Power index inside item %d definition out of bounds 1-%d, skipping item\n", id, INT_MAX);
 		}
-		else if (infile.key == "power_mod")
-			// @ATTR power_mod|integer|Power modifier of item.
-			items[id].power_mod = toInt(infile.val);
+		else if (infile.key == "replace_power") {
+			// @ATTR replace_power|old (integer), new (integer)|Replaces the old power id with the new power id in the action bar when equipped.
+			Point power_ids;
+			power_ids.x = popFirstInt(infile.val);
+			power_ids.y = popFirstInt(infile.val);
+			items[id].replace_power.push_back(power_ids);
+		}
 		else if (infile.key == "power_desc")
 			// @ATTR power_desc|string|A string describing the additional power.
 			items[id].power_desc = msg->get(infile.val);

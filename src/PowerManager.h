@@ -139,6 +139,7 @@ public:
 	int count; // number of hazards/effects or spawns created
 	bool passive; // if unlocked when the user spawns, automatically cast it
 	int passive_trigger; // only activate passive powers under certain conditions (block, hit, death, etc)
+	bool meta_power; // this power can't be used on its own and must be replaced via equipment
 
 	// power requirements
 	std::set<std::string> requires_flags; // checked against equip_flags granted from items
@@ -217,7 +218,6 @@ public:
 
 	int post_power;
 	int wall_power;
-	bool allow_power_mod;
 
 	// spawn info
 	std::string spawn_type;
@@ -245,6 +245,7 @@ public:
 		, count(1)
 		, passive(false)
 		, passive_trigger(-1)
+		, meta_power(false)
 
 		, requires_mp(0)
 		, requires_hp(0)
@@ -310,7 +311,6 @@ public:
 		, post_power(0)
 		, wall_power(0)
 
-		, allow_power_mod(false)
 		, spawn_type("")
 		, target_neighbor(0)
 		, spawn_limit_mode(SPAWN_LIMIT_MODE_UNLIMITED)

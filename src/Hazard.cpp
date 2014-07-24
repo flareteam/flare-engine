@@ -68,8 +68,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, trait_elemental(-1)
 	, beacon(false)
 	, post_power(0)
-	, wall_power(0)
-	, mod_power(0) {
+	, wall_power(0) {
 }
 
 Hazard::~Hazard() {

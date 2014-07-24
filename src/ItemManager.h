@@ -98,7 +98,7 @@ public:
 	std::string gfx;           // the sprite layer shown when this item is equipped
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
 	int power;            // this item can be dragged to the action bar and used as a power
-	int power_mod;        // alter powers when this item is equipped (e.g. shoot arrows from bows)
+	std::vector<Point> replace_power;        // alter powers when this item is equipped. Power id 'x' is replaced with id 'y'
 	std::string power_desc;    // shows up in green text on the tooltip
 	int price;            // if price = 0 the item cannot be sold
 	int price_sell;       // if price_sell = 0, the sell price is price*vendor_ratio
@@ -132,7 +132,6 @@ public:
 		, sfx(0)
 		, gfx("")
 		, power(0)
-		, power_mod(0)
 		, power_desc("")
 		, price(0)
 		, price_sell(0)

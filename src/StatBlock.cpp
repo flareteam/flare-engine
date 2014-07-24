@@ -134,9 +134,6 @@ StatBlock::StatBlock()
 	, suppress_hp(false)
 	, teleportation(false)
 	, teleport_destination()
-	, melee_weapon_power(0)
-	, mental_weapon_power(0)
-	, ranged_weapon_power(0)
 	, currency(0)
 	, death_penalty(false)
 	, defeat_status("")			// enemy only
@@ -412,13 +409,6 @@ void StatBlock::load(const string& filename) {
 		// @ATTR passive_attacker|boolean|Won't initiate combat until attacked.
 		else if (infile.key == "passive_attacker") passive_attacker = toBool(infile.val);
 
-		// @ATTR melee_weapon_power|integer|Power index of a melee power that can be affected by power mod.
-		else if (infile.key == "melee_weapon_power") melee_weapon_power = num;
-		// @ATTR mental_weapon_power|integer|Power index of a mental power that can be affected by power mod.
-		else if (infile.key == "mental_weapon_power") mental_weapon_power = num;
-		// @ATTR ranged_weapon_power|integer|Power index of a ranged power that can be affected by power mod.
-		else if (infile.key == "ranged_weapon_power") ranged_weapon_power = num;
-
 		// @ATTR animations|string|Filename of an animation definition.
 		else if (infile.key == "animations") animations = infile.val;
 
@@ -677,7 +667,8 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 			   && (!power.sacrifice == false || hp > power.requires_hp)
 			   && menu_powers->meetsUsageStats(powerid)
 			   && !power.passive
-			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true);
+			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
+			   && !power.meta_power;
 	}
 
 }
