@@ -339,7 +339,7 @@ private:
 	FPoint targetNeighbor(Point target, int range, bool ignore_blocked = false);
 	void initHazard(int powernum, StatBlock *src_stats, FPoint target, Hazard *haz);
 	void buff(int power_index, StatBlock *src_stats, FPoint target);
-	void playSound(int power_index, StatBlock *src_stats);
+	void playSound(int power_index);
 
 	bool fixed(int powernum, StatBlock *src_stats, FPoint target);
 	bool missile(int powernum, StatBlock *src_stats, FPoint target);

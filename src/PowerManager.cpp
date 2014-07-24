@@ -731,7 +731,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
  * Play the sound effect for this power
  * Equipped items may have unique sounds
  */
-void PowerManager::playSound(int power_index, StatBlock *src_stats) {
+void PowerManager::playSound(int power_index) {
 	if (powers[power_index].sfx_index != -1)
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
@@ -778,7 +778,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 		}
 
 		// If there's a sound effect, play it here
-		playSound(power_index, src_stats);
+		playSound(power_index);
 	}
 
 	return true;
@@ -812,7 +812,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
 	buff(power_index, src_stats, target);
 
 	// If there's a sound effect, play it here
-	playSound(power_index, src_stats);
+	playSound(power_index);
 
 	payPowerCost(power_index, src_stats);
 	return true;
@@ -881,7 +881,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 
 	payPowerCost(power_index, src_stats);
 
-	playSound(power_index, src_stats);
+	playSound(power_index);
 	return true;
 }
 
@@ -905,7 +905,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 
 	location_iterator = src_stats->pos;
 
-	playSound(power_index, src_stats);
+	playSound(power_index);
 
 	for (int i=0; i<powers[power_index].count; i++) {
 
@@ -941,7 +941,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 	buff(power_index, src_stats, target);
 
 	// If there's a sound effect, play it here
-	playSound(power_index, src_stats);
+	playSound(power_index);
 
 	Map_Enemy espawn;
 	espawn.type = powers[power_index].spawn_type;
@@ -1010,7 +1010,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint targe
 	src_stats->transform_with_equipment = powers[power_index].keep_equipment;
 
 	// If there's a sound effect, play it here
-	playSound(power_index, src_stats);
+	playSound(power_index);
 
 	// execute untransform powers
 	if (powers[power_index].spawn_type == "untransform" && src_stats->transformed) {

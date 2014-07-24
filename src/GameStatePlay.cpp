@@ -806,6 +806,29 @@ void GameStatePlay::checkSaveEvent() {
 }
 
 /**
+ * Recursively update the action bar powers based on equipment
+ */
+void GameStatePlay::updateActionBar(int index) {
+	if (index < 0 || index > 11) return;
+
+	for (int i=index; i<12; i++) {
+		if (menu->act->hotkeys[i] == 0) continue;
+
+		for (int j=0; j<menu->inv->inventory[EQUIPMENT].getSlotNumber(); j++) {
+			int id = menu->inv->inventory[EQUIPMENT][j].item;
+
+			for (unsigned k=0; k<items->items[id].replace_power.size(); k++) {
+				if (items->items[id].replace_power[k].x == menu->act->hotkeys_mod[i] &&
+				    items->items[id].replace_power[k].y != menu->act->hotkeys_mod[i]) {
+						menu->act->hotkeys_mod[i] = items->items[id].replace_power[k].y;
+						return updateActionBar(i);
+				}
+			}
+		}
+	}
+}
+
+/**
  * Process all actions for a single frame
  * This includes some message passing between child object
  */
@@ -940,25 +963,16 @@ void GameStatePlay::logic() {
 		curs->setCursor(CURSOR_NORMAL);
 	}
 
-	// update the action bar as it mayb have been changed by items
+	// update the action bar as it may have been changed by items
 	if (menu->act->updated) {
 		menu->act->updated = false;
 
+		// set all hotkeys to their base powers
 		for (int i=0; i<12; i++) {
 			menu->act->hotkeys_mod[i] = menu->act->hotkeys[i];
-			if (menu->act->hotkeys[i] == 0) continue;
-
-			for (int j=0; j<menu->inv->inventory[EQUIPMENT].getSlotNumber(); j++) {
-				int id = menu->inv->inventory[EQUIPMENT][j].item;
-
-				for (unsigned k=0; k<items->items[id].replace_power.size(); k++) {
-					if (items->items[id].replace_power[k].x == menu->act->hotkeys[i]) {
-						menu->act->hotkeys_mod[i] = items->items[id].replace_power[k].y;
-						break;
-					}
-				}
-			}
 		}
+
+		updateActionBar();
 	}
 }
 
