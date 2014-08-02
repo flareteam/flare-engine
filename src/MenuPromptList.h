@@ -1,6 +1,5 @@
 /*
-Copyright © 2011-2012 kitano
-Copyright © 2014 Henrik Andersson
+Copyright © 2014 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -17,39 +16,50 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
- * class MenuExit
+ * class MenuPromptList
  */
 
 #pragma once
-#ifndef MENU_EXIT_H
-#define MENU_EXIT_H
+#ifndef MENU_PROMPTLIST_H
+#define MENU_PROMPTLIST_H
 
 #include "CommonIncludes.h"
 #include "Menu.h"
 #include "WidgetButton.h"
+#include "WidgetLabel.h"
+#include "WidgetListBox.h"
 
-class MenuExit : public Menu {
+class MenuPromptList : public Menu {
 protected:
 	void alignElements();
 	void loadGraphics();
 
-	WidgetButton *buttonExit;
-	WidgetButton *buttonClose;
+	WidgetButton *button_confirm;
+	WidgetButton *button_close;
 	WidgetLabel label;
+	WidgetListBox *listbox;
 	TabList	tablist;
 
-	bool exitClicked;
+	std::string title_text;
+	int index_offset;
+
+	Point close_pos;
+	LabelInfo title;
+	Point confirm_pos;
+	Point listbox_pos;
+	int listbox_rows;
 
 public:
-	MenuExit();
-	~MenuExit();
+	MenuPromptList(const std::string& title_text, int _index_offset = 0);
+	~MenuPromptList();
+
+	void addOption(const std::string& option);
+	int getSelectedIndex();
 
 	void logic();
 	virtual void render();
 
-	bool isExitRequested() {
-		return exitClicked;
-	}
+	bool confirm_clicked;
 };
 
 #endif
