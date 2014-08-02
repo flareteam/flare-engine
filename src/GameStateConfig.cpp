@@ -100,8 +100,6 @@ void GameStateConfig::init() {
 	cancel_button->pos.y = VIEW_H - (cancel_button->pos.h);
 	cancel_button->refresh();
 
-	mods_total = mods->mod_dirs.size();
-
 	fullscreen_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	fullscreen_lb = new WidgetLabel();
 	mouse_move_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
@@ -135,11 +133,11 @@ void GameStateConfig::init() {
 	gamma_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	gamma_lb = new WidgetLabel();
 	resolution_lb = new WidgetLabel();
-	activemods_lstb = new WidgetListBox(mods_total, 10, "images/menus/buttons/listbox_default.png");
+	activemods_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	activemods_lb = new WidgetLabel();
-	inactivemods_lstb = new WidgetListBox(mods_total, 10, "images/menus/buttons/listbox_default.png");
+	inactivemods_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	inactivemods_lb = new WidgetLabel();
-	joystick_device_lstb = new WidgetListBox(SDL_NumJoysticks(), 10, "images/menus/buttons/listbox_default.png");
+	joystick_device_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	joystick_device_lb = new WidgetLabel();
 	language_lb = new WidgetLabel();
 	hws_note_lb = new WidgetLabel();
@@ -182,9 +180,8 @@ void GameStateConfig::init() {
 	key_count = keybinds_btn.size()/3;
 
 	// Allocate resolution list box
-	int resolutions = getVideoModes();
-	if (resolutions < 1) fprintf(stderr, "Unable to get resolutions list!\n");
-	resolution_lstb = new WidgetListBox(resolutions, 10, "images/menus/buttons/listbox_default.png");
+	if (getVideoModes() < 1) fprintf(stderr, "Unable to get resolutions list!\n");
+	resolution_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	resolution_lstb->can_deselect = false;
 
 	// Allocate Languages ListBox
@@ -193,7 +190,7 @@ void GameStateConfig::init() {
 	language_full = std::vector<std::string>();
 	language_ISO.resize(langCount);
 	language_full.resize(langCount);
-	language_lstb = new WidgetListBox(langCount, 10, "images/menus/buttons/listbox_default.png");
+	language_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	language_lstb->can_deselect = false;
 
 	readConfig();

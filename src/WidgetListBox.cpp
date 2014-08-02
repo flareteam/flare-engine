@@ -30,27 +30,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileName)
+WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
 	, listboxs(NULL)
-	, list_amount(amount)
-	, list_height(height)
 	, cursor(0)
 	, has_scroll_bar(false)
-	, non_empty_slots(0)
 	, any_selected(false)
-	, values(new std::string[list_amount])
-	, tooltips(new std::string[list_amount])
-	, vlabels(new WidgetLabel[list_height])
-	, rows(new Rect[list_height])
-	, tip( new WidgetTooltip())
+	, vlabels(std::vector<WidgetLabel>(height,WidgetLabel()))
+	, rows(std::vector<Rect>(height,Rect()))
+	, tip(new WidgetTooltip())
 	, scrollbar(new WidgetScrollBar("images/menus/buttons/scrollbar_default.png"))
 	, color_normal(font->getColor("widget_normal"))
 	, color_disabled(font->getColor("widget_disabled"))
 	, pos_scroll()
 	, pressed(false)
-	, selected(new bool[list_amount])
 	, multi_select(false)
 	, can_deselect(true)
 	, can_select(true)
@@ -64,13 +58,6 @@ WidgetListBox::WidgetListBox(int amount, int height, const std::string& _fileNam
 		pos.w = listboxs->getGraphicsWidth();
 		pos.h = (listboxs->getGraphicsHeight() / 3); // height of one item
 		graphics->unref();
-	}
-
-	click = NULL;
-
-	for (int i=0; i<list_amount; i++) {
-		selected[i] = false;
-		values[i] = "";
 	}
 }
 
@@ -93,7 +80,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 	scroll_area.x = rows[0].x;
 	scroll_area.y = rows[0].y;
 	scroll_area.w = rows[0].w;
-	scroll_area.h = rows[0].h * list_height;
+	scroll_area.h = rows[0].h * rows.size();
 
 	if (isWithin(scroll_area,mouse)) {
 		inpt->lock_scroll = true;
@@ -129,12 +116,12 @@ bool WidgetListBox::checkClick(int x, int y) {
 	if (pressed && !inpt->lock[MAIN1] && can_select) {
 		pressed = false;
 
-		for(int i=0; i<list_height; i++) {
-			if (i<list_amount) {
+		for(unsigned i=0; i<rows.size(); i++) {
+			if (i<values.size()) {
 				if (isWithin(rows[i], mouse) && values[i+cursor] != "") {
 					// deselect other options if multi-select is disabled
 					if (!multi_select) {
-						for (int j=0; j<list_amount; j++) {
+						for (unsigned j=0; j<values.size(); j++) {
 							if (j!=i+cursor)
 								selected[j] = false;
 						}
@@ -157,7 +144,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 
 	// detect new click
 	if (inpt->pressing[MAIN1]) {
-		for (int i=0; i<list_height; i++) {
+		for (unsigned i=0; i<rows.size(); i++) {
 			if (isWithin(rows[i], mouse)) {
 
 				inpt->lock[MAIN1] = true;
@@ -178,8 +165,8 @@ bool WidgetListBox::checkClick(int x, int y) {
 TooltipData WidgetListBox::checkTooltip(Point mouse) {
 	TooltipData _tip;
 
-	for(int i=0; i<list_height; i++) {
-		if (i<list_amount) {
+	for(unsigned i=0; i<rows.size(); i++) {
+		if (i<values.size()) {
 			if (isWithin(rows[i], mouse) && tooltips[i+cursor] != "") {
 				_tip.addText(tooltips[i+cursor]);
 				break;
@@ -191,45 +178,22 @@ TooltipData WidgetListBox::checkTooltip(Point mouse) {
 }
 
 /**
- * Set the value and tooltip of the first available slot
+ * Add a new value (with tooltip) to the list
  */
 void WidgetListBox::append(std::string value, std::string tooltip) {
-	for (int i=0; i<list_amount; i++) {
-		if (values[i] == "") {
-			values[i] = value;
-			tooltips[i] = tooltip;
-			refresh();
-			return;
-		}
-	}
+	values.push_back(value);
+	tooltips.push_back(tooltip);
+	selected.push_back(false);
+	refresh();
 }
 
 /**
- * Set a specific slot's value and tooltip
- */
-void WidgetListBox::set(int index, std::string value, std::string tooltip) {
-	if (index > list_amount || index < 0) return;
-
-	values[index] = value;
-	tooltips[index] = tooltip;
-}
-
-/**
- * Clear a slot at a specified index, shifting the other items accordingly
+ * Remove a value from the list
  */
 void WidgetListBox::remove(int index) {
-	for (int i=index; i<list_amount; i++) {
-		if (i==list_amount-1) {
-			selected[i] = false;
-			values[i] = "";
-			tooltips[i] = "";
-		}
-		else {
-			selected[i] = selected[i+1];
-			values[i] = values[i+1];
-			tooltips[i] = tooltips[i+1];
-		}
-	}
+	values.erase(values.begin()+index);
+	tooltips.erase(tooltips.begin()+index);
+	selected.erase(selected.begin()+index);
 	scrollUp();
 	refresh();
 }
@@ -238,11 +202,9 @@ void WidgetListBox::remove(int index) {
  * Clear the list
  */
 void WidgetListBox::clear() {
-	for (int i=0; i<list_amount; i++) {
-		selected[i] = false;
-		values[i] = "";
-		tooltips[i] = "";
-	}
+	values.clear();
+	tooltips.clear();
+	selected.clear();
 	refresh();
 }
 
@@ -252,7 +214,7 @@ void WidgetListBox::clear() {
 void WidgetListBox::shiftUp() {
 	any_selected = false;
 	if (!selected[0]) {
-		for (int i=1; i < non_empty_slots; i++) {
+		for (unsigned i=1; i < values.size(); i++) {
 			if (selected[i]) {
 				any_selected = true;
 				bool tmp_selected = selected[i];
@@ -279,8 +241,8 @@ void WidgetListBox::shiftUp() {
  */
 void WidgetListBox::shiftDown() {
 	any_selected = false;
-	if (!selected[non_empty_slots-1]) {
-		for (int i=non_empty_slots-2; i >= 0; i--) {
+	if (!selected[values.size()-1]) {
+		for (int i=values.size()-2; i >= 0; i--) {
 			if (selected[i]) {
 				any_selected = true;
 				bool tmp_selected = selected[i];
@@ -304,14 +266,14 @@ void WidgetListBox::shiftDown() {
 
 int WidgetListBox::getSelected() {
 	// return the first selected value
-	for (int i=0; i<non_empty_slots; i++) {
+	for (unsigned i=0; i<values.size(); i++) {
 		if (selected[i]) return i;
 	}
 	return -1; // nothing is selected
 }
 
 std::string WidgetListBox::getValue() {
-	for (int i=0; i<non_empty_slots; i++) {
+	for (unsigned i=0; i<values.size(); i++) {
 		if (selected[i]) return values[i];
 	}
 	return "";
@@ -335,7 +297,7 @@ std::string WidgetListBox::getTooltip(int index) {
  * Get the amount of ListBox items
  */
 int WidgetListBox::getSize() {
-	return list_amount;
+	return values.size();
 }
 
 /*
@@ -351,7 +313,7 @@ void WidgetListBox::scrollUp() {
  * Shift the viewing area down
  */
 void WidgetListBox::scrollDown() {
-	if (cursor+list_height < non_empty_slots)
+	if (cursor+rows.size() < values.size())
 		cursor += 1;
 	refresh();
 }
@@ -367,10 +329,10 @@ void WidgetListBox::render() {
 		listboxs->setOffset(local_offset);
 	}
 
-	for(int i=0; i<list_height; i++) {
+	for(unsigned i=0; i<rows.size(); i++) {
 		if(i==0)
 			src.y = 0;
-		else if(i==list_height-1)
+		else if(i==rows.size()-1)
 			src.y = pos.h*2;
 		else
 			src.y = pos.h;
@@ -381,7 +343,7 @@ void WidgetListBox::render() {
 			render_device->render(listboxs);
 		}
 
-		if (i<list_amount) {
+		if (i<values.size()) {
 			vlabels[i].local_frame = local_frame;
 			vlabels[i].local_offset = local_offset;
 			vlabels[i].render();
@@ -395,8 +357,8 @@ void WidgetListBox::render() {
 
 		topLeft.x = rows[0].x + local_frame.x - local_offset.x;
 		topLeft.y = rows[0].y + local_frame.y - local_offset.y;
-		bottomRight.x = rows[list_height - 1].x + rows[0].w + local_frame.x - local_offset.x;
-		bottomRight.y = rows[list_height - 1].y + rows[0].h + local_frame.y - local_offset.y;
+		bottomRight.x = rows[rows.size() - 1].x + rows[0].w + local_frame.x - local_offset.x;
+		bottomRight.y = rows[rows.size() - 1].y + rows[0].h + local_frame.y - local_offset.y;
 		color = render_device->MapRGB(255,248,220);
 
 		// Only draw rectangle if it fits in local frame
@@ -430,21 +392,14 @@ void WidgetListBox::refresh() {
 	std::string temp;
 	int right_margin = 0;
 
-	// Get the number of slots that have content
-	non_empty_slots = 0;
-	for (int i=0; i<list_amount; i++) {
-		if (values[i] != "")
-			non_empty_slots = i+1;
-	}
-
 	// Update the scrollbar
-	if (non_empty_slots > list_height) {
+	if (values.size() > rows.size()) {
 		has_scroll_bar = true;
 		pos_scroll.x = pos.x+pos.w-scrollbar->pos_up.w-scrollbar_offset;
 		pos_scroll.y = pos.y+scrollbar_offset;
 		pos_scroll.w = scrollbar->pos_up.w;
-		pos_scroll.h = (pos.h*list_height)-scrollbar->pos_down.h-(scrollbar_offset*2);
-		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, non_empty_slots-list_height);
+		pos_scroll.h = (pos.h*rows.size())-scrollbar->pos_down.h-(scrollbar_offset*2);
+		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, values.size()-rows.size());
 		right_margin = scrollbar->pos_knob.w + 8;
 	}
 	else {
@@ -453,7 +408,7 @@ void WidgetListBox::refresh() {
 	}
 
 	// Update each row's hitbox and label
-	for(int i=0; i<list_height; i++) {
+	for(unsigned i=0; i<rows.size(); i++) {
 		rows[i].x = pos.x;
 		rows[i].y = (pos.h*i)+pos.y;
 		if (has_scroll_bar) {
@@ -467,7 +422,7 @@ void WidgetListBox::refresh() {
 		int font_x = rows[i].x + 8;
 		int font_y = rows[i].y + (rows[i].h/2);
 
-		if (i<list_amount) {
+		if (i<values.size()) {
 			// gets the maxiumum value length that can fit in the listbox
 			// maybe there is a better way to do this?
 			unsigned int max_length = (unsigned int)(pos.w-right_margin)/font->calc_width("X");
@@ -491,33 +446,33 @@ void WidgetListBox::refresh() {
 }
 
 bool WidgetListBox::getNext() {
-	if (list_amount < 1) return false;
+	if (values.size() < 1) return false;
 
 	int sel = getSelected();
 	if (sel != -1) selected[sel] = false;
 
-	if(sel == list_amount-1) {
+	if(sel == (int)values.size()-1) {
 		selected[0] = true;
 		while (getSelected() < cursor) scrollUp();
 	}
 	else {
 		selected[sel+1] = true;
-		while (getSelected() > cursor+list_height-1) scrollDown();
+		while (getSelected() > cursor+(int)rows.size()-1) scrollDown();
 	}
 
 	return true;
 }
 
 bool WidgetListBox::getPrev() {
-	if (list_amount < 1) return false;
+	if (values.size() < 1) return false;
 
 	int sel = getSelected();
 	if (sel == -1) sel = 0;
 	selected[sel] = false;
 
 	if(sel == 0) {
-		selected[list_amount-1] = true;
-		while (getSelected() > cursor+list_height-1) scrollDown();
+		selected[values.size()-1] = true;
+		while (getSelected() > cursor+(int)rows.size()-1) scrollDown();
 	}
 	else {
 		selected[sel-1] = true;
@@ -529,12 +484,7 @@ bool WidgetListBox::getPrev() {
 
 WidgetListBox::~WidgetListBox() {
 	if (listboxs) delete listboxs;
-	delete[] values;
-	delete[] tooltips;
-	delete[] vlabels;
-	delete[] rows;
-	delete[] selected;
-	delete tip;
-	delete scrollbar;
+	if (tip) delete tip;
+	if (scrollbar) delete scrollbar;
 }
 

@@ -77,9 +77,8 @@ GameStateNew::GameStateNew()
 		button_permadeath->Check();
 	}
 
-	class_list = new WidgetListBox (HERO_CLASSES.size(), 12, "images/menus/buttons/listbox_default.png");
+	class_list = new WidgetListBox (12, "images/menus/buttons/listbox_default.png");
 	class_list->can_deselect = false;
-	class_list->selected[0] = true;
 
 	tip = new WidgetTooltip();
 
@@ -185,6 +184,9 @@ GameStateNew::GameStateNew()
 	for (unsigned i=0; i<HERO_CLASSES.size(); i++) {
 		class_list->append(msg->get(HERO_CLASSES[i].name),getClassTooltip(i));
 	}
+
+	if (!HERO_CLASSES.empty())
+		class_list->selected[0] = true;
 
 	loadGraphics();
 	loadOptions("hero_options.txt");

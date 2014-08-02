@@ -158,7 +158,6 @@ private:
 	TooltipData         tip_buf;
 
 	int input_key;
-	int mods_total;
 	bool check_resolution;
 	Rect scrollpane;
 	Color scrollpane_color;

@@ -40,32 +40,27 @@ private:
 	std::string fileName; // the path to the ListBoxs background image
 
 	Sprite *listboxs;
-	Mix_Chunk *click;
 
-	int list_amount;
-	int list_height;
 	int cursor;
 	bool has_scroll_bar;
-	int non_empty_slots;
 	bool any_selected;
-	std::string *values;
-	std::string *tooltips;
-	WidgetLabel *vlabels;
-	Rect *rows;
+	std::vector<std::string> values;
+	std::vector<std::string> tooltips;
+	std::vector<WidgetLabel> vlabels;
+	std::vector<Rect> rows;
 	WidgetTooltip *tip;
 	WidgetScrollBar *scrollbar;
 	Color color_normal;
 	Color color_disabled;
 
 public:
-	WidgetListBox(int amount, int height, const std::string& _fileName);
+	WidgetListBox(int height, const std::string& _fileName);
 	~WidgetListBox();
 
 	bool checkClick();
 	bool checkClick(int x, int y);
 	TooltipData checkTooltip(Point mouse);
 	void append(std::string value, std::string tooltip);
-	void set(int index, std::string value, std::string tooltip);
 	void remove(int index);
 	void clear();
 	void shiftUp();
@@ -85,7 +80,7 @@ public:
 
 	Rect pos_scroll;
 	bool pressed;
-	bool *selected;
+	std::vector<bool> selected;
 	bool multi_select;
 	bool can_deselect;
 	bool can_select;
