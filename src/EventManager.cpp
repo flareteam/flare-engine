@@ -481,9 +481,6 @@ bool EventManager::executeEvent(Event &ev) {
 					mapr->layers[index][ec->x][ec->y] = ec->z;
 				else
 					fprintf(stderr, "Error: mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
-
-				if (ec->a < (int)(mapr->index_objectlayer))
-					mapr->repaint_background = true;
 			}
 			mapr->map_change = true;
 		}
