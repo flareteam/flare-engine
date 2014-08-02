@@ -271,7 +271,7 @@ int main(int argc, char *argv[]) {
 --version        Prints the release version.\n\n\
 --data-path      Specifies an exact path to look for mod data.\n\n\
 --debug-event    Prints verbose hardware input information.\n\n\
---dev-mode       Enables opening the developer menu in-game.\n\n
+--dev-mode       Enables opening the developer menu in-game.\n\n\
 --renderer       Specifies the rendering backend to use. The default is 'sdl'.\n");
 			done = true;
 		}

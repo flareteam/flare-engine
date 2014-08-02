@@ -455,6 +455,7 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "actionbar_back") keybind_num = ACTIONBAR_BACK;
 			else if (infile.key == "actionbar_forward") keybind_num = ACTIONBAR_FORWARD;
 			else if (infile.key == "actionbar_use") keybind_num = ACTIONBAR_USE;
+			else if (infile.key == "developer_menu") keybind_num = DEVELOPER_MENU;
 			// buttons end
 
 			else if (infile.key == "hws_note") {
