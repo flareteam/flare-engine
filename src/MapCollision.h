@@ -97,6 +97,8 @@ public:
 	void block(const float& map_x, const float& map_y, bool is_ally);
 	void unblock(const float& map_x, const float& map_y);
 
+	FPoint get_random_neighbor(Point target, int range, bool ignore_blocked = false);
+
 	unsigned short colmap[256][256];
 	Point map_size;
 };

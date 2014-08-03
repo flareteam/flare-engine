@@ -499,6 +499,30 @@ void MapCollision::unblock(const float& map_x, const float& map_y) {
 
 }
 
+/**
+ * Given a target, trys to return one of the 8+ adjacent tiles
+ * Returns the retargeted position on success, returns the original position on failure
+ */
+FPoint MapCollision::get_random_neighbor(Point target, int range, bool ignore_blocked) {
+	FPoint new_target = target;
+	std::vector<FPoint> valid_tiles;
+
+	for (int i=-range; i<=range; i++) {
+		for (int j=-range; j<=range; j++) {
+			if (i == 0 && j == 0) continue; // skip the middle tile
+			new_target.x = target.x + i + 0.5f;
+			new_target.y = target.y + j + 0.5f;
+			if (is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
+				valid_tiles.push_back(new_target);
+		}
+	}
+
+	if (!valid_tiles.empty())
+		return valid_tiles[rand() % valid_tiles.size()];
+	else
+		return target;
+}
+
 MapCollision::~MapCollision() {
 }
 

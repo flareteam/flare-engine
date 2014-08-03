@@ -527,30 +527,6 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint 
 }
 
 /**
- * Try to retarget the power to one of the 8 adjacent tiles
- * Returns the retargeted position on success, returns the original position on failure
- */
-FPoint PowerManager::targetNeighbor(Point target, int range, bool ignore_blocked) {
-	FPoint new_target = target;
-	std::vector<FPoint> valid_tiles;
-
-	for (int i=-range; i<=range; i++) {
-		for (int j=-range; j<=range; j++) {
-			if (i == 0 && j == 0) continue; // skip the middle tile
-			new_target.x = target.x + i + 0.5f;
-			new_target.y = target.y + j + 0.5f;
-			if (collider->is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
-				valid_tiles.push_back(new_target);
-		}
-	}
-
-	if (!valid_tiles.empty())
-		return valid_tiles[rand() % valid_tiles.size()];
-	else
-		return target;
-}
-
-/**
  * Apply basic power info to a new hazard.
  *
  * This can be called several times to combine powers.
@@ -669,7 +645,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 	if (powers[power_index].target_neighbor > 0) {
-		haz->pos = targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
+		haz->pos = collider->get_random_neighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
 	}
 
 	// pre/post power effects
@@ -707,7 +683,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 	if (powers[power_index].buff_teleport) {
 		target = limitRange(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			FPoint new_target = targetNeighbor(floor(target), powers[power_index].target_neighbor);
+			FPoint new_target = collider->get_random_neighbor(floor(target), powers[power_index].target_neighbor);
 			if (floor(new_target.x) == floor(target.x) && floor(new_target.y) == floor(target.y)) {
 				src_stats->teleportation = false;
 			}
@@ -993,7 +969,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 	}
 
 	if (powers[power_index].target_neighbor > 0) {
-		espawn.pos = floor(targetNeighbor(floor(src_stats->pos), powers[power_index].target_neighbor));
+		espawn.pos = floor(collider->get_random_neighbor(floor(src_stats->pos), powers[power_index].target_neighbor));
 	}
 
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);

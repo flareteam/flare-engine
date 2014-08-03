@@ -199,6 +199,7 @@ Set (FLARE_SOURCES
 	./src/MenuNPCActions.cpp
 	./src/MenuPowers.cpp
 	./src/MenuPromptList.cpp
+	./src/MenuPromptNumber.cpp
 	./src/MenuStash.cpp
 	./src/MenuStatBar.cpp
 	./src/MenuTalker.cpp
