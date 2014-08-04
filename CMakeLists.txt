@@ -188,6 +188,7 @@ Set (FLARE_SOURCES
 	./src/MenuBook.cpp
 	./src/MenuCharacter.cpp
 	./src/MenuConfirm.cpp
+	./src/MenuDevHUD.cpp
 	./src/MenuEnemy.cpp
 	./src/MenuExit.cpp
 	./src/MenuHUDLog.cpp
@@ -198,8 +199,6 @@ Set (FLARE_SOURCES
 	./src/MenuMiniMap.cpp
 	./src/MenuNPCActions.cpp
 	./src/MenuPowers.cpp
-	./src/MenuPromptList.cpp
-	./src/MenuPromptNumber.cpp
 	./src/MenuStash.cpp
 	./src/MenuStatBar.cpp
 	./src/MenuTalker.cpp
