@@ -29,10 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 
 class WidgetButton;
-class WidgetScrollBox;
+class WidgetLog;
 class WidgetTabControl;
-
-const unsigned int MAX_LOG_MESSAGES = 32;
 
 const unsigned LOG_TYPE_COUNT = 2;
 const int LOG_TYPE_QUESTS = 0;
@@ -48,19 +46,14 @@ private:
 	void alignElements();
 	void loadGraphics();
 
-	std::vector<std::string> log_msg[LOG_TYPE_COUNT];
-	WidgetScrollBox *msg_buffer[LOG_TYPE_COUNT];
-	int log_count[LOG_TYPE_COUNT];
+	WidgetLog *log[LOG_TYPE_COUNT];
 	std::string tab_labels[LOG_TYPE_COUNT];
 	Rect tab_rect[LOG_TYPE_COUNT];
-	int paragraph_spacing;
 
 	LabelInfo title;
 	Point close_pos;
-	int tab_content_indent;
 	Rect tab_area;
 	Color tab_bg;
-	Color color_normal;
 
 public:
 	MenuLog();
@@ -69,7 +62,7 @@ public:
 	void logic();
 	void render();
 	void refresh(int log_type);
-	void add(const std::string& s, int log_type, bool prevent_spam = true);
+	void add(const std::string& s, int log_type, bool prevent_spam = false);
 	void remove(int msg_index, int log_type);
 	void clear(int log_type);
 	void clear();

@@ -232,6 +232,7 @@ Set (FLARE_SOURCES
 	./src/WidgetInput.cpp
  	./src/WidgetLabel.cpp
  	./src/WidgetListBox.cpp
+	./src/WidgetLog.cpp
 	./src/WidgetScrollBar.cpp
 	./src/WidgetScrollBox.cpp
 	./src/WidgetSlider.cpp
