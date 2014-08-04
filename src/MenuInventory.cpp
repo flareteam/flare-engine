@@ -559,6 +559,12 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 				drop_stack.push(leftover);
 			}
 		}
+		else if (area == EQUIPMENT) {
+			ItemStack leftover = inventory[EQUIPMENT].add(stack, slot);
+			if (leftover.quantity > 0) {
+				add(leftover, CARRIED, -1, false);
+			}
+		}
 	}
 	drag_prev_src = -1;
 }
