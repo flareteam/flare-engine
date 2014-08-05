@@ -37,6 +37,7 @@ class WidgetInput : public Widget {
 protected:
 
 	void loadGraphics(const std::string& filename);
+	void trimText();
 
 	Sprite *background;
 
@@ -45,7 +46,7 @@ protected:
 	bool hover;
 
 	std::string text; // the text that has been typed into the box
-	unsigned int max_characters;
+	std::string trimmed_text; // a trimmed version of text that is rendered
 	int cursor_frame;
 
 	Point font_pos;
@@ -64,11 +65,13 @@ public:
 		return text;
 	}
 	void setText(std::string _text) {
-		text = _text;
+		trimmed_text = text = _text;
+		trimText();
 	}
 	void setPosition(int x, int y);
 
 	bool inFocus;
+	unsigned int max_length;
 };
 
 #endif

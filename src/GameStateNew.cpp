@@ -153,6 +153,7 @@ GameStateNew::GameStateNew()
 	name_pos.y += (VIEW_H - FRAME_H)/2;
 
 	input_name->setPosition(name_pos.x, name_pos.y);
+	input_name->max_length = 20;
 
 	button_permadeath->pos.x += (VIEW_W - FRAME_W)/2;
 	button_permadeath->pos.y += (VIEW_H - FRAME_H)/2;
