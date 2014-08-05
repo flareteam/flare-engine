@@ -91,7 +91,7 @@ void MenuLog::alignElements() {
 	label_log.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Log"), font->getColor("menu_normal"), title.font_style);
 
 	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
-		log[i]->setPos(window_area.x+tab_area.x, window_area.y+tab_area.y+tabControl->getTabHeight());
+		log[i]->setPosition(window_area.x+tab_area.x, window_area.y+tab_area.y+tabControl->getTabHeight());
 	}
 }
 

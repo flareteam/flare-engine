@@ -70,7 +70,7 @@ GameStateNew::GameStateNew()
 
 	button_prev = new WidgetButton("images/menus/buttons/left.png");
 	button_next = new WidgetButton("images/menus/buttons/right.png");
-	input_name = new WidgetInput();
+	input_name = new WidgetInput("images/menus/input.png");
 	button_permadeath = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	if (DEATH_PENALTY_PERMADEATH) {
 		button_permadeath->enabled = false;

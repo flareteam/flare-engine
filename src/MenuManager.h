@@ -45,6 +45,8 @@ class MenuTalker;
 class MenuExit;
 class MenuActiveEffects;
 class MenuStash;
+class MenuDevHUD;
+class MenuDevConsole;
 class StatBlock;
 class WidgetTooltip;
 
@@ -121,6 +123,9 @@ public:
 	MenuExit *exit;
 	MenuActiveEffects *effects;
 	MenuStash *stash;
+
+	MenuDevHUD *devhud;
+	MenuDevConsole *devconsole;
 
 	bool pause;
 	bool menus_open;

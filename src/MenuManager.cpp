@@ -42,6 +42,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActiveEffects.h"
 #include "MenuStash.h"
 #include "MenuLog.h"
+#include "MenuDevHUD.h"
+#include "MenuDevConsole.h"
 #include "ModManager.h"
 #include "NPC.h"
 #include "SharedResources.h"
@@ -86,6 +88,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, exit(NULL)
 	, effects(NULL)
 	, stash(NULL)
+	, devhud(NULL)
+	, devconsole(NULL)
 	, pause(false)
 	, menus_open(false) {
 
@@ -125,6 +129,12 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(npc); // menus[16]
 	book = new MenuBook();
 	menus.push_back(book); // menus[17]
+
+	devconsole = new MenuDevConsole();
+	menus.push_back(devconsole); // menus[18]
+
+	devhud = new MenuDevHUD();
+	DEV_HUD = DEV_MODE;
 
 	tip = new WidgetTooltip();
 
@@ -430,6 +440,10 @@ void MenuManager::logic() {
 	talker->logic();
 	stash->logic();
 
+	devhud->visible = DEV_HUD;
+	devhud->logic();
+	devconsole->logic();
+
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
 		inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
@@ -444,8 +458,11 @@ void MenuManager::logic() {
 		closeAll();
 	}
 
-	if (!inpt->pressing[INVENTORY] && !inpt->pressing[POWERS] && !inpt->pressing[CHARACTER] && !inpt->pressing[LOG])
+	if (!inpt->pressing[INVENTORY] && !inpt->pressing[POWERS] && !inpt->pressing[CHARACTER] && !inpt->pressing[LOG] && !inpt->pressing[DEVELOPER_MENU])
 		key_lock = false;
+
+	if (devconsole->inputFocus())
+		key_lock = true;
 
 	// handle npc action menu
 	if (npc->visible) {
@@ -564,8 +581,21 @@ void MenuManager::logic() {
 		}
 	}
 
-	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible || book->visible);
-	pause = (MENUS_PAUSE && menus_open) || exit->visible;
+	//developer console
+	if (inpt->pressing[DEVELOPER_MENU] && !key_lock && !mouse_dragging && !keyboard_dragging) {
+		key_lock = true;
+		if (devconsole->visible) {
+			closeAll();
+		}
+		else {
+			closeAll();
+			devconsole->visible = true;
+			// TODO reset scroll
+		}
+	}
+
+	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible || book->visible || devconsole->visible);
+	pause = (MENUS_PAUSE && menus_open) || exit->visible || devconsole->visible;
 
 	if (stats->alive) {
 
@@ -1177,6 +1207,9 @@ void MenuManager::resetDrag() {
 }
 
 void MenuManager::render() {
+	// render the devhud under other menus
+	devhud->render();
+
 	for (unsigned int i=0; i<menus.size(); i++) {
 		menus[i]->render();
 	}
@@ -1346,6 +1379,11 @@ void MenuManager::closeLeft() {
 	npc->visible = false;
 	book->visible = false;
 	book->book_name = "";
+
+	if (devconsole->visible) {
+		devconsole->visible = false;
+		devconsole->reset();
+	}
 }
 
 void MenuManager::closeRight() {
@@ -1357,6 +1395,11 @@ void MenuManager::closeRight() {
 	npc->visible = false;
 	book->visible = false;
 	book->book_name = "";
+
+	if (devconsole->visible) {
+		devconsole->visible = false;
+		devconsole->reset();
+	}
 }
 
 bool MenuManager::isDragging() {
@@ -1402,6 +1445,9 @@ MenuManager::~MenuManager() {
 	delete stash;
 	delete npc;
 	delete book;
+
+	delete devhud;
+	delete devconsole;
 
 	if (drag_icon) delete drag_icon;
 }

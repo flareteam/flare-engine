@@ -50,7 +50,7 @@ void WidgetLog::render() {
 	scroll_box->render();
 }
 
-void WidgetLog::setPos(int x, int y) {
+void WidgetLog::setPosition(int x, int y) {
 	scroll_box->pos.x = x;
 	scroll_box->pos.y = y;
 }
@@ -77,21 +77,28 @@ void WidgetLog::refresh() {
 	// Render messages into the scrollbox area
 	for (unsigned int i = messages.size(); i > 0; i--) {
 		Point size = font->calc_size(messages[i-1], content_width);
-		font->renderShadowed(messages[i-1], padding, y2, JUSTIFY_LEFT, scroll_box->contents->getGraphics(), content_width, color_normal);
+		font->renderShadowed(messages[i-1], padding, y2, JUSTIFY_LEFT, scroll_box->contents->getGraphics(), content_width, colors[i-1]);
 		y2 += size.y+paragraph_spacing;
 	}
 }
 
-void WidgetLog::add(const std::string &s, bool prevent_spam) {
+void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color) {
 	// First, make sure we're not repeating the last log message, to avoid spam
 	if (messages.empty() || messages.back() != s || !prevent_spam) {
 		// If we have too many messages, remove the oldest ones
 		while (messages.size() >= max_messages) {
 			messages.erase(messages.begin());
+			colors.erase(colors.begin());
 		}
 
 		// Add the new message.
 		messages.push_back(s);
+		if (color == NULL) {
+			colors.push_back(color_normal);
+		}
+		else {
+			colors.push_back(*color);
+		}
 		refresh();
 	}
 }
@@ -99,11 +106,13 @@ void WidgetLog::add(const std::string &s, bool prevent_spam) {
 void WidgetLog::remove(unsigned msg_index) {
 	if (msg_index < messages.size()) {
 		messages.erase(messages.begin()+msg_index);
+		colors.erase(colors.begin()+msg_index);
 		refresh();
 	}
 }
 
 void WidgetLog::clear() {
 	messages.clear();
+	colors.clear();
 	refresh();
 }

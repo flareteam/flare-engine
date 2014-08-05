@@ -53,7 +53,7 @@ protected:
 	Color color_normal;
 
 public:
-	WidgetInput();
+	WidgetInput(const std::string& filename);
 	~WidgetInput();
 
 	void logic();

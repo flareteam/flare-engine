@@ -189,6 +189,7 @@ Set (FLARE_SOURCES
 	./src/MenuCharacter.cpp
 	./src/MenuConfirm.cpp
 	./src/MenuDevHUD.cpp
+	./src/MenuDevConsole.cpp
 	./src/MenuEnemy.cpp
 	./src/MenuExit.cpp
 	./src/MenuHUDLog.cpp

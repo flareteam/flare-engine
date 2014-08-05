@@ -40,6 +40,7 @@ private:
 	Color color_normal;
 
 	std::vector<std::string> messages;
+	std::vector<Color> colors;
 
 public:
 	WidgetLog (int width, int height);
@@ -48,11 +49,11 @@ public:
 	void logic();
 	void render();
 
-	void setPos(int x, int y);
+	void setPosition(int x, int y);
 	bool inFocus();
 	Widget* getWidget() { return (Widget*)scroll_box; } // for adding to tablist
 
-	void add(const std::string &s, bool prevent_spam = false);
+	void add(const std::string &s, bool prevent_spam = false, Color* color = NULL);
 	void remove(unsigned msg_index);
 	void clear();
 };

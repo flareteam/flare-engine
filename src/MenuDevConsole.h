@@ -1,6 +1,5 @@
 /*
-Copyright © 2011-2012 Clint Bellanger
-Copyright © 2014 Henrik Andersson
+Copyright © 2014 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -17,56 +16,52 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
- * class MenuLog
+ * class MenuDevConsole
  */
 
 #pragma once
-#ifndef MENU_LOG_H
-#define MENU_LOG_H
+#ifndef MENU_DEVCONSOLE_H
+#define MENU_DEVCONSOLE_H
 
 #include "CommonIncludes.h"
-#include "Utils.h"
+#include "Menu.h"
+#include "WidgetButton.h"
+#include "WidgetInput.h"
 #include "WidgetLabel.h"
+#include "WidgetLog.h"
 
-class WidgetButton;
-class WidgetLog;
-class WidgetTabControl;
-
-const unsigned LOG_TYPE_COUNT = 2;
-const int LOG_TYPE_QUESTS = 0;
-const int LOG_TYPE_MESSAGES = 1;
-
-class MenuLog : public Menu {
-private:
-
-	WidgetLabel label_log;
-	WidgetButton *closeButton;
-	WidgetTabControl *tabControl;
-
+class MenuDevConsole : public Menu {
+protected:
 	void alignElements();
 	void loadGraphics();
+	void execute();
 
-	WidgetLog *log[LOG_TYPE_COUNT];
-	std::string tab_labels[LOG_TYPE_COUNT];
-	Rect tab_rect[LOG_TYPE_COUNT];
+	WidgetButton *button_close;
+	WidgetButton *button_confirm;
+	WidgetInput *input_box;
+	WidgetLog *log_history;
 
-	LabelInfo title;
-	Point close_pos;
-	Rect tab_area;
-	Color tab_bg;
-
-public:
-	MenuLog();
-	~MenuLog();
-
-	void logic();
-	void render();
-	void add(const std::string& s, int log_type, bool prevent_spam = false);
-	void remove(int msg_index, int log_type);
-	void clear(int log_type);
-	void clear();
+	WidgetLabel label;
 
 	TabList tablist;
+	LabelInfo title;
+	Point close_pos;
+	Point confirm_pos;
+	Point input_pos;
+	Rect history_area;
+
+	Color color_echo;
+	Color color_error;
+
+public:
+	MenuDevConsole();
+	~MenuDevConsole();
+
+	void logic();
+	virtual void render();
+
+	bool inputFocus();
+	void reset();
 };
 
 #endif

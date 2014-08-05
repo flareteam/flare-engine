@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-WidgetInput::WidgetInput()
+WidgetInput::WidgetInput(const std::string& filename)
 	: background(NULL)
 	, enabled(true)
 	, pressed(false)
@@ -34,7 +34,7 @@ WidgetInput::WidgetInput()
 	, cursor_frame(0)
 	, inFocus(false) {
 
-	loadGraphics("images/menus/input.png");
+	loadGraphics(filename);
 
 	render_to_alpha = false;
 	color_normal = font->getColor("widget_normal");
@@ -81,6 +81,14 @@ bool WidgetInput::logic(int x, int y) {
 			text += inpt->inkeys;
 			if (text.length() > max_characters) {
 				text = text.substr(0, max_characters);
+			}
+
+			// HACK: this prevents normal keys from triggering common menu shortcuts
+			if (inpt->pressing[ACCEPT]) {
+				inpt->lock[ACCEPT] = true;
+			}
+			else if (inpt->pressing[CANCEL]) {
+				inpt->lock[CANCEL] = true;
 			}
 		}
 
