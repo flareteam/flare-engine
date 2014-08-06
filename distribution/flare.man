@@ -24,8 +24,6 @@ Prints the release version.
 Specifies an exact path to look for mod data.
 .IP "\fB\-\-debug-event\fP"
 Prints verbose hardware input information.
-.IP "\fB\-\-dev-mode\fP"
-Enables opening the developer menu in-game.
 .IP "\fB\-\-renderer \fIrenderer\fP"
 Specifies the rendering backend to use. The default is 'sdl'.
 
