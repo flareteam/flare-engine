@@ -171,23 +171,23 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
-		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"));
-		log_history->add("unset_status - " + msg->get("unsets the given campaign statuses if they are set"));
-		log_history->add("set_status - " + msg->get("sets the given campaign statuses"));
-		log_history->add("give_xp - " + msg->get("rewards the player with the specified amount of experience points"));
-		log_history->add("give_currency - " + msg->get("adds the specified amount of currency to the player's inventory"));
-		log_history->add("give_item - " + msg->get("adds an item to the player's inventory"));
-		log_history->add("spawn_enemy - " + msg->get("spawns an enemy matching the given category next to the player"));
-		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"));
-		log_history->add("clear - " + msg->get("clears the command history"));
-		log_history->add("help - " + msg->get("displays this text"));
+		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"), false);
+		log_history->add("unset_status - " + msg->get("unsets the given campaign statuses if they are set"), false);
+		log_history->add("set_status - " + msg->get("sets the given campaign statuses"), false);
+		log_history->add("give_xp - " + msg->get("rewards the player with the specified amount of experience points"), false);
+		log_history->add("give_currency - " + msg->get("adds the specified amount of currency to the player's inventory"), false);
+		log_history->add("give_item - " + msg->get("adds an item to the player's inventory"), false);
+		log_history->add("spawn_enemy - " + msg->get("spawns an enemy matching the given category next to the player"), false);
+		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), false);
+		log_history->add("clear - " + msg->get("clears the command history"), false);
+		log_history->add("help - " + msg->get("displays this text"), false);
 	}
 	else if (args[0] == "clear") {
 		log_history->clear();
 	}
 	else if (args[0] == "toggle_devhud") {
 		DEV_HUD = !DEV_HUD;
-		log_history->add(msg->get("Toggled the developer hud"));
+		log_history->add(msg->get("Toggled the developer hud"), false);
 	}
 	else if (args[0] == "spawn_enemy") {
 		if (args.size() > 1) {
@@ -227,7 +227,7 @@ void MenuDevConsole::execute() {
 					stack.quantity = quantity;
 					camp->rewardItem(stack);
 				}
-				log_history->add(msg->get("Added item: ") + items->items[id].name + " (" + toString(typeid(int), &quantity) + ")" );
+				log_history->add(msg->get("Added item: ") + items->items[id].name + " (" + toString(typeid(int), &quantity) + ")", false);
 			}
 		}
 		else {
@@ -238,7 +238,7 @@ void MenuDevConsole::execute() {
 		int quantity = (args.size() > 1) ? toInt(args[1]) : 0;
 		if (quantity > 0) {
 			camp->rewardCurrency(quantity);
-			log_history->add(msg->get("Added currency: ") + toString(typeid(int), &quantity));
+			log_history->add(msg->get("Added currency: ") + toString(typeid(int), &quantity), false);
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
@@ -248,7 +248,7 @@ void MenuDevConsole::execute() {
 		int quantity = (args.size() > 1) ? toInt(args[1]) : 0;
 		if (quantity > 0) {
 			camp->rewardXP(quantity, true);
-			log_history->add(msg->get("Added XP: ") + toString(typeid(int), &quantity));
+			log_history->add(msg->get("Added XP: ") + toString(typeid(int), &quantity), false);
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
@@ -257,7 +257,7 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "set_status") {
 		for (unsigned i = 1; i < args.size(); ++i) {
 			camp->setStatus(args[i]);
-			log_history->add(msg->get("Set campaign status: ") + args[i]);
+			log_history->add(msg->get("Set campaign status: ") + args[i], false);
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
@@ -267,7 +267,7 @@ void MenuDevConsole::execute() {
 		for (unsigned i = 1; i < args.size(); ++i) {
 			if (camp->checkStatus(args[i])) {
 				camp->unsetStatus(args[i]);
-				log_history->add(msg->get("Unset campaign status: ") + args[i]);
+				log_history->add(msg->get("Unset campaign status: ") + args[i], false);
 			}
 			else {
 				log_history->add(msg->get("ERROR: Unknown campaign status: ") + args[i], false, &color_error);
@@ -289,7 +289,7 @@ void MenuDevConsole::execute() {
 					mapr->teleport_destination.x = dest.x;
 					mapr->teleport_destination.y = dest.y;
 					mapr->teleport_mapname = args[3];
-					log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2] + ", " + args[3]));
+					log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2] + ", " + args[3]), false);
 				}
 				else {
 					log_history->add(msg->get("ERROR: Unknown map: ") + args[3], false, &color_error);
@@ -299,7 +299,7 @@ void MenuDevConsole::execute() {
 				mapr->teleportation = true;
 				mapr->teleport_destination.x = dest.x;
 				mapr->teleport_destination.y = dest.y;
-				log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2]));
+				log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2]), false);
 			}
 		}
 		else {
