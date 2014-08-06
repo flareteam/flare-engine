@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
+#include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
 #include <limits>
@@ -170,15 +171,16 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
-		log_history->add("help - " + msg->get("displays this text"));
-		log_history->add("clear - " + msg->get("clears the command history"));
-		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"));
-		log_history->add("spawn_enemy - " + msg->get("spawns an enemy matching the given category next to the player"));
-		log_history->add("give_item - " + msg->get("adds an item to the player's inventory"));
-		log_history->add("give_currency - " + msg->get("adds the specified amount of currency to the player's inventory"));
-		log_history->add("give_xp - " + msg->get("rewards the player with the specified amount of experience points"));
+		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"));
+		log_history->add("unset_status - " + msg->get("unsets the given campaign statuses if they are set"));
 		log_history->add("set_status - " + msg->get("sets the given campaign statuses"));
-		log_history->add("unset_status - " + msg->get("unsets the given campaign statuses if it is set"));
+		log_history->add("give_xp - " + msg->get("rewards the player with the specified amount of experience points"));
+		log_history->add("give_currency - " + msg->get("adds the specified amount of currency to the player's inventory"));
+		log_history->add("give_item - " + msg->get("adds an item to the player's inventory"));
+		log_history->add("spawn_enemy - " + msg->get("spawns an enemy matching the given category next to the player"));
+		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"));
+		log_history->add("clear - " + msg->get("clears the command history"));
+		log_history->add("help - " + msg->get("displays this text"));
 	}
 	else if (args[0] == "clear") {
 		log_history->clear();
@@ -200,6 +202,9 @@ void MenuDevConsole::execute() {
 			else {
 				log_history->add(msg->get("ERROR: Invalid enemy category"), false, &color_error);
 			}
+		}
+		else {
+			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
 		}
 	}
 	else if (args[0] == "give_item") {
@@ -225,12 +230,18 @@ void MenuDevConsole::execute() {
 				log_history->add(msg->get("Added item: ") + items->items[id].name + " (" + toString(typeid(int), &quantity) + ")" );
 			}
 		}
+		else {
+			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+		}
 	}
 	else if (args[0] == "give_currency") {
 		int quantity = (args.size() > 1) ? toInt(args[1]) : 0;
 		if (quantity > 0) {
 			camp->rewardCurrency(quantity);
 			log_history->add(msg->get("Added currency: ") + toString(typeid(int), &quantity));
+		}
+		if (args.size() < 2) {
+			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
 		}
 	}
 	else if (args[0] == "give_xp") {
@@ -239,11 +250,17 @@ void MenuDevConsole::execute() {
 			camp->rewardXP(quantity, true);
 			log_history->add(msg->get("Added XP: ") + toString(typeid(int), &quantity));
 		}
+		if (args.size() < 2) {
+			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+		}
 	}
 	else if (args[0] == "set_status") {
 		for (unsigned i = 1; i < args.size(); ++i) {
 			camp->setStatus(args[i]);
 			log_history->add(msg->get("Set campaign status: ") + args[i]);
+		}
+		if (args.size() < 2) {
+			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
 		}
 	}
 	else if (args[0] == "unset_status") {
@@ -255,6 +272,38 @@ void MenuDevConsole::execute() {
 			else {
 				log_history->add(msg->get("ERROR: Unknown campaign status: ") + args[i], false, &color_error);
 			}
+		}
+		if (args.size() < 2) {
+			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+		}
+	}
+	else if (args[0] == "teleport") {
+		if (args.size() > 2) {
+			FPoint dest;
+			dest.x = toInt(args[1]) + 0.5f;
+			dest.y = toInt(args[2]) + 0.5f;
+
+			if (args.size() > 3) {
+				if (fileExists(mods->locate(args[3]))) {
+					mapr->teleportation = true;
+					mapr->teleport_destination.x = dest.x;
+					mapr->teleport_destination.y = dest.y;
+					mapr->teleport_mapname = args[3];
+					log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2] + ", " + args[3]));
+				}
+				else {
+					log_history->add(msg->get("ERROR: Unknown map: ") + args[3], false, &color_error);
+				}
+			}
+			else {
+				mapr->teleportation = true;
+				mapr->teleport_destination.x = dest.x;
+				mapr->teleport_destination.y = dest.y;
+				log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2]));
+			}
+		}
+		else {
+			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
 		}
 	}
 	else {
