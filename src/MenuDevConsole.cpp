@@ -248,8 +248,13 @@ void MenuDevConsole::execute() {
 	}
 	else if (args[0] == "unset_status") {
 		for (unsigned i = 1; i < args.size(); ++i) {
-			camp->unsetStatus(args[i]);
-			log_history->add(msg->get("Unset campaign status: ") + args[i]);
+			if (camp->checkStatus(args[i])) {
+				camp->unsetStatus(args[i]);
+				log_history->add(msg->get("Unset campaign status: ") + args[i]);
+			}
+			else {
+				log_history->add(msg->get("ERROR: Unknown campaign status: ") + args[i], false, &color_error);
+			}
 		}
 	}
 	else {

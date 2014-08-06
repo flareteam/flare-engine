@@ -582,7 +582,7 @@ void MenuManager::logic() {
 	}
 
 	//developer console
-	if (inpt->pressing[DEVELOPER_MENU] && !key_lock && !mouse_dragging && !keyboard_dragging) {
+	if (DEV_MODE && inpt->pressing[DEVELOPER_MENU] && !key_lock && !mouse_dragging && !keyboard_dragging) {
 		key_lock = true;
 		if (devconsole->visible) {
 			closeAll();
@@ -590,7 +590,6 @@ void MenuManager::logic() {
 		else {
 			closeAll();
 			devconsole->visible = true;
-			// TODO reset scroll
 		}
 	}
 

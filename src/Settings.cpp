@@ -190,7 +190,7 @@ float INTERACT_RANGE;
 bool HARDWARE_CURSOR = false;
 bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
-bool DEV_MODE = true;
+bool DEV_MODE = false;
 bool DEV_HUD = false;
 
 /**
