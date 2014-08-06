@@ -130,11 +130,11 @@ MenuManager::MenuManager(StatBlock *_stats)
 	book = new MenuBook();
 	menus.push_back(book); // menus[17]
 
-	devconsole = new MenuDevConsole();
-	menus.push_back(devconsole); // menus[18]
-
-	devhud = new MenuDevHUD();
-	DEV_HUD = DEV_MODE;
+	if (DEV_MODE) {
+		devconsole = new MenuDevConsole();
+		devhud = new MenuDevHUD();
+		DEV_HUD = DEV_MODE;
+	}
 
 	tip = new WidgetTooltip();
 
@@ -440,9 +440,11 @@ void MenuManager::logic() {
 	talker->logic();
 	stash->logic();
 
-	devhud->visible = DEV_HUD;
-	devhud->logic();
-	devconsole->logic();
+	if (DEV_MODE) {
+		devhud->visible = DEV_HUD;
+		devhud->logic();
+		devconsole->logic();
+	}
 
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
@@ -461,7 +463,7 @@ void MenuManager::logic() {
 	if (!inpt->pressing[INVENTORY] && !inpt->pressing[POWERS] && !inpt->pressing[CHARACTER] && !inpt->pressing[LOG] && !inpt->pressing[DEVELOPER_MENU])
 		key_lock = false;
 
-	if (devconsole->inputFocus())
+	if (DEV_MODE && devconsole->inputFocus())
 		key_lock = true;
 
 	// handle npc action menu
@@ -593,8 +595,9 @@ void MenuManager::logic() {
 		}
 	}
 
-	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible || book->visible || devconsole->visible);
-	pause = (MENUS_PAUSE && menus_open) || exit->visible || devconsole->visible;
+	bool console_open = DEV_MODE && devconsole->visible;
+	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
+	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open;
 
 	if (stats->alive) {
 
@@ -1207,7 +1210,9 @@ void MenuManager::resetDrag() {
 
 void MenuManager::render() {
 	// render the devhud under other menus
-	devhud->render();
+	if (DEV_MODE) {
+		devhud->render();
+	}
 
 	for (unsigned int i=0; i<menus.size(); i++) {
 		menus[i]->render();
@@ -1274,6 +1279,10 @@ void MenuManager::render() {
 		renderIcon(keydrag_pos.x - ICON_SIZE/2, keydrag_pos.y - ICON_SIZE/2);
 	}
 
+	// render the dev console above everything else
+	if (DEV_MODE) {
+		devconsole->render();
+	}
 }
 
 void MenuManager::handleKeyboardTooltips() {
@@ -1379,7 +1388,7 @@ void MenuManager::closeLeft() {
 	book->visible = false;
 	book->book_name = "";
 
-	if (devconsole->visible) {
+	if (DEV_MODE && devconsole->visible) {
 		devconsole->visible = false;
 		devconsole->reset();
 	}
@@ -1395,7 +1404,7 @@ void MenuManager::closeRight() {
 	book->visible = false;
 	book->book_name = "";
 
-	if (devconsole->visible) {
+	if (DEV_MODE && devconsole->visible) {
 		devconsole->visible = false;
 		devconsole->reset();
 	}
@@ -1445,8 +1454,10 @@ MenuManager::~MenuManager() {
 	delete npc;
 	delete book;
 
-	delete devhud;
-	delete devconsole;
+	if (DEV_MODE) {
+		delete devhud;
+		delete devconsole;
+	}
 
 	if (drag_icon) delete drag_icon;
 }
