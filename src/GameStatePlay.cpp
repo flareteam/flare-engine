@@ -942,7 +942,7 @@ void GameStatePlay::render() {
 	vector<Renderable> rens;
 	vector<Renderable> rens_dead;
 
-	pc->addRenders(rens);
+	pc->addRenders(rens, rens_dead);
 
 	enemies->addRenders(rens, rens_dead);
 

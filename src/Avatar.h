@@ -91,6 +91,12 @@ private:
 
 	void handlePower(int actionbar_power);
 
+	// visible power target
+	FPoint target_pos;
+	bool target_visible;
+	Animation *target_anim;
+	AnimationSet *target_animset;
+
 public:
 	Avatar();
 	~Avatar();
@@ -122,7 +128,7 @@ public:
 	virtual Renderable getRender() {
 		return Renderable();
 	}
-	void addRenders(std::vector<Renderable> &r);
+	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	// vars
 	Hazard *haz;

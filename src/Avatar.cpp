@@ -45,6 +45,9 @@ Avatar::Avatar()
 	, lockAttack(false)
 	, path()
 	, prev_target()
+	, target_visible(false)
+	, target_anim(NULL)
+	, target_animset(NULL)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -64,6 +67,11 @@ Avatar::Avatar()
 	activeAnimation = animationSet->getAnimation();
 
 	loadLayerDefinitions();
+
+	// load target animation
+	anim->increaseCount("animations/target.txt");
+	target_animset = anim->getAnimationSet("animations/target.txt");
+	target_anim = target_animset->getAnimation();
 
 	// load foot-step definitions
 	// @CLASS Avatar: Step sounds|Description of items/step_sounds.txt
@@ -308,6 +316,12 @@ void Avatar::handlePower(int actionbar_power) {
 		if (!powers->hasValidTarget(actionbar_power,&stats,target))
 			return;
 
+		if (!power.buff && power.type != POWTYPE_TRANSFORM) {
+			target_pos = target;
+			target_visible = true;
+			target_anim->reset();
+		}
+
 		hero_cooldown[actionbar_power] = power.cooldown; //set the cooldown timer
 		current_power = actionbar_power;
 		act_target = target;
@@ -440,9 +454,18 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 	// handle animation
 	activeAnimation->advanceFrame();
-	for (unsigned i=0; i < anims.size(); i++)
+	for (unsigned i=0; i < anims.size(); i++) {
 		if (anims[i] != NULL)
 			anims[i]->advanceFrame();
+	}
+
+	if (target_anim->getTimesPlayed() >= 1) {
+		target_visible = false;
+		target_anim->reset();
+	}
+
+	if (target_visible)
+		target_anim->advanceFrame();
 
 	// handle transformation
 	if (stats.transform_type != "" && stats.transform_type != "untransform" && stats.transformed == false) transform();
@@ -816,7 +839,15 @@ void Avatar::resetActiveAnimation() {
 			anims[i]->reset();
 }
 
-void Avatar::addRenders(vector<Renderable> &r) {
+void Avatar::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
+	// target
+	if (target_visible) {
+		Renderable ren = target_anim->getCurrentFrame(0);
+		ren.map_pos = target_pos;
+		ren.prio = 0;
+		r_dead.push_back(ren);
+	}
+
 	if (!stats.transformed) {
 		for (unsigned i = 0; i < layer_def[stats.direction].size(); ++i) {
 			unsigned index = layer_def[stats.direction][i];
@@ -846,6 +877,7 @@ void Avatar::addRenders(vector<Renderable> &r) {
 }
 
 Avatar::~Avatar() {
+	anim->decreaseCount("animations/target.txt");
 
 	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
 		anim->decreaseCount(charmed_stats->animations);
