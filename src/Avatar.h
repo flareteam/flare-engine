@@ -97,6 +97,8 @@ private:
 	Animation *target_anim;
 	AnimationSet *target_animset;
 
+	bool lock_cursor; // keeps the attacking cursor while holding down the power key/button
+
 public:
 	Avatar();
 	~Avatar();

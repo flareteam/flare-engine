@@ -48,6 +48,7 @@ Avatar::Avatar()
 	, target_visible(false)
 	, target_anim(NULL)
 	, target_animset(NULL)
+	, lock_cursor(false)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -316,10 +317,15 @@ void Avatar::handlePower(int actionbar_power) {
 		if (!powers->hasValidTarget(actionbar_power,&stats,target))
 			return;
 
-		if (!power.buff && power.type != POWTYPE_TRANSFORM) {
+		// draw a target on the ground if we're attacking
+		if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
 			target_pos = target;
 			target_visible = true;
 			target_anim->reset();
+			lock_cursor = true;
+		}
+		else {
+			curs->setCursor(CURSOR_NORMAL);
 		}
 
 		hero_cooldown[actionbar_power] = power.cooldown; //set the cooldown timer
@@ -471,6 +477,14 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	if (stats.transform_type != "" && stats.transform_type != "untransform" && stats.transformed == false) transform();
 	if (stats.transform_type != "" && stats.transform_duration == 0) untransform();
 
+	// change the cursor if we're attacking
+	if (actionbar_power == 0) {
+		lock_cursor = false;
+	}
+	else if (lock_cursor) {
+		curs->setCursor(CURSOR_ATTACK);
+	}
+
 	switch(stats.cur_state) {
 		case AVATAR_STANCE:
 
@@ -573,6 +587,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 				stats.cur_state = AVATAR_STANCE;
 				stats.cooldown_ticks += stats.cooldown;
 			}
+
 			break;
 
 		case AVATAR_BLOCK:
