@@ -142,6 +142,7 @@ public:
 	bool close_menus;
 	bool allow_movement;
 	std::vector<int> hero_cooldown;
+	FPoint enemy_pos; // positon of the highlighted enemy
 };
 
 #endif

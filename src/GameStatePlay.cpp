@@ -183,6 +183,14 @@ void GameStatePlay::checkEnemyFocus() {
 		}
 	}
 
+	// save the highlighted enemy position for auto-targeting purposes
+	if (enemy) {
+		pc->enemy_pos = enemy->stats.pos;
+	}
+	else {
+		pc->enemy_pos.x = -1;
+		pc->enemy_pos.y = -1;
+	}
 }
 
 /**

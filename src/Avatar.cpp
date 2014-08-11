@@ -55,7 +55,8 @@ Avatar::Avatar()
 	, drag_walking(false)
 	, respawn(false)
 	, close_menus(false)
-	, allow_movement(true) {
+	, allow_movement(true)
+	, enemy_pos(FPoint(-1,-1)) {
 
 	init();
 
@@ -316,6 +317,11 @@ void Avatar::handlePower(int actionbar_power) {
 			return;
 		if (!powers->hasValidTarget(actionbar_power,&stats,target))
 			return;
+
+		// automatically target the selected enemy with melee attacks
+		if (power.type == POWTYPE_FIXED && power.starting_pos == STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
+			target = enemy_pos;
+		}
 
 		// draw a target on the ground if we're attacking
 		if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
