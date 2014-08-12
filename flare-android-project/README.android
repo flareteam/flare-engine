@@ -10,14 +10,20 @@ To build for Android do next steps:
 
 You will need to edit next settings
 
-1. In file \jni\src\Android.mk
+	1. In file \jni\src\Android.mk
 
-SDL_PATH := D:/Development/SDL
+	SDL_PATH := D:/Development/SDL
 
-NOTE: changing SDL path doesn't work yet. Place SDL folder into \jni\ (so it will be like jni\SDL\src\SDL.c)
+	NOTE: changing SDL path doesn't work yet. Place SDL folder into \jni\ (so it will be like jni\SDL\src\SDL.c)
 
-2. In Eclipse IDE go to Project Properties: C/C++ General -> Paths and Symbols -> Includes -> GNU C++
+	2. In Eclipse IDE go to Project Properties: C/C++ General -> Paths and Symbols -> Includes -> GNU C++
 
-Change path to "platforms\android-16\arch-arm\usr\include"
+	Change path to "platforms\android-16\arch-arm\usr\include"
 
-3. In Eclipse IDE go to Project Properties: C/C++ Build. Change build command to your "ndk-build(.cmd)" path
+	3. In Eclipse IDE go to Project Properties: C/C++ Build. Change build command to your "ndk-build(.cmd)" path
+
+8. Set-up SDL libraries
+
+	1. Download SDL, SDL_image, SDL_mixer and SDL_ttf and extract them to \jni\ folder (so it will be like jni\SDL\src\SDL.c)
+
+	2. In SDL_mixer\Android.mk set SUPPORT_MOD_MIKMOD and SUPPORT_MP3_SMPEG to false to build under Windows.
