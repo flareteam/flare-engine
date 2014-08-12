@@ -29,3 +29,11 @@ You will need to edit next settings
 	1. Download SDL, SDL_image, SDL_mixer and SDL_ttf and extract them to \jni\ folder (so it will be like jni\SDL\src\SDL.c)
 
 	2. In SDL_mixer\Android.mk set SUPPORT_MOD_MIKMOD and SUPPORT_MP3_SMPEG to false to build under Windows.
+
+TODO:
+
+1. Use SDL_AndroidGetInternalStoragePath() for getting game data. Add downloader(?) to get game data instead of packing it in installer.
+
+2. Implement Touch Input Events
+
+3. Implement Orientation Events
