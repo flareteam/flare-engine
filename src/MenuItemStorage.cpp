@@ -35,7 +35,9 @@ MenuItemStorage::MenuItemStorage()
 	, slot_type()
 	, drag_prev_slot(-1)
 	, slots()
-	, highlight(NULL) {
+	, highlight(NULL)
+	, highlight_image(NULL)
+	, overlay_disabled(NULL) {
 }
 
 void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb_cols) {
@@ -83,9 +85,20 @@ void MenuItemStorage::loadGraphics() {
 		highlight_image = graphics->createSprite();
 		graphics->unref();
 	}
+
+	graphics = render_device->loadImage("images/menus/disabled.png");
+	if (graphics) {
+		overlay_disabled = graphics->createSprite();
+		graphics->unref();
+	}
+
 }
 
 void MenuItemStorage::render() {
+	Rect disabled_src;
+	disabled_src.x = disabled_src.y = 0;
+	disabled_src.w = disabled_src.h = ICON_SIZE;
+
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item > 0) {
 			slots[i]->setIcon(items->items[storage[i].item].icon);
@@ -95,6 +108,13 @@ void MenuItemStorage::render() {
 			slots[i]->setIcon(-1);
 		}
 		slots[i]->render();
+		if (!slots[i]->enabled) {
+			if (overlay_disabled) {
+				overlay_disabled->setClip(disabled_src);
+				overlay_disabled->setDest(slots[i]->pos);
+				render_device->render(overlay_disabled);
+			}
+		}
 		if (highlight[i]) renderHighlight(slots[i]->pos.x, slots[i]->pos.y, slots[i]->pos.w);
 	}
 }
@@ -135,9 +155,13 @@ TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int 
 
 ItemStack MenuItemStorage::click(Point position) {
 	ItemStack item;
+
 	drag_prev_slot = slotOver(position);
+
+	// try to click on the highlighted (aka in focus) slot
+	// since mouse clicks defocus slots before this point,
+	// we don't have to worry about the mouse being over another slot
 	if (drag_prev_slot == -1) {
-		// FIXME: What if mouse is over one slot and focused is another slot
 		for (unsigned int i=0; i<slots.size(); i++) {
 			if (slots[i]->in_focus) {
 				drag_prev_slot = i;
@@ -181,7 +205,12 @@ void MenuItemStorage::highlightClear() {
 MenuItemStorage::~MenuItemStorage() {
 	if (highlight_image)
 		delete highlight_image;
+
 	delete[] highlight;
+
+	if (overlay_disabled)
+		delete overlay_disabled;
+
 	for (unsigned i=0; i<slots.size(); i++)
 		delete slots[i];
 }

@@ -35,8 +35,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-MenuEnemy::MenuEnemy() {
-	custom_text_pos = false;
+MenuEnemy::MenuEnemy()
+	: bar_hp(NULL)
+	, custom_text_pos(false)
+	, enemy(NULL)
+	, timeout(0) {
 
 	// Load config settings
 	FileParser infile;
@@ -62,8 +65,6 @@ MenuEnemy::MenuEnemy() {
 	}
 
 	loadGraphics();
-	enemy = NULL;
-	timeout = 0;
 
 	color_normal = font->getColor("menu_normal");
 

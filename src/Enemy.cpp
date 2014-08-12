@@ -16,10 +16,6 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-/*
- * class Enemy
- */
-
 #include "Animation.h"
 #include "Avatar.h"
 #include "BehaviorAlly.h"
@@ -40,7 +36,6 @@ Enemy::Enemy() : Entity() {
 
 	stats.cur_state = ENEMY_STANCE;
 	stats.turn_ticks = MAX_FRAMES_PER_SEC;
-	//stats.patrol_ticks = 0; //no longer needed due to A*
 	stats.cooldown = 0;
 	stats.in_combat = false;
 	stats.join_combat = false;
@@ -60,7 +55,7 @@ Enemy::Enemy(const Enemy& e)
 	, reward_xp(e.reward_xp)
 	, instant_power(e.instant_power)
 	, kill_source_type(e.kill_source_type) {
-	eb = new BehaviorStandard(this);
+	eb = new BehaviorStandard(this); // Putting a 'this' into the init list will make MSVS complain, hence it's in the body of the ctor
 	assert(e.haz == NULL);
 }
 

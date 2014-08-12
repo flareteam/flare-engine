@@ -70,8 +70,6 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	speed = emSource.speed;
 	immunity = emSource.immunity;
 	stun = emSource.stun;
-	forced_speed = emSource.forced_speed;
-	forced_move = emSource.forced_move;
 	revive = emSource.revive;
 	convert = emSource.convert;
 	death_sentence = emSource.death_sentence;
@@ -100,8 +98,6 @@ void EffectManager::clearStatus() {
 	speed = 100;
 	immunity = false;
 	stun = false;
-	forced_speed = 0;
-	forced_move = false;
 	revive = false;
 	convert = false;
 	death_sentence = false;
@@ -133,10 +129,6 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == "speed") speed = (effect_list[i].magnitude * speed) / 100;
 			else if (effect_list[i].type == "immunity") immunity = true;
 			else if (effect_list[i].type == "stun") stun = true;
-			else if (effect_list[i].type == "forced_move") {
-				forced_move = true;
-				forced_speed = (float)effect_list[i].magnitude;
-			}
 			else if (effect_list[i].type == "revive") revive = true;
 			else if (effect_list[i].type == "convert") convert = true;
 			else if (effect_list[i].type == "fear") fear = true;
@@ -204,12 +196,6 @@ void EffectManager::addEffect(std::string id, int icon, int duration, int magnit
 		if (type == "damage") return;
 		else if (type == "speed" && magnitude < 100) return;
 		else if (type == "stun") return;
-	}
-
-	// only allow one forced_move effect
-	// TODO remove this limitation
-	if (forced_move) {
-		if (type == "forced_move") return;
 	}
 
 	for (unsigned i=0; i<effect_list.size(); i++) {

@@ -44,6 +44,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTabControl.h"
 #include "WidgetTooltip.h"
 
+#include <limits.h>
+#include <iomanip>
+
 using namespace std;
 
 bool rescompare(const Rect &r1, const Rect &r2) {
@@ -163,16 +166,16 @@ void GameStateConfig::init() {
 	tabControl->setTabTitle(5, msg->get("Mods"));
 	tabControl->updateHeader();
 
-	input_confirm = new MenuConfirm("",msg->get("Assign: "));
+	input_confirm = new MenuConfirm(msg->get("Clear"),msg->get("Assign: "));
 	defaults_confirm = new MenuConfirm(msg->get("Defaults"),msg->get("Reset ALL settings?"));
 
 	// Allocate KeyBindings
-	for (unsigned int i = 0; i < inpt->key_count; i++) {
+	for (int i = 0; i < inpt->key_count; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
 		keybinds_lb[i]->set(inpt->binding_name[i]);
 		keybinds_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
-	for (unsigned int i = 0; i < inpt->key_count * 3; i++) {
+	for (int i = 0; i < inpt->key_count * 3; i++) {
 		keybinds_btn.push_back(new WidgetButton("images/menus/buttons/button_default.png"));
 	}
 
@@ -734,7 +737,9 @@ void GameStateConfig::logic () {
 			saveSettings();
 			delete requestedGameState;
 			requestedGameState = new GameStateResolution(width, height, fullscreen, hwsurface, doublebuf);
-			// FIXME Can we do this safely?
+
+			// We need to be carful here. GameStateConfig has been deconstructed,
+			// so we need to avoid accessing any dynamically allocated objects
 			return;
 		}
 		else if (defaults_button->checkClick()) {
@@ -918,7 +923,7 @@ void GameStateConfig::logic () {
 					std::string confirm_msg;
 					confirm_msg = msg->get("Assign: ") + inpt->binding_name[i%key_count];
 					delete input_confirm;
-					input_confirm = new MenuConfirm("",confirm_msg);
+					input_confirm = new MenuConfirm(msg->get("Clear"),confirm_msg);
 					input_confirm_ticks = MAX_FRAMES_PER_SEC * 10; // 10 seconds
 					input_confirm->visible = true;
 					input_key = i;
@@ -953,8 +958,10 @@ void GameStateConfig::logic () {
 }
 
 void GameStateConfig::render () {
-	if (requestedGameState != NULL)
+	if (requestedGameState != NULL) {
+		// we're in the process of switching game states, so skip rendering
 		return;
+	}
 
 	int tabheight = tabControl->getTabHeight();
 	Rect	pos;
@@ -1151,14 +1158,10 @@ bool GameStateConfig::setMods() {
  */
 void GameStateConfig::scanKey(int button) {
 	// clear the keybind if the user presses CTRL+Delete
-	// TODO display a message in-game to expose this functionality?
-	if (input_confirm->visible && inpt->pressing[CTRL] && inpt->pressing[DEL]) {
+	if (input_confirm->visible && input_confirm->confirmClicked) {
 		if ((unsigned)button < key_count) inpt->binding[button] = -1;
 		else if ((unsigned)button < key_count*2) inpt->binding_alt[button%key_count] = -1;
 		else if ((unsigned)button < key_count*3) inpt->binding_joy[button%key_count] = -1;
-
-		inpt->pressing[CTRL] = false;
-		inpt->pressing[DEL] = false;
 
 		inpt->pressing[button%key_count] = false;
 		inpt->lock[button%key_count] = false;
@@ -1167,9 +1170,10 @@ void GameStateConfig::scanKey(int button) {
 		input_confirm->visible = false;
 		input_confirm_ticks = 0;
 		keybinds_btn[button]->refresh();
+		return;
 	}
 
-	if (input_confirm->visible && !input_confirm->isWithinClose) {
+	if (input_confirm->visible && !input_confirm->isWithinButtons) {
 		// keyboard & mouse
 		if ((unsigned)button < key_count*2) {
 			if (inpt->last_button != -1 && inpt->last_button < 8) {
@@ -1292,10 +1296,46 @@ void GameStateConfig::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int
 std::string GameStateConfig::createModTooltip(Mod *mod) {
 	std::string ret = "";
 	if (mod) {
+		std::string min_version = "";
+		std::string max_version = "";
+		std::stringstream ss;
+
+		if (mod->min_version_major > 0 || mod->min_version_minor > 0) {
+			ss << mod->min_version_major << "." << std::setfill('0') << std::setw(2) << mod->min_version_minor;
+			min_version = ss.str();
+			ss.str("");
+		}
+
+
+		if (mod->max_version_major < INT_MAX || mod->max_version_minor < INT_MAX) {
+			ss << mod->max_version_major << "." << std::setfill('0') << std::setw(2) << mod->max_version_minor;
+			max_version = ss.str();
+			ss.str("");
+		}
+
 		ret = mod->description;
+		if (mod->game != "") {
+			if (ret != "") ret += '\n';
+			ret += msg->get("Game: ");
+			ret += mod->game;
+		}
+		if (min_version != "" || max_version != "") {
+			if (ret != "") ret += '\n';
+			ret += msg->get("Requires version: ");
+			if (min_version != "" && min_version != max_version) {
+				ret += min_version;
+				if (max_version != "") {
+					ret += " - ";
+					ret += max_version;
+				}
+			}
+			else if (max_version != "") {
+				ret += max_version;
+			}
+		}
 		if (mod->depends.size() > 0) {
 			if (ret != "") ret += '\n';
-			ret += msg->get("Requires: ");
+			ret += msg->get("Requires mods: ");
 			for (unsigned i=0; i<mod->depends.size(); ++i) {
 				ret += mod->depends[i];
 				if (i < mod->depends.size()-1)

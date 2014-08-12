@@ -40,12 +40,18 @@ GameStateLoad::GameStateLoad() : GameState()
 	, background(NULL)
 	, selection(NULL)
 	, portrait_border(NULL)
-	, portrait(NULL) {
+	, portrait(NULL)
+	, loading_requested(false)
+	, loading(false)
+	, loaded(false)
+	, current_frame(0)
+	, frame_ticker(0)
+	, stance_ticks_per_frame(1)
+	, stance_duration(1)
+	, stance_type(PLAY_ONCE)
+	, load_game(false)
+	, selected_slot(-1) {
 	items = new ItemManager();
-	loading_requested = false;
-	loading = false;
-	loaded = false;
-
 	label_loading = new WidgetLabel();
 
 	for (int i = 0; i < GAME_SLOT_MAX; i++) {
@@ -156,8 +162,6 @@ GameStateLoad::GameStateLoad() : GameState()
 	button_alternate->pos.y += (VIEW_H - FRAME_H)/2;
 	button_alternate->refresh();
 
-	load_game = false;
-
 	for (int i=0; i<GAME_SLOT_MAX; i++) {
 		current_map[i] = "";
 	}
@@ -172,11 +176,32 @@ GameStateLoad::GameStateLoad() : GameState()
 		slot_pos[i].w = gameslot_pos.w;
 	}
 
-	selected_slot = -1;
+	// animation data
+	int stance_frames = 0;
+	if (infile.open("animations/hero.txt")) {
+		while (infile.next()) {
+			if (infile.section == "stance") {
+				if (infile.key == "frames") {
+					stance_frames = toInt(infile.val);
+				}
+				else if (infile.key == "duration") {
+					stance_duration = parse_duration(infile.val);
+				}
+				else if (infile.key == "type") {
+					if (infile.val == "play_once")
+						stance_type = PLAY_ONCE;
+					else if (infile.val == "looped")
+						stance_type = LOOPED;
+					else if (infile.val == "back_forth")
+						stance_type = BACK_FORTH;
+				}
+			}
+		}
+		infile.close();
+	}
 
-	// temp
-	current_frame = 0;
-	frame_ticker = 0;
+	stance_frames = max(1, stance_frames);
+	stance_ticks_per_frame = max(1, (stance_duration / stance_frames));
 
 	color_normal = font->getColor("menu_normal");
 }
@@ -260,8 +285,8 @@ void GameStateLoad::readGameSlot(int slot) {
 
 	// save slots are named save#.txt
 	filename << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		filename << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		filename << SAVE_PREFIX << "_";
 	filename << "save" << (slot+1) << ".txt";
 
 	if (!infile.open(filename.str(),false, "")) return;
@@ -365,12 +390,25 @@ void GameStateLoad::loadPreview(int slot) {
 
 void GameStateLoad::logic() {
 
-	frame_ticker++;
-	if (frame_ticker == 64) frame_ticker = 0;
-	if (frame_ticker < 32)
-		current_frame = frame_ticker / 8;
-	else
-		current_frame = (63 - frame_ticker) / 8;
+	// animate the avatar preview images
+	if (stance_type == PLAY_ONCE && frame_ticker < stance_duration) {
+		current_frame = frame_ticker / stance_ticks_per_frame;
+		frame_ticker++;
+	}
+	else {
+		if (stance_type == LOOPED) {
+			if (frame_ticker == stance_duration) frame_ticker = 0;
+			current_frame = frame_ticker / stance_ticks_per_frame;
+		}
+		else if (stance_type == BACK_FORTH) {
+			if (frame_ticker == stance_duration*2) frame_ticker = 0;
+			if (frame_ticker < stance_duration)
+				current_frame = frame_ticker / stance_ticks_per_frame;
+			else
+				current_frame = ((stance_duration*2) - frame_ticker -1) / stance_ticks_per_frame;
+		}
+		frame_ticker++;
+	}
 
 	if (!confirm->visible) {
 		tablist.logic();
@@ -433,8 +471,8 @@ void GameStateLoad::logic() {
 			stringstream filename;
 			filename.str("");
 			filename << PATH_USER;
-			if (GAME_PREFIX.length() > 0)
-				filename << GAME_PREFIX << "_";
+			if (SAVE_PREFIX.length() > 0)
+				filename << SAVE_PREFIX << "_";
 			filename << "save" << (selected_slot+1) << ".txt";
 
 			if (remove(filename.str().c_str()) != 0)
@@ -445,8 +483,8 @@ void GameStateLoad::logic() {
 				stringstream ss;
 				ss.str("");
 				ss << PATH_USER;
-				if (GAME_PREFIX.length() > 0)
-					ss << GAME_PREFIX << "_";
+				if (SAVE_PREFIX.length() > 0)
+					ss << SAVE_PREFIX << "_";
 				ss << "stash_HC" << (selected_slot+1) << ".txt";
 				if (remove(ss.str().c_str()) != 0)
 					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", selected_slot+1);

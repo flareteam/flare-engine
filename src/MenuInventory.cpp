@@ -84,9 +84,9 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 				carried_area.y = popFirstInt(infile.val);
 			}
 			// @ATTR carried_cols|integer|The number of columns for the normal inventory.
-			else if (infile.key == "carried_cols") carried_cols = toInt(infile.val);
+			else if (infile.key == "carried_cols") carried_cols = max(1, toInt(infile.val));
 			// @ATTR carried_rows|integer|The number of rows for the normal inventory.
-			else if (infile.key == "carried_rows") carried_rows = toInt(infile.val);
+			else if (infile.key == "carried_rows") carried_rows = max(1, toInt(infile.val));
 			// @ATTR label_title|label|Position of the "Inventory" label.
 			else if (infile.key == "label_title") title =  eatLabelInfo(infile.val);
 			// @ATTR currency|label|Position of the label that displays the total currency being carried.
@@ -352,14 +352,14 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 	if (area == EQUIPMENT) { // dropped onto equipped item
 
 		// make sure the item is going to the correct slot
-		// note: equipment slots 0-3 correspond with item types 0-3
+		// we match slot_type to stack.item's type to place items in the proper slots
 		// also check to see if the hero meets the requirements
-		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid) {
+		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
 			if (inventory[area][slot].item == stack.item) {
 				// Merge the stacks
 				add(stack, area, slot, false);
 			}
-			else if (inventory[drag_prev_src][drag_prev_slot].item == 0) {
+			else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].item == 0) {
 				// Swap the two stacks
 				itemReturn(inventory[area][slot]);
 				inventory[area][slot] = stack;
@@ -372,6 +372,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		else {
 			// equippable items only belong to one slot, for the moment
 			itemReturn(stack); // cancel
+			updateEquipment(slot);
 		}
 	}
 	else if (area == CARRIED) {
@@ -387,7 +388,8 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 					// Drop the stack
 					inventory[area][slot] = stack;
 				}
-				else if (inventory[drag_prev_src][drag_prev_slot].item == 0) { // Check if the previous slot is free (could still be used if SHIFT was used).
+				else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].item == 0) {
+					// Check if the previous slot is free (could still be used if SHIFT was used).
 					// Swap the two stacks
 					itemReturn( inventory[area][slot]);
 					inventory[area][slot] = stack;
@@ -557,6 +559,12 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 				drop_stack.push(leftover);
 			}
 		}
+		else if (area == EQUIPMENT) {
+			ItemStack leftover = inventory[EQUIPMENT].add(stack, slot);
+			if (leftover.quantity > 0) {
+				add(leftover, CARRIED, -1, false);
+			}
+		}
 	}
 	drag_prev_src = -1;
 }
@@ -708,9 +716,8 @@ bool MenuInventory::requirementsMet(int item) {
 void MenuInventory::updateEquipment(int slot) {
 
 	if (slot == -1) {
-		//FIXME What todo here
-		//return;
-		changed_equipment = true;
+		// This should never happen, but ignore it if it does
+		return;
 	}
 	else if (slot_type[slot] != "artifact") {
 		changed_equipment = true;
@@ -824,6 +831,23 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	applyItemStats(equipped);
 	applyItemSetBonuses(equipped);
 
+
+	// disable any incompatible slots, unequipping items if neccessary
+	for (int i=0; i<MAX_EQUIPPED; ++i) {
+		inventory[EQUIPMENT].slots[i]->enabled = true;
+
+		int id = inventory[EQUIPMENT][i].item;
+		for (unsigned j=0; j<items->items[id].disable_slots.size(); ++j) {
+			for (int k=0; k<MAX_EQUIPPED; ++k) {
+				if (slot_type[k] == items->items[id].disable_slots[j]) {
+					add(inventory[EQUIPMENT].storage[k]);
+					inventory[EQUIPMENT].storage[k].item = 0;
+					inventory[EQUIPMENT].storage[k].quantity = 0;
+					inventory[EQUIPMENT].slots[k]->enabled = false;
+				}
+			}
+		}
+	}
 	// update stat display
 	stats->refresh_stats = true;
 }

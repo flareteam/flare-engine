@@ -157,7 +157,6 @@ bool tryParseValue(const type_info & type, const std::string & value, void * out
 
 	stringstream stream(value);
 
-	// TODO: add additional type parsing
 	if (type == typeid(bool)) {
 		stream>>(bool&)*((bool*)output);
 	}
@@ -197,7 +196,6 @@ std::string toString(const type_info & type, void * value) {
 
 	stringstream stream;
 
-	// TODO: add additional type parsing
 	if (type == typeid(bool)) {
 		stream<<*((bool*)value);
 	}

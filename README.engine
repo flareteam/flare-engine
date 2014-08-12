@@ -70,7 +70,6 @@ If permissions are correct, the game is automatically saved when you exit. In ad
 |-----------------|----------------
 | --help          | Prints the list of command-line flags.
 | --version       | Prints the release version.
-| --game          | Specifies which 'game' to use when launching. A game determines which parent folder to look for mods in, as well as where user settings and save data are stored.
 | --data-path     | Specifies an exact path to look for mod data.
 | --debug-event   | Prints verbose hardware input information.
 | --renderer      | Specifies the rendering backend to use. The default is 'sdl'.

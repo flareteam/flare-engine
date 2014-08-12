@@ -41,8 +41,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class FileParser;
 class WidgetTooltip;
 
-// TODO: Move these Map_* classes to its own file.
-
 class MapRenderer : public Map {
 private:
 
@@ -54,18 +52,11 @@ private:
 	bool show_tooltip;
 
 	bool enemyGroupPlaceEnemy(float x, float y, Map_Group &g);
-	void pushEnemyGroup(Map_Group g);
+	void pushEnemyGroup(Map_Group &g);
 
 	std::string played_music_filename;
 
 	void clearQueues();
-
-	// When the animated tiles are switched off, the background is
-	// not rendered all the time but everytime you have moved away too much.
-	// then the background is completely rendered, else it is just blit
-	// onto screen. units in tiles:
-	static const short movedistance_to_rerender = 4;
-
 
 	// some events are automatically triggered when the map is loaded
 	void executeOnLoadEvents();
@@ -151,13 +142,13 @@ public:
 	// event talker
 	std::string event_npc;
 
+	// trigger for save game events
+	bool save_game;
+
 	// map soundids
 	std::vector<SoundManager::SoundID> sids;
 
 	void loadMusic();
-
-	// force a rendering of the background in the next render step.
-	bool repaint_background;
 
 	/**
 	 * The index of the layer, which mixes with the objects on screen. Layers

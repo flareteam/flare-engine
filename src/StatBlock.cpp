@@ -101,7 +101,6 @@ StatBlock::StatBlock()
 	, transform_with_equipment(false)
 	, effects()
 	, pos()
-	, forced_speed()
 	, direction(0)
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
@@ -159,6 +158,8 @@ StatBlock::StatBlock()
 	, sfx_critdie("")
 	, sfx_block("")
 	, sfx_levelup("")
+	, max_spendable_stat_points(0)
+	, max_points_per_stat(0)
 	, prev_maxhp(0)
 	, prev_maxmp(0)
 	, pres_hp(0)
@@ -166,13 +167,6 @@ StatBlock::StatBlock()
 	, summons()
 	, summoner(NULL)
 	, attacking(false) {
-
-	// todo: move to init list:
-	max_spendable_stat_points = 0;
-	max_points_per_stat = 0;
-
-	activated_powerslot = 0;
-	on_half_dead_casted = false;
 }
 
 bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
@@ -736,8 +730,11 @@ void StatBlock::loadHeroStats() {
 		infile.close();
 	}
 	max_spendable_stat_points = xp_table.size() * stat_points_per_level;
+}
 
+void StatBlock::loadHeroSFX() {
 	// load the paths to base sound effects
+	FileParser infile;
 	if (infile.open("engine/avatar/"+gfx_base+".txt", true, "")) {
 		while(infile.next()) {
 			loadSfxStat(&infile);

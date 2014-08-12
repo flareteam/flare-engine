@@ -25,20 +25,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-WidgetInput::WidgetInput() {
-
-	enabled = true;
-	inFocus = false;
-	pressed = false;
-	hover = false;
-	max_characters = 20;
+WidgetInput::WidgetInput()
+	: background(NULL)
+	, enabled(true)
+	, pressed(false)
+	, hover(false)
+	, max_characters(20)
+	, cursor_frame(0)
+	, inFocus(false) {
 
 	loadGraphics("images/menus/input.png");
 
-	cursor_frame = 0;
-
 	render_to_alpha = false;
-
 	color_normal = font->getColor("widget_normal");
 }
 

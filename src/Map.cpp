@@ -144,9 +144,24 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 	else if (infile.key == "data") {
 		// @ATTR layer.data|raw|Raw map layer data
 		// layer map data handled as a special case
-		// The next h lines must contain layer data.  TODO: err
+		// The next h lines must contain layer data.
 		for (int j=0; j<h; j++) {
-			std::string val = infile.getRawLine() + ',';
+			std::string val = infile.getRawLine();
+			if (!val.empty() && val[val.length()-1] != ',') {
+				val += ',';
+			}
+
+			// verify the width of this row
+			int comma_count = 0;
+			for (unsigned i=0; i<val.length(); ++i) {
+				if (val[i] == ',') comma_count++;
+			}
+			if (comma_count != w) {
+				fprintf(stderr, "ERROR: maploading: A row of layer data has a width not equal to %d.\n", w);
+				SDL_Quit();
+				exit(1);
+			}
+
 			for (int i=0; i<w; i++)
 				(*current_layer)[i][j] = popFirstInt(val, ',');
 		}

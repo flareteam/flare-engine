@@ -54,9 +54,7 @@ static void init(const std::string render_device_name) {
 	if (!mods->haveFallbackMod()) {
 		fprintf(stderr, "Could not find the default mod in the following locations:\n");
 		if (dirExists(PATH_DATA + "mods")) fprintf(stderr, "%smods/\n", PATH_DATA.c_str());
-		if (dirExists(PATH_DEFAULT_DATA + "mods")) fprintf(stderr, "%smods/\n", PATH_DEFAULT_DATA.c_str());
 		if (dirExists(PATH_USER + "mods")) fprintf(stderr, "%smods/\n", PATH_USER.c_str());
-		if (dirExists(PATH_DEFAULT_USER + "mods")) fprintf(stderr, "%smods/\n", PATH_DEFAULT_USER.c_str());
 		fprintf(stderr, "\nA copy of the default mod is in the \"mods\" directory of the flare-engine repo.\n");
 		fprintf(stderr, "The repo is located at: https://github.com/clintbellanger/flare-engine\n");
 		fprintf(stderr, "Try again after copying the default mod to one of the above directories.\nExiting.\n");
@@ -139,10 +137,9 @@ static void mainLoop (bool debug_event) {
 	bool done = false;
 	int delay = int(floor((1000.f/MAX_FRAMES_PER_SEC)+0.5f));
 	int logic_ticks = SDL_GetTicks();
-	int loops = 0;
 
 	while ( !done ) {
-		loops = 0;
+		int loops = 0;
 		int now_ticks = SDL_GetTicks();
 		int prev_ticks = now_ticks;
 
@@ -246,7 +243,6 @@ string parseArgValue(const string &arg) {
 int main(int argc, char *argv[]) {
 	bool debug_event = false;
 	bool done = false;
-	bool game_warning = true;
 	std::string render_device_name = "";
 
 	for (int i = 1 ; i < argc; i++) {
@@ -254,17 +250,13 @@ int main(int argc, char *argv[]) {
 		if (parseArg(arg) == "debug-event") {
 			debug_event = true;
 		}
-		else if (parseArg(arg) == "game") {
-			GAME_FOLDER = parseArgValue(arg);
-			game_warning = false;
-		}
 		else if (parseArg(arg) == "data-path") {
 			CUSTOM_PATH_DATA = parseArgValue(arg);
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";
 		}
 		else if (parseArg(arg) == "version") {
-			printf("%s\n", RELEASE_VERSION.c_str());
+			printf("%s\n", getVersionString().c_str());
 			done = true;
 		}
 		else if (parseArg(arg) == "renderer") {
@@ -274,9 +266,6 @@ int main(int argc, char *argv[]) {
 			printf("\
 --help           Prints this message.\n\n\
 --version        Prints the release version.\n\n\
---game           Specifies which 'game' to use when launching. A game\n\
-                 determines which parent folder to look for mods in, as well\n\
-                 as where user settings and save data are stored.\n\n\
 --data-path      Specifies an exact path to look for mod data.\n\n\
 --debug-event    Prints verbose hardware input information.\n\n\
 --renderer       Specifies the rendering backend to use. The default is 'sdl'.\n");
@@ -285,11 +274,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (!done) {
-		// if a game isn't specified, display a warning
-		if (game_warning) {
-			printf("Warning: A game wasn't specified, falling back to the 'default' game.\nDid you forget the --game flag? (e.g. --game=flare-game).\nSee --help for more details.\n\n");
-		}
-
 		srand((unsigned int)time(NULL));
 		init(render_device_name);
 		mainLoop(debug_event);

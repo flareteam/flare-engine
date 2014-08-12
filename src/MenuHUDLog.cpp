@@ -97,11 +97,23 @@ void MenuHUDLog::render() {
 /**
  * Add a new message to the log
  */
-void MenuHUDLog::add(const string& s) {
+void MenuHUDLog::add(const string& s, bool prevent_spam) {
+	// Make sure we don't spam the same message repeatedly
+	if (log_msg.empty() || log_msg.back() != s || !prevent_spam) {
+		// add new message
+		log_msg.push_back(s);
+		msg_age.push_back(calcDuration(s));
 
-	// add new message
-	log_msg.push_back(s);
-	msg_age.push_back(calcDuration(s));
+		// render the log entry and store it in a buffer
+		font->setFont("font_regular");
+		Point size = font->calc_size(s, window_area.w);
+		Image *graphics = render_device->createImage(size.x, size.y);
+		font->renderShadowed(s, 0, 0, JUSTIFY_LEFT, graphics, window_area.w, color_normal);
+		msg_buffer.push_back(graphics->createSprite());
+	}
+	else if (!msg_age.empty()) {
+		msg_age.back() = calcDuration(s);
+	}
 
 	// force HUD messages to vanish in order
 	if (msg_age.size() > 1) {
@@ -110,12 +122,6 @@ void MenuHUDLog::add(const string& s) {
 			msg_age[last] = msg_age[last-1];
 	}
 
-	// render the log entry and store it in a buffer
-	font->setFont("font_regular");
-	Point size = font->calc_size(s, window_area.w);
-	Image *graphics = render_device->createImage(size.x, size.y);
-	font->renderShadowed(s, 0, 0, JUSTIFY_LEFT, graphics, window_area.w, color_normal);
-	msg_buffer.push_back(graphics->createSprite());
 }
 
 /**

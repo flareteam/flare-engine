@@ -33,6 +33,7 @@ using namespace std;
 
 WidgetSlider::WidgetSlider (const string  & fname)
 	: enabled(true)
+	, sl(NULL)
 	, pressed(false)
 	, minimum(0)
 	, maximum(0)

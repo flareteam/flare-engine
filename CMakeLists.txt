@@ -10,8 +10,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 # Default definitions
 if (NOT MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-math-errno -fno-exceptions")
+  set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wshadow -Woverloaded-virtual -Wunreachable-code ${CMAKE_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS "-fno-math-errno -fno-exceptions ${CMAKE_CXX_FLAGS}")
 endif (NOT MSVC)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -42,6 +42,16 @@ If(NOT IS_ABSOLUTE "${DATADIR}")
 Else(NOT IS_ABSOLUTE "${DATADIR}")
 	add_definitions(-DDATA_INSTALL_DIR="${DATADIR}")
 EndIf(NOT IS_ABSOLUTE "${DATADIR}")
+
+
+# desktop file
+If(NOT IS_ABSOLUTE "${BINDIR}")
+	set(FLARE_EXECUTABLE_PATH ${CMAKE_INSTALL_PREFIX}/${BINDIR}/flare)
+Else(NOT IS_ABSOLUTE "${BINDIR}")
+	set(FLARE_EXECUTABLE_PATH ${BINDIR}/flare)
+EndIf(NOT IS_ABSOLUTE "${BINDIR}")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.desktop.in" "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop")
+
 
 # Detect missing dependencies
 # First, search for SDL2 modules, provided USE_SDL 2 is enabled
@@ -252,16 +262,21 @@ Else (USE_SDL2)
 EndIF (USE_SDL2)
 
 
-
 # installing to the proper places
 install(PROGRAMS
   ${CMAKE_CURRENT_BINARY_DIR}/flare
   DESTINATION ${BINDIR})
 install(DIRECTORY
   "${CMAKE_CURRENT_SOURCE_DIR}/mods"
-  DESTINATION ${DATADIR}/default)
+  DESTINATION ${DATADIR})
 install(FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare.man"
   DESTINATION ${MANDIR}/man6
   RENAME flare.6)
-
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/flare.desktop"
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+install(FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/distribution/flare_logo.svg"
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps
+  RENAME flare.svg)

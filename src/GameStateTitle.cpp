@@ -30,10 +30,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 
-GameStateTitle::GameStateTitle() : GameState() {
-
-	exit_game = false;
-	load_game = false;
+GameStateTitle::GameStateTitle()
+	: GameState()
+	, logo(NULL)
+	, exit_game(false)
+	, load_game(false)
+{
 
 	// set up buttons
 	button_play = new WidgetButton("images/menus/buttons/button_default.png");
@@ -109,28 +111,13 @@ GameStateTitle::GameStateTitle() : GameState() {
 
 	// set up labels
 	label_version = new WidgetLabel();
-	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, RELEASE_VERSION, font->getColor("menu_normal"));
+	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, getVersionString(), font->getColor("menu_normal"));
 
 	// Setup tab order
 	tablist.add(button_play);
 	tablist.add(button_cfg);
 	tablist.add(button_credits);
 	tablist.add(button_exit);
-
-	// Warning text box
-	warning_box = NULL;
-	if (GAME_FOLDER == "default") {
-		std::string warning_text = msg->get("Warning: A game wasn't specified, falling back to the 'default' game. Did you forget the --game flag? (e.g. --game=flare-game). See --help for more details.");
-		Point warning_size = font->calc_size(warning_text, VIEW_W/2);
-
-		int warning_box_h = warning_size.y;
-		clampCeil(warning_box_h, VIEW_H/2);
-		warning_box = new WidgetScrollBox(VIEW_W/2, warning_box_h);
-		warning_box->resize(warning_size.y);
-
-		font->setFont("font_normal");
-		font->renderShadowed(warning_text, 0, 0, JUSTIFY_LEFT, warning_box->contents->getGraphics(), VIEW_W/2, FONT_WHITE);
-	}
 }
 
 void GameStateTitle::logic() {
@@ -141,10 +128,6 @@ void GameStateTitle::logic() {
 	if(inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
 		inpt->lock[CANCEL] = true;
 		exitRequested = true;
-	}
-
-	if (warning_box) {
-		warning_box->logic();
 	}
 
 	tablist.logic();
@@ -187,11 +170,6 @@ void GameStateTitle::render() {
 
 	// version number
 	label_version->render();
-
-	// warning text
-	if (warning_box) {
-		warning_box->render();
-	}
 }
 
 GameStateTitle::~GameStateTitle() {
@@ -201,5 +179,4 @@ GameStateTitle::~GameStateTitle() {
 	delete button_credits;
 	delete button_exit;
 	delete label_version;
-	delete warning_box;
 }

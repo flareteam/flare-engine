@@ -663,7 +663,6 @@ void MenuManager::logic() {
 						else {
 							inv->add(stack);
 						}
-						stash->updated = true;
 					}
 				}
 				else {
@@ -689,7 +688,6 @@ void MenuManager::logic() {
 						if (stash->visible) {
 							if (inv->stashAdd(stack) && !stash->full(stack.item)) {
 								stash->add(stack);
-								stash->updated = true;
 							}
 							else {
 								inv->itemReturn(stack);
@@ -815,7 +813,6 @@ void MenuManager::logic() {
 						else {
 							stash->add(drag_stack);
 						}
-						stash->updated = true;
 					}
 					else {
 						inv->itemReturn(drag_stack);
@@ -885,6 +882,7 @@ void MenuManager::logic() {
 				}
 				else {
 					drop_stack.push(drag_stack);
+					stash->updated = true;
 				}
 			}
 
@@ -1082,6 +1080,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			drag_src = 0;
 			drag_stack.item = 0;
 			keyboard_dragging = false;
+			stash->updated = true;
 		}
 	}
 

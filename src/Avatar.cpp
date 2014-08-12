@@ -381,25 +381,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn && !transform_triggered) powers->activatePassives(&stats);
 	if (transform_triggered) transform_triggered = false;
 
-	int stepfx;
 	stats.logic();
-	if (stats.effects.forced_move) {
-		move();
-
-		// calc new cam position from player position
-		// cam is focused at player position
-		mapr->cam.x = stats.pos.x;
-		mapr->cam.y = stats.pos.y;
-
-		mapr->collider.block(stats.pos.x, stats.pos.y, false);
-		return;
-	}
-	if (stats.effects.stun) {
-
-		mapr->collider.block(stats.pos.x, stats.pos.y, false);
-		return;
-	}
-
 
 	bool allowed_to_move;
 	bool allowed_to_use_power;
@@ -511,7 +493,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 			setAnimation("run");
 
 			if (sound_steps.size() > 0) {
-				stepfx = rand() % sound_steps.size();
+				int stepfx = rand() % sound_steps.size();
 
 				if (activeAnimation->isFirstFrame() || activeAnimation->isActiveFrame())
 					snd->play(sound_steps[stepfx]);

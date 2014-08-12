@@ -52,10 +52,14 @@ bool pathExists(const std::string &path) {
  */
 
 void createDir(std::string path) {
+	if (isDirectory(path))
+		return;
 
 #ifndef _WIN32
 	// *nix implementation
-	mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
+		perror("createDir");
+	}
 #endif
 
 #ifdef _WIN32
@@ -67,8 +71,13 @@ void createDir(std::string path) {
 
 bool isDirectory(const std::string &path) {
 	struct stat st;
-	stat(path.c_str(), &st);
-	return (st.st_mode & S_IFDIR) != 0;
+	if (stat(path.c_str(), &st) == -1) {
+		perror("isDirectory");
+		return false;
+	}
+	else {
+		return (st.st_mode & S_IFDIR) != 0;
+	}
 }
 
 /**

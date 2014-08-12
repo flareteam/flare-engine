@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-20 16:48+\n"
+"POT-Creation-Date: 2014-08-01 06:17+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgid "Lead Programmers - Clint Bellanger, Henrik Andersson, Igor Paliychuk, Jus
 msgstr ""
 
 #: ../cutscenes/credits.txt:10
-msgid "Programmers - Anton Golov, Artur Rojek, Bonbadil, Chris Oelmueller, David Bariod, Daniel Santos, Gallaecio, Joseph Bleu, Juan PabloTamayo, Kitano, Kyle Belanger, LongerDev, Manuel A. Fernandez Montecelo, Matthew Krohn, Nojan, Pavel Kirpichyov, and runtime-x86"
+msgid "Programmers - Anton Golov, Artur Rojek, blazindragon, Bonbadil, Chris Oelmueller, David Bariod, Daniel Santos, Gallaecio, Joseph Bleu, Juan PabloTamayo, Kitano, Kyle Belanger, LongerDev, Manuel A. Fernandez Montecelo, Matthew Krohn, Nojan, Pavel Kirpichyov, runtime-x86, and Ryan Dansie"
 msgstr ""
 
 #: ../cutscenes/credits.txt:12
@@ -32,7 +32,7 @@ msgid "Default Art - Clint Bellanger"
 msgstr ""
 
 #: ../cutscenes/credits.txt:14
-msgid "Translators - Adrian Chaves Fernandez, Andrea Ranaldi, Andreas Berheim Brudin, Bas Doodeman, Bonbadil, Carlos Sanchez, Chris Oelmueller, Christoph J. Thompson, Evgen Pavlov, Giovanni Dalla Torre, Hans Joachim Desserud, Igor Paliychuk, Juan Pablo Tamayo, Mikhail Karalevich, Miro Jánošík, Morgan Strauss, Nikita Vanku, Paul Wortmann, Pawel Puszczynski, Quentin Stievenart, Sergey Basalaev, Stefan Beller, Thomas Glamsch, Timo Sievänen, and Yannis Anthymidis"
+msgid "Translators - Adrian Chaves Fernandez, Andrea Ranaldi, Andreas Berheim Brudin, Bas Doodeman, Bonbadil, Carlos Sanchez, Chris Oelmueller, Christoph J. Thompson, Evgen Pavlov, Giovanni Dalla Torre, gunchleoc, Hans Joachim Desserud, Igor Paliychuk, Juan Pablo Tamayo, losine, Michael Papageorgiou, Mikhail Karalevich, Miro Jánošík, Morgan Strauss, Nikita Vanku, Paul Wortmann, Pawel Puszczynski, Quentin Stievenart, Sergey Basalaev, Stefan Beller, Thomas Glamsch, Timo Sievänen, Wuzzy2, and Yannis Anthymidis"
 msgstr ""
 
 #: ../cutscenes/credits.txt:16
@@ -41,13 +41,5 @@ msgstr ""
 
 #: ../cutscenes/credits.txt:18
 msgid "Special Thanks - Bart Kelsey and the community at OpenGameArt, for giving constant feedback and testing. Thorbjørn Lindeijer, Stefan Beller, and Ranie Jade Ramiso for Tiled and the Flare map exporter."
-msgstr ""
-
-#: ../cutscenes/intro_example.txt:6
-msgid "Flare, the..."
-msgstr ""
-
-#: ../cutscenes/intro_example.txt:9
-msgid "Free Libre Action Roleplaying Engine"
 msgstr ""
 

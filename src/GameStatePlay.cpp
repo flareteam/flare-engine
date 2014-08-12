@@ -69,6 +69,7 @@ GameStatePlay::GameStatePlay()
 	: GameState()
 	, enemy(NULL)
 	, loading(new WidgetLabel())
+	, loading_bg(NULL)
 	// Load the loading screen image (we currently use the confirm dialog background):
 	, npc_id(-1)
 	, eventDialogOngoing(false)
@@ -296,8 +297,8 @@ void GameStatePlay::checkTeleport() {
 			if (pc->stats.permadeath && pc->stats.corpse) {
 				stringstream filename;
 				filename << PATH_USER;
-				if (GAME_PREFIX.length() > 0)
-					filename << GAME_PREFIX << "_";
+				if (SAVE_PREFIX.length() > 0)
+					filename << SAVE_PREFIX << "_";
 				filename << "save" << game_slot << ".txt";
 				if (remove(filename.str().c_str()) != 0)
 					perror("Error deleting save from path");
@@ -306,8 +307,8 @@ void GameStatePlay::checkTeleport() {
 				stringstream ss;
 				ss.str("");
 				ss << PATH_USER;
-				if (GAME_PREFIX.length() > 0)
-					ss << GAME_PREFIX << "_";
+				if (SAVE_PREFIX.length() > 0)
+					ss << SAVE_PREFIX << "_";
 				ss << "stash_HC" << game_slot << ".txt";
 				if (remove(ss.str().c_str()) != 0)
 					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", game_slot);
@@ -315,7 +316,7 @@ void GameStatePlay::checkTeleport() {
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
 			}
-			else {
+			else if (SAVE_ONLOAD) {
 				saveGame();
 			}
 		}
@@ -337,7 +338,9 @@ void GameStatePlay::checkCancel() {
 
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
-		saveGame();
+		if (SAVE_ONEXIT)
+			saveGame();
+
 		Mix_HaltMusic();
 		delete requestedGameState;
 		requestedGameState = new GameStateTitle();
@@ -345,7 +348,9 @@ void GameStatePlay::checkCancel() {
 
 	// if user closes the window
 	if (inpt->done) {
-		saveGame();
+		if (SAVE_ONEXIT)
+			saveGame();
+
 		Mix_HaltMusic();
 		exitRequested = true;
 	}
@@ -363,8 +368,8 @@ void GameStatePlay::checkLog() {
 
 	// Map events can create messages
 	if (mapr->log_msg != "") {
-		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(mapr->log_msg);
+		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->hudlog->add(mapr->log_msg, false);
 		mapr->log_msg = "";
 	}
 
@@ -377,8 +382,8 @@ void GameStatePlay::checkLog() {
 
 	// Campaign events can create messages (e.g. quest rewards)
 	if (camp->log_msg != "") {
-		menu->log->add(camp->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(camp->log_msg);
+		menu->log->add(camp->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->hudlog->add(camp->log_msg, false);
 		camp->log_msg = "";
 	}
 
@@ -594,8 +599,8 @@ void GameStatePlay::checkNotifications() {
 		pc->newLevelNotification = false;
 		menu->act->requires_attention[MENU_CHARACTER] = true;
 	}
-	if (menu->chr->newPowerNotification) {
-		menu->chr->newPowerNotification = false;
+	if (menu->pow->newPowerNotification) {
+		menu->pow->newPowerNotification = false;
 		menu->act->requires_attention[MENU_POWERS] = true;
 	}
 	if (quests->resetQuestNotification) { //remove if no quests
@@ -779,12 +784,20 @@ void GameStatePlay::checkCutscene() {
 		mapr->respawn_point = floor(pc->stats.pos);
 	}
 
-	saveGame();
+	if (SAVE_ONLOAD)
+		saveGame();
 
 	delete requestedGameState;
 	requestedGameState = cutscene;
 }
 
+void GameStatePlay::checkSaveEvent() {
+	if (mapr->save_game) {
+		mapr->respawn_point = floor(pc->stats.pos);
+		saveGame();
+		mapr->save_game = false;
+	}
+}
 
 /**
  * Process all actions for a single frame
@@ -846,6 +859,7 @@ void GameStatePlay::logic() {
 	checkEquipmentChange();
 	checkConsumable();
 	checkStash();
+	checkSaveEvent();
 	checkNotifications();
 	checkCancel();
 

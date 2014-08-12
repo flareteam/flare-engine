@@ -30,9 +30,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 WidgetCheckBox::WidgetCheckBox (const string &fname)
-	: enabled(true),
-	  checked(false),
-	  pressed(false) {
+	: enabled(true)
+	, cb(NULL)
+	, checked(false)
+	, pressed(false) {
 	focusable = true;
 
 	Image *graphics;

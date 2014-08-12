@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 #include <typeinfo>
 #include <cmath>
+#include <iomanip>
 using namespace std;
 
 #include "CommonIncludes.h"
@@ -74,14 +75,10 @@ ConfigEntry config[] = {
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
 // Paths
-string GAME_FOLDER = "default";
-string DEFAULT_FOLDER = "default";
 string PATH_CONF = "";
 string PATH_USER = "";
 string PATH_DATA = "";
 string CUSTOM_PATH_DATA = "";
-string PATH_DEFAULT_USER = "";
-string PATH_DEFAULT_DATA = "";
 
 // Filenames
 string FILE_SETTINGS	= "settings.txt";
@@ -182,7 +179,7 @@ bool COLORBLIND = false;
 int CORPSE_TIMEOUT;
 bool SELL_WITHOUT_VENDOR;
 int AIM_ASSIST;
-std::string GAME_PREFIX = "";
+std::string SAVE_PREFIX = "";
 std::string WINDOW_TITLE;
 int SOUND_FALLOFF;
 int PARTY_EXP_PERCENTAGE;
@@ -191,6 +188,8 @@ bool ENABLE_ALLY_COLLISION;
 int CURRENCY_ID;
 float INTERACT_RANGE;
 bool HARDWARE_CURSOR = false;
+bool SAVE_ONLOAD = true;
+bool SAVE_ONEXIT = true;
 
 /**
  * Set system paths
@@ -204,17 +203,26 @@ bool HARDWARE_CURSOR = false;
 void setPaths() {
 
 	// handle Windows-specific path options
-	PATH_CONF = "config";
-	PATH_USER = "saves";
+	if (getenv("APPDATA") != NULL) {
+		PATH_CONF = PATH_USER = (string)getenv("APPDATA") + "\\flare";
+		createDir(PATH_CONF);
+		createDir(PATH_USER);
+
+		PATH_CONF += "\\config";
+		PATH_USER += "\\saves";
+		createDir(PATH_CONF);
+		createDir(PATH_USER);
+	}
+	else {
+		PATH_CONF = "config";
+		PATH_USER = "saves";
+		createDir(PATH_CONF);
+		createDir(PATH_USER);
+	}
+
 	PATH_DATA = "";
-	PATH_DEFAULT_USER = "";
-	PATH_DEFAULT_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
-
-	// TODO: place config and save data in the user's home, windows style
-	createDir(PATH_CONF);
-	createDir(PATH_USER);
 
 	PATH_CONF = PATH_CONF + "/";
 	PATH_USER = PATH_USER + "/";
@@ -225,8 +233,6 @@ void setPaths() {
 	PATH_CONF = "PROGDIR:";
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
-	PATH_DEFAULT_USER = "PROGDIR:";
-	PATH_DEFAULT_DATA = "PROGDIR:";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 }
@@ -236,14 +242,10 @@ void setPaths() {
 	// attempting to follow this spec:
 	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 
-	// Note: If the GAME_FOLDER isn't defined, we fall back to using the current directory
-
 	// set config path (settings, keybindings)
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
 		PATH_CONF = (string)getenv("XDG_CONFIG_HOME") + "/flare/";
-		createDir(PATH_CONF);
-		PATH_CONF += GAME_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// $HOME/.config/flare/
@@ -251,8 +253,6 @@ void setPaths() {
 		PATH_CONF = (string)getenv("HOME") + "/.config/";
 		createDir(PATH_CONF);
 		PATH_CONF += "flare/";
-		createDir(PATH_CONF);
-		PATH_CONF += GAME_FOLDER + "/";
 		createDir(PATH_CONF);
 	}
 	// ./config/
@@ -266,12 +266,7 @@ void setPaths() {
 	if (getenv("XDG_DATA_HOME") != NULL) {
 		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
 		createDir(PATH_USER);
-		PATH_DEFAULT_USER = PATH_USER + DEFAULT_FOLDER + "/";
-		PATH_USER += GAME_FOLDER + "/";
-		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
-		createDir(PATH_DEFAULT_USER);
-		createDir(PATH_DEFAULT_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -281,19 +276,12 @@ void setPaths() {
 		createDir(PATH_USER);
 		PATH_USER += "flare/";
 		createDir(PATH_USER);
-		PATH_DEFAULT_USER = PATH_USER + DEFAULT_FOLDER + "/";
-		PATH_USER += GAME_FOLDER + "/";
-		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
-		createDir(PATH_DEFAULT_USER);
-		createDir(PATH_DEFAULT_USER + "mods/");
 	}
 	// ./saves/
 	else {
 		PATH_USER = "./saves/";
 		createDir(PATH_USER);
-		PATH_DEFAULT_USER = "./saves/";
-		createDir(PATH_DEFAULT_USER);
 	}
 
 	// data folder
@@ -307,21 +295,18 @@ void setPaths() {
 
 	// these flags are set to true when a valid directory is found
 	bool path_data = false;
-	bool path_default_data = false;
 
 	// if the user specified a data path, try to use it
 	if (dirExists(CUSTOM_PATH_DATA)) {
 		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
-		if (!path_default_data) PATH_DEFAULT_DATA = CUSTOM_PATH_DATA;
-		path_data = path_default_data = true;
+		path_data = true;
 	}
 	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
 		if (!path_data) PATH_DATA = "./";
-		if (!path_default_data) PATH_DEFAULT_DATA = "./";
-		path_data = path_default_data = true;
+		path_data = true;
 	}
 
 	// check $XDG_DATA_DIRS options
@@ -332,50 +317,35 @@ void setPaths() {
 		pathtest = popFirstString(pathlist,':');
 		while (pathtest != "") {
 			if (!path_data) {
-				PATH_DATA = pathtest + "/flare/" + GAME_FOLDER + "/";
+				PATH_DATA = pathtest + "/flare/";
 				if (dirExists(PATH_DATA)) path_data = true;
 			}
-			if (!path_default_data) {
-				PATH_DEFAULT_DATA = pathtest + "/flare/" + DEFAULT_FOLDER + "/";
-				if (dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
-			}
-			if (path_data && path_default_data) break;
+			if (path_data) break;
 			pathtest = popFirstString(pathlist,':');
 		}
 	}
 
 #if defined DATA_INSTALL_DIR
-	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = DATA_INSTALL_DIR "/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 #endif
 
 	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	if (!path_data) PATH_DATA = "/usr/local/share/flare/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = "/usr/local/share/flare/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/local/share/flare/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
-	if (!path_data) PATH_DATA = "/usr/share/flare/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = "/usr/share/flare/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/share/flare/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// check "games" variants of these
-	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/local/share/games/flare/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
-	if (!path_data) PATH_DATA = "/usr/share/games/flare/" + GAME_FOLDER + "/";
+	if (!path_data) PATH_DATA = "/usr/share/games/flare/";
 	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-	if (!path_default_data) PATH_DEFAULT_DATA = "/usr/share/games/flare/" + DEFAULT_FOLDER + "/";
-	if (!path_default_data && dirExists(PATH_DEFAULT_DATA)) path_default_data = true;
 
 	// finally assume the local folder
 	if (!path_data)	PATH_DATA = "./";
-	if (!path_default_data) PATH_DEFAULT_DATA = "./";
 }
 #endif
 
@@ -384,6 +354,8 @@ static ConfigEntry * getConfigEntry(const char * name) {
 	for (int i = 0; i < config_size; i++) {
 		if (std::strcmp(config[i].name, name) == 0) return config + i;
 	}
+
+	fprintf(stderr, "Error: '%s' is not a valid configuration key.\n", name);
 	return NULL;
 }
 
@@ -496,6 +468,8 @@ void loadMiscSettings() {
 	ENABLE_ALLY_COLLISION = true;
 	CURRENCY_ID = 1;
 	INTERACT_RANGE = 3;
+	SAVE_ONLOAD = true;
+	SAVE_ONEXIT = true;
 
 	FileParser infile;
 	// @CLASS Settings: Misc|Description of engine/misc.txt
@@ -516,9 +490,9 @@ void loadMiscSettings() {
 			// @ATTR window_title|string|Sets the text in the window's titlebar.
 			else if (infile.key == "window_title")
 				WINDOW_TITLE = infile.val;
-			// @ATTR game_prefix|string|A string that's prepended to save filenames to prevent conflicts between mods.
-			else if (infile.key == "game_prefix")
-				GAME_PREFIX = infile.val;
+			// @ATTR save_prefix|string|A string that's prepended to save filenames to prevent conflicts between mods.
+			else if (infile.key == "save_prefix")
+				SAVE_PREFIX = infile.val;
 			// @ATTR sound_falloff|integer|The maximum radius in tiles that any single sound is audible.
 			else if (infile.key == "sound_falloff")
 				SOUND_FALLOFF = toInt(infile.val);
@@ -545,6 +519,12 @@ void loadMiscSettings() {
 			// @ATTR menus_pause|boolean|Opening any menu will pause the game.
 			else if (infile.key == "menus_pause")
 				MENUS_PAUSE = toBool(infile.val);
+			// @ATTR save_onload|boolean|Save the game upon changing maps.
+			else if (infile.key == "save_onload")
+				SAVE_ONLOAD = toBool(infile.val);
+			// @ATTR save_onexit|boolean|Save the game upon quitting to the title screen or desktop.
+			else if (infile.key == "save_onexit")
+				SAVE_ONEXIT = toBool(infile.val);
 
 		}
 		infile.close();
@@ -731,7 +711,6 @@ bool loadSettings() {
 
 	// init defaults
 	for (int i = 0; i < config_size; i++) {
-		// TODO: handle errors
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
@@ -750,7 +729,6 @@ bool loadSettings() {
 
 		ConfigEntry * entry = getConfigEntry(infile.key);
 		if (entry) {
-			// TODO: handle errors
 			tryParseValue(*entry->type, infile.val, entry->storage);
 		}
 	}
@@ -795,7 +773,6 @@ bool loadDefaults() {
 
 	// HACK init defaults except video
 	for (int i = 3; i < config_size; i++) {
-		// TODO: handle errors
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
@@ -805,4 +782,23 @@ bool loadDefaults() {
 	VIEW_H_HALF = VIEW_H / 2;
 
 	return true;
+}
+
+/**
+ * Return a string of version name + version number
+ */
+std::string getVersionString() {
+	std::stringstream ss;
+	ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << std::setfill('0') << std::setw(2) << VERSION_MINOR;
+	return ss.str();
+}
+
+/**
+ * Compare version numbers. Returns true if the first number is larger than the second
+ */
+bool compareVersions(int maj0, int min0, int maj1, int min1) {
+	if (maj0 == maj1)
+		return min0 > min1;
+	else
+		return maj0 > maj1;
 }

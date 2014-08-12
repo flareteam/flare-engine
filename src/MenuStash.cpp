@@ -68,11 +68,11 @@ MenuStash::MenuStash(StatBlock *_stats)
 			}
 			// @ATTR stash_cols|integer|The number of columns for the grid of slots.
 			else if (infile.key == "stash_cols") {
-				slots_cols = toInt(infile.val);
+				slots_cols = max(1, toInt(infile.val));
 			}
 			// @ATTR stash_rows|integer|The number of rows for the grid of slots.
 			else if (infile.key == "stash_rows") {
-				slots_rows = toInt(infile.val);
+				slots_rows = max(1, toInt(infile.val));
 			}
 			// @ATTR label_title|label|Position of the "Stash" label.
 			else if (infile.key == "label_title") {
@@ -182,10 +182,12 @@ void MenuStash::drop(Point position, ItemStack stack) {
 		itemReturn(stack); // cancel
 	}
 
+	updated = true;
 }
 
 void MenuStash::add(ItemStack stack, int slot) {
 	stock.add(stack, slot);
+	updated = true;
 }
 
 /**
@@ -206,8 +208,8 @@ void MenuStash::itemReturn(ItemStack stack) {
 
 void MenuStash::add(ItemStack stack) {
 	items->playSound(stack.item);
-
 	stock.add(stack);
+	updated = true;
 }
 
 TooltipData MenuStash::checkTooltip(Point position) {

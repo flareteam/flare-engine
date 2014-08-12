@@ -30,6 +30,7 @@ using namespace std;
 WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
+	, scrollbars(NULL)
 	, value(0)
 	, bar_height(0)
 	, maximum(0)
@@ -40,8 +41,10 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 
 	loadArt();
 
-	pos_up.w = pos_down.w  = pos_knob.w = scrollbars->getGraphicsWidth();
-	pos_up.h = pos_down.h = pos_knob.h = (scrollbars->getGraphicsHeight() / 5); //height of one button
+	if (scrollbars) {
+		pos_up.w = pos_down.w  = pos_knob.w = scrollbars->getGraphicsWidth();
+		pos_up.h = pos_down.h = pos_knob.h = (scrollbars->getGraphicsHeight() / 5); //height of one button
+	}
 }
 
 void WidgetScrollBar::loadArt() {

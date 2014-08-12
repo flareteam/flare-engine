@@ -394,7 +394,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "stash") {
-		// @ATTR event.stash|string|Opens the Stash menu.
+		// @ATTR event.stash|boolean|Opens the Stash menu.
 		e->s = infile.val;
 	}
 	else if (infile.key == "npc") {
@@ -410,7 +410,11 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = infile.val;
 	}
 	else if (infile.key == "repeat") {
-		// @ATTR event.repeat|string|Allows the event to be triggered again.
+		// @ATTR event.repeat|boolean|Allows the event to be triggered again.
+		e->s = infile.val;
+	}
+	else if (infile.key == "save_game") {
+		// @ATTR event.save_game|boolean|Saves the game when the event is triggered. The respawn position is set to where the player is standing.
 		e->s = infile.val;
 	}
 	else {
@@ -477,9 +481,6 @@ bool EventManager::executeEvent(Event &ev) {
 					mapr->layers[index][ec->x][ec->y] = ec->z;
 				else
 					fprintf(stderr, "Error: mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
-
-				if (ec->a < (int)(mapr->index_objectlayer))
-					mapr->repaint_background = true;
 			}
 			mapr->map_change = true;
 		}
@@ -593,9 +594,11 @@ bool EventManager::executeEvent(Event &ev) {
 			powers->activate(power_index, ev.stats, target);
 		}
 		else if (ec->type == "stash") {
-			mapr->stash = true;
-			mapr->stash_pos.x = ev.location.x + 0.5f;
-			mapr->stash_pos.y = ev.location.y + 0.5f;
+			mapr->stash = toBool(ec->s);
+			if (mapr->stash) {
+				mapr->stash_pos.x = ev.location.x + 0.5f;
+				mapr->stash_pos.y = ev.location.y + 0.5f;
+			}
 		}
 		else if (ec->type == "npc") {
 			mapr->event_npc = ec->s;
@@ -610,6 +613,9 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "repeat") {
 			ev.keep_after_trigger = toBool(ec->s);
+		}
+		else if (ec->type == "save_game") {
+			mapr->save_game = toBool(ec->s);
 		}
 	}
 	return !ev.keep_after_trigger;

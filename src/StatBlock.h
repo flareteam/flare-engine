@@ -100,6 +100,10 @@ public:
 	void applyEffects();
 	void calcBase();
 	void logic();
+	void removeFromSummons();
+	bool summonLimitReached(int power_id) const;
+	void setWanderArea(int r);
+	void loadHeroSFX();
 
 	bool alive;
 	bool corpse; // creature is dead and done animating
@@ -229,7 +233,6 @@ public:
 	EffectManager effects;
 
 	FPoint pos;
-	FPoint forced_speed;
 	unsigned char direction;
 
 	int cooldown_hit;
@@ -333,12 +336,6 @@ public:
 	StatBlock* summoner;
 
 	bool attacking;
-
-	void removeFromSummons();
-
-	bool summonLimitReached(int power_id) const;
-
-	void setWanderArea(int r);
 };
 
 #endif

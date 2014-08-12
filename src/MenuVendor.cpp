@@ -41,8 +41,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	, stats(_stats)
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
 	, tabControl(new WidgetTabControl(2))
-	, slots_cols(0)
-	, slots_rows(0)
+	, slots_cols(1)
+	, slots_rows(1)
 	, activetab(VENDOR_BUY)
 	, color_normal(font->getColor("menu_normal"))
 	, npc(NULL)
@@ -73,11 +73,11 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 			}
 			// @ATTR vendor_cols|integer|The number of columns in the grid of slots.
 			else if (infile.key == "vendor_cols") {
-				slots_cols = toInt(infile.val);
+				slots_cols = max(1, toInt(infile.val));
 			}
 			// @ATTR vendor_rows|integer|The number of rows in the grid of slots.
 			else if (infile.key == "vendor_rows") {
-				slots_rows = toInt(infile.val);
+				slots_rows = max(1, toInt(infile.val));
 			}
 			// @ATTR label_title|label|The position of the text that displays the NPC's name.
 			else if (infile.key == "label_title") {

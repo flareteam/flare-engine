@@ -135,7 +135,6 @@ void HazardManager::logic() {
 
 /**
  * Look for hazards generated this frame
- * TODO: all these hazards will originate from PowerManager instead
  */
 void HazardManager::checkNewHazards() {
 

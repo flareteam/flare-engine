@@ -36,7 +36,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 MenuMiniMap::MenuMiniMap()
-	: map_surface(NULL) {
+	: color_wall(0)
+	, color_obst(0)
+	, color_hero(0)
+	, map_surface(NULL) {
 
 	createMapSurface();
 	if (map_surface) {

@@ -26,7 +26,9 @@ using namespace std;
  * @param amount  Amount of tabs the control will have.
  */
 WidgetTabControl::WidgetTabControl(int amount)
-	: active_labels(amount)
+	: activeTabSurface(NULL)
+	, inactiveTabSurface(NULL)
+	, active_labels(amount)
 	, inactive_labels(amount) {
 
 	// Based on given amount:

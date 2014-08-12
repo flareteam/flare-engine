@@ -31,6 +31,8 @@ using namespace std;
 
 WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	: Widget()
+	, slot_selected(NULL)
+	, slot_checked(NULL)
 	, icon_id(_icon_id)
 	, amount(1)
 	, max_amount(1)

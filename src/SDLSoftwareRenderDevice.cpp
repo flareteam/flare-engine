@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "SDL_gfxBlitFunc.h"
 
 #include "SharedResources.h"
@@ -118,33 +119,39 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 		return NULL;
 
 	SDLSoftwareImage *scaled = new SDLSoftwareImage(device);
-	scaled->surface = SDL_CreateRGBSurface(surface->flags, width, height,
-										   surface->format->BitsPerPixel,
-										   surface->format->Rmask,
-										   surface->format->Gmask,
-										   surface->format->Bmask,
-										   surface->format->Amask);
 
-	if (scaled->surface) {
-		double _stretch_factor_x, _stretch_factor_y;
-		_stretch_factor_x = width / (double)surface->w;
-		_stretch_factor_y = height / (double)surface->h;
+	if (scaled) {
+		scaled->surface = SDL_CreateRGBSurface(surface->flags, width, height,
+											   surface->format->BitsPerPixel,
+											   surface->format->Rmask,
+											   surface->format->Gmask,
+											   surface->format->Bmask,
+											   surface->format->Amask);
 
-		for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
-			for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
-				Uint32 spixel = readPixel(x, y);
-				for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
-					for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
-						Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
-						Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
-						scaled->drawPixel(dx, dy, spixel);
+		if (scaled->surface) {
+			double _stretch_factor_x, _stretch_factor_y;
+			_stretch_factor_x = width / (double)surface->w;
+			_stretch_factor_y = height / (double)surface->h;
+
+			for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
+				for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
+					Uint32 spixel = readPixel(x, y);
+					for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
+						for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
+							Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
+							Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
+							scaled->drawPixel(dx, dy, spixel);
+						}
 					}
 				}
 			}
+			// delete the old image and return the new one
+			this->unref();
+			return scaled;
 		}
-		// delete the old image and return the new one
-		this->unref();
-		return scaled;
+		else {
+			delete scaled;
+		}
 	}
 
 	return NULL;
@@ -254,7 +261,8 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	, renderer(NULL)
 	, texture(NULL)
 #endif
-	, titlebar_icon(NULL) {
+	, titlebar_icon(NULL)
+	, title(NULL) {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	cout << "Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)" << endl;
 #else
@@ -270,7 +278,7 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 	bool window_created = false;
 
 	// window title and icon
-	const char* title = msg->get(WINDOW_TITLE).c_str();
+	title = strdup(msg->get(WINDOW_TITLE).c_str());
 	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
 
 #if SDL_VERSION_ATLEAST(2,0,0)
@@ -556,6 +564,10 @@ void SDLSoftwareRenderDevice::destroyContext() {
 	if (window) {
 		SDL_DestroyWindow(window);
 		window = NULL;
+	}
+	if (title) {
+		free(title);
+		title = NULL;
 	}
 #endif
 

@@ -33,7 +33,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 #include "MenuCharacter.h"
 #include "Menu.h"
+#include "MenuHUDLog.h"
 #include "MenuInventory.h"
+#include "MenuLog.h"
 #include "MenuManager.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
@@ -61,8 +63,8 @@ void GameStatePlay::saveGame() {
 	stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		ss << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		ss << SAVE_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
 	outfile.open(ss.str().c_str(), ios::out);
@@ -152,8 +154,8 @@ void GameStatePlay::saveGame() {
 	// Save stash
 	ss.str("");
 	ss << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		ss << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		ss << SAVE_PREFIX << "_";
 	ss << "stash";
 	if (pc->stats.permadeath)
 		ss << "_HC" << game_slot;
@@ -171,6 +173,10 @@ void GameStatePlay::saveGame() {
 		outfile.close();
 		outfile.clear();
 	}
+
+	// display a log message saying that we saved the game
+	menu->log->add(msg->get("Game saved."), LOG_TYPE_MESSAGES);
+	menu->hudlog->add(msg->get("Game saved."));
 }
 
 /**
@@ -194,8 +200,8 @@ void GameStatePlay::loadGame() {
 	stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		ss << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		ss << SAVE_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
 	if (infile.open(ss.str(), false)) {
@@ -375,8 +381,8 @@ void GameStatePlay::loadStash() {
 	stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
-	if (GAME_PREFIX.length() > 0)
-		ss << GAME_PREFIX << "_";
+	if (SAVE_PREFIX.length() > 0)
+		ss << SAVE_PREFIX << "_";
 	ss << "stash";
 	if (pc->stats.permadeath)
 		ss << "_HC" << game_slot;
@@ -411,6 +417,7 @@ void GameStatePlay::applyPlayerData() {
 
 	// initialize vars
 	pc->stats.recalc();
+	pc->stats.loadHeroSFX();
 	menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
 	pc->stats.logic(); // run stat logic once to apply items bonuses
 

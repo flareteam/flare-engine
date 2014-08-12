@@ -69,7 +69,7 @@ public:
 	void logic();
 	void render();
 	void refresh(int log_type);
-	void add(const std::string& s, int log_type);
+	void add(const std::string& s, int log_type, bool prevent_spam = true);
 	void remove(int msg_index, int log_type);
 	void clear(int log_type);
 	void clear();

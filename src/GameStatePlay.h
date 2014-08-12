@@ -85,6 +85,7 @@ private:
 	void checkNPCInteraction();
 	void checkStash();
 	void checkCutscene();
+	void checkSaveEvent();
 	void showLoading();
 	void loadTitles();
 
