@@ -14,6 +14,8 @@ You will need to edit next settings
 
 SDL_PATH := D:/Development/SDL
 
+NOTE: changing SDL path doesn't work yet. Place SDL folder into \jni\ (so it will be like jni\SDL\src\SDL.c)
+
 2. In Eclipse IDE go to Project Properties: C/C++ General -> Paths and Symbols -> Includes -> GNU C++
 
 Change path to "platforms\android-16\arch-arm\usr\include"
