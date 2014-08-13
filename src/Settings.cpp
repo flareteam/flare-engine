@@ -235,8 +235,8 @@ void setPaths() {
 // Android paths
 void setPaths() {
 
-	PATH_CONF = SDL_AndroidGetInternalStoragePath() + "/config";
-	PATH_USER = SDL_AndroidGetInternalStoragePath() + "/saves";
+	PATH_CONF = string(SDL_AndroidGetInternalStoragePath()) + "/config";
+	PATH_USER = string(SDL_AndroidGetInternalStoragePath()) + "/saves";
 	createDir(PATH_CONF);
 	createDir(PATH_USER);
 
