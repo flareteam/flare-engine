@@ -113,7 +113,6 @@ public:
 	// pre/post power effects
 	int post_power;
 	int wall_power;
-	int mod_power;
 
 };
 

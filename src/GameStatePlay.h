@@ -86,6 +86,7 @@ private:
 	void checkStash();
 	void checkCutscene();
 	void checkSaveEvent();
+	void updateActionBar(int index = 0);
 	void showLoading();
 	void loadTitles();
 

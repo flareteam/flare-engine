@@ -906,8 +906,7 @@ void MenuManager::logic() {
 	// handle equipment changes affecting hero stats
 	if (inv->changed_equipment || inv->changed_artifact) {
 		inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
-		inv->changed_artifact = false;
-		// the equipment flag is reset after the new sprites are loaded
+		// the equipment flags get reset in GameStatePlay
 	}
 
 	// for action-bar powers that represent items, lookup the current item count

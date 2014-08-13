@@ -874,23 +874,6 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 		stats->dmg_ment_min_add += item.dmg_ment_min;
 		stats->dmg_ment_max_add += item.dmg_ment_max;
 
-		// apply power mod
-		if (find(item.equip_flags.begin(), item.equip_flags.end(), "melee") != item.equip_flags.end()) {
-			if (item.power_mod != 0) {
-				stats->melee_weapon_power = item.power_mod;
-			}
-		}
-		if (find(item.equip_flags.begin(), item.equip_flags.end(), "ranged") != item.equip_flags.end()) {
-			if (item.power_mod != 0) {
-				stats->ranged_weapon_power = item.power_mod;
-			}
-		}
-		if (find(item.equip_flags.begin(), item.equip_flags.end(), "mental") != item.equip_flags.end()) {
-			if (item.power_mod != 0) {
-				stats->mental_weapon_power = item.power_mod;
-			}
-		}
-
 		// set equip flags
 		for (unsigned j=0; j<item.equip_flags.size(); ++j) {
 			stats->equip_flags.insert(item.equip_flags[j]);

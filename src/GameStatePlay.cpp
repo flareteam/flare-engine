@@ -183,6 +183,14 @@ void GameStatePlay::checkEnemyFocus() {
 		}
 	}
 
+	// save the highlighted enemy position for auto-targeting purposes
+	if (enemy) {
+		pc->enemy_pos = enemy->stats.pos;
+	}
+	else {
+		pc->enemy_pos.x = -1;
+		pc->enemy_pos.y = -1;
+	}
 }
 
 /**
@@ -506,6 +514,11 @@ void GameStatePlay::checkTitle() {
 }
 
 void GameStatePlay::checkEquipmentChange() {
+	// force the actionbar to update when we change gear
+	if (menu->inv->changed_equipment || menu->inv->changed_artifact) {
+		menu->act->updated = true;
+	}
+
 	if (menu->inv->changed_equipment) {
 
 		int feet_index = -1;
@@ -541,9 +554,10 @@ void GameStatePlay::checkEquipmentChange() {
 
 		if (feet_index != -1)
 			pc->loadStepFX(items->items[menu->inv->inventory[EQUIPMENT][feet_index].item].stepfx);
-
-		menu->inv->changed_equipment = false;
 	}
+
+	menu->inv->changed_equipment = false;
+	menu->inv->changed_artifact = false;
 }
 
 void GameStatePlay::checkLootDrop() {
@@ -800,6 +814,29 @@ void GameStatePlay::checkSaveEvent() {
 }
 
 /**
+ * Recursively update the action bar powers based on equipment
+ */
+void GameStatePlay::updateActionBar(int index) {
+	if (index < 0 || index > 11) return;
+
+	for (int i=index; i<12; i++) {
+		if (menu->act->hotkeys[i] == 0) continue;
+
+		for (int j=0; j<menu->inv->inventory[EQUIPMENT].getSlotNumber(); j++) {
+			int id = menu->inv->inventory[EQUIPMENT][j].item;
+
+			for (unsigned k=0; k<items->items[id].replace_power.size(); k++) {
+				if (items->items[id].replace_power[k].x == menu->act->hotkeys_mod[i] &&
+				    items->items[id].replace_power[k].y != menu->act->hotkeys_mod[i]) {
+						menu->act->hotkeys_mod[i] = items->items[id].replace_power[k].y;
+						return updateActionBar(i);
+				}
+			}
+		}
+	}
+}
+
+/**
  * Process all actions for a single frame
  * This includes some message passing between child object
  */
@@ -874,7 +911,7 @@ void GameStatePlay::logic() {
 		if (!pc->stats.humanoid && menu->pow->visible) menu->closeRight();
 		// save ActionBar state and lock slots from removing/replacing power
 		for (int i=0; i<12 ; i++) {
-			menu->act->actionbar[i] = menu->act->hotkeys[i];
+			menu->act->hotkeys_temp[i] = menu->act->hotkeys[i];
 			menu->act->hotkeys[i] = 0;
 		}
 		int count = 10;
@@ -893,6 +930,8 @@ void GameStatePlay::logic() {
 		else if (pc->stats.manual_untransform && pc->untransform_power == 0)
 			fprintf(stderr, "Untransform power not found, you can't untransform manually\n");
 
+		menu->act->updated = true;
+
 		// reapply equipment if the transformation allows it
 		if (pc->stats.transform_with_equipment)
 			menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
@@ -903,9 +942,11 @@ void GameStatePlay::logic() {
 
 		// restore ActionBar state
 		for (int i=0; i<12 ; i++) {
-			menu->act->hotkeys[i] = menu->act->actionbar[i];
+			menu->act->hotkeys[i] = menu->act->hotkeys_temp[i];
 			menu->act->locked[i] = false;
 		}
+
+		menu->act->updated = true;
 
 		// also reapply equipment here, to account items that give bonuses to base stats
 		menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
@@ -929,6 +970,18 @@ void GameStatePlay::logic() {
 	if (menu->menus_open) {
 		curs->setCursor(CURSOR_NORMAL);
 	}
+
+	// update the action bar as it may have been changed by items
+	if (menu->act->updated) {
+		menu->act->updated = false;
+
+		// set all hotkeys to their base powers
+		for (int i=0; i<12; i++) {
+			menu->act->hotkeys_mod[i] = menu->act->hotkeys[i];
+		}
+
+		updateActionBar();
+	}
 }
 
 
@@ -942,7 +995,7 @@ void GameStatePlay::render() {
 	vector<Renderable> rens;
 	vector<Renderable> rens_dead;
 
-	pc->addRenders(rens);
+	pc->addRenders(rens, rens_dead);
 
 	enemies->addRenders(rens, rens_dead);
 

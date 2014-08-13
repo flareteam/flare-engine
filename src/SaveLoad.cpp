@@ -106,7 +106,7 @@ void GameStatePlay::saveGame() {
 		// action bar
 		outfile << "actionbar=";
 		for (int i=0; i<12; i++) {
-			if (pc->stats.transformed) outfile << menu->act->actionbar[i];
+			if (pc->stats.transformed) outfile << menu->act->hotkeys_temp[i];
 			else outfile << menu->act->hotkeys[i];
 			if (i<11) outfile << ",";
 		}

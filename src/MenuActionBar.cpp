@@ -45,7 +45,8 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	: emptyslot(NULL)
 	, disabled(NULL)
 	, attention(NULL)
-	, hero(_hero) {
+	, hero(_hero)
+	, updated(false) {
 	hero = _hero;
 
 	src.x = 0;
@@ -178,7 +179,8 @@ void MenuActionBar::clear() {
 	// clear action bar
 	for (int i=0; i<12; i++) {
 		hotkeys[i] = 0;
-		actionbar[i] = 0;
+		hotkeys_temp[i] = 0;
+		hotkeys_mod[i] = 0;
 		slot_item_count[i] = -1;
 		slot_enabled[i] = true;
 		locked[i] = false;
@@ -252,12 +254,12 @@ void MenuActionBar::render() {
 	// draw hotkeyed icons
 	for (int i=0; i<12; i++) {
 		if (hotkeys[i] != 0) {
-			const Power &power = powers->getPower(hotkeys[i]);
-			slot_enabled[i] = (hero->hero_cooldown[hotkeys[i]] == 0)
+			const Power &power = powers->getPower(hotkeys_mod[i]);
+			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
 							  && (slot_item_count[i] != 0)
 							  && !hero->stats.effects.stun
 							  && hero->stats.alive
-							  && hero->stats.canUsePower(power, hotkeys[i]); //see if the slot should be greyed out
+							  && hero->stats.canUsePower(power, hotkeys_mod[i]); //see if the slot should be greyed out
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
 			slots[i]->setIcon(power.icon + icon_offset);
@@ -315,8 +317,8 @@ void MenuActionBar::renderCooldowns() {
 		if (!slot_enabled[i]) {
 
 			// Wipe from bottom to top
-			if (hero->hero_cooldown[hotkeys[i]] && powers->powers[hotkeys[i]].cooldown) {
-				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys[i]]) / powers->powers[hotkeys[i]].cooldown;
+			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown) {
+				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
 			}
 
 			if (disabled) {
@@ -364,9 +366,9 @@ TooltipData MenuActionBar::checkTooltip(Point mouse) {
 		return tip;
 	}
 	for (int i=0; i<12; i++) {
-		if (hotkeys[i] != 0) {
+		if (hotkeys_mod[i] != 0) {
 			if (isWithin(slots[i]->pos, mouse)) {
-				tip.addText(powers->powers[hotkeys[i]].name);
+				tip.addText(powers->powers[hotkeys_mod[i]].name);
 			}
 		}
 	}
@@ -389,6 +391,7 @@ void MenuActionBar::drop(Point mouse, int power_index, bool rearranging) {
 			}
 			else if (locked[i]) return;
 			hotkeys[i] = power_index;
+			updated = true;
 			return;
 		}
 	}
@@ -409,6 +412,7 @@ void MenuActionBar::remove(Point mouse) {
 		if (isWithin(slots[i]->pos, mouse)) {
 			if (locked[i]) return;
 			hotkeys[i] = 0;
+			updated = true;
 			return;
 		}
 	}
@@ -422,18 +426,18 @@ int MenuActionBar::checkAction() {
 	int current = tablist.getCurrent();
 
 	// check click and hotkey actions
-	if ((inpt->pressing[BAR_1] || (inpt->pressing[ACTIONBAR_USE] && current == 0) || (!NO_MOUSE && slots[0]->checkClick() == ACTIVATED)) && slot_enabled[0]) return hotkeys[0];
-	if ((inpt->pressing[BAR_2] || (inpt->pressing[ACTIONBAR_USE] && current == 1) || (!NO_MOUSE && slots[1]->checkClick() == ACTIVATED)) && slot_enabled[1]) return hotkeys[1];
-	if ((inpt->pressing[BAR_3] || (inpt->pressing[ACTIONBAR_USE] && current == 2) || (!NO_MOUSE && slots[2]->checkClick() == ACTIVATED)) && slot_enabled[2]) return hotkeys[2];
-	if ((inpt->pressing[BAR_4] || (inpt->pressing[ACTIONBAR_USE] && current == 3) || (!NO_MOUSE && slots[3]->checkClick() == ACTIVATED)) && slot_enabled[3]) return hotkeys[3];
-	if ((inpt->pressing[BAR_5] || (inpt->pressing[ACTIONBAR_USE] && current == 4) || (!NO_MOUSE && slots[4]->checkClick() == ACTIVATED)) && slot_enabled[4]) return hotkeys[4];
-	if ((inpt->pressing[BAR_6] || (inpt->pressing[ACTIONBAR_USE] && current == 5) || (!NO_MOUSE && slots[5]->checkClick() == ACTIVATED)) && slot_enabled[5]) return hotkeys[5];
-	if ((inpt->pressing[BAR_7] || (inpt->pressing[ACTIONBAR_USE] && current == 6) || (!NO_MOUSE && slots[6]->checkClick() == ACTIVATED)) && slot_enabled[6]) return hotkeys[6];
-	if ((inpt->pressing[BAR_8] || (inpt->pressing[ACTIONBAR_USE] && current == 7) || (!NO_MOUSE && slots[7]->checkClick() == ACTIVATED)) && slot_enabled[7]) return hotkeys[7];
-	if ((inpt->pressing[BAR_9] || (inpt->pressing[ACTIONBAR_USE] && current == 8) || (!NO_MOUSE && slots[8]->checkClick() == ACTIVATED)) && slot_enabled[8]) return hotkeys[8];
-	if ((inpt->pressing[BAR_0] || (inpt->pressing[ACTIONBAR_USE] && current == 9) || (!NO_MOUSE && slots[9]->checkClick() == ACTIVATED)) && slot_enabled[9]) return hotkeys[9];
-	if ((inpt->pressing[MAIN1] || (inpt->pressing[ACTIONBAR_USE] && current == 10) || (!NO_MOUSE && slots[10]->checkClick() == ACTIVATED)) && slot_enabled[10] && !inpt->lock[MAIN1]) return hotkeys[10];
-	if ((inpt->pressing[MAIN2] || (inpt->pressing[ACTIONBAR_USE] && current == 11) || (!NO_MOUSE && slots[11]->checkClick() == ACTIVATED)) && slot_enabled[11] && !inpt->lock[MAIN2]) return hotkeys[11];
+	if ((inpt->pressing[BAR_1] || (inpt->pressing[ACTIONBAR_USE] && current == 0) || (!NO_MOUSE && slots[0]->checkClick() == ACTIVATED)) && slot_enabled[0]) return hotkeys_mod[0];
+	if ((inpt->pressing[BAR_2] || (inpt->pressing[ACTIONBAR_USE] && current == 1) || (!NO_MOUSE && slots[1]->checkClick() == ACTIVATED)) && slot_enabled[1]) return hotkeys_mod[1];
+	if ((inpt->pressing[BAR_3] || (inpt->pressing[ACTIONBAR_USE] && current == 2) || (!NO_MOUSE && slots[2]->checkClick() == ACTIVATED)) && slot_enabled[2]) return hotkeys_mod[2];
+	if ((inpt->pressing[BAR_4] || (inpt->pressing[ACTIONBAR_USE] && current == 3) || (!NO_MOUSE && slots[3]->checkClick() == ACTIVATED)) && slot_enabled[3]) return hotkeys_mod[3];
+	if ((inpt->pressing[BAR_5] || (inpt->pressing[ACTIONBAR_USE] && current == 4) || (!NO_MOUSE && slots[4]->checkClick() == ACTIVATED)) && slot_enabled[4]) return hotkeys_mod[4];
+	if ((inpt->pressing[BAR_6] || (inpt->pressing[ACTIONBAR_USE] && current == 5) || (!NO_MOUSE && slots[5]->checkClick() == ACTIVATED)) && slot_enabled[5]) return hotkeys_mod[5];
+	if ((inpt->pressing[BAR_7] || (inpt->pressing[ACTIONBAR_USE] && current == 6) || (!NO_MOUSE && slots[6]->checkClick() == ACTIVATED)) && slot_enabled[6]) return hotkeys_mod[6];
+	if ((inpt->pressing[BAR_8] || (inpt->pressing[ACTIONBAR_USE] && current == 7) || (!NO_MOUSE && slots[7]->checkClick() == ACTIVATED)) && slot_enabled[7]) return hotkeys_mod[7];
+	if ((inpt->pressing[BAR_9] || (inpt->pressing[ACTIONBAR_USE] && current == 8) || (!NO_MOUSE && slots[8]->checkClick() == ACTIVATED)) && slot_enabled[8]) return hotkeys_mod[8];
+	if ((inpt->pressing[BAR_0] || (inpt->pressing[ACTIONBAR_USE] && current == 9) || (!NO_MOUSE && slots[9]->checkClick() == ACTIVATED)) && slot_enabled[9]) return hotkeys_mod[9];
+	if ((inpt->pressing[MAIN1] || (inpt->pressing[ACTIONBAR_USE] && current == 10) || (!NO_MOUSE && slots[10]->checkClick() == ACTIVATED)) && slot_enabled[10] && !inpt->lock[MAIN1]) return hotkeys_mod[10];
+	if ((inpt->pressing[MAIN2] || (inpt->pressing[ACTIONBAR_USE] && current == 11) || (!NO_MOUSE && slots[11]->checkClick() == ACTIVATED)) && slot_enabled[11] && !inpt->lock[MAIN2]) return hotkeys_mod[11];
 	return 0;
 }
 
@@ -449,6 +453,7 @@ int MenuActionBar::checkDrag(Point mouse) {
 			power_index = hotkeys[i];
 			hotkeys[i] = 0;
 			last_mouse = mouse;
+			updated = true;
 			return power_index;
 		}
 	}
@@ -478,8 +483,10 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
  * Set all hotkeys at once e.g. when loading a game
  */
 void MenuActionBar::set(int power_id[12]) {
-	for (int i=0; i<12; i++)
+	for (int i=0; i<12; i++) {
 		hotkeys[i] = power_id[i];
+	}
+	updated = true;
 }
 
 void MenuActionBar::resetSlots() {

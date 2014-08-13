@@ -184,6 +184,10 @@ void PowerManager::loadPowers() {
 			else if (infile.val == "on_death") powers[input_id].passive_trigger = TRIGGER_DEATH;
 			else fprintf(stderr, "unknown passive trigger %s\n", infile.val.c_str());
 		}
+		else if (infile.key == "meta_power") {
+			// @ATTR meta_power|boolean|If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.
+			powers[input_id].meta_power = toBool(infile.val);
+		}
 		// power requirements
 		else if (infile.key == "requires_flags") {
 			// @ATTR requires_flags|flag (string), ...|A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt
@@ -357,9 +361,6 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "wall_power")
 			// @ATTR wall_power|power_id|Trigger a power if the hazard hit a wall.
 			powers[input_id].wall_power = toInt(infile.val);
-		else if (infile.key == "allow_power_mod")
-			// @ATTR allow_power_mod|bool|Allow power modifiers
-			powers[input_id].allow_power_mod = toBool(infile.val);
 		// spawn info
 		else if (infile.key == "spawn_type")
 			// @ATTR spawn_type|string|Type of spawn.
@@ -679,22 +680,6 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	if (powers[power_index].wall_power != 0) {
 		haz->wall_power = powers[power_index].wall_power;
 	}
-
-	// if equipment has special powers, apply it here (if it hasn't already been applied)
-	if (haz->mod_power == 0 && powers[power_index].allow_power_mod) {
-		if (powers[power_index].base_damage == BASE_DAMAGE_MELEE && src_stats->melee_weapon_power != 0) {
-			haz->mod_power = power_index;
-			initHazard(src_stats->melee_weapon_power, src_stats, target, haz);
-		}
-		else if (powers[power_index].base_damage == BASE_DAMAGE_MENT && src_stats->mental_weapon_power != 0) {
-			haz->mod_power = power_index;
-			initHazard(src_stats->mental_weapon_power, src_stats, target, haz);
-		}
-		else if (powers[power_index].base_damage == BASE_DAMAGE_RANGED && src_stats->ranged_weapon_power != 0) {
-			haz->mod_power = power_index;
-			initHazard(src_stats->ranged_weapon_power, src_stats, target, haz);
-		}
-	}
 }
 
 /**
@@ -746,27 +731,8 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
  * Play the sound effect for this power
  * Equipped items may have unique sounds
  */
-void PowerManager::playSound(int power_index, StatBlock *src_stats) {
-	bool play_base_sound = false;
-
-	if (powers[power_index].allow_power_mod) {
-		if (powers[power_index].base_damage == BASE_DAMAGE_MELEE && src_stats->melee_weapon_power != 0
-				&& powers[src_stats->melee_weapon_power].sfx_index != -1) {
-			snd->play(sfx[powers[src_stats->melee_weapon_power].sfx_index]);
-		}
-		else if (powers[power_index].base_damage == BASE_DAMAGE_MENT && src_stats->mental_weapon_power != 0
-				 && powers[src_stats->mental_weapon_power].sfx_index != -1) {
-			snd->play(sfx[powers[src_stats->mental_weapon_power].sfx_index]);
-		}
-		else if (powers[power_index].base_damage == BASE_DAMAGE_RANGED && src_stats->ranged_weapon_power != 0
-				 && powers[src_stats->ranged_weapon_power].sfx_index != -1) {
-			snd->play(sfx[powers[src_stats->ranged_weapon_power].sfx_index]);
-		}
-		else play_base_sound = true;
-	}
-	else play_base_sound = true;
-
-	if (play_base_sound && powers[power_index].sfx_index != -1)
+void PowerManager::playSound(int power_index) {
+	if (powers[power_index].sfx_index != -1)
 		snd->play(sfx[powers[power_index].sfx_index]);
 }
 
@@ -812,7 +778,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 		}
 
 		// If there's a sound effect, play it here
-		playSound(power_index, src_stats);
+		playSound(power_index);
 	}
 
 	return true;
@@ -846,7 +812,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
 	buff(power_index, src_stats, target);
 
 	// If there's a sound effect, play it here
-	playSound(power_index, src_stats);
+	playSound(power_index);
 
 	payPowerCost(power_index, src_stats);
 	return true;
@@ -915,7 +881,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 
 	payPowerCost(power_index, src_stats);
 
-	playSound(power_index, src_stats);
+	playSound(power_index);
 	return true;
 }
 
@@ -939,7 +905,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 
 	location_iterator = src_stats->pos;
 
-	playSound(power_index, src_stats);
+	playSound(power_index);
 
 	for (int i=0; i<powers[power_index].count; i++) {
 
@@ -975,7 +941,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 	buff(power_index, src_stats, target);
 
 	// If there's a sound effect, play it here
-	playSound(power_index, src_stats);
+	playSound(power_index);
 
 	Map_Enemy espawn;
 	espawn.type = powers[power_index].spawn_type;
@@ -1044,7 +1010,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint targe
 	src_stats->transform_with_equipment = powers[power_index].keep_equipment;
 
 	// If there's a sound effect, play it here
-	playSound(power_index, src_stats);
+	playSound(power_index);
 
 	// execute untransform powers
 	if (powers[power_index].spawn_type == "untransform" && src_stats->transformed) {
