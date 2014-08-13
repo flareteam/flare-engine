@@ -244,6 +244,7 @@ void setPaths() {
 
 	PATH_CONF = PATH_CONF + "/";
 	PATH_USER = PATH_USER + "/";
+	PATH_DATA = PATH_DATA + "/";
 }
 #elif __amigaos4__
 // AmigaOS paths
