@@ -32,6 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="DownloaderActivity"
+                  android:label="@string/download_activity_title"
+                  android:configChanges="keyboardHidden|orientation|screenSize"
+                  android:screenOrientation="sensorLandscape"
+                  android:launchMode="singleTask" />
     </application>
 
     <!-- Android 4.1.2 -->
@@ -41,5 +46,6 @@
     <uses-feature android:glEsVersion="0x00020000" /> 
 
     <!-- Allow writing to external storage -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.INTERNET" />
 </manifest> 

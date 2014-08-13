@@ -240,9 +240,7 @@ void setPaths() {
 	createDir(PATH_CONF);
 	createDir(PATH_USER);
 
-	PATH_DATA = "";
-	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	PATH_DATA = string(SDL_AndroidGetInternalStoragePath());
 
 	PATH_CONF = PATH_CONF + "/";
 	PATH_USER = PATH_USER + "/";

@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FLARE</string>
+    <string name="success">All data has been downloaded successfully.</string>
+    <string name="download_again">Download again</string>
+
+    <string name="download_activity_title">Downloading</string>
+    <string name="download_activity_cancel">Cancel Download</string>
+    <string name="download_activity_progress">Progress:</string>
+    <string name="download_activity_verifying">Verifying...</string>
+    <string name="download_activity_time_remaining">Time Remaining:</string>
+    <string name="download_activity_time_remaining_unknown">unknown</string>
+    <string name="download_activity_time_remaining_minutes">minutes</string>
+    <string name="download_activity_time_remaining_seconds">seconds</string>
+    <string name="download_activity_time_remaining_hours">hours</string>
+    <string name="download_activity_time_remaining_days">days</string>
+    <string name="download_activity_download_stopped">Download stopped</string>
+    <string name="download_activity_retry">Retry</string>
+    <string name="download_activity_quit">Quit</string>
 </resources>

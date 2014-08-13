@@ -78,6 +78,10 @@ public class SDLActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v("SDL", "onCreate():" + mSingleton);
         super.onCreate(savedInstanceState);
+        if (! DownloaderActivity.ensureDownloaded(this, FILE_CONFIG_URL,
+                CONFIG_VERSION, DATA_PATH, USER_AGENT)) {
+            return;
+        }
         
         SDLActivity.initialize();
         // So we can call stuff from static callbacks
@@ -98,6 +102,11 @@ public class SDLActivity extends Activity {
 
         setContentView(mLayout);
     }
+
+	private final static String FILE_CONFIG_URL = "http://example.com/download.config";
+    private final static String CONFIG_VERSION= "1.0";
+    private final static String DATA_PATH = "/data/data/org.libsdl.app/files";
+    private final static String USER_AGENT = "FLARE Downloader";
 
     // Events
     @Override
