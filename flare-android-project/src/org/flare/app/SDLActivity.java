@@ -78,7 +78,8 @@ public class SDLActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v("SDL", "onCreate():" + mSingleton);
         super.onCreate(savedInstanceState);
-        if (! DownloaderActivity.ensureDownloaded(this, FILE_CONFIG_URL,
+        if (! DownloaderActivity.ensureDownloaded(this,
+                getString(R.string.app_name), FILE_CONFIG_URL,
                 CONFIG_VERSION, DATA_PATH, USER_AGENT)) {
             return;
         }
