@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.downloader;
+package org.flare.app;
 
 import android.app.Activity;
 import android.content.Intent;
