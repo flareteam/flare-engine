@@ -70,16 +70,15 @@ GameStateNew::GameStateNew()
 
 	button_prev = new WidgetButton("images/menus/buttons/left.png");
 	button_next = new WidgetButton("images/menus/buttons/right.png");
-	input_name = new WidgetInput();
+	input_name = new WidgetInput("images/menus/input.png");
 	button_permadeath = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	if (DEATH_PENALTY_PERMADEATH) {
 		button_permadeath->enabled = false;
 		button_permadeath->Check();
 	}
 
-	class_list = new WidgetListBox (HERO_CLASSES.size(), 12, "images/menus/buttons/listbox_default.png");
+	class_list = new WidgetListBox (12, "images/menus/buttons/listbox_default.png");
 	class_list->can_deselect = false;
-	class_list->selected[0] = true;
 
 	tip = new WidgetTooltip();
 
@@ -154,6 +153,7 @@ GameStateNew::GameStateNew()
 	name_pos.y += (VIEW_H - FRAME_H)/2;
 
 	input_name->setPosition(name_pos.x, name_pos.y);
+	input_name->max_length = 20;
 
 	button_permadeath->pos.x += (VIEW_W - FRAME_W)/2;
 	button_permadeath->pos.y += (VIEW_H - FRAME_H)/2;
@@ -185,6 +185,9 @@ GameStateNew::GameStateNew()
 	for (unsigned i=0; i<HERO_CLASSES.size(); i++) {
 		class_list->append(msg->get(HERO_CLASSES[i].name),getClassTooltip(i));
 	}
+
+	if (!HERO_CLASSES.empty())
+		class_list->selected[0] = true;
 
 	loadGraphics();
 	loadOptions("hero_options.txt");

@@ -94,11 +94,11 @@ GameStatePlay::GameStatePlay()
 	mapr = new MapRenderer();
 	pc = new Avatar();
 	enemies = new EnemyManager();
+	enemyg = new EnemyGroupManager();
 	hazards = new HazardManager();
 	menu = new MenuManager(&pc->stats);
 	npcs = new NPCManager(&pc->stats);
 	quests = new QuestLog(menu->log);
-	enemyg = new EnemyGroupManager();
 	loot = new LootManager(&pc->stats);
 
 	// assign some object pointers after object creation, based on dependency order
