@@ -91,6 +91,14 @@ private:
 
 	void handlePower(int actionbar_power);
 
+	// visible power target
+	FPoint target_pos;
+	bool target_visible;
+	Animation *target_anim;
+	AnimationSet *target_animset;
+
+	bool lock_cursor; // keeps the attacking cursor while holding down the power key/button
+
 public:
 	Avatar();
 	~Avatar();
@@ -122,7 +130,7 @@ public:
 	virtual Renderable getRender() {
 		return Renderable();
 	}
-	void addRenders(std::vector<Renderable> &r);
+	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	// vars
 	Hazard *haz;
@@ -134,6 +142,7 @@ public:
 	bool close_menus;
 	bool allow_movement;
 	std::vector<int> hero_cooldown;
+	FPoint enemy_pos; // positon of the highlighted enemy
 };
 
 #endif
