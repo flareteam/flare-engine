@@ -1,4 +1,4 @@
-package org.flare.app;
+package org.libsdl.app;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,11 +78,6 @@ public class SDLActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v("SDL", "onCreate():" + mSingleton);
         super.onCreate(savedInstanceState);
-        if (! DownloaderActivity.ensureDownloaded(this,
-                getString(R.string.app_name), FILE_CONFIG_URL,
-                CONFIG_VERSION, DATA_PATH, USER_AGENT)) {
-            return;
-        }
         
         SDLActivity.initialize();
         // So we can call stuff from static callbacks
@@ -103,11 +98,6 @@ public class SDLActivity extends Activity {
 
         setContentView(mLayout);
     }
-
-	private final static String FILE_CONFIG_URL = "http://flarerpg.org/download.xml";
-    private final static String CONFIG_VERSION= "1.0";
-    private final static String DATA_PATH = "/data/data/org.flare.app/files";
-    private final static String USER_AGENT = "FLARE Downloader";
 
     // Events
     @Override
