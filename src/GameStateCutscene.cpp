@@ -58,7 +58,7 @@ Image *Scene::loadImage(std::string filename, bool scale_graphics) {
 				image = resized;
 		}
 		else {
-			fprintf(stderr, "Error: Can not scale cutscene image with a width of 0.\n");
+			logError("Can not scale cutscene image with a width of 0.\n");
 		}
 	}
 
@@ -244,7 +244,7 @@ bool GameStateCutscene::load(std::string filename) {
 
 		}
 		else {
-			fprintf(stderr, "unknown section %s in file %s\n", infile.section.c_str(), infile.getFileName().c_str());
+			logError("Unknown section %s in file %s\n", infile.section.c_str(), infile.getFileName().c_str());
 		}
 
 		if (infile.key == "scale_gfx") {
@@ -259,7 +259,7 @@ bool GameStateCutscene::load(std::string filename) {
 	}
 
 	if (scenes.empty()) {
-		fprintf(stderr, "No scenes defined in cutscene file %s\n", filename.c_str());
+		logError("No scenes defined in cutscene file %s\n", filename.c_str());
 		return false;
 	}
 

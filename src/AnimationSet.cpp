@@ -95,7 +95,7 @@ void AnimationSet::load() {
 		if (parser.key == "image") {
 			// @ATTR image|string|Filename of sprite-sheet image.
 			if (sprite != NULL) {
-				printf("multiple images specified in %s, dragons be here!\n", name.c_str());
+				logError("Multiple images specified in %s, dragons be here!\n", name.c_str());
 				SDL_Quit();
 				exit(128);
 			}
@@ -168,7 +168,7 @@ void AnimationSet::load() {
 			newanim->addFrame(index, direction, r, offset);
 		}
 		else {
-			fprintf(stderr, "animations definitions (%s): Key %s not supported!\n", parser.getFileName().c_str(), parser.key.c_str());
+			logError("Animations definitions (%s): Key %s not supported!\n", parser.getFileName().c_str(), parser.key.c_str());
 		}
 
 		if (_name == "") {

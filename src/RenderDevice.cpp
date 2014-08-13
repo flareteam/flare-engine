@@ -178,10 +178,10 @@ RenderDevice::~RenderDevice() {
 void RenderDevice::destroyContext() {
 	if (!cache.empty()) {
 		IMAGE_CACHE_CONTAINER_ITER it;
-		fprintf(stderr, "Image cache still holding these images:\n");
+		logError("Image cache still holding these images:\n");
 		it = cache.begin();
 		while (it != cache.end()) {
-			fprintf(stderr, "%s %d\n", it->first.c_str(), it->second->getRefCount());
+			logError("%s %d\n", it->first.c_str(), it->second->getRefCount());
 			++it;
 		}
 	}
@@ -192,7 +192,7 @@ Image * RenderDevice::cacheLookup(std::string &filename) {
 	IMAGE_CACHE_CONTAINER_ITER it;
 	it = cache.find(filename);
 	if (it != cache.end()) {
-		// fprintf(stderr, "%p %s reused from image cache.\n", it->second, filename.c_str());
+		// logError("%p %s reused from image cache.\n", it->second, filename.c_str());
 		it->second->ref();
 		return it->second;
 	}
@@ -202,7 +202,7 @@ Image * RenderDevice::cacheLookup(std::string &filename) {
 void RenderDevice::cacheStore(std::string &filename, Image *image) {
 	if (image == NULL) return;
 	cache[filename] = image;
-	// fprintf(stderr, "%p %s stored in image cache.\n", image, filename.c_str());
+	// logError("%p %s stored in image cache.\n", image, filename.c_str());
 }
 
 void RenderDevice::cacheRemove(Image *image) {
@@ -214,7 +214,7 @@ void RenderDevice::cacheRemove(Image *image) {
 	}
 
 	if (it != cache.end()) {
-		// fprintf(stderr, "%p %s removed from image cache.\n", it->second, it->first.c_str());
+		// logError("%p %s removed from image cache.\n", it->second, it->first.c_str());
 		cache.erase(it);
 	}
 }

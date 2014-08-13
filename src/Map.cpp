@@ -136,7 +136,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
 		if (infile.val != "dec") {
-			fprintf(stderr, "ERROR: maploading: The format of a layer must be \"dec\"!\n");
+			logError("Maploading: The format of a layer must be \"dec\"!\n");
 			SDL_Quit();
 			exit(1);
 		}
@@ -157,7 +157,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 				if (val[i] == ',') comma_count++;
 			}
 			if (comma_count != w) {
-				fprintf(stderr, "ERROR: maploading: A row of layer data has a width not equal to %d.\n", w);
+				logError("Maploading: A row of layer data has a width not equal to %d.\n", w);
 				SDL_Quit();
 				exit(1);
 			}

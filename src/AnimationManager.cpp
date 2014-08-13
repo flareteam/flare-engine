@@ -32,7 +32,7 @@ AnimationSet *AnimationManager::getAnimationSet(const string& filename) {
 		return sets[index];
 	}
 	else {
-		fprintf(stderr, "AnimationManager::getAnimationSet: %s not found\n", filename.c_str());
+		logError("AnimationManager::getAnimationSet: %s not found\n", filename.c_str());
 		SDL_Quit();
 		exit(1);
 		// return 0;
@@ -47,9 +47,9 @@ AnimationManager::~AnimationManager() {
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG
 	if (!names.empty()) {
-		fprintf(stderr, "AnimationManager still holding these animations:\n");
+		logError("AnimationManager still holding these animations:\n");
 		for (unsigned i = 0; i < names.size(); i++)
-			fprintf(stderr, "%s %d\n", names[i].c_str(), counts[i]);
+			logError("%s %d\n", names[i].c_str(), counts[i]);
 	}
 	assert(names.size() == 0);
 #endif
@@ -76,7 +76,7 @@ void AnimationManager::decreaseCount(const std::string &name) {
 		counts[index]--;
 	}
 	else {
-		fprintf(stderr, "AnimationManager::decreaseCount: %s not found\n", name.c_str());
+		logError("AnimationManager::decreaseCount: %s not found\n", name.c_str());
 		SDL_Quit();
 		exit(1);
 	}

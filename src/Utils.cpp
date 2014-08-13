@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 
 #include <cmath>
+#include <stdarg.h>
 
 using namespace std;
 
@@ -256,3 +257,38 @@ void alignFPoint(FPoint *pos) {
 	pos->x = floor(pos->x / 0.0625f) * 0.0625f;
 	pos->y = floor(pos->y / 0.0625f) * 0.0625f;
 }
+
+
+/**
+ * These functions provide a unified way to log messages, printf-style
+ */
+void logInfo(const char* format, ...) {
+	va_list args;
+
+	va_start(args, format);
+
+#if SDL_VERSION_ATLEAST(2,0,0)
+	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, format, args);
+#else
+	printf("INFO: ");
+	vprintf(format, args);
+#endif
+
+	va_end(args);
+}
+
+void logError(const char* format, ...) {
+	va_list args;
+
+	va_start(args, format);
+
+#if SDL_VERSION_ATLEAST(2,0,0)
+	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, format, args);
+#else
+	printf("ERROR: ");
+	vprintf(format, args);
+#endif
+
+	va_end(args);
+}
+

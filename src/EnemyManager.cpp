@@ -60,7 +60,7 @@ Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
 	e.type = type_id;
 
 	if (e.stats.animations == "")
-		fprintf(stderr, "Warning: no animation file specified for entity: %s\n", type_id.c_str());
+		logError("No animation file specified for entity: %s\n", type_id.c_str());
 
 	loadAnimations(&e);
 	e.loadSounds();
@@ -99,7 +99,7 @@ void EnemyManager::handleNewMap () {
 		mapr->enemies.pop();
 
 		if (me.type.empty()) {
-			fprintf(stderr, "Enemy(%f, %f) doesn't have type attribute set, skipping\n", me.pos.x, me.pos.y);
+			logError("Enemy(%f, %f) doesn't have type attribute set, skipping\n", me.pos.x, me.pos.y);
 			continue;
 		}
 
@@ -190,10 +190,10 @@ void EnemyManager::handleSpawn() {
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation();
 			else
-				fprintf(stderr, "Warning: animations file could not be loaded for %s\n", espawn.type.c_str());
+				logError("Animations file could not be loaded for %s\n", espawn.type.c_str());
 		}
 		else {
-			fprintf(stderr, "Warning: no animation file specified for entity: %s\n", espawn.type.c_str());
+			logError("No animation file specified for entity: %s\n", espawn.type.c_str());
 		}
 		e->loadSounds();
 

@@ -163,7 +163,7 @@ void Avatar::loadLayerDefinitions() {
 				// @ATTR layer|direction (integer), string, ...]|Defines the hero avatar sprite layer
 				unsigned dir = popFirstInt(infile.val);
 				if (dir>7) {
-					fprintf(stderr, "direction must be in range [0,7]\n");
+					logError("Hero layer direction must be in range [0,7]\n");
 					SDL_Quit();
 					exit(1);
 				}
@@ -248,7 +248,7 @@ void Avatar::loadStepFX(const string& stepname) {
 	}
 
 	// Could not find step sound fx
-	fprintf(stderr, "Error: Could not find footstep sounds for '%s'.\n", filename.c_str());
+	logError("Could not find footstep sounds for '%s'.\n", filename.c_str());
 }
 
 

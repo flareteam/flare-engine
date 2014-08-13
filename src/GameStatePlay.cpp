@@ -319,7 +319,7 @@ void GameStatePlay::checkTeleport() {
 					ss << SAVE_PREFIX << "_";
 				ss << "stash_HC" << game_slot << ".txt";
 				if (remove(ss.str().c_str()) != 0)
-					fprintf(stderr, "Error deleting hardcore stash in slot %d\n", game_slot);
+					logError("Error deleting hardcore stash in slot %d\n", game_slot);
 
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
@@ -443,7 +443,7 @@ void GameStatePlay::loadTitles() {
 			else if (infile.key == "requires_not_status") titles.back().requires_not = infile.val;
 			// @ATTR title.primary_stat|[physical, mental, offense, defense, physoff, physment, physdef, mentoff, offdef, mentdef]|Required primary stat.
 			else if (infile.key == "primary_stat") titles.back().primary_stat = infile.val;
-			else fprintf(stderr, "GameStatePlay: Unknown key value in title definitons: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
+			else logError("GameStatePlay: Unknown key value in title definitons: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
 		}
 		infile.close();
 	}
@@ -928,7 +928,7 @@ void GameStatePlay::logic() {
 			menu->act->locked[count] = true;
 		}
 		else if (pc->stats.manual_untransform && pc->untransform_power == 0)
-			fprintf(stderr, "Untransform power not found, you can't untransform manually\n");
+			logError("Untransform power not found, you can't untransform manually\n");
 
 		menu->act->updated = true;
 
