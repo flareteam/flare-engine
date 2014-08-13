@@ -284,11 +284,6 @@ public:
 	bool teleportation;
 	FPoint teleport_destination;
 
-	// weapons can modify spells
-	int melee_weapon_power;
-	int mental_weapon_power;
-	int ranged_weapon_power;
-
 	// for purchasing tracking
 	int currency;
 
