@@ -39,6 +39,10 @@ using namespace std;
 #define log2(x)	logf(x)/logf(2)
 #endif
 
+#ifdef __ANDROID__
+#include <SDL.h>
+#endif
+
 class ConfigEntry {
 public:
 	const char * name;
@@ -219,6 +223,22 @@ void setPaths() {
 		createDir(PATH_CONF);
 		createDir(PATH_USER);
 	}
+
+	PATH_DATA = "";
+	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
+	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+
+	PATH_CONF = PATH_CONF + "/";
+	PATH_USER = PATH_USER + "/";
+}
+#elif __ANDROID__
+// Android paths
+void setPaths() {
+
+	PATH_CONF = SDL_AndroidGetInternalStoragePath() + "/config";
+	PATH_USER = SDL_AndroidGetInternalStoragePath() + "/saves";
+	createDir(PATH_CONF);
+	createDir(PATH_USER);
 
 	PATH_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
