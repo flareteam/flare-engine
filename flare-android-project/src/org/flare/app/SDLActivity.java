@@ -104,7 +104,7 @@ public class SDLActivity extends Activity {
         setContentView(mLayout);
     }
 
-	private final static String FILE_CONFIG_URL = "http://example.com/download.config";
+	private final static String FILE_CONFIG_URL = "http://flarerpg.org/download.xml";
     private final static String CONFIG_VERSION= "1.0";
     private final static String DATA_PATH = "/data/data/org.flare.app/files";
     private final static String USER_AGENT = "FLARE Downloader";
