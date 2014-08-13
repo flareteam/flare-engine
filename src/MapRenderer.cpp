@@ -134,7 +134,7 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 
 	}
 	if (enemies_to_spawn) {
-		logError("Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)\n",
+		logError("MapRenderer: Could not spawn all enemies in group at %s (x=%d,y=%d,w=%d,h=%d), %d missing (min=%d max=%d)\n",
 				filename.c_str(), g.pos.x, g.pos.y, g.area.x, g.area.y, enemies_to_spawn, g.numbermin, g.numbermax);
 	}
 }
@@ -197,9 +197,9 @@ int MapRenderer::load(std::string fname) {
 	}
 
 	if (!corrupted.empty()) {
-		logError("Tileset or Map corrupted. A tile has a larger id than the tileset allows or is undefined.\n");
+		logError("MapRenderer: Tileset or Map corrupted. A tile has a larger id than the tileset allows or is undefined.\n");
 		while (!corrupted.empty()) {
-			logError("Removing offending tile id %d.\n", corrupted.back());
+			logError("MapRenderer: Removing offending tile id %d.\n", corrupted.back());
 			corrupted.pop_back();
 		}
 	}
@@ -227,7 +227,7 @@ void MapRenderer::loadMusic() {
 	if (AUDIO && MUSIC_VOLUME) {
 		music = Mix_LoadMUS(mods->locate(played_music_filename).c_str());
 		if(!music)
-			logError("Mix_LoadMUS: %s\n", Mix_GetError());
+			logError("MapRenderer: Mix_LoadMUS: %s\n", Mix_GetError());
 	}
 
 	if (music) {

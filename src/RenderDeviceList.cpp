@@ -27,7 +27,7 @@ RenderDevice* getRenderDevice(std::string name) {
 	if (name != "") {
 		if (name == "sdl") return new SDLSoftwareRenderDevice();
 		else {
-			logError("Render device '%s' not found. Falling back to the default.\n", name.c_str());
+			logError("RenderDeviceList: Render device '%s' not found. Falling back to the default.\n", name.c_str());
 			return new SDLSoftwareRenderDevice();
 		}
 	}

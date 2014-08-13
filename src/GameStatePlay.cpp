@@ -319,7 +319,7 @@ void GameStatePlay::checkTeleport() {
 					ss << SAVE_PREFIX << "_";
 				ss << "stash_HC" << game_slot << ".txt";
 				if (remove(ss.str().c_str()) != 0)
-					logError("Error deleting hardcore stash in slot %d\n", game_slot);
+					logError("GameStatePlay: Error deleting hardcore stash in slot %d\n", game_slot);
 
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
@@ -928,7 +928,7 @@ void GameStatePlay::logic() {
 			menu->act->locked[count] = true;
 		}
 		else if (pc->stats.manual_untransform && pc->untransform_power == 0)
-			logError("Untransform power not found, you can't untransform manually\n");
+			logError("GameStatePlay: Untransform power not found, you can't untransform manually\n");
 
 		menu->act->updated = true;
 

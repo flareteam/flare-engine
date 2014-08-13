@@ -94,12 +94,12 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 
 	// check for errors in config file
 	if((tabs_count == 1) && (!tree_image_files.empty() || !tab_titles.empty())) {
-		logError("menu/powers.txt error: you don't have tabs, but tab_tree_image and tab_title counts are not 0\n");
+		logError("MenuPowers: menu/powers.txt error: you don't have tabs, but tab_tree_image and tab_title counts are not 0\n");
 		SDL_Quit();
 		exit(1);
 	}
 	else if((tabs_count > 1) && (tree_image_files.size() != (unsigned)tabs_count || tab_titles.size() != (unsigned)tabs_count)) {
-		logError("menu/powers.txt error: tabs count, tab_tree_image and tab_name counts do not match\n");
+		logError("MenuPowers: menu/powers.txt error: tabs count, tab_tree_image and tab_name counts do not match\n");
 		SDL_Quit();
 		exit(1);
 	}
@@ -892,7 +892,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 			power_cell.back().id = id;
 		}
 		else {
-			logError("Power index %d inside power menu definition out of bounds 1-%d, skipping\n", id, INT_MAX);
+			logError("MenuPowers: Power index %d inside power menu definition out of bounds 1-%d, skipping\n", id, INT_MAX);
 		}
 	}
 
@@ -901,7 +901,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		power_cell.pop_back();
 		slots.pop_back();
 		upgradeButtons.pop_back();
-		logError("There is a power without a valid id as the first attribute.\nIDs must be the first attribute in the power menu definition.\n");
+		logError("MenuPowers: There is a power without a valid id as the first attribute.\nIDs must be the first attribute in the power menu definition.\n");
 	}
 
 	if (skip_section)
@@ -964,7 +964,7 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 		else {
 			skip_section = true;
 			power_cell_upgrade.pop_back();
-			logError("Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
+			logError("MenuPowers: Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
 		}
 	}
 

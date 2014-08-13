@@ -38,7 +38,7 @@ FontEngine::FontEngine()
 	, cursor_y(0) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
-		logError("TTF_Init: %s\n", TTF_GetError());
+		logError("FontEngine: TTF_Init: %s\n", TTF_GetError());
 		exit(2);
 	}
 
@@ -63,7 +63,7 @@ FontEngine::FontEngine()
 				style->blend = toBool(popFirstString(infile.val));
 				style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
 				if(style->ttfont == NULL) {
-					logError("TTF_OpenFont: %s\n", TTF_GetError());
+					logError("FontEngine: TTF_OpenFont: %s\n", TTF_GetError());
 				}
 				else {
 					int lineskip = TTF_FontLineSkip(style->ttfont);
@@ -91,7 +91,7 @@ FontEngine::FontEngine()
 	// Attempt to set the default active font
 	setFont("font_regular");
 	if (!active_font) {
-		logError("Unable to determine default font!\n");
+		logError("FontEngine: Unable to determine default font!\n");
 		SDL_Quit();
 		exit(1);
 	}

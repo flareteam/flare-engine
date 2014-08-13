@@ -47,7 +47,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 	this->errormessage = _errormessage;
 
 	if (filenames.size() == 0 && !errormessage.empty()) {
-		logError("%s: %s: No such file or directory!\n", _filename.c_str(), errormessage.c_str());
+		logError("FileParser: %s: %s: No such file or directory!\n", _filename.c_str(), errormessage.c_str());
 		return false;
 	}
 
@@ -72,7 +72,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 		}
 		else {
 			if (!errormessage.empty())
-				logError("%s: %s\n", errormessage.c_str(), filenames[i-1].c_str());
+				logError("FileParser: %s: %s\n", errormessage.c_str(), filenames[i-1].c_str());
 		}
 	}
 
@@ -135,7 +135,7 @@ bool FileParser::next() {
 		infile.open(current_filename.c_str(), ios::in);
 		if (!infile.is_open()) {
 			if (!errormessage.empty())
-				logError("%s: %s\n", errormessage.c_str(), current_filename.c_str());
+				logError("FileParser: %s: %s\n", errormessage.c_str(), current_filename.c_str());
 			return false;
 		}
 		// a new file starts a new section

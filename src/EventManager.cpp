@@ -473,14 +473,14 @@ bool EventManager::executeEvent(Event &ev) {
 				if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
 					mapr->collider.colmap[ec->x][ec->y] = ec->z;
 				else
-					logError("Mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
+					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
 			}
 			else {
 				int index = distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s));
 				if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
 					mapr->layers[index][ec->x][ec->y] = ec->z;
 				else
-					logError("Mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
+					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
 			}
 			mapr->map_change = true;
 		}

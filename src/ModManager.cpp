@@ -109,7 +109,7 @@ void ModManager::loadModList() {
 		infile.open(place2.c_str(), ios::in);
 	}
 	if (!infile.is_open()) {
-		logError("Error during ModManager::loadModList() -- couldn't open mods.txt, to be located at \n");
+		logError("ModManager: Error during loadModList() -- couldn't open mods.txt, to be located at \n");
 		logError("%s\n%s\n\n", place1.c_str(), place2.c_str());
 	}
 
@@ -130,13 +130,13 @@ void ModManager::loadModList() {
 				found_any_mod = true;
 			}
 			else {
-				logError("Mod \"%s\" not found, skipping\n", line.c_str());
+				logError("ModManager: Mod \"%s\" not found, skipping\n", line.c_str());
 			}
 		}
 	}
 	infile.close();
 	if (!found_any_mod && mod_list.size() == 1) {
-		logError("Couldn't locate any Flare mod. Check if the game data are installed \
+		logError("ModManager: Couldn't locate any Flare mod. Check if the game data are installed \
                   correctly. Expected to find the data in the $XDG_DATA_DIRS path, in \
 				  /usr/local/share/flare/mods, or in the same folder as the executable. \
 				  Try placing the mods folder in one of these locations.\n");
@@ -294,7 +294,7 @@ void ModManager::applyDepends() {
 	for (unsigned i=0; i<mod_list.size(); i++) {
 		// skip the mod if the game doesn't match
 		if (mod_list[i].game != game && mod_list[i].name != FALLBACK_MOD) {
-			logError("Tried to enable \"%s\", but failed. Game does not match \"%s\".\n", mod_list[i].name.c_str(), game.c_str());
+			logError("ModManager: Tried to enable \"%s\", but failed. Game does not match \"%s\".\n", mod_list[i].name.c_str(), game.c_str());
 			continue;
 		}
 
@@ -302,7 +302,7 @@ void ModManager::applyDepends() {
 		if (compareVersions(mod_list[i].min_version_major, mod_list[i].min_version_minor, VERSION_MAJOR, VERSION_MINOR) ||
 		    compareVersions(VERSION_MAJOR, VERSION_MINOR, mod_list[i].max_version_major, mod_list[i].max_version_minor)) {
 
-			logError("Tried to enable \"%s\", but failed. Not compatible with engine version %d.%02d.\n", mod_list[i].name.c_str(), VERSION_MAJOR, VERSION_MINOR);
+			logError("ModManager: Tried to enable \"%s\", but failed. Not compatible with engine version %d.%02d.\n", mod_list[i].name.c_str(), VERSION_MAJOR, VERSION_MINOR);
 			continue;
 		}
 
@@ -326,26 +326,26 @@ void ModManager::applyDepends() {
 					if (find(mod_dirs.begin(), mod_dirs.end(), mod_list[i].depends[j]) != mod_dirs.end()) {
 						Mod new_depend = loadMod(mod_list[i].depends[j]);
 						if (new_depend.game != game) {
-							logError("Tried to enable dependency \"%s\" for \"%s\", but failed. Game does not match \"%s\".\n", new_depend.name.c_str(), mod_list[i].name.c_str(), game.c_str());
+							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Game does not match \"%s\".\n", new_depend.name.c_str(), mod_list[i].name.c_str(), game.c_str());
 							depends_met = false;
 							break;
 						}
 						else if (compareVersions(new_depend.min_version_major, new_depend.min_version_minor, VERSION_MAJOR, VERSION_MINOR) ||
 						         compareVersions(VERSION_MAJOR, VERSION_MINOR, new_depend.max_version_major, new_depend.max_version_minor)) {
 
-							logError("Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %d.%02d.\n", new_depend.name.c_str(), mod_list[i].name.c_str(), VERSION_MAJOR, VERSION_MINOR);
+							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Not compatible with engine version %d.%02d.\n", new_depend.name.c_str(), mod_list[i].name.c_str(), VERSION_MAJOR, VERSION_MINOR);
 							depends_met = false;
 							break;
 						}
 						else if (find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
-							logError("Mod \"%s\" requires the \"%s\" mod. Enabling \"%s\" now.\n", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str(), mod_list[i].depends[j].c_str());
+							logError("ModManager: Mod \"%s\" requires the \"%s\" mod. Enabling \"%s\" now.\n", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str(), mod_list[i].depends[j].c_str());
 							new_mods.push_back(new_depend);
 							finished = false;
 							break;
 						}
 					}
 					else {
-						logError("Could not find mod \"%s\", which is required by mod \"%s\". Disabling \"%s\" now.\n", mod_list[i].depends[j].c_str(), mod_list[i].name.c_str(), mod_list[i].name.c_str());
+						logError("ModManager: Could not find mod \"%s\", which is required by mod \"%s\". Disabling \"%s\" now.\n", mod_list[i].depends[j].c_str(), mod_list[i].name.c_str(), mod_list[i].name.c_str());
 						depends_met = false;
 						break;
 					}

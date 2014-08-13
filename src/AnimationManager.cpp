@@ -47,7 +47,7 @@ AnimationManager::~AnimationManager() {
 // NDEBUG is used by posix to disable assertions, so use the same MACRO.
 #ifndef NDEBUG
 	if (!names.empty()) {
-		logError("AnimationManager still holding these animations:\n");
+		logError("AnimationManager: Still holding these animations:\n");
 		for (unsigned i = 0; i < names.size(); i++)
 			logError("%s %d\n", names[i].c_str(), counts[i]);
 	}

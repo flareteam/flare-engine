@@ -73,7 +73,7 @@ void PowerManager::loadEffects() {
 			input_name = infile.val;
 			skippingEntry = input_name == "";
 			if (skippingEntry)
-				logError("Effect without a name, skipping\n");
+				logError("PowerManager: Effect without a name, skipping\n");
 			continue;
 		}
 		if (skippingEntry)
@@ -121,7 +121,7 @@ void PowerManager::loadPowers() {
 			input_id = toInt(infile.val);
 			skippingEntry = input_id < 1;
 			if (skippingEntry)
-				logError("Power index out of bounds 1-%d, skipping\n", INT_MAX);
+				logError("PowerManager: Power index out of bounds 1-%d, skipping\n", INT_MAX);
 			if (static_cast<int>(powers.size()) < input_id + 1)
 				powers.resize(input_id + 1);
 			continue;
@@ -136,7 +136,7 @@ void PowerManager::loadPowers() {
 			else if (infile.val == "repeater") powers[input_id].type = POWTYPE_REPEATER;
 			else if (infile.val == "spawn") powers[input_id].type = POWTYPE_SPAWN;
 			else if (infile.val == "transform") powers[input_id].type = POWTYPE_TRANSFORM;
-			else logError("Unknown type %s\n", infile.val.c_str());
+			else logError("PowerManager: Unknown type %s\n", infile.val.c_str());
 		}
 		else if (infile.key == "name")
 			// @ATTR name|string|The name of the power
@@ -164,7 +164,7 @@ void PowerManager::loadPowers() {
 			if (infile.val == "hero") powers[input_id].source_type = SOURCE_TYPE_HERO;
 			else if (infile.val == "neutral") powers[input_id].source_type = SOURCE_TYPE_NEUTRAL;
 			else if (infile.val == "enemy") powers[input_id].source_type = SOURCE_TYPE_ENEMY;
-			else logError("Unknown source_type %s\n", infile.val.c_str());
+			else logError("PowerManager: Unknown source_type %s\n", infile.val.c_str());
 		}
 		else if (infile.key == "beacon")
 			// @ATTR beacon|bool|True if enemy is calling its allies.
@@ -182,7 +182,7 @@ void PowerManager::loadPowers() {
 			else if (infile.val == "on_halfdeath") powers[input_id].passive_trigger = TRIGGER_HALFDEATH;
 			else if (infile.val == "on_joincombat") powers[input_id].passive_trigger = TRIGGER_JOINCOMBAT;
 			else if (infile.val == "on_death") powers[input_id].passive_trigger = TRIGGER_DEATH;
-			else logError("Unknown passive trigger %s\n", infile.val.c_str());
+			else logError("PowerManager: Unknown passive trigger %s\n", infile.val.c_str());
 		}
 		else if (infile.key == "meta_power") {
 			// @ATTR meta_power|boolean|If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.
@@ -272,14 +272,14 @@ void PowerManager::loadPowers() {
 			else if (infile.val == "melee")  powers[input_id].base_damage = BASE_DAMAGE_MELEE;
 			else if (infile.val == "ranged") powers[input_id].base_damage = BASE_DAMAGE_RANGED;
 			else if (infile.val == "ment")   powers[input_id].base_damage = BASE_DAMAGE_MENT;
-			else logError("Unknown base_damage %s\n", infile.val.c_str());
+			else logError("PowerManager: Unknown base_damage %s\n", infile.val.c_str());
 		}
 		else if (infile.key == "starting_pos") {
 			// @ATTR starting_pos|[source, target, melee]|Start position for hazard
 			if (infile.val == "source")      powers[input_id].starting_pos = STARTING_POS_SOURCE;
 			else if (infile.val == "target") powers[input_id].starting_pos = STARTING_POS_TARGET;
 			else if (infile.val == "melee")  powers[input_id].starting_pos = STARTING_POS_MELEE;
-			else logError("Unknown starting_pos %s\n", infile.val.c_str());
+			else logError("PowerManager: Unknown starting_pos %s\n", infile.val.c_str());
 		}
 		else if (infile.key == "multitarget")
 			// @ATTR multitarget|bool|Allows a hazard power to hit more than one entity.
@@ -374,7 +374,7 @@ void PowerManager::loadPowers() {
 			if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
 			else if (mode == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
 			else if (mode == "unlimited") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_UNLIMITED;
-			else logError("Unknown spawn_limit_mode %s\n", mode.c_str());
+			else logError("PowerManager: Unknown spawn_limit_mode %s\n", mode.c_str());
 
 			if(powers[input_id].spawn_limit_mode != SPAWN_LIMIT_MODE_UNLIMITED) {
 				powers[input_id].spawn_limit_qty = popFirstInt(infile.val);
@@ -387,7 +387,7 @@ void PowerManager::loadPowers() {
 					else if (stat == "mental") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_MENTAL;
 					else if (stat == "offense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_OFFENSE;
 					else if (stat == "defense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_DEFENSE;
-					else logError("Unknown spawn_limit_stat %s\n", stat.c_str());
+					else logError("PowerManager: Unknown spawn_limit_stat %s\n", stat.c_str());
 				}
 			}
 		}
@@ -398,7 +398,7 @@ void PowerManager::loadPowers() {
 			else if (mode == "fixed") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_FIXED;
 			else if (mode == "stat") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_STAT;
 			else if (mode == "level") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_LEVEL;
-			else logError("Unknown spawn_level_mode %s\n", mode.c_str());
+			else logError("PowerManager: Unknown spawn_level_mode %s\n", mode.c_str());
 
 			if(powers[input_id].spawn_level_mode != SPAWN_LEVEL_MODE_DEFAULT) {
 				powers[input_id].spawn_level_qty = popFirstInt(infile.val);
@@ -412,7 +412,7 @@ void PowerManager::loadPowers() {
 						else if (stat == "mental") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_MENTAL;
 						else if (stat == "offense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_OFFENSE;
 						else if (stat == "defense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_DEFENSE;
-						else logError("Unknown spawn_level_stat %s\n", stat.c_str());
+						else logError("PowerManager: Unknown spawn_level_stat %s\n", stat.c_str());
 					}
 				}
 			}
@@ -433,7 +433,7 @@ void PowerManager::loadPowers() {
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
 			else if(mode == "absolute") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ABSOLUTE;
-			else logError("Unknown stat_modifier_mode %s\n", mode.c_str());
+			else logError("PowerManager: Unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_accuracy_value = popFirstInt(infile.val);
 		}
@@ -443,7 +443,7 @@ void PowerManager::loadPowers() {
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
 			else if(mode == "absolute") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ABSOLUTE;
-			else logError("Unknown stat_modifier_mode %s\n", mode.c_str());
+			else logError("PowerManager: Unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_damage_value_min = popFirstInt(infile.val);
 			powers[input_id].mod_damage_value_max = popFirstInt(infile.val);
@@ -454,12 +454,12 @@ void PowerManager::loadPowers() {
 			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
 			else if(mode == "absolute") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ABSOLUTE;
-			else logError("Unknown stat_modifier_mode %s\n", mode.c_str());
+			else logError("PowerManager: Unknown stat_modifier_mode %s\n", mode.c_str());
 
 			powers[input_id].mod_crit_value = popFirstInt(infile.val);
 		}
 		else
-			logError("Ignoring unknown key %s set to %s in file %s\n",
+			logError("PowerManager: Ignoring unknown key %s set to %s in file %s\n",
 					infile.key.c_str(), infile.val.c_str(), infile.getFileName().c_str());
 	}
 	infile.close();
