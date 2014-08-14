@@ -1,0 +1,45 @@
+To build for Android do next steps:
+
+1. Install Java Development Kit (x86 version)
+2. Install Google ADT (Android Development Tools) x86 http://developer.android.com/tools/help/adt.html
+3. Install Android NDK x86 http://developer.android.com/sdk/ndk/index.html
+4. Install SDK Platform for your Android version
+5. Open Eclipse IDE
+6. Use File > Import and select General > Existing Projects into Workspace.
+7. Click next and then browse to the directory containing the project directory.
+
+You will need to edit next settings
+
+	1. In file \jni\src\Android.mk
+
+	SDL_PATH := D:/Development/SDL
+	Change SDL include paths
+
+	NOTE: changing SDL path doesn't work yet. Place SDL folder into \jni\ (so it will be like jni\SDL\src\SDL.c)
+
+	2. In Eclipse IDE go to Project Properties: C/C++ General -> Paths and Symbols -> Includes -> GNU C++
+
+	Change path to "platforms\android-16\arch-arm\usr\include"
+	Change path to "sources\cxx-stl\stlport\stlport"
+
+	3. In Eclipse IDE go to Project Properties: C/C++ Build. Change build command to your "ndk-build(.cmd)" path
+
+8. Set-up SDL libraries
+
+	1. Download SDL, SDL_image, SDL_mixer and SDL_ttf and extract them to \jni\ folder (so it will be like jni\SDL\src\SDL.c)
+
+	2. In SDL_mixer\Android.mk set SUPPORT_MOD_MIKMOD and SUPPORT_MP3_SMPEG to false to build under Windows.
+
+TODO:
+
+1. Implement Touch Input Events
+
+References:
+
+1. http://www.dinomage.com/2013/01/howto-sdl-on-android/
+
+2. http://www.dinomage.com/2013/05/howto-sdl-on-android-part-2-platform-details/
+
+3. http://mhandroid.wordpress.com/2011/01/23/using-eclipse-for-android-cc-development/
+
+4. https://code.google.com/p/apps-for-android/ Data Downloader goes from here
