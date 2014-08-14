@@ -243,7 +243,9 @@ void InputState::saveKeyBindings() {
 void InputState::handle(bool dump_event) {
 	SDL_Event event;
 
+#ifndef __ANDROID__
 	SDL_GetMouseState(&mouse.x, &mouse.y);
+#endif
 
 	inkeys = "";
 
@@ -314,6 +316,25 @@ void InputState::handle(bool dump_event) {
 						un_press[key] = true;
 					}
 				}
+				last_button = event.button.button;
+				break;
+			// Android touch events
+			case SDL_FINGERMOTION:
+				if (event.tfinger.dy > 0) {
+					scroll_up = true;
+				} else if (event.tfinger.dy < 0) {
+					scroll_down = true;
+				}
+				break;
+			case SDL_FINGERDOWN:
+				mouse.x = event.tfinger.x * VIEW_W;
+				mouse.y = event.tfinger.y * VIEW_H;
+				pressing[MAIN1] = true;
+				break;
+			case SDL_FINGERUP:
+				mouse.x = event.tfinger.x * VIEW_W;
+				mouse.y = event.tfinger.y * VIEW_H;
+				un_press[MAIN1] = true;
 				last_button = event.button.button;
 				break;
 #else
