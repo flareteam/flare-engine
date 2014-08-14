@@ -51,7 +51,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, Image *
 	, active_frames()
 	, elapsed_frames(0) {
 	if (type == NONE)
-		fprintf(stderr, "Warning: animation type %s is unknown\n", _type.c_str());
+		logError("Animation: Type %s is unknown\n", _type.c_str());
 }
 
 Animation::Animation(const Animation& a)
@@ -120,12 +120,12 @@ void Animation::addFrame(	unsigned short index,
 							Point _render_offset) {
 
 	if (index > gfx.size()/max_kinds) {
-		fprintf(stderr, "WARNING: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]\n",
+		logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]\n",
 				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, (int)gfx.size()/max_kinds);
 		return;
 	}
 	if (kind > max_kinds-1) {
-		fprintf(stderr, "WARNING: Animation(%s) adding rect(%d, %d, %d, %d) to frame(%u) kind(%u) out of bounds. must be in [0, %d]\n",
+		logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame(%u) kind(%u) out of bounds. must be in [0, %d]\n",
 				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, kind, max_kinds-1);
 		return;
 	}

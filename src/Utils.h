@@ -122,4 +122,7 @@ std::string abbreviateKilo(int amount);
 void alignToScreenEdge(std::string alignment, Rect *r);
 void alignFPoint(FPoint *pos);
 
+void logInfo(const char* format, ...);
+void logError(const char* format, ...);
+
 #endif

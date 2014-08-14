@@ -104,8 +104,9 @@ void ItemManager::loadAll() {
 	shrinkVecToFit(items);
 	shrinkVecToFit(item_sets);
 
-	if (items.empty()) fprintf(stderr, "No items were found.\n");
-	if (item_sets.empty()) printf("No item sets were found.\n");
+	// do we need to print these messages?
+	if (items.empty()) logInfo("ItemManager: No items were found.\n");
+	if (item_sets.empty()) logInfo("ItemManager: No item sets were found.\n");
 }
 
 /**
@@ -132,7 +133,7 @@ void ItemManager::loadItems() {
 		else id_line = false;
 
 		if (id < 1) {
-			if (id_line) fprintf(stderr, "Item index out of bounds 1-%d, skipping\n", INT_MAX);
+			if (id_line) logError("ItemManager: Item index out of bounds 1-%d, skipping\n", INT_MAX);
 			continue;
 		}
 		if (id_line) continue;
@@ -248,7 +249,7 @@ void ItemManager::loadItems() {
 			if (toInt(infile.val) > 0) {
 				items[id].power = toInt(infile.val);
 			}
-			else fprintf(stderr, "Power index inside item %d definition out of bounds 1-%d, skipping item\n", id, INT_MAX);
+			else logError("ItemManager: Power index inside item %d definition out of bounds 1-%d, skipping item\n", id, INT_MAX);
 		}
 		else if (infile.key == "replace_power") {
 			// @ATTR replace_power|old (integer), new (integer)|Replaces the old power id with the new power id in the action bar when equipped.
@@ -311,7 +312,7 @@ void ItemManager::loadItems() {
 			}
 		}
 		else {
-			fprintf(stderr, "unknown item(%d, %s) attribute: %s\n",id, items[id].name.c_str(), infile.key.c_str());
+			logError("ItemManager: Unknown item(%d, %s) attribute: %s\n",id, items[id].name.c_str(), infile.key.c_str());
 		}
 
 	}
@@ -373,7 +374,7 @@ void ItemManager::loadSets() {
 		else id_line = false;
 
 		if (id < 1) {
-			if (id_line) fprintf(stderr, "Item set index out of bounds 1-%d, skipping\n", INT_MAX);
+			if (id_line) logError("ItemManager: Item set index out of bounds 1-%d, skipping\n", INT_MAX);
 			continue;
 		}
 		if (id_line) continue;
@@ -396,7 +397,7 @@ void ItemManager::loadSets() {
 				else {
 					const int maxsize = static_cast<int>(items.size()-1);
 					const char* cname = item_sets[id].name.c_str();
-					fprintf(stderr, "Item index inside item set %s definition out of bounds 1-%d, skipping item\n", cname, maxsize);
+					logError("ItemManager: Item index inside item set %s definition out of bounds 1-%d, skipping item\n", cname, maxsize);
 				}
 				item_id = infile.nextValue();
 			}

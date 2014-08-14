@@ -107,7 +107,7 @@ void GameStateResolution::render() {
  */
 bool GameStateResolution::applyVideoSettings(int width, int height) {
 	if (MIN_VIEW_W > width && MIN_VIEW_H > height) {
-		fprintf (stderr, "A mod is requiring a minimum resolution of %dx%d\n", MIN_VIEW_W, MIN_VIEW_H);
+		logError("GameStateResolution: A mod is requiring a minimum resolution of %dx%d\n", MIN_VIEW_W, MIN_VIEW_H);
 		if (width < MIN_VIEW_W) width = MIN_VIEW_W;
 		if (height < MIN_VIEW_H) height = MIN_VIEW_H;
 	}
@@ -117,7 +117,7 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
 
 	// If the new settings fail, revert to the old ones
 	if (status == -1) {
-		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
+		logError("GameStateResolution: Error during SDL_SetVideoMode: %s\n", SDL_GetError());
 		FULLSCREEN = old_fullscreen;
 		HWSURFACE = old_hwsurface;
 		DOUBLEBUF = old_doublebuf;

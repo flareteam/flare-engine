@@ -182,7 +182,7 @@ void GameStateConfig::init() {
 	key_count = keybinds_btn.size()/3;
 
 	// Allocate resolution list box
-	if (getVideoModes() < 1) fprintf(stderr, "Unable to get resolutions list!\n");
+	if (getVideoModes() < 1) logError("GameStateConfig: Unable to get resolutions list!\n");
 	resolution_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	resolution_lstb->can_deselect = false;
 
@@ -629,7 +629,7 @@ void GameStateConfig::update () {
 
 	joystick_deadzone_sl->set(0,32768,JOY_DEADZONE);
 
-	if (!getLanguagesList()) fprintf(stderr, "Unable to get languages list!\n");
+	if (!getLanguagesList()) logError("GameStateConfig: Unable to get languages list!\n");
 	for (int i=0; i < getLanguagesNumber(); i++) {
 		language_lstb->append(language_full[i],"");
 		if (language_ISO[i] == LANGUAGE) language_lstb->selected[i] = true;
@@ -1158,7 +1158,7 @@ bool GameStateConfig::setMods() {
 				outfile<<mods->mod_list[i].name<<"\n";
 		}
 	}
-	if (outfile.bad()) fprintf(stderr, "Unable to save mod list into file. No write access or disk is full!\n");
+	if (outfile.bad()) logError("GameStateConfig: Unable to save mod list into file. No write access or disk is full!\n");
 	outfile.close();
 	outfile.clear();
 	if (mods->mod_list != temp_list) return true;

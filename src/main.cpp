@@ -43,7 +43,7 @@ static void init(const std::string render_device_name) {
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
-		fprintf(stderr, "Could not initialize SDL: %s\n", SDL_GetError());
+		logError("main: Could not initialize SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
 
@@ -52,18 +52,17 @@ static void init(const std::string render_device_name) {
 	mods = new ModManager();
 
 	if (!mods->haveFallbackMod()) {
-		fprintf(stderr, "Could not find the default mod in the following locations:\n");
-		if (dirExists(PATH_DATA + "mods")) fprintf(stderr, "%smods/\n", PATH_DATA.c_str());
-		if (dirExists(PATH_USER + "mods")) fprintf(stderr, "%smods/\n", PATH_USER.c_str());
-		fprintf(stderr, "\nA copy of the default mod is in the \"mods\" directory of the flare-engine repo.\n");
-		fprintf(stderr, "The repo is located at: https://github.com/clintbellanger/flare-engine\n");
-		fprintf(stderr, "Try again after copying the default mod to one of the above directories.\nExiting.\n");
+		logError("main: Could not find the default mod in the following locations:\n");
+		if (dirExists(PATH_DATA + "mods")) logError("%smods/\n", PATH_DATA.c_str());
+		if (dirExists(PATH_USER + "mods")) logError("%smods/\n", PATH_USER.c_str());
+		logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.\n");
+		logError("The repo is located at: https://github.com/clintbellanger/flare-engine\n");
+		logError("Try again after copying the default mod to one of the above directories.\nExiting.\n");
 		exit(1);
 	}
 
 	if (!loadSettings()) {
-		fprintf(stderr, "%s",
-				("Could not load settings file: ‘" + PATH_CONF + FILE_SETTINGS + "’.\n").c_str());
+		logError("%s", ("main: Could not load settings file: ‘" + PATH_CONF + FILE_SETTINGS + "’.\n").c_str());
 		exit(1);
 	}
 
@@ -86,7 +85,7 @@ static void init(const std::string render_device_name) {
 
 	if (status == -1) {
 
-		fprintf (stderr, "Error during SDL_SetVideoMode: %s\n", SDL_GetError());
+		logError("main: Error during SDL_SetVideoMode: %s\n", SDL_GetError());
 		SDL_Quit();
 		exit(1);
 	}
@@ -99,7 +98,7 @@ static void init(const std::string render_device_name) {
 		render_device->setGamma(GAMMA);
 
 	if (AUDIO && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
-		fprintf (stderr, "Error during Mix_OpenAudio: %s\n", SDL_GetError());
+		logError("main: Error during Mix_OpenAudio: %s\n", SDL_GetError());
 		AUDIO = false;
 	}
 
@@ -107,21 +106,21 @@ static void init(const std::string render_device_name) {
 
 	// initialize Joysticks
 	if(SDL_NumJoysticks() == 1) {
-		printf("1 joystick was found:\n");
+		logInfo("1 joystick was found:\n");
 	}
 	else if(SDL_NumJoysticks() > 1) {
-		printf("%d joysticks were found:\n", SDL_NumJoysticks());
+		logInfo("%d joysticks were found:\n", SDL_NumJoysticks());
 	}
 	else {
-		printf("No joysticks were found.\n");
+		logInfo("No joysticks were found.\n");
 		ENABLE_JOYSTICK = false;
 	}
 	for(int i = 0; i < SDL_NumJoysticks(); i++) {
-		printf("  Joy %d) %s\n", i, inpt->getJoystickName(i).c_str());
+		logInfo("  Joy %d) %s\n", i, inpt->getJoystickName(i).c_str());
 	}
 	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-		printf("Using joystick #%d.\n", JOYSTICK_DEVICE);
+		logInfo("Using joystick #%d.\n", JOYSTICK_DEVICE);
 	}
 
 	// Set sound effects volume from settings file
