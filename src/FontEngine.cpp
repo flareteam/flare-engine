@@ -38,7 +38,7 @@ FontEngine::FontEngine()
 	, cursor_y(0) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
-		printf("TTF_Init: %s\n", TTF_GetError());
+		logError("FontEngine: TTF_Init: %s\n", TTF_GetError());
 		exit(2);
 	}
 
@@ -63,7 +63,7 @@ FontEngine::FontEngine()
 				style->blend = toBool(popFirstString(infile.val));
 				style->ttfont = TTF_OpenFont(mods->locate("fonts/" + style->path).c_str(), style->ptsize);
 				if(style->ttfont == NULL) {
-					printf("TTF_OpenFont: %s\n", TTF_GetError());
+					logError("FontEngine: TTF_OpenFont: %s\n", TTF_GetError());
 				}
 				else {
 					int lineskip = TTF_FontLineSkip(style->ttfont);
@@ -91,7 +91,7 @@ FontEngine::FontEngine()
 	// Attempt to set the default active font
 	setFont("font_regular");
 	if (!active_font) {
-		fprintf(stderr, "Unable to determine default font!\n");
+		logError("FontEngine: Unable to determine default font!\n");
 		SDL_Quit();
 		exit(1);
 	}
@@ -219,7 +219,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 		dest_rect.y = y;
 	}
 	else {
-		printf("ERROR: FontEngine::render() given unhandled 'justify=%d', assuming left\n",justify);
+		logError("FontEngine::render() given unhandled 'justify=%d', assuming left\n",justify);
 		dest_rect.x = x;
 		dest_rect.y = y;
 	}

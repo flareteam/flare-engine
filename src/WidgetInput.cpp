@@ -25,16 +25,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 using namespace std;
 
 
-WidgetInput::WidgetInput()
+WidgetInput::WidgetInput(const std::string& filename)
 	: background(NULL)
 	, enabled(true)
 	, pressed(false)
 	, hover(false)
-	, max_characters(20)
 	, cursor_frame(0)
-	, inFocus(false) {
+	, inFocus(false)
+	, max_length(0) {
 
-	loadGraphics("images/menus/input.png");
+	loadGraphics(filename);
 
 	render_to_alpha = false;
 	color_normal = font->getColor("widget_normal");
@@ -49,6 +49,31 @@ void WidgetInput::loadGraphics(const string& filename) {
 		pos.w = background->getGraphicsWidth();
 		pos.h = background->getGraphicsHeight()/2;
 		graphics->unref();
+	}
+}
+
+void WidgetInput::trimText() {
+	unsigned max_characters = 0;
+	int width = 0;
+	int padding = font->getFontHeight();
+
+	if (max_length > 0 && text.length() > max_length) {
+		text = text.substr(0, max_length);
+	}
+
+	for (unsigned i=0; i<text.length(); i++) {
+		width += font->calc_width(text.substr(i,1));
+		if (width > (pos.w - padding)) {
+			break;
+		}
+		else {
+			max_characters++;
+		}
+	}
+
+	trimmed_text = text;
+	if (text.length() > max_characters) {
+		trimmed_text = text.substr(text.length() - max_characters, max_characters);
 	}
 }
 
@@ -79,8 +104,14 @@ bool WidgetInput::logic(int x, int y) {
 		if (inpt->inkeys != "") {
 			// handle text input
 			text += inpt->inkeys;
-			if (text.length() > max_characters) {
-				text = text.substr(0, max_characters);
+			trimText();
+
+			// HACK: this prevents normal keys from triggering common menu shortcuts
+			if (inpt->pressing[ACCEPT]) {
+				inpt->lock[ACCEPT] = true;
+			}
+			else if (inpt->pressing[CANCEL]) {
+				inpt->lock[CANCEL] = true;
 			}
 		}
 
@@ -91,6 +122,7 @@ bool WidgetInput::logic(int x, int y) {
 			int n = text.length()-1;
 			while (n > 0 && ((text[n] & 0xc0) == 0x80) ) n--;
 			text = text.substr(0, n);
+			trimText();
 		}
 
 		// animate cursor
@@ -120,14 +152,14 @@ void WidgetInput::render() {
 	font->setFont("font_regular");
 
 	if (!inFocus) {
-		font->render(text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
+		font->render(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
 	}
 	else {
 		if (cursor_frame < MAX_FRAMES_PER_SEC) {
-			font->renderShadowed(text + "|", font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
+			font->renderShadowed(trimmed_text + "|", font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
 		}
 		else {
-			font->renderShadowed(text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
+			font->renderShadowed(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
 		}
 	}
 }

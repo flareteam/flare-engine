@@ -102,14 +102,12 @@ void InputState::defaultQwertyKeyBindings () {
 	binding[DEL] = SDLK_DELETE;
 	binding_alt[DEL] = SDLK_BACKSPACE;
 
-	binding[ACTIONBAR] = SDLK_b;
-	binding_alt[ACTIONBAR] = SDLK_b;
-	binding[ACTIONBAR_BACK] = SDLK_z;
-	binding_alt[ACTIONBAR_BACK] = SDLK_z;
-	binding[ACTIONBAR_FORWARD] = SDLK_x;
-	binding_alt[ACTIONBAR_FORWARD] = SDLK_x;
-	binding[ACTIONBAR_USE] = SDLK_n;
-	binding_alt[ACTIONBAR_USE] = SDLK_n;
+	binding[ACTIONBAR] = binding_alt[ACTIONBAR] = SDLK_b;
+	binding[ACTIONBAR_BACK] = binding_alt[ACTIONBAR_BACK] = SDLK_z;
+	binding[ACTIONBAR_FORWARD] = binding_alt[ACTIONBAR_FORWARD] = SDLK_x;
+	binding[ACTIONBAR_USE] = binding_alt[ACTIONBAR_USE] = SDLK_n;
+
+	binding[DEVELOPER_MENU] = binding_alt[DEVELOPER_MENU] = SDLK_F5;
 }
 
 void InputState::defaultJoystickBindings () {
@@ -183,6 +181,7 @@ void InputState::loadKeyBindings() {
 		else if (infile.key == "actionbar_back") cursor = ACTIONBAR_BACK;
 		else if (infile.key == "actionbar_forward") cursor = ACTIONBAR_FORWARD;
 		else if (infile.key == "actionbar_use") cursor = ACTIONBAR_USE;
+		else if (infile.key == "developer_menu") cursor = DEVELOPER_MENU;
 
 		if (cursor != -1) {
 			binding[cursor] = key1;
@@ -232,8 +231,9 @@ void InputState::saveKeyBindings() {
 		outfile << "actionbar_back=" << binding[ACTIONBAR_BACK] << "," << binding_alt[ACTIONBAR_BACK] << "," << binding_joy[ACTIONBAR_BACK] << "\n";
 		outfile << "actionbar_forward=" << binding[ACTIONBAR_FORWARD] << "," << binding_alt[ACTIONBAR_FORWARD] << "," << binding_joy[ACTIONBAR_FORWARD] << "\n";
 		outfile << "actionbar_use=" << binding[ACTIONBAR_USE] << "," << binding_alt[ACTIONBAR_USE] << "," << binding_joy[ACTIONBAR_USE] << "\n";
+		outfile << "developer_menu=" << binding[DEVELOPER_MENU] << "," << binding_alt[DEVELOPER_MENU] << "," << binding_joy[DEVELOPER_MENU] << "\n";
 
-		if (outfile.bad()) fprintf(stderr, "Unable to write keybindings config file. No write access or disk is full!\n");
+		if (outfile.bad()) logError("InputState: Unable to write keybindings config file. No write access or disk is full!\n");
 		outfile.close();
 		outfile.clear();
 	}
@@ -713,6 +713,7 @@ void InputState::setKeybindNames() {
 	binding_name[26] = msg->get("ActionBar Left");
 	binding_name[27] = msg->get("ActionBar Right");
 	binding_name[28] = msg->get("ActionBar Use");
+	binding_name[29] = msg->get("Developer Menu");
 
 	mouse_button[0] = msg->get("lmb");
 	mouse_button[1] = msg->get("mmb");

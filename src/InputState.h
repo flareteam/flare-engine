@@ -60,6 +60,7 @@ const int ACTIONBAR = 25;
 const int ACTIONBAR_BACK = 26;
 const int ACTIONBAR_FORWARD = 27;
 const int ACTIONBAR_USE = 28;
+const int DEVELOPER_MENU = 29;
 
 /**
  * class InputState
@@ -69,12 +70,12 @@ const int ACTIONBAR_USE = 28;
 
 class InputState {
 public:
-	static const int key_count = 29;
+	static const int key_count = 30;
 	int binding[key_count];
 	int binding_alt[key_count];
 	int binding_joy[key_count];
 
-	std::string binding_name[29];
+	std::string binding_name[30];
 	std::string mouse_button[7];
 
 	InputState(void);

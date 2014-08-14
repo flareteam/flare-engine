@@ -1,6 +1,5 @@
 /*
-Copyright © 2011-2012 kitano
-Copyright © 2014 Henrik Andersson
+Copyright © 2014 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -17,39 +16,33 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
- * class MenuExit
+ * class MenuDevHUD
  */
 
 #pragma once
-#ifndef MENU_EXIT_H
-#define MENU_EXIT_H
+#ifndef MENU_DEVHUD_H
+#define MENU_DEVHUD_H
 
 #include "CommonIncludes.h"
 #include "Menu.h"
-#include "WidgetButton.h"
+#include "WidgetLabel.h"
 
-class MenuExit : public Menu {
+class MenuDevHUD : public Menu {
 protected:
 	void alignElements();
 	void loadGraphics();
 
-	WidgetButton *buttonExit;
-	WidgetButton *buttonClose;
-	WidgetLabel label;
-	TabList	tablist;
-
-	bool exitClicked;
+	Rect original_area;
+	WidgetLabel player_pos;
+	WidgetLabel mouse_pos;
+	WidgetLabel target_pos;
 
 public:
-	MenuExit();
-	~MenuExit();
+	MenuDevHUD();
+	~MenuDevHUD();
 
 	void logic();
 	virtual void render();
-
-	bool isExitRequested() {
-		return exitClicked;
-	}
 };
 
 #endif

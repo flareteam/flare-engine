@@ -146,7 +146,7 @@ void GameStatePlay::saveGame() {
 
 		outfile << endl;
 
-		if (outfile.bad()) fprintf(stderr, "Unable to save the game. No write access or disk is full!\n");
+		if (outfile.bad()) logError("SaveLoad: Unable to save the game. No write access or disk is full!\n");
 		outfile.close();
 		outfile.clear();
 	}
@@ -169,7 +169,7 @@ void GameStatePlay::saveGame() {
 
 		outfile << endl;
 
-		if (outfile.bad()) fprintf(stderr, "Unable to save stash. No write access or disk is full!\n");
+		if (outfile.bad()) logError("SaveLoad: Unable to save stash. No write access or disk is full!\n");
 		outfile.close();
 		outfile.clear();
 	}
@@ -235,7 +235,7 @@ void GameStatePlay::loadGame() {
 						pc->stats.offense_character < 0 || pc->stats.offense_character > pc->stats.max_points_per_stat ||
 						pc->stats.defense_character < 0 || pc->stats.defense_character > pc->stats.max_points_per_stat) {
 
-					fprintf(stderr, "Some basic stats are out of bounds, setting to zero\n");
+					logError("SaveLoad: Some basic stats are out of bounds, setting to zero\n");
 					pc->stats.physical_character = 0;
 					pc->stats.mental_character = 0;
 					pc->stats.offense_character = 0;
@@ -267,7 +267,7 @@ void GameStatePlay::loadGame() {
 					mapr->clearEvents();
 				}
 				else {
-					fprintf(stderr, "Unable to find %s, loading maps/spawn.txt\n", mapr->teleport_mapname.c_str());
+					logError("SaveLoad: Unable to find %s, loading maps/spawn.txt\n", mapr->teleport_mapname.c_str());
 					mapr->teleport_mapname = "maps/spawn.txt";
 					mapr->teleport_destination.x = 1;
 					mapr->teleport_destination.y = 1;
@@ -278,15 +278,15 @@ void GameStatePlay::loadGame() {
 				for (int i=0; i<12; i++) {
 					hotkeys[i] = toInt(infile.nextValue());
 					if (hotkeys[i] < 0) {
-						fprintf(stderr, "Hotkey power on position %d has negative id, skipping\n", i);
+						logError("SaveLoad: Hotkey power on position %d has negative id, skipping\n", i);
 						hotkeys[i] = 0;
 					}
 					else if ((unsigned)hotkeys[i] > powers->powers.size()-1) {
-						fprintf(stderr, "Hotkey power id (%d) out of bounds 1-%d, skipping\n", hotkeys[i], (int)powers->powers.size());
+						logError("SaveLoad: Hotkey power id (%d) out of bounds 1-%d, skipping\n", hotkeys[i], (int)powers->powers.size());
 						hotkeys[i] = 0;
 					}
 					else if (hotkeys[i] != 0 && powers->powers[hotkeys[i]].name == "") {
-						fprintf(stderr, "Hotkey power with id=%d, found on position %d does not exist, skipping\n", hotkeys[i], i);
+						logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping\n", hotkeys[i], i);
 						hotkeys[i] = 0;
 					}
 				}
@@ -311,7 +311,7 @@ void GameStatePlay::loadGame() {
 
 		infile.close();
 	}
-	else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
+	else logError("SaveLoad: Unable to open %s!\n", ss.str().c_str());
 
 	// add legacy currency to inventory
 	menu->inv->addCurrency(currency);
@@ -323,13 +323,13 @@ void GameStatePlay::loadGame() {
 	// powers->activatePassives(pc->stats);
 	if (SAVE_HPMP) {
 		if (saved_hp < 0 || saved_hp > pc->stats.get(STAT_HP_MAX)) {
-			fprintf(stderr, "HP value is out of bounds, setting to maximum\n");
+			logError("SaveLoad: HP value is out of bounds, setting to maximum\n");
 			pc->stats.hp = pc->stats.get(STAT_HP_MAX);
 		}
 		else pc->stats.hp = saved_hp;
 
 		if (saved_mp < 0 || saved_mp > pc->stats.get(STAT_MP_MAX)) {
-			fprintf(stderr, "MP value is out of bounds, setting to maximum\n");
+			logError("SaveLoad: MP value is out of bounds, setting to maximum\n");
 			pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 		}
 		else pc->stats.mp = saved_mp;
@@ -399,7 +399,7 @@ void GameStatePlay::loadStash() {
 		}
 		infile.close();
 	}
-	else fprintf(stderr, "Unable to open %s!\n", ss.str().c_str());
+	else logError("SaveLoad: Unable to open %s!\n", ss.str().c_str());
 }
 
 /**

@@ -428,7 +428,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "rarity") ; // but do nothing
 
 		else if (!valid) {
-			fprintf(stderr, "%s=%s not a valid StatBlock parameter\n", infile.key.c_str(), infile.val.c_str());
+			logError("StatBlock: %s=%s not a valid StatBlock parameter\n", infile.key.c_str(), infile.val.c_str());
 		}
 	}
 	infile.close();

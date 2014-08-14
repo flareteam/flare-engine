@@ -100,8 +100,6 @@ void GameStateConfig::init() {
 	cancel_button->pos.y = VIEW_H - (cancel_button->pos.h);
 	cancel_button->refresh();
 
-	mods_total = mods->mod_dirs.size();
-
 	fullscreen_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	fullscreen_lb = new WidgetLabel();
 	mouse_move_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
@@ -128,6 +126,8 @@ void GameStateConfig::init() {
 	colorblind_lb = new WidgetLabel();
 	hardware_cursor_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	hardware_cursor_lb = new WidgetLabel();
+	dev_mode_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	dev_mode_lb = new WidgetLabel();
 	music_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	music_volume_lb = new WidgetLabel();
 	sound_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
@@ -135,11 +135,11 @@ void GameStateConfig::init() {
 	gamma_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	gamma_lb = new WidgetLabel();
 	resolution_lb = new WidgetLabel();
-	activemods_lstb = new WidgetListBox(mods_total, 10, "images/menus/buttons/listbox_default.png");
+	activemods_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	activemods_lb = new WidgetLabel();
-	inactivemods_lstb = new WidgetListBox(mods_total, 10, "images/menus/buttons/listbox_default.png");
+	inactivemods_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	inactivemods_lb = new WidgetLabel();
-	joystick_device_lstb = new WidgetListBox(SDL_NumJoysticks(), 10, "images/menus/buttons/listbox_default.png");
+	joystick_device_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	joystick_device_lb = new WidgetLabel();
 	language_lb = new WidgetLabel();
 	hws_note_lb = new WidgetLabel();
@@ -182,9 +182,8 @@ void GameStateConfig::init() {
 	key_count = keybinds_btn.size()/3;
 
 	// Allocate resolution list box
-	int resolutions = getVideoModes();
-	if (resolutions < 1) fprintf(stderr, "Unable to get resolutions list!\n");
-	resolution_lstb = new WidgetListBox(resolutions, 10, "images/menus/buttons/listbox_default.png");
+	if (getVideoModes() < 1) logError("GameStateConfig: Unable to get resolutions list!\n");
+	resolution_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	resolution_lstb->can_deselect = false;
 
 	// Allocate Languages ListBox
@@ -193,7 +192,7 @@ void GameStateConfig::init() {
 	language_full = std::vector<std::string>();
 	language_ISO.resize(langCount);
 	language_full.resize(langCount);
-	language_lstb = new WidgetListBox(langCount, 10, "images/menus/buttons/listbox_default.png");
+	language_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	language_lstb->can_deselect = false;
 
 	readConfig();
@@ -258,6 +257,8 @@ void GameStateConfig::init() {
 	addChildWidget(colorblind_lb, INTERFACE_TAB);
 	addChildWidget(hardware_cursor_cb, INTERFACE_TAB);
 	addChildWidget(hardware_cursor_lb, INTERFACE_TAB);
+	addChildWidget(dev_mode_cb, INTERFACE_TAB);
+	addChildWidget(dev_mode_lb, INTERFACE_TAB);
 	addChildWidget(language_lstb, INTERFACE_TAB);
 	addChildWidget(language_lb, INTERFACE_TAB);
 
@@ -303,6 +304,7 @@ void GameStateConfig::init() {
 	tablist.add(colorblind_cb);
 	tablist.add(show_hotkeys_cb);
 	tablist.add(hardware_cursor_cb);
+	tablist.add(dev_mode_cb);
 	tablist.add(language_lstb);
 
 	tablist.add(enable_joystick_cb);
@@ -390,6 +392,9 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "hardware_cursor") {
 				placeLabeledWidget(hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), JUSTIFY_RIGHT);
 			}
+			else if (infile.key == "dev_mode") {
+				placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), JUSTIFY_RIGHT);
+			}
 			//sliders
 			else if (infile.key == "music_volume") {
 				placeLabeledWidget(music_volume_lb, music_volume_sl, x1, y1, x2, y2, msg->get("Music Volume"), JUSTIFY_RIGHT);
@@ -455,6 +460,7 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "actionbar_back") keybind_num = ACTIONBAR_BACK;
 			else if (infile.key == "actionbar_forward") keybind_num = ACTIONBAR_FORWARD;
 			else if (infile.key == "actionbar_use") keybind_num = ACTIONBAR_USE;
+			else if (infile.key == "developer_menu") keybind_num = DEVELOPER_MENU;
 			// buttons end
 
 			else if (infile.key == "hws_note") {
@@ -599,6 +605,8 @@ void GameStateConfig::update () {
 	else colorblind_cb->unCheck();
 	if (HARDWARE_CURSOR) hardware_cursor_cb->Check();
 	else hardware_cursor_cb->unCheck();
+	if (DEV_MODE) dev_mode_cb->Check();
+	else dev_mode_cb->unCheck();
 
 	std::stringstream list_mode;
 	unsigned int resolutions = getVideoModes();
@@ -621,7 +629,7 @@ void GameStateConfig::update () {
 
 	joystick_deadzone_sl->set(0,32768,JOY_DEADZONE);
 
-	if (!getLanguagesList()) fprintf(stderr, "Unable to get languages list!\n");
+	if (!getLanguagesList()) logError("GameStateConfig: Unable to get languages list!\n");
 	for (int i=0; i < getLanguagesNumber(); i++) {
 		language_lstb->append(language_full[i],"");
 		if (language_ISO[i] == LANGUAGE) language_lstb->selected[i] = true;
@@ -840,6 +848,10 @@ void GameStateConfig::logic () {
 		else if (hardware_cursor_cb->checkClick()) {
 			if (hardware_cursor_cb->isChecked()) HARDWARE_CURSOR=true;
 			else HARDWARE_CURSOR=false;
+		}
+		else if (dev_mode_cb->checkClick()) {
+			if (dev_mode_cb->isChecked()) DEV_MODE=true;
+			else DEV_MODE=false;
 		}
 	}
 	// tab 3 (input)
@@ -1146,7 +1158,7 @@ bool GameStateConfig::setMods() {
 				outfile<<mods->mod_list[i].name<<"\n";
 		}
 	}
-	if (outfile.bad()) fprintf(stderr, "Unable to save mod list into file. No write access or disk is full!\n");
+	if (outfile.bad()) logError("GameStateConfig: Unable to save mod list into file. No write access or disk is full!\n");
 	outfile.close();
 	outfile.clear();
 	if (mods->mod_list != temp_list) return true;

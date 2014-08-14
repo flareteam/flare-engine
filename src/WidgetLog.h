@@ -1,6 +1,5 @@
 /*
-Copyright © 2011-2012 kitano
-Copyright © 2014 Henrik Andersson
+Copyright © 2014 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -17,39 +16,47 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
- * class MenuExit
+ * class WidgetLog
  */
 
 #pragma once
-#ifndef MENU_EXIT_H
-#define MENU_EXIT_H
+#ifndef WIDGET_LOG_H
+#define WIDGET_LOG_H
 
 #include "CommonIncludes.h"
-#include "Menu.h"
-#include "WidgetButton.h"
 
-class MenuExit : public Menu {
-protected:
-	void alignElements();
-	void loadGraphics();
+class Widget;
+class WidgetScrollBox;
 
-	WidgetButton *buttonExit;
-	WidgetButton *buttonClose;
-	WidgetLabel label;
-	TabList	tablist;
+class WidgetLog : public Widget {
+private:
+	void refresh();
 
-	bool exitClicked;
+	WidgetScrollBox *scroll_box;
+	int line_height;
+	int paragraph_spacing;
+	int padding;
+	unsigned max_messages;
+	Color color_normal;
+
+	std::vector<std::string> messages;
+	std::vector<Color> colors;
 
 public:
-	MenuExit();
-	~MenuExit();
+	WidgetLog (int width, int height);
+	~WidgetLog ();
 
 	void logic();
-	virtual void render();
+	void render();
 
-	bool isExitRequested() {
-		return exitClicked;
-	}
+	void setPosition(int x, int y);
+	bool inFocus();
+	Widget* getWidget() { return (Widget*)scroll_box; } // for adding to tablist
+
+	void add(const std::string &s, bool prevent_spam = true, Color* color = NULL);
+	void remove(unsigned msg_index);
+	void clear();
 };
 
 #endif
+

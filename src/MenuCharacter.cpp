@@ -205,7 +205,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	}
 
 	// stat list
-	statList = new WidgetListBox(STATLIST_COUNT-1+stats->vulnerable.size(), statlist_rows, "images/menus/buttons/listbox_char.png");
+	statList = new WidgetListBox(statlist_rows, "images/menus/buttons/listbox_char.png");
 	tablist.add(statList);
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
@@ -282,43 +282,42 @@ void MenuCharacter::refreshStats() {
 	labelUnspent->set(window_area.x+unspent_pos.x, window_area.y+unspent_pos.y, unspent_pos.justify, unspent_pos.valign, ss.str(), font->getColor("menu_bonus"), unspent_pos.font_style);
 
 	// scrolling stat list
-
-	int visible_stats = 0;
+	statList->clear();
 
 	if (show_stat[0]) {
 		ss.str("");
 		ss << msg->get("Max HP:") << " " << stats->get(STAT_HP_MAX);
-		statList->set(visible_stats++, ss.str(), statTooltip(STAT_HP_MAX));
+		statList->append(ss.str(), statTooltip(STAT_HP_MAX));
 	}
 
 	if (show_stat[1]) {
 		ss.str("");
 		ss << msg->get("HP Regen:") << " " << stats->get(STAT_HP_REGEN);
-		statList->set(visible_stats++, ss.str(), msg->get("Ticks of HP regen per minute. ") + statTooltip(STAT_HP_REGEN));
+		statList->append(ss.str(), msg->get("Ticks of HP regen per minute. ") + statTooltip(STAT_HP_REGEN));
 	}
 
 	if (show_stat[2]) {
 		ss.str("");
 		ss << msg->get("Max MP:") << " " << stats->get(STAT_MP_MAX);
-		statList->set(visible_stats++, ss.str(), statTooltip(STAT_MP_MAX));
+		statList->append(ss.str(), statTooltip(STAT_MP_MAX));
 	}
 
 	if (show_stat[3]) {
 		ss.str("");
 		ss << msg->get("MP Regen:") << " " << stats->get(STAT_MP_REGEN);
-		statList->set(visible_stats++, ss.str(), msg->get("Ticks of MP regen per minute. ") + statTooltip(STAT_MP_REGEN));
+		statList->append(ss.str(), msg->get("Ticks of MP regen per minute. ") + statTooltip(STAT_MP_REGEN));
 	}
 
 	if (show_stat[4]) {
 		ss.str("");
 		ss << msg->get("Accuracy:") << " " << stats->get(STAT_ACCURACY) << "%";
-		statList->set(visible_stats++, ss.str(), statTooltip(STAT_ACCURACY));
+		statList->append(ss.str(), statTooltip(STAT_ACCURACY));
 	}
 
 	if (show_stat[5]) {
 		ss.str("");
 		ss << msg->get("Avoidance:") << " " << stats->get(STAT_AVOIDANCE) << "%";
-		statList->set(visible_stats++, ss.str(), statTooltip(STAT_AVOIDANCE));
+		statList->append(ss.str(), statTooltip(STAT_AVOIDANCE));
 	}
 
 	if (show_stat[6]) {
@@ -328,7 +327,7 @@ void MenuCharacter::refreshStats() {
 			ss << stats->get(STAT_DMG_MELEE_MIN);
 		else
 			ss << stats->get(STAT_DMG_MELEE_MIN) << "-" << stats->get(STAT_DMG_MELEE_MAX);
-		statList->set(visible_stats++, ss.str(),"");
+		statList->append(ss.str(),"");
 	}
 
 	if (show_stat[7]) {
@@ -338,7 +337,7 @@ void MenuCharacter::refreshStats() {
 			ss << stats->get(STAT_DMG_RANGED_MIN);
 		else
 			ss << stats->get(STAT_DMG_RANGED_MIN) << "-" << stats->get(STAT_DMG_RANGED_MAX);
-		statList->set(visible_stats++, ss.str(),"");
+		statList->append(ss.str(),"");
 	}
 
 	if (show_stat[8]) {
@@ -348,13 +347,13 @@ void MenuCharacter::refreshStats() {
 			ss << stats->get(STAT_DMG_MENT_MIN);
 		else
 			ss << stats->get(STAT_DMG_MENT_MIN) << "-" << stats->get(STAT_DMG_MENT_MAX);
-		statList->set(visible_stats++, ss.str(),"");
+		statList->append(ss.str(),"");
 	}
 
 	if (show_stat[9]) {
 		ss.str("");
 		ss << msg->get("Crit:") << " " << stats->get(STAT_CRIT) << "%";
-		statList->set(visible_stats++, ss.str(), statTooltip(STAT_CRIT));
+		statList->append(ss.str(), statTooltip(STAT_CRIT));
 	}
 
 	if (show_stat[10]) {
@@ -364,44 +363,44 @@ void MenuCharacter::refreshStats() {
 			ss << stats->get(STAT_ABS_MIN);
 		else
 			ss << stats->get(STAT_ABS_MIN) << "-" << stats->get(STAT_ABS_MAX);
-		statList->set(visible_stats++, ss.str(),"");
+		statList->append(ss.str(),"");
 	}
 
 	if (show_stat[11]) {
 		ss.str("");
 		ss << msg->get("Poise: ") << stats->get(STAT_POISE) << "%";
-		statList->set(visible_stats++, ss.str(), msg->get("Reduces your chance of stumbling when hit") + statTooltip(STAT_POISE));
+		statList->append(ss.str(), msg->get("Reduces your chance of stumbling when hit") + statTooltip(STAT_POISE));
 	}
 
 	if (show_stat[12]) {
 		ss.str("");
 		ss << msg->get("Bonus XP: ") << stats->get(STAT_XP_GAIN) << "%";
-		statList->set(visible_stats++, ss.str(), msg->get("Increases the XP gained per kill") + statTooltip(STAT_XP_GAIN));
+		statList->append(ss.str(), msg->get("Increases the XP gained per kill") + statTooltip(STAT_XP_GAIN));
 	}
 
 	if (show_stat[13]) {
 		ss.str("");
 		ss << msg->get("Bonus") << " " << CURRENCY << ": " << stats->get(STAT_CURRENCY_FIND) << "%";
-		statList->set(visible_stats++, ss.str(), msg->get("Increases the %s found per drop",CURRENCY) + statTooltip(STAT_CURRENCY_FIND));
+		statList->append(ss.str(), msg->get("Increases the %s found per drop",CURRENCY) + statTooltip(STAT_CURRENCY_FIND));
 	}
 
 	if (show_stat[14]) {
 		ss.str("");
 		ss << msg->get("Bonus Item Find: ") << stats->get(STAT_ITEM_FIND)<< "%";
-		statList->set(visible_stats++, ss.str(), msg->get("Increases the chance that an enemy will drop an item when killed") + statTooltip(STAT_ITEM_FIND));
+		statList->append(ss.str(), msg->get("Increases the chance that an enemy will drop an item when killed") + statTooltip(STAT_ITEM_FIND));
 	}
 
 	if (show_stat[15]) {
 		ss.str("");
 		ss << msg->get("Stealth: ") << stats->get(STAT_STEALTH) << "%";
-		statList->set(visible_stats++, ss.str(), msg->get("Increases your ability to move undetected") + statTooltip(STAT_STEALTH));
+		statList->append(ss.str(), msg->get("Increases your ability to move undetected") + statTooltip(STAT_STEALTH));
 	}
 
 	if (show_stat[16]) {
 		for (unsigned int j=0; j<stats->vulnerable.size(); j++) {
 			ss.str("");
 			ss << msg->get(ELEMENTS[j].description) << ": " << (100 - stats->vulnerable[j]) << "%";
-			statList->set(visible_stats++, ss.str(),"");
+			statList->append(ss.str(),"");
 		}
 	}
 

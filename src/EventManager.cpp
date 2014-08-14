@@ -50,7 +50,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->keep_after_trigger = false;
 		}
 		else {
-			fprintf(stderr, "EventManager: Loading event in file %s\nEvent type %s unknown, change to \"on_trigger\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
+			logError("EventManager: Loading event in file %s\nEvent type %s unknown, change to \"on_trigger\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
 		}
 	}
 	else if (infile.key == "location") {
@@ -418,7 +418,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = infile.val;
 	}
 	else {
-		fprintf(stderr, "EventManager: Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
+		logError("EventManager: Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
 	}
 }
 
@@ -473,14 +473,14 @@ bool EventManager::executeEvent(Event &ev) {
 				if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
 					mapr->collider.colmap[ec->x][ec->y] = ec->z;
 				else
-					fprintf(stderr, "Error: mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
+					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
 			}
 			else {
 				int index = distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s));
 				if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
 					mapr->layers[index][ec->x][ec->y] = ec->z;
 				else
-					fprintf(stderr, "Error: mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
+					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.\n", ec->x, ec->y);
 			}
 			mapr->map_change = true;
 		}

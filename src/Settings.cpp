@@ -74,7 +74,8 @@ ConfigEntry config[] = {
 	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
 	{ "show_hotkeys",     &typeid(SHOW_HOTKEYS),    "1",   &SHOW_HOTKEYS,    "show hotkeys names on power bar. 1 enable, 0 disable."},
 	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"},
-	{ "hardware_cursor",  &typeid(HARDWARE_CURSOR), "0",   &HARDWARE_CURSOR, "use the system mouse cursor. 1 enable, 0 disable"}
+	{ "hardware_cursor",  &typeid(HARDWARE_CURSOR), "0",   &HARDWARE_CURSOR, "use the system mouse cursor. 1 enable, 0 disable"},
+	{ "dev_mode",         &typeid(DEV_MODE),        "0",   &DEV_MODE,        "allow opening the developer console. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
@@ -194,6 +195,8 @@ float INTERACT_RANGE;
 bool HARDWARE_CURSOR = false;
 bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
+bool DEV_MODE = false;
+bool DEV_HUD = false;
 
 /**
  * Set system paths
@@ -226,7 +229,7 @@ void setPaths() {
 
 	PATH_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	else if (!CUSTOM_PATH_DATA.empty()) logError("Settings: Could not find specified game data directory.\n");
 
 	PATH_CONF = PATH_CONF + "/";
 	PATH_USER = PATH_USER + "/";
@@ -253,7 +256,7 @@ void setPaths() {
 	PATH_USER = "PROGDIR:";
 	PATH_DATA = "PROGDIR:";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	else if (!CUSTOM_PATH_DATA.empty()) logError("Settings: Could not find specified game data directory.\n");
 }
 #else
 void setPaths() {
@@ -320,7 +323,7 @@ void setPaths() {
 		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
 		path_data = true;
 	}
-	else if (!CUSTOM_PATH_DATA.empty()) fprintf(stderr, "Error: Could not find specified game data directory.\n");
+	else if (!CUSTOM_PATH_DATA.empty()) logError("Settings: Could not find specified game data directory.\n");
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
@@ -374,7 +377,7 @@ static ConfigEntry * getConfigEntry(const char * name) {
 		if (std::strcmp(config[i].name, name) == 0) return config + i;
 	}
 
-	fprintf(stderr, "Error: '%s' is not a valid configuration key.\n", name);
+	logError("Settings: '%s' is not a valid configuration key.\n", name);
 	return NULL;
 }
 
@@ -426,7 +429,7 @@ void loadTilesetSettings() {
 			UNITS_PER_PIXEL_Y = 2.0f / TILE_H;
 		}
 		else {
-			fprintf(stderr, "Error: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.\n");
+			logError("Settings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.\n");
 			TILE_W = 64;
 			TILE_H = 32;
 		}
@@ -437,13 +440,13 @@ void loadTilesetSettings() {
 			UNITS_PER_PIXEL_Y = 1.0f / TILE_H;
 		}
 		else {
-			fprintf(stderr, "Error: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.\n");
+			logError("Settings: Tile dimensions must be greater than 0. Resetting to the default size of 64x32.\n");
 			TILE_W = 64;
 			TILE_H = 32;
 		}
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
-		fprintf(stderr, "One of UNITS_PER_PIXEL values is zero! %dx%d\n", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);
+		logError("Settings: One of UNITS_PER_PIXEL values is zero! %dx%d\n", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);
 		SDL_Quit();
 		exit(1);
 	}
@@ -529,7 +532,7 @@ void loadMiscSettings() {
 				CURRENCY_ID = toInt(infile.val);
 				if (CURRENCY_ID < 1) {
 					CURRENCY_ID = 1;
-					fprintf(stderr, "Currency ID below the minimum allowed value. Resetting it to %d\n", CURRENCY_ID);
+					logError("Settings: Currency ID below the minimum allowed value. Resetting it to %d\n", CURRENCY_ID);
 				}
 			}
 			// @ATTR interact_range|float|Distance where the player can interact with objects and NPCs.
@@ -778,7 +781,7 @@ bool saveSettings() {
 			outfile<<config[i].name<<"="<<toString(*config[i].type, config[i].storage)<<"\n";
 		}
 
-		if (outfile.bad()) fprintf(stderr, "Unable to write settings file. No write access or disk is full!\n");
+		if (outfile.bad()) logError("Settings: Unable to write settings file. No write access or disk is full!\n");
 		outfile.close();
 		outfile.clear();
 	}

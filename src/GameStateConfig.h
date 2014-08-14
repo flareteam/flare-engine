@@ -120,6 +120,8 @@ private:
 	WidgetLabel         * hardware_cursor_lb;
 	WidgetCheckBox      * colorblind_cb;
 	WidgetLabel         * colorblind_lb;
+	WidgetCheckBox      * dev_mode_cb;
+	WidgetLabel         * dev_mode_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;
@@ -158,7 +160,6 @@ private:
 	TooltipData         tip_buf;
 
 	int input_key;
-	int mods_total;
 	bool check_resolution;
 	Rect scrollpane;
 	Color scrollpane_color;

@@ -264,9 +264,9 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	, titlebar_icon(NULL)
 	, title(NULL) {
 #if SDL_VERSION_ATLEAST(2,0,0)
-	cout << "Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)" << endl;
+	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)\n");
 #else
-	cout << "Using Render Device: SDLSoftwareRenderDevice (software, SDL 1.2)" << endl;
+	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 1.2)\n");
 #endif
 }
 
@@ -603,7 +603,7 @@ Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 #endif
 
 	if(image->surface == NULL) {
-		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+		logError("SDLSoftwareRenderDevice: CreateRGBSurface failed: %s\n", SDL_GetError());
 		delete image;
 		return NULL;
 	}
@@ -664,13 +664,13 @@ void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
 
 	// Check if there are any modes available
 	if (detect_modes == (SDL_Rect**)0) {
-		fprintf(stderr, "No modes available!\n");
+		logError("SDLSoftwareRenderDevice: No modes available!\n");
 		return;
 	}
 
 	// Check if our resolution is restricted
 	if (detect_modes == (SDL_Rect**)-1) {
-		fprintf(stderr, "All resolutions available.\n");
+		logError("SDLSoftwareRenderDevice: All resolutions available.\n");
 	}
 
 	for (unsigned i=0; detect_modes[i]; ++i) {
@@ -705,7 +705,7 @@ Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string erro
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
 	if(!cleanup) {
 		if (!errormessage.empty())
-			fprintf(stderr, "%s: %s\n", errormessage.c_str(), IMG_GetError());
+			logError("SDLSoftwareRenderDevice: %s: %s\n", errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
 			SDL_Quit();
 			exit(1);
