@@ -60,6 +60,8 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/MenuBook.cpp \
 	../../../src/MenuCharacter.cpp \
 	../../../src/MenuConfirm.cpp \
+	../../../src/MenuDevHUD.cpp \
+	../../../src/MenuDevConsole.cpp \
 	../../../src/MenuEnemy.cpp \
 	../../../src/MenuExit.cpp \
 	../../../src/MenuHUDLog.cpp \
@@ -103,6 +105,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/WidgetInput.cpp \
  	../../../src/WidgetLabel.cpp \
  	../../../src/WidgetListBox.cpp \
+ 	../../../src/WidgetLog.cpp \
 	../../../src/WidgetScrollBar.cpp \
 	../../../src/WidgetScrollBox.cpp \
 	../../../src/WidgetSlider.cpp \
