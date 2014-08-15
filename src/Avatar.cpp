@@ -899,6 +899,7 @@ void Avatar::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
 
 Avatar::~Avatar() {
 	anim->decreaseCount("animations/target.txt");
+	delete target_anim;
 
 	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
 		anim->decreaseCount(charmed_stats->animations);
