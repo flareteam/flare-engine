@@ -21,8 +21,8 @@ public class FLARE extends SDLActivity {
         super.onDestroy(); 
     }
 	
-    private final static String FILE_CONFIG_URL = "http://flarerpg.org/download.xml";
-    private final static String CONFIG_VERSION= "1.0";
+    private final static String FILE_CONFIG_URL = "http://flarerpg.org/android/download.xml";
+    private final static String CONFIG_VERSION= "0.20";
     private final static String DATA_PATH = "/data/data/org.flare.app/files";
     private final static String USER_AGENT = "FLARE Downloader";
 }
