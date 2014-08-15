@@ -1,0 +1,10 @@
+Next file types should be added to MIME Types on http server
+
+txt			text/plain
+png			image/png
+ogg			audio/ogg
+
+po			text/plain
+pot			text/plain
+sh			text/plain
+py			text/plain
