@@ -25,8 +25,8 @@
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.2094978802" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
 								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.264312247" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;D:\Development\android-ndk-r10\platforms\android-16\arch-arm\usr\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;d:\Development\android-ndk-r10\sources\cxx-stl\stlport\stlport&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\Development\android-ndk-r10\platforms\android-13\arch-arm\usr\include&quot;"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1098602171" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
