@@ -66,6 +66,7 @@ GameSwitcher::GameSwitcher() {
 void GameSwitcher::loadMusic() {
 	if (AUDIO && MUSIC_VOLUME) {
 		Mix_FreeMusic(music);
+		music = NULL;
 
 		std::string music_filename = "";
 		FileParser infile;
