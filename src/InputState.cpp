@@ -327,13 +327,13 @@ void InputState::handle(bool dump_event) {
 				}
 				break;
 			case SDL_FINGERDOWN:
-				mouse.x = event.tfinger.x * VIEW_W;
-				mouse.y = event.tfinger.y * VIEW_H;
+				mouse.x = (int)(event.tfinger.x * VIEW_W);
+				mouse.y = (int)(event.tfinger.y * VIEW_H);
 				pressing[MAIN1] = true;
 				break;
 			case SDL_FINGERUP:
-				mouse.x = event.tfinger.x * VIEW_W;
-				mouse.y = event.tfinger.y * VIEW_H;
+				mouse.x = (int)(event.tfinger.x * VIEW_W);
+				mouse.y = (int)(event.tfinger.y * VIEW_H);
 				un_press[MAIN1] = true;
 				last_button = event.button.button;
 				break;

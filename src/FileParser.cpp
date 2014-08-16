@@ -21,10 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 
 using namespace std;
-bool new_section;
-std::string section;
-std::string key;
-std::string val;
 
 FileParser::FileParser()
 	: current_index(0)
