@@ -56,6 +56,9 @@ MenuLog::MenuLog() {
 			else if(infile.key == "tab_area") {
 				tab_area = toRect(infile.val);
 			}
+			else {
+				infile.error("MenuLog: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

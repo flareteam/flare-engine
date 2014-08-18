@@ -213,7 +213,18 @@ bool GameStateCutscene::load(std::string filename) {
 		}
 
 		if (infile.section.empty()) {
-			// allow having an empty section (globals such as scale_gfx might be set here
+			if (infile.key == "scale_gfx") {
+				// @ATTR scale_gfx|bool|The graphics will be scaled to fit screen width
+				scale_graphics = toBool(infile.val);
+			}
+			else if (infile.key == "caption_margins") {
+				// @ATTR caption_margins|[x,y]|Percentage-based margins for the caption text based on screen size
+				caption_margins.x = toFloat(infile.nextValue())/100.0f;
+				caption_margins.y = toFloat(infile.val)/100.0f;
+			}
+			else {
+				infile.error("GameStateCutscene: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		else if (infile.section == "scene") {
 			SceneComponent sc = SceneComponent();
@@ -238,25 +249,21 @@ bool GameStateCutscene::load(std::string filename) {
 				sc.type = infile.key;
 				sc.s = infile.val;
 			}
+			else {
+				infile.error("GameStateCutscene: '%s' is not a valid key.", infile.key.c_str());
+			}
 
 			if (sc.type != "")
 				scenes.back().components.push(sc);
 
 		}
 		else {
-			logError("GameStateCutscene: Unknown section %s in file %s\n", infile.section.c_str(), infile.getFileName().c_str());
+			infile.error("GameStateCutscene: '%s' is not a valid section.", infile.section.c_str());
 		}
 
-		if (infile.key == "scale_gfx") {
-			// @ATTR scale_gfx|bool|The graphics will be scaled to fit screen width
-			scale_graphics = toBool(infile.val);
-		}
-		else if (infile.key == "caption_margins") {
-			// @ATTR caption_margins|[x,y]|Percentage-based margins for the caption text based on screen size
-			caption_margins.x = toFloat(infile.nextValue())/100.0f;
-			caption_margins.y = toFloat(infile.val)/100.0f;
-		}
 	}
+
+	infile.close();
 
 	if (scenes.empty()) {
 		logError("GameStateCutscene: No scenes defined in cutscene file %s\n", filename.c_str());

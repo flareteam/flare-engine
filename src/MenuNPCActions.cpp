@@ -95,6 +95,8 @@ MenuNPCActions::MenuNPCActions()
 			else if(infile.key == "cancel_normal_color") cancel_normal_color = toRGB(infile.val);
 			// @ATTR cancel_hilight_color|r (integer), g (integer), b (integer)|The color of the option to close the menu when it's hovered over or selected.
 			else if(infile.key == "cancel_hilight_color") cancel_hilight_color = toRGB(infile.val);
+
+			else infile.error("MenuNPCActions: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

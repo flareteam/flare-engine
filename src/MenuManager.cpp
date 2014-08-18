@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuManager
  */
 
-#include "FileParser.h"
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 #include "Menu.h"

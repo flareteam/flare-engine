@@ -76,6 +76,9 @@ LootManager::LootManager(StatBlock *_hero)
 				// @ATTR sfx_loot|string|Sound effect for dropping loot.
 				sfx_loot =  snd->load(infile.val, "LootManager dropping loot");
 			}
+			else {
+				infile.error("LootManager: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

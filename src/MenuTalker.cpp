@@ -80,6 +80,8 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 			else if (infile.key == "font_who") font_who = infile.val;
 			// @ATTR font_dialog|string|Font style to use for the dialog text.
 			else if (infile.key == "font_dialog") font_dialog = infile.val;
+
+			else infile.error("MenuTalker: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

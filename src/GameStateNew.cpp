@@ -136,6 +136,9 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "show_classlist") {
 				show_classlist = toBool(infile.val);
 			}
+			else {
+				infile.error("GameStateNew: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

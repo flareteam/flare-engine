@@ -70,6 +70,9 @@ CursorManager::CursorManager()
 				}
 				offset_attack = toPoint(infile.val);
 			}
+			else {
+				infile.error("CursorManager: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

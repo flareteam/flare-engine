@@ -130,6 +130,9 @@ GameStateLoad::GameStateLoad() : GameState()
 			else if (infile.key == "sprite") {
 				sprites_pos = toPoint(infile.val);
 			}
+			else {
+				infile.error("GameStateLoad: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}
@@ -194,6 +197,9 @@ GameStateLoad::GameStateLoad() : GameState()
 						stance_type = LOOPED;
 					else if (infile.val == "back_forth")
 						stance_type = BACK_FORTH;
+				}
+				else {
+					infile.error("GameStateLoad: '%s' is not a valid key.", infile.key.c_str());
 				}
 			}
 		}

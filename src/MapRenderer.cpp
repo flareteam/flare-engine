@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "EnemyGroupManager.h"
-#include "FileParser.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
 #include "SharedGameResources.h"

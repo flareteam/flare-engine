@@ -20,11 +20,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "SharedResources.h"
 
+#include <stdarg.h>
+
 using namespace std;
 
 FileParser::FileParser()
 	: current_index(0)
 	, line("")
+	, line_number(0)
 	, new_section(false)
 	, section("")
 	, key("")
@@ -40,6 +43,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 		filenames.push_back(_filename);
 	}
 	current_index = 0;
+	line_number = 0;
 	this->errormessage = _errormessage;
 
 	if (filenames.size() == 0 && !errormessage.empty()) {
@@ -95,6 +99,7 @@ bool FileParser::next() {
 		while (infile.good()) {
 
 			line = trim(getLine(infile));
+			line_number++;
 
 			// skip ahead if this line is empty
 			if (line.length() == 0) continue;
@@ -126,6 +131,7 @@ bool FileParser::next() {
 		current_index++;
 		if (current_index == filenames.size()) return false;
 
+		line_number = 0;
 		const string current_filename = filenames[current_index];
 		infile.clear();
 		infile.open(current_filename.c_str(), ios::in);
@@ -177,6 +183,23 @@ string FileParser::nextValue() {
 
 std::string FileParser::getFileName() {
 	return filenames[current_index];
+}
+
+void FileParser::error(const char* format, ...) {
+	char buffer[4096];
+	va_list args;
+
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
+
+	stringstream ss;
+	ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer << endl;
+	logError(ss.str().c_str());
+}
+
+void FileParser::incrementLineNum() {
+	line_number++;
 }
 
 FileParser::~FileParser() {

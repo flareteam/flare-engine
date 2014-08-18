@@ -38,6 +38,8 @@ MenuHUDLog::MenuHUDLog() {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
+			else
+				infile.error("MenuHUDLog: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

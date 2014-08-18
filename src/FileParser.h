@@ -36,6 +36,8 @@ private:
 	std::ifstream infile;
 	std::string line;
 
+	unsigned line_number;
+
 public:
 	FileParser();
 	~FileParser();
@@ -67,6 +69,8 @@ public:
 	std::string nextValue(); // next value inside one line.
 	std::string getRawLine();
 	std::string getFileName();
+	void error(const char* format, ...);
+	void incrementLineNum();
 
 	/**
 	 * @brief new_section is set to true whenever a new [section] starts. If opening

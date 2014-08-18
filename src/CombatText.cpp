@@ -72,6 +72,9 @@ CombatText::CombatText() {
 				// @ATTR offset|integer|The vertical offset for the combat text's starting position.
 				offset = toInt(infile.val);
 			}
+			else {
+				infile.error("CombatText: '%s' is not a valid key.",infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

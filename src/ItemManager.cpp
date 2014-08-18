@@ -133,7 +133,7 @@ void ItemManager::loadItems() {
 		else id_line = false;
 
 		if (id < 1) {
-			if (id_line) logError("ItemManager: Item index out of bounds 1-%d, skipping\n", INT_MAX);
+			if (id_line) infile.error("ItemManager: Item index out of bounds 1-%d, skipping item.", INT_MAX);
 			continue;
 		}
 		if (id_line) continue;
@@ -249,7 +249,7 @@ void ItemManager::loadItems() {
 			if (toInt(infile.val) > 0) {
 				items[id].power = toInt(infile.val);
 			}
-			else logError("ItemManager: Power index inside item %d definition out of bounds 1-%d, skipping item\n", id, INT_MAX);
+			else infile.error("ItemManager: Power index out of bounds 1-%d, skipping power.", INT_MAX);
 		}
 		else if (infile.key == "replace_power") {
 			// @ATTR replace_power|old (integer), new (integer)|Replaces the old power id with the new power id in the action bar when equipped.
@@ -312,7 +312,7 @@ void ItemManager::loadItems() {
 			}
 		}
 		else {
-			logError("ItemManager: Unknown item(%d, %s) attribute: %s\n",id, items[id].name.c_str(), infile.key.c_str());
+			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 
 	}
@@ -331,6 +331,7 @@ void ItemManager::loadTypes() {
 			if (infile.key == "name") type = infile.val;
 			// @ATTR description|string|Item type description.
 			else if (infile.key == "description") description = infile.val;
+			else infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 
 			if (type != "" && description != "") {
 				item_types[type] = description;
@@ -374,7 +375,7 @@ void ItemManager::loadSets() {
 		else id_line = false;
 
 		if (id < 1) {
-			if (id_line) logError("ItemManager: Item set index out of bounds 1-%d, skipping\n", INT_MAX);
+			if (id_line) infile.error("ItemManager: Item set index out of bounds 1-%d, skipping set.", INT_MAX);
 			continue;
 		}
 		if (id_line) continue;
@@ -396,8 +397,7 @@ void ItemManager::loadSets() {
 				}
 				else {
 					const int maxsize = static_cast<int>(items.size()-1);
-					const char* cname = item_sets[id].name.c_str();
-					logError("ItemManager: Item index inside item set %s definition out of bounds 1-%d, skipping item\n", cname, maxsize);
+					infile.error("ItemManager: Item index out of bounds 1-%d, skipping item.", maxsize);
 				}
 				item_id = infile.nextValue();
 			}
@@ -415,6 +415,9 @@ void ItemManager::loadSets() {
 			bonus.bonus_stat = infile.nextValue();
 			bonus.bonus_val = toInt(infile.nextValue());
 			item_sets[id].bonus.push_back(bonus);
+		}
+		else {
+			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 	}
 	infile.close();

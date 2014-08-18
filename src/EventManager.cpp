@@ -50,7 +50,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->keep_after_trigger = false;
 		}
 		else {
-			logError("EventManager: Loading event in file %s\nEvent type %s unknown, change to \"on_trigger\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
+			infile.error("EventManager: Event type '%s' unknown, change to \"on_trigger\" to suppress this warning.", type.c_str());
 		}
 	}
 	else if (infile.key == "location") {
@@ -423,7 +423,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = infile.val;
 	}
 	else {
-		logError("EventManager: Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
+		infile.error("EventManager: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
 

@@ -525,6 +525,9 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "scrollpane_contents") {
 				scrollpane_contents = x1;
 			}
+			else {
+				infile.error("GameStateConfig: '%s' is not a valid key.");
+			}
 
 			if (keybind_num > -1 && (unsigned)keybind_num < keybinds_lb.size() && (unsigned)keybind_num < keybinds_btn.size()) {
 				//keybindings

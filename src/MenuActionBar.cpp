@@ -128,6 +128,8 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 			else if (infile.key == "mouseArea") mouseArea = toRect(infile.val);
 			// @ATTR menuArea|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the area containing the menu buttons.
 			else if (infile.key == "menuArea") menuArea = toRect(infile.val);
+
+			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

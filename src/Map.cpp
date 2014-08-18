@@ -124,6 +124,9 @@ void Map::loadHeader(FileParser &infile) {
 		spawn.y = toInt(infile.nextValue()) + 0.5f;
 		spawn_dir = toInt(infile.nextValue());
 	}
+	else {
+		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
+	}
 }
 
 void Map::loadLayer(FileParser &infile, maprow **current_layer) {
@@ -136,7 +139,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
 		if (infile.val != "dec") {
-			logError("Map: The format of a layer must be \"dec\"!\n");
+			infile.error("Map: The format of a layer must be \"dec\"!");
 			SDL_Quit();
 			exit(1);
 		}
@@ -147,6 +150,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 		// The next h lines must contain layer data.
 		for (int j=0; j<h; j++) {
 			std::string val = infile.getRawLine();
+			infile.incrementLineNum();
 			if (!val.empty() && val[val.length()-1] != ',') {
 				val += ',';
 			}
@@ -157,7 +161,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 				if (val[i] == ',') comma_count++;
 			}
 			if (comma_count != w) {
-				logError("Map: A row of layer data has a width not equal to %d.\n", w);
+				infile.error("Map: A row of layer data has a width not equal to %d.", w);
 				SDL_Quit();
 				exit(1);
 			}
@@ -165,6 +169,9 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 			for (int i=0; i<w; i++)
 				(*current_layer)[i][j] = popFirstInt(val, ',');
 		}
+	}
+	else {
+		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
 
@@ -234,6 +241,9 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		// @ATTR enemygroup.requires_not_status|string|Status required to be missing for loading enemies
 		group->requires_not_status.push_back(infile.nextValue());
 	}
+	else {
+		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
+	}
 }
 
 void Map::loadNPC(FileParser &infile) {
@@ -242,12 +252,12 @@ void Map::loadNPC(FileParser &infile) {
 		// @ATTR npc.type|string|Filename of an NPC definition.
 		npcs.back().id = infile.val;
 	}
-	if (infile.key == "requires_status") {
+	else if (infile.key == "requires_status") {
 		// @ATTR npc.requires_status|string|Status required for NPC load. There can be multiple states, separated by comma
 		while ( (s = infile.nextValue()) != "")
 			npcs.back().requires_status.push_back(s);
 	}
-	if (infile.key == "requires_not_status") {
+	else if (infile.key == "requires_not_status") {
 		// @ATTR npc.requires_not|string|Status required to be missing for NPC load. There can be multiple states, separated by comma
 		while ( (s = infile.nextValue()) != "")
 			npcs.back().requires_not_status.push_back(s);
@@ -256,6 +266,9 @@ void Map::loadNPC(FileParser &infile) {
 		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
 		npcs.back().pos.x = toInt(infile.nextValue()) + 0.5f;
 		npcs.back().pos.y = toInt(infile.nextValue()) + 0.5f;
+	}
+	else {
+		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
 

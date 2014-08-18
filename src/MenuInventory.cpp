@@ -93,6 +93,8 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 			else if (infile.key == "currency") currency_lbl =  eatLabelInfo(infile.val);
 			// @ATTR help|x (integer), y (integer), w (integer), h (integer)|A mouse-over area that displays some help text for inventory shortcuts.
 			else if (infile.key == "help") help_pos = toRect(infile.val);
+
+			else infile.error("MenuInventory: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

@@ -36,6 +36,8 @@ MenuDevHUD::MenuDevHUD() : Menu() {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
+			else
+				infile.error("MenuDevHUD: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
