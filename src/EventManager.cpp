@@ -60,8 +60,10 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->location.w = toInt(infile.nextValue());
 		evnt->location.h = toInt(infile.nextValue());
 
-		evnt->center.x = evnt->location.x + (float)evnt->location.w/2;
-		evnt->center.y = evnt->location.y + (float)evnt->location.h/2;
+		if (evnt->center.x == -1 && evnt->center.y == -1) {
+			evnt->center.x = evnt->location.x + (float)evnt->location.w/2;
+			evnt->center.y = evnt->location.y + (float)evnt->location.h/2;
+		}
 	}
 	else if (infile.key == "hotspot") {
 		//  @ATTR event.hotspot|[ [x, y, w, h] : location ]|Event uses location as hotspot or defined by rect.
@@ -77,6 +79,9 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->hotspot.w = toInt(infile.nextValue());
 			evnt->hotspot.h = toInt(infile.nextValue());
 		}
+
+		evnt->center.x = evnt->hotspot.x + (float)evnt->hotspot.w/2;
+		evnt->center.y = evnt->hotspot.y + (float)evnt->hotspot.h/2;
 	}
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown.

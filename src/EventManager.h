@@ -47,7 +47,7 @@ public:
 		, cooldown_ticks(0)
 		, stats(NULL)
 		, keep_after_trigger(true)
-		, center(FPoint()) {
+		, center(FPoint(-1, -1)) {
 		location.x = location.y = location.w = location.h = 0;
 		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
 		reachable_from.x = reachable_from.y = reachable_from.w = reachable_from.h = 0;
