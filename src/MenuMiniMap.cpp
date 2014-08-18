@@ -64,6 +64,9 @@ MenuMiniMap::MenuMiniMap()
 			else if(infile.key == "text_pos") {
 				text_pos = eatLabelInfo(infile.val);
 			}
+			else {
+				infile.error("MenuMiniMap: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

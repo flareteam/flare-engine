@@ -150,6 +150,9 @@ void TileSet::load(const std::string& filename) {
 					repeat_val = infile.nextValue();
 				}
 			}
+			else {
+				infile.error("TileSet: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

@@ -49,6 +49,8 @@ MenuDevConsole::MenuDevConsole() : Menu() {
 			else if(infile.key == "input") input_pos = toPoint(infile.val);
 			// @ATTR history|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the command history.
 			else if(infile.key == "history") history_area = toRect(infile.val);
+
+			else infile.error("MenuDevConsole: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

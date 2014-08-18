@@ -82,6 +82,9 @@ MenuStash::MenuStash(StatBlock *_stats)
 			else if (infile.key == "currency") {
 				currency =  eatLabelInfo(infile.val);
 			}
+			else {
+				infile.error("MenuStash: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

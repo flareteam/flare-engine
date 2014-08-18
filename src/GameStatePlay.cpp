@@ -443,7 +443,7 @@ void GameStatePlay::loadTitles() {
 			else if (infile.key == "requires_not_status") titles.back().requires_not = infile.val;
 			// @ATTR title.primary_stat|[physical, mental, offense, defense, physoff, physment, physdef, mentoff, offdef, mentdef]|Required primary stat.
 			else if (infile.key == "primary_stat") titles.back().primary_stat = infile.val;
-			else logError("GameStatePlay: Unknown key value in title definitons: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
+			else infile.error("GameStatePlay: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

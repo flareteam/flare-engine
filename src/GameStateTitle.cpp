@@ -89,6 +89,9 @@ GameStateTitle::GameStateTitle()
 				button_exit->pos.y = popFirstInt(infile.val);
 				alignToScreenEdge(popFirstString(infile.val), &(button_exit->pos));
 			}
+			else {
+				infile.error("GameStateTitle: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

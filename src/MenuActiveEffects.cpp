@@ -52,6 +52,9 @@ MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 			if(infile.key == "orientation") {
 				orientation = toBool(infile.val);
 			}
+			else {
+				infile.error("MenuActiveEffects: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

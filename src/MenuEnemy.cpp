@@ -60,6 +60,9 @@ MenuEnemy::MenuEnemy()
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);
 			}
+			else {
+				infile.error("MenuEnemy: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

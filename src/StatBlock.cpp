@@ -428,7 +428,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "rarity") ; // but do nothing
 
 		else if (!valid) {
-			logError("StatBlock: %s=%s not a valid StatBlock parameter\n", infile.key.c_str(), infile.val.c_str());
+			infile.error("StatBlock: '%s' is not a valid key.", infile.key.c_str());
 		}
 	}
 	infile.close();
@@ -681,7 +681,7 @@ void StatBlock::loadHeroStats() {
 		while (infile.next()) {
 			int value = toInt(infile.val);
 
-			loadCoreStat(&infile);
+			bool valid = loadCoreStat(&infile);
 
 			if (infile.key == "max_points_per_stat") {
 				// @ATTR max_points_per_stat|integer|Maximum points for each primary stat.
@@ -698,6 +698,9 @@ void StatBlock::loadHeroStats() {
 			else if (infile.key == "power_points_per_level") {
 				// @ATTR power_points_per_level|integer|The amount of power points awarded each level.
 				power_points_per_level = value;
+			}
+			else if (!valid) {
+				infile.error("StatBlock: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();

@@ -79,6 +79,9 @@ MenuStatBar::MenuStatBar(std::string type)
 			else if (infile.key == "bar_gfx_background") {
 				bar_gfx_background = infile.val;
 			}
+			else {
+				infile.error("MenuStatBar: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

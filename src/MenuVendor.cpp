@@ -83,6 +83,9 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 			else if (infile.key == "label_title") {
 				title =  eatLabelInfo(infile.val);
 			}
+			else {
+				infile.error("MenuVendor: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}

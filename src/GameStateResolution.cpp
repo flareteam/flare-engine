@@ -16,7 +16,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "CommonIncludes.h"
-#include "FileParser.h"
 #include "GameStateConfig.h"
 #include "GameStateResolution.h"
 #include "GameStateTitle.h"

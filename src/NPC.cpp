@@ -166,6 +166,10 @@ void NPC::load(const string& npc_id, int hero_level) {
 					// @ATTR vox_intro|string|Filename of a sound file to play when initially interacting with the NPC.
 					loadSound(infile.val, NPC_VOX_INTRO);
 				}
+
+				else {
+					infile.error("NPC: '%s' is not a valid key.", infile.key.c_str());
+				}
 			}
 		}
 		infile.close();

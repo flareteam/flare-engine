@@ -65,6 +65,9 @@ void MenuBook::loadBook() {
 			else if (infile.key == "background") {
 				setBackground(popFirstString(infile.val));
 			}
+			else if (infile.section == "") {
+				infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
+			}
 
 			if (infile.new_section) {
 
@@ -133,6 +136,9 @@ void MenuBook::loadImage(FileParser &infile) {
 		  graphics->unref();
 		}
 	}
+	else {
+		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
+	}
 }
 
 void MenuBook::loadText(FileParser &infile) {
@@ -161,6 +167,9 @@ void MenuBook::loadText(FileParser &infile) {
 		textData.back() = infile.val;
 		// remove comma from the end
 		textData.back() = textData.back().substr(0, textData.back().length() - 1);
+	}
+	else {
+		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
 
