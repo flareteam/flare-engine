@@ -32,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 const int NPC_VENDOR_MAX_STOCK = 80;
 const int NPC_VOX_INTRO = 0;
 const int NPC_VOX_QUEST = 1;
-const int NPC_NO_DIALOG_AVAIL = -1;
 
 class NPC : public Entity {
 private:
@@ -40,7 +39,7 @@ private:
 public:
 	NPC();
 	~NPC();
-	void load(const std::string& npc_id, int hero_level);
+	void load(const std::string& npc_id);
 	void loadGraphics(const std::string& filename_portrait);
 	int loadSound(const std::string& fname, int type);
 	void logic();
@@ -57,7 +56,6 @@ public:
 	std::string filename;
 	std::string gfx; // filename of sprite.
 	FPoint pos; // map position
-	int level; // used in determining item quality
 
 	int direction;
 

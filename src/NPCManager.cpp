@@ -92,7 +92,7 @@ void NPCManager::handleNewMap() {
 			continue;
 
 		NPC *npc = new NPC();
-		npc->load(mn.id, stats->level);
+		npc->load(mn.id);
 		npc->pos.x = mn.pos.x;
 		npc->pos.y = mn.pos.y;
 
