@@ -68,7 +68,10 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 
 			// don't close the final file if it's the only one with an "APPEND" line
 			if (i > 1)
+			{
 				infile.close();
+				infile.clear();
+			}
 		}
 		else {
 			if (!errormessage.empty())
@@ -82,6 +85,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 void FileParser::close() {
 	if (infile.is_open())
 		infile.close();
+	infile.clear();
 }
 
 /**
@@ -127,6 +131,7 @@ bool FileParser::next() {
 		}
 
 		infile.close();
+		infile.clear();
 
 		current_index++;
 		if (current_index == filenames.size()) return false;
