@@ -76,6 +76,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 		else {
 			if (!errormessage.empty())
 				logError("FileParser: %s: %s\n", errormessage.c_str(), filenames[i-1].c_str());
+			infile.clear();
 		}
 	}
 
@@ -138,11 +139,11 @@ bool FileParser::next() {
 
 		line_number = 0;
 		const string current_filename = filenames[current_index];
-		infile.clear();
 		infile.open(current_filename.c_str(), ios::in);
 		if (!infile.is_open()) {
 			if (!errormessage.empty())
 				logError("FileParser: %s: %s\n", errormessage.c_str(), current_filename.c_str());
+			infile.clear();
 			return false;
 		}
 		// a new file starts a new section
