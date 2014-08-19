@@ -106,6 +106,7 @@ void ModManager::loadModList() {
 	infile.open(place1.c_str(), ios::in);
 
 	if (!infile.is_open()) {
+		infile.clear();
 		infile.open(place2.c_str(), ios::in);
 	}
 	if (!infile.is_open()) {
@@ -135,6 +136,7 @@ void ModManager::loadModList() {
 		}
 	}
 	infile.close();
+	infile.clear();
 	if (!found_any_mod && mod_list.size() == 1) {
 		logError("ModManager: Couldn't locate any Flare mod. Check if the game data are installed \
                   correctly. Expected to find the data in the $XDG_DATA_DIRS path, in \
@@ -274,10 +276,12 @@ Mod ModManager::loadMod(std::string name) {
 		}
 		if (infile.good()) {
 			infile.close();
+			infile.clear();
 			break;
 		}
 		else {
 			infile.close();
+			infile.clear();
 		}
 	}
 

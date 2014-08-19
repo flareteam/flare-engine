@@ -38,6 +38,7 @@ bool GetText::open(const string& filename) {
 void GetText::close() {
 	if (infile.is_open())
 		infile.close();
+	infile.clear();
 }
 
 // Turns all \" into just "
