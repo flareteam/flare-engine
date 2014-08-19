@@ -163,7 +163,7 @@ void Avatar::loadLayerDefinitions() {
 				// @ATTR layer|direction (integer), string, ...]|Defines the hero avatar sprite layer
 				unsigned dir = popFirstInt(infile.val);
 				if (dir>7) {
-					logError("Avatar: Hero layer direction must be in range [0,7]\n");
+					infile.error("Avatar: Hero layer direction must be in range [0,7]");
 					SDL_Quit();
 					exit(1);
 				}
@@ -180,6 +180,9 @@ void Avatar::loadLayerDefinitions() {
 
 					layer = popFirstString(infile.val);
 				}
+			}
+			else {
+				infile.error("Avatar: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();

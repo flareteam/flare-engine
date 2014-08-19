@@ -416,6 +416,9 @@ void loadTilesetSettings() {
 				else if (infile.val == "orthogonal")
 					TILESET_ORIENTATION = TILESET_ORTHOGONAL;
 			}
+			else {
+				infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
+			}
 		}
 		infile.close();
 	}
@@ -548,6 +551,7 @@ void loadMiscSettings() {
 			else if (infile.key == "save_onexit")
 				SAVE_ONEXIT = toBool(infile.val);
 
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
@@ -576,6 +580,7 @@ void loadMiscSettings() {
 				if (VIEW_H < MIN_VIEW_H) VIEW_H = MIN_VIEW_H;
 				VIEW_H_HALF = VIEW_H/2;
 			}
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
@@ -587,6 +592,7 @@ void loadMiscSettings() {
 				// @ATTR enable_playgame|boolean|Enables the "Play Game" button on the main menu.
 				ENABLE_PLAYGAME = toBool(infile.val);
 			}
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
@@ -610,6 +616,8 @@ void loadMiscSettings() {
 			else if (infile.key == "min_block_percent") MIN_BLOCK = toInt(infile.val);
 			// @ATTR min_avoidance_percent|integer|Minimum percentage chance that hazards can be avoided.
 			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = toInt(infile.val);
+
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
@@ -622,6 +630,8 @@ void loadMiscSettings() {
 			if (infile.key == "name") e.name = infile.val;
 			// @ATTR dscription|string|The displayed name of this element.
 			else if (infile.key == "description") e.description = infile.val;
+
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 
 			if (e.name != "" && e.description != "") {
 				ELEMENTS.push_back(e);
@@ -642,6 +652,8 @@ void loadMiscSettings() {
 			// @ATTR dscription|string|The displayed name of this equip flag.
 			else if (infile.key == "description") description = infile.val;
 
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
+
 			if (type != "" && description != "") {
 				EQUIP_FLAGS[type] = description;
 				type = description = "";
@@ -655,11 +667,13 @@ void loadMiscSettings() {
 		HeroClass c;
 		while (infile.next()) {
 			// @ATTR name|string|The displayed name of this class.
-			if (infile.key == "name") c.name = infile.val;
-
-			if (c.name != "") {
-				HERO_CLASSES.push_back(c);
-				c.name = "";
+			if (infile.key == "name") {
+				c.name = infile.val;
+				if (c.name != "") {
+					HERO_CLASSES.push_back(c);
+					c.name = "";
+				}
+				continue;
 			}
 
 			if (!HERO_CLASSES.empty()) {
@@ -698,6 +712,7 @@ void loadMiscSettings() {
 						HERO_CLASSES.back().statuses.push_back(status);
 					}
 				}
+				else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
@@ -724,6 +739,8 @@ void loadMiscSettings() {
 			else if (infile.key == "xp_current_level") DEATH_PENALTY_XP_CURRENT = toInt(infile.val);
 			// @ATTR random_item|integer|Removes a random item from the player's inventory.
 			else if (infile.key == "random_item") DEATH_PENALTY_ITEM = toBool(infile.val);
+
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

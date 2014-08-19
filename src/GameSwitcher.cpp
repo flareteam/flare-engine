@@ -75,6 +75,7 @@ void GameSwitcher::loadMusic() {
 			while (infile.next()) {
 				// @ATTR music|string|Filename of a music file to play during game states that don't already have music.
 				if (infile.key == "music") music_filename = infile.val;
+				else infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());
 			}
 			infile.close();
 		}
@@ -148,6 +149,9 @@ void GameSwitcher::loadFPS() {
 			// @ATTR color|r (integer), g (integer), b (integer)|Color of the fps counter text.
 			else if(infile.key == "color") {
 				fps_color = toRGB(infile.val);
+			}
+			else {
+				infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();

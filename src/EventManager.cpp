@@ -50,7 +50,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->keep_after_trigger = false;
 		}
 		else {
-			logError("EventManager: Loading event in file %s\nEvent type %s unknown, change to \"on_trigger\" to suppress this warning.\n", infile.getFileName().c_str(), type.c_str());
+			infile.error("EventManager: Event type '%s' unknown, change to \"on_trigger\" to suppress this warning.", type.c_str());
 		}
 	}
 	else if (infile.key == "location") {
@@ -60,8 +60,10 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->location.w = toInt(infile.nextValue());
 		evnt->location.h = toInt(infile.nextValue());
 
-		evnt->center.x = evnt->location.x + (float)evnt->location.w/2;
-		evnt->center.y = evnt->location.y + (float)evnt->location.h/2;
+		if (evnt->center.x == -1 && evnt->center.y == -1) {
+			evnt->center.x = evnt->location.x + (float)evnt->location.w/2;
+			evnt->center.y = evnt->location.y + (float)evnt->location.h/2;
+		}
 	}
 	else if (infile.key == "hotspot") {
 		//  @ATTR event.hotspot|[ [x, y, w, h] : location ]|Event uses location as hotspot or defined by rect.
@@ -77,6 +79,9 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->hotspot.w = toInt(infile.nextValue());
 			evnt->hotspot.h = toInt(infile.nextValue());
 		}
+
+		evnt->center.x = evnt->hotspot.x + (float)evnt->hotspot.w/2;
+		evnt->center.y = evnt->hotspot.y + (float)evnt->hotspot.h/2;
 	}
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown.
@@ -418,7 +423,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = infile.val;
 	}
 	else {
-		logError("EventManager: Unknown key value: %s in file %s in section %s\n", infile.key.c_str(), infile.getFileName().c_str(), infile.section.c_str());
+		infile.error("EventManager: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
 

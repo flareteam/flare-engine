@@ -93,6 +93,8 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 			else if (infile.key == "currency") currency_lbl =  eatLabelInfo(infile.val);
 			// @ATTR help|x (integer), y (integer), w (integer), h (integer)|A mouse-over area that displays some help text for inventory shortcuts.
 			else if (infile.key == "help") help_pos = toRect(infile.val);
+
+			else infile.error("MenuInventory: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
@@ -447,6 +449,10 @@ void MenuInventory::activate(Point position) {
 	if (slot == -1)
 		return;
 
+	// empty slot
+	if (inventory[CARRIED][slot].item == 0)
+		return;
+
 	// can't interact with quest items
 	if (items->items[inventory[CARRIED][slot].item].type == "quest") {
 		return;
@@ -485,18 +491,22 @@ void MenuInventory::activate(Point position) {
 	// equip an item
 	else if (stats->humanoid) {
 		int equip_slot = -1;
+		const ItemStack &src = inventory[CARRIED].storage[slot];
+
 		// find first empty(or just first) slot for item to equip
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			// first check for first empty
-			if ((slot_type[i] == items->items[inventory[CARRIED][slot].item].type) &&
-					(inventory[EQUIPMENT].storage[i].item == 0)) {
+			const ItemStack &dest = inventory[EQUIPMENT].storage[i];
+			if (slot_type[i] == items->items[src.item].type && dest.item == 0) {
 				equip_slot = i;
+				break;
 			}
 		}
 		if (equip_slot == -1) {
 			// if empty not found, use just first
 			for (int i = 0; i < MAX_EQUIPPED; i++) {
-				if (slot_type[i] == items->items[inventory[CARRIED][slot].item].type) {
+				const ItemStack &dest = inventory[EQUIPMENT].storage[i];
+				if (slot_type[i] == items->items[src.item].type &&
+				    ((src.item == dest.item && dest.quantity + src.quantity <= items->items[src.item].max_quantity) || src.item != dest.item)) {
 					equip_slot = i;
 					break;
 				}

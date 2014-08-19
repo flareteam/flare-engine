@@ -35,19 +35,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-
-ItemStorage stock;
-
-std::vector<SoundManager::SoundID> vox_intro;
-std::vector<SoundManager::SoundID> vox_quests;
-std::vector<std::vector<Event_Component> > dialog;
-
 NPC::NPC()
 	: Entity()
 	, name("")
 	, gfx("")
 	, pos()
-	, level(1)
 	, direction(0)
 	, portrait(NULL)
 	, talker(false)
@@ -65,7 +57,7 @@ NPC::NPC()
  *
  * @param npc_id Config file for npc
  */
-void NPC::load(const string& npc_id, int hero_level) {
+void NPC::load(const string& npc_id) {
 
 	FileParser infile;
 	ItemStack stack;
@@ -115,13 +107,6 @@ void NPC::load(const string& npc_id, int hero_level) {
 					// @ATTR name|string|NPC's name.
 					name = msg->get(infile.val);
 				}
-				else if (infile.key == "level") {
-					// @ATTR level|[hero, level (integer)]|NPC's level. Can be "hero" to match the player's level.
-					if (infile.val == "hero")
-						level = hero_level;
-					else
-						level = toInt(infile.val);
-				}
 				else if (infile.key == "gfx") {
 					// @ATTR gfx|string|Filename of an animation definition.
 					gfx = infile.val;
@@ -165,6 +150,10 @@ void NPC::load(const string& npc_id, int hero_level) {
 				else if (infile.key == "vox_intro") {
 					// @ATTR vox_intro|string|Filename of a sound file to play when initially interacting with the NPC.
 					loadSound(infile.val, NPC_VOX_INTRO);
+				}
+
+				else {
+					infile.error("NPC: '%s' is not a valid key.", infile.key.c_str());
 				}
 			}
 		}

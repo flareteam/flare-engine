@@ -881,6 +881,8 @@ void MenuPowers::loadHeader(FileParser &infile) {
 		tabs_count = toInt(infile.val);
 		if (tabs_count < 1) tabs_count = 1;
 	}
+
+	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
 
 void MenuPowers::loadPower(FileParser &infile) {
@@ -892,8 +894,9 @@ void MenuPowers::loadPower(FileParser &infile) {
 			power_cell.back().id = id;
 		}
 		else {
-			logError("MenuPowers: Power index %d inside power menu definition out of bounds 1-%d, skipping\n", id, INT_MAX);
+			infile.error("MenuPowers: Power index out of bounds 1-%d, skipping power.", INT_MAX);
 		}
+		return;
 	}
 
 	if (power_cell.back().id <= 0) {
@@ -951,6 +954,8 @@ void MenuPowers::loadPower(FileParser &infile) {
 			repeat_val = infile.nextValue();
 		}
 	}
+
+	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
 
 void MenuPowers::loadUpgrade(FileParser &infile) {
@@ -964,8 +969,9 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 		else {
 			skip_section = true;
 			power_cell_upgrade.pop_back();
-			logError("MenuPowers: Power index inside power menu definition out of bounds 1-%d, skipping\n", INT_MAX);
+			infile.error("MenuPowers: Power index out of bounds 1-%d, skipping power.", INT_MAX);
 		}
+		return;
 	}
 
 	if (skip_section)
@@ -1000,4 +1006,6 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 	else if (infile.key == "visible_requires_status") power_cell_upgrade.back().visible_requires_status.push_back(infile.val);
 	// @ATTR upgrade.visible_requires_not_status|string|Hide the upgrade if we have this campaign status.
 	else if (infile.key == "visible_requires_not_status") power_cell_upgrade.back().visible_requires_not.push_back(infile.val);
+
+	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }

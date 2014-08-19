@@ -200,6 +200,8 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			else if (infile.key == "show_bonus_stealth") show_stat[15] = toBool(infile.val);
 			// @ATTR show_resists|boolean|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_stat[16] = toBool(infile.val);
+
+			else infile.error("MenuCharacter: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}

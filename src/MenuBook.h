@@ -24,6 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_BOOK_H
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "Menu.h"
 #include "Utils.h"
 #include "Widget.h"
