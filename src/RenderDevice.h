@@ -193,7 +193,6 @@ public:
 	/** Screen operations */
 	virtual int render(Sprite* r) = 0;
 	virtual int render(Renderable& r, Rect dest) = 0;
-	virtual int renderImage(Image* image, Rect& src) = 0;
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest,
 							  bool dest_is_transparent = false) = 0;
 	virtual int renderText(TTF_Font *ttf_font, const std::string& text, Color color, Rect& dest) = 0;
