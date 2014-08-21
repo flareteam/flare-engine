@@ -690,14 +690,7 @@ void MapRenderer::checkHotspots() {
 						dest.h = tset.tiles[current_tile].tile->getClip().h;
 
 						if (isWithin(dest, inpt->mouse)) {
-							// Now that the mouse is within the rectangle of the tile, we can check for
-							// pixel precision. We need to have checked the rectangle first, because
-							// otherwise the pixel precise check might hit a neighbouring tile in the
-							// tileset. We need to calculate the point relative to the
-							Point p1;
-							p1.x = inpt->mouse.x - dest.x + tset.tiles[current_tile].tile->getClip().x;
-							p1.y = inpt->mouse.y - dest.y + tset.tiles[current_tile].tile->getClip().y;
-							matched |= tset.sprites->getGraphics()->checkPixel(p1);
+							matched = true;
 							tip_pos.x = dest.x + dest.w/2;
 							tip_pos.y = dest.y;
 						}
