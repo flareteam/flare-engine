@@ -63,6 +63,9 @@ InputState::InputState(void)
 
 void InputState::defaultQwertyKeyBindings () {
 	binding[CANCEL] = SDLK_ESCAPE;
+#ifdef __ANDROID__
+    binding[CANCEL] = SDLK_AC_BACK;
+#endif
 	binding[ACCEPT] = SDLK_RETURN;
 	binding[UP] = SDLK_w;
 	binding[DOWN] = SDLK_s;
@@ -320,6 +323,10 @@ void InputState::handle(bool dump_event) {
 				break;
 			// Android touch events
 			case SDL_FINGERMOTION:
+
+				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
+				mouse.y = (int)((event.tfinger.y + event.tfinger.dy) * VIEW_H);
+
 				if (event.tfinger.dy > 0) {
 					scroll_up = true;
 				} else if (event.tfinger.dy < 0) {
@@ -327,15 +334,26 @@ void InputState::handle(bool dump_event) {
 				}
 				break;
 			case SDL_FINGERDOWN:
+				touch_timestamp = event.tfinger.timestamp;
 				mouse.x = (int)(event.tfinger.x * VIEW_W);
 				mouse.y = (int)(event.tfinger.y * VIEW_H);
 				pressing[MAIN1] = true;
 				break;
 			case SDL_FINGERUP:
-				mouse.x = (int)(event.tfinger.x * VIEW_W);
-				mouse.y = (int)(event.tfinger.y * VIEW_H);
-				un_press[MAIN1] = true;
-				last_button = event.button.button;
+				current_touch_x = (int)(event.tfinger.x * VIEW_W);
+				current_touch_y = (int)(event.tfinger.y * VIEW_H);
+
+				if ((event.tfinger.timestamp - touch_timestamp) < 3000)
+				{
+					un_press[MAIN1] = true;
+					un_press[MAIN2] = true;
+					last_button = event.button.button;
+				}
+				// FIXME: this condition doesn't work
+				else if (mouse.x == current_touch_x && mouse.y == current_touch_y)
+				{
+					pressing[MAIN2] = true;
+				}
 				break;
 #else
 			case SDL_MOUSEBUTTONDOWN:
