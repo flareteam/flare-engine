@@ -190,6 +190,7 @@ void loadMiscSettings();
 bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
+void loadAndroidDefaults();
 
 // version information
 std::string getVersionString();

@@ -153,17 +153,24 @@ void GameStateConfig::init() {
 	joystick_deadzone_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	joystick_deadzone_lb = new WidgetLabel();
 
+#ifdef __ANDROID__
+	tabControl = new WidgetTabControl(3);
+#else
 	tabControl = new WidgetTabControl(6);
+#endif
+
 	tabControl->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
 	frame = tabControl->getContentArea();
 
 	// Define the header.
-	tabControl->setTabTitle(0, msg->get("Video"));
-	tabControl->setTabTitle(1, msg->get("Audio"));
-	tabControl->setTabTitle(2, msg->get("Interface"));
-	tabControl->setTabTitle(3, msg->get("Input"));
-	tabControl->setTabTitle(4, msg->get("Keybindings"));
-	tabControl->setTabTitle(5, msg->get("Mods"));
+	tabControl->setTabTitle(AUDIO_TAB, msg->get("Audio"));
+	tabControl->setTabTitle(INTERFACE_TAB, msg->get("Interface"));
+	tabControl->setTabTitle(MODS_TAB, msg->get("Mods"));
+#ifndef __ANDROID__
+	tabControl->setTabTitle(VIDEO_TAB, msg->get("Video"));
+	tabControl->setTabTitle(INPUT_TAB, msg->get("Input"));
+	tabControl->setTabTitle(KEYBINDS_TAB, msg->get("Keybindings"));
+#endif
 	tabControl->updateHeader();
 
 	input_confirm = new MenuConfirm(msg->get("Clear"),msg->get("Assign: "));
@@ -226,6 +233,7 @@ void GameStateConfig::init() {
 	input_confirm_ticks = 0;
 
 	// child widgets; aka everything except the tabs, OK, Defaults, and Cancel
+#ifndef __ANDROID__
 	addChildWidget(fullscreen_cb, VIDEO_TAB);
 	addChildWidget(fullscreen_lb, VIDEO_TAB);
 	addChildWidget(hwsurface_cb, VIDEO_TAB);
@@ -241,6 +249,7 @@ void GameStateConfig::init() {
 	addChildWidget(hws_note_lb, VIDEO_TAB);
 	addChildWidget(dbuf_note_lb, VIDEO_TAB);
 	addChildWidget(test_note_lb, VIDEO_TAB);
+#endif
 
 	addChildWidget(music_volume_sl, AUDIO_TAB);
 	addChildWidget(music_volume_lb, AUDIO_TAB);
@@ -262,6 +271,7 @@ void GameStateConfig::init() {
 	addChildWidget(language_lstb, INTERFACE_TAB);
 	addChildWidget(language_lb, INTERFACE_TAB);
 
+#ifndef __ANDROID__
 	addChildWidget(mouse_move_cb, INPUT_TAB);
 	addChildWidget(mouse_move_lb, INPUT_TAB);
 	addChildWidget(enable_joystick_cb, INPUT_TAB);
@@ -275,6 +285,7 @@ void GameStateConfig::init() {
 	addChildWidget(joystick_device_lstb, INPUT_TAB);
 	addChildWidget(joystick_device_lb, INPUT_TAB);
 	addChildWidget(handheld_note_lb, INPUT_TAB);
+#endif
 
 	addChildWidget(activemods_lstb, MODS_TAB);
 	addChildWidget(activemods_lb, MODS_TAB);
@@ -682,7 +693,9 @@ void GameStateConfig::update () {
 void GameStateConfig::logic () {
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
 		if (input_scrollbox->in_focus && !input_confirm->visible) {
+#ifndef __ANDROID__
 			tabControl->setActiveTab(KEYBINDS_TAB);
+#endif
 			break;
 		}
 		else if (child_widget[i]->in_focus) {
@@ -772,46 +785,8 @@ void GameStateConfig::logic () {
 
 	int active_tab = tabControl->getActiveTab();
 
-	// tab 0 (video)
-	if (active_tab == VIDEO_TAB && !defaults_confirm->visible) {
-		if (fullscreen_cb->checkClick()) {
-			if (fullscreen_cb->isChecked()) FULLSCREEN=true;
-			else FULLSCREEN=false;
-		}
-		else if (hwsurface_cb->checkClick()) {
-			if (hwsurface_cb->isChecked()) HWSURFACE=true;
-			else HWSURFACE=false;
-		}
-		else if (doublebuf_cb->checkClick()) {
-			if (doublebuf_cb->isChecked()) DOUBLEBUF=true;
-			else DOUBLEBUF=false;
-		}
-		else if (change_gamma_cb->checkClick()) {
-			if (change_gamma_cb->isChecked()) {
-				CHANGE_GAMMA=true;
-				gamma_sl->enabled = true;
-			}
-			else {
-				CHANGE_GAMMA=false;
-				GAMMA = 1.0;
-				gamma_sl->enabled = false;
-				gamma_sl->set(5,20,(int)(GAMMA*10.0));
-				render_device->setGamma(GAMMA);
-			}
-		}
-		else if (resolution_lstb->checkClick()) {
-			; // nothing to do here: resolution value changes next frame.
-		}
-		else if (CHANGE_GAMMA) {
-			gamma_sl->enabled = true;
-			if (gamma_sl->checkClick()) {
-				GAMMA=(gamma_sl->getValue())*0.1f;
-				render_device->setGamma(GAMMA);
-			}
-		}
-	}
 	// tab 1 (audio)
-	else if (active_tab == AUDIO_TAB && !defaults_confirm->visible) {
+	if (active_tab == AUDIO_TAB && !defaults_confirm->visible) {
 		if (AUDIO) {
 			if (music_volume_sl->checkClick()) {
 				if (MUSIC_VOLUME == 0)
@@ -848,13 +823,77 @@ void GameStateConfig::logic () {
 			if (colorblind_cb->isChecked()) COLORBLIND=true;
 			else COLORBLIND=false;
 		}
+#ifndef __ANDROID__
 		else if (hardware_cursor_cb->checkClick()) {
 			if (hardware_cursor_cb->isChecked()) HARDWARE_CURSOR=true;
 			else HARDWARE_CURSOR=false;
 		}
+#endif
 		else if (dev_mode_cb->checkClick()) {
 			if (dev_mode_cb->isChecked()) DEV_MODE=true;
 			else DEV_MODE=false;
+		}
+	}
+	// tab 5 (mods)
+	else if (active_tab == MODS_TAB && !defaults_confirm->visible) {
+		if (activemods_lstb->checkClick()) {
+			//do nothing
+		}
+		else if (inactivemods_lstb->checkClick()) {
+			//do nothing
+		}
+		else if (activemods_shiftup_btn->checkClick()) {
+			activemods_lstb->shiftUp();
+		}
+		else if (activemods_shiftdown_btn->checkClick()) {
+			activemods_lstb->shiftDown();
+		}
+		else if (activemods_deactivate_btn->checkClick()) {
+			disableMods();
+		}
+		else if (inactivemods_activate_btn->checkClick()) {
+			enableMods();
+		}
+	}
+
+// disable video, input, and keybinds tabs on Android
+#ifndef __ANDROID__
+	// tab 0 (video)
+	else if (active_tab == VIDEO_TAB && !defaults_confirm->visible) {
+		if (fullscreen_cb->checkClick()) {
+			if (fullscreen_cb->isChecked()) FULLSCREEN=true;
+			else FULLSCREEN=false;
+		}
+		else if (hwsurface_cb->checkClick()) {
+			if (hwsurface_cb->isChecked()) HWSURFACE=true;
+			else HWSURFACE=false;
+		}
+		else if (doublebuf_cb->checkClick()) {
+			if (doublebuf_cb->isChecked()) DOUBLEBUF=true;
+			else DOUBLEBUF=false;
+		}
+		else if (change_gamma_cb->checkClick()) {
+			if (change_gamma_cb->isChecked()) {
+				CHANGE_GAMMA=true;
+				gamma_sl->enabled = true;
+			}
+			else {
+				CHANGE_GAMMA=false;
+				GAMMA = 1.0;
+				gamma_sl->enabled = false;
+				gamma_sl->set(5,20,(int)(GAMMA*10.0));
+				render_device->setGamma(GAMMA);
+			}
+		}
+		else if (resolution_lstb->checkClick()) {
+			; // nothing to do here: resolution value changes next frame.
+		}
+		else if (CHANGE_GAMMA) {
+			gamma_sl->enabled = true;
+			if (gamma_sl->checkClick()) {
+				GAMMA=(gamma_sl->getValue())*0.1f;
+				render_device->setGamma(GAMMA);
+			}
 		}
 	}
 	// tab 3 (input)
@@ -949,27 +988,7 @@ void GameStateConfig::logic () {
 			}
 		}
 	}
-	// tab 5 (mods)
-	else if (active_tab == MODS_TAB && !defaults_confirm->visible) {
-		if (activemods_lstb->checkClick()) {
-			//do nothing
-		}
-		else if (inactivemods_lstb->checkClick()) {
-			//do nothing
-		}
-		else if (activemods_shiftup_btn->checkClick()) {
-			activemods_lstb->shiftUp();
-		}
-		else if (activemods_shiftdown_btn->checkClick()) {
-			activemods_lstb->shiftDown();
-		}
-		else if (activemods_deactivate_btn->checkClick()) {
-			disableMods();
-		}
-		else if (inactivemods_activate_btn->checkClick()) {
-			enableMods();
-		}
-	}
+#endif
 }
 
 void GameStateConfig::render () {

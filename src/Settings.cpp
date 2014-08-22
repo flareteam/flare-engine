@@ -757,6 +757,7 @@ bool loadSettings() {
 	// try read from file
 	FileParser infile;
 	if (!infile.open(PATH_CONF + FILE_SETTINGS, false, "")) {
+		loadAndroidDefaults();
 		if (!infile.open("engine/default_settings.txt", true, "")) {
 			saveSettings();
 			return true;
@@ -772,6 +773,8 @@ bool loadSettings() {
 		}
 	}
 	infile.close();
+
+	loadAndroidDefaults();
 
 	return true;
 }
@@ -820,6 +823,8 @@ bool loadDefaults() {
 	VIEW_W_HALF = VIEW_W / 2;
 	VIEW_H_HALF = VIEW_H / 2;
 
+	loadAndroidDefaults();
+
 	return true;
 }
 
@@ -840,4 +845,17 @@ bool compareVersions(int maj0, int min0, int maj1, int min1) {
 		return min0 > min1;
 	else
 		return maj0 > maj1;
+}
+
+/**
+ * Set required settings for Android
+ */
+void loadAndroidDefaults() {
+#ifdef __ANDROID__
+	MOUSE_MOVE = true;
+	MOUSE_AIM = true;
+	NO_MOUSE = false;
+	ENABLE_JOYSTICK = false;
+	HARDWARE_CURSOR = true;
+#endif
 }
