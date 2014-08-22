@@ -32,6 +32,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameState.h"
 #include "TooltipData.h"
 
+#ifdef __ANDROID__
+enum CONFIG_TAB {
+	AUDIO_TAB = 0,
+	INTERFACE_TAB = 1,
+	MODS_TAB = 2
+};
+#else
 enum CONFIG_TAB {
 	VIDEO_TAB = 0,
 	AUDIO_TAB = 1,
@@ -40,6 +47,7 @@ enum CONFIG_TAB {
 	KEYBINDS_TAB = 4,
 	MODS_TAB = 5
 };
+#endif
 
 class MenuConfirm;
 class Widget;
