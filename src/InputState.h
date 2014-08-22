@@ -112,8 +112,7 @@ private:
 	bool un_press[key_count];
 
     Uint32 touch_timestamp;
-    int current_touch_x;
-    int current_touch_y;
+    Point current_touch;
 };
 
 #endif
