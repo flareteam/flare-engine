@@ -41,9 +41,8 @@ InputState::InputState(void)
 	, scroll_up(false)
 	, scroll_down(false)
 	, lock_scroll(false)
-	, current_touch_x(0)
-	, current_touch_y(0)
-	, touch_timestamp(0) {
+	, touch_timestamp(0)
+	, current_touch() {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_StartTextInput();
 #else
@@ -343,8 +342,8 @@ void InputState::handle(bool dump_event) {
 				pressing[MAIN1] = true;
 				break;
 			case SDL_FINGERUP:
-				current_touch_x = (int)(event.tfinger.x * VIEW_W);
-				current_touch_y = (int)(event.tfinger.y * VIEW_H);
+				current_touch.x = (int)(event.tfinger.x * VIEW_W);
+				current_touch.y = (int)(event.tfinger.y * VIEW_H);
 
 				if ((event.tfinger.timestamp - touch_timestamp) < 3000)
 				{
@@ -353,7 +352,7 @@ void InputState::handle(bool dump_event) {
 					last_button = event.button.button;
 				}
 				// FIXME: this condition doesn't work
-				else if (mouse.x == current_touch_x && mouse.y == current_touch_y)
+				else if (mouse.x == current_touch.x && mouse.y == current_touch.y)
 				{
 					pressing[MAIN2] = true;
 				}
