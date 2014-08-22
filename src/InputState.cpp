@@ -40,7 +40,8 @@ InputState::InputState(void)
 	, last_joybutton(0)
 	, scroll_up(false)
 	, scroll_down(false)
-	, lock_scroll(false) {
+    , lock_scroll(false)
+    , touch_locked(false) {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_StartTextInput();
 #else
@@ -310,6 +311,8 @@ void InputState::handle(bool dump_event) {
 				for (int key=0; key<key_count; key++) {
 					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
 						pressing[key] = true;
+						// FIXME: did we miss this line by accident ?
+						// un_press[key] = false;
 					}
 				}
 				break;
@@ -323,7 +326,7 @@ void InputState::handle(bool dump_event) {
 				break;
 			// Android touch events
 			case SDL_FINGERMOTION:
-
+				touch_locked = false;
 				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
 				mouse.y = (int)((event.tfinger.y + event.tfinger.dy) * VIEW_H);
 
@@ -334,26 +337,17 @@ void InputState::handle(bool dump_event) {
 				}
 				break;
 			case SDL_FINGERDOWN:
-				touch_timestamp = event.tfinger.timestamp;
+				touch_locked = true;
+				touch_timestamp = 0;
 				mouse.x = (int)(event.tfinger.x * VIEW_W);
 				mouse.y = (int)(event.tfinger.y * VIEW_H);
 				pressing[MAIN1] = true;
+				un_press[MAIN1] = false;
 				break;
 			case SDL_FINGERUP:
-				current_touch_x = (int)(event.tfinger.x * VIEW_W);
-				current_touch_y = (int)(event.tfinger.y * VIEW_H);
-
-				if ((event.tfinger.timestamp - touch_timestamp) < 3000)
-				{
-					un_press[MAIN1] = true;
-					un_press[MAIN2] = true;
-					last_button = event.button.button;
-				}
-				// FIXME: this condition doesn't work
-				else if (mouse.x == current_touch_x && mouse.y == current_touch_y)
-				{
-					pressing[MAIN2] = true;
-				}
+				touch_locked = false;
+				un_press[MAIN1] = true;
+				last_button = binding[MAIN1];
 				break;
 #else
 			case SDL_MOUSEBUTTONDOWN:
@@ -524,6 +518,20 @@ void InputState::handle(bool dump_event) {
 			default:
 				break;
 		}
+	}
+
+	// touch event additional logic
+	if(touch_locked) {
+		touch_timestamp++;
+        if (touch_timestamp > 2 * MAX_FRAMES_PER_SEC) {
+			pressing[MAIN2] = true;
+			un_press[MAIN2] = false;
+		}
+	}
+	else {
+		touch_timestamp = 0;
+		un_press[MAIN2] = true;
+		last_button = binding[MAIN2];
 	}
 
 	// joystick analog input
