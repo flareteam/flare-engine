@@ -97,7 +97,6 @@ private:
 	Sprite *overlay_disabled;
 	std::vector<Sprite *> tree_surf;
 	WidgetButton *closeButton;
-	bool pressed;
 
 	LabelInfo title;
 	LabelInfo unspent_points;

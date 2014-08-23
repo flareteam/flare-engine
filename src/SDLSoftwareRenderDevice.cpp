@@ -313,12 +313,6 @@ int SDLSoftwareRenderDevice::render(Sprite *r) {
 	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r->getGraphics())->surface, &src, screen, &dest);
 }
 
-int SDLSoftwareRenderDevice::renderImage(Image* image, Rect& src) {
-	if (!image) return -1;
-	SDL_Rect _src = src;
-	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(image)->surface, &_src, screen , 0);
-}
-
 int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent) {
 	if (!src_image || !dest_image) return -1;
 
