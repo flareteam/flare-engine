@@ -66,10 +66,11 @@ InputState::InputState(void)
 
 void InputState::defaultQwertyKeyBindings () {
 	binding[CANCEL] = SDLK_ESCAPE;
+	binding[ACCEPT] = SDLK_RETURN;
 #ifdef __ANDROID__
     binding[CANCEL] = SDLK_AC_BACK;
+	binding[ACCEPT] = SDLK_MENU;
 #endif
-	binding[ACCEPT] = SDLK_RETURN;
 	binding[UP] = SDLK_w;
 	binding[DOWN] = SDLK_s;
 	binding[LEFT] = SDLK_a;

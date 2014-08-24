@@ -29,7 +29,7 @@
                   android:launchMode="singleTask" />
     </application>
 
-    <!-- Android 4.1.2 -->
+    <!-- Android 3.2 -->
     <uses-sdk android:minSdkVersion="13" android:targetSdkVersion="13" />
 
     <!-- OpenGL ES 2.0 -->
