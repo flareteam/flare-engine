@@ -328,7 +328,10 @@ void InputState::handle(bool dump_event) {
 				break;
 			// Android touch events
 			case SDL_FINGERMOTION:
-				touch_locked = false;
+				if (abs(event.tfinger.dx * VIEW_W) > 5 || abs(event.tfinger.dy * VIEW_H) > 5)
+				{
+					touch_locked = false;
+				}
 				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
 				mouse.y = (int)((event.tfinger.y + event.tfinger.dy) * VIEW_H);
 
