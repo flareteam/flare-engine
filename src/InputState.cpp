@@ -313,8 +313,7 @@ void InputState::handle(bool dump_event) {
 				for (int key=0; key<key_count; key++) {
 					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
 						pressing[key] = true;
-						// FIXME: did we miss this line by accident ?
-						// un_press[key] = false;
+						un_press[key] = false;
 					}
 				}
 				break;
