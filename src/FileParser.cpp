@@ -187,10 +187,6 @@ string FileParser::nextValue() {
 	return s;
 }
 
-std::string FileParser::getFileName() {
-	return filenames[current_index];
-}
-
 void FileParser::error(const char* format, ...) {
 	char buffer[4096];
 	va_list args;

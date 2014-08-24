@@ -40,8 +40,10 @@ InputState::InputState(void)
 	, last_joybutton(0)
 	, scroll_up(false)
 	, scroll_down(false)
-    , lock_scroll(false)
-    , touch_locked(false) {
+	, lock_scroll(false)
+	, touch_timestamp(0)
+	, current_touch()
+	, touch_locked(false) {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_StartTextInput();
 #else

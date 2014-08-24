@@ -112,6 +112,7 @@ private:
 	bool un_press[key_count];
 
     Uint32 touch_timestamp;
+    Point current_touch;
     bool touch_locked;
 };
 

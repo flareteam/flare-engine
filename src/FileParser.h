@@ -68,7 +68,6 @@ public:
 	bool next();
 	std::string nextValue(); // next value inside one line.
 	std::string getRawLine();
-	std::string getFileName();
 	void error(const char* format, ...);
 	void incrementLineNum();
 
