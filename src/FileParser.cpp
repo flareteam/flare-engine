@@ -61,9 +61,21 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 		if (ret) {
 			// This will be the first file to be parsed. Seek to the start of the file and leave it open.
 			if (infile.good() && trim(getLine(infile)) != "APPEND") {
-				current_index = i-1;
-				infile.seekg(ios::beg);
-				break;
+				std::string test_line;
+
+				// get the first non-comment, non blank line
+				while (infile.good()) {
+					test_line = trim(getLine(infile));
+					if (test_line.length() == 0) continue;
+					else if (test_line.at(0) == '#') continue;
+					else break;
+				}
+
+				if (test_line != "APPEND") {
+					current_index = i-1;
+					infile.seekg(ios::beg);
+					break;
+				}
 			}
 
 			// don't close the final file if it's the only one with an "APPEND" line
