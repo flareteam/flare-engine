@@ -33,7 +33,7 @@ You will need to edit next settings
 NOTES:
 
 1. Comments in data files should begin from ## (instead of # o desktop system). This is needed because Android ndk version of
-std::getline() ignores first characted, resolved from file. Because the same reason, data files should not begin from usefull data.
+std::getline() ignores first character, resolved from file. Because the same reason, data files should not begin from usefull data.
 It should begin from comments(##). To workaround this issue, saved files sytax(mods.txt, stash.txt, savegame.txt, settings.txt)
 was updated to begin with comments.
 
