@@ -30,6 +30,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsDebug.h"
 #include "UtilsParsing.h"
 
+#include <math.h>
+
 using namespace std;
 
 InputState::InputState(void)
@@ -328,7 +330,7 @@ void InputState::handle(bool dump_event) {
 				break;
 			// Android touch events
 			case SDL_FINGERMOTION:
-				if (abs(event.tfinger.dx * VIEW_W) > 5 || abs(event.tfinger.dy * VIEW_H) > 5)
+				if (fabs(event.tfinger.dx * VIEW_W) > 5.f || fabs(event.tfinger.dy * VIEW_H) > 5.f)
 				{
 					touch_locked = false;
 				}
