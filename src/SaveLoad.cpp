@@ -70,6 +70,9 @@ void GameStatePlay::saveGame() {
 	outfile.open(ss.str().c_str(), ios::out);
 
 	if (outfile.is_open()) {
+	
+		// comment
+		outfile << "## flare-engine save file ##" << "\n";
 
 		// hero name
 		outfile << "name=" << pc->stats.name << "\n";
@@ -164,6 +167,10 @@ void GameStatePlay::saveGame() {
 	outfile.open(ss.str().c_str(), ios::out);
 
 	if (outfile.is_open()) {
+	
+		// comment
+		outfile << "## flare-engine stash file ##" << "\n";
+		
 		outfile << "quantity=" << menu->stash->stock.getQuantities() << "\n";
 		outfile << "item=" << menu->stash->stock.getItems() << "\n";
 

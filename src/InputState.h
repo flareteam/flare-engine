@@ -113,6 +113,7 @@ private:
 
     Uint32 touch_timestamp;
     Point current_touch;
+    bool touch_locked;
 };
 
 #endif

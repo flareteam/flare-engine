@@ -1172,6 +1172,9 @@ bool GameStateConfig::setMods() {
 
 	if (outfile.is_open()) {
 
+		// comment
+		outfile << "## flare-engine mods list file ##" << "\n";
+		
 		outfile<<"# Mods lower on the list will overwrite data in the entries higher on the list"<<"\n";
 		outfile<<"\n";
 
