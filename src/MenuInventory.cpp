@@ -496,17 +496,13 @@ void MenuInventory::activate(Point position) {
 		// find first empty(or just first) slot for item to equip
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			const ItemStack &dest = inventory[EQUIPMENT].storage[i];
-			if (slot_type[i] == items->items[src.item].type && dest.item == 0) {
-				equip_slot = i;
-				break;
-			}
-		}
-		if (equip_slot == -1) {
-			// if empty not found, use just first
-			for (int i = 0; i < MAX_EQUIPPED; i++) {
-				const ItemStack &dest = inventory[EQUIPMENT].storage[i];
-				if (slot_type[i] == items->items[src.item].type &&
-				    ((src.item == dest.item && dest.quantity + src.quantity <= items->items[src.item].max_quantity) || src.item != dest.item)) {
+			if (slot_type[i] == items->items[src.item].type) {
+				if (equip_slot == -1) {
+					// non-empty and matching
+					equip_slot = i;
+				}
+				else if (dest.item == 0) {
+					// empty and matching, no need to search more
 					equip_slot = i;
 					break;
 				}
@@ -570,7 +566,21 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 			}
 		}
 		else if (area == EQUIPMENT) {
-			ItemStack leftover = inventory[EQUIPMENT].add(stack, slot);
+			ItemStack &dest = inventory[EQUIPMENT].storage[slot];
+			ItemStack leftover;
+			leftover.item = stack.item;
+
+			if (dest.item != stack.item) {
+				// items don't match, so just add the stack to the carried area
+				leftover.quantity = stack.quantity;
+			}
+			else if (dest.quantity + stack.quantity > items->items[stack.item].max_quantity) {
+				// items match, so attempt to merge the stacks. Any leftover will be added to the carried area
+				leftover.quantity = dest.quantity + stack.quantity - items->items[stack.item].max_quantity;
+				stack.quantity = items->items[stack.item].max_quantity - dest.quantity;
+				add(stack, EQUIPMENT, slot, false);
+			}
+
 			if (leftover.quantity > 0) {
 				add(leftover, CARRIED, -1, false);
 			}
