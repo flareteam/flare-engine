@@ -600,6 +600,14 @@ void MenuManager::logic() {
 
 	if (stats->alive) {
 
+#ifdef __ANDROID__
+		// handle touch press "right-click"
+		if (mouse_dragging && !inpt->pressing[MAIN1] && inpt->pressing[MAIN2]) {
+			resetDrag();
+			mouse_dragging = false;
+		}
+#endif
+
 		// handle right-click
 		if (!mouse_dragging && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
 			// exit menu

@@ -330,8 +330,7 @@ void InputState::handle(bool dump_event) {
 				break;
 			// Android touch events
 			case SDL_FINGERMOTION:
-				if (fabs(event.tfinger.dx * VIEW_W) > 5.f || fabs(event.tfinger.dy * VIEW_H) > 5.f)
-				{
+				if (fabs(event.tfinger.dx * VIEW_W) > 5.f || fabs(event.tfinger.dy * VIEW_H) > 5.f) {
 					touch_locked = false;
 				}
 				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
@@ -527,12 +526,17 @@ void InputState::handle(bool dump_event) {
 		}
 	}
 
+#ifdef __ANDROID__
 	// touch event additional logic
 	if(touch_locked) {
 		touch_timestamp++;
-        if (touch_timestamp > 2 * MAX_FRAMES_PER_SEC) {
+		if (touch_timestamp > MAX_FRAMES_PER_SEC) {
 			pressing[MAIN2] = true;
 			un_press[MAIN2] = false;
+
+			pressing[MAIN1] = false;
+			lock[MAIN1] = false;
+			un_press[MAIN1] = true;
 		}
 	}
 	else {
@@ -540,6 +544,7 @@ void InputState::handle(bool dump_event) {
 		un_press[MAIN2] = true;
 		last_button = binding[MAIN2];
 	}
+#endif
 
 	// joystick analog input
 	if(ENABLE_JOYSTICK) {
