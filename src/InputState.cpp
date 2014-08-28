@@ -537,6 +537,8 @@ void InputState::handle(bool dump_event) {
 			pressing[MAIN1] = false;
 			lock[MAIN1] = false;
 			un_press[MAIN1] = true;
+			
+			touch_locked = false;
 		}
 	}
 	else {
