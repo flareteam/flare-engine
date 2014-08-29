@@ -9,12 +9,14 @@
     <application android:label="@string/app_name"
                  android:icon="@drawable/ic_launcher"
                  android:allowBackup="true"
-                 android:theme="@android:style/Theme.Black"
+                 android:theme="@android:style/Theme.NoTitleBar"
                  android:hardwareAccelerated="true" >
         <activity android:name="FLARE"
                   android:label="@string/app_name"
                   android:configChanges="keyboardHidden|orientation|screenSize"
                   android:screenOrientation="sensorLandscape"
+                  android:windowSoftInputMode="stateAlwaysHidden"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                   >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +28,7 @@
                   android:theme="@android:style/Theme.Black"
                   android:configChanges="keyboardHidden|orientation|screenSize"
                   android:screenOrientation="sensorLandscape"
+                  android:windowSoftInputMode="stateAlwaysHidden"
                   android:launchMode="singleTask" />
     </application>
 

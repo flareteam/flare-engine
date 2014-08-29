@@ -175,6 +175,9 @@ ItemStack MenuItemStorage::click(Point position) {
 		if (inpt->pressing[SHIFT] || NO_MOUSE) {
 			item.quantity = 1;
 		}
+#ifdef __ANDROID__
+		item.quantity = 1;
+#endif
 		substract( drag_prev_slot, item.quantity);
 		return item;
 	}
