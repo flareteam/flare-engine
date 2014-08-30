@@ -107,13 +107,11 @@ public:
 	bool scroll_up;
 	bool scroll_down;
 	bool lock_scroll;
+	bool touch_locked;
 
 private:
 	bool un_press[key_count];
-
-    Uint32 touch_timestamp;
-    Point current_touch;
-    bool touch_locked;
+	Point current_touch;
 };
 
 #endif
