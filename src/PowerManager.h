@@ -124,6 +124,17 @@ public:
 	}
 };
 
+class ActionData {
+public:
+	int power;
+	FPoint target;
+
+	ActionData()
+		: power(0)
+		, target(FPoint()) {
+	}
+};
+
 class Power {
 public:
 	// base info

@@ -422,10 +422,11 @@ void MenuActionBar::remove(Point mouse) {
 
 /**
  * If pressing an action key (keyboard or mouseclick) and the power is enabled,
- * return that power's ID.
+ * return that power's ID and target as ActionData
  */
-int MenuActionBar::checkAction() {
-	int current = tablist.getCurrent();
+ActionData MenuActionBar::checkAction() {
+	ActionData action;
+	bool have_aim = false;
 
 	// check click and hotkey actions
 	for (int i=0; i<12; i++) {
@@ -433,23 +434,48 @@ int MenuActionBar::checkAction() {
 			continue;
 
 		// mouse/touch click
-		if (!NO_MOUSE && slots[i]->checkClick() == ACTIVATED)
-			return hotkeys_mod[i];
+		if (!NO_MOUSE && slots[i]->checkClick() == ACTIVATED) {
+			have_aim = false;
+			action.power = hotkeys_mod[i];
+		}
 
 		// joystick/keyboard action button
-		if (inpt->pressing[ACTIONBAR_USE] && current == i)
-			return hotkeys_mod[i];
+		else if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == i) {
+			have_aim = false;
+			action.power = hotkeys_mod[i];
+		}
 
 		// pressing hotkey
-		if (i<10 && inpt->pressing[i+BAR_1])
-			return hotkeys_mod[i];
-		else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1])
-			return hotkeys_mod[10];
-		else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2])
-			return hotkeys_mod[11];
+		else if (i<10 && inpt->pressing[i+BAR_1]) {
+			have_aim = true;
+			action.power = hotkeys_mod[i];
+		}
+		else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			have_aim = true;
+			action.power = hotkeys_mod[10];
+		}
+		else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
+			have_aim = true;
+			action.power = hotkeys_mod[11];
+		}
 	}
 
-	return 0;
+	// set the target depending on how the power was triggered
+	if (action.power > 0) {
+		if (have_aim && MOUSE_AIM) {
+			const Power &power = powers->getPower(action.power);
+
+			if (power.aim_assist)
+				action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, hero->stats.pos.x, hero->stats.pos.y);
+			else
+				action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, hero->stats.pos.x, hero->stats.pos.y);
+		}
+		else {
+			action.target = calcVector(hero->stats.pos, hero->stats.direction, hero->stats.melee_range);
+		}
+	}
+
+	return action;
 }
 
 /**
