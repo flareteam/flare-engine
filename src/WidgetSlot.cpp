@@ -105,7 +105,7 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	// disabled slots can't be clicked;
 	if (!enabled) return NO_CLICK;
 
-	if (continuous && pressed && checked && (inpt->lock[MAIN2] || inpt->lock[ACTIVATE])) return ACTIVATED;
+	if (continuous && pressed && checked && (inpt->lock[MAIN2] || inpt->lock[ACTIVATE] || inpt->touch_locked)) return ACTIVATED;
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return NO_CLICK;
@@ -141,6 +141,16 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 			checked = true;
 		}
 	}
+
+	// handle touch presses for action bar
+	if (continuous && inpt->touch_locked) {
+		if (isWithin(pos, mouse)) {
+			pressed = true;
+			checked = true;
+			return ACTIVATED;
+		}
+	}
+
 	return NO_CLICK;
 
 }

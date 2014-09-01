@@ -859,13 +859,13 @@ void GameStatePlay::logic() {
 		}
 		checkTitle();
 
-		int actionbar_power = menu->act->checkAction();
-		pc->logic(actionbar_power, restrictPowerUse());
+		ActionData action_data = menu->act->checkAction();
+		pc->logic(action_data, restrictPowerUse());
 
 		// Transform powers change the actionbar layout,
 		// so we need to prevent accidental clicks if a new power is placed under the slot we clicked on.
 		// It's a bit hacky, but it works
-		if (powers->powers[actionbar_power].type == POWTYPE_TRANSFORM) {
+		if (powers->powers[action_data.power].type == POWTYPE_TRANSFORM) {
 			menu->act->resetSlots();
 		}
 

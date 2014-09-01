@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Entity.h"
+#include "PowerManager.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
 #include "Utils.h"
@@ -89,7 +90,7 @@ private:
 	vector<FPoint> path;
 	FPoint prev_target;
 
-	void handlePower(int actionbar_power);
+	void handlePower(const ActionData& action);
 
 	// visible power target
 	FPoint target_pos;
@@ -110,7 +111,7 @@ public:
 	void loadGraphics(std::vector<Layer_gfx> _img_gfx);
 	void loadStepFX(const std::string& stepname);
 
-	void logic(int actionbar_power, bool restrictPowerUse);
+	void logic(const ActionData& action, bool restrictPowerUse);
 	bool pressing_move();
 	void set_direction();
 	std::string log_msg;

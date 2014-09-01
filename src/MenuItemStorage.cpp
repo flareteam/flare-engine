@@ -172,12 +172,9 @@ ItemStack MenuItemStorage::click(Point position) {
 
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
-		if (inpt->pressing[SHIFT] || NO_MOUSE) {
+		if (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked) {
 			item.quantity = 1;
 		}
-#ifdef __ANDROID__
-		item.quantity = 1;
-#endif
 		substract( drag_prev_slot, item.quantity);
 		return item;
 	}

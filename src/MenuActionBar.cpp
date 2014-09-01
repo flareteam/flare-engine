@@ -422,25 +422,60 @@ void MenuActionBar::remove(Point mouse) {
 
 /**
  * If pressing an action key (keyboard or mouseclick) and the power is enabled,
- * return that power's ID.
+ * return that power's ID and target as ActionData
  */
-int MenuActionBar::checkAction() {
-	int current = tablist.getCurrent();
+ActionData MenuActionBar::checkAction() {
+	ActionData action;
+	bool have_aim = false;
 
 	// check click and hotkey actions
-	if ((inpt->pressing[BAR_1] || (inpt->pressing[ACTIONBAR_USE] && current == 0) || (!NO_MOUSE && slots[0]->checkClick() == ACTIVATED)) && slot_enabled[0]) return hotkeys_mod[0];
-	if ((inpt->pressing[BAR_2] || (inpt->pressing[ACTIONBAR_USE] && current == 1) || (!NO_MOUSE && slots[1]->checkClick() == ACTIVATED)) && slot_enabled[1]) return hotkeys_mod[1];
-	if ((inpt->pressing[BAR_3] || (inpt->pressing[ACTIONBAR_USE] && current == 2) || (!NO_MOUSE && slots[2]->checkClick() == ACTIVATED)) && slot_enabled[2]) return hotkeys_mod[2];
-	if ((inpt->pressing[BAR_4] || (inpt->pressing[ACTIONBAR_USE] && current == 3) || (!NO_MOUSE && slots[3]->checkClick() == ACTIVATED)) && slot_enabled[3]) return hotkeys_mod[3];
-	if ((inpt->pressing[BAR_5] || (inpt->pressing[ACTIONBAR_USE] && current == 4) || (!NO_MOUSE && slots[4]->checkClick() == ACTIVATED)) && slot_enabled[4]) return hotkeys_mod[4];
-	if ((inpt->pressing[BAR_6] || (inpt->pressing[ACTIONBAR_USE] && current == 5) || (!NO_MOUSE && slots[5]->checkClick() == ACTIVATED)) && slot_enabled[5]) return hotkeys_mod[5];
-	if ((inpt->pressing[BAR_7] || (inpt->pressing[ACTIONBAR_USE] && current == 6) || (!NO_MOUSE && slots[6]->checkClick() == ACTIVATED)) && slot_enabled[6]) return hotkeys_mod[6];
-	if ((inpt->pressing[BAR_8] || (inpt->pressing[ACTIONBAR_USE] && current == 7) || (!NO_MOUSE && slots[7]->checkClick() == ACTIVATED)) && slot_enabled[7]) return hotkeys_mod[7];
-	if ((inpt->pressing[BAR_9] || (inpt->pressing[ACTIONBAR_USE] && current == 8) || (!NO_MOUSE && slots[8]->checkClick() == ACTIVATED)) && slot_enabled[8]) return hotkeys_mod[8];
-	if ((inpt->pressing[BAR_0] || (inpt->pressing[ACTIONBAR_USE] && current == 9) || (!NO_MOUSE && slots[9]->checkClick() == ACTIVATED)) && slot_enabled[9]) return hotkeys_mod[9];
-	if ((inpt->pressing[MAIN1] || (inpt->pressing[ACTIONBAR_USE] && current == 10) || (!NO_MOUSE && slots[10]->checkClick() == ACTIVATED)) && slot_enabled[10] && !inpt->lock[MAIN1]) return hotkeys_mod[10];
-	if ((inpt->pressing[MAIN2] || (inpt->pressing[ACTIONBAR_USE] && current == 11) || (!NO_MOUSE && slots[11]->checkClick() == ACTIVATED)) && slot_enabled[11] && !inpt->lock[MAIN2]) return hotkeys_mod[11];
-	return 0;
+	for (int i=0; i<12; i++) {
+		if (!slot_enabled[i])
+			continue;
+
+		// mouse/touch click
+		if (!NO_MOUSE && slots[i]->checkClick() == ACTIVATED) {
+			have_aim = false;
+			action.power = hotkeys_mod[i];
+		}
+
+		// joystick/keyboard action button
+		else if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == i) {
+			have_aim = false;
+			action.power = hotkeys_mod[i];
+		}
+
+		// pressing hotkey
+		else if (i<10 && inpt->pressing[i+BAR_1]) {
+			have_aim = true;
+			action.power = hotkeys_mod[i];
+		}
+		else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			have_aim = true;
+			action.power = hotkeys_mod[10];
+		}
+		else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
+			have_aim = true;
+			action.power = hotkeys_mod[11];
+		}
+	}
+
+	// set the target depending on how the power was triggered
+	if (action.power > 0) {
+		if (have_aim && MOUSE_AIM) {
+			const Power &power = powers->getPower(action.power);
+
+			if (power.aim_assist)
+				action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, hero->stats.pos.x, hero->stats.pos.y);
+			else
+				action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, hero->stats.pos.x, hero->stats.pos.y);
+		}
+		else {
+			action.target = calcVector(hero->stats.pos, hero->stats.direction, hero->stats.melee_range);
+		}
+	}
+
+	return action;
 }
 
 /**

@@ -293,32 +293,21 @@ void Avatar::set_direction() {
 	}
 }
 
-void Avatar::handlePower(int actionbar_power) {
-	if (actionbar_power != 0 && stats.cooldown_ticks == 0) {
-		const Power &power = powers->getPower(actionbar_power);
-		FPoint target;
-		if (MOUSE_AIM) {
-			if (power.aim_assist)
-				target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, stats.pos.x, stats.pos.y);
-			else
-				target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, stats.pos.x, stats.pos.y);
-		}
-		else {
-			FPoint ftarget = calcVector(stats.pos, stats.direction, stats.melee_range);
-			target.x = ftarget.x;
-			target.y = ftarget.y;
-		}
+void Avatar::handlePower(const ActionData& action) {
+	if (action.power != 0 && stats.cooldown_ticks == 0) {
+		const Power &power = powers->getPower(action.power);
+		FPoint target = action.target;
 
 		// check requirements
-		if (!stats.canUsePower(power, actionbar_power))
+		if (!stats.canUsePower(power, action.power))
 			return;
 		if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
 			return;
 		if (power.requires_empty_target && !mapr->collider.is_empty(target.x, target.y))
 			return;
-		if (hero_cooldown[actionbar_power] > 0)
+		if (hero_cooldown[action.power] > 0)
 			return;
-		if (!powers->hasValidTarget(actionbar_power,&stats,target))
+		if (!powers->hasValidTarget(action.power,&stats,target))
 			return;
 
 		// automatically target the selected enemy with melee attacks
@@ -337,8 +326,8 @@ void Avatar::handlePower(int actionbar_power) {
 			curs->setCursor(CURSOR_NORMAL);
 		}
 
-		hero_cooldown[actionbar_power] = power.cooldown; //set the cooldown timer
-		current_power = actionbar_power;
+		hero_cooldown[action.power] = power.cooldown; //set the cooldown timer
+		current_power = action.power;
 		act_target = target;
 
 		// is this a power that requires changing direction?
@@ -372,10 +361,10 @@ void Avatar::handlePower(int actionbar_power) {
  * - calculate the next frame of animation
  * - calculate camera position based on avatar position
  *
- * @param actionbar_power The actionbar power activated.  0 means no power.
+ * @param action The actionbar power activated and the target.  action.power == 0 means no power.
  * @param restrictPowerUse rather or not to allow power usage on mouse1
  */
-void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
+void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
 
 	// hazards are processed after Avatar and Enemy[]
 	// so process and clear sound effects from previous frames
@@ -487,7 +476,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 	if (stats.transform_type != "" && stats.transform_duration == 0) untransform();
 
 	// change the cursor if we're attacking
-	if (actionbar_power == 0) {
+	if (action.power == 0) {
 		lock_cursor = false;
 	}
 	else if (lock_cursor) {
@@ -531,7 +520,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// handle power usage
 			if (allowed_to_use_power)
-				handlePower(actionbar_power);
+				handlePower(action);
 			break;
 
 		case AVATAR_RUN:
@@ -568,7 +557,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			// handle power usage
 			if (allowed_to_use_power)
-				handlePower(actionbar_power);
+				handlePower(action);
 
 			if (activeAnimation->getName() != "run")
 				stats.cur_state = AVATAR_STANCE;
@@ -603,7 +592,7 @@ void Avatar::logic(int actionbar_power, bool restrictPowerUse) {
 
 			setAnimation("block");
 
-			if (powers->powers[actionbar_power].new_state != POWSTATE_BLOCK || activeAnimation->getName() != "block") {
+			if (powers->powers[action.power].new_state != POWSTATE_BLOCK || activeAnimation->getName() != "block") {
 				stats.cur_state = AVATAR_STANCE;
 				stats.effects.triggered_block = false;
 				stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
