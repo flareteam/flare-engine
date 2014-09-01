@@ -124,6 +124,12 @@ void Map::loadHeader(FileParser &infile) {
 		spawn.y = toInt(infile.nextValue()) + 0.5f;
 		spawn_dir = toInt(infile.nextValue());
 	}
+	else if (infile.key == "tilewidth") {
+		// @ATTR tilewidth|integer|Inherited from Tiled map file. Unused by engine.
+	}
+	else if (infile.key == "tileheight") {
+		// @ATTR tileheight|integer|Inherited from Tiled map file. Unused by engine.
+	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}
