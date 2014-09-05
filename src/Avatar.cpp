@@ -293,64 +293,83 @@ void Avatar::set_direction() {
 	}
 }
 
-void Avatar::handlePower(const ActionData& action) {
-	if (action.power != 0 && stats.cooldown_ticks == 0) {
+void Avatar::handlePower(std::vector<ActionData> &action_queue) {
+	bool blocking = false;
+
+	for (unsigned i=0; i<action_queue.size(); i++) {
+		ActionData action = action_queue[i];
 		const Power &power = powers->getPower(action.power);
-		FPoint target = action.target;
 
-		// check requirements
-		if (!stats.canUsePower(power, action.power))
-			return;
-		if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
-			return;
-		if (power.requires_empty_target && !mapr->collider.is_empty(target.x, target.y))
-			return;
-		if (hero_cooldown[action.power] > 0)
-			return;
-		if (!powers->hasValidTarget(action.power,&stats,target))
-			return;
+		if (power.new_state == POWSTATE_BLOCK)
+			blocking = true;
 
-		// automatically target the selected enemy with melee attacks
-		if (power.type == POWTYPE_FIXED && power.starting_pos == STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
-			target = enemy_pos;
+		if (action.power != 0 && (stats.cooldown_ticks == 0 || action.instant_item)) {
+			FPoint target = action.target;
+
+			// check requirements
+			if ((stats.cur_state == AVATAR_ATTACK || stats.cur_state == AVATAR_HIT) && !action.instant_item)
+				continue;
+			if (!stats.canUsePower(power, action.power))
+				continue;
+			if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
+				continue;
+			if (power.requires_empty_target && !mapr->collider.is_empty(target.x, target.y))
+				continue;
+			if (hero_cooldown[action.power] > 0)
+				continue;
+			if (!powers->hasValidTarget(action.power, &stats, target))
+				continue;
+
+			// automatically target the selected enemy with melee attacks
+			if (power.type == POWTYPE_FIXED && power.starting_pos == STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
+				target = enemy_pos;
+			}
+
+			// draw a target on the ground if we're attacking
+			if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
+				target_pos = target;
+				target_visible = true;
+				target_anim->reset();
+				lock_cursor = true;
+			}
+			else {
+				curs->setCursor(CURSOR_NORMAL);
+			}
+
+			hero_cooldown[action.power] = power.cooldown; //set the cooldown timer
+
+			if (power.new_state != POWSTATE_INSTANT) {
+				current_power = action.power;
+				act_target = target;
+				attack_anim = power.attack_anim;
+			}
+
+			// is this a power that requires changing direction?
+			if (power.face) {
+				stats.direction = calcDirection(stats.pos, target);
+			}
+
+			switch (power.new_state) {
+				case POWSTATE_ATTACK:	// handle attack powers
+					stats.cur_state = AVATAR_ATTACK;
+					break;
+
+				case POWSTATE_BLOCK:	// handle blocking
+					stats.cur_state = AVATAR_BLOCK;
+					stats.effects.triggered_block = true;
+					break;
+
+				case POWSTATE_INSTANT:	// handle instant powers
+					powers->activate(action.power, &stats, target);
+					break;
+			}
 		}
+	}
 
-		// draw a target on the ground if we're attacking
-		if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
-			target_pos = target;
-			target_visible = true;
-			target_anim->reset();
-			lock_cursor = true;
-		}
-		else {
-			curs->setCursor(CURSOR_NORMAL);
-		}
-
-		hero_cooldown[action.power] = power.cooldown; //set the cooldown timer
-		current_power = action.power;
-		act_target = target;
-
-		// is this a power that requires changing direction?
-		if (power.face) {
-			stats.direction = calcDirection(stats.pos, target);
-		}
-
-		attack_anim = power.attack_anim;
-
-		switch (power.new_state) {
-			case POWSTATE_ATTACK:	// handle attack powers
-				stats.cur_state = AVATAR_ATTACK;
-				break;
-
-			case POWSTATE_BLOCK:	// handle blocking
-				stats.cur_state = AVATAR_BLOCK;
-				stats.effects.triggered_block = true;
-				break;
-
-			case POWSTATE_INSTANT:	// handle instant powers
-				powers->activate(current_power, &stats, target);
-				break;
-		}
+	if (stats.effects.triggered_block && !blocking) {
+		stats.cur_state = AVATAR_STANCE;
+		stats.effects.triggered_block = false;
+		stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
 	}
 }
 
@@ -364,7 +383,7 @@ void Avatar::handlePower(const ActionData& action) {
  * @param action The actionbar power activated and the target.  action.power == 0 means no power.
  * @param restrictPowerUse rather or not to allow power usage on mouse1
  */
-void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
+void Avatar::logic(std::vector<ActionData> &action_queue, bool restrictPowerUse) {
 
 	// hazards are processed after Avatar and Enemy[]
 	// so process and clear sound effects from previous frames
@@ -402,7 +421,7 @@ void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
 	stats.logic();
 
 	bool allowed_to_move;
-	bool allowed_to_use_power;
+	bool allowed_to_use_power = true;
 
 	// check for revive
 	if (stats.hp <= 0 && stats.effects.revive) {
@@ -476,7 +495,7 @@ void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
 	if (stats.transform_type != "" && stats.transform_duration == 0) untransform();
 
 	// change the cursor if we're attacking
-	if (action.power == 0) {
+	if (action_queue.empty()) {
 		lock_cursor = false;
 	}
 	else if (lock_cursor) {
@@ -518,9 +537,6 @@ void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
 				lockAttack = false;
 			}
 
-			// handle power usage
-			if (allowed_to_use_power)
-				handlePower(action);
 			break;
 
 		case AVATAR_RUN:
@@ -555,10 +571,6 @@ void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
 				break;
 			}
 
-			// handle power usage
-			if (allowed_to_use_power)
-				handlePower(action);
-
 			if (activeAnimation->getName() != "run")
 				stats.cur_state = AVATAR_STANCE;
 
@@ -592,11 +604,12 @@ void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
 
 			setAnimation("block");
 
-			if (powers->powers[action.power].new_state != POWSTATE_BLOCK || activeAnimation->getName() != "block") {
+			if (activeAnimation->getName() != "block") {
 				stats.cur_state = AVATAR_STANCE;
 				stats.effects.triggered_block = false;
 				stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
 			}
+
 			break;
 
 		case AVATAR_HIT:
@@ -614,6 +627,8 @@ void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
 			break;
 
 		case AVATAR_DEAD:
+			allowed_to_use_power = false;
+
 			if (stats.effects.triggered_death) break;
 
 			if (stats.transformed) {
@@ -676,6 +691,10 @@ void Avatar::logic(const ActionData& action, bool restrictPowerUse) {
 		default:
 			break;
 	}
+
+	// handle power usage
+	if (allowed_to_use_power)
+		handlePower(action_queue);
 
 	// calc new cam position from player position
 	// cam is focused at player position

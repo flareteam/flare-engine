@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "GameState.h"
+#include "PowerManager.h"
 #include "Utils.h"
 
 class Avatar;
@@ -38,6 +39,8 @@ class MenuManager;
 class NPCManager;
 class QuestLog;
 class WidgetLabel;
+
+class ActionData;
 
 class Title {
 public:
@@ -99,6 +102,8 @@ private:
 	std::vector<Title> titles;
 
 	int nearest_npc;
+
+	std::vector<ActionData> action_queue;
 
 public:
 	GameStatePlay();

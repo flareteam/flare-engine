@@ -90,7 +90,7 @@ private:
 	vector<FPoint> path;
 	FPoint prev_target;
 
-	void handlePower(const ActionData& action);
+	void handlePower(std::vector<ActionData> &action_queue);
 
 	// visible power target
 	FPoint target_pos;
@@ -111,7 +111,7 @@ public:
 	void loadGraphics(std::vector<Layer_gfx> _img_gfx);
 	void loadStepFX(const std::string& stepname);
 
-	void logic(const ActionData& action, bool restrictPowerUse);
+	void logic(std::vector<ActionData> &action_queue, bool restrictPowerUse);
 	bool pressing_move();
 	void set_direction();
 	std::string log_msg;
@@ -121,6 +121,7 @@ public:
 	// transformation handling
 	void transform();
 	void untransform();
+	bool isTransforming() { return transform_triggered; }
 	bool setPowers;
 	bool revertPowers;
 	int untransform_power;

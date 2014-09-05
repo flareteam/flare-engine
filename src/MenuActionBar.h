@@ -66,7 +66,7 @@ public:
 	void renderAttention(int menu_id);
 	void logic();
 	void render();
-	ActionData checkAction();
+	void checkAction(std::vector<ActionData> &action_queue);
 	int checkDrag(Point mouse);
 	void checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l);
 	void drop(Point mouse, int power_index, bool rearranging);
