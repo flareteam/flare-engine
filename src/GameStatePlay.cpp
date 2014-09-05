@@ -88,8 +88,10 @@ GameStatePlay::GameStatePlay()
 		graphics->unref();
 	}
 
+	if (items == NULL)
+		items = new ItemManager();
+
 	powers = new PowerManager();
-	items = new ItemManager();
 	camp = new CampaignManager();
 	mapr = new MapRenderer();
 	pc = new Avatar();
