@@ -213,8 +213,8 @@ void LootManager::checkMapForLoot() {
 	for (unsigned i = mapr->loot.size(); i > 0; i--) {
 		ec = &mapr->loot[i-1];
 		if (ec->z == 0) {
-			p.x = ec->x + 0.5f;
-			p.y = ec->y + 0.5f;
+			Point src(ec->x, ec->y);
+			p = mapr->collider.get_random_neighbor(src, 1);
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
@@ -263,8 +263,8 @@ void LootManager::checkMapForLoot() {
 		if (possible_ids.size() > 1) chosen_loot = rand() % possible_ids.size();
 
 		ec = &mapr->loot[chosen_loot];
-		p.x = ec->x + 0.5f;
-		p.y = ec->y + 0.5f;
+		Point src(ec->x, ec->y);
+		p = mapr->collider.get_random_neighbor(src, 1);
 
 		new_loot.quantity = randBetween(ec->a,ec->b);
 

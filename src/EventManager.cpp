@@ -185,10 +185,8 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 
 	}
 	else if (infile.key == "loot") {
-		// @ATTR event.loot|[string,x(integer),y(integer),drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
+		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
 		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
 
 		// drop chance
 		std::string chance = infile.nextValue();
@@ -209,8 +207,6 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 				e = &evnt->components.back();
 				e->type = infile.key;
 				e->s = repeat_val;
-				e->x = toInt(infile.nextValue());
-				e->y = toInt(infile.nextValue());
 
 				chance = infile.nextValue();
 				if (chance == "fixed") e->z = 0;
@@ -443,7 +439,7 @@ bool EventManager::executeEvent(Event &ev) {
 	// set cooldown
 	ev.cooldown_ticks = ev.cooldown;
 
-	const Event_Component *ec;
+	Event_Component *ec;
 
 	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
@@ -513,6 +509,8 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->sids.push_back(sid);
 		}
 		else if (ec->type == "loot") {
+			ec->x = ev.hotspot.x;
+			ec->y = ev.hotspot.y;
 			mapr->loot.push_back(*ec);
 		}
 		else if (ec->type == "msg") {
