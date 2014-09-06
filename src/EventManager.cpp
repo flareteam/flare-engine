@@ -188,6 +188,11 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
 		e->s = infile.nextValue();
 
+		if (e->s == "currency")
+			e->c = CURRENCY_ID;
+		else if (toInt(e->s, -1) != -1)
+			e->c = toInt(e->s);
+
 		// drop chance
 		std::string chance = infile.nextValue();
 		if (chance == "fixed") e->z = 0;
@@ -206,7 +211,12 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = infile.key;
+
 				e->s = repeat_val;
+				if (e->s == "currency")
+					e->c = CURRENCY_ID;
+				else if (toInt(e->s, -1) != -1)
+					e->c = toInt(e->s);
 
 				chance = infile.nextValue();
 				if (chance == "fixed") e->z = 0;

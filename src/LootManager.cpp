@@ -219,7 +219,7 @@ void LootManager::checkMapForLoot() {
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
 			// an item id of 0 means we should drop currency instead
-			if (ec->s == "currency" || toInt(ec->s) == 0 || toInt(ec->s) == CURRENCY_ID) {
+			if (ec->c == 0 || ec->c == CURRENCY_ID) {
 				new_loot.item = CURRENCY_ID;
 				new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
 			}
@@ -240,7 +240,7 @@ void LootManager::checkMapForLoot() {
 		if (possible_ids.empty()) {
 			// Don't use item find bonus for currency
 			int max_chance = ec->z;
-			if (ec->s != "currency" && toInt(ec->s) != 0 && toInt(ec->s) != CURRENCY_ID)
+			if (ec->c != 0 && ec->c != CURRENCY_ID)
 				max_chance = ec->z * (hero->get(STAT_ITEM_FIND) + 100) / 100;
 
 			// find the rarest loot less than the chance roll
@@ -269,7 +269,7 @@ void LootManager::checkMapForLoot() {
 		new_loot.quantity = randBetween(ec->a,ec->b);
 
 		// an item id of 0 means we should drop currency instead
-		if (ec->s == "currency" || toInt(ec->s) == 0 || toInt(ec->s) == CURRENCY_ID) {
+		if (ec->c == 0 || ec->c == CURRENCY_ID) {
 			new_loot.item = CURRENCY_ID;
 			new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
 		}
