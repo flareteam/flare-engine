@@ -739,19 +739,21 @@ void StatBlock::loadHeroSFX() {
 
 void StatBlock::removeFromSummons() {
 
-	if(summoner != NULL) {
-		vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
+	if (!summons.empty()) {
+		if(summoner != NULL) {
+			vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
 
-		if(parent_ref != summoner->summons.end())
-			summoner->summons.erase(parent_ref);
+			if(parent_ref != summoner->summons.end())
+				summoner->summons.erase(parent_ref);
 
-		summoner = NULL;
+			summoner = NULL;
+		}
+
+		for (vector<StatBlock*>::iterator it=summons.begin(); it != summons.end(); ++it)
+			(*it)->summoner = NULL;
+
+		summons.clear();
 	}
-
-	for (vector<StatBlock*>::iterator it=summons.begin(); it != summons.end(); ++it)
-		(*it)->summoner = NULL;
-
-	summons.clear();
 }
 
 bool StatBlock::summonLimitReached(int power_id) const {
