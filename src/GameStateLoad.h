@@ -53,7 +53,6 @@ private:
 
 	TabList tablist;
 
-	ItemManager *items;
 	WidgetButton *button_exit;
 	WidgetButton *button_action;
 	WidgetButton *button_alternate;

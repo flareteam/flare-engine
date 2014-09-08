@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateNew.h"
 #include "ItemManager.h"
 #include "MenuConfirm.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsFileSystem.h"
@@ -678,7 +679,10 @@ GameStateLoad::~GameStateLoad() {
 	delete button_exit;
 	delete button_action;
 	delete button_alternate;
-	delete items;
+
+	if (!loaded)
+		delete items;
+
 	for (int slot=0; slot<GAME_SLOT_MAX; slot++) {
 		for (unsigned int i=0; i<sprites[slot].size(); i++) {
 			delete sprites[slot][i];
