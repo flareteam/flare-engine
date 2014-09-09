@@ -310,13 +310,12 @@ void MenuActionBar::render() {
  * Also displays disabled powers
  */
 void MenuActionBar::renderCooldowns() {
-
 	Rect item_src;
-	item_src.x = item_src.y = 0;
-	item_src.w = item_src.h = ICON_SIZE;
 
 	for (int i=0; i<12; i++) {
 		if (!slot_enabled[i]) {
+			item_src.x = item_src.y = 0;
+			item_src.w = item_src.h = ICON_SIZE;
 
 			// Wipe from bottom to top
 			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown) {
@@ -328,6 +327,7 @@ void MenuActionBar::renderCooldowns() {
 				disabled->setDest(slots[i]->pos);
 				render_device->render(disabled);
 			}
+
 			slots[i]->renderSelection();
 		}
 	}
