@@ -950,6 +950,9 @@ void MenuManager::logic() {
 			if (item_id != -1 && items->items[item_id].type == "consumable") {
 				act->slot_item_count[i] = inv->getItemCountCarried(item_id);
 				if (act->slot_item_count[i] == 0) {
+					if (act->slot_activated[i])
+						act->slots[i]->deactivate();
+
 					act->slot_enabled[i] = false;
 				}
 			}
