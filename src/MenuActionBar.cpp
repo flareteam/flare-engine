@@ -186,6 +186,7 @@ void MenuActionBar::clear() {
 		slot_item_count[i] = -1;
 		slot_enabled[i] = true;
 		locked[i] = false;
+		slot_activated[i] = false;
 	}
 
 	// clear menu notifications
@@ -310,13 +311,12 @@ void MenuActionBar::render() {
  * Also displays disabled powers
  */
 void MenuActionBar::renderCooldowns() {
-
 	Rect item_src;
-	item_src.x = item_src.y = 0;
-	item_src.w = item_src.h = ICON_SIZE;
 
 	for (int i=0; i<12; i++) {
 		if (!slot_enabled[i]) {
+			item_src.x = item_src.y = 0;
+			item_src.w = item_src.h = ICON_SIZE;
 
 			// Wipe from bottom to top
 			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown) {
@@ -328,6 +328,7 @@ void MenuActionBar::renderCooldowns() {
 				disabled->setDest(slots[i]->pos);
 				render_device->render(disabled);
 			}
+
 			slots[i]->renderSelection();
 		}
 	}
@@ -430,18 +431,22 @@ ActionData MenuActionBar::checkAction() {
 
 	// check click and hotkey actions
 	for (int i=0; i<12; i++) {
+		slot_activated[i] = false;
+
 		if (!slot_enabled[i])
 			continue;
 
 		// mouse/touch click
 		if (!NO_MOUSE && slots[i]->checkClick() == ACTIVATED) {
 			have_aim = false;
+			slot_activated[i] = true;
 			action.power = hotkeys_mod[i];
 		}
 
 		// joystick/keyboard action button
 		else if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == i) {
 			have_aim = false;
+			slot_activated[i] = true;
 			action.power = hotkeys_mod[i];
 		}
 

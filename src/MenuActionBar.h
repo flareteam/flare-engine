@@ -87,6 +87,7 @@ public:
 	int slot_item_count[12]; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.
 	bool slot_enabled[12];
 	bool requires_attention[4];
+	bool slot_activated[12];
 
 	// these store the area occupied by these hotslot sections.
 	// useful for detecting mouse interactions on those locations
