@@ -68,21 +68,6 @@ const int ENEMY_JOIN_COMBAT = 14;
 // final shared states
 const int ENEMY_POWER = 15; // enemy performing a power. anim/sfx based on power
 
-class EnemyLoot {
-public:
-	int id;
-	int chance;
-	int count_min;
-	int count_max;
-
-	EnemyLoot()
-		: id(0)
-		, chance(0)
-		, count_min(1)
-		, count_max(1) {
-	}
-};
-
 class StatBlock {
 private:
 	bool loadCoreStat(FileParser *infile);
@@ -278,7 +263,7 @@ public:
 	bool on_half_dead_casted;
 	bool suppress_hp; // hide an enemy HP bar
 
-	std::vector<EnemyLoot> loot;
+	std::vector<Event_Component> loot_table;
 
 	// for the teleport spell
 	bool teleportation;

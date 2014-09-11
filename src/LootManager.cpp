@@ -132,8 +132,8 @@ void LootManager::logic() {
 		}
 	}
 
-	checkEnemiesForLoot();
-	checkMapForLoot();
+	checkEnemiesForLoot(); // enemy loot
+	checkLoot(mapr->loot); // map loot
 }
 
 /**
@@ -174,25 +174,20 @@ void LootManager::checkEnemiesForLoot() {
 	istack.quantity = 1;
 
 	for (unsigned i=0; i < enemiesDroppingLoot.size(); ++i) {
-		const Enemy *e = enemiesDroppingLoot[i];
+		Enemy *e = enemiesDroppingLoot[i];
 		if (e->stats.quest_loot_id != 0) {
 			// quest loot
 			istack.item = e->stats.quest_loot_id;
 			addLoot(istack, e->stats.pos);
 		}
 		else { // random loot
-			//determine position
-			FPoint pos = hero->pos;
-			if (mapr->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false))
-				pos = e->stats.pos;
-
-			determineLootByEnemy(e, pos);
+			checkLoot(e->stats.loot_table, &e->stats.pos);
 		}
 	}
 	enemiesDroppingLoot.clear();
 }
 
-void LootManager::addEnemyLoot(const Enemy *e) {
+void LootManager::addEnemyLoot(Enemy *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 
@@ -200,21 +195,31 @@ void LootManager::addEnemyLoot(const Enemy *e) {
  * As map events occur, some might have a component named "loot"
  * Loot is created at component x,y
  */
-void LootManager::checkMapForLoot() {
+void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos) {
 	FPoint p;
 	Event_Component *ec;
 	ItemStack new_loot;
-	std::vector<int> possible_ids;
-	int common_chance = -1;
+	std::vector<Event_Component*> possible_ids;
 
 	int chance = rand() % 100;
 
 	// first drop any 'fixed' (0% chance) items
-	for (unsigned i = mapr->loot.size(); i > 0; i--) {
-		ec = &mapr->loot[i-1];
+	for (unsigned i = loot_table.size(); i > 0; i--) {
+		ec = &loot_table[i-1];
 		if (ec->z == 0) {
-			Point src(ec->x, ec->y);
+			Point src;
+			if (pos) {
+				src.x = pos->x;
+				src.y = pos->y;
+			}
+			else {
+				src.x = ec->x;
+				src.y = ec->y;
+			}
 			p = mapr->collider.get_random_neighbor(src, 1);
+
+			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false))
+				p = hero->pos;
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
@@ -229,42 +234,56 @@ void LootManager::checkMapForLoot() {
 
 			addLoot(new_loot, p);
 
-			mapr->loot.erase(mapr->loot.begin()+i-1);
+			loot_table.erase(loot_table.begin()+i-1);
 		}
 	}
 
 	// now pick up to 1 random item to drop
-	for (unsigned i = mapr->loot.size(); i > 0; i--) {
-		ec = &mapr->loot[i-1];
+	int threshold = hero->get(STAT_ITEM_FIND) + 100;
+	for (unsigned i = 0; i < loot_table.size(); i++) {
+		ec = &loot_table[i];
 
-		if (possible_ids.empty()) {
-			// Don't use item find bonus for currency
-			int max_chance = ec->z;
-			if (ec->c != 0 && ec->c != CURRENCY_ID)
-				max_chance = ec->z * (hero->get(STAT_ITEM_FIND) + 100) / 100;
+		int real_chance = ec->z;
 
-			// find the rarest loot less than the chance roll
-			if (chance < max_chance) {
-				possible_ids.push_back(i-1);
-				common_chance = ec->z;
-				i=mapr->loot.size(); // start searching from the beginning
-				continue;
+		if (ec->c != 0 && ec->c != CURRENCY_ID) {
+			real_chance = (int)((float)ec->z * (hero->get(STAT_ITEM_FIND) + 100) / 100.f);
+		}
+
+		if (real_chance >= chance) {
+			if (real_chance <= threshold) {
+				if (real_chance != threshold) {
+					possible_ids.clear();
+				}
+
+				threshold = real_chance;
+			}
+
+			if (chance <= threshold) {
+				possible_ids.push_back(ec);
 			}
 		}
-		else {
-			// include loot with identical chances
-			if (ec->z == common_chance)
-				possible_ids.push_back(i-1);
-		}
 	}
+
 	if (!possible_ids.empty()) {
 		// if there was more than one item with the same chance, randomly pick one of them
 		int chosen_loot = 0;
 		if (possible_ids.size() > 1) chosen_loot = rand() % possible_ids.size();
 
-		ec = &mapr->loot[chosen_loot];
-		Point src(ec->x, ec->y);
+		ec = possible_ids[chosen_loot];
+
+		Point src;
+		if (pos) {
+			src.x = pos->x;
+			src.y = pos->y;
+		}
+		else {
+			src.x = ec->x;
+			src.y = ec->y;
+		}
 		p = mapr->collider.get_random_neighbor(src, 1);
+
+		if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false))
+			p = hero->pos;
 
 		new_loot.quantity = randBetween(ec->a,ec->b);
 
@@ -280,70 +299,7 @@ void LootManager::checkMapForLoot() {
 		addLoot(new_loot, p);
 	}
 
-	mapr->loot.clear();
-}
-
-/**
- * This function is called when there definitely is a piece of loot dropping
- * calls addLoot()
- */
-void LootManager::determineLootByEnemy(const Enemy *e, FPoint pos) {
-	ItemStack new_loot;
-	std::vector<int> possible_ids;
-	std::vector<Point> possible_ranges;
-	Point range;
-	int common_chance = -1;
-
-	int chance = rand() % 100;
-
-	for (unsigned i=0; i<e->stats.loot.size(); i++) {
-		if (possible_ids.empty()) {
-			// Don't use item find bonus for currency
-			int max_chance = e->stats.loot[i].chance;
-			if (e->stats.loot[i].id != 0 && e->stats.loot[i].id != CURRENCY_ID)
-				max_chance = e->stats.loot[i].chance * (hero->get(STAT_ITEM_FIND) + 100) / 100;
-
-			// find the rarest loot less than the chance roll
-			if (chance < max_chance) {
-				possible_ids.push_back(e->stats.loot[i].id);
-				common_chance = e->stats.loot[i].chance;
-
-				range.x = e->stats.loot[i].count_min;
-				range.y = e->stats.loot[i].count_max;
-				possible_ranges.push_back(range);
-
-				i=-1; // start searching from the beginning
-				continue;
-			}
-		}
-		else {
-			// include loot with identical chances
-			if (e->stats.loot[i].chance == common_chance) {
-				possible_ids.push_back(e->stats.loot[i].id);
-
-				range.x = e->stats.loot[i].count_min;
-				range.y = e->stats.loot[i].count_max;
-				possible_ranges.push_back(range);
-
-			}
-		}
-	}
-
-	if (!possible_ids.empty()) {
-
-		int roll = rand() % possible_ids.size();
-		new_loot.item = possible_ids[roll];
-		new_loot.quantity = randBetween(possible_ranges[roll].x, possible_ranges[roll].y);
-
-		// an item id of 0 means we should drop currency instead
-		if (new_loot.item == 0 || new_loot.item == CURRENCY_ID) {
-			new_loot.item = CURRENCY_ID;
-			new_loot.quantity = (new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND))) / 100;
-		}
-
-		addLoot(new_loot, pos);
-
-	}
+	loot_table.clear();
 }
 
 void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
