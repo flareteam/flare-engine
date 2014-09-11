@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define LOOT_MANAGER_H
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "ItemManager.h"
 #include "Loot.h"
 #include "Settings.h"
@@ -83,6 +84,8 @@ public:
 	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
+
+	void parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> &ec_list);
 
 	int tooltip_margin; // pixels between loot drop center and label
 	bool full_msg;

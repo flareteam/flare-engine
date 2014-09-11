@@ -186,49 +186,8 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 	}
 	else if (infile.key == "loot") {
 		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
-		e->s = infile.nextValue();
-
-		if (e->s == "currency")
-			e->c = CURRENCY_ID;
-		else if (toInt(e->s, -1) != -1)
-			e->c = toInt(e->s);
-
-		// drop chance
-		std::string chance = infile.nextValue();
-		if (chance == "fixed") e->z = 0;
-		else e->z = toInt(chance);
-
-		// quantity min/max
-		e->a = toInt(infile.nextValue());
-		if (e->a < 1) e->a = 1;
-		e->b = toInt(infile.nextValue());
-		if (e->b < e->a) e->b = e->a;
-
-		// add repeating loot
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
-			while (repeat_val != "") {
-				evnt->components.push_back(Event_Component());
-				e = &evnt->components.back();
-				e->type = infile.key;
-
-				e->s = repeat_val;
-				if (e->s == "currency")
-					e->c = CURRENCY_ID;
-				else if (toInt(e->s, -1) != -1)
-					e->c = toInt(e->s);
-
-				chance = infile.nextValue();
-				if (chance == "fixed") e->z = 0;
-				else e->z = toInt(chance);
-
-				e->a = toInt(infile.nextValue());
-				if (e->a < 1) e->a = 1;
-				e->b = toInt(infile.nextValue());
-				if (e->b < e->a) e->b = e->a;
-
-				repeat_val = infile.nextValue();
-			}
+			loot->parseLoot(infile, e, evnt->components);
 		}
 	}
 	else if (infile.key == "msg") {
