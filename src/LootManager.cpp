@@ -170,19 +170,20 @@ void LootManager::renderTooltips(FPoint cam) {
  * manager to create loot based on that creature's level and position.
  */
 void LootManager::checkEnemiesForLoot() {
-	ItemStack istack;
-	istack.quantity = 1;
-
 	for (unsigned i=0; i < enemiesDroppingLoot.size(); ++i) {
 		Enemy *e = enemiesDroppingLoot[i];
+
 		if (e->stats.quest_loot_id != 0) {
 			// quest loot
-			istack.item = e->stats.quest_loot_id;
-			addLoot(istack, e->stats.pos);
+			Event_Component ec;
+			ec.c = e->stats.quest_loot_id;
+			ec.a = ec.b = 1;
+			ec.z = 0;
+
+			e->stats.loot_table.push_back(ec);
 		}
-		else { // random loot
-			checkLoot(e->stats.loot_table, &e->stats.pos);
-		}
+
+		checkLoot(e->stats.loot_table, &e->stats.pos);
 	}
 	enemiesDroppingLoot.clear();
 }
@@ -201,6 +202,10 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 	ItemStack new_loot;
 	std::vector<Event_Component*> possible_ids;
 
+	// to prevent dropping multiple loot stacks on the same tile,
+	// we block tiles that have loot dropped on them
+	std::vector<Point> tiles_to_unblock;
+
 	int chance = rand() % 100;
 
 	// first drop any 'fixed' (0% chance) items
@@ -218,8 +223,16 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			}
 			p = mapr->collider.get_random_neighbor(src, 1);
 
-			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false))
+			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
 				p = hero->pos;
+			}
+			else {
+				if (src.x == p.x && src.y == p.y)
+					p = hero->pos;
+
+				mapr->collider.block(p.x, p.y, false);
+				tiles_to_unblock.push_back(floor(p));
+			}
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
@@ -229,7 +242,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 				new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
 			}
 			else {
-				new_loot.item = toInt(ec->s);
+				new_loot.item = ec->c;
 			}
 
 			addLoot(new_loot, p);
@@ -280,10 +293,18 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			src.x = ec->x;
 			src.y = ec->y;
 		}
-		p = mapr->collider.get_random_neighbor(src, 1);
+		p = mapr->collider.get_random_neighbor(src, 1, true);
 
-		if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false))
+		if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
 			p = hero->pos;
+		}
+		else {
+			if (src.x == p.x && src.y == p.y)
+				p = hero->pos;
+
+			mapr->collider.block(p.x, p.y, false);
+			tiles_to_unblock.push_back(floor(p));
+		}
 
 		new_loot.quantity = randBetween(ec->a,ec->b);
 
@@ -293,13 +314,17 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
 		}
 		else {
-			new_loot.item = toInt(ec->s);
+			new_loot.item = ec->c;
 		}
 
 		addLoot(new_loot, p);
 	}
 
 	loot_table.clear();
+
+	for (unsigned i=0; i<tiles_to_unblock.size(); i++) {
+		mapr->collider.unblock(tiles_to_unblock[i].x, tiles_to_unblock[i].y);
+	}
 }
 
 void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
