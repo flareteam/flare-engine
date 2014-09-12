@@ -55,6 +55,8 @@ private:
 
 	// functions
 	void loadGraphics();
+	void loadLootTables();
+	void getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list);
 
 	SoundManager::SoundID sfx_loot;
 
@@ -63,6 +65,9 @@ private:
 
 	// enemies which should drop loot, but didnt yet.
 	std::vector<class Enemy*> enemiesDroppingLoot;
+
+	// loot tables defined in files under "loot/"
+	std::map<std::string, std::vector<Event_Component> > loot_tables;
 
 public:
 	LootManager(StatBlock *_hero);

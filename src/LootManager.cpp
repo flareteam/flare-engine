@@ -89,6 +89,8 @@ LootManager::LootManager(StatBlock *_hero)
 	loadGraphics();
 
 	full_msg = false;
+
+	loadLootTables();
 }
 
 /**
@@ -496,6 +498,20 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 		e->c = CURRENCY_ID;
 	else if (toInt(e->s, -1) != -1)
 		e->c = toInt(e->s);
+	else if (ec_list) {
+		// load entire loot table
+		std::string filename = e->s;
+
+		// remove the last event component, since getLootTable() will create a new one
+		if (e == &ec_list->back())
+			ec_list->pop_back();
+
+		getLootTable(filename, ec_list);
+		return;
+	}
+
+	// make sure the type is "loot"
+	e->type = "loot";
 
 	// drop chance
 	std::string chance = infile.nextValue();
@@ -504,9 +520,9 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 
 	// quantity min/max
 	e->a = toInt(infile.nextValue());
-	if (e->a < 1) e->a = 1;
+	clampFloor(e->a, 1);
 	e->b = toInt(infile.nextValue());
-	if (e->b < e->a) e->b = e->a;
+	clampFloor(e->b, e->a);
 
 	// add repeating loot
 	if (ec_list) {
@@ -527,11 +543,89 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 			else ec->z = toInt(chance);
 
 			ec->a = toInt(infile.nextValue());
-			if (ec->a < 1) ec->a = 1;
+			clampFloor(ec->a, 1);
 			ec->b = toInt(infile.nextValue());
-			if (ec->b < ec->a) ec->b = ec->a;
+			clampFloor(ec->b, ec->a);
 
 			repeat_val = infile.nextValue();
+		}
+	}
+}
+
+void LootManager::loadLootTables() {
+	std::vector<std::string> filenames = mods->list("loot", false);
+
+	for (unsigned i=0; i<filenames.size(); i++) {
+		FileParser infile;
+		if (!infile.open(filenames[i]))
+			continue;
+
+		std::vector<Event_Component> *ec_list = &loot_tables[filenames[i]];
+		Event_Component *ec = &ec_list->back();
+		bool skip_to_next = false;
+
+		while (infile.next()) {
+			if (infile.section == "") {
+				if (infile.key == "loot") {
+					ec_list->push_back(Event_Component());
+					ec = &ec_list->back();
+					parseLoot(infile, ec, ec_list);
+				}
+			}
+			else if (infile.section == "loot") {
+				if (infile.new_section) {
+					ec_list->push_back(Event_Component());
+					ec = &ec_list->back();
+					ec->type = "loot";
+					skip_to_next = false;
+				}
+
+				if (skip_to_next)
+					continue;
+
+				if (infile.key == "id") {
+					ec->s = infile.val;
+
+					if (ec->s == "currency")
+						ec->c = CURRENCY_ID;
+					else if (toInt(ec->s, -1) != -1)
+						ec->c = toInt(ec->s);
+					else {
+						skip_to_next = true;
+						infile.error("LootManager: Invalid item id for loot.");
+					}
+				}
+				else if (infile.key == "chance") {
+					if (infile.val == "fixed")
+						ec->z = 0;
+					else
+						ec->z = toInt(infile.val);
+				}
+				else if (infile.key == "quantity") {
+					ec->a = toInt(infile.nextValue());
+					clampFloor(ec->a, 1);
+					ec->b = toInt(infile.nextValue());
+					clampFloor(ec->b, ec->a);
+				}
+			}
+		}
+
+		infile.close();
+	}
+}
+
+void LootManager::getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list) {
+	if (!ec_list)
+		return;
+
+	std::map<std::string, std::vector<Event_Component> >::iterator it;
+	for (it = loot_tables.begin(); it != loot_tables.end(); ++it) {
+		if (it->first == filename) {
+			std::vector<Event_Component> *loot_defs = &it->second;
+			for (unsigned i=0; i<loot_defs->size(); ++i) {
+				ec_list->push_back((*loot_defs)[i]);
+			}
+			break;
 		}
 	}
 }
