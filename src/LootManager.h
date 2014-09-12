@@ -84,7 +84,7 @@ public:
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 
-	void parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> &ec_list);
+	void parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list);
 
 	int tooltip_margin; // pixels between loot drop center and label
 	bool full_msg;

@@ -284,7 +284,7 @@ void StatBlock::load(const string& filename) {
 			// loot=[id],[percent_chance],[count_min],[count_max]
 
 			loot_table.push_back(Event_Component());
-			loot->parseLoot(infile, &loot_table.back(), loot_table);
+			loot->parseLoot(infile, &loot_table.back(), &loot_table);
 		}
 		// @ATTR defeat_status|string|Campaign status to set upon death.
 		else if (infile.key == "defeat_status") defeat_status = infile.val;

@@ -186,9 +186,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 	}
 	else if (infile.key == "loot") {
 		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
-		if (evnt) {
-			loot->parseLoot(infile, e, evnt->components);
-		}
+		loot->parseLoot(infile, e, &evnt->components);
 	}
 	else if (infile.key == "msg") {
 		// @ATTR event.msg|string|Adds a message to be displayed for the event.

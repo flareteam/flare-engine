@@ -487,7 +487,7 @@ void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_de
 	}
 }
 
-void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> &ec_list) {
+void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list) {
 	if (e == NULL) return;
 
 	e->s = infile.nextValue();
@@ -509,28 +509,30 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 	if (e->b < e->a) e->b = e->a;
 
 	// add repeating loot
-	std::string repeat_val = infile.nextValue();
-	while (repeat_val != "") {
-		ec_list.push_back(Event_Component());
-		Event_Component *ec = &ec_list.back();
-		ec->type = infile.key;
+	if (ec_list) {
+		std::string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			ec_list->push_back(Event_Component());
+			Event_Component *ec = &ec_list->back();
+			ec->type = infile.key;
 
-		ec->s = repeat_val;
-		if (ec->s == "currency")
-			ec->c = CURRENCY_ID;
-		else if (toInt(ec->s, -1) != -1)
-			ec->c = toInt(e->s);
+			ec->s = repeat_val;
+			if (ec->s == "currency")
+				ec->c = CURRENCY_ID;
+			else if (toInt(ec->s, -1) != -1)
+				ec->c = toInt(e->s);
 
-		chance = infile.nextValue();
-		if (chance == "fixed") ec->z = 0;
-		else ec->z = toInt(chance);
+			chance = infile.nextValue();
+			if (chance == "fixed") ec->z = 0;
+			else ec->z = toInt(chance);
 
-		ec->a = toInt(infile.nextValue());
-		if (ec->a < 1) ec->a = 1;
-		ec->b = toInt(infile.nextValue());
-		if (ec->b < ec->a) ec->b = ec->a;
+			ec->a = toInt(infile.nextValue());
+			if (ec->a < 1) ec->a = 1;
+			ec->b = toInt(infile.nextValue());
+			if (ec->b < ec->a) ec->b = ec->a;
 
-		repeat_val = infile.nextValue();
+			repeat_val = infile.nextValue();
+		}
 	}
 }
 
