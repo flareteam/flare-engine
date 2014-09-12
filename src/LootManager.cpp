@@ -46,7 +46,10 @@ using namespace std;
 
 LootManager::LootManager(StatBlock *_hero)
 	: sfx_loot(0)
-	, tooltip_margin(0) {
+	, drop_max(1)
+	, drop_radius(1)
+	, tooltip_margin(0)
+{
 	hero = _hero; // we need the player's position for dropping loot in a valid spot
 
 	tip = new WidgetTooltip();
@@ -75,6 +78,16 @@ LootManager::LootManager(StatBlock *_hero)
 			else if (infile.key == "sfx_loot") {
 				// @ATTR sfx_loot|string|Sound effect for dropping loot.
 				sfx_loot =  snd->load(infile.val, "LootManager dropping loot");
+			}
+			else if (infile.key == "drop_max") {
+				// @ATTR drop_max|integer|The maximum number of random item stacks that can drop at once
+				drop_max = toInt(infile.val);
+				clampFloor(drop_max, 1);
+			}
+			else if (infile.key == "drop_radius") {
+				// @ATTR drop_radius|integer|The distance (in tiles) away from the origin that loot can drop
+				drop_radius = toInt(infile.val);
+				clampFloor(drop_radius, 1);
 			}
 			else {
 				infile.error("LootManager: '%s' is not a valid key.", infile.key.c_str());
@@ -134,8 +147,14 @@ void LootManager::logic() {
 		}
 	}
 
-	checkEnemiesForLoot(); // enemy loot
-	checkLoot(mapr->loot); // map loot
+	checkEnemiesForLoot();
+	checkMapForLoot();
+
+	// clear any tiles that were blocked from dropped loot
+	for (unsigned i=0; i<tiles_to_unblock.size(); i++) {
+		mapr->collider.unblock(tiles_to_unblock[i].x, tiles_to_unblock[i].y);
+	}
+	tiles_to_unblock.clear();
 }
 
 /**
@@ -178,6 +197,7 @@ void LootManager::checkEnemiesForLoot() {
 		if (e->stats.quest_loot_id != 0) {
 			// quest loot
 			Event_Component ec;
+			ec.type = "loot";
 			ec.c = e->stats.quest_loot_id;
 			ec.a = ec.b = 1;
 			ec.z = 0;
@@ -185,28 +205,43 @@ void LootManager::checkEnemiesForLoot() {
 			e->stats.loot_table.push_back(ec);
 		}
 
-		checkLoot(e->stats.loot_table, &e->stats.pos);
+		if (!e->stats.loot_table.empty()) {
+			unsigned drops = (rand() % drop_max) + 1;
+
+			for (unsigned j=0; j<drops; ++j) {
+				checkLoot(e->stats.loot_table, &e->stats.pos);
+			}
+
+			e->stats.loot_table.clear();
+		}
 	}
 	enemiesDroppingLoot.clear();
+}
+
+/**
+ * As map events occur, some might have a component named "loot"
+ */
+void LootManager::checkMapForLoot() {
+	if (!mapr->loot.empty()) {
+		unsigned drops = (rand() % drop_max) + 1;
+
+		for (unsigned i=0; i<drops; ++i) {
+			checkLoot(mapr->loot);
+		}
+
+		mapr->loot.clear();
+	}
 }
 
 void LootManager::addEnemyLoot(Enemy *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 
-/**
- * As map events occur, some might have a component named "loot"
- * Loot is created at component x,y
- */
 void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos) {
 	FPoint p;
 	Event_Component *ec;
 	ItemStack new_loot;
 	std::vector<Event_Component*> possible_ids;
-
-	// to prevent dropping multiple loot stacks on the same tile,
-	// we block tiles that have loot dropped on them
-	std::vector<Point> tiles_to_unblock;
 
 	int chance = rand() % 100;
 
@@ -223,7 +258,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 				src.x = ec->x;
 				src.y = ec->y;
 			}
-			p = mapr->collider.get_random_neighbor(src, 1);
+			p = mapr->collider.get_random_neighbor(src, drop_radius);
 
 			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
 				p = hero->pos;
@@ -281,8 +316,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 
 	if (!possible_ids.empty()) {
 		// if there was more than one item with the same chance, randomly pick one of them
-		int chosen_loot = 0;
-		if (possible_ids.size() > 1) chosen_loot = rand() % possible_ids.size();
+		int chosen_loot = rand() % possible_ids.size();
 
 		ec = possible_ids[chosen_loot];
 
@@ -295,7 +329,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			src.x = ec->x;
 			src.y = ec->y;
 		}
-		p = mapr->collider.get_random_neighbor(src, 1, true);
+		p = mapr->collider.get_random_neighbor(src, drop_radius);
 
 		if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
 			p = hero->pos;
@@ -320,12 +354,6 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		}
 
 		addLoot(new_loot, p);
-	}
-
-	loot_table.clear();
-
-	for (unsigned i=0; i<tiles_to_unblock.size(); i++) {
-		mapr->collider.unblock(tiles_to_unblock[i].x, tiles_to_unblock[i].y);
 	}
 }
 

@@ -55,10 +55,16 @@ private:
 
 	// functions
 	void loadGraphics();
+	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL);
+	void checkEnemiesForLoot();
+	void checkMapForLoot();
 	void loadLootTables();
 	void getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list);
 
 	SoundManager::SoundID sfx_loot;
+
+	int drop_max;
+	int drop_radius;
 
 	// loot refers to ItemManager indices
 	std::vector<Loot> loot;
@@ -69,6 +75,10 @@ private:
 	// loot tables defined in files under "loot/"
 	std::map<std::string, std::vector<Event_Component> > loot_tables;
 
+	// to prevent dropping multiple loot stacks on the same tile,
+	// we block tiles that have loot dropped on them
+	std::vector<Point> tiles_to_unblock;
+
 public:
 	LootManager(StatBlock *_hero);
 	LootManager(const LootManager &copy); // not implemented
@@ -77,8 +87,6 @@ public:
 	void handleNewMap();
 	void logic();
 	void renderTooltips(FPoint cam);
-	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL);
-	void checkEnemiesForLoot();
 
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(Enemy *e);
