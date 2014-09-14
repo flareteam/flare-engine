@@ -646,7 +646,10 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		tip.addText("\n" + msg->get("Set: ") + msg->get(item_sets[items[stack.item].set].name), set.color);
 
 		while (bonus_counter < set.bonus.size() && set.bonus[bonus_counter].bonus_stat != "") {
-			if (set.bonus[bonus_counter].bonus_val > 0) {
+			if (set.bonus[bonus_counter].bonus_stat == "speed") {
+				modifier = msg->get("%d%% Speed", set.bonus[bonus_counter].bonus_val);
+			}
+			else if (set.bonus[bonus_counter].bonus_val > 0) {
 				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Increases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
 			}
 			else {
