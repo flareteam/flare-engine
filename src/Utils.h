@@ -110,7 +110,7 @@ public:
 	std::string type;
 	int icon;
 	std::string animation;
-	bool additive;
+	bool can_stack;
 	bool render_above;
 
 	EffectDef()
@@ -118,7 +118,7 @@ public:
 		, type("")
 		, icon(-1)
 		, animation("")
-		, additive(false)
+		, can_stack(true)
 		, render_above(false) {
 	}
 };

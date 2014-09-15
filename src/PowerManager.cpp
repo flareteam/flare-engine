@@ -93,9 +93,9 @@ void PowerManager::loadEffects() {
 			// @ATTR animation|string|The filename of effect animation.
 			effects[input_name].animation = infile.val;
 		}
-		else if (infile.key == "additive") {
-			// @ATTR additive|bool|Effect is cumulative
-			effects[input_name].additive = toBool(infile.val);
+		else if (infile.key == "can_stack") {
+			// @ATTR can_stack|bool|Allows multiple instances of this effect
+			effects[input_name].can_stack = toBool(infile.val);
 		}
 		else if (infile.key == "render_above") {
 			// @ATTR render_above|bool|Effect is rendered above

@@ -198,23 +198,13 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 		else if (effect.type == "stun") return;
 	}
 
-	for (unsigned i=0; i<effect_list.size(); i++) {
-		if (effect_list[i].name == effect.name) {
-			if (trigger > -1 && effect_list[i].trigger == trigger) return; // trigger effects can only be cast once per trigger
-			if (effect_list[i].duration <= duration && effect_list[i].type != "death_sentence") {
-				effect_list[i].ticks = effect_list[i].duration = duration;
-				if (effect_list[i].animation) effect_list[i].animation->reset();
-			}
-			if (effect_list[i].duration > duration && effect_list[i].type == "death_sentence") {
-				effect_list[i].ticks = effect_list[i].duration = duration;
-				if (effect_list[i].animation) effect_list[i].animation->reset();
-			}
-			if (effect.additive) break; // this effect will stack
-			if (effect_list[i].magnitude_max <= magnitude) {
-				effect_list[i].magnitude = effect_list[i].magnitude_max = magnitude;
-				if (effect_list[i].animation) effect_list[i].animation->reset();
-			}
-			return; // we already have this effect
+	for (unsigned i=effect_list.size(); i>0; i--) {
+		if (effect_list[i-1].name == effect.name) {
+			if (trigger > -1 && effect_list[i-1].trigger == trigger)
+				return; // trigger effects can only be cast once per trigger
+
+			if (!effect.can_stack)
+				removeEffect(i-1);
 		}
 		// if we're adding an immunity effect, remove all negative effects
 		if (effect.type == "immunity") {
@@ -305,13 +295,13 @@ int EffectManager::damageShields(int dmg) {
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
 		if (effect_list[i].magnitude_max > 0 && effect_list[i].type == "shield") {
-			effect_list[i].magnitude -= dmg;
+			effect_list[i].magnitude -= over_dmg;
 			if (effect_list[i].magnitude < 0) {
-				if (abs(effect_list[i].magnitude) < over_dmg) over_dmg = abs(effect_list[i].magnitude);
+				over_dmg = abs(effect_list[i].magnitude);
 				effect_list[i].magnitude = 0;
 			}
 			else {
-				over_dmg = 0;
+				return 0;
 			}
 		}
 	}
