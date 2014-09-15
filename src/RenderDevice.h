@@ -181,6 +181,7 @@ public:
 	virtual void destroyContext() = 0;
 	virtual Rect getContextSize() = 0;
 	virtual void listModes(std::vector<Rect> &modes) = 0;
+	virtual Rect nativeResolution() = 0;
 	virtual void setGamma(float g) = 0;
 
 	/** factory functions for Image */
