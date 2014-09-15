@@ -74,6 +74,8 @@ void PowerManager::loadEffects() {
 			skippingEntry = (input_name == "");
 			if (skippingEntry)
 				infile.error("PowerManager: Effect without a name, skipping");
+			else
+				effects[input_name].name = input_name;
 			continue;
 		}
 		if (skippingEntry)
@@ -752,7 +754,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 			int passive_id = 0;
 			if (powers[power_index].passive) passive_id = power_index;
 
-			src_stats->effects.addEffect(effect_index, effects[effect_index].icon, duration, magnitude, effects[effect_index].type, effects[effect_index].animation, effects[effect_index].additive, false, powers[power_index].passive_trigger, effects[effect_index].render_above, passive_id, source_type);
+			src_stats->effects.addEffect(effects[effect_index], duration, magnitude, false, powers[power_index].passive_trigger, passive_id, source_type);
 		}
 
 		// If there's a sound effect, play it here

@@ -909,7 +909,7 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 			std::string id = item.bonus_stat[bonus_counter];
 
 			if (powers->effects.find(id) != powers->effects.end())
-				stats->effects.addEffect(id, powers->effects[id].icon, 0, item.bonus_val[bonus_counter], powers->effects[id].type, powers->effects[id].animation, powers->effects[id].additive, true, -1, powers->effects[id].render_above, 0, SOURCE_TYPE_HERO);
+				stats->effects.addEffect(powers->effects[id], 0, item.bonus_val[bonus_counter], true, -1, 0, SOURCE_TYPE_HERO);
 
 			bonus_counter++;
 		}
@@ -952,7 +952,7 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 			std::string id = temp_set.bonus[bonus_counter].bonus_stat;
 
 			if (powers->effects.find(id) != powers->effects.end())
-				stats->effects.addEffect(id, powers->effects[id].icon, 0, temp_set.bonus[bonus_counter].bonus_val, powers->effects[id].type, powers->effects[id].animation, powers->effects[id].additive, true, -1, powers->effects[id].render_above, 0, SOURCE_TYPE_HERO);
+				stats->effects.addEffect(powers->effects[id], 0, temp_set.bonus[bonus_counter].bonus_val, true, -1, 0, SOURCE_TYPE_HERO);
 		}
 	}
 }

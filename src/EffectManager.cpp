@@ -46,7 +46,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	effect_list.resize(emSource.effect_list.size());
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
-		effect_list[i].id = emSource.effect_list[i].id;
+		effect_list[i].name = emSource.effect_list[i].name;
 		effect_list[i].icon = emSource.effect_list[i].icon;
 		effect_list[i].ticks = emSource.effect_list[i].ticks;
 		effect_list[i].duration = emSource.effect_list[i].duration;
@@ -190,16 +190,16 @@ void EffectManager::logic() {
 	}
 }
 
-void EffectManager::addEffect(std::string id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type) {
+void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bool item, int trigger, int passive_id, int source_type) {
 	// if we're already immune, don't add negative effects
 	if (immunity) {
-		if (type == "damage") return;
-		else if (type == "speed" && magnitude < 100) return;
-		else if (type == "stun") return;
+		if (effect.type == "damage") return;
+		else if (effect.type == "speed" && magnitude < 100) return;
+		else if (effect.type == "stun") return;
 	}
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
-		if (effect_list[i].id == id) {
+		if (effect_list[i].name == effect.name) {
 			if (trigger > -1 && effect_list[i].trigger == trigger) return; // trigger effects can only be cast once per trigger
 			if (effect_list[i].duration <= duration && effect_list[i].type != "death_sentence") {
 				effect_list[i].ticks = effect_list[i].duration = duration;
@@ -209,7 +209,7 @@ void EffectManager::addEffect(std::string id, int icon, int duration, int magnit
 				effect_list[i].ticks = effect_list[i].duration = duration;
 				if (effect_list[i].animation) effect_list[i].animation->reset();
 			}
-			if (additive) break; // this effect will stack
+			if (effect.additive) break; // this effect will stack
 			if (effect_list[i].magnitude_max <= magnitude) {
 				effect_list[i].magnitude = effect_list[i].magnitude_max = magnitude;
 				if (effect_list[i].animation) effect_list[i].animation->reset();
@@ -217,29 +217,30 @@ void EffectManager::addEffect(std::string id, int icon, int duration, int magnit
 			return; // we already have this effect
 		}
 		// if we're adding an immunity effect, remove all negative effects
-		if (type == "immunity") {
+		if (effect.type == "immunity") {
 			clearNegativeEffects();
 		}
 	}
 
 	Effect e;
 
-	e.id = id;
-	e.icon = icon;
+	e.name = effect.name;
+	e.icon = effect.icon;
+	e.type = effect.type;
+	e.render_above = effect.render_above;
+
+	if (effect.animation != "") {
+		anim->increaseCount(effect.animation);
+		e.animation = loadAnimation(effect.animation);
+		e.animation_name = effect.animation;
+	}
+
 	e.ticks = e.duration = duration;
 	e.magnitude = e.magnitude_max = magnitude;
-	e.type = type;
 	e.item = item;
 	e.trigger = trigger;
-	e.render_above = render_above;
 	e.passive_id = passive_id;
 	e.source_type = source_type;
-
-	if (animation != "") {
-		anim->increaseCount(animation);
-		e.animation = loadAnimation(animation);
-		e.animation_name = animation;
-	}
 
 	effect_list.push_back(e);
 }

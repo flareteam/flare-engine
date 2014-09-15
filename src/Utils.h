@@ -104,6 +104,25 @@ public:
 	}
 };
 
+class EffectDef {
+public:
+	std::string name;
+	std::string type;
+	int icon;
+	std::string animation;
+	bool additive;
+	bool render_above;
+
+	EffectDef()
+		: name("")
+		, type("")
+		, icon(-1)
+		, animation("")
+		, additive(false)
+		, render_above(false) {
+	}
+};
+
 Point floor(FPoint fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
 Point map_to_screen(float x, float y, float camx, float camy);

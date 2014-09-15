@@ -36,7 +36,7 @@ class Hazard;
 
 class Effect {
 public:
-	std::string id;
+	std::string name;
 	int icon;
 	int ticks;
 	int duration;
@@ -52,7 +52,7 @@ public:
 	int source_type;
 
 	Effect()
-		: id("")
+		: name("")
 		, icon(-1)
 		, ticks(0)
 		, duration(-1)
@@ -85,7 +85,7 @@ public:
 	EffectManager& operator= (const EffectManager &emSource);
 	void clearStatus();
 	void logic();
-	void addEffect(std::string id, int icon, int duration, int magnitude, std::string type, std::string animation, bool additive, bool item, int trigger, bool render_above, int passive_id, int source_type);
+	void addEffect(EffectDef &effect, int duration, int magnitude, bool item, int trigger, int passive_id, int source_type);
 	void removeEffectType(std::string type);
 	void removeEffectPassive(int id);
 	void clearEffects();
