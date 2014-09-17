@@ -564,7 +564,14 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 			if (ec->s == "currency")
 				ec->c = CURRENCY_ID;
 			else if (toInt(ec->s, -1) != -1)
-				ec->c = toInt(e->s);
+				ec->c = toInt(ec->s);
+			else {
+				// remove the last event component, since getLootTable() will create a new one
+				ec_list->pop_back();
+
+				getLootTable(repeat_val, ec_list);
+				return;
+			}
 
 			chance = infile.nextValue();
 			if (chance == "fixed") ec->z = 0;
