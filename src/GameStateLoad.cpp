@@ -45,6 +45,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	, loading_requested(false)
 	, loading(false)
 	, loaded(false)
+	, delete_items(true)
 	, current_frame(0)
 	, frame_ticker(0)
 	, stance_ticks_per_frame(1)
@@ -52,7 +53,10 @@ GameStateLoad::GameStateLoad() : GameState()
 	, stance_type(PLAY_ONCE)
 	, load_game(false)
 	, selected_slot(-1) {
-	items = new ItemManager();
+
+	if (items == NULL)
+		items = new ItemManager();
+
 	label_loading = new WidgetLabel();
 
 	for (int i = 0; i < GAME_SLOT_MAX; i++) {
@@ -437,6 +441,7 @@ void GameStateLoad::logic() {
 				GameStateNew* newgame = new GameStateNew();
 				newgame->game_slot = selected_slot + 1;
 				requestedGameState = newgame;
+				delete_items = false;
 			}
 			else {
 				loading_requested = true;
@@ -510,6 +515,7 @@ void GameStateLoad::logic() {
 
 void GameStateLoad::logicLoading() {
 	// load an existing game
+	delete_items = false;
 	GameStatePlay* play = new GameStatePlay();
 	play->resetGame();
 	play->game_slot = selected_slot + 1;
@@ -680,8 +686,10 @@ GameStateLoad::~GameStateLoad() {
 	delete button_action;
 	delete button_alternate;
 
-	if (!loaded)
+	if (delete_items) {
 		delete items;
+		items = NULL;
+	}
 
 	for (int slot=0; slot<GAME_SLOT_MAX; slot++) {
 		for (unsigned int i=0; i<sprites[slot].size(); i++) {

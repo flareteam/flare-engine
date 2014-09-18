@@ -81,6 +81,7 @@ private:
 	bool show_classlist;
 	TooltipData tip_buf;
 	bool modified_name;
+	bool delete_items;
 
 	Color color_normal;
 

@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateLoad.h"
 #include "GameStatePlay.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "TooltipData.h"
 #include "UtilsParsing.h"
@@ -52,6 +53,7 @@ GameStateNew::GameStateNew()
 	, portrait_border(NULL)
 	, show_classlist(true)
 	, modified_name(false)
+	, delete_items(true)
 	, game_slot(0)
 {
 	// set up buttons
@@ -293,20 +295,23 @@ void GameStateNew::logic() {
 	}
 
 	if ((inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) || button_exit->checkClick()) {
-		inpt->lock[CANCEL] = true;
+		delete_items = false;
+		if (inpt->pressing[CANCEL])
+			inpt->lock[CANCEL] = true;
 		delete requestedGameState;
 		requestedGameState = new GameStateLoad();
 	}
 
 	if (button_create->checkClick()) {
 		// start the new game
+		delete_items = false;
 		GameStatePlay* play = new GameStatePlay();
-		Avatar *pc = play->getAvatar();
-		pc->stats.gfx_base = base[current_option];
-		pc->stats.gfx_head = head[current_option];
-		pc->stats.gfx_portrait = portrait[current_option];
-		pc->stats.name = input_name->getText();
-		pc->stats.permadeath = button_permadeath->isChecked();
+		Avatar *avatar = play->getAvatar();
+		avatar->stats.gfx_base = base[current_option];
+		avatar->stats.gfx_head = head[current_option];
+		avatar->stats.gfx_portrait = portrait[current_option];
+		avatar->stats.name = input_name->getText();
+		avatar->stats.permadeath = button_permadeath->isChecked();
 		play->game_slot = game_slot;
 		play->resetGame();
 		play->loadClass(class_list->getSelected());
@@ -400,6 +405,11 @@ GameStateNew::~GameStateNew() {
 
 	if (portrait_border)
 		delete portrait_border;
+
+	if (delete_items) {
+		delete items;
+		items = NULL;
+	}
 
 	delete button_exit;
 	delete button_create;

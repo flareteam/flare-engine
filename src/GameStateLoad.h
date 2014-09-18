@@ -77,6 +77,7 @@ private:
 	bool loading_requested;
 	bool loading;
 	bool loaded;
+	bool delete_items;
 
 	LabelInfo name_pos;
 	LabelInfo level_pos;
