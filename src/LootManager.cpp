@@ -520,6 +520,8 @@ void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_de
 void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list) {
 	if (e == NULL) return;
 
+	std::string chance;
+	bool first_is_filename = false;
 	e->s = infile.nextValue();
 
 	if (e->s == "currency")
@@ -535,22 +537,24 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 			ec_list->pop_back();
 
 		getLootTable(filename, ec_list);
-		return;
+		first_is_filename = true;
 	}
 
-	// make sure the type is "loot"
-	e->type = "loot";
+	if (!first_is_filename) {
+		// make sure the type is "loot"
+		e->type = "loot";
 
-	// drop chance
-	std::string chance = infile.nextValue();
-	if (chance == "fixed") e->z = 0;
-	else e->z = toInt(chance);
+		// drop chance
+		chance = infile.nextValue();
+		if (chance == "fixed") e->z = 0;
+		else e->z = toInt(chance);
 
-	// quantity min/max
-	e->a = toInt(infile.nextValue());
-	clampFloor(e->a, 1);
-	e->b = toInt(infile.nextValue());
-	clampFloor(e->b, e->a);
+		// quantity min/max
+		e->a = toInt(infile.nextValue());
+		clampFloor(e->a, 1);
+		e->b = toInt(infile.nextValue());
+		clampFloor(e->b, e->a);
+	}
 
 	// add repeating loot
 	if (ec_list) {
@@ -570,7 +574,9 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 				ec_list->pop_back();
 
 				getLootTable(repeat_val, ec_list);
-				return;
+
+				repeat_val = infile.nextValue();
+				continue;
 			}
 
 			chance = infile.nextValue();
