@@ -46,7 +46,10 @@ using namespace std;
 
 LootManager::LootManager(StatBlock *_hero)
 	: sfx_loot(0)
-	, tooltip_margin(0) {
+	, drop_max(1)
+	, drop_radius(1)
+	, tooltip_margin(0)
+{
 	hero = _hero; // we need the player's position for dropping loot in a valid spot
 
 	tip = new WidgetTooltip();
@@ -76,6 +79,16 @@ LootManager::LootManager(StatBlock *_hero)
 				// @ATTR sfx_loot|string|Sound effect for dropping loot.
 				sfx_loot =  snd->load(infile.val, "LootManager dropping loot");
 			}
+			else if (infile.key == "drop_max") {
+				// @ATTR drop_max|integer|The maximum number of random item stacks that can drop at once
+				drop_max = toInt(infile.val);
+				clampFloor(drop_max, 1);
+			}
+			else if (infile.key == "drop_radius") {
+				// @ATTR drop_radius|integer|The distance (in tiles) away from the origin that loot can drop
+				drop_radius = toInt(infile.val);
+				clampFloor(drop_radius, 1);
+			}
 			else {
 				infile.error("LootManager: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -89,6 +102,8 @@ LootManager::LootManager(StatBlock *_hero)
 	loadGraphics();
 
 	full_msg = false;
+
+	loadLootTables();
 }
 
 /**
@@ -134,6 +149,12 @@ void LootManager::logic() {
 
 	checkEnemiesForLoot();
 	checkMapForLoot();
+
+	// clear any tiles that were blocked from dropped loot
+	for (unsigned i=0; i<tiles_to_unblock.size(); i++) {
+		mapr->collider.unblock(tiles_to_unblock[i].x, tiles_to_unblock[i].y);
+	}
+	tiles_to_unblock.clear();
 }
 
 /**
@@ -170,179 +191,169 @@ void LootManager::renderTooltips(FPoint cam) {
  * manager to create loot based on that creature's level and position.
  */
 void LootManager::checkEnemiesForLoot() {
-	ItemStack istack;
-	istack.quantity = 1;
-
 	for (unsigned i=0; i < enemiesDroppingLoot.size(); ++i) {
-		const Enemy *e = enemiesDroppingLoot[i];
+		Enemy *e = enemiesDroppingLoot[i];
+
 		if (e->stats.quest_loot_id != 0) {
 			// quest loot
-			istack.item = e->stats.quest_loot_id;
-			addLoot(istack, e->stats.pos);
-		}
-		else { // random loot
-			//determine position
-			FPoint pos = hero->pos;
-			if (mapr->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false))
-				pos = e->stats.pos;
+			Event_Component ec;
+			ec.type = "loot";
+			ec.c = e->stats.quest_loot_id;
+			ec.a = ec.b = 1;
+			ec.z = 0;
 
-			determineLootByEnemy(e, pos);
+			e->stats.loot_table.push_back(ec);
+		}
+
+		if (!e->stats.loot_table.empty()) {
+			unsigned drops = (rand() % drop_max) + 1;
+
+			for (unsigned j=0; j<drops; ++j) {
+				checkLoot(e->stats.loot_table, &e->stats.pos);
+			}
+
+			e->stats.loot_table.clear();
 		}
 	}
 	enemiesDroppingLoot.clear();
 }
 
-void LootManager::addEnemyLoot(const Enemy *e) {
+/**
+ * As map events occur, some might have a component named "loot"
+ */
+void LootManager::checkMapForLoot() {
+	if (!mapr->loot.empty()) {
+		unsigned drops = (rand() % drop_max) + 1;
+
+		for (unsigned i=0; i<drops; ++i) {
+			checkLoot(mapr->loot);
+		}
+
+		mapr->loot.clear();
+	}
+}
+
+void LootManager::addEnemyLoot(Enemy *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 
-/**
- * As map events occur, some might have a component named "loot"
- * Loot is created at component x,y
- */
-void LootManager::checkMapForLoot() {
+void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos) {
 	FPoint p;
 	Event_Component *ec;
 	ItemStack new_loot;
-	std::vector<int> possible_ids;
-	int common_chance = -1;
+	std::vector<Event_Component*> possible_ids;
 
 	int chance = rand() % 100;
 
 	// first drop any 'fixed' (0% chance) items
-	for (unsigned i = mapr->loot.size(); i > 0; i--) {
-		ec = &mapr->loot[i-1];
+	for (unsigned i = loot_table.size(); i > 0; i--) {
+		ec = &loot_table[i-1];
 		if (ec->z == 0) {
-			p.x = ec->x + 0.5f;
-			p.y = ec->y + 0.5f;
+			Point src;
+			if (pos) {
+				src.x = pos->x;
+				src.y = pos->y;
+			}
+			else {
+				src.x = ec->x;
+				src.y = ec->y;
+			}
+			p = mapr->collider.get_random_neighbor(src, drop_radius);
+
+			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
+				p = hero->pos;
+			}
+			else {
+				if (src.x == p.x && src.y == p.y)
+					p = hero->pos;
+
+				mapr->collider.block(p.x, p.y, false);
+				tiles_to_unblock.push_back(floor(p));
+			}
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
 
 			// an item id of 0 means we should drop currency instead
-			if (ec->s == "currency" || toInt(ec->s) == 0 || toInt(ec->s) == CURRENCY_ID) {
+			if (ec->c == 0 || ec->c == CURRENCY_ID) {
 				new_loot.item = CURRENCY_ID;
 				new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
 			}
 			else {
-				new_loot.item = toInt(ec->s);
+				new_loot.item = ec->c;
 			}
 
 			addLoot(new_loot, p);
 
-			mapr->loot.erase(mapr->loot.begin()+i-1);
+			loot_table.erase(loot_table.begin()+i-1);
 		}
 	}
 
 	// now pick up to 1 random item to drop
-	for (unsigned i = mapr->loot.size(); i > 0; i--) {
-		ec = &mapr->loot[i-1];
+	int threshold = hero->get(STAT_ITEM_FIND) + 100;
+	for (unsigned i = 0; i < loot_table.size(); i++) {
+		ec = &loot_table[i];
 
-		if (possible_ids.empty()) {
-			// Don't use item find bonus for currency
-			int max_chance = ec->z;
-			if (ec->s != "currency" && toInt(ec->s) != 0 && toInt(ec->s) != CURRENCY_ID)
-				max_chance = ec->z * (hero->get(STAT_ITEM_FIND) + 100) / 100;
+		int real_chance = ec->z;
 
-			// find the rarest loot less than the chance roll
-			if (chance < max_chance) {
-				possible_ids.push_back(i-1);
-				common_chance = ec->z;
-				i=mapr->loot.size(); // start searching from the beginning
-				continue;
+		if (ec->c != 0 && ec->c != CURRENCY_ID) {
+			real_chance = (int)((float)ec->z * (hero->get(STAT_ITEM_FIND) + 100) / 100.f);
+		}
+
+		if (real_chance >= chance) {
+			if (real_chance <= threshold) {
+				if (real_chance != threshold) {
+					possible_ids.clear();
+				}
+
+				threshold = real_chance;
+			}
+
+			if (chance <= threshold) {
+				possible_ids.push_back(ec);
 			}
 		}
-		else {
-			// include loot with identical chances
-			if (ec->z == common_chance)
-				possible_ids.push_back(i-1);
-		}
 	}
+
 	if (!possible_ids.empty()) {
 		// if there was more than one item with the same chance, randomly pick one of them
-		int chosen_loot = 0;
-		if (possible_ids.size() > 1) chosen_loot = rand() % possible_ids.size();
+		int chosen_loot = rand() % possible_ids.size();
 
-		ec = &mapr->loot[chosen_loot];
-		p.x = ec->x + 0.5f;
-		p.y = ec->y + 0.5f;
+		ec = possible_ids[chosen_loot];
+
+		Point src;
+		if (pos) {
+			src.x = pos->x;
+			src.y = pos->y;
+		}
+		else {
+			src.x = ec->x;
+			src.y = ec->y;
+		}
+		p = mapr->collider.get_random_neighbor(src, drop_radius);
+
+		if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
+			p = hero->pos;
+		}
+		else {
+			if (src.x == p.x && src.y == p.y)
+				p = hero->pos;
+
+			mapr->collider.block(p.x, p.y, false);
+			tiles_to_unblock.push_back(floor(p));
+		}
 
 		new_loot.quantity = randBetween(ec->a,ec->b);
 
 		// an item id of 0 means we should drop currency instead
-		if (ec->s == "currency" || toInt(ec->s) == 0 || toInt(ec->s) == CURRENCY_ID) {
+		if (ec->c == 0 || ec->c == CURRENCY_ID) {
 			new_loot.item = CURRENCY_ID;
 			new_loot.quantity = new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND)) / 100;
 		}
 		else {
-			new_loot.item = toInt(ec->s);
+			new_loot.item = ec->c;
 		}
 
 		addLoot(new_loot, p);
-	}
-
-	mapr->loot.clear();
-}
-
-/**
- * This function is called when there definitely is a piece of loot dropping
- * calls addLoot()
- */
-void LootManager::determineLootByEnemy(const Enemy *e, FPoint pos) {
-	ItemStack new_loot;
-	std::vector<int> possible_ids;
-	std::vector<Point> possible_ranges;
-	Point range;
-	int common_chance = -1;
-
-	int chance = rand() % 100;
-
-	for (unsigned i=0; i<e->stats.loot.size(); i++) {
-		if (possible_ids.empty()) {
-			// Don't use item find bonus for currency
-			int max_chance = e->stats.loot[i].chance;
-			if (e->stats.loot[i].id != 0 && e->stats.loot[i].id != CURRENCY_ID)
-				max_chance = e->stats.loot[i].chance * (hero->get(STAT_ITEM_FIND) + 100) / 100;
-
-			// find the rarest loot less than the chance roll
-			if (chance < max_chance) {
-				possible_ids.push_back(e->stats.loot[i].id);
-				common_chance = e->stats.loot[i].chance;
-
-				range.x = e->stats.loot[i].count_min;
-				range.y = e->stats.loot[i].count_max;
-				possible_ranges.push_back(range);
-
-				i=-1; // start searching from the beginning
-				continue;
-			}
-		}
-		else {
-			// include loot with identical chances
-			if (e->stats.loot[i].chance == common_chance) {
-				possible_ids.push_back(e->stats.loot[i].id);
-
-				range.x = e->stats.loot[i].count_min;
-				range.y = e->stats.loot[i].count_max;
-				possible_ranges.push_back(range);
-
-			}
-		}
-	}
-
-	if (!possible_ids.empty()) {
-
-		int roll = rand() % possible_ids.size();
-		new_loot.item = possible_ids[roll];
-		new_loot.quantity = randBetween(possible_ranges[roll].x, possible_ranges[roll].y);
-
-		// an item id of 0 means we should drop currency instead
-		if (new_loot.item == 0 || new_loot.item == CURRENCY_ID) {
-			new_loot.item = CURRENCY_ID;
-			new_loot.quantity = (new_loot.quantity * (100 + hero->get(STAT_CURRENCY_FIND))) / 100;
-		}
-
-		addLoot(new_loot, pos);
-
 	}
 }
 
@@ -502,6 +513,160 @@ void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_de
 			r.map_pos.y = it->pos.y;
 
 			(it->animation->isLastFrame() ? ren_dead : ren).push_back(r);
+		}
+	}
+}
+
+void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list) {
+	if (e == NULL) return;
+
+	std::string chance;
+	bool first_is_filename = false;
+	e->s = infile.nextValue();
+
+	if (e->s == "currency")
+		e->c = CURRENCY_ID;
+	else if (toInt(e->s, -1) != -1)
+		e->c = toInt(e->s);
+	else if (ec_list) {
+		// load entire loot table
+		std::string filename = e->s;
+
+		// remove the last event component, since getLootTable() will create a new one
+		if (e == &ec_list->back())
+			ec_list->pop_back();
+
+		getLootTable(filename, ec_list);
+		first_is_filename = true;
+	}
+
+	if (!first_is_filename) {
+		// make sure the type is "loot"
+		e->type = "loot";
+
+		// drop chance
+		chance = infile.nextValue();
+		if (chance == "fixed") e->z = 0;
+		else e->z = toInt(chance);
+
+		// quantity min/max
+		e->a = toInt(infile.nextValue());
+		clampFloor(e->a, 1);
+		e->b = toInt(infile.nextValue());
+		clampFloor(e->b, e->a);
+	}
+
+	// add repeating loot
+	if (ec_list) {
+		std::string repeat_val = infile.nextValue();
+		while (repeat_val != "") {
+			ec_list->push_back(Event_Component());
+			Event_Component *ec = &ec_list->back();
+			ec->type = infile.key;
+
+			ec->s = repeat_val;
+			if (ec->s == "currency")
+				ec->c = CURRENCY_ID;
+			else if (toInt(ec->s, -1) != -1)
+				ec->c = toInt(ec->s);
+			else {
+				// remove the last event component, since getLootTable() will create a new one
+				ec_list->pop_back();
+
+				getLootTable(repeat_val, ec_list);
+
+				repeat_val = infile.nextValue();
+				continue;
+			}
+
+			chance = infile.nextValue();
+			if (chance == "fixed") ec->z = 0;
+			else ec->z = toInt(chance);
+
+			ec->a = toInt(infile.nextValue());
+			clampFloor(ec->a, 1);
+			ec->b = toInt(infile.nextValue());
+			clampFloor(ec->b, ec->a);
+
+			repeat_val = infile.nextValue();
+		}
+	}
+}
+
+void LootManager::loadLootTables() {
+	std::vector<std::string> filenames = mods->list("loot", false);
+
+	for (unsigned i=0; i<filenames.size(); i++) {
+		FileParser infile;
+		if (!infile.open(filenames[i]))
+			continue;
+
+		std::vector<Event_Component> *ec_list = &loot_tables[filenames[i]];
+		Event_Component *ec = &ec_list->back();
+		bool skip_to_next = false;
+
+		while (infile.next()) {
+			if (infile.section == "") {
+				if (infile.key == "loot") {
+					ec_list->push_back(Event_Component());
+					ec = &ec_list->back();
+					parseLoot(infile, ec, ec_list);
+				}
+			}
+			else if (infile.section == "loot") {
+				if (infile.new_section) {
+					ec_list->push_back(Event_Component());
+					ec = &ec_list->back();
+					ec->type = "loot";
+					skip_to_next = false;
+				}
+
+				if (skip_to_next)
+					continue;
+
+				if (infile.key == "id") {
+					ec->s = infile.val;
+
+					if (ec->s == "currency")
+						ec->c = CURRENCY_ID;
+					else if (toInt(ec->s, -1) != -1)
+						ec->c = toInt(ec->s);
+					else {
+						skip_to_next = true;
+						infile.error("LootManager: Invalid item id for loot.");
+					}
+				}
+				else if (infile.key == "chance") {
+					if (infile.val == "fixed")
+						ec->z = 0;
+					else
+						ec->z = toInt(infile.val);
+				}
+				else if (infile.key == "quantity") {
+					ec->a = toInt(infile.nextValue());
+					clampFloor(ec->a, 1);
+					ec->b = toInt(infile.nextValue());
+					clampFloor(ec->b, ec->a);
+				}
+			}
+		}
+
+		infile.close();
+	}
+}
+
+void LootManager::getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list) {
+	if (!ec_list)
+		return;
+
+	std::map<std::string, std::vector<Event_Component> >::iterator it;
+	for (it = loot_tables.begin(); it != loot_tables.end(); ++it) {
+		if (it->first == filename) {
+			std::vector<Event_Component> *loot_defs = &it->second;
+			for (unsigned i=0; i<loot_defs->size(); ++i) {
+				ec_list->push_back((*loot_defs)[i]);
+			}
+			break;
 		}
 	}
 }

@@ -166,10 +166,6 @@ StatBlock::StatBlock()
 	, attacking(false) {
 }
 
-bool sortLoot(const EnemyLoot &a, const EnemyLoot &b) {
-	return a.chance < b.chance;
-}
-
 bool StatBlock::loadCoreStat(FileParser *infile) {
 	// @CLASS StatBlock: Core stats|Description of engine/stats.txt and enemies in enemies/
 
@@ -287,28 +283,8 @@ void StatBlock::load(const string& filename) {
 			// optionally allow range:
 			// loot=[id],[percent_chance],[count_min],[count_max]
 
-			EnemyLoot el;
-			std::string loot_id = infile.nextValue();
-
-			// id 0 means currency. The keyword "currency" can also be used.
-			if (loot_id == "currency")
-				el.id = 0;
-			else
-				el.id = toInt(loot_id);
-			el.chance = toInt(infile.nextValue());
-
-			// check for optional range.
-			loot_token = infile.nextValue();
-			if (loot_token != "") {
-				el.count_min = toInt(loot_token);
-				el.count_max = el.count_min;
-			}
-			loot_token = infile.nextValue();
-			if (loot_token != "") {
-				el.count_max = toInt(loot_token);
-			}
-
-			loot.push_back(el);
+			loot_table.push_back(Event_Component());
+			loot->parseLoot(infile, &loot_table.back(), &loot_table);
 		}
 		// @ATTR defeat_status|string|Campaign status to set upon death.
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
@@ -435,9 +411,6 @@ void StatBlock::load(const string& filename) {
 
 	hp = starting[STAT_HP_MAX];
 	mp = starting[STAT_MP_MAX];
-
-	// sort loot table
-	std::sort(loot.begin(), loot.end(), sortLoot);
 
 	applyEffects();
 }

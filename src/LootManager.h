@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define LOOT_MANAGER_H
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "ItemManager.h"
 #include "Loot.h"
 #include "Settings.h"
@@ -54,14 +55,29 @@ private:
 
 	// functions
 	void loadGraphics();
+	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL);
+	void checkEnemiesForLoot();
+	void checkMapForLoot();
+	void loadLootTables();
+	void getLootTable(const std::string &filename, std::vector<Event_Component> *ec_list);
 
 	SoundManager::SoundID sfx_loot;
+
+	int drop_max;
+	int drop_radius;
 
 	// loot refers to ItemManager indices
 	std::vector<Loot> loot;
 
 	// enemies which should drop loot, but didnt yet.
-	std::vector<const class Enemy*> enemiesDroppingLoot;
+	std::vector<class Enemy*> enemiesDroppingLoot;
+
+	// loot tables defined in files under "loot/"
+	std::map<std::string, std::vector<Event_Component> > loot_tables;
+
+	// to prevent dropping multiple loot stacks on the same tile,
+	// we block tiles that have loot dropped on them
+	std::vector<Point> tiles_to_unblock;
 
 public:
 	LootManager(StatBlock *_hero);
@@ -71,18 +87,17 @@ public:
 	void handleNewMap();
 	void logic();
 	void renderTooltips(FPoint cam);
-	void checkEnemiesForLoot();
 
 	// called by enemy, who definitly wants to drop loot.
-	void addEnemyLoot(const Enemy *e);
-	void checkMapForLoot();
-	void determineLootByEnemy(const Enemy *e, FPoint pos); // pick from enemy-specific loot table
+	void addEnemyLoot(Enemy *e);
 	void addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero = false);
 	ItemStack checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv);
 	ItemStack checkAutoPickup(FPoint hero_pos, MenuInventory *inv);
 	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
+
+	void parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list);
 
 	int tooltip_margin; // pixels between loot drop center and label
 	bool full_msg;

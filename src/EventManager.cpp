@@ -185,45 +185,8 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 
 	}
 	else if (infile.key == "loot") {
-		// @ATTR event.loot|[string,x(integer),y(integer),drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
-		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
-
-		// drop chance
-		std::string chance = infile.nextValue();
-		if (chance == "fixed") e->z = 0;
-		else e->z = toInt(chance);
-
-		// quantity min/max
-		e->a = toInt(infile.nextValue());
-		if (e->a < 1) e->a = 1;
-		e->b = toInt(infile.nextValue());
-		if (e->b < e->a) e->b = e->a;
-
-		// add repeating loot
-		if (evnt) {
-			std::string repeat_val = infile.nextValue();
-			while (repeat_val != "") {
-				evnt->components.push_back(Event_Component());
-				e = &evnt->components.back();
-				e->type = infile.key;
-				e->s = repeat_val;
-				e->x = toInt(infile.nextValue());
-				e->y = toInt(infile.nextValue());
-
-				chance = infile.nextValue();
-				if (chance == "fixed") e->z = 0;
-				else e->z = toInt(chance);
-
-				e->a = toInt(infile.nextValue());
-				if (e->a < 1) e->a = 1;
-				e->b = toInt(infile.nextValue());
-				if (e->b < e->a) e->b = e->a;
-
-				repeat_val = infile.nextValue();
-			}
-		}
+		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
+		loot->parseLoot(infile, e, &evnt->components);
 	}
 	else if (infile.key == "msg") {
 		// @ATTR event.msg|string|Adds a message to be displayed for the event.
@@ -443,7 +406,7 @@ bool EventManager::executeEvent(Event &ev) {
 	// set cooldown
 	ev.cooldown_ticks = ev.cooldown;
 
-	const Event_Component *ec;
+	Event_Component *ec;
 
 	for (unsigned i = 0; i < ev.components.size(); ++i) {
 		ec = &ev.components[i];
@@ -513,6 +476,8 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->sids.push_back(sid);
 		}
 		else if (ec->type == "loot") {
+			ec->x = ev.hotspot.x;
+			ec->y = ev.hotspot.y;
 			mapr->loot.push_back(*ec);
 		}
 		else if (ec->type == "msg") {
