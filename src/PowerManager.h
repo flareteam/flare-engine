@@ -92,25 +92,6 @@ const int STAT_MODIFIER_MODE_MULTIPLY = 0;
 const int STAT_MODIFIER_MODE_ADD = 1;
 const int STAT_MODIFIER_MODE_ABSOLUTE = 2;
 
-class EffectDef {
-public:
-	std::string name;
-	std::string type;
-	int icon;
-	std::string animation;
-	bool additive;
-	bool render_above;
-
-	EffectDef()
-		: name("")
-		, type("")
-		, icon(-1)
-		, animation("")
-		, additive(false)
-		, render_above(false) {
-	}
-};
-
 class PostEffect {
 public:
 	std::string id;

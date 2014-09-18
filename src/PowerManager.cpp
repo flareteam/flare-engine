@@ -74,6 +74,8 @@ void PowerManager::loadEffects() {
 			skippingEntry = (input_name == "");
 			if (skippingEntry)
 				infile.error("PowerManager: Effect without a name, skipping");
+			else
+				effects[input_name].name = input_name;
 			continue;
 		}
 		if (skippingEntry)
@@ -91,9 +93,9 @@ void PowerManager::loadEffects() {
 			// @ATTR animation|string|The filename of effect animation.
 			effects[input_name].animation = infile.val;
 		}
-		else if (infile.key == "additive") {
-			// @ATTR additive|bool|Effect is cumulative
-			effects[input_name].additive = toBool(infile.val);
+		else if (infile.key == "can_stack") {
+			// @ATTR can_stack|bool|Allows multiple instances of this effect
+			effects[input_name].can_stack = toBool(infile.val);
 		}
 		else if (infile.key == "render_above") {
 			// @ATTR render_above|bool|Effect is rendered above
@@ -752,7 +754,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 			int passive_id = 0;
 			if (powers[power_index].passive) passive_id = power_index;
 
-			src_stats->effects.addEffect(effect_index, effects[effect_index].icon, duration, magnitude, effects[effect_index].type, effects[effect_index].animation, effects[effect_index].additive, false, powers[power_index].passive_trigger, effects[effect_index].render_above, passive_id, source_type);
+			src_stats->effects.addEffect(effects[effect_index], duration, magnitude, false, powers[power_index].passive_trigger, passive_id, source_type);
 		}
 
 		// If there's a sound effect, play it here
