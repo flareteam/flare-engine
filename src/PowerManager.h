@@ -38,6 +38,7 @@ class Animation;
 class AnimationSet;
 class Hazard;
 class MapCollision;
+class Map_Enemy;
 class StatBlock;
 
 const int POWTYPE_FIXED = 0;
@@ -108,10 +109,14 @@ public:
 class ActionData {
 public:
 	int power;
+	int hotkey;
+	bool instant_item;
 	FPoint target;
 
 	ActionData()
 		: power(0)
+		, hotkey(0)
+		, instant_item(false)
 		, target(FPoint()) {
 	}
 };

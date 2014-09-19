@@ -422,65 +422,91 @@ void MenuActionBar::remove(Point mouse) {
 }
 
 /**
- * If pressing an action key (keyboard or mouseclick) and the power is enabled,
- * return that power's ID and target as ActionData
+ * If pressing an action key (keyboard or mouseclick) and the power can be used,
+ * add that power to the action queue
  */
-ActionData MenuActionBar::checkAction() {
-	ActionData action;
-	bool have_aim = false;
-
+void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 	// check click and hotkey actions
 	for (int i=0; i<12; i++) {
+		ActionData action;
+		action.hotkey = i;
+		bool have_aim = false;
 		slot_activated[i] = false;
 
-		if (!slot_enabled[i])
-			continue;
+		if (slot_enabled[i]) {
+			// mouse/touch click
+			if (!NO_MOUSE && slots[i]->checkClick() == ACTIVATED) {
+				have_aim = false;
+				slot_activated[i] = true;
+				action.power = hotkeys_mod[i];
+			}
 
-		// mouse/touch click
-		if (!NO_MOUSE && slots[i]->checkClick() == ACTIVATED) {
-			have_aim = false;
-			slot_activated[i] = true;
-			action.power = hotkeys_mod[i];
+			// joystick/keyboard action button
+			else if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == i) {
+				have_aim = false;
+				slot_activated[i] = true;
+				action.power = hotkeys_mod[i];
+			}
+
+			// pressing hotkey
+			else if (i<10 && inpt->pressing[i+BAR_1]) {
+				have_aim = true;
+				action.power = hotkeys_mod[i];
+			}
+			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+				have_aim = true;
+				action.power = hotkeys_mod[10];
+			}
+			else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
+				have_aim = true;
+				action.power = hotkeys_mod[11];
+			}
 		}
 
-		// joystick/keyboard action button
-		else if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == i) {
-			have_aim = false;
-			slot_activated[i] = true;
-			action.power = hotkeys_mod[i];
-		}
-
-		// pressing hotkey
-		else if (i<10 && inpt->pressing[i+BAR_1]) {
-			have_aim = true;
-			action.power = hotkeys_mod[i];
-		}
-		else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-			have_aim = true;
-			action.power = hotkeys_mod[10];
-		}
-		else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
-			have_aim = true;
-			action.power = hotkeys_mod[11];
-		}
-	}
-
-	// set the target depending on how the power was triggered
-	if (action.power > 0) {
-		if (have_aim && MOUSE_AIM) {
+		// a power slot was activated
+		if (action.power > 0) {
 			const Power &power = powers->getPower(action.power);
+			bool can_use_power = true;
+			action.instant_item = (power.new_state == POWSTATE_INSTANT && power.requires_item > 0);
 
-			if (power.aim_assist)
-				action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, hero->stats.pos.x, hero->stats.pos.y);
-			else
-				action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, hero->stats.pos.x, hero->stats.pos.y);
+			// check if we can add this power to the action queue
+			for (unsigned j=0; j<action_queue.size(); j++) {
+				if (action_queue[j].hotkey == i) {
+					can_use_power = false;
+					break;
+				}
+				else if (!action.instant_item && !action_queue[j].instant_item) {
+					can_use_power = false;
+					break;
+				}
+			}
+			if (!can_use_power)
+				continue;
+
+			// set the target depending on how the power was triggered
+			if (have_aim && MOUSE_AIM) {
+
+				if (power.aim_assist)
+					action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, hero->stats.pos.x, hero->stats.pos.y);
+				else
+					action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, hero->stats.pos.x, hero->stats.pos.y);
+			}
+			else {
+				action.target = calcVector(hero->stats.pos, hero->stats.direction, hero->stats.melee_range);
+			}
+
+			// add it to the queue
+			action_queue.push_back(action);
 		}
 		else {
-			action.target = calcVector(hero->stats.pos, hero->stats.direction, hero->stats.melee_range);
+			// if we're not triggering an action that is currently in the queue,
+			// remove it from the queue
+			for (unsigned j=0; j<action_queue.size(); j++) {
+				if (action_queue[j].hotkey == i)
+					action_queue.erase(action_queue.begin()+j);
+			}
 		}
 	}
-
-	return action;
 }
 
 /**
