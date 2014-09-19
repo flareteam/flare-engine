@@ -1065,5 +1065,16 @@ GameStatePlay::~GameStatePlay() {
 	delete loading;
 
 	delete enemyg;
+
+	// NULL-ify shared game resources
+	menu_powers = NULL;
+	loot = NULL;
+	enemyg = NULL;
+	powers = NULL;
+	mapr = NULL;
+	enemies = NULL;
+	camp = NULL;
+	items = NULL;
+	pc = NULL;
 }
 
