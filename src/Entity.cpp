@@ -382,6 +382,15 @@ bool Entity::takeHit(const Hazard &h) {
 		powers->activate(h.post_power, h.src_stats, stats.pos);
 	}
 
+	// loot
+	if (dmg > 0 && !h.loot.empty()) {
+		for (unsigned i=0; i<h.loot.size(); i++) {
+			powers->loot.push_back(h.loot[i]);
+			powers->loot.back().x = (int)stats.pos.x;
+			powers->loot.back().y = (int)stats.pos.y;
+		}
+	}
+
 	// interrupted to new state
 	if (dmg > 0) {
 		bool chance_poise = percentChance(stats.get(STAT_POISE));

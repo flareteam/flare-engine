@@ -114,6 +114,8 @@ public:
 	int post_power;
 	int wall_power;
 
+	// loot
+	std::vector<Event_Component> loot;
 };
 
 #endif

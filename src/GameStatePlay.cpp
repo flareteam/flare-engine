@@ -594,7 +594,7 @@ void GameStatePlay::checkLootDrop() {
 
 	// check loot dropped by powers
 	if (!powers->loot.empty()) {
-		loot->checkLoot(powers->loot, &pc->stats.pos);
+		loot->checkLoot(powers->loot);
 		powers->loot.clear();
 	}
 }

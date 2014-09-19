@@ -677,6 +677,11 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	if (powers[power_index].wall_power != 0) {
 		haz->wall_power = powers[power_index].wall_power;
 	}
+
+	// handle loot
+	if (!powers[power_index].loot.empty()) {
+		haz->loot = powers[power_index].loot;
+	}
 }
 
 /**
@@ -722,9 +727,10 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		activate(powers[power_index].post_power, src_stats, src_stats->pos);
 
 		// handle loot
-		// TODO handle loot for hazards as well
 		for (unsigned i=0; i<powers[power_index].loot.size(); i++) {
 			loot.push_back(powers[power_index].loot[i]);
+			loot.back().x = (int)src_stats->pos.x;
+			loot.back().y = (int)src_stats->pos.y;
 		}
 	}
 }
