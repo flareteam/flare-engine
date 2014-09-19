@@ -44,14 +44,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-LootManager::LootManager(StatBlock *_hero)
+LootManager::LootManager()
 	: sfx_loot(0)
 	, drop_max(1)
 	, drop_radius(1)
+	, hero(NULL)
 	, tooltip_margin(0)
 {
-	hero = _hero; // we need the player's position for dropping loot in a valid spot
-
 	tip = new WidgetTooltip();
 
 	FileParser infile;
@@ -238,6 +237,11 @@ void LootManager::addEnemyLoot(Enemy *e) {
 }
 
 void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos) {
+	if (hero == NULL) {
+		logError("LootManager: checkLoot() failed, no hero.\n");
+		return;
+	}
+
 	FPoint p;
 	Event_Component *ec;
 	ItemStack new_loot;
@@ -388,8 +392,7 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
 
 /**
  * Click on the map to pick up loot.  We need the camera position to translate
- * screen coordinates to map locations.  We need the hero position because
- * the hero has to be within range to pick up an item.
+ * screen coordinates to map locations.
  */
 ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv) {
 	Rect r;

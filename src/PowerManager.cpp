@@ -22,22 +22,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class PowerManager
  */
 
-#include "PowerManager.h"
+
 #include "Animation.h"
-#include "AnimationSet.h"
 #include "AnimationManager.h"
+#include "AnimationSet.h"
 #include "FileParser.h"
 #include "Hazard.h"
-#include "SharedResources.h"
+#include "MapCollision.h"
+#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
-#include "MapCollision.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
-
 #include <cmath>
 #include <climits>
 using namespace std;
@@ -46,8 +45,9 @@ using namespace std;
 /**
  * PowerManager constructor
  */
-PowerManager::PowerManager()
+PowerManager::PowerManager(LootManager *_lootm)
 	: collider(NULL)
+	, lootm(_lootm)
 	, log_msg("")
 	, used_items()
 	, used_equipped_items() {
@@ -473,6 +473,13 @@ void PowerManager::loadPowers() {
 
 			powers[input_id].mod_crit_value = popFirstInt(infile.val);
 		}
+		else if (infile.key == "loot") {
+			// @ATTR loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Give the player this loot when the power is used
+			if (lootm) {
+				powers[input_id].loot.push_back(Event_Component());
+				lootm->parseLoot(infile, &powers[input_id].loot.back(), &powers[input_id].loot);
+			}
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -709,11 +716,16 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		party_buffs.push(power_index);
 	}
 
-
 	// activate any post powers here if the power doesn't use a hazard
 	// otherwise the post power will chain off the hazard itself
 	if (!powers[power_index].use_hazard) {
 		activate(powers[power_index].post_power, src_stats, src_stats->pos);
+
+		// handle loot
+		// TODO handle loot for hazards as well
+		for (unsigned i=0; i<powers[power_index].loot.size(); i++) {
+			loot.push_back(powers[power_index].loot[i]);
+		}
 	}
 }
 

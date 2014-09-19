@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define POWER_MANAGER_H
 
 #include "CommonIncludes.h"
+#include "LootManager.h"
 #include "MapRenderer.h"
 #include "Utils.h"
 
@@ -231,6 +232,9 @@ public:
 	int spawn_level_every;
 	int spawn_level_stat;
 
+	// loot
+	std::vector<Event_Component> loot;
+
 	Power()
 		: type(-1)
 		, name("")
@@ -350,9 +354,10 @@ private:
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
 public:
-	PowerManager();
+	PowerManager(LootManager *_lootm);
 	~PowerManager();
 
+	LootManager *lootm;
 	std::string log_msg;
 
 	void handleNewMap(MapCollision *_collider);
@@ -379,6 +384,8 @@ public:
 
 	std::vector<int> used_items;
 	std::vector<int> used_equipped_items;
+
+	std::vector<Event_Component> loot;
 };
 
 #endif

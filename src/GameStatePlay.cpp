@@ -91,7 +91,8 @@ GameStatePlay::GameStatePlay()
 	if (items == NULL)
 		items = new ItemManager();
 
-	powers = new PowerManager();
+	loot = new LootManager();
+	powers = new PowerManager(loot);
 	camp = new CampaignManager();
 	mapr = new MapRenderer();
 	pc = new Avatar();
@@ -101,7 +102,9 @@ GameStatePlay::GameStatePlay()
 	menu = new MenuManager(&pc->stats);
 	npcs = new NPCManager(&pc->stats);
 	quests = new QuestLog(menu->log);
-	loot = new LootManager(&pc->stats);
+
+	// LootManager needs hero StatBlock
+	loot->hero = &pc->stats;
 
 	// assign some object pointers after object creation, based on dependency order
 	camp->carried_items = &menu->inv->inventory[CARRIED];
@@ -589,6 +592,11 @@ void GameStatePlay::checkLootDrop() {
 		menu->inv->drop_stack.pop();
 	}
 
+	// check loot dropped by powers
+	if (!powers->loot.empty()) {
+		loot->checkLoot(powers->loot, &pc->stats.pos);
+		powers->loot.clear();
+	}
 }
 
 /**
