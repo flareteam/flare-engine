@@ -596,9 +596,7 @@ void GameStatePlay::checkLootDrop() {
  */
 void GameStatePlay::checkConsumable() {
 	for (unsigned i=0; i<powers->used_items.size(); i++) {
-		if (items->items[powers->used_items[i]].type == "consumable") {
-			menu->inv->remove(powers->used_items[i]);
-		}
+		menu->inv->remove(powers->used_items[i]);
 	}
 	for (unsigned i=0; i<powers->used_equipped_items.size(); i++) {
 		menu->inv->removeEquipped(powers->used_equipped_items[i]);

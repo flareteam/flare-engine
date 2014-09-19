@@ -146,7 +146,9 @@ public:
 	bool requires_los; // line of sight
 	bool requires_empty_target; // target square must be empty
 	int requires_item;
+	int requires_item_quantity;
 	int requires_equipped_item;
+	int requires_equipped_item_quantity;
 	bool consumable;
 	bool requires_targeting; // power only makes sense when using click-to-target
 	int cooldown; // milliseconds before you can use the power again
@@ -250,7 +252,9 @@ public:
 		, requires_los(false)
 		, requires_empty_target(false)
 		, requires_item(-1)
+		, requires_item_quantity(0)
 		, requires_equipped_item(-1)
+		, requires_equipped_item_quantity(0)
 		, consumable(false)
 		, requires_targeting(false)
 		, cooldown(0)

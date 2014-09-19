@@ -947,20 +947,22 @@ void MenuManager::logic() {
 
 		if (act->hotkeys[i] != -1) {
 			int item_id = powers->powers[act->hotkeys[i]].requires_item;
-			if (item_id != -1 && items->items[item_id].type == "consumable") {
+			int equipped_item_id = powers->powers[act->hotkeys[i]].requires_equipped_item;
+
+			if (equipped_item_id > 0) {
+
+				// if a non-consumable item power is unequipped, disable that slot
+				if (!inv->isItemEquipped(equipped_item_id)) {
+					act->slot_item_count[i] = 0;
+					act->slot_enabled[i] = false;
+				}
+			}
+			else if (item_id > 0) {
 				act->slot_item_count[i] = inv->getItemCountCarried(item_id);
 				if (act->slot_item_count[i] == 0) {
 					if (act->slot_activated[i])
 						act->slots[i]->deactivate();
 
-					act->slot_enabled[i] = false;
-				}
-			}
-			else if (item_id != -1) {
-
-				// if a non-consumable item power is unequipped, disable that slot
-				if (!inv->isItemEquipped(item_id)) {
-					act->slot_item_count[i] = 0;
 					act->slot_enabled[i] = false;
 				}
 			}

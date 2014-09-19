@@ -218,12 +218,22 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "requires_empty_target")
 			// @ATTR requires_empty_target|bool|The power can only be cast when target tile is empty.
 			powers[input_id].requires_empty_target = toBool(infile.val);
-		else if (infile.key == "requires_item")
-			// @ATTR requires_item|item_id|Requires a specific item in inventory.
-			powers[input_id].requires_item = toInt(infile.val);
-		else if (infile.key == "requires_equipped_item")
-			// @ATTR requires_equipped_item|item_id|Requires a specific item to be equipped on hero.
-			powers[input_id].requires_equipped_item = toInt(infile.val);
+		else if (infile.key == "requires_item") {
+			// @ATTR requires_item|item_id, quantity (integer)|Requires a specific item of a specific quantity in inventory.
+			powers[input_id].requires_item = toInt(infile.nextValue());
+			powers[input_id].requires_item_quantity = toInt(infile.nextValue(), 1);
+		}
+		else if (infile.key == "requires_equipped_item") {
+			// @ATTR requires_equipped_item|item_id, quantity (integer) |Requires a specific item of a specific quantity to be equipped on hero.
+			powers[input_id].requires_equipped_item = toInt(infile.nextValue());
+			powers[input_id].requires_equipped_item_quantity = toInt(infile.nextValue());
+
+			// a maximum of 1 equipped item can be consumed at a time
+			if (powers[input_id].requires_equipped_item_quantity > 1) {
+				infile.error("PowerManager: Only 1 equipped item can be consumed at a time.");
+				clampCeil(powers[input_id].requires_equipped_item_quantity, 1);
+			}
+		}
 		else if (infile.key == "requires_targeting")
 			// @ATTR requires_targeting|bool|Power is only used when targeting using click-to-target.
 			powers[input_id].requires_targeting = toBool(infile.val);
@@ -1056,13 +1066,29 @@ void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
 	if (src_stats) {
 		if (src_stats->hero) {
 			src_stats->mp -= powers[power_index].requires_mp;
-			if (powers[power_index].requires_item != -1)
-				used_items.push_back(powers[power_index].requires_item);
+
+			// carried items
+			if (powers[power_index].requires_item != -1) {
+				int quantity = powers[power_index].requires_item_quantity;
+				while (quantity > 0) {
+					used_items.push_back(powers[power_index].requires_item);
+					quantity--;
+				}
+			}
+
+			// equipped item
+			// if the item is to be consumed, only one may be consumed at a time
 			// only allow one instance of duplicate items at a time in the used_equipped_items queue
 			// this is useful for Ouroboros rings, where we have 2 equipped, but only want to remove one at a time
 			if (powers[power_index].requires_equipped_item != -1 &&
-					find(used_equipped_items.begin(), used_equipped_items.end(), powers[power_index].requires_equipped_item) == used_equipped_items.end())
-				used_equipped_items.push_back(powers[power_index].requires_equipped_item);
+					find(used_equipped_items.begin(), used_equipped_items.end(), powers[power_index].requires_equipped_item) == used_equipped_items.end()) {
+
+				int quantity = powers[power_index].requires_equipped_item_quantity;
+				while (quantity > 0) {
+					used_equipped_items.push_back(powers[power_index].requires_equipped_item);
+					quantity--;
+				}
+			}
 		}
 		src_stats->hp -= powers[power_index].requires_hp;
 		src_stats->hp = (src_stats->hp < 0 ? 0 : src_stats->hp);

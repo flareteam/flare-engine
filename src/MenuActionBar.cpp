@@ -259,7 +259,7 @@ void MenuActionBar::render() {
 		if (hotkeys[i] != 0) {
 			const Power &power = powers->getPower(hotkeys_mod[i]);
 			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
-							  && (slot_item_count[i] != 0)
+							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
 							  && !hero->stats.effects.stun
 							  && hero->stats.alive
 							  && hero->stats.canUsePower(power, hotkeys_mod[i]); //see if the slot should be greyed out
