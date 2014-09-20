@@ -257,8 +257,6 @@ void StatBlock::load(const string& filename) {
 	if (!infile.open(filename))
 		return;
 
-	string loot_token;
-
 	while (infile.next()) {
 		int num = toInt(infile.val);
 		float fnum = toFloat(infile.val);
