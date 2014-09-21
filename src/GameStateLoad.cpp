@@ -373,9 +373,11 @@ void GameStateLoad::loadPreview(int slot) {
 			logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod\n", slot+1, equipped[slot][i], (int)items->items.size()-1);
 			continue;
 		}
-		vector<string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
-		if (equipped[slot][i] > 0 && found != preview_layer.end()) {
-			img_gfx[distance(preview_layer.begin(), found)] = items->items[equipped[slot][i]].gfx;
+
+		if (equipped[slot][i] > 0 && !preview_layer.empty()) {
+			vector<string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
+			if (found != preview_layer.end())
+				img_gfx[distance(preview_layer.begin(), found)] = items->items[equipped[slot][i]].gfx;
 		}
 	}
 
