@@ -422,7 +422,7 @@ void WidgetListBox::refresh() {
 		int font_x = rows[i].x + 8;
 		int font_y = rows[i].y + (rows[i].h/2);
 
-		if (i<values.size()) {
+		if (i+cursor < values.size()) {
 			// gets the maxiumum value length that can fit in the listbox
 			// maybe there is a better way to do this?
 			unsigned int max_length = (unsigned int)(pos.w-right_margin)/font->calc_width("X");
@@ -433,13 +433,13 @@ void WidgetListBox::refresh() {
 			else {
 				temp = values[i+cursor];
 			}
+		}
 
-			if(selected[i+cursor]) {
-				vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_normal);
-			}
-			else {
-				vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_disabled);
-			}
+		if(i+cursor < values.size() && selected[i+cursor]) {
+			vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_normal);
+		}
+		else if (i < values.size()) {
+			vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_disabled);
 		}
 	}
 
