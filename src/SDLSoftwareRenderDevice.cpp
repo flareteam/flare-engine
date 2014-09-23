@@ -626,6 +626,26 @@ void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
 #endif
 }
 
+Rect SDLSoftwareRenderDevice::nativeResolution()
+{
+	Rect resolution;
+
+#if SDL_VERSION_ATLEAST(2,0,0)
+	SDL_DisplayMode display_mode;
+	SDL_GetCurrentDisplayMode(0, &display_mode);
+
+	resolution.w = display_mode.w;
+	resolution.h = display_mode.h;
+#else
+	SDL_VideoInfo display_info;
+	display_info = *SDL_GetVideoInfo();
+
+	resolution.w = display_info.current_w;
+	resolution.h = display_info.current_h;
+#endif
+
+	return resolution;
+}
 
 Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
 	// lookup image in cache

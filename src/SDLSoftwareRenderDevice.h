@@ -83,6 +83,7 @@ public:
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void listModes(std::vector<Rect> &modes);
+	Rect nativeResolution();
 	void freeImage(Image *image);
 
 	Image* loadImage(std::string filename,
