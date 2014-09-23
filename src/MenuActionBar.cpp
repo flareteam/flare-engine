@@ -472,6 +472,8 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			// check if we can add this power to the action queue
 			for (unsigned j=0; j<action_queue.size(); j++) {
 				if (action_queue[j].hotkey == i) {
+					// this power is already in the action queue, update its target
+					action_queue[j].target = setTarget(have_aim, power.aim_assist);
 					can_use_power = false;
 					break;
 				}
@@ -484,16 +486,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				continue;
 
 			// set the target depending on how the power was triggered
-			if (have_aim && MOUSE_AIM) {
-
-				if (power.aim_assist)
-					action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, hero->stats.pos.x, hero->stats.pos.y);
-				else
-					action.target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, hero->stats.pos.x, hero->stats.pos.y);
-			}
-			else {
-				action.target = calcVector(hero->stats.pos, hero->stats.direction, hero->stats.melee_range);
-			}
+			action.target = setTarget(have_aim, power.aim_assist);
 
 			// add it to the queue
 			action_queue.push_back(action);
@@ -561,6 +554,21 @@ void MenuActionBar::resetSlots() {
 	for (int i=0; i<12; i++) {
 		slots[i]->checked = false;
 		slots[i]->pressed = false;
+	}
+}
+
+/**
+ * Set a target depending on how a power was triggered
+ */
+FPoint MenuActionBar::setTarget(bool have_aim, bool aim_assist) {
+	if (have_aim && MOUSE_AIM) {
+		if (aim_assist)
+			return screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, hero->stats.pos.x, hero->stats.pos.y);
+		else
+			return screen_to_map(inpt->mouse.x,  inpt->mouse.y, hero->stats.pos.x, hero->stats.pos.y);
+	}
+	else {
+		return calcVector(hero->stats.pos, hero->stats.direction, hero->stats.melee_range);
 	}
 }
 

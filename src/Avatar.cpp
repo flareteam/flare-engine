@@ -297,7 +297,7 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 	bool blocking = false;
 
 	for (unsigned i=0; i<action_queue.size(); i++) {
-		ActionData action = action_queue[i];
+		ActionData &action = action_queue[i];
 		const Power &power = powers->getPower(action.power);
 
 		if (power.new_state == POWSTATE_BLOCK)

@@ -47,6 +47,7 @@ class MenuActionBar : public Menu {
 private:
 	void alignElements();
 	void renderCooldowns();
+	FPoint setTarget(bool have_aim, bool aim_assist);
 
 	Sprite *emptyslot;
 	Sprite *disabled;
