@@ -23,12 +23,55 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-EventManager::EventManager() {
+/**
+ * Class: Event
+ */
+Event::Event()
+	: type("")
+	, components(std::vector<Event_Component>())
+	, location(Rect())
+	, hotspot(Rect())
+	, cooldown(0)
+	, cooldown_ticks(0)
+	, stats(NULL)
+	, keep_after_trigger(true)
+	, center(FPoint(-1, -1))
+	, reachable_from(Rect()) {
+}
 
+Event::~Event() {
+	// may be NULL, but delete can deal with null pointers.
+	delete stats;
+}
+
+/**
+ * returns a pointer to the event component within the components list
+ * no need to free the pointer by caller
+ * NULL will be returned if no such event is found
+ */
+Event_Component* Event::getComponent(const std::string &_type) {
+	std::vector<Event_Component>::iterator it;
+	for (it = components.begin(); it != components.end(); ++it)
+		if (it->type == _type)
+			return &(*it);
+	return NULL;
+}
+
+void Event::deleteAllComponents(const std::string &_type) {
+	std::vector<Event_Component>::iterator it;
+	for (it = components.begin(); it != components.end(); ++it)
+		if (it->type == _type)
+			it = components.erase(it);
+}
+
+
+/**
+ * Class: EventManager
+ */
+EventManager::EventManager() {
 }
 
 EventManager::~EventManager() {
-
 }
 
 void EventManager::loadEvent(FileParser &infile, Event* evnt) {
