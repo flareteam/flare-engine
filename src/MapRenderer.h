@@ -103,6 +103,9 @@ public:
 	// some events are triggered on exiting the map
 	void executeOnMapExitEvents();
 
+	// some events can trigger powers
+	void activatePower(int power_index, unsigned statblock_index, FPoint &target);
+
 	// cam(x,y) is where on the map the camera is pointing
 	FPoint cam;
 

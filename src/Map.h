@@ -118,6 +118,7 @@ protected:
 	// map events
 	std::vector<Event> events;
 	std::queue<Map_Group> enemy_groups;
+	std::vector<StatBlock> statblocks;
 
 	std::string filename;
 	std::string tileset;
