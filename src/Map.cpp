@@ -168,6 +168,9 @@ void Map::loadHeader(FileParser &infile) {
 	else if (infile.key == "tileheight") {
 		// @ATTR tileheight|integer|Inherited from Tiled map file. Unused by engine.
 	}
+	else if (infile.key == "orientation") {
+		// this is only used by Tiled when importing Flare maps
+	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}
