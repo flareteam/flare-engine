@@ -600,9 +600,9 @@ void GameStatePlay::checkLootDrop() {
 }
 
 /**
- * When a consumable-based power is used, we need to remove it from the inventory.
+ * Removes items as required by certain powers
  */
-void GameStatePlay::checkConsumable() {
+void GameStatePlay::checkUsedItems() {
 	for (unsigned i=0; i<powers->used_items.size(); i++) {
 		menu->inv->remove(powers->used_items[i]);
 	}
@@ -902,7 +902,7 @@ void GameStatePlay::logic() {
 	checkLog();
 	checkBook();
 	checkEquipmentChange();
-	checkConsumable();
+	checkUsedItems();
 	checkStash();
 	checkSaveEvent();
 	checkNotifications();
