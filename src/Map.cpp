@@ -52,6 +52,7 @@ void Map::clearQueues() {
 
 void Map::clearEvents() {
 	events.clear();
+	statblocks.clear();
 }
 
 int Map::load(std::string fname) {
@@ -93,6 +94,43 @@ int Map::load(std::string fname) {
 	}
 
 	infile.close();
+
+	// create StatBlocks for events that need powers
+	for (unsigned i=0; i<events.size(); ++i) {
+		Event_Component *ec_power = events[i].getComponent("power");
+		if (ec_power) {
+			statblocks.push_back(StatBlock());
+			StatBlock *statb = &statblocks.back();
+
+			if (!statb) {
+				logError("Map: Could not create StatBlock for Event.\n");
+				continue;
+			}
+
+			// store the index of this StatBlock so that we can find it when the event is activated
+			ec_power->y = statblocks.size()-1;
+
+			statb->current[STAT_ACCURACY] = 1000; // always hit the target
+
+			Event_Component *ec_path = events[i].getComponent("power_path");
+			if (ec_path) {
+				// source is power path start
+				statb->pos.x = ec_path->x + 0.5f;
+				statb->pos.y = ec_path->y + 0.5f;
+			}
+			else {
+				// source is event location
+				statb->pos.x = events[i].location.x + 0.5f;
+				statb->pos.y = events[i].location.y + 0.5f;
+			}
+
+			Event_Component *ec_damage = events[i].getComponent("power_damage");
+			if (ec_damage) {
+				statb->current[STAT_DMG_MELEE_MIN] = statb->current[STAT_DMG_RANGED_MIN] = statb->current[STAT_DMG_MENT_MIN] = ec_damage->a;
+				statb->current[STAT_DMG_MELEE_MAX] = statb->current[STAT_DMG_RANGED_MAX] = statb->current[STAT_DMG_MENT_MAX] = ec_damage->b;
+			}
+		}
+	}
 
 	return 0;
 }
@@ -277,5 +315,4 @@ void Map::loadNPC(FileParser &infile) {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
 	}
 }
-
 

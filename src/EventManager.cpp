@@ -23,12 +23,52 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-EventManager::EventManager() {
+/**
+ * Class: Event
+ */
+Event::Event()
+	: type("")
+	, components(std::vector<Event_Component>())
+	, location(Rect())
+	, hotspot(Rect())
+	, cooldown(0)
+	, cooldown_ticks(0)
+	, keep_after_trigger(true)
+	, center(FPoint(-1, -1))
+	, reachable_from(Rect()) {
+}
 
+Event::~Event() {
+}
+
+/**
+ * returns a pointer to the event component within the components list
+ * no need to free the pointer by caller
+ * NULL will be returned if no such event is found
+ */
+Event_Component* Event::getComponent(const std::string &_type) {
+	std::vector<Event_Component>::iterator it;
+	for (it = components.begin(); it != components.end(); ++it)
+		if (it->type == _type)
+			return &(*it);
+	return NULL;
+}
+
+void Event::deleteAllComponents(const std::string &_type) {
+	std::vector<Event_Component>::iterator it;
+	for (it = components.begin(); it != components.end(); ++it)
+		if (it->type == _type)
+			it = components.erase(it);
+}
+
+
+/**
+ * Class: EventManager
+ */
+EventManager::EventManager() {
 }
 
 EventManager::~EventManager() {
-
 }
 
 void EventManager::loadEvent(FileParser &infile, Event* evnt) {
@@ -514,33 +554,7 @@ bool EventManager::executeEvent(Event &ev) {
 			powers->spawn(ec->s, spawn_pos);
 		}
 		else if (ec->type == "power") {
-
-			int power_index = ec->x;
-
 			Event_Component *ec_path = ev.getComponent("power_path");
-			if (ev.stats == NULL) {
-				ev.stats = new StatBlock();
-
-				ev.stats->current[STAT_ACCURACY] = 1000; //always hits its target
-
-				// if a power path was specified, place the source position there
-				if (ec_path) {
-					ev.stats->pos.x = ec_path->x + 0.5f;
-					ev.stats->pos.y = ec_path->y + 0.5f;
-				}
-				// otherwise the source position is the event position
-				else {
-					ev.stats->pos.x = ev.location.x + 0.5f;
-					ev.stats->pos.y = ev.location.y + 0.5f;
-				}
-
-				Event_Component *ec_damage = ev.getComponent("power_damage");
-				if (ec_damage) {
-					ev.stats->current[STAT_DMG_MELEE_MIN] = ev.stats->current[STAT_DMG_RANGED_MIN] = ev.stats->current[STAT_DMG_MENT_MIN] = ec_damage->a;
-					ev.stats->current[STAT_DMG_MELEE_MAX] = ev.stats->current[STAT_DMG_RANGED_MAX] = ev.stats->current[STAT_DMG_MENT_MAX] = ec_damage->b;
-				}
-			}
-
 			FPoint target;
 
 			if (ec_path) {
@@ -557,11 +571,13 @@ bool EventManager::executeEvent(Event &ev) {
 			}
 			// no path specified, targets self location
 			else {
-				target.x = ev.stats->pos.x;
-				target.y = ev.stats->pos.y;
+				target.x = ev.location.x + 0.5f;
+				target.y = ev.location.y + 0.5f;
 			}
 
-			powers->activate(power_index, ev.stats, target);
+			// ec->x is power id
+			// ec->y is statblock index
+			mapr->activatePower(ec->x, ec->y, target);
 		}
 		else if (ec->type == "stash") {
 			mapr->stash = toBool(ec->s);

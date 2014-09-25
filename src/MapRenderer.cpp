@@ -796,6 +796,18 @@ void MapRenderer::createTooltip(Event_Component *ec) {
 	}
 }
 
+/**
+ * Activate a power that is attached to an event
+ */
+void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target) {
+	if (statblock_index < statblocks.size()) {
+		powers->activate(power_index, &statblocks[statblock_index], target);
+	}
+	else {
+		logError("MapRenderer: StatBlock index is out of bounds.\n");
+	}
+}
+
 MapRenderer::~MapRenderer() {
 	if (music != NULL) {
 		Mix_HaltMusic();

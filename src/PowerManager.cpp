@@ -1020,6 +1020,8 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint targe
  * Activate is basically a switch/redirect to the appropriate function
  */
 bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target) {
+	if ((unsigned)power_index >= powers.size())
+		return false;
 
 	if (src_stats->hero) {
 		if (powers[power_index].requires_mp > src_stats->mp)

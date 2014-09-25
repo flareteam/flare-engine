@@ -25,7 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "FileParser.h"
 #include "Utils.h"
-#include "StatBlock.h"
 
 class Event {
 public:
@@ -35,45 +34,15 @@ public:
 	Rect hotspot;
 	int cooldown; // events that run multiple times pause this long in frames
 	int cooldown_ticks;
-	StatBlock *stats;
 	bool keep_after_trigger; // if this event has been triggered once, should this event be kept? If so, this event can be triggered multiple times.
 	FPoint center;
 	Rect reachable_from;
 
-	Event()
-		: type("")
-		, components(std::vector<Event_Component>())
-		, cooldown(0)
-		, cooldown_ticks(0)
-		, stats(NULL)
-		, keep_after_trigger(true)
-		, center(FPoint(-1, -1)) {
-		location.x = location.y = location.w = location.h = 0;
-		hotspot.x = hotspot.y = hotspot.w = hotspot.h = 0;
-		reachable_from.x = reachable_from.y = reachable_from.w = reachable_from.h = 0;
-	}
+	Event();
+	~Event();
 
-	// returns a pointer to the event component within the components list
-	// no need to free the pointer by caller
-	// NULL will be returned if no such event is found
-	Event_Component *getComponent(const std::string &_type) {
-		std::vector<Event_Component>::iterator it;
-		for (it = components.begin(); it != components.end(); ++it)
-			if (it->type == _type)
-				return &(*it);
-		return NULL;
-	}
-
-	void deleteAllComponents(const std::string &_type) {
-		std::vector<Event_Component>::iterator it;
-		for (it = components.begin(); it != components.end(); ++it)
-			if (it->type == _type)
-				it = components.erase(it);
-	}
-
-	~Event() {
-		delete stats; // may be NULL, but delete can deal with null pointers.
-	}
+	Event_Component* getComponent(const std::string &_type);
+	void deleteAllComponents(const std::string &_type);
 };
 
 class EventManager {

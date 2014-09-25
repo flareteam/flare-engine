@@ -112,6 +112,7 @@ void MenuHUDLog::add(const string& s, bool prevent_spam) {
 		Image *graphics = render_device->createImage(size.x, size.y);
 		font->renderShadowed(s, 0, 0, JUSTIFY_LEFT, graphics, window_area.w, color_normal);
 		msg_buffer.push_back(graphics->createSprite());
+		graphics->unref();
 	}
 	else if (!msg_age.empty()) {
 		msg_age.back() = calcDuration(s);
