@@ -22,22 +22,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class PowerManager
  */
 
-#include "PowerManager.h"
+
 #include "Animation.h"
-#include "AnimationSet.h"
 #include "AnimationManager.h"
+#include "AnimationSet.h"
 #include "FileParser.h"
 #include "Hazard.h"
-#include "SharedResources.h"
+#include "MapCollision.h"
+#include "PowerManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
-#include "MapCollision.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
-
 #include <cmath>
 #include <climits>
 using namespace std;
@@ -46,8 +45,9 @@ using namespace std;
 /**
  * PowerManager constructor
  */
-PowerManager::PowerManager()
+PowerManager::PowerManager(LootManager *_lootm)
 	: collider(NULL)
+	, lootm(_lootm)
 	, log_msg("")
 	, used_items()
 	, used_equipped_items() {
@@ -218,12 +218,22 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "requires_empty_target")
 			// @ATTR requires_empty_target|bool|The power can only be cast when target tile is empty.
 			powers[input_id].requires_empty_target = toBool(infile.val);
-		else if (infile.key == "requires_item")
-			// @ATTR requires_item|item_id|Requires a specific item in inventory.
-			powers[input_id].requires_item = toInt(infile.val);
-		else if (infile.key == "requires_equipped_item")
-			// @ATTR requires_equipped_item|item_id|Requires a specific item to be equipped on hero.
-			powers[input_id].requires_equipped_item = toInt(infile.val);
+		else if (infile.key == "requires_item") {
+			// @ATTR requires_item|item_id, quantity (integer)|Requires a specific item of a specific quantity in inventory.
+			powers[input_id].requires_item = toInt(infile.nextValue());
+			powers[input_id].requires_item_quantity = toInt(infile.nextValue(), 1);
+		}
+		else if (infile.key == "requires_equipped_item") {
+			// @ATTR requires_equipped_item|item_id, quantity (integer) |Requires a specific item of a specific quantity to be equipped on hero.
+			powers[input_id].requires_equipped_item = toInt(infile.nextValue());
+			powers[input_id].requires_equipped_item_quantity = toInt(infile.nextValue());
+
+			// a maximum of 1 equipped item can be consumed at a time
+			if (powers[input_id].requires_equipped_item_quantity > 1) {
+				infile.error("PowerManager: Only 1 equipped item can be consumed at a time.");
+				clampCeil(powers[input_id].requires_equipped_item_quantity, 1);
+			}
+		}
 		else if (infile.key == "requires_targeting")
 			// @ATTR requires_targeting|bool|Power is only used when targeting using click-to-target.
 			powers[input_id].requires_targeting = toBool(infile.val);
@@ -463,6 +473,13 @@ void PowerManager::loadPowers() {
 
 			powers[input_id].mod_crit_value = popFirstInt(infile.val);
 		}
+		else if (infile.key == "loot") {
+			// @ATTR loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Give the player this loot when the power is used
+			if (lootm) {
+				powers[input_id].loot.push_back(Event_Component());
+				lootm->parseLoot(infile, &powers[input_id].loot.back(), &powers[input_id].loot);
+			}
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -660,6 +677,11 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	if (powers[power_index].wall_power != 0) {
 		haz->wall_power = powers[power_index].wall_power;
 	}
+
+	// handle loot
+	if (!powers[power_index].loot.empty()) {
+		haz->loot = powers[power_index].loot;
+	}
 }
 
 /**
@@ -699,11 +721,17 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		party_buffs.push(power_index);
 	}
 
-
 	// activate any post powers here if the power doesn't use a hazard
 	// otherwise the post power will chain off the hazard itself
 	if (!powers[power_index].use_hazard) {
 		activate(powers[power_index].post_power, src_stats, src_stats->pos);
+
+		// handle loot
+		for (unsigned i=0; i<powers[power_index].loot.size(); i++) {
+			loot.push_back(powers[power_index].loot[i]);
+			loot.back().x = (int)src_stats->pos.x;
+			loot.back().y = (int)src_stats->pos.y;
+		}
 	}
 }
 
@@ -1056,13 +1084,29 @@ void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
 	if (src_stats) {
 		if (src_stats->hero) {
 			src_stats->mp -= powers[power_index].requires_mp;
-			if (powers[power_index].requires_item != -1)
-				used_items.push_back(powers[power_index].requires_item);
+
+			// carried items
+			if (powers[power_index].requires_item != -1) {
+				int quantity = powers[power_index].requires_item_quantity;
+				while (quantity > 0) {
+					used_items.push_back(powers[power_index].requires_item);
+					quantity--;
+				}
+			}
+
+			// equipped item
+			// if the item is to be consumed, only one may be consumed at a time
 			// only allow one instance of duplicate items at a time in the used_equipped_items queue
 			// this is useful for Ouroboros rings, where we have 2 equipped, but only want to remove one at a time
 			if (powers[power_index].requires_equipped_item != -1 &&
-					find(used_equipped_items.begin(), used_equipped_items.end(), powers[power_index].requires_equipped_item) == used_equipped_items.end())
-				used_equipped_items.push_back(powers[power_index].requires_equipped_item);
+					find(used_equipped_items.begin(), used_equipped_items.end(), powers[power_index].requires_equipped_item) == used_equipped_items.end()) {
+
+				int quantity = powers[power_index].requires_equipped_item_quantity;
+				while (quantity > 0) {
+					used_equipped_items.push_back(powers[power_index].requires_equipped_item);
+					quantity--;
+				}
+			}
 		}
 		src_stats->hp -= powers[power_index].requires_hp;
 		src_stats->hp = (src_stats->hp < 0 ? 0 : src_stats->hp);

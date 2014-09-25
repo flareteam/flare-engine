@@ -91,7 +91,8 @@ GameStatePlay::GameStatePlay()
 	if (items == NULL)
 		items = new ItemManager();
 
-	powers = new PowerManager();
+	loot = new LootManager();
+	powers = new PowerManager(loot);
 	camp = new CampaignManager();
 	mapr = new MapRenderer();
 	pc = new Avatar();
@@ -101,7 +102,9 @@ GameStatePlay::GameStatePlay()
 	menu = new MenuManager(&pc->stats);
 	npcs = new NPCManager(&pc->stats);
 	quests = new QuestLog(menu->log);
-	loot = new LootManager(&pc->stats);
+
+	// LootManager needs hero StatBlock
+	loot->hero = &pc->stats;
 
 	// assign some object pointers after object creation, based on dependency order
 	camp->carried_items = &menu->inv->inventory[CARRIED];
@@ -589,16 +592,19 @@ void GameStatePlay::checkLootDrop() {
 		menu->inv->drop_stack.pop();
 	}
 
+	// check loot dropped by powers
+	if (!powers->loot.empty()) {
+		loot->checkLoot(powers->loot);
+		powers->loot.clear();
+	}
 }
 
 /**
- * When a consumable-based power is used, we need to remove it from the inventory.
+ * Removes items as required by certain powers
  */
-void GameStatePlay::checkConsumable() {
+void GameStatePlay::checkUsedItems() {
 	for (unsigned i=0; i<powers->used_items.size(); i++) {
-		if (items->items[powers->used_items[i]].type == "consumable") {
-			menu->inv->remove(powers->used_items[i]);
-		}
+		menu->inv->remove(powers->used_items[i]);
 	}
 	for (unsigned i=0; i<powers->used_equipped_items.size(); i++) {
 		menu->inv->removeEquipped(powers->used_equipped_items[i]);
@@ -896,7 +902,7 @@ void GameStatePlay::logic() {
 	checkLog();
 	checkBook();
 	checkEquipmentChange();
-	checkConsumable();
+	checkUsedItems();
 	checkStash();
 	checkSaveEvent();
 	checkNotifications();

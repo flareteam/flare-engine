@@ -51,11 +51,9 @@ class LootManager {
 private:
 
 	WidgetTooltip *tip;
-	StatBlock *hero;
 
 	// functions
 	void loadGraphics();
-	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL);
 	void checkEnemiesForLoot();
 	void checkMapForLoot();
 	void loadLootTables();
@@ -80,7 +78,7 @@ private:
 	std::vector<Point> tiles_to_unblock;
 
 public:
-	LootManager(StatBlock *_hero);
+	LootManager();
 	LootManager(const LootManager &copy); // not implemented
 	~LootManager();
 
@@ -91,6 +89,7 @@ public:
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(Enemy *e);
 	void addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero = false);
+	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL);
 	ItemStack checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv);
 	ItemStack checkAutoPickup(FPoint hero_pos, MenuInventory *inv);
 	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);
@@ -99,6 +98,7 @@ public:
 
 	void parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list);
 
+	StatBlock *hero;
 	int tooltip_margin; // pixels between loot drop center and label
 	bool full_msg;
 };

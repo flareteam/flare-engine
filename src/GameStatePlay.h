@@ -83,7 +83,7 @@ private:
 	void checkBook();
 	void checkEquipmentChange();
 	void checkTitle();
-	void checkConsumable();
+	void checkUsedItems();
 	void checkNotifications();
 	void checkNPCInteraction();
 	void checkStash();

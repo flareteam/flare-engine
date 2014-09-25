@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define POWER_MANAGER_H
 
 #include "CommonIncludes.h"
+#include "LootManager.h"
 #include "MapRenderer.h"
 #include "Utils.h"
 
@@ -146,7 +147,9 @@ public:
 	bool requires_los; // line of sight
 	bool requires_empty_target; // target square must be empty
 	int requires_item;
+	int requires_item_quantity;
 	int requires_equipped_item;
+	int requires_equipped_item_quantity;
 	bool consumable;
 	bool requires_targeting; // power only makes sense when using click-to-target
 	int cooldown; // milliseconds before you can use the power again
@@ -229,6 +232,9 @@ public:
 	int spawn_level_every;
 	int spawn_level_stat;
 
+	// loot
+	std::vector<Event_Component> loot;
+
 	Power()
 		: type(-1)
 		, name("")
@@ -250,7 +256,9 @@ public:
 		, requires_los(false)
 		, requires_empty_target(false)
 		, requires_item(-1)
+		, requires_item_quantity(0)
 		, requires_equipped_item(-1)
+		, requires_equipped_item_quantity(0)
 		, consumable(false)
 		, requires_targeting(false)
 		, cooldown(0)
@@ -346,9 +354,10 @@ private:
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
 public:
-	PowerManager();
+	PowerManager(LootManager *_lootm);
 	~PowerManager();
 
+	LootManager *lootm;
 	std::string log_msg;
 
 	void handleNewMap(MapCollision *_collider);
@@ -375,6 +384,8 @@ public:
 
 	std::vector<int> used_items;
 	std::vector<int> used_equipped_items;
+
+	std::vector<Event_Component> loot;
 };
 
 #endif

@@ -462,25 +462,28 @@ void MenuInventory::activate(Point position) {
 		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
 	// use a consumable item
-	else if (items->items[inventory[CARRIED][slot].item].type == "consumable") {
+	else if (items->items[inventory[CARRIED][slot].item].type == "consumable" &&
+	         items->items[inventory[CARRIED][slot].item].power > 0) {
+
+		int power_id = items->items[inventory[CARRIED][slot].item].power;
 
 		//don't use untransform item if hero is not transformed
-		if (powers->powers[items->items[inventory[CARRIED][slot].item].power].spawn_type == "untransform" && !stats->transformed) return;
+		if (powers->powers[power_id].spawn_type == "untransform" && !stats->transformed)
+			return;
+
+		// if the power consumes items, make sure we have enough
+		if (powers->powers[power_id].requires_item > 0 && powers->powers[power_id].requires_item_quantity > getItemCountCarried(powers->powers[power_id].requires_item)) {
+			log_msg = msg->get("You don't have enough of the required item.");
+			return;
+		}
 
 		//check for power cooldown
-		if (pc->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] > 0) return;
-		else pc->hero_cooldown[items->items[inventory[CARRIED][slot].item].power] = powers->powers[items->items[inventory[CARRIED][slot].item].power].cooldown;
+		if (pc->hero_cooldown[power_id] > 0) return;
+		else pc->hero_cooldown[power_id] = powers->powers[power_id].cooldown;
 
 		// if this item requires targeting it can't be used this way
-		if (!powers->powers[items->items[inventory[CARRIED][slot].item].power].requires_targeting) {
-
-			unsigned used_item_count = powers->used_items.size();
-			unsigned used_equipped_item_count = powers->used_equipped_items.size();
-			powers->activate(items->items[inventory[CARRIED][slot].item].power, stats, nullpt);
-			// Remove any used items from the queue of items to be removed. We will destroy the items here.
-			if (used_item_count < powers->used_items.size()) powers->used_items.pop_back();
-			if (used_equipped_item_count < powers->used_equipped_items.size()) powers->used_equipped_items.pop_back();
-			inventory[CARRIED].substract(slot);
+		if (!powers->powers[power_id].requires_targeting) {
+			powers->activate(power_id, stats, nullpt);
 		}
 		else {
 			// let player know this can only be used from the action bar
