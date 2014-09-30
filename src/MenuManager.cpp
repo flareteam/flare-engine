@@ -506,7 +506,10 @@ void MenuManager::logic() {
 		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
 			inpt->lock[CANCEL] = true;
 			key_lock = true;
-			if (menus_open) {
+			if (act->twostep_slot != -1) {
+				act->twostep_slot = -1;
+			}
+			else if (menus_open) {
 				closeAll();
 			}
 			else {
@@ -946,6 +949,12 @@ void MenuManager::logic() {
 		act->slot_item_count[i] = -1;
 
 		if (act->hotkeys[i] != -1) {
+			// first check if we're using a two-step power
+			if (act->twostep_slot != -1 && act->twostep_slot != i) {
+				act->slot_enabled[i] = false;
+				continue;
+			}
+
 			int item_id = powers->powers[act->hotkeys[i]].requires_item;
 			int equipped_item_id = powers->powers[act->hotkeys[i]].requires_equipped_item;
 
@@ -966,6 +975,7 @@ void MenuManager::logic() {
 					act->slot_enabled[i] = false;
 				}
 			}
+
 		}
 	}
 
