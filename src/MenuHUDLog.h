@@ -20,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuHUDLog
  */
 
-#pragma once
 #ifndef MENU_HUD_LOG_H
 #define MENU_HUD_LOG_H
 

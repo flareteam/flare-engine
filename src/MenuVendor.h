@@ -20,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuVendor
  */
 
-#pragma once
 #ifndef MENU_VENDOR_H
 #define MENU_VENDOR_H
 

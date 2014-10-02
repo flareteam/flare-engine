@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuCharacter
  */
 
-#pragma once
 #ifndef MENU_CHARACTER_H
 #define MENU_CHARACTER_H
 

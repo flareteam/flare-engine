@@ -23,8 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of active effects (buffs/debuffs)
  */
 
-
-#pragma once
 #ifndef MENU_ACTIVE_EFFECTS_H
 #define MENU_ACTIVE_EFFECTS_H
 

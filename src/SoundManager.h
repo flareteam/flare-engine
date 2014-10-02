@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class SoundManager
  */
 
-#pragma once
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 

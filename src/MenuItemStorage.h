@@ -22,8 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuItemStorage
  */
 
-
-#pragma once
 #ifndef MENU_ITEM_STORAGE_H
 #define MENU_ITEM_STORAGE_H
 

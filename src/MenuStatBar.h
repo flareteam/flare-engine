@@ -23,7 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of a status bar
  */
 
-#pragma once
 #ifndef MENU_STATBAR_H
 #define MENU_STATBAR_H
 

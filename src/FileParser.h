@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Abstract the generic key-value pair ini-style file format
  */
 
-#pragma once
 #ifndef FILE_PARSER_H
 #define FILE_PARSER_H
 

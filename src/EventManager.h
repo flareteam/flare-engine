@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class EventManager
  */
 
-#pragma once
 #ifndef EVENT_MANAGER_H
 #define EVENT_MANAGER_H
 

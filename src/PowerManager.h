@@ -24,23 +24,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Special code for handling spells, special powers, item effects, etc.
  */
 
-#pragma once
 #ifndef POWER_MANAGER_H
 #define POWER_MANAGER_H
 
-#include "CommonIncludes.h"
 #include "LootManager.h"
 #include "MapRenderer.h"
-#include "Utils.h"
+#include "Map.h"
 
 #include <cassert>
 
-class Animation;
 class AnimationSet;
 class Hazard;
-class MapCollision;
-class Map_Enemy;
-class StatBlock;
 
 const int POWTYPE_FIXED = 0;
 const int POWTYPE_MISSILE = 1;

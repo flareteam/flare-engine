@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetSlot
  */
 
-#pragma once
 #ifndef WIDGET_SLOT_H
 #define WIDGET_SLOT_H
 

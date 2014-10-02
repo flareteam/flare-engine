@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetLog
  */
 
-#pragma once
 #ifndef WIDGET_LOG_H
 #define WIDGET_LOG_H
 

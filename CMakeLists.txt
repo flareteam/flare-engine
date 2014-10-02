@@ -243,6 +243,106 @@ Set (FLARE_SOURCES
 	./src/main.cpp
 )
 
+Set (FLARE_HEADERS
+	./src/BehaviorAlly.h
+	./src/Entity.h
+	./src/Animation.h
+	./src/AnimationManager.h
+	./src/AnimationSet.h
+	./src/AStarContainer.h
+	./src/AStarNode.h
+	./src/Avatar.h
+	./src/BehaviorStandard.h
+	./src/CampaignManager.h
+	./src/CombatText.h
+	./src/CursorManager.h
+	./src/EffectManager.h
+	./src/Enemy.h
+	./src/EnemyBehavior.h
+	./src/EnemyGroupManager.h
+	./src/EnemyManager.h
+	./src/EventManager.h
+	./src/FileParser.h
+	./src/FontEngine.h
+	./src/GameState.h
+	./src/GameStateConfig.h
+	./src/GameStateCutscene.h
+	./src/GameStateTitle.h
+	./src/GameStateLoad.h
+	./src/GameStatePlay.h
+	./src/GameStateResolution.h
+	./src/GameStateNew.h
+	./src/GameSwitcher.h
+	./src/GetText.h
+	./src/Hazard.h
+	./src/HazardManager.h
+	./src/InputState.h
+	./src/ItemManager.h
+	./src/ItemStorage.h
+	./src/Loot.h
+	./src/LootManager.h
+	./src/Map.h
+	./src/MapCollision.h
+	./src/MapRenderer.h
+	./src/Menu.h
+	./src/MenuActionBar.h
+	./src/MenuActiveEffects.h
+	./src/MenuBook.h
+	./src/MenuCharacter.h
+	./src/MenuConfirm.h
+	./src/MenuDevHUD.h
+	./src/MenuDevConsole.h
+	./src/MenuEnemy.h
+	./src/MenuExit.h
+	./src/MenuHUDLog.h
+	./src/MenuInventory.h
+	./src/MenuItemStorage.h
+	./src/MenuLog.h
+	./src/MenuManager.h
+	./src/MenuMiniMap.h
+	./src/MenuNPCActions.h
+	./src/MenuPowers.h
+	./src/MenuStash.h
+	./src/MenuStatBar.h
+	./src/MenuTalker.h
+	./src/MenuVendor.h
+	./src/MessageEngine.h
+	./src/ModManager.h
+	./src/NPC.h
+	./src/NPCManager.h
+	./src/PowerManager.h
+	./src/QuestLog.h
+	./src/RenderDevice.h
+	./src/RenderDeviceList.h
+	./src/SDL_gfxBlitFunc.c
+	./src/SDLSoftwareRenderDevice.h
+	./src/Settings.h
+	./src/SharedGameResources.h
+	./src/SharedResources.h
+	./src/StatBlock.h
+	./src/Stats.h
+	./src/SoundManager.h
+	./src/TileSet.h
+	./src/TooltipData.h
+	./src/Utils.h
+	./src/UtilsDebug.h
+	./src/UtilsFileSystem.h
+	./src/UtilsParsing.h
+	./src/Widget.h
+	./src/WidgetCheckBox.h
+	./src/WidgetButton.h
+	./src/WidgetInput.h
+ 	./src/WidgetLabel.h
+ 	./src/WidgetListBox.h
+	./src/WidgetLog.h
+	./src/WidgetScrollBar.h
+	./src/WidgetScrollBox.h
+	./src/WidgetSlider.h
+	./src/WidgetSlot.h
+ 	./src/WidgetTabControl.h
+	./src/WidgetTooltip.h
+)
+
 # Add icon and file info to executable for Windows systems
 IF (WIN32)
   SET(FLARE_SOURCES
@@ -251,7 +351,7 @@ IF (WIN32)
     )
 ENDIF (WIN32)
 
-Add_Executable (flare ${FLARE_SOURCES})
+Add_Executable (flare ${FLARE_SOURCES} ${FLARE_HEADERS})
 
 # libSDLMain comes with libSDL if needed on certain platforms
 If (NOT SDLMAIN_LIBRARY)

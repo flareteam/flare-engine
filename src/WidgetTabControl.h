@@ -15,7 +15,6 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#pragma once
 #ifndef MENU_TAB_CONTROL_H
 #define MENU_TAB_CONTROL_H
 

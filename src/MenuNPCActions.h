@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuNPCActions
  */
 
-#pragma once
 #ifndef MENU_NPC_ACTIONS_H
 #define MENU_NPC_ACTIONS_H
 

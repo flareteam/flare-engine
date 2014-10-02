@@ -15,8 +15,6 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-
-#pragma once
 #ifndef INPUT_STATE_H
 #define INPUT_STATE_H
 

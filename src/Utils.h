@@ -24,7 +24,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Various utility structures, enums, function
  */
 
-#pragma once
 #ifndef UTILS_H
 #define UTILS_H
 

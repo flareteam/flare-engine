@@ -16,7 +16,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 
-#pragma once
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 

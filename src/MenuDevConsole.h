@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuDevConsole
  */
 
-#pragma once
 #ifndef MENU_DEVCONSOLE_H
 #define MENU_DEVCONSOLE_H
 

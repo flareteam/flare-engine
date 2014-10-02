@@ -23,7 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 
-#pragma once
 #ifndef ASTARNODE_H
 #define ASTARNODE_H
 
