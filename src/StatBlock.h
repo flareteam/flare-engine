@@ -213,6 +213,7 @@ public:
 	int transform_duration_total;
 	bool manual_untransform;
 	bool transform_with_equipment;
+	bool untransform_on_hit;
 	EffectManager effects;
 
 	FPoint pos;
