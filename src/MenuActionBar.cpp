@@ -46,16 +46,12 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	, disabled(NULL)
 	, attention(NULL)
 	, hero(_hero)
-	, updated(false) {
-	hero = _hero;
+	, drag_prev_slot(-1)
+	, updated(false)
+	, twostep_slot(-1) {
 
-	src.x = 0;
-	src.y = 0;
 	src.w = ICON_SIZE;
 	src.h = ICON_SIZE;
-	drag_prev_slot = -1;
-	last_mouse.x = 0;
-	last_mouse.y = 0;
 
 	clear();
 
@@ -193,6 +189,7 @@ void MenuActionBar::clear() {
 	for (int i=0; i<4; i++)
 		requires_attention[i] = false;
 
+	twostep_slot = -1;
 }
 
 void MenuActionBar::loadGraphics() {
@@ -258,11 +255,15 @@ void MenuActionBar::render() {
 	for (int i=0; i<12; i++) {
 		if (hotkeys[i] != 0) {
 			const Power &power = powers->getPower(hotkeys_mod[i]);
+
+			//see if the slot should be greyed out
 			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
 							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
 							  && !hero->stats.effects.stun
 							  && hero->stats.alive
-							  && hero->stats.canUsePower(power, hotkeys_mod[i]); //see if the slot should be greyed out
+							  && hero->stats.canUsePower(power, hotkeys_mod[i])
+							  && (twostep_slot == -1 || twostep_slot == i);
+
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
 			slots[i]->setIcon(power.icon + icon_offset);
@@ -434,11 +435,32 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		slot_activated[i] = false;
 
 		if (slot_enabled[i]) {
+			// part two of two step activation
+			if (twostep_slot == i && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+				have_aim = true;
+				action.power = hotkeys_mod[i];
+				twostep_slot = -1;
+				inpt->lock[MAIN1] = true;
+			}
+
 			// mouse/touch click
-			if (!NO_MOUSE && slots[i]->checkClick() == ACTIVATED) {
+			else if (!NO_MOUSE && slots[i]->checkClick() == ACTIVATED) {
 				have_aim = false;
 				slot_activated[i] = true;
 				action.power = hotkeys_mod[i];
+
+				// if a power requires a fixed target (like teleportation), break up activation into two parts
+				// the first step is to mark the slot that was clicked on
+				if (action.power > 0) {
+					const Power &power = powers->getPower(action.power);
+					if (power.starting_pos == STARTING_POS_TARGET || power.buff_teleport) {
+						twostep_slot = i;
+						action.power = 0;
+					}
+					else {
+						twostep_slot = -1;
+					}
+				}
 			}
 
 			// joystick/keyboard action button
@@ -446,20 +468,24 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				have_aim = false;
 				slot_activated[i] = true;
 				action.power = hotkeys_mod[i];
+				twostep_slot = -1;
 			}
 
 			// pressing hotkey
 			else if (i<10 && inpt->pressing[i+BAR_1]) {
 				have_aim = true;
 				action.power = hotkeys_mod[i];
+				twostep_slot = -1;
 			}
 			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 				have_aim = true;
 				action.power = hotkeys_mod[10];
+				twostep_slot = -1;
 			}
 			else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
 				have_aim = true;
 				action.power = hotkeys_mod[11];
+				twostep_slot = -1;
 			}
 		}
 
