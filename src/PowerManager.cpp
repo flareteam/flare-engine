@@ -346,8 +346,11 @@ void PowerManager::loadPowers() {
 			// @ATTR manual_untransform|bool|Force manual untranform
 			powers[input_id].manual_untransform = toBool(infile.val);
 		else if (infile.key == "keep_equipment")
-			// @ATTR keep_equipment|bool|Keep  equipment while transformed
+			// @ATTR keep_equipment|bool|Keep equipment while transformed
 			powers[input_id].keep_equipment = toBool(infile.val);
+		else if (infile.key == "untransform_on_hit")
+			// @ATTR untransform_on_hit|bool|Force untransform when the player is hit
+			powers[input_id].untransform_on_hit = toBool(infile.val);
 		// buffs
 		else if (infile.key == "buff")
 			// @ATTR buff|bool|Power is cast upon the caster.
@@ -1016,6 +1019,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint targe
 
 	src_stats->manual_untransform = powers[power_index].manual_untransform;
 	src_stats->transform_with_equipment = powers[power_index].keep_equipment;
+	src_stats->untransform_on_hit = powers[power_index].untransform_on_hit;
 
 	// If there's a sound effect, play it here
 	playSound(power_index);

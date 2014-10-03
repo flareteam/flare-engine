@@ -418,6 +418,9 @@ bool Entity::takeHit(const Hazard &h) {
 				else
 					stats.cur_state = ENEMY_HIT;
 				stats.cooldown_hit_ticks = stats.cooldown_hit;
+
+				if (stats.untransform_on_hit)
+					stats.transform_duration = 0;
 			}
 			// roll to see if the enemy's ON_HIT power is casted
 			if (percentChance(stats.power_chance[ON_HIT])) {

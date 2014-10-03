@@ -837,6 +837,7 @@ void Avatar::untransform() {
 	hero_stats = NULL;
 
 	stats.applyEffects();
+	stats.untransform_on_hit = false;
 }
 
 void Avatar::setAnimation(std::string name) {
