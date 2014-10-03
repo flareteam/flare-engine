@@ -255,6 +255,7 @@ Set (FLARE_HEADERS
 	./src/BehaviorStandard.h
 	./src/CampaignManager.h
 	./src/CombatText.h
+	./src/CommonIncludes.h
 	./src/CursorManager.h
 	./src/EffectManager.h
 	./src/Enemy.h
@@ -327,6 +328,7 @@ Set (FLARE_HEADERS
 	./src/Utils.h
 	./src/UtilsDebug.h
 	./src/UtilsFileSystem.h
+	./src/UtilsMath.h
 	./src/UtilsParsing.h
 	./src/Widget.h
 	./src/WidgetCheckBox.h
