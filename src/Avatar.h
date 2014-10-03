@@ -23,7 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Contains logic and rendering routines for the player avatar.
  */
 
-#pragma once
 #ifndef AVATAR_H
 #define AVATAR_H
 

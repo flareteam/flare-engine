@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuBook
  */
 
-#pragma once
 #ifndef MENU_BOOK_H
 #define MENU_BOOK_H
 

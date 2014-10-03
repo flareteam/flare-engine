@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetCheckBox
  */
 
-#pragma once
 #ifndef WIDGET_CHECKBOX_H
 #define WIDGET_CHECKBOX_H
 

@@ -20,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuExit
  */
 
-#pragma once
 #ifndef MENU_EXIT_H
 #define MENU_EXIT_H
 

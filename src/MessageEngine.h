@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * This class is primarily used for making sure FLARE is flexible and translatable.
  */
 
-#pragma once
 #ifndef MESSAGE_ENGINE_H
 #define MESSAGE_ENGINE_H
 

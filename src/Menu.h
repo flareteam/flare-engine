@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * The base class for Menu objects
  */
 
-#pragma once
 #ifndef MENU_H
 #define MENU_H
 

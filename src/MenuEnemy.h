@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles the display of the Enemy info of the screen
  */
 
-#pragma once
 #ifndef MENU_ENEMY_H
 #define MENU_ENEMY_H
 

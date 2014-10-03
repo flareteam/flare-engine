@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetScrollBar
  */
 
-#pragma once
 #ifndef WIDGET_ScrollBar_H
 #define WIDGET_ScrollBar_H
 

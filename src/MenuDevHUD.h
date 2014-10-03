@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MenuDevHUD
  */
 
-#pragma once
 #ifndef MENU_DEVHUD_H
 #define MENU_DEVHUD_H
 

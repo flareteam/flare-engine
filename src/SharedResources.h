@@ -26,7 +26,6 @@ Generic objects only. Game-specific objects don't belong here.
 Created and destroyed by main.cpp
 **/
 
-#pragma once
 #ifndef SHARED_RESOURCES_H
 #define SHARED_RESOURCES_H
 

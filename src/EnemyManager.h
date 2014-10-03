@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 
-#pragma once
 #ifndef ENEMY_MANAGER_H
 #define ENEMY_MANAGER_H
 

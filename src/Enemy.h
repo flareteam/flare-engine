@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 
-#pragma once
 #ifndef ENEMY_H
 #define ENEMY_H
 
