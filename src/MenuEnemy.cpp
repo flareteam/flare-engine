@@ -101,29 +101,30 @@ void MenuEnemy::render() {
 	if (enemy == NULL) return;
 	if (enemy->stats.corpse && enemy->stats.corpse_ticks == 0) return;
 
-	Rect src;
-	Rect dest;
-	int hp_bar_length;
+	Rect src, dest;
+	src.w = bar_pos.w;
+	src.h = bar_pos.h;
 
-	// draw trim/background
 	dest.x = window_area.x+bar_pos.x;
 	dest.y = window_area.y+bar_pos.y;
 	dest.w = bar_pos.w;
 	dest.h = bar_pos.h;
-	setBackgroundDest(dest);
-	Menu::render();
 
+	int hp_bar_length = 0;
 	if (enemy->stats.get(STAT_HP_MAX) == 0)
 		hp_bar_length = 0;
 	else
 		hp_bar_length = (enemy->stats.hp * 100) / enemy->stats.get(STAT_HP_MAX);
 
-	// draw hp bar
-	src.x = 0;
-	src.y = 0;
-	src.h = bar_pos.h;
-	src.w = hp_bar_length;
+	// draw hp bar background
+	setBackgroundClip(src);
+	setBackgroundDest(dest);
+	Menu::render();
+
+	// draw hp bar fill
 	if (bar_hp) {
+		src.w = hp_bar_length;
+		src.h = bar_pos.h;
 		bar_hp->setClip(src);
 		bar_hp->setDest(dest);
 		render_device->render(bar_hp);
@@ -149,9 +150,6 @@ void MenuEnemy::render() {
 		label_stats.set(window_area.x+bar_pos.x+bar_pos.w/2, window_area.y+bar_pos.y+bar_pos.h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), color_normal);
 		label_stats.render();
 	}
-
-
-	//SDL_UpdateRects(screen, 1, &dest);
 }
 
 MenuEnemy::~MenuEnemy() {
