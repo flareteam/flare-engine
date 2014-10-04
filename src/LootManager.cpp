@@ -605,7 +605,7 @@ void LootManager::loadLootTables() {
 			continue;
 
 		std::vector<Event_Component> *ec_list = &loot_tables[filenames[i]];
-		Event_Component *ec = &ec_list->back();
+		Event_Component *ec = NULL;
 		bool skip_to_next = false;
 
 		while (infile.next()) {
@@ -624,7 +624,7 @@ void LootManager::loadLootTables() {
 					skip_to_next = false;
 				}
 
-				if (skip_to_next)
+				if (skip_to_next || ec == NULL)
 					continue;
 
 				if (infile.key == "id") {
