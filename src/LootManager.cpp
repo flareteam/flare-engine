@@ -137,7 +137,7 @@ void LootManager::logic() {
 			}
 		}
 
-		if (it->on_ground && !it->sound_played && it->stack.item > 0) {
+		if (it->on_ground && !it->sound_played && !it->stack.empty()) {
 			Point pos;
 			pos.x = (int)it->pos.x;
 			pos.y = (int)it->pos.y;
@@ -175,7 +175,7 @@ void LootManager::renderTooltips(FPoint cam) {
 			// create tooltip data if needed
 			if (it->tip.isEmpty()) {
 
-				if (it->stack.item > 0) {
+				if (!it->stack.empty()) {
 					it->tip = items->getShortTooltip(it->stack);
 				}
 			}
@@ -397,8 +397,6 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
 ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv) {
 	Rect r;
 	ItemStack loot_stack;
-	loot_stack.item = 0;
-	loot_stack.quantity = 0;
 
 	// check left mouse click
 	if (!NO_MOUSE) {
@@ -423,13 +421,15 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 					curs->setCursor(CURSOR_INTERACT);
 					if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 						inpt->lock[MAIN1] = true;
-						if (it->stack.item > 0 && !(inv->full(it->stack.item))) {
-							loot_stack = it->stack;
-							it = loot.erase(it);
-							return loot_stack;
-						}
-						else if (it->stack.item > 0) {
-							full_msg = true;
+						if (!it->stack.empty()) {
+							if (!(inv->full(it->stack.item))) {
+								loot_stack = it->stack;
+								it = loot.erase(it);
+								return loot_stack;
+							}
+							else {
+								full_msg = true;
+							}
 						}
 					}
 				}
@@ -440,7 +440,7 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 	// check pressing Enter/Return
 	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 		loot_stack = checkNearestPickup(hero_pos, inv);
-		if (loot_stack.item > 0) {
+		if (!loot_stack.empty()) {
 			inpt->lock[ACCEPT] = true;
 		}
 	}
@@ -454,8 +454,6 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
  */
 ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
 	ItemStack loot_stack;
-	loot_stack.item = 0;
-	loot_stack.quantity = 0;
 
 	vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
@@ -475,8 +473,6 @@ ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
 
 ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 	ItemStack loot_stack;
-	loot_stack.item = 0;
-	loot_stack.quantity = 0;
 
 	float best_distance = std::numeric_limits<float>::max();
 
@@ -493,13 +489,13 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 		}
 	}
 
-	if (nearest != loot.end()) {
-		if (nearest->stack.item > 0 && !(inv->full(nearest->stack.item))) {
+	if (nearest != loot.end() && !nearest->stack.empty()) {
+		if (!(inv->full(nearest->stack.item))) {
 			loot_stack = nearest->stack;
 			loot.erase(nearest);
 			return loot_stack;
 		}
-		else if (nearest->stack.item > 0) {
+		else {
 			full_msg = true;
 		}
 	}

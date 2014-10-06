@@ -70,7 +70,7 @@ void GameStatePlay::saveGame() {
 	outfile.open(ss.str().c_str(), ios::out);
 
 	if (outfile.is_open()) {
-	
+
 		// comment
 		outfile << "## flare-engine save file ##" << "\n";
 
@@ -167,10 +167,10 @@ void GameStatePlay::saveGame() {
 	outfile.open(ss.str().c_str(), ios::out);
 
 	if (outfile.is_open()) {
-	
+
 		// comment
 		outfile << "## flare-engine stash file ##" << "\n";
-		
+
 		outfile << "quantity=" << menu->stash->stock.getQuantities() << "\n";
 		outfile << "item=" << menu->stash->stock.getItems() << "\n";
 
@@ -407,6 +407,8 @@ void GameStatePlay::loadStash() {
 		infile.close();
 	}
 	else logError("SaveLoad: Unable to open %s!\n", ss.str().c_str());
+
+	menu->stash->stock.clean();
 }
 
 /**

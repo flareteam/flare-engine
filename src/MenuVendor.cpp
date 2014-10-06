@@ -206,8 +206,7 @@ void MenuVendor::itemReturn(ItemStack stack) {
 void MenuVendor::add(ItemStack stack) {
 	// Remove the first item stack to make room
 	if (stock[VENDOR_SELL].full(stack)) {
-		stock[VENDOR_SELL][0].item = 0;
-		stock[VENDOR_SELL][0].quantity = 0;
+		stock[VENDOR_SELL][0].clear();
 		sort(VENDOR_SELL);
 	}
 	items->playSound(stack.item);
@@ -248,12 +247,11 @@ void MenuVendor::saveInventory() {
 
 void MenuVendor::sort(int type) {
 	for (unsigned i=0; i<VENDOR_SLOTS; i++) {
-		if (stock[type][i].item == 0) {
+		if (stock[type][i].empty()) {
 			for (unsigned j=i; j<VENDOR_SLOTS; j++) {
-				if (stock[type][j].item != 0) {
+				if (!stock[type][j].empty()) {
 					stock[type][i] = stock[type][j];
-					stock[type][j].item = 0;
-					stock[type][j].quantity = 0;
+					stock[type][j].clear();
 					break;
 				}
 			}

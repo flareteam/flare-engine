@@ -432,7 +432,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	TooltipData tip;
 	Color color = color_normal;
 
-	if (stack.item == 0) return tip;
+	if (stack.empty()) return tip;
 
 	// color quality
 	if (items[stack.item].set > 0) {
@@ -468,7 +468,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	Color color = color_normal;
 	string quality_desc = "";
 
-	if (stack.item == 0) return tip;
+	if (stack.empty()) return tip;
 
 	// color quality
 	if (items[stack.item].set > 0) {
@@ -681,6 +681,29 @@ bool ItemStack::operator > (const ItemStack &param) const {
 	else {
 		return item > param.item;
 	}
+}
+
+/**
+ * Check if an item stack is empty and provide some error checking
+ */
+bool ItemStack::empty() {
+	if (item != 0 && quantity > 0) {
+		return false;
+	}
+	else if (item == 0 && quantity != 0) {
+		logError("ItemStack: Item id is zero, but quantity is %d.\n", quantity);
+		quantity = 0;
+	}
+	else if (item != 0 && quantity == 0) {
+		logError("ItemStack: Item id is %d, but quantity is zero.\n", item);
+		item = 0;
+	}
+	return true;
+}
+
+void ItemStack::clear() {
+	item = 0;
+	quantity = 0;
 }
 
 int Item::getSellPrice() {

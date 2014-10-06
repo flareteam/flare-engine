@@ -33,8 +33,7 @@ void ItemStorage::init(int _slot_number) {
 	storage = new ItemStack[slot_number];
 
 	for( int i=0; i<slot_number; i++) {
-		storage[i].item = 0;
-		storage[i].quantity = 0;
+		storage[i].clear();
 	}
 }
 
@@ -52,8 +51,7 @@ void ItemStorage::setItems(string s) {
 		// check if such item exists to avoid crash if savegame was modified manually
 		if (storage[i].item < 0) {
 			logError("ItemStorage: Item on position %d has negative id, skipping\n", i);
-			storage[i].item = 0;
-			storage[i].quantity = 0;
+			storage[i].clear();
 		}
 		else if ((unsigned)storage[i].item > items->items.size()-1) {
 			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown\n", storage[i].item, (int)items->items.size());
@@ -112,8 +110,7 @@ string ItemStorage::getQuantities() {
 
 void ItemStorage::clear() {
 	for( int i=0; i<slot_number; i++) {
-		storage[i].item = 0;
-		storage[i].quantity = 0;
+		storage[i].clear();
 	}
 }
 
@@ -126,7 +123,7 @@ void ItemStorage::clear() {
  */
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
 
-	if (stack.item != 0) {
+	if (!stack.empty()) {
 		int max_quantity = items->items[stack.item].max_quantity;
 		if (slot > -1) {
 			// a slot is specified
@@ -147,7 +144,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 			// then an empty slot
 			i = 0;
 			while (slot == -1 && i < slot_number) {
-				if (storage[i].item == 0) {
+				if (storage[i].empty()) {
 					slot = i;
 				}
 				i++;
@@ -183,7 +180,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 void ItemStorage::substract(int slot, int quantity) {
 	storage[slot].quantity -= quantity;
 	if (storage[slot].quantity <= 0) {
-		storage[slot].item = 0;
+		storage[slot].clear();
 	}
 }
 
@@ -214,10 +211,10 @@ void ItemStorage::sort() {
 }
 
 bool ItemStorage::full(ItemStack stack) {
+	if (stack.empty())
+		return false;
+
 	for (int i=0; i<slot_number; i++) {
-		if (stack.quantity < 0) {
-			return false;
-		}
 		if (storage[i].item == stack.item && storage[i].quantity < items->items[stack.item].max_quantity) {
 			if (stack.quantity + storage[i].quantity >= items->items[stack.item].max_quantity) {
 				stack.quantity -= storage[i].quantity;
@@ -225,7 +222,7 @@ bool ItemStorage::full(ItemStack stack) {
 			}
 			return false;
 		}
-		if (storage[i].item == 0) {
+		if (storage[i].empty()) {
 			return false;
 		}
 	}
@@ -273,8 +270,11 @@ void ItemStorage::clean() {
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item > 0 && storage[i].quantity < 1) {
 			logInfo("ItemStorage: Removing item with id %d, which has a quantity of 0\n",storage[i].item);
-			storage[i].item = 0;
-			storage[i].quantity = 0;
+			storage[i].clear();
+		}
+		else if (storage[i].item == 0 && storage[i].quantity != 0) {
+			logInfo("ItemStorage: Removing item with id 0, which has a quantity of %d\n", storage[i].quantity);
+			storage[i].clear();
 		}
 	}
 }

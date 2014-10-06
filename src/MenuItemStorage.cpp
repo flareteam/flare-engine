@@ -179,8 +179,7 @@ ItemStack MenuItemStorage::click(Point position) {
 		return item;
 	}
 	else {
-		item.item = 0;
-		item.quantity = 0;
+		item.clear();
 		return item;
 	}
 }
