@@ -882,10 +882,7 @@ void MenuManager::logic() {
 							drop_stack.push(drag_stack);
 						}
 						else {
-							if (inv->areaOver(inpt->mouse) == CARRIED)
-								inv->drop(inpt->mouse,drag_stack);
-							else
-								inv->add(drag_stack);
+							inv->drop(inpt->mouse,drag_stack);
 						}
 					}
 				}
@@ -904,10 +901,7 @@ void MenuManager::logic() {
 						splitStack(drag_stack);
 					}
 					else {
-						if (inv->areaOver(inpt->mouse) == CARRIED)
-							inv->drop(inpt->mouse,drag_stack);
-						else
-							inv->add(drag_stack);
+						inv->drop(inpt->mouse,drag_stack);
 					}
 					stash->updated = true;
 				}

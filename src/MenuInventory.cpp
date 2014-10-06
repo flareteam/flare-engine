@@ -316,12 +316,15 @@ ItemStack MenuInventory::click(Point position) {
  * Return dragged item to previous slot
  */
 void MenuInventory::itemReturn(ItemStack stack) {
-	if (drag_prev_src == -1)
-		return;
-	inventory[drag_prev_src].itemReturn(stack);
-	// if returning equipment, prepare to change stats/sprites
-	if (drag_prev_src == EQUIPMENT) {
-		updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
+	if (drag_prev_src == -1) {
+		add(stack, CARRIED, -1, false);
+	}
+	else {
+		inventory[drag_prev_src].itemReturn(stack);
+		// if returning equipment, prepare to change stats/sprites
+		if (drag_prev_src == EQUIPMENT) {
+			updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
+		}
 	}
 	drag_prev_src = -1;
 }
