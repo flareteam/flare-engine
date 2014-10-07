@@ -110,10 +110,7 @@ public:
 	int currency;
 	int drag_prev_src;
 
-	// the following two are separate because artifacts don't display on the hero.
-	// so we only update the hero sprites when non-artifact changes occur.
 	bool changed_equipment;
-	bool changed_artifact;
 
 	std::string log_msg;
 	std::string show_book;

@@ -520,7 +520,7 @@ void GameStatePlay::checkTitle() {
 
 void GameStatePlay::checkEquipmentChange() {
 	// force the actionbar to update when we change gear
-	if (menu->inv->changed_equipment || menu->inv->changed_artifact) {
+	if (menu->inv->changed_equipment) {
 		menu->act->updated = true;
 	}
 
@@ -562,7 +562,6 @@ void GameStatePlay::checkEquipmentChange() {
 	}
 
 	menu->inv->changed_equipment = false;
-	menu->inv->changed_artifact = false;
 }
 
 void GameStatePlay::checkLootDrop() {
