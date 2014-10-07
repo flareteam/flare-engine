@@ -51,7 +51,6 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 
 	drag_prev_src = -1;
 	changed_equipment = true;
-	changed_artifact = true;
 	log_msg = "";
 	show_book = "";
 
@@ -742,11 +741,8 @@ void MenuInventory::updateEquipment(int slot) {
 		// This should never happen, but ignore it if it does
 		return;
 	}
-	else if (slot_type[slot] != "artifact") {
-		changed_equipment = true;
-	}
 	else {
-		changed_artifact = true;
+		changed_equipment = true;
 	}
 }
 
