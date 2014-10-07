@@ -523,8 +523,11 @@ Uint32 SDLSoftwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
-	Uint32 rmask, gmask, bmask, amask;
 
+	if (!image)
+		return NULL;
+
+	Uint32 rmask, gmask, bmask, amask;
 	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
 
 #if SDL_VERSION_ATLEAST(2,0,0)
