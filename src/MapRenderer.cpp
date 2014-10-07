@@ -761,7 +761,7 @@ void MapRenderer::checkNearestEvent() {
 	}
 
 	if (nearest != events.end()) {
-		if (NO_MOUSE) {
+		if (NO_MOUSE || TOUCHSCREEN) {
 			// new tooltip?
 			createTooltip((*nearest).getComponent("tooltip"));
 			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);

@@ -136,6 +136,7 @@ int JOYSTICK_DEVICE;
 bool MOUSE_AIM;
 bool NO_MOUSE;
 int JOY_DEADZONE;
+bool TOUCHSCREEN = false;
 
 // Language Settings
 std::string LANGUAGE = "en";
@@ -860,5 +861,6 @@ void loadAndroidDefaults() {
 	NO_MOUSE = false;
 	ENABLE_JOYSTICK = false;
 	HARDWARE_CURSOR = true;
+	TOUCHSCREEN = true;
 #endif
 }
