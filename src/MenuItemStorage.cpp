@@ -35,6 +35,7 @@ MenuItemStorage::MenuItemStorage()
 	, slot_type()
 	, drag_prev_slot(-1)
 	, slots()
+	, current_slot(NULL)
 	, highlight(NULL)
 	, highlight_image(NULL)
 	, overlay_disabled(NULL) {
@@ -172,6 +173,18 @@ ItemStack MenuItemStorage::click(Point position) {
 
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
+		if (TOUCHSCREEN) {
+			if (!slots[drag_prev_slot]->in_focus && !item.empty()) {
+				slots[drag_prev_slot]->in_focus = true;
+				current_slot = slots[drag_prev_slot];
+				item.clear();
+				return item;
+			}
+			else {
+				slots[drag_prev_slot]->in_focus = false;
+				current_slot = NULL;
+			}
+		}
 		if (!item.empty()) {
 			if (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked) {
 				item.quantity = 1;

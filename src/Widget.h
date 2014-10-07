@@ -69,6 +69,7 @@ public:
 	void add(Widget* widget);			// Add a widget
 	void remove(Widget* widget);		// Remove a widget
 	void clear();						// Remove all widgets
+	void setCurrent(Widget* widget);
 	int getCurrent();
 	unsigned size();
 	Widget* getNext(bool inner = true);	// Increment current selected, return widget
@@ -77,7 +78,7 @@ public:
 	void activate();					// Fire off what happens when the user presses 'accept'
 	void defocus();						// Call when user clicks outside of a widget, resets current
 
-	void logic();
+	void logic(bool allow_keyboard = false);
 };
 
 #endif

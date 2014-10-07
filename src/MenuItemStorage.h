@@ -57,6 +57,7 @@ public:
 
 	int drag_prev_slot;
 	std::vector<WidgetSlot*> slots;
+	WidgetSlot *current_slot;
 
 	bool * highlight;
 	Sprite *highlight_image;

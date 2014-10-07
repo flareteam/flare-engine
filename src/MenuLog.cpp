@@ -104,9 +104,7 @@ void MenuLog::alignElements() {
 void MenuLog::logic() {
 	if(!visible) return;
 
-	if (NO_MOUSE) {
-		tablist.logic();
-	}
+	tablist.logic();
 
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned i = 0; i < LOG_TYPE_COUNT; i++) {

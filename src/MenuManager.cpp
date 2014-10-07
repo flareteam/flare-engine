@@ -1222,47 +1222,49 @@ void MenuManager::render() {
 		menus[i]->render();
 	}
 
-	TooltipData tip_new;
+	if (!TOUCHSCREEN) {
+		TooltipData tip_new;
 
-	// Find tooltips depending on mouse position
-	if (!book->visible) {
-		if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
-			tip_new = chr->checkTooltip();
+		// Find tooltips depending on mouse position
+		if (!book->visible) {
+			if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
+				tip_new = chr->checkTooltip();
+			}
+			if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
+				tip_new = vendor->checkTooltip(inpt->mouse);
+			}
+			if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
+				tip_new = stash->checkTooltip(inpt->mouse);
+			}
+			if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
+				tip_new = pow->checkTooltip(inpt->mouse);
+			}
+			if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
+				tip_new = inv->checkTooltip(inpt->mouse);
+			}
 		}
-		if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
-			tip_new = vendor->checkTooltip(inpt->mouse);
+		if (isWithin(act->window_area,inpt->mouse)) {
+			tip_new = act->checkTooltip(inpt->mouse);
 		}
-		if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
-			tip_new = stash->checkTooltip(inpt->mouse);
+
+		if (!tip_new.isEmpty()) {
+
+			// when we render a tooltip it buffers the rasterized text for performance.
+			// If this new tooltip is the same as the existing one, reuse.
+
+			if (!tip_new.compare(&tip_buf)) {
+				tip_buf.clear();
+				tip_buf = tip_new;
+			}
+			tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
+			TOOLTIP_CONTEXT = TOOLTIP_MENU;
 		}
-		if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
-			tip_new = pow->checkTooltip(inpt->mouse);
-		}
-		if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
-			tip_new = inv->checkTooltip(inpt->mouse);
+		else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
+			TOOLTIP_CONTEXT = TOOLTIP_NONE;
 		}
 	}
-	if (isWithin(act->window_area,inpt->mouse)) {
-		tip_new = act->checkTooltip(inpt->mouse);
-	}
 
-	if (!tip_new.isEmpty()) {
-
-		// when we render a tooltip it buffers the rasterized text for performance.
-		// If this new tooltip is the same as the existing one, reuse.
-
-		if (!tip_new.compare(&tip_buf)) {
-			tip_buf.clear();
-			tip_buf = tip_new;
-		}
-		tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
-		TOOLTIP_CONTEXT = TOOLTIP_MENU;
-	}
-	else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
-		TOOLTIP_CONTEXT = TOOLTIP_NONE;
-	}
-
-	if (NO_MOUSE)
+	if (NO_MOUSE || TOUCHSCREEN)
 		handleKeyboardTooltips();
 
 	// draw icon under cursor if dragging

@@ -81,7 +81,7 @@ void MenuConfirm::alignElements() {
 
 void MenuConfirm::logic() {
 	if (visible) {
-		tablist.logic();
+		tablist.logic(true);
 		confirmClicked = false;
 
 		if (hasConfirmButton && buttonConfirm->checkClick()) {

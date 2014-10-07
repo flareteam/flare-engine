@@ -133,7 +133,7 @@ void GameStateTitle::logic() {
 		exitRequested = true;
 	}
 
-	tablist.logic();
+	tablist.logic(true);
 
 	if (button_play->checkClick()) {
 		delete requestedGameState;

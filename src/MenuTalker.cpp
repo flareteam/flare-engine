@@ -129,9 +129,7 @@ void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
 
-	if (NO_MOUSE) {
-		tablist.logic();
-	}
+	tablist.logic();
 
 	advanceButton->enabled = false;
 	closeButton->enabled = false;

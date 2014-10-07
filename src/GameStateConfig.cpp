@@ -736,7 +736,7 @@ void GameStateConfig::logic () {
 
 	if (!input_confirm->visible && !defaults_confirm->visible) {
 		tabControl->logic();
-		tablist.logic();
+		tablist.logic(true);
 
 		// Ok/Cancel Buttons
 		if (ok_button->checkClick()) {
@@ -1174,7 +1174,7 @@ bool GameStateConfig::setMods() {
 
 		// comment
 		outfile << "## flare-engine mods list file ##" << "\n";
-		
+
 		outfile<<"# Mods lower on the list will overwrite data in the entries higher on the list"<<"\n";
 		outfile<<"\n";
 
