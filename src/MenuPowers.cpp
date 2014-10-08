@@ -226,7 +226,7 @@ short MenuPowers::nextLevel(short power_cell_index) {
 					power_cell[power_cell_index].upgrades.end(),
 					power_cell[power_cell_index].id);
 
-	if (level_it == power_cell[power_cell_index].upgrades.end()) {
+	if (!power_cell[power_cell_index].upgrades.empty() && level_it == power_cell[power_cell_index].upgrades.end()) {
 		// current power is base power, take first upgrade
 		short index = power_cell[power_cell_index].upgrades[0];
 		return id_by_powerIndex(index, power_cell_upgrade);
@@ -390,7 +390,6 @@ int MenuPowers::click(Point mouse) {
 			else if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) {
 				// pick up and drag power
 				slots[i]->in_focus = false;
-				tablist.setCurrent(NULL);
 				return power_cell[i].id;
 			}
 			else
@@ -470,7 +469,7 @@ void MenuPowers::logic() {
 		if (upgradeButtons[i] != NULL) {
 			upgradeButtons[i]->enabled = false;
 			// enable button only if current level is unlocked and next level can be unlocked
-			if (nextLevel(i) != -1 && requirementsMet(power_cell[i].id) && powerUnlockable(power_cell_upgrade[nextLevel(i)].id) && points_left > 0 && power_cell_upgrade[nextLevel(i)].requires_point) {
+			if (canUpgrade(i)) {
 				upgradeButtons[i]->enabled = true;
 			}
 			if (upgradeButtons[i]->checkClick() && power_cell[i].tab == tabControl->getActiveTab()) {
@@ -498,6 +497,14 @@ void MenuPowers::logic() {
 		snd->play(sfx_close);
 	}
 	if (tabs_count > 1) tabControl->logic();
+}
+
+bool MenuPowers::canUpgrade(short power_cell_index) {
+	return (nextLevel(power_cell_index) != -1 &&
+			requirementsMet(power_cell[power_cell_index].id) &&
+			powerUnlockable(power_cell_upgrade[nextLevel(power_cell_index)].id) &&
+			points_left > 0 &&
+			power_cell_upgrade[nextLevel(power_cell_index)].requires_point);
 }
 
 void MenuPowers::render() {

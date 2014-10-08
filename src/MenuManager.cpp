@@ -1134,6 +1134,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// clear power dragging if power slot was pressed twice
 		else if (slotClick == ACTIVATED) {
+			if (drag_power > 0 && pow->canUpgrade(pow->tablist.getCurrent())) {
+				pow->upgradePower(pow->tablist.getCurrent());
+			}
 			drag_src = 0;
 			drag_power = 0;
 			keyboard_dragging = false;

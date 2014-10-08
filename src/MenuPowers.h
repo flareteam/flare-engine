@@ -122,7 +122,6 @@ private:
 
 	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
 	short nextLevel(short power_cell_index);
-	void upgradePower(short power_cell_index);
 	void replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index);
 	short getPointsUsed();
 	void setUnlockedPowers();
@@ -142,6 +141,8 @@ public:
 	bool baseRequirementsMet(int power_index);
 	bool requirementsMet(int power_index);
 	int click(Point mouse);
+	void upgradePower(short power_cell_index);
+	bool canUpgrade(short power_cell_index);
 	void applyPowerUpgrades();
 	bool meetsUsageStats(unsigned powerid);
 	short getUnspent() {
