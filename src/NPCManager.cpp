@@ -96,7 +96,7 @@ void NPCManager::handleNewMap() {
 		npc->pos.x = mn.pos.x;
 		npc->pos.y = mn.pos.y;
 
-		npc->stock.sort();
+		// npc->stock.sort();
 		npcs.push_back(npc);
 	}
 

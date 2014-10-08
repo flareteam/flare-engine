@@ -792,7 +792,7 @@ bool saveSettings() {
 
 		// comment
 		outfile << "## flare-engine settings file ##" << "\n";
-		
+
 		for (int i = 0; i < config_size; i++) {
 
 			// write additional newline before the next section

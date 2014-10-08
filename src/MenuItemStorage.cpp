@@ -172,15 +172,17 @@ ItemStack MenuItemStorage::click(Point position) {
 
 	if (drag_prev_slot > -1) {
 		item = storage[drag_prev_slot];
-		if (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked) {
-			item.quantity = 1;
+		if (!item.empty()) {
+			if (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked) {
+				item.quantity = 1;
+			}
+			substract( drag_prev_slot, item.quantity);
 		}
-		substract( drag_prev_slot, item.quantity);
+		// item will be cleared if item.empty() == true
 		return item;
 	}
 	else {
-		item.item = 0;
-		item.quantity = 0;
+		item.clear();
 		return item;
 	}
 }

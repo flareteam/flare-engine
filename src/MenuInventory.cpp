@@ -169,13 +169,13 @@ void MenuInventory::logic() {
 			std::vector<int> removable_items;
 			removable_items.clear();
 			for (int i=0; i < MAX_EQUIPPED; i++) {
-				if (inventory[EQUIPMENT][i].item > 0) {
+				if (!inventory[EQUIPMENT][i].empty()) {
 					if (items->items[inventory[EQUIPMENT][i].item].type != "quest")
 						removable_items.push_back(inventory[EQUIPMENT][i].item);
 				}
 			}
 			for (int i=0; i < MAX_CARRIED; i++) {
-				if (inventory[CARRIED][i].item > 0) {
+				if (!inventory[CARRIED][i].empty()) {
 					if (items->items[inventory[CARRIED][i].item].type != "quest")
 						removable_items.push_back(inventory[CARRIED][i].item);
 				}
@@ -277,7 +277,7 @@ TooltipData MenuInventory::checkTooltip(Point position) {
 	if (inventory[area][slot].item > 0) {
 		tip = inventory[area].checkTooltip(position, stats, PLAYER_INV);
 	}
-	else if (area == EQUIPMENT && inventory[area][slot].item == 0) {
+	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
 		tip.addText(msg->get(slot_desc[slot]));
 	}
 
@@ -289,8 +289,6 @@ TooltipData MenuInventory::checkTooltip(Point position) {
  */
 ItemStack MenuInventory::click(Point position) {
 	ItemStack item;
-	item.item = 0;
-	item.quantity = 0;
 
 	drag_prev_src = areaOver(position);
 	if (drag_prev_src > -1) {
@@ -302,8 +300,7 @@ ItemStack MenuInventory::click(Point position) {
 			}
 			else {
 				itemReturn(item);
-				item.item = 0;
-				item.quantity = 0;
+				item.clear();
 			}
 		}
 	}
@@ -315,12 +312,15 @@ ItemStack MenuInventory::click(Point position) {
  * Return dragged item to previous slot
  */
 void MenuInventory::itemReturn(ItemStack stack) {
-	if (drag_prev_src == -1)
-		return;
-	inventory[drag_prev_src].itemReturn(stack);
-	// if returning equipment, prepare to change stats/sprites
-	if (drag_prev_src == EQUIPMENT) {
-		updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
+	if (drag_prev_src == -1) {
+		add(stack, CARRIED, -1, false);
+	}
+	else {
+		inventory[drag_prev_src].itemReturn(stack);
+		// if returning equipment, prepare to change stats/sprites
+		if (drag_prev_src == EQUIPMENT) {
+			updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
+		}
 	}
 	drag_prev_src = -1;
 }
@@ -360,7 +360,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 				// Merge the stacks
 				add(stack, area, slot, false);
 			}
-			else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].item == 0) {
+			else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].empty()) {
 				// Swap the two stacks
 				itemReturn(inventory[area][slot]);
 				inventory[area][slot] = stack;
@@ -385,11 +385,11 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 					// Merge the stacks
 					add(stack, area, slot, false);
 				}
-				else if (inventory[area][slot].item == 0) {
+				else if (inventory[area][slot].empty()) {
 					// Drop the stack
 					inventory[area][slot] = stack;
 				}
-				else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].item == 0) {
+				else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].empty()) {
 					// Check if the previous slot is free (could still be used if SHIFT was used).
 					// Swap the two stacks
 					itemReturn( inventory[area][slot]);
@@ -410,12 +410,12 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 				// Merge the stacks
 				add(stack, area, slot, false);
 			}
-			else if (inventory[area][slot].item == 0) {
+			else if (inventory[area][slot].empty()) {
 				// Drop the stack
 				inventory[area][slot] = stack;
 			}
 			else if(
-				inventory[EQUIPMENT][drag_prev_slot].item == 0
+				inventory[EQUIPMENT][drag_prev_slot].empty()
 				&& inventory[CARRIED][slot].item != stack.item
 				&& items->items[inventory[CARRIED][slot].item].type == slot_type[drag_prev_slot]
 				&& requirementsMet(inventory[CARRIED][slot].item)
@@ -449,7 +449,7 @@ void MenuInventory::activate(Point position) {
 		return;
 
 	// empty slot
-	if (inventory[CARRIED][slot].item == 0)
+	if (inventory[CARRIED][slot].empty())
 		return;
 
 	// can't interact with quest items
@@ -497,13 +497,12 @@ void MenuInventory::activate(Point position) {
 
 		// find first empty(or just first) slot for item to equip
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			const ItemStack &dest = inventory[EQUIPMENT].storage[i];
 			if (slot_type[i] == items->items[src.item].type) {
 				if (equip_slot == -1) {
 					// non-empty and matching
 					equip_slot = i;
 				}
-				else if (dest.item == 0) {
+				else if (inventory[EQUIPMENT].storage[i].empty()) {
 					// empty and matching, no need to search more
 					equip_slot = i;
 					break;
@@ -518,12 +517,12 @@ void MenuInventory::activate(Point position) {
 					// Merge the stacks
 					add(stack, EQUIPMENT, equip_slot, false);
 				}
-				else if( inventory[EQUIPMENT][equip_slot].item == 0) {
+				else if( inventory[EQUIPMENT][equip_slot].empty()) {
 					// Drop the stack
 					inventory[EQUIPMENT][equip_slot] = stack;
 				}
 				else {
-					if( inventory[CARRIED][slot].item == 0) { // Don't forget this slot may have been emptied by the click()
+					if( inventory[CARRIED][slot].empty()) { // Don't forget this slot may have been emptied by the click()
 						// Swap the two stacks
 						itemReturn( inventory[EQUIPMENT][equip_slot]);
 					}
@@ -551,19 +550,19 @@ void MenuInventory::activate(Point position) {
  * @param slot Slot number where it will try to store the item
  */
 void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
-	if (stack.quantity < 1)
+	if (stack.empty())
 		return;
 
 	if (play_sound)
 		items->playSound(stack.item);
 
-	if (stack.item != 0) {
+	if (!stack.empty()) {
 		if (area < 0) {
 			area = CARRIED;
 		}
 		if (area == CARRIED) {
 			ItemStack leftover = inventory[CARRIED].add(stack, slot);
-			if (leftover.quantity > 0) {
+			if (!leftover.empty()) {
 				drop_stack.push(leftover);
 			}
 		}
@@ -583,7 +582,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 				add(stack, EQUIPMENT, slot, false);
 			}
 
-			if (leftover.quantity > 0) {
+			if (!leftover.empty()) {
 				add(leftover, CARRIED, -1, false);
 			}
 		}
@@ -613,10 +612,12 @@ void MenuInventory::removeEquipped(int item) {
  * Add currency item
  */
 void MenuInventory::addCurrency(int count) {
-	ItemStack stack;
-	stack.item = CURRENCY_ID;
-	stack.quantity = count;
-	add(stack, CARRIED, -1, false);
+	if (count > 0) {
+		ItemStack stack;
+		stack.item = CURRENCY_ID;
+		stack.quantity = count;
+		add(stack, CARRIED, -1, false);
+	}
 }
 
 /**
@@ -825,8 +826,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			if (!requirementsMet(equipped[i].item)) {
 				add(equipped[i]);
-				equipped[i].item = 0;
-				equipped[i].quantity = 0;
+				equipped[i].clear();
 				checkRequired = true;
 			}
 		}
@@ -860,8 +860,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 			for (int k=0; k<MAX_EQUIPPED; ++k) {
 				if (slot_type[k] == items->items[id].disable_slots[j]) {
 					add(inventory[EQUIPMENT].storage[k]);
-					inventory[EQUIPMENT].storage[k].item = 0;
-					inventory[EQUIPMENT].storage[k].quantity = 0;
+					inventory[EQUIPMENT].storage[k].clear();
 					inventory[EQUIPMENT].slots[k]->enabled = false;
 				}
 			}
@@ -985,8 +984,7 @@ void MenuInventory::fillEquipmentSlots() {
 	}
 	// clean up storage[]
 	for (int i=0; i<slot_number; i++) {
-		inventory[EQUIPMENT].storage[i].item = 0;
-		inventory[EQUIPMENT].storage[i].quantity = 0;
+		inventory[EQUIPMENT].storage[i].clear();
 	}
 
 	// fill slots with items
@@ -994,7 +992,7 @@ void MenuInventory::fillEquipmentSlots() {
 		bool found_slot = false;
 		for (int j=0; j<slot_number; j++) {
 			// search for empty slot with needed type. If item is not NULL, put it there
-			if (equip_item[i] > 0 && inventory[EQUIPMENT].storage[j].item == 0) {
+			if (equip_item[i] > 0 && inventory[EQUIPMENT].storage[j].empty()) {
 				if (items->items[equip_item[i]].type == slot_type[j]) {
 					inventory[EQUIPMENT].storage[j].item = equip_item[i];
 					inventory[EQUIPMENT].storage[j].quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;

@@ -168,11 +168,11 @@ void MenuStash::drop(Point position, ItemStack stack) {
 			// Merge the stacks
 			add(stack, slot);
 		}
-		else if (stock[slot].item == 0) {
+		else if (stock[slot].empty()) {
 			// Drop the stack
 			stock[slot] = stack;
 		}
-		else if (stock[drag_prev_slot].item == 0) { // Check if the previous slot is free (could still be used if SHIFT was used).
+		else if (stock[drag_prev_slot].empty()) { // Check if the previous slot is free (could still be used if SHIFT was used).
 			// Swap the two stacks
 			itemReturn(stock[slot]);
 			stock[slot] = stack;

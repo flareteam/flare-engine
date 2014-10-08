@@ -19,17 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "Loot.h"
 
-Loot::Loot() {
-	stack.item = 0;
-	stack.quantity = 0;
-	pos.x = 0;
-	pos.y = 0;
-	animation = NULL;
+Loot::Loot()
+	: gfx("")
+	, animation(NULL)
+	, dropped_by_hero(false)
+	, on_ground(false)
+	, sound_played(false) {
 	tip.clear();
-	dropped_by_hero = false;
-	on_ground = false;
-	sound_played = false;
-	gfx = "";
 }
 
 Loot::Loot(const Loot &other) {
