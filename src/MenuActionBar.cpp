@@ -475,12 +475,12 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
 			}
-			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !isWithin(window_area, inpt->mouse)) {
 				have_aim = true;
 				action.power = hotkeys_mod[10];
 				twostep_slot = -1;
 			}
-			else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
+			else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2] && !isWithin(window_area, inpt->mouse)) {
 				have_aim = true;
 				action.power = hotkeys_mod[11];
 				twostep_slot = -1;

@@ -751,16 +751,12 @@ void MenuManager::logic() {
 			if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 
-				// check for unlock first
-				if (!pow->unlockClick(inpt->mouse)) {
-
-					// otherwise, check for dragging
-					drag_power = pow->click(inpt->mouse);
-					if (drag_power > 0) {
-						mouse_dragging = true;
-						keyboard_dragging = false;
-						drag_src = DRAG_SRC_POWERS;
-					}
+				// check for unlock/dragging
+				drag_power = pow->click(inpt->mouse);
+				if (drag_power > 0) {
+					mouse_dragging = true;
+					keyboard_dragging = false;
+					drag_src = DRAG_SRC_POWERS;
 				}
 			}
 			// action bar
@@ -1125,16 +1121,12 @@ void MenuManager::dragAndDropWithKeyboard() {
 	if (pow->visible && pow->tablist.getCurrent() != -1 && drag_src != DRAG_SRC_ACTIONBAR) {
 		CLICK_TYPE slotClick = pow->slots[pow->tablist.getCurrent()]->checkClick();
 		if (slotClick == CHECKED) {
-			// check for unlock first
 			Point src_slot(pow->slots[pow->tablist.getCurrent()]->pos.x, pow->slots[pow->tablist.getCurrent()]->pos.y);
-			if (!pow->unlockClick(src_slot)) {
-
-				// otherwise, check for dragging
-				drag_power = pow->click(src_slot);
-				if (drag_power > 0) {
-					keyboard_dragging = true;
-					drag_src = DRAG_SRC_POWERS;
-				}
+			// check for unlock/dragging
+			drag_power = pow->click(src_slot);
+			if (drag_power > 0) {
+				keyboard_dragging = true;
+				drag_src = DRAG_SRC_POWERS;
 			}
 			else {
 				pow->slots[pow->tablist.getCurrent()]->checked = false;
@@ -1142,6 +1134,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// clear power dragging if power slot was pressed twice
 		else if (slotClick == ACTIVATED) {
+			if (drag_power > 0 && pow->canUpgrade(pow->tablist.getCurrent())) {
+				pow->upgradePower(pow->tablist.getCurrent());
+			}
 			drag_src = 0;
 			drag_power = 0;
 			keyboard_dragging = false;
@@ -1222,7 +1217,9 @@ void MenuManager::render() {
 		menus[i]->render();
 	}
 
-	if (!TOUCHSCREEN) {
+	if (NO_MOUSE || TOUCHSCREEN)
+		handleKeyboardTooltips();
+	else {
 		TooltipData tip_new;
 
 		// Find tooltips depending on mouse position
@@ -1263,9 +1260,6 @@ void MenuManager::render() {
 			TOOLTIP_CONTEXT = TOOLTIP_NONE;
 		}
 	}
-
-	if (NO_MOUSE || TOUCHSCREEN)
-		handleKeyboardTooltips();
 
 	// draw icon under cursor if dragging
 	if (mouse_dragging) {
