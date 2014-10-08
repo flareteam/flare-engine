@@ -142,7 +142,6 @@ public:
 	bool baseRequirementsMet(int power_index);
 	bool requirementsMet(int power_index);
 	int click(Point mouse);
-	bool unlockClick(Point mouse);
 	void applyPowerUpgrades();
 	bool meetsUsageStats(unsigned powerid);
 	short getUnspent() {

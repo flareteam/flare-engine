@@ -380,7 +380,15 @@ int MenuPowers::click(Point mouse) {
 				}
 			}
 
-			if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) {
+			if (powerUnlockable(power_cell[i].id) && points_left > 0 && power_cell[i].requires_point) {
+				// unlock power
+				stats->powers_list.push_back(power_cell[i].id);
+				stats->check_title = true;
+				setUnlockedPowers();
+				return 0;
+			}
+			else if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) {
+				// pick up and drag power
 				slots[i]->in_focus = false;
 				tablist.setCurrent(NULL);
 				return power_cell[i].id;
@@ -390,41 +398,6 @@ int MenuPowers::click(Point mouse) {
 		}
 	}
 	return 0;
-}
-
-/**
- * Unlock a power
- */
-bool MenuPowers::unlockClick(Point mouse) {
-
-	// if we have tabControl
-	if (tabs_count > 1) {
-		int active_tab = tabControl->getActiveTab();
-		for (unsigned i=0; i<power_cell.size(); i++) {
-			if (isWithin(slots[i]->pos, mouse)
-					&& (powerUnlockable(power_cell[i].id)) && points_left > 0
-					&& power_cell[i].requires_point && power_cell[i].tab == active_tab) {
-				stats->powers_list.push_back(power_cell[i].id);
-				stats->check_title = true;
-				setUnlockedPowers();
-				return true;
-			}
-		}
-		// if have don't have tabs
-	}
-	else {
-		for (unsigned i=0; i<power_cell.size(); i++) {
-			if (isWithin(slots[i]->pos, mouse)
-					&& (powerUnlockable(power_cell[i].id))
-					&& points_left > 0 && power_cell[i].requires_point) {
-				stats->powers_list.push_back(power_cell[i].id);
-				stats->check_title = true;
-				setUnlockedPowers();
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 short MenuPowers::getPointsUsed() {
