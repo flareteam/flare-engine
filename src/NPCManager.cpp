@@ -161,7 +161,7 @@ void NPCManager::renderTooltips(FPoint cam, Point mouse, int nearest) {
 	int id = -1;
 
 	for (unsigned i=0; i<npcs.size(); i++) {
-		if (NO_MOUSE && nearest != -1 && (unsigned)nearest != i) continue;
+		if ((NO_MOUSE || TOUCHSCREEN) && nearest != -1 && (unsigned)nearest != i) continue;
 
 		p = map_to_screen(npcs[i]->pos.x, npcs[i]->pos.y, cam.x, cam.y);
 
@@ -171,7 +171,7 @@ void NPCManager::renderTooltips(FPoint cam, Point mouse, int nearest) {
 		r.x = p.x - ren.offset.x;
 		r.y = p.y - ren.offset.y;
 
-		if (NO_MOUSE && nearest != -1 && (unsigned)nearest == i) {
+		if ((NO_MOUSE || TOUCHSCREEN) && nearest != -1 && (unsigned)nearest == i) {
 			id = nearest;
 			break;
 		}

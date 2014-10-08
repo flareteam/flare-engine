@@ -240,9 +240,7 @@ void MenuActionBar::renderAttention(int menu_id) {
 }
 
 void MenuActionBar::logic() {
-	if (NO_MOUSE) {
-		tablist.logic();
-	}
+	tablist.logic();
 }
 
 

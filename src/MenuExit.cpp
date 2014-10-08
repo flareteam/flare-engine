@@ -73,9 +73,7 @@ void MenuExit::alignElements() {
 
 void MenuExit::logic() {
 	if (visible) {
-		if (NO_MOUSE) {
-			tablist.logic();
-		}
+		tablist.logic();
 
 		if (buttonExit->checkClick()) {
 			exitClicked = true;

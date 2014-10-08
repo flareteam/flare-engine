@@ -368,24 +368,25 @@ bool MenuPowers::powerUnlockable(int power_index) {
  * Click-to-drag a power (to the action bar)
  */
 int MenuPowers::click(Point mouse) {
+	int active_tab = (tabs_count > 1) ? tabControl->getActiveTab() : 0;
 
-	// if we have tabControl
-	if (tabs_count > 1) {
-		int active_tab = tabControl->getActiveTab();
-		for (unsigned i=0; i<power_cell.size(); i++) {
-			if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
-				else return 0;
+	for (unsigned i=0; i<power_cell.size(); i++) {
+		if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
+			if (TOUCHSCREEN) {
+				if (!slots[i]->in_focus) {
+					slots[i]->in_focus = true;
+					tablist.setCurrent(slots[i]);
+					return 0;
+				}
 			}
-		}
-		// if have don't have tabs
-	}
-	else {
-		for (unsigned i=0; i<power_cell.size(); i++) {
-			if (isWithin(slots[i]->pos, mouse)) {
-				if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) return power_cell[i].id;
-				else return 0;
+
+			if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) {
+				slots[i]->in_focus = false;
+				tablist.setCurrent(NULL);
+				return power_cell[i].id;
 			}
+			else
+				return 0;
 		}
 	}
 	return 0;
@@ -507,9 +508,7 @@ void MenuPowers::logic() {
 
 	if (!visible) return;
 
-	if (NO_MOUSE) {
-		tablist.logic();
-	}
+	tablist.logic();
 
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned int i = 0; i < slots.size(); i++) {

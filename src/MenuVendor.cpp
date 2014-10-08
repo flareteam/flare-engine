@@ -128,20 +128,23 @@ void MenuVendor::loadMerchant(const std::string&) {
 void MenuVendor::logic() {
 	if (!visible) return;
 
-	if (NO_MOUSE) {
-		tablist.logic();
+	tablist.logic();
+
+	if (TOUCHSCREEN && tablist.getCurrent() == -1) {
+		stock[VENDOR_BUY].current_slot = NULL;
+		stock[VENDOR_SELL].current_slot = NULL;
 	}
 
-	// make shure keyboard navigation leads us to correct tab
+	// make sure keyboard navigation leads us to correct tab
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
 		if (stock[VENDOR_BUY].slots[i]->in_focus) {
-			tabControl->setActiveTab(0);
-			activetab = 0;
+			tabControl->setActiveTab(VENDOR_BUY);
+			activetab = VENDOR_BUY;
 			break;
 		}
 		else if (stock[VENDOR_SELL].slots[i]->in_focus) {
-			tabControl->setActiveTab(1);
-			activetab = 1;
+			tabControl->setActiveTab(VENDOR_SELL);
+			activetab = VENDOR_SELL;
 			break;
 		}
 	}
@@ -154,10 +157,16 @@ void MenuVendor::logic() {
 
 void MenuVendor::tabsLogic() {
 	tabControl->logic();
+	if (TOUCHSCREEN && activetab != tabControl->getActiveTab()) {
+		tablist.defocus();
+	}
 	activetab = tabControl->getActiveTab();
 }
 
 void MenuVendor::setTab(int tab) {
+	if (TOUCHSCREEN && activetab != tab) {
+		tablist.defocus();
+	}
 	tabControl->setActiveTab(tab);
 	activetab = tab;
 }
@@ -191,6 +200,9 @@ void MenuVendor::render() {
 ItemStack MenuVendor::click(Point position) {
 	ItemStack stack = stock[activetab].click(position);
 	saveInventory();
+	if (TOUCHSCREEN) {
+		tablist.setCurrent(stock[activetab].current_slot);
+	}
 	return stack;
 }
 

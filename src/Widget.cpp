@@ -17,6 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "SharedResources.h"
+#include "Settings.h"
 #include "Widget.h"
 
 Widget::Widget()
@@ -108,6 +109,20 @@ void TabList::clear() {
 	widgets.clear();
 }
 
+void TabList::setCurrent(Widget* widget) {
+	if (!widget) {
+		current = -1;
+		return;
+	}
+
+	for (unsigned i=0; i<widgets.size(); ++i) {
+		if (widgets[i] == widget) {
+			current = i;
+			break;
+		}
+	}
+}
+
 int TabList::getCurrent() {
 	return current;
 }
@@ -184,38 +199,40 @@ void TabList::defocus() {
 	current = -1;
 }
 
-void TabList::logic() {
+void TabList::logic(bool allow_keyboard) {
 	if (locked) return;
-	if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
-		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
-			inpt->lock[DOWN] = true;
-			getNext();
+	if (NO_MOUSE || allow_keyboard) {
+		if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
+			if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+				inpt->lock[DOWN] = true;
+				getNext();
+			}
+			else if (inpt->pressing[UP] && !inpt->lock[UP]) {
+				inpt->lock[UP] = true;
+				getPrev();
+			}
 		}
-		else if (inpt->pressing[UP] && !inpt->lock[UP]) {
-			inpt->lock[UP] = true;
-			getPrev();
-		}
-	}
 
-	if (scrolltype == HORIZONTAL || scrolltype == TWO_DIRECTIONS) {
-		if (inpt->pressing[MV_LEFT] && !inpt->lock[MV_LEFT]) {
-			inpt->lock[MV_LEFT] = true;
-			getPrev(false);
+		if (scrolltype == HORIZONTAL || scrolltype == TWO_DIRECTIONS) {
+			if (inpt->pressing[MV_LEFT] && !inpt->lock[MV_LEFT]) {
+				inpt->lock[MV_LEFT] = true;
+				getPrev(false);
+			}
+			else if (inpt->pressing[MV_RIGHT] && !inpt->lock[MV_RIGHT]) {
+				inpt->lock[MV_RIGHT] = true;
+				getNext(false);
+			}
 		}
-		else if (inpt->pressing[MV_RIGHT] && !inpt->lock[MV_RIGHT]) {
-			inpt->lock[MV_RIGHT] = true;
-			getNext(false);
-		}
-	}
 
-	if (inpt->pressing[ACTIVATE] && !inpt->lock[ACTIVATE]) {
-		inpt->lock[ACTIVATE] = true;
-		deactivatePrevious(); //Deactivate previously activated item
-		activate();	// Activate the currently infocus item
+		if (inpt->pressing[ACTIVATE] && !inpt->lock[ACTIVATE]) {
+			inpt->lock[ACTIVATE] = true;
+			deactivatePrevious(); //Deactivate previously activated item
+			activate();	// Activate the currently infocus item
+		}
 	}
 
 	// If mouse is clicked, defocus current tabindex item
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && current_is_valid() && !isWithin(widgets[getCurrent()]->pos, inpt->mouse)) {
 		defocus();
 	}
 }

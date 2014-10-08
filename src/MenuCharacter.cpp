@@ -468,9 +468,8 @@ std::string MenuCharacter::statTooltip(int stat) {
 void MenuCharacter::logic() {
 	if (!visible) return;
 
-	if (NO_MOUSE) {
-		tablist.logic();
-	}
+	tablist.logic();
+
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);

@@ -197,9 +197,8 @@ void MenuInventory::logic() {
 
 	// check close button
 	if (visible) {
-		if (NO_MOUSE) {
-			tablist.logic();
-		}
+		tablist.logic();
+
 		if (closeButton->checkClick()) {
 			visible = false;
 			snd->play(sfx_close);
@@ -293,6 +292,11 @@ ItemStack MenuInventory::click(Point position) {
 	drag_prev_src = areaOver(position);
 	if (drag_prev_src > -1) {
 		item = inventory[drag_prev_src].click(position);
+
+		if (TOUCHSCREEN) {
+			tablist.setCurrent(inventory[drag_prev_src].current_slot);
+		}
+
 		// if dragging equipment, prepare to change stats/sprites
 		if (drag_prev_src == EQUIPMENT) {
 			if (stats->humanoid) {

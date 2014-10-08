@@ -220,9 +220,8 @@ void MenuBook::logic() {
 		visible = true;
 	}
 
-	if (NO_MOUSE) {
-		tablist.logic();
-	}
+	tablist.logic();
+
 	if (closeButton->checkClick() || (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT])) {
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 

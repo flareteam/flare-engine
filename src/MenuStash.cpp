@@ -114,9 +114,8 @@ void MenuStash::alignElements() {
 void MenuStash::logic() {
 	if (!visible) return;
 
-	if (NO_MOUSE) {
-		tablist.logic();
-	}
+	tablist.logic();
+
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);
@@ -199,6 +198,9 @@ void MenuStash::add(ItemStack stack, int slot) {
  */
 ItemStack MenuStash::click(Point position) {
 	ItemStack stack = stock.click(position);
+	if (TOUCHSCREEN) {
+		tablist.setCurrent(stock.current_slot);
+	}
 	return stack;
 }
 
