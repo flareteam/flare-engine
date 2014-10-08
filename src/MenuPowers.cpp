@@ -467,8 +467,13 @@ void MenuPowers::logic() {
 		}
 
 		//upgrade buttons logic
-		if (upgradeButtons[i] != NULL && power_cell[i].tab == tabControl->getActiveTab()) {
-			if (upgradeButtons[i]->checkClick()) {
+		if (upgradeButtons[i] != NULL) {
+			upgradeButtons[i]->enabled = false;
+			// enable button only if current level is unlocked and next level can be unlocked
+			if (nextLevel(i) != -1 && requirementsMet(power_cell[i].id) && powerUnlockable(power_cell_upgrade[nextLevel(i)].id) && points_left > 0 && power_cell_upgrade[nextLevel(i)].requires_point) {
+				upgradeButtons[i]->enabled = true;
+			}
+			if (upgradeButtons[i]->checkClick() && power_cell[i].tab == tabControl->getActiveTab()) {
 				upgradePower(i);
 			}
 		}
@@ -795,16 +800,8 @@ void MenuPowers::renderPowers(int tab_num) {
 		}
 		slots[i]->renderSelection();
 		// upgrade buttons
-		if (upgradeButtons[i] != NULL && nextLevel(i) != -1) {
-			// draw button only if current level is unlocked and next level can be unlocked
-			if (requirementsMet(power_cell[i].id) && powerUnlockable(power_cell_upgrade[nextLevel(i)].id) && points_left > 0 && power_cell_upgrade[nextLevel(i)].requires_point) {
-				upgradeButtons[i]->enabled = true;
-				upgradeButtons[i]->render();
-			}
-			else {
-				upgradeButtons[i]->enabled = false;
-			}
-		}
+		if (upgradeButtons[i])
+			upgradeButtons[i]->render();
 	}
 }
 
