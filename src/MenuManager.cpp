@@ -1214,7 +1214,9 @@ void MenuManager::render() {
 		menus[i]->render();
 	}
 
-	if (!TOUCHSCREEN) {
+	if (NO_MOUSE || TOUCHSCREEN)
+		handleKeyboardTooltips();
+	else {
 		TooltipData tip_new;
 
 		// Find tooltips depending on mouse position
@@ -1255,9 +1257,6 @@ void MenuManager::render() {
 			TOOLTIP_CONTEXT = TOOLTIP_NONE;
 		}
 	}
-
-	if (NO_MOUSE || TOUCHSCREEN)
-		handleKeyboardTooltips();
 
 	// draw icon under cursor if dragging
 	if (mouse_dragging) {
