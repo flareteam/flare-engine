@@ -151,7 +151,7 @@ void LootManager::logic() {
 
 	// clear any tiles that were blocked from dropped loot
 	for (unsigned i=0; i<tiles_to_unblock.size(); i++) {
-		mapr->collider.unblock(tiles_to_unblock[i].x, tiles_to_unblock[i].y);
+		mapr->collider.unblock((float)tiles_to_unblock[i].x, (float)tiles_to_unblock[i].y);
 	}
 	tiles_to_unblock.clear();
 }
@@ -255,8 +255,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		if (ec->z == 0) {
 			Point src;
 			if (pos) {
-				src.x = pos->x;
-				src.y = pos->y;
+				src = floor(*pos);
 			}
 			else {
 				src.x = ec->x;
@@ -326,8 +325,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 
 		Point src;
 		if (pos) {
-			src.x = pos->x;
-			src.y = pos->y;
+			src = floor(*pos);
 		}
 		else {
 			src.x = ec->x;
