@@ -46,7 +46,7 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 
-	void fillWithColor(Rect *dstrect, Uint32 color);
+	void fillWithColor(Uint32 color);
 	void drawPixel(int x, int y, Uint32 color);
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);

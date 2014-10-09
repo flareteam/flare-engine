@@ -114,7 +114,7 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 
 	map_size.x = map_w;
 	map_size.y = map_h;
-	map_surface->getGraphics()->fillWithColor(NULL, map_surface->getGraphics()->MapRGBA(0,0,0,0));
+	map_surface->getGraphics()->fillWithColor(map_surface->getGraphics()->MapRGBA(0,0,0,0));
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
 		prerenderIso(collider);
