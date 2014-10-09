@@ -221,12 +221,16 @@ void MenuPowers::applyPowerUpgrades() {
  * Find cell in upgrades with next upgrade for current power_cell
  */
 short MenuPowers::nextLevel(short power_cell_index) {
+	if (power_cell[power_cell_index].upgrades.empty()) {
+		return -1;
+	}
+
 	vector<short>::iterator level_it;
 	level_it = find(power_cell[power_cell_index].upgrades.begin(),
 					power_cell[power_cell_index].upgrades.end(),
 					power_cell[power_cell_index].id);
 
-	if (!power_cell[power_cell_index].upgrades.empty() && level_it == power_cell[power_cell_index].upgrades.end()) {
+	if (level_it == power_cell[power_cell_index].upgrades.end()) {
 		// current power is base power, take first upgrade
 		short index = power_cell[power_cell_index].upgrades[0];
 		return id_by_powerIndex(index, power_cell_upgrade);
