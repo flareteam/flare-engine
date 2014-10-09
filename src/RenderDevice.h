@@ -125,7 +125,6 @@ public:
 private:
 	Image(RenderDevice *device);
 	virtual ~Image();
-	virtual Uint32 readPixel(int x, int y) = 0;
 	friend class SDLSoftwareImage;
 
 private:
