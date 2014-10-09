@@ -493,7 +493,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// name
 	stringstream ss;
-	if (stack.quantity < 1000)
+	if (stack.quantity == 1)
 		ss << items[stack.item].name;
 	else
 		ss << items[stack.item].name << " (" << stack.quantity << ")";
