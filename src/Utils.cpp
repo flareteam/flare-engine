@@ -63,8 +63,8 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 	float adjust_y = (VIEW_H_HALF + 0.5f) * UNITS_PER_PIXEL_Y;
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
-		r.x = int(floor(((x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X)+0.5f));
-		r.y = int(floor(((x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y)+0.5f));
+		r.x = int(((x - camx - y + camy + adjust_x)/UNITS_PER_PIXEL_X)+0.5f);
+		r.y = int(((x - camx + y - camy + adjust_y)/UNITS_PER_PIXEL_Y)+0.5f);
 	}
 	else { //TILESET_ORTHOGONAL
 		r.x = int((x - camx + adjust_x)/UNITS_PER_PIXEL_X);
@@ -254,8 +254,8 @@ void alignToScreenEdge(std::string alignment, Rect *r) {
 void alignFPoint(FPoint *pos) {
 	if (!pos) return;
 
-	pos->x = floor(pos->x / 0.0625f) * 0.0625f;
-	pos->y = floor(pos->y / 0.0625f) * 0.0625f;
+	pos->x = float(int(pos->x / 0.0625f)) * 0.0625f;
+	pos->y = float(int(pos->y / 0.0625f)) * 0.0625f;
 }
 
 

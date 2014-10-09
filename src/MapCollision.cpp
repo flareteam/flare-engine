@@ -89,7 +89,7 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 	const float epsilon = 0.01f;
 	if (step_x != 0) {
 		assert(step_y == 0);
-		float dy = y - floor(y);
+		float dy = y - float(int(y));
 
 		if (is_valid_tile(int(x), int(y) + 1, movement_type, is_hero)
 				&& is_valid_tile(int(x) + sgn(step_x), int(y) + 1, movement_type, is_hero)
@@ -108,7 +108,7 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 	}
 	else if (step_y != 0) {
 		assert(step_x == 0);
-		float dx = x - floor(x);
+		float dx = x - float(int(x));
 
 		if (is_valid_tile(int(x) + 1, int(y), movement_type, is_hero)
 				&& is_valid_tile(int(x) + 1, int(y) + sgn(step_y), movement_type, is_hero)
@@ -151,7 +151,7 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 			if (step_x <= MIN_TILE_GAP) step_x = min(1.f, _step_x);
 		}
 		else if (_step_x < 0) {
-			step_x = max((float)floor(x) - x, _step_x);
+			step_x = max(float(int(x)) - x, _step_x);
 			if (step_x == 0) step_x = max(-1.f, _step_x);
 		}
 
@@ -161,7 +161,7 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 			if (step_y <= MIN_TILE_GAP) step_y = min(1.f, _step_y);
 		}
 		else if (_step_y < 0) {
-			step_y = max((float)floor(y) - y, _step_y);
+			step_y = max(float(int(y)) - y, _step_y);
 			if (step_y == 0) step_y	= max(-1.f, _step_y);
 		}
 

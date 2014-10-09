@@ -698,7 +698,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		target = limitRange(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
 			FPoint new_target = collider->get_random_neighbor(floor(target), powers[power_index].target_neighbor);
-			if (floor(new_target.x) == floor(target.x) && floor(new_target.y) == floor(target.y)) {
+			if (int(new_target.x) == int(target.x) && int(new_target.y) == int(target.y)) {
 				src_stats->teleportation = false;
 			}
 			else {
