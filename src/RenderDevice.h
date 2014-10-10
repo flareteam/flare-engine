@@ -114,7 +114,7 @@ public:
 	virtual int getWidth() const;
 	virtual int getHeight() const;
 
-	virtual void fillWithColor(Rect *dstrect, Uint32 color) = 0;
+	virtual void fillWithColor(Uint32 color) = 0;
 	virtual void drawPixel(int x, int y, Uint32 color) = 0;
 	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b) = 0;
 	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
@@ -125,7 +125,6 @@ public:
 private:
 	Image(RenderDevice *device);
 	virtual ~Image();
-	virtual Uint32 readPixel(int x, int y) = 0;
 	friend class SDLSoftwareImage;
 
 private:

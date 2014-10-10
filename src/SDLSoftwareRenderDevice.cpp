@@ -47,16 +47,10 @@ int SDLSoftwareImage::getHeight() const {
 	return surface ? surface->h : 0;
 }
 
-void SDLSoftwareImage::fillWithColor(Rect *dstrect, Uint32 color) {
+void SDLSoftwareImage::fillWithColor(Uint32 color) {
 	if (!surface) return;
 
-	if (dstrect) {
-		SDL_Rect dest = *dstrect;
-		SDL_FillRect(surface, &dest, color);
-	}
-	else {
-		SDL_FillRect(surface, NULL, color);
-	}
+	SDL_FillRect(surface, NULL, color);
 }
 
 /*
