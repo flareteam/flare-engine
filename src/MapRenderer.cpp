@@ -261,8 +261,8 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
-		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
+		const unsigned tilex = (const unsigned)(it->map_pos.x);
+		const unsigned tiley = (const unsigned)(it->map_pos.y);
 		const int commax = (const int)((float)(it->map_pos.x - tilex) * (2<<16));
 		const int commay = (const int)((float)(it->map_pos.y - tiley) * (2<<16));
 		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
@@ -271,8 +271,8 @@ void calculatePriosIso(vector<Renderable> &r) {
 
 void calculatePriosOrtho(vector<Renderable> &r) {
 	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
-		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
+		const unsigned tilex = (const unsigned)(it->map_pos.x);
+		const unsigned tiley = (const unsigned)(it->map_pos.y);
 		const int commay = (const int)(1024 * it->map_pos.y);
 		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
 	}
