@@ -112,7 +112,7 @@ bool TooltipData::compare(const TooltipData *tip) {
 		return false;
 
 	for (unsigned int i=0; i<lines.size(); i++) {
-		if (lines[i] != tip->lines[i])
+		if (lines[i] != tip->lines[i] || colors[i] != tip->colors[i])
 			return false;
 	}
 	return true;
