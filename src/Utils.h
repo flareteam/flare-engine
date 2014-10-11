@@ -80,6 +80,12 @@ public:
 #endif
 		return c;
 	}
+	bool operator ==(const Color &other) {
+		return r == other.r && g == other.g && b == other.b && a == other.a;
+	}
+	bool operator !=(const Color &other) {
+		return !((*this) == other);
+	}
 };
 
 class Event_Component {
