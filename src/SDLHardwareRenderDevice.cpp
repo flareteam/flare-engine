@@ -147,19 +147,21 @@ Image* SDLHardwareImage::resize(int width, int height) {
 		this->unref();
 		return scaled;
 	}
+	else {
+		delete scaled;
+	}
 
 	return NULL;
 }
 
 SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	: screen(NULL)
+	, renderer(NULL)
 	, titlebar_icon(NULL) {
 	cout << "Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2)" << endl;
 }
 
 int SDLHardwareRenderDevice::createContext(int width, int height) {
-	int set_fullscreen = 0;
-
 	if (is_initialized) {
 		SDL_DestroyRenderer(renderer);
 		Uint32 flags = 0;
@@ -211,7 +213,7 @@ int SDLHardwareRenderDevice::createContext(int width, int height) {
 			SDL_SetWindowIcon(screen, titlebar_icon);
 		}
 
-		return (set_fullscreen == 0 ? 0 : -1);
+		return 0;
 	}
 	else {
 		logError("SDLHardwareRenderDevice: createContext() failed: %s\n", SDL_GetError());
@@ -295,7 +297,7 @@ int SDLHardwareRenderDevice::renderText(
 	Rect& dest
 ) {
 	int ret = 0;
-	SDL_Texture *surface;
+	SDL_Texture *surface = NULL;
 
 	SDL_Surface *cleanup = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), color);
 	if (cleanup) {
@@ -474,62 +476,33 @@ void SDLHardwareRenderDevice::setGamma(float g) {
 }
 
 void SDLHardwareRenderDevice::listModes(std::vector<Rect> &modes) {
-	Rect** detect_modes;
-	std::vector<Rect> vec_detect_modes;
-	Rect detect_mode;
-	SDL_DisplayMode mode;
-	/* SDL_compat.c */
-	for (int i = 0; i < SDL_GetNumDisplayModes(SDL_GetWindowDisplayIndex(screen)); ++i) {
-		SDL_GetDisplayMode(SDL_GetWindowDisplayIndex(screen), i, &mode);
+	int mode_count = SDL_GetNumDisplayModes(0);
 
-		if (!vec_detect_modes.empty())
-		{
-			if (vec_detect_modes.back().w == mode.w && vec_detect_modes.back().h == mode.h) {
-			continue;
-			}
-		}
+	for (int i=0; i<mode_count; i++) {
+		SDL_DisplayMode display_mode;
+		SDL_GetDisplayMode(0, i, &display_mode);
 
-		detect_mode.x = 0;
-		detect_mode.y = 0;
-		detect_mode.w = mode.w;
-		detect_mode.h = mode.h;
-		vec_detect_modes.push_back(detect_mode);
+		if (display_mode.w == 0 || display_mode.h == 0) continue;
 
-	}
-	detect_modes = (Rect**)calloc(vec_detect_modes.size(),sizeof(Rect));
-	for (unsigned i = 0; i < vec_detect_modes.size(); ++i) {
-		detect_modes[i] = &vec_detect_modes[i];
-	}
-	vec_detect_modes.clear();
-	// Check if there are any modes available
-	if (detect_modes == (Rect**)0) {
-		logError("SDLHardwareRenderDevice: No modes available!\n");
-		return;
-	}
+		Rect mode_rect;
+		mode_rect.w = display_mode.w;
+		mode_rect.h = display_mode.h;
+		modes.push_back(mode_rect);
 
-	// Check if our resolution is restricted
-	if (detect_modes == (Rect**)-1) {
-		logError("SDLHardwareRenderDevice: All resolutions available.\n");
-	}
-
-	for (unsigned i=0; detect_modes[i]; ++i) {
-		modes.push_back(*detect_modes[i]);
-		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
+		if (display_mode.w < MIN_VIEW_W || display_mode.h < MIN_VIEW_H) {
 			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
 			modes.pop_back();
 		}
 		else {
 			// check previous resolutions for duplicates. If one is found, drop the one we just added
 			for (unsigned j=0; j<modes.size()-1; ++j) {
-				if (modes[j].w == detect_modes[i]->w && modes[j].h == detect_modes[i]->h) {
+				if (modes[j].w == display_mode.w && modes[j].h == display_mode.h) {
 					modes.pop_back();
 					break;
 				}
 			}
 		}
 	}
-	if (detect_modes)
-		free(detect_modes);
 }
 
 Image *SDLHardwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
@@ -544,13 +517,15 @@ Image *SDLHardwareRenderDevice::loadImage(std::string filename, std::string erro
 
 	image->surface = IMG_LoadTexture(renderer, mods->locate(filename).c_str());
 
-	if(image == NULL) {
+	if(image->surface == NULL) {
+		delete image;
 		if (!errormessage.empty())
 			logError("SDLHardwareRenderDevice: %s: %s\n", errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
 			SDL_Quit();
 			exit(1);
 		}
+		return NULL;
 	}
 
 	// store image to cache
