@@ -836,12 +836,8 @@ void MenuManager::logic() {
 				}
 				else if (stash->visible && isWithin(stash->window_area, inpt->mouse)) {
 					if (inv->stashAdd( drag_stack) && !stash->full(drag_stack.item)) {
-						if (isWithin(stash->slots_area, inpt->mouse)) {
-							stash->drop(inpt->mouse, drag_stack);
-						}
-						else {
-							stash->add(drag_stack);
-						}
+						stash->stock.drag_prev_slot = -1;
+						stash->drop(inpt->mouse, drag_stack);
 					}
 					else {
 						inv->itemReturn(drag_stack);
