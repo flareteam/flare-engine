@@ -60,7 +60,6 @@ public:
 	ItemStorage buyback_stock;
 	MenuItemStorage stock[2]; // items the vendor currently has in stock
 
-	void loadMerchant(const std::string&);
 	void logic();
 	void tabsLogic();
 	void setTab(int tab);
