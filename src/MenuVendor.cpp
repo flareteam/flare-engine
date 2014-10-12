@@ -52,8 +52,6 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	tabControl->setTabTitle(VENDOR_BUY,msg->get("Inventory"));
 	tabControl->setTabTitle(VENDOR_SELL,msg->get("Buyback"));
 
-	loadMerchant("");
-
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuVendor|Description of menus/vendor.txt
@@ -120,9 +118,6 @@ void MenuVendor::alignElements() {
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
 		tablist.add(stock[VENDOR_SELL].slots[i]);
 	}
-}
-
-void MenuVendor::loadMerchant(const std::string&) {
 }
 
 void MenuVendor::logic() {

@@ -359,19 +359,17 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		// make sure the item is going to the correct slot
 		// we match slot_type to stack.item's type to place items in the proper slots
 		// also check to see if the hero meets the requirements
-		if (drag_prev_src == CARRIED && slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
+		if (slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
 			if (inventory[area][slot].item == stack.item) {
 				// Merge the stacks
 				add(stack, area, slot, false);
 			}
-			else if (drag_prev_slot != -1 && inventory[drag_prev_src][drag_prev_slot].empty()) {
+			else {
 				// Swap the two stacks
-				itemReturn(inventory[area][slot]);
+				if (!inventory[area][slot].empty())
+					itemReturn(inventory[area][slot]);
 				inventory[area][slot] = stack;
 				updateEquipment(slot);
-			}
-			else {
-				itemReturn(stack);
 			}
 		}
 		else {
