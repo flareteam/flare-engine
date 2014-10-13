@@ -257,6 +257,7 @@ void MenuPowers::upgradePower(short power_cell_index) {
 	for(int j = 0; j < 12; j++) {
 		if(action_bar->hotkeys[j] == power_cell[power_cell_index].id) {
 			action_bar->hotkeys[j] = power_cell_upgrade[i].id;
+			action_bar->updated = true;
 		}
 	}
 	// if we have tabControl
