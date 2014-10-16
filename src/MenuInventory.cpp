@@ -722,6 +722,7 @@ bool MenuInventory::isItemEquipped(int item) {
  * Check requirements on an item
  */
 bool MenuInventory::requirementsMet(int item) {
+	// base stats
 	for (unsigned i=0; i < items->items[item].req_stat.size(); ++i) {
 		if (items->items[item].req_stat[i] == REQUIRES_PHYS) {
 			if (stats->get_physical() < items->items[item].req_val[i])
@@ -740,6 +741,12 @@ bool MenuInventory::requirementsMet(int item) {
 				return false;
 		}
 	}
+
+	// class
+	if (items->items[item].requires_class != "" && items->items[item].requires_class != stats->character_class) {
+		return false;
+	}
+
 	// otherwise there is no requirement, so it is usable.
 	return true;
 }

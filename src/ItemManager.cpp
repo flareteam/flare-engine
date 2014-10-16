@@ -224,6 +224,10 @@ void ItemManager::loadItems() {
 				items[id].req_stat.push_back(REQUIRES_DEF);
 			items[id].req_val.push_back(toInt(infile.nextValue()));
 		}
+		else if (infile.key == "requires_class") {
+			// @ATTR requires_class|string|The hero's base class (engine/classes.txt) must match for this item to be equipped.
+			items[id].requires_class = infile.val;
+		}
 		else if (infile.key == "bonus") {
 			// @ATTR bonus|[power_tag (string), amount (integer)]|Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50
 			items[id].bonus_stat.push_back(infile.nextValue());
@@ -595,6 +599,13 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				tip.addText(msg->get("Requires Defense %d", items[stack.item].req_val[i]), color);
 			}
 		}
+	}
+
+	// requires class
+	if (items[stack.item].requires_class != "") {
+		if (items[stack.item].requires_class != stats->character_class) color = color_requirements_not_met;
+		else color = color_normal;
+		tip.addText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class)), color);
 	}
 
 	if (COLORBLIND && quality_desc != "") {
