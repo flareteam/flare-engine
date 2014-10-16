@@ -38,6 +38,17 @@ class TooltipData;
 class WidgetSlot;
 class MenuActionBar;
 
+class Power_Menu_Tab {
+public:
+	std::string title;
+	std::string background;
+
+	Power_Menu_Tab()
+		: title("")
+		, background("") {
+	}
+};
+
 class Power_Menu_Cell {
 public:
 	short id;
@@ -103,13 +114,12 @@ private:
 	Rect tab_area;
 
 	short points_left;
-	short tabs_count;
-	std::vector<std::string> tab_titles;
-	std::vector<std::string> tree_image_files;
+	std::vector<Power_Menu_Tab> tabs;
+	std::string default_background;
 
 	WidgetLabel label_powers;
 	WidgetLabel stat_up;
-	WidgetTabControl *tabControl;
+	WidgetTabControl *tab_control;
 
 	void alignElements();
 	void loadGraphics();
@@ -127,13 +137,14 @@ private:
 	void setUnlockedPowers();
 
 	bool powerIsVisible(short power_index);
-	void loadHeader(FileParser &infile);
+	void loadTab(FileParser &infile);
 	void loadPower(FileParser &infile);
 	void loadUpgrade(FileParser &infile);
 
 public:
 	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();
+	void loadPowerTree(const std::string &filename);
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point mouse);

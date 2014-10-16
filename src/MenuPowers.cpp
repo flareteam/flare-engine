@@ -46,8 +46,8 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	, powers_unlock(NULL)
 	, overlay_disabled(NULL)
 	, points_left(0)
-	, tabs_count(1)
-	, tabControl(NULL)
+	, default_background("")
+	, tab_control(NULL)
 	, newPowerNotification(false)
 {
 
@@ -55,53 +55,27 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 
 	// Read powers data from config file
 	FileParser infile;
-	// @CLASS MenuPowers|Description of menus/powers.txt
+	// @CLASS MenuPowers: Menu layout|Description of menus/powers.txt
 	if (infile.open("menus/powers.txt")) {
 		while (infile.next()) {
-			if (infile.new_section) {
-				// for sections that are stored in collections, add a new object here
-				if (infile.section == "power") {
-					slots.push_back(NULL);
-					upgradeButtons.push_back(NULL);
-					power_cell.push_back(Power_Menu_Cell());
-				}
-				else if (infile.section == "upgrade")
-					power_cell_upgrade.push_back(Power_Menu_Cell());
-			}
-			if (infile.section == "header")
-				loadHeader(infile);
-			else if (infile.section == "power")
-				loadPower(infile);
-			else if (infile.section == "upgrade")
-				loadUpgrade(infile);
+			if (parseMenuKey(infile.key, infile.val))
+				continue;
+
+			// @ATTR label_title|label|Position of the "Powers" text.
+			if (infile.key == "label_title") title = eatLabelInfo(infile.val);
+			// @ATTR unspent_points|label|Position of the text that displays the amount of unused power points.
+			else if (infile.key == "unspent_points") unspent_points = eatLabelInfo(infile.val);
+			// @ATTR close|x (integer), y (integer)|Position of the close button.
+			else if (infile.key == "close") close_pos = toPoint(infile.val);
+			// @ATTR tab_area|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the tree pages.
+			else if (infile.key == "tab_area") tab_area = toRect(infile.val);
+
+			else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
 
-	// save a copy of the base level powers, as they get overwritten during upgrades
-	power_cell_base = power_cell;
-
-	// combine base and upgrade powers into a single list
-	for (unsigned i=0; i<power_cell_base.size(); ++i) {
-		power_cell_all.push_back(power_cell_base[i]);
-	}
-	for (unsigned i=0; i<power_cell_upgrade.size(); ++i) {
-		power_cell_all.push_back(power_cell_upgrade[i]);
-	}
-
 	loadGraphics();
-
-	// check for errors in config file
-	if((tabs_count == 1) && (!tree_image_files.empty() || !tab_titles.empty())) {
-		logError("MenuPowers: menu/powers.txt error: you don't have tabs, but tab_tree_image and tab_title counts are not 0\n");
-		SDL_Quit();
-		exit(1);
-	}
-	else if((tabs_count > 1) && (tree_image_files.size() != (unsigned)tabs_count || tab_titles.size() != (unsigned)tabs_count)) {
-		logError("MenuPowers: menu/powers.txt error: tabs count, tab_tree_image and tab_name counts do not match\n");
-		SDL_Quit();
-		exit(1);
-	}
 
 	menu_powers = this;
 
@@ -113,15 +87,6 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 }
 
 void MenuPowers::alignElements() {
-	for (unsigned i=0; i<power_cell.size(); i++) {
-		slots[i]->pos.x = window_area.x + power_cell[i].pos.x;
-		slots[i]->pos.y = window_area.y + power_cell[i].pos.y;
-		if (upgradeButtons[i] != NULL) {
-			upgradeButtons[i]->pos.x = slots[i]->pos.x + ICON_SIZE;
-			upgradeButtons[i]->pos.y = slots[i]->pos.y;
-		}
-	}
-
 	label_powers.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Powers"), font->getColor("menu_normal"), title.font_style);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
@@ -129,18 +94,6 @@ void MenuPowers::alignElements() {
 
 	stat_up.set(window_area.x+unspent_points.x, window_area.y+unspent_points.y, unspent_points.justify, unspent_points.valign, "", font->getColor("menu_bonus"), unspent_points.font_style);
 
-	// If we have more than one tab, create TabControl
-	if (tabs_count > 1) {
-		tabControl = new WidgetTabControl(tabs_count);
-
-		// Initialize the tab control.
-		tabControl->setMainArea(window_area.x+tab_area.x, window_area.y+tab_area.y, tab_area.w, tab_area.h);
-
-		// Define the header.
-		for (int i=0; i<tabs_count; i++)
-			tabControl->setTabTitle(i, msg->get(tab_titles[i]));
-		tabControl->updateHeader();
-	}
 }
 
 void MenuPowers::loadGraphics() {
@@ -160,30 +113,118 @@ void MenuPowers::loadGraphics() {
 		overlay_disabled = graphics->createSprite();
 		graphics->unref();
 	}
+}
 
-	if (tree_image_files.empty()) {
-		graphics = render_device->loadImage("images/menus/powers_tree.png");
+/**
+ * Loads a given power tree and sets up the menu accordingly
+ */
+void MenuPowers::loadPowerTree(const std::string &filename) {
+	// First, parse the power tree file
+
+	FileParser infile;
+	// @CLASS MenuPowers: Power tree layout|Description of powers/trees/
+	if (infile.open(filename)) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				// for sections that are stored in collections, add a new object here
+				if (infile.section == "power") {
+					slots.push_back(NULL);
+					upgradeButtons.push_back(NULL);
+					power_cell.push_back(Power_Menu_Cell());
+				}
+				else if (infile.section == "upgrade")
+					power_cell_upgrade.push_back(Power_Menu_Cell());
+				else if (infile.section == "tab")
+					tabs.push_back(Power_Menu_Tab());
+			}
+
+			if (infile.section == "") {
+				// @ATTR background|string|Filename of the default background image
+				if (infile.key == "background") default_background = infile.val;
+			}
+			else if (infile.section == "tab")
+				loadTab(infile);
+			else if (infile.section == "power")
+				loadPower(infile);
+			else if (infile.section == "upgrade")
+				loadUpgrade(infile);
+		}
+		infile.close();
+	}
+
+	// save a copy of the base level powers, as they get overwritten during upgrades
+	power_cell_base = power_cell;
+
+	// combine base and upgrade powers into a single list
+	for (unsigned i=0; i<power_cell_base.size(); ++i) {
+		power_cell_all.push_back(power_cell_base[i]);
+	}
+	for (unsigned i=0; i<power_cell_upgrade.size(); ++i) {
+		power_cell_all.push_back(power_cell_upgrade[i]);
+	}
+
+	// load any specified graphics into the tree_surf vector
+	Image *graphics;
+	if (tabs.empty() && default_background != "") {
+		graphics = render_device->loadImage(default_background);
 		if (graphics) {
 			tree_surf.push_back(graphics->createSprite());
 			graphics->unref();
 		}
 	}
 	else {
-		for (unsigned int i = 0; i < tree_image_files.size(); ++i) {
-			graphics = render_device->loadImage(tree_image_files[i]);
+		for (unsigned int i = 0; i < tabs.size(); ++i) {
+			if (tabs[i].background == "")
+				tabs[i].background = default_background;
+
+			if (tabs[i].background == "") {
+				tree_surf.push_back(NULL);
+				continue;
+			}
+
+			graphics = render_device->loadImage(tabs[i].background);
 			if (graphics) {
 				tree_surf.push_back(graphics->createSprite());
 				graphics->unref();
 			}
+			else {
+				tree_surf.push_back(NULL);
+			}
 		}
 	}
-	for (unsigned int i=0; i<slots.size(); i++) {
 
+	// If we have more than one tab, create tab_control
+	if (!tabs.empty()) {
+		tab_control = new WidgetTabControl(tabs.size());
+
+		// Initialize the tab control.
+		tab_control->setMainArea(window_area.x+tab_area.x, window_area.y+tab_area.y, tab_area.w, tab_area.h);
+
+		// Define the header.
+		for (unsigned i=0; i<tabs.size(); i++)
+			tab_control->setTabTitle(i, msg->get(tabs[i].title));
+		tab_control->updateHeader();
+	}
+
+	// create power slots
+	for (unsigned int i=0; i<slots.size(); i++) {
 		slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
 		slots[i]->pos.x = power_cell[i].pos.x;
 		slots[i]->pos.y = power_cell[i].pos.y;
 		tablist.add(slots[i]);
 	}
+
+	// position power slots and upgrade buttons
+	for (unsigned i=0; i<power_cell.size(); i++) {
+		slots[i]->pos.x = window_area.x + power_cell[i].pos.x;
+		slots[i]->pos.y = window_area.y + power_cell[i].pos.y;
+		if (upgradeButtons[i] != NULL) {
+			upgradeButtons[i]->pos.x = slots[i]->pos.x + ICON_SIZE;
+			upgradeButtons[i]->pos.y = slots[i]->pos.y;
+		}
+	}
+
+	applyPowerUpgrades();
 }
 
 short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell) {
@@ -260,9 +301,9 @@ void MenuPowers::upgradePower(short power_cell_index) {
 			action_bar->updated = true;
 		}
 	}
-	// if we have tabControl
-	if (tabs_count > 1) {
-		int active_tab = tabControl->getActiveTab();
+	// if we have tab_control
+	if (tab_control) {
+		int active_tab = tab_control->getActiveTab();
 		if (power_cell[power_cell_index].tab == active_tab) {
 			replacePowerCellDataByUpgrade(power_cell_index, i);
 			stats->powers_list.push_back(power_cell_upgrade[i].id);
@@ -373,7 +414,7 @@ bool MenuPowers::powerUnlockable(int power_index) {
  * Click-to-drag a power (to the action bar)
  */
 int MenuPowers::click(Point mouse) {
-	int active_tab = (tabs_count > 1) ? tabControl->getActiveTab() : 0;
+	int active_tab = (tab_control) ? tab_control->getActiveTab() : 0;
 
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
@@ -477,7 +518,7 @@ void MenuPowers::logic() {
 			if (canUpgrade(i)) {
 				upgradeButtons[i]->enabled = true;
 			}
-			if (upgradeButtons[i]->checkClick() && power_cell[i].tab == tabControl->getActiveTab()) {
+			if (upgradeButtons[i]->checkClick() && (!tab_control || power_cell[i].tab == tab_control->getActiveTab())) {
 				upgradePower(i);
 			}
 		}
@@ -494,14 +535,16 @@ void MenuPowers::logic() {
 
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned int i = 0; i < slots.size(); i++) {
-		if (slots[i]->in_focus) tabControl->setActiveTab(power_cell[i].tab);
+		if (slots[i]->in_focus) tab_control->setActiveTab(power_cell[i].tab);
 	}
 
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);
 	}
-	if (tabs_count > 1) tabControl->logic();
+
+	if (tab_control)
+		tab_control->logic();
 }
 
 bool MenuPowers::canUpgrade(short power_cell_index) {
@@ -530,10 +573,10 @@ void MenuPowers::render() {
 	Menu::render();
 
 
-	if (tabs_count > 1) {
-		tabControl->render();
-		int active_tab = tabControl->getActiveTab();
-		for (int i=0; i<tabs_count; i++) {
+	if (tab_control) {
+		tab_control->render();
+		unsigned active_tab = tab_control->getActiveTab();
+		for (unsigned i=0; i<tabs.size(); i++) {
 			if (active_tab == i) {
 				// power tree
 				Sprite *r = tree_surf[i];
@@ -548,7 +591,7 @@ void MenuPowers::render() {
 			}
 		}
 	}
-	else {
+	else if (!tree_surf.empty()) {
 		Sprite *r = tree_surf[0];
 		if (r) {
 			r->setClip(src);
@@ -606,7 +649,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 	for (unsigned i=0; i<power_cell.size(); i++) {
 
-		if ((tabs_count > 1) && (tabControl->getActiveTab() != power_cell[i].tab)) continue;
+		if (tab_control && (tab_control->getActiveTab() != power_cell[i].tab)) continue;
 
 		if (!powerIsVisible(power_cell[i].id)) continue;
 
@@ -757,7 +800,7 @@ MenuPowers::~MenuPowers() {
 	upgradeButtons.clear();
 
 	delete closeButton;
-	if (tabs_count > 1) delete tabControl;
+	if (tab_control) delete tab_control;
 	menu_powers = NULL;
 }
 
@@ -840,29 +883,16 @@ bool MenuPowers::powerIsVisible(short power_index) {
 	return true;
 }
 
-void MenuPowers::loadHeader(FileParser &infile) {
-	if (parseMenuKey(infile.key, infile.val))
-		return;
+/**
+ * Below are functions used for parsing the power trees located in:
+ * powers/trees/
+ */
 
-	// @ATTR header.tab_title|string|Title to display for a tree page. Use only if tabs > 1.
-	if (infile.key == "tab_title") tab_titles.push_back(infile.val);
-	// @ATTR header.tab_tree|string|Filename of a background image to use for a tree page. Pair this with tab_title. Use only if tabs > 1.
-	else if (infile.key == "tab_tree") tree_image_files.push_back(infile.val);
-	// @ATTR header.label_title|label|Position of the "Powers" text.
-	else if (infile.key == "label_title") title = eatLabelInfo(infile.val);
-	// @ATTR header.unspent_points|label|Position of the text that displays the amount of unused power points.
-	else if (infile.key == "unspent_points") unspent_points = eatLabelInfo(infile.val);
-	// @ATTR header.close|x (integer), y (integer)|Position of the close button.
-	else if (infile.key == "close") close_pos = toPoint(infile.val);
-	// @ATTR header.tab_area|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the tree pages.
-	else if (infile.key == "tab_area") tab_area = toRect(infile.val);
-	// @ATTR header.tabs|integer|The total number of tree pages.
-	else if (infile.key == "tabs") {
-		tabs_count = toInt(infile.val);
-		if (tabs_count < 1) tabs_count = 1;
-	}
-
-	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
+void MenuPowers::loadTab(FileParser &infile) {
+	// @ATTR tab.title|string|The name of this power tree tab
+	if (infile.key == "title") tabs.back().title = infile.val;
+	// @ATTR tab.background|string|Filename of the background image for this tab's power tree
+	else if (infile.key == "background") tabs.back().background = infile.val;
 }
 
 void MenuPowers::loadPower(FileParser &infile) {
@@ -892,7 +922,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 
 	// @ATTR power.tab|integer|Tab index to place this power on, starting from 0.
 	if (infile.key == "tab") power_cell.back().tab = toInt(infile.val);
-	// @ATTR power.position|x (integer), y (integer)|Position of this power icon.
+	// @ATTR power.position|x (integer), y (integer)|Position of this power icon; relative to MenuPowers "pos".
 	else if (infile.key == "position") power_cell.back().pos = toPoint(infile.val);
 
 	// @ATTR power.requires_physoff|integer|Power requires Physical and Offense stat of this value.

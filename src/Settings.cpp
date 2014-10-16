@@ -713,6 +713,9 @@ void loadMiscSettings() {
 						HERO_CLASSES.back().statuses.push_back(status);
 					}
 				}
+				// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
+				else if (infile.key == "power_tree") HERO_CLASSES.back().power_tree = infile.val;
+
 				else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}

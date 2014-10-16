@@ -628,6 +628,7 @@ StatBlock::~StatBlock() {
 }
 
 bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
+	if (!menu_powers) return false;
 
 	// needed to unlock shapeshifter powers
 	if (transformed) return mp >= power.requires_mp;

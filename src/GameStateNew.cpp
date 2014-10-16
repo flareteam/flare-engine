@@ -315,6 +315,7 @@ void GameStateNew::logic() {
 		play->game_slot = game_slot;
 		play->resetGame();
 		play->loadClass(class_list->getSelected());
+		play->loadPowerTree();
 		requestedGameState = play;
 	}
 

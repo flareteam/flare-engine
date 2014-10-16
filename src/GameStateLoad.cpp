@@ -524,6 +524,7 @@ void GameStateLoad::logicLoading() {
 	play->resetGame();
 	play->game_slot = selected_slot + 1;
 	play->loadGame();
+	play->loadPowerTree();
 	requestedGameState = play;
 	loaded = true;
 	loading = false;

@@ -1049,6 +1049,22 @@ void GameStatePlay::showLoading() {
 	render_device->commitFrame();
 }
 
+void GameStatePlay::loadPowerTree() {
+	for (unsigned i=0; i<HERO_CLASSES.size(); ++i) {
+		if (pc->stats.character_class == HERO_CLASSES[i].name) {
+			if (HERO_CLASSES[i].power_tree != "") {
+				menu->pow->loadPowerTree(HERO_CLASSES[i].power_tree);
+				return;
+			}
+			else
+				break;
+		}
+	}
+
+	// fall back to the default power tree
+	menu->pow->loadPowerTree("powers/trees/default.txt");
+}
+
 Avatar *GameStatePlay::getAvatar() const {
 	return pc;
 }
