@@ -802,7 +802,7 @@ std::string StatBlock:: getShortClass() {
  * It contains both the base class and the generated subclass
  */
 std::string StatBlock::getLongClass() {
-	if (character_subclass == "")
+	if (character_subclass == "" || character_class == character_subclass)
 		return msg->get(character_class);
 	else
 		return msg->get(character_class) + " / " + msg->get(character_subclass);
