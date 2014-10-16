@@ -24,17 +24,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "FileParser.h"
 #include "Menu.h"
+#include "MenuManager.h"
+#include "MenuNPCActions.h"
 #include "MenuTalker.h"
-
 #include "NPC.h"
+#include "Settings.h"
+#include "SharedResources.h"
+#include "StatBlock.h"
+#include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetScrollBox.h"
-#include "SharedResources.h"
-#include "Settings.h"
-#include "UtilsParsing.h"
-#include "MenuManager.h"
-#include "MenuNPCActions.h"
 
 using namespace std;
 
@@ -292,18 +292,17 @@ void MenuTalker::render() {
 	}
 }
 
-void MenuTalker::setHero(const string& name, const string& class_name, const string& portrait_filename) {
-	hero_name = name;
-	hero_class = msg->get(class_name);
+void MenuTalker::setHero(StatBlock &stats) {
+	hero_name = stats.name;
+	hero_class = stats.getShortClass();
 
 	if (portrait)
 		delete portrait;
 
-	if (portrait_filename == "") return;
+	if (stats.gfx_portrait == "") return;
 
 	Image *graphics;
-	graphics = render_device->loadImage(portrait_filename,
-			   "Couldn't load portrait");
+	graphics = render_device->loadImage(stats.gfx_portrait, "Couldn't load portrait");
 	if (graphics) {
 		portrait = graphics->createSprite();
 		graphics->unref();

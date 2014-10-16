@@ -84,7 +84,7 @@ void GameStatePlay::saveGame() {
 		outfile << "option=" << pc->stats.gfx_base << "," << pc->stats.gfx_head << "," << pc->stats.gfx_portrait << "\n";
 
 		// hero class
-		outfile << "class=" << pc->stats.character_class << "\n";
+		outfile << "class=" << pc->stats.character_class << "," << pc->stats.character_subclass << "\n";
 
 		// current experience
 		outfile << "xp=" << pc->stats.xp << "\n";
@@ -224,6 +224,7 @@ void GameStatePlay::loadGame() {
 			}
 			else if (infile.key == "class") {
 				pc->stats.character_class = infile.nextValue();
+				pc->stats.character_subclass = infile.nextValue();
 			}
 			else if (infile.key == "xp") {
 				pc->stats.xp = toUnsignedLong(infile.val);
@@ -434,7 +435,7 @@ void GameStatePlay::applyPlayerData() {
 	pc->stats.direction = 6;
 
 	// set up MenuTalker for this hero
-	menu->talker->setHero(pc->stats.name, pc->stats.character_class, pc->stats.gfx_portrait);
+	menu->talker->setHero(pc->stats);
 
 	// load sounds (gender specific)
 	pc->loadSounds();

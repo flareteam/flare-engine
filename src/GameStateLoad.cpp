@@ -307,8 +307,10 @@ void GameStateLoad::readGameSlot(int slot) {
 		// load (key=value) pairs
 		if (infile.key == "name")
 			stats[slot].name = infile.val;
-		else if (infile.key == "class")
-			stats[slot].character_class = infile.val;
+		else if (infile.key == "class") {
+			stats[slot].character_class = infile.nextValue();
+			stats[slot].character_subclass = infile.nextValue();
+		}
 		else if (infile.key == "xp")
 			stats[slot].xp = toInt(infile.val);
 		else if (infile.key == "build") {
@@ -632,7 +634,7 @@ void GameStateLoad::render() {
 			ss.str("");
 			label.x = slot_pos[slot].x + level_pos.x;
 			label.y = slot_pos[slot].y + level_pos.y;
-			ss << msg->get("Level %d %s", stats[slot].level, msg->get(stats[slot].character_class));
+			ss << msg->get("Level %d %s", stats[slot].level, stats[slot].getShortClass());
 			if (stats[slot].permadeath)
 				ss << ", " + msg->get("Permadeath");
 			label_level[slot]->set(label.x, label.y, level_pos.justify, level_pos.valign, ss.str(), color_normal, level_pos.font_style);

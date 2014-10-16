@@ -410,7 +410,7 @@ void MenuCharacter::refreshStats() {
 
 	// update tool tips
 	cstat[CSTAT_NAME].tip.clear();
-	cstat[CSTAT_NAME].tip.addText(msg->get(stats->character_class));
+	cstat[CSTAT_NAME].tip.addText(stats->getLongClass());
 
 	cstat[CSTAT_LEVEL].tip.clear();
 	cstat[CSTAT_LEVEL].tip.addText(msg->get("XP: %d", stats->xp));
