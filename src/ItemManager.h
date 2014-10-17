@@ -89,8 +89,8 @@ public:
 	int dmg_ment_max;     // maximum damage amount (mental)
 	int abs_min;          // minimum absorb amount
 	int abs_max;          // maximum absorb amount
-	int req_stat;         // physical, mental, offense, defense
-	int req_val;          // 1-5 (used with req_stat)
+	std::vector<int> req_stat;         // physical, mental, offense, defense
+	std::vector<int> req_val;          // 1-5 (used with req_stat)
 	std::vector<std::string> bonus_stat;   // stat to increase/decrease e.g. hp, accuracy, speed
 	std::vector<int> bonus_val;       // amount to increase (used with bonus_stat)
 	SoundManager::SoundID sfx;        // the item sound when it hits the floor or inventory, etc
@@ -126,8 +126,6 @@ public:
 		, dmg_ment_max(0)
 		, abs_min(0)
 		, abs_max(0)
-		, req_stat(0)
-		, req_val(0)
 		, sfx(0)
 		, gfx("")
 		, power(0)

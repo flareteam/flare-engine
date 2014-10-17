@@ -215,14 +215,14 @@ void ItemManager::loadItems() {
 			// @ATTR req|[ [p:m:o:d], amount (integer) ]|Make item require specific stat level ex. req=p,6 will require hero to have level 6 in physical stats
 			string s = infile.nextValue();
 			if (s == "p")
-				items[id].req_stat = REQUIRES_PHYS;
+				items[id].req_stat.push_back(REQUIRES_PHYS);
 			else if (s == "m")
-				items[id].req_stat = REQUIRES_MENT;
+				items[id].req_stat.push_back(REQUIRES_MENT);
 			else if (s == "o")
-				items[id].req_stat = REQUIRES_OFF;
+				items[id].req_stat.push_back(REQUIRES_OFF);
 			else if (s == "d")
-				items[id].req_stat = REQUIRES_DEF;
-			items[id].req_val = toInt(infile.nextValue());
+				items[id].req_stat.push_back(REQUIRES_DEF);
+			items[id].req_val.push_back(toInt(infile.nextValue()));
 		}
 		else if (infile.key == "bonus") {
 			// @ATTR bonus|[power_tag (string), amount (integer)]|Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50
@@ -572,26 +572,28 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// requirement
-	if (items[stack.item].req_val > 0) {
-		if (items[stack.item].req_stat == REQUIRES_PHYS) {
-			if (stats->get_physical() < items[stack.item].req_val) color = color_requirements_not_met;
-			else color = color_normal;
-			tip.addText(msg->get("Requires Physical %d", items[stack.item].req_val), color);
-		}
-		else if (items[stack.item].req_stat == REQUIRES_MENT) {
-			if (stats->get_mental() < items[stack.item].req_val) color = color_requirements_not_met;
-			else color = color_normal;
-			tip.addText(msg->get("Requires Mental %d", items[stack.item].req_val), color);
-		}
-		else if (items[stack.item].req_stat == REQUIRES_OFF) {
-			if (stats->get_offense() < items[stack.item].req_val) color = color_requirements_not_met;
-			else color = color_normal;
-			tip.addText(msg->get("Requires Offense %d", items[stack.item].req_val), color);
-		}
-		else if (items[stack.item].req_stat == REQUIRES_DEF) {
-			if (stats->get_defense() < items[stack.item].req_val) color = color_requirements_not_met;
-			else color = color_normal;
-			tip.addText(msg->get("Requires Defense %d", items[stack.item].req_val), color);
+	for (unsigned i=0; i<items[stack.item].req_stat.size(); ++i) {
+		if (items[stack.item].req_val[i] > 0) {
+			if (items[stack.item].req_stat[i] == REQUIRES_PHYS) {
+				if (stats->get_physical() < items[stack.item].req_val[i]) color = color_requirements_not_met;
+				else color = color_normal;
+				tip.addText(msg->get("Requires Physical %d", items[stack.item].req_val[i]), color);
+			}
+			else if (items[stack.item].req_stat[i] == REQUIRES_MENT) {
+				if (stats->get_mental() < items[stack.item].req_val[i]) color = color_requirements_not_met;
+				else color = color_normal;
+				tip.addText(msg->get("Requires Mental %d", items[stack.item].req_val[i]), color);
+			}
+			else if (items[stack.item].req_stat[i] == REQUIRES_OFF) {
+				if (stats->get_offense() < items[stack.item].req_val[i]) color = color_requirements_not_met;
+				else color = color_normal;
+				tip.addText(msg->get("Requires Offense %d", items[stack.item].req_val[i]), color);
+			}
+			else if (items[stack.item].req_stat[i] == REQUIRES_DEF) {
+				if (stats->get_defense() < items[stack.item].req_val[i]) color = color_requirements_not_met;
+				else color = color_normal;
+				tip.addText(msg->get("Requires Defense %d", items[stack.item].req_val[i]), color);
+			}
 		}
 	}
 
