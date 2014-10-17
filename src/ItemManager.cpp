@@ -211,16 +211,16 @@ void ItemManager::loadItems() {
 			else
 				items[id].abs_max = items[id].abs_min;
 		}
-		else if (infile.key == "req") {
-			// @ATTR req|[ [p:m:o:d], amount (integer) ]|Make item require specific stat level ex. req=p,6 will require hero to have level 6 in physical stats
+		else if (infile.key == "requires_stat") {
+			// @ATTR requires_stat|[ [physical:mental:offense:defense], amount (integer) ]|Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats
 			string s = infile.nextValue();
-			if (s == "p")
+			if (s == "physical")
 				items[id].req_stat.push_back(REQUIRES_PHYS);
-			else if (s == "m")
+			else if (s == "mental")
 				items[id].req_stat.push_back(REQUIRES_MENT);
-			else if (s == "o")
+			else if (s == "offense")
 				items[id].req_stat.push_back(REQUIRES_OFF);
-			else if (s == "d")
+			else if (s == "defense")
 				items[id].req_stat.push_back(REQUIRES_DEF);
 			items[id].req_val.push_back(toInt(infile.nextValue()));
 		}
