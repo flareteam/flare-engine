@@ -120,7 +120,9 @@ public:
 	// transformation handling
 	void transform();
 	void untransform();
-	bool isTransforming() { return transform_triggered; }
+	bool isTransforming() {
+		return transform_triggered;
+	}
 	bool setPowers;
 	bool revertPowers;
 	int untransform_power;
