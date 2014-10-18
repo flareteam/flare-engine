@@ -722,17 +722,23 @@ bool MenuInventory::isItemEquipped(int item) {
  * Check requirements on an item
  */
 bool MenuInventory::requirementsMet(int item) {
-	if (items->items[item].req_stat == REQUIRES_PHYS) {
-		return (stats->get_physical() >= items->items[item].req_val);
-	}
-	else if (items->items[item].req_stat == REQUIRES_MENT) {
-		return (stats->get_mental() >= items->items[item].req_val);
-	}
-	else if (items->items[item].req_stat == REQUIRES_OFF) {
-		return (stats->get_offense() >= items->items[item].req_val);
-	}
-	else if (items->items[item].req_stat == REQUIRES_DEF) {
-		return (stats->get_defense() >= items->items[item].req_val);
+	for (unsigned i=0; i < items->items[item].req_stat.size(); ++i) {
+		if (items->items[item].req_stat[i] == REQUIRES_PHYS) {
+			if (stats->get_physical() < items->items[item].req_val[i])
+				return false;
+		}
+		if (items->items[item].req_stat[i] == REQUIRES_MENT) {
+			if (stats->get_mental() < items->items[item].req_val[i])
+				return false;
+		}
+		if (items->items[item].req_stat[i] == REQUIRES_OFF) {
+			if (stats->get_offense() < items->items[item].req_val[i])
+				return false;
+		}
+		if (items->items[item].req_stat[i] == REQUIRES_DEF) {
+			if (stats->get_defense() < items->items[item].req_val[i])
+				return false;
+		}
 	}
 	// otherwise there is no requirement, so it is usable.
 	return true;
