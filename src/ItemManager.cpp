@@ -222,6 +222,8 @@ void ItemManager::loadItems() {
 				items[id].req_stat.push_back(REQUIRES_OFF);
 			else if (s == "defense")
 				items[id].req_stat.push_back(REQUIRES_DEF);
+			else
+				infile.error("%s unrecognized at; requires_stat must be one of [physical:mental:offense:defense]\n", s);
 			items[id].req_val.push_back(toInt(infile.nextValue()));
 		}
 		else if (infile.key == "bonus") {
