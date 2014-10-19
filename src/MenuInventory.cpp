@@ -663,8 +663,8 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
  * Similar to sell(), but for use with stash
  */
 bool MenuInventory::stashAdd(ItemStack stack) {
-	// items that have no price cannot be stored
-	if (items->items[stack.item].price == 0) return false;
+	// quest items can not be stored
+	if (items->items[stack.item].type == "quest") return false;
 
 	drag_prev_src = -1;
 	return true;
