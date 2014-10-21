@@ -222,6 +222,8 @@ void ItemManager::loadItems() {
 				items[id].req_stat.push_back(REQUIRES_OFF);
 			else if (s == "defense")
 				items[id].req_stat.push_back(REQUIRES_DEF);
+			else
+				infile.error("%s unrecognized at; requires_stat must be one of [physical:mental:offense:defense]\n", s);
 			items[id].req_val.push_back(toInt(infile.nextValue()));
 		}
 		else if (infile.key == "bonus") {
@@ -246,10 +248,10 @@ void ItemManager::loadItems() {
 		}
 		else if (infile.key == "power") {
 			// @ATTR power|power_id|Adds a specific power to the item which makes it usable as a power and can be placed in action bar.
-			if (toInt(infile.val) > 0) {
+			if (toInt(infile.val) > 0)
 				items[id].power = toInt(infile.val);
-			}
-			else infile.error("ItemManager: Power index out of bounds 1-%d, skipping power.", INT_MAX);
+			else
+				infile.error("ItemManager: Power index out of bounds 1-%d, skipping power.", INT_MAX);
 		}
 		else if (infile.key == "replace_power") {
 			// @ATTR replace_power|old (integer), new (integer)|Replaces the old power id with the new power id in the action bar when equipped.
@@ -328,10 +330,13 @@ void ItemManager::loadTypes() {
 	if (infile.open("items/types.txt")) {
 		while (infile.next()) {
 			// @ATTR name|string|Item type name.
-			if (infile.key == "name") type = infile.val;
+			if (infile.key == "name")
+				type = infile.val;
 			// @ATTR description|string|Item type description.
-			else if (infile.key == "description") description = infile.val;
-			else infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
+			else if (infile.key == "description")
+				description = infile.val;
+			else
+				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 
 			if (type != "" && description != "") {
 				item_types[type] = description;
