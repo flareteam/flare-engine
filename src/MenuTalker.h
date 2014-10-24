@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class CampaignManager;
 class MenuManager;
 class NPC;
+class StatBlock;
 class WidgetButton;
 class WidgetLabel;
 class WidgetScrollBox;
@@ -75,7 +76,7 @@ public:
 	void chooseDialogNode(int requested_node = -1);
 	void logic();
 	void render();
-	void setHero(const std::string& name, const std::string& class_name, const std::string& portrait_filename);
+	void setHero(StatBlock &stats);
 	void createBuffer();
 
 	WidgetButton *advanceButton;

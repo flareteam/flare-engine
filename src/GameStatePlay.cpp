@@ -137,7 +137,7 @@ void GameStatePlay::resetGame() {
 	loadStash();
 
 	// Finalize new character settings
-	menu->talker->setHero(pc->stats.name, pc->stats.character_class, pc->stats.gfx_portrait);
+	menu->talker->setHero(pc->stats);
 	pc->loadSounds();
 }
 
@@ -513,7 +513,7 @@ void GameStatePlay::checkTitle() {
 		break;
 	}
 
-	if (title_id != -1) pc->stats.character_class = titles[title_id].title;
+	if (title_id != -1) pc->stats.character_subclass = titles[title_id].title;
 	pc->stats.check_title = false;
 	pc->stats.refresh_stats = true;
 }
@@ -1047,6 +1047,22 @@ void GameStatePlay::showLoading() {
 	loading->render();
 
 	render_device->commitFrame();
+}
+
+void GameStatePlay::loadPowerTree() {
+	for (unsigned i=0; i<HERO_CLASSES.size(); ++i) {
+		if (pc->stats.character_class == HERO_CLASSES[i].name) {
+			if (HERO_CLASSES[i].power_tree != "") {
+				menu->pow->loadPowerTree(HERO_CLASSES[i].power_tree);
+				return;
+			}
+			else
+				break;
+		}
+	}
+
+	// fall back to the default power tree
+	menu->pow->loadPowerTree("powers/trees/default.txt");
 }
 
 Avatar *GameStatePlay::getAvatar() const {

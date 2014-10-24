@@ -119,6 +119,7 @@ public:
 	void loadStash();
 	void resetGame();
 	void applyPlayerData();
+	void loadPowerTree();
 	int game_slot;
 
 	Avatar *getAvatar() const;

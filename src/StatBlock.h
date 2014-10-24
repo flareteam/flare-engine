@@ -87,6 +87,8 @@ public:
 	bool summonLimitReached(int power_id) const;
 	void setWanderArea(int r);
 	void loadHeroSFX();
+	std::string getShortClass();
+	std::string getLongClass();
 
 	bool alive;
 	bool corpse; // creature is dead and done animating
@@ -178,9 +180,10 @@ public:
 		return get_offense() + get_defense();
 	}
 
-	// in Flare there are no distinct character classes.
-	// instead each class is given a descriptor based on their base stat builds
+	// Base class picked when starting a new game. Defaults to "Adventurer".
 	std::string character_class;
+	// Class derived from certain properties defined in engine/titles.txt
+	std::string character_subclass;
 
 	// physical stats
 	int hp;

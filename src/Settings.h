@@ -49,6 +49,7 @@ public:
 	int hotkeys[12];
 	std::vector<int> powers;
 	std::vector<std::string> statuses;
+	std::string power_tree;
 
 	HeroClass()
 		: name("")
@@ -58,7 +59,8 @@ public:
 		, physical(0)
 		, mental(0)
 		, offense(0)
-		, defense(0) {
+		, defense(0)
+		, power_tree("") {
 		for (int i=0; i<12; i++) {
 			hotkeys[i] = 0;
 		}

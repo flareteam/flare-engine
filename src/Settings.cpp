@@ -665,21 +665,21 @@ void loadMiscSettings() {
 
 	// @CLASS Settings: Classes|Description of engine/classes.txt
 	if (infile.open("engine/classes.txt")) {
-		HeroClass c;
 		while (infile.next()) {
-			// @ATTR name|string|The displayed name of this class.
-			if (infile.key == "name") {
-				c.name = infile.val;
-				if (c.name != "") {
-					HERO_CLASSES.push_back(c);
-					c.name = "";
+			if (infile.new_section) {
+				if (infile.section == "class") {
+					HERO_CLASSES.push_back(HeroClass());
 				}
-				continue;
 			}
 
+			if (infile.section != "class")
+				continue;
+
 			if (!HERO_CLASSES.empty()) {
+				// @ATTR name|string|The displayed name of this class.
+				if (infile.key == "name") HERO_CLASSES.back().name = infile.val;
 				// @ATTR description|string|A description of this class.
-				if (infile.key == "description") HERO_CLASSES.back().description = infile.val;
+				else if (infile.key == "description") HERO_CLASSES.back().description = infile.val;
 				// @ATTR currency|integer|The amount of currency this class will start with.
 				else if (infile.key == "currency") HERO_CLASSES.back().currency = toInt(infile.val);
 				// @ATTR equipment|item (integer), ...|A list of items that are equipped when starting with this class.
@@ -713,6 +713,9 @@ void loadMiscSettings() {
 						HERO_CLASSES.back().statuses.push_back(status);
 					}
 				}
+				// @ATTR power_tree|string|Power tree that will be loaded by MenuPowers
+				else if (infile.key == "power_tree") HERO_CLASSES.back().power_tree = infile.val;
+
 				else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
@@ -721,7 +724,7 @@ void loadMiscSettings() {
 	// Make a default hero class if none were found
 	if (HERO_CLASSES.empty()) {
 		HeroClass c;
-		c.name = msg->get("Adventurer");
+		c.name = "Adventurer";
 		HERO_CLASSES.push_back(c);
 	}
 

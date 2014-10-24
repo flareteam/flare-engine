@@ -79,6 +79,7 @@ StatBlock::StatBlock()
 	, physical_additional(0)
 	, mental_additional(0)
 	, character_class("")
+	, character_subclass("")
 	, hp(0)
 	, hp_ticker(0)
 	, mp(0)
@@ -627,6 +628,7 @@ StatBlock::~StatBlock() {
 }
 
 bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
+	if (!menu_powers) return false;
 
 	// needed to unlock shapeshifter powers
 	if (transformed) return mp >= power.requires_mp;
@@ -781,4 +783,27 @@ void StatBlock::setWanderArea(int r) {
 	wander_area.x = int(floor(pos.x)) - r;
 	wander_area.y = int(floor(pos.y)) - r;
 	wander_area.w = wander_area.h = (r*2) + 1;
+}
+
+/**
+ * Returns the short version of the class string
+ * For the sake of consistency with previous versions,
+ * this means returning the generated subclass
+ */
+std::string StatBlock:: getShortClass() {
+	if (character_subclass == "")
+		return msg->get(character_class);
+	else
+		return msg->get(character_subclass);
+}
+
+/**
+ * Returns the long version of the class string
+ * It contains both the base class and the generated subclass
+ */
+std::string StatBlock::getLongClass() {
+	if (character_subclass == "" || character_class == character_subclass)
+		return msg->get(character_class);
+	else
+		return msg->get(character_class) + " / " + msg->get(character_subclass);
 }
