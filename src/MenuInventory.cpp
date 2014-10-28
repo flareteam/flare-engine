@@ -359,7 +359,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		// make sure the item is going to the correct slot
 		// we match slot_type to stack.item's type to place items in the proper slots
 		// also check to see if the hero meets the requirements
-		if (slot_type[slot] == items->items[stack.item].type && requirementsMet(stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
+		if (slot_type[slot] == items->items[stack.item].type && items->requirementsMet(stats, stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
 			if (inventory[area][slot].item == stack.item) {
 				// Merge the stacks
 				add(stack, area, slot, false);
@@ -420,7 +420,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 				inventory[EQUIPMENT][drag_prev_slot].empty()
 				&& inventory[CARRIED][slot].item != stack.item
 				&& items->items[inventory[CARRIED][slot].item].type == slot_type[drag_prev_slot]
-				&& requirementsMet(inventory[CARRIED][slot].item)
+				&& items->requirementsMet(stats, inventory[CARRIED][slot].item)
 			) { // The whole equipped stack is dropped on an empty carried slot or on a wearable item
 				// Swap the two stacks
 				itemReturn(inventory[area][slot]);
@@ -468,15 +468,15 @@ void MenuInventory::activate(Point position) {
 
 		int power_id = items->items[inventory[CARRIED][slot].item].power;
 
-		//don't use untransform item if hero is not transformed
-		if (powers->powers[power_id].spawn_type == "untransform" && !stats->transformed)
-			return;
-
 		// if the power consumes items, make sure we have enough
 		if (powers->powers[power_id].requires_item > 0 && powers->powers[power_id].requires_item_quantity > getItemCountCarried(powers->powers[power_id].requires_item)) {
 			log_msg = msg->get("You don't have enough of the required item.");
 			return;
 		}
+
+		// check power & item requirements
+		if (!stats->canUsePower(powers->powers[power_id], power_id))
+			return;
 
 		//check for power cooldown
 		if (pc->hero_cooldown[power_id] > 0) return;
@@ -513,7 +513,7 @@ void MenuInventory::activate(Point position) {
 		}
 
 		if (equip_slot != -1) {
-			if (requirementsMet(inventory[CARRIED][slot].item)) {
+			if (items->requirementsMet(stats, inventory[CARRIED][slot].item)) {
 				stack = click(position);
 				if( inventory[EQUIPMENT][equip_slot].item == stack.item) {
 					// Merge the stacks
@@ -718,39 +718,6 @@ bool MenuInventory::isItemEquipped(int item) {
 	return inventory[EQUIPMENT].contain(item);
 }
 
-/**
- * Check requirements on an item
- */
-bool MenuInventory::requirementsMet(int item) {
-	// base stats
-	for (unsigned i=0; i < items->items[item].req_stat.size(); ++i) {
-		if (items->items[item].req_stat[i] == REQUIRES_PHYS) {
-			if (stats->get_physical() < items->items[item].req_val[i])
-				return false;
-		}
-		if (items->items[item].req_stat[i] == REQUIRES_MENT) {
-			if (stats->get_mental() < items->items[item].req_val[i])
-				return false;
-		}
-		if (items->items[item].req_stat[i] == REQUIRES_OFF) {
-			if (stats->get_offense() < items->items[item].req_val[i])
-				return false;
-		}
-		if (items->items[item].req_stat[i] == REQUIRES_DEF) {
-			if (stats->get_defense() < items->items[item].req_val[i])
-				return false;
-		}
-	}
-
-	// class
-	if (items->items[item].requires_class != "" && items->items[item].requires_class != stats->character_class) {
-		return false;
-	}
-
-	// otherwise there is no requirement, so it is usable.
-	return true;
-}
-
 void MenuInventory::updateEquipment(int slot) {
 
 	if (slot == -1) {
@@ -839,7 +806,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		}
 		// check that each equipped item fit requirements
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			if (!requirementsMet(equipped[i].item)) {
+			if (!items->requirementsMet(stats, equipped[i].item)) {
 				add(equipped[i]);
 				equipped[i].clear();
 				checkRequired = true;

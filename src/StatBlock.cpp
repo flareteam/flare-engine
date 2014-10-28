@@ -642,7 +642,8 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 			   && menu_powers->meetsUsageStats(powerid)
 			   && !power.passive
 			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
-			   && !power.meta_power;
+			   && !power.meta_power
+			   && (power.requires_item == -1 || (power.requires_item > 0 && items->requirementsMet(this, power.requires_item)));
 	}
 
 }

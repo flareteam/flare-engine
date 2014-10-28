@@ -201,6 +201,7 @@ public:
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemType(std::string _type);
 	void addUnknownItem(int id);
+	bool requirementsMet(const StatBlock *stats, int item);
 
 	std::vector<Item> items;
 	std::map<std::string,std::string> item_types;
