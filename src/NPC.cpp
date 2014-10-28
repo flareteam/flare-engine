@@ -283,6 +283,12 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 				is_available = false;
 				break;
 			}
+			else if (dialog[i][j].type == "requires_class") {
+				if (camp->hero->character_class == dialog[i][j].s)
+					continue;
+				is_available = false;
+				break;
+			}
 			else if (dialog[i][j].type == "group") {
 				is_grouped = true;
 				group = dialog[i][j].s;
