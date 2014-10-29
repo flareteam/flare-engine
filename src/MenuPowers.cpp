@@ -197,13 +197,15 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	if (!tabs.empty()) {
 		tab_control = new WidgetTabControl(tabs.size());
 
-		// Initialize the tab control.
-		tab_control->setMainArea(window_area.x+tab_area.x, window_area.y+tab_area.y, tab_area.w, tab_area.h);
+		if (tab_control) {
+			// Initialize the tab control.
+			tab_control->setMainArea(window_area.x+tab_area.x, window_area.y+tab_area.y, tab_area.w, tab_area.h);
 
-		// Define the header.
-		for (unsigned i=0; i<tabs.size(); i++)
-			tab_control->setTabTitle(i, msg->get(tabs[i].title));
-		tab_control->updateHeader();
+			// Define the header.
+			for (unsigned i=0; i<tabs.size(); i++)
+				tab_control->setTabTitle(i, msg->get(tabs[i].title));
+			tab_control->updateHeader();
+		}
 	}
 
 	// create power slots
@@ -533,18 +535,20 @@ void MenuPowers::logic() {
 
 	tablist.logic();
 
-	// make shure keyboard navigation leads us to correct tab
-	for (unsigned int i = 0; i < slots.size(); i++) {
-		if (slots[i]->in_focus) tab_control->setActiveTab(power_cell[i].tab);
-	}
-
 	if (closeButton->checkClick()) {
 		visible = false;
 		snd->play(sfx_close);
 	}
 
-	if (tab_control)
+	if (tab_control) {
+		// make shure keyboard navigation leads us to correct tab
+		for (unsigned int i = 0; i < slots.size(); i++) {
+			if (slots[i]->in_focus)
+				tab_control->setActiveTab(power_cell[i].tab);
+		}
+
 		tab_control->logic();
+	}
 }
 
 bool MenuPowers::canUpgrade(short power_cell_index) {
