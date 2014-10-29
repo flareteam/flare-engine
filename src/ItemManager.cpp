@@ -681,6 +681,41 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	return tip;
 }
 
+/**
+ * Check requirements on an item
+ */
+bool ItemManager::requirementsMet(const StatBlock *stats, int item) {
+	if (!stats) return false;
+
+	// base stats
+	for (unsigned i=0; i < items[item].req_stat.size(); ++i) {
+		if (items[item].req_stat[i] == REQUIRES_PHYS) {
+			if (stats->get_physical() < items[item].req_val[i])
+				return false;
+		}
+		if (items[item].req_stat[i] == REQUIRES_MENT) {
+			if (stats->get_mental() < items[item].req_val[i])
+				return false;
+		}
+		if (items[item].req_stat[i] == REQUIRES_OFF) {
+			if (stats->get_offense() < items[item].req_val[i])
+				return false;
+		}
+		if (items[item].req_stat[i] == REQUIRES_DEF) {
+			if (stats->get_defense() < items[item].req_val[i])
+				return false;
+		}
+	}
+
+	// class
+	if (items[item].requires_class != "" && items[item].requires_class != stats->character_class) {
+		return false;
+	}
+
+	// otherwise there is no requirement, so it is usable.
+	return true;
+}
+
 ItemManager::~ItemManager() {
 }
 

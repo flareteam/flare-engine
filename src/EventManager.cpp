@@ -299,6 +299,10 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 			}
 		}
 	}
+	else if (infile.key == "requires_class") {
+		// @ATTR event.requires_class|string|Event requires this base class
+		e->s = infile.nextValue();
+	}
 	else if (infile.key == "set_status") {
 		// @ATTR event.set_status|string,...|Sets specified statuses
 		e->s = infile.nextValue();
@@ -639,6 +643,10 @@ bool EventManager::isActive(const Event &e) {
 			if (camp->hero->level >= e.components[i].x) {
 				return false;
 			}
+		}
+		else if (e.components[i].type == "requires_class") {
+			if (camp->hero->character_class != e.components[i].s)
+				return false;
 		}
 	}
 	return true;
