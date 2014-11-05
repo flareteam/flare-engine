@@ -259,7 +259,14 @@ void StatBlock::load(const string& filename) {
 	if (!infile.open(filename))
 		return;
 
+	bool clear_loot = true;
+
 	while (infile.next()) {
+		if (infile.new_section) {
+			// APPENDed file
+			clear_loot = true;
+		}
+
 		int num = toInt(infile.val);
 		float fnum = toFloat(infile.val);
 		bool valid = loadCoreStat(&infile) || loadSfxStat(&infile);
@@ -282,6 +289,11 @@ void StatBlock::load(const string& filename) {
 			// loot=[id],[percent_chance]
 			// optionally allow range:
 			// loot=[id],[percent_chance],[count_min],[count_max]
+
+			if (clear_loot) {
+				loot_table.clear();
+				clear_loot = false;
+			}
 
 			loot_table.push_back(Event_Component());
 			loot->parseLoot(infile, &loot_table.back(), &loot_table);
@@ -371,6 +383,7 @@ void StatBlock::load(const string& filename) {
 
 		else if (infile.key == "passive_powers") {
 			// @ATTR passive_powers|power (integer), ...|A list of passive powers this creature has.
+			powers_passive.clear();
 			std::string p = infile.nextValue();
 			while (p != "") {
 				powers_passive.push_back(toInt(p));
@@ -393,6 +406,7 @@ void StatBlock::load(const string& filename) {
 
 		else if (infile.key == "categories") {
 			// @ATTR categories|category (string), ...|Categories that this enemy belongs to.
+			categories.clear();
 			string cat;
 			while ((cat = infile.nextValue()) != "") {
 				categories.push_back(cat);
