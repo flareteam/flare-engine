@@ -288,26 +288,6 @@ void ItemManager::loadItems() {
 		else if (infile.key == "stepfx")
 			// @ATTR stepfx|string|Sound effect when walking, this applies only to armors.
 			items[id].stepfx = infile.val;
-		else if (infile.key == "class") {
-			// @ATTR class|[classname (string), ...]|A comma separated list of classes the item belongs too.
-			string classname = infile.nextValue();
-			while (classname != "") {
-				unsigned pos; // find the position where this classname is stored:
-				for (pos = 0; pos < item_class_names.size(); pos++) {
-					if (item_class_names[pos] == classname)
-						break;
-				}
-				// if it was not found, add it to the end.
-				// pos is already the correct index.
-				if (pos == item_class_names.size()) {
-					item_class_names.push_back(classname);
-					item_class_items.push_back(vector<unsigned int>());
-				}
-				// add item id to the item list of that class:
-				item_class_items[pos].push_back(id);
-				classname = infile.nextValue();
-			}
-		}
 		else if (infile.key == "disable_slots") {
 			// @ATTR disable_slots|type (string), ...|A comma separated list of slot types to disable when this item is equipped.
 			std::string slot_type = popFirstString(infile.val);
