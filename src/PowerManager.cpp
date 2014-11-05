@@ -368,9 +368,14 @@ void PowerManager::loadPowers() {
 			// @ATTR post_effect|[effect_id, magnitude (integer), duration (duration)]|Post effect.
 			PostEffect pe;
 			pe.id = popFirstString(infile.val);
-			pe.magnitude = popFirstInt(infile.val);
-			pe.duration = parse_duration(popFirstString(infile.val));
-			powers[input_id].post_effects.push_back(pe);
+			if (effects.find(pe.id) == effects.end()) {
+				infile.error("PowerManager: Unknown effect '%s'", pe.id.c_str());
+			}
+			else {
+				pe.magnitude = popFirstInt(infile.val);
+				pe.duration = parse_duration(popFirstString(infile.val));
+				powers[input_id].post_effects.push_back(pe);
+			}
 		}
 		// pre and post power effects
 		else if (infile.key == "post_power")
