@@ -121,6 +121,12 @@ void ItemManager::loadItems() {
 	if (!infile.open("items/items.txt"))
 		return;
 
+	// used to clear vectors when overriding items
+	bool clear_req_stat = true;
+	bool clear_bonus = true;
+	bool clear_loot_anim = true;
+	bool clear_replace_power = true;
+
 	int id = 0;
 	bool id_line = false;
 	while (infile.next()) {
@@ -129,6 +135,11 @@ void ItemManager::loadItems() {
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(items, id+1);
+
+			clear_req_stat = true;
+			clear_bonus = true;
+			clear_loot_anim = true;
+			clear_replace_power = true;
 		}
 		else id_line = false;
 
@@ -172,6 +183,7 @@ void ItemManager::loadItems() {
 		}
 		else if (infile.key == "equip_flags") {
 			// @ATTR equip_flags|flag (string), ...|A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.
+			items[id].equip_flags.clear();
 			std::string flag = popFirstString(infile.val);
 
 			while (flag != "") {
@@ -213,6 +225,11 @@ void ItemManager::loadItems() {
 		}
 		else if (infile.key == "requires_stat") {
 			// @ATTR requires_stat|[ [physical:mental:offense:defense], amount (integer) ]|Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats
+			if (clear_req_stat) {
+				items[id].req_stat.clear();
+				items[id].req_val.clear();
+				clear_req_stat = false;
+			}
 			string s = infile.nextValue();
 			if (s == "physical")
 				items[id].req_stat.push_back(REQUIRES_PHYS);
@@ -232,6 +249,11 @@ void ItemManager::loadItems() {
 		}
 		else if (infile.key == "bonus") {
 			// @ATTR bonus|[power_tag (string), amount (integer)]|Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50
+			if (clear_bonus) {
+				items[id].bonus_stat.clear();
+				items[id].bonus_val.clear();
+				clear_bonus = false;
+			}
 			items[id].bonus_stat.push_back(infile.nextValue());
 			items[id].bonus_val.push_back(toInt(infile.nextValue()));
 		}
@@ -244,6 +266,10 @@ void ItemManager::loadItems() {
 			items[id].gfx = infile.val;
 		else if (infile.key == "loot_animation") {
 			// @ATTR loot_animation|filename (string), min quantity (int), max quantity (int)|Specifies the loot animation for the item. The max quantity, or both quantity values, may be omitted.
+			if (clear_loot_anim) {
+				items[id].loot_animation.clear();
+				clear_loot_anim = false;
+			}
 			LootAnimation la;
 			la.name = popFirstString(infile.val);
 			la.low = popFirstInt(infile.val);
@@ -259,9 +285,11 @@ void ItemManager::loadItems() {
 		}
 		else if (infile.key == "replace_power") {
 			// @ATTR replace_power|old (integer), new (integer)|Replaces the old power id with the new power id in the action bar when equipped.
-			Point power_ids;
-			power_ids.x = popFirstInt(infile.val);
-			power_ids.y = popFirstInt(infile.val);
+			if (clear_replace_power) {
+				items[id].replace_power.clear();
+				clear_replace_power = false;
+			}
+			Point power_ids = toPoint(infile.val);
 			items[id].replace_power.push_back(power_ids);
 		}
 		else if (infile.key == "power_desc")
@@ -310,6 +338,7 @@ void ItemManager::loadItems() {
 		}
 		else if (infile.key == "disable_slots") {
 			// @ATTR disable_slots|type (string), ...|A comma separated list of slot types to disable when this item is equipped.
+			items[id].disable_slots.clear();
 			std::string slot_type = popFirstString(infile.val);
 
 			while (slot_type != "") {
@@ -372,6 +401,8 @@ void ItemManager::loadSets() {
 	if (!infile.open("items/sets.txt"))
 		return;
 
+	bool clear_bonus = true;
+
 	int id = 0;
 	bool id_line;
 	while (infile.next()) {
@@ -380,6 +411,8 @@ void ItemManager::loadSets() {
 			id_line = true;
 			id = toInt(infile.val);
 			ensureFitsId(item_sets, id+1);
+
+			clear_bonus = true;
 		}
 		else id_line = false;
 
@@ -397,6 +430,7 @@ void ItemManager::loadSets() {
 		}
 		else if (infile.key == "items") {
 			// @ATTR name|[item_id,...]|List of item id's that is part of the set.
+			item_sets[id].items.clear();
 			string item_id = infile.nextValue();
 			while (item_id != "") {
 				int temp_id = toInt(item_id);
@@ -413,12 +447,14 @@ void ItemManager::loadSets() {
 		}
 		else if (infile.key == "color") {
 			// @ATTR color|color|A specific of color for the set.
-			item_sets[id].color.r = toInt(infile.nextValue());
-			item_sets[id].color.g = toInt(infile.nextValue());
-			item_sets[id].color.b = toInt(infile.nextValue());
+			item_sets[id].color = toRGB(infile.val);
 		}
 		else if (infile.key == "bonus") {
 			// @ATTR bonus|[requirements (integer), bonus stat (string), bonus (integer)]|Bonus to append to items in the set.
+			if (clear_bonus) {
+				item_sets[id].bonus.clear();
+				clear_bonus = false;
+			}
 			Set_bonus bonus;
 			bonus.requirement = toInt(infile.nextValue());
 			bonus.bonus_stat = infile.nextValue();
