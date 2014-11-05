@@ -115,6 +115,9 @@ void PowerManager::loadPowers() {
 	if (!infile.open("powers/powers.txt"))
 		return;
 
+	bool clear_post_effects = true;
+	bool clear_loot = true;
+
 	int input_id = 0;
 	bool skippingEntry = false;
 
@@ -129,6 +132,10 @@ void PowerManager::loadPowers() {
 				infile.error("PowerManager: Power index out of bounds 1-%d, skipping power.", INT_MAX);
 			if (static_cast<int>(powers.size()) < input_id + 1)
 				powers.resize(input_id + 1);
+
+			clear_post_effects = true;
+			clear_loot = true;
+
 			continue;
 		}
 		if (skippingEntry)
@@ -196,6 +203,7 @@ void PowerManager::loadPowers() {
 		// power requirements
 		else if (infile.key == "requires_flags") {
 			// @ATTR requires_flags|flag (string), ...|A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt
+			powers[input_id].requires_flags.clear();
 			std::string flag = popFirstString(infile.val);
 
 			while (flag != "") {
@@ -366,6 +374,10 @@ void PowerManager::loadPowers() {
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
 			// @ATTR post_effect|[effect_id, magnitude (integer), duration (duration)]|Post effect.
+			if (clear_post_effects) {
+				powers[input_id].post_effects.clear();
+				clear_post_effects = false;
+			}
 			PostEffect pe;
 			pe.id = popFirstString(infile.val);
 			pe.magnitude = popFirstInt(infile.val);
@@ -440,6 +452,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].target_party = toBool(infile.val);
 		else if (infile.key == "target_categories") {
 			// @ATTR target_categories|string,...|Hazard will only affect enemies in these categories.
+			powers[input_id].target_categories.clear();
 			string cat;
 			while ((cat = infile.nextValue()) != "") {
 				powers[input_id].target_categories.push_back(cat);
@@ -478,6 +491,10 @@ void PowerManager::loadPowers() {
 		}
 		else if (infile.key == "loot") {
 			// @ATTR loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Give the player this loot when the power is used
+			if (clear_loot) {
+				powers[input_id].loot.clear();
+				clear_loot = false;
+			}
 			if (lootm) {
 				powers[input_id].loot.push_back(Event_Component());
 				lootm->parseLoot(infile, &powers[input_id].loot.back(), &powers[input_id].loot);
