@@ -520,7 +520,7 @@ void MenuPowers::logic() {
 			if (canUpgrade(i)) {
 				upgradeButtons[i]->enabled = true;
 			}
-			if (upgradeButtons[i]->checkClick() && (!tab_control || power_cell[i].tab == tab_control->getActiveTab())) {
+			if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && upgradeButtons[i]->checkClick()) {
 				upgradePower(i);
 			}
 		}
