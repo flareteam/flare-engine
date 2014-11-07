@@ -969,13 +969,6 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
  * Spawn a creature. Does not create a hazard
  */
 bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
-
-	// apply any buffs
-	buff(power_index, src_stats, target);
-
-	// If there's a sound effect, play it here
-	playSound(power_index);
-
 	Map_Enemy espawn;
 	espawn.type = powers[power_index].spawn_type;
 	espawn.summoner = src_stats;
@@ -995,6 +988,11 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 		espawn.pos = floor(collider->get_random_neighbor(floor(src_stats->pos), powers[power_index].target_neighbor));
 	}
 
+	// can't spawn on a blocked tile
+	if (!collider->is_empty(espawn.pos.x, espawn.pos.y)) {
+		return false;
+	}
+
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	espawn.summon_power_index = power_index;
 	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
@@ -1003,6 +1001,12 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 		enemies.push(espawn);
 	}
 	payPowerCost(power_index, src_stats);
+
+	// apply any buffs
+	buff(power_index, src_stats, target);
+
+	// If there's a sound effect, play it here
+	playSound(power_index);
 
 	return true;
 }
