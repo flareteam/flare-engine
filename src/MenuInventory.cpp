@@ -297,6 +297,11 @@ ItemStack MenuInventory::click(Point position) {
 			tablist.setCurrent(inventory[drag_prev_src].current_slot);
 		}
 
+		if (item.empty()) {
+			drag_prev_src = -1;
+			return item;
+		}
+
 		// if dragging equipment, prepare to change stats/sprites
 		if (drag_prev_src == EQUIPMENT) {
 			if (stats->humanoid) {

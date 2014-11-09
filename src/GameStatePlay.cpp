@@ -653,7 +653,7 @@ void GameStatePlay::checkNPCInteraction() {
 	nearest_npc = npcs->getNearestNPC(pc->stats.pos);
 
 	int npc_hover = -1;
-	if (npc_id == -1)
+	if (!menu->npc->visible && !menu->talker->visible && !menu->vendor->visible)
 		npc_hover = npcs->checkNPCClick(inpt->mouse, mapr->cam);
 
 	// check for clicking on an NPC
