@@ -178,6 +178,7 @@ ItemStack MenuItemStorage::click(Point position) {
 				slots[drag_prev_slot]->in_focus = true;
 				current_slot = slots[drag_prev_slot];
 				item.clear();
+				drag_prev_slot = -1;
 				return item;
 			}
 			else {
