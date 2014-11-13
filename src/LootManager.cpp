@@ -163,7 +163,9 @@ void LootManager::renderTooltips(FPoint cam) {
 	Point dest;
 
 	vector<Loot>::iterator it;
-	for (it = loot.begin(); it != loot.end(); ++it) {
+	for (it = loot.end(); it != loot.begin(); ) {
+		--it;
+
 		if (it->on_ground) {
 			Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 			dest.x = p.x;
@@ -172,15 +174,28 @@ void LootManager::renderTooltips(FPoint cam) {
 			// adjust dest.y so that the tooltip floats above the item
 			dest.y -= tooltip_margin;
 
-			// create tooltip data if needed
-			if (it->tip.isEmpty()) {
+			// set hitbox for mouse hover
+			Rect hover;
+			hover.x = p.x - TILE_W_HALF;
+			hover.y = p.y - TILE_H_HALF;
+			hover.w = TILE_W;
+			hover.h = TILE_H;
 
-				if (!it->stack.empty()) {
-					it->tip = items->getShortTooltip(it->stack);
+			if (LOOT_TOOLTIPS || inpt->pressing[ALT] || isWithin(hover, inpt->mouse)) {
+				// create tooltip data if needed
+				if (it->tip.isEmpty()) {
+
+					if (!it->stack.empty()) {
+						it->tip = items->getShortTooltip(it->stack);
+					}
 				}
-			}
 
-			tip->render(it->tip, dest, STYLE_TOPLABEL);
+				tip->render(it->tip, dest, STYLE_TOPLABEL);
+
+				// only display one tooltip if we got it from hovering
+				if (!LOOT_TOOLTIPS && !inpt->pressing[ALT])
+					break;
+			}
 		}
 	}
 }

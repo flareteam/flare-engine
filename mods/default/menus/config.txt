@@ -29,6 +29,7 @@ show_hotkeys=352,136,384,128
 hardware_cursor=352,168,384,160
 dev_mode=352,200,384,192
 show_target=352,232,384,224
+loot_tooltips=352,264,384,256
 
 [input]
 joystick_device=64,16,32,32
