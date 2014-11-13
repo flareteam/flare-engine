@@ -1,6 +1,6 @@
 .\" -*- nroff -*-
 
-.TH FLARE 1 "March 2013"
+.TH FLARE 1 "November 2014"
 
 .SH NAME
 flare \- action role-playing engine
@@ -25,23 +25,23 @@ Specifies an exact path to look for mod data.
 .IP "\fB\-\-debug-event\fP"
 Prints verbose hardware input information.
 .IP "\fB\-\-renderer \fIrenderer\fP"
-Specifies the rendering backend to use. The default is 'sdl'.
+Specifies the rendering backend to use. The default is 'sdl'. Also available is 'sdl_hardware', which is a GPU-based renderer.
 
 
 .SH FILES
 .TP
-The settings are stored in
+The engine settings and key bindings are stored in
 .LP
-\fB$XDG_CONFIG_HOME\fR/\fB$GAMENAME\fR
+\fB$XDG_CONFIG_HOME\fR/flare/
 .LP
-\fB$HOME\fR/.config/\fB$GAMENAME\fR
+\fB$HOME\fR/.config/flare/
 
 .TP
 The game data is stored in
 .LP
-\fB$XDG_DATA_HOME\fR/\fB$GAMENAME\fR
+\fB$XDG_DATA_HOME\fR/flare/
 .LP
-\fB$HOME\fR/.local/share/\fB$GAMENAME\fR
+\fB$HOME\fR/.local/share/flare/
 
 .SH AVAILABILITY
 For more information about the FLARE engine, visit http://flarerpg.org
