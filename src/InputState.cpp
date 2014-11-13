@@ -109,6 +109,8 @@ void InputState::defaultQwertyKeyBindings () {
 	binding_alt[SHIFT] = SDLK_RSHIFT;
 	binding[DEL] = SDLK_DELETE;
 	binding_alt[DEL] = SDLK_BACKSPACE;
+	binding[ALT] = SDLK_LALT;
+	binding_alt[ALT] = SDLK_RALT;
 
 	binding[ACTIONBAR] = binding_alt[ACTIONBAR] = SDLK_b;
 	binding[ACTIONBAR_BACK] = binding_alt[ACTIONBAR_BACK] = SDLK_z;
@@ -184,6 +186,7 @@ void InputState::loadKeyBindings() {
 		else if (infile.key == "log") cursor = LOG;
 		else if (infile.key == "ctrl") cursor = CTRL;
 		else if (infile.key == "shift") cursor = SHIFT;
+		else if (infile.key == "alt") cursor = ALT;
 		else if (infile.key == "delete") cursor = DEL;
 		else if (infile.key == "actionbar") cursor = ACTIONBAR;
 		else if (infile.key == "actionbar_back") cursor = ACTIONBAR_BACK;
@@ -234,6 +237,7 @@ void InputState::saveKeyBindings() {
 		outfile << "log=" << binding[LOG] << "," << binding_alt[LOG] << "," << binding_joy[LOG] << "\n";
 		outfile << "ctrl=" << binding[CTRL] << "," << binding_alt[CTRL] << "," << binding_joy[CTRL] << "\n";
 		outfile << "shift=" << binding[SHIFT] << "," << binding_alt[SHIFT] << "," << binding_joy[SHIFT] << "\n";
+		outfile << "alt=" << binding[ALT] << "," << binding_alt[ALT] << "," << binding_joy[ALT] << "\n";
 		outfile << "delete=" << binding[DEL] << "," << binding_alt[DEL] << "," << binding_joy[DEL] << "\n";
 		outfile << "actionbar=" << binding[ACTIONBAR] << "," << binding_alt[ACTIONBAR] << "," << binding_joy[ACTIONBAR] << "\n";
 		outfile << "actionbar_back=" << binding[ACTIONBAR_BACK] << "," << binding_alt[ACTIONBAR_BACK] << "," << binding_joy[ACTIONBAR_BACK] << "\n";
@@ -742,12 +746,13 @@ void InputState::setKeybindNames() {
 	binding_name[21] = msg->get("Main2");
 	binding_name[22] = msg->get("Ctrl");
 	binding_name[23] = msg->get("Shift");
-	binding_name[24] = msg->get("Delete");
-	binding_name[25] = msg->get("ActionBar Accept");
-	binding_name[26] = msg->get("ActionBar Left");
-	binding_name[27] = msg->get("ActionBar Right");
-	binding_name[28] = msg->get("ActionBar Use");
-	binding_name[29] = msg->get("Developer Menu");
+	binding_name[24] = msg->get("Alt");
+	binding_name[25] = msg->get("Delete");
+	binding_name[26] = msg->get("ActionBar Accept");
+	binding_name[27] = msg->get("ActionBar Left");
+	binding_name[28] = msg->get("ActionBar Right");
+	binding_name[29] = msg->get("ActionBar Use");
+	binding_name[30] = msg->get("Developer Menu");
 
 	mouse_button[0] = msg->get("lmb");
 	mouse_button[1] = msg->get("mmb");

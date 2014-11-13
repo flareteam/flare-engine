@@ -466,6 +466,7 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "log") keybind_num = LOG;
 			else if (infile.key == "ctrl") keybind_num = CTRL;
 			else if (infile.key == "shift") keybind_num = SHIFT;
+			else if (infile.key == "alt") keybind_num = ALT;
 			else if (infile.key == "delete") keybind_num = DEL;
 			else if (infile.key == "actionbar") keybind_num = ACTIONBAR;
 			else if (infile.key == "actionbar_back") keybind_num = ACTIONBAR_BACK;
