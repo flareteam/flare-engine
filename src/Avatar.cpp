@@ -71,9 +71,11 @@ Avatar::Avatar()
 	loadLayerDefinitions();
 
 	// load target animation
-	anim->increaseCount("animations/target.txt");
-	target_animset = anim->getAnimationSet("animations/target.txt");
-	target_anim = target_animset->getAnimation();
+	if (SHOW_TARGET) {
+		anim->increaseCount("animations/target.txt");
+		target_animset = anim->getAnimationSet("animations/target.txt");
+		target_anim = target_animset->getAnimation();
+	}
 
 	// load foot-step definitions
 	// @CLASS Avatar: Step sounds|Description of items/step_sounds.txt
@@ -326,7 +328,7 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 			}
 
 			// draw a target on the ground if we're attacking
-			if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
+			if (target_anim && !power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
 				target_pos = target;
 				target_visible = true;
 				target_anim->reset();
@@ -482,12 +484,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrictPowerUse)
 			anims[i]->advanceFrame();
 	}
 
-	if (target_anim->getTimesPlayed() >= 1) {
+	if (target_anim && target_anim->getTimesPlayed() >= 1) {
 		target_visible = false;
 		target_anim->reset();
 	}
 
-	if (target_visible)
+	if (target_anim && target_visible)
 		target_anim->advanceFrame();
 
 	// handle transformation
@@ -874,7 +876,7 @@ void Avatar::resetActiveAnimation() {
 
 void Avatar::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	// target
-	if (target_visible) {
+	if (target_anim && target_visible) {
 		Renderable ren = target_anim->getCurrentFrame(0);
 		ren.map_pos = target_pos;
 		ren.prio = 0;
@@ -910,8 +912,10 @@ void Avatar::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
 }
 
 Avatar::~Avatar() {
-	anim->decreaseCount("animations/target.txt");
-	delete target_anim;
+	if (SHOW_TARGET) {
+		anim->decreaseCount("animations/target.txt");
+		delete target_anim;
+	}
 
 	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
 		anim->decreaseCount(charmed_stats->animations);

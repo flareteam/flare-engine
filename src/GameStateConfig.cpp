@@ -128,6 +128,8 @@ void GameStateConfig::init() {
 	hardware_cursor_lb = new WidgetLabel();
 	dev_mode_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	dev_mode_lb = new WidgetLabel();
+	show_target_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	show_target_lb = new WidgetLabel();
 	music_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	music_volume_lb = new WidgetLabel();
 	sound_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
@@ -268,6 +270,8 @@ void GameStateConfig::init() {
 	addChildWidget(hardware_cursor_lb, INTERFACE_TAB);
 	addChildWidget(dev_mode_cb, INTERFACE_TAB);
 	addChildWidget(dev_mode_lb, INTERFACE_TAB);
+	addChildWidget(show_target_cb, INTERFACE_TAB);
+	addChildWidget(show_target_lb, INTERFACE_TAB);
 	addChildWidget(language_lstb, INTERFACE_TAB);
 	addChildWidget(language_lb, INTERFACE_TAB);
 
@@ -316,6 +320,7 @@ void GameStateConfig::init() {
 	tablist.add(show_hotkeys_cb);
 	tablist.add(hardware_cursor_cb);
 	tablist.add(dev_mode_cb);
+	tablist.add(show_target_cb);
 	tablist.add(language_lstb);
 
 	tablist.add(enable_joystick_cb);
@@ -405,6 +410,9 @@ void GameStateConfig::readConfig () {
 			}
 			else if (infile.key == "dev_mode") {
 				placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), JUSTIFY_RIGHT);
+			}
+			else if (infile.key == "show_target") {
+				placeLabeledWidget(show_target_lb, show_target_cb, x1, y1, x2, y2, msg->get("Show targeting animation"), JUSTIFY_RIGHT);
 			}
 			//sliders
 			else if (infile.key == "music_volume") {
@@ -622,6 +630,8 @@ void GameStateConfig::update () {
 	else hardware_cursor_cb->unCheck();
 	if (DEV_MODE) dev_mode_cb->Check();
 	else dev_mode_cb->unCheck();
+	if (SHOW_TARGET) show_target_cb->Check();
+	else show_target_cb->unCheck();
 
 	std::stringstream list_mode;
 	unsigned int resolutions = getVideoModes();
@@ -833,6 +843,10 @@ void GameStateConfig::logic () {
 		else if (dev_mode_cb->checkClick()) {
 			if (dev_mode_cb->isChecked()) DEV_MODE=true;
 			else DEV_MODE=false;
+		}
+		else if (show_target_cb->checkClick()) {
+			if (show_target_cb->isChecked()) SHOW_TARGET=true;
+			else SHOW_TARGET=false;
 		}
 	}
 	// tab 5 (mods)
