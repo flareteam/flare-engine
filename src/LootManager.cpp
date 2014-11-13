@@ -409,10 +409,10 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 			if (fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
 				Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 
-				r.w = 32;
-				r.h = 48;
-				r.x = p.x - 16;
-				r.y = p.y - 32;
+				r.x = p.x - TILE_W_HALF;
+				r.y = p.y - TILE_H_HALF;
+				r.w = TILE_W;
+				r.h = TILE_H;
 
 				// clicked in pickup hotspot?
 				if (isWithin(r, mouse)) {
