@@ -17,9 +17,9 @@ from http://softagalleria.net/dirent.php and copy it to "Microsoft Visual C++ fo
 
 Installing dependencies on debian based systems (debian, Ubuntu, Kubuntu, etc):
 
-    sudo apt-get install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
-    # or if using sdl version 2:
     sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+    # or if using sdl version 1.2:
+    sudo apt-get install libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
     # for development you'll also need:
     sudo apt-get install cmake make g++ git
 
@@ -30,10 +30,17 @@ http://packages.ubuntu.com/source/precise/flare
 
 Installing dependencies on Arch Linux:
 
+    pacman -S --asdeps sdl2 sdl2_image sdl2_mixer libogg libvorbis hicolor-icon-theme python sdl2_ttf
+    # or if using sdl version 1.2:
     pacman -S --asdeps sdl sdl_image sdl_mixer libogg libvorbis hicolor-icon-theme python sdl_ttf
 
-There is also a flare-rpg-git pkgbuild at the arch user repository:
-https://aur.archlinux.org/packages.php?ID=57522
+There are also AUR PKGBUILDs available, for both stable and development versions:
+
+flare-engine: https://aur.archlinux.org/packages/flare-engine/
+flare-game: https://aur.archlinux.org/packages/flare-game/
+
+flare-engine-git: https://aur.archlinux.org/packages/flare-engine-git/
+flare-game-git: https://aur.archlinux.org/packages/flare-game-git/
 
 ### OpenSuse
 
