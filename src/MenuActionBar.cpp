@@ -251,7 +251,7 @@ void MenuActionBar::render() {
 
 	// draw hotkeyed icons
 	for (int i=0; i<12; i++) {
-		if (hotkeys[i] != 0) {
+		if (hotkeys[i] != 0 && (unsigned)hotkeys_mod[i] < powers->powers.size()) {
 			const Power &power = powers->getPower(hotkeys_mod[i]);
 
 			//see if the slot should be greyed out
@@ -488,7 +488,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// a power slot was activated
-		if (action.power > 0) {
+		if (action.power > 0 && (unsigned)action.power < powers->powers.size()) {
 			const Power &power = powers->getPower(action.power);
 			bool can_use_power = true;
 			action.instant_item = (power.new_state == POWSTATE_INSTANT && power.requires_item > 0);
