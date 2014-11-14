@@ -129,6 +129,10 @@ private:
 	WidgetLabel         * colorblind_lb;
 	WidgetCheckBox      * dev_mode_cb;
 	WidgetLabel         * dev_mode_lb;
+	WidgetCheckBox      * show_target_cb;
+	WidgetLabel         * show_target_lb;
+	WidgetCheckBox      * loot_tooltips_cb;
+	WidgetLabel         * loot_tooltips_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;

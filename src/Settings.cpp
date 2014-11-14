@@ -75,7 +75,9 @@ ConfigEntry config[] = {
 	{ "show_hotkeys",     &typeid(SHOW_HOTKEYS),    "1",   &SHOW_HOTKEYS,    "show hotkeys names on power bar. 1 enable, 0 disable."},
 	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"},
 	{ "hardware_cursor",  &typeid(HARDWARE_CURSOR), "0",   &HARDWARE_CURSOR, "use the system mouse cursor. 1 enable, 0 disable"},
-	{ "dev_mode",         &typeid(DEV_MODE),        "0",   &DEV_MODE,        "allow opening the developer console. 1 enable, 0 disable"}
+	{ "dev_mode",         &typeid(DEV_MODE),        "0",   &DEV_MODE,        "allow opening the developer console. 1 enable, 0 disable"},
+	{ "show_target",      &typeid(SHOW_TARGET),     "0",   &SHOW_TARGET,     "show the targeting reticle on the ground when attacking. 1 enable, 0 disable"},
+	{ "loot_tooltips",    &typeid(LOOT_TOOLTIPS),   "1",   &LOOT_TOOLTIPS,   "always show loot tooltips. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
@@ -126,8 +128,16 @@ bool AUDIO;
 unsigned short MUSIC_VOLUME;
 unsigned short SOUND_VOLUME;
 
-// User Preferences
+// Interface Settings
 bool COMBAT_TEXT;
+bool SHOW_FPS;
+bool SHOW_HOTKEYS;
+bool COLORBLIND;
+bool HARDWARE_CURSOR;
+bool DEV_MODE;
+bool DEV_HUD = false;
+bool SHOW_TARGET;
+bool LOOT_TOOLTIPS;
 
 // Input Settings
 bool MOUSE_MOVE;
@@ -179,9 +189,6 @@ bool DEATH_PENALTY_ITEM;
 bool MENUS_PAUSE;
 bool SAVE_HPMP;
 bool ENABLE_PLAYGAME;
-bool SHOW_FPS = false;
-bool SHOW_HOTKEYS = true;
-bool COLORBLIND = false;
 int CORPSE_TIMEOUT;
 bool SELL_WITHOUT_VENDOR;
 int AIM_ASSIST;
@@ -193,11 +200,8 @@ bool ENABLE_ALLY_COLLISION_AI;
 bool ENABLE_ALLY_COLLISION;
 int CURRENCY_ID;
 float INTERACT_RANGE;
-bool HARDWARE_CURSOR = false;
 bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
-bool DEV_MODE = false;
-bool DEV_HUD = false;
 
 /**
  * Set system paths

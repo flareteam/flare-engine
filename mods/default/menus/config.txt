@@ -28,6 +28,8 @@ colorblind=352,104,384,96
 show_hotkeys=352,136,384,128
 hardware_cursor=352,168,384,160
 dev_mode=352,200,384,192
+show_target=352,232,384,224
+loot_tooltips=352,264,384,256
 
 [input]
 joystick_device=64,16,32,32
@@ -43,7 +45,7 @@ handheld_note=416,136
 # scrollpane values are positions x, y and sizes width, height
 scrollpane=0,4,600,320
 # scrollpane_contents is the height of the scrollpane's internal area
-scrollpane_contents=910
+scrollpane_contents=940
 
 keybinds_bg_color=26,26,26
 cancel=96,10,138,10
@@ -72,12 +74,13 @@ powers=96,610,138,610
 log=96,640,138,640
 ctrl=96,670,138,670
 shift=96,700,138,700
-delete=96,730,138,730
-actionbar=96,760,138,760
-actionbar_back=96,790,138,790
-actionbar_forward=96,820,138,820
-actionbar_use=96,850,138,850
-developer_menu=96,880,138,880
+alt=96,730,138,730
+delete=96,760,138,760
+actionbar=96,790,138,790
+actionbar_back=96,820,138,820
+actionbar_forward=96,850,138,850
+actionbar_use=96,880,138,880
+developer_menu=96,910,138,910
 secondary_offset=145,0
 
 [mods]

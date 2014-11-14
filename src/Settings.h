@@ -111,16 +111,21 @@ extern bool NO_MOUSE;
 extern int JOY_DEADZONE;
 extern bool TOUCHSCREEN;
 
-// User Options
+// Interface Settings
 extern bool COMBAT_TEXT;
+extern bool SHOW_FPS;
+extern bool SHOW_HOTKEYS;
+extern bool COLORBLIND;
+extern bool HARDWARE_CURSOR;
+extern bool DEV_MODE;
+extern bool DEV_HUD;
+extern bool SHOW_TARGET;
+extern bool LOOT_TOOLTIPS;
 
 // Engine Settings
 extern bool MENUS_PAUSE;
 extern bool SAVE_HPMP;
 extern bool ENABLE_PLAYGAME;
-extern bool SHOW_FPS;
-extern bool SHOW_HOTKEYS;
-extern bool COLORBLIND;
 extern int CORPSE_TIMEOUT;
 extern bool SELL_WITHOUT_VENDOR;
 extern int AIM_ASSIST;
@@ -132,11 +137,8 @@ extern bool ENABLE_ALLY_COLLISION_AI;
 extern bool ENABLE_ALLY_COLLISION;
 extern int CURRENCY_ID;
 extern float INTERACT_RANGE;
-extern bool HARDWARE_CURSOR;
 extern bool SAVE_ONLOAD;
 extern bool SAVE_ONEXIT;
-extern bool DEV_MODE;
-extern bool DEV_HUD;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;

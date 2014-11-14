@@ -53,12 +53,13 @@ const int MAIN1 = 20;
 const int MAIN2 = 21;
 const int CTRL = 22;
 const int SHIFT = 23;
-const int DEL = 24;
-const int ACTIONBAR = 25;
-const int ACTIONBAR_BACK = 26;
-const int ACTIONBAR_FORWARD = 27;
-const int ACTIONBAR_USE = 28;
-const int DEVELOPER_MENU = 29;
+const int ALT = 24;
+const int DEL = 25;
+const int ACTIONBAR = 26;
+const int ACTIONBAR_BACK = 27;
+const int ACTIONBAR_FORWARD = 28;
+const int ACTIONBAR_USE = 29;
+const int DEVELOPER_MENU = 30;
 
 /**
  * class InputState
@@ -68,12 +69,12 @@ const int DEVELOPER_MENU = 29;
 
 class InputState {
 public:
-	static const int key_count = 30;
+	static const int key_count = 31;
 	int binding[key_count];
 	int binding_alt[key_count];
 	int binding_joy[key_count];
 
-	std::string binding_name[30];
+	std::string binding_name[31];
 	std::string mouse_button[7];
 
 	InputState(void);
