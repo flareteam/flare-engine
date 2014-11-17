@@ -939,8 +939,13 @@ void MenuManager::logic() {
 				continue;
 			}
 
-			int item_id = powers->powers[act->hotkeys[i]].requires_item;
-			int equipped_item_id = powers->powers[act->hotkeys[i]].requires_equipped_item;
+			int item_id = 0;
+			int equipped_item_id = 0;
+
+			if ((unsigned)act->hotkeys[i] < powers->powers.size()) {
+				powers->powers[act->hotkeys[i]].requires_item;
+				equipped_item_id = powers->powers[act->hotkeys[i]].requires_equipped_item;
+			}
 
 			if (equipped_item_id > 0) {
 

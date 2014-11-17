@@ -210,14 +210,18 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 
 	// create power slots
 	for (unsigned int i=0; i<slots.size(); i++) {
-		slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
-		slots[i]->pos.x = power_cell[i].pos.x;
-		slots[i]->pos.y = power_cell[i].pos.y;
-		tablist.add(slots[i]);
+		if ((unsigned)power_cell[i].id < powers->powers.size()) {
+			slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
+			slots[i]->pos.x = power_cell[i].pos.x;
+			slots[i]->pos.y = power_cell[i].pos.y;
+			tablist.add(slots[i]);
+		}
 	}
 
 	// position power slots and upgrade buttons
 	for (unsigned i=0; i<power_cell.size(); i++) {
+		if (!slots[i]) continue;
+
 		slots[i]->pos.x = window_area.x + power_cell[i].pos.x;
 		slots[i]->pos.y = window_area.y + power_cell[i].pos.y;
 		if (upgradeButtons[i] != NULL) {
@@ -336,7 +340,8 @@ void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upg
 	power_cell[power_cell_index].requires_point = power_cell_upgrade[upgrade_cell_index].requires_point;
 	power_cell[power_cell_index].passive_on = power_cell_upgrade[upgrade_cell_index].passive_on;
 
-	slots[power_cell_index]->setIcon(powers->powers[power_cell_upgrade[upgrade_cell_index].id].icon);
+	if (slots[power_cell_index])
+		slots[power_cell_index]->setIcon(powers->powers[power_cell_upgrade[upgrade_cell_index].id].icon);
 }
 
 bool MenuPowers::baseRequirementsMet(int power_index) {
@@ -419,7 +424,7 @@ int MenuPowers::click(Point mouse) {
 	int active_tab = (tab_control) ? tab_control->getActiveTab() : 0;
 
 	for (unsigned i=0; i<power_cell.size(); i++) {
-		if (isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
+		if (slots[i] && isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
 			if (TOUCHSCREEN) {
 				if (!slots[i]->in_focus) {
 					slots[i]->in_focus = true;
@@ -493,7 +498,7 @@ void MenuPowers::setUnlockedPowers() {
 
 void MenuPowers::logic() {
 	for (unsigned i=0; i<power_cell.size(); i++) {
-		if (powers->powers[power_cell[i].id].passive) {
+		if ((unsigned)power_cell[i].id < powers->powers.size() && powers->powers[power_cell[i].id].passive) {
 			bool unlocked_power = find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 			vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
 			if (it != stats->powers_passive.end()) {
@@ -543,7 +548,7 @@ void MenuPowers::logic() {
 	if (tab_control) {
 		// make shure keyboard navigation leads us to correct tab
 		for (unsigned int i = 0; i < slots.size(); i++) {
-			if (slots[i]->in_focus)
+			if (slots[i] && slots[i]->in_focus)
 				tab_control->setActiveTab(power_cell[i].tab);
 		}
 
@@ -636,7 +641,7 @@ void MenuPowers::displayBuild(int power_id) {
 	src_unlock.h = ICON_SIZE;
 
 	for (unsigned i=0; i<power_cell.size(); i++) {
-		if (power_cell[i].id == power_id && powers_unlock) {
+		if (power_cell[i].id == power_id && powers_unlock && slots[i]) {
 			powers_unlock->setClip(src_unlock);
 			powers_unlock->setDest(slots[i]->pos);
 			render_device->render(powers_unlock);
@@ -657,7 +662,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 		if (!powerIsVisible(power_cell[i].id)) continue;
 
-		if (isWithin(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
 			generatePowerDescription(&tip, i, power_cell);
 			if (!power_cell[i].upgrades.empty()) {
 				short next_level = nextLevel(i);
@@ -844,20 +849,24 @@ void MenuPowers::renderPowers(int tab_num) {
 
 		if (find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) power_in_vector = true;
 
-		slots[i]->render();
+		if (slots[i])
+			slots[i]->render();
 
 		// highlighting
 		if (power_in_vector || requirementsMet(power_cell[i].id)) {
 			displayBuild(power_cell[i].id);
 		}
 		else {
-			if (overlay_disabled) {
+			if (overlay_disabled && slots[i]) {
 				overlay_disabled->setClip(disabled_src);
 				overlay_disabled->setDest(slots[i]->pos);
 				render_device->render(overlay_disabled);
 			}
 		}
-		slots[i]->renderSelection();
+
+		if (slots[i])
+			slots[i]->renderSelection();
+
 		// upgrade buttons
 		if (upgradeButtons[i])
 			upgradeButtons[i]->render();

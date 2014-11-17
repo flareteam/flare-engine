@@ -293,7 +293,7 @@ void GameStatePlay::loadGame() {
 						logError("SaveLoad: Hotkey power id (%d) out of bounds 1-%d, skipping\n", hotkeys[i], (int)powers->powers.size());
 						hotkeys[i] = 0;
 					}
-					else if (hotkeys[i] != 0 && powers->powers[hotkeys[i]].name == "") {
+					else if (hotkeys[i] != 0 && (unsigned)hotkeys[i] < powers->powers.size() && powers->powers[hotkeys[i]].name == "") {
 						logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping\n", hotkeys[i], i);
 						hotkeys[i] = 0;
 					}
