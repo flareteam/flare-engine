@@ -177,6 +177,7 @@ void AnimationSet::load() {
 		}
 		_name = parser.section;
 	}
+	parser.close();
 
 	if (!compressed_loading) {
 		// add final animation

@@ -119,7 +119,7 @@ void Animation::addFrame(	unsigned short index,
 							Rect rect,
 							Point _render_offset) {
 
-	if (index > gfx.size()/max_kinds) {
+	if (index >= gfx.size()/max_kinds) {
 		logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]\n",
 				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, (int)gfx.size()/max_kinds);
 		return;
