@@ -101,7 +101,7 @@ public:
 	void advanceFrame();
 
 	// sets the frame counters to the same values as the given Animation.
-	void syncTo(const Animation *other);
+	bool syncTo(const Animation *other);
 
 	bool isHoveredBy(const Point &);
 
