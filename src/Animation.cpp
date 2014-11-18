@@ -220,6 +220,17 @@ void Animation::syncTo(const Animation *other) {
 	times_played = other->times_played;
 	additional_data = other->additional_data;
 	elapsed_frames = other->elapsed_frames;
+
+	if (cur_frame_index >= frames.size()) {
+		if (frames.empty()) {
+			logError("Animation: '%s' animation has no frames, but current frame index is greater than 0.\n", name.c_str());
+			cur_frame_index = 0;
+		}
+		else {
+			logError("Animation: Current frame index (%d) was larger than the last frame index (%d) when syncing '%s' animation.\n", cur_frame_index, frames.size()-1, name.c_str());
+			cur_frame_index = frames.size()-1;
+		}
+	}
 }
 
 void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
