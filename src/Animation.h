@@ -101,6 +101,8 @@ public:
 	void advanceFrame();
 
 	// sets the frame counters to the same values as the given Animation.
+	// returns false on error. Error may occur when frame count of other is
+	// larger than this animation's
 	bool syncTo(const Animation *other);
 
 	bool isHoveredBy(const Point &);
