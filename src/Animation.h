@@ -76,6 +76,8 @@ protected:
 
 	unsigned short elapsed_frames; // counts the total number of frames for back-forth animations
 
+	unsigned frame_count; // the frame count as it appears in the data files (i.e. not converted to engine frames)
+
 public:
 	Animation(const std::string &_name, const std::string &_type, Image *_sprite);
 
@@ -130,6 +132,8 @@ public:
 	void setActiveFrames(const std::vector<short> &_active_frames);
 
 	bool isCompleted();
+
+	unsigned getFrameCount() { return frame_count; }
 };
 
 #endif

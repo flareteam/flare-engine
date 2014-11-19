@@ -46,9 +46,19 @@ Animation *AnimationSet::getAnimation() {
 	return new Animation(*defaultAnimation);
 }
 
+unsigned AnimationSet::getAnimationFrames(const std::string &_name) {
+	if (!loaded)
+		load();
+	for (size_t i = 0; i < animations.size(); i++)
+		if (animations[i]->getName() == _name)
+			return animations[i]->getFrameCount();
+	return 0;
+}
+
 AnimationSet::AnimationSet(const std::string &animationname)
 	: name(animationname)
 	, loaded(false)
+	, parent(NULL)
 	, animations()
 	, sprite(NULL) {
 	defaultAnimation = new Animation("default", "play_once", NULL);
@@ -77,6 +87,8 @@ void AnimationSet::load() {
 	Animation *newanim = NULL;
 	vector<short> active_frames;
 
+	int parent_anim_frames = 0;
+
 	// Parse the file and on each new section create an animation object from the data parsed previously
 	while (parser.next()) {
 		// create the animation if finished parsing a section
@@ -91,6 +103,10 @@ void AnimationSet::load() {
 			}
 			first_section = false;
 			compressed_loading = false;
+
+			if (parent) {
+				parent_anim_frames = parent->getAnimationFrames(parser.section);
+			}
 		}
 		if (parser.key == "image") {
 			// @ATTR image|string|Filename of sprite-sheet image.
@@ -109,6 +125,10 @@ void AnimationSet::load() {
 		else if (parser.key == "frames") {
 			// @ATTR frames|integer|The total number of frames
 			frames = toInt(parser.val);
+			if (parent && frames != parent_anim_frames) {
+				parser.error("AnimationSet: Frame count %d != %d for matching animation in %s", frames, parent_anim_frames, parent->getName().c_str());
+				frames = parent_anim_frames;
+			}
 		}
 		else if (parser.key == "duration") {
 			// @ATTR duration|integer|The duration of each frame.
