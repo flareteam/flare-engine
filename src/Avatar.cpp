@@ -211,6 +211,7 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 			string name = "animations/avatar/"+stats.gfx_base+"/"+_img_gfx[i].gfx+".txt";
 			anim->increaseCount(name);
 			animsets.push_back(anim->getAnimationSet(name));
+			animsets.back()->setParent(animationSet);
 			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
 			if(!anims.back()->syncTo(activeAnimation)) {
 				logError("Avatar: Error syncing animation in '%s' to 'animations/hero.txt'.\n", animsets.back()->getName().c_str());

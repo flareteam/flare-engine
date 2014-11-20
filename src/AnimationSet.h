@@ -35,6 +35,7 @@ private:
 	std::string imagefile;
 	Animation *defaultAnimation; // has always a non-null animation, in case of successfull load it contains the first animation in the animation file.
 	bool loaded;
+	AnimationSet *parent;
 
 	void load();
 
@@ -62,8 +63,14 @@ public:
 	 */
 	Animation *getAnimation();
 
+	unsigned getAnimationFrames(const std::string &_name);
+
 	const std::string &getName() {
 		return name;
+	}
+
+	void setParent(AnimationSet *other) {
+		parent = other;
 	}
 };
 

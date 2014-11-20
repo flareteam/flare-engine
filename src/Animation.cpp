@@ -89,6 +89,8 @@ void Animation::setupUncompressed(Point _render_size, Point _render_offset, int 
 }
 
 void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds) {
+	frame_count = _frames;
+
 	calculateFrames(frames, _frames, _duration);
 
 	if (!frames.empty()) number_frames = frames.back()+1;
