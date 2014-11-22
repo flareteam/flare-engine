@@ -609,6 +609,9 @@ void MenuPowers::render() {
 		}
 		renderPowers(0);
 	}
+	else {
+		renderPowers(0);
+	}
 
 	// close button
 	closeButton->render();
