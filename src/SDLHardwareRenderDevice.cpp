@@ -162,18 +162,30 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 }
 
 int SDLHardwareRenderDevice::createContext(int width, int height) {
+	int window_w = width;
+	int window_h = height;
+
+	if (FULLSCREEN) {
+		// make the window the same size as the desktop resolution
+		SDL_DisplayMode desktop;
+		if (SDL_GetDesktopDisplayMode(0, &desktop) == 0) {
+			window_w = desktop.w;
+			window_h = desktop.h;
+		}
+	}
+
 	if (is_initialized) {
 		SDL_DestroyRenderer(renderer);
 		Uint32 flags = 0;
 
-		if (FULLSCREEN) flags = SDL_WINDOW_FULLSCREEN;
+		if (FULLSCREEN) flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
 		else flags = SDL_WINDOW_SHOWN;
 
 		SDL_DestroyWindow(screen);
 		screen = SDL_CreateWindow(msg->get(WINDOW_TITLE).c_str(),
 									SDL_WINDOWPOS_CENTERED,
 									SDL_WINDOWPOS_CENTERED,
-									width, height,
+									window_w, window_h,
 									flags);
 
 		if (HWSURFACE) flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE;
@@ -183,17 +195,21 @@ int SDLHardwareRenderDevice::createContext(int width, int height) {
 
 		renderer = SDL_CreateRenderer(screen, -1, flags);
 
+		if (renderer && FULLSCREEN && (window_w != width || window_h != height)) {
+			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+			SDL_RenderSetLogicalSize(renderer, width, height);
+		}
 	}
 	else {
 		Uint32 flags = 0;
 
-		if (FULLSCREEN) flags = SDL_WINDOW_FULLSCREEN;
+		if (FULLSCREEN) flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
 		else flags = SDL_WINDOW_SHOWN;
 
 		screen = SDL_CreateWindow(msg->get(WINDOW_TITLE).c_str(),
 									SDL_WINDOWPOS_CENTERED,
 									SDL_WINDOWPOS_CENTERED,
-									width, height,
+									window_w, window_h,
 									flags);
 
 		if (HWSURFACE) flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE;
@@ -202,6 +218,11 @@ int SDLHardwareRenderDevice::createContext(int width, int height) {
 		if (DOUBLEBUF) flags = flags | SDL_RENDERER_PRESENTVSYNC;
 
 		if (screen != NULL) renderer = SDL_CreateRenderer(screen, -1, flags);
+
+		if (FULLSCREEN && (window_w != width || window_h != height)) {
+			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+			SDL_RenderSetLogicalSize(renderer, width, height);
+		}
 	}
 
 	if (screen != NULL && renderer != NULL) {

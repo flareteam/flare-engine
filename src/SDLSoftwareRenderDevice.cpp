@@ -218,8 +218,19 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
+	int window_w = width;
+	int window_h = height;
 
-	if (FULLSCREEN) w_flags = w_flags | SDL_WINDOW_FULLSCREEN;
+	if (FULLSCREEN) {
+		w_flags = w_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
+
+		// make the window the same size as the desktop resolution
+		SDL_DisplayMode desktop;
+		if (SDL_GetDesktopDisplayMode(0, &desktop) == 0) {
+			window_w = desktop.w;
+			window_h = desktop.h;
+		}
+	}
 	if (HWSURFACE) {
 		r_flags = r_flags | SDL_RENDERER_ACCELERATED;
 	}
@@ -229,11 +240,15 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 	}
 	if (DOUBLEBUF) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
-	window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, w_flags);
+	window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
 	if (window)
 		renderer = SDL_CreateRenderer(window, -1, r_flags);
 
 	if (renderer) {
+		if (FULLSCREEN && (window_w != width || window_h != height)) {
+			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+			SDL_RenderSetLogicalSize(renderer, width, height);
+		}
 		Uint32 rmask, gmask, bmask, amask;
 		int bpp = (int)BITS_PER_PIXEL;
 		SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
