@@ -82,7 +82,7 @@ void EnemyManager::handleNewMap () {
 	// delete existing enemies
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		anim->decreaseCount(enemies[i]->animationSet->getName());
-		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != ENEMY_DEAD && enemies[i]->stats.cur_state != ENEMY_CRITDEAD)
+		if(enemies[i]->stats.hero_ally && !enemies[i]->stats.corpse && enemies[i]->stats.cur_state != ENEMY_DEAD && enemies[i]->stats.cur_state != ENEMY_CRITDEAD && enemies[i]->stats.speed > 0.0f)
 			allies.push(enemies[i]);
 		else {
 			enemies[i]->unloadSounds();
