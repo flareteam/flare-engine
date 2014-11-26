@@ -255,9 +255,9 @@ void InputState::saveKeyBindings() {
 void InputState::handle(bool dump_event) {
 	SDL_Event event;
 
-#ifndef __ANDROID__
-	SDL_GetMouseState(&mouse.x, &mouse.y);
-#endif
+	if (! SDL_VERSION_ATLEAST(2,0,0)) {
+		SDL_GetMouseState(&mouse.x, &mouse.y);
+	}
 
 	inkeys = "";
 
@@ -308,6 +308,10 @@ void InputState::handle(bool dump_event) {
 		switch (event.type) {
 
 #if SDL_VERSION_ATLEAST(2,0,0)
+			case SDL_MOUSEMOTION:
+				mouse.x = event.motion.x;
+				mouse.y = event.motion.y;
+				break;
 			case SDL_MOUSEWHEEL:
 				if (event.wheel.y > 0) {
 					scroll_up = true;
@@ -316,6 +320,8 @@ void InputState::handle(bool dump_event) {
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
+				mouse.x = event.button.x;
+				mouse.y = event.button.y;
 				for (int key=0; key<key_count; key++) {
 					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
 						pressing[key] = true;
@@ -324,6 +330,8 @@ void InputState::handle(bool dump_event) {
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
+				mouse.x = event.button.x;
+				mouse.y = event.button.y;
 				for (int key=0; key<key_count; key++) {
 					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
 						un_press[key] = true;
