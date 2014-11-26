@@ -75,6 +75,7 @@ public:
 	void set(int power_id[12]);
 	void clear();
 	void resetSlots();
+	void setItemCount(int index, int count, bool is_equipped = false);
 
 	TooltipData checkTooltip(Point mouse);
 

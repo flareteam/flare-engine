@@ -930,7 +930,7 @@ void MenuManager::logic() {
 	// for action-bar powers that represent items, lookup the current item count
 	for (int i=0; i<12; i++) {
 		act->slot_enabled[i] = true;
-		act->slot_item_count[i] = -1;
+		act->setItemCount(i, -1);
 
 		if (act->hotkeys[i] != -1) {
 			// first check if we're using a two-step power
@@ -948,21 +948,16 @@ void MenuManager::logic() {
 			}
 
 			if (equipped_item_id > 0) {
-
 				// if a non-consumable item power is unequipped, disable that slot
 				if (!inv->isItemEquipped(equipped_item_id)) {
-					act->slot_item_count[i] = 0;
-					act->slot_enabled[i] = false;
+					act->setItemCount(i, 0, true);
+				}
+				else {
+					act->setItemCount(i, 1, true);
 				}
 			}
 			else if (item_id > 0) {
-				act->slot_item_count[i] = inv->getItemCountCarried(item_id);
-				if (act->slot_item_count[i] == 0) {
-					if (act->slot_activated[i])
-						act->slots[i]->deactivate();
-
-					act->slot_enabled[i] = false;
-				}
+				act->setItemCount(i, inv->getItemCountCarried(item_id));
 			}
 
 		}

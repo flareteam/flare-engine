@@ -265,12 +265,6 @@ void MenuActionBar::render() {
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
 			slots[i]->setIcon(power.icon + icon_offset);
-			if (slot_item_count[i] > -1) {
-				slots[i]->setAmount(slot_item_count[i]);
-			}
-			else {
-				slots[i]->setAmount(0,0);
-			}
 			slots[i]->render();
 		}
 		else {
@@ -594,6 +588,28 @@ FPoint MenuActionBar::setTarget(bool have_aim, bool aim_assist) {
 	else {
 		return calcVector(hero->stats.pos, hero->stats.direction, hero->stats.melee_range);
 	}
+}
+
+void MenuActionBar::setItemCount(int index, int count, bool is_equipped) {
+	if (index < 0 || index > 11) return;
+
+	slot_item_count[index] = count;
+	if (count == 0) {
+		if (slot_activated[index])
+			slots[index]->deactivate();
+
+		slot_enabled[index] = false;
+	}
+
+	if (is_equipped)
+		// we don't care how many of an equipped item we're carrying
+		slots[index]->setAmount(count, 0);
+	else if (count >= 0)
+		// we can always carry more than 1 of any item, so always display non-equipped item count
+		slots[index]->setAmount(count, 2);
+	else
+		// slot contains a regular power, so ignore item count
+		slots[index]->setAmount(0,0);
 }
 
 MenuActionBar::~MenuActionBar() {
