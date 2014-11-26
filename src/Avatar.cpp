@@ -240,6 +240,8 @@ void Avatar::loadStepFX(const string& stepname) {
 	}
 	sound_steps.clear();
 
+	if (filename == "") return;
+
 	// A literal "NULL" means we don't want to load any new sounds
 	// This is used when transforming, since creatures don't have step sound effects
 	if (stepname == "NULL") return;
