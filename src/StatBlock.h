@@ -246,7 +246,6 @@ public:
 	std::vector<int> powers_passive;
 	std::vector<int> power_chance;
 	std::vector<int> power_index;
-	std::vector<int> power_cooldown;
 	std::vector<int> power_ticks;
 
 	bool canUsePower(const Power &power, unsigned powerid) const;

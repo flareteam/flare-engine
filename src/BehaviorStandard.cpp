@@ -337,7 +337,7 @@ void BehaviorStandard::checkPower() {
 			int power_id = e->stats.power_index[e->stats.activated_powerslot];
 
 			powers->activate(power_id, &e->stats, pursue_pos);
-			e->stats.power_ticks[power_slot] = e->stats.power_cooldown[power_slot];
+			e->stats.power_ticks[power_slot] = powers->powers[power_id].cooldown;
 			e->stats.cooldown_ticks = e->stats.cooldown;
 
 			if (e->stats.activated_powerslot == ON_HALF_DEAD) {
