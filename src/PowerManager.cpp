@@ -984,8 +984,14 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 		espawn.pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
 
-	if (powers[power_index].target_neighbor > 0) {
-		espawn.pos = floor(collider->get_random_neighbor(floor(src_stats->pos), powers[power_index].target_neighbor));
+	// force target_neighbor if our initial target is blocked
+	int target_neighbor = powers[power_index].target_neighbor;
+	if (!collider->is_empty(espawn.pos.x, espawn.pos.y) && target_neighbor < 1) {
+		target_neighbor = 1;
+	}
+
+	if (target_neighbor > 0) {
+		espawn.pos = floor(collider->get_random_neighbor(floor(src_stats->pos), target_neighbor));
 	}
 
 	// can't spawn on a blocked tile
