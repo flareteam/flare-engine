@@ -81,7 +81,6 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 				group_member.waypoints = g.waypoints;
 			}
 
-			collider.block(x, y, false);
 			enemies.push(group_member);
 		}
 		return true;
