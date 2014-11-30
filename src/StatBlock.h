@@ -66,6 +66,11 @@ const int ENEMY_JOIN_COMBAT = 14;
 // final shared states
 const int ENEMY_POWER = 15; // enemy performing a power. anim/sfx based on power
 
+// combat styles; enemy only
+const int COMBAT_DEFAULT = 0;
+const int COMBAT_AGGRESSIVE = 1;
+const int COMBAT_PASSIVE = 2;
+
 class StatBlock {
 private:
 	bool loadCoreStat(FileParser *infile);
@@ -252,7 +257,7 @@ public:
 
 	float melee_range;
 	float threat_range;
-	bool passive_attacker;//enemy will not initiate combat unless attacked
+	int combat_style; // determines how the creature enters combat
 	int hero_stealth;
 	int turn_delay;
 	int turn_ticks;

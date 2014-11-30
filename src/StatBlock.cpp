@@ -122,7 +122,7 @@ StatBlock::StatBlock()
 	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
 	, melee_range(1.0f) //both
 	, threat_range(0)  // enemy
-	, passive_attacker(false)//enemy
+	, combat_style(COMBAT_DEFAULT)//enemy
 	, hero_stealth(0)
 	, turn_delay(0)
 	, turn_ticks(0)
@@ -386,8 +386,13 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "melee_range") melee_range = fnum;
 		// @ATTR threat_range|float|Radius of the area this creature will be able to start chasing the hero.
 		else if (infile.key == "threat_range") threat_range = fnum;
-		// @ATTR passive_attacker|boolean|Won't initiate combat until attacked.
-		else if (infile.key == "passive_attacker") passive_attacker = toBool(infile.val);
+		// @ATTR combat_style|[default:aggressive:passive]|How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat.
+		else if (infile.key == "combat_style") {
+			if (infile.val == "default") combat_style = COMBAT_DEFAULT;
+			else if (infile.val == "aggressive") combat_style = COMBAT_AGGRESSIVE;
+			else if (infile.val == "passive") combat_style = COMBAT_PASSIVE;
+			else infile.error("StatBlock: Unknown combat style '%s'", infile.val.c_str());
+		}
 
 		// @ATTR animations|string|Filename of an animation definition.
 		else if (infile.key == "animations") animations = infile.val;
