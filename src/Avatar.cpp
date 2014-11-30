@@ -729,13 +729,24 @@ void Avatar::transform() {
 	// calling a transform power locks the actionbar, so we unlock it here
 	inpt->unlockActionBar();
 
+	delete charmed_stats;
+	charmed_stats = NULL;
+
+	Enemy_Level el = enemyg->getRandomEnemy(stats.transform_type, 0, 0);
+
+	if (el.type != "") {
+		charmed_stats = new StatBlock();
+		charmed_stats->load(el.type);
+	}
+	else {
+		logError("Avatar: Could not transform into creature type '%s'\n", stats.transform_type.c_str());
+		stats.transform_type = "";
+		return;
+	}
+
 	transform_triggered = true;
 	stats.transformed = true;
 	setPowers = true;
-
-	delete charmed_stats;
-	charmed_stats = new StatBlock();
-	charmed_stats->load(stats.transform_type);
 
 	// temporary save hero stats
 	delete hero_stats;
