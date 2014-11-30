@@ -154,6 +154,12 @@ void BehaviorStandard::findTarget() {
 		hero_dist = 0;
 
 
+	// aggressive enemies are always in combat
+	if (!e->stats.in_combat && e->stats.combat_style == COMBAT_AGGRESSIVE) {
+		e->stats.in_combat = true;
+		powers->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
+	}
+
 	// check entering combat (because the player hit the enemy)
 	if (e->stats.join_combat) {
 		if (hero_dist <= (stealth_threat_range *2)) {
@@ -166,20 +172,18 @@ void BehaviorStandard::findTarget() {
 	}
 
 	// check entering combat (because the player got too close)
-	if (!e->stats.in_combat && los && hero_dist < stealth_threat_range && !e->stats.passive_attacker) {
-
-		if (e->stats.in_combat) e->stats.join_combat = true;
+	if (!e->stats.in_combat && los && hero_dist < stealth_threat_range && e->stats.combat_style != COMBAT_PASSIVE) {
 		e->stats.in_combat = true;
 		powers->activate(e->stats.power_index[BEACON], &e->stats, e->stats.pos); //emit beacon
 	}
 
 	// check exiting combat (player died or got too far away)
-	if (e->stats.in_combat && hero_dist > (e->stats.threat_range *2) && !e->stats.join_combat) {
+	if (e->stats.in_combat && hero_dist > (e->stats.threat_range *2) && !e->stats.join_combat && e->stats.combat_style != COMBAT_AGGRESSIVE) {
 		e->stats.in_combat = false;
 	}
 
 	// check exiting combat (player or enemy died)
-	if (!e->stats.alive || !pc->stats.alive) {
+	if ((!e->stats.alive || !pc->stats.alive) && e->stats.combat_style != COMBAT_AGGRESSIVE) {
 		e->stats.in_combat = false;
 	}
 
@@ -337,7 +341,7 @@ void BehaviorStandard::checkPower() {
 			int power_id = e->stats.power_index[e->stats.activated_powerslot];
 
 			powers->activate(power_id, &e->stats, pursue_pos);
-			e->stats.power_ticks[power_slot] = e->stats.power_cooldown[power_slot];
+			e->stats.power_ticks[power_slot] = powers->powers[power_id].cooldown;
 			e->stats.cooldown_ticks = e->stats.cooldown;
 
 			if (e->stats.activated_powerslot == ON_HALF_DEAD) {

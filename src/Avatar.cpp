@@ -597,6 +597,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrictPowerUse)
 
 			// do power
 			if (activeAnimation->isActiveFrame()) {
+				// some powers check if the caster is blocking a tile
+				// so we block the player tile prematurely here
+				mapr->collider.block(stats.pos.x, stats.pos.y, false);
+
 				powers->activate(current_power, &stats, act_target);
 			}
 

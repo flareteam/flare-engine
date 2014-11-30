@@ -81,7 +81,6 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 				group_member.waypoints = g.waypoints;
 			}
 
-			collider.block(x, y, false);
 			enemies.push(group_member);
 		}
 		return true;
@@ -801,7 +800,11 @@ void MapRenderer::createTooltip(Event_Component *ec) {
  */
 void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target) {
 	if (statblock_index < statblocks.size()) {
-		powers->activate(power_index, &statblocks[statblock_index], target);
+		// check power cooldown before activating
+		if (statblocks[statblock_index].power_ticks[0] == 0) {
+			statblocks[statblock_index].power_ticks[0] = powers->powers[power_index].cooldown;
+			powers->activate(power_index, &statblocks[statblock_index], target);
+		}
 	}
 	else {
 		logError("MapRenderer: StatBlock index is out of bounds.\n");

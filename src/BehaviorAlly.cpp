@@ -83,6 +83,10 @@ void BehaviorAlly::findTarget() {
 	if(!enemies_in_combat)
 		e->stats.in_combat = false;
 
+	// aggressive creatures are always in combat
+	if (e->stats.combat_style == COMBAT_AGGRESSIVE)
+		e->stats.in_combat = true;
+
 	//the default target is the player
 	if(!e->stats.in_combat) {
 		pursue_pos.x = pc->stats.pos.x;
