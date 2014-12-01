@@ -182,7 +182,18 @@ void EnemyManager::handleSpawn() {
 
 		e->type = espawn.type;
 		e->stats.direction = espawn.direction;
-		e->stats.load(espawn.type);
+
+		Enemy_Level el = enemyg->getRandomEnemy(espawn.type, 0, 0);
+
+		if (el.type != "") {
+			e->stats.load(el.type);
+		}
+		else {
+			logError("EnemyManager: Could not spawn creature type '%s'\n", espawn.type.c_str());
+			delete e;
+			return;
+		}
+
 		if (e->stats.animations != "") {
 			// load the animation file if specified
 			anim->increaseCount(e->stats.animations);
