@@ -329,7 +329,7 @@ void GameStatePlay::loadGame() {
 
 	// trigger passive effects here? Saved HP/MP values might depend on passively boosted HP/MP
 	// powers->activatePassives(pc->stats);
-	if (SAVE_HPMP) {
+	if (SAVE_HPMP && saved_hp != 0) {
 		if (saved_hp < 0 || saved_hp > pc->stats.get(STAT_HP_MAX)) {
 			logError("SaveLoad: HP value is out of bounds, setting to maximum\n");
 			pc->stats.hp = pc->stats.get(STAT_HP_MAX);
