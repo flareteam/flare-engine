@@ -308,6 +308,7 @@ void InputState::handle(bool dump_event) {
 		switch (event.type) {
 
 #if SDL_VERSION_ATLEAST(2,0,0)
+#ifndef __ANDROID__
 			case SDL_MOUSEMOTION:
 				mouse.x = event.motion.x;
 				mouse.y = event.motion.y;
@@ -339,6 +340,7 @@ void InputState::handle(bool dump_event) {
 				}
 				last_button = event.button.button;
 				break;
+#endif
 			// Android touch events
 			case SDL_FINGERMOTION:
 				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
