@@ -217,6 +217,8 @@ void Animation::reset() {
 }
 
 bool Animation::syncTo(const Animation *other) {
+	bool warning = false;
+
 	cur_frame = other->cur_frame;
 	cur_frame_index = other->cur_frame_index;
 	times_played = other->times_played;
@@ -225,18 +227,28 @@ bool Animation::syncTo(const Animation *other) {
 
 	if (cur_frame_index >= frames.size()) {
 		if (frames.empty()) {
-			logError("Animation: '%s' animation has no frames, but current frame index is greater than 0.\n", name.c_str());
+			if (name == other->name) {
+				logError("Animation: '%s' animation has no frames, but current frame index is greater than 0.\n", name.c_str());
+				warning = true;
+			}
+			else {
+				warning = false;
+			}
 			cur_frame_index = 0;
-			return false;
 		}
 		else {
-			logError("Animation: Current frame index (%d) was larger than the last frame index (%d) when syncing '%s' animation.\n", cur_frame_index, frames.size()-1, name.c_str());
+			if (name == other->name) {
+				logError("Animation: Current frame index (%d) was larger than the last frame index (%d) when syncing '%s' animation.\n", cur_frame_index, frames.size()-1, name.c_str());
+				warning = true;
+			}
+			else {
+				warning = false;
+			}
 			cur_frame_index = frames.size()-1;
-			return false;
 		}
 	}
 
-	return true;
+	return !warning;
 }
 
 void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
