@@ -180,10 +180,10 @@ void EnemyManager::handleSpawn() {
 			espawn.summoner->summons.push_back(&(e->stats));
 		}
 
-		e->type = espawn.type;
 		e->stats.direction = espawn.direction;
 
 		Enemy_Level el = enemyg->getRandomEnemy(espawn.type, 0, 0);
+		e->type = el.type;
 
 		if (el.type != "") {
 			e->stats.load(el.type);
