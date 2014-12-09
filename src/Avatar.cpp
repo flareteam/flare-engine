@@ -389,9 +389,10 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
  * - calculate camera position based on avatar position
  *
  * @param action The actionbar power activated and the target.  action.power == 0 means no power.
- * @param restrictPowerUse rather or not to allow power usage on mouse1
+ * @param restrict_power_use Whether or not to allow power usage on mouse1
+ * @param npc True if the player is talking to an NPC. Can limit ability to move/attack in certain conditions
  */
-void Avatar::logic(std::vector<ActionData> &action_queue, bool restrictPowerUse) {
+void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_use, bool npc) {
 
 	// hazards are processed after Avatar and Enemy[]
 	// so process and clear sound effects from previous frames
@@ -517,7 +518,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrictPowerUse)
 
 			// allowed to move or use powers?
 			if (MOUSE_MOVE) {
-				allowed_to_move = restrictPowerUse && (!inpt->lock[MAIN1] || drag_walking) && !lockAttack;
+				allowed_to_move = restrict_power_use && (!inpt->lock[MAIN1] || drag_walking) && !lockAttack && !npc;
 				allowed_to_use_power = !allowed_to_move;
 			}
 			else {
@@ -560,7 +561,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrictPowerUse)
 
 			// allowed to move or use powers?
 			if (MOUSE_MOVE) {
-				allowed_to_use_power = !(restrictPowerUse && !inpt->lock[MAIN1]);
+				allowed_to_use_power = !(restrict_power_use && !inpt->lock[MAIN1]);
 			}
 			else {
 				allowed_to_use_power = true;

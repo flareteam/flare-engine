@@ -727,8 +727,8 @@ void GameStatePlay::checkNPCInteraction() {
 		eventPendingDialog = false;
 	}
 
-	// check for walking away from an NPC
 	if (npc_id != -1 && !eventDialogOngoing) {
+		// check for walking away from an NPC
 		if (interact_distance > INTERACT_RANGE || !player_ok) {
 			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {
 				menu->closeAll();
@@ -736,6 +736,11 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->npc->setNPC(NULL);
 			menu->vendor->npc = NULL;
 			menu->talker->npc = NULL;
+			npc_id = -1;
+		}
+
+		// check if we've closed all npc menus
+		if (!menu->vendor->visible && !menu->talker->visible && !menu->npc->visible) {
 			npc_id = -1;
 		}
 	}
@@ -869,7 +874,7 @@ void GameStatePlay::logic() {
 		checkTitle();
 
 		menu->act->checkAction(action_queue);
-		pc->logic(action_queue, restrictPowerUse());
+		pc->logic(action_queue, restrictPowerUse(), npc_id != -1);
 
 		// Transform powers change the actionbar layout,
 		// so we need to prevent accidental clicks if a new power is placed under the slot we clicked on.
