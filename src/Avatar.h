@@ -110,7 +110,7 @@ public:
 	void loadGraphics(std::vector<Layer_gfx> _img_gfx);
 	void loadStepFX(const std::string& stepname);
 
-	void logic(std::vector<ActionData> &action_queue, bool restrictPowerUse);
+	void logic(std::vector<ActionData> &action_queue, bool restrict_power_use, bool npc);
 	bool pressing_move();
 	void set_direction();
 	std::string log_msg;

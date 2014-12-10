@@ -61,10 +61,72 @@ GameStateConfig::GameStateConfig ()
 	, defaults_button(NULL)
 	, cancel_button(NULL)
 	, background(NULL)
+	, fullscreen_cb(NULL)
+	, fullscreen_lb(NULL)
+	, mouse_move_cb(NULL)
+	, mouse_move_lb(NULL)
+	, combat_text_cb(NULL)
+	, combat_text_lb(NULL)
+	, hwsurface_cb(NULL)
+	, hwsurface_lb(NULL)
+	, doublebuf_cb(NULL)
+	, doublebuf_lb(NULL)
+	, enable_joystick_cb(NULL)
+	, enable_joystick_lb(NULL)
+	, change_gamma_cb(NULL)
+	, change_gamma_lb(NULL)
+	, mouse_aim_cb(NULL)
+	, mouse_aim_lb(NULL)
+	, no_mouse_cb(NULL)
+	, no_mouse_lb(NULL)
+	, show_fps_cb(NULL)
+	, show_fps_lb(NULL)
+	, show_hotkeys_cb(NULL)
+	, show_hotkeys_lb(NULL)
+	, hardware_cursor_cb(NULL)
+	, hardware_cursor_lb(NULL)
+	, colorblind_cb(NULL)
+	, colorblind_lb(NULL)
+	, dev_mode_cb(NULL)
+	, dev_mode_lb(NULL)
+	, show_target_cb(NULL)
+	, show_target_lb(NULL)
+	, loot_tooltips_cb(NULL)
+	, loot_tooltips_lb(NULL)
+	, music_volume_sl(NULL)
+	, music_volume_lb(NULL)
+	, sound_volume_sl(NULL)
+	, sound_volume_lb(NULL)
+	, gamma_sl(NULL)
+	, gamma_lb(NULL)
+	, resolution_lstb(NULL)
+	, resolution_lb(NULL)
+	, activemods_lstb(NULL)
+	, activemods_lb(NULL)
+	, inactivemods_lstb(NULL)
+	, inactivemods_lb(NULL)
+	, joystick_device_lstb(NULL)
+	, joystick_device_lb(NULL)
+	, language_lstb(NULL)
+	, language_lb(NULL)
+	, hws_note_lb(NULL)
+	, dbuf_note_lb(NULL)
+	, test_note_lb(NULL)
+	, handheld_note_lb(NULL)
+	, activemods_shiftup_btn(NULL)
+	, activemods_shiftdown_btn(NULL)
+	, activemods_deactivate_btn(NULL)
+	, inactivemods_activate_btn(NULL)
+	, joystick_deadzone_sl(NULL)
+	, joystick_deadzone_lb(NULL)
+	, input_scrollbox(NULL)
+	, input_confirm(NULL)
+	, defaults_confirm(NULL)
 	, tip_buf()
 	, input_key(0)
 	, check_resolution(true)
-	, key_count(0) {
+	, key_count(0)
+{
 
 	Image *graphics;
 	graphics = render_device->loadImage("images/menus/config.png");
@@ -100,24 +162,43 @@ void GameStateConfig::init() {
 	cancel_button->pos.y = VIEW_H - (cancel_button->pos.h);
 	cancel_button->refresh();
 
+#ifndef __ANDROID__
 	fullscreen_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	fullscreen_lb = new WidgetLabel();
-	mouse_move_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
-	mouse_move_lb = new WidgetLabel();
-	combat_text_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
-	combat_text_lb = new WidgetLabel();
 	hwsurface_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	hwsurface_lb = new WidgetLabel();
 	doublebuf_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	doublebuf_lb = new WidgetLabel();
-	enable_joystick_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
-	enable_joystick_lb = new WidgetLabel();
 	change_gamma_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	change_gamma_lb = new WidgetLabel();
+	gamma_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
+	gamma_lb = new WidgetLabel();
+	resolution_lb = new WidgetLabel();
+	hws_note_lb = new WidgetLabel();
+	dbuf_note_lb = new WidgetLabel();
+	test_note_lb = new WidgetLabel();
+	mouse_move_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	mouse_move_lb = new WidgetLabel();
+	enable_joystick_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	enable_joystick_lb = new WidgetLabel();
 	mouse_aim_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	mouse_aim_lb = new WidgetLabel();
 	no_mouse_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	no_mouse_lb = new WidgetLabel();
+	joystick_deadzone_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
+	joystick_deadzone_lb = new WidgetLabel();
+	joystick_device_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
+	joystick_device_lb = new WidgetLabel();
+	handheld_note_lb = new WidgetLabel();
+
+	// Allocate resolution list box
+	if (getVideoModes() < 1) logError("GameStateConfig: Unable to get resolutions list!\n");
+	resolution_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
+	resolution_lstb->can_deselect = false;
+#endif
+
+	combat_text_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	combat_text_lb = new WidgetLabel();
 	show_fps_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
 	show_fps_lb = new WidgetLabel();
 	show_hotkeys_cb = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
@@ -136,26 +217,15 @@ void GameStateConfig::init() {
 	music_volume_lb = new WidgetLabel();
 	sound_volume_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
 	sound_volume_lb = new WidgetLabel();
-	gamma_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
-	gamma_lb = new WidgetLabel();
-	resolution_lb = new WidgetLabel();
 	activemods_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	activemods_lb = new WidgetLabel();
 	inactivemods_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
 	inactivemods_lb = new WidgetLabel();
-	joystick_device_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
-	joystick_device_lb = new WidgetLabel();
 	language_lb = new WidgetLabel();
-	hws_note_lb = new WidgetLabel();
-	dbuf_note_lb = new WidgetLabel();
-	test_note_lb = new WidgetLabel();
-	handheld_note_lb = new WidgetLabel();
 	activemods_shiftup_btn = new WidgetButton("images/menus/buttons/up.png");
 	activemods_shiftdown_btn = new WidgetButton("images/menus/buttons/down.png");
 	activemods_deactivate_btn = new WidgetButton("images/menus/buttons/button_default.png");
 	inactivemods_activate_btn = new WidgetButton("images/menus/buttons/button_default.png");
-	joystick_deadzone_sl = new WidgetSlider("images/menus/buttons/slider_default.png");
-	joystick_deadzone_lb = new WidgetLabel();
 
 #ifdef __ANDROID__
 	tabControl = new WidgetTabControl(3);
@@ -191,11 +261,6 @@ void GameStateConfig::init() {
 	}
 
 	key_count = keybinds_btn.size()/3;
-
-	// Allocate resolution list box
-	if (getVideoModes() < 1) logError("GameStateConfig: Unable to get resolutions list!\n");
-	resolution_lstb = new WidgetListBox(10, "images/menus/buttons/listbox_default.png");
-	resolution_lstb->can_deselect = false;
 
 	// Allocate Languages ListBox
 	int langCount = getLanguagesNumber();
@@ -344,16 +409,20 @@ void GameStateConfig::init() {
 	tablist.add(activemods_shiftup_btn);
 	tablist.add(activemods_shiftdown_btn);
 
+#ifndef __ANDROID__
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
 		input_scrollbox->addChildWidget(keybinds_btn[i]);
 	}
+#endif
 }
 
 void GameStateConfig::readConfig () {
 	//Load the menu configuration from file
 
+#ifndef __ANDROID__
 	int offset_x = 0;
 	int offset_y = 0;
+#endif
 
 	FileParser infile;
 	if (infile.open("menus/config.txt")) {
@@ -367,21 +436,20 @@ void GameStateConfig::readConfig () {
 			int keybind_num = -1;
 
 			if (infile.key == "listbox_scrollbar_offset") {
-				activemods_lstb->scrollbar_offset = x1;
-				inactivemods_lstb->scrollbar_offset = x1;
+#ifndef __ANDROID__
 				joystick_device_lstb->scrollbar_offset = x1;
 				resolution_lstb->scrollbar_offset = x1;
+#endif
+				activemods_lstb->scrollbar_offset = x1;
+				inactivemods_lstb->scrollbar_offset = x1;
 				language_lstb->scrollbar_offset = x1;
 			}
-			//checkboxes
+#ifndef __ANDROID__
 			else if (infile.key == "fullscreen") {
 				placeLabeledWidget(fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "mouse_move") {
 				placeLabeledWidget(mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "combat_text") {
-				placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "hwsurface") {
 				placeLabeledWidget(hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), JUSTIFY_RIGHT);
@@ -400,6 +468,90 @@ void GameStateConfig::readConfig () {
 			}
 			else if (infile.key == "no_mouse") {
 				placeLabeledWidget(no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), JUSTIFY_RIGHT);
+			}
+			else if (infile.key == "gamma") {
+				placeLabeledWidget(gamma_lb, gamma_sl, x1, y1, x2, y2, msg->get("Gamma"), JUSTIFY_RIGHT);
+			}
+			else if (infile.key == "joystick_deadzone") {
+				placeLabeledWidget(joystick_deadzone_lb, joystick_deadzone_sl, x1, y1, x2, y2, msg->get("Joystick Deadzone"), JUSTIFY_RIGHT);
+			}
+			else if (infile.key == "resolution") {
+				placeLabeledWidget(resolution_lb, resolution_lstb, x1, y1, x2, y2, msg->get("Resolution"));
+			}
+			else if (infile.key == "joystick_device") {
+				placeLabeledWidget(joystick_device_lb, joystick_device_lstb, x1, y1, x2, y2, msg->get("Joystick"));
+
+				for(int i = 0; i < SDL_NumJoysticks(); i++) {
+					std::string joystick_name = inpt->getJoystickName(i);
+					if (joystick_name != "")
+						joystick_device_lstb->append(joystick_name, joystick_name);
+				}
+			}
+			else if (infile.key == "hws_note") {
+				hws_note_lb->setX(frame.x + x1);
+				hws_note_lb->setY(frame.y + y1);
+				hws_note_lb->set(msg->get("Disable for performance"));
+			}
+			else if (infile.key == "dbuf_note") {
+				dbuf_note_lb->setX(frame.x + x1);
+				dbuf_note_lb->setY(frame.y + y1);
+				dbuf_note_lb->set(msg->get("Disable for performance"));
+			}
+			else if (infile.key == "test_note") {
+				test_note_lb->setX(frame.x + x1);
+				test_note_lb->setY(frame.y + y1);
+				test_note_lb->set(msg->get("Experimental"));
+			}
+			else if (infile.key == "handheld_note") {
+				handheld_note_lb->setX(frame.x + x1);
+				handheld_note_lb->setY(frame.y + y1);
+				handheld_note_lb->set(msg->get("For handheld devices"));
+			}
+			else if (infile.key == "secondary_offset") {
+				offset_x = x1;
+				offset_y = y1;
+			}
+			else if (infile.key == "keybinds_bg_color") {
+				// background color for keybinds scrollbox
+				scrollpane_color.r = x1;
+				scrollpane_color.g = y1;
+				scrollpane_color.b = x2;
+			}
+			else if (infile.key == "scrollpane") {
+				scrollpane.x = x1;
+				scrollpane.y = y1;
+				scrollpane.w = x2;
+				scrollpane.h = y2;
+			}
+			else if (infile.key == "scrollpane_contents") {
+				scrollpane_contents = x1;
+			}
+#else
+			// not used by Android
+			else if (infile.key == "fullscreen");
+			else if (infile.key == "mouse_move");
+			else if (infile.key == "hwsurface");
+			else if (infile.key == "doublebuf");
+			else if (infile.key == "enable_joystick");
+			else if (infile.key == "change_gamma");
+			else if (infile.key == "mouse_aim");
+			else if (infile.key == "no_mouse");
+			else if (infile.key == "gamma");
+			else if (infile.key == "joystick_deadzone");
+			else if (infile.key == "resolution");
+			else if (infile.key == "joystick_device");
+			else if (infile.key == "hws_note");
+			else if (infile.key == "dbuf_note");
+			else if (infile.key == "test_note");
+			else if (infile.key == "handheld_note");
+			else if (infile.key == "secondary_offset");
+			else if (infile.key == "keybinds_bg_color");
+			else if (infile.key == "scrollpane");
+			else if (infile.key == "scrollpane_contents");
+#endif
+
+			else if (infile.key == "combat_text") {
+				placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "show_fps") {
 				placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), JUSTIFY_RIGHT);
@@ -422,22 +574,11 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "loot_tooltips") {
 				placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), JUSTIFY_RIGHT);
 			}
-			//sliders
 			else if (infile.key == "music_volume") {
 				placeLabeledWidget(music_volume_lb, music_volume_sl, x1, y1, x2, y2, msg->get("Music Volume"), JUSTIFY_RIGHT);
 			}
 			else if (infile.key == "sound_volume") {
 				placeLabeledWidget(sound_volume_lb, sound_volume_sl, x1, y1, x2, y2, msg->get("Sound Volume"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "gamma") {
-				placeLabeledWidget(gamma_lb, gamma_sl, x1, y1, x2, y2, msg->get("Gamma"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "joystick_deadzone") {
-				placeLabeledWidget(joystick_deadzone_lb, joystick_deadzone_sl, x1, y1, x2, y2, msg->get("Joystick Deadzone"), JUSTIFY_RIGHT);
-			}
-			//listboxes
-			else if (infile.key == "resolution") {
-				placeLabeledWidget(resolution_lb, resolution_lstb, x1, y1, x2, y2, msg->get("Resolution"));
 			}
 			else if (infile.key == "activemods") {
 				placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
@@ -445,19 +586,32 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "inactivemods") {
 				placeLabeledWidget(inactivemods_lb, inactivemods_lstb, x1, y1, x2, y2, msg->get("Available Mods"));
 			}
-			else if (infile.key == "joystick_device") {
-				placeLabeledWidget(joystick_device_lb, joystick_device_lstb, x1, y1, x2, y2, msg->get("Joystick"));
-
-				for(int i = 0; i < SDL_NumJoysticks(); i++) {
-					std::string joystick_name = inpt->getJoystickName(i);
-					if (joystick_name != "")
-						joystick_device_lstb->append(joystick_name, joystick_name);
-				}
-			}
 			else if (infile.key == "language") {
 				placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
 			}
-			// buttons begin
+			else if (infile.key == "activemods_shiftup") {
+				activemods_shiftup_btn->pos.x = frame.x + x1;
+				activemods_shiftup_btn->pos.y = frame.y + y1;
+				activemods_shiftup_btn->refresh();
+			}
+			else if (infile.key == "activemods_shiftdown") {
+				activemods_shiftdown_btn->pos.x = frame.x + x1;
+				activemods_shiftdown_btn->pos.y = frame.y + y1;
+				activemods_shiftdown_btn->refresh();
+			}
+			else if (infile.key == "activemods_deactivate") {
+				activemods_deactivate_btn->label = msg->get("<< Disable");
+				activemods_deactivate_btn->pos.x = frame.x + x1;
+				activemods_deactivate_btn->pos.y = frame.y + y1;
+				activemods_deactivate_btn->refresh();
+			}
+			else if (infile.key == "inactivemods_activate") {
+				inactivemods_activate_btn->label = msg->get("Enable >>");
+				inactivemods_activate_btn->pos.x = frame.x + x1;
+				inactivemods_activate_btn->pos.y = frame.y + y1;
+				inactivemods_activate_btn->refresh();
+			}
+			// keybinds begin
 			else if (infile.key == "cancel") keybind_num = CANCEL;
 			else if (infile.key == "accept") keybind_num = ACCEPT;
 			else if (infile.key == "up") keybind_num = UP;
@@ -489,72 +643,10 @@ void GameStateConfig::readConfig () {
 			else if (infile.key == "actionbar_forward") keybind_num = ACTIONBAR_FORWARD;
 			else if (infile.key == "actionbar_use") keybind_num = ACTIONBAR_USE;
 			else if (infile.key == "developer_menu") keybind_num = DEVELOPER_MENU;
-			// buttons end
+			// keybinds end
 
-			else if (infile.key == "hws_note") {
-				hws_note_lb->setX(frame.x + x1);
-				hws_note_lb->setY(frame.y + y1);
-				hws_note_lb->set(msg->get("Disable for performance"));
-			}
-			else if (infile.key == "dbuf_note") {
-				dbuf_note_lb->setX(frame.x + x1);
-				dbuf_note_lb->setY(frame.y + y1);
-				dbuf_note_lb->set(msg->get("Disable for performance"));
-			}
-			else if (infile.key == "test_note") {
-				test_note_lb->setX(frame.x + x1);
-				test_note_lb->setY(frame.y + y1);
-				test_note_lb->set(msg->get("Experimental"));
-			}
-			else if (infile.key == "handheld_note") {
-				handheld_note_lb->setX(frame.x + x1);
-				handheld_note_lb->setY(frame.y + y1);
-				handheld_note_lb->set(msg->get("For handheld devices"));
-			}
-			//buttons
-			else if (infile.key == "activemods_shiftup") {
-				activemods_shiftup_btn->pos.x = frame.x + x1;
-				activemods_shiftup_btn->pos.y = frame.y + y1;
-				activemods_shiftup_btn->refresh();
-			}
-			else if (infile.key == "activemods_shiftdown") {
-				activemods_shiftdown_btn->pos.x = frame.x + x1;
-				activemods_shiftdown_btn->pos.y = frame.y + y1;
-				activemods_shiftdown_btn->refresh();
-			}
-			else if (infile.key == "activemods_deactivate") {
-				activemods_deactivate_btn->label = msg->get("<< Disable");
-				activemods_deactivate_btn->pos.x = frame.x + x1;
-				activemods_deactivate_btn->pos.y = frame.y + y1;
-				activemods_deactivate_btn->refresh();
-			}
-			else if (infile.key == "inactivemods_activate") {
-				inactivemods_activate_btn->label = msg->get("Enable >>");
-				inactivemods_activate_btn->pos.x = frame.x + x1;
-				inactivemods_activate_btn->pos.y = frame.y + y1;
-				inactivemods_activate_btn->refresh();
-			}
-			else if (infile.key == "secondary_offset") {
-				offset_x = x1;
-				offset_y = y1;
-			}
-			else if (infile.key == "keybinds_bg_color") {
-				// background color for keybinds scrollbox
-				scrollpane_color.r = x1;
-				scrollpane_color.g = y1;
-				scrollpane_color.b = x2;
-			}
-			else if (infile.key == "scrollpane") {
-				scrollpane.x = x1;
-				scrollpane.y = y1;
-				scrollpane.w = x2;
-				scrollpane.h = y2;
-			}
-			else if (infile.key == "scrollpane_contents") {
-				scrollpane_contents = x1;
-			}
 			else {
-				infile.error("GameStateConfig: '%s' is not a valid key.");
+				infile.error("GameStateConfig: '%s' is not a valid key.", infile.key.c_str());
 			}
 
 			if (keybind_num > -1 && (unsigned)keybind_num < keybinds_lb.size() && (unsigned)keybind_num < keybinds_btn.size()) {
@@ -564,11 +656,11 @@ void GameStateConfig::readConfig () {
 				keybinds_btn[keybind_num]->pos.x = x2;
 				keybinds_btn[keybind_num]->pos.y = y2;
 			}
-
 		}
 		infile.close();
 	}
 
+#ifndef __ANDROID__
 	// Allocate KeyBindings ScrollBox
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
 	input_scrollbox->pos.x = scrollpane.x + frame.x;
@@ -590,31 +682,17 @@ void GameStateConfig::readConfig () {
 		keybinds_btn[i]->pos.x = keybinds_btn[i-(key_count*2)]->pos.x + (offset_x*2);
 		keybinds_btn[i]->pos.y = keybinds_btn[i-(key_count*2)]->pos.y + (offset_y*2);
 	}
+#endif
 }
 
 void GameStateConfig::update () {
+#ifndef __ANDROID__
 	if (FULLSCREEN) fullscreen_cb->Check();
 	else fullscreen_cb->unCheck();
-	if (AUDIO) {
-		music_volume_sl->set(0,128,MUSIC_VOLUME);
-		Mix_VolumeMusic(MUSIC_VOLUME);
-		sound_volume_sl->set(0,128,SOUND_VOLUME);
-		Mix_Volume(-1, SOUND_VOLUME);
-	}
-	else {
-		music_volume_sl->set(0,128,0);
-		sound_volume_sl->set(0,128,0);
-	}
-	if (MOUSE_MOVE) mouse_move_cb->Check();
-	else mouse_move_cb->unCheck();
-	if (COMBAT_TEXT) combat_text_cb->Check();
-	else combat_text_cb->unCheck();
 	if (HWSURFACE) hwsurface_cb->Check();
 	else hwsurface_cb->unCheck();
 	if (DOUBLEBUF) doublebuf_cb->Check();
 	else doublebuf_cb->unCheck();
-	if (ENABLE_JOYSTICK) enable_joystick_cb->Check();
-	else enable_joystick_cb->unCheck();
 	if (CHANGE_GAMMA) change_gamma_cb->Check();
 	else {
 		change_gamma_cb->unCheck();
@@ -624,24 +702,14 @@ void GameStateConfig::update () {
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
 	render_device->setGamma(GAMMA);
 
+	if (ENABLE_JOYSTICK) enable_joystick_cb->Check();
+	else enable_joystick_cb->unCheck();
 	if (MOUSE_AIM) mouse_aim_cb->Check();
 	else mouse_aim_cb->unCheck();
 	if (NO_MOUSE) no_mouse_cb->Check();
 	else no_mouse_cb->unCheck();
-	if (SHOW_FPS) show_fps_cb->Check();
-	else show_fps_cb->unCheck();
-	if (SHOW_HOTKEYS) show_hotkeys_cb->Check();
-	else show_hotkeys_cb->unCheck();
-	if (COLORBLIND) colorblind_cb->Check();
-	else colorblind_cb->unCheck();
-	if (HARDWARE_CURSOR) hardware_cursor_cb->Check();
-	else hardware_cursor_cb->unCheck();
-	if (DEV_MODE) dev_mode_cb->Check();
-	else dev_mode_cb->unCheck();
-	if (SHOW_TARGET) show_target_cb->Check();
-	else show_target_cb->unCheck();
-	if (LOOT_TOOLTIPS) loot_tooltips_cb->Check();
-	else loot_tooltips_cb->unCheck();
+	if (MOUSE_MOVE) mouse_move_cb->Check();
+	else mouse_move_cb->unCheck();
 
 	std::stringstream list_mode;
 	unsigned int resolutions = getVideoModes();
@@ -663,16 +731,6 @@ void GameStateConfig::update () {
 	joystick_device_lstb->refresh();
 
 	joystick_deadzone_sl->set(0,32768,JOY_DEADZONE);
-
-	if (!getLanguagesList()) logError("GameStateConfig: Unable to get languages list!\n");
-	for (int i=0; i < getLanguagesNumber(); i++) {
-		language_lstb->append(language_full[i],"");
-		if (language_ISO[i] == LANGUAGE) language_lstb->selected[i] = true;
-	}
-	language_lstb->refresh();
-
-	activemods_lstb->refresh();
-	inactivemods_lstb->refresh();
 
 	// reset all keybind labels to "(none)"
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
@@ -709,17 +767,60 @@ void GameStateConfig::update () {
 		keybinds_btn[i]->refresh();
 	}
 	input_scrollbox->refresh();
+#endif
+
+	if (AUDIO) {
+		music_volume_sl->set(0,128,MUSIC_VOLUME);
+		Mix_VolumeMusic(MUSIC_VOLUME);
+		sound_volume_sl->set(0,128,SOUND_VOLUME);
+		Mix_Volume(-1, SOUND_VOLUME);
+	}
+	else {
+		music_volume_sl->set(0,128,0);
+		sound_volume_sl->set(0,128,0);
+	}
+	if (COMBAT_TEXT) combat_text_cb->Check();
+	else combat_text_cb->unCheck();
+
+	if (SHOW_FPS) show_fps_cb->Check();
+	else show_fps_cb->unCheck();
+	if (SHOW_HOTKEYS) show_hotkeys_cb->Check();
+	else show_hotkeys_cb->unCheck();
+	if (COLORBLIND) colorblind_cb->Check();
+	else colorblind_cb->unCheck();
+	if (HARDWARE_CURSOR) hardware_cursor_cb->Check();
+	else hardware_cursor_cb->unCheck();
+	if (DEV_MODE) dev_mode_cb->Check();
+	else dev_mode_cb->unCheck();
+	if (SHOW_TARGET) show_target_cb->Check();
+	else show_target_cb->unCheck();
+	if (LOOT_TOOLTIPS) loot_tooltips_cb->Check();
+	else loot_tooltips_cb->unCheck();
+
+	if (!getLanguagesList()) logError("GameStateConfig: Unable to get languages list!\n");
+	for (int i=0; i < getLanguagesNumber(); i++) {
+		language_lstb->append(language_full[i],"");
+		if (language_ISO[i] == LANGUAGE) language_lstb->selected[i] = true;
+	}
+	language_lstb->refresh();
+
+	activemods_lstb->refresh();
+	inactivemods_lstb->refresh();
 }
 
 void GameStateConfig::logic () {
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
-		if (input_scrollbox->in_focus && !input_confirm->visible) {
 #ifndef __ANDROID__
+		if (input_scrollbox->in_focus && !input_confirm->visible) {
 			tabControl->setActiveTab(KEYBINDS_TAB);
-#endif
 			break;
 		}
 		else if (child_widget[i]->in_focus) {
+			tabControl->setActiveTab(optiontab[i]);
+			break;
+		}
+#endif
+		if (child_widget[i]->in_focus) {
 			tabControl->setActiveTab(optiontab[i]);
 			break;
 		}
@@ -727,9 +828,13 @@ void GameStateConfig::logic () {
 
 	check_resolution = true;
 
+	int width = VIEW_W;
+	int height = VIEW_H;
+
+#ifndef __ANDROID__
 	std::string resolution_value = resolution_lstb->getValue();
-	int width = popFirstInt(resolution_value, 'x');
-	int height = popFirstInt(resolution_value, 'x');
+	width = popFirstInt(resolution_value, 'x');
+	height = popFirstInt(resolution_value, 'x');
 
 	// In case of a custom resolution, the listbox might have nothing selected
 	// So we just use whatever the current view area is
@@ -737,6 +842,7 @@ void GameStateConfig::logic () {
 		width = VIEW_W;
 		height = VIEW_H;
 	}
+#endif
 
 	if (defaults_confirm->visible) {
 		defaults_confirm->logic();
@@ -1046,7 +1152,8 @@ void GameStateConfig::render () {
 	int active_tab = tabControl->getActiveTab();
 
 	// render keybindings tab
-	if (active_tab == 4) {
+#ifndef __ANDROID__
+	if (active_tab == KEYBINDS_TAB) {
 		if (input_scrollbox->update) {
 			input_scrollbox->refresh();
 		}
@@ -1057,6 +1164,7 @@ void GameStateConfig::render () {
 			keybinds_lb[i]->render();
 		}
 	}
+#endif
 
 	for (unsigned int i = 0; i < child_widget.size(); i++) {
 		if (optiontab[i] == active_tab) child_widget[i]->render();
@@ -1069,11 +1177,13 @@ void GameStateConfig::render () {
 	// This isn't very elegant right now
 	// In the future, we'll want to get tooltips for all widget types
 	TooltipData tip_new;
-	if (active_tab == 0 && tip_new.isEmpty()) tip_new = resolution_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == 2 && tip_new.isEmpty()) tip_new = language_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == 3 && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == 5 && tip_new.isEmpty()) tip_new = activemods_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == 5 && tip_new.isEmpty()) tip_new = inactivemods_lstb->checkTooltip(inpt->mouse);
+#ifndef __ANDROID__
+	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = resolution_lstb->checkTooltip(inpt->mouse);
+	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
+#endif
+	if (active_tab == INTERFACE_TAB && tip_new.isEmpty()) tip_new = language_lstb->checkTooltip(inpt->mouse);
+	if (active_tab == MODS_TAB && tip_new.isEmpty()) tip_new = activemods_lstb->checkTooltip(inpt->mouse);
+	if (active_tab == MODS_TAB && tip_new.isEmpty()) tip_new = inactivemods_lstb->checkTooltip(inpt->mouse);
 
 	if (!tip_new.isEmpty()) {
 		if (!tip_new.compare(&tip_buf)) {
@@ -1350,13 +1460,17 @@ GameStateConfig::~GameStateConfig() {
 }
 
 void GameStateConfig::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str, int justify) {
-	w->pos.x = frame.x + x2;
-	w->pos.y = frame.y + y2;
+	if (w) {
+		w->pos.x = frame.x + x2;
+		w->pos.y = frame.y + y2;
+	}
 
-	lb->setX(frame.x + x1);
-	lb->setY(frame.y + y1);
-	lb->set(str);
-	lb->setJustify(justify);
+	if (lb) {
+		lb->setX(frame.x + x1);
+		lb->setY(frame.y + y1);
+		lb->set(str);
+		lb->setJustify(justify);
+	}
 }
 
 std::string GameStateConfig::createModTooltip(Mod *mod) {
