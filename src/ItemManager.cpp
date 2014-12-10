@@ -409,7 +409,7 @@ void ItemManager::loadSets() {
 			item_sets[id].name = msg->get(infile.val);
 		}
 		else if (infile.key == "items") {
-			// @ATTR name|[item_id,...]|List of item id's that is part of the set.
+			// @ATTR items|[item_id,...]|List of item id's that is part of the set.
 			item_sets[id].items.clear();
 			string item_id = infile.nextValue();
 			while (item_id != "") {
