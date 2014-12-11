@@ -167,7 +167,8 @@ Set (FLARE_SOURCES
 	./src/FileParser.cpp
 	./src/FontEngine.cpp
 	./src/GameState.cpp
-	./src/GameStateConfig.cpp
+	./src/GameStateConfigBase.cpp
+	./src/GameStateConfigDesktop.cpp
 	./src/GameStateCutscene.cpp
 	./src/GameStateTitle.cpp
 	./src/GameStateLoad.cpp
@@ -271,7 +272,8 @@ Set (FLARE_HEADERS
 	./src/FileParser.h
 	./src/FontEngine.h
 	./src/GameState.h
-	./src/GameStateConfig.h
+	./src/GameStateConfigBase.h
+	./src/GameStateConfigDesktop.h
 	./src/GameStateCutscene.h
 	./src/GameStateTitle.h
 	./src/GameStateLoad.h
