@@ -508,12 +508,11 @@ void GameStateConfigDesktop::setupTabList() {
 }
 
 void GameStateConfigDesktop::update() {
+	GameStateConfigBase::update();
+
 	updateVideo();
-	updateAudio();
-	updateInterface();
 	updateInput();
 	updateKeybinds();
-	updateMods();
 }
 
 void GameStateConfigDesktop::updateVideo() {
@@ -604,13 +603,6 @@ void GameStateConfigDesktop::updateKeybinds() {
 }
 
 void GameStateConfigDesktop::logic() {
-	for (unsigned int i = 0; i < child_widget.size(); i++) {
-		if (child_widget[i]->in_focus) {
-			tab_control->setActiveTab(optiontab[i]);
-			break;
-		}
-	}
-
 	if (defaults_confirm->visible) {
 		// reset defaults confirmation
 		logicDefaults();
@@ -622,29 +614,11 @@ void GameStateConfigDesktop::logic() {
 		scanKey(input_key);
 		input_confirm_ticks--;
 		if (input_confirm_ticks == 0) input_confirm->visible = false;
+		return;
 	}
 	else {
-		// tabs & the bottom 3 main buttons
-		tab_control->logic();
-		tablist.logic(true);
-
-		// Ok/Cancel Buttons
-		if (ok_button->checkClick()) {
-			logicAccept();
-
-			// GameStateConfigBase deconstructed, proceed with caution
+		if (!logicMain())
 			return;
-		}
-		else if (defaults_button->checkClick()) {
-			defaults_confirm->visible = true;
-			return;
-		}
-		else if (cancel_button->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
-			logicCancel();
-
-			// GameStateConfigBase deconstructed, proceed with caution
-			return;
-		}
 	}
 
 	// tab contents
@@ -845,18 +819,17 @@ void GameStateConfigDesktop::renderTabContents() {
 }
 
 void GameStateConfigDesktop::renderDialogs() {
-	if (defaults_confirm->visible)
-		defaults_confirm->render();
+	GameStateConfigBase::renderDialogs();
+
 	if (input_confirm->visible)
 		input_confirm->render();
 }
 
 void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
+	GameStateConfigBase::renderTooltips(tip_new);
+
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = resolution_lstb->checkTooltip(inpt->mouse);
 	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == INTERFACE_TAB && tip_new.isEmpty()) tip_new = language_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == MODS_TAB && tip_new.isEmpty()) tip_new = activemods_lstb->checkTooltip(inpt->mouse);
-	if (active_tab == MODS_TAB && tip_new.isEmpty()) tip_new = inactivemods_lstb->checkTooltip(inpt->mouse);
 }
 
 int GameStateConfigDesktop::getVideoModes() {

@@ -433,40 +433,14 @@ void GameStateConfigBase::updateMods() {
 }
 
 void GameStateConfigBase::logic() {
-	for (unsigned int i = 0; i < child_widget.size(); i++) {
-		if (child_widget[i]->in_focus) {
-			tab_control->setActiveTab(optiontab[i]);
-			break;
-		}
-	}
-
 	if (defaults_confirm->visible) {
 		// reset defaults confirmation
 		logicDefaults();
 		return;
 	}
 	else {
-		// tabs & the bottom 3 main buttons
-		tab_control->logic();
-		tablist.logic(true);
-
-		// Ok/Cancel Buttons
-		if (ok_button->checkClick()) {
-			logicAccept();
-
-			// GameStateConfigBase deconstructed, proceed with caution
+		if (!logicMain())
 			return;
-		}
-		else if (defaults_button->checkClick()) {
-			defaults_confirm->visible = true;
-			return;
-		}
-		else if (cancel_button->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
-			logicCancel();
-
-			// GameStateConfigBase deconstructed, proceed with caution
-			return;
-		}
 	}
 
 	// tab contents
@@ -484,6 +458,39 @@ void GameStateConfigBase::logic() {
 	}
 	else if (active_tab == MODS_TAB)
 		logicMods();
+}
+
+bool GameStateConfigBase::logicMain() {
+	for (unsigned int i = 0; i < child_widget.size(); i++) {
+		if (child_widget[i]->in_focus) {
+			tab_control->setActiveTab(optiontab[i]);
+			break;
+		}
+	}
+
+	// tabs & the bottom 3 main buttons
+	tab_control->logic();
+	tablist.logic(true);
+
+	// Ok/Cancel Buttons
+	if (ok_button->checkClick()) {
+		logicAccept();
+
+		// GameStateConfigBase deconstructed, proceed with caution
+		return false;
+	}
+	else if (defaults_button->checkClick()) {
+		defaults_confirm->visible = true;
+		return true;
+	}
+	else if (cancel_button->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
+		logicCancel();
+
+		// GameStateConfigBase deconstructed, proceed with caution
+		return false;
+	}
+
+	return true;
 }
 
 void GameStateConfigBase::logicDefaults() {

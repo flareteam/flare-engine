@@ -62,6 +62,7 @@ public:
 	void updateMods();
 
 	virtual void logic();
+	bool logicMain();
 	void logicDefaults();
 	virtual void logicAccept();
 	void logicCancel();
