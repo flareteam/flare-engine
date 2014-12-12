@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMESTATECONFIGDESKTOP_H
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "GameState.h"
 #include "GameStateConfigBase.h"
 #include "TooltipData.h"
@@ -43,15 +44,17 @@ class WidgetTooltip;
 
 class GameStateConfigDesktop : public GameStateConfigBase {
 public:
+	GameStateConfigDesktop();
+	~GameStateConfigDesktop();
+
+private:
 	short VIDEO_TAB;
 	short INPUT_TAB;
 	short KEYBINDS_TAB;
 
-	GameStateConfigDesktop();
-	~GameStateConfigDesktop();
-
 	void init();
 	void readConfig();
+	bool parseKeyDesktop(FileParser &infile, int &x1, int &y1, int &x2, int &y2);
 	void addChildWidgetsDesktop();
 	void setupTabList();
 
@@ -124,6 +127,7 @@ public:
 	Rect scrollpane;
 	Color scrollpane_color;
 	int scrollpane_contents;
+	Point secondary_offset;
 };
 
 #endif

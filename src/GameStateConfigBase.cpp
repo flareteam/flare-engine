@@ -169,7 +169,6 @@ void GameStateConfigBase::readConfig() {
 	//Load the menu configuration from file
 
 	FileParser infile;
-	// @CLASS GameStateConfigBase|Description of menus/config.txt
 	if (infile.open("menus/config.txt")) {
 		while (infile.next()) {
 			int x1 = popFirstInt(infile.val);
@@ -177,153 +176,169 @@ void GameStateConfigBase::readConfig() {
 			int x2 = popFirstInt(infile.val);
 			int y2 = popFirstInt(infile.val);
 
-			if (infile.key == "listbox_scrollbar_offset") {
-				// @ATTR listbox_scrollbar_offset|integer|Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.
-				activemods_lstb->scrollbar_offset = x1;
-				inactivemods_lstb->scrollbar_offset = x1;
-				language_lstb->scrollbar_offset = x1;
-			}
-			else if (infile.key == "music_volume") {
-				// @ATTR music_volume|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Music Volume" slider relative to the frame.
-				placeLabeledWidget(music_volume_lb, music_volume_sl, x1, y1, x2, y2, msg->get("Music Volume"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "sound_volume") {
-				// @ATTR sound_volume|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Sound Volume" slider relative to the frame.
-				placeLabeledWidget(sound_volume_lb, sound_volume_sl, x1, y1, x2, y2, msg->get("Sound Volume"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "language") {
-				// @ATTR language|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Language" list box relative to the frame.
-				placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
-			}
-			else if (infile.key == "combat_text") {
-				// @ATTR combat_text|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show combat text" checkbox relative to the frame.
-				placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "show_fps") {
-				// @ATTR show_fps|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show FPS" checkbox relative to the frame.
-				placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "show_hotkeys") {
-				// @ATTR show_hotkeys|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show Hotkey Labels" checkbox relative to the frame.
-				placeLabeledWidget(show_hotkeys_lb, show_hotkeys_cb, x1, y1, x2, y2, msg->get("Show Hotkeys Labels"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "colorblind") {
-				// @ATTR colorblind|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Colorblind Mode" checkbox relative to the frame.
-				placeLabeledWidget(colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "hardware_cursor") {
-				// @ATTR hardware_cursor|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Hardware mouse cursor" checkbox relative to the frame.
-				placeLabeledWidget(hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "dev_mode") {
-				// @ATTR dev_mode|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Developer Mode" checkbox relative to the frame.
-				placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "show_target") {
-				// @ATTR show_target|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show targeting animation" checkbox relative to the frame.
-				placeLabeledWidget(show_target_lb, show_target_cb, x1, y1, x2, y2, msg->get("Show targeting animation"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "loot_tooltips") {
-				// @ATTR loot_tooltips|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show loot labels" checkbox relative to the frame.
-				placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), JUSTIFY_RIGHT);
-			}
-			else if (infile.key == "activemods") {
-				// @ATTR activemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Active Mods" list box relative to the frame.
-				placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
-			}
-			else if (infile.key == "inactivemods") {
-				// @ATTR inactivemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Available Mods" list box relative to the frame.
-				placeLabeledWidget(inactivemods_lb, inactivemods_lstb, x1, y1, x2, y2, msg->get("Available Mods"));
-			}
-			else if (infile.key == "activemods_shiftup") {
-				// @ATTR activemods_shiftup|x (integer), y (integer)|Position of the button to shift mods up in "Active Mods" relative to the frame.
-				activemods_shiftup_btn->pos.x = frame.x + x1;
-				activemods_shiftup_btn->pos.y = frame.y + y1;
-				activemods_shiftup_btn->refresh();
-			}
-			else if (infile.key == "activemods_shiftdown") {
-				// @ATTR activemods_shiftdown|x (integer), y (integer)|Position of the button to shift mods down in "Active Mods" relative to the frame.
-				activemods_shiftdown_btn->pos.x = frame.x + x1;
-				activemods_shiftdown_btn->pos.y = frame.y + y1;
-				activemods_shiftdown_btn->refresh();
-			}
-			else if (infile.key == "activemods_deactivate") {
-				// @ATTR activemods_deactivate|x (integer), y (integer)|Position of the "Disable" button relative to the frame.
-				activemods_deactivate_btn->label = msg->get("<< Disable");
-				activemods_deactivate_btn->pos.x = frame.x + x1;
-				activemods_deactivate_btn->pos.y = frame.y + y1;
-				activemods_deactivate_btn->refresh();
-			}
-			else if (infile.key == "inactivemods_activate") {
-				// @ATTR inactivemods_activate|x (integer), y (integer)|Position of the "Enable" button relative to the frame.
-				inactivemods_activate_btn->label = msg->get("Enable >>");
-				inactivemods_activate_btn->pos.x = frame.x + x1;
-				inactivemods_activate_btn->pos.y = frame.y + y1;
-				inactivemods_activate_btn->refresh();
-			}
-
-			// not used for base configuration
-			// checking them here prevents getting an "invalid key" warning
-			else if (infile.key == "fullscreen");
-			else if (infile.key == "mouse_move");
-			else if (infile.key == "hwsurface");
-			else if (infile.key == "doublebuf");
-			else if (infile.key == "enable_joystick");
-			else if (infile.key == "change_gamma");
-			else if (infile.key == "mouse_aim");
-			else if (infile.key == "no_mouse");
-			else if (infile.key == "gamma");
-			else if (infile.key == "joystick_deadzone");
-			else if (infile.key == "resolution");
-			else if (infile.key == "joystick_device");
-			else if (infile.key == "hws_note");
-			else if (infile.key == "dbuf_note");
-			else if (infile.key == "test_note");
-			else if (infile.key == "handheld_note");
-			else if (infile.key == "secondary_offset");
-			else if (infile.key == "keybinds_bg_color");
-			else if (infile.key == "scrollpane");
-			else if (infile.key == "scrollpane_contents");
-
-			else if (infile.key == "cancel");
-			else if (infile.key == "accept");
-			else if (infile.key == "up");
-			else if (infile.key == "down");
-			else if (infile.key == "left");
-			else if (infile.key == "right");
-			else if (infile.key == "bar1");
-			else if (infile.key == "bar2");
-			else if (infile.key == "bar3");
-			else if (infile.key == "bar4");
-			else if (infile.key == "bar5");
-			else if (infile.key == "bar6");
-			else if (infile.key == "bar7");
-			else if (infile.key == "bar8");
-			else if (infile.key == "bar9");
-			else if (infile.key == "bar0");
-			else if (infile.key == "main1");
-			else if (infile.key == "main2");
-			else if (infile.key == "character");
-			else if (infile.key == "inventory");
-			else if (infile.key == "powers");
-			else if (infile.key == "log");
-			else if (infile.key == "ctrl");
-			else if (infile.key == "shift");
-			else if (infile.key == "alt");
-			else if (infile.key == "delete");
-			else if (infile.key == "actionbar");
-			else if (infile.key == "actionbar_back");
-			else if (infile.key == "actionbar_forward");
-			else if (infile.key == "actionbar_use");
-			else if (infile.key == "developer_menu");
-
+			if (parseKey(infile, x1, y1, x2, y2))
+				continue;
+			else if (parseStub(infile))
+				continue;
 			else {
 				infile.error("GameStateConfigBase: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
 	}
+}
 
+bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2) {
+	// @CLASS GameStateConfigBase|Description of menus/config.txt
+
+	if (infile.key == "listbox_scrollbar_offset") {
+		// @ATTR listbox_scrollbar_offset|integer|Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.
+		activemods_lstb->scrollbar_offset = x1;
+		inactivemods_lstb->scrollbar_offset = x1;
+		language_lstb->scrollbar_offset = x1;
+	}
+	else if (infile.key == "music_volume") {
+		// @ATTR music_volume|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Music Volume" slider relative to the frame.
+		placeLabeledWidget(music_volume_lb, music_volume_sl, x1, y1, x2, y2, msg->get("Music Volume"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "sound_volume") {
+		// @ATTR sound_volume|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Sound Volume" slider relative to the frame.
+		placeLabeledWidget(sound_volume_lb, sound_volume_sl, x1, y1, x2, y2, msg->get("Sound Volume"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "language") {
+		// @ATTR language|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Language" list box relative to the frame.
+		placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
+	}
+	else if (infile.key == "combat_text") {
+		// @ATTR combat_text|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show combat text" checkbox relative to the frame.
+		placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "show_fps") {
+		// @ATTR show_fps|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show FPS" checkbox relative to the frame.
+		placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "show_hotkeys") {
+		// @ATTR show_hotkeys|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show Hotkey Labels" checkbox relative to the frame.
+		placeLabeledWidget(show_hotkeys_lb, show_hotkeys_cb, x1, y1, x2, y2, msg->get("Show Hotkeys Labels"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "colorblind") {
+		// @ATTR colorblind|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Colorblind Mode" checkbox relative to the frame.
+		placeLabeledWidget(colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "hardware_cursor") {
+		// @ATTR hardware_cursor|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Hardware mouse cursor" checkbox relative to the frame.
+		placeLabeledWidget(hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "dev_mode") {
+		// @ATTR dev_mode|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Developer Mode" checkbox relative to the frame.
+		placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "show_target") {
+		// @ATTR show_target|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show targeting animation" checkbox relative to the frame.
+		placeLabeledWidget(show_target_lb, show_target_cb, x1, y1, x2, y2, msg->get("Show targeting animation"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "loot_tooltips") {
+		// @ATTR loot_tooltips|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show loot labels" checkbox relative to the frame.
+		placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "activemods") {
+		// @ATTR activemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Active Mods" list box relative to the frame.
+		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
+	}
+	else if (infile.key == "inactivemods") {
+		// @ATTR inactivemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Available Mods" list box relative to the frame.
+		placeLabeledWidget(inactivemods_lb, inactivemods_lstb, x1, y1, x2, y2, msg->get("Available Mods"));
+	}
+	else if (infile.key == "activemods_shiftup") {
+		// @ATTR activemods_shiftup|x (integer), y (integer)|Position of the button to shift mods up in "Active Mods" relative to the frame.
+		activemods_shiftup_btn->pos.x = frame.x + x1;
+		activemods_shiftup_btn->pos.y = frame.y + y1;
+		activemods_shiftup_btn->refresh();
+	}
+	else if (infile.key == "activemods_shiftdown") {
+		// @ATTR activemods_shiftdown|x (integer), y (integer)|Position of the button to shift mods down in "Active Mods" relative to the frame.
+		activemods_shiftdown_btn->pos.x = frame.x + x1;
+		activemods_shiftdown_btn->pos.y = frame.y + y1;
+		activemods_shiftdown_btn->refresh();
+	}
+	else if (infile.key == "activemods_deactivate") {
+		// @ATTR activemods_deactivate|x (integer), y (integer)|Position of the "Disable" button relative to the frame.
+		activemods_deactivate_btn->label = msg->get("<< Disable");
+		activemods_deactivate_btn->pos.x = frame.x + x1;
+		activemods_deactivate_btn->pos.y = frame.y + y1;
+		activemods_deactivate_btn->refresh();
+	}
+	else if (infile.key == "inactivemods_activate") {
+		// @ATTR inactivemods_activate|x (integer), y (integer)|Position of the "Enable" button relative to the frame.
+		inactivemods_activate_btn->label = msg->get("Enable >>");
+		inactivemods_activate_btn->pos.x = frame.x + x1;
+		inactivemods_activate_btn->pos.y = frame.y + y1;
+		inactivemods_activate_btn->refresh();
+	}
+	else {
+		return false;
+	}
+
+	return true;
+}
+
+bool GameStateConfigBase::parseStub(FileParser &infile) {
+	// not used for base configuration
+	// checking them here prevents getting an "invalid key" warning
+	if (infile.key == "fullscreen");
+	else if (infile.key == "mouse_move");
+	else if (infile.key == "hwsurface");
+	else if (infile.key == "doublebuf");
+	else if (infile.key == "enable_joystick");
+	else if (infile.key == "change_gamma");
+	else if (infile.key == "mouse_aim");
+	else if (infile.key == "no_mouse");
+	else if (infile.key == "gamma");
+	else if (infile.key == "joystick_deadzone");
+	else if (infile.key == "resolution");
+	else if (infile.key == "joystick_device");
+	else if (infile.key == "hws_note");
+	else if (infile.key == "dbuf_note");
+	else if (infile.key == "test_note");
+	else if (infile.key == "handheld_note");
+	else if (infile.key == "secondary_offset");
+	else if (infile.key == "keybinds_bg_color");
+	else if (infile.key == "scrollpane");
+	else if (infile.key == "scrollpane_contents");
+	else if (infile.key == "cancel");
+	else if (infile.key == "accept");
+	else if (infile.key == "up");
+	else if (infile.key == "down");
+	else if (infile.key == "left");
+	else if (infile.key == "right");
+	else if (infile.key == "bar1");
+	else if (infile.key == "bar2");
+	else if (infile.key == "bar3");
+	else if (infile.key == "bar4");
+	else if (infile.key == "bar5");
+	else if (infile.key == "bar6");
+	else if (infile.key == "bar7");
+	else if (infile.key == "bar8");
+	else if (infile.key == "bar9");
+	else if (infile.key == "bar0");
+	else if (infile.key == "main1");
+	else if (infile.key == "main2");
+	else if (infile.key == "character");
+	else if (infile.key == "inventory");
+	else if (infile.key == "powers");
+	else if (infile.key == "log");
+	else if (infile.key == "ctrl");
+	else if (infile.key == "shift");
+	else if (infile.key == "alt");
+	else if (infile.key == "delete");
+	else if (infile.key == "actionbar");
+	else if (infile.key == "actionbar_back");
+	else if (infile.key == "actionbar_forward");
+	else if (infile.key == "actionbar_use");
+	else if (infile.key == "developer_menu");
+	else return false;
+
+	return true;
 }
 
 void GameStateConfigBase::addChildWidgets() {

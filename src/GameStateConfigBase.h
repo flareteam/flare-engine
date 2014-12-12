@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMESTATECONFIGBASE_H
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "GameState.h"
 #include "TooltipData.h"
 
@@ -53,6 +54,8 @@ public:
 
 	virtual void init();
 	virtual void readConfig();
+	bool parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2);
+	bool parseStub(FileParser &infile);
 	void addChildWidgets();
 	virtual void setupTabList();
 
