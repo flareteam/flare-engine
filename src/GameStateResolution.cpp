@@ -16,7 +16,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "CommonIncludes.h"
-#include "GameStateConfig.h"
+#include "GameStateConfigBase.h"
+#include "GameStateConfigDesktop.h"
 #include "GameStateResolution.h"
 #include "GameStateTitle.h"
 #include "MenuConfirm.h"
@@ -87,7 +88,11 @@ void GameStateResolution::logic() {
 				saveSettings();
 			}
 			delete requestedGameState;
-			requestedGameState = new GameStateConfig();
+#ifdef __ANDROID__
+			requestedGameState = new GameStateConfigBase();
+#else
+			requestedGameState = new GameStateConfigDesktop();
+#endif
 		}
 	}
 	else {

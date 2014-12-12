@@ -3,6 +3,7 @@ Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
+Copyright © 2014 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -19,106 +20,86 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
- * GameStateConfig
+ * GameStateConfigBase
  *
  * Handle game Settings Menu
  */
 
-#ifndef GAMESTATECONFIG_H
-#define GAMESTATECONFIG_H
+#ifndef GAMESTATECONFIGBASE_H
+#define GAMESTATECONFIGBASE_H
 
 #include "CommonIncludes.h"
 #include "GameState.h"
 #include "TooltipData.h"
 
-#ifdef __ANDROID__
-enum CONFIG_TAB {
-	AUDIO_TAB = 0,
-	INTERFACE_TAB = 1,
-	MODS_TAB = 2
-};
-#else
-enum CONFIG_TAB {
-	VIDEO_TAB = 0,
-	AUDIO_TAB = 1,
-	INTERFACE_TAB = 2,
-	INPUT_TAB = 3,
-	KEYBINDS_TAB = 4,
-	MODS_TAB = 5
-};
-#endif
-
 class MenuConfirm;
 class Widget;
 class WidgetButton;
 class WidgetCheckBox;
-class WidgetInput;
 class WidgetLabel;
 class WidgetListBox;
-class WidgetScrollBox;
 class WidgetSlider;
 class WidgetTabControl;
 class WidgetTooltip;
 
-class GameStateConfig : public GameState {
+class GameStateConfigBase : public GameState {
 public:
-	GameStateConfig    ();
-	~GameStateConfig   ();
+	short AUDIO_TAB;
+	short INTERFACE_TAB;
+	short MODS_TAB;
 
-	void    logic   ();
-	void    render  ();
+	GameStateConfigBase(bool do_init = true);
+	~GameStateConfigBase();
 
-private:
-	Rect frame;
-	std::vector<Rect> video_modes;
+	virtual void init();
+	virtual void readConfig();
+	void addChildWidgets();
+	virtual void setupTabList();
 
-	std::vector<std::string> language_ISO;
-	std::vector<std::string> language_full;
+	virtual void update();
+	void updateAudio();
+	void updateInterface();
+	void updateMods();
 
-	int getVideoModes(void);
-	bool getLanguagesList(void);
-	int getLanguagesNumber(void);
-	void init();
-	void cleanup();
-	void readConfig();
-	void update();
-	void setDefaultResolution();
+	virtual void logic();
+	bool logicMain();
+	void logicDefaults();
+	virtual void logicAccept();
+	void logicCancel();
+	void logicAudio();
+	void logicInterface();
+	void logicMods();
+
+	void render();
+	virtual void renderTabContents();
+	virtual void renderDialogs();
+	virtual void renderTooltips(TooltipData& tip_new);
+
+	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = JUSTIFY_LEFT);
+	void addChildWidget(Widget *w, int tab);
+	void refreshLanguages();
 	void refreshFont();
+
 	void enableMods();
 	void disableMods();
 	bool setMods();
-	void scanKey(int button);
-	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = JUSTIFY_LEFT);
 	std::string createModTooltip(Mod *mod);
-	void addChildWidget(Widget *w, int tab);
+
+	void cleanup();
+	virtual void cleanupTabContents();
+	virtual void cleanupDialogs();
 
 	TabList tablist;
-	std::vector<int> optiontab;
-	std::vector<Widget*>      child_widget;
-	WidgetTabControl    * tabControl;
+	std::vector<int>      optiontab;
+	std::vector<Widget*>  child_widget;
+	WidgetTabControl    * tab_control;
 	WidgetButton        * ok_button;
 	WidgetButton        * defaults_button;
 	WidgetButton        * cancel_button;
 	Sprite              * background;
 
-	WidgetCheckBox      * fullscreen_cb;
-	WidgetLabel         * fullscreen_lb;
-	WidgetCheckBox      * mouse_move_cb;
-	WidgetLabel         * mouse_move_lb;
 	WidgetCheckBox      * combat_text_cb;
 	WidgetLabel         * combat_text_lb;
-	WidgetCheckBox      * hwsurface_cb;
-	WidgetLabel         * hwsurface_lb;
-	WidgetCheckBox      * doublebuf_cb;
-	WidgetLabel         * doublebuf_lb;
-	WidgetCheckBox      * enable_joystick_cb;
-	WidgetLabel         * enable_joystick_lb;
-	WidgetCheckBox      * change_gamma_cb;
-	WidgetLabel         * change_gamma_lb;
-	WidgetCheckBox      * mouse_aim_cb;
-	WidgetLabel         * mouse_aim_lb;
-	WidgetCheckBox      * no_mouse_cb;
-	WidgetLabel         * no_mouse_lb;
 	WidgetCheckBox      * show_fps_cb;
 	WidgetLabel         * show_fps_lb;
 	WidgetCheckBox      * show_hotkeys_cb;
@@ -137,49 +118,26 @@ private:
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;
 	WidgetLabel         * sound_volume_lb;
-	WidgetSlider        * gamma_sl;
-	WidgetLabel         * gamma_lb;
-	WidgetListBox       * resolution_lstb;
-	WidgetLabel         * resolution_lb;
 	WidgetListBox       * activemods_lstb;
 	WidgetLabel         * activemods_lb;
 	WidgetListBox       * inactivemods_lstb;
 	WidgetLabel         * inactivemods_lb;
-	WidgetListBox       * joystick_device_lstb;
-	WidgetLabel         * joystick_device_lb;
 	WidgetListBox       * language_lstb;
 	WidgetLabel         * language_lb;
-	WidgetLabel         * hws_note_lb;
-	WidgetLabel         * dbuf_note_lb;
-	WidgetLabel         * test_note_lb;
-	WidgetLabel         * handheld_note_lb;
 	WidgetButton        * activemods_shiftup_btn;
 	WidgetButton        * activemods_shiftdown_btn;
 	WidgetButton        * activemods_deactivate_btn;
 	WidgetButton        * inactivemods_activate_btn;
-	WidgetSlider        * joystick_deadzone_sl;
-	WidgetLabel         * joystick_deadzone_lb;
 
-	std::vector<WidgetLabel *> keybinds_lb;
-	std::vector<WidgetButton *> keybinds_btn;
-
-	WidgetScrollBox     * input_scrollbox;
-	MenuConfirm         * input_confirm;
 	MenuConfirm         * defaults_confirm;
 
 	WidgetTooltip       * tip;
 	TooltipData         tip_buf;
 
-	int input_key;
-	bool check_resolution;
-	Rect scrollpane;
-	Color scrollpane_color;
-	int scrollpane_contents;
-	bool fullscreen;
-	bool hwsurface;
-	bool doublebuf;
-	int input_confirm_ticks;
-	unsigned key_count;
+	short active_tab;
+
+	Rect frame;
+	std::vector<std::string> language_ISO;
 };
 
 #endif

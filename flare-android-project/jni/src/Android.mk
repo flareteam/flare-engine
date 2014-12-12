@@ -35,7 +35,8 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/FileParser.cpp \
 	../../../src/FontEngine.cpp \
 	../../../src/GameState.cpp \
-	../../../src/GameStateConfig.cpp \
+	../../../src/GameStateConfigBase.cpp \
+	../../../src/GameStateConfigDesktop.cpp \
 	../../../src/GameStateCutscene.cpp \
 	../../../src/GameStateTitle.cpp \
 	../../../src/GameStateLoad.cpp \

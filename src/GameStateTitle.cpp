@@ -18,7 +18,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FileParser.h"
-#include "GameStateConfig.h"
+#include "GameStateConfigBase.h"
+#include "GameStateConfigDesktop.h"
 #include "GameStateCutscene.h"
 #include "GameStateLoad.h"
 #include "GameStateTitle.h"
@@ -141,7 +142,11 @@ void GameStateTitle::logic() {
 	}
 	else if (button_cfg->checkClick()) {
 		delete requestedGameState;
-		requestedGameState = new GameStateConfig();
+#ifdef __ANDROID__
+		requestedGameState = new GameStateConfigBase();
+#else
+		requestedGameState = new GameStateConfigDesktop();
+#endif
 	}
 	else if (button_credits->checkClick()) {
 		GameStateTitle *title = new GameStateTitle();

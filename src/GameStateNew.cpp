@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Avatar.h"
 #include "FileParser.h"
-#include "GameStateConfig.h"
 #include "GameStateNew.h"
 #include "GameStateLoad.h"
 #include "GameStatePlay.h"
