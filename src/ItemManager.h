@@ -103,8 +103,6 @@ public:
 	int price;            // if price = 0 the item cannot be sold
 	int price_sell;       // if price_sell = 0, the sell price is price*vendor_ratio
 	int max_quantity;     // max count per stack
-	int rand_loot;        // max amount appearing in a loot stack
-	int rand_vendor;      // max amount appearing in a vendor stack
 	std::string pickup_status; // when this item is picked up, set a campaign state (usually for quest items)
 	std::string stepfx;        // sound effect played when walking (armors only)
 	std::vector<std::string> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
@@ -135,8 +133,6 @@ public:
 		, price(0)
 		, price_sell(0)
 		, max_quantity(1)
-		, rand_loot(1)
-		, rand_vendor(1)
 		, pickup_status("")
 		, stepfx("") {
 	}

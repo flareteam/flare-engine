@@ -131,7 +131,7 @@ void AnimationSet::load() {
 			}
 		}
 		else if (parser.key == "duration") {
-			// @ATTR duration|integer|The duration of each frame.
+			// @ATTR duration|integer|The duration of the entire animation in 'ms' or 's'.
 			duration = parse_duration(parser.val);
 		}
 		else if (parser.key == "type")

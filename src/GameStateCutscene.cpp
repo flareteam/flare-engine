@@ -235,17 +235,17 @@ bool GameStateCutscene::load(std::string filename) {
 				sc.s = msg->get(infile.val);
 			}
 			else if (infile.key == "image") {
-				// @ATTR scene.image|string|An image that will be shown.
+				// @ATTR scene.image|string|Filename of an image that will be shown.
 				sc.type = infile.key;
 				sc.s = infile.val;
 			}
 			else if (infile.key == "pause") {
-				// @ATTR scene.pause|duration|Pause before next component
+				// @ATTR scene.pause|duration|Pause before next component in 'ms' or 's'.
 				sc.type = infile.key;
 				sc.x = parse_duration(infile.val);
 			}
 			else if (infile.key == "soundfx") {
-				// @ATTR scene.soundfx|string|A sound that will be played
+				// @ATTR scene.soundfx|string|Filename of a sound that will be played
 				sc.type = infile.key;
 				sc.s = infile.val;
 			}

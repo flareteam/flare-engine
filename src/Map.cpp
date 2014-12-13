@@ -149,11 +149,11 @@ void Map::loadHeader(FileParser &infile) {
 		this->h = toInt(infile.val);
 	}
 	else if (infile.key == "tileset") {
-		// @ATTR tileset|string|Tileset to use for map
+		// @ATTR tileset|string|Filename of a tileset definition to use for map
 		this->tileset = infile.val;
 	}
 	else if (infile.key == "music") {
-		// @ATTR music|string|Background music to use for map
+		// @ATTR music|string|Filename of background music to use for map
 		music_filename = infile.val;
 	}
 	else if (infile.key == "location") {
@@ -254,7 +254,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->direction = std::min(std::max(0, toInt(infile.val)), 7);
 	}
 	else if (infile.key == "waypoints") {
-		// @ATTR enemygroup.waypoint|[x(integer), y(integer)]|Enemy waypoint; single enemy only; negates wander_radius
+		// @ATTR enemygroup.waypoints|[x(integer), y(integer)]|Enemy waypoints; single enemy only; negates wander_radius
 		std::string none = "";
 		std::string a = infile.nextValue();
 		std::string b = infile.nextValue();
@@ -305,7 +305,7 @@ void Map::loadNPC(FileParser &infile) {
 			npcs.back().requires_status.push_back(s);
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR npc.requires_not|string|Status required to be missing for NPC load. There can be multiple states, separated by comma
+		// @ATTR npc.requires_not_status|string|Status required to be missing for NPC load. There can be multiple states, separated by comma
 		while ( (s = infile.nextValue()) != "")
 			npcs.back().requires_not_status.push_back(s);
 	}

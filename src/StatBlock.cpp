@@ -310,7 +310,7 @@ void StatBlock::load(const string& filename) {
 			quest_loot_id = toInt(infile.nextValue());
 		}
 		// combat stats
-		// @ATTR cooldown|integer|Cooldown between attacks.
+		// @ATTR cooldown|integer|Cooldown between attacks in 'ms' or 's'.
 		else if (infile.key == "cooldown") cooldown = parse_duration(infile.val);
 
 		// behavior stats
@@ -321,10 +321,10 @@ void StatBlock::load(const string& filename) {
 		// @ATTR facing|boolean|Creature can turn to face their target.
 		else if (infile.key == "facing") facing = toBool(infile.val);
 
-		// @ATTR waypoint_pause|duration|Duration to wait at each waypoint.
+		// @ATTR waypoint_pause|duration|Duration to wait at each waypoint in 'ms' or 's'.
 		else if (infile.key == "waypoint_pause") waypoint_pause = parse_duration(infile.val);
 
-		// @ATTR turn_delay|duration|Duration it takes for this creature to turn and face their target.
+		// @ATTR turn_delay|duration|Duration it takes for this creature to turn and face their target in 'ms' or 's'.
 		else if (infile.key == "turn_delay") turn_delay = parse_duration(infile.val);
 		// @ATTR chance_pursue|integer|Percentage change that the creature will chase their target.
 		else if (infile.key == "chance_pursue") chance_pursue = num;
@@ -369,7 +369,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "chance_on_debuff") power_chance[ON_DEBUFF] = num;
 		// @ATTR chance_on_join_combat|integer|Percentage chance that power_on_join_combat will be triggered.
 		else if (infile.key == "chance_on_join_combat") power_chance[ON_JOIN_COMBAT] = num;
-		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit.
+		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
 		else if (infile.key == "cooldown_hit") cooldown_hit = parse_duration(infile.val);
 
 		else if (infile.key == "passive_powers") {
@@ -397,7 +397,7 @@ void StatBlock::load(const string& filename) {
 		// @ATTR animations|string|Filename of an animation definition.
 		else if (infile.key == "animations") animations = infile.val;
 
-		// @ATTR supress_hp|boolean|Hides the enemy HP bar for this creature.
+		// @ATTR suppress_hp|boolean|Hides the enemy HP bar for this creature.
 		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
 
 		else if (infile.key == "categories") {

@@ -130,7 +130,7 @@ void TileSet::load(const std::string& filename) {
 
 			}
 			else if (infile.key == "animation") {
-				// @ATTR animation|tile index (integer), x (integer), y (integer), duration (duration), ...|An animation for a tile.
+				// @ATTR animation|tile index (integer), x (integer), y (integer), duration (duration), ...|An animation for a tile. Durations are in 'ms' or 's'.
 				int frame = 0;
 				unsigned TILE_ID = toInt(infile.nextValue());
 

@@ -69,7 +69,7 @@ void PowerManager::loadEffects() {
 		// name needs to be the first component of each power.  That is how we write
 		// data to the correct power.
 		if (infile.key == "name") {
-			// @ATTR name|string|Uniq identifier for the effect definition.
+			// @ATTR name|string|Unique identifier for the effect definition.
 			input_name = infile.val;
 			skippingEntry = (input_name == "");
 			if (skippingEntry)
@@ -246,14 +246,14 @@ void PowerManager::loadPowers() {
 			// @ATTR requires_targeting|bool|Power is only used when targeting using click-to-target.
 			powers[input_id].requires_targeting = toBool(infile.val);
 		else if (infile.key == "cooldown")
-			// @ATTR cooldown|duration|Specify the duration for cooldown of the power.
+			// @ATTR cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
 			powers[input_id].cooldown = parse_duration(infile.val);
 		// animation info
 		else if (infile.key == "animation")
 			// @ATTR animation|string|The filename of the power animation.
 			powers[input_id].animation_name = infile.val;
 		else if (infile.key == "soundfx")
-			// @ATTR soundfx|string|Sound effect to play when use of power.
+			// @ATTR soundfx|string|Filename of a sound effect to play when use of power.
 			powers[input_id].sfx_index = loadSFX(infile.val);
 		else if (infile.key == "directional")
 			// @ATTR directional|bool|The animation sprite sheet contains 8 directions, one per row.
@@ -271,7 +271,7 @@ void PowerManager::loadPowers() {
 			// @ATTR speed|integer|The speed of missile hazard, the unit is defined as map units per frame.
 			powers[input_id].speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
 		else if (infile.key == "lifespan")
-			// @ATTR lifespan|duration|How long the hazard/animation lasts.
+			// @ATTR lifespan|duration|How long the hazard/animation lasts in 'ms' or 's'.
 			powers[input_id].lifespan = parse_duration(infile.val);
 		else if (infile.key == "floor")
 			// @ATTR floor|bool|The hazard is drawn between the background and the object layer.
@@ -344,11 +344,11 @@ void PowerManager::loadPowers() {
 			powers[input_id].speed_variance = toFloat(infile.val);
 		//repeater modifiers
 		else if (infile.key == "delay")
-			// @ATTR delay|duration|Delay between repeats
+			// @ATTR delay|duration|Delay between repeats in 'ms' or 's'.
 			powers[input_id].delay = parse_duration(infile.val);
 		// buff/debuff durations
 		else if (infile.key == "transform_duration")
-			// @ATTR transform_duration|duration|Duration for transform
+			// @ATTR transform_duration|duration|Duration for transform in 'ms' or 's'.
 			powers[input_id].transform_duration = parse_duration(infile.val);
 		else if (infile.key == "manual_untransform")
 			// @ATTR manual_untransform|bool|Force manual untranform
@@ -367,13 +367,13 @@ void PowerManager::loadPowers() {
 			// @ATTR buff_teleport|bool|Power is a teleportation power.
 			powers[input_id].buff_teleport = toBool(infile.val);
 		else if (infile.key == "buff_party")
-			// @ATTR buff_part|bool|Power is cast upon party members
+			// @ATTR buff_party|bool|Power is cast upon party members
 			powers[input_id].buff_party = toBool(infile.val);
 		else if (infile.key == "buff_party_power_id")
-			// @ATTR buff_part_power_id|integer|Buffs a power id for all party members
+			// @ATTR buff_party_power_id|integer|Buffs a power id for all party members
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
-			// @ATTR post_effect|[effect_id, magnitude (integer), duration (duration)]|Post effect.
+			// @ATTR post_effect|[effect_id, magnitude (integer), duration (duration)]|Post effect. Duration is in 'ms' or 's'.
 			if (clear_post_effects) {
 				powers[input_id].post_effects.clear();
 				clear_post_effects = false;
@@ -401,7 +401,7 @@ void PowerManager::loadPowers() {
 			// @ATTR spawn_type|string|Type of spawn.
 			powers[input_id].spawn_type = infile.val;
 		else if (infile.key == "target_neighbor")
-			// @ATTR target_neighbor|int|Target is changed to an adjacent tile within a radius.
+			// @ATTR target_neighbor|integer|Target is changed to an adjacent tile within a radius.
 			powers[input_id].target_neighbor = toInt(infile.val);
 		else if (infile.key == "spawn_limit") {
 			// @ATTR spawn_limit|[fixed:stat:unlimited],stat[physical:mental:offense:defens]|

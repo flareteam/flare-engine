@@ -154,7 +154,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			// @ATTR defense|x (integer), y (integer), w (integer), h (integer)|Position of the player's defense stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "defense") value_pos[5] = toRect(infile.val);
 
-			// @ATTR upspent|label|Position of the label showing the number of unspent stat points.
+			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
 			else if(infile.key == "unspent") unspent_pos = eatLabelInfo(infile.val);
 
 			// @ATTR show_upgrade_physical|boolean|Hide the Physical upgrade button if set to false.

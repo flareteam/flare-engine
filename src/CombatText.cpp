@@ -61,7 +61,7 @@ CombatText::CombatText() {
 	if(infile.open("engine/combat_text.txt")) {
 		while(infile.next()) {
 			if(infile.key == "duration") {
-				// @ATTR duration|duration|Duration of the combat text.
+				// @ATTR duration|duration|Duration of the combat text in 'ms' or 's'.
 				duration = parse_duration(infile.val);
 			}
 			else if(infile.key == "speed") {
