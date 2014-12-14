@@ -20,52 +20,41 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 using namespace std;
 
-/**
- * Class constructor.
- *
- * @param amount  Amount of tabs the control will have.
- */
-WidgetTabControl::WidgetTabControl(int amount)
-	: activeTabSurface(NULL)
-	, inactiveTabSurface(NULL)
-	, active_labels(amount)
-	, inactive_labels(amount) {
+WidgetTabControl::WidgetTabControl()
+	: active_tab_surface(NULL)
+	, inactive_tab_surface(NULL)
+	, active_tab(0)
+	, tab_padding(8,4) {
 
-	// Based on given amount:
-	tabsAmount = amount;
-	titles = new std::string[tabsAmount];
-	tabs = new Rect[tabsAmount];
-
-	// Predefined:
-	activeTab = 0;
-	tabPadding.x = 8;
-	tabPadding.y = 4;
-
-	// Load needed graphics.
 	loadGraphics();
 
 	color_normal = font->getColor("widget_normal");
 	color_disabled = font->getColor("widget_disabled");
 }
-/**
- * Class destructor.
- */
+
 WidgetTabControl::~WidgetTabControl() {
-	if (activeTabSurface) delete activeTabSurface;
-	if (inactiveTabSurface) delete inactiveTabSurface;
-	delete[] titles;
-	delete[] tabs;
+	if (active_tab_surface)
+		delete active_tab_surface;
+	if (inactive_tab_surface)
+		delete inactive_tab_surface;
 }
 
 /**
- * Sets the title of a tab.
+ * Sets the title of a tab
+ * Adds a new tab if the index is greater than the amount of tabs
  *
- * @param number        Tab index. For example, 0 for the first tab.
+ * @param index         Integer index that relates to this tab
  * @param title         Tab title.
- * @param updateHeader  Whether or not the header should be updated.
  */
-void WidgetTabControl::setTabTitle(int number, const std::string& title) {
-	titles[number] = title;
+void WidgetTabControl::setTabTitle(unsigned index, const std::string& title) {
+	if (index+1 >titles.size()) {
+		titles.resize(index+1);
+		tabs.resize(index+1);
+		active_labels.resize(index+1);
+		inactive_labels.resize(index+1);
+	}
+
+	titles[index] = title;
 }
 
 /**
@@ -74,7 +63,17 @@ void WidgetTabControl::setTabTitle(int number, const std::string& title) {
  * For example, if the first tab is open, it will return 0.
  */
 int WidgetTabControl::getActiveTab() {
-	return activeTab;
+	return active_tab;
+}
+
+/**
+ * Sets the active tab to a given index.
+ */
+void WidgetTabControl::setActiveTab(unsigned tab) {
+	if (tab > tabs.size())
+		active_tab = 0;
+	else
+		active_tab = tab;
 }
 
 /**
@@ -87,16 +86,16 @@ int WidgetTabControl::getActiveTab() {
  */
 void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
 	// Set tabs area.
-	tabsArea.x = x;
-	tabsArea.y = y;
-	tabsArea.w = width;
-	tabsArea.h = activeTabSurface->getGraphicsHeight();
+	tabs_area.x = x;
+	tabs_area.y = y;
+	tabs_area.w = width;
+	tabs_area.h = active_tab_surface->getGraphicsHeight();
 
 	// Set content area.
-	contentArea.x = x + 8;
-	contentArea.y = y + tabsArea.h+8;
-	contentArea.w = width - 16;
-	contentArea.h = height - tabsArea.h;
+	content_area.x = x + 8;
+	content_area.y = y + tabs_area.h+8;
+	content_area.w = width - 16;
+	content_area.h = height - tabs_area.h;
 }
 
 /**
@@ -105,17 +104,17 @@ void WidgetTabControl::setMainArea(int x, int y, int width, int height) {
  * Use it right after you set the area and tab titles of the tab control.
  */
 void WidgetTabControl::updateHeader() {
-	for (int i=0; i<tabsAmount; i++) {
-		tabs[i].y = tabsArea.y;
-		tabs[i].h = tabsArea.h;
+	for (unsigned i=0; i<tabs.size(); i++) {
+		tabs[i].y = tabs_area.y;
+		tabs[i].h = tabs_area.h;
 
-		if (i==0) tabs[i].x = tabsArea.x;
+		if (i==0) tabs[i].x = tabs_area.x;
 		else tabs[i].x = tabs[i-1].x + tabs[i-1].w;
 
-		tabs[i].w = tabPadding.x + font->calc_width(titles[i]) + tabPadding.x;
+		tabs[i].w = tab_padding.x + font->calc_width(titles[i]) + tab_padding.x;
 
 		active_labels[i].set(
-			tabs[i].x + tabPadding.x,
+			tabs[i].x + tab_padding.x,
 			tabs[i].y + tabs[i].h/2,
 			JUSTIFY_LEFT,
 			VALIGN_CENTER,
@@ -123,7 +122,7 @@ void WidgetTabControl::updateHeader() {
 			color_normal);
 
 		inactive_labels[i].set(
-			tabs[i].x + tabPadding.x,
+			tabs[i].x + tab_padding.x,
 			tabs[i].y + tabs[i].h/2,
 			JUSTIFY_LEFT,
 			VALIGN_CENTER,
@@ -140,14 +139,14 @@ void WidgetTabControl::loadGraphics() {
 	graphics = render_device->loadImage("images/menus/tab_active.png",
 			   "loading tab_active.png", true);
 	if (graphics) {
-		activeTabSurface = graphics->createSprite();
+		active_tab_surface = graphics->createSprite();
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/tab_inactive.png",
 			   "loading tab_inactive.png", true);
 	if (graphics) {
-		inactiveTabSurface = graphics->createSprite();
+		inactive_tab_surface = graphics->createSprite();
 		graphics->unref();
 	}
 }
@@ -164,11 +163,11 @@ void WidgetTabControl::logic() {
 void WidgetTabControl::logic(int x, int y) {
 	Point mouse(x, y);
 	// If the click was in the tabs area;
-	if(isWithin(tabsArea, mouse) && inpt->pressing[MAIN1]) {
-		// Mark the clicked tab as activeTab.
-		for (int i=0; i<tabsAmount; i++) {
+	if(isWithin(tabs_area, mouse) && inpt->pressing[MAIN1]) {
+		// Mark the clicked tab as active_tab.
+		for (unsigned i=0; i<tabs.size(); i++) {
 			if(isWithin(tabs[i], mouse)) {
-				activeTab = i;
+				active_tab = i;
 				return;
 			}
 		}
@@ -181,7 +180,7 @@ void WidgetTabControl::logic(int x, int y) {
  * Remember to render then on top of it the actual content of the {@link getActiveTab() active tab}.
  */
 void WidgetTabControl::render() {
-	for (int i=0; i<tabsAmount; i++) {
+	for (unsigned i=0; i<tabs.size(); i++) {
 		renderTab(i);
 	}
 }
@@ -189,8 +188,8 @@ void WidgetTabControl::render() {
 /**
  * Renders the given tab on the widget header.
  */
-void WidgetTabControl::renderTab(int number) {
-	int i = number;
+void WidgetTabControl::renderTab(unsigned number) {
+	unsigned i = number;
 	Rect src;
 	Rect dest;
 
@@ -201,35 +200,35 @@ void WidgetTabControl::renderTab(int number) {
 	src.w = tabs[i].w;
 	src.h = tabs[i].h;
 
-	if (i == activeTab) {
-		activeTabSurface->setClip(src);
-		activeTabSurface->setDest(dest);
-		render_device->render(activeTabSurface);
+	if (i == active_tab) {
+		active_tab_surface->setClip(src);
+		active_tab_surface->setDest(dest);
+		render_device->render(active_tab_surface);
 	}
 	else {
-		inactiveTabSurface->setClip(src);
-		inactiveTabSurface->setDest(dest);
-		render_device->render(inactiveTabSurface);
+		inactive_tab_surface->setClip(src);
+		inactive_tab_surface->setDest(dest);
+		render_device->render(inactive_tab_surface);
 	}
 
 	// Draw tab’s right edge.
-	src.x = activeTabSurface->getGraphicsWidth() - tabPadding.x;
-	src.w = tabPadding.x;
-	dest.x = tabs[i].x + tabs[i].w - tabPadding.x;
+	src.x = active_tab_surface->getGraphicsWidth() - tab_padding.x;
+	src.w = tab_padding.x;
+	dest.x = tabs[i].x + tabs[i].w - tab_padding.x;
 
-	if (i == activeTab) {
-		activeTabSurface->setClip(src);
-		activeTabSurface->setDest(dest);
-		render_device->render(activeTabSurface);
+	if (i == active_tab) {
+		active_tab_surface->setClip(src);
+		active_tab_surface->setDest(dest);
+		render_device->render(active_tab_surface);
 	}
 	else {
-		inactiveTabSurface->setClip(src);
-		inactiveTabSurface->setDest(dest);
-		render_device->render(inactiveTabSurface);
+		inactive_tab_surface->setClip(src);
+		inactive_tab_surface->setDest(dest);
+		render_device->render(inactive_tab_surface);
 	}
 
 	// Render labels
-	if (i == activeTab) {
+	if (i == active_tab) {
 		active_labels[i].render();
 	}
 	else {
@@ -241,5 +240,5 @@ void WidgetTabControl::renderTab(int number) {
  * Returns the height in pixels of the widget.
  */
 Rect WidgetTabControl::getContentArea() {
-	return contentArea;
+	return content_area;
 }

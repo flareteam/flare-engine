@@ -70,7 +70,7 @@ MenuLog::MenuLog() {
 	}
 
 	// Initialize the tab control.
-	tabControl = new WidgetTabControl(LOG_TYPE_COUNT);
+	tabControl = new WidgetTabControl();
 
 	// Define the header.
 	tabControl->setTabTitle(LOG_TYPE_MESSAGES, msg->get("Notes"));

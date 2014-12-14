@@ -60,7 +60,7 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 	, doublebuf_lb(new WidgetLabel())
 	, change_gamma_cb(new WidgetCheckBox())
 	, change_gamma_lb(new WidgetLabel())
-	, gamma_sl(new WidgetSlider("images/menus/buttons/slider_default.png"))
+	, gamma_sl(new WidgetSlider())
 	, gamma_lb(new WidgetLabel())
 	, hws_note_lb(new WidgetLabel())
 	, dbuf_note_lb(new WidgetLabel())
@@ -75,7 +75,7 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 	, mouse_aim_lb(new WidgetLabel())
 	, no_mouse_cb(new WidgetCheckBox())
 	, no_mouse_lb(new WidgetLabel())
-	, joystick_deadzone_sl(new WidgetSlider("images/menus/buttons/slider_default.png"))
+	, joystick_deadzone_sl(new WidgetSlider())
 	, joystick_deadzone_lb(new WidgetLabel())
 	, handheld_note_lb(new WidgetLabel())
 	, input_scrollbox(NULL)
@@ -117,10 +117,6 @@ void GameStateConfigDesktop::init() {
 	INPUT_TAB = 3;
 	KEYBINDS_TAB = 4;
 	MODS_TAB = 5;
-
-	tab_control = new WidgetTabControl(6);
-	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
-	frame = tab_control->getContentArea();
 
 	tab_control->setTabTitle(VIDEO_TAB, msg->get("Video"));
 	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));

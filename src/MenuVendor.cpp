@@ -40,7 +40,7 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	: Menu()
 	, stats(_stats)
 	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
-	, tabControl(new WidgetTabControl(2))
+	, tabControl(new WidgetTabControl())
 	, slots_cols(1)
 	, slots_rows(1)
 	, activetab(VENDOR_BUY)
@@ -49,8 +49,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	, buyback_stock() {
 	setBackground("images/menus/vendor.png");
 
-	tabControl->setTabTitle(VENDOR_BUY,msg->get("Inventory"));
-	tabControl->setTabTitle(VENDOR_SELL,msg->get("Buyback"));
+	tabControl->setTabTitle(VENDOR_BUY, msg->get("Inventory"));
+	tabControl->setTabTitle(VENDOR_SELL, msg->get("Buyback"));
 
 	// Load config settings
 	FileParser infile;

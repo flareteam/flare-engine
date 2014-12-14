@@ -195,7 +195,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 
 	// If we have more than one tab, create tab_control
 	if (!tabs.empty()) {
-		tab_control = new WidgetTabControl(tabs.size());
+		tab_control = new WidgetTabControl();
 
 		if (tab_control) {
 			// Initialize the tab control.

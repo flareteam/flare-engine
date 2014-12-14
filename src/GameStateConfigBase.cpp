@@ -69,9 +69,9 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, show_target_lb(new WidgetLabel())
 	, loot_tooltips_cb(new WidgetCheckBox())
 	, loot_tooltips_lb(new WidgetLabel())
-	, music_volume_sl(new WidgetSlider("images/menus/buttons/slider_default.png"))
+	, music_volume_sl(new WidgetSlider())
 	, music_volume_lb(new WidgetLabel())
-	, sound_volume_sl(new WidgetSlider("images/menus/buttons/slider_default.png"))
+	, sound_volume_sl(new WidgetSlider())
 	, sound_volume_lb(new WidgetLabel())
 	, activemods_lstb(new WidgetListBox(10))
 	, activemods_lb(new WidgetLabel())
@@ -95,6 +95,10 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 		background = graphics->createSprite();
 		graphics->unref();
 	}
+
+	tab_control = new WidgetTabControl();
+	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
+	frame = tab_control->getContentArea();
 
 	ok_button->label = msg->get("OK");
 	ok_button->pos.x = VIEW_W_HALF - ok_button->pos.w/2;
@@ -147,10 +151,6 @@ void GameStateConfigBase::init() {
 	AUDIO_TAB = 0;
 	INTERFACE_TAB = 1;
 	MODS_TAB = 2;
-
-	tab_control = new WidgetTabControl(3);
-	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
-	frame = tab_control->getContentArea();
 
 	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));
 	tab_control->setTabTitle(INTERFACE_TAB, msg->get("Interface"));
