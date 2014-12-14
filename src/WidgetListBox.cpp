@@ -28,8 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetScrollBar.h"
 #include "WidgetTooltip.h"
 
-using namespace std;
-
 WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)

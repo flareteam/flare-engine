@@ -27,15 +27,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
-using namespace std;
-
 LabelInfo::LabelInfo() : x(0), y(0), justify(JUSTIFY_LEFT), valign(VALIGN_TOP), hidden(false), font_style("font_regular") {
 }
 
 /**
  * This is used in menus (e.g. MenuInventory) when parsing their config files
  */
-LabelInfo eatLabelInfo(string val) {
+LabelInfo eatLabelInfo(std::string val) {
 	LabelInfo info;
 	std::string justify,valign,style;
 
@@ -89,14 +87,14 @@ void WidgetLabel::render() {
 	}
 }
 
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, Color _color) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color) {
 	set(_x, _y, _justify, _valign, _text, _color, "font_regular");
 }
 
 /**
  * A shortcut function to set all attributes simultaneously.
  */
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const string& _text, Color _color, std::string _font) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, std::string _font) {
 
 	bool changed = false;
 
@@ -220,7 +218,7 @@ void WidgetLabel::applyOffsets() {
 /**
  * Update the label text only
  */
-void WidgetLabel::set(const string& _text) {
+void WidgetLabel::set(const std::string& _text) {
 	if (text != _text) {
 		this->text = _text;
 		applyOffsets();

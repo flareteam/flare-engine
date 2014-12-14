@@ -39,8 +39,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include <cmath>
 #include <climits>
-using namespace std;
-
 
 /**
  * PowerManager constructor
@@ -458,7 +456,7 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "target_categories") {
 			// @ATTR target_categories|string,...|Hazard will only affect enemies in these categories.
 			powers[input_id].target_categories.clear();
-			string cat;
+			std::string cat;
 			while ((cat = infile.nextValue()) != "") {
 				powers[input_id].target_categories.push_back(cat);
 			}
@@ -517,10 +515,10 @@ void PowerManager::loadPowers() {
  * @param filename The .ogg file containing the sound for this power, assumed to be in soundfx/powers/
  * @return The sfx[] array index for this mix chunk, or -1 upon load failure
  */
-int PowerManager::loadSFX(const string& filename) {
+int PowerManager::loadSFX(const std::string& filename) {
 
 	SoundManager::SoundID sid = snd->load(filename, "PowerManager sfx");
-	vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
+	std::vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
 	if (it == sfx.end()) {
 		sfx.push_back(sid);
 		return sfx.size() - 1;

@@ -22,8 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "WidgetScrollBox.h"
 
-using namespace std;
-
 Scene::Scene() : frame_counter(0)
 	, pause_frames(0)
 	, caption("")

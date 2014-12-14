@@ -38,8 +38,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 
-using namespace std;
-
 Avatar::Avatar()
 	: Entity()
 	, lockAttack(false)
@@ -146,7 +144,7 @@ void Avatar::init() {
 	last_transform = "";
 	untransform_power = getUntransformPower();
 
-	hero_cooldown = vector<int>(powers->powers.size(), 0);
+	hero_cooldown = std::vector<int>(powers->powers.size(), 0);
 
 }
 
@@ -154,8 +152,8 @@ void Avatar::init() {
  * Load avatar sprite layer definitions into vector.
  */
 void Avatar::loadLayerDefinitions() {
-	layer_def = vector<vector<unsigned> >(8, vector<unsigned>());
-	layer_reference_order = vector<string>();
+	layer_def = std::vector<std::vector<unsigned> >(8, std::vector<unsigned>());
+	layer_reference_order = std::vector<std::string>();
 
 	FileParser infile;
 	// @CLASS Avatar: Hero layers|Description of engine/hero_layers.txt
@@ -169,7 +167,7 @@ void Avatar::loadLayerDefinitions() {
 					SDL_Quit();
 					exit(1);
 				}
-				string layer = popFirstString(infile.val);
+				std::string layer = popFirstString(infile.val);
 				while (layer != "") {
 					// check if already in layer_reference:
 					unsigned ref_pos;
@@ -208,7 +206,7 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 
 	for (unsigned int i=0; i<_img_gfx.size(); i++) {
 		if (_img_gfx[i].gfx != "") {
-			string name = "animations/avatar/"+stats.gfx_base+"/"+_img_gfx[i].gfx+".txt";
+			std::string name = "animations/avatar/"+stats.gfx_base+"/"+_img_gfx[i].gfx+".txt";
 			anim->increaseCount(name);
 			animsets.push_back(anim->getAnimationSet(name));
 			animsets.back()->setParent(animationSet);
@@ -229,8 +227,8 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 /**
  * Walking/running steps sound depends on worn armor
  */
-void Avatar::loadStepFX(const string& stepname) {
-	string filename = stats.sfx_step;
+void Avatar::loadStepFX(const std::string& stepname) {
+	std::string filename = stats.sfx_step;
 	if (stepname != "") {
 		filename = stepname;
 	}
@@ -444,7 +442,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	if (stats.level < (int)stats.xp_table.size() && stats.xp >= stats.xp_table[stats.level]) {
 		stats.level_up = true;
 		stats.level++;
-		stringstream ss;
+		std::stringstream ss;
 		ss << msg->get("Congratulations, you have reached level %d!", stats.level);
 		if (stats.level < stats.max_spendable_stat_points) {
 			ss << " " << msg->get("You may increase one attribute through the Character Menu.");
@@ -896,7 +894,7 @@ void Avatar::resetActiveAnimation() {
 			anims[i]->reset();
 }
 
-void Avatar::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void Avatar::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	// target
 	if (target_anim && target_visible) {
 		Renderable ren = target_anim->getCurrentFrame(0);

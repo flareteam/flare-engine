@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "SDLSoftwareRenderDevice.h"
 
-using namespace std;
-
 SDLSoftwareImage::SDLSoftwareImage(RenderDevice *_device)
 	: Image(_device)
 	, surface(NULL) {

@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 
-using namespace std;
-
 NPC::NPC()
 	: Entity()
 	, name("")
@@ -57,19 +55,19 @@ NPC::NPC()
  *
  * @param npc_id Config file for npc
  */
-void NPC::load(const string& npc_id) {
+void NPC::load(const std::string& npc_id) {
 
 	FileParser infile;
 	ItemStack stack;
 
-	string filename_portrait = "";
+	std::string filename_portrait = "";
 
 	// @CLASS NPC|Description of NPCs in npcs/
 	if (infile.open(npc_id)) {
 		while (infile.next()) {
 			if (infile.section == "dialog") {
 				if (infile.new_section) {
-					dialog.push_back(vector<Event_Component>());
+					dialog.push_back(std::vector<Event_Component>());
 				}
 				Event_Component e;
 				e.type = infile.key;
@@ -162,7 +160,7 @@ void NPC::load(const string& npc_id) {
 	loadGraphics(filename_portrait);
 }
 
-void NPC::loadGraphics(const string& filename_portrait) {
+void NPC::loadGraphics(const std::string& filename_portrait) {
 
 	if (gfx != "") {
 		anim->increaseCount(gfx);
@@ -187,7 +185,7 @@ void NPC::loadGraphics(const string& filename_portrait) {
  * returns -1 if not loaded or error.
  * returns index in specific vector where to be found.
  */
-int NPC::loadSound(const string& fname, int type) {
+int NPC::loadSound(const std::string& fname, int type) {
 
 	SoundManager::SoundID a = snd->load(fname, "NPC voice");
 

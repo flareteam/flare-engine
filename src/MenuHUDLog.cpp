@@ -28,8 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 
-using namespace std;
-
 MenuHUDLog::MenuHUDLog() {
 
 	// Load config settings
@@ -56,7 +54,7 @@ MenuHUDLog::MenuHUDLog() {
  * Calculate how long a given message should remain on the HUD
  * Formula: minimum time plus x frames per character
  */
-int MenuHUDLog::calcDuration(const string& s) {
+int MenuHUDLog::calcDuration(const std::string& s) {
 	// 5 seconds plus an extra second per 10 letters
 	return MAX_FRAMES_PER_SEC * 5 + s.length() * (MAX_FRAMES_PER_SEC/10);
 }
@@ -99,7 +97,7 @@ void MenuHUDLog::render() {
 /**
  * Add a new message to the log
  */
-void MenuHUDLog::add(const string& s, bool prevent_spam) {
+void MenuHUDLog::add(const std::string& s, bool prevent_spam) {
 	// Make sure we don't spam the same message repeatedly
 	if (log_msg.empty() || log_msg.back() != s || !prevent_spam) {
 		// add new message

@@ -32,8 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 
-using namespace std;
-
 CampaignManager::CampaignManager()
 	: status()
 	, log_msg("")
@@ -53,8 +51,8 @@ void CampaignManager::clearAll() {
  * Take the savefile campaign= and convert to status array
  */
 void CampaignManager::setAll(std::string s) {
-	string str = s + ',';
-	string token;
+	std::string str = s + ',';
+	std::string token;
 	while (str != "") {
 		token = popFirstString(str, ',');
 		if (token != "") this->setStatus(token);
@@ -66,7 +64,7 @@ void CampaignManager::setAll(std::string s) {
  * Convert status array to savefile campaign= (status csv)
  */
 std::string CampaignManager::getAll() {
-	stringstream ss;
+	std::stringstream ss;
 	ss.str("");
 	for (unsigned int i=0; i < status.size(); i++) {
 		ss << status[i];
@@ -104,7 +102,7 @@ void CampaignManager::unsetStatus(std::string s) {
 	// avoid searching empty statuses
 	if (s == "") return;
 
-	vector<string>::iterator it;
+	std::vector<std::string>::iterator it;
 	// see http://stackoverflow.com/a/223405
 	for (it = status.end(); it != status.begin();) {
 		--it;
@@ -202,7 +200,7 @@ void CampaignManager::restoreHPMP(std::string s) {
 	}
 }
 
-void CampaignManager::addMsg(const string& new_msg) {
+void CampaignManager::addMsg(const std::string& new_msg) {
 	if (log_msg != "") log_msg += " ";
 	log_msg += new_msg;
 }

@@ -32,8 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 #include <cstring>
 
-using namespace std;
-
 MapCollision::MapCollision()
 	: map_size(Point()) {
 	memset(colmap, 0, sizeof(colmap));
@@ -94,12 +92,12 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 		if (is_valid_tile(int(x), int(y) + 1, movement_type, is_hero)
 				&& is_valid_tile(int(x) + sgn(step_x), int(y) + 1, movement_type, is_hero)
 				&& dy > 0.5) {
-			y += min(1 - dy + epsilon, float(fabs(step_x)));
+			y += std::min(1 - dy + epsilon, float(fabs(step_x)));
 		}
 		else if (is_valid_tile(int(x), int(y) - 1, movement_type, is_hero)
 				 && is_valid_tile(int(x) + sgn(step_x), int(y) - 1, movement_type, is_hero)
 				 && dy < 0.5) {
-			y -= min(dy + epsilon, float(fabs(step_x)));
+			y -= std::min(dy + epsilon, float(fabs(step_x)));
 		}
 		else {
 			return false;
@@ -113,12 +111,12 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 		if (is_valid_tile(int(x) + 1, int(y), movement_type, is_hero)
 				&& is_valid_tile(int(x) + 1, int(y) + sgn(step_y), movement_type, is_hero)
 				&& dx > 0.5) {
-			x += min(1 - dx + epsilon, float(fabs(step_y)));
+			x += std::min(1 - dx + epsilon, float(fabs(step_y)));
 		}
 		else if (is_valid_tile(int(x) - 1, int(y), movement_type, is_hero)
 				 && is_valid_tile(int(x) - 1, int(y) + sgn(step_y), movement_type, is_hero)
 				 && dx < 0.5) {
-			x -= min(dx + epsilon, float(fabs(step_y)));
+			x -= std::min(dx + epsilon, float(fabs(step_y)));
 		}
 		else {
 			return false;
@@ -146,23 +144,23 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		float step_x = 0;
 		if (_step_x > 0) {
 			// find next interesting value, which is either the whole step, or the transition to the next tile
-			step_x = min((float)ceil(x) - x, _step_x);
+			step_x = std::min((float)ceil(x) - x, _step_x);
 			// if we are standing on the edge of a tile (ceil(x) - x == 0), we need to look one tile ahead
-			if (step_x <= MIN_TILE_GAP) step_x = min(1.f, _step_x);
+			if (step_x <= MIN_TILE_GAP) step_x = std::min(1.f, _step_x);
 		}
 		else if (_step_x < 0) {
-			step_x = max((float)floor(x) - x, _step_x);
-			if (step_x == 0) step_x = max(-1.f, _step_x);
+			step_x = std::max((float)floor(x) - x, _step_x);
+			if (step_x == 0) step_x = std::max(-1.f, _step_x);
 		}
 
 		float step_y = 0;
 		if (_step_y > 0) {
-			step_y = min((float)ceil(y) - y, _step_y);
-			if (step_y <= MIN_TILE_GAP) step_y = min(1.f, _step_y);
+			step_y = std::min((float)ceil(y) - y, _step_y);
+			if (step_y <= MIN_TILE_GAP) step_y = std::min(1.f, _step_y);
 		}
 		else if (_step_y < 0) {
-			step_y = max((float)floor(y) - y, _step_y);
-			if (step_y == 0) step_y	= max(-1.f, _step_y);
+			step_y = std::max((float)floor(y) - y, _step_y);
+			if (step_y == 0) step_y	= std::max(-1.f, _step_y);
 		}
 
 		_step_x -= step_x;
@@ -271,7 +269,7 @@ bool MapCollision::line_check(const float& x1, const float& y1, const float& x2,
 	float dy = fabs(y2 - y1);
 	float step_x;
 	float step_y;
-	int steps = (int)max(dx, dy);
+	int steps = (int)std::max(dx, dy);
 
 
 	if (dx > dy) {
@@ -369,7 +367,7 @@ bool MapCollision::is_facing(const float& x1, const float& y1, char direction, c
 * limit is the maximum number of explored node
 * @return true if a path is found
 */
-bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
+bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
 	if (is_outside_map(end_pos.x, end_pos.y)) return false;
 
@@ -415,10 +413,10 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, vector<FPoint>
 			break; //path found !
 
 		//limit evaluated nodes to the size of the map
-		list<Point> neighbours = node->getNeighbours(map_size.x, map_size.y);
+		std::list<Point> neighbours = node->getNeighbours(map_size.x, map_size.y);
 
 		// for every neighbour of current node
-		for (list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
+		for (std::list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
 			Point neighbour = *it;
 
 			// if neighbour is not free of any collision, skip it

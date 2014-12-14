@@ -34,8 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
-using namespace std;
-
 MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 	: timer(NULL)
 	, stats(_stats)

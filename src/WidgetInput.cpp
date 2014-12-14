@@ -22,9 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 
-using namespace std;
-
-
 WidgetInput::WidgetInput(const std::string& filename)
 	: background(NULL)
 	, enabled(true)
@@ -40,7 +37,7 @@ WidgetInput::WidgetInput(const std::string& filename)
 	color_normal = font->getColor("widget_normal");
 }
 
-void WidgetInput::loadGraphics(const string& filename) {
+void WidgetInput::loadGraphics(const std::string& filename) {
 	// load input background image
 	Image *graphics;
 	graphics = render_device->loadImage(filename, "Couldn't load image", true);

@@ -34,9 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
-using namespace std;
-
-
 GameStateLoad::GameStateLoad() : GameState()
 	, background(NULL)
 	, selection(NULL)
@@ -151,7 +148,7 @@ GameStateLoad::GameStateLoad() : GameState()
 				if (dir != 6) continue;
 				else found_layer = true;
 
-				string layer = popFirstString(infile.val);
+				std::string layer = popFirstString(infile.val);
 				while (layer != "") {
 					preview_layer.push_back(layer);
 					layer = popFirstString(infile.val);
@@ -211,8 +208,8 @@ GameStateLoad::GameStateLoad() : GameState()
 		infile.close();
 	}
 
-	stance_frames = max(1, stance_frames);
-	stance_ticks_per_frame = max(1, (stance_duration / stance_frames));
+	stance_frames = std::max(1, stance_frames);
+	stance_ticks_per_frame = std::max(1, (stance_duration / stance_frames));
 
 	color_normal = font->getColor("menu_normal");
 }
@@ -272,10 +269,10 @@ void GameStateLoad::readGameSlots() {
 	}
 }
 
-string GameStateLoad::getMapName(const string& map_filename) {
+std::string GameStateLoad::getMapName(const std::string& map_filename) {
 	FileParser infile;
 	if (!infile.open(map_filename, true, "")) return "";
-	string map_name = "";
+	std::string map_name = "";
 
 	while (map_name == "" && infile.next()) {
 		if (infile.key == "title")
@@ -288,7 +285,7 @@ string GameStateLoad::getMapName(const string& map_filename) {
 
 void GameStateLoad::readGameSlot(int slot) {
 
-	stringstream filename;
+	std::stringstream filename;
 	FileParser infile;
 
 	// abort if not a valid slot number
@@ -320,7 +317,7 @@ void GameStateLoad::readGameSlot(int slot) {
 			stats[slot].defense_character = toInt(infile.nextValue());
 		}
 		else if (infile.key == "equipped") {
-			string repeat_val = infile.nextValue();
+			std::string repeat_val = infile.nextValue();
 			while (repeat_val != "") {
 				equipped[slot].push_back(toInt(repeat_val));
 				repeat_val = infile.nextValue();
@@ -348,7 +345,7 @@ void GameStateLoad::readGameSlot(int slot) {
 void GameStateLoad::loadPreview(int slot) {
 
 	Image *graphics;
-	vector<string> img_gfx;
+	std::vector<std::string> img_gfx;
 
 	for (unsigned int i=0; i<sprites[slot].size(); i++) {
 		if (sprites[slot][i])
@@ -377,7 +374,7 @@ void GameStateLoad::loadPreview(int slot) {
 		}
 
 		if (equipped[slot][i] > 0 && !preview_layer.empty()) {
-			vector<string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
+			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
 			if (found != preview_layer.end())
 				img_gfx[distance(preview_layer.begin(), found)] = items->items[equipped[slot][i]].gfx;
 		}
@@ -484,7 +481,7 @@ void GameStateLoad::logic() {
 	else if (confirm->visible) {
 		confirm->logic();
 		if (confirm->confirmClicked) {
-			stringstream filename;
+			std::stringstream filename;
 			filename.str("");
 			filename << PATH_USER;
 			if (SAVE_PREFIX.length() > 0)
@@ -496,7 +493,7 @@ void GameStateLoad::logic() {
 
 			if (stats[selected_slot].permadeath) {
 				// Remove stash
-				stringstream ss;
+				std::stringstream ss;
 				ss.str("");
 				ss << PATH_USER;
 				if (SAVE_PREFIX.length() > 0)
@@ -602,7 +599,7 @@ void GameStateLoad::render() {
 	}
 
 	Point label;
-	stringstream ss;
+	std::stringstream ss;
 
 	if (loading_requested || loading || loaded) {
 		label.x = loading_pos.x + (VIEW_W - FRAME_W)/2;

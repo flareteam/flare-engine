@@ -36,9 +36,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetScrollBox.h"
 
-using namespace std;
-
-
 MenuTalker::MenuTalker(MenuManager *_menu)
 	: Menu()
 	, menu(_menu)
@@ -193,11 +190,11 @@ void MenuTalker::logic() {
 void MenuTalker::createBuffer() {
 	if (event_cursor >= npc->dialog[dialog_node].size()) return;
 
-	string line;
+	std::string line;
 
 	// speaker name
-	string etype = npc->dialog[dialog_node][event_cursor].type;
-	string who;
+	std::string etype = npc->dialog[dialog_node][event_cursor].type;
+	std::string who;
 
 	if (etype == "him" || etype == "her") {
 		who = npc->name;
@@ -248,7 +245,7 @@ void MenuTalker::render() {
 	Menu::render();
 
 	// show active portrait
-	string etype = npc->dialog[dialog_node][event_cursor].type;
+	std::string etype = npc->dialog[dialog_node][event_cursor].type;
 	if (etype == "him" || etype == "her") {
 		Sprite *r = npc->portrait;
 		if (r) {
@@ -309,16 +306,16 @@ void MenuTalker::setHero(StatBlock &stats) {
 	}
 }
 
-string MenuTalker::parseLine(const string &line) {
-	string new_line = line;
+std::string MenuTalker::parseLine(const std::string &line) {
+	std::string new_line = line;
 
 	// name
 	size_t index = new_line.find("%N");
-	if (index != string::npos) new_line = new_line.replace(index, 2, hero_name);
+	if (index != std::string::npos) new_line = new_line.replace(index, 2, hero_name);
 
 	// class
 	index = new_line.find("%C");
-	if (index != string::npos) new_line.replace(index, 2, hero_class);
+	if (index != std::string::npos) new_line.replace(index, 2, hero_class);
 
 	return new_line;
 }

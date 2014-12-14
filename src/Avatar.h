@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SoundManager.h"
 #include "Utils.h"
 
-using namespace std;
-
 class Entity;
 class Hazard;
 class StatBlock;
@@ -86,7 +84,7 @@ private:
 	int getUntransformPower();
 
 	//variables for patfinding
-	vector<FPoint> path;
+	std::vector<FPoint> path;
 	FPoint prev_target;
 
 	void handlePower(std::vector<ActionData> &action_queue);

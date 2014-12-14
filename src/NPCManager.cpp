@@ -36,8 +36,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits>
 
-using namespace std;
-
 NPCManager::NPCManager(StatBlock *_stats)
 	: tip(new WidgetTooltip())
 	, stats(_stats)

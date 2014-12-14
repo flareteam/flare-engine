@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Animation.h"
 
-using namespace std;
-
 Animation::Animation(const std::string &_name, const std::string &_type, Image *_sprite)
 	: name(_name)
 	, type(	_type == "play_once" ? PLAY_ONCE :

@@ -32,8 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <cstdio>
 
-using namespace std;
-
 TileSet::TileSet()
 	: sprites(NULL) {
 	reset();
@@ -137,7 +135,7 @@ void TileSet::load(const std::string& filename) {
 				if (TILE_ID >= anim.size())
 					anim.resize(TILE_ID + 1);
 
-				string repeat_val = infile.nextValue();
+				std::string repeat_val = infile.nextValue();
 				while (repeat_val != "") {
 					anim[TILE_ID].frames++;
 					anim[TILE_ID].pos.resize(frame + 1);

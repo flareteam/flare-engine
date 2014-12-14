@@ -29,9 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <assert.h>
 
-using namespace std;
-
-WidgetSlider::WidgetSlider (const string  & fname)
+WidgetSlider::WidgetSlider (const std::string& fname)
 	: enabled(true)
 	, sl(NULL)
 	, pressed(false)

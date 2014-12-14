@@ -25,8 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetScrollBar.h"
 #include "SharedResources.h"
 
-using namespace std;
-
 WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)
@@ -125,7 +123,7 @@ int WidgetScrollBar::checkClick(int x, int y) {
 
 void WidgetScrollBar::set() {
 	if (maximum < 1) maximum = 1;
-	value = max(0, min(maximum, value));
+	value = std::max(0, std::min(maximum, value));
 	pos_knob.y = pos_up.y + pos_up.h + (value * (bar_height - pos_up.h) / maximum);
 }
 

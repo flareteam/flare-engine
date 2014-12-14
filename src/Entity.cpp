@@ -42,8 +42,6 @@ const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
 const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
 const float speedMultiplyer[8] = { (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f};
 
-using namespace std;
-
 Entity::Entity()
 	: sprites(NULL)
 	, sound_melee(0)
@@ -363,16 +361,16 @@ bool Entity::takeHit(const Hazard &h) {
 
 		if (!stats.effects.immunity) {
 			if (h.hp_steal != 0) {
-				int steal_amt = (min(dmg, prev_hp) * h.hp_steal) / 100;
+				int steal_amt = (std::min(dmg, prev_hp) * h.hp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->hp = min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
+				h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 			}
 			if (h.mp_steal != 0) {
-				int steal_amt = (min(dmg, prev_hp) * h.mp_steal) / 100;
+				int steal_amt = (std::min(dmg, prev_hp) * h.mp_steal) / 100;
 				if (steal_amt == 0) steal_amt = 1;
 				combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->mp = min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
+				h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
 			}
 		}
 	}
@@ -442,7 +440,7 @@ void Entity::resetActiveAnimation() {
 /**
  * Set the entity's current animation by name
  */
-bool Entity::setAnimation(const string& animationName) {
+bool Entity::setAnimation(const std::string& animationName) {
 
 	// if the animation is already the requested one do nothing
 	if (activeAnimation != NULL && activeAnimation->getName() == animationName)

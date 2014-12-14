@@ -19,10 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GetText.h"
 #include "UtilsParsing.h"
 
-
-using namespace std;
-
-
 GetText::GetText()
 	: line("")
 	, key("")
@@ -30,8 +26,8 @@ GetText::GetText()
 	, fuzzy(false) {
 }
 
-bool GetText::open(const string& filename) {
-	infile.open(filename.c_str(), ios::in);
+bool GetText::open(const std::string& filename) {
+	infile.open(filename.c_str(), std::ios::in);
 	return infile.is_open();
 }
 
@@ -42,7 +38,7 @@ void GetText::close() {
 }
 
 // Turns all \" into just "
-string GetText::sanitize(string message) {
+std::string GetText::sanitize(std::string message) {
 	signed int pos = 0;
 	while ((pos = message.find("\\\"")) != -1) {
 		message = message.substr(0, pos) + message.substr(pos+1);

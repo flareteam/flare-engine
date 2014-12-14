@@ -188,7 +188,7 @@ void MenuManager::setDragIconItem(ItemStack stack) {
 		if (!drag_icon) return;
 
 		if (stack.quantity > 1 || items->items[stack.item].max_quantity > 1) {
-			stringstream ss;
+			std::stringstream ss;
 			ss << abbreviateKilo(stack.quantity);
 			font->renderShadowed(ss.str(), 2, 2, JUSTIFY_LEFT, drag_icon->getGraphics(), font->getColor("item_normal"));
 		}

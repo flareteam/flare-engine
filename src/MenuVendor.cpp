@@ -33,9 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTabControl.h"
 #include "SharedGameResources.h"
 
-using namespace std;
-
-
 MenuVendor::MenuVendor(StatBlock *_stats)
 	: Menu()
 	, stats(_stats)
@@ -71,11 +68,11 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 			}
 			// @ATTR vendor_cols|integer|The number of columns in the grid of slots.
 			else if (infile.key == "vendor_cols") {
-				slots_cols = max(1, toInt(infile.val));
+				slots_cols = std::max(1, toInt(infile.val));
 			}
 			// @ATTR vendor_rows|integer|The number of rows in the grid of slots.
 			else if (infile.key == "vendor_rows") {
-				slots_rows = max(1, toInt(infile.val));
+				slots_rows = std::max(1, toInt(infile.val));
 			}
 			// @ATTR label_title|label|The position of the text that displays the NPC's name.
 			else if (infile.key == "label_title") {

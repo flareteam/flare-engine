@@ -18,7 +18,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetTabControl.h"
 #include "WidgetLabel.h"
 
-using namespace std;
 
 /**
  * Class constructor.

@@ -27,8 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 
-using namespace std;
-
 WidgetSlot::WidgetSlot(int _icon_id, int _ACTIVATE)
 	: Widget()
 	, slot_selected(NULL)
@@ -184,7 +182,7 @@ void WidgetSlot::render() {
 		render_device->render(icons);
 
 		if (amount > 1 || max_amount > 1) {
-			stringstream ss;
+			std::stringstream ss;
 			ss << amount_str;
 			label_amount.set(pos.x + 2, pos.y + 2, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("item_normal"));
 			label_amount.local_frame = local_frame;

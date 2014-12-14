@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <cmath>
 
-using namespace std;
-
 Hazard::Hazard(MapCollision *_collider)
 	: collider(_collider)
 	, activeAnimation(NULL)
@@ -129,7 +127,7 @@ bool Hazard::isDangerousNow() {
 }
 
 bool Hazard::hasEntity(Entity *ent) {
-	for(vector<Entity*>::iterator it = entitiesCollided.begin(); it != entitiesCollided.end(); ++it)
+	for(std::vector<Entity*>::iterator it = entitiesCollided.begin(); it != entitiesCollided.end(); ++it)
 		if(*it == ent) return true;
 	return false;
 }
@@ -138,7 +136,7 @@ void Hazard::addEntity(Entity *ent) {
 	entitiesCollided.push_back(ent);
 }
 
-void Hazard::addRenderable(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	if (delay_frames == 0 && activeAnimation) {
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
 		re.map_pos.x = pos.x;

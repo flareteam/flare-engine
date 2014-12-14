@@ -30,31 +30,29 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 
-using namespace std;
-
 MessageEngine::MessageEngine() {
 	GetText infile;
 
-	vector<string> engineFiles = mods->list("languages/engine." + LANGUAGE + ".po");
+	std::vector<std::string> engineFiles = mods->list("languages/engine." + LANGUAGE + ".po");
 	if (engineFiles.size() == 0 && LANGUAGE != "en")
 		logError("MessageEngine: Unable to open basic translation files located in languages/engine.%s.po\n", LANGUAGE.c_str());
 
 	for (unsigned i = 0; i < engineFiles.size(); ++i) {
 		if (infile.open(engineFiles[i])) {
 			while (infile.next() && !infile.fuzzy)
-				messages.insert(pair<string,string>(infile.key, infile.val));
+				messages.insert(std::pair<std::string, std::string>(infile.key, infile.val));
 			infile.close();
 		}
 	}
 
-	vector<string> dataFiles = mods->list("languages/data." + LANGUAGE + ".po");
+	std::vector<std::string> dataFiles = mods->list("languages/data." + LANGUAGE + ".po");
 	if (dataFiles.size() == 0 && LANGUAGE != "en")
 		logError("MessageEngine: Unable to open basic translation files located in languages/data.%s.po\n", LANGUAGE.c_str());
 
 	for (unsigned i = 0; i < dataFiles.size(); ++i) {
 		if (infile.open(dataFiles[i])) {
 			while (infile.next() && !infile.fuzzy)
-				messages.insert(pair<string,string>(infile.key, infile.val));
+				messages.insert(std::pair<std::string, std::string>(infile.key, infile.val));
 			infile.close();
 		}
 	}
@@ -64,61 +62,61 @@ MessageEngine::MessageEngine() {
  * Each of the get() functions returns the mapped value
  * They differ only on which variables they replace in the string - strings replace %s, integers replace %d
  */
-string MessageEngine::get(const string& key) {
-	string message = messages[key];
+std::string MessageEngine::get(const std::string& key) {
+	std::string message = messages[key];
 	if (message == "") message = key;
 	return unescape(message);
 }
 
-string MessageEngine::get(const string& key, int i) {
-	string message = messages[key];
+std::string MessageEngine::get(const std::string& key, int i) {
+	std::string message = messages[key];
 	if (message == "") message = key;
 	size_t index = message.find("%d");
-	if (index != string::npos) message = message.replace(index, 2, str(i));
+	if (index != std::string::npos) message = message.replace(index, 2, str(i));
 	return unescape(message);
 }
 
-string MessageEngine::get(const string& key, const string& s) {
-	string message = messages[key];
+std::string MessageEngine::get(const std::string& key, const std::string& s) {
+	std::string message = messages[key];
 	if (message == "") message = key;
 	size_t index = message.find("%s");
-	if (index != string::npos) message = message.replace(index, 2, s);
+	if (index != std::string::npos) message = message.replace(index, 2, s);
 	return unescape(message);
 }
 
-string MessageEngine::get(const string& key, int i, const string& s) {
-	string message = messages[key];
+std::string MessageEngine::get(const std::string& key, int i, const std::string& s) {
+	std::string message = messages[key];
 	if (message == "") message = key;
 	size_t index = message.find("%d");
-	if (index != string::npos) message = message.replace(index, 2, str(i));
+	if (index != std::string::npos) message = message.replace(index, 2, str(i));
 	index = message.find("%s");
-	if (index != string::npos) message = message.replace(index, 2, s);
+	if (index != std::string::npos) message = message.replace(index, 2, s);
 	return unescape(message);
 }
 
-string MessageEngine::get(const string& key, int i, int j) {
-	string message = messages[key];
+std::string MessageEngine::get(const std::string& key, int i, int j) {
+	std::string message = messages[key];
 	if (message == "") message = key;
 	size_t index = message.find("%d");
-	if (index != string::npos) message = message.replace(index, 2, str(i));
+	if (index != std::string::npos) message = message.replace(index, 2, str(i));
 	index = message.find("%d");
-	if (index != string::npos) message = message.replace(index, 2, str(j));
+	if (index != std::string::npos) message = message.replace(index, 2, str(j));
 	return unescape(message);
 }
 
 // Changes an int into a string
-string MessageEngine::str(int i) {
-	stringstream ss;
+std::string MessageEngine::str(int i) {
+	std::stringstream ss;
 	ss << i;
 	return ss.str();
 }
 
 // unescape c formatted string
-string MessageEngine::unescape(string val) {
+std::string MessageEngine::unescape(std::string val) {
 
 	// unescape percentage %% to %
 	size_t pos;
-	while ((pos = val.find("%%")) != string::npos)
+	while ((pos = val.find("%%")) != std::string::npos)
 		val = val.replace(pos, 2, "%");
 
 	return val;

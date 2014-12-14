@@ -35,8 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-using namespace std;
-
 MenuStatBar::MenuStatBar(std::string type)
 	: bar(NULL)
 	, stat_cur(0)
@@ -170,7 +168,7 @@ void MenuStatBar::render() {
 			label->set(bar_dest.x+bar_pos.w/2, bar_dest.y+bar_pos.h/2, JUSTIFY_CENTER, VALIGN_CENTER, "", color_normal);
 
 		if (isWithin(bar_dest,mouse)) {
-			stringstream ss;
+			std::stringstream ss;
 			if (custom_string != "")
 				ss << custom_string;
 			else
