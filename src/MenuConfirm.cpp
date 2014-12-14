@@ -51,7 +51,7 @@ MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
 	boxMsg = _boxMsg;
 
 	if (hasConfirmButton) {
-		buttonConfirm = new WidgetButton("images/menus/buttons/button_default.png");
+		buttonConfirm = new WidgetButton();
 		buttonConfirm->label = _buttonMsg;
 		tablist.add(buttonConfirm);
 	}

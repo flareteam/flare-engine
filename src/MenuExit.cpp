@@ -42,7 +42,7 @@ MenuExit::MenuExit() : Menu() {
 
 	exitClicked = false;
 
-	buttonExit = new WidgetButton("images/menus/buttons/button_default.png");
+	buttonExit = new WidgetButton();
 
 	if (SAVE_ONEXIT)
 		buttonExit->label = msg->get("Save & Exit");

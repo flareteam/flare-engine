@@ -53,7 +53,7 @@ protected:
 	Color color_normal;
 
 public:
-	WidgetInput(const std::string& filename);
+	WidgetInput(const std::string& filename = "images/menus/input.png");
 	~WidgetInput();
 
 	void logic();

@@ -50,30 +50,30 @@ bool rescompare(const Rect &r1, const Rect &r2) {
 
 GameStateConfigDesktop::GameStateConfigDesktop()
 	: GameStateConfigBase(false)
-	, resolution_lstb(new WidgetListBox(10, "images/menus/buttons/listbox_default.png"))
+	, resolution_lstb(new WidgetListBox(10))
 	, resolution_lb(new WidgetLabel())
-	, fullscreen_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, fullscreen_cb(new WidgetCheckBox())
 	, fullscreen_lb(new WidgetLabel())
-	, hwsurface_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, hwsurface_cb(new WidgetCheckBox())
 	, hwsurface_lb(new WidgetLabel())
-	, doublebuf_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, doublebuf_cb(new WidgetCheckBox())
 	, doublebuf_lb(new WidgetLabel())
-	, change_gamma_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, change_gamma_cb(new WidgetCheckBox())
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider("images/menus/buttons/slider_default.png"))
 	, gamma_lb(new WidgetLabel())
 	, hws_note_lb(new WidgetLabel())
 	, dbuf_note_lb(new WidgetLabel())
 	, test_note_lb(new WidgetLabel())
-	, joystick_device_lstb(new WidgetListBox(10, "images/menus/buttons/listbox_default.png"))
+	, joystick_device_lstb(new WidgetListBox(10))
 	, joystick_device_lb(new WidgetLabel())
-	, enable_joystick_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, enable_joystick_cb(new WidgetCheckBox())
 	, enable_joystick_lb(new WidgetLabel())
-	, mouse_move_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, mouse_move_cb(new WidgetCheckBox())
 	, mouse_move_lb(new WidgetLabel())
-	, mouse_aim_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, mouse_aim_cb(new WidgetCheckBox())
 	, mouse_aim_lb(new WidgetLabel())
-	, no_mouse_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, no_mouse_cb(new WidgetCheckBox())
 	, no_mouse_lb(new WidgetLabel())
 	, joystick_deadzone_sl(new WidgetSlider("images/menus/buttons/slider_default.png"))
 	, joystick_deadzone_lb(new WidgetLabel())
@@ -99,7 +99,7 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 		keybinds_lb[i]->setJustify(JUSTIFY_RIGHT);
 	}
 	for (int i = 0; i < inpt->key_count * 3; i++) {
-		keybinds_btn.push_back(new WidgetButton("images/menus/buttons/button_default.png"));
+		keybinds_btn.push_back(new WidgetButton());
 	}
 
 	key_count = keybinds_btn.size()/3;

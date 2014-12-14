@@ -39,10 +39,10 @@ GameStateTitle::GameStateTitle()
 {
 
 	// set up buttons
-	button_play = new WidgetButton("images/menus/buttons/button_default.png");
-	button_exit = new WidgetButton("images/menus/buttons/button_default.png");
-	button_cfg = new WidgetButton("images/menus/buttons/button_default.png");
-	button_credits = new WidgetButton("images/menus/buttons/button_default.png");
+	button_play = new WidgetButton();
+	button_exit = new WidgetButton();
+	button_cfg = new WidgetButton();
+	button_credits = new WidgetButton();
 
 	FileParser infile;
 	// @CLASS GameStateTitle|Description of menus/gametitle.txt

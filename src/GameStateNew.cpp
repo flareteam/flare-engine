@@ -56,13 +56,13 @@ GameStateNew::GameStateNew()
 	, game_slot(0)
 {
 	// set up buttons
-	button_exit = new WidgetButton("images/menus/buttons/button_default.png");
+	button_exit = new WidgetButton();
 	button_exit->label = msg->get("Cancel");
 	button_exit->pos.x = VIEW_W_HALF - button_exit->pos.w;
 	button_exit->pos.y = VIEW_H - button_exit->pos.h;
 	button_exit->refresh();
 
-	button_create = new WidgetButton("images/menus/buttons/button_default.png");
+	button_create = new WidgetButton();
 	button_create->label = msg->get("Create");
 	button_create->pos.x = VIEW_W_HALF;
 	button_create->pos.y = VIEW_H - button_create->pos.h;
@@ -71,14 +71,14 @@ GameStateNew::GameStateNew()
 
 	button_prev = new WidgetButton("images/menus/buttons/left.png");
 	button_next = new WidgetButton("images/menus/buttons/right.png");
-	input_name = new WidgetInput("images/menus/input.png");
-	button_permadeath = new WidgetCheckBox("images/menus/buttons/checkbox_default.png");
+	input_name = new WidgetInput();
+	button_permadeath = new WidgetCheckBox();
 	if (DEATH_PENALTY_PERMADEATH) {
 		button_permadeath->enabled = false;
 		button_permadeath->Check();
 	}
 
-	class_list = new WidgetListBox (12, "images/menus/buttons/listbox_default.png");
+	class_list = new WidgetListBox (12);
 	class_list->can_deselect = false;
 
 	tip = new WidgetTooltip();
