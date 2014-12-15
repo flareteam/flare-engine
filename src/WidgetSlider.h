@@ -27,7 +27,7 @@ class Widget;
 
 class WidgetSlider : public Widget {
 public:
-	WidgetSlider (const std::string & fname);
+	WidgetSlider (const std::string & fname = "images/menus/buttons/slider_default.png");
 	~WidgetSlider ();
 
 	bool checkClick ();

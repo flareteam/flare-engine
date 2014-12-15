@@ -53,7 +53,7 @@ private:
 	Color color_disabled;
 
 public:
-	WidgetListBox(int height, const std::string& _fileName);
+	WidgetListBox(int height, const std::string& _fileName = "images/menus/buttons/listbox_default.png");
 	~WidgetListBox();
 
 	bool checkClick();

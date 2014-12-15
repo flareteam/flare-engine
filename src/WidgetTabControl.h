@@ -18,8 +18,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MENU_TAB_CONTROL_H
 #define MENU_TAB_CONTROL_H
 
-#include <vector>
-
 #include "CommonIncludes.h"
 #include "SharedResources.h"
 #include "WidgetLabel.h"
@@ -28,44 +26,40 @@ class WidgetTabControl {
 
 private:
 
+	void loadGraphics();
+	void renderTab(unsigned number);
 
-	Sprite *activeTabSurface;
-	Sprite *inactiveTabSurface;
+	Sprite *active_tab_surface;
+	Sprite *inactive_tab_surface;
 
+	std::vector<std::string> titles; // Titles of the tabs.
+	std::vector<Rect> tabs; // Rectangles for each tab title on the tab header.
 	std::vector<WidgetLabel> active_labels;
 	std::vector<WidgetLabel> inactive_labels;
 
-	std::string *titles;  /** Titles of the tabs. */
-	int activeTab;        /** Index of the currently active tab. */
-	int tabsAmount;       /** Amount of tabs in the control. */
 
-	Rect *tabs;       /** Rectangles for each tab title on the tab header. */
-	Rect tabsArea;    /** Area the tab titles are displayed. */
-	Rect contentArea; /** Area where the content of the {@link activeTab active tab} is displayed. */
-	Point tabPadding;     /** Padding between tab titles. */
+	unsigned active_tab;    // Index of the currently active tab.
+	Rect tabs_area;    // Area the tab titles are displayed.
+	Rect content_area; // Area where the content of the active tab is displayed.
+	Point tab_padding; // Padding between tab titles.
+
 	Color color_normal;
 	Color color_disabled;
 
-	void loadGraphics();
-
-	void renderTab(int number);
-
 public:
 
-	WidgetTabControl(int amount);
-	WidgetTabControl(const WidgetTabControl &copy); // copy constructor not implemented
+	WidgetTabControl();
 	~WidgetTabControl();
 
-	void setTabTitle(int number, const std::string& title);
+	void setTabTitle(unsigned index, const std::string& title);
 	void setMainArea(int x, int y, int width, int height);
 
 	int getActiveTab();
-	void setActiveTab(int tab) {
-		activeTab = tab;
-	}
+	void setActiveTab(unsigned tab);
+
 	Rect getContentArea();
 	int getTabHeight() {
-		return activeTabSurface->getGraphicsHeight();
+		return active_tab_surface->getGraphicsHeight();
 	}
 
 	void updateHeader();

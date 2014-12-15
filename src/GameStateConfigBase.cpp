@@ -49,40 +49,40 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameStateConfigBase::GameStateConfigBase (bool do_init)
 	: GameState()
 	, child_widget()
-	, ok_button(new WidgetButton("images/menus/buttons/button_default.png"))
-	, defaults_button(new WidgetButton("images/menus/buttons/button_default.png"))
-	, cancel_button(new WidgetButton("images/menus/buttons/button_default.png"))
+	, ok_button(new WidgetButton())
+	, defaults_button(new WidgetButton())
+	, cancel_button(new WidgetButton())
 	, background(NULL)
-	, combat_text_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, combat_text_cb(new WidgetCheckBox())
 	, combat_text_lb(new WidgetLabel())
-	, show_fps_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, show_fps_cb(new WidgetCheckBox())
 	, show_fps_lb(new WidgetLabel())
-	, show_hotkeys_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, show_hotkeys_cb(new WidgetCheckBox())
 	, show_hotkeys_lb(new WidgetLabel())
-	, hardware_cursor_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, hardware_cursor_cb(new WidgetCheckBox())
 	, hardware_cursor_lb(new WidgetLabel())
-	, colorblind_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, colorblind_cb(new WidgetCheckBox())
 	, colorblind_lb(new WidgetLabel())
-	, dev_mode_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, dev_mode_cb(new WidgetCheckBox())
 	, dev_mode_lb(new WidgetLabel())
-	, show_target_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, show_target_cb(new WidgetCheckBox())
 	, show_target_lb(new WidgetLabel())
-	, loot_tooltips_cb(new WidgetCheckBox("images/menus/buttons/checkbox_default.png"))
+	, loot_tooltips_cb(new WidgetCheckBox())
 	, loot_tooltips_lb(new WidgetLabel())
-	, music_volume_sl(new WidgetSlider("images/menus/buttons/slider_default.png"))
+	, music_volume_sl(new WidgetSlider())
 	, music_volume_lb(new WidgetLabel())
-	, sound_volume_sl(new WidgetSlider("images/menus/buttons/slider_default.png"))
+	, sound_volume_sl(new WidgetSlider())
 	, sound_volume_lb(new WidgetLabel())
-	, activemods_lstb(new WidgetListBox(10, "images/menus/buttons/listbox_default.png"))
+	, activemods_lstb(new WidgetListBox(10))
 	, activemods_lb(new WidgetLabel())
-	, inactivemods_lstb(new WidgetListBox(10, "images/menus/buttons/listbox_default.png"))
+	, inactivemods_lstb(new WidgetListBox(10))
 	, inactivemods_lb(new WidgetLabel())
-	, language_lstb(new WidgetListBox(10, "images/menus/buttons/listbox_default.png"))
+	, language_lstb(new WidgetListBox(10))
 	, language_lb(new WidgetLabel())
 	, activemods_shiftup_btn(new WidgetButton("images/menus/buttons/up.png"))
 	, activemods_shiftdown_btn(new WidgetButton("images/menus/buttons/down.png"))
-	, activemods_deactivate_btn(new WidgetButton("images/menus/buttons/button_default.png"))
-	, inactivemods_activate_btn(new WidgetButton("images/menus/buttons/button_default.png"))
+	, activemods_deactivate_btn(new WidgetButton())
+	, inactivemods_activate_btn(new WidgetButton())
 	, defaults_confirm(new MenuConfirm(msg->get("Defaults"), msg->get("Reset ALL settings?")))
 	, tip(new WidgetTooltip())
 	, tip_buf()
@@ -95,6 +95,10 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 		background = graphics->createSprite();
 		graphics->unref();
 	}
+
+	tab_control = new WidgetTabControl();
+	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
+	frame = tab_control->getContentArea();
 
 	ok_button->label = msg->get("OK");
 	ok_button->pos.x = VIEW_W_HALF - ok_button->pos.w/2;
@@ -147,10 +151,6 @@ void GameStateConfigBase::init() {
 	AUDIO_TAB = 0;
 	INTERFACE_TAB = 1;
 	MODS_TAB = 2;
-
-	tab_control = new WidgetTabControl(3);
-	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
-	frame = tab_control->getContentArea();
 
 	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));
 	tab_control->setTabTitle(INTERFACE_TAB, msg->get("Interface"));

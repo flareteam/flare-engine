@@ -33,7 +33,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	cursor = 0;
 	bg.r = bg.g = bg.b = 0;
 	currentChild = -1;
-	scrollbar = new WidgetScrollBar("images/menus/buttons/scrollbar_default.png");
+	scrollbar = new WidgetScrollBar();
 	update = true;
 	render_to_alpha = false;
 	transparent = true;

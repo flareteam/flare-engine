@@ -61,7 +61,7 @@ MenuDevConsole::MenuDevConsole() : Menu() {
 	input_box = new WidgetInput("images/menus/input_console.png");
 	tablist.add(input_box);
 
-	button_confirm = new WidgetButton("images/menus/buttons/button_default.png");
+	button_confirm = new WidgetButton();
 	button_confirm->label = msg->get("Execute");
 	tablist.add(button_confirm);
 
