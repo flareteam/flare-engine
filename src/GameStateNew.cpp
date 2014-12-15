@@ -117,7 +117,7 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "permadeath_label") {
 				permadeath_label = eatLabelInfo(infile.val);
 			}
-			// @ATTR class_label|label|Label for the "Choose a Class" text.
+			// @ATTR classlist_label|label|Label for the "Choose a Class" text.
 			else if (infile.key == "classlist_label") {
 				classlist_label = eatLabelInfo(infile.val);
 			}

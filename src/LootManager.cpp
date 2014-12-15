@@ -65,7 +65,7 @@ LootManager::LootManager()
 				AUTOPICKUP_CURRENCY = toBool(infile.val);
 			}
 			else if (infile.key == "currency_name") {
-				// @ATTR currenct_name|string|Define the name of currency in game
+				// @ATTR currency_name|string|Define the name of currency in game
 				CURRENCY = msg->get(infile.val);
 			}
 			else if (infile.key == "vendor_ratio") {
@@ -73,7 +73,7 @@ LootManager::LootManager()
 				VENDOR_RATIO = toInt(infile.val) / 100.0f;
 			}
 			else if (infile.key == "sfx_loot") {
-				// @ATTR sfx_loot|string|Sound effect for dropping loot.
+				// @ATTR sfx_loot|string|Filename of a sound effect to play for dropping loot.
 				sfx_loot =  snd->load(infile.val, "LootManager dropping loot");
 			}
 			else if (infile.key == "drop_max") {

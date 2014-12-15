@@ -966,7 +966,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 
 	// @ATTR power.visible_requires_status|string|Hide the power if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell.back().visible_requires_status.push_back(infile.val);
-	// @ATTR power.visible_requires_status|string|Hide the power if we have this campaign status.
+	// @ATTR power.visible_requires_not_status|string|Hide the power if we have this campaign status.
 	else if (infile.key == "visible_requires_not_status") power_cell.back().visible_requires_not.push_back(infile.val);
 
 	// @ATTR power.upgrades|id (integer), ...|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.

@@ -122,7 +122,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->center.y = evnt->hotspot.y + (float)evnt->hotspot.h/2;
 	}
 	else if (infile.key == "cooldown") {
-		// @ATTR event.cooldown|duration|Duration for event cooldown.
+		// @ATTR event.cooldown|duration|Duration for event cooldown in 'ms' or 's'.
 		evnt->cooldown = parse_duration(infile.val);
 	}
 	else if (infile.key == "reachable_from") {
@@ -211,7 +211,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "soundfx") {
-		// @ATTR event.soundfx|[soundfile(string),x(integer),y(integer)]|Play a sound at optional location
+		// @ATTR event.soundfx|[soundfile(string),x(integer),y(integer)]|Filename of a sound to play at an optional location
 		e->s = infile.nextValue();
 		e->x = e->y = -1;
 
@@ -223,7 +223,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 
 	}
 	else if (infile.key == "loot") {
-		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event
+		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event; either a filename or an inline definition.
 		loot->parseLoot(infile, e, &evnt->components);
 	}
 	else if (infile.key == "msg") {
@@ -231,7 +231,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = msg->get(infile.val);
 	}
 	else if (infile.key == "shakycam") {
-		// @ATTR event.shakycam|duration|Makes the camera shake for this duration.
+		// @ATTR event.shakycam|duration|Makes the camera shake for this duration in 'ms' or 's'.
 		e->x = parse_duration(infile.val);
 	}
 	else if (infile.key == "requires_status") {
@@ -252,7 +252,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR event.requires_not|string,...|Event requires not list of statuses
+		// @ATTR event.requires_not_status|string,...|Event requires not list of statuses
 		e->s = infile.nextValue();
 
 		// add repeating requires_not
@@ -382,7 +382,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->x = toInt(infile.val);
 	}
 	else if (infile.key == "spawn") {
-		// @ATTR event.spawn|[string,x(integer),y(integer)], ...|Spawn specified enemies at location
+		// @ATTR event.spawn|[string,x(integer),y(integer)], ...|Spawn an enemy from this category at location
 		e->s = infile.nextValue();
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.nextValue());
@@ -416,7 +416,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = infile.val;
 	}
 	else if (infile.key == "cutscene") {
-		// @ATTR event.cutscene|string|Show specified cutscene.
+		// @ATTR event.cutscene|string|Show specified cutscene by filename.
 		e->s = infile.val;
 	}
 	else if (infile.key == "repeat") {

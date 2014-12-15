@@ -507,7 +507,7 @@ void loadMiscSettings() {
 			// @ATTR save_hpmp|boolean|When saving the game, keep the hero's current HP and MP.
 			if (infile.key == "save_hpmp")
 				SAVE_HPMP = toBool(infile.val);
-			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map.
+			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map in 'ms' or 's'.
 			else if (infile.key == "corpse_timeout")
 				CORPSE_TIMEOUT = parse_duration(infile.val);
 			// @ATTR sell_without_vendor|boolean|Allows selling items when not at a vendor via CTRL-Click.
@@ -566,7 +566,7 @@ void loadMiscSettings() {
 			// @ATTR menu_frame_width|integer|Width of frame for New Game, Configuration, etc. menus.
 			if (infile.key == "menu_frame_width")
 				FRAME_W = toInt(infile.val);
-			// @ATTR menu_frame_width|integer|Height of frame for New Game, Configuration, etc. menus.
+			// @ATTR menu_frame_height|integer|Height of frame for New Game, Configuration, etc. menus.
 			else if (infile.key == "menu_frame_height")
 				FRAME_H = toInt(infile.val);
 			// @ATTR icon_size|integer|Size of icons.
@@ -578,7 +578,7 @@ void loadMiscSettings() {
 				if (VIEW_W < MIN_VIEW_W) VIEW_W = MIN_VIEW_W;
 				VIEW_W_HALF = VIEW_W/2;
 			}
-			// @ATTR required_width|integer|Minimum window/screen resolution height.
+			// @ATTR required_height|integer|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
 				MIN_VIEW_H = toInt(infile.val);
 				if (VIEW_H < MIN_VIEW_H) VIEW_H = MIN_VIEW_H;
@@ -632,7 +632,7 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			// @ATTR name|string|An identifier for this element.
 			if (infile.key == "name") e.name = infile.val;
-			// @ATTR dscription|string|The displayed name of this element.
+			// @ATTR description|string|The displayed name of this element.
 			else if (infile.key == "description") e.description = infile.val;
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
@@ -653,7 +653,7 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			// @ATTR name|string|An identifier for this equip flag.
 			if (infile.key == "name") type = infile.val;
-			// @ATTR dscription|string|The displayed name of this equip flag.
+			// @ATTR description|string|The displayed name of this equip flag.
 			else if (infile.key == "description") description = infile.val;
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());

@@ -256,14 +256,14 @@ void ItemManager::loadItems() {
 			items[id].bonus_val.push_back(toInt(infile.nextValue()));
 		}
 		else if (infile.key == "soundfx") {
-			// @ATTR soundfx|string|Sound effect for the specific item.
+			// @ATTR soundfx|string|Sound effect filename to play for the specific item.
 			items[id].sfx = snd->load(infile.val, "ItemManager");
 		}
 		else if (infile.key == "gfx")
-			// @ATTR gfx|string|Graphics for the specific item.
+			// @ATTR gfx|string|Filename of an animation set to display when the item is equipped.
 			items[id].gfx = infile.val;
 		else if (infile.key == "loot_animation") {
-			// @ATTR loot_animation|filename (string), min quantity (int), max quantity (int)|Specifies the loot animation for the item. The max quantity, or both quantity values, may be omitted.
+			// @ATTR loot_animation|filename (string), min quantity (int), max quantity (int)|Specifies the loot animation file for the item. The max quantity, or both quantity values, may be omitted.
 			if (clear_loot_anim) {
 				items[id].loot_animation.clear();
 				clear_loot_anim = false;
@@ -297,17 +297,11 @@ void ItemManager::loadItems() {
 			// @ATTR price|integer|The amount of currency the item costs, if set to 0 the item cannot be sold.
 			items[id].price = toInt(infile.val);
 		else if (infile.key == "price_sell")
-			// @ATTR sell_price|integer|The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.
+			// @ATTR price_sell|integer|The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.
 			items[id].price_sell = toInt(infile.val);
 		else if (infile.key == "max_quantity")
 			// @ATTR max_quantity|integer|Max item count per stack.
 			items[id].max_quantity = toInt(infile.val);
-		else if (infile.key == "rand_loot")
-			// @ATTR rand_loot|integer|Max amount appearing in loot stack.
-			items[id].rand_loot = toInt(infile.val);
-		else if (infile.key == "rand_vendor")
-			// @ATTR rand_vendor|integer|Max amount appearing in vendor stack.
-			items[id].rand_vendor = toInt(infile.val);
 		else if (infile.key == "pickup_status")
 			// @ATTR pickup_status|string|Set a campaign status when item is picked up, this is used for quest items.
 			items[id].pickup_status = infile.val;
