@@ -121,24 +121,39 @@ void EffectManager::logic() {
 	clearStatus();
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
+		// @CLASS EffectManager|Description of "type" in powers/effects.txt
 		// expire timed effects and total up magnitudes of active effects
 		if (effect_list[i].duration >= 0) {
+			// @TYPE damage|Damage per second
 			if (effect_list[i].type == "damage" && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage += effect_list[i].magnitude;
+			// @TYPE hpot|HP restored per second
 			else if (effect_list[i].type == "hpot" && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot += effect_list[i].magnitude;
+			// @TYPE mpot|MP restored per second
 			else if (effect_list[i].type == "mpot" && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot += effect_list[i].magnitude;
+			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
 			else if (effect_list[i].type == "speed") speed = (effect_list[i].magnitude * speed) / 100;
+			// @TYPE immunity|Removes and prevents bleed, slow, stun, and immobilize. Magnitude is ignored.
 			else if (effect_list[i].type == "immunity") immunity = true;
+			// @TYPE stun|Can't move or attack. Being attacked breaks stun.
 			else if (effect_list[i].type == "stun") stun = true;
+			// @TYPE revive|Revives the player. Typically attached to a power that triggers when the player dies.
 			else if (effect_list[i].type == "revive") revive = true;
+			// @TYPE convert|Causes an enemy or an ally to switch allegiance
 			else if (effect_list[i].type == "convert") convert = true;
+			// @TYPE fear|Causes enemies to run away
 			else if (effect_list[i].type == "fear") fear = true;
+			// @TYPE offense|Increase Offense stat.
 			else if (effect_list[i].type == "offense") bonus_offense += effect_list[i].magnitude;
+			// @TYPE defense|Increase Defense stat.
 			else if (effect_list[i].type == "defense") bonus_defense += effect_list[i].magnitude;
+			// @TYPE physical|Increase Physical stat.
 			else if (effect_list[i].type == "physical") bonus_physical += effect_list[i].magnitude;
+			// @TYPE mental|Increase Mental stat.
 			else if (effect_list[i].type == "mental") bonus_mental += effect_list[i].magnitude;
 			else {
 				bool found_key = false;
 
+				// @TYPE $STATNAME|Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_melee_min, xp_gain
 				for (unsigned j=0; j<STAT_COUNT; j++) {
 					if (effect_list[i].type == STAT_NAME[j]) {
 						bonus[j] += effect_list[i].magnitude;
@@ -147,6 +162,7 @@ void EffectManager::logic() {
 				}
 
 				if (!found_key) {
+					// @TYPE $ELEMENT_resist|Increase Resistance % to $ELEMENT, where $ELEMENT is any found in engine/elements.txt. Example: fire_resist
 					for (unsigned j=0; j<bonus_resist.size(); j++) {
 						if (effect_list[i].type == ELEMENTS[j].name + "_resist")
 							bonus_resist[j] += effect_list[i].magnitude;
@@ -158,6 +174,7 @@ void EffectManager::logic() {
 				if (effect_list[i].ticks > 0) effect_list[i].ticks--;
 				if (effect_list[i].ticks == 0) {
 					//death sentence is only applied at the end of the timer
+					// @TYPE death_sentence|Causes sudden death at the end of the effect duration.
 					if (effect_list[i].type == "death_sentence") death_sentence = true;
 					removeEffect(i);
 					i--;
@@ -167,6 +184,7 @@ void EffectManager::logic() {
 		}
 		// expire shield effects
 		if (effect_list[i].magnitude_max > 0 && effect_list[i].magnitude == 0) {
+			// @TYPE shield|Create a damage absorbing barrier based on Mental damage stat. Duration is ignored.
 			if (effect_list[i].type == "shield") {
 				removeEffect(i);
 				i--;
@@ -175,6 +193,7 @@ void EffectManager::logic() {
 		}
 		// expire effects based on animations
 		if ((effect_list[i].animation && effect_list[i].animation->isLastFrame()) || !effect_list[i].animation) {
+			// @TYPE heal|Restore HP based on Mental damage stat.
 			if (effect_list[i].type == "heal") {
 				removeEffect(i);
 				i--;
