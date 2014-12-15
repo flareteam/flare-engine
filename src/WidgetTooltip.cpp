@@ -28,8 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Utils.h"
 #include "UtilsParsing.h"
 
-using namespace std;
-
 int TOOLTIP_CONTEXT = TOOLTIP_NONE;
 
 WidgetTooltip::WidgetTooltip()
@@ -130,7 +128,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	}
 
 	// concat multi-line tooltip, used in determining total display size
-	string fulltext;
+	std::string fulltext;
 	fulltext = tip.lines[0];
 	for (unsigned int i=1; i<tip.lines.size(); i++) {
 		fulltext = fulltext + "\n" + tip.lines[i];

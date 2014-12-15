@@ -26,8 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetTooltip.h"
 
-using namespace std;
-
 WidgetButton::WidgetButton(const std::string& _fileName)
 	: Widget()
 	, fileName(_fileName)

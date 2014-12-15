@@ -31,9 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "SharedGameResources.h"
 
-using namespace std;
-
-
 MenuStash::MenuStash(StatBlock *_stats)
 	: Menu()
 	, stats(_stats)
@@ -68,11 +65,11 @@ MenuStash::MenuStash(StatBlock *_stats)
 			}
 			// @ATTR stash_cols|integer|The number of columns for the grid of slots.
 			else if (infile.key == "stash_cols") {
-				slots_cols = max(1, toInt(infile.val));
+				slots_cols = std::max(1, toInt(infile.val));
 			}
 			// @ATTR stash_rows|integer|The number of rows for the grid of slots.
 			else if (infile.key == "stash_rows") {
-				slots_rows = max(1, toInt(infile.val));
+				slots_rows = std::max(1, toInt(infile.val));
 			}
 			// @ATTR label_title|label|Position of the "Stash" label.
 			else if (infile.key == "label_title") {

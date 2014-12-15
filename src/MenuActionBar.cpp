@@ -39,8 +39,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <climits>
 
-using namespace std;
-
 MenuActionBar::MenuActionBar(Avatar *_hero)
 	: emptyslot(NULL)
 	, disabled(NULL)

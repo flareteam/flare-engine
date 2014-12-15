@@ -47,7 +47,7 @@ MenuDevHUD::MenuDevHUD() : Menu() {
 }
 
 void MenuDevHUD::alignElements() {
-	stringstream ss;
+	std::stringstream ss;
 	int line_width = 0;
 	int line_height = font->getLineHeight();
 

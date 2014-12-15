@@ -25,8 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLog.h"
 #include "WidgetScrollBox.h"
 
-using namespace std;
-
 WidgetLog::WidgetLog (int width, int height)
 	: scroll_box(new WidgetScrollBox(width, height))
 	, padding(4)

@@ -23,8 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits.h>
 
-using namespace std;
-
 Mod::Mod()
 	: name("")
 	, description("")
@@ -63,7 +61,7 @@ ModManager::ModManager() {
 	mod_list.clear();
 	setPaths();
 
-	vector<string> mod_dirs_other;
+	std::vector<std::string> mod_dirs_other;
 	getDirList(PATH_DATA + "mods", mod_dirs_other);
 	getDirList(PATH_USER + "mods", mod_dirs_other);
 
@@ -87,9 +85,9 @@ ModManager::ModManager() {
  * Later mods override previous mods
  */
 void ModManager::loadModList() {
-	ifstream infile;
-	string line;
-	string starts_with;
+	std::ifstream infile;
+	std::string line;
+	std::string starts_with;
 	bool found_any_mod = false;
 
 	// Add the fallback mod by default
@@ -100,14 +98,14 @@ void ModManager::loadModList() {
 	}
 
 	// Add all other mods.
-	string place1 = PATH_CONF + "mods.txt";
-	string place2 = PATH_DATA + "mods/mods.txt";
+	std::string place1 = PATH_CONF + "mods.txt";
+	std::string place2 = PATH_DATA + "mods/mods.txt";
 
-	infile.open(place1.c_str(), ios::in);
+	infile.open(place1.c_str(), std::ios::in);
 
 	if (!infile.is_open()) {
 		infile.clear();
-		infile.open(place2.c_str(), ios::in);
+		infile.open(place2.c_str(), std::ios::in);
 	}
 	if (!infile.is_open()) {
 		logError("ModManager: Error during loadModList() -- couldn't open mods.txt, to be located at \n");
@@ -149,14 +147,14 @@ void ModManager::loadModList() {
  * Find the location (mod file name) for this data file.
  * Use private loc_cache to prevent excessive disk I/O
  */
-string ModManager::locate(const string& filename) {
+std::string ModManager::locate(const std::string& filename) {
 	// if we have this location already cached, return it
 	if (loc_cache.find(filename) != loc_cache.end()) {
 		return loc_cache[filename];
 	}
 
 	// search through mods for the first instance of this filename
-	string test_path;
+	std::string test_path;
 
 	for (unsigned int i = mod_list.size(); i > 0; i--) {
 		for (unsigned int j = 0; j < mod_paths.size(); j++) {
@@ -172,7 +170,7 @@ string ModManager::locate(const string& filename) {
 	return PATH_DATA + filename;
 }
 
-void amendPathToVector(const string &path, std::vector<std::string> &vec) {
+void amendPathToVector(const std::string &path, std::vector<std::string> &vec) {
 	if (pathExists(path)) {
 		if (isDirectory(path)) {
 			getFileList(path, "txt", vec);
@@ -183,9 +181,9 @@ void amendPathToVector(const string &path, std::vector<std::string> &vec) {
 	}
 }
 
-vector<string> ModManager::list(const string &path, bool full_paths) {
-	vector<string> ret;
-	string test_path;
+std::vector<std::string> ModManager::list(const std::string &path, bool full_paths) {
+	std::vector<std::string> ret;
+	std::string test_path;
 
 	for (unsigned int i = 0; i < mod_list.size(); ++i) {
 		for (unsigned int j = mod_paths.size(); j > 0; j--) {
@@ -227,14 +225,14 @@ void ModManager::setPaths() {
 
 Mod ModManager::loadMod(std::string name) {
 	Mod mod;
-	ifstream infile;
+	std::ifstream infile;
 	std::string starts_with, line, key, val;
 
 	mod.name = name;
 
 	for (unsigned i=0; i<mod_paths.size(); ++i) {
 		std::string path = mod_paths[i] + "mods/" + name + "/settings.txt";
-		infile.open(path.c_str(), ios::in);
+		infile.open(path.c_str(), std::ios::in);
 
 		while (infile.good()) {
 			line = getLine(infile);

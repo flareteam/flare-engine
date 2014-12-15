@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "HazardManager.h"
 #include "SharedGameResources.h"
 
-using namespace std;
-
 HazardManager::HazardManager()
 	: last_enemy(NULL) {
 }
@@ -182,7 +180,7 @@ void HazardManager::handleNewMap() {
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-void HazardManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void HazardManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	for (unsigned int i=0; i<h.size(); i++)
 		h[i]->addRenderable(r, r_dead);
 }

@@ -27,9 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetCheckBox.h"
 #include "Widget.h"
 
-using namespace std;
-
-WidgetCheckBox::WidgetCheckBox (const string &fname)
+WidgetCheckBox::WidgetCheckBox (const std::string &fname)
 	: enabled(true)
 	, cb(NULL)
 	, checked(false)

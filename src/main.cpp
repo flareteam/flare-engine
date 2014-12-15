@@ -23,8 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 #include <ctime>
 
-using namespace std;
-
 #include "Settings.h"
 #include "Stats.h"
 #include "GameSwitcher.h"
@@ -211,8 +209,8 @@ static void cleanup() {
 	SDL_Quit();
 }
 
-string parseArg(const string &arg) {
-	string result = "";
+std::string parseArg(const std::string &arg) {
+	std::string result = "";
 
 	// arguments must start with '--'
 	if (arg.length() > 2 && arg[0] == '-' && arg[1] == '-') {
@@ -225,8 +223,8 @@ string parseArg(const string &arg) {
 	return result;
 }
 
-string parseArgValue(const string &arg) {
-	string result = "";
+std::string parseArgValue(const std::string &arg) {
+	std::string result = "";
 	bool found_equals = false;
 
 	for (unsigned i = 0; i < arg.length(); ++i) {
@@ -245,7 +243,7 @@ int main(int argc, char *argv[]) {
 	std::string render_device_name = "";
 
 	for (int i = 1 ; i < argc; i++) {
-		string arg = string(argv[i]);
+		std::string arg = std::string(argv[i]);
 		if (parseArg(arg) == "debug-event") {
 			debug_event = true;
 		}

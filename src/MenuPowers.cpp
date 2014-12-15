@@ -37,8 +37,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <climits>
 
-using namespace std;
-
 MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	: stats(_stats)
 	, action_bar(_action_bar)
@@ -248,10 +246,10 @@ short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Me
 void MenuPowers::applyPowerUpgrades() {
 	for (unsigned i = 0; i < power_cell.size(); i++) {
 		if (!power_cell[i].upgrades.empty()) {
-			vector<short>::iterator it;
+			std::vector<short>::iterator it;
 			for (it = power_cell[i].upgrades.end(); it != power_cell[i].upgrades.begin(); ) {
 				--it;
-				vector<int>::iterator upgrade_it;
+				std::vector<int>::iterator upgrade_it;
 				upgrade_it = find(stats->powers_list.begin(), stats->powers_list.end(), *it);
 				if (upgrade_it != stats->powers_list.end()) {
 					short upgrade_index = id_by_powerIndex(*upgrade_it, power_cell_upgrade);
@@ -272,7 +270,7 @@ short MenuPowers::nextLevel(short power_cell_index) {
 		return -1;
 	}
 
-	vector<short>::iterator level_it;
+	std::vector<short>::iterator level_it;
 	level_it = find(power_cell[power_cell_index].upgrades.begin(),
 					power_cell[power_cell_index].upgrades.end(),
 					power_cell[power_cell_index].id);
@@ -500,7 +498,7 @@ void MenuPowers::logic() {
 	for (unsigned i=0; i<power_cell.size(); i++) {
 		if ((unsigned)power_cell[i].id < powers->powers.size() && powers->powers[power_cell[i].id].passive) {
 			bool unlocked_power = find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
-			vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
+			std::vector<int>::iterator it = find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
 			if (it != stats->powers_passive.end()) {
 				if (!baseRequirementsMet(power_cell[i].id) && power_cell[i].passive_on) {
 					stats->powers_passive.erase(it);
@@ -621,7 +619,7 @@ void MenuPowers::render() {
 
 	// stats
 	if (!unspent_points.hidden) {
-		stringstream ss;
+		std::stringstream ss;
 
 		ss.str("");
 		if (points_left !=0) {
@@ -682,7 +680,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 	return tip;
 }
 
-void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const vector<Power_Menu_Cell>& power_cells) {
+void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells) {
 	tip->addText(powers->powers[power_cells[slot_num].id].name);
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
 	tip->addText(powers->powers[power_cells[slot_num].id].description);
@@ -974,7 +972,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 	// @ATTR power.upgrades|id (integer), ...|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.
 	else if (infile.key == "upgrades") {
 		upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
-		string repeat_val = infile.nextValue();
+		std::string repeat_val = infile.nextValue();
 		while (repeat_val != "") {
 			power_cell.back().upgrades.push_back(toInt(repeat_val));
 			repeat_val = infile.nextValue();

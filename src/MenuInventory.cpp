@@ -34,8 +34,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 
-using namespace std;
-
 MenuInventory::MenuInventory(StatBlock *_stats) {
 	stats = _stats;
 	MAX_EQUIPPED = 4;
@@ -83,9 +81,9 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 				carried_area.y = popFirstInt(infile.val);
 			}
 			// @ATTR carried_cols|integer|The number of columns for the normal inventory.
-			else if (infile.key == "carried_cols") carried_cols = max(1, toInt(infile.val));
+			else if (infile.key == "carried_cols") carried_cols = std::max(1, toInt(infile.val));
 			// @ATTR carried_rows|integer|The number of rows for the normal inventory.
-			else if (infile.key == "carried_rows") carried_rows = max(1, toInt(infile.val));
+			else if (infile.key == "carried_rows") carried_rows = std::max(1, toInt(infile.val));
 			// @ATTR label_title|label|Position of the "Inventory" label.
 			else if (infile.key == "label_title") title =  eatLabelInfo(infile.val);
 			// @ATTR currency|label|Position of the label that displays the total currency being carried.
@@ -739,7 +737,7 @@ void MenuInventory::updateEquipment(int slot) {
  */
 void MenuInventory::applyEquipment(ItemStack *equipped) {
 
-	const vector<Item> &pc_items = items->items;
+	const std::vector<Item> &pc_items = items->items;
 	int item_id;
 
 	// calculate bonuses to basic stats, added by items
@@ -771,9 +769,9 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		}
 
 		// calculate bonuses. added by item sets
-		vector<int> set;
-		vector<int> quantity;
-		vector<int>::iterator it;
+		std::vector<int> set;
+		std::vector<int> quantity;
+		std::vector<int>::iterator it;
 
 		for (int i=0; i<MAX_EQUIPPED; i++) {
 			item_id = equipped[i].item;
@@ -858,7 +856,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 }
 
 void MenuInventory::applyItemStats(ItemStack *equipped) {
-	const vector<Item> &pc_items = items->items;
+	const std::vector<Item> &pc_items = items->items;
 
 	// reset additional values
 	stats->dmg_melee_min_add = stats->dmg_melee_max_add = 0;
@@ -911,9 +909,9 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 
 void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 	// calculate bonuses. added by item sets
-	vector<int> set;
-	vector<int> quantity;
-	vector<int>::iterator it;
+	std::vector<int> set;
+	std::vector<int> quantity;
+	std::vector<int>::iterator it;
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
 		int item_id = equipped[i].item;

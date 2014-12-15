@@ -32,8 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ITEM_SPACING 2
 #define MENU_BORDER 8
 
-using namespace std;
-
 class Action {
 public:
 	Action(std::string _id = "", std::string _label = "")
@@ -118,7 +116,7 @@ void MenuNPCActions::update() {
 	for(size_t i=0; i<npc_actions.size(); i++) {
 		h += ITEM_SPACING;
 		if (npc_actions[i].label) {
-			w = max((int)npc_actions[i].label->bounds.w, w);
+			w = std::max((int)npc_actions[i].label->bounds.w, w);
 			h += npc_actions[i].label->bounds.h;
 		}
 		else
@@ -236,7 +234,7 @@ void MenuNPCActions::setNPC(NPC *pnpc) {
 		if (topic.length() == 0)
 			continue;
 
-		stringstream ss;
+		std::stringstream ss;
 		ss.str("");
 		ss << "id_dialog_" << nodes[i];
 

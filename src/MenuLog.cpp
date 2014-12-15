@@ -30,9 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLog.h"
 #include "WidgetTabControl.h"
 
-using namespace std;
-
-
 MenuLog::MenuLog() {
 	visible = false;
 
@@ -150,7 +147,7 @@ void MenuLog::render() {
 /**
  * Add a new message to the log.
  */
-void MenuLog::add(const string& s, int log_type, bool prevent_spam) {
+void MenuLog::add(const std::string& s, int log_type, bool prevent_spam) {
 	log[log_type]->add(s, prevent_spam);
 }
 

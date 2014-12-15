@@ -32,8 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <math.h>
 
-using namespace std;
-
 InputState::InputState(void)
 	: done(false)
 	, mouse()
@@ -208,8 +206,8 @@ void InputState::loadKeyBindings() {
  * Write current key bindings to config file
  */
 void InputState::saveKeyBindings() {
-	ofstream outfile;
-	outfile.open((PATH_CONF + FILE_KEYBINDINGS).c_str(), ios::out);
+	std::ofstream outfile;
+	outfile.open((PATH_CONF + FILE_KEYBINDINGS).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
@@ -278,7 +276,7 @@ void InputState::handle(bool dump_event) {
 	while (SDL_PollEvent (&event)) {
 
 		if (dump_event) {
-			cout << event << endl;
+			std::cout << event << std::endl;
 		}
 
 		// grab symbol keys

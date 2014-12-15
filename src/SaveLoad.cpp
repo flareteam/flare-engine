@@ -44,8 +44,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 
-using namespace std;
-
 /**
  * Before exiting the game, save to file
  */
@@ -58,16 +56,16 @@ void GameStatePlay::saveGame() {
 	menu->inv->inventory[EQUIPMENT].clean();
 	menu->inv->inventory[CARRIED].clean();
 
-	ofstream outfile;
+	std::ofstream outfile;
 
-	stringstream ss;
+	std::stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
 	if (SAVE_PREFIX.length() > 0)
 		ss << SAVE_PREFIX << "_";
 	ss << "save" << game_slot << ".txt";
 
-	outfile.open(ss.str().c_str(), ios::out);
+	outfile.open(ss.str().c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
@@ -147,7 +145,7 @@ void GameStatePlay::saveGame() {
 		outfile << "campaign=";
 		outfile << camp->getAll();
 
-		outfile << endl;
+		outfile << std::endl;
 
 		if (outfile.bad()) logError("SaveLoad: Unable to save the game. No write access or disk is full!\n");
 		outfile.close();
@@ -164,7 +162,7 @@ void GameStatePlay::saveGame() {
 		ss << "_HC" << game_slot;
 	ss << ".txt";
 
-	outfile.open(ss.str().c_str(), ios::out);
+	outfile.open(ss.str().c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
@@ -174,7 +172,7 @@ void GameStatePlay::saveGame() {
 		outfile << "quantity=" << menu->stash->stock.getQuantities() << "\n";
 		outfile << "item=" << menu->stash->stock.getItems() << "\n";
 
-		outfile << endl;
+		outfile << std::endl;
 
 		if (outfile.bad()) logError("SaveLoad: Unable to save stash. No write access or disk is full!\n");
 		outfile.close();
@@ -204,7 +202,7 @@ void GameStatePlay::loadGame() {
 		hotkeys[i] = -1;
 	}
 
-	stringstream ss;
+	std::stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
 	if (SAVE_PREFIX.length() > 0)
@@ -308,7 +306,7 @@ void GameStatePlay::loadGame() {
 				}
 			}
 			else if (infile.key == "powers") {
-				string power;
+				std::string power;
 				while ( (power = infile.nextValue()) != "") {
 					if (toInt(power) > 0)
 						pc->stats.powers_list.push_back(toInt(power));
@@ -386,7 +384,7 @@ void GameStatePlay::loadClass(int index) {
 void GameStatePlay::loadStash() {
 	// Load stash
 	FileParser infile;
-	stringstream ss;
+	std::stringstream ss;
 	ss.str("");
 	ss << PATH_USER;
 	if (SAVE_PREFIX.length() > 0)

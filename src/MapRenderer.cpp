@@ -35,8 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits>
 #include <math.h>
 
-using namespace std;
-
 MapRenderer::MapRenderer()
 	: Map()
 	, music(NULL)
@@ -243,7 +241,7 @@ void MapRenderer::logic() {
 	tset.logic();
 
 	// handle event cooldowns
-	vector<Event>::iterator it;
+	std::vector<Event>::iterator it;
 	for (it = events.begin(); it < events.end(); ++it) {
 		if ((*it).cooldown_ticks > 0) (*it).cooldown_ticks--;
 	}
@@ -258,8 +256,8 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  * Sort in the same order as the tiles are drawn
  * Depends upon the map implementation
  */
-void calculatePriosIso(vector<Renderable> &r) {
-	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
+void calculatePriosIso(std::vector<Renderable> &r) {
+	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
 		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
 		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
 		const int commax = (const int)((float)(it->map_pos.x - tilex) * (2<<16));
@@ -268,8 +266,8 @@ void calculatePriosIso(vector<Renderable> &r) {
 	}
 }
 
-void calculatePriosOrtho(vector<Renderable> &r) {
-	for (vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
+void calculatePriosOrtho(std::vector<Renderable> &r) {
+	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
 		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
 		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
 		const int commay = (const int)(1024 * it->map_pos.y);
@@ -277,7 +275,7 @@ void calculatePriosOrtho(vector<Renderable> &r) {
 	}
 }
 
-void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 
 	if (shaky_cam_ticks == 0) {
 		shakycam.x = cam.x;
@@ -304,7 +302,7 @@ void MapRenderer::render(vector<Renderable> &r, vector<Renderable> &r_dead) {
 	}
 }
 
-void MapRenderer::drawRenderable(vector<Renderable>::iterator r_cursor) {
+void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
 	if (r_cursor->image != NULL) {
 		Rect dest;
 		Point p = map_to_screen(r_cursor->map_pos.x, r_cursor->map_pos.y, shakycam.x, shakycam.y);
@@ -376,21 +374,21 @@ void MapRenderer::renderIsoLayer(const unsigned short layerdata[256][256]) {
 	}
 }
 
-void MapRenderer::renderIsoBackObjects(vector<Renderable> &r) {
-	vector<Renderable>::iterator it;
+void MapRenderer::renderIsoBackObjects(std::vector<Renderable> &r) {
+	std::vector<Renderable>::iterator it;
 	for (it = r.begin(); it != r.end(); ++it)
 		drawRenderable(it);
 }
 
-void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
+void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Rect dest;
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
 	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
 
-	vector<Renderable>::iterator r_cursor = r.begin();
-	vector<Renderable>::iterator r_end = r.end();
+	std::vector<Renderable>::iterator r_cursor = r.begin();
+	std::vector<Renderable>::iterator r_end = r.end();
 
 	// object layer
 	int_fast16_t j = upperleft.y - tset.max_size_y + tset.max_size_x;
@@ -454,7 +452,7 @@ void MapRenderer::renderIsoFrontObjects(vector<Renderable> &r) {
 	}
 }
 
-void MapRenderer::renderIso(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	size_t index = 0;
 	while (index < index_objectlayer)
 		renderIsoLayer(layers[index++]);
@@ -473,10 +471,10 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
-	short int startj = max(0, upperleft.y);
-	short int starti = max(0, upperleft.x);
-	const short max_tiles_width =  min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
-	const short max_tiles_height = min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
+	short int startj = std::max(0, upperleft.y);
+	short int starti = std::max(0, upperleft.x);
+	const short max_tiles_width =  std::min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
+	const short max_tiles_height = std::min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
 	short int i;
 	short int j;
@@ -500,7 +498,7 @@ void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
 
 void MapRenderer::renderOrthoBackObjects(std::vector<Renderable> &r) {
 	// some renderables are drawn above the background and below the objects
-	vector<Renderable>::iterator it;
+	std::vector<Renderable>::iterator it;
 	for (it = r.begin(); it != r.end(); ++it)
 		drawRenderable(it);
 }
@@ -510,15 +508,15 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	short int i;
 	short int j;
 	Rect dest;
-	vector<Renderable>::iterator r_cursor = r.begin();
-	vector<Renderable>::iterator r_end = r.end();
+	std::vector<Renderable>::iterator r_cursor = r.begin();
+	std::vector<Renderable>::iterator r_end = r.end();
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
-	short int startj = max(0, upperleft.y);
-	short int starti = max(0, upperleft.x);
-	const short max_tiles_width  = min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
-	const short max_tiles_height = min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
+	short int startj = std::max(0, upperleft.y);
+	short int starti = std::max(0, upperleft.x);
+	const short max_tiles_width  = std::min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
+	const short max_tiles_height = std::min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
 	while (r_cursor != r_end && (int)(r_cursor->map_pos.y) < startj)
 		++r_cursor;
@@ -552,7 +550,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	}
 }
 
-void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead) {
+void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	unsigned index = 0;
 	while (index < index_objectlayer)
 		renderOrthoLayer(layers[index++]);
@@ -568,7 +566,7 @@ void MapRenderer::renderOrtho(vector<Renderable> &r, vector<Renderable> &r_dead)
 }
 
 void MapRenderer::executeOnLoadEvents() {
-	vector<Event>::iterator it;
+	std::vector<Event>::iterator it;
 
 	// loop in reverse because we may erase elements
 	for (it = events.end(); it != events.begin(); ) {
@@ -585,7 +583,7 @@ void MapRenderer::executeOnLoadEvents() {
 }
 
 void MapRenderer::executeOnMapExitEvents() {
-	vector<Event>::iterator it;
+	std::vector<Event>::iterator it;
 
 	// We're leaving the map, so the events of this map are removed anyway in
 	// the next frame (Reminder: We're about to load a new map ;),
@@ -605,7 +603,7 @@ void MapRenderer::checkEvents(FPoint loc) {
 	Point maploc;
 	maploc.x = int(loc.x);
 	maploc.y = int(loc.y);
-	vector<Event>::iterator it;
+	std::vector<Event>::iterator it;
 
 	// loop in reverse because we may erase elements
 	for (it = events.end(); it != events.begin(); ) {
@@ -629,7 +627,7 @@ void MapRenderer::checkEvents(FPoint loc) {
 			if (inside) {
 				if (!(*it).getComponent("wasInsideEventArea")) {
 					(*it).components.push_back(Event_Component());
-					(*it).components.back().type = string("wasInsideEventArea");
+					(*it).components.back().type = std::string("wasInsideEventArea");
 				}
 			}
 			else {
@@ -662,7 +660,7 @@ void MapRenderer::checkHotspots() {
 
 	show_tooltip = false;
 
-	vector<Event>::iterator it;
+	std::vector<Event>::iterator it;
 
 	// work backwards through events because events can be erased in the loop.
 	// this prevents the iterator from becoming invalid.
@@ -733,8 +731,8 @@ void MapRenderer::checkHotspots() {
 void MapRenderer::checkNearestEvent() {
 	if (NO_MOUSE) show_tooltip = false;
 
-	vector<Event>::iterator it;
-	vector<Event>::iterator nearest = events.end();
+	std::vector<Event>::iterator it;
+	std::vector<Event>::iterator nearest = events.end();
 	float best_distance = std::numeric_limits<float>::max();
 
 	// loop in reverse because we may erase elements

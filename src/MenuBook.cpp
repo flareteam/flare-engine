@@ -30,8 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <climits>
 
-using namespace std;
-
 MenuBook::MenuBook()
 	: book_name("")
 	, book_loaded(false) {

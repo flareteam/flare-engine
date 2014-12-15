@@ -28,8 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsParsing.h"
 
-using namespace std;
-
 FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), ttfont(NULL), line_height(0), font_height(0) {
 }
 
@@ -97,8 +95,8 @@ FontEngine::FontEngine()
 	}
 }
 
-Color FontEngine::getColor(string _color) {
-	map<string,Color>::iterator it,end;
+Color FontEngine::getColor(std::string _color) {
+	std::map<std::string,Color>::iterator it,end;
 	for (it=color_map.begin(), end=color_map.end(); it!=end; ++it) {
 		if (_color.compare(it->first) == 0) return it->second;
 	}
@@ -106,7 +104,7 @@ Color FontEngine::getColor(string _color) {
 	return FONT_WHITE;
 }
 
-void FontEngine::setFont(string _font) {
+void FontEngine::setFont(std::string _font) {
 	for (unsigned int i=0; i<font_styles.size(); i++) {
 		if (font_styles[i].name == _font) {
 			active_font = &(font_styles[i]);
@@ -130,11 +128,11 @@ int FontEngine::calc_width(const std::string& text) {
 Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	char newline = 10;
 
-	string text = text_with_newlines;
+	std::string text = text_with_newlines;
 
 	// if this contains newlines, recurse
 	size_t check_newline = text.find_first_of(newline);
-	if (check_newline != string::npos) {
+	if (check_newline != std::string::npos) {
 		Point p1 = calc_size(text.substr(0, check_newline), width);
 		Point p2 = calc_size(text.substr(check_newline+1, text.length()), width);
 		Point p3;
@@ -149,19 +147,19 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	int height = 0;
 	int max_width = 0;
 
-	string next_word;
-	stringstream builder;
-	stringstream builder_prev;
+	std::string next_word;
+	std::stringstream builder;
+	std::stringstream builder_prev;
 	char space = 32;
 	size_t cursor = 0;
-	string fulltext = text + " ";
+	std::string fulltext = text + " ";
 
 	builder.str("");
 	builder_prev.str("");
 
 	next_word = getNextToken(fulltext, cursor, space);
 
-	while(cursor != string::npos) {
+	while(cursor != std::string::npos) {
 		builder << next_word;
 
 		if (calc_width(builder.str()) > width) {
@@ -250,11 +248,11 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
  */
 void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, Color color) {
 
-	string fulltext = text + " ";
+	std::string fulltext = text + " ";
 	cursor_y = y;
-	string next_word;
-	stringstream builder;
-	stringstream builder_prev;
+	std::string next_word;
+	std::stringstream builder;
+	std::stringstream builder_prev;
 	char space = 32;
 	size_t cursor = 0;
 
@@ -263,7 +261,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 	next_word = getNextToken(fulltext, cursor, space);
 
-	while(cursor != string::npos) {
+	while(cursor != std::string::npos) {
 
 		builder << next_word;
 

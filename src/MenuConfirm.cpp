@@ -24,10 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 
-using namespace std;
-
-
-MenuConfirm::MenuConfirm(const string& _buttonMsg, const string& _boxMsg)
+MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxMsg)
 	: Menu()
 	, buttonConfirm(NULL)
 	, buttonClose(NULL)

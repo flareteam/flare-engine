@@ -42,8 +42,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits>
 #include <math.h>
 
-using namespace std;
-
 LootManager::LootManager()
 	: sfx_loot(0)
 	, drop_max(1)
@@ -126,7 +124,7 @@ void LootManager::handleNewMap() {
 }
 
 void LootManager::logic() {
-	vector<Loot>::iterator it;
+	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
 
 		// animate flying loot
@@ -162,7 +160,7 @@ void LootManager::logic() {
 void LootManager::renderTooltips(FPoint cam) {
 	Point dest;
 
-	vector<Loot>::iterator it;
+	std::vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
 
@@ -416,7 +414,7 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 		// I'm starting at the end of the loot list so that more recently-dropped
 		// loot is picked up first.  If a player drops several loot in the same
 		// location, picking it back up will work like a stack.
-		vector<Loot>::iterator it;
+		std::vector<Loot>::iterator it;
 		for (it = loot.end(); it != loot.begin(); ) {
 			--it;
 
@@ -468,7 +466,7 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
 	ItemStack loot_stack;
 
-	vector<Loot>::iterator it;
+	std::vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
 		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
@@ -489,8 +487,8 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 
 	float best_distance = std::numeric_limits<float>::max();
 
-	vector<Loot>::iterator it;
-	vector<Loot>::iterator nearest = loot.end();
+	std::vector<Loot>::iterator it;
+	std::vector<Loot>::iterator nearest = loot.end();
 
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
@@ -516,8 +514,8 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 	return loot_stack;
 }
 
-void LootManager::addRenders(vector<Renderable> &ren, vector<Renderable> &ren_dead) {
-	vector<Loot>::iterator it;
+void LootManager::addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead) {
+	std::vector<Loot>::iterator it;
 	for (it = loot.begin(); it != loot.end(); ++it) {
 		if (it->animation) {
 			Renderable r = it->animation->getCurrentFrame(0);

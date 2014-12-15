@@ -60,8 +60,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "MenuPowers.h"
 
-using namespace std;
-
 const int MENU_ENEMY_TIMEOUT = MAX_FRAMES_PER_SEC * 10;
 
 
@@ -308,7 +306,7 @@ void GameStatePlay::checkTeleport() {
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
-				stringstream filename;
+				std::stringstream filename;
 				filename << PATH_USER;
 				if (SAVE_PREFIX.length() > 0)
 					filename << SAVE_PREFIX << "_";
@@ -317,7 +315,7 @@ void GameStatePlay::checkTeleport() {
 					perror("Error deleting save from path");
 
 				// Remove stash
-				stringstream ss;
+				std::stringstream ss;
 				ss.str("");
 				ss << PATH_USER;
 				if (SAVE_PREFIX.length() > 0)
@@ -527,7 +525,7 @@ void GameStatePlay::checkEquipmentChange() {
 	if (menu->inv->changed_equipment) {
 
 		int feet_index = -1;
-		vector<Layer_gfx> img_gfx;
+		std::vector<Layer_gfx> img_gfx;
 		// load only displayable layers
 		for (unsigned int j=0; j<pc->layer_reference_order.size(); j++) {
 			Layer_gfx gfx;
@@ -1006,8 +1004,8 @@ void GameStatePlay::render() {
 
 	// Create a list of Renderables from all objects not already on the map.
 	// split the list into the beings alive (may move) and dead beings (must not move)
-	vector<Renderable> rens;
-	vector<Renderable> rens_dead;
+	std::vector<Renderable> rens;
+	std::vector<Renderable> rens_dead;
 
 	pc->addRenders(rens, rens_dead);
 

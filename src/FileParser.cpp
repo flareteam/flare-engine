@@ -22,8 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <stdarg.h>
 
-using namespace std;
-
 FileParser::FileParser()
 	: current_index(0)
 	, line("")
@@ -34,7 +32,7 @@ FileParser::FileParser()
 	, val("") {
 }
 
-bool FileParser::open(const string& _filename, bool locateFileName, const string &_errormessage) {
+bool FileParser::open(const std::string& _filename, bool locateFileName, const std::string &_errormessage) {
 	filenames.clear();
 	if (locateFileName) {
 		filenames = mods->list(_filename);
@@ -55,7 +53,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 
 	// Cycle through all filenames from the end, stopping when a file is to overwrite all further files.
 	for (unsigned i=filenames.size(); i>0; i--) {
-		infile.open(filenames[i-1].c_str(), ios::in);
+		infile.open(filenames[i-1].c_str(), std::ios::in);
 		ret = infile.is_open();
 
 		if (ret) {
@@ -73,7 +71,7 @@ bool FileParser::open(const string& _filename, bool locateFileName, const string
 
 				if (test_line != "APPEND") {
 					current_index = i-1;
-					infile.seekg(ios::beg);
+					infile.seekg(std::ios::beg);
 					break;
 				}
 			}
@@ -109,7 +107,7 @@ void FileParser::close() {
  */
 bool FileParser::next() {
 
-	string starts_with;
+	std::string starts_with;
 	new_section = false;
 
 	while (current_index < filenames.size()) {
@@ -150,8 +148,8 @@ bool FileParser::next() {
 		if (current_index == filenames.size()) return false;
 
 		line_number = 0;
-		const string current_filename = filenames[current_index];
-		infile.open(current_filename.c_str(), ios::in);
+		const std::string current_filename = filenames[current_index];
+		infile.open(current_filename.c_str(), std::ios::in);
 		if (!infile.is_open()) {
 			if (!errormessage.empty())
 				logError("FileParser: %s: %s\n", errormessage.c_str(), current_filename.c_str());
@@ -169,7 +167,7 @@ bool FileParser::next() {
 /**
  * Get an unparsed, unfiltered line from the input file
  */
-string FileParser::getRawLine() {
+std::string FileParser::getRawLine() {
 	line = "";
 
 	if (infile.good()) {
@@ -178,17 +176,17 @@ string FileParser::getRawLine() {
 	return line;
 }
 
-string FileParser::nextValue() {
+std::string FileParser::nextValue() {
 	if (val == "") {
 		return ""; // not found
 	}
-	string s;
+	std::string s;
 	size_t seppos = val.find_first_of(',');
 	size_t alt_seppos = val.find_first_of(';');
-	if (alt_seppos != string::npos && alt_seppos < seppos)
+	if (alt_seppos != std::string::npos && alt_seppos < seppos)
 		seppos = alt_seppos; // return the first ',' or ';'
 
-	if (seppos == string::npos) {
+	if (seppos == std::string::npos) {
 		s = val;
 		val = "";
 	}
@@ -207,8 +205,8 @@ void FileParser::error(const char* format, ...) {
 	vsprintf(buffer, format, args);
 	va_end(args);
 
-	stringstream ss;
-	ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer << endl;
+	std::stringstream ss;
+	ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer << std::endl;
 	logError(ss.str().c_str());
 }
 

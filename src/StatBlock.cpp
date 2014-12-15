@@ -35,8 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include <limits>
 
-using namespace std;
-
 StatBlock::StatBlock()
 	: statsLoaded(false)
 	, alive(true)
@@ -252,7 +250,7 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 /**
  * load a statblock, typically for an enemy definition
  */
-void StatBlock::load(const string& filename) {
+void StatBlock::load(const std::string& filename) {
 	// @CLASS StatBlock: Enemies|Description of enemies in enemies/
 	FileParser infile;
 	if (!infile.open(filename))
@@ -403,7 +401,7 @@ void StatBlock::load(const string& filename) {
 		else if (infile.key == "categories") {
 			// @ATTR categories|category (string), ...|Categories that this enemy belongs to.
 			categories.clear();
-			string cat;
+			std::string cat;
 			while ((cat = infile.nextValue()) != "") {
 				categories.push_back(cat);
 			}
@@ -725,7 +723,7 @@ void StatBlock::loadHeroSFX() {
 void StatBlock::removeFromSummons() {
 
 	if(summoner != NULL && !summoner->summons.empty()) {
-		vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
+		std::vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
 
 		if(parent_ref != summoner->summons.end())
 			summoner->summons.erase(parent_ref);
@@ -734,7 +732,7 @@ void StatBlock::removeFromSummons() {
 	}
 
 	if (!summons.empty()) {
-		for (vector<StatBlock*>::iterator it=summons.begin(); it != summons.end(); ++it)
+		for (std::vector<StatBlock*>::iterator it=summons.begin(); it != summons.end(); ++it)
 			(*it)->summoner = NULL;
 
 		summons.clear();

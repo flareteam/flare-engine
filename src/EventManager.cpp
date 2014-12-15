@@ -21,8 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
 
-using namespace std;
-
 /**
  * Class: Event
  */

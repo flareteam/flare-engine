@@ -25,7 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <typeinfo>
 #include <cmath>
 #include <iomanip>
-using namespace std;
 
 #include "CommonIncludes.h"
 #include "FileParser.h"
@@ -46,7 +45,7 @@ using namespace std;
 class ConfigEntry {
 public:
 	const char * name;
-	const type_info * type;
+	const std::type_info * type;
 	const char * default_val;
 	void * storage;
 	const char * comment;
@@ -82,14 +81,14 @@ ConfigEntry config[] = {
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
 // Paths
-string PATH_CONF = "";
-string PATH_USER = "";
-string PATH_DATA = "";
-string CUSTOM_PATH_DATA = "";
+std::string PATH_CONF = "";
+std::string PATH_USER = "";
+std::string PATH_DATA = "";
+std::string CUSTOM_PATH_DATA = "";
 
 // Filenames
-string FILE_SETTINGS	= "settings.txt";
-string FILE_KEYBINDINGS = "keybindings.txt";
+std::string FILE_SETTINGS	= "settings.txt";
+std::string FILE_KEYBINDINGS = "keybindings.txt";
 
 // Tile Settings
 float UNITS_PER_PIXEL_X;
@@ -272,12 +271,12 @@ void setPaths() {
 	// set config path (settings, keybindings)
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
-		PATH_CONF = (string)getenv("XDG_CONFIG_HOME") + "/flare/";
+		PATH_CONF = (std::string)getenv("XDG_CONFIG_HOME") + "/flare/";
 		createDir(PATH_CONF);
 	}
 	// $HOME/.config/flare/
 	else if (getenv("HOME") != NULL) {
-		PATH_CONF = (string)getenv("HOME") + "/.config/";
+		PATH_CONF = (std::string)getenv("HOME") + "/.config/";
 		createDir(PATH_CONF);
 		PATH_CONF += "flare/";
 		createDir(PATH_CONF);
@@ -291,13 +290,13 @@ void setPaths() {
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
 	if (getenv("XDG_DATA_HOME") != NULL) {
-		PATH_USER = (string)getenv("XDG_DATA_HOME") + "/flare/";
+		PATH_USER = (std::string)getenv("XDG_DATA_HOME") + "/flare/";
 		createDir(PATH_USER);
 		createDir(PATH_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
-		PATH_USER = (string)getenv("HOME") + "/.local/";
+		PATH_USER = (std::string)getenv("HOME") + "/.local/";
 		createDir(PATH_USER);
 		PATH_USER += "share/";
 		createDir(PATH_USER);
@@ -339,8 +338,8 @@ void setPaths() {
 	// check $XDG_DATA_DIRS options
 	// a list of directories in preferred order separated by :
 	if (getenv("XDG_DATA_DIRS") != NULL) {
-		string pathlist = (string)getenv("XDG_DATA_DIRS");
-		string pathtest;
+		std::string pathlist = (std::string)getenv("XDG_DATA_DIRS");
+		std::string pathtest;
 		pathtest = popFirstString(pathlist,':');
 		while (pathtest != "") {
 			if (!path_data) {
@@ -648,7 +647,7 @@ void loadMiscSettings() {
 
 	// @CLASS Settings: Equip flags|Description of engine/equip_flags.txt
 	if (infile.open("engine/equip_flags.txt")) {
-		string type,description;
+		std::string type,description;
 		type = description = "";
 
 		while (infile.next()) {
@@ -705,14 +704,14 @@ void loadMiscSettings() {
 				}
 				else if (infile.key == "powers") {
 					// @ATTR powers|power (integer), ...|A list of powers that are unlocked when starting this class.
-					string power;
+					std::string power;
 					while ( (power = infile.nextValue()) != "") {
 						HERO_CLASSES.back().powers.push_back(toInt(power));
 					}
 				}
 				else if (infile.key == "campaign") {
 					// @ATTR campaign|status (string), ...|A list of campaign statuses that are set when starting this class.
-					string status;
+					std::string status;
 					while ( (status = infile.nextValue()) != "") {
 						HERO_CLASSES.back().statuses.push_back(status);
 					}
@@ -792,8 +791,8 @@ bool loadSettings() {
  */
 bool saveSettings() {
 
-	ofstream outfile;
-	outfile.open((PATH_CONF + FILE_SETTINGS).c_str(), ios::out);
+	std::ofstream outfile;
+	outfile.open((PATH_CONF + FILE_SETTINGS).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 

@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <cmath>
 
-using namespace std;
-
 MenuMiniMap::MenuMiniMap()
 	: color_wall(0)
 	, color_obst(0)

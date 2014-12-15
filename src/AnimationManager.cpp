@@ -20,10 +20,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <cassert>
 
-using namespace std;
-
-AnimationSet *AnimationManager::getAnimationSet(const string& filename) {
-	vector<string>::iterator found = find(names.begin(), names.end(), filename);
+AnimationSet *AnimationManager::getAnimationSet(const std::string& filename) {
+	std::vector<std::string>::iterator found = find(names.begin(), names.end(), filename);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		if (sets[index] == 0) {
@@ -56,7 +54,7 @@ AnimationManager::~AnimationManager() {
 }
 
 void AnimationManager::increaseCount(const std::string &name) {
-	vector<string>::iterator found = find(names.begin(), names.end(), name);
+	std::vector<std::string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]++;
@@ -70,7 +68,7 @@ void AnimationManager::increaseCount(const std::string &name) {
 
 void AnimationManager::decreaseCount(const std::string &name) {
 
-	vector<string>::iterator found = find(names.begin(), names.end(), name);
+	std::vector<std::string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
 		int index = distance(names.begin(), found);
 		counts[index]--;

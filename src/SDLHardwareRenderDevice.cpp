@@ -28,8 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #if SDL_VERSION_ATLEAST(2,0,0)
 
-using namespace std;
-
 SDLHardwareImage::SDLHardwareImage(RenderDevice *_device, SDL_Renderer *_renderer)
 	: Image(_device)
 	, renderer(_renderer)
@@ -157,8 +155,9 @@ Image* SDLHardwareImage::resize(int width, int height) {
 SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	: screen(NULL)
 	, renderer(NULL)
-	, titlebar_icon(NULL) {
-	cout << "Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2)" << endl;
+	, titlebar_icon(NULL)
+{
+	std::cout << "Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2)" << std::endl;
 }
 
 int SDLHardwareRenderDevice::createContext(int width, int height) {

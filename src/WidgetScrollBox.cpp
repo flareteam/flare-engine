@@ -25,8 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "WidgetScrollBox.h"
 
-using namespace std;
-
 WidgetScrollBox::WidgetScrollBox(int width, int height)
 	: contents(NULL) {
 	pos.x = pos.y = 0;

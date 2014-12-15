@@ -30,8 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits>
 
-using namespace std;
-
 EnemyManager::EnemyManager()
 	: enemies()
 	, hero_stealth(0)
@@ -46,7 +44,7 @@ void EnemyManager::loadAnimations(Enemy *e) {
 	e->activeAnimation = e->animationSet->getAnimation();
 }
 
-Enemy *EnemyManager::getEnemyPrototype(const string& type_id) {
+Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
 	for (size_t i = 0; i < prototypes.size(); i++)
 		if (prototypes[i].type == type_id) {
 			anim->increaseCount(prototypes[i].stats.animations);
@@ -311,7 +309,7 @@ void EnemyManager::logic() {
 
 	handlePartyBuff();
 
-	vector<Enemy*>::iterator it;
+	std::vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
 		// hazards are processed after Avatar and Enemy[]
 		// so process and clear sound effects from previous frames
@@ -417,8 +415,8 @@ bool EnemyManager::isCleared() {
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
  * to collect all mobile sprites each frame.
  */
-void EnemyManager::addRenders(vector<Renderable> &r, vector<Renderable> &r_dead) {
-	vector<Enemy*>::iterator it;
+void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
+	std::vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
 		bool dead = (*it)->stats.corpse;
 		if (!dead || (dead && (*it)->stats.corpse_ticks > 0)) {

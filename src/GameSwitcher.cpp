@@ -41,8 +41,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <typeinfo>
 
-using namespace std;
-
 GameSwitcher::GameSwitcher() {
 
 	// The initial state is the intro cutscene and then title screen
@@ -128,7 +126,7 @@ void GameSwitcher::logic() {
 void GameSwitcher::showFPS(int fps) {
 	if (SHOW_FPS) {
 		if (!label_fps) label_fps = new WidgetLabel();
-		string sfps = toString(typeid(fps), &fps) + string(" fps");
+		std::string sfps = toString(typeid(fps), &fps) + std::string(" fps");
 		label_fps->set(fps_position.x, fps_position.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
 		label_fps->render();
 	}

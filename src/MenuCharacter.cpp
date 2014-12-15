@@ -33,9 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetListBox.h"
 
-
-using namespace std;
-
 MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	stats = _stats;
 
@@ -253,7 +250,7 @@ void MenuCharacter::refreshStats() {
 
 	stats->refresh_stats = false;
 
-	stringstream ss;
+	std::stringstream ss;
 
 	// update stat text
 	cstat[CSTAT_NAME].value->set(window_area.x+value_pos[0].x+4, window_area.y+value_pos[0].y+value_pos[0].h/2, JUSTIFY_LEFT, VALIGN_CENTER, stats->name, font->getColor("menu_normal"));

@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-using namespace std;
-
 MenuEnemy::MenuEnemy()
 	: bar_hp(NULL)
 	, custom_text_pos(false)
@@ -130,7 +128,7 @@ void MenuEnemy::render() {
 		render_device->render(bar_hp);
 	}
 
-	stringstream ss;
+	std::stringstream ss;
 	ss.str("");
 	if (enemy->stats.hp > 0)
 		ss << enemy->stats.hp << "/" << enemy->stats.get(STAT_HP_MAX);

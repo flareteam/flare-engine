@@ -42,9 +42,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetListBox.h"
 #include "WidgetTooltip.h"
 
-using namespace std;
-
-
 GameStateNew::GameStateNew()
 	: GameState()
 	, current_option(0)
@@ -222,7 +219,7 @@ void GameStateNew::loadGraphics() {
 	}
 }
 
-void GameStateNew::loadPortrait(const string& portrait_filename) {
+void GameStateNew::loadPortrait(const std::string& portrait_filename) {
 
 	Image *graphics;
 
@@ -243,7 +240,7 @@ void GameStateNew::loadPortrait(const string& portrait_filename) {
  *
  * @param filename File containing entries for option=base,look
  */
-void GameStateNew::loadOptions(const string& filename) {
+void GameStateNew::loadOptions(const std::string& filename) {
 	FileParser fin;
 	// @CLASS GameStateNew: Hero options|Description of engine/hero_options.txt
 	if (!fin.open("engine/" + filename)) return;
@@ -265,7 +262,7 @@ void GameStateNew::loadOptions(const string& filename) {
  *
  * @param default_name The name we want to use for the hero
  */
-void GameStateNew:: setName(const string& default_name) {
+void GameStateNew:: setName(const std::string& default_name) {
 	if (input_name->getText() == "" || !modified_name) {
 		input_name->setText(default_name);
 		modified_name = false;
@@ -394,7 +391,7 @@ void GameStateNew::render() {
 }
 
 std::string GameStateNew::getClassTooltip(int index) {
-	string tooltip;
+	std::string tooltip;
 	if (HERO_CLASSES[index].description != "") tooltip += msg->get(HERO_CLASSES[index].description);
 	return tooltip;
 }

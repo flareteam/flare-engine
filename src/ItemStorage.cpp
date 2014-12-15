@@ -25,8 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 
-using namespace std;
-
 void ItemStorage::init(int _slot_number) {
 	slot_number = _slot_number;
 
@@ -44,7 +42,7 @@ ItemStack & ItemStorage::operator [] (int slot) {
 /**
  * Take the savefile CSV list of items id and convert to storage array
  */
-void ItemStorage::setItems(string s) {
+void ItemStorage::setItems(std::string s) {
 	s = s + ',';
 	for (int i=0; i<slot_number; i++) {
 		storage[i].item = popFirstInt(s, ',');
@@ -67,7 +65,7 @@ void ItemStorage::setItems(string s) {
 /**
  * Take the savefile CSV list of items quantities and convert to storage array
  */
-void ItemStorage::setQuantities(string s) {
+void ItemStorage::setQuantities(std::string s) {
 	s = s + ',';
 	for (int i=0; i<slot_number; i++) {
 		storage[i].quantity = popFirstInt(s, ',');
@@ -85,8 +83,8 @@ int ItemStorage::getSlotNumber() {
 /**
  * Convert storage array to a CSV list of items id for savefile
  */
-string ItemStorage::getItems() {
-	stringstream ss;
+std::string ItemStorage::getItems() {
+	std::stringstream ss;
 	ss.str("");
 	for (int i=0; i<slot_number; i++) {
 		ss << storage[i].item;
@@ -98,8 +96,8 @@ string ItemStorage::getItems() {
 /**
  * Convert storage array to a CSV list of items quantities for savefile
  */
-string ItemStorage::getQuantities() {
-	stringstream ss;
+std::string ItemStorage::getQuantities() {
+	std::stringstream ss;
 	ss.str("");
 	for (int i=0; i<slot_number; i++) {
 		ss << storage[i].quantity;
@@ -152,7 +150,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 		}
 		if (slot != -1) {
 			// Add
-			int quantity_added = min( stack.quantity, max_quantity - storage[slot].quantity);
+			int quantity_added = std::min( stack.quantity, max_quantity - storage[slot].quantity);
 			storage[slot].item = stack.item;
 			storage[slot].quantity += quantity_added;
 			stack.quantity -= quantity_added;

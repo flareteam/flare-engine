@@ -25,8 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 #include <stdarg.h>
 
-using namespace std;
-
 Point floor(FPoint fp) {
 	Point result;
 	result.x = int(fp.x);
@@ -199,7 +197,7 @@ float calcTheta(float x1, float y1, float x2, float y2) {
 }
 
 std::string abbreviateKilo(int amount) {
-	stringstream ss;
+	std::stringstream ss;
 	if (amount < 1000)
 		ss << amount;
 	else

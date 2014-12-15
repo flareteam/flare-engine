@@ -37,17 +37,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <climits>
 #include <cstring>
 
-using namespace std;
-
 /**
  * Resizes vector vec, so it can fit index id.
  */
 template <typename Ty_>
-static inline void ensureFitsId(vector<Ty_>& vec, int id) {
+static inline void ensureFitsId(std::vector<Ty_>& vec, int id) {
 	// id's are always greater or equal 1;
 	if (id < 1) return;
 
-	typedef typename vector<Ty_>::size_type VecSz;
+	typedef typename std::vector<Ty_>::size_type VecSz;
 
 	if (vec.size() <= VecSz(id+1))
 		vec.resize(id+1);
@@ -230,7 +228,7 @@ void ItemManager::loadItems() {
 				items[id].req_val.clear();
 				clear_req_stat = false;
 			}
-			string s = infile.nextValue();
+			std::string s = infile.nextValue();
 			if (s == "physical")
 				items[id].req_stat.push_back(REQUIRES_PHYS);
 			else if (s == "mental")
@@ -336,7 +334,7 @@ void ItemManager::loadItems() {
 
 void ItemManager::loadTypes() {
 	FileParser infile;
-	string type,description;
+	std::string type,description;
 	type = description = "";
 
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
@@ -360,8 +358,8 @@ void ItemManager::loadTypes() {
 	}
 }
 
-string ItemManager::getItemType(std::string _type) {
-	map<string,string>::iterator it,end;
+std::string ItemManager::getItemType(std::string _type) {
+	std::map<std::string, std::string>::iterator it,end;
 	for (it=item_types.begin(), end=item_types.end(); it!=end; ++it) {
 		if (_type.compare(it->first) == 0) return it->second;
 	}
@@ -411,7 +409,7 @@ void ItemManager::loadSets() {
 		else if (infile.key == "items") {
 			// @ATTR items|[item_id,...]|List of item id's that is part of the set.
 			item_sets[id].items.clear();
-			string item_id = infile.nextValue();
+			std::string item_id = infile.nextValue();
 			while (item_id != "") {
 				int temp_id = toInt(item_id);
 				if (temp_id > 0 && temp_id < static_cast<int>(items.size())) {
@@ -453,7 +451,7 @@ void ItemManager::playSound(int item, Point pos) {
 }
 
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {
-	stringstream ss;
+	std::stringstream ss;
 	TooltipData tip;
 	Color color = color_normal;
 
@@ -491,7 +489,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int context) {
 	TooltipData tip;
 	Color color = color_normal;
-	string quality_desc = "";
+	std::string quality_desc = "";
 
 	if (stack.empty()) return tip;
 
@@ -517,7 +515,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// name
-	stringstream ss;
+	std::stringstream ss;
 	if (stack.quantity == 1)
 		ss << items[stack.item].name;
 	else
@@ -564,7 +562,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// bonuses
 	unsigned bonus_counter = 0;
-	string modifier;
+	std::string modifier;
 	while (bonus_counter < items[stack.item].bonus_val.size() && items[stack.item].bonus_stat[bonus_counter] != "") {
 		if (items[stack.item].bonus_stat[bonus_counter] == "speed") {
 			modifier = msg->get("%d%% Speed", items[stack.item].bonus_val[bonus_counter]);

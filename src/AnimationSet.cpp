@@ -29,8 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <cassert>
 
-using namespace std;
-
 Animation *AnimationSet::getAnimation(const std::string &_name) {
 	if (!loaded)
 		load();
@@ -74,18 +72,18 @@ void AnimationSet::load() {
 	if (!parser.open(name, true, "Error loading animation definition: " + name))
 		return;
 
-	string _name = "";
+	std::string _name = "";
 	int position = 0;
 	int frames = 0;
 	int duration = 0;
 	Point render_size;
 	Point render_offset;
-	string type = "";
-	string starting_animation = "";
+	std::string type = "";
+	std::string starting_animation = "";
 	bool first_section=true;
 	bool compressed_loading=false; // is reset every section to false, set by frame keyword
 	Animation *newanim = NULL;
-	vector<short> active_frames;
+	std::vector<short> active_frames;
 
 	int parent_anim_frames = 0;
 
@@ -150,7 +148,7 @@ void AnimationSet::load() {
 		else if (parser.key == "active_frame") {
 			// @ATTR active_frame|[all:frame (integer), ...]|A list of frames marked as "active". Also, "all" can be used to mark all frames as active.
 			active_frames.clear();
-			string nv = parser.nextValue();
+			std::string nv = parser.nextValue();
 			if (nv == "all") {
 				active_frames.push_back(-1);
 			}
