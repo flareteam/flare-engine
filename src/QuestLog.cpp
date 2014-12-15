@@ -71,9 +71,6 @@ void QuestLog::load(const std::string& filename) {
 			if (infile.section == "quest")
 				quests.push_back(std::vector<Event_Component>());
 		}
-		// @ATTR quest.requires_status|string|Quest requires this campaign status
-		// @ATTR quest.requires_not_status|string|Quest requires not having this campaign status.
-		// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.
 		if (!quests.empty()) {
 			Event_Component ev;
 			ev.type = infile.key;
@@ -105,12 +102,15 @@ void QuestLog::createQuestList() {
 			// break (skip to next dialog node) if any requirement fails
 			// if we reach an event that is not a requirement, succeed
 
+			// @ATTR quest.requires_status|string|Quest requires this campaign status
 			if (quests[i][j].type == "requires_status") {
 				if (!camp->checkStatus(quests[i][j].s)) break;
 			}
+			// @ATTR quest.requires_not_status|string|Quest requires not having this campaign status.
 			else if (quests[i][j].type == "requires_not_status") {
 				if (camp->checkStatus(quests[i][j].s)) break;
 			}
+			// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.
 			else if (quests[i][j].type == "quest_text") {
 				log->add(quests[i][j].s, LOG_TYPE_QUESTS, false);
 				newQuestNotification = true;
