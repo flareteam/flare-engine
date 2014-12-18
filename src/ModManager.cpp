@@ -309,7 +309,7 @@ void ModManager::applyDepends() {
 		}
 
 		// skip the mod if it's already in the new_mods list
-		if (find(new_mods.begin(), new_mods.end(), mod_list[i]) != new_mods.end()) {
+		if (std::find(new_mods.begin(), new_mods.end(), mod_list[i]) != new_mods.end()) {
 			continue;
 		}
 
@@ -339,7 +339,7 @@ void ModManager::applyDepends() {
 							depends_met = false;
 							break;
 						}
-						else if (find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
+						else if (std::find(new_mods.begin(), new_mods.end(), new_depend) == new_mods.end()) {
 							logError("ModManager: Mod \"%s\" requires the \"%s\" mod. Enabling \"%s\" now.\n", mod_list[i].name.c_str(), mod_list[i].depends[j].c_str(), mod_list[i].depends[j].c_str());
 							new_mods.push_back(new_depend);
 							finished = false;
@@ -357,7 +357,7 @@ void ModManager::applyDepends() {
 		}
 
 		if (depends_met) {
-			if (find(new_mods.begin(), new_mods.end(), mod_list[i]) == new_mods.end()) {
+			if (std::find(new_mods.begin(), new_mods.end(), mod_list[i]) == new_mods.end()) {
 				new_mods.push_back(mod_list[i]);
 			}
 		}

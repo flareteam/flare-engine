@@ -775,9 +775,9 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 
 		for (int i=0; i<MAX_EQUIPPED; i++) {
 			item_id = equipped[i].item;
-			it = find(set.begin(), set.end(), items->items[item_id].set);
+			it = std::find(set.begin(), set.end(), items->items[item_id].set);
 			if (items->items[item_id].set > 0 && it != set.end()) {
-				quantity[distance(set.begin(), it)] += 1;
+				quantity[std::distance(set.begin(), it)] += 1;
 			}
 			else if (items->items[item_id].set > 0) {
 				set.push_back(items->items[item_id].set);
@@ -915,9 +915,9 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
 		int item_id = equipped[i].item;
-		it = find(set.begin(), set.end(), items->items[item_id].set);
+		it = std::find(set.begin(), set.end(), items->items[item_id].set);
 		if (items->items[item_id].set > 0 && it != set.end()) {
-			quantity[distance(set.begin(), it)] += 1;
+			quantity[std::distance(set.begin(), it)] += 1;
 		}
 		else if (items->items[item_id].set > 0) {
 			set.push_back(items->items[item_id].set);
