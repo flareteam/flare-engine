@@ -183,7 +183,7 @@ int MapRenderer::load(std::string fname) {
 			for (int y = 0; y < h; ++y) {
 				const unsigned tile_id = layers[i][x][y];
 				if (tile_id > 0 && (tile_id >= tset.tiles.size() || tset.tiles[tile_id].tile == NULL)) {
-					if (find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
+					if (std::find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
 						corrupted.push_back(tile_id);
 					}
 					layers[i][x][y] = 0;

@@ -723,7 +723,7 @@ void StatBlock::loadHeroSFX() {
 void StatBlock::removeFromSummons() {
 
 	if(summoner != NULL && !summoner->summons.empty()) {
-		std::vector<StatBlock*>::iterator parent_ref = find(summoner->summons.begin(), summoner->summons.end(), this);
+		std::vector<StatBlock*>::iterator parent_ref = std::find(summoner->summons.begin(), summoner->summons.end(), this);
 
 		if(parent_ref != summoner->summons.end())
 			summoner->summons.erase(parent_ref);

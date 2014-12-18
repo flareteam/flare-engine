@@ -1133,7 +1133,7 @@ void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
 			// only allow one instance of duplicate items at a time in the used_equipped_items queue
 			// this is useful for Ouroboros rings, where we have 2 equipped, but only want to remove one at a time
 			if (powers[power_index].requires_equipped_item != -1 &&
-					find(used_equipped_items.begin(), used_equipped_items.end(), powers[power_index].requires_equipped_item) == used_equipped_items.end()) {
+					std::find(used_equipped_items.begin(), used_equipped_items.end(), powers[power_index].requires_equipped_item) == used_equipped_items.end()) {
 
 				int quantity = powers[power_index].requires_equipped_item_quantity;
 				while (quantity > 0) {

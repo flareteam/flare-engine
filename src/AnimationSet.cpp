@@ -157,8 +157,8 @@ void AnimationSet::load() {
 					active_frames.push_back(toInt(nv));
 					nv = parser.nextValue();
 				}
-				sort(active_frames.begin(), active_frames.end());
-				active_frames.erase(unique(active_frames.begin(), active_frames.end()), active_frames.end());
+				std::sort(active_frames.begin(), active_frames.end());
+				active_frames.erase(std::unique(active_frames.begin(), active_frames.end()), active_frames.end());
 			}
 		}
 		else if (parser.key == "frame") {

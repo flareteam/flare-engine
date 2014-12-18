@@ -215,7 +215,7 @@ void setPaths() {
 
 	// handle Windows-specific path options
 	if (getenv("APPDATA") != NULL) {
-		PATH_CONF = PATH_USER = (string)getenv("APPDATA") + "\\flare";
+		PATH_CONF = PATH_USER = (std::string)getenv("APPDATA") + "\\flare";
 		createDir(PATH_CONF);
 		createDir(PATH_USER);
 
@@ -242,12 +242,41 @@ void setPaths() {
 // Android paths
 void setPaths() {
 
-	PATH_CONF = string(SDL_AndroidGetInternalStoragePath()) + "/config";
-	PATH_USER = string(SDL_AndroidGetInternalStoragePath()) + "/saves";
+	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
+	PATH_USER = std::string(SDL_AndroidGetInternalStoragePath()) + "/saves";
 	createDir(PATH_CONF);
 	createDir(PATH_USER);
-
-	PATH_DATA = string(SDL_AndroidGetInternalStoragePath());
+	
+	std::string mods_folder = "data/org.flare.app/files";
+	
+	if (SDL_AndroidGetExternalStorageState() != 0)
+	{
+		PATH_DATA = std::string(SDL_AndroidGetExternalStoragePath());
+	}
+	else if (dirExists("/sdcard/Android"))
+	{
+		PATH_DATA = "/sdcard/Android/" + mods_folder;
+	}
+	else if (dirExists("/mnt/sdcard/Android"))
+	{
+		PATH_DATA = "/mnt/sdcard/Android/" + mods_folder;
+	}
+	else if (dirExists("storage/sdcard0/Android"))
+	{
+		PATH_DATA = "/storage/sdcard0/Android/" + mods_folder;
+	}
+	else if (dirExists("/storage/emulated/0/Android"))
+	{
+		PATH_DATA = "/storage/emulated/0/Android/" + mods_folder;
+	}
+	else if (dirExists("/storage/emulated/legacy/Android"))
+	{
+		PATH_DATA = "/storage/emulated/legacy/Android/" + mods_folder;
+	}
+	else
+	{
+		logError("Settings: Android external storage unavailable: %s\n", SDL_GetError());
+	}
 
 	PATH_CONF = PATH_CONF + "/";
 	PATH_USER = PATH_USER + "/";
