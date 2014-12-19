@@ -605,6 +605,9 @@ bool EventManager::executeEvent(Event &ev) {
 		else if (ec->type == "save_game") {
 			mapr->save_game = toBool(ec->s);
 		}
+		else if (ec->type == "npc_id") {
+			mapr->npc_id = ec->x;
+		}
 	}
 	return !ev.keep_after_trigger;
 }

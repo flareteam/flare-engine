@@ -19,16 +19,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 #include "Map.h"
+#include "MapCollision.h"
 
 #include "FileParser.h"
 #include "UtilsParsing.h"
 #include "Settings.h"
 
 Map::Map()
-	: events()
-	, enemy_groups()
+	: enemy_groups()
 	, filename("")
+	, collision_layer(-1)
 	, layers()
+	, events()
 	, w(0)
 	, h(0)
 	, spawn()
@@ -182,6 +184,8 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 		*current_layer = new maprow[w];
 		layers.push_back(*current_layer);
 		layernames.push_back(infile.val);
+		if (infile.val == "collision")
+			collision_layer = layernames.size()-1;
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
@@ -313,6 +317,20 @@ void Map::loadNPC(FileParser &infile) {
 		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
 		npcs.back().pos.x = toInt(infile.nextValue()) + 0.5f;
 		npcs.back().pos.y = toInt(infile.nextValue()) + 0.5f;
+
+		// make sure this NPC has a collision tile
+		// otherwise, it becomes possible for the player to stand "inside" the npc, which will trigger their event infinitely
+		if (collision_layer != -1) {
+			unsigned tile_x = npcs.back().pos.x;
+			unsigned tile_y = npcs.back().pos.y;
+			if (tile_x < (unsigned)w && tile_y < (unsigned)h) {
+				short unsigned int& tile = layers[collision_layer][tile_x][tile_y];
+				if (tile == BLOCKS_NONE) {
+					logError("Map: NPC at (%d, %d) does not have a collision tile. Creating one now.", tile_x, tile_y);
+					tile = BLOCKS_MOVEMENT_HIDDEN;
+				}
+			}
+		}
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());

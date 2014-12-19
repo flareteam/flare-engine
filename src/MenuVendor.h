@@ -74,8 +74,8 @@ public:
 	void setInventory();
 	void saveInventory();
 	void sort(int type);
-
 	int getRowsCount();
+	void setNPC(NPC* _npc);
 
 	Rect slots_area;
 

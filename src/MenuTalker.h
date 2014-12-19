@@ -78,6 +78,7 @@ public:
 	void render();
 	void setHero(StatBlock &stats);
 	void createBuffer();
+	void setNPC(NPC* _npc);
 
 	WidgetButton *advanceButton;
 	WidgetButton *closeButton;

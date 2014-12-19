@@ -1376,13 +1376,14 @@ void MenuManager::closeLeft() {
 	resetDrag();
 	chr->visible = false;
 	log->visible = false;
-	vendor->visible = false;
-	talker->visible = false;
 	exit->visible = false;
 	stash->visible = false;
-	npc->visible = false;
 	book->visible = false;
 	book->book_name = "";
+
+	npc->setNPC(NULL);
+	talker->setNPC(NULL);
+	vendor->setNPC(NULL);
 
 	if (DEV_MODE && devconsole->visible) {
 		devconsole->visible = false;
@@ -1394,11 +1395,12 @@ void MenuManager::closeRight() {
 	resetDrag();
 	inv->visible = false;
 	pow->visible = false;
-	talker->visible = false;
 	exit->visible = false;
-	npc->visible = false;
 	book->visible = false;
 	book->book_name = "";
+
+	npc->setNPC(NULL);
+	talker->setNPC(NULL);
 
 	if (DEV_MODE && devconsole->visible) {
 		devconsole->visible = false;

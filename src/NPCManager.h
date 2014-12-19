@@ -37,7 +37,6 @@ private:
 	WidgetTooltip *tip;
 	StatBlock *stats;
 	TooltipData tip_buf;
-	int tooltip_margin;
 
 public:
 	NPCManager(StatBlock *stats);
@@ -49,9 +48,6 @@ public:
 	void logic();
 	void addRenders(std::vector<Renderable> &r);
 	int getID(std::string npcName);
-	int checkNPCClick(Point mouse, FPoint cam);
-	int getNearestNPC(FPoint pos);
-	void renderTooltips(FPoint cam, Point mouse, int nearest);
 };
 
 #endif

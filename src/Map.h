@@ -115,8 +115,6 @@ protected:
 	void clearLayers();
 	void clearQueues();
 
-	// map events
-	std::vector<Event> events;
 	std::queue<Map_Group> enemy_groups;
 	std::vector<StatBlock> statblocks;
 
@@ -124,6 +122,8 @@ protected:
 	std::string tileset;
 
 	int load(std::string filename);
+
+	int collision_layer;
 public:
 	Map();
 
@@ -139,6 +139,9 @@ public:
 
 	// npc load handling
 	std::queue<Map_NPC> npcs;
+
+	// map events
+	std::vector<Event> events;
 
 	// vars
 	std::string title;

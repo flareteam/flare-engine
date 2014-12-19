@@ -216,8 +216,10 @@ void MenuNPCActions::setNPC(NPC *pnpc) {
 
 	npc = pnpc;
 
-	if (npc == NULL)
+	if (npc == NULL) {
+		visible = false;
 		return;
+	}
 
 	// reset selection
 	dialog_selected = vendor_selected = cancel_selected = false;
