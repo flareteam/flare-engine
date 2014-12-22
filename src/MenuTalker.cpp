@@ -182,8 +182,7 @@ void MenuTalker::logic() {
 			menu->npc->setNPC(NULL);
 
 		// end dialog
-		npc = NULL;
-		visible = false;
+		setNPC(NULL);
 	}
 }
 
@@ -318,6 +317,19 @@ std::string MenuTalker::parseLine(const std::string &line) {
 	if (index != std::string::npos) new_line.replace(index, 2, hero_class);
 
 	return new_line;
+}
+
+void MenuTalker::setNPC(NPC* _npc) {
+	npc = _npc;
+
+	if (_npc == NULL) {
+		visible = false;
+		return;
+	}
+
+	if (!visible) {
+		visible = true;
+	}
 }
 
 MenuTalker::~MenuTalker() {

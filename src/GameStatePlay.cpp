@@ -291,11 +291,10 @@ void GameStatePlay::checkTeleport() {
 			powers->handleNewMap(&mapr->collider);
 			menu->enemy->handleNewMap();
 			npcs->handleNewMap();
-			menu->vendor->npc = NULL;
-			menu->vendor->visible = false;
-			menu->talker->visible = false;
+			menu->npc->setNPC(NULL);
+			menu->vendor->setNPC(NULL);
+			menu->talker->setNPC(NULL);
 			menu->stash->visible = false;
-			menu->npc->visible = false;
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 			npc_id = nearest_npc = -1;
 
@@ -645,33 +644,13 @@ void GameStatePlay::checkNotifications() {
 void GameStatePlay::checkNPCInteraction() {
 	if (pc->stats.attacking) return;
 
+	if (mapr->npc_id != -1)
+		npc_id = mapr->npc_id;
+
 	bool player_ok = pc->stats.alive && pc->stats.humanoid;
 	float interact_distance = 0;
-	int npc_click = -1;
-	nearest_npc = npcs->getNearestNPC(pc->stats.pos);
-
-	int npc_hover = -1;
-	if (!menu->npc->visible && !menu->talker->visible && !menu->vendor->visible)
-		npc_hover = npcs->checkNPCClick(inpt->mouse, mapr->cam);
-
-	// check for clicking on an NPC
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !NO_MOUSE) {
-		npc_click = npc_hover;
-		if (npc_click != -1) npc_id = npc_click;
-	}
-	// if we press the ACCEPT key, find the nearest NPC to interact with
-	else if (nearest_npc != -1 && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		npc_id = npc_click = nearest_npc;
-	}
-
 	// check distance to this npc
-	if (npc_hover != -1) {
-		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_hover]->pos);
-		if (interact_distance < INTERACT_RANGE && player_ok) {
-			curs->setCursor(CURSOR_TALK);
-		}
-	}
-	else if (npc_id != -1) {
+	if (npc_id != -1) {
 		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
 	}
 
@@ -686,7 +665,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 	// if close enough to the NPC, open the appropriate interaction screen
 
-	if (npc_id != -1 && ((npc_click != -1 && interact_distance < INTERACT_RANGE && player_ok) || eventPendingDialog)) {
+	if (npc_id != -1 && mapr->npc_id != -1 && ((interact_distance < INTERACT_RANGE && player_ok) || eventPendingDialog)) {
 
 		if (inpt->pressing[MAIN1] && !NO_MOUSE) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
@@ -698,27 +677,22 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->npc->visible = true;
 	}
 
+	mapr->npc_id = -1;
+
 	// check if a NPC action selection is made
 	if (npc_id != -1 && (menu->npc->selection() || eventPendingDialog)) {
-		if (menu->npc->vendor_selected) {
+		if (menu->npc->vendor_selected && !menu->vendor->visible) {
 			// begin trading
-			menu->vendor->setTab(0); // Show the NPC's inventory as opposed to the buyback tab
-			menu->vendor->npc = npcs->npcs[npc_id];
-			menu->vendor->setInventory();
 			menu->closeAll();
-			menu->vendor->visible = true;
+			menu->vendor->setNPC(npcs->npcs[npc_id]);
 			menu->inv->visible = true;
-			snd->play(menu->vendor->sfx_open);
-			npcs->npcs[npc_id]->playSound(NPC_VOX_INTRO);
 		}
-		else if (menu->npc->dialog_selected) {
+		else if (menu->npc->dialog_selected && !menu->talker->visible) {
 			// begin talking
-			menu->talker->npc = npcs->npcs[npc_id];
+			menu->closeAll();
+			menu->talker->setNPC(npcs->npcs[npc_id]);
 			menu->talker->chooseDialogNode(menu->npc->selected_dialog_node);
 			pc->allow_movement = npcs->npcs[npc_id]->checkMovement(menu->npc->selected_dialog_node);
-
-			menu->closeAll();
-			menu->talker->visible = true;
 		}
 
 		menu->npc->setNPC(NULL);
@@ -728,21 +702,12 @@ void GameStatePlay::checkNPCInteraction() {
 	if (npc_id != -1 && !eventDialogOngoing) {
 		// check for walking away from an NPC
 		if (interact_distance > INTERACT_RANGE || !player_ok) {
-			if (menu->vendor->visible || menu->talker->visible || menu->npc->visible) {
-				menu->closeAll();
-			}
 			menu->npc->setNPC(NULL);
-			menu->vendor->npc = NULL;
-			menu->talker->npc = NULL;
-			npc_id = -1;
-		}
-
-		// check if we've closed all npc menus
-		if (!menu->vendor->visible && !menu->talker->visible && !menu->npc->visible) {
-			npc_id = -1;
+			menu->vendor->setNPC(NULL);
+			menu->talker->setNPC(NULL);
 		}
 	}
-	else if ((!menu->vendor->visible && !menu->talker->visible) || npc_click != -1) {
+	else if (!menu->vendor->visible && !menu->talker->visible) {
 		eventDialogOngoing = false;
 	}
 
@@ -750,6 +715,11 @@ void GameStatePlay::checkNPCInteraction() {
 	if (!menu->talker->visible) {
 		pc->allow_movement = true;
 	}
+
+	if (npc_id != -1 && !menu->talker->visible && !menu->vendor->visible && !menu->npc->visible) {
+		npc_id = -1;
+	}
+
 }
 
 void GameStatePlay::checkStash() {
@@ -865,9 +835,9 @@ void GameStatePlay::logic() {
 		if (pc->stats.alive) checkLoot();
 		checkEnemyFocus();
 		if (pc->stats.alive) {
-			checkNPCInteraction();
 			mapr->checkHotspots();
 			mapr->checkNearestEvent();
+			checkNPCInteraction();
 		}
 		checkTitle();
 
@@ -1023,7 +993,6 @@ void GameStatePlay::render() {
 
 	// mouseover tooltips
 	loot->renderTooltips(mapr->cam);
-	npcs->renderTooltips(mapr->cam, inpt->mouse, nearest_npc);
 
 	if (mapr->map_change) {
 		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);

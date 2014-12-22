@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "EnemyGroupManager.h"
+#include "FileParser.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
 #include "SharedGameResources.h"
@@ -42,6 +43,7 @@ MapRenderer::MapRenderer()
 	, tip_pos()
 	, show_tooltip(false)
 	, shakycam()
+	, npc_tooltip_margin(0)
 	, cam()
 	, map_change(false)
 	, teleportation(false)
@@ -55,7 +57,21 @@ MapRenderer::MapRenderer()
 	, stash_pos()
 	, enemies_cleared(false)
 	, save_game(false)
-	, index_objectlayer(0) {
+	, npc_id(-1)
+	, index_objectlayer(0)
+{
+	FileParser infile;
+	// load tooltip_margin from engine config file
+	// @CLASS Map|Description of engine/tooltips.txt
+	if (infile.open("engine/tooltips.txt")) {
+		while (infile.next()) {
+			if (infile.key == "npc_tooltip_margin") {
+				// @ATTR npc_tooltip_margin|integer|Vertical offset for NPC labels.
+				npc_tooltip_margin = toInt(infile.val);
+			}
+		}
+		infile.close();
+	}
 }
 
 void MapRenderer::clearQueues() {
@@ -670,26 +686,46 @@ void MapRenderer::checkHotspots() {
 		for (int x=it->hotspot.x; x < it->hotspot.x + it->hotspot.w; ++x) {
 			for (int y=it->hotspot.y; y < it->hotspot.y + it->hotspot.h; ++y) {
 				bool matched = false;
-				for (unsigned index = 0; index <= index_objectlayer; ++index) {
-					maprow *current_layer = layers[index];
-					Point p = map_to_screen(float(x),
-											float(y),
-											shakycam.x,
-											shakycam.y);
+				bool is_npc = false;
+
+				Event_Component* npc = (*it).getComponent("npc_hotspot");
+				if (npc) {
+					is_npc = true;
+
+					Point p = map_to_screen(float(npc->x), float(npc->y), shakycam.x, shakycam.y);
 					p = center_tile(p);
 
-					if (const short current_tile = current_layer[x][y]) {
-						// first check if mouse pointer is in rectangle of that tile:
-						Rect dest;
-						dest.x = p.x - tset.tiles[current_tile].offset.x;
-						dest.y = p.y - tset.tiles[current_tile].offset.y;
-						dest.w = tset.tiles[current_tile].tile->getClip().w;
-						dest.h = tset.tiles[current_tile].tile->getClip().h;
+					Rect dest;
+					dest.x = p.x - npc->z;
+					dest.y = p.y - npc->a;
+					dest.w = npc->b;
+					dest.h = npc->c;
 
-						if (isWithin(dest, inpt->mouse)) {
-							matched = true;
-							tip_pos.x = dest.x + dest.w/2;
-							tip_pos.y = dest.y;
+					if (isWithin(dest, inpt->mouse)) {
+						matched = true;
+						tip_pos.x = dest.x + dest.w/2;
+						tip_pos.y = p.y - npc_tooltip_margin;
+					}
+				}
+				else {
+					for (unsigned index = 0; index <= index_objectlayer; ++index) {
+						maprow *current_layer = layers[index];
+						Point p = map_to_screen(float(x), float(y), shakycam.x, shakycam.y);
+						p = center_tile(p);
+
+						if (const short current_tile = current_layer[x][y]) {
+							// first check if mouse pointer is in rectangle of that tile:
+							Rect dest;
+							dest.x = p.x - tset.tiles[current_tile].offset.x;
+							dest.y = p.y - tset.tiles[current_tile].offset.y;
+							dest.w = tset.tiles[current_tile].tile->getClip().w;
+							dest.h = tset.tiles[current_tile].tile->getClip().h;
+
+							if (isWithin(dest, inpt->mouse)) {
+								matched = true;
+								tip_pos.x = dest.x + dest.w/2;
+								tip_pos.y = dest.y;
+							}
 						}
 					}
 				}
@@ -712,7 +748,12 @@ void MapRenderer::checkHotspots() {
 
 						// only check events if the player is clicking
 						// and allowed to click
-						curs->setCursor(CURSOR_INTERACT);
+						if (is_npc) {
+							curs->setCursor(CURSOR_TALK);
+						}
+						else {
+							curs->setCursor(CURSOR_INTERACT);
+						}
 						if (!inpt->pressing[MAIN1]) return;
 						else if (inpt->lock[MAIN1]) return;
 
@@ -762,7 +803,12 @@ void MapRenderer::checkNearestEvent() {
 			// new tooltip?
 			createTooltip((*nearest).getComponent("tooltip"));
 			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
-			tip_pos.y -= TILE_H;
+			if ((*nearest).getComponent("npc_hotspot")) {
+				tip_pos.y -= npc_tooltip_margin;
+			}
+			else {
+				tip_pos.y -= TILE_H;
+			}
 		}
 
 		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {

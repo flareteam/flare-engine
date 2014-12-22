@@ -83,6 +83,8 @@ private:
 	FPoint shakycam;
 	TileSet tset;
 
+	int npc_tooltip_margin;
+
 public:
 	// functions
 	MapRenderer();
@@ -149,6 +151,9 @@ public:
 
 	// map soundids
 	std::vector<SoundManager::SoundID> sids;
+
+	// npc handling
+	int npc_id;
 
 	void loadMusic();
 

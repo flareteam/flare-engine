@@ -24,35 +24,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "Animation.h"
-#include "FileParser.h"
 #include "ItemManager.h"
-#include "NPCManager.h"
 #include "NPC.h"
+#include "NPCManager.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "WidgetTooltip.h"
-#include "SharedGameResources.h"
-#include "UtilsParsing.h"
 
 #include <limits>
 
 NPCManager::NPCManager(StatBlock *_stats)
 	: tip(new WidgetTooltip())
 	, stats(_stats)
-	, tip_buf()
-	, tooltip_margin(0) {
-	FileParser infile;
-	// load tooltip_margin from engine config file
-	// @CLASS NPCManager|Description of engine/tooltips.txt
-	if (infile.open("engine/tooltips.txt")) {
-		while (infile.next()) {
-			if (infile.key == "npc_tooltip_margin") {
-				// @ATTR npc_tooltip_margin|integer|Vertical offset for NPC labels.
-				tooltip_margin = toInt(infile.val);
-			}
-		}
-		infile.close();
-	}
+	, tip_buf() {
 }
 
 void NPCManager::addRenders(std::vector<Renderable> &r) {
@@ -96,6 +81,44 @@ void NPCManager::handleNewMap() {
 
 		// npc->stock.sort();
 		npcs.push_back(npc);
+
+		// create a map event for this npc
+		Event ev;
+		Event_Component ec;
+
+		// the event hotspot is a 1x1 tile at the npc's feet
+		ev.type = "on_trigger";
+		ev.keep_after_trigger = true;
+		Rect location;
+		location.x = npc->pos.x;
+		location.y = npc->pos.y;
+		location.w = location.h = 1;
+		ev.location = ev.hotspot = location;
+		ev.center.x = ev.hotspot.x + (float)ev.hotspot.w/2;
+		ev.center.y = ev.hotspot.y + (float)ev.hotspot.h/2;
+
+		ec.type = "npc_id";
+		ec.x = npcs.size()-1;
+		ev.components.push_back(ec);
+
+		ec.type = "tooltip";
+		ec.s = npc->name;
+		ev.components.push_back(ec);
+
+		// The hitbox for hovering/clicking on an npc is based on their first frame of animation
+		// This might cause some undesired behavior for npcs that have packed animations and a lot of variation
+		// However, it is sufficient for all of our current game data (fantasycore, no-name mod, polymorphable)
+		Renderable ren = npc->activeAnimation->getCurrentFrame(npc->direction);
+		ec.type = "npc_hotspot";
+		ec.x = npc->pos.x;
+		ec.y = npc->pos.y;
+		ec.z = ren.offset.x;
+		ec.a = ren.offset.y;
+		ec.b = ren.src.w;
+		ec.c = ren.src.h;
+		ev.components.push_back(ec);
+
+		mapr->events.push_back(ev);
 	}
 
 }
@@ -111,90 +134,6 @@ int NPCManager::getID(std::string npcName) {
 		if (npcs[i]->filename == npcName) return i;
 	}
 	return -1;
-}
-
-int NPCManager::checkNPCClick(Point mouse, FPoint cam) {
-	Point p;
-	Rect r;
-	for (unsigned i=0; i<npcs.size(); i++) {
-
-		p = map_to_screen(npcs[i]->pos.x, npcs[i]->pos.y, cam.x, cam.y);
-
-		Renderable ren = npcs[i]->activeAnimation->getCurrentFrame(npcs[i]->direction);
-		r.w = ren.src.w;
-		r.h = ren.src.h;
-		r.x = p.x - ren.offset.x;
-		r.y = p.y - ren.offset.y;
-
-		if (isWithin(r, mouse)) {
-			return i;
-		}
-	}
-	return -1;
-}
-
-int NPCManager::getNearestNPC(FPoint pos) {
-	int nearest = -1;
-	float best_distance = std::numeric_limits<float>::max();
-
-	for (unsigned i=0; i<npcs.size(); i++) {
-		float distance = calcDist(pos, npcs[i]->pos);
-		if (distance < best_distance) {
-			best_distance = distance;
-			nearest = i;
-		}
-	}
-
-	if (best_distance > INTERACT_RANGE) nearest = -1;
-
-	return nearest;
-}
-
-/**
- * On mouseover, display NPC's name
- */
-void NPCManager::renderTooltips(FPoint cam, Point mouse, int nearest) {
-	Point p;
-	Rect r;
-	int id = -1;
-
-	for (unsigned i=0; i<npcs.size(); i++) {
-		if ((NO_MOUSE || TOUCHSCREEN) && nearest != -1 && (unsigned)nearest != i) continue;
-
-		p = map_to_screen(npcs[i]->pos.x, npcs[i]->pos.y, cam.x, cam.y);
-
-		Renderable ren = npcs[i]->activeAnimation->getCurrentFrame(npcs[i]->direction);
-		r.w = ren.src.w;
-		r.h = ren.src.h;
-		r.x = p.x - ren.offset.x;
-		r.y = p.y - ren.offset.y;
-
-		if ((NO_MOUSE || TOUCHSCREEN) && nearest != -1 && (unsigned)nearest == i) {
-			id = nearest;
-			break;
-		}
-		else if (!NO_MOUSE && isWithin(r, mouse)) {
-			id = i;
-			break;
-		}
-	}
-	if (id != -1 && TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-
-		// adjust dest.y so that the tooltip floats above the item
-		p.y -= tooltip_margin;
-
-		// use current tip or make a new one?
-		if (!tip_buf.compareFirstLine(npcs[id]->name)) {
-			tip_buf.clear();
-			tip_buf.addText(npcs[id]->name);
-		}
-
-		tip->render(tip_buf, p, STYLE_TOPLABEL);
-		TOOLTIP_CONTEXT = TOOLTIP_MAP;
-	}
-	else if (TOOLTIP_CONTEXT != TOOLTIP_MENU) {
-		TOOLTIP_CONTEXT = TOOLTIP_NONE;
-	}
 }
 
 NPCManager::~NPCManager() {

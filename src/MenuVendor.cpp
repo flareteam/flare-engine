@@ -142,7 +142,7 @@ void MenuVendor::logic() {
 	}
 
 	if (closeButton->checkClick()) {
-		visible = false;
+		setNPC(NULL);
 		snd->play(sfx_close);
 	}
 }
@@ -265,6 +265,23 @@ void MenuVendor::sort(int type) {
 
 int MenuVendor::getRowsCount() {
 	return slots_rows;
+}
+
+void MenuVendor::setNPC(NPC* _npc) {
+	npc = _npc;
+
+	if (_npc == NULL) {
+		visible = false;
+		return;
+	}
+
+	setTab(0);
+	setInventory();
+	if (!visible) {
+		visible = true;
+		snd->play(sfx_open);
+		npc->playSound(NPC_VOX_INTRO);
+	}
 }
 
 MenuVendor::~MenuVendor() {
