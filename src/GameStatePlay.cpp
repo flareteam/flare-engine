@@ -300,8 +300,8 @@ void GameStatePlay::checkTeleport() {
 
 			// store this as the new respawn point
 			mapr->respawn_map = teleport_mapname;
-			mapr->respawn_point.x = pc->stats.pos.x;
-			mapr->respawn_point.y = pc->stats.pos.y;
+			mapr->respawn_point = pc->stats.pos;
+			pc->transform_pos = pc->stats.pos;
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
@@ -886,6 +886,7 @@ void GameStatePlay::logic() {
 	mapr->enemies_cleared = enemies->isCleared();
 	quests->logic();
 
+	pc->checkTransform();
 
 	// change hero powers on transformation
 	if (pc->setPowers) {

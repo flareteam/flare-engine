@@ -497,10 +497,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	if (target_anim && target_visible)
 		target_anim->advanceFrame();
 
-	// handle transformation
-	if (stats.transform_type != "" && stats.transform_type != "untransform" && stats.transformed == false) transform();
-	if (stats.transform_type != "" && stats.transform_duration == 0) untransform();
-
 	// change the cursor if we're attacking
 	if (action_queue.empty()) {
 		lock_cursor = false;
@@ -798,6 +794,8 @@ void Avatar::transform() {
 	loadStepFX("NULL");
 
 	stats.applyEffects();
+
+	transform_pos = stats.pos;
 }
 
 void Avatar::untransform() {
@@ -805,7 +803,12 @@ void Avatar::untransform() {
 	inpt->unlockActionBar();
 
 	// Only allow untransform when on a valid tile
-	if (!mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) return;
+	// If we're not on a valid tile, teleport the player to where they initially transformed
+	mapr->collider.unblock(stats.pos.x, stats.pos.y);
+	if (!mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
+		stats.pos = transform_pos;
+	}
+	mapr->collider.block(stats.pos.x, stats.pos.y, false);
 
 	stats.transformed = false;
 	transform_triggered = true;
@@ -860,6 +863,14 @@ void Avatar::untransform() {
 
 	stats.applyEffects();
 	stats.untransform_on_hit = false;
+}
+
+void Avatar::checkTransform() {
+	// handle transformation
+	if (stats.transform_type != "" && stats.transform_type != "untransform" && stats.transformed == false)
+		transform();
+	if (stats.transform_type != "" && stats.transform_duration == 0)
+		untransform();
 }
 
 void Avatar::setAnimation(std::string name) {
