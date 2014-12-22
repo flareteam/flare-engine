@@ -120,7 +120,7 @@ GameStatePlay::GameStatePlay()
  */
 void GameStatePlay::resetGame() {
 	mapr->load("maps/spawn.txt");
-	load_counter++;
+	setLoadingFrame();
 	camp->clearAll();
 	pc->init();
 	pc->stats.currency = 0;
@@ -284,7 +284,7 @@ void GameStatePlay::checkTeleport() {
 			mapr->executeOnMapExitEvents();
 			showLoading();
 			mapr->load(teleport_mapname);
-			load_counter++;
+			setLoadingFrame();
 			enemies->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
