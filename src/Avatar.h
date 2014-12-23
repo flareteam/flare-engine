@@ -121,11 +121,13 @@ public:
 	bool isTransforming() {
 		return transform_triggered;
 	}
+	void checkTransform();
 	bool setPowers;
 	bool revertPowers;
 	int untransform_power;
 	StatBlock *hero_stats;
 	StatBlock *charmed_stats;
+	FPoint transform_pos;
 
 	virtual void resetActiveAnimation();
 	virtual Renderable getRender() {
