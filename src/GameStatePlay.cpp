@@ -405,6 +405,7 @@ void GameStatePlay::checkLog() {
 
 	// PowerManager has hints for powers
 	if (powers->log_msg != "") {
+		menu->log->add(powers->log_msg, LOG_TYPE_MESSAGES);
 		menu->hudlog->add(powers->log_msg);
 		powers->log_msg = "";
 	}

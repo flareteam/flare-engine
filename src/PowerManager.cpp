@@ -1044,20 +1044,20 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint targe
 		return false;
 	}
 
-	// apply any buffs
-	buff(power_index, src_stats, target);
-
-	src_stats->manual_untransform = powers[power_index].manual_untransform;
-	src_stats->transform_with_equipment = powers[power_index].keep_equipment;
-	src_stats->untransform_on_hit = powers[power_index].untransform_on_hit;
-
-	// If there's a sound effect, play it here
-	playSound(power_index);
-
 	// execute untransform powers
 	if (powers[power_index].spawn_type == "untransform" && src_stats->transformed) {
-		src_stats->transform_duration = 0;
-		src_stats->transform_type = "untransform"; // untransform() is called only if type !=""
+		collider->unblock(src_stats->pos.x, src_stats->pos.y);
+		if (collider->is_valid_position(src_stats->pos.x, src_stats->pos.y, MOVEMENT_NORMAL, true)) {
+			src_stats->transform_duration = 0;
+			src_stats->transform_type = "untransform"; // untransform() is called only if type !=""
+		}
+		else {
+			log_msg = msg->get("Could not untransform at this position.");
+			inpt->unlockActionBar();
+			collider->block(src_stats->pos.x, src_stats->pos.y, false);
+			return false;
+		}
+		collider->block(src_stats->pos.x, src_stats->pos.y, false);
 	}
 	else {
 		if (powers[power_index].transform_duration == 0) {
@@ -1071,6 +1071,16 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint targe
 
 		src_stats->transform_type = powers[power_index].spawn_type;
 	}
+
+	// apply any buffs
+	buff(power_index, src_stats, target);
+
+	src_stats->manual_untransform = powers[power_index].manual_untransform;
+	src_stats->transform_with_equipment = powers[power_index].keep_equipment;
+	src_stats->untransform_on_hit = powers[power_index].untransform_on_hit;
+
+	// If there's a sound effect, play it here
+	playSound(power_index);
 
 	payPowerCost(power_index, src_stats);
 
