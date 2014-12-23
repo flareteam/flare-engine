@@ -807,6 +807,7 @@ void Avatar::untransform() {
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 	if (!mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
 		stats.pos = transform_pos;
+		log_msg = msg->get("Could not untransform at this position.");
 	}
 	mapr->collider.block(stats.pos.x, stats.pos.y, false);
 
