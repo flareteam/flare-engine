@@ -33,6 +33,8 @@ public:
 	bool isExitRequested() {
 		return exitRequested;
 	}
+	void setLoadingFrame();
+
 	bool hasMusic;
 	bool reload_music;
 
