@@ -505,6 +505,11 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		curs->setCursor(CURSOR_ATTACK);
 	}
 
+	// save a valid tile position in the event that we untransform on an invalid tile
+	if (mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
+		transform_pos = stats.pos;
+	}
+
 	switch(stats.cur_state) {
 		case AVATAR_STANCE:
 
@@ -802,12 +807,11 @@ void Avatar::untransform() {
 	// calling a transform power locks the actionbar, so we unlock it here
 	inpt->unlockActionBar();
 
-	// Only allow untransform when on a valid tile
-	// If we're not on a valid tile, teleport the player to where they initially transformed
+	// For timed transformations, move the player to the last valid tile when untransforming
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 	if (!mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
 		stats.pos = transform_pos;
-		log_msg = msg->get("Could not untransform at this position.");
+		log_msg = msg->get("Transformation expired. You have been moved back to a safe place.");
 	}
 	mapr->collider.block(stats.pos.x, stats.pos.y, false);
 
