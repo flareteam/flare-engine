@@ -301,7 +301,6 @@ void GameStatePlay::checkTeleport() {
 			// store this as the new respawn point
 			mapr->respawn_map = teleport_mapname;
 			mapr->respawn_point = pc->stats.pos;
-			pc->transform_pos = pc->stats.pos;
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {

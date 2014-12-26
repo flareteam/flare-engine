@@ -128,6 +128,7 @@ public:
 	StatBlock *hero_stats;
 	StatBlock *charmed_stats;
 	FPoint transform_pos;
+	std::string transform_map;
 
 	virtual void resetActiveAnimation();
 	virtual Renderable getRender() {

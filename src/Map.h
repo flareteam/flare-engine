@@ -126,6 +126,7 @@ protected:
 	int collision_layer;
 public:
 	Map();
+	std::string getFilename() { return filename; }
 
 	std::string music_filename;
 
