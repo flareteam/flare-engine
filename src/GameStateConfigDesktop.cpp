@@ -577,12 +577,9 @@ void GameStateConfigDesktop::logic() {
 }
 
 void GameStateConfigDesktop::logicAccept() {
-	int width = VIEW_W;
-	int height = VIEW_H;
-
 	std::string resolution_value = resolution_lstb->getValue();
-	width = popFirstInt(resolution_value, 'x');
-	height = popFirstInt(resolution_value, 'x');
+	int width = popFirstInt(resolution_value, 'x');
+	int height = popFirstInt(resolution_value, 'x');
 
 	// In case of a custom resolution, the listbox might have nothing selected
 	// So we just use whatever the current view area is
