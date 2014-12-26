@@ -340,9 +340,11 @@ std::string NPC::getDialogTopic(unsigned int dialog_node) {
  * Check if the hero can move during this dialog branch
  */
 bool NPC::checkMovement(unsigned int dialog_node) {
-	for (unsigned int i=0; i<dialog[dialog_node].size(); i++) {
-		if (dialog[dialog_node][i].type == "allow_movement")
-			return toBool(dialog[dialog_node][i].s);
+	if (dialog_node < dialog.size()) {
+		for (unsigned int i=0; i<dialog[dialog_node].size(); i++) {
+			if (dialog[dialog_node][i].type == "allow_movement")
+				return toBool(dialog[dialog_node][i].s);
+		}
 	}
 	return true;
 }
@@ -353,6 +355,8 @@ bool NPC::checkMovement(unsigned int dialog_node) {
  * Return false if the dialog has ended
  */
 bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
+	if (dialog_node >= dialog.size())
+		return false;
 
 	while (event_cursor < dialog[dialog_node].size()) {
 
@@ -401,11 +405,11 @@ void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
 
 	Event ev;
 
-	if (cursor < dialog[dialog_node].size() && isDialogType(dialog[dialog_node][cursor].type)) {
+	if (dialog_node < dialog.size() && cursor < dialog[dialog_node].size() && isDialogType(dialog[dialog_node][cursor].type)) {
 		cursor++;
 	}
 
-	while (cursor < dialog[dialog_node].size() && !isDialogType(dialog[dialog_node][cursor].type)) {
+	while (dialog_node < dialog.size() && cursor < dialog[dialog_node].size() && !isDialogType(dialog[dialog_node][cursor].type)) {
 		ev.components.push_back(dialog[dialog_node][cursor]);
 		cursor++;
 	}

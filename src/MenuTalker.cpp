@@ -132,7 +132,7 @@ void MenuTalker::logic() {
 	closeButton->enabled = false;
 
 	// determine active button
-	if (event_cursor < npc->dialog[dialog_node].size()-1) {
+	if ((unsigned)dialog_node < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
 		if (npc->dialog[dialog_node][event_cursor+1].type != "") {
 			advanceButton->enabled = true;
 			tablist.remove(closeButton);
@@ -187,7 +187,8 @@ void MenuTalker::logic() {
 }
 
 void MenuTalker::createBuffer() {
-	if (event_cursor >= npc->dialog[dialog_node].size()) return;
+	if ((unsigned)dialog_node >= npc->dialog.size() || event_cursor >= npc->dialog[dialog_node].size())
+		return;
 
 	std::string line;
 
@@ -243,30 +244,32 @@ void MenuTalker::render() {
 	setBackgroundDest(dest);
 	Menu::render();
 
-	// show active portrait
-	std::string etype = npc->dialog[dialog_node][event_cursor].type;
-	if (etype == "him" || etype == "her") {
-		Sprite *r = npc->portrait;
-		if (r) {
-			src.w = dest.w = portrait_he.w;
-			src.h = dest.h = portrait_he.h;
-			dest.x = offset_x + portrait_he.x;
-			dest.y = offset_y + portrait_he.y;
+	if ((unsigned)dialog_node < npc->dialog.size() && event_cursor < npc->dialog[dialog_node].size()) {
+		// show active portrait
+		std::string etype = npc->dialog[dialog_node][event_cursor].type;
+		if (etype == "him" || etype == "her") {
+			Sprite *r = npc->portrait;
+			if (r) {
+				src.w = dest.w = portrait_he.w;
+				src.h = dest.h = portrait_he.h;
+				dest.x = offset_x + portrait_he.x;
+				dest.y = offset_y + portrait_he.y;
 
-			r->setClip(src);
-			r->setDest(dest);
-			render_device->render(r);
+				r->setClip(src);
+				r->setDest(dest);
+				render_device->render(r);
+			}
 		}
-	}
-	else if (etype == "you") {
-		if (portrait) {
-			src.w = dest.w = portrait_you.w;
-			src.h = dest.h = portrait_you.h;
-			dest.x = offset_x + portrait_you.x;
-			dest.y = offset_y + portrait_you.y;
-			portrait->setClip(src);
-			portrait->setDest(dest);
-			render_device->render(portrait);
+		else if (etype == "you") {
+			if (portrait) {
+				src.w = dest.w = portrait_you.w;
+				src.h = dest.h = portrait_you.h;
+				dest.x = offset_x + portrait_you.x;
+				dest.y = offset_y + portrait_you.y;
+				portrait->setClip(src);
+				portrait->setDest(dest);
+				render_device->render(portrait);
+			}
 		}
 	}
 
@@ -275,7 +278,7 @@ void MenuTalker::render() {
 	textbox->render();
 
 	// show advance button if there are more event components, or close button if not
-	if (event_cursor < npc->dialog[dialog_node].size()-1) {
+	if ((unsigned)dialog_node < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
 		if (npc->dialog[dialog_node][event_cursor+1].type != "") {
 			advanceButton->render();
 		}
