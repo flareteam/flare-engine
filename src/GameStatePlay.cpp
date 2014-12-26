@@ -656,7 +656,7 @@ void GameStatePlay::checkNPCInteraction() {
 	}
 
 	if (mapr->event_npc != "") {
-		npc_id = npcs->getID(mapr->event_npc);
+		npc_id = mapr->npc_id = npcs->getID(mapr->event_npc);
 		if (npc_id != -1) {
 			eventDialogOngoing = true;
 			eventPendingDialog = true;

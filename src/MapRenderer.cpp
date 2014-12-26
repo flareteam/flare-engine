@@ -723,8 +723,8 @@ void MapRenderer::checkHotspots() {
 
 							if (isWithin(dest, inpt->mouse)) {
 								matched = true;
-								tip_pos.x = dest.x + dest.w/2;
-								tip_pos.y = dest.y;
+								tip_pos = map_to_screen(it->center.x, it->center.y, shakycam.x, shakycam.y);
+								tip_pos.y -= TILE_H;
 							}
 						}
 					}
