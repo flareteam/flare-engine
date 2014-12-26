@@ -506,8 +506,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// save a valid tile position in the event that we untransform on an invalid tile
-	if (mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
+	if (stats.transformed && mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
 		transform_pos = stats.pos;
+		transform_map = mapr->getFilename();
 	}
 
 	switch(stats.cur_state) {
@@ -801,6 +802,7 @@ void Avatar::transform() {
 	stats.applyEffects();
 
 	transform_pos = stats.pos;
+	transform_map = mapr->getFilename();
 }
 
 void Avatar::untransform() {
@@ -810,8 +812,18 @@ void Avatar::untransform() {
 	// For timed transformations, move the player to the last valid tile when untransforming
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 	if (!mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
-		stats.pos = transform_pos;
 		log_msg = msg->get("Transformation expired. You have been moved back to a safe place.");
+		if (transform_map != mapr->getFilename()) {
+			mapr->teleportation = true;
+			mapr->teleport_mapname = transform_map;
+			mapr->teleport_destination.x = floor(transform_pos.x) + 0.5f;
+			mapr->teleport_destination.y = floor(transform_pos.y) + 0.5f;
+			transform_map = "";
+		}
+		else {
+			stats.pos.x = floor(transform_pos.x) + 0.5f;
+			stats.pos.y = floor(transform_pos.y) + 0.5f;
+		}
 	}
 	mapr->collider.block(stats.pos.x, stats.pos.y, false);
 
