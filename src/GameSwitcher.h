@@ -61,6 +61,7 @@ public:
 	void loadMusic();
 	void loadFPS();
 	bool isLoadingFrame();
+	bool isPaused();
 	void logic();
 	void render();
 	void showFPS(int fps);

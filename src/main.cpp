@@ -161,6 +161,10 @@ static void mainLoop (bool debug_event) {
 
 			logic_ticks += delay;
 			loops++;
+
+			// don't skip frames if the game is paused
+			if (gswitch->isPaused())
+				break;
 		}
 
 		render_device->blankScreen();
