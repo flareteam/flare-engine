@@ -34,6 +34,7 @@ public:
 		return exitRequested;
 	}
 	void setLoadingFrame();
+	virtual bool isPaused();
 
 	bool hasMusic;
 	bool reload_music;

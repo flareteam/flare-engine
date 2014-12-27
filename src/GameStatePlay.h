@@ -110,6 +110,7 @@ public:
 
 	void initialize();
 
+	bool isPaused();
 	void logic();
 	void render();
 	void showFPS(int fps);

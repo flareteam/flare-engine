@@ -39,5 +39,9 @@ void GameState::setLoadingFrame() {
 	load_counter = 2;
 }
 
+bool GameState::isPaused() {
+	return false;
+}
+
 GameState::~GameState() {
 }

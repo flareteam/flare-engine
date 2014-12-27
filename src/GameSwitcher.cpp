@@ -178,6 +178,10 @@ bool GameSwitcher::isLoadingFrame() {
 	return false;
 }
 
+bool GameSwitcher::isPaused() {
+	return currentState->isPaused();
+}
+
 void GameSwitcher::render() {
 	currentState->render();
 	curs->render();

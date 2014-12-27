@@ -1040,6 +1040,10 @@ void GameStatePlay::loadPowerTree() {
 	menu->pow->loadPowerTree("powers/trees/default.txt");
 }
 
+bool GameStatePlay::isPaused() {
+	return menu->pause;
+}
+
 Avatar *GameStatePlay::getAvatar() const {
 	return pc;
 }
