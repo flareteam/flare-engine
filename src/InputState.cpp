@@ -42,6 +42,7 @@ InputState::InputState(void)
 	, scroll_down(false)
 	, lock_scroll(false)
 	, touch_locked(false)
+	, lock_all(false)
 	, current_touch() {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_StartTextInput();
@@ -251,6 +252,8 @@ void InputState::saveKeyBindings() {
 }
 
 void InputState::handle(bool dump_event) {
+	if (lock_all) return;
+
 	SDL_Event event;
 
 	if (! SDL_VERSION_ATLEAST(2,0,0)) {

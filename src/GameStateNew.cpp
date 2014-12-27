@@ -300,6 +300,7 @@ void GameStateNew::logic() {
 
 	if (button_create->checkClick()) {
 		// start the new game
+		inpt->lock_all = true;
 		delete_items = false;
 		GameStatePlay* play = new GameStatePlay();
 		Avatar *avatar = play->getAvatar();

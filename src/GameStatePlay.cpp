@@ -281,6 +281,7 @@ void GameStatePlay::checkTeleport() {
 		if (mapr->teleportation && mapr->teleport_mapname != "") {
 			std::string teleport_mapname = mapr->teleport_mapname;
 			mapr->teleport_mapname = "";
+			inpt->lock_all = (teleport_mapname == "maps/spawn.txt");
 			mapr->executeOnMapExitEvents();
 			showLoading();
 			mapr->load(teleport_mapname);

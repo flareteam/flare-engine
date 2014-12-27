@@ -516,6 +516,7 @@ void GameStateLoad::logic() {
 
 void GameStateLoad::logicLoading() {
 	// load an existing game
+	inpt->lock_all = true;
 	delete_items = false;
 	GameStatePlay* play = new GameStatePlay();
 	play->resetGame();
