@@ -107,6 +107,7 @@ public:
 	bool scroll_down;
 	bool lock_scroll;
 	bool touch_locked;
+	bool lock_all;
 
 private:
 	bool un_press[key_count];

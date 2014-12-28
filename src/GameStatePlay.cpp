@@ -281,6 +281,7 @@ void GameStatePlay::checkTeleport() {
 		if (mapr->teleportation && mapr->teleport_mapname != "") {
 			std::string teleport_mapname = mapr->teleport_mapname;
 			mapr->teleport_mapname = "";
+			inpt->lock_all = (teleport_mapname == "maps/spawn.txt");
 			mapr->executeOnMapExitEvents();
 			showLoading();
 			mapr->load(teleport_mapname);
@@ -298,9 +299,14 @@ void GameStatePlay::checkTeleport() {
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 			npc_id = nearest_npc = -1;
 
-			// store this as the new respawn point
-			mapr->respawn_map = teleport_mapname;
-			mapr->respawn_point = pc->stats.pos;
+			// store this as the new respawn point (provided the tile is open)
+			if (mapr->collider.is_valid_position(pc->stats.pos.x, pc->stats.pos.y, MOVEMENT_NORMAL, true)) {
+				mapr->respawn_map = teleport_mapname;
+				mapr->respawn_point = pc->stats.pos;
+			}
+			else {
+				logError("GameStatePlay: Spawn position (%d, %d) is blocked.\n", (int)pc->stats.pos.x, (int)pc->stats.pos.y);
+			}
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
