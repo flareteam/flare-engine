@@ -469,16 +469,6 @@ void MenuManager::logic() {
 		npc->logic();
 	}
 
-	// check if mouse-clicking a menu button
-	act->checkMenu(clicking_character, clicking_inventory, clicking_powers, clicking_log);
-
-	if (exit->visible) {
-		exit->logic();
-		if (exit->isExitRequested()) {
-			done = true;
-		}
-	}
-
 	// cancel dragging and defocus menu tablists
 	if (!key_lock && inpt->pressing[CANCEL] && !inpt->lock[CANCEL] && !stats->corpse) {
 		if (keyboard_dragging || mouse_dragging) {
@@ -517,82 +507,93 @@ void MenuManager::logic() {
 		}
 	}
 
-	// inventory menu toggle
-	if ((inpt->pressing[INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory) {
-		key_lock = true;
-		if (inv->visible) {
-			snd->play(inv->sfx_close);
-			closeRight();
-		}
-		else {
-			closeRight();
-			act->requires_attention[MENU_INVENTORY] = false;
-			inv->visible = true;
-			snd->play(inv->sfx_open);
-		}
-
-	}
-
-	// powers menu toggle
-	if (((inpt->pressing[POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !stats->transformed) {
-		key_lock = true;
-		if (pow->visible) {
-			snd->play(pow->sfx_close);
-			closeRight();
-		}
-		else {
-			closeRight();
-			act->requires_attention[MENU_POWERS] = false;
-			pow->visible = true;
-			snd->play(pow->sfx_open);
+	if (exit->visible) {
+		exit->logic();
+		if (exit->isExitRequested()) {
+			done = true;
 		}
 	}
-	act->requires_attention[MENU_POWERS] = pow->getUnspent() > 0;
+	else {
+		// check if mouse-clicking a menu button
+		act->checkMenu(clicking_character, clicking_inventory, clicking_powers, clicking_log);
 
-	// character menu toggleggle
-	if ((inpt->pressing[CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character) {
-		key_lock = true;
-		if (chr->visible) {
-			snd->play(chr->sfx_close);
-			closeLeft();
-		}
-		else {
-			closeLeft();
-			act->requires_attention[MENU_CHARACTER] = false;
-			chr->visible = true;
-			snd->play(chr->sfx_open);
-			// Make sure the stat list isn't scrolled when we open the character menu
-			inpt->resetScroll();
-		}
-	}
-	act->requires_attention[MENU_CHARACTER] = chr->getUnspent() > 0;
+		// inventory menu toggle
+		if ((inpt->pressing[INVENTORY] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_inventory) {
+			key_lock = true;
+			if (inv->visible) {
+				snd->play(inv->sfx_close);
+				closeRight();
+			}
+			else {
+				closeRight();
+				act->requires_attention[MENU_INVENTORY] = false;
+				inv->visible = true;
+				snd->play(inv->sfx_open);
+			}
 
-	// log menu toggle
-	if ((inpt->pressing[LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log) {
-		key_lock = true;
-		if (log->visible) {
-			snd->play(log->sfx_close);
-			closeLeft();
 		}
-		else {
-			closeLeft();
-			act->requires_attention[MENU_LOG] = false;
-			log->visible = true;
-			snd->play(log->sfx_open);
-			// Make sure the log isn't scrolled when we open the log menu
-			inpt->resetScroll();
-		}
-	}
 
-	//developer console
-	if (DEV_MODE && inpt->pressing[DEVELOPER_MENU] && !key_lock && !mouse_dragging && !keyboard_dragging) {
-		key_lock = true;
-		if (devconsole->visible) {
-			closeAll();
+		// powers menu toggle
+		if (((inpt->pressing[POWERS] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_powers) && !stats->transformed) {
+			key_lock = true;
+			if (pow->visible) {
+				snd->play(pow->sfx_close);
+				closeRight();
+			}
+			else {
+				closeRight();
+				act->requires_attention[MENU_POWERS] = false;
+				pow->visible = true;
+				snd->play(pow->sfx_open);
+			}
 		}
-		else {
-			closeAll();
-			devconsole->visible = true;
+		act->requires_attention[MENU_POWERS] = pow->getUnspent() > 0;
+
+		// character menu toggleggle
+		if ((inpt->pressing[CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character) {
+			key_lock = true;
+			if (chr->visible) {
+				snd->play(chr->sfx_close);
+				closeLeft();
+			}
+			else {
+				closeLeft();
+				act->requires_attention[MENU_CHARACTER] = false;
+				chr->visible = true;
+				snd->play(chr->sfx_open);
+				// Make sure the stat list isn't scrolled when we open the character menu
+				inpt->resetScroll();
+			}
+		}
+		act->requires_attention[MENU_CHARACTER] = chr->getUnspent() > 0;
+
+		// log menu toggle
+		if ((inpt->pressing[LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log) {
+			key_lock = true;
+			if (log->visible) {
+				snd->play(log->sfx_close);
+				closeLeft();
+			}
+			else {
+				closeLeft();
+				act->requires_attention[MENU_LOG] = false;
+				log->visible = true;
+				snd->play(log->sfx_open);
+				// Make sure the log isn't scrolled when we open the log menu
+				inpt->resetScroll();
+			}
+		}
+
+		//developer console
+		if (DEV_MODE && inpt->pressing[DEVELOPER_MENU] && !key_lock && !mouse_dragging && !keyboard_dragging) {
+			key_lock = true;
+			if (devconsole->visible) {
+				closeAll();
+			}
+			else {
+				closeAll();
+				devconsole->visible = true;
+			}
 		}
 	}
 
