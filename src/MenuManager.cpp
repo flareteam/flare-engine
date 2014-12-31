@@ -761,7 +761,7 @@ void MenuManager::logic() {
 				}
 			}
 			// action bar
-			if (!inpt->touch_locked && (isWithin(act->numberArea,inpt->mouse) || isWithin(act->mouseArea,inpt->mouse) || isWithin(act->menuArea, inpt->mouse))) {
+			if (!inpt->touch_locked && (act->isWithinSlots(inpt->mouse) || act->isWithinMenus(inpt->mouse))) {
 				inpt->lock[MAIN1] = true;
 
 				// ctrl-click action bar to clear that slot
@@ -769,7 +769,7 @@ void MenuManager::logic() {
 					act->remove(inpt->mouse);
 				}
 				// allow drag-to-rearrange action bar
-				else if (!isWithin(act->menuArea, inpt->mouse)) {
+				else if (!act->isWithinMenus(inpt->mouse)) {
 					drag_power = act->checkDrag(inpt->mouse);
 					if (drag_power > 0) {
 						mouse_dragging = true;
@@ -794,14 +794,14 @@ void MenuManager::logic() {
 
 			// putting a power on the Action Bar
 			if (drag_src == DRAG_SRC_POWERS) {
-				if (isWithin(act->numberArea,inpt->mouse) || isWithin(act->mouseArea,inpt->mouse)) {
+				if (act->isWithinSlots(inpt->mouse)) {
 					act->drop(inpt->mouse, drag_power, 0);
 				}
 			}
 
 			// rearranging the action bar
 			else if (drag_src == DRAG_SRC_ACTIONBAR) {
-				if (isWithin(act->numberArea,inpt->mouse) || isWithin(act->mouseArea,inpt->mouse)) {
+				if (act->isWithinSlots(inpt->mouse)) {
 					act->drop(inpt->mouse, drag_power, 1);
 					// for locked slots forbid power dropping
 				}
@@ -817,7 +817,7 @@ void MenuManager::logic() {
 				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
 					inv->drop(inpt->mouse, drag_stack);
 				}
-				else if (isWithin(act->numberArea,inpt->mouse) || isWithin(act->mouseArea,inpt->mouse)) {
+				else if (act->isWithinSlots(inpt->mouse)) {
 					// The action bar is not storage!
 					inv->itemReturn(drag_stack);
 
@@ -929,13 +929,13 @@ void MenuManager::logic() {
 	}
 
 	// for action-bar powers that represent items, lookup the current item count
-	for (int i=0; i<12; i++) {
+	for (unsigned i = 0; i < act->slots_count; i++) {
 		act->slot_enabled[i] = true;
 		act->setItemCount(i, -1);
 
 		if (act->hotkeys[i] != -1) {
 			// first check if we're using a two-step power
-			if (act->twostep_slot != -1 && act->twostep_slot != i) {
+			if (act->twostep_slot != -1 && (unsigned)act->twostep_slot != i) {
 				act->slot_enabled[i] = false;
 				continue;
 			}

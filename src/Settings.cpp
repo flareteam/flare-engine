@@ -246,9 +246,9 @@ void setPaths() {
 	PATH_USER = std::string(SDL_AndroidGetInternalStoragePath()) + "/saves";
 	createDir(PATH_CONF);
 	createDir(PATH_USER);
-	
+
 	std::string mods_folder = "data/org.flare.app/files";
-	
+
 	if (SDL_AndroidGetExternalStorageState() != 0)
 	{
 		PATH_DATA = std::string(SDL_AndroidGetExternalStoragePath());

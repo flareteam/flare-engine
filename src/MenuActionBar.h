@@ -42,6 +42,8 @@ const int MENU_INVENTORY = 1;
 const int MENU_POWERS = 2;
 const int MENU_LOG = 3;
 
+const int ACTIONBAR_MAIN = 10;
+
 class MenuActionBar : public Menu {
 private:
 	void alignElements();
@@ -55,8 +57,11 @@ private:
 	Avatar *hero;
 	Rect src;
 
-	WidgetLabel *labels[16];
+	std::vector<WidgetLabel *> labels;
+	WidgetLabel * menu_labels[4];
+
 	Point last_mouse;
+	void addSlot(unsigned index, int x, int y);
 
 public:
 
@@ -67,34 +72,32 @@ public:
 	void logic();
 	void render();
 	void checkAction(std::vector<ActionData> &action_queue);
-	int checkDrag(Point mouse);
+	int checkDrag(const Point& mouse);
 	void checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l);
-	void drop(Point mouse, int power_index, bool rearranging);
+	void drop(const Point& mouse, int power_index, bool rearranging);
 	void actionReturn(int power_index);
-	void remove(Point mouse);
-	void set(int power_id[12]);
+	void remove(const Point& mouse);
+	void set(std::vector<int> power_id);
 	void clear();
 	void resetSlots();
-	void setItemCount(int index, int count, bool is_equipped = false);
+	void setItemCount(unsigned index, int count, bool is_equipped = false);
 
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(const Point& mouse);
+	bool isWithinSlots(const Point& mouse);
+	bool isWithinMenus(const Point& mouse);
 
-	int hotkeys[12]; // refer to power_index in PowerManager
-	int hotkeys_temp[12]; // temp for shapeshifting
-	int hotkeys_mod[12]; // hotkeys can be changed by items
-	bool locked[12]; // if slot is locked, you cannot drop it
-	WidgetSlot *slots[12]; // hotkey slots
+	unsigned slots_count;
+	std::vector<int> hotkeys; // refer to power_index in PowerManager
+	std::vector<int> hotkeys_temp; // temp for shapeshifting
+	std::vector<int> hotkeys_mod; // hotkeys can be changed by items
+	std::vector<bool> locked; // if slot is locked, you cannot drop it
+	std::vector<WidgetSlot *> slots; // hotkey slots
 	WidgetSlot *menus[4]; // menu buttons
-	int slot_item_count[12]; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.
-	bool slot_enabled[12];
+	std::vector<int> slot_item_count; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.
+	std::vector<bool> slot_enabled;
 	bool requires_attention[4];
-	bool slot_activated[12];
+	std::vector<bool> slot_activated;
 
-	// these store the area occupied by these hotslot sections.
-	// useful for detecting mouse interactions on those locations
-	Rect numberArea;
-	Rect mouseArea;
-	Rect menuArea;
 	int drag_prev_slot;
 	bool updated;
 	int twostep_slot;

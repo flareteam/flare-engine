@@ -36,6 +36,8 @@ public:
 	std::string description;
 };
 
+const int ACTIONBAR_MAX = 12; // maximum number of slots in MenuActionBar
+
 class HeroClass {
 public:
 	std::string name;
@@ -46,7 +48,7 @@ public:
 	int mental;
 	int offense;
 	int defense;
-	int hotkeys[12];
+	std::vector<int> hotkeys;
 	std::vector<int> powers;
 	std::vector<std::string> statuses;
 	std::string power_tree;
@@ -61,9 +63,7 @@ public:
 		, offense(0)
 		, defense(0)
 		, power_tree("") {
-		for (int i=0; i<12; i++) {
-			hotkeys[i] = 0;
-		}
+		hotkeys = std::vector<int>(ACTIONBAR_MAX, 0);
 		powers.clear();
 	}
 };
