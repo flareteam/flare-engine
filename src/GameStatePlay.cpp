@@ -202,12 +202,12 @@ void GameStatePlay::checkEnemyFocus() {
  */
 bool GameStatePlay::restrictPowerUse() {
 	if(MOUSE_MOVE) {
-		if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !(isWithin(menu->act->numberArea,inpt->mouse) || isWithin(menu->act->mouseArea,inpt->mouse) || isWithin(menu->act->menuArea, inpt->mouse))) {
+		if(inpt->pressing[MAIN1] && !inpt->pressing[SHIFT] && !menu->act->isWithinSlots(inpt->mouse) && !menu->act->isWithinMenus(inpt->mouse)) {
 			if(enemy == NULL) {
 				return true;
 			}
 			else {
-				if(menu->act->slot_enabled[10] && (powers->powers[menu->act->hotkeys[10]].target_party != enemy->stats.hero_ally))
+				if(ACTIONBAR_MAIN < menu->act->slots_count && menu->act->slot_enabled[ACTIONBAR_MAIN] && (powers->powers[menu->act->hotkeys[ACTIONBAR_MAIN]].target_party != enemy->stats.hero_ally))
 					return true;
 			}
 		}
@@ -804,10 +804,10 @@ void GameStatePlay::checkSaveEvent() {
 /**
  * Recursively update the action bar powers based on equipment
  */
-void GameStatePlay::updateActionBar(int index) {
-	if (index < 0 || index > 11) return;
+void GameStatePlay::updateActionBar(unsigned index) {
+	if (menu->act->slots_count == 0 || index > menu->act->slots_count - 1) return;
 
-	for (int i=index; i<12; i++) {
+	for (unsigned i = index; i < menu->act->slots_count; i++) {
 		if (menu->act->hotkeys[i] == 0) continue;
 
 		for (int j=0; j<menu->inv->inventory[EQUIPMENT].getSlotNumber(); j++) {
@@ -899,18 +899,19 @@ void GameStatePlay::logic() {
 		pc->setPowers = false;
 		if (!pc->stats.humanoid && menu->pow->visible) menu->closeRight();
 		// save ActionBar state and lock slots from removing/replacing power
-		for (int i=0; i<12 ; i++) {
+		for (int i=0; i<ACTIONBAR_MAX ; i++) {
 			menu->act->hotkeys_temp[i] = menu->act->hotkeys[i];
 			menu->act->hotkeys[i] = 0;
 		}
-		int count = 10;
+		int count = ACTIONBAR_MAIN;
+		// creatures can have up to 4 powers
 		for (int i=0; i<4 ; i++) {
 			if (pc->charmed_stats->power_index[i] != 0) {
 				menu->act->hotkeys[count] = pc->charmed_stats->power_index[i];
 				menu->act->locked[count] = true;
 				count++;
 			}
-			if (count == 12) count = 0;
+			if (count == ACTIONBAR_MAX) count = 0;
 		}
 		if (pc->stats.manual_untransform && pc->untransform_power > 0) {
 			menu->act->hotkeys[count] = pc->untransform_power;
@@ -930,7 +931,7 @@ void GameStatePlay::logic() {
 		pc->revertPowers = false;
 
 		// restore ActionBar state
-		for (int i=0; i<12 ; i++) {
+		for (int i=0; i<ACTIONBAR_MAX; i++) {
 			menu->act->hotkeys[i] = menu->act->hotkeys_temp[i];
 			menu->act->locked[i] = false;
 		}
@@ -965,7 +966,7 @@ void GameStatePlay::logic() {
 		menu->act->updated = false;
 
 		// set all hotkeys to their base powers
-		for (int i=0; i<12; i++) {
+		for (unsigned i = 0; i < menu->act->slots_count; i++) {
 			menu->act->hotkeys_mod[i] = menu->act->hotkeys[i];
 		}
 

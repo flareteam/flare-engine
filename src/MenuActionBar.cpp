@@ -44,6 +44,7 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	, disabled(NULL)
 	, attention(NULL)
 	, hero(_hero)
+	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
 	, twostep_slot(-1) {
@@ -51,19 +52,12 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	src.w = ICON_SIZE;
 	src.h = ICON_SIZE;
 
-	clear();
-
-	for (unsigned int i=0; i<16; i++) {
-		labels[i] = new WidgetLabel();
+	for (unsigned int i = 0; i < 4; i++) {
+		menu_labels[i] = new WidgetLabel();
 	}
 
 	tablist = TabList(HORIZONTAL, ACTIONBAR_BACK, ACTIONBAR_FORWARD, ACTIONBAR);
 
-	for (unsigned int i=0; i<12; i++) {
-		slots[i] = new WidgetSlot(-1, ACTIONBAR);
-		slots[i]->continuous = true;
-		tablist.add(slots[i]);
-	}
 	for (unsigned int i=0; i<4; i++) {
 		menus[i] = new WidgetSlot(-1, ACTIONBAR);
 		tablist.add(menus[i]);
@@ -78,55 +72,72 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// numberArea
-			// @ATTR slot1|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 1.
-			if (infile.key == "slot1") slots[0]->pos = toRect(infile.val);
-			// @ATTR slot2|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 2.
-			else if (infile.key == "slot2") slots[1]->pos = toRect(infile.val);
-			// @ATTR slot3|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 3.
-			else if (infile.key == "slot3") slots[2]->pos = toRect(infile.val);
-			// @ATTR slot4|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 4.
-			else if (infile.key == "slot4") slots[3]->pos = toRect(infile.val);
-			// @ATTR slot5|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 5.
-			else if (infile.key == "slot5") slots[4]->pos = toRect(infile.val);
-			// @ATTR slot6|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 6.
-			else if (infile.key == "slot6") slots[5]->pos = toRect(infile.val);
-			// @ATTR slot7|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 7.
-			else if (infile.key == "slot7") slots[6]->pos = toRect(infile.val);
-			// @ATTR slot8|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 8.
-			else if (infile.key == "slot8") slots[7]->pos = toRect(infile.val);
-			// @ATTR slot9|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 9.
-			else if (infile.key == "slot9") slots[8]->pos = toRect(infile.val);
-			// @ATTR slot10|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 10.
-			else if (infile.key == "slot10") slots[9]->pos = toRect(infile.val);
+			// @ATTR slot|index(integer), x (integer), y (integer)|Index (max 10) and position for power slot.
+			if (infile.key == "slot") {
+				unsigned index = popFirstInt(infile.val, ',');
+				if (index == 0 || index > 10) {
+					infile.error("MenuActionBar: Slot index must be in range 1-10.");
+				}
+				else {
+					int x = popFirstInt(infile.val, ',');
+					int y = popFirstInt(infile.val, ',');
+					addSlot(index-1, x, y);
+				}
+			}
+			// @ATTR slot_M1|x (integer), y (integer)|Position for the primary action slot.
+			else if (infile.key == "slot_M1") {
+				int x = popFirstInt(infile.val, ',');
+				int y = popFirstInt(infile.val, ',');
+				addSlot(10, x, y);
+			}
+			// @ATTR slot_M2|x (integer), y (integer)|Position for the secondary action slot.
+			else if (infile.key == "slot_M2") {
+				int x = popFirstInt(infile.val, ',');
+				int y = popFirstInt(infile.val, ',');
+				addSlot(11, x, y);
+			}
 
-			// mouseArea
-			// @ATTR slot_M1|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 11.
-			else if (infile.key == "slot_M1") slots[10]->pos = toRect(infile.val);
-			// @ATTR slot_M2|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for slot 12.
-			else if (infile.key == "slot_M2") slots[11]->pos = toRect(infile.val);
-
-			// menuArea
-			// @ATTR char_menu|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for the Character menu button.
-			else if (infile.key == "char_menu") menus[MENU_CHARACTER]->pos = toRect(infile.val);
-			// @ATTR inv_menu|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for the Inventory menu button.
-			else if (infile.key == "inv_menu") menus[MENU_INVENTORY]->pos = toRect(infile.val);
-			// @ATTR powers_menu|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for the Powers menu button.
-			else if (infile.key == "powers_menu") menus[MENU_POWERS]->pos = toRect(infile.val);
-			// @ATTR log_menu|x (integer), y (integer), w (integer), h (integer)|Position and dimensions for the Log menu button.
-			else if (infile.key == "log_menu") menus[MENU_LOG]->pos = toRect(infile.val);
-
-			// @ATTR numberArea|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the area containing slots 1-10.
-			else if (infile.key == "numberArea") numberArea = toRect(infile.val);
-			// @ATTR mouseArea|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the area containing slots M1 and M2.
-			else if (infile.key == "mouseArea") mouseArea = toRect(infile.val);
-			// @ATTR menuArea|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the area containing the menu buttons.
-			else if (infile.key == "menuArea") menuArea = toRect(infile.val);
+			// @ATTR char_menu|x (integer), y (integer)|Position for the Character menu button.
+			else if (infile.key == "char_menu") {
+				menus[MENU_CHARACTER]->pos.x = popFirstInt(infile.val, ',');
+				menus[MENU_CHARACTER]->pos.y = popFirstInt(infile.val, ',');
+				menus[MENU_CHARACTER]->pos.w = menus[MENU_CHARACTER]->pos.h = ICON_SIZE;
+			}
+			// @ATTR inv_menu|x (integer), y (integer)|Position for the Inventory menu button.
+			else if (infile.key == "inv_menu") {
+				menus[MENU_INVENTORY]->pos.x = popFirstInt(infile.val, ',');
+				menus[MENU_INVENTORY]->pos.y = popFirstInt(infile.val, ',');
+				menus[MENU_INVENTORY]->pos.w = menus[MENU_INVENTORY]->pos.h = ICON_SIZE;
+			}
+			// @ATTR powers_menu|x (integer), y (integer)|Position for the Powers menu button.
+			else if (infile.key == "powers_menu") {
+				menus[MENU_POWERS]->pos.x = popFirstInt(infile.val, ',');
+				menus[MENU_POWERS]->pos.y = popFirstInt(infile.val, ',');
+				menus[MENU_POWERS]->pos.w = menus[MENU_POWERS]->pos.h = ICON_SIZE;
+			}
+			// @ATTR log_menu|x (integer), y (integer)|Position for the Log menu button.
+			else if (infile.key == "log_menu") {
+				menus[MENU_LOG]->pos.x = popFirstInt(infile.val, ',');
+				menus[MENU_LOG]->pos.y = popFirstInt(infile.val, ',');
+				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = ICON_SIZE;
+			}
 
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
 	}
+
+	slots_count = slots.size();
+
+	hotkeys.resize(slots_count);
+	hotkeys_temp.resize(slots_count);
+	hotkeys_mod.resize(slots_count);
+	locked.resize(slots_count);
+	slot_item_count.resize(slots_count);
+	slot_enabled.resize(slots_count);
+	slot_activated.resize(slots_count);
+
+	clear();
 
 	loadGraphics();
 
@@ -134,46 +145,64 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	alignElements();
 }
 
+void MenuActionBar::addSlot(unsigned index, int x, int y) {
+	if (index >= slots.size()) {
+		labels.resize(index+1, NULL);
+		slots.resize(index+1, NULL);
+	}
+
+	labels[index] = new WidgetLabel();
+
+	slots[index] = new WidgetSlot(-1, ACTIONBAR);
+	slots[index]->pos.x = x;
+	slots[index]->pos.y = y;
+	slots[index]->pos.w = slots[index]->pos.h = ICON_SIZE;
+	slots[index]->continuous = true;
+
+	tablist.add(slots[index]);
+}
+
 void MenuActionBar::alignElements() {
-	for (unsigned int i=0; i<12; i++) {
-		slots[i]->pos.x += window_area.x;
-		slots[i]->pos.y += window_area.y;
+	for (unsigned int i = 0; i < slots_count; i++) {
+		if (slots[i]) {
+			slots[i]->pos.x += window_area.x;
+			slots[i]->pos.y += window_area.y;
+		}
 	}
 	for (unsigned int i=0; i<4; i++) {
 		menus[i]->pos.x += window_area.x;
 		menus[i]->pos.y += window_area.y;
 	}
 
-	// screen areas occupied by the three main sections
-	numberArea.x += window_area.x;
-	mouseArea.x += window_area.x;
-	menuArea.x += window_area.x;
-	numberArea.y = mouseArea.y = menuArea.y = window_area.y;
-
 	// set keybinding labels
-	for (unsigned int i=0; i<10; i++) {
-		if (inpt->binding[i+6] < 8)
-			labels[i]->set(slots[i]->pos.x+slots[i]->pos.w, slots[i]->pos.y+slots[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+6]-1], font->getColor("menu_normal"));
-		else
-			labels[i]->set(slots[i]->pos.x+slots[i]->pos.w, slots[i]->pos.y+slots[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i+6]), font->getColor("menu_normal"));
+	for (unsigned int i = 0; i<ACTIONBAR_MAIN; i++) {
+		if (i < slots.size() && slots[i]) {
+			if (inpt->binding[i + BAR_1] < 8)
+				labels[i]->set(slots[i]->pos.x + slots[i]->pos.w, slots[i]->pos.y + slots[i]->pos.h - font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i + BAR_1] - 1], font->getColor("menu_normal"));
+			else
+				labels[i]->set(slots[i]->pos.x + slots[i]->pos.w, slots[i]->pos.y + slots[i]->pos.h - font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i + BAR_1]), font->getColor("menu_normal"));
+		}
 	}
-	for (unsigned int i=0; i<2; i++) {
-		if (inpt->binding[i+20] < 8)
-			labels[i+10]->set(slots[i+10]->pos.x+slots[i+10]->pos.w, slots[i+10]->pos.y+slots[i+10]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+20]-1], font->getColor("menu_normal"));
-		else
-			labels[i+10]->set(slots[i+10]->pos.x+slots[i+10]->pos.w, slots[i+10]->pos.y+slots[i+10]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i+20]), font->getColor("menu_normal"));
+
+	for (unsigned int i=ACTIONBAR_MAIN; i<ACTIONBAR_MAX; i++) {
+		if (i < slots.size() && slots[i]) {
+			if (inpt->binding[i - ACTIONBAR_MAIN + MAIN1] < 8)
+				labels[i]->set(slots[i]->pos.x + slots[i]->pos.w, slots[i]->pos.y + slots[i]->pos.h - font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i - ACTIONBAR_MAIN + MAIN1] - 1], font->getColor("menu_normal"));
+			else
+				labels[i]->set(slots[i]->pos.x + slots[i]->pos.w, slots[i]->pos.y + slots[i]->pos.h - font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i - ACTIONBAR_MAIN + MAIN1]), font->getColor("menu_normal"));
+		}
 	}
 	for (unsigned int i=0; i<4; i++) {
-		if (inpt->binding[i+16] < 8)
-			labels[i+12]->set(menus[i]->pos.x+menus[i]->pos.w, menus[i]->pos.y+menus[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i+16]-1], font->getColor("menu_normal"));
+		if (inpt->binding[i + CHARACTER] < 8)
+			menu_labels[i]->set(menus[i]->pos.x+menus[i]->pos.w, menus[i]->pos.y+menus[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i + CHARACTER] - 1], font->getColor("menu_normal"));
 		else
-			labels[i+12]->set(menus[i]->pos.x+menus[i]->pos.w, menus[i]->pos.y+menus[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i+16]), font->getColor("menu_normal"));
+			menu_labels[i]->set(menus[i]->pos.x+menus[i]->pos.w, menus[i]->pos.y+menus[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i + CHARACTER]), font->getColor("menu_normal"));
 	}
 }
 
 void MenuActionBar::clear() {
 	// clear action bar
-	for (int i=0; i<12; i++) {
+	for (unsigned int i = 0; i < slots_count; i++) {
 		hotkeys[i] = 0;
 		hotkeys_temp[i] = 0;
 		hotkeys_mod[i] = 0;
@@ -241,14 +270,14 @@ void MenuActionBar::logic() {
 	tablist.logic();
 }
 
-
-
 void MenuActionBar::render() {
 
 	Menu::render();
 
 	// draw hotkeyed icons
-	for (int i=0; i<12; i++) {
+	for (unsigned i = 0; i < slots_count; i++) {
+		if (!slots[i]) continue;
+
 		if (hotkeys[i] != 0 && (unsigned)hotkeys_mod[i] < powers->powers.size()) {
 			const Power &power = powers->getPower(hotkeys_mod[i]);
 
@@ -258,7 +287,7 @@ void MenuActionBar::render() {
 							  && !hero->stats.effects.stun
 							  && hero->stats.alive
 							  && hero->stats.canUsePower(power, hotkeys_mod[i])
-							  && (twostep_slot == -1 || twostep_slot == i);
+							  && (twostep_slot == -1 || (unsigned)twostep_slot == i);
 
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
@@ -290,8 +319,12 @@ void MenuActionBar::render() {
 
 	// draw hotkey labels
 	if (SHOW_HOTKEYS) {
-		for (int i=0; i<16; i++) {
-			labels[i]->render();
+		for (unsigned int i = 0; i < slots_count; i++) {
+			if (labels[i])
+				labels[i]->render();
+		}
+		for (int i = 0; i < 4; i++) {
+			menu_labels[i]->render();
 		}
 	}
 
@@ -304,13 +337,13 @@ void MenuActionBar::render() {
 void MenuActionBar::renderCooldowns() {
 	Rect item_src;
 
-	for (int i=0; i<12; i++) {
-		if (!slot_enabled[i]) {
+	for (unsigned i = 0; i < slots_count; i++) {
+		if (slots[i] && !slot_enabled[i]) {
 			item_src.x = item_src.y = 0;
 			item_src.w = item_src.h = ICON_SIZE;
 
 			// Wipe from bottom to top
-			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown && (twostep_slot == -1 || twostep_slot == i)) {
+			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown && (twostep_slot == -1 || (unsigned)twostep_slot == i)) {
 				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
 			}
 
@@ -328,7 +361,7 @@ void MenuActionBar::renderCooldowns() {
 /**
  * On mouseover, show tooltip for buttons
  */
-TooltipData MenuActionBar::checkTooltip(Point mouse) {
+TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 	TooltipData tip;
 
 	if (isWithin(menus[MENU_CHARACTER]->pos, mouse)) {
@@ -359,9 +392,9 @@ TooltipData MenuActionBar::checkTooltip(Point mouse) {
 			tip.addText(msg->get("Log"));
 		return tip;
 	}
-	for (int i=0; i<12; i++) {
+	for (unsigned i = 0; i < slots_count; i++) {
 		if (hotkeys_mod[i] != 0) {
-			if (isWithin(slots[i]->pos, mouse)) {
+			if (slots[i] && isWithin(slots[i]->pos, mouse)) {
 				tip.addText(powers->powers[hotkeys_mod[i]].name);
 			}
 		}
@@ -373,9 +406,9 @@ TooltipData MenuActionBar::checkTooltip(Point mouse) {
 /**
  * After dragging a power or item onto the action bar, set as new hotkey
  */
-void MenuActionBar::drop(Point mouse, int power_index, bool rearranging) {
-	for (int i=0; i<12; i++) {
-		if (isWithin(slots[i]->pos, mouse)) {
+void MenuActionBar::drop(const Point& mouse, int power_index, bool rearranging) {
+	for (unsigned i = 0; i < slots_count; i++) {
+		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
 			if (rearranging) {
 				if ((locked[i] && !locked[drag_prev_slot]) || (!locked[i] && locked[drag_prev_slot])) {
 					locked[i] = !locked[i];
@@ -401,9 +434,9 @@ void MenuActionBar::actionReturn(int power_index) {
 /**
  * CTRL-click a hotkey to clear it
  */
-void MenuActionBar::remove(Point mouse) {
-	for (int i=0; i<12; i++) {
-		if (isWithin(slots[i]->pos, mouse)) {
+void MenuActionBar::remove(const Point& mouse) {
+	for (unsigned i=0; i<slots_count; i++) {
+		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
 			if (locked[i]) return;
 			hotkeys[i] = 0;
 			updated = true;
@@ -418,15 +451,17 @@ void MenuActionBar::remove(Point mouse) {
  */
 void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 	// check click and hotkey actions
-	for (int i=0; i<12; i++) {
+	for (unsigned i = 0; i < slots_count; i++) {
 		ActionData action;
 		action.hotkey = i;
 		bool have_aim = false;
 		slot_activated[i] = false;
 
+		if (!slots[i]) continue;
+
 		if (slot_enabled[i]) {
 			// part two of two step activation
-			if (twostep_slot == i && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			if ((unsigned)twostep_slot == i && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 				have_aim = true;
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
@@ -454,7 +489,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			}
 
 			// joystick/keyboard action button
-			else if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == i) {
+			else if (inpt->pressing[ACTIONBAR_USE] && (unsigned)tablist.getCurrent() == i) {
 				have_aim = false;
 				slot_activated[i] = true;
 				action.power = hotkeys_mod[i];
@@ -521,11 +556,11 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 /**
  * If clicking while a menu is open, assume the player wants to rearrange the action bar
  */
-int MenuActionBar::checkDrag(Point mouse) {
+int MenuActionBar::checkDrag(const Point& mouse) {
 	int power_index;
 
-	for (int i=0; i<12; i++) {
-		if (isWithin(slots[i]->pos, mouse)) {
+	for (unsigned i=0; i<slots_count; i++) {
+		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
 			drag_prev_slot = i;
 			power_index = hotkeys[i];
 			hotkeys[i] = 0;
@@ -559,17 +594,19 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 /**
  * Set all hotkeys at once e.g. when loading a game
  */
-void MenuActionBar::set(int power_id[12]) {
-	for (int i=0; i<12; i++) {
+void MenuActionBar::set(std::vector<int> power_id) {
+	for (unsigned int i = 0; i < slots_count; i++) {
 		hotkeys[i] = power_id[i];
 	}
 	updated = true;
 }
 
 void MenuActionBar::resetSlots() {
-	for (int i=0; i<12; i++) {
-		slots[i]->checked = false;
-		slots[i]->pressed = false;
+	for (unsigned int i = 0; i < slots_count; i++) {
+		if (slots[i]) {
+			slots[i]->checked = false;
+			slots[i]->pressed = false;
+		}
 	}
 }
 
@@ -588,8 +625,8 @@ FPoint MenuActionBar::setTarget(bool have_aim, bool aim_assist) {
 	}
 }
 
-void MenuActionBar::setItemCount(int index, int count, bool is_equipped) {
-	if (index < 0 || index > 11) return;
+void MenuActionBar::setItemCount(unsigned index, int count, bool is_equipped) {
+	if (index >= slots_count || !slots[index]) return;
 
 	slot_item_count[index] = count;
 	if (count == 0) {
@@ -610,6 +647,22 @@ void MenuActionBar::setItemCount(int index, int count, bool is_equipped) {
 		slots[index]->setAmount(0,0);
 }
 
+bool MenuActionBar::isWithinSlots(const Point& mouse) {
+	for (unsigned i=0; i<slots_count; i++) {
+		if (slots[i] && isWithin(slots[i]->pos, mouse))
+			return true;
+	}
+	return false;
+}
+
+bool MenuActionBar::isWithinMenus(const Point& mouse) {
+	for (unsigned i=0; i<4; i++) {
+		if (isWithin(menus[i]->pos, mouse))
+			return true;
+	}
+	return false;
+}
+
 MenuActionBar::~MenuActionBar() {
 
 	if (emptyslot)
@@ -619,10 +672,13 @@ MenuActionBar::~MenuActionBar() {
 	if (attention)
 		delete attention;
 
-	for (unsigned i = 0; i < 16; i++)
+	for (unsigned i = 0; i < slots_count; i++)
 		delete labels[i];
 
-	for (unsigned i = 0; i < 12; i++)
+	for (unsigned i = 0; i < 4; i++)
+		delete menu_labels[i];
+
+	for (unsigned i = 0; i < slots_count; i++)
 		delete slots[i];
 
 	for (unsigned int i=0; i<4; i++)

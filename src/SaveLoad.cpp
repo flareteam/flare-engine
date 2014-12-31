@@ -106,10 +106,17 @@ void GameStatePlay::saveGame() {
 
 		// action bar
 		outfile << "actionbar=";
-		for (int i=0; i<12; i++) {
-			if (pc->stats.transformed) outfile << menu->act->hotkeys_temp[i];
-			else outfile << menu->act->hotkeys[i];
-			if (i<11) outfile << ",";
+		for (unsigned i = 0; i < ACTIONBAR_MAX; i++) {
+			if (i < menu->act->slots_count)
+			{
+				if (pc->stats.transformed) outfile << menu->act->hotkeys_temp[i];
+				else outfile << menu->act->hotkeys[i];
+			}
+			else
+			{
+				outfile << 0;
+			}
+			if (i < ACTIONBAR_MAX - 1) outfile << ",";
 		}
 		outfile << "\n";
 
@@ -196,11 +203,7 @@ void GameStatePlay::loadGame() {
 	if (game_slot == 0) return;
 
 	FileParser infile;
-	int hotkeys[12];
-
-	for (int i=0; i<12; i++) {
-		hotkeys[i] = -1;
-	}
+	std::vector<int> hotkeys(ACTIONBAR_MAX, -1);
 
 	std::stringstream ss;
 	ss.str("");
@@ -281,7 +284,7 @@ void GameStatePlay::loadGame() {
 				}
 			}
 			else if (infile.key == "actionbar") {
-				for (int i=0; i<12; i++) {
+				for (int i = 0; i < ACTIONBAR_MAX; i++) {
 					hotkeys[i] = toInt(infile.nextValue());
 					if (hotkeys[i] < 0) {
 						logError("SaveLoad: Hotkey power on position %d has negative id, skipping\n", i);

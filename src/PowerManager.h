@@ -104,7 +104,7 @@ public:
 class ActionData {
 public:
 	int power;
-	int hotkey;
+	unsigned hotkey;
 	bool instant_item;
 	FPoint target;
 
