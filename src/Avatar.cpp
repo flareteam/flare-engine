@@ -759,6 +759,7 @@ void Avatar::transform() {
 	// replace some hero stats
 	stats.speed = charmed_stats->speed;
 	stats.flying = charmed_stats->flying;
+	stats.intangible = charmed_stats->intangible;
 	stats.humanoid = charmed_stats->humanoid;
 	stats.animations = charmed_stats->animations;
 	stats.powers_list = charmed_stats->powers_list;
@@ -836,6 +837,7 @@ void Avatar::untransform() {
 	// revert some hero stats to last saved
 	stats.speed = hero_stats->speed;
 	stats.flying = hero_stats->flying;
+	stats.intangible = hero_stats->intangible;
 	stats.humanoid = hero_stats->humanoid;
 	stats.animations = hero_stats->animations;
 	stats.effects = hero_stats->effects;
