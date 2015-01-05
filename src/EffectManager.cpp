@@ -285,6 +285,8 @@ void EffectManager::clearEffects() {
 		removeEffect(i-1);
 	}
 
+	clearStatus();
+
 	// clear triggers
 	triggered_others = triggered_block = triggered_hit = triggered_halfdeath = triggered_joincombat = triggered_death = false;
 }
