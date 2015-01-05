@@ -773,29 +773,15 @@ void Avatar::transform() {
 	activeAnimation = animationSet->getAnimation();
 	stats.cur_state = AVATAR_STANCE;
 
-	// damage
-	clampFloor(stats.starting[STAT_DMG_MELEE_MIN], charmed_stats->starting[STAT_DMG_MELEE_MIN]);
-	clampFloor(stats.starting[STAT_DMG_MELEE_MAX], charmed_stats->starting[STAT_DMG_MELEE_MAX]);
-
-	clampFloor(stats.starting[STAT_DMG_MENT_MIN], charmed_stats->starting[STAT_DMG_MENT_MIN]);
-	clampFloor(stats.starting[STAT_DMG_MENT_MAX], charmed_stats->starting[STAT_DMG_MENT_MAX]);
-
-	clampFloor(stats.starting[STAT_DMG_RANGED_MIN], charmed_stats->starting[STAT_DMG_RANGED_MIN]);
-	clampFloor(stats.starting[STAT_DMG_RANGED_MAX], charmed_stats->starting[STAT_DMG_RANGED_MAX]);
-
-	// dexterity
-	clampFloor(stats.starting[STAT_ABS_MIN], charmed_stats->starting[STAT_ABS_MIN]);
-	clampFloor(stats.starting[STAT_ABS_MAX], charmed_stats->starting[STAT_ABS_MAX]);
-
-	clampFloor(stats.starting[STAT_AVOIDANCE], charmed_stats->starting[STAT_AVOIDANCE]);
-
-	clampFloor(stats.starting[STAT_ACCURACY], charmed_stats->starting[STAT_ACCURACY]);
-
-	clampFloor(stats.starting[STAT_CRIT], charmed_stats->starting[STAT_CRIT]);
+	// base stats
+	for (unsigned int i=0; i<STAT_COUNT; ++i) {
+		clampFloor(stats.starting[i], charmed_stats->starting[i]);
+	}
 
 	// resistances
-	for (unsigned int i=0; i<stats.vulnerable.size(); i++)
+	for (unsigned int i=0; i<stats.vulnerable.size(); i++) {
 		clampCeil(stats.vulnerable[i], charmed_stats->vulnerable[i]);
+	}
 
 	loadSounds(charmed_stats);
 	loadStepFX("NULL");
@@ -855,18 +841,9 @@ void Avatar::untransform() {
 	// In order to switch to the stance animation, we can't already be in a stance animation
 	setAnimation("run");
 
-	stats.starting[STAT_DMG_MELEE_MIN] = hero_stats->starting[STAT_DMG_MELEE_MIN];
-	stats.starting[STAT_DMG_MELEE_MAX] = hero_stats->starting[STAT_DMG_MELEE_MAX];
-	stats.starting[STAT_DMG_MENT_MIN] = hero_stats->starting[STAT_DMG_MENT_MIN];
-	stats.starting[STAT_DMG_MENT_MAX] = hero_stats->starting[STAT_DMG_MENT_MAX];
-	stats.starting[STAT_DMG_RANGED_MIN] = hero_stats->starting[STAT_DMG_RANGED_MIN];
-	stats.starting[STAT_DMG_RANGED_MAX] = hero_stats->starting[STAT_DMG_RANGED_MAX];
-
-	stats.starting[STAT_ABS_MIN] = hero_stats->starting[STAT_ABS_MIN];
-	stats.starting[STAT_ABS_MAX] = hero_stats->starting[STAT_ABS_MAX];
-	stats.starting[STAT_AVOIDANCE] = hero_stats->starting[STAT_AVOIDANCE];
-	stats.starting[STAT_ACCURACY] = hero_stats->starting[STAT_ACCURACY];
-	stats.starting[STAT_CRIT] = hero_stats->starting[STAT_CRIT];
+	for (unsigned int i=0; i<STAT_COUNT; ++i) {
+		stats.starting[i] = hero_stats->starting[i];
+	}
 
 	for (unsigned int i=0; i<stats.vulnerable.size(); i++) {
 		stats.vulnerable[i] = hero_stats->vulnerable[i];
