@@ -94,6 +94,7 @@ public:
 	void loadHeroSFX();
 	std::string getShortClass();
 	std::string getLongClass();
+	void addXP(int amount);
 
 	bool alive;
 	bool corpse; // creature is dead and done animating

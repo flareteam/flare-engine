@@ -452,6 +452,9 @@ void StatBlock::recalc() {
 		}
 	}
 
+	if (xp >= xp_table.back())
+		xp = xp_table.back();
+
 	applyEffects();
 
 	hp = get(STAT_HP_MAX);
@@ -799,7 +802,7 @@ void StatBlock::setWanderArea(int r) {
  * For the sake of consistency with previous versions,
  * this means returning the generated subclass
  */
-std::string StatBlock:: getShortClass() {
+std::string StatBlock::getShortClass() {
 	if (character_subclass == "")
 		return msg->get(character_class);
 	else
@@ -815,4 +818,11 @@ std::string StatBlock::getLongClass() {
 		return msg->get(character_class);
 	else
 		return msg->get(character_class) + " / " + msg->get(character_subclass);
+}
+
+void StatBlock::addXP(int amount) {
+	xp += amount;
+
+	if (xp >= xp_table.back())
+		xp = xp_table.back();
 }

@@ -402,9 +402,13 @@ void MenuManager::logic() {
 	bool clicking_log = false;
 	ItemStack stack;
 
-	hp->update(stats->hp,stats->get(STAT_HP_MAX),inpt->mouse);
-	mp->update(stats->mp,stats->get(STAT_MP_MAX),inpt->mouse);
-	xp->update((stats->xp - stats->xp_table[stats->level-1]),(stats->xp_table[stats->level] - stats->xp_table[stats->level-1]),inpt->mouse,msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
+	hp->update(stats->hp, stats->get(STAT_HP_MAX), inpt->mouse);
+	mp->update(stats->mp, stats->get(STAT_MP_MAX), inpt->mouse);
+
+	if (stats->level == (int)stats->xp_table.size())
+		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d", stats->xp));
+	else
+		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
 
 	if (NO_MOUSE)
 		handleKeyboardNavigation();
