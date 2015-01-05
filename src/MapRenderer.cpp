@@ -855,6 +855,13 @@ void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoin
 	}
 }
 
+bool MapRenderer::isValidTile(const unsigned &tile) {
+	if (tile >= tset.tiles.size())
+		return false;
+
+	return tset.tiles[tile].tile != NULL;
+}
+
 MapRenderer::~MapRenderer() {
 	if (music != NULL) {
 		Mix_HaltMusic();
