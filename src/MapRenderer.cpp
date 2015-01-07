@@ -856,6 +856,9 @@ void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoin
 }
 
 bool MapRenderer::isValidTile(const unsigned &tile) {
+	if (tile == 0)
+		return true;
+
 	if (tile >= tset.tiles.size())
 		return false;
 
