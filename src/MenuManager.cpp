@@ -395,11 +395,6 @@ void MenuManager::handleKeyboardNavigation() {
 	}
 }
 void MenuManager::logic() {
-
-	bool clicking_character = false;
-	bool clicking_inventory = false;
-	bool clicking_powers = false;
-	bool clicking_log = false;
 	ItemStack stack;
 
 	hp->update(stats->hp, stats->get(STAT_HP_MAX), inpt->mouse);
@@ -516,8 +511,12 @@ void MenuManager::logic() {
 		if (exit->isExitRequested()) {
 			done = true;
 		}
-	}
-	else {
+	} else {
+		bool clicking_character = false;
+		bool clicking_inventory = false;
+		bool clicking_powers = false;
+		bool clicking_log = false;
+
 		// check if mouse-clicking a menu button
 		act->checkMenu(clicking_character, clicking_inventory, clicking_powers, clicking_log);
 
