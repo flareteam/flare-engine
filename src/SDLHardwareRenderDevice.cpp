@@ -215,7 +215,7 @@ int SDLHardwareRenderDevice::createContext(int width, int height) {
 		return 0;
 	}
 	else {
-		logError("SDLHardwareRenderDevice: createContext() failed: %s\n", SDL_GetError());
+		logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
 		SDL_Quit();
 		exit(1);
 	}
@@ -454,7 +454,7 @@ Image *SDLHardwareRenderDevice::createImage(int width, int height) {
 	if (width > 0 && height > 0) {
 		image->surface = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
 		if(image->surface == NULL) {
-			logError("SDLHardwareRenderDevice: SDL_CreateTexture failed: %s\n", SDL_GetError());
+			logError("SDLHardwareRenderDevice: SDL_CreateTexture failed: %s", SDL_GetError());
 		}
 		else {
 				SDL_SetRenderTarget(renderer, image->surface);
@@ -519,7 +519,7 @@ Image *SDLHardwareRenderDevice::loadImage(std::string filename, std::string erro
 	if(image->surface == NULL) {
 		delete image;
 		if (!errormessage.empty())
-			logError("SDLHardwareRenderDevice: %s: %s\n", errormessage.c_str(), IMG_GetError());
+			logError("SDLHardwareRenderDevice: %s: %s", errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
 			SDL_Quit();
 			exit(1);

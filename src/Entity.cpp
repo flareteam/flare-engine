@@ -130,7 +130,7 @@ void Entity::move_from_offending_tile() {
 	// offending tile. The idea is simple: We can only be stuck on a tile by accident,
 	// so we got here somehow. We'll try to push this entity to the nearest valid place
 	while (!mapr->collider.is_valid_position(stats.pos.x, stats.pos.y, stats.movement_type, stats.hero)) {
-		logError("Entity: %s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!\n",
+		logError("Entity: %s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!",
 				stats.hero ? "The hero" : "An entity");
 
 		float pushx = 0;
@@ -158,7 +158,7 @@ void Entity::move_from_offending_tile() {
 		if (pushx == 0 && pushy == 0) {
 			stats.pos.x = randBetween(1, mapr->w-1) + 0.5f;
 			stats.pos.y = randBetween(1, mapr->h-1) + 0.5f;
-			logError("Entity: %s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!\n",
+			logError("Entity: %s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!",
 					stats.hero ? "The hero" : "An entity");
 		}
 	}
@@ -450,7 +450,7 @@ bool Entity::setAnimation(const std::string& animationName) {
 	activeAnimation = animationSet->getAnimation(animationName);
 
 	if (activeAnimation == NULL)
-		logError("Entity::setAnimation(%s): not found\n", animationName.c_str());
+		logError("Entity::setAnimation(%s): not found", animationName.c_str());
 
 	return activeAnimation == NULL;
 }

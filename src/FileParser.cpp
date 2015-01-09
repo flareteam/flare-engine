@@ -45,7 +45,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	this->errormessage = _errormessage;
 
 	if (filenames.size() == 0 && !errormessage.empty()) {
-		logError("FileParser: %s: %s: No such file or directory!\n", _filename.c_str(), errormessage.c_str());
+		logError("FileParser: %s: %s: No such file or directory!", _filename.c_str(), errormessage.c_str());
 		return false;
 	}
 
@@ -85,7 +85,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 		}
 		else {
 			if (!errormessage.empty())
-				logError("FileParser: %s: %s\n", errormessage.c_str(), filenames[i-1].c_str());
+				logError("FileParser: %s: %s", errormessage.c_str(), filenames[i-1].c_str());
 			infile.clear();
 		}
 	}
@@ -152,7 +152,7 @@ bool FileParser::next() {
 		infile.open(current_filename.c_str(), std::ios::in);
 		if (!infile.is_open()) {
 			if (!errormessage.empty())
-				logError("FileParser: %s: %s\n", errormessage.c_str(), current_filename.c_str());
+				logError("FileParser: %s: %s", errormessage.c_str(), current_filename.c_str());
 			infile.clear();
 			return false;
 		}
@@ -206,7 +206,7 @@ void FileParser::error(const char* format, ...) {
 	va_end(args);
 
 	std::stringstream ss;
-	ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer << std::endl;
+	ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer;
 	logError(ss.str().c_str());
 }
 

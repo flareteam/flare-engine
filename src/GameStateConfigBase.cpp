@@ -795,7 +795,7 @@ bool GameStateConfigBase::setMods() {
 		}
 	}
 	if (outfile.bad())
-		logError("GameStateConfigBase: Unable to save mod list into file. No write access or disk is full!\n");
+		logError("GameStateConfigBase: Unable to save mod list into file. No write access or disk is full!");
 
 	outfile.close();
 	outfile.clear();

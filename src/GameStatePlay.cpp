@@ -305,7 +305,7 @@ void GameStatePlay::checkTeleport() {
 				mapr->respawn_point = pc->stats.pos;
 			}
 			else {
-				logError("GameStatePlay: Spawn position (%d, %d) is blocked.\n", (int)pc->stats.pos.x, (int)pc->stats.pos.y);
+				logError("GameStatePlay: Spawn position (%d, %d) is blocked.", (int)pc->stats.pos.x, (int)pc->stats.pos.y);
 			}
 
 			// return to title (permadeath) OR auto-save
@@ -326,7 +326,7 @@ void GameStatePlay::checkTeleport() {
 					ss << SAVE_PREFIX << "_";
 				ss << "stash_HC" << game_slot << ".txt";
 				if (remove(ss.str().c_str()) != 0)
-					logError("GameStatePlay: Error deleting hardcore stash in slot %d\n", game_slot);
+					logError("GameStatePlay: Error deleting hardcore stash in slot %d", game_slot);
 
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
@@ -918,7 +918,7 @@ void GameStatePlay::logic() {
 			menu->act->locked[count] = true;
 		}
 		else if (pc->stats.manual_untransform && pc->untransform_power == 0)
-			logError("GameStatePlay: Untransform power not found, you can't untransform manually\n");
+			logError("GameStatePlay: Untransform power not found, you can't untransform manually");
 
 		menu->act->updated = true;
 

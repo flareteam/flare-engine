@@ -53,7 +53,7 @@ int parse_duration(const std::string& s) {
 		val *= MAX_FRAMES_PER_SEC;
 	else {
 		if (suffix != "ms")
-			logError("UtilsParsing: Duration of '%d' does not have a suffix. Assuming 'ms'.\n", val);
+			logError("UtilsParsing: Duration of '%d' does not have a suffix. Assuming 'ms'.", val);
 		val = int(floor(((val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
 	}
 
@@ -183,7 +183,7 @@ bool tryParseValue(const std::type_info & type, const std::string & value, void 
 		*((std::string *)output) = value;
 	}
 	else {
-		logError("UtilsParsing: %s: a required type is not defined!\n", __FUNCTION__);
+		logError("UtilsParsing: %s: a required type is not defined!", __FUNCTION__);
 		return false;
 	}
 
@@ -222,7 +222,7 @@ std::string toString(const std::type_info & type, void * value) {
 		return (std::string &)*((std::string *)value);
 	}
 	else {
-		logError("UtilsParsing: %s: a required type is not defined!\n", __FUNCTION__);
+		logError("UtilsParsing: %s: a required type is not defined!", __FUNCTION__);
 		return "";
 	}
 
@@ -261,7 +261,7 @@ bool toBool(std::string value) {
 	if (value == "no") return false;
 	if (value == "0") return false;
 
-	logError("UtilsParsing: %s %s doesn't know how to handle %s\n", __FILE__, __FUNCTION__, value.c_str());
+	logError("UtilsParsing: %s %s doesn't know how to handle %s", __FILE__, __FUNCTION__, value.c_str());
 	return false;
 }
 

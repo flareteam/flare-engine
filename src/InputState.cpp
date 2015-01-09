@@ -244,7 +244,7 @@ void InputState::saveKeyBindings() {
 		outfile << "actionbar_use=" << binding[ACTIONBAR_USE] << "," << binding_alt[ACTIONBAR_USE] << "," << binding_joy[ACTIONBAR_USE] << "\n";
 		outfile << "developer_menu=" << binding[DEVELOPER_MENU] << "," << binding_alt[DEVELOPER_MENU] << "," << binding_joy[DEVELOPER_MENU] << "\n";
 
-		if (outfile.bad()) logError("InputState: Unable to write keybindings config file. No write access or disk is full!\n");
+		if (outfile.bad()) logError("InputState: Unable to write keybindings config file. No write access or disk is full!");
 		outfile.close();
 		outfile.clear();
 	}

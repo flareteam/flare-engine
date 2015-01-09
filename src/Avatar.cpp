@@ -213,7 +213,7 @@ void Avatar::loadGraphics(std::vector<Layer_gfx> _img_gfx) {
 			anims.push_back(animsets.back()->getAnimation(activeAnimation->getName()));
 			setAnimation("stance");
 			if(!anims.back()->syncTo(activeAnimation)) {
-				logError("Avatar: Error syncing animation in '%s' to 'animations/hero.txt'.\n", animsets.back()->getName().c_str());
+				logError("Avatar: Error syncing animation in '%s' to 'animations/hero.txt'.", animsets.back()->getName().c_str());
 			}
 		}
 		else {
@@ -257,7 +257,7 @@ void Avatar::loadStepFX(const std::string& stepname) {
 	}
 
 	// Could not find step sound fx
-	logError("Avatar: Could not find footstep sounds for '%s'.\n", filename.c_str());
+	logError("Avatar: Could not find footstep sounds for '%s'.", filename.c_str());
 }
 
 
@@ -741,7 +741,7 @@ void Avatar::transform() {
 		charmed_stats->load(el.type);
 	}
 	else {
-		logError("Avatar: Could not transform into creature type '%s'\n", stats.transform_type.c_str());
+		logError("Avatar: Could not transform into creature type '%s'", stats.transform_type.c_str());
 		stats.transform_type = "";
 		return;
 	}

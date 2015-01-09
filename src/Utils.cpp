@@ -270,6 +270,7 @@ void logInfo(const char* format, ...) {
 #else
 	printf("INFO: ");
 	vprintf(format, args);
+	printf("\n");
 #endif
 
 	va_end(args);
@@ -285,6 +286,7 @@ void logError(const char* format, ...) {
 #else
 	printf("ERROR: ");
 	vprintf(format, args);
+	printf("\n");
 #endif
 
 	va_end(args);

@@ -103,8 +103,8 @@ void ItemManager::loadAll() {
 	shrinkVecToFit(item_sets);
 
 	// do we need to print these messages?
-	if (items.empty()) logInfo("ItemManager: No items were found.\n");
-	if (item_sets.empty()) logInfo("ItemManager: No item sets were found.\n");
+	if (items.empty()) logInfo("ItemManager: No items were found.");
+	if (item_sets.empty()) logInfo("ItemManager: No item sets were found.");
 }
 
 /**
@@ -238,7 +238,7 @@ void ItemManager::loadItems() {
 			else if (s == "defense")
 				items[id].req_stat.push_back(REQUIRES_DEF);
 			else
-				infile.error("%s unrecognized at; requires_stat must be one of [physical:mental:offense:defense]\n", s.c_str());
+				infile.error("%s unrecognized at; requires_stat must be one of [physical:mental:offense:defense]", s.c_str());
 			items[id].req_val.push_back(toInt(infile.nextValue()));
 		}
 		else if (infile.key == "requires_class") {
@@ -752,11 +752,11 @@ bool ItemStack::empty() {
 		return false;
 	}
 	else if (item == 0 && quantity != 0) {
-		logError("ItemStack: Item id is zero, but quantity is %d.\n", quantity);
+		logError("ItemStack: Item id is zero, but quantity is %d.", quantity);
 		quantity = 0;
 	}
 	else if (item != 0 && quantity == 0) {
-		logError("ItemStack: Item id is %d, but quantity is zero.\n", item);
+		logError("ItemStack: Item id is %d, but quantity is zero.", item);
 		item = 0;
 	}
 	return true;

@@ -928,7 +928,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		power_cell.pop_back();
 		slots.pop_back();
 		upgradeButtons.pop_back();
-		logError("MenuPowers: There is a power without a valid id as the first attribute.\nIDs must be the first attribute in the power menu definition.\n");
+		logError("MenuPowers: There is a power without a valid id as the first attribute. IDs must be the first attribute in the power menu definition.");
 	}
 
 	if (skip_section)

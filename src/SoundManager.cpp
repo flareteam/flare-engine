@@ -178,7 +178,7 @@ SoundManager::SoundID SoundManager::load(const std::string& filename, const std:
 	lsnd.chunk = Mix_LoadWAV(realfilename.c_str());
 	lsnd.refCnt = 1;
 	if (!lsnd.chunk) {
-		logError("SoundManager: %s: Loading sound %s (%s) failed: %s \n", errormessage.c_str(),
+		logError("SoundManager: %s: Loading sound %s (%s) failed: %s", errormessage.c_str(),
 				realfilename.c_str(), filename.c_str(), Mix_GetError());
 		return 0;
 	}
@@ -245,7 +245,7 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, FPoint p
 	int c = Mix_PlayChannel(-1, it->second->chunk, (loop ? -1 : 0));
 
 	if (c == -1)
-		logError("SoundManager: Failed to play sound, no more channels available.\n");
+		logError("SoundManager: Failed to play sound, no more channels available.");
 
 	// precalculate mixing volume if sound has a location
 	Uint8 d = 0;

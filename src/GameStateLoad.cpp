@@ -157,7 +157,7 @@ GameStateLoad::GameStateLoad() : GameState()
 		}
 		infile.close();
 	}
-	if (!found_layer) logError("GameStateLoad: Could not find layers for direction 6\n");
+	if (!found_layer) logError("GameStateLoad: Could not find layers for direction 6");
 
 	button_action->pos.x += (VIEW_W - FRAME_W)/2;
 	button_action->pos.y += (VIEW_H - FRAME_H)/2;
@@ -369,7 +369,7 @@ void GameStateLoad::loadPreview(int slot) {
 
 	for (unsigned int i=0; i<equipped[slot].size(); i++) {
 		if ((unsigned)equipped[slot][i] > items->items.size()-1) {
-			logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod\n", slot+1, equipped[slot][i], (int)items->items.size()-1);
+			logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot+1, equipped[slot][i], (int)items->items.size()-1);
 			continue;
 		}
 
@@ -500,7 +500,7 @@ void GameStateLoad::logic() {
 					ss << SAVE_PREFIX << "_";
 				ss << "stash_HC" << (selected_slot+1) << ".txt";
 				if (remove(ss.str().c_str()) != 0)
-					logError("GameStateLoad: Error deleting hardcore stash in slot %d\n", selected_slot+1);
+					logError("GameStateLoad: Error deleting hardcore stash in slot %d", selected_slot+1);
 			}
 
 			stats[selected_slot] = StatBlock();

@@ -90,7 +90,7 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 {
 	// Populate the resolution list
 	if (getVideoModes() < 1)
-		logError("GameStateConfigDesktop: Unable to get resolutions list!\n");
+		logError("GameStateConfigDesktop: Unable to get resolutions list!");
 
 	// Allocate KeyBindings
 	for (int i = 0; i < inpt->key_count; i++) {
