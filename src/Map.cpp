@@ -105,7 +105,7 @@ int Map::load(std::string fname) {
 			StatBlock *statb = &statblocks.back();
 
 			if (!statb) {
-				logError("Map: Could not create StatBlock for Event.\n");
+				logError("Map: Could not create StatBlock for Event.");
 				continue;
 			}
 

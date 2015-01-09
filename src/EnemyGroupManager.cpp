@@ -79,7 +79,7 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 		enemyCategory = it->second;
 	}
 	else {
-		logError("EnemyGroupManager: Could not find enemy category %s, returning empty enemy\n", category.c_str());
+		logError("EnemyGroupManager: Could not find enemy category %s, returning empty enemy", category.c_str());
 		return Enemy_Level();
 	}
 
@@ -101,7 +101,7 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 				add_times = 1;
 			}
 			else {
-				logError("EnemyGroupManager: 'rarity' property for enemy '%s' not valid (common|uncommon|rare): %s\n",
+				logError("EnemyGroupManager: 'rarity' property for enemy '%s' not valid (common|uncommon|rare): %s",
 						new_enemy.type.c_str(), new_enemy.rarity.c_str());
 			}
 
@@ -113,7 +113,7 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 	}
 
 	if (enemyCandidates.empty()) {
-		logError("EnemyGroupManager: Could not find a suitable enemy category for (%s, %d, %d)\n", category.c_str(), minlevel, maxlevel);
+		logError("EnemyGroupManager: Could not find a suitable enemy category for (%s, %d, %d)", category.c_str(), minlevel, maxlevel);
 		return Enemy_Level();
 	}
 	else {

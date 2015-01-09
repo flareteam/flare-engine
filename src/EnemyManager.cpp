@@ -58,7 +58,7 @@ Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
 	e.type = type_id;
 
 	if (e.stats.animations == "")
-		logError("EnemyManager: No animation file specified for entity: %s\n", type_id.c_str());
+		logError("EnemyManager: No animation file specified for entity: %s", type_id.c_str());
 
 	loadAnimations(&e);
 	e.loadSounds();
@@ -97,7 +97,7 @@ void EnemyManager::handleNewMap () {
 		mapr->enemies.pop();
 
 		if (me.type.empty()) {
-			logError("EnemyManager: Enemy(%f, %f) doesn't have type attribute set, skipping\n", me.pos.x, me.pos.y);
+			logError("EnemyManager: Enemy(%f, %f) doesn't have type attribute set, skipping", me.pos.x, me.pos.y);
 			continue;
 		}
 
@@ -187,7 +187,7 @@ void EnemyManager::handleSpawn() {
 			e->stats.load(el.type);
 		}
 		else {
-			logError("EnemyManager: Could not spawn creature type '%s'\n", espawn.type.c_str());
+			logError("EnemyManager: Could not spawn creature type '%s'", espawn.type.c_str());
 			delete e;
 			return;
 		}
@@ -199,10 +199,10 @@ void EnemyManager::handleSpawn() {
 			if (e->animationSet)
 				e->activeAnimation = e->animationSet->getAnimation();
 			else
-				logError("EnemyManager: Animations file could not be loaded for %s\n", espawn.type.c_str());
+				logError("EnemyManager: Animations file could not be loaded for %s", espawn.type.c_str());
 		}
 		else {
-			logError("EnemyManager: No animation file specified for entity: %s\n", espawn.type.c_str());
+			logError("EnemyManager: No animation file specified for entity: %s", espawn.type.c_str());
 		}
 		e->loadSounds();
 

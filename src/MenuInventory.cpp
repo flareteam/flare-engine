@@ -541,7 +541,7 @@ void MenuInventory::activate(Point position) {
 				items->playSound(inventory[EQUIPMENT][equip_slot].item);
 			}
 		}
-		else logError("MenuInventory: Can't find equip slot, corresponding to type %s\n", items->items[inventory[CARRIED][slot].item].type.c_str());
+		else logError("MenuInventory: Can't find equip slot, corresponding to type %s", items->items[inventory[CARRIED][slot].item].type.c_str());
 	}
 
 	drag_prev_src = -1;

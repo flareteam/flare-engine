@@ -48,15 +48,15 @@ void ItemStorage::setItems(std::string s) {
 		storage[i].item = popFirstInt(s, ',');
 		// check if such item exists to avoid crash if savegame was modified manually
 		if (storage[i].item < 0) {
-			logError("ItemStorage: Item on position %d has negative id, skipping\n", i);
+			logError("ItemStorage: Item on position %d has negative id, skipping", i);
 			storage[i].clear();
 		}
 		else if ((unsigned)storage[i].item > items->items.size()-1) {
-			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown\n", storage[i].item, (int)items->items.size());
+			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, (int)items->items.size());
 			items->addUnknownItem(storage[i].item);
 		}
 		else if (storage[i].item != 0 && items->items[storage[i].item].name == "") {
-			logError("ItemStorage: Item with id=%d. found on position %d does not exist, marking as unknown\n", storage[i].item, i);
+			logError("ItemStorage: Item with id=%d. found on position %d does not exist, marking as unknown", storage[i].item, i);
 			items->addUnknownItem(storage[i].item);
 		}
 	}
@@ -70,7 +70,7 @@ void ItemStorage::setQuantities(std::string s) {
 	for (int i=0; i<slot_number; i++) {
 		storage[i].quantity = popFirstInt(s, ',');
 		if (storage[i].quantity < 0) {
-			logError("ItemStorage: Items quantity on position %d is negative, setting to zero\n", i);
+			logError("ItemStorage: Items quantity on position %d is negative, setting to zero", i);
 			storage[i].quantity = 0;
 		}
 	}
@@ -267,11 +267,11 @@ bool ItemStorage::contain(int item, int quantity) {
 void ItemStorage::clean() {
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item > 0 && storage[i].quantity < 1) {
-			logInfo("ItemStorage: Removing item with id %d, which has a quantity of 0\n",storage[i].item);
+			logInfo("ItemStorage: Removing item with id %d, which has a quantity of 0",storage[i].item);
 			storage[i].clear();
 		}
 		else if (storage[i].item == 0 && storage[i].quantity != 0) {
-			logInfo("ItemStorage: Removing item with id 0, which has a quantity of %d\n", storage[i].quantity);
+			logInfo("ItemStorage: Removing item with id 0, which has a quantity of %d", storage[i].quantity);
 			storage[i].clear();
 		}
 	}

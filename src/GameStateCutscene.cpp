@@ -56,7 +56,7 @@ Image *Scene::loadImage(std::string filename, bool scale_graphics) {
 				image = resized;
 		}
 		else {
-			logError("GameStateCutscene: Can not scale cutscene image with a width of 0.\n");
+			logError("GameStateCutscene: Can not scale cutscene image with a width of 0.");
 		}
 	}
 
@@ -264,7 +264,7 @@ bool GameStateCutscene::load(std::string filename) {
 	infile.close();
 
 	if (scenes.empty()) {
-		logError("GameStateCutscene: No scenes defined in cutscene file %s\n", filename.c_str());
+		logError("GameStateCutscene: No scenes defined in cutscene file %s", filename.c_str());
 		return false;
 	}
 

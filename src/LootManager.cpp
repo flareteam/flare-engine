@@ -251,7 +251,7 @@ void LootManager::addEnemyLoot(Enemy *e) {
 
 void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos) {
 	if (hero == NULL) {
-		logError("LootManager: checkLoot() failed, no hero.\n");
+		logError("LootManager: checkLoot() failed, no hero.");
 		return;
 	}
 
