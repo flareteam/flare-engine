@@ -256,6 +256,11 @@ void MapRenderer::logic() {
 	// handle tile set logic e.g. animations
 	tset.logic();
 
+	// handle statblock logic for map powers
+	for (unsigned i=0; i<statblocks.size(); ++i) {
+		statblocks[i].logic();
+	}
+
 	// handle event cooldowns
 	std::vector<Event>::iterator it;
 	for (it = events.begin(); it < events.end(); ++it) {
