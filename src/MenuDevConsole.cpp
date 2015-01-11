@@ -193,9 +193,7 @@ void MenuDevConsole::execute() {
 	}
 	else if (args[0] == "spawn_enemy") {
 		if (args.size() > 1) {
-			int min_level = (args.size() > 2 && toInt(args[2]) > 0) ? toInt(args[2]) : 0;
-			int max_level = (args.size() > 3 && toInt(args[3]) > 0) ? toInt(args[3]) : std::numeric_limits<int>::max();
-			Enemy_Level el = enemyg->getRandomEnemy(args[1], min_level, max_level);
+			Enemy_Level el = enemyg->getRandomEnemy(args[1], 0, 0);
 			if (el.type != "") {
 				Point spawn_pos = floor(mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1));
 				powers->spawn(args[1], spawn_pos);
