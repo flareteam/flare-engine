@@ -511,7 +511,8 @@ void MenuManager::logic() {
 		if (exit->isExitRequested()) {
 			done = true;
 		}
-	} else {
+	}
+	else {
 		bool clicking_character = false;
 		bool clicking_inventory = false;
 		bool clicking_powers = false;
