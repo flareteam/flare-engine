@@ -44,6 +44,7 @@ InputState::InputState(void)
 	, touch_locked(false)
 	, lock_all(false)
 	, window_minimized(false)
+	, window_restored(false)
 	, current_touch() {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_StartTextInput();
@@ -343,12 +344,12 @@ void InputState::handle(bool dump_event) {
 				last_button = event.button.button;
 				break;
 #else
-			// detect hiding Android app to trigger pausing
+			// detect restoring hidden Android app to bypass frameskip
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_MINIMIZED)
 					window_minimized = true;
 				else if (event.window.event == SDL_WINDOWEVENT_RESTORED)
-					window_minimized = false;
+					window_restored = true;
 				break;
 #endif
 			// Android touch events
