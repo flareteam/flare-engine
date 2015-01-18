@@ -88,10 +88,6 @@ CombatText::~CombatText() {
 	}
 }
 
-void CombatText::setCam(FPoint location) {
-	cam = location;
-}
-
 void CombatText::addMessage(std::string message, FPoint location, int displaytype) {
 	if (COMBAT_TEXT) {
 		Combat_Text_Item *c = new Combat_Text_Item();
@@ -116,9 +112,10 @@ void CombatText::addMessage(int num, FPoint location, int displaytype) {
 	}
 }
 
-void CombatText::render() {
-	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
+void CombatText::logic(const FPoint& _cam) {
+	cam = _cam;
 
+	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
 		it->lifespan--;
 		it->floating_offset += speed;
 
@@ -127,14 +124,18 @@ void CombatText::render() {
 		scr_pos.y -= it->floating_offset;
 
 		it->label->set(scr_pos.x, scr_pos.y, JUSTIFY_CENTER, VALIGN_BOTTOM, it->text, msg_color[it->displaytype]);
-
-		if (it->lifespan > 0)
-			it->label->render();
-
 	}
+
 	// delete expired messages
 	while (combat_text.size() && combat_text.begin()->lifespan <= 0) {
 		delete combat_text.begin()->label;
 		combat_text.erase(combat_text.begin());
+	}
+}
+
+void CombatText::render() {
+	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
+		if (it->lifespan > 0)
+			it->label->render();
 	}
 }

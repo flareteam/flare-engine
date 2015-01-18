@@ -868,6 +868,8 @@ void GameStatePlay::logic() {
 		npcs->logic();
 
 		snd->logic(pc->stats.pos);
+
+		comb->logic(mapr->cam);
 	}
 
 	// close menus when the player dies, but still allow them to be reopened
@@ -1012,9 +1014,7 @@ void GameStatePlay::render() {
 
 	// render combat text last - this should make it obvious you're being
 	// attacked, even if you have menus open
-	CombatText *combat_text = comb;
-	combat_text->setCam(mapr->cam);
-	combat_text->render();
+	comb->render();
 }
 
 void GameStatePlay::showLoading() {

@@ -57,10 +57,10 @@ public:
 	CombatText();
 	~CombatText();
 
+	void logic(const FPoint& _cam);
 	void render();
 	void addMessage(std::string message, FPoint location, int displaytype);
 	void addMessage(int num, FPoint location, int displaytype);
-	void setCam(FPoint location);
 
 private:
 	FPoint cam;
