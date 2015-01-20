@@ -152,6 +152,11 @@ static void mainLoop (bool debug_event) {
 
 			SDL_PumpEvents();
 			inpt->handle(debug_event);
+
+			// Skip game logic when minimized on Android
+			if (inpt->window_minimized && !inpt->window_restored)
+				break;
+
 			gswitch->logic();
 			inpt->resetScroll();
 
@@ -161,6 +166,16 @@ static void mainLoop (bool debug_event) {
 
 			logic_ticks += delay;
 			loops++;
+
+			// Android only
+			// When the app is minimized on Android, no logic gets processed.
+			// As a result, the delta time when restoring the app is large, so the game will skip frames and appear to be running fast.
+			// To counter this, we reset our delta time here when restoring the app
+			if (inpt->window_minimized && inpt->window_restored) {
+				logic_ticks = now_ticks = SDL_GetTicks();
+				inpt->window_minimized = inpt->window_restored = false;
+				break;
+			}
 
 			// don't skip frames if the game is paused
 			if (gswitch->isPaused()) {

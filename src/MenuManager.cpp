@@ -601,11 +601,6 @@ void MenuManager::logic() {
 		}
 	}
 
-	// pause the game when minimized (on Android)
-	if (inpt->window_minimized) {
-		exit->visible = true;
-	}
-
 	bool console_open = DEV_MODE && devconsole->visible;
 	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
 	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open;
