@@ -85,7 +85,7 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 		if (!enemy_lev.type.empty()) {
 			Map_Enemy group_member = Map_Enemy(enemy_lev.type, FPoint(x, y));
 
-			group_member.direction = g.direction;
+			group_member.direction = (g.direction == -1 ? rand()%8 : g.direction);
 			group_member.wander_radius = g.wander_radius;
 			group_member.requires_status = g.requires_status;
 			group_member.requires_not_status = g.requires_not_status;

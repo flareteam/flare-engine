@@ -55,7 +55,7 @@ public:
 		, numbermin(1)
 		, numbermax(1)
 		, chance(1.0f)
-		, direction(rand() % 8)
+		, direction(-1)
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
 		, requires_status()
