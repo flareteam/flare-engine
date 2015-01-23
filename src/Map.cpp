@@ -26,8 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 Map::Map()
-	: enemy_groups()
-	, filename("")
+	: filename("")
 	, collision_layer(-1)
 	, layers()
 	, events()

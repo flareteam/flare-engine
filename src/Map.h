@@ -115,18 +115,19 @@ protected:
 	void clearLayers();
 	void clearQueues();
 
-	std::queue<Map_Group> enemy_groups;
 	std::vector<StatBlock> statblocks;
 
 	std::string filename;
 	std::string tileset;
 
-	int load(std::string filename);
-
 	int collision_layer;
 public:
 	Map();
 	std::string getFilename() { return filename; }
+	std::string getTileset() { return tileset; }
+	void setTileset(const std::string& tset) { tileset = tset; }
+
+	int load(std::string filename);
 
 	std::string music_filename;
 
@@ -137,6 +138,7 @@ public:
 
 	// enemy load handling
 	std::queue<Map_Enemy> enemies;
+	std::queue<Map_Group> enemy_groups;
 
 	// npc load handling
 	std::queue<Map_NPC> npcs;
