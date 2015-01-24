@@ -96,7 +96,6 @@ void MapSaver::writeTilesets(std::ofstream& map_file)
     }
     else if (tileset == "tilesetdefs/tileset_dungeon.txt")
     {
-        map_file << "[tilesets]" << std::endl;
         map_file << "tileset=../../../tiled/dungeon/tiled_collision.png,64,32,0,0" << std::endl;
         map_file << "tileset=../../../tiled/dungeon/tiled_dungeon.png,64,128,0,0" << std::endl;
         map_file << "tileset=../../../tiled/dungeon/set_rules.png,64,32,0,0" << std::endl;
@@ -107,7 +106,6 @@ void MapSaver::writeTilesets(std::ofstream& map_file)
     }
     else if (tileset == "tilesetdefs/tileset_grassland.txt")
     {
-        map_file << "[tilesets]" << std::endl;
         map_file << "tileset=../../../tiled/grassland/tiled_collision.png,64,32,0,0" << std::endl;
         map_file << "tileset=../../../tiled/grassland/grassland.png,64,128,0,0" << std::endl;
         map_file << "tileset=../../../tiled/grassland/grassland_water.png,64,64,0,32" << std::endl;
@@ -179,9 +177,10 @@ void MapSaver::writeEnemies(std::ofstream& map_file)
             map_file << "chance=" << group.front().chance*100 << std::endl;
         }
 
-        // UNIMPLEMENTED
-        // we can't know if direction was explicitly set because default value is random
-        //map_file << "direction=" << group.front().direction << std::endl;
+        if (group.front().direction != -1)
+        {
+            map_file << "direction=" << group.front().direction << std::endl;
+        }
 
         if (!group.front().waypoints.empty())
         {
