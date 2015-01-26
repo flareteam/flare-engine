@@ -292,7 +292,7 @@ void GameStateLoad::readGameSlot(int slot) {
 	if (slot < 0 || slot >= GAME_SLOT_MAX) return;
 
 	// save data is stored in slot#/avatar.txt
-	filename << PATH_USER << SAVE_PREFIX << "/" << (slot+1) << "/avatar.txt";
+	filename << PATH_USER << "saves/" << SAVE_PREFIX << "/" << (slot+1) << "/avatar.txt";
 
 	if (!infile.open(filename.str(),false, "")) return;
 

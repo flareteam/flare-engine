@@ -63,7 +63,7 @@ void GameStatePlay::saveGame() {
 	std::ofstream outfile;
 
 	std::stringstream ss;
-	ss << PATH_USER << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
 
 	outfile.open(ss.str().c_str(), std::ios::out);
 
@@ -162,9 +162,9 @@ void GameStatePlay::saveGame() {
 	// Save stash
 	ss.str("");
 	if (pc->stats.permadeath)
-		ss << PATH_USER << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
 	else
-		ss << PATH_USER << SAVE_PREFIX << "/stash.txt";
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
 	outfile.open(ss.str().c_str(), std::ios::out);
 
@@ -203,7 +203,7 @@ void GameStatePlay::loadGame() {
 	std::vector<int> hotkeys(ACTIONBAR_MAX, -1);
 
 	std::stringstream ss;
-	ss << PATH_USER << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
 
 	if (infile.open(ss.str(), false)) {
 		while (infile.next()) {
@@ -382,9 +382,9 @@ void GameStatePlay::loadStash() {
 	FileParser infile;
 	std::stringstream ss;
 	if (pc->stats.permadeath)
-		ss << PATH_USER << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
 	else
-		ss << PATH_USER << SAVE_PREFIX << "/stash.txt";
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
 	if (infile.open(ss.str(), false)) {
 		while (infile.next()) {

@@ -298,7 +298,7 @@ void createSaveDir(int slot) {
 	if (slot == 0) return;
 
 	std::stringstream ss;
-	ss << PATH_USER << SAVE_PREFIX << "/";
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/";
 
 	createDir(ss.str());
 
@@ -311,7 +311,7 @@ void removeSaveDir(int slot) {
 	if (slot == 0) return;
 
 	std::stringstream ss;
-	ss << PATH_USER << SAVE_PREFIX << "/" << slot;
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << slot;
 
 	if (isDirectory(ss.str())) {
 		removeDirRecursive(ss.str());
