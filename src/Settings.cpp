@@ -519,6 +519,7 @@ void loadMiscSettings() {
 	CORPSE_TIMEOUT = 60*MAX_FRAMES_PER_SEC;
 	SELL_WITHOUT_VENDOR = true;
 	AIM_ASSIST = 0;
+	SAVE_PREFIX = "";
 	WINDOW_TITLE = "Flare";
 	SOUND_FALLOFF = 15;
 	PARTY_EXP_PERCENTAGE = 100;
@@ -587,6 +588,11 @@ void loadMiscSettings() {
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+
+	if (SAVE_PREFIX == "") {
+		logError("Settings: save_prefix not found in engine/misc.txt, setting to 'default'. This may cause save file conflicts between games that have no save_prefix.");
+		SAVE_PREFIX = "default";
 	}
 
 	// @CLASS Settings: Resolution|Description of engine/resolutions.txt
