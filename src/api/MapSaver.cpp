@@ -182,17 +182,26 @@ void MapSaver::writeEnemies(std::ofstream& map_file)
             map_file << "direction=" << group.front().direction << std::endl;
         }
 
-        if (!group.front().waypoints.empty())
+        if (!group.front().waypoints.empty() && group.front().wander_radius == 0)
         {
-            // UNIMPLEMENTED
-            map_file << "waypoints=" << std::endl;
+            map_file << "waypoints=";
+            std::queue<FPoint> points = group.front().waypoints;
+            while (!points.empty())
+            {
+                map_file << points.front().x - 0.5f << "," << points.front().y - 0.5f;
+                points.pop();
+                if (!points.empty())
+                {
+                    map_file << ";";
+                }
+            }
+            map_file << std::endl;
         }
 
-        if (group.front().wander_radius != 4)
+        if ((group.front().wander_radius != 4 && group.front().waypoints.empty()))
         {
             map_file << "wander_radius=" << group.front().wander_radius << std::endl;
         }
-
 
         for (int i = 0; i < group.front().requires_status.size(); i++)
         {
@@ -218,7 +227,7 @@ void MapSaver::writeNPCs(std::ofstream& map_file)
     {
         map_file << "[npc]" << std::endl;
         map_file << "type=" << npcs.front().id << std::endl;
-        map_file << "location=" << npcs.front().pos.x << "," << npcs.front().pos.y << ",1,1" << std::endl;
+        map_file << "location=" << npcs.front().pos.x - 0.5f << "," << npcs.front().pos.y - 0.5f << ",1,1" << std::endl;
 
         for (int j = 0; j < npcs.front().requires_status.size(); j++)
         {
@@ -257,7 +266,14 @@ void MapSaver::writeEvents(std::ofstream& map_file)
 
         if (map->events[i].cooldown != 0)
         {
-            map_file << "cooldown=" << map->events[i].cooldown << std::endl;
+            std::string suffix = "ms";
+            int value = (int)(1000.f * map->events[i].cooldown / MAX_FRAMES_PER_SEC);
+            if (value % 1000 == 0)
+            {
+                value = map->events[i].cooldown / MAX_FRAMES_PER_SEC;
+                suffix = "s";
+            }
+            map_file << "cooldown=" << value << suffix << std::endl;
         }
 
         Rect reachable_from = map->events[i].reachable_from;
@@ -304,8 +320,15 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
             map_file << e.x << "," << e.y << std::endl;
         }
         else if (e.type == "mapmod") {
-            map_file << e.s << "," << e.x << "," << e.y << "," << e.z << std::endl;
-            // UNIMPLEMENTED
+            map_file << e.s << "," << e.x << "," << e.y << "," << e.z;
+
+            while (i+1 < components.size() && components[i+1].type == "mapmod")
+            {
+                i++;
+                e = components[i];
+                map_file << ";" << e.s << "," << e.x << "," << e.y << "," << e.z;
+            }
+            map_file << std::endl;
         }
         else if (e.type == "soundfx") {
             map_file << e.s;
@@ -316,24 +339,55 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
             map_file << std::endl;
         }
         else if (e.type == "loot") {
+
+            std::string chance = (e.z == 0) ? "fixed" : std::to_string(e.z);
+            map_file << e.s << "," << chance << "," << e.a << "," << e.b;
+
+            while (i+1 < components.size() && components[i+1].type == "loot")
+            {
+                i++;
+                e = components[i];
+                chance = (e.z == 0) ? "fixed" : std::to_string(e.z);
+                map_file << ";" << e.s << "," << chance << "," << e.a << "," << e.b;
+            }
             map_file << std::endl;
             // UNIMPLEMENTED
+            // Loot tables not supported
         }
         else if (e.type == "msg") {
             map_file << e.s << std::endl;
         }
         else if (e.type == "shakycam") {
-            // UNIMPLEMENTED
-            // Should support ms too
-            map_file << e.x/MAX_FRAMES_PER_SEC << "s" << std::endl;
+            std::string suffix = "ms";
+            int value = (int)(1000.f * e.x / MAX_FRAMES_PER_SEC);
+            if (value % 1000 == 0)
+            {
+                value = e.x / MAX_FRAMES_PER_SEC;
+                suffix = "s";
+            }
+            map_file << value << suffix << std::endl;
         }
         else if (e.type == "requires_status") {
-            map_file << e.s << std::endl;
-            // UNIMPLEMENTED
+            map_file << e.s;
+
+            while (i+1 < components.size() && components[i+1].type == "requires_status")
+            {
+                i++;
+                e = components[i];
+                map_file << ";" << e.s;
+            }
+            map_file << std::endl;
         }
         else if (e.type == "requires_not_status") {
-            map_file << e.s << std::endl;
-            // UNIMPLEMENTED
+            map_file << e.s;
+
+            while (i+1 < components.size() && components[i+1].type == "requires_not_status")
+            {
+                i++;
+                e = components[i];
+                map_file << ";" << e.s;
+            }
+            map_file << std::endl;
         }
         else if (e.type == "requires_level") {
             map_file << e.x << std::endl;
@@ -345,26 +399,54 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
             map_file << e.x << std::endl;
         }
         else if (e.type == "requires_item") {
-            map_file << e.x << std::endl;
-            // UNIMPLEMENTED
+            map_file << e.x;
+
+            while (i+1 < components.size() && components[i+1].type == "requires_item")
+            {
+                i++;
+                e = components[i];
+                map_file << "," << e.x;
+            }
+            map_file << std::endl;
         }
         else if (e.type == "requires_class") {
             map_file << e.s << std::endl;
         }
         else if (e.type == "set_status") {
-            map_file << e.s << std::endl;
-            // UNIMPLEMENTED
+            map_file << e.s;
+
+            while (i+1 < components.size() && components[i+1].type == "set_status")
+            {
+                i++;
+                e = components[i];
+                map_file << "," << e.s;
+            }
+            map_file << std::endl;
         }
         else if (e.type == "unset_status") {
-            map_file << e.s << std::endl;
-            // UNIMPLEMENTED
+            map_file << e.s;
+
+            while (i+1 < components.size() && components[i+1].type == "unset_status")
+            {
+                i++;
+                e = components[i];
+                map_file << "," << e.s;
+            }
+            map_file << std::endl;
         }
         else if (e.type == "remove_currency") {
             map_file << e.x << std::endl;
         }
         else if (e.type == "remove_item") {
-            map_file << e.x << std::endl;
-            // UNIMPLEMENTED
+            map_file << e.x;
+
+            while (i+1 < components.size() && components[i+1].type == "remove_item")
+            {
+                i++;
+                e = components[i];
+                map_file << "," << e.x;
+            }
+            map_file << std::endl;
         }
         else if (e.type == "reward_xp") {
             map_file << e.x << std::endl;
@@ -383,8 +465,15 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
             map_file << e.x << std::endl;
         }
         else if (e.type == "spawn") {
-            map_file << e.s << "," << e.x << "," << e.y << std::endl;
-            // UNIMPLEMENTED
+            map_file << e.s << "," << e.x << "," << e.y;
+
+            while (i+1 < components.size() && components[i+1].type == "spawn")
+            {
+                i++;
+                e = components[i];
+                map_file << ";" << e.s << "," << e.x << "," << e.y;
+            }
+            map_file << std::endl;
         }
         else if (e.type == "stash") {
             map_file << e.s << std::endl;
