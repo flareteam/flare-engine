@@ -36,4 +36,8 @@ int getDirList(std::string dir, std::vector<std::string> &dirs);
 
 bool isDirectory(const std::string &path);
 
+bool removeFile(const std::string file);
+bool removeDir(const std::string dir);
+bool removeDirRecursive(const std::string dir);
+
 #endif

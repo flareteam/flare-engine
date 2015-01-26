@@ -144,3 +144,53 @@ int getDirList(std::string dir, std::vector<std::string> &dirs) {
 	closedir(dp);
 	return 0;
 }
+
+bool removeFile(const std::string file) {
+	if (remove(file.c_str()) != 0) {
+		perror("removeFile");
+		return false;
+	}
+	return true;
+}
+
+bool removeDir(const std::string dir) {
+	if (!isDirectory(dir))
+		return false;
+
+#ifndef _WIN32
+	// *nix implementation
+	if (rmdir(dir.c_str()) == -1) {
+		perror("removeDir");
+		return false;
+	}
+#endif
+
+#ifdef _WIN32
+	// win implementation
+	std::string syscmd = "rmdir " + path;
+	system(syscmd.c_str());
+#endif
+
+	return true;
+}
+
+bool removeDirRecursive(const std::string dir) {
+	std::vector<std::string> dir_list;
+	std::vector<std::string> file_list;
+
+	getDirList(dir, dir_list);
+	while (!dir_list.empty()) {
+		removeDirRecursive(dir + "/" + dir_list.back());
+		dir_list.pop_back();
+	}
+
+	getFileList(dir, "txt", file_list);
+	while (!file_list.empty()) {
+		removeFile(file_list.back());
+		file_list.pop_back();
+	}
+
+	removeDir(dir);
+
+	return true;
+}
