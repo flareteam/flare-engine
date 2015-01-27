@@ -40,6 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuStash.h"
 #include "MenuTalker.h"
 #include "Settings.h"
+#include "Utils.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
@@ -52,6 +53,9 @@ void GameStatePlay::saveGame() {
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
 
+	// if needed, create the save file structure
+	createSaveDir(game_slot);
+
 	// remove items with zero quantity from inventory
 	menu->inv->inventory[EQUIPMENT].clean();
 	menu->inv->inventory[CARRIED].clean();
@@ -59,11 +63,7 @@ void GameStatePlay::saveGame() {
 	std::ofstream outfile;
 
 	std::stringstream ss;
-	ss.str("");
-	ss << PATH_USER;
-	if (SAVE_PREFIX.length() > 0)
-		ss << SAVE_PREFIX << "_";
-	ss << "save" << game_slot << ".txt";
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
 
 	outfile.open(ss.str().c_str(), std::ios::out);
 
@@ -161,13 +161,10 @@ void GameStatePlay::saveGame() {
 
 	// Save stash
 	ss.str("");
-	ss << PATH_USER;
-	if (SAVE_PREFIX.length() > 0)
-		ss << SAVE_PREFIX << "_";
-	ss << "stash";
 	if (pc->stats.permadeath)
-		ss << "_HC" << game_slot;
-	ss << ".txt";
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
+	else
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
 	outfile.open(ss.str().c_str(), std::ios::out);
 
@@ -206,11 +203,7 @@ void GameStatePlay::loadGame() {
 	std::vector<int> hotkeys(ACTIONBAR_MAX, -1);
 
 	std::stringstream ss;
-	ss.str("");
-	ss << PATH_USER;
-	if (SAVE_PREFIX.length() > 0)
-		ss << SAVE_PREFIX << "_";
-	ss << "save" << game_slot << ".txt";
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
 
 	if (infile.open(ss.str(), false)) {
 		while (infile.next()) {
@@ -388,14 +381,10 @@ void GameStatePlay::loadStash() {
 	// Load stash
 	FileParser infile;
 	std::stringstream ss;
-	ss.str("");
-	ss << PATH_USER;
-	if (SAVE_PREFIX.length() > 0)
-		ss << SAVE_PREFIX << "_";
-	ss << "stash";
 	if (pc->stats.permadeath)
-		ss << "_HC" << game_slot;
-	ss << ".txt";
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
+	else
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
 	if (infile.open(ss.str(), false)) {
 		while (infile.next()) {

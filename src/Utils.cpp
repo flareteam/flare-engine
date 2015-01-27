@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
+#include "UtilsFileSystem.h"
 
 #include <cmath>
 #include <stdarg.h>
@@ -290,5 +291,30 @@ void logError(const char* format, ...) {
 #endif
 
 	va_end(args);
+}
+
+void createSaveDir(int slot) {
+	// game slots are currently 1-4
+	if (slot == 0) return;
+
+	std::stringstream ss;
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/";
+
+	createDir(ss.str());
+
+	ss << slot;
+	createDir(ss.str());
+}
+
+void removeSaveDir(int slot) {
+	// game slots are currently 1-4
+	if (slot == 0) return;
+
+	std::stringstream ss;
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << slot;
+
+	if (isDirectory(ss.str())) {
+		removeDirRecursive(ss.str());
+	}
 }
 

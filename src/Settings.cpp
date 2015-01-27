@@ -220,16 +220,19 @@ void setPaths() {
 		createDir(PATH_USER);
 
 		PATH_CONF += "\\config";
-		PATH_USER += "\\saves";
+		PATH_USER += "\\userdata";
 		createDir(PATH_CONF);
 		createDir(PATH_USER);
 	}
 	else {
 		PATH_CONF = "config";
-		PATH_USER = "saves";
+		PATH_USER = "userdata";
 		createDir(PATH_CONF);
 		createDir(PATH_USER);
 	}
+
+	createDir(PATH_USER + "\\mods");
+	createDir(PATH_USER + "\\saves");
 
 	PATH_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
@@ -243,9 +246,11 @@ void setPaths() {
 void setPaths() {
 
 	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
-	PATH_USER = std::string(SDL_AndroidGetInternalStoragePath()) + "/saves";
+	PATH_USER = std::string(SDL_AndroidGetInternalStoragePath()) + "/userdata";
 	createDir(PATH_CONF);
 	createDir(PATH_USER);
+	createDir(PATH_USER + "/mods");
+	createDir(PATH_USER + "/saves");
 
 	std::string mods_folder = "data/org.flare.app/files";
 
@@ -301,27 +306,24 @@ void setPaths() {
 	// $XDG_CONFIG_HOME/flare/
 	if (getenv("XDG_CONFIG_HOME") != NULL) {
 		PATH_CONF = (std::string)getenv("XDG_CONFIG_HOME") + "/flare/";
-		createDir(PATH_CONF);
 	}
 	// $HOME/.config/flare/
 	else if (getenv("HOME") != NULL) {
 		PATH_CONF = (std::string)getenv("HOME") + "/.config/";
 		createDir(PATH_CONF);
 		PATH_CONF += "flare/";
-		createDir(PATH_CONF);
 	}
 	// ./config/
 	else {
 		PATH_CONF = "./config/";
-		createDir(PATH_CONF);
 	}
+
+	createDir(PATH_CONF);
 
 	// set user path (save games)
 	// $XDG_DATA_HOME/flare/
 	if (getenv("XDG_DATA_HOME") != NULL) {
 		PATH_USER = (std::string)getenv("XDG_DATA_HOME") + "/flare/";
-		createDir(PATH_USER);
-		createDir(PATH_USER + "mods/");
 	}
 	// $HOME/.local/share/flare/
 	else if (getenv("HOME") != NULL) {
@@ -330,14 +332,15 @@ void setPaths() {
 		PATH_USER += "share/";
 		createDir(PATH_USER);
 		PATH_USER += "flare/";
-		createDir(PATH_USER);
-		createDir(PATH_USER + "mods/");
 	}
 	// ./saves/
 	else {
-		PATH_USER = "./saves/";
-		createDir(PATH_USER);
+		PATH_USER = "./userdata/";
 	}
+
+	createDir(PATH_USER);
+	createDir(PATH_USER + "mods/");
+	createDir(PATH_USER + "saves/");
 
 	// data folder
 	// while PATH_CONF and PATH_USER are created if not found,
@@ -519,6 +522,7 @@ void loadMiscSettings() {
 	CORPSE_TIMEOUT = 60*MAX_FRAMES_PER_SEC;
 	SELL_WITHOUT_VENDOR = true;
 	AIM_ASSIST = 0;
+	SAVE_PREFIX = "";
 	WINDOW_TITLE = "Flare";
 	SOUND_FALLOFF = 15;
 	PARTY_EXP_PERCENTAGE = 100;
@@ -587,6 +591,11 @@ void loadMiscSettings() {
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+
+	if (SAVE_PREFIX == "") {
+		logError("Settings: save_prefix not found in engine/misc.txt, setting to 'default'. This may cause save file conflicts between games that have no save_prefix.");
+		SAVE_PREFIX = "default";
 	}
 
 	// @CLASS Settings: Resolution|Description of engine/resolutions.txt
