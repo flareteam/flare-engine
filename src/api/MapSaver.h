@@ -45,4 +45,4 @@ private:
     std::string dest_file;
 };
 
-#endif MAP_SAVER
+#endif //MAP_SAVER

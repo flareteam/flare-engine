@@ -56,6 +56,9 @@ bool MapSaver::saveMap()
 
         return true;
     }
+	else {
+		logError("MapSaver: Could not open %s for writing", dest_file.c_str());
+	}
     return false;
 }
 
@@ -121,7 +124,7 @@ void MapSaver::writeTilesets(std::ofstream& map_file)
 
 void MapSaver::writeLayers(std::ofstream& map_file)
 {
-    for (short i = 0; i < map->layernames.size(); i++)
+    for (unsigned short i = 0; i < map->layernames.size(); i++)
     {
         map_file << "[layer]" << std::endl;
 
@@ -131,19 +134,17 @@ void MapSaver::writeLayers(std::ofstream& map_file)
         std::string layer = "";
         for (int line = 0; line < map->h; line++)
         {
-            std::string map_row = "";
+            std::stringstream map_row;
             for (int tile = 0; tile < map->w; tile++)
             {
                 maprow* row = map->layers[i];
-                map_row += std::to_string(row[tile][line]);
-                map_row += ",";
+                map_row << row[tile][line] << ",";
 
             }
-            layer += map_row;
+            layer += map_row.str();
             layer += '\n';
         }
-        layer.pop_back();
-        layer.pop_back();
+        layer.erase(layer.end()-2, layer.end());
         layer += '\n';
 
         map_file << layer << std::endl;
@@ -203,12 +204,12 @@ void MapSaver::writeEnemies(std::ofstream& map_file)
             map_file << "wander_radius=" << group.front().wander_radius << std::endl;
         }
 
-        for (int i = 0; i < group.front().requires_status.size(); i++)
+        for (unsigned i = 0; i < group.front().requires_status.size(); i++)
         {
             map_file << "requires_status=" << group.front().requires_status[i] << std::endl;
         }
 
-        for (int i = 0; i < group.front().requires_status.size(); i++)
+        for (unsigned i = 0; i < group.front().requires_status.size(); i++)
         {
             map_file << "requires_not_status=" << group.front().requires_not_status[i] << std::endl;
         }
@@ -229,11 +230,11 @@ void MapSaver::writeNPCs(std::ofstream& map_file)
         map_file << "type=" << npcs.front().id << std::endl;
         map_file << "location=" << npcs.front().pos.x - 0.5f << "," << npcs.front().pos.y - 0.5f << ",1,1" << std::endl;
 
-        for (int j = 0; j < npcs.front().requires_status.size(); j++)
+        for (unsigned j = 0; j < npcs.front().requires_status.size(); j++)
         {
             map_file << "requires_status=" << npcs.front().requires_status[j] << std::endl;
         }
-        for (int j = 0; j < npcs.front().requires_not_status.size(); j++)
+        for (unsigned j = 0; j < npcs.front().requires_not_status.size(); j++)
         {
             map_file << "requires_not_status=" << npcs.front().requires_not_status[j] << std::endl;
         }
@@ -246,7 +247,7 @@ void MapSaver::writeNPCs(std::ofstream& map_file)
 
 void MapSaver::writeEvents(std::ofstream& map_file)
 {
-    for (int i = 0; i < map->events.size(); i++)
+    for (unsigned i = 0; i < map->events.size(); i++)
     {
         map_file << "[event]" << std::endl;
         map_file << "type=" << map->events[i].type << std::endl;
@@ -290,7 +291,7 @@ void MapSaver::writeEvents(std::ofstream& map_file)
 void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 {
     std::vector<Event_Component> components = map->events[eventID].components;
-    for (int i = 0; i < components.size(); i++)
+    for (unsigned i = 0; i < components.size(); i++)
     {
         Event_Component e = components[i];
 
@@ -340,14 +341,25 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
         }
         else if (e.type == "loot") {
 
-            std::string chance = (e.z == 0) ? "fixed" : std::to_string(e.z);
-            map_file << e.s << "," << chance << "," << e.a << "," << e.b;
+            std::stringstream chance;
+
+			if (e.z == 0)
+				chance << "fixed";
+			else
+				chance << e.z;
+
+            map_file << e.s << "," << chance.str() << "," << e.a << "," << e.b;
 
             while (i+1 < components.size() && components[i+1].type == "loot")
             {
                 i++;
                 e = components[i];
-                chance = (e.z == 0) ? "fixed" : std::to_string(e.z);
+
+                if (e.z == 0)
+					chance << "fixed";
+				else
+					chance << e.z;
+
                 map_file << ";" << e.s << "," << chance << "," << e.a << "," << e.b;
             }
             map_file << std::endl;
