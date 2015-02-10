@@ -26,23 +26,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MapSaver {
 public:
-    MapSaver(Map* _map);
+	MapSaver(Map* _map);
 	~MapSaver();
 
 	bool saveMap(std::string tileset_definitions);
-    bool saveMap(std::string file, std::string tileset_definitions);
+	bool saveMap(std::string file, std::string tileset_definitions);
 
 private:
-    void writeHeader(std::ofstream& map_file);
-    void writeTilesets(std::ofstream& map_file, std::string tileset_definitions);
-    void writeLayers(std::ofstream& map_file);
-    void writeEnemies(std::ofstream& map_file);
-    void writeNPCs(std::ofstream& map_file);
-    void writeEvents(std::ofstream& map_file);
-    void writeEventComponents(std::ofstream& map_file, int eventID);
+	void writeHeader(std::ofstream& map_file);
+	void writeTilesets(std::ofstream& map_file, std::string tileset_definitions);
+	void writeLayers(std::ofstream& map_file);
+	void writeEnemies(std::ofstream& map_file);
+	void writeNPCs(std::ofstream& map_file);
+	void writeEvents(std::ofstream& map_file);
+	void writeEventComponents(std::ofstream& map_file, int eventID);
 
-    Map* map;
-    std::string dest_file;
+	Map* map;
+	std::string dest_file;
 };
 
 #endif //MAP_SAVER
