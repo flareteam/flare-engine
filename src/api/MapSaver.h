@@ -22,19 +22,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_SAVER
 #define MAP_SAVER
 
-#include "Map.h"
+#include "flare/Map.h"
 
 class MapSaver {
 public:
     MapSaver(Map* _map);
 	~MapSaver();
 
-	bool saveMap();
-    bool saveMap(std::string file);
+	bool saveMap(std::string tileset_definitions);
+    bool saveMap(std::string file, std::string tileset_definitions);
 
 private:
     void writeHeader(std::ofstream& map_file);
-    void writeTilesets(std::ofstream& map_file);
+    void writeTilesets(std::ofstream& map_file, std::string tileset_definitions);
     void writeLayers(std::ofstream& map_file);
     void writeEnemies(std::ofstream& map_file);
     void writeNPCs(std::ofstream& map_file);

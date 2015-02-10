@@ -16,7 +16,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "MapSaver.h"
-#include "Settings.h"
+#include "flare/Settings.h"
 
 MapSaver::MapSaver(Map *_map) : map(_map)
 {
@@ -28,7 +28,7 @@ MapSaver::~MapSaver()
 {
 }
 
-bool MapSaver::saveMap()
+bool MapSaver::saveMap(std::string tileset_definitions)
 {
     std::ofstream outfile;
 
@@ -39,7 +39,7 @@ bool MapSaver::saveMap()
         outfile << "## flare-engine generated map file ##" << "\n";
 
         writeHeader(outfile);
-        writeTilesets(outfile);
+        writeTilesets(outfile, tileset_definitions);
         writeLayers(outfile);
 
         writeEvents(outfile);
@@ -62,11 +62,11 @@ bool MapSaver::saveMap()
     return false;
 }
 
-bool MapSaver::saveMap(std::string file)
+bool MapSaver::saveMap(std::string file, std::string tileset_definitions)
 {
     dest_file = file;
 
-    return saveMap();
+    return saveMap(tileset_definitions);
 }
 
 
@@ -85,38 +85,11 @@ void MapSaver::writeHeader(std::ofstream& map_file)
     map_file << std::endl;
 }
 
-void MapSaver::writeTilesets(std::ofstream& map_file)
+void MapSaver::writeTilesets(std::ofstream& map_file, std::string tileset_definitions)
 {
     map_file << "[tilesets]" << std::endl;
 
-    std::string tileset = map->getTileset();
-
-    if (tileset == "tilesetdefs/tileset_cave.txt")
-    {
-        map_file << "tileset=../../../tiled/cave/tiled_collision.png,64,32,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/cave/tiled_cave.png,64,128,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/cave/set_rules.png,64,32,0,0" << std::endl;
-    }
-    else if (tileset == "tilesetdefs/tileset_dungeon.txt")
-    {
-        map_file << "tileset=../../../tiled/dungeon/tiled_collision.png,64,32,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/dungeon/tiled_dungeon.png,64,128,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/dungeon/set_rules.png,64,32,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/dungeon/tiled_dungeon_2x2.png,128,64,0,16" << std::endl;
-        map_file << "tileset=../../../tiled/dungeon/door_left.png,64,128,-16,-8" << std::endl;
-        map_file << "tileset=../../../tiled/dungeon/door_right.png,64,128,16,-8" << std::endl;
-        map_file << "tileset=../../../tiled/dungeon/stairs.png,256,256,0,48" << std::endl;
-    }
-    else if (tileset == "tilesetdefs/tileset_grassland.txt")
-    {
-        map_file << "tileset=../../../tiled/grassland/tiled_collision.png,64,32,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/grassland/grassland.png,64,128,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/grassland/grassland_water.png,64,64,0,32" << std::endl;
-        map_file << "tileset=../../../tiled/grassland/grassland_structures.png,64,256,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/grassland/grassland_trees.png,128,256,-32,0" << std::endl;
-        map_file << "tileset=../../../tiled/grassland/set_rules.png,64,32,0,0" << std::endl;
-        map_file << "tileset=../../../tiled/grassland/tiled_grassland_2x2.png,128,64,0,16" << std::endl;
-    }
+    map_file << tileset_definitions << std::endl;
 
     map_file << std::endl;
 }
