@@ -22,7 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef MAP_SAVER
 #define MAP_SAVER
 
-#include "flare/Map.h"
+#include "Map.h"
 
 class MapSaver {
 public:

@@ -16,7 +16,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "MapSaver.h"
-#include "flare/Settings.h"
+#include "Settings.h"
 
 MapSaver::MapSaver(Map *_map) : map(_map)
 {
