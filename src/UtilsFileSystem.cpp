@@ -51,7 +51,7 @@ bool pathExists(const std::string &path) {
  * Create this folder if it doesn't already exist
  */
 
-void createDir(std::string path) {
+void createDir(const std::string path) {
 	if (isDirectory(path))
 		return;
 
@@ -65,7 +65,9 @@ void createDir(std::string path) {
 #ifdef _WIN32
 	// win implementation
 	std::string syscmd = "mkdir " + path;
-	system(syscmd.c_str());
+	if (system(syscmd.c_str()) != 0) {
+		perror("createDir");
+	}
 #endif
 }
 
@@ -193,4 +195,32 @@ bool removeDirRecursive(const std::string dir) {
 	removeDir(dir);
 
 	return true;
+}
+
+/**
+ * Convert from stringstream to filesystem path string in an os-independent fashion
+ */
+std::string path(const std::stringstream* ss) {
+	std::string path = ss->str();
+
+	bool is_windows_path = false;
+
+	int len = path.length();
+	// fix mixed '\' and '/' on windows
+	for (int i = 0; i < len; i++) {
+		if (path[i] == '\\') {
+			is_windows_path = true;
+		}
+		if (is_windows_path && path[i] == '/') {
+			// isDirectory does not like trailing '\', so terminate string if last char
+			if (i == len - 1) {
+				path[i] = 0;
+			} 
+			else {
+				path[i] = '\\';
+			}
+		}
+	}
+		
+	return path;
 }
