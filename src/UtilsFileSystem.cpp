@@ -167,7 +167,7 @@ bool removeDir(const std::string dir) {
 
 #ifdef _WIN32
 	// win implementation
-	std::string syscmd = "rmdir " + path;
+	std::string syscmd = "rmdir " + dir;
 	system(syscmd.c_str());
 #endif
 
