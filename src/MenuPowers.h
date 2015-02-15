@@ -141,6 +141,8 @@ private:
 	void loadPower(FileParser &infile);
 	void loadUpgrade(FileParser &infile);
 
+	bool tree_loaded;
+
 public:
 	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();

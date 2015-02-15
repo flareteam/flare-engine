@@ -46,6 +46,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	, points_left(0)
 	, default_background("")
 	, tab_control(NULL)
+	, tree_loaded(false)
 	, newPowerNotification(false)
 {
 
@@ -117,6 +118,9 @@ void MenuPowers::loadGraphics() {
  * Loads a given power tree and sets up the menu accordingly
  */
 void MenuPowers::loadPowerTree(const std::string &filename) {
+	// only load the power tree once per instance
+	if (tree_loaded) return;
+
 	// First, parse the power tree file
 
 	FileParser infile;
@@ -229,6 +233,8 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	}
 
 	applyPowerUpgrades();
+
+	tree_loaded = true;
 }
 
 short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell) {

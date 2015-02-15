@@ -343,6 +343,8 @@ void GameStatePlay::loadGame() {
 
 	// reset character menu
 	menu->chr->refreshStats();
+
+	loadPowerTree();
 }
 
 /**
