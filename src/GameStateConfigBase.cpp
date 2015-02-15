@@ -139,8 +139,15 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 		}
 	}
 
-	if (do_init)
+	if (do_init) {
 		init();
+	}
+	else {
+		// these will be initialized properly by a derevitive class (i.e. GameStateConfigDesktop)
+		AUDIO_TAB = 0;
+		INTERFACE_TAB = 0;
+		MODS_TAB = 0;
+	}
 }
 
 GameStateConfigBase::~GameStateConfigBase() {
@@ -581,9 +588,9 @@ void GameStateConfigBase::logicInterface() {
 		else COMBAT_TEXT=false;
 	}
 	else if (language_lstb->checkClick()) {
-		LANGUAGE = language_ISO[language_lstb->getSelected()];
-		// delete msg;
-		// msg = new MessageEngine();
+		int lang_id = language_lstb->getSelected();
+		if (lang_id != -1)
+			LANGUAGE = language_ISO[lang_id];
 	}
 	else if (show_fps_cb->checkClick()) {
 		if (show_fps_cb->isChecked()) SHOW_FPS=true;

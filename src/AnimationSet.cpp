@@ -123,6 +123,10 @@ void AnimationSet::load() {
 		else if (parser.key == "frames") {
 			// @ATTR frames|integer|The total number of frames
 			frames = toInt(parser.val);
+			if (frames < 0) {
+				parser.error("AnimationSet: Frame count can not be negative.");
+				frames = 0;
+			}
 			if (parent && frames != parent_anim_frames) {
 				parser.error("AnimationSet: Frame count %d != %d for matching animation in %s", frames, parent_anim_frames, parent->getName().c_str());
 				frames = parent_anim_frames;

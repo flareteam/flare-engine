@@ -112,14 +112,12 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 
 	active_frames.push_back(number_frames/2);
 
-	gfx.resize(max_kinds*_frames);
-	render_offset.resize(max_kinds*_frames);
+	unsigned i = max_kinds*_frames;
+	gfx.resize(i);
+	render_offset.resize(i);
 }
 
-void Animation::addFrame(	unsigned short index,
-							unsigned short kind,
-							Rect rect,
-							Point _render_offset) {
+void Animation::addFrame(unsigned short index, unsigned short kind, Rect rect, Point _render_offset) {
 
 	if (index >= gfx.size()/max_kinds) {
 		logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]",
@@ -131,8 +129,10 @@ void Animation::addFrame(	unsigned short index,
 				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, kind, max_kinds-1);
 		return;
 	}
-	gfx[max_kinds*index+kind] = rect;
-	render_offset[max_kinds*index+kind] = _render_offset;
+
+	unsigned i = max_kinds*index+kind;
+	gfx[i] = rect;
+	render_offset[i] = _render_offset;
 }
 
 void Animation::advanceFrame() {

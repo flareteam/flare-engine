@@ -253,7 +253,8 @@ void MenuPowers::applyPowerUpgrades() {
 				upgrade_it = std::find(stats->powers_list.begin(), stats->powers_list.end(), *it);
 				if (upgrade_it != stats->powers_list.end()) {
 					short upgrade_index = id_by_powerIndex(*upgrade_it, power_cell_upgrade);
-					replacePowerCellDataByUpgrade(i, upgrade_index);
+					if (upgrade_index != -1)
+						replacePowerCellDataByUpgrade(i, upgrade_index);
 					break;
 				}
 			}
@@ -344,6 +345,9 @@ void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upg
 
 bool MenuPowers::baseRequirementsMet(int power_index) {
 	int id = id_by_powerIndex(power_index, power_cell_all);
+
+	if (id == -1)
+		return false;
 
 	for (unsigned i = 0; i < power_cell_all[id].requires_power.size(); ++i)
 		if (!requirementsMet(power_cell_all[id].requires_power[i]))

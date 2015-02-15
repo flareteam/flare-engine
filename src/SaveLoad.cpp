@@ -349,6 +349,11 @@ void GameStatePlay::loadGame() {
  * Load a class definition, index
  */
 void GameStatePlay::loadClass(int index) {
+	if (index < 0 || (unsigned)index >= HERO_CLASSES.size()) {
+		logError("SaveLoad: Class index out of bounds.");
+		return;
+	}
+
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
 
