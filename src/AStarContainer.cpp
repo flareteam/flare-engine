@@ -19,21 +19,24 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 #include <cfloat>
 
-AStarContainer::AStarContainer(unsigned int map_width, unsigned int node_limit)
-	: size(0) {
+AStarContainer::AStarContainer(unsigned int _map_width, unsigned int _map_height, unsigned int node_limit)
+	: size(0)
+	, map_width(_map_width)
+	, map_height(_map_height)
+{
 	nodes = new AStarNode*[node_limit];
-	map_pos = new astar_mapcol[map_width];
 
 	//initialise the map array. A -1 value will mean there is no node at that position
-	for(unsigned i = 0; i < map_width; ++i)
-		std::fill(map_pos[i], map_pos[i] + 256, -1);
+	map_pos.resize(map_width);
+	for (unsigned i=0; i<map_width; ++i) {
+		map_pos[i].resize(map_height, -1);
+	}
 }
 
 AStarContainer::~AStarContainer() {
 	for(unsigned int i=0; i<size; i++)
 		delete nodes[i];
 	delete [] nodes;
-	delete [] map_pos;
 }
 
 void AStarContainer::add(AStarNode* node) {
@@ -146,21 +149,24 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score) {
 	}
 }
 
-AStarCloseContainer::AStarCloseContainer(unsigned int map_width, unsigned int node_limit)
-	: size(0) {
+AStarCloseContainer::AStarCloseContainer(unsigned int _map_width, unsigned int _map_height, unsigned int node_limit)
+	: size(0)
+	, map_width(_map_width)
+	, map_height(_map_height)
+{
 	nodes = new AStarNode*[node_limit];
-	map_pos = new astar_mapcol[map_width];
 
-	//initialise the map index array. A -1 value will mean there is no node at that position
-	for (unsigned i = 0; i < map_width; ++i)
-		std::fill(map_pos[i], map_pos[i] + 256, -1);
+	//initialise the map array. A -1 value will mean there is no node at that position
+	map_pos.resize(map_width);
+	for (unsigned i=0; i<map_width; ++i) {
+		map_pos[i].resize(map_height, -1);
+	}
 }
 
 AStarCloseContainer::~AStarCloseContainer() {
 	for(unsigned int i=0; i<size; i++)
 		delete nodes[i];
 	delete [] nodes;
-	delete [] map_pos;
 }
 
 int AStarCloseContainer::getSize() {

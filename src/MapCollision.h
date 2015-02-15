@@ -30,6 +30,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <cstdlib>
 
+typedef std::vector< std::vector<unsigned short> > Map_Layer;
+
 // collision tile types
 // The numbers 0..6 are the collision tiles as produced by tiled,
 // only 7 and 8 deal with entities on the map
@@ -72,11 +74,13 @@ private:
 
 	bool is_valid_tile(const int& x, const int& y, MOVEMENTTYPE movement_type, bool is_hero) const;
 
+	void clearmap();
+
 public:
 	MapCollision();
 	~MapCollision();
 
-	void setmap(const unsigned short _colmap[][256], unsigned short w, unsigned short h);
+	void setmap(const Map_Layer& _colmap, unsigned short w, unsigned short h);
 	bool move(float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 
 	bool is_outside_map(const int& tile_x, const int& tile_y) const;
@@ -98,7 +102,7 @@ public:
 
 	FPoint get_random_neighbor(Point target, int range, bool ignore_blocked = false);
 
-	unsigned short colmap[256][256];
+	Map_Layer colmap;
 	Point map_size;
 };
 

@@ -18,17 +18,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef ASTARCONTAINER_H
 #define ASTARCONTAINER_H
 
+#include <vector>
+
 #include "AStarNode.h"
+
+typedef std::vector< std::vector<short> > AStar_Grid;
 
 /* Designed to be used for the Open nodes.
 *  Unsuitable for Closed nodes but a close node conatiner is declared below
 *
 *  All code in the class assumes that the nodes and points provided are within the bounds of the map limits
 */
-typedef short astar_mapcol[256];
 class AStarContainer {
 public:
-	AStarContainer(unsigned int _map_width, unsigned int node_limit);
+	AStarContainer(unsigned int _map_width, unsigned int _map_height, unsigned int node_limit);
 	AStarContainer(const AStarContainer&); // copy constructor not yet implemented
 
 	~AStarContainer();
@@ -46,6 +49,8 @@ public:
 
 private:
 	unsigned int size;
+	unsigned int map_width;
+	unsigned int map_height;
 
 	/* This is an array of AStarNode pointers. This is the main data for this collection.
 	*  The size of the array is based on the node limit.
@@ -67,18 +72,14 @@ private:
 	*/
 	AStarNode** nodes;
 
-	/* This is an array of astar_mapcol (short[256]) which acts as an index for the main node array.
-	*  Its essentially a 2d array: short[map_width][256],
-	*  so elements can be accessed using cartesian coordinates e.g. map_pos[x][y]
+	/* This is a 2d array of shorts ([map_width][map_height]) which acts as an index for the main node array.
+	*  Elements can be accessed using cartesian coordinates e.g. map_pos[x][y]
 	*  To access an AStarNode based on map position use: nodes[map_pos[x][y]]
-	*
-	*  The map height is always set to 256 even if the actual map is smaller.
-	*  This helps with initialisation and potentially allows the compiler to optimise array access.
 	*
 	*  The data in this array is initialised as -1, which indicates hat there is no corresponding node for that position
 	*  This must be maintained when nodes are added, removed and re-ordered in the node array
 	*/
-	astar_mapcol* map_pos;
+	AStar_Grid map_pos;
 };
 
 /* This class is used to store the closed list of a* nodes
@@ -86,7 +87,7 @@ private:
 */
 class AStarCloseContainer {
 public:
-	AStarCloseContainer(unsigned int _map_width, unsigned int node_limit);
+	AStarCloseContainer(unsigned int _map_width, unsigned int _map_height, unsigned int node_limit);
 	AStarCloseContainer(const AStarCloseContainer&); // copy constructor not yet implemented
 	~AStarCloseContainer();
 
@@ -98,8 +99,10 @@ public:
 
 private:
 	unsigned int size;
+	unsigned int map_width;
+	unsigned int map_height;
 	AStarNode** nodes;
-	astar_mapcol* map_pos;
+	AStar_Grid map_pos;
 
 };
 

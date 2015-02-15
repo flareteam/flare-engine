@@ -62,7 +62,7 @@ private:
 
 	void drawRenderable(std::vector<Renderable>::iterator r_cursor);
 
-	void renderIsoLayer(const unsigned short layerdata[][256]);
+	void renderIsoLayer(const Map_Layer& layerdata);
 
 	// renders only objects
 	void renderIsoBackObjects(std::vector<Renderable> &r);
@@ -71,7 +71,7 @@ private:
 	void renderIsoFrontObjects(std::vector<Renderable> &r);
 	void renderIso(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
-	void renderOrthoLayer(const unsigned short layerdata[][256]);
+	void renderOrthoLayer(const Map_Layer& layerdata);
 	void renderOrthoBackObjects(std::vector<Renderable> &r);
 	void renderOrthoFrontObjects(std::vector<Renderable> &r);
 	void renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);

@@ -480,7 +480,7 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
-				if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
+				if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
 					mapr->collider.colmap[ec->x][ec->y] = ec->z;
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
@@ -489,7 +489,7 @@ bool EventManager::executeEvent(Event &ev) {
 				int index = distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s));
 				if (!mapr->isValidTile(ec->z))
 					logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", ec->x, ec->y, ec->z);
-				else if (ec->x >= 0 && ec->x < 256 && ec->y >= 0 && ec->y < 256)
+				else if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
 					mapr->layers[index][ec->x][ec->y] = ec->z;
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);

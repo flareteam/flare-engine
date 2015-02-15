@@ -177,9 +177,7 @@ int MapRenderer::load(std::string fname) {
 	for (unsigned i = 0; i < layers.size(); ++i) {
 		if (layernames[i] == "collision") {
 			collider.setmap(layers[i], w, h);
-			layernames.erase(layernames.begin() + i);
-			delete[] layers[i];
-			layers.erase(layers.begin() + i);
+			removeLayer(i);
 		}
 	}
 	for (unsigned i = 0; i < layers.size(); ++i)
@@ -333,7 +331,7 @@ void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
 	}
 }
 
-void MapRenderer::renderIsoLayer(const unsigned short layerdata[256][256]) {
+void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	Rect dest;
@@ -421,7 +419,6 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	if (index_objectlayer >= layers.size())
 		return;
 
-	maprow *objectlayer = layers[index_objectlayer];
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
 		int_fast16_t tiles_width = 0;
 
@@ -448,7 +445,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 			++tiles_width;
 			p.x += TILE_W;
 
-			if (const uint_fast16_t current_tile = objectlayer[i][j]) {
+			if (const uint_fast16_t current_tile = layers[index_objectlayer][i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile->setDest(dest);
@@ -488,14 +485,14 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 	checkTooltip();
 }
 
-void MapRenderer::renderOrthoLayer(const unsigned short layerdata[256][256]) {
+void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
 	short int startj = std::max(0, upperleft.y);
 	short int starti = std::max(0, upperleft.x);
-	const short max_tiles_width =  std::min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
-	const short max_tiles_height = std::min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
+	const short max_tiles_width =  std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
+	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
 	short int i;
 	short int j;
@@ -536,8 +533,8 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	short int startj = std::max(0, upperleft.y);
 	short int starti = std::max(0, upperleft.x);
-	const short max_tiles_width  = std::min(w, static_cast<short int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
-	const short max_tiles_height = std::min(h, static_cast<short int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
+	const short max_tiles_width  = std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
+	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
 	while (r_cursor != r_end && (int)(r_cursor->map_pos.y) < startj)
 		++r_cursor;
@@ -545,13 +542,12 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	if (index_objectlayer >= layers.size())
 		return;
 
-	maprow *objectlayer = layers[index_objectlayer];
 	for (j = startj; j < max_tiles_height; j++) {
 		Point p = map_to_screen(starti, j, shakycam.x, shakycam.y);
 		p = center_tile(p);
 		for (i = starti; i<max_tiles_width; i++) {
 
-			if (const unsigned short current_tile = objectlayer[i][j]) {
+			if (const unsigned short current_tile = layers[index_objectlayer][i][j]) {
 				dest.x = p.x - tset.tiles[current_tile].offset.x;
 				dest.y = p.y - tset.tiles[current_tile].offset.y;
 				tset.tiles[current_tile].tile->setDest(dest);
@@ -714,11 +710,10 @@ void MapRenderer::checkHotspots() {
 				}
 				else {
 					for (unsigned index = 0; index <= index_objectlayer; ++index) {
-						maprow *current_layer = layers[index];
 						Point p = map_to_screen(float(x), float(y), shakycam.x, shakycam.y);
 						p = center_tile(p);
 
-						if (const short current_tile = current_layer[x][y]) {
+						if (const short current_tile = layers[index][x][y]) {
 							// first check if mouse pointer is in rectangle of that tile:
 							Rect dest;
 							dest.x = p.x - tset.tiles[current_tile].offset.x;

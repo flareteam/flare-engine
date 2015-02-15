@@ -33,17 +33,28 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 
 MapCollision::MapCollision()
-	: map_size(Point()) {
-	memset(colmap, 0, sizeof(colmap));
+	: map_size(Point())
+{
+	colmap.resize(1);
+	colmap[0].resize(1);
 }
 
-void MapCollision::setmap(const unsigned short _colmap[][256], unsigned short w, unsigned short h) {
-	for (int i=0; i<w; i++)
-		for (int j=0; j<h; j++)
+void MapCollision::setmap(const Map_Layer& _colmap, unsigned short w, unsigned short h) {
+	clearmap();
+
+	colmap.resize(w);
+	for (unsigned i=0; i<w; ++i) {
+		colmap[i].resize(h);
+	}
+	for (unsigned i=0; i<w; i++)
+		for (unsigned j=0; j<h; j++)
 			colmap[i][j] = _colmap[i][j];
 
 	map_size.x = w;
 	map_size.y = h;
+}
+
+void MapCollision::clearmap() {
 }
 
 int sgn(float f) {
@@ -210,7 +221,6 @@ bool MapCollision::is_empty(const float& x, const float& y) const {
  * A position outside the map boundary is a wall
  */
 bool MapCollision::is_wall(const float& x, const float& y) const {
-
 	// bounds check
 	const int tile_x = int(x);
 	const int tile_y = int(y);
@@ -224,7 +234,6 @@ bool MapCollision::is_wall(const float& x, const float& y) const {
  * Is this a valid tile for an entity with this movement type?
  */
 bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, MOVEMENTTYPE movement_type, bool is_hero) const {
-
 	// outside the map isn't valid
 	if (is_outside_map(tile_x,tile_y)) return false;
 
@@ -310,7 +319,6 @@ bool MapCollision::line_of_sight(const float& x1, const float& y1, const float& 
 }
 
 bool MapCollision::line_of_movement(const float& x1, const float& y1, const float& x2, const float& y2, MOVEMENTTYPE movement_type) {
-
 	if (is_outside_map(x2, y2)) return false;
 
 	// intangible entities can always move
@@ -372,7 +380,7 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FP
 	if (is_outside_map(end_pos.x, end_pos.y)) return false;
 
 	if (limit == 0)
-		limit = 256;
+		limit = std::max(map_size.x, map_size.y);
 
 	// path must be empty
 	if (!path.empty())
@@ -396,8 +404,8 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FP
 	node->setEstimatedCost((float)calcDist(start,end));
 	node->setParent(current);
 
-	AStarContainer open(map_size.x, limit);
-	AStarCloseContainer close(map_size.x, limit);
+	AStarContainer open(map_size.x, map_size.y, limit);
+	AStarCloseContainer close(map_size.x, map_size.y, limit);
 
 	open.add(node);
 
@@ -473,7 +481,6 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FP
 }
 
 void MapCollision::block(const float& map_x, const float& map_y, bool is_ally) {
-
 	const int tile_x = int(map_x);
 	const int tile_y = int(map_y);
 
@@ -487,7 +494,6 @@ void MapCollision::block(const float& map_x, const float& map_y, bool is_ally) {
 }
 
 void MapCollision::unblock(const float& map_x, const float& map_y) {
-
 	const int tile_x = int(map_x);
 	const int tile_y = int(map_y);
 
@@ -522,5 +528,6 @@ FPoint MapCollision::get_random_neighbor(Point target, int range, bool ignore_bl
 }
 
 MapCollision::~MapCollision() {
+	clearmap();
 }
 

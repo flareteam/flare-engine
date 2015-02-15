@@ -19,7 +19,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 #include "Map.h"
-#include "MapCollision.h"
 
 #include "FileParser.h"
 #include "UtilsParsing.h"
@@ -36,12 +35,11 @@ Map::Map()
 	, spawn_dir(0) {
 }
 
-
+Map::~Map() {
+	clearLayers();
+}
 
 void Map::clearLayers() {
-
-	for (unsigned i = 0; i < layers.size(); ++i)
-		delete[] layers[i];
 	layers.clear();
 	layernames.clear();
 }
@@ -56,9 +54,13 @@ void Map::clearEvents() {
 	statblocks.clear();
 }
 
+void Map::removeLayer(unsigned index) {
+	layernames.erase(layernames.begin() + index);
+	layers.erase(layers.begin() + index);
+}
+
 int Map::load(std::string fname) {
 	FileParser infile;
-	maprow *cur_layer = NULL;
 
 	clearEvents();
 	clearLayers();
@@ -85,7 +87,7 @@ int Map::load(std::string fname) {
 		if (infile.section == "header")
 			loadHeader(infile);
 		else if (infile.section == "layer")
-			loadLayer(infile, &cur_layer);
+			loadLayer(infile);
 		else if (infile.section == "enemy")
 			loadEnemyGroup(infile, &enemy_groups.back());
 		else if (infile.section == "npc")
@@ -143,11 +145,11 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "width") {
 		// @ATTR width|integer|Width of map
-		this->w = toInt(infile.val);
+		this->w = std::max(toInt(infile.val), 1);
 	}
 	else if (infile.key == "height") {
 		// @ATTR height|integer|Height of map
-		this->h = toInt(infile.val);
+		this->h = std::max(toInt(infile.val), 1);
 	}
 	else if (infile.key == "tileset") {
 		// @ATTR tileset|string|Filename of a tileset definition to use for map
@@ -177,11 +179,14 @@ void Map::loadHeader(FileParser &infile) {
 	}
 }
 
-void Map::loadLayer(FileParser &infile, maprow **current_layer) {
+void Map::loadLayer(FileParser &infile) {
 	if (infile.key == "type") {
 		// @ATTR layer.type|string|Map layer type.
-		*current_layer = new maprow[w];
-		layers.push_back(*current_layer);
+		layers.resize(layers.size()+1);
+		layers.back().resize(w);
+		for (unsigned i=0; i<w; ++i) {
+			layers.back()[i].resize(h);
+		}
 		layernames.push_back(infile.val);
 		if (infile.val == "collision")
 			collision_layer = layernames.size()-1;
@@ -217,7 +222,7 @@ void Map::loadLayer(FileParser &infile, maprow **current_layer) {
 			}
 
 			for (int i=0; i<w; i++)
-				(*current_layer)[i][j] = popFirstInt(val, ',');
+				layers.back()[i][j] = popFirstInt(val, ',');
 		}
 	}
 	else {
