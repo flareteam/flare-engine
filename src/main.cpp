@@ -34,7 +34,7 @@ GameSwitcher *gswitch;
 /**
  * Game initialization.
  */
-static void init(const std::string render_device_name) {
+static void init(const std::string &render_device_name) {
 
 	setPaths();
 	setStatNames();

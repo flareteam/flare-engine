@@ -47,7 +47,8 @@ Animation::Animation(const std::string &_name, const std::string &_type, Image *
 	, render_offset()
 	, frames()
 	, active_frames()
-	, elapsed_frames(0) {
+	, elapsed_frames(0)
+	, frame_count(0) {
 	if (type == NONE)
 		logError("Animation: Type %s is unknown", _type.c_str());
 }
@@ -67,7 +68,8 @@ Animation::Animation(const Animation& a)
 	, render_offset(std::vector<Point>(a.render_offset))
 	, frames(std::vector<unsigned short>(a.frames))
 	, active_frames(std::vector<short>(a.active_frames))
-	, elapsed_frames(0) {
+	, elapsed_frames(0)
+	, frame_count(0) {
 }
 
 void Animation::setupUncompressed(Point _render_size, Point _render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds) {

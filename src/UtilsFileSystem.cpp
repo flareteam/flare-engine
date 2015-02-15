@@ -51,7 +51,7 @@ bool pathExists(const std::string &path) {
  * Create this folder if it doesn't already exist
  */
 
-void createDir(const std::string path) {
+void createDir(const std::string &path) {
 	if (isDirectory(path))
 		return;
 
@@ -86,12 +86,10 @@ bool isDirectory(const std::string &path) {
  * Check to see if a file exists
  * The filename parameter should include the entire path to this file
  */
-bool fileExists(std::string filename) {
-	bool exists;
-
+bool fileExists(const std::string &filename) {
 	std::ifstream infile(filename.c_str());
-	exists = infile.is_open();
-	if (infile.is_open()) infile.close();
+	bool exists = infile.is_open();
+	if (exists) infile.close();
 
 	return exists;
 }
@@ -99,7 +97,7 @@ bool fileExists(std::string filename) {
 /**
  * Returns a vector containing all filenames in a given folder with the given extension
  */
-int getFileList(std::string dir, std::string ext, std::vector<std::string> &files) {
+int getFileList(const std::string &dir, const std::string &ext, std::vector<std::string> &files) {
 
 	DIR *dp;
 	struct dirent *dirp;
@@ -121,7 +119,7 @@ int getFileList(std::string dir, std::string ext, std::vector<std::string> &file
 /**
  * Returns a vector containing all directory names in a given directory
  */
-int getDirList(std::string dir, std::vector<std::string> &dirs) {
+int getDirList(const std::string &dir, std::vector<std::string> &dirs) {
 
 	DIR *dp;
 	struct dirent *dirp;
@@ -147,7 +145,7 @@ int getDirList(std::string dir, std::vector<std::string> &dirs) {
 	return 0;
 }
 
-bool removeFile(const std::string file) {
+bool removeFile(const std::string &file) {
 	if (remove(file.c_str()) != 0) {
 		perror("removeFile");
 		return false;
@@ -155,7 +153,7 @@ bool removeFile(const std::string file) {
 	return true;
 }
 
-bool removeDir(const std::string dir) {
+bool removeDir(const std::string &dir) {
 	if (!isDirectory(dir))
 		return false;
 
@@ -176,7 +174,7 @@ bool removeDir(const std::string dir) {
 	return true;
 }
 
-bool removeDirRecursive(const std::string dir) {
+bool removeDirRecursive(const std::string &dir) {
 	std::vector<std::string> dir_list;
 	std::vector<std::string> file_list;
 
@@ -215,12 +213,12 @@ std::string path(const std::stringstream* ss) {
 			// isDirectory does not like trailing '\', so terminate string if last char
 			if (i == len - 1) {
 				path[i] = 0;
-			} 
+			}
 			else {
 				path[i] = '\\';
 			}
 		}
 	}
-		
+
 	return path;
 }

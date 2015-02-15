@@ -62,9 +62,8 @@ public:
 		, mental(0)
 		, offense(0)
 		, defense(0)
+		, hotkeys(std::vector<int>(ACTIONBAR_MAX, 0))
 		, power_tree("") {
-		hotkeys = std::vector<int>(ACTIONBAR_MAX, 0);
-		powers.clear();
 	}
 };
 
