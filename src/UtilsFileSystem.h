@@ -40,4 +40,6 @@ bool removeFile(const std::string file);
 bool removeDir(const std::string dir);
 bool removeDirRecursive(const std::string dir);
 
+std::string path(const std::stringstream* ss);
+
 #endif

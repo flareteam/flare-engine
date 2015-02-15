@@ -65,7 +65,7 @@ void GameStatePlay::saveGame() {
 	std::stringstream ss;
 	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
 
-	outfile.open(ss.str().c_str(), std::ios::out);
+	outfile.open(path(&ss).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
@@ -166,7 +166,7 @@ void GameStatePlay::saveGame() {
 	else
 		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
-	outfile.open(ss.str().c_str(), std::ios::out);
+	outfile.open(path(&ss).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
 
@@ -205,7 +205,7 @@ void GameStatePlay::loadGame() {
 	std::stringstream ss;
 	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
 
-	if (infile.open(ss.str(), false)) {
+	if (infile.open(path(&ss), false)) {
 		while (infile.next()) {
 			if (infile.key == "name") pc->stats.name = infile.val;
 			else if (infile.key == "permadeath") {
@@ -386,7 +386,7 @@ void GameStatePlay::loadStash() {
 	else
 		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
-	if (infile.open(ss.str(), false)) {
+	if (infile.open(path(&ss), false)) {
 		while (infile.next()) {
 			if (infile.key == "item") {
 				menu->stash->stock.setItems(infile.val);
