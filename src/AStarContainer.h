@@ -31,10 +31,11 @@ typedef std::vector< std::vector<short> > AStar_Grid;
 */
 class AStarContainer {
 public:
-	AStarContainer(unsigned int _map_width, unsigned int _map_height, unsigned int node_limit);
+	AStarContainer(unsigned int _map_width, unsigned int _map_height, unsigned int _node_limit);
 	AStarContainer(const AStarContainer&); // copy constructor not yet implemented
 
 	~AStarContainer();
+	int getSize();
 	//assumes that the node is not already in the collection
 	void add(AStarNode* node);
 	//assumes that there is at least 1 node in the collection
@@ -49,6 +50,7 @@ public:
 
 private:
 	unsigned int size;
+	unsigned int node_limit;
 	unsigned int map_width;
 	unsigned int map_height;
 
@@ -70,7 +72,7 @@ private:
 	*  Also note that the code within the article is based on arrays with starting position 1, whereas we use 0 based arrays.
 	*  http://www.policyalmanac.org/games/binaryHeaps.htm
 	*/
-	AStarNode** nodes;
+	std::vector<AStarNode*> nodes;
 
 	/* This is a 2d array of shorts ([map_width][map_height]) which acts as an index for the main node array.
 	*  Elements can be accessed using cartesian coordinates e.g. map_pos[x][y]
@@ -87,7 +89,7 @@ private:
 */
 class AStarCloseContainer {
 public:
-	AStarCloseContainer(unsigned int _map_width, unsigned int _map_height, unsigned int node_limit);
+	AStarCloseContainer(unsigned int _map_width, unsigned int _map_height, unsigned int _node_limit);
 	AStarCloseContainer(const AStarCloseContainer&); // copy constructor not yet implemented
 	~AStarCloseContainer();
 
@@ -99,9 +101,10 @@ public:
 
 private:
 	unsigned int size;
+	unsigned int node_limit;
 	unsigned int map_width;
 	unsigned int map_height;
-	AStarNode** nodes;
+	std::vector<AStarNode*> nodes;
 	AStar_Grid map_pos;
 
 };

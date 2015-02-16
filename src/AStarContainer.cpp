@@ -19,12 +19,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 #include <cfloat>
 
-AStarContainer::AStarContainer(unsigned int _map_width, unsigned int _map_height, unsigned int node_limit)
+AStarContainer::AStarContainer(unsigned int _map_width, unsigned int _map_height, unsigned int _node_limit)
 	: size(0)
+	, node_limit(_node_limit)
 	, map_width(_map_width)
 	, map_height(_map_height)
 {
-	nodes = new AStarNode*[node_limit];
+	nodes.resize(node_limit, NULL);
 
 	//initialise the map array. A -1 value will mean there is no node at that position
 	map_pos.resize(map_width);
@@ -36,10 +37,15 @@ AStarContainer::AStarContainer(unsigned int _map_width, unsigned int _map_height
 AStarContainer::~AStarContainer() {
 	for(unsigned int i=0; i<size; i++)
 		delete nodes[i];
-	delete [] nodes;
+	nodes.clear();
+}
+
+int AStarContainer::getSize() {
+	return size;
 }
 
 void AStarContainer::add(AStarNode* node) {
+	if (size >= node_limit) return;
 
 	//add the new node at the end and update its index
 	nodes[size] = node;
@@ -149,12 +155,13 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score) {
 	}
 }
 
-AStarCloseContainer::AStarCloseContainer(unsigned int _map_width, unsigned int _map_height, unsigned int node_limit)
+AStarCloseContainer::AStarCloseContainer(unsigned int _map_width, unsigned int _map_height, unsigned int _node_limit)
 	: size(0)
+	, node_limit(_node_limit)
 	, map_width(_map_width)
 	, map_height(_map_height)
 {
-	nodes = new AStarNode*[node_limit];
+	nodes.resize(node_limit, NULL);
 
 	//initialise the map array. A -1 value will mean there is no node at that position
 	map_pos.resize(map_width);
@@ -166,7 +173,7 @@ AStarCloseContainer::AStarCloseContainer(unsigned int _map_width, unsigned int _
 AStarCloseContainer::~AStarCloseContainer() {
 	for(unsigned int i=0; i<size; i++)
 		delete nodes[i];
-	delete [] nodes;
+	nodes.clear();
 }
 
 int AStarCloseContainer::getSize() {
@@ -174,6 +181,8 @@ int AStarCloseContainer::getSize() {
 }
 
 void AStarCloseContainer::add(AStarNode* node) {
+	if (size >= node_limit) return;
+
 	nodes[size] = node;
 	map_pos[node->getX()][node->getY()] = size;
 	size++;

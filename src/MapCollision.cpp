@@ -427,6 +427,11 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FP
 		for (std::list<Point>::iterator it=neighbours.begin(); it != neighbours.end(); ++it)	{
 			Point neighbour = *it;
 
+			// do not exceed the node limit when adding nodes
+			if ((unsigned)open.getSize() >= limit) {
+				break;
+			}
+
 			// if neighbour is not free of any collision, skip it
 			if (!is_valid_tile(neighbour.x,neighbour.y,movement_type, false))
 				continue;
