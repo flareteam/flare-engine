@@ -333,7 +333,7 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 				else
 					chance << e.z;
 
-				map_file << ";" << e.s << "," << chance << "," << e.a << "," << e.b;
+				map_file << ";" << e.s << "," << chance.str() << "," << e.a << "," << e.b;
 			}
 			map_file << std::endl;
 			// UNIMPLEMENTED
