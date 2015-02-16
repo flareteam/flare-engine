@@ -110,9 +110,7 @@ void MapSaver::writeLayers(std::ofstream& map_file)
 			std::stringstream map_row;
 			for (int tile = 0; tile < map->w; tile++)
 			{
-				maprow* row = map->layers[i];
-				map_row << row[tile][line] << ",";
-
+				map_row << map->layers[i][tile][line] << ",";
 			}
 			layer += map_row.str();
 			layer += '\n';
