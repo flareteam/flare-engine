@@ -20,11 +20,11 @@ for most of the game data, allowing anyone to easily modify game contents.
 Prints a description of command line flags.
 .IP "\fB\-\-version\fP"
 Prints the release version.
-.IP "\fB\-\-data-path \fIpath\fP"
+.IP "\fB\-\-data-path=\fIpath\fP"
 Specifies an exact path to look for mod data.
 .IP "\fB\-\-debug-event\fP"
 Prints verbose hardware input information.
-.IP "\fB\-\-renderer \fIrenderer\fP"
+.IP "\fB\-\-renderer=\fIrenderer\fP"
 Specifies the rendering backend to use. The default is 'sdl'. Also available is 'sdl_hardware', which is a GPU-based renderer.
 
 
