@@ -750,6 +750,9 @@ void Avatar::transform() {
 	hero_stats = new StatBlock();
 	*hero_stats = stats;
 
+	// do not allow two copies of the summons list
+	hero_stats->summons.clear();
+
 	// replace some hero stats
 	stats.speed = charmed_stats->speed;
 	stats.flying = charmed_stats->flying;
