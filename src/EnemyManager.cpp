@@ -404,7 +404,8 @@ bool EnemyManager::isCleared() {
 	if (enemies.empty()) return true;
 
 	for (unsigned int i=0; i < enemies.size(); i++) {
-		if (enemies[i]->stats.alive) return false;
+		if (enemies[i]->stats.alive && !enemies[i]->stats.hero_ally)
+			return false;
 	}
 
 	return true;
