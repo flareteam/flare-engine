@@ -42,7 +42,6 @@ public:
 	int faceNextBest(float mapx, float mapy);
 	void newState(int state);
 	virtual void doRewards(int source_type);
-	void InstantDeath();
 
 	std::string type;
 

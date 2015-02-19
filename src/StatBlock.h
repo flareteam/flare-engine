@@ -88,6 +88,7 @@ public:
 	void applyEffects();
 	void calcBase();
 	void logic();
+	void removeSummons();
 	void removeFromSummons();
 	bool summonLimitReached(int power_id) const;
 	void setWanderArea(int r);

@@ -668,12 +668,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				else {
 					log_msg = msg->get("You are defeated. Press Enter to continue.");
 				}
-
-				//once the player dies, kill off any remaining summons
-				for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-					if(!enemies->enemies[i]->stats.corpse && enemies->enemies[i]->stats.hero_ally)
-						enemies->enemies[i]->InstantDeath();
-				}
 			}
 
 			if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "die") {

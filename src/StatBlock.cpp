@@ -632,6 +632,9 @@ void StatBlock::logic() {
 	if (intangible) movement_type = MOVEMENT_INTANGIBLE;
 	else if (flying) movement_type = MOVEMENT_FLYING;
 	else movement_type = MOVEMENT_NORMAL;
+
+	if (hp == 0)
+		removeSummons();
 }
 
 StatBlock::~StatBlock() {
@@ -723,6 +726,25 @@ void StatBlock::loadHeroSFX() {
 	}
 }
 
+/**
+ * Recursivly kill all summoned creatures
+ */
+void StatBlock::removeSummons() {
+	for (std::vector<StatBlock*>::iterator it = summons.begin(); it != summons.end(); ++it) {
+		(*it)->hp = 0;
+		(*it)->effects.triggered_death = true;
+		(*it)->effects.clearEffects();
+		if (!(*it)->hero) {
+			(*it)->cur_state = ENEMY_DEAD;
+			(*it)->corpse_ticks = CORPSE_TIMEOUT;
+		}
+		(*it)->removeSummons();
+		(*it)->summoner = NULL;
+	}
+
+	summons.clear();
+}
+
 void StatBlock::removeFromSummons() {
 
 	if(summoner != NULL && !summoner->summons.empty()) {
@@ -734,12 +756,7 @@ void StatBlock::removeFromSummons() {
 		summoner = NULL;
 	}
 
-	if (!summons.empty()) {
-		for (std::vector<StatBlock*>::iterator it=summons.begin(); it != summons.end(); ++it)
-			(*it)->summoner = NULL;
-
-		summons.clear();
-	}
+	removeSummons();
 }
 
 bool StatBlock::summonLimitReached(int power_id) const {

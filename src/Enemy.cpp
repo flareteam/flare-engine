@@ -159,16 +159,6 @@ void Enemy::doRewards(int source_type) {
 	loot->addEnemyLoot(this);
 }
 
-void Enemy::InstantDeath() {
-	stats.effects.triggered_death = true;
-	stats.cur_state = ENEMY_DEAD;
-
-	stats.hp = 0;
-	play_sfx_die = true;
-	stats.corpse_ticks = CORPSE_TIMEOUT;
-	stats.effects.clearEffects();
-}
-
 /**
  * getRender()
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
