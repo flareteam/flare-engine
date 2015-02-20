@@ -272,11 +272,11 @@ void GameStatePlay::checkTeleport() {
 		// if we're not changing map, move allies to a the player's new position
 		// when changing maps, enemies->handleNewMap() does something similar to this
 		if (mapr->teleport_mapname == "") {
-			int spawn_radius = (enemies->enemies.size() % 8 == 0) ? enemies->enemies.size()/8 : (enemies->enemies.size()/8)+1;
+			FPoint spawn_pos = mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1, false);
 			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 				if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
 					mapr->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
-					enemies->enemies[i]->stats.pos = mapr->collider.get_random_neighbor(floor(pc->stats.pos), spawn_radius, false);
+					enemies->enemies[i]->stats.pos = spawn_pos;
 					mapr->collider.block(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y, true);
 				}
 			}

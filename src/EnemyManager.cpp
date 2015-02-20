@@ -130,7 +130,7 @@ void EnemyManager::handleNewMap () {
 		mapr->collider.block(me.pos.x, me.pos.y, false);
 	}
 
-	int spawn_radius = (allies.size() % 8 == 0) ? allies.size()/8 : (allies.size()/8)+1;
+	FPoint spawn_pos = mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1, false);
 	while (!allies.empty()) {
 
 		Enemy *e = allies.front();
@@ -139,7 +139,7 @@ void EnemyManager::handleNewMap () {
 		//dont need the result of this. its only called to handle animation and sound
 		getEnemyPrototype(e->type);
 
-		e->stats.pos = mapr->collider.get_random_neighbor(floor(pc->stats.pos), spawn_radius, false);
+		e->stats.pos = spawn_pos;
 		e->stats.direction = pc->stats.direction;
 
 		enemies.push_back(e);
