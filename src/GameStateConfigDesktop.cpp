@@ -609,6 +609,7 @@ void GameStateConfigDesktop::logicAccept() {
 	}
 	cleanup();
 	saveSettings();
+	render_device->updateTitleBar();
 	delete requestedGameState;
 	requestedGameState = new GameStateResolution(width, height, fullscreen, hwsurface, doublebuf);
 }

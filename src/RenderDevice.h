@@ -183,6 +183,7 @@ public:
 	virtual Rect getContextSize() = 0;
 	virtual void listModes(std::vector<Rect> &modes) = 0;
 	virtual void setGamma(float g) = 0;
+	virtual void updateTitleBar() = 0;
 
 	/** factory functions for Image */
 	virtual Image *loadImage(std::string filename,

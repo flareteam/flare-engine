@@ -85,6 +85,7 @@ public:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	Image *createImage(int width, int height);
 	void setGamma(float g);
+	void updateTitleBar();
 	void listModes(std::vector<Rect> &modes);
 	void freeImage(Image *image);
 
@@ -97,6 +98,7 @@ private:
 	SDL_Window *screen;
 	SDL_Renderer *renderer;
 	SDL_Surface* titlebar_icon;
+	char* title;
 };
 
 #endif // SDL_VERSION_ATLEAST(2,0,0)

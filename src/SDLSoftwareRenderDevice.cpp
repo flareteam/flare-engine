@@ -209,10 +209,6 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 
 	bool window_created = false;
 
-	// window title and icon
-	title = strdup(msg->get(WINDOW_TITLE).c_str());
-	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
-
 #if SDL_VERSION_ATLEAST(2,0,0)
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
@@ -238,7 +234,7 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 	}
 	if (DOUBLEBUF) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
-	window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
+	window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
 	if (window)
 		renderer = SDL_CreateRenderer(window, -1, r_flags);
 
@@ -280,13 +276,7 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 	}
 
 	if (is_initialized) {
-#if SDL_VERSION_ATLEAST(2,0,0)
-		// title was already set when creating the window
-		if (titlebar_icon) SDL_SetWindowIcon(window, titlebar_icon);
-#else
-		if (title) SDL_WM_SetCaption(title, title);
-		if (titlebar_icon) SDL_WM_SetIcon(titlebar_icon, NULL);
-#endif
+		updateTitleBar();
 	}
 
 	return (window_created ? 0 : -1);
@@ -485,6 +475,10 @@ void SDLSoftwareRenderDevice::commitFrame() {
 }
 
 void SDLSoftwareRenderDevice::destroyContext() {
+	if (title) {
+		free(title);
+		title = NULL;
+	}
 	if (titlebar_icon) {
 		SDL_FreeSurface(titlebar_icon);
 		titlebar_icon = NULL;
@@ -505,10 +499,6 @@ void SDLSoftwareRenderDevice::destroyContext() {
 	if (window) {
 		SDL_DestroyWindow(window);
 		window = NULL;
-	}
-	if (title) {
-		free(title);
-		title = NULL;
 	}
 #endif
 
@@ -571,6 +561,26 @@ void SDLSoftwareRenderDevice::setGamma(float g) {
 	SDL_SetWindowGammaRamp(window, ramp, ramp, ramp);
 #else
 	SDL_SetGamma(g, g, g);
+#endif
+}
+
+void SDLSoftwareRenderDevice::updateTitleBar() {
+	if (title) free(title);
+	if (titlebar_icon) SDL_FreeSurface(titlebar_icon);
+
+#if SDL_VERSION_ATLEAST(2,0,0)
+	if (!window) return;
+#endif
+
+	title = strdup(msg->get(WINDOW_TITLE).c_str());
+	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
+
+#if SDL_VERSION_ATLEAST(2,0,0)
+	if (title) SDL_SetWindowTitle(window, title);
+	if (titlebar_icon) SDL_SetWindowIcon(window, titlebar_icon);
+#else
+	if (title) SDL_WM_SetCaption(title, title);
+	if (titlebar_icon) SDL_WM_SetIcon(titlebar_icon, NULL);
 #endif
 }
 

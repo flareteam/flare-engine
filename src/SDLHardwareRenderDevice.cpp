@@ -156,6 +156,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	: screen(NULL)
 	, renderer(NULL)
 	, titlebar_icon(NULL)
+	, title(NULL)
 {
 	std::cout << "Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2)" << std::endl;
 }
@@ -205,13 +206,7 @@ int SDLHardwareRenderDevice::createContext(int width, int height) {
 
 	if (screen != NULL && renderer != NULL) {
 		is_initialized = true;
-
-		// Add Window Titlebar Icon
-		if (titlebar_icon == NULL) {
-			titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
-			SDL_SetWindowIcon(screen, titlebar_icon);
-		}
-
+		updateTitleBar();
 		return 0;
 	}
 	else {
@@ -410,8 +405,18 @@ void SDLHardwareRenderDevice::commitFrame() {
 
 void SDLHardwareRenderDevice::destroyContext() {
 	SDL_FreeSurface(titlebar_icon);
+	titlebar_icon = NULL;
+
 	SDL_DestroyRenderer(renderer);
+	renderer = NULL;
+
 	SDL_DestroyWindow(screen);
+	screen = NULL;
+
+	if (title) {
+		free(title);
+		title = NULL;
+	}
 
 	return;
 }
@@ -472,6 +477,21 @@ void SDLHardwareRenderDevice::setGamma(float g) {
 	Uint16 ramp[256];
 	SDL_CalculateGammaRamp(g, ramp);
 	SDL_SetWindowGammaRamp(screen, ramp, ramp, ramp);
+}
+
+void SDLHardwareRenderDevice::updateTitleBar() {
+	if (title) free(title);
+	title = NULL;
+	if (titlebar_icon) SDL_FreeSurface(titlebar_icon);
+	titlebar_icon = NULL;
+
+	if (!screen) return;
+
+	title = strdup(msg->get(WINDOW_TITLE).c_str());
+	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
+
+	if (title) SDL_SetWindowTitle(screen, title);
+	if (titlebar_icon) SDL_SetWindowIcon(screen, titlebar_icon);
 }
 
 void SDLHardwareRenderDevice::listModes(std::vector<Rect> &modes) {

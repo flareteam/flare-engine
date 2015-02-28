@@ -551,6 +551,7 @@ void GameStateConfigBase::logicAccept() {
 	}
 	cleanup();
 	saveSettings();
+	render_device->updateTitleBar();
 	delete requestedGameState;
 	requestedGameState = new GameStateTitle();
 }
@@ -563,6 +564,7 @@ void GameStateConfigBase::logicCancel() {
 	delete msg;
 	msg = new MessageEngine();
 	update();
+	render_device->updateTitleBar();
 	delete requestedGameState;
 	requestedGameState = new GameStateTitle();
 }
