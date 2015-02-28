@@ -259,7 +259,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "direction") {
 		// @ATTR enemygroup.direction|integer|Direction of enemies
-		group->direction = std::min(std::max(0, toInt(infile.val)), 7);
+		group->direction = parse_direction(infile.val);
 	}
 	else if (infile.key == "waypoints") {
 		// @ATTR enemygroup.waypoints|[x(integer), y(integer)]|Enemy waypoints; single enemy only; negates wander_radius

@@ -63,6 +63,36 @@ int parse_duration(const std::string& s) {
 	return val;
 }
 
+int parse_direction(const std::string& s) {
+	int dir;
+
+	if (s == "N")
+		dir = 3;
+	else if (s == "NE")
+		dir = 4;
+	else if (s == "E")
+		dir = 5;
+	else if (s == "SE")
+		dir = 6;
+	else if (s == "S")
+		dir = 7;
+	else if (s == "SW")
+		dir = 0;
+	else if (s == "W")
+		dir = 1;
+	else if (s == "NW")
+		dir = 2;
+	else {
+		dir = toInt(s);
+		if (dir < 0 || dir > 7) {
+			logError("UtilsParsing: Direction '%d' is not within range 0-7.");
+			dir = 0;
+		}
+	}
+
+	return dir;
+}
+
 std::string parse_section_title(const std::string& s) {
 	size_t bracket = s.find_first_of(']');
 	if (bracket == std::string::npos) return ""; // not found

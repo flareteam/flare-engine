@@ -27,6 +27,7 @@ std::string trim(std::string s, const std::string& delimiters = " \f\n\r\t\v");
 std::string trim_left_inplace(std::string s, const std::string& delimiters = " \f\n\r\t\v");
 std::string trim_right_inplace(std::string s, const std::string& delimiters = " \f\n\r\t\v");
 int parse_duration(const std::string& s);
+int parse_direction(const std::string& s);
 std::string parse_section_title(const std::string& s);
 void parse_key_pair(const std::string& s, std::string& key, std::string& val);
 int popFirstInt(std::string& s, char separator = ',');
