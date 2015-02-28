@@ -258,7 +258,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
 	else if (infile.key == "direction") {
-		// @ATTR enemygroup.direction|integer|Direction of enemies
+		// @ATTR enemygroup.direction|direction|Direction that enemies will initially face.
 		group->direction = parse_direction(infile.val);
 	}
 	else if (infile.key == "waypoints") {
