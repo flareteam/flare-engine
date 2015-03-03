@@ -261,7 +261,7 @@ void GameStatePlay::loadGame() {
 			}
 			else if (infile.key == "spawn") {
 				mapr->teleport_mapname = infile.nextValue();
-				if (fileExists(mods->locate(mapr->teleport_mapname))) {
+				if (mapr->teleport_mapname != "" && fileExists(mods->locate(mapr->teleport_mapname))) {
 					mapr->teleport_destination.x = toInt(infile.nextValue()) + 0.5f;
 					mapr->teleport_destination.y = toInt(infile.nextValue()) + 0.5f;
 					mapr->teleportation = true;
@@ -271,8 +271,8 @@ void GameStatePlay::loadGame() {
 				else {
 					logError("SaveLoad: Unable to find %s, loading maps/spawn.txt", mapr->teleport_mapname.c_str());
 					mapr->teleport_mapname = "maps/spawn.txt";
-					mapr->teleport_destination.x = 1;
-					mapr->teleport_destination.y = 1;
+					mapr->teleport_destination.x = 0.5f;
+					mapr->teleport_destination.y = 0.5f;
 					mapr->teleportation = true;
 				}
 			}
