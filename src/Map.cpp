@@ -29,8 +29,8 @@ Map::Map()
 	, collision_layer(-1)
 	, layers()
 	, events()
-	, w(0)
-	, h(0)
+	, w(1)
+	, h(1)
 	, spawn()
 	, spawn_dir(0) {
 }
@@ -133,6 +133,17 @@ int Map::load(std::string fname) {
 				statb->current[STAT_DMG_MELEE_MAX] = statb->current[STAT_DMG_RANGED_MAX] = statb->current[STAT_DMG_MENT_MAX] = ec_damage->b;
 			}
 		}
+	}
+
+	// ensure that our map contains a collison layer
+	if (std::find(layernames.begin(), layernames.end(), "collision") == layernames.end()) {
+		layernames.push_back("collision");
+		layers.resize(layers.size()+1);
+		layers.back().resize(w);
+		for (unsigned i=0; i<w; ++i) {
+			layers.back()[i].resize(h, 0);
+		}
+		collision_layer = layers.size()-1;
 	}
 
 	return 0;
