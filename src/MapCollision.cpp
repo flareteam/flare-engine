@@ -264,6 +264,8 @@ bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, MOVEMENTT
  * Is this a valid position for an entity with this movement type?
  */
 bool MapCollision::is_valid_position(const float& x, const float& y, MOVEMENTTYPE movement_type, bool is_hero) const {
+	if (x < 0 || y < 0) return false;
+
 	return is_valid_tile(int(x), int(y), movement_type, is_hero);
 }
 
