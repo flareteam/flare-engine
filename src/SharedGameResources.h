@@ -18,25 +18,27 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef SHAREDGAMEOBJECTS_H
 #define SHAREDGAMEOBJECTS_H
 
-#include "LootManager.h"
-#include "MenuPowers.h"
-#include "EnemyGroupManager.h"
-#include "PowerManager.h"
-#include "CampaignManager.h"
 #include "Avatar.h"
+#include "CampaignManager.h"
+#include "EnemyGroupManager.h"
+#include "LootManager.h"
+#include "MenuActionBar.h"
+#include "MenuPowers.h"
+#include "PowerManager.h"
 
+extern MenuActionBar *menu_act;
 extern MenuPowers *menu_powers;
 
 /* These objects are created in the GameStatePlay constructor and deleted in the GameStatePlay destructor
 *  so can be accessed safely anywhere in between. The objects must not be changed by any other class.
 */
-extern LootManager *loot;
-extern EnemyGroupManager *enemyg;
-extern PowerManager *powers;
-extern MapRenderer *mapr;
-extern EnemyManager *enemies;
-extern CampaignManager *camp;
-extern ItemManager *items;
 extern Avatar *pc;
+extern CampaignManager *camp;
+extern EnemyGroupManager *enemyg;
+extern EnemyManager *enemies;
+extern ItemManager *items;
+extern LootManager *loot;
+extern MapRenderer *mapr;
+extern PowerManager *powers;
 
 #endif // SHAREDGAMEOBJECTS_H

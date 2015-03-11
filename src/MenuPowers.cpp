@@ -306,12 +306,8 @@ void MenuPowers::upgradePower(short power_cell_index) {
 		return;
 
 	// if power was present in ActionBar, update it there
-	for(int j = 0; j < 12; j++) {
-		if(action_bar->hotkeys[j] == power_cell[power_cell_index].id) {
-			action_bar->hotkeys[j] = power_cell_upgrade[i].id;
-			action_bar->updated = true;
-		}
-	}
+	action_bar->addPower(power_cell_upgrade[i].id, power_cell[power_cell_index].id);
+
 	// if we have tab_control
 	if (tab_control) {
 		int active_tab = tab_control->getActiveTab();
@@ -446,6 +442,7 @@ int MenuPowers::click(Point mouse) {
 				stats->powers_list.push_back(power_cell[i].id);
 				stats->check_title = true;
 				setUnlockedPowers();
+				action_bar->addPower(power_cell[i].id, 0);
 				return 0;
 			}
 			else if (requirementsMet(power_cell[i].id) && !powers->powers[power_cell[i].id].passive) {

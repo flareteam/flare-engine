@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
 #include "StatBlock.h"
@@ -143,6 +144,8 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 
 	align();
 	alignElements();
+
+	menu_act = this;
 }
 
 void MenuActionBar::addSlot(unsigned index, int x, int y) {
@@ -661,6 +664,44 @@ bool MenuActionBar::isWithinMenus(const Point& mouse) {
 			return true;
 	}
 	return false;
+}
+
+/**
+ * Replaces the power(s) in slots that match the target_id with the power of id
+ * So a target_id of 0 will place the power in an empty slot, if available
+ */
+void MenuActionBar::addPower(const int id, const int target_id) {
+	// can't put passive powers on the action bar
+	if ((unsigned)id < powers->powers.size() && powers->powers[id].passive)
+		return;
+
+	// if we're not replacing an existing power, avoid placing duplicate powers
+	if (target_id == 0) {
+		for (unsigned i=0; i<12; ++i) {
+			if (hotkeys[i] == id)
+				return;
+		}
+	}
+
+	// MAIN slots have priority
+	for (unsigned i=10; i<12; ++i) {
+		if (hotkeys[i] == target_id) {
+			hotkeys[i] = id;
+			updated = true;
+			if (target_id == 0)
+				return;
+		}
+	}
+
+	// now try 0-9 slots
+	for (unsigned i=0; i<10; ++i) {
+		if (hotkeys[i] == target_id) {
+			hotkeys[i] = id;
+			updated = true;
+			if (target_id == 0)
+				return;
+		}
+	}
 }
 
 MenuActionBar::~MenuActionBar() {

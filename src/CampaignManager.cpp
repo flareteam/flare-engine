@@ -138,6 +138,8 @@ void CampaignManager::removeItem(int item_id) {
 }
 
 void CampaignManager::rewardItem(ItemStack istack) {
+	if (istack.empty())
+		return;
 
 	if (carried_items->full(istack.item)) {
 		drop_stack.push(istack);
@@ -153,6 +155,12 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 			items->playSound(istack.item);
 		}
+
+		// if this item has a power, place it on the action bar if possible
+		if (items->items[istack.item].type == "consumable" && items->items[istack.item].power > 0) {
+			menu_act->addPower(items->items[istack.item].power, 0);
+		}
+
 	}
 }
 

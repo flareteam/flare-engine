@@ -85,6 +85,7 @@ public:
 	TooltipData checkTooltip(const Point& mouse);
 	bool isWithinSlots(const Point& mouse);
 	bool isWithinMenus(const Point& mouse);
+	void addPower(const int id, const int target_id = 0);
 
 	unsigned slots_count;
 	std::vector<int> hotkeys; // refer to power_index in PowerManager

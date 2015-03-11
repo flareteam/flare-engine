@@ -374,6 +374,11 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 				inventory[area][slot] = stack;
 				updateEquipment(slot);
 			}
+
+			// if this item has a power, place it on the action bar if possible
+			if (items->items[stack.item].power > 0) {
+				menu_act->addPower(items->items[stack.item].power, 0);
+			}
 		}
 		else {
 			// equippable items only belong to one slot, for the moment
@@ -427,6 +432,12 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			) { // The whole equipped stack is dropped on an empty carried slot or on a wearable item
 				// Swap the two stacks
 				itemReturn(inventory[area][slot]);
+
+				// if this item has a power, place it on the action bar if possible
+				if (items->items[inventory[EQUIPMENT][drag_prev_slot].item].power > 0) {
+					menu_act->addPower(items->items[inventory[EQUIPMENT][drag_prev_slot].item].power, 0);
+				}
+
 				inventory[area][slot] = stack;
 			}
 			else {
@@ -539,6 +550,11 @@ void MenuInventory::activate(Point position) {
 				}
 				updateEquipment( equip_slot);
 				items->playSound(inventory[EQUIPMENT][equip_slot].item);
+
+				// if this item has a power, place it on the action bar if possible
+				if (items->items[stack.item].power > 0) {
+					menu_act->addPower(items->items[stack.item].power, 0);
+				}
 			}
 		}
 		else logError("MenuInventory: Can't find equip slot, corresponding to type %s", items->items[inventory[CARRIED][slot].item].type.c_str());
@@ -590,6 +606,11 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
 			if (!leftover.empty()) {
 				add(leftover, CARRIED, -1, false);
 			}
+		}
+
+		// if this item has a power, place it on the action bar if possible
+		if (items->items[stack.item].type == "consumable" && items->items[stack.item].power > 0) {
+			menu_act->addPower(items->items[stack.item].power, 0);
 		}
 	}
 	drag_prev_src = -1;

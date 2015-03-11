@@ -17,13 +17,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "SharedGameResources.h"
 
-MenuPowers *menu_powers = NULL;
-LootManager *loot = NULL;
-EnemyGroupManager *enemyg = NULL;
-PowerManager *powers = NULL;
-MapRenderer *mapr = NULL;
-EnemyManager *enemies = NULL;
-CampaignManager *camp = NULL;
-ItemManager *items = NULL;
 Avatar *pc = NULL;
-
+CampaignManager *camp = NULL;
+EnemyGroupManager *enemyg = NULL;
+EnemyManager *enemies = NULL;
+ItemManager *items = NULL;
+LootManager *loot = NULL;
+MapRenderer *mapr = NULL;
+MenuActionBar *menu_act= NULL;
+MenuPowers *menu_powers = NULL;
+PowerManager *powers = NULL;
