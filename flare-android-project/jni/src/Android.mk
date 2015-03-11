@@ -4,12 +4,12 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := main
 
-SDL_PATH := ../SDL
+SDL_PATH := ../SDL2
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include \
-					D:/Development/Flare/flare-android-project/jni/SDL_image \
-					D:/Development/Flare/flare-android-project/jni/SDL_mixer \
-					D:/Development/Flare/flare-android-project/jni/SDL_ttf
+					$(LOCAL_PATH)/../SDL2_image \
+					$(LOCAL_PATH)/../SDL2_mixer \
+					$(LOCAL_PATH)/../SDL2_ttf
 
 # Add your application source files here...
 LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \

@@ -10,25 +10,20 @@ To build for Android do next steps:
 
 You will need to edit next settings
 
-	1. In file \jni\src\Android.mk
-
-	SDL_PATH := D:/Development/SDL
-	Change SDL include paths
-
-	NOTE: changing SDL path doesn't work yet. Place SDL folder into \jni\ (so it will be like jni\SDL\src\SDL.c)
-
-	2. In Eclipse IDE go to Project Properties: C/C++ General -> Paths and Symbols -> Includes -> GNU C++
+	1. In Eclipse IDE go to Project Properties: C/C++ General -> Paths and Symbols -> Includes -> GNU C++
 
 	Change path to "platforms\android-16\arch-arm\usr\include"
 	Change path to "sources\cxx-stl\stlport\stlport"
 
-	3. In Eclipse IDE go to Project Properties: C/C++ Build. Change build command to your "ndk-build(.cmd)" path
+	2. In Eclipse IDE go to Project Properties: C/C++ Build. Change build command to your "ndk-build(.cmd)" path
 
 8. Set-up SDL libraries
 
-	1. Download SDL, SDL_image, SDL_mixer and SDL_ttf and extract them to \jni\ folder (so it will be like jni\SDL\src\SDL.c)
+	1. Download SDL2, SDL2_image, SDL2_mixer and SDL2_ttf and extract them to \jni\ folder (so it will be like jni\SDL2\src\SDL.c)
 
-	2. In SDL_mixer\Android.mk set SUPPORT_MOD_MIKMOD and SUPPORT_MP3_SMPEG to false to build under Windows.
+	2. In SDL2_image/Android.mk, set SUPPORT_JPG and SUPPORT_WEBP to false.
+
+	3. In SDL2_mixer/Android.mk, set SUPPORT_MOD_MIKMOD and SUPPORT_MP3_SMPEG to false.
 
 NOTES:
 
@@ -41,10 +36,6 @@ was updated to begin with comments.
 
 3. \server\update.sh is used to generate download.xml file, which should be uploaded to server, that will store mods.
 Location on server is defined in src\org\flare\app\FLARE.java in FILE_CONFIG_URL string. Also see note.txt
-
-TODO:
-
-1. APPEND flag in data files is not parsed.
 
 References:
 

@@ -27,3 +27,13 @@ perf.data
 
 # from regenerate_wiki_attributepage.sh
 Attribute-Reference.md
+
+# android stuff
+flare-android-project/bin/
+flare-android-project/jni/SDL2/
+flare-android-project/jni/SDL2_image/
+flare-android-project/jni/SDL2_mixer/
+flare-android-project/jni/SDL2_ttf/
+flare-android-project/libs/
+flare-android-project/obj/
+
