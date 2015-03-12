@@ -343,6 +343,10 @@ void InputState::handle(bool dump_event) {
 				}
 				last_button = event.button.button;
 				break;
+			case SDL_WINDOWEVENT:
+				if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+					render_device->windowResize();
+				break;
 #else
 			// detect restoring hidden Android app to bypass frameskip
 			case SDL_WINDOWEVENT:

@@ -474,7 +474,7 @@ void GameStateConfigDesktop::updateVideo() {
 	for (unsigned int i=0; i<resolutions; ++i) {
 		list_mode << video_modes[i].w << "x" << video_modes[i].h;
 		resolution_lstb->append(list_mode.str(),"");
-		if (video_modes[i].w == VIEW_W && video_modes[i].h == VIEW_H) resolution_lstb->selected[i] = true;
+		if (video_modes[i].w == SCREEN_W && video_modes[i].h == SCREEN_H) resolution_lstb->selected[i] = true;
 		else resolution_lstb->selected[i] = false;
 		list_mode.str("");
 	}
@@ -582,10 +582,10 @@ void GameStateConfigDesktop::logicAccept() {
 	int height = popFirstInt(resolution_value, 'x');
 
 	// In case of a custom resolution, the listbox might have nothing selected
-	// So we just use whatever the current view area is
+	// So we just use whatever the current window area is
 	if (width == 0 || height == 0) {
-		width = VIEW_W;
-		height = VIEW_H;
+		width = SCREEN_W;
+		height = SCREEN_H;
 	}
 
 	delete msg;
@@ -780,17 +780,17 @@ int GameStateConfigDesktop::getVideoModes() {
 	common_modes[1].h = 600;
 	common_modes[2].w = 1024;
 	common_modes[2].h = 768;
-	common_modes[3].w = VIEW_W;
-	common_modes[3].h = VIEW_H;
-	common_modes[4].w = MIN_VIEW_W;
-	common_modes[4].h = MIN_VIEW_H;
+	common_modes[3].w = SCREEN_W;
+	common_modes[3].h = SCREEN_H;
+	common_modes[4].w = MIN_SCREEN_W;
+	common_modes[4].h = MIN_SCREEN_H;
 
 	// Get available fullscreen/hardware modes
 	render_device->listModes(video_modes);
 
 	for (unsigned i=0; i<cm_count; ++i) {
 		video_modes.push_back(common_modes[i]);
-		if (common_modes[i].w < MIN_VIEW_W || common_modes[i].h < MIN_VIEW_H) {
+		if (common_modes[i].w < MIN_SCREEN_W || common_modes[i].h < MIN_SCREEN_H) {
 			video_modes.pop_back();
 		}
 		else {

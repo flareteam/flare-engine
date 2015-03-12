@@ -29,8 +29,8 @@ GameStateResolution::GameStateResolution(int width, int height, bool fullscreen,
 	: GameState()
 	, confirm(NULL)
 	, confirm_ticks(0)
-	, old_w(VIEW_W)
-	, old_h(VIEW_H)
+	, old_w(SCREEN_W)
+	, old_h(SCREEN_H)
 	, old_fullscreen(fullscreen)
 	, old_hwsurface(hwsurface)
 	, old_doublebuf(doublebuf)
@@ -110,10 +110,10 @@ void GameStateResolution::render() {
  * Tries to apply the selected video settings, reverting back to the old settings upon failure
  */
 bool GameStateResolution::applyVideoSettings(int width, int height) {
-	if (MIN_VIEW_W > width && MIN_VIEW_H > height) {
-		logError("GameStateResolution: A mod is requiring a minimum resolution of %dx%d", MIN_VIEW_W, MIN_VIEW_H);
-		if (width < MIN_VIEW_W) width = MIN_VIEW_W;
-		if (height < MIN_VIEW_H) height = MIN_VIEW_H;
+	if (MIN_SCREEN_W > width && MIN_SCREEN_H > height) {
+		logError("GameStateResolution: A mod is requiring a minimum resolution of %dx%d", MIN_SCREEN_W, MIN_SCREEN_H);
+		if (width < MIN_SCREEN_W) width = MIN_SCREEN_W;
+		if (height < MIN_SCREEN_H) height = MIN_SCREEN_H;
 	}
 
 	// Attempt to apply the new settings
@@ -125,7 +125,7 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
 		FULLSCREEN = old_fullscreen;
 		HWSURFACE = old_hwsurface;
 		DOUBLEBUF = old_doublebuf;
-		render_device->createContext(VIEW_W, VIEW_H);
+		render_device->createContext(SCREEN_W, SCREEN_H);
 		SharedResources::loadIcons();
 		curs = new CursorManager();
 		return false;
@@ -133,10 +133,8 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
 	}
 	else {
 		// If the new settings succeed, adjust the view area
-		VIEW_W = width;
-		VIEW_W_HALF = width/2;
-		VIEW_H = height;
-		VIEW_H_HALF = height/2;
+		SCREEN_W = width;
+		SCREEN_H = height;
 		SharedResources::loadIcons();
 		curs = new CursorManager();
 		return true;

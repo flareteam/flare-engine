@@ -53,8 +53,8 @@ public:
 
 ConfigEntry config[] = {
 	{ "fullscreen",       &typeid(FULLSCREEN),      "0",   &FULLSCREEN,      "fullscreen mode. 1 enable, 0 disable."},
-	{ "resolution_w",     &typeid(VIEW_W),          "640", &VIEW_W,          "display resolution. 640x480 minimum."},
-	{ "resolution_h",     &typeid(VIEW_H),          "480", &VIEW_H,          NULL},
+	{ "resolution_w",     &typeid(SCREEN_W),        "640", &SCREEN_W,        "display resolution. 640x480 minimum."},
+	{ "resolution_h",     &typeid(SCREEN_H),        "480", &SCREEN_H,        NULL},
 	{ "audio",            &typeid(AUDIO),           "1",   &AUDIO,           "Enable music and sound subsystem."},
 	{ "music_volume",     &typeid(MUSIC_VOLUME),    "96",  &MUSIC_VOLUME,    "music and sound volume (0 = silent, 128 = max)"},
 	{ "sound_volume",     &typeid(SOUND_VOLUME),    "128", &SOUND_VOLUME,    NULL},
@@ -115,8 +115,10 @@ unsigned short VIEW_W;
 unsigned short VIEW_H;
 unsigned short VIEW_W_HALF = VIEW_W/2;
 unsigned short VIEW_H_HALF = VIEW_H/2;
-short MIN_VIEW_W = -1;
-short MIN_VIEW_H = -1;
+short MIN_SCREEN_W = -1;
+short MIN_SCREEN_H = -1;
+unsigned short SCREEN_W;
+unsigned short SCREEN_H;
 bool DOUBLEBUF;
 bool HWSURFACE;
 bool CHANGE_GAMMA;
@@ -612,15 +614,18 @@ void loadMiscSettings() {
 				ICON_SIZE = toInt(infile.val);
 			// @ATTR required_width|integer|Minimum window/screen resolution width.
 			else if (infile.key == "required_width") {
-				MIN_VIEW_W = toInt(infile.val);
-				if (VIEW_W < MIN_VIEW_W) VIEW_W = MIN_VIEW_W;
-				VIEW_W_HALF = VIEW_W/2;
+				MIN_SCREEN_W = toInt(infile.val);
+				if (SCREEN_W < MIN_SCREEN_W) SCREEN_W = MIN_SCREEN_W;
 			}
 			// @ATTR required_height|integer|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
-				MIN_VIEW_H = toInt(infile.val);
-				if (VIEW_H < MIN_VIEW_H) VIEW_H = MIN_VIEW_H;
-				VIEW_H_HALF = VIEW_H/2;
+				MIN_SCREEN_H = toInt(infile.val);
+				if (SCREEN_H < MIN_SCREEN_H) SCREEN_H = MIN_SCREEN_H;
+			}
+			// @ATTR virtual_height|integer|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
+			else if (infile.key == "virtual_height") {
+				VIEW_H = toInt(infile.val);
+				VIEW_H_HALF = VIEW_H / 2;
 			}
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}

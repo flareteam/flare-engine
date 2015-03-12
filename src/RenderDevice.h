@@ -205,6 +205,7 @@ public:
 	virtual void drawRectangle(const Point& p0, const Point& p1, Uint32 color) = 0;
 	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b) = 0;
 	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
+	virtual void windowResize() = 0;
 
 protected:
 	/* Compute clipping and global position from local frame. */

@@ -225,6 +225,9 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 			window_h = desktop.h;
 		}
 	}
+
+	w_flags = w_flags | SDL_WINDOW_RESIZABLE;
+
 	if (HWSURFACE) {
 		r_flags = r_flags | SDL_RENDERER_ACCELERATED;
 	}
@@ -239,18 +242,13 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 		renderer = SDL_CreateRenderer(window, -1, r_flags);
 
 	if (renderer) {
-		if (FULLSCREEN && (window_w != width || window_h != height)) {
-			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-			SDL_RenderSetLogicalSize(renderer, width, height);
-		}
-		Uint32 rmask, gmask, bmask, amask;
-		int bpp = (int)BITS_PER_PIXEL;
-		SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
-		screen = SDL_CreateRGBSurface(0, width, height, bpp, rmask, gmask, bmask, amask);
-		texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+		windowResize();
 	}
 
 	window_created = window != NULL && renderer != NULL && screen != NULL && texture != NULL;
+
+	SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
+
 #else
 	Uint32 flags = 0;
 
@@ -599,8 +597,8 @@ void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
 		mode_rect.h = display_mode.h;
 		modes.push_back(mode_rect);
 
-		if (display_mode.w < MIN_VIEW_W || display_mode.h < MIN_VIEW_H) {
-			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
+		if (display_mode.w < MIN_SCREEN_W || display_mode.h < MIN_SCREEN_H) {
+			// make sure the resolution fits in the constraints of MIN_SCREEN_W and MIN_SCREEN_H
 			modes.pop_back();
 		}
 		else {
@@ -629,8 +627,8 @@ void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
 
 	for (unsigned i=0; detect_modes[i]; ++i) {
 		modes.push_back(Rect(*detect_modes[i]));
-		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
-			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
+		if (detect_modes[i]->w < MIN_SCREEN_W || detect_modes[i]->h < MIN_SCREEN_H) {
+			// make sure the resolution fits in the constraints of MIN_SCREEN_W and MIN_SCREEN_H
 			modes.pop_back();
 		}
 		else {
@@ -701,5 +699,27 @@ void SDLSoftwareRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *
 	*bmask = 0x00ff0000;
 	*amask = 0xff000000;
 #endif
+}
+
+void SDLSoftwareRenderDevice::windowResize() {
+	int w,h;
+	SDL_GetWindowSize(window, &w, &h);
+	SCREEN_W = w;
+	SCREEN_H = h;
+
+	float scale = (float)VIEW_H / (float)SCREEN_H;
+	VIEW_W = (int)((float)SCREEN_W * scale);
+	VIEW_W_HALF = VIEW_W/2;
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+	SDL_RenderSetLogicalSize(renderer, VIEW_W, VIEW_H);
+
+	if (texture) SDL_DestroyTexture(texture);
+	if (screen) SDL_FreeSurface(screen);
+
+	Uint32 rmask, gmask, bmask, amask;
+	int bpp = (int)BITS_PER_PIXEL;
+	SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
+	screen = SDL_CreateRGBSurface(0, VIEW_W, VIEW_H, bpp, rmask, gmask, bmask, amask);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);
 }
 

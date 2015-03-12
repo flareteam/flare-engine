@@ -79,6 +79,7 @@ public:
 	void destroyContext();
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	void windowResize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();

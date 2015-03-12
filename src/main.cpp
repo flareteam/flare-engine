@@ -79,7 +79,7 @@ static void init(const std::string &render_device_name) {
 
 	// Create render Device and Rendering Context.
 	render_device = getRenderDevice(render_device_name);
-	int status = render_device->createContext(VIEW_W, VIEW_H);
+	int status = render_device->createContext(SCREEN_W, SCREEN_H);
 
 	if (status == -1) {
 

@@ -508,8 +508,8 @@ void SDLHardwareRenderDevice::listModes(std::vector<Rect> &modes) {
 		mode_rect.h = display_mode.h;
 		modes.push_back(mode_rect);
 
-		if (display_mode.w < MIN_VIEW_W || display_mode.h < MIN_VIEW_H) {
-			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
+		if (display_mode.w < MIN_SCREEN_W || display_mode.h < MIN_SCREEN_H) {
+			// make sure the resolution fits in the constraints of MIN_SCREEN_W and MIN_SCREEN_H
 			modes.pop_back();
 		}
 		else {
@@ -560,6 +560,10 @@ void SDLHardwareRenderDevice::freeImage(Image *image) {
 	if (static_cast<SDLHardwareImage *>(image)->surface) {
 		SDL_DestroyTexture(static_cast<SDLHardwareImage *>(image)->surface);
 	}
+}
+
+void SDLHardwareRenderDevice::windowResize() {
+	// unimplemented
 }
 
 #endif
