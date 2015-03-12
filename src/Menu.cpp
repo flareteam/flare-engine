@@ -103,7 +103,7 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 	}
 	else if (key == "align") {
 		// @ATTR align|alignment|Position relative to screen edges
-		alignment = value;
+		alignment = parse_alignment(value);
 	}
 	else if (key == "soundfx_open") {
 		// @ATTR soundfx_open|string|Filename of a sound to play when opening this menu.

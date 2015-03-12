@@ -60,7 +60,7 @@ GameStateTitle::GameStateTitle()
 					r.y = popFirstInt(infile.val);
 					r.w = logo->getGraphicsWidth();
 					r.h = logo->getGraphicsHeight();
-					alignToScreenEdge(popFirstString(infile.val), &r);
+					alignToScreenEdge(parse_alignment(popFirstString(infile.val)), &r);
 					logo->setDestX(r.x);
 					logo->setDestY(r.y);
 					graphics->unref();
@@ -70,25 +70,25 @@ GameStateTitle::GameStateTitle()
 			else if (infile.key == "play_pos") {
 				button_play->pos.x = popFirstInt(infile.val);
 				button_play->pos.y = popFirstInt(infile.val);
-				alignToScreenEdge(popFirstString(infile.val), &(button_play->pos));
+				alignToScreenEdge(parse_alignment(popFirstString(infile.val)), &(button_play->pos));
 			}
 			// @ATTR config_pos|x (integer), y (integer), align (alignment)|Position of the "Configuration" button.
 			else if (infile.key == "config_pos") {
 				button_cfg->pos.x = popFirstInt(infile.val);
 				button_cfg->pos.y = popFirstInt(infile.val);
-				alignToScreenEdge(popFirstString(infile.val), &(button_cfg->pos));
+				alignToScreenEdge(parse_alignment(popFirstString(infile.val)), &(button_cfg->pos));
 			}
 			// @ATTR credits_pos|x (integer), y (integer), align (alignment)|Position of the "Credits" button.
 			else if (infile.key == "credits_pos") {
 				button_credits->pos.x = popFirstInt(infile.val);
 				button_credits->pos.y = popFirstInt(infile.val);
-				alignToScreenEdge(popFirstString(infile.val), &(button_credits->pos));
+				alignToScreenEdge(parse_alignment(popFirstString(infile.val)), &(button_credits->pos));
 			}
 			// @ATTR exit_pos|x (integer), y (integer), align (alignment)|Position of the "Exit Game" button.
 			else if (infile.key == "exit_pos") {
 				button_exit->pos.x = popFirstInt(infile.val);
 				button_exit->pos.y = popFirstInt(infile.val);
-				alignToScreenEdge(popFirstString(infile.val), &(button_exit->pos));
+				alignToScreenEdge(parse_alignment(popFirstString(infile.val)), &(button_exit->pos));
 			}
 			else {
 				infile.error("GameStateTitle: '%s' is not a valid key.", infile.key.c_str());

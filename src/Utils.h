@@ -88,6 +88,18 @@ public:
 	}
 };
 
+typedef enum {
+	ALIGN_TOPLEFT = 0,
+	ALIGN_TOP = 1,
+	ALIGN_TOPRIGHT = 2,
+	ALIGN_LEFT = 3,
+	ALIGN_CENTER = 4,
+	ALIGN_RIGHT = 5,
+	ALIGN_BOTTOMLEFT = 6,
+	ALIGN_BOTTOM = 7,
+	ALIGN_BOTTOMRIGHT = 8
+}ALIGNMENT;
+
 class Event_Component {
 public:
 	std::string type;
@@ -145,7 +157,7 @@ bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(Rect r, Point target);
 
 std::string abbreviateKilo(int amount);
-void alignToScreenEdge(std::string alignment, Rect *r);
+void alignToScreenEdge(ALIGNMENT alignment, Rect *r);
 void alignFPoint(FPoint *pos);
 
 void logInfo(const char* format, ...);

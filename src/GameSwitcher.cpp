@@ -142,7 +142,7 @@ void GameSwitcher::loadFPS() {
 			if(infile.key == "position") {
 				fps_position.x = popFirstInt(infile.val);
 				fps_position.y = popFirstInt(infile.val);
-				fps_corner = popFirstString(infile.val);
+				fps_corner = parse_alignment(popFirstString(infile.val));
 			}
 			// @ATTR color|r (integer), g (integer), b (integer)|Color of the fps counter text.
 			else if(infile.key == "color") {
