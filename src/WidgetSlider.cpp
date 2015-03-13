@@ -55,6 +55,10 @@ WidgetSlider::~WidgetSlider () {
 	if (sl) delete sl;
 }
 
+void WidgetSlider::setPos(int offset_x, int offset_y) {
+	Widget::setPos(offset_x, offset_y);
+	set(minimum, maximum, value);
+}
 
 bool WidgetSlider::checkClick() {
 	if (!enabled) return false;
@@ -121,8 +125,10 @@ void WidgetSlider::set (int min, int max, int val) {
 	maximum = max;
 	value = val;
 
-	pos_knob.x = pos.x + ((val-min)* pos.w)/(max-min) - (pos_knob.w/2);
-	pos_knob.y = pos.y;
+	if (max-min != 0) {
+		pos_knob.x = pos.x + ((val-min)* pos.w)/(max-min) - (pos_knob.w/2);
+		pos_knob.y = pos.y;
+	}
 }
 
 

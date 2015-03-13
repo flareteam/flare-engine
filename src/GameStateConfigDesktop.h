@@ -73,6 +73,8 @@ private:
 	void renderDialogs();
 	void renderTooltips(TooltipData& tip_new);
 
+	void refreshWidgets();
+
 	void cleanupTabContents();
 	void cleanupDialogs();
 

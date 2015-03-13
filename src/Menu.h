@@ -38,6 +38,7 @@ public:
 	void setBackgroundClip(Rect &clip);
 	virtual void align();
 	virtual void render();
+	virtual void setWindowPos(int x, int y);
 
 	bool visible;
 	Rect window_area;
@@ -50,7 +51,7 @@ public:
 
 private:
 	Sprite *background;
-
+	Point window_area_base;
 };
 
 #endif

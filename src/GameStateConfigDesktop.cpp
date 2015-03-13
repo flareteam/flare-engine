@@ -130,13 +130,12 @@ void GameStateConfigDesktop::init() {
 
 	// Allocate KeyBindings ScrollBox
 	input_scrollbox = new WidgetScrollBox(scrollpane.w, scrollpane.h);
-	input_scrollbox->pos.x = scrollpane.x + frame.x;
-	input_scrollbox->pos.y = scrollpane.y + frame.y;
+	input_scrollbox->setBasePos(scrollpane.x, scrollpane.y);
 	input_scrollbox->bg.r = scrollpane_color.r;
 	input_scrollbox->bg.g = scrollpane_color.g;
 	input_scrollbox->bg.b = scrollpane_color.b;
 	input_scrollbox->transparent = false;
-	input_scrollbox->resize(scrollpane_contents);
+	input_scrollbox->resize(scrollpane.w, scrollpane_contents);
 
 	// Set positions of secondary key bindings
 	for (unsigned int i = key_count; i < key_count*2; i++) {
@@ -153,6 +152,8 @@ void GameStateConfigDesktop::init() {
 	addChildWidgets();
 	addChildWidgetsDesktop();
 	setupTabList();
+
+	refreshWidgets();
 
 	update();
 }
@@ -221,20 +222,17 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	}
 	else if (infile.key == "hws_note") {
 		// @ATTR hws_note|x (integer), y (integer)|Position of the "Disable for performance" label (next to Hardware surfaces) relative to the frame.
-		hws_note_lb->setX(frame.x + x1);
-		hws_note_lb->setY(frame.y + y1);
+		hws_note_lb->setBasePos(x1, y1);
 		hws_note_lb->set(msg->get("Disable for performance"));
 	}
 	else if (infile.key == "dbuf_note") {
 		// @ATTR dbuf_note|x (integer), y (integer)|Position of the "Disable for performance" label (next to Double buffering) relative to the frame.
-		dbuf_note_lb->setX(frame.x + x1);
-		dbuf_note_lb->setY(frame.y + y1);
+		dbuf_note_lb->setBasePos(x1, y1);
 		dbuf_note_lb->set(msg->get("Disable for performance"));
 	}
 	else if (infile.key == "test_note") {
 		// @ATTR test_note|x (integer), y (integer)|Position of the "Experimental" label relative to the frame.
-		test_note_lb->setX(frame.x + x1);
-		test_note_lb->setY(frame.y + y1);
+		test_note_lb->setBasePos(x1, y1);
 		test_note_lb->set(msg->get("Experimental"));
 	}
 	else if (infile.key == "enable_joystick") {
@@ -265,8 +263,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	}
 	else if (infile.key == "handheld_note") {
 		// @ATTR handheld_note|x (integer), y (integer)|Position of the "For handheld devices" label relative to the frame.
-		handheld_note_lb->setX(frame.x + x1);
-		handheld_note_lb->setY(frame.y + y1);
+		handheld_note_lb->setBasePos(x1, y1);
 		handheld_note_lb->set(msg->get("For handheld devices"));
 	}
 	else if (infile.key == "secondary_offset") {
@@ -541,6 +538,9 @@ void GameStateConfigDesktop::updateKeybinds() {
 }
 
 void GameStateConfigDesktop::logic() {
+	if (inpt->window_resized)
+		refreshWidgets();
+
 	if (defaults_confirm->visible) {
 		// reset defaults confirmation
 		logicDefaults();
@@ -766,6 +766,14 @@ void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
 
 	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = resolution_lstb->checkTooltip(inpt->mouse);
 	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
+}
+
+void GameStateConfigDesktop::refreshWidgets() {
+	GameStateConfigBase::refreshWidgets();
+
+	input_scrollbox->setPos(frame.x, frame.y);
+
+	input_confirm->align();
 }
 
 int GameStateConfigDesktop::getVideoModes() {

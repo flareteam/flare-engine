@@ -41,6 +41,7 @@ public:
 	~MenuConfirm();
 
 	void logic();
+	void align();
 	virtual void render();
 
 	bool confirmClicked;

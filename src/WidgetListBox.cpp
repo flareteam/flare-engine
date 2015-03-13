@@ -63,6 +63,11 @@ bool WidgetListBox::checkClick() {
 	return checkClick(inpt->mouse.x,inpt->mouse.y);
 }
 
+void WidgetListBox::setPos(int offset_x, int offset_y) {
+	Widget::setPos(offset_x, offset_y);
+	refresh();
+}
+
 /**
  * Sets and releases the "pressed" visual state of the ListBox
  * If press and release, activate (return true)

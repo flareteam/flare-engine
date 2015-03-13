@@ -48,6 +48,7 @@ private:
 	void loadPortrait(int slot);
 	std::string getMapName(const std::string& map_filename);
 	void updateButtons();
+	void refreshWidgets();
 
 	TabList tablist;
 

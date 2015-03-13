@@ -61,6 +61,11 @@ MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxM
 	alignElements();
 }
 
+void MenuConfirm::align() {
+	Menu::align();
+	alignElements();
+}
+
 void MenuConfirm::alignElements() {
 	if (hasConfirmButton) {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;

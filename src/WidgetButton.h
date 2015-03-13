@@ -58,6 +58,7 @@ public:
 	~WidgetButton();
 
 	void activate();
+	void setPos(int offset_x = 0, int offset_y = 0);
 
 	void loadArt();
 	bool checkClick();

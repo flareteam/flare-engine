@@ -87,6 +87,13 @@ void WidgetLabel::render() {
 	}
 }
 
+void WidgetLabel::setPos(int offset_x, int offset_y) {
+	setX(pos_base.x + offset_x);
+	setY(pos_base.y + offset_y);
+	applyOffsets();
+	refresh();
+}
+
 void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color) {
 	set(_x, _y, _justify, _valign, _text, _color, "font_regular");
 }

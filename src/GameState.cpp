@@ -35,6 +35,9 @@ void GameState::logic() {
 void GameState::render() {
 }
 
+void GameState::refreshWidgets() {
+}
+
 void GameState::setLoadingFrame() {
 	load_counter = 2;
 }

@@ -34,12 +34,13 @@ class WidgetScrollBox : public Widget {
 public:
 	WidgetScrollBox (int width, int height);
 	~WidgetScrollBox ();
+	void setPos(int offset_x = 0, int offset_y = 0);
 
 	void addChildWidget(Widget* child);
 	Point input_assist(Point mouse);
 	void logic();
 	void logic(int x, int y);
-	void resize(int h);
+	void resize(int w, int h);
 	void refresh();
 	void render();
 

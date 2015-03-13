@@ -55,6 +55,7 @@ protected:
 public:
 	WidgetInput(const std::string& filename = "images/menus/input.png");
 	~WidgetInput();
+	void setPos(int offset_x = 0, int offset_y = 0);
 
 	void logic();
 	bool logic(int x, int y);

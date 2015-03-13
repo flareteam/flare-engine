@@ -27,6 +27,8 @@ class WidgetLabel;
 
 class GameStateTitle : public GameState {
 private:
+	void refreshWidgets();
+
 	Sprite *logo;
 	WidgetButton *button_play;
 	WidgetButton *button_exit;
@@ -35,6 +37,9 @@ private:
 	WidgetLabel *label_version;
 
 	TabList tablist;
+
+	Point pos_logo;
+	ALIGNMENT align_logo;
 
 public:
 	GameStateTitle();

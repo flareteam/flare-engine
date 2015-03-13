@@ -55,6 +55,7 @@ private:
 public:
 	WidgetListBox(int height, const std::string& _fileName = "images/menus/buttons/listbox_default.png");
 	~WidgetListBox();
+	void setPos(int offset_x = 0, int offset_y = 0);
 
 	bool checkClick();
 	bool checkClick(int x, int y);

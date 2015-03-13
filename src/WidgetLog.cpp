@@ -70,7 +70,7 @@ void WidgetLog::refresh() {
 		y += size.y+paragraph_spacing;
 	}
 	y+=padding;
-	scroll_box->resize(y);
+	scroll_box->resize(scroll_box->pos.w, y);
 
 	// Render messages into the scrollbox area
 	for (unsigned int i = messages.size(); i > 0; i--) {

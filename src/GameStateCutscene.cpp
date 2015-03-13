@@ -22,48 +22,32 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "WidgetScrollBox.h"
 
-Scene::Scene() : frame_counter(0)
+Scene::Scene(const FPoint& _caption_margins, bool _scale_graphics)
+	: frame_counter(0)
 	, pause_frames(0)
 	, caption("")
 	, caption_size(0,0)
 	, art(NULL)
+	, art_scaled(NULL)
 	, sid(-1)
 	, caption_box(NULL)
-	, done(false) {
+	, done(false)
+	, caption_margins(_caption_margins)
+	, scale_graphics(_scale_graphics)
+	, scale_to_width(false)
+{
 }
 
 Scene::~Scene() {
 	if (art) delete art;
+	if (art_scaled) delete art_scaled;
 	delete caption_box;
 	while(!components.empty()) {
 		components.pop();
 	}
 }
 
-Image *Scene::loadImage(std::string filename, bool scale_graphics) {
-
-	Image *image = render_device->loadImage(filename);
-
-	if (image == NULL)
-		return NULL;
-
-	/* scale image to fit height */
-	if (scale_graphics) {
-		if (image->getWidth() > 0) {
-			float ratio = image->getHeight()/(float)image->getWidth();
-			Image *resized = image->resize(VIEW_W, (int)(VIEW_W*ratio));
-			if (resized)
-				image = resized;
-		}
-		else {
-			logError("GameStateCutscene: Can not scale cutscene image with a width of 0.");
-		}
-	}
-
-	return image;
-}
-
-bool Scene::logic(FPoint *caption_margins, bool scale_graphics) {
+bool Scene::logic() {
 	if (done) return false;
 
 	bool skip = false;
@@ -90,37 +74,22 @@ bool Scene::logic(FPoint *caption_margins, bool scale_graphics) {
 	while (!components.empty() && components.front().type != "pause") {
 
 		if (components.front().type == "caption") {
-
-			int caption_width = render_device->getContextSize().w - (int)(render_device->getContextSize().w * (caption_margins->x * 2.0f));
-			font->setFont("font_captions");
 			caption = components.front().s;
-			caption_size = font->calc_size(caption, caption_width);
-
-			delete caption_box;
-			caption_box = new WidgetScrollBox(render_device->getContextSize().w,caption_size.y);
-			caption_box->pos.x = 0;
-			caption_box->pos.y = render_device->getContextSize().h - caption_size.y - (int)(VIEW_H * caption_margins->y);
-			font->renderShadowed(caption, render_device->getContextSize().w / 2, 0,
-								 JUSTIFY_CENTER,
-								 caption_box->contents->getGraphics(),
-								 caption_width,
-								 FONT_WHITE);
-
 		}
 		else if (components.front().type == "image") {
-
-			Image *graphics;
 			if (art) {
 				delete art;
 				art = NULL;
 			}
-			graphics = loadImage(components.front().s, scale_graphics);
+			if (art_scaled) {
+				delete art_scaled;
+				art_scaled = NULL;
+			}
+			Image *graphics = render_device->loadImage(components.front().s);
 			if (graphics != NULL) {
 				art = graphics->createSprite();
-				art_dest.x = (VIEW_W/2) - (art->getGraphicsWidth()/2);
-				art_dest.y = (VIEW_H/2) - (art->getGraphicsHeight()/2);
-				art_dest.w = art->getGraphicsWidth();
-				art_dest.h = art->getGraphicsHeight();
+				art_size.x = art->getGraphicsWidth();
+				art_size.y = art->getGraphicsHeight();
 				graphics->unref();
 			}
 		}
@@ -144,16 +113,86 @@ bool Scene::logic(FPoint *caption_margins, bool scale_graphics) {
 	pause_frames = components.front().x;
 	components.pop();
 
+	refreshWidgets();
+
 	return true;
 }
 
+void Scene::refreshWidgets() {
+	if (!caption.empty()) {
+		int caption_width = VIEW_W - (int)(VIEW_W * (caption_margins.x * 2.0f));
+		font->setFont("font_captions");
+		caption_size = font->calc_size(caption, caption_width);
+
+		if (!caption_box) {
+			caption_box = new WidgetScrollBox(VIEW_W, caption_size.y);
+			caption_box->setBasePos(0, 0, ALIGN_BOTTOM);
+		}
+		else {
+			caption_box->pos.h = caption_size.y;
+			caption_box->resize(VIEW_W, caption_size.y);
+		}
+
+		caption_box->setPos(0, (float)VIEW_H * caption_margins.y);
+
+		font->renderShadowed(caption, VIEW_W / 2, 0,
+							 JUSTIFY_CENTER,
+							 caption_box->contents->getGraphics(),
+							 caption_width,
+							 FONT_WHITE);
+	}
+
+	if (art) {
+		Rect art_dest;
+		if (scale_graphics) {
+			float ratio = VIEW_H / (float)art_size.y;
+			art_dest.w = (float)art_size.x * ratio;
+			art_dest.h = VIEW_H;
+			scale_to_width = false;
+
+			if (art_dest.w > VIEW_W) {
+				ratio = VIEW_W / (float)art_size.x;
+				art_dest.h = (float)art_size.y * ratio;
+				art_dest.w = VIEW_W;
+				scale_to_width = true;
+			}
+
+			art->getGraphics()->ref(); // resize unref's our image (which we want to keep), so counter that here
+			Image *resized = art->getGraphics()->resize(art_dest.w, art_dest.h);
+			if (resized != NULL) {
+				if (art_scaled) {
+					delete art_scaled;
+				}
+				art_scaled = resized->createSprite();
+				resized->unref();
+			}
+
+			alignToScreenEdge(ALIGN_CENTER, &art_dest);
+			if (art_scaled)
+				art_scaled->setDest(art_dest);
+		}
+		else {
+			art_dest.w = art_size.x;
+			art_dest.h = art_size.y;
+
+			alignToScreenEdge(ALIGN_CENTER, &art_dest);
+			art->setDest(art_dest);
+		}
+	}
+}
+
 void Scene::render() {
-	if (art != NULL) {
-		art->setDest(art_dest);
+	if (inpt->window_resized)
+		refreshWidgets();
+
+	if (art_scaled) {
+		render_device->render(art_scaled);
+	}
+	else if (art) {
 		render_device->render(art);
 	}
 
-	if (caption != "") {
+	if (caption_box && caption != "") {
 		caption_box->render();
 	}
 }
@@ -183,16 +222,19 @@ void GameStateCutscene::logic() {
 		/* return to previous gamestate */
 		delete requestedGameState;
 		requestedGameState = previous_gamestate;
+		requestedGameState->refreshWidgets();
 		return;
 	}
 
-	while (!scenes.empty() && !scenes.front().logic(&caption_margins, scale_graphics))
+	while (!scenes.empty() && !scenes.front()->logic()) {
+		delete scenes.front();
 		scenes.pop();
+	}
 }
 
 void GameStateCutscene::render() {
 	if (!scenes.empty())
-		scenes.front().render();
+		scenes.front()->render();
 }
 
 bool GameStateCutscene::load(std::string filename) {
@@ -207,7 +249,7 @@ bool GameStateCutscene::load(std::string filename) {
 
 		if (infile.new_section) {
 			if (infile.section == "scene")
-				scenes.push(Scene());
+				scenes.push(new Scene(caption_margins, scale_graphics));
 		}
 
 		if (infile.section.empty()) {
@@ -252,7 +294,7 @@ bool GameStateCutscene::load(std::string filename) {
 			}
 
 			if (sc.type != "")
-				scenes.back().components.push(sc);
+				scenes.back()->components.push(sc);
 
 		}
 		else {

@@ -79,6 +79,7 @@ public:
 	virtual void renderTooltips(TooltipData& tip_new);
 
 	void placeLabeledWidget(WidgetLabel* lb, Widget* w, int x1, int y1, int x2, int y2, std::string const& str, int justify = JUSTIFY_LEFT);
+	virtual void refreshWidgets();
 	void addChildWidget(Widget *w, int tab);
 	void refreshLanguages();
 	void refreshFont();

@@ -39,12 +39,16 @@ public:
 	virtual void defocus();
 	virtual bool getNext();  // getNext and getPrev should be implemented
 	virtual bool getPrev(); // if the widget has items internally that can be iterated
+	virtual void setBasePos(int x, int y, ALIGNMENT a = ALIGN_TOPLEFT);
+	virtual void setPos(int offset_x = 0, int offset_y = 0);
 	bool render_to_alpha;
 	bool in_focus;
 	bool focusable;
 	Rect pos; // This is the position of the button within the screen
 	Rect local_frame; // Local reference frame is this is a daughter widget
 	Point local_offset; // Offset in local frame is this is a daughter widget
+	Point pos_base; // the initial x/y position of this widget, often from a config file
+	ALIGNMENT alignment;
 };
 
 class TabList {

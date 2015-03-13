@@ -29,6 +29,7 @@ class WidgetSlider : public Widget {
 public:
 	WidgetSlider (const std::string & fname = "images/menus/buttons/slider_default.png");
 	~WidgetSlider ();
+	void setPos(int offset_x = 0, int offset_y = 0);
 
 	bool checkClick ();
 	bool checkClick (int x, int y);

@@ -38,13 +38,22 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	render_to_alpha = false;
 	transparent = true;
 	line_height = 20;
-	resize(height);
+	resize(width, height);
 	tablist = TabList(VERTICAL);
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
 	if (contents) delete contents;
 	delete scrollbar;
+}
+
+void WidgetScrollBox::setPos(int offset_x, int offset_y) {
+	Widget::setPos(offset_x, offset_y);
+
+	if (contents && scrollbar) {
+		scrollbar->refresh(pos.x+pos.w, pos.y, pos.h-scrollbar->pos_down.h, cursor,
+						   contents->getGraphicsHeight()-pos.h);
+	}
 }
 
 void WidgetScrollBox::addChildWidget(Widget* child) {
@@ -140,7 +149,9 @@ void WidgetScrollBox::logic(int x, int y) {
 	}
 }
 
-void WidgetScrollBox::resize(int h) {
+void WidgetScrollBox::resize(int w, int h) {
+
+	pos.w = w;
 
 	if (pos.h > h) h = pos.h;
 

@@ -28,6 +28,7 @@ public:
 
 	virtual void logic();
 	virtual void render();
+	virtual void refreshWidgets();
 
 	GameState* getRequestedGameState();
 	bool isExitRequested() {

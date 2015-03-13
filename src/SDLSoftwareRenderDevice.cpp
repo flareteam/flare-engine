@@ -466,6 +466,7 @@ void SDLSoftwareRenderDevice::commitFrame() {
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
+	inpt->window_resized = false;
 #else
 	SDL_Flip(screen);
 #endif
@@ -709,6 +710,9 @@ void SDLSoftwareRenderDevice::windowResize() {
 
 	float scale = (float)VIEW_H / (float)SCREEN_H;
 	VIEW_W = (int)((float)SCREEN_W * scale);
+
+	// TODO letterbox if too tall
+
 	VIEW_W_HALF = VIEW_W/2;
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	SDL_RenderSetLogicalSize(renderer, VIEW_W, VIEW_H);
