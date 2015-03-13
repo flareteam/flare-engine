@@ -432,6 +432,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			) { // The whole equipped stack is dropped on an empty carried slot or on a wearable item
 				// Swap the two stacks
 				itemReturn(inventory[area][slot]);
+				updateEquipment(drag_prev_slot);
 
 				// if this item has a power, place it on the action bar if possible
 				if (items->items[inventory[EQUIPMENT][drag_prev_slot].item].power > 0) {
