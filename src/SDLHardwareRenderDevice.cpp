@@ -26,8 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "SDLHardwareRenderDevice.h"
 
-#if SDL_VERSION_ATLEAST(2,0,0)
-
 SDLHardwareImage::SDLHardwareImage(RenderDevice *_device, SDL_Renderer *_renderer)
 	: Image(_device)
 	, renderer(_renderer)
@@ -566,4 +564,3 @@ void SDLHardwareRenderDevice::windowResize() {
 	// unimplemented
 }
 
-#endif

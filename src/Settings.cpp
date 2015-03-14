@@ -289,15 +289,6 @@ void setPaths() {
 	PATH_USER = PATH_USER + "/";
 	PATH_DATA = PATH_DATA + "/";
 }
-#elif __amigaos4__
-// AmigaOS paths
-void setPaths() {
-	PATH_CONF = "PROGDIR:";
-	PATH_USER = "PROGDIR:";
-	PATH_DATA = "PROGDIR:";
-	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) logError("Settings: Could not find specified game data directory.");
-}
 #else
 void setPaths() {
 

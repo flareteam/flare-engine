@@ -94,11 +94,9 @@ private:
 	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
 
 	SDL_Surface* screen;
-#if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Texture* texture;
-#endif
 	SDL_Surface* titlebar_icon;
 	char* title;
 };

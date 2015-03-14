@@ -20,8 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef SDLHARDWARERENDERDEVICE_H
 #define SDLHARDWARERENDERDEVICE_H
 
-#if SDL_VERSION_ATLEAST(2,0,0)
-
 #include "RenderDevice.h"
 
 /** Provide rendering device using SDL_BlitSurface backend.
@@ -102,6 +100,5 @@ private:
 	char* title;
 };
 
-#endif // SDL_VERSION_ATLEAST(2,0,0)
+#endif
 
-#endif // SDLHARDWARERENDERDEVICE_H

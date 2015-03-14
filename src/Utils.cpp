@@ -266,13 +266,7 @@ void logInfo(const char* format, ...) {
 
 	va_start(args, format);
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, format, args);
-#else
-	printf("INFO: ");
-	vprintf(format, args);
-	printf("\n");
-#endif
 
 	va_end(args);
 }
@@ -282,13 +276,7 @@ void logError(const char* format, ...) {
 
 	va_start(args, format);
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_LogMessageV(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, format, args);
-#else
-	printf("ERROR: ");
-	vprintf(format, args);
-	printf("\n");
-#endif
 
 	va_end(args);
 }

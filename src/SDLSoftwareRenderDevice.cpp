@@ -188,18 +188,12 @@ Uint32 SDLSoftwareImage::readPixel(int x, int y) {
 
 SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	: screen(NULL)
-#if SDL_VERSION_ATLEAST(2,0,0)
 	, window(NULL)
 	, renderer(NULL)
 	, texture(NULL)
-#endif
 	, titlebar_icon(NULL)
 	, title(NULL) {
-#if SDL_VERSION_ATLEAST(2,0,0)
 	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)");
-#else
-	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 1.2)");
-#endif
 }
 
 int SDLSoftwareRenderDevice::createContext(int width, int height) {
@@ -209,7 +203,6 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 
 	bool window_created = false;
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
 	int window_w = width;
@@ -249,20 +242,6 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 
 	SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
 
-#else
-	Uint32 flags = 0;
-
-	if (FULLSCREEN) flags = flags | SDL_FULLSCREEN;
-	if (DOUBLEBUF) flags = flags | SDL_DOUBLEBUF;
-	if (HWSURFACE)
-		flags = flags | SDL_HWSURFACE | SDL_HWACCEL;
-	else
-		flags = flags | SDL_SWSURFACE;
-
-	screen = SDL_SetVideoMode (width, height, 0, flags);
-
-	window_created = screen != NULL;
-#endif
 	if (!window_created && !is_initialized) {
 		// If this is the first attempt and it failed we are not
 		// getting anywhere.
@@ -461,15 +440,12 @@ void SDLSoftwareRenderDevice::blankScreen() {
 }
 
 void SDLSoftwareRenderDevice::commitFrame() {
-#if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 	inpt->window_resized = false;
-#else
-	SDL_Flip(screen);
-#endif
+
 	return;
 }
 
@@ -486,7 +462,6 @@ void SDLSoftwareRenderDevice::destroyContext() {
 		SDL_FreeSurface(screen);
 		screen = NULL;
 	}
-#if SDL_VERSION_ATLEAST(2,0,0)
 	if (texture) {
 		SDL_DestroyTexture(texture);
 		texture = NULL;
@@ -499,7 +474,6 @@ void SDLSoftwareRenderDevice::destroyContext() {
 		SDL_DestroyWindow(window);
 		window = NULL;
 	}
-#endif
 
 	return;
 }
@@ -526,14 +500,7 @@ Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 	Uint32 rmask, gmask, bmask, amask;
 	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
 
-#if SDL_VERSION_ATLEAST(2,0,0)
-		image->surface = SDL_CreateRGBSurface(0, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-#else
-	if (HWSURFACE)
-		image->surface = SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-	else
-		image->surface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-#endif
+	image->surface = SDL_CreateRGBSurface(0, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 
 	if(image->surface == NULL) {
 		logError("SDLSoftwareRenderDevice: CreateRGBSurface failed: %s", SDL_GetError());
@@ -543,48 +510,32 @@ Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 
 	// optimize
 	SDL_Surface *cleanup = image->surface;
-#if SDL_VERSION_ATLEAST(2,0,0)
 	image->surface = SDL_ConvertSurfaceFormat(cleanup, SDL_PIXELFORMAT_ARGB8888, 0);
-#else
-	image->surface = SDL_DisplayFormatAlpha(cleanup);
-#endif
 	SDL_FreeSurface(cleanup);
 
 	return image;
 }
 
 void SDLSoftwareRenderDevice::setGamma(float g) {
-#if SDL_VERSION_ATLEAST(2,0,0)
 	Uint16 ramp[256];
 	SDL_CalculateGammaRamp(g, ramp);
 	SDL_SetWindowGammaRamp(window, ramp, ramp, ramp);
-#else
-	SDL_SetGamma(g, g, g);
-#endif
 }
 
 void SDLSoftwareRenderDevice::updateTitleBar() {
 	if (title) free(title);
 	if (titlebar_icon) SDL_FreeSurface(titlebar_icon);
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 	if (!window) return;
-#endif
 
 	title = strdup(msg->get(WINDOW_TITLE).c_str());
 	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 	if (title) SDL_SetWindowTitle(window, title);
 	if (titlebar_icon) SDL_SetWindowIcon(window, titlebar_icon);
-#else
-	if (title) SDL_WM_SetCaption(title, title);
-	if (titlebar_icon) SDL_WM_SetIcon(titlebar_icon, NULL);
-#endif
 }
 
 void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
-#if SDL_VERSION_ATLEAST(2,0,0)
 	int mode_count = SDL_GetNumDisplayModes(0);
 
 	for (int i=0; i<mode_count; i++) {
@@ -612,37 +563,6 @@ void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
 			}
 		}
 	}
-#else
-	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
-
-	// Check if there are any modes available
-	if (detect_modes == (SDL_Rect**)0) {
-		logError("SDLSoftwareRenderDevice: No modes available!");
-		return;
-	}
-
-	// Check if our resolution is restricted
-	if (detect_modes == (SDL_Rect**)-1) {
-		logError("SDLSoftwareRenderDevice: All resolutions available.");
-	}
-
-	for (unsigned i=0; detect_modes[i]; ++i) {
-		modes.push_back(Rect(*detect_modes[i]));
-		if (detect_modes[i]->w < MIN_SCREEN_W || detect_modes[i]->h < MIN_SCREEN_H) {
-			// make sure the resolution fits in the constraints of MIN_SCREEN_W and MIN_SCREEN_H
-			modes.pop_back();
-		}
-		else {
-			// check previous resolutions for duplicates. If one is found, drop the one we just added
-			for (unsigned j=0; j<modes.size()-1; ++j) {
-				if (modes[j].w == detect_modes[i]->w && modes[j].h == detect_modes[i]->h) {
-					modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
-#endif
 }
 
 
@@ -666,11 +586,7 @@ Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string erro
 	}
 	else {
 		image = new SDLSoftwareImage(this);
-#if SDL_VERSION_ATLEAST(2,0,0)
 		image->surface = SDL_ConvertSurfaceFormat(cleanup, SDL_PIXELFORMAT_ARGB8888, 0);
-#else
-		image->surface = SDL_DisplayFormatAlpha(cleanup);
-#endif
 		SDL_FreeSurface(cleanup);
 	}
 
