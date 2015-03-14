@@ -32,15 +32,12 @@ class WidgetButton;
 
 class MenuStash : public Menu {
 private:
-	void alignElements();
-
 	StatBlock *stats;
 	WidgetButton *closeButton;
 
 	int STASH_SLOTS;
 
 	// label and widget positions
-	Point close_pos;
 	LabelInfo title;
 	LabelInfo currency;
 	int slots_cols;
@@ -50,6 +47,7 @@ private:
 public:
 	MenuStash(StatBlock *stats);
 	~MenuStash();
+	void align();
 
 	void logic();
 	void render();

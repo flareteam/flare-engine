@@ -42,7 +42,6 @@ private:
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
 
-	void alignElements();
 	void loadGraphics();
 
 	WidgetLog *log[LOG_TYPE_COUNT];
@@ -50,13 +49,13 @@ private:
 	Rect tab_rect[LOG_TYPE_COUNT];
 
 	LabelInfo title;
-	Point close_pos;
 	Rect tab_area;
 	Color tab_bg;
 
 public:
 	MenuLog();
 	~MenuLog();
+	void align();
 
 	void logic();
 	void render();

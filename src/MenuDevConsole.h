@@ -31,7 +31,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MenuDevConsole : public Menu {
 protected:
-	void alignElements();
 	void loadGraphics();
 	void execute();
 
@@ -44,9 +43,6 @@ protected:
 
 	TabList tablist;
 	LabelInfo title;
-	Point close_pos;
-	Point confirm_pos;
-	Point input_pos;
 	Rect history_area;
 
 	Color color_echo;
@@ -55,6 +51,7 @@ protected:
 public:
 	MenuDevConsole();
 	~MenuDevConsole();
+	void align();
 
 	void logic();
 	virtual void render();

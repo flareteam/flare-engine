@@ -37,6 +37,7 @@ protected:
 	void loadGraphics();
 	void renderHighlight(int x, int y, int _icon_size);
 	Rect grid_area;
+	Point grid_pos;
 	int nb_cols;
 
 public:
@@ -53,6 +54,7 @@ public:
 	void itemReturn(ItemStack stack);
 	void highlightMatching(std::string type);
 	void highlightClear();
+	void setPos(int x = 0, int y = 0);
 	std::vector<std::string> slot_type;
 
 	int drag_prev_slot;

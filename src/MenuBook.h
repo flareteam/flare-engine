@@ -37,6 +37,7 @@ public:
 
 	MenuBook();
 	~MenuBook();
+	void align();
 
 	void loadGraphics();
 	void logic();

@@ -58,8 +58,6 @@ public:
 
 class MenuCharacter : public Menu {
 private:
-	void alignElements();
-
 	StatBlock *stats;
 
 	WidgetButton *closeButton;
@@ -79,9 +77,7 @@ private:
 	bool defense_up;
 
 	// label and widget positions
-	Point close_pos;
 	LabelInfo title;
-	Point upgrade_pos[4];
 	Point statlist_pos;
 	int statlist_rows;
 	int statlist_scrollbar_offset;
@@ -96,6 +92,8 @@ private:
 public:
 	MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
+	void align();
+
 	void logic();
 	void render();
 	void refreshStats();

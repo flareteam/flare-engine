@@ -42,6 +42,8 @@ MenuItemStorage::MenuItemStorage()
 void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb_cols) {
 	ItemStorage::init( _slot_number);
 	grid_area = _area;
+	grid_pos.x = _area.x;
+	grid_pos.y = _area.y;
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot();
 		slots.push_back(slot);
@@ -53,6 +55,7 @@ void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb
 		slots[i]->pos.x = grid_area.x + (i % nb_cols * _icon_size);
 		slots[i]->pos.y = grid_area.y + (i / nb_cols * _icon_size);
 		slots[i]->pos.h = slots[i]->pos.w = _icon_size;
+		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y);
 	}
 	loadGraphics();
 }
@@ -65,6 +68,7 @@ void MenuItemStorage::init(int _slot_number, std::vector<Rect> _area, std::vecto
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot();
 		slot->pos = _area[i];
+		slot->setBasePos(slot->pos.x, slot->pos.y);
 		slots.push_back(slot);
 	}
 	nb_cols = 0;
@@ -74,6 +78,16 @@ void MenuItemStorage::init(int _slot_number, std::vector<Rect> _area, std::vecto
 		highlight[i] = false;
 	}
 	loadGraphics();
+}
+
+void MenuItemStorage::setPos(int x, int y) {
+	for (unsigned i=0; i<slots.size(); ++i) {
+		slots[i]->setPos(x, y);
+	}
+	if (nb_cols > 0) {
+		grid_area.x = grid_pos.x + x;
+		grid_area.y = grid_pos.y + y;
+	}
 }
 
 void MenuItemStorage::loadGraphics() {

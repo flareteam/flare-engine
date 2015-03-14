@@ -35,8 +35,6 @@ class WidgetTabControl;
 
 class MenuVendor : public Menu {
 private:
-	void alignElements();
-
 	StatBlock *stats;
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
@@ -45,7 +43,6 @@ private:
 	unsigned VENDOR_SLOTS;
 
 	// label and widget positions
-	Point close_pos;
 	LabelInfo title;
 	int slots_cols;
 	int slots_rows;
@@ -55,6 +52,7 @@ private:
 public:
 	MenuVendor(StatBlock *stats);
 	~MenuVendor();
+	void align();
 
 	NPC *npc;
 	ItemStorage buyback_stock;

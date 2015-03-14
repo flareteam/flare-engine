@@ -37,7 +37,6 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
-	void alignElements();
 	std::string parseLine(const std::string &line);
 
 	MenuManager *menu;
@@ -49,8 +48,6 @@ private:
 	int dialog_node;
 	unsigned int event_cursor;
 
-	Point close_pos;
-	Point advance_pos;
 	Rect dialog_pos;
 	Rect text_pos;
 	Point text_offset;
@@ -70,6 +67,7 @@ private:
 public:
 	MenuTalker(MenuManager *menu);
 	~MenuTalker();
+	void align();
 
 	NPC *npc;
 

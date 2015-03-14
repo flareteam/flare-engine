@@ -121,7 +121,6 @@ private:
 	WidgetLabel stat_up;
 	WidgetTabControl *tab_control;
 
-	void alignElements();
 	void loadGraphics();
 	void displayBuild(int power_id);
 	bool powerUnlockable(int power_index);
@@ -146,6 +145,8 @@ private:
 public:
 	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();
+	void align();
+
 	void loadPowerTree(const std::string &filename);
 	void logic();
 	void render();

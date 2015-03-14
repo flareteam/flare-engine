@@ -89,17 +89,32 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 				continue;
 
 			// @ATTR close|x (integer), y (integer)|Position of the close button.
-			if(infile.key == "close") close_pos = toPoint(infile.val);
+			if(infile.key == "close") {
+				Point pos = toPoint(infile.val);
+				closeButton->setBasePos(pos.x, pos.y);
+			}
 			// @ATTR label_title|label|Position of the "Character" text.
 			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
 			// @ATTR upgrade_physical|x (integer), y (integer)|Position of the button used to add a stat point to Physical.
-			else if(infile.key == "upgrade_physical") upgrade_pos[0] = toPoint(infile.val);
+			else if(infile.key == "upgrade_physical") {
+				Point pos = toPoint(infile.val);
+				upgradeButton[0]->setBasePos(pos.x, pos.y);
+			}
 			// @ATTR upgrade_mental|x (integer), y (integer)|Position of the button used to add a stat point to Mental.
-			else if(infile.key == "upgrade_mental")	upgrade_pos[1] = toPoint(infile.val);
+			else if(infile.key == "upgrade_mental")	{
+				Point pos = toPoint(infile.val);
+				upgradeButton[1]->setBasePos(pos.x, pos.y);
+			}
 			// @ATTR upgrade_offense|x (integer), y (integer)|Position of the button used to add a stat point to Offense.
-			else if(infile.key == "upgrade_offense") upgrade_pos[2] = toPoint(infile.val);
+			else if(infile.key == "upgrade_offense") {
+				Point pos = toPoint(infile.val);
+				upgradeButton[2]->setBasePos(pos.x, pos.y);
+			}
 			// @ATTR upgrade_defense|x (integer), y (integer)|Position of the button used to add a stat point to Defense.
-			else if(infile.key == "upgrade_defense") upgrade_pos[3] = toPoint(infile.val);
+			else if(infile.key == "upgrade_defense") {
+				Point pos = toPoint(infile.val);
+				upgradeButton[3]->setBasePos(pos.x, pos.y);
+			}
 			// @ATTR statlist|x (integer), y (integer)|Position of the scrollbox containing non-primary stats.
 			else if(infile.key == "statlist") statlist_pos = toPoint(infile.val);
 			// @ATTR statlist_rows|integer|The height of the statlist in rows.
@@ -109,47 +124,65 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 
 			// @ATTR label_name|label|Position of the "Name" text.
 			else if(infile.key == "label_name") {
-				label_pos[0] = eatLabelInfo(infile.val);
-				cstat[CSTAT_NAME].visible = !label_pos[0].hidden;
+				label_pos[CSTAT_NAME] = eatLabelInfo(infile.val);
+				cstat[CSTAT_NAME].visible = !label_pos[CSTAT_NAME].hidden;
 			}
 			// @ATTR label_level|label|Position of the "Level" text.
 			else if(infile.key == "label_level") {
-				label_pos[1] = eatLabelInfo(infile.val);
-				cstat[CSTAT_LEVEL].visible = !label_pos[1].hidden;
+				label_pos[CSTAT_LEVEL] = eatLabelInfo(infile.val);
+				cstat[CSTAT_LEVEL].visible = !label_pos[CSTAT_LEVEL].hidden;
 			}
 			// @ATTR label_physical|label|Position of the "Physical" text.
 			else if(infile.key == "label_physical") {
-				label_pos[2] = eatLabelInfo(infile.val);
-				cstat[CSTAT_PHYSICAL].visible = !label_pos[2].hidden;
+				label_pos[CSTAT_PHYSICAL] = eatLabelInfo(infile.val);
+				cstat[CSTAT_PHYSICAL].visible = !label_pos[CSTAT_PHYSICAL].hidden;
 			}
 			// @ATTR label_mental|label|Position of the "Mental" text.
 			else if(infile.key == "label_mental") {
-				label_pos[3] = eatLabelInfo(infile.val);
-				cstat[CSTAT_MENTAL].visible = !label_pos[3].hidden;
+				label_pos[CSTAT_MENTAL] = eatLabelInfo(infile.val);
+				cstat[CSTAT_MENTAL].visible = !label_pos[CSTAT_MENTAL].hidden;
 			}
 			// @ATTR label_offense|label|Position of the "Offense" text.
 			else if(infile.key == "label_offense") {
-				label_pos[4] = eatLabelInfo(infile.val);
-				cstat[CSTAT_OFFENSE].visible = !label_pos[4].hidden;
+				label_pos[CSTAT_OFFENSE] = eatLabelInfo(infile.val);
+				cstat[CSTAT_OFFENSE].visible = !label_pos[CSTAT_OFFENSE].hidden;
 			}
 			// @ATTR label_defense|label|Position of the "Defense" text.
 			else if(infile.key == "label_defense") {
-				label_pos[5] = eatLabelInfo(infile.val);
-				cstat[CSTAT_DEFENSE].visible = !label_pos[5].hidden;
+				label_pos[CSTAT_DEFENSE] = eatLabelInfo(infile.val);
+				cstat[CSTAT_DEFENSE].visible = !label_pos[CSTAT_DEFENSE].hidden;
 			}
 
 			// @ATTR name|x (integer), y (integer), w (integer), h (integer)|Position of the player's name and dimensions of the tooltip hotspot.
-			else if(infile.key == "name") value_pos[0] = toRect(infile.val);
+			else if(infile.key == "name") {
+				value_pos[CSTAT_NAME] = toRect(infile.val);
+				cstat[CSTAT_NAME].value->setBasePos(value_pos[CSTAT_NAME].x + 4, value_pos[CSTAT_NAME].y + (value_pos[CSTAT_NAME].h/2)); // TODO remove 4 from x value
+			}
 			// @ATTR level|x (integer), y (integer), w (integer), h (integer)|Position of the player's level and dimensions of the tooltip hotspot.
-			else if(infile.key == "level") value_pos[1] = toRect(infile.val);
+			else if(infile.key == "level") {
+				value_pos[CSTAT_LEVEL] = toRect(infile.val);
+				cstat[CSTAT_LEVEL].value->setBasePos(value_pos[CSTAT_LEVEL].x + (value_pos[CSTAT_LEVEL].w/2), value_pos[CSTAT_LEVEL].y + (value_pos[CSTAT_LEVEL].h/2));
+			}
 			// @ATTR physical|x (integer), y (integer), w (integer), h (integer)|Position of the player's physical stat and dimensions of the tooltip hotspot.
-			else if(infile.key == "physical") value_pos[2] = toRect(infile.val);
+			else if(infile.key == "physical") {
+				value_pos[CSTAT_PHYSICAL] = toRect(infile.val);
+				cstat[CSTAT_PHYSICAL].value->setBasePos(value_pos[CSTAT_PHYSICAL].x + (value_pos[CSTAT_PHYSICAL].w/2), value_pos[CSTAT_PHYSICAL].y + (value_pos[CSTAT_PHYSICAL].h/2));
+			}
 			// @ATTR mental|x (integer), y (integer), w (integer), h (integer)|Position of the player's mental stat and dimensions of the tooltip hotspot.
-			else if(infile.key == "mental") value_pos[3] = toRect(infile.val);
+			else if(infile.key == "mental") {
+				value_pos[CSTAT_MENTAL] = toRect(infile.val);
+				cstat[CSTAT_MENTAL].value->setBasePos(value_pos[CSTAT_MENTAL].x + (value_pos[CSTAT_MENTAL].w/2), value_pos[CSTAT_MENTAL].y + (value_pos[CSTAT_MENTAL].h/2));
+			}
 			// @ATTR offense|x (integer), y (integer), w (integer), h (integer)|Position of the player's offense stat and dimensions of the tooltip hotspot.
-			else if(infile.key == "offense") value_pos[4] = toRect(infile.val);
+			else if(infile.key == "offense") {
+				value_pos[CSTAT_OFFENSE] = toRect(infile.val);
+				cstat[CSTAT_OFFENSE].value->setBasePos(value_pos[CSTAT_OFFENSE].x + (value_pos[CSTAT_OFFENSE].w/2), value_pos[CSTAT_OFFENSE].y + (value_pos[CSTAT_OFFENSE].h/2));
+			}
 			// @ATTR defense|x (integer), y (integer), w (integer), h (integer)|Position of the player's defense stat and dimensions of the tooltip hotspot.
-			else if(infile.key == "defense") value_pos[5] = toRect(infile.val);
+			else if(infile.key == "defense") {
+				value_pos[CSTAT_DEFENSE] = toRect(infile.val);
+				cstat[CSTAT_DEFENSE].value->setBasePos(value_pos[CSTAT_DEFENSE].x + (value_pos[CSTAT_DEFENSE].w/2), value_pos[CSTAT_DEFENSE].y + (value_pos[CSTAT_DEFENSE].h/2));
+			}
 
 			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
 			else if(infile.key == "unspent") unspent_pos = eatLabelInfo(infile.val);
@@ -208,31 +241,29 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	tablist.add(statList);
 	statList->can_select = false;
 	statList->scrollbar_offset = statlist_scrollbar_offset;
+	statList->setBasePos(statlist_pos.x, statlist_pos.y);
 
 	setBackground("images/menus/character.png");
 
 	align();
-	alignElements();
 }
 
-void MenuCharacter::alignElements() {
+void MenuCharacter::align() {
+	Menu::align();
 
 	// close button
-	closeButton->pos.x = window_area.x + close_pos.x;
-	closeButton->pos.y = window_area.y + close_pos.y;
+	closeButton->setPos(window_area.x, window_area.y);
 
 	// menu title
 	labelCharacter->set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Character"), font->getColor("menu_normal"), title.font_style);
 
 	// upgrade buttons
 	for (int i=0; i<4; i++) {
-		upgradeButton[i]->pos.x = window_area.x+upgrade_pos[i].x;
-		upgradeButton[i]->pos.y = window_area.y+upgrade_pos[i].y;
+		upgradeButton[i]->setPos(window_area.x, window_area.y);
 	}
 
 	// stat list
-	statList->pos.x = window_area.x+statlist_pos.x;
-	statList->pos.y = window_area.y+statlist_pos.y;
+	statList->setPos(window_area.x, window_area.y);
 
 	for (int i=0; i<CSTAT_COUNT; i++) {
 		// setup static labels
@@ -240,7 +271,13 @@ void MenuCharacter::alignElements() {
 
 		// setup hotspot locations
 		cstat[i].setHover(window_area.x+value_pos[i].x, window_area.y+value_pos[i].y, value_pos[i].w, value_pos[i].h);
+
+		// setup value labels
+		cstat[i].value->setPos(window_area.x, window_area.y);
 	}
+
+	labelUnspent->setX(window_area.x + unspent_pos.x);
+	labelUnspent->setY(window_area.y + unspent_pos.y);
 }
 
 /**
@@ -253,27 +290,27 @@ void MenuCharacter::refreshStats() {
 	std::stringstream ss;
 
 	// update stat text
-	cstat[CSTAT_NAME].value->set(window_area.x+value_pos[0].x+4, window_area.y+value_pos[0].y+value_pos[0].h/2, JUSTIFY_LEFT, VALIGN_CENTER, stats->name, font->getColor("menu_normal"));
+	cstat[CSTAT_NAME].value->set(cstat[CSTAT_NAME].value->pos.x, cstat[CSTAT_NAME].value->pos.y, JUSTIFY_LEFT, VALIGN_CENTER, stats->name, font->getColor("menu_normal"));
 
 	ss.str("");
 	ss << stats->level;
-	cstat[CSTAT_LEVEL].value->set(window_area.x+value_pos[1].x+value_pos[1].w/2, window_area.y+value_pos[1].y+value_pos[1].h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), font->getColor("menu_normal"));
+	cstat[CSTAT_LEVEL].value->set(cstat[CSTAT_LEVEL].value->pos.x, cstat[CSTAT_LEVEL].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), font->getColor("menu_normal"));
 
 	ss.str("");
 	ss << stats->get_physical();
-	cstat[CSTAT_PHYSICAL].value->set(window_area.x+value_pos[2].x+value_pos[2].w/2, window_area.y+value_pos[2].y+value_pos[2].h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->physical_additional));
+	cstat[CSTAT_PHYSICAL].value->set(cstat[CSTAT_PHYSICAL].value->pos.x, cstat[CSTAT_PHYSICAL].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->physical_additional));
 
 	ss.str("");
 	ss << stats->get_mental();
-	cstat[CSTAT_MENTAL].value->set(window_area.x+value_pos[3].x+value_pos[3].w/2, window_area.y+value_pos[3].y+value_pos[3].h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->mental_additional));
+	cstat[CSTAT_MENTAL].value->set(cstat[CSTAT_MENTAL].value->pos.x, cstat[CSTAT_MENTAL].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->mental_additional));
 
 	ss.str("");
 	ss << stats->get_offense();
-	cstat[CSTAT_OFFENSE].value->set(window_area.x+value_pos[4].x+value_pos[4].w/2, window_area.y+value_pos[4].y+value_pos[4].h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->offense_additional));
+	cstat[CSTAT_OFFENSE].value->set(cstat[CSTAT_OFFENSE].value->pos.x, cstat[CSTAT_OFFENSE].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->offense_additional));
 
 	ss.str("");
 	ss << stats->get_defense();
-	cstat[CSTAT_DEFENSE].value->set(window_area.x+value_pos[5].x+value_pos[5].w/2, window_area.y+value_pos[5].y+value_pos[5].h/2, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->defense_additional));
+	cstat[CSTAT_DEFENSE].value->set(cstat[CSTAT_DEFENSE].value->pos.x, cstat[CSTAT_DEFENSE].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->defense_additional));
 
 	ss.str("");
 	if (skill_points > 0) ss << skill_points << " " << msg->get("points remaining");

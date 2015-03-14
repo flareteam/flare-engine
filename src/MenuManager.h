@@ -95,6 +95,7 @@ public:
 	MenuManager(StatBlock *stats);
 	MenuManager(const MenuManager &copy); // not implemented
 	~MenuManager();
+	void alignAll();
 	void logic();
 	void render();
 	void closeAll();

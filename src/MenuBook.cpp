@@ -56,8 +56,9 @@ void MenuBook::loadBook() {
 
 			// @ATTR close|x (integer), y (integer)|Position of the close button.
 			if(infile.key == "close") {
-				closeButton->pos.x = popFirstInt(infile.val);
-				closeButton->pos.y = popFirstInt(infile.val);
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				closeButton->setBasePos(x, y);
 			}
 			// @ATTR background|string|Filename for the background image.
 			else if (infile.key == "background") {
@@ -115,7 +116,6 @@ void MenuBook::loadBook() {
 	}
 
 	align();
-	alignElements();
 
 	book_loaded = true;
 }
@@ -171,25 +171,18 @@ void MenuBook::loadText(FileParser &infile) {
 	}
 }
 
-void MenuBook::alignElements() {
-	closeButton->pos.x += window_area.x;
-	closeButton->pos.y += window_area.y;
+void MenuBook::align() {
+	Menu::align();
 
-	Rect clip;
-	clip.x = clip.y = 0;
-	clip.w = window_area.w;
-	clip.h = window_area.h;
-
-	setBackgroundClip(clip);
-	setBackgroundDest(window_area);
+	closeButton->setPos(window_area.x, window_area.y);
 
 	for (unsigned i=0; i<text.size(); i++) {
 		text[i]->setDestX(size[i].x + window_area.x);
 		text[i]->setDestY(size[i].y + window_area.y);
 	}
 	for (unsigned i=0; i<image.size(); i++) {
-		image[i]->setDestX(int(image[i]->getDest().x) + window_area.x);
-		image[i]->setDestY(int(image[i]->getDest().y) + window_area.y);
+		image[i]->setDestX(image_dest[i].x + window_area.x);
+		image[i]->setDestY(image_dest[i].y + window_area.y);
 	}
 }
 

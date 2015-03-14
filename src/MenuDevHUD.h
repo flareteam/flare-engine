@@ -28,7 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MenuDevHUD : public Menu {
 protected:
-	void alignElements();
 	void loadGraphics();
 
 	Rect original_area;
@@ -39,6 +38,7 @@ protected:
 public:
 	MenuDevHUD();
 	~MenuDevHUD();
+	void align();
 
 	void logic();
 	virtual void render();

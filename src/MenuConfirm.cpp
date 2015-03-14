@@ -58,15 +58,11 @@ MenuConfirm::MenuConfirm(const std::string& _buttonMsg, const std::string& _boxM
 
 	setBackground("images/menus/confirm_bg.png");
 	align();
-	alignElements();
 }
 
 void MenuConfirm::align() {
 	Menu::align();
-	alignElements();
-}
 
-void MenuConfirm::alignElements() {
 	if (hasConfirmButton) {
 		buttonConfirm->pos.x = window_area.x + window_area.w/2 - buttonConfirm->pos.w/2;
 		buttonConfirm->pos.y = window_area.y + window_area.h/2;

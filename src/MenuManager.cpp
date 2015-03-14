@@ -149,6 +149,17 @@ MenuManager::MenuManager(StatBlock *_stats)
 	closeAll(); // make sure all togglable menus start closed
 }
 
+void MenuManager::alignAll() {
+	for (unsigned int i=0; i<menus.size(); i++) {
+		menus[i]->align();
+	}
+
+	if (DEV_MODE) {
+		devconsole->align();
+		devhud->align();
+	}
+}
+
 void MenuManager::renderIcon(int x, int y) {
 	if (drag_icon) {
 		drag_icon->setDest(x,y);

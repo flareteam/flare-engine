@@ -60,9 +60,15 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 				continue;
 
 			// @ATTR close|x (integer), y (integer)|Position of the close button.
-			if(infile.key == "close") close_pos = toPoint(infile.val);
+			if(infile.key == "close") {
+				Point pos = toPoint(infile.val);
+				closeButton->setBasePos(pos.x, pos.y);
+			}
 			// @ATTR advance|x (integer), y (integer)|Position of the button to advance dialog.
-			else if(infile.key == "advance") advance_pos = toPoint(infile.val);
+			else if(infile.key == "advance") {
+				Point pos = toPoint(infile.val);
+				advanceButton->setBasePos(pos.x, pos.y);
+			}
 			// @ATTR dialogbox|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the text box graphics.
 			else if (infile.key == "dialogbox") dialog_pos = toRect(infile.val);
 			// @ATTR dialogtext|x (integer), y (integer), w (integer), h (integer)|Rectangle where the dialog text is placed.
@@ -84,14 +90,28 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	}
 
 	label_name = new WidgetLabel();
+	label_name->setBasePos(text_pos.x + text_offset.x, text_pos.y + text_offset.y);
+
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
+	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y);
 
 	tablist.add(advanceButton);
 	tablist.add(closeButton);
 	tablist.add(textbox);
 
 	align();
-	alignElements();
+}
+
+void MenuTalker::align() {
+	Menu::align();
+
+	advanceButton->setPos(window_area.x, window_area.y);
+	closeButton->setPos(window_area.x, window_area.y);
+
+	label_name->setPos(window_area.x, window_area.y);
+
+	textbox->setPos(window_area.x, window_area.y + label_name->bounds.h);
+	textbox->pos.h = text_pos.h - (text_offset.y*2) - label_name->bounds.h;
 }
 
 void MenuTalker::chooseDialogNode(int request_dialog_node) {
@@ -106,19 +126,6 @@ void MenuTalker::chooseDialogNode(int request_dialog_node) {
 	createBuffer();
 }
 
-void MenuTalker::alignElements() {
-	advanceButton->pos.x = window_area.x + advance_pos.x;
-	advanceButton->pos.y = window_area.y + advance_pos.y;
-
-	closeButton->pos.x = window_area.x + close_pos.x;
-	closeButton->pos.y = window_area.y + close_pos.y;
-
-	label_name->set(window_area.x+text_pos.x+text_offset.x, window_area.y+text_pos.y+text_offset.y, JUSTIFY_LEFT, VALIGN_TOP, "", color_normal, font_who);
-
-	textbox->pos.x = window_area.x + text_pos.x;
-	textbox->pos.y = window_area.y + text_pos.y+text_offset.y+label_name->bounds.h;
-	textbox->pos.h -= label_name->bounds.h;
-}
 /**
  * Menu interaction (enter/space/click to continue)
  */
@@ -203,7 +210,8 @@ void MenuTalker::createBuffer() {
 		who = hero_name;
 	}
 
-	label_name->set(who);
+	label_name->set(window_area.x+text_pos.x+text_offset.x, window_area.y+text_pos.y+text_offset.y, JUSTIFY_LEFT, VALIGN_TOP, who, color_normal, font_who);
+
 
 	line = parseLine(npc->dialog[dialog_node][event_cursor].s);
 

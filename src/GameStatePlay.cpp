@@ -109,10 +109,17 @@ GameStatePlay::GameStatePlay()
 	camp->currency = &menu->inv->currency;
 	camp->hero = &pc->stats;
 
-	loading->set(VIEW_W_HALF, VIEW_H_HALF, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
+	loading->set(0, 0, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
 	// load the config file for character titles
 	loadTitles();
+
+	refreshWidgets();
+}
+
+void GameStatePlay::refreshWidgets() {
+	menu->alignAll();
+	loading->setPos(VIEW_W_HALF, VIEW_H_HALF);
 }
 
 /**
@@ -818,6 +825,8 @@ void GameStatePlay::updateActionBar(unsigned index) {
  * This includes some message passing between child object
  */
 void GameStatePlay::logic() {
+	if (inpt->window_resized)
+		refreshWidgets();
 
 	checkCutscene();
 

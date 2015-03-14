@@ -33,6 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuLog::MenuLog() {
 	visible = false;
 
+	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
+
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuLog|Description of menus/log.txt
@@ -47,7 +49,8 @@ MenuLog::MenuLog() {
 			}
 			// @ATTR close|x (integer), y (integer)|Position of the close button.
 			else if(infile.key == "close") {
-				close_pos = toPoint(infile.val);
+				Point pos = toPoint(infile.val);
+				closeButton->setBasePos(pos.x, pos.y);
 			}
 			// @ATTR tab_area|x (integer), y (integer), w (integer), h (integer)|The position of the row of tabs, followed by the dimensions of the log text area.
 			else if(infile.key == "tab_area") {
@@ -60,14 +63,15 @@ MenuLog::MenuLog() {
 		infile.close();
 	}
 
+	// Initialize the tab control.
+	tabControl = new WidgetTabControl();
+
 	// Store the amount of displayed log messages on each log, and the maximum.
 	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		log[i] = new WidgetLog(tab_area.w,tab_area.h);
+		log[i]->setBasePos(tab_area.x, tab_area.y + tabControl->getTabHeight());
 		tablist.add(log[i]->getWidget());
 	}
-
-	// Initialize the tab control.
-	tabControl = new WidgetTabControl();
 
 	// Define the header.
 	tabControl->setTabTitle(LOG_TYPE_MESSAGES, msg->get("Notes"));
@@ -75,23 +79,21 @@ MenuLog::MenuLog() {
 
 	setBackground("images/menus/log.png");
 
-	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
-
 	align();
-	alignElements();
 }
 
-void MenuLog::alignElements() {
+void MenuLog::align() {
+	Menu::align();
+
 	tabControl->setMainArea(window_area.x + tab_area.x, window_area.y + tab_area.y, tab_area.w, tab_area.h);
 	tabControl->updateHeader();
 
-	closeButton->pos.x = window_area.x + close_pos.x;
-	closeButton->pos.y = window_area.y + close_pos.y;
+	closeButton->setPos(window_area.x, window_area.y);
 
 	label_log.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Log"), font->getColor("menu_normal"), title.font_style);
 
 	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
-		log[i]->setPosition(window_area.x+tab_area.x, window_area.y+tab_area.y+tabControl->getTabHeight());
+		log[i]->setPos(window_area.x, window_area.y);
 	}
 }
 

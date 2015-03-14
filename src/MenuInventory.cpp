@@ -55,7 +55,6 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// Load config settings
-	Rect equipment_slot;
 	FileParser infile;
 	// @CLASS MenuInventory|Description of menus/inventory.txt
 	if (infile.open("menus/inventory.txt")) {
@@ -64,21 +63,29 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 				continue;
 
 			// @ATTR close|x (integer), y (integer)|Position of the close button.
-			if(infile.key == "close") close_pos = toPoint(infile.val);
+			if(infile.key == "close") {
+				Point pos = toPoint(infile.val);
+				closeButton->setBasePos(pos.x, pos.y);
+			}
 			// @ATTR equipment_slot|x (integer), y (integer), size (integer), slot_type (string)|Position and item type of an equipment slot.
 			else if(infile.key == "equipment_slot") {
-				equipment_slot.x = popFirstInt(infile.val);
-				equipment_slot.y = popFirstInt(infile.val);
-				equipment_slot.w = equipment_slot.h = popFirstInt(infile.val);
-				equipped_area.push_back(equipment_slot);
+				Rect area;
+				Point pos;
+
+				pos.x = area.x = popFirstInt(infile.val);
+				pos.y = area.y = popFirstInt(infile.val);
+				area.w = area.h = popFirstInt(infile.val);
+				equipped_area.push_back(area);
+				equipped_pos.push_back(pos);
 				slot_type.push_back(popFirstString(infile.val));
 			}
 			// @ATTR slot_name|string|The displayed name of the last defined equipment slot.
 			else if(infile.key == "slot_name") slot_desc.push_back(infile.val);
 			// @ATTR carried_area|x (integer), y (integer)|Position of the first normal inventory slot.
 			else if(infile.key == "carried_area") {
-				carried_area.x = popFirstInt(infile.val);
-				carried_area.y = popFirstInt(infile.val);
+				Point pos;
+				carried_pos.x = carried_area.x = popFirstInt(infile.val);
+				carried_pos.y = carried_area.y = popFirstInt(infile.val);
 			}
 			// @ATTR carried_cols|integer|The number of columns for the normal inventory.
 			else if (infile.key == "carried_cols") carried_cols = std::max(1, toInt(infile.val));
@@ -99,31 +106,14 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 	MAX_EQUIPPED = equipped_area.size();
 	MAX_CARRIED = carried_cols * carried_rows;
 
-	color_normal = font->getColor("menu_normal");
-	color_high = font->getColor("menu_bonus");
-
-	align();
-	alignElements();
-}
-
-void MenuInventory::alignElements() {
-	for (int i=0; i<MAX_EQUIPPED; i++) {
-		equipped_area[i].x += window_area.x;
-		equipped_area[i].y += window_area.y;
-	}
-
-	carried_area.x += window_area.x;
-	carried_area.y += window_area.y;
 	carried_area.w = carried_cols*ICON_SIZE;
 	carried_area.h = carried_rows*ICON_SIZE;
 
+	color_normal = font->getColor("menu_normal");
+	color_high = font->getColor("menu_bonus");
+
 	inventory[EQUIPMENT].init(MAX_EQUIPPED, equipped_area, slot_type);
 	inventory[CARRIED].init(MAX_CARRIED, carried_area, ICON_SIZE, carried_cols);
-
-	closeButton->pos.x = window_area.x+close_pos.x;
-	closeButton->pos.y = window_area.y+close_pos.y;
-
-	label_inventory.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Inventory"), color_normal, title.font_style);
 
 	for (int i = 0; i < MAX_EQUIPPED; i++) {
 		tablist.add(inventory[EQUIPMENT].slots[i]);
@@ -131,6 +121,27 @@ void MenuInventory::alignElements() {
 	for (int i = 0; i < MAX_CARRIED; i++) {
 		tablist.add(inventory[CARRIED].slots[i]);
 	}
+
+	align();
+}
+
+void MenuInventory::align() {
+	Menu::align();
+
+	for (int i=0; i<MAX_EQUIPPED; i++) {
+		equipped_area[i].x = equipped_pos[i].x + window_area.x;
+		equipped_area[i].y = equipped_pos[i].y + window_area.y;
+	}
+
+	carried_area.x = carried_pos.x + window_area.x;
+	carried_area.y = carried_pos.y + window_area.y;
+
+	inventory[EQUIPMENT].setPos(window_area.x, window_area.y);
+	inventory[CARRIED].setPos(window_area.x, window_area.y);
+
+	closeButton->setPos(window_area.x, window_area.y);
+
+	label_inventory.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Inventory"), color_normal, title.font_style);
 }
 
 void MenuInventory::logic() {
