@@ -172,6 +172,7 @@ RenderDevice::RenderDevice()
 	: fullscreen(false)
 	, hwsurface(false)
 	, doublebuf(false)
+	, texture_filter(false)
 	, min_screen(640, 480)
 	, is_initialized(false) {
 }

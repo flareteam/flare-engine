@@ -86,6 +86,8 @@ private:
 	WidgetLabel         * hwsurface_lb;
 	WidgetCheckBox      * doublebuf_cb;
 	WidgetLabel         * doublebuf_lb;
+	WidgetCheckBox      * texture_filter_cb;
+	WidgetLabel         * texture_filter_lb;
 	WidgetCheckBox      * change_gamma_cb;
 	WidgetLabel         * change_gamma_lb;
 	WidgetSlider        * gamma_sl;

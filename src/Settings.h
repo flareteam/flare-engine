@@ -100,6 +100,7 @@ extern short MIN_SCREEN_W;
 extern short MIN_SCREEN_H;
 extern bool DOUBLEBUF;
 extern bool HWSURFACE;
+extern bool TEXTURE_FILTER;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
 

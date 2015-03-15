@@ -198,13 +198,14 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	fullscreen = FULLSCREEN;
 	hwsurface = HWSURFACE;
 	doublebuf = DOUBLEBUF;
+	texture_filter = TEXTURE_FILTER;
 
 	min_screen.x = MIN_SCREEN_W;
 	min_screen.y = MIN_SCREEN_H;
 }
 
 int SDLSoftwareRenderDevice::createContext() {
-	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || doublebuf != DOUBLEBUF);
+	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || doublebuf != DOUBLEBUF || texture_filter != TEXTURE_FILTER);
 
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
@@ -246,8 +247,14 @@ int SDLSoftwareRenderDevice::createContext() {
 		window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
 		if (window) {
 			renderer = SDL_CreateRenderer(window, -1, r_flags);
-			if (renderer)
+			if (renderer) {
+				if (TEXTURE_FILTER)
+					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+				else
+					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
+
 				windowResize();
+			}
 
 			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
 			// setting minimum size might move the window, so set position again
@@ -268,11 +275,13 @@ int SDLSoftwareRenderDevice::createContext() {
 			FULLSCREEN = fullscreen;
 			HWSURFACE = hwsurface;
 			DOUBLEBUF = doublebuf;
+			TEXTURE_FILTER = texture_filter;
 			if (createContext() == -1) {
 				// last resort, try turning everything off
 				FULLSCREEN = false;
 				HWSURFACE = false;
 				DOUBLEBUF = false;
+				TEXTURE_FILTER = false;
 				return createContext();
 			}
 			else {
@@ -283,6 +292,7 @@ int SDLSoftwareRenderDevice::createContext() {
 			fullscreen = FULLSCREEN;
 			hwsurface = HWSURFACE;
 			doublebuf = DOUBLEBUF;
+			texture_filter = TEXTURE_FILTER;
 			is_initialized = true;
 		}
 	}
@@ -652,7 +662,7 @@ void SDLSoftwareRenderDevice::windowResize() {
 	}
 
 	VIEW_W_HALF = VIEW_W/2;
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+
 	SDL_RenderSetLogicalSize(renderer, VIEW_W, VIEW_H);
 
 	if (texture) SDL_DestroyTexture(texture);

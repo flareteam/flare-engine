@@ -55,6 +55,8 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 	, hwsurface_lb(new WidgetLabel())
 	, doublebuf_cb(new WidgetCheckBox())
 	, doublebuf_lb(new WidgetLabel())
+	, texture_filter_cb(new WidgetCheckBox())
+	, texture_filter_lb(new WidgetLabel())
 	, change_gamma_cb(new WidgetCheckBox())
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider())
@@ -196,6 +198,10 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	else if (infile.key == "doublebuf") {
 		// @ATTR doublebuf|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Double buffering" checkbox relative to the frame.
 		placeLabeledWidget(doublebuf_lb, doublebuf_cb, x1, y1, x2, y2, msg->get("Double buffering"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "texture_filter") {
+		// @ATTR texture_filter|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Texture Filtering" checkbox relative to the frame.
+		placeLabeledWidget(texture_filter_lb, texture_filter_cb, x1, y1, x2, y2, msg->get("Texture Filtering"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "change_gamma") {
 		// @ATTR change_gamma|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Allow changing gamma" checkbox relative to the frame.
@@ -357,6 +363,8 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 	addChildWidget(hwsurface_lb, VIDEO_TAB);
 	addChildWidget(doublebuf_cb, VIDEO_TAB);
 	addChildWidget(doublebuf_lb, VIDEO_TAB);
+	addChildWidget(texture_filter_cb, VIDEO_TAB);
+	addChildWidget(texture_filter_lb, VIDEO_TAB);
 	addChildWidget(change_gamma_cb, VIDEO_TAB);
 	addChildWidget(change_gamma_lb, VIDEO_TAB);
 	addChildWidget(gamma_sl, VIDEO_TAB);
@@ -391,6 +399,7 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist.add(fullscreen_cb);
 	tablist.add(hwsurface_cb);
 	tablist.add(doublebuf_cb);
+	tablist.add(texture_filter_cb);
 	tablist.add(change_gamma_cb);
 	tablist.add(gamma_sl);
 
@@ -439,6 +448,8 @@ void GameStateConfigDesktop::updateVideo() {
 	else hwsurface_cb->unCheck();
 	if (DOUBLEBUF) doublebuf_cb->Check();
 	else doublebuf_cb->unCheck();
+	if (TEXTURE_FILTER) texture_filter_cb->Check();
+	else texture_filter_cb->unCheck();
 	if (CHANGE_GAMMA) change_gamma_cb->Check();
 	else {
 		change_gamma_cb->unCheck();
@@ -586,6 +597,10 @@ void GameStateConfigDesktop::logicVideo() {
 	else if (doublebuf_cb->checkClick()) {
 		if (doublebuf_cb->isChecked()) DOUBLEBUF=true;
 		else DOUBLEBUF=false;
+	}
+	else if (texture_filter_cb->checkClick()) {
+		if (texture_filter_cb->isChecked()) TEXTURE_FILTER=true;
+		else TEXTURE_FILTER=false;
 	}
 	else if (change_gamma_cb->checkClick()) {
 		if (change_gamma_cb->isChecked()) {

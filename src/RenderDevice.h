@@ -216,6 +216,7 @@ protected:
 	bool fullscreen;
 	bool hwsurface;
 	bool doublebuf;
+	bool texture_filter;
 	Point min_screen;
 
 	bool is_initialized;
