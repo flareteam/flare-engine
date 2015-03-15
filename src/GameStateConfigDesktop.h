@@ -78,11 +78,8 @@ private:
 	void cleanupTabContents();
 	void cleanupDialogs();
 
-	int getVideoModes();
 	void scanKey(int button);
 
-	WidgetListBox       * resolution_lstb;
-	WidgetLabel         * resolution_lb;
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;
 	WidgetCheckBox      * hwsurface_cb;
@@ -125,6 +122,7 @@ private:
 	bool fullscreen;
 	bool hwsurface;
 	bool doublebuf;
+	Point min_screen;
 
 	Rect scrollpane;
 	Color scrollpane_color;

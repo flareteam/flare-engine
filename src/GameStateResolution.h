@@ -24,22 +24,19 @@ class MenuConfirm;
 
 class GameStateResolution : public GameState {
 private:
-	bool applyVideoSettings(int width, int height);
+	bool applyVideoSettings();
 	bool compareVideoSettings();
 	void cleanup();
 	MenuConfirm *confirm;
 	int confirm_ticks;
-	int old_w;
-	int old_h;
 	bool old_fullscreen;
 	bool old_hwsurface;
 	bool old_doublebuf;
-	int new_w;
-	int new_h;
+	bool updated_min_screen;
 	bool initialized;
 
 public:
-	GameStateResolution(int width, int height, bool fullscreen, bool hwsurface, bool doublebuf);
+	GameStateResolution(bool fullscreen, bool hwsurface, bool doublebuf, bool _updated_min_screen);
 	~GameStateResolution();
 	void logic();
 	void render();

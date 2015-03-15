@@ -6,7 +6,6 @@
 listbox_scrollbar_offset=2
 
 [video]
-resolution=64,16,32,32
 fullscreen=352,40,384,32
 hwsurface=352,72,384,64
 doublebuf=352,104,384,96

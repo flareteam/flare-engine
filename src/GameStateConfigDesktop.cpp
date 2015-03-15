@@ -50,8 +50,6 @@ bool rescompare(const Rect &r1, const Rect &r2) {
 
 GameStateConfigDesktop::GameStateConfigDesktop()
 	: GameStateConfigBase(false)
-	, resolution_lstb(new WidgetListBox(10))
-	, resolution_lb(new WidgetLabel())
 	, fullscreen_cb(new WidgetCheckBox())
 	, fullscreen_lb(new WidgetLabel())
 	, hwsurface_cb(new WidgetCheckBox())
@@ -86,12 +84,9 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 	, fullscreen(FULLSCREEN)
 	, hwsurface(HWSURFACE)
 	, doublebuf(DOUBLEBUF)
+	, min_screen(MIN_SCREEN_W, MIN_SCREEN_H)
 	, scrollpane_contents(0)
 {
-	// Populate the resolution list
-	if (getVideoModes() < 1)
-		logError("GameStateConfigDesktop: Unable to get resolutions list!");
-
 	// Allocate KeyBindings
 	for (int i = 0; i < inpt->key_count; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
@@ -187,14 +182,9 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	if (infile.key == "listbox_scrollbar_offset") {
 		// overrides same key in GameStateConfigBase
 		joystick_device_lstb->scrollbar_offset = x1;
-		resolution_lstb->scrollbar_offset = x1;
 		activemods_lstb->scrollbar_offset = x1;
 		inactivemods_lstb->scrollbar_offset = x1;
 		language_lstb->scrollbar_offset = x1;
-	}
-	else if (infile.key == "resolution") {
-		// @ATTR resolution|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Resolution" list box relative to the frame.
-		placeLabeledWidget(resolution_lb, resolution_lstb, x1, y1, x2, y2, msg->get("Resolution"));
 	}
 	else if (infile.key == "fullscreen") {
 		// @ATTR fullscreen|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Full Screen Mode" checkbox relative to the frame.
@@ -376,8 +366,6 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 	addChildWidget(change_gamma_lb, VIDEO_TAB);
 	addChildWidget(gamma_sl, VIDEO_TAB);
 	addChildWidget(gamma_lb, VIDEO_TAB);
-	addChildWidget(resolution_lstb, VIDEO_TAB);
-	addChildWidget(resolution_lb, VIDEO_TAB);
 	addChildWidget(hws_note_lb, VIDEO_TAB);
 	addChildWidget(dbuf_note_lb, VIDEO_TAB);
 	addChildWidget(test_note_lb, VIDEO_TAB);
@@ -410,7 +398,6 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist.add(doublebuf_cb);
 	tablist.add(change_gamma_cb);
 	tablist.add(gamma_sl);
-	tablist.add(resolution_lstb);
 
 	tablist.add(music_volume_sl);
 	tablist.add(sound_volume_sl);
@@ -465,17 +452,6 @@ void GameStateConfigDesktop::updateVideo() {
 	}
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
 	render_device->setGamma(GAMMA);
-
-	std::stringstream list_mode;
-	unsigned int resolutions = getVideoModes();
-	for (unsigned int i=0; i<resolutions; ++i) {
-		list_mode << video_modes[i].w << "x" << video_modes[i].h;
-		resolution_lstb->append(list_mode.str(),"");
-		if (video_modes[i].w == SCREEN_W && video_modes[i].h == SCREEN_H) resolution_lstb->selected[i] = true;
-		else resolution_lstb->selected[i] = false;
-		list_mode.str("");
-	}
-	resolution_lstb->refresh();
 }
 
 void GameStateConfigDesktop::updateInput() {
@@ -577,17 +553,6 @@ void GameStateConfigDesktop::logic() {
 }
 
 void GameStateConfigDesktop::logicAccept() {
-	std::string resolution_value = resolution_lstb->getValue();
-	int width = popFirstInt(resolution_value, 'x');
-	int height = popFirstInt(resolution_value, 'x');
-
-	// In case of a custom resolution, the listbox might have nothing selected
-	// So we just use whatever the current window area is
-	if (width == 0 || height == 0) {
-		width = SCREEN_W;
-		height = SCREEN_H;
-	}
-
 	delete msg;
 	msg = new MessageEngine();
 	inpt->saveKeyBindings();
@@ -610,8 +575,9 @@ void GameStateConfigDesktop::logicAccept() {
 	cleanup();
 	saveSettings();
 	render_device->updateTitleBar();
+	bool updated_min_screen = (min_screen.x != MIN_SCREEN_W || min_screen.y != MIN_SCREEN_H);
 	delete requestedGameState;
-	requestedGameState = new GameStateResolution(width, height, fullscreen, hwsurface, doublebuf);
+	requestedGameState = new GameStateResolution(fullscreen, hwsurface, doublebuf, updated_min_screen);
 }
 
 void GameStateConfigDesktop::logicVideo() {
@@ -639,9 +605,6 @@ void GameStateConfigDesktop::logicVideo() {
 			gamma_sl->set(5,20,(int)(GAMMA*10.0));
 			render_device->setGamma(GAMMA);
 		}
-	}
-	else if (resolution_lstb->checkClick()) {
-		// nothing to do here: resolution value changes next frame.
 	}
 	else if (CHANGE_GAMMA) {
 		gamma_sl->enabled = true;
@@ -764,7 +727,6 @@ void GameStateConfigDesktop::renderDialogs() {
 void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
 	GameStateConfigBase::renderTooltips(tip_new);
 
-	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = resolution_lstb->checkTooltip(inpt->mouse);
 	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
 }
 
@@ -774,46 +736,6 @@ void GameStateConfigDesktop::refreshWidgets() {
 	input_scrollbox->setPos(frame.x, frame.y);
 
 	input_confirm->align();
-}
-
-int GameStateConfigDesktop::getVideoModes() {
-	video_modes.clear();
-
-	// Set predefined modes
-	const unsigned int cm_count = 5;
-	Rect common_modes[cm_count];
-	common_modes[0].w = 640;
-	common_modes[0].h = 480;
-	common_modes[1].w = 800;
-	common_modes[1].h = 600;
-	common_modes[2].w = 1024;
-	common_modes[2].h = 768;
-	common_modes[3].w = SCREEN_W;
-	common_modes[3].h = SCREEN_H;
-	common_modes[4].w = MIN_SCREEN_W;
-	common_modes[4].h = MIN_SCREEN_H;
-
-	// Get available fullscreen/hardware modes
-	render_device->listModes(video_modes);
-
-	for (unsigned i=0; i<cm_count; ++i) {
-		video_modes.push_back(common_modes[i]);
-		if (common_modes[i].w < MIN_SCREEN_W || common_modes[i].h < MIN_SCREEN_H) {
-			video_modes.pop_back();
-		}
-		else {
-			for (unsigned j=0; j<video_modes.size()-1; ++j) {
-				if (video_modes[j].w == common_modes[i].w && video_modes[j].h == common_modes[i].h) {
-					video_modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
-
-	std::sort(video_modes.begin(), video_modes.end(), rescompare);
-
-	return video_modes.size();
 }
 
 void GameStateConfigDesktop::scanKey(int button) {

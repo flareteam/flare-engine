@@ -82,10 +82,10 @@ public:
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void windowResize();
+	void windowUpdateMinSize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();
-	void listModes(std::vector<Rect> &modes);
 	void freeImage(Image *image);
 
 	Image* loadImage(std::string filename,

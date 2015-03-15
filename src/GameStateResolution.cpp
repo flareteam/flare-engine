@@ -25,17 +25,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
-GameStateResolution::GameStateResolution(int width, int height, bool fullscreen, bool hwsurface, bool doublebuf)
+GameStateResolution::GameStateResolution(bool fullscreen, bool hwsurface, bool doublebuf, bool _updated_min_screen)
 	: GameState()
 	, confirm(NULL)
 	, confirm_ticks(0)
-	, old_w(SCREEN_W)
-	, old_h(SCREEN_H)
 	, old_fullscreen(fullscreen)
 	, old_hwsurface(hwsurface)
 	, old_doublebuf(doublebuf)
-	, new_w(width)
-	, new_h(height)
+	, updated_min_screen(_updated_min_screen)
 	, initialized(false) {
 }
 
@@ -55,7 +52,7 @@ void GameStateResolution::logic() {
 
 		// Apply the new resolution
 		// if it fails, don't create the dialog box (this will make the game continue straight to the title screen)
-		if (settings_changed && applyVideoSettings(new_w, new_h))
+		if (settings_changed && applyVideoSettings())
 			confirm = new MenuConfirm(msg->get("OK"),msg->get("Use this resolution?"));
 
 		if (confirm) {
@@ -63,6 +60,9 @@ void GameStateResolution::logic() {
 			confirm_ticks = MAX_FRAMES_PER_SEC * 10;
 		}
 		else {
+			if (updated_min_screen)
+				render_device->windowUpdateMinSize();
+			render_device->windowResize();
 			delete requestedGameState;
 			requestedGameState = new GameStateTitle();
 			return;
@@ -84,7 +84,7 @@ void GameStateResolution::logic() {
 			FULLSCREEN = old_fullscreen;
 			HWSURFACE = old_hwsurface;
 			DOUBLEBUF = old_doublebuf;
-			if (applyVideoSettings(old_w, old_h)) {
+			if (applyVideoSettings()) {
 				saveSettings();
 			}
 			delete requestedGameState;
@@ -96,6 +96,9 @@ void GameStateResolution::logic() {
 		}
 	}
 	else {
+		if (updated_min_screen)
+			render_device->windowUpdateMinSize();
+		render_device->windowResize();
 		delete requestedGameState;
 		requestedGameState = new GameStateTitle();
 	}
@@ -109,15 +112,9 @@ void GameStateResolution::render() {
 /**
  * Tries to apply the selected video settings, reverting back to the old settings upon failure
  */
-bool GameStateResolution::applyVideoSettings(int width, int height) {
-	if (MIN_SCREEN_W > width && MIN_SCREEN_H > height) {
-		logError("GameStateResolution: A mod is requiring a minimum resolution of %dx%d", MIN_SCREEN_W, MIN_SCREEN_H);
-		if (width < MIN_SCREEN_W) width = MIN_SCREEN_W;
-		if (height < MIN_SCREEN_H) height = MIN_SCREEN_H;
-	}
-
+bool GameStateResolution::applyVideoSettings() {
 	// Attempt to apply the new settings
-	int status = render_device->createContext(width, height);
+	int status = render_device->createContext(SCREEN_W, SCREEN_H);
 
 	// If the new settings fail, revert to the old ones
 	if (status == -1) {
@@ -132,9 +129,7 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
 
 	}
 	else {
-		// If the new settings succeed, adjust the view area
-		SCREEN_W = width;
-		SCREEN_H = height;
+		// If the new settings succeed, finish loading resources
 		SharedResources::loadIcons();
 		curs = new CursorManager();
 		return true;
@@ -146,8 +141,7 @@ bool GameStateResolution::applyVideoSettings(int width, int height) {
  * Returns true if they have, otherwise returns false
  */
 bool GameStateResolution::compareVideoSettings() {
-	return (!(old_w == new_w && old_h == new_h) ||
-			FULLSCREEN != old_fullscreen ||
+	return (FULLSCREEN != old_fullscreen ||
 			HWSURFACE != old_hwsurface ||
 			DOUBLEBUF != old_doublebuf);
 }

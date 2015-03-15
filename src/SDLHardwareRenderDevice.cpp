@@ -492,36 +492,6 @@ void SDLHardwareRenderDevice::updateTitleBar() {
 	if (titlebar_icon) SDL_SetWindowIcon(screen, titlebar_icon);
 }
 
-void SDLHardwareRenderDevice::listModes(std::vector<Rect> &modes) {
-	int mode_count = SDL_GetNumDisplayModes(0);
-
-	for (int i=0; i<mode_count; i++) {
-		SDL_DisplayMode display_mode;
-		SDL_GetDisplayMode(0, i, &display_mode);
-
-		if (display_mode.w == 0 || display_mode.h == 0) continue;
-
-		Rect mode_rect;
-		mode_rect.w = display_mode.w;
-		mode_rect.h = display_mode.h;
-		modes.push_back(mode_rect);
-
-		if (display_mode.w < MIN_SCREEN_W || display_mode.h < MIN_SCREEN_H) {
-			// make sure the resolution fits in the constraints of MIN_SCREEN_W and MIN_SCREEN_H
-			modes.pop_back();
-		}
-		else {
-			// check previous resolutions for duplicates. If one is found, drop the one we just added
-			for (unsigned j=0; j<modes.size()-1; ++j) {
-				if (modes[j].w == display_mode.w && modes[j].h == display_mode.h) {
-					modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
-}
-
 Image *SDLHardwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
 	// lookup image in cache
 	Image *img;
@@ -561,6 +531,10 @@ void SDLHardwareRenderDevice::freeImage(Image *image) {
 }
 
 void SDLHardwareRenderDevice::windowResize() {
+	// unimplemented
+}
+
+void SDLHardwareRenderDevice::windowUpdateMinSize() {
 	// unimplemented
 }
 
