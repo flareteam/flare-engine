@@ -169,7 +169,11 @@ Image * Sprite::getGraphics() {
  * RenderDevice
  */
 RenderDevice::RenderDevice()
-	: is_initialized(false) {
+	: fullscreen(false)
+	, hwsurface(false)
+	, doublebuf(false)
+	, min_screen(640, 480)
+	, is_initialized(false) {
 }
 
 RenderDevice::~RenderDevice() {

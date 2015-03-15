@@ -194,19 +194,22 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	, titlebar_icon(NULL)
 	, title(NULL) {
 	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)");
+
+	fullscreen = FULLSCREEN;
+	hwsurface = HWSURFACE;
+	doublebuf = DOUBLEBUF;
+
+	min_screen.x = MIN_SCREEN_W;
+	min_screen.y = MIN_SCREEN_H;
 }
 
-int SDLSoftwareRenderDevice::createContext(int width, int height) {
-	if (is_initialized) {
-		destroyContext();
-	}
-
-	bool window_created = false;
+int SDLSoftwareRenderDevice::createContext() {
+	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || doublebuf != DOUBLEBUF);
 
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
-	int window_w = width;
-	int window_h = height;
+	int window_w = SCREEN_W;
+	int window_h = SCREEN_H;
 
 	if (FULLSCREEN) {
 		w_flags = w_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -217,6 +220,11 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 			window_w = desktop.w;
 			window_h = desktop.h;
 		}
+	}
+	else if (fullscreen && is_initialized) {
+		// if the game was previously in fullscreen, resize the window when returning to windowed mode
+		window_w = MIN_SCREEN_W;
+		window_h = MIN_SCREEN_H;
 	}
 
 	w_flags = w_flags | SDL_WINDOW_RESIZABLE;
@@ -230,32 +238,75 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 	}
 	if (DOUBLEBUF) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
-	window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
-	if (window)
-		renderer = SDL_CreateRenderer(window, -1, r_flags);
+	if (settings_changed || !is_initialized) {
+		if (is_initialized) {
+			destroyContext();
+		}
 
-	if (renderer) {
-		windowResize();
-	}
+		window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
+		if (window) {
+			renderer = SDL_CreateRenderer(window, -1, r_flags);
+			if (renderer)
+				windowResize();
 
-	window_created = window != NULL && renderer != NULL && screen != NULL && texture != NULL;
+			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
+			// setting minimum size might move the window, so set position again
+			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
-	if (!window_created && !is_initialized) {
-		// If this is the first attempt and it failed we are not
-		// getting anywhere.
-		SDL_Quit();
-		exit(1);
-	}
-	else {
-		is_initialized = true;
+		}
+
+		bool window_created = window != NULL && renderer != NULL && screen != NULL && texture != NULL;
+
+		if (!window_created && !is_initialized) {
+			// If this is the first attempt and it failed we are not
+			// getting anywhere.
+			SDL_Quit();
+			exit(1);
+		}
+		else if (!window_created) {
+			// try previous setting first
+			FULLSCREEN = fullscreen;
+			HWSURFACE = hwsurface;
+			DOUBLEBUF = doublebuf;
+			if (createContext() == -1) {
+				// last resort, try turning everything off
+				FULLSCREEN = false;
+				HWSURFACE = false;
+				DOUBLEBUF = false;
+				return createContext();
+			}
+			else {
+				return 0;
+			}
+		}
+		else {
+			fullscreen = FULLSCREEN;
+			hwsurface = HWSURFACE;
+			doublebuf = DOUBLEBUF;
+			is_initialized = true;
+		}
 	}
 
 	if (is_initialized) {
-		windowUpdateMinSize();
+		windowResize();
+
+		// update minimum window size if it has changed
+		if (min_screen.x != MIN_SCREEN_W || min_screen.y != MIN_SCREEN_H) {
+			min_screen.x = MIN_SCREEN_W;
+			min_screen.y = MIN_SCREEN_H;
+			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
+			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+		}
+
+		// update title bar text and icon
 		updateTitleBar();
+
+		// load persistent resources
+		SharedResources::loadIcons();
+		curs = new CursorManager();
 	}
 
-	return (window_created ? 0 : -1);
+	return (is_initialized ? 0 : -1);
 }
 
 Rect SDLSoftwareRenderDevice::getContextSize() {
@@ -614,7 +665,3 @@ void SDLSoftwareRenderDevice::windowResize() {
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);
 }
 
-void SDLSoftwareRenderDevice::windowUpdateMinSize() {
-	SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-}

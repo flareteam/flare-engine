@@ -159,9 +159,9 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	std::cout << "Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2)" << std::endl;
 }
 
-int SDLHardwareRenderDevice::createContext(int width, int height) {
-	int window_w = width;
-	int window_h = height;
+int SDLHardwareRenderDevice::createContext() {
+	int window_w = SCREEN_W;
+	int window_h = SCREEN_H;
 
 	if (FULLSCREEN) {
 		// make the window the same size as the desktop resolution
@@ -197,9 +197,9 @@ int SDLHardwareRenderDevice::createContext(int width, int height) {
 
 	if (screen != NULL) renderer = SDL_CreateRenderer(screen, -1, flags);
 
-	if (renderer && FULLSCREEN && (window_w != width || window_h != height)) {
+	if (renderer && FULLSCREEN && (window_w != SCREEN_W || window_h != SCREEN_H)) {
 		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-		SDL_RenderSetLogicalSize(renderer, width, height);
+		SDL_RenderSetLogicalSize(renderer, SCREEN_W, SCREEN_H);
 	}
 
 	if (screen != NULL && renderer != NULL) {
@@ -531,10 +531,6 @@ void SDLHardwareRenderDevice::freeImage(Image *image) {
 }
 
 void SDLHardwareRenderDevice::windowResize() {
-	// unimplemented
-}
-
-void SDLHardwareRenderDevice::windowUpdateMinSize() {
 	// unimplemented
 }
 

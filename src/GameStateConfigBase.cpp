@@ -546,8 +546,8 @@ void GameStateConfigBase::logicAccept() {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 	}
 	cleanup();
+	render_device->createContext();
 	saveSettings();
-	render_device->updateTitleBar();
 	delete requestedGameState;
 	requestedGameState = new GameStateTitle();
 }

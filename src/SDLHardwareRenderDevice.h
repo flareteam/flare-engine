@@ -65,7 +65,7 @@ class SDLHardwareRenderDevice : public RenderDevice {
 public:
 
 	SDLHardwareRenderDevice();
-	int createContext(int width, int height);
+	int createContext();
 	Rect getContextSize();
 
 	virtual int render(Renderable& r, Rect dest);
@@ -82,7 +82,6 @@ public:
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void windowResize();
-	void windowUpdateMinSize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();

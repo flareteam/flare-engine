@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateConfigBase.h"
 #include "GameStateConfigDesktop.h"
 #include "GameStateTitle.h"
-#include "GameStateResolution.h"
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -81,10 +80,6 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 	, input_confirm_ticks(0)
 	, input_key(0)
 	, key_count(0)
-	, fullscreen(FULLSCREEN)
-	, hwsurface(HWSURFACE)
-	, doublebuf(DOUBLEBUF)
-	, min_screen(MIN_SCREEN_W, MIN_SCREEN_H)
 	, scrollpane_contents(0)
 {
 	// Allocate KeyBindings
@@ -573,11 +568,10 @@ void GameStateConfigDesktop::logicAccept() {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 	}
 	cleanup();
+	render_device->createContext();
 	saveSettings();
-	render_device->updateTitleBar();
-	bool updated_min_screen = (min_screen.x != MIN_SCREEN_W || min_screen.y != MIN_SCREEN_H);
 	delete requestedGameState;
-	requestedGameState = new GameStateResolution(fullscreen, hwsurface, doublebuf, updated_min_screen);
+	requestedGameState = new GameStateTitle();
 }
 
 void GameStateConfigDesktop::logicVideo() {

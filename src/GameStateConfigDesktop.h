@@ -119,11 +119,6 @@ private:
 	int input_key;
 	unsigned key_count;
 
-	bool fullscreen;
-	bool hwsurface;
-	bool doublebuf;
-	Point min_screen;
-
 	Rect scrollpane;
 	Color scrollpane_color;
 	int scrollpane_contents;
