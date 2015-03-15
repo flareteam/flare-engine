@@ -20,6 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameState::GameState()
 	: hasMusic(false)
 	, reload_music(false)
+	, save_settings_on_exit(true)
 	, load_counter(0)
 	, requestedGameState(NULL)
 	, exitRequested(false) {

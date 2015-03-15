@@ -187,6 +187,11 @@ void GameSwitcher::render() {
 	curs->render();
 }
 
+void GameSwitcher::saveUserSettings() {
+	if (currentState && currentState->save_settings_on_exit)
+		saveSettings();
+}
+
 GameSwitcher::~GameSwitcher() {
 	delete currentState;
 	delete label_fps;

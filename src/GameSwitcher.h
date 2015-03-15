@@ -65,6 +65,7 @@ public:
 	void logic();
 	void render();
 	void showFPS(int fps);
+	void saveUserSettings();
 	bool done;
 };
 

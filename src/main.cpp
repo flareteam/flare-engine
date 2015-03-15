@@ -296,6 +296,10 @@ int main(int argc, char *argv[]) {
 		srand((unsigned int)time(NULL));
 		init(render_device_name);
 		mainLoop(debug_event);
+
+		if (gswitch)
+			gswitch->saveUserSettings();
+
 		cleanup();
 	}
 

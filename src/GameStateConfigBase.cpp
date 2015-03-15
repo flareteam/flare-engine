@@ -89,6 +89,9 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, active_tab(0)
 {
 
+	// don't save settings if we close the game while in this menu
+	save_settings_on_exit = false;
+
 	Image *graphics;
 	graphics = render_device->loadImage("images/menus/config.png");
 	if (graphics) {
