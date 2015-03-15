@@ -628,8 +628,8 @@ void SDLSoftwareRenderDevice::windowResize() {
 	VIEW_W = (int)((float)SCREEN_W * scale);
 
 	// letterbox if too tall
-	if (VIEW_W < FRAME_W) {
-		VIEW_W = FRAME_W;
+	if (VIEW_W < MIN_SCREEN_W) {
+		VIEW_W = MIN_SCREEN_W;
 	}
 
 	VIEW_W_HALF = VIEW_W/2;

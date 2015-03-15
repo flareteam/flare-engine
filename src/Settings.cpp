@@ -111,14 +111,14 @@ unsigned short ICON_SIZE;
 bool FULLSCREEN;
 unsigned short MAX_FRAMES_PER_SEC = 60;
 unsigned char BITS_PER_PIXEL = 32;
-unsigned short VIEW_W;
-unsigned short VIEW_H;
-unsigned short VIEW_W_HALF = VIEW_W/2;
-unsigned short VIEW_H_HALF = VIEW_H/2;
-short MIN_SCREEN_W = -1;
-short MIN_SCREEN_H = -1;
-unsigned short SCREEN_W;
-unsigned short SCREEN_H;
+unsigned short VIEW_W = 0;
+unsigned short VIEW_H = 0;
+unsigned short VIEW_W_HALF = 0;
+unsigned short VIEW_H_HALF = 0;
+short MIN_SCREEN_W = 640;
+short MIN_SCREEN_H = 480;
+unsigned short SCREEN_W = 640;
+unsigned short SCREEN_H = 480;
 bool DOUBLEBUF;
 bool HWSURFACE;
 bool CHANGE_GAMMA;
@@ -453,8 +453,6 @@ void loadTilesetSettings() {
 	}
 
 	// Init automatically calculated parameters
-	VIEW_W_HALF = VIEW_W / 2;
-	VIEW_H_HALF = VIEW_H / 2;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		if (TILE_W > 0 && TILE_H > 0) {
 			UNITS_PER_PIXEL_X = 2.0f / TILE_W;
@@ -606,12 +604,10 @@ void loadMiscSettings() {
 			// @ATTR required_width|integer|Minimum window/screen resolution width.
 			else if (infile.key == "required_width") {
 				MIN_SCREEN_W = toInt(infile.val);
-				if (SCREEN_W < MIN_SCREEN_W) SCREEN_W = MIN_SCREEN_W;
 			}
 			// @ATTR required_height|integer|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
 				MIN_SCREEN_H = toInt(infile.val);
-				if (SCREEN_H < MIN_SCREEN_H) SCREEN_H = MIN_SCREEN_H;
 			}
 			// @ATTR virtual_height|integer|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
 			else if (infile.key == "virtual_height") {
@@ -621,6 +617,17 @@ void loadMiscSettings() {
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+
+	// prevent the window from being too small
+	if (SCREEN_W < MIN_SCREEN_W) SCREEN_W = MIN_SCREEN_W;
+	if (SCREEN_H < MIN_SCREEN_H) SCREEN_H = MIN_SCREEN_H;
+
+	// set the default virtual height if it's not defined
+	if (VIEW_H == 0) {
+		logError("Settings: virtual_height is undefined. Setting it to %d.", MIN_SCREEN_H);
+		VIEW_H = MIN_SCREEN_H;
+		VIEW_H_HALF = VIEW_H / 2;
 	}
 
 	// @CLASS Settings: Gameplay|Description of engine/gameplay.txt
@@ -862,10 +869,6 @@ bool loadDefaults() {
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
-
-	// Init automatically calculated parameters
-	VIEW_W_HALF = VIEW_W / 2;
-	VIEW_H_HALF = VIEW_H / 2;
 
 	loadAndroidDefaults();
 
