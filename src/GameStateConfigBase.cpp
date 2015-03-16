@@ -291,7 +291,7 @@ bool GameStateConfigBase::parseStub(FileParser &infile) {
 	if (infile.key == "fullscreen");
 	else if (infile.key == "mouse_move");
 	else if (infile.key == "hwsurface");
-	else if (infile.key == "doublebuf");
+	else if (infile.key == "vsync");
 	else if (infile.key == "enable_joystick");
 	else if (infile.key == "change_gamma");
 	else if (infile.key == "mouse_aim");

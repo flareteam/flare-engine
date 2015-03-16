@@ -8,7 +8,7 @@ listbox_scrollbar_offset=2
 [video]
 fullscreen=224,40,256,32
 hwsurface=224,72,256,64
-doublebuf=224,104,256,96
+vsync=224,104,256,96
 texture_filter=224,136,256,128
 hws_note=288,72
 dbuf_note=288,104

@@ -84,8 +84,8 @@ private:
 	WidgetLabel         * fullscreen_lb;
 	WidgetCheckBox      * hwsurface_cb;
 	WidgetLabel         * hwsurface_lb;
-	WidgetCheckBox      * doublebuf_cb;
-	WidgetLabel         * doublebuf_lb;
+	WidgetCheckBox      * vsync_cb;
+	WidgetLabel         * vsync_lb;
 	WidgetCheckBox      * texture_filter_cb;
 	WidgetLabel         * texture_filter_lb;
 	WidgetCheckBox      * change_gamma_cb;

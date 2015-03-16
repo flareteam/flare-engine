@@ -160,7 +160,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 
 	fullscreen = FULLSCREEN;
 	hwsurface = HWSURFACE;
-	doublebuf = DOUBLEBUF;
+	vsync = VSYNC;
 	texture_filter = TEXTURE_FILTER;
 
 	min_screen.x = MIN_SCREEN_W;
@@ -168,7 +168,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 }
 
 int SDLHardwareRenderDevice::createContext() {
-	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || doublebuf != DOUBLEBUF || texture_filter != TEXTURE_FILTER);
+	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
 
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
@@ -202,9 +202,9 @@ int SDLHardwareRenderDevice::createContext() {
 	}
 	else {
 		r_flags = SDL_RENDERER_SOFTWARE | SDL_RENDERER_TARGETTEXTURE;
-		DOUBLEBUF = false; // can't have software mode & vsync at the same time
+		VSYNC = false; // can't have software mode & vsync at the same time
 	}
-	if (DOUBLEBUF) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
+	if (VSYNC) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
 	if (settings_changed || !is_initialized) {
 		if (is_initialized) {
@@ -241,13 +241,13 @@ int SDLHardwareRenderDevice::createContext() {
 			// try previous setting first
 			FULLSCREEN = fullscreen;
 			HWSURFACE = hwsurface;
-			DOUBLEBUF = doublebuf;
+			VSYNC = vsync;
 			TEXTURE_FILTER = texture_filter;
 			if (createContext() == -1) {
 				// last resort, try turning everything off
 				FULLSCREEN = false;
 				HWSURFACE = false;
-				DOUBLEBUF = false;
+				VSYNC = false;
 				TEXTURE_FILTER = false;
 				return createContext();
 			}
@@ -258,7 +258,7 @@ int SDLHardwareRenderDevice::createContext() {
 		else {
 			fullscreen = FULLSCREEN;
 			hwsurface = HWSURFACE;
-			doublebuf = DOUBLEBUF;
+			vsync = VSYNC;
 			texture_filter = TEXTURE_FILTER;
 			is_initialized = true;
 		}

@@ -60,8 +60,8 @@ ConfigEntry config[] = {
 	{ "sound_volume",     &typeid(SOUND_VOLUME),    "128", &SOUND_VOLUME,    NULL},
 	{ "combat_text",      &typeid(COMBAT_TEXT),     "0",   &COMBAT_TEXT,     "display floating damage text. 1 enable, 0 disable."},
 	{ "mouse_move",       &typeid(MOUSE_MOVE),      "0",   &MOUSE_MOVE,      "use mouse to move (experimental). 1 enable, 0 disable."},
-	{ "hwsurface",        &typeid(HWSURFACE),       "1",   &HWSURFACE,       "hardware surfaces, double buffering. Try disabling for performance. 1 enable, 0 disable."},
-	{ "doublebuf",        &typeid(DOUBLEBUF),       "1",   &DOUBLEBUF,       NULL},
+	{ "hwsurface",        &typeid(HWSURFACE),       "1",   &HWSURFACE,       "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
+	{ "vsync",            &typeid(VSYNC),           "1",   &VSYNC,           NULL},
 	{ "texture_filter",   &typeid(TEXTURE_FILTER),  "1",   &TEXTURE_FILTER,  "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"},
 	{ "enable_joystick",  &typeid(ENABLE_JOYSTICK), "0",   &ENABLE_JOYSTICK, "joystick settings."},
 	{ "joystick_device",  &typeid(JOYSTICK_DEVICE), "0",   &JOYSTICK_DEVICE, NULL},
@@ -120,7 +120,7 @@ short MIN_SCREEN_W = 640;
 short MIN_SCREEN_H = 480;
 unsigned short SCREEN_W = 640;
 unsigned short SCREEN_H = 480;
-bool DOUBLEBUF;
+bool VSYNC;
 bool HWSURFACE;
 bool TEXTURE_FILTER;
 bool CHANGE_GAMMA;

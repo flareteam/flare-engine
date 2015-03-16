@@ -215,7 +215,7 @@ protected:
 
 	bool fullscreen;
 	bool hwsurface;
-	bool doublebuf;
+	bool vsync;
 	bool texture_filter;
 	Point min_screen;
 
