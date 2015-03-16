@@ -93,7 +93,7 @@ public:
 private:
 	void drawLine(int x0, int y0, int x1, int y1, Uint32 color);
 
-	SDL_Window *screen;
+	SDL_Window *window;
 	SDL_Renderer *renderer;
 	SDL_Surface* titlebar_icon;
 	char* title;

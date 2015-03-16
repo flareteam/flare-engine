@@ -259,7 +259,6 @@ int SDLSoftwareRenderDevice::createContext() {
 			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
 			// setting minimum size might move the window, so set position again
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-
 		}
 
 		bool window_created = window != NULL && renderer != NULL && screen != NULL && texture != NULL;
@@ -267,6 +266,7 @@ int SDLSoftwareRenderDevice::createContext() {
 		if (!window_created && !is_initialized) {
 			// If this is the first attempt and it failed we are not
 			// getting anywhere.
+			logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
 			SDL_Quit();
 			exit(1);
 		}
@@ -298,8 +298,6 @@ int SDLSoftwareRenderDevice::createContext() {
 	}
 
 	if (is_initialized) {
-		windowResize();
-
 		// update minimum window size if it has changed
 		if (min_screen.x != MIN_SCREEN_W || min_screen.y != MIN_SCREEN_H) {
 			min_screen.x = MIN_SCREEN_W;
@@ -307,6 +305,8 @@ int SDLSoftwareRenderDevice::createContext() {
 			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		}
+
+		windowResize();
 
 		// update title bar text and icon
 		updateTitleBar();
