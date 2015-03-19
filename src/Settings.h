@@ -101,6 +101,7 @@ extern short MIN_SCREEN_H;
 extern bool VSYNC;
 extern bool HWSURFACE;
 extern bool TEXTURE_FILTER;
+extern bool IGNORE_TEXTURE_FILTER;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
 

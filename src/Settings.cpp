@@ -123,6 +123,7 @@ unsigned short SCREEN_H = 480;
 bool VSYNC;
 bool HWSURFACE;
 bool TEXTURE_FILTER;
+bool IGNORE_TEXTURE_FILTER = false;
 bool CHANGE_GAMMA;
 float GAMMA;
 
@@ -491,6 +492,7 @@ void loadMiscSettings() {
 	HERO_CLASSES.clear();
 	FRAME_W = 0;
 	FRAME_H = 0;
+	IGNORE_TEXTURE_FILTER = false;
 	ICON_SIZE = 0;
 	AUTOPICKUP_CURRENCY = false;
 	MAX_ABSORB = 90;
@@ -615,6 +617,10 @@ void loadMiscSettings() {
 			else if (infile.key == "virtual_height") {
 				VIEW_H = toInt(infile.val);
 				VIEW_H_HALF = VIEW_H / 2;
+			}
+			// @ATTR ignore_texture_filter|boolean|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
+			else if (infile.key == "ignore_texture_filter") {
+				IGNORE_TEXTURE_FILTER = toBool(infile.val);
 			}
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}

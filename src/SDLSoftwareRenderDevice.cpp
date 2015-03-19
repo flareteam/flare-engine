@@ -248,7 +248,7 @@ int SDLSoftwareRenderDevice::createContext() {
 		if (window) {
 			renderer = SDL_CreateRenderer(window, -1, r_flags);
 			if (renderer) {
-				if (TEXTURE_FILTER)
+				if (TEXTURE_FILTER && !IGNORE_TEXTURE_FILTER)
 					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 				else
 					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
