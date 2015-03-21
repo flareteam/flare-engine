@@ -610,6 +610,11 @@ void BehaviorStandard::updateState() {
 				//allow free movement over the corpse
 				mapr->collider.unblock(e->stats.pos.x, e->stats.pos.y);
 
+				// remove corpses that land on blocked tiles, such as water or pits
+				if (!mapr->collider.is_valid_position(e->stats.pos.x, e->stats.pos.y, MOVEMENT_NORMAL, false)) {
+					e->stats.corpse_ticks = 0;
+				}
+
 				// prevent "jumping" when rendering
 				alignFPoint(&e->stats.pos);
 			}
