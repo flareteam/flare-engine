@@ -76,6 +76,9 @@ void Menu::render() {
  * topleft, top, topright, left, center, right, bottomleft, bottom, bottomright
  */
 void Menu::align() {
+	window_area.x = window_area_base.x;
+	window_area.y = window_area_base.y;
+
 	alignToScreenEdge(alignment, &window_area);
 
 	if (background) {
@@ -89,6 +92,11 @@ void Menu::align() {
 	}
 }
 
+void Menu::setWindowPos(int x, int y) {
+	window_area_base.x = x;
+	window_area_base.y = y;
+}
+
 /**
  * When reading menu config files, we use this to set common variables
  */
@@ -100,10 +108,11 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 		// @ATTR pos|x (integer), y (integer), w (integer), h (integer)|Menu position and dimensions
 		value = value + ',';
 		window_area = toRect(value);
+		setWindowPos(window_area.x, window_area.y);
 	}
 	else if (key == "align") {
 		// @ATTR align|alignment|Position relative to screen edges
-		alignment = value;
+		alignment = parse_alignment(value);
 	}
 	else if (key == "soundfx_open") {
 		// @ATTR soundfx_open|string|Filename of a sound to play when opening this menu.

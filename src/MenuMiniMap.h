@@ -52,6 +52,7 @@ private:
 public:
 	MenuMiniMap();
 	~MenuMiniMap();
+	void align();
 
 	void render();
 	void render(FPoint hero_pos);

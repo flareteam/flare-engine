@@ -26,8 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class MenuConfirm : public Menu {
 protected:
-	void alignElements();
-
 	WidgetButton *buttonConfirm;
 	WidgetButton *buttonClose;
 	WidgetLabel label;
@@ -41,6 +39,7 @@ public:
 	~MenuConfirm();
 
 	void logic();
+	void align();
 	virtual void render();
 
 	bool confirmClicked;

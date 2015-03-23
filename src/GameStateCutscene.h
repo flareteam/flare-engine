@@ -46,22 +46,25 @@ public:
 
 class Scene {
 private:
-	Image *loadImage(std::string filename, bool scale_graphics);
-
 	int frame_counter;
 	int pause_frames;
 	std::string caption;
 	Point caption_size;
 	Sprite *art;
-	Rect art_dest;
+	Sprite *art_scaled;
+	Point art_size;
 	SoundManager::SoundID sid;
 	WidgetScrollBox *caption_box;
 	bool done;
+	FPoint caption_margins;
+	bool scale_graphics;
+	bool scale_to_width; // scale to height if false
 
 public:
-	Scene();
+	Scene(const FPoint& _caption_margins, bool _scale_graphics);
 	~Scene();
-	bool logic(FPoint *caption_margins, bool scale_graphics);
+	void refreshWidgets();
+	bool logic();
 	void render();
 
 	std::queue<SceneComponent> components;
@@ -76,7 +79,7 @@ private:
 	bool scale_graphics;
 	FPoint caption_margins;
 
-	std::queue<Scene> scenes;
+	std::queue<Scene*> scenes;
 
 public:
 	GameStateCutscene(GameState *game_state);

@@ -43,10 +43,11 @@ MenuDevHUD::MenuDevHUD() : Menu() {
 	}
 
 	original_area = window_area;
-	alignElements();
+
+	align();
 }
 
-void MenuDevHUD::alignElements() {
+void MenuDevHUD::align() {
 	std::stringstream ss;
 	int line_width = 0;
 	int line_height = font->getLineHeight();
@@ -71,12 +72,12 @@ void MenuDevHUD::alignElements() {
 	window_area.w = line_width;
 	window_area.h = line_height*3;
 
-	align();
+	Menu::align();
 }
 
 void MenuDevHUD::logic() {
 	if (visible) {
-		alignElements();
+		align();
 	}
 }
 

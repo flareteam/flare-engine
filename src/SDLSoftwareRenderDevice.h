@@ -63,7 +63,7 @@ class SDLSoftwareRenderDevice : public RenderDevice {
 public:
 
 	SDLSoftwareRenderDevice();
-	int createContext(int width, int height);
+	int createContext();
 	Rect getContextSize();
 
 	virtual int render(Renderable& r, Rect dest);
@@ -79,10 +79,10 @@ public:
 	void destroyContext();
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	void windowResize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();
-	void listModes(std::vector<Rect> &modes);
 	void freeImage(Image *image);
 
 	Image* loadImage(std::string filename,
@@ -93,11 +93,9 @@ private:
 	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
 
 	SDL_Surface* screen;
-#if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Texture* texture;
-#endif
 	SDL_Surface* titlebar_icon;
 	char* title;
 };

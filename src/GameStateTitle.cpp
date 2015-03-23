@@ -34,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 GameStateTitle::GameStateTitle()
 	: GameState()
 	, logo(NULL)
+	, align_logo(ALIGN_CENTER)
 	, exit_game(false)
 	, load_game(false)
 {
@@ -50,45 +51,43 @@ GameStateTitle::GameStateTitle()
 		while (infile.next()) {
 			// @ATTR logo|filename (string), x (integer), y (integer), align (alignment)|Filename and position of the main logo image.
 			if (infile.key == "logo") {
-				Image *graphics;
-				graphics = render_device->loadImage(popFirstString(infile.val), "");
+				Image *graphics = render_device->loadImage(popFirstString(infile.val), "");
 				if (graphics) {
-					Rect r;
- 				        logo = graphics->createSprite();
-
-					r.x = popFirstInt(infile.val);
-					r.y = popFirstInt(infile.val);
-					r.w = logo->getGraphicsWidth();
-					r.h = logo->getGraphicsHeight();
-					alignToScreenEdge(popFirstString(infile.val), &r);
-					logo->setDestX(r.x);
-					logo->setDestY(r.y);
+ 				    logo = graphics->createSprite();
 					graphics->unref();
+
+					pos_logo.x = popFirstInt(infile.val);
+					pos_logo.y = popFirstInt(infile.val);
+					align_logo = parse_alignment(popFirstString(infile.val));
 				}
 			}
 			// @ATTR play_pos|x (integer), y (integer), align (alignment)|Position of the "Play Game" button.
 			else if (infile.key == "play_pos") {
-				button_play->pos.x = popFirstInt(infile.val);
-				button_play->pos.y = popFirstInt(infile.val);
-				alignToScreenEdge(popFirstString(infile.val), &(button_play->pos));
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_play->setBasePos(x, y, a);
 			}
 			// @ATTR config_pos|x (integer), y (integer), align (alignment)|Position of the "Configuration" button.
 			else if (infile.key == "config_pos") {
-				button_cfg->pos.x = popFirstInt(infile.val);
-				button_cfg->pos.y = popFirstInt(infile.val);
-				alignToScreenEdge(popFirstString(infile.val), &(button_cfg->pos));
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_cfg->setBasePos(x, y, a);
 			}
 			// @ATTR credits_pos|x (integer), y (integer), align (alignment)|Position of the "Credits" button.
 			else if (infile.key == "credits_pos") {
-				button_credits->pos.x = popFirstInt(infile.val);
-				button_credits->pos.y = popFirstInt(infile.val);
-				alignToScreenEdge(popFirstString(infile.val), &(button_credits->pos));
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_credits->setBasePos(x, y, a);
 			}
 			// @ATTR exit_pos|x (integer), y (integer), align (alignment)|Position of the "Exit Game" button.
 			else if (infile.key == "exit_pos") {
-				button_exit->pos.x = popFirstInt(infile.val);
-				button_exit->pos.y = popFirstInt(infile.val);
-				alignToScreenEdge(popFirstString(infile.val), &(button_exit->pos));
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_exit->setBasePos(x, y, a);
 			}
 			else {
 				infile.error("GameStateTitle: '%s' is not a valid key.", infile.key.c_str());
@@ -115,16 +114,21 @@ GameStateTitle::GameStateTitle()
 
 	// set up labels
 	label_version = new WidgetLabel();
-	label_version->set(VIEW_W, 0, JUSTIFY_RIGHT, VALIGN_TOP, getVersionString(), font->getColor("menu_normal"));
+	label_version->set(0, 0, JUSTIFY_RIGHT, VALIGN_TOP, getVersionString(), font->getColor("menu_normal"));
 
 	// Setup tab order
 	tablist.add(button_play);
 	tablist.add(button_cfg);
 	tablist.add(button_credits);
 	tablist.add(button_exit);
+
+	refreshWidgets();
 }
 
 void GameStateTitle::logic() {
+	if (inpt->window_resized)
+		refreshWidgets();
+
 	button_play->enabled = ENABLE_PLAYGAME;
 
 	snd->logic(FPoint(0,0));
@@ -164,6 +168,26 @@ void GameStateTitle::logic() {
 	else if (button_exit->checkClick()) {
 		exitRequested = true;
 	}
+}
+
+void GameStateTitle::refreshWidgets() {
+	if (logo) {
+		Rect r;
+		r.x = pos_logo.x;
+		r.y = pos_logo.y;
+		r.w = logo->getGraphicsWidth();
+		r.h = logo->getGraphicsHeight();
+		alignToScreenEdge(align_logo, &r);
+		logo->setDestX(r.x);
+		logo->setDestY(r.y);
+	}
+
+	button_play->setPos();
+	button_cfg->setPos();
+	button_credits->setPos();
+	button_exit->setPos();
+
+	label_version->setPos(VIEW_W, 0);
 }
 
 void GameStateTitle::render() {

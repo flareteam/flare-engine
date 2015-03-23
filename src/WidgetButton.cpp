@@ -49,6 +49,11 @@ void WidgetButton::activate() {
 	pressed = true;
 }
 
+void WidgetButton::setPos(int offset_x, int offset_y) {
+	Widget::setPos(offset_x, offset_y);
+	refresh();
+}
+
 void WidgetButton::loadArt() {
 	// load button images
 	Image *graphics;

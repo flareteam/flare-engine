@@ -38,10 +38,11 @@ public:
 	void setBackgroundClip(Rect &clip);
 	virtual void align();
 	virtual void render();
+	virtual void setWindowPos(int x, int y);
 
 	bool visible;
 	Rect window_area;
-	std::string alignment;
+	ALIGNMENT alignment;
 
 	virtual bool parseMenuKey(const std::string &key, const std::string &val);
 
@@ -50,7 +51,7 @@ public:
 
 private:
 	Sprite *background;
-
+	Point window_area_base;
 };
 
 #endif

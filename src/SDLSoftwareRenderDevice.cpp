@@ -188,32 +188,29 @@ Uint32 SDLSoftwareImage::readPixel(int x, int y) {
 
 SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	: screen(NULL)
-#if SDL_VERSION_ATLEAST(2,0,0)
 	, window(NULL)
 	, renderer(NULL)
 	, texture(NULL)
-#endif
 	, titlebar_icon(NULL)
 	, title(NULL) {
-#if SDL_VERSION_ATLEAST(2,0,0)
 	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)");
-#else
-	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 1.2)");
-#endif
+
+	fullscreen = FULLSCREEN;
+	hwsurface = HWSURFACE;
+	vsync = VSYNC;
+	texture_filter = TEXTURE_FILTER;
+
+	min_screen.x = MIN_SCREEN_W;
+	min_screen.y = MIN_SCREEN_H;
 }
 
-int SDLSoftwareRenderDevice::createContext(int width, int height) {
-	if (is_initialized) {
-		destroyContext();
-	}
+int SDLSoftwareRenderDevice::createContext() {
+	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
 
-	bool window_created = false;
-
-#if SDL_VERSION_ATLEAST(2,0,0)
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
-	int window_w = width;
-	int window_h = height;
+	int window_w = SCREEN_W;
+	int window_h = SCREEN_H;
 
 	if (FULLSCREEN) {
 		w_flags = w_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -225,61 +222,101 @@ int SDLSoftwareRenderDevice::createContext(int width, int height) {
 			window_h = desktop.h;
 		}
 	}
+	else if (fullscreen && is_initialized) {
+		// if the game was previously in fullscreen, resize the window when returning to windowed mode
+		window_w = MIN_SCREEN_W;
+		window_h = MIN_SCREEN_H;
+	}
+
+	w_flags = w_flags | SDL_WINDOW_RESIZABLE;
+
 	if (HWSURFACE) {
 		r_flags = r_flags | SDL_RENDERER_ACCELERATED;
 	}
 	else {
 		r_flags = r_flags | SDL_RENDERER_SOFTWARE;
-		DOUBLEBUF = false; // can't have software mode & vsync at the same time
+		VSYNC = false; // can't have software mode & vsync at the same time
 	}
-	if (DOUBLEBUF) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
+	if (VSYNC) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
-	window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
-	if (window)
-		renderer = SDL_CreateRenderer(window, -1, r_flags);
-
-	if (renderer) {
-		if (FULLSCREEN && (window_w != width || window_h != height)) {
-			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-			SDL_RenderSetLogicalSize(renderer, width, height);
+	if (settings_changed || !is_initialized) {
+		if (is_initialized) {
+			destroyContext();
 		}
-		Uint32 rmask, gmask, bmask, amask;
-		int bpp = (int)BITS_PER_PIXEL;
-		SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
-		screen = SDL_CreateRGBSurface(0, width, height, bpp, rmask, gmask, bmask, amask);
-		texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
-	}
 
-	window_created = window != NULL && renderer != NULL && screen != NULL && texture != NULL;
-#else
-	Uint32 flags = 0;
+		window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
+		if (window) {
+			renderer = SDL_CreateRenderer(window, -1, r_flags);
+			if (renderer) {
+				if (TEXTURE_FILTER && !IGNORE_TEXTURE_FILTER)
+					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+				else
+					SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
 
-	if (FULLSCREEN) flags = flags | SDL_FULLSCREEN;
-	if (DOUBLEBUF) flags = flags | SDL_DOUBLEBUF;
-	if (HWSURFACE)
-		flags = flags | SDL_HWSURFACE | SDL_HWACCEL;
-	else
-		flags = flags | SDL_SWSURFACE;
+				windowResize();
+			}
 
-	screen = SDL_SetVideoMode (width, height, 0, flags);
+			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
+			// setting minimum size might move the window, so set position again
+			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+		}
 
-	window_created = screen != NULL;
-#endif
-	if (!window_created && !is_initialized) {
-		// If this is the first attempt and it failed we are not
-		// getting anywhere.
-		SDL_Quit();
-		exit(1);
-	}
-	else {
-		is_initialized = true;
+		bool window_created = window != NULL && renderer != NULL && screen != NULL && texture != NULL;
+
+		if (!window_created && !is_initialized) {
+			// If this is the first attempt and it failed we are not
+			// getting anywhere.
+			logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
+			SDL_Quit();
+			exit(1);
+		}
+		else if (!window_created) {
+			// try previous setting first
+			FULLSCREEN = fullscreen;
+			HWSURFACE = hwsurface;
+			VSYNC = vsync;
+			TEXTURE_FILTER = texture_filter;
+			if (createContext() == -1) {
+				// last resort, try turning everything off
+				FULLSCREEN = false;
+				HWSURFACE = false;
+				VSYNC = false;
+				TEXTURE_FILTER = false;
+				return createContext();
+			}
+			else {
+				return 0;
+			}
+		}
+		else {
+			fullscreen = FULLSCREEN;
+			hwsurface = HWSURFACE;
+			vsync = VSYNC;
+			texture_filter = TEXTURE_FILTER;
+			is_initialized = true;
+		}
 	}
 
 	if (is_initialized) {
+		// update minimum window size if it has changed
+		if (min_screen.x != MIN_SCREEN_W || min_screen.y != MIN_SCREEN_H) {
+			min_screen.x = MIN_SCREEN_W;
+			min_screen.y = MIN_SCREEN_H;
+			SDL_SetWindowMinimumSize(window, MIN_SCREEN_W, MIN_SCREEN_H);
+			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+		}
+
+		windowResize();
+
+		// update title bar text and icon
 		updateTitleBar();
+
+		// load persistent resources
+		SharedResources::loadIcons();
+		curs = new CursorManager();
 	}
 
-	return (window_created ? 0 : -1);
+	return (is_initialized ? 0 : -1);
 }
 
 Rect SDLSoftwareRenderDevice::getContextSize() {
@@ -463,14 +500,12 @@ void SDLSoftwareRenderDevice::blankScreen() {
 }
 
 void SDLSoftwareRenderDevice::commitFrame() {
-#if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
-#else
-	SDL_Flip(screen);
-#endif
+	inpt->window_resized = false;
+
 	return;
 }
 
@@ -487,7 +522,6 @@ void SDLSoftwareRenderDevice::destroyContext() {
 		SDL_FreeSurface(screen);
 		screen = NULL;
 	}
-#if SDL_VERSION_ATLEAST(2,0,0)
 	if (texture) {
 		SDL_DestroyTexture(texture);
 		texture = NULL;
@@ -500,7 +534,6 @@ void SDLSoftwareRenderDevice::destroyContext() {
 		SDL_DestroyWindow(window);
 		window = NULL;
 	}
-#endif
 
 	return;
 }
@@ -527,14 +560,7 @@ Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 	Uint32 rmask, gmask, bmask, amask;
 	setSDL_RGBA(&rmask, &gmask, &bmask, &amask);
 
-#if SDL_VERSION_ATLEAST(2,0,0)
-		image->surface = SDL_CreateRGBSurface(0, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-#else
-	if (HWSURFACE)
-		image->surface = SDL_CreateRGBSurface(SDL_HWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-	else
-		image->surface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCALPHA, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
-#endif
+	image->surface = SDL_CreateRGBSurface(0, width, height, BITS_PER_PIXEL, rmask, gmask, bmask, amask);
 
 	if(image->surface == NULL) {
 		logError("SDLSoftwareRenderDevice: CreateRGBSurface failed: %s", SDL_GetError());
@@ -544,108 +570,30 @@ Image *SDLSoftwareRenderDevice::createImage(int width, int height) {
 
 	// optimize
 	SDL_Surface *cleanup = image->surface;
-#if SDL_VERSION_ATLEAST(2,0,0)
 	image->surface = SDL_ConvertSurfaceFormat(cleanup, SDL_PIXELFORMAT_ARGB8888, 0);
-#else
-	image->surface = SDL_DisplayFormatAlpha(cleanup);
-#endif
 	SDL_FreeSurface(cleanup);
 
 	return image;
 }
 
 void SDLSoftwareRenderDevice::setGamma(float g) {
-#if SDL_VERSION_ATLEAST(2,0,0)
 	Uint16 ramp[256];
 	SDL_CalculateGammaRamp(g, ramp);
 	SDL_SetWindowGammaRamp(window, ramp, ramp, ramp);
-#else
-	SDL_SetGamma(g, g, g);
-#endif
 }
 
 void SDLSoftwareRenderDevice::updateTitleBar() {
 	if (title) free(title);
 	if (titlebar_icon) SDL_FreeSurface(titlebar_icon);
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 	if (!window) return;
-#endif
 
 	title = strdup(msg->get(WINDOW_TITLE).c_str());
 	titlebar_icon = IMG_Load(mods->locate("images/logo/icon.png").c_str());
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 	if (title) SDL_SetWindowTitle(window, title);
 	if (titlebar_icon) SDL_SetWindowIcon(window, titlebar_icon);
-#else
-	if (title) SDL_WM_SetCaption(title, title);
-	if (titlebar_icon) SDL_WM_SetIcon(titlebar_icon, NULL);
-#endif
 }
-
-void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
-#if SDL_VERSION_ATLEAST(2,0,0)
-	int mode_count = SDL_GetNumDisplayModes(0);
-
-	for (int i=0; i<mode_count; i++) {
-		SDL_DisplayMode display_mode;
-		SDL_GetDisplayMode(0, i, &display_mode);
-
-		if (display_mode.w == 0 || display_mode.h == 0) continue;
-
-		Rect mode_rect;
-		mode_rect.w = display_mode.w;
-		mode_rect.h = display_mode.h;
-		modes.push_back(mode_rect);
-
-		if (display_mode.w < MIN_VIEW_W || display_mode.h < MIN_VIEW_H) {
-			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
-			modes.pop_back();
-		}
-		else {
-			// check previous resolutions for duplicates. If one is found, drop the one we just added
-			for (unsigned j=0; j<modes.size()-1; ++j) {
-				if (modes[j].w == display_mode.w && modes[j].h == display_mode.h) {
-					modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
-#else
-	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
-
-	// Check if there are any modes available
-	if (detect_modes == (SDL_Rect**)0) {
-		logError("SDLSoftwareRenderDevice: No modes available!");
-		return;
-	}
-
-	// Check if our resolution is restricted
-	if (detect_modes == (SDL_Rect**)-1) {
-		logError("SDLSoftwareRenderDevice: All resolutions available.");
-	}
-
-	for (unsigned i=0; detect_modes[i]; ++i) {
-		modes.push_back(Rect(*detect_modes[i]));
-		if (detect_modes[i]->w < MIN_VIEW_W || detect_modes[i]->h < MIN_VIEW_H) {
-			// make sure the resolution fits in the constraints of MIN_VIEW_W and MIN_VIEW_H
-			modes.pop_back();
-		}
-		else {
-			// check previous resolutions for duplicates. If one is found, drop the one we just added
-			for (unsigned j=0; j<modes.size()-1; ++j) {
-				if (modes[j].w == detect_modes[i]->w && modes[j].h == detect_modes[i]->h) {
-					modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
-#endif
-}
-
 
 Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
 	// lookup image in cache
@@ -667,11 +615,7 @@ Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string erro
 	}
 	else {
 		image = new SDLSoftwareImage(this);
-#if SDL_VERSION_ATLEAST(2,0,0)
 		image->surface = SDL_ConvertSurfaceFormat(cleanup, SDL_PIXELFORMAT_ARGB8888, 0);
-#else
-		image->surface = SDL_DisplayFormatAlpha(cleanup);
-#endif
 		SDL_FreeSurface(cleanup);
 	}
 
@@ -701,5 +645,33 @@ void SDLSoftwareRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *
 	*bmask = 0x00ff0000;
 	*amask = 0xff000000;
 #endif
+}
+
+void SDLSoftwareRenderDevice::windowResize() {
+	int w,h;
+	SDL_GetWindowSize(window, &w, &h);
+	SCREEN_W = w;
+	SCREEN_H = h;
+
+	float scale = (float)VIEW_H / (float)SCREEN_H;
+	VIEW_W = (int)((float)SCREEN_W * scale);
+
+	// letterbox if too tall
+	if (VIEW_W < MIN_SCREEN_W) {
+		VIEW_W = MIN_SCREEN_W;
+	}
+
+	VIEW_W_HALF = VIEW_W/2;
+
+	SDL_RenderSetLogicalSize(renderer, VIEW_W, VIEW_H);
+
+	if (texture) SDL_DestroyTexture(texture);
+	if (screen) SDL_FreeSurface(screen);
+
+	Uint32 rmask, gmask, bmask, amask;
+	int bpp = (int)BITS_PER_PIXEL;
+	SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
+	screen = SDL_CreateRGBSurface(0, VIEW_W, VIEW_H, bpp, rmask, gmask, bmask, amask);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);
 }
 

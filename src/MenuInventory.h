@@ -40,7 +40,6 @@ class MenuInventory : public Menu {
 private:
 	StatBlock *stats;
 
-	void alignElements();
 	void loadGraphics();
 	void updateEquipment(int slot);
 
@@ -52,7 +51,6 @@ private:
 	int MAX_CARRIED;
 
 	// label and widget positions
-	Point close_pos;
 	LabelInfo title;
 	LabelInfo currency_lbl;
 	Rect help_pos;
@@ -60,10 +58,14 @@ private:
 	int carried_rows;
 	Color color_normal;
 	Color color_high;
+	std::vector<Point> equipped_pos;
+	Point carried_pos;
 
 public:
 	MenuInventory(StatBlock *stats);
 	~MenuInventory();
+	void align();
+
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point position);

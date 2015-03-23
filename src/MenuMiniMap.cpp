@@ -71,8 +71,14 @@ MenuMiniMap::MenuMiniMap()
 
 	// label for map name
 	label = new WidgetLabel();
+	label->setBasePos(text_pos.x, text_pos.y);
 
 	align();
+}
+
+void MenuMiniMap::align() {
+	Menu::align();
+	label->setPos(window_area.x, window_area.y);
 }
 
 void MenuMiniMap::getMapTitle(std::string map_title) {

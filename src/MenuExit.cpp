@@ -57,10 +57,11 @@ MenuExit::MenuExit() : Menu() {
 	tablist.add(buttonClose);
 
 	align();
-	alignElements();
 }
 
-void MenuExit::alignElements() {
+void MenuExit::align() {
+	Menu::align();
+
 	buttonExit->pos.x = window_area.x + window_area.w/2 - buttonExit->pos.w/2;
 	buttonExit->pos.y = window_area.y + window_area.h/2;
 	buttonExit->refresh();

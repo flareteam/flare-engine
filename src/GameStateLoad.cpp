@@ -66,8 +66,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	confirm = new MenuConfirm(msg->get("Delete Save"), msg->get("Delete this save?"));
 	button_exit = new WidgetButton();
 	button_exit->label = msg->get("Exit to Title");
-	button_exit->pos.x = VIEW_W_HALF - button_exit->pos.w/2;
-	button_exit->pos.y = VIEW_H - button_exit->pos.h;
+	button_exit->setBasePos(0, 0, ALIGN_BOTTOM);
 	button_exit->refresh();
 
 	button_action = new WidgetButton();
@@ -90,19 +89,19 @@ GameStateLoad::GameStateLoad() : GameState()
 		while (infile.next()) {
 			// @ATTR action_button|x (integer), y (integer)|Position of the "New Game"/"Load Game" button.
 			if (infile.key == "action_button") {
-				button_action->pos.x = popFirstInt(infile.val);
-				button_action->pos.y = popFirstInt(infile.val);
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				button_action->setBasePos(x, y);
 			}
 			// @ATTR alternate_button|x (integer), y (integer)|Position of the "Delete Save" button.
 			else if (infile.key == "alternate_button") {
-				button_alternate->pos.x = popFirstInt(infile.val);
-				button_alternate->pos.y = popFirstInt(infile.val);
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				button_alternate->setBasePos(x, y);
 			}
 			// @ATTR portrait|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
 				portrait_dest = toRect(infile.val);
-				portrait_dest.x += (VIEW_W - FRAME_W) / 2;
-				portrait_dest.y += (VIEW_H - FRAME_H) / 2;
 			}
 			// @ATTR gameslot|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the first game slot.
 			else if (infile.key == "gameslot") {
@@ -159,12 +158,8 @@ GameStateLoad::GameStateLoad() : GameState()
 	}
 	if (!found_layer) logError("GameStateLoad: Could not find layers for direction 6");
 
-	button_action->pos.x += (VIEW_W - FRAME_W)/2;
-	button_action->pos.y += (VIEW_H - FRAME_H)/2;
 	button_action->refresh();
 
-	button_alternate->pos.x += (VIEW_W - FRAME_W)/2;
-	button_alternate->pos.y += (VIEW_H - FRAME_H)/2;
 	button_alternate->refresh();
 
 	for (int i=0; i<GAME_SLOT_MAX; i++) {
@@ -212,6 +207,8 @@ GameStateLoad::GameStateLoad() : GameState()
 	stance_ticks_per_frame = std::max(1, (stance_duration / stance_frames));
 
 	color_normal = font->getColor("menu_normal");
+
+	refreshWidgets();
 }
 
 void GameStateLoad::loadGraphics() {
@@ -254,8 +251,6 @@ void GameStateLoad::loadPortrait(int slot) {
 	graphics = render_device->loadImage(stats[slot].gfx_portrait);
 	if (graphics) {
 		portrait = graphics->createSprite();
-		portrait->setDestX(portrait_dest.x);
-		portrait->setDestY(portrait_dest.y);
 		portrait->setClipW(portrait_dest.w);
 		portrait->setClipH(portrait_dest.h);
 		graphics->unref();
@@ -399,6 +394,9 @@ void GameStateLoad::loadPreview(int slot) {
 
 void GameStateLoad::logic() {
 
+	if (inpt->window_resized)
+		refreshWidgets();
+
 	// animate the avatar preview images
 	if (stance_type == PLAY_ONCE && frame_ticker < stance_duration) {
 		current_frame = frame_ticker / stance_ticks_per_frame;
@@ -539,6 +537,29 @@ void GameStateLoad::updateButtons() {
 	}
 	button_action->refresh();
 	button_alternate->refresh();
+
+	refreshWidgets();
+}
+
+void GameStateLoad::refreshWidgets() {
+	button_exit->setPos();
+	button_action->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	button_alternate->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+
+	label_loading->setPos();
+
+	if (portrait) {
+		portrait->setDestX(portrait_dest.x + ((VIEW_W-FRAME_W)/2));
+		portrait->setDestY(portrait_dest.y + ((VIEW_H-FRAME_H)/2));
+	}
+	for (int i=0; i<GAME_SLOT_MAX; i++) {
+		slot_pos[i].x = gameslot_pos.x + (VIEW_W - FRAME_W)/2;
+		slot_pos[i].h = gameslot_pos.h;
+		slot_pos[i].y = gameslot_pos.y + (VIEW_H - FRAME_H)/2 + (i * gameslot_pos.h);
+		slot_pos[i].w = gameslot_pos.w;
+	}
+
+	confirm->align();
 }
 
 void GameStateLoad::render() {

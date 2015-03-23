@@ -72,12 +72,7 @@ public:
 		c.r = r;
 		c.g = g;
 		c.b = b;
-#if SDL_VERSION_ATLEAST(2,0,0)
 		c.a = a;
-#else
-		// Warning: SDL 1.2 only
-		c.unused = a;
-#endif
 		return c;
 	}
 	bool operator ==(const Color &other) {
@@ -87,6 +82,18 @@ public:
 		return !((*this) == other);
 	}
 };
+
+typedef enum {
+	ALIGN_TOPLEFT = 0,
+	ALIGN_TOP = 1,
+	ALIGN_TOPRIGHT = 2,
+	ALIGN_LEFT = 3,
+	ALIGN_CENTER = 4,
+	ALIGN_RIGHT = 5,
+	ALIGN_BOTTOMLEFT = 6,
+	ALIGN_BOTTOM = 7,
+	ALIGN_BOTTOMRIGHT = 8
+}ALIGNMENT;
 
 class Event_Component {
 public:
@@ -145,7 +152,7 @@ bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(Rect r, Point target);
 
 std::string abbreviateKilo(int amount);
-void alignToScreenEdge(std::string alignment, Rect *r);
+void alignToScreenEdge(ALIGNMENT alignment, Rect *r);
 void alignFPoint(FPoint *pos);
 
 void logInfo(const char* format, ...);

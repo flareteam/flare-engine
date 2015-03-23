@@ -107,6 +107,7 @@ private:
 public:
 	GameStatePlay();
 	~GameStatePlay();
+	void refreshWidgets();
 
 	void initialize();
 

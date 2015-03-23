@@ -79,7 +79,7 @@ static void init(const std::string &render_device_name) {
 
 	// Create render Device and Rendering Context.
 	render_device = getRenderDevice(render_device_name);
-	int status = render_device->createContext(VIEW_W, VIEW_H);
+	int status = render_device->createContext();
 
 	if (status == -1) {
 
@@ -296,6 +296,10 @@ int main(int argc, char *argv[]) {
 		srand((unsigned int)time(NULL));
 		init(render_device_name);
 		mainLoop(debug_event);
+
+		if (gswitch)
+			gswitch->saveUserSettings();
+
 		cleanup();
 	}
 

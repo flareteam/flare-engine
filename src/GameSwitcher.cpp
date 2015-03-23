@@ -127,7 +127,9 @@ void GameSwitcher::showFPS(int fps) {
 	if (SHOW_FPS) {
 		if (!label_fps) label_fps = new WidgetLabel();
 		std::string sfps = toString(typeid(fps), &fps) + std::string(" fps");
-		label_fps->set(fps_position.x, fps_position.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
+		Rect pos = fps_position;
+		alignToScreenEdge(fps_corner, &pos);
+		label_fps->set(pos.x, pos.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
 		label_fps->render();
 	}
 }
@@ -142,7 +144,7 @@ void GameSwitcher::loadFPS() {
 			if(infile.key == "position") {
 				fps_position.x = popFirstInt(infile.val);
 				fps_position.y = popFirstInt(infile.val);
-				fps_corner = popFirstString(infile.val);
+				fps_corner = parse_alignment(popFirstString(infile.val));
 			}
 			// @ATTR color|r (integer), g (integer), b (integer)|Color of the fps counter text.
 			else if(infile.key == "color") {
@@ -159,8 +161,6 @@ void GameSwitcher::loadFPS() {
 	font->setFont("font_regular");
 	fps_position.w = font->calc_width("00 fps");
 	fps_position.h = font->getLineHeight();
-
-	alignToScreenEdge(fps_corner, &fps_position);
 
 	// Delete the label object if it exists (we'll recreate this with showFPS())
 	if (label_fps) {
@@ -185,6 +185,11 @@ bool GameSwitcher::isPaused() {
 void GameSwitcher::render() {
 	currentState->render();
 	curs->render();
+}
+
+void GameSwitcher::saveUserSettings() {
+	if (currentState && currentState->save_settings_on_exit)
+		saveSettings();
 }
 
 GameSwitcher::~GameSwitcher() {

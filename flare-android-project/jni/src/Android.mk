@@ -41,7 +41,6 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/GameStateTitle.cpp \
 	../../../src/GameStateLoad.cpp \
 	../../../src/GameStatePlay.cpp \
-	../../../src/GameStateResolution.cpp \
 	../../../src/GameStateNew.cpp \
 	../../../src/GameSwitcher.cpp \
 	../../../src/GetText.cpp \

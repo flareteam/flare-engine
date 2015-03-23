@@ -23,11 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Widget::Widget()
 	: render_to_alpha(false)
 	, in_focus(false)
-	, focusable(false)
-	, pos() {
-	pos.x = pos.y = pos.w = pos.h = 0;
-	local_frame.x = local_frame.y = local_frame.w = local_frame.h = 0;
-	local_offset.x = local_offset.y = 0;
+	, focusable(false) {
 }
 
 Widget::~Widget() {
@@ -49,6 +45,18 @@ bool Widget::getNext() {
 
 bool Widget::getPrev() {
 	return false;
+}
+
+void Widget::setBasePos(int x, int y, ALIGNMENT a) {
+	pos_base.x = x;
+	pos_base.y = y;
+	alignment = a;
+}
+
+void Widget::setPos(int offset_x, int offset_y) {
+	pos.x = pos_base.x + offset_x;
+	pos.y = pos_base.y + offset_y;
+	alignToScreenEdge(alignment, &pos);
 }
 
 TabList::TabList(ScrollType _scrolltype, int _LEFT, int _RIGHT, int _ACTIVATE)

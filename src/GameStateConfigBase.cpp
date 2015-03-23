@@ -89,6 +89,9 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, active_tab(0)
 {
 
+	// don't save settings if we close the game while in this menu
+	save_settings_on_exit = false;
+
 	Image *graphics;
 	graphics = render_device->loadImage("images/menus/config.png");
 	if (graphics) {
@@ -97,22 +100,17 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	}
 
 	tab_control = new WidgetTabControl();
-	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
-	frame = tab_control->getContentArea();
 
 	ok_button->label = msg->get("OK");
-	ok_button->pos.x = VIEW_W_HALF - ok_button->pos.w/2;
-	ok_button->pos.y = VIEW_H - (cancel_button->pos.h*3);
+	ok_button->setBasePos(0, -(cancel_button->pos.h*2), ALIGN_BOTTOM);
 	ok_button->refresh();
 
 	defaults_button->label = msg->get("Defaults");
-	defaults_button->pos.x = VIEW_W_HALF - defaults_button->pos.w/2;
-	defaults_button->pos.y = VIEW_H - (cancel_button->pos.h*2);
+	defaults_button->setBasePos(0, -(cancel_button->pos.h), ALIGN_BOTTOM);
 	defaults_button->refresh();
 
 	cancel_button->label = msg->get("Cancel");
-	cancel_button->pos.x = VIEW_W_HALF - cancel_button->pos.w/2;
-	cancel_button->pos.y = VIEW_H - (cancel_button->pos.h);
+	cancel_button->setBasePos(0, 0, ALIGN_BOTTOM);
 	cancel_button->refresh();
 
 	language_lstb->can_deselect = false;
@@ -168,6 +166,8 @@ void GameStateConfigBase::init() {
 
 	addChildWidgets();
 	setupTabList();
+
+	refreshWidgets();
 
 	update();
 }
@@ -258,28 +258,24 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	}
 	else if (infile.key == "activemods_shiftup") {
 		// @ATTR activemods_shiftup|x (integer), y (integer)|Position of the button to shift mods up in "Active Mods" relative to the frame.
-		activemods_shiftup_btn->pos.x = frame.x + x1;
-		activemods_shiftup_btn->pos.y = frame.y + y1;
+		activemods_shiftup_btn->setBasePos(x1, y1);
 		activemods_shiftup_btn->refresh();
 	}
 	else if (infile.key == "activemods_shiftdown") {
 		// @ATTR activemods_shiftdown|x (integer), y (integer)|Position of the button to shift mods down in "Active Mods" relative to the frame.
-		activemods_shiftdown_btn->pos.x = frame.x + x1;
-		activemods_shiftdown_btn->pos.y = frame.y + y1;
+		activemods_shiftdown_btn->setBasePos(x1, y1);
 		activemods_shiftdown_btn->refresh();
 	}
 	else if (infile.key == "activemods_deactivate") {
 		// @ATTR activemods_deactivate|x (integer), y (integer)|Position of the "Disable" button relative to the frame.
 		activemods_deactivate_btn->label = msg->get("<< Disable");
-		activemods_deactivate_btn->pos.x = frame.x + x1;
-		activemods_deactivate_btn->pos.y = frame.y + y1;
+		activemods_deactivate_btn->setBasePos(x1, y1);
 		activemods_deactivate_btn->refresh();
 	}
 	else if (infile.key == "inactivemods_activate") {
 		// @ATTR inactivemods_activate|x (integer), y (integer)|Position of the "Enable" button relative to the frame.
 		inactivemods_activate_btn->label = msg->get("Enable >>");
-		inactivemods_activate_btn->pos.x = frame.x + x1;
-		inactivemods_activate_btn->pos.y = frame.y + y1;
+		inactivemods_activate_btn->setBasePos(x1, y1);
 		inactivemods_activate_btn->refresh();
 	}
 	else {
@@ -295,7 +291,7 @@ bool GameStateConfigBase::parseStub(FileParser &infile) {
 	if (infile.key == "fullscreen");
 	else if (infile.key == "mouse_move");
 	else if (infile.key == "hwsurface");
-	else if (infile.key == "doublebuf");
+	else if (infile.key == "vsync");
 	else if (infile.key == "enable_joystick");
 	else if (infile.key == "change_gamma");
 	else if (infile.key == "mouse_aim");
@@ -455,6 +451,9 @@ void GameStateConfigBase::updateMods() {
 }
 
 void GameStateConfigBase::logic() {
+	if (inpt->window_resized)
+		refreshWidgets();
+
 	if (defaults_confirm->visible) {
 		// reset defaults confirmation
 		logicDefaults();
@@ -550,8 +549,8 @@ void GameStateConfigBase::logicAccept() {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 	}
 	cleanup();
+	render_device->createContext();
 	saveSettings();
-	render_device->updateTitleBar();
 	delete requestedGameState;
 	requestedGameState = new GameStateTitle();
 }
@@ -707,16 +706,30 @@ void GameStateConfigBase::renderTooltips(TooltipData& tip_new) {
 
 void GameStateConfigBase::placeLabeledWidget(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str, int justify) {
 	if (w) {
-		w->pos.x = frame.x + x2;
-		w->pos.y = frame.y + y2;
+		w->setBasePos(x2, y2);
 	}
 
 	if (lb) {
-		lb->setX(frame.x + x1);
-		lb->setY(frame.y + y1);
+		lb->setBasePos(x1, y1);
 		lb->set(str);
 		lb->setJustify(justify);
 	}
+}
+
+void GameStateConfigBase::refreshWidgets() {
+	tab_control->setMainArea(((VIEW_W - FRAME_W)/2)+3, (VIEW_H - FRAME_H)/2, FRAME_W, FRAME_H);
+	tab_control->updateHeader();
+	frame = tab_control->getContentArea();
+
+	for (unsigned i=0; i<child_widget.size(); ++i) {
+		child_widget[i]->setPos(frame.x, frame.y);
+	}
+
+	ok_button->setPos();
+	defaults_button->setPos();
+	cancel_button->setPos();
+
+	defaults_confirm->align();
 }
 
 void GameStateConfigBase::addChildWidget(Widget *w, int tab) {

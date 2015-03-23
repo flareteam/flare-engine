@@ -100,26 +100,30 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 
 			// @ATTR char_menu|x (integer), y (integer)|Position for the Character menu button.
 			else if (infile.key == "char_menu") {
-				menus[MENU_CHARACTER]->pos.x = popFirstInt(infile.val, ',');
-				menus[MENU_CHARACTER]->pos.y = popFirstInt(infile.val, ',');
+				int x = popFirstInt(infile.val, ',');
+				int y = popFirstInt(infile.val, ',');
+				menus[MENU_CHARACTER]->setBasePos(x, y);
 				menus[MENU_CHARACTER]->pos.w = menus[MENU_CHARACTER]->pos.h = ICON_SIZE;
 			}
 			// @ATTR inv_menu|x (integer), y (integer)|Position for the Inventory menu button.
 			else if (infile.key == "inv_menu") {
-				menus[MENU_INVENTORY]->pos.x = popFirstInt(infile.val, ',');
-				menus[MENU_INVENTORY]->pos.y = popFirstInt(infile.val, ',');
+				int x = popFirstInt(infile.val, ',');
+				int y = popFirstInt(infile.val, ',');
+				menus[MENU_INVENTORY]->setBasePos(x, y);
 				menus[MENU_INVENTORY]->pos.w = menus[MENU_INVENTORY]->pos.h = ICON_SIZE;
 			}
 			// @ATTR powers_menu|x (integer), y (integer)|Position for the Powers menu button.
 			else if (infile.key == "powers_menu") {
-				menus[MENU_POWERS]->pos.x = popFirstInt(infile.val, ',');
-				menus[MENU_POWERS]->pos.y = popFirstInt(infile.val, ',');
+				int x = popFirstInt(infile.val, ',');
+				int y = popFirstInt(infile.val, ',');
+				menus[MENU_POWERS]->setBasePos(x, y);
 				menus[MENU_POWERS]->pos.w = menus[MENU_POWERS]->pos.h = ICON_SIZE;
 			}
 			// @ATTR log_menu|x (integer), y (integer)|Position for the Log menu button.
 			else if (infile.key == "log_menu") {
-				menus[MENU_LOG]->pos.x = popFirstInt(infile.val, ',');
-				menus[MENU_LOG]->pos.y = popFirstInt(infile.val, ',');
+				int x = popFirstInt(infile.val, ',');
+				int y = popFirstInt(infile.val, ',');
+				menus[MENU_LOG]->setBasePos(x, y);
 				menus[MENU_LOG]->pos.w = menus[MENU_LOG]->pos.h = ICON_SIZE;
 			}
 
@@ -143,7 +147,6 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	loadGraphics();
 
 	align();
-	alignElements();
 
 	menu_act = this;
 }
@@ -157,24 +160,23 @@ void MenuActionBar::addSlot(unsigned index, int x, int y) {
 	labels[index] = new WidgetLabel();
 
 	slots[index] = new WidgetSlot(-1, ACTIONBAR);
-	slots[index]->pos.x = x;
-	slots[index]->pos.y = y;
+	slots[index]->setBasePos(x, y);
 	slots[index]->pos.w = slots[index]->pos.h = ICON_SIZE;
 	slots[index]->continuous = true;
 
 	tablist.add(slots[index]);
 }
 
-void MenuActionBar::alignElements() {
+void MenuActionBar::align() {
+	Menu::align();
+
 	for (unsigned int i = 0; i < slots_count; i++) {
 		if (slots[i]) {
-			slots[i]->pos.x += window_area.x;
-			slots[i]->pos.y += window_area.y;
+			slots[i]->setPos(window_area.x, window_area.y);
 		}
 	}
 	for (unsigned int i=0; i<4; i++) {
-		menus[i]->pos.x += window_area.x;
-		menus[i]->pos.y += window_area.y;
+		menus[i]->setPos(window_area.x, window_area.y);
 	}
 
 	// set keybinding labels
@@ -196,6 +198,8 @@ void MenuActionBar::alignElements() {
 		}
 	}
 	for (unsigned int i=0; i<4; i++) {
+		menus[i]->setPos(window_area.x, window_area.y);
+
 		if (inpt->binding[i + CHARACTER] < 8)
 			menu_labels[i]->set(menus[i]->pos.x+menus[i]->pos.w, menus[i]->pos.y+menus[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i + CHARACTER] - 1], font->getColor("menu_normal"));
 		else

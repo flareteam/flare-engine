@@ -37,6 +37,10 @@ WidgetInput::WidgetInput(const std::string& filename)
 	color_normal = font->getColor("widget_normal");
 }
 
+void WidgetInput::setPos(int offset_x, int offset_y) {
+	setPosition(pos_base.x+offset_x, pos_base.y+offset_y);
+}
+
 void WidgetInput::loadGraphics(const std::string& filename) {
 	// load input background image
 	Image *graphics;

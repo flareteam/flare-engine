@@ -44,6 +44,8 @@ private:
 public:
 	WidgetLog (int width, int height);
 	~WidgetLog ();
+	void setBasePos(int x, int y, ALIGNMENT a = ALIGN_TOPLEFT);
+	void setPos(int offset_x = 0, int offset_y = 0);
 
 	void logic();
 	void render();

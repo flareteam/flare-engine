@@ -93,6 +93,31 @@ int parse_direction(const std::string& s) {
 	return dir;
 }
 
+ALIGNMENT parse_alignment(const std::string &s) {
+	ALIGNMENT align = ALIGN_TOPLEFT;
+
+	if (s == "topleft")
+		align = ALIGN_TOPLEFT;
+	else if (s == "top")
+		align = ALIGN_TOP;
+	else if (s == "topright")
+		align = ALIGN_TOPRIGHT;
+	else if (s == "left")
+		align = ALIGN_LEFT;
+	else if (s == "center")
+		align = ALIGN_CENTER;
+	else if (s == "right")
+		align = ALIGN_RIGHT;
+	else if (s == "bottomleft")
+		align = ALIGN_BOTTOMLEFT;
+	else if (s == "bottom")
+		align = ALIGN_BOTTOM;
+	else if (s == "bottomright")
+		align = ALIGN_BOTTOMRIGHT;
+
+	return align;
+}
+
 std::string parse_section_title(const std::string& s) {
 	size_t bracket = s.find_first_of(']');
 	if (bracket == std::string::npos) return ""; // not found

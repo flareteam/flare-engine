@@ -24,15 +24,9 @@ std::ostream &
 operator<< (std::ostream        & os,
 			const SDL_Event     & evt) {
 	switch (evt.type) {
-#if SDL_VERSION_ATLEAST(2,0,0)
 		case SDL_WINDOWEVENT:
 			os << reinterpret_cast<const SDL_WindowEvent&>(evt);
 			break;
-#else
-		case SDL_ACTIVEEVENT:
-			os << reinterpret_cast<const SDL_ActiveEvent&>(evt);
-			break;
-#endif
 		case SDL_KEYUP:
 		case SDL_KEYDOWN:
 			os << reinterpret_cast<const SDL_KeyboardEvent&>(evt);
@@ -63,15 +57,6 @@ operator<< (std::ostream        & os,
 		case SDL_SYSWMEVENT:
 			os << reinterpret_cast<const SDL_SysWMEvent&>(evt);
 			break;
-#if SDL_VERSION_ATLEAST(2,0,0)
-#else
-		case SDL_VIDEORESIZE:
-			os << reinterpret_cast<const SDL_ResizeEvent&>(evt);
-			break;
-		case SDL_VIDEOEXPOSE:
-			os << reinterpret_cast<const SDL_ExposeEvent&>(evt);
-			break;
-#endif
 		case SDL_USEREVENT:
 			os << "User Event";
 			break;
@@ -84,7 +69,6 @@ operator<< (std::ostream        & os,
 }
 
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 std::ostream &
 operator<< (std::ostream            & os,
 			const SDL_WindowEvent   & evt)
@@ -93,16 +77,6 @@ operator<< (std::ostream            & os,
 	   << ", data2 = " << static_cast<uint16_t>(evt.data2) << "}";
 	return os;
 }
-
-#else
-std::ostream &
-operator<< (std::ostream            & os,
-			const SDL_ActiveEvent   & evt) {
-	os << "{SDL_ACTIVE_EVENT, gain = " << static_cast<uint16_t>(evt.gain)
-	   << ", state = " << static_cast<uint16_t>(evt.state) << "}";
-	return os;
-}
-#endif
 
 
 std::ostream &
@@ -134,7 +108,6 @@ operator<< (std::ostream            & os,
 }
 
 
-#if SDL_VERSION_ATLEAST(2,0,0)
 std::ostream &
 operator<< (std::ostream        & os,
 			const SDL_Keysym    & ks)
@@ -144,17 +117,6 @@ operator<< (std::ostream        & os,
 	   << ", sym = " << ks.sym << ", mod = " << ks.mod << "}";
 	return os;
 }
-#else
-std::ostream &
-operator<< (std::ostream        & os,
-			const SDL_keysym    & ks)
-
-{
-	os << "{scancode = " << static_cast<uint16_t>(ks.scancode)
-	   << ", sym = " << ks.sym << ", mod = " << ks.mod << ", unicode = " << ks.unicode << "}";
-	return os;
-}
-#endif
 
 
 std::ostream &
@@ -265,20 +227,6 @@ operator<< (std::ostream & os, const SDL_SysWMEvent &) {
 	return os;
 }
 
-#if SDL_VERSION_ATLEAST(2,0,0)
-#else
-std::ostream &
-operator<< (std::ostream & os, const SDL_ResizeEvent &evt) {
-	os << "{SDL_RESIZE_EVENT, (w,h) = (" << evt.w << "," << evt.h << ")}";
-	return os;
-}
-
-std::ostream &
-operator<< (std::ostream & os, const SDL_ExposeEvent &) {
-	os << "{SDL_EXPOSEEVENT}";
-	return os;
-}
-#endif
 
 std::ostream &
 operator<< (std::ostream & os, const Rect & rect) {

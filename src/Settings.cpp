@@ -53,15 +53,16 @@ public:
 
 ConfigEntry config[] = {
 	{ "fullscreen",       &typeid(FULLSCREEN),      "0",   &FULLSCREEN,      "fullscreen mode. 1 enable, 0 disable."},
-	{ "resolution_w",     &typeid(VIEW_W),          "640", &VIEW_W,          "display resolution. 640x480 minimum."},
-	{ "resolution_h",     &typeid(VIEW_H),          "480", &VIEW_H,          NULL},
+	{ "resolution_w",     &typeid(SCREEN_W),        "640", &SCREEN_W,        "display resolution. 640x480 minimum."},
+	{ "resolution_h",     &typeid(SCREEN_H),        "480", &SCREEN_H,        NULL},
 	{ "audio",            &typeid(AUDIO),           "1",   &AUDIO,           "Enable music and sound subsystem."},
 	{ "music_volume",     &typeid(MUSIC_VOLUME),    "96",  &MUSIC_VOLUME,    "music and sound volume (0 = silent, 128 = max)"},
 	{ "sound_volume",     &typeid(SOUND_VOLUME),    "128", &SOUND_VOLUME,    NULL},
 	{ "combat_text",      &typeid(COMBAT_TEXT),     "0",   &COMBAT_TEXT,     "display floating damage text. 1 enable, 0 disable."},
 	{ "mouse_move",       &typeid(MOUSE_MOVE),      "0",   &MOUSE_MOVE,      "use mouse to move (experimental). 1 enable, 0 disable."},
-	{ "hwsurface",        &typeid(HWSURFACE),       "1",   &HWSURFACE,       "hardware surfaces, double buffering. Try disabling for performance. 1 enable, 0 disable."},
-	{ "doublebuf",        &typeid(DOUBLEBUF),       "1",   &DOUBLEBUF,       NULL},
+	{ "hwsurface",        &typeid(HWSURFACE),       "1",   &HWSURFACE,       "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
+	{ "vsync",            &typeid(VSYNC),           "1",   &VSYNC,           NULL},
+	{ "texture_filter",   &typeid(TEXTURE_FILTER),  "1",   &TEXTURE_FILTER,  "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"},
 	{ "enable_joystick",  &typeid(ENABLE_JOYSTICK), "0",   &ENABLE_JOYSTICK, "joystick settings."},
 	{ "joystick_device",  &typeid(JOYSTICK_DEVICE), "0",   &JOYSTICK_DEVICE, NULL},
 	{ "joystick_deadzone",&typeid(JOY_DEADZONE),    "100", &JOY_DEADZONE,    NULL},
@@ -111,14 +112,18 @@ unsigned short ICON_SIZE;
 bool FULLSCREEN;
 unsigned short MAX_FRAMES_PER_SEC = 60;
 unsigned char BITS_PER_PIXEL = 32;
-unsigned short VIEW_W;
-unsigned short VIEW_H;
-unsigned short VIEW_W_HALF = VIEW_W/2;
-unsigned short VIEW_H_HALF = VIEW_H/2;
-short MIN_VIEW_W = -1;
-short MIN_VIEW_H = -1;
-bool DOUBLEBUF;
+unsigned short VIEW_W = 0;
+unsigned short VIEW_H = 0;
+unsigned short VIEW_W_HALF = 0;
+unsigned short VIEW_H_HALF = 0;
+short MIN_SCREEN_W = 640;
+short MIN_SCREEN_H = 480;
+unsigned short SCREEN_W = 640;
+unsigned short SCREEN_H = 480;
+bool VSYNC;
 bool HWSURFACE;
+bool TEXTURE_FILTER;
+bool IGNORE_TEXTURE_FILTER = false;
 bool CHANGE_GAMMA;
 float GAMMA;
 
@@ -287,15 +292,6 @@ void setPaths() {
 	PATH_USER = PATH_USER + "/";
 	PATH_DATA = PATH_DATA + "/";
 }
-#elif __amigaos4__
-// AmigaOS paths
-void setPaths() {
-	PATH_CONF = "PROGDIR:";
-	PATH_USER = "PROGDIR:";
-	PATH_DATA = "PROGDIR:";
-	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) logError("Settings: Could not find specified game data directory.");
-}
 #else
 void setPaths() {
 
@@ -460,8 +456,6 @@ void loadTilesetSettings() {
 	}
 
 	// Init automatically calculated parameters
-	VIEW_W_HALF = VIEW_W / 2;
-	VIEW_H_HALF = VIEW_H / 2;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		if (TILE_W > 0 && TILE_H > 0) {
 			UNITS_PER_PIXEL_X = 2.0f / TILE_W;
@@ -498,6 +492,7 @@ void loadMiscSettings() {
 	HERO_CLASSES.clear();
 	FRAME_W = 0;
 	FRAME_H = 0;
+	IGNORE_TEXTURE_FILTER = false;
 	ICON_SIZE = 0;
 	AUTOPICKUP_CURRENCY = false;
 	MAX_ABSORB = 90;
@@ -612,19 +607,35 @@ void loadMiscSettings() {
 				ICON_SIZE = toInt(infile.val);
 			// @ATTR required_width|integer|Minimum window/screen resolution width.
 			else if (infile.key == "required_width") {
-				MIN_VIEW_W = toInt(infile.val);
-				if (VIEW_W < MIN_VIEW_W) VIEW_W = MIN_VIEW_W;
-				VIEW_W_HALF = VIEW_W/2;
+				MIN_SCREEN_W = toInt(infile.val);
 			}
 			// @ATTR required_height|integer|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
-				MIN_VIEW_H = toInt(infile.val);
-				if (VIEW_H < MIN_VIEW_H) VIEW_H = MIN_VIEW_H;
-				VIEW_H_HALF = VIEW_H/2;
+				MIN_SCREEN_H = toInt(infile.val);
+			}
+			// @ATTR virtual_height|integer|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
+			else if (infile.key == "virtual_height") {
+				VIEW_H = toInt(infile.val);
+				VIEW_H_HALF = VIEW_H / 2;
+			}
+			// @ATTR ignore_texture_filter|boolean|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
+			else if (infile.key == "ignore_texture_filter") {
+				IGNORE_TEXTURE_FILTER = toBool(infile.val);
 			}
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+
+	// prevent the window from being too small
+	if (SCREEN_W < MIN_SCREEN_W) SCREEN_W = MIN_SCREEN_W;
+	if (SCREEN_H < MIN_SCREEN_H) SCREEN_H = MIN_SCREEN_H;
+
+	// set the default virtual height if it's not defined
+	if (VIEW_H == 0) {
+		logError("Settings: virtual_height is undefined. Setting it to %d.", MIN_SCREEN_H);
+		VIEW_H = MIN_SCREEN_H;
+		VIEW_H_HALF = VIEW_H / 2;
 	}
 
 	// @CLASS Settings: Gameplay|Description of engine/gameplay.txt
@@ -866,10 +877,6 @@ bool loadDefaults() {
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
-
-	// Init automatically calculated parameters
-	VIEW_W_HALF = VIEW_W / 2;
-	VIEW_H_HALF = VIEW_H / 2;
 
 	loadAndroidDefaults();
 

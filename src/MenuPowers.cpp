@@ -82,16 +82,32 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	color_penalty = font->getColor("menu_penalty");
 
 	align();
-	alignElements();
 }
 
-void MenuPowers::alignElements() {
+void MenuPowers::align() {
+	Menu::align();
+
 	label_powers.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Powers"), font->getColor("menu_normal"), title.font_style);
 
 	closeButton->pos.x = window_area.x+close_pos.x;
 	closeButton->pos.y = window_area.y+close_pos.y;
 
 	stat_up.set(window_area.x+unspent_points.x, window_area.y+unspent_points.y, unspent_points.justify, unspent_points.valign, "", font->getColor("menu_bonus"), unspent_points.font_style);
+
+	if (tab_control) {
+		tab_control->setMainArea(window_area.x+tab_area.x, window_area.y+tab_area.y, tab_area.w, tab_area.h);
+		tab_control->updateHeader();
+	}
+
+	for (unsigned int i=0; i<slots.size(); i++) {
+		if (!slots[i]) continue;
+
+		slots[i]->setPos(window_area.x, window_area.y);
+
+		if (upgradeButtons[i] != NULL) {
+			upgradeButtons[i]->setPos(window_area.x, window_area.y);
+		}
+	}
 
 }
 
@@ -214,27 +230,20 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	for (unsigned int i=0; i<slots.size(); i++) {
 		if ((unsigned)power_cell[i].id < powers->powers.size()) {
 			slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
-			slots[i]->pos.x = power_cell[i].pos.x;
-			slots[i]->pos.y = power_cell[i].pos.y;
+			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y);
 			tablist.add(slots[i]);
-		}
-	}
 
-	// position power slots and upgrade buttons
-	for (unsigned i=0; i<power_cell.size(); i++) {
-		if (!slots[i]) continue;
-
-		slots[i]->pos.x = window_area.x + power_cell[i].pos.x;
-		slots[i]->pos.y = window_area.y + power_cell[i].pos.y;
-		if (upgradeButtons[i] != NULL) {
-			upgradeButtons[i]->pos.x = slots[i]->pos.x + ICON_SIZE;
-			upgradeButtons[i]->pos.y = slots[i]->pos.y;
+			if (upgradeButtons[i] != NULL) {
+				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + ICON_SIZE, power_cell[i].pos.y);
+			}
 		}
 	}
 
 	applyPowerUpgrades();
 
 	tree_loaded = true;
+
+	align();
 }
 
 short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell) {

@@ -55,20 +55,21 @@ GameStateNew::GameStateNew()
 	// set up buttons
 	button_exit = new WidgetButton();
 	button_exit->label = msg->get("Cancel");
-	button_exit->pos.x = VIEW_W_HALF - button_exit->pos.w;
-	button_exit->pos.y = VIEW_H - button_exit->pos.h;
+	button_exit->setBasePos(-(button_exit->pos.w/2), 0, ALIGN_BOTTOM);
 	button_exit->refresh();
 
 	button_create = new WidgetButton();
 	button_create->label = msg->get("Create");
-	button_create->pos.x = VIEW_W_HALF;
-	button_create->pos.y = VIEW_H - button_create->pos.h;
+	button_create->setBasePos(button_create->pos.w/2, 0, ALIGN_BOTTOM);
 	button_create->enabled = false;
 	button_create->refresh();
 
 	button_prev = new WidgetButton("images/menus/buttons/left.png");
 	button_next = new WidgetButton("images/menus/buttons/right.png");
+
 	input_name = new WidgetInput();
+	input_name->max_length = 20;
+
 	button_permadeath = new WidgetCheckBox();
 	if (DEATH_PENALTY_PERMADEATH) {
 		button_permadeath->enabled = false;
@@ -88,22 +89,27 @@ GameStateNew::GameStateNew()
 		while (infile.next()) {
 			// @ATTR button_prev|x (integer), y (integer)|Position of button to choose the previous preset hero.
 			if (infile.key == "button_prev") {
-				button_prev->pos.x = popFirstInt(infile.val);
-				button_prev->pos.y = popFirstInt(infile.val);
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				button_prev->setBasePos(x, y);
 			}
 			// @ATTR button_next|x (integer), y (integer)|Position of button to choose the next preset hero.
 			else if (infile.key == "button_next") {
-				button_next->pos.x = popFirstInt(infile.val);
-				button_next->pos.y = popFirstInt(infile.val);
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				button_next->setBasePos(x, y);
 			}
 			// @ATTR button_permadeath|x (integer), y (integer)|Position of checkbox for toggling permadeath.
 			else if (infile.key == "button_permadeath") {
-				button_permadeath->pos.x = popFirstInt(infile.val);
-				button_permadeath->pos.y = popFirstInt(infile.val);
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				button_permadeath->setBasePos(x, y);
 			}
 			// @ATTR name_input|x (integer), y (integer)|Position of the hero name textbox.
 			else if (infile.key == "name_input") {
-				name_pos = toPoint(infile.val);
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				input_name->setBasePos(x, y);
 			}
 			// @ATTR portrait_label|label|Label for the "Choose a Portrait" text.
 			else if (infile.key == "portrait_label") {
@@ -127,8 +133,9 @@ GameStateNew::GameStateNew()
 			}
 			// @ATTR class_list|x (integer), y (integer)|Position of the class list.
 			else if (infile.key == "class_list") {
-				class_list->pos.x = popFirstInt(infile.val);
-				class_list->pos.y = popFirstInt(infile.val);
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				class_list->setBasePos(x, y);
 			}
 			// @ATTR show_classlist|boolean|Allows hiding the class list.
 			else if (infile.key == "show_classlist") {
@@ -141,45 +148,23 @@ GameStateNew::GameStateNew()
 		infile.close();
 	}
 
-	button_prev->pos.x += (VIEW_W - FRAME_W)/2;
-	button_prev->pos.y += (VIEW_H - FRAME_H)/2;
-
-	button_next->pos.x += (VIEW_W - FRAME_W)/2;
-	button_next->pos.y += (VIEW_H - FRAME_H)/2;
-
-	class_list->pos.x += (VIEW_W - FRAME_W)/2;
-	class_list->pos.y += (VIEW_H - FRAME_H)/2;
-
-	name_pos.x += (VIEW_W - FRAME_W)/2;
-	name_pos.y += (VIEW_H - FRAME_H)/2;
-
-	input_name->setPosition(name_pos.x, name_pos.y);
-	input_name->max_length = 20;
-
-	button_permadeath->pos.x += (VIEW_W - FRAME_W)/2;
-	button_permadeath->pos.y += (VIEW_H - FRAME_H)/2;
-
-	portrait_label.x += (VIEW_W - FRAME_W)/2;
-	portrait_label.y += (VIEW_H - FRAME_H)/2;
-
-	name_label.x += (VIEW_W - FRAME_W)/2;
-	name_label.y += (VIEW_H - FRAME_H)/2;
-
-	permadeath_label.x += (VIEW_W - FRAME_W)/2;
-	permadeath_label.y += (VIEW_H - FRAME_H)/2;
-
-	classlist_label.x += (VIEW_W - FRAME_W)/2;
-	classlist_label.y += (VIEW_H - FRAME_H)/2;
-
 	// set up labels
 	color_normal = font->getColor("menu_normal");
+
 	label_portrait = new WidgetLabel();
+	label_portrait->setBasePos(portrait_label.x, portrait_label.y);
 	label_portrait->set(portrait_label.x, portrait_label.y, portrait_label.justify, portrait_label.valign, msg->get("Choose a Portrait"), color_normal, portrait_label.font_style);
+
 	label_name = new WidgetLabel();
+	label_name->setBasePos(name_label.x, name_label.y);
 	label_name->set(name_label.x, name_label.y, name_label.justify, name_label.valign, msg->get("Choose a Name"), color_normal, name_label.font_style);
+
 	label_permadeath = new WidgetLabel();
+	label_permadeath->setBasePos(permadeath_label.x, permadeath_label.y);
 	label_permadeath->set(permadeath_label.x, permadeath_label.y, permadeath_label.justify, permadeath_label.valign, msg->get("Permadeath?"), color_normal, permadeath_label.font_style);
+
 	label_classlist = new WidgetLabel();
+	label_classlist->setBasePos(classlist_label.x, classlist_label.y);
 	label_classlist->set(classlist_label.x, classlist_label.y, classlist_label.justify, classlist_label.valign, msg->get("Choose a Class"), color_normal, classlist_label.font_style);
 
 	// set up class list
@@ -206,6 +191,8 @@ GameStateNew::GameStateNew()
 	tablist.add(button_prev);
 	tablist.add(button_next);
 	tablist.add(class_list);
+
+	refreshWidgets();
 }
 
 void GameStateNew::loadGraphics() {
@@ -270,6 +257,10 @@ void GameStateNew:: setName(const std::string& default_name) {
 }
 
 void GameStateNew::logic() {
+
+	if (inpt->window_resized)
+		refreshWidgets();
+
 	if (!input_name->inFocus)
 		tablist.logic(true);
 
@@ -333,6 +324,23 @@ void GameStateNew::logic() {
 	input_name->logic();
 
 	if (input_name->getText() != name[current_option]) modified_name = true;
+}
+
+void GameStateNew::refreshWidgets() {
+	button_exit->setPos();
+	button_create->setPos();
+
+	button_prev->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	button_next->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	button_permadeath->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	class_list->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+
+	label_portrait->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	label_name->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	label_permadeath->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	label_classlist->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+
+	input_name->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
 }
 
 void GameStateNew::render() {

@@ -126,9 +126,7 @@ private:
 	Image(RenderDevice *device);
 	virtual ~Image();
 	friend class SDLSoftwareImage;
-#if SDL_VERSION_ATLEAST(2,0,0)
 	friend class SDLHardwareImage;
-#endif
 
 private:
 	RenderDevice *device;
@@ -178,10 +176,9 @@ public:
 	virtual ~RenderDevice();
 
 	/** Context operations */
-	virtual int createContext(int width, int height) = 0;
+	virtual int createContext() = 0;
 	virtual void destroyContext() = 0;
 	virtual Rect getContextSize() = 0;
-	virtual void listModes(std::vector<Rect> &modes) = 0;
 	virtual void setGamma(float g) = 0;
 	virtual void updateTitleBar() = 0;
 
@@ -205,6 +202,7 @@ public:
 	virtual void drawRectangle(const Point& p0, const Point& p1, Uint32 color) = 0;
 	virtual Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b) = 0;
 	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
+	virtual void windowResize() = 0;
 
 protected:
 	/* Compute clipping and global position from local frame. */
@@ -214,6 +212,12 @@ protected:
 	Image *cacheLookup(std::string &filename);
 	void cacheStore(std::string &filename, Image *);
 	void cacheRemove(Image *image);
+
+	bool fullscreen;
+	bool hwsurface;
+	bool vsync;
+	bool texture_filter;
+	Point min_screen;
 
 	bool is_initialized;
 

@@ -94,10 +94,14 @@ extern unsigned short VIEW_W;
 extern unsigned short VIEW_H;
 extern unsigned short VIEW_W_HALF;
 extern unsigned short VIEW_H_HALF;
-extern short MIN_VIEW_W;
-extern short MIN_VIEW_H;
-extern bool DOUBLEBUF;
+extern unsigned short SCREEN_W;
+extern unsigned short SCREEN_H;
+extern short MIN_SCREEN_W;
+extern short MIN_SCREEN_H;
+extern bool VSYNC;
 extern bool HWSURFACE;
+extern bool TEXTURE_FILTER;
+extern bool IGNORE_TEXTURE_FILTER;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
 

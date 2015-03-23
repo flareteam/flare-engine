@@ -46,6 +46,7 @@ private:
 	void loadOptions(const std::string& option_filename);
 	std::string getClassTooltip(int index);
 	void setName(const std::string& default_name);
+	void refreshWidgets();
 
 	std::vector<std::string> base;
 	std::vector<std::string> head;
@@ -70,7 +71,6 @@ private:
 
 	TabList tablist;
 
-	Point name_pos;
 	LabelInfo portrait_label;
 	LabelInfo name_label;
 	LabelInfo permadeath_label;

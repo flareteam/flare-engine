@@ -51,7 +51,7 @@ private:
 	WidgetLabel *label_fps;
 	Rect fps_position;
 	Color fps_color;
-	std::string fps_corner;
+	ALIGNMENT fps_corner;
 
 public:
 	GameSwitcher();
@@ -65,6 +65,7 @@ public:
 	void logic();
 	void render();
 	void showFPS(int fps);
+	void saveUserSettings();
 	bool done;
 };
 

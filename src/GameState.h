@@ -28,6 +28,7 @@ public:
 
 	virtual void logic();
 	virtual void render();
+	virtual void refreshWidgets();
 
 	GameState* getRequestedGameState();
 	bool isExitRequested() {
@@ -38,6 +39,7 @@ public:
 
 	bool hasMusic;
 	bool reload_music;
+	bool save_settings_on_exit;
 
 	int load_counter;
 

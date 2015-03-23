@@ -20,8 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef SDLHARDWARERENDERDEVICE_H
 #define SDLHARDWARERENDERDEVICE_H
 
-#if SDL_VERSION_ATLEAST(2,0,0)
-
 #include "RenderDevice.h"
 
 /** Provide rendering device using SDL_BlitSurface backend.
@@ -67,7 +65,7 @@ class SDLHardwareRenderDevice : public RenderDevice {
 public:
 
 	SDLHardwareRenderDevice();
-	int createContext(int width, int height);
+	int createContext();
 	Rect getContextSize();
 
 	virtual int render(Renderable& r, Rect dest);
@@ -83,10 +81,10 @@ public:
 	void destroyContext();
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	void windowResize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();
-	void listModes(std::vector<Rect> &modes);
 	void freeImage(Image *image);
 
 	Image* loadImage(std::string filename,
@@ -95,12 +93,11 @@ public:
 private:
 	void drawLine(int x0, int y0, int x1, int y1, Uint32 color);
 
-	SDL_Window *screen;
+	SDL_Window *window;
 	SDL_Renderer *renderer;
 	SDL_Surface* titlebar_icon;
 	char* title;
 };
 
-#endif // SDL_VERSION_ATLEAST(2,0,0)
+#endif
 
-#endif // SDLHARDWARERENDERDEVICE_H

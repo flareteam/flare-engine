@@ -46,7 +46,6 @@ const int ACTIONBAR_MAIN = 10;
 
 class MenuActionBar : public Menu {
 private:
-	void alignElements();
 	void renderCooldowns();
 	FPoint setTarget(bool have_aim, bool aim_assist);
 
@@ -67,6 +66,7 @@ public:
 
 	MenuActionBar(Avatar *hero);
 	~MenuActionBar();
+	void align();
 	void loadGraphics();
 	void renderAttention(int menu_id);
 	void logic();
