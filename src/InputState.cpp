@@ -337,7 +337,6 @@ void InputState::handle(bool dump_event) {
 				else if (event.window.event == SDL_WINDOWEVENT_RESTORED)
 					window_restored = true;
 				break;
-#endif
 			// Android touch events
 			case SDL_FINGERMOTION:
 				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
@@ -361,6 +360,7 @@ void InputState::handle(bool dump_event) {
 				un_press[MAIN1] = true;
 				last_button = binding[MAIN1];
 				break;
+#endif
 			case SDL_KEYDOWN:
 				for (int key=0; key<key_count; key++) {
 					if (event.key.keysym.sym == binding[key] || event.key.keysym.sym == binding_alt[key]) {
