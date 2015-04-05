@@ -46,8 +46,11 @@ InputState::InputState(void)
 	, window_minimized(false)
 	, window_restored(false)
 	, window_resized(false)
-	, current_touch() {
+	, current_touch()
+{
+#ifndef __ANDROID__
 	SDL_StartTextInput();
+#endif
 
 	defaultQwertyKeyBindings();
 	defaultJoystickBindings();
