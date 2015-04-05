@@ -429,6 +429,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	bool allowed_to_move;
 	bool allowed_to_use_power = true;
+	bool click_to_respawn = false;
 
 	// check for revive
 	if (stats.hp <= 0 && stats.effects.revive) {
@@ -642,6 +643,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		case AVATAR_DEAD:
 			allowed_to_use_power = false;
 
+#ifdef __ANDROID__
+			click_to_respawn = true;
+#endif
+
 			if (stats.effects.triggered_death) break;
 
 			if (stats.transformed) {
@@ -668,6 +673,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				else {
 					log_msg = msg->get("You are defeated. Press Enter to continue.");
 				}
+
+				// if the player is attacking, we need to block further input
+				if (inpt->pressing[MAIN1])
+					inpt->lock[MAIN1] = true;
 			}
 
 			if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != "die") {
@@ -675,8 +684,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			}
 
 			// allow respawn with Accept if not permadeath
-			if (inpt->pressing[ACCEPT]) {
-				inpt->lock[ACCEPT] = true;
+			if (inpt->pressing[ACCEPT] || (click_to_respawn && inpt->pressing[MAIN1] && !inpt->lock[MAIN1])) {
+				if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+				if (click_to_respawn && inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 				mapr->teleportation = true;
 				mapr->teleport_mapname = mapr->respawn_map;
 				if (stats.permadeath) {
