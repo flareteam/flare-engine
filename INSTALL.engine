@@ -55,6 +55,14 @@ http://software.opensuse.org/download.html?project=games&package=flare
 Installing dependencies on Fedora
 
     yum install git make cmake gcc-c++ SDL2-devel SDL2_image-devel SDL2_mixer-devel SDL2_ttf-devel
+    
+### OS X
+
+Installing dependencies using [Homebrew]
+
+    brew install cmake sdl2 sdl2_image sdl2_mixer sdl2_ttf
+
+[Homebrew]: http://brew.sh/
 
 ## Building from Source
 
