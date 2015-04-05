@@ -95,6 +95,7 @@ private:
 
 	SDL_Window *window;
 	SDL_Renderer *renderer;
+	SDL_Texture *texture;
 	SDL_Surface* titlebar_icon;
 	char* title;
 };

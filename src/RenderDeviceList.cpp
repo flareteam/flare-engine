@@ -24,6 +24,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SDLHardwareRenderDevice.h"
 
 RenderDevice* getRenderDevice(std::string name) {
+#ifdef __ANDROID__
+	// Android always uses the hardware renderer
+	return new SDLHardwareRenderDevice();
+#endif
+
 	// "sdl" is the default
 	if (name != "") {
 		if (name == "sdl") return new SDLSoftwareRenderDevice();

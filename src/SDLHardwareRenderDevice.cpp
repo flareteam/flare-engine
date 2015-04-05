@@ -153,6 +153,7 @@ Image* SDLHardwareImage::resize(int width, int height) {
 SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	: window(NULL)
 	, renderer(NULL)
+	, texture(NULL)
 	, titlebar_icon(NULL)
 	, title(NULL)
 {
@@ -299,6 +300,7 @@ int SDLHardwareRenderDevice::render(Renderable& r, Rect dest) {
 	dest.h = r.src.h;
     SDL_Rect src = r.src;
     SDL_Rect _dest = dest;
+	SDL_SetRenderTarget(renderer, texture);
 	return SDL_RenderCopy(renderer, static_cast<SDLHardwareImage *>(r.image)->surface, &src, &_dest);
 }
 
@@ -328,6 +330,7 @@ int SDLHardwareRenderDevice::render(Sprite *r) {
 
     SDL_Rect src = m_clip;
     SDL_Rect dest = m_dest;
+	SDL_SetRenderTarget(renderer, texture);
 	return SDL_RenderCopy(renderer, static_cast<SDLHardwareImage *>(r->getGraphics())->surface, &src, &dest);
 }
 
@@ -384,6 +387,7 @@ int SDLHardwareRenderDevice::renderText(
 	dest.h = clip.h;
 	SDL_Rect _dest = dest;
 
+	SDL_SetRenderTarget(renderer, texture);
 	ret = SDL_RenderCopy(renderer, surface, &clip, &_dest);
 
 	SDL_DestroyTexture(surface);
@@ -463,13 +467,18 @@ void SDLHardwareRenderDevice::drawRectangle(
 }
 
 void SDLHardwareRenderDevice::blankScreen() {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_SetRenderTarget(renderer, texture);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	return;
 }
 
 void SDLHardwareRenderDevice::commitFrame() {
+	SDL_SetRenderTarget(renderer, NULL);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
+	inpt->window_resized = false;
+
 	return;
 }
 
@@ -482,6 +491,9 @@ void SDLHardwareRenderDevice::destroyContext() {
 
 	SDL_DestroyWindow(window);
 	window = NULL;
+
+	SDL_DestroyTexture(texture);
+	texture = NULL;
 
 	if (title) {
 		free(title);
@@ -619,5 +631,9 @@ void SDLHardwareRenderDevice::windowResize() {
 	VIEW_W_HALF = VIEW_W/2;
 
 	SDL_RenderSetLogicalSize(renderer, VIEW_W, VIEW_H);
+
+	if (texture) SDL_DestroyTexture(texture);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, VIEW_W, VIEW_H);
+	SDL_SetRenderTarget(renderer, texture);
 }
 
