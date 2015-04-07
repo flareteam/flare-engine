@@ -124,28 +124,11 @@ void SDLFontEngine::setFont(std::string _font) {
  * Justify is left, right, or center
  */
 void SDLFontEngine::render(const std::string& text, int x, int y, int justify, Image *target, Color color) {
-	Rect clip, dest_rect;
+	Rect clip;
 	Image *graphics;
 	Sprite *temp;
 
-	// calculate actual starting x,y based on justify
-	if (justify == JUSTIFY_LEFT) {
-		dest_rect.x = x;
-		dest_rect.y = y;
-	}
-	else if (justify == JUSTIFY_RIGHT) {
-		dest_rect.x = x - calc_width(text);
-		dest_rect.y = y;
-	}
-	else if (justify == JUSTIFY_CENTER) {
-		dest_rect.x = x - calc_width(text)/2;
-		dest_rect.y = y;
-	}
-	else {
-		logError("SDLFontEngine::render() given unhandled 'justify=%d', assuming left",justify);
-		dest_rect.x = x;
-		dest_rect.y = y;
-	}
+	Rect dest_rect = position(x, y, justify);
 
 	// Render text directly onto screen
 	if (!target) {
