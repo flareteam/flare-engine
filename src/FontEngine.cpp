@@ -111,7 +111,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	return size;
 }
 
-Rect position(int x, int y, int justify) {
+Rect FontEngine::position(const std::string& text, int x, int y, int justify) {
 
 	Rect dest_rect;
 	// calculate actual starting x,y based on justify
@@ -128,7 +128,7 @@ Rect position(int x, int y, int justify) {
 		dest_rect.y = y;
 	}
 	else {
-		logError("FontEngine::setPosition() given unhandled 'justify=%d', assuming left",justify);
+		logError("FontEngine::position() given unhandled 'justify=%d', assuming left",justify);
 		dest_rect.x = x;
 		dest_rect.y = y;
 	}
