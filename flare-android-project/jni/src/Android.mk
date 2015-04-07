@@ -88,6 +88,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/SDL_gfxBlitFunc.c \
 	../../../src/SDLHardwareRenderDevice.cpp \
 	../../../src/SDLSoftwareRenderDevice.cpp \
+	../../../src/SDLFontEngine.cpp \
 	../../../src/Settings.cpp \
 	../../../src/SharedGameResources.cpp \
 	../../../src/SharedResources.cpp \

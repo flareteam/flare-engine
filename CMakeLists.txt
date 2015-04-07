@@ -164,6 +164,7 @@ Set (FLARE_SOURCES
 	./src/SDL_gfxBlitFunc.c
 	./src/SDLSoftwareRenderDevice.cpp
 	./src/SDLHardwareRenderDevice.cpp
+ 	./src/SDLFontEngine.cpp
 	./src/Settings.cpp
 	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
@@ -267,6 +268,7 @@ Set (FLARE_HEADERS
 	./src/SDL_gfxBlitFunc.c
 	./src/SDLSoftwareRenderDevice.h
 	./src/SDLHardwareRenderDevice.h
+	./src/SDLFontEngine.h
 	./src/Settings.h
 	./src/SharedGameResources.h
 	./src/SharedResources.h
