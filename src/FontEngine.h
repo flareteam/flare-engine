@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
 Copyright © 2014 Henrik Andersson
+Copyright © 2015 Igor Paliychuk
 
 This file is part of FLARE.
 
@@ -21,8 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Utils.h"
-
-#include <SDL_ttf.h>
+#include <map>
 
 const int JUSTIFY_LEFT = 0;
 const int JUSTIFY_RIGHT = 1;
@@ -37,46 +37,41 @@ public:
 	std::string path;
 	int ptsize;
 	bool blend;
-	TTF_Font *ttfont;
 	int line_height;
 	int font_height;
 
 	FontStyle();
+	virtual ~FontStyle() {};
 };
 
 /**
- * class FontEngine
  *
- * Handles rendering a bitmap font.
+ * class FontEngine
+ * Provide abstract interface for FLARE engine text rendering.
+ *
  */
-
 class FontEngine {
-private:
+protected:
 	std::map<std::string,Color> color_map;
-	std::vector<FontStyle> font_styles;
-	FontStyle *active_font;
 
 public:
 	FontEngine();
-	~FontEngine();
-
-	int getLineHeight() {
-		return active_font->line_height;
-	}
-	int getFontHeight() {
-		return active_font->font_height;
-	}
+	virtual ~FontEngine() {};
 
 	Color getColor(std::string _color);
-	void setFont(std::string _font);
 
-	int calc_width(const std::string& text);
 	Point calc_size(const std::string& text_with_newlines, int width);
 
-	void render(const std::string& text, int x, int y, int justify, Image *target, Color color);
 	void render(const std::string& text, int x, int y, int justify, Image *target, int width, Color color);
 	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, Color color);
 	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, Color color);
+
+	virtual int getLineHeight() = 0;
+	virtual int getFontHeight() = 0;
+
+	virtual void setFont(std::string _font) = 0;
+	virtual int calc_width(const std::string& text) = 0;
+	virtual void render(const std::string& text, int x, int y, int justify, Image *target, Color color) = 0;
 
 	int cursor_y;
 };

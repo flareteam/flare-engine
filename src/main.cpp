@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameSwitcher.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
+#include "SDLFontEngine.h"
 
 GameSwitcher *gswitch;
 
@@ -65,7 +66,7 @@ static void init(const std::string &render_device_name) {
 	}
 
 	msg = new MessageEngine();
-	font = new FontEngine();
+	font = getFontEngine();
 	anim = new AnimationManager();
 	comb = new CombatText();
 	inpt = new InputState();

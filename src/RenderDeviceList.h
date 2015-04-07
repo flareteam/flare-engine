@@ -21,7 +21,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <string>
 
 #include "RenderDevice.h"
+#include "FontEngine.h"
+
+class FontEngine;
 
 RenderDevice* getRenderDevice(std::string name);
+
+FontEngine* getFontEngine();
 
 #endif
