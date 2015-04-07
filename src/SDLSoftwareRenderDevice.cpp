@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 #include "SDLSoftwareRenderDevice.h"
+#include "SDLFontEngine.h"
 
 SDLSoftwareImage::SDLSoftwareImage(RenderDevice *_device)
 	: Image(_device)
@@ -362,7 +363,7 @@ int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* d
 }
 
 int SDLSoftwareRenderDevice::renderText(
-	TTF_Font *ttf_font,
+	FontStyle *font,
 	const std::string& text,
 	Color color,
 	Rect& dest
@@ -370,7 +371,7 @@ int SDLSoftwareRenderDevice::renderText(
 	int ret = 0;
 	SDL_Color _color = color;
 
-	SDL_Surface *surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), _color);
+	SDL_Surface *surface = TTF_RenderUTF8_Blended(static_cast<SDLFontStyle *>(font)->ttfont, text.c_str(), _color);
 
 	if (surface == NULL)
 		return -1;
@@ -383,16 +384,16 @@ int SDLSoftwareRenderDevice::renderText(
 	return ret;
 }
 
-Image* SDLSoftwareRenderDevice::renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended) {
+Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font, const std::string& text, Color color, bool blended) {
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
 	if (!image) return NULL;
 
 	SDL_Color _color = color;
 
 	if (blended)
-		image->surface = TTF_RenderUTF8_Blended(ttf_font, text.c_str(), _color);
+		image->surface = TTF_RenderUTF8_Blended(static_cast<SDLFontStyle *>(font)->ttfont, text.c_str(), _color);
 	else
-		image->surface = TTF_RenderUTF8_Solid(ttf_font, text.c_str(), _color);
+		image->surface = TTF_RenderUTF8_Solid(static_cast<SDLFontStyle *>(font)->ttfont, text.c_str(), _color);
 
 	if (image->surface)
 		return image;
