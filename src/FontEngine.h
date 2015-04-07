@@ -51,8 +51,6 @@ public:
  *
  */
 class FontEngine {
-protected:
-	std::map<std::string,Color> color_map;
 
 public:
 	FontEngine();
@@ -74,6 +72,12 @@ public:
 	virtual void render(const std::string& text, int x, int y, int justify, Image *target, Color color) = 0;
 
 	int cursor_y;
+	
+protected:
+	Rect position(int x, int y, int justify);
+
+	std::map<std::string,Color> color_map;
+
 };
 
 #endif

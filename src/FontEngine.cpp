@@ -111,6 +111,30 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	return size;
 }
 
+Rect position(int x, int y, int justify) {
+
+	Rect dest_rect;
+	// calculate actual starting x,y based on justify
+	if (justify == JUSTIFY_LEFT) {
+		dest_rect.x = x;
+		dest_rect.y = y;
+	}
+	else if (justify == JUSTIFY_RIGHT) {
+		dest_rect.x = x - calc_width(text);
+		dest_rect.y = y;
+	}
+	else if (justify == JUSTIFY_CENTER) {
+		dest_rect.x = x - calc_width(text)/2;
+		dest_rect.y = y;
+	}
+	else {
+		logError("FontEngine::setPosition() given unhandled 'justify=%d', assuming left",justify);
+		dest_rect.x = x;
+		dest_rect.y = y;
+	}
+	return dest_rect;
+}
+
 /**
  * Word wrap to width
  */
