@@ -74,7 +74,7 @@ public:
 	int cursor_y;
 	
 protected:
-	Rect position(int x, int y, int justify);
+	Rect position(const std::string& text, int x, int y, int justify);
 
 	std::map<std::string,Color> color_map;
 

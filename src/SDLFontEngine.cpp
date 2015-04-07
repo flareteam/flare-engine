@@ -128,7 +128,7 @@ void SDLFontEngine::render(const std::string& text, int x, int y, int justify, I
 	Image *graphics;
 	Sprite *temp;
 
-	Rect dest_rect = position(x, y, justify);
+	Rect dest_rect = position(text, x, y, justify);
 
 	// Render text directly onto screen
 	if (!target) {
