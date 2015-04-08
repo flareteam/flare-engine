@@ -1,5 +1,5 @@
 /*
-Copyright © 2014 Justin Jacobs
+Copyright © 2011-2012 Clint Bellanger
 
 This file is part of FLARE.
 
@@ -15,21 +15,27 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#ifndef RENDERDEVICELIST_H
-#define RENDERDEVICELIST_H
+#ifndef SDL_INPUT_STATE_H
+#define SDL_INPUT_STATE_H
 
-#include <string>
+#include "InputState.h"
 
-#include "RenderDevice.h"
+/**
+ * class SDLInputState
+ *
+ * Handles keyboard and mouse states using SDL API
+ */
+class SDLInputState : public InputState {
+public:
+	SDLInputState(void);
+	~SDLInputState();
 
-class FontEngine;
-class SoundManager;
-class InputState;
-
-RenderDevice* getRenderDevice(std::string name);
-
-FontEngine* getFontEngine();
-SoundManager* getSoundManager();
-InputState* getInputManager();
+	void defaultQwertyKeyBindings();
+	void handle(bool dump_event);
+	void hideCursor();
+	void showCursor();
+	std::string getJoystickName(int index);
+	std::string getKeyName(int key);
+};
 
 #endif

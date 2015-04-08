@@ -765,7 +765,7 @@ void GameStateConfigBase::refreshLanguages() {
 
 void GameStateConfigBase::refreshFont() {
 	delete font;
-	font = new FontEngine();
+	font = getFontEngine();
 }
 
 void GameStateConfigBase::enableMods() {

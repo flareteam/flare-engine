@@ -162,14 +162,16 @@ Set (FLARE_SOURCES
 	./src/RenderDeviceList.cpp
 	./src/SaveLoad.cpp
 	./src/SDL_gfxBlitFunc.c
+	./src/SDLInputState.cpp
 	./src/SDLSoftwareRenderDevice.cpp
+	./src/SDLSoundManager.cpp
 	./src/SDLHardwareRenderDevice.cpp
+ 	./src/SDLFontEngine.cpp
 	./src/Settings.cpp
 	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
 	./src/StatBlock.cpp
 	./src/Stats.cpp
-	./src/SoundManager.cpp
 	./src/TileSet.cpp
 	./src/TooltipData.cpp
 	./src/Utils.cpp
@@ -264,9 +266,11 @@ Set (FLARE_HEADERS
 	./src/QuestLog.h
 	./src/RenderDevice.h
 	./src/RenderDeviceList.h
-	./src/SDL_gfxBlitFunc.c
+	./src/SDLInputState.h
 	./src/SDLSoftwareRenderDevice.h
+	./src/SDLSoundManager.h
 	./src/SDLHardwareRenderDevice.h
+	./src/SDLFontEngine.h
 	./src/Settings.h
 	./src/SharedGameResources.h
 	./src/SharedResources.h
