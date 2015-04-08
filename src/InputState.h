@@ -88,12 +88,14 @@ public:
 	void unlockActionBar();
 	void setKeybindNames();
 
-	virtual void handle(bool dump_event);
+	virtual void handle();
 	virtual void defaultQwertyKeyBindings() = 0;
 	virtual void hideCursor() = 0;
 	virtual void showCursor() = 0;
 	virtual std::string getJoystickName(int index) = 0;
 	virtual std::string getKeyName(int key) = 0;
+
+	void enableEventLog();
 
 	bool pressing[key_count];
 	bool lock[key_count];
@@ -116,6 +118,7 @@ public:
 protected:
 	bool un_press[key_count];
 	Point current_touch;
+	bool dump_event;
 };
 
 #endif

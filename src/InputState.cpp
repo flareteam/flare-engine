@@ -45,6 +45,7 @@ InputState::InputState(void)
 	, window_restored(false)
 	, window_resized(false)
 	, current_touch()
+	, dump_event(false)
 {
 }
 
@@ -180,7 +181,7 @@ void InputState::saveKeyBindings() {
 
 }
 
-void InputState::handle(bool dump_event) {
+void InputState::handle() {
 	if (lock_all) return;
 
 	inkeys = "";
@@ -291,3 +292,6 @@ void InputState::setKeybindNames() {
 	mouse_button[6] = msg->get("mbx2");
 }
 
+void InputState::enableEventLog() {
+	dump_event = true;
+}

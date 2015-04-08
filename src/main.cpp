@@ -131,7 +131,7 @@ static void init(const std::string &render_device_name) {
 	curs = new CursorManager();
 }
 
-static void mainLoop (bool debug_event) {
+static void mainLoop () {
 	bool done = false;
 	int delay = int(floor((1000.f/MAX_FRAMES_PER_SEC)+0.5f));
 	int logic_ticks = SDL_GetTicks();
@@ -152,7 +152,7 @@ static void mainLoop (bool debug_event) {
 			}
 
 			SDL_PumpEvents();
-			inpt->handle(debug_event);
+			inpt->handle();
 
 			// Skip game logic when minimized on Android
 			if (inpt->window_minimized && !inpt->window_restored)
@@ -296,7 +296,11 @@ int main(int argc, char *argv[]) {
 	if (!done) {
 		srand((unsigned int)time(NULL));
 		init(render_device_name);
-		mainLoop(debug_event);
+
+		if (debug_event)
+			inpt->enableEventLog();
+
+		mainLoop();
 
 		if (gswitch)
 			gswitch->saveUserSettings();

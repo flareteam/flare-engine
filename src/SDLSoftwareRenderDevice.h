@@ -70,8 +70,8 @@ public:
 	virtual int render(Sprite* r);
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent = false);
 
-	int renderText(FontStyle *font, const std::string& text, Color color, Rect& dest);
-	Image* renderTextToImage(FontStyle* font, const std::string& text, Color color, bool blended = true);
+	int renderText(FontStyle *font_style, const std::string& text, Color color, Rect& dest);
+	Image* renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended = true);
 	void drawPixel(int x, int y, Uint32 color);
 	void drawRectangle(const Point& p0, const Point& p1, Uint32 color);
 	void blankScreen();

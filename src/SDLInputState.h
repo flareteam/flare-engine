@@ -31,7 +31,7 @@ public:
 	~SDLInputState();
 
 	void defaultQwertyKeyBindings();
-	void handle(bool dump_event);
+	void handle();
 	void hideCursor();
 	void showCursor();
 	std::string getJoystickName(int index);

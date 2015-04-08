@@ -363,7 +363,7 @@ int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* d
 }
 
 int SDLSoftwareRenderDevice::renderText(
-	FontStyle *font,
+	FontStyle *font_style,
 	const std::string& text,
 	Color color,
 	Rect& dest
@@ -371,7 +371,7 @@ int SDLSoftwareRenderDevice::renderText(
 	int ret = 0;
 	SDL_Color _color = color;
 
-	SDL_Surface *surface = TTF_RenderUTF8_Blended(static_cast<SDLFontStyle *>(font)->ttfont, text.c_str(), _color);
+	SDL_Surface *surface = TTF_RenderUTF8_Blended(static_cast<SDLFontStyle *>(font_style)->ttfont, text.c_str(), _color);
 
 	if (surface == NULL)
 		return -1;
@@ -384,16 +384,16 @@ int SDLSoftwareRenderDevice::renderText(
 	return ret;
 }
 
-Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font, const std::string& text, Color color, bool blended) {
+Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended) {
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
 	if (!image) return NULL;
 
 	SDL_Color _color = color;
 
 	if (blended)
-		image->surface = TTF_RenderUTF8_Blended(static_cast<SDLFontStyle *>(font)->ttfont, text.c_str(), _color);
+		image->surface = TTF_RenderUTF8_Blended(static_cast<SDLFontStyle *>(font_style)->ttfont, text.c_str(), _color);
 	else
-		image->surface = TTF_RenderUTF8_Solid(static_cast<SDLFontStyle *>(font)->ttfont, text.c_str(), _color);
+		image->surface = TTF_RenderUTF8_Solid(static_cast<SDLFontStyle *>(font_style)->ttfont, text.c_str(), _color);
 
 	if (image->surface)
 		return image;

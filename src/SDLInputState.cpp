@@ -106,8 +106,8 @@ void SDLInputState::defaultQwertyKeyBindings () {
 	binding[DEVELOPER_MENU] = binding_alt[DEVELOPER_MENU] = SDLK_F5;
 }
 
-void SDLInputState::handle(bool dump_event) {
-	InputState::handle(dump_event);
+void SDLInputState::handle() {
+	InputState::handle();
 
 	SDL_Event event;
 
