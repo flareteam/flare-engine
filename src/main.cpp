@@ -69,7 +69,7 @@ static void init(const std::string &render_device_name) {
 	font = getFontEngine();
 	anim = new AnimationManager();
 	comb = new CombatText();
-	inpt = new InputState();
+	inpt = getInputManager();
 	icons = NULL;
 
 	// Load tileset options (must be after ModManager is initialized)
@@ -101,7 +101,7 @@ static void init(const std::string &render_device_name) {
 		AUDIO = false;
 	}
 
-	snd = new SoundManager();
+	snd = getSoundManager();
 
 	// initialize Joysticks
 	if(SDL_NumJoysticks() == 1) {

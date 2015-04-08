@@ -16,19 +16,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
-SoundManager
-
-SoundManager take care of loading and playing of sound effects,
-each sound is references with a hash SoundID for playing. If a
-sound is already loaded the SoundID for currently loaded sound
-will be returned by SoundManager::load().
-
+ *
+ * SDLSoundManager
+ * SDL implementation of SoundManager
+ *
 **/
 
 #include "CommonIncludes.h"
 #include "Settings.h"
 #include "SharedResources.h"
-#include "SoundManager.h"
+#include "SDLSoundManager.h"
 #include "UtilsMath.h"
 
 #include <locale>
@@ -39,39 +36,21 @@ public:
 	Mix_Chunk *chunk;
 	Sound() :  chunk(0), refCnt(0) {}
 private:
-	friend class SoundManager;
+	friend class SDLSoundManager;
 	int refCnt;
 };
 
-class Playback {
-public:
-	Playback()
-		: sid(-1)
-		, location(FPoint())
-		, loop(false)
-		, paused(false)
-		, finished(false) {
-	}
-
-	SoundManager::SoundID sid;
-	std::string virtual_channel;
-	FPoint location;
-	bool loop;
-	bool paused;
-	bool finished;
-};
-
-SoundManager::SoundManager() {
+SDLSoundManager::SDLSoundManager() : SoundManager() {
 	Mix_AllocateChannels(128);
 }
 
-SoundManager::~SoundManager() {
-	SoundManager::SoundMapIterator it;
+SDLSoundManager::~SDLSoundManager() {
+	SDLSoundManager::SoundMapIterator it;
 	while((it = sounds.begin()) != sounds.end())
 		unload(it->first);
 }
 
-void SoundManager::logic(FPoint c) {
+void SDLSoundManager::logic(FPoint c) {
 
 	PlaybackMapIterator it = playback.begin();
 	if (it == playback.end())
@@ -137,7 +116,7 @@ void SoundManager::logic(FPoint c) {
 	}
 }
 
-void SoundManager::reset() {
+void SDLSoundManager::reset() {
 
 	PlaybackMapIterator it = playback.begin();
 	if (it == playback.end())
@@ -153,7 +132,7 @@ void SoundManager::reset() {
 	logic(Point(0,0));
 }
 
-SoundManager::SoundID SoundManager::load(const std::string& filename, const std::string& errormessage) {
+SoundManager::SoundID SDLSoundManager::load(const std::string& filename, const std::string& errormessage) {
 
 	Sound lsnd;
 	SoundID sid = 0;
@@ -191,7 +170,7 @@ SoundManager::SoundID SoundManager::load(const std::string& filename, const std:
 	return sid;
 }
 
-void SoundManager::unload(SoundManager::SoundID sid) {
+void SDLSoundManager::unload(SoundManager::SoundID sid) {
 
 	SoundMapIterator it;
 	it = sounds.find(sid);
@@ -207,7 +186,7 @@ void SoundManager::unload(SoundManager::SoundID sid) {
 
 
 
-void SoundManager::play(SoundManager::SoundID sid, std::string channel, FPoint pos, bool loop) {
+void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, FPoint pos, bool loop) {
 
 	SoundMapIterator it;
 	VirtualChannelMapIterator vcit = channels.end();
@@ -263,7 +242,7 @@ void SoundManager::play(SoundManager::SoundID sid, std::string channel, FPoint p
 	playback.insert(std::pair<int, Playback>(c, p));
 }
 
-void SoundManager::on_channel_finished(int channel) {
+void SDLSoundManager::on_channel_finished(int channel) {
 	PlaybackMapIterator pit = playback.find(channel);
 	if (pit == playback.end())
 		return;
@@ -273,6 +252,6 @@ void SoundManager::on_channel_finished(int channel) {
 	Mix_SetPosition(channel, 0, 0);
 }
 
-void SoundManager::channel_finished(int channel) {
-	snd->on_channel_finished(channel);
+void SDLSoundManager::channel_finished(int channel) {
+	static_cast<SDLSoundManager*>(snd)->on_channel_finished(channel);
 }
