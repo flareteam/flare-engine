@@ -79,9 +79,10 @@ void GameSwitcher::loadMusic() {
 		}
 
 		if (music_filename != "") {
-			music = Mix_LoadMUS((mods->locate(music_filename)).c_str());
+			std::string file_path = mods->locate(music_filename);
+			music = Mix_LoadMUS(file_path.c_str());
 			if (!music)
-				logError("GameSwitcher: Mix_LoadMUS(%s): %s", music_filename.c_str(), Mix_GetError());
+				logError("GameSwitcher: Mix_LoadMUS(%s): %s", file_path.c_str(), Mix_GetError());
 		}
 	}
 
