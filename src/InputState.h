@@ -114,6 +114,8 @@ public:
 	bool window_minimized;
 	bool window_restored;
 	bool window_resized;
+	bool pressing_up;
+	bool pressing_down;
 
 protected:
 	bool un_press[key_count];

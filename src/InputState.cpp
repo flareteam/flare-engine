@@ -44,6 +44,8 @@ InputState::InputState(void)
 	, window_minimized(false)
 	, window_restored(false)
 	, window_resized(false)
+	, pressing_up(false)
+	, pressing_down(false)
 	, current_touch()
 	, dump_event(false)
 {

@@ -206,6 +206,9 @@ void SDLInputState::handle() {
 						un_press[key] = false;
 					}
 				}
+
+				if (event.key.keysym.sym == SDLK_UP) pressing_up = true;
+				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = true;
 				break;
 			case SDL_KEYUP:
 				for (int key=0; key<key_count; key++) {
@@ -214,6 +217,9 @@ void SDLInputState::handle() {
 					}
 				}
 				last_key = event.key.keysym.sym;
+
+				if (event.key.keysym.sym == SDLK_UP) pressing_up = false;
+				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = false;
 				break;
 				/*
 				case SDL_JOYAXISMOTION:
