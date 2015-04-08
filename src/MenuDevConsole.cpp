@@ -141,9 +141,13 @@ void MenuDevConsole::logic() {
 			inpt->pressing_down = false;
 			if (input_scrollback.size() != 0) {
 				input_scrollback_pos++;
-				if (input_scrollback_pos >= input_scrollback.size())
-					input_scrollback_pos = input_scrollback.size() - 1;
-				input_box->setText(input_scrollback[input_scrollback_pos]);
+				if (input_scrollback_pos < input_scrollback.size()) {
+					input_box->setText(input_scrollback[input_scrollback_pos]);
+				}
+				else if (input_scrollback_pos >= input_scrollback.size()) {
+					input_scrollback_pos = input_scrollback.size();
+					input_box->setText("");
+				}
 			}
 		}
 	}
