@@ -129,6 +129,23 @@ void MenuDevConsole::logic() {
 			inpt->lock[CANCEL] = true;
 			input_box->inFocus = false;
 		}
+		else if (input_box->inFocus && inpt->last_key == SDLK_UP) {
+			inpt->last_key = 0;
+			if (input_scrollback.size() != 0) {
+				if (input_scrollback_pos != 0)
+					input_scrollback_pos--;
+				input_box->setText(input_scrollback[input_scrollback_pos]);
+			}
+		}
+		else if (input_box->inFocus && inpt->last_key == SDLK_DOWN) {
+			inpt->last_key = 0;
+			if (input_scrollback.size() != 0) {
+				input_scrollback_pos++;
+				if (input_scrollback_pos >= input_scrollback.size())
+					input_scrollback_pos = input_scrollback.size() - 1;
+				input_box->setText(input_scrollback[input_scrollback_pos]);
+			}
+		}
 	}
 }
 
@@ -159,6 +176,8 @@ void MenuDevConsole::execute() {
 	std::string command = input_box->getText();
 	if (command == "") return;
 
+	input_scrollback.push_back(command);
+	input_scrollback_pos = input_scrollback.size();
 	input_box->setText("");
 
 	log_history->add(command, false, &color_echo);
