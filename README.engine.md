@@ -43,13 +43,17 @@ The following links are specific to the engine
 
 ## Games made with flare
 
-* flare-game    A medival fantasy game. In the first days of the engine this game influenced most design decisions a lot. The art is 3d rendered 64x32 px isometric perspective.
-* polymorphable A game made for "The Liberated Pixel cup", which was a competition about game art and making a game thereof. The pixel art is 32x32 orthogonal perspective featuring a medival setting. The development has finished.
-* concordia     Another game using the art created during "The liberated pixel cup". While this started without stress regarding the timeline for the pixel cup, this story is more thought through and the content is more organized.
+* [flare-game]    A medival fantasy game. In the first days of the engine this game influenced most design decisions a lot. The art is 3d rendered 64x32 px isometric perspective.
+* [polymorphable] A game made for "The Liberated Pixel cup", which was a competition about game art and making a game thereof. The pixel art is 32x32 orthogonal perspective featuring a medival setting. The development has finished.
+* [concordia]     Another game using the art created during "The liberated pixel cup". While this started without stress regarding the timeline for the pixel cup, this story is more thought through and the content is more organized.
+
+[polymorphable]: https://github.com/makrohn/polymorphable
+[concordia]: https://github.com/makrohn/concordia
+[flare-game]: https://github.com/clintbellanger/flare-game
 
 ## Building from Source
 
-Please see the [INSTALL.md](INSTALL.md) file for instructions.
+Please see the [INSTALL.md](INSTALL.engine.md) file for instructions.
 
 ## Settings
 

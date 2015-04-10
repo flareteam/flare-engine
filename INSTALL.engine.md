@@ -123,7 +123,7 @@ If you want the game installed system-wide, as root, install with:
 make install
 ```
 
-The game will be installed into '/usr/local' by default.  
+The game will be installed into `/usr/local` by default.  
 You can set different paths in the cmake step, like:
 
 ```sh
