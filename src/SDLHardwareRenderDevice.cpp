@@ -335,17 +335,12 @@ int SDLHardwareRenderDevice::render(Sprite *r) {
 	return SDL_RenderCopy(renderer, static_cast<SDLHardwareImage *>(r->getGraphics())->surface, &src, &dest);
 }
 
-int SDLHardwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent) {
+int SDLHardwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest) {
 	if (!src_image || !dest_image)
 		return -1;
 
 	if (SDL_SetRenderTarget(renderer, static_cast<SDLHardwareImage *>(dest_image)->surface) != 0)
 		return -1;
-
-	if (dest_is_transparent) {
-		// do nothing
-		// this block is here to suppress an unused variable compiler warning
-	}
 
 	dest.w = src.w;
 	dest.h = src.h;

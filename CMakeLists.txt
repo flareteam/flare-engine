@@ -161,7 +161,6 @@ Set (FLARE_SOURCES
 	./src/RenderDevice.cpp
 	./src/RenderDeviceList.cpp
 	./src/SaveLoad.cpp
-	./src/SDL_gfxBlitFunc.c
 	./src/SDLInputState.cpp
 	./src/SDLSoftwareRenderDevice.cpp
 	./src/SDLSoundManager.cpp

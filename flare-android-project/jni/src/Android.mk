@@ -85,7 +85,6 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/RenderDevice.cpp \
 	../../../src/RenderDeviceList.cpp \
 	../../../src/SaveLoad.cpp \
-	../../../src/SDL_gfxBlitFunc.c \
 	../../../src/SDLInputState.cpp \
 	../../../src/SDLHardwareRenderDevice.cpp \
 	../../../src/SDLSoftwareRenderDevice.cpp \

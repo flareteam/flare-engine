@@ -144,8 +144,7 @@ void SDLFontEngine::render(const std::string& text, int x, int y, int justify, I
 
 	// Render text graphics into target
 	clip = temp->getClip();
-	render_device->renderToImage(temp->getGraphics(), clip,
-								 target, dest_rect, active_font->blend);
+	render_device->renderToImage(temp->getGraphics(), clip, target, dest_rect);
 
 	// text is cached, we can free temp resource
 	delete temp;

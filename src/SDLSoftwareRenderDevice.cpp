@@ -22,7 +22,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "SDL_gfxBlitFunc.h"
 
 #include "SharedResources.h"
 #include "Settings.h"
@@ -348,18 +347,14 @@ int SDLSoftwareRenderDevice::render(Sprite *r) {
 	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r->getGraphics())->surface, &src, screen, &dest);
 }
 
-int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent) {
+int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest) {
 	if (!src_image || !dest_image) return -1;
 
 	SDL_Rect _src = src;
 	SDL_Rect _dest = dest;
 
-	if (dest_is_transparent)
-		return SDL_gfxBlitRGBA(static_cast<SDLSoftwareImage *>(src_image)->surface, &_src,
-							   static_cast<SDLSoftwareImage *>(dest_image)->surface, &_dest);
-	else
-		return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(src_image)->surface, &_src,
-							   static_cast<SDLSoftwareImage *>(dest_image)->surface, &_dest);
+	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(src_image)->surface, &_src,
+						   static_cast<SDLSoftwareImage *>(dest_image)->surface, &_dest);
 }
 
 int SDLSoftwareRenderDevice::renderText(

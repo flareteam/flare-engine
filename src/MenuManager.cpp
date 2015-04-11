@@ -186,7 +186,7 @@ void MenuManager::setDragIcon(int icon_id) {
 
 		icons->setClip(src);
 		icons->setDest(dest);
-		render_device->renderToImage(icons->getGraphics(), src, drag_icon->getGraphics(), dest, true);
+		render_device->renderToImage(icons->getGraphics(), src, drag_icon->getGraphics(), dest);
 	}
 }
 
