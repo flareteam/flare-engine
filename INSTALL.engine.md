@@ -22,7 +22,7 @@ make # build the executable
 cd ../flare-game/mods
 ln -s ../../flare-engine/mods/default # symlink the default mod
 cd ../
-ln -s ../flare-engine/flare # symlink the executable 
+ln -s ../flare-engine/flare # symlink the executable
 ./flare # flame on!
 ```
 
@@ -48,7 +48,7 @@ Installing dependencies on Arch Linux:
 pacman -S --asdeps sdl2 sdl2_image sdl2_mixer libogg libvorbis hicolor-icon-theme python sdl2_ttf
 ```
 
-There are also AUR PKGBUILDs available, 
+There are also AUR PKGBUILDs available,
 for both stable([engine][arch_stable_engine] and game[arch_stable_game]) and development([engine][arch_dev_engine] and game[arch_dev_game]) versions.
 
 [arch_stable_engine]: https://aur.archlinux.org/packages/flare-engine/
@@ -105,7 +105,7 @@ brew install cmake libvorbis sdl2 sdl2_image sdl2_mixer sdl2_ttf
 
 #### Microsoft Visual C++
 
-If you want to build flare under Microsoft Visual C++, 
+If you want to build flare under Microsoft Visual C++,
 you should get [dirent.h header file][dirent.h]
 and copy it to `$MICROSOFT_VISUAL_CPP_FOLDER\VC\include\`.
 
@@ -123,11 +123,11 @@ If you want the game installed system-wide, as root, install with:
 make install
 ```
 
-The game will be installed into `/usr/local` by default.  
+The game will be installed into `/usr/local` by default.
 You can set different paths in the cmake step, like:
 
 ```sh
-cmake -DCMAKE_INSTALL_PREFIX:STRING="/usr" ..
+cmake -DCMAKE_INSTALL_PREFIX:STRING="/usr" .
 ```
 <a name="one_call_build"></a>
 ## Building with g++
