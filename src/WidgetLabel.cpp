@@ -91,7 +91,6 @@ void WidgetLabel::setPos(int offset_x, int offset_y) {
 	setX(pos_base.x + offset_x);
 	setY(pos_base.y + offset_y);
 	applyOffsets();
-	refresh();
 }
 
 void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color) {
@@ -104,6 +103,7 @@ void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::stri
 void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, std::string _font) {
 
 	bool changed = false;
+	bool changed_pos = false;
 
 	if (justify != _justify) {
 		justify = _justify;
@@ -123,11 +123,11 @@ void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::stri
 	}
 	if (pos.x != _x) {
 		pos.x = _x;
-		changed = true;
+		changed_pos = true;
 	}
 	if (pos.y != _y) {
 		pos.y = _y;
-		changed = true;
+		changed_pos = true;
 	}
 	if (font_style != _font) {
 		font_style = _font;
@@ -135,8 +135,10 @@ void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::stri
 	}
 
 	if (changed) {
+		recacheTextSprite();
+	}
+	else if (changed_pos) {
 		applyOffsets();
-		refresh();
 	}
 }
 
@@ -147,7 +149,6 @@ void WidgetLabel::setX(int _x) {
 	if (pos.x != _x) {
 		pos.x = _x;
 		applyOffsets();
-		refresh();
 	}
 }
 
@@ -158,7 +159,6 @@ void WidgetLabel::setY(int _y) {
 	if (pos.y != _y) {
 		pos.y = _y;
 		applyOffsets();
-		refresh();
 	}
 }
 
@@ -182,8 +182,7 @@ int WidgetLabel::getY() {
 void WidgetLabel::setJustify(int _justify) {
 	if (justify != _justify) {
 		justify = _justify;
-		applyOffsets();
-		refresh();
+		recacheTextSprite();
 	}
 }
 
@@ -191,12 +190,6 @@ void WidgetLabel::setJustify(int _justify) {
  * Apply horizontal justify and vertical alignment to label position
  */
 void WidgetLabel::applyOffsets() {
-
-	font->setFont(font_style);
-
-	bounds.w = font->calc_width(text);
-	bounds.h = font->getFontHeight();
-
 	// apply JUSTIFY
 	if (justify == JUSTIFY_LEFT)
 		bounds.x = pos.x;
@@ -228,8 +221,7 @@ void WidgetLabel::applyOffsets() {
 void WidgetLabel::set(const std::string& _text) {
 	if (text != _text) {
 		this->text = _text;
-		applyOffsets();
-		refresh();
+		recacheTextSprite();
 	}
 }
 
@@ -237,7 +229,7 @@ void WidgetLabel::set(const std::string& _text) {
  * We buffer the rendered text instead of calculating it each frame
  * This function refreshes the buffer.
  */
-void WidgetLabel::refresh() {
+void WidgetLabel::recacheTextSprite() {
 	Image *image;
 
 	if (label) {
@@ -245,16 +237,18 @@ void WidgetLabel::refresh() {
 		label = NULL;
 	}
 
+	font->setFont(font_style);
+	bounds.w = font->calc_width(text);
+	bounds.h = font->getFontHeight();
+
 	image = render_device->createImage(bounds.w, bounds.h);
 	if (!image) return;
 
-	font->setFont(font_style);
 	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, image, color);
 	label = image->createSprite();
 	image->unref();
 
-	label->setDestX(bounds.x);
-	label->setDestY(bounds.y);
+	applyOffsets();
 }
 
 WidgetLabel::~WidgetLabel() {
