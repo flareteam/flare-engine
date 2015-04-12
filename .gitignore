@@ -40,3 +40,6 @@ flare-android-project/gen/
 
 # os x
 .DS_Store
+
+# qt creator
+*.autosave

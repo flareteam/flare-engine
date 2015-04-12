@@ -82,6 +82,7 @@ MenuDevConsole::MenuDevConsole() : Menu() {
 
 	color_echo = font->getColor("widget_disabled");
 	color_error = font->getColor("menu_penalty");
+	color_hint = font->getColor("menu_bonus");
 
 	align();
 	input_box->inFocus = true;
@@ -223,7 +224,13 @@ void MenuDevConsole::execute() {
 		if (args.size() > 1) {
 			Enemy_Level el = enemyg->getRandomEnemy(args[1], 0, 0);
 			if (el.type != "") {
-				Point spawn_pos = floor(mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1));
+				Point spawn_pos;
+				if (args.size() > 3) {
+					spawn_pos.x = toInt(args[4]);
+					spawn_pos.y = toInt(args[5]);
+				} else {
+					spawn_pos = floor(mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1));
+				}
 				powers->spawn(args[1], spawn_pos);
 				log_history->add(msg->get("Spawning enemy from category: ") + args[1]);
 			}
@@ -233,6 +240,7 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: " + args[0] + " <category> [<x> <y>]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_item") {
@@ -260,6 +268,7 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: " + args[0] + " <item_id> [<quantity>]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_currency") {
@@ -270,6 +279,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: " + args[0] + " <quantity>"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_xp") {
@@ -280,6 +290,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: " + args[0] + " <quantity>"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "set_status") {
@@ -289,6 +300,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: " + args[0] + " <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "unset_status") {
@@ -303,6 +315,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: " + args[0] + " <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "teleport") {
@@ -332,9 +345,11 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: " + args[0] + " <x> <y> [<map>]"), false, &color_hint);
 		}
 	}
 	else {
 		log_history->add(msg->get("ERROR: Unknown command"), false, &color_error);
+		log_history->add(msg->get("HINT: Type help"), false, &color_hint);
 	}
 }
