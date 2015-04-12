@@ -222,13 +222,13 @@ void MenuDevConsole::execute() {
 	}
 	else if (args[0] == "spawn_enemy") {
 		if (args.size() > 1) {
-			int min_level = 0;
-			int max_level = 0;
+			int minlevel = 0;
+			int maxlevel = 0;
 			if (args.size() > 3) {
-				min_level = toInt(args[2]);
-				max_level = toInt(args[3]);
+				minlevel = toInt(args[2]);
+				maxlevel = toInt(args[3]);
 			}
-			Enemy_Level el = enemyg->getRandomEnemy(args[1], min_level, max_level);
+			Enemy_Level el = enemyg->getRandomEnemy(args[1], minlevel, maxlevel);
 			if (el.type != "") {
 				Point spawn_pos;
 				if (args.size() > 5) {
