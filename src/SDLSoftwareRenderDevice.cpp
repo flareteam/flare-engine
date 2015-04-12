@@ -319,14 +319,6 @@ int SDLSoftwareRenderDevice::createContext() {
 	return (is_initialized ? 0 : -1);
 }
 
-Rect SDLSoftwareRenderDevice::getContextSize() {
-	Rect size;
-	size.x = size.y = 0;
-	size.h = screen->h;
-	size.w = screen->w;
-	return size;
-}
-
 int SDLSoftwareRenderDevice::render(Renderable& r, Rect dest) {
 	SDL_Rect src = r.src;
 	SDL_Rect _dest = dest;
