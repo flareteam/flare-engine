@@ -42,11 +42,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits.h>
 #include <iomanip>
 
-bool rescompare(const Rect &r1, const Rect &r2) {
-	if (r1.w == r2.w) return r1.h > r2.h;
-	return r1.w > r2.w;
-}
-
 GameStateConfigDesktop::GameStateConfigDesktop()
 	: GameStateConfigBase(false)
 	, fullscreen_cb(new WidgetCheckBox())
