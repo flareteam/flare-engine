@@ -225,9 +225,9 @@ void MenuDevConsole::execute() {
 			Enemy_Level el = enemyg->getRandomEnemy(args[1], 0, 0);
 			if (el.type != "") {
 				Point spawn_pos;
-				if (args.size() > 3) {
-					spawn_pos.x = toInt(args[4]);
-					spawn_pos.y = toInt(args[5]);
+				if (args.size() == 4) {
+					spawn_pos.x = toInt(args[2]);
+					spawn_pos.y = toInt(args[3]);
 				} else {
 					spawn_pos = floor(mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1));
 				}
