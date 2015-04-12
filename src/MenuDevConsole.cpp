@@ -222,16 +222,10 @@ void MenuDevConsole::execute() {
 	}
 	else if (args[0] == "spawn_enemy") {
 		if (args.size() > 1) {
-			int min_level = 0;
-			int max_level = 0;
-			if (args.size() > 3) {
-				min_level = toInt(args[2]);
-				max_level = toInt(args[3]);
-			}
-			Enemy_Level el = enemyg->getRandomEnemy(args[1], min_level, max_level);
+			Enemy_Level el = enemyg->getRandomEnemy(args[1], 0, 0);
 			if (el.type != "") {
 				Point spawn_pos;
-				if (args.size() > 5) {
+				if (args.size() > 3) {
 					spawn_pos.x = toInt(args[4]);
 					spawn_pos.y = toInt(args[5]);
 				} else {
@@ -246,7 +240,7 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: " + args[0] + " <category> [<min_level> <max_level> <x> <y>]"), false, &color_hint);
+			log_history->add(msg->get("HINT: " + args[0] + " <category> [<x> <y>]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_item") {
