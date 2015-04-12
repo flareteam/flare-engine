@@ -288,14 +288,6 @@ int SDLHardwareRenderDevice::createContext() {
 	return (is_initialized ? 0 : -1);
 }
 
-Rect SDLHardwareRenderDevice::getContextSize() {
-	Rect size;
-	size.x = size.y = 0;
-	SDL_GetWindowSize(window, &size.w, &size.h);
-
-	return size;
-}
-
 int SDLHardwareRenderDevice::render(Renderable& r, Rect dest) {
 	dest.w = r.src.w;
 	dest.h = r.src.h;

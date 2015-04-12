@@ -178,7 +178,6 @@ public:
 	/** Context operations */
 	virtual int createContext() = 0;
 	virtual void destroyContext() = 0;
-	virtual Rect getContextSize() = 0;
 	virtual void setGamma(float g) = 0;
 	virtual void updateTitleBar() = 0;
 

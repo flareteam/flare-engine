@@ -64,7 +64,6 @@ public:
 
 	SDLSoftwareRenderDevice();
 	int createContext();
-	Rect getContextSize();
 
 	virtual int render(Renderable& r, Rect dest);
 	virtual int render(Sprite* r);
