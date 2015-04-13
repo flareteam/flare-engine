@@ -138,6 +138,7 @@ bool WidgetInput::logic(int x, int y) {
 		// cursor visible one second, invisible the next
 		cursor_frame++;
 		if (cursor_frame == MAX_FRAMES_PER_SEC+MAX_FRAMES_PER_SEC) cursor_frame = 0;
+
 	}
 	return true;
 }
