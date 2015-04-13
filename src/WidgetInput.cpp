@@ -119,18 +119,25 @@ bool WidgetInput::logic(int x, int y) {
 		// handle backspaces
 		if (!inpt->lock[DEL] && inpt->pressing[DEL]) {
 			inpt->lock[DEL] = true;
+			del_frame = 0;
 			// remove utf-8 character
 			int n = text.length()-1;
 			while (n > 0 && ((text[n] & 0xc0) == 0x80) ) n--;
 			text = text.substr(0, n);
 			trimText();
+		} else if (inpt->pressing[DEL]) {
+			// delay unlocking of DEL lock
+			del_frame++;
+		}
+		if (inpt->lock[DEL] && del_frame >= MAX_FRAMES_PER_SEC / 8) {
+			// after X frames allow DEL again
+			inpt->lock[DEL]	= false;
 		}
 
 		// animate cursor
 		// cursor visible one second, invisible the next
 		cursor_frame++;
 		if (cursor_frame == MAX_FRAMES_PER_SEC+MAX_FRAMES_PER_SEC) cursor_frame = 0;
-
 	}
 	return true;
 }
