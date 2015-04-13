@@ -47,6 +47,7 @@ protected:
 	std::string text; // the text that has been typed into the box
 	std::string trimmed_text; // a trimmed version of text that is rendered
 	int cursor_frame;
+	int del_frame;
 
 	Point font_pos;
 
