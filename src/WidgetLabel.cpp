@@ -88,8 +88,7 @@ void WidgetLabel::render() {
 }
 
 void WidgetLabel::setPos(int offset_x, int offset_y) {
-	setX(pos_base.x + offset_x);
-	setY(pos_base.y + offset_y);
+	Widget::setPos(offset_x, offset_y);
 	applyOffsets();
 }
 
