@@ -29,7 +29,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits>
 
-MenuDevConsole::MenuDevConsole() : Menu() {
+MenuDevConsole::MenuDevConsole()
+	: Menu()
+	, input_scrollback_pos(0)
+{
 
 	button_close = new WidgetButton("images/menus/buttons/button_x.png");
 	tablist.add(button_close);

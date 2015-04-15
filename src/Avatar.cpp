@@ -429,7 +429,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	bool allowed_to_move;
 	bool allowed_to_use_power = true;
-	bool click_to_respawn = false;
+
+#ifdef __ANDROID__
+	const bool click_to_respawn = true;
+#else
+	const bool click_to_respawn = false;
+#endif
 
 	// check for revive
 	if (stats.hp <= 0 && stats.effects.revive) {
@@ -642,10 +647,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 		case AVATAR_DEAD:
 			allowed_to_use_power = false;
-
-#ifdef __ANDROID__
-			click_to_respawn = true;
-#endif
 
 			if (stats.effects.triggered_death) break;
 

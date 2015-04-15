@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 Menu::Menu()
 	: visible(false)
+	, alignment(ALIGN_TOPLEFT)
 	, sfx_open(0)
 	, sfx_close(0)
 	, background(NULL) {

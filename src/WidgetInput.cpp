@@ -28,6 +28,7 @@ WidgetInput::WidgetInput(const std::string& filename)
 	, pressed(false)
 	, hover(false)
 	, cursor_frame(0)
+	, del_frame(0)
 	, inFocus(false)
 	, max_length(0) {
 
