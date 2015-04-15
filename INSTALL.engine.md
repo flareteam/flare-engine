@@ -49,7 +49,7 @@ pacman -S --asdeps sdl2 sdl2_image sdl2_mixer libogg libvorbis hicolor-icon-them
 ```
 
 There are also AUR PKGBUILDs available,
-for both stable([engine][arch_stable_engine] and game[arch_stable_game]) and development([engine][arch_dev_engine] and game[arch_dev_game]) versions.
+for both stable([engine][arch_stable_engine] and [game][arch_stable_game]) and development([engine][arch_dev_engine] and [game][arch_dev_game]) versions.
 
 [arch_stable_engine]: https://aur.archlinux.org/packages/flare-engine/
 [arch_stable_game]: https://aur.archlinux.org/packages/flare-game/
@@ -140,7 +140,7 @@ If you prefer building directly with C++, the command will be something like thi
 g++ -I /usr/include/SDL src/*.cpp src/*.c -o flare -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 ```
 
-**Windows** plus [MinGW] (depending on where your SDL dev headers are):
+**Windows** plus [MinGW]:
 
 ```
 g++ -I C:\MinGW\include\SDL src\*.cpp src\*.c -o flare.exe -lmingw32 -lSDLmain -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf

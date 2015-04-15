@@ -2,15 +2,15 @@
 
 Flare (Free Libre Action Roleplaying Engine) is a simple game engine
 built to handle a very specific kind of game: single-player 2D action RPGs.
-Flare is not a reimplementation of an existing game or engine. 
+Flare is not a reimplementation of an existing game or engine.
 It is a tribute to and exploration of the action RPG genre.
 
-Rather than building a very abstract, robust game engine, 
-the goal of this project is to build several real games 
+Rather than building a very abstract, robust game engine,
+the goal of this project is to build several real games
 and harvest an engine from the common, reusable code.
 
-Flare uses simple file formats (INI style config files) for most of the game data, 
-allowing anyone to easily modify game contents. Open formats are preferred (png, ogg). 
+Flare uses simple file formats (INI style config files) for most of the game data,
+allowing anyone to easily modify game contents. Open formats are preferred (png, ogg).
 The game code is C++.
 
 Originally the first game to be developed using this engine was part of this
@@ -26,7 +26,7 @@ Contributors retain copyrights to their original contributions.
 
 Flare's source code is released under the GNU GPL v3. Later versions are permitted.
 
-Flare's default mod (includes engine translations) is released under GNU GPL v3 and CC-BY-SA 3.0. 
+Flare's default mod (includes engine translations) is released under GNU GPL v3 and CC-BY-SA 3.0.
 Later versions are permitted.
 
 The default mod contains the Liberation Sans font which is released under the SIL Open Font License, Version 1.1.
@@ -35,10 +35,9 @@ The default mod contains the Liberation Sans font which is released under the SI
 
 The following links are specific to the engine
 
-* Homepage  no engine dedicated homepage exists yet, the first game flare-game is found at [www.flarerpg.org](http://https://github.com/clintbellanger/flare-game). 
-  Some issues regarding the engine can be found there as well.
-* Source    [https://github.com/clintbellanger/flare-engine]()
-* Forums    [http://opengameart.org/forums/flare]()
+* [Homepage](http://flarerpg.org).
+* [Source](https://github.com/clintbellanger/flare-engine)
+* [Forums](http://opengameart.org/forums/flare)
 * Email     clintbellanger@gmail.com
 
 ## Games made with flare
@@ -47,9 +46,9 @@ The following links are specific to the engine
 * [polymorphable] A game made for "The Liberated Pixel cup", which was a competition about game art and making a game thereof. The pixel art is 32x32 orthogonal perspective featuring a medival setting. The development has finished.
 * [concordia]     Another game using the art created during "The liberated pixel cup". While this started without stress regarding the timeline for the pixel cup, this story is more thought through and the content is more organized.
 
+[flare-game]: https://github.com/clintbellanger/flare-game
 [polymorphable]: https://github.com/makrohn/polymorphable
 [concordia]: https://github.com/makrohn/concordia
-[flare-game]: https://github.com/clintbellanger/flare-game
 
 ## Building from Source
 
@@ -74,7 +73,7 @@ Save files are stored in one of these places:
     $HOME/.local/share/flare/
     ./saves
 
-If permissions are correct, the game is automatically saved when you exit. 
+If permissions are correct, the game is automatically saved when you exit.
 In addition, there is a `mods` directory in this location, which can be used to override system-wide mods.
 
 ## Command-line Flags
