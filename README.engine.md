@@ -35,7 +35,7 @@ The default mod contains the Liberation Sans font which is released under the SI
 
 The following links are specific to the engine
 
-* [Homepage](http://flarerpg.org).
+* [Homepage](http://flarerpg.org)
 * [Source](https://github.com/clintbellanger/flare-engine)
 * [Forums](http://opengameart.org/forums/flare)
 * Email     clintbellanger@gmail.com
