@@ -643,7 +643,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		case AVATAR_DEAD:
 			allowed_to_use_power = false;
 
-#ifdef __ANDROID__
+#ifdef __ANDROID__ || __IPHONEOS__
 			click_to_respawn = true;
 #endif
 

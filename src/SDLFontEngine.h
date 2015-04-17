@@ -20,7 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define SDL_FONT_ENGINE_H
 
 #include "FontEngine.h"
-#include <SDL_ttf.h>
+#include "SDL_ttf.h"
 
 class SDLFontStyle : public FontStyle {
 public:

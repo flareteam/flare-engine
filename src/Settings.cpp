@@ -38,7 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define log2(x)	logf(x)/logf(2)
 #endif
 
-#ifdef __ANDROID__
+#ifdef __ANDROID__ || __IPHONEOS__
 #include <SDL.h>
 #endif
 
@@ -906,7 +906,7 @@ bool compareVersions(int maj0, int min0, int maj1, int min1) {
  * Set required settings for Android
  */
 void loadAndroidDefaults() {
-#ifdef __ANDROID__
+#ifdef __ANDROID__ || __IPHONEOS__
 	MOUSE_MOVE = true;
 	MOUSE_AIM = true;
 	NO_MOUSE = false;

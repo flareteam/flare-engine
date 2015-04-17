@@ -34,7 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 SDLInputState::SDLInputState(void)
 	: InputState()
 {
-#ifndef __ANDROID__
+#ifndef __ANDROID__ || __IPHONEOS__
 	SDL_StartTextInput();
 #endif
 
@@ -54,7 +54,7 @@ SDLInputState::SDLInputState(void)
 void SDLInputState::defaultQwertyKeyBindings () {
 	binding[CANCEL] = SDLK_ESCAPE;
 	binding[ACCEPT] = SDLK_RETURN;
-#ifdef __ANDROID__
+#ifdef __ANDROID__ || __IPHONEOS__
     binding[CANCEL] = SDLK_AC_BACK;
 	binding[ACCEPT] = SDLK_MENU;
 #endif
@@ -125,7 +125,7 @@ void SDLInputState::handle() {
 
 		switch (event.type) {
 
-#ifndef __ANDROID__
+#ifndef __ANDROID__ || __IPHONEOS__
 			case SDL_MOUSEMOTION:
 				mouse.x = event.motion.x;
 				mouse.y = event.motion.y;

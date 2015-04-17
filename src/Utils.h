@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <SDL.h>
+#include "SDL.h"
 #include <stdint.h>
 #include <string>
 
