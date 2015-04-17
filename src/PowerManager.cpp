@@ -1087,6 +1087,29 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint targe
 	return true;
 }
 
+/**
+ * Stationary blocking with optional buffs/debuffs
+ * Only the hero can block
+ */
+bool PowerManager::block(int power_index, StatBlock *src_stats) {
+	// if the hero is blocking, we can't activate any more blocking powers
+	if (src_stats->effects.triggered_block)
+		return false;
+
+	src_stats->effects.triggered_block = true;
+
+	// apply any attached effects
+	// passive_trigger MUST be "TRIGGER_BLOCK", since that is how we will later remove effects added by blocking
+	powers[power_index].passive_trigger = TRIGGER_BLOCK;
+	effect(src_stats, src_stats, power_index, SOURCE_TYPE_HERO);
+
+	// If there's a sound effect, play it here
+	playSound(power_index);
+
+	payPowerCost(power_index, src_stats);
+
+	return true;
+}
 
 /**
  * Activate is basically a switch/redirect to the appropriate function
@@ -1102,6 +1125,9 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target
 
 	if (src_stats->hp > 0 && powers[power_index].sacrifice == false && powers[power_index].requires_hp >= src_stats->hp)
 		return false;
+
+	if (powers[power_index].new_state == POWSTATE_BLOCK)
+		return block(power_index, src_stats);
 
 	// logic for different types of powers are very different.  We allow these
 	// separate functions to handle the details.

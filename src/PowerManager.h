@@ -346,6 +346,7 @@ private:
 	bool repeater(int powernum, StatBlock *src_stats, FPoint target);
 	bool spawn(int powernum, StatBlock *src_stats, FPoint target);
 	bool transform(int powernum, StatBlock *src_stats, FPoint target);
+	bool block(int power_index, StatBlock *src_stats);
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
