@@ -65,6 +65,8 @@ public:
 
 	void loadAnimation(std::string &s);
 
+	void setAngle(const float& _angle);
+
 	int dmg_min;
 	int dmg_max;
 	int crit_chance;
@@ -75,6 +77,7 @@ public:
 	FPoint pos;
 	FPoint speed;
 	float base_speed;
+	float angle; // in radians
 	int lifespan; // ticks down to zero
 	float radius;
 	int power_index;
@@ -107,6 +110,8 @@ public:
 	int trait_crits_impaired;
 	int trait_elemental;
 	bool beacon;
+	bool missile;
+	bool directional;
 
 	// pre/post power effects
 	int post_power;

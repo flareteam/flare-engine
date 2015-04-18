@@ -632,8 +632,10 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 		haz->loadAnimation(powers[power_index].animation_name);
 	if (powers[power_index].lifespan != 0)
 		haz->lifespan = powers[power_index].lifespan;
-	if (powers[power_index].directional)
+	if (powers[power_index].directional) {
+		haz->directional = powers[power_index].directional;
 		haz->animationKind = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
+	}
 	else if (powers[power_index].visual_random)
 		haz->animationKind = rand() % powers[power_index].visual_random;
 	else if (powers[power_index].visual_option)
@@ -705,6 +707,10 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	if (!powers[power_index].loot.empty()) {
 		haz->loot = powers[power_index].loot;
 	}
+
+	// flag missile powers for reflection
+	if (powers[power_index].type == POWTYPE_MISSILE)
+		haz->missile = true;
 }
 
 /**
@@ -860,8 +866,6 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
  * return boolean true if successful
  */
 bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target) {
-	const float pi = 3.1415926535898f;
-
 	FPoint src;
 	if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
 		src = target;
@@ -878,17 +882,14 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 	//generate hazards
 	for (int i=0; i < powers[power_index].count; i++) {
 		Hazard *haz = new Hazard(collider);
+		initHazard(power_index, src_stats, target, haz);
 
 		//calculate individual missile angle
-		float offset_angle = ((1.0f - powers[power_index].count)/2 + i) * (powers[power_index].missile_angle * pi / 180.0f);
+		float offset_angle = ((1.0f - powers[power_index].count)/2 + i) * (powers[power_index].missile_angle * M_PI / 180.0f);
 		float variance = 0;
 		if (powers[power_index].angle_variance != 0)
-			variance = pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].angle_variance) * pi / 180.0f; //random between 0 and angle_variance away
+			variance = pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].angle_variance) * M_PI / 180.0f; //random between 0 and angle_variance away
 		float alpha = theta + offset_angle + variance;
-		while (alpha >= pi+pi) alpha -= pi+pi;
-		while (alpha < 0.0) alpha += pi+pi;
-
-		initHazard(power_index, src_stats, target, haz);
 
 		//calculate the missile velocity
 		float speed_var = 0;
@@ -896,12 +897,10 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 			const float var = powers[power_index].speed_variance;
 			speed_var = ((var * 2.0f * rand()) / RAND_MAX) - var;
 		}
-		haz->speed.x = (haz->base_speed + speed_var) * cos(alpha);
-		haz->speed.y = (haz->base_speed + speed_var) * sin(alpha);
 
-		// calculate direction based on trajectory, not actual target
-		if (powers[power_index].directional)
-			haz->animationKind = calcDirection(src.x, src.y, src.x + haz->speed.x, src.y + haz->speed.y);
+		// set speed and angle
+		haz->base_speed += speed_var;
+		haz->setAngle(alpha);
 
 		// add optional delay
 		haz->delay_frames = delay_iterator;

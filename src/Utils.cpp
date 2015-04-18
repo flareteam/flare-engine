@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
+#include "UtilsMath.h"
 
 #include <cmath>
 #include <stdarg.h>
@@ -163,9 +164,8 @@ int calcDirection(const FPoint &src, const FPoint &dst) {
 }
 
 int calcDirection(float x0, float y0, float x1, float y1) {
-	const float pi = 3.1415926535898f;
 	float theta = calcTheta(x0, y0, x1, y1);
-	float val = theta / (pi/4);
+	float val = theta / (M_PI/4);
 	int dir = int(((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4);
 	dir = (dir + 1) % 8;
 	if (dir >= 0 && dir < 8)
@@ -176,8 +176,6 @@ int calcDirection(float x0, float y0, float x1, float y1) {
 
 // convert cartesian to polar theta where (x1,x2) is the origin
 float calcTheta(float x1, float y1, float x2, float y2) {
-	const float pi = 3.1415926535898f;
-
 	// calculate base angle
 	float dx = (float)x2 - (float)x1;
 	float dy = (float)y2 - (float)y1;
@@ -186,13 +184,13 @@ float calcTheta(float x1, float y1, float x2, float y2) {
 
 	// convert cartesian to polar coordinates
 	if (exact_dx == 0) {
-		if (dy > 0.0) theta = pi/2.0f;
-		else theta = -pi/2.0f;
+		if (dy > 0.0) theta = M_PI/2.0f;
+		else theta = -M_PI/2.0f;
 	}
 	else {
 		theta = atan(dy/dx);
-		if (dx < 0.0 && dy >= 0.0) theta += pi;
-		if (dx < 0.0 && dy < 0.0) theta -= pi;
+		if (dx < 0.0 && dy >= 0.0) theta += M_PI;
+		if (dx < 0.0 && dy < 0.0) theta -= M_PI;
 	}
 	return theta;
 }
