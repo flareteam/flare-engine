@@ -78,6 +78,7 @@ public:
 	FPoint speed;
 	float base_speed;
 	float angle; // in radians
+	int base_lifespan;
 	int lifespan; // ticks down to zero
 	float radius;
 	int power_index;

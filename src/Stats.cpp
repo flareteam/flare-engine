@@ -68,5 +68,7 @@ void setStatNames() {
 	STAT_NAME[STAT_STEALTH] = "stealth";
 	// @TYPE poise|Reduced % chance of entering "hit" animation when damaged
 	STAT_NAME[STAT_POISE] = "poise";
+	// @TYPE reflect_chance|Percentage chance to reflect missiles
+	STAT_NAME[STAT_REFLECT] = "reflect_chance";
 }
 

@@ -631,7 +631,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	if (powers[power_index].animation_name != "")
 		haz->loadAnimation(powers[power_index].animation_name);
 	if (powers[power_index].lifespan != 0)
-		haz->lifespan = powers[power_index].lifespan;
+		haz->base_lifespan = haz->lifespan = powers[power_index].lifespan;
 	if (powers[power_index].directional) {
 		haz->directional = powers[power_index].directional;
 		haz->animationKind = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);

@@ -331,36 +331,38 @@ Animation* EffectManager::loadAnimation(std::string &s) {
 }
 
 int EffectManager::getType(const std::string type) {
-		if (type == "damage") return EFFECT_DAMAGE;
-		else if (type == "hpot") return EFFECT_HPOT;
-		else if (type == "mpot") return EFFECT_MPOT;
-		else if (type == "speed") return EFFECT_SPEED;
-		else if (type == "immunity") return EFFECT_IMMUNITY;
-		else if (type == "stun") return EFFECT_STUN;
-		else if (type == "revive") return EFFECT_REVIVE;
-		else if (type == "convert") return EFFECT_CONVERT;
-		else if (type == "fear") return EFFECT_FEAR;
-		else if (type == "offense") return EFFECT_OFFENSE;
-		else if (type == "defense") return EFFECT_DEFENSE;
-		else if (type == "physical") return EFFECT_PHYSICAL;
-		else if (type == "mental") return EFFECT_MENTAL;
-		else if (type == "death_sentence") return EFFECT_DEATH_SENTENCE;
-		else if (type == "shield") return EFFECT_SHIELD;
-		else if (type == "heal") return EFFECT_HEAL;
-		else {
-			for (unsigned i=0; i<STAT_COUNT; i++) {
-				if (type == STAT_NAME[i]) {
-					return EFFECT_COUNT+i;
-				}
-			}
+	if (type.empty()) return EFFECT_NONE;
 
-			for (unsigned i=0; i<bonus_resist.size(); i++) {
-				if (type == ELEMENTS[i].name + "_resist") {
-					return EFFECT_COUNT+STAT_COUNT+i;
-				}
+	if (type == "damage") return EFFECT_DAMAGE;
+	else if (type == "hpot") return EFFECT_HPOT;
+	else if (type == "mpot") return EFFECT_MPOT;
+	else if (type == "speed") return EFFECT_SPEED;
+	else if (type == "immunity") return EFFECT_IMMUNITY;
+	else if (type == "stun") return EFFECT_STUN;
+	else if (type == "revive") return EFFECT_REVIVE;
+	else if (type == "convert") return EFFECT_CONVERT;
+	else if (type == "fear") return EFFECT_FEAR;
+	else if (type == "offense") return EFFECT_OFFENSE;
+	else if (type == "defense") return EFFECT_DEFENSE;
+	else if (type == "physical") return EFFECT_PHYSICAL;
+	else if (type == "mental") return EFFECT_MENTAL;
+	else if (type == "death_sentence") return EFFECT_DEATH_SENTENCE;
+	else if (type == "shield") return EFFECT_SHIELD;
+	else if (type == "heal") return EFFECT_HEAL;
+	else {
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (type == STAT_NAME[i]) {
+				return EFFECT_COUNT+i;
 			}
 		}
 
-		logError("EffectManager: '%s' is not a valid effect type.", type.c_str());
-		return EFFECT_NONE;
+		for (unsigned i=0; i<bonus_resist.size(); i++) {
+			if (type == ELEMENTS[i].name + "_resist") {
+				return EFFECT_COUNT+STAT_COUNT+i;
+			}
+		}
+	}
+
+	logError("EffectManager: '%s' is not a valid effect type.", type.c_str());
+	return EFFECT_NONE;
 }

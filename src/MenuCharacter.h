@@ -38,7 +38,7 @@ const int CSTAT_MENTAL = 3;
 const int CSTAT_OFFENSE = 4;
 const int CSTAT_DEFENSE = 5;
 const int CSTAT_COUNT = 6;
-const int STATLIST_COUNT = 17;
+const int STATLIST_COUNT = 18;
 
 class CharStat {
 public:

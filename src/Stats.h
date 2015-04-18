@@ -20,7 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-#define STAT_COUNT 22
+#define STAT_COUNT 23
 
 enum STAT {
 	STAT_DMG_MELEE_MIN = 0,
@@ -44,7 +44,8 @@ enum STAT {
 	STAT_CURRENCY_FIND = 18,
 	STAT_ITEM_FIND = 19,
 	STAT_STEALTH = 20,
-	STAT_POISE = 21
+	STAT_POISE = 21,
+	STAT_REFLECT = 22
 };
 
 extern std::string STAT_NAME[STAT_COUNT];
