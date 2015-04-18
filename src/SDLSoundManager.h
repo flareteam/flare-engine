@@ -32,6 +32,8 @@ public:
 	SoundManager::SoundID load(const std::string& filename, const std::string& errormessage);
 	void unload(SoundManager::SoundID);
 	void play(SoundManager::SoundID, std::string channel = GLOBAL_VIRTUAL_CHANNEL, FPoint pos = FPoint(0,0), bool loop = false);
+	void pauseAll();
+	void resumeAll();
 
 	void logic(FPoint center);
 	void reset();
