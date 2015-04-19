@@ -25,15 +25,6 @@ You will need to edit next settings
 
 	3. In SDL2_mixer/Android.mk, set SUPPORT_MOD_MIKMOD and SUPPORT_MP3_SMPEG to false.
 
-NOTES:
-
-1. Comments in data files should begin from ## (instead of # on desktop system). This is needed because Android ndk version of
-std::getline() ignores first character, resolved from file. Because the same reason, data files should not begin from usefull data.
-It should begin from comments(##). To workaround this issue, saved files sytax(mods.txt, stash.txt, savegame.txt, settings.txt)
-was updated to begin with comments.
-
-2. \data\insert_comment.sh is used to add ## comments to data files.
-
 References:
 
 1. http://www.dinomage.com/2013/01/howto-sdl-on-android/
