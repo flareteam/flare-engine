@@ -26,6 +26,7 @@ FileParser::FileParser()
 	: current_index(0)
 	, line("")
 	, line_number(0)
+	, include_fp(NULL)
 	, new_section(false)
 	, section("")
 	, key("")
@@ -77,8 +78,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 			}
 
 			// don't close the final file if it's the only one with an "APPEND" line
-			if (i > 1)
-			{
+			if (i > 1) {
 				infile.close();
 				infile.clear();
 			}
@@ -90,10 +90,30 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 		}
 	}
 
+	// re-open the file, because getLine() modifies the contents of infile
+	if (ret && current_index < filenames.size()) {
+		infile.close();
+		infile.clear();
+		infile.open(filenames[current_index].c_str(), std::ios::in);
+
+		if (!infile.is_open()) {
+			if (!errormessage.empty())
+				logError("FileParser: %s: %s", errormessage.c_str(), filenames[current_index].c_str());
+			infile.clear();
+			ret = false;
+		}
+	}
+
 	return ret;
 }
 
 void FileParser::close() {
+	if (include_fp) {
+		include_fp->close();
+		delete include_fp;
+		include_fp = NULL;
+	}
+
 	if (infile.is_open())
 		infile.close();
 	infile.clear();
@@ -112,6 +132,21 @@ bool FileParser::next() {
 
 	while (current_index < filenames.size()) {
 		while (infile.good()) {
+			if (include_fp) {
+				if (include_fp->next()) {
+					new_section = include_fp->new_section;
+					section = include_fp->section;
+					key = include_fp->key;
+					val = include_fp->val;
+					return true;
+				}
+				else {
+					include_fp->close();
+					delete include_fp;
+					include_fp = NULL;
+					continue;
+				}
+			}
 
 			line = trim(getLine(infile));
 			line_number++;
@@ -135,6 +170,24 @@ bool FileParser::next() {
 
 			// skip the string used to combine files
 			if (line == "APPEND") continue;
+
+			// read from a separate file
+			std::size_t first_space = line.find(' ');
+
+			if (first_space != std::string::npos) {
+				std::string directive = line.substr(0, first_space);
+
+				if (directive == "INCLUDE") {
+					std::string tmp = line.substr(first_space+1);
+
+					include_fp = new FileParser();
+					if (!include_fp || !include_fp->open(tmp)) {
+						delete include_fp;
+						include_fp = NULL;
+					}
+					continue;
+				}
+			}
 
 			// this is a keypair. Perform basic parsing and return
 			parse_key_pair(line, key, val);
