@@ -43,3 +43,8 @@ flare-android-project/gen/
 
 # qt creator
 *.autosave
+
+# ios
+flare-ios-project/___PROJECTNAME___.xcodeproj/project.xcworkspace/xcuserdata/
+flare-ios-project/___PROJECTNAME___.xcodeproj/xcuserdata/
+flare-ios-project/libs/
