@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapCollision.h"
 #include "SharedResources.h"
 #include "Settings.h"
+#include "UtilsMath.h"
 #include "UtilsParsing.h"
 
 #include <cmath>
@@ -47,6 +48,8 @@ Hazard::Hazard(MapCollision *_collider)
 	, pos()
 	, speed()
 	, base_speed(0)
+	, angle(0)
+	, base_lifespan(1)
 	, lifespan(1)
 	, radius(0)
 	, power_index(0)
@@ -64,6 +67,8 @@ Hazard::Hazard(MapCollision *_collider)
 	, trait_crits_impaired(0)
 	, trait_elemental(-1)
 	, beacon(false)
+	, missile(false)
+	, directional(false)
 	, post_power(0)
 	, wall_power(0) {
 }
@@ -143,4 +148,16 @@ void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &
 		re.map_pos.y = pos.y;
 		(on_floor ? r_dead : r).push_back(re);
 	}
+}
+
+void Hazard::setAngle(const float& _angle) {
+	angle = _angle;
+	while (angle >= M_PI*2) angle -= M_PI*2;
+	while (angle < 0.0) angle += M_PI*2;
+
+	speed.x = base_speed * cos(angle);
+	speed.y = base_speed * sin(angle);
+
+	if (directional)
+		animationKind = calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
 }

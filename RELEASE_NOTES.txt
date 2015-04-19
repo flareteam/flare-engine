@@ -1,34 +1,590 @@
-Flare Engine v0.19
+Flare v0.19 http://flarerpg.org/blog/20131203
 
 Engine changes:
 
-Power specific stat modifiers (Ryan Dansie)
-Cutscenes (Stefan Beller)
-Specify data path via command line argument (Justin Jacobs)
-Minions support (Ryan Dansie)
-Flare engine man page (Christoph Thompson)
-Keyboard based menu navigation (Igor Paliychuk, Joseph Bleu, Justin Jacobs)
-Movement using floating point positions (Stefan Beller, Justin Jacobs
-Hardcore characters no longer share a stash (Stefan Beller)
-Credits added to title menu (Igor Paliychuk)
-Additional event triggers (Stefan Beller)
-Configurable death penalty (Justin Jacobs)
-Colorblind mode options (blazindragon)
-Add chance_flee behavior for enemies (Justin Jacobs)
-Currency as a stackable item (Justin Jacobs)
-Inline configuration attribute documentation (Henrik Andersson)
-New minimap tiles for false walls (Matthew Krohn)
-Allow custom attack animations (Matthew Krohn)
-EventManager to handle map and NPC events (Igor Paliychuk, Justin Jacobs)
-Use paths in config files when referring to other files (Justin Jacobs)
-Upgradeable powers (Ryan Dansie and Igor Paliychuk)
-TONS of internal refactoring/cleanup (everyone)
-Various bug fixes (everyone)
+* Power specific stat modifiers (Ryan Dansie)
+* Cutscenes (Stefan Beller)
+* Specify data path via command line argument (Justin Jacobs)
+* Minions support (Ryan Dansie)
+* Flare engine man page (Christoph Thompson)
+* Keyboard based menu navigation (Igor Paliychuk, Joseph Bleu, Justin Jacobs)
+* Movement using floating point positions (Stefan Beller, Justin Jacobs)
+* Hardcore characters no longer share a stash (Stefan Beller)
+* Credits added to title menu (Igor Paliychuk)
+* Additional event triggers (Stefan Beller)
+* Configurable death penalty (Justin Jacobs)
+* Colorblind mode options (blazindragon)
+* Add chance_flee behavior for enemies (Justin Jacobs)
+* Currency as a stackable item (Justin Jacobs)
+* Inline configuration attribute documentation (Henrik Andersson)
+* New minimap tiles for false walls (Matthew Krohn)
+* Allow custom attack animations (Matthew Krohn)
+* EventManager to handle map and NPC events (Igor Paliychuk, Justin Jacobs)
+* Use paths in config files when referring to other files (Justin Jacobs)
+* Upgradeable powers (Ryan Dansie and Igor Paliychuk)
+* TONS of internal refactoring/cleanup (everyone)
+* Various bug fixes (everyone)
 
 New Translators:
 
-German (de) update by Wuzzy2
-Greek (el) update by Michael Papageorgiou
-Scottish Gaelic (gd) by gunchleoc
-Chinese (zh) by lonsine
+* German (de) update by Wuzzy2
+* Greek (el) update by Michael Papageorgiou
+* Scottish Gaelic (gd) by gunchleoc
+* Chinese (zh) by lonsine
 
+Game Changes:
+
+* Gold is now a stackable item and can safely be stored in the shared stash
+* Heroic Swing and Greater Channel are now upgrades of starting powers
+* New powers Ember Shot and Thunderstrike
+
+Flare v0.18 http://flarerpg.org/blog/20130331
+
+Major Updates:
+
+* 10 Equipment Slots, up from 4 (and easily configurable)
+* Starting "Class" choice (beginner's power/item kit)
+* Environmental/Ambient Sounds on maps
+* Much improved handling of Animations, Effects, and Sounds
+* New Powers: Stealth, Traps, Thrown Weapons
+* New Item Bonuses: XP gain, Gold Find, Item Find, and more
+* Improved support for various input devices
+* Two new starting quests
+
+Engine Updates:
+
+* Items sold away from vendor are sent to Buyback tab (Justin Jacobs)
+* Implement avatar layer composition and configurable slots (Igor Paliychuk)
+* Allow low quality (no alpha) textures for gameplay art (Igor Paliychuk)
+* Add support for font styles (Justin Jacobs)
+* Introduce AnimationManager and use it for existing animations (Stefan Beller)
+* Make buyback price the same as sell price (Justin Jacobs)
+* Remove many warnings from static code analysis (Stefan Beller)
+* New starting class system (Justin Jacobs)
+* Allow assigning titles based on xp, primary stats, or campaign status (Matthew Krohn)
+* Powers can require HP and optionally kill the caster (Matthew Krohn)
+* Add on-hit, half dead, and dead power triggers (Justin Jacobs)
+* New EffectsManager to handle buffs and debuffs (Justin Jacobs)
+* Add support for Passive Powers (Justin Jacobs)
+* Add "XP Gain", "Gold Find", "Item Find" bonuses (Justin Jacobs)
+* Support granting multiple stat/power points per level (Justin Jacobs)
+* Standardize init lists for classes (Stefan Beller)
+* Add on_clear map event type (Justin Jacobs)
+* Add flavor text option for item tooltips (Clint Bellanger)
+* Convert MenuCharacter to stat listbox (Justin Jacobs)
+* Allow bonus max HP/MP percentages (Matthew Krohn)
+* Implement per-enemy loot tables (Justin Jacobs)
+* Add Stealth bonus effect (Justin Jacobs)
+* Standardize sound effect loading function (Stefan Beller)
+* Add internal utility functions (Piotrrak)
+* Support NPC and map events based on hero level (Stefan Beller)
+* Allow Accept key to interact with the environment instead of clicking (Justin Jacobs)
+* Mouse emulation mode (Justin Jacobs)
+* Add default names for portraits to help keyboardless systems (Justin Jacobs)
+* Add --game_dataflag for setting a user-defined PATH_DATA (Justin Jacobs)
+* Introduce SoundManager for centralized sound handling (Henrik Andersson)
+* Add game_prefix to segregate save games and config files for mods (Henrik Andersson)
+* Add NPC Action Menu for NPCs with multiple discussion topics (Henrik Andersson)
+* Add location-based sound volume (Henrik Andersson)
+* Implement enemy style loot tables for map events (Justin Jacobs)
+* Make the local data folder prevail over installed ones (Yohann Ferreira)
+* Rendering optimizations (Stefan Beller)
+* Allow config file durations to be specified in frames, ms, or seconds (Henrik Andersson)
+* Fix LMB ignoring locks in some situations (Joseph Bleau)
+* Add cooldown_hit duration to prevent stunlock (Joseph Bleau)
+* Add status-based trader stock (Justin Jacobs)
+* Allow equipment bonuses to be applied while transformed (Justin Jacobs)
+* Handle fuzzy matching in translation files (Henrik Andersson)
+* Add item count ranges for loot tables (Clint Bellanger)
+* Don't allow dead hero to trigger map events (Justin Jacobs)
+* Add additional cppcheck flags to the .travis.yml file (Hans Joachim)
+* Clean up BOM from the languages.txt file (Hans Joachim)
+
+Game Updates:
+
+* Updated equipment from 4 slots (weapon, offhand, body, artifact) to 10 slots (head, body, hands, legs, feet, weapon, offhand, ring, ring, artifact)
+* Added chainmail and mage armor (Clint Bellanger)
+* Clothes icon paintings (Ben at CrowLine Studio)
+* Mage, Leather, Chain, Plate icon paintings (Justin Nichol)
+* Ring art (Clint Bellanger)
+* Iron Buckler shield (Clint Bellanger)
+* Animal Figurines (Clint Bellanger)
+* Abandoned Tower art and quest line (Stefan Beller)
+* Mineshaft Longsword quest line (Justin Jacobs)
+* Beginning of new item list (Clint Bellanger)
+* Environmental Sounds on existing maps (Henrik Andersson)
+* New powers: Stealth, Caltrops, Bear Trap, Dagger Throw, Axe Throw (Clint Bellanger)
+
+New Translations:
+
+* Czech by Nikita Vanku (Zaraka)
+* Norwegian Bokmal by Hans Joachim Desserud
+* Polish by Pawel Puszczynski
+* Many thanks to the other translators who sent in updates
+
+
+
+Flare v0.17.1 http://flarerpg.org/blog/20121001
+
+Bug Fixes:
+
+* Instant-sell items now go to the vendor Buyback tab
+* Disable New/Load buttons if there is no story mod loaded
+* Prevent crash when binding higher number mouse buttons
+* Prevent crash when loading a map with missing layers
+* Add helpful tooltips when play buttons are disabled
+* Removed -flto compiler flag from default build script
+* If you installed v0.17 completely new, you can probably skip this update.
+
+
+
+Flare v0.17 http://flarerpg.org/blog/20120928
+
+Release Highlights:
+
+* All menus now easy to mod/reskin!
+* New Powers tree with traditional tabs and spendable points
+* Shared Stash! Collect epics, hoard resist gear, or buff your new characters
+* Warp Zone -- fast-travel map to get around the alpha demo campaign
+
+Code Features:
+
+* Menu for showing buffs/debuffs (Justin Jacobs)
+* Add Texture Quality option (Justin Jacobs)
+* Add item categories for loot tables (Stefan Beller)
+* Refactor HP, MP, XP into generic stat bar class (Justin Jacobs)
+* Convert remaining arrays to vectors where possible (Stefan Beller)
+* Various refactoring, optimization, cleanup (Stefan Beller)
+* Move menu options and layouts to config file (Justin Jacobs, Igor Paliychuk, Stefan Beller)
+* Move various magic numbers to config file (everyone)
+* Refactor Powers Menu to tab/tree/points style (Igor Paliychuk)
+* "I shouldn't be coding at 3:30 AM" (Clint Bellanger)
+* Refactor menus to use base class for placement/size/etc (Justin Jacobs)
+* Powers that spawn multiple enemies (Matthew Krohn)
+* Add Shared Stash (Justin Jacobs)
+* Add a Buyback tab to vendors (Justin Jacobs)
+* Allow NPCs to heal the hero during dialog (Igor Paliychuk)
+* Configurable font colors (Justin Jacobs)
+* Allow enemies to wander in an area (Justin Jacobs)
+* Enable scroll wheel in some widgets (Justin Jacobs)
+* Add on_load map event type
+* Don't load sound/music if the volume is 0 (Stefan Beller)
+* Added pixel-precision to clickable tiles (Justin Jacobs)
+* Made equipment slots configurable (Igor Paliychuk)
+* Made bonuses work on any item type/slot
+* Map Rendering optimizations (Stefan Beller)
+* Animation refactoring (Stefan Beller)
+* Sprite sheet packing and utility (Stefan Beller)
+* Add support for item sets (Igor Paliychuk)
+* Add optional Fringe and Foreground tile layers (Matthew Krohn)
+* Add load screen to map transitions (Justin Jacobs)
+* FPS display option (Igor Paliychuk and Justin Jacobs)
+* Configurable buff/debuff animations (Justin Jacobs)
+* Split flare into two repos: flare-engine for core upstream dev, flare-game for the actual game
+* Support multi-line text in our GetText implementation (Gallaecio)
+* Updates to GetText data extractor (Chris Oelmueller, Justin Jacobs, Igor Paliychuk)
+* Remove corpses after a fixed amount of time, for performance (Justin Jacobs)
+* Optimize text display in several places (Justin Jacobs)
+
+Art Features:
+
+* Use full alpha transparency for the hero art
+* Updated Tiled files to use v0.9 features
+* Added spike traps
+* Added double doors, stairs, and bones to the Dungeon tile set
+* Added ambient sound near braziers
+* New 320x240 downscale mod
+* Added a default mod (engine translations and barebones UI)
+* Added Teleporter art and a warp zone map
+* Added a lifesteal melee attack, a manasteal magic attack, and a rapid fire bow attack
+* Updated floors on all the old dungeon maps
+* Updated Liberation Sans font to 2.0
+
+Translations:
+
+* Greek - Yannis Anthymidis
+* Italian - Giovanni Dalla Torre
+* Dutch - Bas Doodeman
+* German - Chris Oelmueller
+* Galician - Gallaecio
+* Russian - Sergey Basalaev
+* Finnish - Timo Sievanen
+* French - Morgan Strauss
+
+
+
+Flare v0.16 http://flarerpg.org/blog/20120707 "Advanced Enemies"
+
+Release Highlights:
+
+* Improved enemy pathfinding, including flying creatures
+* Summon or transform into enemies!
+* Config menu including keybindings, mods, and more
+* Orthogonal map support
+
+Code Features:
+
+* A* Pathfinding (Nojan)
+* Enemies now block movement (Clint Bellanger)
+* Enemies, powers, and map events can spawn enemies (Clint Bellanger)
+* Floating Combat Text (Thane Brimhall)
+* New Widgets: tabs, check boxes, scroll bars, sliders, and more (Gallaecio, David Bariod, Justin Jacobs)
+* Config Menu, including keybindings and mods (David Baiod, Justin Jacobs, Igor Paliychuk)
+* Flying Creatures (Clint Bellanger)
+* Patrolling Enemies (Thane Brimhall)
+* Transformation/Shapeshifting into any creature (Igor Paliychuk)
+* Configurable XP per level and per creature (Thane Brimhall)
+* Configurable sell price for items (Justin Jacobs)
+* Orthogonal Map Support (Thane Brimhall)
+* Powers can target neighboring squares (Justin Jacobs)
+* Intramap teleportation events (Clint Bellanger)
+* Optional Permadeath (Thane Brimhall)
+* NPCs can be both Talkers and Vendors (Justin Jacobs)
+* Animated Tiles (Igor Paliychuk)
+* Gold Autopickup (Justin Jacobs)
+
+Art Features:
+
+* Widget art via RPG GUI Construction Kit (Lamut)
+* Wyvern art (Clint Bellanger and Justin Nichol)
+* Wyvern sounds (Brandon Morris)
+* Antlion and Zombie summoning animations (Clint Bellanger)
+* New Minotaur animations (Lamut)
+* Cursed Grave creature (Clint Bellanger)
+* Female Merchant Vocals (Holly Daniel)
+* Creepy Forest theme music (Brandon Morris)
+* Ancient Temple map (Clint Bellanger)
+* Full set of Kickstarter portraits (Justin Nichol)
+
+Fixes:
+
+* Handle systems without sounds (Justin Jacobs)
+* Joystick handling fixes (Justin Jacobs, Igor Paliychuk)
+* Multi-line gettext support (Gallaecio)
+* Movement around corners (Daniel Santos)
+* Disable unusable powers in the action bar (Daniel Santos)
+* Multiple Event Components per line for Tiled compatibility (Thane Brimhall)
+* Unspent attribute points shown on the Character Menu (Igor Paliychuk)
+* Threat range and entering combat fixes (Justin Jacobs)
+* Close vendor bag when closing inventory (Justin Jacobs)
+* Faster previews on Load Game screen (Justin Jacobs)
+* Isometric Rendering optimizations (Stefan Beller)
+* Misc fixes (AI0867, AMDmi3, CmPons, manuelafm, runtime-x86, matthiaskrgr)
+
+Translations:
+
+* French (Morgan Strauss)
+* German (Thomas Glamsch and Chris Oelmueller)
+* Italian (Giovanni Dalla Torre and Andrea Ranaldi)
+* Russian (Sergey Basalaev)
+* Slovak (Miro Janosik)
+* Ukranian (Igor Paliychuk)
+
+
+
+Flare v0.15 http://flarerpg.org/blog/20111223 "Translations and Mods"
+
+Release Highlights:
+
+* Now using TTF for fonts
+* All game data can be overwritten/added via mods
+* Translation support for the core engine and mods
+* New Grassland tileset
+* New questing areas: Frontier and Living Bones
+* Redesigned creatures are tougher and more varied
+
+Contributions:
+
+* Thane Brimhall "pennomi" - Living Bones mod and plenty of code
+* Manuel A. Fernandez Montecelo - code and Debian/Ubuntu packaging
+* Igorko: code and Win build features
+* Hennr - Debian/Ubuntu packaging
+* Remaxim - composer of Magical Theme
+* Brandon Morris - steps foley, new level up sound
+* Justin Nichol - character portraits
+* Stefan Beller - Tiled flare export mod and automapping help
+* Thorbjorn Lindeijer - Tiled tileset offset feature
+* AMDmi3 - Build help
+* acieroid - Display power cooldown timer and various mouse/menu fixes
+
+Translations changes:
+
+* (by) Belarussian by mikhailSaTuRn
+* (de) German by Thomas 'CruzR' Glamsch
+* (es) Spanish by Juan Pablo 'morris989' Tamayo
+* (fi) Finnish by Timo SievA¤nen
+* (fr) French by acieroid and Bonbadil
+* (gl) Galacian by Gallaecio
+* (ja) Japanese by Paul Wortmann
+* (ru) Russian by Sbasalaev
+* (sv) Swedish by Andreas Berheim Brudin
+* (uk) Ukrainian by igorko
+
+
+
+Flare v0.14.1 http://flarerpg.org/blog/20110713
+
+BugFix:
+
+* It patches a significant memory leak in the v0.14 release.
+
+
+
+Flare v0.14 http://flarerpg.org/blog/20110707 "Main Menus"
+
+ChangeLog:
+
+* Title Screen added
+* Load Game Screen added with four game slots
+* New Game Screen added with choosable portrait and hero name
+* Title Music by Brandon Morris
+* Customizeable portraits with matching sprite heads for heroes
+* Player portrait displayed during NPC conversations
+* Female heroine option added
+* Six player portraits added by Justin Nichol
+* Save and Exit to Main Menu confirmation added by kitano
+* GameState base class by kitano
+* Entity base class by kitano
+* Variable MP cost for spells added by kitano
+* Animation class added by kitano
+* WidgetButton generalized by kitano
+* Arrow and X to show conversation progress added by kitano
+* Input text widget added by kitano
+* Clickable map events added by Thane "pennomi" Brimhall
+* Enemy group random spawning added by Thane "pennomi" Brimhall
+* Freeze and Multishot code expanded by Thane "pennomi" Brimhall
+* Damage Multiplier for powers added by Thane "pennomi" Brimhall
+* Life Steal and Mana Steal for powers added by Thane "pennomi" Brimhall
+* Power Cooldowns added by Thane "pennomi" Brimhall and wokste
+* Item bonus to increase base stats added by Alexander Olkhovskiy
+* Enabled multiple bonuses on items (up to 8)
+* Joystick support added by Artur "Zear" Rojek
+* FileParser now used by all data files added by Bonbadil
+* Added close buttons to several menus
+* Attempts to use standard *nix directories if available (XDG or $HOME)
+* Sound effects volume added to settings.txt
+* Double Buffering option added to settings.txt
+* Hardware Surfaces option added to settings.txt
+* Bug Fix: Teleport Scrolls can no longer be used without a target
+* Bug Fix: Windows mkdir fixed by Paul-Wortmann
+
+
+
+Flare v0.13 http://flarerpg.org/blog/20110502 "Quests"
+
+Release Highlights:
+
+* Flare now supports quests!
+* NPC questgivers can send players on quests and give rewards on completion.
+* Quests can also involve finding items, killing bosses, or exploring a map area.
+
+Detailed list of changes:
+
+* New "Lost Mines" area by Thane Brimhall (pennomi)
+* MenuTalker code beginnings by Juan PabloTamayo (morris989)
+* Added GameSwitcher class in preparation for Main Menus
+* Block power buffed
+* Framerate fixed. Animations adjusted and should be smoother on low-power systems.
+* Added healing-over-time support for powers.
+* New stat awards on level up.
+* Added new potion levels
+* "Magical" renamed "Mental" for genre neutrality
+* Rearranged power tree. All power slots now implemented
+* New "Channel" spell: short-range spell that costs 0 mana but requires a Mental weapon
+* New "Immobilize" power: use a ranged weapon to pin a creature to the ground
+* New config files to edit resolution, fullscreen, keybindings
+* Updated health bar by Scrittl
+* Stackable items and inventory refactoring by Bonbadil
+* Basic conversations added
+* NPC portrait by Justin Nichol
+* Campaign Manager added to handle quest states
+* Enemies no longer use ranged powers when losing line of sight
+* Added consumable spell scrolls by Thane Brimhall (pennomi)
+* Added elemental spell scroll icons
+* Separated icons into 32px and 64px pages
+* Added NPC ability to advance quest and give rewards
+* Added monster kill to advance quests
+* Added quest loot for monsters
+* Added a tutorial NPC
+* Added on-pickup quest advancement on items
+* Added Averguard Keep quest chain featuring 4 bosses and 3 quest items
+* Added a quest-giver NPC
+* Added key and book icon for quests
+* Added tabbed interface to Log Menu
+* Log Menu has room for Quests, Messages, Statistics, and Achievements
+* Weapon requirements displayed on Power tooltips
+* (bugfix) Enemies no longer run before changing directions when entering combat
+* (bugfix) Enemies leave combat when the player is dead
+* (bugfix) Missing menu deconstruction calls added
+* (bugfix) Correct memory reallocation when chaning equipment
+* (bugfix) Correct resist stats on bows
+
+
+
+Flare v0.12 http://flarerpg.org/blog/20110315 "Vendors"
+
+ChangeLog:
+
+* Vendors have been added. Buy and sell items! There is one vendor at the spawn point and another vendor in the cave.
+* Voice-acting for the vendor by Brandon Morris (Augmentality)
+* Male vendor 3D model by TiZiana
+* Potions can be placed on the Action Bar. The number of remaining potions is shown. When you run out of that potion, the icon goes dark. Thanks to help from LongerDev.
+* Support for other powers on items has been added. This opens up the possibility for interesting items in the future (e.g. teleport boots).
+* Action is no longer paused when menus are open. This behavior can be changed in Settings.h. Contributed by LongerDev
+* Basic support for Mouse Movement added. Edit your save file and you'll see a mouse_move option. Contributed by Cheshire.
+* Mouse-over on creatures shows a menu with the monster's name, level, and health. Contributed by Cheshire.
+* Added a basic cmake file to the source distributable. Also rearranged the folder structure to make things easier for novice users. Thanks to gnurobert and ceninan for help on this!
+* Dying now has a penalty: 50% gold loss
+* Crits are more powerful and always do more damage than a regular attack.
+
+
+
+Flare v0.11 http://flarerpg.org/blog/20110228 "Enemy Powers"
+
+Changes:
+
+* Enemies have four slots for powers. New enemies shoot bows, cast spells, throw javelins, and more!
+* Most powers moved to a config file.
+* New: Cave level (head east from the Goblin Warrens. Creatures are level ~6)
+* New creature art: skeletal archer, skeletal mage, fire antlion, ice antlion, antlion hatchling
+* Some magical ranged weapons have Ice and Fire Ammo...
+* Various bug fixes and new minor features
+
+Special thanks to these contributors:
+
+* Brandon Morris composed the Cave theme
+* Thane "pennomi" Brimhall scripted the Cave enemies and events
+* Gordon "mogrohl" patched the looting-while-dead bug
+* ferrer patched uninitialized music variables
+* BartK contributed new zombie sounds ("Braaaains!")
+
+
+
+OSARE v0.10 http://flarerpg.org/blog/20101025 "Powers"
+
+New in this version:
+
+* Magic, melee, and ranged powers
+* Action bar support for powers
+* Click-to-activate action bar and menus
+* XP bar on HUD
+* Minimap on HUD
+* New health/mana bar images
+* New creature: Minotaur
+* README.txt to help new players
+
+
+
+OSARE v0.09 http://flarerpg.org/blog/20100905
+
+ChangeLog:
+
+* Games are automatically saved upon exit.
+* Level Up system in place!
+* You must meet requirements to equip items now
+* Now you can respawn after dying
+* Gold added to loot drops! Though nothing to spend it on yet...
+* New map "Averguard Complex" added!
+
+
+
+OSARE v0.08 http://flarerpg.org/blog/20100901 "Loot"
+
+* The newest OSARE release is focused on loot.
+* Over 500 items are in the game, dropped from enemies or found in treasure chests.
+* I also added the starting logic for the Log Menu (and a heads-up log display).
+* Finally, there is a new starting area called "Goblin Warrens" where you can fight low-level creatures to scavenge for beginner equipment.
+
+
+
+OSARE v0.07 http://flarerpg.org/blog/20100611 "Inventory"
+
+New in this release:
+
+* Word wrap, size calculation, and font colors on the font engine
+* Created a mouseover tooltip system
+* Drag and drop support for arranging and equipping items
+* Item drop sound effects
+* Changing hero graphics based on equipped items
+* Changing combat stats based on equipped items
+* Adjusted monsters based on combat stats
+* Basic test items and a few low and high quality variations
+
+
+
+OSARE v0.06 http://flarerpg.org/blog/20100528
+
+New in this release:
+
+* Tweaked some sound effects due to license questions
+* Added menu open/close sound effects
+* Added map interactions when stepping on certain tiles
+* Added opening containers
+* Added throwing switches to open doors
+* Added support for various monster types
+* Added several varieties of zombie, skeleton, antlion, and goblin
+
+
+
+OSARE v0.05 http://flarerpg.org/blog/20100516
+
+ChangeLog:
+
+* Added map transitions
+* Added a starter dungeon with three wings named Averguard Hold (click for map)
+* Added support for hex or dec map data format
+* Changed definition files to use = instead of :
+* Upgraded zombie steering AI. They now pursue to where they last saw the hero.
+* Started refactoring to prepare for more monster varieties
+* EnemyManager now holds enemy sound effects, so that we only load one copy of each
+* I now use Tiled 0.4.1 to edit map layers
+* Reminder: use the command-line argument -f (or --fullscreen) to play in fullscreen mode.
+* Changed the tileset to use magic pink as the transparency and removed the tileset alpha layer. This should  improve performance on most systems.
+* Note to self: in GIMP set Alpha Threshold to 32, then remove the alpha channel onto magic pink.
+
+
+
+OSARE v0.04 http://flarerpg.org/blog/20100414 "Font Support and Basic Menus"
+
+Features:
+
+* NOTE: now runs in windowed mode by default (apologies to XP users, windowed mode seems to change the desktop resolution). To run in fullscreen mode use -f or --fullscreen options at command line (easier to use options coming in a future release)
+* FontEngine is a class that handles drawing of a bitmap font, with support for left/center/right justify (word wrap coming in a future release)
+* Finished the icons for Powers. Commissioned Blarumyrran to finish the icons for the basic set of weapons/armors.
+* Character Menu displays the proper info based on the Avatar's stats (level up coming in a future release)
+* Powers Menu displays the Avatar's build (dragging powers to the action bar coming in a future release)
+* Log and Inventory menus are mostly static. Inventory drag/drop and equipping coming later. I still haven't settled on a design for the Log, which will contain quest info and achievements.
+* I refactored all the menus and hud under a MenuManager class. That class controls which menus should be displayed. In a future release it will handle drag/drop between the Inventory, Powers, and ActionBar menus.
+* When the core menus are open (Character, Log, Powers, Inventory) the game action is paused.
+* The actionbar hotkeys work but clicking on the action bar doesn't work yet. Also, still no way to change the default key bindings. All this coming in future releases.
+
+
+
+OSARE v0.03 http://flarerpg.org/blog/20100228
+
+ChangeLog:
+
+* Combat to the death. You can kill zombies and they can kill you.
+* Added combat sound effects.
+* Added a health and mana bar
+* Left-mouse click is now an aimed sword attack (1-key will instead attack the way you're currently facing)
+* Memory cleanup in the class deconstructors.
+
+
+
+OSARE v0.02 http://flarerpg.org/blog/20100215
+
+ChangeLog:
+
+* Re-rendered all assets using Blender's CatRom AA setting. The result is much sharper.
+* Added SDL_mixer support and background music by Remaxim
+* Added the bare bones for the Action Bar
+* Set Action Bar slot 1 to melee attack (no customization yet)
+* Added (much hardcode) a basic zombie creature. The zombie will pursue and try to melee attack.
+* Bug: fixed an issue in the Collider class with a variable not initialized
+* Background music
+* The hero and zombie can try to attack each other, I haven't yet implemented the attack collisions, damage, dying, etc.
+
+
+
+OSARE v0.01 http://flarerpg.org/blog/20100101

@@ -595,7 +595,7 @@ Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string erro
 	SDL_Surface *cleanup = IMG_Load(mods->locate(filename).c_str());
 	if(!cleanup) {
 		if (!errormessage.empty())
-			logError("SDLSoftwareRenderDevice: %s: %s", errormessage.c_str(), IMG_GetError());
+			logError("SDLSoftwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
 			SDL_Quit();
 			exit(1);

@@ -220,16 +220,18 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			else if (infile.key == "show_absorb") show_stat[10] = toBool(infile.val);
 			// @ATTR show_poise|boolean|Hide the "Poise" stat in the statlist if set to false.
 			else if (infile.key == "show_poise") show_stat[11] = toBool(infile.val);
+			// @ATTR show_reflect|boolean|Hide the "Reflect Chance" stat in the statlist if set to false.
+			else if (infile.key == "show_reflect") show_stat[12] = toBool(infile.val);
 			// @ATTR show_bonus_xp|boolean|Hide the "Bonus XP" stat in the statlist if set to false.
-			else if (infile.key == "show_bonus_xp") show_stat[12] = toBool(infile.val);
+			else if (infile.key == "show_bonus_xp") show_stat[13] = toBool(infile.val);
 			// @ATTR show_bonus_currency|boolean|Hide the "Bonus Gold" stat in the statlist if set to false.
-			else if (infile.key == "show_bonus_currency") show_stat[13] = toBool(infile.val);
+			else if (infile.key == "show_bonus_currency") show_stat[14] = toBool(infile.val);
 			// @ATTR show_bonus_itemfind|boolean|Hide the "Bonus Item Find" stat in the statlist if set to false.
-			else if (infile.key == "show_bonus_itemfind") show_stat[14] = toBool(infile.val);
+			else if (infile.key == "show_bonus_itemfind") show_stat[15] = toBool(infile.val);
 			// @ATTR show_bonus_stealth|boolean|Hide the "Stealth" stat in the statlist if set to false.
-			else if (infile.key == "show_bonus_stealth") show_stat[15] = toBool(infile.val);
+			else if (infile.key == "show_bonus_stealth") show_stat[16] = toBool(infile.val);
 			// @ATTR show_resists|boolean|Hide the elemental "Resistance" stats in the statlist if set to false.
-			else if (infile.key == "show_resists") show_stat[16] = toBool(infile.val);
+			else if (infile.key == "show_resists") show_stat[17] = toBool(infile.val);
 
 			else infile.error("MenuCharacter: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -410,29 +412,35 @@ void MenuCharacter::refreshStats() {
 
 	if (show_stat[12]) {
 		ss.str("");
+		ss << msg->get("Reflect Chance: ") << stats->get(STAT_REFLECT) << "%";
+		statList->append(ss.str(), msg->get("Increases your chance of reflecting missiles back at enemies") + statTooltip(STAT_POISE));
+	}
+
+	if (show_stat[13]) {
+		ss.str("");
 		ss << msg->get("Bonus XP: ") << stats->get(STAT_XP_GAIN) << "%";
 		statList->append(ss.str(), msg->get("Increases the XP gained per kill") + statTooltip(STAT_XP_GAIN));
 	}
 
-	if (show_stat[13]) {
+	if (show_stat[14]) {
 		ss.str("");
 		ss << msg->get("Bonus") << " " << CURRENCY << ": " << stats->get(STAT_CURRENCY_FIND) << "%";
 		statList->append(ss.str(), msg->get("Increases the %s found per drop",CURRENCY) + statTooltip(STAT_CURRENCY_FIND));
 	}
 
-	if (show_stat[14]) {
+	if (show_stat[15]) {
 		ss.str("");
 		ss << msg->get("Bonus Item Find: ") << stats->get(STAT_ITEM_FIND)<< "%";
 		statList->append(ss.str(), msg->get("Increases the chance that an enemy will drop an item when killed") + statTooltip(STAT_ITEM_FIND));
 	}
 
-	if (show_stat[15]) {
+	if (show_stat[16]) {
 		ss.str("");
 		ss << msg->get("Stealth: ") << stats->get(STAT_STEALTH) << "%";
 		statList->append(ss.str(), msg->get("Increases your ability to move undetected") + statTooltip(STAT_STEALTH));
 	}
 
-	if (show_stat[16]) {
+	if (show_stat[17]) {
 		for (unsigned int j=0; j<stats->vulnerable.size(); j++) {
 			ss.str("");
 			ss << msg->get(ELEMENTS[j].description) << ": " << (100 - stats->vulnerable[j]) << "%";

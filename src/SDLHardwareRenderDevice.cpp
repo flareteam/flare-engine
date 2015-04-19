@@ -579,7 +579,7 @@ Image *SDLHardwareRenderDevice::loadImage(std::string filename, std::string erro
 	if(image->surface == NULL) {
 		delete image;
 		if (!errormessage.empty())
-			logError("SDLHardwareRenderDevice: %s: %s", errormessage.c_str(), IMG_GetError());
+			logError("SDLHardwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
 			SDL_Quit();
 			exit(1);

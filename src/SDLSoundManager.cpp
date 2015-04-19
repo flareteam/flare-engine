@@ -242,6 +242,16 @@ void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, FPoin
 	playback.insert(std::pair<int, Playback>(c, p));
 }
 
+void SDLSoundManager::pauseAll() {
+	Mix_Pause(-1);
+	Mix_PauseMusic();
+}
+
+void SDLSoundManager::resumeAll() {
+	Mix_Resume(-1);
+	Mix_ResumeMusic();
+}
+
 void SDLSoundManager::on_channel_finished(int channel) {
 	PlaybackMapIterator pit = playback.find(channel);
 	if (pit == playback.end())

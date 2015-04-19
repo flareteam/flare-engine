@@ -362,7 +362,8 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 
 				case POWSTATE_BLOCK:	// handle blocking
 					stats.cur_state = AVATAR_BLOCK;
-					stats.effects.triggered_block = true;
+					powers->activate(action.power, &stats, target);
+					stats.refresh_stats = true;
 					break;
 
 				case POWSTATE_INSTANT:	// handle instant powers
@@ -372,11 +373,7 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 		}
 	}
 
-	if (stats.effects.triggered_block && !blocking) {
-		stats.cur_state = AVATAR_STANCE;
-		stats.effects.triggered_block = false;
-		stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
-	}
+	stats.blocking = blocking;
 }
 
 /**
@@ -425,11 +422,24 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	if ((stats.hp > 0 || stats.effects.triggered_death) && !respawn && !transform_triggered) powers->activatePassives(&stats);
 	if (transform_triggered) transform_triggered = false;
 
+	// handle when the player stops blocking
+	if (stats.effects.triggered_block && !stats.blocking) {
+		stats.cur_state = AVATAR_STANCE;
+		stats.effects.triggered_block = false;
+		stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
+		stats.refresh_stats = true;
+	}
+
 	stats.logic();
 
 	bool allowed_to_move;
 	bool allowed_to_use_power = true;
-	bool click_to_respawn = false;
+
+#ifdef __ANDROID__
+	const bool click_to_respawn = true;
+#else
+	const bool click_to_respawn = false;
+#endif
 
 	// check for revive
 	if (stats.hp <= 0 && stats.effects.revive) {
@@ -618,11 +628,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 			setAnimation("block");
 
-			if (activeAnimation->getName() != "block") {
-				stats.cur_state = AVATAR_STANCE;
-				stats.effects.triggered_block = false;
-				stats.effects.clearTriggerEffects(TRIGGER_BLOCK);
-			}
+			stats.blocking = false;
 
 			break;
 

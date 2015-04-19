@@ -170,10 +170,14 @@ void SDLInputState::handle() {
 					window_resized = true;
 					render_device->windowResize();
 				}
-				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED)
+				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
 					window_minimized = true;
-				else if (event.window.event == SDL_WINDOWEVENT_RESTORED)
+					snd->pauseAll();
+				}
+				else if (event.window.event == SDL_WINDOWEVENT_RESTORED) {
 					window_restored = true;
+					snd->resumeAll();
+				}
 				break;
 			// Android touch events
 			case SDL_FINGERMOTION:
