@@ -72,7 +72,8 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 
 				if (test_line != "APPEND") {
 					current_index = i-1;
-					infile.seekg(std::ios::beg);
+					infile.clear(); // reset flags
+					infile.seekg(0, std::ios::beg);
 					break;
 				}
 			}
@@ -87,20 +88,6 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 			if (!errormessage.empty())
 				logError("FileParser: %s: %s", errormessage.c_str(), filenames[i-1].c_str());
 			infile.clear();
-		}
-	}
-
-	// re-open the file, because getLine() modifies the contents of infile
-	if (ret && current_index < filenames.size()) {
-		infile.close();
-		infile.clear();
-		infile.open(filenames[current_index].c_str(), std::ios::in);
-
-		if (!infile.is_open()) {
-			if (!errormessage.empty())
-				logError("FileParser: %s: %s", errormessage.c_str(), filenames[current_index].c_str());
-			infile.clear();
-			ret = false;
 		}
 	}
 
