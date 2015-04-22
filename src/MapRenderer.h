@@ -83,8 +83,6 @@ private:
 	FPoint shakycam;
 	TileSet tset;
 
-	int npc_tooltip_margin;
-
 public:
 	// functions
 	MapRenderer();

@@ -35,10 +35,6 @@ const int TOOLTIP_MAP = 1;
 const int TOOLTIP_MENU = 2;
 
 class WidgetTooltip {
-private:
-	int offset; // distance between cursor and tooltip
-	int width; // max width of tooltips (wrap text)
-	int margin; // outer margin between tooltip text and the edge of the tooltip background
 public:
 	WidgetTooltip();
 	Point calcPosition(STYLE style, Point pos, Point size);

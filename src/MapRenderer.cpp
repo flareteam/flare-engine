@@ -21,7 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "EnemyGroupManager.h"
-#include "FileParser.h"
 #include "MapRenderer.h"
 #include "PowerManager.h"
 #include "SharedGameResources.h"
@@ -29,7 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsFileSystem.h"
 #include "UtilsMath.h"
-#include "UtilsParsing.h"
 #include "WidgetTooltip.h"
 
 #include <stdint.h>
@@ -43,7 +41,6 @@ MapRenderer::MapRenderer()
 	, tip_pos()
 	, show_tooltip(false)
 	, shakycam()
-	, npc_tooltip_margin(0)
 	, cam()
 	, map_change(false)
 	, teleportation(false)
@@ -60,18 +57,6 @@ MapRenderer::MapRenderer()
 	, npc_id(-1)
 	, index_objectlayer(0)
 {
-	FileParser infile;
-	// load tooltip_margin from engine config file
-	// @CLASS Map|Description of engine/tooltips.txt
-	if (infile.open("engine/tooltips.txt")) {
-		while (infile.next()) {
-			if (infile.key == "npc_tooltip_margin") {
-				// @ATTR npc_tooltip_margin|integer|Vertical offset for NPC labels.
-				npc_tooltip_margin = toInt(infile.val);
-			}
-		}
-		infile.close();
-	}
 }
 
 void MapRenderer::clearQueues() {
@@ -705,7 +690,7 @@ void MapRenderer::checkHotspots() {
 					if (isWithin(dest, inpt->mouse)) {
 						matched = true;
 						tip_pos.x = dest.x + dest.w/2;
-						tip_pos.y = p.y - npc_tooltip_margin;
+						tip_pos.y = p.y - TOOLTIP_MARGIN_NPC;
 					}
 				}
 				else {
@@ -804,7 +789,7 @@ void MapRenderer::checkNearestEvent() {
 			createTooltip((*nearest).getComponent("tooltip"));
 			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
 			if ((*nearest).getComponent("npc_hotspot")) {
-				tip_pos.y -= npc_tooltip_margin;
+				tip_pos.y -= TOOLTIP_MARGIN_NPC;
 			}
 			else {
 				tip_pos.y -= TILE_H;

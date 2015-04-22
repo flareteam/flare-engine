@@ -189,6 +189,12 @@ int DEATH_PENALTY_XP;
 int DEATH_PENALTY_XP_CURRENT;
 bool DEATH_PENALTY_ITEM;
 
+// Tooltip settings
+int TOOLTIP_OFFSET;
+int TOOLTIP_WIDTH;
+int TOOLTIP_MARGIN;
+int TOOLTIP_MARGIN_NPC;
+
 // Other Settings
 bool MENUS_PAUSE;
 bool SAVE_HPMP;
@@ -527,6 +533,10 @@ void loadMiscSettings() {
 	INTERACT_RANGE = 3;
 	SAVE_ONLOAD = true;
 	SAVE_ONEXIT = true;
+	TOOLTIP_OFFSET = 0;
+	TOOLTIP_WIDTH = 1;
+	TOOLTIP_MARGIN = 0;
+	TOOLTIP_MARGIN_NPC = 0;
 
 	FileParser infile;
 	// @CLASS Settings: Misc|Description of engine/misc.txt
@@ -797,6 +807,25 @@ void loadMiscSettings() {
 			else if (infile.key == "random_item") DEATH_PENALTY_ITEM = toBool(infile.val);
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+	}
+
+	// @CLASS Settings: Tooltips|Description of engine/tooltips.txt
+	if (infile.open("engine/tooltips.txt")) {
+		while (infile.next()) {
+			// @ATTR tooltip_offset|integer|Offset in pixels from the origin point (usually mouse cursor).
+			if (infile.key == "tooltip_offset")
+				TOOLTIP_OFFSET = toInt(infile.val);
+			// @ATTR tooltip_width|integer|Maximum width of tooltip in pixels.
+			else if (infile.key == "tooltip_width")
+				TOOLTIP_WIDTH = toInt(infile.val);
+			// @ATTR tooltip_margin|integer|Padding between the text and the tooltip borders.
+			else if (infile.key == "tooltip_margin")
+				TOOLTIP_MARGIN = toInt(infile.val);
+			// @ATTR npc_tooltip_margin|integer|Vertical offset for NPC labels.
+			else if (infile.key == "npc_tooltip_margin")
+				TOOLTIP_MARGIN_NPC = toInt(infile.val);
 		}
 		infile.close();
 	}
