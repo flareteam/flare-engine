@@ -64,7 +64,7 @@ void createDir(const std::string &path) {
 
 #ifdef _WIN32
 	// win implementation
-	std::string syscmd = "mkdir " + path;
+	std::string syscmd = std::string("mkdir \"") + path + std::string("\"");
 	if (system(syscmd.c_str()) != 0) {
 		perror("createDir");
 	}
@@ -167,7 +167,7 @@ bool removeDir(const std::string &dir) {
 
 #ifdef _WIN32
 	// win implementation
-	std::string syscmd = "rmdir " + dir;
+	std::string syscmd = std::string("rmdir \"") + dir + std::string("\"");
 	system(syscmd.c_str());
 #endif
 
