@@ -563,9 +563,6 @@ void GameStateConfigDesktop::logicAccept() {
 		delete mods;
 		mods = new ModManager();
 		loadTilesetSettings();
-		SharedResources::loadIcons();
-		delete curs;
-		curs = new CursorManager();
 	}
 	loadMiscSettings();
 	refreshFont();

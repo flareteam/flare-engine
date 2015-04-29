@@ -89,9 +89,6 @@ static void init(const std::string &render_device_name) {
 		exit(1);
 	}
 
-	// initialize share icons resource
-	SharedResources::loadIcons();
-
 	// Set Gamma
 	if (CHANGE_GAMMA)
 		render_device->setGamma(GAMMA);
@@ -127,8 +124,6 @@ static void init(const std::string &render_device_name) {
 		Mix_Volume(-1, SOUND_VOLUME);
 
 	gswitch = new GameSwitcher();
-
-	curs = new CursorManager();
 }
 
 static void mainLoop () {
@@ -220,7 +215,6 @@ static void cleanup() {
 	delete mods;
 	delete msg;
 	delete snd;
-	delete curs;
 
 	Mix_CloseAudio();
 

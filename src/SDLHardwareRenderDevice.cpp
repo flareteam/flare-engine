@@ -283,6 +283,7 @@ int SDLHardwareRenderDevice::createContext() {
 
 		// load persistent resources
 		SharedResources::loadIcons();
+		delete curs;
 		curs = new CursorManager();
 	}
 
@@ -472,6 +473,11 @@ void SDLHardwareRenderDevice::commitFrame() {
 }
 
 void SDLHardwareRenderDevice::destroyContext() {
+	if (curs) {
+		delete curs;
+		curs = NULL;
+	}
+
 	SDL_FreeSurface(titlebar_icon);
 	titlebar_icon = NULL;
 

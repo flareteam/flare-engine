@@ -313,6 +313,7 @@ int SDLSoftwareRenderDevice::createContext() {
 
 		// load persistent resources
 		SharedResources::loadIcons();
+		delete curs;
 		curs = new CursorManager();
 	}
 
@@ -498,6 +499,10 @@ void SDLSoftwareRenderDevice::commitFrame() {
 }
 
 void SDLSoftwareRenderDevice::destroyContext() {
+	if (curs) {
+		delete curs;
+		curs = NULL;
+	}
 	if (title) {
 		free(title);
 		title = NULL;
