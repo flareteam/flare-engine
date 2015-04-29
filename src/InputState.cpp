@@ -22,12 +22,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handles keyboard and mouse states
  */
 
-#include "CommonIncludes.h"
 #include "FileParser.h"
 #include "InputState.h"
 #include "Settings.h"
 #include "SharedResources.h"
-#include "UtilsDebug.h"
 #include "UtilsParsing.h"
 
 #include <math.h>
@@ -46,80 +44,11 @@ InputState::InputState(void)
 	, window_minimized(false)
 	, window_restored(false)
 	, window_resized(false)
-	, current_touch() {
-#if SDL_VERSION_ATLEAST(2,0,0)
-	SDL_StartTextInput();
-#else
-	SDL_EnableUNICODE(true);
-#endif
-
-	defaultQwertyKeyBindings();
-	defaultJoystickBindings();
-
-	for (int key=0; key<key_count; key++) {
-		pressing[key] = false;
-		un_press[key] = false;
-		lock[key] = false;
-	}
-
-	loadKeyBindings();
-	setKeybindNames();
-}
-
-
-void InputState::defaultQwertyKeyBindings () {
-	binding[CANCEL] = SDLK_ESCAPE;
-	binding[ACCEPT] = SDLK_RETURN;
-#ifdef __ANDROID__
-    binding[CANCEL] = SDLK_AC_BACK;
-	binding[ACCEPT] = SDLK_MENU;
-#endif
-	binding[UP] = SDLK_w;
-	binding[DOWN] = SDLK_s;
-	binding[LEFT] = SDLK_a;
-	binding[RIGHT] = SDLK_d;
-
-	binding_alt[CANCEL] = SDLK_ESCAPE;
-	binding_alt[ACCEPT] = SDLK_SPACE;
-	binding_alt[UP] = SDLK_UP;
-	binding_alt[DOWN] = SDLK_DOWN;
-	binding_alt[LEFT] = SDLK_LEFT;
-	binding_alt[RIGHT] = SDLK_RIGHT;
-
-	binding[BAR_1] = binding_alt[BAR_1] = SDLK_1;
-	binding[BAR_2] = binding_alt[BAR_2] = SDLK_2;
-	binding[BAR_3] = binding_alt[BAR_3] = SDLK_3;
-	binding[BAR_4] = binding_alt[BAR_4] = SDLK_4;
-	binding[BAR_5] = binding_alt[BAR_5] = SDLK_5;
-	binding[BAR_6] = binding_alt[BAR_6] = SDLK_6;
-	binding[BAR_7] = binding_alt[BAR_7] = SDLK_7;
-	binding[BAR_8] = binding_alt[BAR_8] = SDLK_8;
-	binding[BAR_9] = binding_alt[BAR_9] = SDLK_9;
-	binding[BAR_0] = binding_alt[BAR_0] = SDLK_0;
-
-	binding[CHARACTER] = binding_alt[CHARACTER] = SDLK_c;
-	binding[INVENTORY] = binding_alt[INVENTORY] = SDLK_i;
-	binding[POWERS] = binding_alt[POWERS] = SDLK_p;
-	binding[LOG] = binding_alt[LOG] = SDLK_l;
-
-	binding[MAIN1] = binding_alt[MAIN1] = SDL_BUTTON_LEFT;
-	binding[MAIN2] = binding_alt[MAIN2] = SDL_BUTTON_RIGHT;
-
-	binding[CTRL] = SDLK_LCTRL;
-	binding_alt[CTRL] = SDLK_RCTRL;
-	binding[SHIFT] = SDLK_LSHIFT;
-	binding_alt[SHIFT] = SDLK_RSHIFT;
-	binding[DEL] = SDLK_DELETE;
-	binding_alt[DEL] = SDLK_BACKSPACE;
-	binding[ALT] = SDLK_LALT;
-	binding_alt[ALT] = SDLK_RALT;
-
-	binding[ACTIONBAR] = binding_alt[ACTIONBAR] = SDLK_b;
-	binding[ACTIONBAR_BACK] = binding_alt[ACTIONBAR_BACK] = SDLK_z;
-	binding[ACTIONBAR_FORWARD] = binding_alt[ACTIONBAR_FORWARD] = SDLK_x;
-	binding[ACTIONBAR_USE] = binding_alt[ACTIONBAR_USE] = SDLK_n;
-
-	binding[DEVELOPER_MENU] = binding_alt[DEVELOPER_MENU] = SDLK_F5;
+	, pressing_up(false)
+	, pressing_down(false)
+	, current_touch()
+	, dump_event(false)
+{
 }
 
 void InputState::defaultJoystickBindings () {
@@ -368,5 +297,3 @@ void InputState::setKeybindNames() {
 void InputState::enableEventLog() {
 	dump_event = true;
 }
-
-
