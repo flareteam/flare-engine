@@ -211,9 +211,10 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 }
 
 int SDLSoftwareRenderDevice::createContext() {
-	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
 
 #if SDL_VERSION_ATLEAST(2,0,0)
+	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
+
 	Uint32 w_flags = 0;
 	Uint32 r_flags = 0;
 	int window_w = SCREEN_W;
@@ -325,6 +326,55 @@ int SDLSoftwareRenderDevice::createContext() {
 	}
 
 	return (is_initialized ? 0 : -1);
+
+#else
+	SCREEN_W = 640;
+	SCREEN_H = 480;
+
+	MIN_SCREEN_W = 640;
+	MIN_SCREEN_H = 480;
+
+	VIEW_W = 640;
+	VIEW_H = 480;
+
+	VIEW_W_HALF = 320;
+	VIEW_H_HALF = 240;
+
+	if (is_initialized) {
+		destroyContext();
+	}
+
+	bool window_created = false;
+
+	Uint32 flags = 0;
+
+	if (FULLSCREEN) flags = flags | SDL_FULLSCREEN;
+	if (DOUBLEBUF) flags = flags | SDL_DOUBLEBUF;
+	if (HWSURFACE)
+		flags = flags | SDL_HWSURFACE | SDL_HWACCEL;
+	else
+		flags = flags | SDL_SWSURFACE;
+
+	screen = SDL_SetVideoMode (SCREEN_W, SCREEN_H, 0, flags);
+
+	window_created = screen != NULL;
+
+	if (!window_created && !is_initialized) {
+		// If this is the first attempt and it failed we are not
+		// getting anywhere.
+		SDL_Quit();
+		exit(1);
+	}
+	else {
+		is_initialized = true;
+	}
+
+	if (is_initialized) {
+		updateTitleBar();
+	}
+
+	return (window_created ? 0 : -1);
+#endif
 }
 
 int SDLSoftwareRenderDevice::render(Renderable& r, Rect dest) {
@@ -622,6 +672,14 @@ void SDLSoftwareRenderDevice::updateTitleBar() {
 #endif
 }
 
+Rect SDLSoftwareRenderDevice::getContextSize() {
+	Rect size;
+	size.x = size.y = 0;
+	size.h = screen->h;
+	size.w = screen->w;
+	return size;
+}
+
 void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	int mode_count = SDL_GetNumDisplayModes(0);
@@ -742,6 +800,7 @@ void SDLSoftwareRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *
 }
 
 void SDLSoftwareRenderDevice::windowResize() {
+#if SDL_VERSION_ATLEAST(2,0,0)
 	int w,h;
 	SDL_GetWindowSize(window, &w, &h);
 	SCREEN_W = w;
@@ -767,5 +826,6 @@ void SDLSoftwareRenderDevice::windowResize() {
 	SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
 	screen = SDL_CreateRGBSurface(0, VIEW_W, VIEW_H, bpp, rmask, gmask, bmask, amask);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);
+#endif
 }
 

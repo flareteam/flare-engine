@@ -76,6 +76,8 @@ public:
 	void blankScreen();
 	void commitFrame();
 	void destroyContext();
+	Rect getContextSize();
+	void listModes(std::vector<Rect> &modes);
 	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void windowResize();

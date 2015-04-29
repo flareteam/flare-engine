@@ -34,8 +34,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 SDLInputState::SDLInputState(void)
 	: InputState()
 {
+#if SDL_VERSION_ATLEAST(2,0,0)
+
 #ifndef __ANDROID__
 	SDL_StartTextInput();
+#endif
+
+#else
+	SDL_EnableUNICODE(true);
 #endif
 
 	defaultQwertyKeyBindings();
@@ -111,6 +117,10 @@ void SDLInputState::handle() {
 
 	SDL_Event event;
 
+	if (! SDL_VERSION_ATLEAST(2,0,0)) {
+		SDL_GetMouseState(&mouse.x, &mouse.y);
+	}
+
 	/* Check for events */
 	while (SDL_PollEvent (&event)) {
 
@@ -119,12 +129,32 @@ void SDLInputState::handle() {
 		}
 
 		// grab symbol keys
+#if SDL_VERSION_ATLEAST(2,0,0)
 		if (event.type == SDL_TEXTINPUT) {
 			inkeys += event.text.text;
 		}
+#else
+		if (event.type == SDL_KEYDOWN) {
+			int ch = event.key.keysym.unicode;
+			// if it is printable char then write its utf-8 representation
+			if (ch >= 0x800) {
+				inkeys += (char) ((ch >> 12) | 0xe0);
+				inkeys += (char) (((ch >> 6) & 0x3f) | 0x80);
+				inkeys += (char) ((ch & 0x3f) | 0x80);
+			}
+			else if (ch >= 0x80) {
+				inkeys += (char) ((ch >> 6) | 0xc0);
+				inkeys += (char) ((ch & 0x3f) | 0x80);
+			}
+			else if (ch >= 32 && ch != 127) {
+				inkeys += (char)ch;
+			}
+		}
+#endif
 
 		switch (event.type) {
 
+#if SDL_VERSION_ATLEAST(2,0,0)
 #ifndef __ANDROID__
 			case SDL_MOUSEMOTION:
 				mouse.x = event.motion.x;
@@ -166,19 +196,12 @@ void SDLInputState::handle() {
 #else
 			// detect restoring hidden Android app to bypass frameskip
 			case SDL_WINDOWEVENT:
-				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-					window_resized = true;
-					render_device->windowResize();
-				}
-				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
+				if (event.window.event == SDL_WINDOWEVENT_MINIMIZED)
 					window_minimized = true;
-					snd->pauseAll();
-				}
-				else if (event.window.event == SDL_WINDOWEVENT_RESTORED) {
+				else if (event.window.event == SDL_WINDOWEVENT_RESTORED)
 					window_restored = true;
-					snd->resumeAll();
-				}
 				break;
+#endif
 			// Android touch events
 			case SDL_FINGERMOTION:
 				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
@@ -202,6 +225,35 @@ void SDLInputState::handle() {
 				un_press[MAIN1] = true;
 				last_button = binding[MAIN1];
 				break;
+#else
+			case SDL_MOUSEBUTTONDOWN:
+				if (event.button.button == SDL_BUTTON_WHEELUP) {
+					scroll_up = true;
+				}
+				else if (event.button.button == SDL_BUTTON_WHEELDOWN) {
+					scroll_down = true;
+				}
+				if (!lock_scroll || (event.button.button != SDL_BUTTON_WHEELUP && event.button.button != SDL_BUTTON_WHEELDOWN)) {
+					for (int key=0; key<key_count; key++) {
+						if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+							pressing[key] = true;
+							un_press[key] = false;
+						}
+					}
+				}
+				break;
+			case SDL_MOUSEBUTTONUP:
+				for (int key=0; key<key_count; key++) {
+					if ((scroll_up && (binding[key] == SDL_BUTTON_WHEELUP || binding_alt[key] == SDL_BUTTON_WHEELUP)) ||
+					    (scroll_down && (binding[key] == SDL_BUTTON_WHEELDOWN || binding_alt[key] == SDL_BUTTON_WHEELDOWN))) {
+						un_press[key] = true;
+					}
+					else if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+						un_press[key] = true;
+					}
+				}
+				last_button = event.button.button;
+				break;
 #endif
 			case SDL_KEYDOWN:
 				for (int key=0; key<key_count; key++) {
@@ -210,9 +262,6 @@ void SDLInputState::handle() {
 						un_press[key] = false;
 					}
 				}
-
-				if (event.key.keysym.sym == SDLK_UP) pressing_up = true;
-				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = true;
 				break;
 			case SDL_KEYUP:
 				for (int key=0; key<key_count; key++) {
@@ -221,9 +270,6 @@ void SDLInputState::handle() {
 					}
 				}
 				last_key = event.key.keysym.sym;
-
-				if (event.key.keysym.sym == SDLK_UP) pressing_up = false;
-				if (event.key.keysym.sym == SDLK_DOWN) pressing_down = false;
 				break;
 				/*
 				case SDL_JOYAXISMOTION:
@@ -505,11 +551,19 @@ void SDLInputState::showCursor() {
 }
 
 std::string SDLInputState::getJoystickName(int index) {
+#if SDL_VERSION_ATLEAST(2,0,0)
 	return std::string(SDL_JoystickNameForIndex(index));
+#else
+	return std::string(SDL_JoystickName(index));
+#endif
 }
 
 std::string SDLInputState::getKeyName(int key) {
+#if SDL_VERSION_ATLEAST(2,0,0)
 	return std::string(SDL_GetKeyName((SDL_Keycode)key));
+#else
+	return std::string(SDL_GetKeyName((SDLKey)key));
+#endif
 }
 
 SDLInputState::~SDLInputState() {

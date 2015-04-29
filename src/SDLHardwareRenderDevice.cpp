@@ -500,6 +500,14 @@ void SDLHardwareRenderDevice::destroyContext() {
 	return;
 }
 
+Rect SDLHardwareRenderDevice::getContextSize()
+{
+	return Rect();
+}
+
+void SDLHardwareRenderDevice::listModes(std::vector<Rect> &modes)
+{}
+
 Uint32 SDLHardwareRenderDevice::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
 	Uint32 u_format = SDL_GetWindowPixelFormat(window);
 	SDL_PixelFormat* format = SDL_AllocFormat(u_format);

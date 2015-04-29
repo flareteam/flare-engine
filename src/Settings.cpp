@@ -121,6 +121,7 @@ short MIN_SCREEN_H = 480;
 unsigned short SCREEN_W = 640;
 unsigned short SCREEN_H = 480;
 bool VSYNC;
+bool DOUBLEBUF;
 bool HWSURFACE;
 bool TEXTURE_FILTER;
 bool IGNORE_TEXTURE_FILTER = false;
