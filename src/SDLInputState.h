@@ -1,5 +1,5 @@
 /*
-Copyright © 2014 Justin Jacobs
+Copyright © 2011-2012 Clint Bellanger
 
 This file is part of FLARE.
 
@@ -15,35 +15,27 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#ifndef GAMESTATERESOLUTION_H
-#define GAMESTATERESOLUTION_H
+#ifndef SDL_INPUT_STATE_H
+#define SDL_INPUT_STATE_H
 
-#include "GameState.h"
+#include "InputState.h"
 
-class MenuConfirm;
-
-class GameStateResolution : public GameState {
-private:
-	bool applyVideoSettings(int width, int height);
-	bool compareVideoSettings();
-	void cleanup();
-	MenuConfirm *confirm;
-	int confirm_ticks;
-	int old_w;
-	int old_h;
-	bool old_fullscreen;
-	bool old_hwsurface;
-	bool old_doublebuf;
-	int new_w;
-	int new_h;
-	bool initialized;
-
+/**
+ * class SDLInputState
+ *
+ * Handles keyboard and mouse states using SDL API
+ */
+class SDLInputState : public InputState {
 public:
-	GameStateResolution(int width, int height, bool fullscreen, bool hwsurface, bool doublebuf);
-	~GameStateResolution();
-	void logic();
-	void render();
+	SDLInputState(void);
+	~SDLInputState();
+
+	void defaultQwertyKeyBindings();
+	void handle();
+	void hideCursor();
+	void showCursor();
+	std::string getJoystickName(int index);
+	std::string getKeyName(int key);
 };
 
 #endif
-

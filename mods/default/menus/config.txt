@@ -6,19 +6,19 @@
 listbox_scrollbar_offset=2
 
 [video]
-resolution=64,16,32,32
-fullscreen=352,40,384,32
-hwsurface=352,72,384,64
-doublebuf=352,104,384,96
-hws_note=416,72
-dbuf_note=416,104
-change_gamma=352,136,384,128
-gamma=352,168,384,160
-test_note=416,136
+fullscreen=224,40,256,32
+hwsurface=224,72,256,64
+vsync=224,104,256,96
+texture_filter=224,136,256,128
+hws_note=288,72
+dbuf_note=288,104
+change_gamma=224,168,256,160
+gamma=224,200,256,192
+test_note=288,168
 
 [audio]
-music_volume=224,8,256,0
-sound_volume=224,40,256,32
+music_volume=224,40,256,32
+sound_volume=224,72,256,64
 
 [interface]
 language=64,16,32,32

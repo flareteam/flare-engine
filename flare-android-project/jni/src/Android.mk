@@ -41,7 +41,6 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/GameStateTitle.cpp \
 	../../../src/GameStateLoad.cpp \
 	../../../src/GameStatePlay.cpp \
-	../../../src/GameStateResolution.cpp \
 	../../../src/GameStateNew.cpp \
 	../../../src/GameSwitcher.cpp \
 	../../../src/GetText.cpp \
@@ -86,15 +85,16 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/RenderDevice.cpp \
 	../../../src/RenderDeviceList.cpp \
 	../../../src/SaveLoad.cpp \
-	../../../src/SDL_gfxBlitFunc.c \
+	../../../src/SDLInputState.cpp \
 	../../../src/SDLHardwareRenderDevice.cpp \
 	../../../src/SDLSoftwareRenderDevice.cpp \
+	../../../src/SDLSoundManager.cpp \
+	../../../src/SDLFontEngine.cpp \
 	../../../src/Settings.cpp \
 	../../../src/SharedGameResources.cpp \
 	../../../src/SharedResources.cpp \
 	../../../src/StatBlock.cpp \
 	../../../src/Stats.cpp \
-	../../../src/SoundManager.cpp \
 	../../../src/TileSet.cpp \
 	../../../src/TooltipData.cpp \
 	../../../src/Utils.cpp \

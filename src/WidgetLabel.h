@@ -49,7 +49,7 @@ LabelInfo eatLabelInfo(std::string val);
 class WidgetLabel : public Widget {
 private:
 
-	void refresh();
+	void recacheTextSprite();
 	void applyOffsets();
 
 	std::string text;

@@ -37,6 +37,8 @@ private:
 
 	unsigned line_number;
 
+	FileParser* include_fp;
+
 public:
 	FileParser();
 	~FileParser();

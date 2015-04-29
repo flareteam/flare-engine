@@ -47,7 +47,7 @@ public:
 	void loadSounds(StatBlock *src_stats = NULL);
 	void unloadSounds();
 	bool move();
-	bool takeHit(const Hazard &h);
+	bool takeHit(Hazard &h);
 	virtual void resetActiveAnimation();
 	virtual void doRewards(int) {}
 

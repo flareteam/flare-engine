@@ -79,9 +79,10 @@ void GameSwitcher::loadMusic() {
 		}
 
 		if (music_filename != "") {
-			music = Mix_LoadMUS((mods->locate(music_filename)).c_str());
+			std::string file_path = mods->locate(music_filename);
+			music = Mix_LoadMUS(file_path.c_str());
 			if (!music)
-				logError("GameSwitcher: Mix_LoadMUS: %s", Mix_GetError());
+				logError("GameSwitcher: Mix_LoadMUS(%s): %s", file_path.c_str(), Mix_GetError());
 		}
 	}
 
@@ -185,6 +186,11 @@ bool GameSwitcher::isPaused() {
 void GameSwitcher::render() {
 	currentState->render();
 	curs->render();
+}
+
+void GameSwitcher::saveUserSettings() {
+	if (currentState && currentState->save_settings_on_exit)
+		saveSettings();
 }
 
 GameSwitcher::~GameSwitcher() {

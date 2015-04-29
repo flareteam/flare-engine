@@ -26,7 +26,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateConfigBase.h"
 #include "GameStateConfigDesktop.h"
 #include "GameStateTitle.h"
-#include "GameStateResolution.h"
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
@@ -43,21 +42,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits.h>
 #include <iomanip>
 
-bool rescompare(const Rect &r1, const Rect &r2) {
-	if (r1.w == r2.w) return r1.h > r2.h;
-	return r1.w > r2.w;
-}
-
 GameStateConfigDesktop::GameStateConfigDesktop()
 	: GameStateConfigBase(false)
-	, resolution_lstb(new WidgetListBox(10))
-	, resolution_lb(new WidgetLabel())
 	, fullscreen_cb(new WidgetCheckBox())
 	, fullscreen_lb(new WidgetLabel())
 	, hwsurface_cb(new WidgetCheckBox())
 	, hwsurface_lb(new WidgetLabel())
-	, doublebuf_cb(new WidgetCheckBox())
-	, doublebuf_lb(new WidgetLabel())
+	, vsync_cb(new WidgetCheckBox())
+	, vsync_lb(new WidgetLabel())
+	, texture_filter_cb(new WidgetCheckBox())
+	, texture_filter_lb(new WidgetLabel())
 	, change_gamma_cb(new WidgetCheckBox())
 	, change_gamma_lb(new WidgetLabel())
 	, gamma_sl(new WidgetSlider())
@@ -83,15 +77,8 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 	, input_confirm_ticks(0)
 	, input_key(0)
 	, key_count(0)
-	, fullscreen(FULLSCREEN)
-	, hwsurface(HWSURFACE)
-	, doublebuf(DOUBLEBUF)
 	, scrollpane_contents(0)
 {
-	// Populate the resolution list
-	if (getVideoModes() < 1)
-		logError("GameStateConfigDesktop: Unable to get resolutions list!");
-
 	// Allocate KeyBindings
 	for (int i = 0; i < inpt->key_count; i++) {
 		keybinds_lb.push_back(new WidgetLabel());
@@ -187,14 +174,9 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	if (infile.key == "listbox_scrollbar_offset") {
 		// overrides same key in GameStateConfigBase
 		joystick_device_lstb->scrollbar_offset = x1;
-		resolution_lstb->scrollbar_offset = x1;
 		activemods_lstb->scrollbar_offset = x1;
 		inactivemods_lstb->scrollbar_offset = x1;
 		language_lstb->scrollbar_offset = x1;
-	}
-	else if (infile.key == "resolution") {
-		// @ATTR resolution|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Resolution" list box relative to the frame.
-		placeLabeledWidget(resolution_lb, resolution_lstb, x1, y1, x2, y2, msg->get("Resolution"));
 	}
 	else if (infile.key == "fullscreen") {
 		// @ATTR fullscreen|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Full Screen Mode" checkbox relative to the frame.
@@ -208,9 +190,13 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		// @ATTR hwsurface|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Hardware surfaces" checkbox relative to the frame.
 		placeLabeledWidget(hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), JUSTIFY_RIGHT);
 	}
-	else if (infile.key == "doublebuf") {
-		// @ATTR doublebuf|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Double buffering" checkbox relative to the frame.
-		placeLabeledWidget(doublebuf_lb, doublebuf_cb, x1, y1, x2, y2, msg->get("Double buffering"), JUSTIFY_RIGHT);
+	else if (infile.key == "vsync") {
+		// @ATTR vsync|label x (integer), label y (integer), x (integer), y (integer)|Position of the "V-Sync" checkbox relative to the frame.
+		placeLabeledWidget(vsync_lb, vsync_cb, x1, y1, x2, y2, msg->get("V-Sync"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "texture_filter") {
+		// @ATTR texture_filter|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Texture Filtering" checkbox relative to the frame.
+		placeLabeledWidget(texture_filter_lb, texture_filter_cb, x1, y1, x2, y2, msg->get("Texture Filtering"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "change_gamma") {
 		// @ATTR change_gamma|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Allow changing gamma" checkbox relative to the frame.
@@ -370,14 +356,14 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 	addChildWidget(fullscreen_lb, VIDEO_TAB);
 	addChildWidget(hwsurface_cb, VIDEO_TAB);
 	addChildWidget(hwsurface_lb, VIDEO_TAB);
-	addChildWidget(doublebuf_cb, VIDEO_TAB);
-	addChildWidget(doublebuf_lb, VIDEO_TAB);
+	addChildWidget(vsync_cb, VIDEO_TAB);
+	addChildWidget(vsync_lb, VIDEO_TAB);
+	addChildWidget(texture_filter_cb, VIDEO_TAB);
+	addChildWidget(texture_filter_lb, VIDEO_TAB);
 	addChildWidget(change_gamma_cb, VIDEO_TAB);
 	addChildWidget(change_gamma_lb, VIDEO_TAB);
 	addChildWidget(gamma_sl, VIDEO_TAB);
 	addChildWidget(gamma_lb, VIDEO_TAB);
-	addChildWidget(resolution_lstb, VIDEO_TAB);
-	addChildWidget(resolution_lb, VIDEO_TAB);
 	addChildWidget(hws_note_lb, VIDEO_TAB);
 	addChildWidget(dbuf_note_lb, VIDEO_TAB);
 	addChildWidget(test_note_lb, VIDEO_TAB);
@@ -407,10 +393,10 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist.add(cancel_button);
 	tablist.add(fullscreen_cb);
 	tablist.add(hwsurface_cb);
-	tablist.add(doublebuf_cb);
+	tablist.add(vsync_cb);
+	tablist.add(texture_filter_cb);
 	tablist.add(change_gamma_cb);
 	tablist.add(gamma_sl);
-	tablist.add(resolution_lstb);
 
 	tablist.add(music_volume_sl);
 	tablist.add(sound_volume_sl);
@@ -455,8 +441,10 @@ void GameStateConfigDesktop::updateVideo() {
 	else fullscreen_cb->unCheck();
 	if (HWSURFACE) hwsurface_cb->Check();
 	else hwsurface_cb->unCheck();
-	if (DOUBLEBUF) doublebuf_cb->Check();
-	else doublebuf_cb->unCheck();
+	if (VSYNC) vsync_cb->Check();
+	else vsync_cb->unCheck();
+	if (TEXTURE_FILTER) texture_filter_cb->Check();
+	else texture_filter_cb->unCheck();
 	if (CHANGE_GAMMA) change_gamma_cb->Check();
 	else {
 		change_gamma_cb->unCheck();
@@ -465,17 +453,6 @@ void GameStateConfigDesktop::updateVideo() {
 	}
 	gamma_sl->set(5,20,(int)(GAMMA*10.0));
 	render_device->setGamma(GAMMA);
-
-	std::stringstream list_mode;
-	unsigned int resolutions = getVideoModes();
-	for (unsigned int i=0; i<resolutions; ++i) {
-		list_mode << video_modes[i].w << "x" << video_modes[i].h;
-		resolution_lstb->append(list_mode.str(),"");
-		if (video_modes[i].w == SCREEN_W && video_modes[i].h == SCREEN_H) resolution_lstb->selected[i] = true;
-		else resolution_lstb->selected[i] = false;
-		list_mode.str("");
-	}
-	resolution_lstb->refresh();
 }
 
 void GameStateConfigDesktop::updateInput() {
@@ -577,17 +554,6 @@ void GameStateConfigDesktop::logic() {
 }
 
 void GameStateConfigDesktop::logicAccept() {
-	std::string resolution_value = resolution_lstb->getValue();
-	int width = popFirstInt(resolution_value, 'x');
-	int height = popFirstInt(resolution_value, 'x');
-
-	// In case of a custom resolution, the listbox might have nothing selected
-	// So we just use whatever the current window area is
-	if (width == 0 || height == 0) {
-		width = SCREEN_W;
-		height = SCREEN_H;
-	}
-
 	delete msg;
 	msg = new MessageEngine();
 	inpt->saveKeyBindings();
@@ -597,9 +563,6 @@ void GameStateConfigDesktop::logicAccept() {
 		delete mods;
 		mods = new ModManager();
 		loadTilesetSettings();
-		SharedResources::loadIcons();
-		delete curs;
-		curs = new CursorManager();
 	}
 	loadMiscSettings();
 	refreshFont();
@@ -608,10 +571,10 @@ void GameStateConfigDesktop::logicAccept() {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 	}
 	cleanup();
+	render_device->createContext();
 	saveSettings();
-	render_device->updateTitleBar();
 	delete requestedGameState;
-	requestedGameState = new GameStateResolution(width, height, fullscreen, hwsurface, doublebuf);
+	requestedGameState = new GameStateTitle();
 }
 
 void GameStateConfigDesktop::logicVideo() {
@@ -623,9 +586,13 @@ void GameStateConfigDesktop::logicVideo() {
 		if (hwsurface_cb->isChecked()) HWSURFACE=true;
 		else HWSURFACE=false;
 	}
-	else if (doublebuf_cb->checkClick()) {
-		if (doublebuf_cb->isChecked()) DOUBLEBUF=true;
-		else DOUBLEBUF=false;
+	else if (vsync_cb->checkClick()) {
+		if (vsync_cb->isChecked()) VSYNC=true;
+		else VSYNC=false;
+	}
+	else if (texture_filter_cb->checkClick()) {
+		if (texture_filter_cb->isChecked()) TEXTURE_FILTER=true;
+		else TEXTURE_FILTER=false;
 	}
 	else if (change_gamma_cb->checkClick()) {
 		if (change_gamma_cb->isChecked()) {
@@ -639,9 +606,6 @@ void GameStateConfigDesktop::logicVideo() {
 			gamma_sl->set(5,20,(int)(GAMMA*10.0));
 			render_device->setGamma(GAMMA);
 		}
-	}
-	else if (resolution_lstb->checkClick()) {
-		// nothing to do here: resolution value changes next frame.
 	}
 	else if (CHANGE_GAMMA) {
 		gamma_sl->enabled = true;
@@ -764,7 +728,6 @@ void GameStateConfigDesktop::renderDialogs() {
 void GameStateConfigDesktop::renderTooltips(TooltipData& tip_new) {
 	GameStateConfigBase::renderTooltips(tip_new);
 
-	if (active_tab == VIDEO_TAB && tip_new.isEmpty()) tip_new = resolution_lstb->checkTooltip(inpt->mouse);
 	if (active_tab == INPUT_TAB && tip_new.isEmpty()) tip_new = joystick_device_lstb->checkTooltip(inpt->mouse);
 }
 
@@ -774,46 +737,6 @@ void GameStateConfigDesktop::refreshWidgets() {
 	input_scrollbox->setPos(frame.x, frame.y);
 
 	input_confirm->align();
-}
-
-int GameStateConfigDesktop::getVideoModes() {
-	video_modes.clear();
-
-	// Set predefined modes
-	const unsigned int cm_count = 5;
-	Rect common_modes[cm_count];
-	common_modes[0].w = 640;
-	common_modes[0].h = 480;
-	common_modes[1].w = 800;
-	common_modes[1].h = 600;
-	common_modes[2].w = 1024;
-	common_modes[2].h = 768;
-	common_modes[3].w = SCREEN_W;
-	common_modes[3].h = SCREEN_H;
-	common_modes[4].w = MIN_SCREEN_W;
-	common_modes[4].h = MIN_SCREEN_H;
-
-	// Get available fullscreen/hardware modes
-	render_device->listModes(video_modes);
-
-	for (unsigned i=0; i<cm_count; ++i) {
-		video_modes.push_back(common_modes[i]);
-		if (common_modes[i].w < MIN_SCREEN_W || common_modes[i].h < MIN_SCREEN_H) {
-			video_modes.pop_back();
-		}
-		else {
-			for (unsigned j=0; j<video_modes.size()-1; ++j) {
-				if (video_modes[j].w == common_modes[i].w && video_modes[j].h == common_modes[i].h) {
-					video_modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
-
-	std::sort(video_modes.begin(), video_modes.end(), rescompare);
-
-	return video_modes.size();
 }
 
 void GameStateConfigDesktop::scanKey(int button) {

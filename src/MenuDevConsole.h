@@ -47,6 +47,10 @@ protected:
 
 	Color color_echo;
 	Color color_error;
+	Color color_hint;
+
+	unsigned long input_scrollback_pos;
+	std::vector<std::string> input_scrollback;
 
 public:
 	MenuDevConsole();

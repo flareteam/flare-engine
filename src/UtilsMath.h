@@ -24,6 +24,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <algorithm> // for std::min()/std::max()
 #include "math.h"
 
+#ifndef M_PI
+#define M_PI 3.1415926535898f
+#endif
+
 /**
  * Clamps value to floor.
  *

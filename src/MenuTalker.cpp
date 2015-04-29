@@ -111,7 +111,7 @@ void MenuTalker::align() {
 	label_name->setPos(window_area.x, window_area.y);
 
 	textbox->setPos(window_area.x, window_area.y + label_name->bounds.h);
-	textbox->pos.h = text_pos.h - (text_offset.y*2) - label_name->bounds.h;
+	textbox->pos.h = text_pos.h - (text_offset.y*2);
 }
 
 void MenuTalker::chooseDialogNode(int request_dialog_node) {
@@ -230,6 +230,7 @@ void MenuTalker::createBuffer() {
 		color_normal
 	);
 
+	align();
 }
 
 void MenuTalker::render() {

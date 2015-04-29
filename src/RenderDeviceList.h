@@ -22,6 +22,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "RenderDevice.h"
 
+class FontEngine;
+class SoundManager;
+class InputState;
+
 RenderDevice* getRenderDevice(std::string name);
+
+FontEngine* getFontEngine();
+SoundManager* getSoundManager();
+InputState* getInputManager();
 
 #endif

@@ -33,13 +33,35 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class Hazard;
 
+#define EFFECT_COUNT 18
+
+enum EFFECT_TYPE {
+	EFFECT_NONE = 0,
+	EFFECT_DAMAGE = 1,
+	EFFECT_HPOT = 2,
+	EFFECT_MPOT = 3,
+	EFFECT_SPEED = 4,
+	EFFECT_IMMUNITY = 5,
+	EFFECT_STUN = 6,
+	EFFECT_REVIVE = 7,
+	EFFECT_CONVERT = 8,
+	EFFECT_FEAR = 9,
+	EFFECT_OFFENSE = 10,
+	EFFECT_DEFENSE = 11,
+	EFFECT_PHYSICAL = 12,
+	EFFECT_MENTAL = 13,
+	EFFECT_DEATH_SENTENCE = 14,
+	EFFECT_SHIELD = 15,
+	EFFECT_HEAL = 16,
+};
+
 class Effect {
 public:
 	std::string name;
 	int icon;
 	int ticks;
 	int duration;
-	std::string type;
+	int type;
 	int magnitude;
 	int magnitude_max;
 	std::string animation_name;
@@ -55,7 +77,7 @@ public:
 		, icon(-1)
 		, ticks(0)
 		, duration(-1)
-		, type("")
+		, type(EFFECT_NONE)
 		, magnitude(0)
 		, magnitude_max(0)
 		, animation_name("")
@@ -85,13 +107,14 @@ public:
 	void clearStatus();
 	void logic();
 	void addEffect(EffectDef &effect, int duration, int magnitude, bool item, int trigger, int passive_id, int source_type);
-	void removeEffectType(std::string type);
+	void removeEffectType(const int &type);
 	void removeEffectPassive(int id);
 	void clearEffects();
 	void clearNegativeEffects();
 	void clearItemEffects();
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
+	int getType(const std::string type);
 
 	std::vector<Effect> effect_list;
 

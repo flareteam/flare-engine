@@ -225,6 +225,7 @@ public:
 	bool transform_with_equipment;
 	bool untransform_on_hit;
 	EffectManager effects;
+	bool blocking;
 
 	FPoint pos;
 	unsigned char direction;

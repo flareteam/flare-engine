@@ -78,21 +78,24 @@ public:
 	std::string mouse_button[7];
 
 	InputState(void);
-	~InputState();
+	virtual ~InputState() {};
 
-	void defaultQwertyKeyBindings();
 	void defaultJoystickBindings();
 	void loadKeyBindings();
 	void saveKeyBindings();
-	void handle(bool dump_event);
 	void resetScroll();
 	void lockActionBar();
 	void unlockActionBar();
 	void setKeybindNames();
-	void hideCursor();
-	void showCursor();
-	std::string getJoystickName(int index);
-	std::string getKeyName(int key);
+
+	virtual void handle();
+	virtual void defaultQwertyKeyBindings() = 0;
+	virtual void hideCursor() = 0;
+	virtual void showCursor() = 0;
+	virtual std::string getJoystickName(int index) = 0;
+	virtual std::string getKeyName(int key) = 0;
+
+	void enableEventLog();
 
 	bool pressing[key_count];
 	bool lock[key_count];
@@ -111,10 +114,13 @@ public:
 	bool window_minimized;
 	bool window_restored;
 	bool window_resized;
+	bool pressing_up;
+	bool pressing_down;
 
-private:
+protected:
 	bool un_press[key_count];
 	Point current_touch;
+	bool dump_event;
 };
 
 #endif

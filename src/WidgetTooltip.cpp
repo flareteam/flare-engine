@@ -22,36 +22,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class WidgetTooltip
  */
 
-#include "FileParser.h"
 #include "WidgetTooltip.h"
 #include "Settings.h"
 #include "Utils.h"
-#include "UtilsParsing.h"
 
 int TOOLTIP_CONTEXT = TOOLTIP_NONE;
 
-WidgetTooltip::WidgetTooltip()
-	: offset(0)
-	, width(0)
-	, margin(0) {
-
-	FileParser infile;
-	// load tooltip settings from engine config file
-	// @CLASS WidgetTooltip|Description of engine/tooltips.txt
-	if (infile.open("engine/tooltips.txt")) {
-		while (infile.next()) {
-			// @ATTR tooltip_offset|integer|Offset in pixels from the origin point (usually mouse cursor).
-			if (infile.key == "tooltip_offset")
-				offset = toInt(infile.val);
-			// @ATTR tooltip_width|integer|Maximum width of tooltip in pixels.
-			else if (infile.key == "tooltip_width")
-				width = toInt(infile.val);
-			// @ATTR tooltip_margin|integer|Padding between the text and the tooltip borders.
-			else if (infile.key == "tooltip_margin")
-				margin = toInt(infile.val);
-		}
-		infile.close();
-	}
+WidgetTooltip::WidgetTooltip() {
 }
 
 /**
@@ -65,7 +42,7 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
 	// TopLabel style is fixed and centered over the origin
 	if (style == STYLE_TOPLABEL) {
 		tip_pos.x = pos.x - size.x/2;
-		tip_pos.y = pos.y - offset;
+		tip_pos.y = pos.y - TOOLTIP_OFFSET;
 	}
 	// Float style changes position based on the screen quadrant of the origin
 	// (usually used for tooltips which are long and we don't want them to overflow
@@ -73,23 +50,23 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
 	else if (style == STYLE_FLOAT) {
 		// upper left
 		if (pos.x < VIEW_W_HALF && pos.y < VIEW_H_HALF) {
-			tip_pos.x = pos.x + offset;
-			tip_pos.y = pos.y + offset;
+			tip_pos.x = pos.x + TOOLTIP_OFFSET;
+			tip_pos.y = pos.y + TOOLTIP_OFFSET;
 		}
 		// upper right
 		else if (pos.x >= VIEW_W_HALF && pos.y < VIEW_H_HALF) {
-			tip_pos.x = pos.x - offset - size.x;
-			tip_pos.y = pos.y + offset;
+			tip_pos.x = pos.x - TOOLTIP_OFFSET - size.x;
+			tip_pos.y = pos.y + TOOLTIP_OFFSET;
 		}
 		// lower left
 		else if (pos.x < VIEW_W_HALF && pos.y >= VIEW_H_HALF) {
-			tip_pos.x = pos.x + offset;
-			tip_pos.y = pos.y - offset - size.y;
+			tip_pos.x = pos.x + TOOLTIP_OFFSET;
+			tip_pos.y = pos.y - TOOLTIP_OFFSET - size.y;
 		}
 		// lower right
 		else if (pos.x >= VIEW_W_HALF && pos.y >= VIEW_H_HALF) {
-			tip_pos.x = pos.x - offset - size.x;
-			tip_pos.y = pos.y - offset - size.y;
+			tip_pos.x = pos.x - TOOLTIP_OFFSET - size.x;
+			tip_pos.y = pos.y - TOOLTIP_OFFSET - size.y;
 		}
 	}
 
@@ -137,7 +114,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	font->setFont("font_regular");
 
 	// calculate the full size to display a multi-line tooltip
-	Point size = font->calc_size(fulltext, width);
+	Point size = font->calc_size(fulltext, TOOLTIP_WIDTH);
 
 	// WARNING: dynamic memory allocation. Be careful of memory leaks.
 	if (tip.tip_buffer) {
@@ -146,7 +123,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	}
 
 	Image *graphics;
-	graphics = render_device->createImage(size.x + margin+margin, size.y + margin+margin);
+	graphics = render_device->createImage(size.x + (TOOLTIP_MARGIN*2), size.y + (TOOLTIP_MARGIN*2));
 
 	if (!graphics) {
 		logError("WidgetTooltip: Could not create tooltip buffer.");
@@ -157,10 +134,10 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	// currently this is plain black
 	graphics->fillWithColor(graphics->MapRGB(0,0,0));
 
-	int cursor_y = margin;
+	int cursor_y = TOOLTIP_MARGIN;
 
 	for (unsigned int i=0; i<tip.lines.size(); i++) {
-		font->render(tip.lines[i], margin, cursor_y, JUSTIFY_LEFT, graphics, size.x, tip.colors[i]);
+		font->render(tip.lines[i], TOOLTIP_MARGIN, cursor_y, JUSTIFY_LEFT, graphics, size.x, tip.colors[i]);
 		cursor_y = font->cursor_y;
 	}
 

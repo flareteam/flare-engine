@@ -480,8 +480,10 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
-				if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
+				if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h) {
 					mapr->collider.colmap[ec->x][ec->y] = ec->z;
+					mapr->map_change = true;
+				}
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
 			}
@@ -494,7 +496,6 @@ bool EventManager::executeEvent(Event &ev) {
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
 			}
-			mapr->map_change = true;
 		}
 		else if (ec->type == "soundfx") {
 			FPoint pos(0,0);

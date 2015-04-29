@@ -365,7 +365,7 @@ void GameStateLoad::loadPreview(int slot) {
 			continue;
 		}
 
-		if (equipped[slot][i] > 0 && !preview_layer.empty()) {
+		if (equipped[slot][i] > 0 && !preview_layer.empty() && (unsigned)equipped[slot][i] < items->items.size()) {
 			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
 			if (found != preview_layer.end())
 				img_gfx[distance(preview_layer.begin(), found)] = items->items[equipped[slot][i]].gfx;

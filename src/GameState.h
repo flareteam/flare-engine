@@ -39,6 +39,7 @@ public:
 
 	bool hasMusic;
 	bool reload_music;
+	bool save_settings_on_exit;
 
 	int load_counter;
 

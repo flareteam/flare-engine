@@ -98,8 +98,10 @@ extern unsigned short SCREEN_W;
 extern unsigned short SCREEN_H;
 extern short MIN_SCREEN_W;
 extern short MIN_SCREEN_H;
-extern bool DOUBLEBUF;
+extern bool VSYNC;
 extern bool HWSURFACE;
+extern bool TEXTURE_FILTER;
+extern bool IGNORE_TEXTURE_FILTER;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
 
@@ -188,6 +190,12 @@ extern int DEATH_PENALTY_CURRENCY;
 extern int DEATH_PENALTY_XP;
 extern int DEATH_PENALTY_XP_CURRENT;
 extern bool DEATH_PENALTY_ITEM;
+
+// Tooltip Settings
+extern int TOOLTIP_OFFSET; // distance between cursor and tooltip
+extern int TOOLTIP_WIDTH; // max width of tooltips (wrap text)
+extern int TOOLTIP_MARGIN; // outer margin between tooltip text and the edge of the tooltip background
+extern int TOOLTIP_MARGIN_NPC;
 
 void setPaths();
 void loadTilesetSettings();

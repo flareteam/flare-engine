@@ -173,7 +173,6 @@ Set (FLARE_SOURCES
 	./src/GameStateTitle.cpp
 	./src/GameStateLoad.cpp
 	./src/GameStatePlay.cpp
-	./src/GameStateResolution.cpp
 	./src/GameStateNew.cpp
 	./src/GameSwitcher.cpp
 	./src/GetText.cpp
@@ -218,15 +217,16 @@ Set (FLARE_SOURCES
 	./src/RenderDevice.cpp
 	./src/RenderDeviceList.cpp
 	./src/SaveLoad.cpp
-	./src/SDL_gfxBlitFunc.c
+	./src/SDLInputState.cpp
 	./src/SDLSoftwareRenderDevice.cpp
+	./src/SDLSoundManager.cpp
 	./src/SDLHardwareRenderDevice.cpp
+ 	./src/SDLFontEngine.cpp
 	./src/Settings.cpp
 	./src/SharedGameResources.cpp
 	./src/SharedResources.cpp
 	./src/StatBlock.cpp
 	./src/Stats.cpp
-	./src/SoundManager.cpp
 	./src/TileSet.cpp
 	./src/TooltipData.cpp
 	./src/Utils.cpp
@@ -278,7 +278,6 @@ Set (FLARE_HEADERS
 	./src/GameStateTitle.h
 	./src/GameStateLoad.h
 	./src/GameStatePlay.h
-	./src/GameStateResolution.h
 	./src/GameStateNew.h
 	./src/GameSwitcher.h
 	./src/GetText.h
@@ -322,9 +321,11 @@ Set (FLARE_HEADERS
 	./src/QuestLog.h
 	./src/RenderDevice.h
 	./src/RenderDeviceList.h
-	./src/SDL_gfxBlitFunc.c
+	./src/SDLInputState.h
 	./src/SDLSoftwareRenderDevice.h
+	./src/SDLSoundManager.h
 	./src/SDLHardwareRenderDevice.h
+	./src/SDLFontEngine.h
 	./src/Settings.h
 	./src/SharedGameResources.h
 	./src/SharedResources.h

@@ -15,51 +15,61 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-/**
- * class SoundManager
- */
-
 #ifndef SOUND_MANAGER_H
 #define SOUND_MANAGER_H
 
-#include "CommonIncludes.h"
 #include "Utils.h"
-
 #include <stdint.h>
 
 const std::string GLOBAL_VIRTUAL_CHANNEL = "__global__";
 
+/**
+ * class SoundManager
+ *
+ * SoundManager takes care of loading and playing of sound effects,
+ * each sound is referenced with a hash SoundID for playing. If a
+ * sound is already loaded, the SoundID for currently loaded sound
+ * will be returned by SoundManager::load().
+**/
 class SoundManager {
 public:
 	typedef unsigned long SoundID;
 
-	SoundManager();
-	~SoundManager();
+	virtual ~SoundManager() {};
 
-	SoundManager::SoundID load(const std::string& filename, const std::string& errormessage);
-	void unload(SoundManager::SoundID);
-	void play(SoundManager::SoundID, std::string channel = GLOBAL_VIRTUAL_CHANNEL, FPoint pos = FPoint(0,0), bool loop = false);
+	virtual SoundManager::SoundID load(const std::string& filename, const std::string& errormessage) = 0;
+	virtual void unload(SoundManager::SoundID) = 0;
+	virtual void play(SoundManager::SoundID, std::string channel = GLOBAL_VIRTUAL_CHANNEL, FPoint pos = FPoint(0,0), bool loop = false) = 0;
+	virtual void pauseAll() = 0;
+	virtual void resumeAll() = 0;
 
-	void logic(FPoint center);
-	void reset();
+	virtual void logic(FPoint center) = 0;
+	virtual void reset() = 0;
+};
 
-private:
-	typedef std::map<std::string, int> VirtualChannelMap;
-	typedef VirtualChannelMap::iterator VirtualChannelMapIterator;
+/**
+ * class Playback
+ *
+ * Playback class is used for creating playback objects,
+ * it includes API independent sound id returned by SoundManager::load(), sound location,
+ * sound duration properties and virtual channel name, on which sound should be played
+**/
+class Playback {
+public:
+	Playback()
+		: sid(-1)
+		, location(FPoint())
+		, loop(false)
+		, paused(false)
+		, finished(false) {
+	}
 
-	typedef std::map<SoundID, class Sound *> SoundMap;
-	typedef SoundMap::iterator SoundMapIterator;
-
-	typedef std::map<int, class Playback> PlaybackMap;
-	typedef PlaybackMap::iterator PlaybackMapIterator;
-
-	static void channel_finished(int channel);
-	void on_channel_finished(int channel);
-
-	SoundMap sounds;
-	VirtualChannelMap channels;
-	PlaybackMap playback;
-	FPoint lastPos;
+	SoundManager::SoundID sid;
+	std::string virtual_channel;
+	FPoint location;
+	bool loop;
+	bool paused;
+	bool finished;
 };
 
 #endif

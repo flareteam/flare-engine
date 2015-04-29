@@ -78,17 +78,16 @@ private:
 	void cleanupTabContents();
 	void cleanupDialogs();
 
-	int getVideoModes();
 	void scanKey(int button);
 
-	WidgetListBox       * resolution_lstb;
-	WidgetLabel         * resolution_lb;
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;
 	WidgetCheckBox      * hwsurface_cb;
 	WidgetLabel         * hwsurface_lb;
-	WidgetCheckBox      * doublebuf_cb;
-	WidgetLabel         * doublebuf_lb;
+	WidgetCheckBox      * vsync_cb;
+	WidgetLabel         * vsync_lb;
+	WidgetCheckBox      * texture_filter_cb;
+	WidgetLabel         * texture_filter_lb;
 	WidgetCheckBox      * change_gamma_cb;
 	WidgetLabel         * change_gamma_lb;
 	WidgetSlider        * gamma_sl;
@@ -121,10 +120,6 @@ private:
 	int input_confirm_ticks;
 	int input_key;
 	unsigned key_count;
-
-	bool fullscreen;
-	bool hwsurface;
-	bool doublebuf;
 
 	Rect scrollpane;
 	Color scrollpane_color;

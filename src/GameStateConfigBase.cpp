@@ -89,6 +89,9 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, active_tab(0)
 {
 
+	// don't save settings if we close the game while in this menu
+	save_settings_on_exit = false;
+
 	Image *graphics;
 	graphics = render_device->loadImage("images/menus/config.png");
 	if (graphics) {
@@ -288,7 +291,7 @@ bool GameStateConfigBase::parseStub(FileParser &infile) {
 	if (infile.key == "fullscreen");
 	else if (infile.key == "mouse_move");
 	else if (infile.key == "hwsurface");
-	else if (infile.key == "doublebuf");
+	else if (infile.key == "vsync");
 	else if (infile.key == "enable_joystick");
 	else if (infile.key == "change_gamma");
 	else if (infile.key == "mouse_aim");
@@ -535,9 +538,6 @@ void GameStateConfigBase::logicAccept() {
 		delete mods;
 		mods = new ModManager();
 		loadTilesetSettings();
-		SharedResources::loadIcons();
-		delete curs;
-		curs = new CursorManager();
 	}
 	loadMiscSettings();
 	refreshFont();
@@ -546,8 +546,8 @@ void GameStateConfigBase::logicAccept() {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 	}
 	cleanup();
+	render_device->createContext();
 	saveSettings();
-	render_device->updateTitleBar();
 	delete requestedGameState;
 	requestedGameState = new GameStateTitle();
 }
@@ -762,7 +762,7 @@ void GameStateConfigBase::refreshLanguages() {
 
 void GameStateConfigBase::refreshFont() {
 	delete font;
-	font = new FontEngine();
+	font = getFontEngine();
 }
 
 void GameStateConfigBase::enableMods() {

@@ -36,4 +36,10 @@ flare-android-project/jni/SDL2_mixer/
 flare-android-project/jni/SDL2_ttf/
 flare-android-project/libs/
 flare-android-project/obj/
+flare-android-project/gen/
 
+# os x
+.DS_Store
+
+# qt creator
+*.autosave

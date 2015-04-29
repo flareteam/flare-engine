@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameSwitcher.h"
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
+#include "SDLFontEngine.h"
 
 GameSwitcher *gswitch;
 
@@ -65,10 +66,10 @@ static void init(const std::string &render_device_name) {
 	}
 
 	msg = new MessageEngine();
-	font = new FontEngine();
+	font = getFontEngine();
 	anim = new AnimationManager();
 	comb = new CombatText();
-	inpt = new InputState();
+	inpt = getInputManager();
 	icons = NULL;
 
 	// Load tileset options (must be after ModManager is initialized)
@@ -79,7 +80,7 @@ static void init(const std::string &render_device_name) {
 
 	// Create render Device and Rendering Context.
 	render_device = getRenderDevice(render_device_name);
-	int status = render_device->createContext(SCREEN_W, SCREEN_H);
+	int status = render_device->createContext();
 
 	if (status == -1) {
 
@@ -87,9 +88,6 @@ static void init(const std::string &render_device_name) {
 		SDL_Quit();
 		exit(1);
 	}
-
-	// initialize share icons resource
-	SharedResources::loadIcons();
 
 	// Set Gamma
 	if (CHANGE_GAMMA)
@@ -100,7 +98,7 @@ static void init(const std::string &render_device_name) {
 		AUDIO = false;
 	}
 
-	snd = new SoundManager();
+	snd = getSoundManager();
 
 	// initialize Joysticks
 	if(SDL_NumJoysticks() == 1) {
@@ -126,11 +124,9 @@ static void init(const std::string &render_device_name) {
 		Mix_Volume(-1, SOUND_VOLUME);
 
 	gswitch = new GameSwitcher();
-
-	curs = new CursorManager();
 }
 
-static void mainLoop (bool debug_event) {
+static void mainLoop () {
 	bool done = false;
 	int delay = int(floor((1000.f/MAX_FRAMES_PER_SEC)+0.5f));
 	int logic_ticks = SDL_GetTicks();
@@ -151,7 +147,7 @@ static void mainLoop (bool debug_event) {
 			}
 
 			SDL_PumpEvents();
-			inpt->handle(debug_event);
+			inpt->handle();
 
 			// Skip game logic when minimized on Android
 			if (inpt->window_minimized && !inpt->window_restored)
@@ -219,7 +215,6 @@ static void cleanup() {
 	delete mods;
 	delete msg;
 	delete snd;
-	delete curs;
 
 	Mix_CloseAudio();
 
@@ -295,7 +290,15 @@ int main(int argc, char *argv[]) {
 	if (!done) {
 		srand((unsigned int)time(NULL));
 		init(render_device_name);
-		mainLoop(debug_event);
+
+		if (debug_event)
+			inpt->enableEventLog();
+
+		mainLoop();
+
+		if (gswitch)
+			gswitch->saveUserSettings();
+
 		cleanup();
 	}
 

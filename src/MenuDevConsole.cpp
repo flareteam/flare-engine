@@ -29,7 +29,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits>
 
-MenuDevConsole::MenuDevConsole() : Menu() {
+MenuDevConsole::MenuDevConsole()
+	: Menu()
+	, input_scrollback_pos(0)
+{
 
 	button_close = new WidgetButton("images/menus/buttons/button_x.png");
 	tablist.add(button_close);
@@ -82,6 +85,7 @@ MenuDevConsole::MenuDevConsole() : Menu() {
 
 	color_echo = font->getColor("widget_disabled");
 	color_error = font->getColor("menu_penalty");
+	color_hint = font->getColor("menu_bonus");
 
 	align();
 	input_box->inFocus = true;
@@ -129,6 +133,27 @@ void MenuDevConsole::logic() {
 			inpt->lock[CANCEL] = true;
 			input_box->inFocus = false;
 		}
+		else if (input_box->inFocus && inpt->pressing_up) {
+			inpt->pressing_up = false;
+			if (input_scrollback.size() != 0) {
+				if (input_scrollback_pos != 0)
+					input_scrollback_pos--;
+				input_box->setText(input_scrollback[input_scrollback_pos]);
+			}
+		}
+		else if (input_box->inFocus && inpt->pressing_down) {
+			inpt->pressing_down = false;
+			if (input_scrollback.size() != 0) {
+				input_scrollback_pos++;
+				if (input_scrollback_pos < input_scrollback.size()) {
+					input_box->setText(input_scrollback[input_scrollback_pos]);
+				}
+				else if (input_scrollback_pos >= input_scrollback.size()) {
+					input_scrollback_pos = input_scrollback.size();
+					input_box->setText("");
+				}
+			}
+		}
 	}
 }
 
@@ -159,6 +184,8 @@ void MenuDevConsole::execute() {
 	std::string command = input_box->getText();
 	if (command == "") return;
 
+	input_scrollback.push_back(command);
+	input_scrollback_pos = input_scrollback.size();
 	input_box->setText("");
 
 	log_history->add(command, false, &color_echo);
@@ -200,7 +227,13 @@ void MenuDevConsole::execute() {
 		if (args.size() > 1) {
 			Enemy_Level el = enemyg->getRandomEnemy(args[1], 0, 0);
 			if (el.type != "") {
-				Point spawn_pos = floor(mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1));
+				Point spawn_pos;
+				if (args.size() == 4) {
+					spawn_pos.x = toInt(args[2]);
+					spawn_pos.y = toInt(args[3]);
+				} else {
+					spawn_pos = floor(mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1));
+				}
 				powers->spawn(args[1], spawn_pos);
 				log_history->add(msg->get("Spawning enemy from category: ") + args[1]);
 			}
@@ -210,6 +243,7 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <category> [<x> <y>]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_item") {
@@ -237,6 +271,7 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <item_id> [<quantity>]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_currency") {
@@ -247,6 +282,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <quantity>"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_xp") {
@@ -257,6 +293,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <quantity>"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "set_status") {
@@ -266,6 +303,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "unset_status") {
@@ -280,6 +318,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "teleport") {
@@ -294,7 +333,7 @@ void MenuDevConsole::execute() {
 					mapr->teleport_destination.x = dest.x;
 					mapr->teleport_destination.y = dest.y;
 					mapr->teleport_mapname = args[3];
-					log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2] + ", " + args[3]), false);
+					log_history->add(msg->get("Teleporting to: ") + args[1] + ", " + args[2] + ", " + args[3], false);
 				}
 				else {
 					log_history->add(msg->get("ERROR: Unknown map: ") + args[3], false, &color_error);
@@ -304,14 +343,16 @@ void MenuDevConsole::execute() {
 				mapr->teleportation = true;
 				mapr->teleport_destination.x = dest.x;
 				mapr->teleport_destination.y = dest.y;
-				log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2]), false);
+				log_history->add(msg->get("Teleporting to: ") + args[1] + ", " + args[2], false);
 			}
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <x> <y> [<map>]"), false, &color_hint);
 		}
 	}
 	else {
 		log_history->add(msg->get("ERROR: Unknown command"), false, &color_error);
+		log_history->add(msg->get("HINT: Type help"), false, &color_hint);
 	}
 }

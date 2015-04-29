@@ -100,6 +100,7 @@ StatBlock::StatBlock()
 	, transform_with_equipment(false)
 	, untransform_on_hit(false)
 	, effects()
+	, blocking(false) // hero only
 	, pos()
 	, direction(0)
 	, cooldown_hit(0)

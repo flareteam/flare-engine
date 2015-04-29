@@ -125,49 +125,39 @@ void EffectManager::logic() {
 		// expire timed effects and total up magnitudes of active effects
 		if (effect_list[i].duration >= 0) {
 			// @TYPE damage|Damage per second
-			if (effect_list[i].type == "damage" && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage += effect_list[i].magnitude;
+			if (effect_list[i].type == EFFECT_DAMAGE && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage += effect_list[i].magnitude;
 			// @TYPE hpot|HP restored per second
-			else if (effect_list[i].type == "hpot" && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot += effect_list[i].magnitude;
+			else if (effect_list[i].type == EFFECT_HPOT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot += effect_list[i].magnitude;
 			// @TYPE mpot|MP restored per second
-			else if (effect_list[i].type == "mpot" && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot += effect_list[i].magnitude;
+			else if (effect_list[i].type == EFFECT_MPOT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot += effect_list[i].magnitude;
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
-			else if (effect_list[i].type == "speed") speed = (effect_list[i].magnitude * speed) / 100;
+			else if (effect_list[i].type == EFFECT_SPEED) speed = (effect_list[i].magnitude * speed) / 100;
 			// @TYPE immunity|Removes and prevents bleed, slow, stun, and immobilize. Magnitude is ignored.
-			else if (effect_list[i].type == "immunity") immunity = true;
+			else if (effect_list[i].type == EFFECT_IMMUNITY) immunity = true;
 			// @TYPE stun|Can't move or attack. Being attacked breaks stun.
-			else if (effect_list[i].type == "stun") stun = true;
+			else if (effect_list[i].type == EFFECT_STUN) stun = true;
 			// @TYPE revive|Revives the player. Typically attached to a power that triggers when the player dies.
-			else if (effect_list[i].type == "revive") revive = true;
+			else if (effect_list[i].type == EFFECT_REVIVE) revive = true;
 			// @TYPE convert|Causes an enemy or an ally to switch allegiance
-			else if (effect_list[i].type == "convert") convert = true;
+			else if (effect_list[i].type == EFFECT_CONVERT) convert = true;
 			// @TYPE fear|Causes enemies to run away
-			else if (effect_list[i].type == "fear") fear = true;
+			else if (effect_list[i].type == EFFECT_FEAR) fear = true;
 			// @TYPE offense|Increase Offense stat.
-			else if (effect_list[i].type == "offense") bonus_offense += effect_list[i].magnitude;
+			else if (effect_list[i].type == EFFECT_OFFENSE) bonus_offense += effect_list[i].magnitude;
 			// @TYPE defense|Increase Defense stat.
-			else if (effect_list[i].type == "defense") bonus_defense += effect_list[i].magnitude;
+			else if (effect_list[i].type == EFFECT_DEFENSE) bonus_defense += effect_list[i].magnitude;
 			// @TYPE physical|Increase Physical stat.
-			else if (effect_list[i].type == "physical") bonus_physical += effect_list[i].magnitude;
+			else if (effect_list[i].type == EFFECT_PHYSICAL) bonus_physical += effect_list[i].magnitude;
 			// @TYPE mental|Increase Mental stat.
-			else if (effect_list[i].type == "mental") bonus_mental += effect_list[i].magnitude;
-			else {
-				bool found_key = false;
+			else if (effect_list[i].type == EFFECT_MENTAL) bonus_mental += effect_list[i].magnitude;
 
-				// @TYPE $STATNAME|Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_melee_min, xp_gain
-				for (unsigned j=0; j<STAT_COUNT; j++) {
-					if (effect_list[i].type == STAT_NAME[j]) {
-						bonus[j] += effect_list[i].magnitude;
-						found_key = true;
-					}
-				}
-
-				if (!found_key) {
-					// @TYPE $ELEMENT_resist|Increase Resistance % to $ELEMENT, where $ELEMENT is any found in engine/elements.txt. Example: fire_resist
-					for (unsigned j=0; j<bonus_resist.size(); j++) {
-						if (effect_list[i].type == ELEMENTS[j].name + "_resist")
-							bonus_resist[j] += effect_list[i].magnitude;
-					}
-				}
+			// @TYPE $STATNAME|Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_melee_min, xp_gain
+			else if (effect_list[i].type >= EFFECT_COUNT && effect_list[i].type < EFFECT_COUNT+STAT_COUNT) {
+				bonus[effect_list[i].type - EFFECT_COUNT] += effect_list[i].magnitude;
+			}
+			// @TYPE $ELEMENT_resist|Increase Resistance % to $ELEMENT, where $ELEMENT is any found in engine/elements.txt. Example: fire_resist
+			else if (effect_list[i].type >= EFFECT_COUNT + STAT_COUNT) {
+				bonus_resist[effect_list[i].type - EFFECT_COUNT - STAT_COUNT] += effect_list[i].magnitude;
 			}
 
 			if (effect_list[i].duration > 0) {
@@ -175,7 +165,7 @@ void EffectManager::logic() {
 				if (effect_list[i].ticks == 0) {
 					//death sentence is only applied at the end of the timer
 					// @TYPE death_sentence|Causes sudden death at the end of the effect duration.
-					if (effect_list[i].type == "death_sentence") death_sentence = true;
+					if (effect_list[i].type == EFFECT_DEATH_SENTENCE) death_sentence = true;
 					removeEffect(i);
 					i--;
 					continue;
@@ -185,7 +175,7 @@ void EffectManager::logic() {
 		// expire shield effects
 		if (effect_list[i].magnitude_max > 0 && effect_list[i].magnitude == 0) {
 			// @TYPE shield|Create a damage absorbing barrier based on Mental damage stat. Duration is ignored.
-			if (effect_list[i].type == "shield") {
+			if (effect_list[i].type == EFFECT_SHIELD) {
 				removeEffect(i);
 				i--;
 				continue;
@@ -194,7 +184,7 @@ void EffectManager::logic() {
 		// expire effects based on animations
 		if ((effect_list[i].animation && effect_list[i].animation->isLastFrame()) || !effect_list[i].animation) {
 			// @TYPE heal|Restore HP based on Mental damage stat.
-			if (effect_list[i].type == "heal") {
+			if (effect_list[i].type == EFFECT_HEAL) {
 				removeEffect(i);
 				i--;
 				continue;
@@ -210,11 +200,13 @@ void EffectManager::logic() {
 }
 
 void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bool item, int trigger, int passive_id, int source_type) {
+	int effect_type = getType(effect.type);
+
 	// if we're already immune, don't add negative effects
 	if (immunity) {
-		if (effect.type == "damage") return;
-		else if (effect.type == "speed" && magnitude < 100) return;
-		else if (effect.type == "stun") return;
+		if (effect_type == EFFECT_DAMAGE) return;
+		else if (effect_type == EFFECT_SPEED && magnitude < 100) return;
+		else if (effect_type == EFFECT_STUN) return;
 	}
 
 	for (unsigned i=effect_list.size(); i>0; i--) {
@@ -226,7 +218,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 				removeEffect(i-1);
 		}
 		// if we're adding an immunity effect, remove all negative effects
-		if (effect.type == "immunity") {
+		if (effect_type == EFFECT_IMMUNITY) {
 			clearNegativeEffects();
 		}
 	}
@@ -235,7 +227,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 
 	e.name = effect.name;
 	e.icon = effect.icon;
-	e.type = effect.type;
+	e.type = effect_type;
 	e.render_above = effect.render_above;
 
 	if (effect.animation != "") {
@@ -268,7 +260,7 @@ void EffectManager::removeAnimation(int id) {
 	}
 }
 
-void EffectManager::removeEffectType(std::string type) {
+void EffectManager::removeEffectType(const int &type) {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == type) removeEffect(i-1);
 	}
@@ -293,9 +285,9 @@ void EffectManager::clearEffects() {
 
 void EffectManager::clearNegativeEffects() {
 	for (unsigned i=effect_list.size(); i > 0; i--) {
-		if (effect_list[i-1].type == "damage") removeEffect(i-1);
-		else if (effect_list[i-1].type == "speed" && effect_list[i-1].magnitude_max < 100) removeEffect(i-1);
-		else if (effect_list[i-1].type == "stun") removeEffect(i-1);
+		if (effect_list[i-1].type == EFFECT_DAMAGE) removeEffect(i-1);
+		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) removeEffect(i-1);
+		else if (effect_list[i-1].type == EFFECT_STUN) removeEffect(i-1);
 	}
 }
 
@@ -315,7 +307,7 @@ int EffectManager::damageShields(int dmg) {
 	int over_dmg = dmg;
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
-		if (effect_list[i].magnitude_max > 0 && effect_list[i].type == "shield") {
+		if (effect_list[i].magnitude_max > 0 && effect_list[i].type == EFFECT_SHIELD) {
 			effect_list[i].magnitude -= over_dmg;
 			if (effect_list[i].magnitude < 0) {
 				over_dmg = abs(effect_list[i].magnitude);
@@ -338,3 +330,39 @@ Animation* EffectManager::loadAnimation(std::string &s) {
 	return NULL;
 }
 
+int EffectManager::getType(const std::string type) {
+	if (type.empty()) return EFFECT_NONE;
+
+	if (type == "damage") return EFFECT_DAMAGE;
+	else if (type == "hpot") return EFFECT_HPOT;
+	else if (type == "mpot") return EFFECT_MPOT;
+	else if (type == "speed") return EFFECT_SPEED;
+	else if (type == "immunity") return EFFECT_IMMUNITY;
+	else if (type == "stun") return EFFECT_STUN;
+	else if (type == "revive") return EFFECT_REVIVE;
+	else if (type == "convert") return EFFECT_CONVERT;
+	else if (type == "fear") return EFFECT_FEAR;
+	else if (type == "offense") return EFFECT_OFFENSE;
+	else if (type == "defense") return EFFECT_DEFENSE;
+	else if (type == "physical") return EFFECT_PHYSICAL;
+	else if (type == "mental") return EFFECT_MENTAL;
+	else if (type == "death_sentence") return EFFECT_DEATH_SENTENCE;
+	else if (type == "shield") return EFFECT_SHIELD;
+	else if (type == "heal") return EFFECT_HEAL;
+	else {
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (type == STAT_NAME[i]) {
+				return EFFECT_COUNT+i;
+			}
+		}
+
+		for (unsigned i=0; i<bonus_resist.size(); i++) {
+			if (type == ELEMENTS[i].name + "_resist") {
+				return EFFECT_COUNT+STAT_COUNT+i;
+			}
+		}
+	}
+
+	logError("EffectManager: '%s' is not a valid effect type.", type.c_str());
+	return EFFECT_NONE;
+}

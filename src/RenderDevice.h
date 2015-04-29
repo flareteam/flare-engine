@@ -22,11 +22,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <vector>
 #include <map>
-#include <SDL_ttf.h>
 #include "Utils.h"
 
 class Image;
 class RenderDevice;
+class FontStyle;
 
 /** A Sprite representation
  *
@@ -178,10 +178,8 @@ public:
 	virtual ~RenderDevice();
 
 	/** Context operations */
-	virtual int createContext(int width, int height) = 0;
+	virtual int createContext() = 0;
 	virtual void destroyContext() = 0;
-	virtual Rect getContextSize() = 0;
-	virtual void listModes(std::vector<Rect> &modes) = 0;
 	virtual void setGamma(float g) = 0;
 	virtual void updateTitleBar() = 0;
 
@@ -195,10 +193,9 @@ public:
 	/** Screen operations */
 	virtual int render(Sprite* r) = 0;
 	virtual int render(Renderable& r, Rect dest) = 0;
-	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest,
-							  bool dest_is_transparent = false) = 0;
-	virtual int renderText(TTF_Font *ttf_font, const std::string& text, Color color, Rect& dest) = 0;
-	virtual Image* renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true) = 0;
+	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest) = 0;
+	virtual int renderText(FontStyle *font_style, const std::string& text, Color color, Rect& dest) = 0;
+	virtual Image* renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended = true) = 0;
 	virtual void blankScreen() = 0;
 	virtual void commitFrame() = 0;
 	virtual void drawPixel(int x, int y, Uint32 color) = 0;
@@ -215,6 +212,12 @@ protected:
 	Image *cacheLookup(std::string &filename);
 	void cacheStore(std::string &filename, Image *);
 	void cacheRemove(Image *image);
+
+	bool fullscreen;
+	bool hwsurface;
+	bool vsync;
+	bool texture_filter;
+	Point min_screen;
 
 	bool is_initialized;
 

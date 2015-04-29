@@ -63,15 +63,14 @@ class SDLSoftwareRenderDevice : public RenderDevice {
 public:
 
 	SDLSoftwareRenderDevice();
-	int createContext(int width, int height);
-	Rect getContextSize();
+	int createContext();
 
 	virtual int render(Renderable& r, Rect dest);
 	virtual int render(Sprite* r);
-	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest, bool dest_is_transparent = false);
+	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest);
 
-	int renderText(TTF_Font *ttf_font, const std::string& text, Color color, Rect& dest);
-	Image* renderTextToImage(TTF_Font* ttf_font, const std::string& text, Color color, bool blended = true);
+	int renderText(FontStyle *font_style, const std::string& text, Color color, Rect& dest);
+	Image* renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended = true);
 	void drawPixel(int x, int y, Uint32 color);
 	void drawRectangle(const Point& p0, const Point& p1, Uint32 color);
 	void blankScreen();
@@ -83,7 +82,6 @@ public:
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();
-	void listModes(std::vector<Rect> &modes);
 	void freeImage(Image *image);
 
 	Image* loadImage(std::string filename,

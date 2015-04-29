@@ -111,7 +111,7 @@ void MenuActiveEffects::render() {
 
 	// Step through the list of effects and render those that are active
 	for (unsigned int i=0; i<stats->effects.effect_list.size(); i++) {
-		std::string type = stats->effects.effect_list[i].type;
+		int type = stats->effects.effect_list[i].type;
 		int icon = stats->effects.effect_list[i].icon;
 		int ticks = stats->effects.effect_list[i].ticks;
 		int duration = stats->effects.effect_list[i].duration;
@@ -120,9 +120,9 @@ void MenuActiveEffects::render() {
 
 		if (icon >= 0) count++;
 
-		if (type == "shield")
+		if (type == EFFECT_SHIELD)
 			renderIcon(icon,count,magnitude,magnitude_max);
-		else if (type == "heal" || type == "block")
+		else if (type == EFFECT_HEAL)
 			renderIcon(icon,count,0,0);
 		else if (ticks >= 0 && duration >= 0)
 			renderIcon(icon,count,ticks,duration);

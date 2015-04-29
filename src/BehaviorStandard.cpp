@@ -95,7 +95,7 @@ void BehaviorStandard::doUpkeep() {
 		bool source_ally = false;
 		bool source_enemy = false;
 		for (unsigned i=0; i<e->stats.effects.effect_list.size(); i++) {
-			if (e->stats.effects.effect_list[i].type == "damage") {
+			if (e->stats.effects.effect_list[i].type == EFFECT_DAMAGE) {
 				switch(e->stats.effects.effect_list[i].source_type) {
 					case(SOURCE_TYPE_ALLY):
 						source_ally = true;

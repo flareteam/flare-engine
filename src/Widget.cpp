@@ -23,7 +23,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Widget::Widget()
 	: render_to_alpha(false)
 	, in_focus(false)
-	, focusable(false) {
+	, focusable(false)
+	, alignment(ALIGN_TOPLEFT) {
 }
 
 Widget::~Widget() {

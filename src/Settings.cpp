@@ -60,8 +60,9 @@ ConfigEntry config[] = {
 	{ "sound_volume",     &typeid(SOUND_VOLUME),    "128", &SOUND_VOLUME,    NULL},
 	{ "combat_text",      &typeid(COMBAT_TEXT),     "0",   &COMBAT_TEXT,     "display floating damage text. 1 enable, 0 disable."},
 	{ "mouse_move",       &typeid(MOUSE_MOVE),      "0",   &MOUSE_MOVE,      "use mouse to move (experimental). 1 enable, 0 disable."},
-	{ "hwsurface",        &typeid(HWSURFACE),       "1",   &HWSURFACE,       "hardware surfaces, double buffering. Try disabling for performance. 1 enable, 0 disable."},
-	{ "doublebuf",        &typeid(DOUBLEBUF),       "1",   &DOUBLEBUF,       NULL},
+	{ "hwsurface",        &typeid(HWSURFACE),       "1",   &HWSURFACE,       "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
+	{ "vsync",            &typeid(VSYNC),           "1",   &VSYNC,           NULL},
+	{ "texture_filter",   &typeid(TEXTURE_FILTER),  "1",   &TEXTURE_FILTER,  "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"},
 	{ "enable_joystick",  &typeid(ENABLE_JOYSTICK), "0",   &ENABLE_JOYSTICK, "joystick settings."},
 	{ "joystick_device",  &typeid(JOYSTICK_DEVICE), "0",   &JOYSTICK_DEVICE, NULL},
 	{ "joystick_deadzone",&typeid(JOY_DEADZONE),    "100", &JOY_DEADZONE,    NULL},
@@ -111,16 +112,18 @@ unsigned short ICON_SIZE;
 bool FULLSCREEN;
 unsigned short MAX_FRAMES_PER_SEC = 60;
 unsigned char BITS_PER_PIXEL = 32;
-unsigned short VIEW_W;
-unsigned short VIEW_H;
-unsigned short VIEW_W_HALF = VIEW_W/2;
-unsigned short VIEW_H_HALF = VIEW_H/2;
-short MIN_SCREEN_W = -1;
-short MIN_SCREEN_H = -1;
-unsigned short SCREEN_W;
-unsigned short SCREEN_H;
-bool DOUBLEBUF;
+unsigned short VIEW_W = 0;
+unsigned short VIEW_H = 0;
+unsigned short VIEW_W_HALF = 0;
+unsigned short VIEW_H_HALF = 0;
+short MIN_SCREEN_W = 640;
+short MIN_SCREEN_H = 480;
+unsigned short SCREEN_W = 640;
+unsigned short SCREEN_H = 480;
+bool VSYNC;
 bool HWSURFACE;
+bool TEXTURE_FILTER;
+bool IGNORE_TEXTURE_FILTER = false;
 bool CHANGE_GAMMA;
 float GAMMA;
 
@@ -185,6 +188,12 @@ int DEATH_PENALTY_CURRENCY;
 int DEATH_PENALTY_XP;
 int DEATH_PENALTY_XP_CURRENT;
 bool DEATH_PENALTY_ITEM;
+
+// Tooltip settings
+int TOOLTIP_OFFSET;
+int TOOLTIP_WIDTH;
+int TOOLTIP_MARGIN;
+int TOOLTIP_MARGIN_NPC;
 
 // Other Settings
 bool MENUS_PAUSE;
@@ -462,8 +471,6 @@ void loadTilesetSettings() {
 	}
 
 	// Init automatically calculated parameters
-	VIEW_W_HALF = VIEW_W / 2;
-	VIEW_H_HALF = VIEW_H / 2;
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC) {
 		if (TILE_W > 0 && TILE_H > 0) {
 			UNITS_PER_PIXEL_X = 2.0f / TILE_W;
@@ -500,6 +507,7 @@ void loadMiscSettings() {
 	HERO_CLASSES.clear();
 	FRAME_W = 0;
 	FRAME_H = 0;
+	IGNORE_TEXTURE_FILTER = false;
 	ICON_SIZE = 0;
 	AUTOPICKUP_CURRENCY = false;
 	MAX_ABSORB = 90;
@@ -534,6 +542,10 @@ void loadMiscSettings() {
 	INTERACT_RANGE = 3;
 	SAVE_ONLOAD = true;
 	SAVE_ONEXIT = true;
+	TOOLTIP_OFFSET = 0;
+	TOOLTIP_WIDTH = 1;
+	TOOLTIP_MARGIN = 0;
+	TOOLTIP_MARGIN_NPC = 0;
 
 	FileParser infile;
 	// @CLASS Settings: Misc|Description of engine/misc.txt
@@ -615,21 +627,34 @@ void loadMiscSettings() {
 			// @ATTR required_width|integer|Minimum window/screen resolution width.
 			else if (infile.key == "required_width") {
 				MIN_SCREEN_W = toInt(infile.val);
-				if (SCREEN_W < MIN_SCREEN_W) SCREEN_W = MIN_SCREEN_W;
 			}
 			// @ATTR required_height|integer|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
 				MIN_SCREEN_H = toInt(infile.val);
-				if (SCREEN_H < MIN_SCREEN_H) SCREEN_H = MIN_SCREEN_H;
 			}
 			// @ATTR virtual_height|integer|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
 			else if (infile.key == "virtual_height") {
 				VIEW_H = toInt(infile.val);
 				VIEW_H_HALF = VIEW_H / 2;
 			}
+			// @ATTR ignore_texture_filter|boolean|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
+			else if (infile.key == "ignore_texture_filter") {
+				IGNORE_TEXTURE_FILTER = toBool(infile.val);
+			}
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+
+	// prevent the window from being too small
+	if (SCREEN_W < MIN_SCREEN_W) SCREEN_W = MIN_SCREEN_W;
+	if (SCREEN_H < MIN_SCREEN_H) SCREEN_H = MIN_SCREEN_H;
+
+	// set the default virtual height if it's not defined
+	if (VIEW_H == 0) {
+		logError("Settings: virtual_height is undefined. Setting it to %d.", MIN_SCREEN_H);
+		VIEW_H = MIN_SCREEN_H;
+		VIEW_H_HALF = VIEW_H / 2;
 	}
 
 	// @CLASS Settings: Gameplay|Description of engine/gameplay.txt
@@ -794,6 +819,25 @@ void loadMiscSettings() {
 		}
 		infile.close();
 	}
+
+	// @CLASS Settings: Tooltips|Description of engine/tooltips.txt
+	if (infile.open("engine/tooltips.txt")) {
+		while (infile.next()) {
+			// @ATTR tooltip_offset|integer|Offset in pixels from the origin point (usually mouse cursor).
+			if (infile.key == "tooltip_offset")
+				TOOLTIP_OFFSET = toInt(infile.val);
+			// @ATTR tooltip_width|integer|Maximum width of tooltip in pixels.
+			else if (infile.key == "tooltip_width")
+				TOOLTIP_WIDTH = toInt(infile.val);
+			// @ATTR tooltip_margin|integer|Padding between the text and the tooltip borders.
+			else if (infile.key == "tooltip_margin")
+				TOOLTIP_MARGIN = toInt(infile.val);
+			// @ATTR npc_tooltip_margin|integer|Vertical offset for NPC labels.
+			else if (infile.key == "npc_tooltip_margin")
+				TOOLTIP_MARGIN_NPC = toInt(infile.val);
+		}
+		infile.close();
+	}
 }
 
 bool loadSettings() {
@@ -871,10 +915,6 @@ bool loadDefaults() {
 		ConfigEntry * entry = config + i;
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
-
-	// Init automatically calculated parameters
-	VIEW_W_HALF = VIEW_W / 2;
-	VIEW_H_HALF = VIEW_H / 2;
 
 	loadAndroidDefaults();
 
