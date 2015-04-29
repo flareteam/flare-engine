@@ -243,7 +243,7 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: " + args[0] + " <category> [<x> <y>]"), false, &color_hint);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <category> [<x> <y>]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_item") {
@@ -271,7 +271,7 @@ void MenuDevConsole::execute() {
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: " + args[0] + " <item_id> [<quantity>]"), false, &color_hint);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <item_id> [<quantity>]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_currency") {
@@ -282,7 +282,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: " + args[0] + " <quantity>"), false, &color_hint);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <quantity>"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "give_xp") {
@@ -293,7 +293,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: " + args[0] + " <quantity>"), false, &color_hint);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <quantity>"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "set_status") {
@@ -303,7 +303,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: " + args[0] + " <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "unset_status") {
@@ -318,7 +318,7 @@ void MenuDevConsole::execute() {
 		}
 		if (args.size() < 2) {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: " + args[0] + " <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
 		}
 	}
 	else if (args[0] == "teleport") {
@@ -333,7 +333,7 @@ void MenuDevConsole::execute() {
 					mapr->teleport_destination.x = dest.x;
 					mapr->teleport_destination.y = dest.y;
 					mapr->teleport_mapname = args[3];
-					log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2] + ", " + args[3]), false);
+					log_history->add(msg->get("Teleporting to: ") + args[1] + ", " + args[2] + ", " + args[3], false);
 				}
 				else {
 					log_history->add(msg->get("ERROR: Unknown map: ") + args[3], false, &color_error);
@@ -343,12 +343,12 @@ void MenuDevConsole::execute() {
 				mapr->teleportation = true;
 				mapr->teleport_destination.x = dest.x;
 				mapr->teleport_destination.y = dest.y;
-				log_history->add(msg->get("Teleporting to: " + args[1] + ", " + args[2]), false);
+				log_history->add(msg->get("Teleporting to: ") + args[1] + ", " + args[2], false);
 			}
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: " + args[0] + " <x> <y> [<map>]"), false, &color_hint);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <x> <y> [<map>]"), false, &color_hint);
 		}
 	}
 	else {

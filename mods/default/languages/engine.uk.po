@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-29 11:47+0300\n"
+"POT-Creation-Date: 2015-04-29 13:33+0300\n"
 "PO-Revision-Date: 2013-03-16 11:05+0300\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -988,10 +988,6 @@ msgstr "ПОМИЛКА: Невідомий статус кампанії: "
 msgid "Teleporting to: "
 msgstr "Телепортую до: "
 
-#: ../../../src/MenuDevConsole.cpp:336 ../../../src/MenuDevConsole.cpp:346
-msgid ", "
-msgstr ", "
-
 #: ../../../src/MenuDevConsole.cpp:339
 msgid "ERROR: Unknown map: "
 msgstr "ПОМИЛКА: Невідома карта: "
@@ -1206,23 +1202,8 @@ msgstr "Гру збережено."
 msgid "k"
 msgstr "к"
 
-#~ msgid "Use this resolution?"
-#~ msgstr "Використати це розширення?"
-
 #~ msgid "Double buffering"
 #~ msgstr "Подвійна буферизація"
-
-#~ msgid "High Quality Textures"
-#~ msgstr "Високоякісні текстури"
-
-#~ msgid "Animated tiles"
-#~ msgstr "Анімація оточення"
-
-#~ msgid "Resolution"
-#~ msgstr "Розширення"
-
-#~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare Альфа v0.19"
 
 #~ msgid "Level"
 #~ msgstr "Рівень"
@@ -1239,23 +1220,8 @@ msgstr "к"
 #~ msgid "Defense"
 #~ msgstr "Захист"
 
-#~ msgid "Save and exit to title?"
-#~ msgstr "Зберегти та вийти?"
-
 #~ msgid "Adventurer"
 #~ msgstr "Шукач пригод"
-
-#~ msgid "Character Menu (C)"
-#~ msgstr "Меню персонажа (C)"
-
-#~ msgid "Inventory Menu (I)"
-#~ msgstr "Інвентар (I)"
-
-#~ msgid "Power Menu (P)"
-#~ msgstr "Уміння (P)"
-
-#~ msgid "Log Menu (L)"
-#~ msgstr "Журнал (L)"
 
 #~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
 #~ msgstr "Відновлення ЗД за хвилину. Кожне очко Фізики додає +%d відновлення ЗД. Кожен рівень додає +%d відновлення ЗД"
