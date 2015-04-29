@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "SDL_gfxBlitFunc.h"
 
 #include "SharedResources.h"
 #include "Settings.h"
@@ -197,9 +198,6 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	, title(NULL) {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)");
-#else
-	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 1.2)");
-#endif
 
 	fullscreen = FULLSCREEN;
 	hwsurface = HWSURFACE;
@@ -208,6 +206,9 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 
 	min_screen.x = MIN_SCREEN_W;
 	min_screen.y = MIN_SCREEN_H;
+#else
+	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 1.2)");
+#endif
 }
 
 int SDLSoftwareRenderDevice::createContext() {
@@ -377,6 +378,14 @@ int SDLSoftwareRenderDevice::createContext() {
 #endif
 }
 
+Rect SDLSoftwareRenderDevice::getContextSize() {
+	Rect size;
+	size.x = size.y = 0;
+	size.h = screen->h;
+	size.w = screen->w;
+	return size;
+}
+
 int SDLSoftwareRenderDevice::render(Renderable& r, Rect dest) {
 	SDL_Rect src = r.src;
 	SDL_Rect _dest = dest;
@@ -403,8 +412,13 @@ int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* d
 	SDL_Rect _src = src;
 	SDL_Rect _dest = dest;
 
+#if SDL_VERSION_ATLEAST(2,0,0)
 	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(src_image)->surface, &_src,
 						   static_cast<SDLSoftwareImage *>(dest_image)->surface, &_dest);
+#else
+	return SDL_gfxBlitRGBA(static_cast<SDLSoftwareImage *>(src_image)->surface, &_src,
+						   static_cast<SDLSoftwareImage *>(dest_image)->surface, &_dest);
+#endif
 }
 
 int SDLSoftwareRenderDevice::renderText(
@@ -670,14 +684,6 @@ void SDLSoftwareRenderDevice::updateTitleBar() {
 	if (title) SDL_WM_SetCaption(title, title);
 	if (titlebar_icon) SDL_WM_SetIcon(titlebar_icon, NULL);
 #endif
-}
-
-Rect SDLSoftwareRenderDevice::getContextSize() {
-	Rect size;
-	size.x = size.y = 0;
-	size.h = screen->h;
-	size.w = screen->w;
-	return size;
 }
 
 void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {

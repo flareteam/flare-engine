@@ -217,6 +217,7 @@ Set (FLARE_SOURCES
 	./src/RenderDevice.cpp
 	./src/RenderDeviceList.cpp
 	./src/SaveLoad.cpp
+	./src/SDL_gfxBlitFunc.c
 	./src/SDLInputState.cpp
 	./src/SDLSoftwareRenderDevice.cpp
 	./src/SDLSoundManager.cpp
@@ -321,6 +322,7 @@ Set (FLARE_HEADERS
 	./src/QuestLog.h
 	./src/RenderDevice.h
 	./src/RenderDeviceList.h
+	./src/SDL_gfxBlitFunc.h
 	./src/SDLInputState.h
 	./src/SDLSoftwareRenderDevice.h
 	./src/SDLSoundManager.h
