@@ -372,6 +372,11 @@ int SDLSoftwareRenderDevice::createContext() {
 
 	if (is_initialized) {
 		updateTitleBar();
+
+		// load persistent resources
+		SharedResources::loadIcons();
+		delete curs;
+		curs = new CursorManager();
 	}
 
 	return (window_created ? 0 : -1);
