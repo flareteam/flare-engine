@@ -99,7 +99,6 @@ extern unsigned short SCREEN_H;
 extern short MIN_SCREEN_W;
 extern short MIN_SCREEN_H;
 extern bool VSYNC;
-extern bool DOUBLEBUF;
 extern bool HWSURFACE;
 extern bool TEXTURE_FILTER;
 extern bool IGNORE_TEXTURE_FILTER;
