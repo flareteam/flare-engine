@@ -55,28 +55,8 @@ void WidgetInput::loadGraphics(const std::string& filename) {
 }
 
 void WidgetInput::trimText() {
-	unsigned max_characters = 0;
-	int width = 0;
-	int padding = font->getFontHeight();
-
-	if (max_length > 0 && text.length() > max_length) {
-		text = text.substr(0, max_length);
-	}
-
-	for (unsigned i=0; i<text.length(); i++) {
-		width += font->calc_width(text.substr(i,1));
-		if (width > (pos.w - padding)) {
-			break;
-		}
-		else {
-			max_characters++;
-		}
-	}
-
-	trimmed_text = text;
-	if (text.length() > max_characters) {
-		trimmed_text = text.substr(text.length() - max_characters, max_characters);
-	}
+	int padding =font->getFontHeight();
+	trimmed_text = font->trimTextToWidth(text, pos.w-padding, true);
 }
 
 void WidgetInput::logic() {

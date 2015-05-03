@@ -110,6 +110,52 @@ int SDLFontEngine::calc_width(const std::string& text) {
 	return w;
 }
 
+/**
+ * Fit a string of text into a pixel width
+ * use_ellipsis determines how the returned string will appear
+ * Example with "Hello World" (let's assume a monospace font and a width that can fit 6 characters):
+ * use_ellipsis == true: "Hello ..."
+ * use_ellipsis == false: " World"
+ */
+std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int& width, const bool& use_ellipsis) {
+	if (width >= calc_width(text))
+		return text;
+
+	unsigned text_length = text.length();
+	unsigned ret_length = text_length;
+	int total_width = (use_ellipsis ? width - calc_width("...") : width);
+
+	for (unsigned i=text_length; i>0; i--) {
+		if (use_ellipsis) {
+			if (total_width < calc_width(text.substr(0,ret_length)))
+				ret_length = i;
+			else
+				break;
+		}
+		else {
+			if (total_width < calc_width(text.substr(text_length-ret_length)))
+				ret_length = i;
+			else
+				break;
+		}
+	}
+
+	if (!use_ellipsis) {
+		return text.substr(text_length-ret_length);
+	}
+	else {
+		if (text_length <= 3)
+			return std::string("...");
+
+		if (text_length-ret_length < 3)
+			ret_length = text_length-3;
+
+		std::string ret_str = text.substr(0,ret_length);
+		ret_str = ret_str + '.' + '.' + '.';
+		return ret_str;
+	}
+}
+
 void SDLFontEngine::setFont(std::string _font) {
 	for (unsigned int i=0; i<font_styles.size(); i++) {
 		if (font_styles[i].name == _font) {
