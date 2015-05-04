@@ -56,7 +56,7 @@ void WidgetInput::loadGraphics(const std::string& filename) {
 
 void WidgetInput::trimText() {
 	int padding =font->getFontHeight();
-	trimmed_text = font->trimTextToWidth(text, pos.w-padding, true);
+	trimmed_text = font->trimTextToWidth(text, pos.w-padding, false);
 }
 
 void WidgetInput::logic() {
