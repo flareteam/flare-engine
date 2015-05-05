@@ -291,6 +291,10 @@ void logError(const char* format, ...) {
 	va_end(args);
 }
 
+void logErrorDialog(const char* dialog_text) {
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FLARE", dialog_text, NULL);
+}
+
 void createSaveDir(int slot) {
 	// game slots are currently 1-4
 	if (slot == 0) return;

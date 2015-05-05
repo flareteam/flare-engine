@@ -52,6 +52,7 @@ public:
 	void setFont(std::string _font);
 
 	int calc_width(const std::string& text);
+	std::string trimTextToWidth(const std::string& text, const int& width, const bool& use_ellipsis);
 	void render(const std::string& text, int x, int y, int justify, Image *target, Color color);
 };
 

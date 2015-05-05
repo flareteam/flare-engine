@@ -425,17 +425,10 @@ void WidgetListBox::refresh() {
 		int font_x = rows[i].x + 8;
 		int font_y = rows[i].y + (rows[i].h/2);
 
+		int padding = font->getFontHeight();
+
 		if (i+cursor < values.size()) {
-			// gets the maxiumum value length that can fit in the listbox
-			// maybe there is a better way to do this?
-			unsigned int max_length = (unsigned int)(pos.w-right_margin)/font->calc_width("X");
-			if (font->calc_width(values[i+cursor]) > pos.w-right_margin) {
-				temp = values[i+cursor].substr(0,max_length);
-				temp.append("...");
-			}
-			else {
-				temp = values[i+cursor];
-			}
+			temp = font->trimTextToWidth(values[i+cursor], pos.w-right_margin-padding, true);
 		}
 
 		if(i+cursor < values.size() && selected[i+cursor]) {

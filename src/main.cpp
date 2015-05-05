@@ -43,6 +43,7 @@ static void init(const std::string &render_device_name) {
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
 		logError("main: Could not initialize SDL: %s", SDL_GetError());
+		logErrorDialog("ERROR: Could not initialize SDL.");
 		exit(1);
 	}
 
@@ -57,11 +58,13 @@ static void init(const std::string &render_device_name) {
 		logError("A copy of the default mod is in the \"mods\" directory of the flare-engine repo.");
 		logError("The repo is located at: https://github.com/clintbellanger/flare-engine");
 		logError("Try again after copying the default mod to one of the above directories. Exiting.");
+		logErrorDialog("ERROR: No \"default\" mod found.");
 		exit(1);
 	}
 
 	if (!loadSettings()) {
-		logError("%s", ("main: Could not load settings file: ‘" + PATH_CONF + FILE_SETTINGS + "’.").c_str());
+		logError("main: Could not load settings file: '%s'.", (PATH_CONF + FILE_SETTINGS).c_str());
+		logErrorDialog("ERROR: Could not load settings file.");
 		exit(1);
 	}
 
@@ -83,8 +86,8 @@ static void init(const std::string &render_device_name) {
 	int status = render_device->createContext();
 
 	if (status == -1) {
-
-		logError("main: Error during SDL_SetVideoMode: %s", SDL_GetError());
+		logError("main: Could not create rendering context: %s", SDL_GetError());
+		logErrorDialog("ERROR: Could not create rendering context");
 		SDL_Quit();
 		exit(1);
 	}

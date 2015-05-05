@@ -261,7 +261,9 @@ bool Entity::takeHit(Hazard &h) {
 		// reset the hazard ticks
 		h.lifespan = h.base_lifespan;
 
-		play_sfx_block = true;
+		if (activeAnimation->getName() == "block") {
+			play_sfx_block = true;
+		}
 
 		return false;
 	}
@@ -322,9 +324,10 @@ bool Entity::takeHit(Hazard &h) {
 			else {
 				if (MAX_RESIST < 100) dmg = 1;
 			}
-			play_sfx_block = true;
-			if (activeAnimation->getName() == "block")
+			if (activeAnimation->getName() == "block") {
+				play_sfx_block = true;
 				resetActiveAnimation();
+			}
 		}
 	}
 

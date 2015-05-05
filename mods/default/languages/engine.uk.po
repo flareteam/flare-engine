@@ -65,19 +65,19 @@ msgstr "Ви отримали %d %s."
 #: ../../../src/CampaignManager.cpp:184
 #, c-format
 msgid "You receive %d XP."
-msgstr "Ви здобули %d ДВ."
+msgstr "Ви здобули %d Досвіду."
 
 #: ../../../src/CampaignManager.cpp:190
 msgid "HP restored."
-msgstr "ЗД відновлено."
+msgstr "Здоров'я відновлено."
 
 #: ../../../src/CampaignManager.cpp:194
 msgid "MP restored."
-msgstr "МН відновлено."
+msgstr "Ману відновлено."
 
 #: ../../../src/CampaignManager.cpp:199
 msgid "HP and MP restored."
-msgstr "ЗД та МН відновлені."
+msgstr "Здоров'я та Мана відновлені."
 
 #: ../../../src/CampaignManager.cpp:203
 msgid "Negative effects removed."
@@ -85,7 +85,7 @@ msgstr "Шкідливі ефекти усунено."
 
 #: ../../../src/CampaignManager.cpp:209
 msgid "HP and MP restored, negative effects removed"
-msgstr "ЗД та МН відновлені, шкідливі ефекти усунено"
+msgstr "Здоров'я та Мана відновлені, шкідливі ефекти усунено"
 
 #: ../../../src/Entity.cpp:270
 msgid "miss"
@@ -95,12 +95,12 @@ msgstr "промах"
 #: ../../../src/StatBlock.cpp:621
 #, c-format
 msgid "+%d HP"
-msgstr "+%d ЗД"
+msgstr "+%d Здоров'я"
 
 #: ../../../src/Entity.cpp:386 ../../../src/StatBlock.cpp:626
 #, c-format
 msgid "+%d MP"
-msgstr "+%d МН"
+msgstr "+%d Мани"
 
 #: ../../../src/EventManager.cpp:472
 msgid "Unknown destination"
@@ -710,27 +710,27 @@ msgstr "очок залишилось"
 
 #: ../../../src/MenuCharacter.cpp:327
 msgid "Max HP:"
-msgstr "Макс ЗД:"
+msgstr "Максимум Здоров'я:"
 
 #: ../../../src/MenuCharacter.cpp:333
 msgid "HP Regen:"
-msgstr "Відновлення ЗД:"
+msgstr "Відновлення Здоров'я:"
 
 #: ../../../src/MenuCharacter.cpp:334
 msgid "Ticks of HP regen per minute. "
-msgstr "Відновлення ЗД за хвилину. "
+msgstr "Відновлення Здоров'я за хвилину. "
 
 #: ../../../src/MenuCharacter.cpp:339
 msgid "Max MP:"
-msgstr "Макс МН:"
+msgstr "Максимум Мани:"
 
 #: ../../../src/MenuCharacter.cpp:345
 msgid "MP Regen:"
-msgstr "Відновлення МН:"
+msgstr "Відновлення Мани:"
 
 #: ../../../src/MenuCharacter.cpp:346
 msgid "Ticks of MP regen per minute. "
-msgstr "Відновлення МП за хвилину. "
+msgstr "Відновлення Мани за хвилину. "
 
 #: ../../../src/MenuCharacter.cpp:351
 msgid "Accuracy:"
@@ -754,7 +754,7 @@ msgstr "Психічна шкода:"
 
 #: ../../../src/MenuCharacter.cpp:393
 msgid "Crit:"
-msgstr "Крит:"
+msgstr "Критична шкода:"
 
 #: ../../../src/MenuCharacter.cpp:399
 msgid "Absorb:"
@@ -778,11 +778,11 @@ msgstr "Збільшує ймовірність відбиття снаряді�
 
 #: ../../../src/MenuCharacter.cpp:421
 msgid "Bonus XP: "
-msgstr "Бонус ДВ: "
+msgstr "Бонус Досвіду: "
 
 #: ../../../src/MenuCharacter.cpp:422
 msgid "Increases the XP gained per kill"
-msgstr "Збільшує ДВ отриманий за вбивство"
+msgstr "Збільшує Досвід отриманий за вбивство"
 
 #: ../../../src/MenuCharacter.cpp:427
 msgid "Bonus"
@@ -1045,12 +1045,12 @@ msgstr "Втрачено %d%% з %s. "
 #: ../../../src/MenuInventory.cpp:164
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr "Втрачено %d%% з загального ДВ. "
+msgstr "Втрачено %d%% загального Досвіду. "
 
 #: ../../../src/MenuInventory.cpp:169
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr "Втрачено %d%% з ДВ поточного рівня. "
+msgstr "Втрачено %d%% Досвіду поточного рівня. "
 
 #: ../../../src/MenuInventory.cpp:195
 #, c-format
@@ -1224,10 +1224,10 @@ msgstr "к"
 #~ msgstr "Шукач пригод"
 
 #~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "Відновлення ЗД за хвилину. Кожне очко Фізики додає +%d відновлення ЗД. Кожен рівень додає +%d відновлення ЗД"
+#~ msgstr "Відновлення Здоров'я за хвилину. Кожне очко Фізики додає +%d відновлення Здоров'я. Кожен рівень додає +%d відновлення Здоров'я"
 
 #~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "Відновлення МН за хвилину. Кожне очко Психіки додає +%d відновлення МН. Кожен рівень додає +%d відновлення МН"
+#~ msgstr "Відновлення Мани за хвилину. Кожне очко Психіки додає +%d відновлення Мани. Кожен рівень додає +%d відновлення Мани"
 
 #~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
 #~ msgstr "Кожне очко Нападу додає +%d точності. Кожен рівень додає +%d точності"
