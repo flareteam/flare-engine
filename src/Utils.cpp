@@ -292,7 +292,9 @@ void logError(const char* format, ...) {
 }
 
 void logErrorDialog(const char* dialog_text) {
+#if SDL_VERSION_ATLEAST(2,0,0)
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FLARE", dialog_text, NULL);
+#endif
 }
 
 void createSaveDir(int slot) {
