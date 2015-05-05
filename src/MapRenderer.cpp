@@ -108,8 +108,8 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 
 	while (enemies_to_spawn && allowed_misses) {
 
-		float x = (g.pos.x + (rand() % g.area.x)) + 0.5f;
-		float y = (g.pos.y + (rand() % g.area.y)) + 0.5f;
+		float x = (g.area.x == 0) ? 0 : (g.pos.x + (rand() % g.area.x)) + 0.5f;
+		float y = (g.area.y == 0) ? 0 : (g.pos.y + (rand() % g.area.y)) + 0.5f;
 
 		if (enemyGroupPlaceEnemy(x, y, g))
 			enemies_to_spawn--;
