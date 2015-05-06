@@ -96,11 +96,6 @@ static void init(const std::string &render_device_name) {
 	if (CHANGE_GAMMA)
 		render_device->setGamma(GAMMA);
 
-	if (AUDIO && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
-		logError("main: Error during Mix_OpenAudio: %s", SDL_GetError());
-		AUDIO = false;
-	}
-
 	snd = getSoundManager();
 
 	// initialize Joysticks
@@ -121,10 +116,6 @@ static void init(const std::string &render_device_name) {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 		logInfo("Using joystick #%d.", JOYSTICK_DEVICE);
 	}
-
-	// Set sound effects volume from settings file
-	if (AUDIO)
-		Mix_Volume(-1, SOUND_VOLUME);
 
 	gswitch = new GameSwitcher();
 }
@@ -218,8 +209,6 @@ static void cleanup() {
 	delete mods;
 	delete msg;
 	delete snd;
-
-	Mix_CloseAudio();
 
 	if (render_device)
 		render_device->destroyContext();

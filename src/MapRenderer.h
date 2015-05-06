@@ -43,8 +43,6 @@ class WidgetTooltip;
 class MapRenderer : public Map {
 private:
 
-	Mix_Music *music;
-
 	WidgetTooltip *tip;
 	TooltipData tip_buf;
 	Point tip_pos;
@@ -52,8 +50,6 @@ private:
 
 	bool enemyGroupPlaceEnemy(float x, float y, Map_Group &g);
 	void pushEnemyGroup(Map_Group &g);
-
-	std::string played_music_filename;
 
 	void clearQueues();
 

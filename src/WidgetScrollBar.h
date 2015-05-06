@@ -34,7 +34,6 @@ private:
 	std::string fileName; // the path to the ScrollBar's atlas
 
 	Sprite *scrollbars;
-	Mix_Chunk *click;
 
 	int value;
 	int bar_height;

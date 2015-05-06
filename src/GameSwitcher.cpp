@@ -56,16 +56,14 @@ GameSwitcher::GameSwitcher() {
 
 	label_fps = new WidgetLabel();
 	done = false;
-	music = NULL;
 	loadMusic();
 	loadFPS();
 }
 
 void GameSwitcher::loadMusic() {
-	if (AUDIO && MUSIC_VOLUME) {
-		Mix_FreeMusic(music);
-		music = NULL;
+	if (!AUDIO) return;
 
+	if (MUSIC_VOLUME > 0) {
 		std::string music_filename = "";
 		FileParser infile;
 		// @CLASS GameSwitcher: Default music|Description of engine/default_music.txt
@@ -78,17 +76,11 @@ void GameSwitcher::loadMusic() {
 			infile.close();
 		}
 
-		if (music_filename != "") {
-			std::string file_path = mods->locate(music_filename);
-			music = Mix_LoadMUS(file_path.c_str());
-			if (!music)
-				logError("GameSwitcher: Mix_LoadMUS(%s): %s", file_path.c_str(), Mix_GetError());
-		}
+		//load and play music
+		snd->loadMusic(music_filename);
 	}
-
-	if (music) {
-		Mix_VolumeMusic(MUSIC_VOLUME);
-		Mix_PlayMusic(music, -1);
+	else {
+		snd->stopMusic();
 	}
 }
 
@@ -108,9 +100,8 @@ void GameSwitcher::logic() {
 
 		// if this game state does not provide music, use the title theme
 		if (!currentState->hasMusic)
-			if (!Mix_PlayingMusic())
-				if (music)
-					Mix_PlayMusic(music, -1);
+			if (!snd->isPlayingMusic())
+				loadMusic();
 	}
 
 	currentState->logic();
@@ -196,6 +187,6 @@ void GameSwitcher::saveUserSettings() {
 GameSwitcher::~GameSwitcher() {
 	delete currentState;
 	delete label_fps;
-	Mix_FreeMusic(music);
+	snd->unloadMusic();
 }
 
