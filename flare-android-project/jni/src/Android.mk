@@ -26,6 +26,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/CampaignManager.cpp \
 	../../../src/CombatText.cpp \
 	../../../src/CursorManager.cpp \
+	../../../src/DeviceList.cpp \
 	../../../src/EffectManager.cpp \
 	../../../src/Enemy.cpp \
 	../../../src/EnemyBehavior.cpp \
@@ -83,7 +84,6 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../src/PowerManager.cpp \
 	../../../src/QuestLog.cpp \
 	../../../src/RenderDevice.cpp \
-	../../../src/RenderDeviceList.cpp \
 	../../../src/SaveLoad.cpp \
 	../../../src/SDLInputState.cpp \
 	../../../src/SDLHardwareRenderDevice.cpp \

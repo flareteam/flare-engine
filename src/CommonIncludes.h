@@ -30,6 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <vector>
 
 #include <SDL.h>
-#include "RenderDeviceList.h"
+#include "DeviceList.h"
 
 #endif

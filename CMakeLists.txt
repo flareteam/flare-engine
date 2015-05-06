@@ -102,6 +102,7 @@ Set (FLARE_SOURCES
 	./src/CampaignManager.cpp
 	./src/CombatText.cpp
 	./src/CursorManager.cpp
+	./src/DeviceList.cpp
 	./src/EffectManager.cpp
 	./src/Enemy.cpp
 	./src/EnemyBehavior.cpp
@@ -159,7 +160,6 @@ Set (FLARE_SOURCES
 	./src/PowerManager.cpp
 	./src/QuestLog.cpp
 	./src/RenderDevice.cpp
-	./src/RenderDeviceList.cpp
 	./src/SaveLoad.cpp
 	./src/SDLInputState.cpp
 	./src/SDLSoftwareRenderDevice.cpp
@@ -207,6 +207,7 @@ Set (FLARE_HEADERS
 	./src/CombatText.h
 	./src/CommonIncludes.h
 	./src/CursorManager.h
+	./src/DeviceList.h
 	./src/EffectManager.h
 	./src/Enemy.h
 	./src/EnemyBehavior.h
@@ -264,7 +265,6 @@ Set (FLARE_HEADERS
 	./src/PowerManager.h
 	./src/QuestLog.h
 	./src/RenderDevice.h
-	./src/RenderDeviceList.h
 	./src/SDLInputState.h
 	./src/SDLSoftwareRenderDevice.h
 	./src/SDLSoundManager.h
