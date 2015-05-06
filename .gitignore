@@ -47,3 +47,8 @@ flare-android-project/jni/SDL2_ttf
 
 # qt creator
 *.autosave
+
+# ios
+flare-ios-project/___PROJECTNAME___.xcodeproj/project.xcworkspace/xcuserdata/
+flare-ios-project/___PROJECTNAME___.xcodeproj/xcuserdata/
+flare-ios-project/libs/
