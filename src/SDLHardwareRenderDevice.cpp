@@ -235,13 +235,7 @@ int SDLHardwareRenderDevice::createContext() {
 
 		bool window_created = window != NULL && renderer != NULL;
 
-		if (!window_created && !is_initialized) {
-			// If this is the first attempt and it failed we are not
-			// getting anywhere.
-			logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
-			Exit(1);
-		}
-		else if (!window_created) {
+		if (!window_created) {
 			// try previous setting first
 			FULLSCREEN = fullscreen;
 			HWSURFACE = hwsurface;
@@ -253,7 +247,14 @@ int SDLHardwareRenderDevice::createContext() {
 				HWSURFACE = false;
 				VSYNC = false;
 				TEXTURE_FILTER = false;
-				return createContext();
+				int last_resort = createContext();
+				if (last_resort == -1 && !is_initialized) {
+					// If this is the first attempt and it failed we are not
+					// getting anywhere.
+					logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
+					Exit(1);
+				}
+				return last_resort;
 			}
 			else {
 				return 0;
