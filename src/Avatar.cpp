@@ -164,8 +164,7 @@ void Avatar::loadLayerDefinitions() {
 				unsigned dir = popFirstInt(infile.val);
 				if (dir>7) {
 					infile.error("Avatar: Hero layer direction must be in range [0,7]");
-					SDL_Quit();
-					exit(1);
+					Exit(1);
 				}
 				std::string layer = popFirstString(infile.val);
 				while (layer != "") {

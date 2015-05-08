@@ -239,8 +239,7 @@ int SDLHardwareRenderDevice::createContext() {
 			// If this is the first attempt and it failed we are not
 			// getting anywhere.
 			logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
-			SDL_Quit();
-			exit(1);
+			Exit(1);
 		}
 		else if (!window_created) {
 			// try previous setting first
@@ -590,8 +589,7 @@ Image *SDLHardwareRenderDevice::loadImage(std::string filename, std::string erro
 		if (!errormessage.empty())
 			logError("SDLHardwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
-			SDL_Quit();
-			exit(1);
+			Exit(1);
 		}
 		return NULL;
 	}

@@ -35,7 +35,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
 		logError("SDLFontEngine: TTF_Init: %s", TTF_GetError());
-		exit(2);
+		Exit(2);
 	}
 
 	// load the fonts
@@ -88,8 +88,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	setFont("font_regular");
 	if (!active_font) {
 		logError("FontEngine: Unable to determine default font!");
-		SDL_Quit();
-		exit(1);
+		Exit(1);
 	}
 }
 

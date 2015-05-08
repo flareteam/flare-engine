@@ -206,8 +206,7 @@ void Map::loadLayer(FileParser &infile) {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'
 		if (infile.val != "dec") {
 			infile.error("Map: The format of a layer must be \"dec\"!");
-			SDL_Quit();
-			exit(1);
+			Exit(1);
 		}
 	}
 	else if (infile.key == "data") {
@@ -228,8 +227,7 @@ void Map::loadLayer(FileParser &infile) {
 			}
 			if (comma_count != w) {
 				infile.error("Map: A row of layer data has a width not equal to %d.", w);
-				SDL_Quit();
-				exit(1);
+				Exit(1);
 			}
 
 			for (int i=0; i<w; i++)
