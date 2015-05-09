@@ -37,12 +37,12 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	stats = _stats;
 
 	// Labels for major stats
-	cstat_labels[CSTAT_NAME] = "Name";
-	cstat_labels[CSTAT_LEVEL] = "Level";
-	cstat_labels[CSTAT_PHYSICAL] = "Physical";
-	cstat_labels[CSTAT_MENTAL] = "Mental";
-	cstat_labels[CSTAT_OFFENSE] = "Offense";
-	cstat_labels[CSTAT_DEFENSE] = "Defense";
+	cstat_labels[CSTAT_NAME] = msg->get("Name");
+	cstat_labels[CSTAT_LEVEL] = msg->get("Level");
+	cstat_labels[CSTAT_PHYSICAL] = msg->get("Physical");
+	cstat_labels[CSTAT_MENTAL] = msg->get("Mental");
+	cstat_labels[CSTAT_OFFENSE] = msg->get("Offense");
+	cstat_labels[CSTAT_DEFENSE] = msg->get("Defense");
 
 	skill_points = 0;
 
@@ -269,7 +269,7 @@ void MenuCharacter::align() {
 
 	for (int i=0; i<CSTAT_COUNT; i++) {
 		// setup static labels
-		cstat[i].label->set(window_area.x+label_pos[i].x, window_area.y+label_pos[i].y, label_pos[i].justify, label_pos[i].valign, msg->get(cstat_labels[i]), font->getColor("menu_normal"), label_pos[i].font_style);
+		cstat[i].label->set(window_area.x+label_pos[i].x, window_area.y+label_pos[i].y, label_pos[i].justify, label_pos[i].valign, cstat_labels[i], font->getColor("menu_normal"), label_pos[i].font_style);
 
 		// setup hotspot locations
 		cstat[i].setHover(window_area.x+value_pos[i].x, window_area.y+value_pos[i].y, value_pos[i].w, value_pos[i].h);
