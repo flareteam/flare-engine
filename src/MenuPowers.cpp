@@ -36,6 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 
 #include <climits>
+#include <iomanip>
 
 MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	: stats(_stats)
@@ -807,7 +808,9 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 	}
 	// add cooldown time
 	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
-		tip->addText(msg->get("Cooldown: %d seconds", powers->powers[power_cells[slot_num].id].cooldown / MAX_FRAMES_PER_SEC));
+		std::stringstream ss;
+		ss << std::setprecision(3) << (float)powers->powers[power_cells[slot_num].id].cooldown / MAX_FRAMES_PER_SEC;
+		tip->addText(msg->get("Cooldown: %s seconds", ss.str().c_str()));
 	}
 }
 
