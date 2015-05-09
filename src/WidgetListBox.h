@@ -85,6 +85,7 @@ public:
 	bool can_deselect;
 	bool can_select;
 	int scrollbar_offset;
+	bool disable_text_trim;
 };
 
 #endif

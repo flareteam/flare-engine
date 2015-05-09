@@ -245,6 +245,10 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	statList->scrollbar_offset = statlist_scrollbar_offset;
 	statList->setBasePos(statlist_pos.x, statlist_pos.y);
 
+	// HACK: During gameplay, the stat list can refresh rapidly when the charcter menu is open and the player has certain effects
+	// frequently refreshing trimmed text is slow for Cyrillic characters, so disable it here
+	statList->disable_text_trim = true;
+
 	setBackground("images/menus/character.png");
 
 	align();
