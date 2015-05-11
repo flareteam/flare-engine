@@ -44,8 +44,6 @@ class WidgetLabel;
 
 class GameSwitcher {
 private:
-	Mix_Music *music;
-
 	GameState *currentState;
 
 	WidgetLabel *label_fps;

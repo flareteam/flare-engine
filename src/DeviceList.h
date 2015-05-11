@@ -15,8 +15,8 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#ifndef RENDERDEVICELIST_H
-#define RENDERDEVICELIST_H
+#ifndef DEVICELIST_H
+#define DEVICELIST_H
 
 #include <string>
 

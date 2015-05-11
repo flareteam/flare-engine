@@ -31,8 +31,7 @@ AnimationSet *AnimationManager::getAnimationSet(const std::string& filename) {
 	}
 	else {
 		logError("AnimationManager::getAnimationSet: %s not found", filename.c_str());
-		SDL_Quit();
-		exit(1);
+		Exit(1);
 		// return 0;
 	}
 }
@@ -75,8 +74,7 @@ void AnimationManager::decreaseCount(const std::string &name) {
 	}
 	else {
 		logError("AnimationManager::decreaseCount: %s not found", name.c_str());
-		SDL_Quit();
-		exit(1);
+		Exit(1);
 	}
 }
 

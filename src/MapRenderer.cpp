@@ -36,7 +36,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MapRenderer::MapRenderer()
 	: Map()
-	, music(NULL)
 	, tip(new WidgetTooltip())
 	, tip_pos()
 	, show_tooltip(false)
@@ -108,8 +107,8 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 
 	while (enemies_to_spawn && allowed_misses) {
 
-		float x = (g.area.x == 0) ? 0 : (g.pos.x + (rand() % g.area.x)) + 0.5f;
-		float y = (g.area.y == 0) ? 0 : (g.pos.y + (rand() % g.area.y)) + 0.5f;
+		float x = (g.area.x == 0) ? (g.pos.x + 0.5f) : (g.pos.x + (rand() % g.area.x)) + 0.5f;
+		float y = (g.area.y == 0) ? (g.pos.y + 0.5f) : (g.pos.y + (rand() % g.area.y)) + 0.5f;
 
 		if (enemyGroupPlaceEnemy(x, y, g))
 			enemies_to_spawn--;
@@ -207,28 +206,8 @@ int MapRenderer::load(std::string fname) {
 }
 
 void MapRenderer::loadMusic() {
-
-	// keep playing if already the correct track
-	if (played_music_filename == music_filename)
-		return;
-
-	played_music_filename = music_filename;
-
-	if (music) {
-		Mix_HaltMusic();
-		Mix_FreeMusic(music);
-		music = NULL;
-	}
-	if (AUDIO && MUSIC_VOLUME) {
-		music = Mix_LoadMUS(mods->locate(played_music_filename).c_str());
-		if(!music)
-			logError("MapRenderer: Mix_LoadMUS: %s", Mix_GetError());
-	}
-
-	if (music) {
-		Mix_VolumeMusic(MUSIC_VOLUME);
-		Mix_PlayMusic(music, -1);
-	}
+	// load and play music
+	snd->loadMusic(music_filename);
 }
 
 void MapRenderer::logic() {
@@ -856,11 +835,6 @@ bool MapRenderer::isValidTile(const unsigned &tile) {
 }
 
 MapRenderer::~MapRenderer() {
-	if (music != NULL) {
-		Mix_HaltMusic();
-		Mix_FreeMusic(music);
-	}
-
 	tip_buf.clear();
 	clearLayers();
 	clearEvents();

@@ -16,6 +16,8 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include <SDL_image.h>
+
 #include <iostream>
 
 #include <stdio.h>
@@ -235,14 +237,7 @@ int SDLHardwareRenderDevice::createContext() {
 
 		bool window_created = window != NULL && renderer != NULL;
 
-		if (!window_created && !is_initialized) {
-			// If this is the first attempt and it failed we are not
-			// getting anywhere.
-			logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
-			SDL_Quit();
-			exit(1);
-		}
-		else if (!window_created) {
+		if (!window_created) {
 			// try previous setting first
 			FULLSCREEN = fullscreen;
 			HWSURFACE = hwsurface;
@@ -254,7 +249,14 @@ int SDLHardwareRenderDevice::createContext() {
 				HWSURFACE = false;
 				VSYNC = false;
 				TEXTURE_FILTER = false;
-				return createContext();
+				int last_resort = createContext();
+				if (last_resort == -1 && !is_initialized) {
+					// If this is the first attempt and it failed we are not
+					// getting anywhere.
+					logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
+					Exit(1);
+				}
+				return last_resort;
 			}
 			else {
 				return 0;
@@ -598,8 +600,7 @@ Image *SDLHardwareRenderDevice::loadImage(std::string filename, std::string erro
 		if (!errormessage.empty())
 			logError("SDLHardwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
-			SDL_Quit();
-			exit(1);
+			Exit(1);
 		}
 		return NULL;
 	}

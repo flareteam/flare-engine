@@ -324,6 +324,7 @@ void GameStatePlay::checkTeleport() {
 			if (pc->stats.permadeath && pc->stats.corpse) {
 				removeSaveDir(game_slot);
 
+				snd->stopMusic();
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
 			}
@@ -352,7 +353,7 @@ void GameStatePlay::checkCancel() {
 		if (SAVE_ONEXIT)
 			saveGame();
 
-		Mix_HaltMusic();
+		snd->stopMusic();
 		delete requestedGameState;
 		requestedGameState = new GameStateTitle();
 	}
@@ -362,7 +363,7 @@ void GameStatePlay::checkCancel() {
 		if (SAVE_ONEXIT)
 			saveGame();
 
-		Mix_HaltMusic();
+		snd->stopMusic();
 		exitRequested = true;
 	}
 }

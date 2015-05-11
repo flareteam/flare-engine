@@ -35,7 +35,6 @@ WidgetScrollBar::WidgetScrollBar(const std::string& _fileName)
 	, pressed_up(false)
 	, pressed_down(false)
 	, pressed_knob(false) {
-	click = NULL;
 
 	loadArt();
 

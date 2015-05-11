@@ -297,6 +297,10 @@ void logErrorDialog(const char* dialog_text) {
 #endif
 }
 
+void Exit(int code) {
+	SDL_Quit();
+	exit(code);
+}
 void createSaveDir(int slot) {
 	// game slots are currently 1-4
 	if (slot == 0) return;

@@ -110,8 +110,7 @@ void AnimationSet::load() {
 			// @ATTR image|string|Filename of sprite-sheet image.
 			if (sprite != NULL) {
 				parser.error("AnimationSet: Multiple images specified. Dragons be here!");
-				SDL_Quit();
-				exit(128);
+				Exit(128);
 			}
 
 			sprite = render_device->loadImage(parser.val);

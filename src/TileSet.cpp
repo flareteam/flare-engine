@@ -99,7 +99,7 @@ void TileSet::load(const std::string& filename) {
 				// Verify that we have graphics for tiles
 				if (!sprites) {
 					std::cerr << "No graphics for tileset definition '" << filename << "', aborting." << std::endl;
-					exit(0);
+					Exit(0);
 				}
 
 				unsigned index = popFirstInt(infile.val);

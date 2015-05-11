@@ -414,9 +414,9 @@ void GameStateConfigBase::update() {
 void GameStateConfigBase::updateAudio() {
 	if (AUDIO) {
 		music_volume_sl->set(0,128,MUSIC_VOLUME);
-		Mix_VolumeMusic(MUSIC_VOLUME);
+		snd->setVolumeMusic(MUSIC_VOLUME);
 		sound_volume_sl->set(0,128,SOUND_VOLUME);
-		Mix_Volume(-1, SOUND_VOLUME);
+		snd->setVolumeSFX(SOUND_VOLUME);
 	}
 	else {
 		music_volume_sl->set(0,128,0);
@@ -571,12 +571,12 @@ void GameStateConfigBase::logicAudio() {
 		if (music_volume_sl->checkClick()) {
 			if (MUSIC_VOLUME == 0)
 				reload_music = true;
-			MUSIC_VOLUME=music_volume_sl->getValue();
-			Mix_VolumeMusic(MUSIC_VOLUME);
+			MUSIC_VOLUME = music_volume_sl->getValue();
+			snd->setVolumeMusic(MUSIC_VOLUME);
 		}
 		else if (sound_volume_sl->checkClick()) {
-			SOUND_VOLUME=sound_volume_sl->getValue();
-			Mix_Volume(-1, SOUND_VOLUME);
+			SOUND_VOLUME = sound_volume_sl->getValue();
+			snd->setVolumeSFX(SOUND_VOLUME);
 		}
 	}
 }

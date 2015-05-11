@@ -40,14 +40,28 @@ private:
 	int refCnt;
 };
 
-SDLSoundManager::SDLSoundManager() : SoundManager() {
+SDLSoundManager::SDLSoundManager()
+	: SoundManager()
+	, music(NULL)
+	, music_filename("")
+{
+	if (AUDIO && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
+		logError("SDLSoundManager: Error during Mix_OpenAudio: %s", SDL_GetError());
+		AUDIO = false;
+	}
+
 	Mix_AllocateChannels(128);
+	setVolumeSFX(SOUND_VOLUME);
 }
 
 SDLSoundManager::~SDLSoundManager() {
+	unloadMusic();
+
 	SDLSoundManager::SoundMapIterator it;
 	while((it = sounds.begin()) != sounds.end())
 		unload(it->first);
+
+	Mix_CloseAudio();
 }
 
 void SDLSoundManager::logic(FPoint c) {
@@ -264,4 +278,63 @@ void SDLSoundManager::on_channel_finished(int channel) {
 
 void SDLSoundManager::channel_finished(int channel) {
 	static_cast<SDLSoundManager*>(snd)->on_channel_finished(channel);
+}
+
+void SDLSoundManager::setVolumeSFX(int value) {
+	Mix_Volume(-1, value);
+}
+
+void SDLSoundManager::loadMusic(const std::string& filename) {
+	if (!AUDIO || MUSIC_VOLUME == 0)
+		return;
+
+	if (filename == music_filename) {
+		if (!isPlayingMusic())
+			playMusic();
+		return;
+	}
+
+	unloadMusic();
+
+	if (filename == "")
+		return;
+
+	music = Mix_LoadMUS(mods->locate(filename).c_str());
+	if (music) {
+		music_filename = filename;
+		playMusic();
+	}
+	else {
+		logError("SoundManager: Couldn't load music file '%s': %s", filename.c_str(), Mix_GetError());
+	}
+}
+
+void SDLSoundManager::unloadMusic() {
+	stopMusic();
+	if (music) Mix_FreeMusic(music);
+	music = NULL;
+	music_filename = "";
+}
+
+void SDLSoundManager::playMusic() {
+	if (!AUDIO || !music) return;
+
+	Mix_VolumeMusic(MUSIC_VOLUME);
+	Mix_PlayMusic(music, -1);
+}
+
+void SDLSoundManager::stopMusic() {
+	if (!AUDIO || !music) return;
+
+	Mix_HaltMusic();
+}
+
+void SDLSoundManager::setVolumeMusic(int value) {
+	if (!AUDIO || !music) return;
+
+	Mix_VolumeMusic(value);
+}
+
+bool SDLSoundManager::isPlayingMusic() {
+	return (AUDIO && music && MUSIC_VOLUME > 0 && Mix_PlayingMusic());
 }

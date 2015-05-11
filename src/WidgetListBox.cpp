@@ -46,7 +46,8 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 	, multi_select(false)
 	, can_deselect(true)
 	, can_select(true)
-	, scrollbar_offset(0) {
+	, scrollbar_offset(0)
+	, disable_text_trim(false) {
 
 	// load ListBox images
 	Image *graphics;
@@ -428,7 +429,10 @@ void WidgetListBox::refresh() {
 		int padding = font->getFontHeight();
 
 		if (i+cursor < values.size()) {
-			temp = font->trimTextToWidth(values[i+cursor], pos.w-right_margin-padding, true);
+			if (disable_text_trim)
+				temp = values[i+cursor];
+			else
+				temp = font->trimTextToWidth(values[i+cursor], pos.w-right_margin-padding, true);
 		}
 
 		if(i+cursor < values.size() && selected[i+cursor]) {
