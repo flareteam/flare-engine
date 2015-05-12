@@ -948,7 +948,7 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 		temp_set = items->item_sets[set[k]];
 		unsigned bonus_counter = 0;
 		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
-			if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
+			if (temp_set.bonus[bonus_counter].requirement > quantity[k]) continue;
 			applyBonus(&temp_set.bonus[bonus_counter]);
 		}
 	}
