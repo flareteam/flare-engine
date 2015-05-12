@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
+#include "Stats.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
@@ -246,14 +247,14 @@ void ItemManager::loadItems() {
 			items[id].requires_class = infile.val;
 		}
 		else if (infile.key == "bonus") {
-			// @ATTR bonus|[power_tag (string), amount (integer)]|Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50
+			// @ATTR bonus|[stat_name (string), amount (integer)]|Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50
 			if (clear_bonus) {
-				items[id].bonus_stat.clear();
-				items[id].bonus_val.clear();
+				items[id].bonus.clear();
 				clear_bonus = false;
 			}
-			items[id].bonus_stat.push_back(infile.nextValue());
-			items[id].bonus_val.push_back(toInt(infile.nextValue()));
+			BonusData bdata;
+			parseBonus(bdata, infile);
+			items[id].bonus.push_back(bdata);
 		}
 		else if (infile.key == "soundfx") {
 			// @ATTR soundfx|string|Sound effect filename to play for the specific item.
@@ -429,8 +430,7 @@ void ItemManager::loadSets() {
 			}
 			Set_bonus bonus;
 			bonus.requirement = toInt(infile.nextValue());
-			bonus.bonus_stat = infile.nextValue();
-			bonus.bonus_val = toInt(infile.nextValue());
+			parseBonus(bonus, infile);
 			item_sets[id].bonus.push_back(bonus);
 		}
 		else {
@@ -438,6 +438,76 @@ void ItemManager::loadSets() {
 		}
 	}
 	infile.close();
+}
+
+void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
+	std::string bonus_str = infile.nextValue();
+	bdata.value = toInt(infile.nextValue());
+
+	if (bonus_str == "speed") {
+		bdata.is_speed = true;
+		return;
+	}
+
+	for (unsigned i=0; i<STAT_COUNT; ++i) {
+		if (bonus_str == STAT_KEY[i]) {
+			bdata.stat_index = (STAT)i;
+			return;
+		}
+	}
+
+	for (unsigned i=0; i<ELEMENTS.size(); ++i) {
+		if (bonus_str == ELEMENTS[i].name + "_resist") {
+			bdata.resist_index = i;
+			return;
+		}
+	}
+
+	if (bonus_str == "physical") {
+		bdata.base_index = 0;
+		return;
+	}
+	else if (bonus_str == "mental") {
+		bdata.base_index = 1;
+		return;
+	}
+	else if (bonus_str == "offense") {
+		bdata.base_index = 2;
+		return;
+	}
+	else if (bonus_str == "defense") {
+		bdata.base_index = 3;
+		return;
+	}
+
+	infile.error("ItemManager: Unknown bonus type '%s'.", bonus_str.c_str());
+}
+
+void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
+	if (bdata->value > 0)
+		ss << "+" << bdata->value;
+	else
+		ss << bdata->value;
+
+	if (bdata->stat_index != -1) {
+		if (STAT_PERCENT[bdata->stat_index])
+			ss << "%";
+
+		ss << " " << STAT_NAME[bdata->stat_index];
+	}
+	else if (bdata->resist_index != -1) {
+		ss << "% " << msg->get(ELEMENTS[bdata->resist_index].description);
+	}
+	else if (bdata->base_index != -1) {
+		if (bdata->base_index == 0)
+			ss << " " << msg->get("Physical");
+		else if (bdata->base_index == 1)
+			ss << " " << msg->get("Mental");
+		else if (bdata->base_index == 2)
+			ss << " " << msg->get("Offense");
+		else if (bdata->base_index == 3)
+			ss << " " << msg->get("Defense");
+	}
 }
 
 void ItemManager::playSound(int item, Point pos) {
@@ -556,30 +626,28 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// bonuses
 	unsigned bonus_counter = 0;
-	std::string modifier;
-	while (bonus_counter < items[stack.item].bonus_val.size() && items[stack.item].bonus_stat[bonus_counter] != "") {
-		if (items[stack.item].bonus_stat[bonus_counter] == "speed") {
-			modifier = msg->get("%d%% Speed", items[stack.item].bonus_val[bonus_counter]);
-			if (items[stack.item].bonus_val[bonus_counter] >= 100) color = color_bonus;
+	while (bonus_counter < items[stack.item].bonus.size()) {
+		ss.str("");
+
+		BonusData* bdata = &items[stack.item].bonus[bonus_counter];
+
+		if (bdata->is_speed) {
+			ss << msg->get("%d%% Speed", bdata->value);
+			if (bdata->value >= 100) color = color_bonus;
 			else color = color_penalty;
 		}
 		else {
-			if (items[stack.item].bonus_val[bonus_counter] > 0) {
-				modifier = msg->get("Increases %s by %d",
-									items[stack.item].bonus_val[bonus_counter],
-									msg->get(items[stack.item].bonus_stat[bonus_counter]));
-
+			if (bdata->value > 0) {
 				color = color_bonus;
 			}
 			else {
-				modifier = msg->get("Decreases %s by %d",
-									items[stack.item].bonus_val[bonus_counter],
-									msg->get(items[stack.item].bonus_stat[bonus_counter]));
-
 				color = color_penalty;
 			}
+
+			getBonusString(ss, bdata);
 		}
-		tip.addText(modifier, color);
+
+		tip.addText(ss.str(), color);
 		bonus_counter++;
 	}
 
@@ -667,21 +735,24 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		// item set bonuses
 		ItemSet set = item_sets[items[stack.item].set];
 		bonus_counter = 0;
-		modifier = "";
 
 		tip.addText("\n" + msg->get("Set: ") + msg->get(item_sets[items[stack.item].set].name), set.color);
 
-		while (bonus_counter < set.bonus.size() && set.bonus[bonus_counter].bonus_stat != "") {
-			if (set.bonus[bonus_counter].bonus_stat == "speed") {
-				modifier = msg->get("%d%% Speed", set.bonus[bonus_counter].bonus_val);
-			}
-			else if (set.bonus[bonus_counter].bonus_val > 0) {
-				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Increases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
+		while (bonus_counter < set.bonus.size()) {
+			ss.str("");
+
+			Set_bonus* bdata = &set.bonus[bonus_counter];
+
+			ss << msg->get("%d items: ", bdata->requirement);
+
+			if (bdata->is_speed) {
+				ss << msg->get("%d%% Speed", bdata->value);
 			}
 			else {
-				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Decreases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
+				getBonusString(ss, bdata);
 			}
-			tip.addText(modifier, set.color);
+
+			tip.addText(ss.str(), set.color);
 			bonus_counter++;
 		}
 	}

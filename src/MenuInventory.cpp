@@ -782,21 +782,16 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 			item_id = equipped[i].item;
 			const Item &item = pc_items[item_id];
 			unsigned bonus_counter = 0;
-			while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
-				if (item.bonus_stat[bonus_counter] == "offense")
-					stats->offense_additional += item.bonus_val[bonus_counter];
-				else if (item.bonus_stat[bonus_counter] == "defense")
-					stats->defense_additional += item.bonus_val[bonus_counter];
-				else if (item.bonus_stat[bonus_counter] == "physical")
-					stats->physical_additional += item.bonus_val[bonus_counter];
-				else if (item.bonus_stat[bonus_counter] == "mental")
-					stats->mental_additional += item.bonus_val[bonus_counter];
-				else if (item.bonus_stat[bonus_counter] == "all basic stats") {
-					stats->offense_additional += item.bonus_val[bonus_counter];
-					stats->defense_additional += item.bonus_val[bonus_counter];
-					stats->physical_additional += item.bonus_val[bonus_counter];
-					stats->mental_additional += item.bonus_val[bonus_counter];
-				}
+			while (bonus_counter < item.bonus.size()) {
+				if (item.bonus[bonus_counter].base_index == 0) //physical
+					stats->physical_additional += item.bonus[bonus_counter].value;
+				else if (item.bonus[bonus_counter].base_index == 1) //mental
+					stats->mental_additional += item.bonus[bonus_counter].value;
+				else if (item.bonus[bonus_counter].base_index == 2) //offense
+					stats->offense_additional += item.bonus[bonus_counter].value;
+				else if (item.bonus[bonus_counter].base_index == 3) //defense
+					stats->defense_additional += item.bonus[bonus_counter].value;
+
 				bonus_counter++;
 			}
 		}
@@ -824,20 +819,14 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 			for (unsigned bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 				if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
-				if (temp_set.bonus[bonus_counter].bonus_stat == "offense")
-					stats->offense_additional += temp_set.bonus[bonus_counter].bonus_val;
-				else if (temp_set.bonus[bonus_counter].bonus_stat == "defense")
-					stats->defense_additional += temp_set.bonus[bonus_counter].bonus_val;
-				else if (temp_set.bonus[bonus_counter].bonus_stat == "physical")
-					stats->physical_additional += temp_set.bonus[bonus_counter].bonus_val;
-				else if (temp_set.bonus[bonus_counter].bonus_stat == "mental")
-					stats->mental_additional += temp_set.bonus[bonus_counter].bonus_val;
-				else if (temp_set.bonus[bonus_counter].bonus_stat == "all basic stats") {
-					stats->offense_additional += temp_set.bonus[bonus_counter].bonus_val;
-					stats->defense_additional += temp_set.bonus[bonus_counter].bonus_val;
-					stats->physical_additional += temp_set.bonus[bonus_counter].bonus_val;
-					stats->mental_additional += temp_set.bonus[bonus_counter].bonus_val;
-				}
+				if (temp_set.bonus[bonus_counter].base_index == 0) //physical
+					stats->physical_additional += temp_set.bonus[bonus_counter].value;
+				else if (temp_set.bonus[bonus_counter].base_index == 1) //mental
+					stats->mental_additional += temp_set.bonus[bonus_counter].value;
+				else if (temp_set.bonus[bonus_counter].base_index == 2) //offense
+					stats->offense_additional += temp_set.bonus[bonus_counter].value;
+				else if (temp_set.bonus[bonus_counter].base_index == 3) //defense
+					stats->defense_additional += temp_set.bonus[bonus_counter].value;
 			}
 		}
 		// check that each equipped item fit requirements
@@ -921,12 +910,8 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 
 		// apply various bonuses
 		unsigned bonus_counter = 0;
-		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
-			std::string id = item.bonus_stat[bonus_counter];
-
-			if (powers->effects.find(id) != powers->effects.end())
-				stats->effects.addEffect(powers->effects[id], 0, item.bonus_val[bonus_counter], true, -1, 0, SOURCE_TYPE_HERO);
-
+		while (bonus_counter < item.bonus.size()) {
+			applyBonus(&item.bonus[bonus_counter]);
 			bonus_counter++;
 		}
 
@@ -964,13 +949,39 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 		unsigned bonus_counter = 0;
 		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 			if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
-
-			std::string id = temp_set.bonus[bonus_counter].bonus_stat;
-
-			if (powers->effects.find(id) != powers->effects.end())
-				stats->effects.addEffect(powers->effects[id], 0, temp_set.bonus[bonus_counter].bonus_val, true, -1, 0, SOURCE_TYPE_HERO);
+			applyBonus(&temp_set.bonus[bonus_counter]);
 		}
 	}
+}
+
+void MenuInventory::applyBonus(const BonusData* bdata) {
+	EffectDef ed;
+
+	if (bdata->is_speed) {
+		ed.name = ed.type = "speed";
+	}
+	else if (bdata->stat_index != -1) {
+		ed.name = ed.type = STAT_KEY[bdata->stat_index];
+	}
+	else if (bdata->resist_index != -1) {
+		ed.name = ed.type = ELEMENTS[bdata->resist_index].name + "_resist";
+	}
+	else if (bdata->base_index != -1) {
+		if (bdata->base_index == 0) {
+			ed.name = ed.type = "physical";
+		}
+		else if (bdata->base_index == 1) {
+			ed.name = ed.type = "mental";
+		}
+		else if (bdata->base_index == 2) {
+			ed.name = ed.type = "offense";
+		}
+		else if (bdata->base_index == 3) {
+			ed.name = ed.type = "defense";
+		}
+	}
+
+	stats->effects.addEffect(ed, 0, bdata->value, true, -1, 0, SOURCE_TYPE_HERO);
 }
 
 int MenuInventory::getEquippedCount() {

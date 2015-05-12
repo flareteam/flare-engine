@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ITEM_MANAGER_H
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "TooltipData.h"
 
 #include <stdint.h>
@@ -58,15 +59,28 @@ public:
 	}
 };
 
-class Set_bonus {
+class BonusData {
+public:
+	int stat_index; // Stats.h
+	int resist_index; // engine/elements.txt
+	int base_index; // physical, mental, offense, defense
+	bool is_speed;
+	int value;
+	BonusData()
+		: stat_index(-1)
+		, resist_index(-1)
+		, base_index(-1)
+		, is_speed(false)
+		, value(0) {
+	}
+};
+
+class Set_bonus : public BonusData {
 public:
 	int requirement;
-	std::string bonus_stat;
-	int bonus_val;
 	Set_bonus()
-		: requirement(0)
-		, bonus_stat("")
-		, bonus_val(0) {
+		: BonusData()
+		, requirement(0) {
 	}
 };
 
@@ -92,8 +106,7 @@ public:
 	std::vector<int> req_stat;         // physical, mental, offense, defense
 	std::vector<int> req_val;          // 1-5 (used with req_stat)
 	std::string requires_class;
-	std::vector<std::string> bonus_stat;   // stat to increase/decrease e.g. hp, accuracy, speed
-	std::vector<int> bonus_val;       // amount to increase (used with bonus_stat)
+	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
 	SoundManager::SoundID sfx;        // the item sound when it hits the floor or inventory, etc
 	std::string gfx;           // the sprite layer shown when this item is equipped
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
@@ -179,6 +192,8 @@ private:
 	void loadTypes();
 	void loadSets();
 	void loadAll();
+	void parseBonus(BonusData& bdata, FileParser& infile);
+	void getBonusString(std::stringstream& ss, BonusData* bdata);
 
 	Color color_normal;
 	Color color_low;
