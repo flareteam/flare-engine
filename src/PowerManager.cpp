@@ -378,7 +378,7 @@ void PowerManager::loadPowers() {
 			}
 			PostEffect pe;
 			pe.id = popFirstString(infile.val);
-			if (effects.find(pe.id) == effects.end()) {
+			if (!isValidEffect(pe.id)) {
 				infile.error("PowerManager: Unknown effect '%s'", pe.id.c_str());
 			}
 			else {
@@ -507,6 +507,35 @@ void PowerManager::loadPowers() {
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
 	infile.close();
+}
+
+bool PowerManager::isValidEffect(const std::string& type) {
+	if (type == "speed")
+		return true;
+
+	if (type == "physical")
+		return true;
+	if (type == "mental")
+		return true;
+	if (type == "offense")
+		return true;
+	if (type == "defense")
+		return true;
+
+	for (int i=0; i<STAT_COUNT; ++i) {
+		if (type == STAT_KEY[i])
+			return true;
+	}
+
+	for (unsigned i=0; i<ELEMENTS.size(); ++i) {
+		if (type == ELEMENTS[i].name + "_resist")
+			return true;
+	}
+
+	if (effects.find(type) != effects.end())
+		return true;
+
+	return false;
 }
 
 /**
@@ -776,12 +805,18 @@ void PowerManager::playSound(int power_index) {
 bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
-		std::string effect_index = powers[power_index].post_effects[i].id;
+		EffectDef effect_data;
+
 		int magnitude = powers[power_index].post_effects[i].magnitude;
 		int duration = powers[power_index].post_effects[i].duration;
 
+		std::string effect_index = powers[power_index].post_effects[i].id;
+
 		if (effects.find(effect_index) != effects.end()) {
-			if (effects[effect_index].type == "shield") {
+			// effects loaded from powers/effects.txt
+			effect_data = effects[effect_index];
+
+			if (effect_data.type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
@@ -792,7 +827,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 
 				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
-			else if (effects[effect_index].type == "heal") {
+			else if (effect_data.type == "heal") {
 				// heal for ment weapon damage * damage multiplier
 				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
 
@@ -807,12 +842,16 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				src_stats->hp += magnitude;
 				if (src_stats->hp > src_stats->get(STAT_HP_MAX)) src_stats->hp = src_stats->get(STAT_HP_MAX);
 			}
-
-			int passive_id = 0;
-			if (powers[power_index].passive) passive_id = power_index;
-
-			src_stats->effects.addEffect(effects[effect_index], duration, magnitude, false, powers[power_index].passive_trigger, passive_id, source_type);
 		}
+		else {
+			// all other effects
+			effect_data.name = effect_data.type = effect_index;
+		}
+
+		int passive_id = 0;
+		if (powers[power_index].passive) passive_id = power_index;
+
+		src_stats->effects.addEffect(effect_data, duration, magnitude, false, powers[power_index].passive_trigger, passive_id, source_type);
 
 		// If there's a sound effect, play it here
 		playSound(power_index);

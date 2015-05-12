@@ -334,6 +334,7 @@ private:
 	void loadEffects();
 	void loadPowers();
 
+	bool isValidEffect(const std::string& type);
 	int loadSFX(const std::string& filename);
 
 	FPoint limitRange(float range, FPoint src, FPoint target);
