@@ -828,6 +828,17 @@ void loadMiscSettings() {
 		}
 		infile.close();
 	}
+
+	// @CLASS Settings: Loot|Description of engine/loot.txt
+	if (infile.open("engine/loot.txt")) {
+		while (infile.next()) {
+			if (infile.key == "currency_name") {
+				// @ATTR currency_name|string|Define the name of currency in game
+				CURRENCY = msg->get(infile.val);
+			}
+		}
+		infile.close();
+	}
 }
 
 bool loadSettings() {

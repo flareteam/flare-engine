@@ -179,32 +179,32 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (infile->key == STAT_NAME[i]) {
+			if (infile->key == STAT_KEY[i]) {
 				// @ATTR $STATNAME|integer|The starting value for this stat.
 				starting[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_level") {
+			else if (infile->key == STAT_KEY[i] + "_per_level") {
 				// @ATTR $STATNAME_per_level|integer|The value for this stat added per level.
 				per_level[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_physical") {
+			else if (infile->key == STAT_KEY[i] + "_per_physical") {
 				// @ATTR $STATNAME_per_physical|integer|The value for this stat added per Physical.
 				per_physical[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_mental") {
+			else if (infile->key == STAT_KEY[i] + "_per_mental") {
 				// @ATTR $STATNAME_per_mental|integer|The value for this stat added per Mental.
 				per_mental[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_offense") {
+			else if (infile->key == STAT_KEY[i] + "_per_offense") {
 				// @ATTR $STATNAME_per_offense|integer|The value for this stat added per Offense.
 				per_offense[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_defense") {
+			else if (infile->key == STAT_KEY[i] + "_per_defense") {
 				// @ATTR $STATNAME_per_defense|integer|The value for this stat added per Defense.
 				per_defense[i] = value;
 				return true;

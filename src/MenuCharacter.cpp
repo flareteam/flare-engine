@@ -55,9 +55,16 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 		cstat[i].hover.w = cstat[i].hover.h = 0;
 		cstat[i].visible = true;
 	}
-	for (int i=0; i<STATLIST_COUNT; i++) {
+	for (int i=0; i<STAT_COUNT; i++) {
 		show_stat[i] = true;
 	}
+
+	// these two are hidden by default, as they are currently unused
+	show_stat[STAT_HP_PERCENT] = false;
+	show_stat[STAT_MP_PERCENT] = false;
+
+	show_resists = true;
+
 	statlist_rows = 10;
 	statlist_scrollbar_offset = 0;
 
@@ -196,44 +203,24 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			// @ATTR show_upgrade_defense|boolean|Hide the Defense upgrade button if set to false.
 			else if (infile.key == "show_upgrade_defense") show_upgrade[3] = toBool(infile.val);
 
-			// @ATTR show_maxhp|boolean|Hide the "Max HP" stat in the statlist if set to false.
-			else if (infile.key == "show_maxhp") show_stat[0] = toBool(infile.val);
-			// @ATTR show_hpregen|boolean|Hide the "HP Regen" stat in the statlist if set to false.
-			else if (infile.key == "show_hpregen") show_stat[1] = toBool(infile.val);
-			// @ATTR show_maxmp|boolean|Hide the "Max MP" stat in the statlist if set to false.
-			else if (infile.key == "show_maxmp") show_stat[2] = toBool(infile.val);
-			// @ATTR show_mpregen|boolean|Hide the "MP Regen" stat in the statlist if set to false.
-			else if (infile.key == "show_mpregen") show_stat[3] = toBool(infile.val);
-			// @ATTR show_accuracy|boolean|Hide the "Accuracy" stat in the statlist if set to false.
-			else if (infile.key == "show_accuracy") show_stat[4] = toBool(infile.val);
-			// @ATTR show_avoidance|boolean|Hide the "Avoidance" stat in the statlist if set to false.
-			else if (infile.key == "show_avoidance") show_stat[5] = toBool(infile.val);
-			// @ATTR show_melee|boolean|Hide the "Melee Damage" stat in the statlist if set to false.
-			else if (infile.key == "show_melee") show_stat[6] = toBool(infile.val);
-			// @ATTR show_ranged|boolean|Hide the "Ranged Damage" stat in the statlist if set to false.
-			else if (infile.key == "show_ranged") show_stat[7] = toBool(infile.val);
-			// @ATTR show_mental|boolean|Hide the "Mental Damage" stat in the statlist if set to false.
-			else if (infile.key == "show_mental") show_stat[8] = toBool(infile.val);
-			// @ATTR show_crit|boolean|Hide the "Crit" stat in the statlist if set to false.
-			else if (infile.key == "show_crit") show_stat[9] = toBool(infile.val);
-			// @ATTR show_absorb|boolean|Hide the "Absorb" stat in the statlist if set to false.
-			else if (infile.key == "show_absorb") show_stat[10] = toBool(infile.val);
-			// @ATTR show_poise|boolean|Hide the "Poise" stat in the statlist if set to false.
-			else if (infile.key == "show_poise") show_stat[11] = toBool(infile.val);
-			// @ATTR show_reflect|boolean|Hide the "Reflect Chance" stat in the statlist if set to false.
-			else if (infile.key == "show_reflect") show_stat[12] = toBool(infile.val);
-			// @ATTR show_bonus_xp|boolean|Hide the "Bonus XP" stat in the statlist if set to false.
-			else if (infile.key == "show_bonus_xp") show_stat[13] = toBool(infile.val);
-			// @ATTR show_bonus_currency|boolean|Hide the "Bonus Gold" stat in the statlist if set to false.
-			else if (infile.key == "show_bonus_currency") show_stat[14] = toBool(infile.val);
-			// @ATTR show_bonus_itemfind|boolean|Hide the "Bonus Item Find" stat in the statlist if set to false.
-			else if (infile.key == "show_bonus_itemfind") show_stat[15] = toBool(infile.val);
-			// @ATTR show_bonus_stealth|boolean|Hide the "Stealth" stat in the statlist if set to false.
-			else if (infile.key == "show_bonus_stealth") show_stat[16] = toBool(infile.val);
 			// @ATTR show_resists|boolean|Hide the elemental "Resistance" stats in the statlist if set to false.
-			else if (infile.key == "show_resists") show_stat[17] = toBool(infile.val);
+			else if (infile.key == "show_resists") show_resists = toBool(infile.val);
 
-			else infile.error("MenuCharacter: '%s' is not a valid key.", infile.key.c_str());
+			else {
+				bool found_key = false;
+				for (unsigned i=0; i<STAT_COUNT; ++i) {
+					// @ATTR show_$STAT|boolean|Hide the matching stat in the statlist if set to false.
+					if (infile.key == "show_" + STAT_KEY[i]) {
+						found_key = true;
+						show_stat[i] = toBool(infile.val);
+						break;
+					}
+				}
+
+				if (!found_key) {
+					infile.error("MenuCharacter: '%s' is not a valid key.", infile.key.c_str());
+				}
+			}
 		}
 		infile.close();
 	}
@@ -326,125 +313,25 @@ void MenuCharacter::refreshStats() {
 	// scrolling stat list
 	statList->clear();
 
-	if (show_stat[0]) {
+	for (unsigned i=0; i<STAT_COUNT; ++i) {
+		if (!show_stat[i]) continue;
+
 		ss.str("");
-		ss << msg->get("Max HP:") << " " << stats->get(STAT_HP_MAX);
-		statList->append(ss.str(), statTooltip(STAT_HP_MAX));
+		ss << STAT_NAME[i] << ": " << stats->get((STAT)i);
+		if (STAT_PERCENT[i]) ss << "%";
+
+		std::string stat_tooltip = statTooltip(i);
+		std::string full_tooltip = "";
+		if (STAT_DESC[i] != "")
+			full_tooltip += STAT_DESC[i];
+		if (full_tooltip != "" && stat_tooltip != "")
+			full_tooltip += "\n";
+		full_tooltip += stat_tooltip;
+
+		statList->append(ss.str(), full_tooltip);
 	}
 
-	if (show_stat[1]) {
-		ss.str("");
-		ss << msg->get("HP Regen:") << " " << stats->get(STAT_HP_REGEN);
-		statList->append(ss.str(), msg->get("Ticks of HP regen per minute. ") + statTooltip(STAT_HP_REGEN));
-	}
-
-	if (show_stat[2]) {
-		ss.str("");
-		ss << msg->get("Max MP:") << " " << stats->get(STAT_MP_MAX);
-		statList->append(ss.str(), statTooltip(STAT_MP_MAX));
-	}
-
-	if (show_stat[3]) {
-		ss.str("");
-		ss << msg->get("MP Regen:") << " " << stats->get(STAT_MP_REGEN);
-		statList->append(ss.str(), msg->get("Ticks of MP regen per minute. ") + statTooltip(STAT_MP_REGEN));
-	}
-
-	if (show_stat[4]) {
-		ss.str("");
-		ss << msg->get("Accuracy:") << " " << stats->get(STAT_ACCURACY) << "%";
-		statList->append(ss.str(), statTooltip(STAT_ACCURACY));
-	}
-
-	if (show_stat[5]) {
-		ss.str("");
-		ss << msg->get("Avoidance:") << " " << stats->get(STAT_AVOIDANCE) << "%";
-		statList->append(ss.str(), statTooltip(STAT_AVOIDANCE));
-	}
-
-	if (show_stat[6]) {
-		ss.str("");
-		ss << msg->get("Melee Damage:") << " ";
-		if (stats->get(STAT_DMG_MELEE_MIN) == stats->get(STAT_DMG_MELEE_MAX))
-			ss << stats->get(STAT_DMG_MELEE_MIN);
-		else
-			ss << stats->get(STAT_DMG_MELEE_MIN) << "-" << stats->get(STAT_DMG_MELEE_MAX);
-		statList->append(ss.str(),"");
-	}
-
-	if (show_stat[7]) {
-		ss.str("");
-		ss << msg->get("Ranged Damage:") << " ";
-		if (stats->get(STAT_DMG_RANGED_MIN) == stats->get(STAT_DMG_RANGED_MAX))
-			ss << stats->get(STAT_DMG_RANGED_MIN);
-		else
-			ss << stats->get(STAT_DMG_RANGED_MIN) << "-" << stats->get(STAT_DMG_RANGED_MAX);
-		statList->append(ss.str(),"");
-	}
-
-	if (show_stat[8]) {
-		ss.str("");
-		ss << msg->get("Mental Damage:") << " ";
-		if (stats->get(STAT_DMG_MENT_MIN) == stats->get(STAT_DMG_MENT_MAX))
-			ss << stats->get(STAT_DMG_MENT_MIN);
-		else
-			ss << stats->get(STAT_DMG_MENT_MIN) << "-" << stats->get(STAT_DMG_MENT_MAX);
-		statList->append(ss.str(),"");
-	}
-
-	if (show_stat[9]) {
-		ss.str("");
-		ss << msg->get("Crit:") << " " << stats->get(STAT_CRIT) << "%";
-		statList->append(ss.str(), statTooltip(STAT_CRIT));
-	}
-
-	if (show_stat[10]) {
-		ss.str("");
-		ss << msg->get("Absorb:") << " ";
-		if (stats->get(STAT_ABS_MIN) == stats->get(STAT_ABS_MAX))
-			ss << stats->get(STAT_ABS_MIN);
-		else
-			ss << stats->get(STAT_ABS_MIN) << "-" << stats->get(STAT_ABS_MAX);
-		statList->append(ss.str(),"");
-	}
-
-	if (show_stat[11]) {
-		ss.str("");
-		ss << msg->get("Poise: ") << stats->get(STAT_POISE) << "%";
-		statList->append(ss.str(), msg->get("Reduces your chance of stumbling when hit") + statTooltip(STAT_POISE));
-	}
-
-	if (show_stat[12]) {
-		ss.str("");
-		ss << msg->get("Reflect Chance: ") << stats->get(STAT_REFLECT) << "%";
-		statList->append(ss.str(), msg->get("Increases your chance of reflecting missiles back at enemies") + statTooltip(STAT_POISE));
-	}
-
-	if (show_stat[13]) {
-		ss.str("");
-		ss << msg->get("Bonus XP: ") << stats->get(STAT_XP_GAIN) << "%";
-		statList->append(ss.str(), msg->get("Increases the XP gained per kill") + statTooltip(STAT_XP_GAIN));
-	}
-
-	if (show_stat[14]) {
-		ss.str("");
-		ss << msg->get("Bonus") << " " << CURRENCY << ": " << stats->get(STAT_CURRENCY_FIND) << "%";
-		statList->append(ss.str(), msg->get("Increases the %s found per drop",CURRENCY) + statTooltip(STAT_CURRENCY_FIND));
-	}
-
-	if (show_stat[15]) {
-		ss.str("");
-		ss << msg->get("Bonus Item Find: ") << stats->get(STAT_ITEM_FIND)<< "%";
-		statList->append(ss.str(), msg->get("Increases the chance that an enemy will drop an item when killed") + statTooltip(STAT_ITEM_FIND));
-	}
-
-	if (show_stat[16]) {
-		ss.str("");
-		ss << msg->get("Stealth: ") << stats->get(STAT_STEALTH) << "%";
-		statList->append(ss.str(), msg->get("Increases your ability to move undetected") + statTooltip(STAT_STEALTH));
-	}
-
-	if (show_stat[17]) {
+	if (show_resists) {
 		for (unsigned int j=0; j<stats->vulnerable.size(); j++) {
 			ss.str("");
 			ss << msg->get(ELEMENTS[j].description) << ": " << (100 - stats->vulnerable[j]) << "%";

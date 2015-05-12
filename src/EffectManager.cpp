@@ -351,7 +351,7 @@ int EffectManager::getType(const std::string type) {
 	else if (type == "heal") return EFFECT_HEAL;
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (type == STAT_NAME[i]) {
+			if (type == STAT_KEY[i]) {
 				return EFFECT_COUNT+i;
 			}
 		}

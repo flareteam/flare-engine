@@ -65,8 +65,7 @@ LootManager::LootManager()
 				AUTOPICKUP_CURRENCY = toBool(infile.val);
 			}
 			else if (infile.key == "currency_name") {
-				// @ATTR currency_name|string|Define the name of currency in game
-				CURRENCY = msg->get(infile.val);
+				// This key is parsed in loadMiscSettings() in Settings.cpp
 			}
 			else if (infile.key == "vendor_ratio") {
 				// @ATTR vendor_ratio|integer|Prices ratio for vendors

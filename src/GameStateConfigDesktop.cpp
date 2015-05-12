@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "Stats.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
@@ -565,6 +566,7 @@ void GameStateConfigDesktop::logicAccept() {
 		loadTilesetSettings();
 	}
 	loadMiscSettings();
+	setStatNames();
 	refreshFont();
 	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
 		SDL_JoystickClose(joy);

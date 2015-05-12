@@ -38,7 +38,6 @@ GameSwitcher *gswitch;
 static void init(const std::string &render_device_name) {
 
 	setPaths();
-	setStatNames();
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
@@ -80,6 +79,7 @@ static void init(const std::string &render_device_name) {
 
 	// Load miscellaneous settings
 	loadMiscSettings();
+	setStatNames();
 
 	// Create render Device and Rendering Context.
 	render_device = getRenderDevice(render_device_name);
