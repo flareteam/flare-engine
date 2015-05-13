@@ -346,7 +346,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	bool crit = percentChance(true_crit_chance);
 	if (crit) {
-		dmg = dmg + h.dmg_max;
+		dmg *= 2;
 		if(!stats.hero)
 			mapr->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
 	}
