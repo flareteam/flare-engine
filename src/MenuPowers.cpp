@@ -702,6 +702,21 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
 	tip->addText(powers->powers[power_cells[slot_num].id].description);
 
+	// add mana cost
+	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
+		tip->addText(msg->get("Costs %d MP", powers->powers[power_cells[slot_num].id].requires_mp));
+	}
+	// add health cost
+	if (powers->powers[power_cells[slot_num].id].requires_hp > 0) {
+		tip->addText(msg->get("Costs %d HP", powers->powers[power_cells[slot_num].id].requires_hp));
+	}
+	// add cooldown time
+	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
+		std::stringstream ss;
+		ss << std::setprecision(3) << (float)powers->powers[power_cells[slot_num].id].cooldown / MAX_FRAMES_PER_SEC;
+		tip->addText(msg->get("Cooldown: %s seconds", ss.str().c_str()));
+	}
+
 	std::set<std::string>::iterator it;
 	for (it = powers->powers[power_cells[slot_num].id].requires_flags.begin(); it != powers->powers[power_cells[slot_num].id].requires_flags.end(); ++it) {
 		tip->addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[(*it)])));
@@ -777,16 +792,6 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 		tip->addText(msg->get("Requires %d Skill Point", power_cells[slot_num].requires_point));
 	}
 
-	// Draw unlock power Tooltip
-	if (power_cells[slot_num].requires_point &&
-			!(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end()) &&
-			(points_left > 0) &&
-			powerUnlockable(power_cells[slot_num].id)) {
-		tip->addText(msg->get("Click to Unlock"), color_bonus);
-	}
-
-
-
 	for (unsigned j = 0; j < power_cells[slot_num].requires_power.size(); ++j) {
 		// Required Power Tooltip
 		if ((power_cells[slot_num].requires_power[j] != 0) && !(requirementsMet(power_cells[slot_num].requires_power[j]))) {
@@ -798,19 +803,12 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 
 	}
 
-	// add mana cost
-	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
-		tip->addText(msg->get("Costs %d MP", powers->powers[power_cells[slot_num].id].requires_mp));
-	}
-	// add health cost
-	if (powers->powers[power_cells[slot_num].id].requires_hp > 0) {
-		tip->addText(msg->get("Costs %d HP", powers->powers[power_cells[slot_num].id].requires_hp));
-	}
-	// add cooldown time
-	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
-		std::stringstream ss;
-		ss << std::setprecision(3) << (float)powers->powers[power_cells[slot_num].id].cooldown / MAX_FRAMES_PER_SEC;
-		tip->addText(msg->get("Cooldown: %s seconds", ss.str().c_str()));
+	// Draw unlock power Tooltip
+	if (power_cells[slot_num].requires_point &&
+			!(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end()) &&
+			(points_left > 0) &&
+			powerUnlockable(power_cells[slot_num].id)) {
+		tip->addText(msg->get("Click to Unlock"), color_bonus);
 	}
 }
 
