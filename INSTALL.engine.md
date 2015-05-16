@@ -164,3 +164,17 @@ include it into the default compile settings.
  * More aggressive optimisation by telling the linker, it's just this program.
    (g++: -fwhole-program)
  * to be continued.
+
+## Troubleshooting
+
+If the game fails to start, some of the following tips might help:
+
+ * Open the your `settings.txt` file. The location of this file is specified in [README.md](README.engine.md#settings).
+   In that file, set `hwsurface=0` and `vsync=0`.
+ * Older computers might have CPUs that don't support SSE. The default binaries for SDL 2 require SSE.
+   To disable SSE instructions, it is necessary to download the SDL 2 source and run the following commands:
+
+   ```
+   ./configure --disable-sse
+   make
+   ```
