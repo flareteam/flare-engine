@@ -245,9 +245,18 @@ void FileParser::error(const char* format, ...) {
 	vsprintf(buffer, format, args);
 	va_end(args);
 
-	std::stringstream ss;
-	ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer;
-	logError(ss.str().c_str());
+	errorBuf(buffer);
+}
+
+void FileParser::errorBuf(const char* buffer) {
+	if (include_fp) {
+		include_fp->errorBuf(buffer);
+	}
+	else {
+		std::stringstream ss;
+		ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer;
+		logError(ss.str().c_str());
+	}
 }
 
 void FileParser::incrementLineNum() {
