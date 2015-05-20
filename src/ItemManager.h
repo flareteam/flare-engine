@@ -107,7 +107,8 @@ public:
 	std::vector<int> req_val;          // 1-5 (used with req_stat)
 	std::string requires_class;
 	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
-	SoundManager::SoundID sfx;        // the item sound when it hits the floor or inventory, etc
+	std::string sfx;           // the item sound when it hits the floor or inventory, etc
+	SoundManager::SoundID sfx_id;
 	std::string gfx;           // the sprite layer shown when this item is equipped
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
 	int power;            // this item can be dragged to the action bar and used as a power
@@ -139,7 +140,8 @@ public:
 		, abs_min(0)
 		, abs_max(0)
 		, requires_class("")
-		, sfx(0)
+		, sfx("")
+		, sfx_id(0)
 		, gfx("")
 		, power(0)
 		, power_desc("")

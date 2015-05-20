@@ -258,7 +258,8 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 		}
 		else if (infile.key == "soundfx") {
 			// @ATTR soundfx|string|Sound effect filename to play for the specific item.
-			items[id].sfx = snd->load(infile.val, "ItemManager");
+			items[id].sfx = infile.val;
+			items[id].sfx_id = snd->load(items[id].sfx, "ItemManager");
 		}
 		else if (infile.key == "gfx")
 			// @ATTR gfx|string|Filename of an animation set to display when the item is equipped.
@@ -521,7 +522,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 }
 
 void ItemManager::playSound(int item, Point pos) {
-	snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+	snd->play(items[item].sfx_id, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {
