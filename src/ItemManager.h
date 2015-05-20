@@ -187,10 +187,11 @@ public:
 };
 
 class ItemManager {
+protected:
+	void loadItems(const std::string& filename, bool locateFileName = true);
+	void loadTypes(const std::string& filename, bool locateFileName = true);
+	void loadSets(const std::string& filename, bool locateFileName = true);
 private:
-	void loadItems();
-	void loadTypes();
-	void loadSets();
 	void loadAll();
 	void parseBonus(BonusData& bdata, FileParser& infile);
 	void getBonusString(std::stringstream& ss, BonusData* bdata);

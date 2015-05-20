@@ -86,9 +86,9 @@ ItemManager::ItemManager()
 void ItemManager::loadAll() {
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
-	this->loadItems();
-	this->loadTypes();
-	this->loadSets();
+	this->loadItems("items/items.txt");
+	this->loadTypes("items/types.txt");
+	this->loadSets("items/sets.txt");
 
 	/*
 	 * Shrinks the items vector to the absolute needed size.
@@ -111,13 +111,13 @@ void ItemManager::loadAll() {
 /**
  * Load a specific items file
  *
- * @param filename The full path and name of the file to load
+ * @param filename The (full) path and name of the file to load
  */
-void ItemManager::loadItems() {
+void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Items|Description about the class and it usage, items/items.txt...
-	if (!infile.open("items/items.txt"))
+	if (!infile.open(filename, locateFileName))
 		return;
 
 	// used to clear vectors when overriding items
@@ -327,13 +327,18 @@ void ItemManager::loadItems() {
 	infile.close();
 }
 
-void ItemManager::loadTypes() {
+/**
+ * Load a specific item types file
+ *
+ * @param filename The (full) path and name of the file to load
+ */
+void ItemManager::loadTypes(const std::string& filename, bool locateFileName) {
 	FileParser infile;
 	std::string type,description;
 	type = description = "";
 
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
-	if (infile.open("items/types.txt")) {
+	if (infile.open(filename, locateFileName)) {
 		while (infile.next()) {
 			// @ATTR name|string|Item type name.
 			if (infile.key == "name")
@@ -367,11 +372,16 @@ void ItemManager::addUnknownItem(int id) {
 	items[id].name = msg->get("Unknown Item");
 }
 
-void ItemManager::loadSets() {
+/**
+ * Load a specific item sets file
+ *
+ * @param filename The (full) path and name of the file to load
+ */
+void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Sets|Definition of a item sets, items/sets.txt...
-	if (!infile.open("items/sets.txt"))
+	if (!infile.open(filename, locateFileName))
 		return;
 
 	bool clear_bonus = true;
