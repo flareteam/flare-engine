@@ -311,7 +311,7 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			// @ATTR stepfx|string|Sound effect when walking, this applies only to armors.
 			items[id].stepfx = infile.val;
 		else if (infile.key == "disable_slots") {
-			// @ATTR disable_slots|type (string), ...|A comma separated list of slot types to disable when this item is equipped.
+			// @ATTR disable_slots|type (string), ...|A comma separated list of equip slot types to disable when this item is equipped.
 			items[id].disable_slots.clear();
 			std::string slot_type = popFirstString(infile.val);
 
