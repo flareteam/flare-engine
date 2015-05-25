@@ -360,11 +360,13 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 				case POWSTATE_BLOCK:	// handle blocking
 					stats.cur_state = AVATAR_BLOCK;
 					powers->activate(action.power, &stats, target);
+					hero_cooldown[action.power] = power.cooldown;
 					stats.refresh_stats = true;
 					break;
 
 				case POWSTATE_INSTANT:	// handle instant powers
 					powers->activate(action.power, &stats, target);
+					hero_cooldown[action.power] = power.cooldown;
 					break;
 			}
 		}
