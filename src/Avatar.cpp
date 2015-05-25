@@ -341,8 +341,6 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 				curs->setCursor(CURSOR_NORMAL);
 			}
 
-			hero_cooldown[action.power] = power.cooldown; //set the cooldown timer
-
 			if (power.new_state != POWSTATE_INSTANT) {
 				current_power = action.power;
 				act_target = target;
@@ -614,6 +612,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				mapr->collider.block(stats.pos.x, stats.pos.y, false);
 
 				powers->activate(current_power, &stats, act_target);
+				hero_cooldown[current_power] = powers->getPower(current_power).cooldown;
 			}
 
 			if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != attack_anim) {
