@@ -493,10 +493,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// handle animation
-	activeAnimation->advanceFrame();
-	for (unsigned i=0; i < anims.size(); i++) {
-		if (anims[i] != NULL)
-			anims[i]->advanceFrame();
+	if (!stats.effects.stun) {
+		activeAnimation->advanceFrame();
+		for (unsigned i=0; i < anims.size(); i++) {
+			if (anims[i] != NULL)
+				anims[i]->advanceFrame();
+		}
 	}
 
 	if (target_anim && target_anim->getTimesPlayed() >= 1) {

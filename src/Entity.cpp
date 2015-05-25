@@ -174,7 +174,7 @@ bool Entity::move() {
 
 	move_from_offending_tile();
 
-	if (stats.effects.speed == 0) return false;
+	if (stats.effects.stun || stats.effects.speed == 0) return false;
 
 	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
 	float dx = speed * directionDeltaX[stats.direction];
