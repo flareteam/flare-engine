@@ -106,6 +106,7 @@ def get_quests():
 extract('../items/items.txt')
 extract('../items/types.txt')
 extract('../items/sets.txt')
+extract('../items/qualities.txt')
 extract('../menus/inventory.txt')
 extract('../menus/powers.txt')
 extract('../powers/effects.txt')

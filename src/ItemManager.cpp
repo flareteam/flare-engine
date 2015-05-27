@@ -65,10 +65,7 @@ static inline void shrinkVecToFit(std::vector<Ty_>& vec) {
 }
 
 ItemManager::ItemManager()
-	: color_normal(font->getColor("item_normal"))
-	, color_low(font->getColor("item_low"))
-	, color_high(font->getColor("item_high"))
-	, color_epic(font->getColor("item_epic"))
+	: color_normal(font->getColor("widget_normal"))
 	, color_bonus(font->getColor("item_bonus"))
 	, color_penalty(font->getColor("item_penalty"))
 	, color_requirements_not_met(font->getColor("requirements_not_met"))
@@ -89,6 +86,7 @@ void ItemManager::loadAll() {
 	this->loadItems("items/items.txt");
 	this->loadTypes("items/types.txt");
 	this->loadSets("items/sets.txt");
+	this->loadQualities("items/qualities.txt");
 
 	/*
 	 * Shrinks the items vector to the absolute needed size.
@@ -168,13 +166,8 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			items[id].book = infile.val;
 		}
 		else if (infile.key == "quality") {
-			// @ATTR quality|[low:high:epic]|Item quality, corresponds to item color.
-			if (infile.val == "low")
-				items[id].quality = ITEM_QUALITY_LOW;
-			else if (infile.val == "high")
-				items[id].quality = ITEM_QUALITY_HIGH;
-			else if (infile.val == "epic")
-				items[id].quality = ITEM_QUALITY_EPIC;
+			// @ATTR quality|string|Item quality matching an id in items/qualities.txt
+			items[id].quality = infile.val;
 		}
 		else if (infile.key == "item_type") {
 			// @ATTR item_type|string|Equipment slot [artifact, head, chest, hands, legs, feets, main, off, ring] or base item type [gem, consumable]
@@ -370,6 +363,51 @@ void ItemManager::loadTypes(const std::string& filename, bool locateFileName) {
 	}
 }
 
+/**
+ * Load a specific item qualities file
+ *
+ * @param filename The (full) path and name of the file to load
+ */
+void ItemManager::loadQualities(const std::string& filename, bool locateFileName) {
+	FileParser infile;
+
+	// @CLASS ItemManager: Qualities|Definition of a item qualities, items/types.txt...
+	if (infile.open(filename, locateFileName)) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "quality") {
+					// check if the previous quality and remove it if there is no identifier
+					if (!item_qualities.empty() && item_qualities.back().id == "") {
+						item_qualities.pop_back();
+					}
+					item_qualities.resize(item_qualities.size()+1);
+				}
+			}
+
+			if (item_qualities.empty() || infile.section != "quality")
+				continue;
+
+			// @ATTR quality.id|string|Item quality identifier.
+			if (infile.key == "id")
+				item_qualities.back().id = infile.val;
+			// @ATTR quality.name|string|Item quality name.
+			else if (infile.key == "name")
+				item_qualities.back().name = infile.val;
+			// @ATTR quality.color|r (integer), g (integer), b (integer)|Item quality color.
+			else if (infile.key == "color")
+				item_qualities.back().color = toRGB(infile.val);
+			else
+				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+
+		// check if the last quality and remove it if there is no identifier
+		if (!item_qualities.empty() && item_qualities.back().id == "") {
+			item_qualities.pop_back();
+		}
+	}
+}
+
 std::string ItemManager::getItemType(std::string _type) {
 	for (unsigned i=0; i<item_types.size(); ++i) {
 		if (item_types[i].id == _type)
@@ -547,14 +585,13 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	if (items[stack.item].set > 0) {
 		color = item_sets[items[stack.item].set].color;
 	}
-	else if (items[stack.item].quality == ITEM_QUALITY_LOW) {
-		color = color_low;
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_HIGH) {
-		color = color_high;
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_EPIC) {
-		color = color_epic;
+	else {
+		for (unsigned i=0; i<item_qualities.size(); ++i) {
+			if (item_qualities[i].id == items[stack.item].quality) {
+				color = item_qualities[i].color;
+				break;
+			}
+		}
 	}
 
 	// name
@@ -583,21 +620,14 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (items[stack.item].set > 0) {
 		color = item_sets[items[stack.item].set].color;
 	}
-	else if (items[stack.item].quality == ITEM_QUALITY_LOW) {
-		color = color_low;
-		quality_desc = msg->get("Low");
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_NORMAL) {
-		color = color_normal;
-		quality_desc = msg->get("Normal");
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_HIGH) {
-		color = color_high;
-		quality_desc = msg->get("High");
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_EPIC) {
-		color = color_epic;
-		quality_desc = msg->get("Epic");
+	else {
+		for (unsigned i=0; i<item_qualities.size(); ++i) {
+			if (item_qualities[i].id == items[stack.item].quality) {
+				color = item_qualities[i].color;
+				quality_desc = msg->get(item_qualities[i].name);
+				break;
+			}
+		}
 	}
 
 	// name

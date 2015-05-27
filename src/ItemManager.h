@@ -42,11 +42,6 @@ const int REQUIRES_MENT = 1;
 const int REQUIRES_OFF = 2;
 const int REQUIRES_DEF = 3;
 
-const int ITEM_QUALITY_LOW = 0;
-const int ITEM_QUALITY_NORMAL = 1;
-const int ITEM_QUALITY_HIGH = 2;
-const int ITEM_QUALITY_EPIC = 3;
-
 class LootAnimation {
 public:
 	std::string name;
@@ -84,13 +79,25 @@ public:
 	}
 };
 
+class ItemQuality {
+public:
+	std::string id;
+	std::string name;
+	Color color;
+	ItemQuality()
+		: id("")
+		, name("")
+		, color(255,255,255) {
+	}
+};
+
 class Item {
 public:
 	std::string name;     // item name displayed on long and short tool tips
 	std::string flavor;   // optional flavor text describing the item
 	int level;            // rough estimate of quality, used in the loot algorithm
 	int set;              // item can be attached to item set
-	int quality;          // low, normal, high, epic; corresponds to item name color
+	std::string quality;  // should match an id from items/qualities.txt
 	std::string type;     // equipment slot or base item type
 	std::vector<std::string> equip_flags;   // common values include: melee, ranged, mental, shield
 	int icon;             // icon index on small pixel sheet
@@ -128,7 +135,7 @@ public:
 		, flavor("")
 		, level(0)
 		, set(0)
-		, quality(ITEM_QUALITY_NORMAL)
+		, quality("")
 		, type("other")
 		, icon(0)
 		, dmg_melee_min(0)
@@ -205,6 +212,7 @@ protected:
 	void loadItems(const std::string& filename, bool locateFileName = true);
 	void loadTypes(const std::string& filename, bool locateFileName = true);
 	void loadSets(const std::string& filename, bool locateFileName = true);
+	void loadQualities(const std::string& filename, bool locateFileName = true);
 private:
 	void loadAll();
 	void parseBonus(BonusData& bdata, FileParser& infile);
@@ -232,6 +240,7 @@ public:
 	std::vector<Item> items;
 	std::vector<ItemType> item_types;
 	std::vector<ItemSet> item_sets;
+	std::vector<ItemQuality> item_qualities;
 };
 
 #endif
