@@ -751,11 +751,15 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "class") {
-					HERO_CLASSES.push_back(HeroClass());
+					// check if the previous class and remove it if there is no name
+					if (!HERO_CLASSES.empty() && HERO_CLASSES.back().name == "") {
+						HERO_CLASSES.pop_back();
+					}
+					HERO_CLASSES.resize(HERO_CLASSES.size()+1);
 				}
 			}
 
-			if (infile.section != "class")
+			if (HERO_CLASSES.empty() || infile.section != "class")
 				continue;
 
 			if (!HERO_CLASSES.empty()) {
@@ -803,11 +807,17 @@ void loadMiscSettings() {
 			}
 		}
 		infile.close();
+
+		// check if the last class and remove it if there is no name
+		if (!HERO_CLASSES.empty() && HERO_CLASSES.back().name == "") {
+			HERO_CLASSES.pop_back();
+		}
 	}
 	// Make a default hero class if none were found
 	if (HERO_CLASSES.empty()) {
 		HeroClass c;
 		c.name = "Adventurer";
+		msg->get("Adventurer"); // this is needed for translation
 		HERO_CLASSES.push_back(c);
 	}
 
