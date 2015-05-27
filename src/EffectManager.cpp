@@ -210,7 +210,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	}
 
 	for (unsigned i=effect_list.size(); i>0; i--) {
-		if (effect_list[i-1].name == effect.name) {
+		if (effect_list[i-1].name == effect.id) {
 			if (trigger > -1 && effect_list[i-1].trigger == trigger)
 				return; // trigger effects can only be cast once per trigger
 
@@ -225,7 +225,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 
 	Effect e;
 
-	e.name = effect.name;
+	e.name = effect.id;
 	e.icon = effect.icon;
 	e.type = effect_type;
 	e.render_above = effect.render_above;
@@ -357,7 +357,7 @@ int EffectManager::getType(const std::string type) {
 		}
 
 		for (unsigned i=0; i<bonus_resist.size(); i++) {
-			if (type == ELEMENTS[i].name + "_resist") {
+			if (type == ELEMENTS[i].id + "_resist") {
 				return EFFECT_COUNT+STAT_COUNT+i;
 			}
 		}

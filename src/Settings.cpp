@@ -172,7 +172,7 @@ short MIN_AVOIDANCE;
 std::vector<Element> ELEMENTS;
 
 // Equipment flags
-std::map<std::string,std::string> EQUIP_FLAGS;
+std::vector<EquipFlag> EQUIP_FLAGS;
 
 // Hero classes
 std::vector<HeroClass> HERO_CLASSES;
@@ -686,42 +686,64 @@ void loadMiscSettings() {
 
 	// @CLASS Settings: Elements|Description of engine/elements.txt
 	if (infile.open("engine/elements.txt")) {
-		Element e;
 		while (infile.next()) {
-			// @ATTR name|string|An identifier for this element.
-			if (infile.key == "name") e.name = infile.val;
-			// @ATTR description|string|The displayed name of this element.
-			else if (infile.key == "description") e.description = infile.val;
+			if (infile.new_section) {
+				if (infile.section == "element") {
+					// check if the previous element and remove it if there is no identifier
+					if (!ELEMENTS.empty() && ELEMENTS.back().id == "") {
+						ELEMENTS.pop_back();
+					}
+					ELEMENTS.resize(ELEMENTS.size()+1);
+				}
+			}
+
+			if (ELEMENTS.empty() || infile.section != "element")
+				continue;
+
+			// @ATTR element.id|string|An identifier for this element.
+			if (infile.key == "id") ELEMENTS.back().id = infile.val;
+			// @ATTR element.name|string|The displayed name of this element.
+			else if (infile.key == "name") ELEMENTS.back().name = infile.val;
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
-
-			if (e.name != "" && e.description != "") {
-				ELEMENTS.push_back(e);
-				e.name = e.description = "";
-			}
 		}
 		infile.close();
+
+		// check if the last element and remove it if there is no identifier
+		if (!ELEMENTS.empty() && ELEMENTS.back().id == "") {
+			ELEMENTS.pop_back();
+		}
 	}
 
 	// @CLASS Settings: Equip flags|Description of engine/equip_flags.txt
 	if (infile.open("engine/equip_flags.txt")) {
-		std::string type,description;
-		type = description = "";
-
 		while (infile.next()) {
-			// @ATTR name|string|An identifier for this equip flag.
-			if (infile.key == "name") type = infile.val;
-			// @ATTR description|string|The displayed name of this equip flag.
-			else if (infile.key == "description") description = infile.val;
+			if (infile.new_section) {
+				if (infile.section == "flag") {
+					// check if the previous flag and remove it if there is no identifier
+					if (!EQUIP_FLAGS.empty() && EQUIP_FLAGS.back().id == "") {
+						EQUIP_FLAGS.pop_back();
+					}
+					EQUIP_FLAGS.resize(EQUIP_FLAGS.size()+1);
+				}
+			}
+
+			if (EQUIP_FLAGS.empty() || infile.section != "flag")
+				continue;
+
+			// @ATTR flag.id|string|An identifier for this equip flag.
+			if (infile.key == "id") EQUIP_FLAGS.back().id = infile.val;
+			// @ATTR flag.name|string|The displayed name of this equip flag.
+			else if (infile.key == "name") EQUIP_FLAGS.back().name = infile.val;
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
-
-			if (type != "" && description != "") {
-				EQUIP_FLAGS[type] = description;
-				type = description = "";
-			}
 		}
 		infile.close();
+
+		// check if the last flag and remove it if there is no identifier
+		if (!EQUIP_FLAGS.empty() && EQUIP_FLAGS.back().id == "") {
+			EQUIP_FLAGS.pop_back();
+		}
 	}
 
 	// @CLASS Settings: Classes|Description of engine/classes.txt

@@ -32,8 +32,14 @@ const int VERSION_MINOR = 19;
 
 class Element {
 public:
+	std::string id;
 	std::string name;
-	std::string description;
+};
+
+class EquipFlag {
+public:
+	std::string id;
+	std::string name;
 };
 
 const int ACTIONBAR_MAX = 12; // maximum number of slots in MenuActionBar
@@ -174,7 +180,7 @@ extern short MIN_AVOIDANCE;
 extern std::vector<Element> ELEMENTS;
 
 // Equip flags
-extern std::map<std::string,std::string> EQUIP_FLAGS;
+extern std::vector<EquipFlag> EQUIP_FLAGS;
 
 // Hero classes
 extern std::vector<HeroClass> HERO_CLASSES;

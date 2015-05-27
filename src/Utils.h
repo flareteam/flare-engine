@@ -120,7 +120,7 @@ public:
 
 class EffectDef {
 public:
-	std::string name;
+	std::string id;
 	std::string type;
 	int icon;
 	std::string animation;
@@ -128,7 +128,7 @@ public:
 	bool render_above;
 
 	EffectDef()
-		: name("")
+		: id("")
 		, type("")
 		, icon(-1)
 		, animation("")

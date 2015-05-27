@@ -351,6 +351,8 @@ private:
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
+	EffectDef* getEffectDef(const std::string& id);
+
 public:
 	PowerManager(LootManager *_lootm);
 	~PowerManager();
@@ -371,7 +373,7 @@ public:
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
 
-	std::map<std::string,EffectDef> effects;
+	std::vector<EffectDef> effects;
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> enemies; // output; read by PowerManager

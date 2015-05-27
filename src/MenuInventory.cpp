@@ -958,26 +958,26 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	EffectDef ed;
 
 	if (bdata->is_speed) {
-		ed.name = ed.type = "speed";
+		ed.id = ed.type = "speed";
 	}
 	else if (bdata->stat_index != -1) {
-		ed.name = ed.type = STAT_KEY[bdata->stat_index];
+		ed.id = ed.type = STAT_KEY[bdata->stat_index];
 	}
 	else if (bdata->resist_index != -1) {
-		ed.name = ed.type = ELEMENTS[bdata->resist_index].name + "_resist";
+		ed.id = ed.type = ELEMENTS[bdata->resist_index].id + "_resist";
 	}
 	else if (bdata->base_index != -1) {
 		if (bdata->base_index == 0) {
-			ed.name = ed.type = "physical";
+			ed.id = ed.type = "physical";
 		}
 		else if (bdata->base_index == 1) {
-			ed.name = ed.type = "mental";
+			ed.id = ed.type = "mental";
 		}
 		else if (bdata->base_index == 2) {
-			ed.name = ed.type = "offense";
+			ed.id = ed.type = "offense";
 		}
 		else if (bdata->base_index == 3) {
-			ed.name = ed.type = "defense";
+			ed.id = ed.type = "defense";
 		}
 	}
 

@@ -188,6 +188,18 @@ public:
 	void clear();
 };
 
+class ItemType {
+public:
+	ItemType()
+		: id("")
+		, name("") {
+	}
+	~ItemType() {}
+
+	std::string id;
+	std::string name;
+};
+
 class ItemManager {
 protected:
 	void loadItems(const std::string& filename, bool locateFileName = true);
@@ -218,7 +230,7 @@ public:
 	bool requirementsMet(const StatBlock *stats, int item);
 
 	std::vector<Item> items;
-	std::map<std::string,std::string> item_types;
+	std::vector<ItemType> item_types;
 	std::vector<ItemSet> item_sets;
 };
 

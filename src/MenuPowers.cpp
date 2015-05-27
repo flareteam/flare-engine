@@ -719,7 +719,11 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 
 	std::set<std::string>::iterator it;
 	for (it = powers->powers[power_cells[slot_num].id].requires_flags.begin(); it != powers->powers[power_cells[slot_num].id].requires_flags.end(); ++it) {
-		tip->addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[(*it)])));
+		for (unsigned i=0; i<EQUIP_FLAGS.size(); ++i) {
+			if ((*it) == EQUIP_FLAGS[i].id) {
+				tip->addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[i].name)));
+			}
+		}
 	}
 
 	// add requirement

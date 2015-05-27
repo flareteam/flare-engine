@@ -335,34 +335,45 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
  */
 void ItemManager::loadTypes(const std::string& filename, bool locateFileName) {
 	FileParser infile;
-	std::string type,description;
-	type = description = "";
 
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
 	if (infile.open(filename, locateFileName)) {
 		while (infile.next()) {
-			// @ATTR name|string|Item type name.
-			if (infile.key == "name")
-				type = infile.val;
-			// @ATTR description|string|Item type description.
-			else if (infile.key == "description")
-				description = infile.val;
+			if (infile.new_section) {
+				if (infile.section == "type") {
+					// check if the previous type and remove it if there is no identifier
+					if (!item_types.empty() && item_types.back().id == "") {
+						item_types.pop_back();
+					}
+					item_types.resize(item_types.size()+1);
+				}
+			}
+
+			if (item_types.empty() || infile.section != "type")
+				continue;
+
+			// @ATTR type.id|string|Item type identifier.
+			if (infile.key == "id")
+				item_types.back().id = infile.val;
+			// @ATTR type.name|string|Item type name.
+			else if (infile.key == "name")
+				item_types.back().name = infile.val;
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
-
-			if (type != "" && description != "") {
-				item_types[type] = description;
-				type = description = "";
-			}
 		}
 		infile.close();
+
+		// check if the last type and remove it if there is no identifier
+		if (!item_types.empty() && item_types.back().id == "") {
+			item_types.pop_back();
+		}
 	}
 }
 
 std::string ItemManager::getItemType(std::string _type) {
-	std::map<std::string, std::string>::iterator it,end;
-	for (it=item_types.begin(), end=item_types.end(); it!=end; ++it) {
-		if (_type.compare(it->first) == 0) return it->second;
+	for (unsigned i=0; i<item_types.size(); ++i) {
+		if (item_types[i].id == _type)
+			return item_types[i].name;
 	}
 	// If all else fails, return the original string
 	return _type;
@@ -468,7 +479,7 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 	}
 
 	for (unsigned i=0; i<ELEMENTS.size(); ++i) {
-		if (bonus_str == ELEMENTS[i].name + "_resist") {
+		if (bonus_str == ELEMENTS[i].id + "_resist") {
 			bdata.resist_index = i;
 			return;
 		}
@@ -507,7 +518,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << " " << STAT_NAME[bdata->stat_index];
 	}
 	else if (bdata->resist_index != -1) {
-		ss << "% " << msg->get(ELEMENTS[bdata->resist_index].description);
+		ss << "% " << msg->get(ELEMENTS[bdata->resist_index].name);
 	}
 	else if (bdata->base_index != -1) {
 		if (bdata->base_index == 0)
