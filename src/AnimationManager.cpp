@@ -32,7 +32,7 @@ AnimationSet *AnimationManager::getAnimationSet(const std::string& filename) {
 	else {
 		logError("AnimationManager::getAnimationSet: %s not found", filename.c_str());
 		Exit(1);
-		// return 0;
+		return NULL;
 	}
 }
 
