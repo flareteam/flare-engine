@@ -132,7 +132,6 @@ MenuManager::MenuManager(StatBlock *_stats)
 	if (DEV_MODE) {
 		devconsole = new MenuDevConsole();
 		devhud = new MenuDevHUD();
-		DEV_HUD = DEV_MODE;
 	}
 
 	tip = new WidgetTooltip();

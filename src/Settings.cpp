@@ -76,6 +76,7 @@ ConfigEntry config[] = {
 	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"},
 	{ "hardware_cursor",  &typeid(HARDWARE_CURSOR), "0",   &HARDWARE_CURSOR, "use the system mouse cursor. 1 enable, 0 disable"},
 	{ "dev_mode",         &typeid(DEV_MODE),        "0",   &DEV_MODE,        "allow opening the developer console. 1 enable, 0 disable"},
+	{ "dev_hud",          &typeid(DEV_HUD),         "1",   &DEV_HUD,         "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable"},
 	{ "show_target",      &typeid(SHOW_TARGET),     "0",   &SHOW_TARGET,     "show the targeting reticle on the ground when attacking. 1 enable, 0 disable"},
 	{ "loot_tooltips",    &typeid(LOOT_TOOLTIPS),   "1",   &LOOT_TOOLTIPS,   "always show loot tooltips. 1 enable, 0 disable"}
 };
@@ -139,7 +140,7 @@ bool SHOW_HOTKEYS;
 bool COLORBLIND;
 bool HARDWARE_CURSOR;
 bool DEV_MODE;
-bool DEV_HUD = false;
+bool DEV_HUD;
 bool SHOW_TARGET;
 bool LOOT_TOOLTIPS;
 
