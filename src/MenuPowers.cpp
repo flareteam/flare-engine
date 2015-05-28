@@ -512,27 +512,30 @@ void MenuPowers::setUnlockedPowers() {
 }
 
 void MenuPowers::logic() {
-	for (unsigned i=0; i<power_cell.size(); i++) {
-		if ((unsigned)power_cell[i].id < powers->powers.size() && powers->powers[power_cell[i].id].passive) {
-			bool unlocked_power = std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
-			std::vector<int>::iterator it = std::find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell[i].id);
+	for (unsigned i=0; i<power_cell_unlocked.size(); i++) {
+		if ((unsigned)power_cell_unlocked[i].id < powers->powers.size() && powers->powers[power_cell_unlocked[i].id].passive) {
+			bool unlocked_power = std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell_unlocked[i].id) != stats->powers_list.end();
+			std::vector<int>::iterator it = std::find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell_unlocked[i].id);
+
 			if (it != stats->powers_passive.end()) {
-				if (!baseRequirementsMet(power_cell[i].id) && power_cell[i].passive_on) {
+				if (!baseRequirementsMet(power_cell_unlocked[i].id) && power_cell_unlocked[i].passive_on) {
 					stats->powers_passive.erase(it);
-					stats->effects.removeEffectPassive(power_cell[i].id);
+					stats->effects.removeEffectPassive(power_cell_unlocked[i].id);
 					power_cell[i].passive_on = false;
 					stats->refresh_stats = true;
 				}
 			}
-			else if (((baseRequirementsMet(power_cell[i].id) && !power_cell[i].requires_point) || unlocked_power) && !power_cell[i].passive_on) {
-				stats->powers_passive.push_back(power_cell[i].id);
-				power_cell[i].passive_on = true;
+			else if (((baseRequirementsMet(power_cell_unlocked[i].id) && !power_cell_unlocked[i].requires_point) || unlocked_power) && !power_cell_unlocked[i].passive_on) {
+				stats->powers_passive.push_back(power_cell_unlocked[i].id);
+				power_cell_unlocked[i].passive_on = true;
 				// for passives without special triggers, we need to trigger them here
 				if (stats->effects.triggered_others)
-					powers->activateSinglePassive(stats, power_cell[i].id);
+					powers->activateSinglePassive(stats, power_cell_unlocked[i].id);
 			}
 		}
+	}
 
+	for (unsigned i=0; i<power_cell.size(); i++) {
 		//upgrade buttons logic
 		if (upgradeButtons[i] != NULL) {
 			upgradeButtons[i]->enabled = false;
