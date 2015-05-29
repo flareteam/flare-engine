@@ -45,11 +45,12 @@ void EnemyManager::loadAnimations(Enemy *e) {
 }
 
 Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
-	for (size_t i = 0; i < prototypes.size(); i++)
+	for (size_t i = 0; i < prototypes.size(); i++) {
 		if (prototypes[i].type == type_id) {
 			anim->increaseCount(prototypes[i].stats.animations);
 			return new Enemy(prototypes[i]);
 		}
+	}
 
 	Enemy e = Enemy();
 
@@ -137,7 +138,8 @@ void EnemyManager::handleNewMap () {
 		allies.pop();
 
 		//dont need the result of this. its only called to handle animation and sound
-		getEnemyPrototype(e->type);
+		Enemy* temp = getEnemyPrototype(e->type);
+		delete temp;
 
 		e->stats.pos = spawn_pos;
 		e->stats.direction = pc->stats.direction;
