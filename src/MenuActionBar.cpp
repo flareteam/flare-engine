@@ -603,6 +603,9 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
  */
 void MenuActionBar::set(std::vector<int> power_id) {
 	for (unsigned int i = 0; i < slots_count; i++) {
+		if ((unsigned)power_id[i] >= powers->powers.size())
+			continue;
+
 		hotkeys[i] = power_id[i];
 	}
 	updated = true;
@@ -675,8 +678,11 @@ bool MenuActionBar::isWithinMenus(const Point& mouse) {
  * So a target_id of 0 will place the power in an empty slot, if available
  */
 void MenuActionBar::addPower(const int id, const int target_id) {
+	if ((unsigned)id >= powers->powers.size())
+		return;
+
 	// can't put passive powers on the action bar
-	if ((unsigned)id < powers->powers.size() && powers->powers[id].passive)
+	if (powers->powers[id].passive)
 		return;
 
 	// if we're not replacing an existing power, avoid placing duplicate powers
