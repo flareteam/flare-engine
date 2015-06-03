@@ -423,11 +423,12 @@ bool Entity::takeHit(Hazard &h) {
 				mapr->collider.unblock(stats.pos.x,stats.pos.y);
 			}
 		}
-		// don't go through a hit animation if stunned
-		else if (!stats.effects.stun && !chance_poise) {
+		// don't go through a hit animation if stunned or successfully poised
+		// however, critical hits ignore poise
+		else if (!stats.effects.stun && (!chance_poise || crit)) {
 			play_sfx_hit = true;
 
-			if(!chance_poise && stats.cooldown_hit_ticks == 0) {
+			if(stats.cooldown_hit_ticks == 0) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
 				else
