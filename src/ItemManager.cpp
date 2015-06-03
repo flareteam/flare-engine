@@ -638,13 +638,17 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		ss << items[stack.item].name << " (" << stack.quantity << ")";
 	tip.addText(ss.str(), color);
 
+	// only show the name of the currency item
+	if (stack.item == CURRENCY_ID)
+		return tip;
+
 	// level
 	if (items[stack.item].level != 0) {
 		tip.addText(msg->get("Level %d", items[stack.item].level));
 	}
 
 	// type
-	if (items[stack.item].type != "other" && items[stack.item].type != "book") {
+	if (items[stack.item].type != "") {
 		tip.addText(msg->get(getItemType(items[stack.item].type)));
 	}
 

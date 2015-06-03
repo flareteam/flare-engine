@@ -136,7 +136,7 @@ public:
 		, level(0)
 		, set(0)
 		, quality("")
-		, type("other")
+		, type("")
 		, icon(0)
 		, dmg_melee_min(0)
 		, dmg_melee_max(0)
