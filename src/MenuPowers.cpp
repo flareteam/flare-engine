@@ -696,12 +696,14 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 		if (!powerIsVisible(power_cell[i].id)) continue;
 
 		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
-			generatePowerDescription(&tip, i, power_cell);
+			bool base_unlocked = requirementsMet(power_cell[i].id) || std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
+
+			generatePowerDescription(&tip, i, power_cell, !base_unlocked);
 			if (!power_cell[i].upgrades.empty()) {
 				short next_level = nextLevel(i);
 				if (next_level != -1) {
 					tip.addText("\n" + msg->get("Next Level:"));
-					generatePowerDescription(&tip, next_level, power_cell_upgrade);
+					generatePowerDescription(&tip, next_level, power_cell_upgrade, base_unlocked);
 				}
 			}
 
@@ -712,7 +714,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 	return tip;
 }
 
-void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells) {
+void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt) {
 	tip->addText(powers->powers[power_cells[slot_num].id].name);
 
 	if (power_cells[slot_num].upgrade_level > 0)
@@ -803,18 +805,6 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 		tip->addText(msg->get("Requires Level %d", power_cells[slot_num].requires_level));
 	}
 
-	// Draw required Skill Point Tooltip
-	if ((power_cells[slot_num].requires_point) &&
-			!(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end()) &&
-			(points_left < 1)) {
-		tip->addText(msg->get("Requires %d Skill Point", power_cells[slot_num].requires_point), color_penalty);
-	}
-	else if ((power_cells[slot_num].requires_point) &&
-			 !(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end()) &&
-			 (points_left > 0)) {
-		tip->addText(msg->get("Requires %d Skill Point", power_cells[slot_num].requires_point));
-	}
-
 	for (unsigned j = 0; j < power_cells[slot_num].requires_power.size(); ++j) {
 		// Required Power Tooltip
 		if ((power_cells[slot_num].requires_power[j] != 0) && !(requirementsMet(power_cells[slot_num].requires_power[j]))) {
@@ -827,11 +817,16 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 	}
 
 	// Draw unlock power Tooltip
-	if (power_cells[slot_num].requires_point &&
-			!(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end()) &&
-			(points_left > 0) &&
-			powerUnlockable(power_cells[slot_num].id)) {
-		tip->addText(msg->get("Click to Unlock"), color_bonus);
+	if (power_cells[slot_num].requires_point && !(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end())) {
+		if (show_unlock_prompt && points_left > 0 && powerUnlockable(power_cells[slot_num].id)) {
+			tip->addText(msg->get("Click to Unlock (uses %d Skill Point)", power_cells[slot_num].requires_point), color_bonus);
+		}
+		else {
+			if (power_cells[slot_num].requires_point > points_left)
+				tip->addText(msg->get("Requires %d Skill Point", power_cells[slot_num].requires_point), color_penalty);
+			else
+				tip->addText(msg->get("Requires %d Skill Point", power_cells[slot_num].requires_point));
+		}
 	}
 }
 
