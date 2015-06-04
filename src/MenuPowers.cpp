@@ -174,6 +174,17 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	// save a copy of the base level powers, as they get overwritten during upgrades
 	power_cell_base = power_cell;
 
+	// store the appropriate level for all upgrades
+	for (unsigned i=0; i<power_cell_upgrade.size(); ++i) {
+		for (unsigned j=0; j<power_cell_base.size(); j++) {
+			std::vector<short>::iterator it = std::find(power_cell_base[j].upgrades.begin(), power_cell_base[j].upgrades.end(), power_cell_upgrade[i].id);
+			if (it != power_cell_base[j].upgrades.end()) {
+				power_cell_upgrade[i].upgrade_level = std::distance(power_cell_base[j].upgrades.begin(), it) + 2;
+				break;
+			}
+		}
+	}
+
 	// combine base and upgrade powers into a single list
 	for (unsigned i=0; i<power_cell_base.size(); ++i) {
 		power_cell_all.push_back(power_cell_base[i]);
@@ -350,6 +361,7 @@ void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upg
 	power_cell[power_cell_index].requires_power = power_cell_upgrade[upgrade_cell_index].requires_power;
 	power_cell[power_cell_index].requires_point = power_cell_upgrade[upgrade_cell_index].requires_point;
 	power_cell[power_cell_index].passive_on = power_cell_upgrade[upgrade_cell_index].passive_on;
+	power_cell[power_cell_index].upgrade_level = power_cell_upgrade[upgrade_cell_index].upgrade_level;
 
 	if (slots[power_cell_index])
 		slots[power_cell_index]->setIcon(powers->powers[power_cell_upgrade[upgrade_cell_index].id].icon);
@@ -702,6 +714,10 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells) {
 	tip->addText(powers->powers[power_cells[slot_num].id].name);
+
+	if (power_cells[slot_num].upgrade_level > 0)
+		tip->addText(msg->get("Level %d", power_cells[slot_num].upgrade_level));
+
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
 	tip->addText(powers->powers[power_cells[slot_num].id].description);
 
@@ -1001,6 +1017,9 @@ void MenuPowers::loadPower(FileParser &infile) {
 			power_cell.back().upgrades.push_back(toInt(repeat_val));
 			repeat_val = infile.nextValue();
 		}
+
+		if (!power_cell.back().upgrades.empty())
+			power_cell.back().upgrade_level = 1;
 	}
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());

@@ -63,6 +63,7 @@ public:
 	short requires_physical;
 	short requires_mental;
 	short requires_level;
+	short upgrade_level;
 	std::vector<short> upgrades;
 
 	std::vector<short> requires_power;
@@ -84,6 +85,7 @@ public:
 		, requires_physical(0)
 		, requires_mental(0)
 		, requires_level(0)
+		, upgrade_level(0)
 		, upgrades()
 		, requires_power()
 		, requires_point(false)
