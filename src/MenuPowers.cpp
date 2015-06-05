@@ -715,10 +715,10 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 }
 
 void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt) {
-	tip->addText(powers->powers[power_cells[slot_num].id].name);
-
 	if (power_cells[slot_num].upgrade_level > 0)
-		tip->addText(msg->get("Level %d", power_cells[slot_num].upgrade_level));
+		tip->addText(powers->powers[power_cells[slot_num].id].name + " (" + msg->get("Level %d", power_cells[slot_num].upgrade_level) + ")");
+	else
+		tip->addText(powers->powers[power_cells[slot_num].id].name);
 
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
 	tip->addText(powers->powers[power_cells[slot_num].id].description);
