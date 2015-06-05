@@ -205,6 +205,7 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
+		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
 		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"), false);
 		log_history->add("unset_status - " + msg->get("unsets the given campaign statuses if they are set"), false);
 		log_history->add("set_status - " + msg->get("sets the given campaign statuses"), false);
@@ -350,6 +351,21 @@ void MenuDevConsole::execute() {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
 			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <x> <y> [<map>]"), false, &color_hint);
 		}
+	}
+	else if (args[0] == "respec") {
+		pc->stats.level = 1;
+		pc->stats.xp = 0;
+		pc->stats.offense_character = 1;
+		pc->stats.defense_character = 1;
+		pc->stats.physical_character = 1;
+		pc->stats.mental_character = 1;
+		pc->stats.powers_list.clear();
+		pc->stats.powers_passive.clear();
+		pc->stats.effects.clearEffects();
+		menu_powers->applyPowerUpgrades();
+		menu_act->clear();
+		pc->respawn = true; // re-applies equipment, also revives the player
+		pc->stats.refresh_stats = true;
 	}
 	else {
 		log_history->add(msg->get("ERROR: Unknown command"), false, &color_error);
