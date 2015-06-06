@@ -1071,3 +1071,9 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
 }
+
+void MenuPowers::resetToBasePowers() {
+	for (unsigned i=0; i<power_cell.size(); ++i) {
+		power_cell[i] = power_cell_base[i];
+	}
+}

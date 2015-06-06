@@ -164,6 +164,7 @@ public:
 	short getUnspent() {
 		return points_left;
 	}
+	void resetToBasePowers();
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 

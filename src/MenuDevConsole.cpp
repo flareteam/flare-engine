@@ -362,6 +362,7 @@ void MenuDevConsole::execute() {
 		pc->stats.powers_list.clear();
 		pc->stats.powers_passive.clear();
 		pc->stats.effects.clearEffects();
+		menu_powers->resetToBasePowers();
 		menu_powers->applyPowerUpgrades();
 		menu_act->clear();
 		pc->respawn = true; // re-applies equipment, also revives the player
