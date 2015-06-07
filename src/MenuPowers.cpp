@@ -806,12 +806,23 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 	}
 
 	for (unsigned j = 0; j < power_cells[slot_num].requires_power.size(); ++j) {
+		if (power_cells[slot_num].requires_power[j] == 0) continue;
+
+		std::string req_power_name;
+		short req_index = id_by_powerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
+
+		if (power_cell_all[req_index].upgrade_level > 0)
+			req_power_name = powers->powers[power_cell_all[req_index].id].name + " (" + msg->get("Level %d", power_cell_all[req_index].upgrade_level) + ")";
+		else
+			req_power_name = powers->powers[power_cell_all[req_index].id].name;
+
+
 		// Required Power Tooltip
-		if ((power_cells[slot_num].requires_power[j] != 0) && !(requirementsMet(power_cells[slot_num].requires_power[j]))) {
-			tip->addText(msg->get("Requires Power: %s", powers->powers[power_cells[slot_num].requires_power[j]].name), color_penalty);
+		if (!(requirementsMet(power_cells[slot_num].requires_power[j]))) {
+			tip->addText(msg->get("Requires Power: %s", req_power_name), color_penalty);
 		}
-		else if ((power_cells[slot_num].requires_power[j] != 0) && (requirementsMet(power_cells[slot_num].requires_power[j]))) {
-			tip->addText(msg->get("Requires Power: %s", powers->powers[power_cells[slot_num].requires_power[j]].name));
+		else {
+			tip->addText(msg->get("Requires Power: %s", req_power_name));
 		}
 
 	}
