@@ -184,10 +184,25 @@ TooltipData WidgetListBox::checkTooltip(Point mouse) {
 /**
  * Add a new value (with tooltip) to the list
  */
-void WidgetListBox::append(std::string value, std::string tooltip) {
+void WidgetListBox::append(const std::string& value, const std::string& tooltip) {
 	values.push_back(value);
 	tooltips.push_back(tooltip);
 	selected.push_back(false);
+	refresh();
+}
+
+/**
+ * Set a value (with tooltip) at a specific index
+ */
+void WidgetListBox::set(unsigned index, const std::string& value, const std::string& tooltip) {
+	if (index >= values.size()) {
+		append(value, tooltip);
+		return;
+	}
+
+	values[index] = value;
+	tooltips[index] = tooltip;
+	selected[index] = false;
 	refresh();
 }
 

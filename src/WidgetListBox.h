@@ -60,7 +60,8 @@ public:
 	bool checkClick();
 	bool checkClick(int x, int y);
 	TooltipData checkTooltip(Point mouse);
-	void append(std::string value, std::string tooltip);
+	void append(const std::string& value, const std::string& tooltip);
+	void set(unsigned index, const std::string& value, const std::string& tooltip);
 	void remove(int index);
 	void clear();
 	void shiftUp();
