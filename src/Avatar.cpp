@@ -468,11 +468,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		}
 	}
 
-	// check for bleeding spurt
-	if (stats.effects.damage > 0 && stats.hp > 0) {
-		comb->addMessage(stats.effects.damage, stats.pos, COMBAT_MESSAGE_TAKEDMG);
-	}
-
 	// check for bleeding to death
 	if (stats.hp == 0 && !(stats.cur_state == AVATAR_DEAD)) {
 		stats.effects.triggered_death = true;

@@ -65,8 +65,11 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 		}
 	}
 	damage = emSource.damage;
+	damage_percent = emSource.damage_percent;
 	hpot = emSource.hpot;
+	hpot_percent = emSource.hpot_percent;
 	mpot = emSource.mpot;
+	mpot_percent = emSource.mpot_percent;
 	speed = emSource.speed;
 	immunity = emSource.immunity;
 	stun = emSource.stun;
@@ -93,8 +96,11 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 
 void EffectManager::clearStatus() {
 	damage = 0;
+	damage_percent = 0;
 	hpot = 0;
+	hpot_percent = 0;
 	mpot = 0;
+	mpot_percent = 0;
 	speed = 100;
 	immunity = false;
 	stun = false;
@@ -126,10 +132,16 @@ void EffectManager::logic() {
 		if (effect_list[i].duration >= 0) {
 			// @TYPE damage|Damage per second
 			if (effect_list[i].type == EFFECT_DAMAGE && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage += effect_list[i].magnitude;
+			// @TYPE damage_percent|Damage per second (percentage of max HP)
+			else if (effect_list[i].type == EFFECT_DAMAGE_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage_percent += effect_list[i].magnitude;
 			// @TYPE hpot|HP restored per second
 			else if (effect_list[i].type == EFFECT_HPOT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot += effect_list[i].magnitude;
+			// @TYPE hpot_percent|HP restored per second (percentage of max HP)
+			else if (effect_list[i].type == EFFECT_HPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot_percent += effect_list[i].magnitude;
 			// @TYPE mpot|MP restored per second
 			else if (effect_list[i].type == EFFECT_MPOT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot += effect_list[i].magnitude;
+			// @TYPE mpot_percent|MP restored per second (percentage of max MP)
+			else if (effect_list[i].type == EFFECT_MPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot_percent += effect_list[i].magnitude;
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
 			else if (effect_list[i].type == EFFECT_SPEED) speed = (effect_list[i].magnitude * speed) / 100;
 			// @TYPE immunity|Removes and prevents bleed, slow, stun, and immobilize. Magnitude is ignored.
@@ -334,8 +346,11 @@ int EffectManager::getType(const std::string type) {
 	if (type.empty()) return EFFECT_NONE;
 
 	if (type == "damage") return EFFECT_DAMAGE;
+	else if (type == "damage_percent") return EFFECT_DAMAGE_PERCENT;
 	else if (type == "hpot") return EFFECT_HPOT;
+	else if (type == "hpot_percent") return EFFECT_HPOT_PERCENT;
 	else if (type == "mpot") return EFFECT_MPOT;
+	else if (type == "mpot_percent") return EFFECT_MPOT_PERCENT;
 	else if (type == "speed") return EFFECT_SPEED;
 	else if (type == "immunity") return EFFECT_IMMUNITY;
 	else if (type == "stun") return EFFECT_STUN;
