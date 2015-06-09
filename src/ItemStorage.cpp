@@ -120,8 +120,11 @@ void ItemStorage::clear() {
  * @param slot Slot number where it will try to store the item
  */
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
-
 	if (!stack.empty()) {
+		if (items->items.empty() || stack.item <= 0 || (unsigned)stack.item > items->items.size()-1) {
+			items->addUnknownItem(stack.item);
+		}
+
 		int max_quantity = items->items[stack.item].max_quantity;
 		if (slot > -1) {
 			// a slot is specified
