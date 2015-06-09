@@ -170,6 +170,18 @@ void EnemyManager::handleNewMap () {
 		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, true);
 	}
 
+	// load enemies that can be spawn by avatar's powers
+	for (size_t i = 0; i < pc->stats.powers_list.size(); i++) {
+		int power_index = pc->stats.powers_list[i];
+		std::string spwan_type = powers->getPower(power_index).spawn_type;
+		if (spwan_type != "") {
+			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spwan_type);
+			for (size_t j = 0; j < spawn_enemies.size(); j++) {
+				loadEnemyPrototype(spawn_enemies[j].type);
+			}
+		}
+	}
+
 	anim->cleanUp();
 }
 
