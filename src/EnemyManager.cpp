@@ -45,10 +45,15 @@ void EnemyManager::loadAnimations(Enemy *e) {
 }
 
 Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
+	Enemy* e = new Enemy(prototypes.at(loadEnemyPrototype(type_id)));
+	anim->increaseCount(e->stats.animations);
+	return e;
+}
+
+size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	for (size_t i = 0; i < prototypes.size(); i++) {
 		if (prototypes[i].type == type_id) {
-			anim->increaseCount(prototypes[i].stats.animations);
-			return new Enemy(prototypes[i]);
+			return i;
 		}
 	}
 
@@ -65,8 +70,19 @@ Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
 	e.loadSounds();
 
 	prototypes.push_back(e);
+	size_t prototype = prototypes.size() - 1;
 
-	return new Enemy(prototypes.back());
+	for (size_t i = 0; i < e.stats.power_index.size(); i++) {
+		int powerIndex = e.stats.power_index[i];
+		if (powerIndex != 0 && powers->getPower(powerIndex).spawn_type != "") {
+			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(powers->getPower(powerIndex).spawn_type);
+			for (size_t j = 0; j < spawn_enemies.size(); j++) {
+				loadEnemyPrototype(spawn_enemies[j].type);
+			}
+		}
+	}
+
+	return prototype;
 }
 
 /**
@@ -90,6 +106,11 @@ void EnemyManager::handleNewMap () {
 	}
 	enemies.clear();
 
+
+	for (unsigned int i=0; i < prototypes.size(); i++) {
+		anim->decreaseCount(prototypes[i].animationSet->getName());
+		prototypes[i].unloadSounds();
+	}
 	prototypes.clear();
 
 	// load new enemies
@@ -448,5 +469,9 @@ EnemyManager::~EnemyManager() {
 		anim->decreaseCount(enemies[i]->animationSet->getName());
 		enemies[i]->unloadSounds();
 		delete enemies[i];
+	}
+	for (unsigned int i=0; i < prototypes.size(); i++) {
+		anim->decreaseCount(prototypes[i].animationSet->getName());
+		prototypes[i].unloadSounds();
 	}
 }
