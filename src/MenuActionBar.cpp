@@ -716,6 +716,7 @@ void MenuActionBar::addPower(const int id, const int target_id) {
 
 MenuActionBar::~MenuActionBar() {
 
+	menu_act = NULL;
 	if (emptyslot)
 		delete emptyslot;
 	if (disabled)

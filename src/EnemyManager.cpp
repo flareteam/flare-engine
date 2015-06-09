@@ -182,6 +182,19 @@ void EnemyManager::handleNewMap () {
 		}
 	}
 
+	// load enemies that can be spawn by powers in the action bar
+	if (menu_act != NULL) {
+		for (size_t i = 0; i < menu_act->hotkeys.size(); i++) {
+			int power_index = menu_act->hotkeys[i];
+			if (power_index != 0 && powers->getPower(power_index).spawn_type != "") {
+				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(powers->getPower(power_index).spawn_type);
+				for (size_t j = 0; j < spawn_enemies.size(); j++) {
+					loadEnemyPrototype(spawn_enemies[j].type);
+				}
+			}
+		}
+	}
+
 	anim->cleanUp();
 }
 
