@@ -45,10 +45,15 @@ void EnemyManager::loadAnimations(Enemy *e) {
 }
 
 Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
+	Enemy* e = new Enemy(prototypes.at(loadEnemyPrototype(type_id)));
+	anim->increaseCount(e->stats.animations);
+	return e;
+}
+
+size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	for (size_t i = 0; i < prototypes.size(); i++) {
 		if (prototypes[i].type == type_id) {
-			anim->increaseCount(prototypes[i].stats.animations);
-			return new Enemy(prototypes[i]);
+			return i;
 		}
 	}
 
@@ -65,8 +70,19 @@ Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
 	e.loadSounds();
 
 	prototypes.push_back(e);
+	size_t prototype = prototypes.size() - 1;
 
-	return new Enemy(prototypes.back());
+	for (size_t i = 0; i < e.stats.power_index.size(); i++) {
+		int powerIndex = e.stats.power_index[i];
+		if (powerIndex != 0 && powers->getPower(powerIndex).spawn_type != "") {
+			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(powers->getPower(powerIndex).spawn_type);
+			for (size_t j = 0; j < spawn_enemies.size(); j++) {
+				loadEnemyPrototype(spawn_enemies[j].type);
+			}
+		}
+	}
+
+	return prototype;
 }
 
 /**
@@ -90,6 +106,11 @@ void EnemyManager::handleNewMap () {
 	}
 	enemies.clear();
 
+
+	for (unsigned int i=0; i < prototypes.size(); i++) {
+		anim->decreaseCount(prototypes[i].animationSet->getName());
+		prototypes[i].unloadSounds();
+	}
 	prototypes.clear();
 
 	// load new enemies
@@ -147,6 +168,43 @@ void EnemyManager::handleNewMap () {
 		enemies.push_back(e);
 
 		mapr->collider.block(e->stats.pos.x, e->stats.pos.y, true);
+	}
+
+	// load enemies that can be spawn by avatar's powers
+	for (size_t i = 0; i < pc->stats.powers_list.size(); i++) {
+		int power_index = pc->stats.powers_list[i];
+		std::string spwan_type = powers->getPower(power_index).spawn_type;
+		if (spwan_type != "") {
+			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spwan_type);
+			for (size_t j = 0; j < spawn_enemies.size(); j++) {
+				loadEnemyPrototype(spawn_enemies[j].type);
+			}
+		}
+	}
+
+	// load enemies that can be spawn by powers in the action bar
+	if (menu_act != NULL) {
+		for (size_t i = 0; i < menu_act->hotkeys.size(); i++) {
+			int power_index = menu_act->hotkeys[i];
+			if (power_index != 0 && powers->getPower(power_index).spawn_type != "") {
+				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(powers->getPower(power_index).spawn_type);
+				for (size_t j = 0; j < spawn_enemies.size(); j++) {
+					loadEnemyPrototype(spawn_enemies[j].type);
+				}
+			}
+		}
+	}
+
+	// load enemies that can be spawn by map events
+	for (size_t i = 0; i < mapr->events.size(); i++) {
+		for (size_t j = 0; j < mapr->events[i].components.size(); j++) {
+			if (mapr->events[i].components[j].type == "spawn") {
+				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(mapr->events[i].components[j].s);
+				for (size_t k = 0; k < spawn_enemies.size(); k++) {
+					loadEnemyPrototype(spawn_enemies[k].type);
+				}
+			}
+		}
 	}
 
 	anim->cleanUp();
@@ -448,5 +506,9 @@ EnemyManager::~EnemyManager() {
 		anim->decreaseCount(enemies[i]->animationSet->getName());
 		enemies[i]->unloadSounds();
 		delete enemies[i];
+	}
+	for (unsigned int i=0; i < prototypes.size(); i++) {
+		anim->decreaseCount(prototypes[i].animationSet->getName());
+		prototypes[i].unloadSounds();
 	}
 }

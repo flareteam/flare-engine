@@ -120,3 +120,12 @@ Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int m
 		return enemyCandidates[rand() % enemyCandidates.size()];
 	}
 }
+
+std::vector<Enemy_Level> EnemyGroupManager::getEnemiesInCategory(const std::string& category) const {
+	std::map<std::string, std::vector<Enemy_Level> >::const_iterator it = _categories.find(category);
+	if (it == _categories.end()) {
+		logError("EnemyGroupManager: Could not find enemy category %s, returning empty enemy list", category.c_str());
+		return std::vector<Enemy_Level>();
+	}
+	return it->second;
+}
