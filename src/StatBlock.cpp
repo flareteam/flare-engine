@@ -212,7 +212,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 
 		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
-			if (infile->key == "vulnerable_" + ELEMENTS[i].name) {
+			if (infile->key == "vulnerable_" + ELEMENTS[i].id) {
 				// @ATTR vulnerable_$ELEMENT|integer|Percentage weakness to this element.
 				vulnerable[i] = vulnerable_base[i] = value;
 				return true;
