@@ -233,8 +233,9 @@ public:
 	void playSound(int item, Point pos = Point(0,0));
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);
 	TooltipData getShortTooltip(ItemStack item);
+	std::string getItemName(unsigned id);
 	std::string getItemType(std::string _type);
-	void addUnknownItem(int id);
+	void addUnknownItem(unsigned id);
 	bool requirementsMet(const StatBlock *stats, int item);
 
 	std::vector<Item> items;

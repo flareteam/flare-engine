@@ -250,7 +250,7 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "give_item") {
 		if (args.size() > 1) {
 			int id = toInt(args[1]);
-			if (id <= 0 || (unsigned)id >= items->items.size() || items->items[id].name == "") {
+			if (id <= 0 || (unsigned)id >= items->items.size()) {
 				log_history->add(msg->get("ERROR: Invalid item ID"), false, &color_error);
 				return;
 			}
@@ -267,7 +267,7 @@ void MenuDevConsole::execute() {
 					stack.quantity = quantity;
 					camp->rewardItem(stack);
 				}
-				log_history->add(msg->get("Added item: ") + items->items[id].name + " (" + toString(typeid(int), &quantity) + ")", false);
+				log_history->add(msg->get("Added item: ") + items->getItemName(id) + " (" + toString(typeid(int), &quantity) + ")", false);
 			}
 		}
 		else {

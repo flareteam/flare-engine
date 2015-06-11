@@ -135,7 +135,7 @@ void CampaignManager::removeItem(int item_id) {
 	if (item_id < 0 || (unsigned)item_id >= items->items.size()) return;
 
 	carried_items->remove(item_id);
-	addMsg(msg->get("%s removed.", items->items[item_id].name));
+	addMsg(msg->get("%s removed.", items->getItemName(item_id)));
 	items->playSound(item_id);
 }
 
@@ -151,9 +151,9 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 		if (istack.item != CURRENCY_ID) {
 			if (istack.quantity <= 1)
-				addMsg(msg->get("You receive %s.", items->items[istack.item].name));
+				addMsg(msg->get("You receive %s.", items->getItemName(istack.item)));
 			if (istack.quantity > 1)
-				addMsg(msg->get("You receive %s x%d.", istack.quantity, items->items[istack.item].name));
+				addMsg(msg->get("You receive %s x%d.", istack.quantity, items->getItemName(istack.item)));
 
 			items->playSound(istack.item);
 		}

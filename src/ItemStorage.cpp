@@ -55,10 +55,6 @@ void ItemStorage::setItems(std::string s) {
 			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, (int)items->items.size());
 			items->addUnknownItem(storage[i].item);
 		}
-		else if (storage[i].item != 0 && items->items[storage[i].item].name == "") {
-			logError("ItemStorage: Item with id=%d. found on position %d does not exist, marking as unknown", storage[i].item, i);
-			items->addUnknownItem(storage[i].item);
-		}
 	}
 }
 

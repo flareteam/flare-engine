@@ -408,6 +408,15 @@ void ItemManager::loadQualities(const std::string& filename, bool locateFileName
 	}
 }
 
+std::string ItemManager::getItemName(unsigned id) {
+	if (id >= items.size()) return msg->get("Unknown Item");
+
+	if (items[id].name == "")
+		items[id].name = msg->get("Unknown Item");
+
+	return items[id].name;
+}
+
 std::string ItemManager::getItemType(std::string _type) {
 	for (unsigned i=0; i<item_types.size(); ++i) {
 		if (item_types[i].id == _type)
@@ -417,12 +426,8 @@ std::string ItemManager::getItemType(std::string _type) {
 	return _type;
 }
 
-void ItemManager::addUnknownItem(int id) {
+void ItemManager::addUnknownItem(unsigned id) {
 	ensureFitsId(items, id);
-	for (unsigned i=0; i<items.size(); ++i) {
-		if (items[i].name == "")
-			items[i].name = msg->get("Unknown Item");
-	}
 }
 
 /**
@@ -599,10 +604,10 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 
 	// name
 	if (stack.quantity > 1) {
-		ss << stack.quantity << " " << items[stack.item].name;
+		ss << stack.quantity << " " << getItemName(stack.item);
 	}
 	else {
-		ss << items[stack.item].name;
+		ss << getItemName(stack.item);
 	}
 	tip.addText(ss.str(), color);
 
@@ -636,9 +641,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	// name
 	std::stringstream ss;
 	if (stack.quantity == 1)
-		ss << items[stack.item].name;
+		ss << getItemName(stack.item);
 	else
-		ss << items[stack.item].name << " (" << stack.quantity << ")";
+		ss << getItemName(stack.item) << " (" << stack.quantity << ")";
 	tip.addText(ss.str(), color);
 
 	// only show the name of the currency item
