@@ -131,7 +131,7 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			// @ATTR id|integer|An uniq id of the item used as reference from other classes.
 			id_line = true;
 			id = toInt(infile.val);
-			ensureFitsId(items, id+1);
+			addUnknownItem(id);
 
 			clear_req_stat = true;
 			clear_bonus = true;
