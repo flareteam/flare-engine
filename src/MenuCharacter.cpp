@@ -239,6 +239,21 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	setBackground("images/menus/character.png");
 
 	align();
+
+	base_stats[0] = &stats->physical_character;
+	base_stats[1] = &stats->mental_character;
+	base_stats[2] = &stats->offense_character;
+	base_stats[3] = &stats->defense_character;
+
+	base_stats_add[0] = &stats->physical_additional;
+	base_stats_add[1] = &stats->mental_additional;
+	base_stats_add[2] = &stats->offense_additional;
+	base_stats_add[3] = &stats->defense_additional;
+
+	base_bonus[0] = &stats->per_physical;
+	base_bonus[1] = &stats->per_mental;
+	base_bonus[2] = &stats->per_offense;
+	base_bonus[3] = &stats->per_defense;
 }
 
 void MenuCharacter::align() {
@@ -347,21 +362,21 @@ void MenuCharacter::refreshStats() {
 		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", stats->xp_table[stats->level]));
 	}
 
-	cstat[CSTAT_PHYSICAL].tip.clear();
-	cstat[CSTAT_PHYSICAL].tip.addText(msg->get("Physical (P) increases melee weapon proficiency and total HP."));
-	cstat[CSTAT_PHYSICAL].tip.addText(msg->get("base (%d), bonus (%d)", stats->physical_character, stats->physical_additional));
-
-	cstat[CSTAT_MENTAL].tip.clear();
-	cstat[CSTAT_MENTAL].tip.addText(msg->get("Mental (M) increases mental weapon proficiency and total MP."));
-	cstat[CSTAT_MENTAL].tip.addText(msg->get("base (%d), bonus (%d)", stats->mental_character, stats->mental_additional));
-
-	cstat[CSTAT_OFFENSE].tip.clear();
-	cstat[CSTAT_OFFENSE].tip.addText(msg->get("Offense (O) increases ranged weapon proficiency and accuracy."));
-	cstat[CSTAT_OFFENSE].tip.addText(msg->get("base (%d), bonus (%d)", stats->offense_character, stats->offense_additional));
-
-	cstat[CSTAT_DEFENSE].tip.clear();
-	cstat[CSTAT_DEFENSE].tip.addText(msg->get("Defense (D) increases armor proficiency and avoidance."));
-	cstat[CSTAT_DEFENSE].tip.addText(msg->get("base (%d), bonus (%d)", stats->defense_character, stats->defense_additional));
+	for (unsigned j=2; j<CSTAT_COUNT; ++j) {
+		cstat[j].tip.clear();
+		cstat[j].tip.addText(cstat_labels[j]);
+		cstat[j].tip.addText(msg->get("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
+		bool have_bonus = false;
+		for (unsigned i=0; i<STAT_COUNT; ++i) {
+			if (base_bonus[j-2]->at(i) > 0) {
+				if (!have_bonus) {
+					cstat[j].tip.addText("\n" + msg->get("Related stats:"));
+					have_bonus = true;
+				}
+				cstat[j].tip.addText(STAT_NAME[i]);
+			}
+		}
+	}
 }
 
 

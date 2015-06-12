@@ -90,6 +90,10 @@ private:
 
 	std::string cstat_labels[CSTAT_COUNT];
 
+	int* base_stats[4];
+	int* base_stats_add[4];
+	std::vector<int>* base_bonus[4];
+
 public:
 	MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
