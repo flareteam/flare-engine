@@ -92,8 +92,11 @@ public:
 };
 
 class Item {
-public:
+private:
 	std::string name;     // item name displayed on long and short tool tips
+	friend class ItemManager;
+
+public:
 	std::string flavor;   // optional flavor text describing the item
 	int level;            // rough estimate of quality, used in the loot algorithm
 	int set;              // item can be attached to item set
