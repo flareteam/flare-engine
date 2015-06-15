@@ -294,7 +294,7 @@ void Avatar::set_direction() {
 		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL &&
 				((inpt->pressing[UP] && !inpt->lock[UP]) || (inpt->pressing[DOWN] && !inpt->lock[UP]) ||
 				 (inpt->pressing[LEFT] && !inpt->lock[LEFT]) || (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])))
-			stats.direction = stats.direction == 7 ? 0 : stats.direction + 1;
+			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
 	}
 }
 
@@ -809,13 +809,13 @@ void Avatar::untransform() {
 		if (transform_map != mapr->getFilename()) {
 			mapr->teleportation = true;
 			mapr->teleport_mapname = transform_map;
-			mapr->teleport_destination.x = floor(transform_pos.x) + 0.5f;
-			mapr->teleport_destination.y = floor(transform_pos.y) + 0.5f;
+			mapr->teleport_destination.x = static_cast<float>(floor(transform_pos.x)) + 0.5f;
+			mapr->teleport_destination.y = static_cast<float>(floor(transform_pos.y)) + 0.5f;
 			transform_map = "";
 		}
 		else {
-			stats.pos.x = floor(transform_pos.x) + 0.5f;
-			stats.pos.y = floor(transform_pos.y) + 0.5f;
+			stats.pos.x = static_cast<float>(floor(transform_pos.x)) + 0.5f;
+			stats.pos.y = static_cast<float>(floor(transform_pos.y)) + 0.5f;
 		}
 	}
 	mapr->collider.block(stats.pos.x, stats.pos.y, false);

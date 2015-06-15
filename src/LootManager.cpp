@@ -69,7 +69,7 @@ LootManager::LootManager()
 			}
 			else if (infile.key == "vendor_ratio") {
 				// @ATTR vendor_ratio|integer|Prices ratio for vendors
-				VENDOR_RATIO = toInt(infile.val) / 100.0f;
+				VENDOR_RATIO = static_cast<float>(toInt(infile.val)) / 100.0f;
 			}
 			else if (infile.key == "sfx_loot") {
 				// @ATTR sfx_loot|string|Filename of a sound effect to play for dropping loot.
@@ -311,7 +311,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		int real_chance = ec->z;
 
 		if (ec->c != 0 && ec->c != CURRENCY_ID) {
-			real_chance = (int)((float)ec->z * (hero->get(STAT_ITEM_FIND) + 100) / 100.f);
+			real_chance = static_cast<int>(static_cast<float>(ec->z) * static_cast<float>(hero->get(STAT_ITEM_FIND) + 100) / 100.f);
 		}
 
 		if (real_chance >= chance) {

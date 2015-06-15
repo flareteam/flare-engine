@@ -154,9 +154,9 @@ void MenuBook::loadText(FileParser &infile) {
 	// @ATTR text.text_font|r (integer), g (integer), b (integer), style (string)|Font color and style.
 	else if (infile.key == "text_font") {
 		Color color;
-		color.r = popFirstInt(infile.val);
-		color.g = popFirstInt(infile.val);
-		color.b = popFirstInt(infile.val);
+		color.r = static_cast<Uint8>(popFirstInt(infile.val));
+		color.g = static_cast<Uint8>(popFirstInt(infile.val));
+		color.b = static_cast<Uint8>(popFirstInt(infile.val));
 		textColor.back() = color;
 		textFont.back() = popFirstString(infile.val);
 	}

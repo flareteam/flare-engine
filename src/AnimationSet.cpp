@@ -73,9 +73,9 @@ void AnimationSet::load() {
 		return;
 
 	std::string _name = "";
-	int position = 0;
-	int frames = 0;
-	int duration = 0;
+	unsigned short position = 0;
+	unsigned short frames = 0;
+	unsigned short duration = 0;
 	Point render_size;
 	Point render_offset;
 	std::string type = "";
@@ -85,7 +85,7 @@ void AnimationSet::load() {
 	Animation *newanim = NULL;
 	std::vector<short> active_frames;
 
-	int parent_anim_frames = 0;
+	unsigned short parent_anim_frames = 0;
 
 	// Parse the file and on each new section create an animation object from the data parsed previously
 	while (parser.next()) {
@@ -103,7 +103,7 @@ void AnimationSet::load() {
 			compressed_loading = false;
 
 			if (parent) {
-				parent_anim_frames = parent->getAnimationFrames(parser.section);
+				parent_anim_frames = static_cast<unsigned short>(parent->getAnimationFrames(parser.section));
 			}
 		}
 		if (parser.key == "image") {
@@ -117,15 +117,11 @@ void AnimationSet::load() {
 		}
 		else if (parser.key == "position") {
 			// @ATTR position|integer|Number of frames to the right to use as the first frame. Unpacked animations only.
-			position = toInt(parser.val);
+			position = static_cast<unsigned short>(toInt(parser.val));
 		}
 		else if (parser.key == "frames") {
 			// @ATTR frames|integer|The total number of frames
-			frames = toInt(parser.val);
-			if (frames < 0) {
-				parser.error("AnimationSet: Frame count can not be negative.");
-				frames = 0;
-			}
+			frames = static_cast<unsigned short>(toInt(parser.val));
 			if (parent && frames != parent_anim_frames) {
 				parser.error("AnimationSet: Frame count %d != %d for matching animation in %s", frames, parent_anim_frames, parent->getName().c_str());
 				frames = parent_anim_frames;
@@ -133,7 +129,7 @@ void AnimationSet::load() {
 		}
 		else if (parser.key == "duration") {
 			// @ATTR duration|integer|The duration of the entire animation in 'ms' or 's'.
-			duration = parse_duration(parser.val);
+			duration = static_cast<unsigned short>(parse_duration(parser.val));
 		}
 		else if (parser.key == "type")
 			// @ATTR type|[play_once, back_forth, looped]|How to loop (or not loop) this animation.
@@ -157,7 +153,7 @@ void AnimationSet::load() {
 			}
 			else {
 				while (nv != "") {
-					active_frames.push_back(toInt(nv));
+					active_frames.push_back(static_cast<short>(toInt(nv)));
 					nv = parser.nextValue();
 				}
 				std::sort(active_frames.begin(), active_frames.end());
@@ -178,8 +174,8 @@ void AnimationSet::load() {
 			// frame = index, direction, x, y, w, h, offsetx, offsety
 			Rect r;
 			Point offset;
-			const int index = toInt(parser.nextValue());
-			const int direction = toInt(parser.nextValue());
+			const unsigned short index = static_cast<unsigned short>(toInt(parser.nextValue()));
+			const unsigned short direction = static_cast<unsigned short>(toInt(parser.nextValue()));
 			r.x = toInt(parser.nextValue());
 			r.y = toInt(parser.nextValue());
 			r.w = toInt(parser.nextValue());

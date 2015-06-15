@@ -138,7 +138,7 @@ public:
 	WidgetTooltip       * tip;
 	TooltipData         tip_buf;
 
-	short active_tab;
+	int active_tab;
 
 	Rect frame;
 	std::vector<std::string> language_ISO;

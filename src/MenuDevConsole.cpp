@@ -325,8 +325,8 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "teleport") {
 		if (args.size() > 2) {
 			FPoint dest;
-			dest.x = toInt(args[1]) + 0.5f;
-			dest.y = toInt(args[2]) + 0.5f;
+			dest.x = static_cast<float>(toInt(args[1])) + 0.5f;
+			dest.y = static_cast<float>(toInt(args[2])) + 0.5f;
 
 			if (args.size() > 3) {
 				if (fileExists(mods->locate(args[3]))) {

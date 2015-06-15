@@ -143,7 +143,7 @@ void EnemyManager::handleNewMap () {
 		e->stats.waypoints = me.waypoints;
 		e->stats.pos.x = me.pos.x;
 		e->stats.pos.y = me.pos.y;
-		e->stats.direction = me.direction;
+		e->stats.direction = static_cast<unsigned char>(me.direction);
 		e->stats.wander = me.wander_radius > 0;
 		e->stats.setWanderArea(me.wander_radius);
 
@@ -238,7 +238,7 @@ void EnemyManager::handleSpawn() {
 			espawn.summoner->summons.push_back(&(e->stats));
 		}
 
-		e->stats.direction = espawn.direction;
+		e->stats.direction = static_cast<unsigned char>(espawn.direction);
 
 		Enemy_Level el = enemyg->getRandomEnemy(espawn.type, 0, 0);
 		e->type = el.type;
@@ -454,7 +454,7 @@ void EnemyManager::checkEnemiesforXP() {
 			if(enemies[i]->kill_source_type == SOURCE_TYPE_ALLY)
 				xp_multiplier = (float)PARTY_EXP_PERCENTAGE / 100.0f;
 
-			camp->rewardXP((int)(enemies[i]->stats.xp * xp_multiplier), false);
+			camp->rewardXP(static_cast<int>((static_cast<float>(enemies[i]->stats.xp) * xp_multiplier)), false);
 			enemies[i]->reward_xp = false; // clear flag
 		}
 	}

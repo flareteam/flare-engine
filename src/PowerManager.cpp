@@ -930,17 +930,19 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 		initHazard(power_index, src_stats, target, haz);
 
 		//calculate individual missile angle
-		float offset_angle = ((1.0f - powers[power_index].count)/2 + i) * (powers[power_index].missile_angle * M_PI / 180.0f);
+		float offset_angle = ((1.0f - static_cast<float>(powers[power_index].count))/2 + static_cast<float>(i)) * (static_cast<float>(powers[power_index].missile_angle) * static_cast<float>(M_PI) / 180.0f);
 		float variance = 0;
-		if (powers[power_index].angle_variance != 0)
-			variance = pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].angle_variance) * M_PI / 180.0f; //random between 0 and angle_variance away
+		if (powers[power_index].angle_variance != 0) {
+			//random between 0 and angle_variance away
+			variance = static_cast<float>(pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].angle_variance) * M_PI / 180.0f);
+		}
 		float alpha = theta + offset_angle + variance;
 
 		//calculate the missile velocity
 		float speed_var = 0;
 		if (powers[power_index].speed_variance != 0) {
 			const float var = powers[power_index].speed_variance;
-			speed_var = ((var * 2.0f * rand()) / RAND_MAX) - var;
+			speed_var = ((var * 2.0f * static_cast<float>(rand())) / static_cast<float>(RAND_MAX)) - var;
 		}
 
 		// set speed and angle
@@ -975,8 +977,8 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
-	speed.x = powers[power_index].speed * cos(theta);
-	speed.y = powers[power_index].speed * sin(theta);
+	speed.x = powers[power_index].speed * static_cast<float>(cos(theta));
+	speed.y = powers[power_index].speed * static_cast<float>(sin(theta));
 
 	location_iterator = src_stats->pos;
 

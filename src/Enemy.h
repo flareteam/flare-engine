@@ -39,7 +39,7 @@ public:
 	~Enemy();
 	bool lineOfSight();
 	void logic();
-	int faceNextBest(float mapx, float mapy);
+	unsigned char faceNextBest(float mapx, float mapy);
 	void newState(int state);
 	virtual void doRewards(int source_type);
 

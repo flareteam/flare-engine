@@ -260,9 +260,9 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	}
 	else if (infile.key == "keybinds_bg_color") {
 		// @ATTR keybinds_bg_color|r (integer), g (integer), b (integer)|Background color for the keybindings scrollbox.
-		scrollpane_color.r = x1;
-		scrollpane_color.g = y1;
-		scrollpane_color.b = x2;
+		scrollpane_color.r = static_cast<Uint8>(x1);
+		scrollpane_color.g = static_cast<Uint8>(y1);
+		scrollpane_color.b = static_cast<Uint8>(x2);
 	}
 	else if (infile.key == "scrollpane") {
 		// @ATTR scrollpane|x (integer), y (integer), w (integer), h (integer)|Position of the keybinding scrollbox relative to the frame.
@@ -598,11 +598,11 @@ void GameStateConfigDesktop::logicVideo() {
 	}
 	else if (change_gamma_cb->checkClick()) {
 		if (change_gamma_cb->isChecked()) {
-			CHANGE_GAMMA=true;
+			CHANGE_GAMMA = true;
 			gamma_sl->enabled = true;
 		}
 		else {
-			CHANGE_GAMMA=false;
+			CHANGE_GAMMA = false;
 			GAMMA = 1.0;
 			gamma_sl->enabled = false;
 			gamma_sl->set(5,20,(int)(GAMMA*10.0));
@@ -612,7 +612,7 @@ void GameStateConfigDesktop::logicVideo() {
 	else if (CHANGE_GAMMA) {
 		gamma_sl->enabled = true;
 		if (gamma_sl->checkClick()) {
-			GAMMA=(gamma_sl->getValue())*0.1f;
+			GAMMA = static_cast<float>(gamma_sl->getValue())*0.1f;
 			render_device->setGamma(GAMMA);
 		}
 	}

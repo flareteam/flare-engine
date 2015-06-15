@@ -907,7 +907,7 @@ int Item::getSellPrice() {
 	if (price_sell != 0)
 		new_price = price_sell;
 	else
-		new_price = static_cast<int>(price * VENDOR_RATIO);
+		new_price = static_cast<int>(static_cast<float>(price) * VENDOR_RATIO);
 	if (new_price == 0) new_price = 1;
 
 	return new_price;

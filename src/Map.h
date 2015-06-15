@@ -152,7 +152,7 @@ public:
 	unsigned short w;
 	unsigned short h;
 	FPoint spawn;
-	int spawn_dir;
+	unsigned char spawn_dir;
 
 };
 

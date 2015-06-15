@@ -60,9 +60,9 @@ Enemy::Enemy(const Enemy& e)
 /**
  * The current direction leads to a wall.  Try the next best direction, if one is available.
  */
-int Enemy::faceNextBest(float mapx, float mapy) {
-	float dx = fabs(mapx - stats.pos.x);
-	float dy = fabs(mapy - stats.pos.y);
+unsigned char Enemy::faceNextBest(float mapx, float mapy) {
+	float dx = static_cast<float>(fabs(mapx - stats.pos.x));
+	float dy = static_cast<float>(fabs(mapy - stats.pos.y));
 	switch (stats.direction) {
 		case 0:
 			if (dy > dx) return 7;

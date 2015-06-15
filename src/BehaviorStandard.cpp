@@ -137,7 +137,7 @@ void BehaviorStandard::doUpkeep() {
  * Locate the player and set various targeting info
  */
 void BehaviorStandard::findTarget() {
-	float stealth_threat_range = (e->stats.threat_range * (100 - e->stats.hero_stealth)) / 100;
+	float stealth_threat_range = (e->stats.threat_range * (100 - static_cast<float>(e->stats.hero_stealth))) / 100;
 
 	// stunned enemies can't act
 	if (e->stats.effects.stun) return;
@@ -480,7 +480,7 @@ void BehaviorStandard::checkMoveStateStance() {
 		}
 		else {
 			collided = true;
-			int prev_direction = e->stats.direction;
+			unsigned char prev_direction = e->stats.direction;
 
 			// hit an obstacle, try the next best angle
 			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
@@ -503,7 +503,7 @@ void BehaviorStandard::checkMoveStateMove() {
 	// try to continue moving
 	else if (!e->move()) {
 		collided = true;
-		int prev_direction = e->stats.direction;
+		unsigned char prev_direction = e->stats.direction;
 		// hit an obstacle.  Try the next best angle
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 		if (!e->move()) {
@@ -648,8 +648,8 @@ void BehaviorStandard::updateState() {
 
 FPoint BehaviorStandard::getWanderPoint() {
 	FPoint waypoint;
-	waypoint.x = e->stats.wander_area.x + (rand() % (e->stats.wander_area.w)) + 0.5f;
-	waypoint.y = e->stats.wander_area.y + (rand() % (e->stats.wander_area.h)) + 0.5f;
+	waypoint.x = static_cast<float>(e->stats.wander_area.x) + static_cast<float>(rand() % (e->stats.wander_area.w)) + 0.5f;
+	waypoint.y = static_cast<float>(e->stats.wander_area.y) + static_cast<float>(rand() % (e->stats.wander_area.h)) + 0.5f;
 
 	if (mapr->collider.is_valid_position(waypoint.x, waypoint.y, e->stats.movement_type, e->stats.hero)) {
 		return waypoint;

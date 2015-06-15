@@ -133,7 +133,7 @@ void Scene::refreshWidgets() {
 			caption_box->resize(VIEW_W, caption_size.y);
 		}
 
-		caption_box->setPos(0, (float)VIEW_H * caption_margins.y);
+		caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * caption_margins.y));
 
 		font->renderShadowed(caption, VIEW_W / 2, 0,
 							 JUSTIFY_CENTER,
@@ -146,13 +146,13 @@ void Scene::refreshWidgets() {
 		Rect art_dest;
 		if (scale_graphics) {
 			float ratio = VIEW_H / (float)art_size.y;
-			art_dest.w = (float)art_size.x * ratio;
+			art_dest.w = static_cast<int>(static_cast<float>(art_size.x) * ratio);
 			art_dest.h = VIEW_H;
 			scale_to_width = false;
 
 			if (art_dest.w > VIEW_W) {
 				ratio = VIEW_W / (float)art_size.x;
-				art_dest.h = (float)art_size.y * ratio;
+				art_dest.h = static_cast<int>(static_cast<float>(art_size.y) * ratio);
 				art_dest.w = VIEW_W;
 				scale_to_width = true;
 			}

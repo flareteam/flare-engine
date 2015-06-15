@@ -118,13 +118,13 @@ int Map::load(std::string fname) {
 			Event_Component *ec_path = events[i].getComponent("power_path");
 			if (ec_path) {
 				// source is power path start
-				statb->pos.x = ec_path->x + 0.5f;
-				statb->pos.y = ec_path->y + 0.5f;
+				statb->pos.x = static_cast<float>(ec_path->x) + 0.5f;
+				statb->pos.y = static_cast<float>(ec_path->y) + 0.5f;
 			}
 			else {
 				// source is event location
-				statb->pos.x = events[i].location.x + 0.5f;
-				statb->pos.y = events[i].location.y + 0.5f;
+				statb->pos.x = static_cast<float>(events[i].location.x) + 0.5f;
+				statb->pos.y = static_cast<float>(events[i].location.y) + 0.5f;
 			}
 
 			Event_Component *ec_damage = events[i].getComponent("power_damage");
@@ -156,11 +156,11 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "width") {
 		// @ATTR width|integer|Width of map
-		this->w = std::max(toInt(infile.val), 1);
+		this->w = static_cast<unsigned short>(std::max(toInt(infile.val), 1));
 	}
 	else if (infile.key == "height") {
 		// @ATTR height|integer|Height of map
-		this->h = std::max(toInt(infile.val), 1);
+		this->h = static_cast<unsigned short>(std::max(toInt(infile.val), 1));
 	}
 	else if (infile.key == "tileset") {
 		// @ATTR tileset|string|Filename of a tileset definition to use for map
@@ -172,9 +172,9 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR location|[x(integer), y(integer), direction(integer))|Spawn point location in map
-		spawn.x = toInt(infile.nextValue()) + 0.5f;
-		spawn.y = toInt(infile.nextValue()) + 0.5f;
-		spawn_dir = toInt(infile.nextValue());
+		spawn.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+		spawn.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+		spawn_dir = static_cast<unsigned char>(toInt(infile.nextValue()));
 	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|integer|Inherited from Tiled map file. Unused by engine.
@@ -231,7 +231,7 @@ void Map::loadLayer(FileParser &infile) {
 			}
 
 			for (int i=0; i<w; i++)
-				layers.back()[i][j] = popFirstInt(val, ',');
+				layers.back()[i][j] = static_cast<unsigned short>(popFirstInt(val, ','));
 		}
 	}
 	else {
@@ -263,7 +263,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "chance") {
 		// @ATTR enemygroup.chance|integer|Percentage of chance
-		float n = std::max(0, toInt(infile.nextValue())) / 100.0f;
+		float n = static_cast<float>(std::max(0, toInt(infile.nextValue()))) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
 	else if (infile.key == "direction") {
@@ -278,8 +278,8 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 
 		while (a != none) {
 			FPoint p;
-			p.x = toInt(a) + 0.5f;
-			p.y = toInt(b) + 0.5f;
+			p.x = static_cast<float>(toInt(a)) + 0.5f;
+			p.y = static_cast<float>(toInt(b)) + 0.5f;
 			group->waypoints.push(p);
 			a = infile.nextValue();
 			b = infile.nextValue();
@@ -328,14 +328,14 @@ void Map::loadNPC(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
-		npcs.back().pos.x = toInt(infile.nextValue()) + 0.5f;
-		npcs.back().pos.y = toInt(infile.nextValue()) + 0.5f;
+		npcs.back().pos.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+		npcs.back().pos.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
 
 		// make sure this NPC has a collision tile
 		// otherwise, it becomes possible for the player to stand "inside" the npc, which will trigger their event infinitely
 		if (collision_layer != -1) {
-			unsigned tile_x = npcs.back().pos.x;
-			unsigned tile_y = npcs.back().pos.y;
+			unsigned tile_x = static_cast<unsigned>(npcs.back().pos.x);
+			unsigned tile_y = static_cast<unsigned>(npcs.back().pos.y);
 			if (tile_x < (unsigned)w && tile_y < (unsigned)h) {
 				short unsigned int& tile = layers[collision_layer][tile_x][tile_y];
 				if (tile == BLOCKS_NONE) {

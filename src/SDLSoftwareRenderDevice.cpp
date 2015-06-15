@@ -69,11 +69,11 @@ void SDLSoftwareImage::drawPixel(int x, int y, Uint32 pixel) {
 
 	switch(bpp) {
 		case 1:
-			*p = pixel;
+			*p = static_cast<Uint8>(pixel);
 			break;
 
 		case 2:
-			*(Uint16 *)p = pixel;
+			*(Uint16 *)p = static_cast<Uint16>(pixel);
 			break;
 
 		case 3:
@@ -406,11 +406,11 @@ void SDLSoftwareRenderDevice::drawPixel(
 	}
 	switch(bpp) {
 		case 1:
-			*p = color;
+			*p = static_cast<Uint8>(color);
 			break;
 
 		case 2:
-			*(Uint16 *)p = color;
+			*(Uint16 *)p = static_cast<Uint16>(color);
 			break;
 
 		case 3:
@@ -644,11 +644,11 @@ void SDLSoftwareRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *
 void SDLSoftwareRenderDevice::windowResize() {
 	int w,h;
 	SDL_GetWindowSize(window, &w, &h);
-	SCREEN_W = w;
-	SCREEN_H = h;
+	SCREEN_W = static_cast<unsigned short>(w);
+	SCREEN_H = static_cast<unsigned short>(h);
 
-	float scale = (float)VIEW_H / (float)SCREEN_H;
-	VIEW_W = (int)((float)SCREEN_W * scale);
+	float scale = static_cast<float>(VIEW_H) / static_cast<float>(SCREEN_H);
+	VIEW_W = static_cast<unsigned short>(static_cast<float>(SCREEN_W) * scale);
 
 	// letterbox if too tall
 	if (VIEW_W < MIN_SCREEN_W) {

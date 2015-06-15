@@ -443,8 +443,8 @@ void loadTilesetSettings() {
 		while (infile.next()) {
 			if (infile.key == "tile_size") {
 				// @ATTR tile_size|w (integet), h (integer)|The width and height of a tile.
-				TILE_W = toInt(infile.nextValue());
-				TILE_H = toInt(infile.nextValue());
+				TILE_W = static_cast<unsigned short>(toInt(infile.nextValue()));
+				TILE_H = static_cast<unsigned short>(toInt(infile.nextValue()));
 				TILE_W_HALF = TILE_W /2;
 				TILE_H_HALF = TILE_H /2;
 			}
@@ -608,24 +608,24 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			// @ATTR menu_frame_width|integer|Width of frame for New Game, Configuration, etc. menus.
 			if (infile.key == "menu_frame_width")
-				FRAME_W = toInt(infile.val);
+				FRAME_W = static_cast<unsigned short>(toInt(infile.val));
 			// @ATTR menu_frame_height|integer|Height of frame for New Game, Configuration, etc. menus.
 			else if (infile.key == "menu_frame_height")
-				FRAME_H = toInt(infile.val);
+				FRAME_H = static_cast<unsigned short>(toInt(infile.val));
 			// @ATTR icon_size|integer|Size of icons.
 			else if (infile.key == "icon_size")
-				ICON_SIZE = toInt(infile.val);
+				ICON_SIZE = static_cast<unsigned short>(toInt(infile.val));
 			// @ATTR required_width|integer|Minimum window/screen resolution width.
 			else if (infile.key == "required_width") {
-				MIN_SCREEN_W = toInt(infile.val);
+				MIN_SCREEN_W = static_cast<unsigned short>(toInt(infile.val));
 			}
 			// @ATTR required_height|integer|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
-				MIN_SCREEN_H = toInt(infile.val);
+				MIN_SCREEN_H = static_cast<unsigned short>(toInt(infile.val));
 			}
 			// @ATTR virtual_height|integer|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
 			else if (infile.key == "virtual_height") {
-				VIEW_H = toInt(infile.val);
+				VIEW_H = static_cast<unsigned short>(toInt(infile.val));
 				VIEW_H_HALF = VIEW_H / 2;
 			}
 			// @ATTR ignore_texture_filter|boolean|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
@@ -664,21 +664,21 @@ void loadMiscSettings() {
 	if (infile.open("engine/combat.txt")) {
 		while (infile.next()) {
 			// @ATTR max_absorb_percent|integer|Maximum percentage of damage that can be absorbed.
-			if (infile.key == "max_absorb_percent") MAX_ABSORB = toInt(infile.val);
+			if (infile.key == "max_absorb_percent") MAX_ABSORB = static_cast<short>(toInt(infile.val));
 			// @ATTR max_resist_percent|integer|Maximum percentage of elemental damage that can be resisted.
-			else if (infile.key == "max_resist_percent") MAX_RESIST = toInt(infile.val);
+			else if (infile.key == "max_resist_percent") MAX_RESIST = static_cast<short>(toInt(infile.val));
 			// @ATTR max_block_percent|integer|Maximum percentage of damage that can be blocked.
-			else if (infile.key == "max_block_percent") MAX_BLOCK = toInt(infile.val);
+			else if (infile.key == "max_block_percent") MAX_BLOCK = static_cast<short>(toInt(infile.val));
 			// @ATTR max_avoidance_percent|integer|Maximum percentage chance that hazards can be avoided.
-			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = toInt(infile.val);
+			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = static_cast<short>(toInt(infile.val));
 			// @ATTR min_absorb_percent|integer|Minimum percentage of damage that can be absorbed.
-			else if (infile.key == "min_absorb_percent") MIN_ABSORB = toInt(infile.val);
+			else if (infile.key == "min_absorb_percent") MIN_ABSORB = static_cast<short>(toInt(infile.val));
 			// @ATTR min_resist_percent|integer|Minimum percentage of elemental damage that can be resisted.
-			else if (infile.key == "min_resist_percent") MIN_RESIST = toInt(infile.val);
+			else if (infile.key == "min_resist_percent") MIN_RESIST = static_cast<short>(toInt(infile.val));
 			// @ATTR min_block_percent|integer|Minimum percentage of damage that can be blocked.
-			else if (infile.key == "min_block_percent") MIN_BLOCK = toInt(infile.val);
+			else if (infile.key == "min_block_percent") MIN_BLOCK = static_cast<short>(toInt(infile.val));
 			// @ATTR min_avoidance_percent|integer|Minimum percentage chance that hazards can be avoided.
-			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = toInt(infile.val);
+			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = static_cast<short>(toInt(infile.val));
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}

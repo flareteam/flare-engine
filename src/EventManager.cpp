@@ -99,8 +99,8 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->location.h = toInt(infile.nextValue());
 
 		if (evnt->center.x == -1 && evnt->center.y == -1) {
-			evnt->center.x = evnt->location.x + (float)evnt->location.w/2;
-			evnt->center.y = evnt->location.y + (float)evnt->location.h/2;
+			evnt->center.x = static_cast<float>(evnt->location.x) + static_cast<float>(evnt->location.w)/2;
+			evnt->center.y = static_cast<float>(evnt->location.y) + static_cast<float>(evnt->location.h)/2;
 		}
 	}
 	else if (infile.key == "hotspot") {
@@ -118,8 +118,8 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->hotspot.h = toInt(infile.nextValue());
 		}
 
-		evnt->center.x = evnt->hotspot.x + (float)evnt->hotspot.w/2;
-		evnt->center.y = evnt->hotspot.y + (float)evnt->hotspot.h/2;
+		evnt->center.x = static_cast<float>(evnt->hotspot.x) + static_cast<float>(evnt->hotspot.w)/2;
+		evnt->center.y = static_cast<float>(evnt->hotspot.y) + static_cast<float>(evnt->hotspot.h)/2;
 	}
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown in 'ms' or 's'.
@@ -464,8 +464,8 @@ bool EventManager::executeEvent(Event &ev) {
 			if (fileExists(mods->locate(ec->s))) {
 				mapr->teleportation = true;
 				mapr->teleport_mapname = ec->s;
-				mapr->teleport_destination.x = ec->x + 0.5f;
-				mapr->teleport_destination.y = ec->y + 0.5f;
+				mapr->teleport_destination.x = static_cast<float>(ec->x) + 0.5f;
+				mapr->teleport_destination.y = static_cast<float>(ec->y) + 0.5f;
 			}
 			else {
 				ev.keep_after_trigger = false;
@@ -475,13 +475,13 @@ bool EventManager::executeEvent(Event &ev) {
 		else if (ec->type == "intramap") {
 			mapr->teleportation = true;
 			mapr->teleport_mapname = "";
-			mapr->teleport_destination.x = ec->x + 0.5f;
-			mapr->teleport_destination.y = ec->y + 0.5f;
+			mapr->teleport_destination.x = static_cast<float>(ec->x) + 0.5f;
+			mapr->teleport_destination.y = static_cast<float>(ec->y) + 0.5f;
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
 				if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h) {
-					mapr->collider.colmap[ec->x][ec->y] = ec->z;
+					mapr->collider.colmap[ec->x][ec->y] = static_cast<unsigned short>(ec->z);
 					mapr->map_change = true;
 				}
 				else
@@ -492,7 +492,7 @@ bool EventManager::executeEvent(Event &ev) {
 				if (!mapr->isValidTile(ec->z))
 					logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", ec->x, ec->y, ec->z);
 				else if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
-					mapr->layers[index][ec->x][ec->y] = ec->z;
+					mapr->layers[index][ec->x][ec->y] = static_cast<unsigned short>(ec->z);
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
 			}
@@ -503,13 +503,13 @@ bool EventManager::executeEvent(Event &ev) {
 
 			if (ec->x != -1 && ec->y != -1) {
 				if (ec->x != 0 && ec->y != 0) {
-					pos.x = ec->x + 0.5f;
-					pos.y = ec->y + 0.5f;
+					pos.x = static_cast<float>(ec->x) + 0.5f;
+					pos.y = static_cast<float>(ec->y) + 0.5f;
 				}
 			}
 			else if (ev.location.x != 0 && ev.location.y != 0) {
-				pos.x = ev.location.x + 0.5f;
-				pos.y = ev.location.y + 0.5f;
+				pos.x = static_cast<float>(ev.location.x) + 0.5f;
+				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
 			if (ev.type == "on_load")
@@ -570,14 +570,14 @@ bool EventManager::executeEvent(Event &ev) {
 				}
 				// targets fixed path option
 				else {
-					target.x = ec_path->a + 0.5f;
-					target.y = ec_path->b + 0.5f;
+					target.x = static_cast<float>(ec_path->a) + 0.5f;
+					target.y = static_cast<float>(ec_path->b) + 0.5f;
 				}
 			}
 			// no path specified, targets self location
 			else {
-				target.x = ev.location.x + 0.5f;
-				target.y = ev.location.y + 0.5f;
+				target.x = static_cast<float>(ev.location.x) + 0.5f;
+				target.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
 			// ec->x is power id
@@ -587,8 +587,8 @@ bool EventManager::executeEvent(Event &ev) {
 		else if (ec->type == "stash") {
 			mapr->stash = toBool(ec->s);
 			if (mapr->stash) {
-				mapr->stash_pos.x = ev.location.x + 0.5f;
-				mapr->stash_pos.y = ev.location.y + 0.5f;
+				mapr->stash_pos.x = static_cast<float>(ev.location.x) + 0.5f;
+				mapr->stash_pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 		}
 		else if (ec->type == "npc") {

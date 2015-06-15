@@ -146,8 +146,8 @@ FPoint collision_to_map(Point p);
 FPoint calcVector(FPoint pos, int direction, float dist);
 float calcDist(FPoint p1, FPoint p2);
 float calcTheta(float x1, float y1, float x2, float y2);
-int calcDirection(float x0, float y0, float x1, float y1);
-int calcDirection(const FPoint &src, const FPoint &dst);
+unsigned char calcDirection(float x0, float y0, float x1, float y1);
+unsigned char calcDirection(const FPoint &src, const FPoint &dst);
 bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(Rect r, Point target);
 

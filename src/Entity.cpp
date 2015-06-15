@@ -137,16 +137,16 @@ void Entity::move_from_offending_tile() {
 		float pushy = 0;
 
 		if (mapr->collider.is_valid_position(stats.pos.x + 1, stats.pos.y, stats.movement_type, stats.hero))
-			pushx += 0.1f * (2 - (int(stats.pos.x + 1) + 0.5f - stats.pos.x));
+			pushx += 0.1f * (2 - (static_cast<float>(static_cast<int>(stats.pos.x + 1)) + 0.5f - stats.pos.x));
 
 		if (mapr->collider.is_valid_position(stats.pos.x - 1, stats.pos.y, stats.movement_type, stats.hero))
-			pushx -= 0.1f * (2 - (stats.pos.x - (int(stats.pos.x - 1) + 0.5f)));
+			pushx -= 0.1f * (2 - (stats.pos.x - (static_cast<float>(static_cast<int>(stats.pos.x - 1)) + 0.5f)));
 
 		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y + 1, stats.movement_type, stats.hero))
-			pushy += 0.1f * (2 - (int(stats.pos.y + 1) + 0.5f - stats.pos.y));
+			pushy += 0.1f * (2 - (static_cast<float>(static_cast<int>(stats.pos.y + 1)) + 0.5f - stats.pos.y));
 
 		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y- 1, stats.movement_type, stats.hero))
-			pushy -= 0.1f * (2 - (stats.pos.y - (int(stats.pos.y - 1) + 0.5f)));
+			pushy -= 0.1f * (2 - (stats.pos.y - (static_cast<float>(static_cast<int>(stats.pos.y - 1)) + 0.5f)));
 
 		stats.pos.x += pushx;
 		stats.pos.y += pushy;
@@ -156,8 +156,8 @@ void Entity::move_from_offending_tile() {
 		// just blink away. This will seriously irritate the player, but there
 		// is probably no other easy way to repair the game
 		if (pushx == 0 && pushy == 0) {
-			stats.pos.x = randBetween(1, mapr->w-1) + 0.5f;
-			stats.pos.y = randBetween(1, mapr->h-1) + 0.5f;
+			stats.pos.x = static_cast<float>(randBetween(1, mapr->w-1)) + 0.5f;
+			stats.pos.y = static_cast<float>(randBetween(1, mapr->h-1)) + 0.5f;
 			logError("Entity: %s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!",
 					stats.hero ? "The hero" : "An entity");
 		}
@@ -177,8 +177,8 @@ bool Entity::move() {
 	if (stats.effects.stun || stats.effects.speed == 0) return false;
 
 	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
-	float dx = speed * directionDeltaX[stats.direction];
-	float dy = speed * directionDeltaY[stats.direction];
+	float dx = speed * static_cast<float>(directionDeltaX[stats.direction]);
+	float dy = speed * static_cast<float>(directionDeltaY[stats.direction]);
 
 	bool full_move = mapr->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, stats.hero);
 
@@ -249,7 +249,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	if (h.missile && percentChance(stats.get(STAT_REFLECT))) {
 		// reflect the missile 180 degrees
-		h.setAngle(h.angle+M_PI);
+		h.setAngle(h.angle+static_cast<float>(M_PI));
 
 		// change hazard source to match the reflector's type
 		// maybe we should change the source stats pointer to the reflector's StatBlock

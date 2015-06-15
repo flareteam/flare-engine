@@ -98,7 +98,7 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 	const float epsilon = 0.01f;
 	if (step_x != 0) {
 		assert(step_y == 0);
-		float dy = y - floor(y);
+		float dy = y - static_cast<float>(floor(y));
 
 		if (is_valid_tile(int(x), int(y) + 1, movement_type, is_hero)
 				&& is_valid_tile(int(x) + sgn(step_x), int(y) + 1, movement_type, is_hero)
@@ -117,7 +117,7 @@ bool MapCollision::small_step_forced_slide(float &x, float &y, float step_x, flo
 	}
 	else if (step_y != 0) {
 		assert(step_x == 0);
-		float dx = x - floor(x);
+		float dx = x - static_cast<float>(floor(x));
 
 		if (is_valid_tile(int(x) + 1, int(y), movement_type, is_hero)
 				&& is_valid_tile(int(x) + 1, int(y) + sgn(step_y), movement_type, is_hero)
@@ -276,8 +276,8 @@ bool MapCollision::is_valid_position(const float& x, const float& y, MOVEMENTTYP
 bool MapCollision::line_check(const float& x1, const float& y1, const float& x2, const float& y2, int check_type, MOVEMENTTYPE movement_type) {
 	float x = x1;
 	float y = y1;
-	float dx = fabs(x2 - x1);
-	float dy = fabs(y2 - y1);
+	float dx = static_cast<float>(fabs(x2 - x1));
+	float dy = static_cast<float>(fabs(y2 - y1));
 	float step_x;
 	float step_y;
 	int steps = (int)std::max(dx, dy);
@@ -521,8 +521,8 @@ FPoint MapCollision::get_random_neighbor(Point target, int range, bool ignore_bl
 	for (int i=-range; i<=range; i++) {
 		for (int j=-range; j<=range; j++) {
 			if (i == 0 && j == 0) continue; // skip the middle tile
-			new_target.x = target.x + i + 0.5f;
-			new_target.y = target.y + j + 0.5f;
+			new_target.x = static_cast<float>(target.x + i) + 0.5f;
+			new_target.y = static_cast<float>(target.y + j) + 0.5f;
 			if (is_valid_position(new_target.x,new_target.y,MOVEMENT_NORMAL,false) || ignore_blocked)
 				valid_tiles.push_back(new_target);
 		}

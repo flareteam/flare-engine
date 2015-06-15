@@ -88,7 +88,7 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 
 void MapRenderer::pushEnemyGroup(Map_Group &g) {
 	// activate at all?
-	float activate_chance = (rand() % 100) / 100.0f;
+	float activate_chance = static_cast<float>(rand() % 100) / 100.0f;
 	if (activate_chance > g.chance) {
 		return;
 	}
@@ -107,8 +107,8 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 
 	while (enemies_to_spawn && allowed_misses) {
 
-		float x = (g.area.x == 0) ? (g.pos.x + 0.5f) : (g.pos.x + (rand() % g.area.x)) + 0.5f;
-		float y = (g.area.y == 0) ? (g.pos.y + 0.5f) : (g.pos.y + (rand() % g.area.y)) + 0.5f;
+		float x = (g.area.x == 0) ? (static_cast<float>(g.pos.x) + 0.5f) : (static_cast<float>(g.pos.x + (rand() % g.area.x))) + 0.5f;
+		float y = (g.area.y == 0) ? (static_cast<float>(g.pos.y) + 0.5f) : (static_cast<float>(g.pos.y + (rand() % g.area.y))) + 0.5f;
 
 		if (enemyGroupPlaceEnemy(x, y, g))
 			enemies_to_spawn--;
@@ -121,8 +121,8 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 		// first free spot
 		for (int x = g.pos.x; x < g.pos.x + g.area.x && enemies_to_spawn; x++) {
 			for (int y = g.pos.y; y < g.pos.y + g.area.y && enemies_to_spawn; y++) {
-				float xpos = x + 0.5f;
-				float ypos = y + 0.5f;
+				float xpos = static_cast<float>(x) + 0.5f;
+				float ypos = static_cast<float>(y) + 0.5f;
 				if (enemyGroupPlaceEnemy(xpos, ypos, g))
 					enemies_to_spawn--;
 			}
@@ -241,20 +241,20 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(std::vector<Renderable> &r) {
 	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
-		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
-		const int commax = (const int)((float)(it->map_pos.x - tilex) * (2<<16));
-		const int commay = (const int)((float)(it->map_pos.y - tiley) * (2<<16));
-		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
+		const unsigned tilex = static_cast<const unsigned>(floor(it->map_pos.x));
+		const unsigned tiley = static_cast<const unsigned>(floor(it->map_pos.y));
+		const int commax = static_cast<const int>((it->map_pos.x - static_cast<float>(tilex)) * (2<<16));
+		const int commay = static_cast<const int>((it->map_pos.y - static_cast<float>(tiley)) * (2<<16));
+		it->prio += (static_cast<uint64_t>(tilex + tiley) << 54) + (static_cast<uint64_t>(tilex) << 42) + ((commax + commay) << 16);
 	}
 }
 
 void calculatePriosOrtho(std::vector<Renderable> &r) {
 	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
-		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
-		const int commay = (const int)(1024 * it->map_pos.y);
-		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
+		const unsigned tilex = static_cast<const unsigned>(floor(it->map_pos.x));
+		const unsigned tiley = static_cast<const unsigned>(floor(it->map_pos.y));
+		const int commay = static_cast<const int>(1024 * it->map_pos.y);
+		it->prio += (static_cast<uint64_t>(tiley) << 48) + (static_cast<uint64_t>(tilex) << 32) + (commay << 16);
 	}
 }
 
@@ -265,8 +265,8 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 		shakycam.y = cam.y;
 	}
 	else {
-		shakycam.x = cam.x + (rand() % 16 - 8) * 0.0078125f;
-		shakycam.y = cam.y + (rand() % 16 - 8) * 0.0078125f;
+		shakycam.x = cam.x + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
+		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
 	}
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
@@ -453,8 +453,8 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
-	short int startj = std::max(0, upperleft.y);
-	short int starti = std::max(0, upperleft.x);
+	short int startj = static_cast<short int>(std::max(0, upperleft.y));
+	short int starti = static_cast<short int>(std::max(0, upperleft.x));
 	const short max_tiles_width =  std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
@@ -495,8 +495,8 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
-	short int startj = std::max(0, upperleft.y);
-	short int starti = std::max(0, upperleft.x);
+	short int startj = static_cast<short int>(std::max(0, upperleft.y));
+	short int starti = static_cast<short int>(std::max(0, upperleft.x));
 	const short max_tiles_width  = std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 

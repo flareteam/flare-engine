@@ -574,11 +574,11 @@ void GameStateConfigBase::logicAudio() {
 		if (music_volume_sl->checkClick()) {
 			if (MUSIC_VOLUME == 0)
 				reload_music = true;
-			MUSIC_VOLUME = music_volume_sl->getValue();
+			MUSIC_VOLUME = static_cast<short>(music_volume_sl->getValue());
 			snd->setVolumeMusic(MUSIC_VOLUME);
 		}
 		else if (sound_volume_sl->checkClick()) {
-			SOUND_VOLUME = sound_volume_sl->getValue();
+			SOUND_VOLUME = static_cast<short>(sound_volume_sl->getValue());
 			snd->setVolumeSFX(SOUND_VOLUME);
 		}
 	}
