@@ -236,7 +236,7 @@ void MenuManager::handleKeyboardNavigation() {
 				}
 			}
 			else if (chr->visible && chr->tablist.getCurrent() != -1 && !chr->tablist.isLocked()) {
-				if ((chr->tablist.getCurrent() + 1 == (int)chr->tablist.size()) &&
+				if ((chr->tablist.getCurrent() + 1 == static_cast<int>(chr->tablist.size())) &&
 						inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
 					inpt->lock[RIGHT] = true;
 					chr->tablist.lock();
@@ -325,9 +325,9 @@ void MenuManager::handleKeyboardNavigation() {
 
 	// lock left and right where buy/sell slots meet
 	if (vendor->visible && drag_src != 0) {
-		if (vendor->tablist.getCurrent() == 0 || vendor->tablist.getCurrent() == (int)vendor->tablist.size()/2)
+		if (vendor->tablist.getCurrent() == 0 || vendor->tablist.getCurrent() == static_cast<int>(vendor->tablist.size())/2)
 			inpt->lock[LEFT] = true;
-		if (vendor->tablist.getCurrent() == (int)vendor->tablist.size()-1 || vendor->tablist.getCurrent() == (int)vendor->tablist.size()/2 - 1)
+		if (vendor->tablist.getCurrent() == static_cast<int>(vendor->tablist.size())-1 || vendor->tablist.getCurrent() == static_cast<int>(vendor->tablist.size())/2 - 1)
 			inpt->lock[RIGHT] = true;
 	}
 
@@ -336,10 +336,10 @@ void MenuManager::handleKeyboardNavigation() {
 		int VENDOR_ROWS = vendor->getRowsCount() * 2;
 		int VENDOR_COLS = vendor->tablist.size()/VENDOR_ROWS;
 
-		bool buy_down = vendor->tablist.getCurrent() >= 0 && vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2-VENDOR_COLS;
-		bool sell_down = vendor->tablist.getCurrent() >= (int)vendor->tablist.size()/2 && vendor->tablist.getCurrent() < (int)vendor->tablist.size()-VENDOR_COLS;
-		bool buy_up = vendor->tablist.getCurrent() >= VENDOR_COLS && vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2;
-		bool sell_up = vendor->tablist.getCurrent() >= (int)vendor->tablist.size()/2+VENDOR_COLS && vendor->tablist.getCurrent() < (int)vendor->tablist.size();
+		bool buy_down = vendor->tablist.getCurrent() >= 0 && vendor->tablist.getCurrent() < static_cast<int>(vendor->tablist.size())/2-VENDOR_COLS;
+		bool sell_down = vendor->tablist.getCurrent() >= static_cast<int>(vendor->tablist.size())/2 && vendor->tablist.getCurrent() < static_cast<int>(vendor->tablist.size())-VENDOR_COLS;
+		bool buy_up = vendor->tablist.getCurrent() >= VENDOR_COLS && vendor->tablist.getCurrent() < static_cast<int>(vendor->tablist.size())/2;
+		bool sell_up = vendor->tablist.getCurrent() >= static_cast<int>(vendor->tablist.size())/2+VENDOR_COLS && vendor->tablist.getCurrent() < static_cast<int>(vendor->tablist.size());
 
 		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 			inpt->lock[DOWN] = true;
@@ -410,7 +410,7 @@ void MenuManager::logic() {
 	hp->update(stats->hp, stats->get(STAT_HP_MAX), inpt->mouse);
 	mp->update(stats->mp, stats->get(STAT_MP_MAX), inpt->mouse);
 
-	if (stats->level == (int)stats->xp_table.size())
+	if (stats->level == static_cast<int>(stats->xp_table.size()))
 		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d", stats->xp));
 	else
 		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
@@ -949,7 +949,7 @@ void MenuManager::logic() {
 
 		if (act->hotkeys[i] != -1) {
 			// first check if we're using a two-step power
-			if (act->twostep_slot != -1 && (unsigned)act->twostep_slot != i) {
+			if (act->twostep_slot != -1 && static_cast<unsigned>(act->twostep_slot) != i) {
 				act->slot_enabled[i] = false;
 				continue;
 			}
@@ -957,7 +957,7 @@ void MenuManager::logic() {
 			int item_id = 0;
 			int equipped_item_id = 0;
 
-			if ((unsigned)act->hotkeys[i] < powers->powers.size()) {
+			if (static_cast<unsigned>(act->hotkeys[i]) < powers->powers.size()) {
 				item_id = powers->powers[act->hotkeys[i]].requires_item;
 				equipped_item_id = powers->powers[act->hotkeys[i]].requires_equipped_item;
 			}
@@ -1044,7 +1044,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		Point src_slot;
 		WidgetSlot * vendor_slot;
 
-		if (vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2)
+		if (vendor->tablist.getCurrent() < static_cast<int>(vendor->tablist.size())/2)
 			vendor_slot = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()];
 		else
 			vendor_slot = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - vendor->tablist.size()/2];
@@ -1305,13 +1305,13 @@ void MenuManager::handleKeyboardTooltips() {
 	TooltipData keyb_tip_new_act;
 
 	if (vendor->visible && vendor->tablist.getCurrent() != -1) {
-		if (vendor->tablist.getCurrent() < (int)vendor->tablist.size()/2) {
+		if (vendor->tablist.getCurrent() < static_cast<int>(vendor->tablist.size())/2) {
 			keydrag_pos.x = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.x;
 			keydrag_pos.y = vendor->stock[VENDOR_BUY].slots[vendor->tablist.getCurrent()]->pos.y;
 		}
 		else {
-			keydrag_pos.x = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - (int)vendor->tablist.size()/2]->pos.x;
-			keydrag_pos.y = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - (int)vendor->tablist.size()/2]->pos.y;
+			keydrag_pos.x = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - static_cast<int>(vendor->tablist.size())/2]->pos.x;
+			keydrag_pos.y = vendor->stock[VENDOR_SELL].slots[vendor->tablist.getCurrent() - static_cast<int>(vendor->tablist.size())/2]->pos.y;
 		}
 		keyb_tip_new_vendor = vendor->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_vendor.isEmpty()) {

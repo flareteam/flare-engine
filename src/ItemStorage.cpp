@@ -51,8 +51,8 @@ void ItemStorage::setItems(std::string s) {
 			logError("ItemStorage: Item on position %d has negative id, skipping", i);
 			storage[i].clear();
 		}
-		else if (items->items.empty() || (unsigned)storage[i].item > items->items.size()-1) {
-			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, (int)items->items.size());
+		else if (items->items.empty() || static_cast<unsigned>(storage[i].item) > items->items.size()-1) {
+			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, static_cast<int>(items->items.size()));
 			items->addUnknownItem(storage[i].item);
 		}
 	}
@@ -117,7 +117,7 @@ void ItemStorage::clear() {
  */
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
 	if (!stack.empty()) {
-		if (items->items.empty() || stack.item <= 0 || (unsigned)stack.item > items->items.size()-1) {
+		if (items->items.empty() || stack.item <= 0 || static_cast<unsigned>(stack.item) > items->items.size()-1) {
 			items->addUnknownItem(stack.item);
 		}
 

@@ -285,7 +285,7 @@ void MenuActionBar::render() {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 
-		if (hotkeys[i] != 0 && (unsigned)hotkeys_mod[i] < powers->powers.size()) {
+		if (hotkeys[i] != 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
 			const Power &power = powers->getPower(hotkeys_mod[i]);
 
 			//see if the slot should be greyed out
@@ -294,7 +294,7 @@ void MenuActionBar::render() {
 							  && !hero->stats.effects.stun
 							  && hero->stats.alive
 							  && hero->stats.canUsePower(power, hotkeys_mod[i])
-							  && (twostep_slot == -1 || (unsigned)twostep_slot == i);
+							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
 			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
 								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
@@ -350,7 +350,7 @@ void MenuActionBar::renderCooldowns() {
 			item_src.w = item_src.h = ICON_SIZE;
 
 			// Wipe from bottom to top
-			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown && (twostep_slot == -1 || (unsigned)twostep_slot == i)) {
+			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i)) {
 				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
 			}
 
@@ -468,7 +468,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 
 		if (slot_enabled[i]) {
 			// part two of two step activation
-			if ((unsigned)twostep_slot == i && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			if (static_cast<unsigned>(twostep_slot) == i && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 				have_aim = true;
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
@@ -496,7 +496,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			}
 
 			// joystick/keyboard action button
-			else if (inpt->pressing[ACTIONBAR_USE] && (unsigned)tablist.getCurrent() == i) {
+			else if (inpt->pressing[ACTIONBAR_USE] && static_cast<unsigned>(tablist.getCurrent()) == i) {
 				have_aim = false;
 				slot_activated[i] = true;
 				action.power = hotkeys_mod[i];
@@ -522,7 +522,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// a power slot was activated
-		if (action.power > 0 && (unsigned)action.power < powers->powers.size()) {
+		if (action.power > 0 && static_cast<unsigned>(action.power) < powers->powers.size()) {
 			const Power &power = powers->getPower(action.power);
 			bool can_use_power = true;
 			action.instant_item = (power.new_state == POWSTATE_INSTANT && power.requires_item > 0);
@@ -603,7 +603,7 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
  */
 void MenuActionBar::set(std::vector<int> power_id) {
 	for (unsigned int i = 0; i < slots_count; i++) {
-		if ((unsigned)power_id[i] >= powers->powers.size())
+		if (static_cast<unsigned>(power_id[i]) >= powers->powers.size())
 			continue;
 
 		hotkeys[i] = power_id[i];
@@ -678,7 +678,7 @@ bool MenuActionBar::isWithinMenus(const Point& mouse) {
  * So a target_id of 0 will place the power in an empty slot, if available
  */
 void MenuActionBar::addPower(const int id, const int target_id) {
-	if ((unsigned)id >= powers->powers.size())
+	if (static_cast<unsigned>(id) >= powers->powers.size())
 		return;
 
 	// can't put passive powers on the action bar

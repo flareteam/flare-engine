@@ -116,7 +116,7 @@ void MenuNPCActions::update() {
 	for(size_t i=0; i<npc_actions.size(); i++) {
 		h += ITEM_SPACING;
 		if (npc_actions[i].label) {
-			w = std::max((int)npc_actions[i].label->bounds.w, w);
+			w = std::max(static_cast<int>(npc_actions[i].label->bounds.w), w);
 			h += npc_actions[i].label->bounds.h;
 		}
 		else
@@ -227,7 +227,7 @@ void MenuNPCActions::setNPC(NPC *pnpc) {
 	/* enumerate available dialog topics */
 	std::vector<int> nodes;
 	npc->getDialogNodes(nodes);
-	for (int i = (int)nodes.size() - 1; i >= 0; i--) {
+	for (int i = static_cast<int>(nodes.size()) - 1; i >= 0; i--) {
 
 		if (first_dialog_node == -1 && topics == 0)
 			first_dialog_node = nodes[i];
@@ -326,7 +326,7 @@ void MenuNPCActions::logic() {
 	}
 
 	/* is main1 pressed */
-	if ((int)current_action > -1 && ((inpt->pressing[MAIN1] && !NO_MOUSE) || (inpt->pressing[ACCEPT] && NO_MOUSE))) {
+	if (static_cast<int>(current_action) > -1 && ((inpt->pressing[MAIN1] && !NO_MOUSE) || (inpt->pressing[ACCEPT] && NO_MOUSE))) {
 		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
@@ -362,7 +362,7 @@ void MenuNPCActions::keyboardLogic() {
 		inpt->lock[UP] = true;
 		do {
 			current_action--;
-			if ((int)current_action < 0)
+			if (static_cast<int>(current_action) < 0)
 				current_action = npc_actions.size()-1;
 		}
 		while (npc_actions[current_action].label == NULL);

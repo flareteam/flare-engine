@@ -220,7 +220,7 @@ bool NPC::playSound(int type, int id) {
 		return true;
 	}
 	if (type == NPC_VOX_QUEST) {
-		if (id < 0 || id >= (int)vox_quests.size()) return false;
+		if (id < 0 || id >= static_cast<int>(vox_quests.size())) return false;
 		snd->play(vox_quests[id], "NPC_VOX");
 		return true;
 	}

@@ -341,7 +341,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 
 	else return false;
 
-	if (keybind_num > -1 && (unsigned)keybind_num < keybinds_lb.size() && (unsigned)keybind_num < keybinds_btn.size()) {
+	if (keybind_num > -1 && static_cast<unsigned>(keybind_num) < keybinds_lb.size() && static_cast<unsigned>(keybind_num) < keybinds_btn.size()) {
 		//keybindings
 		keybinds_lb[keybind_num]->setX(x1);
 		keybinds_lb[keybind_num]->setY(y1);
@@ -452,7 +452,7 @@ void GameStateConfigDesktop::updateVideo() {
 		GAMMA = 1.0;
 		gamma_sl->enabled = false;
 	}
-	gamma_sl->set(5,20,(int)(GAMMA*10.0));
+	gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
 	render_device->setGamma(GAMMA);
 }
 
@@ -605,7 +605,7 @@ void GameStateConfigDesktop::logicVideo() {
 			CHANGE_GAMMA = false;
 			GAMMA = 1.0;
 			gamma_sl->enabled = false;
-			gamma_sl->set(5,20,(int)(GAMMA*10.0));
+			gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
 			render_device->setGamma(GAMMA);
 		}
 	}
@@ -744,9 +744,9 @@ void GameStateConfigDesktop::refreshWidgets() {
 void GameStateConfigDesktop::scanKey(int button) {
 	// clear the keybind if the user presses CTRL+Delete
 	if (input_confirm->visible && input_confirm->confirmClicked) {
-		if ((unsigned)button < key_count) inpt->binding[button] = -1;
-		else if ((unsigned)button < key_count*2) inpt->binding_alt[button%key_count] = -1;
-		else if ((unsigned)button < key_count*3) inpt->binding_joy[button%key_count] = -1;
+		if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = -1;
+		else if (static_cast<unsigned>(button) < key_count*2) inpt->binding_alt[button%key_count] = -1;
+		else if (static_cast<unsigned>(button) < key_count*3) inpt->binding_joy[button%key_count] = -1;
 
 		inpt->pressing[button%key_count] = false;
 		inpt->lock[button%key_count] = false;
@@ -760,9 +760,9 @@ void GameStateConfigDesktop::scanKey(int button) {
 
 	if (input_confirm->visible && !input_confirm->isWithinButtons) {
 		// keyboard & mouse
-		if ((unsigned)button < key_count*2) {
+		if (static_cast<unsigned>(button) < key_count*2) {
 			if (inpt->last_button != -1 && inpt->last_button < 8) {
-				if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_button;
+				if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = inpt->last_button;
 				else inpt->binding_alt[button-key_count] = inpt->last_button;
 
 				inpt->pressing[button%key_count] = false;
@@ -775,7 +775,7 @@ void GameStateConfigDesktop::scanKey(int button) {
 				return;
 			}
 			if (inpt->last_key != -1) {
-				if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_key;
+				if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = inpt->last_key;
 				else inpt->binding_alt[button-key_count] = inpt->last_key;
 
 				inpt->pressing[button%key_count] = false;
@@ -789,7 +789,7 @@ void GameStateConfigDesktop::scanKey(int button) {
 			}
 		}
 		// joystick
-		else if ((unsigned)button >= key_count*2 && inpt->last_joybutton != -1) {
+		else if (static_cast<unsigned>(button) >= key_count*2 && inpt->last_joybutton != -1) {
 			inpt->binding_joy[button-(key_count*2)] = inpt->last_joybutton;
 
 			keybinds_btn[button]->label = msg->get("Button %d", inpt->binding_joy[button-(key_count*2)]);

@@ -336,7 +336,7 @@ void Map::loadNPC(FileParser &infile) {
 		if (collision_layer != -1) {
 			unsigned tile_x = static_cast<unsigned>(npcs.back().pos.x);
 			unsigned tile_y = static_cast<unsigned>(npcs.back().pos.y);
-			if (tile_x < (unsigned)w && tile_y < (unsigned)h) {
+			if (tile_x < static_cast<unsigned>(w) && tile_y < static_cast<unsigned>(h)) {
 				short unsigned int& tile = layers[collision_layer][tile_x][tile_y];
 				if (tile == BLOCKS_NONE) {
 					logError("Map: NPC at (%d, %d) does not have a collision tile. Creating one now.", tile_x, tile_y);

@@ -317,7 +317,7 @@ void GameStatePlay::checkTeleport() {
 				mapr->respawn_point = pc->stats.pos;
 			}
 			else {
-				logError("GameStatePlay: Spawn position (%d, %d) is blocked.", (int)pc->stats.pos.x, (int)pc->stats.pos.y);
+				logError("GameStatePlay: Spawn position (%d, %d) is blocked.", static_cast<int>(pc->stats.pos.x), static_cast<int>(pc->stats.pos.y));
 			}
 
 			// return to title (permadeath) OR auto-save

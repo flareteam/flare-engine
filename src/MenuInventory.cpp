@@ -985,7 +985,7 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 }
 
 int MenuInventory::getEquippedCount() {
-	return (int)equipped_area.size();
+	return static_cast<int>(equipped_area.size());
 }
 
 int MenuInventory::getCarriedRows() {

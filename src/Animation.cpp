@@ -121,7 +121,7 @@ void Animation::addFrame(unsigned short index, unsigned short kind, Rect rect, P
 
 	if (index >= gfx.size()/max_kinds) {
 		logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]",
-				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, (int)gfx.size()/max_kinds);
+				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, static_cast<int>(gfx.size())/max_kinds);
 		return;
 	}
 	if (kind > max_kinds-1) {

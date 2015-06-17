@@ -136,8 +136,8 @@ void LootManager::logic() {
 
 		if (it->on_ground && !it->sound_played && !it->stack.empty()) {
 			Point pos;
-			pos.x = (int)it->pos.x;
-			pos.y = (int)it->pos.y;
+			pos.x = static_cast<int>(it->pos.x);
+			pos.y = static_cast<int>(it->pos.y);
 			items->playSound(it->stack.item, pos);
 			it->sound_played = true;
 		}
@@ -148,7 +148,7 @@ void LootManager::logic() {
 
 	// clear any tiles that were blocked from dropped loot
 	for (unsigned i=0; i<tiles_to_unblock.size(); i++) {
-		mapr->collider.unblock((float)tiles_to_unblock[i].x, (float)tiles_to_unblock[i].y);
+		mapr->collider.unblock(static_cast<float>(tiles_to_unblock[i].x), static_cast<float>(tiles_to_unblock[i].y));
 	}
 	tiles_to_unblock.clear();
 }

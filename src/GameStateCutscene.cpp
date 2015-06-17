@@ -120,7 +120,7 @@ bool Scene::logic() {
 
 void Scene::refreshWidgets() {
 	if (!caption.empty()) {
-		int caption_width = VIEW_W - (int)(VIEW_W * (caption_margins.x * 2.0f));
+		int caption_width = VIEW_W - static_cast<int>(VIEW_W * (caption_margins.x * 2.0f));
 		font->setFont("font_captions");
 		caption_size = font->calc_size(caption, caption_width);
 
@@ -145,13 +145,13 @@ void Scene::refreshWidgets() {
 	if (art) {
 		Rect art_dest;
 		if (scale_graphics) {
-			float ratio = VIEW_H / (float)art_size.y;
+			float ratio = VIEW_H / static_cast<float>(art_size.y);
 			art_dest.w = static_cast<int>(static_cast<float>(art_size.x) * ratio);
 			art_dest.h = VIEW_H;
 			scale_to_width = false;
 
 			if (art_dest.w > VIEW_W) {
-				ratio = VIEW_W / (float)art_size.x;
+				ratio = VIEW_W / static_cast<float>(art_size.x);
 				art_dest.h = static_cast<int>(static_cast<float>(art_size.y) * ratio);
 				art_dest.w = VIEW_W;
 				scale_to_width = true;

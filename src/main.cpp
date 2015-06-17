@@ -279,7 +279,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (!done) {
-		srand((unsigned int)time(NULL));
+		srand(static_cast<unsigned int>(time(NULL)));
 		init(render_device_name);
 
 		if (debug_event)

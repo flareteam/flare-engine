@@ -250,7 +250,7 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "give_item") {
 		if (args.size() > 1) {
 			int id = toInt(args[1]);
-			if (id <= 0 || (unsigned)id >= items->items.size()) {
+			if (id <= 0 || static_cast<unsigned>(id) >= items->items.size()) {
 				log_history->add(msg->get("ERROR: Invalid item ID"), false, &color_error);
 				return;
 			}

@@ -41,7 +41,7 @@ public:
 class FPoint {
 public:
 	float x, y;
-	FPoint(Point _p) : x((float)_p.x), y((float)_p.y) {}
+	FPoint(Point _p) : x(static_cast<float>(_p.x)), y(static_cast<float>(_p.y)) {}
 	FPoint() : x(0), y(0) {}
 	FPoint(float _x, float _y) : x(_x), y(_y) {}
 };

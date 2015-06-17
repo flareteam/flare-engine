@@ -132,7 +132,7 @@ void CampaignManager::removeCurrency(int quantity) {
 }
 
 void CampaignManager::removeItem(int item_id) {
-	if (item_id < 0 || (unsigned)item_id >= items->items.size()) return;
+	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
 
 	carried_items->remove(item_id);
 	addMsg(msg->get("%s removed.", items->getItemName(item_id)));

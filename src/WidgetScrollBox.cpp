@@ -270,7 +270,7 @@ bool WidgetScrollBox::getNext() {
 	if (currentChild != -1)
 		children[currentChild]->in_focus = false;
 	currentChild+=1;
-	currentChild = ((unsigned)currentChild == children.size()) ? 0 : currentChild;
+	currentChild = (static_cast<unsigned>(currentChild) == children.size()) ? 0 : currentChild;
 
 	if (children[currentChild]->pos.y > (cursor + pos.h) ||
 			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {

@@ -239,7 +239,7 @@ void MapSaver::writeEvents(std::ofstream& map_file)
 		if (map->events[i].cooldown != 0)
 		{
 			std::string suffix = "ms";
-			int value = (int)(1000.f * map->events[i].cooldown / MAX_FRAMES_PER_SEC);
+			int value = static_cast<int>(1000.f * map->events[i].cooldown / MAX_FRAMES_PER_SEC);
 			if (value % 1000 == 0)
 			{
 				value = map->events[i].cooldown / MAX_FRAMES_PER_SEC;
@@ -342,7 +342,7 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 		}
 		else if (e.type == "shakycam") {
 			std::string suffix = "ms";
-			int value = (int)(1000.f * e.x / MAX_FRAMES_PER_SEC);
+			int value = static_cast<int>(1000.f * e.x / MAX_FRAMES_PER_SEC);
 			if (value % 1000 == 0)
 			{
 				value = e.x / MAX_FRAMES_PER_SEC;

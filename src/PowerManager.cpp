@@ -794,8 +794,8 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		// handle loot
 		for (unsigned i=0; i<powers[power_index].loot.size(); i++) {
 			loot.push_back(powers[power_index].loot[i]);
-			loot.back().x = (int)src_stats->pos.x;
-			loot.back().y = (int)src_stats->pos.y;
+			loot.back().x = static_cast<int>(src_stats->pos.x);
+			loot.back().y = static_cast<int>(src_stats->pos.y);
 		}
 	}
 }
@@ -1161,7 +1161,7 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
  * Activate is basically a switch/redirect to the appropriate function
  */
 bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target) {
-	if ((unsigned)power_index >= powers.size())
+	if (static_cast<unsigned>(power_index) >= powers.size())
 		return false;
 
 	if (src_stats->hero) {

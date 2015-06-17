@@ -466,13 +466,13 @@ bool WidgetListBox::getNext() {
 	int sel = getSelected();
 	if (sel != -1) selected[sel] = false;
 
-	if(sel == (int)values.size()-1) {
+	if(sel == static_cast<int>(values.size())-1) {
 		selected[0] = true;
 		while (getSelected() < cursor) scrollUp();
 	}
 	else {
 		selected[sel+1] = true;
-		while (getSelected() > cursor+(int)rows.size()-1) scrollDown();
+		while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) scrollDown();
 	}
 
 	return true;
@@ -487,7 +487,7 @@ bool WidgetListBox::getPrev() {
 
 	if(sel == 0) {
 		selected[values.size()-1] = true;
-		while (getSelected() > cursor+(int)rows.size()-1) scrollDown();
+		while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) scrollDown();
 	}
 	else {
 		selected[sel-1] = true;

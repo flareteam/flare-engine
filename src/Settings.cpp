@@ -486,7 +486,7 @@ void loadTilesetSettings() {
 		}
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
-		logError("Settings: One of UNITS_PER_PIXEL values is zero! %dx%d", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);
+		logError("Settings: One of UNITS_PER_PIXEL values is zero! %dx%d", static_cast<int>(UNITS_PER_PIXEL_X), static_cast<int>(UNITS_PER_PIXEL_Y));
 		Exit(1);
 	}
 }

@@ -377,7 +377,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	int_fast16_t j = upperleft.y - tset.max_size_y + tset.max_size_x;
 	int_fast16_t i = upperleft.x - tset.max_size_y - tset.max_size_x;
 
-	while (r_cursor != r_end && ((int)(r_cursor->map_pos.x) + (int)(r_cursor->map_pos.y) < i + j || (int)(r_cursor->map_pos.x) < i)) // implicit floor
+	while (r_cursor != r_end && (static_cast<int>(r_cursor->map_pos.x) + static_cast<int>(r_cursor->map_pos.y) < i + j || static_cast<int>(r_cursor->map_pos.x) < i)) // implicit floor
 		++r_cursor;
 
 	if (index_objectlayer >= layers.size())
@@ -417,7 +417,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 			}
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && ((int)r_cursor->map_pos.x == i && (int)r_cursor->map_pos.y == j)) { // implicit floor by int cast
+			while (r_cursor != r_end && (static_cast<int>(r_cursor->map_pos.x) == i && static_cast<int>(r_cursor->map_pos.y) == j)) { // implicit floor by int cast
 				drawRenderable(r_cursor);
 				++r_cursor;
 			}
@@ -429,7 +429,7 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 		else
 			j++;
 
-		while (r_cursor != r_end && ((int)r_cursor->map_pos.x + (int)r_cursor->map_pos.y < i + j || (int)r_cursor->map_pos.x <= i)) // implicit floor by int cast
+		while (r_cursor != r_end && (static_cast<int>(r_cursor->map_pos.x) + static_cast<int>(r_cursor->map_pos.y) < i + j || static_cast<int>(r_cursor->map_pos.x) <= i)) // implicit floor by int cast
 			++r_cursor;
 	}
 }
@@ -500,7 +500,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	const short max_tiles_width  = std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
-	while (r_cursor != r_end && (int)(r_cursor->map_pos.y) < startj)
+	while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) < startj)
 		++r_cursor;
 
 	if (index_objectlayer >= layers.size())
@@ -519,14 +519,14 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 			}
 			p.x += TILE_W;
 
-			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) < i) // implicit floor
+			while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) == j && static_cast<int>(r_cursor->map_pos.x) < i) // implicit floor
 				++r_cursor;
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) == i) // implicit floor
+			while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) == j && static_cast<int>(r_cursor->map_pos.x) == i) // implicit floor
 				drawRenderable(r_cursor++);
 		}
-		while (r_cursor != r_end && (int)(r_cursor->map_pos.y) <= j) // implicit floor
+		while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) <= j) // implicit floor
 			++r_cursor;
 	}
 }
@@ -807,7 +807,7 @@ void MapRenderer::createTooltip(Event_Component *ec) {
  * Activate a power that is attached to an event
  */
 void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target) {
-	if (power_index < 0 || (unsigned)power_index >= powers->powers.size()) {
+	if (power_index < 0 || static_cast<unsigned>(power_index) >= powers->powers.size()) {
 		logError("MapRenderer: Power index is out of bounds.");
 		return;
 	}

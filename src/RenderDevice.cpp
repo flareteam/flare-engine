@@ -126,26 +126,26 @@ Rect Sprite::getClip() {
 	return src;
 }
 void Sprite::setDest(const Rect& _dest) {
-	dest.x = (float)_dest.x;
-	dest.y = (float)_dest.y;
+	dest.x = static_cast<float>(_dest.x);
+	dest.y = static_cast<float>(_dest.y);
 }
 
 void Sprite::setDest(const Point& _dest) {
-	dest.x = (float)_dest.x;
-	dest.y = (float)_dest.y;
+	dest.x = static_cast<float>(_dest.x);
+	dest.y = static_cast<float>(_dest.y);
 }
 
 void Sprite::setDest(int x, int y) {
-	dest.x = (float)x;
-	dest.y = (float)y;
+	dest.x = static_cast<float>(x);
+	dest.y = static_cast<float>(y);
 }
 
 void Sprite::setDestX(int x) {
-	dest.x = (float)x;
+	dest.x = static_cast<float>(x);
 }
 
 void Sprite::setDestY(int y) {
-	dest.y = (float)y;
+	dest.y = static_cast<float>(y);
 }
 
 FPoint Sprite::getDest() {

@@ -155,22 +155,22 @@ bool MapCollision::move(float &x, float &y, float _step_x, float _step_y, MOVEME
 		float step_x = 0;
 		if (_step_x > 0) {
 			// find next interesting value, which is either the whole step, or the transition to the next tile
-			step_x = std::min((float)ceil(x) - x, _step_x);
+			step_x = std::min(static_cast<float>(ceil(x)) - x, _step_x);
 			// if we are standing on the edge of a tile (ceil(x) - x == 0), we need to look one tile ahead
 			if (step_x <= MIN_TILE_GAP) step_x = std::min(1.f, _step_x);
 		}
 		else if (_step_x < 0) {
-			step_x = std::max((float)floor(x) - x, _step_x);
+			step_x = std::max(static_cast<float>(floor(x)) - x, _step_x);
 			if (step_x == 0) step_x = std::max(-1.f, _step_x);
 		}
 
 		float step_y = 0;
 		if (_step_y > 0) {
-			step_y = std::min((float)ceil(y) - y, _step_y);
+			step_y = std::min(static_cast<float>(ceil(y)) - y, _step_y);
 			if (step_y <= MIN_TILE_GAP) step_y = std::min(1.f, _step_y);
 		}
 		else if (_step_y < 0) {
-			step_y = std::max((float)floor(y) - y, _step_y);
+			step_y = std::max(static_cast<float>(floor(y)) - y, _step_y);
 			if (step_y == 0) step_y	= std::max(-1.f, _step_y);
 		}
 
@@ -199,7 +199,7 @@ bool MapCollision::is_outside_map(const int& tile_x, const int& tile_y) const {
 }
 
 bool MapCollision::is_outside_map(const float& tile_x, const float& tile_y) const {
-	return is_outside_map((int)(tile_x), (int)(tile_y));
+	return is_outside_map(static_cast<int>(tile_x), static_cast<int>(tile_y));
 }
 
 /**
@@ -280,7 +280,7 @@ bool MapCollision::line_check(const float& x1, const float& y1, const float& x2,
 	float dy = static_cast<float>(fabs(y2 - y1));
 	float step_x;
 	float step_y;
-	int steps = (int)std::max(dx, dy);
+	int steps = static_cast<int>(std::max(dx, dy));
 
 
 	if (dx > dy) {
@@ -403,7 +403,7 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FP
 	Point current = start;
 	AStarNode* node = new AStarNode(start);
 	node->setActualCost(0);
-	node->setEstimatedCost((float)calcDist(start,end));
+	node->setEstimatedCost(static_cast<float>(calcDist(start,end)));
 	node->setParent(current);
 
 	AStarContainer open(map_size.x, map_size.y, limit);
@@ -411,7 +411,7 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FP
 
 	open.add(node);
 
-	while (!open.isEmpty() && (unsigned)close.getSize() < limit) {
+	while (!open.isEmpty() && static_cast<unsigned>(close.getSize()) < limit) {
 		node = open.get_shortest_f();
 
 		current.x = node->getX();
@@ -430,7 +430,7 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FP
 			Point neighbour = *it;
 
 			// do not exceed the node limit when adding nodes
-			if ((unsigned)open.getSize() >= limit) {
+			if (static_cast<unsigned>(open.getSize()) >= limit) {
 				break;
 			}
 
@@ -444,18 +444,18 @@ bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FP
 			// if neighbour isn't inside open, add it as a new Node
 			if(!open.exists(neighbour)) {
 				AStarNode* newNode = new AStarNode(neighbour.x,neighbour.y);
-				newNode->setActualCost(node->getActualCost()+(float)calcDist(current,neighbour));
+				newNode->setActualCost(node->getActualCost() + static_cast<float>(calcDist(current,neighbour)));
 				newNode->setParent(current);
-				newNode->setEstimatedCost((float)calcDist(neighbour,end));
+				newNode->setEstimatedCost(static_cast<float>(calcDist(neighbour,end)));
 				open.add(newNode);
 			}
 			// else, update it's cost if better
 			else {
 				AStarNode* i = open.get(neighbour.x, neighbour.y);
-				if (node->getActualCost()+(float)calcDist(current,neighbour) < i->getActualCost()) {
+				if (node->getActualCost() + static_cast<float>(calcDist(current,neighbour)) < i->getActualCost()) {
 					Point pos(i->getX(), i->getY());
 					Point parent_pos(node->getX(), node->getY());
-					open.updateParent(pos, parent_pos, node->getActualCost()+(float)calcDist(current,neighbour));
+					open.updateParent(pos, parent_pos, node->getActualCost() + static_cast<float>(calcDist(current,neighbour)));
 				}
 			}
 		}

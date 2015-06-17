@@ -124,8 +124,8 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 
 		if (scaled->surface) {
 			double _stretch_factor_x, _stretch_factor_y;
-			_stretch_factor_x = width / (double)surface->w;
-			_stretch_factor_y = height / (double)surface->h;
+			_stretch_factor_x = width / static_cast<double>(surface->w);
+			_stretch_factor_y = height / static_cast<double>(surface->h);
 
 			for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
 				for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
@@ -663,7 +663,7 @@ void SDLSoftwareRenderDevice::windowResize() {
 	if (screen) SDL_FreeSurface(screen);
 
 	Uint32 rmask, gmask, bmask, amask;
-	int bpp = (int)BITS_PER_PIXEL;
+	int bpp = static_cast<int>(BITS_PER_PIXEL);
 	SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
 	screen = SDL_CreateRGBSurface(0, VIEW_W, VIEW_H, bpp, rmask, gmask, bmask, amask);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);

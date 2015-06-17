@@ -40,7 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
 const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
-const float speedMultiplyer[8] = { (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f};
+const float speedMultiplyer[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
 
 Entity::Entity()
 	: sprites(NULL)
@@ -401,8 +401,8 @@ bool Entity::takeHit(Hazard &h) {
 	if (dmg > 0 && !h.loot.empty()) {
 		for (unsigned i=0; i<h.loot.size(); i++) {
 			powers->loot.push_back(h.loot[i]);
-			powers->loot.back().x = (int)stats.pos.x;
-			powers->loot.back().y = (int)stats.pos.y;
+			powers->loot.back().x = static_cast<int>(stats.pos.x);
+			powers->loot.back().y = static_cast<int>(stats.pos.y);
 		}
 	}
 

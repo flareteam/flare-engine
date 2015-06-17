@@ -177,8 +177,8 @@ unsigned char calcDirection(float x0, float y0, float x1, float y1) {
 // convert cartesian to polar theta where (x1,x2) is the origin
 float calcTheta(float x1, float y1, float x2, float y2) {
 	// calculate base angle
-	float dx = (float)x2 - (float)x1;
-	float dy = (float)y2 - (float)y1;
+	float dx = x2 - x1;
+	float dy = y2 - y1;
 	float exact_dx = x2 - x1;
 	float theta;
 

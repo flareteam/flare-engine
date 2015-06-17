@@ -181,8 +181,8 @@ void SDLInputState::handle() {
 				break;
 			// Android touch events
 			case SDL_FINGERMOTION:
-				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
-				mouse.y = (int)((event.tfinger.y + event.tfinger.dy) * VIEW_H);
+				mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * VIEW_W);
+				mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * VIEW_H);
 
 				if (event.tfinger.dy > 0) {
 					scroll_up = true;
@@ -192,8 +192,8 @@ void SDLInputState::handle() {
 				break;
 			case SDL_FINGERDOWN:
 				touch_locked = true;
-				mouse.x = (int)(event.tfinger.x * VIEW_W);
-				mouse.y = (int)(event.tfinger.y * VIEW_H);
+				mouse.x = static_cast<int>(event.tfinger.x * VIEW_W);
+				mouse.y = static_cast<int>(event.tfinger.y * VIEW_H);
 				pressing[MAIN1] = true;
 				un_press[MAIN1] = false;
 				break;

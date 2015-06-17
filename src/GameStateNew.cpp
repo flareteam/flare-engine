@@ -310,7 +310,7 @@ void GameStateNew::logic() {
 	// scroll through portrait options
 	if (button_next->checkClick()) {
 		current_option++;
-		if (current_option == (int)portrait.size()) current_option = 0;
+		if (static_cast<unsigned>(current_option) == portrait.size()) current_option = 0;
 		loadPortrait(portrait[current_option]);
 		setName(name[current_option]);
 	}

@@ -141,11 +141,11 @@ unsigned TabList::size() {
 }
 
 bool TabList::current_is_valid() {
-	return current >= 0 && current < (int)widgets.size();
+	return current >= 0 && current < static_cast<int>(widgets.size());
 }
 
 bool TabList::previous_is_valid() {
-	return previous >= 0 && previous < (int)widgets.size();
+	return previous >= 0 && previous < static_cast<int>(widgets.size());
 }
 
 Widget* TabList::getNext(bool inner) {
@@ -160,7 +160,7 @@ Widget* TabList::getNext(bool inner) {
 	}
 	++current;
 
-	if (current >= (int)widgets.size())
+	if (current >= static_cast<int>(widgets.size()))
 		current = 0;
 
 	widgets.at(current)->in_focus = true;

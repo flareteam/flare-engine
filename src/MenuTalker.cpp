@@ -139,7 +139,7 @@ void MenuTalker::logic() {
 	closeButton->enabled = false;
 
 	// determine active button
-	if ((unsigned)dialog_node < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
+	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
 		if (npc->dialog[dialog_node][event_cursor+1].type != "") {
 			advanceButton->enabled = true;
 			tablist.remove(closeButton);
@@ -194,7 +194,7 @@ void MenuTalker::logic() {
 }
 
 void MenuTalker::createBuffer() {
-	if ((unsigned)dialog_node >= npc->dialog.size() || event_cursor >= npc->dialog[dialog_node].size())
+	if (static_cast<unsigned>(dialog_node) >= npc->dialog.size() || event_cursor >= npc->dialog[dialog_node].size())
 		return;
 
 	std::string line;
@@ -253,7 +253,7 @@ void MenuTalker::render() {
 	setBackgroundDest(dest);
 	Menu::render();
 
-	if ((unsigned)dialog_node < npc->dialog.size() && event_cursor < npc->dialog[dialog_node].size()) {
+	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && event_cursor < npc->dialog[dialog_node].size()) {
 		// show active portrait
 		std::string etype = npc->dialog[dialog_node][event_cursor].type;
 		if (etype == "him" || etype == "her") {
@@ -287,7 +287,7 @@ void MenuTalker::render() {
 	textbox->render();
 
 	// show advance button if there are more event components, or close button if not
-	if ((unsigned)dialog_node < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
+	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
 		if (npc->dialog[dialog_node][event_cursor+1].type != "") {
 			advanceButton->render();
 		}

@@ -136,7 +136,7 @@ void MenuStatBar::render() {
 
 	// draw bar progress based on orientation
 	if (orientation == 0) {
-		unsigned bar_length = (stat_max == 0) ? 0 : ((long)stat_cur * (long)bar_pos.w) / (long)stat_max;
+		unsigned bar_length = (stat_max == 0) ? 0 : (static_cast<long>(stat_cur) * static_cast<long>(bar_pos.w)) / static_cast<long>(stat_max);
 		src.x = 0;
 		src.y = 0;
 		src.w = bar_length;
@@ -145,7 +145,7 @@ void MenuStatBar::render() {
 		dest.y = bar_dest.y;
 	}
 	else if (orientation == 1) {
-		unsigned bar_length = (stat_max == 0) ? 0 : ((long)stat_cur * (long)bar_pos.h) / (long)stat_max;
+		unsigned bar_length = (stat_max == 0) ? 0 : (static_cast<long>(stat_cur) * static_cast<long>(bar_pos.h)) / static_cast<long>(stat_max);
 		src.x = 0;
 		src.y = bar_pos.h-bar_length;
 		src.w = bar_pos.w;

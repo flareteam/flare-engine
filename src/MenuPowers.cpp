@@ -240,7 +240,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 
 	// create power slots
 	for (unsigned int i=0; i<slots.size(); i++) {
-		if ((unsigned)power_cell[i].id < powers->powers.size()) {
+		if (static_cast<unsigned>(power_cell[i].id) < powers->powers.size()) {
 			slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
 			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y);
 			tablist.add(slots[i]);
@@ -310,7 +310,7 @@ short MenuPowers::nextLevel(short power_cell_index) {
 	}
 	// current power is an upgrade, take next upgrade if avaliable
 	short index = static_cast<short>(std::distance(power_cell[power_cell_index].upgrades.begin(), level_it));
-	if ((short)power_cell[power_cell_index].upgrades.size() > index + 1) {
+	if (static_cast<short>(power_cell[power_cell_index].upgrades.size()) > index + 1) {
 		return id_by_powerIndex(*(++level_it), power_cell_upgrade);
 	}
 	else {
@@ -525,7 +525,7 @@ void MenuPowers::setUnlockedPowers() {
 
 void MenuPowers::logic() {
 	for (unsigned i=0; i<power_cell_unlocked.size(); i++) {
-		if ((unsigned)power_cell_unlocked[i].id < powers->powers.size() && powers->powers[power_cell_unlocked[i].id].passive) {
+		if (static_cast<unsigned>(power_cell_unlocked[i].id) < powers->powers.size() && powers->powers[power_cell_unlocked[i].id].passive) {
 			bool unlocked_power = std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell_unlocked[i].id) != stats->powers_list.end();
 			std::vector<int>::iterator it = std::find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell_unlocked[i].id);
 
@@ -734,7 +734,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 	// add cooldown time
 	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
 		std::stringstream ss;
-		ss << std::setprecision(3) << (float)powers->powers[power_cells[slot_num].id].cooldown / MAX_FRAMES_PER_SEC;
+		ss << std::setprecision(3) << static_cast<float>(powers->powers[power_cells[slot_num].id].cooldown) / MAX_FRAMES_PER_SEC;
 		tip->addText(msg->get("Cooldown: %s seconds", ss.str().c_str()));
 	}
 
