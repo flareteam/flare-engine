@@ -667,5 +667,7 @@ void SDLSoftwareRenderDevice::windowResize() {
 	SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
 	screen = SDL_CreateRGBSurface(0, VIEW_W, VIEW_H, bpp, rmask, gmask, bmask, amask);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);
+
+	updateScreenVars();
 }
 

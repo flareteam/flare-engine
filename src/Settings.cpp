@@ -213,6 +213,7 @@ int CURRENCY_ID;
 float INTERACT_RANGE;
 bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
+float ENCOUNTER_DIST;
 
 /**
  * Set system paths
@@ -986,4 +987,16 @@ void loadAndroidDefaults() {
 	HARDWARE_CURSOR = true;
 	TOUCHSCREEN = true;
 #endif
+}
+
+/**
+ * Some variables depend on VIEW_W and VIEW_H. Update them here.
+ */
+void updateScreenVars() {
+	if (TILE_W > 0 && TILE_H > 0) {
+		if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
+			ENCOUNTER_DIST = sqrtf(powf(VIEW_W/TILE_W, 2.f) + powf(VIEW_H/TILE_H_HALF, 2.f)) / 2.f;
+		else if (TILESET_ORIENTATION == TILESET_ORTHOGONAL)
+			ENCOUNTER_DIST = sqrtf(powf(VIEW_W/TILE_W, 2.f) + powf(VIEW_H/TILE_H, 2.f)) / 2.f;
+	}
 }

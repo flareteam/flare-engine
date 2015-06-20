@@ -631,5 +631,7 @@ void SDLHardwareRenderDevice::windowResize() {
 	if (texture) SDL_DestroyTexture(texture);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, VIEW_W, VIEW_H);
 	SDL_SetRenderTarget(renderer, texture);
+
+	updateScreenVars();
 }
 

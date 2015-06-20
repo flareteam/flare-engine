@@ -148,6 +148,7 @@ extern int CURRENCY_ID;
 extern float INTERACT_RANGE;
 extern bool SAVE_ONLOAD;
 extern bool SAVE_ONEXIT;
+extern float ENCOUNTER_DIST;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;
@@ -210,6 +211,7 @@ bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
 void loadAndroidDefaults();
+void updateScreenVars();
 
 // version information
 std::string getVersionString();

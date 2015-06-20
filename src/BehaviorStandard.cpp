@@ -50,6 +50,15 @@ void BehaviorStandard::logic() {
 			e->stats.corpse_ticks--;
 		return;
 	}
+
+	if (!e->stats.hero_ally) {
+		if (calcDist(e->stats.pos, pc->stats.pos) <= ENCOUNTER_DIST)
+			e->stats.encountered = true;
+
+		if (!e->stats.encountered)
+			return;
+	}
+
 	doUpkeep();
 	findTarget();
 	checkPower();

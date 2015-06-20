@@ -109,6 +109,7 @@ public:
 	bool converted;
 	bool summoned;
 	int summoned_power_index;
+	bool encountered; // enemy only
 
 	MOVEMENTTYPE movement_type;
 	bool flying;
