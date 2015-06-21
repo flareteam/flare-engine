@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef POWER_MANAGER_H
 #define POWER_MANAGER_H
 
+#include "FileParser.h"
 #include "LootManager.h"
 #include "MapRenderer.h"
 #include "Map.h"
@@ -372,6 +373,7 @@ public:
 	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
+	int verifyID(int power_id, FileParser* infile = NULL);
 
 	std::vector<EffectDef> effects;
 	std::vector<Power> powers;

@@ -1317,6 +1317,18 @@ EffectDef* PowerManager::getEffectDef(const std::string& id) {
 	return NULL;
 }
 
+int PowerManager::verifyID(int power_id, FileParser* infile) {
+	if (power_id < 1 || static_cast<unsigned>(power_id) >= powers.size()) {
+		if (infile != NULL)
+			infile->error("PowerManager: %d is not a valid power id.", power_id);
+		else
+			logError("PowerManager: %d is not a valid power id.", power_id);
+
+		return 0;
+	}
+	return power_id;
+}
+
 PowerManager::~PowerManager() {
 
 	for (unsigned i=0; i<sfx.size(); i++) {

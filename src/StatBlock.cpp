@@ -340,25 +340,25 @@ void StatBlock::load(const std::string& filename) {
 		// @ATTR chance_ranged_ment|integer|Percentage chance that the creature will use their mental ranged power.
 		else if (infile.key == "chance_ranged_ment") power_chance[RANGED_MENT] = num;
 		// @ATTR power_melee_phys|integer|Power index for the physical melee power.
-		else if (infile.key == "power_melee_phys") power_index[MELEE_PHYS] = num;
+		else if (infile.key == "power_melee_phys") power_index[MELEE_PHYS] = powers->verifyID(num, &infile);
 		// @ATTR power_melee_ment|integer|Power index for the mental melee power.
-		else if (infile.key == "power_melee_ment") power_index[MELEE_MENT] = num;
+		else if (infile.key == "power_melee_ment") power_index[MELEE_MENT] = powers->verifyID(num, &infile);
 		// @ATTR power_ranged_phys|integer|Power index for the physical ranged power.
-		else if (infile.key == "power_ranged_phys") power_index[RANGED_PHYS] = num;
+		else if (infile.key == "power_ranged_phys") power_index[RANGED_PHYS] = powers->verifyID(num, &infile);
 		// @ATTR power_ranged_ment|integer|Power index for the mental ranged power.
-		else if (infile.key == "power_ranged_ment") power_index[RANGED_MENT] = num;
+		else if (infile.key == "power_ranged_ment") power_index[RANGED_MENT] = powers->verifyID(num, &infile);
 		// @ATTR power_beacon|integer|Power index of a "beacon" power used to aggro nearby creatures.
-		else if (infile.key == "power_beacon") power_index[BEACON] = num;
+		else if (infile.key == "power_beacon") power_index[BEACON] = powers->verifyID(num, &infile);
 		// @ATTR power_on_hit|integer|Power index that is triggered when hit.
-		else if (infile.key == "power_on_hit") power_index[ON_HIT] = num;
+		else if (infile.key == "power_on_hit") power_index[ON_HIT] = powers->verifyID(num, &infile);
 		// @ATTR power_on_death|integer|Power index that is triggered when dead.
-		else if (infile.key == "power_on_death") power_index[ON_DEATH] = num;
+		else if (infile.key == "power_on_death") power_index[ON_DEATH] = powers->verifyID(num, &infile);
 		// @ATTR power_on_half_dead|integer|Power index that is triggered when at half health.
-		else if (infile.key == "power_on_half_dead") power_index[ON_HALF_DEAD] = num;
+		else if (infile.key == "power_on_half_dead") power_index[ON_HALF_DEAD] = powers->verifyID(num, &infile);
 		// @ATTR power_on_debuff|integer|Power index that is triggered when under a negative status effect.
-		else if (infile.key == "power_on_debuff") power_index[ON_DEBUFF] = num;
+		else if (infile.key == "power_on_debuff") power_index[ON_DEBUFF] = powers->verifyID(num, &infile);
 		// @ATTR power_on_join_combat|integer|Power index that is triggered when initiating combat.
-		else if (infile.key == "power_on_join_combat") power_index[ON_JOIN_COMBAT] = num;
+		else if (infile.key == "power_on_join_combat") power_index[ON_JOIN_COMBAT] = powers->verifyID(num, &infile);
 		// @ATTR chance_on_hit|integer|Percentage chance that power_on_hit will be triggered.
 		else if (infile.key == "chance_on_hit") power_chance[ON_HIT] = num;
 		// @ATTR chance_on_death|integer|Percentage chance that power_on_death will be triggered.
