@@ -993,8 +993,8 @@ void loadAndroidDefaults() {
 void updateScreenVars() {
 	if (TILE_W > 0 && TILE_H > 0) {
 		if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
-			ENCOUNTER_DIST = sqrtf(powf(VIEW_W/TILE_W, 2.f) + powf(VIEW_H/TILE_H_HALF, 2.f)) / 2.f;
+			ENCOUNTER_DIST = sqrtf(powf(static_cast<float>(VIEW_W/TILE_W), 2.f) + powf(static_cast<float>(VIEW_H/TILE_H_HALF), 2.f)) / 2.f;
 		else if (TILESET_ORIENTATION == TILESET_ORTHOGONAL)
-			ENCOUNTER_DIST = sqrtf(powf(VIEW_W/TILE_W, 2.f) + powf(VIEW_H/TILE_H, 2.f)) / 2.f;
+			ENCOUNTER_DIST = sqrtf(powf(static_cast<float>(VIEW_W/TILE_W), 2.f) + powf(static_cast<float>(VIEW_H/TILE_H), 2.f)) / 2.f;
 	}
 }
