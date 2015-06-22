@@ -145,11 +145,16 @@ void MapRenderer::clearLayers() {
 }
 
 int MapRenderer::load(std::string fname) {
-	/* unload sounds */
+	// unload sounds
 	snd->reset();
 	while (!sids.empty()) {
 		snd->unload(sids.back());
 		sids.pop_back();
+	}
+
+	// clear enemy spawn queue
+	while (!powers->enemies.empty()) {
+		powers->enemies.pop();
 	}
 
 	show_tooltip = false;

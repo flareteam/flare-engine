@@ -566,9 +566,6 @@ int PowerManager::loadSFX(const std::string& filename) {
  */
 void PowerManager::handleNewMap(MapCollision *_collider) {
 	collider = _collider;
-	while (!enemies.empty()) {
-		enemies.pop();
-	}
 }
 
 /**
