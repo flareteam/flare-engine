@@ -405,7 +405,6 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist.add(combat_text_cb);
 	tablist.add(show_fps_cb);
 	tablist.add(colorblind_cb);
-	tablist.add(show_hotkeys_cb);
 	tablist.add(hardware_cursor_cb);
 	tablist.add(dev_mode_cb);
 	tablist.add(show_target_cb);

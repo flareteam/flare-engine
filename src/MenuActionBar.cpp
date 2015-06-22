@@ -53,9 +53,7 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	src.w = ICON_SIZE;
 	src.h = ICON_SIZE;
 
-	for (unsigned int i = 0; i < 4; i++) {
-		menu_labels[i] = new WidgetLabel();
-	}
+	menu_labels.resize(4);
 
 	tablist = TabList(HORIZONTAL, ACTIONBAR_BACK, ACTIONBAR_FORWARD, ACTIONBAR);
 
@@ -153,11 +151,9 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 
 void MenuActionBar::addSlot(unsigned index, int x, int y) {
 	if (index >= slots.size()) {
-		labels.resize(index+1, NULL);
+		labels.resize(index+1);
 		slots.resize(index+1, NULL);
 	}
-
-	labels[index] = new WidgetLabel();
 
 	slots[index] = new WidgetSlot(-1, ACTIONBAR);
 	slots[index]->setBasePos(x, y);
@@ -183,27 +179,27 @@ void MenuActionBar::align() {
 	for (unsigned int i = 0; i<ACTIONBAR_MAIN; i++) {
 		if (i < slots.size() && slots[i]) {
 			if (inpt->binding[i + BAR_1] < 8)
-				labels[i]->set(slots[i]->pos.x + slots[i]->pos.w, slots[i]->pos.y + slots[i]->pos.h - font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i + BAR_1] - 1], font->getColor("menu_normal"));
+				labels[i] = msg->get("Hotkey: %s", inpt->mouse_button[inpt->binding[i + BAR_1] - 1].c_str());
 			else
-				labels[i]->set(slots[i]->pos.x + slots[i]->pos.w, slots[i]->pos.y + slots[i]->pos.h - font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i + BAR_1]), font->getColor("menu_normal"));
+				labels[i] = msg->get("Hotkey: %s", inpt->getKeyName(inpt->binding[i + BAR_1]).c_str());
 		}
 	}
 
 	for (unsigned int i=ACTIONBAR_MAIN; i<ACTIONBAR_MAX; i++) {
 		if (i < slots.size() && slots[i]) {
 			if (inpt->binding[i - ACTIONBAR_MAIN + MAIN1] < 8)
-				labels[i]->set(slots[i]->pos.x + slots[i]->pos.w, slots[i]->pos.y + slots[i]->pos.h - font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i - ACTIONBAR_MAIN + MAIN1] - 1], font->getColor("menu_normal"));
+				labels[i] = msg->get("Hotkey: %s", inpt->mouse_button[inpt->binding[i - ACTIONBAR_MAIN + MAIN1] - 1].c_str());
 			else
-				labels[i]->set(slots[i]->pos.x + slots[i]->pos.w, slots[i]->pos.y + slots[i]->pos.h - font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i - ACTIONBAR_MAIN + MAIN1]), font->getColor("menu_normal"));
+				labels[i] = msg->get("Hotkey: %s", inpt->getKeyName(inpt->binding[i - ACTIONBAR_MAIN + MAIN1]).c_str());
 		}
 	}
-	for (unsigned int i=0; i<4; i++) {
+	for (unsigned int i=0; i<menu_labels.size(); i++) {
 		menus[i]->setPos(window_area.x, window_area.y);
 
 		if (inpt->binding[i + CHARACTER] < 8)
-			menu_labels[i]->set(menus[i]->pos.x+menus[i]->pos.w, menus[i]->pos.y+menus[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->mouse_button[inpt->binding[i + CHARACTER] - 1], font->getColor("menu_normal"));
+			menu_labels[i] = msg->get("Hotkey: %s", inpt->mouse_button[inpt->binding[i + CHARACTER] - 1].c_str());
 		else
-			menu_labels[i]->set(menus[i]->pos.x+menus[i]->pos.w, menus[i]->pos.y+menus[i]->pos.h-font->getFontHeight(), JUSTIFY_RIGHT, VALIGN_TOP, inpt->getKeyName(inpt->binding[i + CHARACTER]), font->getColor("menu_normal"));
+			menu_labels[i] = msg->get("Hotkey: %s", inpt->getKeyName(inpt->binding[i + CHARACTER]).c_str());
 	}
 }
 
@@ -323,18 +319,6 @@ void MenuActionBar::render() {
 	for (int i=0; i<4; i++)
 		if (requires_attention[i])
 			renderAttention(i);
-
-	// draw hotkey labels
-	if (SHOW_HOTKEYS) {
-		for (unsigned int i = 0; i < slots_count; i++) {
-			if (labels[i])
-				labels[i]->render();
-		}
-		for (int i = 0; i < 4; i++) {
-			menu_labels[i]->render();
-		}
-	}
-
 }
 
 /**
@@ -376,6 +360,8 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 			tip.addText(msg->get("Character") + " (*)");
 		else
 			tip.addText(msg->get("Character"));
+
+		tip.addText(menu_labels[MENU_CHARACTER]);
 		return tip;
 	}
 	if (isWithin(menus[MENU_INVENTORY]->pos, mouse)) {
@@ -383,6 +369,8 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 			tip.addText(msg->get("Inventory") + " (*)");
 		else
 			tip.addText(msg->get("Inventory"));
+
+		tip.addText(menu_labels[MENU_INVENTORY]);
 		return tip;
 	}
 	if (isWithin(menus[MENU_POWERS]->pos, mouse)) {
@@ -390,6 +378,8 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 			tip.addText(msg->get("Powers") + " (*)");
 		else
 			tip.addText(msg->get("Powers"));
+
+		tip.addText(menu_labels[MENU_POWERS]);
 		return tip;
 	}
 	if (isWithin(menus[MENU_LOG]->pos, mouse)) {
@@ -397,13 +387,16 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 			tip.addText(msg->get("Log") + " (*)");
 		else
 			tip.addText(msg->get("Log"));
+
+		tip.addText(menu_labels[MENU_LOG]);
 		return tip;
 	}
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (hotkeys_mod[i] != 0) {
-			if (slots[i] && isWithin(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
+			if (hotkeys_mod[i] != 0) {
 				tip.addText(powers->powers[hotkeys_mod[i]].name);
 			}
+			tip.addText(labels[i]);
 		}
 	}
 
@@ -724,11 +717,8 @@ MenuActionBar::~MenuActionBar() {
 	if (attention)
 		delete attention;
 
-	for (unsigned i = 0; i < slots_count; i++)
-		delete labels[i];
-
-	for (unsigned i = 0; i < 4; i++)
-		delete menu_labels[i];
+	labels.clear();
+	menu_labels.clear();
 
 	for (unsigned i = 0; i < slots_count; i++)
 		delete slots[i];

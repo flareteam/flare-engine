@@ -123,7 +123,6 @@ extern bool TOUCHSCREEN;
 // Interface Settings
 extern bool COMBAT_TEXT;
 extern bool SHOW_FPS;
-extern bool SHOW_HOTKEYS;
 extern bool COLORBLIND;
 extern bool HARDWARE_CURSOR;
 extern bool DEV_MODE;

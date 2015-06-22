@@ -56,8 +56,8 @@ private:
 	Avatar *hero;
 	Rect src;
 
-	std::vector<WidgetLabel *> labels;
-	WidgetLabel * menu_labels[4];
+	std::vector<std::string> labels;
+	std::vector<std::string> menu_labels;
 
 	Point last_mouse;
 	void addSlot(unsigned index, int x, int y);

@@ -25,11 +25,10 @@ language=64,16,32,32
 combat_text=352,40,384,32
 show_fps=352,72,384,64
 colorblind=352,104,384,96
-show_hotkeys=352,136,384,128
-hardware_cursor=352,168,384,160
-dev_mode=352,200,384,192
-show_target=352,232,384,224
-loot_tooltips=352,264,384,256
+hardware_cursor=352,136,384,128
+dev_mode=352,168,384,160
+show_target=352,200,384,192
+loot_tooltips=352,232,384,224
 
 [input]
 joystick_device=64,16,32,32
