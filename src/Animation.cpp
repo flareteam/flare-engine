@@ -296,6 +296,10 @@ std::string Animation::getName() {
 	return name;
 }
 
+int Animation::getDuration() {
+	return static_cast<int>(frames.size());
+}
+
 bool Animation::isCompleted() {
 	return (type == PLAY_ONCE && times_played > 0);
 }

@@ -126,6 +126,7 @@ public:
 	void reset();
 
 	std::string getName();
+	int getDuration();
 
 	// a vector of indexes of gfx passed into.
 	// if { -1 } is passed, all frames are set to active.
