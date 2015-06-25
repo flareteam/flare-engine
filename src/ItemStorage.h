@@ -44,7 +44,7 @@ public:
 	std::string getQuantities();
 	ItemStack add(ItemStack stack, int slot = -1);
 	void subtract(int slot, int quantity = 1);
-	bool remove(int item);
+	bool remove(int item, int quantity = 1);
 	void sort();
 	void clear();
 	void clean();

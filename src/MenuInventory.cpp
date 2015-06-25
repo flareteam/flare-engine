@@ -662,16 +662,13 @@ void MenuInventory::addCurrency(int count) {
  * Remove currency item
  */
 void MenuInventory::removeCurrency(int count) {
-	for (int i=0; i<count; i++) {
-		inventory[CARRIED].remove(CURRENCY_ID);
-	}
+	inventory[CARRIED].remove(CURRENCY_ID, count);
 }
 
 /**
  * Count the number of currency items in the inventory
  */
 int MenuInventory::getCurrency() {
-
 	return getItemCountCarried(CURRENCY_ID);
 }
 

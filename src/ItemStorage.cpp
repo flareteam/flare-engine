@@ -25,6 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 
+#include <limits.h>
+
 void ItemStorage::init(int _slot_number) {
 	slot_number = _slot_number;
 
@@ -170,7 +172,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 }
 
 /**
- * Substract an item from the specified slot, or remove it if it's the last
+ * Subtract an item from the specified slot, or remove it if it's the last
  *
  * @param slot Slot number
  */
@@ -182,16 +184,37 @@ void ItemStorage::subtract(int slot, int quantity) {
 }
 
 /**
- * Remove one given item
+ * Remove a quantity of a given item by its ID
  */
-bool ItemStorage::remove(int item) {
-	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item == item) {
-			subtract(i, 1);
-			return true;
+bool ItemStorage::remove(int item, int quantity) {
+	int lowest_quantity, lowest_slot;
+
+	while (quantity > 0) {
+		lowest_quantity = INT_MAX;
+		lowest_slot = -1;
+
+		for (int i=0; i<slot_number; i++) {
+			if (storage[i].item == item && storage[i].quantity < lowest_quantity) {
+				lowest_slot = i;
+			}
+		}
+
+		// could not find item id, can't remove anything
+		if (lowest_slot == -1)
+			return false;
+
+		if (quantity <= storage[lowest_slot].quantity) {
+			// take from a single stack
+			subtract(lowest_slot, quantity);
+			quantity = 0;
+		}
+		else {
+			// need to take from another stack
+			quantity = quantity - storage[lowest_slot].quantity;
+			subtract(lowest_slot, storage[lowest_slot].quantity);
 		}
 	}
-	return false;
+	return true;
 }
 
 int compareItemStack (const void *a, const void *b) {
