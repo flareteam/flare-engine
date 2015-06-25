@@ -771,6 +771,8 @@ void loadMiscSettings() {
 				else if (infile.key == "currency") HERO_CLASSES.back().currency = toInt(infile.val);
 				// @ATTR equipment|item (integer), ...|A list of items that are equipped when starting with this class.
 				else if (infile.key == "equipment") HERO_CLASSES.back().equipment = infile.val;
+				// @ATTR carried|item (integer), ...|A list of items that are placed in the normal inventorty when starting with this class.
+				else if (infile.key == "carried") HERO_CLASSES.back().carried = infile.val;
 				// @ATTR physical|integer|Class starts with this physical stat.
 				else if (infile.key == "physical") HERO_CLASSES.back().physical = toInt(infile.val);
 				// @ATTR mental|integer|Class starts with this mental stat.

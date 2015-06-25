@@ -374,6 +374,15 @@ void GameStatePlay::loadClass(int index) {
 	}
 	menu->act->set(HERO_CLASSES[index].hotkeys);
 
+	// Add carried items
+	std::string carried = HERO_CLASSES[index].carried;
+	ItemStack stack;
+	stack.quantity = 1;
+	while (carried != "") {
+		stack.item = popFirstInt(carried);
+		menu->inv->add(stack, CARRIED, -1, false);
+	}
+
 	// apply stats, inventory, and powers
 	applyPlayerData();
 

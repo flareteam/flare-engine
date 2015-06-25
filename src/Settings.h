@@ -50,6 +50,7 @@ public:
 	std::string description;
 	int currency;
 	std::string equipment;
+	std::string carried;
 	int physical;
 	int mental;
 	int offense;
@@ -64,6 +65,7 @@ public:
 		, description("")
 		, currency(0)
 		, equipment("")
+		, carried("")
 		, physical(0)
 		, mental(0)
 		, offense(0)
