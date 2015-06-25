@@ -157,7 +157,7 @@ void GameStatePlay::checkEnemyFocus() {
 	if (NO_MOUSE) {
 		if (hazards->last_enemy) {
 			if (enemy == hazards->last_enemy) {
-				if (menu->enemy->timeout > 0) return;
+				if (menu->enemy->timeout > 0 && hazards->last_enemy->stats.hp > 0) return;
 				else hazards->last_enemy = NULL;
 			}
 			enemy = hazards->last_enemy;
