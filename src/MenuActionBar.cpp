@@ -59,7 +59,6 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 
 	for (unsigned int i=0; i<4; i++) {
 		menus[i] = new WidgetSlot(-1, ACTIONBAR);
-		tablist.add(menus[i]);
 	}
 
 	// Read data from config file
@@ -128,6 +127,10 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
+	}
+
+	for (unsigned int i=0; i<4; i++) {
+		tablist.add(menus[i]);
 	}
 
 	slots_count = slots.size();
@@ -705,6 +708,17 @@ void MenuActionBar::addPower(const int id, const int target_id) {
 				return;
 		}
 	}
+}
+
+Point MenuActionBar::getSlotPos(int slot) {
+	if (static_cast<unsigned>(slot) < slots.size()) {
+		return Point(slots[slot]->pos.x, slots[slot]->pos.y);
+	}
+	else if (static_cast<unsigned>(slot) < slots.size() + 4) {
+		int slot_size = static_cast<int>(slots.size());
+		return Point(menus[slot - slot_size]->pos.x, menus[slot - slot_size]->pos.y);
+	}
+	return Point();
 }
 
 MenuActionBar::~MenuActionBar() {

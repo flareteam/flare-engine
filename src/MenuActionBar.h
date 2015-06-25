@@ -81,6 +81,7 @@ public:
 	void clear();
 	void resetSlots();
 	void setItemCount(unsigned index, int count, bool is_equipped = false);
+	Point getSlotPos(int slot);
 
 	TooltipData checkTooltip(const Point& mouse);
 	bool isWithinSlots(const Point& mouse);

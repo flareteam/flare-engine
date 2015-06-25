@@ -1155,9 +1155,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// actionbar
-	if (act->tablist.getCurrent() >= 0 && act->tablist.getCurrent() < 12) {
+	if (act->tablist.getCurrent() != -1 && static_cast<unsigned>(act->tablist.getCurrent()) < act->slots.size()) {
 		CLICK_TYPE slotClick = act->slots[act->tablist.getCurrent()]->checkClick();
-		Point dest_slot(act->slots[act->tablist.getCurrent()]->pos.x, act->slots[act->tablist.getCurrent()]->pos.y);
+		Point dest_slot = act->getSlotPos(act->tablist.getCurrent());
 
 		// pick up power
 		if (slotClick == CHECKED && drag_stack.empty() && drag_power == 0) {
@@ -1369,8 +1369,7 @@ void MenuManager::handleKeyboardTooltips() {
 	}
 
 	if (act_drag_hover && act->tablist.getCurrent() != -1) {
-		keydrag_pos.x = act->slots[act->tablist.getCurrent()]->pos.x;
-		keydrag_pos.y = act->slots[act->tablist.getCurrent()]->pos.y;
+		keydrag_pos = act->getSlotPos(act->tablist.getCurrent());
 		keyb_tip_new_act = act->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_act.isEmpty()) {
 			if (!keyb_tip_new_act.compare(&keyb_tip_buf_act)) {
