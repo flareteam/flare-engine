@@ -294,7 +294,7 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
-		// substract absorption from armor
+		// subtract absorption from armor
 		int absorption = randBetween(stats.get(STAT_ABS_MIN), stats.get(STAT_ABS_MAX));
 
 		if (absorption > 0 && dmg > 0) {

@@ -174,7 +174,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
  *
  * @param slot Slot number
  */
-void ItemStorage::substract(int slot, int quantity) {
+void ItemStorage::subtract(int slot, int quantity) {
 	storage[slot].quantity -= quantity;
 	if (storage[slot].quantity <= 0) {
 		storage[slot].clear();
@@ -187,7 +187,7 @@ void ItemStorage::substract(int slot, int quantity) {
 bool ItemStorage::remove(int item) {
 	for (int i=0; i<slot_number; i++) {
 		if (storage[i].item == item) {
-			substract(i, 1);
+			subtract(i, 1);
 			return true;
 		}
 	}
