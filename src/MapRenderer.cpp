@@ -182,8 +182,8 @@ int MapRenderer::load(std::string fname) {
 
 	std::vector<unsigned> corrupted;
 	for (unsigned i = 0; i < layers.size(); ++i) {
-		for (int x = 0; x < w; ++x) {
-			for (int y = 0; y < h; ++y) {
+		for (unsigned x = 0; x < layers[i].size(); ++x) {
+			for (unsigned y = 0; y < layers[i][x].size(); ++y) {
 				const unsigned tile_id = layers[i][x][y];
 				if (tile_id > 0 && (tile_id >= tset.tiles.size() || tset.tiles[tile_id].tile == NULL)) {
 					if (std::find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
