@@ -808,10 +808,11 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 	for (unsigned j = 0; j < power_cells[slot_num].requires_power.size(); ++j) {
 		if (power_cells[slot_num].requires_power[j] == 0) continue;
 
-		std::string req_power_name;
 		short req_index = id_by_powerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
+		if (req_index == -1) continue;
 
-		if (req_index != -1 && power_cell_all[req_index].upgrade_level > 0)
+		std::string req_power_name;
+		if (power_cell_all[req_index].upgrade_level > 0)
 			req_power_name = powers->powers[power_cell_all[req_index].id].name + " (" + msg->get("Level %d", power_cell_all[req_index].upgrade_level) + ")";
 		else
 			req_power_name = powers->powers[power_cell_all[req_index].id].name;
