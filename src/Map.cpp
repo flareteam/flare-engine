@@ -140,7 +140,7 @@ int Map::load(std::string fname) {
 		layernames.push_back("collision");
 		layers.resize(layers.size()+1);
 		layers.back().resize(w);
-		for (unsigned i=0; i<w; ++i) {
+		for (size_t i=0; i<layers.back().size(); ++i) {
 			layers.back()[i].resize(h, 0);
 		}
 		collision_layer = static_cast<int>(layers.size())-1;
@@ -195,7 +195,7 @@ void Map::loadLayer(FileParser &infile) {
 		// @ATTR layer.type|string|Map layer type.
 		layers.resize(layers.size()+1);
 		layers.back().resize(w);
-		for (unsigned i=0; i<w; ++i) {
+		for (size_t i=0; i<layers.back().size(); ++i) {
 			layers.back()[i].resize(h);
 		}
 		layernames.push_back(infile.val);

@@ -165,7 +165,13 @@ int MapRenderer::load(std::string fname) {
 
 	for (unsigned i = 0; i < layers.size(); ++i) {
 		if (layernames[i] == "collision") {
-			collider.setmap(layers[i], w, h);
+			short width = static_cast<short>(layers[i].size());
+			if (width == 0) {
+				logError("MapRenderer: Map width is 0. Can't set collision layer.");
+				break;
+			}
+			short height = static_cast<short>(layers[i][0].size());
+			collider.setmap(layers[i], width, height);
 			removeLayer(i);
 		}
 	}
