@@ -84,7 +84,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 	scroll_area.x = rows[0].x;
 	scroll_area.y = rows[0].y;
 	scroll_area.w = rows[0].w;
-	scroll_area.h = rows[0].h * rows.size();
+	scroll_area.h = rows[0].h * static_cast<int>(rows.size());
 
 	if (isWithin(scroll_area,mouse)) {
 		inpt->lock_scroll = true;
@@ -261,7 +261,7 @@ void WidgetListBox::shiftUp() {
 void WidgetListBox::shiftDown() {
 	any_selected = false;
 	if (!selected[values.size()-1]) {
-		for (int i=values.size()-2; i >= 0; i--) {
+		for (int i=static_cast<int>(values.size())-2; i >= 0; i--) {
 			if (selected[i]) {
 				any_selected = true;
 				bool tmp_selected = selected[i];
@@ -316,7 +316,7 @@ std::string WidgetListBox::getTooltip(int index) {
  * Get the amount of ListBox items
  */
 int WidgetListBox::getSize() {
-	return values.size();
+	return static_cast<int>(values.size());
 }
 
 /*
@@ -417,8 +417,8 @@ void WidgetListBox::refresh() {
 		pos_scroll.x = pos.x+pos.w-scrollbar->pos_up.w-scrollbar_offset;
 		pos_scroll.y = pos.y+scrollbar_offset;
 		pos_scroll.w = scrollbar->pos_up.w;
-		pos_scroll.h = (pos.h*rows.size())-scrollbar->pos_down.h-(scrollbar_offset*2);
-		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, values.size()-rows.size());
+		pos_scroll.h = (pos.h*static_cast<int>(rows.size()))-scrollbar->pos_down.h-(scrollbar_offset*2);
+		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, static_cast<int>(values.size()-rows.size()));
 		right_margin = scrollbar->pos_knob.w + 8;
 	}
 	else {

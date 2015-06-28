@@ -90,7 +90,7 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 		keybinds_btn.push_back(new WidgetButton());
 	}
 
-	key_count = keybinds_btn.size()/3;
+	key_count = static_cast<unsigned>(keybinds_btn.size()/3);
 
 	init();
 }

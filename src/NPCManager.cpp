@@ -98,7 +98,7 @@ void NPCManager::handleNewMap() {
 		ev.center.y = static_cast<float>(ev.hotspot.y) + static_cast<float>(ev.hotspot.h)/2;
 
 		ec.type = "npc_id";
-		ec.x = npcs.size()-1;
+		ec.x = static_cast<int>(npcs.size())-1;
 		ev.components.push_back(ec);
 
 		ec.type = "tooltip";

@@ -357,12 +357,12 @@ void MenuCharacter::refreshStats() {
 	cstat[CSTAT_NAME].tip.addText(stats->getLongClass());
 
 	cstat[CSTAT_LEVEL].tip.clear();
-	cstat[CSTAT_LEVEL].tip.addText(msg->get("XP: %d", stats->xp));
+	cstat[CSTAT_LEVEL].tip.addText(msg->get("XP: %lu", stats->xp));
 	if (static_cast<unsigned>(stats->level) < stats->xp_table.size()) {
-		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", stats->xp_table[stats->level]));
+		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %lu", stats->xp_table[stats->level]));
 	}
 
-	for (unsigned j=2; j<CSTAT_COUNT; ++j) {
+	for (unsigned j=2; j<static_cast<unsigned>(CSTAT_COUNT); ++j) {
 		cstat[j].tip.clear();
 		cstat[j].tip.addText(cstat_labels[j]);
 		cstat[j].tip.addText(msg->get("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));

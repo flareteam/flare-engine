@@ -361,7 +361,7 @@ unsigned short Animation::getLastFrameIndex(const short &frame) {
 	}
 	else {
 		// normal animation
-		for (unsigned i=frames.size(); i>0; i--) {
+		for (size_t i=frames.size(); i>0; i--) {
 			if (frames[i-1] == frame)
 				return static_cast<unsigned short>(i-1);
 		}

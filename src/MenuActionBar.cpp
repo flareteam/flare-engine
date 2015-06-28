@@ -133,7 +133,7 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 		tablist.add(menus[i]);
 	}
 
-	slots_count = slots.size();
+	slots_count = static_cast<unsigned>(slots.size());
 
 	hotkeys.resize(slots_count);
 	hotkeys_temp.resize(slots_count);
@@ -179,7 +179,7 @@ void MenuActionBar::align() {
 	}
 
 	// set keybinding labels
-	for (unsigned int i = 0; i<ACTIONBAR_MAIN; i++) {
+	for (unsigned int i = 0; i < static_cast<unsigned int>(ACTIONBAR_MAIN); i++) {
 		if (i < slots.size() && slots[i]) {
 			if (inpt->binding[i + BAR_1] < 8)
 				labels[i] = msg->get("Hotkey: %s", inpt->mouse_button[inpt->binding[i + BAR_1] - 1].c_str());
@@ -188,7 +188,7 @@ void MenuActionBar::align() {
 		}
 	}
 
-	for (unsigned int i=ACTIONBAR_MAIN; i<ACTIONBAR_MAX; i++) {
+	for (unsigned int i=ACTIONBAR_MAIN; i < static_cast<unsigned int>(ACTIONBAR_MAX); i++) {
 		if (i < slots.size() && slots[i]) {
 			if (inpt->binding[i - ACTIONBAR_MAIN + MAIN1] < 8)
 				labels[i] = msg->get("Hotkey: %s", inpt->mouse_button[inpt->binding[i - ACTIONBAR_MAIN + MAIN1] - 1].c_str());

@@ -111,7 +111,7 @@ int Map::load(std::string fname) {
 			}
 
 			// store the index of this StatBlock so that we can find it when the event is activated
-			ec_power->y = statblocks.size()-1;
+			ec_power->y = static_cast<int>(statblocks.size())-1;
 
 			statb->current[STAT_ACCURACY] = 1000; // always hit the target
 
@@ -143,7 +143,7 @@ int Map::load(std::string fname) {
 		for (unsigned i=0; i<w; ++i) {
 			layers.back()[i].resize(h, 0);
 		}
-		collision_layer = layers.size()-1;
+		collision_layer = static_cast<int>(layers.size())-1;
 	}
 
 	return 0;
@@ -200,7 +200,7 @@ void Map::loadLayer(FileParser &infile) {
 		}
 		layernames.push_back(infile.val);
 		if (infile.val == "collision")
-			collision_layer = layernames.size()-1;
+			collision_layer = static_cast<int>(layernames.size())-1;
 	}
 	else if (infile.key == "format") {
 		// @ATTR layer.format|string|Format for map layer, must be 'dec'

@@ -83,7 +83,7 @@ void WidgetLog::refresh() {
 	scroll_box->resize(scroll_box->pos.w, y);
 
 	// Render messages into the scrollbox area
-	for (unsigned int i = messages.size(); i > 0; i--) {
+	for (size_t i = messages.size(); i > 0; i--) {
 		Point size = font->calc_size(messages[i-1], content_width);
 		font->renderShadowed(messages[i-1], padding, y2, JUSTIFY_LEFT, scroll_box->contents->getGraphics(), content_width, colors[i-1]);
 		y2 += size.y+paragraph_spacing;

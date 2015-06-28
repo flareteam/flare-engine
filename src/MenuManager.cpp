@@ -411,9 +411,9 @@ void MenuManager::logic() {
 	mp->update(stats->mp, stats->get(STAT_MP_MAX), inpt->mouse);
 
 	if (stats->level == static_cast<int>(stats->xp_table.size()))
-		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d", stats->xp));
+		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %lu", stats->xp));
 	else
-		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
+		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %lu/%lu", stats->xp, stats->xp_table[stats->level]));
 
 	if (NO_MOUSE)
 		handleKeyboardNavigation();

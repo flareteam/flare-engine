@@ -733,7 +733,7 @@ void StatBlock::loadHeroStats() {
 		}
 		infile.close();
 	}
-	max_spendable_stat_points = xp_table.size() * stat_points_per_level;
+	max_spendable_stat_points = static_cast<int>(xp_table.size()) * stat_points_per_level;
 }
 
 void StatBlock::loadHeroSFX() {

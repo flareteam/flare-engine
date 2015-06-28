@@ -194,12 +194,12 @@ int NPC::loadSound(const std::string& fname, int type) {
 
 	if (type == NPC_VOX_INTRO) {
 		vox_intro.push_back(a);
-		return vox_intro.size() - 1;
+		return static_cast<int>(vox_intro.size()) - 1;
 	}
 
 	if (type == NPC_VOX_QUEST) {
 		vox_quests.push_back(a);
-		return vox_quests.size() - 1;
+		return static_cast<int>(vox_quests.size()) - 1;
 	}
 	return -1;
 }
@@ -215,7 +215,7 @@ bool NPC::playSound(int type, int id) {
 	if (type == NPC_VOX_INTRO) {
 		int roll;
 		if (vox_intro.empty()) return false;
-		roll = rand() % vox_intro.size();
+		roll = rand() % static_cast<int>(vox_intro.size());
 		snd->play(vox_intro[roll], "NPC_VOX");
 		return true;
 	}
@@ -240,62 +240,62 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 	typedef std::map<std::string, Dialogs > DialogGroups;
 	DialogGroups groups;
 
-	for (int i=dialog.size()-1; i>=0; i--) {
+	for (size_t i=dialog.size(); i>0; i--) {
 		bool is_available = true;
 		bool is_grouped = false;
-		for (unsigned int j=0; j<dialog[i].size(); j++) {
+		for (size_t j=0; j<dialog[i-1].size(); j++) {
 
-			if (dialog[i][j].type == "requires_status") {
-				if (camp->checkStatus(dialog[i][j].s))
+			if (dialog[i-1][j].type == "requires_status") {
+				if (camp->checkStatus(dialog[i-1][j].s))
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i][j].type == "requires_not_status") {
-				if (!camp->checkStatus(dialog[i][j].s))
+			else if (dialog[i-1][j].type == "requires_not_status") {
+				if (!camp->checkStatus(dialog[i-1][j].s))
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i][j].type == "requires_currency") {
-				if (camp->checkCurrency(dialog[i][j].x))
+			else if (dialog[i-1][j].type == "requires_currency") {
+				if (camp->checkCurrency(dialog[i-1][j].x))
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i][j].type == "requires_item") {
-				if (camp->checkItem(dialog[i][j].x))
+			else if (dialog[i-1][j].type == "requires_item") {
+				if (camp->checkItem(dialog[i-1][j].x))
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i][j].type == "requires_level") {
-				if (camp->hero->level >= dialog[i][j].x)
+			else if (dialog[i-1][j].type == "requires_level") {
+				if (camp->hero->level >= dialog[i-1][j].x)
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i][j].type == "requires_not_level") {
-				if (camp->hero->level < dialog[i][j].x)
+			else if (dialog[i-1][j].type == "requires_not_level") {
+				if (camp->hero->level < dialog[i-1][j].x)
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i][j].type == "requires_class") {
-				if (camp->hero->character_class == dialog[i][j].s)
+			else if (dialog[i-1][j].type == "requires_class") {
+				if (camp->hero->character_class == dialog[i-1][j].s)
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i][j].type == "group") {
+			else if (dialog[i-1][j].type == "group") {
 				is_grouped = true;
-				group = dialog[i][j].s;
+				group = dialog[i-1][j].s;
 			}
 		}
 
 		if (is_available) {
 			if (!is_grouped) {
-				result.push_back(i);
+				result.push_back(i-1);
 			}
 			else {
 				DialogGroups::iterator it;
@@ -304,7 +304,7 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 					groups.insert(DialogGroups::value_type(group, Dialogs()));
 				}
 				else
-					it->second.push_back(i);
+					it->second.push_back(i-1);
 
 			}
 		}

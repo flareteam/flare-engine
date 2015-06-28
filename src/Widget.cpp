@@ -137,7 +137,7 @@ int TabList::getCurrent() {
 }
 
 unsigned TabList::size() {
-	return widgets.size();
+	return static_cast<unsigned>(widgets.size());
 }
 
 bool TabList::current_is_valid() {
@@ -181,7 +181,7 @@ Widget* TabList::getPrev(bool inner) {
 	--current;
 
 	if (current <= -1)
-		current = widgets.size()-1;
+		current = static_cast<unsigned>(widgets.size()-1);
 
 	widgets.at(current)->in_focus = true;
 	return widgets.at(current);

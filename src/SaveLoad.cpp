@@ -106,7 +106,7 @@ void GameStatePlay::saveGame() {
 
 		// action bar
 		outfile << "actionbar=";
-		for (unsigned i = 0; i < ACTIONBAR_MAX; i++) {
+		for (unsigned i = 0; i < static_cast<unsigned>(ACTIONBAR_MAX); i++) {
 			if (i < menu->act->slots_count)
 			{
 				if (pc->stats.transformed) outfile << menu->act->hotkeys_temp[i];

@@ -221,7 +221,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 		else if (effect_type == EFFECT_STUN) return;
 	}
 
-	for (unsigned i=effect_list.size(); i>0; i--) {
+	for (size_t i=effect_list.size(); i>0; i--) {
 		if (effect_list[i-1].name == effect.id) {
 			if (trigger > -1 && effect_list[i-1].trigger == trigger)
 				return; // trigger effects can only be cast once per trigger
@@ -273,19 +273,19 @@ void EffectManager::removeAnimation(int id) {
 }
 
 void EffectManager::removeEffectType(const int &type) {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == type) removeEffect(i-1);
 	}
 }
 
 void EffectManager::removeEffectPassive(int id) {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].passive_id == id) removeEffect(i-1);
 	}
 }
 
 void EffectManager::clearEffects() {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		removeEffect(i-1);
 	}
 
@@ -296,7 +296,7 @@ void EffectManager::clearEffects() {
 }
 
 void EffectManager::clearNegativeEffects() {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == EFFECT_DAMAGE) removeEffect(i-1);
 		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) removeEffect(i-1);
 		else if (effect_list[i-1].type == EFFECT_STUN) removeEffect(i-1);
@@ -304,13 +304,13 @@ void EffectManager::clearNegativeEffects() {
 }
 
 void EffectManager::clearItemEffects() {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].item) removeEffect(i-1);
 	}
 }
 
 void EffectManager::clearTriggerEffects(int trigger) {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].trigger > -1 && effect_list[i-1].trigger == trigger) removeEffect(i-1);
 	}
 }

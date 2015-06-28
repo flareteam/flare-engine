@@ -203,9 +203,9 @@ std::string path(const std::stringstream* ss) {
 
 	bool is_windows_path = false;
 
-	int len = path.length();
+	size_t len = path.length();
 	// fix mixed '\' and '/' on windows
-	for (int i = 0; i < len; i++) {
+	for (size_t i = 0; i < len; i++) {
 		if (path[i] == '\\') {
 			is_windows_path = true;
 		}

@@ -103,7 +103,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 		infile.close();
 	}
 
-	MAX_EQUIPPED = equipped_area.size();
+	MAX_EQUIPPED = static_cast<int>(equipped_area.size());
 	MAX_CARRIED = carried_cols * carried_rows;
 
 	carried_area.w = carried_cols*ICON_SIZE;
@@ -190,7 +190,7 @@ void MenuInventory::logic() {
 				}
 			}
 			if (!removable_items.empty()) {
-				int random_item = rand() % removable_items.size();
+				size_t random_item = static_cast<size_t>(rand()) % removable_items.size();
 				remove(removable_items[random_item]);
 				death_message += msg->get("Lost %s.",items->getItemName(removable_items[random_item]));
 			}

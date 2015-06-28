@@ -316,7 +316,7 @@ void GameStateNew::logic() {
 	}
 	else if (button_prev->checkClick()) {
 		current_option--;
-		if (current_option == -1) current_option = portrait.size()-1;
+		if (current_option == -1) current_option = static_cast<int>(portrait.size())-1;
 		loadPortrait(portrait[current_option]);
 		setName(name[current_option]);
 	}

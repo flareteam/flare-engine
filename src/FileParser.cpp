@@ -53,7 +53,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	bool ret = false;
 
 	// Cycle through all filenames from the end, stopping when a file is to overwrite all further files.
-	for (unsigned i=filenames.size(); i>0; i--) {
+	for (size_t i=filenames.size(); i>0; i--) {
 		infile.open(filenames[i-1].c_str(), std::ios::in);
 		ret = infile.is_open();
 

@@ -156,8 +156,8 @@ std::string ModManager::locate(const std::string& filename) {
 	// search through mods for the first instance of this filename
 	std::string test_path;
 
-	for (unsigned int i = mod_list.size(); i > 0; i--) {
-		for (unsigned int j = 0; j < mod_paths.size(); j++) {
+	for (size_t i = mod_list.size(); i > 0; i--) {
+		for (size_t j = 0; j < mod_paths.size(); j++) {
 			test_path = mod_paths[j] + "mods/" + mod_list[i-1].name + "/" + filename;
 			if (fileExists(test_path)) {
 				loc_cache[filename] = test_path;
@@ -185,8 +185,8 @@ std::vector<std::string> ModManager::list(const std::string &path, bool full_pat
 	std::vector<std::string> ret;
 	std::string test_path;
 
-	for (unsigned int i = 0; i < mod_list.size(); ++i) {
-		for (unsigned int j = mod_paths.size(); j > 0; j--) {
+	for (size_t i = 0; i < mod_list.size(); ++i) {
+		for (size_t j = mod_paths.size(); j > 0; j--) {
 			test_path = mod_paths[j-1] + "mods/" + mod_list[i].name + "/" + path;
 			amendPathToVector(test_path, ret);
 		}

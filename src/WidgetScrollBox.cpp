@@ -293,7 +293,7 @@ bool WidgetScrollBox::getPrev() {
 	if (currentChild != -1)
 		children[currentChild]->in_focus = false;
 	currentChild-=1;
-	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
+	currentChild = (currentChild < 0) ? static_cast<int>(children.size()) - 1 : currentChild;
 
 	if (children[currentChild]->pos.y > (cursor + pos.h) ||
 			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {

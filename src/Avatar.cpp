@@ -560,7 +560,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			setAnimation("run");
 
 			if (sound_steps.size() > 0) {
-				int stepfx = rand() % sound_steps.size();
+				int stepfx = rand() % static_cast<int>(sound_steps.size());
 
 				if (activeAnimation->isFirstFrame() || activeAnimation->isActiveFrame())
 					snd->play(sound_steps[stepfx]);

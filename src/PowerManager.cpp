@@ -554,10 +554,10 @@ int PowerManager::loadSFX(const std::string& filename) {
 	std::vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
 	if (it == sfx.end()) {
 		sfx.push_back(sid);
-		return sfx.size() - 1;
+		return static_cast<int>(sfx.size()) - 1;
 	}
 
-	return it - sfx.begin();
+	return static_cast<int>(it - sfx.begin());
 }
 
 

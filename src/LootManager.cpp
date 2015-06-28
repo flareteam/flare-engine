@@ -262,7 +262,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 	int chance = rand() % 100;
 
 	// first drop any 'fixed' (0% chance) items
-	for (unsigned i = loot_table.size(); i > 0; i--) {
+	for (size_t i = loot_table.size(); i > 0; i--) {
 		ec = &loot_table[i-1];
 		if (ec->z == 0) {
 			Point src;
@@ -331,7 +331,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 
 	if (!possible_ids.empty()) {
 		// if there was more than one item with the same chance, randomly pick one of them
-		int chosen_loot = rand() % possible_ids.size();
+		size_t chosen_loot = static_cast<size_t>(rand()) % possible_ids.size();
 
 		ec = possible_ids[chosen_loot];
 
@@ -379,8 +379,9 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
 	alignFPoint(&ld.pos);
 	ld.dropped_by_hero = dropped_by_hero;
 
-	int index = items->items[stack.item].loot_animation.size()-1;
-	if (index >= 0) {
+	if (!items->items[stack.item].loot_animation.empty()) {
+		size_t index = items->items[stack.item].loot_animation.size()-1;
+
 		for (unsigned int i=0; i<items->items[stack.item].loot_animation.size(); i++) {
 			int low = items->items[stack.item].loot_animation[i].low;
 			int high = items->items[stack.item].loot_animation[i].high;

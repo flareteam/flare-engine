@@ -214,7 +214,7 @@ bool GameStatePlay::restrictPowerUse() {
 				return true;
 			}
 			else {
-				if(ACTIONBAR_MAIN < menu->act->slots_count && menu->act->slot_enabled[ACTIONBAR_MAIN] && (powers->powers[menu->act->hotkeys[ACTIONBAR_MAIN]].target_party != enemy->stats.hero_ally))
+				if(static_cast<unsigned>(ACTIONBAR_MAIN) < menu->act->slots_count && menu->act->slot_enabled[ACTIONBAR_MAIN] && (powers->powers[menu->act->hotkeys[ACTIONBAR_MAIN]].target_party != enemy->stats.hero_ally))
 					return true;
 			}
 		}
