@@ -129,6 +129,13 @@ std::string MessageEngine::str(int i) {
 	return ss.str();
 }
 
+// Changes an unsigned long into a string
+std::string MessageEngine::str(unsigned long i) {
+	std::stringstream ss;
+	ss << i;
+	return ss.str();
+}
+
 // unescape c formatted string
 std::string MessageEngine::unescape(std::string val) {
 

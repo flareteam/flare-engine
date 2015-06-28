@@ -36,6 +36,7 @@ class MessageEngine {
 private:
 	std::map<std::string,std::string> messages;
 	std::string str(int i);
+	std::string str(unsigned long i);
 	std::string unescape(std::string msg);
 public:
 	MessageEngine();
