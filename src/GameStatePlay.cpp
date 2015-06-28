@@ -99,7 +99,7 @@ GameStatePlay::GameStatePlay()
 	hazards = new HazardManager();
 	menu = new MenuManager(&pc->stats);
 	npcs = new NPCManager(&pc->stats);
-	quests = new QuestLog(menu->log);
+	quests = new QuestLog(menu->questlog);
 
 	// LootManager needs hero StatBlock
 	loot->hero = &pc->stats;
@@ -136,7 +136,7 @@ void GameStatePlay::resetGame() {
 	menu->inv->inventory[1].clear();
 	menu->inv->changed_equipment = true;
 	menu->inv->currency = 0;
-	menu->log->clear();
+	menu->questlog->clear();
 	quests->createQuestList();
 	menu->hudlog->clear();
 	loadStash();
@@ -253,7 +253,7 @@ void GameStatePlay::checkLoot() {
 	if (loot->full_msg) {
 		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-		menu->log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+		menu->questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 		menu->hudlog->add(msg->get("Inventory is full."));
 		loot->full_msg = false;
 	}
@@ -380,21 +380,21 @@ void GameStatePlay::checkLog() {
 
 	// Map events can create messages
 	if (mapr->log_msg != "") {
-		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->questlog->add(mapr->log_msg, LOG_TYPE_MESSAGES, false);
 		menu->hudlog->add(mapr->log_msg, false);
 		mapr->log_msg = "";
 	}
 
 	// The avatar can create messages (e.g. level up)
 	if (pc->log_msg != "") {
-		menu->log->add(pc->log_msg, LOG_TYPE_MESSAGES);
+		menu->questlog->add(pc->log_msg, LOG_TYPE_MESSAGES);
 		menu->hudlog->add(pc->log_msg);
 		pc->log_msg = "";
 	}
 
 	// Campaign events can create messages (e.g. quest rewards)
 	if (camp->log_msg != "") {
-		menu->log->add(camp->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->questlog->add(camp->log_msg, LOG_TYPE_MESSAGES, false);
 		menu->hudlog->add(camp->log_msg, false);
 		camp->log_msg = "";
 	}
@@ -407,7 +407,7 @@ void GameStatePlay::checkLog() {
 
 	// PowerManager has hints for powers
 	if (powers->log_msg != "") {
-		menu->log->add(powers->log_msg, LOG_TYPE_MESSAGES);
+		menu->questlog->add(powers->log_msg, LOG_TYPE_MESSAGES);
 		menu->hudlog->add(powers->log_msg);
 		powers->log_msg = "";
 	}

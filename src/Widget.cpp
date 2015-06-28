@@ -149,7 +149,7 @@ bool TabList::previous_is_valid() {
 }
 
 Widget* TabList::getNext(bool inner) {
-	if (widgets.size() == 0)
+	if (widgets.empty())
 		return NULL;
 
 	if (current_is_valid()) {
@@ -168,7 +168,7 @@ Widget* TabList::getNext(bool inner) {
 }
 
 Widget* TabList::getPrev(bool inner) {
-	if (widgets.size() == 0)
+	if (widgets.empty())
 		return NULL;
 
 	if (current_is_valid()) {

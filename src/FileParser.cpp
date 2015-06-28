@@ -45,7 +45,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	line_number = 0;
 	this->errormessage = _errormessage;
 
-	if (filenames.size() == 0 && !errormessage.empty()) {
+	if (filenames.empty() && !errormessage.empty()) {
 		logError("FileParser: %s: %s: No such file or directory!", _filename.c_str(), errormessage.c_str());
 		return false;
 	}
@@ -71,7 +71,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 				}
 
 				if (test_line != "APPEND") {
-					current_index = i-1;
+					current_index = static_cast<unsigned>(i)-1;
 					infile.clear(); // reset flags
 					infile.seekg(0, std::ios::beg);
 					break;

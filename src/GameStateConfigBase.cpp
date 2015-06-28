@@ -854,7 +854,7 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 				ret += max_version;
 			}
 		}
-		if (mod->depends.size() > 0) {
+		if (!mod->depends.empty()) {
 			if (ret != "") ret += '\n';
 			ret += msg->get("Requires mods: ");
 			for (unsigned i=0; i<mod->depends.size(); ++i) {

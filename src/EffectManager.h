@@ -100,8 +100,8 @@ public:
 class EffectManager {
 private:
 	Animation* loadAnimation(std::string &s);
-	void removeEffect(int id);
-	void removeAnimation(int id);
+	void removeEffect(size_t id);
+	void removeAnimation(size_t id);
 
 public:
 	EffectManager();
@@ -117,7 +117,7 @@ public:
 	void clearItemEffects();
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
-	int getType(const std::string type);
+	int getType(const std::string& type);
 
 	std::vector<Effect> effect_list;
 

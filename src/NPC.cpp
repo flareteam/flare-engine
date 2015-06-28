@@ -295,7 +295,7 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 
 		if (is_available) {
 			if (!is_grouped) {
-				result.push_back(i-1);
+				result.push_back(static_cast<int>(i-1));
 			}
 			else {
 				DialogGroups::iterator it;
@@ -304,7 +304,7 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 					groups.insert(DialogGroups::value_type(group, Dialogs()));
 				}
 				else
-					it->second.push_back(i-1);
+					it->second.push_back(static_cast<int>(i-1));
 
 			}
 		}

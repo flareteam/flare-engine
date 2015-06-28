@@ -46,6 +46,8 @@ public:
 		, label(id != "" ? new WidgetLabel() : NULL) {
 		if (label)
 			label->set(r.label->get());
+
+		rect = r.rect;
 	}
 
 	virtual ~Action() {

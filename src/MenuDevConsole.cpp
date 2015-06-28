@@ -135,7 +135,7 @@ void MenuDevConsole::logic() {
 		}
 		else if (input_box->inFocus && inpt->pressing_up) {
 			inpt->pressing_up = false;
-			if (input_scrollback.size() != 0) {
+			if (!input_scrollback.empty()) {
 				if (input_scrollback_pos != 0)
 					input_scrollback_pos--;
 				input_box->setText(input_scrollback[input_scrollback_pos]);
@@ -143,7 +143,7 @@ void MenuDevConsole::logic() {
 		}
 		else if (input_box->inFocus && inpt->pressing_down) {
 			inpt->pressing_down = false;
-			if (input_scrollback.size() != 0) {
+			if (!input_scrollback.empty()) {
 				input_scrollback_pos++;
 				if (input_scrollback_pos < input_scrollback.size()) {
 					input_box->setText(input_scrollback[input_scrollback_pos]);

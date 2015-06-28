@@ -262,7 +262,7 @@ void WidgetScrollBox::render() {
 }
 
 bool WidgetScrollBox::getNext() {
-	if (children.size() == 0) {
+	if (children.empty()) {
 		scrollDown();
 		return true;
 	}
@@ -285,7 +285,7 @@ bool WidgetScrollBox::getNext() {
 }
 
 bool WidgetScrollBox::getPrev() {
-	if (children.size() == 0) {
+	if (children.empty()) {
 		scrollUp();
 		return true;
 	}

@@ -184,7 +184,7 @@ void GameStatePlay::saveGame() {
 	}
 
 	// display a log message saying that we saved the game
-	menu->log->add(msg->get("Game saved."), LOG_TYPE_MESSAGES);
+	menu->questlog->add(msg->get("Game saved."), LOG_TYPE_MESSAGES);
 	menu->hudlog->add(msg->get("Game saved."));
 }
 

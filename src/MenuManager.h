@@ -107,7 +107,7 @@ public:
 	MenuInventory *inv;
 	MenuPowers *pow;
 	MenuCharacter *chr;
-	MenuLog *log;
+	MenuLog *questlog;
 	MenuHUDLog *hudlog;
 	MenuActionBar *act;
 	MenuBook *book;

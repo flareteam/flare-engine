@@ -56,7 +56,7 @@ AnimationManager::~AnimationManager() {
 void AnimationManager::increaseCount(const std::string &name) {
 	std::vector<std::string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
-		int index = distance(names.begin(), found);
+		size_t index = static_cast<size_t>(distance(names.begin(), found));
 		counts[index]++;
 	}
 	else {

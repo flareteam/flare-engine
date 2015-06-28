@@ -35,7 +35,7 @@ public:
 	HazardManager();
 	~HazardManager();
 	void logic();
-	void expire(int index);
+	void expire(size_t index);
 	void checkNewHazards();
 	void handleNewMap();
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);

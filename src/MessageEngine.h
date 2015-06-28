@@ -44,6 +44,8 @@ public:
 	std::string get(const std::string& key, const std::string& s);
 	std::string get(const std::string& key, int i, const std::string& s);
 	std::string get(const std::string& key, int i, int j);
+	std::string get(const std::string& key, unsigned long i);
+	std::string get(const std::string& key, unsigned long i, unsigned long j);
 };
 
 #endif

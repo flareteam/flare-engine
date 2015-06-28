@@ -37,7 +37,7 @@ EffectManager::EffectManager()
 }
 
 EffectManager::~EffectManager() {
-	for (unsigned i=0; i<effect_list.size(); i++) {
+	for (size_t i=0; i<effect_list.size(); i++) {
 		removeAnimation(i);
 	}
 }
@@ -81,9 +81,14 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	bonus_defense = emSource.bonus_defense;
 	bonus_physical = emSource.bonus_physical;
 	bonus_mental = emSource.bonus_mental;
-	for (unsigned i=0; i<STAT_COUNT; i++) {
+
+	for (size_t i=0; i<emSource.bonus.size(); i++) {
 		bonus[i] = emSource.bonus[i];
 	}
+	for (size_t i=0; i<emSource.bonus_resist.size(); i++) {
+		bonus_resist[i] = emSource.bonus_resist[i];
+	}
+
 	triggered_others = emSource.triggered_others;
 	triggered_block = emSource.triggered_block;
 	triggered_hit = emSource.triggered_hit;
@@ -258,12 +263,12 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	effect_list.push_back(e);
 }
 
-void EffectManager::removeEffect(int id) {
+void EffectManager::removeEffect(size_t id) {
 	removeAnimation(id);
 	effect_list.erase(effect_list.begin()+id);
 }
 
-void EffectManager::removeAnimation(int id) {
+void EffectManager::removeAnimation(size_t id) {
 	if (effect_list[id].animation && effect_list[id].animation_name != "") {
 		anim->decreaseCount(effect_list[id].animation_name);
 		delete effect_list[id].animation;
@@ -342,7 +347,7 @@ Animation* EffectManager::loadAnimation(std::string &s) {
 	return NULL;
 }
 
-int EffectManager::getType(const std::string type) {
+int EffectManager::getType(const std::string& type) {
 	if (type.empty()) return EFFECT_NONE;
 
 	if (type == "damage") return EFFECT_DAMAGE;

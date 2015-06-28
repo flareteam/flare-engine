@@ -71,7 +71,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, inv(NULL)
 	, pow(NULL)
 	, chr(NULL)
-	, log(NULL)
+	, questlog(NULL)
 	, hudlog(NULL)
 	, act(NULL)
 	, book(NULL)
@@ -120,8 +120,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(inv); // menus[12]
 	pow = new MenuPowers(stats, act);
 	menus.push_back(pow); // menus[13]
-	log = new MenuLog();
-	menus.push_back(log); // menus[14]
+	questlog = new MenuLog();
+	menus.push_back(questlog); // menus[14]
 	stash = new MenuStash(stats);
 	menus.push_back(stash); // menus[15]
 	npc = new MenuNPCActions();
@@ -251,11 +251,11 @@ void MenuManager::handleKeyboardNavigation() {
 					}
 				}
 			}
-			else if (log->visible && log->tablist.getCurrent() != -1 && !log->tablist.isLocked()) {
+			else if (questlog->visible && questlog->tablist.getCurrent() != -1 && !questlog->tablist.isLocked()) {
 				if (inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
 					inpt->lock[RIGHT] = true;
-					log->tablist.lock();
-					log->tablist.defocus();
+					questlog->tablist.lock();
+					questlog->tablist.defocus();
 					if (inv->visible) {
 						inv->tablist.unlock();
 						inv->tablist.getNext();
@@ -268,7 +268,7 @@ void MenuManager::handleKeyboardNavigation() {
 			}
 		}
 		// right -> left
-		if (vendor->visible || stash->visible || chr->visible || log->visible) {
+		if (vendor->visible || stash->visible || chr->visible || questlog->visible) {
 			if (inv->visible && (inv->tablist.getCurrent() - EQUIPPED_SLOTS) >= 0 && !inv->tablist.isLocked()) {
 				if (((inv->tablist.getCurrent() - EQUIPPED_SLOTS + 1) % ((inv->tablist.size() - EQUIPPED_SLOTS)/INVENTORY_ROWS) == 1) &&
 						inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
@@ -287,9 +287,9 @@ void MenuManager::handleKeyboardNavigation() {
 						chr->tablist.unlock();
 						chr->tablist.getNext();
 					}
-					else if (log->visible) {
-						log->tablist.unlock();
-						log->tablist.getNext();
+					else if (questlog->visible) {
+						questlog->tablist.unlock();
+						questlog->tablist.getNext();
 					}
 				}
 			}
@@ -302,9 +302,9 @@ void MenuManager::handleKeyboardNavigation() {
 						chr->tablist.unlock();
 						chr->tablist.getNext();
 					}
-					else if (log->visible) {
-						log->tablist.unlock();
-						log->tablist.getNext();
+					else if (questlog->visible) {
+						questlog->tablist.unlock();
+						questlog->tablist.getNext();
 					}
 				}
 			}
@@ -316,9 +316,9 @@ void MenuManager::handleKeyboardNavigation() {
 		stash->tablist.unlock();
 		vendor->tablist.unlock();
 		chr->tablist.unlock();
-		log->tablist.unlock();
+		questlog->tablist.unlock();
 	}
-	else if (!vendor->visible && ! stash->visible && !chr->visible && !log->visible) {
+	else if (!vendor->visible && ! stash->visible && !chr->visible && !questlog->visible) {
 		inv->tablist.unlock();
 		pow->tablist.unlock();
 	}
@@ -411,9 +411,9 @@ void MenuManager::logic() {
 	mp->update(stats->mp, stats->get(STAT_MP_MAX), inpt->mouse);
 
 	if (stats->level == static_cast<int>(stats->xp_table.size()))
-		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %lu", stats->xp));
+		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d", stats->xp));
 	else
-		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %lu/%lu", stats->xp, stats->xp_table[stats->level]));
+		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
 
 	if (NO_MOUSE)
 		handleKeyboardNavigation();
@@ -426,7 +426,7 @@ void MenuManager::logic() {
 			(inv->visible && isWithin(inv->window_area, inpt->mouse)) ||
 			(vendor->visible && isWithin(vendor->window_area, inpt->mouse)) ||
 			(pow->visible && isWithin(pow->window_area, inpt->mouse)) ||
-			(log->visible && isWithin(log->window_area, inpt->mouse)) ||
+			(questlog->visible && isWithin(questlog->window_area, inpt->mouse)) ||
 			(talker->visible && isWithin(talker->window_area, inpt->mouse)) ||
 			(stash->visible && isWithin(stash->window_area, inpt->mouse)))
 		{
@@ -443,7 +443,7 @@ void MenuManager::logic() {
 	inv->logic();
 	vendor->logic();
 	pow->logic();
-	log->logic();
+	questlog->logic();
 	talker->logic();
 	stash->logic();
 
@@ -486,7 +486,7 @@ void MenuManager::logic() {
 			keyboard_dragging = false;
 			mouse_dragging = false;
 		}
-		if (inv->tablist.getCurrent() != -1 || vendor->tablist.getCurrent() != -1 || stash->tablist.getCurrent() != -1 || act->tablist.getCurrent() != -1 || pow->tablist.getCurrent() != -1 || chr->tablist.getCurrent() != -1 || log->tablist.getCurrent() != -1 || book->tablist.getCurrent() != -1) {
+		if (inv->tablist.getCurrent() != -1 || vendor->tablist.getCurrent() != -1 || stash->tablist.getCurrent() != -1 || act->tablist.getCurrent() != -1 || pow->tablist.getCurrent() != -1 || chr->tablist.getCurrent() != -1 || questlog->tablist.getCurrent() != -1 || book->tablist.getCurrent() != -1) {
 			inpt->lock[CANCEL] = true;
 			inv->tablist.defocus();
 			vendor->tablist.defocus();
@@ -494,7 +494,7 @@ void MenuManager::logic() {
 			act->tablist.defocus();
 			pow->tablist.defocus();
 			chr->tablist.defocus();
-			log->tablist.defocus();
+			questlog->tablist.defocus();
 			book->tablist.defocus();
 		}
 	}
@@ -584,15 +584,15 @@ void MenuManager::logic() {
 		// log menu toggle
 		if ((inpt->pressing[LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log) {
 			key_lock = true;
-			if (log->visible) {
-				snd->play(log->sfx_close);
+			if (questlog->visible) {
+				snd->play(questlog->sfx_close);
 				closeLeft();
 			}
 			else {
 				closeLeft();
 				act->requires_attention[MENU_LOG] = false;
-				log->visible = true;
-				snd->play(log->sfx_open);
+				questlog->visible = true;
+				snd->play(questlog->sfx_open);
 				// Make sure the log isn't scrolled when we open the log menu
 				inpt->resetScroll();
 			}
@@ -612,7 +612,7 @@ void MenuManager::logic() {
 	}
 
 	bool console_open = DEV_MODE && devconsole->visible;
-	menus_open = (inv->visible || pow->visible || chr->visible || log->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
+	menus_open = (inv->visible || pow->visible || chr->visible || questlog->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
 	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open;
 
 	if (stats->alive) {
@@ -671,13 +671,13 @@ void MenuManager::logic() {
 					stack = vendor->click(inpt->mouse);
 					if (!stack.empty()) {
 						if (!inv->buy(stack,vendor->getTab())) {
-							log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
+							questlog->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Not enough %s.", CURRENCY));
 							vendor->itemReturn( stack);
 						}
 						else {
 							if (inv->full(stack)) {
-								log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+								questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 								hudlog->add(msg->get("Inventory is full."));
 								drop_stack.push(stack);
 							}
@@ -704,7 +704,7 @@ void MenuManager::logic() {
 					stack = stash->click(inpt->mouse);
 					if (!stack.empty()) {
 						if (inv->full(stack)) {
-							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+							questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
 							splitStack(stack);
 						}
@@ -723,7 +723,7 @@ void MenuManager::logic() {
 				}
 			}
 
-			if (log->visible && isWithin(log->window_area,inpt->mouse)) {
+			if (questlog->visible && isWithin(questlog->window_area,inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 			}
 
@@ -877,13 +877,13 @@ void MenuManager::logic() {
 				// dropping an item from vendor (we only allow to drop into the carried area)
 				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
 					if (!inv->buy(drag_stack,vendor->getTab())) {
-						log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
+						questlog->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
 						hudlog->add(msg->get("Not enough %s.", CURRENCY));
 						vendor->itemReturn( drag_stack);
 					}
 					else {
 						if (inv->full(drag_stack)) {
-							log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+							questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 							hudlog->add(msg->get("Inventory is full."));
 							drop_stack.push(drag_stack);
 						}
@@ -902,7 +902,7 @@ void MenuManager::logic() {
 				// dropping an item from stash (we only allow to drop into the carried area)
 				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
 					if (inv->full(drag_stack)) {
-						log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+						questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 						hudlog->add(msg->get("Inventory is full."));
 						splitStack(drag_stack);
 					}
@@ -1070,13 +1070,13 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
 			if (!inv->buy(drag_stack,vendor->getTab())) {
-				log->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
+				questlog->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
 				hudlog->add(msg->get("Not enough %s.", CURRENCY));
 				vendor->itemReturn(drag_stack);
 			}
 			else {
 				if (inv->full(drag_stack)) {
-					log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+					questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 					hudlog->add(msg->get("Inventory is full."));
 					drop_stack.push(drag_stack);
 				}
@@ -1117,7 +1117,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				inv->add(drag_stack);
 			}
 			else {
-				log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+				questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 				hudlog->add(msg->get("Inventory is full."));
 				splitStack(drag_stack);
 			}
@@ -1389,7 +1389,7 @@ void MenuManager::closeAll() {
 void MenuManager::closeLeft() {
 	resetDrag();
 	chr->visible = false;
-	log->visible = false;
+	questlog->visible = false;
 	exit->visible = false;
 	stash->visible = false;
 	book->visible = false;
@@ -1454,7 +1454,7 @@ MenuManager::~MenuManager() {
 	delete pow;
 	delete chr;
 	delete hudlog;
-	delete log;
+	delete questlog;
 	delete act;
 	delete tip;
 	delete vendor;
