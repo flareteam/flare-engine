@@ -58,6 +58,7 @@ private:
 	WidgetLabel *label_loading;
 	WidgetLabel *label_name[GAME_SLOT_MAX];
 	WidgetLabel *label_level[GAME_SLOT_MAX];
+	WidgetLabel *label_class[GAME_SLOT_MAX];
 	WidgetLabel *label_map[GAME_SLOT_MAX];
 
 	MenuConfirm *confirm;
@@ -80,6 +81,7 @@ private:
 
 	LabelInfo name_pos;
 	LabelInfo level_pos;
+	LabelInfo class_pos;
 	LabelInfo map_pos;
 	LabelInfo loading_pos;
 	Point sprites_pos;
