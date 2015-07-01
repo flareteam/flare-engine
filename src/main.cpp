@@ -250,30 +250,34 @@ int main(int argc, char *argv[]) {
 	std::string render_device_name = "";
 
 	for (int i = 1 ; i < argc; i++) {
-		std::string arg = std::string(argv[i]);
-		if (parseArg(arg) == "debug-event") {
+		std::string arg = parseArg(std::string(argv[i]));
+		if (arg == "debug-event") {
 			debug_event = true;
 		}
-		else if (parseArg(arg) == "data-path") {
+		else if (arg == "data-path") {
 			CUSTOM_PATH_DATA = parseArgValue(arg);
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";
 		}
-		else if (parseArg(arg) == "version") {
+		else if (arg == "version") {
 			printf("%s\n", getVersionString().c_str());
 			done = true;
 		}
-		else if (parseArg(arg) == "renderer") {
+		else if (arg == "renderer") {
 			render_device_name = parseArgValue(arg);
 		}
-		else if (parseArg(arg) == "help") {
+		else if (arg == "no-audio") {
+			AUDIO = false;
+		}
+		else if (arg == "help") {
 			printf("\
 --help                   Prints this message.\n\n\
 --version                Prints the release version.\n\n\
 --data-path=<PATH>       Specifies an exact path to look for mod data.\n\n\
 --debug-event            Prints verbose hardware input information.\n\n\
 --renderer=<RENDERER>    Specifies the rendering backend to use.\n\
-                         The default is 'sdl'.\n");
+                         The default is 'sdl'.\n\n\
+--no-audio               Disables sound effects and music.\n");
 			done = true;
 		}
 	}

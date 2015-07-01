@@ -55,7 +55,6 @@ ConfigEntry config[] = {
 	{ "fullscreen",       &typeid(FULLSCREEN),      "0",   &FULLSCREEN,      "fullscreen mode. 1 enable, 0 disable."},
 	{ "resolution_w",     &typeid(SCREEN_W),        "640", &SCREEN_W,        "display resolution. 640x480 minimum."},
 	{ "resolution_h",     &typeid(SCREEN_H),        "480", &SCREEN_H,        NULL},
-	{ "audio",            &typeid(AUDIO),           "1",   &AUDIO,           "Enable music and sound subsystem."},
 	{ "music_volume",     &typeid(MUSIC_VOLUME),    "96",  &MUSIC_VOLUME,    "music and sound volume (0 = silent, 128 = max)"},
 	{ "sound_volume",     &typeid(SOUND_VOLUME),    "128", &SOUND_VOLUME,    NULL},
 	{ "combat_text",      &typeid(COMBAT_TEXT),     "0",   &COMBAT_TEXT,     "display floating damage text. 1 enable, 0 disable."},
@@ -128,7 +127,7 @@ bool CHANGE_GAMMA;
 float GAMMA;
 
 // Audio Settings
-bool AUDIO;
+bool AUDIO = true;
 unsigned short MUSIC_VOLUME;
 unsigned short SOUND_VOLUME;
 
