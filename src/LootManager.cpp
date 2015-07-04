@@ -372,6 +372,11 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 }
 
 void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
+	if (static_cast<size_t>(stack.item) >= items->items.size()) {
+		logError("LootManager: Loot item with id %d is not valid.", stack.item);
+		return;
+	}
+
 	Loot ld;
 	ld.stack = stack;
 	ld.pos.x = pos.x;
