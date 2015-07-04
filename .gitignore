@@ -6,6 +6,8 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 build/
+build-debug/
+build-release/
 config/
 saves/
 # ignore also vim swap files
