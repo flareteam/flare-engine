@@ -280,6 +280,10 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.requires_currency|integer|Event requires atleast this much currency
 		e->x = toInt(infile.nextValue());
 	}
+	else if (infile.key == "requires_not_currency") {
+		// @ATTR event.requires_not_currency|integer|Event requires no more than this much currency
+		e->x = toInt(infile.nextValue());
+	}
 	else if (infile.key == "requires_item") {
 		// @ATTR event.requires_item|integer,...|Event requires specific item
 		e->x = toInt(infile.nextValue());
@@ -297,8 +301,29 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 			}
 		}
 	}
+	else if (infile.key == "requires_not_item") {
+		// @ATTR event.requires_not_item|integer,...|Event requires not having a specific item
+		e->x = toInt(infile.nextValue());
+
+		// add repeating requires_not_item
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->x = toInt(repeat_val);
+
+				repeat_val = infile.nextValue();
+			}
+		}
+	}
 	else if (infile.key == "requires_class") {
 		// @ATTR event.requires_class|string|Event requires this base class
+		e->s = infile.nextValue();
+	}
+	else if (infile.key == "requires_not_class") {
+		// @ATTR event.requires_not_class|string|Event requires not this base class
 		e->s = infile.nextValue();
 	}
 	else if (infile.key == "set_status") {
@@ -633,8 +658,18 @@ bool EventManager::isActive(const Event &e) {
 				return false;
 			}
 		}
+		else if (e.components[i].type == "requires_not_currency") {
+			if (camp->checkCurrency(e.components[i].x)) {
+				return false;
+			}
+		}
 		else if (e.components[i].type == "requires_item") {
 			if (!camp->checkItem(e.components[i].x)) {
+				return false;
+			}
+		}
+		else if (e.components[i].type == "requires_not_item") {
+			if (camp->checkItem(e.components[i].x)) {
 				return false;
 			}
 		}
@@ -650,6 +685,10 @@ bool EventManager::isActive(const Event &e) {
 		}
 		else if (e.components[i].type == "requires_class") {
 			if (camp->hero->character_class != e.components[i].s)
+				return false;
+		}
+		else if (e.components[i].type == "requires_not_class") {
+			if (camp->hero->character_class == e.components[i].s)
 				return false;
 		}
 	}
