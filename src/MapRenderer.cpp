@@ -311,11 +311,11 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t j; // second index of the map array
 	Rect dest;
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2*tset.max_size_x;
-	const int_fast16_t max_tiles_height = (2 * VIEW_H / TILE_H) + 2*tset.max_size_y;
+	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2*tset.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / TILE_H) + 2*tset.max_size_y);
 
-	j = upperleft.y - tset.max_size_y/2 + tset.max_size_x;
-	i = upperleft.x - tset.max_size_y/2 - tset.max_size_x;
+	j = static_cast<int_fast16_t>(upperleft.y - tset.max_size_y/2 + tset.max_size_x);
+	i = static_cast<int_fast16_t>(upperleft.x - tset.max_size_y/2 - tset.max_size_x);
 
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
 		int_fast16_t tiles_width = 0;
@@ -323,16 +323,16 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 		// make sure the isometric corners are not rendered:
 		// corner north west, upper left  (i < 0)
 		if (i < -1) {
-			j += i + 1;
-			tiles_width -= i + 1;
+			j = static_cast<int_fast16_t>(j + i + 1);
+			tiles_width = static_cast<int_fast16_t>(tiles_width - (i + 1));
 			i = -1;
 		}
 		// corner north east, upper right (j > mapheight)
-		const int_fast16_t d = j - h;
+		const int_fast16_t d = static_cast<int_fast16_t>(j - h);
 		if (d >= 0) {
-			j -= d;
-			tiles_width += d;
-			i += d;
+			j = static_cast<int_fast16_t>(j - d);
+			tiles_width = static_cast<int_fast16_t>(tiles_width + d);
+			i = static_cast<int_fast16_t>(i + d);
 		}
 
 		// lower right (south east) corner is covered by (j+i-w+1)
@@ -358,8 +358,8 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 				render_device->render(tset.tiles[current_tile].tile);
 			}
 		}
-		j += tiles_width;
-		i -= tiles_width;
+		j = static_cast<int_fast16_t>(j + tiles_width);
+		i = static_cast<int_fast16_t>(i - tiles_width);
 		// Go one line deeper, the starting position goes zig-zag
 		if (y % 2)
 			i++;
@@ -378,15 +378,15 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Rect dest;
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
-	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
+	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2 * tset.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2);
 
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
 
 	// object layer
-	int_fast16_t j = upperleft.y - tset.max_size_y + tset.max_size_x;
-	int_fast16_t i = upperleft.x - tset.max_size_y - tset.max_size_x;
+	int_fast16_t j = static_cast<int_fast16_t>(upperleft.y - tset.max_size_y + tset.max_size_x);
+	int_fast16_t i = static_cast<int_fast16_t>(upperleft.x - tset.max_size_y - tset.max_size_x);
 
 	while (r_cursor != r_end && (static_cast<int>(r_cursor->map_pos.x) + static_cast<int>(r_cursor->map_pos.y) < i + j || static_cast<int>(r_cursor->map_pos.x) < i)) // implicit floor
 		++r_cursor;
@@ -399,15 +399,15 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 
 		// make sure the isometric corners are not rendered:
 		if (i < -1) {
-			j += i + 1;
-			tiles_width -= i + 1;
+			j = static_cast<int_fast16_t>(j + i + 1);
+			tiles_width = static_cast<int_fast16_t>(tiles_width - (i + 1));
 			i = -1;
 		}
-		const int_fast16_t d = j - h;
+		const int_fast16_t d = static_cast<int_fast16_t>(j - h);
 		if (d >= 0) {
-			j -= d;
-			tiles_width += d;
-			i += d;
+			j = static_cast<int_fast16_t>(j - d);
+			tiles_width = static_cast<int_fast16_t>(tiles_width + d);
+			i = static_cast<int_fast16_t>(i + d);
 		}
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1), std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
@@ -433,8 +433,8 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 				++r_cursor;
 			}
 		}
-		j += tiles_width;
-		i -= tiles_width;
+		j = static_cast<int_fast16_t>(j + tiles_width);
+		i = static_cast<int_fast16_t>(i - tiles_width);
 		if (y % 2)
 			i++;
 		else
