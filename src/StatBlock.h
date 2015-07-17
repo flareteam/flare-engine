@@ -282,7 +282,7 @@ public:
 	int cooldown_ticks;
 	int cooldown; // min. # of frames between abilities
 	AIPower* activated_power;
-	bool on_half_dead_casted;
+	bool half_dead_power;
 	bool suppress_hp; // hide an enemy HP bar
 
 	std::vector<Event_Component> loot_table;

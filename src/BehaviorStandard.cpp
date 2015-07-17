@@ -274,7 +274,7 @@ void BehaviorStandard::checkPower() {
 		AIPower* ai_power = NULL;
 
 		// check half dead power use
-		if (!e->stats.on_half_dead_casted && e->stats.hp <= e->stats.get(STAT_HP_MAX)/2) {
+		if (e->stats.half_dead_power && e->stats.hp <= e->stats.get(STAT_HP_MAX)/2) {
 			ai_power = e->stats.getAIPower(AI_POWER_HALF_DEAD);
 		}
 		// check ranged power use
@@ -314,7 +314,7 @@ void BehaviorStandard::checkPower() {
 				e->stats.cooldown_ticks = e->stats.cooldown;
 
 			if (e->stats.activated_power->type == AI_POWER_HALF_DEAD) {
-				e->stats.on_half_dead_casted = true;
+				e->stats.half_dead_power = false;
 			}
 		}
 	}
@@ -518,8 +518,10 @@ void BehaviorStandard::updateState() {
 
 		case ENEMY_POWER:
 
-			// if (e->stats.activated_power == NULL)
-			// 	break;
+			if (e->stats.activated_power == NULL) {
+				e->newState(ENEMY_STANCE);
+				break;
+			}
 
 			power_id = e->stats.activated_power->id;
 			power_state = powers->powers[power_id].new_state;
@@ -534,8 +536,10 @@ void BehaviorStandard::updateState() {
 				else if (powers->powers[power_id].attack_anim == "cast") e->play_sfx_ment = true;
 			}
 
-			if (e->activeAnimation->isLastFrame() || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim))
+			if (e->activeAnimation->isLastFrame() || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim)) {
 				e->newState(ENEMY_STANCE);
+				e->stats.activated_power = NULL;
+			}
 			break;
 
 		case ENEMY_SPAWN:

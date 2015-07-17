@@ -129,7 +129,7 @@ StatBlock::StatBlock()
 	, cooldown_ticks(0)
 	, cooldown(0)
 	, activated_power(NULL) // enemy only
-	, on_half_dead_casted(false) // enemy only
+	, half_dead_power(false) // enemy only
 	, suppress_hp(false)
 	, teleportation(false)
 	, teleport_destination()
@@ -354,6 +354,9 @@ void StatBlock::load(const std::string& filename) {
 				infile.error("StatBlock: '%s' is not a valid enemy power type.", ai_type.c_str());
 				continue;
 			}
+
+			if (ai_power.type == AI_POWER_HALF_DEAD)
+				half_dead_power = true;
 
 			powers_ai.push_back(ai_power);
 		}
