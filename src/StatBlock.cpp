@@ -117,9 +117,7 @@ StatBlock::StatBlock()
 	, powers_list()	// hero only
 	, powers_list_items()	// hero only
 	, powers_passive()
-	, power_chance(POWERSLOT_COUNT, 0)		// enemy only
-	, power_index(POWERSLOT_COUNT, 0)		// both
-	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
+	, powers_ai() // enemy only
 	, melee_range(1.0f) //both
 	, threat_range(0)  // enemy
 	, combat_style(COMBAT_DEFAULT)//enemy
@@ -130,7 +128,7 @@ StatBlock::StatBlock()
 	, join_combat(false)
 	, cooldown_ticks(0)
 	, cooldown(0)
-	, activated_powerslot(0)// enemy only
+	, activated_power(NULL) // enemy only
 	, on_half_dead_casted(false) // enemy only
 	, suppress_hp(false)
 	, teleportation(false)
@@ -330,47 +328,35 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		// @ATTR chance_flee|integer|Percentage chance that the creature will run away from their target.
 		else if (infile.key == "chance_flee") chance_flee = num;
-
-		// @ATTR chance_melee_phys|integer|Percentage chance that the creature will use their physical melee power.
-		else if (infile.key == "chance_melee_phys") power_chance[MELEE_PHYS] = num;
-		// @ATTR chance_melee_ment|integer|Percentage chance that the creature will use their mental melee power.
-		else if (infile.key == "chance_melee_ment") power_chance[MELEE_MENT] = num;
-		// @ATTR chance_ranged_phys|integer|Percentage chance that the creature will use their physical ranged power.
-		else if (infile.key == "chance_ranged_phys") power_chance[RANGED_PHYS] = num;
-		// @ATTR chance_ranged_ment|integer|Percentage chance that the creature will use their mental ranged power.
-		else if (infile.key == "chance_ranged_ment") power_chance[RANGED_MENT] = num;
-		// @ATTR power_melee_phys|integer|Power index for the physical melee power.
-		else if (infile.key == "power_melee_phys") power_index[MELEE_PHYS] = powers->verifyID(num, &infile);
-		// @ATTR power_melee_ment|integer|Power index for the mental melee power.
-		else if (infile.key == "power_melee_ment") power_index[MELEE_MENT] = powers->verifyID(num, &infile);
-		// @ATTR power_ranged_phys|integer|Power index for the physical ranged power.
-		else if (infile.key == "power_ranged_phys") power_index[RANGED_PHYS] = powers->verifyID(num, &infile);
-		// @ATTR power_ranged_ment|integer|Power index for the mental ranged power.
-		else if (infile.key == "power_ranged_ment") power_index[RANGED_MENT] = powers->verifyID(num, &infile);
-		// @ATTR power_beacon|integer|Power index of a "beacon" power used to aggro nearby creatures.
-		else if (infile.key == "power_beacon") power_index[BEACON] = powers->verifyID(num, &infile);
-		// @ATTR power_on_hit|integer|Power index that is triggered when hit.
-		else if (infile.key == "power_on_hit") power_index[ON_HIT] = powers->verifyID(num, &infile);
-		// @ATTR power_on_death|integer|Power index that is triggered when dead.
-		else if (infile.key == "power_on_death") power_index[ON_DEATH] = powers->verifyID(num, &infile);
-		// @ATTR power_on_half_dead|integer|Power index that is triggered when at half health.
-		else if (infile.key == "power_on_half_dead") power_index[ON_HALF_DEAD] = powers->verifyID(num, &infile);
-		// @ATTR power_on_debuff|integer|Power index that is triggered when under a negative status effect.
-		else if (infile.key == "power_on_debuff") power_index[ON_DEBUFF] = powers->verifyID(num, &infile);
-		// @ATTR power_on_join_combat|integer|Power index that is triggered when initiating combat.
-		else if (infile.key == "power_on_join_combat") power_index[ON_JOIN_COMBAT] = powers->verifyID(num, &infile);
-		// @ATTR chance_on_hit|integer|Percentage chance that power_on_hit will be triggered.
-		else if (infile.key == "chance_on_hit") power_chance[ON_HIT] = num;
-		// @ATTR chance_on_death|integer|Percentage chance that power_on_death will be triggered.
-		else if (infile.key == "chance_on_death") power_chance[ON_DEATH] = num;
-		// @ATTR chance_on_half_dead|integer|Percentage chance that power_on_half_dead will be triggered.
-		else if (infile.key == "chance_on_half_dead") power_chance[ON_HALF_DEAD] = num;
-		// @ATTR chance_on_debuff|integer|Percentage chance that power_on_debuff will be triggered.
-		else if (infile.key == "chance_on_debuff") power_chance[ON_DEBUFF] = num;
-		// @ATTR chance_on_join_combat|integer|Percentage chance that power_on_join_combat will be triggered.
-		else if (infile.key == "chance_on_join_combat") power_chance[ON_JOIN_COMBAT] = num;
 		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
 		else if (infile.key == "cooldown_hit") cooldown_hit = parse_duration(infile.val);
+
+		else if (infile.key == "power") {
+			// @ATTR power|type (string), power id (integer), chance (integer)|A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, hit, death, half_dead, join_combat
+			AIPower ai_power;
+
+			std::string ai_type = infile.nextValue();
+
+			ai_power.id = powers->verifyID(toInt(infile.nextValue()), &infile);
+			if (ai_power.id == 0)
+				continue; // verifyID() will print our error message
+
+			ai_power.chance = toInt(infile.nextValue());
+
+			if (ai_type == "melee") ai_power.type = AI_POWER_MELEE;
+			else if (ai_type == "ranged") ai_power.type = AI_POWER_RANGED;
+			else if (ai_type == "beacon") ai_power.type = AI_POWER_BEACON;
+			else if (ai_type == "on_hit") ai_power.type = AI_POWER_HIT;
+			else if (ai_type == "on_death") ai_power.type = AI_POWER_DEATH;
+			else if (ai_type == "on_half_dead") ai_power.type = AI_POWER_HALF_DEAD;
+			else if (ai_type == "on_join_combat") ai_power.type = AI_POWER_JOIN_COMBAT;
+			else {
+				infile.error("StatBlock: '%s' is not a valid enemy power type.", ai_type.c_str());
+				continue;
+			}
+
+			powers_ai.push_back(ai_power);
+		}
 
 		else if (infile.key == "passive_powers") {
 			// @ATTR passive_powers|power (integer), ...|A list of passive powers this creature has.
@@ -580,8 +566,8 @@ void StatBlock::logic() {
 	// handle cooldowns
 	if (cooldown_ticks > 0) cooldown_ticks--; // global cooldown
 
-	for (int i=0; i<POWERSLOT_COUNT; i++) { // NPC/enemy powerslot cooldown
-		if (power_ticks[i] > 0) power_ticks[i]--;
+	for (size_t i=0; i<powers_ai.size(); ++i) { // NPC/enemy powerslot cooldown
+		if (powers_ai[i].ticks > 0) powers_ai[i].ticks--;
 	}
 
 	// HP regen
@@ -863,4 +849,34 @@ void StatBlock::addXP(int amount) {
 
 	if (xp >= xp_table.back())
 		xp = xp_table.back();
+}
+
+AIPower* StatBlock::getAIPower(AI_POWER ai_type) {
+	std::vector<size_t> possible_ids;
+	int chance = rand() % 100;
+
+	for (size_t i=0; i<powers_ai.size(); ++i) {
+		if (ai_type != powers_ai[i].type)
+			continue;
+
+		if (chance > powers_ai[i].chance)
+			continue;
+
+		if (powers_ai[i].ticks > 0)
+			continue;
+
+		if (powers->powers[powers_ai[i].id].type == POWTYPE_SPAWN) {
+			if (summonLimitReached(powers_ai[i].id))
+				continue;
+		}
+
+		possible_ids.push_back(i);
+	}
+
+	if (!possible_ids.empty()) {
+		size_t index = static_cast<size_t>(rand()) % possible_ids.size();
+		return &powers_ai[possible_ids[index]];
+	}
+
+	return NULL;
 }

@@ -34,17 +34,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Power;
 class FileParser;
 
-const int POWERSLOT_COUNT = 10;
-const int MELEE_PHYS = 0;
-const int MELEE_MENT = 1;
-const int RANGED_PHYS = 2;
-const int RANGED_MENT = 3;
-const int BEACON = 4;
-const int ON_HIT = 5;
-const int ON_DEATH = 6;
-const int ON_HALF_DEAD = 7;
-const int ON_DEBUFF = 8;
-const int ON_JOIN_COMBAT = 9;
+typedef enum {
+	AI_POWER_MELEE = 0,
+	AI_POWER_RANGED = 1,
+	AI_POWER_BEACON = 2,
+	AI_POWER_HIT = 3,
+	AI_POWER_DEATH = 4,
+	AI_POWER_HALF_DEAD = 5,
+	AI_POWER_JOIN_COMBAT = 6
+} AI_POWER;
 
 // active states
 const int ENEMY_STANCE = 0;
@@ -71,6 +69,21 @@ const int COMBAT_DEFAULT = 0;
 const int COMBAT_AGGRESSIVE = 1;
 const int COMBAT_PASSIVE = 2;
 
+class AIPower {
+public:
+	AI_POWER type;
+	int id;
+	int chance;
+	int ticks;
+
+	AIPower()
+		: type(AI_POWER_MELEE)
+		, id(0)
+		, chance(0)
+		, ticks(0)
+	{}
+};
+
 class StatBlock {
 private:
 	bool loadCoreStat(FileParser *infile);
@@ -96,6 +109,7 @@ public:
 	std::string getShortClass();
 	std::string getLongClass();
 	void addXP(int amount);
+	AIPower* getAIPower(AI_POWER ai_type);
 
 	bool alive;
 	bool corpse; // creature is dead and done animating
@@ -253,9 +267,7 @@ public:
 	std::vector<int> powers_list;
 	std::vector<int> powers_list_items;
 	std::vector<int> powers_passive;
-	std::vector<int> power_chance;
-	std::vector<int> power_index;
-	std::vector<int> power_ticks;
+	std::vector<AIPower> powers_ai;
 
 	bool canUsePower(const Power &power, unsigned powerid) const;
 
@@ -269,7 +281,7 @@ public:
 	bool join_combat;
 	int cooldown_ticks;
 	int cooldown; // min. # of frames between abilities
-	int activated_powerslot;
+	AIPower* activated_power;
 	bool on_half_dead_casted;
 	bool suppress_hp; // hide an enemy HP bar
 

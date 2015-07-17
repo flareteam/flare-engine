@@ -72,8 +72,8 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	prototypes.push_back(e);
 	size_t prototype = prototypes.size() - 1;
 
-	for (size_t i = 0; i < e.stats.power_index.size(); i++) {
-		int powerIndex = e.stats.power_index[i];
+	for (size_t i = 0; i < e.stats.powers_ai.size(); i++) {
+		int powerIndex = e.stats.powers_ai[i].id;
 		if (powerIndex != 0 && powers->getPower(powerIndex).spawn_type != "") {
 			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(powers->getPower(powerIndex).spawn_type);
 			for (size_t j = 0; j < spawn_enemies.size(); j++) {

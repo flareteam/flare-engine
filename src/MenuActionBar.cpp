@@ -295,9 +295,7 @@ void MenuActionBar::render() {
 							  && hero->stats.canUsePower(power, hotkeys_mod[i])
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
-			unsigned icon_offset = 0;/* !slot_enabled[i] ? ICON_DISABLED_OFFSET :
-								   (hero->activated_powerslot == i ? ICON_HIGHLIGHT_OFFSET : 0); */
-			slots[i]->setIcon(power.icon + icon_offset);
+			slots[i]->setIcon(power.icon);
 			slots[i]->render();
 		}
 		else {

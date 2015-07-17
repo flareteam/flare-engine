@@ -905,10 +905,11 @@ void GameStatePlay::logic() {
 			menu->act->hotkeys[i] = 0;
 		}
 		int count = ACTIONBAR_MAIN;
-		// creatures can have up to 4 powers
-		for (int i=0; i<4 ; i++) {
-			if (pc->charmed_stats->power_index[i] != 0) {
-				menu->act->hotkeys[count] = pc->charmed_stats->power_index[i];
+		// put creature powers on action bar
+		// TODO What if creature has more powers than the size of the action bar?
+		for (size_t i=0; i<pc->charmed_stats->powers_ai.size(); i++) {
+			if (pc->charmed_stats->powers_ai[i].id != 0) {
+				menu->act->hotkeys[count] = pc->charmed_stats->powers_ai[i].id;
 				menu->act->locked[count] = true;
 				count++;
 			}

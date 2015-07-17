@@ -216,8 +216,6 @@ bool Entity::takeHit(Hazard &h) {
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally) {
 		stats.join_combat = true;
-		stats.in_combat = true;
-		powers->activate(stats.power_index[BEACON], &stats, stats.pos); //emit beacon
 	}
 
 	// exit if it was a beacon (to prevent stats.targeted from being set)
@@ -438,14 +436,16 @@ bool Entity::takeHit(Hazard &h) {
 				if (stats.untransform_on_hit)
 					stats.transform_duration = 0;
 			}
-			// roll to see if the enemy's ON_HIT power is casted
-			if (percentChance(stats.power_chance[ON_HIT])) {
-				powers->activate(stats.power_index[ON_HIT], &stats, stats.pos);
-			}
 		}
 		// just play the hit sound
 		else
 			play_sfx_hit = true;
+
+		// roll to see if the enemy's ON_HIT power is casted
+		AIPower* ai_power = stats.getAIPower(AI_POWER_HIT);
+		if (ai_power != NULL) {
+			powers->activate(ai_power->id, &stats, stats.pos);
+		}
 	}
 
 	return true;

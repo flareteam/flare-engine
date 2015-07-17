@@ -825,8 +825,8 @@ void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoin
 
 	if (statblock_index < statblocks.size()) {
 		// check power cooldown before activating
-		if (statblocks[statblock_index].power_ticks[0] == 0) {
-			statblocks[statblock_index].power_ticks[0] = powers->powers[power_index].cooldown;
+		if (statblocks[statblock_index].powers_ai[0].ticks == 0) {
+			statblocks[statblock_index].powers_ai[0].ticks = powers->powers[power_index].cooldown;
 			powers->activate(power_index, &statblocks[statblock_index], target);
 		}
 	}

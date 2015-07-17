@@ -132,6 +132,10 @@ int Map::load(std::string fname) {
 				statb->current[STAT_DMG_MELEE_MIN] = statb->current[STAT_DMG_RANGED_MIN] = statb->current[STAT_DMG_MENT_MIN] = ec_damage->a;
 				statb->current[STAT_DMG_MELEE_MAX] = statb->current[STAT_DMG_RANGED_MAX] = statb->current[STAT_DMG_MENT_MAX] = ec_damage->b;
 			}
+
+			// this is used to store cooldown ticks for a map power
+			// the power id, type, etc are not used
+			statb->powers_ai.resize(1);
 		}
 	}
 
