@@ -332,7 +332,7 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "cooldown_hit") cooldown_hit = parse_duration(infile.val);
 
 		else if (infile.key == "power") {
-			// @ATTR power|type (string), power id (integer), chance (integer)|A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, hit, death, half_dead, join_combat
+			// @ATTR power|type (string), power id (integer), chance (integer)|A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, on_hit, on_death, on_half_dead, on_join_combat, on_debuff
 			AIPower ai_power;
 
 			std::string ai_type = infile.nextValue();
@@ -350,6 +350,7 @@ void StatBlock::load(const std::string& filename) {
 			else if (ai_type == "on_death") ai_power.type = AI_POWER_DEATH;
 			else if (ai_type == "on_half_dead") ai_power.type = AI_POWER_HALF_DEAD;
 			else if (ai_type == "on_join_combat") ai_power.type = AI_POWER_JOIN_COMBAT;
+			else if (ai_type == "on_debuff") ai_power.type = AI_POWER_DEBUFF;
 			else {
 				infile.error("StatBlock: '%s' is not a valid enemy power type.", ai_type.c_str());
 				continue;

@@ -41,7 +41,8 @@ typedef enum {
 	AI_POWER_HIT = 3,
 	AI_POWER_DEATH = 4,
 	AI_POWER_HALF_DEAD = 5,
-	AI_POWER_JOIN_COMBAT = 6
+	AI_POWER_JOIN_COMBAT = 6,
+	AI_POWER_DEBUFF = 7
 } AI_POWER;
 
 // active states

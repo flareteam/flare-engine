@@ -386,3 +386,13 @@ int EffectManager::getType(const std::string& type) {
 	logError("EffectManager: '%s' is not a valid effect type.", type.c_str());
 	return EFFECT_NONE;
 }
+
+bool EffectManager::isDebuffed() {
+	for (size_t i=effect_list.size(); i > 0; i--) {
+		if (effect_list[i-1].type == EFFECT_DAMAGE) return true;
+		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) return true;
+		else if (effect_list[i-1].type == EFFECT_STUN) return true;
+	}
+	return false;
+}
+

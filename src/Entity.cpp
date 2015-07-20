@@ -366,12 +366,21 @@ bool Entity::takeHit(Hazard &h) {
 
 	// after effects
 	if (dmg > 0) {
+		bool was_debuffed = stats.effects.isDebuffed();
 
 		// damage always breaks stun
 		stats.effects.removeEffectType(EFFECT_STUN);
 
 		if (stats.hp > 0) {
 			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
+		}
+
+		// if this hit caused a debuff, activate an on_debuff power
+		if (!was_debuffed && stats.effects.isDebuffed()) {
+			AIPower* ai_power = stats.getAIPower(AI_POWER_DEBUFF);
+			if (ai_power != NULL) {
+				powers->activate(ai_power->id, &stats, stats.pos);
+			}
 		}
 
 		if (!stats.effects.immunity) {

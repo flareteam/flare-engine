@@ -118,6 +118,7 @@ public:
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
 	int getType(const std::string& type);
+	bool isDebuffed();
 
 	std::vector<Effect> effect_list;
 
