@@ -181,7 +181,7 @@ void BehaviorStandard::findTarget() {
 
 		ai_power = e->stats.getAIPower(AI_POWER_JOIN_COMBAT);
 		if (ai_power != NULL) {
-			e->newState(ENEMY_POWER);
+			e->stats.cur_state = ENEMY_POWER;
 			e->stats.activated_power = ai_power;
 		}
 
@@ -287,7 +287,7 @@ void BehaviorStandard::checkPower() {
 		}
 
 		if (ai_power != NULL) {
-			e->newState(ENEMY_POWER);
+			e->stats.cur_state = ENEMY_POWER;
 			e->stats.activated_power = ai_power;
 			return;
 		}
@@ -336,7 +336,7 @@ void BehaviorStandard::checkMove() {
 	if (!e->stats.hero_ally && !e->stats.in_combat && (e->stats.waypoints.empty() || e->stats.waypoint_pause_ticks > 0)) {
 
 		if (e->stats.cur_state == ENEMY_MOVE) {
-			e->newState(ENEMY_STANCE);
+			e->stats.cur_state = ENEMY_STANCE;
 		}
 
 		// currently enemies only move while in combat or patrolling
@@ -450,7 +450,7 @@ void BehaviorStandard::checkMoveStateStance() {
 	if ((hero_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
 
 		if (e->move()) {
-			e->newState(ENEMY_MOVE);
+			e->stats.cur_state = ENEMY_MOVE;
 		}
 		else {
 			collided = true;
@@ -459,7 +459,7 @@ void BehaviorStandard::checkMoveStateStance() {
 			// hit an obstacle, try the next best angle
 			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 			if (e->move()) {
-				e->newState(ENEMY_MOVE);
+				e->stats.cur_state = ENEMY_MOVE;
 			}
 			else
 				e->stats.direction = prev_direction;
@@ -470,7 +470,7 @@ void BehaviorStandard::checkMoveStateStance() {
 void BehaviorStandard::checkMoveStateMove() {
 	// close enough to the hero or is at a safe distance
 	if ((target_dist < e->stats.melee_range && !fleeing) || (move_to_safe_dist && target_dist >= e->stats.threat_range/2)) {
-		e->newState(ENEMY_STANCE);
+		e->stats.cur_state = ENEMY_STANCE;
 		move_to_safe_dist = false;
 	}
 
@@ -481,7 +481,7 @@ void BehaviorStandard::checkMoveStateMove() {
 		// hit an obstacle.  Try the next best angle
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 		if (!e->move()) {
-			e->newState(ENEMY_STANCE);
+			e->stats.cur_state = ENEMY_STANCE;
 			e->stats.direction = prev_direction;
 		}
 	}
@@ -519,7 +519,7 @@ void BehaviorStandard::updateState() {
 		case ENEMY_POWER:
 
 			if (e->stats.activated_power == NULL) {
-				e->newState(ENEMY_STANCE);
+				e->stats.cur_state = ENEMY_STANCE;
 				break;
 			}
 
@@ -537,7 +537,7 @@ void BehaviorStandard::updateState() {
 			}
 
 			if (e->activeAnimation->isLastFrame() || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim)) {
-				e->newState(ENEMY_STANCE);
+				e->stats.cur_state = ENEMY_STANCE;
 				e->stats.activated_power = NULL;
 			}
 			break;
@@ -547,7 +547,7 @@ void BehaviorStandard::updateState() {
 			e->setAnimation("spawn");
 			//the second check is needed in case the entity does not have a spawn animation
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "spawn") {
-				e->newState(ENEMY_STANCE);
+				e->stats.cur_state = ENEMY_STANCE;
 			}
 			break;
 
@@ -563,7 +563,7 @@ void BehaviorStandard::updateState() {
 				e->stats.effects.triggered_hit = true;
 			}
 			if (e->activeAnimation->isLastFrame() || e->activeAnimation->getName() != "hit")
-				e->newState(ENEMY_STANCE);
+				e->stats.cur_state = ENEMY_STANCE;
 			break;
 
 		case ENEMY_DEAD:

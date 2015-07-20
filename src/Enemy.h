@@ -40,7 +40,6 @@ public:
 	bool lineOfSight();
 	void logic();
 	unsigned char faceNextBest(float mapx, float mapy);
-	void newState(int state);
 	virtual void doRewards(int source_type);
 
 	std::string type;

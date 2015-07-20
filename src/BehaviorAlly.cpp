@@ -124,11 +124,11 @@ void BehaviorAlly::findTarget() {
 void BehaviorAlly::checkMoveStateStance() {
 
 	if(e->stats.in_combat && target_dist > e->stats.melee_range)
-		e->newState(ENEMY_MOVE);
+		e->stats.cur_state = ENEMY_MOVE;
 
 	if((!e->stats.in_combat && hero_dist > ALLY_FOLLOW_DISTANCE_WALK) || fleeing) {
 		if (e->move()) {
-			e->newState(ENEMY_MOVE);
+			e->stats.cur_state = ENEMY_MOVE;
 		}
 		else {
 			collided = true;
@@ -137,7 +137,7 @@ void BehaviorAlly::checkMoveStateStance() {
 			// hit an obstacle, try the next best angle
 			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 			if (e->move()) {
-				e->newState(ENEMY_MOVE);
+				e->stats.cur_state = ENEMY_MOVE;
 			}
 			else e->stats.direction = prev_direction;
 		}
@@ -149,7 +149,7 @@ void BehaviorAlly::checkMoveStateMove() {
 	if((hero_dist < ALLY_FOLLOW_DISTANCE_STOP && !e->stats.in_combat && !fleeing)
 			|| (target_dist < e->stats.melee_range && e->stats.in_combat && !fleeing)
 			|| (move_to_safe_dist && target_dist >= e->stats.threat_range/2)) {
-		e->newState(ENEMY_STANCE);
+		e->stats.cur_state = ENEMY_STANCE;
 		move_to_safe_dist = false;
 	}
 

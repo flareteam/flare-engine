@@ -92,11 +92,6 @@ unsigned char Enemy::faceNextBest(float mapx, float mapy) {
 	return 0;
 }
 
-void Enemy::newState(int state) {
-
-	stats.cur_state = state;
-}
-
 /**
  * logic()
  * Handle a single frame.  This includes:
