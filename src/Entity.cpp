@@ -361,26 +361,20 @@ bool Entity::takeHit(Hazard &h) {
 	// temporarily save the current HP for calculating HP/MP steal on final blow
 	int prev_hp = stats.hp;
 
+	// save debuff status to check for on_debuff powers later
+	bool was_debuffed = stats.effects.isDebuffed();
+
 	// apply damage
 	stats.takeDamage(dmg);
 
 	// after effects
 	if (dmg > 0) {
-		bool was_debuffed = stats.effects.isDebuffed();
 
 		// damage always breaks stun
 		stats.effects.removeEffectType(EFFECT_STUN);
 
 		if (stats.hp > 0) {
 			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
-		}
-
-		// if this hit caused a debuff, activate an on_debuff power
-		if (!was_debuffed && stats.effects.isDebuffed()) {
-			AIPower* ai_power = stats.getAIPower(AI_POWER_DEBUFF);
-			if (ai_power != NULL) {
-				powers->activate(ai_power->id, &stats, stats.pos);
-			}
 		}
 
 		if (!stats.effects.immunity) {
@@ -429,12 +423,36 @@ bool Entity::takeHit(Hazard &h) {
 					stats.cur_state = ENEMY_DEAD;
 				mapr->collider.unblock(stats.pos.x,stats.pos.y);
 			}
+
+			return true;
 		}
+
+		// play hit sound effect
+		play_sfx_hit = true;
+
+		// if this hit caused a debuff, activate an on_debuff power
+		if (!was_debuffed && stats.effects.isDebuffed()) {
+			AIPower* ai_power = stats.getAIPower(AI_POWER_DEBUFF);
+			if (ai_power != NULL) {
+				stats.cur_state = ENEMY_POWER;
+				stats.activated_power = ai_power;
+				stats.cooldown_ticks = 0; // ignore global cooldown
+				return true;
+			}
+		}
+
+		// roll to see if the enemy's ON_HIT power is casted
+		AIPower* ai_power = stats.getAIPower(AI_POWER_HIT);
+		if (ai_power != NULL) {
+			stats.cur_state = ENEMY_POWER;
+			stats.activated_power = ai_power;
+			stats.cooldown_ticks = 0; // ignore global cooldown
+			return true;
+		}
+
 		// don't go through a hit animation if stunned or successfully poised
 		// however, critical hits ignore poise
-		else if (!stats.effects.stun && (!chance_poise || crit)) {
-			play_sfx_hit = true;
-
+		if (!stats.effects.stun && (!chance_poise || crit)) {
 			if(stats.cooldown_hit_ticks == 0) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
@@ -445,15 +463,6 @@ bool Entity::takeHit(Hazard &h) {
 				if (stats.untransform_on_hit)
 					stats.transform_duration = 0;
 			}
-		}
-		// just play the hit sound
-		else
-			play_sfx_hit = true;
-
-		// roll to see if the enemy's ON_HIT power is casted
-		AIPower* ai_power = stats.getAIPower(AI_POWER_HIT);
-		if (ai_power != NULL) {
-			powers->activate(ai_power->id, &stats, stats.pos);
 		}
 	}
 
