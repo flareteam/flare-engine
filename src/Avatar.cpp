@@ -331,10 +331,12 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 			}
 
 			// draw a target on the ground if we're attacking
-			if (target_anim && !power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
-				target_pos = target;
-				target_visible = true;
-				target_anim->reset();
+			if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
+				if (target_anim) {
+					target_pos = target;
+					target_visible = true;
+					target_anim->reset();
+				}
 				lock_cursor = true;
 			}
 			else {
