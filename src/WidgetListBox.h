@@ -39,7 +39,7 @@ public:
 		: selected(false)
 	{}
 	~ListBoxItem() {}
-	bool operator< (const ListBoxItem &other) {
+	bool operator< (const ListBoxItem& other) const {
 		return value < other.value;
 	}
 	std::string value;
