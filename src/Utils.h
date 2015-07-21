@@ -163,4 +163,6 @@ void Exit(int code);
 void createSaveDir(int slot);
 void removeSaveDir(int slot);
 
+Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align);
+
 #endif

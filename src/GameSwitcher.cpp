@@ -41,7 +41,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <typeinfo>
 
-GameSwitcher::GameSwitcher() {
+GameSwitcher::GameSwitcher()
+	: background(NULL)
+	, background_image(NULL)
+	, background_filename("")
+{
 
 	// The initial state is the intro cutscene and then title screen
 	GameStateTitle *title=new GameStateTitle();
@@ -58,6 +62,9 @@ GameSwitcher::GameSwitcher() {
 	done = false;
 	loadMusic();
 	loadFPS();
+
+	if (currentState->has_background)
+		loadBackgroundImage();
 }
 
 void GameSwitcher::loadMusic() {
@@ -84,6 +91,50 @@ void GameSwitcher::loadMusic() {
 	}
 }
 
+void GameSwitcher::loadBackgroundImage() {
+	std::string filename = "images/menus/background.png";
+
+	if (background_filename == filename) {
+		return;
+	}
+
+	// load the background image
+	background_filename = filename;
+	background_image = render_device->loadImage(background_filename);
+	refreshBackground();
+}
+
+void GameSwitcher::refreshBackground() {
+	if (background_image) {
+		background_image->ref();
+		Rect dest = resizeToScreen(background_image->getWidth(), background_image->getHeight(), true, ALIGN_CENTER);
+
+		Image *resized = background_image->resize(dest.w, dest.h);
+		if (resized) {
+			if (background)
+				delete background;
+
+			background = resized->createSprite();
+			resized->unref();
+		}
+
+		if (background)
+			background->setDest(dest);
+	}
+}
+
+void GameSwitcher::freeBackground() {
+	delete background;
+	background = NULL;
+
+	if (background_image) {
+		background_image->unref();
+		background_image = NULL;
+	}
+
+	background_filename = "";
+}
+
 void GameSwitcher::logic() {
 	// reset the mouse cursor
 	curs->logic();
@@ -102,6 +153,17 @@ void GameSwitcher::logic() {
 		if (!currentState->hasMusic)
 			if (!snd->isPlayingMusic())
 				loadMusic();
+
+		// if this game state shows a background image, load it here
+		if (currentState->has_background)
+			loadBackgroundImage();
+		else
+			freeBackground();
+	}
+
+	// resize background image when window is resized
+	if (inpt->window_resized && currentState->has_background) {
+		refreshBackground();
 	}
 
 	currentState->logic();
@@ -175,6 +237,11 @@ bool GameSwitcher::isPaused() {
 }
 
 void GameSwitcher::render() {
+	// display background
+	if (background && currentState->has_background) {
+		render_device->render(background);
+	}
+
 	currentState->render();
 	curs->render();
 }
@@ -188,5 +255,6 @@ GameSwitcher::~GameSwitcher() {
 	delete currentState;
 	delete label_fps;
 	snd->unloadMusic();
+	freeBackground();
 }
 

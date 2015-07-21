@@ -34,7 +34,6 @@ Scene::Scene(const FPoint& _caption_margins, bool _scale_graphics)
 	, done(false)
 	, caption_margins(_caption_margins)
 	, scale_graphics(_scale_graphics)
-	, scale_to_width(false)
 {
 }
 
@@ -145,17 +144,7 @@ void Scene::refreshWidgets() {
 	if (art) {
 		Rect art_dest;
 		if (scale_graphics) {
-			float ratio = VIEW_H / static_cast<float>(art_size.y);
-			art_dest.w = static_cast<int>(static_cast<float>(art_size.x) * ratio);
-			art_dest.h = VIEW_H;
-			scale_to_width = false;
-
-			if (art_dest.w > VIEW_W) {
-				ratio = VIEW_W / static_cast<float>(art_size.x);
-				art_dest.h = static_cast<int>(static_cast<float>(art_size.y) * ratio);
-				art_dest.w = VIEW_W;
-				scale_to_width = true;
-			}
+			art_dest = resizeToScreen(art_size.x, art_size.y, false, ALIGN_CENTER);
 
 			art->getGraphics()->ref(); // resize unref's our image (which we want to keep), so counter that here
 			Image *resized = art->getGraphics()->resize(art_dest.w, art_dest.h);
@@ -167,7 +156,6 @@ void Scene::refreshWidgets() {
 				resized->unref();
 			}
 
-			alignToScreenEdge(ALIGN_CENTER, &art_dest);
 			if (art_scaled)
 				art_scaled->setDest(art_dest);
 		}
@@ -201,7 +189,9 @@ GameStateCutscene::GameStateCutscene(GameState *game_state)
 	: previous_gamestate(game_state)
 	, scale_graphics(false)
 	, caption_margins(0.1f, 0.0f)
-	, game_slot(-1) {
+	, game_slot(-1)
+{
+	has_background = false;
 }
 
 GameStateCutscene::~GameStateCutscene() {

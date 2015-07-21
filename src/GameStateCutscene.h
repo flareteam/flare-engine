@@ -58,7 +58,6 @@ private:
 	bool done;
 	FPoint caption_margins;
 	bool scale_graphics;
-	bool scale_to_width; // scale to height if false
 
 public:
 	Scene(const FPoint& _caption_margins, bool _scale_graphics);

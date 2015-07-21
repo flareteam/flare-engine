@@ -44,6 +44,9 @@ class WidgetLabel;
 
 class GameSwitcher {
 private:
+	void refreshBackground();
+	void freeBackground();
+
 	GameState *currentState;
 
 	WidgetLabel *label_fps;
@@ -51,12 +54,17 @@ private:
 	Color fps_color;
 	ALIGNMENT fps_corner;
 
+	Sprite *background;
+	Image *background_image;
+	std::string background_filename;
+
 public:
 	GameSwitcher();
 	GameSwitcher(const GameSwitcher &copy); // not implemented.
 	~GameSwitcher();
 
 	void loadMusic();
+	void loadBackgroundImage();
 	void loadFPS();
 	bool isLoadingFrame();
 	bool isPaused();

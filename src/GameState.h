@@ -38,15 +38,14 @@ public:
 	virtual bool isPaused();
 
 	bool hasMusic;
+	bool has_background;
 	bool reload_music;
 	bool save_settings_on_exit;
 
 	int load_counter;
 
 protected:
-
 	GameState* requestedGameState;
-
 	bool exitRequested;
 };
 

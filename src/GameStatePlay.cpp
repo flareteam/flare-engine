@@ -78,6 +78,7 @@ GameStatePlay::GameStatePlay()
 
 	Image *graphics;
 	hasMusic = true;
+	has_background = false;
 	// GameEngine scope variables
 
 	graphics = render_device->loadImage("images/menus/confirm_bg.png");

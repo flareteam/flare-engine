@@ -312,3 +312,24 @@ void removeSaveDir(int slot) {
 	}
 }
 
+Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align) {
+	Rect r;
+
+	// fit to height
+	float ratio = VIEW_H / static_cast<float>(h);
+	r.w = static_cast<int>(static_cast<float>(w) * ratio);
+	r.h = VIEW_H;
+
+	if (!crop) {
+		// fit to width
+		if (r.w > VIEW_W) {
+			ratio = VIEW_W / static_cast<float>(w);
+			r.h = static_cast<int>(static_cast<float>(h) * ratio);
+			r.w = VIEW_W;
+		}
+	}
+
+	alignToScreenEdge(align, &r);
+
+	return r;
+}
