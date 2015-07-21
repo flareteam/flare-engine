@@ -44,6 +44,7 @@ class WidgetLabel;
 
 class GameSwitcher {
 private:
+	void loadBackgroundList();
 	void refreshBackground();
 	void freeBackground();
 

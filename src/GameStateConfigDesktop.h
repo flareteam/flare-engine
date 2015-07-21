@@ -64,7 +64,6 @@ private:
 	void updateKeybinds();
 
 	void logic();
-	void logicAccept();
 	void logicVideo();
 	void logicInput();
 	void logicKeybinds();

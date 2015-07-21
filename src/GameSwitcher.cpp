@@ -63,17 +63,7 @@ GameSwitcher::GameSwitcher()
 	loadMusic();
 	loadFPS();
 
-	// populate list of background image filenames
-	FileParser infile;
-	// @CLASS GameSwitcher: Background images|Description of engine/backgrounds.txt
-	if (infile.open("engine/backgrounds.txt", true, "")) {
-		while (infile.next()) {
-			// @ATTR background|string|Filename of a background image to be added to the pool of random menu backgrounds
-			if (infile.key == "background") background_list.push_back(infile.val);
-			else infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());
-		}
-		infile.close();
-	}
+	loadBackgroundList();
 
 	if (currentState->has_background)
 		loadBackgroundImage();
@@ -100,6 +90,22 @@ void GameSwitcher::loadMusic() {
 	}
 	else {
 		snd->stopMusic();
+	}
+}
+
+void GameSwitcher::loadBackgroundList() {
+	background_list.clear();
+	freeBackground();
+
+	FileParser infile;
+	// @CLASS GameSwitcher: Background images|Description of engine/backgrounds.txt
+	if (infile.open("engine/backgrounds.txt", true, "")) {
+		while (infile.next()) {
+			// @ATTR background|string|Filename of a background image to be added to the pool of random menu backgrounds
+			if (infile.key == "background") background_list.push_back(infile.val);
+			else infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
 	}
 }
 
@@ -153,6 +159,9 @@ void GameSwitcher::logic() {
 	// Check if a the game state is to be changed and change it if necessary, deleting the old state
 	GameState* newState = currentState->getRequestedGameState();
 	if (newState != NULL) {
+		if (currentState->reload_backgrounds)
+			loadBackgroundList();
+
 		delete currentState;
 		currentState = newState;
 		currentState->load_counter++;

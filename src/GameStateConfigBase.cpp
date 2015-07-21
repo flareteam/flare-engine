@@ -525,6 +525,7 @@ void GameStateConfigBase::logicAccept() {
 	inpt->setKeybindNames();
 	if (setMods()) {
 		reload_music = true;
+		reload_backgrounds = true;
 		delete mods;
 		mods = new ModManager();
 		loadTilesetSettings();

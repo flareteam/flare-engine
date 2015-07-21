@@ -553,31 +553,6 @@ void GameStateConfigDesktop::logic() {
 		logicMods();
 }
 
-void GameStateConfigDesktop::logicAccept() {
-	delete msg;
-	msg = new MessageEngine();
-	inpt->saveKeyBindings();
-	inpt->setKeybindNames();
-	if (setMods()) {
-		reload_music = true;
-		delete mods;
-		mods = new ModManager();
-		loadTilesetSettings();
-	}
-	loadMiscSettings();
-	setStatNames();
-	refreshFont();
-	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
-		SDL_JoystickClose(joy);
-		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-	}
-	cleanup();
-	render_device->createContext();
-	saveSettings();
-	delete requestedGameState;
-	requestedGameState = new GameStateTitle();
-}
-
 void GameStateConfigDesktop::logicVideo() {
 	if (fullscreen_cb->checkClick()) {
 		if (fullscreen_cb->isChecked()) FULLSCREEN=true;
