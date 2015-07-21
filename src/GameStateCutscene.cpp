@@ -252,6 +252,10 @@ bool GameStateCutscene::load(std::string filename) {
 				caption_margins.x = toFloat(infile.nextValue())/100.0f;
 				caption_margins.y = toFloat(infile.val)/100.0f;
 			}
+			else if (infile.key == "menu_backgrounds") {
+				// @ATTR menu_backgrounds|bool|This cutscene will use a random fullscreen background image, like the title screen does
+				has_background = true;
+			}
 			else {
 				infile.error("GameStateCutscene: '%s' is not a valid key.", infile.key.c_str());
 			}
