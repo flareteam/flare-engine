@@ -960,7 +960,10 @@ bool loadDefaults() {
  */
 std::string getVersionString() {
 	std::stringstream ss;
-	ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << std::setfill('0') << std::setw(2) << VERSION_MINOR;
+	if (VERSION_MAJOR > 0 && VERSION_MINOR < 100 && VERSION_MINOR % 10 == 0)
+		ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << VERSION_MINOR/10;
+	else
+		ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << std::setfill('0') << std::setw(2) << VERSION_MINOR;
 	return ss.str();
 }
 
