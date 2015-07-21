@@ -57,6 +57,7 @@ private:
 	Sprite *background;
 	Image *background_image;
 	std::string background_filename;
+	std::vector<std::string> background_list;
 
 public:
 	GameSwitcher();

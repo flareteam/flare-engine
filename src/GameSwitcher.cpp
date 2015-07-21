@@ -63,6 +63,18 @@ GameSwitcher::GameSwitcher()
 	loadMusic();
 	loadFPS();
 
+	// populate list of background image filenames
+	FileParser infile;
+	// @CLASS GameSwitcher: Background images|Description of engine/backgrounds.txt
+	if (infile.open("engine/backgrounds.txt", true, "")) {
+		while (infile.next()) {
+			// @ATTR background|string|Filename of a background image to be added to the pool of random menu backgrounds
+			if (infile.key == "background") background_list.push_back(infile.val);
+			else infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+	}
+
 	if (currentState->has_background)
 		loadBackgroundImage();
 }
@@ -92,14 +104,13 @@ void GameSwitcher::loadMusic() {
 }
 
 void GameSwitcher::loadBackgroundImage() {
-	std::string filename = "images/menus/background.png";
+	if (background_list.empty()) return;
 
-	if (background_filename == filename) {
-		return;
-	}
+	if (background_filename != "") return;
 
 	// load the background image
-	background_filename = filename;
+	size_t index = static_cast<size_t>(rand()) % background_list.size();
+	background_filename = background_list[index];
 	background_image = render_device->loadImage(background_filename);
 	refreshBackground();
 }
@@ -256,5 +267,6 @@ GameSwitcher::~GameSwitcher() {
 	delete label_fps;
 	snd->unloadMusic();
 	freeBackground();
+	background_list.clear();
 }
 
