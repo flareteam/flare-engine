@@ -26,9 +26,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-const std::string VERSION_NAME = "Flare Alpha";
-const int VERSION_MAJOR = 0;
-const int VERSION_MINOR = 19;
+const std::string VERSION_NAME = "Flare";
+const int VERSION_MAJOR = 1;
+const int VERSION_MINOR = 0;
 
 class Element {
 public:
