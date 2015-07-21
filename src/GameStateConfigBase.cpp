@@ -135,6 +135,7 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 			inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
 		}
 	}
+	inactivemods_lstb->sort();
 
 	if (do_init) {
 		init();
@@ -737,7 +738,7 @@ void GameStateConfigBase::refreshLanguages() {
 				language_lstb->append(infile.nextValue(),"");
 
 				if (language_ISO.back() == LANGUAGE) {
-					language_lstb->selected[i] = true;
+					language_lstb->select(i);
 				}
 
 				i++;
@@ -756,7 +757,7 @@ void GameStateConfigBase::refreshFont() {
 
 void GameStateConfigBase::enableMods() {
 	for (int i=0; i<inactivemods_lstb->getSize(); i++) {
-		if (inactivemods_lstb->selected[i]) {
+		if (inactivemods_lstb->isSelected(i)) {
 			activemods_lstb->append(inactivemods_lstb->getValue(i),inactivemods_lstb->getTooltip(i));
 			inactivemods_lstb->remove(i);
 			i--;
@@ -766,12 +767,13 @@ void GameStateConfigBase::enableMods() {
 
 void GameStateConfigBase::disableMods() {
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
-		if (activemods_lstb->selected[i] && activemods_lstb->getValue(i) != FALLBACK_MOD) {
+		if (activemods_lstb->isSelected(i) && activemods_lstb->getValue(i) != FALLBACK_MOD) {
 			inactivemods_lstb->append(activemods_lstb->getValue(i),activemods_lstb->getTooltip(i));
 			activemods_lstb->remove(i);
 			i--;
 		}
 	}
+	inactivemods_lstb->sort();
 }
 
 bool GameStateConfigBase::setMods() {

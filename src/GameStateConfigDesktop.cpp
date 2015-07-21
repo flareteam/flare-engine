@@ -469,7 +469,7 @@ void GameStateConfigDesktop::updateInput() {
 	if (ENABLE_JOYSTICK && SDL_NumJoysticks() > 0) {
 		SDL_JoystickClose(joy);
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-		joystick_device_lstb->selected[JOYSTICK_DEVICE] = true;
+		joystick_device_lstb->select(JOYSTICK_DEVICE);
 	}
 	joystick_device_lstb->refresh();
 
@@ -626,13 +626,13 @@ void GameStateConfigDesktop::logicInput() {
 				JOYSTICK_DEVICE = 0;
 				SDL_JoystickClose(joy);
 				joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-				joystick_device_lstb->selected[JOYSTICK_DEVICE] = true;
+				joystick_device_lstb->select(JOYSTICK_DEVICE);
 			}
 		}
 		else {
 			ENABLE_JOYSTICK=false;
 			for (int i=0; i<joystick_device_lstb->getSize(); i++)
-				joystick_device_lstb->selected[i] = false;
+				joystick_device_lstb->deselect(i);
 		}
 		if (SDL_NumJoysticks() > 0) joystick_device_lstb->refresh();
 	}

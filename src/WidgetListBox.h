@@ -33,6 +33,20 @@ class WidgetLabel;
 class WidgetScrollBar;
 class WidgetTooltip;
 
+class ListBoxItem {
+public:
+	ListBoxItem()
+		: selected(false)
+	{}
+	~ListBoxItem() {}
+	bool operator< (const ListBoxItem &other) {
+		return value < other.value;
+	}
+	std::string value;
+	std::string tooltip;
+	bool selected;
+};
+
 class WidgetListBox : public Widget {
 private:
 
@@ -43,8 +57,7 @@ private:
 	int cursor;
 	bool has_scroll_bar;
 	bool any_selected;
-	std::vector<std::string> values;
-	std::vector<std::string> tooltips;
+	std::vector<ListBoxItem> items;
 	std::vector<WidgetLabel> vlabels;
 	std::vector<Rect> rows;
 	WidgetTooltip *tip;
@@ -75,13 +88,17 @@ public:
 	void scrollDown();
 	void render();
 	void refresh();
+	void sort();
 
 	bool getNext();
 	bool getPrev();
 
+	void select(int index);
+	void deselect(int index);
+	bool isSelected(int index);
+
 	Rect pos_scroll;
 	bool pressed;
-	std::vector<bool> selected;
 	bool multi_select;
 	bool can_deselect;
 	bool can_select;

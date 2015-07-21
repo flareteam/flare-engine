@@ -173,7 +173,7 @@ GameStateNew::GameStateNew()
 	}
 
 	if (!HERO_CLASSES.empty())
-		class_list->selected[0] = true;
+		class_list->select(0);
 
 	loadGraphics();
 	loadOptions("hero_options.txt");
