@@ -98,8 +98,8 @@ void GameSwitcher::loadBackgroundList() {
 	freeBackground();
 
 	FileParser infile;
-	// @CLASS GameSwitcher: Background images|Description of engine/backgrounds.txt
-	if (infile.open("engine/backgrounds.txt", true, "")) {
+	// @CLASS GameSwitcher: Background images|Description of engine/menu_backgrounds.txt
+	if (infile.open("engine/menu_backgrounds.txt", true, "")) {
 		while (infile.next()) {
 			// @ATTR background|string|Filename of a background image to be added to the pool of random menu backgrounds
 			if (infile.key == "background") background_list.push_back(infile.val);
