@@ -480,13 +480,14 @@ void MenuInventory::activate(Point position) {
 	if (inventory[CARRIED][slot].empty())
 		return;
 
-	// can't interact with quest items
-	if (items->items[inventory[CARRIED][slot].item].type == "quest") {
-		return;
-	}
-	else if (items->items[inventory[CARRIED][slot].item].type == "book") {
+	// if the item is a book, open it
+	if (items->items[inventory[CARRIED][slot].item].book != "") {
 		snd->play(sfx_open);
 		show_book = items->items[inventory[CARRIED][slot].item].book;
+	}
+	// can't interact with quest items
+	else if (items->items[inventory[CARRIED][slot].item].type == "quest") {
+		return;
 	}
 	// use a consumable item
 	else if (items->items[inventory[CARRIED][slot].item].type == "consumable" &&
