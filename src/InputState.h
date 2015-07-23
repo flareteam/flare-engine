@@ -27,6 +27,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define JOY_POS_UP	-1
 #define JOY_POS_DOWN	1
 
+enum INPUT_BINDINGS {
+	INPUT_BINDING_DEFAULT = 0,
+	INPUT_BINDING_ALT = 1,
+	INPUT_BINDING_JOYSTICK = 2
+};
 
 // Input commands enum
 const int CANCEL = 0;
@@ -94,6 +99,7 @@ public:
 	virtual void showCursor() = 0;
 	virtual std::string getJoystickName(int index) = 0;
 	virtual std::string getKeyName(int key) = 0;
+	virtual std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT) = 0;
 
 	void enableEventLog();
 

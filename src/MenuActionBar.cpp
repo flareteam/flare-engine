@@ -181,28 +181,18 @@ void MenuActionBar::align() {
 	// set keybinding labels
 	for (unsigned int i = 0; i < static_cast<unsigned int>(ACTIONBAR_MAIN); i++) {
 		if (i < slots.size() && slots[i]) {
-			if (inpt->binding[i + BAR_1] < 8)
-				labels[i] = msg->get("Hotkey: %s", inpt->mouse_button[inpt->binding[i + BAR_1] - 1].c_str());
-			else
-				labels[i] = msg->get("Hotkey: %s", inpt->getKeyName(inpt->binding[i + BAR_1]).c_str());
+			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i+BAR_1));
 		}
 	}
 
 	for (unsigned int i=ACTIONBAR_MAIN; i < static_cast<unsigned int>(ACTIONBAR_MAX); i++) {
 		if (i < slots.size() && slots[i]) {
-			if (inpt->binding[i - ACTIONBAR_MAIN + MAIN1] < 8)
-				labels[i] = msg->get("Hotkey: %s", inpt->mouse_button[inpt->binding[i - ACTIONBAR_MAIN + MAIN1] - 1].c_str());
-			else
-				labels[i] = msg->get("Hotkey: %s", inpt->getKeyName(inpt->binding[i - ACTIONBAR_MAIN + MAIN1]).c_str());
+			labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i - ACTIONBAR_MAIN + MAIN1));
 		}
 	}
 	for (unsigned int i=0; i<menu_labels.size(); i++) {
 		menus[i]->setPos(window_area.x, window_area.y);
-
-		if (inpt->binding[i + CHARACTER] < 8)
-			menu_labels[i] = msg->get("Hotkey: %s", inpt->mouse_button[inpt->binding[i + CHARACTER] - 1].c_str());
-		else
-			menu_labels[i] = msg->get("Hotkey: %s", inpt->getKeyName(inpt->binding[i + CHARACTER]).c_str());
+		menu_labels[i] = msg->get("Hotkey: %s", inpt->getBindingString(i + CHARACTER));
 	}
 }
 

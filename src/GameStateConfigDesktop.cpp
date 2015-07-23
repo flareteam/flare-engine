@@ -477,38 +477,17 @@ void GameStateConfigDesktop::updateInput() {
 }
 
 void GameStateConfigDesktop::updateKeybinds() {
-	// reset all keybind labels to "(none)"
-	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		keybinds_btn[i]->label = msg->get("(none)");
-	}
-
 	// now do labels for keybinds that are set
 	for (unsigned int i = 0; i < key_count; i++) {
-		if (inpt->binding[i] >= 0) {
-			if (inpt->binding[i] < 8) {
-				keybinds_btn[i]->label = inpt->mouse_button[inpt->binding[i]-1];
-			}
-			else {
-				keybinds_btn[i]->label = inpt->getKeyName(inpt->binding[i]);
-			}
-		}
+		keybinds_btn[i]->label = inpt->getBindingString(i);
 		keybinds_btn[i]->refresh();
 	}
 	for (unsigned int i = key_count; i < key_count*2; i++) {
-		if (inpt->binding_alt[i-key_count] >= 0) {
-			if (inpt->binding_alt[i-key_count] < 8) {
-				keybinds_btn[i]->label = inpt->mouse_button[inpt->binding_alt[i-key_count]-1];
-			}
-			else {
-				keybinds_btn[i]->label = inpt->getKeyName(inpt->binding_alt[i-key_count]);
-			}
-		}
+		keybinds_btn[i]->label = inpt->getBindingString(i-key_count, INPUT_BINDING_ALT);
 		keybinds_btn[i]->refresh();
 	}
 	for (unsigned int i = key_count*2; i < keybinds_btn.size(); i++) {
-		if (inpt->binding_joy[i-(key_count*2)] >= 0) {
-			keybinds_btn[i]->label = msg->get("Button %d", inpt->binding_joy[i-(key_count*2)]);
-		}
+		keybinds_btn[i]->label = inpt->getBindingString(i-(key_count*2), INPUT_BINDING_JOYSTICK);
 		keybinds_btn[i]->refresh();
 	}
 	input_scrollbox->refresh();
