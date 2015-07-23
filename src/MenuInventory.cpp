@@ -523,7 +523,7 @@ void MenuInventory::activate(Point position) {
 
 	}
 	// equip an item
-	else if (stats->humanoid) {
+	else if (stats->humanoid && items->items[inventory[CARRIED][slot].item].type != "") {
 		int equip_slot = -1;
 		const ItemStack &src = inventory[CARRIED].storage[slot];
 
