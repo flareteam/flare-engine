@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-21 19:43-0400\n"
+"POT-Creation-Date: 2015-07-23 12:58-0400\n"
 "PO-Revision-Date: 2014-01-24 17:00+0100\n"
 "Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
 "Language-Team: SWEDISH <LL@li.org>\n"
@@ -211,12 +211,12 @@ msgid "Requires mods: "
 msgstr "Kräver styrka: %s"
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
-#: ../../../src/GameStateConfigDesktop.cpp:668
+#: ../../../src/GameStateConfigDesktop.cpp:647
 msgid "Clear"
 msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
-#: ../../../src/GameStateConfigDesktop.cpp:666
+#: ../../../src/GameStateConfigDesktop.cpp:645
 msgid "Assign: "
 msgstr "Tilldela:"
 
@@ -293,13 +293,13 @@ msgstr "Joystick Dödzon"
 msgid "For handheld devices"
 msgstr "För handhållna neheter"
 
-#: ../../../src/GameStateConfigDesktop.cpp:482
-#: ../../../src/GameStateConfigDesktop.cpp:728
+#: ../../../src/GameStateConfigDesktop.cpp:707
+#: ../../../src/SDLInputState.cpp:516
 msgid "(none)"
 msgstr ""
 
-#: ../../../src/GameStateConfigDesktop.cpp:510
-#: ../../../src/GameStateConfigDesktop.cpp:769
+#: ../../../src/GameStateConfigDesktop.cpp:748
+#: ../../../src/SDLInputState.cpp:538
 #, c-format
 msgid "Button %d"
 msgstr ""
@@ -468,24 +468,24 @@ msgstr ""
 msgid "Bar0"
 msgstr ""
 
-#: ../../../src/InputState.cpp:272 ../../../src/MenuActionBar.cpp:361
-#: ../../../src/MenuActionBar.cpp:363 ../../../src/MenuCharacter.cpp:266
+#: ../../../src/InputState.cpp:272 ../../../src/MenuActionBar.cpp:351
+#: ../../../src/MenuActionBar.cpp:353 ../../../src/MenuCharacter.cpp:266
 msgid "Character"
 msgstr "Karaktär"
 
-#: ../../../src/InputState.cpp:273 ../../../src/MenuActionBar.cpp:370
-#: ../../../src/MenuActionBar.cpp:372 ../../../src/MenuInventory.cpp:144
+#: ../../../src/InputState.cpp:273 ../../../src/MenuActionBar.cpp:360
+#: ../../../src/MenuActionBar.cpp:362 ../../../src/MenuInventory.cpp:144
 #: ../../../src/MenuVendor.cpp:49
 msgid "Inventory"
 msgstr "Inventarie"
 
-#: ../../../src/InputState.cpp:274 ../../../src/MenuActionBar.cpp:379
-#: ../../../src/MenuActionBar.cpp:381 ../../../src/MenuPowers.cpp:91
+#: ../../../src/InputState.cpp:274 ../../../src/MenuActionBar.cpp:369
+#: ../../../src/MenuActionBar.cpp:371 ../../../src/MenuPowers.cpp:91
 msgid "Powers"
 msgstr "Krafter"
 
-#: ../../../src/InputState.cpp:275 ../../../src/MenuActionBar.cpp:388
-#: ../../../src/MenuActionBar.cpp:390 ../../../src/MenuLog.cpp:93
+#: ../../../src/InputState.cpp:275 ../../../src/MenuActionBar.cpp:378
+#: ../../../src/MenuActionBar.cpp:380 ../../../src/MenuLog.cpp:93
 msgid "Log"
 msgstr "Logg"
 
@@ -692,9 +692,8 @@ msgstr ""
 msgid "%d items: "
 msgstr "%d föremål:"
 
-#: ../../../src/MenuActionBar.cpp:185 ../../../src/MenuActionBar.cpp:187
-#: ../../../src/MenuActionBar.cpp:194 ../../../src/MenuActionBar.cpp:196
-#: ../../../src/MenuActionBar.cpp:203 ../../../src/MenuActionBar.cpp:205
+#: ../../../src/MenuActionBar.cpp:184 ../../../src/MenuActionBar.cpp:190
+#: ../../../src/MenuActionBar.cpp:195
 #, c-format
 msgid "Hotkey: %s"
 msgstr ""
@@ -958,18 +957,32 @@ msgid "%d %s"
 msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:275
-msgid "Use SHIFT to move only one item."
-msgstr "Använd SHIFT för att flytta enstaka föremål."
+msgid "Pick up item(s):"
+msgstr ""
 
 #: ../../../src/MenuInventory.cpp:276
-msgid "CTRL-click a carried item to sell it."
-msgstr "CTRL-klicka på ett föremål för att sälja det."
+msgid "Use or equip item:"
+msgstr ""
 
-#: ../../../src/MenuInventory.cpp:499
+#: ../../../src/MenuInventory.cpp:277
+#, c-format
+msgid "%s modifiers"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:278
+#, fuzzy
+msgid "Move only one item:"
+msgstr "Använd SHIFT för att flytta enstaka föremål."
+
+#: ../../../src/MenuInventory.cpp:279
+msgid "Sell or stash item(s):"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:503
 msgid "You don't have enough of the required item."
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:517
+#: ../../../src/MenuInventory.cpp:521
 msgid "This item can only be used from the action bar."
 msgstr "Det här föremålet kan bara användas från handlingslisten."
 
@@ -1255,6 +1268,9 @@ msgstr ""
 #: ../../../src/Utils.cpp:203
 msgid "k"
 msgstr "k"
+
+#~ msgid "CTRL-click a carried item to sell it."
+#~ msgstr "CTRL-klicka på ett föremål för att sälja det."
 
 #~ msgid "Use this resolution?"
 #~ msgstr "Använd denna upplösning?"
