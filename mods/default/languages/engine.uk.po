@@ -244,7 +244,7 @@ msgstr "Апаратні поверхні"
 
 #: ../../../src/GameStateConfigDesktop.cpp:196
 msgid "V-Sync"
-msgstr ""
+msgstr "Вертикальна синхронізація"
 
 #: ../../../src/GameStateConfigDesktop.cpp:200
 msgid "Texture Filtering"
@@ -533,36 +533,31 @@ msgstr "Меню розробника"
 
 #: ../../../src/InputState.cpp:288
 msgid "Left Mouse"
-msgstr ""
+msgstr "Ліва Мишки"
 
 #: ../../../src/InputState.cpp:289
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Середня Мишки"
 
 #: ../../../src/InputState.cpp:290
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Вправо"
+msgstr "Права Мишки"
 
 #: ../../../src/InputState.cpp:291
-#, fuzzy
 msgid "Wheel Up"
-msgstr "кол вверх"
+msgstr "Колесо вверх"
 
 #: ../../../src/InputState.cpp:292
-#, fuzzy
 msgid "Wheel Down"
-msgstr "кол вниз"
+msgstr "Колесо вниз"
 
 #: ../../../src/InputState.cpp:293
-#, fuzzy
 msgid "Mouse X1"
-msgstr "Цілитись мишкою"
+msgstr "Мишка X1"
 
 #: ../../../src/InputState.cpp:294
-#, fuzzy
 msgid "Mouse X2"
-msgstr "Цілитись мишкою"
+msgstr "Мишка X2"
 
 #: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
 msgid "Unknown Item"
@@ -696,7 +691,7 @@ msgstr "%d предмети: "
 #: ../../../src/MenuActionBar.cpp:195
 #, c-format
 msgid "Hotkey: %s"
-msgstr ""
+msgstr "Гаряча клавіша: %s"
 
 #: ../../../src/MenuCharacter.cpp:40
 msgid "Name"
@@ -727,7 +722,7 @@ msgstr "базове (%d), бонус (%d)"
 
 #: ../../../src/MenuCharacter.cpp:373
 msgid "Related stats:"
-msgstr ""
+msgstr "Пов'язані характеристики:"
 
 #: ../../../src/MenuCharacter.cpp:399
 #, c-format
@@ -956,25 +951,24 @@ msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:275
 msgid "Pick up item(s):"
-msgstr ""
+msgstr "Підняти предмет(и):"
 
 #: ../../../src/MenuInventory.cpp:276
 msgid "Use or equip item:"
-msgstr ""
+msgstr "Використати предмет:"
 
 #: ../../../src/MenuInventory.cpp:277
 #, c-format
 msgid "%s modifiers"
-msgstr ""
+msgstr "Модифікатори для %s"
 
 #: ../../../src/MenuInventory.cpp:278
-#, fuzzy
 msgid "Move only one item:"
-msgstr "SHIFT для переміщення одного предмету."
+msgstr "Перемістити лише один предмет:"
 
 #: ../../../src/MenuInventory.cpp:279
 msgid "Sell or stash item(s):"
-msgstr ""
+msgstr "Продати або сховати предмет(и):"
 
 #: ../../../src/MenuInventory.cpp:503
 msgid "You don't have enough of the required item."
@@ -1067,14 +1061,12 @@ msgid "Requires Power: %s"
 msgstr "Вимагає Уміння: %s"
 
 #: ../../../src/MenuPowers.cpp:834
-#, fuzzy
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr "Клацніть для вивчення (потребує %d Очко Умінь)"
+msgstr "Клацніть для вивчення (потребує 1 Очко Умінь)"
 
 #: ../../../src/MenuPowers.cpp:838 ../../../src/MenuPowers.cpp:840
-#, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Вимагає %d Очко Умінь"
+msgstr "Вимагає 1 Очко Умінь"
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
