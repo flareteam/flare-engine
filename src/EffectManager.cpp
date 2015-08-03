@@ -222,6 +222,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	// if we're already immune, don't add negative effects
 	if (immunity) {
 		if (effect_type == EFFECT_DAMAGE) return;
+		else if (effect_type == EFFECT_DAMAGE_PERCENT) return;
 		else if (effect_type == EFFECT_SPEED && magnitude < 100) return;
 		else if (effect_type == EFFECT_STUN) return;
 	}
@@ -303,6 +304,7 @@ void EffectManager::clearEffects() {
 void EffectManager::clearNegativeEffects() {
 	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == EFFECT_DAMAGE) removeEffect(i-1);
+		else if (effect_list[i-1].type == EFFECT_DAMAGE_PERCENT) removeEffect(i-1);
 		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) removeEffect(i-1);
 		else if (effect_list[i-1].type == EFFECT_STUN) removeEffect(i-1);
 	}
@@ -390,6 +392,7 @@ int EffectManager::getType(const std::string& type) {
 bool EffectManager::isDebuffed() {
 	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == EFFECT_DAMAGE) return true;
+		else if (effect_list[i-1].type == EFFECT_DAMAGE_PERCENT) return true;
 		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) return true;
 		else if (effect_list[i-1].type == EFFECT_STUN) return true;
 	}
