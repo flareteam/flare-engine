@@ -73,9 +73,10 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	size_t prototype = prototypes.size() - 1;
 
 	for (size_t i = 0; i < e.stats.powers_ai.size(); i++) {
-		int powerIndex = e.stats.powers_ai[i].id;
-		if (powerIndex != 0 && powers->getPower(powerIndex).spawn_type != "") {
-			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(powers->getPower(powerIndex).spawn_type);
+		int power_index = e.stats.powers_ai[i].id;
+		const std::string& spawn_type = powers->getPower(power_index).spawn_type;
+		if (power_index != 0 && spawn_type != "" && spawn_type != "untransform") {
+			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
 			for (size_t j = 0; j < spawn_enemies.size(); j++) {
 				loadEnemyPrototype(spawn_enemies[j].type);
 			}
@@ -173,9 +174,9 @@ void EnemyManager::handleNewMap () {
 	// load enemies that can be spawn by avatar's powers
 	for (size_t i = 0; i < pc->stats.powers_list.size(); i++) {
 		int power_index = pc->stats.powers_list[i];
-		std::string spwan_type = powers->getPower(power_index).spawn_type;
-		if (spwan_type != "") {
-			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spwan_type);
+		const std::string& spawn_type = powers->getPower(power_index).spawn_type;
+		if (spawn_type != "" && spawn_type != "untransform") {
+			std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
 			for (size_t j = 0; j < spawn_enemies.size(); j++) {
 				loadEnemyPrototype(spawn_enemies[j].type);
 			}
@@ -186,8 +187,9 @@ void EnemyManager::handleNewMap () {
 	if (menu_act != NULL) {
 		for (size_t i = 0; i < menu_act->hotkeys.size(); i++) {
 			int power_index = menu_act->hotkeys[i];
-			if (power_index != 0 && powers->getPower(power_index).spawn_type != "") {
-				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(powers->getPower(power_index).spawn_type);
+			const std::string& spawn_type = powers->getPower(power_index).spawn_type;
+			if (power_index != 0 && spawn_type != "" && spawn_type != "untransform") {
+				std::vector<Enemy_Level> spawn_enemies = enemyg->getEnemiesInCategory(spawn_type);
 				for (size_t j = 0; j < spawn_enemies.size(); j++) {
 					loadEnemyPrototype(spawn_enemies[j].type);
 				}
