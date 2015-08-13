@@ -162,8 +162,8 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == EFFECT_CONVERT) convert = true;
 			// @TYPE fear|Causes enemies to run away
 			else if (effect_list[i].type == EFFECT_FEAR) fear = true;
-			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by 100. In other words, a desired speed of 4 would have a knockback value of 400.
-			else if (effect_list[i].type == EFFECT_KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/100.f;
+			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
+			else if (effect_list[i].type == EFFECT_KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/static_cast<float>(MAX_FRAMES_PER_SEC);
 			// @TYPE offense|Increase Offense stat.
 			else if (effect_list[i].type == EFFECT_OFFENSE) bonus_offense += effect_list[i].magnitude;
 			// @TYPE defense|Increase Defense stat.
