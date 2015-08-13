@@ -859,9 +859,6 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 		if (powers[power_index].passive) passive_id = power_index;
 
 		src_stats->effects.addEffect(effect_data, duration, magnitude, false, powers[power_index].passive_trigger, passive_id, source_type);
-
-		// If there's a sound effect, play it here
-		playSound(power_index);
 	}
 
 	return true;
