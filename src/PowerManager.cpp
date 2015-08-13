@@ -846,6 +846,10 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				if (src_stats->hp > src_stats->get(STAT_HP_MAX)) src_stats->hp = src_stats->get(STAT_HP_MAX);
 			}
 			else if (effect_data.type == "knockback") {
+				if (src_stats->speed_default == 0) {
+					// enemies that can't move can't be knocked back
+					continue;
+				}
 				src_stats->knockback_srcpos = caster_stats->pos;
 				src_stats->knockback_destpos = src_stats->pos;
 			}
