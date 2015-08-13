@@ -516,6 +516,8 @@ bool EventManager::executeEvent(Event &ev) {
 				size_t index = static_cast<size_t>(distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s)));
 				if (!mapr->isValidTile(ec->z))
 					logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", ec->x, ec->y, ec->z);
+				else if (index >= mapr->layers.size())
+					logError("EventManager: Mapmod at position (%d, %d) is on an invalid layer.", ec->x, ec->y);
 				else if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
 					mapr->layers[index][ec->x][ec->y] = static_cast<unsigned short>(ec->z);
 				else
