@@ -264,6 +264,9 @@ bool Avatar::pressing_move() {
 	if (!allow_movement) {
 		return false;
 	}
+	else if (stats.effects.knockback_speed != 0) {
+		return false;
+	}
 	else if (MOUSE_MOVE) {
 		return inpt->pressing[MAIN1];
 	}

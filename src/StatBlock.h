@@ -244,6 +244,9 @@ public:
 	bool blocking;
 
 	FPoint pos;
+	FPoint knockback_speed;
+	FPoint knockback_srcpos;
+	FPoint knockback_destpos;
 	unsigned char direction;
 
 	int cooldown_hit;

@@ -77,6 +77,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	convert = emSource.convert;
 	death_sentence = emSource.death_sentence;
 	fear = emSource.fear;
+	knockback_speed = emSource.knockback_speed;
 	bonus_offense = emSource.bonus_offense;
 	bonus_defense = emSource.bonus_defense;
 	bonus_physical = emSource.bonus_physical;
@@ -113,6 +114,7 @@ void EffectManager::clearStatus() {
 	convert = false;
 	death_sentence = false;
 	fear = false;
+	knockback_speed = 0;
 
 	bonus_offense = 0;
 	bonus_defense = 0;
@@ -159,6 +161,8 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == EFFECT_CONVERT) convert = true;
 			// @TYPE fear|Causes enemies to run away
 			else if (effect_list[i].type == EFFECT_FEAR) fear = true;
+			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by 100. In other words, a desired speed of 4 would have a knockback value of 400.
+			else if (effect_list[i].type == EFFECT_KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/100.f;
 			// @TYPE offense|Increase Offense stat.
 			else if (effect_list[i].type == EFFECT_OFFENSE) bonus_offense += effect_list[i].magnitude;
 			// @TYPE defense|Increase Defense stat.
@@ -225,7 +229,12 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 		else if (effect_type == EFFECT_DAMAGE_PERCENT) return;
 		else if (effect_type == EFFECT_SPEED && magnitude < 100) return;
 		else if (effect_type == EFFECT_STUN) return;
+		else if (effect_type == EFFECT_KNOCKBACK) return;
 	}
+
+	// only allow one knockback effect at a time
+	if (effect_type == EFFECT_KNOCKBACK && knockback_speed != 0)
+		return;
 
 	for (size_t i=effect_list.size(); i>0; i--) {
 		if (effect_list[i-1].name == effect.id) {
@@ -307,6 +316,7 @@ void EffectManager::clearNegativeEffects() {
 		else if (effect_list[i-1].type == EFFECT_DAMAGE_PERCENT) removeEffect(i-1);
 		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) removeEffect(i-1);
 		else if (effect_list[i-1].type == EFFECT_STUN) removeEffect(i-1);
+		else if (effect_list[i-1].type == EFFECT_KNOCKBACK) removeEffect(i-1);
 	}
 }
 
@@ -371,6 +381,7 @@ int EffectManager::getType(const std::string& type) {
 	else if (type == "death_sentence") return EFFECT_DEATH_SENTENCE;
 	else if (type == "shield") return EFFECT_SHIELD;
 	else if (type == "heal") return EFFECT_HEAL;
+	else if (type == "knockback") return EFFECT_KNOCKBACK;
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (type == STAT_KEY[i]) {
@@ -395,6 +406,7 @@ bool EffectManager::isDebuffed() {
 		else if (effect_list[i-1].type == EFFECT_DAMAGE_PERCENT) return true;
 		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) return true;
 		else if (effect_list[i-1].type == EFFECT_STUN) return true;
+		else if (effect_list[i-1].type == EFFECT_KNOCKBACK) return true;
 	}
 	return false;
 }

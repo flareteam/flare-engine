@@ -103,6 +103,9 @@ StatBlock::StatBlock()
 	, effects()
 	, blocking(false) // hero only
 	, pos()
+	, knockback_speed()
+	, knockback_srcpos()
+	, knockback_destpos()
 	, direction(0)
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
@@ -645,6 +648,18 @@ void StatBlock::logic() {
 
 	if (hp == 0)
 		removeSummons();
+
+	if (effects.knockback_speed != 0) {
+		float theta = calcTheta(knockback_srcpos.x, knockback_srcpos.y, knockback_destpos.x, knockback_destpos.y);
+		knockback_speed.x = effects.knockback_speed * static_cast<float>(cos(theta));
+		knockback_speed.y = effects.knockback_speed * static_cast<float>(sin(theta));
+	}
+
+	if (effects.knockback_speed != 0) {
+		mapr->collider.unblock(pos.x, pos.y);
+		mapr->collider.move(pos.x, pos.y, knockback_speed.x, knockback_speed.y, movement_type, hero);
+		mapr->collider.block(pos.x, pos.y, hero_ally);
+	}
 }
 
 StatBlock::~StatBlock() {

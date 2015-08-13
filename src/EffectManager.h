@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class Hazard;
 
-#define EFFECT_COUNT 20
+#define EFFECT_COUNT 21
 
 enum EFFECT_TYPE {
 	EFFECT_NONE = 0,
@@ -56,6 +56,7 @@ enum EFFECT_TYPE {
 	EFFECT_DEATH_SENTENCE = 17,
 	EFFECT_SHIELD = 18,
 	EFFECT_HEAL = 19,
+	EFFECT_KNOCKBACK = 20
 };
 
 class Effect {
@@ -135,6 +136,7 @@ public:
 	bool convert;
 	bool death_sentence;
 	bool fear;
+	float knockback_speed;
 
 	int bonus_offense;
 	int bonus_defense;

@@ -845,6 +845,10 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				src_stats->hp += magnitude;
 				if (src_stats->hp > src_stats->get(STAT_HP_MAX)) src_stats->hp = src_stats->get(STAT_HP_MAX);
 			}
+			else if (effect_data.type == "knockback") {
+				src_stats->knockback_srcpos = caster_stats->pos;
+				src_stats->knockback_destpos = src_stats->pos;
+			}
 		}
 		else {
 			// all other effects
