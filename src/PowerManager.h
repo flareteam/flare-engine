@@ -373,7 +373,7 @@ public:
 	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
-	int verifyID(int power_id, FileParser* infile = NULL);
+	int verifyID(int power_id, FileParser* infile = NULL, bool allow_zero = true);
 
 	std::vector<EffectDef> effects;
 	std::vector<Power> powers;

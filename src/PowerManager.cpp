@@ -511,6 +511,12 @@ void PowerManager::loadPowers() {
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
 	infile.close();
+
+	// verify wall/post power ids
+	for (size_t i=0; i<powers.size(); ++i) {
+		powers[i].wall_power = verifyID(powers[i].wall_power);
+		powers[i].post_power = verifyID(powers[i].post_power);
+	}
 }
 
 bool PowerManager::isValidEffect(const std::string& type) {
@@ -1319,8 +1325,9 @@ EffectDef* PowerManager::getEffectDef(const std::string& id) {
 	return NULL;
 }
 
-int PowerManager::verifyID(int power_id, FileParser* infile) {
-	if (power_id < 1 || static_cast<unsigned>(power_id) >= powers.size()) {
+int PowerManager::verifyID(int power_id, FileParser* infile, bool allow_zero) {
+	bool lower_bound = (allow_zero && power_id < 0) || (!allow_zero && power_id < 1);
+	if (lower_bound || static_cast<unsigned>(power_id) >= powers.size()) {
 		if (infile != NULL)
 			infile->error("PowerManager: %d is not a valid power id.", power_id);
 		else

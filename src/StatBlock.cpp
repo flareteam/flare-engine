@@ -340,7 +340,7 @@ void StatBlock::load(const std::string& filename) {
 
 			std::string ai_type = infile.nextValue();
 
-			ai_power.id = powers->verifyID(toInt(infile.nextValue()), &infile);
+			ai_power.id = powers->verifyID(toInt(infile.nextValue()), &infile, false);
 			if (ai_power.id == 0)
 				continue; // verifyID() will print our error message
 
