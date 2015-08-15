@@ -226,6 +226,15 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event; either a filename or an inline definition.
 		loot->parseLoot(infile, e, &evnt->components);
 	}
+	else if (infile.key == "loot_count") {
+		// @ATTR loot_count|min (integer), max (integer)|Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
+		if (e->x != 0 || e->y != 0) {
+			clampFloor(e->x, 1);
+			clampFloor(e->y, e->x);
+		}
+	}
 	else if (infile.key == "msg") {
 		// @ATTR event.msg|string|Adds a message to be displayed for the event.
 		e->s = msg->get(infile.val);
@@ -548,6 +557,16 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->sids.push_back(sid);
 		}
 		else if (ec->type == "loot") {
+			Event_Component *ec_lootcount = ev.getComponent("loot_count");
+			if (ec_lootcount) {
+				mapr->loot_count.x = ec_lootcount->x;
+				mapr->loot_count.y = ec_lootcount->y;
+			}
+			else {
+				mapr->loot_count.x = 0;
+				mapr->loot_count.y = 0;
+			}
+
 			ec->x = ev.hotspot.x;
 			ec->y = ev.hotspot.y;
 			mapr->loot.push_back(*ec);

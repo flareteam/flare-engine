@@ -298,6 +298,15 @@ void StatBlock::load(const std::string& filename) {
 			loot_table.push_back(Event_Component());
 			loot->parseLoot(infile, &loot_table.back(), &loot_table);
 		}
+		else if (infile.key == "loot_count") {
+			// @ATTR loot_count|min (integer), max (integer)|Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.
+			loot_count.x = toInt(infile.nextValue());
+			loot_count.y = toInt(infile.nextValue());
+			if (loot_count.x != 0 || loot_count.y != 0) {
+				clampFloor(loot_count.x, 1);
+				clampFloor(loot_count.y, loot_count.x);
+			}
+		}
 		// @ATTR defeat_status|string|Campaign status to set upon death.
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
 		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.

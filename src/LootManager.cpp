@@ -217,7 +217,13 @@ void LootManager::checkEnemiesForLoot() {
 		}
 
 		if (!e->stats.loot_table.empty()) {
-			unsigned drops = (rand() % drop_max) + 1;
+			unsigned drops;
+			if (e->stats.loot_count.y != 0) {
+				drops = (rand() % e->stats.loot_count.y) + e->stats.loot_count.x;
+			}
+			else {
+				drops = (rand() % drop_max) + 1;
+			}
 
 			for (unsigned j=0; j<drops; ++j) {
 				checkLoot(e->stats.loot_table, &e->stats.pos);
@@ -234,13 +240,21 @@ void LootManager::checkEnemiesForLoot() {
  */
 void LootManager::checkMapForLoot() {
 	if (!mapr->loot.empty()) {
-		unsigned drops = (rand() % drop_max) + 1;
+		unsigned drops;
+		if (mapr->loot_count.y != 0) {
+			drops = (rand() % mapr->loot_count.y) + mapr->loot_count.x;
+		}
+		else {
+			drops = (rand() % drop_max) + 1;
+		}
 
 		for (unsigned i=0; i<drops; ++i) {
 			checkLoot(mapr->loot);
 		}
 
 		mapr->loot.clear();
+		mapr->loot_count.x = 0;
+		mapr->loot_count.y = 0;
 	}
 }
 

@@ -290,6 +290,7 @@ public:
 	bool suppress_hp; // hide an enemy HP bar
 
 	std::vector<Event_Component> loot_table;
+	Point loot_count;
 
 	// for the teleport spell
 	bool teleportation;
