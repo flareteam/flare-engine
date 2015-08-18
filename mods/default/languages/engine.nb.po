@@ -27,7 +27,7 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:672
 msgid "You are defeated. Game over! Press Enter to exit to Title."
-msgstr ""
+msgstr "Du har blitt beseiret. Spillet er slutt! Trykk Enter for å gå til hovedmenyen."
 
 #: ../../../src/Avatar.cpp:675
 msgid "You are defeated. Press Enter to continue."
@@ -198,7 +198,7 @@ msgstr "Aktiver >>"
 
 #: ../../../src/GameStateConfigBase.cpp:843
 msgid "Game: "
-msgstr ""
+msgstr "Spill: "
 
 #: ../../../src/GameStateConfigBase.cpp:848
 msgid "Requires version: "
@@ -211,7 +211,7 @@ msgstr ""
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:647
 msgid "Clear"
-msgstr ""
+msgstr "Nullstill"
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:645
@@ -248,15 +248,15 @@ msgstr ""
 
 #: ../../../src/GameStateConfigDesktop.cpp:200
 msgid "Texture Filtering"
-msgstr ""
+msgstr "Teksturfiltrering"
 
 #: ../../../src/GameStateConfigDesktop.cpp:204
 msgid "Allow changing gamma"
-msgstr ""
+msgstr "Tillat endring av lysstyrke"
 
 #: ../../../src/GameStateConfigDesktop.cpp:208
 msgid "Gamma"
-msgstr ""
+msgstr "Lysstyrke"
 
 #: ../../../src/GameStateConfigDesktop.cpp:213
 #: ../../../src/GameStateConfigDesktop.cpp:218
@@ -285,7 +285,7 @@ msgstr "Ikke bruk mus"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 msgid "Joystick Deadzone"
-msgstr ""
+msgstr "Joystick dødsone"
 
 #: ../../../src/GameStateConfigDesktop.cpp:254
 msgid "For handheld devices"
@@ -763,15 +763,15 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:209
 msgid "teleports the player to a specific tile, and optionally, a specific map"
-msgstr ""
+msgstr "teleporterer spilleren til en angitt flis, og (valgfritt) et angitt kart"
 
 #: ../../../src/MenuDevConsole.cpp:210
 msgid "unsets the given campaign statuses if they are set"
-msgstr ""
+msgstr "fjerner den angitte kampanjestatusen hvis den har blitt satt"
 
 #: ../../../src/MenuDevConsole.cpp:211
 msgid "sets the given campaign statuses"
-msgstr ""
+msgstr "setter den angitte kampanjestatusen"
 
 #: ../../../src/MenuDevConsole.cpp:212
 msgid "rewards the player with the specified amount of experience points"
@@ -787,7 +787,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:215
 msgid "spawns an enemy matching the given category next to the player"
-msgstr ""
+msgstr "skaper en fiende fra den angitte kategorien ved siden av spilleren"
 
 #: ../../../src/MenuDevConsole.cpp:216
 msgid "turns on/off the developer hud"
@@ -795,7 +795,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:217
 msgid "clears the command history"
-msgstr ""
+msgstr "tømmer kommando-historikk"
 
 #: ../../../src/MenuDevConsole.cpp:218
 msgid "displays this text"
@@ -807,7 +807,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:239
 msgid "Spawning enemy from category: "
-msgstr ""
+msgstr "Skaper fiende fra kategori: "
 
 #: ../../../src/MenuDevConsole.cpp:242
 msgid "ERROR: Invalid enemy category"
@@ -869,7 +869,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:317
 msgid "ERROR: Unknown campaign status: "
-msgstr ""
+msgstr "FEIL: Ukjent kampanjestatus: "
 
 #: ../../../src/MenuDevConsole.cpp:337 ../../../src/MenuDevConsole.cpp:347
 msgid "Teleporting to: "
@@ -897,7 +897,7 @@ msgstr "Spiller (x,y): "
 
 #: ../../../src/MenuDevHUD.cpp:62
 msgid "Target (x,y): "
-msgstr ""
+msgstr "Mål (x,y): "
 
 #: ../../../src/MenuDevHUD.cpp:67
 msgid "Mouse (x,y): "
