@@ -650,6 +650,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (stack.item == CURRENCY_ID)
 		return tip;
 
+	// flavor text
+	if (items[stack.item].flavor != "") {
+		tip.addText(items[stack.item].flavor, color_flavor);
+	}
+
 	// level
 	if (items[stack.item].level != 0) {
 		tip.addText(msg->get("Level %d", items[stack.item].level));
@@ -756,11 +761,6 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (COLORBLIND && quality_desc != "") {
 		color = color_normal;
 		tip.addText(msg->get("Quality: %s", quality_desc), color);
-	}
-
-	// flavor text
-	if (items[stack.item].flavor != "") {
-		tip.addText(items[stack.item].flavor, color_flavor);
 	}
 
 	// buy or sell price
