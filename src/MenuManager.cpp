@@ -503,6 +503,17 @@ void MenuManager::logic() {
 		closeAll();
 	}
 
+	// context-sensistive help tooltip in inventory menu
+	if (inv->visible && vendor->visible) {
+		inv->inv_ctrl = INV_CTRL_VENDOR;
+	}
+	else if (inv->visible && stash->visible) {
+		inv->inv_ctrl = INV_CTRL_STASH;
+	}
+	else {
+		inv->inv_ctrl = INV_CTRL_NONE;
+	}
+
 	if (!inpt->pressing[INVENTORY] && !inpt->pressing[POWERS] && !inpt->pressing[CHARACTER] && !inpt->pressing[LOG] && !inpt->pressing[DEVELOPER_MENU])
 		key_lock = false;
 

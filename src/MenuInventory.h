@@ -36,6 +36,12 @@ const int INV_WINDOW = -1;
 const int EQUIPMENT = 0;
 const int CARRIED = 1;
 
+enum {
+	INV_CTRL_NONE = 0,
+	INV_CTRL_VENDOR = 1,
+	INV_CTRL_STASH = 2
+};
+
 class MenuInventory : public Menu {
 private:
 	StatBlock *stats;
@@ -115,6 +121,8 @@ public:
 	int drag_prev_src;
 
 	bool changed_equipment;
+
+	short inv_ctrl;
 
 	std::string log_msg;
 	std::string show_book;

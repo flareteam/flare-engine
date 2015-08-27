@@ -49,6 +49,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 
 	drag_prev_src = -1;
 	changed_equipment = true;
+	inv_ctrl = INV_CTRL_NONE;
 	log_msg = "";
 	show_book = "";
 
@@ -275,8 +276,12 @@ TooltipData MenuInventory::checkTooltip(Point position) {
 			tip.addText(msg->get("Pick up item(s):") + " " + inpt->getBindingString(MAIN1));
 			tip.addText(msg->get("Use or equip item:") + " " + inpt->getBindingString(MAIN2) + "\n");
 			tip.addText(msg->get("%s modifiers", inpt->getBindingString(MAIN1).c_str()));
-			tip.addText(msg->get("Move only one item:") + " " + inpt->getBindingString(SHIFT) + " / " + inpt->getBindingString(SHIFT, INPUT_BINDING_ALT));
-			tip.addText(msg->get("Sell or stash item(s):") + " " + inpt->getBindingString(CTRL) + " / " + inpt->getBindingString(CTRL, INPUT_BINDING_ALT));
+			tip.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(SHIFT) + " / " + inpt->getBindingString(SHIFT, INPUT_BINDING_ALT));
+
+			if (inv_ctrl == INV_CTRL_STASH)
+				tip.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(CTRL) + " / " + inpt->getBindingString(CTRL, INPUT_BINDING_ALT));
+			else if (inv_ctrl == INV_CTRL_VENDOR || (SELL_WITHOUT_VENDOR && inv_ctrl != INV_CTRL_STASH))
+				tip.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(CTRL) + " / " + inpt->getBindingString(CTRL, INPUT_BINDING_ALT));
 		}
 		return tip;
 	}
