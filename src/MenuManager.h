@@ -38,6 +38,7 @@ class MenuBook;
 class MenuStatBar;
 class MenuMiniMap;
 class MenuNPCActions;
+class MenuNumPicker;
 class MenuEnemy;
 class MenuVendor;
 class MenuTalker;
@@ -117,6 +118,7 @@ public:
 	WidgetTooltip *tip;
 	MenuMiniMap *mini;
 	MenuNPCActions *npc;
+	MenuNumPicker *num_picker;
 	MenuEnemy *enemy;
 	MenuVendor *vendor;
 	MenuTalker *talker;

@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuInventory.h"
 #include "MenuMiniMap.h"
 #include "MenuNPCActions.h"
+#include "MenuNumPicker.h"
 #include "MenuPowers.h"
 #include "MenuEnemy.h"
 #include "MenuVendor.h"
@@ -81,6 +82,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, tip(NULL)
 	, mini(NULL)
 	, npc(NULL)
+	, num_picker(NULL)
 	, enemy(NULL)
 	, vendor(NULL)
 	, talker(NULL)
@@ -128,6 +130,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 	menus.push_back(npc); // menus[16]
 	book = new MenuBook();
 	menus.push_back(book); // menus[17]
+	num_picker = new MenuNumPicker();
+	menus.push_back(num_picker); // menus[18]
 
 	if (DEV_MODE) {
 		devconsole = new MenuDevConsole();
@@ -433,6 +437,12 @@ void MenuManager::logic() {
 			inpt->pressing[MAIN1] = false;
 			inpt->pressing[MAIN2] = false;
 		}
+	}
+
+	if (num_picker->visible) {
+		num_picker->logic();
+		pause = true;
+		return;
 	}
 
 	book->logic();
@@ -1394,6 +1404,7 @@ void MenuManager::closeLeft() {
 	stash->visible = false;
 	book->visible = false;
 	book->book_name = "";
+	num_picker->visible = false;
 
 	npc->setNPC(NULL);
 	talker->setNPC(NULL);
@@ -1412,6 +1423,7 @@ void MenuManager::closeRight() {
 	exit->visible = false;
 	book->visible = false;
 	book->book_name = "";
+	num_picker->visible = false;
 
 	npc->setNPC(NULL);
 	talker->setNPC(NULL);
@@ -1465,6 +1477,7 @@ MenuManager::~MenuManager() {
 	delete stash;
 	delete npc;
 	delete book;
+	delete num_picker;
 
 	if (DEV_MODE) {
 		delete devhud;
