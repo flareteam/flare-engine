@@ -74,6 +74,7 @@ private:
 
 	bool mouse_dragging;
 	bool keyboard_dragging;
+	bool sticky_dragging;
 	ItemStack drag_stack;
 	int drag_power;
 	int drag_src;

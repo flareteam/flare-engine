@@ -59,8 +59,9 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, keyb_tip_buf_inv()
 	, keyb_tip_buf_act()
 	, key_lock(false)
-	, mouse_dragging(0)
-	, keyboard_dragging(0)
+	, mouse_dragging(false)
+	, keyboard_dragging(false)
+	, sticky_dragging(false)
 	, drag_stack()
 	, drag_power(0)
 	, drag_src(0)
@@ -442,6 +443,7 @@ void MenuManager::logic() {
 
 			num_picker->confirm_clicked = false;
 			num_picker->visible = false;
+			sticky_dragging = true;
 		}
 		else {
 			pause = true;
@@ -850,8 +852,11 @@ void MenuManager::logic() {
 		}
 
 		// handle dropping
-		if (mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-			inpt->lock[MAIN1] = true;
+		if (mouse_dragging && ((sticky_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) || (!sticky_dragging && !inpt->pressing[MAIN1]))) {
+			if (sticky_dragging) {
+				inpt->lock[MAIN1] = true;
+				sticky_dragging = false;
+			}
 
 			// putting a power on the Action Bar
 			if (drag_src == DRAG_SRC_POWERS) {
@@ -1340,7 +1345,10 @@ void MenuManager::render() {
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
 			setDragIcon(powers->powers[drag_power].icon);
 
-		renderIcon(inpt->mouse.x - ICON_SIZE/2, inpt->mouse.y - ICON_SIZE/2);
+		if (TOUCHSCREEN && sticky_dragging)
+			renderIcon(keydrag_pos.x - ICON_SIZE/2, keydrag_pos.y - ICON_SIZE/2);
+		else
+			renderIcon(inpt->mouse.x - ICON_SIZE/2, inpt->mouse.y - ICON_SIZE/2);
 	}
 	else if (keyboard_dragging && !num_picker->visible) {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
