@@ -79,6 +79,7 @@ public:
 	void add( ItemStack stack, int area = CARRIED, int slot = -1, bool play_sound = true);
 	void remove(int item);
 	void removeEquipped(int item);
+	void removeFromPrevSlot(int quantity);
 	void addCurrency(int count);
 	void removeCurrency(int count);
 	int getCurrency();

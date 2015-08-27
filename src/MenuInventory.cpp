@@ -650,6 +650,17 @@ void MenuInventory::removeEquipped(int item) {
 	applyEquipment(inventory[EQUIPMENT].storage);
 }
 
+void MenuInventory::removeFromPrevSlot(int quantity) {
+	if (drag_prev_src > -1 && inventory[drag_prev_src].drag_prev_slot > -1) {
+		int drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
+		inventory[drag_prev_src].subtract(drag_prev_slot, quantity);
+		if (inventory[drag_prev_src].storage[drag_prev_slot].empty()) {
+			if (drag_prev_src == EQUIPMENT)
+				updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
+		}
+	}
+}
+
 /**
  * Add currency item
  */
@@ -1042,7 +1053,6 @@ void MenuInventory::fillEquipmentSlots() {
 	delete [] equip_item;
 	delete [] equip_quantity;
 }
-
 
 MenuInventory::~MenuInventory() {
 	delete closeButton;

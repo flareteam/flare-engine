@@ -33,7 +33,6 @@ protected:
 	void updateInput();
 
 	WidgetButton *button_ok;
-	WidgetButton *button_close;
 	WidgetButton *button_up;
 	WidgetButton *button_down;
 	WidgetInput *input_box;
@@ -64,6 +63,8 @@ public:
 	void increaseValue(int val);
 	void decreaseValue(int val);
 	int getValue();
+
+	bool confirm_clicked;
 };
 
 #endif

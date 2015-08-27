@@ -419,6 +419,36 @@ void MenuManager::logic() {
 	else
 		xp->update((stats->xp - stats->xp_table[stats->level-1]), (stats->xp_table[stats->level] - stats->xp_table[stats->level-1]), inpt->mouse, msg->get("XP: %d/%d", stats->xp, stats->xp_table[stats->level]));
 
+	// when selecting item quantities, don't process other menus
+	if (num_picker->visible) {
+		num_picker->logic();
+
+		if (num_picker->confirm_clicked) {
+			// start dragging items
+			// removes the desired quantity from the source stack
+
+			if (drag_src == DRAG_SRC_INVENTORY) {
+				drag_stack.quantity = num_picker->getValue();
+				inv->removeFromPrevSlot(drag_stack.quantity);
+			}
+			else if (drag_src == DRAG_SRC_VENDOR) {
+				drag_stack.quantity = num_picker->getValue();
+				vendor->removeFromPrevSlot(drag_stack.quantity);
+			}
+			else if (drag_src == DRAG_SRC_STASH) {
+				drag_stack.quantity = num_picker->getValue();
+				stash->removeFromPrevSlot(drag_stack.quantity);
+			}
+
+			num_picker->confirm_clicked = false;
+			num_picker->visible = false;
+		}
+		else {
+			pause = true;
+			return;
+		}
+	}
+
 	if (NO_MOUSE)
 		handleKeyboardNavigation();
 
@@ -437,12 +467,6 @@ void MenuManager::logic() {
 			inpt->pressing[MAIN1] = false;
 			inpt->pressing[MAIN2] = false;
 		}
-	}
-
-	if (num_picker->visible) {
-		num_picker->logic();
-		pause = true;
-		return;
 	}
 
 	book->logic();
@@ -704,6 +728,10 @@ void MenuManager::logic() {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_VENDOR;
 					}
+					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
+						num_picker->setValueBounds(1, drag_stack.quantity);
+						num_picker->visible = true;
+					}
 				}
 			}
 
@@ -729,6 +757,10 @@ void MenuManager::logic() {
 					if (!drag_stack.empty()) {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_STASH;
+					}
+					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
+						num_picker->setValueBounds(1, drag_stack.quantity);
+						num_picker->visible = true;
 					}
 				}
 			}
@@ -769,6 +801,10 @@ void MenuManager::logic() {
 					if (!drag_stack.empty()) {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_INVENTORY;
+					}
+					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
+						num_picker->setValueBounds(1, drag_stack.quantity);
+						num_picker->visible = true;
 					}
 				}
 			}
@@ -814,7 +850,8 @@ void MenuManager::logic() {
 		}
 
 		// handle dropping
-		if (mouse_dragging && !inpt->pressing[MAIN1]) {
+		if (mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			inpt->lock[MAIN1] = true;
 
 			// putting a power on the Action Bar
 			if (drag_src == DRAG_SRC_POWERS) {
@@ -1017,6 +1054,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 				keyboard_dragging = true;
 				drag_src = DRAG_SRC_INVENTORY;
 			}
+			if (drag_stack.quantity > 1) {
+				num_picker->setValueBounds(1, drag_stack.quantity);
+				num_picker->visible = true;
+			}
 		}
 		// rearrange item
 		else if (slotClick == CHECKED && !drag_stack.empty()) {
@@ -1070,6 +1111,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 				keyboard_dragging = true;
 				drag_src = DRAG_SRC_VENDOR;
 			}
+			if (drag_stack.quantity > 1) {
+				num_picker->setValueBounds(1, drag_stack.quantity);
+				num_picker->visible = true;
+			}
 		}
 		else if (slotClick == CHECKED && !drag_stack.empty()) {
 			vendor->itemReturn(drag_stack);
@@ -1111,6 +1156,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 			if (!drag_stack.empty()) {
 				keyboard_dragging = true;
 				drag_src = DRAG_SRC_STASH;
+			}
+			if (drag_stack.quantity > 1) {
+				num_picker->setValueBounds(1, drag_stack.quantity);
+				num_picker->visible = true;
 			}
 		}
 		// rearrange item
@@ -1238,52 +1287,54 @@ void MenuManager::render() {
 		menus[i]->render();
 	}
 
-	if (NO_MOUSE || TOUCHSCREEN)
-		handleKeyboardTooltips();
-	else {
-		TooltipData tip_new;
+	if (!num_picker->visible) {
+		if (NO_MOUSE || TOUCHSCREEN)
+			handleKeyboardTooltips();
+		else {
+			TooltipData tip_new;
 
-		// Find tooltips depending on mouse position
-		if (!book->visible) {
-			if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
-				tip_new = chr->checkTooltip();
+			// Find tooltips depending on mouse position
+			if (!book->visible) {
+				if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
+					tip_new = chr->checkTooltip();
+				}
+				if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
+					tip_new = vendor->checkTooltip(inpt->mouse);
+				}
+				if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
+					tip_new = stash->checkTooltip(inpt->mouse);
+				}
+				if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
+					tip_new = pow->checkTooltip(inpt->mouse);
+				}
+				if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
+					tip_new = inv->checkTooltip(inpt->mouse);
+				}
 			}
-			if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
-				tip_new = vendor->checkTooltip(inpt->mouse);
+			if (isWithin(act->window_area,inpt->mouse)) {
+				tip_new = act->checkTooltip(inpt->mouse);
 			}
-			if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
-				tip_new = stash->checkTooltip(inpt->mouse);
-			}
-			if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
-				tip_new = pow->checkTooltip(inpt->mouse);
-			}
-			if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
-				tip_new = inv->checkTooltip(inpt->mouse);
-			}
-		}
-		if (isWithin(act->window_area,inpt->mouse)) {
-			tip_new = act->checkTooltip(inpt->mouse);
-		}
 
-		if (!tip_new.isEmpty()) {
+			if (!tip_new.isEmpty()) {
 
-			// when we render a tooltip it buffers the rasterized text for performance.
-			// If this new tooltip is the same as the existing one, reuse.
+				// when we render a tooltip it buffers the rasterized text for performance.
+				// If this new tooltip is the same as the existing one, reuse.
 
-			if (!tip_new.compare(&tip_buf)) {
-				tip_buf.clear();
-				tip_buf = tip_new;
+				if (!tip_new.compare(&tip_buf)) {
+					tip_buf.clear();
+					tip_buf = tip_new;
+				}
+				tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
+				TOOLTIP_CONTEXT = TOOLTIP_MENU;
 			}
-			tip->render(tip_buf, inpt->mouse, STYLE_FLOAT);
-			TOOLTIP_CONTEXT = TOOLTIP_MENU;
-		}
-		else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
-			TOOLTIP_CONTEXT = TOOLTIP_NONE;
+			else if (TOOLTIP_CONTEXT != TOOLTIP_MAP) {
+				TOOLTIP_CONTEXT = TOOLTIP_NONE;
+			}
 		}
 	}
 
 	// draw icon under cursor if dragging
-	if (mouse_dragging) {
+	if (mouse_dragging && !num_picker->visible) {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
 			setDragIconItem(drag_stack);
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)
@@ -1291,7 +1342,7 @@ void MenuManager::render() {
 
 		renderIcon(inpt->mouse.x - ICON_SIZE/2, inpt->mouse.y - ICON_SIZE/2);
 	}
-	else if (keyboard_dragging) {
+	else if (keyboard_dragging && !num_picker->visible) {
 		if (drag_src == DRAG_SRC_INVENTORY || drag_src == DRAG_SRC_VENDOR || drag_src == DRAG_SRC_STASH)
 			setDragIconItem(drag_stack);
 		else if (drag_src == DRAG_SRC_POWERS || drag_src == DRAG_SRC_ACTIONBAR)

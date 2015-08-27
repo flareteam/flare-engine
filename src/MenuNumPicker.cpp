@@ -37,12 +37,11 @@ MenuNumPicker::MenuNumPicker()
 	, spin_increment(1)
 	, spin_delay(MAX_FRAMES_PER_SEC/6)
 	, spin_rate(1)
+	, confirm_clicked(false)
 {
 
 	button_ok = new WidgetButton();
 	button_ok->label = msg->get("OK");
-
-	button_close = new WidgetButton("images/menus/buttons/button_x.png");
 
 	button_up = new WidgetButton("images/menus/buttons/up.png");
 	button_down = new WidgetButton("images/menus/buttons/down.png");
@@ -56,11 +55,6 @@ MenuNumPicker::MenuNumPicker()
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
-			else if (infile.key == "close") {
-				// @ATTR close|x (integer), y (integer)|Position of the close button.
-				Point pos = toPoint(infile.val);
-				button_close->setBasePos(pos.x, pos.y);
-			}
 			else if (infile.key == "label_title") {
 				// @ATTR label_title|label|Position of the "Enter amount:" text.
 				title = eatLabelInfo(infile.val);
@@ -96,15 +90,12 @@ MenuNumPicker::MenuNumPicker()
 	tablist.add(button_up);
 	tablist.add(button_down);
 	tablist.add(button_ok);
-	tablist.add(button_close);
 
 	align();
 }
 
 void MenuNumPicker::align() {
 	Menu::align();
-
-	button_close->setPos(window_area.x, window_area.y);
 
 	button_ok->setPos(window_area.x, window_area.y);
 	button_up->setPos(window_area.x, window_area.y);
@@ -122,13 +113,9 @@ void MenuNumPicker::logic() {
 		tablist.logic();
 
 		if (button_ok->checkClick()) {
-			// confirm_clicked = true;
+			confirm_clicked = true;
 		}
-		if (button_close->checkClick()) {
-			visible = false;
-		}
-
-		if (button_up->checkClick()) {
+		else if (button_up->checkClick()) {
 			increaseValue(1);
 		}
 		else if (button_down->checkClick()) {
@@ -165,8 +152,6 @@ void MenuNumPicker::render() {
 		Menu::render();
 
 		label.render();
-
-		button_close->render();
 
 		button_ok->render();
 		button_up->render();
@@ -221,7 +206,6 @@ void MenuNumPicker::updateInput() {
 
 MenuNumPicker::~MenuNumPicker() {
 	delete button_ok;
-	delete button_close;
 	delete button_up;
 	delete button_down;
 	delete input_box;
