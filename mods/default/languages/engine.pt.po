@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare v0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-23 12:58-0400\n"
+"POT-Creation-Date: 2015-08-31 12:59-0400\n"
 "PO-Revision-Date: 2013-11-30 01:38-0300\n"
 "Last-Translator: Phillippe Caetano <ph.ufeb@gmail.com>\n"
 "Language-Team: \n"
@@ -17,24 +17,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.7\n"
 
-#: ../../../src/Avatar.cpp:458
+#: ../../../src/Avatar.cpp:461
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Parabéns, você alcançou o nível %d!"
 
-#: ../../../src/Avatar.cpp:460
+#: ../../../src/Avatar.cpp:463
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Você pode aumentar um atributo através do Menu de Personagem."
 
-#: ../../../src/Avatar.cpp:672
+#: ../../../src/Avatar.cpp:675
 msgid "You are defeated. Game over! Press Enter to exit to Title."
 msgstr "Você foi derrotado. Game over! Pressione Enter para sair para o Título."
 
-#: ../../../src/Avatar.cpp:675
+#: ../../../src/Avatar.cpp:678
 msgid "You are defeated. Press Enter to continue."
 msgstr "Você foi derrotado. Pressione Enter para continuar."
 
-#: ../../../src/Avatar.cpp:810
+#: ../../../src/Avatar.cpp:813
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -88,23 +88,23 @@ msgstr "Efeitos negativos removidos."
 msgid "HP and MP restored, negative effects removed"
 msgstr "PV e PM restaurados, efeitos negativos removidos."
 
-#: ../../../src/Entity.cpp:270
+#: ../../../src/Entity.cpp:273
 msgid "miss"
 msgstr "errou"
 
-#: ../../../src/Entity.cpp:384 ../../../src/PowerManager.cpp:844
-#: ../../../src/StatBlock.cpp:618 ../../../src/StatBlock.cpp:624
+#: ../../../src/Entity.cpp:387 ../../../src/PowerManager.cpp:850
+#: ../../../src/StatBlock.cpp:630 ../../../src/StatBlock.cpp:636
 #, c-format
 msgid "+%d HP"
 msgstr "+%d PV"
 
-#: ../../../src/Entity.cpp:390 ../../../src/StatBlock.cpp:629
-#: ../../../src/StatBlock.cpp:635
+#: ../../../src/Entity.cpp:393 ../../../src/StatBlock.cpp:641
+#: ../../../src/StatBlock.cpp:647
 #, c-format
 msgid "+%d MP"
 msgstr "+%d PM"
 
-#: ../../../src/EventManager.cpp:497
+#: ../../../src/EventManager.cpp:506
 msgid "Unknown destination"
 msgstr "Destino desconhecido"
 
@@ -117,7 +117,7 @@ msgstr "Padrões"
 msgid "Reset ALL settings?"
 msgstr "Resetar TODAS as configurações?"
 
-#: ../../../src/GameStateConfigBase.cpp:103
+#: ../../../src/GameStateConfigBase.cpp:103 ../../../src/MenuNumPicker.cpp:44
 msgid "OK"
 msgstr ""
 
@@ -342,7 +342,7 @@ msgstr "Entrando no mundo do jogo..."
 msgid "Loading saved game..."
 msgstr "Carregando jogo salvo..."
 
-#: ../../../src/GameStateLoad.cpp:639 ../../../src/ItemManager.cpp:655
+#: ../../../src/GameStateLoad.cpp:639 ../../../src/ItemManager.cpp:660
 #: ../../../src/MenuPowers.cpp:719 ../../../src/MenuPowers.cpp:816
 #, c-format
 msgid "Level %d"
@@ -381,12 +381,12 @@ msgid "Loading..."
 msgstr "Carregando..."
 
 #: ../../../src/GameStatePlay.cpp:257 ../../../src/GameStatePlay.cpp:258
-#: ../../../src/MenuManager.cpp:680 ../../../src/MenuManager.cpp:681
-#: ../../../src/MenuManager.cpp:707 ../../../src/MenuManager.cpp:708
-#: ../../../src/MenuManager.cpp:886 ../../../src/MenuManager.cpp:887
-#: ../../../src/MenuManager.cpp:905 ../../../src/MenuManager.cpp:906
-#: ../../../src/MenuManager.cpp:1079 ../../../src/MenuManager.cpp:1080
-#: ../../../src/MenuManager.cpp:1120 ../../../src/MenuManager.cpp:1121
+#: ../../../src/MenuManager.cpp:727 ../../../src/MenuManager.cpp:728
+#: ../../../src/MenuManager.cpp:758 ../../../src/MenuManager.cpp:759
+#: ../../../src/MenuManager.cpp:949 ../../../src/MenuManager.cpp:950
+#: ../../../src/MenuManager.cpp:968 ../../../src/MenuManager.cpp:969
+#: ../../../src/MenuManager.cpp:1150 ../../../src/MenuManager.cpp:1151
+#: ../../../src/MenuManager.cpp:1195 ../../../src/MenuManager.cpp:1196
 msgid "Inventory is full."
 msgstr "Inventário está cheio."
 
@@ -476,7 +476,7 @@ msgid "Character"
 msgstr "Personagem"
 
 #: ../../../src/InputState.cpp:273 ../../../src/MenuActionBar.cpp:360
-#: ../../../src/MenuActionBar.cpp:362 ../../../src/MenuInventory.cpp:144
+#: ../../../src/MenuActionBar.cpp:362 ../../../src/MenuInventory.cpp:145
 #: ../../../src/MenuVendor.cpp:49
 msgid "Inventory"
 msgstr "Inventário"
@@ -588,81 +588,81 @@ msgstr "Ataque"
 msgid "Defense"
 msgstr "Defesa"
 
-#: ../../../src/ItemManager.cpp:666
+#: ../../../src/ItemManager.cpp:671
 #, c-format
 msgid "Melee damage: %d-%d"
 msgstr "Dano corpo a corpo: %d-%d"
 
-#: ../../../src/ItemManager.cpp:668
+#: ../../../src/ItemManager.cpp:673
 #, c-format
 msgid "Melee damage: %d"
 msgstr "Dano corpo a corpo: %d"
 
-#: ../../../src/ItemManager.cpp:672
+#: ../../../src/ItemManager.cpp:677
 #, c-format
 msgid "Ranged damage: %d-%d"
 msgstr "Dano à distância: %d-%d"
 
-#: ../../../src/ItemManager.cpp:674
+#: ../../../src/ItemManager.cpp:679
 #, c-format
 msgid "Ranged damage: %d"
 msgstr "Dano à distância: %d"
 
-#: ../../../src/ItemManager.cpp:678
+#: ../../../src/ItemManager.cpp:683
 #, c-format
 msgid "Mental damage: %d-%d"
 msgstr "Dano mental: %d-%d"
 
-#: ../../../src/ItemManager.cpp:680
+#: ../../../src/ItemManager.cpp:685
 #, c-format
 msgid "Mental damage: %d"
 msgstr "Dano mental: %d"
 
-#: ../../../src/ItemManager.cpp:686
+#: ../../../src/ItemManager.cpp:691
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Absorve: %d-%d"
 
-#: ../../../src/ItemManager.cpp:688
+#: ../../../src/ItemManager.cpp:693
 #, c-format
 msgid "Absorb: %d"
 msgstr "Absorve: %d"
 
-#: ../../../src/ItemManager.cpp:699 ../../../src/ItemManager.cpp:813
+#: ../../../src/ItemManager.cpp:704 ../../../src/ItemManager.cpp:813
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "%d% de Velocidade"
 
-#: ../../../src/ItemManager.cpp:729 ../../../src/MenuPowers.cpp:788
+#: ../../../src/ItemManager.cpp:734 ../../../src/MenuPowers.cpp:788
 #: ../../../src/MenuPowers.cpp:791
 #, c-format
 msgid "Requires Physical %d"
 msgstr "Requer Físico %d"
 
-#: ../../../src/ItemManager.cpp:734 ../../../src/MenuPowers.cpp:794
+#: ../../../src/ItemManager.cpp:739 ../../../src/MenuPowers.cpp:794
 #: ../../../src/MenuPowers.cpp:797
 #, c-format
 msgid "Requires Mental %d"
 msgstr "Requer Mental %d"
 
-#: ../../../src/ItemManager.cpp:739 ../../../src/MenuPowers.cpp:776
+#: ../../../src/ItemManager.cpp:744 ../../../src/MenuPowers.cpp:776
 #: ../../../src/MenuPowers.cpp:779
 #, c-format
 msgid "Requires Offense %d"
 msgstr "Requer Ataque %d"
 
-#: ../../../src/ItemManager.cpp:744 ../../../src/MenuPowers.cpp:782
+#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:782
 #: ../../../src/MenuPowers.cpp:785
 #, c-format
 msgid "Requires Defense %d"
 msgstr "Requer Defesa %d"
 
-#: ../../../src/ItemManager.cpp:753
+#: ../../../src/ItemManager.cpp:758
 #, fuzzy, c-format
 msgid "Requires Class: %s"
 msgstr "Requer um %s"
 
-#: ../../../src/ItemManager.cpp:758
+#: ../../../src/ItemManager.cpp:763
 #, c-format
 msgid "Quality: %s"
 msgstr "Qualidade: %s"
@@ -714,7 +714,7 @@ msgstr "Nível"
 msgid "points remaining"
 msgstr "pontos restantes"
 
-#: ../../../src/MenuCharacter.cpp:360 ../../../src/MenuManager.cpp:414
+#: ../../../src/MenuCharacter.cpp:360 ../../../src/MenuManager.cpp:419
 #, c-format
 msgid "XP: %d"
 msgstr ""
@@ -935,58 +935,61 @@ msgstr "Sair"
 msgid "Exit to title?"
 msgstr "Sair para o Título"
 
-#: ../../../src/MenuInventory.cpp:157
+#: ../../../src/MenuInventory.cpp:158
 #, c-format
 msgid "Lost %d%% of %s. "
 msgstr "Perdeu %d%% de %s."
 
-#: ../../../src/MenuInventory.cpp:164
+#: ../../../src/MenuInventory.cpp:165
 #, c-format
 msgid "Lost %d%% of total XP. "
 msgstr "Perdeu %d%% do XP total. "
 
-#: ../../../src/MenuInventory.cpp:169
+#: ../../../src/MenuInventory.cpp:170
 #, c-format
 msgid "Lost %d%% of current level XP. "
 msgstr "Perdeu %d%% do XP do nível atual. "
 
-#: ../../../src/MenuInventory.cpp:195
+#: ../../../src/MenuInventory.cpp:196
 #, c-format
 msgid "Lost %s."
 msgstr "Perdeu %s."
 
-#: ../../../src/MenuInventory.cpp:234 ../../../src/MenuStash.cpp:136
+#: ../../../src/MenuInventory.cpp:235 ../../../src/MenuStash.cpp:136
 #, c-format
 msgid "%d %s"
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:275
+#: ../../../src/MenuInventory.cpp:276
 msgid "Pick up item(s):"
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:276
+#: ../../../src/MenuInventory.cpp:277
 msgid "Use or equip item:"
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:277
+#: ../../../src/MenuInventory.cpp:278
 #, c-format
 msgid "%s modifiers"
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:278
-#, fuzzy
-msgid "Move only one item:"
-msgstr "Use SHIFT para mover somente um item."
-
 #: ../../../src/MenuInventory.cpp:279
-msgid "Sell or stash item(s):"
+msgid "Select a quantity of item:"
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:503
+#: ../../../src/MenuInventory.cpp:282
+msgid "Stash item stack:"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:284
+msgid "Sell item stack:"
+msgstr ""
+
+#: ../../../src/MenuInventory.cpp:508
 msgid "You don't have enough of the required item."
 msgstr ""
 
-#: ../../../src/MenuInventory.cpp:521
+#: ../../../src/MenuInventory.cpp:526
 msgid "This item can only be used from the action bar."
 msgstr "Este item pode ser usado somente a partir da barra de ação."
 
@@ -998,14 +1001,14 @@ msgstr "Notas"
 msgid "Quests"
 msgstr "Aventuras"
 
-#: ../../../src/MenuManager.cpp:416
+#: ../../../src/MenuManager.cpp:421
 #, c-format
 msgid "XP: %d/%d"
 msgstr ""
 
-#: ../../../src/MenuManager.cpp:674 ../../../src/MenuManager.cpp:675
-#: ../../../src/MenuManager.cpp:880 ../../../src/MenuManager.cpp:881
-#: ../../../src/MenuManager.cpp:1073 ../../../src/MenuManager.cpp:1074
+#: ../../../src/MenuManager.cpp:721 ../../../src/MenuManager.cpp:722
+#: ../../../src/MenuManager.cpp:943 ../../../src/MenuManager.cpp:944
+#: ../../../src/MenuManager.cpp:1144 ../../../src/MenuManager.cpp:1145
 #, c-format
 msgid "Not enough %s."
 msgstr "Sem %s suficiente."
@@ -1013,6 +1016,10 @@ msgstr "Sem %s suficiente."
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
 msgstr "Comércio"
+
+#: ../../../src/MenuNumPicker.cpp:106
+msgid "Enter amount:"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:658
 msgid "Unspent skill points:"
@@ -1096,16 +1103,16 @@ msgstr "Recompra"
 msgid "Vendor"
 msgstr "Vendedor"
 
-#: ../../../src/PowerManager.cpp:831
+#: ../../../src/PowerManager.cpp:837
 #, c-format
 msgid "+%d Shield"
 msgstr "Escudo +%d"
 
-#: ../../../src/PowerManager.cpp:1086
+#: ../../../src/PowerManager.cpp:1097
 msgid "You are already transformed, untransform first."
 msgstr "Você já está transformado, destransforme-se primeiro."
 
-#: ../../../src/PowerManager.cpp:1098
+#: ../../../src/PowerManager.cpp:1109
 msgid "Could not untransform at this position."
 msgstr ""
 
@@ -1270,6 +1277,10 @@ msgstr ""
 #: ../../../src/Utils.cpp:203
 msgid "k"
 msgstr "m"
+
+#, fuzzy
+#~ msgid "Move only one item:"
+#~ msgstr "Use SHIFT para mover somente um item."
 
 #~ msgid "CTRL-click a carried item to sell it."
 #~ msgstr "CTRL+clique em um item que carrega para vendê-lo."
