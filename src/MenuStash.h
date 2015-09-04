@@ -61,6 +61,8 @@ public:
 
 	int getRowsCount();
 
+	void removeFromPrevSlot(int quantity);
+
 	Rect slots_area;
 	MenuItemStorage stock;
 	bool updated;

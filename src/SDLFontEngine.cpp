@@ -120,11 +120,11 @@ std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int& w
 	if (width >= calc_width(text))
 		return text;
 
-	unsigned text_length = text.length();
-	unsigned ret_length = text_length;
+	size_t text_length = text.length();
+	size_t ret_length = text_length;
 	int total_width = (use_ellipsis ? width - calc_width("...") : width);
 
-	for (unsigned i=text_length; i>0; i--) {
+	for (size_t i=text_length; i>0; i--) {
 		if (use_ellipsis) {
 			if (total_width < calc_width(text.substr(0,ret_length)))
 				ret_length = i;

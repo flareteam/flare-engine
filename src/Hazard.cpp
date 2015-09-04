@@ -152,11 +152,11 @@ void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &
 
 void Hazard::setAngle(const float& _angle) {
 	angle = _angle;
-	while (angle >= M_PI*2) angle -= M_PI*2;
-	while (angle < 0.0) angle += M_PI*2;
+	while (angle >= static_cast<float>(M_PI)*2) angle -= static_cast<float>(M_PI)*2;
+	while (angle < 0.0) angle += static_cast<float>(M_PI)*2;
 
-	speed.x = base_speed * cos(angle);
-	speed.y = base_speed * sin(angle);
+	speed.x = base_speed * static_cast<float>(cos(angle));
+	speed.y = base_speed * static_cast<float>(sin(angle));
 
 	if (directional)
 		animationKind = calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);

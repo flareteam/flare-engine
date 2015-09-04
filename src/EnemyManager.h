@@ -42,6 +42,7 @@ private:
 	 * callee is responsible for deleting returned enemy object
 	 */
 	Enemy *getEnemyPrototype(const std::string& type_id);
+	size_t loadEnemyPrototype(const std::string& type_id);
 
 	std::vector<Enemy> prototypes;
 

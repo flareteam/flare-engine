@@ -56,8 +56,8 @@ private:
 	Avatar *hero;
 	Rect src;
 
-	std::vector<WidgetLabel *> labels;
-	WidgetLabel * menu_labels[4];
+	std::vector<std::string> labels;
+	std::vector<std::string> menu_labels;
 
 	Point last_mouse;
 	void addSlot(unsigned index, int x, int y);
@@ -81,6 +81,7 @@ public:
 	void clear();
 	void resetSlots();
 	void setItemCount(unsigned index, int count, bool is_equipped = false);
+	Point getSlotPos(int slot);
 
 	TooltipData checkTooltip(const Point& mouse);
 	bool isWithinSlots(const Point& mouse);

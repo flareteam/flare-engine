@@ -84,7 +84,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 	scroll_area.x = rows[0].x;
 	scroll_area.y = rows[0].y;
 	scroll_area.w = rows[0].w;
-	scroll_area.h = rows[0].h * rows.size();
+	scroll_area.h = rows[0].h * static_cast<int>(rows.size());
 
 	if (isWithin(scroll_area,mouse)) {
 		inpt->lock_scroll = true;
@@ -121,21 +121,21 @@ bool WidgetListBox::checkClick(int x, int y) {
 		pressed = false;
 
 		for(unsigned i=0; i<rows.size(); i++) {
-			if (i<values.size()) {
-				if (isWithin(rows[i], mouse) && values[i+cursor] != "") {
+			if (i<items.size()) {
+				if (isWithin(rows[i], mouse) && items[i+cursor].value != "") {
 					// deselect other options if multi-select is disabled
 					if (!multi_select) {
-						for (unsigned j=0; j<values.size(); j++) {
+						for (unsigned j=0; j<items.size(); j++) {
 							if (j!=i+cursor)
-								selected[j] = false;
+								items[j].selected = false;
 						}
 					}
 					// activate upon release
-					if (selected[i+cursor]) {
-						if (can_deselect) selected[i+cursor] = false;
+					if (items[i+cursor].selected) {
+						if (can_deselect) items[i+cursor].selected = false;
 					}
 					else {
-						selected[i+cursor] = true;
+						items[i+cursor].selected = true;
 					}
 					refresh();
 					return true;
@@ -170,9 +170,9 @@ TooltipData WidgetListBox::checkTooltip(Point mouse) {
 	TooltipData _tip;
 
 	for(unsigned i=0; i<rows.size(); i++) {
-		if (i<values.size()) {
-			if (isWithin(rows[i], mouse) && tooltips[i+cursor] != "") {
-				_tip.addText(tooltips[i+cursor]);
+		if (i<items.size()) {
+			if (isWithin(rows[i], mouse) && items[i+cursor].tooltip != "") {
+				_tip.addText(items[i+cursor].tooltip);
 				break;
 			}
 		}
@@ -184,10 +184,24 @@ TooltipData WidgetListBox::checkTooltip(Point mouse) {
 /**
  * Add a new value (with tooltip) to the list
  */
-void WidgetListBox::append(std::string value, std::string tooltip) {
-	values.push_back(value);
-	tooltips.push_back(tooltip);
-	selected.push_back(false);
+void WidgetListBox::append(const std::string& value, const std::string& tooltip) {
+	items.resize(items.size()+1);
+	items.back().value = value;
+	items.back().tooltip = tooltip;
+	refresh();
+}
+
+/**
+ * Set a value (with tooltip) at a specific index
+ */
+void WidgetListBox::set(unsigned index, const std::string& value, const std::string& tooltip) {
+	if (index >= items.size()) {
+		append(value, tooltip);
+		return;
+	}
+
+	items[index].value = value;
+	items[index].tooltip = tooltip;
 	refresh();
 }
 
@@ -195,9 +209,7 @@ void WidgetListBox::append(std::string value, std::string tooltip) {
  * Remove a value from the list
  */
 void WidgetListBox::remove(int index) {
-	values.erase(values.begin()+index);
-	tooltips.erase(tooltips.begin()+index);
-	selected.erase(selected.begin()+index);
+	items.erase(items.begin()+index);
 	scrollUp();
 	refresh();
 }
@@ -206,9 +218,7 @@ void WidgetListBox::remove(int index) {
  * Clear the list
  */
 void WidgetListBox::clear() {
-	values.clear();
-	tooltips.clear();
-	selected.clear();
+	items.clear();
 	refresh();
 }
 
@@ -217,21 +227,14 @@ void WidgetListBox::clear() {
  */
 void WidgetListBox::shiftUp() {
 	any_selected = false;
-	if (!selected[0]) {
-		for (unsigned i=1; i < values.size(); i++) {
-			if (selected[i]) {
+	if (!items[0].selected) {
+		for (unsigned i=1; i < items.size(); i++) {
+			if (items[i].selected) {
 				any_selected = true;
-				bool tmp_selected = selected[i];
-				std::string tmp_value = values[i];
-				std::string tmp_tooltip = tooltips[i];
+				ListBoxItem tmp_item = items[i];
 
-				selected[i] = selected[i-1];
-				values[i] = values[i-1];
-				tooltips[i] = tooltips[i-1];
-
-				selected[i-1] = tmp_selected;
-				values[i-1] = tmp_value;
-				tooltips[i-1] = tmp_tooltip;
+				items[i] = items[i-1];
+				items[i-1] = tmp_item;
 			}
 		}
 		if (any_selected) {
@@ -245,21 +248,14 @@ void WidgetListBox::shiftUp() {
  */
 void WidgetListBox::shiftDown() {
 	any_selected = false;
-	if (!selected[values.size()-1]) {
-		for (int i=values.size()-2; i >= 0; i--) {
-			if (selected[i]) {
+	if (!items[items.size()-1].selected) {
+		for (int i=static_cast<int>(items.size())-2; i >= 0; i--) {
+			if (items[i].selected) {
 				any_selected = true;
-				bool tmp_selected = selected[i];
-				std::string tmp_value = values[i];
-				std::string tmp_tooltip = tooltips[i];
+				ListBoxItem tmp_item = items[i];
 
-				selected[i] = selected[i+1];
-				values[i] = values[i+1];
-				tooltips[i] = tooltips[i+1];
-
-				selected[i+1] = tmp_selected;
-				values[i+1] = tmp_value;
-				tooltips[i+1] = tmp_tooltip;
+				items[i] = items[i+1];
+				items[i+1] = tmp_item;
 			}
 		}
 		if (any_selected) {
@@ -270,15 +266,15 @@ void WidgetListBox::shiftDown() {
 
 int WidgetListBox::getSelected() {
 	// return the first selected value
-	for (unsigned i=0; i<values.size(); i++) {
-		if (selected[i]) return i;
+	for (unsigned i=0; i<items.size(); i++) {
+		if (items[i].selected) return i;
 	}
 	return -1; // nothing is selected
 }
 
 std::string WidgetListBox::getValue() {
-	for (unsigned i=0; i<values.size(); i++) {
-		if (selected[i]) return values[i];
+	for (unsigned i=0; i<items.size(); i++) {
+		if (items[i].selected) return items[i].value;
 	}
 	return "";
 }
@@ -287,21 +283,21 @@ std::string WidgetListBox::getValue() {
  * Get the item name at a specific index
  */
 std::string WidgetListBox::getValue(int index) {
-	return values[index];
+	return items[index].value;
 }
 
 /*
  * Get the item tooltip at a specific index
  */
 std::string WidgetListBox::getTooltip(int index) {
-	return tooltips[index];
+	return items[index].tooltip;
 }
 
 /*
  * Get the amount of ListBox items
  */
 int WidgetListBox::getSize() {
-	return values.size();
+	return static_cast<int>(items.size());
 }
 
 /*
@@ -317,7 +313,7 @@ void WidgetListBox::scrollUp() {
  * Shift the viewing area down
  */
 void WidgetListBox::scrollDown() {
-	if (cursor+rows.size() < values.size())
+	if (cursor+rows.size() < items.size())
 		cursor += 1;
 	refresh();
 }
@@ -347,7 +343,7 @@ void WidgetListBox::render() {
 			render_device->render(listboxs);
 		}
 
-		if (i<values.size()) {
+		if (i<items.size()) {
 			vlabels[i].local_frame = local_frame;
 			vlabels[i].local_offset = local_offset;
 			vlabels[i].render();
@@ -397,13 +393,13 @@ void WidgetListBox::refresh() {
 	int right_margin = 0;
 
 	// Update the scrollbar
-	if (values.size() > rows.size()) {
+	if (items.size() > rows.size()) {
 		has_scroll_bar = true;
 		pos_scroll.x = pos.x+pos.w-scrollbar->pos_up.w-scrollbar_offset;
 		pos_scroll.y = pos.y+scrollbar_offset;
 		pos_scroll.w = scrollbar->pos_up.w;
-		pos_scroll.h = (pos.h*rows.size())-scrollbar->pos_down.h-(scrollbar_offset*2);
-		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, values.size()-rows.size());
+		pos_scroll.h = (pos.h*static_cast<int>(rows.size()))-scrollbar->pos_down.h-(scrollbar_offset*2);
+		scrollbar->refresh(pos_scroll.x, pos_scroll.y, pos_scroll.h, cursor, static_cast<int>(items.size()-rows.size()));
 		right_margin = scrollbar->pos_knob.w + 8;
 	}
 	else {
@@ -428,17 +424,17 @@ void WidgetListBox::refresh() {
 
 		int padding = font->getFontHeight();
 
-		if (i+cursor < values.size()) {
+		if (i+cursor < items.size()) {
 			if (disable_text_trim)
-				temp = values[i+cursor];
+				temp = items[i+cursor].value;
 			else
-				temp = font->trimTextToWidth(values[i+cursor], pos.w-right_margin-padding, true);
+				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, true);
 		}
 
-		if(i+cursor < values.size() && selected[i+cursor]) {
+		if(i+cursor < items.size() && items[i+cursor].selected) {
 			vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_normal);
 		}
-		else if (i < values.size()) {
+		else if (i < items.size()) {
 			vlabels[i].set(font_x, font_y, JUSTIFY_LEFT, VALIGN_CENTER, temp, color_disabled);
 		}
 	}
@@ -446,40 +442,56 @@ void WidgetListBox::refresh() {
 }
 
 bool WidgetListBox::getNext() {
-	if (values.size() < 1) return false;
+	if (items.size() < 1) return false;
 
 	int sel = getSelected();
-	if (sel != -1) selected[sel] = false;
+	if (sel != -1) items[sel].selected = false;
 
-	if(sel == (int)values.size()-1) {
-		selected[0] = true;
+	if(sel == static_cast<int>(items.size())-1) {
+		items[0].selected = true;
 		while (getSelected() < cursor) scrollUp();
 	}
 	else {
-		selected[sel+1] = true;
-		while (getSelected() > cursor+(int)rows.size()-1) scrollDown();
+		items[sel+1].selected = true;
+		while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) scrollDown();
 	}
 
 	return true;
 }
 
 bool WidgetListBox::getPrev() {
-	if (values.size() < 1) return false;
+	if (items.size() < 1) return false;
 
 	int sel = getSelected();
 	if (sel == -1) sel = 0;
-	selected[sel] = false;
+	items[sel].selected = false;
 
 	if(sel == 0) {
-		selected[values.size()-1] = true;
-		while (getSelected() > cursor+(int)rows.size()-1) scrollDown();
+		items[items.size()-1].selected = true;
+		while (getSelected() > cursor + static_cast<int>(rows.size()) - 1) scrollDown();
 	}
 	else {
-		selected[sel-1] = true;
+		items[sel-1].selected = true;
 		while (getSelected() < cursor) scrollUp();
 	}
 
 	return true;
+}
+
+void WidgetListBox::select(int index) {
+	items[index].selected = true;
+}
+
+void WidgetListBox::deselect(int index) {
+	items[index].selected = false;
+}
+
+bool WidgetListBox::isSelected(int index) {
+	return items[index].selected;
+}
+
+void WidgetListBox::sort() {
+	std::sort(items.begin(), items.end());
 }
 
 WidgetListBox::~WidgetListBox() {

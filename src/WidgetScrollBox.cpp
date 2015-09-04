@@ -262,7 +262,7 @@ void WidgetScrollBox::render() {
 }
 
 bool WidgetScrollBox::getNext() {
-	if (children.size() == 0) {
+	if (children.empty()) {
 		scrollDown();
 		return true;
 	}
@@ -270,7 +270,7 @@ bool WidgetScrollBox::getNext() {
 	if (currentChild != -1)
 		children[currentChild]->in_focus = false;
 	currentChild+=1;
-	currentChild = ((unsigned)currentChild == children.size()) ? 0 : currentChild;
+	currentChild = (static_cast<unsigned>(currentChild) == children.size()) ? 0 : currentChild;
 
 	if (children[currentChild]->pos.y > (cursor + pos.h) ||
 			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {
@@ -285,7 +285,7 @@ bool WidgetScrollBox::getNext() {
 }
 
 bool WidgetScrollBox::getPrev() {
-	if (children.size() == 0) {
+	if (children.empty()) {
 		scrollUp();
 		return true;
 	}
@@ -293,7 +293,7 @@ bool WidgetScrollBox::getPrev() {
 	if (currentChild != -1)
 		children[currentChild]->in_focus = false;
 	currentChild-=1;
-	currentChild = (currentChild < 0) ? children.size() - 1 : currentChild;
+	currentChild = (currentChild < 0) ? static_cast<int>(children.size()) - 1 : currentChild;
 
 	if (children[currentChild]->pos.y > (cursor + pos.h) ||
 			(children[currentChild]->pos.y + children[currentChild]->pos.h) > (cursor + pos.h)) {

@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "Stats.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
@@ -89,7 +90,7 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 		keybinds_btn.push_back(new WidgetButton());
 	}
 
-	key_count = keybinds_btn.size()/3;
+	key_count = static_cast<unsigned>(keybinds_btn.size()/3);
 
 	init();
 }
@@ -259,9 +260,9 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	}
 	else if (infile.key == "keybinds_bg_color") {
 		// @ATTR keybinds_bg_color|r (integer), g (integer), b (integer)|Background color for the keybindings scrollbox.
-		scrollpane_color.r = x1;
-		scrollpane_color.g = y1;
-		scrollpane_color.b = x2;
+		scrollpane_color.r = static_cast<Uint8>(x1);
+		scrollpane_color.g = static_cast<Uint8>(y1);
+		scrollpane_color.b = static_cast<Uint8>(x2);
 	}
 	else if (infile.key == "scrollpane") {
 		// @ATTR scrollpane|x (integer), y (integer), w (integer), h (integer)|Position of the keybinding scrollbox relative to the frame.
@@ -340,7 +341,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 
 	else return false;
 
-	if (keybind_num > -1 && (unsigned)keybind_num < keybinds_lb.size() && (unsigned)keybind_num < keybinds_btn.size()) {
+	if (keybind_num > -1 && static_cast<unsigned>(keybind_num) < keybinds_lb.size() && static_cast<unsigned>(keybind_num) < keybinds_btn.size()) {
 		//keybindings
 		keybinds_lb[keybind_num]->setX(x1);
 		keybinds_lb[keybind_num]->setY(y1);
@@ -404,7 +405,6 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist.add(combat_text_cb);
 	tablist.add(show_fps_cb);
 	tablist.add(colorblind_cb);
-	tablist.add(show_hotkeys_cb);
 	tablist.add(hardware_cursor_cb);
 	tablist.add(dev_mode_cb);
 	tablist.add(show_target_cb);
@@ -451,7 +451,7 @@ void GameStateConfigDesktop::updateVideo() {
 		GAMMA = 1.0;
 		gamma_sl->enabled = false;
 	}
-	gamma_sl->set(5,20,(int)(GAMMA*10.0));
+	gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
 	render_device->setGamma(GAMMA);
 }
 
@@ -469,7 +469,7 @@ void GameStateConfigDesktop::updateInput() {
 	if (ENABLE_JOYSTICK && SDL_NumJoysticks() > 0) {
 		SDL_JoystickClose(joy);
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-		joystick_device_lstb->selected[JOYSTICK_DEVICE] = true;
+		joystick_device_lstb->select(JOYSTICK_DEVICE);
 	}
 	joystick_device_lstb->refresh();
 
@@ -477,38 +477,17 @@ void GameStateConfigDesktop::updateInput() {
 }
 
 void GameStateConfigDesktop::updateKeybinds() {
-	// reset all keybind labels to "(none)"
-	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		keybinds_btn[i]->label = msg->get("(none)");
-	}
-
 	// now do labels for keybinds that are set
 	for (unsigned int i = 0; i < key_count; i++) {
-		if (inpt->binding[i] >= 0) {
-			if (inpt->binding[i] < 8) {
-				keybinds_btn[i]->label = inpt->mouse_button[inpt->binding[i]-1];
-			}
-			else {
-				keybinds_btn[i]->label = inpt->getKeyName(inpt->binding[i]);
-			}
-		}
+		keybinds_btn[i]->label = inpt->getBindingString(i);
 		keybinds_btn[i]->refresh();
 	}
 	for (unsigned int i = key_count; i < key_count*2; i++) {
-		if (inpt->binding_alt[i-key_count] >= 0) {
-			if (inpt->binding_alt[i-key_count] < 8) {
-				keybinds_btn[i]->label = inpt->mouse_button[inpt->binding_alt[i-key_count]-1];
-			}
-			else {
-				keybinds_btn[i]->label = inpt->getKeyName(inpt->binding_alt[i-key_count]);
-			}
-		}
+		keybinds_btn[i]->label = inpt->getBindingString(i-key_count, INPUT_BINDING_ALT);
 		keybinds_btn[i]->refresh();
 	}
 	for (unsigned int i = key_count*2; i < keybinds_btn.size(); i++) {
-		if (inpt->binding_joy[i-(key_count*2)] >= 0) {
-			keybinds_btn[i]->label = msg->get("Button %d", inpt->binding_joy[i-(key_count*2)]);
-		}
+		keybinds_btn[i]->label = inpt->getBindingString(i-(key_count*2), INPUT_BINDING_JOYSTICK);
 		keybinds_btn[i]->refresh();
 	}
 	input_scrollbox->refresh();
@@ -553,30 +532,6 @@ void GameStateConfigDesktop::logic() {
 		logicMods();
 }
 
-void GameStateConfigDesktop::logicAccept() {
-	delete msg;
-	msg = new MessageEngine();
-	inpt->saveKeyBindings();
-	inpt->setKeybindNames();
-	if (setMods()) {
-		reload_music = true;
-		delete mods;
-		mods = new ModManager();
-		loadTilesetSettings();
-	}
-	loadMiscSettings();
-	refreshFont();
-	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
-		SDL_JoystickClose(joy);
-		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-	}
-	cleanup();
-	render_device->createContext();
-	saveSettings();
-	delete requestedGameState;
-	requestedGameState = new GameStateTitle();
-}
-
 void GameStateConfigDesktop::logicVideo() {
 	if (fullscreen_cb->checkClick()) {
 		if (fullscreen_cb->isChecked()) FULLSCREEN=true;
@@ -596,21 +551,21 @@ void GameStateConfigDesktop::logicVideo() {
 	}
 	else if (change_gamma_cb->checkClick()) {
 		if (change_gamma_cb->isChecked()) {
-			CHANGE_GAMMA=true;
+			CHANGE_GAMMA = true;
 			gamma_sl->enabled = true;
 		}
 		else {
-			CHANGE_GAMMA=false;
+			CHANGE_GAMMA = false;
 			GAMMA = 1.0;
 			gamma_sl->enabled = false;
-			gamma_sl->set(5,20,(int)(GAMMA*10.0));
+			gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
 			render_device->setGamma(GAMMA);
 		}
 	}
 	else if (CHANGE_GAMMA) {
 		gamma_sl->enabled = true;
 		if (gamma_sl->checkClick()) {
-			GAMMA=(gamma_sl->getValue())*0.1f;
+			GAMMA = static_cast<float>(gamma_sl->getValue())*0.1f;
 			render_device->setGamma(GAMMA);
 		}
 	}
@@ -650,13 +605,13 @@ void GameStateConfigDesktop::logicInput() {
 				JOYSTICK_DEVICE = 0;
 				SDL_JoystickClose(joy);
 				joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-				joystick_device_lstb->selected[JOYSTICK_DEVICE] = true;
+				joystick_device_lstb->select(JOYSTICK_DEVICE);
 			}
 		}
 		else {
 			ENABLE_JOYSTICK=false;
 			for (int i=0; i<joystick_device_lstb->getSize(); i++)
-				joystick_device_lstb->selected[i] = false;
+				joystick_device_lstb->deselect(i);
 		}
 		if (SDL_NumJoysticks() > 0) joystick_device_lstb->refresh();
 	}
@@ -742,9 +697,9 @@ void GameStateConfigDesktop::refreshWidgets() {
 void GameStateConfigDesktop::scanKey(int button) {
 	// clear the keybind if the user presses CTRL+Delete
 	if (input_confirm->visible && input_confirm->confirmClicked) {
-		if ((unsigned)button < key_count) inpt->binding[button] = -1;
-		else if ((unsigned)button < key_count*2) inpt->binding_alt[button%key_count] = -1;
-		else if ((unsigned)button < key_count*3) inpt->binding_joy[button%key_count] = -1;
+		if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = -1;
+		else if (static_cast<unsigned>(button) < key_count*2) inpt->binding_alt[button%key_count] = -1;
+		else if (static_cast<unsigned>(button) < key_count*3) inpt->binding_joy[button%key_count] = -1;
 
 		inpt->pressing[button%key_count] = false;
 		inpt->lock[button%key_count] = false;
@@ -758,9 +713,9 @@ void GameStateConfigDesktop::scanKey(int button) {
 
 	if (input_confirm->visible && !input_confirm->isWithinButtons) {
 		// keyboard & mouse
-		if ((unsigned)button < key_count*2) {
+		if (static_cast<unsigned>(button) < key_count*2) {
 			if (inpt->last_button != -1 && inpt->last_button < 8) {
-				if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_button;
+				if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = inpt->last_button;
 				else inpt->binding_alt[button-key_count] = inpt->last_button;
 
 				inpt->pressing[button%key_count] = false;
@@ -773,7 +728,7 @@ void GameStateConfigDesktop::scanKey(int button) {
 				return;
 			}
 			if (inpt->last_key != -1) {
-				if ((unsigned)button < key_count) inpt->binding[button] = inpt->last_key;
+				if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = inpt->last_key;
 				else inpt->binding_alt[button-key_count] = inpt->last_key;
 
 				inpt->pressing[button%key_count] = false;
@@ -787,7 +742,7 @@ void GameStateConfigDesktop::scanKey(int button) {
 			}
 		}
 		// joystick
-		else if ((unsigned)button >= key_count*2 && inpt->last_joybutton != -1) {
+		else if (static_cast<unsigned>(button) >= key_count*2 && inpt->last_joybutton != -1) {
 			inpt->binding_joy[button-(key_count*2)] = inpt->last_joybutton;
 
 			keybinds_btn[button]->label = msg->get("Button %d", inpt->binding_joy[button-(key_count*2)]);

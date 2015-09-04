@@ -58,9 +58,13 @@ Please see the [INSTALL.md](INSTALL.engine.md) file for instructions.
 
 Settings are stored in one of these places:
 
+### Linux/Mac OS X/Unix
     $XDG_CONFIG_HOME/flare/
     $HOME/.config/flare/
     ./config
+### Windows
+	%APPDATA%\flare\config
+	config\
 
 Here you can enable fullscreen, change the game resolution, enable mouse-move, and change keybindings.
 The settings files are created the first time you run Flare.
@@ -69,9 +73,13 @@ The settings files are created the first time you run Flare.
 
 Save files are stored in one of these places:
 
+### Linux/Mac OS X/Unix
     $XDG_DATA_HOME/flare/
     $HOME/.local/share/flare/
-    ./saves
+    ./userdata
+### Windows
+	%APPDATA%\flare\userdata
+	userdata\
 
 If permissions are correct, the game is automatically saved when you exit.
 In addition, there is a `mods` directory in this location, which can be used to override system-wide mods.
@@ -85,3 +93,4 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | `--data-path`     | Specifies an exact path to look for mod data.
 | `--debug-event`   | Prints verbose hardware input information.
 | `--renderer`      | Specifies the rendering backend to use. The default is 'sdl'. Also available is 'sdl_hardware', which is a GPU-based renderer.
+| `--no-audio`      | Disables sound effects and music.

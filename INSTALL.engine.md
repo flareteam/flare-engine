@@ -164,3 +164,27 @@ include it into the default compile settings.
  * More aggressive optimisation by telling the linker, it's just this program.
    (g++: -fwhole-program)
  * to be continued.
+
+## Troubleshooting
+
+If the game fails to start, some of the following tips might help:
+
+ * Open your `settings.txt` file. The location of this file is specified in [README.md](README.engine.md#settings).
+   In that file, set `hwsurface=0` and `vsync=0`.
+ * Older computers might have CPUs that don't support SSE. The default binaries for SDL 2 require SSE.
+   To disable SSE instructions, it is necessary to download the SDL 2 source and build SDL 2 library from source. In case of Windows plus MinGW/MSYS run the following commands from SDL 2 source folder using MSYS terminal:
+
+   ```
+   ./configure --disable-sse
+   make
+   ```
+
+   Then use produced libraries to build flare.
+   In case of Linux you can add next command:
+
+   ```
+   make install
+   ```
+
+   to install built libraries system-wide.
+   For other ways of building SDL 2 library (cmake, Visual C++) refer to SDL 2 documentation.

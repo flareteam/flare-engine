@@ -623,11 +623,11 @@ void SDLHardwareRenderDevice::freeImage(Image *image) {
 void SDLHardwareRenderDevice::windowResize() {
 	int w,h;
 	SDL_GetWindowSize(window, &w, &h);
-	SCREEN_W = w;
-	SCREEN_H = h;
+	SCREEN_W = static_cast<unsigned short>(w);
+	SCREEN_H = static_cast<unsigned short>(h);
 
-	float scale = (float)VIEW_H / (float)SCREEN_H;
-	VIEW_W = (int)((float)SCREEN_W * scale);
+	float scale = static_cast<float>(VIEW_H) / static_cast<float>(SCREEN_H);
+	VIEW_W = static_cast<unsigned short>(static_cast<float>(SCREEN_W) * scale);
 
 	// letterbox if too tall
 	if (VIEW_W < MIN_SCREEN_W) {
@@ -641,6 +641,8 @@ void SDLHardwareRenderDevice::windowResize() {
 	if (texture) SDL_DestroyTexture(texture);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, VIEW_W, VIEW_H);
 	SDL_SetRenderTarget(renderer, texture);
+
+	updateScreenVars();
 }
 
 #endif

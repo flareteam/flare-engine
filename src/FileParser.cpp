@@ -45,7 +45,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	line_number = 0;
 	this->errormessage = _errormessage;
 
-	if (filenames.size() == 0 && !errormessage.empty()) {
+	if (filenames.empty() && !errormessage.empty()) {
 		logError("FileParser: %s: %s: No such file or directory!", _filename.c_str(), errormessage.c_str());
 		return false;
 	}
@@ -53,7 +53,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 	bool ret = false;
 
 	// Cycle through all filenames from the end, stopping when a file is to overwrite all further files.
-	for (unsigned i=filenames.size(); i>0; i--) {
+	for (size_t i=filenames.size(); i>0; i--) {
 		infile.open(filenames[i-1].c_str(), std::ios::in);
 		ret = infile.is_open();
 
@@ -71,7 +71,7 @@ bool FileParser::open(const std::string& _filename, bool locateFileName, const s
 				}
 
 				if (test_line != "APPEND") {
-					current_index = i-1;
+					current_index = static_cast<unsigned>(i)-1;
 					infile.clear(); // reset flags
 					infile.seekg(0, std::ios::beg);
 					break;
@@ -245,9 +245,18 @@ void FileParser::error(const char* format, ...) {
 	vsprintf(buffer, format, args);
 	va_end(args);
 
-	std::stringstream ss;
-	ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer;
-	logError(ss.str().c_str());
+	errorBuf(buffer);
+}
+
+void FileParser::errorBuf(const char* buffer) {
+	if (include_fp) {
+		include_fp->errorBuf(buffer);
+	}
+	else {
+		std::stringstream ss;
+		ss << "[" << filenames[current_index] << ":" << line_number << "] " << buffer;
+		logError(ss.str().c_str());
+	}
 }
 
 void FileParser::incrementLineNum() {

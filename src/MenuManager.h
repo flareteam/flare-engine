@@ -38,6 +38,7 @@ class MenuBook;
 class MenuStatBar;
 class MenuMiniMap;
 class MenuNPCActions;
+class MenuNumPicker;
 class MenuEnemy;
 class MenuVendor;
 class MenuTalker;
@@ -73,6 +74,7 @@ private:
 
 	bool mouse_dragging;
 	bool keyboard_dragging;
+	bool sticky_dragging;
 	ItemStack drag_stack;
 	int drag_power;
 	int drag_src;
@@ -107,7 +109,7 @@ public:
 	MenuInventory *inv;
 	MenuPowers *pow;
 	MenuCharacter *chr;
-	MenuLog *log;
+	MenuLog *questlog;
 	MenuHUDLog *hudlog;
 	MenuActionBar *act;
 	MenuBook *book;
@@ -117,6 +119,7 @@ public:
 	WidgetTooltip *tip;
 	MenuMiniMap *mini;
 	MenuNPCActions *npc;
+	MenuNumPicker *num_picker;
 	MenuEnemy *enemy;
 	MenuVendor *vendor;
 	MenuTalker *talker;

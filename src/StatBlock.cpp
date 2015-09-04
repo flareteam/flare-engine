@@ -49,6 +49,7 @@ StatBlock::StatBlock()
 	, converted(false)
 	, summoned(false)
 	, summoned_power_index(0)
+	, encountered(false)
 	, movement_type(MOVEMENT_NORMAL)
 	, flying(false)
 	, intangible(false)
@@ -102,6 +103,9 @@ StatBlock::StatBlock()
 	, effects()
 	, blocking(false) // hero only
 	, pos()
+	, knockback_speed()
+	, knockback_srcpos()
+	, knockback_destpos()
 	, direction(0)
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
@@ -116,9 +120,7 @@ StatBlock::StatBlock()
 	, powers_list()	// hero only
 	, powers_list_items()	// hero only
 	, powers_passive()
-	, power_chance(POWERSLOT_COUNT, 0)		// enemy only
-	, power_index(POWERSLOT_COUNT, 0)		// both
-	, power_ticks(POWERSLOT_COUNT, 0)		// enemy only
+	, powers_ai() // enemy only
 	, melee_range(1.0f) //both
 	, threat_range(0)  // enemy
 	, combat_style(COMBAT_DEFAULT)//enemy
@@ -129,8 +131,8 @@ StatBlock::StatBlock()
 	, join_combat(false)
 	, cooldown_ticks(0)
 	, cooldown(0)
-	, activated_powerslot(0)// enemy only
-	, on_half_dead_casted(false) // enemy only
+	, activated_power(NULL) // enemy only
+	, half_dead_power(false) // enemy only
 	, suppress_hp(false)
 	, teleportation(false)
 	, teleport_destination()
@@ -179,32 +181,32 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (infile->key == STAT_NAME[i]) {
+			if (infile->key == STAT_KEY[i]) {
 				// @ATTR $STATNAME|integer|The starting value for this stat.
 				starting[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_level") {
+			else if (infile->key == STAT_KEY[i] + "_per_level") {
 				// @ATTR $STATNAME_per_level|integer|The value for this stat added per level.
 				per_level[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_physical") {
+			else if (infile->key == STAT_KEY[i] + "_per_physical") {
 				// @ATTR $STATNAME_per_physical|integer|The value for this stat added per Physical.
 				per_physical[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_mental") {
+			else if (infile->key == STAT_KEY[i] + "_per_mental") {
 				// @ATTR $STATNAME_per_mental|integer|The value for this stat added per Mental.
 				per_mental[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_offense") {
+			else if (infile->key == STAT_KEY[i] + "_per_offense") {
 				// @ATTR $STATNAME_per_offense|integer|The value for this stat added per Offense.
 				per_offense[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_NAME[i] + "_per_defense") {
+			else if (infile->key == STAT_KEY[i] + "_per_defense") {
 				// @ATTR $STATNAME_per_defense|integer|The value for this stat added per Defense.
 				per_defense[i] = value;
 				return true;
@@ -212,7 +214,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 
 		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
-			if (infile->key == "vulnerable_" + ELEMENTS[i].name) {
+			if (infile->key == "vulnerable_" + ELEMENTS[i].id) {
 				// @ATTR vulnerable_$ELEMENT|integer|Percentage weakness to this element.
 				vulnerable[i] = vulnerable_base[i] = value;
 				return true;
@@ -296,6 +298,15 @@ void StatBlock::load(const std::string& filename) {
 			loot_table.push_back(Event_Component());
 			loot->parseLoot(infile, &loot_table.back(), &loot_table);
 		}
+		else if (infile.key == "loot_count") {
+			// @ATTR loot_count|min (integer), max (integer)|Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.
+			loot_count.x = toInt(infile.nextValue());
+			loot_count.y = toInt(infile.nextValue());
+			if (loot_count.x != 0 || loot_count.y != 0) {
+				clampFloor(loot_count.x, 1);
+				clampFloor(loot_count.y, loot_count.x);
+			}
+		}
 		// @ATTR defeat_status|string|Campaign status to set upon death.
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
 		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
@@ -329,47 +340,39 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		// @ATTR chance_flee|integer|Percentage chance that the creature will run away from their target.
 		else if (infile.key == "chance_flee") chance_flee = num;
-
-		// @ATTR chance_melee_phys|integer|Percentage chance that the creature will use their physical melee power.
-		else if (infile.key == "chance_melee_phys") power_chance[MELEE_PHYS] = num;
-		// @ATTR chance_melee_ment|integer|Percentage chance that the creature will use their mental melee power.
-		else if (infile.key == "chance_melee_ment") power_chance[MELEE_MENT] = num;
-		// @ATTR chance_ranged_phys|integer|Percentage chance that the creature will use their physical ranged power.
-		else if (infile.key == "chance_ranged_phys") power_chance[RANGED_PHYS] = num;
-		// @ATTR chance_ranged_ment|integer|Percentage chance that the creature will use their mental ranged power.
-		else if (infile.key == "chance_ranged_ment") power_chance[RANGED_MENT] = num;
-		// @ATTR power_melee_phys|integer|Power index for the physical melee power.
-		else if (infile.key == "power_melee_phys") power_index[MELEE_PHYS] = num;
-		// @ATTR power_melee_ment|integer|Power index for the mental melee power.
-		else if (infile.key == "power_melee_ment") power_index[MELEE_MENT] = num;
-		// @ATTR power_ranged_phys|integer|Power index for the physical ranged power.
-		else if (infile.key == "power_ranged_phys") power_index[RANGED_PHYS] = num;
-		// @ATTR power_ranged_ment|integer|Power index for the mental ranged power.
-		else if (infile.key == "power_ranged_ment") power_index[RANGED_MENT] = num;
-		// @ATTR power_beacon|integer|Power index of a "beacon" power used to aggro nearby creatures.
-		else if (infile.key == "power_beacon") power_index[BEACON] = num;
-		// @ATTR power_on_hit|integer|Power index that is triggered when hit.
-		else if (infile.key == "power_on_hit") power_index[ON_HIT] = num;
-		// @ATTR power_on_death|integer|Power index that is triggered when dead.
-		else if (infile.key == "power_on_death") power_index[ON_DEATH] = num;
-		// @ATTR power_on_half_dead|integer|Power index that is triggered when at half health.
-		else if (infile.key == "power_on_half_dead") power_index[ON_HALF_DEAD] = num;
-		// @ATTR power_on_debuff|integer|Power index that is triggered when under a negative status effect.
-		else if (infile.key == "power_on_debuff") power_index[ON_DEBUFF] = num;
-		// @ATTR power_on_join_combat|integer|Power index that is triggered when initiating combat.
-		else if (infile.key == "power_on_join_combat") power_index[ON_JOIN_COMBAT] = num;
-		// @ATTR chance_on_hit|integer|Percentage chance that power_on_hit will be triggered.
-		else if (infile.key == "chance_on_hit") power_chance[ON_HIT] = num;
-		// @ATTR chance_on_death|integer|Percentage chance that power_on_death will be triggered.
-		else if (infile.key == "chance_on_death") power_chance[ON_DEATH] = num;
-		// @ATTR chance_on_half_dead|integer|Percentage chance that power_on_half_dead will be triggered.
-		else if (infile.key == "chance_on_half_dead") power_chance[ON_HALF_DEAD] = num;
-		// @ATTR chance_on_debuff|integer|Percentage chance that power_on_debuff will be triggered.
-		else if (infile.key == "chance_on_debuff") power_chance[ON_DEBUFF] = num;
-		// @ATTR chance_on_join_combat|integer|Percentage chance that power_on_join_combat will be triggered.
-		else if (infile.key == "chance_on_join_combat") power_chance[ON_JOIN_COMBAT] = num;
 		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
 		else if (infile.key == "cooldown_hit") cooldown_hit = parse_duration(infile.val);
+
+		else if (infile.key == "power") {
+			// @ATTR power|type (string), power id (integer), chance (integer)|A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, on_hit, on_death, on_half_dead, on_join_combat, on_debuff
+			AIPower ai_power;
+
+			std::string ai_type = infile.nextValue();
+
+			ai_power.id = powers->verifyID(toInt(infile.nextValue()), &infile, false);
+			if (ai_power.id == 0)
+				continue; // verifyID() will print our error message
+
+			ai_power.chance = toInt(infile.nextValue());
+
+			if (ai_type == "melee") ai_power.type = AI_POWER_MELEE;
+			else if (ai_type == "ranged") ai_power.type = AI_POWER_RANGED;
+			else if (ai_type == "beacon") ai_power.type = AI_POWER_BEACON;
+			else if (ai_type == "on_hit") ai_power.type = AI_POWER_HIT;
+			else if (ai_type == "on_death") ai_power.type = AI_POWER_DEATH;
+			else if (ai_type == "on_half_dead") ai_power.type = AI_POWER_HALF_DEAD;
+			else if (ai_type == "on_join_combat") ai_power.type = AI_POWER_JOIN_COMBAT;
+			else if (ai_type == "on_debuff") ai_power.type = AI_POWER_DEBUFF;
+			else {
+				infile.error("StatBlock: '%s' is not a valid enemy power type.", ai_type.c_str());
+				continue;
+			}
+
+			if (ai_power.type == AI_POWER_HALF_DEAD)
+				half_dead_power = true;
+
+			powers_ai.push_back(ai_power);
+		}
 
 		else if (infile.key == "passive_powers") {
 			// @ATTR passive_powers|power (integer), ...|A list of passive powers this creature has.
@@ -568,19 +571,19 @@ void StatBlock::logic() {
 	// preserve ratio on maxmp and maxhp changes
 	float ratio;
 	if (prev_maxhp != get(STAT_HP_MAX)) {
-		ratio = (float)pres_hp / (float)prev_maxhp;
-		hp = (int)(ratio * get(STAT_HP_MAX));
+		ratio = static_cast<float>(pres_hp) / static_cast<float>(prev_maxhp);
+		hp = static_cast<int>(ratio * static_cast<float>(get(STAT_HP_MAX)));
 	}
 	if (prev_maxmp != get(STAT_MP_MAX)) {
-		ratio = (float)pres_mp / (float)prev_maxmp;
-		mp = (int)(ratio * get(STAT_MP_MAX));
+		ratio = static_cast<float>(pres_mp) / static_cast<float>(prev_maxmp);
+		mp = static_cast<int>(ratio * static_cast<float>(get(STAT_MP_MAX)));
 	}
 
 	// handle cooldowns
 	if (cooldown_ticks > 0) cooldown_ticks--; // global cooldown
 
-	for (int i=0; i<POWERSLOT_COUNT; i++) { // NPC/enemy powerslot cooldown
-		if (power_ticks[i] > 0) power_ticks[i]--;
+	for (size_t i=0; i<powers_ai.size(); ++i) { // NPC/enemy powerslot cooldown
+		if (powers_ai[i].ticks > 0) powers_ai[i].ticks--;
 	}
 
 	// HP regen
@@ -606,8 +609,14 @@ void StatBlock::logic() {
 		transform_duration--;
 
 	// apply bleed
-	if (effects.damage > 0) {
+	if (effects.damage > 0 && hp > 0) {
 		takeDamage(effects.damage);
+		comb->addMessage(effects.damage, pos, COMBAT_MESSAGE_TAKEDMG);
+	}
+	if (effects.damage_percent > 0 && hp > 0) {
+		int damage = (get(STAT_HP_MAX)*effects.damage_percent)/100;
+		takeDamage(damage);
+		comb->addMessage(damage, pos, COMBAT_MESSAGE_TAKEDMG);
 	}
 
 	if(effects.death_sentence)
@@ -622,9 +631,21 @@ void StatBlock::logic() {
 		hp += effects.hpot;
 		if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
 	}
+	if (effects.hpot_percent > 0) {
+		int hpot = (get(STAT_HP_MAX)*effects.hpot_percent)/100;
+		comb->addMessage(msg->get("+%d HP",hpot), pos, COMBAT_MESSAGE_BUFF);
+		hp += hpot;
+		if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
+	}
 	if (effects.mpot > 0) {
 		comb->addMessage(msg->get("+%d MP",effects.mpot), pos, COMBAT_MESSAGE_BUFF);
 		mp += effects.mpot;
+		if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
+	}
+	if (effects.mpot_percent > 0) {
+		int mpot = (get(STAT_MP_MAX)*effects.mpot_percent)/100;
+		comb->addMessage(msg->get("+%d MP",mpot), pos, COMBAT_MESSAGE_BUFF);
+		mp += mpot;
 		if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
 	}
 
@@ -636,6 +657,18 @@ void StatBlock::logic() {
 
 	if (hp == 0)
 		removeSummons();
+
+	if (effects.knockback_speed != 0) {
+		float theta = calcTheta(knockback_srcpos.x, knockback_srcpos.y, knockback_destpos.x, knockback_destpos.y);
+		knockback_speed.x = effects.knockback_speed * static_cast<float>(cos(theta));
+		knockback_speed.y = effects.knockback_speed * static_cast<float>(sin(theta));
+	}
+
+	if (effects.knockback_speed != 0) {
+		mapr->collider.unblock(pos.x, pos.y);
+		mapr->collider.move(pos.x, pos.y, knockback_speed.x, knockback_speed.y, movement_type, hero);
+		mapr->collider.block(pos.x, pos.y, hero_ally);
+	}
 }
 
 StatBlock::~StatBlock() {
@@ -658,6 +691,7 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 			   && !power.passive
 			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
 			   && !power.meta_power
+			   && !effects.stun
 			   && (power.requires_item == -1 || (power.requires_item > 0 && items->requirementsMet(this, power.requires_item)));
 	}
 
@@ -713,7 +747,7 @@ void StatBlock::loadHeroStats() {
 		}
 		infile.close();
 	}
-	max_spendable_stat_points = xp_table.size() * stat_points_per_level;
+	max_spendable_stat_points = static_cast<int>(xp_table.size()) * stat_points_per_level;
 }
 
 void StatBlock::loadHeroSFX() {
@@ -843,4 +877,34 @@ void StatBlock::addXP(int amount) {
 
 	if (xp >= xp_table.back())
 		xp = xp_table.back();
+}
+
+AIPower* StatBlock::getAIPower(AI_POWER ai_type) {
+	std::vector<size_t> possible_ids;
+	int chance = rand() % 100;
+
+	for (size_t i=0; i<powers_ai.size(); ++i) {
+		if (ai_type != powers_ai[i].type)
+			continue;
+
+		if (chance > powers_ai[i].chance)
+			continue;
+
+		if (powers_ai[i].ticks > 0)
+			continue;
+
+		if (powers->powers[powers_ai[i].id].type == POWTYPE_SPAWN) {
+			if (summonLimitReached(powers_ai[i].id))
+				continue;
+		}
+
+		possible_ids.push_back(i);
+	}
+
+	if (!possible_ids.empty()) {
+		size_t index = static_cast<size_t>(rand()) % possible_ids.size();
+		return &powers_ai[possible_ids[index]];
+	}
+
+	return NULL;
 }

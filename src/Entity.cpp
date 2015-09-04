@@ -40,7 +40,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 const int directionDeltaX[8] =   {-1, -1, -1,  0,  1,  1,  1,  0};
 const int directionDeltaY[8] =   { 1,  0, -1, -1, -1,  0,  1,  1};
-const float speedMultiplyer[8] = { (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f, (float)(1.0/M_SQRT2), 1.0f};
+const float speedMultiplyer[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f, static_cast<float>(1.0/M_SQRT2), 1.0f};
 
 Entity::Entity()
 	: sprites(NULL)
@@ -137,16 +137,16 @@ void Entity::move_from_offending_tile() {
 		float pushy = 0;
 
 		if (mapr->collider.is_valid_position(stats.pos.x + 1, stats.pos.y, stats.movement_type, stats.hero))
-			pushx += 0.1f * (2 - (int(stats.pos.x + 1) + 0.5f - stats.pos.x));
+			pushx += 0.1f * (2 - (static_cast<float>(static_cast<int>(stats.pos.x + 1)) + 0.5f - stats.pos.x));
 
 		if (mapr->collider.is_valid_position(stats.pos.x - 1, stats.pos.y, stats.movement_type, stats.hero))
-			pushx -= 0.1f * (2 - (stats.pos.x - (int(stats.pos.x - 1) + 0.5f)));
+			pushx -= 0.1f * (2 - (stats.pos.x - (static_cast<float>(static_cast<int>(stats.pos.x - 1)) + 0.5f)));
 
 		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y + 1, stats.movement_type, stats.hero))
-			pushy += 0.1f * (2 - (int(stats.pos.y + 1) + 0.5f - stats.pos.y));
+			pushy += 0.1f * (2 - (static_cast<float>(static_cast<int>(stats.pos.y + 1)) + 0.5f - stats.pos.y));
 
 		if (mapr->collider.is_valid_position(stats.pos.x, stats.pos.y- 1, stats.movement_type, stats.hero))
-			pushy -= 0.1f * (2 - (stats.pos.y - (int(stats.pos.y - 1) + 0.5f)));
+			pushy -= 0.1f * (2 - (stats.pos.y - (static_cast<float>(static_cast<int>(stats.pos.y - 1)) + 0.5f)));
 
 		stats.pos.x += pushx;
 		stats.pos.y += pushy;
@@ -156,8 +156,8 @@ void Entity::move_from_offending_tile() {
 		// just blink away. This will seriously irritate the player, but there
 		// is probably no other easy way to repair the game
 		if (pushx == 0 && pushy == 0) {
-			stats.pos.x = randBetween(1, mapr->w-1) + 0.5f;
-			stats.pos.y = randBetween(1, mapr->h-1) + 0.5f;
+			stats.pos.x = static_cast<float>(randBetween(1, mapr->w-1)) + 0.5f;
+			stats.pos.y = static_cast<float>(randBetween(1, mapr->h-1)) + 0.5f;
 			logError("Entity: %s got stuck on an invalid tile. Please report this bug, if you're able to reproduce it!",
 					stats.hero ? "The hero" : "An entity");
 		}
@@ -174,11 +174,14 @@ bool Entity::move() {
 
 	move_from_offending_tile();
 
-	if (stats.effects.speed == 0) return false;
+	if (stats.effects.knockback_speed != 0)
+		return false;
+
+	if (stats.effects.stun || stats.effects.speed == 0) return false;
 
 	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
-	float dx = speed * directionDeltaX[stats.direction];
-	float dy = speed * directionDeltaY[stats.direction];
+	float dx = speed * static_cast<float>(directionDeltaX[stats.direction]);
+	float dy = speed * static_cast<float>(directionDeltaY[stats.direction]);
 
 	bool full_move = mapr->collider.move(stats.pos.x, stats.pos.y, dx, dy, stats.movement_type, stats.hero);
 
@@ -216,8 +219,6 @@ bool Entity::takeHit(Hazard &h) {
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally) {
 		stats.join_combat = true;
-		stats.in_combat = true;
-		powers->activate(stats.power_index[BEACON], &stats, stats.pos); //emit beacon
 	}
 
 	// exit if it was a beacon (to prevent stats.targeted from being set)
@@ -249,7 +250,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	if (h.missile && percentChance(stats.get(STAT_REFLECT))) {
 		// reflect the missile 180 degrees
-		h.setAngle(h.angle+M_PI);
+		h.setAngle(h.angle+static_cast<float>(M_PI));
 
 		// change hazard source to match the reflector's type
 		// maybe we should change the source stats pointer to the reflector's StatBlock
@@ -294,7 +295,7 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	if (!h.trait_armor_penetration) { // armor penetration ignores all absorption
-		// substract absorption from armor
+		// subtract absorption from armor
 		int absorption = randBetween(stats.get(STAT_ABS_MIN), stats.get(STAT_ABS_MAX));
 
 		if (absorption > 0 && dmg > 0) {
@@ -346,7 +347,7 @@ bool Entity::takeHit(Hazard &h) {
 
 	bool crit = percentChance(true_crit_chance);
 	if (crit) {
-		dmg = dmg + h.dmg_max;
+		dmg *= 2;
 		if(!stats.hero)
 			mapr->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
 	}
@@ -362,6 +363,9 @@ bool Entity::takeHit(Hazard &h) {
 
 	// temporarily save the current HP for calculating HP/MP steal on final blow
 	int prev_hp = stats.hp;
+
+	// save debuff status to check for on_debuff powers later
+	bool was_debuffed = stats.effects.isDebuffed();
 
 	// apply damage
 	stats.takeDamage(dmg);
@@ -401,8 +405,8 @@ bool Entity::takeHit(Hazard &h) {
 	if (dmg > 0 && !h.loot.empty()) {
 		for (unsigned i=0; i<h.loot.size(); i++) {
 			powers->loot.push_back(h.loot[i]);
-			powers->loot.back().x = (int)stats.pos.x;
-			powers->loot.back().y = (int)stats.pos.y;
+			powers->loot.back().x = static_cast<int>(stats.pos.x);
+			powers->loot.back().y = static_cast<int>(stats.pos.y);
 		}
 	}
 
@@ -422,12 +426,37 @@ bool Entity::takeHit(Hazard &h) {
 					stats.cur_state = ENEMY_DEAD;
 				mapr->collider.unblock(stats.pos.x,stats.pos.y);
 			}
-		}
-		// don't go through a hit animation if stunned
-		else if (!stats.effects.stun && !chance_poise) {
-			play_sfx_hit = true;
 
-			if(!chance_poise && stats.cooldown_hit_ticks == 0) {
+			return true;
+		}
+
+		// play hit sound effect
+		play_sfx_hit = true;
+
+		// if this hit caused a debuff, activate an on_debuff power
+		if (!was_debuffed && stats.effects.isDebuffed()) {
+			AIPower* ai_power = stats.getAIPower(AI_POWER_DEBUFF);
+			if (ai_power != NULL) {
+				stats.cur_state = ENEMY_POWER;
+				stats.activated_power = ai_power;
+				stats.cooldown_ticks = 0; // ignore global cooldown
+				return true;
+			}
+		}
+
+		// roll to see if the enemy's ON_HIT power is casted
+		AIPower* ai_power = stats.getAIPower(AI_POWER_HIT);
+		if (ai_power != NULL) {
+			stats.cur_state = ENEMY_POWER;
+			stats.activated_power = ai_power;
+			stats.cooldown_ticks = 0; // ignore global cooldown
+			return true;
+		}
+
+		// don't go through a hit animation if stunned or successfully poised
+		// however, critical hits ignore poise
+		if (!stats.effects.stun && (!chance_poise || crit)) {
+			if(stats.cooldown_hit_ticks == 0) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
 				else
@@ -437,14 +466,7 @@ bool Entity::takeHit(Hazard &h) {
 				if (stats.untransform_on_hit)
 					stats.transform_duration = 0;
 			}
-			// roll to see if the enemy's ON_HIT power is casted
-			if (percentChance(stats.power_chance[ON_HIT])) {
-				powers->activate(stats.power_index[ON_HIT], &stats, stats.pos);
-			}
 		}
-		// just play the hit sound
-		else
-			play_sfx_hit = true;
 	}
 
 	return true;

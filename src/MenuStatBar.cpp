@@ -107,7 +107,7 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string) {
+void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, Point _mouse, std::string _custom_string) {
 	if (_custom_string != "") custom_string = _custom_string;
 	mouse = _mouse;
 	stat_cur = _stat_cur;
@@ -136,20 +136,20 @@ void MenuStatBar::render() {
 
 	// draw bar progress based on orientation
 	if (orientation == 0) {
-		unsigned bar_length = (stat_max == 0) ? 0 : ((long)stat_cur * (long)bar_pos.w) / (long)stat_max;
+		unsigned long bar_length = (stat_max == 0) ? 0 : (stat_cur * static_cast<unsigned long>(bar_pos.w)) / stat_max;
 		src.x = 0;
 		src.y = 0;
-		src.w = bar_length;
+		src.w = static_cast<int>(bar_length);
 		src.h = bar_pos.h;
 		dest.x = bar_dest.x;
 		dest.y = bar_dest.y;
 	}
 	else if (orientation == 1) {
-		unsigned bar_length = (stat_max == 0) ? 0 : ((long)stat_cur * (long)bar_pos.h) / (long)stat_max;
+		unsigned long bar_length = (stat_max == 0) ? 0 : (stat_cur * static_cast<unsigned long>(bar_pos.h)) / stat_max;
 		src.x = 0;
-		src.y = bar_pos.h-bar_length;
+		src.y = bar_pos.h-static_cast<int>(bar_length);
 		src.w = bar_pos.w;
-		src.h = bar_length;
+		src.h = static_cast<int>(bar_length);
 		dest.x = bar_dest.x;
 		dest.y = bar_dest.y+src.y;
 	}

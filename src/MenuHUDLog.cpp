@@ -56,7 +56,7 @@ MenuHUDLog::MenuHUDLog() {
  */
 int MenuHUDLog::calcDuration(const std::string& s) {
 	// 5 seconds plus an extra second per 10 letters
-	return MAX_FRAMES_PER_SEC * 5 + s.length() * (MAX_FRAMES_PER_SEC/10);
+	return MAX_FRAMES_PER_SEC * 5 + static_cast<int>(s.length()) * (MAX_FRAMES_PER_SEC/10);
 }
 
 /**
@@ -83,11 +83,11 @@ void MenuHUDLog::render() {
 	dest.y = window_area.y+window_area.h;
 
 	// go through new messages
-	for (int i = msg_age.size() - 1; i >= 0; i--) {
-		if (msg_age[i] > 0 && dest.y > 64 && msg_buffer[i]) {
-			dest.y -= msg_buffer[i]->getGraphicsHeight() + paragraph_spacing;
-			msg_buffer[i]->setDest(dest);
-			render_device->render(msg_buffer[i]);
+	for (size_t i = msg_age.size(); i > 0; i--) {
+		if (msg_age[i-1] > 0 && dest.y > 64 && msg_buffer[i-1]) {
+			dest.y -= msg_buffer[i-1]->getGraphicsHeight() + paragraph_spacing;
+			msg_buffer[i-1]->setDest(dest);
+			render_device->render(msg_buffer[i-1]);
 		}
 		else return; // no more new messages
 	}
@@ -118,7 +118,7 @@ void MenuHUDLog::add(const std::string& s, bool prevent_spam) {
 
 	// force HUD messages to vanish in order
 	if (msg_age.size() > 1) {
-		const int last = msg_age.size()-1;
+		const size_t last = msg_age.size()-1;
 		if (msg_age[last] < msg_age[last-1])
 			msg_age[last] = msg_age[last-1];
 	}

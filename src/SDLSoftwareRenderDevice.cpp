@@ -70,11 +70,11 @@ void SDLSoftwareImage::drawPixel(int x, int y, Uint32 pixel) {
 
 	switch(bpp) {
 		case 1:
-			*p = pixel;
+			*p = static_cast<Uint8>(pixel);
 			break;
 
 		case 2:
-			*(Uint16 *)p = pixel;
+			*(Uint16 *)p = static_cast<Uint16>(pixel);
 			break;
 
 		case 3:
@@ -125,8 +125,8 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 
 		if (scaled->surface) {
 			double _stretch_factor_x, _stretch_factor_y;
-			_stretch_factor_x = width / (double)surface->w;
-			_stretch_factor_y = height / (double)surface->h;
+			_stretch_factor_x = width / static_cast<double>(surface->w);
+			_stretch_factor_y = height / static_cast<double>(surface->h);
 
 			for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
 				for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
@@ -482,11 +482,11 @@ void SDLSoftwareRenderDevice::drawPixel(
 	}
 	switch(bpp) {
 		case 1:
-			*p = color;
+			*p = static_cast<Uint8>(color);
 			break;
 
 		case 2:
-			*(Uint16 *)p = color;
+			*(Uint16 *)p = static_cast<Uint16>(color);
 			break;
 
 		case 3:
@@ -815,11 +815,11 @@ void SDLSoftwareRenderDevice::windowResize() {
 #if SDL_VERSION_ATLEAST(2,0,0)
 	int w,h;
 	SDL_GetWindowSize(window, &w, &h);
-	SCREEN_W = w;
-	SCREEN_H = h;
+	SCREEN_W = static_cast<unsigned short>(w);
+	SCREEN_H = static_cast<unsigned short>(h);
 
-	float scale = (float)VIEW_H / (float)SCREEN_H;
-	VIEW_W = (int)((float)SCREEN_W * scale);
+	float scale = static_cast<float>(VIEW_H) / static_cast<float>(SCREEN_H);
+	VIEW_W = static_cast<unsigned short>(static_cast<float>(SCREEN_W) * scale);
 
 	// letterbox if too tall
 	if (VIEW_W < MIN_SCREEN_W) {
@@ -834,10 +834,9 @@ void SDLSoftwareRenderDevice::windowResize() {
 	if (screen) SDL_FreeSurface(screen);
 
 	Uint32 rmask, gmask, bmask, amask;
-	int bpp = (int)BITS_PER_PIXEL;
+	int bpp = static_cast<int>(BITS_PER_PIXEL);
 	SDL_PixelFormatEnumToMasks(SDL_PIXELFORMAT_ARGB8888, &bpp, &rmask, &gmask, &bmask, &amask);
 	screen = SDL_CreateRGBSurface(0, VIEW_W, VIEW_H, bpp, rmask, gmask, bmask, amask);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);
-#endif
-}
+	updateScreenVars();#endif}
 

@@ -60,50 +60,54 @@ void PowerManager::loadEffects() {
 	if (!infile.open("powers/effects.txt"))
 		return;
 
-	std::string input_name = "";
-	bool skippingEntry = false;
-
 	while (infile.next()) {
-		// name needs to be the first component of each power.  That is how we write
-		// data to the correct power.
-		if (infile.key == "name") {
-			// @ATTR name|string|Unique identifier for the effect definition.
-			input_name = infile.val;
-			skippingEntry = (input_name == "");
-			if (skippingEntry)
-				infile.error("PowerManager: Effect without a name, skipping");
-			else
-				effects[input_name].name = input_name;
-			continue;
+		if (infile.new_section) {
+			if (infile.section == "effect") {
+				// check if the previous effect and remove it if there is no identifier
+				if (!effects.empty() && effects.back().id == "") {
+					effects.pop_back();
+				}
+				effects.resize(effects.size()+1);
+			}
 		}
-		if (skippingEntry)
+
+		if (effects.empty() || infile.section != "effect")
 			continue;
 
-		if (infile.key == "type") {
-			// @ATTR type|string|Defines the type of effect
-			effects[input_name].type = infile.val;
+		if (infile.key == "id") {
+			// @ATTR effect.id|string|Unique identifier for the effect definition.
+			effects.back().id = infile.val;
+		}
+		else if (infile.key == "type") {
+			// @ATTR effect.type|string|Defines the type of effect
+			effects.back().type = infile.val;
 		}
 		else if (infile.key == "icon") {
-			// @ATTR icon|integer|The icon to visually represent the effect in the status area
-			effects[input_name].icon = toInt(infile.val);
+			// @ATTR effect.icon|integer|The icon to visually represent the effect in the status area
+			effects.back().icon = toInt(infile.val);
 		}
 		else if (infile.key == "animation") {
-			// @ATTR animation|string|The filename of effect animation.
-			effects[input_name].animation = infile.val;
+			// @ATTR effect.animation|string|The filename of effect animation.
+			effects.back().animation = infile.val;
 		}
 		else if (infile.key == "can_stack") {
-			// @ATTR can_stack|bool|Allows multiple instances of this effect
-			effects[input_name].can_stack = toBool(infile.val);
+			// @ATTR effect.can_stack|bool|Allows multiple instances of this effect
+			effects.back().can_stack = toBool(infile.val);
 		}
 		else if (infile.key == "render_above") {
-			// @ATTR render_above|bool|Effect is rendered above
-			effects[input_name].render_above = toBool(infile.val);
+			// @ATTR effect.render_above|bool|Effect is rendered above
+			effects.back().render_above = toBool(infile.val);
 		}
 		else {
 			infile.error("PowerManager: '%s' is not a valid key.", infile.key.c_str());
 		}
 	}
 	infile.close();
+
+	// check if the last effect and remove it if there is no identifier
+	if (!effects.empty() && effects.back().id == "") {
+		effects.pop_back();
+	}
 }
 
 void PowerManager::loadPowers() {
@@ -317,7 +321,7 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "trait_elemental") {
 			// @ATTR trait_elemental|string|Damage done is elemental. See engine/elements.txt
 			for (unsigned int i=0; i<ELEMENTS.size(); i++) {
-				if (infile.val == ELEMENTS[i].name) powers[input_id].trait_elemental = i;
+				if (infile.val == ELEMENTS[i].id) powers[input_id].trait_elemental = i;
 			}
 		}
 		else if (infile.key == "target_range")
@@ -378,7 +382,7 @@ void PowerManager::loadPowers() {
 			}
 			PostEffect pe;
 			pe.id = popFirstString(infile.val);
-			if (effects.find(pe.id) == effects.end()) {
+			if (!isValidEffect(pe.id)) {
 				infile.error("PowerManager: Unknown effect '%s'", pe.id.c_str());
 			}
 			else {
@@ -507,6 +511,41 @@ void PowerManager::loadPowers() {
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
 	infile.close();
+
+	// verify wall/post power ids
+	for (size_t i=0; i<powers.size(); ++i) {
+		powers[i].wall_power = verifyID(powers[i].wall_power);
+		powers[i].post_power = verifyID(powers[i].post_power);
+	}
+}
+
+bool PowerManager::isValidEffect(const std::string& type) {
+	if (type == "speed")
+		return true;
+
+	if (type == "physical")
+		return true;
+	if (type == "mental")
+		return true;
+	if (type == "offense")
+		return true;
+	if (type == "defense")
+		return true;
+
+	for (int i=0; i<STAT_COUNT; ++i) {
+		if (type == STAT_KEY[i])
+			return true;
+	}
+
+	for (unsigned i=0; i<ELEMENTS.size(); ++i) {
+		if (type == ELEMENTS[i].id + "_resist")
+			return true;
+	}
+
+	if (getEffectDef(type) != NULL)
+		return true;
+
+	return false;
 }
 
 /**
@@ -521,10 +560,10 @@ int PowerManager::loadSFX(const std::string& filename) {
 	std::vector<SoundManager::SoundID>::iterator it = std::find(sfx.begin(), sfx.end(), sid);
 	if (it == sfx.end()) {
 		sfx.push_back(sid);
-		return sfx.size() - 1;
+		return static_cast<int>(sfx.size()) - 1;
 	}
 
-	return it - sfx.begin();
+	return static_cast<int>(it - sfx.begin());
 }
 
 
@@ -758,8 +797,8 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		// handle loot
 		for (unsigned i=0; i<powers[power_index].loot.size(); i++) {
 			loot.push_back(powers[power_index].loot[i]);
-			loot.back().x = (int)src_stats->pos.x;
-			loot.back().y = (int)src_stats->pos.y;
+			loot.back().x = static_cast<int>(src_stats->pos.x);
+			loot.back().y = static_cast<int>(src_stats->pos.y);
 		}
 	}
 }
@@ -776,12 +815,17 @@ void PowerManager::playSound(int power_index) {
 bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
 
-		std::string effect_index = powers[power_index].post_effects[i].id;
+		EffectDef effect_data;
+		EffectDef* effect_ptr = getEffectDef(powers[power_index].post_effects[i].id);
+
 		int magnitude = powers[power_index].post_effects[i].magnitude;
 		int duration = powers[power_index].post_effects[i].duration;
 
-		if (effects.find(effect_index) != effects.end()) {
-			if (effects[effect_index].type == "shield") {
+		if (effect_ptr != NULL) {
+			// effects loaded from powers/effects.txt
+			effect_data = (*effect_ptr);
+
+			if (effect_data.type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
@@ -792,7 +836,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 
 				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
-			else if (effects[effect_index].type == "heal") {
+			else if (effect_data.type == "heal") {
 				// heal for ment weapon damage * damage multiplier
 				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
 
@@ -807,15 +851,24 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				src_stats->hp += magnitude;
 				if (src_stats->hp > src_stats->get(STAT_HP_MAX)) src_stats->hp = src_stats->get(STAT_HP_MAX);
 			}
-
-			int passive_id = 0;
-			if (powers[power_index].passive) passive_id = power_index;
-
-			src_stats->effects.addEffect(effects[effect_index], duration, magnitude, false, powers[power_index].passive_trigger, passive_id, source_type);
+			else if (effect_data.type == "knockback") {
+				if (src_stats->speed_default == 0) {
+					// enemies that can't move can't be knocked back
+					continue;
+				}
+				src_stats->knockback_srcpos = caster_stats->pos;
+				src_stats->knockback_destpos = src_stats->pos;
+			}
+		}
+		else {
+			// all other effects
+			effect_data.id = effect_data.type = powers[power_index].post_effects[i].id;
 		}
 
-		// If there's a sound effect, play it here
-		playSound(power_index);
+		int passive_id = 0;
+		if (powers[power_index].passive) passive_id = power_index;
+
+		src_stats->effects.addEffect(effect_data, duration, magnitude, false, powers[power_index].passive_trigger, passive_id, source_type);
 	}
 
 	return true;
@@ -885,17 +938,19 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 		initHazard(power_index, src_stats, target, haz);
 
 		//calculate individual missile angle
-		float offset_angle = ((1.0f - powers[power_index].count)/2 + i) * (powers[power_index].missile_angle * M_PI / 180.0f);
+		float offset_angle = ((1.0f - static_cast<float>(powers[power_index].count))/2 + static_cast<float>(i)) * (static_cast<float>(powers[power_index].missile_angle) * static_cast<float>(M_PI) / 180.0f);
 		float variance = 0;
-		if (powers[power_index].angle_variance != 0)
-			variance = pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].angle_variance) * M_PI / 180.0f; //random between 0 and angle_variance away
+		if (powers[power_index].angle_variance != 0) {
+			//random between 0 and angle_variance away
+			variance = static_cast<float>(pow(-1.0f, (rand() % 2) - 1) * (rand() % powers[power_index].angle_variance) * M_PI / 180.0f);
+		}
 		float alpha = theta + offset_angle + variance;
 
 		//calculate the missile velocity
 		float speed_var = 0;
 		if (powers[power_index].speed_variance != 0) {
 			const float var = powers[power_index].speed_variance;
-			speed_var = ((var * 2.0f * rand()) / RAND_MAX) - var;
+			speed_var = ((var * 2.0f * static_cast<float>(rand())) / static_cast<float>(RAND_MAX)) - var;
 		}
 
 		// set speed and angle
@@ -930,8 +985,8 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
-	speed.x = powers[power_index].speed * cos(theta);
-	speed.y = powers[power_index].speed * sin(theta);
+	speed.x = powers[power_index].speed * static_cast<float>(cos(theta));
+	speed.y = powers[power_index].speed * static_cast<float>(sin(theta));
 
 	location_iterator = src_stats->pos;
 
@@ -1114,7 +1169,7 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
  * Activate is basically a switch/redirect to the appropriate function
  */
 bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target) {
-	if ((unsigned)power_index >= powers.size())
+	if (static_cast<unsigned>(power_index) >= powers.size())
 		return false;
 
 	if (src_stats->hero) {
@@ -1259,6 +1314,28 @@ void PowerManager::activateSinglePassive(StatBlock *src_stats, int id) {
 		src_stats->refresh_stats = true;
 		src_stats->effects.triggered_others = true;
 	}
+}
+
+EffectDef* PowerManager::getEffectDef(const std::string& id) {
+	for (unsigned i=0; i<effects.size(); ++i) {
+		if (effects[i].id == id) {
+			return &effects[i];
+		}
+	}
+	return NULL;
+}
+
+int PowerManager::verifyID(int power_id, FileParser* infile, bool allow_zero) {
+	bool lower_bound = (allow_zero && power_id < 0) || (!allow_zero && power_id < 1);
+	if (lower_bound || static_cast<unsigned>(power_id) >= powers.size()) {
+		if (infile != NULL)
+			infile->error("PowerManager: %d is not a valid power id.", power_id);
+		else
+			logError("PowerManager: %d is not a valid power id.", power_id);
+
+		return 0;
+	}
+	return power_id;
 }
 
 PowerManager::~PowerManager() {

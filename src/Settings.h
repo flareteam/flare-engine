@@ -26,14 +26,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-const std::string VERSION_NAME = "Flare Alpha";
-const int VERSION_MAJOR = 0;
-const int VERSION_MINOR = 19;
+const std::string VERSION_NAME = "Flare";
+const int VERSION_MAJOR = 1;
+const int VERSION_MINOR = 0;
 
 class Element {
 public:
+	std::string id;
 	std::string name;
-	std::string description;
+};
+
+class EquipFlag {
+public:
+	std::string id;
+	std::string name;
 };
 
 const int ACTIONBAR_MAX = 12; // maximum number of slots in MenuActionBar
@@ -44,6 +50,7 @@ public:
 	std::string description;
 	int currency;
 	std::string equipment;
+	std::string carried;
 	int physical;
 	int mental;
 	int offense;
@@ -58,6 +65,7 @@ public:
 		, description("")
 		, currency(0)
 		, equipment("")
+		, carried("")
 		, physical(0)
 		, mental(0)
 		, offense(0)
@@ -117,7 +125,6 @@ extern bool TOUCHSCREEN;
 // Interface Settings
 extern bool COMBAT_TEXT;
 extern bool SHOW_FPS;
-extern bool SHOW_HOTKEYS;
 extern bool COLORBLIND;
 extern bool HARDWARE_CURSOR;
 extern bool DEV_MODE;
@@ -142,6 +149,7 @@ extern int CURRENCY_ID;
 extern float INTERACT_RANGE;
 extern bool SAVE_ONLOAD;
 extern bool SAVE_ONEXIT;
+extern float ENCOUNTER_DIST;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;
@@ -174,7 +182,7 @@ extern short MIN_AVOIDANCE;
 extern std::vector<Element> ELEMENTS;
 
 // Equip flags
-extern std::map<std::string,std::string> EQUIP_FLAGS;
+extern std::vector<EquipFlag> EQUIP_FLAGS;
 
 // Hero classes
 extern std::vector<HeroClass> HERO_CLASSES;
@@ -204,6 +212,7 @@ bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
 void loadAndroidDefaults();
+void updateScreenVars();
 
 // version information
 std::string getVersionString();

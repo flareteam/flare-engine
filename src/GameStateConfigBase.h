@@ -106,8 +106,6 @@ public:
 	WidgetLabel         * combat_text_lb;
 	WidgetCheckBox      * show_fps_cb;
 	WidgetLabel         * show_fps_lb;
-	WidgetCheckBox      * show_hotkeys_cb;
-	WidgetLabel         * show_hotkeys_lb;
 	WidgetCheckBox      * hardware_cursor_cb;
 	WidgetLabel         * hardware_cursor_lb;
 	WidgetCheckBox      * colorblind_cb;
@@ -138,7 +136,7 @@ public:
 	WidgetTooltip       * tip;
 	TooltipData         tip_buf;
 
-	short active_tab;
+	int active_tab;
 
 	Rect frame;
 	std::vector<std::string> language_ISO;

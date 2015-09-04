@@ -264,6 +264,9 @@ bool Avatar::pressing_move() {
 	if (!allow_movement) {
 		return false;
 	}
+	else if (stats.effects.knockback_speed != 0) {
+		return false;
+	}
 	else if (MOUSE_MOVE) {
 		return inpt->pressing[MAIN1];
 	}
@@ -294,7 +297,7 @@ void Avatar::set_direction() {
 		if (TILESET_ORIENTATION == TILESET_ORTHOGONAL &&
 				((inpt->pressing[UP] && !inpt->lock[UP]) || (inpt->pressing[DOWN] && !inpt->lock[UP]) ||
 				 (inpt->pressing[LEFT] && !inpt->lock[LEFT]) || (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])))
-			stats.direction = stats.direction == 7 ? 0 : stats.direction + 1;
+			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
 	}
 }
 
@@ -331,17 +334,17 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 			}
 
 			// draw a target on the ground if we're attacking
-			if (target_anim && !power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
-				target_pos = target;
-				target_visible = true;
-				target_anim->reset();
+			if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
+				if (target_anim) {
+					target_pos = target;
+					target_visible = true;
+					target_anim->reset();
+				}
 				lock_cursor = true;
 			}
 			else {
 				curs->setCursor(CURSOR_NORMAL);
 			}
-
-			hero_cooldown[action.power] = power.cooldown; //set the cooldown timer
 
 			if (power.new_state != POWSTATE_INSTANT) {
 				current_power = action.power;
@@ -362,11 +365,13 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 				case POWSTATE_BLOCK:	// handle blocking
 					stats.cur_state = AVATAR_BLOCK;
 					powers->activate(action.power, &stats, target);
+					hero_cooldown[action.power] = power.cooldown;
 					stats.refresh_stats = true;
 					break;
 
 				case POWSTATE_INSTANT:	// handle instant powers
 					powers->activate(action.power, &stats, target);
+					hero_cooldown[action.power] = power.cooldown;
 					break;
 			}
 		}
@@ -449,7 +454,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// check level up
-	if (stats.level < (int)stats.xp_table.size() && stats.xp >= stats.xp_table[stats.level]) {
+	if (stats.level < static_cast<int>(stats.xp_table.size()) && stats.xp >= stats.xp_table[stats.level]) {
 		stats.level_up = true;
 		stats.level++;
 		std::stringstream ss;
@@ -466,11 +471,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		if (stats.cur_state == AVATAR_DEAD) {
 			stats.cur_state = AVATAR_STANCE;
 		}
-	}
-
-	// check for bleeding spurt
-	if (stats.effects.damage > 0 && stats.hp > 0) {
-		comb->addMessage(stats.effects.damage, stats.pos, COMBAT_MESSAGE_TAKEDMG);
 	}
 
 	// check for bleeding to death
@@ -493,10 +493,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	// handle animation
-	activeAnimation->advanceFrame();
-	for (unsigned i=0; i < anims.size(); i++) {
-		if (anims[i] != NULL)
-			anims[i]->advanceFrame();
+	if (!stats.effects.stun) {
+		activeAnimation->advanceFrame();
+		for (unsigned i=0; i < anims.size(); i++) {
+			if (anims[i] != NULL)
+				anims[i]->advanceFrame();
+		}
 	}
 
 	if (target_anim && target_anim->getTimesPlayed() >= 1) {
@@ -562,8 +564,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 			setAnimation("run");
 
-			if (sound_steps.size() > 0) {
-				int stepfx = rand() % sound_steps.size();
+			if (!sound_steps.empty()) {
+				int stepfx = rand() % static_cast<int>(sound_steps.size());
 
 				if (activeAnimation->isFirstFrame() || activeAnimation->isActiveFrame())
 					snd->play(sound_steps[stepfx]);
@@ -614,6 +616,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				mapr->collider.block(stats.pos.x, stats.pos.y, false);
 
 				powers->activate(current_power, &stats, act_target);
+				hero_cooldown[current_power] = powers->getPower(current_power).cooldown;
 			}
 
 			if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != attack_anim) {
@@ -811,13 +814,13 @@ void Avatar::untransform() {
 		if (transform_map != mapr->getFilename()) {
 			mapr->teleportation = true;
 			mapr->teleport_mapname = transform_map;
-			mapr->teleport_destination.x = floor(transform_pos.x) + 0.5f;
-			mapr->teleport_destination.y = floor(transform_pos.y) + 0.5f;
+			mapr->teleport_destination.x = static_cast<float>(floor(transform_pos.x)) + 0.5f;
+			mapr->teleport_destination.y = static_cast<float>(floor(transform_pos.y)) + 0.5f;
 			transform_map = "";
 		}
 		else {
-			stats.pos.x = floor(transform_pos.x) + 0.5f;
-			stats.pos.y = floor(transform_pos.y) + 0.5f;
+			stats.pos.x = static_cast<float>(floor(transform_pos.x)) + 0.5f;
+			stats.pos.y = static_cast<float>(floor(transform_pos.y)) + 0.5f;
 		}
 	}
 	mapr->collider.block(stats.pos.x, stats.pos.y, false);

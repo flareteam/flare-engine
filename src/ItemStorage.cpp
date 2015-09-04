@@ -25,6 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 
+#include <limits.h>
+
 void ItemStorage::init(int _slot_number) {
 	slot_number = _slot_number;
 
@@ -51,12 +53,8 @@ void ItemStorage::setItems(std::string s) {
 			logError("ItemStorage: Item on position %d has negative id, skipping", i);
 			storage[i].clear();
 		}
-		else if ((unsigned)storage[i].item > items->items.size()-1) {
-			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, (int)items->items.size());
-			items->addUnknownItem(storage[i].item);
-		}
-		else if (storage[i].item != 0 && items->items[storage[i].item].name == "") {
-			logError("ItemStorage: Item with id=%d. found on position %d does not exist, marking as unknown", storage[i].item, i);
+		else if (items->items.empty() || static_cast<unsigned>(storage[i].item) > items->items.size()-1) {
+			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, static_cast<int>(items->items.size()));
 			items->addUnknownItem(storage[i].item);
 		}
 	}
@@ -120,8 +118,11 @@ void ItemStorage::clear() {
  * @param slot Slot number where it will try to store the item
  */
 ItemStack ItemStorage::add( ItemStack stack, int slot) {
-
 	if (!stack.empty()) {
+		if (items->items.empty() || stack.item <= 0 || static_cast<unsigned>(stack.item) > items->items.size()-1) {
+			items->addUnknownItem(stack.item);
+		}
+
 		int max_quantity = items->items[stack.item].max_quantity;
 		if (slot > -1) {
 			// a slot is specified
@@ -171,11 +172,11 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 }
 
 /**
- * Substract an item from the specified slot, or remove it if it's the last
+ * Subtract an item from the specified slot, or remove it if it's the last
  *
  * @param slot Slot number
  */
-void ItemStorage::substract(int slot, int quantity) {
+void ItemStorage::subtract(int slot, int quantity) {
 	storage[slot].quantity -= quantity;
 	if (storage[slot].quantity <= 0) {
 		storage[slot].clear();
@@ -183,16 +184,37 @@ void ItemStorage::substract(int slot, int quantity) {
 }
 
 /**
- * Remove one given item
+ * Remove a quantity of a given item by its ID
  */
-bool ItemStorage::remove(int item) {
-	for (int i=0; i<slot_number; i++) {
-		if (storage[i].item == item) {
-			substract(i, 1);
-			return true;
+bool ItemStorage::remove(int item, int quantity) {
+	int lowest_quantity, lowest_slot;
+
+	while (quantity > 0) {
+		lowest_quantity = INT_MAX;
+		lowest_slot = -1;
+
+		for (int i=0; i<slot_number; i++) {
+			if (storage[i].item == item && storage[i].quantity < lowest_quantity) {
+				lowest_slot = i;
+			}
+		}
+
+		// could not find item id, can't remove anything
+		if (lowest_slot == -1)
+			return false;
+
+		if (quantity <= storage[lowest_slot].quantity) {
+			// take from a single stack
+			subtract(lowest_slot, quantity);
+			quantity = 0;
+		}
+		else {
+			// need to take from another stack
+			quantity = quantity - storage[lowest_slot].quantity;
+			subtract(lowest_slot, storage[lowest_slot].quantity);
 		}
 	}
-	return false;
+	return true;
 }
 
 int compareItemStack (const void *a, const void *b) {

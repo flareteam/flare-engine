@@ -132,10 +132,10 @@ void CampaignManager::removeCurrency(int quantity) {
 }
 
 void CampaignManager::removeItem(int item_id) {
-	if (item_id < 0 || (unsigned)item_id >= items->items.size()) return;
+	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
 
 	carried_items->remove(item_id);
-	addMsg(msg->get("%s removed.", items->items[item_id].name));
+	addMsg(msg->get("%s removed.", items->getItemName(item_id)));
 	items->playSound(item_id);
 }
 
@@ -151,9 +151,9 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 		if (istack.item != CURRENCY_ID) {
 			if (istack.quantity <= 1)
-				addMsg(msg->get("You receive %s.", items->items[istack.item].name));
+				addMsg(msg->get("You receive %s.", items->getItemName(istack.item)));
 			if (istack.quantity > 1)
-				addMsg(msg->get("You receive %s x%d.", istack.quantity, items->items[istack.item].name));
+				addMsg(msg->get("You receive %s x%d.", istack.quantity, items->getItemName(istack.item)));
 
 			items->playSound(istack.item);
 		}
@@ -177,9 +177,9 @@ void CampaignManager::rewardCurrency(int amount) {
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
-	bonus_xp += (amount * (100.0f + hero->get(STAT_XP_GAIN))) / 100.0f;
-	hero->addXP((int)bonus_xp);
-	bonus_xp -= (int)bonus_xp;
+	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(hero->get(STAT_XP_GAIN)))) / 100.0f;
+	hero->addXP(static_cast<int>(bonus_xp));
+	bonus_xp -= static_cast<float>(static_cast<int>(bonus_xp));
 	hero->refresh_stats = true;
 	if (show_message) addMsg(msg->get("You receive %d XP.", amount));
 }

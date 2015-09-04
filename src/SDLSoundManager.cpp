@@ -90,7 +90,7 @@ void SDLSoundManager::logic(FPoint c) {
 		}
 
 		/* control mixing playback depending on distance */
-		float v = calcDist(c, it->second.location) / (SOUND_FALLOFF);
+		float v = calcDist(c, it->second.location) / static_cast<float>(SOUND_FALLOFF);
 		if (it->second.loop) {
 			if (v < 1.0 && it->second.paused) {
 				Mix_Resume(it->first);
@@ -105,7 +105,7 @@ void SDLSoundManager::logic(FPoint c) {
 		}
 
 		/* update sound mix with new distance/location to hero */
-		clamp(v, 0.0, 1.0);
+		clamp(v, 0.0f, 1.0f);
 		Uint8 dist = Uint8(255.0 * v);
 
 		Mix_SetPosition(it->first, 0, dist);
@@ -243,7 +243,7 @@ void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, FPoin
 	// precalculate mixing volume if sound has a location
 	Uint8 d = 0;
 	if (p.location.x != 0 || p.location.y != 0) {
-		float v = 255.0f * (calcDist(lastPos, p.location) / (SOUND_FALLOFF));
+		float v = 255.0f * (calcDist(lastPos, p.location) / static_cast<float>(SOUND_FALLOFF));
 		clamp(v, 0.f, 255.f);
 		d = Uint8(v);
 	}

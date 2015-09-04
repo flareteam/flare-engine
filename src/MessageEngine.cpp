@@ -34,7 +34,7 @@ MessageEngine::MessageEngine() {
 	GetText infile;
 
 	std::vector<std::string> engineFiles = mods->list("languages/engine." + LANGUAGE + ".po");
-	if (engineFiles.size() == 0 && LANGUAGE != "en")
+	if (engineFiles.empty() && LANGUAGE != "en")
 		logError("MessageEngine: Unable to open basic translation files located in languages/engine.%s.po", LANGUAGE.c_str());
 
 	for (unsigned i = 0; i < engineFiles.size(); ++i) {
@@ -46,7 +46,7 @@ MessageEngine::MessageEngine() {
 	}
 
 	std::vector<std::string> dataFiles = mods->list("languages/data." + LANGUAGE + ".po");
-	if (dataFiles.size() == 0 && LANGUAGE != "en")
+	if (dataFiles.empty() && LANGUAGE != "en")
 		logError("MessageEngine: Unable to open basic translation files located in languages/data.%s.po", LANGUAGE.c_str());
 
 	for (unsigned i = 0; i < dataFiles.size(); ++i) {
@@ -104,8 +104,33 @@ std::string MessageEngine::get(const std::string& key, int i, int j) {
 	return unescape(message);
 }
 
+std::string MessageEngine::get(const std::string& key, unsigned long i) {
+	std::string message = messages[key];
+	if (message == "") message = key;
+	size_t index = message.find("%d");
+	if (index != std::string::npos) message = message.replace(index, 2, str(i));
+	return unescape(message);
+}
+
+std::string MessageEngine::get(const std::string& key, unsigned long i, unsigned long j) {
+	std::string message = messages[key];
+	if (message == "") message = key;
+	size_t index = message.find("%d");
+	if (index != std::string::npos) message = message.replace(index, 2, str(i));
+	index = message.find("%d");
+	if (index != std::string::npos) message = message.replace(index, 2, str(j));
+	return unescape(message);
+}
+
 // Changes an int into a string
 std::string MessageEngine::str(int i) {
+	std::stringstream ss;
+	ss << i;
+	return ss.str();
+}
+
+// Changes an unsigned long into a string
+std::string MessageEngine::str(unsigned long i) {
 	std::stringstream ss;
 	ss << i;
 	return ss.str();

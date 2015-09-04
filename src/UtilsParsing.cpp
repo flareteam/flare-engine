@@ -54,7 +54,7 @@ int parse_duration(const std::string& s) {
 	else {
 		if (suffix != "ms")
 			logError("UtilsParsing: Duration of '%d' does not have a suffix. Assuming 'ms'.", val);
-		val = int(floor(((val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
+		val = static_cast<int>(floor((static_cast<float>(val*MAX_FRAMES_PER_SEC) / 1000.f) + 0.5f));
 	}
 
 	// round back up to 1 if we rounded down to 0 for ms
@@ -338,17 +338,17 @@ Rect toRect(std::string value) {
 
 Color toRGB(std::string value) {
 	Color c;
-	c.r = popFirstInt(value);
-	c.g = popFirstInt(value);
-	c.b = popFirstInt(value);
+	c.r = static_cast<Uint8>(popFirstInt(value));
+	c.g = static_cast<Uint8>(popFirstInt(value));
+	c.b = static_cast<Uint8>(popFirstInt(value));
 	return c;
 }
 
 Color toRGBA(std::string value) {
 	Color c;
-	c.r = popFirstInt(value);
-	c.g = popFirstInt(value);
-	c.b = popFirstInt(value);
-	c.a = popFirstInt(value);
+	c.r = static_cast<Uint8>(popFirstInt(value));
+	c.g = static_cast<Uint8>(popFirstInt(value));
+	c.b = static_cast<Uint8>(popFirstInt(value));
+	c.a = static_cast<Uint8>(popFirstInt(value));
 	return c;
 }

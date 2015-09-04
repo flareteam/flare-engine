@@ -199,10 +199,12 @@ ItemStack MenuItemStorage::click(Point position) {
 			}
 		}
 		if (!item.empty()) {
-			if (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked) {
-				item.quantity = 1;
+			if (item.quantity > 1 && !inpt->pressing[CTRL] && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
+				// we use an external menu to let the player pick the desired quantity
+				// we will subtract from this stack after they've made their decision
+				return item;
 			}
-			substract( drag_prev_slot, item.quantity);
+			subtract( drag_prev_slot, item.quantity);
 		}
 		// item will be cleared if item.empty() == true
 		return item;

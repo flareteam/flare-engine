@@ -53,7 +53,7 @@ public:
 	void setPosition(int x, int y);
 	bool inFocus();
 	Widget* getWidget() {
-		return (Widget*)scroll_box;    // for adding to tablist
+		return reinterpret_cast<Widget*>(scroll_box);    // for adding to tablist
 	}
 
 	void add(const std::string &s, bool prevent_spam = true, Color* color = NULL);

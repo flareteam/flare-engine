@@ -285,13 +285,13 @@ void InputState::setKeybindNames() {
 	binding_name[29] = msg->get("ActionBar Use");
 	binding_name[30] = msg->get("Developer Menu");
 
-	mouse_button[0] = msg->get("lmb");
-	mouse_button[1] = msg->get("mmb");
-	mouse_button[2] = msg->get("rmb");
-	mouse_button[3] = msg->get("wheel up");
-	mouse_button[4] = msg->get("wheel down");
-	mouse_button[5] = msg->get("mbx1");
-	mouse_button[6] = msg->get("mbx2");
+	mouse_button[0] = msg->get("Left Mouse");
+	mouse_button[1] = msg->get("Middle Mouse");
+	mouse_button[2] = msg->get("Right Mouse");
+	mouse_button[3] = msg->get("Wheel Up");
+	mouse_button[4] = msg->get("Wheel Down");
+	mouse_button[5] = msg->get("Mouse X1");
+	mouse_button[6] = msg->get("Mouse X2");
 }
 
 void InputState::enableEventLog() {

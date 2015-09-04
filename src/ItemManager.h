@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ITEM_MANAGER_H
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "TooltipData.h"
 
 #include <stdint.h>
@@ -41,11 +42,6 @@ const int REQUIRES_MENT = 1;
 const int REQUIRES_OFF = 2;
 const int REQUIRES_DEF = 3;
 
-const int ITEM_QUALITY_LOW = 0;
-const int ITEM_QUALITY_NORMAL = 1;
-const int ITEM_QUALITY_HIGH = 2;
-const int ITEM_QUALITY_EPIC = 3;
-
 class LootAnimation {
 public:
 	std::string name;
@@ -58,25 +54,53 @@ public:
 	}
 };
 
-class Set_bonus {
+class BonusData {
+public:
+	int stat_index; // Stats.h
+	int resist_index; // engine/elements.txt
+	int base_index; // physical, mental, offense, defense
+	bool is_speed;
+	int value;
+	BonusData()
+		: stat_index(-1)
+		, resist_index(-1)
+		, base_index(-1)
+		, is_speed(false)
+		, value(0) {
+	}
+};
+
+class Set_bonus : public BonusData {
 public:
 	int requirement;
-	std::string bonus_stat;
-	int bonus_val;
 	Set_bonus()
-		: requirement(0)
-		, bonus_stat("")
-		, bonus_val(0) {
+		: BonusData()
+		, requirement(0) {
+	}
+};
+
+class ItemQuality {
+public:
+	std::string id;
+	std::string name;
+	Color color;
+	ItemQuality()
+		: id("")
+		, name("")
+		, color(255,255,255) {
 	}
 };
 
 class Item {
-public:
+private:
 	std::string name;     // item name displayed on long and short tool tips
+	friend class ItemManager;
+
+public:
 	std::string flavor;   // optional flavor text describing the item
 	int level;            // rough estimate of quality, used in the loot algorithm
 	int set;              // item can be attached to item set
-	int quality;          // low, normal, high, epic; corresponds to item name color
+	std::string quality;  // should match an id from items/qualities.txt
 	std::string type;     // equipment slot or base item type
 	std::vector<std::string> equip_flags;   // common values include: melee, ranged, mental, shield
 	int icon;             // icon index on small pixel sheet
@@ -92,9 +116,9 @@ public:
 	std::vector<int> req_stat;         // physical, mental, offense, defense
 	std::vector<int> req_val;          // 1-5 (used with req_stat)
 	std::string requires_class;
-	std::vector<std::string> bonus_stat;   // stat to increase/decrease e.g. hp, accuracy, speed
-	std::vector<int> bonus_val;       // amount to increase (used with bonus_stat)
-	SoundManager::SoundID sfx;        // the item sound when it hits the floor or inventory, etc
+	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed
+	std::string sfx;           // the item sound when it hits the floor or inventory, etc
+	SoundManager::SoundID sfx_id;
 	std::string gfx;           // the sprite layer shown when this item is equipped
 	std::vector<LootAnimation> loot_animation;// the flying loot animation for this item
 	int power;            // this item can be dragged to the action bar and used as a power
@@ -114,8 +138,8 @@ public:
 		, flavor("")
 		, level(0)
 		, set(0)
-		, quality(ITEM_QUALITY_NORMAL)
-		, type("other")
+		, quality("")
+		, type("")
 		, icon(0)
 		, dmg_melee_min(0)
 		, dmg_melee_max(0)
@@ -126,7 +150,8 @@ public:
 		, abs_min(0)
 		, abs_max(0)
 		, requires_class("")
-		, sfx(0)
+		, sfx("")
+		, sfx_id(0)
 		, gfx("")
 		, power(0)
 		, power_desc("")
@@ -173,12 +198,28 @@ public:
 	void clear();
 };
 
+class ItemType {
+public:
+	ItemType()
+		: id("")
+		, name("") {
+	}
+	~ItemType() {}
+
+	std::string id;
+	std::string name;
+};
+
 class ItemManager {
+protected:
+	void loadItems(const std::string& filename, bool locateFileName = true);
+	void loadTypes(const std::string& filename, bool locateFileName = true);
+	void loadSets(const std::string& filename, bool locateFileName = true);
+	void loadQualities(const std::string& filename, bool locateFileName = true);
 private:
-	void loadItems();
-	void loadTypes();
-	void loadSets();
 	void loadAll();
+	void parseBonus(BonusData& bdata, FileParser& infile);
+	void getBonusString(std::stringstream& ss, BonusData* bdata);
 
 	Color color_normal;
 	Color color_low;
@@ -195,13 +236,15 @@ public:
 	void playSound(int item, Point pos = Point(0,0));
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);
 	TooltipData getShortTooltip(ItemStack item);
+	std::string getItemName(unsigned id);
 	std::string getItemType(std::string _type);
-	void addUnknownItem(int id);
+	void addUnknownItem(unsigned id);
 	bool requirementsMet(const StatBlock *stats, int item);
 
 	std::vector<Item> items;
-	std::map<std::string,std::string> item_types;
+	std::vector<ItemType> item_types;
 	std::vector<ItemSet> item_sets;
+	std::vector<ItemQuality> item_qualities;
 };
 
 #endif

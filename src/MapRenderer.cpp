@@ -88,7 +88,7 @@ bool MapRenderer::enemyGroupPlaceEnemy(float x, float y, Map_Group &g) {
 
 void MapRenderer::pushEnemyGroup(Map_Group &g) {
 	// activate at all?
-	float activate_chance = (rand() % 100) / 100.0f;
+	float activate_chance = static_cast<float>(rand() % 100) / 100.0f;
 	if (activate_chance > g.chance) {
 		return;
 	}
@@ -107,8 +107,8 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 
 	while (enemies_to_spawn && allowed_misses) {
 
-		float x = (g.area.x == 0) ? (g.pos.x + 0.5f) : (g.pos.x + (rand() % g.area.x)) + 0.5f;
-		float y = (g.area.y == 0) ? (g.pos.y + 0.5f) : (g.pos.y + (rand() % g.area.y)) + 0.5f;
+		float x = (g.area.x == 0) ? (static_cast<float>(g.pos.x) + 0.5f) : (static_cast<float>(g.pos.x + (rand() % g.area.x))) + 0.5f;
+		float y = (g.area.y == 0) ? (static_cast<float>(g.pos.y) + 0.5f) : (static_cast<float>(g.pos.y + (rand() % g.area.y))) + 0.5f;
 
 		if (enemyGroupPlaceEnemy(x, y, g))
 			enemies_to_spawn--;
@@ -121,8 +121,8 @@ void MapRenderer::pushEnemyGroup(Map_Group &g) {
 		// first free spot
 		for (int x = g.pos.x; x < g.pos.x + g.area.x && enemies_to_spawn; x++) {
 			for (int y = g.pos.y; y < g.pos.y + g.area.y && enemies_to_spawn; y++) {
-				float xpos = x + 0.5f;
-				float ypos = y + 0.5f;
+				float xpos = static_cast<float>(x) + 0.5f;
+				float ypos = static_cast<float>(y) + 0.5f;
 				if (enemyGroupPlaceEnemy(xpos, ypos, g))
 					enemies_to_spawn--;
 			}
@@ -145,11 +145,16 @@ void MapRenderer::clearLayers() {
 }
 
 int MapRenderer::load(std::string fname) {
-	/* unload sounds */
+	// unload sounds
 	snd->reset();
 	while (!sids.empty()) {
 		snd->unload(sids.back());
 		sids.pop_back();
+	}
+
+	// clear enemy spawn queue
+	while (!powers->enemies.empty()) {
+		powers->enemies.pop();
 	}
 
 	show_tooltip = false;
@@ -160,7 +165,13 @@ int MapRenderer::load(std::string fname) {
 
 	for (unsigned i = 0; i < layers.size(); ++i) {
 		if (layernames[i] == "collision") {
-			collider.setmap(layers[i], w, h);
+			short width = static_cast<short>(layers[i].size());
+			if (width == 0) {
+				logError("MapRenderer: Map width is 0. Can't set collision layer.");
+				break;
+			}
+			short height = static_cast<short>(layers[i][0].size());
+			collider.setmap(layers[i], width, height);
 			removeLayer(i);
 		}
 	}
@@ -177,8 +188,8 @@ int MapRenderer::load(std::string fname) {
 
 	std::vector<unsigned> corrupted;
 	for (unsigned i = 0; i < layers.size(); ++i) {
-		for (int x = 0; x < w; ++x) {
-			for (int y = 0; y < h; ++y) {
+		for (unsigned x = 0; x < layers[i].size(); ++x) {
+			for (unsigned y = 0; y < layers[i][x].size(); ++y) {
 				const unsigned tile_id = layers[i][x][y];
 				if (tile_id > 0 && (tile_id >= tset.tiles.size() || tset.tiles[tile_id].tile == NULL)) {
 					if (std::find(corrupted.begin(), corrupted.end(), tile_id) == corrupted.end()) {
@@ -241,20 +252,20 @@ bool priocompare(const Renderable &r1, const Renderable &r2) {
  */
 void calculatePriosIso(std::vector<Renderable> &r) {
 	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
-		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
-		const int commax = (const int)((float)(it->map_pos.x - tilex) * (2<<16));
-		const int commay = (const int)((float)(it->map_pos.y - tiley) * (2<<16));
-		it->prio += (((uint64_t)(tilex + tiley)) << 54) + (((uint64_t)tilex) << 42) + ((commax + commay) << 16);
+		const unsigned tilex = static_cast<const unsigned>(floor(it->map_pos.x));
+		const unsigned tiley = static_cast<const unsigned>(floor(it->map_pos.y));
+		const int commax = static_cast<const int>((it->map_pos.x - static_cast<float>(tilex)) * (2<<16));
+		const int commay = static_cast<const int>((it->map_pos.y - static_cast<float>(tiley)) * (2<<16));
+		it->prio += (static_cast<uint64_t>(tilex + tiley) << 54) + (static_cast<uint64_t>(tilex) << 42) + ((commax + commay) << 16);
 	}
 }
 
 void calculatePriosOrtho(std::vector<Renderable> &r) {
 	for (std::vector<Renderable>::iterator it = r.begin(); it != r.end(); ++it) {
-		const unsigned tilex = (const unsigned)floor(it->map_pos.x);
-		const unsigned tiley = (const unsigned)floor(it->map_pos.y);
-		const int commay = (const int)(1024 * it->map_pos.y);
-		it->prio += (((uint64_t)tiley) << 48) + (((uint64_t)tilex) << 32) + (commay << 16);
+		const unsigned tilex = static_cast<const unsigned>(floor(it->map_pos.x));
+		const unsigned tiley = static_cast<const unsigned>(floor(it->map_pos.y));
+		const int commay = static_cast<const int>(1024 * it->map_pos.y);
+		it->prio += (static_cast<uint64_t>(tiley) << 48) + (static_cast<uint64_t>(tilex) << 32) + (commay << 16);
 	}
 }
 
@@ -265,8 +276,8 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 		shakycam.y = cam.y;
 	}
 	else {
-		shakycam.x = cam.x + (rand() % 16 - 8) * 0.0078125f;
-		shakycam.y = cam.y + (rand() % 16 - 8) * 0.0078125f;
+		shakycam.x = cam.x + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
+		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
 	}
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
@@ -300,11 +311,11 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t j; // second index of the map array
 	Rect dest;
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2*tset.max_size_x;
-	const int_fast16_t max_tiles_height = (2 * VIEW_H / TILE_H) + 2*tset.max_size_y;
+	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2*tset.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / TILE_H) + 2*tset.max_size_y);
 
-	j = upperleft.y - tset.max_size_y/2 + tset.max_size_x;
-	i = upperleft.x - tset.max_size_y/2 - tset.max_size_x;
+	j = static_cast<int_fast16_t>(upperleft.y - tset.max_size_y/2 + tset.max_size_x);
+	i = static_cast<int_fast16_t>(upperleft.x - tset.max_size_y/2 - tset.max_size_x);
 
 	for (uint_fast16_t y = max_tiles_height ; y; --y) {
 		int_fast16_t tiles_width = 0;
@@ -312,16 +323,16 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 		// make sure the isometric corners are not rendered:
 		// corner north west, upper left  (i < 0)
 		if (i < -1) {
-			j += i + 1;
-			tiles_width -= i + 1;
+			j = static_cast<int_fast16_t>(j + i + 1);
+			tiles_width = static_cast<int_fast16_t>(tiles_width - (i + 1));
 			i = -1;
 		}
 		// corner north east, upper right (j > mapheight)
-		const int_fast16_t d = j - h;
+		const int_fast16_t d = static_cast<int_fast16_t>(j - h);
 		if (d >= 0) {
-			j -= d;
-			tiles_width += d;
-			i += d;
+			j = static_cast<int_fast16_t>(j - d);
+			tiles_width = static_cast<int_fast16_t>(tiles_width + d);
+			i = static_cast<int_fast16_t>(i + d);
 		}
 
 		// lower right (south east) corner is covered by (j+i-w+1)
@@ -347,8 +358,8 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 				render_device->render(tset.tiles[current_tile].tile);
 			}
 		}
-		j += tiles_width;
-		i -= tiles_width;
+		j = static_cast<int_fast16_t>(j + tiles_width);
+		i = static_cast<int_fast16_t>(i - tiles_width);
 		// Go one line deeper, the starting position goes zig-zag
 		if (y % 2)
 			i++;
@@ -367,17 +378,17 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Rect dest;
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
-	const int_fast16_t max_tiles_width =   (VIEW_W / TILE_W) + 2 * tset.max_size_x;
-	const int_fast16_t max_tiles_height = ((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2;
+	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2 * tset.max_size_x);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2);
 
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
 
 	// object layer
-	int_fast16_t j = upperleft.y - tset.max_size_y + tset.max_size_x;
-	int_fast16_t i = upperleft.x - tset.max_size_y - tset.max_size_x;
+	int_fast16_t j = static_cast<int_fast16_t>(upperleft.y - tset.max_size_y + tset.max_size_x);
+	int_fast16_t i = static_cast<int_fast16_t>(upperleft.x - tset.max_size_y - tset.max_size_x);
 
-	while (r_cursor != r_end && ((int)(r_cursor->map_pos.x) + (int)(r_cursor->map_pos.y) < i + j || (int)(r_cursor->map_pos.x) < i)) // implicit floor
+	while (r_cursor != r_end && (static_cast<int>(r_cursor->map_pos.x) + static_cast<int>(r_cursor->map_pos.y) < i + j || static_cast<int>(r_cursor->map_pos.x) < i)) // implicit floor
 		++r_cursor;
 
 	if (index_objectlayer >= layers.size())
@@ -388,15 +399,15 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 
 		// make sure the isometric corners are not rendered:
 		if (i < -1) {
-			j += i + 1;
-			tiles_width -= i + 1;
+			j = static_cast<int_fast16_t>(j + i + 1);
+			tiles_width = static_cast<int_fast16_t>(tiles_width - (i + 1));
 			i = -1;
 		}
-		const int_fast16_t d = j - h;
+		const int_fast16_t d = static_cast<int_fast16_t>(j - h);
 		if (d >= 0) {
-			j -= d;
-			tiles_width += d;
-			i += d;
+			j = static_cast<int_fast16_t>(j - d);
+			tiles_width = static_cast<int_fast16_t>(tiles_width + d);
+			i = static_cast<int_fast16_t>(i + d);
 		}
 		const int_fast16_t j_end = std::max(static_cast<int_fast16_t>(j+i-w+1), std::max(static_cast<int_fast16_t>(j - max_tiles_width), static_cast<int_fast16_t>(0)));
 
@@ -417,19 +428,19 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 			}
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && ((int)r_cursor->map_pos.x == i && (int)r_cursor->map_pos.y == j)) { // implicit floor by int cast
+			while (r_cursor != r_end && (static_cast<int>(r_cursor->map_pos.x) == i && static_cast<int>(r_cursor->map_pos.y) == j)) { // implicit floor by int cast
 				drawRenderable(r_cursor);
 				++r_cursor;
 			}
 		}
-		j += tiles_width;
-		i -= tiles_width;
+		j = static_cast<int_fast16_t>(j + tiles_width);
+		i = static_cast<int_fast16_t>(i - tiles_width);
 		if (y % 2)
 			i++;
 		else
 			j++;
 
-		while (r_cursor != r_end && ((int)r_cursor->map_pos.x + (int)r_cursor->map_pos.y < i + j || (int)r_cursor->map_pos.x <= i)) // implicit floor by int cast
+		while (r_cursor != r_end && (static_cast<int>(r_cursor->map_pos.x) + static_cast<int>(r_cursor->map_pos.y) < i + j || static_cast<int>(r_cursor->map_pos.x) <= i)) // implicit floor by int cast
 			++r_cursor;
 	}
 }
@@ -453,8 +464,8 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
-	short int startj = std::max(0, upperleft.y);
-	short int starti = std::max(0, upperleft.x);
+	short int startj = static_cast<short int>(std::max(0, upperleft.y));
+	short int starti = static_cast<short int>(std::max(0, upperleft.x));
 	const short max_tiles_width =  std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
@@ -495,12 +506,12 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
-	short int startj = std::max(0, upperleft.y);
-	short int starti = std::max(0, upperleft.x);
+	short int startj = static_cast<short int>(std::max(0, upperleft.y));
+	short int starti = static_cast<short int>(std::max(0, upperleft.x));
 	const short max_tiles_width  = std::min(w, static_cast<short unsigned int>(starti + (VIEW_W / TILE_W) + 2 * tset.max_size_x));
 	const short max_tiles_height = std::min(h, static_cast<short unsigned int>(startj + (VIEW_H / TILE_H) + 2 * tset.max_size_y));
 
-	while (r_cursor != r_end && (int)(r_cursor->map_pos.y) < startj)
+	while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) < startj)
 		++r_cursor;
 
 	if (index_objectlayer >= layers.size())
@@ -519,14 +530,14 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 			}
 			p.x += TILE_W;
 
-			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) < i) // implicit floor
+			while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) == j && static_cast<int>(r_cursor->map_pos.x) < i) // implicit floor
 				++r_cursor;
 
 			// some renderable entities go in this layer
-			while (r_cursor != r_end && (int)(r_cursor->map_pos.y) == j && (int)(r_cursor->map_pos.x) == i) // implicit floor
+			while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) == j && static_cast<int>(r_cursor->map_pos.x) == i) // implicit floor
 				drawRenderable(r_cursor++);
 		}
-		while (r_cursor != r_end && (int)(r_cursor->map_pos.y) <= j) // implicit floor
+		while (r_cursor != r_end && static_cast<int>(r_cursor->map_pos.y) <= j) // implicit floor
 			++r_cursor;
 	}
 }
@@ -807,15 +818,15 @@ void MapRenderer::createTooltip(Event_Component *ec) {
  * Activate a power that is attached to an event
  */
 void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target) {
-	if (power_index < 0 || (unsigned)power_index >= powers->powers.size()) {
+	if (power_index < 0 || static_cast<unsigned>(power_index) >= powers->powers.size()) {
 		logError("MapRenderer: Power index is out of bounds.");
 		return;
 	}
 
 	if (statblock_index < statblocks.size()) {
 		// check power cooldown before activating
-		if (statblocks[statblock_index].power_ticks[0] == 0) {
-			statblocks[statblock_index].power_ticks[0] = powers->powers[power_index].cooldown;
+		if (statblocks[statblock_index].powers_ai[0].ticks == 0) {
+			statblocks[statblock_index].powers_ai[0].ticks = powers->powers[power_index].cooldown;
 			powers->activate(power_index, &statblocks[statblock_index], target);
 		}
 	}

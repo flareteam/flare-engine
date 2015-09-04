@@ -36,8 +36,8 @@ class MenuStatBar : public Menu {
 private:
 	Sprite *bar;
 	WidgetLabel *label;
-	int stat_cur;
-	int stat_max;
+	unsigned long stat_cur;
+	unsigned long stat_max;
 	Point mouse;
 	Rect bar_pos;
 	LabelInfo text_pos;
@@ -52,7 +52,7 @@ public:
 	MenuStatBar(std::string type);
 	~MenuStatBar();
 	void loadGraphics();
-	void update(int _stat_cur, int _stat_max, Point _mouse, std::string _custom_string = "");
+	void update(unsigned long _stat_cur, unsigned long _stat_max, Point _mouse, std::string _custom_string = "");
 	void render();
 };
 

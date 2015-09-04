@@ -37,7 +37,7 @@ EffectManager::EffectManager()
 }
 
 EffectManager::~EffectManager() {
-	for (unsigned i=0; i<effect_list.size(); i++) {
+	for (size_t i=0; i<effect_list.size(); i++) {
 		removeAnimation(i);
 	}
 }
@@ -57,6 +57,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 		effect_list[i].trigger = emSource.effect_list[i].trigger;
 		effect_list[i].render_above = emSource.effect_list[i].render_above;
 		effect_list[i].passive_id = emSource.effect_list[i].passive_id;
+		effect_list[i].source_type = emSource.effect_list[i].source_type;
 
 		if (emSource.effect_list[i].animation_name != "") {
 			effect_list[i].animation_name = emSource.effect_list[i].animation_name;
@@ -65,8 +66,11 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 		}
 	}
 	damage = emSource.damage;
+	damage_percent = emSource.damage_percent;
 	hpot = emSource.hpot;
+	hpot_percent = emSource.hpot_percent;
 	mpot = emSource.mpot;
+	mpot_percent = emSource.mpot_percent;
 	speed = emSource.speed;
 	immunity = emSource.immunity;
 	stun = emSource.stun;
@@ -74,13 +78,19 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	convert = emSource.convert;
 	death_sentence = emSource.death_sentence;
 	fear = emSource.fear;
+	knockback_speed = emSource.knockback_speed;
 	bonus_offense = emSource.bonus_offense;
 	bonus_defense = emSource.bonus_defense;
 	bonus_physical = emSource.bonus_physical;
 	bonus_mental = emSource.bonus_mental;
-	for (unsigned i=0; i<STAT_COUNT; i++) {
+
+	for (size_t i=0; i<emSource.bonus.size(); i++) {
 		bonus[i] = emSource.bonus[i];
 	}
+	for (size_t i=0; i<emSource.bonus_resist.size(); i++) {
+		bonus_resist[i] = emSource.bonus_resist[i];
+	}
+
 	triggered_others = emSource.triggered_others;
 	triggered_block = emSource.triggered_block;
 	triggered_hit = emSource.triggered_hit;
@@ -93,8 +103,11 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 
 void EffectManager::clearStatus() {
 	damage = 0;
+	damage_percent = 0;
 	hpot = 0;
+	hpot_percent = 0;
 	mpot = 0;
+	mpot_percent = 0;
 	speed = 100;
 	immunity = false;
 	stun = false;
@@ -102,6 +115,7 @@ void EffectManager::clearStatus() {
 	convert = false;
 	death_sentence = false;
 	fear = false;
+	knockback_speed = 0;
 
 	bonus_offense = 0;
 	bonus_defense = 0;
@@ -126,12 +140,18 @@ void EffectManager::logic() {
 		if (effect_list[i].duration >= 0) {
 			// @TYPE damage|Damage per second
 			if (effect_list[i].type == EFFECT_DAMAGE && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage += effect_list[i].magnitude;
+			// @TYPE damage_percent|Damage per second (percentage of max HP)
+			else if (effect_list[i].type == EFFECT_DAMAGE_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage_percent += effect_list[i].magnitude;
 			// @TYPE hpot|HP restored per second
 			else if (effect_list[i].type == EFFECT_HPOT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot += effect_list[i].magnitude;
+			// @TYPE hpot_percent|HP restored per second (percentage of max HP)
+			else if (effect_list[i].type == EFFECT_HPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) hpot_percent += effect_list[i].magnitude;
 			// @TYPE mpot|MP restored per second
 			else if (effect_list[i].type == EFFECT_MPOT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot += effect_list[i].magnitude;
+			// @TYPE mpot_percent|MP restored per second (percentage of max MP)
+			else if (effect_list[i].type == EFFECT_MPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot_percent += effect_list[i].magnitude;
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
-			else if (effect_list[i].type == EFFECT_SPEED) speed = (effect_list[i].magnitude * speed) / 100;
+			else if (effect_list[i].type == EFFECT_SPEED) speed = (static_cast<float>(effect_list[i].magnitude) * speed) / 100.f;
 			// @TYPE immunity|Removes and prevents bleed, slow, stun, and immobilize. Magnitude is ignored.
 			else if (effect_list[i].type == EFFECT_IMMUNITY) immunity = true;
 			// @TYPE stun|Can't move or attack. Being attacked breaks stun.
@@ -142,6 +162,8 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == EFFECT_CONVERT) convert = true;
 			// @TYPE fear|Causes enemies to run away
 			else if (effect_list[i].type == EFFECT_FEAR) fear = true;
+			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
+			else if (effect_list[i].type == EFFECT_KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/static_cast<float>(MAX_FRAMES_PER_SEC);
 			// @TYPE offense|Increase Offense stat.
 			else if (effect_list[i].type == EFFECT_OFFENSE) bonus_offense += effect_list[i].magnitude;
 			// @TYPE defense|Increase Defense stat.
@@ -205,12 +227,18 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	// if we're already immune, don't add negative effects
 	if (immunity) {
 		if (effect_type == EFFECT_DAMAGE) return;
+		else if (effect_type == EFFECT_DAMAGE_PERCENT) return;
 		else if (effect_type == EFFECT_SPEED && magnitude < 100) return;
 		else if (effect_type == EFFECT_STUN) return;
+		else if (effect_type == EFFECT_KNOCKBACK) return;
 	}
 
-	for (unsigned i=effect_list.size(); i>0; i--) {
-		if (effect_list[i-1].name == effect.name) {
+	// only allow one knockback effect at a time
+	if (effect_type == EFFECT_KNOCKBACK && knockback_speed != 0)
+		return;
+
+	for (size_t i=effect_list.size(); i>0; i--) {
+		if (effect_list[i-1].name == effect.id) {
 			if (trigger > -1 && effect_list[i-1].trigger == trigger)
 				return; // trigger effects can only be cast once per trigger
 
@@ -225,7 +253,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 
 	Effect e;
 
-	e.name = effect.name;
+	e.name = effect.id;
 	e.icon = effect.icon;
 	e.type = effect_type;
 	e.render_above = effect.render_above;
@@ -246,12 +274,12 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	effect_list.push_back(e);
 }
 
-void EffectManager::removeEffect(int id) {
+void EffectManager::removeEffect(size_t id) {
 	removeAnimation(id);
 	effect_list.erase(effect_list.begin()+id);
 }
 
-void EffectManager::removeAnimation(int id) {
+void EffectManager::removeAnimation(size_t id) {
 	if (effect_list[id].animation && effect_list[id].animation_name != "") {
 		anim->decreaseCount(effect_list[id].animation_name);
 		delete effect_list[id].animation;
@@ -261,19 +289,19 @@ void EffectManager::removeAnimation(int id) {
 }
 
 void EffectManager::removeEffectType(const int &type) {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == type) removeEffect(i-1);
 	}
 }
 
 void EffectManager::removeEffectPassive(int id) {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].passive_id == id) removeEffect(i-1);
 	}
 }
 
 void EffectManager::clearEffects() {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		removeEffect(i-1);
 	}
 
@@ -284,21 +312,23 @@ void EffectManager::clearEffects() {
 }
 
 void EffectManager::clearNegativeEffects() {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == EFFECT_DAMAGE) removeEffect(i-1);
+		else if (effect_list[i-1].type == EFFECT_DAMAGE_PERCENT) removeEffect(i-1);
 		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) removeEffect(i-1);
 		else if (effect_list[i-1].type == EFFECT_STUN) removeEffect(i-1);
+		else if (effect_list[i-1].type == EFFECT_KNOCKBACK) removeEffect(i-1);
 	}
 }
 
 void EffectManager::clearItemEffects() {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].item) removeEffect(i-1);
 	}
 }
 
 void EffectManager::clearTriggerEffects(int trigger) {
-	for (unsigned i=effect_list.size(); i > 0; i--) {
+	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].trigger > -1 && effect_list[i-1].trigger == trigger) removeEffect(i-1);
 	}
 }
@@ -330,12 +360,15 @@ Animation* EffectManager::loadAnimation(std::string &s) {
 	return NULL;
 }
 
-int EffectManager::getType(const std::string type) {
+int EffectManager::getType(const std::string& type) {
 	if (type.empty()) return EFFECT_NONE;
 
 	if (type == "damage") return EFFECT_DAMAGE;
+	else if (type == "damage_percent") return EFFECT_DAMAGE_PERCENT;
 	else if (type == "hpot") return EFFECT_HPOT;
+	else if (type == "hpot_percent") return EFFECT_HPOT_PERCENT;
 	else if (type == "mpot") return EFFECT_MPOT;
+	else if (type == "mpot_percent") return EFFECT_MPOT_PERCENT;
 	else if (type == "speed") return EFFECT_SPEED;
 	else if (type == "immunity") return EFFECT_IMMUNITY;
 	else if (type == "stun") return EFFECT_STUN;
@@ -349,15 +382,16 @@ int EffectManager::getType(const std::string type) {
 	else if (type == "death_sentence") return EFFECT_DEATH_SENTENCE;
 	else if (type == "shield") return EFFECT_SHIELD;
 	else if (type == "heal") return EFFECT_HEAL;
+	else if (type == "knockback") return EFFECT_KNOCKBACK;
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (type == STAT_NAME[i]) {
+			if (type == STAT_KEY[i]) {
 				return EFFECT_COUNT+i;
 			}
 		}
 
 		for (unsigned i=0; i<bonus_resist.size(); i++) {
-			if (type == ELEMENTS[i].name + "_resist") {
+			if (type == ELEMENTS[i].id + "_resist") {
 				return EFFECT_COUNT+STAT_COUNT+i;
 			}
 		}
@@ -366,3 +400,15 @@ int EffectManager::getType(const std::string type) {
 	logError("EffectManager: '%s' is not a valid effect type.", type.c_str());
 	return EFFECT_NONE;
 }
+
+bool EffectManager::isDebuffed() {
+	for (size_t i=effect_list.size(); i > 0; i--) {
+		if (effect_list[i-1].type == EFFECT_DAMAGE) return true;
+		else if (effect_list[i-1].type == EFFECT_DAMAGE_PERCENT) return true;
+		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) return true;
+		else if (effect_list[i-1].type == EFFECT_STUN) return true;
+		else if (effect_list[i-1].type == EFFECT_KNOCKBACK) return true;
+	}
+	return false;
+}
+

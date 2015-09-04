@@ -36,28 +36,28 @@ HazardManager::HazardManager()
 void HazardManager::logic() {
 
 	// remove all hazards with lifespan 0.  Most hazards still display their last frame.
-	for (int i=h.size()-1; i>=0; i--) {
-		if (h[i]->lifespan == 0)
-			expire(i);
+	for (size_t i=h.size(); i>0; i--) {
+		if (h[i-1]->lifespan == 0)
+			expire(i-1);
 	}
 
 	checkNewHazards();
 
 	// handle single-frame transforms
-	for (int i=h.size()-1; i>=0; i--) {
-		h[i]->logic();
+	for (size_t i=h.size(); i>0; i--) {
+		h[i-1]->logic();
 
 		// remove all hazards that need to die immediately (e.g. exit the map)
-		if (h[i]->remove_now) {
-			expire(i);
+		if (h[i-1]->remove_now) {
+			expire(i-1);
 			continue;
 		}
 
 
 		// if a moving hazard hits a wall, check for an after-effect
-		if (h[i]->hit_wall && h[i]->wall_power > 0) {
-			powers->activate(h[i]->wall_power, h[i]->src_stats, h[i]->pos);
-			if (powers->powers[h[i]->wall_power].directional) powers->hazards.back()->animationKind = h[i]->animationKind;
+		if (h[i-1]->hit_wall && h[i-1]->wall_power > 0) {
+			powers->activate(h[i-1]->wall_power, h[i-1]->src_stats, h[i-1]->pos);
+			if (powers->powers[h[i-1]->wall_power].directional) powers->hazards.back()->animationKind = h[i-1]->animationKind;
 		}
 
 	}
@@ -65,7 +65,7 @@ void HazardManager::logic() {
 	bool hit;
 
 	// handle collisions
-	for (unsigned int i=0; i<h.size(); i++) {
+	for (size_t i=0; i<h.size(); i++) {
 		if (h[i]->isDangerousNow()) {
 
 			// process hazards that can hurt enemies
@@ -160,7 +160,7 @@ void HazardManager::checkNewHazards() {
 	}
 }
 
-void HazardManager::expire(int index) {
+void HazardManager::expire(size_t index) {
 	delete h[index];
 	h.erase(h.begin()+index);
 }

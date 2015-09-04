@@ -36,6 +36,7 @@ public:
 	void showCursor();
 	std::string getJoystickName(int index);
 	std::string getKeyName(int key);
+	std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT);
 };
 
 #endif

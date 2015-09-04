@@ -23,8 +23,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_CHARACTER_H
 
 #include "CommonIncludes.h"
-#include "WidgetLabel.h"
+#include "Stats.h"
 #include "TooltipData.h"
+#include "WidgetLabel.h"
 
 class StatBlock;
 class WidgetButton;
@@ -38,7 +39,6 @@ const int CSTAT_MENTAL = 3;
 const int CSTAT_OFFENSE = 4;
 const int CSTAT_DEFENSE = 5;
 const int CSTAT_COUNT = 6;
-const int STATLIST_COUNT = 18;
 
 class CharStat {
 public:
@@ -85,9 +85,14 @@ private:
 	LabelInfo label_pos[CSTAT_COUNT];
 	Rect value_pos[CSTAT_COUNT];
 	bool show_upgrade[4];
-	bool show_stat[STATLIST_COUNT];
+	bool show_stat[STAT_COUNT];
+	bool show_resists;
 
 	std::string cstat_labels[CSTAT_COUNT];
+
+	int* base_stats[4];
+	int* base_stats_add[4];
+	std::vector<int>* base_bonus[4];
 
 public:
 	MenuCharacter(StatBlock *stats);

@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
+#include "Stats.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetLabel.h"
@@ -64,10 +65,7 @@ static inline void shrinkVecToFit(std::vector<Ty_>& vec) {
 }
 
 ItemManager::ItemManager()
-	: color_normal(font->getColor("item_normal"))
-	, color_low(font->getColor("item_low"))
-	, color_high(font->getColor("item_high"))
-	, color_epic(font->getColor("item_epic"))
+	: color_normal(font->getColor("widget_normal"))
 	, color_bonus(font->getColor("item_bonus"))
 	, color_penalty(font->getColor("item_penalty"))
 	, color_requirements_not_met(font->getColor("requirements_not_met"))
@@ -85,9 +83,10 @@ ItemManager::ItemManager()
 void ItemManager::loadAll() {
 
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
-	this->loadItems();
-	this->loadTypes();
-	this->loadSets();
+	this->loadItems("items/items.txt");
+	this->loadTypes("items/types.txt");
+	this->loadSets("items/sets.txt");
+	this->loadQualities("items/qualities.txt");
 
 	/*
 	 * Shrinks the items vector to the absolute needed size.
@@ -110,13 +109,13 @@ void ItemManager::loadAll() {
 /**
  * Load a specific items file
  *
- * @param filename The full path and name of the file to load
+ * @param filename The (full) path and name of the file to load
  */
-void ItemManager::loadItems() {
+void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Items|Description about the class and it usage, items/items.txt...
-	if (!infile.open("items/items.txt"))
+	if (!infile.open(filename, locateFileName))
 		return;
 
 	// used to clear vectors when overriding items
@@ -132,7 +131,7 @@ void ItemManager::loadItems() {
 			// @ATTR id|integer|An uniq id of the item used as reference from other classes.
 			id_line = true;
 			id = toInt(infile.val);
-			ensureFitsId(items, id+1);
+			addUnknownItem(id);
 
 			clear_req_stat = true;
 			clear_bonus = true;
@@ -167,13 +166,8 @@ void ItemManager::loadItems() {
 			items[id].book = infile.val;
 		}
 		else if (infile.key == "quality") {
-			// @ATTR quality|[low:high:epic]|Item quality, corresponds to item color.
-			if (infile.val == "low")
-				items[id].quality = ITEM_QUALITY_LOW;
-			else if (infile.val == "high")
-				items[id].quality = ITEM_QUALITY_HIGH;
-			else if (infile.val == "epic")
-				items[id].quality = ITEM_QUALITY_EPIC;
+			// @ATTR quality|string|Item quality matching an id in items/qualities.txt
+			items[id].quality = infile.val;
 		}
 		else if (infile.key == "item_type") {
 			// @ATTR item_type|string|Equipment slot [artifact, head, chest, hands, legs, feets, main, off, ring] or base item type [gem, consumable]
@@ -246,18 +240,19 @@ void ItemManager::loadItems() {
 			items[id].requires_class = infile.val;
 		}
 		else if (infile.key == "bonus") {
-			// @ATTR bonus|[power_tag (string), amount (integer)]|Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50
+			// @ATTR bonus|[stat_name (string), amount (integer)]|Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50
 			if (clear_bonus) {
-				items[id].bonus_stat.clear();
-				items[id].bonus_val.clear();
+				items[id].bonus.clear();
 				clear_bonus = false;
 			}
-			items[id].bonus_stat.push_back(infile.nextValue());
-			items[id].bonus_val.push_back(toInt(infile.nextValue()));
+			BonusData bdata;
+			parseBonus(bdata, infile);
+			items[id].bonus.push_back(bdata);
 		}
 		else if (infile.key == "soundfx") {
 			// @ATTR soundfx|string|Sound effect filename to play for the specific item.
-			items[id].sfx = snd->load(infile.val, "ItemManager");
+			items[id].sfx = infile.val;
+			items[id].sfx_id = snd->load(items[id].sfx, "ItemManager");
 		}
 		else if (infile.key == "gfx")
 			// @ATTR gfx|string|Filename of an animation set to display when the item is equipped.
@@ -309,7 +304,7 @@ void ItemManager::loadItems() {
 			// @ATTR stepfx|string|Sound effect when walking, this applies only to armors.
 			items[id].stepfx = infile.val;
 		else if (infile.key == "disable_slots") {
-			// @ATTR disable_slots|type (string), ...|A comma separated list of slot types to disable when this item is equipped.
+			// @ATTR disable_slots|type (string), ...|A comma separated list of equip slot types to disable when this item is equipped.
 			items[id].disable_slots.clear();
 			std::string slot_type = popFirstString(infile.val);
 
@@ -326,51 +321,125 @@ void ItemManager::loadItems() {
 	infile.close();
 }
 
-void ItemManager::loadTypes() {
+/**
+ * Load a specific item types file
+ *
+ * @param filename The (full) path and name of the file to load
+ */
+void ItemManager::loadTypes(const std::string& filename, bool locateFileName) {
 	FileParser infile;
-	std::string type,description;
-	type = description = "";
 
 	// @CLASS ItemManager: Types|Definition of a item types, items/types.txt...
-	if (infile.open("items/types.txt")) {
+	if (infile.open(filename, locateFileName)) {
 		while (infile.next()) {
-			// @ATTR name|string|Item type name.
-			if (infile.key == "name")
-				type = infile.val;
-			// @ATTR description|string|Item type description.
-			else if (infile.key == "description")
-				description = infile.val;
+			if (infile.new_section) {
+				if (infile.section == "type") {
+					// check if the previous type and remove it if there is no identifier
+					if (!item_types.empty() && item_types.back().id == "") {
+						item_types.pop_back();
+					}
+					item_types.resize(item_types.size()+1);
+				}
+			}
+
+			if (item_types.empty() || infile.section != "type")
+				continue;
+
+			// @ATTR type.id|string|Item type identifier.
+			if (infile.key == "id")
+				item_types.back().id = infile.val;
+			// @ATTR type.name|string|Item type name.
+			else if (infile.key == "name")
+				item_types.back().name = infile.val;
 			else
 				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
-
-			if (type != "" && description != "") {
-				item_types[type] = description;
-				type = description = "";
-			}
 		}
 		infile.close();
+
+		// check if the last type and remove it if there is no identifier
+		if (!item_types.empty() && item_types.back().id == "") {
+			item_types.pop_back();
+		}
 	}
 }
 
+/**
+ * Load a specific item qualities file
+ *
+ * @param filename The (full) path and name of the file to load
+ */
+void ItemManager::loadQualities(const std::string& filename, bool locateFileName) {
+	FileParser infile;
+
+	// @CLASS ItemManager: Qualities|Definition of a item qualities, items/types.txt...
+	if (infile.open(filename, locateFileName)) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "quality") {
+					// check if the previous quality and remove it if there is no identifier
+					if (!item_qualities.empty() && item_qualities.back().id == "") {
+						item_qualities.pop_back();
+					}
+					item_qualities.resize(item_qualities.size()+1);
+				}
+			}
+
+			if (item_qualities.empty() || infile.section != "quality")
+				continue;
+
+			// @ATTR quality.id|string|Item quality identifier.
+			if (infile.key == "id")
+				item_qualities.back().id = infile.val;
+			// @ATTR quality.name|string|Item quality name.
+			else if (infile.key == "name")
+				item_qualities.back().name = infile.val;
+			// @ATTR quality.color|r (integer), g (integer), b (integer)|Item quality color.
+			else if (infile.key == "color")
+				item_qualities.back().color = toRGB(infile.val);
+			else
+				infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+
+		// check if the last quality and remove it if there is no identifier
+		if (!item_qualities.empty() && item_qualities.back().id == "") {
+			item_qualities.pop_back();
+		}
+	}
+}
+
+std::string ItemManager::getItemName(unsigned id) {
+	if (id >= items.size()) return msg->get("Unknown Item");
+
+	if (items[id].name == "")
+		items[id].name = msg->get("Unknown Item");
+
+	return items[id].name;
+}
+
 std::string ItemManager::getItemType(std::string _type) {
-	std::map<std::string, std::string>::iterator it,end;
-	for (it=item_types.begin(), end=item_types.end(); it!=end; ++it) {
-		if (_type.compare(it->first) == 0) return it->second;
+	for (unsigned i=0; i<item_types.size(); ++i) {
+		if (item_types[i].id == _type)
+			return item_types[i].name;
 	}
 	// If all else fails, return the original string
 	return _type;
 }
 
-void ItemManager::addUnknownItem(int id) {
+void ItemManager::addUnknownItem(unsigned id) {
 	ensureFitsId(items, id);
-	items[id].name = msg->get("Unknown Item");
 }
 
-void ItemManager::loadSets() {
+/**
+ * Load a specific item sets file
+ *
+ * @param filename The (full) path and name of the file to load
+ */
+void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
 	FileParser infile;
 
 	// @CLASS ItemManager: Sets|Definition of a item sets, items/sets.txt...
-	if (!infile.open("items/sets.txt"))
+	if (!infile.open(filename, locateFileName))
 		return;
 
 	bool clear_bonus = true;
@@ -429,8 +498,7 @@ void ItemManager::loadSets() {
 			}
 			Set_bonus bonus;
 			bonus.requirement = toInt(infile.nextValue());
-			bonus.bonus_stat = infile.nextValue();
-			bonus.bonus_val = toInt(infile.nextValue());
+			parseBonus(bonus, infile);
 			item_sets[id].bonus.push_back(bonus);
 		}
 		else {
@@ -440,8 +508,78 @@ void ItemManager::loadSets() {
 	infile.close();
 }
 
+void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
+	std::string bonus_str = infile.nextValue();
+	bdata.value = toInt(infile.nextValue());
+
+	if (bonus_str == "speed") {
+		bdata.is_speed = true;
+		return;
+	}
+
+	for (unsigned i=0; i<STAT_COUNT; ++i) {
+		if (bonus_str == STAT_KEY[i]) {
+			bdata.stat_index = (STAT)i;
+			return;
+		}
+	}
+
+	for (unsigned i=0; i<ELEMENTS.size(); ++i) {
+		if (bonus_str == ELEMENTS[i].id + "_resist") {
+			bdata.resist_index = i;
+			return;
+		}
+	}
+
+	if (bonus_str == "physical") {
+		bdata.base_index = 0;
+		return;
+	}
+	else if (bonus_str == "mental") {
+		bdata.base_index = 1;
+		return;
+	}
+	else if (bonus_str == "offense") {
+		bdata.base_index = 2;
+		return;
+	}
+	else if (bonus_str == "defense") {
+		bdata.base_index = 3;
+		return;
+	}
+
+	infile.error("ItemManager: Unknown bonus type '%s'.", bonus_str.c_str());
+}
+
+void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
+	if (bdata->value > 0)
+		ss << "+" << bdata->value;
+	else
+		ss << bdata->value;
+
+	if (bdata->stat_index != -1) {
+		if (STAT_PERCENT[bdata->stat_index])
+			ss << "%";
+
+		ss << " " << STAT_NAME[bdata->stat_index];
+	}
+	else if (bdata->resist_index != -1) {
+		ss << "% " << msg->get(ELEMENTS[bdata->resist_index].name);
+	}
+	else if (bdata->base_index != -1) {
+		if (bdata->base_index == 0)
+			ss << " " << msg->get("Physical");
+		else if (bdata->base_index == 1)
+			ss << " " << msg->get("Mental");
+		else if (bdata->base_index == 2)
+			ss << " " << msg->get("Offense");
+		else if (bdata->base_index == 3)
+			ss << " " << msg->get("Defense");
+	}
+}
+
 void ItemManager::playSound(int item, Point pos) {
-	snd->play(items[item].sfx, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+	snd->play(items[item].sfx_id, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {
@@ -455,22 +593,21 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	if (items[stack.item].set > 0) {
 		color = item_sets[items[stack.item].set].color;
 	}
-	else if (items[stack.item].quality == ITEM_QUALITY_LOW) {
-		color = color_low;
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_HIGH) {
-		color = color_high;
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_EPIC) {
-		color = color_epic;
+	else {
+		for (unsigned i=0; i<item_qualities.size(); ++i) {
+			if (item_qualities[i].id == items[stack.item].quality) {
+				color = item_qualities[i].color;
+				break;
+			}
+		}
 	}
 
 	// name
 	if (stack.quantity > 1) {
-		ss << stack.quantity << " " << items[stack.item].name;
+		ss << stack.quantity << " " << getItemName(stack.item);
 	}
 	else {
-		ss << items[stack.item].name;
+		ss << getItemName(stack.item);
 	}
 	tip.addText(ss.str(), color);
 
@@ -491,30 +628,32 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (items[stack.item].set > 0) {
 		color = item_sets[items[stack.item].set].color;
 	}
-	else if (items[stack.item].quality == ITEM_QUALITY_LOW) {
-		color = color_low;
-		quality_desc = msg->get("Low");
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_NORMAL) {
-		color = color_normal;
-		quality_desc = msg->get("Normal");
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_HIGH) {
-		color = color_high;
-		quality_desc = msg->get("High");
-	}
-	else if (items[stack.item].quality == ITEM_QUALITY_EPIC) {
-		color = color_epic;
-		quality_desc = msg->get("Epic");
+	else {
+		for (unsigned i=0; i<item_qualities.size(); ++i) {
+			if (item_qualities[i].id == items[stack.item].quality) {
+				color = item_qualities[i].color;
+				quality_desc = msg->get(item_qualities[i].name);
+				break;
+			}
+		}
 	}
 
 	// name
 	std::stringstream ss;
 	if (stack.quantity == 1)
-		ss << items[stack.item].name;
+		ss << getItemName(stack.item);
 	else
-		ss << items[stack.item].name << " (" << stack.quantity << ")";
+		ss << getItemName(stack.item) << " (" << stack.quantity << ")";
 	tip.addText(ss.str(), color);
+
+	// only show the name of the currency item
+	if (stack.item == CURRENCY_ID)
+		return tip;
+
+	// flavor text
+	if (items[stack.item].flavor != "") {
+		tip.addText(items[stack.item].flavor, color_flavor);
+	}
 
 	// level
 	if (items[stack.item].level != 0) {
@@ -522,7 +661,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// type
-	if (items[stack.item].type != "other" && items[stack.item].type != "book") {
+	if (items[stack.item].type != "") {
 		tip.addText(msg->get(getItemType(items[stack.item].type)));
 	}
 
@@ -556,30 +695,28 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// bonuses
 	unsigned bonus_counter = 0;
-	std::string modifier;
-	while (bonus_counter < items[stack.item].bonus_val.size() && items[stack.item].bonus_stat[bonus_counter] != "") {
-		if (items[stack.item].bonus_stat[bonus_counter] == "speed") {
-			modifier = msg->get("%d%% Speed", items[stack.item].bonus_val[bonus_counter]);
-			if (items[stack.item].bonus_val[bonus_counter] >= 100) color = color_bonus;
+	while (bonus_counter < items[stack.item].bonus.size()) {
+		ss.str("");
+
+		BonusData* bdata = &items[stack.item].bonus[bonus_counter];
+
+		if (bdata->is_speed) {
+			ss << msg->get("%d%% Speed", bdata->value);
+			if (bdata->value >= 100) color = color_bonus;
 			else color = color_penalty;
 		}
 		else {
-			if (items[stack.item].bonus_val[bonus_counter] > 0) {
-				modifier = msg->get("Increases %s by %d",
-									items[stack.item].bonus_val[bonus_counter],
-									msg->get(items[stack.item].bonus_stat[bonus_counter]));
-
+			if (bdata->value > 0) {
 				color = color_bonus;
 			}
 			else {
-				modifier = msg->get("Decreases %s by %d",
-									items[stack.item].bonus_val[bonus_counter],
-									msg->get(items[stack.item].bonus_stat[bonus_counter]));
-
 				color = color_penalty;
 			}
+
+			getBonusString(ss, bdata);
 		}
-		tip.addText(modifier, color);
+
+		tip.addText(ss.str(), color);
 		bonus_counter++;
 	}
 
@@ -626,11 +763,6 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		tip.addText(msg->get("Quality: %s", quality_desc), color);
 	}
 
-	// flavor text
-	if (items[stack.item].flavor != "") {
-		tip.addText(items[stack.item].flavor, color_flavor);
-	}
-
 	// buy or sell price
 	if (items[stack.item].price > 0 && stack.item != CURRENCY_ID) {
 
@@ -667,21 +799,24 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		// item set bonuses
 		ItemSet set = item_sets[items[stack.item].set];
 		bonus_counter = 0;
-		modifier = "";
 
 		tip.addText("\n" + msg->get("Set: ") + msg->get(item_sets[items[stack.item].set].name), set.color);
 
-		while (bonus_counter < set.bonus.size() && set.bonus[bonus_counter].bonus_stat != "") {
-			if (set.bonus[bonus_counter].bonus_stat == "speed") {
-				modifier = msg->get("%d%% Speed", set.bonus[bonus_counter].bonus_val);
-			}
-			else if (set.bonus[bonus_counter].bonus_val > 0) {
-				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Increases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
+		while (bonus_counter < set.bonus.size()) {
+			ss.str("");
+
+			Set_bonus* bdata = &set.bonus[bonus_counter];
+
+			ss << msg->get("%d items: ", bdata->requirement);
+
+			if (bdata->is_speed) {
+				ss << msg->get("%d%% Speed", bdata->value);
 			}
 			else {
-				modifier = msg->get("%d items: ", set.bonus[bonus_counter].requirement) + msg->get("Decreases %s by %d", set.bonus[bonus_counter].bonus_val, msg->get(set.bonus[bonus_counter].bonus_stat));
+				getBonusString(ss, bdata);
 			}
-			tip.addText(modifier, set.color);
+
+			tip.addText(ss.str(), set.color);
 			bonus_counter++;
 		}
 	}
@@ -772,7 +907,7 @@ int Item::getSellPrice() {
 	if (price_sell != 0)
 		new_price = price_sell;
 	else
-		new_price = static_cast<int>(price * VENDOR_RATIO);
+		new_price = static_cast<int>(static_cast<float>(price) * VENDOR_RATIO);
 	if (new_price == 0) new_price = 1;
 
 	return new_price;

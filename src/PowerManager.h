@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef POWER_MANAGER_H
 #define POWER_MANAGER_H
 
+#include "FileParser.h"
 #include "LootManager.h"
 #include "MapRenderer.h"
 #include "Map.h"
@@ -334,6 +335,7 @@ private:
 	void loadEffects();
 	void loadPowers();
 
+	bool isValidEffect(const std::string& type);
 	int loadSFX(const std::string& filename);
 
 	FPoint limitRange(float range, FPoint src, FPoint target);
@@ -349,6 +351,8 @@ private:
 	bool block(int power_index, StatBlock *src_stats);
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
+
+	EffectDef* getEffectDef(const std::string& id);
 
 public:
 	PowerManager(LootManager *_lootm);
@@ -369,8 +373,9 @@ public:
 	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
+	int verifyID(int power_id, FileParser* infile = NULL, bool allow_zero = true);
 
-	std::map<std::string,EffectDef> effects;
+	std::vector<EffectDef> effects;
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> enemies; // output; read by PowerManager

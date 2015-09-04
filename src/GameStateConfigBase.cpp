@@ -34,6 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuConfirm.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "Stats.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
@@ -57,8 +58,6 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, combat_text_lb(new WidgetLabel())
 	, show_fps_cb(new WidgetCheckBox())
 	, show_fps_lb(new WidgetLabel())
-	, show_hotkeys_cb(new WidgetCheckBox())
-	, show_hotkeys_lb(new WidgetLabel())
 	, hardware_cursor_cb(new WidgetCheckBox())
 	, hardware_cursor_lb(new WidgetLabel())
 	, colorblind_cb(new WidgetCheckBox())
@@ -136,6 +135,7 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 			inactivemods_lstb->append(mods->mod_dirs[i],createModTooltip(&temp_mod));
 		}
 	}
+	inactivemods_lstb->sort();
 
 	if (do_init) {
 		init();
@@ -223,10 +223,6 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	else if (infile.key == "show_fps") {
 		// @ATTR show_fps|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show FPS" checkbox relative to the frame.
 		placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), JUSTIFY_RIGHT);
-	}
-	else if (infile.key == "show_hotkeys") {
-		// @ATTR show_hotkeys|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show Hotkey Labels" checkbox relative to the frame.
-		placeLabeledWidget(show_hotkeys_lb, show_hotkeys_cb, x1, y1, x2, y2, msg->get("Show Hotkeys Labels"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "colorblind") {
 		// @ATTR colorblind|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Colorblind Mode" checkbox relative to the frame.
@@ -354,8 +350,6 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(combat_text_lb, INTERFACE_TAB);
 	addChildWidget(show_fps_cb, INTERFACE_TAB);
 	addChildWidget(show_fps_lb, INTERFACE_TAB);
-	addChildWidget(show_hotkeys_cb, INTERFACE_TAB);
-	addChildWidget(show_hotkeys_lb, INTERFACE_TAB);
 	addChildWidget(colorblind_cb, INTERFACE_TAB);
 	addChildWidget(colorblind_lb, INTERFACE_TAB);
 	addChildWidget(hardware_cursor_cb, INTERFACE_TAB);
@@ -390,7 +384,6 @@ void GameStateConfigBase::setupTabList() {
 	tablist.add(combat_text_cb);
 	tablist.add(show_fps_cb);
 	tablist.add(colorblind_cb);
-	tablist.add(show_hotkeys_cb);
 	tablist.add(hardware_cursor_cb);
 	tablist.add(dev_mode_cb);
 	tablist.add(show_target_cb);
@@ -429,8 +422,6 @@ void GameStateConfigBase::updateInterface() {
 	else combat_text_cb->unCheck();
 	if (SHOW_FPS) show_fps_cb->Check();
 	else show_fps_cb->unCheck();
-	if (SHOW_HOTKEYS) show_hotkeys_cb->Check();
-	else show_hotkeys_cb->unCheck();
 	if (COLORBLIND) colorblind_cb->Check();
 	else colorblind_cb->unCheck();
 	if (HARDWARE_CURSOR) hardware_cursor_cb->Check();
@@ -535,11 +526,13 @@ void GameStateConfigBase::logicAccept() {
 	inpt->setKeybindNames();
 	if (setMods()) {
 		reload_music = true;
+		reload_backgrounds = true;
 		delete mods;
 		mods = new ModManager();
 		loadTilesetSettings();
 	}
 	loadMiscSettings();
+	setStatNames();
 	refreshFont();
 	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
 		SDL_JoystickClose(joy);
@@ -555,10 +548,11 @@ void GameStateConfigBase::logicAccept() {
 void GameStateConfigBase::logicCancel() {
 	inpt->lock[CANCEL] = true;
 	loadSettings();
-	loadMiscSettings();
 	inpt->loadKeyBindings();
 	delete msg;
 	msg = new MessageEngine();
+	loadMiscSettings();
+	setStatNames();
 	update();
 	cleanup();
 	render_device->updateTitleBar();
@@ -571,11 +565,11 @@ void GameStateConfigBase::logicAudio() {
 		if (music_volume_sl->checkClick()) {
 			if (MUSIC_VOLUME == 0)
 				reload_music = true;
-			MUSIC_VOLUME = music_volume_sl->getValue();
+			MUSIC_VOLUME = static_cast<short>(music_volume_sl->getValue());
 			snd->setVolumeMusic(MUSIC_VOLUME);
 		}
 		else if (sound_volume_sl->checkClick()) {
-			SOUND_VOLUME = sound_volume_sl->getValue();
+			SOUND_VOLUME = static_cast<short>(sound_volume_sl->getValue());
 			snd->setVolumeSFX(SOUND_VOLUME);
 		}
 	}
@@ -594,10 +588,6 @@ void GameStateConfigBase::logicInterface() {
 	else if (show_fps_cb->checkClick()) {
 		if (show_fps_cb->isChecked()) SHOW_FPS=true;
 		else SHOW_FPS=false;
-	}
-	else if (show_hotkeys_cb->checkClick()) {
-		if (show_hotkeys_cb->isChecked()) SHOW_HOTKEYS=true;
-		else SHOW_HOTKEYS=false;
 	}
 	else if (colorblind_cb->checkClick()) {
 		if (colorblind_cb->isChecked()) COLORBLIND=true;
@@ -748,7 +738,7 @@ void GameStateConfigBase::refreshLanguages() {
 				language_lstb->append(infile.nextValue(),"");
 
 				if (language_ISO.back() == LANGUAGE) {
-					language_lstb->selected[i] = true;
+					language_lstb->select(i);
 				}
 
 				i++;
@@ -767,7 +757,7 @@ void GameStateConfigBase::refreshFont() {
 
 void GameStateConfigBase::enableMods() {
 	for (int i=0; i<inactivemods_lstb->getSize(); i++) {
-		if (inactivemods_lstb->selected[i]) {
+		if (inactivemods_lstb->isSelected(i)) {
 			activemods_lstb->append(inactivemods_lstb->getValue(i),inactivemods_lstb->getTooltip(i));
 			inactivemods_lstb->remove(i);
 			i--;
@@ -777,12 +767,13 @@ void GameStateConfigBase::enableMods() {
 
 void GameStateConfigBase::disableMods() {
 	for (int i=0; i<activemods_lstb->getSize(); i++) {
-		if (activemods_lstb->selected[i] && activemods_lstb->getValue(i) != FALLBACK_MOD) {
+		if (activemods_lstb->isSelected(i) && activemods_lstb->getValue(i) != FALLBACK_MOD) {
 			inactivemods_lstb->append(activemods_lstb->getValue(i),activemods_lstb->getTooltip(i));
 			activemods_lstb->remove(i);
 			i--;
 		}
 	}
+	inactivemods_lstb->sort();
 }
 
 bool GameStateConfigBase::setMods() {
@@ -866,7 +857,7 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 				ret += max_version;
 			}
 		}
-		if (mod->depends.size() > 0) {
+		if (!mod->depends.empty()) {
 			if (ret != "") ret += '\n';
 			ret += msg->get("Requires mods: ");
 			for (unsigned i=0; i<mod->depends.size(); ++i) {

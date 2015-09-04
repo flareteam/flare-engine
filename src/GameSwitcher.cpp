@@ -41,7 +41,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <typeinfo>
 
-GameSwitcher::GameSwitcher() {
+GameSwitcher::GameSwitcher()
+	: background(NULL)
+	, background_image(NULL)
+	, background_filename("")
+{
 
 	// The initial state is the intro cutscene and then title screen
 	GameStateTitle *title=new GameStateTitle();
@@ -58,6 +62,11 @@ GameSwitcher::GameSwitcher() {
 	done = false;
 	loadMusic();
 	loadFPS();
+
+	loadBackgroundList();
+
+	if (currentState->has_background)
+		loadBackgroundImage();
 }
 
 void GameSwitcher::loadMusic() {
@@ -84,6 +93,65 @@ void GameSwitcher::loadMusic() {
 	}
 }
 
+void GameSwitcher::loadBackgroundList() {
+	background_list.clear();
+	freeBackground();
+
+	FileParser infile;
+	// @CLASS GameSwitcher: Background images|Description of engine/menu_backgrounds.txt
+	if (infile.open("engine/menu_backgrounds.txt", true, "")) {
+		while (infile.next()) {
+			// @ATTR background|string|Filename of a background image to be added to the pool of random menu backgrounds
+			if (infile.key == "background") background_list.push_back(infile.val);
+			else infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+	}
+}
+
+void GameSwitcher::loadBackgroundImage() {
+	if (background_list.empty()) return;
+
+	if (background_filename != "") return;
+
+	// load the background image
+	size_t index = static_cast<size_t>(rand()) % background_list.size();
+	background_filename = background_list[index];
+	background_image = render_device->loadImage(background_filename);
+	refreshBackground();
+}
+
+void GameSwitcher::refreshBackground() {
+	if (background_image) {
+		background_image->ref();
+		Rect dest = resizeToScreen(background_image->getWidth(), background_image->getHeight(), true, ALIGN_CENTER);
+
+		Image *resized = background_image->resize(dest.w, dest.h);
+		if (resized) {
+			if (background)
+				delete background;
+
+			background = resized->createSprite();
+			resized->unref();
+		}
+
+		if (background)
+			background->setDest(dest);
+	}
+}
+
+void GameSwitcher::freeBackground() {
+	delete background;
+	background = NULL;
+
+	if (background_image) {
+		background_image->unref();
+		background_image = NULL;
+	}
+
+	background_filename = "";
+}
+
 void GameSwitcher::logic() {
 	// reset the mouse cursor
 	curs->logic();
@@ -91,6 +159,9 @@ void GameSwitcher::logic() {
 	// Check if a the game state is to be changed and change it if necessary, deleting the old state
 	GameState* newState = currentState->getRequestedGameState();
 	if (newState != NULL) {
+		if (currentState->reload_backgrounds)
+			loadBackgroundList();
+
 		delete currentState;
 		currentState = newState;
 		currentState->load_counter++;
@@ -102,6 +173,17 @@ void GameSwitcher::logic() {
 		if (!currentState->hasMusic)
 			if (!snd->isPlayingMusic())
 				loadMusic();
+
+		// if this game state shows a background image, load it here
+		if (currentState->has_background)
+			loadBackgroundImage();
+		else
+			freeBackground();
+	}
+
+	// resize background image when window is resized
+	if (inpt->window_resized && currentState->has_background) {
+		refreshBackground();
 	}
 
 	currentState->logic();
@@ -175,6 +257,11 @@ bool GameSwitcher::isPaused() {
 }
 
 void GameSwitcher::render() {
+	// display background
+	if (background && currentState->has_background) {
+		render_device->render(background);
+	}
+
 	currentState->render();
 	curs->render();
 }
@@ -188,5 +275,7 @@ GameSwitcher::~GameSwitcher() {
 	delete currentState;
 	delete label_fps;
 	snd->unloadMusic();
+	freeBackground();
+	background_list.clear();
 }
 

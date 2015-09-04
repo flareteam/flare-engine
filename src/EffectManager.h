@@ -33,26 +33,30 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class Hazard;
 
-#define EFFECT_COUNT 18
+#define EFFECT_COUNT 21
 
 enum EFFECT_TYPE {
 	EFFECT_NONE = 0,
 	EFFECT_DAMAGE = 1,
-	EFFECT_HPOT = 2,
-	EFFECT_MPOT = 3,
-	EFFECT_SPEED = 4,
-	EFFECT_IMMUNITY = 5,
-	EFFECT_STUN = 6,
-	EFFECT_REVIVE = 7,
-	EFFECT_CONVERT = 8,
-	EFFECT_FEAR = 9,
-	EFFECT_OFFENSE = 10,
-	EFFECT_DEFENSE = 11,
-	EFFECT_PHYSICAL = 12,
-	EFFECT_MENTAL = 13,
-	EFFECT_DEATH_SENTENCE = 14,
-	EFFECT_SHIELD = 15,
-	EFFECT_HEAL = 16,
+	EFFECT_DAMAGE_PERCENT = 2,
+	EFFECT_HPOT = 3,
+	EFFECT_HPOT_PERCENT = 4,
+	EFFECT_MPOT = 5,
+	EFFECT_MPOT_PERCENT = 6,
+	EFFECT_SPEED = 7,
+	EFFECT_IMMUNITY = 8,
+	EFFECT_STUN = 9,
+	EFFECT_REVIVE = 10,
+	EFFECT_CONVERT = 11,
+	EFFECT_FEAR = 12,
+	EFFECT_OFFENSE = 13,
+	EFFECT_DEFENSE = 14,
+	EFFECT_PHYSICAL = 15,
+	EFFECT_MENTAL = 16,
+	EFFECT_DEATH_SENTENCE = 17,
+	EFFECT_SHIELD = 18,
+	EFFECT_HEAL = 19,
+	EFFECT_KNOCKBACK = 20
 };
 
 class Effect {
@@ -97,8 +101,8 @@ public:
 class EffectManager {
 private:
 	Animation* loadAnimation(std::string &s);
-	void removeEffect(int id);
-	void removeAnimation(int id);
+	void removeEffect(size_t id);
+	void removeAnimation(size_t id);
 
 public:
 	EffectManager();
@@ -114,13 +118,17 @@ public:
 	void clearItemEffects();
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
-	int getType(const std::string type);
+	int getType(const std::string& type);
+	bool isDebuffed();
 
 	std::vector<Effect> effect_list;
 
 	int damage;
+	int damage_percent;
 	int hpot;
+	int hpot_percent;
 	int mpot;
+	int mpot_percent;
 	float speed;
 	bool immunity;
 	bool stun;
@@ -128,6 +136,7 @@ public:
 	bool convert;
 	bool death_sentence;
 	bool fear;
+	float knockback_speed;
 
 	int bonus_offense;
 	int bonus_defense;

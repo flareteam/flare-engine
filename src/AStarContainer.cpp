@@ -49,7 +49,7 @@ void AStarContainer::add(AStarNode* node) {
 
 	//add the new node at the end and update its index
 	nodes[size] = node;
-	map_pos[node->getX()][node->getY()] = size;
+	map_pos[node->getX()][node->getY()] = static_cast<short>(size);
 
 	//reorder the heap based on f ordering, staring with thenewly added node and working up the tree from there
 	int m = size;
@@ -60,9 +60,9 @@ void AStarContainer::add(AStarNode* node) {
 		if(nodes[m]->getFinalCost() <= nodes[m/2]->getFinalCost()) {
 			temp = nodes[m/2];
 			nodes[m/2] = nodes[m];
-			map_pos[nodes[m/2]->getX()][nodes[m/2]->getY()] = m/2;
+			map_pos[nodes[m/2]->getX()][nodes[m/2]->getY()] = static_cast<short>(m/2);
 			nodes[m] = temp;
-			map_pos[nodes[m]->getX()][nodes[m]->getY()] = m;
+			map_pos[nodes[m]->getX()][nodes[m]->getY()] = static_cast<short>(m);
 			m=m/2;
 		}
 		else
@@ -81,7 +81,7 @@ void AStarContainer::remove(AStarNode* node) {
 
 	//swap the last node in the list with the node being deleted
 	nodes[heap_indexv-1] = nodes[size-1];
-	map_pos[nodes[heap_indexv-1]->getX()][nodes[heap_indexv-1]->getY()] = heap_indexv-1;
+	map_pos[nodes[heap_indexv-1]->getX()][nodes[heap_indexv-1]->getY()] = static_cast<short>(heap_indexv-1);
 
 	size--;
 
@@ -108,9 +108,9 @@ void AStarContainer::remove(AStarNode* node) {
 		if(heap_indexu != heap_indexv) { //If parent's F > one or both of its children, swap them
 			AStarNode* temp = nodes[heap_indexu-1];
 			nodes[heap_indexu-1] = nodes[heap_indexv-1];
-			map_pos[nodes[heap_indexu-1]->getX()][nodes[heap_indexu-1]->getY()] = heap_indexu-1;
+			map_pos[nodes[heap_indexu-1]->getX()][nodes[heap_indexu-1]->getY()] = static_cast<short>(heap_indexu-1);
 			nodes[heap_indexv-1] = temp;
-			map_pos[nodes[heap_indexv-1]->getX()][nodes[heap_indexv-1]->getY()] = heap_indexv-1;
+			map_pos[nodes[heap_indexv-1]->getX()][nodes[heap_indexv-1]->getY()] = static_cast<short>(heap_indexv-1);
 		}
 		else {
 			break;//if item <= both children, exit loop
@@ -145,9 +145,9 @@ void AStarContainer::updateParent(Point pos, Point parent_pos, float score) {
 		if(nodes[m]->getFinalCost() <= nodes[m/2]->getFinalCost()) {
 			temp = nodes[m/2];
 			nodes[m/2] = nodes[m];
-			map_pos[nodes[m/2]->getX()][nodes[m/2]->getY()] = m/2;
+			map_pos[nodes[m/2]->getX()][nodes[m/2]->getY()] = static_cast<short>(m/2);
 			nodes[m] = temp;
-			map_pos[nodes[m]->getX()][nodes[m]->getY()] = m;
+			map_pos[nodes[m]->getX()][nodes[m]->getY()] = static_cast<short>(m);
 			m=m/2;
 		}
 		else
@@ -184,7 +184,7 @@ void AStarCloseContainer::add(AStarNode* node) {
 	if (size >= node_limit) return;
 
 	nodes[size] = node;
-	map_pos[node->getX()][node->getY()] = size;
+	map_pos[node->getX()][node->getY()] = static_cast<short>(size);
 	size++;
 }
 

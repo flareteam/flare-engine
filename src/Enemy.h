@@ -39,8 +39,7 @@ public:
 	~Enemy();
 	bool lineOfSight();
 	void logic();
-	int faceNextBest(float mapx, float mapy);
-	void newState(int state);
+	unsigned char faceNextBest(float mapx, float mapy);
 	virtual void doRewards(int source_type);
 
 	std::string type;

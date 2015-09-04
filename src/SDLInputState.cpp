@@ -212,8 +212,8 @@ void SDLInputState::handle() {
 #endif
 			// Android touch events
 			case SDL_FINGERMOTION:
-				mouse.x = (int)((event.tfinger.x + event.tfinger.dx) * VIEW_W);
-				mouse.y = (int)((event.tfinger.y + event.tfinger.dy) * VIEW_H);
+				mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * VIEW_W);
+				mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * VIEW_H);
 
 				if (event.tfinger.dy > 0) {
 					scroll_up = true;
@@ -223,8 +223,8 @@ void SDLInputState::handle() {
 				break;
 			case SDL_FINGERDOWN:
 				touch_locked = true;
-				mouse.x = (int)(event.tfinger.x * VIEW_W);
-				mouse.y = (int)(event.tfinger.y * VIEW_H);
+				mouse.x = static_cast<int>(event.tfinger.x * VIEW_W);
+				mouse.y = static_cast<int>(event.tfinger.y * VIEW_H);
 				pressing[MAIN1] = true;
 				un_press[MAIN1] = false;
 				break;
@@ -578,6 +578,36 @@ std::string SDLInputState::getKeyName(int key) {
 #else
 	return std::string(SDL_GetKeyName((SDLKey)key));
 #endif
+}
+
+std::string SDLInputState::getBindingString(int key, int bindings_list) {
+	std::string none = msg->get("(none)");
+
+	if (bindings_list == INPUT_BINDING_DEFAULT) {
+		if (inpt->binding[key] < 0)
+			return none;
+		else if (inpt->binding[key] < 8)
+			return mouse_button[inpt->binding[key] - 1];
+		else
+			return getKeyName(inpt->binding[key]);
+	}
+	else if (bindings_list == INPUT_BINDING_ALT) {
+		if (inpt->binding_alt[key] < 0)
+			return none;
+		else if (inpt->binding[key] < 8)
+			return mouse_button[inpt->binding_alt[key] - 1];
+		else
+			return getKeyName(inpt->binding_alt[key]);
+	}
+	else if (bindings_list == INPUT_BINDING_JOYSTICK) {
+		if (inpt->binding_joy[key] < 0)
+			return none;
+		else
+			return msg->get("Button %d", inpt->binding_joy[key]);
+	}
+	else {
+		return none;
+	}
 }
 
 SDLInputState::~SDLInputState() {

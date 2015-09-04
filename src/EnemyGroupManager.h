@@ -53,6 +53,15 @@ public:
 	 */
 	Enemy_Level getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const;
 
+	/** To get enemies that fit in a category
+	 *
+	 * @param category Enemies of the desired category
+	 *
+	 * @return Level descriptions of enemies in the category.
+	 *         Empty buffer if none was found.
+	 */
+	std::vector<Enemy_Level> getEnemiesInCategory(const std::string& category) const;
+
 private:
 
 	/** Container to store enemy data */

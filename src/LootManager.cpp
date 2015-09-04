@@ -65,12 +65,11 @@ LootManager::LootManager()
 				AUTOPICKUP_CURRENCY = toBool(infile.val);
 			}
 			else if (infile.key == "currency_name") {
-				// @ATTR currency_name|string|Define the name of currency in game
-				CURRENCY = msg->get(infile.val);
+				// This key is parsed in loadMiscSettings() in Settings.cpp
 			}
 			else if (infile.key == "vendor_ratio") {
 				// @ATTR vendor_ratio|integer|Prices ratio for vendors
-				VENDOR_RATIO = toInt(infile.val) / 100.0f;
+				VENDOR_RATIO = static_cast<float>(toInt(infile.val)) / 100.0f;
 			}
 			else if (infile.key == "sfx_loot") {
 				// @ATTR sfx_loot|string|Filename of a sound effect to play for dropping loot.
@@ -137,8 +136,8 @@ void LootManager::logic() {
 
 		if (it->on_ground && !it->sound_played && !it->stack.empty()) {
 			Point pos;
-			pos.x = (int)it->pos.x;
-			pos.y = (int)it->pos.y;
+			pos.x = static_cast<int>(it->pos.x);
+			pos.y = static_cast<int>(it->pos.y);
 			items->playSound(it->stack.item, pos);
 			it->sound_played = true;
 		}
@@ -149,7 +148,7 @@ void LootManager::logic() {
 
 	// clear any tiles that were blocked from dropped loot
 	for (unsigned i=0; i<tiles_to_unblock.size(); i++) {
-		mapr->collider.unblock((float)tiles_to_unblock[i].x, (float)tiles_to_unblock[i].y);
+		mapr->collider.unblock(static_cast<float>(tiles_to_unblock[i].x), static_cast<float>(tiles_to_unblock[i].y));
 	}
 	tiles_to_unblock.clear();
 }
@@ -218,7 +217,13 @@ void LootManager::checkEnemiesForLoot() {
 		}
 
 		if (!e->stats.loot_table.empty()) {
-			unsigned drops = (rand() % drop_max) + 1;
+			unsigned drops;
+			if (e->stats.loot_count.y != 0) {
+				drops = (rand() % e->stats.loot_count.y) + e->stats.loot_count.x;
+			}
+			else {
+				drops = (rand() % drop_max) + 1;
+			}
 
 			for (unsigned j=0; j<drops; ++j) {
 				checkLoot(e->stats.loot_table, &e->stats.pos);
@@ -235,13 +240,21 @@ void LootManager::checkEnemiesForLoot() {
  */
 void LootManager::checkMapForLoot() {
 	if (!mapr->loot.empty()) {
-		unsigned drops = (rand() % drop_max) + 1;
+		unsigned drops;
+		if (mapr->loot_count.y != 0) {
+			drops = (rand() % mapr->loot_count.y) + mapr->loot_count.x;
+		}
+		else {
+			drops = (rand() % drop_max) + 1;
+		}
 
 		for (unsigned i=0; i<drops; ++i) {
 			checkLoot(mapr->loot);
 		}
 
 		mapr->loot.clear();
+		mapr->loot_count.x = 0;
+		mapr->loot_count.y = 0;
 	}
 }
 
@@ -263,7 +276,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 	int chance = rand() % 100;
 
 	// first drop any 'fixed' (0% chance) items
-	for (unsigned i = loot_table.size(); i > 0; i--) {
+	for (size_t i = loot_table.size(); i > 0; i--) {
 		ec = &loot_table[i-1];
 		if (ec->z == 0) {
 			Point src;
@@ -312,7 +325,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		int real_chance = ec->z;
 
 		if (ec->c != 0 && ec->c != CURRENCY_ID) {
-			real_chance = (int)((float)ec->z * (hero->get(STAT_ITEM_FIND) + 100) / 100.f);
+			real_chance = static_cast<int>(static_cast<float>(ec->z) * static_cast<float>(hero->get(STAT_ITEM_FIND) + 100) / 100.f);
 		}
 
 		if (real_chance >= chance) {
@@ -332,7 +345,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 
 	if (!possible_ids.empty()) {
 		// if there was more than one item with the same chance, randomly pick one of them
-		int chosen_loot = rand() % possible_ids.size();
+		size_t chosen_loot = static_cast<size_t>(rand()) % possible_ids.size();
 
 		ec = possible_ids[chosen_loot];
 
@@ -373,6 +386,11 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 }
 
 void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
+	if (static_cast<size_t>(stack.item) >= items->items.size()) {
+		logError("LootManager: Loot item with id %d is not valid.", stack.item);
+		return;
+	}
+
 	Loot ld;
 	ld.stack = stack;
 	ld.pos.x = pos.x;
@@ -380,8 +398,9 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
 	alignFPoint(&ld.pos);
 	ld.dropped_by_hero = dropped_by_hero;
 
-	int index = items->items[stack.item].loot_animation.size()-1;
-	if (index >= 0) {
+	if (!items->items[stack.item].loot_animation.empty()) {
+		size_t index = items->items[stack.item].loot_animation.size()-1;
+
 		for (unsigned int i=0; i<items->items[stack.item].loot_animation.size(); i++) {
 			int low = items->items[stack.item].loot_animation[i].low;
 			int high = items->items[stack.item].loot_animation[i].high;

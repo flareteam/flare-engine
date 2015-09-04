@@ -99,8 +99,8 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->location.h = toInt(infile.nextValue());
 
 		if (evnt->center.x == -1 && evnt->center.y == -1) {
-			evnt->center.x = evnt->location.x + (float)evnt->location.w/2;
-			evnt->center.y = evnt->location.y + (float)evnt->location.h/2;
+			evnt->center.x = static_cast<float>(evnt->location.x) + static_cast<float>(evnt->location.w)/2;
+			evnt->center.y = static_cast<float>(evnt->location.y) + static_cast<float>(evnt->location.h)/2;
 		}
 	}
 	else if (infile.key == "hotspot") {
@@ -118,8 +118,8 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->hotspot.h = toInt(infile.nextValue());
 		}
 
-		evnt->center.x = evnt->hotspot.x + (float)evnt->hotspot.w/2;
-		evnt->center.y = evnt->hotspot.y + (float)evnt->hotspot.h/2;
+		evnt->center.x = static_cast<float>(evnt->hotspot.x) + static_cast<float>(evnt->hotspot.w)/2;
+		evnt->center.y = static_cast<float>(evnt->hotspot.y) + static_cast<float>(evnt->hotspot.h)/2;
 	}
 	else if (infile.key == "cooldown") {
 		// @ATTR event.cooldown|duration|Duration for event cooldown in 'ms' or 's'.
@@ -226,6 +226,15 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event; either a filename or an inline definition.
 		loot->parseLoot(infile, e, &evnt->components);
 	}
+	else if (infile.key == "loot_count") {
+		// @ATTR loot_count|min (integer), max (integer)|Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.
+		e->x = toInt(infile.nextValue());
+		e->y = toInt(infile.nextValue());
+		if (e->x != 0 || e->y != 0) {
+			clampFloor(e->x, 1);
+			clampFloor(e->y, e->x);
+		}
+	}
 	else if (infile.key == "msg") {
 		// @ATTR event.msg|string|Adds a message to be displayed for the event.
 		e->s = msg->get(infile.val);
@@ -280,6 +289,10 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.requires_currency|integer|Event requires atleast this much currency
 		e->x = toInt(infile.nextValue());
 	}
+	else if (infile.key == "requires_not_currency") {
+		// @ATTR event.requires_not_currency|integer|Event requires no more than this much currency
+		e->x = toInt(infile.nextValue());
+	}
 	else if (infile.key == "requires_item") {
 		// @ATTR event.requires_item|integer,...|Event requires specific item
 		e->x = toInt(infile.nextValue());
@@ -297,8 +310,29 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 			}
 		}
 	}
+	else if (infile.key == "requires_not_item") {
+		// @ATTR event.requires_not_item|integer,...|Event requires not having a specific item
+		e->x = toInt(infile.nextValue());
+
+		// add repeating requires_not_item
+		if (evnt) {
+			std::string repeat_val = infile.nextValue();
+			while (repeat_val != "") {
+				evnt->components.push_back(Event_Component());
+				e = &evnt->components.back();
+				e->type = infile.key;
+				e->x = toInt(repeat_val);
+
+				repeat_val = infile.nextValue();
+			}
+		}
+	}
 	else if (infile.key == "requires_class") {
 		// @ATTR event.requires_class|string|Event requires this base class
+		e->s = infile.nextValue();
+	}
+	else if (infile.key == "requires_not_class") {
+		// @ATTR event.requires_not_class|string|Event requires not this base class
 		e->s = infile.nextValue();
 	}
 	else if (infile.key == "set_status") {
@@ -464,8 +498,8 @@ bool EventManager::executeEvent(Event &ev) {
 			if (fileExists(mods->locate(ec->s))) {
 				mapr->teleportation = true;
 				mapr->teleport_mapname = ec->s;
-				mapr->teleport_destination.x = ec->x + 0.5f;
-				mapr->teleport_destination.y = ec->y + 0.5f;
+				mapr->teleport_destination.x = static_cast<float>(ec->x) + 0.5f;
+				mapr->teleport_destination.y = static_cast<float>(ec->y) + 0.5f;
 			}
 			else {
 				ev.keep_after_trigger = false;
@@ -475,24 +509,26 @@ bool EventManager::executeEvent(Event &ev) {
 		else if (ec->type == "intramap") {
 			mapr->teleportation = true;
 			mapr->teleport_mapname = "";
-			mapr->teleport_destination.x = ec->x + 0.5f;
-			mapr->teleport_destination.y = ec->y + 0.5f;
+			mapr->teleport_destination.x = static_cast<float>(ec->x) + 0.5f;
+			mapr->teleport_destination.y = static_cast<float>(ec->y) + 0.5f;
 		}
 		else if (ec->type == "mapmod") {
 			if (ec->s == "collision") {
 				if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h) {
-					mapr->collider.colmap[ec->x][ec->y] = ec->z;
+					mapr->collider.colmap[ec->x][ec->y] = static_cast<unsigned short>(ec->z);
 					mapr->map_change = true;
 				}
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
 			}
 			else {
-				int index = distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s));
+				size_t index = static_cast<size_t>(distance(mapr->layernames.begin(), find(mapr->layernames.begin(), mapr->layernames.end(), ec->s)));
 				if (!mapr->isValidTile(ec->z))
 					logError("EventManager: Mapmod at position (%d, %d) contains invalid tile id (%d).", ec->x, ec->y, ec->z);
+				else if (index >= mapr->layers.size())
+					logError("EventManager: Mapmod at position (%d, %d) is on an invalid layer.", ec->x, ec->y);
 				else if (ec->x >= 0 && ec->x < mapr->w && ec->y >= 0 && ec->y < mapr->h)
-					mapr->layers[index][ec->x][ec->y] = ec->z;
+					mapr->layers[index][ec->x][ec->y] = static_cast<unsigned short>(ec->z);
 				else
 					logError("EventManager: Mapmod at position (%d, %d) is out of bounds 0-255.", ec->x, ec->y);
 			}
@@ -503,13 +539,13 @@ bool EventManager::executeEvent(Event &ev) {
 
 			if (ec->x != -1 && ec->y != -1) {
 				if (ec->x != 0 && ec->y != 0) {
-					pos.x = ec->x + 0.5f;
-					pos.y = ec->y + 0.5f;
+					pos.x = static_cast<float>(ec->x) + 0.5f;
+					pos.y = static_cast<float>(ec->y) + 0.5f;
 				}
 			}
 			else if (ev.location.x != 0 && ev.location.y != 0) {
-				pos.x = ev.location.x + 0.5f;
-				pos.y = ev.location.y + 0.5f;
+				pos.x = static_cast<float>(ev.location.x) + 0.5f;
+				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
 			if (ev.type == "on_load")
@@ -521,6 +557,16 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->sids.push_back(sid);
 		}
 		else if (ec->type == "loot") {
+			Event_Component *ec_lootcount = ev.getComponent("loot_count");
+			if (ec_lootcount) {
+				mapr->loot_count.x = ec_lootcount->x;
+				mapr->loot_count.y = ec_lootcount->y;
+			}
+			else {
+				mapr->loot_count.x = 0;
+				mapr->loot_count.y = 0;
+			}
+
 			ec->x = ev.hotspot.x;
 			ec->y = ev.hotspot.y;
 			mapr->loot.push_back(*ec);
@@ -570,14 +616,14 @@ bool EventManager::executeEvent(Event &ev) {
 				}
 				// targets fixed path option
 				else {
-					target.x = ec_path->a + 0.5f;
-					target.y = ec_path->b + 0.5f;
+					target.x = static_cast<float>(ec_path->a) + 0.5f;
+					target.y = static_cast<float>(ec_path->b) + 0.5f;
 				}
 			}
 			// no path specified, targets self location
 			else {
-				target.x = ev.location.x + 0.5f;
-				target.y = ev.location.y + 0.5f;
+				target.x = static_cast<float>(ev.location.x) + 0.5f;
+				target.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
 			// ec->x is power id
@@ -587,8 +633,8 @@ bool EventManager::executeEvent(Event &ev) {
 		else if (ec->type == "stash") {
 			mapr->stash = toBool(ec->s);
 			if (mapr->stash) {
-				mapr->stash_pos.x = ev.location.x + 0.5f;
-				mapr->stash_pos.y = ev.location.y + 0.5f;
+				mapr->stash_pos.x = static_cast<float>(ev.location.x) + 0.5f;
+				mapr->stash_pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 		}
 		else if (ec->type == "npc") {
@@ -633,8 +679,18 @@ bool EventManager::isActive(const Event &e) {
 				return false;
 			}
 		}
+		else if (e.components[i].type == "requires_not_currency") {
+			if (camp->checkCurrency(e.components[i].x)) {
+				return false;
+			}
+		}
 		else if (e.components[i].type == "requires_item") {
 			if (!camp->checkItem(e.components[i].x)) {
+				return false;
+			}
+		}
+		else if (e.components[i].type == "requires_not_item") {
+			if (camp->checkItem(e.components[i].x)) {
 				return false;
 			}
 		}
@@ -650,6 +706,10 @@ bool EventManager::isActive(const Event &e) {
 		}
 		else if (e.components[i].type == "requires_class") {
 			if (camp->hero->character_class != e.components[i].s)
+				return false;
+		}
+		else if (e.components[i].type == "requires_not_class") {
+			if (camp->hero->character_class == e.components[i].s)
 				return false;
 		}
 	}

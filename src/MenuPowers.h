@@ -63,6 +63,7 @@ public:
 	short requires_physical;
 	short requires_mental;
 	short requires_level;
+	short upgrade_level;
 	std::vector<short> upgrades;
 
 	std::vector<short> requires_power;
@@ -84,6 +85,7 @@ public:
 		, requires_physical(0)
 		, requires_mental(0)
 		, requires_level(0)
+		, upgrade_level(0)
 		, upgrades()
 		, requires_power()
 		, requires_point(false)
@@ -151,7 +153,7 @@ public:
 	void logic();
 	void render();
 	TooltipData checkTooltip(Point mouse);
-	void generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells);
+	void generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
 	bool baseRequirementsMet(int power_index);
 	bool requirementsMet(int power_index);
 	int click(Point mouse);
@@ -162,6 +164,7 @@ public:
 	short getUnspent() {
 		return points_left;
 	}
+	void resetToBasePowers();
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 

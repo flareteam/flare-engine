@@ -39,8 +39,8 @@ void GetText::close() {
 
 // Turns all \" into just "
 std::string GetText::sanitize(std::string message) {
-	signed int pos = 0;
-	while ((pos = message.find("\\\"")) != -1) {
+	size_t pos = 0;
+	while ((pos = message.find("\\\"")) != std::string::npos) {
 		message = message.substr(0, pos) + message.substr(pos+1);
 	}
 	return message;

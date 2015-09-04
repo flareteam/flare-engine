@@ -72,7 +72,7 @@ Animation::Animation(const Animation& a)
 	, frame_count(0) {
 }
 
-void Animation::setupUncompressed(Point _render_size, Point _render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds) {
+void Animation::setupUncompressed(Point _render_size, Point _render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, unsigned short _maxkinds) {
 	setup(_frames, _duration, _maxkinds);
 
 	for (unsigned short i = 0 ; i < _frames; i++) {
@@ -93,7 +93,7 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 
 	calculateFrames(frames, _frames, _duration);
 
-	if (!frames.empty()) number_frames = frames.back()+1;
+	if (!frames.empty()) number_frames = static_cast<unsigned short>(frames.back()+1);
 
 	if (type == PLAY_ONCE) {
 		additional_data = 0;
@@ -102,7 +102,7 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 		additional_data = 0;
 	}
 	else if (type == BACK_FORTH) {
-		number_frames = 2 * number_frames;
+		number_frames = static_cast<unsigned short>(2 * number_frames);
 		additional_data = 1;
 	}
 	cur_frame = 0;
@@ -121,7 +121,7 @@ void Animation::addFrame(unsigned short index, unsigned short kind, Rect rect, P
 
 	if (index >= gfx.size()/max_kinds) {
 		logError("Animation: Animation(%s) adding rect(%d, %d, %d, %d) to frame index(%u) out of bounds. must be in [0, %d]",
-				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, (int)gfx.size()/max_kinds);
+				name.c_str(), rect.x, rect.y, rect.w, rect.h, index, static_cast<int>(gfx.size())/max_kinds);
 		return;
 	}
 	if (kind > max_kinds-1) {
@@ -147,7 +147,7 @@ void Animation::advanceFrame() {
 	}
 
 
-	unsigned short last_base_index = frames.size()-1;
+	unsigned short last_base_index = static_cast<unsigned short>(frames.size()-1);
 	switch(type) {
 		case PLAY_ONCE:
 
@@ -231,7 +231,7 @@ bool Animation::syncTo(const Animation *other) {
 		}
 		else {
 			logError("Animation: Current frame index (%d) was larger than the last frame index (%d) when syncing '%s' animation.", cur_frame_index, frames.size()-1, name.c_str());
-			cur_frame_index = frames.size()-1;
+			cur_frame_index = static_cast<unsigned short>(frames.size()-1);
 			return false;
 		}
 	}
@@ -257,7 +257,7 @@ void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
 			if (have_last_frame)
 				active_frames.erase(active_frames.begin()+i);
 			else {
-				active_frames[i] = number_frames-1;
+				active_frames[i] = static_cast<short>(number_frames-1);
 				have_last_frame = true;
 			}
 		}
@@ -269,11 +269,11 @@ bool Animation::isFirstFrame() {
 }
 
 bool Animation::isLastFrame() {
-	return cur_frame_index == getLastFrameIndex((short)number_frames-1);
+	return cur_frame_index == static_cast<short>(getLastFrameIndex(static_cast<short>(number_frames-1)));
 }
 
 bool Animation::isSecondLastFrame() {
-	return cur_frame_index == getLastFrameIndex((short)number_frames-2);
+	return cur_frame_index == static_cast<short>(getLastFrameIndex(static_cast<short>(number_frames-2)));
 }
 
 bool Animation::isActiveFrame() {
@@ -296,6 +296,10 @@ std::string Animation::getName() {
 	return name;
 }
 
+int Animation::getDuration() {
+	return static_cast<int>(frames.size());
+}
+
 bool Animation::isCompleted() {
 	return (type == PLAY_ONCE && times_played > 0);
 }
@@ -306,7 +310,7 @@ void Animation::calculateFrames(std::vector<unsigned short> &fvec, const unsigne
 	if (_frames > 0 && _duration % _frames == 0) {
 		const unsigned short divided = _duration/_frames;
 		// if we can evenly space frames among the duration, do it
-		for (unsigned i = 0; i < _frames; ++i) {
+		for (unsigned short i = 0; i < _frames; ++i) {
 			for (unsigned j = 0; j < divided; ++j) {
 				fvec.push_back(i);
 			}
@@ -316,19 +320,19 @@ void Animation::calculateFrames(std::vector<unsigned short> &fvec, const unsigne
 		// we can't evenly space frames, so we try using Bresenham's line algorithm to lay them out
 		// TODO the plain Bresenham algorithm isn't ideal and can cause weird results. Experimentation is needed here
 		int x0 = 0;
-		int y0 = 0;
+		unsigned short y0 = 0;
 		int x1 = _duration-1;
 		int y1 = _frames-1;
 
 		int dx = x1-x0;
 		int dy = y1-y0;
 
-		int D= 2*dy - dx;
+		int D = 2*dy - dx;
 
 		fvec.push_back(y0);
 
 		int x = x0+1;
-		int y = y0;
+		unsigned short y = y0;
 
 		while (x<=x1) {
 			if (D > 0) {
@@ -350,16 +354,17 @@ unsigned short Animation::getLastFrameIndex(const short &frame) {
 
 	if (type == BACK_FORTH && additional_data == -1) {
 		// since the animation is advancing backwards here, the first frame index is actually the last
-		for (unsigned i=0; i<frames.size(); i++) {
+		for (unsigned short i=0; i<frames.size(); i++) {
 			if (frames[i] == frame) return i;
 		}
 		return 0;
 	}
 	else {
 		// normal animation
-		for (unsigned i=frames.size(); i>0; i--) {
-			if (frames[i-1] == frame) return i-1;
+		for (size_t i=frames.size(); i>0; i--) {
+			if (frames[i-1] == frame)
+				return static_cast<unsigned short>(i-1);
 		}
-		return frames.size()-1;
+		return static_cast<unsigned short>(frames.size()-1);
 	}
 }

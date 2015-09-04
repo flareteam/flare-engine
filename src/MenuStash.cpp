@@ -221,6 +221,13 @@ int MenuStash::getRowsCount() {
 	return slots_rows;
 }
 
+void MenuStash::removeFromPrevSlot(int quantity) {
+	int drag_prev_slot = stock.drag_prev_slot;
+	if (drag_prev_slot > -1) {
+		stock.subtract(drag_prev_slot, quantity);
+	}
+}
+
 MenuStash::~MenuStash() {
 	delete closeButton;
 }

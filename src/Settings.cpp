@@ -55,7 +55,6 @@ ConfigEntry config[] = {
 	{ "fullscreen",       &typeid(FULLSCREEN),      "0",   &FULLSCREEN,      "fullscreen mode. 1 enable, 0 disable."},
 	{ "resolution_w",     &typeid(SCREEN_W),        "640", &SCREEN_W,        "display resolution. 640x480 minimum."},
 	{ "resolution_h",     &typeid(SCREEN_H),        "480", &SCREEN_H,        NULL},
-	{ "audio",            &typeid(AUDIO),           "1",   &AUDIO,           "Enable music and sound subsystem."},
 	{ "music_volume",     &typeid(MUSIC_VOLUME),    "96",  &MUSIC_VOLUME,    "music and sound volume (0 = silent, 128 = max)"},
 	{ "sound_volume",     &typeid(SOUND_VOLUME),    "128", &SOUND_VOLUME,    NULL},
 	{ "combat_text",      &typeid(COMBAT_TEXT),     "0",   &COMBAT_TEXT,     "display floating damage text. 1 enable, 0 disable."},
@@ -72,10 +71,10 @@ ConfigEntry config[] = {
 	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
 	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
 	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
-	{ "show_hotkeys",     &typeid(SHOW_HOTKEYS),    "1",   &SHOW_HOTKEYS,    "show hotkeys names on power bar. 1 enable, 0 disable."},
 	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"},
 	{ "hardware_cursor",  &typeid(HARDWARE_CURSOR), "0",   &HARDWARE_CURSOR, "use the system mouse cursor. 1 enable, 0 disable"},
 	{ "dev_mode",         &typeid(DEV_MODE),        "0",   &DEV_MODE,        "allow opening the developer console. 1 enable, 0 disable"},
+	{ "dev_hud",          &typeid(DEV_HUD),         "1",   &DEV_HUD,         "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable"},
 	{ "show_target",      &typeid(SHOW_TARGET),     "0",   &SHOW_TARGET,     "show the targeting reticle on the ground when attacking. 1 enable, 0 disable"},
 	{ "loot_tooltips",    &typeid(LOOT_TOOLTIPS),   "1",   &LOOT_TOOLTIPS,   "always show loot tooltips. 1 enable, 0 disable"}
 };
@@ -128,18 +127,17 @@ bool CHANGE_GAMMA;
 float GAMMA;
 
 // Audio Settings
-bool AUDIO;
+bool AUDIO = true;
 unsigned short MUSIC_VOLUME;
 unsigned short SOUND_VOLUME;
 
 // Interface Settings
 bool COMBAT_TEXT;
 bool SHOW_FPS;
-bool SHOW_HOTKEYS;
 bool COLORBLIND;
 bool HARDWARE_CURSOR;
 bool DEV_MODE;
-bool DEV_HUD = false;
+bool DEV_HUD;
 bool SHOW_TARGET;
 bool LOOT_TOOLTIPS;
 
@@ -172,7 +170,7 @@ short MIN_AVOIDANCE;
 std::vector<Element> ELEMENTS;
 
 // Equipment flags
-std::map<std::string,std::string> EQUIP_FLAGS;
+std::vector<EquipFlag> EQUIP_FLAGS;
 
 // Hero classes
 std::vector<HeroClass> HERO_CLASSES;
@@ -212,6 +210,7 @@ int CURRENCY_ID;
 float INTERACT_RANGE;
 bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
+float ENCOUNTER_DIST;
 
 /**
  * Set system paths
@@ -451,8 +450,8 @@ void loadTilesetSettings() {
 		while (infile.next()) {
 			if (infile.key == "tile_size") {
 				// @ATTR tile_size|w (integet), h (integer)|The width and height of a tile.
-				TILE_W = toInt(infile.nextValue());
-				TILE_H = toInt(infile.nextValue());
+				TILE_W = static_cast<unsigned short>(toInt(infile.nextValue()));
+				TILE_H = static_cast<unsigned short>(toInt(infile.nextValue()));
 				TILE_W_HALF = TILE_W /2;
 				TILE_H_HALF = TILE_H /2;
 			}
@@ -494,7 +493,7 @@ void loadTilesetSettings() {
 		}
 	}
 	if (UNITS_PER_PIXEL_X == 0 || UNITS_PER_PIXEL_Y == 0) {
-		logError("Settings: One of UNITS_PER_PIXEL values is zero! %dx%d", (int)UNITS_PER_PIXEL_X, (int)UNITS_PER_PIXEL_Y);
+		logError("Settings: One of UNITS_PER_PIXEL values is zero! %dx%d", static_cast<int>(UNITS_PER_PIXEL_X), static_cast<int>(UNITS_PER_PIXEL_Y));
 		Exit(1);
 	}
 }
@@ -616,24 +615,24 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			// @ATTR menu_frame_width|integer|Width of frame for New Game, Configuration, etc. menus.
 			if (infile.key == "menu_frame_width")
-				FRAME_W = toInt(infile.val);
+				FRAME_W = static_cast<unsigned short>(toInt(infile.val));
 			// @ATTR menu_frame_height|integer|Height of frame for New Game, Configuration, etc. menus.
 			else if (infile.key == "menu_frame_height")
-				FRAME_H = toInt(infile.val);
+				FRAME_H = static_cast<unsigned short>(toInt(infile.val));
 			// @ATTR icon_size|integer|Size of icons.
 			else if (infile.key == "icon_size")
-				ICON_SIZE = toInt(infile.val);
+				ICON_SIZE = static_cast<unsigned short>(toInt(infile.val));
 			// @ATTR required_width|integer|Minimum window/screen resolution width.
 			else if (infile.key == "required_width") {
-				MIN_SCREEN_W = toInt(infile.val);
+				MIN_SCREEN_W = static_cast<unsigned short>(toInt(infile.val));
 			}
 			// @ATTR required_height|integer|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
-				MIN_SCREEN_H = toInt(infile.val);
+				MIN_SCREEN_H = static_cast<unsigned short>(toInt(infile.val));
 			}
 			// @ATTR virtual_height|integer|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
 			else if (infile.key == "virtual_height") {
-				VIEW_H = toInt(infile.val);
+				VIEW_H = static_cast<unsigned short>(toInt(infile.val));
 				VIEW_H_HALF = VIEW_H / 2;
 			}
 			// @ATTR ignore_texture_filter|boolean|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
@@ -672,21 +671,21 @@ void loadMiscSettings() {
 	if (infile.open("engine/combat.txt")) {
 		while (infile.next()) {
 			// @ATTR max_absorb_percent|integer|Maximum percentage of damage that can be absorbed.
-			if (infile.key == "max_absorb_percent") MAX_ABSORB = toInt(infile.val);
+			if (infile.key == "max_absorb_percent") MAX_ABSORB = static_cast<short>(toInt(infile.val));
 			// @ATTR max_resist_percent|integer|Maximum percentage of elemental damage that can be resisted.
-			else if (infile.key == "max_resist_percent") MAX_RESIST = toInt(infile.val);
+			else if (infile.key == "max_resist_percent") MAX_RESIST = static_cast<short>(toInt(infile.val));
 			// @ATTR max_block_percent|integer|Maximum percentage of damage that can be blocked.
-			else if (infile.key == "max_block_percent") MAX_BLOCK = toInt(infile.val);
+			else if (infile.key == "max_block_percent") MAX_BLOCK = static_cast<short>(toInt(infile.val));
 			// @ATTR max_avoidance_percent|integer|Maximum percentage chance that hazards can be avoided.
-			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = toInt(infile.val);
+			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = static_cast<short>(toInt(infile.val));
 			// @ATTR min_absorb_percent|integer|Minimum percentage of damage that can be absorbed.
-			else if (infile.key == "min_absorb_percent") MIN_ABSORB = toInt(infile.val);
+			else if (infile.key == "min_absorb_percent") MIN_ABSORB = static_cast<short>(toInt(infile.val));
 			// @ATTR min_resist_percent|integer|Minimum percentage of elemental damage that can be resisted.
-			else if (infile.key == "min_resist_percent") MIN_RESIST = toInt(infile.val);
+			else if (infile.key == "min_resist_percent") MIN_RESIST = static_cast<short>(toInt(infile.val));
 			// @ATTR min_block_percent|integer|Minimum percentage of damage that can be blocked.
-			else if (infile.key == "min_block_percent") MIN_BLOCK = toInt(infile.val);
+			else if (infile.key == "min_block_percent") MIN_BLOCK = static_cast<short>(toInt(infile.val));
 			// @ATTR min_avoidance_percent|integer|Minimum percentage chance that hazards can be avoided.
-			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = toInt(infile.val);
+			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = static_cast<short>(toInt(infile.val));
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -695,42 +694,64 @@ void loadMiscSettings() {
 
 	// @CLASS Settings: Elements|Description of engine/elements.txt
 	if (infile.open("engine/elements.txt")) {
-		Element e;
 		while (infile.next()) {
-			// @ATTR name|string|An identifier for this element.
-			if (infile.key == "name") e.name = infile.val;
-			// @ATTR description|string|The displayed name of this element.
-			else if (infile.key == "description") e.description = infile.val;
+			if (infile.new_section) {
+				if (infile.section == "element") {
+					// check if the previous element and remove it if there is no identifier
+					if (!ELEMENTS.empty() && ELEMENTS.back().id == "") {
+						ELEMENTS.pop_back();
+					}
+					ELEMENTS.resize(ELEMENTS.size()+1);
+				}
+			}
+
+			if (ELEMENTS.empty() || infile.section != "element")
+				continue;
+
+			// @ATTR element.id|string|An identifier for this element.
+			if (infile.key == "id") ELEMENTS.back().id = infile.val;
+			// @ATTR element.name|string|The displayed name of this element.
+			else if (infile.key == "name") ELEMENTS.back().name = infile.val;
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
-
-			if (e.name != "" && e.description != "") {
-				ELEMENTS.push_back(e);
-				e.name = e.description = "";
-			}
 		}
 		infile.close();
+
+		// check if the last element and remove it if there is no identifier
+		if (!ELEMENTS.empty() && ELEMENTS.back().id == "") {
+			ELEMENTS.pop_back();
+		}
 	}
 
 	// @CLASS Settings: Equip flags|Description of engine/equip_flags.txt
 	if (infile.open("engine/equip_flags.txt")) {
-		std::string type,description;
-		type = description = "";
-
 		while (infile.next()) {
-			// @ATTR name|string|An identifier for this equip flag.
-			if (infile.key == "name") type = infile.val;
-			// @ATTR description|string|The displayed name of this equip flag.
-			else if (infile.key == "description") description = infile.val;
+			if (infile.new_section) {
+				if (infile.section == "flag") {
+					// check if the previous flag and remove it if there is no identifier
+					if (!EQUIP_FLAGS.empty() && EQUIP_FLAGS.back().id == "") {
+						EQUIP_FLAGS.pop_back();
+					}
+					EQUIP_FLAGS.resize(EQUIP_FLAGS.size()+1);
+				}
+			}
+
+			if (EQUIP_FLAGS.empty() || infile.section != "flag")
+				continue;
+
+			// @ATTR flag.id|string|An identifier for this equip flag.
+			if (infile.key == "id") EQUIP_FLAGS.back().id = infile.val;
+			// @ATTR flag.name|string|The displayed name of this equip flag.
+			else if (infile.key == "name") EQUIP_FLAGS.back().name = infile.val;
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
-
-			if (type != "" && description != "") {
-				EQUIP_FLAGS[type] = description;
-				type = description = "";
-			}
 		}
 		infile.close();
+
+		// check if the last flag and remove it if there is no identifier
+		if (!EQUIP_FLAGS.empty() && EQUIP_FLAGS.back().id == "") {
+			EQUIP_FLAGS.pop_back();
+		}
 	}
 
 	// @CLASS Settings: Classes|Description of engine/classes.txt
@@ -738,11 +759,15 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			if (infile.new_section) {
 				if (infile.section == "class") {
-					HERO_CLASSES.push_back(HeroClass());
+					// check if the previous class and remove it if there is no name
+					if (!HERO_CLASSES.empty() && HERO_CLASSES.back().name == "") {
+						HERO_CLASSES.pop_back();
+					}
+					HERO_CLASSES.resize(HERO_CLASSES.size()+1);
 				}
 			}
 
-			if (infile.section != "class")
+			if (HERO_CLASSES.empty() || infile.section != "class")
 				continue;
 
 			if (!HERO_CLASSES.empty()) {
@@ -754,6 +779,8 @@ void loadMiscSettings() {
 				else if (infile.key == "currency") HERO_CLASSES.back().currency = toInt(infile.val);
 				// @ATTR equipment|item (integer), ...|A list of items that are equipped when starting with this class.
 				else if (infile.key == "equipment") HERO_CLASSES.back().equipment = infile.val;
+				// @ATTR carried|item (integer), ...|A list of items that are placed in the normal inventorty when starting with this class.
+				else if (infile.key == "carried") HERO_CLASSES.back().carried = infile.val;
 				// @ATTR physical|integer|Class starts with this physical stat.
 				else if (infile.key == "physical") HERO_CLASSES.back().physical = toInt(infile.val);
 				// @ATTR mental|integer|Class starts with this mental stat.
@@ -790,11 +817,17 @@ void loadMiscSettings() {
 			}
 		}
 		infile.close();
+
+		// check if the last class and remove it if there is no name
+		if (!HERO_CLASSES.empty() && HERO_CLASSES.back().name == "") {
+			HERO_CLASSES.pop_back();
+		}
 	}
 	// Make a default hero class if none were found
 	if (HERO_CLASSES.empty()) {
 		HeroClass c;
 		c.name = "Adventurer";
+		msg->get("Adventurer"); // this is needed for translation
 		HERO_CLASSES.push_back(c);
 	}
 
@@ -834,6 +867,17 @@ void loadMiscSettings() {
 			// @ATTR npc_tooltip_margin|integer|Vertical offset for NPC labels.
 			else if (infile.key == "npc_tooltip_margin")
 				TOOLTIP_MARGIN_NPC = toInt(infile.val);
+		}
+		infile.close();
+	}
+
+	// @CLASS Settings: Loot|Description of engine/loot.txt
+	if (infile.open("engine/loot.txt")) {
+		while (infile.next()) {
+			if (infile.key == "currency_name") {
+				// @ATTR currency_name|string|Define the name of currency in game
+				CURRENCY = msg->get(infile.val);
+			}
 		}
 		infile.close();
 	}
@@ -925,7 +969,10 @@ bool loadDefaults() {
  */
 std::string getVersionString() {
 	std::stringstream ss;
-	ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << std::setfill('0') << std::setw(2) << VERSION_MINOR;
+	if (VERSION_MAJOR > 0 && VERSION_MINOR < 100 && VERSION_MINOR % 10 == 0)
+		ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << VERSION_MINOR/10;
+	else
+		ss << VERSION_NAME << " v" << VERSION_MAJOR << "." << std::setfill('0') << std::setw(2) << VERSION_MINOR;
 	return ss.str();
 }
 
@@ -951,4 +998,16 @@ void loadAndroidDefaults() {
 	HARDWARE_CURSOR = true;
 	TOUCHSCREEN = true;
 #endif
+}
+
+/**
+ * Some variables depend on VIEW_W and VIEW_H. Update them here.
+ */
+void updateScreenVars() {
+	if (TILE_W > 0 && TILE_H > 0) {
+		if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
+			ENCOUNTER_DIST = sqrtf(powf(static_cast<float>(VIEW_W/TILE_W), 2.f) + powf(static_cast<float>(VIEW_H/TILE_H_HALF), 2.f)) / 2.f;
+		else if (TILESET_ORIENTATION == TILESET_ORTHOGONAL)
+			ENCOUNTER_DIST = sqrtf(powf(static_cast<float>(VIEW_W/TILE_W), 2.f) + powf(static_cast<float>(VIEW_H/TILE_H), 2.f)) / 2.f;
+	}
 }

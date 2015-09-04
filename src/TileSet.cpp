@@ -142,7 +142,7 @@ void TileSet::load(const std::string& filename) {
 					anim[TILE_ID].frame_duration.resize(frame + 1);
 					anim[TILE_ID].pos[frame].x = toInt(repeat_val);
 					anim[TILE_ID].pos[frame].y = toInt(infile.nextValue());
-					anim[TILE_ID].frame_duration[frame] = parse_duration(infile.nextValue());
+					anim[TILE_ID].frame_duration[frame] = static_cast<unsigned short>(parse_duration(infile.nextValue()));
 
 					frame++;
 					repeat_val = infile.nextValue();
@@ -167,7 +167,7 @@ void TileSet::logic() {
 			tiles[i].tile->setClipX(an.pos[an.current_frame].x);
 			tiles[i].tile->setClipY(an.pos[an.current_frame].y);
 			an.duration = 0;
-			an.current_frame = (an.current_frame + 1) % an.frames;
+			an.current_frame = static_cast<unsigned short>((an.current_frame + 1) % an.frames);
 		}
 		an.duration++;
 	}

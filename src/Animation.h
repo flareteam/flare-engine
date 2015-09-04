@@ -92,7 +92,7 @@ public:
 	// which all belong to this animation.
 	// The render_offset is constant for all frames. The render_size is also
 	// the grid size.
-	void setupUncompressed(Point render_size, Point render_offset, int _position, int _frames, int _duration, unsigned short _maxkinds = 8);
+	void setupUncompressed(Point render_size, Point render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
 
 	void setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
 
@@ -126,6 +126,7 @@ public:
 	void reset();
 
 	std::string getName();
+	int getDuration();
 
 	// a vector of indexes of gfx passed into.
 	// if { -1 } is passed, all frames are set to active.

@@ -59,6 +59,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	for (int i = 0; i < GAME_SLOT_MAX; i++) {
 		label_name[i] = new WidgetLabel();
 		label_level[i] = new WidgetLabel();
+		label_class[i] = new WidgetLabel();
 		label_map[i] = new WidgetLabel();
 	}
 
@@ -118,6 +119,10 @@ GameStateLoad::GameStateLoad() : GameState()
 			// @ATTR level|label|The label for the hero's level. Position is relative to game slot position.
 			else if (infile.key == "level") {
 				level_pos = eatLabelInfo(infile.val);
+			}
+			// @ATTR class|label|The label for the hero's class. Position is relative to game slot position.
+			else if (infile.key == "class") {
+				class_pos = eatLabelInfo(infile.val);
 			}
 			// @ATTR map|label|The label for the hero's current location. Position is relative to game slot position.
 			else if (infile.key == "map") {
@@ -360,12 +365,12 @@ void GameStateLoad::loadPreview(int slot) {
 	}
 
 	for (unsigned int i=0; i<equipped[slot].size(); i++) {
-		if ((unsigned)equipped[slot][i] > items->items.size()-1) {
-			logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot+1, equipped[slot][i], (int)items->items.size()-1);
+		if (static_cast<unsigned>(equipped[slot][i]) > items->items.size()-1) {
+			logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot+1, equipped[slot][i], static_cast<int>(items->items.size())-1);
 			continue;
 		}
 
-		if (equipped[slot][i] > 0 && !preview_layer.empty() && (unsigned)equipped[slot][i] < items->items.size()) {
+		if (equipped[slot][i] > 0 && !preview_layer.empty() && static_cast<unsigned>(equipped[slot][i]) < items->items.size()) {
 			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
 			if (found != preview_layer.end())
 				img_gfx[distance(preview_layer.begin(), found)] = items->items[equipped[slot][i]].gfx;
@@ -631,11 +636,17 @@ void GameStateLoad::render() {
 			ss.str("");
 			label.x = slot_pos[slot].x + level_pos.x;
 			label.y = slot_pos[slot].y + level_pos.y;
-			ss << msg->get("Level %d %s", stats[slot].level, stats[slot].getShortClass());
+			ss << msg->get("Level %d", stats[slot].level);
 			if (stats[slot].permadeath)
 				ss << ", " + msg->get("Permadeath");
 			label_level[slot]->set(label.x, label.y, level_pos.justify, level_pos.valign, ss.str(), color_normal, level_pos.font_style);
 			label_level[slot]->render();
+
+			// class
+			label.x = slot_pos[slot].x + class_pos.x;
+			label.y = slot_pos[slot].y + class_pos.y;
+			label_class[slot]->set(label.x, label.y, class_pos.justify, class_pos.valign, stats[slot].getLongClass(), color_normal, class_pos.font_style);
+			label_class[slot]->render();
 
 			// map
 			label.x = slot_pos[slot].x + map_pos.x;
@@ -701,6 +712,7 @@ GameStateLoad::~GameStateLoad() {
 	for (int i=0; i<GAME_SLOT_MAX; i++) {
 		delete label_name[i];
 		delete label_level[i];
+		delete label_class[i];
 		delete label_map[i];
 	}
 	delete label_loading;

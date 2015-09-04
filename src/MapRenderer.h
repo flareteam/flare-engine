@@ -114,6 +114,7 @@ public:
 
 	// event-created loot or items
 	std::vector<Event_Component> loot;
+	Point loot_count;
 
 	// teleport handling
 	bool teleportation;

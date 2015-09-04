@@ -41,7 +41,7 @@ public:
 class FPoint {
 public:
 	float x, y;
-	FPoint(Point _p) : x((float)_p.x), y((float)_p.y) {}
+	FPoint(Point _p) : x(static_cast<float>(_p.x)), y(static_cast<float>(_p.y)) {}
 	FPoint() : x(0), y(0) {}
 	FPoint(float _x, float _y) : x(_x), y(_y) {}
 };
@@ -125,7 +125,7 @@ public:
 
 class EffectDef {
 public:
-	std::string name;
+	std::string id;
 	std::string type;
 	int icon;
 	std::string animation;
@@ -133,7 +133,7 @@ public:
 	bool render_above;
 
 	EffectDef()
-		: name("")
+		: id("")
 		, type("")
 		, icon(-1)
 		, animation("")
@@ -151,8 +151,8 @@ FPoint collision_to_map(Point p);
 FPoint calcVector(FPoint pos, int direction, float dist);
 float calcDist(FPoint p1, FPoint p2);
 float calcTheta(float x1, float y1, float x2, float y2);
-int calcDirection(float x0, float y0, float x1, float y1);
-int calcDirection(const FPoint &src, const FPoint &dst);
+unsigned char calcDirection(float x0, float y0, float x1, float y1);
+unsigned char calcDirection(const FPoint &src, const FPoint &dst);
 bool isWithin(FPoint center, float radius, FPoint target);
 bool isWithin(Rect r, Point target);
 
@@ -167,5 +167,7 @@ void Exit(int code);
 
 void createSaveDir(int slot);
 void removeSaveDir(int slot);
+
+Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align);
 
 #endif

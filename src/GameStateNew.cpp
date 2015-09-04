@@ -173,7 +173,7 @@ GameStateNew::GameStateNew()
 	}
 
 	if (!HERO_CLASSES.empty())
-		class_list->selected[0] = true;
+		class_list->select(0);
 
 	loadGraphics();
 	loadOptions("hero_options.txt");
@@ -310,13 +310,13 @@ void GameStateNew::logic() {
 	// scroll through portrait options
 	if (button_next->checkClick()) {
 		current_option++;
-		if (current_option == (int)portrait.size()) current_option = 0;
+		if (static_cast<unsigned>(current_option) == portrait.size()) current_option = 0;
 		loadPortrait(portrait[current_option]);
 		setName(name[current_option]);
 	}
 	else if (button_prev->checkClick()) {
 		current_option--;
-		if (current_option == -1) current_option = portrait.size()-1;
+		if (current_option == -1) current_option = static_cast<int>(portrait.size())-1;
 		loadPortrait(portrait[current_option]);
 		setName(name[current_option]);
 	}

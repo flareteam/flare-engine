@@ -126,26 +126,26 @@ Rect Sprite::getClip() {
 	return src;
 }
 void Sprite::setDest(const Rect& _dest) {
-	dest.x = (float)_dest.x;
-	dest.y = (float)_dest.y;
+	dest.x = static_cast<float>(_dest.x);
+	dest.y = static_cast<float>(_dest.y);
 }
 
 void Sprite::setDest(const Point& _dest) {
-	dest.x = (float)_dest.x;
-	dest.y = (float)_dest.y;
+	dest.x = static_cast<float>(_dest.x);
+	dest.y = static_cast<float>(_dest.y);
 }
 
 void Sprite::setDest(int x, int y) {
-	dest.x = (float)x;
-	dest.y = (float)y;
+	dest.x = static_cast<float>(x);
+	dest.y = static_cast<float>(y);
 }
 
 void Sprite::setDestX(int x) {
-	dest.x = (float)x;
+	dest.x = static_cast<float>(x);
 }
 
 void Sprite::setDestY(int y) {
-	dest.y = (float)y;
+	dest.y = static_cast<float>(y);
 }
 
 FPoint Sprite::getDest() {
@@ -161,7 +161,7 @@ int Sprite::getGraphicsHeight() {
 }
 
 Image * Sprite::getGraphics() {
-	return (Image *)image;
+	return static_cast<Image *>(image);
 }
 
 
@@ -224,9 +224,9 @@ void RenderDevice::cacheRemove(Image *image) {
 bool RenderDevice::localToGlobal(Sprite *r) {
 	m_clip = r->getClip();
 
-	int left = int(r->getDest().x - r->getOffset().x);
+	int left = static_cast<int>(r->getDest().x) - r->getOffset().x;
 	int right = left + r->getClip().w;
-	int up = int(r->getDest().y - r->getOffset().y);
+	int up = static_cast<int>(r->getDest().y) - r->getOffset().y;
 	int down = up + r->getClip().h;
 
 	// Check whether we need to render.

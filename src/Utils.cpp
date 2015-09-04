@@ -44,8 +44,8 @@ FPoint screen_to_map(int x, int y, float camx, float camy) {
 		r.y = (UNITS_PER_PIXEL_Y * scry) - (UNITS_PER_PIXEL_X * scrx) + camy;
 	}
 	else {
-		r.x = (x - VIEW_W_HALF) * (UNITS_PER_PIXEL_X ) + camx;
-		r.y = (y - VIEW_H_HALF) * (UNITS_PER_PIXEL_Y ) + camy;
+		r.x = static_cast<float>(x - VIEW_W_HALF) * (UNITS_PER_PIXEL_X) + camx;
+		r.y = static_cast<float>(y - VIEW_H_HALF) * (UNITS_PER_PIXEL_Y) + camy;
 	}
 	return r;
 }
@@ -85,8 +85,8 @@ Point center_tile(Point p) {
 
 FPoint collision_to_map(Point p) {
 	FPoint ret;
-	ret.x = p.x + 0.5f;
-	ret.y = p.y + 0.5f;
+	ret.x = static_cast<float>(p.x) + 0.5f;
+	ret.y = static_cast<float>(p.y) + 0.5f;
 	return ret;
 }
 
@@ -142,7 +142,7 @@ FPoint calcVector(FPoint pos, int direction, float dist) {
 }
 
 float calcDist(FPoint p1, FPoint p2) {
-	return sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
+	return static_cast<float>(sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
 }
 
 /**
@@ -159,17 +159,17 @@ bool isWithin(Rect r, Point target) {
 	return target.x >= r.x && target.y >= r.y && target.x < r.x+r.w && target.y < r.y+r.h;
 }
 
-int calcDirection(const FPoint &src, const FPoint &dst) {
+unsigned char calcDirection(const FPoint &src, const FPoint &dst) {
 	return calcDirection(src.x, src.y, dst.x, dst.y);
 }
 
-int calcDirection(float x0, float y0, float x1, float y1) {
+unsigned char calcDirection(float x0, float y0, float x1, float y1) {
 	float theta = calcTheta(x0, y0, x1, y1);
-	float val = theta / (M_PI/4);
-	int dir = int(((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4);
+	float val = theta / (static_cast<float>(M_PI)/4);
+	int dir = static_cast<int>(((val < 0) ? ceil(val-0.5) : floor(val+0.5)) + 4);
 	dir = (dir + 1) % 8;
 	if (dir >= 0 && dir < 8)
-		return dir;
+		return static_cast<unsigned char>(dir);
 	else
 		return 0;
 }
@@ -177,20 +177,20 @@ int calcDirection(float x0, float y0, float x1, float y1) {
 // convert cartesian to polar theta where (x1,x2) is the origin
 float calcTheta(float x1, float y1, float x2, float y2) {
 	// calculate base angle
-	float dx = (float)x2 - (float)x1;
-	float dy = (float)y2 - (float)y1;
+	float dx = x2 - x1;
+	float dy = y2 - y1;
 	float exact_dx = x2 - x1;
 	float theta;
 
 	// convert cartesian to polar coordinates
 	if (exact_dx == 0) {
-		if (dy > 0.0) theta = M_PI/2.0f;
-		else theta = -M_PI/2.0f;
+		if (dy > 0.0) theta = static_cast<float>(M_PI)/2.0f;
+		else theta = static_cast<float>(-M_PI)/2.0f;
 	}
 	else {
-		theta = atan(dy/dx);
-		if (dx < 0.0 && dy >= 0.0) theta += M_PI;
-		if (dx < 0.0 && dy < 0.0) theta -= M_PI;
+		theta = static_cast<float>(atan(dy/dx));
+		if (dx < 0.0 && dy >= 0.0) theta += static_cast<float>(M_PI);
+		if (dx < 0.0 && dy < 0.0) theta -= static_cast<float>(M_PI);
 	}
 	return theta;
 }
@@ -251,8 +251,8 @@ void alignToScreenEdge(ALIGNMENT alignment, Rect *r) {
 void alignFPoint(FPoint *pos) {
 	if (!pos) return;
 
-	pos->x = floor(pos->x / 0.0625f) * 0.0625f;
-	pos->y = floor(pos->y / 0.0625f) * 0.0625f;
+	pos->x = static_cast<float>(floor(pos->x / 0.0625f) * 0.0625f);
+	pos->y = static_cast<float>(floor(pos->y / 0.0625f) * 0.0625f);
 }
 
 
@@ -326,3 +326,24 @@ void removeSaveDir(int slot) {
 	}
 }
 
+Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align) {
+	Rect r;
+
+	// fit to height
+	float ratio = VIEW_H / static_cast<float>(h);
+	r.w = static_cast<int>(static_cast<float>(w) * ratio);
+	r.h = VIEW_H;
+
+	if (!crop) {
+		// fit to width
+		if (r.w > VIEW_W) {
+			ratio = VIEW_W / static_cast<float>(w);
+			r.h = static_cast<int>(static_cast<float>(h) * ratio);
+			r.w = VIEW_W;
+		}
+	}
+
+	alignToScreenEdge(align, &r);
+
+	return r;
+}

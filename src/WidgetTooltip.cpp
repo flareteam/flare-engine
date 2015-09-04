@@ -68,6 +68,14 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
 			tip_pos.x = pos.x - TOOLTIP_OFFSET - size.x;
 			tip_pos.y = pos.y - TOOLTIP_OFFSET - size.y;
 		}
+
+		// very large tooltips might still be off screen at this point
+		// so we try to constrain them to the screen bounds
+		// we give priority to being able to read the top-left of the tooltip over the bottom-right
+		if (tip_pos.x + size.x > VIEW_W) tip_pos.x = VIEW_W - size.x;
+		if (tip_pos.y + size.y > VIEW_H) tip_pos.y = VIEW_H - size.y;
+		if (tip_pos.x < 0) tip_pos.x = 0;
+		if (tip_pos.y < 0) tip_pos.y = 0;
 	}
 
 	return tip_pos;

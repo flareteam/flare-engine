@@ -49,6 +49,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 
 	drag_prev_src = -1;
 	changed_equipment = true;
+	inv_ctrl = INV_CTRL_NONE;
 	log_msg = "";
 	show_book = "";
 
@@ -103,7 +104,7 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 		infile.close();
 	}
 
-	MAX_EQUIPPED = equipped_area.size();
+	MAX_EQUIPPED = static_cast<int>(equipped_area.size());
 	MAX_CARRIED = carried_cols * carried_rows;
 
 	carried_area.w = carried_cols*ICON_SIZE;
@@ -190,9 +191,9 @@ void MenuInventory::logic() {
 				}
 			}
 			if (!removable_items.empty()) {
-				int random_item = rand() % removable_items.size();
+				size_t random_item = static_cast<size_t>(rand()) % removable_items.size();
 				remove(removable_items[random_item]);
-				death_message += msg->get("Lost %s.",items->items[removable_items[random_item]].name);
+				death_message += msg->get("Lost %s.",items->getItemName(removable_items[random_item]));
 			}
 		}
 
@@ -272,8 +273,15 @@ TooltipData MenuInventory::checkTooltip(Point position) {
 	area = areaOver(position);
 	if (area < 0) {
 		if (position.x >= window_area.x + help_pos.x && position.y >= window_area.y+help_pos.y && position.x < window_area.x+help_pos.x+help_pos.w && position.y < window_area.y+help_pos.y+help_pos.h) {
-			tip.addText(msg->get("Use SHIFT to move only one item."));
-			tip.addText(msg->get("CTRL-click a carried item to sell it."));
+			tip.addText(msg->get("Pick up item(s):") + " " + inpt->getBindingString(MAIN1));
+			tip.addText(msg->get("Use or equip item:") + " " + inpt->getBindingString(MAIN2) + "\n");
+			tip.addText(msg->get("%s modifiers", inpt->getBindingString(MAIN1).c_str()));
+			tip.addText(msg->get("Select a quantity of item:") + " " + inpt->getBindingString(SHIFT) + " / " + inpt->getBindingString(SHIFT, INPUT_BINDING_ALT));
+
+			if (inv_ctrl == INV_CTRL_STASH)
+				tip.addText(msg->get("Stash item stack:") + " " + inpt->getBindingString(CTRL) + " / " + inpt->getBindingString(CTRL, INPUT_BINDING_ALT));
+			else if (inv_ctrl == INV_CTRL_VENDOR || (SELL_WITHOUT_VENDOR && inv_ctrl != INV_CTRL_STASH))
+				tip.addText(msg->get("Sell item stack:") + " " + inpt->getBindingString(CTRL) + " / " + inpt->getBindingString(CTRL, INPUT_BINDING_ALT));
 		}
 		return tip;
 	}
@@ -480,13 +488,14 @@ void MenuInventory::activate(Point position) {
 	if (inventory[CARRIED][slot].empty())
 		return;
 
-	// can't interact with quest items
-	if (items->items[inventory[CARRIED][slot].item].type == "quest") {
-		return;
-	}
-	else if (items->items[inventory[CARRIED][slot].item].type == "book") {
+	// if the item is a book, open it
+	if (items->items[inventory[CARRIED][slot].item].book != "") {
 		snd->play(sfx_open);
 		show_book = items->items[inventory[CARRIED][slot].item].book;
+	}
+	// can't interact with quest items
+	else if (items->items[inventory[CARRIED][slot].item].type == "quest") {
+		return;
 	}
 	// use a consumable item
 	else if (items->items[inventory[CARRIED][slot].item].type == "consumable" &&
@@ -519,7 +528,7 @@ void MenuInventory::activate(Point position) {
 
 	}
 	// equip an item
-	else if (stats->humanoid) {
+	else if (stats->humanoid && items->items[inventory[CARRIED][slot].item].type != "") {
 		int equip_slot = -1;
 		const ItemStack &src = inventory[CARRIED].storage[slot];
 
@@ -646,6 +655,17 @@ void MenuInventory::removeEquipped(int item) {
 	applyEquipment(inventory[EQUIPMENT].storage);
 }
 
+void MenuInventory::removeFromPrevSlot(int quantity) {
+	if (drag_prev_src > -1 && inventory[drag_prev_src].drag_prev_slot > -1) {
+		int drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
+		inventory[drag_prev_src].subtract(drag_prev_slot, quantity);
+		if (inventory[drag_prev_src].storage[drag_prev_slot].empty()) {
+			if (drag_prev_src == EQUIPMENT)
+				updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
+		}
+	}
+}
+
 /**
  * Add currency item
  */
@@ -662,16 +682,13 @@ void MenuInventory::addCurrency(int count) {
  * Remove currency item
  */
 void MenuInventory::removeCurrency(int count) {
-	for (int i=0; i<count; i++) {
-		inventory[CARRIED].remove(CURRENCY_ID);
-	}
+	inventory[CARRIED].remove(CURRENCY_ID, count);
 }
 
 /**
  * Count the number of currency items in the inventory
  */
 int MenuInventory::getCurrency() {
-
 	return getItemCountCarried(CURRENCY_ID);
 }
 
@@ -782,21 +799,16 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 			item_id = equipped[i].item;
 			const Item &item = pc_items[item_id];
 			unsigned bonus_counter = 0;
-			while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
-				if (item.bonus_stat[bonus_counter] == "offense")
-					stats->offense_additional += item.bonus_val[bonus_counter];
-				else if (item.bonus_stat[bonus_counter] == "defense")
-					stats->defense_additional += item.bonus_val[bonus_counter];
-				else if (item.bonus_stat[bonus_counter] == "physical")
-					stats->physical_additional += item.bonus_val[bonus_counter];
-				else if (item.bonus_stat[bonus_counter] == "mental")
-					stats->mental_additional += item.bonus_val[bonus_counter];
-				else if (item.bonus_stat[bonus_counter] == "all basic stats") {
-					stats->offense_additional += item.bonus_val[bonus_counter];
-					stats->defense_additional += item.bonus_val[bonus_counter];
-					stats->physical_additional += item.bonus_val[bonus_counter];
-					stats->mental_additional += item.bonus_val[bonus_counter];
-				}
+			while (bonus_counter < item.bonus.size()) {
+				if (item.bonus[bonus_counter].base_index == 0) //physical
+					stats->physical_additional += item.bonus[bonus_counter].value;
+				else if (item.bonus[bonus_counter].base_index == 1) //mental
+					stats->mental_additional += item.bonus[bonus_counter].value;
+				else if (item.bonus[bonus_counter].base_index == 2) //offense
+					stats->offense_additional += item.bonus[bonus_counter].value;
+				else if (item.bonus[bonus_counter].base_index == 3) //defense
+					stats->defense_additional += item.bonus[bonus_counter].value;
+
 				bonus_counter++;
 			}
 		}
@@ -824,20 +836,14 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 			for (unsigned bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 				if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
-				if (temp_set.bonus[bonus_counter].bonus_stat == "offense")
-					stats->offense_additional += temp_set.bonus[bonus_counter].bonus_val;
-				else if (temp_set.bonus[bonus_counter].bonus_stat == "defense")
-					stats->defense_additional += temp_set.bonus[bonus_counter].bonus_val;
-				else if (temp_set.bonus[bonus_counter].bonus_stat == "physical")
-					stats->physical_additional += temp_set.bonus[bonus_counter].bonus_val;
-				else if (temp_set.bonus[bonus_counter].bonus_stat == "mental")
-					stats->mental_additional += temp_set.bonus[bonus_counter].bonus_val;
-				else if (temp_set.bonus[bonus_counter].bonus_stat == "all basic stats") {
-					stats->offense_additional += temp_set.bonus[bonus_counter].bonus_val;
-					stats->defense_additional += temp_set.bonus[bonus_counter].bonus_val;
-					stats->physical_additional += temp_set.bonus[bonus_counter].bonus_val;
-					stats->mental_additional += temp_set.bonus[bonus_counter].bonus_val;
-				}
+				if (temp_set.bonus[bonus_counter].base_index == 0) //physical
+					stats->physical_additional += temp_set.bonus[bonus_counter].value;
+				else if (temp_set.bonus[bonus_counter].base_index == 1) //mental
+					stats->mental_additional += temp_set.bonus[bonus_counter].value;
+				else if (temp_set.bonus[bonus_counter].base_index == 2) //offense
+					stats->offense_additional += temp_set.bonus[bonus_counter].value;
+				else if (temp_set.bonus[bonus_counter].base_index == 3) //defense
+					stats->defense_additional += temp_set.bonus[bonus_counter].value;
 			}
 		}
 		// check that each equipped item fit requirements
@@ -921,12 +927,8 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 
 		// apply various bonuses
 		unsigned bonus_counter = 0;
-		while (bonus_counter < item.bonus_stat.size() && item.bonus_stat[bonus_counter] != "") {
-			std::string id = item.bonus_stat[bonus_counter];
-
-			if (powers->effects.find(id) != powers->effects.end())
-				stats->effects.addEffect(powers->effects[id], 0, item.bonus_val[bonus_counter], true, -1, 0, SOURCE_TYPE_HERO);
-
+		while (bonus_counter < item.bonus.size()) {
+			applyBonus(&item.bonus[bonus_counter]);
 			bonus_counter++;
 		}
 
@@ -963,18 +965,44 @@ void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
 		temp_set = items->item_sets[set[k]];
 		unsigned bonus_counter = 0;
 		for (bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
-			if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
-
-			std::string id = temp_set.bonus[bonus_counter].bonus_stat;
-
-			if (powers->effects.find(id) != powers->effects.end())
-				stats->effects.addEffect(powers->effects[id], 0, temp_set.bonus[bonus_counter].bonus_val, true, -1, 0, SOURCE_TYPE_HERO);
+			if (temp_set.bonus[bonus_counter].requirement > quantity[k]) continue;
+			applyBonus(&temp_set.bonus[bonus_counter]);
 		}
 	}
 }
 
+void MenuInventory::applyBonus(const BonusData* bdata) {
+	EffectDef ed;
+
+	if (bdata->is_speed) {
+		ed.id = ed.type = "speed";
+	}
+	else if (bdata->stat_index != -1) {
+		ed.id = ed.type = STAT_KEY[bdata->stat_index];
+	}
+	else if (bdata->resist_index != -1) {
+		ed.id = ed.type = ELEMENTS[bdata->resist_index].id + "_resist";
+	}
+	else if (bdata->base_index != -1) {
+		if (bdata->base_index == 0) {
+			ed.id = ed.type = "physical";
+		}
+		else if (bdata->base_index == 1) {
+			ed.id = ed.type = "mental";
+		}
+		else if (bdata->base_index == 2) {
+			ed.id = ed.type = "offense";
+		}
+		else if (bdata->base_index == 3) {
+			ed.id = ed.type = "defense";
+		}
+	}
+
+	stats->effects.addEffect(ed, 0, bdata->value, true, -1, 0, SOURCE_TYPE_HERO);
+}
+
 int MenuInventory::getEquippedCount() {
-	return (int)equipped_area.size();
+	return static_cast<int>(equipped_area.size());
 }
 
 int MenuInventory::getCarriedRows() {
@@ -1030,7 +1058,6 @@ void MenuInventory::fillEquipmentSlots() {
 	delete [] equip_item;
 	delete [] equip_quantity;
 }
-
 
 MenuInventory::~MenuInventory() {
 	delete closeButton;

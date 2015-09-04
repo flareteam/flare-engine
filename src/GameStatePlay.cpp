@@ -78,6 +78,7 @@ GameStatePlay::GameStatePlay()
 
 	Image *graphics;
 	hasMusic = true;
+	has_background = false;
 	// GameEngine scope variables
 
 	graphics = render_device->loadImage("images/menus/confirm_bg.png");
@@ -99,7 +100,7 @@ GameStatePlay::GameStatePlay()
 	hazards = new HazardManager();
 	menu = new MenuManager(&pc->stats);
 	npcs = new NPCManager(&pc->stats);
-	quests = new QuestLog(menu->log);
+	quests = new QuestLog(menu->questlog);
 
 	// LootManager needs hero StatBlock
 	loot->hero = &pc->stats;
@@ -136,7 +137,7 @@ void GameStatePlay::resetGame() {
 	menu->inv->inventory[1].clear();
 	menu->inv->changed_equipment = true;
 	menu->inv->currency = 0;
-	menu->log->clear();
+	menu->questlog->clear();
 	quests->createQuestList();
 	menu->hudlog->clear();
 	loadStash();
@@ -157,7 +158,7 @@ void GameStatePlay::checkEnemyFocus() {
 	if (NO_MOUSE) {
 		if (hazards->last_enemy) {
 			if (enemy == hazards->last_enemy) {
-				if (menu->enemy->timeout > 0) return;
+				if (menu->enemy->timeout > 0 && hazards->last_enemy->stats.hp > 0) return;
 				else hazards->last_enemy = NULL;
 			}
 			enemy = hazards->last_enemy;
@@ -214,7 +215,7 @@ bool GameStatePlay::restrictPowerUse() {
 				return true;
 			}
 			else {
-				if(ACTIONBAR_MAIN < menu->act->slots_count && menu->act->slot_enabled[ACTIONBAR_MAIN] && (powers->powers[menu->act->hotkeys[ACTIONBAR_MAIN]].target_party != enemy->stats.hero_ally))
+				if(static_cast<unsigned>(ACTIONBAR_MAIN) < menu->act->slots_count && menu->act->slot_enabled[ACTIONBAR_MAIN] && (powers->powers[menu->act->hotkeys[ACTIONBAR_MAIN]].target_party != enemy->stats.hero_ally))
 					return true;
 			}
 		}
@@ -253,7 +254,7 @@ void GameStatePlay::checkLoot() {
 	if (loot->full_msg) {
 		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-		menu->log->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
+		menu->questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
 		menu->hudlog->add(msg->get("Inventory is full."));
 		loot->full_msg = false;
 	}
@@ -317,7 +318,7 @@ void GameStatePlay::checkTeleport() {
 				mapr->respawn_point = pc->stats.pos;
 			}
 			else {
-				logError("GameStatePlay: Spawn position (%d, %d) is blocked.", (int)pc->stats.pos.x, (int)pc->stats.pos.y);
+				logError("GameStatePlay: Spawn position (%d, %d) is blocked.", static_cast<int>(pc->stats.pos.x), static_cast<int>(pc->stats.pos.y));
 			}
 
 			// return to title (permadeath) OR auto-save
@@ -380,21 +381,21 @@ void GameStatePlay::checkLog() {
 
 	// Map events can create messages
 	if (mapr->log_msg != "") {
-		menu->log->add(mapr->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->questlog->add(mapr->log_msg, LOG_TYPE_MESSAGES, false);
 		menu->hudlog->add(mapr->log_msg, false);
 		mapr->log_msg = "";
 	}
 
 	// The avatar can create messages (e.g. level up)
 	if (pc->log_msg != "") {
-		menu->log->add(pc->log_msg, LOG_TYPE_MESSAGES);
+		menu->questlog->add(pc->log_msg, LOG_TYPE_MESSAGES);
 		menu->hudlog->add(pc->log_msg);
 		pc->log_msg = "";
 	}
 
 	// Campaign events can create messages (e.g. quest rewards)
 	if (camp->log_msg != "") {
-		menu->log->add(camp->log_msg, LOG_TYPE_MESSAGES, false);
+		menu->questlog->add(camp->log_msg, LOG_TYPE_MESSAGES, false);
 		menu->hudlog->add(camp->log_msg, false);
 		camp->log_msg = "";
 	}
@@ -407,7 +408,7 @@ void GameStatePlay::checkLog() {
 
 	// PowerManager has hints for powers
 	if (powers->log_msg != "") {
-		menu->log->add(powers->log_msg, LOG_TYPE_MESSAGES);
+		menu->questlog->add(powers->log_msg, LOG_TYPE_MESSAGES);
 		menu->hudlog->add(powers->log_msg);
 		powers->log_msg = "";
 	}
@@ -905,10 +906,11 @@ void GameStatePlay::logic() {
 			menu->act->hotkeys[i] = 0;
 		}
 		int count = ACTIONBAR_MAIN;
-		// creatures can have up to 4 powers
-		for (int i=0; i<4 ; i++) {
-			if (pc->charmed_stats->power_index[i] != 0) {
-				menu->act->hotkeys[count] = pc->charmed_stats->power_index[i];
+		// put creature powers on action bar
+		// TODO What if creature has more powers than the size of the action bar?
+		for (size_t i=0; i<pc->charmed_stats->powers_ai.size(); i++) {
+			if (pc->charmed_stats->powers_ai[i].id != 0 && powers->getPower(pc->charmed_stats->powers_ai[i].id).beacon != true) {
+				menu->act->hotkeys[count] = pc->charmed_stats->powers_ai[i].id;
 				menu->act->locked[count] = true;
 				count++;
 			}

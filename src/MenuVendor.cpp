@@ -288,6 +288,14 @@ void MenuVendor::setNPC(NPC* _npc) {
 	}
 }
 
+void MenuVendor::removeFromPrevSlot(int quantity) {
+	int drag_prev_slot = stock[activetab].drag_prev_slot;
+	if (drag_prev_slot > -1) {
+		stock[activetab].subtract(drag_prev_slot, quantity);
+		saveInventory();
+	}
+}
+
 MenuVendor::~MenuVendor() {
 	delete closeButton;
 	delete tabControl;

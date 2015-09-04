@@ -102,7 +102,7 @@ bool WidgetInput::logic(int x, int y) {
 			inpt->lock[DEL] = true;
 			del_frame = 0;
 			// remove utf-8 character
-			int n = text.length()-1;
+			int n = static_cast<int>(text.length()-1);
 			while (n > 0 && ((text[n] & 0xc0) == 0x80) ) n--;
 			text = text.substr(0, n);
 			trimText();

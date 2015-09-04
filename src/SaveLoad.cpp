@@ -102,11 +102,11 @@ void GameStatePlay::saveGame() {
 		outfile << "carried=" << menu->inv->inventory[CARRIED].getItems() << "\n";
 
 		// spawn point
-		outfile << "spawn=" << mapr->respawn_map << "," << (int)mapr->respawn_point.x << "," << (int)mapr->respawn_point.y << "\n";
+		outfile << "spawn=" << mapr->respawn_map << "," << static_cast<int>(mapr->respawn_point.x) << "," << static_cast<int>(mapr->respawn_point.y) << "\n";
 
 		// action bar
 		outfile << "actionbar=";
-		for (unsigned i = 0; i < ACTIONBAR_MAX; i++) {
+		for (unsigned i = 0; i < static_cast<unsigned>(ACTIONBAR_MAX); i++) {
 			if (i < menu->act->slots_count)
 			{
 				if (pc->stats.transformed) outfile << menu->act->hotkeys_temp[i];
@@ -184,7 +184,7 @@ void GameStatePlay::saveGame() {
 	}
 
 	// display a log message saying that we saved the game
-	menu->log->add(msg->get("Game saved."), LOG_TYPE_MESSAGES);
+	menu->questlog->add(msg->get("Game saved."), LOG_TYPE_MESSAGES);
 	menu->hudlog->add(msg->get("Game saved."));
 }
 
@@ -262,8 +262,8 @@ void GameStatePlay::loadGame() {
 			else if (infile.key == "spawn") {
 				mapr->teleport_mapname = infile.nextValue();
 				if (mapr->teleport_mapname != "" && fileExists(mods->locate(mapr->teleport_mapname))) {
-					mapr->teleport_destination.x = toInt(infile.nextValue()) + 0.5f;
-					mapr->teleport_destination.y = toInt(infile.nextValue()) + 0.5f;
+					mapr->teleport_destination.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+					mapr->teleport_destination.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
 					mapr->teleportation = true;
 					// prevent spawn.txt from putting us on the starting map
 					mapr->clearEvents();
@@ -283,11 +283,11 @@ void GameStatePlay::loadGame() {
 						logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);
 						hotkeys[i] = 0;
 					}
-					else if ((unsigned)hotkeys[i] > powers->powers.size()-1) {
-						logError("SaveLoad: Hotkey power id (%d) out of bounds 1-%d, skipping", hotkeys[i], (int)powers->powers.size());
+					else if (static_cast<unsigned>(hotkeys[i]) > powers->powers.size()-1) {
+						logError("SaveLoad: Hotkey power id (%d) out of bounds 1-%d, skipping", hotkeys[i], static_cast<int>(powers->powers.size()));
 						hotkeys[i] = 0;
 					}
-					else if (hotkeys[i] != 0 && (unsigned)hotkeys[i] < powers->powers.size() && powers->powers[hotkeys[i]].name == "") {
+					else if (hotkeys[i] != 0 && static_cast<unsigned>(hotkeys[i]) < powers->powers.size() && powers->powers[hotkeys[i]].name == "") {
 						logError("SaveLoad: Hotkey power with id=%d, found on position %d does not exist, skipping", hotkeys[i], i);
 						hotkeys[i] = 0;
 					}
@@ -351,7 +351,7 @@ void GameStatePlay::loadGame() {
  * Load a class definition, index
  */
 void GameStatePlay::loadClass(int index) {
-	if (index < 0 || (unsigned)index >= HERO_CLASSES.size()) {
+	if (index < 0 || static_cast<unsigned>(index) >= HERO_CLASSES.size()) {
 		logError("SaveLoad: Class index out of bounds.");
 		return;
 	}
@@ -373,6 +373,15 @@ void GameStatePlay::loadClass(int index) {
 		camp->setStatus(HERO_CLASSES[index].statuses[i]);
 	}
 	menu->act->set(HERO_CLASSES[index].hotkeys);
+
+	// Add carried items
+	std::string carried = HERO_CLASSES[index].carried;
+	ItemStack stack;
+	stack.quantity = 1;
+	while (carried != "") {
+		stack.item = popFirstInt(carried);
+		menu->inv->add(stack, CARRIED, -1, false);
+	}
 
 	// apply stats, inventory, and powers
 	applyPlayerData();

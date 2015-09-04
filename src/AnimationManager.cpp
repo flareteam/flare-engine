@@ -23,7 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 AnimationSet *AnimationManager::getAnimationSet(const std::string& filename) {
 	std::vector<std::string>::iterator found = find(names.begin(), names.end(), filename);
 	if (found != names.end()) {
-		int index = distance(names.begin(), found);
+		size_t index = static_cast<size_t>(distance(names.begin(), found));
 		if (sets[index] == 0) {
 			sets[index] = new AnimationSet(filename);
 		}
@@ -32,7 +32,7 @@ AnimationSet *AnimationManager::getAnimationSet(const std::string& filename) {
 	else {
 		logError("AnimationManager::getAnimationSet: %s not found", filename.c_str());
 		Exit(1);
-		// return 0;
+		return NULL;
 	}
 }
 
@@ -45,8 +45,9 @@ AnimationManager::~AnimationManager() {
 #ifndef NDEBUG
 	if (!names.empty()) {
 		logError("AnimationManager: Still holding these animations:");
-		for (unsigned i = 0; i < names.size(); i++)
+		for (size_t i = 0; i < names.size(); i++) {
 			logError("%s %d", names[i].c_str(), counts[i]);
+		}
 	}
 	assert(names.size() == 0);
 #endif
@@ -55,7 +56,7 @@ AnimationManager::~AnimationManager() {
 void AnimationManager::increaseCount(const std::string &name) {
 	std::vector<std::string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
-		int index = distance(names.begin(), found);
+		size_t index = static_cast<size_t>(distance(names.begin(), found));
 		counts[index]++;
 	}
 	else {
@@ -69,7 +70,7 @@ void AnimationManager::decreaseCount(const std::string &name) {
 
 	std::vector<std::string>::iterator found = find(names.begin(), names.end(), name);
 	if (found != names.end()) {
-		int index = distance(names.begin(), found);
+		size_t index = static_cast<size_t>(distance(names.begin(), found));
 		counts[index]--;
 	}
 	else {
@@ -79,7 +80,7 @@ void AnimationManager::decreaseCount(const std::string &name) {
 }
 
 void AnimationManager::cleanUp() {
-	int i = sets.size() - 1;
+	int i = static_cast<int>(sets.size()) - 1;
 	while (i >= 0) {
 		if (counts[i] <= 0) {
 			delete sets[i];

@@ -90,15 +90,15 @@ void NPCManager::handleNewMap() {
 		ev.type = "on_trigger";
 		ev.keep_after_trigger = true;
 		Rect location;
-		location.x = npc->pos.x;
-		location.y = npc->pos.y;
+		location.x = static_cast<int>(npc->pos.x);
+		location.y = static_cast<int>(npc->pos.y);
 		location.w = location.h = 1;
 		ev.location = ev.hotspot = location;
-		ev.center.x = ev.hotspot.x + (float)ev.hotspot.w/2;
-		ev.center.y = ev.hotspot.y + (float)ev.hotspot.h/2;
+		ev.center.x = static_cast<float>(ev.hotspot.x) + static_cast<float>(ev.hotspot.w)/2;
+		ev.center.y = static_cast<float>(ev.hotspot.y) + static_cast<float>(ev.hotspot.h)/2;
 
 		ec.type = "npc_id";
-		ec.x = npcs.size()-1;
+		ec.x = static_cast<int>(npcs.size())-1;
 		ev.components.push_back(ec);
 
 		ec.type = "tooltip";
@@ -110,8 +110,8 @@ void NPCManager::handleNewMap() {
 		// However, it is sufficient for all of our current game data (fantasycore, no-name mod, polymorphable)
 		Renderable ren = npc->activeAnimation->getCurrentFrame(npc->direction);
 		ec.type = "npc_hotspot";
-		ec.x = npc->pos.x;
-		ec.y = npc->pos.y;
+		ec.x = static_cast<int>(npc->pos.x);
+		ec.y = static_cast<int>(npc->pos.y);
 		ec.z = ren.offset.x;
 		ec.a = ren.offset.y;
 		ec.b = ren.src.w;
