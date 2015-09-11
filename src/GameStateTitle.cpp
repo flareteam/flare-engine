@@ -146,7 +146,7 @@ void GameStateTitle::logic() {
 	}
 	else if (button_cfg->checkClick()) {
 		delete requestedGameState;
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined (__IPHONEOS__)
 		requestedGameState = new GameStateConfigBase();
 #else
 		requestedGameState = new GameStateConfigDesktop();

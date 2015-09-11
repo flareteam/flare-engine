@@ -439,7 +439,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	bool allowed_to_move;
 	bool allowed_to_use_power = true;
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined (__IPHONEOS__)
 	const bool click_to_respawn = true;
 #else
 	const bool click_to_respawn = false;
