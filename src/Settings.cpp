@@ -38,7 +38,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define log2(x)	logf(x)/logf(2)
 #endif
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined (__IPHONEOS__)
 #include <SDL.h>
 #endif
 
@@ -885,7 +885,7 @@ bool loadSettings() {
 	// try read from file
 	FileParser infile;
 	if (!infile.open(PATH_CONF + FILE_SETTINGS, false, "")) {
-		loadAndroidDefaults();
+		loadMobileDefaults();
 		if (!infile.open("engine/default_settings.txt", true, "")) {
 			saveSettings();
 			return true;
@@ -902,7 +902,7 @@ bool loadSettings() {
 	}
 	infile.close();
 
-	loadAndroidDefaults();
+	loadMobileDefaults();
 
 	return true;
 }
@@ -950,7 +950,7 @@ bool loadDefaults() {
 		tryParseValue(*entry->type, entry->default_val, entry->storage);
 	}
 
-	loadAndroidDefaults();
+	loadMobileDefaults();
 
 	return true;
 }
@@ -978,10 +978,10 @@ bool compareVersions(int maj0, int min0, int maj1, int min1) {
 }
 
 /**
- * Set required settings for Android
+ * Set required settings for Mobile devices
  */
-void loadAndroidDefaults() {
-#ifdef __ANDROID__
+void loadMobileDefaults() {
+#if defined(__ANDROID__) || defined (__IPHONEOS__)
 	MOUSE_MOVE = true;
 	MOUSE_AIM = true;
 	NO_MOUSE = false;

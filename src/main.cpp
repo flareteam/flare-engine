@@ -142,7 +142,7 @@ static void mainLoop () {
 			SDL_PumpEvents();
 			inpt->handle();
 
-			// Skip game logic when minimized on Android
+			// Skip game logic when minimized on Mobile device
 			if (inpt->window_minimized && !inpt->window_restored)
 				break;
 
@@ -156,8 +156,8 @@ static void mainLoop () {
 			logic_ticks += delay;
 			loops++;
 
-			// Android only
-			// When the app is minimized on Android, no logic gets processed.
+			// Android and IOS only
+			// When the app is minimized on Mobile device, no logic gets processed.
 			// As a result, the delta time when restoring the app is large, so the game will skip frames and appear to be running fast.
 			// To counter this, we reset our delta time here when restoring the app
 			if (inpt->window_minimized && inpt->window_restored) {

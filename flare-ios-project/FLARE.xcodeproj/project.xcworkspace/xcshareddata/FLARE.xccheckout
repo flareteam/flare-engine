@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>54DE3BAF-B12C-4682-B356-02D297327746</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FLARE</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0A0DC61A1D68B489A9FCBB97A76843FB12EC2247</key>
+		<string>https://github.com/igorko/flare-engine.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>flare-ios-project/FLARE.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0A0DC61A1D68B489A9FCBB97A76843FB12EC2247</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/igorko/flare-engine.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0A0DC61A1D68B489A9FCBB97A76843FB12EC2247</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0A0DC61A1D68B489A9FCBB97A76843FB12EC2247</string>
+			<key>IDESourceControlWCCName</key>
+			<string>flare-engine</string>
+		</dict>
+	</array>
+</dict>
+</plist>
