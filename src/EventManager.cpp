@@ -211,9 +211,10 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "soundfx") {
-		// @ATTR event.soundfx|[soundfile(string),x(integer),y(integer)]|Filename of a sound to play at an optional location
+		// @ATTR event.soundfx|[soundfile(string),x(integer),y(integer),loop(boolean)]|Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.
 		e->s = infile.nextValue();
 		e->x = e->y = -1;
+		e->z = static_cast<int>(false);
 
 		std::string s = infile.nextValue();
 		if (s != "") e->x = toInt(s);
@@ -221,6 +222,8 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		s = infile.nextValue();
 		if (s != "") e->y = toInt(s);
 
+		s = infile.nextValue();
+		if (s != "") e->z = static_cast<int>(toBool(s));
 	}
 	else if (infile.key == "loot") {
 		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event; either a filename or an inline definition.
@@ -548,7 +551,7 @@ bool EventManager::executeEvent(Event &ev) {
 				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ev.type == "on_load")
+			if (ev.type == "on_load" || static_cast<bool>(ec->z) == true)
 				loop = true;
 
 			SoundManager::SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
