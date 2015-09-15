@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 WidgetLog::WidgetLog (int width, int height)
 	: scroll_box(new WidgetScrollBox(width, height))
 	, padding(4)
-	, max_messages(50)
+	, max_messages(WIDGETLOG_MAX_MESSAGES)
 {
 	font->setFont("font_regular");
 	line_height = font->getLineHeight();
@@ -123,4 +123,11 @@ void WidgetLog::clear() {
 	messages.clear();
 	colors.clear();
 	refresh();
+}
+
+void WidgetLog::setMaxMessages(unsigned count) {
+	if (count > WIDGETLOG_MAX_MESSAGES)
+		max_messages = count;
+	else
+		max_messages = WIDGETLOG_MAX_MESSAGES;
 }

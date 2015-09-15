@@ -148,9 +148,11 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 
 		assert(items.size() > std::size_t(id));
 
-		if (infile.key == "name")
+		if (infile.key == "name") {
 			// @ATTR name|string|Item name displayed on long and short tooltips.
 			items[id].name = msg->get(infile.val);
+			items[id].has_name = true;
+		}
 		else if (infile.key == "flavor")
 			// @ATTR flavor|string|A description of the item.
 			items[id].flavor = msg->get(infile.val);
@@ -411,7 +413,7 @@ void ItemManager::loadQualities(const std::string& filename, bool locateFileName
 std::string ItemManager::getItemName(unsigned id) {
 	if (id >= items.size()) return msg->get("Unknown Item");
 
-	if (items[id].name == "")
+	if (!items[id].has_name)
 		items[id].name = msg->get("Unknown Item");
 
 	return items[id].name;
@@ -424,6 +426,23 @@ std::string ItemManager::getItemType(std::string _type) {
 	}
 	// If all else fails, return the original string
 	return _type;
+}
+
+Color ItemManager::getItemColor(unsigned id) {
+	if (id < 1 || id > items.size()) return color_normal;
+
+	if (items[id].set > 0) {
+		return item_sets[items[id].set].color;
+	}
+	else {
+		for (unsigned i=0; i<item_qualities.size(); ++i) {
+			if (item_qualities[i].id == items[id].quality) {
+				return item_qualities[i].color;
+			}
+		}
+	}
+
+	return color_normal;
 }
 
 void ItemManager::addUnknownItem(unsigned id) {
@@ -585,22 +604,8 @@ void ItemManager::playSound(int item, Point pos) {
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	std::stringstream ss;
 	TooltipData tip;
-	Color color = color_normal;
 
 	if (stack.empty()) return tip;
-
-	// color quality
-	if (items[stack.item].set > 0) {
-		color = item_sets[items[stack.item].set].color;
-	}
-	else {
-		for (unsigned i=0; i<item_qualities.size(); ++i) {
-			if (item_qualities[i].id == items[stack.item].quality) {
-				color = item_qualities[i].color;
-				break;
-			}
-		}
-	}
 
 	// name
 	if (stack.quantity > 1) {
@@ -609,7 +614,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	else {
 		ss << getItemName(stack.item);
 	}
-	tip.addText(ss.str(), color);
+	tip.addText(ss.str(), getItemColor(stack.item));
 
 	return tip;
 }
@@ -619,24 +624,11 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
  */
 TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int context) {
 	TooltipData tip;
-	Color color = color_normal;
 	std::string quality_desc = "";
 
 	if (stack.empty()) return tip;
 
-	// color quality
-	if (items[stack.item].set > 0) {
-		color = item_sets[items[stack.item].set].color;
-	}
-	else {
-		for (unsigned i=0; i<item_qualities.size(); ++i) {
-			if (item_qualities[i].id == items[stack.item].quality) {
-				color = item_qualities[i].color;
-				quality_desc = msg->get(item_qualities[i].name);
-				break;
-			}
-		}
-	}
+	Color color = getItemColor(stack.item);
 
 	// name
 	std::stringstream ss;

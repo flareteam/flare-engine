@@ -24,6 +24,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
+const int WIDGETLOG_MAX_MESSAGES = 50;
+
 class Widget;
 class WidgetScrollBox;
 
@@ -59,6 +61,7 @@ public:
 	void add(const std::string &s, bool prevent_spam = true, Color* color = NULL);
 	void remove(unsigned msg_index);
 	void clear();
+	void setMaxMessages(unsigned count = 50);
 };
 
 #endif

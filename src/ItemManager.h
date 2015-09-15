@@ -97,6 +97,7 @@ private:
 	friend class ItemManager;
 
 public:
+	bool has_name;        // flag that is set when the item name is parsed
 	std::string flavor;   // optional flavor text describing the item
 	int level;            // rough estimate of quality, used in the loot algorithm
 	int set;              // item can be attached to item set
@@ -135,6 +136,7 @@ public:
 
 	Item()
 		: name("")
+		, has_name(false)
 		, flavor("")
 		, level(0)
 		, set(0)
@@ -238,6 +240,7 @@ public:
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemName(unsigned id);
 	std::string getItemType(std::string _type);
+	Color getItemColor(unsigned id);
 	void addUnknownItem(unsigned id);
 	bool requirementsMet(const StatBlock *stats, int item);
 

@@ -205,6 +205,7 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
+		log_history->add("list_items - " + msg->get("Prints out all of the available items and their IDs"), false);
 		log_history->add("list_status - " + msg->get("Prints out all of the campaign status that are set"), false);
 		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
 		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"), false);
@@ -370,8 +371,39 @@ void MenuDevConsole::execute() {
 		pc->stats.refresh_stats = true;
 	}
 	else if (args[0] == "list_status") {
+		log_history->setMaxMessages(static_cast<unsigned>(camp->status.size())+1);
+
 		for (size_t i=0; i<camp->status.size(); ++i) {
 			log_history->add(camp->status[i]);
+		}
+
+		log_history->setMaxMessages(); // reset
+	}
+	else if (args[0] == "list_items") {
+		std::stringstream ss;
+		unsigned message_size = 1;
+
+		for (size_t i=1; i<items->items.size(); ++i) {
+			if (!items->items[i].has_name)
+				continue;
+
+			message_size++;
+		}
+
+		if (message_size > 1) {
+			log_history->setMaxMessages(message_size);
+
+			for (size_t i=1; i<items->items.size(); ++i) {
+				if (!items->items[i].has_name)
+					continue;
+
+				Color item_color = items->getItemColor(static_cast<int>(i));
+				ss.str("");
+				ss << items->getItemName(static_cast<int>(i)) << " (" << i << ")";
+				log_history->add(ss.str(), false, &item_color);
+			}
+
+			log_history->setMaxMessages(); // reset
 		}
 	}
 	else {
