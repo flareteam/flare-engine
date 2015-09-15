@@ -373,8 +373,8 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "list_status") {
 		log_history->setMaxMessages(static_cast<unsigned>(camp->status.size())+1);
 
-		for (size_t i=0; i<camp->status.size(); ++i) {
-			log_history->add(camp->status[i]);
+		for (size_t i=camp->status.size(); i>0; i--) {
+			log_history->add(camp->status[i-1]);
 		}
 
 		log_history->setMaxMessages(); // reset
@@ -405,17 +405,17 @@ void MenuDevConsole::execute() {
 		if (message_size > 1) {
 			log_history->setMaxMessages(message_size);
 
-			for (size_t i=1; i<items->items.size(); ++i) {
-				if (!items->items[i].has_name)
+			for (size_t i=items->items.size(); i>1; i--) {
+				if (!items->items[i-1].has_name)
 					continue;
 
-				std::string item_name = items->getItemName(static_cast<int>(i));
+				std::string item_name = items->getItemName(static_cast<int>(i-1));
 				if (!search_terms.empty() && stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
 					continue;
 
-				Color item_color = items->getItemColor(static_cast<int>(i));
+				Color item_color = items->getItemColor(static_cast<int>(i-1));
 				ss.str("");
-				ss << item_name << " (" << i << ")";
+				ss << item_name << " (" << i-1 << ")";
 				log_history->add(ss.str(), false, &item_color);
 			}
 
