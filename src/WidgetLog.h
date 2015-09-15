@@ -43,6 +43,8 @@ private:
 	std::vector<std::string> messages;
 	std::vector<Color> colors;
 
+	bool updated;
+
 public:
 	WidgetLog (int width, int height);
 	~WidgetLog ();

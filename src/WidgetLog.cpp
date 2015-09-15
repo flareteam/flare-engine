@@ -55,6 +55,10 @@ void WidgetLog::logic() {
 }
 
 void WidgetLog::render() {
+	if (updated) {
+		refresh();
+		updated = false;
+	}
 	scroll_box->render();
 }
 
@@ -107,7 +111,7 @@ void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color) {
 		else {
 			colors.push_back(*color);
 		}
-		refresh();
+		updated = true;
 	}
 }
 
@@ -115,14 +119,14 @@ void WidgetLog::remove(unsigned msg_index) {
 	if (msg_index < messages.size()) {
 		messages.erase(messages.begin()+msg_index);
 		colors.erase(colors.begin()+msg_index);
-		refresh();
+		updated = true;
 	}
 }
 
 void WidgetLog::clear() {
 	messages.clear();
 	colors.clear();
-	refresh();
+	updated = true;
 }
 
 void WidgetLog::setMaxMessages(unsigned count) {
