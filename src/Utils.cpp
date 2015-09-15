@@ -333,3 +333,18 @@ Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align) {
 
 	return r;
 }
+
+size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
+	std::string a;
+	std::string b;
+
+	for (size_t i=0; i<_a.size(); ++i) {
+		a += static_cast<char>(std::tolower(_a[i]));
+	}
+
+	for (size_t i=0; i<_b.size(); ++i) {
+		b += static_cast<char>(std::tolower(_b[i]));
+	}
+
+	return a.find(b);
+}

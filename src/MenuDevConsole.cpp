@@ -205,7 +205,7 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
-		log_history->add("list_items - " + msg->get("Prints out all of the available items and their IDs"), false);
+		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), false);
 		log_history->add("list_status - " + msg->get("Prints out all of the campaign status that are set"), false);
 		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
 		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"), false);
@@ -383,8 +383,20 @@ void MenuDevConsole::execute() {
 		std::stringstream ss;
 		unsigned message_size = 1;
 
+		std::string search_terms;
+		for (size_t i=1; i<args.size(); i++) {
+			search_terms += args[i];
+
+			if (i+1 != args.size())
+				search_terms += ' ';
+		}
+
 		for (size_t i=1; i<items->items.size(); ++i) {
 			if (!items->items[i].has_name)
+				continue;
+
+			std::string item_name = items->getItemName(static_cast<int>(i));
+			if (!search_terms.empty() && stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
 				continue;
 
 			message_size++;
@@ -397,9 +409,13 @@ void MenuDevConsole::execute() {
 				if (!items->items[i].has_name)
 					continue;
 
+				std::string item_name = items->getItemName(static_cast<int>(i));
+				if (!search_terms.empty() && stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
+					continue;
+
 				Color item_color = items->getItemColor(static_cast<int>(i));
 				ss.str("");
-				ss << items->getItemName(static_cast<int>(i)) << " (" << i << ")";
+				ss << item_name << " (" << i << ")";
 				log_history->add(ss.str(), false, &item_color);
 			}
 
