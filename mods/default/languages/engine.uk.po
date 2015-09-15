@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 12:59-0400\n"
+"POT-Creation-Date: 2015-09-15 16:33-0400\n"
 "PO-Revision-Date: 2013-03-16 11:05+0300\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -103,7 +103,7 @@ msgstr "+%d Здоров'я"
 msgid "+%d MP"
 msgstr "+%d Мани"
 
-#: ../../../src/EventManager.cpp:506
+#: ../../../src/EventManager.cpp:509
 msgid "Unknown destination"
 msgstr "Невідомий пункт призначення"
 
@@ -338,7 +338,7 @@ msgstr "Входжу в ігровий світ..."
 msgid "Loading saved game..."
 msgstr "Завантажую збереження..."
 
-#: ../../../src/GameStateLoad.cpp:639 ../../../src/ItemManager.cpp:660
+#: ../../../src/GameStateLoad.cpp:639 ../../../src/ItemManager.cpp:652
 #: ../../../src/MenuPowers.cpp:719 ../../../src/MenuPowers.cpp:816
 #, c-format
 msgid "Level %d"
@@ -559,130 +559,130 @@ msgstr "Мишка X1"
 msgid "Mouse X2"
 msgstr "Мишка X2"
 
-#: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
+#: ../../../src/ItemManager.cpp:414 ../../../src/ItemManager.cpp:417
 msgid "Unknown Item"
 msgstr "Невідомий предмет"
 
-#: ../../../src/ItemManager.cpp:571 ../../../src/MenuCharacter.cpp:42
+#: ../../../src/ItemManager.cpp:590 ../../../src/MenuCharacter.cpp:42
 msgid "Physical"
 msgstr "Фізика"
 
-#: ../../../src/ItemManager.cpp:573 ../../../src/MenuCharacter.cpp:43
+#: ../../../src/ItemManager.cpp:592 ../../../src/MenuCharacter.cpp:43
 msgid "Mental"
 msgstr "Психіка"
 
-#: ../../../src/ItemManager.cpp:575 ../../../src/MenuCharacter.cpp:44
+#: ../../../src/ItemManager.cpp:594 ../../../src/MenuCharacter.cpp:44
 msgid "Offense"
 msgstr "Напад"
 
-#: ../../../src/ItemManager.cpp:577 ../../../src/MenuCharacter.cpp:45
+#: ../../../src/ItemManager.cpp:596 ../../../src/MenuCharacter.cpp:45
 msgid "Defense"
 msgstr "Захист"
 
-#: ../../../src/ItemManager.cpp:671
+#: ../../../src/ItemManager.cpp:663
 #, c-format
 msgid "Melee damage: %d-%d"
 msgstr "Ближня шкода: %d-%d"
 
-#: ../../../src/ItemManager.cpp:673
+#: ../../../src/ItemManager.cpp:665
 #, c-format
 msgid "Melee damage: %d"
 msgstr "Ближня шкода: %d"
 
-#: ../../../src/ItemManager.cpp:677
+#: ../../../src/ItemManager.cpp:669
 #, c-format
 msgid "Ranged damage: %d-%d"
 msgstr "Дальня шкода: %d-%d"
 
-#: ../../../src/ItemManager.cpp:679
+#: ../../../src/ItemManager.cpp:671
 #, c-format
 msgid "Ranged damage: %d"
 msgstr "Дальня шкода: %d"
 
-#: ../../../src/ItemManager.cpp:683
+#: ../../../src/ItemManager.cpp:675
 #, c-format
 msgid "Mental damage: %d-%d"
 msgstr "Психічна шкода: %d-%d"
 
-#: ../../../src/ItemManager.cpp:685
+#: ../../../src/ItemManager.cpp:677
 #, c-format
 msgid "Mental damage: %d"
 msgstr "Психічна шкода: %d"
 
-#: ../../../src/ItemManager.cpp:691
+#: ../../../src/ItemManager.cpp:683
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Поглинання: %d-%d"
 
-#: ../../../src/ItemManager.cpp:693
+#: ../../../src/ItemManager.cpp:685
 #, c-format
 msgid "Absorb: %d"
 msgstr "Поглинання: %d"
 
-#: ../../../src/ItemManager.cpp:704 ../../../src/ItemManager.cpp:813
+#: ../../../src/ItemManager.cpp:696 ../../../src/ItemManager.cpp:805
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Швидкості"
 
-#: ../../../src/ItemManager.cpp:734 ../../../src/MenuPowers.cpp:788
+#: ../../../src/ItemManager.cpp:726 ../../../src/MenuPowers.cpp:788
 #: ../../../src/MenuPowers.cpp:791
 #, c-format
 msgid "Requires Physical %d"
 msgstr "Вимагає %d Фізики"
 
-#: ../../../src/ItemManager.cpp:739 ../../../src/MenuPowers.cpp:794
+#: ../../../src/ItemManager.cpp:731 ../../../src/MenuPowers.cpp:794
 #: ../../../src/MenuPowers.cpp:797
 #, c-format
 msgid "Requires Mental %d"
 msgstr "Вимагає %d Психіки"
 
-#: ../../../src/ItemManager.cpp:744 ../../../src/MenuPowers.cpp:776
+#: ../../../src/ItemManager.cpp:736 ../../../src/MenuPowers.cpp:776
 #: ../../../src/MenuPowers.cpp:779
 #, c-format
 msgid "Requires Offense %d"
 msgstr "Вимагає %d Нападу"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:782
+#: ../../../src/ItemManager.cpp:741 ../../../src/MenuPowers.cpp:782
 #: ../../../src/MenuPowers.cpp:785
 #, c-format
 msgid "Requires Defense %d"
 msgstr "Вимагає %d Захисту"
 
-#: ../../../src/ItemManager.cpp:758
+#: ../../../src/ItemManager.cpp:750
 #, c-format
 msgid "Requires Class: %s"
 msgstr "Вимагає клас: %s"
 
-#: ../../../src/ItemManager.cpp:763
+#: ../../../src/ItemManager.cpp:755
 #, c-format
 msgid "Quality: %s"
 msgstr "Якість: %s"
 
-#: ../../../src/ItemManager.cpp:775 ../../../src/ItemManager.cpp:784
+#: ../../../src/ItemManager.cpp:767 ../../../src/ItemManager.cpp:776
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Ціна купівлі: %d %s"
 
-#: ../../../src/ItemManager.cpp:777 ../../../src/ItemManager.cpp:786
+#: ../../../src/ItemManager.cpp:769 ../../../src/ItemManager.cpp:778
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Вартість купівлі: %d %s кожен"
 
-#: ../../../src/ItemManager.cpp:792
+#: ../../../src/ItemManager.cpp:784
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Ціна продажу: %d %s"
 
-#: ../../../src/ItemManager.cpp:794
+#: ../../../src/ItemManager.cpp:786
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Вартість продажу: %d %s кожен"
 
-#: ../../../src/ItemManager.cpp:803
+#: ../../../src/ItemManager.cpp:795
 msgid "Set: "
 msgstr "Набір: "
 
-#: ../../../src/ItemManager.cpp:810
+#: ../../../src/ItemManager.cpp:802
 #, c-format
 msgid "%d items: "
 msgstr "%d предмети: "
@@ -758,136 +758,145 @@ msgid "Developer Console"
 msgstr "Консоль розробника"
 
 #: ../../../src/MenuDevConsole.cpp:208
+msgid "Prints a list of items that match a search term. No search term will list all items"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:209
+#, fuzzy
+msgid "Prints out all of the campaign status that are set"
+msgstr "скидає задані статуси кампанії, якщо вони встановлені"
+
+#: ../../../src/MenuDevConsole.cpp:210
 msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr "скидає гравця до рівня 1, без використаних очків статистики та умінь"
 
-#: ../../../src/MenuDevConsole.cpp:209
+#: ../../../src/MenuDevConsole.cpp:211
 msgid "teleports the player to a specific tile, and optionally, a specific map"
 msgstr "телепортує гравця до вказаного місця, і, якщо вказано, до карти"
 
-#: ../../../src/MenuDevConsole.cpp:210
+#: ../../../src/MenuDevConsole.cpp:212
 msgid "unsets the given campaign statuses if they are set"
 msgstr "скидає задані статуси кампанії, якщо вони встановлені"
 
-#: ../../../src/MenuDevConsole.cpp:211
+#: ../../../src/MenuDevConsole.cpp:213
 msgid "sets the given campaign statuses"
 msgstr "встановлює вказані статуси кампанії"
 
-#: ../../../src/MenuDevConsole.cpp:212
+#: ../../../src/MenuDevConsole.cpp:214
 msgid "rewards the player with the specified amount of experience points"
 msgstr "нагороджує гравця вказаною кількістю очків досвіду"
 
-#: ../../../src/MenuDevConsole.cpp:213
+#: ../../../src/MenuDevConsole.cpp:215
 msgid "adds the specified amount of currency to the player's inventory"
 msgstr "додає до інвентаря гравця вказану кількість грошей"
 
-#: ../../../src/MenuDevConsole.cpp:214
+#: ../../../src/MenuDevConsole.cpp:216
 msgid "adds an item to the player's inventory"
 msgstr "додає предмет до інвентаря гравця"
 
-#: ../../../src/MenuDevConsole.cpp:215
+#: ../../../src/MenuDevConsole.cpp:217
 msgid "spawns an enemy matching the given category next to the player"
 msgstr "породжує ворога вказаної категорії поряд з гравцем"
 
-#: ../../../src/MenuDevConsole.cpp:216
+#: ../../../src/MenuDevConsole.cpp:218
 msgid "turns on/off the developer hud"
 msgstr "вмикає/вимикає панель розробника"
 
-#: ../../../src/MenuDevConsole.cpp:217
+#: ../../../src/MenuDevConsole.cpp:219
 msgid "clears the command history"
 msgstr "Очищує історію команд"
 
-#: ../../../src/MenuDevConsole.cpp:218
+#: ../../../src/MenuDevConsole.cpp:220
 msgid "displays this text"
 msgstr "показує цей текст"
 
-#: ../../../src/MenuDevConsole.cpp:225
+#: ../../../src/MenuDevConsole.cpp:227
 msgid "Toggled the developer hud"
 msgstr "Стан панелі розробника змінено"
 
-#: ../../../src/MenuDevConsole.cpp:239
+#: ../../../src/MenuDevConsole.cpp:241
 msgid "Spawning enemy from category: "
 msgstr "Породжує ворога категорії: "
 
-#: ../../../src/MenuDevConsole.cpp:242
+#: ../../../src/MenuDevConsole.cpp:244
 msgid "ERROR: Invalid enemy category"
 msgstr "ПОМИЛКА: Невірна категорія ворога"
 
-#: ../../../src/MenuDevConsole.cpp:246 ../../../src/MenuDevConsole.cpp:274
-#: ../../../src/MenuDevConsole.cpp:285 ../../../src/MenuDevConsole.cpp:296
-#: ../../../src/MenuDevConsole.cpp:306 ../../../src/MenuDevConsole.cpp:321
-#: ../../../src/MenuDevConsole.cpp:351
+#: ../../../src/MenuDevConsole.cpp:248 ../../../src/MenuDevConsole.cpp:276
+#: ../../../src/MenuDevConsole.cpp:287 ../../../src/MenuDevConsole.cpp:298
+#: ../../../src/MenuDevConsole.cpp:308 ../../../src/MenuDevConsole.cpp:323
+#: ../../../src/MenuDevConsole.cpp:353
 msgid "ERROR: Too few arguments"
 msgstr "ПОМИЛКА: Замало параметрів"
 
-#: ../../../src/MenuDevConsole.cpp:247 ../../../src/MenuDevConsole.cpp:275
-#: ../../../src/MenuDevConsole.cpp:286 ../../../src/MenuDevConsole.cpp:297
-#: ../../../src/MenuDevConsole.cpp:307 ../../../src/MenuDevConsole.cpp:322
-#: ../../../src/MenuDevConsole.cpp:352
+#: ../../../src/MenuDevConsole.cpp:249 ../../../src/MenuDevConsole.cpp:277
+#: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
+#: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
+#: ../../../src/MenuDevConsole.cpp:354
 msgid "HINT: "
 msgstr "ПІДКАЗКА: "
 
-#: ../../../src/MenuDevConsole.cpp:247
+#: ../../../src/MenuDevConsole.cpp:249
 msgid " <category> [<x> <y>]"
 msgstr " <категорія> [<x> <y>]"
 
-#: ../../../src/MenuDevConsole.cpp:254
+#: ../../../src/MenuDevConsole.cpp:256
 msgid "ERROR: Invalid item ID"
 msgstr "ПОМИЛКА: Невірний ID предмета"
 
-#: ../../../src/MenuDevConsole.cpp:270
+#: ../../../src/MenuDevConsole.cpp:272
 msgid "Added item: "
 msgstr "Додано предмет: "
 
-#: ../../../src/MenuDevConsole.cpp:275
+#: ../../../src/MenuDevConsole.cpp:277
 msgid " <item_id> [<quantity>]"
 msgstr " <id_предмета> [<кількість>]"
 
-#: ../../../src/MenuDevConsole.cpp:282
+#: ../../../src/MenuDevConsole.cpp:284
 msgid "Added currency: "
 msgstr "Додано грошей: "
 
-#: ../../../src/MenuDevConsole.cpp:286 ../../../src/MenuDevConsole.cpp:297
+#: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
 msgid " <quantity>"
 msgstr " <кількість>"
 
-#: ../../../src/MenuDevConsole.cpp:293
+#: ../../../src/MenuDevConsole.cpp:295
 msgid "Added XP: "
 msgstr "Додано досвіду: "
 
-#: ../../../src/MenuDevConsole.cpp:303
+#: ../../../src/MenuDevConsole.cpp:305
 msgid "Set campaign status: "
 msgstr "Встановлено статус кампанії: "
 
-#: ../../../src/MenuDevConsole.cpp:307 ../../../src/MenuDevConsole.cpp:322
+#: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
 msgid " <status_1> [<status_2> <status_3> ...]"
 msgstr " <статус_1> [<статус_2> <статус_3> ...]"
 
-#: ../../../src/MenuDevConsole.cpp:314
+#: ../../../src/MenuDevConsole.cpp:316
 msgid "Unset campaign status: "
 msgstr "Скинуто статус кампанії: "
 
-#: ../../../src/MenuDevConsole.cpp:317
+#: ../../../src/MenuDevConsole.cpp:319
 msgid "ERROR: Unknown campaign status: "
 msgstr "ПОМИЛКА: Невідомий статус кампанії: "
 
-#: ../../../src/MenuDevConsole.cpp:337 ../../../src/MenuDevConsole.cpp:347
+#: ../../../src/MenuDevConsole.cpp:339 ../../../src/MenuDevConsole.cpp:349
 msgid "Teleporting to: "
 msgstr "Телепортую до: "
 
-#: ../../../src/MenuDevConsole.cpp:340
+#: ../../../src/MenuDevConsole.cpp:342
 msgid "ERROR: Unknown map: "
 msgstr "ПОМИЛКА: Невідома карта: "
 
-#: ../../../src/MenuDevConsole.cpp:352
+#: ../../../src/MenuDevConsole.cpp:354
 msgid " <x> <y> [<map>]"
 msgstr " <x> <y> [<карта>]"
 
-#: ../../../src/MenuDevConsole.cpp:372
+#: ../../../src/MenuDevConsole.cpp:426
 msgid "ERROR: Unknown command"
 msgstr "ПОМИЛКА: Невідома команда"
 
-#: ../../../src/MenuDevConsole.cpp:373
+#: ../../../src/MenuDevConsole.cpp:427
 msgid "HINT: Type help"
 msgstr "ПІДКАЗКА: Введіть help"
 
