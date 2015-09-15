@@ -205,6 +205,7 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
+		log_history->add("list_status - " + msg->get("Prints out all of the campaign status that are set"), false);
 		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
 		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"), false);
 		log_history->add("unset_status - " + msg->get("unsets the given campaign statuses if they are set"), false);
@@ -367,6 +368,11 @@ void MenuDevConsole::execute() {
 		menu_act->clear();
 		pc->respawn = true; // re-applies equipment, also revives the player
 		pc->stats.refresh_stats = true;
+	}
+	else if (args[0] == "list_status") {
+		for (size_t i=0; i<camp->status.size(); ++i) {
+			log_history->add(camp->status[i]);
+		}
 	}
 	else {
 		log_history->add(msg->get("ERROR: Unknown command"), false, &color_error);
