@@ -525,6 +525,7 @@ void GameStateConfigBase::logicAccept() {
 	inpt->saveKeyBindings();
 	inpt->setKeybindNames();
 	if (setMods()) {
+		snd->unloadMusic();
 		reload_music = true;
 		reload_backgrounds = true;
 		delete mods;
