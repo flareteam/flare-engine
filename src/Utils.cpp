@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <cmath>
 #include <stdarg.h>
+#include <ctype.h>
 
 Point floor(FPoint fp) {
 	Point result;
@@ -339,11 +340,11 @@ size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
 	std::string b;
 
 	for (size_t i=0; i<_a.size(); ++i) {
-		a += static_cast<char>(std::tolower(_a[i]));
+		a += static_cast<char>(tolower(static_cast<int>(_a[i])));
 	}
 
 	for (size_t i=0; i<_b.size(); ++i) {
-		b += static_cast<char>(std::tolower(_b[i]));
+		b += static_cast<char>(tolower(static_cast<int>(_b[i])));
 	}
 
 	return a.find(b);
