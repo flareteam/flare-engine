@@ -99,7 +99,7 @@ public:
 	void executeOnMapExitEvents();
 
 	// some events can trigger powers
-	void activatePower(int power_index, unsigned statblock_index, FPoint &target, int dmg_min, int dmg_max);
+	void activatePower(int power_index, unsigned statblock_index, FPoint &target);
 
 	bool isValidTile(const unsigned &tile);
 

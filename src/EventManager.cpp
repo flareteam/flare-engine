@@ -609,9 +609,7 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "power") {
 			Event_Component *ec_path = ev.getComponent("power_path");
-			Event_Component *ec_damage = ev.getComponent("power_damage");
 			FPoint target;
-			Point damage;
 
 			if (ec_path) {
 				// targets hero option
@@ -631,14 +629,9 @@ bool EventManager::executeEvent(Event &ev) {
 				target.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ec_damage) {
-				damage.x = ec_damage->a;
-				damage.y = ec_damage->b;
-			}
-
 			// ec->x is power id
 			// ec->y is statblock index
-			mapr->activatePower(ec->x, ec->y, target, damage.x, damage.y);
+			mapr->activatePower(ec->x, ec->y, target);
 		}
 		else if (ec->type == "stash") {
 			mapr->stash = toBool(ec->s);

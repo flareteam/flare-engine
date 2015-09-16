@@ -817,29 +817,13 @@ void MapRenderer::createTooltip(Event_Component *ec) {
 /**
  * Activate a power that is attached to an event
  */
-void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target, int dmg_min, int dmg_max) {
+void MapRenderer::activatePower(int power_index, unsigned statblock_index, FPoint &target) {
 	if (power_index < 0 || static_cast<unsigned>(power_index) >= powers->powers.size()) {
 		logError("MapRenderer: Power index is out of bounds.");
 		return;
 	}
 
 	if (statblock_index < statblocks.size()) {
-		Power map_power = powers->getPower(static_cast<unsigned>(power_index));
-
-		// set damage
-		if (map_power.base_damage == BASE_DAMAGE_MELEE) {
-			statblocks[statblock_index].current[STAT_DMG_MELEE_MIN] = dmg_min;
-			statblocks[statblock_index].current[STAT_DMG_MELEE_MAX] = dmg_max;
-		}
-		else if (map_power.base_damage == BASE_DAMAGE_RANGED) {
-			statblocks[statblock_index].current[STAT_DMG_RANGED_MIN] = dmg_min;
-			statblocks[statblock_index].current[STAT_DMG_RANGED_MAX] = dmg_max;
-		}
-		else if (map_power.base_damage == BASE_DAMAGE_MENT) {
-			statblocks[statblock_index].current[STAT_DMG_MENT_MIN] = dmg_min;
-			statblocks[statblock_index].current[STAT_DMG_MENT_MAX] = dmg_max;
-		}
-
 		// check power cooldown before activating
 		if (statblocks[statblock_index].powers_ai[0].ticks == 0) {
 			statblocks[statblock_index].powers_ai[0].ticks = powers->powers[power_index].cooldown;
