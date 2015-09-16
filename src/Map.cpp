@@ -113,7 +113,7 @@ int Map::load(std::string fname) {
 			// store the index of this StatBlock so that we can find it when the event is activated
 			ec_power->y = static_cast<int>(statblocks.size())-1;
 
-			statb->current[STAT_ACCURACY] = 1000; // always hit the target
+			statb->starting[STAT_ACCURACY] = 1000; // always hit the target
 
 			Event_Component *ec_path = events[i].getComponent("power_path");
 			if (ec_path) {
@@ -129,8 +129,8 @@ int Map::load(std::string fname) {
 
 			Event_Component *ec_damage = events[i].getComponent("power_damage");
 			if (ec_damage) {
-				statb->current[STAT_DMG_MELEE_MIN] = statb->current[STAT_DMG_RANGED_MIN] = statb->current[STAT_DMG_MENT_MIN] = ec_damage->a;
-				statb->current[STAT_DMG_MELEE_MAX] = statb->current[STAT_DMG_RANGED_MAX] = statb->current[STAT_DMG_MENT_MAX] = ec_damage->b;
+				statb->starting[STAT_DMG_MELEE_MIN] = statb->starting[STAT_DMG_RANGED_MIN] = statb->starting[STAT_DMG_MENT_MIN] = ec_damage->a;
+				statb->starting[STAT_DMG_MELEE_MAX] = statb->starting[STAT_DMG_RANGED_MAX] = statb->starting[STAT_DMG_MENT_MAX] = ec_damage->b;
 			}
 
 			// this is used to store cooldown ticks for a map power
