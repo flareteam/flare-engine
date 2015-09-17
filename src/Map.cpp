@@ -98,6 +98,11 @@ int Map::load(std::string fname) {
 
 	infile.close();
 
+	// create a temporary EffectDef for immunity; will be used for map StatBlocks
+	EffectDef immunity_effect;
+	immunity_effect.id = "MAP_EVENT_IMMUNITY";
+	immunity_effect.type = "immunity";
+
 	// create StatBlocks for events that need powers
 	for (unsigned i=0; i<events.size(); ++i) {
 		Event_Component *ec_power = events[i].getComponent("power");
@@ -136,6 +141,10 @@ int Map::load(std::string fname) {
 			// this is used to store cooldown ticks for a map power
 			// the power id, type, etc are not used
 			statb->powers_ai.resize(1);
+
+			// make this StatBlock immune to negative status effects
+			// this is mostly to prevent a player with a damage return bonus from damaging this StatBlock
+			statb->effects.addEffect(immunity_effect, 0, 0, false, -1, 0, SOURCE_TYPE_ENEMY);
 		}
 	}
 
