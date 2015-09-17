@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-15 16:33-0400\n"
+"POT-Creation-Date: 2015-09-17 14:55-0400\n"
 "PO-Revision-Date: 2015-06-01 01:07+0600\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian https://github.com/SBasalaev/flare-game/wiki/\n"
@@ -199,15 +199,15 @@ msgstr "<< Отключить"
 msgid "Enable >>"
 msgstr "Включить >>"
 
-#: ../../../src/GameStateConfigBase.cpp:843
+#: ../../../src/GameStateConfigBase.cpp:844
 msgid "Game: "
 msgstr "Игра: "
 
-#: ../../../src/GameStateConfigBase.cpp:848
+#: ../../../src/GameStateConfigBase.cpp:849
 msgid "Requires version: "
 msgstr "Требуется версия: "
 
-#: ../../../src/GameStateConfigBase.cpp:862
+#: ../../../src/GameStateConfigBase.cpp:863
 msgid "Requires mods: "
 msgstr "Требуются моды: "
 
@@ -1272,15 +1272,23 @@ msgid "Increases your chance of reflecting missiles back at enemies."
 msgstr "Увеличивает шанс отражения выстрелов обратно во врагов"
 
 #: ../../../src/Stats.cpp:141
-msgid "Base HP"
+msgid "Damage Reflection"
+msgstr ""
+
+#: ../../../src/Stats.cpp:142
+msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:146
+msgid "Base HP"
+msgstr ""
+
+#: ../../../src/Stats.cpp:151
 msgid "Base MP"
 msgstr ""
 
 # сокращение для «кило»
-#: ../../../src/Utils.cpp:203
+#: ../../../src/Utils.cpp:204
 msgid "k"
 msgstr "к"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-15 16:33-0400\n"
+"POT-Creation-Date: 2015-09-17 14:55-0400\n"
 "PO-Revision-Date: 2013-04-09 18:55+0800\n"
 "Last-Translator: lonsine <lonsine@qq.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,16 +198,16 @@ msgstr "<< 禁用"
 msgid "Enable >>"
 msgstr " 启用>>"
 
-#: ../../../src/GameStateConfigBase.cpp:843
+#: ../../../src/GameStateConfigBase.cpp:844
 msgid "Game: "
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:848
+#: ../../../src/GameStateConfigBase.cpp:849
 #, fuzzy
 msgid "Requires version: "
 msgstr "需要技能点: %s"
 
-#: ../../../src/GameStateConfigBase.cpp:862
+#: ../../../src/GameStateConfigBase.cpp:863
 #, fuzzy
 msgid "Requires mods: "
 msgstr "需要技能点: %s"
@@ -1274,14 +1274,22 @@ msgid "Increases your chance of reflecting missiles back at enemies."
 msgstr ""
 
 #: ../../../src/Stats.cpp:141
-msgid "Base HP"
+msgid "Damage Reflection"
+msgstr ""
+
+#: ../../../src/Stats.cpp:142
+msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:146
+msgid "Base HP"
+msgstr ""
+
+#: ../../../src/Stats.cpp:151
 msgid "Base MP"
 msgstr ""
 
-#: ../../../src/Utils.cpp:203
+#: ../../../src/Utils.cpp:204
 msgid "k"
 msgstr ""
 

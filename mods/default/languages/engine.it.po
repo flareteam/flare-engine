@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 12:59-0400\n"
+"POT-Creation-Date: 2015-09-17 14:55-0400\n"
 "PO-Revision-Date: 2012-07-02 19:21+0100\n"
 "Last-Translator: Gianfranco Del Borrello <jeffry84@hotmail.it>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -105,7 +105,7 @@ msgstr "+%d HP"
 msgid "+%d MP"
 msgstr "+%d MP"
 
-#: ../../../src/EventManager.cpp:506
+#: ../../../src/EventManager.cpp:509
 msgid "Unknown destination"
 msgstr "Destinazione sconosciuta"
 
@@ -202,16 +202,16 @@ msgstr "<< Disabilita"
 msgid "Enable >>"
 msgstr "Abilita >>"
 
-#: ../../../src/GameStateConfigBase.cpp:843
+#: ../../../src/GameStateConfigBase.cpp:844
 msgid "Game: "
 msgstr "Gioco: "
 
-#: ../../../src/GameStateConfigBase.cpp:848
+#: ../../../src/GameStateConfigBase.cpp:849
 #, fuzzy
 msgid "Requires version: "
 msgstr "Richiede versione: "
 
-#: ../../../src/GameStateConfigBase.cpp:862
+#: ../../../src/GameStateConfigBase.cpp:863
 #, fuzzy
 msgid "Requires mods: "
 msgstr "Richiede mod: "
@@ -349,7 +349,7 @@ msgstr "Entrata nel mondo del gioco..."
 msgid "Loading saved game..."
 msgstr "Caricamento partita salvata..."
 
-#: ../../../src/GameStateLoad.cpp:639 ../../../src/ItemManager.cpp:660
+#: ../../../src/GameStateLoad.cpp:639 ../../../src/ItemManager.cpp:652
 #: ../../../src/MenuPowers.cpp:719 ../../../src/MenuPowers.cpp:816
 #, c-format
 msgid "Level %d"
@@ -581,131 +581,131 @@ msgstr "Mouse X2"
 msgid "Mouse X2"
 msgstr "Mouse X2"
 
-#: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
+#: ../../../src/ItemManager.cpp:414 ../../../src/ItemManager.cpp:417
 msgid "Unknown Item"
 msgstr "Oggetto sconosciuto"
 
-#: ../../../src/ItemManager.cpp:571 ../../../src/MenuCharacter.cpp:42
+#: ../../../src/ItemManager.cpp:590 ../../../src/MenuCharacter.cpp:42
 msgid "Physical"
 msgstr "Fisico"
 
-#: ../../../src/ItemManager.cpp:573 ../../../src/MenuCharacter.cpp:43
+#: ../../../src/ItemManager.cpp:592 ../../../src/MenuCharacter.cpp:43
 msgid "Mental"
 msgstr "Mentale"
 
-#: ../../../src/ItemManager.cpp:575 ../../../src/MenuCharacter.cpp:44
+#: ../../../src/ItemManager.cpp:594 ../../../src/MenuCharacter.cpp:44
 msgid "Offense"
 msgstr "Offensivo"
 
-#: ../../../src/ItemManager.cpp:577 ../../../src/MenuCharacter.cpp:45
+#: ../../../src/ItemManager.cpp:596 ../../../src/MenuCharacter.cpp:45
 msgid "Defense"
 msgstr "Difensivo"
 
-#: ../../../src/ItemManager.cpp:671
+#: ../../../src/ItemManager.cpp:663
 #, c-format
 msgid "Melee damage: %d-%d"
 msgstr "Danno da mischia: %d-%d"
 
-#: ../../../src/ItemManager.cpp:673
+#: ../../../src/ItemManager.cpp:665
 #, c-format
 msgid "Melee damage: %d"
 msgstr "Danno da mischia: %d"
 
-#: ../../../src/ItemManager.cpp:677
+#: ../../../src/ItemManager.cpp:669
 #, c-format
 msgid "Ranged damage: %d-%d"
 msgstr "Danno da lancio: %d-%d"
 
-#: ../../../src/ItemManager.cpp:679
+#: ../../../src/ItemManager.cpp:671
 #, c-format
 msgid "Ranged damage: %d"
 msgstr "Danno da lancio: %d"
 
-#: ../../../src/ItemManager.cpp:683
+#: ../../../src/ItemManager.cpp:675
 #, c-format
 msgid "Mental damage: %d-%d"
 msgstr "Danno mentale: %d-%d"
 
-#: ../../../src/ItemManager.cpp:685
+#: ../../../src/ItemManager.cpp:677
 #, c-format
 msgid "Mental damage: %d"
 msgstr "Danno mentale: %d"
 
-#: ../../../src/ItemManager.cpp:691
+#: ../../../src/ItemManager.cpp:683
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Assorbimento: %d-%d"
 
-#: ../../../src/ItemManager.cpp:693
+#: ../../../src/ItemManager.cpp:685
 #, c-format
 msgid "Absorb: %d"
 msgstr "Assorbimento: %d"
 
-#: ../../../src/ItemManager.cpp:704 ../../../src/ItemManager.cpp:813
+#: ../../../src/ItemManager.cpp:696 ../../../src/ItemManager.cpp:805
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Velocità"
 
-#: ../../../src/ItemManager.cpp:734 ../../../src/MenuPowers.cpp:788
+#: ../../../src/ItemManager.cpp:726 ../../../src/MenuPowers.cpp:788
 #: ../../../src/MenuPowers.cpp:791
 #, c-format
 msgid "Requires Physical %d"
 msgstr "Richiesto Potere Fisico %d"
 
-#: ../../../src/ItemManager.cpp:739 ../../../src/MenuPowers.cpp:794
+#: ../../../src/ItemManager.cpp:731 ../../../src/MenuPowers.cpp:794
 #: ../../../src/MenuPowers.cpp:797
 #, c-format
 msgid "Requires Mental %d"
 msgstr "Richiede Potere Mentale %d"
 
-#: ../../../src/ItemManager.cpp:744 ../../../src/MenuPowers.cpp:776
+#: ../../../src/ItemManager.cpp:736 ../../../src/MenuPowers.cpp:776
 #: ../../../src/MenuPowers.cpp:779
 #, c-format
 msgid "Requires Offense %d"
 msgstr "Richiede Potere Offensivo %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:782
+#: ../../../src/ItemManager.cpp:741 ../../../src/MenuPowers.cpp:782
 #: ../../../src/MenuPowers.cpp:785
 #, c-format
 msgid "Requires Defense %d"
 msgstr "Richiede Potere Difensivo %d"
 
-#: ../../../src/ItemManager.cpp:758
+#: ../../../src/ItemManager.cpp:750
 #, fuzzy, c-format
 msgid "Requires Class: %s"
 msgstr "Richiede Classe %d"
 
-#: ../../../src/ItemManager.cpp:763
+#: ../../../src/ItemManager.cpp:755
 #, c-format
 msgid "Quality: %s"
 msgstr "Qualità: %s"
 
-#: ../../../src/ItemManager.cpp:775 ../../../src/ItemManager.cpp:784
+#: ../../../src/ItemManager.cpp:767 ../../../src/ItemManager.cpp:776
 #, fuzzy, c-format
 msgid "Buy Price: %d %s"
 msgstr "Prezzo d'acquisto: %d %s"
 
-#: ../../../src/ItemManager.cpp:777 ../../../src/ItemManager.cpp:786
+#: ../../../src/ItemManager.cpp:769 ../../../src/ItemManager.cpp:778
 #, fuzzy, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Prezzo d'acquisto: %d %s ciascuno"
 
-#: ../../../src/ItemManager.cpp:792
+#: ../../../src/ItemManager.cpp:784
 #, fuzzy, c-format
 msgid "Sell Price: %d %s"
 msgstr "Prezzo di vendita: %d %s"
 
-#: ../../../src/ItemManager.cpp:794
+#: ../../../src/ItemManager.cpp:786
 #, fuzzy, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Prezzo di vendita: %d %s ciascuno"
 
-#: ../../../src/ItemManager.cpp:803
+#: ../../../src/ItemManager.cpp:795
 #, fuzzy
 msgid "Set: "
 msgstr "Imposta: "
 
-#: ../../../src/ItemManager.cpp:810
+#: ../../../src/ItemManager.cpp:802
 #, c-format
 msgid "%d items: "
 msgstr "%d oggetti: "
@@ -781,137 +781,146 @@ msgid "Developer Console"
 msgstr "Console Sviluppatore"
 
 #: ../../../src/MenuDevConsole.cpp:208
+msgid "Prints a list of items that match a search term. No search term will list all items"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:209
+#, fuzzy
+msgid "Prints out all of the campaign status that are set"
+msgstr "disassegna gli status campagna attribuiti se assegnati"
+
+#: ../../../src/MenuDevConsole.cpp:210
 msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr "riporta il giocatore al livello 1, senza punti statistiche o abilità spesi"
 
-#: ../../../src/MenuDevConsole.cpp:209
+#: ../../../src/MenuDevConsole.cpp:211
 msgid "teleports the player to a specific tile, and optionally, a specific map"
 msgstr "teletrasporta il giocatore ad una tessera specifica, e, opzionalmente, ad una mappa specifica"
 
-#: ../../../src/MenuDevConsole.cpp:210
+#: ../../../src/MenuDevConsole.cpp:212
 msgid "unsets the given campaign statuses if they are set"
 msgstr "disassegna gli status campagna attribuiti se assegnati"
 
-#: ../../../src/MenuDevConsole.cpp:211
+#: ../../../src/MenuDevConsole.cpp:213
 msgid "sets the given campaign statuses"
 msgstr "assegna gli status campagna attribuiti"
 
-#: ../../../src/MenuDevConsole.cpp:212
+#: ../../../src/MenuDevConsole.cpp:214
 msgid "rewards the player with the specified amount of experience points"
 msgstr "ricompensa il giocatore con i punti esperienza specificati"
 
-#: ../../../src/MenuDevConsole.cpp:213
+#: ../../../src/MenuDevConsole.cpp:215
 msgid "adds the specified amount of currency to the player's inventory"
 msgstr "aggiunge all'inventario del giocatore la somma di denaro specificata"
 
-#: ../../../src/MenuDevConsole.cpp:214
+#: ../../../src/MenuDevConsole.cpp:216
 msgid "adds an item to the player's inventory"
 msgstr "aggiunge un oggetto all'inventario del giocatore"
 
-#: ../../../src/MenuDevConsole.cpp:215
+#: ../../../src/MenuDevConsole.cpp:217
 msgid "spawns an enemy matching the given category next to the player"
 msgstr "fa sorgere vicino al giocatore un nemico della categoria assegnata"
 
-#: ../../../src/MenuDevConsole.cpp:216
+#: ../../../src/MenuDevConsole.cpp:218
 msgid "turns on/off the developer hud"
 msgstr "accende/spegne lo schermo sviluppatore"
 
-#: ../../../src/MenuDevConsole.cpp:217
+#: ../../../src/MenuDevConsole.cpp:219
 msgid "clears the command history"
 msgstr "pulisce la cronologia comandi"
 
-#: ../../../src/MenuDevConsole.cpp:218
+#: ../../../src/MenuDevConsole.cpp:220
 msgid "displays this text"
 msgstr "mostra questo testo"
 
-#: ../../../src/MenuDevConsole.cpp:225
+#: ../../../src/MenuDevConsole.cpp:227
 msgid "Toggled the developer hud"
 msgstr "Alternato lo schermo sviluppatore"
 
-#: ../../../src/MenuDevConsole.cpp:239
+#: ../../../src/MenuDevConsole.cpp:241
 msgid "Spawning enemy from category: "
 msgstr "Far sorgere nemico dalla categoria: "
 
-#: ../../../src/MenuDevConsole.cpp:242
+#: ../../../src/MenuDevConsole.cpp:244
 msgid "ERROR: Invalid enemy category"
 msgstr "ERRORE: Categoria nemici non valida"
 
-#: ../../../src/MenuDevConsole.cpp:246 ../../../src/MenuDevConsole.cpp:274
-#: ../../../src/MenuDevConsole.cpp:285 ../../../src/MenuDevConsole.cpp:296
-#: ../../../src/MenuDevConsole.cpp:306 ../../../src/MenuDevConsole.cpp:321
-#: ../../../src/MenuDevConsole.cpp:351
+#: ../../../src/MenuDevConsole.cpp:248 ../../../src/MenuDevConsole.cpp:276
+#: ../../../src/MenuDevConsole.cpp:287 ../../../src/MenuDevConsole.cpp:298
+#: ../../../src/MenuDevConsole.cpp:308 ../../../src/MenuDevConsole.cpp:323
+#: ../../../src/MenuDevConsole.cpp:353
 msgid "ERROR: Too few arguments"
 msgstr "ERRORE: Troppo pochi argomenti"
 
-#: ../../../src/MenuDevConsole.cpp:247 ../../../src/MenuDevConsole.cpp:275
-#: ../../../src/MenuDevConsole.cpp:286 ../../../src/MenuDevConsole.cpp:297
-#: ../../../src/MenuDevConsole.cpp:307 ../../../src/MenuDevConsole.cpp:322
-#: ../../../src/MenuDevConsole.cpp:352
+#: ../../../src/MenuDevConsole.cpp:249 ../../../src/MenuDevConsole.cpp:277
+#: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
+#: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
+#: ../../../src/MenuDevConsole.cpp:354
 msgid "HINT: "
 msgstr "SUGGERIMENTO: "
 
-#: ../../../src/MenuDevConsole.cpp:247
+#: ../../../src/MenuDevConsole.cpp:249
 msgid " <category> [<x> <y>]"
 msgstr " <categoria> [<x> <y>]"
 
-#: ../../../src/MenuDevConsole.cpp:254
+#: ../../../src/MenuDevConsole.cpp:256
 msgid "ERROR: Invalid item ID"
 msgstr "ERRORE: ID oggetto non valido"
 
-#: ../../../src/MenuDevConsole.cpp:270
+#: ../../../src/MenuDevConsole.cpp:272
 #, fuzzy
 msgid "Added item: "
 msgstr "Oggetto aggiunto: "
 
-#: ../../../src/MenuDevConsole.cpp:275
+#: ../../../src/MenuDevConsole.cpp:277
 msgid " <item_id> [<quantity>]"
 msgstr "<id_oggetto> [<quantità>]"
 
-#: ../../../src/MenuDevConsole.cpp:282
+#: ../../../src/MenuDevConsole.cpp:284
 msgid "Added currency: "
 msgstr "Denaro aggiunto: "
 
-#: ../../../src/MenuDevConsole.cpp:286 ../../../src/MenuDevConsole.cpp:297
+#: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
 msgid " <quantity>"
 msgstr " <quantità>"
 
-#: ../../../src/MenuDevConsole.cpp:293
+#: ../../../src/MenuDevConsole.cpp:295
 msgid "Added XP: "
 msgstr "XP aggiunta: "
 
-#: ../../../src/MenuDevConsole.cpp:303
+#: ../../../src/MenuDevConsole.cpp:305
 msgid "Set campaign status: "
 msgstr "Imposta status campagna: "
 
-#: ../../../src/MenuDevConsole.cpp:307 ../../../src/MenuDevConsole.cpp:322
+#: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
 msgid " <status_1> [<status_2> <status_3> ...]"
 msgstr " <status_1> [<status_2> <status_3> ...]"
 
-#: ../../../src/MenuDevConsole.cpp:314
+#: ../../../src/MenuDevConsole.cpp:316
 msgid "Unset campaign status: "
 msgstr "Status campagna non impostato: "
 
-#: ../../../src/MenuDevConsole.cpp:317
+#: ../../../src/MenuDevConsole.cpp:319
 msgid "ERROR: Unknown campaign status: "
 msgstr "ERRORE: Status campagna sconosciuto"
 
-#: ../../../src/MenuDevConsole.cpp:337 ../../../src/MenuDevConsole.cpp:347
+#: ../../../src/MenuDevConsole.cpp:339 ../../../src/MenuDevConsole.cpp:349
 msgid "Teleporting to: "
 msgstr "Teletrasporta a: "
 
-#: ../../../src/MenuDevConsole.cpp:340
+#: ../../../src/MenuDevConsole.cpp:342
 msgid "ERROR: Unknown map: "
 msgstr "ERRORE: Mappa sconosciuta: "
 
-#: ../../../src/MenuDevConsole.cpp:352
+#: ../../../src/MenuDevConsole.cpp:354
 msgid " <x> <y> [<map>]"
 msgstr " <x> <y> [<mappa>]"
 
-#: ../../../src/MenuDevConsole.cpp:372
+#: ../../../src/MenuDevConsole.cpp:426
 msgid "ERROR: Unknown command"
 msgstr "ERRORE: Comando sconosciuto"
 
-#: ../../../src/MenuDevConsole.cpp:373
+#: ../../../src/MenuDevConsole.cpp:427
 msgid "HINT: Type help"
 msgstr "SUGGERIMENTO: Digita help"
 
@@ -1284,14 +1293,22 @@ msgid "Increases your chance of reflecting missiles back at enemies."
 msgstr "Aumenta la probabilità di rilanciare un proiettile al nemico."
 
 #: ../../../src/Stats.cpp:141
+msgid "Damage Reflection"
+msgstr ""
+
+#: ../../../src/Stats.cpp:142
+msgid "Deals a percentage of damage taken back to the attacker."
+msgstr ""
+
+#: ../../../src/Stats.cpp:146
 msgid "Base HP"
 msgstr "HP base"
 
-#: ../../../src/Stats.cpp:146
+#: ../../../src/Stats.cpp:151
 msgid "Base MP"
 msgstr "MP base"
 
-#: ../../../src/Utils.cpp:203
+#: ../../../src/Utils.cpp:204
 #, fuzzy
 msgid "k"
 msgstr "m"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-15 16:33-0400\n"
+"POT-Creation-Date: 2015-09-17 14:55-0400\n"
 "PO-Revision-Date: 2014-05-03 21:36+0900\n"
 "Last-Translator: Paul Wortmann <paul.wortmann@gmail.com>\n"
 "Language-Team: Paul Wortmann <www.physhexgames.co.nr>\n"
@@ -197,16 +197,16 @@ msgstr "<<は無効"
 msgid "Enable >>"
 msgstr ">>を有効に"
 
-#: ../../../src/GameStateConfigBase.cpp:843
+#: ../../../src/GameStateConfigBase.cpp:844
 msgid "Game: "
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:848
+#: ../../../src/GameStateConfigBase.cpp:849
 #, fuzzy
 msgid "Requires version: "
 msgstr "%s 精神が必要です。"
 
-#: ../../../src/GameStateConfigBase.cpp:862
+#: ../../../src/GameStateConfigBase.cpp:863
 #, fuzzy
 msgid "Requires mods: "
 msgstr "%s 精神が必要です。"
@@ -1276,14 +1276,22 @@ msgid "Increases your chance of reflecting missiles back at enemies."
 msgstr ""
 
 #: ../../../src/Stats.cpp:141
-msgid "Base HP"
+msgid "Damage Reflection"
+msgstr ""
+
+#: ../../../src/Stats.cpp:142
+msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:146
+msgid "Base HP"
+msgstr ""
+
+#: ../../../src/Stats.cpp:151
 msgid "Base MP"
 msgstr ""
 
-#: ../../../src/Utils.cpp:203
+#: ../../../src/Utils.cpp:204
 #, fuzzy
 msgid "k"
 msgstr "オーケ"

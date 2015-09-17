@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-15 16:33-0400\n"
+"POT-Creation-Date: 2015-09-17 14:55-0400\n"
 "PO-Revision-Date: 2014-10-26 20:31+0100\n"
 "Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -197,15 +197,15 @@ msgstr "← Desactivar"
 msgid "Enable >>"
 msgstr "Activar →"
 
-#: ../../../src/GameStateConfigBase.cpp:843
+#: ../../../src/GameStateConfigBase.cpp:844
 msgid "Game: "
 msgstr "Xogo: "
 
-#: ../../../src/GameStateConfigBase.cpp:848
+#: ../../../src/GameStateConfigBase.cpp:849
 msgid "Requires version: "
 msgstr "Require a versión: "
 
-#: ../../../src/GameStateConfigBase.cpp:862
+#: ../../../src/GameStateConfigBase.cpp:863
 msgid "Requires mods: "
 msgstr "Require as modificacións: "
 
@@ -1273,14 +1273,22 @@ msgid "Increases your chance of reflecting missiles back at enemies."
 msgstr ""
 
 #: ../../../src/Stats.cpp:141
-msgid "Base HP"
+msgid "Damage Reflection"
+msgstr ""
+
+#: ../../../src/Stats.cpp:142
+msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:146
+msgid "Base HP"
+msgstr ""
+
+#: ../../../src/Stats.cpp:151
 msgid "Base MP"
 msgstr ""
 
-#: ../../../src/Utils.cpp:203
+#: ../../../src/Utils.cpp:204
 msgid "k"
 msgstr "k"
 
