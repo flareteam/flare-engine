@@ -136,6 +136,11 @@ void setStatNames() {
 	STAT_NAME[STAT_REFLECT] = msg->get("Reflect Chance");
 	STAT_DESC[STAT_REFLECT] = msg->get("Increases your chance of reflecting missiles back at enemies.");
 	STAT_PERCENT[STAT_REFLECT] = true;
+	// @TYPE return_damage|Deals a percentage of the damage taken back to the attacker
+	STAT_KEY[STAT_RETURN_DAMAGE] = "return_damage";
+	STAT_NAME[STAT_RETURN_DAMAGE] = msg->get("Damage Reflection");
+	STAT_DESC[STAT_RETURN_DAMAGE] = msg->get("Deals a percentage of damage taken back to the attacker.");
+	STAT_PERCENT[STAT_RETURN_DAMAGE] = true;
 	// @TYPE hp_percent|Base HP altered by percentage
 	STAT_KEY[STAT_HP_PERCENT] = "hp_percent";
 	STAT_NAME[STAT_HP_PERCENT] = msg->get("Base HP");

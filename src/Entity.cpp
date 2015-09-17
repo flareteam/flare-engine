@@ -394,6 +394,17 @@ bool Entity::takeHit(Hazard &h) {
 				h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
 			}
 		}
+
+		// deal return damage
+		if (stats.get(STAT_RETURN_DAMAGE) > 0) {
+			int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(STAT_RETURN_DAMAGE)) / 100.f);
+
+			if (dmg_return == 0)
+				dmg_return = 1;
+
+			h.src_stats->takeDamage(dmg_return);
+			comb->addMessage(dmg_return, h.src_stats->pos, COMBAT_MESSAGE_GIVEDMG);
+		}
 	}
 
 	// post effect power
