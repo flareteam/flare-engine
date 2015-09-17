@@ -396,7 +396,7 @@ bool Entity::takeHit(Hazard &h) {
 		}
 
 		// deal return damage
-		if (stats.get(STAT_RETURN_DAMAGE) > 0) {
+		if (stats.get(STAT_RETURN_DAMAGE) > 0 && !h.src_stats->effects.immunity) {
 			int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(STAT_RETURN_DAMAGE)) / 100.f);
 
 			if (dmg_return == 0)
