@@ -167,4 +167,6 @@ Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align);
 
 size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b);
 
+std::string getDurationString(const int& duration);
+
 #endif

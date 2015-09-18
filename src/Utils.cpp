@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 #include <stdarg.h>
 #include <ctype.h>
+#include <iomanip>
 
 Point floor(FPoint fp) {
 	Point result;
@@ -349,3 +350,18 @@ size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
 
 	return a.find(b);
 }
+
+std::string getDurationString(const int& duration) {
+	float real_duration = static_cast<float>(duration) / MAX_FRAMES_PER_SEC;
+
+	std::stringstream ss;
+	ss << std::setprecision(3) << real_duration;
+
+	if (real_duration == 1.f) {
+		return msg->get("%s second", ss.str().c_str());
+	}
+	else {
+		return msg->get("%s seconds", ss.str().c_str());
+	}
+}
+

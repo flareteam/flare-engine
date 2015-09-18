@@ -36,7 +36,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 
 #include <climits>
-#include <iomanip>
 
 MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	: stats(_stats)
@@ -735,8 +734,8 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 	// add cooldown time
 	if (powers->powers[power_cells[slot_num].id].cooldown > 0) {
 		std::stringstream ss;
-		ss << std::setprecision(3) << static_cast<float>(powers->powers[power_cells[slot_num].id].cooldown) / MAX_FRAMES_PER_SEC;
-		tip->addText(msg->get("Cooldown: %s seconds", ss.str().c_str()));
+		ss << msg->get("Cooldown:") << " " << getDurationString(powers->powers[power_cells[slot_num].id].cooldown);
+		tip->addText(ss.str());
 	}
 
 	const Power &pwr = powers->powers[power_cells[slot_num].id];
@@ -892,14 +891,11 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 
 		if (!ss.str().empty()) {
 			if (pwr.post_effects[i].duration > 0) {
-				std::stringstream duration;
-				duration << std::setprecision(3) << static_cast<float>(pwr.post_effects[i].duration) / MAX_FRAMES_PER_SEC;
-
 				if (effect_ptr && effect_ptr->type == "death_sentence") {
-					ss << ": " << msg->get("%s seconds", duration.str());
+					ss << ": " << getDurationString(pwr.post_effects[i].duration);
 				}
 				else {
-					ss << " (" << msg->get("%s seconds", duration.str()) << ")";
+					ss << " (" << getDurationString(pwr.post_effects[i].duration) << ")";
 				}
 			}
 
