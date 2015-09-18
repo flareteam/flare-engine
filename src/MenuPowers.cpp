@@ -995,7 +995,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 		if (pwr.trait_elemental > -1) {
 			ss.str("");
 			// TODO Print specific element here
-			ss << msg->get("Elemental Damage");
+			ss << msg->get("%s Elemental Damage", ELEMENTS[pwr.trait_elemental].name.c_str());
 			tip->addText(ss.str(), color_bonus);
 		}
 	}

@@ -347,7 +347,7 @@ void MenuCharacter::refreshStats() {
 	if (show_resists) {
 		for (unsigned int j=0; j<stats->vulnerable.size(); ++j) {
 			ss.str("");
-			ss << msg->get(ELEMENTS[j].name) << ": " << (100 - stats->vulnerable[j]) << "%";
+			ss << msg->get("%s Resistance", ELEMENTS[j].name.c_str()) << ": " << (100 - stats->vulnerable[j]) << "%";
 			statList->set(j+STAT_COUNT-2, ss.str(),"");
 		}
 	}

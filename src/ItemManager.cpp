@@ -583,7 +583,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << " " << STAT_NAME[bdata->stat_index];
 	}
 	else if (bdata->resist_index != -1) {
-		ss << "% " << msg->get(ELEMENTS[bdata->resist_index].name);
+		ss << "% " << msg->get("%s Resistance", ELEMENTS[bdata->resist_index].name.c_str());
 	}
 	else if (bdata->base_index != -1) {
 		if (bdata->base_index == 0)

@@ -702,7 +702,7 @@ void loadMiscSettings() {
 			// @ATTR element.id|string|An identifier for this element.
 			if (infile.key == "id") ELEMENTS.back().id = infile.val;
 			// @ATTR element.name|string|The displayed name of this element.
-			else if (infile.key == "name") ELEMENTS.back().name = infile.val;
+			else if (infile.key == "name") ELEMENTS.back().name = msg->get(infile.val);
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
