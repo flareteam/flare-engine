@@ -81,6 +81,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 
 	color_bonus = font->getColor("menu_bonus");
 	color_penalty = font->getColor("menu_penalty");
+	color_flavor = font->getColor("item_flavor");
 
 	align();
 }
@@ -721,7 +722,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 		tip->addText(powers->powers[power_cells[slot_num].id].name);
 
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
-	tip->addText(powers->powers[power_cells[slot_num].id].description);
+	tip->addText(powers->powers[power_cells[slot_num].id].description, color_flavor);
 
 	// add mana cost
 	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
@@ -736,6 +737,267 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 		std::stringstream ss;
 		ss << std::setprecision(3) << static_cast<float>(powers->powers[power_cells[slot_num].id].cooldown) / MAX_FRAMES_PER_SEC;
 		tip->addText(msg->get("Cooldown: %s seconds", ss.str().c_str()));
+	}
+
+	const Power &pwr = powers->powers[power_cells[slot_num].id];
+	for (size_t i=0; i<pwr.post_effects.size(); ++i) {
+		std::stringstream ss;
+		EffectDef* effect_ptr = powers->getEffectDef(pwr.post_effects[i].id);
+
+		// base stats
+		if (effect_ptr == NULL) {
+			if (pwr.post_effects[i].magnitude > 0) {
+				ss << "+";
+			}
+
+			if (pwr.passive) {
+				// since leveled passive powers stack, we need to get the total magnitude for all levels
+				// TODO: don't stack leveled passive powers?
+				ss << pwr.post_effects[i].magnitude * power_cells[slot_num].upgrade_level;
+			}
+			else {
+				ss << pwr.post_effects[i].magnitude;
+			}
+
+			for (size_t j=0; j<STAT_COUNT; ++j) {
+				if (pwr.post_effects[i].id == STAT_KEY[j]) {
+					if (STAT_PERCENT[j])
+						ss << "%";
+
+					ss << " " << STAT_NAME[j];
+
+					break;
+				}
+			}
+
+			for (size_t j=0; j<ELEMENTS.size(); ++j) {
+				if (pwr.post_effects[i].id == ELEMENTS[j].id + "_resist") {
+					ss << "% " << msg->get(ELEMENTS[j].name);
+					break;
+				}
+			}
+		}
+		else if (effect_ptr != NULL) {
+			if (effect_ptr->type == "damage") {
+				ss << pwr.post_effects[i].magnitude << " " << msg->get("Damage per second");
+			}
+			else if (effect_ptr->type == "damage_percent") {
+				ss << pwr.post_effects[i].magnitude << "% " << msg->get("Damage per second");
+			}
+			else if (effect_ptr->type == "hpot") {
+				ss << pwr.post_effects[i].magnitude << " " << msg->get("HP per second");
+			}
+			else if (effect_ptr->type == "hpot_percent") {
+				ss << pwr.post_effects[i].magnitude << "% " << msg->get("HP per second");
+			}
+			else if (effect_ptr->type == "mpot") {
+				ss << pwr.post_effects[i].magnitude << " " << msg->get("MP per second");
+			}
+			else if (effect_ptr->type == "mpot_percent") {
+				ss << pwr.post_effects[i].magnitude << "% " << msg->get("MP per second");
+			}
+			else if (effect_ptr->type == "speed") {
+				if (pwr.post_effects[i].magnitude == 0)
+					ss << msg->get("Immobilize");
+				else
+					ss << msg->get("%d%% Speed", pwr.post_effects[i].magnitude);
+			}
+			else if (effect_ptr->type == "immunity") {
+				ss << msg->get("Immunity");
+			}
+			else if (effect_ptr->type == "stun") {
+				ss << msg->get("Stun");
+			}
+			else if (effect_ptr->type == "revive") {
+				ss << msg->get("Automatic revive on death");
+			}
+			else if (effect_ptr->type == "convert") {
+				ss << msg->get("Convert");
+			}
+			else if (effect_ptr->type == "fear") {
+				ss << msg->get("Fear");
+			}
+			else if (effect_ptr->type == "offense") {
+				ss << pwr.post_effects[i].magnitude << " " << msg->get("Offense");
+			}
+			else if (effect_ptr->type == "defense") {
+				ss << pwr.post_effects[i].magnitude << " " << msg->get("Defense");
+			}
+			else if (effect_ptr->type == "physical") {
+				ss << pwr.post_effects[i].magnitude << " " << msg->get("Physical");
+			}
+			else if (effect_ptr->type == "mental") {
+				ss << pwr.post_effects[i].magnitude << " " << msg->get("Mental");
+			}
+			else if (effect_ptr->type == "death_sentence") {
+				ss << msg->get("Lifespan");
+			}
+			else if (effect_ptr->type == "shield") {
+				if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+					int magnitude = stats->get(STAT_DMG_MENT_MAX) * pwr.mod_damage_value_min / 100;
+					ss << magnitude;
+				}
+				else if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD) {
+					int magnitude = stats->get(STAT_DMG_MENT_MAX) + pwr.mod_damage_value_min;
+					ss << magnitude;
+				}
+				else if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE) {
+					if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
+						ss << pwr.mod_damage_value_min;
+					else
+						ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
+				}
+				else {
+					ss << stats->get(STAT_DMG_MENT_MAX);
+				}
+
+				ss << " " << msg->get("Magical Shield");
+			}
+			else if (effect_ptr->type == "heal") {
+				int mag_min = stats->get(STAT_DMG_MENT_MIN);
+				int mag_max = stats->get(STAT_DMG_MENT_MAX);
+
+				if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+					mag_min = mag_min * pwr.mod_damage_value_min / 100;
+					mag_max = mag_max * pwr.mod_damage_value_min / 100;
+					ss << mag_min << "-" << mag_max;
+				}
+				else if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD) {
+					mag_min = mag_min + pwr.mod_damage_value_min;
+					mag_max = mag_max + pwr.mod_damage_value_min;
+					ss << mag_min << "-" << mag_max;
+				}
+				else if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE) {
+					if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max)
+						ss << pwr.mod_damage_value_min;
+					else
+						ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
+				}
+				else {
+					ss << mag_min << "-" << mag_max;
+				}
+
+				ss << " " << msg->get("Healing");
+			}
+			else if (effect_ptr->type == "knockback") {
+				ss << pwr.post_effects[i].magnitude << " " << msg->get("Knockback");
+			}
+			else if (pwr.post_effects[i].magnitude == 0) {
+				// nothing
+			}
+		}
+		else {
+			ss << pwr.post_effects[i].id;
+		}
+
+		if (!ss.str().empty()) {
+			if (pwr.post_effects[i].duration > 0) {
+				std::stringstream duration;
+				duration << std::setprecision(3) << static_cast<float>(pwr.post_effects[i].duration) / MAX_FRAMES_PER_SEC;
+
+				if (effect_ptr && effect_ptr->type == "death_sentence") {
+					ss << ": " << msg->get("%s seconds", duration.str());
+				}
+				else {
+					ss << " (" << msg->get("%s seconds", duration.str()) << ")";
+				}
+			}
+
+			tip->addText(ss.str(), color_bonus);
+		}
+	}
+
+	if (pwr.use_hazard || pwr.type == POWTYPE_REPEATER) {
+		std::stringstream ss;
+
+		// modifier_damage
+		if (pwr.mod_damage_mode > -1) {
+			if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_ADD && pwr.mod_damage_value_min > 0)
+				ss << "+";
+
+			if (pwr.mod_damage_value_max == 0 || pwr.mod_damage_value_min == pwr.mod_damage_value_max) {
+				ss << pwr.mod_damage_value_min;
+			}
+			else {
+				ss << pwr.mod_damage_value_min << "-" << pwr.mod_damage_value_max;
+			}
+
+			if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+				ss << "% ";
+			}
+
+			if (pwr.base_damage == BASE_DAMAGE_NONE)
+				ss << msg->get("Damage");
+			else if (pwr.base_damage == BASE_DAMAGE_MELEE)
+				ss << msg->get("Melee Damage");
+			else if (pwr.base_damage == BASE_DAMAGE_RANGED)
+				ss << msg->get("Ranged Damage");
+			else if (pwr.base_damage == BASE_DAMAGE_MENT)
+				ss << msg->get("Mental Damage");
+
+			if (!ss.str().empty())
+				tip->addText(ss.str(), color_bonus);
+		}
+
+		// modifier_accuracy
+		if (pwr.mod_accuracy_mode > -1) {
+			ss.str("");
+
+			if (pwr.mod_accuracy_mode == STAT_MODIFIER_MODE_ADD && pwr.mod_accuracy_value > 0)
+				ss << "+";
+
+			ss << pwr.mod_accuracy_value;
+
+			if (pwr.mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+				ss << "% ";
+			}
+
+			ss << msg->get("Base Accuracy");
+
+			if (!ss.str().empty())
+				tip->addText(ss.str(), color_bonus);
+		}
+
+		// modifier_critical
+		if (pwr.mod_crit_mode > -1) {
+			ss.str("");
+
+			if (pwr.mod_crit_mode == STAT_MODIFIER_MODE_ADD && pwr.mod_crit_value > 0)
+				ss << "+";
+
+			ss << pwr.mod_crit_value;
+
+			if (pwr.mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY) {
+				ss << "% ";
+			}
+
+			ss << msg->get("Base Critical Chance");
+
+			if (!ss.str().empty())
+				tip->addText(ss.str(), color_bonus);
+		}
+
+		if (pwr.trait_armor_penetration) {
+			ss.str("");
+			ss << msg->get("Ignores Absorbtion");
+			tip->addText(ss.str(), color_bonus);
+		}
+		if (pwr.trait_avoidance_ignore) {
+			ss.str("");
+			ss << msg->get("Ignores Avoidance");
+			tip->addText(ss.str(), color_bonus);
+		}
+		if (pwr.trait_crits_impaired > 0) {
+			ss.str("");
+			ss << msg->get("%d%% Chance to crit slowed targets", pwr.trait_crits_impaired);
+			tip->addText(ss.str(), color_bonus);
+		}
+		if (pwr.trait_elemental > -1) {
+			ss.str("");
+			// TODO Print specific element here
+			ss << msg->get("Elemental Damage");
+			tip->addText(ss.str(), color_bonus);
+		}
 	}
 
 	std::set<std::string>::iterator it;
