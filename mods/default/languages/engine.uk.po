@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:01-0400\n"
+"POT-Creation-Date: 2015-09-19 11:22-0400\n"
 "PO-Revision-Date: 2013-03-16 11:05+0300\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -1341,7 +1341,8 @@ msgid "Reduces your chance of stumbling when hit."
 msgstr "Знижує ймовірність спотикання при попаданні."
 
 #: ../../../src/Stats.cpp:136
-msgid "Reflect Chance"
+#, fuzzy
+msgid "Missile Reflect Chance"
 msgstr "Шанс відбиття"
 
 #: ../../../src/Stats.cpp:137

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:01-0400\n"
+"POT-Creation-Date: 2015-09-19 11:22-0400\n"
 "PO-Revision-Date: 2013-03-25 22:07+0200\n"
 "Last-Translator: Timo Sievänen <thematic@helsinkilainen.com>\n"
 "Language-Team: \n"
@@ -1374,7 +1374,7 @@ msgid "Reduces your chance of stumbling when hit."
 msgstr "Vähentää horjahduksen mahdollisuutta iskuja vastaanottaessa"
 
 #: ../../../src/Stats.cpp:136
-msgid "Reflect Chance"
+msgid "Missile Reflect Chance"
 msgstr ""
 
 #: ../../../src/Stats.cpp:137

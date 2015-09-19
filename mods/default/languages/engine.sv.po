@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:01-0400\n"
+"POT-Creation-Date: 2015-09-19 11:22-0400\n"
 "PO-Revision-Date: 2014-01-24 17:00+0100\n"
 "Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
 "Language-Team: SWEDISH <LL@li.org>\n"
@@ -1375,7 +1375,7 @@ msgstr "Minskar din chans att snava när du blir träffad"
 
 #: ../../../src/Stats.cpp:136
 #, fuzzy
-msgid "Reflect Chance"
+msgid "Missile Reflect Chance"
 msgstr "Kritisk chans"
 
 #: ../../../src/Stats.cpp:137

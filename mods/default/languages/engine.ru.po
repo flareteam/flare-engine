@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:01-0400\n"
+"POT-Creation-Date: 2015-09-19 11:22-0400\n"
 "PO-Revision-Date: 2015-06-01 01:07+0600\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian https://github.com/SBasalaev/flare-game/wiki/\n"
@@ -1372,7 +1372,7 @@ msgstr "Уменьшает шанс задержки при получении �
 
 #: ../../../src/Stats.cpp:136
 #, fuzzy
-msgid "Reflect Chance"
+msgid "Missile Reflect Chance"
 msgstr "Шанс отражения: "
 
 #: ../../../src/Stats.cpp:137

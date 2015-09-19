@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:01-0400\n"
+"POT-Creation-Date: 2015-09-19 11:22-0400\n"
 "PO-Revision-Date: 2012-12-24 14:36+0100\n"
 "Last-Translator: Hans Joachim Desserud <github@desserud.org>\n"
 "Language-Team: Norwegian Bokmal\n"
@@ -1336,7 +1336,7 @@ msgid "Reduces your chance of stumbling when hit."
 msgstr "Reduserer sjansen for å snuble når du blir truffet"
 
 #: ../../../src/Stats.cpp:136
-msgid "Reflect Chance"
+msgid "Missile Reflect Chance"
 msgstr ""
 
 #: ../../../src/Stats.cpp:137

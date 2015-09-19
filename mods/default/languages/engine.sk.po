@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:01-0400\n"
+"POT-Creation-Date: 2015-09-19 11:22-0400\n"
 "PO-Revision-Date: 2012-01-03+GMT+1\n"
 "Last-Translator: Miro Janosik <miro.jano.sik@gmail.com>\n"
 "Language-Team: Slovak <LL@li.org>\n"
@@ -1368,7 +1368,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:136
 #, fuzzy
-msgid "Reflect Chance"
+msgid "Missile Reflect Chance"
 msgstr "Kritická Šanca"
 
 #: ../../../src/Stats.cpp:137

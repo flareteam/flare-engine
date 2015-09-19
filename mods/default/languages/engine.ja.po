@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:01-0400\n"
+"POT-Creation-Date: 2015-09-19 11:22-0400\n"
 "PO-Revision-Date: 2014-05-03 21:36+0900\n"
 "Last-Translator: Paul Wortmann <paul.wortmann@gmail.com>\n"
 "Language-Team: Paul Wortmann <www.physhexgames.co.nr>\n"
@@ -1378,7 +1378,7 @@ msgstr "打ったときつまずきのあなたのチャンスを低減"
 
 #: ../../../src/Stats.cpp:136
 #, fuzzy
-msgid "Reflect Chance"
+msgid "Missile Reflect Chance"
 msgstr "重要走向確率"
 
 #: ../../../src/Stats.cpp:137

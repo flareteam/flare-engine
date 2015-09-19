@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:01-0400\n"
+"POT-Creation-Date: 2015-09-19 11:22-0400\n"
 "PO-Revision-Date: 2013-04-09 18:55+0800\n"
 "Last-Translator: lonsine <lonsine@qq.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1375,7 +1375,7 @@ msgid "Reduces your chance of stumbling when hit."
 msgstr "减少被击中后跌倒的可能"
 
 #: ../../../src/Stats.cpp:136
-msgid "Reflect Chance"
+msgid "Missile Reflect Chance"
 msgstr ""
 
 #: ../../../src/Stats.cpp:137
