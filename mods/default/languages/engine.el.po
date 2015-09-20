@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-19 11:22-0400\n"
+"POT-Creation-Date: 2015-09-20 13:21-0400\n"
 "PO-Revision-Date: 2013-11-25 13:11+0300\n"
 "Last-Translator: Μιχάλης Παπαγεωργίου <werdanith@yahoo.gr>\n"
 "Language-Team: Μιχάλης Παπαγεωργίου\n"
@@ -778,145 +778,154 @@ msgid "Developer Console"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:208
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid "Removes an item of a given ID from the player's inventory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:209
-msgid "Prints out all of the campaign status that are set"
+msgid "Prints a list of items that match a search term. No search term will list all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:210
-msgid "resets the player to level 1, with no stat or skill points spent"
+msgid "Prints out all of the campaign status that are set"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:211
-msgid "teleports the player to a specific tile, and optionally, a specific map"
+msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:212
-msgid "unsets the given campaign statuses if they are set"
+msgid "teleports the player to a specific tile, and optionally, a specific map"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:213
-msgid "sets the given campaign statuses"
+msgid "unsets the given campaign statuses if they are set"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:214
-msgid "rewards the player with the specified amount of experience points"
+msgid "sets the given campaign statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:215
-msgid "adds the specified amount of currency to the player's inventory"
+msgid "rewards the player with the specified amount of experience points"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:216
-msgid "adds an item to the player's inventory"
+msgid "adds the specified amount of currency to the player's inventory"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:217
-msgid "spawns an enemy matching the given category next to the player"
+msgid "adds an item to the player's inventory"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:218
-msgid "turns on/off the developer hud"
+msgid "spawns an enemy matching the given category next to the player"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:219
-msgid "clears the command history"
+msgid "turns on/off the developer hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:220
+msgid "clears the command history"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:221
 msgid "displays this text"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:227
+#: ../../../src/MenuDevConsole.cpp:228
 msgid "Toggled the developer hud"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:241
+#: ../../../src/MenuDevConsole.cpp:242
 msgid "Spawning enemy from category: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:244
+#: ../../../src/MenuDevConsole.cpp:245
 msgid "ERROR: Invalid enemy category"
-msgstr ""
-
-#: ../../../src/MenuDevConsole.cpp:248 ../../../src/MenuDevConsole.cpp:276
-#: ../../../src/MenuDevConsole.cpp:287 ../../../src/MenuDevConsole.cpp:298
-#: ../../../src/MenuDevConsole.cpp:308 ../../../src/MenuDevConsole.cpp:323
-#: ../../../src/MenuDevConsole.cpp:353
-msgid "ERROR: Too few arguments"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:249 ../../../src/MenuDevConsole.cpp:277
 #: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
 #: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
-#: ../../../src/MenuDevConsole.cpp:354
+#: ../../../src/MenuDevConsole.cpp:354 ../../../src/MenuDevConsole.cpp:442
+msgid "ERROR: Too few arguments"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:250 ../../../src/MenuDevConsole.cpp:278
+#: ../../../src/MenuDevConsole.cpp:289 ../../../src/MenuDevConsole.cpp:300
+#: ../../../src/MenuDevConsole.cpp:310 ../../../src/MenuDevConsole.cpp:325
+#: ../../../src/MenuDevConsole.cpp:355 ../../../src/MenuDevConsole.cpp:443
 msgid "HINT: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:249
+#: ../../../src/MenuDevConsole.cpp:250
 msgid " <category> [<x> <y>]"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:256
+#: ../../../src/MenuDevConsole.cpp:257 ../../../src/MenuDevConsole.cpp:430
 msgid "ERROR: Invalid item ID"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:272
+#: ../../../src/MenuDevConsole.cpp:273
 #, fuzzy
 msgid "Added item: "
 msgstr "%d αντικείμενα: "
 
-#: ../../../src/MenuDevConsole.cpp:277
+#: ../../../src/MenuDevConsole.cpp:278 ../../../src/MenuDevConsole.cpp:443
 msgid " <item_id> [<quantity>]"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:284
+#: ../../../src/MenuDevConsole.cpp:285
 msgid "Added currency: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
+#: ../../../src/MenuDevConsole.cpp:289 ../../../src/MenuDevConsole.cpp:300
 msgid " <quantity>"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:295
+#: ../../../src/MenuDevConsole.cpp:296
 msgid "Added XP: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:305
+#: ../../../src/MenuDevConsole.cpp:306
 msgid "Set campaign status: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
+#: ../../../src/MenuDevConsole.cpp:310 ../../../src/MenuDevConsole.cpp:325
 msgid " <status_1> [<status_2> <status_3> ...]"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:316
+#: ../../../src/MenuDevConsole.cpp:317
 msgid "Unset campaign status: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:319
+#: ../../../src/MenuDevConsole.cpp:320
 msgid "ERROR: Unknown campaign status: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:339 ../../../src/MenuDevConsole.cpp:349
+#: ../../../src/MenuDevConsole.cpp:340 ../../../src/MenuDevConsole.cpp:350
 msgid "Teleporting to: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:342
+#: ../../../src/MenuDevConsole.cpp:343
 msgid "ERROR: Unknown map: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:354
+#: ../../../src/MenuDevConsole.cpp:355
 msgid " <x> <y> [<map>]"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:426
+#: ../../../src/MenuDevConsole.cpp:438
+#, fuzzy
+msgid "Removed item: "
+msgstr "%d αντικείμενα: "
+
+#: ../../../src/MenuDevConsole.cpp:447
 msgid "ERROR: Unknown command"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:427
+#: ../../../src/MenuDevConsole.cpp:448
 msgid "HINT: Type help"
 msgstr ""
 

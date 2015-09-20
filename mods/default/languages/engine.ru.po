@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-19 11:22-0400\n"
+"POT-Creation-Date: 2015-09-20 13:21-0400\n"
 "PO-Revision-Date: 2015-06-01 01:07+0600\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian https://github.com/SBasalaev/flare-game/wiki/\n"
@@ -776,145 +776,155 @@ msgid "Developer Console"
 msgstr "Консоль разработчика"
 
 #: ../../../src/MenuDevConsole.cpp:208
+#, fuzzy
+msgid "Removes an item of a given ID from the player's inventory."
+msgstr "добавляет предмет в инвентарь игрока"
+
+#: ../../../src/MenuDevConsole.cpp:209
 msgid "Prints a list of items that match a search term. No search term will list all items"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:209
+#: ../../../src/MenuDevConsole.cpp:210
 #, fuzzy
 msgid "Prints out all of the campaign status that are set"
 msgstr "сбрасывает указанные статусы кампаний, если они установлены"
 
-#: ../../../src/MenuDevConsole.cpp:210
+#: ../../../src/MenuDevConsole.cpp:211
 msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:211
+#: ../../../src/MenuDevConsole.cpp:212
 msgid "teleports the player to a specific tile, and optionally, a specific map"
 msgstr "телепортирует игрока на указанный тайл и, опционально, указанную карту"
 
-#: ../../../src/MenuDevConsole.cpp:212
+#: ../../../src/MenuDevConsole.cpp:213
 msgid "unsets the given campaign statuses if they are set"
 msgstr "сбрасывает указанные статусы кампаний, если они установлены"
 
-#: ../../../src/MenuDevConsole.cpp:213
+#: ../../../src/MenuDevConsole.cpp:214
 msgid "sets the given campaign statuses"
 msgstr "устанавливает заданные статусы кампаний"
 
-#: ../../../src/MenuDevConsole.cpp:214
+#: ../../../src/MenuDevConsole.cpp:215
 msgid "rewards the player with the specified amount of experience points"
 msgstr "вознаграждает игрока указанным количеством очков опыта"
 
-#: ../../../src/MenuDevConsole.cpp:215
+#: ../../../src/MenuDevConsole.cpp:216
 msgid "adds the specified amount of currency to the player's inventory"
 msgstr "добавляет указанное количество валюты в инвентарь игрока"
 
-#: ../../../src/MenuDevConsole.cpp:216
+#: ../../../src/MenuDevConsole.cpp:217
 msgid "adds an item to the player's inventory"
 msgstr "добавляет предмет в инвентарь игрока"
 
-#: ../../../src/MenuDevConsole.cpp:217
+#: ../../../src/MenuDevConsole.cpp:218
 msgid "spawns an enemy matching the given category next to the player"
 msgstr "порождает врага указанной категории рядом с игроком"
 
-#: ../../../src/MenuDevConsole.cpp:218
+#: ../../../src/MenuDevConsole.cpp:219
 msgid "turns on/off the developer hud"
 msgstr "переключает дисплей разработчика"
 
-#: ../../../src/MenuDevConsole.cpp:219
+#: ../../../src/MenuDevConsole.cpp:220
 msgid "clears the command history"
 msgstr "очищает историю команд"
 
-#: ../../../src/MenuDevConsole.cpp:220
+#: ../../../src/MenuDevConsole.cpp:221
 msgid "displays this text"
 msgstr "показывает этот текст"
 
-#: ../../../src/MenuDevConsole.cpp:227
+#: ../../../src/MenuDevConsole.cpp:228
 msgid "Toggled the developer hud"
 msgstr "Переключен дисплей разработчика"
 
-#: ../../../src/MenuDevConsole.cpp:241
+#: ../../../src/MenuDevConsole.cpp:242
 msgid "Spawning enemy from category: "
 msgstr "Рождается враг из категории: "
 
-#: ../../../src/MenuDevConsole.cpp:244
+#: ../../../src/MenuDevConsole.cpp:245
 msgid "ERROR: Invalid enemy category"
 msgstr "ОШИБКА: Неверная категория врага"
-
-#: ../../../src/MenuDevConsole.cpp:248 ../../../src/MenuDevConsole.cpp:276
-#: ../../../src/MenuDevConsole.cpp:287 ../../../src/MenuDevConsole.cpp:298
-#: ../../../src/MenuDevConsole.cpp:308 ../../../src/MenuDevConsole.cpp:323
-#: ../../../src/MenuDevConsole.cpp:353
-msgid "ERROR: Too few arguments"
-msgstr "ОШИБКА: Слишком мало аргументов"
 
 #: ../../../src/MenuDevConsole.cpp:249 ../../../src/MenuDevConsole.cpp:277
 #: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
 #: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
-#: ../../../src/MenuDevConsole.cpp:354
+#: ../../../src/MenuDevConsole.cpp:354 ../../../src/MenuDevConsole.cpp:442
+msgid "ERROR: Too few arguments"
+msgstr "ОШИБКА: Слишком мало аргументов"
+
+#: ../../../src/MenuDevConsole.cpp:250 ../../../src/MenuDevConsole.cpp:278
+#: ../../../src/MenuDevConsole.cpp:289 ../../../src/MenuDevConsole.cpp:300
+#: ../../../src/MenuDevConsole.cpp:310 ../../../src/MenuDevConsole.cpp:325
+#: ../../../src/MenuDevConsole.cpp:355 ../../../src/MenuDevConsole.cpp:443
 msgid "HINT: "
 msgstr "ПОДСКАЗКА: "
 
-#: ../../../src/MenuDevConsole.cpp:249
+#: ../../../src/MenuDevConsole.cpp:250
 msgid " <category> [<x> <y>]"
 msgstr " <категория> [<x> <y>]"
 
-#: ../../../src/MenuDevConsole.cpp:256
+#: ../../../src/MenuDevConsole.cpp:257 ../../../src/MenuDevConsole.cpp:430
 msgid "ERROR: Invalid item ID"
 msgstr "ОШИБКА: Неверный ID предмета"
 
-#: ../../../src/MenuDevConsole.cpp:272
+#: ../../../src/MenuDevConsole.cpp:273
 msgid "Added item: "
 msgstr "Добавлен предмет: "
 
-#: ../../../src/MenuDevConsole.cpp:277
+#: ../../../src/MenuDevConsole.cpp:278 ../../../src/MenuDevConsole.cpp:443
 msgid " <item_id> [<quantity>]"
 msgstr " <id_предмета> [<количество>]"
 
-#: ../../../src/MenuDevConsole.cpp:284
+#: ../../../src/MenuDevConsole.cpp:285
 msgid "Added currency: "
 msgstr "Добавлена валюта: "
 
-#: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
+#: ../../../src/MenuDevConsole.cpp:289 ../../../src/MenuDevConsole.cpp:300
 msgid " <quantity>"
 msgstr " <количество>"
 
-#: ../../../src/MenuDevConsole.cpp:295
+#: ../../../src/MenuDevConsole.cpp:296
 msgid "Added XP: "
 msgstr "Добавлен опыт: "
 
-#: ../../../src/MenuDevConsole.cpp:305
+#: ../../../src/MenuDevConsole.cpp:306
 msgid "Set campaign status: "
 msgstr "Установить статус кампании: "
 
-#: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
+#: ../../../src/MenuDevConsole.cpp:310 ../../../src/MenuDevConsole.cpp:325
 msgid " <status_1> [<status_2> <status_3> ...]"
 msgstr " <статус_1> [<статус_2> <статус_3> ...]"
 
-#: ../../../src/MenuDevConsole.cpp:316
+#: ../../../src/MenuDevConsole.cpp:317
 msgid "Unset campaign status: "
 msgstr "Сбросить статус кампании: "
 
-#: ../../../src/MenuDevConsole.cpp:319
+#: ../../../src/MenuDevConsole.cpp:320
 msgid "ERROR: Unknown campaign status: "
 msgstr "ОШИБКА: Неизвестный статус кампании: "
 
-#: ../../../src/MenuDevConsole.cpp:339 ../../../src/MenuDevConsole.cpp:349
+#: ../../../src/MenuDevConsole.cpp:340 ../../../src/MenuDevConsole.cpp:350
 msgid "Teleporting to: "
 msgstr "Телепортация в: "
 
-#: ../../../src/MenuDevConsole.cpp:342
+#: ../../../src/MenuDevConsole.cpp:343
 msgid "ERROR: Unknown map: "
 msgstr "ОШИБКА: Неизвестная карта: "
 
-#: ../../../src/MenuDevConsole.cpp:354
+#: ../../../src/MenuDevConsole.cpp:355
 msgid " <x> <y> [<map>]"
 msgstr " <x> <y> [<карта>]"
 
-#: ../../../src/MenuDevConsole.cpp:426
+#: ../../../src/MenuDevConsole.cpp:438
+#, fuzzy
+msgid "Removed item: "
+msgstr "Добавлен предмет: "
+
+#: ../../../src/MenuDevConsole.cpp:447
 msgid "ERROR: Unknown command"
 msgstr "ОШИБКА: Неизвестная команда"
 
-#: ../../../src/MenuDevConsole.cpp:427
+#: ../../../src/MenuDevConsole.cpp:448
 msgid "HINT: Type help"
 msgstr "ПОДСКАЗКА: Наберите help"
 
