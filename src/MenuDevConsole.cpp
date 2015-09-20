@@ -205,6 +205,7 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
+		log_history->add("remove_item - " + msg->get("Removes an item of a given ID from the player's inventory."), false);
 		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), false);
 		log_history->add("list_status - " + msg->get("Prints out all of the campaign status that are set"), false);
 		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
@@ -420,6 +421,26 @@ void MenuDevConsole::execute() {
 			}
 
 			log_history->setMaxMessages(); // reset
+		}
+	}
+	else if (args[0] == "remove_item") {
+		if (args.size() > 1) {
+			int id = toInt(args[1]);
+			if (id <= 0 || static_cast<unsigned>(id) >= items->items.size()) {
+				log_history->add(msg->get("ERROR: Invalid item ID"), false, &color_error);
+				return;
+			}
+
+			int quantity = (args.size() > 2) ? toInt(args[2]) : 1;
+
+			if (quantity > 0) {
+				camp->removeItem(id);
+				log_history->add(msg->get("Removed item: ") + items->getItemName(id) + " (" + toString(typeid(int), &quantity) + ")", false);
+			}
+		}
+		else {
+			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <item_id> [<quantity>]"), false, &color_hint);
 		}
 	}
 	else {
