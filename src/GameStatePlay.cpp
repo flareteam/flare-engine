@@ -841,7 +841,7 @@ void GameStatePlay::logic() {
 	// check menus first (top layer gets mouse click priority)
 	menu->logic();
 
-	if (!menu->pause) {
+	if (!isPaused()) {
 
 		// these actions only occur when the game isn't paused
 		if (pc->stats.alive) checkLoot();
@@ -1021,7 +1021,8 @@ void GameStatePlay::render() {
 
 	// render combat text last - this should make it obvious you're being
 	// attacked, even if you have menus open
-	comb->render();
+	if (!isPaused())
+		comb->render();
 }
 
 void GameStatePlay::showLoading() {
