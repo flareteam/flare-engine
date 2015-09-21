@@ -152,6 +152,9 @@ public:
 	// npc handling
 	int npc_id;
 
+	// book from map event
+	std::string show_book;
+
 	void loadMusic();
 
 	/**

@@ -464,6 +464,10 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.save_game|boolean|Saves the game when the event is triggered. The respawn position is set to where the player is standing.
 		e->s = infile.val;
 	}
+	else if (infile.key == "book") {
+		// @ATTR event.book|string|Opens a book by filename.
+		e->s = infile.val;
+	}
 	else {
 		infile.error("EventManager: '%s' is not a valid key.", infile.key.c_str());
 	}
@@ -659,6 +663,9 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == "npc_id") {
 			mapr->npc_id = ec->x;
+		}
+		else if (ec->type == "book") {
+			mapr->show_book = ec->s;
 		}
 	}
 	return !ev.keep_after_trigger;

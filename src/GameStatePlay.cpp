@@ -419,6 +419,12 @@ void GameStatePlay::checkLog() {
  */
 void GameStatePlay::checkBook() {
 	// Map events can open books
+	if (mapr->show_book != "") {
+		menu->book->book_name = mapr->show_book;
+		mapr->show_book = "";
+	}
+
+	// items can be readable books
 	if (menu->inv->show_book != "") {
 		menu->book->book_name = menu->inv->show_book;
 		menu->inv->show_book = "";

@@ -54,6 +54,7 @@ MapRenderer::MapRenderer()
 	, enemies_cleared(false)
 	, save_game(false)
 	, npc_id(-1)
+	, show_book("")
 	, index_objectlayer(0)
 {
 }
