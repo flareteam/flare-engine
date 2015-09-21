@@ -246,7 +246,10 @@ void setPaths() {
 
 	PATH_DATA = "";
 	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) logError("Settings: Could not find specified game data directory.");
+	else if (!CUSTOM_PATH_DATA.empty()) {
+		logError("Settings: Could not find specified game data directory.");
+		CUSTOM_PATH_DATA = "";
+	}
 
 	PATH_CONF = PATH_CONF + "/";
 	PATH_USER = PATH_USER + "/";
@@ -360,7 +363,10 @@ void setPaths() {
 		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
 		path_data = true;
 	}
-	else if (!CUSTOM_PATH_DATA.empty()) logError("Settings: Could not find specified game data directory.");
+	else if (!CUSTOM_PATH_DATA.empty()) {
+		logError("Settings: Could not find specified game data directory.");
+		CUSTOM_PATH_DATA = "";
+	}
 
 	// Check for the local data before trying installed ones.
 	if (dirExists("./mods")) {
