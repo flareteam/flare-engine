@@ -250,12 +250,13 @@ int main(int argc, char *argv[]) {
 	std::string render_device_name = "";
 
 	for (int i = 1 ; i < argc; i++) {
-		std::string arg = parseArg(std::string(argv[i]));
+		std::string arg_full = std::string(argv[i]);
+		std::string arg = parseArg(arg_full);
 		if (arg == "debug-event") {
 			debug_event = true;
 		}
 		else if (arg == "data-path") {
-			CUSTOM_PATH_DATA = parseArgValue(arg);
+			CUSTOM_PATH_DATA = parseArgValue(arg_full);
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";
 		}
@@ -264,7 +265,7 @@ int main(int argc, char *argv[]) {
 			done = true;
 		}
 		else if (arg == "renderer") {
-			render_device_name = parseArgValue(arg);
+			render_device_name = parseArgValue(arg_full);
 		}
 		else if (arg == "no-audio") {
 			AUDIO = false;
