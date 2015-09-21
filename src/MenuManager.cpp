@@ -660,7 +660,7 @@ void MenuManager::logic() {
 
 	bool console_open = DEV_MODE && devconsole->visible;
 	menus_open = (inv->visible || pow->visible || chr->visible || questlog->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
-	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open;
+	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open || book->visible;
 
 	if (stats->alive) {
 
