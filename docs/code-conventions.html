@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>FLARE Documentation - Code Conventions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style type="text/css">
+body {
+	font-family: Arial, sans-serif;
+	margin-left: 15%;
+	margin-right: 15%;
+}
+.logo {
+	text-align: center;
+	background: #000;
+	color: #fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="logo">
+<img src="../mods/default/images/menus/logo.png" alt="FLARE"/>
+<h1>Code Conventions</h1>
+<hr/>
+</div>
+
+<div class="content">
+
+<h2>Contributing Code</h2>
+
+<p>The #1 rule of this project: <em>all non-trivial code changes must be discussed first!</em></p>
+
+<p>Years of careful decision-making have gone into all parts of this project. Some designs are awaiting planned future changes. If you submit a large patch without knowing how it will affect past and future code, <strong>it will be rejected</strong>.</p>
+
+<p>Is my code non-trivial? If it touches multiple functions or files, probably so.</p>
+
+<p>Ways to discuss a desired code change:</p>
+
+<ul>
+<li>Email me (clintbellanger@gmail.com)</li>
+<li>Open an Issue</li>
+<li>Join us on IRC (#flarerpg at freenode)</li>
+</ul>
+
+<h2>Pull Requests</h2>
+
+<p>When possible, use small pull requests that keep the engine in a stable state. It is far better to have many small pull requests than to wait until your change is too large to merge.</p>
+
+<p>If you're working on more than one feature, submit pull requests separately for these. Some times we need to accept one change and reject the other; if your pull request is all combined I have to reject the entire thing.</p>
+
+<h2>Cross-platform considerations</h2>
+
+<p>To the best of our ability, we want the code to work on Windows, OSX, Linux and more. We try to isolate platform-specific code and use C preprocessor directives when necessary.</p>
+
+<h2>OOP as a last resort</h2>
+
+<p>My code is simple (some would say not elegant). I start by coding it the simplest possible way that would work. I have a deep disdain for overengineering.</p>
+
+<p>Action RPGs are a really simple genre. We don't need fully OOP Entity system to create these games.</p>
+
+<p>We have introduced OOP as needed, when the solution makes much more sense than the added complexity. We won't needlessly refactor working code.</p>
+
+<h2>No C++11 / C++0x</h2>
+
+<p>Maybe we'll allow this kind of code in the future. But Flare has a presence on obscure platforms; I can't guarantee that the compilers have kept up.</p>
+
+<h2>Indentation</h2>
+
+<p>I try to use tabs. I don't really care though, as long as a single file is internally consistent.</p>
+
+<h2>Naming Conventions</h2>
+
+<p>Here are the basic conventions, which are not really consistent. Not a big deal, I sometimes clean these up as I go.</p>
+
+<ul>
+<li>ClassName::functionName</li>
+<li>ClassName::class_variable</li>
+<li>local_variable</li>
+<li>ENUM<em>OR</em>CONSTANT</li>
+</ul>
+
+<h2>Commenting</h2>
+
+<p>I try to use Javadoc style comments on functions, especially if they're non-obvious.</p>
+
+<p>I try to avoid block comments inside functions (so it's easy to block comment out an entire function).</p>
+
+<h2>Namespaces</h2>
+
+<p>Avoid polluting the project's namespace. This means no <code>using namespace std</code>. Instead, prefix the appropriate names with the <code>std::</code> syntax (e.g. <code>std::vector</code>, <code>std::string</code>, <code>std::min()</code>, etc)</p>
+
+</div>
+
+<div class="footer">
+<hr/>
+<p>
+<a href="http://flarerpg.org/">FLARE Website</a>
+</p>
+</div>
+
+</body>
+
+</html>
