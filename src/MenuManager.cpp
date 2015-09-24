@@ -742,7 +742,7 @@ void MenuManager::logic() {
 						drag_src = DRAG_SRC_VENDOR;
 					}
 					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
-						num_picker->setValueBounds(1, inv->getMaxPurchasable(drag_stack.item, vendor->getTab()));
+						num_picker->setValueBounds(1, std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity));
 						num_picker->visible = true;
 					}
 				}
@@ -1128,7 +1128,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				drag_src = DRAG_SRC_VENDOR;
 			}
 			if (drag_stack.quantity > 1) {
-				num_picker->setValueBounds(1, inv->getMaxPurchasable(drag_stack.item, vendor->getTab()));
+				num_picker->setValueBounds(1, std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity));
 				num_picker->visible = true;
 			}
 		}
