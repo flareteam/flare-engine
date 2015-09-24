@@ -71,12 +71,33 @@ void QuestLog::load(const std::string& filename) {
 			if (infile.section == "quest")
 				quests.push_back(std::vector<Event_Component>());
 		}
-		if (!quests.empty()) {
-			Event_Component ev;
-			ev.type = infile.key;
+
+		if (quests.empty())
+			continue;
+
+		// TODO support requires_level, requires_item, requires_currency, requires_class?
+		Event_Component ev;
+		if (infile.key == "requires_status") {
+			// @ATTR quest.requires_status|string|Quest requires this campaign status
+			ev.type = EC_REQUIRES_STATUS;
 			ev.s = msg->get(infile.val);
-			quests.back().push_back(ev);
 		}
+		else if (infile.key == "requires_not_status") {
+			// @ATTR quest.requires_not_status|string|Quest requires not having this campaign status.
+			ev.type = EC_REQUIRES_NOT_STATUS;
+			ev.s = msg->get(infile.val);
+		}
+		else if (infile.key == "quest_text") {
+			// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.
+			ev.type = EC_QUEST_TEXT;
+			ev.s = msg->get(infile.val);
+		}
+		else {
+			logError("QuestLog: %s is not a valid key.", infile.key.c_str());
+		}
+
+		if (ev.type != EC_NONE)
+			quests.back().push_back(ev);
 	}
 	infile.close();
 }
@@ -101,22 +122,20 @@ void QuestLog::createQuestList() {
 			// check requirements
 			// break (skip to next dialog node) if any requirement fails
 			// if we reach an event that is not a requirement, succeed
+			// TODO support requires_level, requires_item, requires_currency, requires_class?
 
-			// @ATTR quest.requires_status|string|Quest requires this campaign status
-			if (quests[i][j].type == "requires_status") {
+			if (quests[i][j].type == EC_REQUIRES_STATUS) {
 				if (!camp->checkStatus(quests[i][j].s)) break;
 			}
-			// @ATTR quest.requires_not_status|string|Quest requires not having this campaign status.
-			else if (quests[i][j].type == "requires_not_status") {
+			else if (quests[i][j].type == EC_REQUIRES_NOT_STATUS) {
 				if (camp->checkStatus(quests[i][j].s)) break;
 			}
-			// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.
-			else if (quests[i][j].type == "quest_text") {
+			else if (quests[i][j].type == EC_QUEST_TEXT) {
 				log->add(quests[i][j].s, LOG_TYPE_QUESTS, false);
 				newQuestNotification = true;
 				break;
 			}
-			else if (quests[i][j].type == "") {
+			else if (quests[i][j].type == EC_NONE) {
 				break;
 			}
 		}

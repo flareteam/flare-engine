@@ -140,7 +140,7 @@ void MenuTalker::logic() {
 
 	// determine active button
 	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
-		if (npc->dialog[dialog_node][event_cursor+1].type != "") {
+		if (npc->dialog[dialog_node][event_cursor+1].type != EC_NONE) {
 			advanceButton->enabled = true;
 			tablist.remove(closeButton);
 			tablist.add(advanceButton);
@@ -200,13 +200,13 @@ void MenuTalker::createBuffer() {
 	std::string line;
 
 	// speaker name
-	std::string etype = npc->dialog[dialog_node][event_cursor].type;
+	EVENT_COMPONENT_TYPE etype = npc->dialog[dialog_node][event_cursor].type;
 	std::string who;
 
-	if (etype == "him" || etype == "her") {
+	if (etype == EC_NPC_DIALOG_THEM) {
 		who = npc->name;
 	}
-	else if (etype == "you") {
+	else if (etype == EC_NPC_DIALOG_YOU) {
 		who = hero_name;
 	}
 
@@ -255,8 +255,8 @@ void MenuTalker::render() {
 
 	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && event_cursor < npc->dialog[dialog_node].size()) {
 		// show active portrait
-		std::string etype = npc->dialog[dialog_node][event_cursor].type;
-		if (etype == "him" || etype == "her") {
+		EVENT_COMPONENT_TYPE etype = npc->dialog[dialog_node][event_cursor].type;
+		if (etype == EC_NPC_DIALOG_THEM) {
 			Sprite *r = npc->portrait;
 			if (r) {
 				src.w = dest.w = portrait_he.w;
@@ -269,7 +269,7 @@ void MenuTalker::render() {
 				render_device->render(r);
 			}
 		}
-		else if (etype == "you") {
+		else if (etype == EC_NPC_DIALOG_YOU) {
 			if (portrait) {
 				src.w = dest.w = portrait_you.w;
 				src.h = dest.h = portrait_you.h;
@@ -288,7 +288,7 @@ void MenuTalker::render() {
 
 	// show advance button if there are more event components, or close button if not
 	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
-		if (npc->dialog[dialog_node][event_cursor+1].type != "") {
+		if (npc->dialog[dialog_node][event_cursor+1].type != EC_NONE) {
 			advanceButton->render();
 		}
 		else {

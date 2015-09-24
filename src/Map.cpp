@@ -105,7 +105,7 @@ int Map::load(std::string fname) {
 
 	// create StatBlocks for events that need powers
 	for (unsigned i=0; i<events.size(); ++i) {
-		Event_Component *ec_power = events[i].getComponent("power");
+		Event_Component *ec_power = events[i].getComponent(EC_POWER);
 		if (ec_power) {
 			statblocks.push_back(StatBlock());
 			StatBlock *statb = &statblocks.back();
@@ -120,7 +120,7 @@ int Map::load(std::string fname) {
 
 			statb->starting[STAT_ACCURACY] = 1000; // always hit the target
 
-			Event_Component *ec_path = events[i].getComponent("power_path");
+			Event_Component *ec_path = events[i].getComponent(EC_POWER_PATH);
 			if (ec_path) {
 				// source is power path start
 				statb->pos.x = static_cast<float>(ec_path->x) + 0.5f;
@@ -132,7 +132,7 @@ int Map::load(std::string fname) {
 				statb->pos.y = static_cast<float>(events[i].location.y) + 0.5f;
 			}
 
-			Event_Component *ec_damage = events[i].getComponent("power_damage");
+			Event_Component *ec_damage = events[i].getComponent(EC_POWER_DAMAGE);
 			if (ec_damage) {
 				statb->starting[STAT_DMG_MELEE_MIN] = statb->starting[STAT_DMG_RANGED_MIN] = statb->starting[STAT_DMG_MENT_MIN] = ec_damage->a;
 				statb->starting[STAT_DMG_MELEE_MAX] = statb->starting[STAT_DMG_RANGED_MAX] = statb->starting[STAT_DMG_MENT_MAX] = ec_damage->b;
