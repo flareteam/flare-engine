@@ -104,7 +104,7 @@ body {
 
 <h4>CombatText</h4>
 
-<p>Description of engine/combat_ext.txt</p>
+<p>Description of engine/combat_text.txt</p>
 
 <p><strong>duration</strong>, _duration_, Duration of the combat text in 'ms' or 's'.</p>
 
@@ -166,9 +166,9 @@ body {
 
 <p><strong>mental</strong>, Increase Mental stat.</p>
 
-<p><strong>$STATNAME</strong>, Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_melee_min, xp_gain</p>
+<p><strong>$STATNAME</strong>, Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_mele_min, xp_gain</p>
 
-<p><strong>$ELEMENT_resist</strong>, Increase Resistance % to $ELEMENT, where $ELEMENT is any found in engine/elements.txt. Example: fire_sist</p>
+<p><strong>$ELEMENT_resist</strong>, Increase Resistance % to $ELEMENT, where $ELEMENT is any found in engine/elements.txt. Example: fire_resist</p>
 
 <p><strong>death_sentence</strong>, Causes sudden death at the end of the effect duration.</p>
 
@@ -220,13 +220,13 @@ body {
 
 <p><strong>event.loot</strong>, _[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],..._, Add loot to the event; either a filename or an inline definition.</p>
 
-<p><strong>loot_count</strong>, _min (integer), max (integer)_, Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.</p>
+<p><strong>event.loot_count</strong>, _min (integer), max (integer)_, Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.</p>
 
 <p><strong>event.msg</strong>, _string_, Adds a message to be displayed for the event.</p>
 
 <p><strong>event.shakycam</strong>, _duration_, Makes the camera shake for this duration in 'ms' or 's'.</p>
 
-<p><strong>event.requires_tatus</strong>, _string,..._, Event requires list of statuses</p>
+<p><strong>event.requires_status</strong>, _string,..._, Event requires list of statuses</p>
 
 <p><strong>event.requires_not_status</strong>, _string,..._, Event requires not list of statuses</p>
 
@@ -294,7 +294,7 @@ body {
 
 <p><strong>language</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Language" list box relative to the frame.</p>
 
-<p><strong>combat_ext</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Show combat text" checkbox relative to the frame.</p>
+<p><strong>combat_text</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Show combat text" checkbox relative to the frame.</p>
 
 <p><strong>show_fps</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Show FPS" checkbox relative to the frame.</p>
 
@@ -306,15 +306,15 @@ body {
 
 <p><strong>show_target</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Show targeting animation" checkbox relative to the frame.</p>
 
-<p><strong>loot_ooltips</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Always show loot labels" checkbox relative to the frame.</p>
+<p><strong>loot_tooltips</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Always show loot labels" checkbox relative to the frame.</p>
 
 <p><strong>activemods</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Active Mods" list box relative to the frame.</p>
 
 <p><strong>inactivemods</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Available Mods" list box relative to the frame.</p>
 
-<p><strong>activemods_hiftup</strong>, _x (integer), y (integer)_, Position of the button to shift mods up in "Active Mods" relative to the frame.</p>
+<p><strong>activemods_shiftup</strong>, _x (integer), y (integer)_, Position of the button to shift mods up in "Active Mods" relative to the frame.</p>
 
-<p><strong>activemods_hiftdown</strong>, _x (integer), y (integer)_, Position of the button to shift mods down in "Active Mods" relative to the frame.</p>
+<p><strong>activemods_shiftdown</strong>, _x (integer), y (integer)_, Position of the button to shift mods down in "Active Mods" relative to the frame.</p>
 
 <p><strong>activemods_deactivate</strong>, _x (integer), y (integer)_, Position of the "Disable" button relative to the frame.</p>
 
@@ -484,7 +484,7 @@ body {
 
 <p><strong>button_prev</strong>, _x (integer), y (integer)_, Position of button to choose the previous preset hero.</p>
 
-<p><strong>button_ext</strong>, _x (integer), y (integer)_, Position of button to choose the next preset hero.</p>
+<p><strong>button_next</strong>, _x (integer), y (integer)_, Position of button to choose the next preset hero.</p>
 
 <p><strong>button_permadeath</strong>, _x (integer), y (integer)_, Position of checkbox for toggling permadeath.</p>
 
@@ -500,7 +500,7 @@ body {
 
 <p><strong>portrait</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the portrait image.</p>
 
-<p><strong>class_list</strong>, _x (integer), y (integer)_, Position of the class list.</p>
+<p><strong>clas_list</strong>, _x (integer), y (integer)_, Position of the class list.</p>
 
 <p><strong>show_classlist</strong>, _boolean_, Allows hiding the class list.</p>
 
@@ -508,7 +508,7 @@ body {
 
 <h4>GameStateNew: Hero options</h4>
 
-<p>Description of engine/hero_ptions.txt</p>
+<p>Description of engine/hero_options.txt</p>
 
 <p><strong>option</strong>, _base (string), head (string), portrait (string), name (string)_, A default body, head, portrait, and name for a hero.</p>
 
@@ -524,7 +524,7 @@ body {
 
 <p><strong>title.power</strong>, _integer_, Requires power.</p>
 
-<p><strong>title.requires_tatus</strong>, _string_, Requires status.</p>
+<p><strong>title.requires_status</strong>, _string_, Requires status.</p>
 
 <p><strong>title.requires_not_status</strong>, _string_, Requires not status.</p>
 
@@ -604,7 +604,7 @@ body {
 
 <p><strong>abs</strong>, _[min (integer), max (integer)]_, Defines the item absorb value, if only min is specified the absorb value is fixed.</p>
 
-<p><strong>requires_tat</strong>, _[ [physical:mental:offense:defense], amount (integer) ]_, Make item require specific stat level ex. requires_tat=physical,6 will require hero to have level 6 in physical stats</p>
+<p><strong>requires_stat</strong>, _[ [physical:mental:offense:defense], amount (integer) ]_, Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats</p>
 
 <p><strong>requires_class</strong>, _string_, The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
@@ -624,7 +624,7 @@ body {
 
 <p><strong>price</strong>, _integer_, The amount of currency the item costs, if set to 0 the item cannot be sold.</p>
 
-<p><strong>price_sell</strong>, _integer_, The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_atio.</p>
+<p><strong>price_sell</strong>, _integer_, The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.</p>
 
 <p><strong>max_quantity</strong>, _integer_, Max item count per stack.</p>
 
@@ -682,7 +682,7 @@ body {
 
 <p><strong>autopickup_currency</strong>, _boolean_, Enable autopickup for currency</p>
 
-<p><strong>vendor_atio</strong>, _integer_, Prices ratio for vendors</p>
+<p><strong>vendor_ratio</strong>, _integer_, Prices ratio for vendors</p>
 
 <p><strong>sfx_loot</strong>, _string_, Filename of a sound effect to play for dropping loot.</p>
 
@@ -730,17 +730,17 @@ body {
 
 <p><strong>enemygroup.direction</strong>, _direction_, Direction that enemies will initially face.</p>
 
-<p><strong>enemygroup.waypoints</strong>, _[x(integer), y(integer)]_, Enemy waypoints; single enemy only; negates wander_adius</p>
+<p><strong>enemygroup.waypoints</strong>, _[x(integer), y(integer)]_, Enemy waypoints; single enemy only; negates wander_radius</p>
 
-<p><strong>enemygroup.wander_adius</strong>, _integer_, The radius (in tiles) that an enemy will wander around randomly; negates waypoints</p>
+<p><strong>enemygroup.wander_radius</strong>, _integer_, The radius (in tiles) that an enemy will wander around randomly; negates waypoints</p>
 
-<p><strong>enemygroup.requires_tatus</strong>, _string_, Status required for loading enemies</p>
+<p><strong>enemygroup.requires_status</strong>, _string_, Status required for loading enemies</p>
 
 <p><strong>enemygroup.requires_not_status</strong>, _string_, Status required to be missing for loading enemies</p>
 
 <p><strong>npc.type</strong>, _string_, Filename of an NPC definition.</p>
 
-<p><strong>npc.requires_tatus</strong>, _string_, Status required for NPC load. There can be multiple states, separated by comma</p>
+<p><strong>npc.requires_status</strong>, _string_, Status required for NPC load. There can be multiple states, separated by comma</p>
 
 <p><strong>npc.requires_not_status</strong>, _string_, Status required to be missing for NPC load. There can be multiple states, separated by comma</p>
 
@@ -810,7 +810,7 @@ body {
 
 <p><strong>upgrade_offense</strong>, _x (integer), y (integer)_, Position of the button used to add a stat point to Offense.</p>
 
-<p><strong>upgrade_fense</strong>, _x (integer), y (integer)_, Position of the button used to add a stat point to Defense.</p>
+<p><strong>upgrade_defense</strong>, _x (integer), y (integer)_, Position of the button used to add a stat point to Defense.</p>
 
 <p><strong>statlist</strong>, _x (integer), y (integer)_, Position of the scrollbox containing non-primary stats.</p>
 
@@ -820,7 +820,7 @@ body {
 
 <p><strong>label_name</strong>, _label_, Position of the "Name" text.</p>
 
-<p><strong>label_evel</strong>, _label_, Position of the "Level" text.</p>
+<p><strong>label_level</strong>, _label_, Position of the "Level" text.</p>
 
 <p><strong>label_physical</strong>, _label_, Position of the "Physical" text.</p>
 
@@ -850,7 +850,7 @@ body {
 
 <p><strong>show_upgrade_offense</strong>, _boolean_, Hide the Offense upgrade button if set to false.</p>
 
-<p><strong>show_upgrade_fense</strong>, _boolean_, Hide the Defense upgrade button if set to false.</p>
+<p><strong>show_upgrade_defense</strong>, _boolean_, Hide the Defense upgrade button if set to false.</p>
 
 <p><strong>show_resists</strong>, _boolean_, Hide the elemental "Resistance" stats in the statlist if set to false.</p>
 
@@ -910,7 +910,7 @@ body {
 
 <p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
 
-<p><strong>equipment_slot</strong>, _x (integer), y (integer), size (integer), slot_ype (string)_, Position and item type of an equipment slot.</p>
+<p><strong>equipment_slot</strong>, _x (integer), y (integer), size (integer), slot_type (string)_, Position and item type of an equipment slot.</p>
 
 <p><strong>slot_name</strong>, _string_, The displayed name of the last defined equipment slot.</p>
 
@@ -944,7 +944,7 @@ body {
 
 <p>Description of menus/minimap.txt</p>
 
-<p><strong>map_os</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the map.</p>
+<p><strong>map_pos</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the map.</p>
 
 <p><strong>text_pos</strong>, _label_, Position of the text label with the map name.</p>
 
@@ -1038,7 +1038,7 @@ body {
 
 <p><strong>power.requires_power</strong>, _integer_, Power requires another power id.</p>
 
-<p><strong>power.visible_requires_tatus</strong>, _string_, Hide the power if we don't have this campaign status.</p>
+<p><strong>power.visible_requires_status</strong>, _string_, Hide the power if we don't have this campaign status.</p>
 
 <p><strong>power.visible_requires_not_status</strong>, _string_, Hide the power if we have this campaign status.</p>
 
@@ -1068,7 +1068,7 @@ body {
 
 <p><strong>upgrade.requires_power</strong>, _integer_, Upgrade requires another power id.</p>
 
-<p><strong>upgrade.visible_requires_tatus</strong>, _string_, Hide the upgrade if we don't have this campaign status.</p>
+<p><strong>upgrade.visible_requires_status</strong>, _string_, Hide the upgrade if we don't have this campaign status.</p>
 
 <p><strong>upgrade.visible_requires_not_status</strong>, _string_, Hide the upgrade if we have this campaign status.</p>
 
@@ -1142,7 +1142,7 @@ body {
 
 <p><strong>vendor_cols</strong>, _integer_, The number of columns in the grid of slots.</p>
 
-<p><strong>vendor_ows</strong>, _integer_, The number of rows in the grid of slots.</p>
+<p><strong>vendor_rows</strong>, _integer_, The number of rows in the grid of slots.</p>
 
 <p><strong>label_title</strong>, _label_, The position of the text that displays the NPC's name.</p>
 
@@ -1176,7 +1176,7 @@ body {
 
 <p><strong>constant_stock</strong>, _item (integer), ..._, A list of items this vendor has for sale.</p>
 
-<p><strong>status_tock</strong>, _status (string), item (integer), ..._, A list of items this vendor will have for sale if the required status is met.</p>
+<p><strong>status_stock</strong>, _status (string), item (integer), ..._, A list of items this vendor will have for sale if the required status is met.</p>
 
 <p><strong>vox_intro</strong>, _string_, Filename of a sound file to play when initially interacting with the NPC.</p>
 
@@ -1314,17 +1314,17 @@ body {
 
 <p><strong>buff</strong>, _bool_, Power is cast upon the caster.</p>
 
-<p><strong>buff_teleport</strong>, _bool_, Power is a teleportation power.</p>
+<p><strong>buf_teleport</strong>, _bool_, Power is a teleportation power.</p>
 
-<p><strong>buff_party</strong>, _bool_, Power is cast upon party members</p>
+<p><strong>buf_party</strong>, _bool_, Power is cast upon party members</p>
 
-<p><strong>buff_party_power_id</strong>, _integer_, Buffs a power id for all party members</p>
+<p><strong>buf_party_power_id</strong>, _integer_, Buffs a power id for all party members</p>
 
 <p><strong>post_effect</strong>, _[effect_id, magnitude (integer), duration (duration)]_, Post effect. Duration is in 'ms' or 's'.</p>
 
 <p><strong>post_power</strong>, _power_id_, Trigger a power if the hazard did damage.</p>
 
-<p><strong>wall_power</strong>, _power_id_, Trigger a power if the hazard hit a wall.</p>
+<p><strong>wal_power</strong>, _power_id_, Trigger a power if the hazard hit a wall.</p>
 
 <p><strong>spawn_type</strong>, _string_, Type of spawn.</p>
 
@@ -1352,11 +1352,11 @@ body {
 
 <p>Description of quest files in quests/</p>
 
-<p><strong>quest.requires_tatus</strong>, _string_, Quest requires this campaign status</p>
+<p><strong>quest.requires_status</strong>, _string_, Quest requires this campaign status</p>
 
 <p><strong>quest.requires_not_status</strong>, _string_, Quest requires not having this campaign status.</p>
 
-<p><strong>quest.quest_ext</strong>, _string_, Text that gets displayed in the Quest log when this quest is active.</p>
+<p><strong>quest.quest_text</strong>, _string_, Text that gets displayed in the Quest log when this quest is active.</p>
 
 <hr />
 
@@ -1368,7 +1368,7 @@ body {
 
 <p><strong>menu_normal, menu_bonus, menu_penalty, widget_normal, widget_disabled</strong>, _r (integer), g (integer), b (integer)_, Colors for menus and widgets</p>
 
-<p><strong>combat_givedmg, combat_akedmg, combat_crit, combat_buff, combat_miss</strong>, _r (integer), g (integer), b (integer)_, Colors for combat text</p>
+<p><strong>combat_givedmg, combat_takedmg, combat_crit, combat_buff, combat_miss</strong>, _r (integer), g (integer), b (integer)_, Colors for combat text</p>
 
 <p><strong>requirements_not_met, item_bonus, item_penalty, item_flavor</strong>, _r (integer), g (integer), b (integer)_, Colors for tooltips</p>
 
@@ -1394,7 +1394,7 @@ body {
 
 <p><strong>corpse_timeout</strong>, _duration_, Duration that a corpse can exist on the map in 'ms' or 's'.</p>
 
-<p><strong>sell_without_vendor</strong>, _boolean_, Allows selling items when not at a vendor via CTRL-Click.</p>
+<p><strong>sel_without_vendor</strong>, _boolean_, Allows selling items when not at a vendor via CTRL-Click.</p>
 
 <p><strong>aim_assist</strong>, _integer_, The pixel offset for powers that use aim_assist.</p>
 
@@ -1404,7 +1404,7 @@ body {
 
 <p><strong>sound_falloff</strong>, _integer_, The maximum radius in tiles that any single sound is audible.</p>
 
-<p><strong>party_exp_ercentage</strong>, _integer_, The percentage of XP given to allies.</p>
+<p><strong>party_exp_percentage</strong>, _integer_, The percentage of XP given to allies.</p>
 
 <p><strong>enable_ally_collision</strong>, _boolean_, Allows allies to block the player's path.</p>
 
@@ -1652,7 +1652,7 @@ body {
 
 <p><strong>passive_powers</strong>, _power (integer), ..._, A list of passive powers this creature has.</p>
 
-<p><strong>melee_range</strong>, _float_, Minimum distance from target required to use melee powers.</p>
+<p><strong>mele_range</strong>, _float_, Minimum distance from target required to use melee powers.</p>
 
 <p><strong>threat_range</strong>, _float_, Radius of the area this creature will be able to start chasing the hero.</p>
 
@@ -1660,7 +1660,7 @@ body {
 
 <p><strong>animations</strong>, _string_, Filename of an animation definition.</p>
 
-<p><strong>suppress_hp</strong>, _boolean_, Hides the enemy HP bar for this creature.</p>
+<p><strong>suppres_hp</strong>, _boolean_, Hides the enemy HP bar for this creature.</p>
 
 <p><strong>categories</strong>, _category (string), ..._, Categories that this enemy belongs to.</p>
 
@@ -1704,9 +1704,9 @@ body {
 
 <p><strong>avoidance</strong>, Avoidance %. Higher values means more likely to not get hit.</p>
 
-<p><strong>dmg_melee_min</strong>, Minimum melee damage</p>
+<p><strong>dmg_mele_min</strong>, Minimum melee damage</p>
 
-<p><strong>dmg_melee_max</strong>, Maximum melee damage</p>
+<p><strong>dmg_mele_max</strong>, Maximum melee damage</p>
 
 <p><strong>dmg_ranged_min</strong>, Minimum ranged damage</p>
 
@@ -1736,9 +1736,9 @@ body {
 
 <p><strong>return_damage</strong>, Deals a percentage of the damage taken back to the attacker</p>
 
-<p><strong>hp_ercent</strong>, Base HP altered by percentage</p>
+<p><strong>hp_percent</strong>, Base HP altered by percentage</p>
 
-<p><strong>mp_ercent</strong>, Base MP altered by percentage</p>
+<p><strong>mp_percent</strong>, Base MP altered by percentage</p>
 
 <hr />
 
