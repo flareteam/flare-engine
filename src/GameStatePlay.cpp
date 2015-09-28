@@ -357,6 +357,8 @@ void GameStatePlay::checkCancel() {
 		snd->stopMusic();
 		delete requestedGameState;
 		requestedGameState = new GameStateTitle();
+
+		CurrentGameSlot = 0;
 	}
 
 	// if user closes the window
