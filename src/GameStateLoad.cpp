@@ -500,7 +500,7 @@ void GameStateLoad::logicLoading() {
 	delete_items = false;
 	GameStatePlay* play = new GameStatePlay();
 	play->resetGame();
-	play->game_slot = selected_slot + 1;
+	CurrentGameSlot = selected_slot + 1;
 	play->loadGame();
 	play->loadPowerTree();
 	requestedGameState = play;

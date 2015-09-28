@@ -1,5 +1,5 @@
 /*
-Copyright © 2013 Stefan Beller
+Copyright © 2015 Igor Paliychuk
 
 This file is part of FLARE.
 
@@ -15,18 +15,23 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include "SharedGameResources.h"
+/**
+ * class SaveLoad
+ *
+ * Save function for the GameStatePlay.
+ */
 
-Avatar *pc = NULL;
-MenuManager *menu = NULL;
-CampaignManager *camp = NULL;
-EnemyGroupManager *enemyg = NULL;
-EnemyManager *enemies = NULL;
-ItemManager *items = NULL;
-LootManager *loot = NULL;
-MapRenderer *mapr = NULL;
-MenuActionBar *menu_act= NULL;
-MenuPowers *menu_powers = NULL;
-PowerManager *powers = NULL;
+#ifndef SAVELOAD_H
+#define SAVELOAD_H
 
-int CurrentGameSlot = 0;
+class SaveLoad {
+public:
+	static void saveGame(int game_slot);
+
+private:
+	SaveLoad();
+	~SaveLoad();
+
+};
+
+#endif

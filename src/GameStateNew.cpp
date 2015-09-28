@@ -300,7 +300,7 @@ void GameStateNew::logic() {
 		avatar->stats.gfx_portrait = portrait[current_option];
 		avatar->stats.name = input_name->getText();
 		avatar->stats.permadeath = button_permadeath->isChecked();
-		play->game_slot = game_slot;
+		CurrentGameSlot = game_slot;
 		play->resetGame();
 		play->loadClass(class_list->getSelected());
 		play->loadPowerTree();

@@ -59,6 +59,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "UtilsParsing.h"
 #include "MenuPowers.h"
+#include "SaveLoad.h"
 
 const int MENU_ENEMY_TIMEOUT = MAX_FRAMES_PER_SEC * 10;
 
@@ -73,8 +74,7 @@ GameStatePlay::GameStatePlay()
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
-	, nearest_npc(-1)
-	, game_slot(0) {
+	, nearest_npc(-1) {
 
 	Image *graphics;
 	hasMusic = true;
@@ -323,14 +323,14 @@ void GameStatePlay::checkTeleport() {
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
-				removeSaveDir(game_slot);
+				removeSaveDir(CurrentGameSlot);
 
 				snd->stopMusic();
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
 			}
 			else if (SAVE_ONLOAD) {
-				saveGame();
+				SaveLoad::saveGame(CurrentGameSlot);
 			}
 		}
 
@@ -352,7 +352,7 @@ void GameStatePlay::checkCancel() {
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
 		if (SAVE_ONEXIT)
-			saveGame();
+			SaveLoad::saveGame(CurrentGameSlot);
 
 		snd->stopMusic();
 		delete requestedGameState;
@@ -362,7 +362,7 @@ void GameStatePlay::checkCancel() {
 	// if user closes the window
 	if (inpt->done) {
 		if (SAVE_ONEXIT)
-			saveGame();
+			SaveLoad::saveGame(CurrentGameSlot);
 
 		snd->stopMusic();
 		exitRequested = true;
@@ -759,7 +759,7 @@ void GameStatePlay::checkStash() {
 	// If the stash has been updated, save the game
 	if (menu->stash->updated) {
 		menu->stash->updated = false;
-		saveGame();
+		SaveLoad::saveGame(CurrentGameSlot);
 	}
 }
 
@@ -776,7 +776,7 @@ void GameStatePlay::checkCutscene() {
 	}
 
 	// handle respawn point and set game play game_slot
-	cutscene->game_slot = game_slot;
+	cutscene->game_slot = CurrentGameSlot;
 
 	if (mapr->teleportation) {
 
@@ -791,7 +791,7 @@ void GameStatePlay::checkCutscene() {
 	}
 
 	if (SAVE_ONLOAD)
-		saveGame();
+		SaveLoad::saveGame(CurrentGameSlot);
 
 	delete requestedGameState;
 	requestedGameState = cutscene;
@@ -800,7 +800,7 @@ void GameStatePlay::checkCutscene() {
 void GameStatePlay::checkSaveEvent() {
 	if (mapr->save_game) {
 		mapr->respawn_point = floor(pc->stats.pos);
-		saveGame();
+		SaveLoad::saveGame(CurrentGameSlot);
 		mapr->save_game = false;
 	}
 }
@@ -1091,5 +1091,6 @@ GameStatePlay::~GameStatePlay() {
 	camp = NULL;
 	items = NULL;
 	pc = NULL;
+	menu = NULL;
 }
 

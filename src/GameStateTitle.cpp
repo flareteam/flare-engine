@@ -165,9 +165,11 @@ void GameStateTitle::logic() {
 			requestedGameState = credits;
 		}
 	}
+#if !defined (__IPHONEOS__)
 	else if (button_exit->checkClick()) {
 		exitRequested = true;
 	}
+#endif
 }
 
 void GameStateTitle::refreshWidgets() {
@@ -198,7 +200,9 @@ void GameStateTitle::render() {
 	button_play->render();
 	button_cfg->render();
 	button_credits->render();
+#if !defined (__IPHONEOS__)
 	button_exit->render();
+#endif
 
 	// version number
 	label_version->render();

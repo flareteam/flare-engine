@@ -28,14 +28,34 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsDebug.h"
 #include "UtilsParsing.h"
+#include "SaveLoad.h"
+#include "SharedGameResources.h"
 
 #include <math.h>
+
+#if defined(__ANDROID__) || defined (__IPHONEOS__)
+
+int isExitEvent(void* userdata, SDL_Event* event)
+{
+	if (event->type == SDL_APP_TERMINATING)
+	{
+		logInfo("Terminating app, saving...");
+		SaveLoad::saveGame(CurrentGameSlot);
+		logInfo("Saved, ready to exit.");
+		return 0;
+	}
+	return 1;
+}
+
+#endif
 
 SDLInputState::SDLInputState(void)
 	: InputState()
 {
 #if !defined(__ANDROID__) && !defined (__IPHONEOS__)
 	SDL_StartTextInput();
+#else
+	SDL_SetEventFilter(isExitEvent, NULL);
 #endif
 
 	defaultQwertyKeyBindings();
@@ -171,6 +191,9 @@ void SDLInputState::handle() {
 					render_device->windowResize();
 				}
 				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
+					logInfo("Minimizing app, saving...");
+					SaveLoad::saveGame(CurrentGameSlot);
+					logInfo("Game saved");
 					window_minimized = true;
 					snd->pauseAll();
 				}

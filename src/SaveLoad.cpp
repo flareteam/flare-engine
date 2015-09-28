@@ -19,13 +19,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 /**
+ * class SaveLoad
+ *
+ * Save function for the GameStatePlay.
+ *
+ *
+ * class GameStatePlay
+ *
  * Save and Load functions for the GameStatePlay.
  *
  * I put these in a separate cpp file just to keep GameStatePlay.cpp devoted to its core.
  *
- * class GameStatePlay
  */
 
+#include "SaveLoad.h"
 #include "CommonIncludes.h"
 #include "FileParser.h"
 #include "GameStatePlay.h"
@@ -48,7 +55,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * Before exiting the game, save to file
  */
-void GameStatePlay::saveGame() {
+void SaveLoad::saveGame(int game_slot) {
 
 	// game slots are currently 1-4
 	if (game_slot == 0) return;
@@ -197,13 +204,13 @@ void GameStatePlay::loadGame() {
 	int currency = 0;
 
 	// game slots are currently 1-4
-	if (game_slot == 0) return;
+	if (CurrentGameSlot == 0) return;
 
 	FileParser infile;
 	std::vector<int> hotkeys(ACTIONBAR_MAX, -1);
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << CurrentGameSlot << "/avatar.txt";
 
 	if (infile.open(path(&ss), false)) {
 		while (infile.next()) {
@@ -357,7 +364,7 @@ void GameStatePlay::loadClass(int index) {
 	}
 
 	// game slots are currently 1-4
-	if (game_slot == 0) return;
+	if (CurrentGameSlot == 0) return;
 
 	pc->stats.character_class = HERO_CLASSES[index].name;
 	pc->stats.physical_character += HERO_CLASSES[index].physical;
@@ -398,7 +405,7 @@ void GameStatePlay::loadStash() {
 	FileParser infile;
 	std::stringstream ss;
 	if (pc->stats.permadeath)
-		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << CurrentGameSlot << "/stash_HC.txt";
 	else
 		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 

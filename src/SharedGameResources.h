@@ -33,6 +33,7 @@ extern MenuPowers *menu_powers;
 *  so can be accessed safely anywhere in between. The objects must not be changed by any other class.
 */
 extern Avatar *pc;
+extern MenuManager *menu;
 extern CampaignManager *camp;
 extern EnemyGroupManager *enemyg;
 extern EnemyManager *enemies;
@@ -40,5 +41,7 @@ extern ItemManager *items;
 extern LootManager *loot;
 extern MapRenderer *mapr;
 extern PowerManager *powers;
+
+extern int CurrentGameSlot;
 
 #endif // SHAREDGAMEOBJECTS_H

@@ -21,6 +21,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStatePlay.h"
 #include "FileParser.h"
 #include "WidgetScrollBox.h"
+#include "SharedGameResources.h"
 
 Scene::Scene(const FPoint& _caption_margins, bool _scale_graphics)
 	: frame_counter(0)
@@ -203,7 +204,7 @@ void GameStateCutscene::logic() {
 		if (game_slot != -1) {
 			GameStatePlay *gsp = new GameStatePlay();
 			gsp->resetGame();
-			gsp->game_slot = game_slot;
+			CurrentGameSlot = game_slot;
 			gsp->loadGame();
 
 			previous_gamestate = gsp;
