@@ -42,6 +42,4 @@ extern LootManager *loot;
 extern MapRenderer *mapr;
 extern PowerManager *powers;
 
-extern int CurrentGameSlot;
-
 #endif // SHAREDGAMEOBJECTS_H

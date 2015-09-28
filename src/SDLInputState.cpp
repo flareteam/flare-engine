@@ -40,7 +40,7 @@ int isExitEvent(void* userdata, SDL_Event* event)
 	if (event->type == SDL_APP_TERMINATING)
 	{
 		logInfo("Terminating app, saving...");
-		SaveLoad::saveGame(CurrentGameSlot);
+		save_load->saveGame();
 		logInfo("Saved, ready to exit.");
 		return 0;
 	}
@@ -192,7 +192,7 @@ void SDLInputState::handle() {
 				}
 				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
 					logInfo("Minimizing app, saving...");
-					SaveLoad::saveGame(CurrentGameSlot);
+					save_load->saveGame();
 					logInfo("Game saved");
 					window_minimized = true;
 					snd->pauseAll();

@@ -67,6 +67,7 @@ static void init(const std::string &render_device_name) {
 		Exit(1);
 	}
 
+	save_load = new SaveLoad();
 	msg = new MessageEngine();
 	font = getFontEngine();
 	anim = new AnimationManager();
@@ -208,6 +209,7 @@ static void cleanup() {
 	delete mods;
 	delete msg;
 	delete snd;
+	delete save_load;
 
 	if (render_device)
 		render_device->destroyContext();

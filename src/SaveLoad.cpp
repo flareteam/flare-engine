@@ -21,11 +21,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * class SaveLoad
  *
- * Save function for the GameStatePlay.
- *
- *
- * class GameStatePlay
- *
  * Save and Load functions for the GameStatePlay.
  *
  * I put these in a separate cpp file just to keep GameStatePlay.cpp devoted to its core.
@@ -52,13 +47,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 
+SaveLoad::SaveLoad()
+	: game_slot(0) {
+}
+
+SaveLoad::~SaveLoad() {
+}
+
 /**
  * Before exiting the game, save to file
  */
-void SaveLoad::saveGame(int game_slot) {
+void SaveLoad::saveGame() {
 
-	// game slots are currently 1-4
-	if (game_slot == 0) return;
+	if (!gameSlotIsValid()) return;
 
 	// if needed, create the save file structure
 	createSaveDir(game_slot);
@@ -198,19 +199,18 @@ void SaveLoad::saveGame(int game_slot) {
 /**
  * When loading the game, load from file if possible
  */
-void GameStatePlay::loadGame() {
+void SaveLoad::loadGame() {
 	int saved_hp = 0;
 	int saved_mp = 0;
 	int currency = 0;
 
-	// game slots are currently 1-4
-	if (CurrentGameSlot == 0) return;
+	if (!gameSlotIsValid()) return;
 
 	FileParser infile;
 	std::vector<int> hotkeys(ACTIONBAR_MAX, -1);
 
 	std::stringstream ss;
-	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << CurrentGameSlot << "/avatar.txt";
+	ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/avatar.txt";
 
 	if (infile.open(path(&ss), false)) {
 		while (infile.next()) {
@@ -357,14 +357,13 @@ void GameStatePlay::loadGame() {
 /**
  * Load a class definition, index
  */
-void GameStatePlay::loadClass(int index) {
+void SaveLoad::loadClass(int index) {
 	if (index < 0 || static_cast<unsigned>(index) >= HERO_CLASSES.size()) {
 		logError("SaveLoad: Class index out of bounds.");
 		return;
 	}
 
-	// game slots are currently 1-4
-	if (CurrentGameSlot == 0) return;
+	if (!gameSlotIsValid()) return;
 
 	pc->stats.character_class = HERO_CLASSES[index].name;
 	pc->stats.physical_character += HERO_CLASSES[index].physical;
@@ -395,17 +394,19 @@ void GameStatePlay::loadClass(int index) {
 
 	// reset character menu
 	menu->chr->refreshStats();
+
+	loadPowerTree();
 }
 
 /**
  * This is used to load the stash when starting a new game
  */
-void GameStatePlay::loadStash() {
+void SaveLoad::loadStash() {
 	// Load stash
 	FileParser infile;
 	std::stringstream ss;
 	if (pc->stats.permadeath)
-		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << CurrentGameSlot << "/stash_HC.txt";
+		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/" << game_slot << "/stash_HC.txt";
 	else
 		ss << PATH_USER << "saves/" << SAVE_PREFIX << "/stash.txt";
 
@@ -428,7 +429,7 @@ void GameStatePlay::loadStash() {
 /**
  * Performs final calculations after loading a save or a new class
  */
-void GameStatePlay::applyPlayerData() {
+void SaveLoad::applyPlayerData() {
 	menu->inv->fillEquipmentSlots();
 
 	// remove items with zero quantity from inventory
@@ -457,3 +458,23 @@ void GameStatePlay::applyPlayerData() {
 	menu->pow->applyPowerUpgrades();
 }
 
+void SaveLoad::loadPowerTree() {
+	for (unsigned i=0; i<HERO_CLASSES.size(); ++i) {
+		if (pc->stats.character_class == HERO_CLASSES[i].name) {
+			if (HERO_CLASSES[i].power_tree != "") {
+				menu->pow->loadPowerTree(HERO_CLASSES[i].power_tree);
+				return;
+			}
+			else
+				break;
+		}
+	}
+
+	// fall back to the default power tree
+	menu->pow->loadPowerTree("powers/trees/default.txt");
+}
+
+bool SaveLoad::gameSlotIsValid() {
+	// game slots are currently 1-4
+	return (game_slot >= 1 && game_slot <= 4);
+}

@@ -114,12 +114,7 @@ public:
 	void logic();
 	void render();
 	void showFPS(int fps);
-	void loadGame();
-	void loadClass(int index);
-	void loadStash();
 	void resetGame();
-	void applyPlayerData();
-	void loadPowerTree();
 
 	Avatar *getAvatar() const;
 };

@@ -39,6 +39,7 @@ Created and destroyed by main.cpp
 #include "ModManager.h"
 #include "SoundManager.h"
 #include "RenderDevice.h"
+#include "SaveLoad.h"
 
 extern SDL_Joystick *joy;
 
@@ -52,6 +53,7 @@ extern ModManager *mods;
 extern SoundManager *snd;
 extern Sprite *icons;
 extern RenderDevice *render_device;
+extern SaveLoad *save_load;
 
 class SharedResources {
 public:

@@ -26,12 +26,27 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class SaveLoad {
 public:
-	static void saveGame(int game_slot);
-
-private:
 	SaveLoad();
 	~SaveLoad();
 
+	int getGameSlot() {
+		return game_slot;
+	}
+	void setGameSlot(int slot) {
+		game_slot = slot;
+	}
+
+	void saveGame();
+	void loadGame();
+	void loadClass(int index);
+	void loadStash();
+
+private:
+	void applyPlayerData();
+	void loadPowerTree();
+	bool gameSlotIsValid();
+
+	int game_slot;
 };
 
 #endif

@@ -140,7 +140,7 @@ void GameStatePlay::resetGame() {
 	menu->questlog->clear();
 	quests->createQuestList();
 	menu->hudlog->clear();
-	loadStash();
+	save_load->loadStash();
 
 	// Finalize new character settings
 	menu->talker->setHero(pc->stats);
@@ -323,14 +323,14 @@ void GameStatePlay::checkTeleport() {
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
-				removeSaveDir(CurrentGameSlot);
+				removeSaveDir(save_load->getGameSlot());
 
 				snd->stopMusic();
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
 			}
 			else if (SAVE_ONLOAD) {
-				SaveLoad::saveGame(CurrentGameSlot);
+				save_load->saveGame();
 			}
 		}
 
@@ -352,19 +352,19 @@ void GameStatePlay::checkCancel() {
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
 		if (SAVE_ONEXIT)
-			SaveLoad::saveGame(CurrentGameSlot);
+			save_load->saveGame();
 
 		snd->stopMusic();
 		delete requestedGameState;
 		requestedGameState = new GameStateTitle();
 
-		CurrentGameSlot = 0;
+		save_load->setGameSlot(0);
 	}
 
 	// if user closes the window
 	if (inpt->done) {
 		if (SAVE_ONEXIT)
-			SaveLoad::saveGame(CurrentGameSlot);
+			save_load->saveGame();
 
 		snd->stopMusic();
 		exitRequested = true;
@@ -761,7 +761,7 @@ void GameStatePlay::checkStash() {
 	// If the stash has been updated, save the game
 	if (menu->stash->updated) {
 		menu->stash->updated = false;
-		SaveLoad::saveGame(CurrentGameSlot);
+		save_load->saveGame();
 	}
 }
 
@@ -778,7 +778,7 @@ void GameStatePlay::checkCutscene() {
 	}
 
 	// handle respawn point and set game play game_slot
-	cutscene->game_slot = CurrentGameSlot;
+	cutscene->game_slot = save_load->getGameSlot();
 
 	if (mapr->teleportation) {
 
@@ -793,7 +793,7 @@ void GameStatePlay::checkCutscene() {
 	}
 
 	if (SAVE_ONLOAD)
-		SaveLoad::saveGame(CurrentGameSlot);
+		save_load->saveGame();
 
 	delete requestedGameState;
 	requestedGameState = cutscene;
@@ -802,7 +802,7 @@ void GameStatePlay::checkCutscene() {
 void GameStatePlay::checkSaveEvent() {
 	if (mapr->save_game) {
 		mapr->respawn_point = floor(pc->stats.pos);
-		SaveLoad::saveGame(CurrentGameSlot);
+		save_load->saveGame();
 		mapr->save_game = false;
 	}
 }
@@ -1039,22 +1039,6 @@ void GameStatePlay::showLoading() {
 	loading->render();
 
 	render_device->commitFrame();
-}
-
-void GameStatePlay::loadPowerTree() {
-	for (unsigned i=0; i<HERO_CLASSES.size(); ++i) {
-		if (pc->stats.character_class == HERO_CLASSES[i].name) {
-			if (HERO_CLASSES[i].power_tree != "") {
-				menu->pow->loadPowerTree(HERO_CLASSES[i].power_tree);
-				return;
-			}
-			else
-				break;
-		}
-	}
-
-	// fall back to the default power tree
-	menu->pow->loadPowerTree("powers/trees/default.txt");
 }
 
 bool GameStatePlay::isPaused() {
