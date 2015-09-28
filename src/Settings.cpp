@@ -40,6 +40,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #if defined(__ANDROID__) || defined (__IPHONEOS__)
 #include <SDL.h>
+#if defined(__ANDROID__)
+#include <jni.h>
+#endif
 #endif
 
 class ConfigEntry {
@@ -256,49 +259,91 @@ void setPaths() {
 }
 #elif __ANDROID__
 // Android paths
+std::string getPackageName()
+{
+	JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+
+	jobject activity = (jobject)SDL_AndroidGetActivity();
+	jclass clazz(env->GetObjectClass(activity));
+
+	jmethodID method_id = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
+	jstring packageName = (jstring)env->CallObjectMethod(activity,  method_id);
+	const char* name = env->GetStringUTFChars(packageName, NULL);
+	std::string result(name);
+	env->ReleaseStringUTFChars(packageName, name);
+
+	env->DeleteLocalRef(activity);
+	env->DeleteLocalRef(clazz);
+
+	return result;
+}
+
 void setPaths() {
+	const std::string externalSDList[] = {
+		"/mnt/extSdCard/Android",
+		"/storage/extSdCard/Android"
+		};
+	const int externalSDList_size = 2;
 
 	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
-	PATH_USER = std::string(SDL_AndroidGetInternalStoragePath()) + "/userdata";
+
+	const std::string package_name = getPackageName();
+	const std::string user_folder = "data/" + package_name + "/files";
+
+	if (SDL_AndroidGetExternalStorageState() != 0)
+	{
+		PATH_USER = std::string(SDL_AndroidGetExternalStoragePath());
+	}
+	// NOTE: Next condition shouldn't be needed, but in theory SDL_AndroidGetExternalStoragePath() can fail.
+	else
+	{
+		const std::string internalSDList[] = {
+			"/sdcard/Android",
+			"/mnt/sdcard/Android",
+			"/storage/sdcard0/Android",
+			"/storage/emulated/0/Android",
+			"/storage/emulated/legacy/Android",
+			};
+		const int internalSDList_size = 5;
+
+		for (int i = 0; i < internalSDList_size; i++)
+		{
+			if (dirExists(internalSDList[i]))
+			{
+				PATH_USER = internalSDList[i] + "/" + user_folder;
+				break;
+			}
+		}
+	}
+	if (PATH_USER.empty())
+	{
+		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
+	}
+
+	for (int i = 0; i < externalSDList_size; i++)
+	{
+		if (dirExists(externalSDList[i]))
+		{
+			PATH_DATA = externalSDList[i] + "/" + user_folder;
+			if (!dirExists(PATH_DATA))
+			{
+				createDir(externalSDList[i] + "/data" + package_name);
+				createDir(externalSDList[i] + "/data" + package_name + "/files");
+			}
+			break;
+		}
+	}
+
+	PATH_USER += "/userdata";
+
 	createDir(PATH_CONF);
 	createDir(PATH_USER);
 	createDir(PATH_USER + "/mods");
 	createDir(PATH_USER + "/saves");
 
-	std::string mods_folder = "data/org.flare.app/files";
-
-	if (SDL_AndroidGetExternalStorageState() != 0)
-	{
-		PATH_DATA = std::string(SDL_AndroidGetExternalStoragePath());
-	}
-	else if (dirExists("/sdcard/Android"))
-	{
-		PATH_DATA = "/sdcard/Android/" + mods_folder;
-	}
-	else if (dirExists("/mnt/sdcard/Android"))
-	{
-		PATH_DATA = "/mnt/sdcard/Android/" + mods_folder;
-	}
-	else if (dirExists("storage/sdcard0/Android"))
-	{
-		PATH_DATA = "/storage/sdcard0/Android/" + mods_folder;
-	}
-	else if (dirExists("/storage/emulated/0/Android"))
-	{
-		PATH_DATA = "/storage/emulated/0/Android/" + mods_folder;
-	}
-	else if (dirExists("/storage/emulated/legacy/Android"))
-	{
-		PATH_DATA = "/storage/emulated/legacy/Android/" + mods_folder;
-	}
-	else
-	{
-		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
-	}
-
-	PATH_CONF = PATH_CONF + "/";
-	PATH_USER = PATH_USER + "/";
-	PATH_DATA = PATH_DATA + "/";
+	PATH_CONF += "/";
+	PATH_USER += "/";
+	PATH_DATA += "/";
 }
 #else
 void setPaths() {
