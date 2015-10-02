@@ -1303,7 +1303,7 @@ void MenuManager::render() {
 		menus[i]->render();
 	}
 
-	if (!num_picker->visible) {
+	if (!num_picker->visible && !mouse_dragging && !sticky_dragging) {
 		if (NO_MOUSE || TOUCHSCREEN)
 			handleKeyboardTooltips();
 		else {
