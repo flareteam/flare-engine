@@ -624,7 +624,6 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
  */
 TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int context) {
 	TooltipData tip;
-	std::string quality_desc = "";
 
 	if (stack.empty()) return tip;
 
@@ -655,6 +654,17 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	// type
 	if (items[stack.item].type != "") {
 		tip.addText(msg->get(getItemType(items[stack.item].type)));
+	}
+
+	// item quality text for colorblind users
+	if (COLORBLIND && items[stack.item].quality != "") {
+		color = color_normal;
+		for (size_t i=0; i<item_qualities.size(); ++i) {
+			if (item_qualities[i].id == items[stack.item].quality) {
+				tip.addText(msg->get("Quality: %s", msg->get(item_qualities[i].name)), color);
+				break;
+			}
+		}
 	}
 
 	// damage
@@ -748,11 +758,6 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		if (items[stack.item].requires_class != stats->character_class) color = color_requirements_not_met;
 		else color = color_normal;
 		tip.addText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class)), color);
-	}
-
-	if (COLORBLIND && quality_desc != "") {
-		color = color_normal;
-		tip.addText(msg->get("Quality: %s", quality_desc), color);
 	}
 
 	// buy or sell price
