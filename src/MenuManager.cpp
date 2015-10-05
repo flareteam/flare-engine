@@ -897,6 +897,7 @@ void MenuManager::logic() {
 				else if (act->isWithinSlots(inpt->mouse)) {
 					// The action bar is not storage!
 					inv->itemReturn(drag_stack);
+					inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
 
 					// put an item with a power on the action bar
 					if (items->items[drag_stack.item].power != 0) {
@@ -1260,6 +1261,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			}
 			act->slots[act->tablist.getCurrent()]->checked = false;
 			resetDrag();
+			inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
 			keyboard_dragging = false;
 		}
 		// rearrange actionbar
