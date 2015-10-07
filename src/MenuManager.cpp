@@ -660,7 +660,7 @@ void MenuManager::logic() {
 
 	bool console_open = DEV_MODE && devconsole->visible;
 	menus_open = (inv->visible || pow->visible || chr->visible || questlog->visible || vendor->visible || talker->visible || npc->visible || book->visible || console_open);
-	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open;
+	pause = (MENUS_PAUSE && menus_open) || exit->visible || console_open || book->visible;
 
 	if (stats->alive) {
 
@@ -742,7 +742,7 @@ void MenuManager::logic() {
 						drag_src = DRAG_SRC_VENDOR;
 					}
 					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
-						num_picker->setValueBounds(1, drag_stack.quantity);
+						num_picker->setValueBounds(1, std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity));
 						num_picker->visible = true;
 					}
 				}
@@ -897,6 +897,7 @@ void MenuManager::logic() {
 				else if (act->isWithinSlots(inpt->mouse)) {
 					// The action bar is not storage!
 					inv->itemReturn(drag_stack);
+					inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
 
 					// put an item with a power on the action bar
 					if (items->items[drag_stack.item].power != 0) {
@@ -1128,7 +1129,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 				drag_src = DRAG_SRC_VENDOR;
 			}
 			if (drag_stack.quantity > 1) {
-				num_picker->setValueBounds(1, drag_stack.quantity);
+				num_picker->setValueBounds(1, std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity));
 				num_picker->visible = true;
 			}
 		}
@@ -1260,6 +1261,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			}
 			act->slots[act->tablist.getCurrent()]->checked = false;
 			resetDrag();
+			inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
 			keyboard_dragging = false;
 		}
 		// rearrange actionbar
@@ -1303,7 +1305,7 @@ void MenuManager::render() {
 		menus[i]->render();
 	}
 
-	if (!num_picker->visible) {
+	if (!num_picker->visible && !mouse_dragging && !sticky_dragging) {
 		if (NO_MOUSE || TOUCHSCREEN)
 			handleKeyboardTooltips();
 		else {

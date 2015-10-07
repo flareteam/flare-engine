@@ -40,8 +40,8 @@ public:
 	Event();
 	~Event();
 
-	Event_Component* getComponent(const std::string &_type);
-	void deleteAllComponents(const std::string &_type);
+	Event_Component* getComponent(const EVENT_COMPONENT_TYPE &_type);
+	void deleteAllComponents(const EVENT_COMPONENT_TYPE &_type);
 };
 
 class EventManager {

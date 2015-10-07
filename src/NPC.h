@@ -34,7 +34,7 @@ const int NPC_VOX_QUEST = 1;
 
 class NPC : public Entity {
 private:
-	bool isDialogType(const std::string &type);
+	bool isDialogType(const EVENT_COMPONENT_TYPE &type);
 public:
 	NPC();
 	~NPC();

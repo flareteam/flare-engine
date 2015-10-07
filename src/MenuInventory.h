@@ -111,6 +111,8 @@ public:
 
 	void fillEquipmentSlots();
 
+	int getMaxPurchasable(int item, int vendor_tab);
+
 	Rect carried_area;
 	std::vector<Rect> equipped_area;
 	std::vector<std::string> slot_type;

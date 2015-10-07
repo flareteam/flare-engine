@@ -18,6 +18,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 
 Avatar *pc = NULL;
+MenuManager *menu = NULL;
 CampaignManager *camp = NULL;
 EnemyGroupManager *enemyg = NULL;
 EnemyManager *enemies = NULL;

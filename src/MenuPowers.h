@@ -130,6 +130,7 @@ private:
 
 	Color color_bonus;
 	Color color_penalty;
+	Color color_flavor;
 
 	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
 	short nextLevel(short power_cell_index);

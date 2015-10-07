@@ -208,7 +208,7 @@ void LootManager::checkEnemiesForLoot() {
 		if (e->stats.quest_loot_id != 0) {
 			// quest loot
 			Event_Component ec;
-			ec.type = "loot";
+			ec.type = EC_LOOT;
 			ec.c = e->stats.quest_loot_id;
 			ec.a = ec.b = 1;
 			ec.z = 0;
@@ -571,7 +571,7 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 
 	if (!first_is_filename) {
 		// make sure the type is "loot"
-		e->type = "loot";
+		e->type = EC_LOOT;
 
 		// drop chance
 		chance = infile.nextValue();
@@ -591,7 +591,7 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 		while (repeat_val != "") {
 			ec_list->push_back(Event_Component());
 			Event_Component *ec = &ec_list->back();
-			ec->type = infile.key;
+			ec->type = EC_LOOT;
 
 			ec->s = repeat_val;
 			if (ec->s == "currency")
@@ -646,7 +646,7 @@ void LootManager::loadLootTables() {
 				if (infile.new_section) {
 					ec_list->push_back(Event_Component());
 					ec = &ec_list->back();
-					ec->type = "loot";
+					ec->type = EC_LOOT;
 					skip_to_next = false;
 				}
 

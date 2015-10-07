@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateNew.h"
 #include "GameStateLoad.h"
 #include "GameStatePlay.h"
+#include "SaveLoad.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -300,10 +301,9 @@ void GameStateNew::logic() {
 		avatar->stats.gfx_portrait = portrait[current_option];
 		avatar->stats.name = input_name->getText();
 		avatar->stats.permadeath = button_permadeath->isChecked();
-		play->game_slot = game_slot;
+		save_load->setGameSlot(game_slot);
 		play->resetGame();
-		play->loadClass(class_list->getSelected());
-		play->loadPowerTree();
+		save_load->loadClass(class_list->getSelected());
 		requestedGameState = play;
 	}
 

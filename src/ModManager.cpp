@@ -219,6 +219,12 @@ void ModManager::setPaths() {
 	// set some flags if directories are identical
 	bool uniq_path_data = PATH_USER != PATH_DATA;
 
+	if (!CUSTOM_PATH_DATA.empty()) {
+		// if we're using a custom data path, give it priority
+		// in fact, don't use PATH_DATA at all, since the two are equal if CUSTOM_PATH_DATA is set
+		mod_paths.push_back(CUSTOM_PATH_DATA);
+		uniq_path_data = false;
+	}
 	mod_paths.push_back(PATH_USER);
 	if (uniq_path_data) mod_paths.push_back(PATH_DATA);
 }

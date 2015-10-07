@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 WidgetLog::WidgetLog (int width, int height)
 	: scroll_box(new WidgetScrollBox(width, height))
 	, padding(4)
-	, max_messages(50)
+	, max_messages(WIDGETLOG_MAX_MESSAGES)
 {
 	font->setFont("font_regular");
 	line_height = font->getLineHeight();
@@ -55,6 +55,10 @@ void WidgetLog::logic() {
 }
 
 void WidgetLog::render() {
+	if (updated) {
+		refresh();
+		updated = false;
+	}
 	scroll_box->render();
 }
 
@@ -107,7 +111,7 @@ void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color) {
 		else {
 			colors.push_back(*color);
 		}
-		refresh();
+		updated = true;
 	}
 }
 
@@ -115,12 +119,19 @@ void WidgetLog::remove(unsigned msg_index) {
 	if (msg_index < messages.size()) {
 		messages.erase(messages.begin()+msg_index);
 		colors.erase(colors.begin()+msg_index);
-		refresh();
+		updated = true;
 	}
 }
 
 void WidgetLog::clear() {
 	messages.clear();
 	colors.clear();
-	refresh();
+	updated = true;
+}
+
+void WidgetLog::setMaxMessages(unsigned count) {
+	if (count > WIDGETLOG_MAX_MESSAGES)
+		max_messages = count;
+	else
+		max_messages = WIDGETLOG_MAX_MESSAGES;
 }

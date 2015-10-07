@@ -1059,6 +1059,15 @@ void MenuInventory::fillEquipmentSlots() {
 	delete [] equip_quantity;
 }
 
+int MenuInventory::getMaxPurchasable(int item, int vendor_tab) {
+	if (vendor_tab == VENDOR_BUY)
+		return currency / items->items[item].price;
+	else if (vendor_tab == VENDOR_BUY)
+		return currency / items->items[item].getSellPrice();
+	else
+		return 0;
+}
+
 MenuInventory::~MenuInventory() {
 	delete closeButton;
 }

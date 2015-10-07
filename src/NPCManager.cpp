@@ -97,11 +97,11 @@ void NPCManager::handleNewMap() {
 		ev.center.x = static_cast<float>(ev.hotspot.x) + static_cast<float>(ev.hotspot.w)/2;
 		ev.center.y = static_cast<float>(ev.hotspot.y) + static_cast<float>(ev.hotspot.h)/2;
 
-		ec.type = "npc_id";
+		ec.type = EC_NPC_ID;
 		ec.x = static_cast<int>(npcs.size())-1;
 		ev.components.push_back(ec);
 
-		ec.type = "tooltip";
+		ec.type = EC_TOOLTIP;
 		ec.s = npc->name;
 		ev.components.push_back(ec);
 
@@ -109,7 +109,7 @@ void NPCManager::handleNewMap() {
 		// This might cause some undesired behavior for npcs that have packed animations and a lot of variation
 		// However, it is sufficient for all of our current game data (fantasycore, no-name mod, polymorphable)
 		Renderable ren = npc->activeAnimation->getCurrentFrame(npc->direction);
-		ec.type = "npc_hotspot";
+		ec.type = EC_NPC_HOTSPOT;
 		ec.x = static_cast<int>(npc->pos.x);
 		ec.y = static_cast<int>(npc->pos.y);
 		ec.z = ren.offset.x;

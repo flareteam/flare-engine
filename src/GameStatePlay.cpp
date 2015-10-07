@@ -59,6 +59,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "UtilsParsing.h"
 #include "MenuPowers.h"
+#include "SaveLoad.h"
 
 const int MENU_ENEMY_TIMEOUT = MAX_FRAMES_PER_SEC * 10;
 
@@ -73,8 +74,7 @@ GameStatePlay::GameStatePlay()
 	, eventDialogOngoing(false)
 	, eventPendingDialog(false)
 	, color_normal(font->getColor("menu_normal"))
-	, nearest_npc(-1)
-	, game_slot(0) {
+	, nearest_npc(-1) {
 
 	Image *graphics;
 	hasMusic = true;
@@ -140,7 +140,7 @@ void GameStatePlay::resetGame() {
 	menu->questlog->clear();
 	quests->createQuestList();
 	menu->hudlog->clear();
-	loadStash();
+	save_load->loadStash();
 
 	// Finalize new character settings
 	menu->talker->setHero(pc->stats);
@@ -323,14 +323,14 @@ void GameStatePlay::checkTeleport() {
 
 			// return to title (permadeath) OR auto-save
 			if (pc->stats.permadeath && pc->stats.corpse) {
-				removeSaveDir(game_slot);
+				removeSaveDir(save_load->getGameSlot());
 
 				snd->stopMusic();
 				delete requestedGameState;
 				requestedGameState = new GameStateTitle();
 			}
 			else if (SAVE_ONLOAD) {
-				saveGame();
+				save_load->saveGame();
 			}
 		}
 
@@ -352,17 +352,19 @@ void GameStatePlay::checkCancel() {
 	// if user has clicked exit game from exit menu
 	if (menu->requestingExit()) {
 		if (SAVE_ONEXIT)
-			saveGame();
+			save_load->saveGame();
 
 		snd->stopMusic();
 		delete requestedGameState;
 		requestedGameState = new GameStateTitle();
+
+		save_load->setGameSlot(0);
 	}
 
 	// if user closes the window
 	if (inpt->done) {
 		if (SAVE_ONEXIT)
-			saveGame();
+			save_load->saveGame();
 
 		snd->stopMusic();
 		exitRequested = true;
@@ -419,6 +421,12 @@ void GameStatePlay::checkLog() {
  */
 void GameStatePlay::checkBook() {
 	// Map events can open books
+	if (mapr->show_book != "") {
+		menu->book->book_name = mapr->show_book;
+		mapr->show_book = "";
+	}
+
+	// items can be readable books
 	if (menu->inv->show_book != "") {
 		menu->book->book_name = menu->inv->show_book;
 		menu->inv->show_book = "";
@@ -753,7 +761,7 @@ void GameStatePlay::checkStash() {
 	// If the stash has been updated, save the game
 	if (menu->stash->updated) {
 		menu->stash->updated = false;
-		saveGame();
+		save_load->saveGame();
 	}
 }
 
@@ -770,7 +778,7 @@ void GameStatePlay::checkCutscene() {
 	}
 
 	// handle respawn point and set game play game_slot
-	cutscene->game_slot = game_slot;
+	cutscene->game_slot = save_load->getGameSlot();
 
 	if (mapr->teleportation) {
 
@@ -785,7 +793,7 @@ void GameStatePlay::checkCutscene() {
 	}
 
 	if (SAVE_ONLOAD)
-		saveGame();
+		save_load->saveGame();
 
 	delete requestedGameState;
 	requestedGameState = cutscene;
@@ -794,7 +802,7 @@ void GameStatePlay::checkCutscene() {
 void GameStatePlay::checkSaveEvent() {
 	if (mapr->save_game) {
 		mapr->respawn_point = floor(pc->stats.pos);
-		saveGame();
+		save_load->saveGame();
 		mapr->save_game = false;
 	}
 }
@@ -835,7 +843,7 @@ void GameStatePlay::logic() {
 	// check menus first (top layer gets mouse click priority)
 	menu->logic();
 
-	if (!menu->pause) {
+	if (!isPaused()) {
 
 		// these actions only occur when the game isn't paused
 		if (pc->stats.alive) checkLoot();
@@ -1015,7 +1023,8 @@ void GameStatePlay::render() {
 
 	// render combat text last - this should make it obvious you're being
 	// attacked, even if you have menus open
-	comb->render();
+	if (!isPaused())
+		comb->render();
 }
 
 void GameStatePlay::showLoading() {
@@ -1030,22 +1039,6 @@ void GameStatePlay::showLoading() {
 	loading->render();
 
 	render_device->commitFrame();
-}
-
-void GameStatePlay::loadPowerTree() {
-	for (unsigned i=0; i<HERO_CLASSES.size(); ++i) {
-		if (pc->stats.character_class == HERO_CLASSES[i].name) {
-			if (HERO_CLASSES[i].power_tree != "") {
-				menu->pow->loadPowerTree(HERO_CLASSES[i].power_tree);
-				return;
-			}
-			else
-				break;
-		}
-	}
-
-	// fall back to the default power tree
-	menu->pow->loadPowerTree("powers/trees/default.txt");
 }
 
 bool GameStatePlay::isPaused() {
@@ -1084,5 +1077,6 @@ GameStatePlay::~GameStatePlay() {
 	camp = NULL;
 	items = NULL;
 	pc = NULL;
+	menu = NULL;
 }
 

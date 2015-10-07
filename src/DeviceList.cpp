@@ -31,8 +31,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SDLInputState.h"
 
 RenderDevice* getRenderDevice(std::string name) {
-#ifdef __ANDROID__
-	// Android always uses the hardware renderer
+#if defined(__ANDROID__) || defined (__IPHONEOS__)
+	// Android and IOS always use the hardware renderer
 	return new SDLHardwareRenderDevice();
 #endif
 

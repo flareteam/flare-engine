@@ -152,7 +152,7 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == EFFECT_MPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot_percent += effect_list[i].magnitude;
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
 			else if (effect_list[i].type == EFFECT_SPEED) speed = (static_cast<float>(effect_list[i].magnitude) * speed) / 100.f;
-			// @TYPE immunity|Removes and prevents bleed, slow, stun, and immobilize. Magnitude is ignored.
+			// @TYPE immunity|Removes and prevents bleed, slow, stun, HP/MP steal, and damage reflection. Magnitude is ignored.
 			else if (effect_list[i].type == EFFECT_IMMUNITY) immunity = true;
 			// @TYPE stun|Can't move or attack. Being attacked breaks stun.
 			else if (effect_list[i].type == EFFECT_STUN) stun = true;

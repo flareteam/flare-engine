@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>FLARE Documentation - Translations</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style type="text/css">
+body {
+	font-family: Arial, sans-serif;
+	margin-left: 15%;
+	margin-right: 15%;
+}
+.logo {
+	text-align: center;
+	background: #000;
+	color: #fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="logo">
+<img src="../mods/default/images/menus/logo.png" alt="FLARE"/>
+<h1>Translations</h1>
+<hr/>
+</div>
+
+<div class="content">
+
+<h2>Translation file locations</h2>
+
+<p>The main engine translation file is at:</p>
+
+<pre><code>/mods/default/languages/engine.pot
+</code></pre>
+
+<p>This is the simplest and most important file to translate. It contains the common engine and interface text. Having this text translated at least makes the interface usable for readers of that language.</p>
+
+<p>The data translation files are at:</p>
+
+<pre><code>/mods/[modname]/languages/data.pot
+</code></pre>
+
+<p>Once the basic engine text is translated, these data files are the next files to translate. Note that not all mods have a translation file (example: mods that only update graphics).</p>
+
+<p>In these language folders you'll see translations of these pot files. Each language has its own .po file. Example:</p>
+
+<pre><code>/mods/default/languages/engine.it.po
+/mods/fantasycore/languages/data.ru.po
+</code></pre>
+
+<p>The filenames for these language translations use the ISO standard 2-letter language codes (639-1). If the language only has a 639-2 code, that is permitted instead.</p>
+
+<h2>Editing an existing po file</h2>
+
+<p>Before editing an existing translation, check with the original translators to make sure they're not already working on this. Example, here we list the previous translators for Flare-game: https://github.com/clintbellanger/flare-game/wiki/Credits#translations</p>
+
+<p>We use a very small subset of the <strong>gettext</strong> convention for Flare translations. Most .po file editing apps should work. In a pinch, a plain-text editor should work (but be sure to test in-game, as syntax errors are more possible).</p>
+
+<p>Translation entries have two lines. The <strong>msgid</strong> is the original text and the <strong>msgstr</strong> is your translation. Example from engine.it.po:</p>
+
+<pre><code>#: ../../../src/Avatar.cpp:633
+msgid "You are defeated. Game over! Press Enter to exit to Title."
+msgstr "La Morte ti ha raggiunto. Game over! Premere Invio per tornare al Titolo."
+</code></pre>
+
+<p>Any line that starts with # is a comment. Often these comments refer to the source file of the text. You might want to look at the source file if you're having trouble figuring out the context of this message.</p>
+
+<p>The lines that begin with msgid and msgstr always start with those keywords, followed by one blank space, followed by the entire message in double-quotes (").</p>
+
+<p>Sometimes the msgid contains a % sign followed by a letter, like this:</p>
+
+<pre><code>#: ../../../src/Avatar.cpp:444
+msgid "Congratulations, you have reached level %d!"
+msgstr "Felicitaciones, has alcanzado el nivel %d!"
+</code></pre>
+
+<p>This means some value (usually a number) is inserted into the text at that position. Your translation should include the same % sign followed by the same letter.</p>
+
+<p>Translating is as simple as editing the text inside the quotes of the msgstr line. Do not modify the msgid lines. The only other thing your edited .po file should include is updated header information e.g. the revision date and last translator.</p>
+
+<h2>Creating a new .po file</h2>
+
+<p>Copy the engine.pot (or data.pot) file and rename it to engine.xx.po, where xx is the new language's code. Then edit your new .po file. First fill in the header information, then fill in the msgstr values.</p>
+
+<p>If you get confused on any one point, look at other .po files in the same folder for examples.</p>
+
+<h2>Enabling a new language in the engine</h2>
+
+<p>If you're creating a new language file, you'll especially want to test it by playing the game with your language enabled. Edit this file and add your new language entry:</p>
+
+<pre><code>mods/default/engine/languages.txt
+</code></pre>
+
+<p>And save the file. When running the game use the Configuration menu, Interface tab to select your new language.</p>
+
+<h2>Submitting your new .po files</h2>
+
+<p>If you're already familiar with GitHub you could fork the engine or game and send your update as a Pull Request.</p>
+
+<p>Otherwise it's fine to email your new .po file(s) to the engine maintainer (Clint Bellanger) or the specific game maintainers.</p>
+
+<p>Please include your name or preferred nickname to be included in the credits.</p>
+
+<p>Note that we're only accepting human-translated text. Please don't submit a translation that was simply run through machine translation.</p>
+
+<h2>Tools</h2>
+
+<p>Here is a list of .po file editing tools, if you don't want to use a plain text editor.</p>
+
+<ul>
+<li><a href="http://www.poedit.net/">Poedit</a> - simple cross-platform editor of gettext catalogs.</li>
+<li><a href="http://translate.sourceforge.net/wiki/virtaal/index">Virtaal</a> - easy translation tool that supports many localization formats.</li>
+<li><a href="http://projects.gnome.org/gtranslator/">GTranslator</a> - powerful translation tool integrated with GNOME desktop.</li>
+<li><a href="http://www.kde.org/applications/development/lokalize/">Lokalize</a> - editor of gettext catalogs integrated with KDE desktop.</li>
+</ul>
+
+</div>
+
+<div class="footer">
+<hr/>
+<p>
+<a href="http://flarerpg.org/">FLARE Website</a>
+</p>
+</div>
+
+</body>
+
+</html>

@@ -148,9 +148,11 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 
 		assert(items.size() > std::size_t(id));
 
-		if (infile.key == "name")
+		if (infile.key == "name") {
 			// @ATTR name|string|Item name displayed on long and short tooltips.
 			items[id].name = msg->get(infile.val);
+			items[id].has_name = true;
+		}
 		else if (infile.key == "flavor")
 			// @ATTR flavor|string|A description of the item.
 			items[id].flavor = msg->get(infile.val);
@@ -411,7 +413,7 @@ void ItemManager::loadQualities(const std::string& filename, bool locateFileName
 std::string ItemManager::getItemName(unsigned id) {
 	if (id >= items.size()) return msg->get("Unknown Item");
 
-	if (items[id].name == "")
+	if (!items[id].has_name)
 		items[id].name = msg->get("Unknown Item");
 
 	return items[id].name;
@@ -424,6 +426,23 @@ std::string ItemManager::getItemType(std::string _type) {
 	}
 	// If all else fails, return the original string
 	return _type;
+}
+
+Color ItemManager::getItemColor(unsigned id) {
+	if (id < 1 || id > items.size()) return color_normal;
+
+	if (items[id].set > 0) {
+		return item_sets[items[id].set].color;
+	}
+	else {
+		for (unsigned i=0; i<item_qualities.size(); ++i) {
+			if (item_qualities[i].id == items[id].quality) {
+				return item_qualities[i].color;
+			}
+		}
+	}
+
+	return color_normal;
 }
 
 void ItemManager::addUnknownItem(unsigned id) {
@@ -564,7 +583,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << " " << STAT_NAME[bdata->stat_index];
 	}
 	else if (bdata->resist_index != -1) {
-		ss << "% " << msg->get(ELEMENTS[bdata->resist_index].name);
+		ss << "% " << msg->get("%s Resistance", ELEMENTS[bdata->resist_index].name.c_str());
 	}
 	else if (bdata->base_index != -1) {
 		if (bdata->base_index == 0)
@@ -585,22 +604,8 @@ void ItemManager::playSound(int item, Point pos) {
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	std::stringstream ss;
 	TooltipData tip;
-	Color color = color_normal;
 
 	if (stack.empty()) return tip;
-
-	// color quality
-	if (items[stack.item].set > 0) {
-		color = item_sets[items[stack.item].set].color;
-	}
-	else {
-		for (unsigned i=0; i<item_qualities.size(); ++i) {
-			if (item_qualities[i].id == items[stack.item].quality) {
-				color = item_qualities[i].color;
-				break;
-			}
-		}
-	}
 
 	// name
 	if (stack.quantity > 1) {
@@ -609,7 +614,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	else {
 		ss << getItemName(stack.item);
 	}
-	tip.addText(ss.str(), color);
+	tip.addText(ss.str(), getItemColor(stack.item));
 
 	return tip;
 }
@@ -619,24 +624,10 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
  */
 TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int context) {
 	TooltipData tip;
-	Color color = color_normal;
-	std::string quality_desc = "";
 
 	if (stack.empty()) return tip;
 
-	// color quality
-	if (items[stack.item].set > 0) {
-		color = item_sets[items[stack.item].set].color;
-	}
-	else {
-		for (unsigned i=0; i<item_qualities.size(); ++i) {
-			if (item_qualities[i].id == items[stack.item].quality) {
-				color = item_qualities[i].color;
-				quality_desc = msg->get(item_qualities[i].name);
-				break;
-			}
-		}
-	}
+	Color color = getItemColor(stack.item);
 
 	// name
 	std::stringstream ss;
@@ -663,6 +654,17 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	// type
 	if (items[stack.item].type != "") {
 		tip.addText(msg->get(getItemType(items[stack.item].type)));
+	}
+
+	// item quality text for colorblind users
+	if (COLORBLIND && items[stack.item].quality != "") {
+		color = color_normal;
+		for (size_t i=0; i<item_qualities.size(); ++i) {
+			if (item_qualities[i].id == items[stack.item].quality) {
+				tip.addText(msg->get("Quality: %s", msg->get(item_qualities[i].name)), color);
+				break;
+			}
+		}
 	}
 
 	// damage
@@ -756,11 +758,6 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		if (items[stack.item].requires_class != stats->character_class) color = color_requirements_not_met;
 		else color = color_normal;
 		tip.addText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class)), color);
-	}
-
-	if (COLORBLIND && quality_desc != "") {
-		color = color_normal;
-		tip.addText(msg->get("Quality: %s", quality_desc), color);
 	}
 
 	// buy or sell price

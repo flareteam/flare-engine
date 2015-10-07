@@ -211,7 +211,7 @@ void loadMiscSettings();
 bool loadSettings();
 bool saveSettings();
 bool loadDefaults();
-void loadAndroidDefaults();
+void loadMobileDefaults();
 void updateScreenVars();
 
 // version information

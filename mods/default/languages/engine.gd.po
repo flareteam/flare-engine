@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 12:59-0400\n"
+"POT-Creation-Date: 2015-09-20 13:21-0400\n"
 "PO-Revision-Date: 2014-01-15 14:49+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig http://www.foramnagaidhlig.net\n"
@@ -92,7 +92,7 @@ msgstr "Chaidh PB is PG a leigheas is èifeachdan dona a thoirt air falbh."
 msgid "miss"
 msgstr "mearachdadh"
 
-#: ../../../src/Entity.cpp:387 ../../../src/PowerManager.cpp:850
+#: ../../../src/Entity.cpp:387 ../../../src/PowerManager.cpp:854
 #: ../../../src/StatBlock.cpp:630 ../../../src/StatBlock.cpp:636
 #, c-format
 msgid "+%d HP"
@@ -104,7 +104,7 @@ msgstr "+%d PB"
 msgid "+%d MP"
 msgstr "+%d PG"
 
-#: ../../../src/EventManager.cpp:506
+#: ../../../src/EventManager.cpp:509
 msgid "Unknown destination"
 msgstr "Ceann-uidhe neo-aithnichte"
 
@@ -198,16 +198,16 @@ msgstr "<< Cuir à comas"
 msgid "Enable >>"
 msgstr "Cuir an comas >>"
 
-#: ../../../src/GameStateConfigBase.cpp:843
+#: ../../../src/GameStateConfigBase.cpp:844
 msgid "Game: "
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:848
+#: ../../../src/GameStateConfigBase.cpp:849
 #, fuzzy
 msgid "Requires version: "
 msgstr "Feum air cumhachd: %s"
 
-#: ../../../src/GameStateConfigBase.cpp:862
+#: ../../../src/GameStateConfigBase.cpp:863
 #, fuzzy
 msgid "Requires mods: "
 msgstr "Feum air cumhachd: %s"
@@ -342,8 +342,8 @@ msgstr "A' dol a-steach do shaoghal a' gheama..."
 msgid "Loading saved game..."
 msgstr "A' luchdadh geama air a shàbhaladh..."
 
-#: ../../../src/GameStateLoad.cpp:639 ../../../src/ItemManager.cpp:660
-#: ../../../src/MenuPowers.cpp:719 ../../../src/MenuPowers.cpp:816
+#: ../../../src/GameStateLoad.cpp:639 ../../../src/ItemManager.cpp:652
+#: ../../../src/MenuPowers.cpp:719 ../../../src/MenuPowers.cpp:1074
 #, c-format
 msgid "Level %d"
 msgstr "Leibheil %d"
@@ -568,130 +568,140 @@ msgstr "Amas luchaige"
 msgid "Mouse X2"
 msgstr "Amas luchaige"
 
-#: ../../../src/ItemManager.cpp:412 ../../../src/ItemManager.cpp:415
+#: ../../../src/ItemManager.cpp:414 ../../../src/ItemManager.cpp:417
 msgid "Unknown Item"
 msgstr ""
 
-#: ../../../src/ItemManager.cpp:571 ../../../src/MenuCharacter.cpp:42
+#: ../../../src/ItemManager.cpp:586 ../../../src/MenuCharacter.cpp:350
+#, c-format
+msgid "%s Resistance"
+msgstr ""
+
+#: ../../../src/ItemManager.cpp:590 ../../../src/MenuCharacter.cpp:42
+#: ../../../src/MenuPowers.cpp:826
 msgid "Physical"
 msgstr "Bodhaig"
 
-#: ../../../src/ItemManager.cpp:573 ../../../src/MenuCharacter.cpp:43
+#: ../../../src/ItemManager.cpp:592 ../../../src/MenuCharacter.cpp:43
+#: ../../../src/MenuPowers.cpp:829
 msgid "Mental"
 msgstr "Inntinn"
 
-#: ../../../src/ItemManager.cpp:575 ../../../src/MenuCharacter.cpp:44
+#: ../../../src/ItemManager.cpp:594 ../../../src/MenuCharacter.cpp:44
+#: ../../../src/MenuPowers.cpp:820
 msgid "Offense"
 msgstr "Ionnsaigh"
 
-#: ../../../src/ItemManager.cpp:577 ../../../src/MenuCharacter.cpp:45
+#: ../../../src/ItemManager.cpp:596 ../../../src/MenuCharacter.cpp:45
+#: ../../../src/MenuPowers.cpp:823
 msgid "Defense"
 msgstr "Dìon"
 
-#: ../../../src/ItemManager.cpp:671
+#: ../../../src/ItemManager.cpp:663
 #, c-format
 msgid "Melee damage: %d-%d"
 msgstr "Dochann dlùth: %d-%d"
 
-#: ../../../src/ItemManager.cpp:673
+#: ../../../src/ItemManager.cpp:665
 #, c-format
 msgid "Melee damage: %d"
 msgstr "Dochann dlùth: %d"
 
-#: ../../../src/ItemManager.cpp:677
+#: ../../../src/ItemManager.cpp:669
 #, c-format
 msgid "Ranged damage: %d-%d"
 msgstr "Dochann astair: %d-%d"
 
-#: ../../../src/ItemManager.cpp:679
+#: ../../../src/ItemManager.cpp:671
 #, c-format
 msgid "Ranged damage: %d"
 msgstr "Dochann astair: %d"
 
-#: ../../../src/ItemManager.cpp:683
+#: ../../../src/ItemManager.cpp:675
 #, c-format
 msgid "Mental damage: %d-%d"
 msgstr "Dochann inntinne: %d-%d"
 
-#: ../../../src/ItemManager.cpp:685
+#: ../../../src/ItemManager.cpp:677
 #, c-format
 msgid "Mental damage: %d"
 msgstr "Dochann inntinne: %d"
 
-#: ../../../src/ItemManager.cpp:691
+#: ../../../src/ItemManager.cpp:683
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Ceapadh: %d-%d"
 
-#: ../../../src/ItemManager.cpp:693
+#: ../../../src/ItemManager.cpp:685
 #, c-format
 msgid "Absorb: %d"
 msgstr "Ceapadh: %d"
 
-#: ../../../src/ItemManager.cpp:704 ../../../src/ItemManager.cpp:813
+#: ../../../src/ItemManager.cpp:696 ../../../src/ItemManager.cpp:805
+#: ../../../src/MenuPowers.cpp:802
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "Luaths de %d%"
 
-#: ../../../src/ItemManager.cpp:734 ../../../src/MenuPowers.cpp:788
-#: ../../../src/MenuPowers.cpp:791
+#: ../../../src/ItemManager.cpp:726 ../../../src/MenuPowers.cpp:1046
+#: ../../../src/MenuPowers.cpp:1049
 #, c-format
 msgid "Requires Physical %d"
 msgstr "Feum air buadh bodhaige de %d"
 
-#: ../../../src/ItemManager.cpp:739 ../../../src/MenuPowers.cpp:794
-#: ../../../src/MenuPowers.cpp:797
+#: ../../../src/ItemManager.cpp:731 ../../../src/MenuPowers.cpp:1052
+#: ../../../src/MenuPowers.cpp:1055
 #, c-format
 msgid "Requires Mental %d"
 msgstr "Feum air buadh inntinne de %d"
 
-#: ../../../src/ItemManager.cpp:744 ../../../src/MenuPowers.cpp:776
-#: ../../../src/MenuPowers.cpp:779
+#: ../../../src/ItemManager.cpp:736 ../../../src/MenuPowers.cpp:1034
+#: ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Requires Offense %d"
 msgstr "Feum air buadh ionnsaighe de %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:782
-#: ../../../src/MenuPowers.cpp:785
+#: ../../../src/ItemManager.cpp:741 ../../../src/MenuPowers.cpp:1040
+#: ../../../src/MenuPowers.cpp:1043
 #, c-format
 msgid "Requires Defense %d"
 msgstr "Feum air buadh dìona de %d"
 
-#: ../../../src/ItemManager.cpp:758
+#: ../../../src/ItemManager.cpp:750
 #, fuzzy, c-format
 msgid "Requires Class: %s"
 msgstr "Feum air %s"
 
-#: ../../../src/ItemManager.cpp:763
+#: ../../../src/ItemManager.cpp:755
 #, c-format
 msgid "Quality: %s"
 msgstr "Càileachd: %s"
 
-#: ../../../src/ItemManager.cpp:775 ../../../src/ItemManager.cpp:784
+#: ../../../src/ItemManager.cpp:767 ../../../src/ItemManager.cpp:776
 #, c-format
 msgid "Buy Price: %d %s"
 msgstr "Prìs ceannaich: %d %s"
 
-#: ../../../src/ItemManager.cpp:777 ../../../src/ItemManager.cpp:786
+#: ../../../src/ItemManager.cpp:769 ../../../src/ItemManager.cpp:778
 #, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Prìs ceannaich: %d %s an urra"
 
-#: ../../../src/ItemManager.cpp:792
+#: ../../../src/ItemManager.cpp:784
 #, c-format
 msgid "Sell Price: %d %s"
 msgstr "Prìs reic: %d %s"
 
-#: ../../../src/ItemManager.cpp:794
+#: ../../../src/ItemManager.cpp:786
 #, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Prìs reic: %d %s an urra"
 
-#: ../../../src/ItemManager.cpp:803
+#: ../../../src/ItemManager.cpp:795
 msgid "Set: "
 msgstr "Seata: "
 
-#: ../../../src/ItemManager.cpp:810
+#: ../../../src/ItemManager.cpp:802
 #, c-format
 msgid "%d items: "
 msgstr "%d nithean: "
@@ -767,137 +777,154 @@ msgid "Developer Console"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:208
-msgid "resets the player to level 1, with no stat or skill points spent"
+msgid "Removes an item of a given ID from the player's inventory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:209
-msgid "teleports the player to a specific tile, and optionally, a specific map"
+msgid "Prints a list of items that match a search term. No search term will list all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:210
-msgid "unsets the given campaign statuses if they are set"
+msgid "Prints out all of the campaign status that are set"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:211
-msgid "sets the given campaign statuses"
+msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:212
-msgid "rewards the player with the specified amount of experience points"
+msgid "teleports the player to a specific tile, and optionally, a specific map"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:213
-msgid "adds the specified amount of currency to the player's inventory"
+msgid "unsets the given campaign statuses if they are set"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:214
-msgid "adds an item to the player's inventory"
+msgid "sets the given campaign statuses"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:215
-msgid "spawns an enemy matching the given category next to the player"
+msgid "rewards the player with the specified amount of experience points"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:216
-msgid "turns on/off the developer hud"
+msgid "adds the specified amount of currency to the player's inventory"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:217
-msgid "clears the command history"
+msgid "adds an item to the player's inventory"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:218
+msgid "spawns an enemy matching the given category next to the player"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:219
+msgid "turns on/off the developer hud"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:220
+msgid "clears the command history"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:221
 msgid "displays this text"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:225
+#: ../../../src/MenuDevConsole.cpp:228
 msgid "Toggled the developer hud"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:239
+#: ../../../src/MenuDevConsole.cpp:242
 msgid "Spawning enemy from category: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:242
+#: ../../../src/MenuDevConsole.cpp:245
 msgid "ERROR: Invalid enemy category"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:246 ../../../src/MenuDevConsole.cpp:274
-#: ../../../src/MenuDevConsole.cpp:285 ../../../src/MenuDevConsole.cpp:296
-#: ../../../src/MenuDevConsole.cpp:306 ../../../src/MenuDevConsole.cpp:321
-#: ../../../src/MenuDevConsole.cpp:351
+#: ../../../src/MenuDevConsole.cpp:249 ../../../src/MenuDevConsole.cpp:277
+#: ../../../src/MenuDevConsole.cpp:288 ../../../src/MenuDevConsole.cpp:299
+#: ../../../src/MenuDevConsole.cpp:309 ../../../src/MenuDevConsole.cpp:324
+#: ../../../src/MenuDevConsole.cpp:354 ../../../src/MenuDevConsole.cpp:442
 msgid "ERROR: Too few arguments"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:247 ../../../src/MenuDevConsole.cpp:275
-#: ../../../src/MenuDevConsole.cpp:286 ../../../src/MenuDevConsole.cpp:297
-#: ../../../src/MenuDevConsole.cpp:307 ../../../src/MenuDevConsole.cpp:322
-#: ../../../src/MenuDevConsole.cpp:352
+#: ../../../src/MenuDevConsole.cpp:250 ../../../src/MenuDevConsole.cpp:278
+#: ../../../src/MenuDevConsole.cpp:289 ../../../src/MenuDevConsole.cpp:300
+#: ../../../src/MenuDevConsole.cpp:310 ../../../src/MenuDevConsole.cpp:325
+#: ../../../src/MenuDevConsole.cpp:355 ../../../src/MenuDevConsole.cpp:443
 msgid "HINT: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:247
+#: ../../../src/MenuDevConsole.cpp:250
 msgid " <category> [<x> <y>]"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:254
+#: ../../../src/MenuDevConsole.cpp:257 ../../../src/MenuDevConsole.cpp:430
 msgid "ERROR: Invalid item ID"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:270
+#: ../../../src/MenuDevConsole.cpp:273
 #, fuzzy
 msgid "Added item: "
 msgstr "%d nithean: "
 
-#: ../../../src/MenuDevConsole.cpp:275
+#: ../../../src/MenuDevConsole.cpp:278 ../../../src/MenuDevConsole.cpp:443
 msgid " <item_id> [<quantity>]"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:282
+#: ../../../src/MenuDevConsole.cpp:285
 msgid "Added currency: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:286 ../../../src/MenuDevConsole.cpp:297
+#: ../../../src/MenuDevConsole.cpp:289 ../../../src/MenuDevConsole.cpp:300
 msgid " <quantity>"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:293
+#: ../../../src/MenuDevConsole.cpp:296
 msgid "Added XP: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:303
+#: ../../../src/MenuDevConsole.cpp:306
 msgid "Set campaign status: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:307 ../../../src/MenuDevConsole.cpp:322
+#: ../../../src/MenuDevConsole.cpp:310 ../../../src/MenuDevConsole.cpp:325
 msgid " <status_1> [<status_2> <status_3> ...]"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:314
+#: ../../../src/MenuDevConsole.cpp:317
 msgid "Unset campaign status: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:317
+#: ../../../src/MenuDevConsole.cpp:320
 msgid "ERROR: Unknown campaign status: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:337 ../../../src/MenuDevConsole.cpp:347
+#: ../../../src/MenuDevConsole.cpp:340 ../../../src/MenuDevConsole.cpp:350
 msgid "Teleporting to: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:340
+#: ../../../src/MenuDevConsole.cpp:343
 msgid "ERROR: Unknown map: "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:352
+#: ../../../src/MenuDevConsole.cpp:355
 msgid " <x> <y> [<map>]"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:372
+#: ../../../src/MenuDevConsole.cpp:438
+#, fuzzy
+msgid "Removed item: "
+msgstr "%d nithean: "
+
+#: ../../../src/MenuDevConsole.cpp:447
 msgid "ERROR: Unknown command"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:373
+#: ../../../src/MenuDevConsole.cpp:448
 msgid "HINT: Type help"
 msgstr ""
 
@@ -1042,51 +1069,150 @@ msgstr "Cosgaidh e %d PG"
 msgid "Costs %d HP"
 msgstr "Cosgaidh e %d PB"
 
-#: ../../../src/MenuPowers.cpp:738
-#, fuzzy, c-format
-msgid "Cooldown: %s seconds"
+#: ../../../src/MenuPowers.cpp:737
+#, fuzzy
+msgid "Cooldown:"
 msgstr "Fuarachadh: %d diog"
 
-#: ../../../src/MenuPowers.cpp:745
+#: ../../../src/MenuPowers.cpp:781 ../../../src/MenuPowers.cpp:784
+msgid "Damage per second"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:787 ../../../src/MenuPowers.cpp:790
+msgid "HP per second"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:793 ../../../src/MenuPowers.cpp:796
+msgid "MP per second"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:800
+msgid "Immobilize"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:805
+msgid "Immunity"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:808
+msgid "Stun"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:811
+msgid "Automatic revive on death"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:814
+msgid "Convert"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:817
+msgid "Fear"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:832
+msgid "Lifespan"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:853
+msgid "Magical Shield"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:879
+msgid "Healing"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:882
+msgid "Knockback"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:926
+msgid "Damage"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:928
+#, fuzzy
+msgid "Melee Damage"
+msgstr "Dochann dlùth:"
+
+#: ../../../src/MenuPowers.cpp:930
+#, fuzzy
+msgid "Ranged Damage"
+msgstr "Dochann astair:"
+
+#: ../../../src/MenuPowers.cpp:932
+#, fuzzy
+msgid "Mental Damage"
+msgstr "Dochann inntinne:"
+
+#: ../../../src/MenuPowers.cpp:951
+#, fuzzy
+msgid "Base Accuracy"
+msgstr "Pongalachd:"
+
+#: ../../../src/MenuPowers.cpp:970
+msgid "Base Critical Chance"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:978
+msgid "Ignores Absorbtion"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:983
+#, fuzzy
+msgid "Ignores Avoidance"
+msgstr "Teàrnadh:"
+
+#: ../../../src/MenuPowers.cpp:988
+#, c-format
+msgid "%d%% Chance to crit slowed targets"
+msgstr ""
+
+#: ../../../src/MenuPowers.cpp:994
+#, fuzzy, c-format
+msgid "%s Elemental Damage"
+msgstr "Dochann inntinne:"
+
+#: ../../../src/MenuPowers.cpp:1003
 #, c-format
 msgid "Requires a %s"
 msgstr "Feum air %s"
 
-#: ../../../src/MenuPowers.cpp:752 ../../../src/MenuPowers.cpp:755
+#: ../../../src/MenuPowers.cpp:1010 ../../../src/MenuPowers.cpp:1013
 #, c-format
 msgid "Requires Physical Offense %d"
 msgstr "Feum air ionnsaigh bodhaige de %d"
 
-#: ../../../src/MenuPowers.cpp:758 ../../../src/MenuPowers.cpp:761
+#: ../../../src/MenuPowers.cpp:1016 ../../../src/MenuPowers.cpp:1019
 #, c-format
 msgid "Requires Physical Defense %d"
 msgstr "Feum air dìon bodhaige de %d"
 
-#: ../../../src/MenuPowers.cpp:764 ../../../src/MenuPowers.cpp:767
+#: ../../../src/MenuPowers.cpp:1022 ../../../src/MenuPowers.cpp:1025
 #, c-format
 msgid "Requires Mental Offense %d"
 msgstr "Feum air ionnsaigh inntinne de %d"
 
-#: ../../../src/MenuPowers.cpp:770 ../../../src/MenuPowers.cpp:773
+#: ../../../src/MenuPowers.cpp:1028 ../../../src/MenuPowers.cpp:1031
 #, c-format
 msgid "Requires Mental Defense %d"
 msgstr "Feum air dìon inntinne de %d"
 
-#: ../../../src/MenuPowers.cpp:802 ../../../src/MenuPowers.cpp:805
+#: ../../../src/MenuPowers.cpp:1060 ../../../src/MenuPowers.cpp:1063
 #, c-format
 msgid "Requires Level %d"
 msgstr "Feum air leibheil %d"
 
-#: ../../../src/MenuPowers.cpp:823 ../../../src/MenuPowers.cpp:826
+#: ../../../src/MenuPowers.cpp:1081 ../../../src/MenuPowers.cpp:1084
 #, c-format
 msgid "Requires Power: %s"
 msgstr "Feum air cumhachd: %s"
 
-#: ../../../src/MenuPowers.cpp:834
+#: ../../../src/MenuPowers.cpp:1092
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:838 ../../../src/MenuPowers.cpp:840
+#: ../../../src/MenuPowers.cpp:1096 ../../../src/MenuPowers.cpp:1098
 #, fuzzy
 msgid "Requires 1 Skill Point"
 msgstr "Feum air %d puingean-sgil"
@@ -1103,16 +1229,16 @@ msgstr "Ceannach air ais"
 msgid "Vendor"
 msgstr "Reiceadair"
 
-#: ../../../src/PowerManager.cpp:837
+#: ../../../src/PowerManager.cpp:840
 #, c-format
 msgid "+%d Shield"
 msgstr "Sgiath +%d"
 
-#: ../../../src/PowerManager.cpp:1097
+#: ../../../src/PowerManager.cpp:1101
 msgid "You are already transformed, untransform first."
 msgstr "Tha thu air cruth-atharrachadh mar-thà, feumaidh tu an cruth tùsail agad a ghabhail an toiseach."
 
-#: ../../../src/PowerManager.cpp:1109
+#: ../../../src/PowerManager.cpp:1113
 msgid "Could not untransform at this position."
 msgstr ""
 
@@ -1259,7 +1385,7 @@ msgid "Reduces your chance of stumbling when hit."
 msgstr "Cha tuit thu gu furasta nuair a thèid bualadh ort"
 
 #: ../../../src/Stats.cpp:136
-msgid "Reflect Chance"
+msgid "Missile Reflect Chance"
 msgstr ""
 
 #: ../../../src/Stats.cpp:137
@@ -1267,16 +1393,34 @@ msgid "Increases your chance of reflecting missiles back at enemies."
 msgstr ""
 
 #: ../../../src/Stats.cpp:141
-msgid "Base HP"
+msgid "Damage Reflection"
+msgstr ""
+
+#: ../../../src/Stats.cpp:142
+msgid "Deals a percentage of damage taken back to the attacker."
 msgstr ""
 
 #: ../../../src/Stats.cpp:146
+msgid "Base HP"
+msgstr ""
+
+#: ../../../src/Stats.cpp:151
 msgid "Base MP"
 msgstr ""
 
-#: ../../../src/Utils.cpp:203
+#: ../../../src/Utils.cpp:205
 msgid "k"
 msgstr "k"
+
+#: ../../../src/Utils.cpp:361
+#, fuzzy, c-format
+msgid "%s second"
+msgstr "Fuarachadh: %d diog"
+
+#: ../../../src/Utils.cpp:364
+#, fuzzy, c-format
+msgid "%s seconds"
+msgstr "Fuarachadh: %d diog"
 
 #, fuzzy
 #~ msgid "Move only one item:"

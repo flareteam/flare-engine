@@ -20,7 +20,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-#define STAT_COUNT 23
+#define STAT_COUNT 24
 
 enum STAT {
 	STAT_HP_MAX = 0,
@@ -44,8 +44,11 @@ enum STAT {
 	STAT_STEALTH = 18,
 	STAT_POISE = 19,
 	STAT_REFLECT = 20,
-	STAT_HP_PERCENT = 21,
-	STAT_MP_PERCENT = 22
+	STAT_RETURN_DAMAGE = 21,
+	// since STAT_HP_PERCENT & STAT_MP_PERCENT aren't displayed in MenuCharacter, new stats should be added here.
+	// Otherwise, their values won't update in MenuCharacter
+	STAT_HP_PERCENT = 22,
+	STAT_MP_PERCENT = 23
 };
 
 extern std::string STAT_KEY[STAT_COUNT];

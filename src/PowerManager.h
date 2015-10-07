@@ -278,11 +278,11 @@ public:
 		, multitarget(false)
 		, target_range(0)
 		, target_party(false)
-		, mod_accuracy_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_accuracy_mode(-1)
 		, mod_accuracy_value(100)
-		, mod_crit_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_crit_mode(-1)
 		, mod_crit_value(100)
-		, mod_damage_mode(STAT_MODIFIER_MODE_MULTIPLY)
+		, mod_damage_mode(-1)
 		, mod_damage_value_min(100)
 		, mod_damage_value_max(0)
 
@@ -352,8 +352,6 @@ private:
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
-	EffectDef* getEffectDef(const std::string& id);
-
 public:
 	PowerManager(LootManager *_lootm);
 	~PowerManager();
@@ -374,6 +372,8 @@ public:
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
 	int verifyID(int power_id, FileParser* infile = NULL, bool allow_zero = true);
+
+	EffectDef* getEffectDef(const std::string& id);
 
 	std::vector<EffectDef> effects;
 	std::vector<Power> powers;

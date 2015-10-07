@@ -54,6 +54,7 @@ MapRenderer::MapRenderer()
 	, enemies_cleared(false)
 	, save_game(false)
 	, npc_id(-1)
+	, show_book("")
 	, index_objectlayer(0)
 {
 }
@@ -617,14 +618,14 @@ void MapRenderer::checkEvents(FPoint loc) {
 
 		if ((*it).type == "on_leave") {
 			if (inside) {
-				if (!(*it).getComponent("wasInsideEventArea")) {
+				if (!(*it).getComponent(EC_WAS_INSIDE_EVENT_AREA)) {
 					(*it).components.push_back(Event_Component());
-					(*it).components.back().type = std::string("wasInsideEventArea");
+					(*it).components.back().type = EC_WAS_INSIDE_EVENT_AREA;
 				}
 			}
 			else {
-				if ((*it).getComponent("wasInsideEventArea")) {
-					(*it).deleteAllComponents("wasInsideEventArea");
+				if ((*it).getComponent(EC_WAS_INSIDE_EVENT_AREA)) {
+					(*it).deleteAllComponents(EC_WAS_INSIDE_EVENT_AREA);
 					if (EventManager::executeEvent(*it))
 						it = events.erase(it);
 				}
@@ -664,7 +665,7 @@ void MapRenderer::checkHotspots() {
 				bool matched = false;
 				bool is_npc = false;
 
-				Event_Component* npc = (*it).getComponent("npc_hotspot");
+				Event_Component* npc = (*it).getComponent(EC_NPC_HOTSPOT);
 				if (npc) {
 					is_npc = true;
 
@@ -716,7 +717,7 @@ void MapRenderer::checkHotspots() {
 					if ((*it).cooldown_ticks != 0) continue;
 
 					// new tooltip?
-					createTooltip((*it).getComponent("tooltip"));
+					createTooltip((*it).getComponent(EC_TOOLTIP));
 
 					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, floor(cam)))
 							&& calcDist(cam, (*it).center) < INTERACT_RANGE) {
@@ -776,9 +777,9 @@ void MapRenderer::checkNearestEvent() {
 	if (nearest != events.end()) {
 		if (NO_MOUSE || TOUCHSCREEN) {
 			// new tooltip?
-			createTooltip((*nearest).getComponent("tooltip"));
+			createTooltip((*nearest).getComponent(EC_TOOLTIP));
 			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);
-			if ((*nearest).getComponent("npc_hotspot")) {
+			if ((*nearest).getComponent(EC_NPC_HOTSPOT)) {
 				tip_pos.y -= TOOLTIP_MARGIN_NPC;
 			}
 			else {

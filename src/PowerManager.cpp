@@ -827,12 +827,15 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 
 			if (effect_data.type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
+				// TODO: MULTIPLY and ADD don't account for mod_damage_value_max. Is this okay?
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
 					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) + powers[power_index].mod_damage_value_min;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
+				else
+					magnitude = caster_stats->get(STAT_DMG_MENT_MAX);
 
 				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
@@ -840,6 +843,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				// heal for ment weapon damage * damage multiplier
 				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
 
+				// TODO: MULTIPLY and ADD don't account for mod_damage_value_max. Is this okay?
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)

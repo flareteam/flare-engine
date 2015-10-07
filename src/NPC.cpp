@@ -70,27 +70,35 @@ void NPC::load(const std::string& npc_id) {
 					dialog.push_back(std::vector<Event_Component>());
 				}
 				Event_Component e;
-				e.type = infile.key;
-				if (infile.key == "him" || infile.key == "her")
+				e.type = EC_NONE;
+				if (infile.key == "him" || infile.key == "her") {
 					// @ATTR dialog.him, dialog.her|string|A line of dialog from the NPC.
+					e.type = EC_NPC_DIALOG_THEM;
 					e.s = msg->get(infile.val);
-				else if (infile.key == "you")
+				}
+				else if (infile.key == "you") {
 					// @ATTR dialog.you|string|A line of dialog from the player.
+					e.type = EC_NPC_DIALOG_YOU;
 					e.s = msg->get(infile.val);
+				}
 				else if (infile.key == "voice") {
 					// @ATTR dialog.voice|string|Filename of a voice sound file to play.
+					e.type = EC_NPC_VOICE;
 					e.x = loadSound(infile.val, NPC_VOX_QUEST);
 				}
 				else if (infile.key == "topic") {
 					// @ATTR dialog.topic|string|The name of this dialog topic. Displayed when picking a dialog tree.
+					e.type = EC_NPC_DIALOG_TOPIC;
 					e.s = msg->get(infile.val);
 				}
 				else if (infile.key == "group") {
 					// @ATTR dialog.group|string|Dialog group.
+					e.type = EC_NPC_DIALOG_GROUP;
 					e.s = infile.val;
 				}
 				else if (infile.key == "allow_movement") {
 					// @ATTR dialog.allow_movement|boolean|Restrict the player's mvoement during dialog.
+					e.type = EC_NPC_ALLOW_MOVEMENT;
 					e.s = infile.val;
 				}
 				else {
@@ -245,49 +253,67 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 		bool is_grouped = false;
 		for (size_t j=0; j<dialog[i-1].size(); j++) {
 
-			if (dialog[i-1][j].type == "requires_status") {
+			if (dialog[i-1][j].type == EC_REQUIRES_STATUS) {
 				if (camp->checkStatus(dialog[i-1][j].s))
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i-1][j].type == "requires_not_status") {
+			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_STATUS) {
 				if (!camp->checkStatus(dialog[i-1][j].s))
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i-1][j].type == "requires_currency") {
+			else if (dialog[i-1][j].type == EC_REQUIRES_CURRENCY) {
 				if (camp->checkCurrency(dialog[i-1][j].x))
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i-1][j].type == "requires_item") {
+			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_CURRENCY) {
+				if (!camp->checkCurrency(dialog[i-1][j].x))
+					continue;
+				is_available = false;
+				break;
+			}
+			else if (dialog[i-1][j].type == EC_REQUIRES_ITEM) {
 				if (camp->checkItem(dialog[i-1][j].x))
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i-1][j].type == "requires_level") {
+			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_ITEM) {
+				if (!camp->checkItem(dialog[i-1][j].x))
+					continue;
+				is_available = false;
+				break;
+			}
+			else if (dialog[i-1][j].type == EC_REQUIRES_LEVEL) {
 				if (camp->hero->level >= dialog[i-1][j].x)
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i-1][j].type == "requires_not_level") {
+			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_LEVEL) {
 				if (camp->hero->level < dialog[i-1][j].x)
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i-1][j].type == "requires_class") {
+			else if (dialog[i-1][j].type == EC_REQUIRES_CLASS) {
 				if (camp->hero->character_class == dialog[i-1][j].s)
 					continue;
 				is_available = false;
 				break;
 			}
-			else if (dialog[i-1][j].type == "group") {
+			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_CLASS) {
+				if (camp->hero->character_class != dialog[i-1][j].s)
+					continue;
+				is_available = false;
+				break;
+			}
+			else if (dialog[i-1][j].type == EC_NPC_DIALOG_GROUP) {
 				is_grouped = true;
 				group = dialog[i-1][j].s;
 			}
@@ -329,7 +355,7 @@ std::string NPC::getDialogTopic(unsigned int dialog_node) {
 		return "";
 
 	for (unsigned int j=0; j<dialog[dialog_node].size(); j++) {
-		if (dialog[dialog_node][j].type == "topic")
+		if (dialog[dialog_node][j].type == EC_NPC_DIALOG_TOPIC)
 			return dialog[dialog_node][j].s;
 	}
 
@@ -342,7 +368,7 @@ std::string NPC::getDialogTopic(unsigned int dialog_node) {
 bool NPC::checkMovement(unsigned int dialog_node) {
 	if (dialog_node < dialog.size()) {
 		for (unsigned int i=0; i<dialog[dialog_node].size(); i++) {
-			if (dialog[dialog_node][i].type == "allow_movement")
+			if (dialog[dialog_node][i].type == EC_NPC_ALLOW_MOVEMENT)
 				return toBool(dialog[dialog_node][i].s);
 		}
 	}
@@ -361,37 +387,46 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 	while (event_cursor < dialog[dialog_node].size()) {
 
 		// we've already determined requirements are met, so skip these
-		if (dialog[dialog_node][event_cursor].type == "requires_status") {
+		if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_STATUS) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == "requires_not_status") {
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_STATUS) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == "requires_level") {
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_LEVEL) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == "requires_not_level") {
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_LEVEL) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == "requires_currency") {
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_CURRENCY) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == "requires_item") {
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_CURRENCY) {
 			// continue to next event component
 		}
-		else if (dialog[dialog_node][event_cursor].type == "him") {
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_ITEM) {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_ITEM) {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_CLASS) {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == EC_REQUIRES_NOT_CLASS) {
+			// continue to next event component
+		}
+		else if (dialog[dialog_node][event_cursor].type == EC_NPC_DIALOG_THEM) {
 			return true;
 		}
-		else if (dialog[dialog_node][event_cursor].type == "her") {
+		else if (dialog[dialog_node][event_cursor].type == EC_NPC_DIALOG_YOU) {
 			return true;
 		}
-		else if (dialog[dialog_node][event_cursor].type == "you") {
-			return true;
-		}
-		else if (dialog[dialog_node][event_cursor].type == "voice") {
+		else if (dialog[dialog_node][event_cursor].type == EC_NPC_VOICE) {
 			playSound(NPC_VOX_QUEST, dialog[dialog_node][event_cursor].x);
 		}
-		else if (dialog[dialog_node][event_cursor].type == "") {
+		else if (dialog[dialog_node][event_cursor].type == EC_NONE) {
 			// conversation ends
 			return false;
 		}
@@ -425,8 +460,8 @@ Renderable NPC::getRender() {
 	return r;
 }
 
-bool NPC::isDialogType(const std::string &type) {
-	return type == "him" || type == "her" || type == "you" || type == "voice";
+bool NPC::isDialogType(const EVENT_COMPONENT_TYPE &type) {
+	return type == EC_NPC_DIALOG_THEM || type == EC_NPC_DIALOG_YOU || type == EC_NPC_VOICE;
 }
 
 NPC::~NPC() {

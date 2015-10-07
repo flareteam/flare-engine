@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateNew.h"
 #include "ItemManager.h"
 #include "MenuConfirm.h"
+#include "SaveLoad.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
@@ -500,9 +501,8 @@ void GameStateLoad::logicLoading() {
 	delete_items = false;
 	GameStatePlay* play = new GameStatePlay();
 	play->resetGame();
-	play->game_slot = selected_slot + 1;
-	play->loadGame();
-	play->loadPowerTree();
+	save_load->setGameSlot(selected_slot + 1);
+	save_load->loadGame();
 	requestedGameState = play;
 	loaded = true;
 	loading = false;

@@ -67,6 +67,7 @@ static void init(const std::string &render_device_name) {
 		Exit(1);
 	}
 
+	save_load = new SaveLoad();
 	msg = new MessageEngine();
 	font = getFontEngine();
 	anim = new AnimationManager();
@@ -142,7 +143,7 @@ static void mainLoop () {
 			SDL_PumpEvents();
 			inpt->handle();
 
-			// Skip game logic when minimized on Android
+			// Skip game logic when minimized on Mobile device
 			if (inpt->window_minimized && !inpt->window_restored)
 				break;
 
@@ -156,8 +157,8 @@ static void mainLoop () {
 			logic_ticks += delay;
 			loops++;
 
-			// Android only
-			// When the app is minimized on Android, no logic gets processed.
+			// Android and IOS only
+			// When the app is minimized on Mobile device, no logic gets processed.
 			// As a result, the delta time when restoring the app is large, so the game will skip frames and appear to be running fast.
 			// To counter this, we reset our delta time here when restoring the app
 			if (inpt->window_minimized && inpt->window_restored) {
@@ -208,6 +209,7 @@ static void cleanup() {
 	delete mods;
 	delete msg;
 	delete snd;
+	delete save_load;
 
 	if (render_device)
 		render_device->destroyContext();
@@ -250,12 +252,13 @@ int main(int argc, char *argv[]) {
 	std::string render_device_name = "";
 
 	for (int i = 1 ; i < argc; i++) {
-		std::string arg = parseArg(std::string(argv[i]));
+		std::string arg_full = std::string(argv[i]);
+		std::string arg = parseArg(arg_full);
 		if (arg == "debug-event") {
 			debug_event = true;
 		}
 		else if (arg == "data-path") {
-			CUSTOM_PATH_DATA = parseArgValue(arg);
+			CUSTOM_PATH_DATA = parseArgValue(arg_full);
 			if (!CUSTOM_PATH_DATA.empty() && CUSTOM_PATH_DATA.at(CUSTOM_PATH_DATA.length()-1) != '/')
 				CUSTOM_PATH_DATA += "/";
 		}
@@ -264,7 +267,7 @@ int main(int argc, char *argv[]) {
 			done = true;
 		}
 		else if (arg == "renderer") {
-			render_device_name = parseArgValue(arg);
+			render_device_name = parseArgValue(arg_full);
 		}
 		else if (arg == "no-audio") {
 			AUDIO = false;

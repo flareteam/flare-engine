@@ -39,3 +39,4 @@ RenderDevice *render_device;
 SDL_Joystick *joy;
 SoundManager *snd;
 Sprite *icons;
+SaveLoad *save_load;

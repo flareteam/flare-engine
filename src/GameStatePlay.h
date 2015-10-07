@@ -65,7 +65,6 @@ private:
 	Enemy *enemy;
 
 	HazardManager *hazards;
-	MenuManager *menu;
 	NPCManager *npcs;
 	QuestLog *quests;
 
@@ -115,14 +114,7 @@ public:
 	void logic();
 	void render();
 	void showFPS(int fps);
-	void saveGame();
-	void loadGame();
-	void loadClass(int index);
-	void loadStash();
 	void resetGame();
-	void applyPlayerData();
-	void loadPowerTree();
-	int game_slot;
 
 	Avatar *getAvatar() const;
 };
