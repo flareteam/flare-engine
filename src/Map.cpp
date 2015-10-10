@@ -66,6 +66,8 @@ int Map::load(std::string fname) {
 	clearLayers();
 	clearQueues();
 
+	music_filename = "";
+
 	// @CLASS Map|Description of maps/
 	if (!infile.open(fname))
 		return 0;
