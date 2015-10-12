@@ -43,6 +43,8 @@ private:
 
 	Map* map;
 	std::string dest_file;
+
+	std::string EVENT_COMPONENT_NAME[39];
 };
 
 #endif //MAP_SAVER
