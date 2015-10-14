@@ -41,13 +41,13 @@ body {
 
 <p><em>string</em>, a string value</p>
 
-<p><em>xyz</em>id_, specifies an id reference of type xyz</p>
+<p><em>xyz_id</em>, specifies an id reference of type xyz</p>
 
 <p><em>duration</em>, durations can be specified in seconds and milliseconds with integer suffix s, ms (eg. 20s, 20000ms)</p>
 
 <p><em>[val1 : val2]</em>, this describes a list of fixed string values for attribute</p>
 
-<p><em>[val1 (xyz</em>id), val2 (duration), val3 (integer)]_, comma seperated values ex: 43,4s,200</p>
+<p><em>[val1 (xyz_id), val2 (duration), val3 (integer)]</em>, comma seperated values ex: 43,4s,200</p>
 
 <p><em>[val1 (string), ...]</em>, comma separated list of <em>n</em> values</p>
 
@@ -64,23 +64,23 @@ body {
 
 <p>Description of animations in animations/</p>
 
-<p><strong>image</strong>, _string_, Filename of sprite-sheet image.</p>
+<p><strong>image</strong>, <em>string</em>, Filename of sprite-sheet image.</p>
 
-<p><strong>position</strong>, _integer_, Number of frames to the right to use as the first frame. Unpacked animations only.</p>
+<p><strong>position</strong>, <em>integer</em>, Number of frames to the right to use as the first frame. Unpacked animations only.</p>
 
-<p><strong>frames</strong>, _integer_, The total number of frames</p>
+<p><strong>frames</strong>, <em>integer</em>, The total number of frames</p>
 
-<p><strong>duration</strong>, _integer_, The duration of the entire animation in 'ms' or 's'.</p>
+<p><strong>duration</strong>, <em>integer</em>, The duration of the entire animation in 'ms' or 's'.</p>
 
-<p><strong>type</strong>, _[play_once, back_forth, looped]_, How to loop (or not loop) this animation.</p>
+<p><strong>type</strong>, <em>[play_once, back_forth, looped]</em>, How to loop (or not loop) this animation.</p>
 
-<p><strong>render_size</strong>, _w (integer), h (integer)_, Width and height of animation.</p>
+<p><strong>render_size</strong>, <em>w (integer), h (integer)</em>, Width and height of animation.</p>
 
-<p><strong>render_offset</strong>, _x (integer), y (integer)_, Render x/y offset.</p>
+<p><strong>render_offset</strong>, <em>x (integer), y (integer)</em>, Render x/y offset.</p>
 
-<p><strong>active_frame</strong>, _[all:frame (integer), ...]_, A list of frames marked as "active". Also, "all" can be used to mark all frames as active.</p>
+<p><strong>active_frame</strong>, <em>[all:frame (integer), ...]</em>, A list of frames marked as "active". Also, "all" can be used to mark all frames as active.</p>
 
-<p><strong>frame</strong>, _index (integer), direction (integer), x (integer), y (integer), w (integer), h (integer), x offset (integer), y offset (integer)_, A single frame of a compressed animation.</p>
+<p><strong>frame</strong>, <em>index (integer), direction (integer), x (integer), y (integer), w (integer), h (integer), x offset (integer), y offset (integer)</em>, A single frame of a compressed animation.</p>
 
 <hr />
 
@@ -88,9 +88,9 @@ body {
 
 <p>Description of items/step_sounds.txt</p>
 
-<p><strong>id</strong>, _string_, An identifier name for a set of step sounds.</p>
+<p><strong>id</strong>, <em>string</em>, An identifier name for a set of step sounds.</p>
 
-<p><strong>step</strong>, _string_, Filename of a step sound effect.</p>
+<p><strong>step</strong>, <em>string</em>, Filename of a step sound effect.</p>
 
 <hr />
 
@@ -98,7 +98,7 @@ body {
 
 <p>Description of engine/hero_layers.txt</p>
 
-<p><strong>layer</strong>, _direction (integer), string, ...]_, Defines the hero avatar sprite layer</p>
+<p><strong>layer</strong>, <em>direction (integer), string, ...]</em>, Defines the hero avatar sprite layer</p>
 
 <hr />
 
@@ -106,11 +106,11 @@ body {
 
 <p>Description of engine/combat_text.txt</p>
 
-<p><strong>duration</strong>, _duration_, Duration of the combat text in 'ms' or 's'.</p>
+<p><strong>duration</strong>, <em>duration</em>, Duration of the combat text in 'ms' or 's'.</p>
 
-<p><strong>speed</strong>, _integer_, Motion speed of the combat text.</p>
+<p><strong>speed</strong>, <em>integer</em>, Motion speed of the combat text.</p>
 
-<p><strong>offset</strong>, _integer_, The vertical offset for the combat text's starting position.</p>
+<p><strong>offset</strong>, <em>integer</em>, The vertical offset for the combat text's starting position.</p>
 
 <hr />
 
@@ -118,13 +118,13 @@ body {
 
 <p>Description of engine/mouse_cursor.txt</p>
 
-<p><strong>normal</strong>, _string_, Filename of an image for the normal cursor.</p>
+<p><strong>normal</strong>, <em>string</em>, Filename of an image for the normal cursor.</p>
 
-<p><strong>interact</strong>, _string_, Filename of an image for the object interaction cursor.</p>
+<p><strong>interact</strong>, <em>string</em>, Filename of an image for the object interaction cursor.</p>
 
-<p><strong>talk</strong>, _string_, Filename of an image for the NPC interaction cursor.</p>
+<p><strong>talk</strong>, <em>string</em>, Filename of an image for the NPC interaction cursor.</p>
 
-<p><strong>attack</strong>, _string_, Filename of an image for the cursor when attacking enemies.</p>
+<p><strong>attack</strong>, <em>string</em>, Filename of an image for the cursor when attacking enemies.</p>
 
 <hr />
 
@@ -166,7 +166,7 @@ body {
 
 <p><strong>mental</strong>, Increase Mental stat.</p>
 
-<p><strong>$STATNAME</strong>, Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_mele_min, xp_gain</p>
+<p><strong>$STATNAME</strong>, Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_melee_min, xp_gain</p>
 
 <p><strong>$ELEMENT_resist</strong>, Increase Resistance % to $ELEMENT, where $ELEMENT is any found in engine/elements.txt. Example: fire_resist</p>
 
@@ -182,11 +182,11 @@ body {
 
 <p>Description of enemies in enemies/</p>
 
-<p><strong>level</strong>, _integer_, Level of the enemy</p>
+<p><strong>level</strong>, <em>integer</em>, Level of the enemy</p>
 
-<p><strong>rarity</strong>, _[common,uncommon,rare]_, Enemy rarity</p>
+<p><strong>rarity</strong>, <em>[common,uncommon,rare]</em>, Enemy rarity</p>
 
-<p><strong>categories</strong>, _string,..._, Comma separated list of enemy categories</p>
+<p><strong>categories</strong>, <em>string,...</em>, Comma separated list of enemy categories</p>
 
 <hr />
 
@@ -194,91 +194,91 @@ body {
 
 <p>Description of events in maps/ and npcs/</p>
 
-<p><strong>event.type</strong>, _[on_trigger:on_mapexit:on_leave:on_load:on_clear]_, Type of map event.</p>
+<p><strong>event.type</strong>, <em>[on_trigger:on_mapexit:on_leave:on_load:on_clear]</em>, Type of map event.</p>
 
-<p><strong>event.location</strong>, _[x,y,w,h]_, Defines the location area for the event.</p>
+<p><strong>event.location</strong>, <em>[x,y,w,h]</em>, Defines the location area for the event.</p>
 
-<p><strong>event.hotspot</strong>, _[ [x, y, w, h] : location ]_, Event uses location as hotspot or defined by rect.</p>
+<p><strong>event.hotspot</strong>, <em>[ [x, y, w, h] : location ]</em>, Event uses location as hotspot or defined by rect.</p>
 
-<p><strong>event.cooldown</strong>, _duration_, Duration for event cooldown in 'ms' or 's'.</p>
+<p><strong>event.cooldown</strong>, <em>duration</em>, Duration for event cooldown in 'ms' or 's'.</p>
 
-<p><strong>event.reachable_from</strong>, _[x,y,w,h]_, If the hero is inside this rectangle, they can activate the event.</p>
+<p><strong>event.reachable_from</strong>, <em>[x,y,w,h]</em>, If the hero is inside this rectangle, they can activate the event.</p>
 
-<p><strong>event.tooltip</strong>, _string_, Tooltip for event</p>
+<p><strong>event.tooltip</strong>, <em>string</em>, Tooltip for event</p>
 
-<p><strong>event.power_path</strong>, _[hero:[x,y]]_, Event power path</p>
+<p><strong>event.power_path</strong>, <em>[hero:[x,y]]</em>, Event power path</p>
 
-<p><strong>event.power_damage</strong>, _min(integer), max(integer)_, Range of power damage</p>
+<p><strong>event.power_damage</strong>, <em>min(integer), max(integer)</em>, Range of power damage</p>
 
-<p><strong>event.intermap</strong>, _[map(string),x(integer),y(integer)]_, Jump to specific map at location specified.</p>
+<p><strong>event.intermap</strong>, <em>[map(string),x(integer),y(integer)]</em>, Jump to specific map at location specified.</p>
 
-<p><strong>event.intramap</strong>, _[x(integer),y(integer)]_, Jump to specific position within current map.</p>
+<p><strong>event.intramap</strong>, <em>[x(integer),y(integer)]</em>, Jump to specific position within current map.</p>
 
-<p><strong>event.mapmod</strong>, _[string,int,int,int],.._, Modify map tiles</p>
+<p><strong>event.mapmod</strong>, <em>[string,int,int,int],..</em>, Modify map tiles</p>
 
-<p><strong>event.soundfx</strong>, _[soundfile(string),x(integer),y(integer),loop(boolean)]_, Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.</p>
+<p><strong>event.soundfx</strong>, <em>[soundfile(string),x(integer),y(integer),loop(boolean)]</em>, Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.</p>
 
-<p><strong>event.loot</strong>, _[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],..._, Add loot to the event; either a filename or an inline definition.</p>
+<p><strong>event.loot</strong>, <em>[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...</em>, Add loot to the event; either a filename or an inline definition.</p>
 
-<p><strong>event.loot_count</strong>, _min (integer), max (integer)_, Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.</p>
+<p><strong>event.loot_count</strong>, <em>min (integer), max (integer)</em>, Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.</p>
 
-<p><strong>event.msg</strong>, _string_, Adds a message to be displayed for the event.</p>
+<p><strong>event.msg</strong>, <em>string</em>, Adds a message to be displayed for the event.</p>
 
-<p><strong>event.shakycam</strong>, _duration_, Makes the camera shake for this duration in 'ms' or 's'.</p>
+<p><strong>event.shakycam</strong>, <em>duration</em>, Makes the camera shake for this duration in 'ms' or 's'.</p>
 
-<p><strong>event.requires_status</strong>, _string,..._, Event requires list of statuses</p>
+<p><strong>event.requires_status</strong>, <em>string,...</em>, Event requires list of statuses</p>
 
-<p><strong>event.requires_not_status</strong>, _string,..._, Event requires not list of statuses</p>
+<p><strong>event.requires_not_status</strong>, <em>string,...</em>, Event requires not list of statuses</p>
 
-<p><strong>event.requires_level</strong>, _integer_, Event requires hero level</p>
+<p><strong>event.requires_level</strong>, <em>integer</em>, Event requires hero level</p>
 
-<p><strong>event.requires_not_level</strong>, _integer_, Event requires not hero level</p>
+<p><strong>event.requires_not_level</strong>, <em>integer</em>, Event requires not hero level</p>
 
-<p><strong>event.requires_currency</strong>, _integer_, Event requires atleast this much currency</p>
+<p><strong>event.requires_currency</strong>, <em>integer</em>, Event requires atleast this much currency</p>
 
-<p><strong>event.requires_not_currency</strong>, _integer_, Event requires no more than this much currency</p>
+<p><strong>event.requires_not_currency</strong>, <em>integer</em>, Event requires no more than this much currency</p>
 
-<p><strong>event.requires_item</strong>, _integer,..._, Event requires specific item</p>
+<p><strong>event.requires_item</strong>, <em>integer,...</em>, Event requires specific item</p>
 
-<p><strong>event.requires_not_item</strong>, _integer,..._, Event requires not having a specific item</p>
+<p><strong>event.requires_not_item</strong>, <em>integer,...</em>, Event requires not having a specific item</p>
 
-<p><strong>event.requires_class</strong>, _string_, Event requires this base class</p>
+<p><strong>event.requires_class</strong>, <em>string</em>, Event requires this base class</p>
 
-<p><strong>event.requires_not_class</strong>, _string_, Event requires not this base class</p>
+<p><strong>event.requires_not_class</strong>, <em>string</em>, Event requires not this base class</p>
 
-<p><strong>event.set_status</strong>, _string,..._, Sets specified statuses</p>
+<p><strong>event.set_status</strong>, <em>string,...</em>, Sets specified statuses</p>
 
-<p><strong>event.unset_status</strong>, _string,..._, Unsets specified statuses</p>
+<p><strong>event.unset_status</strong>, <em>string,...</em>, Unsets specified statuses</p>
 
-<p><strong>event.remove_currency</strong>, _integer_, Removes specified amount of currency from hero inventory</p>
+<p><strong>event.remove_currency</strong>, <em>integer</em>, Removes specified amount of currency from hero inventory</p>
 
-<p><strong>event.remove_item</strong>, _integer,..._, Removes specified item from hero inventory</p>
+<p><strong>event.remove_item</strong>, <em>integer,...</em>, Removes specified item from hero inventory</p>
 
-<p><strong>event.reward_xp</strong>, _integer_, Reward hero with specified amount of experience points.</p>
+<p><strong>event.reward_xp</strong>, <em>integer</em>, Reward hero with specified amount of experience points.</p>
 
-<p><strong>event.reward_currency</strong>, _integer_, Reward hero with specified amount of currency.</p>
+<p><strong>event.reward_currency</strong>, <em>integer</em>, Reward hero with specified amount of currency.</p>
 
-<p><strong>event.reward_item</strong>, _x(integer),y(integer)_, Reward hero with y number of item x.</p>
+<p><strong>event.reward_item</strong>, <em>x(integer),y(integer)</em>, Reward hero with y number of item x.</p>
 
-<p><strong>event.restore</strong>, _string_, Restore the hero's HP, MP, and/or status.</p>
+<p><strong>event.restore</strong>, <em>string</em>, Restore the hero's HP, MP, and/or status.</p>
 
-<p><strong>event.power</strong>, _power_id_, Specify power coupled with event.</p>
+<p><strong>event.power</strong>, <em>power_id</em>, Specify power coupled with event.</p>
 
-<p><strong>event.spawn</strong>, _[string,x(integer),y(integer)], ..._, Spawn an enemy from this category at location</p>
+<p><strong>event.spawn</strong>, <em>[string,x(integer),y(integer)], ...</em>, Spawn an enemy from this category at location</p>
 
-<p><strong>event.stash</strong>, _boolean_, Opens the Stash menu.</p>
+<p><strong>event.stash</strong>, <em>boolean</em>, Opens the Stash menu.</p>
 
-<p><strong>event.npc</strong>, _string_, Filename of an NPC to start dialog with.</p>
+<p><strong>event.npc</strong>, <em>string</em>, Filename of an NPC to start dialog with.</p>
 
-<p><strong>event.music</strong>, _string_, Change background music to specified file.</p>
+<p><strong>event.music</strong>, <em>string</em>, Change background music to specified file.</p>
 
-<p><strong>event.cutscene</strong>, _string_, Show specified cutscene by filename.</p>
+<p><strong>event.cutscene</strong>, <em>string</em>, Show specified cutscene by filename.</p>
 
-<p><strong>event.repeat</strong>, _boolean_, Allows the event to be triggered again.</p>
+<p><strong>event.repeat</strong>, <em>boolean</em>, Allows the event to be triggered again.</p>
 
-<p><strong>event.save_game</strong>, _boolean_, Saves the game when the event is triggered. The respawn position is set to where the player is standing.</p>
+<p><strong>event.save_game</strong>, <em>boolean</em>, Saves the game when the event is triggered. The respawn position is set to where the player is standing.</p>
 
-<p><strong>event.book</strong>, _string_, Opens a book by filename.</p>
+<p><strong>event.book</strong>, <em>string</em>, Opens a book by filename.</p>
 
 <hr />
 
@@ -286,39 +286,39 @@ body {
 
 <p>Description of menus/config.txt</p>
 
-<p><strong>listbox_scrollbar_offset</strong>, _integer_, Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.</p>
+<p><strong>listbox_scrollbar_offset</strong>, <em>integer</em>, Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.</p>
 
-<p><strong>music_volume</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Music Volume" slider relative to the frame.</p>
+<p><strong>music_volume</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Music Volume" slider relative to the frame.</p>
 
-<p><strong>sound_volume</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Sound Volume" slider relative to the frame.</p>
+<p><strong>sound_volume</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Sound Volume" slider relative to the frame.</p>
 
-<p><strong>language</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Language" list box relative to the frame.</p>
+<p><strong>language</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Language" list box relative to the frame.</p>
 
-<p><strong>combat_text</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Show combat text" checkbox relative to the frame.</p>
+<p><strong>combat_text</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Show combat text" checkbox relative to the frame.</p>
 
-<p><strong>show_fps</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Show FPS" checkbox relative to the frame.</p>
+<p><strong>show_fps</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Show FPS" checkbox relative to the frame.</p>
 
-<p><strong>colorblind</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Colorblind Mode" checkbox relative to the frame.</p>
+<p><strong>colorblind</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Colorblind Mode" checkbox relative to the frame.</p>
 
-<p><strong>hardware_cursor</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Hardware mouse cursor" checkbox relative to the frame.</p>
+<p><strong>hardware_cursor</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Hardware mouse cursor" checkbox relative to the frame.</p>
 
-<p><strong>dev_mode</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Developer Mode" checkbox relative to the frame.</p>
+<p><strong>dev_mode</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Developer Mode" checkbox relative to the frame.</p>
 
-<p><strong>show_target</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Show targeting animation" checkbox relative to the frame.</p>
+<p><strong>show_target</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Show targeting animation" checkbox relative to the frame.</p>
 
-<p><strong>loot_tooltips</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Always show loot labels" checkbox relative to the frame.</p>
+<p><strong>loot_tooltips</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Always show loot labels" checkbox relative to the frame.</p>
 
-<p><strong>activemods</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Active Mods" list box relative to the frame.</p>
+<p><strong>activemods</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Active Mods" list box relative to the frame.</p>
 
-<p><strong>inactivemods</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Available Mods" list box relative to the frame.</p>
+<p><strong>inactivemods</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Available Mods" list box relative to the frame.</p>
 
-<p><strong>activemods_shiftup</strong>, _x (integer), y (integer)_, Position of the button to shift mods up in "Active Mods" relative to the frame.</p>
+<p><strong>activemods_shiftup</strong>, <em>x (integer), y (integer)</em>, Position of the button to shift mods up in "Active Mods" relative to the frame.</p>
 
-<p><strong>activemods_shiftdown</strong>, _x (integer), y (integer)_, Position of the button to shift mods down in "Active Mods" relative to the frame.</p>
+<p><strong>activemods_shiftdown</strong>, <em>x (integer), y (integer)</em>, Position of the button to shift mods down in "Active Mods" relative to the frame.</p>
 
-<p><strong>activemods_deactivate</strong>, _x (integer), y (integer)_, Position of the "Disable" button relative to the frame.</p>
+<p><strong>activemods_deactivate</strong>, <em>x (integer), y (integer)</em>, Position of the "Disable" button relative to the frame.</p>
 
-<p><strong>inactivemods_activate</strong>, _x (integer), y (integer)_, Position of the "Enable" button relative to the frame.</p>
+<p><strong>inactivemods_activate</strong>, <em>x (integer), y (integer)</em>, Position of the "Enable" button relative to the frame.</p>
 
 <hr />
 
@@ -326,107 +326,107 @@ body {
 
 <p>Description of menus/config.txt</p>
 
-<p><strong>fullscreen</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Full Screen Mode" checkbox relative to the frame.</p>
+<p><strong>fullscreen</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Full Screen Mode" checkbox relative to the frame.</p>
 
-<p><strong>mouse_move</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Move hero using mouse" checkbox relative to the frame.</p>
+<p><strong>mouse_move</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Move hero using mouse" checkbox relative to the frame.</p>
 
-<p><strong>hwsurface</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Hardware surfaces" checkbox relative to the frame.</p>
+<p><strong>hwsurface</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Hardware surfaces" checkbox relative to the frame.</p>
 
-<p><strong>vsync</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "V-Sync" checkbox relative to the frame.</p>
+<p><strong>vsync</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "V-Sync" checkbox relative to the frame.</p>
 
-<p><strong>texture_filter</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Texture Filtering" checkbox relative to the frame.</p>
+<p><strong>texture_filter</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Texture Filtering" checkbox relative to the frame.</p>
 
-<p><strong>change_gamma</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Allow changing gamma" checkbox relative to the frame.</p>
+<p><strong>change_gamma</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Allow changing gamma" checkbox relative to the frame.</p>
 
-<p><strong>gamma</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Gamma" slider relative to the frame.</p>
+<p><strong>gamma</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Gamma" slider relative to the frame.</p>
 
-<p><strong>hws_note</strong>, _x (integer), y (integer)_, Position of the "Disable for performance" label (next to Hardware surfaces) relative to the frame.</p>
+<p><strong>hws_note</strong>, <em>x (integer), y (integer)</em>, Position of the "Disable for performance" label (next to Hardware surfaces) relative to the frame.</p>
 
-<p><strong>dbuf_note</strong>, _x (integer), y (integer)_, Position of the "Disable for performance" label (next to Double buffering) relative to the frame.</p>
+<p><strong>dbuf_note</strong>, <em>x (integer), y (integer)</em>, Position of the "Disable for performance" label (next to Double buffering) relative to the frame.</p>
 
-<p><strong>test_note</strong>, _x (integer), y (integer)_, Position of the "Experimental" label relative to the frame.</p>
+<p><strong>test_note</strong>, <em>x (integer), y (integer)</em>, Position of the "Experimental" label relative to the frame.</p>
 
-<p><strong>enable_joystick</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Use joystick" checkbox relative to the frame.</p>
+<p><strong>enable_joystick</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Use joystick" checkbox relative to the frame.</p>
 
-<p><strong>joystick_device</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Joystick" list box relative to the frame.</p>
+<p><strong>joystick_device</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Joystick" list box relative to the frame.</p>
 
-<p><strong>mouse_aim</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Mouse aim" checkbox relative to the frame.</p>
+<p><strong>mouse_aim</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Mouse aim" checkbox relative to the frame.</p>
 
-<p><strong>no_mouse</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Do not use mouse" checkbox relative to the frame.</p>
+<p><strong>no_mouse</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Do not use mouse" checkbox relative to the frame.</p>
 
-<p><strong>joystick_deadzone</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Joystick Deadzone" slider relative to the frame.</p>
+<p><strong>joystick_deadzone</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Joystick Deadzone" slider relative to the frame.</p>
 
-<p><strong>handheld_note</strong>, _x (integer), y (integer)_, Position of the "For handheld devices" label relative to the frame.</p>
+<p><strong>handheld_note</strong>, <em>x (integer), y (integer)</em>, Position of the "For handheld devices" label relative to the frame.</p>
 
-<p><strong>secondary_offset</strong>, _x (integer), y (integer)_, Offset of the second (and third) columns of keybinds.</p>
+<p><strong>secondary_offset</strong>, <em>x (integer), y (integer)</em>, Offset of the second (and third) columns of keybinds.</p>
 
-<p><strong>keybinds_bg_color</strong>, _r (integer), g (integer), b (integer)_, Background color for the keybindings scrollbox.</p>
+<p><strong>keybinds_bg_color</strong>, <em>r (integer), g (integer), b (integer)</em>, Background color for the keybindings scrollbox.</p>
 
-<p><strong>scrollpane</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position of the keybinding scrollbox relative to the frame.</p>
+<p><strong>scrollpane</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position of the keybinding scrollbox relative to the frame.</p>
 
-<p><strong>scrollpane_contents</strong>, _integer_, The vertical size of the keybinding scrollbox's contents.</p>
+<p><strong>scrollpane_contents</strong>, <em>integer</em>, The vertical size of the keybinding scrollbox's contents.</p>
 
-<p><strong>cancel</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Cancel" keybind relative to the keybinding scrollbox.</p>
+<p><strong>cancel</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Cancel" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>accept</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Accept" keybind relative to the keybinding scrollbox.</p>
+<p><strong>accept</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Accept" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>up</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Up" keybind relative to the keybinding scrollbox.</p>
+<p><strong>up</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Up" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>down</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Down" keybind relative to the keybinding scrollbox.</p>
+<p><strong>down</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Down" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>left</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Left" keybind relative to the keybinding scrollbox.</p>
+<p><strong>left</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Left" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>right</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Right" keybind relative to the keybinding scrollbox.</p>
+<p><strong>right</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Right" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar1</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar1" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar1</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar1" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar2</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar2" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar2</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar2" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar3</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar3" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar3</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar3" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar4</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar4" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar4</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar4" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar5</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar5" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar5</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar5" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar6</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar6" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar6</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar6" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar7</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar7" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar7</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar7" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>Bar8</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar8" keybind relative to the keybinding scrollbox.</p>
+<p><strong>Bar8</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar8" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar9</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar9" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar9</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar9" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>bar0</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Bar0" keybind relative to the keybinding scrollbox.</p>
+<p><strong>bar0</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Bar0" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>main1</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Main1" keybind relative to the keybinding scrollbox.</p>
+<p><strong>main1</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Main1" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>main2</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Main2" keybind relative to the keybinding scrollbox.</p>
+<p><strong>main2</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Main2" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>character</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Character" keybind relative to the keybinding scrollbox.</p>
+<p><strong>character</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Character" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>inventory</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Inventory" keybind relative to the keybinding scrollbox.</p>
+<p><strong>inventory</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Inventory" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>powers</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Powers" keybind relative to the keybinding scrollbox.</p>
+<p><strong>powers</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Powers" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>log</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Log" keybind relative to the keybinding scrollbox.</p>
+<p><strong>log</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Log" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>ctrl</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Ctrl" keybind relative to the keybinding scrollbox.</p>
+<p><strong>ctrl</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Ctrl" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>shift</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Shift" keybind relative to the keybinding scrollbox.</p>
+<p><strong>shift</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Shift" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>alt</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Alt" keybind relative to the keybinding scrollbox.</p>
+<p><strong>alt</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Alt" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>delete</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Delete" keybind relative to the keybinding scrollbox.</p>
+<p><strong>delete</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Delete" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>actionbar</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "ActionBar Accept" keybind relative to the keybinding scrollbox.</p>
+<p><strong>actionbar</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "ActionBar Accept" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>actionbar_back</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "ActionBar Left" keybind relative to the keybinding scrollbox.</p>
+<p><strong>actionbar_back</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "ActionBar Left" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>actionbar_forward</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "ActionBar Right" keybind relative to the keybinding scrollbox.</p>
+<p><strong>actionbar_forward</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "ActionBar Right" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>actionbar_use</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "ActionBar Use" keybind relative to the keybinding scrollbox.</p>
+<p><strong>actionbar_use</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "ActionBar Use" keybind relative to the keybinding scrollbox.</p>
 
-<p><strong>developer_menu</strong>, _label x (integer), label y (integer), x (integer), y (integer)_, Position of the "Developer Menu" keybind relative to the keybinding scrollbox.</p>
+<p><strong>developer_menu</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Developer Menu" keybind relative to the keybinding scrollbox.</p>
 
 <hr />
 
@@ -434,19 +434,19 @@ body {
 
 <p>Description of cutscenes in cutscenes/</p>
 
-<p><strong>scale_gfx</strong>, _bool_, The graphics will be scaled to fit screen width</p>
+<p><strong>scale_gfx</strong>, <em>bool</em>, The graphics will be scaled to fit screen width</p>
 
-<p><strong>caption_margins</strong>, _[x,y]_, Percentage-based margins for the caption text based on screen size</p>
+<p><strong>caption_margins</strong>, <em>[x,y]</em>, Percentage-based margins for the caption text based on screen size</p>
 
-<p><strong>menu_backgrounds</strong>, _bool_, This cutscene will use a random fullscreen background image, like the title screen does</p>
+<p><strong>menu_backgrounds</strong>, <em>bool</em>, This cutscene will use a random fullscreen background image, like the title screen does</p>
 
-<p><strong>scene.caption</strong>, _string_, A caption that will be shown.</p>
+<p><strong>scene.caption</strong>, <em>string</em>, A caption that will be shown.</p>
 
-<p><strong>scene.image</strong>, _string_, Filename of an image that will be shown.</p>
+<p><strong>scene.image</strong>, <em>string</em>, Filename of an image that will be shown.</p>
 
-<p><strong>scene.pause</strong>, _duration_, Pause before next component in 'ms' or 's'.</p>
+<p><strong>scene.pause</strong>, <em>duration</em>, Pause before next component in 'ms' or 's'.</p>
 
-<p><strong>scene.soundfx</strong>, _string_, Filename of a sound that will be played</p>
+<p><strong>scene.soundfx</strong>, <em>string</em>, Filename of a sound that will be played</p>
 
 <hr />
 
@@ -454,27 +454,27 @@ body {
 
 <p>Description of menus/gameload.txt</p>
 
-<p><strong>action_button</strong>, _x (integer), y (integer)_, Position of the "New Game"/"Load Game" button.</p>
+<p><strong>action_button</strong>, <em>x (integer), y (integer)</em>, Position of the "New Game"/"Load Game" button.</p>
 
-<p><strong>alternate_button</strong>, _x (integer), y (integer)_, Position of the "Delete Save" button.</p>
+<p><strong>alternate_button</strong>, <em>x (integer), y (integer)</em>, Position of the "Delete Save" button.</p>
 
-<p><strong>portrait</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the portrait image.</p>
+<p><strong>portrait</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the portrait image.</p>
 
-<p><strong>gameslot</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the first game slot.</p>
+<p><strong>gameslot</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the first game slot.</p>
 
-<p><strong>preview</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the preview area in the first game slot. Only 'h' is used?</p>
+<p><strong>preview</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the preview area in the first game slot. Only 'h' is used?</p>
 
-<p><strong>name</strong>, _label_, The label for the hero's name. Position is relative to game slot position.</p>
+<p><strong>name</strong>, <em>label</em>, The label for the hero's name. Position is relative to game slot position.</p>
 
-<p><strong>level</strong>, _label_, The label for the hero's level. Position is relative to game slot position.</p>
+<p><strong>level</strong>, <em>label</em>, The label for the hero's level. Position is relative to game slot position.</p>
 
-<p><strong>class</strong>, _label_, The label for the hero's class. Position is relative to game slot position.</p>
+<p><strong>class</strong>, <em>label</em>, The label for the hero's class. Position is relative to game slot position.</p>
 
-<p><strong>map</strong>, _label_, The label for the hero's current location. Position is relative to game slot position.</p>
+<p><strong>map</strong>, <em>label</em>, The label for the hero's current location. Position is relative to game slot position.</p>
 
-<p><strong>loading_label</strong>, _label_, The label for the "Entering game world..."/"Loading saved game..." text.</p>
+<p><strong>loading_label</strong>, <em>label</em>, The label for the "Entering game world..."/"Loading saved game..." text.</p>
 
-<p><strong>sprite</strong>, _x (integer), y (integer)_, Position for the avatar preview image in each slot</p>
+<p><strong>sprite</strong>, <em>x (integer), y (integer)</em>, Position for the avatar preview image in each slot</p>
 
 <hr />
 
@@ -482,27 +482,27 @@ body {
 
 <p>Description of menus/gamenew.txt</p>
 
-<p><strong>button_prev</strong>, _x (integer), y (integer)_, Position of button to choose the previous preset hero.</p>
+<p><strong>button_prev</strong>, <em>x (integer), y (integer)</em>, Position of button to choose the previous preset hero.</p>
 
-<p><strong>button_next</strong>, _x (integer), y (integer)_, Position of button to choose the next preset hero.</p>
+<p><strong>button_next</strong>, <em>x (integer), y (integer)</em>, Position of button to choose the next preset hero.</p>
 
-<p><strong>button_permadeath</strong>, _x (integer), y (integer)_, Position of checkbox for toggling permadeath.</p>
+<p><strong>button_permadeath</strong>, <em>x (integer), y (integer)</em>, Position of checkbox for toggling permadeath.</p>
 
-<p><strong>name_input</strong>, _x (integer), y (integer)_, Position of the hero name textbox.</p>
+<p><strong>name_input</strong>, <em>x (integer), y (integer)</em>, Position of the hero name textbox.</p>
 
-<p><strong>portrait_label</strong>, _label_, Label for the "Choose a Portrait" text.</p>
+<p><strong>portrait_label</strong>, <em>label</em>, Label for the "Choose a Portrait" text.</p>
 
-<p><strong>name_label</strong>, _label_, Label for the "Choose a Name" text.</p>
+<p><strong>name_label</strong>, <em>label</em>, Label for the "Choose a Name" text.</p>
 
-<p><strong>permadeath_label</strong>, _label_, Label for the "Permadeath?" text.</p>
+<p><strong>permadeath_label</strong>, <em>label</em>, Label for the "Permadeath?" text.</p>
 
-<p><strong>classlist_label</strong>, _label_, Label for the "Choose a Class" text.</p>
+<p><strong>classlist_label</strong>, <em>label</em>, Label for the "Choose a Class" text.</p>
 
-<p><strong>portrait</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the portrait image.</p>
+<p><strong>portrait</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the portrait image.</p>
 
-<p><strong>clas_list</strong>, _x (integer), y (integer)_, Position of the class list.</p>
+<p><strong>class_list</strong>, <em>x (integer), y (integer)</em>, Position of the class list.</p>
 
-<p><strong>show_classlist</strong>, _boolean_, Allows hiding the class list.</p>
+<p><strong>show_classlist</strong>, <em>boolean</em>, Allows hiding the class list.</p>
 
 <hr />
 
@@ -510,7 +510,7 @@ body {
 
 <p>Description of engine/hero_options.txt</p>
 
-<p><strong>option</strong>, _base (string), head (string), portrait (string), name (string)_, A default body, head, portrait, and name for a hero.</p>
+<p><strong>option</strong>, <em>base (string), head (string), portrait (string), name (string)</em>, A default body, head, portrait, and name for a hero.</p>
 
 <hr />
 
@@ -518,17 +518,17 @@ body {
 
 <p>Description of engine/titles.txt</p>
 
-<p><strong>title.title</strong>, _string_, The displayed title.</p>
+<p><strong>title.title</strong>, <em>string</em>, The displayed title.</p>
 
-<p><strong>title.level</strong>, _integer_, Requires level.</p>
+<p><strong>title.level</strong>, <em>integer</em>, Requires level.</p>
 
-<p><strong>title.power</strong>, _integer_, Requires power.</p>
+<p><strong>title.power</strong>, <em>integer</em>, Requires power.</p>
 
-<p><strong>title.requires_status</strong>, _string_, Requires status.</p>
+<p><strong>title.requires_status</strong>, <em>string</em>, Requires status.</p>
 
-<p><strong>title.requires_not_status</strong>, _string_, Requires not status.</p>
+<p><strong>title.requires_not_status</strong>, <em>string</em>, Requires not status.</p>
 
-<p><strong>title.primary_stat</strong>, _[physical, mental, offense, defense, physoff, physment, physdef, mentoff, offdef, mentdef]_, Required primary stat.</p>
+<p><strong>title.primary_stat</strong>, <em>[physical, mental, offense, defense, physoff, physment, physdef, mentoff, offdef, mentdef]</em>, Required primary stat.</p>
 
 <hr />
 
@@ -536,15 +536,15 @@ body {
 
 <p>Description of menus/gametitle.txt</p>
 
-<p><strong>logo</strong>, _filename (string), x (integer), y (integer), align (alignment)_, Filename and position of the main logo image.</p>
+<p><strong>logo</strong>, <em>filename (string), x (integer), y (integer), align (alignment)</em>, Filename and position of the main logo image.</p>
 
-<p><strong>play_pos</strong>, _x (integer), y (integer), align (alignment)_, Position of the "Play Game" button.</p>
+<p><strong>play_pos</strong>, <em>x (integer), y (integer), align (alignment)</em>, Position of the "Play Game" button.</p>
 
-<p><strong>config_pos</strong>, _x (integer), y (integer), align (alignment)_, Position of the "Configuration" button.</p>
+<p><strong>config_pos</strong>, <em>x (integer), y (integer), align (alignment)</em>, Position of the "Configuration" button.</p>
 
-<p><strong>credits_pos</strong>, _x (integer), y (integer), align (alignment)_, Position of the "Credits" button.</p>
+<p><strong>credits_pos</strong>, <em>x (integer), y (integer), align (alignment)</em>, Position of the "Credits" button.</p>
 
-<p><strong>exit_pos</strong>, _x (integer), y (integer), align (alignment)_, Position of the "Exit Game" button.</p>
+<p><strong>exit_pos</strong>, <em>x (integer), y (integer), align (alignment)</em>, Position of the "Exit Game" button.</p>
 
 <hr />
 
@@ -552,7 +552,7 @@ body {
 
 <p>Description of engine/default_music.txt</p>
 
-<p><strong>music</strong>, _string_, Filename of a music file to play during game states that don't already have music.</p>
+<p><strong>music</strong>, <em>string</em>, Filename of a music file to play during game states that don't already have music.</p>
 
 <hr />
 
@@ -560,7 +560,7 @@ body {
 
 <p>Description of engine/menu_backgrounds.txt</p>
 
-<p><strong>background</strong>, _string_, Filename of a background image to be added to the pool of random menu backgrounds</p>
+<p><strong>background</strong>, <em>string</em>, Filename of a background image to be added to the pool of random menu backgrounds</p>
 
 <hr />
 
@@ -568,9 +568,9 @@ body {
 
 <p>Description of menus/fps.txt</p>
 
-<p><strong>position</strong>, _x (integer), y (integer), align (alignment)_, Position of the fps counter.</p>
+<p><strong>position</strong>, <em>x (integer), y (integer), align (alignment)</em>, Position of the fps counter.</p>
 
-<p><strong>color</strong>, _r (integer), g (integer), b (integer)_, Color of the fps counter text.</p>
+<p><strong>color</strong>, <em>r (integer), g (integer), b (integer)</em>, Color of the fps counter text.</p>
 
 <hr />
 
@@ -578,61 +578,61 @@ body {
 
 <p>Description about the class and it usage, items/items.txt...</p>
 
-<p><strong>id</strong>, _integer_, An uniq id of the item used as reference from other classes.</p>
+<p><strong>id</strong>, <em>integer</em>, An uniq id of the item used as reference from other classes.</p>
 
-<p><strong>name</strong>, _string_, Item name displayed on long and short tooltips.</p>
+<p><strong>name</strong>, <em>string</em>, Item name displayed on long and short tooltips.</p>
 
-<p><strong>flavor</strong>, _string_, A description of the item.</p>
+<p><strong>flavor</strong>, <em>string</em>, A description of the item.</p>
 
-<p><strong>level</strong>, _integer_, The item's level. Has no gameplay impact. (Deprecated?)</p>
+<p><strong>level</strong>, <em>integer</em>, The item's level. Has no gameplay impact. (Deprecated?)</p>
 
-<p><strong>icon</strong>, _integer_, An id for the icon to display for this item.</p>
+<p><strong>icon</strong>, <em>integer</em>, An id for the icon to display for this item.</p>
 
-<p><strong>book</strong>, _string_, A book file to open when this item is activated.</p>
+<p><strong>book</strong>, <em>string</em>, A book file to open when this item is activated.</p>
 
-<p><strong>quality</strong>, _string_, Item quality matching an id in items/qualities.txt</p>
+<p><strong>quality</strong>, <em>string</em>, Item quality matching an id in items/qualities.txt</p>
 
-<p><strong>item_type</strong>, _string_, Equipment slot [artifact, head, chest, hands, legs, feets, main, off, ring] or base item type [gem, consumable]</p>
+<p><strong>item_type</strong>, <em>string</em>, Equipment slot [artifact, head, chest, hands, legs, feets, main, off, ring] or base item type [gem, consumable]</p>
 
-<p><strong>equip_flags</strong>, _flag (string), ..._, A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.</p>
+<p><strong>equip_flags</strong>, <em>flag (string), ...</em>, A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.</p>
 
-<p><strong>dmg_melee</strong>, _[min (integer), max (integer)]_, Defines the item melee damage, if only min is specified the melee damage is fixed.</p>
+<p><strong>dmg_melee</strong>, <em>[min (integer), max (integer)]</em>, Defines the item melee damage, if only min is specified the melee damage is fixed.</p>
 
-<p><strong>dmg_ranged</strong>, _[min (integer), max (integer)]_, Defines the item ranged damage, if only min is specified the ranged damage is fixed.</p>
+<p><strong>dmg_ranged</strong>, <em>[min (integer), max (integer)]</em>, Defines the item ranged damage, if only min is specified the ranged damage is fixed.</p>
 
-<p><strong>dmg_ment</strong>, _[min (integer), max (integer)]_, Defines the item mental damage, if only min is specified the ranged damage is fixed.</p>
+<p><strong>dmg_ment</strong>, <em>[min (integer), max (integer)]</em>, Defines the item mental damage, if only min is specified the ranged damage is fixed.</p>
 
-<p><strong>abs</strong>, _[min (integer), max (integer)]_, Defines the item absorb value, if only min is specified the absorb value is fixed.</p>
+<p><strong>abs</strong>, <em>[min (integer), max (integer)]</em>, Defines the item absorb value, if only min is specified the absorb value is fixed.</p>
 
-<p><strong>requires_stat</strong>, _[ [physical:mental:offense:defense], amount (integer) ]_, Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats</p>
+<p><strong>requires_stat</strong>, <em>[ [physical:mental:offense:defense], amount (integer) ]</em>, Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats</p>
 
-<p><strong>requires_class</strong>, _string_, The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
+<p><strong>requires_class</strong>, <em>string</em>, The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
-<p><strong>bonus</strong>, _[stat_name (string), amount (integer)]_, Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50</p>
+<p><strong>bonus</strong>, <em>[stat_name (string), amount (integer)]</em>, Adds a bonus to the item power_tag being a uniq tag of a power definition, e.: bonus=HP regen, 50</p>
 
-<p><strong>soundfx</strong>, _string_, Sound effect filename to play for the specific item.</p>
+<p><strong>soundfx</strong>, <em>string</em>, Sound effect filename to play for the specific item.</p>
 
-<p><strong>gfx</strong>, _string_, Filename of an animation set to display when the item is equipped.</p>
+<p><strong>gfx</strong>, <em>string</em>, Filename of an animation set to display when the item is equipped.</p>
 
-<p><strong>loot_animation</strong>, _filename (string), min quantity (int), max quantity (int)_, Specifies the loot animation file for the item. The max quantity, or both quantity values, may be omitted.</p>
+<p><strong>loot_animation</strong>, <em>filename (string), min quantity (int), max quantity (int)</em>, Specifies the loot animation file for the item. The max quantity, or both quantity values, may be omitted.</p>
 
-<p><strong>power</strong>, _power_id_, Adds a specific power to the item which makes it usable as a power and can be placed in action bar.</p>
+<p><strong>power</strong>, <em>power_id</em>, Adds a specific power to the item which makes it usable as a power and can be placed in action bar.</p>
 
-<p><strong>replace_power</strong>, _old (integer), new (integer)_, Replaces the old power id with the new power id in the action bar when equipped.</p>
+<p><strong>replace_power</strong>, <em>old (integer), new (integer)</em>, Replaces the old power id with the new power id in the action bar when equipped.</p>
 
-<p><strong>power_desc</strong>, _string_, A string describing the additional power.</p>
+<p><strong>power_desc</strong>, <em>string</em>, A string describing the additional power.</p>
 
-<p><strong>price</strong>, _integer_, The amount of currency the item costs, if set to 0 the item cannot be sold.</p>
+<p><strong>price</strong>, <em>integer</em>, The amount of currency the item costs, if set to 0 the item cannot be sold.</p>
 
-<p><strong>price_sell</strong>, _integer_, The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.</p>
+<p><strong>price_sell</strong>, <em>integer</em>, The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.</p>
 
-<p><strong>max_quantity</strong>, _integer_, Max item count per stack.</p>
+<p><strong>max_quantity</strong>, <em>integer</em>, Max item count per stack.</p>
 
-<p><strong>pickup_status</strong>, _string_, Set a campaign status when item is picked up, this is used for quest items.</p>
+<p><strong>pickup_status</strong>, <em>string</em>, Set a campaign status when item is picked up, this is used for quest items.</p>
 
-<p><strong>stepfx</strong>, _string_, Sound effect when walking, this applies only to armors.</p>
+<p><strong>stepfx</strong>, <em>string</em>, Sound effect when walking, this applies only to armors.</p>
 
-<p><strong>disable_slots</strong>, _type (string), ..._, A comma separated list of equip slot types to disable when this item is equipped.</p>
+<p><strong>disable_slots</strong>, <em>type (string), ...</em>, A comma separated list of equip slot types to disable when this item is equipped.</p>
 
 <hr />
 
@@ -640,9 +640,9 @@ body {
 
 <p>Definition of a item types, items/types.txt...</p>
 
-<p><strong>type.id</strong>, _string_, Item type identifier.</p>
+<p><strong>type.id</strong>, <em>string</em>, Item type identifier.</p>
 
-<p><strong>type.name</strong>, _string_, Item type name.</p>
+<p><strong>type.name</strong>, <em>string</em>, Item type name.</p>
 
 <hr />
 
@@ -650,11 +650,11 @@ body {
 
 <p>Definition of a item qualities, items/types.txt...</p>
 
-<p><strong>quality.id</strong>, _string_, Item quality identifier.</p>
+<p><strong>quality.id</strong>, <em>string</em>, Item quality identifier.</p>
 
-<p><strong>quality.name</strong>, _string_, Item quality name.</p>
+<p><strong>quality.name</strong>, <em>string</em>, Item quality name.</p>
 
-<p><strong>quality.color</strong>, _r (integer), g (integer), b (integer)_, Item quality color.</p>
+<p><strong>quality.color</strong>, <em>r (integer), g (integer), b (integer)</em>, Item quality color.</p>
 
 <hr />
 
@@ -662,15 +662,15 @@ body {
 
 <p>Definition of a item sets, items/sets.txt...</p>
 
-<p><strong>id</strong>, _integer_, A uniq id for the item set.</p>
+<p><strong>id</strong>, <em>integer</em>, A uniq id for the item set.</p>
 
-<p><strong>name</strong>, _string_, Name of the item set.</p>
+<p><strong>name</strong>, <em>string</em>, Name of the item set.</p>
 
-<p><strong>items</strong>, _[item_id,...]_, List of item id's that is part of the set.</p>
+<p><strong>items</strong>, <em>[item_id,...]</em>, List of item id's that is part of the set.</p>
 
-<p><strong>color</strong>, _color_, A specific of color for the set.</p>
+<p><strong>color</strong>, <em>color</em>, A specific of color for the set.</p>
 
-<p><strong>bonus</strong>, _[requirements (integer), bonus stat (string), bonus (integer)]_, Bonus to append to items in the set.</p>
+<p><strong>bonus</strong>, <em>[requirements (integer), bonus stat (string), bonus (integer)]</em>, Bonus to append to items in the set.</p>
 
 <hr />
 
@@ -678,17 +678,17 @@ body {
 
 <p>Description of engine/loot.txt</p>
 
-<p><strong>tooltip_margin</strong>, _integer_, Vertical offset of the loot tooltip from the loot itself.</p>
+<p><strong>tooltip_margin</strong>, <em>integer</em>, Vertical offset of the loot tooltip from the loot itself.</p>
 
-<p><strong>autopickup_currency</strong>, _boolean_, Enable autopickup for currency</p>
+<p><strong>autopickup_currency</strong>, <em>boolean</em>, Enable autopickup for currency</p>
 
-<p><strong>vendor_ratio</strong>, _integer_, Prices ratio for vendors</p>
+<p><strong>vendor_ratio</strong>, <em>integer</em>, Prices ratio for vendors</p>
 
-<p><strong>sfx_loot</strong>, _string_, Filename of a sound effect to play for dropping loot.</p>
+<p><strong>sfx_loot</strong>, <em>string</em>, Filename of a sound effect to play for dropping loot.</p>
 
-<p><strong>drop_max</strong>, _integer_, The maximum number of random item stacks that can drop at once</p>
+<p><strong>drop_max</strong>, <em>integer</em>, The maximum number of random item stacks that can drop at once</p>
 
-<p><strong>drop_radius</strong>, _integer_, The distance (in tiles) away from the origin that loot can drop</p>
+<p><strong>drop_radius</strong>, <em>integer</em>, The distance (in tiles) away from the origin that loot can drop</p>
 
 <hr />
 
@@ -696,55 +696,55 @@ body {
 
 <p>Description of maps/</p>
 
-<p><strong>title</strong>, _string_, Title of map</p>
+<p><strong>title</strong>, <em>string</em>, Title of map</p>
 
-<p><strong>width</strong>, _integer_, Width of map</p>
+<p><strong>width</strong>, <em>integer</em>, Width of map</p>
 
-<p><strong>height</strong>, _integer_, Height of map</p>
+<p><strong>height</strong>, <em>integer</em>, Height of map</p>
 
-<p><strong>tileset</strong>, _string_, Filename of a tileset definition to use for map</p>
+<p><strong>tileset</strong>, <em>string</em>, Filename of a tileset definition to use for map</p>
 
-<p><strong>music</strong>, _string_, Filename of background music to use for map</p>
+<p><strong>music</strong>, <em>string</em>, Filename of background music to use for map</p>
 
-<p><strong>location</strong>, _[x(integer), y(integer), direction(integer))_, Spawn point location in map</p>
+<p><strong>location</strong>, <em>[x(integer), y(integer), direction(integer))</em>, Spawn point location in map</p>
 
-<p><strong>tilewidth</strong>, _integer_, Inherited from Tiled map file. Unused by engine.</p>
+<p><strong>tilewidth</strong>, <em>integer</em>, Inherited from Tiled map file. Unused by engine.</p>
 
-<p><strong>tileheight</strong>, _integer_, Inherited from Tiled map file. Unused by engine.</p>
+<p><strong>tileheight</strong>, <em>integer</em>, Inherited from Tiled map file. Unused by engine.</p>
 
-<p><strong>layer.type</strong>, _string_, Map layer type.</p>
+<p><strong>layer.type</strong>, <em>string</em>, Map layer type.</p>
 
-<p><strong>layer.format</strong>, _string_, Format for map layer, must be 'dec'</p>
+<p><strong>layer.format</strong>, <em>string</em>, Format for map layer, must be 'dec'</p>
 
-<p><strong>layer.data</strong>, _raw_, Raw map layer data</p>
+<p><strong>layer.data</strong>, <em>raw</em>, Raw map layer data</p>
 
-<p><strong>enemygroup.type</strong>, _string_, The category of enemies that will spawn in this group.</p>
+<p><strong>enemygroup.type</strong>, <em>string</em>, The category of enemies that will spawn in this group.</p>
 
-<p><strong>enemygroup.level</strong>, _[min(integer), max(integer)]_, Defines the level range of enemies in group. If only one number is given, it's the exact level.</p>
+<p><strong>enemygroup.level</strong>, <em>[min(integer), max(integer)]</em>, Defines the level range of enemies in group. If only one number is given, it's the exact level.</p>
 
-<p><strong>enemygroup.location</strong>, _[x(integer), y(integer), x2(integer), y2(integer)]_, Location area for enemygroup</p>
+<p><strong>enemygroup.location</strong>, <em>[x(integer), y(integer), x2(integer), y2(integer)]</em>, Location area for enemygroup</p>
 
-<p><strong>enemygroup.number</strong>, _[min(integer), max(integer]_, Defines the range of enemies in group. If only one number is given, it's the exact amount.</p>
+<p><strong>enemygroup.number</strong>, <em>[min(integer), max(integer]</em>, Defines the range of enemies in group. If only one number is given, it's the exact amount.</p>
 
-<p><strong>enemygroup.chance</strong>, _integer_, Percentage of chance</p>
+<p><strong>enemygroup.chance</strong>, <em>integer</em>, Percentage of chance</p>
 
-<p><strong>enemygroup.direction</strong>, _direction_, Direction that enemies will initially face.</p>
+<p><strong>enemygroup.direction</strong>, <em>direction</em>, Direction that enemies will initially face.</p>
 
-<p><strong>enemygroup.waypoints</strong>, _[x(integer), y(integer)]_, Enemy waypoints; single enemy only; negates wander_radius</p>
+<p><strong>enemygroup.waypoints</strong>, <em>[x(integer), y(integer)]</em>, Enemy waypoints; single enemy only; negates wander_radius</p>
 
-<p><strong>enemygroup.wander_radius</strong>, _integer_, The radius (in tiles) that an enemy will wander around randomly; negates waypoints</p>
+<p><strong>enemygroup.wander_radius</strong>, <em>integer</em>, The radius (in tiles) that an enemy will wander around randomly; negates waypoints</p>
 
-<p><strong>enemygroup.requires_status</strong>, _string_, Status required for loading enemies</p>
+<p><strong>enemygroup.requires_status</strong>, <em>string</em>, Status required for loading enemies</p>
 
-<p><strong>enemygroup.requires_not_status</strong>, _string_, Status required to be missing for loading enemies</p>
+<p><strong>enemygroup.requires_not_status</strong>, <em>string</em>, Status required to be missing for loading enemies</p>
 
-<p><strong>npc.type</strong>, _string_, Filename of an NPC definition.</p>
+<p><strong>npc.type</strong>, <em>string</em>, Filename of an NPC definition.</p>
 
-<p><strong>npc.requires_status</strong>, _string_, Status required for NPC load. There can be multiple states, separated by comma</p>
+<p><strong>npc.requires_status</strong>, <em>string</em>, Status required for NPC load. There can be multiple states, separated by comma</p>
 
-<p><strong>npc.requires_not_status</strong>, _string_, Status required to be missing for NPC load. There can be multiple states, separated by comma</p>
+<p><strong>npc.requires_not_status</strong>, <em>string</em>, Status required to be missing for NPC load. There can be multiple states, separated by comma</p>
 
-<p><strong>npc.location</strong>, _[x(integer), y(integer)]_, Location of NPC</p>
+<p><strong>npc.location</strong>, <em>[x(integer), y(integer)]</em>, Location of NPC</p>
 
 <hr />
 
@@ -752,19 +752,19 @@ body {
 
 <p>Description of menus/actionbar.txt</p>
 
-<p><strong>slot</strong>, _index(integer), x (integer), y (integer)_, Index (max 10) and position for power slot.</p>
+<p><strong>slot</strong>, <em>index(integer), x (integer), y (integer)</em>, Index (max 10) and position for power slot.</p>
 
-<p><strong>slot_M1</strong>, _x (integer), y (integer)_, Position for the primary action slot.</p>
+<p><strong>slot_M1</strong>, <em>x (integer), y (integer)</em>, Position for the primary action slot.</p>
 
-<p><strong>slot_M2</strong>, _x (integer), y (integer)_, Position for the secondary action slot.</p>
+<p><strong>slot_M2</strong>, <em>x (integer), y (integer)</em>, Position for the secondary action slot.</p>
 
-<p><strong>char_menu</strong>, _x (integer), y (integer)_, Position for the Character menu button.</p>
+<p><strong>char_menu</strong>, <em>x (integer), y (integer)</em>, Position for the Character menu button.</p>
 
-<p><strong>inv_menu</strong>, _x (integer), y (integer)_, Position for the Inventory menu button.</p>
+<p><strong>inv_menu</strong>, <em>x (integer), y (integer)</em>, Position for the Inventory menu button.</p>
 
-<p><strong>powers_menu</strong>, _x (integer), y (integer)_, Position for the Powers menu button.</p>
+<p><strong>powers_menu</strong>, <em>x (integer), y (integer)</em>, Position for the Powers menu button.</p>
 
-<p><strong>log_menu</strong>, _x (integer), y (integer)_, Position for the Log menu button.</p>
+<p><strong>log_menu</strong>, <em>x (integer), y (integer)</em>, Position for the Log menu button.</p>
 
 <hr />
 
@@ -772,7 +772,7 @@ body {
 
 <p>Description of menus/activeeffects.txt</p>
 
-<p><strong>orientation</strong>, _boolean_, True is vertical orientation; False is horizontal orientation.</p>
+<p><strong>orientation</strong>, <em>boolean</em>, True is vertical orientation; False is horizontal orientation.</p>
 
 <hr />
 
@@ -780,19 +780,19 @@ body {
 
 <p>Description of books in books/</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>background</strong>, _string_, Filename for the background image.</p>
+<p><strong>background</strong>, <em>string</em>, Filename for the background image.</p>
 
-<p><strong>image.image_pos</strong>, _x (integer), y (integer)_, Position of the image.</p>
+<p><strong>image.image_pos</strong>, <em>x (integer), y (integer)</em>, Position of the image.</p>
 
-<p><strong>image.image</strong>, _string_, Filename of the image.</p>
+<p><strong>image.image</strong>, <em>string</em>, Filename of the image.</p>
 
-<p><strong>text.text_pos</strong>, _x (integer), y (integer), w (integer), [left:center:right]_, Position of the text.</p>
+<p><strong>text.text_pos</strong>, <em>x (integer), y (integer), w (integer), [left:center:right]</em>, Position of the text.</p>
 
-<p><strong>text.text_font</strong>, _r (integer), g (integer), b (integer), style (string)_, Font color and style.</p>
+<p><strong>text.text_font</strong>, <em>r (integer), g (integer), b (integer), style (string)</em>, Font color and style.</p>
 
-<p><strong>text.text</strong>, _string_, The text to be displayed.</p>
+<p><strong>text.text</strong>, <em>string</em>, The text to be displayed.</p>
 
 <hr />
 
@@ -800,61 +800,61 @@ body {
 
 <p>Description of menus/character.txt</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>label_title</strong>, _label_, Position of the "Character" text.</p>
+<p><strong>label_title</strong>, <em>label</em>, Position of the "Character" text.</p>
 
-<p><strong>upgrade_physical</strong>, _x (integer), y (integer)_, Position of the button used to add a stat point to Physical.</p>
+<p><strong>upgrade_physical</strong>, <em>x (integer), y (integer)</em>, Position of the button used to add a stat point to Physical.</p>
 
-<p><strong>upgrade_mental</strong>, _x (integer), y (integer)_, Position of the button used to add a stat point to Mental.</p>
+<p><strong>upgrade_mental</strong>, <em>x (integer), y (integer)</em>, Position of the button used to add a stat point to Mental.</p>
 
-<p><strong>upgrade_offense</strong>, _x (integer), y (integer)_, Position of the button used to add a stat point to Offense.</p>
+<p><strong>upgrade_offense</strong>, <em>x (integer), y (integer)</em>, Position of the button used to add a stat point to Offense.</p>
 
-<p><strong>upgrade_defense</strong>, _x (integer), y (integer)_, Position of the button used to add a stat point to Defense.</p>
+<p><strong>upgrade_defense</strong>, <em>x (integer), y (integer)</em>, Position of the button used to add a stat point to Defense.</p>
 
-<p><strong>statlist</strong>, _x (integer), y (integer)_, Position of the scrollbox containing non-primary stats.</p>
+<p><strong>statlist</strong>, <em>x (integer), y (integer)</em>, Position of the scrollbox containing non-primary stats.</p>
 
-<p><strong>statlist_rows</strong>, _integer_, The height of the statlist in rows.</p>
+<p><strong>statlist_rows</strong>, <em>integer</em>, The height of the statlist in rows.</p>
 
-<p><strong>statlist_scrollbar_offset</strong>, _integer_, Right margin in pixels for the statlist's scrollbar.</p>
+<p><strong>statlist_scrollbar_offset</strong>, <em>integer</em>, Right margin in pixels for the statlist's scrollbar.</p>
 
-<p><strong>label_name</strong>, _label_, Position of the "Name" text.</p>
+<p><strong>label_name</strong>, <em>label</em>, Position of the "Name" text.</p>
 
-<p><strong>label_level</strong>, _label_, Position of the "Level" text.</p>
+<p><strong>label_level</strong>, <em>label</em>, Position of the "Level" text.</p>
 
-<p><strong>label_physical</strong>, _label_, Position of the "Physical" text.</p>
+<p><strong>label_physical</strong>, <em>label</em>, Position of the "Physical" text.</p>
 
-<p><strong>label_mental</strong>, _label_, Position of the "Mental" text.</p>
+<p><strong>label_mental</strong>, <em>label</em>, Position of the "Mental" text.</p>
 
-<p><strong>label_offense</strong>, _label_, Position of the "Offense" text.</p>
+<p><strong>label_offense</strong>, <em>label</em>, Position of the "Offense" text.</p>
 
-<p><strong>label_defense</strong>, _label_, Position of the "Defense" text.</p>
+<p><strong>label_defense</strong>, <em>label</em>, Position of the "Defense" text.</p>
 
-<p><strong>name</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position of the player's name and dimensions of the tooltip hotspot.</p>
+<p><strong>name</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position of the player's name and dimensions of the tooltip hotspot.</p>
 
-<p><strong>level</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position of the player's level and dimensions of the tooltip hotspot.</p>
+<p><strong>level</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position of the player's level and dimensions of the tooltip hotspot.</p>
 
-<p><strong>physical</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position of the player's physical stat and dimensions of the tooltip hotspot.</p>
+<p><strong>physical</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position of the player's physical stat and dimensions of the tooltip hotspot.</p>
 
-<p><strong>mental</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position of the player's mental stat and dimensions of the tooltip hotspot.</p>
+<p><strong>mental</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position of the player's mental stat and dimensions of the tooltip hotspot.</p>
 
-<p><strong>offense</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position of the player's offense stat and dimensions of the tooltip hotspot.</p>
+<p><strong>offense</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position of the player's offense stat and dimensions of the tooltip hotspot.</p>
 
-<p><strong>defense</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position of the player's defense stat and dimensions of the tooltip hotspot.</p>
+<p><strong>defense</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position of the player's defense stat and dimensions of the tooltip hotspot.</p>
 
-<p><strong>unspent</strong>, _label_, Position of the label showing the number of unspent stat points.</p>
+<p><strong>unspent</strong>, <em>label</em>, Position of the label showing the number of unspent stat points.</p>
 
-<p><strong>show_upgrade_physical</strong>, _boolean_, Hide the Physical upgrade button if set to false.</p>
+<p><strong>show_upgrade_physical</strong>, <em>boolean</em>, Hide the Physical upgrade button if set to false.</p>
 
-<p><strong>show_upgrade_mental</strong>, _boolean_, Hide the Mental upgrade button if set to false.</p>
+<p><strong>show_upgrade_mental</strong>, <em>boolean</em>, Hide the Mental upgrade button if set to false.</p>
 
-<p><strong>show_upgrade_offense</strong>, _boolean_, Hide the Offense upgrade button if set to false.</p>
+<p><strong>show_upgrade_offense</strong>, <em>boolean</em>, Hide the Offense upgrade button if set to false.</p>
 
-<p><strong>show_upgrade_defense</strong>, _boolean_, Hide the Defense upgrade button if set to false.</p>
+<p><strong>show_upgrade_defense</strong>, <em>boolean</em>, Hide the Defense upgrade button if set to false.</p>
 
-<p><strong>show_resists</strong>, _boolean_, Hide the elemental "Resistance" stats in the statlist if set to false.</p>
+<p><strong>show_resists</strong>, <em>boolean</em>, Hide the elemental "Resistance" stats in the statlist if set to false.</p>
 
-<p><strong>show_$STAT</strong>, _boolean_, Hide the matching stat in the statlist if set to false.</p>
+<p><strong>show_$STAT</strong>, <em>boolean</em>, Hide the matching stat in the statlist if set to false.</p>
 
 <hr />
 
@@ -862,13 +862,13 @@ body {
 
 <p>Description of menus in menus/</p>
 
-<p><strong>pos</strong>, _x (integer), y (integer), w (integer), h (integer)_, Menu position and dimensions</p>
+<p><strong>pos</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Menu position and dimensions</p>
 
-<p><strong>align</strong>, _alignment_, Position relative to screen edges</p>
+<p><strong>align</strong>, <em>alignment</em>, Position relative to screen edges</p>
 
-<p><strong>soundfx_open</strong>, _string_, Filename of a sound to play when opening this menu.</p>
+<p><strong>soundfx_open</strong>, <em>string</em>, Filename of a sound to play when opening this menu.</p>
 
-<p><strong>soundfx_close</strong>, _string_, Filename of a sound to play when closing this menu.</p>
+<p><strong>soundfx_close</strong>, <em>string</em>, Filename of a sound to play when closing this menu.</p>
 
 <hr />
 
@@ -876,15 +876,15 @@ body {
 
 <p>Description of menus/devconsole.txt</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>label_title</strong>, _label_, Position of the "Developer Console" label.</p>
+<p><strong>label_title</strong>, <em>label</em>, Position of the "Developer Console" label.</p>
 
-<p><strong>confirm</strong>, _x (integer), y (integer)_, Position of the "Execute" button.</p>
+<p><strong>confirm</strong>, <em>x (integer), y (integer)</em>, Position of the "Execute" button.</p>
 
-<p><strong>input</strong>, _x (integer), y (integer)_, Position of the command entry widget.</p>
+<p><strong>input</strong>, <em>x (integer), y (integer)</em>, Position of the command entry widget.</p>
 
-<p><strong>history</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the command history.</p>
+<p><strong>history</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the command history.</p>
 
 <hr />
 
@@ -898,9 +898,9 @@ body {
 
 <p>Description of menus/enemy.txt</p>
 
-<p><strong>bar_pos</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the health bar.</p>
+<p><strong>bar_pos</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the health bar.</p>
 
-<p><strong>text_pos</strong>, _label_, Position of the "$ENEMY level $LEVEL" text. Optional.</p>
+<p><strong>text_pos</strong>, <em>label</em>, Position of the "$ENEMY level $LEVEL" text. Optional.</p>
 
 <hr />
 
@@ -908,23 +908,23 @@ body {
 
 <p>Description of menus/inventory.txt</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>equipment_slot</strong>, _x (integer), y (integer), size (integer), slot_type (string)_, Position and item type of an equipment slot.</p>
+<p><strong>equipment_slot</strong>, <em>x (integer), y (integer), size (integer), slot_type (string)</em>, Position and item type of an equipment slot.</p>
 
-<p><strong>slot_name</strong>, _string_, The displayed name of the last defined equipment slot.</p>
+<p><strong>slot_name</strong>, <em>string</em>, The displayed name of the last defined equipment slot.</p>
 
-<p><strong>carried_area</strong>, _x (integer), y (integer)_, Position of the first normal inventory slot.</p>
+<p><strong>carried_area</strong>, <em>x (integer), y (integer)</em>, Position of the first normal inventory slot.</p>
 
-<p><strong>carried_cols</strong>, _integer_, The number of columns for the normal inventory.</p>
+<p><strong>carried_cols</strong>, <em>integer</em>, The number of columns for the normal inventory.</p>
 
-<p><strong>carried_rows</strong>, _integer_, The number of rows for the normal inventory.</p>
+<p><strong>carried_rows</strong>, <em>integer</em>, The number of rows for the normal inventory.</p>
 
-<p><strong>label_title</strong>, _label_, Position of the "Inventory" label.</p>
+<p><strong>label_title</strong>, <em>label</em>, Position of the "Inventory" label.</p>
 
-<p><strong>currency</strong>, _label_, Position of the label that displays the total currency being carried.</p>
+<p><strong>currency</strong>, <em>label</em>, Position of the label that displays the total currency being carried.</p>
 
-<p><strong>help</strong>, _x (integer), y (integer), w (integer), h (integer)_, A mouse-over area that displays some help text for inventory shortcuts.</p>
+<p><strong>help</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, A mouse-over area that displays some help text for inventory shortcuts.</p>
 
 <hr />
 
@@ -932,11 +932,11 @@ body {
 
 <p>Description of menus/log.txt</p>
 
-<p><strong>label_title</strong>, _label_, Position of the "Log" text.</p>
+<p><strong>label_title</strong>, <em>label</em>, Position of the "Log" text.</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>tab_area</strong>, _x (integer), y (integer), w (integer), h (integer)_, The position of the row of tabs, followed by the dimensions of the log text area.</p>
+<p><strong>tab_area</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, The position of the row of tabs, followed by the dimensions of the log text area.</p>
 
 <hr />
 
@@ -944,9 +944,9 @@ body {
 
 <p>Description of menus/minimap.txt</p>
 
-<p><strong>map_pos</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the map.</p>
+<p><strong>map_pos</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the map.</p>
 
-<p><strong>text_pos</strong>, _label_, Position of the text label with the map name.</p>
+<p><strong>text_pos</strong>, <em>label</em>, Position of the text label with the map name.</p>
 
 <hr />
 
@@ -954,19 +954,19 @@ body {
 
 <p>Description of menus/npc.txt</p>
 
-<p><strong>background_color</strong>, _r (integer), g (integer), b (integer), a (integer)_, Color and alpha of the menu's background.</p>
+<p><strong>background_color</strong>, <em>r (integer), g (integer), b (integer), a (integer)</em>, Color and alpha of the menu's background.</p>
 
-<p><strong>topic_normal_color</strong>, _r (integer), g (integer), b (integer)_, The normal color of a generic topic text.</p>
+<p><strong>topic_normal_color</strong>, <em>r (integer), g (integer), b (integer)</em>, The normal color of a generic topic text.</p>
 
-<p><strong>topic_hilight_color</strong>, _r (integer), g (integer), b (integer)_, The color of generic topic text when it's hovered over or selected.</p>
+<p><strong>topic_hilight_color</strong>, <em>r (integer), g (integer), b (integer)</em>, The color of generic topic text when it's hovered over or selected.</p>
 
-<p><strong>vendor_normal_color</strong>, _r (integer), g (integer), b (integer)_, The normal color of the vendor option text.</p>
+<p><strong>vendor_normal_color</strong>, <em>r (integer), g (integer), b (integer)</em>, The normal color of the vendor option text.</p>
 
-<p><strong>vendor_hilight_color</strong>, _r (integer), g (integer), b (integer)_, The color of vendor option text when it's hovered over or selected.</p>
+<p><strong>vendor_hilight_color</strong>, <em>r (integer), g (integer), b (integer)</em>, The color of vendor option text when it's hovered over or selected.</p>
 
-<p><strong>cancel_normal_color</strong>, _r (integer), g (integer), b (integer)_, The normal color of the option to close the menu.</p>
+<p><strong>cancel_normal_color</strong>, <em>r (integer), g (integer), b (integer)</em>, The normal color of the option to close the menu.</p>
 
-<p><strong>cancel_hilight_color</strong>, _r (integer), g (integer), b (integer)_, The color of the option to close the menu when it's hovered over or selected.</p>
+<p><strong>cancel_hilight_color</strong>, <em>r (integer), g (integer), b (integer)</em>, The color of the option to close the menu when it's hovered over or selected.</p>
 
 <hr />
 
@@ -974,15 +974,15 @@ body {
 
 <p>Description of menus/num_picker.txt</p>
 
-<p><strong>label_title</strong>, _label_, Position of the "Enter amount:" text.</p>
+<p><strong>label_title</strong>, <em>label</em>, Position of the "Enter amount:" text.</p>
 
-<p><strong>confirm</strong>, _x (integer), y (integer)_, Position of the "OK" button.</p>
+<p><strong>confirm</strong>, <em>x (integer), y (integer)</em>, Position of the "OK" button.</p>
 
-<p><strong>increase</strong>, _x (integer), y (integer)_, Position of the button used to increase the value.</p>
+<p><strong>increase</strong>, <em>x (integer), y (integer)</em>, Position of the button used to increase the value.</p>
 
-<p><strong>decrease</strong>, _x (integer), y (integer)_, Position of the button used to decrease the value.</p>
+<p><strong>decrease</strong>, <em>x (integer), y (integer)</em>, Position of the button used to decrease the value.</p>
 
-<p><strong>input</strong>, _x (integer), y (integer)_, Position of the text input box.</p>
+<p><strong>input</strong>, <em>x (integer), y (integer)</em>, Position of the text input box.</p>
 
 <hr />
 
@@ -990,13 +990,13 @@ body {
 
 <p>Description of menus/powers.txt</p>
 
-<p><strong>label_title</strong>, _label_, Position of the "Powers" text.</p>
+<p><strong>label_title</strong>, <em>label</em>, Position of the "Powers" text.</p>
 
-<p><strong>unspent_points</strong>, _label_, Position of the text that displays the amount of unused power points.</p>
+<p><strong>unspent_points</strong>, <em>label</em>, Position of the text that displays the amount of unused power points.</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>tab_area</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the tree pages.</p>
+<p><strong>tab_area</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the tree pages.</p>
 
 <hr />
 
@@ -1004,73 +1004,73 @@ body {
 
 <p>Description of powers/trees/</p>
 
-<p><strong>background</strong>, _string_, Filename of the default background image</p>
+<p><strong>background</strong>, <em>string</em>, Filename of the default background image</p>
 
-<p><strong>tab.title</strong>, _string_, The name of this power tree tab</p>
+<p><strong>tab.title</strong>, <em>string</em>, The name of this power tree tab</p>
 
-<p><strong>tab.background</strong>, _string_, Filename of the background image for this tab's power tree</p>
+<p><strong>tab.background</strong>, <em>string</em>, Filename of the background image for this tab's power tree</p>
 
-<p><strong>power.id</strong>, _integer_, A power id from powers/powers.txt for this slot.</p>
+<p><strong>power.id</strong>, <em>integer</em>, A power id from powers/powers.txt for this slot.</p>
 
-<p><strong>power.tab</strong>, _integer_, Tab index to place this power on, starting from 0.</p>
+<p><strong>power.tab</strong>, <em>integer</em>, Tab index to place this power on, starting from 0.</p>
 
-<p><strong>power.position</strong>, _x (integer), y (integer)_, Position of this power icon; relative to MenuPowers "pos".</p>
+<p><strong>power.position</strong>, <em>x (integer), y (integer)</em>, Position of this power icon; relative to MenuPowers "pos".</p>
 
-<p><strong>power.requires_physoff</strong>, _integer_, Power requires Physical and Offense stat of this value.</p>
+<p><strong>power.requires_physoff</strong>, <em>integer</em>, Power requires Physical and Offense stat of this value.</p>
 
-<p><strong>power.requires_physdef</strong>, _integer_, Power requires Physical and Defense stat of this value.</p>
+<p><strong>power.requires_physdef</strong>, <em>integer</em>, Power requires Physical and Defense stat of this value.</p>
 
-<p><strong>power.requires_mentoff</strong>, _integer_, Power requires Mental and Offense stat of this value.</p>
+<p><strong>power.requires_mentoff</strong>, <em>integer</em>, Power requires Mental and Offense stat of this value.</p>
 
-<p><strong>power.requires_mentdef</strong>, _integer_, Power requires Mental and Defense stat of this value.</p>
+<p><strong>power.requires_mentdef</strong>, <em>integer</em>, Power requires Mental and Defense stat of this value.</p>
 
-<p><strong>power.requires_defense</strong>, _integer_, Power requires Defense stat of this value.</p>
+<p><strong>power.requires_defense</strong>, <em>integer</em>, Power requires Defense stat of this value.</p>
 
-<p><strong>power.requires_offense</strong>, _integer_, Power requires Offense stat of this value.</p>
+<p><strong>power.requires_offense</strong>, <em>integer</em>, Power requires Offense stat of this value.</p>
 
-<p><strong>power.requires_physical</strong>, _integer_, Power requires Physical stat of this value.</p>
+<p><strong>power.requires_physical</strong>, <em>integer</em>, Power requires Physical stat of this value.</p>
 
-<p><strong>power.requires_mental</strong>, _integer_, Power requires Mental stat of this value.</p>
+<p><strong>power.requires_mental</strong>, <em>integer</em>, Power requires Mental stat of this value.</p>
 
-<p><strong>power.requires_point</strong>, _boolean_, Power requires a power point to unlock.</p>
+<p><strong>power.requires_point</strong>, <em>boolean</em>, Power requires a power point to unlock.</p>
 
-<p><strong>power.requires_level</strong>, _integer_, Power requires at least this level for the hero.</p>
+<p><strong>power.requires_level</strong>, <em>integer</em>, Power requires at least this level for the hero.</p>
 
-<p><strong>power.requires_power</strong>, _integer_, Power requires another power id.</p>
+<p><strong>power.requires_power</strong>, <em>integer</em>, Power requires another power id.</p>
 
-<p><strong>power.visible_requires_status</strong>, _string_, Hide the power if we don't have this campaign status.</p>
+<p><strong>power.visible_requires_status</strong>, <em>string</em>, Hide the power if we don't have this campaign status.</p>
 
-<p><strong>power.visible_requires_not_status</strong>, _string_, Hide the power if we have this campaign status.</p>
+<p><strong>power.visible_requires_not_status</strong>, <em>string</em>, Hide the power if we have this campaign status.</p>
 
-<p><strong>power.upgrades</strong>, _id (integer), ..._, A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.</p>
+<p><strong>power.upgrades</strong>, <em>id (integer), ...</em>, A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.</p>
 
-<p><strong>upgrade.id</strong>, _integer_, A power id from powers/powers.txt for this upgrade.</p>
+<p><strong>upgrade.id</strong>, <em>integer</em>, A power id from powers/powers.txt for this upgrade.</p>
 
-<p><strong>upgrade.requires_physoff</strong>, _integer_, Upgrade requires Physical and Offense stat of this value.</p>
+<p><strong>upgrade.requires_physoff</strong>, <em>integer</em>, Upgrade requires Physical and Offense stat of this value.</p>
 
-<p><strong>upgrade.requires_physdef</strong>, _integer_, Upgrade requires Physical and Defense stat of this value.</p>
+<p><strong>upgrade.requires_physdef</strong>, <em>integer</em>, Upgrade requires Physical and Defense stat of this value.</p>
 
-<p><strong>upgrade.requires_mentoff</strong>, _integer_, Upgrade requires Mental and Offense stat of this value.</p>
+<p><strong>upgrade.requires_mentoff</strong>, <em>integer</em>, Upgrade requires Mental and Offense stat of this value.</p>
 
-<p><strong>upgrade.requires_mentdef</strong>, _integer_, Upgrade requires Mental and Defense stat of this value.</p>
+<p><strong>upgrade.requires_mentdef</strong>, <em>integer</em>, Upgrade requires Mental and Defense stat of this value.</p>
 
-<p><strong>upgrade.requires_defense</strong>, _integer_, Upgrade requires Defense stat of this value.</p>
+<p><strong>upgrade.requires_defense</strong>, <em>integer</em>, Upgrade requires Defense stat of this value.</p>
 
-<p><strong>upgrade.requires_offense</strong>, _integer_, Upgrade requires Offense stat of this value.</p>
+<p><strong>upgrade.requires_offense</strong>, <em>integer</em>, Upgrade requires Offense stat of this value.</p>
 
-<p><strong>upgrade.requires_physical</strong>, _integer_, Upgrade requires Physical stat of this value.</p>
+<p><strong>upgrade.requires_physical</strong>, <em>integer</em>, Upgrade requires Physical stat of this value.</p>
 
-<p><strong>upgrade.requires_mental</strong>, _integer_, Upgrade requires Mental stat of this value.</p>
+<p><strong>upgrade.requires_mental</strong>, <em>integer</em>, Upgrade requires Mental stat of this value.</p>
 
-<p><strong>upgrade.requires_point</strong>, _boolean_, Upgrade requires a power point to unlock.</p>
+<p><strong>upgrade.requires_point</strong>, <em>boolean</em>, Upgrade requires a power point to unlock.</p>
 
-<p><strong>upgrade.requires_level</strong>, _integer_, Upgrade requires at least this level for the hero.</p>
+<p><strong>upgrade.requires_level</strong>, <em>integer</em>, Upgrade requires at least this level for the hero.</p>
 
-<p><strong>upgrade.requires_power</strong>, _integer_, Upgrade requires another power id.</p>
+<p><strong>upgrade.requires_power</strong>, <em>integer</em>, Upgrade requires another power id.</p>
 
-<p><strong>upgrade.visible_requires_status</strong>, _string_, Hide the upgrade if we don't have this campaign status.</p>
+<p><strong>upgrade.visible_requires_status</strong>, <em>string</em>, Hide the upgrade if we don't have this campaign status.</p>
 
-<p><strong>upgrade.visible_requires_not_status</strong>, _string_, Hide the upgrade if we have this campaign status.</p>
+<p><strong>upgrade.visible_requires_not_status</strong>, <em>string</em>, Hide the upgrade if we have this campaign status.</p>
 
 <hr />
 
@@ -1078,17 +1078,17 @@ body {
 
 <p>Description of menus/stash.txt</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>slots_area</strong>, _x (integer), y (integer)_, Position of the top-left slot.</p>
+<p><strong>slots_area</strong>, <em>x (integer), y (integer)</em>, Position of the top-left slot.</p>
 
-<p><strong>stash_cols</strong>, _integer_, The number of columns for the grid of slots.</p>
+<p><strong>stash_cols</strong>, <em>integer</em>, The number of columns for the grid of slots.</p>
 
-<p><strong>stash_rows</strong>, _integer_, The number of rows for the grid of slots.</p>
+<p><strong>stash_rows</strong>, <em>integer</em>, The number of rows for the grid of slots.</p>
 
-<p><strong>label_title</strong>, _label_, Position of the "Stash" label.</p>
+<p><strong>label_title</strong>, <em>label</em>, Position of the "Stash" label.</p>
 
-<p><strong>currency</strong>, _label_, Position of the label displaying the amount of currency stored in the stash.</p>
+<p><strong>currency</strong>, <em>label</em>, Position of the label displaying the amount of currency stored in the stash.</p>
 
 <hr />
 
@@ -1096,15 +1096,15 @@ body {
 
 <p>Description of menus/hp.txt, menus/mp.txt, menus/xp.txt</p>
 
-<p><strong>bar_pos</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the bar graphics.</p>
+<p><strong>bar_pos</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the bar graphics.</p>
 
-<p><strong>text_pos</strong>, _label_, Position of the "$CURRENT/$TOTAL" text.</p>
+<p><strong>text_pos</strong>, <em>label</em>, Position of the "$CURRENT/$TOTAL" text.</p>
 
-<p><strong>orientation</strong>, _boolean_, True is vertical orientation; false is horizontal.</p>
+<p><strong>orientation</strong>, <em>boolean</em>, True is vertical orientation; false is horizontal.</p>
 
-<p><strong>bar_gfx</strong>, _string_, Filename of the image to use for the "fill" of the bar.</p>
+<p><strong>bar_gfx</strong>, <em>string</em>, Filename of the image to use for the "fill" of the bar.</p>
 
-<p><strong>bar_gfx_background</strong>, _string_, Filename of the image to use for the base of the bar.</p>
+<p><strong>bar_gfx_background</strong>, <em>string</em>, Filename of the image to use for the base of the bar.</p>
 
 <hr />
 
@@ -1112,23 +1112,23 @@ body {
 
 <p>Description of menus/talker.txt</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>advance</strong>, _x (integer), y (integer)_, Position of the button to advance dialog.</p>
+<p><strong>advance</strong>, <em>x (integer), y (integer)</em>, Position of the button to advance dialog.</p>
 
-<p><strong>dialogbox</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the text box graphics.</p>
+<p><strong>dialogbox</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the text box graphics.</p>
 
-<p><strong>dialogtext</strong>, _x (integer), y (integer), w (integer), h (integer)_, Rectangle where the dialog text is placed.</p>
+<p><strong>dialogtext</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Rectangle where the dialog text is placed.</p>
 
-<p><strong>text_offset</strong>, _x (integer), y (integer)_, Margins for the left/right and top/bottom of the dialog text.</p>
+<p><strong>text_offset</strong>, <em>x (integer), y (integer)</em>, Margins for the left/right and top/bottom of the dialog text.</p>
 
-<p><strong>portrait_he</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the NPC portrait graphics.</p>
+<p><strong>portrait_he</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the NPC portrait graphics.</p>
 
-<p><strong>portrait_you</strong>, _x (integer), y (integer), w (integer), h (integer)_, Position and dimensions of the player's portrait graphics.</p>
+<p><strong>portrait_you</strong>, <em>x (integer), y (integer), w (integer), h (integer)</em>, Position and dimensions of the player's portrait graphics.</p>
 
-<p><strong>font_who</strong>, _string_, Font style to use for the name of the currently talking person.</p>
+<p><strong>font_who</strong>, <em>string</em>, Font style to use for the name of the currently talking person.</p>
 
-<p><strong>font_dialog</strong>, _string_, Font style to use for the dialog text.</p>
+<p><strong>font_dialog</strong>, <em>string</em>, Font style to use for the dialog text.</p>
 
 <hr />
 
@@ -1136,15 +1136,15 @@ body {
 
 <p>Description of menus/vendor.txt</p>
 
-<p><strong>close</strong>, _x (integer), y (integer)_, Position of the close button.</p>
+<p><strong>close</strong>, <em>x (integer), y (integer)</em>, Position of the close button.</p>
 
-<p><strong>slots_area</strong>, _x (integer), y (integer)_, Position of the top-left slot.</p>
+<p><strong>slots_area</strong>, <em>x (integer), y (integer)</em>, Position of the top-left slot.</p>
 
-<p><strong>vendor_cols</strong>, _integer_, The number of columns in the grid of slots.</p>
+<p><strong>vendor_cols</strong>, <em>integer</em>, The number of columns in the grid of slots.</p>
 
-<p><strong>vendor_rows</strong>, _integer_, The number of rows in the grid of slots.</p>
+<p><strong>vendor_rows</strong>, <em>integer</em>, The number of rows in the grid of slots.</p>
 
-<p><strong>label_title</strong>, _label_, The position of the text that displays the NPC's name.</p>
+<p><strong>label_title</strong>, <em>label</em>, The position of the text that displays the NPC's name.</p>
 
 <hr />
 
@@ -1152,33 +1152,33 @@ body {
 
 <p>Description of NPCs in npcs/</p>
 
-<p><strong>dialog.him, dialog.her</strong>, _string_, A line of dialog from the NPC.</p>
+<p><strong>dialog.him, dialog.her</strong>, <em>string</em>, A line of dialog from the NPC.</p>
 
-<p><strong>dialog.you</strong>, _string_, A line of dialog from the player.</p>
+<p><strong>dialog.you</strong>, <em>string</em>, A line of dialog from the player.</p>
 
-<p><strong>dialog.voice</strong>, _string_, Filename of a voice sound file to play.</p>
+<p><strong>dialog.voice</strong>, <em>string</em>, Filename of a voice sound file to play.</p>
 
-<p><strong>dialog.topic</strong>, _string_, The name of this dialog topic. Displayed when picking a dialog tree.</p>
+<p><strong>dialog.topic</strong>, <em>string</em>, The name of this dialog topic. Displayed when picking a dialog tree.</p>
 
-<p><strong>dialog.group</strong>, _string_, Dialog group.</p>
+<p><strong>dialog.group</strong>, <em>string</em>, Dialog group.</p>
 
-<p><strong>dialog.allow_movement</strong>, _boolean_, Restrict the player's mvoement during dialog.</p>
+<p><strong>dialog.allow_movement</strong>, <em>boolean</em>, Restrict the player's mvoement during dialog.</p>
 
-<p><strong>name</strong>, _string_, NPC's name.</p>
+<p><strong>name</strong>, <em>string</em>, NPC's name.</p>
 
-<p><strong>gfx</strong>, _string_, Filename of an animation definition.</p>
+<p><strong>gfx</strong>, <em>string</em>, Filename of an animation definition.</p>
 
-<p><strong>talker</strong>, _boolean_, Allows this NPC to be talked to.</p>
+<p><strong>talker</strong>, <em>boolean</em>, Allows this NPC to be talked to.</p>
 
-<p><strong>portrait</strong>, _string_, Filename of a portrait image.</p>
+<p><strong>portrait</strong>, <em>string</em>, Filename of a portrait image.</p>
 
-<p><strong>vendor</strong>, _string_, Allows this NPC to buy/sell items.</p>
+<p><strong>vendor</strong>, <em>string</em>, Allows this NPC to buy/sell items.</p>
 
-<p><strong>constant_stock</strong>, _item (integer), ..._, A list of items this vendor has for sale.</p>
+<p><strong>constant_stock</strong>, <em>item (integer), ...</em>, A list of items this vendor has for sale.</p>
 
-<p><strong>status_stock</strong>, _status (string), item (integer), ..._, A list of items this vendor will have for sale if the required status is met.</p>
+<p><strong>status_stock</strong>, <em>status (string), item (integer), ...</em>, A list of items this vendor will have for sale if the required status is met.</p>
 
-<p><strong>vox_intro</strong>, _string_, Filename of a sound file to play when initially interacting with the NPC.</p>
+<p><strong>vox_intro</strong>, <em>string</em>, Filename of a sound file to play when initially interacting with the NPC.</p>
 
 <hr />
 
@@ -1186,17 +1186,17 @@ body {
 
 <p>Description of powers/effects.txt</p>
 
-<p><strong>effect.id</strong>, _string_, Unique identifier for the effect definition.</p>
+<p><strong>effect.id</strong>, <em>string</em>, Unique identifier for the effect definition.</p>
 
-<p><strong>effect.type</strong>, _string_, Defines the type of effect</p>
+<p><strong>effect.type</strong>, <em>string</em>, Defines the type of effect</p>
 
-<p><strong>effect.icon</strong>, _integer_, The icon to visually represent the effect in the status area</p>
+<p><strong>effect.icon</strong>, <em>integer</em>, The icon to visually represent the effect in the status area</p>
 
-<p><strong>effect.animation</strong>, _string_, The filename of effect animation.</p>
+<p><strong>effect.animation</strong>, <em>string</em>, The filename of effect animation.</p>
 
-<p><strong>effect.can_stack</strong>, _bool_, Allows multiple instances of this effect</p>
+<p><strong>effect.can_stack</strong>, <em>bool</em>, Allows multiple instances of this effect</p>
 
-<p><strong>effect.render_above</strong>, _bool_, Effect is rendered above</p>
+<p><strong>effect.render_above</strong>, <em>bool</em>, Effect is rendered above</p>
 
 <hr />
 
@@ -1204,147 +1204,147 @@ body {
 
 <p>Description of powers/powers.txt</p>
 
-<p><strong>id</strong>, _integer_, Uniq identifier for the power definition.</p>
+<p><strong>id</strong>, <em>integer</em>, Uniq identifier for the power definition.</p>
 
-<p><strong>type</strong>, _[fixed:missile:repeater:spawn:transform]_, Defines the type of power definiton</p>
+<p><strong>type</strong>, <em>[fixed:missile:repeater:spawn:transform]</em>, Defines the type of power definiton</p>
 
-<p><strong>name</strong>, _string_, The name of the power</p>
+<p><strong>name</strong>, <em>string</em>, The name of the power</p>
 
-<p><strong>description</strong>, _string_, Description of the power</p>
+<p><strong>description</strong>, <em>string</em>, Description of the power</p>
 
-<p><strong>icon</strong>, _string_, The icon to visually represent the power eg. in skill tree or action bar.</p>
+<p><strong>icon</strong>, <em>string</em>, The icon to visually represent the power eg. in skill tree or action bar.</p>
 
-<p><strong>new_state</strong>, _string_, When power is used, hero or enemy will change to this state. Must be one of the states [block, instant, user defined]</p>
+<p><strong>new_state</strong>, <em>string</em>, When power is used, hero or enemy will change to this state. Must be one of the states [block, instant, user defined]</p>
 
-<p><strong>face</strong>, _bool_, Power will make hero or enemy to face the target location.</p>
+<p><strong>face</strong>, <em>bool</em>, Power will make hero or enemy to face the target location.</p>
 
-<p><strong>source_type</strong>, _[hero:neutral:enemy]_, Determines which entities the power can effect.</p>
+<p><strong>source_type</strong>, <em>[hero:neutral:enemy]</em>, Determines which entities the power can effect.</p>
 
-<p><strong>beacon</strong>, _bool_, True if enemy is calling its allies.</p>
+<p><strong>beacon</strong>, <em>bool</em>, True if enemy is calling its allies.</p>
 
-<p><strong>count</strong>, _integer_, The count of hazards/effect or spawns to be created by this power.</p>
+<p><strong>count</strong>, <em>integer</em>, The count of hazards/effect or spawns to be created by this power.</p>
 
-<p><strong>passive</strong>, _bool_, If power is unlocked when the hero or enemy spawns it will be automatically activated.</p>
+<p><strong>passive</strong>, <em>bool</em>, If power is unlocked when the hero or enemy spawns it will be automatically activated.</p>
 
-<p><strong>passive_trigger</strong>, _[on_block:on_hit:on_halfdeath:on_joincombat:on_death]_, This will only activate a passive power under a certain condition.</p>
+<p><strong>passive_trigger</strong>, <em>[on_block:on_hit:on_halfdeath:on_joincombat:on_death]</em>, This will only activate a passive power under a certain condition.</p>
 
-<p><strong>meta_power</strong>, _boolean_, If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.</p>
+<p><strong>meta_power</strong>, <em>boolean</em>, If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.</p>
 
-<p><strong>requires_flags</strong>, _flag (string), ..._, A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt</p>
+<p><strong>requires_flags</strong>, <em>flag (string), ...</em>, A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt</p>
 
-<p><strong>requires_mp</strong>, _integer_, Restrict power usage to a specified MP level.</p>
+<p><strong>requires_mp</strong>, <em>integer</em>, Restrict power usage to a specified MP level.</p>
 
-<p><strong>requires_hp</strong>, _integer_, Restrict power usage to a specified HP level.</p>
+<p><strong>requires_hp</strong>, <em>integer</em>, Restrict power usage to a specified HP level.</p>
 
-<p><strong>sacrifice</strong>, _bool_, If the power has requires_hp, allow it to kill the caster.</p>
+<p><strong>sacrifice</strong>, <em>bool</em>, If the power has requires_hp, allow it to kill the caster.</p>
 
-<p><strong>requires_los</strong>, _bool_, Requires a line-of-sight to target.</p>
+<p><strong>requires_los</strong>, <em>bool</em>, Requires a line-of-sight to target.</p>
 
-<p><strong>requires_empty_target</strong>, _bool_, The power can only be cast when target tile is empty.</p>
+<p><strong>requires_empty_target</strong>, <em>bool</em>, The power can only be cast when target tile is empty.</p>
 
-<p><strong>requires_item</strong>, _item_id, quantity (integer)_, Requires a specific item of a specific quantity in inventory.</p>
+<p><strong>requires_item</strong>, <em>item_id, quantity (integer)</em>, Requires a specific item of a specific quantity in inventory.</p>
 
 <p><strong>requires_equipped_item</strong>, _item_id, quantity (integer) _, Requires a specific item of a specific quantity to be equipped on hero.</p>
 
-<p><strong>requires_targeting</strong>, _bool_, Power is only used when targeting using click-to-target.</p>
+<p><strong>requires_targeting</strong>, <em>bool</em>, Power is only used when targeting using click-to-target.</p>
 
-<p><strong>cooldown</strong>, _duration_, Specify the duration for cooldown of the power in 'ms' or 's'.</p>
+<p><strong>cooldown</strong>, <em>duration</em>, Specify the duration for cooldown of the power in 'ms' or 's'.</p>
 
-<p><strong>animation</strong>, _string_, The filename of the power animation.</p>
+<p><strong>animation</strong>, <em>string</em>, The filename of the power animation.</p>
 
-<p><strong>soundfx</strong>, _string_, Filename of a sound effect to play when use of power.</p>
+<p><strong>soundfx</strong>, <em>string</em>, Filename of a sound effect to play when use of power.</p>
 
-<p><strong>directional</strong>, _bool_, The animation sprite sheet contains 8 directions, one per row.</p>
+<p><strong>directional</strong>, <em>bool</em>, The animation sprite sheet contains 8 directions, one per row.</p>
 
-<p><strong>visual_random</strong>, _integer_, The animation sprite sheet contains rows of random options</p>
+<p><strong>visual_random</strong>, <em>integer</em>, The animation sprite sheet contains rows of random options</p>
 
-<p><strong>visual_option</strong>, _integer_, The animation sprite sheet containers rows of similar effects, use a specific option.</p>
+<p><strong>visual_option</strong>, <em>integer</em>, The animation sprite sheet containers rows of similar effects, use a specific option.</p>
 
-<p><strong>aim_assist</strong>, _bool_, Power is aim assisted.</p>
+<p><strong>aim_assist</strong>, <em>bool</em>, Power is aim assisted.</p>
 
-<p><strong>speed</strong>, _integer_, The speed of missile hazard, the unit is defined as map units per frame.</p>
+<p><strong>speed</strong>, <em>integer</em>, The speed of missile hazard, the unit is defined as map units per frame.</p>
 
-<p><strong>lifespan</strong>, _duration_, How long the hazard/animation lasts in 'ms' or 's'.</p>
+<p><strong>lifespan</strong>, <em>duration</em>, How long the hazard/animation lasts in 'ms' or 's'.</p>
 
-<p><strong>floor</strong>, _bool_, The hazard is drawn between the background and the object layer.</p>
+<p><strong>floor</strong>, <em>bool</em>, The hazard is drawn between the background and the object layer.</p>
 
-<p><strong>complete_animation</strong>, _bool_, For hazards; Play the entire animation, even if the hazard has hit a target.</p>
+<p><strong>complete_animation</strong>, <em>bool</em>, For hazards; Play the entire animation, even if the hazard has hit a target.</p>
 
-<p><strong>use_hazard</strong>, _bool_, Power uses hazard.</p>
+<p><strong>use_hazard</strong>, <em>bool</em>, Power uses hazard.</p>
 
-<p><strong>no_attack</strong>, _bool_, Hazard won't affect other entities.</p>
+<p><strong>no_attack</strong>, <em>bool</em>, Hazard won't affect other entities.</p>
 
-<p><strong>radius</strong>, _integer_, Radius in pixels</p>
+<p><strong>radius</strong>, <em>integer</em>, Radius in pixels</p>
 
-<p><strong>base_damage</strong>, _[melee:ranged:ment]_, </p>
+<p><strong>base_damage</strong>, <em>[melee:ranged:ment]</em>, </p>
 
-<p><strong>starting_pos</strong>, _[source, target, melee]_, Start position for hazard</p>
+<p><strong>starting_pos</strong>, <em>[source, target, melee]</em>, Start position for hazard</p>
 
-<p><strong>multitarget</strong>, _bool_, Allows a hazard power to hit more than one entity.</p>
+<p><strong>multitarget</strong>, <em>bool</em>, Allows a hazard power to hit more than one entity.</p>
 
-<p><strong>trait_armor_penetration</strong>, _bool_, Ignores the target's Absorbtion stat</p>
+<p><strong>trait_armor_penetration</strong>, <em>bool</em>, Ignores the target's Absorbtion stat</p>
 
-<p><strong>trait_avoidance_ignore</strong>, _bool_, Ignores the target's Avoidance stat</p>
+<p><strong>trait_avoidance_ignore</strong>, <em>bool</em>, Ignores the target's Avoidance stat</p>
 
-<p><strong>trait_crits_impaired</strong>, _integer_, Increases critical hit percentage for slowed/immobile targets</p>
+<p><strong>trait_crits_impaired</strong>, <em>integer</em>, Increases critical hit percentage for slowed/immobile targets</p>
 
-<p><strong>trait_elemental</strong>, _string_, Damage done is elemental. See engine/elements.txt</p>
+<p><strong>trait_elemental</strong>, <em>string</em>, Damage done is elemental. See engine/elements.txt</p>
 
-<p><strong>target_range</strong>, _float_, </p>
+<p><strong>target_range</strong>, <em>float</em>, </p>
 
-<p><strong>hp_steal</strong>, _integer_, Percentage of damage to steal into HP</p>
+<p><strong>hp_steal</strong>, <em>integer</em>, Percentage of damage to steal into HP</p>
 
-<p><strong>mp_steal</strong>, _integer_, Percentage of damage to steal into MP</p>
+<p><strong>mp_steal</strong>, <em>integer</em>, Percentage of damage to steal into MP</p>
 
-<p><strong>missile_angle</strong>, _integer_, Angle of missile</p>
+<p><strong>missile_angle</strong>, <em>integer</em>, Angle of missile</p>
 
-<p><strong>angle_variance</strong>, _integer_, Percentage of variance added to missile angle</p>
+<p><strong>angle_variance</strong>, <em>integer</em>, Percentage of variance added to missile angle</p>
 
-<p><strong>speed_variance</strong>, _integer_, Percentage of variance added to missile speed</p>
+<p><strong>speed_variance</strong>, <em>integer</em>, Percentage of variance added to missile speed</p>
 
-<p><strong>delay</strong>, _duration_, Delay between repeats in 'ms' or 's'.</p>
+<p><strong>delay</strong>, <em>duration</em>, Delay between repeats in 'ms' or 's'.</p>
 
-<p><strong>transform_duration</strong>, _duration_, Duration for transform in 'ms' or 's'.</p>
+<p><strong>transform_duration</strong>, <em>duration</em>, Duration for transform in 'ms' or 's'.</p>
 
-<p><strong>manual_untransform</strong>, _bool_, Force manual untranform</p>
+<p><strong>manual_untransform</strong>, <em>bool</em>, Force manual untranform</p>
 
-<p><strong>keep_equipment</strong>, _bool_, Keep equipment while transformed</p>
+<p><strong>keep_equipment</strong>, <em>bool</em>, Keep equipment while transformed</p>
 
-<p><strong>untransform_on_hit</strong>, _bool_, Force untransform when the player is hit</p>
+<p><strong>untransform_on_hit</strong>, <em>bool</em>, Force untransform when the player is hit</p>
 
-<p><strong>buff</strong>, _bool_, Power is cast upon the caster.</p>
+<p><strong>buff</strong>, <em>bool</em>, Power is cast upon the caster.</p>
 
-<p><strong>buf_teleport</strong>, _bool_, Power is a teleportation power.</p>
+<p><strong>buff_teleport</strong>, <em>bool</em>, Power is a teleportation power.</p>
 
-<p><strong>buf_party</strong>, _bool_, Power is cast upon party members</p>
+<p><strong>buff_party</strong>, <em>bool</em>, Power is cast upon party members</p>
 
-<p><strong>buf_party_power_id</strong>, _integer_, Buffs a power id for all party members</p>
+<p><strong>buff_party_power_id</strong>, <em>integer</em>, Buffs a power id for all party members</p>
 
-<p><strong>post_effect</strong>, _[effect_id, magnitude (integer), duration (duration)]_, Post effect. Duration is in 'ms' or 's'.</p>
+<p><strong>post_effect</strong>, <em>[effect_id, magnitude (integer), duration (duration)]</em>, Post effect. Duration is in 'ms' or 's'.</p>
 
-<p><strong>post_power</strong>, _power_id_, Trigger a power if the hazard did damage.</p>
+<p><strong>post_power</strong>, <em>power_id</em>, Trigger a power if the hazard did damage.</p>
 
-<p><strong>wal_power</strong>, _power_id_, Trigger a power if the hazard hit a wall.</p>
+<p><strong>wall_power</strong>, <em>power_id</em>, Trigger a power if the hazard hit a wall.</p>
 
-<p><strong>spawn_type</strong>, _string_, Type of spawn.</p>
+<p><strong>spawn_type</strong>, <em>string</em>, Type of spawn.</p>
 
-<p><strong>target_neighbor</strong>, _integer_, Target is changed to an adjacent tile within a radius.</p>
+<p><strong>target_neighbor</strong>, <em>integer</em>, Target is changed to an adjacent tile within a radius.</p>
 
-<p><strong>spawn_limit</strong>, _[fixed:stat:unlimited],stat[physical:mental:offense:defens]_, </p>
+<p><strong>spawn_limit</strong>, <em>[fixed:stat:unlimited],stat[physical:mental:offense:defens]</em>, </p>
 
-<p><strong>spawn_level</strong>, _[default:fixed:stat:level],stat[physical:mental:offense:defens]_, </p>
+<p><strong>spawn_level</strong>, <em>[default:fixed:stat:level],stat[physical:mental:offense:defens]</em>, </p>
 
-<p><strong>target_party</strong>, _bool_, Hazard will only affect party members.</p>
+<p><strong>target_party</strong>, <em>bool</em>, Hazard will only affect party members.</p>
 
-<p><strong>target_categories</strong>, _string,..._, Hazard will only affect enemies in these categories.</p>
+<p><strong>target_categories</strong>, <em>string,...</em>, Hazard will only affect enemies in these categories.</p>
 
-<p><strong>modifier_accuracy</strong>, _[multiply:add:absolute], integer_, Changes this power's accuracy.</p>
+<p><strong>modifier_accuracy</strong>, <em>[multiply:add:absolute], integer</em>, Changes this power's accuracy.</p>
 
-<p><strong>modifier_damage</strong>, _[multiply:add:absolute], integer_, Changes this power's damage.</p>
+<p><strong>modifier_damage</strong>, <em>[multiply:add:absolute], integer</em>, Changes this power's damage.</p>
 
-<p><strong>modifier_critical</strong>, _[multiply:add:absolute], integer_, Changes the chance that this power will land a critical hit.</p>
+<p><strong>modifier_critical</strong>, <em>[multiply:add:absolute], integer</em>, Changes the chance that this power will land a critical hit.</p>
 
-<p><strong>loot</strong>, _[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],..._, Give the player this loot when the power is used</p>
+<p><strong>loot</strong>, <em>[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...</em>, Give the player this loot when the power is used</p>
 
 <hr />
 
@@ -1352,11 +1352,11 @@ body {
 
 <p>Description of quest files in quests/</p>
 
-<p><strong>quest.requires_status</strong>, _string_, Quest requires this campaign status</p>
+<p><strong>quest.requires_status</strong>, <em>string</em>, Quest requires this campaign status</p>
 
-<p><strong>quest.requires_not_status</strong>, _string_, Quest requires not having this campaign status.</p>
+<p><strong>quest.requires_not_status</strong>, <em>string</em>, Quest requires not having this campaign status.</p>
 
-<p><strong>quest.quest_text</strong>, _string_, Text that gets displayed in the Quest log when this quest is active.</p>
+<p><strong>quest.quest_text</strong>, <em>string</em>, Text that gets displayed in the Quest log when this quest is active.</p>
 
 <hr />
 
@@ -1364,15 +1364,15 @@ body {
 
 <p>Description of engine/font_settings.txt</p>
 
-<p><strong>$STYLE.default, $STYLE.$LANGUAGE</strong>, _filename (string), point size (integer), blending (boolean)_, Filename, point size, and blend mode of the font to use for this language. $STYLE can be something like "font_normal" or "font_bold". $LANGUAGE can be a 2-letter region code.</p>
+<p><strong>$STYLE.default, $STYLE.$LANGUAGE</strong>, <em>filename (string), point size (integer), blending (boolean)</em>, Filename, point size, and blend mode of the font to use for this language. $STYLE can be something like "font_normal" or "font_bold". $LANGUAGE can be a 2-letter region code.</p>
 
-<p><strong>menu_normal, menu_bonus, menu_penalty, widget_normal, widget_disabled</strong>, _r (integer), g (integer), b (integer)_, Colors for menus and widgets</p>
+<p><strong>menu_normal, menu_bonus, menu_penalty, widget_normal, widget_disabled</strong>, <em>r (integer), g (integer), b (integer)</em>, Colors for menus and widgets</p>
 
-<p><strong>combat_givedmg, combat_takedmg, combat_crit, combat_buff, combat_miss</strong>, _r (integer), g (integer), b (integer)_, Colors for combat text</p>
+<p><strong>combat_givedmg, combat_takedmg, combat_crit, combat_buff, combat_miss</strong>, <em>r (integer), g (integer), b (integer)</em>, Colors for combat text</p>
 
-<p><strong>requirements_not_met, item_bonus, item_penalty, item_flavor</strong>, _r (integer), g (integer), b (integer)_, Colors for tooltips</p>
+<p><strong>requirements_not_met, item_bonus, item_penalty, item_flavor</strong>, <em>r (integer), g (integer), b (integer)</em>, Colors for tooltips</p>
 
-<p><strong>item_$QUALITY</strong>, _r (integer), g (integer), b (integer)_, Colors for item quality. $QUALITY should match qualities used in items/items.txt</p>
+<p><strong>item_$QUALITY</strong>, <em>r (integer), g (integer), b (integer)</em>, Colors for item quality. $QUALITY should match qualities used in items/items.txt</p>
 
 <hr />
 
@@ -1380,9 +1380,9 @@ body {
 
 <p>Description of engine/tileset_config.txt</p>
 
-<p><strong>tile_size</strong>, _w (integet), h (integer)_, The width and height of a tile.</p>
+<p><strong>tile_size</strong>, <em>w (integet), h (integer)</em>, The width and height of a tile.</p>
 
-<p><strong>orientation</strong>, _[isometric, orthogonal]_, The perspective of tiles; isometric or orthogonal.</p>
+<p><strong>orientation</strong>, <em>[isometric, orthogonal]</em>, The perspective of tiles; isometric or orthogonal.</p>
 
 <hr />
 
@@ -1390,35 +1390,35 @@ body {
 
 <p>Description of engine/misc.txt</p>
 
-<p><strong>save_hpmp</strong>, _boolean_, When saving the game, keep the hero's current HP and MP.</p>
+<p><strong>save_hpmp</strong>, <em>boolean</em>, When saving the game, keep the hero's current HP and MP.</p>
 
-<p><strong>corpse_timeout</strong>, _duration_, Duration that a corpse can exist on the map in 'ms' or 's'.</p>
+<p><strong>corpse_timeout</strong>, <em>duration</em>, Duration that a corpse can exist on the map in 'ms' or 's'.</p>
 
-<p><strong>sel_without_vendor</strong>, _boolean_, Allows selling items when not at a vendor via CTRL-Click.</p>
+<p><strong>sell_without_vendor</strong>, <em>boolean</em>, Allows selling items when not at a vendor via CTRL-Click.</p>
 
-<p><strong>aim_assist</strong>, _integer_, The pixel offset for powers that use aim_assist.</p>
+<p><strong>aim_assist</strong>, <em>integer</em>, The pixel offset for powers that use aim_assist.</p>
 
-<p><strong>window_title</strong>, _string_, Sets the text in the window's titlebar.</p>
+<p><strong>window_title</strong>, <em>string</em>, Sets the text in the window's titlebar.</p>
 
-<p><strong>save_prefix</strong>, _string_, A string that's prepended to save filenames to prevent conflicts between mods.</p>
+<p><strong>save_prefix</strong>, <em>string</em>, A string that's prepended to save filenames to prevent conflicts between mods.</p>
 
-<p><strong>sound_falloff</strong>, _integer_, The maximum radius in tiles that any single sound is audible.</p>
+<p><strong>sound_falloff</strong>, <em>integer</em>, The maximum radius in tiles that any single sound is audible.</p>
 
-<p><strong>party_exp_percentage</strong>, _integer_, The percentage of XP given to allies.</p>
+<p><strong>party_exp_percentage</strong>, <em>integer</em>, The percentage of XP given to allies.</p>
 
-<p><strong>enable_ally_collision</strong>, _boolean_, Allows allies to block the player's path.</p>
+<p><strong>enable_ally_collision</strong>, <em>boolean</em>, Allows allies to block the player's path.</p>
 
-<p><strong>enable_ally_collision_ai</strong>, _boolean_, Allows allies to block the path of other AI creatures.</p>
+<p><strong>enable_ally_collision_ai</strong>, <em>boolean</em>, Allows allies to block the path of other AI creatures.</p>
 
-<p><strong>currency_id</strong>, _integer_, An item id that will be used as currency.</p>
+<p><strong>currency_id</strong>, <em>integer</em>, An item id that will be used as currency.</p>
 
-<p><strong>interact_range</strong>, _float_, Distance where the player can interact with objects and NPCs.</p>
+<p><strong>interact_range</strong>, <em>float</em>, Distance where the player can interact with objects and NPCs.</p>
 
-<p><strong>menus_pause</strong>, _boolean_, Opening any menu will pause the game.</p>
+<p><strong>menus_pause</strong>, <em>boolean</em>, Opening any menu will pause the game.</p>
 
-<p><strong>save_onload</strong>, _boolean_, Save the game upon changing maps.</p>
+<p><strong>save_onload</strong>, <em>boolean</em>, Save the game upon changing maps.</p>
 
-<p><strong>save_onexit</strong>, _boolean_, Save the game upon quitting to the title screen or desktop.</p>
+<p><strong>save_onexit</strong>, <em>boolean</em>, Save the game upon quitting to the title screen or desktop.</p>
 
 <hr />
 
@@ -1426,19 +1426,19 @@ body {
 
 <p>Description of engine/resolutions.txt</p>
 
-<p><strong>menu_frame_width</strong>, _integer_, Width of frame for New Game, Configuration, etc. menus.</p>
+<p><strong>menu_frame_width</strong>, <em>integer</em>, Width of frame for New Game, Configuration, etc. menus.</p>
 
-<p><strong>menu_frame_height</strong>, _integer_, Height of frame for New Game, Configuration, etc. menus.</p>
+<p><strong>menu_frame_height</strong>, <em>integer</em>, Height of frame for New Game, Configuration, etc. menus.</p>
 
-<p><strong>icon_size</strong>, _integer_, Size of icons.</p>
+<p><strong>icon_size</strong>, <em>integer</em>, Size of icons.</p>
 
-<p><strong>required_width</strong>, _integer_, Minimum window/screen resolution width.</p>
+<p><strong>required_width</strong>, <em>integer</em>, Minimum window/screen resolution width.</p>
 
-<p><strong>required_height</strong>, _integer_, Minimum window/screen resolution height.</p>
+<p><strong>required_height</strong>, <em>integer</em>, Minimum window/screen resolution height.</p>
 
-<p><strong>virtual_height</strong>, _integer_, The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.</p>
+<p><strong>virtual_height</strong>, <em>integer</em>, The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.</p>
 
-<p><strong>ignore_texture_filter</strong>, _boolean_, If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.</p>
+<p><strong>ignore_texture_filter</strong>, <em>boolean</em>, If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.</p>
 
 <hr />
 
@@ -1446,7 +1446,7 @@ body {
 
 <p>Description of engine/gameplay.txt</p>
 
-<p><strong>enable_playgame</strong>, _boolean_, Enables the "Play Game" button on the main menu.</p>
+<p><strong>enable_playgame</strong>, <em>boolean</em>, Enables the "Play Game" button on the main menu.</p>
 
 <hr />
 
@@ -1454,21 +1454,21 @@ body {
 
 <p>Description of engine/combat.txt</p>
 
-<p><strong>max_absorb_percent</strong>, _integer_, Maximum percentage of damage that can be absorbed.</p>
+<p><strong>max_absorb_percent</strong>, <em>integer</em>, Maximum percentage of damage that can be absorbed.</p>
 
-<p><strong>max_resist_percent</strong>, _integer_, Maximum percentage of elemental damage that can be resisted.</p>
+<p><strong>max_resist_percent</strong>, <em>integer</em>, Maximum percentage of elemental damage that can be resisted.</p>
 
-<p><strong>max_block_percent</strong>, _integer_, Maximum percentage of damage that can be blocked.</p>
+<p><strong>max_block_percent</strong>, <em>integer</em>, Maximum percentage of damage that can be blocked.</p>
 
-<p><strong>max_avoidance_percent</strong>, _integer_, Maximum percentage chance that hazards can be avoided.</p>
+<p><strong>max_avoidance_percent</strong>, <em>integer</em>, Maximum percentage chance that hazards can be avoided.</p>
 
-<p><strong>min_absorb_percent</strong>, _integer_, Minimum percentage of damage that can be absorbed.</p>
+<p><strong>min_absorb_percent</strong>, <em>integer</em>, Minimum percentage of damage that can be absorbed.</p>
 
-<p><strong>min_resist_percent</strong>, _integer_, Minimum percentage of elemental damage that can be resisted.</p>
+<p><strong>min_resist_percent</strong>, <em>integer</em>, Minimum percentage of elemental damage that can be resisted.</p>
 
-<p><strong>min_block_percent</strong>, _integer_, Minimum percentage of damage that can be blocked.</p>
+<p><strong>min_block_percent</strong>, <em>integer</em>, Minimum percentage of damage that can be blocked.</p>
 
-<p><strong>min_avoidance_percent</strong>, _integer_, Minimum percentage chance that hazards can be avoided.</p>
+<p><strong>min_avoidance_percent</strong>, <em>integer</em>, Minimum percentage chance that hazards can be avoided.</p>
 
 <hr />
 
@@ -1476,9 +1476,9 @@ body {
 
 <p>Description of engine/elements.txt</p>
 
-<p><strong>element.id</strong>, _string_, An identifier for this element.</p>
+<p><strong>element.id</strong>, <em>string</em>, An identifier for this element.</p>
 
-<p><strong>element.name</strong>, _string_, The displayed name of this element.</p>
+<p><strong>element.name</strong>, <em>string</em>, The displayed name of this element.</p>
 
 <hr />
 
@@ -1486,9 +1486,9 @@ body {
 
 <p>Description of engine/equip_flags.txt</p>
 
-<p><strong>flag.id</strong>, _string_, An identifier for this equip flag.</p>
+<p><strong>flag.id</strong>, <em>string</em>, An identifier for this equip flag.</p>
 
-<p><strong>flag.name</strong>, _string_, The displayed name of this equip flag.</p>
+<p><strong>flag.name</strong>, <em>string</em>, The displayed name of this equip flag.</p>
 
 <hr />
 
@@ -1496,31 +1496,31 @@ body {
 
 <p>Description of engine/classes.txt</p>
 
-<p><strong>name</strong>, _string_, The displayed name of this class.</p>
+<p><strong>name</strong>, <em>string</em>, The displayed name of this class.</p>
 
-<p><strong>description</strong>, _string_, A description of this class.</p>
+<p><strong>description</strong>, <em>string</em>, A description of this class.</p>
 
-<p><strong>currency</strong>, _integer_, The amount of currency this class will start with.</p>
+<p><strong>currency</strong>, <em>integer</em>, The amount of currency this class will start with.</p>
 
-<p><strong>equipment</strong>, _item (integer), ..._, A list of items that are equipped when starting with this class.</p>
+<p><strong>equipment</strong>, <em>item (integer), ...</em>, A list of items that are equipped when starting with this class.</p>
 
-<p><strong>carried</strong>, _item (integer), ..._, A list of items that are placed in the normal inventorty when starting with this class.</p>
+<p><strong>carried</strong>, <em>item (integer), ...</em>, A list of items that are placed in the normal inventorty when starting with this class.</p>
 
-<p><strong>physical</strong>, _integer_, Class starts with this physical stat.</p>
+<p><strong>physical</strong>, <em>integer</em>, Class starts with this physical stat.</p>
 
-<p><strong>mental</strong>, _integer_, Class starts with this mental stat.</p>
+<p><strong>mental</strong>, <em>integer</em>, Class starts with this mental stat.</p>
 
-<p><strong>offense</strong>, _integer_, Class starts with this offense stat.</p>
+<p><strong>offense</strong>, <em>integer</em>, Class starts with this offense stat.</p>
 
-<p><strong>defense</strong>, _integer_, Class starts with this defense stat.</p>
+<p><strong>defense</strong>, <em>integer</em>, Class starts with this defense stat.</p>
 
-<p><strong>actionbar</strong>, _power (integer), ..._, A list of powers to place in the action bar for the class.</p>
+<p><strong>actionbar</strong>, <em>power (integer), ...</em>, A list of powers to place in the action bar for the class.</p>
 
-<p><strong>powers</strong>, _power (integer), ..._, A list of powers that are unlocked when starting this class.</p>
+<p><strong>powers</strong>, <em>power (integer), ...</em>, A list of powers that are unlocked when starting this class.</p>
 
-<p><strong>campaign</strong>, _status (string), ..._, A list of campaign statuses that are set when starting this class.</p>
+<p><strong>campaign</strong>, <em>status (string), ...</em>, A list of campaign statuses that are set when starting this class.</p>
 
-<p><strong>power_tree</strong>, _string_, Power tree that will be loaded by MenuPowers</p>
+<p><strong>power_tree</strong>, <em>string</em>, Power tree that will be loaded by MenuPowers</p>
 
 <hr />
 
@@ -1528,17 +1528,17 @@ body {
 
 <p>Description of engine/death_penalty.txt</p>
 
-<p><strong>enable</strong>, _boolean_, Enable the death penalty.</p>
+<p><strong>enable</strong>, <em>boolean</em>, Enable the death penalty.</p>
 
-<p><strong>permadeath</strong>, _boolean_, Force permadeath for all new saves.</p>
+<p><strong>permadeath</strong>, <em>boolean</em>, Force permadeath for all new saves.</p>
 
-<p><strong>currency</strong>, _integer_, Remove this percentage of currency.</p>
+<p><strong>currency</strong>, <em>integer</em>, Remove this percentage of currency.</p>
 
-<p><strong>xp_total</strong>, _integer_, Remove this percentage of total XP.</p>
+<p><strong>xp_total</strong>, <em>integer</em>, Remove this percentage of total XP.</p>
 
-<p><strong>xp_current_level</strong>, _integer_, Remove this percentage of the XP gained since the last level.</p>
+<p><strong>xp_current_level</strong>, <em>integer</em>, Remove this percentage of the XP gained since the last level.</p>
 
-<p><strong>random_item</strong>, _integer_, Removes a random item from the player's inventory.</p>
+<p><strong>random_item</strong>, <em>integer</em>, Removes a random item from the player's inventory.</p>
 
 <hr />
 
@@ -1546,13 +1546,13 @@ body {
 
 <p>Description of engine/tooltips.txt</p>
 
-<p><strong>tooltip_offset</strong>, _integer_, Offset in pixels from the origin point (usually mouse cursor).</p>
+<p><strong>tooltip_offset</strong>, <em>integer</em>, Offset in pixels from the origin point (usually mouse cursor).</p>
 
-<p><strong>tooltip_width</strong>, _integer_, Maximum width of tooltip in pixels.</p>
+<p><strong>tooltip_width</strong>, <em>integer</em>, Maximum width of tooltip in pixels.</p>
 
-<p><strong>tooltip_margin</strong>, _integer_, Padding between the text and the tooltip borders.</p>
+<p><strong>tooltip_margin</strong>, <em>integer</em>, Padding between the text and the tooltip borders.</p>
 
-<p><strong>npc_tooltip_margin</strong>, _integer_, Vertical offset for NPC labels.</p>
+<p><strong>npc_tooltip_margin</strong>, <em>integer</em>, Vertical offset for NPC labels.</p>
 
 <hr />
 
@@ -1560,7 +1560,7 @@ body {
 
 <p>Description of engine/loot.txt</p>
 
-<p><strong>currency_name</strong>, _string_, Define the name of currency in game</p>
+<p><strong>currency_name</strong>, <em>string</em>, Define the name of currency in game</p>
 
 <hr />
 
@@ -1568,21 +1568,21 @@ body {
 
 <p>Description of engine/stats.txt and enemies in enemies/</p>
 
-<p><strong>speed</strong>, _float_, Movement speed</p>
+<p><strong>speed</strong>, <em>float</em>, Movement speed</p>
 
-<p><strong>$STATNAME</strong>, _integer_, The starting value for this stat.</p>
+<p><strong>$STATNAME</strong>, <em>integer</em>, The starting value for this stat.</p>
 
-<p><strong>$STATNAME_per_level</strong>, _integer_, The value for this stat added per level.</p>
+<p><strong>$STATNAME_per_level</strong>, <em>integer</em>, The value for this stat added per level.</p>
 
-<p><strong>$STATNAME_per_physical</strong>, _integer_, The value for this stat added per Physical.</p>
+<p><strong>$STATNAME_per_physical</strong>, <em>integer</em>, The value for this stat added per Physical.</p>
 
-<p><strong>$STATNAME_per_mental</strong>, _integer_, The value for this stat added per Mental.</p>
+<p><strong>$STATNAME_per_mental</strong>, <em>integer</em>, The value for this stat added per Mental.</p>
 
-<p><strong>$STATNAME_per_offense</strong>, _integer_, The value for this stat added per Offense.</p>
+<p><strong>$STATNAME_per_offense</strong>, <em>integer</em>, The value for this stat added per Offense.</p>
 
-<p><strong>$STATNAME_per_defense</strong>, _integer_, The value for this stat added per Defense.</p>
+<p><strong>$STATNAME_per_defense</strong>, <em>integer</em>, The value for this stat added per Defense.</p>
 
-<p><strong>vulnerable_$ELEMENT</strong>, _integer_, Percentage weakness to this element.</p>
+<p><strong>vulnerable_$ELEMENT</strong>, <em>integer</em>, Percentage weakness to this element.</p>
 
 <hr />
 
@@ -1590,19 +1590,19 @@ body {
 
 <p>Description of heroes in engine/avatar/ and enemies in enemies/</p>
 
-<p><strong>sfx_phys</strong>, _string_, Filename of sound effect for physical attack.</p>
+<p><strong>sfx_phys</strong>, <em>string</em>, Filename of sound effect for physical attack.</p>
 
-<p><strong>sfx_ment</strong>, _string_, Filename of sound effect for mental attack.</p>
+<p><strong>sfx_ment</strong>, <em>string</em>, Filename of sound effect for mental attack.</p>
 
-<p><strong>sfx_hit</strong>, _string_, Filename of sound effect for being hit.</p>
+<p><strong>sfx_hit</strong>, <em>string</em>, Filename of sound effect for being hit.</p>
 
-<p><strong>sfx_die</strong>, _string_, Filename of sound effect for dying.</p>
+<p><strong>sfx_die</strong>, <em>string</em>, Filename of sound effect for dying.</p>
 
-<p><strong>sfx_critdie</strong>, _string_, Filename of sound effect for dying to a critical hit.</p>
+<p><strong>sfx_critdie</strong>, <em>string</em>, Filename of sound effect for dying to a critical hit.</p>
 
-<p><strong>sfx_block</strong>, _string_, Filename of sound effect for blocking an incoming hit.</p>
+<p><strong>sfx_block</strong>, <em>string</em>, Filename of sound effect for blocking an incoming hit.</p>
 
-<p><strong>sfx_levelup</strong>, _string_, Filename of sound effect for leveling up.</p>
+<p><strong>sfx_levelup</strong>, <em>string</em>, Filename of sound effect for leveling up.</p>
 
 <hr />
 
@@ -1610,59 +1610,59 @@ body {
 
 <p>Description of enemies in enemies/</p>
 
-<p><strong>name</strong>, _string_, Name</p>
+<p><strong>name</strong>, <em>string</em>, Name</p>
 
-<p><strong>humanoid</strong>, _boolean_, This creature gives human traits when transformed into, such as the ability to talk with NPCs.</p>
+<p><strong>humanoid</strong>, <em>boolean</em>, This creature gives human traits when transformed into, such as the ability to talk with NPCs.</p>
 
-<p><strong>level</strong>, _integer_, Level</p>
+<p><strong>level</strong>, <em>integer</em>, Level</p>
 
-<p><strong>xp</strong>, _integer_, XP awarded upon death.</p>
+<p><strong>xp</strong>, <em>integer</em>, XP awarded upon death.</p>
 
-<p><strong>loot</strong>, _[currency:item (integer)], chance (integer), min (integer), max (integer)_, Possible loot that can be dropped on death.</p>
+<p><strong>loot</strong>, <em>[currency:item (integer)], chance (integer), min (integer), max (integer)</em>, Possible loot that can be dropped on death.</p>
 
-<p><strong>loot_count</strong>, _min (integer), max (integer)_, Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.</p>
+<p><strong>loot_count</strong>, <em>min (integer), max (integer)</em>, Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.</p>
 
-<p><strong>defeat_status</strong>, _string_, Campaign status to set upon death.</p>
+<p><strong>defeat_status</strong>, <em>string</em>, Campaign status to set upon death.</p>
 
-<p><strong>convert_status</strong>, _string_, Campaign status to set upon being converted to a player ally.</p>
+<p><strong>convert_status</strong>, <em>string</em>, Campaign status to set upon being converted to a player ally.</p>
 
-<p><strong>first_defeat_loot</strong>, _integer_, Drops this item upon first death.</p>
+<p><strong>first_defeat_loot</strong>, <em>integer</em>, Drops this item upon first death.</p>
 
-<p><strong>quest_loot</strong>, _[requires status (string), requires not status (string), item (integer)_, Drops this item when campaign status is met.</p>
+<p><strong>quest_loot</strong>, <em>[requires status (string), requires not status (string), item (integer)</em>, Drops this item when campaign status is met.</p>
 
-<p><strong>cooldown</strong>, _integer_, Cooldown between attacks in 'ms' or 's'.</p>
+<p><strong>cooldown</strong>, <em>integer</em>, Cooldown between attacks in 'ms' or 's'.</p>
 
-<p><strong>flying</strong>, _boolean_, Creature can move over gaps/water.</p>
+<p><strong>flying</strong>, <em>boolean</em>, Creature can move over gaps/water.</p>
 
-<p><strong>intangible</strong>, _boolean_, Creature can move through walls.</p>
+<p><strong>intangible</strong>, <em>boolean</em>, Creature can move through walls.</p>
 
-<p><strong>facing</strong>, _boolean_, Creature can turn to face their target.</p>
+<p><strong>facing</strong>, <em>boolean</em>, Creature can turn to face their target.</p>
 
-<p><strong>waypoint_pause</strong>, _duration_, Duration to wait at each waypoint in 'ms' or 's'.</p>
+<p><strong>waypoint_pause</strong>, <em>duration</em>, Duration to wait at each waypoint in 'ms' or 's'.</p>
 
-<p><strong>turn_delay</strong>, _duration_, Duration it takes for this creature to turn and face their target in 'ms' or 's'.</p>
+<p><strong>turn_delay</strong>, <em>duration</em>, Duration it takes for this creature to turn and face their target in 'ms' or 's'.</p>
 
-<p><strong>chance_pursue</strong>, _integer_, Percentage change that the creature will chase their target.</p>
+<p><strong>chance_pursue</strong>, <em>integer</em>, Percentage change that the creature will chase their target.</p>
 
-<p><strong>chance_flee</strong>, _integer_, Percentage chance that the creature will run away from their target.</p>
+<p><strong>chance_flee</strong>, <em>integer</em>, Percentage chance that the creature will run away from their target.</p>
 
-<p><strong>cooldown_hit</strong>, _duration_, Duration of cooldown after being hit in 'ms' or 's'.</p>
+<p><strong>cooldown_hit</strong>, <em>duration</em>, Duration of cooldown after being hit in 'ms' or 's'.</p>
 
-<p><strong>power</strong>, _type (string), power id (integer), chance (integer)_, A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, on_hit, on_death, on_half_dead, on_join_combat, on_debuff</p>
+<p><strong>power</strong>, <em>type (string), power id (integer), chance (integer)</em>, A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, on_hit, on_death, on_half_dead, on_join_combat, on_debuff</p>
 
-<p><strong>passive_powers</strong>, _power (integer), ..._, A list of passive powers this creature has.</p>
+<p><strong>passive_powers</strong>, <em>power (integer), ...</em>, A list of passive powers this creature has.</p>
 
-<p><strong>mele_range</strong>, _float_, Minimum distance from target required to use melee powers.</p>
+<p><strong>melee_range</strong>, <em>float</em>, Minimum distance from target required to use melee powers.</p>
 
-<p><strong>threat_range</strong>, _float_, Radius of the area this creature will be able to start chasing the hero.</p>
+<p><strong>threat_range</strong>, <em>float</em>, Radius of the area this creature will be able to start chasing the hero.</p>
 
-<p><strong>combat_style</strong>, _[default:aggressive:passive]_, How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat.</p>
+<p><strong>combat_style</strong>, <em>[default:aggressive:passive]</em>, How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat.</p>
 
-<p><strong>animations</strong>, _string_, Filename of an animation definition.</p>
+<p><strong>animations</strong>, <em>string</em>, Filename of an animation definition.</p>
 
-<p><strong>suppres_hp</strong>, _boolean_, Hides the enemy HP bar for this creature.</p>
+<p><strong>suppress_hp</strong>, <em>boolean</em>, Hides the enemy HP bar for this creature.</p>
 
-<p><strong>categories</strong>, _category (string), ..._, Categories that this enemy belongs to.</p>
+<p><strong>categories</strong>, <em>category (string), ...</em>, Categories that this enemy belongs to.</p>
 
 <hr />
 
@@ -1670,13 +1670,13 @@ body {
 
 <p>Description of engine/stats.txt</p>
 
-<p><strong>max_points_per_stat</strong>, _integer_, Maximum points for each primary stat.</p>
+<p><strong>max_points_per_stat</strong>, <em>integer</em>, Maximum points for each primary stat.</p>
 
-<p><strong>sfx_step</strong>, _string_, An id for a set of step sound effects. See items/step_sounds.txt.</p>
+<p><strong>sfx_step</strong>, <em>string</em>, An id for a set of step sound effects. See items/step_sounds.txt.</p>
 
-<p><strong>stat_points_per_level</strong>, _integer_, The amount of stat points awarded each level.</p>
+<p><strong>stat_points_per_level</strong>, <em>integer</em>, The amount of stat points awarded each level.</p>
 
-<p><strong>power_points_per_level</strong>, _integer_, The amount of power points awarded each level.</p>
+<p><strong>power_points_per_level</strong>, <em>integer</em>, The amount of power points awarded each level.</p>
 
 <hr />
 
@@ -1684,7 +1684,7 @@ body {
 
 <p>Description of engine/xp_table.txt</p>
 
-<p><strong>$LEVEL</strong>, _integer_, The amount of XP required for this level.</p>
+<p><strong>$LEVEL</strong>, <em>integer</em>, The amount of XP required for this level.</p>
 
 <hr />
 
@@ -1704,9 +1704,9 @@ body {
 
 <p><strong>avoidance</strong>, Avoidance %. Higher values means more likely to not get hit.</p>
 
-<p><strong>dmg_mele_min</strong>, Minimum melee damage</p>
+<p><strong>dmg_melee_min</strong>, Minimum melee damage</p>
 
-<p><strong>dmg_mele_max</strong>, Maximum melee damage</p>
+<p><strong>dmg_melee_max</strong>, Maximum melee damage</p>
 
 <p><strong>dmg_ranged_min</strong>, Minimum ranged damage</p>
 
@@ -1746,13 +1746,13 @@ body {
 
 <p>Description of tilesets in tilesets/</p>
 
-<p><strong>img</strong>, _string_, Filename of a tile sheet image.</p>
+<p><strong>img</strong>, <em>string</em>, Filename of a tile sheet image.</p>
 
-<p><strong>tile</strong>, _index (integer), x (integer), y (integer), w (integer), h (integer), x offset (integer), y offset (integer)_, A single tile definition.</p>
+<p><strong>tile</strong>, <em>index (integer), x (integer), y (integer), w (integer), h (integer), x offset (integer), y offset (integer)</em>, A single tile definition.</p>
 
-<p><strong>transparency</strong>, _r (integer), g (integer), b (integer)_, An RGB color to key out and treat as transparent.</p>
+<p><strong>transparency</strong>, <em>r (integer), g (integer), b (integer)</em>, An RGB color to key out and treat as transparent.</p>
 
-<p><strong>animation</strong>, _tile index (integer), x (integer), y (integer), duration (duration), ..._, An animation for a tile. Durations are in 'ms' or 's'.</p>
+<p><strong>animation</strong>, <em>tile index (integer), x (integer), y (integer), duration (duration), ...</em>, An animation for a tile. Durations are in 'ms' or 's'.</p>
 
 </div>
 
