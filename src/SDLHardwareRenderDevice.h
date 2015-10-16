@@ -56,9 +56,6 @@ public:
 
 	SDL_Renderer *renderer;
 	SDL_Texture *surface;
-
-private:
-	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 };
 
 class SDLHardwareRenderDevice : public RenderDevice {
@@ -79,7 +76,6 @@ public:
 	void blankScreen();
 	void commitFrame();
 	void destroyContext();
-	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void windowResize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);

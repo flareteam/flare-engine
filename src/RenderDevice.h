@@ -123,7 +123,6 @@ public:
 private:
 	Image(RenderDevice *device);
 	virtual ~Image();
-	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
 	friend class SDLSoftwareImage;
 	friend class SDLHardwareImage;
 
@@ -220,8 +219,6 @@ protected:
 	Rect m_dest;
 
 private:
-	virtual Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
-
 	typedef std::map<std::string, Image *> IMAGE_CACHE_CONTAINER;
 	typedef IMAGE_CACHE_CONTAINER::iterator IMAGE_CACHE_CONTAINER_ITER;
 

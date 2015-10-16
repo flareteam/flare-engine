@@ -74,23 +74,6 @@ void SDLHardwareImage::drawPixel(int x, int y, const Color& color) {
 	SDL_SetRenderTarget(renderer, NULL);
 }
 
-Uint32 SDLHardwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	if (!surface) return 0;
-
-	Uint32 u_format;
-	SDL_QueryTexture(surface, &u_format, NULL, NULL, NULL);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (format) {
-		Uint32 ret = SDL_MapRGBA(format, r, g, b, a);
-		SDL_FreeFormat(format);
-		return ret;
-	}
-	else {
-		return 0;
-	}
-}
-
 Image* SDLHardwareImage::resize(int width, int height) {
 	if(!surface || width <= 0 || height <= 0)
 		return NULL;
@@ -429,20 +412,6 @@ void SDLHardwareRenderDevice::destroyContext() {
 	}
 
 	return;
-}
-
-Uint32 SDLHardwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	Uint32 u_format = SDL_GetWindowPixelFormat(window);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (format) {
-		Uint32 ret = SDL_MapRGBA(format, r, g, b, a);
-		SDL_FreeFormat(format);
-		return ret;
-	}
-	else {
-		return 0;
-	}
 }
 
 /**
