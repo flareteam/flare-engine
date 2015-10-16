@@ -140,7 +140,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	// style the tooltip background
 	// currently this is plain black
-	graphics->fillWithColor(graphics->MapRGB(0,0,0));
+	graphics->fillWithColor(Color(0,0,0,255));
 
 	int cursor_y = TOOLTIP_MARGIN;
 

@@ -32,9 +32,9 @@ class WidgetLabel;
 
 class MenuMiniMap : public Menu {
 private:
-	Uint32 color_wall;
-	Uint32 color_obst;
-	Uint32 color_hero;
+	Color color_wall;
+	Color color_obst;
+	Color color_hero;
 
 	Sprite *map_surface;
 	Point map_size;

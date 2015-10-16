@@ -47,10 +47,10 @@ int SDLSoftwareImage::getHeight() const {
 	return surface ? surface->h : 0;
 }
 
-void SDLSoftwareImage::fillWithColor(Uint32 color) {
+void SDLSoftwareImage::fillWithColor(const Color& color) {
 	if (!surface) return;
 
-	SDL_FillRect(surface, NULL, color);
+	SDL_FillRect(surface, NULL, MapRGBA(color.r, color.g, color.b, color.a));
 }
 
 /*
@@ -60,8 +60,10 @@ void SDLSoftwareImage::fillWithColor(Uint32 color) {
  * Source: SDL Documentation
  * http://www.libsdl.org/docs/html/guidevideo.html
  */
-void SDLSoftwareImage::drawPixel(int x, int y, Uint32 pixel) {
+void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
+
+	Uint32 pixel = MapRGBA(color.r, color.g, color.b, color.a);
 
 	int bpp = surface->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to set */
@@ -94,11 +96,6 @@ void SDLSoftwareImage::drawPixel(int x, int y, Uint32 pixel) {
 	}
 }
 
-Uint32 SDLSoftwareImage::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
-	if (!surface) return 0;
-	return SDL_MapRGB(surface->format, r, g, b);
-}
-
 Uint32 SDLSoftwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	if (!surface) return 0;
 	return SDL_MapRGBA(surface->format, r, g, b, a);
@@ -129,7 +126,7 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 
 			for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
 				for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
-					Uint32 spixel = readPixel(x, y);
+					Color spixel = readPixel(x, y);
 					for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
 						for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
 							Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
@@ -151,8 +148,8 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 	return NULL;
 }
 
-Uint32 SDLSoftwareImage::readPixel(int x, int y) {
-	if (!surface) return 0;
+Color SDLSoftwareImage::readPixel(int x, int y) {
+	if (!surface) return Color();
 
 	SDL_LockSurface(surface);
 	int bpp = surface->format->BytesPerPixel;
@@ -181,11 +178,15 @@ Uint32 SDLSoftwareImage::readPixel(int x, int y) {
 
 		default:
 			SDL_UnlockSurface(surface);
-			return 0;
+			return Color();
 	}
 
+	Uint8 r,g,b,a;
+	SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
+
 	SDL_UnlockSurface(surface);
-	return pixel;
+
+	return Color(r,g,b,a);
 }
 
 SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
@@ -392,11 +393,9 @@ Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font_style, const s
 	return NULL;
 }
 
-void SDLSoftwareRenderDevice::drawPixel(
-	int x,
-	int y,
-	Uint32 color
-) {
+void SDLSoftwareRenderDevice::drawPixel(int x, int y, const Color& color) {
+	Uint32 pixel = MapRGBA(color.r, color.g, color.b, color.a);
+
 	int bpp = screen->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to set */
 	Uint8 *p = (Uint8 *)screen->pixels + y * screen->pitch + x * bpp;
@@ -406,27 +405,27 @@ void SDLSoftwareRenderDevice::drawPixel(
 	}
 	switch(bpp) {
 		case 1:
-			*p = static_cast<Uint8>(color);
+			*p = static_cast<Uint8>(pixel);
 			break;
 
 		case 2:
-			*(Uint16 *)p = static_cast<Uint16>(color);
+			*(Uint16 *)p = static_cast<Uint16>(pixel);
 			break;
 
 		case 3:
 #if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-			p[0] = (color >> 16) & 0xff;
-			p[1] = (color >> 8) & 0xff;
-			p[2] = color & 0xff;
+			p[0] = (pixel >> 16) & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = pixel & 0xff;
 #else
-			p[0] = color & 0xff;
-			p[1] = (color >> 8) & 0xff;
-			p[2] = (color >> 16) & 0xff;
+			p[0] = pixel & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = (pixel >> 16) & 0xff;
 #endif
 			break;
 
 		case 4:
-			*(Uint32 *)p = color;
+			*(Uint32 *)p = pixel;
 			break;
 	}
 	if (SDL_MUSTLOCK(screen)) {
@@ -436,13 +435,7 @@ void SDLSoftwareRenderDevice::drawPixel(
 	return;
 }
 
-void SDLSoftwareRenderDevice::drawLine(
-	int x0,
-	int y0,
-	int x1,
-	int y1,
-	Uint32 color
-) {
+void SDLSoftwareRenderDevice::drawLine(int x0, int y0, int x1, int y1, const Color& color) {
 	const int dx = abs(x1-x0);
 	const int dy = abs(y1-y0);
 	const int sx = x0 < x1 ? 1 : -1;
@@ -468,11 +461,7 @@ void SDLSoftwareRenderDevice::drawLine(
 	while(x0 != x1 || y0 != y1);
 }
 
-void SDLSoftwareRenderDevice::drawRectangle(
-	const Point& p0,
-	const Point& p1,
-	Uint32 color
-) {
+void SDLSoftwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, const Color& color) {
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_LockSurface(screen);
 	}
@@ -531,10 +520,6 @@ void SDLSoftwareRenderDevice::destroyContext() {
 	}
 
 	return;
-}
-
-Uint32 SDLSoftwareRenderDevice::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
-	return SDL_MapRGB(screen->format, r, g, b);
 }
 
 Uint32 SDLSoftwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {

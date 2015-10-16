@@ -196,8 +196,7 @@ void MenuNPCActions::update() {
 		}
 		Image *graphics = render_device->createImage(w,h);
 		if (graphics) {
-			Uint32 bg = graphics->MapRGBA(background_color.r, background_color.g, background_color.b, background_color.a);
-			graphics->fillWithColor(bg);
+			graphics->fillWithColor(background_color);
 			action_menu = graphics->createSprite();
 		}
 	}

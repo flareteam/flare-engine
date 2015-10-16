@@ -353,13 +353,12 @@ void WidgetListBox::render() {
 	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
-		Uint32 color;
 
 		topLeft.x = rows[0].x + local_frame.x - local_offset.x;
 		topLeft.y = rows[0].y + local_frame.y - local_offset.y;
 		bottomRight.x = rows[rows.size() - 1].x + rows[0].w + local_frame.x - local_offset.x;
 		bottomRight.y = rows[rows.size() - 1].y + rows[0].h + local_frame.y - local_offset.y;
-		color = render_device->MapRGB(255,248,220);
+		Color color = Color(255,248,220,255);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;

@@ -51,22 +51,12 @@ int SDLHardwareImage::getHeight() const {
 	return (surface ? h : 0);
 }
 
-void SDLHardwareImage::fillWithColor(Uint32 color) {
+void SDLHardwareImage::fillWithColor(const Color& color) {
 	if (!surface) return;
-
-	Uint32 u_format;
-	SDL_QueryTexture(surface, &u_format, NULL, NULL, NULL);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (!format) return;
-
-	SDL_Color rgba;
-	SDL_GetRGBA(color, format, &rgba.r, &rgba.g, &rgba.b, &rgba.a);
-	SDL_FreeFormat(format);
 
 	SDL_SetRenderTarget(renderer, surface);
 	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, rgba.r, rgba.g , rgba.b, rgba.a);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g , color.b, color.a);
 	SDL_RenderClear(renderer);
 	SDL_SetRenderTarget(renderer, NULL);
 }
@@ -74,41 +64,14 @@ void SDLHardwareImage::fillWithColor(Uint32 color) {
 /*
  * Set the pixel at (x, y) to the given value
  */
-void SDLHardwareImage::drawPixel(int x, int y, Uint32 pixel) {
+void SDLHardwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
-
-	Uint32 u_format;
-	SDL_QueryTexture(surface, &u_format, NULL, NULL, NULL);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (!format) return;
-
-	SDL_Color rgba;
-	SDL_GetRGBA(pixel, format, &rgba.r, &rgba.g, &rgba.b, &rgba.a);
-	SDL_FreeFormat(format);
 
 	SDL_SetRenderTarget(renderer, surface);
 	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, rgba.r, rgba.g, rgba.b, rgba.a);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawPoint(renderer, x, y);
 	SDL_SetRenderTarget(renderer, NULL);
-}
-
-Uint32 SDLHardwareImage::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
-	if (!surface) return 0;
-
-	Uint32 u_format;
-	SDL_QueryTexture(surface, &u_format, NULL, NULL, NULL);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (format) {
-		Uint32 ret = SDL_MapRGB(format, r, g, b);
-		SDL_FreeFormat(format);
-		return ret;
-	}
-	else {
-		return 0;
-	}
 }
 
 Uint32 SDLHardwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
@@ -409,49 +372,17 @@ Image * SDLHardwareRenderDevice::renderTextToImage(FontStyle* font_style, const 
 	return NULL;
 }
 
-void SDLHardwareRenderDevice::drawPixel(
-	int x,
-	int y,
-	Uint32 color
-) {
-	Uint32 u_format = SDL_GetWindowPixelFormat(window);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (!format) return;
-
-	SDL_Color rgba;
-	SDL_GetRGBA(color, format, &rgba.r, &rgba.g, &rgba.b, &rgba.a);
-	SDL_FreeFormat(format);
-
-	SDL_SetRenderDrawColor(renderer, rgba.r, rgba.g, rgba.b, rgba.a);
+void SDLHardwareRenderDevice::drawPixel(int x, int y, const Color& color) {
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawPoint(renderer, x, y);
 }
 
-void SDLHardwareRenderDevice::drawLine(
-	int x0,
-	int y0,
-	int x1,
-	int y1,
-	Uint32 color
-) {
-	Uint32 u_format = SDL_GetWindowPixelFormat(window);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (!format) return;
-
-	SDL_Color rgba;
-	SDL_GetRGBA(color, format, &rgba.r, &rgba.g, &rgba.b, &rgba.a);
-	SDL_FreeFormat(format);
-
-	SDL_SetRenderDrawColor(renderer, rgba.r, rgba.g, rgba.b, rgba.a);
+void SDLHardwareRenderDevice::drawLine(int x0, int y0, int x1, int y1, const Color& color) {
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawLine(renderer, x0, y0, x1, y1);
 }
 
-void SDLHardwareRenderDevice::drawRectangle(
-	const Point& p0,
-	const Point& p1,
-	Uint32 color
-) {
+void SDLHardwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, const Color& color) {
 	drawLine(p0.x, p0.y, p1.x, p0.y, color);
 	drawLine(p1.x, p0.y, p1.x, p1.y, color);
 	drawLine(p0.x, p0.y, p0.x, p1.y, color);
@@ -498,20 +429,6 @@ void SDLHardwareRenderDevice::destroyContext() {
 	}
 
 	return;
-}
-
-Uint32 SDLHardwareRenderDevice::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
-	Uint32 u_format = SDL_GetWindowPixelFormat(window);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (format) {
-		Uint32 ret = SDL_MapRGB(format, r, g, b);
-		SDL_FreeFormat(format);
-		return ret;
-	}
-	else {
-		return 0;
-	}
 }
 
 Uint32 SDLHardwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {

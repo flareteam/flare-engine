@@ -50,14 +50,15 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 
-	void fillWithColor(Uint32 color);
-	void drawPixel(int x, int y, Uint32 color);
-	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
-	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	void fillWithColor(const Color& color);
+	void drawPixel(int x, int y, const Color& color);
 	Image* resize(int width, int height);
 
 	SDL_Renderer *renderer;
 	SDL_Texture *surface;
+
+private:
+	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 };
 
 class SDLHardwareRenderDevice : public RenderDevice {
@@ -73,12 +74,11 @@ public:
 
 	int renderText(FontStyle *font_style, const std::string& text, Color color, Rect& dest);
 	Image *renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended = true);
-	void drawPixel(int x, int y, Uint32 color);
-	void drawRectangle(const Point& p0, const Point& p1, Uint32 color);
+	void drawPixel(int x, int y, const Color& color);
+	void drawRectangle(const Point& p0, const Point& p1, const Color& color);
 	void blankScreen();
 	void commitFrame();
 	void destroyContext();
-	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void windowResize();
 	Image *createImage(int width, int height);
@@ -90,7 +90,7 @@ public:
 					 std::string errormessage = "Couldn't load image",
 					 bool IfNotFoundExit = false);
 private:
-	void drawLine(int x0, int y0, int x1, int y1, Uint32 color);
+	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 
 	SDL_Window *window;
 	SDL_Renderer *renderer;
