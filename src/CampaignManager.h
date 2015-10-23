@@ -51,6 +51,7 @@ public:
 	void rewardXP(int amount, bool show_message);
 	void restoreHPMP(std::string s);
 	void addMsg(const std::string& msg);
+	bool checkAllRequirements(const Event_Component& ec);
 
 	std::vector<std::string> status;
 	std::string log_msg;

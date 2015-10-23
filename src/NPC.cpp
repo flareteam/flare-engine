@@ -261,70 +261,16 @@ void NPC::getDialogNodes(std::vector<int> &result) {
 		bool is_available = true;
 		bool is_grouped = false;
 		for (size_t j=0; j<dialog[i-1].size(); j++) {
-
-			if (dialog[i-1][j].type == EC_REQUIRES_STATUS) {
-				if (camp->checkStatus(dialog[i-1][j].s))
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_STATUS) {
-				if (!camp->checkStatus(dialog[i-1][j].s))
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_CURRENCY) {
-				if (camp->checkCurrency(dialog[i-1][j].x))
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_CURRENCY) {
-				if (!camp->checkCurrency(dialog[i-1][j].x))
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_ITEM) {
-				if (camp->checkItem(dialog[i-1][j].x))
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_ITEM) {
-				if (!camp->checkItem(dialog[i-1][j].x))
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_LEVEL) {
-				if (camp->hero->level >= dialog[i-1][j].x)
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_LEVEL) {
-				if (camp->hero->level < dialog[i-1][j].x)
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_CLASS) {
-				if (camp->hero->character_class == dialog[i-1][j].s)
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_REQUIRES_NOT_CLASS) {
-				if (camp->hero->character_class != dialog[i-1][j].s)
-					continue;
-				is_available = false;
-				break;
-			}
-			else if (dialog[i-1][j].type == EC_NPC_DIALOG_GROUP) {
+			if (dialog[i-1][j].type == EC_NPC_DIALOG_GROUP) {
 				is_grouped = true;
 				group = dialog[i-1][j].s;
+			}
+			else {
+				if (camp->checkAllRequirements(dialog[i-1][j]))
+					continue;
+
+				is_available = false;
+				break;
 			}
 		}
 

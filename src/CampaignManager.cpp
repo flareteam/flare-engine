@@ -215,5 +215,56 @@ void CampaignManager::addMsg(const std::string& new_msg) {
 	log_msg += new_msg;
 }
 
+bool CampaignManager::checkAllRequirements(const Event_Component& ec) {
+	if (ec.type == EC_REQUIRES_STATUS) {
+		if (camp->checkStatus(ec.s))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_STATUS) {
+		if (!camp->checkStatus(ec.s))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_CURRENCY) {
+		if (camp->checkCurrency(ec.x))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_CURRENCY) {
+		if (!camp->checkCurrency(ec.x))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_ITEM) {
+		if (camp->checkItem(ec.x))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_ITEM) {
+		if (!camp->checkItem(ec.x))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_LEVEL) {
+		if (camp->hero->level >= ec.x)
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_LEVEL) {
+		if (camp->hero->level < ec.x)
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_CLASS) {
+		if (camp->hero->character_class == ec.s)
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_CLASS) {
+		if (camp->hero->character_class != ec.s)
+			return true;
+	}
+	else {
+		// Event component is not a requirement check
+		// treat it as if the "requirement" was met
+		return true;
+	}
+
+	// requirement check failed
+	return false;
+}
+
 CampaignManager::~CampaignManager() {
 }

@@ -749,55 +749,9 @@ bool EventManager::executeEvent(Event &ev) {
 
 
 bool EventManager::isActive(const Event &e) {
-	for (unsigned i=0; i < e.components.size(); i++) {
-		if (e.components[i].type == EC_REQUIRES_NOT_STATUS) {
-			if (camp->checkStatus(e.components[i].s)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_STATUS) {
-			if (!camp->checkStatus(e.components[i].s)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_CURRENCY) {
-			if (!camp->checkCurrency(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_NOT_CURRENCY) {
-			if (camp->checkCurrency(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_ITEM) {
-			if (!camp->checkItem(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_NOT_ITEM) {
-			if (camp->checkItem(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_LEVEL) {
-			if (camp->hero->level < e.components[i].x) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_NOT_LEVEL) {
-			if (camp->hero->level >= e.components[i].x) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_CLASS) {
-			if (camp->hero->character_class != e.components[i].s)
-				return false;
-		}
-		else if (e.components[i].type == EC_REQUIRES_NOT_CLASS) {
-			if (camp->hero->character_class == e.components[i].s)
-				return false;
-		}
+	for (size_t i=0; i < e.components.size(); i++) {
+		if (!camp->checkAllRequirements(e.components[i]))
+			return false;
 	}
 	return true;
 }
