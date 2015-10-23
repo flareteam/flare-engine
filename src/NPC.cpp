@@ -102,10 +102,19 @@ void NPC::load(const std::string& npc_id) {
 					e.s = infile.val;
 				}
 				else {
-					EventManager::loadEventComponent(infile, NULL, &e);
+					Event ev;
+					EventManager::loadEventComponent(infile, &ev, NULL);
+
+					for (size_t i=0; i<ev.components.size(); ++i) {
+						if (ev.components[i].type != EC_NONE) {
+							dialog.back().push_back(ev.components[i]);
+						}
+					}
 				}
 
-				dialog.back().push_back(e);
+				if (e.type != EC_NONE) {
+					dialog.back().push_back(e);
+				}
 			}
 			else {
 				filename = npc_id;
