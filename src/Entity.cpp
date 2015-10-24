@@ -216,6 +216,14 @@ bool Entity::takeHit(Hazard &h) {
 	if(stats.cur_state == AVATAR_DEAD && stats.hero)
 		return false;
 
+	// some attacks will always miss enemies of a certain movement type
+	if (stats.movement_type == MOVEMENT_NORMAL && !h.target_movement_normal)
+		return false;
+	else if (stats.movement_type == MOVEMENT_FLYING && !h.target_movement_flying)
+		return false;
+	else if (stats.movement_type == MOVEMENT_INTANGIBLE && !h.target_movement_intangible)
+		return false;
+
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally) {
 		stats.join_combat = true;
@@ -269,16 +277,7 @@ bool Entity::takeHit(Hazard &h) {
 		return false;
 	}
 
-	// some attacks will always miss enemies of a certain movement type
-	bool can_hit = true;
-	if (stats.movement_type == MOVEMENT_NORMAL && !h.target_movement_normal)
-		can_hit = false;
-	else if (stats.movement_type == MOVEMENT_FLYING && !h.target_movement_flying)
-		can_hit = false;
-	else if (stats.movement_type == MOVEMENT_INTANGIBLE && !h.target_movement_intangible)
-		can_hit = false;
-
-	if (percentChance(true_avoidance) || can_hit == false) {
+	if (percentChance(true_avoidance)) {
 		combat_text->addMessage(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
 		return false;
 	}
