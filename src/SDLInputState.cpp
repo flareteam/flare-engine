@@ -549,7 +549,7 @@ std::string SDLInputState::getBindingString(int key, int bindings_list) {
 	else if (bindings_list == INPUT_BINDING_ALT) {
 		if (inpt->binding_alt[key] < 0)
 			return none;
-		else if (inpt->binding[key] < 8)
+		else if (inpt->binding_alt[key] < 8)
 			return mouse_button[inpt->binding_alt[key] - 1];
 		else
 			return getKeyName(inpt->binding_alt[key]);
