@@ -608,7 +608,6 @@ void MenuManager::logic() {
 				snd->play(pow->sfx_open);
 			}
 		}
-		act->requires_attention[MENU_POWERS] = pow->getUnspent() > 0;
 
 		// character menu toggleggle
 		if ((inpt->pressing[CHARACTER] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_character) {
@@ -626,7 +625,6 @@ void MenuManager::logic() {
 				inpt->resetScroll();
 			}
 		}
-		act->requires_attention[MENU_CHARACTER] = chr->getUnspent() > 0;
 
 		// log menu toggle
 		if ((inpt->pressing[LOG] && !key_lock && !mouse_dragging && !keyboard_dragging) || clicking_log) {

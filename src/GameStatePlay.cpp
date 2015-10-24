@@ -625,21 +625,17 @@ void GameStatePlay::checkUsedItems() {
  * Marks the menu if it needs attention.
  */
 void GameStatePlay::checkNotifications() {
-	if (pc->newLevelNotification) {
+	if (pc->newLevelNotification || menu->chr->getUnspent() > 0) {
 		pc->newLevelNotification = false;
-		menu->act->requires_attention[MENU_CHARACTER] = true;
+		menu->act->requires_attention[MENU_CHARACTER] = !menu->chr->visible;
 	}
 	if (menu->pow->newPowerNotification) {
 		menu->pow->newPowerNotification = false;
-		menu->act->requires_attention[MENU_POWERS] = true;
-	}
-	if (quests->resetQuestNotification) { //remove if no quests
-		quests->resetQuestNotification = false;
-		menu->act->requires_attention[MENU_LOG] = false;
+		menu->act->requires_attention[MENU_POWERS] = !menu->pow->visible;
 	}
 	if (quests->newQuestNotification) {
 		quests->newQuestNotification = false;
-		menu->act->requires_attention[MENU_LOG] = true;
+		menu->act->requires_attention[MENU_LOG] = !menu->questlog->visible;
 	}
 
 	// if the player is transformed into a creature, don't notifications for the powers menu

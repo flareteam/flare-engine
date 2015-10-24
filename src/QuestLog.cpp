@@ -37,7 +37,6 @@ QuestLog::QuestLog(MenuLog *_log) {
 	log = _log;
 
 	newQuestNotification = false;
-	resetQuestNotification = false;
 	loadAll();
 }
 
