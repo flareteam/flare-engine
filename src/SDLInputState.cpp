@@ -130,6 +130,7 @@ void SDLInputState::handle() {
 	InputState::handle();
 
 	SDL_Event event;
+	int bind_button = 0;
 
 	/* Check for events */
 	while (SDL_PollEvent (&event)) {
@@ -160,8 +161,9 @@ void SDLInputState::handle() {
 			case SDL_MOUSEBUTTONDOWN:
 				mouse.x = event.button.x;
 				mouse.y = event.button.y;
+				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 				for (int key=0; key<key_count; key++) {
-					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+					if (bind_button == binding[key] || bind_button == binding_alt[key]) {
 						pressing[key] = true;
 						un_press[key] = false;
 					}
@@ -170,12 +172,13 @@ void SDLInputState::handle() {
 			case SDL_MOUSEBUTTONUP:
 				mouse.x = event.button.x;
 				mouse.y = event.button.y;
+				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 				for (int key=0; key<key_count; key++) {
-					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+					if (bind_button == binding[key] || bind_button == binding_alt[key]) {
 						un_press[key] = true;
 					}
 				}
-				last_button = event.button.button;
+				last_button = bind_button;
 				break;
 			case SDL_WINDOWEVENT:
 				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
@@ -539,23 +542,35 @@ std::string SDLInputState::getBindingString(int key, int bindings_list) {
 	std::string none = msg->get("(none)");
 
 	if (bindings_list == INPUT_BINDING_DEFAULT) {
-		if (inpt->binding[key] < 0)
+		if (inpt->binding[key] == 0 || inpt->binding[key] == -1)
 			return none;
-		else if (inpt->binding[key] < 8)
-			return mouse_button[inpt->binding[key] - 1];
+		else if (inpt->binding[key] < -1) {
+			int real_button = (inpt->binding[key] + MOUSE_BIND_OFFSET) * (-1);
+
+			if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
+				return mouse_button[real_button - 1];
+			else
+				return msg->get("Mouse %d", real_button);
+		}
 		else
 			return getKeyName(inpt->binding[key]);
 	}
 	else if (bindings_list == INPUT_BINDING_ALT) {
-		if (inpt->binding_alt[key] < 0)
+		if (inpt->binding_alt[key] == 0 || inpt->binding_alt[key] == -1)
 			return none;
-		else if (inpt->binding_alt[key] < 8)
-			return mouse_button[inpt->binding_alt[key] - 1];
+		else if (inpt->binding_alt[key] < -1) {
+			int real_button = (inpt->binding_alt[key] + MOUSE_BIND_OFFSET) * (-1);
+
+			if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
+				return mouse_button[real_button - 1];
+			else
+				return msg->get("Mouse %d", real_button);
+		}
 		else
 			return getKeyName(inpt->binding_alt[key]);
 	}
 	else if (bindings_list == INPUT_BINDING_JOYSTICK) {
-		if (inpt->binding_joy[key] < 0)
+		if (inpt->binding_joy[key] == -1)
 			return none;
 		else
 			return msg->get("Button %d", inpt->binding_joy[key]);

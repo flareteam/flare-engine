@@ -84,6 +84,14 @@ void InputState::loadKeyBindings() {
 		int key1 = popFirstInt(infile.val);
 		int key2 = popFirstInt(infile.val);
 
+		// if we're loading an older keybindings file, convert greater than 0 mouse binds to negative
+		if (key1 > 0 && key1 < 8) {
+			key1 = (key1 + MOUSE_BIND_OFFSET) * (-1);
+		}
+		if (key2 > 0 && key2 < 8) {
+			key2 = (key2 + MOUSE_BIND_OFFSET) * (-1);
+		}
+
 		// if we're loading an older keybindings file, we need to unbind all joystick bindings
 		int key3 = -1;
 		std::string temp = infile.val;
@@ -143,6 +151,12 @@ void InputState::saveKeyBindings() {
 	outfile.open((PATH_CONF + FILE_KEYBINDINGS).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
+		outfile << "# Keybindings\n";
+		outfile << "# FORMAT: {ACTION}={BIND},{BIND_ALT},{BIND_JOY}\n";
+		outfile << "# A bind value of -1 means unbound\n";
+		outfile << "# For BIND and BIND_ALT, a value of 0 is also unbound\n";
+		outfile << "# For BIND and BIND_ALT, any value less than -1 is a mouse button\n";
+		outfile << "# As an example, mouse button 1 would be -3 here. Button 2 would be -4, etc.\n\n";
 
 		outfile << "cancel=" << binding[CANCEL] << "," << binding_alt[CANCEL] << "," << binding_joy[CANCEL] << "\n";
 		outfile << "accept=" << binding[ACCEPT] << "," << binding_alt[ACCEPT] << "," << binding_joy[ACCEPT] << "\n";

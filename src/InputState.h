@@ -66,6 +66,15 @@ const int ACTIONBAR_FORWARD = 28;
 const int ACTIONBAR_USE = 29;
 const int DEVELOPER_MENU = 30;
 
+// we store mouse bindings and keyboard bindings together
+// keyboard keycodes are all positive integers, so we use negative integers for mouse buttons
+// -1 is reserved for unbound keys, so we start mouse bindings at -2
+// adding MOUSE_BIND_OFFSET to a mouse bind gives us the appropriate mouse button (mouse buttons start at 1)
+const int MOUSE_BIND_OFFSET = 2;
+
+// some mouse buttons are named (e.g. "Left Mouse")
+const int MOUSE_BUTTON_NAME_COUNT = 7;
+
 /**
  * class InputState
  *
@@ -80,7 +89,7 @@ public:
 	int binding_joy[key_count];
 
 	std::string binding_name[31];
-	std::string mouse_button[7];
+	std::string mouse_button[MOUSE_BUTTON_NAME_COUNT];
 
 	InputState(void);
 	virtual ~InputState() {};

@@ -714,14 +714,18 @@ void GameStateConfigDesktop::scanKey(int button) {
 	if (input_confirm->visible && !input_confirm->isWithinButtons) {
 		// keyboard & mouse
 		if (static_cast<unsigned>(button) < key_count*2) {
-			if (inpt->last_button != -1 && inpt->last_button < 8) {
+			if (inpt->last_button != -1) {
 				if (static_cast<unsigned>(button) < key_count) inpt->binding[button] = inpt->last_button;
 				else inpt->binding_alt[button-key_count] = inpt->last_button;
 
 				inpt->pressing[button%key_count] = false;
 				inpt->lock[button%key_count] = false;
 
-				keybinds_btn[button]->label = inpt->mouse_button[inpt->last_button-1];
+				if (static_cast<unsigned>(button) < key_count)
+					keybinds_btn[button]->label = inpt->getBindingString(button%key_count, INPUT_BINDING_DEFAULT);
+				else if (static_cast<unsigned>(button) < key_count*2)
+					keybinds_btn[button]->label = inpt->getBindingString(button%key_count, INPUT_BINDING_ALT);
+
 				input_confirm->visible = false;
 				input_confirm_ticks = 0;
 				keybinds_btn[button]->refresh();
