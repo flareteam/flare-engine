@@ -519,6 +519,10 @@ void PowerManager::loadPowers() {
 			// @ATTR target_movement_intangible|bool|Power can affect intangible entities
 			powers[input_id].target_movement_intangible = toBool(infile.val);
 		}
+		else if (infile.key == "walls_block_aoe") {
+			// @ATTR walls_block_aoe|bool|When true, prevents hazard aoe from hitting targets that are behind walls/pits.
+			powers[input_id].walls_block_aoe = toBool(infile.val);
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -767,6 +771,8 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	haz->target_movement_normal = powers[power_index].target_movement_normal;
 	haz->target_movement_flying = powers[power_index].target_movement_flying;
 	haz->target_movement_intangible = powers[power_index].target_movement_intangible;
+
+	haz->walls_block_aoe = powers[power_index].walls_block_aoe;
 }
 
 /**

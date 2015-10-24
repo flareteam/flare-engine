@@ -233,6 +233,8 @@ public:
 	bool target_movement_flying;
 	bool target_movement_intangible;
 
+	bool walls_block_aoe;
+
 	// loot
 	std::vector<Event_Component> loot;
 
@@ -331,7 +333,9 @@ public:
 
 		, target_movement_normal(true)
 		, target_movement_flying(true)
-		, target_movement_intangible(true) {
+		, target_movement_intangible(true)
+
+		, walls_block_aoe(false) {
 	}
 
 };

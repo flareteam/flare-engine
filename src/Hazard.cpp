@@ -73,7 +73,8 @@ Hazard::Hazard(MapCollision *_collider)
 	, wall_power(0)
 	, target_movement_normal(true)
 	, target_movement_flying(true)
-	, target_movement_intangible(true) {
+	, target_movement_intangible(true)
+	, walls_block_aoe(false) {
 }
 
 Hazard::~Hazard() {

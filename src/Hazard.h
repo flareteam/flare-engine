@@ -123,6 +123,8 @@ public:
 	bool target_movement_flying;
 	bool target_movement_intangible;
 
+	bool walls_block_aoe;
+
 	// loot
 	std::vector<Event_Component> loot;
 };
