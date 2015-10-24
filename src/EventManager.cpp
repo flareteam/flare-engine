@@ -331,7 +331,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->x = toInt(infile.nextValue());
 	}
 	else if (infile.key == "requires_item") {
-		// @ATTR event.requires_item|integer,...|Event requires specific item
+		// @ATTR event.requires_item|integer,...|Event requires specific item (not equipped)
 		e->type = EC_REQUIRES_ITEM;
 
 		e->x = toInt(infile.nextValue());
@@ -350,7 +350,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "requires_not_item") {
-		// @ATTR event.requires_not_item|integer,...|Event requires not having a specific item
+		// @ATTR event.requires_not_item|integer,...|Event requires not having a specific item (not equipped)
 		e->type = EC_REQUIRES_NOT_ITEM;
 
 		e->x = toInt(infile.nextValue());

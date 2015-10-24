@@ -38,7 +38,6 @@ CampaignManager::CampaignManager()
 	, carried_items(NULL)
 	, currency(NULL)
 	, hero(NULL)
-	, quest_update(true)
 	, bonus_xp(0.0) {
 }
 
@@ -57,7 +56,6 @@ void CampaignManager::setAll(std::string s) {
 		token = popFirstString(str, ',');
 		if (token != "") this->setStatus(token);
 	}
-	quest_update = true;
 }
 
 /**
@@ -93,7 +91,6 @@ void CampaignManager::setStatus(std::string s) {
 	if (checkStatus(s)) return;
 
 	status.push_back(s);
-	quest_update = true;
 	hero->check_title = true;
 }
 
@@ -108,7 +105,6 @@ void CampaignManager::unsetStatus(std::string s) {
 		--it;
 		if ((*it) == s) {
 			it = status.erase(it);
-			quest_update = true;
 			return;
 		}
 		hero->check_title = true;

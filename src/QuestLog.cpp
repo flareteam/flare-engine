@@ -75,68 +75,131 @@ void QuestLog::load(const std::string& filename) {
 		if (quests.empty())
 			continue;
 
-		// TODO support requires_level, requires_item, requires_currency, requires_class?
-		Event_Component ev;
+		Event ev;
 		if (infile.key == "requires_status") {
 			// @ATTR quest.requires_status|string|Quest requires this campaign status
-			ev.type = EC_REQUIRES_STATUS;
-			ev.s = msg->get(infile.val);
+			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_status") {
 			// @ATTR quest.requires_not_status|string|Quest requires not having this campaign status.
-			ev.type = EC_REQUIRES_NOT_STATUS;
-			ev.s = msg->get(infile.val);
+			EventManager::loadEventComponent(infile, &ev, NULL);
+		}
+		else if (infile.key == "requires_level") {
+			// @ATTR quest.requires_level|integer|Quest requires hero level
+			EventManager::loadEventComponent(infile, &ev, NULL);
+		}
+		else if (infile.key == "requires_not_level") {
+			// @ATTR quest.requires_not_level|integer|Quest requires not hero level
+			EventManager::loadEventComponent(infile, &ev, NULL);
+		}
+		else if (infile.key == "requires_currency") {
+			// @ATTR quest.requires_currency|integer|Quest requires atleast this much currency
+			EventManager::loadEventComponent(infile, &ev, NULL);
+		}
+		else if (infile.key == "requires_not_currency") {
+			// @ATTR quest.requires_not_currency|integer|Quest requires no more than this much currency
+			EventManager::loadEventComponent(infile, &ev, NULL);
+		}
+		else if (infile.key == "requires_item") {
+			// @ATTR quest.requires_item|integer,...|Quest requires specific item (not equipped)
+			EventManager::loadEventComponent(infile, &ev, NULL);
+		}
+		else if (infile.key == "requires_not_item") {
+			// @ATTR quest.requires_not_item|integer,...|Quest requires not having a specific item (not equipped)
+			EventManager::loadEventComponent(infile, &ev, NULL);
+		}
+		else if (infile.key == "requires_class") {
+			// @ATTR quest.requires_class|string|Quest requires this base class
+			EventManager::loadEventComponent(infile, &ev, NULL);
+		}
+		else if (infile.key == "requires_not_class") {
+			// @ATTR quest.requires_not_class|string|Quest requires not this base class
+			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "quest_text") {
 			// @ATTR quest.quest_text|string|Text that gets displayed in the Quest log when this quest is active.
-			ev.type = EC_QUEST_TEXT;
-			ev.s = msg->get(infile.val);
+			Event_Component ec;
+			ec.type = EC_QUEST_TEXT;
+			ec.s = msg->get(infile.val);
+
+			ev.components.push_back(ec);
 		}
 		else {
 			logError("QuestLog: %s is not a valid key.", infile.key.c_str());
 		}
 
-		if (ev.type != EC_NONE)
-			quests.back().push_back(ev);
+		for (size_t i=0; i<ev.components.size(); ++i) {
+			if (ev.components[i].type != EC_NONE)
+				quests.back().push_back(ev.components[i]);
+		}
 	}
 	infile.close();
 }
 
 void QuestLog::logic() {
-	if (camp->quest_update) {
-		resetQuestNotification = true;
-		camp->quest_update = false;
-		createQuestList();
-	}
+	createQuestList();
 }
 
 /**
  * All active quests are placed in the Quest tab of the Log Menu
  */
 void QuestLog::createQuestList() {
-	log->clear(LOG_TYPE_QUESTS);
+	std::vector<size_t> temp_quest_ids;
 
-	for (unsigned int i=0; i<quests.size(); i++) {
-		for (unsigned int j=0; j<quests[i].size(); j++) {
+	// check quest requirements
+	for (size_t i=0; i<quests.size(); i++) {
+		bool requirements_met = false;
 
-			// check requirements
-			// break (skip to next dialog node) if any requirement fails
-			// if we reach an event that is not a requirement, succeed
-			// TODO support requires_level, requires_item, requires_currency, requires_class?
-
-			if (quests[i][j].type == EC_REQUIRES_STATUS) {
-				if (!camp->checkStatus(quests[i][j].s)) break;
+		for (size_t j=0; j<quests[i].size(); j++) {
+			if (quests[i][j].type == EC_QUEST_TEXT) {
+				continue;
 			}
-			else if (quests[i][j].type == EC_REQUIRES_NOT_STATUS) {
-				if (camp->checkStatus(quests[i][j].s)) break;
+			else {
+				// check requirements
+				// break (skip to next dialog node) if any requirement fails
+				// if we reach an event that is not a requirement, succeed
+				if (!camp->checkAllRequirements(quests[i][j]))
+					break;
 			}
-			else if (quests[i][j].type == EC_QUEST_TEXT) {
-				log->add(quests[i][j].s, LOG_TYPE_QUESTS, false);
-				newQuestNotification = true;
+
+			requirements_met = true;
+		}
+
+		if (requirements_met) {
+			// passed requirement checks, add ID to active quest list
+			temp_quest_ids.push_back(i);
+		}
+	}
+
+	// check if we actually need to update the quest log
+	bool refresh_quest_list = false;
+	if (temp_quest_ids.size() != active_quest_ids.size()) {
+		refresh_quest_list = true;
+	}
+	else {
+		for (size_t i=0; i<temp_quest_ids.size(); ++i) {
+			if (temp_quest_ids[i] != active_quest_ids[i]) {
+				refresh_quest_list = true;
 				break;
 			}
-			else if (quests[i][j].type == EC_NONE) {
-				break;
+		}
+	}
+
+	// update the quest log
+	if (refresh_quest_list) {
+		active_quest_ids = temp_quest_ids;
+		newQuestNotification = true;
+
+		log->clear(LOG_TYPE_QUESTS);
+
+		for (size_t i=0; i<active_quest_ids.size(); i++) {
+			size_t k = active_quest_ids[i];
+
+			for (size_t j=0; j<quests[k].size(); j++) {
+				if (quests[k][j].type == EC_QUEST_TEXT) {
+					log->add(quests[k][j].s, LOG_TYPE_QUESTS, false);
+					break;
+				}
 			}
 		}
 	}
