@@ -118,6 +118,11 @@ public:
 	int post_power;
 	int wall_power;
 
+	// targeting by movement type
+	bool target_movement_normal;
+	bool target_movement_flying;
+	bool target_movement_intangible;
+
 	// loot
 	std::vector<Event_Component> loot;
 };

@@ -70,7 +70,10 @@ Hazard::Hazard(MapCollision *_collider)
 	, missile(false)
 	, directional(false)
 	, post_power(0)
-	, wall_power(0) {
+	, wall_power(0)
+	, target_movement_normal(true)
+	, target_movement_flying(true)
+	, target_movement_intangible(true) {
 }
 
 Hazard::~Hazard() {

@@ -507,6 +507,18 @@ void PowerManager::loadPowers() {
 				lootm->parseLoot(infile, &powers[input_id].loot.back(), &powers[input_id].loot);
 			}
 		}
+		else if (infile.key == "target_movement_normal") {
+			// @ATTR target_movement_normal|bool|Power can affect entities with normal movement (aka walking on ground)
+			powers[input_id].target_movement_normal = toBool(infile.val);
+		}
+		else if (infile.key == "target_movement_flying") {
+			// @ATTR target_movement_flying|bool|Power can affect flying entities
+			powers[input_id].target_movement_flying = toBool(infile.val);
+		}
+		else if (infile.key == "target_movement_intangible") {
+			// @ATTR target_movement_intangible|bool|Power can affect intangible entities
+			powers[input_id].target_movement_intangible = toBool(infile.val);
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -750,6 +762,11 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	// flag missile powers for reflection
 	if (powers[power_index].type == POWTYPE_MISSILE)
 		haz->missile = true;
+
+	// targeting by movement type
+	haz->target_movement_normal = powers[power_index].target_movement_normal;
+	haz->target_movement_flying = powers[power_index].target_movement_flying;
+	haz->target_movement_intangible = powers[power_index].target_movement_intangible;
 }
 
 /**

@@ -269,7 +269,16 @@ bool Entity::takeHit(Hazard &h) {
 		return false;
 	}
 
-	if (percentChance(true_avoidance)) {
+	// some attacks will always miss enemies of a certain movement type
+	bool can_hit = true;
+	if (stats.movement_type == MOVEMENT_NORMAL && !h.target_movement_normal)
+		can_hit = false;
+	else if (stats.movement_type == MOVEMENT_FLYING && !h.target_movement_flying)
+		can_hit = false;
+	else if (stats.movement_type == MOVEMENT_INTANGIBLE && !h.target_movement_intangible)
+		can_hit = false;
+
+	if (percentChance(true_avoidance) || can_hit == false) {
 		combat_text->addMessage(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
 		return false;
 	}
