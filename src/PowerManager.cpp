@@ -679,59 +679,38 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 		}
 	}
 
-	// Only apply stats from powers that are not defaults
-	// If we do this, we can init with multiple power layers
-	// (e.g. base spell plus weapon type)
-
-	if (powers[power_index].animation_name != "")
+	// animation properties
+	if (powers[power_index].animation_name != "") {
 		haz->loadAnimation(powers[power_index].animation_name);
-	if (powers[power_index].lifespan != 0)
-		haz->base_lifespan = haz->lifespan = powers[power_index].lifespan;
+	}
+
 	if (powers[power_index].directional) {
 		haz->directional = powers[power_index].directional;
 		haz->animationKind = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	}
-	else if (powers[power_index].visual_random)
+	else if (powers[power_index].visual_random) {
 		haz->animationKind = rand() % powers[power_index].visual_random;
-	else if (powers[power_index].visual_option)
+	}
+	else if (powers[power_index].visual_option) {
 		haz->animationKind = powers[power_index].visual_option;
+	}
 
+	haz->base_lifespan = haz->lifespan = powers[power_index].lifespan;
 	haz->on_floor = powers[power_index].floor;
 	haz->base_speed = powers[power_index].speed;
 	haz->complete_animation = powers[power_index].complete_animation;
 
 	// combat traits
-	if (powers[power_index].radius != 0) {
-		haz->radius = powers[power_index].radius;
-	}
-	if (powers[power_index].trait_elemental != -1) {
-		haz->trait_elemental = powers[power_index].trait_elemental;
-	}
+	haz->radius = powers[power_index].radius;
+	haz->trait_elemental = powers[power_index].trait_elemental;
+	haz->active = !powers[power_index].no_attack;
 
-	if (powers[power_index].no_attack) {
-		haz->active = false;
-	}
-
-	// note: it may look like this line would be more efficient:
-	// haz->multitarget = powers[power_index].multitarget
-	// but as mentioned above, only apply traits that are not the default!
-	// If haz->multitarget is already true, don't reset it to false.
-	// otherwise a base power with multitarget will lose multitarget from a power mod
-	// e.g. Piercing Shot in flare-game has multitarget
-	// but the generic Arrow missile or Sling Stone missile does not.
-	if (powers[power_index].multitarget) {
-		haz->multitarget = true;
-	}
-	if (powers[power_index].trait_armor_penetration) {
-		haz->trait_armor_penetration = true;
-	}
+	haz->multitarget = powers[power_index].multitarget;
+	haz->trait_armor_penetration = powers[power_index].trait_armor_penetration;
 	haz->trait_crits_impaired += powers[power_index].trait_crits_impaired;
 
-	if (powers[power_index].beacon) {
-		haz->beacon = true;
-	}
+	haz->beacon = powers[power_index].beacon;
 
-	// status effect durations
 	// steal effects
 	haz->hp_steal += powers[power_index].hp_steal;
 	haz->mp_steal += powers[power_index].mp_steal;
@@ -746,17 +725,14 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
+
 	if (powers[power_index].target_neighbor > 0) {
 		haz->pos = collider->get_random_neighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
 	}
 
 	// pre/post power effects
-	if (powers[power_index].post_power != 0) {
-		haz->post_power = powers[power_index].post_power;
-	}
-	if (powers[power_index].wall_power != 0) {
-		haz->wall_power = powers[power_index].wall_power;
-	}
+	haz->post_power = powers[power_index].post_power;
+	haz->wall_power = powers[power_index].wall_power;
 
 	// handle loot
 	if (!powers[power_index].loot.empty()) {
@@ -764,8 +740,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	}
 
 	// flag missile powers for reflection
-	if (powers[power_index].type == POWTYPE_MISSILE)
-		haz->missile = true;
+	haz->missile = (powers[power_index].type == POWTYPE_MISSILE);
 
 	// targeting by movement type
 	haz->target_movement_normal = powers[power_index].target_movement_normal;
