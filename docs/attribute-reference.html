@@ -238,9 +238,9 @@ body {
 
 <p><strong>event.requires_not_currency</strong>, <em>integer</em>, Event requires no more than this much currency</p>
 
-<p><strong>event.requires_item</strong>, <em>integer,...</em>, Event requires specific item</p>
+<p><strong>event.requires_item</strong>, <em>integer,...</em>, Event requires specific item (not equipped)</p>
 
-<p><strong>event.requires_not_item</strong>, <em>integer,...</em>, Event requires not having a specific item</p>
+<p><strong>event.requires_not_item</strong>, <em>integer,...</em>, Event requires not having a specific item (not equipped)</p>
 
 <p><strong>event.requires_class</strong>, <em>string</em>, Event requires this base class</p>
 
@@ -1346,6 +1346,12 @@ body {
 
 <p><strong>loot</strong>, <em>[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...</em>, Give the player this loot when the power is used</p>
 
+<p><strong>target_movement_normal</strong>, <em>bool</em>, Power can affect entities with normal movement (aka walking on ground)</p>
+
+<p><strong>target_movement_flying</strong>, <em>bool</em>, Power can affect flying entities</p>
+
+<p><strong>target_movement_intangible</strong>, <em>bool</em>, Power can affect intangible entities</p>
+
 <hr />
 
 <h4>QuestLog</h4>
@@ -1355,6 +1361,22 @@ body {
 <p><strong>quest.requires_status</strong>, <em>string</em>, Quest requires this campaign status</p>
 
 <p><strong>quest.requires_not_status</strong>, <em>string</em>, Quest requires not having this campaign status.</p>
+
+<p><strong>quest.requires_level</strong>, <em>integer</em>, Quest requires hero level</p>
+
+<p><strong>quest.requires_not_level</strong>, <em>integer</em>, Quest requires not hero level</p>
+
+<p><strong>quest.requires_currency</strong>, <em>integer</em>, Quest requires atleast this much currency</p>
+
+<p><strong>quest.requires_not_currency</strong>, <em>integer</em>, Quest requires no more than this much currency</p>
+
+<p><strong>quest.requires_item</strong>, <em>integer,...</em>, Quest requires specific item (not equipped)</p>
+
+<p><strong>quest.requires_not_item</strong>, <em>integer,...</em>, Quest requires not having a specific item (not equipped)</p>
+
+<p><strong>quest.requires_class</strong>, <em>string</em>, Quest requires this base class</p>
+
+<p><strong>quest.requires_not_class</strong>, <em>string</em>, Quest requires not this base class</p>
 
 <p><strong>quest.quest_text</strong>, <em>string</em>, Text that gets displayed in the Quest log when this quest is active.</p>
 
