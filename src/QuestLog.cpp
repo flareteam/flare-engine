@@ -157,8 +157,10 @@ void QuestLog::createQuestList() {
 				// check requirements
 				// break (skip to next dialog node) if any requirement fails
 				// if we reach an event that is not a requirement, succeed
-				if (!camp->checkAllRequirements(quests[i][j]))
+				if (!camp->checkAllRequirements(quests[i][j])) {
+					requirements_met = false;
 					break;
+				}
 			}
 
 			requirements_met = true;
