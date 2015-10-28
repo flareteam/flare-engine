@@ -919,8 +919,9 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 			}
 
 			if (pwr.mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY) {
-				ss << "% ";
+				ss << "%";
 			}
+			ss << " ";
 
 			if (pwr.base_damage == BASE_DAMAGE_NONE)
 				ss << msg->get("Damage");
@@ -945,8 +946,9 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 			ss << pwr.mod_accuracy_value;
 
 			if (pwr.mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY) {
-				ss << "% ";
+				ss << "%";
 			}
+			ss << " ";
 
 			ss << msg->get("Base Accuracy");
 
@@ -966,6 +968,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 			if (pwr.mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY) {
 				ss << "% ";
 			}
+			ss << " ";
 
 			ss << msg->get("Base Critical Chance");
 
