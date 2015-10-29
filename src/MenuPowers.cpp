@@ -966,7 +966,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 			ss << pwr.mod_crit_value;
 
 			if (pwr.mod_crit_mode == STAT_MODIFIER_MODE_MULTIPLY) {
-				ss << "% ";
+				ss << "%";
 			}
 			ss << " ";
 
