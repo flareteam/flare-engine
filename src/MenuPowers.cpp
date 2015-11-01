@@ -776,7 +776,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 				}
 			}
 		}
-		else if (effect_ptr != NULL) {
+		else {
 			if (effect_ptr->type == "damage") {
 				ss << pwr.post_effects[i].magnitude << " " << msg->get("Damage per second");
 			}
@@ -884,9 +884,6 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 			else if (pwr.post_effects[i].magnitude == 0) {
 				// nothing
 			}
-		}
-		else {
-			ss << pwr.post_effects[i].id;
 		}
 
 		if (!ss.str().empty()) {
