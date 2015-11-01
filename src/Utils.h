@@ -31,6 +31,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <stdint.h>
 #include <string>
 
+class Avatar;
+
 class Point {
 public:
 	int x, y;
@@ -220,5 +222,7 @@ Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align);
 size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b);
 
 std::string getDurationString(const int& duration);
+
+std::string substituteVarsInString(const std::string &_s, Avatar* avatar = NULL);
 
 #endif

@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "Avatar.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
@@ -365,3 +366,39 @@ std::string getDurationString(const int& duration) {
 	}
 }
 
+std::string substituteVarsInString(const std::string &_s, Avatar* avatar) {
+	std::string s = _s;
+
+	size_t begin = s.find("${");
+	while (begin != std::string::npos) {
+		size_t end = s.find("}");
+
+		if (end == std::string::npos)
+			break;
+
+		size_t var_len = end-begin+1;
+		std::string var = s.substr(begin,var_len);
+
+		if (avatar && var == "${AVATAR_NAME}") {
+			s.replace(begin, var_len, avatar->stats.name);
+		}
+		else if (avatar && var == "${AVATAR_CLASS}") {
+			s.replace(begin, var_len, avatar->stats.getShortClass());
+		}
+		else if (var == "${INPUT_MOVEMENT}") {
+			s.replace(begin, var_len, inpt->getMovementString());
+		}
+		else if (var == "${INPUT_ATTACK}") {
+			s.replace(begin, var_len, inpt->getAttackString());
+		}
+		else {
+			logError("'%s' is not a valid string variable name.", var.c_str());
+			// strip the brackets from the variable
+			s.replace(begin, var_len, var.substr(2, var.length()-3));
+		}
+
+		begin = s.find("${");
+	}
+
+	return s;
+}

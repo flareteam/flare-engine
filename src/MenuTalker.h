@@ -37,8 +37,6 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
-	std::string parseLine(const std::string &line);
-
 	MenuManager *menu;
 
 	Sprite *portrait;

@@ -109,6 +109,8 @@ public:
 	virtual std::string getJoystickName(int index) = 0;
 	virtual std::string getKeyName(int key) = 0;
 	virtual std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT) = 0;
+	virtual std::string getMovementString() = 0;
+	virtual std::string getAttackString() = 0;
 
 	void enableEventLog();
 

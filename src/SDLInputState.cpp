@@ -580,5 +580,51 @@ std::string SDLInputState::getBindingString(int key, int bindings_list) {
 	}
 }
 
+std::string SDLInputState::getMovementString() {
+	std::stringstream ss;
+	ss << "[";
+
+	if (ENABLE_JOYSTICK) {
+		// can't rebind joystick axes
+		ss << msg->get("Joy Axis 0/Joy Axis 1");
+	}
+	else if (TOUCHSCREEN) {
+		ss << msg->get("%s on ground", msg->get("Tap"));
+	}
+	else if (MOUSE_MOVE) {
+		ss << msg->get("%s on ground", inpt->getBindingString(MAIN1));
+	}
+	else {
+		ss << inpt->getBindingString(UP) << "/";
+		ss << inpt->getBindingString(LEFT) <<  "/";
+		ss << inpt->getBindingString(DOWN) << "/";
+		ss << inpt->getBindingString(RIGHT);
+	}
+
+	ss << "]";
+	return ss.str();
+}
+
+std::string SDLInputState::getAttackString() {
+	std::stringstream ss;
+	ss << "[";
+
+	if (ENABLE_JOYSTICK) {
+		ss << inpt->getBindingString(ACTIONBAR_USE, INPUT_BINDING_JOYSTICK);
+	}
+	else if (TOUCHSCREEN) {
+		ss << msg->get("%s on enemy", msg->get("Tap"));
+	}
+	else if (MOUSE_MOVE) {
+		ss << msg->get("%s on enemy", inpt->getBindingString(MAIN1));
+	}
+	else {
+		ss << inpt->getBindingString(MAIN1);
+	}
+
+	ss << "]";
+	return ss.str();
+}
+
 SDLInputState::~SDLInputState() {
 }
