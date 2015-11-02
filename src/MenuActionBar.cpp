@@ -441,6 +441,11 @@ void MenuActionBar::remove(const Point& mouse) {
  * add that power to the action queue
  */
 void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
+	if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == -1 && slots_count > 10) {
+		tablist.setCurrent(slots[10]);
+		slots[10]->in_focus = true;
+	}
+
 	// check click and hotkey actions
 	for (unsigned i = 0; i < slots_count; i++) {
 		ActionData action;
@@ -579,6 +584,22 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 	}
 	else if (menus[MENU_LOG]->checkClick()) {
 		menu_l = true;
+	}
+
+	// also allow ACTIONBAR_USE to open menus
+	if (inpt->pressing[ACTIONBAR_USE] && !inpt->lock[ACTIONBAR_USE]) {
+		inpt->lock[ACTIONBAR_USE] = true;
+
+		unsigned cur_slot = static_cast<unsigned>(tablist.getCurrent());
+
+		if (cur_slot == tablist.size()-4)
+			menu_c = true;
+		else if (cur_slot == tablist.size()-3)
+			menu_i = true;
+		else if (cur_slot == tablist.size()-2)
+			menu_p = true;
+		else if (cur_slot == tablist.size()-1)
+			menu_l = true;
 	}
 }
 
