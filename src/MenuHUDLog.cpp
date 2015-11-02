@@ -26,7 +26,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuHUDLog.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 #include "Settings.h"
+#include "Utils.h"
 
 MenuHUDLog::MenuHUDLog() {
 
@@ -101,19 +103,19 @@ void MenuHUDLog::add(const std::string& s, bool prevent_spam) {
 	// Make sure we don't spam the same message repeatedly
 	if (log_msg.empty() || log_msg.back() != s || !prevent_spam) {
 		// add new message
-		log_msg.push_back(s);
-		msg_age.push_back(calcDuration(s));
+		log_msg.push_back(substituteVarsInString(s, pc));
+		msg_age.push_back(calcDuration(log_msg.back()));
 
 		// render the log entry and store it in a buffer
 		font->setFont("font_regular");
-		Point size = font->calc_size(s, window_area.w);
+		Point size = font->calc_size(log_msg.back(), window_area.w);
 		Image *graphics = render_device->createImage(size.x, size.y);
-		font->renderShadowed(s, 0, 0, JUSTIFY_LEFT, graphics, window_area.w, color_normal);
+		font->renderShadowed(log_msg.back(), 0, 0, JUSTIFY_LEFT, graphics, window_area.w, color_normal);
 		msg_buffer.push_back(graphics->createSprite());
 		graphics->unref();
 	}
 	else if (!msg_age.empty()) {
-		msg_age.back() = calcDuration(s);
+		msg_age.back() = calcDuration(log_msg.back());
 	}
 
 	// force HUD messages to vanish in order

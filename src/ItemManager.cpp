@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 #include "StatBlock.h"
 #include "Stats.h"
 #include "UtilsFileSystem.h"
@@ -643,7 +644,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// flavor text
 	if (items[stack.item].flavor != "") {
-		tip.addText(items[stack.item].flavor, color_flavor);
+		tip.addText(substituteVarsInString(items[stack.item].flavor, pc), color_flavor);
 	}
 
 	// level

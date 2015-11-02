@@ -25,6 +25,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuLog.h"
 #include "ModManager.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 #include "WidgetLog.h"
@@ -150,7 +152,7 @@ void MenuLog::render() {
  * Add a new message to the log.
  */
 void MenuLog::add(const std::string& s, int log_type, bool prevent_spam) {
-	log[log_type]->add(s, prevent_spam);
+	log[log_type]->add(substituteVarsInString(s, pc), prevent_spam);
 }
 
 /**

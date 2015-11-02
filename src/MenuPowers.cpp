@@ -721,7 +721,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 		tip->addText(powers->powers[power_cells[slot_num].id].name);
 
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
-	tip->addText(powers->powers[power_cells[slot_num].id].description, color_flavor);
+	tip->addText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), color_flavor);
 
 	// add mana cost
 	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
