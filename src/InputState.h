@@ -111,6 +111,7 @@ public:
 	virtual std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT) = 0;
 	virtual std::string getMovementString() = 0;
 	virtual std::string getAttackString() = 0;
+	virtual std::string getContinueString() = 0;
 
 	void enableEventLog();
 

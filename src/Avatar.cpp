@@ -439,12 +439,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	bool allowed_to_move;
 	bool allowed_to_use_power = true;
 
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-	const bool click_to_respawn = true;
-#else
-	const bool click_to_respawn = false;
-#endif
-
 	// check for revive
 	if (stats.hp <= 0 && stats.effects.revive) {
 		stats.hp = stats.get(STAT_HP_MAX);
@@ -672,10 +666,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				snd->play(sound_die);
 
 				if (stats.permadeath) {
-					log_msg = msg->get("You are defeated. Game over! Press Enter to exit to Title.");
+					log_msg = msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title.");
+					log_msg = substituteVarsInString(log_msg, this);
 				}
 				else {
-					log_msg = msg->get("You are defeated. Press Enter to continue.");
+					log_msg = msg->get("You are defeated. ${INPUT_CONTINUE} to continue.");
+					log_msg = substituteVarsInString(log_msg, this);
 				}
 
 				// if the player is attacking, we need to block further input
@@ -688,9 +684,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			}
 
 			// allow respawn with Accept if not permadeath
-			if (inpt->pressing[ACCEPT] || (click_to_respawn && inpt->pressing[MAIN1] && !inpt->lock[MAIN1])) {
+			if (inpt->pressing[ACCEPT] || (TOUCHSCREEN && inpt->pressing[MAIN1] && !inpt->lock[MAIN1])) {
 				if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-				if (click_to_respawn && inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
+				if (TOUCHSCREEN && inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 				mapr->teleportation = true;
 				mapr->teleport_mapname = mapr->respawn_map;
 				if (stats.permadeath) {

@@ -626,5 +626,21 @@ std::string SDLInputState::getAttackString() {
 	return ss.str();
 }
 
+std::string SDLInputState::getContinueString() {
+	std::stringstream ss;
+	ss << "[";
+
+	if (TOUCHSCREEN) {
+		ss << msg->get("Tap");
+	}
+	else {
+		int binding_type = (ENABLE_JOYSTICK ? INPUT_BINDING_JOYSTICK : INPUT_BINDING_DEFAULT);
+		ss << getBindingString(ACCEPT, binding_type);
+	}
+
+	ss << "]";
+	return ss.str();
+}
+
 SDLInputState::~SDLInputState() {
 }
