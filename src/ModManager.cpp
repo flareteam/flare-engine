@@ -166,8 +166,12 @@ std::string ModManager::locate(const std::string& filename) {
 		}
 	}
 
-	// all else failing, simply return the filename
-	return PATH_DATA + filename;
+	// all else failing, simply return the filename if it exists
+	test_path = PATH_DATA + filename;
+	if (!fileExists(test_path))
+		test_path = "";
+
+	return test_path;
 }
 
 void amendPathToVector(const std::string &path, std::vector<std::string> &vec) {
