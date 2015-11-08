@@ -447,7 +447,7 @@ void BehaviorStandard::checkMoveStateStance() {
 	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
 	if (hero_dist >= e->stats.threat_range/2 && e->stats.chance_flee > 0 && e->stats.waypoints.empty()) return;
 
-	if ((hero_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
+	if ((target_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
 
 		if (e->move()) {
 			e->stats.cur_state = ENEMY_MOVE;
