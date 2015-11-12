@@ -52,6 +52,7 @@ public:
 	void handleNewMap();
 	void handleSpawn();
 	void handlePartyBuff();
+	bool checkPartyMembers();
 	void logic();
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP();

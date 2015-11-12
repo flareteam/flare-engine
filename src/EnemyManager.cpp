@@ -356,6 +356,15 @@ void EnemyManager::handlePartyBuff() {
 	}
 }
 
+bool EnemyManager::checkPartyMembers() {
+	for (unsigned int i=0; i < enemies.size(); i++) {
+		if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /**
  * perform logic() for all enemies
  */

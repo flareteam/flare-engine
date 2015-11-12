@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "MapCollision.h"
 #include "MenuPowers.h"
+#include "EnemyManager.h"
 #include "UtilsMath.h"
 #include <limits>
 
@@ -676,8 +677,6 @@ StatBlock::~StatBlock() {
 }
 
 bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
-	if (!menu_powers) return false;
-
 	// needed to unlock shapeshifter powers
 	if (transformed) return mp >= power.requires_mp;
 
@@ -687,11 +686,12 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 		return std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
 			   && mp >= power.requires_mp
 			   && (!power.sacrifice == false || hp > power.requires_hp)
-			   && menu_powers->meetsUsageStats(powerid)
+			   && (menu_powers && menu_powers->meetsUsageStats(powerid))
 			   && !power.passive
 			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
 			   && !power.meta_power
 			   && !effects.stun
+			   && (!power.buff_party || (power.buff_party && enemies && enemies->checkPartyMembers()))
 			   && (power.requires_item == -1 || (power.requires_item > 0 && items->requirementsMet(this, power.requires_item)));
 	}
 
