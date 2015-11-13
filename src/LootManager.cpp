@@ -219,10 +219,10 @@ void LootManager::checkEnemiesForLoot() {
 		if (!e->stats.loot_table.empty()) {
 			unsigned drops;
 			if (e->stats.loot_count.y != 0) {
-				drops = (rand() % e->stats.loot_count.y) + e->stats.loot_count.x;
+				drops = randBetween(e->stats.loot_count.x, e->stats.loot_count.y);
 			}
 			else {
-				drops = (rand() % drop_max) + 1;
+				drops = randBetween(1, drop_max);
 			}
 
 			for (unsigned j=0; j<drops; ++j) {
@@ -242,10 +242,10 @@ void LootManager::checkMapForLoot() {
 	if (!mapr->loot.empty()) {
 		unsigned drops;
 		if (mapr->loot_count.y != 0) {
-			drops = (rand() % mapr->loot_count.y) + mapr->loot_count.x;
+			drops = randBetween(mapr->loot_count.x, mapr->loot_count.y);
 		}
 		else {
-			drops = (rand() % drop_max) + 1;
+			drops = randBetween(1, drop_max);
 		}
 
 		for (unsigned i=0; i<drops; ++i) {
