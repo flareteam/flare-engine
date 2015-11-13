@@ -250,4 +250,6 @@ public:
 	std::vector<ItemQuality> item_qualities;
 };
 
+bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2);
+
 #endif

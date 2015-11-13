@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
+#include "UtilsMath.h"
 
 NPC::NPC()
 	: Entity()
@@ -61,6 +62,8 @@ void NPC::load(const std::string& npc_id) {
 	ItemStack stack;
 
 	std::string filename_portrait = "";
+
+	bool clear_random_table = true;
 
 	// @CLASS NPC|Description of NPCs in npcs/
 	if (infile.open(npc_id)) {
@@ -118,6 +121,12 @@ void NPC::load(const std::string& npc_id) {
 			}
 			else {
 				filename = npc_id;
+
+				if (infile.new_section) {
+					// APPENDed file
+					clear_random_table = true;
+				}
+
 				if (infile.key == "name") {
 					// @ATTR name|string|NPC's name.
 					name = msg->get(infile.val);
@@ -160,6 +169,25 @@ void NPC::load(const std::string& npc_id) {
 						}
 					}
 				}
+				else if (infile.key == "random_stock") {
+					// @ATTR random_stock|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Use a loot table to add random items to the stock; either a filename or an inline definition.
+					if (clear_random_table) {
+						random_table.clear();
+						clear_random_table = false;
+					}
+
+					random_table.push_back(Event_Component());
+					loot->parseLoot(infile, &random_table.back(), &random_table);
+				}
+				else if (infile.key == "random_stock_count") {
+					// @ATTR random_stock_count|min (integer), max (integer)|Sets the minimum (and optionally, the maximum) amount of random items this npc can have.
+					random_table_count.x = toInt(infile.nextValue());
+					random_table_count.y = toInt(infile.nextValue());
+					if (random_table_count.x != 0 || random_table_count.y != 0) {
+						clampFloor(random_table_count.x, 1);
+						clampFloor(random_table_count.y, random_table_count.x);
+					}
+				}
 
 				// handle vocals
 				else if (infile.key == "vox_intro") {
@@ -175,6 +203,18 @@ void NPC::load(const std::string& npc_id) {
 		infile.close();
 	}
 	loadGraphics(filename_portrait);
+
+	// fill inventory with items from random stock table
+	unsigned rand_count = randBetween(random_table_count.x, random_table_count.y);
+
+	std::vector<ItemStack> rand_itemstacks;
+	for (unsigned i=0; i<rand_count; ++i) {
+		loot->checkLoot(random_table, NULL, &rand_itemstacks);
+	}
+	std::sort(rand_itemstacks.begin(), rand_itemstacks.end(), compareItemStack);
+	for (size_t i=0; i<rand_itemstacks.size(); ++i) {
+		stock.add(rand_itemstacks[i]);
+	}
 }
 
 void NPC::loadGraphics(const std::string& filename_portrait) {

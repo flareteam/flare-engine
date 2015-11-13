@@ -262,7 +262,7 @@ void LootManager::addEnemyLoot(Enemy *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 
-void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos) {
+void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec) {
 	if (hero == NULL) {
 		logError("LootManager: checkLoot() failed, no hero.");
 		return;
@@ -311,7 +311,10 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 				new_loot.item = ec->c;
 			}
 
-			addLoot(new_loot, p);
+			if (itemstack_vec)
+				itemstack_vec->push_back(new_loot);
+			else
+				addLoot(new_loot, p);
 
 			loot_table.erase(loot_table.begin()+i-1);
 		}
@@ -381,7 +384,10 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			new_loot.item = ec->c;
 		}
 
-		addLoot(new_loot, p);
+		if (itemstack_vec)
+			itemstack_vec->push_back(new_loot);
+		else
+			addLoot(new_loot, p);
 	}
 }
 

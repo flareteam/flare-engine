@@ -65,6 +65,10 @@ static inline void shrinkVecToFit(std::vector<Ty_>& vec) {
 		std::vector<Ty_>(vec).swap(vec);
 }
 
+bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
+	return stack1.item < stack2.item;
+}
+
 ItemManager::ItemManager()
 	: color_normal(font->getColor("widget_normal"))
 	, color_bonus(font->getColor("item_bonus"))

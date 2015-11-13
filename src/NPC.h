@@ -35,6 +35,10 @@ const int NPC_VOX_QUEST = 1;
 class NPC : public Entity {
 private:
 	bool isDialogType(const EVENT_COMPONENT_TYPE &type);
+
+	std::vector<Event_Component> random_table;
+	Point random_table_count;
+
 public:
 	NPC();
 	~NPC();
