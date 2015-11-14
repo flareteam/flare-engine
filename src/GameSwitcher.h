@@ -60,6 +60,9 @@ private:
 	std::string background_filename;
 	std::vector<std::string> background_list;
 
+	int fps_ticks;
+	int last_fps;
+
 public:
 	GameSwitcher();
 	GameSwitcher(const GameSwitcher &copy); // not implemented.
