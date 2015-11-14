@@ -83,7 +83,11 @@ static void init(const std::string &render_device_name) {
 	setStatNames();
 
 	// Create render Device and Rendering Context.
-	render_device = getRenderDevice(render_device_name);
+	if (render_device_name != "")
+		render_device = getRenderDevice(render_device_name);
+	else
+		render_device = getRenderDevice(RENDER_DEVICE);
+
 	int status = render_device->createContext();
 
 	if (status == -1) {

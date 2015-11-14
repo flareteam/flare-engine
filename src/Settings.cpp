@@ -55,31 +55,33 @@ public:
 };
 
 ConfigEntry config[] = {
-	{ "fullscreen",       &typeid(FULLSCREEN),      "0",   &FULLSCREEN,      "fullscreen mode. 1 enable, 0 disable."},
-	{ "resolution_w",     &typeid(SCREEN_W),        "640", &SCREEN_W,        "display resolution. 640x480 minimum."},
-	{ "resolution_h",     &typeid(SCREEN_H),        "480", &SCREEN_H,        NULL},
-	{ "music_volume",     &typeid(MUSIC_VOLUME),    "96",  &MUSIC_VOLUME,    "music and sound volume (0 = silent, 128 = max)"},
-	{ "sound_volume",     &typeid(SOUND_VOLUME),    "128", &SOUND_VOLUME,    NULL},
-	{ "combat_text",      &typeid(COMBAT_TEXT),     "0",   &COMBAT_TEXT,     "display floating damage text. 1 enable, 0 disable."},
-	{ "mouse_move",       &typeid(MOUSE_MOVE),      "0",   &MOUSE_MOVE,      "use mouse to move (experimental). 1 enable, 0 disable."},
-	{ "hwsurface",        &typeid(HWSURFACE),       "1",   &HWSURFACE,       "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
-	{ "vsync",            &typeid(VSYNC),           "1",   &VSYNC,           NULL},
-	{ "texture_filter",   &typeid(TEXTURE_FILTER),  "1",   &TEXTURE_FILTER,  "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"},
-	{ "enable_joystick",  &typeid(ENABLE_JOYSTICK), "0",   &ENABLE_JOYSTICK, "joystick settings."},
-	{ "joystick_device",  &typeid(JOYSTICK_DEVICE), "0",   &JOYSTICK_DEVICE, NULL},
-	{ "joystick_deadzone",&typeid(JOY_DEADZONE),    "100", &JOY_DEADZONE,    NULL},
-	{ "language",         &typeid(LANGUAGE),        "en",  &LANGUAGE,        "2-letter language code."},
-	{ "change_gamma",     &typeid(CHANGE_GAMMA),    "0",   &CHANGE_GAMMA,    "allow changing gamma (experimental). 1 enable, 0 disable."},
-	{ "gamma",            &typeid(GAMMA),           "1.0", &GAMMA,           "screen gamma (0.5 = darkest, 2.0 = lightest)"},
-	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
-	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
-	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
-	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"},
-	{ "hardware_cursor",  &typeid(HARDWARE_CURSOR), "0",   &HARDWARE_CURSOR, "use the system mouse cursor. 1 enable, 0 disable"},
-	{ "dev_mode",         &typeid(DEV_MODE),        "0",   &DEV_MODE,        "allow opening the developer console. 1 enable, 0 disable"},
-	{ "dev_hud",          &typeid(DEV_HUD),         "1",   &DEV_HUD,         "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable"},
-	{ "show_target",      &typeid(SHOW_TARGET),     "0",   &SHOW_TARGET,     "show the targeting reticle on the ground when attacking. 1 enable, 0 disable"},
-	{ "loot_tooltips",    &typeid(LOOT_TOOLTIPS),   "1",   &LOOT_TOOLTIPS,   "always show loot tooltips. 1 enable, 0 disable"}
+	{ "fullscreen",        &typeid(FULLSCREEN),         "0",   &FULLSCREEN,         "fullscreen mode. 1 enable, 0 disable."},
+	{ "resolution_w",      &typeid(SCREEN_W),           "640", &SCREEN_W,           "display resolution. 640x480 minimum."},
+	{ "resolution_h",      &typeid(SCREEN_H),           "480", &SCREEN_H,           NULL},
+	{ "music_volume",      &typeid(MUSIC_VOLUME),       "96",  &MUSIC_VOLUME,       "music and sound volume (0 = silent, 128 = max)"},
+	{ "sound_volume",      &typeid(SOUND_VOLUME),       "128", &SOUND_VOLUME,       NULL},
+	{ "combat_text",       &typeid(COMBAT_TEXT),        "0",   &COMBAT_TEXT,        "display floating damage text. 1 enable, 0 disable."},
+	{ "mouse_move",        &typeid(MOUSE_MOVE),         "0",   &MOUSE_MOVE,         "use mouse to move (experimental). 1 enable, 0 disable."},
+	{ "hwsurface",         &typeid(HWSURFACE),          "1",   &HWSURFACE,          "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
+	{ "vsync",             &typeid(VSYNC),              "1",   &VSYNC,              NULL},
+	{ "texture_filter",    &typeid(TEXTURE_FILTER),     "1",   &TEXTURE_FILTER,     "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"},
+	{ "max_fps",           &typeid(MAX_FRAMES_PER_SEC), "60",  &MAX_FRAMES_PER_SEC, "maximum frames per second. default is 60"},
+	{ "renderer",          &typeid(RENDER_DEVICE),      "sdl", &RENDER_DEVICE,      "default render device. 'sdl' is the default setting"},
+	{ "enable_joystick",   &typeid(ENABLE_JOYSTICK),    "0",   &ENABLE_JOYSTICK,    "joystick settings."},
+	{ "joystick_device",   &typeid(JOYSTICK_DEVICE),    "0",   &JOYSTICK_DEVICE,    NULL},
+	{ "joystick_deadzone", &typeid(JOY_DEADZONE),       "100", &JOY_DEADZONE,       NULL},
+	{ "language",          &typeid(LANGUAGE),           "en",  &LANGUAGE,           "2-letter language code."},
+	{ "change_gamma",      &typeid(CHANGE_GAMMA),       "0",   &CHANGE_GAMMA,       "allow changing gamma (experimental). 1 enable, 0 disable."},
+	{ "gamma",             &typeid(GAMMA),              "1.0", &GAMMA,              "screen gamma (0.5 = darkest, 2.0 = lightest)"},
+	{ "mouse_aim",         &typeid(MOUSE_AIM),          "1",   &MOUSE_AIM,          "use mouse to aim. 1 enable, 0 disable."},
+	{ "no_mouse",          &typeid(NO_MOUSE),           "0",   &NO_MOUSE,           "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
+	{ "show_fps",          &typeid(SHOW_FPS),           "0",   &SHOW_FPS,           "show frames per second. 1 enable, 0 disable."},
+	{ "colorblind",        &typeid(COLORBLIND),         "0",   &COLORBLIND,         "enable colorblind tooltips. 1 enable, 0 disable"},
+	{ "hardware_cursor",   &typeid(HARDWARE_CURSOR),    "0",   &HARDWARE_CURSOR,    "use the system mouse cursor. 1 enable, 0 disable"},
+	{ "dev_mode",          &typeid(DEV_MODE),           "0",   &DEV_MODE,           "allow opening the developer console. 1 enable, 0 disable"},
+	{ "dev_hud",           &typeid(DEV_HUD),            "1",   &DEV_HUD,            "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable"},
+	{ "show_target",       &typeid(SHOW_TARGET),        "0",   &SHOW_TARGET,        "show the targeting reticle on the ground when attacking. 1 enable, 0 disable"},
+	{ "loot_tooltips",     &typeid(LOOT_TOOLTIPS),      "1",   &LOOT_TOOLTIPS,      "always show loot tooltips. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
@@ -112,8 +114,8 @@ unsigned short ICON_SIZE;
 
 // Video Settings
 bool FULLSCREEN;
-unsigned short MAX_FRAMES_PER_SEC = 60;
 unsigned char BITS_PER_PIXEL = 32;
+unsigned short MAX_FRAMES_PER_SEC;
 unsigned short VIEW_W = 0;
 unsigned short VIEW_H = 0;
 unsigned short VIEW_W_HALF = 0;
@@ -128,6 +130,7 @@ bool TEXTURE_FILTER;
 bool IGNORE_TEXTURE_FILTER = false;
 bool CHANGE_GAMMA;
 float GAMMA;
+std::string RENDER_DEVICE;
 
 // Audio Settings
 bool AUDIO = true;
