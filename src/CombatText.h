@@ -47,7 +47,7 @@ public:
 	WidgetLabel *label;
 	int lifespan;
 	FPoint pos;
-	int floating_offset;
+	float floating_offset;
 	std::string text;
 	int displaytype;
 };
@@ -68,7 +68,7 @@ private:
 
 	Color msg_color[5];
 	int duration;
-	int speed;
+	float speed;
 	int offset;
 };
 

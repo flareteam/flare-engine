@@ -52,7 +52,7 @@ CombatText::CombatText() {
 	msg_color[COMBAT_MESSAGE_MISS] = font->getColor("combat_miss");
 
 	duration = MAX_FRAMES_PER_SEC; // 1 second
-	speed = 1;
+	speed = 60.f / MAX_FRAMES_PER_SEC;
 	offset = 48; // average height of flare-game enemies, so a sensible default
 
 	// Load config settings
@@ -66,7 +66,7 @@ CombatText::CombatText() {
 			}
 			else if(infile.key == "speed") {
 				// @ATTR speed|integer|Motion speed of the combat text.
-				speed = toInt(infile.val);
+				speed = static_cast<float>(toInt(infile.val) * 60) / MAX_FRAMES_PER_SEC;
 			}
 			else if (infile.key == "offset") {
 				// @ATTR offset|integer|The vertical offset for the combat text's starting position.
@@ -94,7 +94,7 @@ void CombatText::addMessage(std::string message, FPoint location, int displaytyp
 		WidgetLabel *label = new WidgetLabel();
 		c->pos.x = location.x;
 		c->pos.y = location.y;
-		c->floating_offset = offset;
+		c->floating_offset = static_cast<float>(offset);
 		c->label = label;
 		c->text = message;
 		c->lifespan = duration;
@@ -123,7 +123,7 @@ void CombatText::logic(const FPoint& _cam) {
 
 		Point scr_pos;
 		scr_pos = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
-		scr_pos.y -= it->floating_offset;
+		scr_pos.y -= static_cast<int>(it->floating_offset);
 
 		it->label->setX(scr_pos.x);
 		it->label->setY(scr_pos.y);
