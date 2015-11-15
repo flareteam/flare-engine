@@ -700,6 +700,9 @@ bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
 }
 
 void StatBlock::loadHeroStats() {
+	// set the default global cooldown
+	cooldown = parse_duration("66ms");
+
 	// Redefine numbers from config file if present
 	FileParser infile;
 	// @CLASS StatBlock: Hero stats|Description of engine/stats.txt
