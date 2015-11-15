@@ -180,6 +180,11 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		speed = speed_default = fvalue / MAX_FRAMES_PER_SEC;
 		return true;
 	}
+	else if (infile->key == "cooldown") {
+		// @ATTR cooldown|integer|Cooldown between attacks in 'ms' or 's'.
+		cooldown = parse_duration(infile->val);
+		return true;
+	}
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (infile->key == STAT_KEY[i]) {
@@ -320,9 +325,6 @@ void StatBlock::load(const std::string& filename) {
 			quest_loot_requires_not_status = infile.nextValue();
 			quest_loot_id = toInt(infile.nextValue());
 		}
-		// combat stats
-		// @ATTR cooldown|integer|Cooldown between attacks in 'ms' or 's'.
-		else if (infile.key == "cooldown") cooldown = parse_duration(infile.val);
 
 		// behavior stats
 		// @ATTR flying|boolean|Creature can move over gaps/water.

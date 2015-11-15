@@ -307,15 +307,14 @@ void BehaviorStandard::checkPower() {
 			powers->activate(power_id, &e->stats, pursue_pos);
 			e->stats.activated_power->ticks = powers->powers[power_id].cooldown;
 
-			int anim_duration = e->activeAnimation->getDuration();
-			if (e->stats.cooldown < anim_duration)
-				e->stats.cooldown_ticks = anim_duration;
-			else
-				e->stats.cooldown_ticks = e->stats.cooldown;
-
 			if (e->stats.activated_power->type == AI_POWER_HALF_DEAD) {
 				e->stats.half_dead_power = false;
 			}
+		}
+		else if (e->stats.activated_power == NULL) {
+			// power animation is finished, return to normal stance
+			e->stats.cur_state = ENEMY_STANCE;
+			e->stats.cooldown_ticks = e->stats.cooldown;
 		}
 	}
 
@@ -537,8 +536,8 @@ void BehaviorStandard::updateState() {
 			}
 
 			if (e->activeAnimation->isLastFrame() || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim)) {
-				e->stats.cur_state = ENEMY_STANCE;
 				e->stats.activated_power = NULL;
+				// cur_state change and cooldown are done in checkPower()
 			}
 			break;
 

@@ -58,9 +58,6 @@ Avatar::Avatar()
 
 	init();
 
-	// default hero animation data
-	stats.cooldown = 4;
-
 	// load the hero's animations from hero definition file
 	anim->increaseCount("animations/hero.txt");
 	animationSet = anim->getAnimationSet("animations/hero.txt");
@@ -597,11 +594,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 			if (MOUSE_MOVE) lockAttack = true;
 
-			if (activeAnimation->isFirstFrame() && attack_anim == "swing")
-				snd->play(sound_melee);
-
-			if (activeAnimation->isFirstFrame() && attack_anim == "cast")
-				snd->play(sound_mental);
+			if (activeAnimation->isFirstFrame()) {
+				if (attack_anim == "swing")
+					snd->play(sound_melee);
+				else if (attack_anim == "cast")
+					snd->play(sound_mental);
+			}
 
 			// do power
 			if (activeAnimation->isActiveFrame()) {
@@ -613,9 +611,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				hero_cooldown[current_power] = powers->getPower(current_power).cooldown;
 			}
 
-			if (activeAnimation->getTimesPlayed() >= 1 || activeAnimation->getName() != attack_anim) {
+			if (activeAnimation->isLastFrame() || activeAnimation->getName() != attack_anim) {
 				stats.cur_state = AVATAR_STANCE;
-				stats.cooldown_ticks += stats.cooldown;
+				stats.cooldown_ticks = stats.cooldown;
+				allowed_to_use_power = false;
 			}
 
 			break;
