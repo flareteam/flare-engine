@@ -1178,6 +1178,10 @@ body {
 
 <p><strong>status_stock</strong>, <em>status (string), item (integer), ...</em>, A list of items this vendor will have for sale if the required status is met.</p>
 
+<p><strong>random_stock</strong>, <em>[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...</em>, Use a loot table to add random items to the stock; either a filename or an inline definition.</p>
+
+<p><strong>random_stock_count</strong>, <em>min (integer), max (integer)</em>, Sets the minimum (and optionally, the maximum) amount of random items this npc can have.</p>
+
 <p><strong>vox_intro</strong>, <em>string</em>, Filename of a sound file to play when initially interacting with the NPC.</p>
 
 <hr />
@@ -1594,6 +1598,8 @@ body {
 
 <p><strong>speed</strong>, <em>float</em>, Movement speed</p>
 
+<p><strong>cooldown</strong>, <em>integer</em>, Cooldown between attacks in 'ms' or 's'.</p>
+
 <p><strong>$STATNAME</strong>, <em>integer</em>, The starting value for this stat.</p>
 
 <p><strong>$STATNAME_per_level</strong>, <em>integer</em>, The value for this stat added per level.</p>
@@ -1653,8 +1659,6 @@ body {
 <p><strong>first_defeat_loot</strong>, <em>integer</em>, Drops this item upon first death.</p>
 
 <p><strong>quest_loot</strong>, <em>[requires status (string), requires not status (string), item (integer)</em>, Drops this item when campaign status is met.</p>
-
-<p><strong>cooldown</strong>, <em>integer</em>, Cooldown between attacks in 'ms' or 's'.</p>
 
 <p><strong>flying</strong>, <em>boolean</em>, Creature can move over gaps/water.</p>
 
