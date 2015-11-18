@@ -46,6 +46,7 @@ LootManager::LootManager()
 	: sfx_loot(0)
 	, drop_max(1)
 	, drop_radius(1)
+	, autopickup_range(INTERACT_RANGE)
 	, hero(NULL)
 	, tooltip_margin(0)
 {
@@ -63,6 +64,10 @@ LootManager::LootManager()
 			else if (infile.key == "autopickup_currency") {
 				// @ATTR autopickup_currency|boolean|Enable autopickup for currency
 				AUTOPICKUP_CURRENCY = toBool(infile.val);
+			}
+			else if (infile.key == "autopickup_range") {
+				// @ATTR autopickup_range|float|Minimum distance the player must be from loot to trigger autopickup.
+				autopickup_range = toFloat(infile.val);
 			}
 			else if (infile.key == "currency_name") {
 				// This key is parsed in loadMiscSettings() in Settings.cpp
@@ -494,7 +499,7 @@ ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
 	std::vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
-		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
+		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < autopickup_range && fabs(hero_pos.y - it->pos.y) < autopickup_range && !it->isFlying()) {
 			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
 				if (!(inv->full(it->stack.item))) {
 					loot_stack = it->stack;

@@ -61,6 +61,7 @@ private:
 
 	int drop_max;
 	int drop_radius;
+	float autopickup_range;
 
 	// loot refers to ItemManager indices
 	std::vector<Loot> loot;
