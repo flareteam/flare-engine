@@ -475,6 +475,6 @@ void SaveLoad::loadPowerTree() {
 }
 
 bool SaveLoad::gameSlotIsValid() {
-	// game slots are currently 1-4
-	return (game_slot >= 1 && game_slot <= 4);
+	// minimum game slot is 1
+	return (game_slot >= 1);
 }

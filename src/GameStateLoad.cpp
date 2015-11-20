@@ -34,6 +34,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include "WidgetScrollBar.h"
+
+bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
+	int first = toInt(dir1);
+	int second = toInt(dir2);
+
+	return first < second;
+}
+
+GameSlot::GameSlot()
+	: id(0) {
+}
+
+GameSlot::~GameSlot() {
+	for (size_t i=0; i<sprites.size(); ++i) {
+		delete sprites[i];
+	}
+	sprites.clear();
+}
 
 GameStateLoad::GameStateLoad() : GameState()
 	, background(NULL)
@@ -49,20 +68,15 @@ GameStateLoad::GameStateLoad() : GameState()
 	, stance_ticks_per_frame(1)
 	, stance_duration(1)
 	, stance_type(PLAY_ONCE)
-	, load_game(false)
-	, selected_slot(-1) {
+	, selected_slot(-1)
+	, visible_slots(0)
+	, scroll_offset(0)
+	, has_scroll_bar(false) {
 
 	if (items == NULL)
 		items = new ItemManager();
 
 	label_loading = new WidgetLabel();
-
-	for (int i = 0; i < GAME_SLOT_MAX; i++) {
-		label_name[i] = new WidgetLabel();
-		label_level[i] = new WidgetLabel();
-		label_class[i] = new WidgetLabel();
-		label_map[i] = new WidgetLabel();
-	}
 
 	// Confirmation box to confirm deleting
 	confirm = new MenuConfirm(msg->get("Delete Save"), msg->get("Delete this save?"));
@@ -71,17 +85,24 @@ GameStateLoad::GameStateLoad() : GameState()
 	button_exit->setBasePos(0, 0, ALIGN_BOTTOM);
 	button_exit->refresh();
 
-	button_action = new WidgetButton();
-	button_action->label = msg->get("Choose a Slot");
-	button_action->enabled = false;
+	button_new = new WidgetButton();
+	button_new->label = msg->get("New Game");
+	button_new->enabled = true;
 
-	button_alternate = new WidgetButton();
-	button_alternate->label = msg->get("Delete Save");
-	button_alternate->enabled = false;
+	button_load = new WidgetButton();
+	button_load->label = msg->get("Choose a Slot");
+	button_load->enabled = false;
+
+	button_delete = new WidgetButton();
+	button_delete->label = msg->get("Delete Save");
+	button_delete->enabled = false;
+
+	scrollbar = new WidgetScrollBar();
 
 	// Set up tab list
 	tablist = TabList(HORIZONTAL);
 	tablist.add(button_exit);
+	tablist.add(button_new);
 
 	// Read positions from config file
 	FileParser infile;
@@ -89,17 +110,23 @@ GameStateLoad::GameStateLoad() : GameState()
 	// @CLASS GameStateLoad|Description of menus/gameload.txt
 	if (infile.open("menus/gameload.txt")) {
 		while (infile.next()) {
-			// @ATTR action_button|x (integer), y (integer)|Position of the "New Game"/"Load Game" button.
-			if (infile.key == "action_button") {
+			// @ATTR button_new|x (integer), y (integer)|Position of the "New Game" button.
+			if (infile.key == "button_new") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				button_action->setBasePos(x, y);
+				button_new->setBasePos(x, y);
 			}
-			// @ATTR alternate_button|x (integer), y (integer)|Position of the "Delete Save" button.
-			else if (infile.key == "alternate_button") {
+			// @ATTR button_load|x (integer), y (integer)|Position of the "Load Game" button.
+			else if (infile.key == "button_load") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				button_alternate->setBasePos(x, y);
+				button_load->setBasePos(x, y);
+			}
+			// @ATTR button_delete|x (integer), y (integer)|Position of the "Delete Save" button.
+			else if (infile.key == "button_delete") {
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				button_delete->setBasePos(x, y);
 			}
 			// @ATTR portrait|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
@@ -164,23 +191,12 @@ GameStateLoad::GameStateLoad() : GameState()
 	}
 	if (!found_layer) logError("GameStateLoad: Could not find layers for direction 6");
 
-	button_action->refresh();
-
-	button_alternate->refresh();
-
-	for (int i=0; i<GAME_SLOT_MAX; i++) {
-		current_map[i] = "";
-	}
+	button_new->refresh();
+	button_load->refresh();
+	button_delete->refresh();
 
 	loadGraphics();
 	readGameSlots();
-
-	for (int i=0; i<GAME_SLOT_MAX; i++) {
-		slot_pos[i].x = gameslot_pos.x + (VIEW_W - FRAME_W)/2;
-		slot_pos[i].h = gameslot_pos.h;
-		slot_pos[i].y = gameslot_pos.y + (VIEW_H - FRAME_H)/2 + (i * gameslot_pos.h);
-		slot_pos[i].w = gameslot_pos.w;
-	}
 
 	// animation data
 	int stance_frames = 0;
@@ -215,6 +231,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	color_normal = font->getColor("menu_normal");
 
 	refreshWidgets();
+	updateButtons();
 }
 
 void GameStateLoad::loadGraphics() {
@@ -252,9 +269,9 @@ void GameStateLoad::loadPortrait(int slot) {
 
 	if (slot < 0) return;
 
-	if (stats[slot].name == "") return;
+	if (game_slots[slot]->stats.name == "") return;
 
-	graphics = render_device->loadImage(stats[slot].gfx_portrait);
+	graphics = render_device->loadImage(game_slots[slot]->stats.gfx_portrait);
 	if (graphics) {
 		portrait = graphics->createSprite();
 		portrait->setClipW(portrait_dest.w);
@@ -265,8 +282,66 @@ void GameStateLoad::loadPortrait(int slot) {
 }
 
 void GameStateLoad::readGameSlots() {
-	for (int i=0; i<GAME_SLOT_MAX; i++) {
-		readGameSlot(i);
+	FileParser infile;
+	std::stringstream filename;
+	std::vector<std::string> save_dirs;
+
+	getDirList(PATH_USER + "saves/" + SAVE_PREFIX, save_dirs);
+	std::sort(save_dirs.begin(), save_dirs.end(), compareSaveDirs);
+	game_slots.resize(save_dirs.size(), NULL);
+
+	visible_slots = (GAME_SLOT_MAX > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : GAME_SLOT_MAX);
+
+	for (size_t i=0; i<save_dirs.size(); ++i){
+		// save data is stored in slot#/avatar.txt
+		filename.str("");
+		filename << PATH_USER << "saves/" << SAVE_PREFIX << "/" << save_dirs[i] << "/avatar.txt";
+
+		if (!infile.open(filename.str(),false)) continue;
+
+		game_slots[i] = new GameSlot();
+		game_slots[i]->id = toInt(save_dirs[i]);
+
+		while (infile.next()) {
+
+			// load (key=value) pairs
+			if (infile.key == "name")
+				game_slots[i]->stats.name = infile.val;
+			else if (infile.key == "class") {
+				game_slots[i]->stats.character_class = infile.nextValue();
+				game_slots[i]->stats.character_subclass = infile.nextValue();
+			}
+			else if (infile.key == "xp")
+				game_slots[i]->stats.xp = toInt(infile.val);
+			else if (infile.key == "build") {
+				game_slots[i]->stats.physical_character = toInt(infile.nextValue());
+				game_slots[i]->stats.mental_character = toInt(infile.nextValue());
+				game_slots[i]->stats.offense_character = toInt(infile.nextValue());
+				game_slots[i]->stats.defense_character = toInt(infile.nextValue());
+			}
+			else if (infile.key == "equipped") {
+				std::string repeat_val = infile.nextValue();
+				while (repeat_val != "") {
+					game_slots[i]->equipped.push_back(toInt(repeat_val));
+					repeat_val = infile.nextValue();
+				}
+			}
+			else if (infile.key == "option") {
+				game_slots[i]->stats.gfx_base = infile.nextValue();
+				game_slots[i]->stats.gfx_head = infile.nextValue();
+				game_slots[i]->stats.gfx_portrait = infile.nextValue();
+			}
+			else if (infile.key == "spawn") {
+				game_slots[i]->current_map = getMapName(infile.nextValue());
+			}
+			else if (infile.key == "permadeath") {
+				game_slots[i]->stats.permadeath = toBool(infile.val);
+			}
+		}
+		infile.close();
+
+		game_slots[i]->stats.recalc();
+		loadPreview(game_slots[i]);
 	}
 }
 
@@ -284,113 +359,58 @@ std::string GameStateLoad::getMapName(const std::string& map_filename) {
 	return map_name;
 }
 
-void GameStateLoad::readGameSlot(int slot) {
-
-	std::stringstream filename;
-	FileParser infile;
-
-	// abort if not a valid slot number
-	if (slot < 0 || slot >= GAME_SLOT_MAX) return;
-
-	// save data is stored in slot#/avatar.txt
-	filename << PATH_USER << "saves/" << SAVE_PREFIX << "/" << (slot+1) << "/avatar.txt";
-
-	if (!infile.open(filename.str(),false, "")) return;
-
-	while (infile.next()) {
-
-		// load (key=value) pairs
-		if (infile.key == "name")
-			stats[slot].name = infile.val;
-		else if (infile.key == "class") {
-			stats[slot].character_class = infile.nextValue();
-			stats[slot].character_subclass = infile.nextValue();
-		}
-		else if (infile.key == "xp")
-			stats[slot].xp = toInt(infile.val);
-		else if (infile.key == "build") {
-			stats[slot].physical_character = toInt(infile.nextValue());
-			stats[slot].mental_character = toInt(infile.nextValue());
-			stats[slot].offense_character = toInt(infile.nextValue());
-			stats[slot].defense_character = toInt(infile.nextValue());
-		}
-		else if (infile.key == "equipped") {
-			std::string repeat_val = infile.nextValue();
-			while (repeat_val != "") {
-				equipped[slot].push_back(toInt(repeat_val));
-				repeat_val = infile.nextValue();
-			}
-		}
-		else if (infile.key == "option") {
-			stats[slot].gfx_base = infile.nextValue();
-			stats[slot].gfx_head = infile.nextValue();
-			stats[slot].gfx_portrait = infile.nextValue();
-		}
-		else if (infile.key == "spawn") {
-			current_map[slot] = getMapName(infile.nextValue());
-		}
-		else if (infile.key == "permadeath") {
-			stats[slot].permadeath = toBool(infile.val);
-		}
-	}
-	infile.close();
-
-	stats[slot].recalc();
-	loadPreview(slot);
-
-}
-
-void GameStateLoad::loadPreview(int slot) {
+void GameStateLoad::loadPreview(GameSlot* slot) {
+	if (!slot) return;
 
 	Image *graphics;
 	std::vector<std::string> img_gfx;
 
-	for (unsigned int i=0; i<sprites[slot].size(); i++) {
-		if (sprites[slot][i])
-			delete sprites[slot][i];
+	for (unsigned int i=0; i<slot->sprites.size(); i++) {
+		if (slot->sprites[i])
+			delete slot->sprites[i];
 	}
-	sprites[slot].clear();
+	slot->sprites.clear();
 
 	// fall back to default if it exists
 	for (unsigned int i=0; i<preview_layer.size(); i++) {
-		bool exists = fileExists(mods->locate("animations/avatar/" + stats[slot].gfx_base + "/default_" + preview_layer[i] + ".txt"));
+		bool exists = fileExists(mods->locate("animations/avatar/" + slot->stats.gfx_base + "/default_" + preview_layer[i] + ".txt"));
 		if (exists) {
 			img_gfx.push_back("default_" + preview_layer[i]);
 		}
 		else if (preview_layer[i] == "head") {
-			img_gfx.push_back(stats[slot].gfx_head);
+			img_gfx.push_back(slot->stats.gfx_head);
 		}
 		else {
 			img_gfx.push_back("");
 		}
 	}
 
-	for (unsigned int i=0; i<equipped[slot].size(); i++) {
-		if (static_cast<unsigned>(equipped[slot][i]) > items->items.size()-1) {
-			logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot+1, equipped[slot][i], static_cast<int>(items->items.size())-1);
+	for (unsigned int i=0; i<slot->equipped.size(); i++) {
+		if (static_cast<unsigned>(slot->equipped[i]) > items->items.size()-1) {
+			logError("GameStateLoad: Item in save slot %d with id=%d is out of bounds 1-%d. Your savegame is broken or you might be using an incompatible savegame/mod", slot->id, slot->equipped[i], static_cast<int>(items->items.size())-1);
 			continue;
 		}
 
-		if (equipped[slot][i] > 0 && !preview_layer.empty() && static_cast<unsigned>(equipped[slot][i]) < items->items.size()) {
-			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[equipped[slot][i]].type);
+		if (slot->equipped[i] > 0 && !preview_layer.empty() && static_cast<unsigned>(slot->equipped[i]) < items->items.size()) {
+			std::vector<std::string>::iterator found = find(preview_layer.begin(), preview_layer.end(), items->items[slot->equipped[i]].type);
 			if (found != preview_layer.end())
-				img_gfx[distance(preview_layer.begin(), found)] = items->items[equipped[slot][i]].gfx;
+				img_gfx[distance(preview_layer.begin(), found)] = items->items[slot->equipped[i]].gfx;
 		}
 	}
 
 	// composite the hero graphic
-	sprites[slot].resize(img_gfx.size());
+	slot->sprites.resize(img_gfx.size());
 	for (unsigned int i=0; i<img_gfx.size(); i++) {
 		if (img_gfx[i] == "")
 			continue;
 
-		graphics = render_device->loadImage("images/avatar/" + stats[slot].gfx_base + "/preview/" + img_gfx[i] + ".png");
-		sprites[slot][i] = NULL;
+		graphics = render_device->loadImage("images/avatar/" + slot->stats.gfx_base + "/preview/" + img_gfx[i] + ".png");
+		slot->sprites[i] = NULL;
 		if (graphics) {
-			sprites[slot][i] = graphics->createSprite();
-			sprites[slot][i]->setClip(0, 0,
-									  sprites[slot][i]->getGraphicsWidth(),
-									  sprites[slot][i]->getGraphicsHeight());
+			slot->sprites[i] = graphics->createSprite();
+			slot->sprites[i]->setClip(0, 0,
+									  slot->sprites[i]->getGraphicsWidth(),
+									  slot->sprites[i]->getGraphicsHeight());
 			graphics->unref();
 		}
 	}
@@ -437,55 +457,103 @@ void GameStateLoad::logic() {
 			logicLoading();
 		}
 
-		if (button_action->checkClick()) {
-			if (stats[selected_slot].name == "") {
-				// create a new game
-				GameStateNew* newgame = new GameStateNew();
-				newgame->game_slot = selected_slot + 1;
-				requestedGameState = newgame;
-				delete_items = false;
-			}
-			else {
-				loading_requested = true;
-			}
+		bool outside_scrollbar = true;
+
+		if (button_new->checkClick()) {
+			// create a new game
+			GameStateNew* newgame = new GameStateNew();
+			newgame->game_slot = (game_slots.empty() ? 1 : game_slots.back()->id+1);
+			requestedGameState = newgame;
+			delete_items = false;
 		}
-		if (button_alternate->checkClick()) {
+		else if (button_load->checkClick()) {
+			loading_requested = true;
+		}
+		else if (button_delete->checkClick()) {
 			// Display pop-up to make sure save should be deleted
 			confirm->visible = true;
 			confirm->render();
 		}
-		// check clicking game slot
-		if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-			for (int i=0; i<GAME_SLOT_MAX; i++) {
-				if (isWithin(slot_pos[i], inpt->mouse)) {
-					inpt->lock[MAIN1] = true;
-					selected_slot = i;
-					updateButtons();
+		else if (game_slots.size() > 0) {
+			Rect scroll_area = slot_pos[0];
+			scroll_area.h = slot_pos[0].h * GAME_SLOT_MAX;
+
+			if (isWithin(scroll_area, inpt->mouse)) {
+				if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+					for (int i=0; i<visible_slots; ++i) {
+						if (isWithin(slot_pos[i], inpt->mouse)) {
+							inpt->lock[MAIN1] = true;
+							selected_slot = i + scroll_offset;
+							updateButtons();
+							break;
+						}
+					}
+				}
+				else if (inpt->scroll_up) {
+					scrollUp();
+				}
+				else if (inpt->scroll_down) {
+					scrollDown();
 				}
 			}
-		}
+			else if (has_scroll_bar) {
+				switch (scrollbar->checkClick(inpt->mouse.x, inpt->mouse.y)) {
+					case 1:
+						scrollUp();
+						outside_scrollbar = false;
+						break;
+					case 2:
+						scrollDown();
+						outside_scrollbar = false;
+						break;
+					case 3:
+						scroll_offset = scrollbar->getValue();
+						if (scroll_offset >= static_cast<int>(game_slots.size()) - visible_slots) {
+							scroll_offset = static_cast<int>(game_slots.size()) - visible_slots;
+						}
+						outside_scrollbar = false;
+						break;
+					default:
+						break;
+				}
+			}
 
-		// Allow characters to be navigateable via up/down keys
-		if (inpt->pressing[UP] && !inpt->lock[UP]) {
-			inpt->lock[UP] = true;
-			selected_slot = (--selected_slot < 0) ? GAME_SLOT_MAX - 1 : selected_slot;
-			updateButtons();
-		}
+			if (outside_scrollbar && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+				inpt->lock[MAIN1] = true;
+				selected_slot = -1;
+				updateButtons();
+			}
 
-		if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
-			inpt->lock[DOWN] = true;
-			selected_slot = (++selected_slot == GAME_SLOT_MAX) ? 0 : selected_slot;
-			updateButtons();
+			// Allow characters to be navigateable via up/down keys
+			if (inpt->pressing[UP] && !inpt->lock[UP]) {
+				inpt->lock[UP] = true;
+				selected_slot = (--selected_slot < 0) ? static_cast<int>(game_slots.size()) - 1 : selected_slot;
+				scroll_offset = std::min(static_cast<int>(game_slots.size()) - visible_slots, selected_slot);
+				updateButtons();
+			}
+			else if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
+				inpt->lock[DOWN] = true;
+				selected_slot = (++selected_slot == static_cast<int>(game_slots.size())) ? 0 : selected_slot;
+				scroll_offset = std::max(0, selected_slot-visible_slots+1);
+				updateButtons();
+			}
 		}
-
 	}
 	else if (confirm->visible) {
 		confirm->logic();
 		if (confirm->confirmClicked) {
-			removeSaveDir(selected_slot+1);
+			removeSaveDir(game_slots[selected_slot]->id);
 
-			stats[selected_slot] = StatBlock();
-			readGameSlot(selected_slot);
+			delete game_slots[selected_slot];
+			game_slots[selected_slot] = NULL;
+			game_slots.erase(game_slots.begin()+selected_slot);
+
+			visible_slots = (GAME_SLOT_MAX > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : GAME_SLOT_MAX);
+			selected_slot = -1;
+
+			while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
+				scroll_offset--;
+			}
 
 			updateButtons();
 
@@ -501,7 +569,7 @@ void GameStateLoad::logicLoading() {
 	delete_items = false;
 	GameStatePlay* play = new GameStatePlay();
 	play->resetGame();
-	save_load->setGameSlot(selected_slot + 1);
+	save_load->setGameSlot(game_slots[selected_slot]->id);
 	save_load->loadGame();
 	requestedGameState = play;
 	loaded = true;
@@ -511,45 +579,57 @@ void GameStateLoad::logicLoading() {
 void GameStateLoad::updateButtons() {
 	loadPortrait(selected_slot);
 
-	if (button_action->enabled == false) {
-		button_action->enabled = true;
-		tablist.add(button_action);
+	// check status of New Game button
+	if (!fileExists(mods->locate("maps/spawn.txt"))) {
+		button_new->enabled = false;
+		tablist.remove(button_new);
+		button_new->tooltip = msg->get("Enable a story mod to continue");
 	}
-	button_action->tooltip = "";
-	if (stats[selected_slot].name == "") {
-		button_action->label = msg->get("New Game");
-		if (!fileExists(mods->locate("maps/spawn.txt"))) {
-			button_action->enabled = false;
-			tablist.remove(button_action);
-			button_action->tooltip = msg->get("Enable a story mod to continue");
+
+	if (selected_slot >= 0) {
+		// slot selected: we can load/delete
+		if (button_load->enabled == false) {
+			button_load->enabled = true;
+			tablist.add(button_load);
 		}
-		button_alternate->enabled = false;
-		tablist.remove(button_alternate);
-	}
-	else {
-		if (button_alternate->enabled == false) {
-			button_alternate->enabled = true;
-			tablist.add(button_alternate);
+		button_load->tooltip = "";
+
+		if (button_delete->enabled == false) {
+			button_delete->enabled = true;
+			tablist.add(button_delete);
 		}
-		button_action->label = msg->get("Load Game");
-		if (current_map[selected_slot] == "") {
+
+		button_load->label = msg->get("Load Game");
+		if (game_slots[selected_slot]->current_map == "") {
 			if (!fileExists(mods->locate("maps/spawn.txt"))) {
-				button_action->enabled = false;
-				tablist.remove(button_action);
-				button_action->tooltip = msg->get("Enable a story mod to continue");
+				button_load->enabled = false;
+				tablist.remove(button_load);
+				button_load->tooltip = msg->get("Enable a story mod to continue");
 			}
 		}
 	}
-	button_action->refresh();
-	button_alternate->refresh();
+	else {
+		// no slot selected: can't load/delete
+		button_load->label = msg->get("Choose a Slot");
+		button_load->enabled = false;
+		tablist.remove(button_load);
+
+		button_delete->enabled = false;
+		tablist.remove(button_delete);
+	}
+
+	button_new->refresh();
+	button_load->refresh();
+	button_delete->refresh();
 
 	refreshWidgets();
 }
 
 void GameStateLoad::refreshWidgets() {
 	button_exit->setPos();
-	button_action->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
-	button_alternate->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	button_new->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	button_load->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
+	button_delete->setPos((VIEW_W-FRAME_W)/2, (VIEW_H-FRAME_H)/2);
 
 	label_loading->setPos();
 
@@ -557,40 +637,50 @@ void GameStateLoad::refreshWidgets() {
 		portrait->setDestX(portrait_dest.x + ((VIEW_W-FRAME_W)/2));
 		portrait->setDestY(portrait_dest.y + ((VIEW_H-FRAME_H)/2));
 	}
-	for (int i=0; i<GAME_SLOT_MAX; i++) {
+
+	slot_pos.resize(visible_slots);
+	for (size_t i=0; i<slot_pos.size(); i++) {
 		slot_pos[i].x = gameslot_pos.x + (VIEW_W - FRAME_W)/2;
 		slot_pos[i].h = gameslot_pos.h;
-		slot_pos[i].y = gameslot_pos.y + (VIEW_H - FRAME_H)/2 + (i * gameslot_pos.h);
+		slot_pos[i].y = gameslot_pos.y + (VIEW_H - FRAME_H)/2 + (static_cast<int>(i) * gameslot_pos.h);
 		slot_pos[i].w = gameslot_pos.w;
 	}
 
+	refreshScrollBar();
 	confirm->align();
+}
+
+void GameStateLoad::scrollUp() {
+	if (scroll_offset > 0)
+		scroll_offset--;
+
+	refreshScrollBar();
+}
+
+void GameStateLoad::scrollDown() {
+	if (scroll_offset < static_cast<int>(game_slots.size()) - visible_slots)
+		scroll_offset++;
+
+	refreshScrollBar();
+}
+
+void GameStateLoad::refreshScrollBar() {
+	has_scroll_bar = (static_cast<int>(game_slots.size()) > GAME_SLOT_MAX);
+
+	if (has_scroll_bar) {
+		Rect scroll_pos;
+		scroll_pos.x = slot_pos[0].x + slot_pos[0].w;
+		scroll_pos.y = slot_pos[0].y;
+		scroll_pos.w = scrollbar->pos_up.w;
+		scroll_pos.h = (slot_pos[0].h * GAME_SLOT_MAX) - scrollbar->pos_down.h;
+		scrollbar->refresh(scroll_pos.x, scroll_pos.y, scroll_pos.h, scroll_offset, static_cast<int>(game_slots.size()) - visible_slots);
+	}
 }
 
 void GameStateLoad::render() {
 
 	Rect src;
 	Rect dest;
-
-	// display background
-	src.w = gameslot_pos.w;
-	src.h = gameslot_pos.h * GAME_SLOT_MAX;
-	src.x = src.y = 0;
-	dest.x = slot_pos[0].x;
-	dest.y = slot_pos[0].y;
-
-	// display background
-	if (background != NULL) {
-		background->setClip(src);
-		background->setDest(dest);
-		render_device->render(background);
-	}
-
-	// display selection
-	if (selected_slot >= 0 && selection != NULL) {
-		selection->setDest(slot_pos[selected_slot]);
-		render_device->render(selection);
-	}
 
 
 	// portrait
@@ -621,67 +711,89 @@ void GameStateLoad::render() {
 	}
 
 	Color color_permadeath_enabled = font->getColor("hardcore_color_name");
+
 	// display text
-	for (int slot=0; slot<GAME_SLOT_MAX; slot++) {
-		if (stats[slot].name != "") {
-			Color color_used = stats[slot].permadeath ? color_permadeath_enabled : color_normal;
+	for (int slot=0; slot<visible_slots; slot++) {
+		int off_slot = slot+scroll_offset;
 
-			// name
-			label.x = slot_pos[slot].x + name_pos.x;
-			label.y = slot_pos[slot].y + name_pos.y;
-			label_name[slot]->set(label.x, label.y, name_pos.justify, name_pos.valign, stats[slot].name, color_used, name_pos.font_style);
-			label_name[slot]->render();
+		// slot background
+		if (background) {
+			src.x = 0;
+			src.y = (off_slot % 4) * gameslot_pos.h;
+			dest.w = dest.h = 0;
 
-			// level
-			ss.str("");
-			label.x = slot_pos[slot].x + level_pos.x;
-			label.y = slot_pos[slot].y + level_pos.y;
-			ss << msg->get("Level %d", stats[slot].level);
-			if (stats[slot].permadeath)
-				ss << ", " + msg->get("Permadeath");
-			label_level[slot]->set(label.x, label.y, level_pos.justify, level_pos.valign, ss.str(), color_normal, level_pos.font_style);
-			label_level[slot]->render();
+			src.w = gameslot_pos.w;
+			src.h = gameslot_pos.h;
+			dest.x = slot_pos[slot].x;
+			dest.y = slot_pos[slot].y;
 
-			// class
-			label.x = slot_pos[slot].x + class_pos.x;
-			label.y = slot_pos[slot].y + class_pos.y;
-			label_class[slot]->set(label.x, label.y, class_pos.justify, class_pos.valign, stats[slot].getLongClass(), color_normal, class_pos.font_style);
-			label_class[slot]->render();
-
-			// map
-			label.x = slot_pos[slot].x + map_pos.x;
-			label.y = slot_pos[slot].y + map_pos.y;
-			label_map[slot]->set(label.x, label.y, map_pos.justify, map_pos.valign, current_map[slot], color_normal, map_pos.font_style);
-			label_map[slot]->render();
-
-			// render character preview
-			dest.x = slot_pos[slot].x + sprites_pos.x;
-			dest.y = slot_pos[slot].y + sprites_pos.y;
-			src.x = current_frame * preview_pos.h;
-			src.y = 0;
-			src.w = src.h = preview_pos.h;
-
-			for (unsigned int i=0; i<sprites[slot].size(); i++) {
-				if (sprites[slot][i] == NULL) continue;
-				sprites[slot][i]->setClip(src);
-				sprites[slot][i]->setDest(dest);
-				render_device->render(sprites[slot][i]);
-			}
+			background->setClip(src);
+			background->setDest(dest);
+			render_device->render(background);
 		}
-		else {
-			label.x = slot_pos[slot].x + name_pos.x;
-			label.y = slot_pos[slot].y + name_pos.y;
-			label_name[slot]->set(label.x, label.y, name_pos.justify, name_pos.valign, msg->get("Empty Slot"), color_normal, name_pos.font_style);
-			label_name[slot]->render();
+
+		Color color_used = game_slots[off_slot]->stats.permadeath ? color_permadeath_enabled : color_normal;
+
+		// name
+		label.x = slot_pos[slot].x + name_pos.x;
+		label.y = slot_pos[slot].y + name_pos.y;
+		game_slots[off_slot]->label_name.set(label.x, label.y, name_pos.justify, name_pos.valign, game_slots[off_slot]->stats.name, color_used, name_pos.font_style);
+		game_slots[off_slot]->label_name.render();
+
+		// level
+		ss.str("");
+		label.x = slot_pos[slot].x + level_pos.x;
+		label.y = slot_pos[slot].y + level_pos.y;
+		ss << msg->get("Level %d", game_slots[off_slot]->stats.level);
+		if (game_slots[off_slot]->stats.permadeath)
+			ss << ", " + msg->get("Permadeath");
+		game_slots[off_slot]->label_level.set(label.x, label.y, level_pos.justify, level_pos.valign, ss.str(), color_normal, level_pos.font_style);
+		game_slots[off_slot]->label_level.render();
+
+		// class
+		label.x = slot_pos[slot].x + class_pos.x;
+		label.y = slot_pos[slot].y + class_pos.y;
+		game_slots[off_slot]->label_class.set(label.x, label.y, class_pos.justify, class_pos.valign, game_slots[off_slot]->stats.getLongClass(), color_normal, class_pos.font_style);
+		game_slots[off_slot]->label_class.render();
+
+		// map
+		label.x = slot_pos[slot].x + map_pos.x;
+		label.y = slot_pos[slot].y + map_pos.y;
+		game_slots[off_slot]->label_map.set(label.x, label.y, map_pos.justify, map_pos.valign, game_slots[off_slot]->current_map, color_normal, map_pos.font_style);
+		game_slots[off_slot]->label_map.render();
+
+		// render character preview
+		dest.x = slot_pos[slot].x + sprites_pos.x;
+		dest.y = slot_pos[slot].y + sprites_pos.y;
+		src.x = current_frame * preview_pos.h;
+		src.y = 0;
+		src.w = src.h = preview_pos.h;
+
+		for (size_t i=0; i<game_slots[off_slot]->sprites.size(); i++) {
+			if (game_slots[off_slot]->sprites[i] == NULL) continue;
+			game_slots[off_slot]->sprites[i]->setClip(src);
+			game_slots[off_slot]->sprites[i]->setDest(dest);
+			render_device->render(game_slots[off_slot]->sprites[i]);
 		}
 	}
+
+	// display selection
+	if (selected_slot >= scroll_offset && selected_slot < visible_slots+scroll_offset && selection != NULL) {
+		selection->setDest(slot_pos[selected_slot-scroll_offset]);
+		render_device->render(selection);
+	}
+
+	if (has_scroll_bar)
+		scrollbar->render();
+
 	// display warnings
 	if (confirm->visible) confirm->render();
 
 	// display buttons
 	button_exit->render();
-	button_action->render();
-	button_alternate->render();
+	button_new->render();
+	button_load->render();
+	button_delete->render();
 }
 
 GameStateLoad::~GameStateLoad() {
@@ -695,26 +807,18 @@ GameStateLoad::~GameStateLoad() {
 		delete portrait;
 
 	delete button_exit;
-	delete button_action;
-	delete button_alternate;
+	delete button_new;
+	delete button_load;
+	delete button_delete;
 
 	if (delete_items) {
 		delete items;
 		items = NULL;
 	}
 
-	for (int slot=0; slot<GAME_SLOT_MAX; slot++) {
-		for (unsigned int i=0; i<sprites[slot].size(); i++) {
-			delete sprites[slot][i];
-		}
-		sprites[slot].clear();
-	}
-	for (int i=0; i<GAME_SLOT_MAX; i++) {
-		delete label_name[i];
-		delete label_level[i];
-		delete label_class[i];
-		delete label_map[i];
-	}
+	game_slots.clear();
+
 	delete label_loading;
+	delete scrollbar;
 	delete confirm;
 }
