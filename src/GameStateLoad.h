@@ -40,8 +40,6 @@ class WidgetButton;
 class WidgetLabel;
 class WidgetScrollBar;
 
-const int GAME_SLOT_MAX = 4;
-
 class GameSlot {
 public:
 	unsigned id;
@@ -127,6 +125,7 @@ private:
 	int visible_slots;
 	int scroll_offset;
 	bool has_scroll_bar;
+	int game_slot_max;
 
 public:
 	GameStateLoad();

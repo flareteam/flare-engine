@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 #include "UtilsFileSystem.h"
+#include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include "WidgetScrollBar.h"
 
@@ -71,7 +72,8 @@ GameStateLoad::GameStateLoad() : GameState()
 	, selected_slot(-1)
 	, visible_slots(0)
 	, scroll_offset(0)
-	, has_scroll_bar(false) {
+	, has_scroll_bar(false)
+	, game_slot_max(4) {
 
 	if (items == NULL)
 		items = new ItemManager();
@@ -163,6 +165,13 @@ GameStateLoad::GameStateLoad() : GameState()
 			// @ATTR sprite|x (integer), y (integer)|Position for the avatar preview image in each slot
 			else if (infile.key == "sprite") {
 				sprites_pos = toPoint(infile.val);
+			}
+			// @ATTR visible_slots|integer|The maximum numbers of visible save slots.
+			else if (infile.key == "visible_slots") {
+				game_slot_max = toInt(infile.val);
+
+				// can't have less than 1 game slot visible
+				clampFloor(game_slot_max, 1);
 			}
 			else {
 				infile.error("GameStateLoad: '%s' is not a valid key.", infile.key.c_str());
@@ -290,7 +299,7 @@ void GameStateLoad::readGameSlots() {
 	std::sort(save_dirs.begin(), save_dirs.end(), compareSaveDirs);
 	game_slots.resize(save_dirs.size(), NULL);
 
-	visible_slots = (GAME_SLOT_MAX > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : GAME_SLOT_MAX);
+	visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
 
 	for (size_t i=0; i<save_dirs.size(); ++i){
 		// save data is stored in slot#/avatar.txt
@@ -476,7 +485,7 @@ void GameStateLoad::logic() {
 		}
 		else if (game_slots.size() > 0) {
 			Rect scroll_area = slot_pos[0];
-			scroll_area.h = slot_pos[0].h * GAME_SLOT_MAX;
+			scroll_area.h = slot_pos[0].h * game_slot_max;
 
 			if (isWithin(scroll_area, inpt->mouse)) {
 				if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
@@ -548,7 +557,7 @@ void GameStateLoad::logic() {
 			game_slots[selected_slot] = NULL;
 			game_slots.erase(game_slots.begin()+selected_slot);
 
-			visible_slots = (GAME_SLOT_MAX > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : GAME_SLOT_MAX);
+			visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
 			selected_slot = -1;
 
 			while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
@@ -665,14 +674,14 @@ void GameStateLoad::scrollDown() {
 }
 
 void GameStateLoad::refreshScrollBar() {
-	has_scroll_bar = (static_cast<int>(game_slots.size()) > GAME_SLOT_MAX);
+	has_scroll_bar = (static_cast<int>(game_slots.size()) > game_slot_max);
 
 	if (has_scroll_bar) {
 		Rect scroll_pos;
 		scroll_pos.x = slot_pos[0].x + slot_pos[0].w;
 		scroll_pos.y = slot_pos[0].y;
 		scroll_pos.w = scrollbar->pos_up.w;
-		scroll_pos.h = (slot_pos[0].h * GAME_SLOT_MAX) - scrollbar->pos_down.h;
+		scroll_pos.h = (slot_pos[0].h * game_slot_max) - scrollbar->pos_down.h;
 		scrollbar->refresh(scroll_pos.x, scroll_pos.y, scroll_pos.h, scroll_offset, static_cast<int>(game_slots.size()) - visible_slots);
 	}
 }
