@@ -740,8 +740,15 @@ void MenuManager::logic() {
 						drag_src = DRAG_SRC_VENDOR;
 					}
 					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
-						num_picker->setValueBounds(1, std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity));
-						num_picker->visible = true;
+						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity);
+						if (max_quantity >= 1) {
+							num_picker->setValueBounds(1, max_quantity);
+							num_picker->visible = true;
+						}
+						else {
+							drag_stack.clear();
+							resetDrag();
+						}
 					}
 				}
 			}
@@ -1127,8 +1134,15 @@ void MenuManager::dragAndDropWithKeyboard() {
 				drag_src = DRAG_SRC_VENDOR;
 			}
 			if (drag_stack.quantity > 1) {
-				num_picker->setValueBounds(1, std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity));
-				num_picker->visible = true;
+				int max_quantity = std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity);
+				if (max_quantity >= 1) {
+					num_picker->setValueBounds(1, max_quantity);
+					num_picker->visible = true;
+				}
+				else {
+					drag_stack.clear();
+					resetDrag();
+				}
 			}
 		}
 		else if (slotClick == CHECKED && !drag_stack.empty()) {
