@@ -378,8 +378,6 @@ void SDLInputState::handle() {
 
 	// joystick analog input
 	if(ENABLE_JOYSTICK) {
-		static bool joyReverseAxisX;
-		static bool joyReverseAxisY;
 		static bool joyHasMovedX;
 		static bool joyHasMovedY;
 		static int joyLastPosX;
@@ -390,60 +388,28 @@ void SDLInputState::handle() {
 
 		// axis 0
 		if(joyAxisXval < -JOY_DEADZONE) {
-			if(!joyReverseAxisX) {
-				if(joyLastPosX == JOY_POS_RIGHT) {
-					joyHasMovedX = 0;
-				}
-			}
-			else {
-				if(joyLastPosX == JOY_POS_LEFT) {
-					joyHasMovedX = 0;
-				}
+			if(joyLastPosX == JOY_POS_RIGHT) {
+				joyHasMovedX = 0;
 			}
 			if(joyHasMovedX == 0) {
-				if(!joyReverseAxisX) {
-					pressing[LEFT] = true;
-					un_press[LEFT] = false;
-					pressing[RIGHT] = false;
-					lock[RIGHT] = false;
-					joyLastPosX = JOY_POS_LEFT;
-				}
-				else {
-					pressing[RIGHT] = true;
-					un_press[RIGHT] = false;
-					pressing[LEFT] = false;
-					lock[LEFT] = false;
-					joyLastPosX = JOY_POS_RIGHT;
-				}
+				pressing[LEFT] = true;
+				un_press[LEFT] = false;
+				pressing[RIGHT] = false;
+				lock[RIGHT] = false;
+				joyLastPosX = JOY_POS_LEFT;
 				joyHasMovedX = 1;
 			}
 		}
 		if(joyAxisXval > JOY_DEADZONE) {
-			if(!joyReverseAxisX) {
-				if(joyLastPosX == JOY_POS_LEFT) {
-					joyHasMovedX = 0;
-				}
-			}
-			else {
-				if(joyLastPosX == JOY_POS_RIGHT) {
-					joyHasMovedX = 0;
-				}
+			if(joyLastPosX == JOY_POS_LEFT) {
+				joyHasMovedX = 0;
 			}
 			if(joyHasMovedX == 0) {
-				if(!joyReverseAxisX) {
-					pressing[RIGHT] = true;
-					un_press[RIGHT] = false;
-					pressing[LEFT] = false;
-					lock[LEFT] = false;
-					joyLastPosX = JOY_POS_RIGHT;
-				}
-				else {
-					pressing[LEFT] = true;
-					un_press[LEFT] = false;
-					pressing[RIGHT] = false;
-					lock[RIGHT] = false;
-					joyLastPosX = JOY_POS_LEFT;
-				}
+				pressing[RIGHT] = true;
+				un_press[RIGHT] = false;
+				pressing[LEFT] = false;
+				lock[LEFT] = false;
+				joyLastPosX = JOY_POS_RIGHT;
 				joyHasMovedX = 1;
 			}
 		}
@@ -456,60 +422,28 @@ void SDLInputState::handle() {
 
 		// axis 1
 		if(joyAxisYval < -JOY_DEADZONE) {
-			if(!joyReverseAxisY) {
-				if(joyLastPosY == JOY_POS_DOWN) {
-					joyHasMovedY = 0;
-				}
-			}
-			else {
-				if(joyLastPosY == JOY_POS_UP) {
-					joyHasMovedY = 0;
-				}
+			if(joyLastPosY == JOY_POS_DOWN) {
+				joyHasMovedY = 0;
 			}
 			if(joyHasMovedY == 0) {
-				if(!joyReverseAxisY) {
-					pressing[UP] = true;
-					un_press[UP] = false;
-					pressing[DOWN] = false;
-					lock[DOWN] = false;
-					joyLastPosY = JOY_POS_UP;
-				}
-				else {
-					pressing[DOWN] = true;
-					un_press[DOWN] = false;
-					pressing[UP] = false;
-					lock[UP] = false;
-					joyLastPosY = JOY_POS_DOWN;
-				}
+				pressing[UP] = true;
+				un_press[UP] = false;
+				pressing[DOWN] = false;
+				lock[DOWN] = false;
+				joyLastPosY = JOY_POS_UP;
 				joyHasMovedY = 1;
 			}
 		}
 		if(joyAxisYval > JOY_DEADZONE) {
-			if(!joyReverseAxisY) {
-				if(joyLastPosY == JOY_POS_UP) {
-					joyHasMovedY = 0;
-				}
-			}
-			else {
-				if(joyLastPosY == JOY_POS_DOWN) {
-					joyHasMovedY = 0;
-				}
+			if(joyLastPosY == JOY_POS_UP) {
+				joyHasMovedY = 0;
 			}
 			if(joyHasMovedY == 0) {
-				if(!joyReverseAxisY) {
-					pressing[DOWN] = true;
-					un_press[DOWN] = false;
-					pressing[UP] = false;
-					lock[UP] = false;
-					joyLastPosY = JOY_POS_DOWN;
-				}
-				else {
-					pressing[UP] = true;
-					un_press[UP] = false;
-					pressing[DOWN] = false;
-					lock[DOWN] = false;
-					joyLastPosY = JOY_POS_UP;
-				}
+				pressing[DOWN] = true;
+				un_press[DOWN] = false;
+				pressing[UP] = false;
+				lock[UP] = false;
+				joyLastPosY = JOY_POS_DOWN;
 				joyHasMovedY = 1;
 			}
 		}
