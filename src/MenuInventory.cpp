@@ -1062,7 +1062,7 @@ void MenuInventory::fillEquipmentSlots() {
 int MenuInventory::getMaxPurchasable(int item, int vendor_tab) {
 	if (vendor_tab == VENDOR_BUY)
 		return currency / items->items[item].price;
-	else if (vendor_tab == VENDOR_BUY)
+	else if (vendor_tab == VENDOR_SELL)
 		return currency / items->items[item].getSellPrice();
 	else
 		return 0;
