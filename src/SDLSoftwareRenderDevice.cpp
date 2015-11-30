@@ -69,6 +69,9 @@ void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 	/* Here p is the address to the pixel we want to set */
 	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
+	if (SDL_MUSTLOCK(surface)) {
+		SDL_LockSurface(surface);
+	}
 	switch(bpp) {
 		case 1:
 			*p = static_cast<Uint8>(pixel);
@@ -93,6 +96,9 @@ void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 		case 4:
 			*(Uint32 *)p = pixel;
 			break;
+	}
+	if (SDL_MUSTLOCK(surface)) {
+		SDL_UnlockSurface(surface);
 	}
 }
 
