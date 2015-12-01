@@ -30,14 +30,14 @@ WidgetLog::WidgetLog (int width, int height)
 	, padding(4)
 	, max_messages(WIDGETLOG_MAX_MESSAGES)
 {
-	font->setFont("font_regular");
-	line_height = font->getLineHeight();
-	paragraph_spacing = line_height/2;
+	setFont(WIDGETLOG_FONT_REGULAR);
 	color_normal = font->getColor("menu_normal");
+	color_disabled = font->getColor("widget_disabled");
 }
 
 WidgetLog::~WidgetLog () {
 	delete scroll_box;
+	clear();
 }
 
 void WidgetLog::setBasePos(int x, int y, ALIGNMENT a) {
@@ -48,6 +48,17 @@ void WidgetLog::setBasePos(int x, int y, ALIGNMENT a) {
 void WidgetLog::setPos(int offset_x, int offset_y) {
 	Widget::setPos(offset_x, offset_y);
 	scroll_box->setPos(offset_x, offset_y);
+}
+
+void WidgetLog::setFont(int style) {
+	if (style == WIDGETLOG_FONT_BOLD) {
+		font->setFont("font_bold");
+	}
+	else {
+		font->setFont("font_regular");
+	}
+	line_height = font->getLineHeight();
+	paragraph_spacing = line_height/2;
 }
 
 void WidgetLog::logic() {
@@ -76,12 +87,15 @@ void WidgetLog::refresh() {
 	y = y2 = padding;
 
 	int content_width = scroll_box->pos.w-(padding*2);
-	font->setFont("font_regular");
 
 	// Resize the scrollbox content area first
-	for (unsigned int i=0; i<messages.size(); i++) {
+	for (size_t i=0; i<messages.size(); i++) {
+		setFont(styles[i]);
 		Point size = font->calc_size(messages[i], content_width);
 		y += size.y+paragraph_spacing;
+
+		if (separators[i])
+			y += paragraph_spacing+1;
 	}
 	y+=padding;
 	scroll_box->resize(scroll_box->pos.w, y);
@@ -89,18 +103,28 @@ void WidgetLog::refresh() {
 	// Render messages into the scrollbox area
 	for (size_t i = messages.size(); i > 0; i--) {
 		Point size = font->calc_size(messages[i-1], content_width);
-		font->renderShadowed(messages[i-1], padding, y2, JUSTIFY_LEFT, scroll_box->contents->getGraphics(), content_width, colors[i-1]);
+		Image* render_target = scroll_box->contents->getGraphics();
+
+		if (!separators.empty() && separators[i-1]) {
+			for (int j=padding; j<padding+content_width; ++j) {
+				render_target->drawPixel(j, y2, color_disabled);
+			}
+
+			y2 += paragraph_spacing;
+		}
+		setFont(styles[i-1]);
+		font->renderShadowed(messages[i-1], padding, y2, JUSTIFY_LEFT, render_target, content_width, colors[i-1]);
 		y2 += size.y+paragraph_spacing;
+
 	}
 }
 
-void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color) {
+void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color, int style) {
 	// First, make sure we're not repeating the last log message, to avoid spam
 	if (messages.empty() || messages.back() != s || !prevent_spam) {
 		// If we have too many messages, remove the oldest ones
 		while (messages.size() >= max_messages) {
-			messages.erase(messages.begin());
-			colors.erase(colors.begin());
+			remove(0);
 		}
 
 		// Add the new message.
@@ -111,6 +135,8 @@ void WidgetLog::add(const std::string &s, bool prevent_spam, Color* color) {
 		else {
 			colors.push_back(*color);
 		}
+		styles.push_back(style);
+		separators.resize(messages.size(), false);
 		updated = true;
 	}
 }
@@ -119,6 +145,8 @@ void WidgetLog::remove(unsigned msg_index) {
 	if (msg_index < messages.size()) {
 		messages.erase(messages.begin()+msg_index);
 		colors.erase(colors.begin()+msg_index);
+		styles.erase(styles.begin()+msg_index);
+		separators.erase(separators.begin()+msg_index);
 		updated = true;
 	}
 }
@@ -126,6 +154,8 @@ void WidgetLog::remove(unsigned msg_index) {
 void WidgetLog::clear() {
 	messages.clear();
 	colors.clear();
+	styles.clear();
+	separators.clear();
 	updated = true;
 }
 
@@ -134,4 +164,11 @@ void WidgetLog::setMaxMessages(unsigned count) {
 		max_messages = count;
 	else
 		max_messages = WIDGETLOG_MAX_MESSAGES;
+}
+
+void WidgetLog::addSeparator() {
+	if (messages.empty()) return;
+
+	separators.back() = true;
+	updated = true;
 }

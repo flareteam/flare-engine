@@ -38,6 +38,7 @@ private:
 	std::vector<std::vector<Event_Component> >quests;
 
 	std::vector<size_t> active_quest_ids;
+	std::vector<std::string> quest_names;
 
 public:
 	QuestLog(MenuLog *_log);

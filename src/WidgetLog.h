@@ -26,12 +26,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 const int WIDGETLOG_MAX_MESSAGES = 50;
 
+enum {
+	WIDGETLOG_FONT_REGULAR = 0,
+	WIDGETLOG_FONT_BOLD = 1
+};
+
 class Widget;
 class WidgetScrollBox;
 
 class WidgetLog : public Widget {
 private:
 	void refresh();
+	void setFont(int style);
 
 	WidgetScrollBox *scroll_box;
 	int line_height;
@@ -39,9 +45,12 @@ private:
 	int padding;
 	unsigned max_messages;
 	Color color_normal;
+	Color color_disabled;
 
 	std::vector<std::string> messages;
 	std::vector<Color> colors;
+	std::vector<int> styles;
+	std::vector<bool> separators;
 
 	bool updated;
 
@@ -60,10 +69,11 @@ public:
 		return reinterpret_cast<Widget*>(scroll_box);    // for adding to tablist
 	}
 
-	void add(const std::string &s, bool prevent_spam = true, Color* color = NULL);
+	void add(const std::string &s, bool prevent_spam = true, Color* color = NULL, int style = WIDGETLOG_FONT_REGULAR);
 	void remove(unsigned msg_index);
 	void clear();
 	void setMaxMessages(unsigned count = 50);
+	void addSeparator();
 };
 
 #endif

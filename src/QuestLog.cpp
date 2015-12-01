@@ -65,10 +65,23 @@ void QuestLog::load(const std::string& filename) {
 	if (!infile.open(filename))
 		return;
 
+	quest_names.resize(quest_names.size()+1);
+	quest_names.back() = "";
+
 	while (infile.next()) {
 		if (infile.new_section) {
-			if (infile.section == "quest")
+			if (infile.section == "quest") {
 				quests.push_back(std::vector<Event_Component>());
+			}
+		}
+
+		if (infile.section == "") {
+			if (infile.key == "name") {
+				// @ATTR name|string|A displayed name for this quest.
+				quest_names.back() = msg->get(infile.val);
+			}
+
+			continue;
 		}
 
 		if (quests.empty())
@@ -120,6 +133,9 @@ void QuestLog::load(const std::string& filename) {
 			Event_Component ec;
 			ec.type = EC_QUEST_TEXT;
 			ec.s = msg->get(infile.val);
+
+			// quest group id
+			ec.x = static_cast<int>(quest_names.size()-1);
 
 			ev.components.push_back(ec);
 		}
@@ -193,12 +209,36 @@ void QuestLog::createQuestList() {
 
 		log->clear(LOG_TYPE_QUESTS);
 
-		for (size_t i=0; i<active_quest_ids.size(); i++) {
-			size_t k = active_quest_ids[i];
+		for (size_t i=active_quest_ids.size(); i>0; i--) {
+			size_t k = active_quest_ids[i-1];
+
+			size_t i_next = (i > 1) ? i-2 : 0;
+			size_t k_next = active_quest_ids[i_next];
+
+			// get the group id of the next active quest
+			int next_quest_id = 0;
+			for (size_t j=0; j<quests[k_next].size(); j++) {
+				if (quests[k_next][j].type == EC_QUEST_TEXT) {
+					next_quest_id = quests[k_next][j].x;
+					break;
+				}
+			}
 
 			for (size_t j=0; j<quests[k].size(); j++) {
 				if (quests[k][j].type == EC_QUEST_TEXT) {
 					log->add(quests[k][j].s, LOG_TYPE_QUESTS, false);
+
+					if (next_quest_id != quests[k][j].x) {
+						if (quest_names[quests[k][j].x] != "")
+							log->add(quest_names[quests[k][j].x], LOG_TYPE_QUESTS, false, NULL, WIDGETLOG_FONT_BOLD);
+
+						log->addSeparator(LOG_TYPE_QUESTS);
+					}
+					else if (i == 1) {
+						if (quest_names[quests[k][j].x] != "")
+							log->add(quest_names[quests[k][j].x], LOG_TYPE_QUESTS, false, NULL, WIDGETLOG_FONT_BOLD);
+					}
+
 					break;
 				}
 			}

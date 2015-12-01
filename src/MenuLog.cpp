@@ -151,8 +151,8 @@ void MenuLog::render() {
 /**
  * Add a new message to the log.
  */
-void MenuLog::add(const std::string& s, int log_type, bool prevent_spam) {
-	log[log_type]->add(substituteVarsInString(s, pc), prevent_spam);
+void MenuLog::add(const std::string& s, int log_type, bool prevent_spam, Color* color, int style) {
+	log[log_type]->add(substituteVarsInString(s, pc), prevent_spam, color, style);
 }
 
 /**
@@ -170,6 +170,10 @@ void MenuLog::clear() {
 	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		log[i]->clear();
 	}
+}
+
+void MenuLog::addSeparator(int log_type) {
+	log[log_type]->addSeparator();
 }
 
 MenuLog::~MenuLog() {
