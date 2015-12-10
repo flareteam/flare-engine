@@ -222,6 +222,10 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			else
 				items[id].abs_max = items[id].abs_min;
 		}
+		else if (infile.key == "requires_level") {
+			// @ATTR requires_level|integer|The hero's level must match or exceed this value in order to equip this item.
+			items[id].requires_level = toInt(infile.val);
+		}
 		else if (infile.key == "requires_stat") {
 			// @ATTR requires_stat|[ [physical:mental:offense:defense], amount (integer) ]|Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats
 			if (clear_req_stat) {
@@ -732,7 +736,14 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		tip.addText(items[stack.item].power_desc, color_bonus);
 	}
 
-	// requirement
+	// level requirement
+	if (items[stack.item].requires_level > 0) {
+		if (stats->level < items[stack.item].requires_level) color = color_requirements_not_met;
+		else color = color_normal;
+		tip.addText(msg->get("Requires Level %d", items[stack.item].requires_level), color);
+	}
+
+	// base stat requirement
 	for (unsigned i=0; i<items[stack.item].req_stat.size(); ++i) {
 		if (items[stack.item].req_val[i] > 0) {
 			if (items[stack.item].req_stat[i] == REQUIRES_PHYS) {
@@ -831,6 +842,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
  */
 bool ItemManager::requirementsMet(const StatBlock *stats, int item) {
 	if (!stats) return false;
+
+	// level
+	if (items[item].requires_level > 0 && stats->level < items[item].requires_level) {
+		return false;
+	}
 
 	// base stats
 	for (unsigned i=0; i < items[item].req_stat.size(); ++i) {
