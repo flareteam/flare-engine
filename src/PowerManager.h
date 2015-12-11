@@ -43,10 +43,10 @@ const int POWTYPE_REPEATER = 2;
 const int POWTYPE_SPAWN = 3;
 const int POWTYPE_TRANSFORM = 4;
 const int POWTYPE_EFFECT = 5;
+const int POWTYPE_BLOCK = 6;
 
-const int POWSTATE_BLOCK = 1;
-const int POWSTATE_INSTANT = 2;
-const int POWSTATE_ATTACK = 3;
+const int POWSTATE_INSTANT = 1;
+const int POWSTATE_ATTACK = 2;
 
 const int BASE_DAMAGE_NONE = 0;
 const int BASE_DAMAGE_MELEE = 1;

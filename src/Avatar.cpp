@@ -305,7 +305,7 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 		ActionData &action = action_queue[i];
 		const Power &power = powers->getPower(action.power);
 
-		if (power.new_state == POWSTATE_BLOCK)
+		if (power.type == POWTYPE_BLOCK)
 			blocking = true;
 
 		if (action.power != 0 && (stats.cooldown_ticks == 0 || action.instant_item)) {
@@ -331,7 +331,7 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 			}
 
 			// draw a target on the ground if we're attacking
-			if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.new_state != POWSTATE_BLOCK) {
+			if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.type != POWTYPE_BLOCK) {
 				if (target_anim) {
 					target_pos = target;
 					target_visible = true;
@@ -359,16 +359,18 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 					stats.cur_state = AVATAR_ATTACK;
 					break;
 
-				case POWSTATE_BLOCK:	// handle blocking
-					stats.cur_state = AVATAR_BLOCK;
-					powers->activate(action.power, &stats, target);
-					hero_cooldown[action.power] = power.cooldown;
-					stats.refresh_stats = true;
-					break;
-
 				case POWSTATE_INSTANT:	// handle instant powers
 					powers->activate(action.power, &stats, target);
 					hero_cooldown[action.power] = power.cooldown;
+					break;
+
+				default:
+					if (power.type == POWTYPE_BLOCK) {
+						stats.cur_state = AVATAR_BLOCK;
+						powers->activate(action.power, &stats, target);
+						hero_cooldown[action.power] = power.cooldown;
+						stats.refresh_stats = true;
+					}
 					break;
 			}
 		}

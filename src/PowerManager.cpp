@@ -144,12 +144,13 @@ void PowerManager::loadPowers() {
 			continue;
 
 		if (infile.key == "type") {
-			// @ATTR type|[fixed:missile:repeater:spawn:transform]|Defines the type of power definiton
+			// @ATTR type|[fixed:missile:repeater:spawn:transform:block]|Defines the type of power definiton
 			if (infile.val == "fixed") powers[input_id].type = POWTYPE_FIXED;
 			else if (infile.val == "missile") powers[input_id].type = POWTYPE_MISSILE;
 			else if (infile.val == "repeater") powers[input_id].type = POWTYPE_REPEATER;
 			else if (infile.val == "spawn") powers[input_id].type = POWTYPE_SPAWN;
 			else if (infile.val == "transform") powers[input_id].type = POWTYPE_TRANSFORM;
+			else if (infile.val == "block") powers[input_id].type = POWTYPE_BLOCK;
 			else infile.error("PowerManager: Unknown type '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "name")
@@ -162,9 +163,8 @@ void PowerManager::loadPowers() {
 			// @ATTR icon|string|The icon to visually represent the power eg. in skill tree or action bar.
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
-			// @ATTR new_state|string|When power is used, hero or enemy will change to this state. Must be one of the states [block, instant, user defined]
-			if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
-			else if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
+			// @ATTR new_state|string|When power is used, hero or enemy will change to this state. Must be one of the states [instant, user defined]
+			if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
 			else {
 				powers[input_id].new_state = POWSTATE_ATTACK;
 				powers[input_id].attack_anim = infile.val;
@@ -1182,7 +1182,7 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target
 	if (src_stats->hp > 0 && powers[power_index].sacrifice == false && powers[power_index].requires_hp >= src_stats->hp)
 		return false;
 
-	if (powers[power_index].new_state == POWSTATE_BLOCK)
+	if (powers[power_index].type == POWTYPE_BLOCK)
 		return block(power_index, src_stats);
 
 	// logic for different types of powers are very different.  We allow these
