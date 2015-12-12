@@ -354,6 +354,9 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 				stats.direction = calcDirection(stats.pos, target);
 			}
 
+			if (power.state_duration > 0)
+				stats.state_ticks = power.state_duration;
+
 			switch (power.new_state) {
 				case POWSTATE_ATTACK:	// handle attack powers
 					stats.cur_state = AVATAR_ATTACK;
@@ -604,16 +607,19 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			}
 
 			// do power
-			if (activeAnimation->isActiveFrame()) {
+			if (activeAnimation->isActiveFrame() && !stats.hold_state) {
 				// some powers check if the caster is blocking a tile
 				// so we block the player tile prematurely here
 				mapr->collider.block(stats.pos.x, stats.pos.y, false);
 
 				powers->activate(current_power, &stats, act_target);
 				hero_cooldown[current_power] = powers->getPower(current_power).cooldown;
+
+				if (stats.state_ticks > 0)
+					stats.hold_state = true;
 			}
 
-			if (activeAnimation->isLastFrame() || activeAnimation->getName() != attack_anim) {
+			if ((activeAnimation->isLastFrame() && stats.state_ticks == 0) || activeAnimation->getName() != attack_anim) {
 				stats.cur_state = AVATAR_STANCE;
 				stats.cooldown_ticks = stats.cooldown;
 				allowed_to_use_power = false;
@@ -730,6 +736,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	// make the current square solid
 	mapr->collider.block(stats.pos.x, stats.pos.y, false);
+
+	if (stats.state_ticks == 0 && stats.hold_state)
+		stats.hold_state = false;
 }
 
 void Avatar::transform() {

@@ -111,6 +111,8 @@ StatBlock::StatBlock()
 	, cooldown_hit(0)
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
+	, state_ticks(0)
+	, hold_state(false)
 	, waypoints()		// enemy only
 	, waypoint_pause(MAX_FRAMES_PER_SEC)	// enemy only
 	, waypoint_pause_ticks(0)		// enemy only
@@ -627,6 +629,9 @@ void StatBlock::logic() {
 
 	if(cooldown_hit_ticks > 0)
 		cooldown_hit_ticks--;
+
+	if (state_ticks > 0)
+		state_ticks--;
 
 	// apply healing over time
 	if (effects.hpot > 0) {

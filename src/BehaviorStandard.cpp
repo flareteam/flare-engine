@@ -299,7 +299,7 @@ void BehaviorStandard::checkPower() {
 
 		// if we're at the active frame of a power animation,
 		// activate the power and set the local and global cooldowns
-		if (e->stats.activated_power != NULL && (e->activeAnimation->isActiveFrame() || e->instant_power)) {
+		if (e->stats.activated_power != NULL && (e->activeAnimation->isActiveFrame() || e->instant_power) && !e->stats.hold_state) {
 			e->instant_power = false;
 
 			int power_id = e->stats.activated_power->id;
@@ -310,6 +310,9 @@ void BehaviorStandard::checkPower() {
 			if (e->stats.activated_power->type == AI_POWER_HALF_DEAD) {
 				e->stats.half_dead_power = false;
 			}
+
+			if (e->stats.state_ticks > 0)
+				e->stats.hold_state = true;
 		}
 		else if (e->stats.activated_power == NULL) {
 			// power animation is finished, return to normal stance
@@ -533,9 +536,12 @@ void BehaviorStandard::updateState() {
 			if (e->activeAnimation->isFirstFrame()) {
 				if (powers->powers[power_id].attack_anim == "swing" || powers->powers[power_id].attack_anim == "shoot") e->play_sfx_phys = true;
 				else if (powers->powers[power_id].attack_anim == "cast") e->play_sfx_ment = true;
+
+				if (powers->powers[power_id].state_duration > 0)
+					e->stats.state_ticks = powers->powers[power_id].state_duration;
 			}
 
-			if (e->activeAnimation->isLastFrame() || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim)) {
+			if ((e->activeAnimation->isLastFrame() && e->stats.state_ticks == 0) || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim)) {
 				e->stats.activated_power = NULL;
 				// cur_state change and cooldown are done in checkPower()
 			}
@@ -626,6 +632,9 @@ void BehaviorStandard::updateState() {
 		default:
 			break;
 	}
+
+	if (e->stats.state_ticks == 0 && e->stats.hold_state)
+		e->stats.hold_state = false;
 }
 
 FPoint BehaviorStandard::getWanderPoint() {

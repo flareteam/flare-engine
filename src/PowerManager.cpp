@@ -170,6 +170,10 @@ void PowerManager::loadPowers() {
 				powers[input_id].attack_anim = infile.val;
 			}
 		}
+		else if (infile.key == "state_duration") {
+			// @ATTR state_duration|duration|Sets the length of time the caster is in their state animation. A time longer than the animation length will cause the animation to pause on the last frame. Times shorter than the state animation length will have no effect.
+			powers[input_id].state_duration = parse_duration(infile.val);
+		}
 		else if (infile.key == "face")
 			// @ATTR face|bool|Power will make hero or enemy to face the target location.
 			powers[input_id].face = toBool(infile.val);

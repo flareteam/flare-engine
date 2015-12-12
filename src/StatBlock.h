@@ -254,6 +254,8 @@ public:
 
 	// state
 	int cur_state;
+	int state_ticks;
+	bool hold_state;
 
 	// waypoint patrolling
 	std::queue<FPoint> waypoints;
