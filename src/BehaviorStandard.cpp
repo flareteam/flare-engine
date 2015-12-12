@@ -405,10 +405,12 @@ void BehaviorStandard::checkMove() {
 				path.clear();
 			}
 
-			if(fleeing)
-				e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
-			else
-				e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+			if (e->stats.charge_speed == 0.0f) {
+				if(fleeing)
+					e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
+				else
+					e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+			}
 			e->stats.turn_ticks = 0;
 		}
 	}
@@ -539,6 +541,9 @@ void BehaviorStandard::updateState() {
 
 				if (powers->powers[power_id].state_duration > 0)
 					e->stats.state_ticks = powers->powers[power_id].state_duration;
+
+				if (powers->powers[power_id].charge_speed != 0.0f)
+					e->stats.charge_speed = powers->powers[power_id].charge_speed;
 			}
 
 			if ((e->activeAnimation->isLastFrame() && e->stats.state_ticks == 0) || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim)) {
@@ -635,6 +640,9 @@ void BehaviorStandard::updateState() {
 
 	if (e->stats.state_ticks == 0 && e->stats.hold_state)
 		e->stats.hold_state = false;
+
+	if (e->stats.cur_state != ENEMY_POWER && e->stats.charge_speed != 0.0f)
+		e->stats.charge_speed = 0.0f;
 }
 
 FPoint BehaviorStandard::getWanderPoint() {

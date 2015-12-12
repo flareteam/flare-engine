@@ -161,6 +161,7 @@ public:
 	int lifespan; // how long the hazard/animation lasts
 	bool floor; // the hazard is drawn between the background and object layers
 	bool complete_animation;
+	float charge_speed;
 
 	// hazard traits
 	bool use_hazard;
@@ -279,6 +280,7 @@ public:
 		, lifespan(0)
 		, floor(false)
 		, complete_animation(false)
+		, charge_speed(0.0f)
 
 		, use_hazard(false)
 		, no_attack(false)

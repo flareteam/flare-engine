@@ -229,6 +229,7 @@ public:
 	int absorb_max_add;
 
 	float speed;
+	float charge_speed;
 
 	std::set<std::string> equip_flags;
 	std::vector<int> vulnerable;

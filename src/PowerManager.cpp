@@ -285,6 +285,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "complete_animation")
 			// @ATTR complete_animation|bool|For hazards; Play the entire animation, even if the hazard has hit a target.
 			powers[input_id].complete_animation = toBool(infile.val);
+		else if (infile.key == "charge_speed")
+			// @ATTR charge_speed|float|Moves the caster at this speed in the direction they are facing until the state animation is finished.
+			powers[input_id].charge_speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
 		// hazard traits
 		else if (infile.key == "use_hazard")
 			// @ATTR use_hazard|bool|Power uses hazard.

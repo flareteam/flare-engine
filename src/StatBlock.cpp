@@ -94,6 +94,7 @@ StatBlock::StatBlock()
 	, absorb_min_add(0)
 	, absorb_max_add(0)
 	, speed(0.1f)
+	, charge_speed(0.0f)
 	, vulnerable(ELEMENTS.size(), 100)
 	, vulnerable_base(ELEMENTS.size(), 100)
 	, transform_duration(0)
@@ -670,11 +671,18 @@ void StatBlock::logic() {
 		float theta = calcTheta(knockback_srcpos.x, knockback_srcpos.y, knockback_destpos.x, knockback_destpos.y);
 		knockback_speed.x = effects.knockback_speed * static_cast<float>(cos(theta));
 		knockback_speed.y = effects.knockback_speed * static_cast<float>(sin(theta));
-	}
 
-	if (effects.knockback_speed != 0) {
 		mapr->collider.unblock(pos.x, pos.y);
 		mapr->collider.move(pos.x, pos.y, knockback_speed.x, knockback_speed.y, movement_type, hero);
+		mapr->collider.block(pos.x, pos.y, hero_ally);
+	}
+	else if (charge_speed != 0.0f) {
+		float tmp_speed = charge_speed * speedMultiplyer[direction];
+		float dx = tmp_speed * static_cast<float>(directionDeltaX[direction]);
+		float dy = tmp_speed * static_cast<float>(directionDeltaY[direction]);
+
+		mapr->collider.unblock(pos.x, pos.y);
+		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, hero);
 		mapr->collider.block(pos.x, pos.y, hero_ally);
 	}
 }

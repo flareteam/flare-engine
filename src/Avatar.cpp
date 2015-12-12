@@ -357,6 +357,9 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 			if (power.state_duration > 0)
 				stats.state_ticks = power.state_duration;
 
+			if (power.charge_speed != 0.0f)
+				stats.charge_speed = power.charge_speed;
+
 			switch (power.new_state) {
 				case POWSTATE_ATTACK:	// handle attack powers
 					stats.cur_state = AVATAR_ATTACK;
@@ -739,6 +742,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	if (stats.state_ticks == 0 && stats.hold_state)
 		stats.hold_state = false;
+
+	if (stats.cur_state != AVATAR_ATTACK && stats.charge_speed != 0.0f)
+		stats.charge_speed = 0.0f;
 }
 
 void Avatar::transform() {
