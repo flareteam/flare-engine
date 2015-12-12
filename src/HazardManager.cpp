@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Hazard.h"
 #include "HazardManager.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
 
 HazardManager::HazardManager()
 	: last_enemy(NULL) {
@@ -80,10 +81,7 @@ void HazardManager::logic() {
 								if (!h[i]->beacon) last_enemy = enemies->enemies[eindex];
 								// hit!
 								hit = enemies->enemies[eindex]->takeHit(*h[i]);
-								if (!h[i]->multitarget && hit) {
-									h[i]->active = false;
-									if (!h[i]->complete_animation) h[i]->lifespan = 0;
-								}
+								hitEntity(i, hit);
 							}
 						}
 					}
@@ -99,10 +97,7 @@ void HazardManager::logic() {
 							h[i]->addEntity(pc);
 							// hit!
 							hit = pc->takeHit(*h[i]);
-							if (!h[i]->multitarget && hit) {
-								h[i]->active = false;
-								if (!h[i]->complete_animation) h[i]->lifespan = 0;
-							}
+							hitEntity(i, hit);
 						}
 					}
 				}
@@ -116,10 +111,7 @@ void HazardManager::logic() {
 								h[i]->addEntity(enemies->enemies[eindex]);
 								// hit!
 								hit = enemies->enemies[eindex]->takeHit(*h[i]);
-								if (!h[i]->multitarget && hit) {
-									h[i]->active = false;
-									if (!h[i]->complete_animation) h[i]->lifespan = 0;
-								}
+								hitEntity(i, hit);
 							}
 						}
 					}
@@ -128,6 +120,17 @@ void HazardManager::logic() {
 			}
 
 		}
+	}
+}
+
+void HazardManager::hitEntity(size_t index, const bool hit) {
+	if (!h[index]->multitarget && hit) {
+		h[index]->active = false;
+		if (!h[index]->complete_animation) h[index]->lifespan = 0;
+	}
+	if (hit && h[index]->sfx_hit_enable && !h[index]->sfx_hit_played) {
+		snd->play(h[index]->sfx_hit);
+		h[index]->sfx_hit_played = true;
 	}
 }
 

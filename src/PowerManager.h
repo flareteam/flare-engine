@@ -153,6 +153,8 @@ public:
 	// animation info
 	std::string animation_name;
 	int sfx_index;
+	unsigned long sfx_hit;
+	bool sfx_hit_enable;
 	bool directional; // sprite sheet contains options for 8 directions, one per row
 	int visual_random; // sprite sheet contains rows of random options
 	int visual_option; // sprite sheet contains rows of similar effects.  use a specific option
@@ -272,6 +274,7 @@ public:
 
 		, animation_name("")
 		, sfx_index(-1)
+		, sfx_hit(0)
 		, directional(false)
 		, visual_random(0)
 		, visual_option(0)

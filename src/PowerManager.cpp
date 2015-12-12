@@ -259,8 +259,16 @@ void PowerManager::loadPowers() {
 			// @ATTR animation|string|The filename of the power animation.
 			powers[input_id].animation_name = infile.val;
 		else if (infile.key == "soundfx")
-			// @ATTR soundfx|string|Filename of a sound effect to play when use of power.
+			// @ATTR soundfx|string|Filename of a sound effect to play when the power is used.
 			powers[input_id].sfx_index = loadSFX(infile.val);
+		else if (infile.key == "soundfx_hit") {
+			// @ATTR soundfx_hit|string|Filename of a sound effect to play when the power's hazard hits a valid target.
+			int sfx_id = loadSFX(infile.val);
+			if (sfx_id != -1) {
+				powers[input_id].sfx_hit = sfx[sfx_id];
+				powers[input_id].sfx_hit_enable = true;
+			}
+		}
 		else if (infile.key == "directional")
 			// @ATTR directional|bool|The animation sprite sheet contains 8 directions, one per row.
 			powers[input_id].directional = toBool(infile.val);
@@ -764,6 +772,11 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	haz->target_movement_intangible = powers[power_index].target_movement_intangible;
 
 	haz->walls_block_aoe = powers[power_index].walls_block_aoe;
+
+	if (powers[power_index].sfx_hit_enable) {
+		haz->sfx_hit = powers[power_index].sfx_hit;
+		haz->sfx_hit_enable = powers[power_index].sfx_hit_enable;
+	}
 }
 
 /**

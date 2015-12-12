@@ -31,6 +31,9 @@ class Avatar;
 class Hazard;
 
 class HazardManager {
+private:
+	void hitEntity(size_t index, const bool hit);
+
 public:
 	HazardManager();
 	~HazardManager();

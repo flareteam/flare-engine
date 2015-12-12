@@ -126,6 +126,11 @@ public:
 
 	bool walls_block_aoe;
 
+	// soundfx
+	unsigned long sfx_hit;
+	bool sfx_hit_enable;
+	bool sfx_hit_played;
+
 	// loot
 	std::vector<Event_Component> loot;
 };
