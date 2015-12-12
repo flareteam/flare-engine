@@ -1218,7 +1218,7 @@ body {
 
 <p><strong>id</strong>, <em>integer</em>, Uniq identifier for the power definition.</p>
 
-<p><strong>type</strong>, <em>[fixed:missile:repeater:spawn:transform]</em>, Defines the type of power definiton</p>
+<p><strong>type</strong>, <em>[fixed:missile:repeater:spawn:transform:block]</em>, Defines the type of power definiton</p>
 
 <p><strong>name</strong>, <em>string</em>, The name of the power</p>
 
@@ -1226,7 +1226,9 @@ body {
 
 <p><strong>icon</strong>, <em>string</em>, The icon to visually represent the power eg. in skill tree or action bar.</p>
 
-<p><strong>new_state</strong>, <em>string</em>, When power is used, hero or enemy will change to this state. Must be one of the states [block, instant, user defined]</p>
+<p><strong>new_state</strong>, <em>string</em>, When power is used, hero or enemy will change to this state. Must be one of the states [instant, user defined]</p>
+
+<p><strong>state_duration</strong>, <em>duration</em>, Sets the length of time the caster is in their state animation. A time longer than the animation length will cause the animation to pause on the last frame. Times shorter than the state animation length will have no effect.</p>
 
 <p><strong>face</strong>, <em>bool</em>, Power will make hero or enemy to face the target location.</p>
 
@@ -1264,7 +1266,9 @@ body {
 
 <p><strong>animation</strong>, <em>string</em>, The filename of the power animation.</p>
 
-<p><strong>soundfx</strong>, <em>string</em>, Filename of a sound effect to play when use of power.</p>
+<p><strong>soundfx</strong>, <em>string</em>, Filename of a sound effect to play when the power is used.</p>
+
+<p><strong>soundfx_hit</strong>, <em>string</em>, Filename of a sound effect to play when the power's hazard hits a valid target.</p>
 
 <p><strong>directional</strong>, <em>bool</em>, The animation sprite sheet contains 8 directions, one per row.</p>
 
@@ -1282,6 +1286,8 @@ body {
 
 <p><strong>complete_animation</strong>, <em>bool</em>, For hazards; Play the entire animation, even if the hazard has hit a target.</p>
 
+<p><strong>charge_speed</strong>, <em>float</em>, Moves the caster at this speed in the direction they are facing until the state animation is finished.</p>
+
 <p><strong>use_hazard</strong>, <em>bool</em>, Power uses hazard.</p>
 
 <p><strong>no_attack</strong>, <em>bool</em>, Hazard won't affect other entities.</p>
@@ -1291,6 +1297,8 @@ body {
 <p><strong>base_damage</strong>, <em>[melee:ranged:ment]</em>, </p>
 
 <p><strong>starting_pos</strong>, <em>[source, target, melee]</em>, Start position for hazard</p>
+
+<p><strong>relative_pos</strong>, <em>bool</em>, Hazard will move relative to the caster's position.</p>
 
 <p><strong>multitarget</strong>, <em>bool</em>, Allows a hazard power to hit more than one entity.</p>
 
