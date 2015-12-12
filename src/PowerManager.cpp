@@ -310,6 +310,10 @@ void PowerManager::loadPowers() {
 			else if (infile.val == "melee")  powers[input_id].starting_pos = STARTING_POS_MELEE;
 			else infile.error("PowerManager: Unknown starting_pos '%s'", infile.val.c_str());
 		}
+		else if (infile.key == "relative_pos") {
+			// @ATTR relative_pos|bool|Hazard will move relative to the caster's position.
+			powers[input_id].relative_pos = toBool(infile.val);
+		}
 		else if (infile.key == "multitarget")
 			// @ATTR multitarget|bool|Allows a hazard power to hit more than one entity.
 			powers[input_id].multitarget = toBool(infile.val);
@@ -732,6 +736,11 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 
 	if (powers[power_index].target_neighbor > 0) {
 		haz->pos = collider->get_random_neighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
+	}
+
+	if (powers[power_index].relative_pos) {
+		haz->pos_offset.x = src_stats->pos.x - haz->pos.x;
+		haz->pos_offset.y = src_stats->pos.y - haz->pos.y;
 	}
 
 	// pre/post power effects

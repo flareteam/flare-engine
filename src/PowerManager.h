@@ -168,6 +168,7 @@ public:
 	float radius;
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
 	int starting_pos; // enum. (source, target, or melee)
+	bool relative_pos;
 	bool multitarget;
 	float target_range;
 	bool target_party;
@@ -284,6 +285,7 @@ public:
 		, radius(0)
 		, base_damage(BASE_DAMAGE_NONE)
 		, starting_pos(STARTING_POS_SOURCE)
+		, relative_pos(false)
 		, multitarget(false)
 		, target_range(0)
 		, target_party(false)

@@ -76,6 +76,7 @@ public:
 
 	FPoint pos;
 	FPoint speed;
+	FPoint pos_offset;
 	float base_speed;
 	float angle; // in radians
 	int base_lifespan;
