@@ -162,6 +162,8 @@ void LootManager::logic() {
  * Show all tooltips for loot on the floor
  */
 void LootManager::renderTooltips(FPoint cam) {
+	if (!SHOW_HUD) return;
+
 	Point dest;
 
 	std::vector<Loot>::iterator it;

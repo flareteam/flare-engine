@@ -216,6 +216,7 @@ void MenuDevConsole::execute() {
 		log_history->add("give_currency - " + msg->get("adds the specified amount of currency to the player's inventory"), false);
 		log_history->add("give_item - " + msg->get("adds an item to the player's inventory"), false);
 		log_history->add("spawn_enemy - " + msg->get("spawns an enemy matching the given category next to the player"), false);
+		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), false);
 		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), false);
 		log_history->add("clear - " + msg->get("clears the command history"), false);
 		log_history->add("help - " + msg->get("displays this text"), false);
@@ -226,6 +227,10 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "toggle_devhud") {
 		DEV_HUD = !DEV_HUD;
 		log_history->add(msg->get("Toggled the developer hud"), false);
+	}
+	else if (args[0] == "toggle_hud") {
+		SHOW_HUD = !SHOW_HUD;
+		log_history->add(msg->get("Toggled the hud"), false);
 	}
 	else if (args[0] == "spawn_enemy") {
 		if (args.size() > 1) {

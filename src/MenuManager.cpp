@@ -151,6 +151,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 	done = false;
 
 	closeAll(); // make sure all togglable menus start closed
+
+	SHOW_HUD = true;
 }
 
 void MenuManager::alignAll() {
@@ -1309,8 +1311,21 @@ void MenuManager::resetDrag() {
 
 void MenuManager::render() {
 	// render the devhud under other menus
-	if (DEV_MODE) {
+	if (DEV_MODE && SHOW_HUD) {
 		devhud->render();
+	}
+
+	if (!SHOW_HUD) {
+		// if the hud is disabled, only show a few necessary menus
+
+		// exit menu
+		menus[9]->render();
+
+		// dev console
+		if (DEV_MODE)
+			devconsole->render();
+
+		return;
 	}
 
 	for (unsigned int i=0; i<menus.size(); i++) {

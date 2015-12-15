@@ -137,6 +137,8 @@ void CombatText::logic(const FPoint& _cam) {
 }
 
 void CombatText::render() {
+	if (!SHOW_HUD) return;
+
 	for(std::vector<Combat_Text_Item>::iterator it = combat_text.begin(); it != combat_text.end(); ++it) {
 		if (it->lifespan > 0)
 			it->label->render();

@@ -146,6 +146,7 @@ bool DEV_MODE;
 bool DEV_HUD;
 bool SHOW_TARGET;
 bool LOOT_TOOLTIPS;
+bool SHOW_HUD = true;
 
 // Input Settings
 bool MOUSE_MOVE;

@@ -797,7 +797,7 @@ void MapRenderer::checkNearestEvent() {
 }
 
 void MapRenderer::checkTooltip() {
-	if (show_tooltip)
+	if (show_tooltip && SHOW_HUD)
 		tip->render(tip_buf, tip_pos, STYLE_TOPLABEL);
 }
 

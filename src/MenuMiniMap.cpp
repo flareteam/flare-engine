@@ -98,6 +98,8 @@ void MenuMiniMap::render() {
 }
 
 void MenuMiniMap::render(FPoint hero_pos) {
+	if (!SHOW_HUD) return;
+
 	if (!text_pos.hidden) label->render();
 
 	if (map_surface) {
