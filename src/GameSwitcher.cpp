@@ -200,7 +200,7 @@ void GameSwitcher::logic() {
 }
 
 void GameSwitcher::showFPS(int fps) {
-	if (SHOW_FPS) {
+	if (SHOW_FPS && SHOW_HUD) {
 		if (!label_fps) label_fps = new WidgetLabel();
 		if (fps_ticks == 0) {
 			fps_ticks = MAX_FRAMES_PER_SEC / 4;
