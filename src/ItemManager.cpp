@@ -39,32 +39,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <climits>
 #include <cstring>
 
-/**
- * Resizes vector vec, so it can fit index id.
- */
-template <typename Ty_>
-static inline void ensureFitsId(std::vector<Ty_>& vec, int id) {
-	// id's are always greater or equal 1;
-	if (id < 1) return;
-
-	typedef typename std::vector<Ty_>::size_type VecSz;
-
-	if (vec.size() <= VecSz(id+1))
-		vec.resize(id+1);
-}
-
-/**
- * Trims vector allocated memory to its size.
- *
- * Emulates C++2011 vector::shrink_to_fit().
- * It is sometimes also called "swap trick".
- */
-template <typename Ty_>
-static inline void shrinkVecToFit(std::vector<Ty_>& vec) {
-	if (vec.capacity() != vec.size())
-		std::vector<Ty_>(vec).swap(vec);
-}
-
 bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
 	return stack1.item < stack2.item;
 }
@@ -103,8 +77,10 @@ void ItemManager::loadAll() {
 	 * vector is twice as large as needed. This memory is definitly not used,
 	 * so we can free it.
 	 */
-	shrinkVecToFit(items);
-	shrinkVecToFit(item_sets);
+	if (items.capacity() != items.size())
+		items.swap(items);
+	if (item_sets.capacity() != item_sets.size())
+		item_sets.swap(item_sets);
 
 	// do we need to print these messages?
 	if (items.empty()) logInfo("ItemManager: No items were found.");
@@ -455,7 +431,11 @@ Color ItemManager::getItemColor(unsigned id) {
 }
 
 void ItemManager::addUnknownItem(unsigned id) {
-	ensureFitsId(items, id);
+	if (id > 0) {
+		size_t new_size = id+1;
+		if (items.size() <= new_size)
+			items.resize(new_size);
+	}
 }
 
 /**
@@ -479,7 +459,12 @@ void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
 			// @ATTR id|integer|A uniq id for the item set.
 			id_line = true;
 			id = toInt(infile.val);
-			ensureFitsId(item_sets, id+1);
+
+			if (id > 0) {
+				size_t new_size = id+1;
+				if (item_sets.size() <= new_size)
+					item_sets.resize(new_size);
+			}
 
 			clear_bonus = true;
 		}

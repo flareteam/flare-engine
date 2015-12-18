@@ -33,9 +33,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  *
  * Postcondition: value >= floor
  */
-template <typename Ty1_, typename Ty2_>
-inline void clampFloor(Ty1_& value, Ty2_ floor) {
-	value = std::max<Ty1_>(value, floor);
+inline void clampFloor(int& value, const int floor) {
+	value = std::max<int>(value, floor);
 }
 
 /**
@@ -43,28 +42,15 @@ inline void clampFloor(Ty1_& value, Ty2_ floor) {
  *
  * Postcondition: value <= ceiling
  */
-template <typename Ty1_, typename Ty2_>
-inline void clampCeil(Ty1_& value, Ty2_ ceiling) {
-	value = std::min<Ty1_>(value, ceiling);
-}
-
-/**
- * Clamps value.
- *
- * Postcondition: floor <= value <= ceiling
- */
-template <typename Ty1_, typename Ty2_>
-inline void clamp(Ty1_& value, Ty2_ floor, Ty2_ ceiling) {
-	clampFloor(value, floor);
-	clampCeil(value, ceiling);
+inline void clampCeil(int& value, const int ceiling) {
+	value = std::min<int>(value, ceiling);
 }
 
 /**
  * Returns sign of value.
  */
-template <typename Ty_>
-inline Ty_ signum(Ty_ value) {
-	return (Ty_(0) < value) - (value < Ty_(0));
+inline int signum(const int value) {
+	return (0 < value) - (value < 0);
 }
 
 /**
