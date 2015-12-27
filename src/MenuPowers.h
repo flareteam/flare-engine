@@ -51,22 +51,22 @@ public:
 
 class Power_Menu_Cell {
 public:
-	short id;
-	short tab;
+	int id;
+	int tab;
 	Point pos;
-	short requires_physoff;
-	short requires_physdef;
-	short requires_mentoff;
-	short requires_mentdef;
-	short requires_defense;
-	short requires_offense;
-	short requires_physical;
-	short requires_mental;
-	short requires_level;
-	short upgrade_level;
-	std::vector<short> upgrades;
+	int requires_physoff;
+	int requires_physdef;
+	int requires_mentoff;
+	int requires_mentdef;
+	int requires_defense;
+	int requires_offense;
+	int requires_physical;
+	int requires_mental;
+	int requires_level;
+	int upgrade_level;
+	std::vector<int> upgrades;
 
-	std::vector<short> requires_power;
+	std::vector<int> requires_power;
 	std::vector<int> requires_power_cell;
 
 	bool requires_point;
@@ -116,7 +116,7 @@ private:
 	Point close_pos;
 	Rect tab_area;
 
-	short points_left;
+	int points_left;
 	std::vector<Power_Menu_Tab> tabs;
 	std::string default_background;
 
@@ -133,10 +133,10 @@ private:
 	Color color_penalty;
 	Color color_flavor;
 
-	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
-	short nextLevel(short power_cell_index);
-	void replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index);
-	short getPointsUsed();
+	int id_by_powerIndex(int power_index, const std::vector<Power_Menu_Cell>& cell);
+	int nextLevel(int power_cell_index);
+	void replacePowerCellDataByUpgrade(int power_cell_index, int upgrade_cell_index);
+	int getPointsUsed();
 	void setUnlockedPowers();
 
 	bool powerIsVisible(int id);
@@ -159,11 +159,11 @@ public:
 	bool baseRequirementsMet(int id);
 	bool requirementsMet(int id);
 	int click(Point mouse);
-	void upgradePower(short power_cell_index);
-	bool canUpgrade(short power_cell_index);
+	void upgradePower(int power_cell_index);
+	bool canUpgrade(int power_cell_index);
 	void applyPowerUpgrades();
-	bool meetsUsageStats(unsigned powerid);
-	short getUnspent() {
+	bool meetsUsageStats(int powerid);
+	int getUnspent() {
 		return points_left;
 	}
 	void resetToBasePowers();

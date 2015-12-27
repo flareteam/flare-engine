@@ -100,7 +100,7 @@ void MenuPowers::align() {
 		tab_control->updateHeader();
 	}
 
-	for (unsigned int i=0; i<slots.size(); i++) {
+	for (size_t i=0; i<slots.size(); i++) {
 		if (!slots[i]) continue;
 
 		slots[i]->setPos(window_area.x, window_area.y);
@@ -175,21 +175,21 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	power_cell_base = power_cell;
 
 	// store the appropriate level for all upgrades
-	for (unsigned i=0; i<power_cell_upgrade.size(); ++i) {
-		for (unsigned j=0; j<power_cell_base.size(); j++) {
-			std::vector<short>::iterator it = std::find(power_cell_base[j].upgrades.begin(), power_cell_base[j].upgrades.end(), power_cell_upgrade[i].id);
+	for (size_t i=0; i<power_cell_upgrade.size(); ++i) {
+		for (size_t j=0; j<power_cell_base.size(); j++) {
+			std::vector<int>::iterator it = std::find(power_cell_base[j].upgrades.begin(), power_cell_base[j].upgrades.end(), power_cell_upgrade[i].id);
 			if (it != power_cell_base[j].upgrades.end()) {
-				power_cell_upgrade[i].upgrade_level = static_cast<short>(std::distance(power_cell_base[j].upgrades.begin(), it) + 2);
+				power_cell_upgrade[i].upgrade_level = static_cast<int>(std::distance(power_cell_base[j].upgrades.begin(), it) + 2);
 				break;
 			}
 		}
 	}
 
 	// combine base and upgrade powers into a single list
-	for (unsigned i=0; i<power_cell_base.size(); ++i) {
+	for (size_t i=0; i<power_cell_base.size(); ++i) {
 		power_cell_all.push_back(power_cell_base[i]);
 	}
-	for (unsigned i=0; i<power_cell_upgrade.size(); ++i) {
+	for (size_t i=0; i<power_cell_upgrade.size(); ++i) {
 		power_cell_all.push_back(power_cell_upgrade[i]);
 	}
 
@@ -211,7 +211,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 		}
 	}
 	else {
-		for (unsigned int i = 0; i < tabs.size(); ++i) {
+		for (size_t i=0; i<tabs.size(); ++i) {
 			if (tabs[i].background == "")
 				tabs[i].background = default_background;
 
@@ -240,15 +240,15 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			tab_control->setMainArea(window_area.x+tab_area.x, window_area.y+tab_area.y, tab_area.w, tab_area.h);
 
 			// Define the header.
-			for (unsigned i=0; i<tabs.size(); i++)
-				tab_control->setTabTitle(i, msg->get(tabs[i].title));
+			for (size_t i=0; i<tabs.size(); i++)
+				tab_control->setTabTitle(static_cast<unsigned>(i), msg->get(tabs[i].title));
 			tab_control->updateHeader();
 		}
 	}
 
 	// create power slots
-	for (unsigned int i=0; i<slots.size(); i++) {
-		if (static_cast<unsigned>(power_cell[i].id) < powers->powers.size()) {
+	for (size_t i=0; i<slots.size(); i++) {
+		if (static_cast<size_t>(power_cell[i].id) < powers->powers.size()) {
 			slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
 			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y);
 			tablist.add(slots[i]);
@@ -266,14 +266,14 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 	align();
 }
 
-short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell) {
+int MenuPowers::id_by_powerIndex(int power_index, const std::vector<Power_Menu_Cell>& cell) {
 	// Powers can not have an id of 0
 	if (power_index == 0) return -1;
 
 	// Find cell with our power
-	for (unsigned i=0; i<cell.size(); i++)
+	for (size_t i=0; i<cell.size(); i++)
 		if (cell[i].id == power_index)
-			return static_cast<short>(i);
+			return static_cast<int>(i);
 
 	return -1;
 }
@@ -282,17 +282,17 @@ short MenuPowers::id_by_powerIndex(short power_index, const std::vector<Power_Me
  * Apply power upgrades on savegame loading
  */
 void MenuPowers::applyPowerUpgrades() {
-	for (unsigned i = 0; i < power_cell.size(); i++) {
+	for (size_t i=0; i<power_cell.size(); i++) {
 		if (!power_cell[i].upgrades.empty()) {
-			std::vector<short>::iterator it;
+			std::vector<int>::iterator it;
 			for (it = power_cell[i].upgrades.end(); it != power_cell[i].upgrades.begin(); ) {
 				--it;
 				std::vector<int>::iterator upgrade_it;
 				upgrade_it = std::find(stats->powers_list.begin(), stats->powers_list.end(), *it);
 				if (upgrade_it != stats->powers_list.end()) {
-					short upgrade_index = id_by_powerIndex(static_cast<short>(*upgrade_it), power_cell_upgrade);
+					int upgrade_index = id_by_powerIndex((*upgrade_it), power_cell_upgrade);
 					if (upgrade_index != -1)
-						replacePowerCellDataByUpgrade(static_cast<short>(i), upgrade_index);
+						replacePowerCellDataByUpgrade(static_cast<int>(i), upgrade_index);
 					break;
 				}
 			}
@@ -304,24 +304,24 @@ void MenuPowers::applyPowerUpgrades() {
 /**
  * Find cell in upgrades with next upgrade for current power_cell
  */
-short MenuPowers::nextLevel(short power_cell_index) {
+int MenuPowers::nextLevel(int power_cell_index) {
 	if (power_cell[power_cell_index].upgrades.empty()) {
 		return -1;
 	}
 
-	std::vector<short>::iterator level_it;
+	std::vector<int>::iterator level_it;
 	level_it = std::find(power_cell[power_cell_index].upgrades.begin(),
 					power_cell[power_cell_index].upgrades.end(),
 					power_cell[power_cell_index].id);
 
 	if (level_it == power_cell[power_cell_index].upgrades.end()) {
 		// current power is base power, take first upgrade
-		short index = power_cell[power_cell_index].upgrades[0];
+		int index = power_cell[power_cell_index].upgrades[0];
 		return id_by_powerIndex(index, power_cell_upgrade);
 	}
 	// current power is an upgrade, take next upgrade if avaliable
-	short index = static_cast<short>(std::distance(power_cell[power_cell_index].upgrades.begin(), level_it));
-	if (static_cast<short>(power_cell[power_cell_index].upgrades.size()) > index + 1) {
+	int index = static_cast<int>(std::distance(power_cell[power_cell_index].upgrades.begin(), level_it));
+	if (static_cast<int>(power_cell[power_cell_index].upgrades.size()) > index + 1) {
 		return id_by_powerIndex(*(++level_it), power_cell_upgrade);
 	}
 	else {
@@ -332,8 +332,8 @@ short MenuPowers::nextLevel(short power_cell_index) {
 /**
  * Replace data in power_cell[cell_index] by data in upgrades
  */
-void MenuPowers::upgradePower(short power_cell_index) {
-	short i = nextLevel(power_cell_index);
+void MenuPowers::upgradePower(int power_cell_index) {
+	int i = nextLevel(power_cell_index);
 	if (i == -1)
 		return;
 
@@ -358,7 +358,7 @@ void MenuPowers::upgradePower(short power_cell_index) {
 	setUnlockedPowers();
 }
 
-void MenuPowers::replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index) {
+void MenuPowers::replacePowerCellDataByUpgrade(int power_cell_index, int upgrade_cell_index) {
 	power_cell[power_cell_index].id = power_cell_upgrade[upgrade_cell_index].id;
 	power_cell[power_cell_index].requires_physoff = power_cell_upgrade[upgrade_cell_index].requires_physoff;
 	power_cell[power_cell_index].requires_physdef = power_cell_upgrade[upgrade_cell_index].requires_physdef;
@@ -410,7 +410,7 @@ bool MenuPowers::requirementsMet(int id) {
 
 	// If power_id is saved into vector, it's unlocked anyway
 	// check power_cell_unlocked and stats->powers_list
-	for (unsigned i=0; i<power_cell_unlocked.size(); ++i) {
+	for (size_t i=0; i<power_cell_unlocked.size(); ++i) {
 		if (power_cell_unlocked[i].id == power_cell_all[id].id)
 			return true;
 	}
@@ -475,9 +475,9 @@ int MenuPowers::click(Point mouse) {
 	return 0;
 }
 
-short MenuPowers::getPointsUsed() {
-	short used = 0;
-	for (unsigned i=0; i<power_cell_unlocked.size(); ++i) {
+int MenuPowers::getPointsUsed() {
+	int used = 0;
+	for (size_t i=0; i<power_cell_unlocked.size(); ++i) {
 		if (power_cell_unlocked[i].requires_point)
 			used++;
 	}
@@ -489,7 +489,7 @@ void MenuPowers::setUnlockedPowers() {
 	std::vector<int> power_ids;
 	power_cell_unlocked.clear();
 
-	for (unsigned i=0; i<power_cell.size(); ++i) {
+	for (size_t i=0; i<power_cell.size(); ++i) {
 		if (std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) {
 			// base power
 			if (std::find(power_ids.begin(), power_ids.end(), power_cell[i].id) == power_ids.end()) {
@@ -500,7 +500,7 @@ void MenuPowers::setUnlockedPowers() {
 				continue;
 
 			//upgrades
-			for (unsigned j=0; j<power_cell[i].upgrades.size(); ++j) {
+			for (size_t j=0; j<power_cell[i].upgrades.size(); ++j) {
 				if (std::find(power_ids.begin(), power_ids.end(), power_cell[i].upgrades[j]) == power_ids.end()) {
 					int id = id_by_powerIndex(power_cell[i].upgrades[j], power_cell_upgrade);
 					if (id != -1) {
@@ -520,8 +520,8 @@ void MenuPowers::setUnlockedPowers() {
 }
 
 void MenuPowers::logic() {
-	for (unsigned i=0; i<power_cell_unlocked.size(); i++) {
-		if (static_cast<unsigned>(power_cell_unlocked[i].id) < powers->powers.size() && powers->powers[power_cell_unlocked[i].id].passive) {
+	for (size_t i=0; i<power_cell_unlocked.size(); i++) {
+		if (static_cast<size_t>(power_cell_unlocked[i].id) < powers->powers.size() && powers->powers[power_cell_unlocked[i].id].passive) {
 			bool unlocked_power = std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell_unlocked[i].id) != stats->powers_list.end();
 			std::vector<int>::iterator it = std::find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell_unlocked[i].id);
 
@@ -544,21 +544,21 @@ void MenuPowers::logic() {
 		}
 	}
 
-	for (unsigned i=0; i<power_cell.size(); i++) {
+	for (size_t i=0; i<power_cell.size(); i++) {
 		//upgrade buttons logic
 		if (upgradeButtons[i] != NULL) {
 			upgradeButtons[i]->enabled = false;
 			// enable button only if current level is unlocked and next level can be unlocked
-			if (canUpgrade(static_cast<short>(i))) {
+			if (canUpgrade(static_cast<int>(i))) {
 				upgradeButtons[i]->enabled = true;
 			}
 			if ((!tab_control || power_cell[i].tab == tab_control->getActiveTab()) && upgradeButtons[i]->checkClick()) {
-				upgradePower(static_cast<short>(i));
+				upgradePower(static_cast<int>(i));
 			}
 		}
 	}
 
-	points_left = static_cast<short>((stats->level * stats->power_points_per_level) - getPointsUsed());
+	points_left = (stats->level * stats->power_points_per_level) - getPointsUsed();
 	if (points_left > 0) {
 		newPowerNotification = true;
 	}
@@ -574,7 +574,7 @@ void MenuPowers::logic() {
 
 	if (tab_control) {
 		// make shure keyboard navigation leads us to correct tab
-		for (unsigned int i = 0; i < slots.size(); i++) {
+		for (size_t i=0; i<slots.size(); i++) {
 			if (slots[i] && slots[i]->in_focus)
 				tab_control->setActiveTab(power_cell[i].tab);
 		}
@@ -583,7 +583,7 @@ void MenuPowers::logic() {
 	}
 }
 
-bool MenuPowers::canUpgrade(short power_cell_index) {
+bool MenuPowers::canUpgrade(int power_cell_index) {
 	if (points_left < 1)
 		return false;
 
@@ -591,7 +591,7 @@ bool MenuPowers::canUpgrade(short power_cell_index) {
 	if (!requirementsMet(id))
 		return false;
 
-	short next_index = nextLevel(power_cell_index);
+	int next_index = nextLevel(power_cell_index);
 	if (next_index == -1)
 		return false;
 	if (!power_cell_upgrade[next_index].requires_point)
@@ -625,7 +625,7 @@ void MenuPowers::render() {
 	if (tab_control) {
 		tab_control->render();
 		unsigned active_tab = tab_control->getActiveTab();
-		for (unsigned i=0; i<tabs.size(); i++) {
+		for (size_t i=0; i<tabs.size(); i++) {
 			if (active_tab == i) {
 				// power tree
 				Sprite *r = tree_surf[i];
@@ -683,7 +683,7 @@ void MenuPowers::displayBuild(int power_id) {
 	src_unlock.w = ICON_SIZE;
 	src_unlock.h = ICON_SIZE;
 
-	for (unsigned i=0; i<power_cell.size(); i++) {
+	for (size_t i=0; i<power_cell.size(); i++) {
 		if (power_cell[i].id == power_id && powers_unlock && slots[i]) {
 			powers_unlock->setClip(src_unlock);
 			powers_unlock->setDest(slots[i]->pos);
@@ -699,7 +699,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 
 	TooltipData tip;
 
-	for (unsigned i=0; i<power_cell.size(); i++) {
+	for (size_t i=0; i<power_cell.size(); i++) {
 
 		if (tab_control && (tab_control->getActiveTab() != power_cell[i].tab)) continue;
 
@@ -709,9 +709,9 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
 			bool base_unlocked = requirementsMet(cell_index) || std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 
-			generatePowerDescription(&tip, i, power_cell, !base_unlocked);
+			generatePowerDescription(&tip, static_cast<int>(i), power_cell, !base_unlocked);
 			if (!power_cell[i].upgrades.empty()) {
-				short next_level = nextLevel(static_cast<short>(i));
+				int next_level = nextLevel(static_cast<int>(i));
 				if (next_level != -1) {
 					tip.addText("\n" + msg->get("Next Level:"));
 					generatePowerDescription(&tip, next_level, power_cell_upgrade, base_unlocked);
@@ -1012,7 +1012,7 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 
 	std::set<std::string>::iterator it;
 	for (it = powers->powers[power_cells[slot_num].id].requires_flags.begin(); it != powers->powers[power_cells[slot_num].id].requires_flags.end(); ++it) {
-		for (unsigned i=0; i<EQUIP_FLAGS.size(); ++i) {
+		for (size_t i=0; i<EQUIP_FLAGS.size(); ++i) {
 			if ((*it) == EQUIP_FLAGS[i].id) {
 				tip->addText(msg->get("Requires a %s", msg->get(EQUIP_FLAGS[i].name)));
 			}
@@ -1077,10 +1077,10 @@ void MenuPowers::generatePowerDescription(TooltipData* tip, int slot_num, const 
 		tip->addText(msg->get("Requires Level %d", power_cells[slot_num].requires_level));
 	}
 
-	for (unsigned j = 0; j < power_cells[slot_num].requires_power.size(); ++j) {
+	for (size_t j=0; j < power_cells[slot_num].requires_power.size(); ++j) {
 		if (power_cells[slot_num].requires_power[j] == 0) continue;
 
-		short req_index = id_by_powerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
+		int req_index = id_by_powerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
 		if (req_index == -1) continue;
 
 		std::string req_power_name;
@@ -1119,10 +1119,10 @@ MenuPowers::~MenuPowers() {
 	if (powers_unlock) delete powers_unlock;
 	if (overlay_disabled) delete overlay_disabled;
 
-	for (unsigned int i=0; i<tree_surf.size(); i++) {
+	for (size_t i=0; i<tree_surf.size(); i++) {
 		if (tree_surf[i]) delete tree_surf[i];
 	}
-	for (unsigned int i=0; i<slots.size(); i++) {
+	for (size_t i=0; i<slots.size(); i++) {
 		delete slots.at(i);
 		delete upgradeButtons.at(i);
 	}
@@ -1137,10 +1137,10 @@ MenuPowers::~MenuPowers() {
 /**
  * Return true if required stats for power usage are met. Else return false.
  */
-bool MenuPowers::meetsUsageStats(unsigned powerid) {
-
+bool MenuPowers::meetsUsageStats(int powerid) {
 	// Find cell with our power
-	int id = id_by_powerIndex(static_cast<short>(powerid), power_cell);
+	int id = id_by_powerIndex(powerid, power_cell);
+
 	// If we didn't find power in power_menu, than it has no stats requirements
 	if (id == -1) return true;
 
@@ -1160,7 +1160,7 @@ void MenuPowers::renderPowers(int tab_num) {
 	disabled_src.x = disabled_src.y = 0;
 	disabled_src.w = disabled_src.h = ICON_SIZE;
 
-	for (unsigned i=0; i<power_cell.size(); i++) {
+	for (size_t i=0; i<power_cell.size(); i++) {
 		bool power_in_vector = false;
 
 		// Continue if slot is not filled with data
@@ -1199,11 +1199,11 @@ bool MenuPowers::powerIsVisible(int id) {
 	// If we didn't find power in power_menu, than it has no requirements
 	if (id == -1) return true;
 
-	for (unsigned i = 0; i < power_cell_all[id].visible_requires_status.size(); ++i)
+	for (size_t i=0; i<power_cell_all[id].visible_requires_status.size(); ++i)
 		if (!camp->checkStatus(power_cell_all[id].visible_requires_status[i]))
 			return false;
 
-	for (unsigned i = 0; i < power_cell_all[id].visible_requires_not.size(); ++i)
+	for (size_t i=0; i<power_cell_all[id].visible_requires_not.size(); ++i)
 		if (camp->checkStatus(power_cell_all[id].visible_requires_not[i]))
 			return false;
 
@@ -1228,7 +1228,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		int id = popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
-			power_cell.back().id = static_cast<short>(id);
+			power_cell.back().id = id;
 		}
 		else {
 			infile.error("MenuPowers: Power index out of bounds 1-%d, skipping power.", INT_MAX);
@@ -1248,34 +1248,34 @@ void MenuPowers::loadPower(FileParser &infile) {
 		return;
 
 	// @ATTR power.tab|integer|Tab index to place this power on, starting from 0.
-	if (infile.key == "tab") power_cell.back().tab = static_cast<short>(toInt(infile.val));
+	if (infile.key == "tab") power_cell.back().tab = toInt(infile.val);
 	// @ATTR power.position|x (integer), y (integer)|Position of this power icon; relative to MenuPowers "pos".
 	else if (infile.key == "position") power_cell.back().pos = toPoint(infile.val);
 
 	// @ATTR power.requires_physoff|integer|Power requires Physical and Offense stat of this value.
-	else if (infile.key == "requires_physoff") power_cell.back().requires_physoff = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_physoff") power_cell.back().requires_physoff = toInt(infile.val);
 	// @ATTR power.requires_physdef|integer|Power requires Physical and Defense stat of this value.
-	else if (infile.key == "requires_physdef") power_cell.back().requires_physdef = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_physdef") power_cell.back().requires_physdef = toInt(infile.val);
 	// @ATTR power.requires_mentoff|integer|Power requires Mental and Offense stat of this value.
-	else if (infile.key == "requires_mentoff") power_cell.back().requires_mentoff = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_mentoff") power_cell.back().requires_mentoff = toInt(infile.val);
 	// @ATTR power.requires_mentdef|integer|Power requires Mental and Defense stat of this value.
-	else if (infile.key == "requires_mentdef") power_cell.back().requires_mentdef = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_mentdef") power_cell.back().requires_mentdef = toInt(infile.val);
 
 	// @ATTR power.requires_defense|integer|Power requires Defense stat of this value.
-	else if (infile.key == "requires_defense") power_cell.back().requires_defense = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_defense") power_cell.back().requires_defense = toInt(infile.val);
 	// @ATTR power.requires_offense|integer|Power requires Offense stat of this value.
-	else if (infile.key == "requires_offense") power_cell.back().requires_offense = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_offense") power_cell.back().requires_offense = toInt(infile.val);
 	// @ATTR power.requires_physical|integer|Power requires Physical stat of this value.
-	else if (infile.key == "requires_physical") power_cell.back().requires_physical = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_physical") power_cell.back().requires_physical = toInt(infile.val);
 	// @ATTR power.requires_mental|integer|Power requires Mental stat of this value.
-	else if (infile.key == "requires_mental") power_cell.back().requires_mental = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_mental") power_cell.back().requires_mental = toInt(infile.val);
 
 	// @ATTR power.requires_point|boolean|Power requires a power point to unlock.
 	else if (infile.key == "requires_point") power_cell.back().requires_point = toBool(infile.val);
 	// @ATTR power.requires_level|integer|Power requires at least this level for the hero.
-	else if (infile.key == "requires_level") power_cell.back().requires_level = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_level") power_cell.back().requires_level = toInt(infile.val);
 	// @ATTR power.requires_power|integer|Power requires another power id.
-	else if (infile.key == "requires_power") power_cell.back().requires_power.push_back(static_cast<short>(toInt(infile.val)));
+	else if (infile.key == "requires_power") power_cell.back().requires_power.push_back(toInt(infile.val));
 
 	// @ATTR power.visible_requires_status|string|Hide the power if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell.back().visible_requires_status.push_back(infile.val);
@@ -1287,7 +1287,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 		upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
 		std::string repeat_val = infile.nextValue();
 		while (repeat_val != "") {
-			power_cell.back().upgrades.push_back(static_cast<short>(toInt(repeat_val)));
+			power_cell.back().upgrades.push_back(toInt(repeat_val));
 			repeat_val = infile.nextValue();
 		}
 
@@ -1304,7 +1304,7 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 		int id = popFirstInt(infile.val);
 		if (id > 0) {
 			skip_section = false;
-			power_cell_upgrade.back().id = static_cast<short>(id);
+			power_cell_upgrade.back().id = (id);
 		}
 		else {
 			skip_section = true;
@@ -1318,29 +1318,29 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 		return;
 
 	// @ATTR upgrade.requires_physoff|integer|Upgrade requires Physical and Offense stat of this value.
-	if (infile.key == "requires_physoff") power_cell_upgrade.back().requires_physoff = static_cast<short>(toInt(infile.val));
+	if (infile.key == "requires_physoff") power_cell_upgrade.back().requires_physoff = toInt(infile.val);
 	// @ATTR upgrade.requires_physdef|integer|Upgrade requires Physical and Defense stat of this value.
-	else if (infile.key == "requires_physdef") power_cell_upgrade.back().requires_physdef = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_physdef") power_cell_upgrade.back().requires_physdef = toInt(infile.val);
 	// @ATTR upgrade.requires_mentoff|integer|Upgrade requires Mental and Offense stat of this value.
-	else if (infile.key == "requires_mentoff") power_cell_upgrade.back().requires_mentoff = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_mentoff") power_cell_upgrade.back().requires_mentoff = toInt(infile.val);
 	// @ATTR upgrade.requires_mentdef|integer|Upgrade requires Mental and Defense stat of this value.
-	else if (infile.key == "requires_mentdef") power_cell_upgrade.back().requires_mentdef = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_mentdef") power_cell_upgrade.back().requires_mentdef = toInt(infile.val);
 
 	// @ATTR upgrade.requires_defense|integer|Upgrade requires Defense stat of this value.
-	else if (infile.key == "requires_defense") power_cell_upgrade.back().requires_defense = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_defense") power_cell_upgrade.back().requires_defense = toInt(infile.val);
 	// @ATTR upgrade.requires_offense|integer|Upgrade requires Offense stat of this value.
-	else if (infile.key == "requires_offense") power_cell_upgrade.back().requires_offense = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_offense") power_cell_upgrade.back().requires_offense = toInt(infile.val);
 	// @ATTR upgrade.requires_physical|integer|Upgrade requires Physical stat of this value.
-	else if (infile.key == "requires_physical") power_cell_upgrade.back().requires_physical = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_physical") power_cell_upgrade.back().requires_physical = toInt(infile.val);
 	// @ATTR upgrade.requires_mental|integer|Upgrade requires Mental stat of this value.
-	else if (infile.key == "requires_mental") power_cell_upgrade.back().requires_mental = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_mental") power_cell_upgrade.back().requires_mental = toInt(infile.val);
 
 	// @ATTR upgrade.requires_point|boolean|Upgrade requires a power point to unlock.
 	else if (infile.key == "requires_point") power_cell_upgrade.back().requires_point = toBool(infile.val);
 	// @ATTR upgrade.requires_level|integer|Upgrade requires at least this level for the hero.
-	else if (infile.key == "requires_level") power_cell_upgrade.back().requires_level = static_cast<short>(toInt(infile.val));
+	else if (infile.key == "requires_level") power_cell_upgrade.back().requires_level = toInt(infile.val);
 	// @ATTR upgrade.requires_power|integer|Upgrade requires another power id.
-	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(static_cast<short>(toInt(infile.val)));
+	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(toInt(infile.val));
 
 	// @ATTR upgrade.visible_requires_status|string|Hide the upgrade if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell_upgrade.back().visible_requires_status.push_back(infile.val);
@@ -1351,7 +1351,7 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 }
 
 void MenuPowers::resetToBasePowers() {
-	for (unsigned i=0; i<power_cell.size(); ++i) {
+	for (size_t i=0; i<power_cell.size(); ++i) {
 		power_cell[i] = power_cell_base[i];
 	}
 }

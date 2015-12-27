@@ -691,7 +691,7 @@ StatBlock::~StatBlock() {
 	removeFromSummons();
 }
 
-bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
+bool StatBlock::canUsePower(const Power &power, int powerid) const {
 	// needed to unlock shapeshifter powers
 	if (transformed) return mp >= power.requires_mp;
 

@@ -276,7 +276,7 @@ public:
 	std::vector<int> powers_passive;
 	std::vector<AIPower> powers_ai;
 
-	bool canUsePower(const Power &power, unsigned powerid) const;
+	bool canUsePower(const Power &power, int powerid) const;
 
 	float melee_range;
 	float threat_range;
