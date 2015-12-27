@@ -67,6 +67,7 @@ public:
 	std::vector<short> upgrades;
 
 	std::vector<short> requires_power;
+	std::vector<int> requires_power_cell;
 
 	bool requires_point;
 	bool passive_on;
@@ -125,7 +126,7 @@ private:
 
 	void loadGraphics();
 	void displayBuild(int power_id);
-	bool powerUnlockable(int power_index);
+	bool powerUnlockable(int id);
 	void renderPowers(int tab_num);
 
 	Color color_bonus;
@@ -138,7 +139,7 @@ private:
 	short getPointsUsed();
 	void setUnlockedPowers();
 
-	bool powerIsVisible(short power_index);
+	bool powerIsVisible(int id);
 	void loadTab(FileParser &infile);
 	void loadPower(FileParser &infile);
 	void loadUpgrade(FileParser &infile);
@@ -155,8 +156,8 @@ public:
 	void render();
 	TooltipData checkTooltip(Point mouse);
 	void generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
-	bool baseRequirementsMet(int power_index);
-	bool requirementsMet(int power_index);
+	bool baseRequirementsMet(int id);
+	bool requirementsMet(int id);
 	int click(Point mouse);
 	void upgradePower(short power_cell_index);
 	bool canUpgrade(short power_cell_index);
