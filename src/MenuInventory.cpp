@@ -698,7 +698,7 @@ int MenuInventory::getCurrency() {
  */
 bool MenuInventory::buy(ItemStack stack, int tab) {
 	int value_each;
-	if (tab == VENDOR_BUY) value_each = items->items[stack.item].price;
+	if (tab == VENDOR_BUY) value_each = items->items[stack.item].getPrice();
 	else value_each = items->items[stack.item].getSellPrice();
 
 	int count = value_each * stack.quantity;
@@ -730,7 +730,7 @@ bool MenuInventory::sell(ItemStack stack) {
 	if (stack.item == CURRENCY_ID) return false;
 
 	// items that have no price cannot be sold
-	if (items->items[stack.item].price == 0) return false;
+	if (items->items[stack.item].getPrice() == 0) return false;
 
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
@@ -1061,7 +1061,7 @@ void MenuInventory::fillEquipmentSlots() {
 
 int MenuInventory::getMaxPurchasable(int item, int vendor_tab) {
 	if (vendor_tab == VENDOR_BUY)
-		return currency / items->items[item].price;
+		return currency / items->items[item].getPrice();
 	else if (vendor_tab == VENDOR_SELL)
 		return currency / items->items[item].getSellPrice();
 	else

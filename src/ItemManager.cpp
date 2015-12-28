@@ -278,6 +278,9 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 		else if (infile.key == "price")
 			// @ATTR price|integer|The amount of currency the item costs, if set to 0 the item cannot be sold.
 			items[id].price = toInt(infile.val);
+		else if (infile.key == "price_per_level")
+			// @ATTR price_per_level|integer|Additional price for each player level above 1
+			items[id].price_per_level = toInt(infile.val);
 		else if (infile.key == "price_sell")
 			// @ATTR price_sell|integer|The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.
 			items[id].price_sell = toInt(infile.val);
@@ -762,12 +765,12 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// buy or sell price
-	if (items[stack.item].price > 0 && stack.item != CURRENCY_ID) {
+	if (items[stack.item].getPrice() > 0 && stack.item != CURRENCY_ID) {
 
 		int price_per_unit;
 		if (context == VENDOR_BUY) {
-			price_per_unit = items[stack.item].price;
-			if (stats->currency < items[stack.item].price) color = color_requirements_not_met;
+			price_per_unit = items[stack.item].getPrice();
+			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
 				tip.addText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
@@ -905,12 +908,16 @@ void ItemStack::clear() {
 	quantity = 0;
 }
 
+int Item::getPrice() {
+	return price + (price_per_level * (pc->stats.level - 1));
+}
+
 int Item::getSellPrice() {
 	int new_price = 0;
 	if (price_sell != 0)
 		new_price = price_sell;
 	else
-		new_price = static_cast<int>(static_cast<float>(price) * VENDOR_RATIO);
+		new_price = static_cast<int>(static_cast<float>(getPrice()) * VENDOR_RATIO);
 	if (new_price == 0) new_price = 1;
 
 	return new_price;

@@ -127,12 +127,14 @@ public:
 	std::vector<Point> replace_power;        // alter powers when this item is equipped. Power id 'x' is replaced with id 'y'
 	std::string power_desc;    // shows up in green text on the tooltip
 	int price;            // if price = 0 the item cannot be sold
+	int price_per_level;  // additional price for each character level above 1
 	int price_sell;       // if price_sell = 0, the sell price is price*vendor_ratio
 	int max_quantity;     // max count per stack
 	std::string pickup_status; // when this item is picked up, set a campaign state (usually for quest items)
 	std::string stepfx;        // sound effect played when walking (armors only)
 	std::vector<std::string> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
 
+	int getPrice();
 	int getSellPrice();
 
 	Item()
@@ -160,6 +162,7 @@ public:
 		, power(0)
 		, power_desc("")
 		, price(0)
+		, price_per_level(0)
 		, price_sell(0)
 		, max_quantity(1)
 		, pickup_status("")
