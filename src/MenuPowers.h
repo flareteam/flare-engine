@@ -96,6 +96,29 @@ public:
 
 class MenuPowers : public Menu {
 private:
+	void loadGraphics();
+	void loadTab(FileParser &infile);
+	void loadPower(FileParser &infile);
+	void loadUpgrade(FileParser &infile);
+
+	bool checkRequirements(int pci);
+	bool checkUnlocked(int pci);
+	bool checkCellVisible(int pci);
+	bool checkUnlock(int pci);
+	bool checkUpgrade(int pci);
+
+	int getCellByPowerIndex(int power_index, const std::vector<Power_Menu_Cell>& cell);
+	int getNextLevelCell(int pci);
+
+	void replaceCellWithUpgrade(int pci, int uci);
+	void upgradePower(int pci);
+
+	void setUnlockedPowers();
+	int getPointsUsed();
+
+	void createTooltip(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
+	void renderPowers(int tab_num);
+
 	StatBlock *stats;
 	MenuActionBar *action_bar;
 	std::vector<Power_Menu_Cell> power_cell;           // the current visible power cells
@@ -124,25 +147,9 @@ private:
 	WidgetLabel stat_up;
 	WidgetTabControl *tab_control;
 
-	void loadGraphics();
-	void displayBuild(int power_id);
-	bool powerUnlockable(int id);
-	void renderPowers(int tab_num);
-
 	Color color_bonus;
 	Color color_penalty;
 	Color color_flavor;
-
-	int id_by_powerIndex(int power_index, const std::vector<Power_Menu_Cell>& cell);
-	int nextLevel(int power_cell_index);
-	void replacePowerCellDataByUpgrade(int power_cell_index, int upgrade_cell_index);
-	int getPointsUsed();
-	void setUnlockedPowers();
-
-	bool powerIsVisible(int id);
-	void loadTab(FileParser &infile);
-	void loadPower(FileParser &infile);
-	void loadUpgrade(FileParser &infile);
 
 	bool tree_loaded;
 
@@ -152,27 +159,23 @@ public:
 	void align();
 
 	void loadPowerTree(const std::string &filename);
+
 	void logic();
 	void render();
+
 	TooltipData checkTooltip(Point mouse);
-	void generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
-	bool baseRequirementsMet(int id);
-	bool requirementsMet(int id);
 	int click(Point mouse);
-	void upgradePower(int power_cell_index);
-	bool canUpgrade(int power_cell_index);
+	void upgradeByCell(int pci);
+
 	void applyPowerUpgrades();
-	bool meetsUsageStats(int powerid);
-	int getUnspent() {
-		return points_left;
-	}
 	void resetToBasePowers();
+
+	bool meetsUsageStats(int power_index);
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 
 	bool newPowerNotification;
 
 	TabList tablist;
-
 };
 #endif
