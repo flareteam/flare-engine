@@ -41,8 +41,6 @@ Created and destroyed by main.cpp
 #include "RenderDevice.h"
 #include "SaveLoad.h"
 
-extern SDL_Joystick *joy;
-
 extern AnimationManager *anim;
 extern CombatText *comb;
 extern CursorManager *curs;

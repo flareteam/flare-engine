@@ -33,9 +33,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 InputState::InputState(void)
 	: done(false)
 	, mouse()
-	, last_key(0)
-	, last_button(0)
-	, last_joybutton(0)
+	, last_key(-1)
+	, last_button(-1)
+	, last_joybutton(-1)
+	, last_joyaxis(-1)
 	, scroll_up(false)
 	, scroll_down(false)
 	, lock_scroll(false)
@@ -63,6 +64,14 @@ void InputState::defaultJoystickBindings () {
 	binding_joy[ACTIONBAR_USE] = 3;
 	binding_joy[ACTIONBAR_BACK] = 4;
 	binding_joy[ACTIONBAR_FORWARD] = 5;
+
+	// axis 0
+	binding_joy[LEFT] = JOY_AXIS_OFFSET * (-1);
+	binding_joy[RIGHT] = (JOY_AXIS_OFFSET+1) * (-1);
+
+	// axis 1
+	binding_joy[UP] = (JOY_AXIS_OFFSET+2) * (-1);
+	binding_joy[DOWN] = (JOY_AXIS_OFFSET+3) * (-1);
 }
 
 /**

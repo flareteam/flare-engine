@@ -51,6 +51,11 @@ int isExitEvent(void* userdata, SDL_Event* event)
 
 SDLInputState::SDLInputState(void)
 	: InputState()
+	, joy(NULL)
+	, joy_num(0)
+	, joy_axis_num(0)
+	, joy_axis_ticks(0)
+	, temp_joyaxis(-1)
 {
 #if !defined(__ANDROID__) && !defined (__IPHONEOS__)
 	SDL_StartTextInput();
@@ -69,6 +74,42 @@ SDLInputState::SDLInputState(void)
 
 	loadKeyBindings();
 	setKeybindNames();
+
+	// print some information to the console about connected joysticks
+	if(SDL_NumJoysticks() > 0) {
+		logInfo("%d joystick(s) found.", SDL_NumJoysticks());
+		joy_num = SDL_NumJoysticks();
+	}
+	else {
+		logInfo("No joysticks were found.");
+		ENABLE_JOYSTICK = false;
+		return;
+	}
+
+	for(int i = 0; i < SDL_NumJoysticks(); i++) {
+		logInfo("  Joy %d) %s", i, getJoystickName(i).c_str());
+	}
+}
+
+void SDLInputState::initJoystick() {
+	SDL_Init(SDL_INIT_JOYSTICK);
+
+	// close our joystick handle if it's open
+	if (joy) {
+		SDL_JoystickClose(joy);
+		joy = NULL;
+	}
+
+	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
+		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
+		logInfo("Using joystick #%d.", JOYSTICK_DEVICE);
+	}
+
+	if (joy) {
+		joy_axis_num = SDL_JoystickNumAxes(joy);
+		joy_axis_prev.resize(joy_axis_num*2, 0);
+		joy_axis_deltas.resize(joy_axis_num*2, 0);
+	}
 }
 
 void SDLInputState::defaultQwertyKeyBindings () {
@@ -131,6 +172,7 @@ void SDLInputState::handle() {
 
 	SDL_Event event;
 	int bind_button = 0;
+	bool joy_hat_event = false;
 
 	/* Check for events */
 	while (SDL_PollEvent (&event)) {
@@ -258,6 +300,7 @@ void SDLInputState::handle() {
 				*/
 			case SDL_JOYHATMOTION:
 				if(JOYSTICK_DEVICE == event.jhat.which && ENABLE_JOYSTICK) {
+					joy_hat_event = true;
 					switch (event.jhat.value) {
 						case SDL_HAT_CENTERED:
 							un_press[UP] = true;
@@ -377,81 +420,51 @@ void SDLInputState::handle() {
 	}
 
 	// joystick analog input
-	if(ENABLE_JOYSTICK) {
-		static bool joyHasMovedX;
-		static bool joyHasMovedY;
-		static int joyLastPosX;
-		static int joyLastPosY;
+	if(ENABLE_JOYSTICK && joy_axis_num > 0 && !joy_hat_event) {
+		std::vector<bool> joy_axis_pressed;
+		joy_axis_pressed.resize(joy_axis_num*2, false);
+		last_joyaxis = -1;
 
-		int joyAxisXval = SDL_JoystickGetAxis(joy, 0);
-		int joyAxisYval = SDL_JoystickGetAxis(joy, 1);
+		for (int i=0; i<joy_axis_num*2; i++) {
+			int axis = SDL_JoystickGetAxis(joy, i/2);
 
-		// axis 0
-		if(joyAxisXval < -JOY_DEADZONE) {
-			if(joyLastPosX == JOY_POS_RIGHT) {
-				joyHasMovedX = 0;
-			}
-			if(joyHasMovedX == 0) {
-				pressing[LEFT] = true;
-				un_press[LEFT] = false;
-				pressing[RIGHT] = false;
-				lock[RIGHT] = false;
-				joyLastPosX = JOY_POS_LEFT;
-				joyHasMovedX = 1;
-			}
-		}
-		if(joyAxisXval > JOY_DEADZONE) {
-			if(joyLastPosX == JOY_POS_LEFT) {
-				joyHasMovedX = 0;
-			}
-			if(joyHasMovedX == 0) {
-				pressing[RIGHT] = true;
-				un_press[RIGHT] = false;
-				pressing[LEFT] = false;
-				lock[LEFT] = false;
-				joyLastPosX = JOY_POS_RIGHT;
-				joyHasMovedX = 1;
-			}
-		}
-		if((joyAxisXval >= -JOY_DEADZONE) && (joyAxisXval < JOY_DEADZONE)) {
-			un_press[LEFT] = true;
-			un_press[RIGHT] = true;
-			joyHasMovedX = 0;
-			joyLastPosX = JOY_POS_CENTER;
-		}
+			joy_axis_deltas[i] = (axis - joy_axis_prev[i])/2;
+			joy_axis_prev[i] = axis;
 
-		// axis 1
-		if(joyAxisYval < -JOY_DEADZONE) {
-			if(joyLastPosY == JOY_POS_DOWN) {
-				joyHasMovedY = 0;
+			if (i % 2 == 0) {
+				if (axis < -JOY_DEADZONE)
+					joy_axis_pressed[i] = true;
+				else if (axis <= JOY_DEADZONE)
+					joy_axis_pressed[i] = false;
 			}
-			if(joyHasMovedY == 0) {
-				pressing[UP] = true;
-				un_press[UP] = false;
-				pressing[DOWN] = false;
-				lock[DOWN] = false;
-				joyLastPosY = JOY_POS_UP;
-				joyHasMovedY = 1;
-			}
-		}
-		if(joyAxisYval > JOY_DEADZONE) {
-			if(joyLastPosY == JOY_POS_UP) {
-				joyHasMovedY = 0;
-			}
-			if(joyHasMovedY == 0) {
-				pressing[DOWN] = true;
-				un_press[DOWN] = false;
-				pressing[UP] = false;
-				lock[UP] = false;
-				joyLastPosY = JOY_POS_DOWN;
-				joyHasMovedY = 1;
+			else {
+				if (axis > JOY_DEADZONE)
+					joy_axis_pressed[i] = true;
+				else if (axis >= -JOY_DEADZONE)
+					joy_axis_pressed[i] = false;
 			}
 		}
-		if((joyAxisYval >= -JOY_DEADZONE) && (joyAxisYval < JOY_DEADZONE)) {
-			un_press[UP] = true;
-			un_press[DOWN] = true;
-			joyHasMovedY = 0;
-			joyLastPosY = JOY_POS_CENTER;
+		for (int i=0; i<joy_axis_num*2; i++) {
+			int bind_axis = (i+JOY_AXIS_OFFSET) * (-1);
+			for (int key=0; key<key_count; key++) {
+				if (bind_axis == binding_joy[key]) {
+					if (joy_axis_pressed[i]) {
+						pressing[key] = true;
+						un_press[key] = false;
+					}
+					else {
+						if (pressing[key]) {
+							un_press[key] = true;
+						}
+						pressing[key] = false;
+						lock[key] = false;
+					}
+				}
+			}
+
+			if (joy_axis_pressed[i] && joy_axis_deltas[i] != 0) {
+				last_joyaxis = (i+JOY_AXIS_OFFSET) * (-1);
+			}
 		}
 	}
 }
@@ -506,6 +519,14 @@ std::string SDLInputState::getBindingString(int key, int bindings_list) {
 	else if (bindings_list == INPUT_BINDING_JOYSTICK) {
 		if (inpt->binding_joy[key] == -1)
 			return none;
+		else if (inpt->binding_joy[key] < -1) {
+			int axis = (inpt->binding_joy[key] + JOY_AXIS_OFFSET) * (-1);
+
+			if (axis % 2 == 0)
+				return msg->get("Axis %d -", axis/2);
+			else
+				return msg->get("Axis %d +", axis/2);
+		}
 		else
 			return msg->get("Button %d", inpt->binding_joy[key]);
 	}
@@ -520,7 +541,10 @@ std::string SDLInputState::getMovementString() {
 
 	if (ENABLE_JOYSTICK) {
 		// can't rebind joystick axes
-		ss << msg->get("Joy Axis 0/Joy Axis 1");
+		ss << inpt->getBindingString(LEFT, INPUT_BINDING_JOYSTICK) <<  "/";
+		ss << inpt->getBindingString(RIGHT, INPUT_BINDING_JOYSTICK) << "/";
+		ss << inpt->getBindingString(UP, INPUT_BINDING_JOYSTICK) << "/";
+		ss << inpt->getBindingString(DOWN, INPUT_BINDING_JOYSTICK);
 	}
 	else if (TOUCHSCREEN) {
 		ss << msg->get("%s on ground", msg->get("Tap"));
@@ -529,10 +553,10 @@ std::string SDLInputState::getMovementString() {
 		ss << msg->get("%s on ground", inpt->getBindingString(MAIN1));
 	}
 	else {
-		ss << inpt->getBindingString(UP) << "/";
 		ss << inpt->getBindingString(LEFT) <<  "/";
-		ss << inpt->getBindingString(DOWN) << "/";
-		ss << inpt->getBindingString(RIGHT);
+		ss << inpt->getBindingString(RIGHT) << "/";
+		ss << inpt->getBindingString(UP) << "/";
+		ss << inpt->getBindingString(DOWN);
 	}
 
 	ss << "]";
@@ -576,5 +600,11 @@ std::string SDLInputState::getContinueString() {
 	return ss.str();
 }
 
+int SDLInputState::getNumJoysticks() {
+	return joy_num;
+}
+
 SDLInputState::~SDLInputState() {
+	if (joy)
+		SDL_JoystickClose(joy);
 }

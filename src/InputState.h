@@ -71,6 +71,7 @@ const int DEVELOPER_MENU = 30;
 // -1 is reserved for unbound keys, so we start mouse bindings at -2
 // adding MOUSE_BIND_OFFSET to a mouse bind gives us the appropriate mouse button (mouse buttons start at 1)
 const int MOUSE_BIND_OFFSET = 2;
+const int JOY_AXIS_OFFSET = 2;
 
 // some mouse buttons are named (e.g. "Left Mouse")
 const int MOUSE_BUTTON_NAME_COUNT = 7;
@@ -94,6 +95,7 @@ public:
 	InputState(void);
 	virtual ~InputState() {};
 
+	virtual void initJoystick() = 0;
 	void defaultJoystickBindings();
 	void loadKeyBindings();
 	void saveKeyBindings();
@@ -112,6 +114,7 @@ public:
 	virtual std::string getMovementString() = 0;
 	virtual std::string getAttackString() = 0;
 	virtual std::string getContinueString() = 0;
+	virtual int getNumJoysticks() = 0;
 
 	void enableEventLog();
 
@@ -124,6 +127,7 @@ public:
 	int last_key;
 	int last_button;
 	int last_joybutton;
+	int last_joyaxis;
 	bool scroll_up;
 	bool scroll_down;
 	bool lock_scroll;

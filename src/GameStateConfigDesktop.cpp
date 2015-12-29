@@ -230,7 +230,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		// @ATTR joystick_device|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Joystick" list box relative to the frame.
 		placeLabeledWidget(joystick_device_lb, joystick_device_lstb, x1, y1, x2, y2, msg->get("Joystick"));
 
-		for(int i = 0; i < SDL_NumJoysticks(); i++) {
+		for(int i = 0; i < inpt->getNumJoysticks(); i++) {
 			std::string joystick_name = inpt->getJoystickName(i);
 			if (joystick_name != "")
 				joystick_device_lstb->append(joystick_name, joystick_name);
@@ -465,10 +465,8 @@ void GameStateConfigDesktop::updateInput() {
 	if (MOUSE_MOVE) mouse_move_cb->Check();
 	else mouse_move_cb->unCheck();
 
-	SDL_Init(SDL_INIT_JOYSTICK);
-	if (ENABLE_JOYSTICK && SDL_NumJoysticks() > 0) {
-		SDL_JoystickClose(joy);
-		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
+	if (ENABLE_JOYSTICK && inpt->getNumJoysticks() > 0) {
+		inpt->initJoystick();
 		joystick_device_lstb->select(JOYSTICK_DEVICE);
 	}
 	joystick_device_lstb->refresh();
@@ -575,45 +573,40 @@ void GameStateConfigDesktop::logicInput() {
 	if (mouse_move_cb->checkClick()) {
 		if (mouse_move_cb->isChecked()) {
 			MOUSE_MOVE=true;
-			no_mouse_cb->unCheck();
-			NO_MOUSE=false;
+			disableJoystickOptions();
 		}
 		else MOUSE_MOVE=false;
 	}
 	else if (mouse_aim_cb->checkClick()) {
 		if (mouse_aim_cb->isChecked()) {
 			MOUSE_AIM=true;
-			no_mouse_cb->unCheck();
-			NO_MOUSE=false;
+			disableJoystickOptions();
 		}
 		else MOUSE_AIM=false;
 	}
 	else if (no_mouse_cb->checkClick()) {
 		if (no_mouse_cb->isChecked()) {
 			NO_MOUSE=true;
-			mouse_aim_cb->unCheck();
-			MOUSE_AIM=false;
-			mouse_move_cb->unCheck();
-			MOUSE_MOVE=false;
+			disableMouseOptions();
 		}
 		else NO_MOUSE=false;
 	}
 	else if (enable_joystick_cb->checkClick()) {
 		if (enable_joystick_cb->isChecked()) {
 			ENABLE_JOYSTICK=true;
-			if (SDL_NumJoysticks() > 0) {
+			if (inpt->getNumJoysticks() > 0) {
 				JOYSTICK_DEVICE = 0;
-				SDL_JoystickClose(joy);
-				joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
+				inpt->initJoystick();
 				joystick_device_lstb->select(JOYSTICK_DEVICE);
 			}
+			disableMouseOptions();
+
+			if (inpt->getNumJoysticks() > 0)
+				joystick_device_lstb->refresh();
 		}
 		else {
-			ENABLE_JOYSTICK=false;
-			for (int i=0; i<joystick_device_lstb->getSize(); i++)
-				joystick_device_lstb->deselect(i);
+			disableJoystickOptions();
 		}
-		if (SDL_NumJoysticks() > 0) joystick_device_lstb->refresh();
 	}
 	else if (joystick_deadzone_sl->checkClick()) {
 		JOY_DEADZONE = joystick_deadzone_sl->getValue();
@@ -623,10 +616,10 @@ void GameStateConfigDesktop::logicInput() {
 		if (JOYSTICK_DEVICE != -1) {
 			enable_joystick_cb->Check();
 			ENABLE_JOYSTICK=true;
-			if (SDL_NumJoysticks() > 0) {
-				SDL_JoystickClose(joy);
-				joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
+			if (inpt->getNumJoysticks() > 0) {
+				inpt->initJoystick();
 			}
+			disableMouseOptions();
 		}
 		else {
 			enable_joystick_cb->unCheck();
@@ -754,6 +747,14 @@ void GameStateConfigDesktop::scanKey(int button) {
 			input_confirm_ticks = 0;
 			keybinds_btn[button]->refresh();
 		}
+		else if (static_cast<unsigned>(button) >= key_count*2 && inpt->last_joyaxis != -1) {
+			inpt->binding_joy[button-(key_count*2)] = inpt->last_joyaxis;
+
+			keybinds_btn[button]->label = inpt->getBindingString(button%key_count, INPUT_BINDING_JOYSTICK);
+			input_confirm->visible = false;
+			input_confirm_ticks = 0;
+			keybinds_btn[button]->refresh();
+		}
 	}
 }
 
@@ -794,4 +795,28 @@ void GameStateConfigDesktop::cleanupDialogs() {
 		delete input_confirm;
 		input_confirm = NULL;
 	}
+}
+
+void GameStateConfigDesktop::disableMouseOptions() {
+	mouse_aim_cb->unCheck();
+	MOUSE_AIM=false;
+	mouse_move_cb->unCheck();
+	MOUSE_MOVE=false;
+
+	no_mouse_cb->Check();
+	NO_MOUSE = true;
+}
+
+void GameStateConfigDesktop::disableJoystickOptions() {
+	enable_joystick_cb->unCheck();
+	ENABLE_JOYSTICK=false;
+
+	for (int i=0; i<joystick_device_lstb->getSize(); i++)
+		joystick_device_lstb->deselect(i);
+
+	if (inpt->getNumJoysticks() > 0)
+		joystick_device_lstb->refresh();
+
+	no_mouse_cb->unCheck();
+	NO_MOUSE = false;
 }

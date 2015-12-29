@@ -30,6 +30,7 @@ public:
 	SDLInputState(void);
 	~SDLInputState();
 
+	void initJoystick();
 	void defaultQwertyKeyBindings();
 	void handle();
 	void hideCursor();
@@ -40,6 +41,17 @@ public:
 	std::string getMovementString();
 	std::string getAttackString();
 	std::string getContinueString();
+	int getNumJoysticks();
+
+private:
+	SDL_Joystick* joy;
+	int joy_num;
+	int joy_axis_num;
+	int joy_axis_ticks;
+	int temp_joyaxis;
+
+	std::vector<int> joy_axis_prev;
+	std::vector<int> joy_axis_deltas;
 };
 
 #endif

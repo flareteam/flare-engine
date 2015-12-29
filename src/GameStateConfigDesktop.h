@@ -79,6 +79,9 @@ private:
 
 	void scanKey(int button);
 
+	void disableMouseOptions();
+	void disableJoystickOptions();
+
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;
 	WidgetCheckBox      * hwsurface_cb;

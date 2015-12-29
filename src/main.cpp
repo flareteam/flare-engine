@@ -102,24 +102,7 @@ static void init(const std::string &render_device_name) {
 
 	snd = getSoundManager();
 
-	// initialize Joysticks
-	if(SDL_NumJoysticks() == 1) {
-		logInfo("1 joystick was found:");
-	}
-	else if(SDL_NumJoysticks() > 1) {
-		logInfo("%d joysticks were found:", SDL_NumJoysticks());
-	}
-	else {
-		logInfo("No joysticks were found.");
-		ENABLE_JOYSTICK = false;
-	}
-	for(int i = 0; i < SDL_NumJoysticks(); i++) {
-		logInfo("  Joy %d) %s", i, inpt->getJoystickName(i).c_str());
-	}
-	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
-		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-		logInfo("Using joystick #%d.", JOYSTICK_DEVICE);
-	}
+	inpt->initJoystick();
 
 	gswitch = new GameSwitcher();
 }

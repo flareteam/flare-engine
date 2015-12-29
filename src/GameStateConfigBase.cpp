@@ -535,9 +535,8 @@ void GameStateConfigBase::logicAccept() {
 	loadMiscSettings();
 	setStatNames();
 	refreshFont();
-	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
-		SDL_JoystickClose(joy);
-		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
+	if ((ENABLE_JOYSTICK) && (inpt->getNumJoysticks() > 0)) {
+		inpt->initJoystick();
 	}
 	cleanup();
 	render_device->createContext();
