@@ -54,8 +54,6 @@ SDLInputState::SDLInputState(void)
 	, joy(NULL)
 	, joy_num(0)
 	, joy_axis_num(0)
-	, joy_axis_ticks(0)
-	, temp_joyaxis(-1)
 {
 #if !defined(__ANDROID__) && !defined (__IPHONEOS__)
 	SDL_StartTextInput();
