@@ -1026,7 +1026,8 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 
 	// Draw unlock power Tooltip
 	if (power_cells[slot_num].requires_point && !(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end())) {
-		if (show_unlock_prompt && points_left > 0 && checkUnlock(power_cells[slot_num].id)) {
+		int unlock_id = getCellByPowerIndex(power_cells[slot_num].id, power_cell_all);
+		if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_id)) {
 			tip->addText(msg->get("Click to Unlock (uses 1 Skill Point)"), color_bonus);
 		}
 		else {
