@@ -60,7 +60,7 @@ ConfigEntry config[] = {
 	{ "resolution_h",      &typeid(SCREEN_H),           "480", &SCREEN_H,           NULL},
 	{ "music_volume",      &typeid(MUSIC_VOLUME),       "96",  &MUSIC_VOLUME,       "music and sound volume (0 = silent, 128 = max)"},
 	{ "sound_volume",      &typeid(SOUND_VOLUME),       "128", &SOUND_VOLUME,       NULL},
-	{ "combat_text",       &typeid(COMBAT_TEXT),        "0",   &COMBAT_TEXT,        "display floating damage text. 1 enable, 0 disable."},
+	{ "combat_text",       &typeid(COMBAT_TEXT),        "1",   &COMBAT_TEXT,        "display floating damage text. 1 enable, 0 disable."},
 	{ "mouse_move",        &typeid(MOUSE_MOVE),         "0",   &MOUSE_MOVE,         "use mouse to move (experimental). 1 enable, 0 disable."},
 	{ "hwsurface",         &typeid(HWSURFACE),          "1",   &HWSURFACE,          "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
 	{ "vsync",             &typeid(VSYNC),              "1",   &VSYNC,              NULL},
