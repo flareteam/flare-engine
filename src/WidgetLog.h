@@ -24,7 +24,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 
-const int WIDGETLOG_MAX_MESSAGES = 50;
+const unsigned WIDGETLOG_MAX_MESSAGES = 50;
 
 enum {
 	WIDGETLOG_FONT_REGULAR = 0,
