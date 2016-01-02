@@ -30,7 +30,9 @@ WidgetInput::WidgetInput(const std::string& filename)
 	, cursor_frame(0)
 	, del_frame(0)
 	, inFocus(false)
-	, max_length(0) {
+	, max_length(0)
+	, only_numbers(false)
+{
 
 	loadGraphics(filename);
 
@@ -85,8 +87,11 @@ bool WidgetInput::logic(int x, int y) {
 
 		if (inpt->inkeys != "") {
 			// handle text input
-			text += inpt->inkeys;
-			trimText();
+			// only_numbers will restrict our input to 0-9 characters
+			if (!only_numbers || (inpt->inkeys[0] >= 48 && inpt->inkeys[0] <= 57)) {
+				text += inpt->inkeys;
+				trimText();
+			}
 
 			// HACK: this prevents normal keys from triggering common menu shortcuts
 			if (inpt->pressing[ACCEPT]) {

@@ -73,6 +73,7 @@ public:
 
 	bool inFocus;
 	unsigned int max_length;
+	bool only_numbers;
 };
 
 #endif

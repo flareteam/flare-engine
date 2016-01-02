@@ -47,6 +47,7 @@ MenuNumPicker::MenuNumPicker()
 	button_down = new WidgetButton("images/menus/buttons/down.png");
 
 	input_box = new WidgetInput();
+	input_box->only_numbers = true;
 
 	// Load config settings
 	FileParser infile;
@@ -112,7 +113,13 @@ void MenuNumPicker::logic() {
 	if (visible) {
 		tablist.logic();
 
-		if (button_ok->checkClick()) {
+		input_box->logic();
+
+		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+			inpt->lock[ACCEPT] = true;
+			confirm_clicked = true;
+		}
+		else if (button_ok->checkClick()) {
 			confirm_clicked = true;
 		}
 		else if (button_up->checkClick()) {
@@ -142,6 +149,11 @@ void MenuNumPicker::logic() {
 					decreaseValue(spin_increment);
 				}
 			}
+		}
+
+		if (confirm_clicked) {
+			setValue(toInt(input_box->getText()));
+			updateInput();
 		}
 	}
 }
@@ -175,6 +187,8 @@ void MenuNumPicker::setValue(int val) {
 }
 
 void MenuNumPicker::increaseValue(int val) {
+	setValue(toInt(input_box->getText()));
+
 	value += val;
 
 	if (value > value_max || value < value_min)
@@ -184,6 +198,8 @@ void MenuNumPicker::increaseValue(int val) {
 }
 
 void MenuNumPicker::decreaseValue(int val) {
+	setValue(toInt(input_box->getText()));
+
 	value -= val;
 
 	if (value > value_max || value < value_min)
