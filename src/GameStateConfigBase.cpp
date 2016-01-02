@@ -68,6 +68,8 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, show_target_lb(new WidgetLabel())
 	, loot_tooltips_cb(new WidgetCheckBox())
 	, loot_tooltips_lb(new WidgetLabel())
+	, statbar_labels_cb(new WidgetCheckBox())
+	, statbar_labels_lb(new WidgetLabel())
 	, music_volume_sl(new WidgetSlider())
 	, music_volume_lb(new WidgetLabel())
 	, sound_volume_sl(new WidgetSlider())
@@ -244,6 +246,10 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR loot_tooltips|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show loot labels" checkbox relative to the frame.
 		placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), JUSTIFY_RIGHT);
 	}
+	else if (infile.key == "statbar_labels") {
+		// @ATTR statbar_labels|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show stat bar labels" checkbox relative to the frame.
+		placeLabeledWidget(statbar_labels_lb, statbar_labels_cb, x1, y1, x2, y2, msg->get("Always show stat bar labels"), JUSTIFY_RIGHT);
+	}
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Active Mods" list box relative to the frame.
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
@@ -360,6 +366,8 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(show_target_lb, INTERFACE_TAB);
 	addChildWidget(loot_tooltips_cb, INTERFACE_TAB);
 	addChildWidget(loot_tooltips_lb, INTERFACE_TAB);
+	addChildWidget(statbar_labels_cb, INTERFACE_TAB);
+	addChildWidget(statbar_labels_lb, INTERFACE_TAB);
 	addChildWidget(language_lstb, INTERFACE_TAB);
 	addChildWidget(language_lb, INTERFACE_TAB);
 
@@ -432,6 +440,8 @@ void GameStateConfigBase::updateInterface() {
 	else show_target_cb->unCheck();
 	if (LOOT_TOOLTIPS) loot_tooltips_cb->Check();
 	else loot_tooltips_cb->unCheck();
+	if (STATBAR_LABELS) statbar_labels_cb->Check();
+	else statbar_labels_cb->unCheck();
 
 	refreshLanguages();
 }
@@ -608,6 +618,10 @@ void GameStateConfigBase::logicInterface() {
 	else if (loot_tooltips_cb->checkClick()) {
 		if (loot_tooltips_cb->isChecked()) LOOT_TOOLTIPS=true;
 		else LOOT_TOOLTIPS=false;
+	}
+	else if (statbar_labels_cb->checkClick()) {
+		if (statbar_labels_cb->isChecked()) STATBAR_LABELS=true;
+		else STATBAR_LABELS=false;
 	}
 }
 

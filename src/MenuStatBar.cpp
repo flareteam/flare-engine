@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuStatBar.h"
 #include "ModManager.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "WidgetLabel.h"
@@ -167,7 +168,7 @@ void MenuStatBar::render() {
 		else
 			label->set(bar_dest.x+bar_pos.w/2, bar_dest.y+bar_pos.h/2, JUSTIFY_CENTER, VALIGN_CENTER, "", color_normal);
 
-		if (isWithin(bar_dest,mouse)) {
+		if (STATBAR_LABELS || isWithin(bar_dest,mouse)) {
 			std::stringstream ss;
 			if (custom_string != "")
 				ss << custom_string;

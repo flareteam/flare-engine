@@ -116,6 +116,8 @@ public:
 	WidgetLabel         * show_target_lb;
 	WidgetCheckBox      * loot_tooltips_cb;
 	WidgetLabel         * loot_tooltips_lb;
+	WidgetCheckBox      * statbar_labels_cb;
+	WidgetLabel         * statbar_labels_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;
