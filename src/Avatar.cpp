@@ -142,6 +142,8 @@ void Avatar::init() {
 	untransform_power = getUntransformPower();
 
 	hero_cooldown = std::vector<int>(powers->powers.size(), 0);
+	power_cast_ticks = std::vector<int>(powers->powers.size(), 0);
+	power_cast_duration = std::vector<int>(powers->powers.size(), 0);
 
 }
 
@@ -607,6 +609,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					snd->play(sound_melee);
 				else if (attack_anim == "cast")
 					snd->play(sound_mental);
+
+				power_cast_duration[current_power] = activeAnimation->getDuration();
+				power_cast_ticks[current_power] = power_cast_duration[current_power];
 			}
 
 			// do power
@@ -735,6 +740,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	for (unsigned i = 0; i < hero_cooldown.size(); i++) {
 		hero_cooldown[i]--;
 		if (hero_cooldown[i] < 0) hero_cooldown[i] = 0;
+
+		power_cast_ticks[i]--;
+		if (power_cast_ticks[i] < 0) power_cast_ticks[i] = 0;
 	}
 
 	// make the current square solid

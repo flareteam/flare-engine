@@ -41,9 +41,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <climits>
 
 MenuActionBar::MenuActionBar(Avatar *_hero)
-	: emptyslot(NULL)
-	, disabled(NULL)
-	, attention(NULL)
+	: sprite_emptyslot(NULL)
+	, sprite_disabled(NULL)
+	, sprite_attention(NULL)
 	, hero(_hero)
 	, slots_count(0)
 	, drag_prev_slot(-1)
@@ -222,21 +222,21 @@ void MenuActionBar::loadGraphics() {
 
 	graphics = render_device->loadImage("images/menus/slot_empty.png");
 	if (graphics) {
-		emptyslot = graphics->createSprite();
-		emptyslot->setClip(0,0,ICON_SIZE,ICON_SIZE);
+		sprite_emptyslot = graphics->createSprite();
+		sprite_emptyslot->setClip(0,0,ICON_SIZE,ICON_SIZE);
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/disabled.png");
 	if (graphics) {
-		disabled = graphics->createSprite();
-		disabled->setClip(0,0,ICON_SIZE,ICON_SIZE);
+		sprite_disabled = graphics->createSprite();
+		sprite_disabled->setClip(0,0,ICON_SIZE,ICON_SIZE);
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/attention_glow.png");
 	if (graphics) {
-		attention = graphics->createSprite();
+		sprite_attention = graphics->createSprite();
 		graphics->unref();
 	}
 }
@@ -249,9 +249,9 @@ void MenuActionBar::renderAttention(int menu_id) {
 	dest.x = window_area.x + (menu_id * ICON_SIZE) + ICON_SIZE*15;
 	dest.y = window_area.y+3;
 	dest.w = dest.h = ICON_SIZE;
-	if (attention) {
-		attention->setDest(dest);
-		render_device->render(attention);
+	if (sprite_attention) {
+		sprite_attention->setDest(dest);
+		render_device->render(sprite_attention);
 	}
 
 	// put an asterisk on this icon if in colorblind mode
@@ -279,6 +279,7 @@ void MenuActionBar::render() {
 
 			//see if the slot should be greyed out
 			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
+							  && (hero->power_cast_ticks[hotkeys_mod[i]] == 0)
 							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
 							  && !hero->stats.effects.stun
 							  && hero->stats.alive
@@ -293,9 +294,9 @@ void MenuActionBar::render() {
 			dest.x = slots[i]->pos.x;
 			dest.y = slots[i]->pos.y;
 			dest.h = dest.w = ICON_SIZE;
-			if (emptyslot) {
-				emptyslot->setDest(dest);
-				render_device->render(emptyslot);
+			if (sprite_emptyslot) {
+				sprite_emptyslot->setDest(dest);
+				render_device->render(sprite_emptyslot);
 			}
 			slots[i]->renderSelection();
 		}
@@ -325,14 +326,19 @@ void MenuActionBar::renderCooldowns() {
 			item_src.w = item_src.h = ICON_SIZE;
 
 			// Wipe from bottom to top
-			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i)) {
-				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
+			if (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i) {
+				if (hero->power_cast_ticks[hotkeys_mod[i]] > 0 && hero->power_cast_duration[hotkeys_mod[i]] > 0) {
+					item_src.h = (ICON_SIZE * hero->power_cast_ticks[hotkeys_mod[i]]) / hero->power_cast_duration[hotkeys_mod[i]];
+				}
+				else if (hero->hero_cooldown[hotkeys_mod[i]] > 0 && powers->powers[hotkeys_mod[i]].cooldown > 0) {
+					item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
+				}
 			}
 
-			if (disabled) {
-				disabled->setClip(item_src);
-				disabled->setDest(slots[i]->pos);
-				render_device->render(disabled);
+			if (sprite_disabled) {
+				sprite_disabled->setClip(item_src);
+				sprite_disabled->setDest(slots[i]->pos);
+				render_device->render(sprite_disabled);
 			}
 
 			slots[i]->renderSelection();
@@ -733,12 +739,12 @@ Point MenuActionBar::getSlotPos(int slot) {
 MenuActionBar::~MenuActionBar() {
 
 	menu_act = NULL;
-	if (emptyslot)
-		delete emptyslot;
-	if (disabled)
-		delete disabled;
-	if (attention)
-		delete attention;
+	if (sprite_emptyslot)
+		delete sprite_emptyslot;
+	if (sprite_disabled)
+		delete sprite_disabled;
+	if (sprite_attention)
+		delete sprite_attention;
 
 	labels.clear();
 	menu_labels.clear();

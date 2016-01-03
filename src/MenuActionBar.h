@@ -49,9 +49,9 @@ private:
 	void renderCooldowns();
 	FPoint setTarget(bool have_aim, bool aim_assist);
 
-	Sprite *emptyslot;
-	Sprite *disabled;
-	Sprite *attention;
+	Sprite *sprite_emptyslot;
+	Sprite *sprite_disabled;
+	Sprite *sprite_attention;
 
 	Avatar *hero;
 	Rect src;
