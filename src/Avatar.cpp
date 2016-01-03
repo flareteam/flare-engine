@@ -381,6 +381,8 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 					}
 					break;
 			}
+
+			action.executed = true;
 		}
 	}
 

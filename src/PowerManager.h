@@ -107,12 +107,14 @@ public:
 	int power;
 	unsigned hotkey;
 	bool instant_item;
+	bool executed;
 	FPoint target;
 
 	ActionData()
 		: power(0)
 		, hotkey(0)
 		, instant_item(false)
+		, executed(false)
 		, target(FPoint()) {
 	}
 };
