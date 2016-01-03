@@ -62,7 +62,7 @@ class SDLSoftwareRenderDevice : public RenderDevice {
 public:
 
 	SDLSoftwareRenderDevice();
-	int createContext();
+	int createContext(bool allow_fallback = true);
 
 	virtual int render(Renderable& r, Rect dest);
 	virtual int render(Sprite* r);

@@ -174,7 +174,7 @@ public:
 	virtual ~RenderDevice();
 
 	/** Context operations */
-	virtual int createContext() = 0;
+	virtual int createContext(bool allow_fallback = true) = 0;
 	virtual void destroyContext() = 0;
 	virtual void setGamma(float g) = 0;
 	virtual void updateTitleBar() = 0;

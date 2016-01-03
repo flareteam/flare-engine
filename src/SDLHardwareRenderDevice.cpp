@@ -118,7 +118,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	min_screen.y = MIN_SCREEN_H;
 }
 
-int SDLHardwareRenderDevice::createContext() {
+int SDLHardwareRenderDevice::createContext(bool allow_fallback) {
 	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
 
 	Uint32 w_flags = 0;
@@ -158,9 +158,7 @@ int SDLHardwareRenderDevice::createContext() {
 	if (VSYNC) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
 	if (settings_changed || !is_initialized) {
-		if (is_initialized) {
-			destroyContext();
-		}
+		destroyContext();
 
 		window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
 		if (window) {
@@ -182,28 +180,30 @@ int SDLHardwareRenderDevice::createContext() {
 		bool window_created = window != NULL && renderer != NULL;
 
 		if (!window_created) {
-			// try previous setting first
-			FULLSCREEN = fullscreen;
-			HWSURFACE = hwsurface;
-			VSYNC = vsync;
-			TEXTURE_FILTER = texture_filter;
-			if (createContext() == -1) {
-				// last resort, try turning everything off
-				FULLSCREEN = false;
-				HWSURFACE = false;
-				VSYNC = false;
-				TEXTURE_FILTER = false;
-				int last_resort = createContext();
-				if (last_resort == -1 && !is_initialized) {
-					// If this is the first attempt and it failed we are not
-					// getting anywhere.
-					logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
-					Exit(1);
+			if (allow_fallback) {
+				// try previous setting first
+				FULLSCREEN = fullscreen;
+				HWSURFACE = hwsurface;
+				VSYNC = vsync;
+				TEXTURE_FILTER = texture_filter;
+				if (createContext(false) == -1) {
+					// last resort, try turning everything off
+					FULLSCREEN = false;
+					HWSURFACE = false;
+					VSYNC = false;
+					TEXTURE_FILTER = false;
+					int last_resort = createContext(false);
+					if (last_resort == -1 && !is_initialized) {
+						// If this is the first attempt and it failed we are not
+						// getting anywhere.
+						logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
+						Exit(1);
+					}
+					return last_resort;
 				}
-				return last_resort;
-			}
-			else {
-				return 0;
+				else {
+					return 0;
+				}
 			}
 		}
 		else {
