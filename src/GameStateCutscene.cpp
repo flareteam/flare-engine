@@ -134,7 +134,7 @@ void Scene::refreshWidgets() {
 			caption_box->resize(VIEW_W, caption_size.y);
 		}
 
-		caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * caption_margins.y));
+		caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * caption_margins.y) * (-1));
 
 		font->renderShadowed(caption, VIEW_W / 2, 0,
 							 JUSTIFY_CENTER,
