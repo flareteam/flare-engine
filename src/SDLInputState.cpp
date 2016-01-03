@@ -90,8 +90,6 @@ SDLInputState::SDLInputState(void)
 }
 
 void SDLInputState::initJoystick() {
-	SDL_Init(SDL_INIT_JOYSTICK);
-
 	// close our joystick handle if it's open
 	if (joy) {
 		SDL_JoystickClose(joy);
