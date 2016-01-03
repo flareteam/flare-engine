@@ -316,6 +316,9 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 			// check requirements
 			if ((stats.cur_state == AVATAR_ATTACK || stats.cur_state == AVATAR_HIT) && !action.instant_item)
 				continue;
+
+			action.executed = true;
+
 			if (!stats.canUsePower(power, action.power))
 				continue;
 			if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
@@ -381,8 +384,6 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 					}
 					break;
 			}
-
-			action.executed = true;
 		}
 	}
 
