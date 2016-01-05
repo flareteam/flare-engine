@@ -32,6 +32,7 @@ Event::Event()
 	, cooldown(0)
 	, cooldown_ticks(0)
 	, keep_after_trigger(true)
+	, click_to_trigger(true)
 	, center(FPoint(-1, -1))
 	, reachable_from(Rect()) {
 }
@@ -137,6 +138,11 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->reachable_from.y = toInt(infile.nextValue());
 		evnt->reachable_from.w = toInt(infile.nextValue());
 		evnt->reachable_from.h = toInt(infile.nextValue());
+	}
+	else if (infile.key == "click_to_trigger") {
+		// @ATTR event.click_to_trigger|bool|If true, an "on_trigger" event can be activated by clicking or pressing the "Accept" key.
+		if (evnt->type == EVENT_ON_TRIGGER)
+			evnt->click_to_trigger = toBool(infile.val);
 	}
 	else {
 		loadEventComponent(infile, evnt, NULL);
