@@ -568,7 +568,7 @@ void MapRenderer::executeOnLoadEvents() {
 		// skip inactive events
 		if (!EventManager::isActive(*it)) continue;
 
-		if ((*it).type == "on_load") {
+		if ((*it).type == EVENT_ON_LOAD) {
 			if (EventManager::executeEvent(*it))
 				it = events.erase(it);
 		}
@@ -587,7 +587,7 @@ void MapRenderer::executeOnMapExitEvents() {
 		// skip inactive events
 		if (!EventManager::isActive(*it)) continue;
 
-		if ((*it).type == "on_mapexit")
+		if ((*it).type == EVENT_ON_MAPEXIT)
 			EventManager::executeEvent(*it); // ignore repeat value
 	}
 }
@@ -605,7 +605,7 @@ void MapRenderer::checkEvents(FPoint loc) {
 		// skip inactive events
 		if (!EventManager::isActive(*it)) continue;
 
-		if ((*it).type == "on_clear") {
+		if ((*it).type == EVENT_ON_CLEAR) {
 			if (enemies_cleared && EventManager::executeEvent(*it))
 				it = events.erase(it);
 			continue;
@@ -616,7 +616,7 @@ void MapRenderer::checkEvents(FPoint loc) {
 					  maploc.x <= (*it).location.x + (*it).location.w-1 &&
 					  maploc.y <= (*it).location.y + (*it).location.h-1;
 
-		if ((*it).type == "on_leave") {
+		if ((*it).type == EVENT_ON_LEAVE) {
 			if (inside) {
 				if (!(*it).getComponent(EC_WAS_INSIDE_EVENT_AREA)) {
 					(*it).components.push_back(Event_Component());

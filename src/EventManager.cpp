@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Class: Event
  */
 Event::Event()
-	: type("")
+	: type(-1)
 	, components(std::vector<Event_Component>())
 	, location(Rect())
 	, hotspot(Rect())
@@ -75,20 +75,26 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 
 	if (infile.key == "type") {
 		// @ATTR event.type|[on_trigger:on_mapexit:on_leave:on_load:on_clear]|Type of map event.
-		std::string type = infile.val;
-		evnt->type = type;
-
-		if      (type == "on_trigger");
-		else if (type == "on_mapexit"); // no need to set keep_after_trigger to false correctly, it's ignored anyway
-		else if (type == "on_leave");
-		else if (type == "on_load") {
+		if (infile.val == "on_trigger") {
+			evnt->type = EVENT_ON_TRIGGER;
+		}
+		else if (infile.val == "on_mapexit") {
+			// no need to set keep_after_trigger to false correctly, it's ignored anyway
+			evnt->type = EVENT_ON_MAPEXIT;
+		}
+		else if (infile.val == "on_leave") {
+			evnt->type = EVENT_ON_LEAVE;
+		}
+		else if (infile.val == "on_load") {
+			evnt->type = EVENT_ON_LOAD;
 			evnt->keep_after_trigger = false;
 		}
-		else if (type == "on_clear") {
+		else if (infile.val == "on_clear") {
+			evnt->type = EVENT_ON_CLEAR;
 			evnt->keep_after_trigger = false;
 		}
 		else {
-			infile.error("EventManager: Event type '%s' unknown, change to \"on_trigger\" to suppress this warning.", type.c_str());
+			infile.error("EventManager: Event type '%s' unknown, change to \"on_trigger\" to suppress this warning.", infile.val.c_str());
 		}
 	}
 	else if (infile.key == "location") {
@@ -631,7 +637,7 @@ bool EventManager::executeEvent(Event &ev) {
 				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ev.type == "on_load" || static_cast<bool>(ec->z) == true)
+			if (ev.type == EVENT_ON_LOAD || static_cast<bool>(ec->z) == true)
 				loop = true;
 
 			SoundManager::SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");

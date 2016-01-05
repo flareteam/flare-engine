@@ -25,9 +25,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Utils.h"
 
+enum EVENT_TYPE {
+	EVENT_ON_TRIGGER = 0,
+	EVENT_ON_MAPEXIT = 1,
+	EVENT_ON_LEAVE = 2,
+	EVENT_ON_LOAD = 3,
+	EVENT_ON_CLEAR = 4
+};
+
 class Event {
 public:
-	std::string type;
+	int type;
 	std::vector<Event_Component> components;
 	Rect location;
 	Rect hotspot;
