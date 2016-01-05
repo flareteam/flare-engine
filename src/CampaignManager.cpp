@@ -25,7 +25,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
-#include "MenuItemStorage.h"
+#include "Menu.h"
+#include "MenuManager.h"
+#include "MenuInventory.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -35,9 +37,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 CampaignManager::CampaignManager()
 	: status()
 	, log_msg("")
-	, carried_items(NULL)
-	, currency(NULL)
-	, hero(NULL)
 	, bonus_xp(0.0) {
 }
 
@@ -91,7 +90,7 @@ void CampaignManager::setStatus(std::string s) {
 	if (checkStatus(s)) return;
 
 	status.push_back(s);
-	hero->check_title = true;
+	pc->stats.check_title = true;
 }
 
 void CampaignManager::unsetStatus(std::string s) {
@@ -107,22 +106,23 @@ void CampaignManager::unsetStatus(std::string s) {
 			it = status.erase(it);
 			return;
 		}
-		hero->check_title = true;
+		pc->stats.check_title = true;
 	}
 }
 
 bool CampaignManager::checkCurrency(int quantity) {
-	return carried_items->contain(CURRENCY_ID, quantity);
+	return menu->inv->inventory[CARRIED].contain(CURRENCY_ID, quantity);
 }
 
 bool CampaignManager::checkItem(int item_id) {
-	return carried_items->contain(item_id);
+	if (menu->inv->inventory[CARRIED].contain(item_id))
+		return true;
+	else
+		return menu->inv->inventory[EQUIPMENT].contain(item_id);
 }
 
 void CampaignManager::removeCurrency(int quantity) {
-	for (int i=0; i<quantity; ++i) {
-		carried_items->remove(CURRENCY_ID);
-	}
+	menu->inv->removeCurrency(quantity);
 	addMsg(msg->get("%d %s removed.", quantity, CURRENCY));
 	items->playSound(CURRENCY_ID);
 }
@@ -130,7 +130,7 @@ void CampaignManager::removeCurrency(int quantity) {
 void CampaignManager::removeItem(int item_id) {
 	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
 
-	carried_items->remove(item_id);
+	menu->inv->remove(item_id);
 	addMsg(msg->get("%s removed.", items->getItemName(item_id)));
 	items->playSound(item_id);
 }
@@ -139,11 +139,11 @@ void CampaignManager::rewardItem(ItemStack istack) {
 	if (istack.empty())
 		return;
 
-	if (carried_items->full(istack.item)) {
+	if (menu->inv->inventory[CARRIED].full(istack.item)) {
 		drop_stack.push(istack);
 	}
 	else {
-		carried_items->add(istack);
+		menu->inv->add(istack, -1, -1, false);
 
 		if (istack.item != CURRENCY_ID) {
 			if (istack.quantity <= 1)
@@ -153,12 +153,6 @@ void CampaignManager::rewardItem(ItemStack istack) {
 
 			items->playSound(istack.item);
 		}
-
-		// if this item has a power, place it on the action bar if possible
-		if (items->items[istack.item].type == "consumable" && items->items[istack.item].power > 0) {
-			menu_act->addPower(items->items[istack.item].power, 0);
-		}
-
 	}
 }
 
@@ -166,42 +160,42 @@ void CampaignManager::rewardCurrency(int amount) {
 	ItemStack stack;
 	stack.item = CURRENCY_ID;
 	stack.quantity = amount;
-	if (!carried_items->full(stack.item))
+	if (!menu->inv->inventory[CARRIED].full(stack.item))
 		addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
 	rewardItem(stack);
 	items->playSound(CURRENCY_ID);
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
-	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(hero->get(STAT_XP_GAIN)))) / 100.0f;
-	hero->addXP(static_cast<int>(bonus_xp));
+	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(pc->stats.get(STAT_XP_GAIN)))) / 100.0f;
+	pc->stats.addXP(static_cast<int>(bonus_xp));
 	bonus_xp -= static_cast<float>(static_cast<int>(bonus_xp));
-	hero->refresh_stats = true;
+	pc->stats.refresh_stats = true;
 	if (show_message) addMsg(msg->get("You receive %d XP.", amount));
 }
 
 void CampaignManager::restoreHPMP(std::string s) {
 	if (s == "hp") {
-		hero->hp = hero->get(STAT_HP_MAX);
+		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
 		addMsg(msg->get("HP restored."));
 	}
 	else if (s == "mp") {
-		hero->mp = hero->get(STAT_MP_MAX);
+		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 		addMsg(msg->get("MP restored."));
 	}
 	else if (s == "hpmp") {
-		hero->hp = hero->get(STAT_HP_MAX);
-		hero->mp = hero->get(STAT_MP_MAX);
+		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
+		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 		addMsg(msg->get("HP and MP restored."));
 	}
 	else if (s == "status") {
-		hero->effects.clearNegativeEffects();
+		pc->stats.effects.clearNegativeEffects();
 		addMsg(msg->get("Negative effects removed."));
 	}
 	else if (s == "all") {
-		hero->hp = hero->get(STAT_HP_MAX);
-		hero->mp = hero->get(STAT_MP_MAX);
-		hero->effects.clearNegativeEffects();
+		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
+		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
+		pc->stats.effects.clearNegativeEffects();
 		addMsg(msg->get("HP and MP restored, negative effects removed"));
 	}
 }
@@ -213,43 +207,43 @@ void CampaignManager::addMsg(const std::string& new_msg) {
 
 bool CampaignManager::checkAllRequirements(const Event_Component& ec) {
 	if (ec.type == EC_REQUIRES_STATUS) {
-		if (camp->checkStatus(ec.s))
+		if (checkStatus(ec.s))
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_NOT_STATUS) {
-		if (!camp->checkStatus(ec.s))
+		if (!checkStatus(ec.s))
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_CURRENCY) {
-		if (camp->checkCurrency(ec.x))
+		if (checkCurrency(ec.x))
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_NOT_CURRENCY) {
-		if (!camp->checkCurrency(ec.x))
+		if (!checkCurrency(ec.x))
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_ITEM) {
-		if (camp->checkItem(ec.x))
+		if (checkItem(ec.x))
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_NOT_ITEM) {
-		if (!camp->checkItem(ec.x))
+		if (!checkItem(ec.x))
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_LEVEL) {
-		if (camp->hero->level >= ec.x)
+		if (pc->stats.level >= ec.x)
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_NOT_LEVEL) {
-		if (camp->hero->level < ec.x)
+		if (pc->stats.level < ec.x)
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_CLASS) {
-		if (camp->hero->character_class == ec.s)
+		if (pc->stats.character_class == ec.s)
 			return true;
 	}
 	else if (ec.type == EC_REQUIRES_NOT_CLASS) {
-		if (camp->hero->character_class != ec.s)
+		if (pc->stats.character_class != ec.s)
 			return true;
 	}
 	else {

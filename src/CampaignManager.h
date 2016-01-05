@@ -29,7 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 
 class StatBlock;
-class MenuItemStorage;
 
 class CampaignManager {
 public:
@@ -56,11 +55,6 @@ public:
 	std::vector<std::string> status;
 	std::string log_msg;
 	std::queue<ItemStack> drop_stack;
-
-	// pointers to various info that can be changed
-	MenuItemStorage *carried_items;
-	int *currency;
-	StatBlock *hero;
 
 	float bonus_xp;		// Fractional XP points not yet awarded (e.g. killing 1 XP enemies with a +25% ring)
 };

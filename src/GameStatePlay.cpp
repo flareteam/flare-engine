@@ -105,11 +105,6 @@ GameStatePlay::GameStatePlay()
 	// LootManager needs hero StatBlock
 	loot->hero = &pc->stats;
 
-	// assign some object pointers after object creation, based on dependency order
-	camp->carried_items = &menu->inv->inventory[CARRIED];
-	camp->currency = &menu->inv->currency;
-	camp->hero = &pc->stats;
-
 	loading->set(0, 0, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
 	// load the config file for character titles
