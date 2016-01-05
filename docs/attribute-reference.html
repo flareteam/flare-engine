@@ -204,6 +204,8 @@ body {
 
 <p><strong>event.reachable_from</strong>, <em>[x,y,w,h]</em>, If the hero is inside this rectangle, they can activate the event.</p>
 
+<p><strong>event.click_to_trigger</strong>, <em>bool</em>, If true, an "on_trigger" event can be activated by clicking or pressing the "Accept" key.</p>
+
 <p><strong>event.tooltip</strong>, <em>string</em>, Tooltip for event</p>
 
 <p><strong>event.power_path</strong>, <em>[hero:[x,y]]</em>, Event power path</p>
@@ -307,6 +309,8 @@ body {
 <p><strong>show_target</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Show targeting animation" checkbox relative to the frame.</p>
 
 <p><strong>loot_tooltips</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Always show loot labels" checkbox relative to the frame.</p>
+
+<p><strong>statbar_labels</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Always show stat bar labels" checkbox relative to the frame.</p>
 
 <p><strong>activemods</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Active Mods" list box relative to the frame.</p>
 
@@ -641,6 +645,8 @@ body {
 <p><strong>stepfx</strong>, <em>string</em>, Sound effect when walking, this applies only to armors.</p>
 
 <p><strong>disable_slots</strong>, <em>type (string), ...</em>, A comma separated list of equip slot types to disable when this item is equipped.</p>
+
+<p><strong>quest_item</strong>, <em>bool</em>, If true, this item is a quest item and can not be dropped, stashed, or sold.</p>
 
 <hr />
 
