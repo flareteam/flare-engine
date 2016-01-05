@@ -180,13 +180,13 @@ void MenuInventory::logic() {
 			removable_items.clear();
 			for (int i=0; i < MAX_EQUIPPED; i++) {
 				if (!inventory[EQUIPMENT][i].empty()) {
-					if (items->items[inventory[EQUIPMENT][i].item].type != "quest")
+					if (!items->items[inventory[EQUIPMENT][i].item].quest_item)
 						removable_items.push_back(inventory[EQUIPMENT][i].item);
 				}
 			}
 			for (int i=0; i < MAX_CARRIED; i++) {
 				if (!inventory[CARRIED][i].empty()) {
-					if (items->items[inventory[CARRIED][i].item].type != "quest")
+					if (!items->items[inventory[CARRIED][i].item].quest_item)
 						removable_items.push_back(inventory[CARRIED][i].item);
 				}
 			}
@@ -493,12 +493,9 @@ void MenuInventory::activate(Point position) {
 		snd->play(sfx_open);
 		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
-	// can't interact with quest items
-	else if (items->items[inventory[CARRIED][slot].item].type == "quest") {
-		return;
-	}
 	// use a consumable item
-	else if (items->items[inventory[CARRIED][slot].item].type == "consumable" &&
+	else if (!items->items[inventory[CARRIED][slot].item].quest_item &&
+             items->items[inventory[CARRIED][slot].item].type == "consumable" &&
 	         items->items[inventory[CARRIED][slot].item].power > 0) {
 
 		int power_id = items->items[inventory[CARRIED][slot].item].power;
@@ -717,7 +714,7 @@ bool MenuInventory::buy(ItemStack stack, int tab) {
  */
 bool MenuInventory::stashAdd(ItemStack stack) {
 	// quest items can not be stored
-	if (items->items[stack.item].type == "quest") return false;
+	if (items->items[stack.item].quest_item) return false;
 
 	drag_prev_src = -1;
 	return true;

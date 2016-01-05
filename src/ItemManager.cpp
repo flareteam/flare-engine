@@ -303,6 +303,10 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 				slot_type = popFirstString(infile.val);
 			}
 		}
+		else if (infile.key == "quest_item") {
+			// @ATTR quest_item|bool|If true, this item is a quest item and can not be dropped, stashed, or sold.
+			items[id].quest_item = toBool(infile.val);
+		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -633,6 +637,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	else
 		ss << getItemName(stack.item) << " (" << stack.quantity << ")";
 	tip.addText(ss.str(), color);
+
+	// quest item
+	if (items[stack.item].quest_item) {
+		tip.addText(msg->get("Quest Item"), color_bonus);
+	}
 
 	// only show the name of the currency item
 	if (stack.item == CURRENCY_ID)

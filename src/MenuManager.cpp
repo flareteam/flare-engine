@@ -933,7 +933,7 @@ void MenuManager::logic() {
 					// if dragging and the source was inventory, drop item to the floor
 
 					// quest items cannot be dropped
-					if (items->items[drag_stack.item].type != "quest") {
+					if (!items->items[drag_stack.item].quest_item) {
 						drop_stack.push(drag_stack);
 						inv->clearHighlight();
 					}
@@ -1093,12 +1093,11 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// sell, stash, or use item
 		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
-			bool not_quest_item = items->items[drag_stack.item].type != "quest";
-			if (vendor->visible && inv->sell(drag_stack) && not_quest_item) {
+			if (vendor->visible && inv->sell(drag_stack) && !items->items[drag_stack.item].quest_item) {
 				vendor->setTab(VENDOR_SELL);
 				vendor->add(drag_stack);
 			}
-			else if (stash->visible && !stash->full(drag_stack.item) && not_quest_item) {
+			else if (stash->visible && !stash->full(drag_stack.item) && !items->items[drag_stack.item].quest_item) {
 				stash->add(drag_stack);
 			}
 			else {
