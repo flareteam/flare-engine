@@ -49,6 +49,7 @@ QuestLog::~QuestLog() {
 void QuestLog::loadAll() {
 	// load each items.txt file. Individual item IDs can be overwritten with mods.
 	std::vector<std::string> files = mods->list("quests", false);
+	std::sort(files.begin(), files.end());
 	for (unsigned int i = 0; i < files.size(); i++)
 		load(files[i]);
 }
