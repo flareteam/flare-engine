@@ -722,9 +722,6 @@ void MapRenderer::checkHotspots() {
 					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, floor(cam)))
 							&& calcDist(cam, (*it).center) < INTERACT_RANGE) {
 
-						// skip events that can't be triggered by clicking
-						if ((*it).type == EVENT_ON_TRIGGER && (*it).click_to_trigger == false) return;
-
 						// only check events if the player is clicking
 						// and allowed to click
 						if (is_npc) {
@@ -789,10 +786,6 @@ void MapRenderer::checkNearestEvent() {
 				tip_pos.y -= TILE_H;
 			}
 		}
-
-		// skip events that can't be triggered by clicking
-		if ((*nearest).type == EVENT_ON_TRIGGER && (*nearest).click_to_trigger == false)
-			return;
 
 		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 			if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
