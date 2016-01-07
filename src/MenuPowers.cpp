@@ -738,6 +738,27 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			else if (effect_ptr->type == "immunity") {
 				ss << msg->get("Immunity");
 			}
+			else if (effect_ptr->type == "immunity_damage") {
+				ss << msg->get("Immunity to damage over time");
+			}
+			else if (effect_ptr->type == "immunity_slow") {
+				ss << msg->get("Immunity to slow");
+			}
+			else if (effect_ptr->type == "immunity_stun") {
+				ss << msg->get("Immunity to stun");
+			}
+			else if (effect_ptr->type == "immunity_hp_steal") {
+				ss << msg->get("Immunity to HP steal");
+			}
+			else if (effect_ptr->type == "immunity_mp_steal") {
+				ss << msg->get("Immunity to MP steal");
+			}
+			else if (effect_ptr->type == "immunity_knockback") {
+				ss << msg->get("Immunity to knockback");
+			}
+			else if (effect_ptr->type == "immunity_damage_reflect") {
+				ss << msg->get("Immunity to damage reflection");
+			}
 			else if (effect_ptr->type == "stun") {
 				ss << msg->get("Stun");
 			}

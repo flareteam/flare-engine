@@ -395,23 +395,21 @@ bool Entity::takeHit(Hazard &h) {
 			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
 		}
 
-		if (!stats.effects.immunity) {
-			if (h.hp_steal != 0) {
-				int steal_amt = (std::min(dmg, prev_hp) * h.hp_steal) / 100;
-				if (steal_amt == 0) steal_amt = 1;
-				combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
-			}
-			if (h.mp_steal != 0) {
-				int steal_amt = (std::min(dmg, prev_hp) * h.mp_steal) / 100;
-				if (steal_amt == 0) steal_amt = 1;
-				combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
-			}
+		if (!stats.effects.immunity_hp_steal && h.hp_steal != 0) {
+			int steal_amt = (std::min(dmg, prev_hp) * h.hp_steal) / 100;
+			if (steal_amt == 0) steal_amt = 1;
+			combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
+			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
+		}
+		if (!stats.effects.immunity_mp_steal && h.mp_steal != 0) {
+			int steal_amt = (std::min(dmg, prev_hp) * h.mp_steal) / 100;
+			if (steal_amt == 0) steal_amt = 1;
+			combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
+			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
 		}
 
 		// deal return damage
-		if (stats.get(STAT_RETURN_DAMAGE) > 0 && !h.src_stats->effects.immunity) {
+		if (!h.src_stats->effects.immunity_damage_reflect && stats.get(STAT_RETURN_DAMAGE) > 0) {
 			int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(STAT_RETURN_DAMAGE)) / 100.f);
 
 			if (dmg_return == 0)
