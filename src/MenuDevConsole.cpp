@@ -205,9 +205,9 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
-		log_history->add("remove_item - " + msg->get("Removes an item of a given ID from the player's inventory."), false);
+		log_history->add("remove_item - " + msg->get("Removes an item of a given ID from the player's inventory"), false);
 		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), false);
-		log_history->add("list_status - " + msg->get("Prints out all of the campaign status that are set"), false);
+		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), false);
 		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
 		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"), false);
 		log_history->add("unset_status - " + msg->get("unsets the given campaign statuses if they are set"), false);
@@ -377,13 +377,32 @@ void MenuDevConsole::execute() {
 		pc->stats.refresh_stats = true;
 	}
 	else if (args[0] == "list_status") {
-		log_history->setMaxMessages(static_cast<unsigned>(camp->status.size())+1);
+		std::string search_terms;
+		for (size_t i=1; i<args.size(); i++) {
+			search_terms += args[i];
 
-		for (size_t i=camp->status.size(); i>0; i--) {
-			log_history->add(camp->status[i-1]);
+			if (i+1 != args.size())
+				search_terms += ' ';
 		}
 
-		log_history->setMaxMessages(); // reset
+		std::vector<size_t> matching_ids;
+
+		for (size_t i=0; i<camp->status.size(); ++i) {
+			if (!search_terms.empty() && stringFindCaseInsensitive(camp->status[i], search_terms) == std::string::npos)
+				continue;
+
+			matching_ids.push_back(i);
+		}
+
+		if (!matching_ids.empty()) {
+			log_history->setMaxMessages(static_cast<unsigned>(matching_ids.size()));
+
+			for (size_t i=matching_ids.size(); i>0; i--) {
+				log_history->add(camp->status[matching_ids[i-1]]);
+			}
+
+			log_history->setMaxMessages(); // reset
+		}
 	}
 	else if (args[0] == "list_items") {
 		std::stringstream ss;
