@@ -387,7 +387,6 @@ void MenuDevConsole::execute() {
 	}
 	else if (args[0] == "list_items") {
 		std::stringstream ss;
-		unsigned message_size = 1;
 
 		std::string search_terms;
 		for (size_t i=1; i<args.size(); i++) {
@@ -397,6 +396,8 @@ void MenuDevConsole::execute() {
 				search_terms += ' ';
 		}
 
+		std::vector<size_t> matching_ids;
+
 		for (size_t i=1; i<items->items.size(); ++i) {
 			if (!items->items[i].has_name)
 				continue;
@@ -405,23 +406,18 @@ void MenuDevConsole::execute() {
 			if (!search_terms.empty() && stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
 				continue;
 
-			message_size++;
+			matching_ids.push_back(i);
 		}
 
-		if (message_size > 1) {
-			log_history->setMaxMessages(message_size);
+		if (!matching_ids.empty()) {
+			log_history->setMaxMessages(static_cast<unsigned>(matching_ids.size()));
 
-			for (size_t i=items->items.size(); i>1; i--) {
-				if (!items->items[i-1].has_name)
-					continue;
+			for (size_t i=matching_ids.size(); i>0; i--) {
+				size_t id = matching_ids[i-1];
 
-				std::string item_name = items->getItemName(static_cast<int>(i-1));
-				if (!search_terms.empty() && stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
-					continue;
-
-				Color item_color = items->getItemColor(static_cast<int>(i-1));
+				Color item_color = items->getItemColor(static_cast<int>(id));
 				ss.str("");
-				ss << item_name << " (" << i-1 << ")";
+				ss << items->getItemName(static_cast<int>(id)) << " (" << id <<")";
 				log_history->add(ss.str(), false, &item_color);
 			}
 
