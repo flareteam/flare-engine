@@ -168,7 +168,7 @@ void SDLFontEngine::setFont(const std::string& _font) {
  * Render the given text at (x,y) on the target image.
  * Justify is left, right, or center
  */
-void SDLFontEngine::render(const std::string& text, int x, int y, int justify, Image *target, Color color) {
+void SDLFontEngine::render(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
 	Rect clip;
 	Image *graphics;
 	Sprite *temp;

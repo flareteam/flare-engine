@@ -64,8 +64,8 @@ public:
 	~WidgetLabel();
 	void render();
 	void setPos(int offset_x = 0, int offset_y = 0);
-	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color);
-	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, const std::string& _font);
+	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color);
+	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color, const std::string& _font);
 	void setX(int _x);
 	void setY(int _y);
 	int getX();

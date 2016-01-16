@@ -138,7 +138,7 @@ Rect FontEngine::position(const std::string& text, int x, int y, int justify) {
 /**
  * Word wrap to width
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
 
 	std::string fulltext = text + " ";
 	cursor_y = y;
@@ -178,12 +178,12 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
 	render(text, x+1, y+1, justify, target, FONT_BLACK);
 	render(text, x, y, justify, target, color);
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
 	render(text, x+1, y+1, justify, target, width, FONT_BLACK);
 	render(text, x, y, justify, target, width, color);
 }

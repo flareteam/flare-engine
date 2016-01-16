@@ -190,8 +190,8 @@ public:
 	virtual int render(Sprite* r) = 0;
 	virtual int render(Renderable& r, Rect dest) = 0;
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest) = 0;
-	virtual int renderText(FontStyle *font_style, const std::string& text, Color color, Rect& dest) = 0;
-	virtual Image* renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended = true) = 0;
+	virtual int renderText(FontStyle *font_style, const std::string& text, const Color& color, Rect& dest) = 0;
+	virtual Image* renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended = true) = 0;
 	virtual void blankScreen() = 0;
 	virtual void commitFrame() = 0;
 	virtual void drawPixel(int x, int y, const Color& color) = 0;

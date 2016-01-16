@@ -53,7 +53,7 @@ public:
 	int x, y, w, h;
 	Rect() : x(0), y(0), w(0), h(0) {}
 	Rect(SDL_Rect _r) : x(_r.x), y(_r.y), w(_r.w), h(_r.h) {}
-	operator SDL_Rect() {
+	operator SDL_Rect() const {
 		SDL_Rect r;
 		r.x = x;
 		r.y = y;
@@ -69,7 +69,7 @@ public:
 	Color() : r(0), g(0), b(0), a(255) {}
 	Color(Uint8 _r, Uint8 _g, Uint8 _b) : r(_r), g(_g), b(_b), a(255) {}
 	Color(Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a) : r(_r), g(_g), b(_b), a(_a) {}
-	operator SDL_Color() {
+	operator SDL_Color() const {
 		SDL_Color c;
 		c.r = r;
 		c.g = g;

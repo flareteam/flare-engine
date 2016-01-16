@@ -54,7 +54,7 @@ public:
 	void clear();
 
 	// add text with support for new lines
-	void addText(const std::string &text, Color color);
+	void addText(const std::string &text, const Color& color);
 	void addText(const std::string &text);
 
 	bool isEmpty();

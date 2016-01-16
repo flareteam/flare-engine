@@ -362,7 +362,7 @@ int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* d
 int SDLSoftwareRenderDevice::renderText(
 	FontStyle *font_style,
 	const std::string& text,
-	Color color,
+	const Color& color,
 	Rect& dest
 ) {
 	int ret = 0;
@@ -381,7 +381,7 @@ int SDLSoftwareRenderDevice::renderText(
 	return ret;
 }
 
-Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended) {
+Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended) {
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
 	if (!image) return NULL;
 

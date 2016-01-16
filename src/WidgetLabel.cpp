@@ -92,14 +92,14 @@ void WidgetLabel::setPos(int offset_x, int offset_y) {
 	applyOffsets();
 }
 
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color) {
 	set(_x, _y, _justify, _valign, _text, _color, "font_regular");
 }
 
 /**
  * A shortcut function to set all attributes simultaneously.
  */
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, const std::string& _font) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color, const std::string& _font) {
 
 	bool changed = false;
 	bool changed_pos = false;
