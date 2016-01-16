@@ -37,8 +37,8 @@ const int TOOLTIP_MENU = 2;
 class WidgetTooltip {
 public:
 	WidgetTooltip();
-	Point calcPosition(STYLE style, Point pos, Point size);
-	void render(TooltipData &tip, Point pos, STYLE style);
+	Point calcPosition(STYLE style, const Point& pos, const Point& size);
+	void render(TooltipData &tip, const Point& pos, STYLE style);
 	bool createBuffer(TooltipData &tip);
 };
 

@@ -65,7 +65,7 @@ public:
 	SDLHardwareRenderDevice();
 	int createContext(bool allow_fallback = true);
 
-	virtual int render(Renderable& r, Rect dest);
+	virtual int render(Renderable& r, Rect& dest);
 	virtual int render(Sprite* r);
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest);
 

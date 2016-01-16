@@ -83,15 +83,15 @@ public:
 
 	void handleNewMap();
 	void logic();
-	void renderTooltips(FPoint cam);
+	void renderTooltips(const FPoint& cam);
 
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(Enemy *e);
-	void addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero = false);
+	void addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero = false);
 	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL, std::vector<ItemStack> *itemstack_vec = NULL);
-	ItemStack checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv);
-	ItemStack checkAutoPickup(FPoint hero_pos, MenuInventory *inv);
-	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);
+	ItemStack checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos, MenuInventory *inv);
+	ItemStack checkAutoPickup(const FPoint& hero_pos, MenuInventory *inv);
+	ItemStack checkNearestPickup(const FPoint& hero_pos, MenuInventory *inv);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 

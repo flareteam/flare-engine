@@ -51,12 +51,12 @@ public:
 
 	void logic();
 	void render();
-	ItemStack click(Point position);
+	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
-	TooltipData checkTooltip(Point position);
+	TooltipData checkTooltip(const Point& position);
 	bool full(int item);
-	void drop(Point position, ItemStack stack);
+	void drop(const Point& position, ItemStack stack);
 	void add(ItemStack stack, int slot);
 
 	int getRowsCount();

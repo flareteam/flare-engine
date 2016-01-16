@@ -176,7 +176,7 @@ void WidgetButton::refresh() {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData WidgetButton::checkTooltip(Point mouse) {
+TooltipData WidgetButton::checkTooltip(const Point& mouse) {
 	TooltipData _tip;
 
 	if (isWithin(pos, mouse) && tooltip != "") {

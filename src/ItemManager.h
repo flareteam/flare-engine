@@ -242,7 +242,7 @@ private:
 public:
 	ItemManager();
 	~ItemManager();
-	void playSound(int item, Point pos = Point(0,0));
+	void playSound(int item, const Point& pos = Point(0,0));
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemName(unsigned id);

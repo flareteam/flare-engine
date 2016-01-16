@@ -108,7 +108,7 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, Point _mouse, const std::string& _custom_string) {
+void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, const Point& _mouse, const std::string& _custom_string) {
 	if (_custom_string != "") custom_string = _custom_string;
 	mouse = _mouse;
 	stat_cur = _stat_cur;

@@ -411,7 +411,7 @@ void EnemyManager::logic() {
 	}
 }
 
-Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
+Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool alive_only) {
 	Point p;
 	Rect r;
 	for(unsigned int i = 0; i < enemies.size(); i++) {
@@ -433,7 +433,7 @@ Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 	return NULL;
 }
 
-Enemy* EnemyManager::getNearestEnemy(FPoint pos) {
+Enemy* EnemyManager::getNearestEnemy(const FPoint& pos) {
 	Enemy* nearest = NULL;
 	float best_distance = std::numeric_limits<float>::max();
 

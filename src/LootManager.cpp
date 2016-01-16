@@ -161,7 +161,7 @@ void LootManager::logic() {
 /**
  * Show all tooltips for loot on the floor
  */
-void LootManager::renderTooltips(FPoint cam) {
+void LootManager::renderTooltips(const FPoint& cam) {
 	if (!SHOW_HUD) return;
 
 	Point dest;
@@ -398,7 +398,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 	}
 }
 
-void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
+void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero) {
 	if (static_cast<size_t>(stack.item) >= items->items.size()) {
 		logError("LootManager: Loot item with id %d is not valid.", stack.item);
 		return;
@@ -437,7 +437,7 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
  * Click on the map to pick up loot.  We need the camera position to translate
  * screen coordinates to map locations.
  */
-ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv) {
+ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos, MenuInventory *inv) {
 	Rect r;
 	ItemStack loot_stack;
 
@@ -495,7 +495,7 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
  * Autopickup loot if enabled in the engine
  * Currently, only currency is checked for autopickup
  */
-ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
+ItemStack LootManager::checkAutoPickup(const FPoint& hero_pos, MenuInventory *inv) {
 	ItemStack loot_stack;
 
 	std::vector<Loot>::iterator it;
@@ -514,7 +514,7 @@ ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
 	return loot_stack;
 }
 
-ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
+ItemStack LootManager::checkNearestPickup(const FPoint& hero_pos, MenuInventory *inv) {
 	ItemStack loot_stack;
 
 	float best_distance = std::numeric_limits<float>::max();

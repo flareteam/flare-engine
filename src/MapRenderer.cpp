@@ -597,7 +597,7 @@ void MapRenderer::executeOnMapExitEvents() {
 	}
 }
 
-void MapRenderer::checkEvents(FPoint loc) {
+void MapRenderer::checkEvents(const FPoint& loc) {
 	Point maploc;
 	maploc.x = int(loc.x);
 	maploc.y = int(loc.y);

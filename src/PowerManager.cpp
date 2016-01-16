@@ -612,31 +612,33 @@ void PowerManager::handleNewMap(MapCollision *_collider) {
 /**
  * Keep two points within a certain range
  */
-FPoint PowerManager::limitRange(float range, FPoint src, FPoint target) {
+FPoint PowerManager::limitRange(float range, const FPoint& src, const FPoint& target) {
+	FPoint limit_target = target;
+
 	if (range > 0) {
 		if (src.x+range < target.x)
-			target.x = src.x+range;
+			limit_target.x = src.x+range;
 		if (src.x-range > target.x)
-			target.x = src.x-range;
+			limit_target.x = src.x-range;
 		if (src.y+range < target.y)
-			target.y = src.y+range;
+			limit_target.y = src.y+range;
 		if (src.y-range > target.y)
-			target.y = src.y-range;
+			limit_target.y = src.y-range;
 	}
 
-	return target;
+	return limit_target;
 }
 
 /**
  * Check if the target is valid (not an empty area or a wall)
  */
-bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	if (!collider) return false;
 
-	target = limitRange(powers[power_index].target_range,src_stats->pos,target);
+	FPoint limit_target = limitRange(powers[power_index].target_range,src_stats->pos,target);
 
-	if (!collider->is_empty(target.x, target.y) || collider->is_wall(target.x,target.y)) {
+	if (!collider->is_empty(limit_target.x, limit_target.y) || collider->is_wall(limit_target.x,limit_target.y)) {
 		if (powers[power_index].buff_teleport) {
 			return false;
 		}
@@ -657,7 +659,7 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint 
  * @param target Aim position in map coordinates
  * @param haz A newly-initialized hazard
  */
-void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint target, Hazard *haz) {
+void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoint& target, Hazard *haz) {
 
 	//the hazard holds the statblock of its source
 	haz->src_stats = src_stats;
@@ -783,14 +785,14 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
  * Any attack-based effects are handled by hazards.
  * Self-enhancements (buffs) are handled by this function.
  */
-void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
+void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
-		target = limitRange(powers[power_index].target_range,src_stats->pos,target);
+		FPoint limit_target = limitRange(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			FPoint new_target = collider->get_random_neighbor(floor(target), powers[power_index].target_neighbor);
-			if (floor(new_target.x) == floor(target.x) && floor(new_target.y) == floor(target.y)) {
+			FPoint new_target = collider->get_random_neighbor(floor(limit_target), powers[power_index].target_neighbor);
+			if (floor(new_target.x) == floor(limit_target.x) && floor(new_target.y) == floor(limit_target.y)) {
 				src_stats->teleportation = false;
 			}
 			else {
@@ -801,8 +803,8 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		}
 		else {
 			src_stats->teleportation = true;
-			src_stats->teleport_destination.x = target.x;
-			src_stats->teleport_destination.y = target.y;
+			src_stats->teleport_destination.x = limit_target.x;
+			src_stats->teleport_destination.y = limit_target.y;
 		}
 	}
 
@@ -913,7 +915,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::fixed(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	if (powers[power_index].use_hazard) {
 		int delay_iterator = 0;
@@ -949,7 +951,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& target) {
 	FPoint src;
 	if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
 		src = target;
@@ -1004,7 +1006,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 /**
  * Repeaters are multiple hazards that spawn in a straight line
  */
-bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	payPowerCost(power_index, src_stats);
 
@@ -1051,7 +1053,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 /**
  * Spawn a creature. Does not create a hazard
  */
-bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& target) {
 	Map_Enemy espawn;
 	espawn.type = powers[power_index].spawn_type;
 	espawn.summoner = src_stats;
@@ -1103,7 +1105,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 /**
  * A simpler spawn routine for map events
  */
-bool PowerManager::spawn(const std::string& enemy_type, Point target) {
+bool PowerManager::spawn(const std::string& enemy_type, const Point& target) {
 
 	Map_Enemy espawn;
 
@@ -1120,7 +1122,7 @@ bool PowerManager::spawn(const std::string& enemy_type, Point target) {
 /**
  * Transform into a creature. Fully replaces entity characteristics
  */
-bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint& target) {
 	// locking the actionbar prevents power usage until after the hero is transformed
 	inpt->lockActionBar();
 
@@ -1199,7 +1201,7 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
 /**
  * Activate is basically a switch/redirect to the appropriate function
  */
-bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint& target) {
 	if (static_cast<unsigned>(power_index) >= powers.size())
 		return false;
 

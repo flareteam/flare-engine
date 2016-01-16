@@ -1249,7 +1249,7 @@ void MenuPowers::render() {
 /**
  * Show mouseover descriptions of disciplines and powers
  */
-TooltipData MenuPowers::checkTooltip(Point mouse) {
+TooltipData MenuPowers::checkTooltip(const Point& mouse) {
 
 	TooltipData tip;
 
@@ -1282,7 +1282,7 @@ TooltipData MenuPowers::checkTooltip(Point mouse) {
 /**
  * Click-to-drag a power (to the action bar)
  */
-int MenuPowers::click(Point mouse) {
+int MenuPowers::click(const Point& mouse) {
 	int active_tab = (tab_control) ? tab_control->getActiveTab() : 0;
 
 	for (size_t i=0; i<power_cell.size(); i++) {

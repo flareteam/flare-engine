@@ -598,7 +598,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	}
 }
 
-void ItemManager::playSound(int item, Point pos) {
+void ItemManager::playSound(int item, const Point& pos) {
 	snd->play(items[item].sfx_id, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 

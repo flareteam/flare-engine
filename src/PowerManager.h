@@ -360,16 +360,16 @@ private:
 	bool isValidEffect(const std::string& type);
 	int loadSFX(const std::string& filename);
 
-	FPoint limitRange(float range, FPoint src, FPoint target);
-	void initHazard(int powernum, StatBlock *src_stats, FPoint target, Hazard *haz);
-	void buff(int power_index, StatBlock *src_stats, FPoint target);
+	FPoint limitRange(float range, const FPoint& src, const FPoint& target);
+	void initHazard(int powernum, StatBlock *src_stats, const FPoint& target, Hazard *haz);
+	void buff(int power_index, StatBlock *src_stats, const FPoint& target);
 	void playSound(int power_index);
 
-	bool fixed(int powernum, StatBlock *src_stats, FPoint target);
-	bool missile(int powernum, StatBlock *src_stats, FPoint target);
-	bool repeater(int powernum, StatBlock *src_stats, FPoint target);
-	bool spawn(int powernum, StatBlock *src_stats, FPoint target);
-	bool transform(int powernum, StatBlock *src_stats, FPoint target);
+	bool fixed(int powernum, StatBlock *src_stats, const FPoint& target);
+	bool missile(int powernum, StatBlock *src_stats, const FPoint& target);
+	bool repeater(int powernum, StatBlock *src_stats, const FPoint& target);
+	bool spawn(int powernum, StatBlock *src_stats, const FPoint& target);
+	bool transform(int powernum, StatBlock *src_stats, const FPoint& target);
 	bool block(int power_index, StatBlock *src_stats);
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
@@ -382,14 +382,14 @@ public:
 	std::string log_msg;
 
 	void handleNewMap(MapCollision *_collider);
-	bool activate(int power_index, StatBlock *src_stats, FPoint target);
+	bool activate(int power_index, StatBlock *src_stats, const FPoint& target);
 	const Power &getPower(unsigned id) 	{
 		assert(id < powers.size());
 		return powers[id];
 	}
 	bool canUsePower(unsigned id) const;
-	bool hasValidTarget(int power_index, StatBlock *src_stats, FPoint target);
-	bool spawn(const std::string& enemy_type, Point target);
+	bool hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target);
+	bool spawn(const std::string& enemy_type, const Point& target);
 	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);

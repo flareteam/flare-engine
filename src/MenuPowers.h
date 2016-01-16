@@ -163,8 +163,8 @@ public:
 	void logic();
 	void render();
 
-	TooltipData checkTooltip(Point mouse);
-	int click(Point mouse);
+	TooltipData checkTooltip(const Point& mouse);
+	int click(const Point& mouse);
 	void upgradeByCell(int pci);
 
 	void applyPowerUpgrades();

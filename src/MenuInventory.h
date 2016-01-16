@@ -74,13 +74,13 @@ public:
 
 	void logic();
 	void render();
-	TooltipData checkTooltip(Point position);
-	int areaOver(Point position);
+	TooltipData checkTooltip(const Point& position);
+	int areaOver(const Point& position);
 
-	ItemStack click(Point position);
+	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
-	void drop(Point position, ItemStack stack);
-	void activate(Point position);
+	void drop(const Point& position, ItemStack stack);
+	void activate(const Point& position);
 
 	void add( ItemStack stack, int area = CARRIED, int slot = -1, bool play_sound = true);
 	void remove(int item);

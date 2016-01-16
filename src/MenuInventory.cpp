@@ -240,7 +240,7 @@ void MenuInventory::render() {
 	inventory[CARRIED].render();
 }
 
-int MenuInventory::areaOver(Point position) {
+int MenuInventory::areaOver(const Point& position) {
 	if (isWithin(carried_area, position)) {
 		return CARRIED;
 	}
@@ -265,7 +265,7 @@ int MenuInventory::areaOver(Point position) {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData MenuInventory::checkTooltip(Point position) {
+TooltipData MenuInventory::checkTooltip(const Point& position) {
 	int area;
 	int slot;
 	TooltipData tip;
@@ -303,7 +303,7 @@ TooltipData MenuInventory::checkTooltip(Point position) {
 /**
  * Click-start dragging in the inventory
  */
-ItemStack MenuInventory::click(Point position) {
+ItemStack MenuInventory::click(const Point& position) {
 	ItemStack item;
 
 	drag_prev_src = areaOver(position);
@@ -355,7 +355,7 @@ void MenuInventory::itemReturn(ItemStack stack) {
  * Dragging and dropping an item can be used to rearrange the inventory
  * and equip items
  */
-void MenuInventory::drop(Point position, ItemStack stack) {
+void MenuInventory::drop(const Point& position, ItemStack stack) {
 	items->playSound(stack.item);
 
 	int area = areaOver(position);
@@ -474,7 +474,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
  * e.g. drink a potion
  * e.g. equip an item
  */
-void MenuInventory::activate(Point position) {
+void MenuInventory::activate(const Point& position) {
 	ItemStack stack;
 	Point nullpt;
 	nullpt.x = nullpt.y = 0;

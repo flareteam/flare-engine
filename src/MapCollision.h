@@ -95,12 +95,12 @@ public:
 
 	bool is_facing(const float& x1, const float& y1, char direction, const float& x2, const float& y2);
 
-	bool compute_path(FPoint start, FPoint end, std::vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
+	bool compute_path(const FPoint& start, const FPoint& end, std::vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit = 0);
 
 	void block(const float& map_x, const float& map_y, bool is_ally);
 	void unblock(const float& map_x, const float& map_y);
 
-	FPoint get_random_neighbor(Point target, int range, bool ignore_blocked = false);
+	FPoint get_random_neighbor(const Point& target, int range, bool ignore_blocked = false);
 
 	Map_Layer colmap;
 	Point map_size;

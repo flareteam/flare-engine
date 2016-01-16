@@ -102,7 +102,7 @@ void WidgetScrollBox::scrollUp() {
 	scroll(-line_height);
 }
 
-Point WidgetScrollBox::input_assist(Point mouse) {
+Point WidgetScrollBox::input_assist(const Point& mouse) {
 	Point new_mouse;
 	if (isWithin(pos,mouse)) {
 		new_mouse.x = mouse.x-pos.x;

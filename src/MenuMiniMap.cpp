@@ -97,7 +97,7 @@ void MenuMiniMap::createMapSurface() {
 void MenuMiniMap::render() {
 }
 
-void MenuMiniMap::render(FPoint hero_pos) {
+void MenuMiniMap::render(const FPoint& hero_pos) {
 	if (!SHOW_HUD) return;
 
 	if (!text_pos.hidden) label->render();
@@ -126,7 +126,7 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 /**
  * Render a top-down version of the map (90 deg angle)
  */
-void MenuMiniMap::renderOrtho(FPoint hero_pos) {
+void MenuMiniMap::renderOrtho(const FPoint& hero_pos) {
 
 	const int herox = int(hero_pos.x);
 	const int heroy = int(hero_pos.y);
@@ -160,7 +160,7 @@ void MenuMiniMap::renderOrtho(FPoint hero_pos) {
 /**
  * Render an "isometric" version of the map (45 deg angle)
  */
-void MenuMiniMap::renderIso(FPoint hero_pos) {
+void MenuMiniMap::renderIso(const FPoint& hero_pos) {
 
 	const int herox = int(hero_pos.x);
 	const int heroy = int(hero_pos.y);

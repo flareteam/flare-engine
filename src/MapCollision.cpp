@@ -377,7 +377,7 @@ bool MapCollision::is_facing(const float& x1, const float& y1, char direction, c
 * limit is the maximum number of explored node
 * @return true if a path is found
 */
-bool MapCollision::compute_path(FPoint start_pos, FPoint end_pos, std::vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
+bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, std::vector<FPoint> &path, MOVEMENTTYPE movement_type, unsigned int limit) {
 
 	if (is_outside_map(end_pos.x, end_pos.y)) return false;
 
@@ -514,7 +514,7 @@ void MapCollision::unblock(const float& map_x, const float& map_y) {
  * Given a target, trys to return one of the 8+ adjacent tiles
  * Returns the retargeted position on success, returns the original position on failure
  */
-FPoint MapCollision::get_random_neighbor(Point target, int range, bool ignore_blocked) {
+FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ignore_blocked) {
 	FPoint new_target = target;
 	std::vector<FPoint> valid_tiles;
 

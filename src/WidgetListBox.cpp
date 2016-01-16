@@ -166,7 +166,7 @@ bool WidgetListBox::checkClick(int x, int y) {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData WidgetListBox::checkTooltip(Point mouse) {
+TooltipData WidgetListBox::checkTooltip(const Point& mouse) {
 	TooltipData _tip;
 
 	for(unsigned i=0; i<rows.size(); i++) {

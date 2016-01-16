@@ -65,10 +65,10 @@ public:
 		return activetab;
 	}
 	void render();
-	ItemStack click(Point position);
+	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
-	TooltipData checkTooltip(Point position);
+	TooltipData checkTooltip(const Point& position);
 	void setInventory();
 	void saveInventory();
 	void sort(int type);

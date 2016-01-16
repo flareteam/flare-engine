@@ -33,7 +33,7 @@ public:
 
 	SoundManager::SoundID load(const std::string& filename, const std::string& errormessage);
 	void unload(SoundManager::SoundID);
-	void play(SoundManager::SoundID, std::string channel = GLOBAL_VIRTUAL_CHANNEL, FPoint pos = FPoint(0,0), bool loop = false);
+	void play(SoundManager::SoundID, std::string channel = GLOBAL_VIRTUAL_CHANNEL, const FPoint& pos = FPoint(0,0), bool loop = false);
 	void pauseAll();
 	void resumeAll();
 	void setVolumeSFX(int value);
@@ -45,7 +45,7 @@ public:
 	void setVolumeMusic(int value);
 	bool isPlayingMusic();
 
-	void logic(FPoint center);
+	void logic(const FPoint& center);
 	void reset();
 
 private:

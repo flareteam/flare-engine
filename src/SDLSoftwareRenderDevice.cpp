@@ -329,7 +329,7 @@ int SDLSoftwareRenderDevice::createContext(bool allow_fallback) {
 	return (is_initialized ? 0 : -1);
 }
 
-int SDLSoftwareRenderDevice::render(Renderable& r, Rect dest) {
+int SDLSoftwareRenderDevice::render(Renderable& r, Rect& dest) {
 	SDL_Rect src = r.src;
 	SDL_Rect _dest = dest;
 	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r.image)->surface, &src, screen, &_dest);

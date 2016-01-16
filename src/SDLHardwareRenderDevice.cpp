@@ -238,7 +238,7 @@ int SDLHardwareRenderDevice::createContext(bool allow_fallback) {
 	return (is_initialized ? 0 : -1);
 }
 
-int SDLHardwareRenderDevice::render(Renderable& r, Rect dest) {
+int SDLHardwareRenderDevice::render(Renderable& r, Rect& dest) {
 	dest.w = r.src.w;
 	dest.h = r.src.h;
     SDL_Rect src = r.src;

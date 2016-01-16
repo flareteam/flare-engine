@@ -39,7 +39,7 @@ MenuItemStorage::MenuItemStorage()
 	, overlay_disabled(NULL) {
 }
 
-void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb_cols) {
+void MenuItemStorage::init(int _slot_number, const Rect& _area, int _icon_size, int _nb_cols) {
 	ItemStorage::init( _slot_number);
 	grid_area = _area;
 	grid_pos.x = _area.x;
@@ -144,7 +144,7 @@ void MenuItemStorage::renderHighlight(int x, int y, int _icon_size) {
 	}
 }
 
-int MenuItemStorage::slotOver(Point position) {
+int MenuItemStorage::slotOver(const Point& position) {
 	if (isWithin(grid_area, position) && nb_cols > 0) {
 		return (position.x - grid_area.x) / slots[0]->pos.w + (position.y - grid_area.y) / slots[0]->pos.w * nb_cols;
 	}
@@ -156,7 +156,7 @@ int MenuItemStorage::slotOver(Point position) {
 	return -1;
 }
 
-TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int context) {
+TooltipData MenuItemStorage::checkTooltip(const Point& position, StatBlock *stats, int context) {
 	TooltipData tip;
 	int slot = slotOver(position);
 
@@ -166,7 +166,7 @@ TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int 
 	return tip;
 }
 
-ItemStack MenuItemStorage::click(Point position) {
+ItemStack MenuItemStorage::click(const Point& position) {
 	ItemStack item;
 
 	drag_prev_slot = slotOver(position);

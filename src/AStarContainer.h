@@ -42,11 +42,11 @@ public:
 	AStarNode* get_shortest_f();
 	//assumes that the node exists in the collection
 	void remove(AStarNode* node);
-	bool exists(Point pos);
+	bool exists(const Point& pos);
 	//assumes that the node exists in the collection
 	AStarNode* get(int x, int y);
 	bool isEmpty();
-	void updateParent(Point pos, Point parent_pos, float score);
+	void updateParent(const Point& pos, const Point& parent_pos, float score);
 
 private:
 	unsigned int size;
@@ -95,7 +95,7 @@ public:
 
 	int getSize();
 	void add(AStarNode* node);
-	bool exists(Point pos);
+	bool exists(const Point& pos);
 	AStarNode* get(int x, int y);
 	AStarNode* get_shortest_h();
 

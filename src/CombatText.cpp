@@ -88,7 +88,7 @@ CombatText::~CombatText() {
 	}
 }
 
-void CombatText::addMessage(const std::string& message, FPoint location, int displaytype) {
+void CombatText::addMessage(const std::string& message, const FPoint& location, int displaytype) {
 	if (COMBAT_TEXT) {
 		Combat_Text_Item *c = new Combat_Text_Item();
 		WidgetLabel *label = new WidgetLabel();
@@ -106,7 +106,7 @@ void CombatText::addMessage(const std::string& message, FPoint location, int dis
 	}
 }
 
-void CombatText::addMessage(int num, FPoint location, int displaytype) {
+void CombatText::addMessage(int num, const FPoint& location, int displaytype) {
 	if (COMBAT_TEXT) {
 		std::stringstream ss;
 		ss << num;

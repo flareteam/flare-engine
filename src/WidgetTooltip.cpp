@@ -35,7 +35,7 @@ WidgetTooltip::WidgetTooltip() {
  * Knowing the total size of the text and the position of origin,
  * calculate the starting position of the background and text
  */
-Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
+Point WidgetTooltip::calcPosition(STYLE style, const Point& pos, const Point& size) {
 
 	Point tip_pos;
 
@@ -85,7 +85,7 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
  * Tooltip position depends on the screen quadrant of the source.
  * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
  */
-void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
+void WidgetTooltip::render(TooltipData &tip, const Point& pos, STYLE style) {
 	if (tip.tip_buffer == NULL) {
 		if (!createBuffer(tip)) return;
 	}

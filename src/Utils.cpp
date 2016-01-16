@@ -30,7 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <ctype.h>
 #include <iomanip>
 
-Point floor(FPoint fp) {
+Point floor(const FPoint& fp) {
 	Point result;
 	result.x = int(fp.x);
 	result.y = int(fp.y);
@@ -76,24 +76,26 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 	return r;
 }
 
-Point center_tile(Point p) {
+Point center_tile(const Point& p) {
+	Point r = p;
+
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
-		p.x += TILE_W_HALF;
-		p.y += TILE_H_HALF;
+		r.x += TILE_W_HALF;
+		r.y += TILE_H_HALF;
 	}
 	else //TILESET_ISOMETRIC
-		p.y += TILE_H_HALF;
-	return p;
+		r.y += TILE_H_HALF;
+	return r;
 }
 
-FPoint collision_to_map(Point p) {
+FPoint collision_to_map(const Point& p) {
 	FPoint ret;
 	ret.x = static_cast<float>(p.x) + 0.5f;
 	ret.y = static_cast<float>(p.y) + 0.5f;
 	return ret;
 }
 
-Point map_to_collision(FPoint p) {
+Point map_to_collision(const FPoint& p) {
 	Point ret;
 	ret.x = int(p.x);
 	ret.y = int(p.y);
@@ -103,7 +105,7 @@ Point map_to_collision(FPoint p) {
 /**
  * Apply parameter distance to position and direction
  */
-FPoint calcVector(FPoint pos, int direction, float dist) {
+FPoint calcVector(const FPoint& pos, int direction, float dist) {
 	FPoint p;
 	p.x = pos.x;
 	p.y = pos.y;
@@ -144,21 +146,21 @@ FPoint calcVector(FPoint pos, int direction, float dist) {
 	return p;
 }
 
-float calcDist(FPoint p1, FPoint p2) {
+float calcDist(const FPoint& p1, const FPoint& p2) {
 	return static_cast<float>(sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
 }
 
 /**
  * is target within the area defined by center and radius?
  */
-bool isWithin(FPoint center, float radius, FPoint target) {
+bool isWithin(const FPoint& center, float radius, const FPoint& target) {
 	return (calcDist(center, target) < radius);
 }
 
 /**
  * is target within the area defined by rectangle r?
  */
-bool isWithin(Rect r, Point target) {
+bool isWithin(const Rect& r, const Point& target) {
 	return target.x >= r.x && target.y >= r.y && target.x < r.x+r.w && target.y < r.y+r.h;
 }
 
