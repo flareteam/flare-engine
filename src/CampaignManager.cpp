@@ -48,7 +48,7 @@ void CampaignManager::clearAll() {
 /**
  * Take the savefile campaign= and convert to status array
  */
-void CampaignManager::setAll(std::string s) {
+void CampaignManager::setAll(const std::string& s) {
 	std::string str = s + ',';
 	std::string token;
 	while (str != "") {
@@ -70,7 +70,7 @@ std::string CampaignManager::getAll() {
 	return ss.str();
 }
 
-bool CampaignManager::checkStatus(std::string s) {
+bool CampaignManager::checkStatus(const std::string& s) {
 
 	// avoid searching empty statuses
 	if (s == "") return false;
@@ -81,7 +81,7 @@ bool CampaignManager::checkStatus(std::string s) {
 	return false;
 }
 
-void CampaignManager::setStatus(std::string s) {
+void CampaignManager::setStatus(const std::string& s) {
 
 	// avoid adding empty statuses
 	if (s == "") return;
@@ -93,7 +93,7 @@ void CampaignManager::setStatus(std::string s) {
 	pc->stats.check_title = true;
 }
 
-void CampaignManager::unsetStatus(std::string s) {
+void CampaignManager::unsetStatus(const std::string& s) {
 
 	// avoid searching empty statuses
 	if (s == "") return;
@@ -174,7 +174,7 @@ void CampaignManager::rewardXP(int amount, bool show_message) {
 	if (show_message) addMsg(msg->get("You receive %d XP.", amount));
 }
 
-void CampaignManager::restoreHPMP(std::string s) {
+void CampaignManager::restoreHPMP(const std::string& s) {
 	if (s == "hp") {
 		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
 		addMsg(msg->get("HP restored."));

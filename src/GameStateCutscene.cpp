@@ -229,7 +229,7 @@ void GameStateCutscene::render() {
 		scenes.front()->render();
 }
 
-bool GameStateCutscene::load(std::string filename) {
+bool GameStateCutscene::load(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS Cutscene|Description of cutscenes in cutscenes/

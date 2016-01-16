@@ -68,7 +68,7 @@ Loot& Loot::operator= (const Loot &other) {
 	return *this;
 }
 
-void Loot::loadAnimation(std::string _gfx) {
+void Loot::loadAnimation(const std::string& _gfx) {
 	gfx = _gfx;
 	if (gfx != "") {
 		anim->increaseCount(gfx);

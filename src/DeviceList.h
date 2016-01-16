@@ -26,7 +26,7 @@ class FontEngine;
 class SoundManager;
 class InputState;
 
-RenderDevice* getRenderDevice(std::string name);
+RenderDevice* getRenderDevice(const std::string& name);
 
 FontEngine* getFontEngine();
 SoundManager* getSoundManager();

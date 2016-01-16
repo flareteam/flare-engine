@@ -38,12 +38,13 @@ void GetText::close() {
 }
 
 // Turns all \" into just "
-std::string GetText::sanitize(std::string message) {
+std::string GetText::sanitize(const std::string& message) {
+	std::string new_message = message;
 	size_t pos = 0;
 	while ((pos = message.find("\\\"")) != std::string::npos) {
-		message = message.substr(0, pos) + message.substr(pos+1);
+		new_message = message.substr(0, pos) + message.substr(pos+1);
 	}
-	return message;
+	return new_message;
 }
 
 /**

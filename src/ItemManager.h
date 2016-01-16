@@ -246,7 +246,7 @@ public:
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemName(unsigned id);
-	std::string getItemType(std::string _type);
+	std::string getItemType(const std::string& _type);
 	Color getItemColor(unsigned id);
 	void addUnknownItem(unsigned id);
 	bool requirementsMet(const StatBlock *stats, int item);

@@ -36,7 +36,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-MenuStatBar::MenuStatBar(std::string type)
+MenuStatBar::MenuStatBar(const std::string& type)
 	: bar(NULL)
 	, stat_cur(0)
 	, stat_max(0)
@@ -108,7 +108,7 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, Point _mouse, std::string _custom_string) {
+void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, Point _mouse, const std::string& _custom_string) {
 	if (_custom_string != "") custom_string = _custom_string;
 	mouse = _mouse;
 	stat_cur = _stat_cur;

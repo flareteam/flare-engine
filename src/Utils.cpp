@@ -352,7 +352,7 @@ size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
 	return a.find(b);
 }
 
-std::string getDurationString(const int& duration) {
+std::string getDurationString(const int duration) {
 	float real_duration = static_cast<float>(duration) / MAX_FRAMES_PER_SEC;
 
 	std::stringstream ss;

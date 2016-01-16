@@ -42,7 +42,7 @@ public:
 	Loot& operator= (const Loot &other);
 	~Loot();
 
-	void loadAnimation(std::string _gfx);
+	void loadAnimation(const std::string& _gfx);
 
 	/**
 	 * If an item is flying, it hasn't completed its "flying loot" animation.

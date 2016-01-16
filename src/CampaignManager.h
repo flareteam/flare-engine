@@ -36,11 +36,11 @@ public:
 	~CampaignManager();
 
 	void clearAll();
-	void setAll(std::string s);
+	void setAll(const std::string& s);
 	std::string getAll();
-	bool checkStatus(std::string s);
-	void setStatus(std::string s);
-	void unsetStatus(std::string s);
+	bool checkStatus(const std::string& s);
+	void setStatus(const std::string& s);
+	void unsetStatus(const std::string& s);
 	bool checkCurrency(int quantity);
 	bool checkItem(int item_id);
 	void removeCurrency(int quantity);
@@ -48,7 +48,7 @@ public:
 	void rewardItem(ItemStack istack);
 	void rewardCurrency(int amount);
 	void rewardXP(int amount, bool show_message);
-	void restoreHPMP(std::string s);
+	void restoreHPMP(const std::string& s);
 	void addMsg(const std::string& msg);
 	bool checkAllRequirements(const Event_Component& ec);
 

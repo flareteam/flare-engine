@@ -81,8 +81,8 @@ public:
 	void updateTitleBar();
 	void freeImage(Image *image);
 
-	Image* loadImage(std::string filename,
-					 std::string errormessage = "Couldn't load image",
+	Image* loadImage(const std::string& filename,
+					 const std::string& errormessage = "Couldn't load image",
 					 bool IfNotFoundExit = false);
 private:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);

@@ -137,7 +137,8 @@ std::string MessageEngine::str(unsigned long i) {
 }
 
 // unescape c formatted string
-std::string MessageEngine::unescape(std::string val) {
+std::string MessageEngine::unescape(const std::string& _val) {
+	std::string val = _val;
 
 	// unescape percentage %% to %
 	size_t pos;

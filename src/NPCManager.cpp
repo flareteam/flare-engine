@@ -129,7 +129,7 @@ void NPCManager::logic() {
 	}
 }
 
-int NPCManager::getID(std::string npcName) {
+int NPCManager::getID(const std::string& npcName) {
 	for (unsigned i=0; i<npcs.size(); i++) {
 		if (npcs[i]->filename == npcName) return i;
 	}

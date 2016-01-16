@@ -401,7 +401,7 @@ int EffectManager::damageShields(int dmg) {
 	return over_dmg;
 }
 
-Animation* EffectManager::loadAnimation(std::string &s) {
+Animation* EffectManager::loadAnimation(const std::string &s) {
 	if (s != "") {
 		AnimationSet *animationSet = anim->getAnimationSet(s);
 		return animationSet->getAnimation();

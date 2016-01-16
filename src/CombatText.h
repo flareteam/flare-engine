@@ -59,7 +59,7 @@ public:
 
 	void logic(const FPoint& _cam);
 	void render();
-	void addMessage(std::string message, FPoint location, int displaytype);
+	void addMessage(const std::string& message, FPoint location, int displaytype);
 	void addMessage(int num, FPoint location, int displaytype);
 
 private:

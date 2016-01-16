@@ -82,8 +82,8 @@ public:
 	void updateTitleBar();
 	void freeImage(Image *image);
 
-	Image* loadImage(std::string filename,
-					 std::string errormessage = "Couldn't load image",
+	Image* loadImage(const std::string& filename,
+					 const std::string& errormessage = "Couldn't load image",
 					 bool IfNotFoundExit = false);
 private:
 	void drawLine(int x0, int y0, int x1, int y1, const Color& color);

@@ -107,7 +107,7 @@ public:
 
 class EffectManager {
 private:
-	Animation* loadAnimation(std::string &s);
+	Animation* loadAnimation(const std::string &s);
 	void removeEffect(size_t id);
 	void removeAnimation(size_t id);
 

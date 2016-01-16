@@ -411,7 +411,7 @@ std::string ItemManager::getItemName(unsigned id) {
 	return items[id].name;
 }
 
-std::string ItemManager::getItemType(std::string _type) {
+std::string ItemManager::getItemType(const std::string& _type) {
 	for (unsigned i=0; i<item_types.size(); ++i) {
 		if (item_types[i].id == _type)
 			return item_types[i].name;

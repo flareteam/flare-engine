@@ -37,7 +37,7 @@ private:
 	std::map<std::string,std::string> messages;
 	std::string str(int i);
 	std::string str(unsigned long i);
-	std::string unescape(std::string msg);
+	std::string unescape(const std::string& _val);
 public:
 	MessageEngine();
 	std::string get(const std::string& key);

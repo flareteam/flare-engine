@@ -116,7 +116,7 @@ int SDLFontEngine::calc_width(const std::string& text) {
  * use_ellipsis == true: "Hello ..."
  * use_ellipsis == false: " World"
  */
-std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int& width, const bool& use_ellipsis) {
+std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis) {
 	if (width >= calc_width(text))
 		return text;
 
@@ -155,7 +155,7 @@ std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int& w
 	}
 }
 
-void SDLFontEngine::setFont(std::string _font) {
+void SDLFontEngine::setFont(const std::string& _font) {
 	for (unsigned int i=0; i<font_styles.size(); i++) {
 		if (font_styles[i].name == _font) {
 			active_font = &(font_styles[i]);

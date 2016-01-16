@@ -86,7 +86,7 @@ public:
 
 	MapRenderer(const MapRenderer &copy); // not implemented
 
-	int load(std::string filename);
+	int load(const std::string& filename);
 	void logic();
 	void render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 

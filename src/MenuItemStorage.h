@@ -43,7 +43,7 @@ protected:
 public:
 	MenuItemStorage();
 	void init(int _slot_number, Rect _area, int icon_size, int nb_cols);
-	void init(int _slot_number, std::vector<Rect> _area, std::vector<std::string> _slot_type);
+	void init(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type);
 	~MenuItemStorage();
 
 	// rendering
@@ -52,7 +52,7 @@ public:
 	TooltipData checkTooltip(Point position, StatBlock *stats, int context);
 	ItemStack click(Point position);
 	void itemReturn(ItemStack stack);
-	void highlightMatching(std::string type);
+	void highlightMatching(const std::string& type);
 	void highlightClear();
 	void setPos(int x = 0, int y = 0);
 	std::vector<std::string> slot_type;

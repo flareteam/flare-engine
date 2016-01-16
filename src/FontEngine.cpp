@@ -31,7 +31,7 @@ FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), line_height
 FontEngine::FontEngine() : cursor_y(0) {
 }
 
-Color FontEngine::getColor(std::string _color) {
+Color FontEngine::getColor(const std::string& _color) {
 	std::map<std::string,Color>::iterator it,end;
 	for (it=color_map.begin(), end=color_map.end(); it!=end; ++it) {
 		if (_color.compare(it->first) == 0) return it->second;

@@ -33,7 +33,7 @@ public:
 	Menu();
 	virtual ~Menu();
 
-	void setBackground(std::string background_image);
+	void setBackground(const std::string& background_image);
 	void setBackgroundDest(Rect &dest);
 	void setBackgroundClip(Rect &clip);
 	virtual void align();

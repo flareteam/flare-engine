@@ -31,7 +31,7 @@ class GetText {
 private:
 	std::ifstream infile;
 	std::string line;
-	std::string sanitize(std::string input);
+	std::string sanitize(const std::string& input);
 
 public:
 	GetText();

@@ -27,7 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SDLSoundManager.h"
 #include "SDLInputState.h"
 
-RenderDevice* getRenderDevice(std::string name) {
+RenderDevice* getRenderDevice(const std::string& name) {
 #if defined(__ANDROID__) || defined (__IPHONEOS__)
 	// Android and IOS always use the hardware renderer
 	return new SDLHardwareRenderDevice();

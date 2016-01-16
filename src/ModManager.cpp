@@ -233,7 +233,7 @@ void ModManager::setPaths() {
 	if (uniq_path_data) mod_paths.push_back(PATH_DATA);
 }
 
-Mod ModManager::loadMod(std::string name) {
+Mod ModManager::loadMod(const std::string& name) {
 	Mod mod;
 	std::ifstream infile;
 	std::string starts_with, line, key, val;

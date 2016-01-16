@@ -180,8 +180,8 @@ public:
 	virtual void updateTitleBar() = 0;
 
 	/** factory functions for Image */
-	virtual Image *loadImage(std::string filename,
-							 std::string errormessage = "Couldn't load image",
+	virtual Image *loadImage(const std::string& filename,
+							 const std::string& errormessage = "Couldn't load image",
 							 bool IfNotFoundExit = false) = 0;
 	virtual Image *createImage(int width, int height) = 0;
 	virtual void freeImage(Image *image) = 0;
@@ -203,8 +203,8 @@ protected:
 	bool localToGlobal(Sprite *r);
 
 	/* Image cache operations */
-	Image *cacheLookup(std::string &filename);
-	void cacheStore(std::string &filename, Image *);
+	Image *cacheLookup(const std::string &filename);
+	void cacheStore(const std::string &filename, Image *);
 	void cacheRemove(Image *image);
 
 	bool fullscreen;

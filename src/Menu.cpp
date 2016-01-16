@@ -42,7 +42,7 @@ Menu::~Menu() {
 	if (background) delete background;
 }
 
-void Menu::setBackground(std::string background_image) {
+void Menu::setBackground(const std::string& background_image) {
 	Image *graphics;
 
 	if (background) {

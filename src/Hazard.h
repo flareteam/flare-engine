@@ -63,7 +63,7 @@ public:
 	bool hasEntity(Entity*);
 	void addEntity(Entity*);
 
-	void loadAnimation(std::string &s);
+	void loadAnimation(const std::string &s);
 
 	void setAngle(const float& _angle);
 

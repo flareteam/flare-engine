@@ -58,7 +58,7 @@ private:
 public:
 	ModManager();
 	~ModManager();
-	Mod loadMod(std::string name);
+	Mod loadMod(const std::string& name);
 	void applyDepends();
 	bool haveFallbackMod();
 

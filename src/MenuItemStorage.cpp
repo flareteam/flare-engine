@@ -63,7 +63,7 @@ void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb
 /**
  * Overloaded function for case, if slot positions are predefined
  */
-void MenuItemStorage::init(int _slot_number, std::vector<Rect> _area, std::vector<std::string> _slot_type) {
+void MenuItemStorage::init(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type) {
 	ItemStorage::init( _slot_number);
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot();
@@ -220,7 +220,7 @@ void MenuItemStorage::itemReturn(ItemStack stack) {
 	drag_prev_slot = -1;
 }
 
-void MenuItemStorage::highlightMatching(std::string type) {
+void MenuItemStorage::highlightMatching(const std::string& type) {
 	for (int i=0; i<slot_number; i++) {
 		if (slot_type[i] == type) highlight[i] = true;
 	}

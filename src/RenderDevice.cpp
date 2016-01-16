@@ -193,7 +193,7 @@ void RenderDevice::destroyContext() {
 	assert(cache.empty());
 }
 
-Image * RenderDevice::cacheLookup(std::string &filename) {
+Image * RenderDevice::cacheLookup(const std::string &filename) {
 	IMAGE_CACHE_CONTAINER_ITER it;
 	it = cache.find(filename);
 	if (it != cache.end()) {
@@ -203,7 +203,7 @@ Image * RenderDevice::cacheLookup(std::string &filename) {
 	return NULL;
 }
 
-void RenderDevice::cacheStore(std::string &filename, Image *image) {
+void RenderDevice::cacheStore(const std::string &filename, Image *image) {
 	if (image == NULL) return;
 	cache[filename] = image;
 }

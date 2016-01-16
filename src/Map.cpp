@@ -59,7 +59,7 @@ void Map::removeLayer(unsigned index) {
 	layers.erase(layers.begin() + index);
 }
 
-int Map::load(std::string fname) {
+int Map::load(const std::string& fname) {
 	FileParser infile;
 
 	clearEvents();

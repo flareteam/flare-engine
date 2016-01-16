@@ -99,7 +99,7 @@ void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::stri
 /**
  * A shortcut function to set all attributes simultaneously.
  */
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, std::string _font) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, const std::string& _font) {
 
 	bool changed = false;
 	bool changed_pos = false;

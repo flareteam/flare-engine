@@ -128,7 +128,7 @@ public:
 	void setTileset(const std::string& tset) { tileset = tset; }
 	void removeLayer(unsigned index);
 
-	int load(std::string filename);
+	int load(const std::string& filename);
 
 	std::string music_filename;
 

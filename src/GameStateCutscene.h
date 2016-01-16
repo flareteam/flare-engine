@@ -84,7 +84,7 @@ public:
 	GameStateCutscene(GameState *game_state);
 	~GameStateCutscene();
 
-	bool load(std::string filename);
+	bool load(const std::string& filename);
 	void logic();
 	void render();
 

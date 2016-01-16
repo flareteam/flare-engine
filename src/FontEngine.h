@@ -56,7 +56,7 @@ public:
 	FontEngine();
 	virtual ~FontEngine() {};
 
-	Color getColor(std::string _color);
+	Color getColor(const std::string& _color);
 
 	Point calc_size(const std::string& text_with_newlines, int width);
 
@@ -67,9 +67,9 @@ public:
 	virtual int getLineHeight() = 0;
 	virtual int getFontHeight() = 0;
 
-	virtual void setFont(std::string _font) = 0;
+	virtual void setFont(const std::string& _font) = 0;
 	virtual int calc_width(const std::string& text) = 0;
-	virtual std::string trimTextToWidth(const std::string& text, const int& width, const bool& use_ellipsis) = 0;
+	virtual std::string trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis) = 0;
 	virtual void render(const std::string& text, int x, int y, int justify, Image *target, Color color) = 0;
 
 	int cursor_y;

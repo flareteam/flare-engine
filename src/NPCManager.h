@@ -47,7 +47,7 @@ public:
 	void handleNewMap();
 	void logic();
 	void addRenders(std::vector<Renderable> &r);
-	int getID(std::string npcName);
+	int getID(const std::string& npcName);
 };
 
 #endif

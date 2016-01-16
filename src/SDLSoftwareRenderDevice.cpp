@@ -581,7 +581,7 @@ void SDLSoftwareRenderDevice::updateTitleBar() {
 	if (titlebar_icon) SDL_SetWindowIcon(window, titlebar_icon);
 }
 
-Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
+Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, const std::string& errormessage, bool IfNotFoundExit) {
 	// lookup image in cache
 	Image *img;
 	img = cacheLookup(filename);

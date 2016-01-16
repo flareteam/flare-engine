@@ -145,7 +145,7 @@ void MapRenderer::clearLayers() {
 	index_objectlayer = 0;
 }
 
-int MapRenderer::load(std::string fname) {
+int MapRenderer::load(const std::string& fname) {
 	// unload sounds
 	snd->reset();
 	while (!sids.empty()) {

@@ -129,7 +129,7 @@ void Hazard::logic() {
 	}
 }
 
-void Hazard::loadAnimation(std::string &s) {
+void Hazard::loadAnimation(const std::string &s) {
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
