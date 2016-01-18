@@ -111,6 +111,7 @@ static void mainLoop () {
 	bool done = false;
 	float delay_f = 1000.f/MAX_FRAMES_PER_SEC;
 	int delay = int(floorf(delay_f+0.5f));
+	int delay_unrounded = int(floorf(delay_f)); // used in SDL_Delay()
 	int logic_ticks = SDL_GetTicks();
 
 	while ( !done ) {
@@ -118,7 +119,7 @@ static void mainLoop () {
 		int now_ticks = SDL_GetTicks();
 		int prev_ticks = now_ticks;
 
-		while (now_ticks > logic_ticks && loops < MAX_FRAMES_PER_SEC) {
+		while (now_ticks >= logic_ticks && loops < MAX_FRAMES_PER_SEC) {
 			// Frames where data loading happens (GameState switching and map loading)
 			// take a long time, so our loop here will think that the game "lagged" and
 			// try to compensate. To prevent this compensation, we mark those frames as
@@ -181,8 +182,11 @@ static void mainLoop () {
 
 		// delay quick frames
 		now_ticks = SDL_GetTicks();
-		if (now_ticks - prev_ticks < delay) {
-			SDL_Delay(delay - (now_ticks - prev_ticks));
+		if (logic_ticks > now_ticks)
+			logic_ticks = now_ticks;
+
+		if (now_ticks - prev_ticks < delay_unrounded) {
+			SDL_Delay(delay_unrounded - (now_ticks - prev_ticks));
 		}
 
 	}
