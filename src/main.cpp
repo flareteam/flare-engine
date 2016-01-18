@@ -276,6 +276,9 @@ int main(int argc, char *argv[]) {
 --no-audio               Disables sound effects and music.\n");
 			done = true;
 		}
+		else {
+			logError("'%s' is not a valid command line option. Try '--help' for a list of valid options.", argv[i]);
+		}
 	}
 
 	if (!done) {
