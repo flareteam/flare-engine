@@ -113,6 +113,7 @@ static void mainLoop () {
 	int delay = int(floorf(delay_f+0.5f));
 	int delay_unrounded = int(floorf(delay_f)); // used in SDL_Delay()
 	int logic_ticks = SDL_GetTicks();
+	int last_fps = -1;
 
 	while ( !done ) {
 		int loops = 0;
@@ -167,6 +168,13 @@ static void mainLoop () {
 		gswitch->render();
 
 		// display the FPS counter
+		if (last_fps != -1) {
+		    gswitch->showFPS(last_fps);
+		}
+
+		render_device->commitFrame();
+
+		// calculate the FPS
 		// if the frame completed quickly, we estimate the delay here
 		now_ticks = SDL_GetTicks();
 		float delay_ticks = 0;
@@ -175,10 +183,10 @@ static void mainLoop () {
 		}
 		float fps_delay = delay_ticks + static_cast<float>(now_ticks-prev_ticks);
 		if (fps_delay != 0) {
-			gswitch->showFPS(static_cast<int>(1000.f / fps_delay));
+			last_fps = static_cast<int>(1000.f / fps_delay);
+		} else {
+			last_fps = -1;
 		}
-
-		render_device->commitFrame();
 
 		// delay quick frames
 		now_ticks = SDL_GetTicks();
