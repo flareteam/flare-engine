@@ -631,7 +631,6 @@ void GameStateConfigDesktop::logicInput() {
 void GameStateConfigDesktop::logicKeybinds() {
 	input_scrollbox->logic();
 	for (unsigned int i = 0; i < keybinds_btn.size(); i++) {
-		if (keybinds_btn[i]->pressed || keybinds_btn[i]->hover) input_scrollbox->update = true;
 		Point mouse = input_scrollbox->input_assist(inpt->mouse);
 		if (keybinds_btn[i]->checkClick(mouse.x,mouse.y)) {
 			std::string confirm_msg;
