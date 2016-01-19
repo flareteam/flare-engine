@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 #include <cmath>
 #include <ctime>
+#include <limits.h>
 
 #include "Settings.h"
 #include "Stats.h"
@@ -111,13 +112,18 @@ static void mainLoop () {
 	bool done = false;
 	float delay_f = 1000.f/MAX_FRAMES_PER_SEC;
 	int delay = int(floorf(delay_f+0.5f));
-	int logic_ticks = SDL_GetTicks();
+	unsigned int logic_ticks = SDL_GetTicks();
 	int last_fps = -1;
 
 	while ( !done ) {
 		int loops = 0;
-		int now_ticks = SDL_GetTicks();
-		int prev_ticks = now_ticks;
+		unsigned int now_ticks = SDL_GetTicks();
+		unsigned int prev_ticks = now_ticks;
+
+		// reset our tick counters before they overflow
+		if (now_ticks >= UINT_MAX-delay) {
+			now_ticks = prev_ticks = logic_ticks = 0;
+		}
 
 		while (now_ticks >= logic_ticks && loops < MAX_FRAMES_PER_SEC) {
 			// Frames where data loading happens (GameState switching and map loading)
