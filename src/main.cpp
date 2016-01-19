@@ -177,11 +177,12 @@ static void mainLoop () {
 		// calculate the FPS
 		// if the frame completed quickly, we estimate the delay here
 		now_ticks = SDL_GetTicks();
-		float delay_ticks = 0;
-		if (now_ticks - prev_ticks < delay) {
-			delay_ticks = delay_f - static_cast<float>(now_ticks - prev_ticks);
+		float fps_delay;
+		if (now_ticks - prev_ticks < delay_f) {
+			fps_delay = delay_f;
+		} else {
+			fps_delay = static_cast<float>(now_ticks - prev_ticks);
 		}
-		float fps_delay = delay_ticks + static_cast<float>(now_ticks-prev_ticks);
 		if (fps_delay != 0) {
 			last_fps = static_cast<int>(1000.f / fps_delay);
 		} else {
