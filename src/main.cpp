@@ -111,7 +111,6 @@ static void mainLoop () {
 	bool done = false;
 	float delay_f = 1000.f/MAX_FRAMES_PER_SEC;
 	int delay = int(floorf(delay_f+0.5f));
-	int delay_unrounded = int(floorf(delay_f)); // used in SDL_Delay()
 	int logic_ticks = SDL_GetTicks();
 	int last_fps = -1;
 
@@ -194,8 +193,9 @@ static void mainLoop () {
 		if (logic_ticks > now_ticks)
 			logic_ticks = now_ticks;
 
-		if (now_ticks - prev_ticks < delay_unrounded) {
-			SDL_Delay(delay_unrounded - (now_ticks - prev_ticks));
+		int delay_ticks = (delay - 1) - (now_ticks - prev_ticks);
+		if (delay_ticks > 0) {
+			SDL_Delay(delay_ticks);
 		}
 
 	}
