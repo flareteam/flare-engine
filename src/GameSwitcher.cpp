@@ -161,7 +161,7 @@ void GameSwitcher::logic() {
 	// Check if a the game state is to be changed and change it if necessary, deleting the old state
 	GameState* newState = currentState->getRequestedGameState();
 	if (newState != NULL) {
-		if (currentState->reload_backgrounds)
+		if (currentState->reload_backgrounds || render_device->reloadGraphics())
 			loadBackgroundList();
 
 		delete currentState;

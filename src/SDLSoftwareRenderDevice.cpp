@@ -496,6 +496,10 @@ void SDLSoftwareRenderDevice::commitFrame() {
 }
 
 void SDLSoftwareRenderDevice::destroyContext() {
+	// we need to free all loaded graphics as they may be tied to the current context
+	RenderDevice::cacheRemoveAll();
+	reload_graphics = true;
+
 	if (curs) {
 		delete curs;
 		curs = NULL;

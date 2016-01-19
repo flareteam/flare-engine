@@ -198,6 +198,8 @@ public:
 	virtual void drawRectangle(const Point& p0, const Point& p1, const Color& color) = 0;
 	virtual void windowResize() = 0;
 
+	bool reloadGraphics();
+
 protected:
 	/* Compute clipping and global position from local frame. */
 	bool localToGlobal(Sprite *r);
@@ -206,6 +208,7 @@ protected:
 	Image *cacheLookup(const std::string &filename);
 	void cacheStore(const std::string &filename, Image *);
 	void cacheRemove(Image *image);
+	void cacheRemoveAll();
 
 	bool fullscreen;
 	bool hwsurface;
@@ -214,6 +217,7 @@ protected:
 	Point min_screen;
 
 	bool is_initialized;
+	bool reload_graphics;
 
 	Rect m_clip;
 	Rect m_dest;

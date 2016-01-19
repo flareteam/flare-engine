@@ -174,7 +174,8 @@ RenderDevice::RenderDevice()
 	, vsync(false)
 	, texture_filter(false)
 	, min_screen(640, 480)
-	, is_initialized(false) {
+	, is_initialized(false)
+	, reload_graphics(false) {
 }
 
 RenderDevice::~RenderDevice() {
@@ -221,6 +222,15 @@ void RenderDevice::cacheRemove(Image *image) {
 	}
 }
 
+void RenderDevice::cacheRemoveAll() {
+	IMAGE_CACHE_CONTAINER_ITER it = cache.begin();
+
+	while (it != cache.end()) {
+		cacheRemove(it->second);
+		it = cache.begin();
+	}
+}
+
 bool RenderDevice::localToGlobal(Sprite *r) {
 	m_clip = r->getClip();
 
@@ -264,4 +274,13 @@ bool RenderDevice::localToGlobal(Sprite *r) {
 	m_dest.y = up + r->local_frame.y;
 
 	return true;
+}
+
+bool RenderDevice::reloadGraphics() {
+	if (reload_graphics) {
+		reload_graphics = false;
+		return true;
+	}
+
+	return false;
 }
