@@ -111,7 +111,7 @@ static void init(const std::string &render_device_name) {
 static void mainLoop () {
 	bool done = false;
 	float delay_f = 1000.f/MAX_FRAMES_PER_SEC;
-	int delay = int(floorf(delay_f+0.5f));
+	unsigned int delay = (unsigned int)(floorf(delay_f+0.5f));
 	unsigned int logic_ticks = SDL_GetTicks();
 	int last_fps = -1;
 
@@ -199,8 +199,8 @@ static void mainLoop () {
 		if (logic_ticks > now_ticks)
 			logic_ticks = now_ticks;
 
-		int delay_ticks = (delay - 1) - (now_ticks - prev_ticks);
-		if (delay_ticks > 0) {
+		unsigned int delay_ticks = (delay - 1) - (now_ticks - prev_ticks);
+		if (delay_ticks > 0 && delay_ticks < delay) {
 			SDL_Delay(delay_ticks);
 		}
 
