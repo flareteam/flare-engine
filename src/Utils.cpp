@@ -193,7 +193,7 @@ float calcTheta(float x1, float y1, float x2, float y2) {
 		else theta = static_cast<float>(-M_PI)/2.0f;
 	}
 	else {
-		theta = static_cast<float>(atan(dy/dx));
+		theta = atanf(dy/dx);
 		if (dx < 0.0 && dy >= 0.0) theta += static_cast<float>(M_PI);
 		if (dx < 0.0 && dy < 0.0) theta -= static_cast<float>(M_PI);
 	}

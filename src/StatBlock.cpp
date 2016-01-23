@@ -669,8 +669,8 @@ void StatBlock::logic() {
 
 	if (effects.knockback_speed != 0) {
 		float theta = calcTheta(knockback_srcpos.x, knockback_srcpos.y, knockback_destpos.x, knockback_destpos.y);
-		knockback_speed.x = effects.knockback_speed * static_cast<float>(cos(theta));
-		knockback_speed.y = effects.knockback_speed * static_cast<float>(sin(theta));
+		knockback_speed.x = effects.knockback_speed * cosf(theta);
+		knockback_speed.y = effects.knockback_speed * sinf(theta);
 
 		mapr->collider.unblock(pos.x, pos.y);
 		mapr->collider.move(pos.x, pos.y, knockback_speed.x, knockback_speed.y, movement_type, hero);

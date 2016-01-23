@@ -1018,8 +1018,8 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint&
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
-	speed.x = powers[power_index].speed * static_cast<float>(cos(theta));
-	speed.y = powers[power_index].speed * static_cast<float>(sin(theta));
+	speed.x = powers[power_index].speed * cosf(theta);
+	speed.y = powers[power_index].speed * sinf(theta);
 
 	location_iterator = src_stats->pos;
 
