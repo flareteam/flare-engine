@@ -13,6 +13,7 @@
 # ignore also vim swap files
 .*.sw*
 /flare.desktop
+gmon.out
 
 # ignore copy-on-write backup files
 *~
