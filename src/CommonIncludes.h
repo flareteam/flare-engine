@@ -16,8 +16,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #pragma once
-#ifndef SHARED_INCLUDES
-#define SHARED_INCLUDES
+#ifndef COMMON_INCLUDES_H
+#define COMMON_INCLUDES_H
 
 #include <algorithm>
 #include <fstream>
