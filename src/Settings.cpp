@@ -34,15 +34,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "SharedResources.h"
 
-#ifdef _MSC_VER
-#define log2(x)	logf(x)/logf(2)
-#endif
-
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-#include <SDL.h>
 #if defined(__ANDROID__)
 #include <jni.h>
-#endif
 #endif
 
 class ConfigEntry {
