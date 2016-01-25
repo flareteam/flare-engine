@@ -28,15 +28,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "Platform.h"
 #include "Settings.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 #include "SharedResources.h"
-
-#if defined(__ANDROID__)
-#include <jni.h>
-#endif
 
 class ConfigEntry {
 public:
@@ -213,250 +210,6 @@ float INTERACT_RANGE;
 bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
 float ENCOUNTER_DIST;
-
-/**
- * Set system paths
- * PATH_CONF is for user-configurable settings files (e.g. keybindings)
- * PATH_USER is for user-specific data (e.g. save games)
- * PATH_DATA is for common game data (e.g. images, music)
- */
-
-#ifdef _WIN32
-// Windows paths
-void setPaths() {
-
-	// handle Windows-specific path options
-	if (getenv("APPDATA") != NULL) {
-		PATH_CONF = PATH_USER = (std::string)getenv("APPDATA") + "\\flare";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
-
-		PATH_CONF += "\\config";
-		PATH_USER += "\\userdata";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
-	}
-	else {
-		PATH_CONF = "config";
-		PATH_USER = "userdata";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
-	}
-
-	createDir(PATH_USER + "\\mods");
-	createDir(PATH_USER + "\\saves");
-
-	PATH_DATA = "";
-	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) {
-		logError("Settings: Could not find specified game data directory.");
-		CUSTOM_PATH_DATA = "";
-	}
-
-	PATH_CONF = PATH_CONF + "/";
-	PATH_USER = PATH_USER + "/";
-}
-#elif __ANDROID__
-// Android paths
-std::string getPackageName()
-{
-	JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-
-	jobject activity = (jobject)SDL_AndroidGetActivity();
-	jclass clazz(env->GetObjectClass(activity));
-
-	jmethodID method_id = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
-	jstring packageName = (jstring)env->CallObjectMethod(activity,  method_id);
-	const char* name = env->GetStringUTFChars(packageName, NULL);
-	std::string result(name);
-	env->ReleaseStringUTFChars(packageName, name);
-
-	env->DeleteLocalRef(activity);
-	env->DeleteLocalRef(clazz);
-
-	return result;
-}
-
-void setPaths() {
-	const std::string externalSDList[] = {
-		"/mnt/extSdCard/Android",
-		"/storage/extSdCard/Android"
-		};
-	const int externalSDList_size = 2;
-
-	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
-
-	const std::string package_name = getPackageName();
-	const std::string user_folder = "data/" + package_name + "/files";
-
-	if (SDL_AndroidGetExternalStorageState() != 0)
-	{
-		PATH_USER = std::string(SDL_AndroidGetExternalStoragePath());
-	}
-	// NOTE: Next condition shouldn't be needed, but in theory SDL_AndroidGetExternalStoragePath() can fail.
-	else
-	{
-		const std::string internalSDList[] = {
-			"/sdcard/Android",
-			"/mnt/sdcard/Android",
-			"/storage/sdcard0/Android",
-			"/storage/emulated/0/Android",
-			"/storage/emulated/legacy/Android",
-			};
-		const int internalSDList_size = 5;
-
-		for (int i = 0; i < internalSDList_size; i++)
-		{
-			if (dirExists(internalSDList[i]))
-			{
-				PATH_USER = internalSDList[i] + "/" + user_folder;
-				break;
-			}
-		}
-	}
-	if (PATH_USER.empty())
-	{
-		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
-	}
-
-	for (int i = 0; i < externalSDList_size; i++)
-	{
-		if (dirExists(externalSDList[i]))
-		{
-			PATH_DATA = externalSDList[i] + "/" + user_folder;
-			if (!dirExists(PATH_DATA))
-			{
-				createDir(externalSDList[i] + "/data" + package_name);
-				createDir(externalSDList[i] + "/data" + package_name + "/files");
-			}
-			break;
-		}
-	}
-
-	PATH_USER += "/userdata";
-
-	createDir(PATH_CONF);
-	createDir(PATH_USER);
-	createDir(PATH_USER + "/mods");
-	createDir(PATH_USER + "/saves");
-
-	PATH_CONF += "/";
-	PATH_USER += "/";
-	PATH_DATA += "/";
-}
-#else
-void setPaths() {
-
-	// attempting to follow this spec:
-	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-
-	// set config path (settings, keybindings)
-	// $XDG_CONFIG_HOME/flare/
-	if (getenv("XDG_CONFIG_HOME") != NULL) {
-		PATH_CONF = (std::string)getenv("XDG_CONFIG_HOME") + "/flare/";
-	}
-	// $HOME/.config/flare/
-	else if (getenv("HOME") != NULL) {
-		PATH_CONF = (std::string)getenv("HOME") + "/.config/";
-		createDir(PATH_CONF);
-		PATH_CONF += "flare/";
-	}
-	// ./config/
-	else {
-		PATH_CONF = "./config/";
-	}
-
-	createDir(PATH_CONF);
-
-	// set user path (save games)
-	// $XDG_DATA_HOME/flare/
-	if (getenv("XDG_DATA_HOME") != NULL) {
-		PATH_USER = (std::string)getenv("XDG_DATA_HOME") + "/flare/";
-	}
-	// $HOME/.local/share/flare/
-	else if (getenv("HOME") != NULL) {
-		PATH_USER = (std::string)getenv("HOME") + "/.local/";
-		createDir(PATH_USER);
-		PATH_USER += "share/";
-		createDir(PATH_USER);
-		PATH_USER += "flare/";
-	}
-	// ./saves/
-	else {
-		PATH_USER = "./userdata/";
-	}
-
-	createDir(PATH_USER);
-	createDir(PATH_USER + "mods/");
-	createDir(PATH_USER + "saves/");
-
-	// data folder
-	// while PATH_CONF and PATH_USER are created if not found,
-	// PATH_DATA must already have the game data for the game to work.
-	// in most releases the data will be in the same folder as the executable
-	// - Windows apps are released as a simple folder
-	// - OSX apps are released in a .app folder
-	// Official linux distros might put the executable and data files
-	// in a more standard location.
-
-	// these flags are set to true when a valid directory is found
-	bool path_data = false;
-
-	// if the user specified a data path, try to use it
-	if (dirExists(CUSTOM_PATH_DATA)) {
-		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
-		path_data = true;
-	}
-	else if (!CUSTOM_PATH_DATA.empty()) {
-		logError("Settings: Could not find specified game data directory.");
-		CUSTOM_PATH_DATA = "";
-	}
-
-	// Check for the local data before trying installed ones.
-	if (dirExists("./mods")) {
-		if (!path_data) PATH_DATA = "./";
-		path_data = true;
-	}
-
-	// check $XDG_DATA_DIRS options
-	// a list of directories in preferred order separated by :
-	if (getenv("XDG_DATA_DIRS") != NULL) {
-		std::string pathlist = (std::string)getenv("XDG_DATA_DIRS");
-		std::string pathtest;
-		pathtest = popFirstString(pathlist,':');
-		while (pathtest != "") {
-			if (!path_data) {
-				PATH_DATA = pathtest + "/flare/";
-				if (dirExists(PATH_DATA)) path_data = true;
-			}
-			if (path_data) break;
-			pathtest = popFirstString(pathlist,':');
-		}
-	}
-
-#if defined DATA_INSTALL_DIR
-	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-#endif
-
-	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	if (!path_data) PATH_DATA = "/usr/local/share/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-
-	if (!path_data) PATH_DATA = "/usr/share/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-
-	// check "games" variants of these
-	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-
-	if (!path_data) PATH_DATA = "/usr/share/games/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-
-	// finally assume the local folder
-	if (!path_data)	PATH_DATA = "./";
-}
-#endif
 
 static ConfigEntry * getConfigEntry(const char * name) {
 
@@ -1031,14 +784,14 @@ bool compareVersions(int maj0, int min0, int maj1, int min1) {
  * Set required settings for Mobile devices
  */
 void loadMobileDefaults() {
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-	MOUSE_MOVE = true;
-	MOUSE_AIM = true;
-	NO_MOUSE = false;
-	ENABLE_JOYSTICK = false;
-	HARDWARE_CURSOR = true;
-	TOUCHSCREEN = true;
-#endif
+	if (PlatformOptions.is_mobile_device) {
+		MOUSE_MOVE = true;
+		MOUSE_AIM = true;
+		NO_MOUSE = false;
+		ENABLE_JOYSTICK = false;
+		HARDWARE_CURSOR = true;
+		TOUCHSCREEN = true;
+	}
 }
 
 /**

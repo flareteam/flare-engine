@@ -23,31 +23,16 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "Platform.h"
 #include "SDLInputState.h"
+#include "SaveLoad.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsDebug.h"
 #include "UtilsParsing.h"
-#include "SaveLoad.h"
-#include "SharedGameResources.h"
 
 #include <math.h>
-
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-
-int isExitEvent(void* userdata, SDL_Event* event)
-{
-	if (event->type == SDL_APP_TERMINATING)
-	{
-		logInfo("Terminating app, saving...");
-		save_load->saveGame();
-		logInfo("Saved, ready to exit.");
-		return 0;
-	}
-	return 1;
-}
-
-#endif
 
 SDLInputState::SDLInputState(void)
 	: InputState()
@@ -55,11 +40,11 @@ SDLInputState::SDLInputState(void)
 	, joy_num(0)
 	, joy_axis_num(0)
 {
-#if !defined(__ANDROID__) && !defined (__IPHONEOS__)
-	SDL_StartTextInput();
-#else
-	SDL_SetEventFilter(isExitEvent, NULL);
-#endif
+	// don't use keyboard for touchscreen devices
+	if (!PlatformOptions.is_mobile_device)
+		SDL_StartTextInput();
+
+	PlatformSetExitEventFilter();
 
 	defaultQwertyKeyBindings();
 	defaultJoystickBindings();
@@ -109,12 +94,14 @@ void SDLInputState::initJoystick() {
 }
 
 void SDLInputState::defaultQwertyKeyBindings () {
-	binding[CANCEL] = SDLK_ESCAPE;
-	binding[ACCEPT] = SDLK_RETURN;
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-    binding[CANCEL] = SDLK_AC_BACK;
-	binding[ACCEPT] = SDLK_MENU;
-#endif
+	if (PlatformOptions.is_mobile_device) {
+		binding[CANCEL] = SDLK_AC_BACK;
+		binding[ACCEPT] = SDLK_MENU;
+	}
+	else {
+		binding[CANCEL] = SDLK_ESCAPE;
+		binding[ACCEPT] = SDLK_RETURN;
+	}
 	binding[UP] = SDLK_w;
 	binding[DOWN] = SDLK_s;
 	binding[LEFT] = SDLK_a;
@@ -183,90 +170,99 @@ void SDLInputState::handle() {
 		}
 
 		switch (event.type) {
-
-#if !defined(__ANDROID__) && !defined (__IPHONEOS__)
 			case SDL_MOUSEMOTION:
-				mouse.x = event.motion.x;
-				mouse.y = event.motion.y;
+				if (!PlatformOptions.is_mobile_device) {
+					mouse.x = event.motion.x;
+					mouse.y = event.motion.y;
+				}
 				break;
 			case SDL_MOUSEWHEEL:
-				if (event.wheel.y > 0) {
-					scroll_up = true;
-				} else if (event.wheel.y < 0) {
-					scroll_down = true;
+				if (!PlatformOptions.is_mobile_device) {
+					if (event.wheel.y > 0) {
+						scroll_up = true;
+					} else if (event.wheel.y < 0) {
+						scroll_down = true;
+					}
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				mouse.x = event.button.x;
-				mouse.y = event.button.y;
-				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
-				for (int key=0; key<key_count; key++) {
-					if (bind_button == binding[key] || bind_button == binding_alt[key]) {
-						pressing[key] = true;
-						un_press[key] = false;
+				if (!PlatformOptions.is_mobile_device) {
+					mouse.x = event.button.x;
+					mouse.y = event.button.y;
+					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
+					for (int key=0; key<key_count; key++) {
+						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
+							pressing[key] = true;
+							un_press[key] = false;
+						}
 					}
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
-				mouse.x = event.button.x;
-				mouse.y = event.button.y;
-				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
-				for (int key=0; key<key_count; key++) {
-					if (bind_button == binding[key] || bind_button == binding_alt[key]) {
-						un_press[key] = true;
+				if (!PlatformOptions.is_mobile_device) {
+					mouse.x = event.button.x;
+					mouse.y = event.button.y;
+					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
+					for (int key=0; key<key_count; key++) {
+						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
+							un_press[key] = true;
+						}
+					}
+					last_button = bind_button;
+				}
+				break;
+			case SDL_WINDOWEVENT:
+				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+					window_resized = true;
+					render_device->windowResize();
+				}
+				else if (PlatformOptions.is_mobile_device) {
+					// detect restoring hidden Mobile app to bypass frameskip
+					if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
+						logInfo("Minimizing app, saving...");
+						save_load->saveGame();
+						logInfo("Game saved");
+						window_minimized = true;
+						snd->pauseAll();
+					}
+					else if (event.window.event == SDL_WINDOWEVENT_RESTORED) {
+						window_restored = true;
+						snd->resumeAll();
 					}
 				}
-				last_button = bind_button;
 				break;
-			case SDL_WINDOWEVENT:
-				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-					window_resized = true;
-					render_device->windowResize();
-				}
-				break;
-#else
-			// detect restoring hidden Mobile app to bypass frameskip
-			case SDL_WINDOWEVENT:
-				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-					window_resized = true;
-					render_device->windowResize();
-				}
-				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
-					logInfo("Minimizing app, saving...");
-					save_load->saveGame();
-					logInfo("Game saved");
-					window_minimized = true;
-					snd->pauseAll();
-				}
-				else if (event.window.event == SDL_WINDOWEVENT_RESTORED) {
-					window_restored = true;
-					snd->resumeAll();
-				}
-				break;
-			// Mobile touch events
-			case SDL_FINGERMOTION:
-				mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * VIEW_W);
-				mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * VIEW_H);
 
-				if (event.tfinger.dy > 0) {
-					scroll_up = true;
-				} else if (event.tfinger.dy < 0) {
-					scroll_down = true;
+			// Mobile touch events
+			// NOTE Should these be limited to mobile only?
+			case SDL_FINGERMOTION:
+				if (PlatformOptions.is_mobile_device) {
+					mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * VIEW_W);
+					mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * VIEW_H);
+
+					if (event.tfinger.dy > 0) {
+						scroll_up = true;
+					} else if (event.tfinger.dy < 0) {
+						scroll_down = true;
+					}
 				}
 				break;
 			case SDL_FINGERDOWN:
-				touch_locked = true;
-				mouse.x = static_cast<int>(event.tfinger.x * VIEW_W);
-				mouse.y = static_cast<int>(event.tfinger.y * VIEW_H);
-				pressing[MAIN1] = true;
-				un_press[MAIN1] = false;
+				if (PlatformOptions.is_mobile_device) {
+					touch_locked = true;
+					mouse.x = static_cast<int>(event.tfinger.x * VIEW_W);
+					mouse.y = static_cast<int>(event.tfinger.y * VIEW_H);
+					pressing[MAIN1] = true;
+					un_press[MAIN1] = false;
+				}
 				break;
 			case SDL_FINGERUP:
-				touch_locked = false;
-				un_press[MAIN1] = true;
-				last_button = binding[MAIN1];
+				if (PlatformOptions.is_mobile_device) {
+					touch_locked = false;
+					un_press[MAIN1] = true;
+					last_button = binding[MAIN1];
+				}
 				break;
-#endif
+
 			case SDL_KEYDOWN:
 				for (int key=0; key<key_count; key++) {
 					if (event.key.keysym.sym == binding[key] || event.key.keysym.sym == binding_alt[key]) {

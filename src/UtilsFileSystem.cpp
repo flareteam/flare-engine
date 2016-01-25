@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "Platform.h"
 #include "UtilsFileSystem.h"
 
 #include <sys/types.h>
@@ -29,10 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <dirent.h>
 #include <errno.h>
 #include <stdlib.h>
-
-#ifndef _WIN32
-#include <unistd.h>
-#endif
 
 /**
  * Check to see if a directory/folder exists
@@ -55,20 +52,8 @@ void createDir(const std::string &path) {
 	if (isDirectory(path))
 		return;
 
-#ifndef _WIN32
-	// *nix implementation
-	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-		perror("createDir");
-	}
-#endif
-
-#ifdef _WIN32
-	// win implementation
-	std::string syscmd = std::string("mkdir \"") + path + std::string("\"");
-	if (system(syscmd.c_str()) != 0) {
-		perror("createDir");
-	}
-#endif
+	// TODO check return value?
+	PlatformDirCreate(path);
 }
 
 bool isDirectory(const std::string &path) {
@@ -157,21 +142,7 @@ bool removeDir(const std::string &dir) {
 	if (!isDirectory(dir))
 		return false;
 
-#ifndef _WIN32
-	// *nix implementation
-	if (rmdir(dir.c_str()) == -1) {
-		perror("removeDir");
-		return false;
-	}
-#endif
-
-#ifdef _WIN32
-	// win implementation
-	std::string syscmd = std::string("rmdir \"") + dir + std::string("\"");
-	system(syscmd.c_str());
-#endif
-
-	return true;
+	return PlatformDirRemove(dir);
 }
 
 bool removeDirRecursive(const std::string &dir) {

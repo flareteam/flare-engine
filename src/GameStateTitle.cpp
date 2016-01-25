@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateCutscene.h"
 #include "GameStateLoad.h"
 #include "GameStateTitle.h"
+#include "Platform.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "WidgetButton.h"
@@ -146,11 +147,10 @@ void GameStateTitle::logic() {
 	}
 	else if (button_cfg->checkClick()) {
 		delete requestedGameState;
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-		requestedGameState = new GameStateConfigBase();
-#else
-		requestedGameState = new GameStateConfigDesktop();
-#endif
+		if (PlatformOptions.config_menu_type == CONFIG_MENU_TYPE_DESKTOP)
+			requestedGameState = new GameStateConfigDesktop();
+		else
+			requestedGameState = new GameStateConfigBase();
 	}
 	else if (button_credits->checkClick()) {
 		GameStateTitle *title = new GameStateTitle();
@@ -165,11 +165,9 @@ void GameStateTitle::logic() {
 			requestedGameState = credits;
 		}
 	}
-#if !defined (__IPHONEOS__)
-	else if (button_exit->checkClick()) {
+	else if (PlatformOptions.has_exit_button && button_exit->checkClick()) {
 		exitRequested = true;
 	}
-#endif
 }
 
 void GameStateTitle::refreshWidgets() {
@@ -200,9 +198,9 @@ void GameStateTitle::render() {
 	button_play->render();
 	button_cfg->render();
 	button_credits->render();
-#if !defined (__IPHONEOS__)
-	button_exit->render();
-#endif
+
+	if (PlatformOptions.has_exit_button)
+		button_exit->render();
 
 	// version number
 	label_version->render();

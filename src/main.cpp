@@ -33,12 +33,30 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 GameSwitcher *gswitch;
 
+#ifdef _WIN32
+#include "PlatformWin32.cpp"
+#elif __ANDROID__
+#include "PlatformAndroid.cpp"
+#elif __IPHONEOS__
+#include "PlatformIPhoneOS.cpp"
+#else
+// Linux stuff should work on Mac OSX/BSD/etc, too
+#include "PlatformLinux.cpp"
+#endif
+
 /**
  * Game initialization.
  */
 static void init(const std::string &render_device_name) {
+	PlatformInit(&PlatformOptions);
 
-	setPaths();
+	/**
+	 * Set system paths
+	 * PATH_CONF is for user-configurable settings files (e.g. keybindings)
+	 * PATH_USER is for user-specific data (e.g. save games)
+	 * PATH_DATA is for common game data (e.g. images, music)
+	 */
+	PlatformSetPaths();
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
@@ -84,7 +102,9 @@ static void init(const std::string &render_device_name) {
 	setStatNames();
 
 	// Create render Device and Rendering Context.
-	if (render_device_name != "")
+	if (PlatformOptions.default_renderer != "")
+		render_device = getRenderDevice(PlatformOptions.default_renderer);
+	else if (render_device_name != "")
 		render_device = getRenderDevice(render_device_name);
 	else
 		render_device = getRenderDevice(RENDER_DEVICE);

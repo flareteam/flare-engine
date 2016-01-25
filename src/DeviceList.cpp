@@ -28,11 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SDLInputState.h"
 
 RenderDevice* getRenderDevice(const std::string& name) {
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-	// Android and IOS always use the hardware renderer
-	return new SDLHardwareRenderDevice();
-#endif
-
 	// "sdl" is the default
 	if (name != "") {
 		if (name == "sdl") return new SDLSoftwareRenderDevice();
