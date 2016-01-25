@@ -57,8 +57,6 @@ private:
 
 	Color color_normal;
 
-	TabList tablist;
-
 	WidgetLabel *label_name;
 	WidgetScrollBox *textbox;
 

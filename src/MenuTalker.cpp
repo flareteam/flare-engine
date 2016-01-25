@@ -96,10 +96,6 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
 	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y);
 
-	tablist.add(advanceButton);
-	tablist.add(closeButton);
-	tablist.add(textbox);
-
 	align();
 }
 
@@ -134,8 +130,6 @@ void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
 
-	tablist.logic();
-
 	advanceButton->enabled = false;
 	closeButton->enabled = false;
 
@@ -143,19 +137,13 @@ void MenuTalker::logic() {
 	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
 		if (npc->dialog[dialog_node][event_cursor+1].type != EC_NONE) {
 			advanceButton->enabled = true;
-			tablist.remove(closeButton);
-			tablist.add(advanceButton);
 		}
 		else {
 			closeButton->enabled = true;
-			tablist.remove(advanceButton);
-			tablist.add(closeButton);
 		}
 	}
 	else {
 		closeButton->enabled = true;
-		tablist.remove(advanceButton);
-		tablist.add(closeButton);
 	}
 
 	bool more;
