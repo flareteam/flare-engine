@@ -92,6 +92,7 @@ public:
 
 	bool getNext();
 	bool getPrev();
+	void defocus();
 
 	void select(int index);
 	void deselect(int index);
