@@ -94,11 +94,19 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	stock[VENDOR_SELL].init(VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
 	buyback_stock.init(NPC_VENDOR_MAX_STOCK);
 
+	tablist.setInnerScrolltype(HORIZONTAL);
+	tablist.add(tabControl);
+	tablist_buy.setPrevTabList(&tablist);
+	tablist_sell.setPrevTabList(&tablist);
+
+	tablist_buy.lock();
+	tablist_sell.lock();
+
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
-		tablist.add(stock[VENDOR_BUY].slots[i]);
+		tablist_buy.add(stock[VENDOR_BUY].slots[i]);
 	}
 	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
-		tablist.add(stock[VENDOR_SELL].slots[i]);
+		tablist_sell.add(stock[VENDOR_SELL].slots[i]);
 	}
 
 	align();
@@ -125,10 +133,21 @@ void MenuVendor::logic() {
 	if (!visible) return;
 
 	tablist.logic();
+	tablist_buy.logic();
+	tablist_sell.logic();
 
-	if (TOUCHSCREEN && tablist.getCurrent() == -1) {
-		stock[VENDOR_BUY].current_slot = NULL;
-		stock[VENDOR_SELL].current_slot = NULL;
+	activetab = tabControl->getActiveTab();
+
+	if (activetab == VENDOR_BUY)
+		tablist.setNextTabList(&tablist_buy);
+	else if (activetab == VENDOR_SELL)
+		tablist.setNextTabList(&tablist_sell);
+
+	if (TOUCHSCREEN) {
+		if (activetab == VENDOR_BUY && tablist_buy.getCurrent() == -1)
+			stock[VENDOR_BUY].current_slot = NULL;
+		else if (activetab == VENDOR_SELL && tablist_sell.getCurrent() == -1)
+			stock[VENDOR_SELL].current_slot = NULL;
 	}
 
 	// make sure keyboard navigation leads us to correct tab
@@ -154,14 +173,16 @@ void MenuVendor::logic() {
 void MenuVendor::tabsLogic() {
 	tabControl->logic();
 	if (TOUCHSCREEN && activetab != tabControl->getActiveTab()) {
-		tablist.defocus();
+		tablist_buy.defocus();
+		tablist_sell.defocus();
 	}
 	activetab = tabControl->getActiveTab();
 }
 
 void MenuVendor::setTab(int tab) {
 	if (TOUCHSCREEN && activetab != tab) {
-		tablist.defocus();
+		tablist_buy.defocus();
+		tablist_sell.defocus();
 	}
 	tabControl->setActiveTab(tab);
 	activetab = tab;
@@ -197,7 +218,10 @@ ItemStack MenuVendor::click(const Point& position) {
 	ItemStack stack = stock[activetab].click(position);
 	saveInventory();
 	if (TOUCHSCREEN) {
-		tablist.setCurrent(stock[activetab].current_slot);
+		if (activetab == VENDOR_BUY)
+			tablist_buy.setCurrent(stock[activetab].current_slot);
+		else if (activetab == VENDOR_SELL)
+			tablist_sell.setCurrent(stock[activetab].current_slot);
 	}
 	return stack;
 }
@@ -294,6 +318,16 @@ void MenuVendor::removeFromPrevSlot(int quantity) {
 		stock[activetab].subtract(drag_prev_slot, quantity);
 		saveInventory();
 	}
+}
+
+void MenuVendor::lockTabControl() {
+	tablist_buy.setPrevTabList(NULL);
+	tablist_sell.setPrevTabList(NULL);
+}
+
+void MenuVendor::unlockTabControl() {
+	tablist_buy.setPrevTabList(&tablist);
+	tablist_sell.setPrevTabList(&tablist);
 }
 
 MenuVendor::~MenuVendor() {

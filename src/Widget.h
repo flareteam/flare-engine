@@ -28,6 +28,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 enum ScrollType {VERTICAL, HORIZONTAL, TWO_DIRECTIONS};
 
+enum WidgetRelSelect {
+	WIDGET_SELECT_AUTO,
+	WIDGET_SELECT_LEFT,
+	WIDGET_SELECT_RIGHT,
+	WIDGET_SELECT_UP,
+	WIDGET_SELECT_DOWN
+};
+
 class Widget {
 public:
 	Widget();
@@ -63,6 +71,9 @@ private:
 	int MV_LEFT;
 	int MV_RIGHT;
 	int ACTIVATE;
+	TabList *prev_tablist;
+	TabList *next_tablist;
+	ScrollType inner_scrolltype;
 public:
 	TabList(ScrollType _scrolltype = TWO_DIRECTIONS, int _LEFT = 4/*LEFT*/, int _RIGHT = 5/*RIGHT*/, int _ACTIVATE = 1/*ACCEPT*/);
 	~TabList();
@@ -76,11 +87,15 @@ public:
 	void setCurrent(Widget* widget);
 	int getCurrent();
 	unsigned size();
-	Widget* getNext(bool inner = true);	// Increment current selected, return widget
-	Widget* getPrev(bool inner = true);	// Decrement current selected, return widget
+	Widget* getNext(bool inner = true, WidgetRelSelect dir = WIDGET_SELECT_AUTO);	// Increment current selected, return widget
+	Widget* getPrev(bool inner = true, WidgetRelSelect dir = WIDGET_SELECT_AUTO);	// Decrement current selected, return widget
+	int getNextRelativeIndex(WidgetRelSelect dir);
 	void deactivatePrevious();
 	void activate();					// Fire off what happens when the user presses 'accept'
 	void defocus();						// Call when user clicks outside of a widget, resets current
+	void setPrevTabList(TabList *tl);
+	void setNextTabList(TabList *tl);
+	void setInnerScrolltype(ScrollType st);
 
 	void logic(bool allow_keyboard = false);
 };
