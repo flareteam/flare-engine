@@ -78,10 +78,6 @@ void WidgetLog::setPosition(int x, int y) {
 	scroll_box->pos.y = y;
 }
 
-bool WidgetLog::inFocus() {
-	return scroll_box->in_focus;
-}
-
 void WidgetLog::refresh() {
 	int y,y2;
 	y = y2 = padding;

@@ -67,12 +67,18 @@ MenuLog::MenuLog() {
 
 	// Initialize the tab control.
 	tabControl = new WidgetTabControl();
+	tablist.add(tabControl);
+	tablist.setInnerScrolltype(HORIZONTAL);
 
 	// Store the amount of displayed log messages on each log, and the maximum.
+	tablist_log.resize(LOG_TYPE_COUNT);
 	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
 		log[i] = new WidgetLog(tab_area.w,tab_area.h);
 		log[i]->setBasePos(tab_area.x, tab_area.y + tabControl->getTabHeight());
-		tablist.add(log[i]->getWidget());
+
+		tablist_log[i].add(log[i]->getWidget());
+		tablist_log[i].setPrevTabList(&tablist);
+		tablist_log[i].lock();
 	}
 
 	// Define the header.
@@ -106,13 +112,12 @@ void MenuLog::logic() {
 	if(!visible) return;
 
 	tablist.logic();
-
 	// make shure keyboard navigation leads us to correct tab
 	for (unsigned i = 0; i < LOG_TYPE_COUNT; i++) {
-		if (log[i]->inFocus()) {
-			tabControl->setActiveTab(i);
-			break;
+		if (tabControl->getActiveTab() == static_cast<int>(i)) {
+			tablist.setNextTabList(&tablist_log[i]);
 		}
+		tablist_log[i].logic();
 	}
 
 	if (closeButton->checkClick()) {
@@ -122,6 +127,7 @@ void MenuLog::logic() {
 
 	tabControl->logic();
 	int active_log = tabControl->getActiveTab();
+
 	log[active_log]->logic();
 }
 
@@ -174,6 +180,33 @@ void MenuLog::clear() {
 
 void MenuLog::addSeparator(int log_type) {
 	log[log_type]->addSeparator();
+}
+
+void MenuLog::setNextTabList(TabList *tl) {
+	for (unsigned i=0; i<LOG_TYPE_COUNT; ++i) {
+		tablist_log[i].setNextTabList(tl);
+	}
+}
+
+TabList* MenuLog::getCurrentTabList() {
+	if (tablist.getCurrent() != -1) {
+		return (&tablist);
+	}
+	else {
+		for (unsigned i=0; i<LOG_TYPE_COUNT; ++i) {
+			if (tablist_log[i].getCurrent() != -1)
+				return (&tablist_log[i]);
+		}
+	}
+
+	return NULL;
+}
+
+void MenuLog::defocusTabLists() {
+	tablist.defocus();
+	for (unsigned i=0; i<LOG_TYPE_COUNT; ++i) {
+		tablist_log[i].defocus();
+	}
 }
 
 MenuLog::~MenuLog() {

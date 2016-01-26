@@ -218,7 +218,7 @@ void MenuManager::handleKeyboardNavigation() {
 	vendor->tablist_buy.setNextTabList(NULL);
 	vendor->tablist_sell.setNextTabList(NULL);
 	chr->tablist.setNextTabList(NULL);
-	questlog->tablist.setNextTabList(NULL);
+	questlog->setNextTabList(&questlog->tablist);
 	inv->tablist.setPrevTabList(NULL);
 	pow->tablist.setPrevTabList(NULL);
 
@@ -227,7 +227,8 @@ void MenuManager::handleKeyboardNavigation() {
 		stash->tablist.unlock();
 		vendor->tablist.unlock();
 		chr->tablist.unlock();
-		questlog->tablist.unlock();
+		if (!questlog->getCurrentTabList())
+			questlog->tablist.unlock();
 
 	}
 	else if (!vendor->visible && !stash->visible && !chr->visible && !questlog->visible) {
@@ -241,7 +242,7 @@ void MenuManager::handleKeyboardNavigation() {
 			vendor->tablist_buy.setNextTabList(&inv->tablist);
 			vendor->tablist_sell.setNextTabList(&inv->tablist);
 			chr->tablist.setNextTabList(&inv->tablist);
-			questlog->tablist.setNextTabList(&inv->tablist);
+			questlog->setNextTabList(&inv->tablist);
 
 			if (stash->visible) {
 				inv->tablist.setPrevTabList(&stash->tablist);
@@ -261,7 +262,7 @@ void MenuManager::handleKeyboardNavigation() {
 			vendor->tablist_buy.setNextTabList(&pow->tablist);
 			vendor->tablist_sell.setNextTabList(&pow->tablist);
 			chr->tablist.setNextTabList(&pow->tablist);
-			questlog->tablist.setNextTabList(&pow->tablist);
+			questlog->setNextTabList(&pow->tablist);
 
 			// NOTE stash and vendor are only visible with inventory, so we don't need to handle them here
 			if (chr->visible) {
@@ -424,7 +425,7 @@ void MenuManager::logic() {
 			if (tablist) {
 					inpt->lock[CANCEL] = true;
 
-				tablist->defocus();
+				menus[i]->defocusTabLists();
 			}
 		}
 	}

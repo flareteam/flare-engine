@@ -64,7 +64,6 @@ public:
 	void render();
 
 	void setPosition(int x, int y);
-	bool inFocus();
 	Widget* getWidget() {
 		return reinterpret_cast<Widget*>(scroll_box);    // for adding to tablist
 	}

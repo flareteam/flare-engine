@@ -65,6 +65,12 @@ public:
 	void clear(int log_type);
 	void clear();
 	void addSeparator(int log_type);
+	void setNextTabList(TabList *tl);
+
+	std::vector<TabList> tablist_log;
+
+	TabList* getCurrentTabList();
+	void defocusTabLists();
 };
 
 #endif
