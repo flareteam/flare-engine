@@ -175,7 +175,5 @@ public:
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 
 	bool newPowerNotification;
-
-	TabList tablist;
 };
 #endif

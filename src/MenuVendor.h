@@ -80,9 +80,11 @@ public:
 
 	Rect slots_area;
 
-	TabList tablist;
 	TabList tablist_buy;
 	TabList tablist_sell;
+
+	TabList* getCurrentTabList();
+	void defocusTabLists();
 };
 
 

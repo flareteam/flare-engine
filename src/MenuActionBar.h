@@ -103,9 +103,6 @@ public:
 	int drag_prev_slot;
 	bool updated;
 	int twostep_slot;
-
-	TabList tablist;
-
 };
 
 #endif

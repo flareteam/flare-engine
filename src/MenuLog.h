@@ -65,8 +65,6 @@ public:
 	void clear(int log_type);
 	void clear();
 	void addSeparator(int log_type);
-
-	TabList tablist;
 };
 
 #endif

@@ -34,7 +34,6 @@ protected:
 	WidgetButton *buttonExit;
 	WidgetButton *buttonClose;
 	WidgetLabel label;
-	TabList	tablist;
 
 	bool exitClicked;
 

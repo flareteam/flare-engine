@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "SoundManager.h"
+#include "Widget.h"
 
 class Menu {
 public:
@@ -48,6 +49,10 @@ public:
 
 	SoundManager::SoundID sfx_open;
 	SoundManager::SoundID sfx_close;
+
+	TabList tablist;
+	virtual TabList* getCurrentTabList();
+	virtual void defocusTabLists();
 
 private:
 	Sprite *background;

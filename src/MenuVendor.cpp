@@ -330,6 +330,25 @@ void MenuVendor::unlockTabControl() {
 	tablist_sell.setPrevTabList(&tablist);
 }
 
+TabList* MenuVendor::getCurrentTabList() {
+	if (tablist.getCurrent() != -1)
+		return (&tablist);
+	else if (tablist_buy.getCurrent() != -1) {
+		return (&tablist_buy);
+	}
+	else if (tablist_sell.getCurrent() != -1) {
+		return (&tablist_sell);
+	}
+
+	return NULL;
+}
+
+void MenuVendor::defocusTabLists() {
+	tablist.defocus();
+	tablist_buy.defocus();
+	tablist_sell.defocus();
+}
+
 MenuVendor::~MenuVendor() {
 	delete closeButton;
 	delete tabControl;

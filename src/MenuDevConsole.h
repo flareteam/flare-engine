@@ -41,7 +41,6 @@ protected:
 
 	WidgetLabel label;
 
-	TabList tablist;
 	LabelInfo title;
 	Rect history_area;
 

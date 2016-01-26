@@ -46,8 +46,6 @@ public:
 	std::string book_name;
 	bool book_loaded;
 
-	TabList tablist;
-
 private:
 	WidgetButton *closeButton;
 	std::vector<Sprite*> image;

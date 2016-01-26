@@ -156,7 +156,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 }
 
 void MenuManager::alignAll() {
-	for (unsigned int i=0; i<menus.size(); i++) {
+	for (size_t i=0; i<menus.size(); i++) {
 		menus[i]->align();
 	}
 
@@ -419,28 +419,13 @@ void MenuManager::logic() {
 			keyboard_dragging = false;
 			mouse_dragging = false;
 		}
-		if (inv->tablist.getCurrent() != -1 ||
-			vendor->tablist.getCurrent() != -1 ||
-			vendor->tablist_buy.getCurrent() != -1 ||
-			vendor->tablist_sell.getCurrent() != -1 ||
-			stash->tablist.getCurrent() != -1 ||
-			act->tablist.getCurrent() != -1 ||
-			pow->tablist.getCurrent() != -1 ||
-			chr->tablist.getCurrent() != -1 ||
-			questlog->tablist.getCurrent() != -1 ||
-			book->tablist.getCurrent() != -1)
-		{
-			inpt->lock[CANCEL] = true;
-			inv->tablist.defocus();
-			vendor->tablist.defocus();
-			vendor->tablist_buy.defocus();
-			vendor->tablist_sell.defocus();
-			stash->tablist.defocus();
-			act->tablist.defocus();
-			pow->tablist.defocus();
-			chr->tablist.defocus();
-			questlog->tablist.defocus();
-			book->tablist.defocus();
+		for (size_t i=0; i<menus.size(); i++) {
+			TabList *tablist = menus[i]->getCurrentTabList();
+			if (tablist) {
+					inpt->lock[CANCEL] = true;
+
+				tablist->defocus();
+			}
 		}
 	}
 
@@ -953,15 +938,17 @@ void MenuManager::logic() {
 
 void MenuManager::dragAndDropWithKeyboard() {
 	// inventory menu
-	if (inv->visible && inv->tablist.getCurrent() != -1 && drag_src != DRAG_SRC_ACTIONBAR) {
+
+	if (inv->visible && inv->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
+		int slot_index = inv->getCurrentTabList()->getCurrent();
 		CLICK_TYPE slotClick;
 		Point src_slot;
 		WidgetSlot * inv_slot;
 
-		if (inv->tablist.getCurrent() < inv->getEquippedCount())
-			inv_slot = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()];
+		if (slot_index < inv->getEquippedCount())
+			inv_slot = inv->inventory[EQUIPMENT].slots[slot_index];
 		else
-			inv_slot = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()];
+			inv_slot = inv->inventory[CARRIED].slots[slot_index - inv->getEquippedCount()];
 
 		src_slot.x = inv_slot->pos.x;
 		src_slot.y = inv_slot->pos.y;
@@ -1011,15 +998,16 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// vendor menu
-	if (vendor->visible && (vendor->tablist_buy.getCurrent() != -1 || vendor->tablist_sell.getCurrent() != -1) && drag_src != DRAG_SRC_ACTIONBAR) {
+	if (vendor->visible && vendor->getCurrentTabList() && vendor->getCurrentTabList() != (&vendor->tablist) && drag_src != DRAG_SRC_ACTIONBAR) {
+		int slot_index = vendor->getCurrentTabList()->getCurrent();
 		CLICK_TYPE slotClick;
 		Point src_slot;
 		WidgetSlot * vendor_slot;
 
 		if (vendor->getTab() == VENDOR_BUY)
-			vendor_slot = vendor->stock[VENDOR_BUY].slots[vendor->tablist_buy.getCurrent()];
+			vendor_slot = vendor->stock[VENDOR_BUY].slots[slot_index];
 		else if (vendor->getTab() == VENDOR_SELL)
-			vendor_slot = vendor->stock[VENDOR_SELL].slots[vendor->tablist_sell.getCurrent()];
+			vendor_slot = vendor->stock[VENDOR_SELL].slots[slot_index];
 
 		src_slot.x = vendor_slot->pos.x;
 		src_slot.y = vendor_slot->pos.y;
@@ -1079,9 +1067,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// stash menu
-	if (stash->visible && stash->tablist.getCurrent() != -1 && drag_src != DRAG_SRC_ACTIONBAR) {
-		CLICK_TYPE slotClick = stash->stock.slots[stash->tablist.getCurrent()]->checkClick();
-		Point src_slot(stash->stock.slots[stash->tablist.getCurrent()]->pos.x, stash->stock.slots[stash->tablist.getCurrent()]->pos.y);
+	if (stash->visible && stash->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
+		int slot_index = stash->getCurrentTabList()->getCurrent();
+		CLICK_TYPE slotClick = stash->stock.slots[slot_index]->checkClick();
+		Point src_slot(stash->stock.slots[slot_index]->pos.x, stash->stock.slots[slot_index]->pos.y);
 
 		// pick up item
 		if (slotClick == CHECKED && drag_stack.empty()) {
@@ -1097,7 +1086,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// rearrange item
 		else if (slotClick == CHECKED && !drag_stack.empty()) {
-			stash->stock.slots[stash->tablist.getCurrent()]->checked = false;
+			stash->stock.slots[slot_index]->checked = false;
 			stash->drop(src_slot, drag_stack);
 			drag_src = 0;
 			drag_stack.clear();
@@ -1123,10 +1112,12 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// powers menu
-	if (pow->visible && pow->tablist.getCurrent() != -1 && drag_src != DRAG_SRC_ACTIONBAR) {
-		CLICK_TYPE slotClick = pow->slots[pow->tablist.getCurrent()]->checkClick();
+	if (pow->visible && pow->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
+		int slot_index = pow->getCurrentTabList()->getCurrent();
+		CLICK_TYPE slotClick = pow->slots[slot_index]->checkClick();
+
 		if (slotClick == CHECKED) {
-			Point src_slot(pow->slots[pow->tablist.getCurrent()]->pos.x, pow->slots[pow->tablist.getCurrent()]->pos.y);
+			Point src_slot(pow->slots[slot_index]->pos.x, pow->slots[slot_index]->pos.y);
 			// check for unlock/dragging
 			drag_power = pow->click(src_slot);
 			if (drag_power > 0) {
@@ -1134,13 +1125,13 @@ void MenuManager::dragAndDropWithKeyboard() {
 				drag_src = DRAG_SRC_POWERS;
 			}
 			else {
-				pow->slots[pow->tablist.getCurrent()]->checked = false;
+				pow->slots[slot_index]->checked = false;
 			}
 		}
 		// clear power dragging if power slot was pressed twice
 		else if (slotClick == ACTIVATED) {
 			if (drag_power > 0) {
-				pow->upgradeByCell(static_cast<int>(pow->tablist.getCurrent()));
+				pow->upgradeByCell(slot_index);
 			}
 			drag_src = 0;
 			drag_power = 0;
@@ -1149,9 +1140,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// actionbar
-	if (act->tablist.getCurrent() != -1 && static_cast<unsigned>(act->tablist.getCurrent()) < act->slots.size()) {
-		CLICK_TYPE slotClick = act->slots[act->tablist.getCurrent()]->checkClick();
-		Point dest_slot = act->getSlotPos(act->tablist.getCurrent());
+	if (act->getCurrentTabList() && static_cast<unsigned>(act->getCurrentTabList()->getCurrent()) < act->slots.size()) {
+		int slot_index = act->getCurrentTabList()->getCurrent();
+		CLICK_TYPE slotClick = act->slots[slot_index]->checkClick();
+		Point dest_slot = act->getSlotPos(slot_index);
 
 		// pick up power
 		if (slotClick == CHECKED && drag_stack.empty() && drag_power == 0) {
@@ -1165,26 +1157,26 @@ void MenuManager::dragAndDropWithKeyboard() {
 		else if (slotClick == CHECKED && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
 			if (drag_src == DRAG_SRC_POWERS) {
 				act->drop(dest_slot, drag_power, 0);
-				pow->slots[pow->tablist.getCurrent()]->checked = false;
+				pow->slots[slot_index]->checked = false;
 			}
 			else if (drag_src == DRAG_SRC_INVENTORY) {
-				if (inv->tablist.getCurrent() < inv->getEquippedCount())
-					inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->checked = false;
+				if (slot_index< inv->getEquippedCount())
+					inv->inventory[EQUIPMENT].slots[slot_index]->checked = false;
 				else
-					inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->checked = false;
+					inv->inventory[CARRIED].slots[slot_index - inv->getEquippedCount()]->checked = false;
 
 				if (items->items[drag_stack.item].power != 0) {
 					act->drop(dest_slot, items->items[drag_stack.item].power, false);
 				}
 			}
-			act->slots[act->tablist.getCurrent()]->checked = false;
+			act->slots[slot_index]->checked = false;
 			resetDrag();
 			inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
 			keyboard_dragging = false;
 		}
 		// rearrange actionbar
 		else if ((slotClick == CHECKED || slotClick == ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
-			if (slotClick == CHECKED) act->slots[act->tablist.getCurrent()]->checked = false;
+			if (slotClick == CHECKED) act->slots[slot_index]->checked = false;
 			act->drop(dest_slot, drag_power, 1);
 			drag_src = 0;
 			drag_power = 0;
@@ -1235,7 +1227,7 @@ void MenuManager::render() {
 		return;
 	}
 
-	for (unsigned int i=0; i<menus.size(); i++) {
+	for (size_t i=0; i<menus.size(); i++) {
 		menus[i]->render();
 	}
 
@@ -1320,15 +1312,18 @@ void MenuManager::handleKeyboardTooltips() {
 	TooltipData keyb_tip_new_inv;
 	TooltipData keyb_tip_new_act;
 
-	if (vendor->visible && (vendor->tablist_buy.getCurrent() != -1 || vendor->tablist_sell.getCurrent() != -1)) {
-		if (vendor->getTab() == VENDOR_BUY && vendor->tablist_buy.getCurrent() != -1) {
-			keydrag_pos.x = vendor->stock[VENDOR_BUY].slots[vendor->tablist_buy.getCurrent()]->pos.x;
-			keydrag_pos.y = vendor->stock[VENDOR_BUY].slots[vendor->tablist_buy.getCurrent()]->pos.y;
+	if (vendor->visible && vendor->getCurrentTabList() && vendor->getCurrentTabList() != (&vendor->tablist)) {
+		int slot_index = vendor->getCurrentTabList()->getCurrent();
+
+		if (vendor->getTab() == VENDOR_BUY) {
+			keydrag_pos.x = vendor->stock[VENDOR_BUY].slots[slot_index]->pos.x;
+			keydrag_pos.y = vendor->stock[VENDOR_BUY].slots[slot_index]->pos.y;
 		}
-		else if (vendor->getTab() == VENDOR_SELL && vendor->tablist_sell.getCurrent() != -1) {
-			keydrag_pos.x = vendor->stock[VENDOR_SELL].slots[vendor->tablist_sell.getCurrent()]->pos.x;
-			keydrag_pos.y = vendor->stock[VENDOR_SELL].slots[vendor->tablist_sell.getCurrent()]->pos.y;
+		else if (vendor->getTab() == VENDOR_SELL) {
+			keydrag_pos.x = vendor->stock[VENDOR_SELL].slots[slot_index]->pos.x;
+			keydrag_pos.y = vendor->stock[VENDOR_SELL].slots[slot_index]->pos.y;
 		}
+
 		keyb_tip_new_vendor = vendor->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_vendor.isEmpty()) {
 			if (!keyb_tip_new_vendor.compare(&keyb_tip_buf_vendor)) {
@@ -1339,9 +1334,12 @@ void MenuManager::handleKeyboardTooltips() {
 		}
 	}
 
-	if (stash->visible && stash->tablist.getCurrent() != -1) {
-		keydrag_pos.x = stash->stock.slots[stash->tablist.getCurrent()]->pos.x;
-		keydrag_pos.y = stash->stock.slots[stash->tablist.getCurrent()]->pos.y;
+	if (stash->visible && stash->getCurrentTabList()) {
+		int slot_index = stash->getCurrentTabList()->getCurrent();
+
+		keydrag_pos.x = stash->stock.slots[slot_index]->pos.x;
+		keydrag_pos.y = stash->stock.slots[slot_index]->pos.y;
+
 		keyb_tip_new_stash = stash->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_stash.isEmpty()) {
 			if (!keyb_tip_new_stash.compare(&keyb_tip_buf_stash)) {
@@ -1352,9 +1350,12 @@ void MenuManager::handleKeyboardTooltips() {
 		}
 	}
 
-	if (pow->visible && pow->tablist.getCurrent() != -1) {
-		keydrag_pos.x = pow->slots[pow->tablist.getCurrent()]->pos.x;
-		keydrag_pos.y = pow->slots[pow->tablist.getCurrent()]->pos.y;
+	if (pow->visible && pow->getCurrentTabList()) {
+		int slot_index = pow->getCurrentTabList()->getCurrent();
+
+		keydrag_pos.x = pow->slots[slot_index]->pos.x;
+		keydrag_pos.y = pow->slots[slot_index]->pos.y;
+
 		keyb_tip_new_pow = pow->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_pow.isEmpty()) {
 			if (!keyb_tip_new_pow.compare(&keyb_tip_buf_pow)) {
@@ -1365,15 +1366,18 @@ void MenuManager::handleKeyboardTooltips() {
 		}
 	}
 
-	if (inv->visible && inv->tablist.getCurrent() != -1) {
-		if (inv->tablist.getCurrent() < inv->getEquippedCount()) {
-			keydrag_pos.x = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.x;
-			keydrag_pos.y = inv->inventory[EQUIPMENT].slots[inv->tablist.getCurrent()]->pos.y;
+	if (inv->visible && inv->getCurrentTabList()) {
+		int slot_index = inv->getCurrentTabList()->getCurrent();
+
+		if (slot_index < inv->getEquippedCount()) {
+			keydrag_pos.x = inv->inventory[EQUIPMENT].slots[slot_index]->pos.x;
+			keydrag_pos.y = inv->inventory[EQUIPMENT].slots[slot_index]->pos.y;
 		}
 		else {
-			keydrag_pos.x = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.x;
-			keydrag_pos.y = inv->inventory[CARRIED].slots[inv->tablist.getCurrent() - inv->getEquippedCount()]->pos.y;
+			keydrag_pos.x = inv->inventory[CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.x;
+			keydrag_pos.y = inv->inventory[CARRIED].slots[slot_index - inv->getEquippedCount()]->pos.y;
 		}
+
 		keyb_tip_new_inv = inv->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_inv.isEmpty()) {
 			if (!keyb_tip_new_inv.compare(&keyb_tip_buf_inv)) {
@@ -1384,8 +1388,11 @@ void MenuManager::handleKeyboardTooltips() {
 		}
 	}
 
-	if (act_drag_hover && act->tablist.getCurrent() != -1) {
-		keydrag_pos = act->getSlotPos(act->tablist.getCurrent());
+	if (act_drag_hover && act->getCurrentTabList()) {
+		int slot_index = act->getCurrentTabList()->getCurrent();
+
+		keydrag_pos = act->getSlotPos(slot_index);
+
 		keyb_tip_new_act = act->checkTooltip(keydrag_pos);
 		if (!keyb_tip_new_act.isEmpty()) {
 			if (!keyb_tip_new_act.compare(&keyb_tip_buf_act)) {

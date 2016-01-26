@@ -66,8 +66,6 @@ public:
 	Rect slots_area;
 	MenuItemStorage stock;
 	bool updated;
-
-	TabList tablist;
 };
 
 

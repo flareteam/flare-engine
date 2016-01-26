@@ -107,9 +107,6 @@ public:
 	int getUnspent() {
 		return skill_points;
 	}
-
-	TabList tablist;
-
 };
 
 #endif

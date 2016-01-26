@@ -130,9 +130,6 @@ public:
 	std::string show_book;
 
 	std::queue<ItemStack> drop_stack;
-
-	TabList tablist;
-
 };
 
 #endif

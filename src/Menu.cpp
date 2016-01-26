@@ -130,3 +130,14 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 
 	return true;
 }
+
+TabList* Menu::getCurrentTabList() {
+	if (tablist.getCurrent() != -1)
+		return (&tablist);
+
+	return NULL;
+}
+
+void Menu::defocusTabLists() {
+	tablist.defocus();
+}
