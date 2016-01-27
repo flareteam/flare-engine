@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <jni.h>
 
-PlatformOptions_t PlatformOptions = {};
+PlatformOptions_t PlatformOptions = {true, true, CONFIG_MENU_TYPE_BASE, "sdl_hardware"};
 
 std::string AndroidGetPackageName()
 {

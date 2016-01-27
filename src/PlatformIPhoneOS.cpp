@@ -26,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <unistd.h>
 #include <sys/stat.h>
 
-PlatformOptions_t PlatformOptions = {};
+PlatformOptions_t PlatformOptions = {false, true, CONFIG_MENU_TYPE_BASE, "sdl_hardware"};
 
 int IPhoneOSIsExitEvent(void* userdata, SDL_Event* event) {
 	if (userdata) {}; // avoid unused var compile warning

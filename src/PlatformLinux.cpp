@@ -28,7 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <unistd.h>
 #include <sys/stat.h>
 
-PlatformOptions_t PlatformOptions = {};
+PlatformOptions_t PlatformOptions = {true, false, CONFIG_MENU_TYPE_DESKTOP, ""};
 
 void PlatformInit(struct PlatformOptions_t *options) {
 	options->has_exit_button = true;
