@@ -342,10 +342,11 @@ void MenuInventory::itemReturn(ItemStack stack) {
 		add(stack, CARRIED, -1, false);
 	}
 	else {
+		int prev_slot = inventory[drag_prev_src].drag_prev_slot;
 		inventory[drag_prev_src].itemReturn(stack);
 		// if returning equipment, prepare to change stats/sprites
 		if (drag_prev_src == EQUIPMENT) {
-			updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
+			updateEquipment(prev_slot);
 		}
 	}
 	drag_prev_src = -1;
