@@ -65,7 +65,7 @@ public:
 	void updateMods();
 
 	virtual void logic();
-	bool logicMain();
+	virtual bool logicMain();
 	void logicDefaults();
 	virtual void logicAccept();
 	void logicCancel();
@@ -94,6 +94,11 @@ public:
 	virtual void cleanupDialogs();
 
 	TabList tablist;
+	TabList tablist_main;
+	TabList tablist_audio;
+	TabList tablist_interface;
+	TabList tablist_mods;
+
 	std::vector<int>      optiontab;
 	std::vector<Widget*>  child_widget;
 	WidgetTabControl    * tab_control;

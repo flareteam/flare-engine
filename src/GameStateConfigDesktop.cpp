@@ -389,43 +389,69 @@ void GameStateConfigDesktop::addChildWidgetsDesktop() {
 }
 
 void GameStateConfigDesktop::setupTabList() {
-	tablist.add(ok_button);
-	tablist.add(defaults_button);
-	tablist.add(cancel_button);
-	tablist.add(fullscreen_cb);
-	tablist.add(hwsurface_cb);
-	tablist.add(vsync_cb);
-	tablist.add(texture_filter_cb);
-	tablist.add(change_gamma_cb);
-	tablist.add(gamma_sl);
+	tablist.add(tab_control);
+	tablist.setPrevTabList(&tablist_main);
 
-	tablist.add(music_volume_sl);
-	tablist.add(sound_volume_sl);
+	tablist_main.add(ok_button);
+	tablist_main.add(defaults_button);
+	tablist_main.add(cancel_button);
+	tablist_main.setPrevTabList(&tablist);
+	tablist_main.setNextTabList(&tablist);
+	tablist_main.lock();
 
-	tablist.add(combat_text_cb);
-	tablist.add(show_fps_cb);
-	tablist.add(colorblind_cb);
-	tablist.add(hardware_cursor_cb);
-	tablist.add(dev_mode_cb);
-	tablist.add(show_target_cb);
-	tablist.add(loot_tooltips_cb);
-	tablist.add(language_lstb);
+	tablist_video.add(fullscreen_cb);
+	tablist_video.add(hwsurface_cb);
+	tablist_video.add(vsync_cb);
+	tablist_video.add(texture_filter_cb);
+	tablist_video.add(change_gamma_cb);
+	tablist_video.add(gamma_sl);
+	tablist_video.setPrevTabList(&tablist);
+	tablist_video.setNextTabList(&tablist_main);
+	tablist_video.lock();
 
-	tablist.add(enable_joystick_cb);
-	tablist.add(mouse_move_cb);
-	tablist.add(mouse_aim_cb);
-	tablist.add(no_mouse_cb);
-	tablist.add(joystick_deadzone_sl);
-	tablist.add(joystick_device_lstb);
+	tablist_audio.add(music_volume_sl);
+	tablist_audio.add(sound_volume_sl);
+	tablist_audio.setPrevTabList(&tablist);
+	tablist_audio.setNextTabList(&tablist_main);
+	tablist_audio.lock();
 
-	tablist.add(input_scrollbox);
+	tablist_interface.add(combat_text_cb);
+	tablist_interface.add(show_fps_cb);
+	tablist_interface.add(colorblind_cb);
+	tablist_interface.add(hardware_cursor_cb);
+	tablist_interface.add(dev_mode_cb);
+	tablist_interface.add(show_target_cb);
+	tablist_interface.add(loot_tooltips_cb);
+	tablist_interface.add(statbar_labels_cb);
+	tablist_interface.add(language_lstb);
+	tablist_interface.setPrevTabList(&tablist);
+	tablist_interface.setNextTabList(&tablist_main);
+	tablist_interface.lock();
 
-	tablist.add(inactivemods_lstb);
-	tablist.add(activemods_lstb);
-	tablist.add(inactivemods_activate_btn);
-	tablist.add(activemods_deactivate_btn);
-	tablist.add(activemods_shiftup_btn);
-	tablist.add(activemods_shiftdown_btn);
+	tablist_input.add(enable_joystick_cb);
+	tablist_input.add(mouse_move_cb);
+	tablist_input.add(mouse_aim_cb);
+	tablist_input.add(no_mouse_cb);
+	tablist_input.add(joystick_deadzone_sl);
+	tablist_input.add(joystick_device_lstb);
+	tablist_input.setPrevTabList(&tablist);
+	tablist_input.setNextTabList(&tablist_main);
+	tablist_input.lock();
+
+	tablist_keybinds.add(input_scrollbox);
+	tablist_keybinds.setPrevTabList(&tablist);
+	tablist_keybinds.setNextTabList(&tablist_main);
+	tablist_keybinds.lock();
+
+	tablist_mods.add(inactivemods_lstb);
+	tablist_mods.add(activemods_lstb);
+	tablist_mods.add(inactivemods_activate_btn);
+	tablist_mods.add(activemods_deactivate_btn);
+	tablist_mods.add(activemods_shiftup_btn);
+	tablist_mods.add(activemods_shiftdown_btn);
+	tablist_mods.setPrevTabList(&tablist);
+	tablist_mods.setNextTabList(&tablist_main);
+	tablist_mods.lock();
 }
 
 void GameStateConfigDesktop::update() {
@@ -516,18 +542,41 @@ void GameStateConfigDesktop::logic() {
 	// tab contents
 	active_tab = tab_control->getActiveTab();
 
-	if (active_tab == VIDEO_TAB)
+	if (active_tab == VIDEO_TAB) {
+		tablist.setNextTabList(&tablist_video);
 		logicVideo();
-	else if (active_tab == AUDIO_TAB)
+	}
+	else if (active_tab == AUDIO_TAB) {
+		tablist.setNextTabList(&tablist_audio);
 		logicAudio();
-	else if (active_tab == INTERFACE_TAB)
+	}
+	else if (active_tab == INTERFACE_TAB) {
+		tablist.setNextTabList(&tablist_interface);
 		logicInterface();
-	else if (active_tab == INPUT_TAB)
+	}
+	else if (active_tab == INPUT_TAB) {
+		tablist.setNextTabList(&tablist_input);
 		logicInput();
-	else if (active_tab == KEYBINDS_TAB)
+	}
+	else if (active_tab == KEYBINDS_TAB) {
+		tablist.setNextTabList(&tablist_keybinds);
 		logicKeybinds();
-	else if (active_tab == MODS_TAB)
+	}
+	else if (active_tab == MODS_TAB) {
+		tablist.setNextTabList(&tablist_mods);
 		logicMods();
+	}
+}
+
+bool GameStateConfigDesktop::logicMain() {
+	if (GameStateConfigBase::logicMain()) {
+		tablist_video.logic();
+		tablist_input.logic();
+		tablist_keybinds.logic();
+		return true;
+	}
+
+	return false;
 }
 
 void GameStateConfigDesktop::logicVideo() {

@@ -52,6 +52,7 @@ public:
 	bool render_to_alpha;
 	bool in_focus;
 	bool focusable;
+	ScrollType scroll_type;
 	Rect pos; // This is the position of the button within the screen
 	Rect local_frame; // Local reference frame is this is a daughter widget
 	Point local_offset; // Offset in local frame is this is a daughter widget
@@ -73,7 +74,6 @@ private:
 	int ACTIVATE;
 	TabList *prev_tablist;
 	TabList *next_tablist;
-	ScrollType inner_scrolltype;
 public:
 	TabList(ScrollType _scrolltype = TWO_DIRECTIONS, int _LEFT = 4/*LEFT*/, int _RIGHT = 5/*RIGHT*/, int _ACTIVATE = 1/*ACCEPT*/);
 	~TabList();
@@ -95,7 +95,6 @@ public:
 	void defocus();						// Call when user clicks outside of a widget, resets current
 	void setPrevTabList(TabList *tl);
 	void setNextTabList(TabList *tl);
-	void setInnerScrolltype(ScrollType st);
 
 	void logic(bool allow_keyboard = false);
 };

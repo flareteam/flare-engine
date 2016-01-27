@@ -94,7 +94,6 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	stock[VENDOR_SELL].init(VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
 	buyback_stock.init(NPC_VENDOR_MAX_STOCK);
 
-	tablist.setInnerScrolltype(HORIZONTAL);
 	tablist.add(tabControl);
 	tablist_buy.setPrevTabList(&tablist);
 	tablist_sell.setPrevTabList(&tablist);

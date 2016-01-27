@@ -294,6 +294,7 @@ bool GameStateConfigBase::parseStub(FileParser &infile) {
 	else if (infile.key == "mouse_move");
 	else if (infile.key == "hwsurface");
 	else if (infile.key == "vsync");
+	else if (infile.key == "texture_filter");
 	else if (infile.key == "enable_joystick");
 	else if (infile.key == "change_gamma");
 	else if (infile.key == "mouse_aim");
@@ -382,28 +383,44 @@ void GameStateConfigBase::addChildWidgets() {
 }
 
 void GameStateConfigBase::setupTabList() {
-	tablist.add(ok_button);
-	tablist.add(defaults_button);
-	tablist.add(cancel_button);
+	tablist.add(tab_control);
+	tablist.setPrevTabList(&tablist_main);
 
-	tablist.add(music_volume_sl);
-	tablist.add(sound_volume_sl);
+	tablist_main.add(ok_button);
+	tablist_main.add(defaults_button);
+	tablist_main.add(cancel_button);
+	tablist_main.setPrevTabList(&tablist);
+	tablist_main.setNextTabList(&tablist);
+	tablist_main.lock();
 
-	tablist.add(combat_text_cb);
-	tablist.add(show_fps_cb);
-	tablist.add(colorblind_cb);
-	tablist.add(hardware_cursor_cb);
-	tablist.add(dev_mode_cb);
-	tablist.add(show_target_cb);
-	tablist.add(loot_tooltips_cb);
-	tablist.add(language_lstb);
+	tablist_audio.add(music_volume_sl);
+	tablist_audio.add(sound_volume_sl);
+	tablist_audio.setPrevTabList(&tablist);
+	tablist_audio.setNextTabList(&tablist_main);
+	tablist_audio.lock();
 
-	tablist.add(inactivemods_lstb);
-	tablist.add(activemods_lstb);
-	tablist.add(inactivemods_activate_btn);
-	tablist.add(activemods_deactivate_btn);
-	tablist.add(activemods_shiftup_btn);
-	tablist.add(activemods_shiftdown_btn);
+	tablist_interface.add(combat_text_cb);
+	tablist_interface.add(show_fps_cb);
+	tablist_interface.add(colorblind_cb);
+	tablist_interface.add(hardware_cursor_cb);
+	tablist_interface.add(dev_mode_cb);
+	tablist_interface.add(show_target_cb);
+	tablist_interface.add(loot_tooltips_cb);
+	tablist_interface.add(statbar_labels_cb);
+	tablist_interface.add(language_lstb);
+	tablist_interface.setPrevTabList(&tablist);
+	tablist_interface.setNextTabList(&tablist_main);
+	tablist_interface.lock();
+
+	tablist_mods.add(inactivemods_lstb);
+	tablist_mods.add(activemods_lstb);
+	tablist_mods.add(inactivemods_activate_btn);
+	tablist_mods.add(activemods_deactivate_btn);
+	tablist_mods.add(activemods_shiftup_btn);
+	tablist_mods.add(activemods_shiftdown_btn);
+	tablist_mods.setPrevTabList(&tablist);
+	tablist_mods.setNextTabList(&tablist_main);
+	tablist_mods.lock();
 }
 
 void GameStateConfigBase::update() {
@@ -468,9 +485,12 @@ void GameStateConfigBase::logic() {
 	// tab contents
 	active_tab = tab_control->getActiveTab();
 
-	if (active_tab == AUDIO_TAB)
+	if (active_tab == AUDIO_TAB) {
+		tablist.setNextTabList(&tablist_audio);
 		logicAudio();
+	}
 	else if (active_tab == INTERFACE_TAB) {
+		tablist.setNextTabList(&tablist_interface);
 		logicInterface();
 
 		// by default, hardware mouse cursor can not be turned off
@@ -478,8 +498,10 @@ void GameStateConfigBase::logic() {
 		hardware_cursor_cb->Check();
 		HARDWARE_CURSOR = true;
 	}
-	else if (active_tab == MODS_TAB)
+	else if (active_tab == MODS_TAB) {
+		tablist.setNextTabList(&tablist_mods);
 		logicMods();
+	}
 }
 
 bool GameStateConfigBase::logicMain() {
@@ -492,7 +514,11 @@ bool GameStateConfigBase::logicMain() {
 
 	// tabs & the bottom 3 main buttons
 	tab_control->logic();
-	tablist.logic(true);
+	tablist.logic();
+	tablist_main.logic();
+	tablist_audio.logic();
+	tablist_interface.logic();
+	tablist_mods.logic();
 
 	// Ok/Cancel Buttons
 	if (ok_button->checkClick()) {

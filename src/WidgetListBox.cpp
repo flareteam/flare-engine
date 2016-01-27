@@ -58,6 +58,8 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 		pos.h = (listboxs->getGraphicsHeight() / 3); // height of one item
 		graphics->unref();
 	}
+
+	scroll_type = VERTICAL;
 }
 
 bool WidgetListBox::checkClick() {

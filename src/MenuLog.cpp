@@ -68,7 +68,6 @@ MenuLog::MenuLog() {
 	// Initialize the tab control.
 	tabControl = new WidgetTabControl();
 	tablist.add(tabControl);
-	tablist.setInnerScrolltype(HORIZONTAL);
 
 	// Store the amount of displayed log messages on each log, and the maximum.
 	tablist_log.resize(LOG_TYPE_COUNT);

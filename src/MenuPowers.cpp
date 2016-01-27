@@ -266,7 +266,6 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			tab_control->updateHeader();
 
 			tablist.add(tab_control);
-			tablist.setInnerScrolltype(HORIZONTAL);
 		}
 
 		tablist_pow.resize(tabs.size());

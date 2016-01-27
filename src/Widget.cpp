@@ -24,6 +24,7 @@ Widget::Widget()
 	: render_to_alpha(false)
 	, in_focus(false)
 	, focusable(false)
+	, scroll_type(TWO_DIRECTIONS)
 	, alignment(ALIGN_TOPLEFT) {
 }
 
@@ -70,8 +71,7 @@ TabList::TabList(ScrollType _scrolltype, int _LEFT, int _RIGHT, int _ACTIVATE)
 	, MV_RIGHT(_RIGHT)
 	, ACTIVATE(_ACTIVATE)
 	, prev_tablist(NULL)
-	, next_tablist(NULL)
-	, inner_scrolltype(VERTICAL) {
+	, next_tablist(NULL) {
 }
 
 TabList::~TabList() {
@@ -306,6 +306,12 @@ void TabList::setNextTabList(TabList *tl) {
 void TabList::logic(bool allow_keyboard) {
 	if (locked) return;
 	if (NO_MOUSE || allow_keyboard) {
+		ScrollType inner_scrolltype = VERTICAL;
+
+		if (current_is_valid() && widgets.at(current)->scroll_type != TWO_DIRECTIONS) {
+			inner_scrolltype = widgets.at(current)->scroll_type;
+		}
+
 		if (scrolltype == VERTICAL || scrolltype == TWO_DIRECTIONS) {
 			if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 				inpt->lock[DOWN] = true;
@@ -355,9 +361,5 @@ void TabList::logic(bool allow_keyboard) {
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && current_is_valid() && !isWithin(widgets[getCurrent()]->pos, inpt->mouse)) {
 		defocus();
 	}
-}
-
-void TabList::setInnerScrolltype(ScrollType st) {
-	inner_scrolltype = st;
 }
 

@@ -49,6 +49,8 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	}
 
 	render_to_alpha = false;
+
+	scroll_type = HORIZONTAL;
 }
 
 WidgetSlider::~WidgetSlider () {
@@ -187,7 +189,7 @@ void WidgetSlider::render () {
 	}
 }
 
-bool WidgetSlider::getNext() {
+bool WidgetSlider::getPrev() {
 	if (!enabled) return false;
 
 	value -= (maximum - minimum)/10;
@@ -200,7 +202,7 @@ bool WidgetSlider::getNext() {
 	return true;
 }
 
-bool WidgetSlider::getPrev() {
+bool WidgetSlider::getNext() {
 	if (!enabled) return false;
 
 	value += (maximum - minimum)/10;

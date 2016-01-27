@@ -64,6 +64,7 @@ private:
 	void updateKeybinds();
 
 	void logic();
+	bool logicMain();
 	void logicVideo();
 	void logicInput();
 	void logicKeybinds();
@@ -76,6 +77,10 @@ private:
 
 	void cleanupTabContents();
 	void cleanupDialogs();
+
+	TabList tablist_video;
+	TabList tablist_input;
+	TabList tablist_keybinds;
 
 	void scanKey(int button);
 

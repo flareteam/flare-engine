@@ -41,6 +41,8 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	line_height = 20;
 	resize(width, height);
 	tablist = TabList(VERTICAL);
+
+	scroll_type = VERTICAL;
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
