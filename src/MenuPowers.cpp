@@ -264,7 +264,12 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			for (size_t i=0; i<tabs.size(); i++)
 				tab_control->setTabTitle(static_cast<unsigned>(i), msg->get(tabs[i].title));
 			tab_control->updateHeader();
+
+			tablist.add(tab_control);
+			tablist.setInnerScrolltype(HORIZONTAL);
 		}
+
+		tablist_pow.resize(tabs.size());
 	}
 
 	// create power slots
@@ -272,7 +277,15 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 		if (static_cast<size_t>(power_cell[i].id) < powers->powers.size()) {
 			slots[i] = new WidgetSlot(powers->powers[power_cell[i].id].icon);
 			slots[i]->setBasePos(power_cell[i].pos.x, power_cell[i].pos.y);
-			tablist.add(slots[i]);
+
+			if (!tablist_pow.empty()) {
+				tablist_pow[power_cell[i].tab].add(slots[i]);
+				tablist_pow[power_cell[i].tab].setPrevTabList(&tablist);
+				tablist_pow[power_cell[i].tab].lock();
+			}
+			else {
+				tablist.add(slots[i]);
+			}
 
 			if (upgradeButtons[i] != NULL) {
 				upgradeButtons[i]->setBasePos(power_cell[i].pos.x + ICON_SIZE, power_cell[i].pos.y);
@@ -1161,6 +1174,14 @@ void MenuPowers::logic() {
 	if (!visible) return;
 
 	tablist.logic();
+	if (!tabs.empty()) {
+		for (size_t i=0; i<tabs.size(); i++) {
+			if (tab_control->getActiveTab() == static_cast<int>(i)) {
+				tablist.setNextTabList(&tablist_pow[i]);
+			}
+			tablist_pow[i].logic();
+		}
+	}
 
 	if (closeButton->checkClick()) {
 		visible = false;
@@ -1290,7 +1311,12 @@ int MenuPowers::click(const Point& mouse) {
 			if (TOUCHSCREEN) {
 				if (!slots[i]->in_focus) {
 					slots[i]->in_focus = true;
-					tablist.setCurrent(slots[i]);
+					if (!tabs.empty()) {
+						tablist_pow[active_tab].setCurrent(slots[i]);
+					}
+					else {
+						tablist.setCurrent(slots[i]);
+					}
 					return 0;
 				}
 			}
@@ -1368,5 +1394,61 @@ bool MenuPowers::meetsUsageStats(int power_index) {
 		   && stats->get_offense() >= power_cell[id].requires_offense
 		   && stats->get_mental() >= power_cell[id].requires_mental
 		   && stats->get_physical() >= power_cell[id].requires_physical;
+}
+
+bool MenuPowers::isTabListSelected() {
+	return (getCurrentTabList() && (tabs.empty() || (tabs.size() > 0 && getCurrentTabList() != (&tablist))));
+}
+
+int MenuPowers::getSelectedCellIndex() {
+	int current = getCurrentTabList()->getCurrent();
+
+	if (tabs.empty()) {
+		return current;
+	}
+	else {
+		int active_tab = tab_control->getActiveTab();
+		int index_offset = 0;
+
+		for (int i=0; i<active_tab; ++i) {
+			index_offset += static_cast<int>(tablist_pow[active_tab].size());
+		}
+
+		index_offset += current;
+
+		return index_offset;
+	}
+}
+
+void MenuPowers::setNextTabList(TabList *tl) {
+	if (!tabs.empty()) {
+		for (size_t i=0; i<tabs.size(); ++i) {
+			tablist_pow[i].setNextTabList(tl);
+		}
+	}
+}
+
+TabList* MenuPowers::getCurrentTabList() {
+	if (tablist.getCurrent() != -1) {
+		return (&tablist);
+	}
+	else if (!tabs.empty()) {
+		for (size_t i=0; i<tabs.size(); ++i) {
+			if (tablist_pow[i].getCurrent() != -1)
+				return (&tablist_pow[i]);
+		}
+	}
+
+	return NULL;
+}
+
+void MenuPowers::defocusTabLists() {
+	tablist.defocus();
+
+	if (!tabs.empty()) {
+		for (size_t i=0; i<tabs.size(); ++i) {
+			tablist_pow[i].defocus();
+		}
+	}
 }
 

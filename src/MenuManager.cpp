@@ -220,7 +220,7 @@ void MenuManager::handleKeyboardNavigation() {
 	chr->tablist.setNextTabList(NULL);
 	questlog->setNextTabList(&questlog->tablist);
 	inv->tablist.setPrevTabList(NULL);
-	pow->tablist.setPrevTabList(NULL);
+	pow->setNextTabList(NULL);
 
 	// unlock menus if only one side is showing
 	if (!inv->visible && !pow->visible) {
@@ -233,7 +233,8 @@ void MenuManager::handleKeyboardNavigation() {
 	}
 	else if (!vendor->visible && !stash->visible && !chr->visible && !questlog->visible) {
 		inv->tablist.unlock();
-		pow->tablist.unlock();
+		if (!pow->getCurrentTabList())
+			pow->tablist.unlock();
 	}
 
 	if (drag_src == 0) {
@@ -330,7 +331,9 @@ void MenuManager::logic() {
 
 			num_picker->confirm_clicked = false;
 			num_picker->visible = false;
-			sticky_dragging = true;
+			if (!NO_MOUSE) {
+				sticky_dragging = true;
+			}
 		}
 		else {
 			pause = true;
@@ -1113,8 +1116,8 @@ void MenuManager::dragAndDropWithKeyboard() {
 	}
 
 	// powers menu
-	if (pow->visible && pow->getCurrentTabList() && drag_src != DRAG_SRC_ACTIONBAR) {
-		int slot_index = pow->getCurrentTabList()->getCurrent();
+	if (pow->visible && pow->isTabListSelected() && drag_src != DRAG_SRC_ACTIONBAR) {
+		int slot_index = pow->getSelectedCellIndex();
 		CLICK_TYPE slotClick = pow->slots[slot_index]->checkClick();
 
 		if (slotClick == CHECKED) {
@@ -1351,8 +1354,8 @@ void MenuManager::handleKeyboardTooltips() {
 		}
 	}
 
-	if (pow->visible && pow->getCurrentTabList()) {
-		int slot_index = pow->getCurrentTabList()->getCurrent();
+	if (pow->visible && pow->isTabListSelected()) {
+		int slot_index = pow->getSelectedCellIndex();
 
 		keydrag_pos.x = pow->slots[slot_index]->pos.x;
 		keydrag_pos.y = pow->slots[slot_index]->pos.y;

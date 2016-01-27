@@ -175,5 +175,14 @@ public:
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 
 	bool newPowerNotification;
+
+
+	std::vector<TabList> tablist_pow;
+
+	bool isTabListSelected();
+	int getSelectedCellIndex();
+	void setNextTabList(TabList *tl);
+	TabList* getCurrentTabList();
+	void defocusTabLists();
 };
 #endif
