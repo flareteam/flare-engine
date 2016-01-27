@@ -1102,7 +1102,15 @@ void MenuPowers::renderPowers(int tab_num) {
 			src_unlock.w = ICON_SIZE;
 			src_unlock.h = ICON_SIZE;
 
+			int selected_slot = -1;
+			if (getCurrentTabList()) {
+				selected_slot = getSelectedCellIndex();
+			}
+
 			for (size_t j=0; j<power_cell.size(); j++) {
+				if (selected_slot == -1 || selected_slot == static_cast<int>(j))
+					continue;
+
 				if (power_cell[j].id == power_cell[i].id && powers_unlock && slots[j]) {
 					powers_unlock->setClip(src_unlock);
 					powers_unlock->setDest(slots[j]->pos);

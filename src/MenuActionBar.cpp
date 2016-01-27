@@ -308,9 +308,11 @@ void MenuActionBar::render() {
 	renderCooldowns();
 
 	// render log attention notifications
-	for (int i=0; i<4; i++)
-		if (requires_attention[i])
+	for (int i=0; i<4; i++) {
+		if (requires_attention[i] && !menus[i]->in_focus) {
 			renderAttention(i);
+		}
+	}
 }
 
 /**

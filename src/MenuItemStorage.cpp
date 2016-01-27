@@ -128,7 +128,9 @@ void MenuItemStorage::render() {
 				render_device->render(overlay_disabled);
 			}
 		}
-		if (highlight[i]) renderHighlight(slots[i]->pos.x, slots[i]->pos.y, slots[i]->pos.w);
+		if (highlight[i] && !slots[i]->in_focus) {
+			renderHighlight(slots[i]->pos.x, slots[i]->pos.y, slots[i]->pos.w);
+		}
 	}
 }
 
