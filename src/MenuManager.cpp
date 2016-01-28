@@ -1037,16 +1037,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 				}
 			}
 		}
-		else if (slotClick == CHECKED && !drag_stack.empty()) {
-			vendor->itemReturn(drag_stack);
-			vendor_slot->checked = false;
-			drag_src = 0;
-			drag_stack.clear();
-			keyboard_dragging = false;
-			sticky_dragging = false;
-			vendor->unlockTabControl();
-		}
-		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
+
+		// if we selected a single item buy it imediately
+		// otherwise, wait until we get a result from num_picker
+		if (vendor_slot->checked && !drag_stack.empty() && !num_picker->visible) {
 			if (!inv->buy(drag_stack,vendor->getTab())) {
 				questlog->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
 				hudlog->add(msg->get("Not enough %s.", CURRENCY));
@@ -1066,6 +1060,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			drag_stack.clear();
 			keyboard_dragging = false;
 			sticky_dragging = false;
+			vendor_slot->checked = false;
 			vendor->unlockTabControl();
 		}
 	}
