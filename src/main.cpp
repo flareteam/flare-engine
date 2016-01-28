@@ -179,7 +179,7 @@ static void mainLoop () {
 			// As a result, the delta time when restoring the app is large, so the game will skip frames and appear to be running fast.
 			// To counter this, we reset our delta time here when restoring the app
 			if (inpt->window_minimized && inpt->window_restored) {
-				logic_ticks = now_ticks = SDL_GetTicks();
+				logic_ticks = now_ticks = SDL_GetPerformanceCounter();
 				inpt->window_minimized = inpt->window_restored = false;
 				break;
 			}
