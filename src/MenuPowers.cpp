@@ -1198,8 +1198,11 @@ void MenuPowers::logic() {
 	if (tab_control) {
 		// make shure keyboard navigation leads us to correct tab
 		for (size_t i=0; i<slots.size(); i++) {
+			if (power_cell[i].tab == tab_control->getActiveTab())
+				continue;
+
 			if (slots[i] && slots[i]->in_focus)
-				tab_control->setActiveTab(power_cell[i].tab);
+				slots[i]->defocus();
 		}
 
 		tab_control->logic();
@@ -1339,13 +1342,23 @@ int MenuPowers::click(const Point& mouse) {
 			}
 			else if (checkUnlocked(cell_index) && !powers->powers[power_cell[i].id].passive) {
 				// pick up and drag power
-				slots[i]->in_focus = false;
+				slots[i]->defocus();
+				if (!tabs.empty()) {
+					tablist_pow[active_tab].setCurrent(NULL);
+				}
+				else {
+					tablist.setCurrent(NULL);
+				}
 				return power_cell[i].id;
 			}
 			else
 				return 0;
 		}
 	}
+
+	// nothing selected, defocus everything
+	defocusTabLists();
+
 	return 0;
 }
 

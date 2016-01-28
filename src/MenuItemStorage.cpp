@@ -173,14 +173,15 @@ ItemStack MenuItemStorage::click(const Point& position) {
 
 	drag_prev_slot = slotOver(position);
 
-	// try to click on the highlighted (aka in focus) slot
-	// since mouse clicks defocus slots before this point,
-	// we don't have to worry about the mouse being over another slot
+	// no selection, so defocus everything
 	if (drag_prev_slot == -1) {
 		for (unsigned int i=0; i<slots.size(); i++) {
 			if (slots[i]->in_focus) {
-				drag_prev_slot = i;
-				break;
+				slots[i]->defocus();
+			}
+
+			if (slots[i] == current_slot) {
+				current_slot = NULL;
 			}
 		}
 	}
@@ -196,7 +197,7 @@ ItemStack MenuItemStorage::click(const Point& position) {
 				return item;
 			}
 			else {
-				slots[drag_prev_slot]->in_focus = false;
+				slots[drag_prev_slot]->defocus();
 				current_slot = NULL;
 			}
 		}
@@ -212,6 +213,7 @@ ItemStack MenuItemStorage::click(const Point& position) {
 		return item;
 	}
 	else {
+		current_slot = NULL;
 		item.clear();
 		return item;
 	}

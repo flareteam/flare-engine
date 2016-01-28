@@ -130,7 +130,9 @@ void TabList::setCurrent(Widget* widget) {
 	for (unsigned i=0; i<widgets.size(); ++i) {
 		if (widgets[i] == widget) {
 			current = i;
-			break;
+		}
+		else {
+			widgets[i]->defocus();
 		}
 	}
 }

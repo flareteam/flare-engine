@@ -149,20 +149,6 @@ void MenuVendor::logic() {
 			stock[VENDOR_SELL].current_slot = NULL;
 	}
 
-	// make sure keyboard navigation leads us to correct tab
-	for (unsigned i = 0; i < VENDOR_SLOTS; i++) {
-		if (stock[VENDOR_BUY].slots[i]->in_focus) {
-			tabControl->setActiveTab(VENDOR_BUY);
-			activetab = VENDOR_BUY;
-			break;
-		}
-		else if (stock[VENDOR_SELL].slots[i]->in_focus) {
-			tabControl->setActiveTab(VENDOR_SELL);
-			activetab = VENDOR_SELL;
-			break;
-		}
-	}
-
 	if (closeButton->checkClick()) {
 		setNPC(NULL);
 		snd->play(sfx_close);
