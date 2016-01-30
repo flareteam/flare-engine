@@ -148,6 +148,7 @@ public:
 	int requires_equipped_item_quantity;
 	bool consumable;
 	bool requires_targeting; // power only makes sense when using click-to-target
+	int requires_spawns;
 	int cooldown; // milliseconds before you can use the power again
 
 	// animation info
@@ -270,6 +271,7 @@ public:
 		, requires_equipped_item_quantity(0)
 		, consumable(false)
 		, requires_targeting(false)
+		, requires_spawns(0)
 		, cooldown(0)
 
 		, animation_name("")

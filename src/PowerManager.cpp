@@ -251,6 +251,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "requires_targeting")
 			// @ATTR requires_targeting|bool|Power is only used when targeting using click-to-target.
 			powers[input_id].requires_targeting = toBool(infile.val);
+		else if (infile.key == "requires_spawns")
+			// @ATTR requires_spawns|integer|The caster must have at least this many summoned creatures to use this power.
+			powers[input_id].requires_spawns = toInt(infile.val);
 		else if (infile.key == "cooldown")
 			// @ATTR cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
 			powers[input_id].cooldown = parse_duration(infile.val);
