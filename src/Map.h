@@ -85,6 +85,7 @@ public:
 	std::queue<FPoint> waypoints;
 	int wander_radius;
 	bool hero_ally;
+	bool enemy_ally;
 	int summon_power_index;
 	StatBlock* summoner;
 	std::vector<std::string> requires_status;
@@ -97,6 +98,7 @@ public:
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
 		, hero_ally(false)
+		, enemy_ally(false)
 		, summon_power_index(0)
 		, summoner(NULL)
 		, requires_status()

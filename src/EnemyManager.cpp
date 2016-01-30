@@ -232,6 +232,7 @@ void EnemyManager::handleSpawn() {
 			e->eb = new BehaviorStandard(e);
 
 		e->stats.hero_ally = espawn.hero_ally;
+		e->stats.enemy_ally = espawn.enemy_ally;
 		e->stats.summoned = true;
 		e->stats.summoned_power_index = espawn.summon_power_index;
 
@@ -321,7 +322,7 @@ void EnemyManager::handleSpawn() {
 		//synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
 		//at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
 		for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
-			if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && e->stats.hero_ally
+			if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
 					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->stats.summoned_power_index)) {
 
 				e->stats.powers_passive.push_back(pc->stats.powers_passive[i]);
@@ -329,7 +330,7 @@ void EnemyManager::handleSpawn() {
 		}
 
 		for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
-			if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && e->stats.hero_ally
+			if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
 					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->stats.summoned_power_index)) {
 
 				e->stats.powers_passive.push_back(pc->stats.powers_list_items[i]);
@@ -349,7 +350,10 @@ void EnemyManager::handlePartyBuff() {
 		Power *buff_power = &powers->powers[power_index];
 
 		for (unsigned int i=0; i < enemies.size(); i++) {
-			if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0 && (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->stats.summoned_power_index)) {
+			if((enemies[i]->stats.hero_ally || enemies[i]->stats.enemy_ally) &&
+				enemies[i]->stats.hp > 0 &&
+				(buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->stats.summoned_power_index)
+			) {
 				powers->effect(&enemies[i]->stats, &pc->stats, power_index,SOURCE_TYPE_HERO);
 			}
 		}

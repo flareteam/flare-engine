@@ -809,7 +809,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 	}
 
 	// handle all other effects
-	if (powers[power_index].buff || (powers[power_index].buff_party && src_stats->hero_ally)) {
+	if (powers[power_index].buff || (powers[power_index].buff_party && (src_stats->hero_ally || src_stats->enemy_ally))) {
 		int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
 		effect(src_stats, src_stats, power_index, source_type);
 	}
@@ -1087,6 +1087,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	espawn.summon_power_index = power_index;
 	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
+	espawn.enemy_ally = !src_stats->hero;
 
 	for (int i=0; i < powers[power_index].count; i++) {
 		enemies.push(espawn);
