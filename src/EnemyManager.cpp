@@ -322,18 +322,20 @@ void EnemyManager::handleSpawn() {
 		//synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
 		//at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
 		for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
-			if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
-					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->stats.summoned_power_index)) {
+			int pwr = pc->stats.powers_passive[i];
+			if (powers->powers[pwr].passive && powers->powers[pwr].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
+					&& (powers->powers[pwr].buff_party_power_id == 0 || powers->powers[pwr].buff_party_power_id == e->stats.summoned_power_index)) {
 
-				e->stats.powers_passive.push_back(pc->stats.powers_passive[i]);
+				e->stats.powers_passive.push_back(pwr);
 			}
 		}
 
 		for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
-			if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
-					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->stats.summoned_power_index)) {
+			int pwr = pc->stats.powers_list_items[i];
+			if (powers->powers[pwr].passive && powers->powers[pwr].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
+					&& (powers->powers[pwr].buff_party_power_id == 0 || powers->powers[pwr].buff_party_power_id == e->stats.summoned_power_index)) {
 
-				e->stats.powers_passive.push_back(pc->stats.powers_list_items[i]);
+				e->stats.powers_passive.push_back(pwr);
 			}
 		}
 
