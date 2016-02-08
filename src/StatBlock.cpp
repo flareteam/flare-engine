@@ -569,6 +569,24 @@ void StatBlock::logic() {
 	if (hp <= 0 && !effects.triggered_death && !effects.revive) alive = false;
 	else alive = true;
 
+	// handle party buffs
+	if (enemies && powers) {
+		while (!party_buffs.empty()) {
+			int power_index = party_buffs.front();
+			party_buffs.pop();
+			Power *buff_power = &powers->powers[power_index];
+
+			for (size_t i=0; i < enemies->enemies.size(); ++i) {
+				if(enemies->enemies[i]->stats.hp > 0 &&
+				   ((enemies->enemies[i]->stats.hero_ally && hero) || (enemies->enemies[i]->stats.enemy_ally && enemies->enemies[i]->stats.summoner == this)) &&
+				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies->enemies[i]->stats.summoned_power_index)
+				) {
+					powers->effect(&enemies->enemies[i]->stats, this, power_index, (hero ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY));
+				}
+			}
+		}
+	}
+
 	// handle effect timers
 	effects.logic();
 

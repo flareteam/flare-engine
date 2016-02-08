@@ -403,7 +403,6 @@ public:
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> enemies; // output; read by PowerManager
-	std::queue<int> party_buffs;
 
 	// shared sounds for power special effects
 	std::vector<SoundManager::SoundID> sfx;

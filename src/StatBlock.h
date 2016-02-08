@@ -345,6 +345,7 @@ public:
 	// links to summoned creatures and the entity which summoned this
 	std::vector<StatBlock*> summons;
 	StatBlock* summoner;
+	std::queue<int> party_buffs;
 
 	bool attacking;
 };

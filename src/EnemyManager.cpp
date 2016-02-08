@@ -345,23 +345,6 @@ void EnemyManager::handleSpawn() {
 	}
 }
 
-void EnemyManager::handlePartyBuff() {
-	while (!powers->party_buffs.empty()) {
-		int power_index = powers->party_buffs.front();
-		powers->party_buffs.pop();
-		Power *buff_power = &powers->powers[power_index];
-
-		for (unsigned int i=0; i < enemies.size(); i++) {
-			if((enemies[i]->stats.hero_ally || enemies[i]->stats.enemy_ally) &&
-				enemies[i]->stats.hp > 0 &&
-				(buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->stats.summoned_power_index)
-			) {
-				powers->effect(&enemies[i]->stats, &pc->stats, power_index,SOURCE_TYPE_HERO);
-			}
-		}
-	}
-}
-
 bool EnemyManager::checkPartyMembers() {
 	for (unsigned int i=0; i < enemies.size(); i++) {
 		if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0) {
@@ -383,8 +366,6 @@ void EnemyManager::logic() {
 	}
 
 	handleSpawn();
-
-	handlePartyBuff();
 
 	std::vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {

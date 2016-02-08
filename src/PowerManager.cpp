@@ -818,7 +818,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 	}
 
 	if (powers[power_index].buff_party && !powers[power_index].passive) {
-		party_buffs.push(power_index);
+		src_stats->party_buffs.push(power_index);
 	}
 
 	// activate any post powers here if the power doesn't use a hazard
