@@ -672,6 +672,12 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			if (!stats.corpse && activeAnimation->isFirstFrame() && activeAnimation->getTimesPlayed() < 1) {
 				stats.effects.clearEffects();
 
+				// reset power cooldowns
+				for (size_t i = 0; i < hero_cooldown.size(); i++) {
+					hero_cooldown[i] = 0;
+					power_cast_ticks[i] = 0;
+				}
+
 				// raise the death penalty flag.  Another module will read this and reset.
 				stats.death_penalty = true;
 
