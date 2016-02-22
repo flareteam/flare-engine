@@ -604,6 +604,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 			if (MOUSE_MOVE) lockAttack = true;
 
+			// don't play attack sound or activate power when stunned
+			if (stats.effects.stun)
+				break;
+
 			if (activeAnimation->isFirstFrame()) {
 				if (attack_anim == "swing")
 					snd->play(sound_melee);
