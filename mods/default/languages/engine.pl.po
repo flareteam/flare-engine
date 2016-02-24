@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-23 20:20-0400\n"
+"POT-Creation-Date: 2016-02-24 12:13-0400\n"
 "PO-Revision-Date: 2013-03-22 11:58+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: \n"
@@ -210,7 +210,7 @@ msgstr "Wymagana wersja: %s"
 #: ../../../src/GameStateConfigBase.cpp:863
 #, fuzzy
 msgid "Requires mods: "
-msgstr "Wymagane mody: %s"
+msgstr "Wymagane mody: "
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:647
@@ -353,7 +353,7 @@ msgstr "Poziom %d"
 #: ../../../src/GameStateLoad.cpp:641
 #, fuzzy
 msgid "Permadeath"
-msgstr "Tryb ze śmiercią permamentną"
+msgstr "Tryb hardkorowy"
 
 #: ../../../src/GameStateLoad.cpp:674
 msgid "Empty Slot"
@@ -373,7 +373,7 @@ msgstr "Wybierz Imię"
 
 #: ../../../src/GameStateNew.cpp:164
 msgid "Permadeath?"
-msgstr "Jedno życie?"
+msgstr "Tryb hardkorowy?"
 
 #: ../../../src/GameStateNew.cpp:168
 msgid "Choose a Class"
@@ -578,7 +578,7 @@ msgstr "Nieznany przedmiot"
 #: ../../../src/ItemManager.cpp:586 ../../../src/MenuCharacter.cpp:350
 #, c-format
 msgid "%s Resistance"
-msgstr "%d Odporność"
+msgstr "Odporność na %s"
 
 #: ../../../src/ItemManager.cpp:590 ../../../src/MenuCharacter.cpp:42
 #: ../../../src/MenuPowers.cpp:826
@@ -650,25 +650,25 @@ msgstr "%d%% Szybkość"
 #: ../../../src/MenuPowers.cpp:1049
 #, c-format
 msgid "Requires Physical %d"
-msgstr "Wymaga %d Siły Fizycznej"
+msgstr "Wymaga Siła Fizyczna: %d"
 
 #: ../../../src/ItemManager.cpp:731 ../../../src/MenuPowers.cpp:1052
 #: ../../../src/MenuPowers.cpp:1055
 #, c-format
 msgid "Requires Mental %d"
-msgstr "Wymaga %d Siły Umysłu"
+msgstr "Wymagana Siła Umysłu: %d"
 
 #: ../../../src/ItemManager.cpp:736 ../../../src/MenuPowers.cpp:1034
 #: ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Requires Offense %d"
-msgstr "Wymaga %d Ataku"
+msgstr "Wymagany Atak: %d"
 
 #: ../../../src/ItemManager.cpp:741 ../../../src/MenuPowers.cpp:1040
 #: ../../../src/MenuPowers.cpp:1043
 #, c-format
 msgid "Requires Defense %d"
-msgstr "Wymaga %d Obrony"
+msgstr "Wymagana Obrona: %d"
 
 #: ../../../src/ItemManager.cpp:750
 #, fuzzy, c-format
@@ -744,7 +744,7 @@ msgstr "Podstawa (%d), dodatkowo (%d)"
 
 #: ../../../src/MenuCharacter.cpp:373
 msgid "Related stats:"
-msgstr "Powiązane atrybuty:"
+msgstr "Powiązane statystyki:"
 
 #: ../../../src/MenuCharacter.cpp:399
 #, c-format
@@ -1001,11 +1001,11 @@ msgstr "Użyj bądź załóż przedmiot:"
 #: ../../../src/MenuInventory.cpp:278
 #, c-format
 msgid "%s modifiers"
-msgstr "%s modyfikatory"
+msgstr "%s - modyfikatory"
 
 #: ../../../src/MenuInventory.cpp:279
 msgid "Select a quantity of item:"
-msgstr "Wybierz liczbę przedmiotów:"
+msgstr "Rozdziel przedmioty:"
 
 #: ../../../src/MenuInventory.cpp:282
 msgid "Stash item stack:"
@@ -1013,7 +1013,7 @@ msgstr "Ilość przedmiotów w skrytce:"
 
 #: ../../../src/MenuInventory.cpp:284
 msgid "Sell item stack:"
-msgstr "Sprzedaj liczbę przedmiotów:"
+msgstr "Sprzedaj przedmiot:"
 
 #: ../../../src/MenuInventory.cpp:508
 msgid "You don't have enough of the required item."
@@ -1157,7 +1157,7 @@ msgstr "Bazowa Szansa na Trafienie Krytyczne"
 
 #: ../../../src/MenuPowers.cpp:978
 msgid "Ignores Absorbtion"
-msgstr "Ignoruje Absorpcję"
+msgstr "Ignoruje Absorbcję"
 
 #: ../../../src/MenuPowers.cpp:983
 #, fuzzy
@@ -1224,7 +1224,7 @@ msgstr "Wspólna Skrytka"
 
 #: ../../../src/MenuVendor.cpp:50
 msgid "Buyback"
-msgstr "Odkupienie"
+msgstr "Odkup"
 
 #: ../../../src/MenuVendor.cpp:181
 msgid "Vendor"
@@ -1323,12 +1323,12 @@ msgstr "Maksymalne obrażenia umysłowe"
 #: ../../../src/Stats.cpp:96
 #, fuzzy
 msgid "Absorb Min"
-msgstr "Minimalna absorbcja:"
+msgstr "Minimalna absorbcja"
 
 #: ../../../src/Stats.cpp:101
 #, fuzzy
 msgid "Absorb Max"
-msgstr "Maksymalna absorbcja:"
+msgstr "Maksymalna absorbcja"
 
 #: ../../../src/Stats.cpp:106
 msgid "Critical Hit Chance"
@@ -1347,12 +1347,12 @@ msgstr "Zwiększa zdobywane PD za każde zabicie."
 #: ../../../src/Stats.cpp:116
 #, fuzzy, c-format
 msgid "Bonus %s"
-msgstr "Premia %s"
+msgstr "Dodatkowe %s"
 
 #: ../../../src/Stats.cpp:117
 #, fuzzy, c-format
 msgid "Increases the %s found per drop."
-msgstr "Zwiększa ilość znajdowanego %s na łup"
+msgstr "Zwiększa ilość znajdowanych %s na łup"
 
 #: ../../../src/Stats.cpp:121
 #, fuzzy
@@ -1416,12 +1416,12 @@ msgstr "k"
 #: ../../../src/Utils.cpp:361
 #, fuzzy, c-format
 msgid "%s second"
-msgstr "%d sekunda"
+msgstr "%s sekunda"
 
 #: ../../../src/Utils.cpp:364
 #, fuzzy, c-format
 msgid "%s seconds"
-msgstr "%d sekund"
+msgstr "%s sekund"
 
 #, fuzzy
 #~ msgid "Move only one item:"
