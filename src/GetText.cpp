@@ -41,8 +41,8 @@ void GetText::close() {
 std::string GetText::sanitize(const std::string& message) {
 	std::string new_message = message;
 	size_t pos = 0;
-	while ((pos = message.find("\\\"")) != std::string::npos) {
-		new_message = message.substr(0, pos) + message.substr(pos+1);
+	while ((pos = new_message.find("\\\"")) != std::string::npos) {
+		new_message = new_message.substr(0, pos) + new_message.substr(pos+1);
 	}
 	return new_message;
 }
