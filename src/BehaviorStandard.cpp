@@ -451,7 +451,12 @@ void BehaviorStandard::checkMoveStateStance() {
 	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
 	if (hero_dist >= e->stats.threat_range/2 && e->stats.chance_flee > 0 && e->stats.waypoints.empty()) return;
 
-	if ((target_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
+	// try to move to the target if we're either:
+	// 1. too far away and chance_pursue roll succeeds
+	// 2. within range, but lack line-pf-sight (required to attack)
+	bool should_move_to_target = (target_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los);
+
+	if (should_move_to_target || fleeing) {
 
 		if (e->move()) {
 			e->stats.cur_state = ENEMY_MOVE;
