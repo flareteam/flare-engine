@@ -449,6 +449,12 @@ void loadMiscSettings() {
 		VIEW_H_HALF = VIEW_H / 2;
 	}
 
+	// icon size can not be zero, so we set a default of 32x32, which is fantasycore's icon size
+	if (ICON_SIZE == 0) {
+		logError("Settings: icon_size is undefined. Setting it to 32.");
+		ICON_SIZE = 32;
+	}
+
 	// @CLASS Settings: Gameplay|Description of engine/gameplay.txt
 	if (infile.open("engine/gameplay.txt")) {
 		while (infile.next()) {
