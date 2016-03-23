@@ -59,7 +59,8 @@ void createDir(const std::string &path) {
 bool isDirectory(const std::string &path) {
 	struct stat st;
 	if (stat(path.c_str(), &st) == -1) {
-		perror("isDirectory");
+		std::string error_msg = "isDirectory (" + path + ")";
+		perror(error_msg.c_str());
 		return false;
 	}
 	else {
@@ -132,7 +133,8 @@ int getDirList(const std::string &dir, std::vector<std::string> &dirs) {
 
 bool removeFile(const std::string &file) {
 	if (remove(file.c_str()) != 0) {
-		perror("removeFile");
+		std::string error_msg = "removeFile (" + file + ")";
+		perror(error_msg.c_str());
 		return false;
 	}
 	return true;

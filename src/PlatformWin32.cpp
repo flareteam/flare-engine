@@ -69,7 +69,8 @@ void PlatformSetExitEventFilter() {
 bool PlatformDirCreate(const std::string& path) {
 	std::string syscmd = std::string("mkdir \"") + path + std::string("\"");
 	if (system(syscmd.c_str()) != 0) {
-		perror("createDir");
+		std::string error_msg = "createDir (" + path + ")";
+		perror(error_msg.c_str());
 		return false;
 	}
 	return true;
@@ -77,6 +78,10 @@ bool PlatformDirCreate(const std::string& path) {
 
 bool PlatformDirRemove(const std::string& path) {
 	std::string syscmd = std::string("rmdir \"") + path + std::string("\"");
-	system(syscmd.c_str());
+	if (system(syscmd.c_str()) != 0) {
+		std::string error_msg = "removeDir (" + path + ")";
+		perror(error_msg.c_str());
+		return false;
+	}
 	return true;
 }

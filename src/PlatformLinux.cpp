@@ -154,7 +154,8 @@ void PlatformSetExitEventFilter() {
 
 bool PlatformDirCreate(const std::string& path) {
 	if (mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO) == -1) {
-		perror("createDir");
+		std::string error_msg = "createDir (" + path + ")";
+		perror(error_msg.c_str());
 		return false;
 	}
 	return true;
@@ -162,7 +163,8 @@ bool PlatformDirCreate(const std::string& path) {
 
 bool PlatformDirRemove(const std::string& path) {
 	if (rmdir(path.c_str()) == -1) {
-		perror("removeDir");
+		std::string error_msg = "removeDir (" + path + ")";
+		perror(error_msg.c_str());
 		return false;
 	}
 	return true;
