@@ -407,3 +407,24 @@ std::string substituteVarsInString(const std::string &_s, Avatar* avatar) {
 
 	return s;
 }
+
+/**
+ * Keep two points within a certain range
+ */
+FPoint clampDistance(float range, const FPoint& src, const FPoint& target) {
+	FPoint limit_target = target;
+
+	if (range > 0) {
+		if (src.x+range < target.x)
+			limit_target.x = src.x+range;
+		if (src.x-range > target.x)
+			limit_target.x = src.x-range;
+		if (src.y+range < target.y)
+			limit_target.y = src.y+range;
+		if (src.y-range > target.y)
+			limit_target.y = src.y-range;
+	}
+
+	return limit_target;
+}
+

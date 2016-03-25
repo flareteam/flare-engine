@@ -362,7 +362,6 @@ private:
 	bool isValidEffect(const std::string& type);
 	int loadSFX(const std::string& filename);
 
-	FPoint limitRange(float range, const FPoint& src, const FPoint& target);
 	void initHazard(int powernum, StatBlock *src_stats, const FPoint& target, Hazard *haz);
 	void buff(int power_index, StatBlock *src_stats, const FPoint& target);
 	void playSound(int power_index);

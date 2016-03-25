@@ -613,33 +613,13 @@ void PowerManager::handleNewMap(MapCollision *_collider) {
 }
 
 /**
- * Keep two points within a certain range
- */
-FPoint PowerManager::limitRange(float range, const FPoint& src, const FPoint& target) {
-	FPoint limit_target = target;
-
-	if (range > 0) {
-		if (src.x+range < target.x)
-			limit_target.x = src.x+range;
-		if (src.x-range > target.x)
-			limit_target.x = src.x-range;
-		if (src.y+range < target.y)
-			limit_target.y = src.y+range;
-		if (src.y-range > target.y)
-			limit_target.y = src.y-range;
-	}
-
-	return limit_target;
-}
-
-/**
  * Check if the target is valid (not an empty area or a wall)
  */
 bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	if (!collider) return false;
 
-	FPoint limit_target = limitRange(powers[power_index].target_range,src_stats->pos,target);
+	FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 
 	if (!collider->is_empty(limit_target.x, limit_target.y) || collider->is_wall(limit_target.x,limit_target.y)) {
 		if (powers[power_index].buff_teleport) {
@@ -744,7 +724,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 		haz->pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		haz->pos = limitRange(powers[power_index].target_range,src_stats->pos,target);
+		haz->pos = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
@@ -792,7 +772,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
-		FPoint limit_target = limitRange(powers[power_index].target_range,src_stats->pos,target);
+		FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
 			FPoint new_target = collider->get_random_neighbor(floor(limit_target), powers[power_index].target_neighbor);
 			if (floor(new_target.x) == floor(limit_target.x) && floor(new_target.y) == floor(limit_target.y)) {

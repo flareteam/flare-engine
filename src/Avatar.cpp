@@ -332,10 +332,27 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 				target = enemy_pos;
 			}
 
+			// is this a power that requires changing direction?
+			if (power.face) {
+				stats.direction = calcDirection(stats.pos, target);
+			}
+
 			// draw a target on the ground if we're attacking
-			if (!power.buff && !power.buff_teleport && power.type != POWTYPE_TRANSFORM && power.type != POWTYPE_BLOCK) {
-				if (target_anim) {
+			if (!power.buff && !power.buff_teleport &&
+			    power.type != POWTYPE_TRANSFORM && power.type != POWTYPE_BLOCK &&
+			    !(power.starting_pos == STARTING_POS_SOURCE && power.speed == 0))
+			{
+				if (power.starting_pos == STARTING_POS_TARGET && power.target_range > 0) {
+					target_pos = clampDistance(power.target_range, stats.pos, target);
+				}
+				else if (power.starting_pos == STARTING_POS_MELEE) {
+					target_pos = calcVector(stats.pos, stats.direction, stats.melee_range);
+				}
+				else {
 					target_pos = target;
+				}
+
+				if (target_anim) {
 					target_visible = true;
 					target_anim->reset();
 				}
@@ -349,11 +366,6 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 				current_power = action.power;
 				act_target = target;
 				attack_anim = power.attack_anim;
-			}
-
-			// is this a power that requires changing direction?
-			if (power.face) {
-				stats.direction = calcDirection(stats.pos, target);
 			}
 
 			if (power.state_duration > 0)
