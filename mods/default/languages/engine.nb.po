@@ -776,9 +776,8 @@ msgid "Prints a list of items that match a search term. No search term will list
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:210
-#, fuzzy
 msgid "Prints out all of the campaign status that are set"
-msgstr "fjerner den angitte kampanjestatusen hvis den har blitt satt"
+msgstr "skriver ut alle kampanjestatusene som har blitt satt"
 
 #: ../../../src/MenuDevConsole.cpp:211
 msgid "resets the player to level 1, with no stat or skill points spent"
@@ -907,9 +906,8 @@ msgid " <x> <y> [<map>]"
 msgstr " <x> <y> [<kart>]"
 
 #: ../../../src/MenuDevConsole.cpp:438
-#, fuzzy
 msgid "Removed item: "
-msgstr "%d gjenstander: "
+msgstr "Fjernet gjenstand: "
 
 #: ../../../src/MenuDevConsole.cpp:447
 msgid "ERROR: Unknown command"
@@ -1117,28 +1115,24 @@ msgid "Damage"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:928
-#, fuzzy
 msgid "Melee Damage"
-msgstr "Mental skade: %d"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:930
 msgid "Ranged Damage"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:932
-#, fuzzy
 msgid "Mental Damage"
-msgstr "Mental skade: %d"
+msgstr "Mental skade"
 
 #: ../../../src/MenuPowers.cpp:951
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "Treffsikkerhet"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:970
-#, fuzzy
 msgid "Base Critical Chance"
-msgstr "Sjanse for kritisk treff"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:978
 msgid "Ignores Absorbtion"
@@ -1154,9 +1148,9 @@ msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
 #: ../../../src/MenuPowers.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "Mental skade: %d"
+msgstr ""
 
 #: ../../../src/MenuPowers.cpp:1003
 #, c-format
