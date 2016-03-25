@@ -461,14 +461,14 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 		}
 	}
 
-	if (current.x != end.x || current.y != end.y) {
+	if (!(current.x == end.x && current.y == end.y)) {
 
 		//couldnt find the target so map a path to the closest node found
 		node = close.get_shortest_h();
 		current.x = node->getX();
 		current.y = node->getY();
 
-		while (current.x != start.x || current.y != start.y) {
+		while (!(current.x == start.x && current.y == start.y)) {
 			path.push_back(collision_to_map(current));
 			current = close.get(current.x, current.y)->getParent();
 		}
@@ -476,7 +476,7 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 	else {
 		// store path from end to start
 		path.push_back(collision_to_map(end));
-		while (current.x != start.x || current.y != start.y) {
+		while (!(current.x == start.x && current.y == start.y)) {
 			path.push_back(collision_to_map(current));
 			current = close.get(current.x, current.y)->getParent();
 		}
