@@ -48,6 +48,7 @@ private:
 
 	void loadGraphics();
 	void updateEquipment(int slot);
+	int getEquipSlotFromItem(int item, bool only_empty_slots);
 
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
@@ -82,7 +83,7 @@ public:
 	void drop(const Point& position, ItemStack stack);
 	void activate(const Point& position);
 
-	void add( ItemStack stack, int area = CARRIED, int slot = -1, bool play_sound = true);
+	void add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip);
 	void remove(int item);
 	void removeEquipped(int item);
 	void removeFromPrevSlot(int quantity);

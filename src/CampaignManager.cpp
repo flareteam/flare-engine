@@ -143,7 +143,7 @@ void CampaignManager::rewardItem(ItemStack istack) {
 		drop_stack.push(istack);
 	}
 	else {
-		menu->inv->add(istack, -1, -1, false);
+		menu->inv->add(istack, CARRIED, -1, false, true);
 
 		if (istack.item != CURRENCY_ID) {
 			if (istack.quantity <= 1)

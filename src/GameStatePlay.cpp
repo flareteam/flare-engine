@@ -235,17 +235,23 @@ void GameStatePlay::checkLoot() {
 	// Autopickup
 	if (AUTOPICKUP_CURRENCY) {
 		pickup = loot->checkAutoPickup(pc->stats.pos, menu->inv);
-		if (!pickup.empty()) menu->inv->add(pickup);
+		if (!pickup.empty()) {
+			menu->inv->add(pickup, CARRIED, -1, true, true);
+			pickup.clear();
+		}
 	}
 
 	// Normal pickups
-	if (!pc->stats.attacking)
+	if (!pc->stats.attacking) {
 		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, menu->inv);
+	}
 
 	if (!pickup.empty()) {
-		menu->inv->add(pickup);
+		menu->inv->add(pickup, CARRIED, -1, true, true);
 		camp->setStatus(items->items[pickup.item].pickup_status);
+		pickup.clear();
 	}
+
 	if (loot->full_msg) {
 		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;

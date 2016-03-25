@@ -620,7 +620,7 @@ void MenuManager::logic() {
 								drop_stack.push(stack);
 							}
 							else {
-								inv->add(stack);
+								inv->add(stack, CARRIED, -1, true, true);
 							}
 						}
 					}
@@ -658,7 +658,7 @@ void MenuManager::logic() {
 							splitStack(stack);
 						}
 						else {
-							inv->add(stack);
+							inv->add(stack, CARRIED, -1, true, true);
 						}
 					}
 				}
@@ -1059,7 +1059,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 					drop_stack.push(drag_stack);
 				}
 				else {
-					inv->add(drag_stack);
+					inv->add(drag_stack, CARRIED, -1, true, true);
 				}
 			}
 			drag_src = 0;
@@ -1101,7 +1101,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// send to inventory
 		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
 			if (!inv->full(drag_stack)) {
-				inv->add(drag_stack);
+				inv->add(drag_stack, CARRIED, -1, true, true);
 			}
 			else {
 				questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
@@ -1470,7 +1470,7 @@ void MenuManager::splitStack(ItemStack stack) {
 	if (stack.empty()) return;
 
 	if (items->items[stack.item].max_quantity > 1) {
-		inv->add(stack);
+		inv->add(stack, CARRIED, -1, true, true);
 		stash->add(inv->drop_stack.front());
 		inv->drop_stack.pop();
 	}

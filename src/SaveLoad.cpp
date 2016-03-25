@@ -386,7 +386,7 @@ void SaveLoad::loadClass(int index) {
 	stack.quantity = 1;
 	while (carried != "") {
 		stack.item = popFirstInt(carried);
-		menu->inv->add(stack, CARRIED, -1, false);
+		menu->inv->add(stack, CARRIED, -1, false, false);
 	}
 
 	// apply stats, inventory, and powers
