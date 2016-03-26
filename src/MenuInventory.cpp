@@ -582,7 +582,7 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 	if (play_sound)
 		items->playSound(stack.item);
 
-	if (auto_equip) {
+	if (auto_equip && AUTO_EQUIP) {
 		int equip_slot = getEquipSlotFromItem(stack.item, true);
 
 		if (equip_slot >= 0) {

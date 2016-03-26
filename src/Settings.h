@@ -133,6 +133,7 @@ extern bool DEV_HUD;
 extern bool SHOW_TARGET;
 extern bool LOOT_TOOLTIPS;
 extern bool STATBAR_LABELS;
+extern bool AUTO_EQUIP;
 extern bool SHOW_HUD;
 
 // Engine Settings

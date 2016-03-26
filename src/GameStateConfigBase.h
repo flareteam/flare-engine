@@ -123,6 +123,8 @@ public:
 	WidgetLabel         * loot_tooltips_lb;
 	WidgetCheckBox      * statbar_labels_cb;
 	WidgetLabel         * statbar_labels_lb;
+	WidgetCheckBox      * auto_equip_cb;
+	WidgetLabel         * auto_equip_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;

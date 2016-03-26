@@ -70,6 +70,8 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, loot_tooltips_lb(new WidgetLabel())
 	, statbar_labels_cb(new WidgetCheckBox())
 	, statbar_labels_lb(new WidgetLabel())
+	, auto_equip_cb(new WidgetCheckBox())
+	, auto_equip_lb(new WidgetLabel())
 	, music_volume_sl(new WidgetSlider())
 	, music_volume_lb(new WidgetLabel())
 	, sound_volume_sl(new WidgetSlider())
@@ -250,6 +252,10 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR statbar_labels|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show stat bar labels" checkbox relative to the frame.
 		placeLabeledWidget(statbar_labels_lb, statbar_labels_cb, x1, y1, x2, y2, msg->get("Always show stat bar labels"), JUSTIFY_RIGHT);
 	}
+	else if (infile.key == "auto_equip") {
+		// @ATTR auto_equip|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Automatically equip items" checkbox relative to the frame.
+		placeLabeledWidget(auto_equip_lb, auto_equip_cb, x1, y1, x2, y2, msg->get("Automatically equip items"), JUSTIFY_RIGHT);
+	}
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Active Mods" list box relative to the frame.
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
@@ -369,6 +375,8 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(loot_tooltips_lb, INTERFACE_TAB);
 	addChildWidget(statbar_labels_cb, INTERFACE_TAB);
 	addChildWidget(statbar_labels_lb, INTERFACE_TAB);
+	addChildWidget(auto_equip_cb, INTERFACE_TAB);
+	addChildWidget(auto_equip_lb, INTERFACE_TAB);
 	addChildWidget(language_lstb, INTERFACE_TAB);
 	addChildWidget(language_lb, INTERFACE_TAB);
 
@@ -406,7 +414,7 @@ void GameStateConfigBase::setupTabList() {
 	tablist_interface.add(dev_mode_cb);
 	tablist_interface.add(show_target_cb);
 	tablist_interface.add(loot_tooltips_cb);
-	tablist_interface.add(statbar_labels_cb);
+	tablist_interface.add(auto_equip_cb);
 	tablist_interface.add(language_lstb);
 	tablist_interface.setPrevTabList(&tablist);
 	tablist_interface.setNextTabList(&tablist_main);
@@ -445,20 +453,30 @@ void GameStateConfigBase::updateAudio() {
 void GameStateConfigBase::updateInterface() {
 	if (COMBAT_TEXT) combat_text_cb->Check();
 	else combat_text_cb->unCheck();
+
 	if (SHOW_FPS) show_fps_cb->Check();
 	else show_fps_cb->unCheck();
+
 	if (COLORBLIND) colorblind_cb->Check();
 	else colorblind_cb->unCheck();
+
 	if (HARDWARE_CURSOR) hardware_cursor_cb->Check();
 	else hardware_cursor_cb->unCheck();
+
 	if (DEV_MODE) dev_mode_cb->Check();
 	else dev_mode_cb->unCheck();
+
 	if (SHOW_TARGET) show_target_cb->Check();
 	else show_target_cb->unCheck();
+
 	if (LOOT_TOOLTIPS) loot_tooltips_cb->Check();
 	else loot_tooltips_cb->unCheck();
+
 	if (STATBAR_LABELS) statbar_labels_cb->Check();
 	else statbar_labels_cb->unCheck();
+
+	if (AUTO_EQUIP) auto_equip_cb->Check();
+	else auto_equip_cb->unCheck();
 
 	refreshLanguages();
 }
@@ -648,6 +666,10 @@ void GameStateConfigBase::logicInterface() {
 	else if (statbar_labels_cb->checkClick()) {
 		if (statbar_labels_cb->isChecked()) STATBAR_LABELS=true;
 		else STATBAR_LABELS=false;
+	}
+	else if (auto_equip_cb->checkClick()) {
+		if (auto_equip_cb->isChecked()) AUTO_EQUIP=true;
+		else AUTO_EQUIP=false;
 	}
 }
 
