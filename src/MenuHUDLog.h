@@ -38,6 +38,8 @@ private:
 	int paragraph_spacing;
 
 	Color color_normal;
+	Sprite *overlay_bg;
+	bool click_to_dismiss;
 
 public:
 
@@ -48,6 +50,9 @@ public:
 	void add(const std::string& s, bool prevent_spam = true);
 	void remove(int msg_index);
 	void clear();
+	void renderOverlay();
+
+	bool hide_overlay;
 };
 
 #endif

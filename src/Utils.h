@@ -227,4 +227,6 @@ std::string substituteVarsInString(const std::string &_s, Avatar* avatar = NULL)
 
 FPoint clampDistance(float range, const FPoint& src, const FPoint& target);
 
+bool rectsOverlap(const Rect &a, const Rect &b);
+
 #endif

@@ -1239,8 +1239,36 @@ void MenuManager::render() {
 		return;
 	}
 
+	bool hudlog_overlapped = false;
+	if (chr->visible && rectsOverlap(hudlog->window_area, chr->window_area)) {
+		hudlog_overlapped = true;
+	}
+	if (questlog->visible && rectsOverlap(hudlog->window_area, questlog->window_area)) {
+		hudlog_overlapped = true;
+	}
+	if (inv->visible && rectsOverlap(hudlog->window_area, inv->window_area)) {
+		hudlog_overlapped = true;
+	}
+	if (pow->visible && rectsOverlap(hudlog->window_area, pow->window_area)) {
+		hudlog_overlapped = true;
+	}
+	if (vendor->visible && rectsOverlap(hudlog->window_area, vendor->window_area)) {
+		hudlog_overlapped = true;
+	}
+	if (stash->visible && rectsOverlap(hudlog->window_area, stash->window_area)) {
+		hudlog_overlapped = true;
+	}
+
 	for (size_t i=0; i<menus.size(); i++) {
+		if (menus[i] == hudlog && hudlog_overlapped && !hudlog->hide_overlay) {
+			continue;
+		}
+
 		menus[i]->render();
+	}
+
+	if (hudlog_overlapped && !hudlog->hide_overlay) {
+		hudlog->renderOverlay();
 	}
 
 	if (!num_picker->visible && !mouse_dragging && !sticky_dragging) {

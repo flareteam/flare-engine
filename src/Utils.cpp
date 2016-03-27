@@ -428,3 +428,22 @@ FPoint clampDistance(float range, const FPoint& src, const FPoint& target) {
 	return limit_target;
 }
 
+/**
+ * Compares two rectangles and returns true if they overlap
+ */
+bool rectsOverlap(const Rect &a, const Rect &b) {
+	Point a_1(a.x, a.y);
+	Point a_2(a.x + a.w, a.y);
+	Point a_3(a.x, a.y + a.h);
+	Point a_4(a.x + a.w, a.y + a.h);
+
+	Point b_1(b.x, b.y);
+	Point b_2(b.x + b.w, b.y);
+	Point b_3(b.x, b.y + b.h);
+	Point b_4(b.x + b.w, b.y + b.h);
+
+	bool a_in_b = isWithin(b, a_1) || isWithin(b, a_2) || isWithin(b, a_3) || isWithin(b, a_4);
+	bool b_in_a = isWithin(a, b_1) || isWithin(a, b_2) || isWithin(a, b_3) || isWithin(a, b_4);
+
+	return a_in_b || b_in_a;
+}
