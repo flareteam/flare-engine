@@ -92,7 +92,6 @@ public:
 	int getCurrency();
 	bool buy(ItemStack stack, int tab, bool dragging);
 	bool sell(ItemStack stack);
-	bool stashAdd(ItemStack stack);
 
 	int getItemCountCarried(int item);
 	bool isItemEquipped(int item);

@@ -172,16 +172,17 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 			// Swap the two stacks
 			itemReturn(stock[slot]);
 			stock[slot] = stack;
+			updated = true;
 		}
 		else {
 			itemReturn(stack);
+			updated = true;
 		}
 	}
 	else {
 		success = add(stack, -1, false);
 	}
 
-	updated = true;
 	drag_prev_slot = -1;
 
 	return success;
@@ -192,20 +193,27 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 		return true;
 	}
 
-	if (items->items[stack.item].quest_item) {
-		return true;
-	}
-
 	if (play_sound) {
 		items->playSound(stack.item);
 	}
-	updated = true;
+
+	if (items->items[stack.item].quest_item) {
+		log_msg = msg->get("Can not store quest items in the stash.");
+		drop_stack.push(stack);
+		return false;
+	}
 
 	ItemStack leftover = stock.add(stack, slot);
 	if (!leftover.empty()) {
+		if (leftover.quantity != stack.quantity) {
+			updated = true;
+		}
 		log_msg = msg->get("Stash is full.");
 		drop_stack.push(leftover);
 		return false;
+	}
+	else {
+		updated = true;
 	}
 
 	return true;

@@ -741,16 +741,6 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 }
 
 /**
- * Similar to sell(), but for use with stash
- */
-bool MenuInventory::stashAdd(ItemStack stack) {
-	// quest items can not be stored
-	if (items->items[stack.item].quest_item) return false;
-
-	drag_prev_src = -1;
-	return true;
-}
-/**
  * Sell a specific stack of items
  */
 bool MenuInventory::sell(ItemStack stack) {
@@ -758,10 +748,18 @@ bool MenuInventory::sell(ItemStack stack) {
 	if (stack.item == CURRENCY_ID) return false;
 
 	// items that have no price cannot be sold
-	if (items->items[stack.item].getPrice() == 0) return false;
+	if (items->items[stack.item].getPrice() == 0) {
+		items->playSound(stack.item);
+		log_msg = msg->get("This item can not be sold.");
+		return false;
+	}
 
 	// quest items can not be sold
-	if (items->items[stack.item].quest_item) return false;
+	if (items->items[stack.item].quest_item) {
+		items->playSound(stack.item);
+		log_msg = msg->get("This item can not be sold.");
+		return false;
+	}
 
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
