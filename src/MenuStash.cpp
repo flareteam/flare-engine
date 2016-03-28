@@ -160,7 +160,7 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 	drag_prev_slot = stock.drag_prev_slot;
 
 	if (slot == -1) {
-		success = add(stack, -1, false);
+		success = add(stack, slot, false);
 	}
 	else if (drag_prev_slot != -1) {
 		if (stock[slot].item == stack.item || stock[slot].empty()) {
@@ -180,7 +180,7 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 		}
 	}
 	else {
-		success = add(stack, -1, false);
+		success = add(stack, slot, false);
 	}
 
 	drag_prev_slot = -1;
