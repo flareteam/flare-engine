@@ -139,20 +139,13 @@ void CampaignManager::rewardItem(ItemStack istack) {
 	if (istack.empty())
 		return;
 
-	if (menu->inv->inventory[CARRIED].full(istack.item)) {
-		drop_stack.push(istack);
-	}
-	else {
-		menu->inv->add(istack, CARRIED, -1, false, true);
+	menu->inv->add(istack, CARRIED, -1, true, true);
 
-		if (istack.item != CURRENCY_ID) {
-			if (istack.quantity <= 1)
-				addMsg(msg->get("You receive %s.", items->getItemName(istack.item)));
-			if (istack.quantity > 1)
-				addMsg(msg->get("You receive %s x%d.", istack.quantity, items->getItemName(istack.item)));
-
-			items->playSound(istack.item);
-		}
+	if (istack.item != CURRENCY_ID) {
+		if (istack.quantity <= 1)
+			addMsg(msg->get("You receive %s.", items->getItemName(istack.item)));
+		if (istack.quantity > 1)
+			addMsg(msg->get("You receive %s x%d.", istack.quantity, items->getItemName(istack.item)));
 	}
 }
 
@@ -160,10 +153,9 @@ void CampaignManager::rewardCurrency(int amount) {
 	ItemStack stack;
 	stack.item = CURRENCY_ID;
 	stack.quantity = amount;
-	if (!menu->inv->inventory[CARRIED].full(stack.item))
-		addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
+
+	addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
 	rewardItem(stack);
-	items->playSound(CURRENCY_ID);
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {

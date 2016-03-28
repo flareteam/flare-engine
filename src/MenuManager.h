@@ -91,7 +91,6 @@ private:
 
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
-	void splitStack(ItemStack stack);
 
 public:
 	MenuManager(StatBlock *stats);

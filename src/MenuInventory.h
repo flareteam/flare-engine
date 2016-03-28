@@ -80,22 +80,20 @@ public:
 
 	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
-	void drop(const Point& position, ItemStack stack);
+	bool drop(const Point& position, ItemStack stack);
 	void activate(const Point& position);
 
-	void add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip);
+	bool add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip);
 	void remove(int item);
 	void removeEquipped(int item);
 	void removeFromPrevSlot(int quantity);
 	void addCurrency(int count);
 	void removeCurrency(int count);
 	int getCurrency();
-	bool buy(ItemStack stack, int tab);
+	bool buy(ItemStack stack, int tab, bool dragging);
 	bool sell(ItemStack stack);
 	bool stashAdd(ItemStack stack);
 
-	bool full(ItemStack stack);
-	bool full(int item);
 	int getItemCountCarried(int item);
 	bool isItemEquipped(int item);
 	bool requirementsMet(int item);

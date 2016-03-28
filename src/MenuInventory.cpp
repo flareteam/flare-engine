@@ -356,21 +356,33 @@ void MenuInventory::itemReturn(ItemStack stack) {
  * Dragging and dropping an item can be used to rearrange the inventory
  * and equip items
  */
-void MenuInventory::drop(const Point& position, ItemStack stack) {
+bool MenuInventory::drop(const Point& position, ItemStack stack) {
 	items->playSound(stack.item);
+
+	bool success = true;
 
 	int area = areaOver(position);
 	if (area < 0) {
-		// not dropped into a slot. Just return it to the previous slot.
-		itemReturn(stack);
-		return;
+		if (drag_prev_src == -1) {
+			success = add(stack, CARRIED, -1, false, true);
+		}
+		else {
+			// not dropped into a slot. Just return it to the previous slot.
+			itemReturn(stack);
+		}
+		return success;
 	}
 
 	int slot = inventory[area].slotOver(position);
 	if (slot == -1) {
-		// not dropped into a slot. Just return it to the previous slot.
-		itemReturn(stack);
-		return;
+		if (drag_prev_src == -1) {
+			success = add(stack, CARRIED, -1, false, true);
+		}
+		else {
+			// not dropped into a slot. Just return it to the previous slot.
+			itemReturn(stack);
+		}
+		return success;
 	}
 
 	int drag_prev_slot = -1;
@@ -385,7 +397,7 @@ void MenuInventory::drop(const Point& position, ItemStack stack) {
 		if (slot_type[slot] == items->items[stack.item].type && items->requirementsMet(stats, stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
 			if (inventory[area][slot].item == stack.item) {
 				// Merge the stacks
-				add(stack, area, slot, false, false);
+				success = add(stack, area, slot, false, false);
 			}
 			else {
 				// Swap the two stacks
@@ -413,7 +425,7 @@ void MenuInventory::drop(const Point& position, ItemStack stack) {
 			if (slot != drag_prev_slot) {
 				if (inventory[area][slot].item == stack.item) {
 					// Merge the stacks
-					add(stack, area, slot, false, false);
+					success = add(stack, area, slot, false, false);
 				}
 				else if (inventory[area][slot].empty()) {
 					// Drop the stack
@@ -434,11 +446,9 @@ void MenuInventory::drop(const Point& position, ItemStack stack) {
 			}
 		}
 		else {
-			// note: equipment slots 0-3 correspond with item types 0-3
-			// also check to see if the hero meets the requirements
 			if (inventory[area][slot].item == stack.item || drag_prev_src == -1) {
 				// Merge the stacks
-				add(stack, area, slot, false, false);
+				success = add(stack, area, slot, false, false);
 			}
 			else if (inventory[area][slot].empty()) {
 				// Drop the stack
@@ -468,6 +478,8 @@ void MenuInventory::drop(const Point& position, ItemStack stack) {
 	}
 
 	drag_prev_src = -1;
+
+	return success;
 }
 
 /**
@@ -575,9 +587,11 @@ void MenuInventory::activate(const Point& position) {
  * @param area Area number where it will try to store the item
  * @param slot Slot number where it will try to store the item
  */
-void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip) {
+bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip) {
 	if (stack.empty())
-		return;
+		return true;
+
+	bool success = true;
 
 	if (play_sound)
 		items->playSound(stack.item);
@@ -594,7 +608,9 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 	if (area == CARRIED) {
 		ItemStack leftover = inventory[CARRIED].add(stack, slot);
 		if (!leftover.empty()) {
+			log_msg = msg->get("Inventory is full.");
 			drop_stack.push(leftover);
+			success = false;
 		}
 	}
 	else if (area == EQUIPMENT) {
@@ -632,6 +648,8 @@ void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 	}
 
 	drag_prev_src = -1;
+
+	return success;
 }
 
 /**
@@ -693,18 +711,31 @@ int MenuInventory::getCurrency() {
  * Check if there is enough currency to buy the given stack, and if so remove it from the current total and add the stack.
  * (Handle the drop into the equipment area, but add() don't handle it well in all circonstances. MenuManager::logic() allow only into the carried area.)
  */
-bool MenuInventory::buy(ItemStack stack, int tab) {
+bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
+	if (stack.empty()) {
+		return true;
+	}
+
 	int value_each;
 	if (tab == VENDOR_BUY) value_each = items->items[stack.item].getPrice();
 	else value_each = items->items[stack.item].getSellPrice();
 
 	int count = value_each * stack.quantity;
 	if( getCurrency() >= count) {
+		if (dragging) {
+			drop(inpt->mouse, stack);
+		}
+		else {
+			add(stack, CARRIED, -1, true, true);
+		}
+
 		removeCurrency(count);
 		items->playSound(CURRENCY_ID);
 		return true;
 	}
 	else {
+		log_msg = msg->get("Not enough %s.", CURRENCY);
+		drop_stack.push(stack);
 		return false;
 	}
 }
@@ -729,29 +760,15 @@ bool MenuInventory::sell(ItemStack stack) {
 	// items that have no price cannot be sold
 	if (items->items[stack.item].getPrice() == 0) return false;
 
+	// quest items can not be sold
+	if (items->items[stack.item].quest_item) return false;
+
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
 	addCurrency(value);
 	items->playSound(CURRENCY_ID);
 	drag_prev_src = -1;
 	return true;
-}
-
-/**
- * Cannot pick up new items if the inventory is full.
- * Full means no more carrying capacity (equipped capacity is ignored)
- */
-bool MenuInventory::full(ItemStack stack) {
-	return inventory[CARRIED].full(stack);
-}
-
-/**
- * An alternative version of the above full() function
- * This one only checks for a single item
- * It's primarily used when checking LootManager pickups
- */
-bool MenuInventory::full(int item) {
-	return inventory[CARRIED].full(item);
 }
 
 /**

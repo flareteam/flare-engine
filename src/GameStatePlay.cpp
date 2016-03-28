@@ -234,7 +234,7 @@ void GameStatePlay::checkLoot() {
 
 	// Autopickup
 	if (AUTOPICKUP_CURRENCY) {
-		pickup = loot->checkAutoPickup(pc->stats.pos, menu->inv);
+		pickup = loot->checkAutoPickup(pc->stats.pos);
 		if (!pickup.empty()) {
 			menu->inv->add(pickup, CARRIED, -1, true, true);
 			pickup.clear();
@@ -243,21 +243,13 @@ void GameStatePlay::checkLoot() {
 
 	// Normal pickups
 	if (!pc->stats.attacking) {
-		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, menu->inv);
+		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos);
 	}
 
 	if (!pickup.empty()) {
 		menu->inv->add(pickup, CARRIED, -1, true, true);
 		camp->setStatus(items->items[pickup.item].pickup_status);
 		pickup.clear();
-	}
-
-	if (loot->full_msg) {
-		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
-		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-		menu->questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-		menu->hudlog->add(msg->get("Inventory is full."));
-		loot->full_msg = false;
 	}
 
 }
@@ -405,8 +397,16 @@ void GameStatePlay::checkLog() {
 
 	// MenuInventory has hints to help the player use items properly
 	if (menu->inv->log_msg != "") {
+		menu->questlog->add(menu->inv->log_msg, LOG_TYPE_MESSAGES);
 		menu->hudlog->add(menu->inv->log_msg);
 		menu->inv->log_msg = "";
+	}
+
+	// MenuStash can display a message when the stash is full
+	if (menu->stash->log_msg != "") {
+		menu->questlog->add(menu->stash->log_msg, LOG_TYPE_MESSAGES);
+		menu->hudlog->add(menu->stash->log_msg);
+		menu->stash->log_msg = "";
 	}
 
 	// PowerManager has hints for powers

@@ -35,7 +35,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 
 class EnemyManager;
-class MenuInventory;
 class WidgetTooltip;
 
 // this means that normal items are 10x more common than epic items
@@ -89,9 +88,9 @@ public:
 	void addEnemyLoot(Enemy *e);
 	void addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero = false);
 	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL, std::vector<ItemStack> *itemstack_vec = NULL);
-	ItemStack checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos, MenuInventory *inv);
-	ItemStack checkAutoPickup(const FPoint& hero_pos, MenuInventory *inv);
-	ItemStack checkNearestPickup(const FPoint& hero_pos, MenuInventory *inv);
+	ItemStack checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos);
+	ItemStack checkAutoPickup(const FPoint& hero_pos);
+	ItemStack checkNearestPickup(const FPoint& hero_pos);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 
@@ -99,7 +98,6 @@ public:
 
 	StatBlock *hero;
 	int tooltip_margin; // pixels between loot drop center and label
-	bool full_msg;
 };
 
 #endif

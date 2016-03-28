@@ -38,7 +38,7 @@ MenuStash::MenuStash(StatBlock *_stats)
 	, color_normal(font->getColor("menu_normal"))
 	, stock()
 	, updated(false)
-
+	, log_msg("")
 {
 
 	setBackground("images/menus/stash.png");
@@ -145,9 +145,14 @@ void MenuStash::render() {
 /**
  * Dragging and dropping an item can be used to rearrange the stash
  */
-void MenuStash::drop(const Point& position, ItemStack stack) {
+bool MenuStash::drop(const Point& position, ItemStack stack) {
+	if (stack.empty()) {
+		return true;
+	}
+
 	int slot;
 	int drag_prev_slot;
+	bool success = true;
 
 	items->playSound(stack.item);
 
@@ -155,12 +160,12 @@ void MenuStash::drop(const Point& position, ItemStack stack) {
 	drag_prev_slot = stock.drag_prev_slot;
 
 	if (slot == -1) {
-		itemReturn(stack);
+		success = add(stack, -1, false);
 	}
-	else if (slot != drag_prev_slot) {
+	else if (drag_prev_slot != -1) {
 		if (stock[slot].item == stack.item || stock[slot].empty()) {
 			// Drop the stack, merging if needed
-			add(stack, slot);
+			success = add(stack, slot, false);
 		}
 		else if (drag_prev_slot != -1 && stock[drag_prev_slot].empty()) {
 			// Check if the previous slot is free (could still be used if SHIFT was used).
@@ -173,15 +178,37 @@ void MenuStash::drop(const Point& position, ItemStack stack) {
 		}
 	}
 	else {
-		itemReturn(stack); // cancel
+		success = add(stack, -1, false);
 	}
 
 	updated = true;
+	drag_prev_slot = -1;
+
+	return success;
 }
 
-void MenuStash::add(ItemStack stack, int slot) {
-	stock.add(stack, slot);
+bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
+	if (stack.empty()) {
+		return true;
+	}
+
+	if (items->items[stack.item].quest_item) {
+		return true;
+	}
+
+	if (play_sound) {
+		items->playSound(stack.item);
+	}
 	updated = true;
+
+	ItemStack leftover = stock.add(stack, slot);
+	if (!leftover.empty()) {
+		log_msg = msg->get("Stash is full.");
+		drop_stack.push(leftover);
+		return false;
+	}
+
+	return true;
 }
 
 /**
@@ -203,18 +230,8 @@ void MenuStash::itemReturn(ItemStack stack) {
 	stock.itemReturn(stack);
 }
 
-void MenuStash::add(ItemStack stack) {
-	items->playSound(stack.item);
-	stock.add(stack);
-	updated = true;
-}
-
 TooltipData MenuStash::checkTooltip(const Point& position) {
 	return stock.checkTooltip(position, stats, PLAYER_INV);
-}
-
-bool MenuStash::full(int item) {
-	return stock.full(item);
 }
 
 int MenuStash::getRowsCount() {

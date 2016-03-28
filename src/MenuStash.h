@@ -53,11 +53,9 @@ public:
 	void render();
 	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
-	void add(ItemStack stack);
+	bool add(ItemStack stack, int slot, bool play_sound);
 	TooltipData checkTooltip(const Point& position);
-	bool full(int item);
-	void drop(const Point& position, ItemStack stack);
-	void add(ItemStack stack, int slot);
+	bool drop(const Point& position, ItemStack stack);
 
 	int getRowsCount();
 
@@ -66,6 +64,10 @@ public:
 	Rect slots_area;
 	MenuItemStorage stock;
 	bool updated;
+
+	std::string log_msg;
+
+	std::queue<ItemStack> drop_stack;
 };
 
 

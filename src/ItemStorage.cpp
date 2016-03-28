@@ -131,7 +131,7 @@ ItemStack ItemStorage::add( ItemStack stack, int slot) {
 				slot = -1;
 			}
 		}
-		else {
+		if (slot == -1) {
 			// first search of stack to complete if the item is stackable
 			int i = 0;
 			while (max_quantity > 1 && slot == -1 && i < slot_number) {

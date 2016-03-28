@@ -607,22 +607,9 @@ void MenuManager::logic() {
 				if (inpt->pressing[CTRL]) {
 					// buy item from a vendor
 					stack = vendor->click(inpt->mouse);
-					if (!stack.empty()) {
-						if (!inv->buy(stack,vendor->getTab())) {
-							questlog->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
-							hudlog->add(msg->get("Not enough %s.", CURRENCY));
-							vendor->itemReturn( stack);
-						}
-						else {
-							if (inv->full(stack)) {
-								questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-								hudlog->add(msg->get("Inventory is full."));
-								drop_stack.push(stack);
-							}
-							else {
-								inv->add(stack, CARRIED, -1, true, true);
-							}
-						}
+					if (!inv->buy(stack, vendor->getTab(), false)) {
+						vendor->itemReturn(inv->drop_stack.front());
+						inv->drop_stack.pop();
 					}
 				}
 				else {
@@ -651,16 +638,11 @@ void MenuManager::logic() {
 				if (inpt->pressing[CTRL]) {
 					// take an item from the stash
 					stack = stash->click(inpt->mouse);
-					if (!stack.empty()) {
-						if (inv->full(stack)) {
-							questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-							hudlog->add(msg->get("Inventory is full."));
-							splitStack(stack);
-						}
-						else {
-							inv->add(stack, CARRIED, -1, true, true);
-						}
+					if (!inv->add(stack, CARRIED, -1, true, true)) {
+						stash->itemReturn(inv->drop_stack.front());
+						inv->drop_stack.pop();
 					}
+					stash->updated = true;
 				}
 				else {
 					// start dragging a stash item
@@ -685,24 +667,20 @@ void MenuManager::logic() {
 				if (inpt->pressing[CTRL]) {
 					inpt->lock[MAIN1] = true;
 					stack = inv->click(inpt->mouse);
-					if (!stack.empty()) {
-						if (stash->visible) {
-							if (inv->stashAdd(stack) && !stash->full(stack.item)) {
-								stash->add(stack);
-							}
-							else {
-								inv->itemReturn(stack);
-							}
+					if (stash->visible) {
+						if (!stash->add(stack, -1, true)) {
+							inv->itemReturn(stash->drop_stack.front());
+							stash->drop_stack.pop();
+						}
+					}
+					else {
+						// The vendor could have a limited amount of currency in the future. It will be tested here.
+						if ((SELL_WITHOUT_VENDOR || vendor->visible) && inv->sell(stack)) {
+							vendor->setTab(VENDOR_SELL);
+							vendor->add(stack);
 						}
 						else {
-							// The vendor could have a limited amount of currency in the future. It will be tested here.
-							if ((SELL_WITHOUT_VENDOR || vendor->visible) && inv->sell(stack)) {
-								vendor->setTab(VENDOR_SELL);
-								vendor->add(stack);
-							}
-							else {
-								inv->itemReturn(stack);
-							}
+							inv->itemReturn(stack);
 						}
 					}
 				}
@@ -812,12 +790,10 @@ void MenuManager::logic() {
 					}
 				}
 				else if (stash->visible && isWithin(stash->window_area, inpt->mouse)) {
-					if (inv->stashAdd( drag_stack) && !stash->full(drag_stack.item)) {
-						stash->stock.drag_prev_slot = -1;
-						stash->drop(inpt->mouse, drag_stack);
-					}
-					else {
-						inv->itemReturn(drag_stack);
+					stash->stock.drag_prev_slot = -1;
+					if (!stash->drop(inpt->mouse, drag_stack)) {
+						inv->itemReturn(stash->drop_stack.front());
+						stash->drop_stack.pop();
 					}
 				}
 				else {
@@ -826,32 +802,21 @@ void MenuManager::logic() {
 					// quest items cannot be dropped
 					if (!items->items[drag_stack.item].quest_item) {
 						drop_stack.push(drag_stack);
-						inv->clearHighlight();
 					}
 					else {
 						inv->itemReturn(drag_stack);
 					}
 				}
+				inv->clearHighlight();
 			}
 
 			else if (drag_src == DRAG_SRC_VENDOR) {
 
 				// dropping an item from vendor (we only allow to drop into the carried area)
 				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
-					if (!inv->buy(drag_stack,vendor->getTab())) {
-						questlog->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
-						hudlog->add(msg->get("Not enough %s.", CURRENCY));
-						vendor->itemReturn( drag_stack);
-					}
-					else {
-						if (inv->full(drag_stack)) {
-							questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-							hudlog->add(msg->get("Inventory is full."));
-							drop_stack.push(drag_stack);
-						}
-						else {
-							inv->drop(inpt->mouse,drag_stack);
-						}
+					if (!inv->buy(drag_stack, vendor->getTab(), true)) {
+						vendor->itemReturn(inv->drop_stack.front());
+						inv->drop_stack.pop();
 					}
 				}
 				else {
@@ -863,18 +828,17 @@ void MenuManager::logic() {
 
 				// dropping an item from stash (we only allow to drop into the carried area)
 				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
-					if (inv->full(drag_stack)) {
-						questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-						hudlog->add(msg->get("Inventory is full."));
-						splitStack(drag_stack);
-					}
-					else {
-						inv->drop(inpt->mouse,drag_stack);
+					if (!inv->drop(inpt->mouse, drag_stack)) {
+						stash->itemReturn(inv->drop_stack.front());
+						inv->drop_stack.pop();
 					}
 					stash->updated = true;
 				}
 				else if (stash->visible && isWithin(stash->window_area, inpt->mouse)) {
-					stash->drop(inpt->mouse,drag_stack);
+					if (!stash->drop(inpt->mouse,drag_stack)) {
+						drop_stack.push(stash->drop_stack.front());
+						stash->drop_stack.pop();
+					}
 				}
 				else {
 					drop_stack.push(drag_stack);
@@ -987,12 +951,15 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// sell, stash, or use item
 		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
-			if (vendor->visible && inv->sell(drag_stack) && !items->items[drag_stack.item].quest_item) {
+			if (vendor->visible && inv->sell(drag_stack)) {
 				vendor->setTab(VENDOR_SELL);
 				vendor->add(drag_stack);
 			}
-			else if (stash->visible && !stash->full(drag_stack.item) && !items->items[drag_stack.item].quest_item) {
-				stash->add(drag_stack);
+			else if (stash->visible) {
+				if (!stash->add(drag_stack, -1, true)) {
+					inv->itemReturn(stash->drop_stack.front());
+					stash->drop_stack.pop();
+				}
 			}
 			else {
 				inv->itemReturn(drag_stack);
@@ -1014,10 +981,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 		Point src_slot;
 		WidgetSlot * vendor_slot;
 
-		if (vendor->getTab() == VENDOR_BUY)
-			vendor_slot = vendor->stock[VENDOR_BUY].slots[slot_index];
-		else if (vendor->getTab() == VENDOR_SELL)
+		if (vendor->getTab() == VENDOR_SELL)
 			vendor_slot = vendor->stock[VENDOR_SELL].slots[slot_index];
+		else
+			vendor_slot = vendor->stock[VENDOR_BUY].slots[slot_index];
 
 		src_slot.x = vendor_slot->pos.x;
 		src_slot.y = vendor_slot->pos.y;
@@ -1047,20 +1014,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// if we selected a single item buy it imediately
 		// otherwise, wait until we get a result from num_picker
 		if (vendor_slot->checked && !drag_stack.empty() && !num_picker->visible) {
-			if (!inv->buy(drag_stack,vendor->getTab())) {
-				questlog->add(msg->get("Not enough %s.", CURRENCY), LOG_TYPE_MESSAGES);
-				hudlog->add(msg->get("Not enough %s.", CURRENCY));
-				vendor->itemReturn(drag_stack);
-			}
-			else {
-				if (inv->full(drag_stack)) {
-					questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-					hudlog->add(msg->get("Inventory is full."));
-					drop_stack.push(drag_stack);
-				}
-				else {
-					inv->add(drag_stack, CARRIED, -1, true, true);
-				}
+			if (!inv->buy(drag_stack, vendor->getTab(), false)) {
+				vendor->itemReturn(inv->drop_stack.front());
+				inv->drop_stack.pop();
 			}
 			drag_src = 0;
 			drag_stack.clear();
@@ -1092,7 +1048,10 @@ void MenuManager::dragAndDropWithKeyboard() {
 		// rearrange item
 		else if (slotClick == CHECKED && !drag_stack.empty()) {
 			stash->stock.slots[slot_index]->checked = false;
-			stash->drop(src_slot, drag_stack);
+			if (!stash->drop(src_slot, drag_stack)) {
+				drop_stack.push(stash->drop_stack.front());
+				stash->drop_stack.pop();
+			}
 			drag_src = 0;
 			drag_stack.clear();
 			keyboard_dragging = false;
@@ -1100,13 +1059,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 		}
 		// send to inventory
 		else if (slotClick == ACTIVATED && !drag_stack.empty()) {
-			if (!inv->full(drag_stack)) {
-				inv->add(drag_stack, CARRIED, -1, true, true);
-			}
-			else {
-				questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-				hudlog->add(msg->get("Inventory is full."));
-				splitStack(drag_stack);
+			if (!inv->add(drag_stack, CARRIED, -1, true, true)) {
+				stash->itemReturn(inv->drop_stack.front());
+				inv->drop_stack.pop();
 			}
 			drag_src = 0;
 			drag_stack.clear();
@@ -1489,22 +1444,6 @@ void MenuManager::closeRight() {
 
 bool MenuManager::isDragging() {
 	return drag_src != 0;
-}
-
-/**
- * Splits an item stack between the stash and the inventory when the latter is full
- */
-void MenuManager::splitStack(ItemStack stack) {
-	if (stack.empty()) return;
-
-	if (items->items[stack.item].max_quantity > 1) {
-		inv->add(stack, CARRIED, -1, true, true);
-		stash->add(inv->drop_stack.front());
-		inv->drop_stack.pop();
-	}
-	else {
-		stash->itemReturn(stack);
-	}
 }
 
 MenuManager::~MenuManager() {
