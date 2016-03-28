@@ -579,9 +579,10 @@ void MenuManager::logic() {
 
 		// handle left-click
 		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			resetDrag();
+
 			// clear keyboard dragging
 			if (keyboard_dragging) {
-				resetDrag();
 				keyboard_dragging = false;
 			}
 
@@ -1173,6 +1174,13 @@ void MenuManager::resetDrag() {
 		delete drag_icon;
 		drag_icon = NULL;
 	}
+
+	vendor->stock[VENDOR_BUY].drag_prev_slot = -1;
+	vendor->stock[VENDOR_SELL].drag_prev_slot = -1;
+	stash->stock.drag_prev_slot = -1;
+	inv->drag_prev_src = -1;
+	inv->inventory[EQUIPMENT].drag_prev_slot = -1;
+	inv->inventory[CARRIED].drag_prev_slot = -1;
 }
 
 void MenuManager::render() {
