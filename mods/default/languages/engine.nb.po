@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-27 22:28-0400\n"
+"POT-Creation-Date: 2016-04-02 21:38-0400\n"
 "PO-Revision-Date: 2012-12-24 14:36+0100\n"
 "Last-Translator: Hans Joachim Desserud <github@desserud.org>\n"
 "Language-Team: Norwegian Bokmal\n"
@@ -1032,7 +1032,7 @@ msgstr "Du har ikke plass til flere gjenstander."
 msgid "Not enough %s."
 msgstr "Ikke nok %s."
 
-#: ../../../src/MenuInventory.cpp:753 ../../../src/MenuInventory.cpp:760
+#: ../../../src/MenuInventory.cpp:757 ../../../src/MenuInventory.cpp:764
 msgid "This item can not be sold."
 msgstr ""
 
@@ -1047,6 +1047,10 @@ msgstr "Oppdrag"
 #: ../../../src/MenuManager.cpp:309
 #, c-format
 msgid "XP: %d/%d"
+msgstr ""
+
+#: ../../../src/MenuManager.cpp:808
+msgid "This item can not be dropped."
 msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:70

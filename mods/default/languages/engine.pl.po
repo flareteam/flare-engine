@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-27 22:28-0400\n"
+"POT-Creation-Date: 2016-04-02 21:38-0400\n"
 "PO-Revision-Date: 2013-03-22 11:58+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: \n"
@@ -1051,7 +1051,7 @@ msgstr "Ekwipunek jest pełny."
 msgid "Not enough %s."
 msgstr "Za mało %s."
 
-#: ../../../src/MenuInventory.cpp:753 ../../../src/MenuInventory.cpp:760
+#: ../../../src/MenuInventory.cpp:757 ../../../src/MenuInventory.cpp:764
 #, fuzzy
 msgid "This item can not be sold."
 msgstr "Ten przedmiot może być użyty jedynie z paska akcji."
@@ -1068,6 +1068,11 @@ msgstr "Zadania"
 #, c-format
 msgid "XP: %d/%d"
 msgstr "PD: %d/%d"
+
+#: ../../../src/MenuManager.cpp:808
+#, fuzzy
+msgid "This item can not be dropped."
+msgstr "Ten przedmiot może być użyty jedynie z paska akcji."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"

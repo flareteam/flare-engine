@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-27 22:28-0400\n"
+"POT-Creation-Date: 2016-04-02 21:38-0400\n"
 "PO-Revision-Date: 2013-03-16 11:05+0300\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -1039,7 +1039,7 @@ msgstr "Інвентар заповнений."
 msgid "Not enough %s."
 msgstr "Недостатньо %s."
 
-#: ../../../src/MenuInventory.cpp:753 ../../../src/MenuInventory.cpp:760
+#: ../../../src/MenuInventory.cpp:757 ../../../src/MenuInventory.cpp:764
 #, fuzzy
 msgid "This item can not be sold."
 msgstr "Цей предмет може бути використаний лише з панелі дій."
@@ -1056,6 +1056,11 @@ msgstr "Квести"
 #, c-format
 msgid "XP: %d/%d"
 msgstr "Досвід: %d/%d"
+
+#: ../../../src/MenuManager.cpp:808
+#, fuzzy
+msgid "This item can not be dropped."
+msgstr "Цей предмет може бути використаний лише з панелі дій."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"

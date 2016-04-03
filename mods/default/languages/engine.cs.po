@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-27 22:28-0400\n"
+"POT-Creation-Date: 2016-04-02 21:38-0400\n"
 "PO-Revision-Date: 2013-03-25 10:03+ZONE\n"
 "Last-Translator: Nikita Vaňků <ZarakaAngel@gmail.com>\n"
 "Language-Team:\n"
@@ -1045,7 +1045,7 @@ msgstr "Inventář je plný."
 msgid "Not enough %s."
 msgstr "Nedostatek peněz."
 
-#: ../../../src/MenuInventory.cpp:753 ../../../src/MenuInventory.cpp:760
+#: ../../../src/MenuInventory.cpp:757 ../../../src/MenuInventory.cpp:764
 #, fuzzy
 msgid "This item can not be sold."
 msgstr "Tento předmět může být použit pouze z akčního menu"
@@ -1062,6 +1062,11 @@ msgstr "Úkoly"
 #, c-format
 msgid "XP: %d/%d"
 msgstr ""
+
+#: ../../../src/MenuManager.cpp:808
+#, fuzzy
+msgid "This item can not be dropped."
+msgstr "Tento předmět může být použit pouze z akčního menu"
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"

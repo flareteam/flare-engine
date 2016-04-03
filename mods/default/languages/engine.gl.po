@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-27 22:28-0400\n"
+"POT-Creation-Date: 2016-04-02 21:38-0400\n"
 "PO-Revision-Date: 2014-10-26 20:31+0100\n"
 "Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -1044,7 +1044,7 @@ msgstr "O inventario está cheo."
 msgid "Not enough %s."
 msgstr "Non tes %s dabondo."
 
-#: ../../../src/MenuInventory.cpp:753 ../../../src/MenuInventory.cpp:760
+#: ../../../src/MenuInventory.cpp:757 ../../../src/MenuInventory.cpp:764
 #, fuzzy
 msgid "This item can not be sold."
 msgstr "Este obxecto só pode empregarse desde a barra de acción."
@@ -1061,6 +1061,11 @@ msgstr "Misións"
 #, c-format
 msgid "XP: %d/%d"
 msgstr "Experiencia: %d/%d"
+
+#: ../../../src/MenuManager.cpp:808
+#, fuzzy
+msgid "This item can not be dropped."
+msgstr "Este obxecto só pode empregarse desde a barra de acción."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"

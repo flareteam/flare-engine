@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-27 22:28-0400\n"
+"POT-Creation-Date: 2016-04-02 21:38-0400\n"
 "PO-Revision-Date: 2014-01-15 14:49+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig http://www.foramnagaidhlig.net\n"
@@ -1044,7 +1044,7 @@ msgstr "Tha an tasgadh làn."
 msgid "Not enough %s."
 msgstr "Chan eil %s gu leòr agad."
 
-#: ../../../src/MenuInventory.cpp:753 ../../../src/MenuInventory.cpp:760
+#: ../../../src/MenuInventory.cpp:757 ../../../src/MenuInventory.cpp:764
 #, fuzzy
 msgid "This item can not be sold."
 msgstr "Cha ghabh an nì seo cleachdadh ach on bhàr-ghnìomhan."
@@ -1061,6 +1061,11 @@ msgstr "Sireadh"
 #, c-format
 msgid "XP: %d/%d"
 msgstr "PE: %d/%d"
+
+#: ../../../src/MenuManager.cpp:808
+#, fuzzy
+msgid "This item can not be dropped."
+msgstr "Cha ghabh an nì seo cleachdadh ach on bhàr-ghnìomhan."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"

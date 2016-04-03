@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-27 22:28-0400\n"
+"POT-Creation-Date: 2016-04-02 21:38-0400\n"
 "PO-Revision-Date: 2015-06-01 01:07+0600\n"
 "Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
 "Language-Team: Russian https://github.com/SBasalaev/flare-game/wiki/\n"
@@ -1045,7 +1045,7 @@ msgstr "Инвентарь полон."
 msgid "Not enough %s."
 msgstr "Недостаточно %s."
 
-#: ../../../src/MenuInventory.cpp:753 ../../../src/MenuInventory.cpp:760
+#: ../../../src/MenuInventory.cpp:757 ../../../src/MenuInventory.cpp:764
 #, fuzzy
 msgid "This item can not be sold."
 msgstr "Этот предмет можно использовать только с панели действия."
@@ -1062,6 +1062,11 @@ msgstr "Задания"
 #, c-format
 msgid "XP: %d/%d"
 msgstr "Опыт: %d/%d"
+
+#: ../../../src/MenuManager.cpp:808
+#, fuzzy
+msgid "This item can not be dropped."
+msgstr "Этот предмет можно использовать только с панели действия."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
