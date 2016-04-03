@@ -744,6 +744,10 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
  * Sell a specific stack of items
  */
 bool MenuInventory::sell(ItemStack stack) {
+	if (stack.empty()) {
+		return false;
+	}
+
 	// can't sell currency
 	if (stack.item == CURRENCY_ID) return false;
 
