@@ -650,8 +650,14 @@ void StatBlock::logic() {
 	if(cooldown_hit_ticks > 0)
 		cooldown_hit_ticks--;
 
-	if (state_ticks > 0)
+	if (effects.stun) {
+		// stun stops charge attacks
+		state_ticks = 0;
+		charge_speed = 0;
+	}
+	else if (state_ticks > 0) {
 		state_ticks--;
+	}
 
 	// apply healing over time
 	if (effects.hpot > 0) {
