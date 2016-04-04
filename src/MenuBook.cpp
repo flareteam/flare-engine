@@ -162,9 +162,8 @@ void MenuBook::loadText(FileParser &infile) {
 	}
 	// @ATTR text.text|string|The text to be displayed.
 	else if (infile.key == "text") {
-		textData.back() = infile.val;
-		// remove comma from the end
-		textData.back() = textData.back().substr(0, textData.back().length() - 1);
+		// we use substr here to remove the comma from the end
+		textData.back() = msg->get(infile.val.substr(0, infile.val.length() - 1));
 	}
 	else {
 		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
