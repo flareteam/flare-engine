@@ -896,7 +896,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			else if (pwr.base_damage == BASE_DAMAGE_MENT)
 				ss << msg->get("Mental Damage");
 
-			if (pwr.count > 1)
+			if (pwr.count > 1 && pwr.type != POWTYPE_REPEATER)
 				ss << " (x" << pwr.count << ")";
 
 			if (!ss.str().empty())
