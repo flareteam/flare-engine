@@ -133,6 +133,10 @@ public:
 
 	// loot
 	std::vector<Event_Component> loot;
+
+	// for linking hazards together, e.g. repeaters
+	Hazard* parent;
+	std::vector<Hazard*> children;
 };
 
 #endif

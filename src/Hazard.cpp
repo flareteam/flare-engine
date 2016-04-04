@@ -79,10 +79,35 @@ Hazard::Hazard(MapCollision *_collider)
 	, walls_block_aoe(false)
 	, sfx_hit(0)
 	, sfx_hit_enable(false)
-	, sfx_hit_played(false) {
+	, sfx_hit_played(false)
+	, parent(NULL) {
 }
 
 Hazard::~Hazard() {
+	if (!parent && !children.empty()) {
+		// make the next child the parent for the existing children
+		Hazard* new_parent = children[0];
+		new_parent->parent = NULL;
+
+		for (size_t i = 1; i < children.size(); ++i) {
+			children[i]->parent = new_parent;
+			new_parent->children.push_back(children[i]);
+		}
+
+		for (size_t i = 0; i < entitiesCollided.size(); ++i) {
+			new_parent->addEntity(entitiesCollided[i]);
+		}
+	}
+	else if (parent) {
+		// remove this hazard from the parent's list of children
+		for (size_t i = 0; i < parent->children.size(); ++i) {
+			if (parent->children[i] == this) {
+				parent->children.erase(parent->children.begin() + i);
+				break;
+			}
+		}
+	}
+
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
@@ -150,13 +175,23 @@ bool Hazard::isDangerousNow() {
 }
 
 bool Hazard::hasEntity(Entity *ent) {
-	for(std::vector<Entity*>::iterator it = entitiesCollided.begin(); it != entitiesCollided.end(); ++it)
-		if(*it == ent) return true;
-	return false;
+	if (parent) {
+		return parent->hasEntity(ent);
+	}
+	else {
+		for(std::vector<Entity*>::iterator it = entitiesCollided.begin(); it != entitiesCollided.end(); ++it)
+			if(*it == ent) return true;
+		return false;
+	}
 }
 
 void Hazard::addEntity(Entity *ent) {
-	entitiesCollided.push_back(ent);
+	if (parent) {
+		parent->addEntity(ent);
+	}
+	else {
+		entitiesCollided.push_back(ent);
+	}
 }
 
 void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {

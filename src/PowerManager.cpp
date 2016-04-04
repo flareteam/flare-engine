@@ -1008,6 +1008,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint&
 
 	playSound(power_index);
 
+	Hazard* parent_haz = NULL;
 	for (int i=0; i<powers[power_index].count; i++) {
 
 		location_iterator.x += speed.x;
@@ -1024,6 +1025,14 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint&
 		haz->pos = location_iterator;
 		haz->delay_frames = delay_iterator;
 		delay_iterator += powers[power_index].delay;
+
+		if (i == 0 && powers[power_index].count > 1) {
+			parent_haz = haz;
+		}
+		else if (parent_haz != NULL && i > 0) {
+			haz->parent = parent_haz;
+			parent_haz->children.push_back(haz);
+		}
 
 		hazards.push(haz);
 	}
