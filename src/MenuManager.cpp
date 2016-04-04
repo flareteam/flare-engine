@@ -141,15 +141,6 @@ MenuManager::MenuManager(StatBlock *_stats)
 
 	tip = new WidgetTooltip();
 
-	pause = false;
-	mouse_dragging = false;
-	keyboard_dragging = false;
-	drag_stack.clear();
-	drag_power = 0;
-	drag_src = 0;
-
-	done = false;
-
 	closeAll(); // make sure all togglable menus start closed
 
 	SHOW_HUD = true;
@@ -420,8 +411,6 @@ void MenuManager::logic() {
 		if (keyboard_dragging || mouse_dragging) {
 			inpt->lock[CANCEL] = true;
 			resetDrag();
-			keyboard_dragging = false;
-			mouse_dragging = false;
 		}
 		for (size_t i=0; i<menus.size(); i++) {
 			TabList *tablist = menus[i]->getCurrentTabList();
@@ -580,11 +569,6 @@ void MenuManager::logic() {
 		// handle left-click
 		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 			resetDrag();
-
-			// clear keyboard dragging
-			if (keyboard_dragging) {
-				keyboard_dragging = false;
-			}
 
 			for (size_t i=0; i<menus.size(); ++i) {
 				if (!menus[i]->visible || (menus[i]->visible && !isWithin(menus[i]->window_area, inpt->mouse))) {
@@ -861,8 +845,6 @@ void MenuManager::logic() {
 	else {
 		if (mouse_dragging || keyboard_dragging) {
 			resetDrag();
-			mouse_dragging = false;
-			keyboard_dragging = false;
 		}
 	}
 
@@ -1136,7 +1118,6 @@ void MenuManager::dragAndDropWithKeyboard() {
 			act->slots[slot_index]->checked = false;
 			resetDrag();
 			inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
-			keyboard_dragging = false;
 		}
 		// rearrange actionbar
 		else if ((slotClick == CHECKED || slotClick == ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {
@@ -1184,6 +1165,10 @@ void MenuManager::resetDrag() {
 	inv->drag_prev_src = -1;
 	inv->inventory[EQUIPMENT].drag_prev_slot = -1;
 	inv->inventory[CARRIED].drag_prev_slot = -1;
+
+	keyboard_dragging = false;
+	mouse_dragging = false;
+	sticky_dragging = false;
 }
 
 void MenuManager::render() {
