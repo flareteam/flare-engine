@@ -305,7 +305,13 @@ void BehaviorStandard::checkPower() {
 			int power_id = e->stats.activated_power->id;
 
 			powers->activate(power_id, &e->stats, pursue_pos);
-			e->stats.activated_power->ticks = powers->powers[power_id].cooldown;
+
+			// set cooldown for all ai powers with the same power id
+			for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
+				if (e->stats.activated_power->id == e->stats.powers_ai[i].id) {
+					e->stats.powers_ai[i].ticks = powers->powers[power_id].cooldown;
+				}
+			}
 
 			if (e->stats.activated_power->type == AI_POWER_HALF_DEAD) {
 				e->stats.half_dead_power = false;
