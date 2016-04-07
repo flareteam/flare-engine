@@ -324,6 +324,8 @@ body {
 
 <p><strong>statbar_labels</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Always show stat bar labels" checkbox relative to the frame.</p>
 
+<p><strong>auto_equip</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Automatically equip items" checkbox relative to the frame.</p>
+
 <p><strong>activemods</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Active Mods" list box relative to the frame.</p>
 
 <p><strong>inactivemods</strong>, <em>label x (integer), label y (integer), x (integer), y (integer)</em>, Position of the "Available Mods" list box relative to the frame.</p>
@@ -1324,6 +1326,10 @@ body {
 
 <p><strong>multitarget</strong>, <em>bool</em>, Allows a hazard power to hit more than one entity.</p>
 
+<p><strong>multihit</strong>, <em>bool</em>, Allows a hazard power to hit the same entity more than once.</p>
+
+<p><strong>expire_with_caster</strong>, <em>bool</em>, If true, hazard will disappear when the caster dies.</p>
+
 <p><strong>trait_armor_penetration</strong>, <em>bool</em>, Ignores the target's Absorbtion stat</p>
 
 <p><strong>trait_avoidance_ignore</strong>, <em>bool</em>, Ignores the target's Avoidance stat</p>
@@ -1332,7 +1338,7 @@ body {
 
 <p><strong>trait_elemental</strong>, <em>string</em>, Damage done is elemental. See engine/elements.txt</p>
 
-<p><strong>target_range</strong>, <em>float</em>, </p>
+<p><strong>target_range</strong>, <em>float</em>, The distance from the caster that the power can be activated</p>
 
 <p><strong>hp_steal</strong>, <em>integer</em>, Percentage of damage to steal into HP</p>
 
