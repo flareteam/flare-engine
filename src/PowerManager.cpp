@@ -350,7 +350,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "target_range")
-			// @ATTR target_range|float||The distance from the caster that the power can be activated
+			// @ATTR target_range|float|The distance from the caster that the power can be activated
 			powers[input_id].target_range = toFloat(infile.nextValue());
 		//steal effects
 		else if (infile.key == "hp_steal")

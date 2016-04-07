@@ -453,7 +453,7 @@ void BehaviorStandard::checkMoveStateStance() {
 
 	// try to move to the target if we're either:
 	// 1. too far away and chance_pursue roll succeeds
-	// 2. within range, but lack line-pf-sight (required to attack)
+	// 2. within range, but lack line-of-sight (required to attack)
 	bool should_move_to_target = (target_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los);
 
 	if (should_move_to_target || fleeing) {
