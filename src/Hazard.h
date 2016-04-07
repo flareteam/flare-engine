@@ -103,6 +103,7 @@ public:
 	bool active;
 
 	bool multihit;
+	bool expire_with_caster;
 
 	bool remove_now;
 	bool hit_wall;

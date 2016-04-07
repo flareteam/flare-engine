@@ -63,6 +63,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, multitarget(false)
 	, active(true)
 	, multihit(false)
+	, expire_with_caster(false)
 	, remove_now(false)
 	, hit_wall(false)
 	, hp_steal(0)
@@ -126,6 +127,9 @@ void Hazard::logic() {
 
 	// handle tickers
 	if (lifespan > 0) lifespan--;
+
+	if (expire_with_caster && !src_stats->alive)
+		lifespan = 0;
 
 	if (activeAnimation)
 		activeAnimation->advanceFrame();

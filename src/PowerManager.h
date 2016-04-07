@@ -175,6 +175,7 @@ public:
 	bool relative_pos;
 	bool multitarget;
 	bool multihit;
+	bool expire_with_caster;
 	float target_range;
 	bool target_party;
 	std::vector<std::string> target_categories;
@@ -296,6 +297,7 @@ public:
 		, relative_pos(false)
 		, multitarget(false)
 		, multihit(false)
+		, expire_with_caster(false)
 		, target_range(0)
 		, target_party(false)
 		, mod_accuracy_mode(-1)
