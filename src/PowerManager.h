@@ -174,6 +174,7 @@ public:
 	int starting_pos; // enum. (source, target, or melee)
 	bool relative_pos;
 	bool multitarget;
+	bool multihit;
 	float target_range;
 	bool target_party;
 	std::vector<std::string> target_categories;
@@ -294,6 +295,7 @@ public:
 		, starting_pos(STARTING_POS_SOURCE)
 		, relative_pos(false)
 		, multitarget(false)
+		, multihit(false)
 		, target_range(0)
 		, target_party(false)
 		, mod_accuracy_mode(-1)

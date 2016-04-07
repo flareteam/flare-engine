@@ -102,6 +102,8 @@ public:
 	bool multitarget;
 	bool active;
 
+	bool multihit;
+
 	bool remove_now;
 	bool hit_wall;
 

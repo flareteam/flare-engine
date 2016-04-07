@@ -331,6 +331,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "multitarget")
 			// @ATTR multitarget|bool|Allows a hazard power to hit more than one entity.
 			powers[input_id].multitarget = toBool(infile.val);
+		else if (infile.key == "multihit")
+			// @ATTR multihit|bool|Allows a hazard power to hit the same entity more than once.
+			powers[input_id].multihit = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
 			// @ATTR trait_armor_penetration|bool|Ignores the target's Absorbtion stat
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
@@ -710,6 +713,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	haz->active = !powers[power_index].no_attack;
 
 	haz->multitarget = powers[power_index].multitarget;
+	haz->multihit = powers[power_index].multihit;
 	haz->trait_armor_penetration = powers[power_index].trait_armor_penetration;
 	haz->trait_crits_impaired += powers[power_index].trait_crits_impaired;
 

@@ -62,6 +62,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, complete_animation(false)
 	, multitarget(false)
 	, active(true)
+	, multihit(false)
 	, remove_now(false)
 	, hit_wall(false)
 	, hp_steal(0)
@@ -180,6 +181,10 @@ bool Hazard::isDangerousNow() {
 }
 
 bool Hazard::hasEntity(Entity *ent) {
+	if (multihit) {
+		return false;
+	}
+
 	if (parent) {
 		return parent->hasEntity(ent);
 	}
