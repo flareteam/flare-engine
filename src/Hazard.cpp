@@ -49,6 +49,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, pos()
 	, speed()
 	, pos_offset()
+	, relative_pos(false)
 	, base_speed(0)
 	, angle(0)
 	, base_lifespan(1)
@@ -139,6 +140,10 @@ void Hazard::logic() {
 		pos.x = src_stats->pos.x - pos_offset.x;
 		pos.y = src_stats->pos.y - pos_offset.y;
 		check_collide = true;
+	}
+	else if (relative_pos) {
+		pos.x = src_stats->pos.x;
+		pos.y = src_stats->pos.y;
 	}
 
 	if (check_collide) {

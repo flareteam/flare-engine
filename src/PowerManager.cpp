@@ -735,6 +735,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 
 	if (powers[power_index].relative_pos) {
+		haz->relative_pos = true;
 		haz->pos_offset.x = src_stats->pos.x - haz->pos.x;
 		haz->pos_offset.y = src_stats->pos.y - haz->pos.y;
 	}
