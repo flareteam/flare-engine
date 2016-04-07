@@ -213,6 +213,7 @@ void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
 		re.map_pos.x = pos.x;
 		re.map_pos.y = pos.y;
+		re.prio = (on_floor ? 0 : 2);
 		(on_floor ? r_dead : r).push_back(re);
 	}
 }
