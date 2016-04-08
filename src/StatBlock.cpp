@@ -812,7 +812,7 @@ void StatBlock::removeSummons() {
 		(*it)->hp = 0;
 		(*it)->effects.triggered_death = true;
 		(*it)->effects.clearEffects();
-		if (!(*it)->hero) {
+		if (!(*it)->hero && !(*it)->corpse) {
 			(*it)->cur_state = ENEMY_DEAD;
 			(*it)->corpse_ticks = CORPSE_TIMEOUT;
 		}
