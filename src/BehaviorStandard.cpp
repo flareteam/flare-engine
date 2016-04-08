@@ -242,7 +242,7 @@ void BehaviorStandard::findTarget() {
 	if(e->stats.effects.fear) fleeing = true;
 
 	// If we have a successful chance_flee roll, try to move to a safe distance
-	if (e->stats.cur_state == ENEMY_STANCE && !move_to_safe_dist && hero_dist < e->stats.threat_range/2 && hero_dist >= e->stats.melee_range && percentChance(e->stats.chance_flee) && !collided)
+	if (e->stats.cur_state == ENEMY_STANCE && !move_to_safe_dist && hero_dist < e->stats.threat_range/2 && hero_dist >= e->stats.melee_range && percentChance(e->stats.chance_flee))
 		move_to_safe_dist = true;
 
 	if (move_to_safe_dist) fleeing = true;
@@ -469,21 +469,15 @@ void BehaviorStandard::checkMoveStateStance() {
 		}
 		else {
 			collided = true;
-			if (fleeing || move_to_safe_dist) {
-				fleeing = false;
-				move_to_safe_dist = false;
-			}
-			else {
-				unsigned char prev_direction = e->stats.direction;
+			unsigned char prev_direction = e->stats.direction;
 
-				// hit an obstacle, try the next best angle
-				e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-				if (e->move()) {
-					e->stats.cur_state = ENEMY_MOVE;
-				}
-				else
-					e->stats.direction = prev_direction;
+			// hit an obstacle, try the next best angle
+			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+			if (e->move()) {
+				e->stats.cur_state = ENEMY_MOVE;
 			}
+			else
+				e->stats.direction = prev_direction;
 		}
 	}
 }
@@ -498,19 +492,12 @@ void BehaviorStandard::checkMoveStateMove() {
 	// try to continue moving
 	else if (!e->move()) {
 		collided = true;
-		if (fleeing || move_to_safe_dist) {
+		unsigned char prev_direction = e->stats.direction;
+		// hit an obstacle.  Try the next best angle
+		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+		if (!e->move()) {
 			e->stats.cur_state = ENEMY_STANCE;
-		}
-		else {
-			unsigned char prev_direction = e->stats.direction;
-			// hit an obstacle.  Try the next best angle
-			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
-			if (!e->move()) {
-				e->stats.cur_state = ENEMY_STANCE;
-				e->stats.direction = prev_direction;
-				fleeing = false;
-				move_to_safe_dist = false;
-			}
+			e->stats.direction = prev_direction;
 		}
 	}
 }
