@@ -246,6 +246,40 @@ void BehaviorStandard::findTarget() {
 		move_to_safe_dist = true;
 
 	if (move_to_safe_dist) fleeing = true;
+
+	if (fleeing) {
+		FPoint target_pos = pursue_pos;
+
+		std::vector<int> flee_dirs;
+
+		int middle_dir = calcDirection(target_pos, e->stats.pos);
+		for (int i = -2; i <= 2; ++i) {
+			int test_dir = rotateDirection(middle_dir, i);
+
+			FPoint test_pos = calcVector(e->stats.pos, test_dir, 1);
+			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, false)) {
+				if (test_dir == e->stats.direction) {
+					// if we're already moving in a good direction, favor it over other directions
+					flee_dirs.clear();
+					flee_dirs.push_back(test_dir);
+					break;
+				}
+				else {
+					flee_dirs.push_back(test_dir);
+				}
+			}
+		}
+
+		if (flee_dirs.empty()) {
+			// trapped and can't move
+			move_to_safe_dist = false;
+			fleeing = false;
+		}
+		else {
+			int index = randBetween(0, static_cast<int>(flee_dirs.size())-1);
+			pursue_pos = calcVector(e->stats.pos, flee_dirs[index], 1);
+		}
+	}
 }
 
 /**
@@ -255,7 +289,7 @@ void BehaviorStandard::findTarget() {
 void BehaviorStandard::checkPower() {
 
 	// stunned enemies can't act
-	if (e->stats.effects.stun || fleeing) return;
+	if (e->stats.effects.stun || e->stats.effects.fear || fleeing) return;
 
 	// currently all enemy power use happens during combat
 	if (!e->stats.in_combat) return;
@@ -412,10 +446,7 @@ void BehaviorStandard::checkMove() {
 			}
 
 			if (e->stats.charge_speed == 0.0f) {
-				if(fleeing)
-					e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
-				else
-					e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+				e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
 			}
 			e->stats.turn_ticks = 0;
 		}

@@ -229,4 +229,6 @@ FPoint clampDistance(float range, const FPoint& src, const FPoint& target);
 
 bool rectsOverlap(const Rect &a, const Rect &b);
 
+int rotateDirection(int direction, int val);
+
 #endif

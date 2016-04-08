@@ -447,3 +447,13 @@ bool rectsOverlap(const Rect &a, const Rect &b) {
 
 	return a_in_b || b_in_a;
 }
+
+int rotateDirection(int direction, int val) {
+	direction += val;
+	if (direction > 7)
+		direction -= 7;
+	else if (direction < 0)
+		direction += 7;
+
+	return direction;
+}
