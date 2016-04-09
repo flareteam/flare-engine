@@ -241,6 +241,7 @@ bool Animation::syncTo(const Animation *other) {
 
 void Animation::setActiveFrames(const std::vector<short> &_active_frames) {
 	if (_active_frames.size() == 1 && _active_frames[0] == -1) {
+		active_frames.clear();
 		for (unsigned short i = 0; i < number_frames; ++i)
 			active_frames.push_back(i);
 	}
