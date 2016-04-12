@@ -281,8 +281,6 @@ void MenuActionBar::render() {
 			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
 							  && (hero->power_cast_ticks[hotkeys_mod[i]] == 0)
 							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
-							  && !hero->stats.effects.stun
-							  && hero->stats.alive
 							  && hero->stats.canUsePower(power, hotkeys_mod[i])
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
