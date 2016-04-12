@@ -110,7 +110,7 @@ StatBlock::StatBlock()
 	, knockback_srcpos()
 	, knockback_destpos()
 	, direction(0)
-	, cooldown_hit(0)
+	, cooldown_hit(-1)
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
 	, state_ticks(0)
@@ -187,6 +187,11 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	else if (infile->key == "cooldown") {
 		// @ATTR cooldown|integer|Cooldown between attacks in 'ms' or 's'.
 		cooldown = parse_duration(infile->val);
+		return true;
+	}
+	else if (infile->key == "cooldown_hit") {
+		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
+		cooldown_hit = parse_duration(infile->val);
 		return true;
 	}
 	else {
@@ -347,8 +352,6 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		// @ATTR chance_flee|integer|Percentage chance that the creature will run away from their target.
 		else if (infile.key == "chance_flee") chance_flee = num;
-		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
-		else if (infile.key == "cooldown_hit") cooldown_hit = parse_duration(infile.val);
 
 		else if (infile.key == "power") {
 			// @ATTR power|type (string), power id (integer), chance (integer)|A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, on_hit, on_death, on_half_dead, on_join_combat, on_debuff

@@ -63,6 +63,18 @@ Avatar::Avatar()
 	animationSet = anim->getAnimationSet("animations/hero.txt");
 	activeAnimation = animationSet->getAnimation();
 
+	// set cooldown_hit to duration of hit animation if undefined
+	if (stats.cooldown_hit == -1) {
+		Animation *hit_anim = animationSet->getAnimation("hit");
+		if (hit_anim) {
+			stats.cooldown_hit = hit_anim->getDuration();
+			delete hit_anim;
+		}
+		else {
+			stats.cooldown_hit = 0;
+		}
+	}
+
 	loadLayerDefinitions();
 
 	// load target animation

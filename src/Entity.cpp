@@ -231,6 +231,10 @@ bool Entity::takeHit(Hazard &h) {
 	if (h.walls_block_aoe && !mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, h.pos.x, h.pos.y, MOVEMENT_NORMAL))
 		return false;
 
+	// entity can't be damaged when in hit state, be it animation or cooldown
+	if (stats.cooldown_hit_ticks > 0)
+		return false;
+
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
 	if (!stats.in_combat && !stats.hero && !stats.hero_ally) {
 		stats.join_combat = true;
@@ -479,13 +483,14 @@ bool Entity::takeHit(Hazard &h) {
 
 		// don't go through a hit animation if stunned or successfully poised
 		// however, critical hits ignore poise
-		if (!stats.effects.stun && (!chance_poise || crit)) {
-			if(stats.cooldown_hit_ticks == 0) {
+		if(stats.cooldown_hit_ticks == 0) {
+			stats.cooldown_hit_ticks = stats.cooldown_hit;
+
+			if (!stats.effects.stun && (!chance_poise || crit)) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
 				else
 					stats.cur_state = ENEMY_HIT;
-				stats.cooldown_hit_ticks = stats.cooldown_hit;
 
 				if (stats.untransform_on_hit)
 					stats.transform_duration = 0;
