@@ -99,6 +99,7 @@ public:
 	std::vector<bool> slot_enabled;
 	bool requires_attention[4];
 	std::vector<bool> slot_activated;
+	std::vector<int> slot_cooldown_size;
 
 	int drag_prev_slot;
 	bool updated;

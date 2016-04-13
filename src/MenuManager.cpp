@@ -854,42 +854,6 @@ void MenuManager::logic() {
 		// the equipment flags get reset in GameStatePlay
 	}
 
-	// for action-bar powers that represent items, lookup the current item count
-	for (unsigned i = 0; i < act->slots_count; i++) {
-		act->slot_enabled[i] = true;
-		act->setItemCount(i, -1);
-
-		if (act->hotkeys[i] != -1) {
-			// first check if we're using a two-step power
-			if (act->twostep_slot != -1 && static_cast<unsigned>(act->twostep_slot) != i) {
-				act->slot_enabled[i] = false;
-				continue;
-			}
-
-			int item_id = 0;
-			int equipped_item_id = 0;
-
-			if (static_cast<unsigned>(act->hotkeys[i]) < powers->powers.size()) {
-				item_id = powers->powers[act->hotkeys[i]].requires_item;
-				equipped_item_id = powers->powers[act->hotkeys[i]].requires_equipped_item;
-			}
-
-			if (equipped_item_id > 0) {
-				// if a non-consumable item power is unequipped, disable that slot
-				if (!inv->isItemEquipped(equipped_item_id)) {
-					act->setItemCount(i, 0, true);
-				}
-				else {
-					act->setItemCount(i, 1, true);
-				}
-			}
-			else if (item_id > 0) {
-				act->setItemCount(i, inv->getItemCountCarried(item_id));
-			}
-
-		}
-	}
-
 	if (drag_icon && !(mouse_dragging || keyboard_dragging)) {
 		delete drag_icon;
 		drag_icon = NULL;

@@ -28,6 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
+#include "MenuInventory.h"
+#include "MenuManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
@@ -142,6 +144,7 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	slot_item_count.resize(slots_count);
 	slot_enabled.resize(slots_count);
 	slot_activated.resize(slots_count);
+	slot_cooldown_size.resize(slots_count);
 
 	clear();
 
@@ -206,6 +209,7 @@ void MenuActionBar::clear() {
 		slot_enabled[i] = true;
 		locked[i] = false;
 		slot_activated[i] = false;
+		slot_cooldown_size[i] = 0;
 	}
 
 	// clear menu notifications
@@ -264,6 +268,56 @@ void MenuActionBar::renderAttention(int menu_id) {
 
 void MenuActionBar::logic() {
 	tablist.logic();
+
+	for (unsigned i = 0; i < slots_count; i++) {
+		if (!slots[i]) continue;
+
+		if (hotkeys[i] > 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
+			const Power &power = powers->getPower(hotkeys_mod[i]);
+
+			int item_id = power.requires_item;
+			int equipped_item_id = power.requires_equipped_item;
+
+			if (equipped_item_id > 0) {
+				// if a non-consumable item power is unequipped, disable that slot
+				if (!menu->inv->isItemEquipped(equipped_item_id)) {
+					setItemCount(i, 0, true);
+				}
+				else {
+					setItemCount(i, 1, true);
+				}
+			}
+			else if (item_id > 0) {
+				setItemCount(i, menu->inv->getItemCountCarried(item_id));
+			}
+			else {
+				setItemCount(i, -1);
+			}
+
+			//see if the slot should be greyed out
+			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
+							  && (hero->power_cast_ticks[hotkeys_mod[i]] == 0)
+							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
+							  && hero->stats.canUsePower(power, hotkeys_mod[i])
+							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
+
+			slots[i]->setIcon(power.icon);
+		}
+		else {
+			slot_enabled[i] = true;
+		}
+
+		if (hero->power_cast_ticks[hotkeys_mod[i]] > 0 && hero->power_cast_duration[hotkeys_mod[i]] > 0) {
+			slot_cooldown_size[i] = (ICON_SIZE * hero->power_cast_ticks[hotkeys_mod[i]]) / hero->power_cast_duration[hotkeys_mod[i]];
+		}
+		else if (hero->hero_cooldown[hotkeys_mod[i]] > 0 && powers->powers[hotkeys_mod[i]].cooldown > 0) {
+			slot_cooldown_size[i] = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
+		}
+		else {
+			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : ICON_SIZE);;
+		}
+	}
+
 }
 
 void MenuActionBar::render() {
@@ -274,17 +328,7 @@ void MenuActionBar::render() {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 
-		if (hotkeys[i] != 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
-			const Power &power = powers->getPower(hotkeys_mod[i]);
-
-			//see if the slot should be greyed out
-			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
-							  && (hero->power_cast_ticks[hotkeys_mod[i]] == 0)
-							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
-							  && hero->stats.canUsePower(power, hotkeys_mod[i])
-							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
-
-			slots[i]->setIcon(power.icon);
+		if (hotkeys[i] != 0) {
 			slots[i]->render();
 		}
 		else {
@@ -327,15 +371,10 @@ void MenuActionBar::renderCooldowns() {
 
 			// Wipe from bottom to top
 			if (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i) {
-				if (hero->power_cast_ticks[hotkeys_mod[i]] > 0 && hero->power_cast_duration[hotkeys_mod[i]] > 0) {
-					item_src.h = (ICON_SIZE * hero->power_cast_ticks[hotkeys_mod[i]]) / hero->power_cast_duration[hotkeys_mod[i]];
-				}
-				else if (hero->hero_cooldown[hotkeys_mod[i]] > 0 && powers->powers[hotkeys_mod[i]].cooldown > 0) {
-					item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
-				}
+				item_src.h = slot_cooldown_size[i];
 			}
 
-			if (sprite_disabled) {
+			if (sprite_disabled && item_src.h > 0) {
 				sprite_disabled->setClip(item_src);
 				sprite_disabled->setDest(slots[i]->pos);
 				render_device->render(sprite_disabled);
@@ -568,6 +607,7 @@ int MenuActionBar::checkDrag(const Point& mouse) {
 			hotkeys[i] = 0;
 			last_mouse = mouse;
 			updated = true;
+			twostep_slot = -1;
 			return power_index;
 		}
 	}

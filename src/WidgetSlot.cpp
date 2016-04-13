@@ -103,7 +103,8 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	// disabled slots can't be clicked;
 	if (!enabled) return NO_CLICK;
 
-	if (continuous && pressed && checked && (inpt->lock[MAIN2] || inpt->lock[ACTIVATE] || inpt->touch_locked)) return ACTIVATED;
+	if (continuous && pressed && checked && (inpt->lock[MAIN2] || inpt->lock[ACTIVATE] || inpt->touch_locked))
+		return ACTIVATED;
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return NO_CLICK;
@@ -116,6 +117,8 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 		checked = !checked;
 		if (checked)
 			return CHECKED;
+		else if (continuous)
+			return NO_CLICK;
 		else
 			return ACTIVATED;
 	}
