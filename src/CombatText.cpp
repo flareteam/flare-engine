@@ -144,3 +144,7 @@ void CombatText::render() {
 			it->label->render();
 	}
 }
+
+void CombatText::clear() {
+	combat_text.clear();
+}

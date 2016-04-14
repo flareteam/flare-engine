@@ -61,6 +61,7 @@ public:
 	void render();
 	void addMessage(const std::string& message, const FPoint& location, int displaytype);
 	void addMessage(int num, const FPoint& location, int displaytype);
+	void clear();
 
 private:
 	FPoint cam;

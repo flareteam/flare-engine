@@ -158,6 +158,9 @@ int MapRenderer::load(const std::string& fname) {
 		powers->enemies.pop();
 	}
 
+	// clear combat text
+	comb->clear();
+
 	show_tooltip = false;
 
 	Map::load(fname);
