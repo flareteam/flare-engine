@@ -3,7 +3,7 @@ Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
-Copyright © 2014 Justin Jacobs
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 

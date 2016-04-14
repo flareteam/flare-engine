@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Thane Brimhall
 Copyright © 2013 Henrik Andersson
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 

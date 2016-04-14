@@ -1,5 +1,5 @@
 /*
-Copyright © 2012 Justin Jacobs
+Copyright © 2012-2016 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
 

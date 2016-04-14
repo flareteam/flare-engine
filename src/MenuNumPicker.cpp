@@ -1,5 +1,5 @@
 /*
-Copyright © 2015 Justin Jacobs
+Copyright © 2015-2016 Justin Jacobs
 
 This file is part of FLARE.
 

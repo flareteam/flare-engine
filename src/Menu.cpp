@@ -2,6 +2,7 @@
 Copyright © 2011-2012 kitano
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 

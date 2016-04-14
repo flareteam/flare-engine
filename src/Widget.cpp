@@ -1,6 +1,7 @@
 /*
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Joseph Bleau
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 

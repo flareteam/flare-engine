@@ -1,5 +1,6 @@
 /*
 Copyright © 2013 Ryan Dansie
+Copyright © 2014-2015 Justin Jacobs
 
 This file is part of FLARE.
 

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 kitano
+Copyright © 2014-2015 Justin Jacobs
 
 This file is part of FLARE.
 

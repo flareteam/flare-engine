@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Thane Brimhall
+Copyright © 2013-2015 Justin Jacobs
 		Manuel A. Fernandez Montecelo <manuel.montezelo@gmail.com>
 
 This file is part of FLARE.

@@ -1,5 +1,6 @@
 /*
 Copyright © 2015 Igor Paliychuk
+Copyright © 2015 Justin Jacobs
 
 This file is part of FLARE.
 
