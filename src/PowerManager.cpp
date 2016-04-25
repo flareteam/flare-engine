@@ -505,7 +505,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_accuracy_value = popFirstInt(infile.val);
 		}
 		else if (infile.key == "modifier_damage") {
-			// @ATTR modifier_damage|[multiply:add:absolute], integer|Changes this power's damage.
+			// @ATTR modifier_damage|[multiply:add:absolute], min (integer), max (integer)|Changes this power's damage. The "max" value is ignored, except in the case of "absolute" modifiers.
 			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
@@ -849,7 +849,6 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 
 			if (effect_data.type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
-				// TODO: MULTIPLY and ADD don't account for mod_damage_value_max. Is this okay?
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
@@ -865,7 +864,6 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				// heal for ment weapon damage * damage multiplier
 				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
 
-				// TODO: MULTIPLY and ADD don't account for mod_damage_value_max. Is this okay?
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
