@@ -231,7 +231,8 @@ int SDLHardwareRenderDevice::createContext(bool allow_fallback) {
 		updateTitleBar();
 
 		// load persistent resources
-		SharedResources::loadIcons();
+		delete icons;
+		icons = new IconManager();
 		delete curs;
 		curs = new CursorManager();
 	}
@@ -394,6 +395,10 @@ void SDLHardwareRenderDevice::destroyContext() {
 	RenderDevice::cacheRemoveAll();
 	reload_graphics = true;
 
+	if (icons) {
+		delete icons;
+		icons = NULL;
+	}
 	if (curs) {
 		delete curs;
 		curs = NULL;

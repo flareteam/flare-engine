@@ -172,18 +172,8 @@ void WidgetSlot::render() {
 	Rect src;
 
 	if (icon_id != -1 && icons) {
-		int columns = icons->getGraphicsWidth() / ICON_SIZE;
-		src.x = (icon_id % columns) * ICON_SIZE;
-		src.y = (icon_id / columns) * ICON_SIZE;
-
-		src.w = pos.w;
-		src.h = pos.h;
-
-		icons->local_frame = local_frame;
-		icons->setOffset(local_offset);
-		icons->setClip(src);
-		icons->setDest(pos);
-		render_device->render(icons);
+		icons->setIcon(icon_id, Point(pos.x, pos.y));
+		icons->render();
 
 		if (amount > 1 || max_amount > 1) {
 			std::stringstream ss;

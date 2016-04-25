@@ -72,7 +72,8 @@ void MenuActiveEffects::loadGraphics() {
 
 void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max) {
 	if (icon_id > -1) {
-		Rect pos,src,overlay;
+		Point pos;
+		Rect src, overlay;
 		if (orientation == 0) {
 			pos.x = window_area.x + (index * ICON_SIZE);
 			pos.y = window_area.y;
@@ -82,14 +83,8 @@ void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max)
 			pos.y = window_area.y + (index * ICON_SIZE);
 		}
 
-		int columns = icons->getGraphicsWidth() / ICON_SIZE;
-		src.x = (icon_id % columns) * ICON_SIZE;
-		src.y = (icon_id / columns) * ICON_SIZE;
-		src.w = src.h = ICON_SIZE;
-
-		icons->setClip(src);
-		icons->setDest(pos);
-		render_device->render(icons);
+		icons->setIcon(icon_id, pos);
+		icons->render();
 
 		if (max > 0) {
 			overlay.x = 0;

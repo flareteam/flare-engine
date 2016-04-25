@@ -175,16 +175,8 @@ void MenuManager::setDragIcon(int icon_id) {
 		drag_icon = graphics->createSprite();
 		graphics->unref();
 
-		Rect src, dest;
-		src.w = src.h = dest.w = dest.h = ICON_SIZE;
-
-		int columns = icons->getGraphicsWidth() / ICON_SIZE;
-		src.x = (icon_id % columns) * ICON_SIZE;
-		src.y = (icon_id / columns) * ICON_SIZE;
-
-		icons->setClip(src);
-		icons->setDest(dest);
-		render_device->renderToImage(icons->getGraphics(), src, drag_icon->getGraphics(), dest);
+		icons->setIcon(icon_id, Point());
+		icons->renderToImage(drag_icon->getGraphics());
 	}
 }
 

@@ -126,6 +126,7 @@ Set (FLARE_SOURCES
 	./src/GetText.cpp
 	./src/Hazard.cpp
 	./src/HazardManager.cpp
+	./src/IconManager.cpp
 	./src/InputState.cpp
 	./src/ItemManager.cpp
 	./src/ItemStorage.cpp
@@ -232,6 +233,7 @@ Set (FLARE_HEADERS
 	./src/GetText.h
 	./src/Hazard.h
 	./src/HazardManager.h
+	./src/IconManager.h
 	./src/InputState.h
 	./src/ItemManager.h
 	./src/ItemStorage.h
