@@ -21,7 +21,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "Utils.h"
 
-struct IconSet {
+class IconSet {
+public:
+	IconSet();
+
 	Sprite *gfx;
 	int id_begin;
 	int id_end;
@@ -38,7 +41,7 @@ public:
 	void renderToImage(Image *img);
 
 private:
-	bool loadIconSet(struct IconSet* icon_set, const std::string& filename, int first_id);
+	bool loadIconSet(IconSet& icon_set, const std::string& filename, int first_id);
 
 	std::vector<IconSet> icon_sets;
 	IconSet *current_set;

@@ -21,6 +21,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
+IconSet::IconSet()
+	: gfx(NULL)
+	, id_begin(0)
+	, id_end(0)
+	, columns(1)
+{
+}
+
 IconManager::IconManager()
 	: current_set(NULL)
 {
@@ -35,7 +43,7 @@ IconManager::IconManager()
 				std::string filename = popFirstString(infile.val, ',');
 
 				icon_sets.resize(icon_sets.size()+1);
-				if (!loadIconSet(&icon_sets.back(), filename, first_id)) {
+				if (!loadIconSet(icon_sets.back(), filename, first_id)) {
 					icon_sets.pop_back();
 				}
 			}
@@ -45,7 +53,7 @@ IconManager::IconManager()
 	else {
 		// no icons.txt file, so load icons.png legacy-style
 		icon_sets.resize(1);
-		if (!loadIconSet(&icon_sets.back(), "images/icons/icons.png", 0)) {
+		if (!loadIconSet(icon_sets.back(), "images/icons/icons.png", 0)) {
 			icon_sets.pop_back();
 		}
 	}
@@ -57,27 +65,27 @@ IconManager::~IconManager() {
 	}
 }
 
-bool IconManager::loadIconSet(struct IconSet* iset, const std::string& filename, int first_id) {
-	if (!render_device || !iset)
+bool IconManager::loadIconSet(IconSet& iset, const std::string& filename, int first_id) {
+	if (!render_device || ICON_SIZE == 0)
 		return false;
-
-	iset->gfx = NULL;
-	iset->id_begin = 0;
-	iset->id_end = 0;
-	iset->columns = 0;
 
 	Image *graphics = render_device->loadImage(filename, "Couldn't load icon graphics file", false);
 	if (graphics) {
-		iset->gfx = graphics->createSprite();
+		iset.gfx = graphics->createSprite();
 		graphics->unref();
 	}
 
-	if (iset->gfx) {
-		int rows = iset->gfx->getGraphicsHeight() / ICON_SIZE;
-		iset->columns = iset->gfx->getGraphicsWidth() / ICON_SIZE;
+	if (iset.gfx) {
+		int rows = iset.gfx->getGraphicsHeight() / ICON_SIZE;
+		iset.columns = iset.gfx->getGraphicsWidth() / ICON_SIZE;
 
-		iset->id_begin = first_id;
-		iset->id_end = first_id + (iset->columns * rows) - 1;
+		if (iset.columns == 0) {
+			// prevent divide-by-zero
+			iset.columns = 1;
+		}
+
+		iset.id_begin = first_id;
+		iset.id_end = first_id + (iset.columns * rows) - 1;
 
 		return true;
 	}
