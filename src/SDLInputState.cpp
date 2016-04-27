@@ -40,6 +40,7 @@ SDLInputState::SDLInputState(void)
 	, joy(NULL)
 	, joy_num(0)
 	, joy_axis_num(0)
+	, resize_ticks(-1)
 {
 	// don't use keyboard for touchscreen devices
 	if (!PlatformOptions.is_mobile_device)
@@ -213,9 +214,8 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_WINDOWEVENT:
-				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-					window_resized = true;
-					render_device->windowResize();
+				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+					resize_ticks = MAX_FRAMES_PER_SEC/4;
 				}
 				else if (PlatformOptions.is_mobile_device) {
 					// detect restoring hidden Mobile app to bypass frameskip
@@ -459,6 +459,15 @@ void SDLInputState::handle() {
 				last_joyaxis = (i+JOY_AXIS_OFFSET) * (-1);
 			}
 		}
+	}
+
+	if (resize_ticks > 0) {
+		resize_ticks--;
+	}
+	if (resize_ticks == 0) {
+		resize_ticks = -1;
+		window_resized = true;
+		render_device->windowResize();
 	}
 }
 

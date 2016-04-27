@@ -48,6 +48,7 @@ private:
 	SDL_Joystick* joy;
 	int joy_num;
 	int joy_axis_num;
+	int resize_ticks;
 
 	std::vector<int> joy_axis_prev;
 	std::vector<int> joy_axis_deltas;
