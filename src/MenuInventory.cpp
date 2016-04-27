@@ -627,7 +627,9 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 			// items match, so attempt to merge the stacks. Any leftover will be added to the carried area
 			leftover.quantity = dest.quantity + stack.quantity - items->items[stack.item].max_quantity;
 			stack.quantity = items->items[stack.item].max_quantity - dest.quantity;
-			add(stack, EQUIPMENT, slot, false, false);
+			if (stack.quantity > 0) {
+				add(stack, EQUIPMENT, slot, false, false);
+			}
 		}
 		else {
 			// put the item in the appropriate equipment slot
