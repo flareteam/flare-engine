@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -25,7 +26,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
-#include "MenuItemStorage.h"
+#include "Menu.h"
+#include "MenuManager.h"
+#include "MenuInventory.h"
 #include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
@@ -35,10 +38,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 CampaignManager::CampaignManager()
 	: status()
 	, log_msg("")
-	, carried_items(NULL)
-	, currency(NULL)
-	, hero(NULL)
-	, quest_update(true)
 	, bonus_xp(0.0) {
 }
 
@@ -50,14 +49,13 @@ void CampaignManager::clearAll() {
 /**
  * Take the savefile campaign= and convert to status array
  */
-void CampaignManager::setAll(std::string s) {
+void CampaignManager::setAll(const std::string& s) {
 	std::string str = s + ',';
 	std::string token;
 	while (str != "") {
 		token = popFirstString(str, ',');
 		if (token != "") this->setStatus(token);
 	}
-	quest_update = true;
 }
 
 /**
@@ -73,7 +71,7 @@ std::string CampaignManager::getAll() {
 	return ss.str();
 }
 
-bool CampaignManager::checkStatus(std::string s) {
+bool CampaignManager::checkStatus(const std::string& s) {
 
 	// avoid searching empty statuses
 	if (s == "") return false;
@@ -84,7 +82,7 @@ bool CampaignManager::checkStatus(std::string s) {
 	return false;
 }
 
-void CampaignManager::setStatus(std::string s) {
+void CampaignManager::setStatus(const std::string& s) {
 
 	// avoid adding empty statuses
 	if (s == "") return;
@@ -93,11 +91,10 @@ void CampaignManager::setStatus(std::string s) {
 	if (checkStatus(s)) return;
 
 	status.push_back(s);
-	quest_update = true;
-	hero->check_title = true;
+	pc->stats.check_title = true;
 }
 
-void CampaignManager::unsetStatus(std::string s) {
+void CampaignManager::unsetStatus(const std::string& s) {
 
 	// avoid searching empty statuses
 	if (s == "") return;
@@ -108,25 +105,25 @@ void CampaignManager::unsetStatus(std::string s) {
 		--it;
 		if ((*it) == s) {
 			it = status.erase(it);
-			quest_update = true;
 			return;
 		}
-		hero->check_title = true;
+		pc->stats.check_title = true;
 	}
 }
 
 bool CampaignManager::checkCurrency(int quantity) {
-	return carried_items->contain(CURRENCY_ID, quantity);
+	return menu->inv->inventory[CARRIED].contain(CURRENCY_ID, quantity);
 }
 
 bool CampaignManager::checkItem(int item_id) {
-	return carried_items->contain(item_id);
+	if (menu->inv->inventory[CARRIED].contain(item_id))
+		return true;
+	else
+		return menu->inv->inventory[EQUIPMENT].contain(item_id);
 }
 
 void CampaignManager::removeCurrency(int quantity) {
-	for (int i=0; i<quantity; ++i) {
-		carried_items->remove(CURRENCY_ID);
-	}
+	menu->inv->removeCurrency(quantity);
 	addMsg(msg->get("%d %s removed.", quantity, CURRENCY));
 	items->playSound(CURRENCY_ID);
 }
@@ -134,7 +131,7 @@ void CampaignManager::removeCurrency(int quantity) {
 void CampaignManager::removeItem(int item_id) {
 	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
 
-	carried_items->remove(item_id);
+	menu->inv->remove(item_id);
 	addMsg(msg->get("%s removed.", items->getItemName(item_id)));
 	items->playSound(item_id);
 }
@@ -143,26 +140,13 @@ void CampaignManager::rewardItem(ItemStack istack) {
 	if (istack.empty())
 		return;
 
-	if (carried_items->full(istack.item)) {
-		drop_stack.push(istack);
-	}
-	else {
-		carried_items->add(istack);
+	menu->inv->add(istack, CARRIED, -1, true, true);
 
-		if (istack.item != CURRENCY_ID) {
-			if (istack.quantity <= 1)
-				addMsg(msg->get("You receive %s.", items->getItemName(istack.item)));
-			if (istack.quantity > 1)
-				addMsg(msg->get("You receive %s x%d.", istack.quantity, items->getItemName(istack.item)));
-
-			items->playSound(istack.item);
-		}
-
-		// if this item has a power, place it on the action bar if possible
-		if (items->items[istack.item].type == "consumable" && items->items[istack.item].power > 0) {
-			menu_act->addPower(items->items[istack.item].power, 0);
-		}
-
+	if (istack.item != CURRENCY_ID) {
+		if (istack.quantity <= 1)
+			addMsg(msg->get("You receive %s.", items->getItemName(istack.item)));
+		if (istack.quantity > 1)
+			addMsg(msg->get("You receive %s x%d.", istack.quantity, items->getItemName(istack.item)));
 	}
 }
 
@@ -170,42 +154,41 @@ void CampaignManager::rewardCurrency(int amount) {
 	ItemStack stack;
 	stack.item = CURRENCY_ID;
 	stack.quantity = amount;
-	if (!carried_items->full(stack.item))
-		addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
+
+	addMsg(msg->get("You receive %d %s.", amount, CURRENCY));
 	rewardItem(stack);
-	items->playSound(CURRENCY_ID);
 }
 
 void CampaignManager::rewardXP(int amount, bool show_message) {
-	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(hero->get(STAT_XP_GAIN)))) / 100.0f;
-	hero->addXP(static_cast<int>(bonus_xp));
+	bonus_xp += (static_cast<float>(amount) * (100.0f + static_cast<float>(pc->stats.get(STAT_XP_GAIN)))) / 100.0f;
+	pc->stats.addXP(static_cast<int>(bonus_xp));
 	bonus_xp -= static_cast<float>(static_cast<int>(bonus_xp));
-	hero->refresh_stats = true;
+	pc->stats.refresh_stats = true;
 	if (show_message) addMsg(msg->get("You receive %d XP.", amount));
 }
 
-void CampaignManager::restoreHPMP(std::string s) {
+void CampaignManager::restoreHPMP(const std::string& s) {
 	if (s == "hp") {
-		hero->hp = hero->get(STAT_HP_MAX);
+		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
 		addMsg(msg->get("HP restored."));
 	}
 	else if (s == "mp") {
-		hero->mp = hero->get(STAT_MP_MAX);
+		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 		addMsg(msg->get("MP restored."));
 	}
 	else if (s == "hpmp") {
-		hero->hp = hero->get(STAT_HP_MAX);
-		hero->mp = hero->get(STAT_MP_MAX);
+		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
+		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
 		addMsg(msg->get("HP and MP restored."));
 	}
 	else if (s == "status") {
-		hero->effects.clearNegativeEffects();
+		pc->stats.effects.clearNegativeEffects();
 		addMsg(msg->get("Negative effects removed."));
 	}
 	else if (s == "all") {
-		hero->hp = hero->get(STAT_HP_MAX);
-		hero->mp = hero->get(STAT_MP_MAX);
-		hero->effects.clearNegativeEffects();
+		pc->stats.hp = pc->stats.get(STAT_HP_MAX);
+		pc->stats.mp = pc->stats.get(STAT_MP_MAX);
+		pc->stats.effects.clearNegativeEffects();
 		addMsg(msg->get("HP and MP restored, negative effects removed"));
 	}
 }
@@ -213,6 +196,57 @@ void CampaignManager::restoreHPMP(std::string s) {
 void CampaignManager::addMsg(const std::string& new_msg) {
 	if (log_msg != "") log_msg += " ";
 	log_msg += new_msg;
+}
+
+bool CampaignManager::checkAllRequirements(const Event_Component& ec) {
+	if (ec.type == EC_REQUIRES_STATUS) {
+		if (checkStatus(ec.s))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_STATUS) {
+		if (!checkStatus(ec.s))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_CURRENCY) {
+		if (checkCurrency(ec.x))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_CURRENCY) {
+		if (!checkCurrency(ec.x))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_ITEM) {
+		if (checkItem(ec.x))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_ITEM) {
+		if (!checkItem(ec.x))
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_LEVEL) {
+		if (pc->stats.level >= ec.x)
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_LEVEL) {
+		if (pc->stats.level < ec.x)
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_CLASS) {
+		if (pc->stats.character_class == ec.s)
+			return true;
+	}
+	else if (ec.type == EC_REQUIRES_NOT_CLASS) {
+		if (pc->stats.character_class != ec.s)
+			return true;
+	}
+	else {
+		// Event component is not a requirement check
+		// treat it as if the "requirement" was met
+		return true;
+	}
+
+	// requirement check failed
+	return false;
 }
 
 CampaignManager::~CampaignManager() {

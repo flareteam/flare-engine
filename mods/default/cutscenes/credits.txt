@@ -1,5 +1,6 @@
 #this scales art to width of flare window
 #scale_gfx=true
+caption_margins=5,5
 
 [scene]
 image=images/menus/logo.png

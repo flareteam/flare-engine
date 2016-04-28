@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -419,14 +420,21 @@ void MenuCharacter::logic() {
 		snd->play(sfx_close);
 	}
 
-	// upgrade buttons
-	for (int i=0; i<4; i++) {
-		upgradeButton[i]->enabled = false;
-		tablist.remove(upgradeButton[i]);
-	}
-
 	int spent = stats->physical_character + stats->mental_character + stats->offense_character + stats->defense_character -4;
 	skill_points = (stats->level * stats->stat_points_per_level) - spent;
+
+	if (skill_points == 0) {
+		// upgrade buttons
+		for (int i=0; i<4; i++) {
+			upgradeButton[i]->enabled = false;
+			tablist.remove(upgradeButton[i]);
+		}
+
+		if (tablist.getCurrent() >= static_cast<int>(tablist.size())) {
+			tablist.defocus();
+			tablist.getNext();
+		}
+	}
 
 	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points) {
 		if (stats->physical_character < stats->max_points_per_stat && show_upgrade[0]) {

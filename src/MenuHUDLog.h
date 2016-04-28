@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -38,6 +39,8 @@ private:
 	int paragraph_spacing;
 
 	Color color_normal;
+	Sprite *overlay_bg;
+	bool click_to_dismiss;
 
 public:
 
@@ -48,6 +51,9 @@ public:
 	void add(const std::string& s, bool prevent_spam = true);
 	void remove(int msg_index);
 	void clear();
+	void renderOverlay();
+
+	bool hide_overlay;
 };
 
 #endif

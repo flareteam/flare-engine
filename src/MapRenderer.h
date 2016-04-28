@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013-2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -86,11 +87,11 @@ public:
 
 	MapRenderer(const MapRenderer &copy); // not implemented
 
-	int load(std::string filename);
+	int load(const std::string& filename);
 	void logic();
 	void render(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
-	void checkEvents(FPoint loc);
+	void checkEvents(const FPoint& loc);
 	void checkHotspots();
 	void checkNearestEvent();
 	void checkTooltip();

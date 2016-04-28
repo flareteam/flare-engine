@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -43,10 +44,10 @@ const int POWTYPE_REPEATER = 2;
 const int POWTYPE_SPAWN = 3;
 const int POWTYPE_TRANSFORM = 4;
 const int POWTYPE_EFFECT = 5;
+const int POWTYPE_BLOCK = 6;
 
-const int POWSTATE_BLOCK = 1;
-const int POWSTATE_INSTANT = 2;
-const int POWSTATE_ATTACK = 3;
+const int POWSTATE_INSTANT = 1;
+const int POWSTATE_ATTACK = 2;
 
 const int BASE_DAMAGE_NONE = 0;
 const int BASE_DAMAGE_MELEE = 1;
@@ -125,6 +126,7 @@ public:
 	std::string description;
 	int icon; // just the number.  The caller menu will have access to the surface.
 	int new_state; // when using this power the user (avatar/enemy) starts a new state
+	int state_duration; // can be used to extend the length of a state animation by pausing on the last frame
 	std::string attack_anim; // name of the animation to play when using this power, if it is not block
 	bool face; // does the user turn to face the mouse cursor when using this power?
 	int source_type; //hero, neutral, or enemy
@@ -147,11 +149,14 @@ public:
 	int requires_equipped_item_quantity;
 	bool consumable;
 	bool requires_targeting; // power only makes sense when using click-to-target
+	int requires_spawns;
 	int cooldown; // milliseconds before you can use the power again
 
 	// animation info
 	std::string animation_name;
 	int sfx_index;
+	unsigned long sfx_hit;
+	bool sfx_hit_enable;
 	bool directional; // sprite sheet contains options for 8 directions, one per row
 	int visual_random; // sprite sheet contains rows of random options
 	int visual_option; // sprite sheet contains rows of similar effects.  use a specific option
@@ -160,6 +165,7 @@ public:
 	int lifespan; // how long the hazard/animation lasts
 	bool floor; // the hazard is drawn between the background and object layers
 	bool complete_animation;
+	float charge_speed;
 
 	// hazard traits
 	bool use_hazard;
@@ -167,7 +173,10 @@ public:
 	float radius;
 	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
 	int starting_pos; // enum. (source, target, or melee)
+	bool relative_pos;
 	bool multitarget;
+	bool multihit;
+	bool expire_with_caster;
 	float target_range;
 	bool target_party;
 	std::vector<std::string> target_categories;
@@ -228,6 +237,13 @@ public:
 	int spawn_level_every;
 	int spawn_level_stat;
 
+	// targeting by movement type
+	bool target_movement_normal;
+	bool target_movement_flying;
+	bool target_movement_intangible;
+
+	bool walls_block_aoe;
+
 	// loot
 	std::vector<Event_Component> loot;
 
@@ -237,6 +253,7 @@ public:
 		, description("")
 		, icon(-1)
 		, new_state(-1)
+		, state_duration(0)
 		, attack_anim("")
 		, face(false)
 		, source_type(-1)
@@ -257,10 +274,12 @@ public:
 		, requires_equipped_item_quantity(0)
 		, consumable(false)
 		, requires_targeting(false)
+		, requires_spawns(0)
 		, cooldown(0)
 
 		, animation_name("")
 		, sfx_index(-1)
+		, sfx_hit(0)
 		, directional(false)
 		, visual_random(0)
 		, visual_option(0)
@@ -269,13 +288,17 @@ public:
 		, lifespan(0)
 		, floor(false)
 		, complete_animation(false)
+		, charge_speed(0.0f)
 
 		, use_hazard(false)
 		, no_attack(false)
 		, radius(0)
 		, base_damage(BASE_DAMAGE_NONE)
 		, starting_pos(STARTING_POS_SOURCE)
+		, relative_pos(false)
 		, multitarget(false)
+		, multihit(false)
+		, expire_with_caster(false)
 		, target_range(0)
 		, target_party(false)
 		, mod_accuracy_mode(-1)
@@ -322,7 +345,13 @@ public:
 		, spawn_level_mode(SPAWN_LEVEL_MODE_DEFAULT)
 		, spawn_level_qty(0)
 		, spawn_level_every(0)
-		, spawn_level_stat(SPAWN_LEVEL_STAT_MENTAL) {
+		, spawn_level_stat(SPAWN_LEVEL_STAT_MENTAL)
+
+		, target_movement_normal(true)
+		, target_movement_flying(true)
+		, target_movement_intangible(true)
+
+		, walls_block_aoe(false) {
 	}
 
 };
@@ -338,16 +367,15 @@ private:
 	bool isValidEffect(const std::string& type);
 	int loadSFX(const std::string& filename);
 
-	FPoint limitRange(float range, FPoint src, FPoint target);
-	void initHazard(int powernum, StatBlock *src_stats, FPoint target, Hazard *haz);
-	void buff(int power_index, StatBlock *src_stats, FPoint target);
+	void initHazard(int powernum, StatBlock *src_stats, const FPoint& target, Hazard *haz);
+	void buff(int power_index, StatBlock *src_stats, const FPoint& target);
 	void playSound(int power_index);
 
-	bool fixed(int powernum, StatBlock *src_stats, FPoint target);
-	bool missile(int powernum, StatBlock *src_stats, FPoint target);
-	bool repeater(int powernum, StatBlock *src_stats, FPoint target);
-	bool spawn(int powernum, StatBlock *src_stats, FPoint target);
-	bool transform(int powernum, StatBlock *src_stats, FPoint target);
+	bool fixed(int powernum, StatBlock *src_stats, const FPoint& target);
+	bool missile(int powernum, StatBlock *src_stats, const FPoint& target);
+	bool repeater(int powernum, StatBlock *src_stats, const FPoint& target);
+	bool spawn(int powernum, StatBlock *src_stats, const FPoint& target);
+	bool transform(int powernum, StatBlock *src_stats, const FPoint& target);
 	bool block(int power_index, StatBlock *src_stats);
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
@@ -360,14 +388,14 @@ public:
 	std::string log_msg;
 
 	void handleNewMap(MapCollision *_collider);
-	bool activate(int power_index, StatBlock *src_stats, FPoint target);
+	bool activate(int power_index, StatBlock *src_stats, const FPoint& target);
 	const Power &getPower(unsigned id) 	{
 		assert(id < powers.size());
 		return powers[id];
 	}
 	bool canUsePower(unsigned id) const;
-	bool hasValidTarget(int power_index, StatBlock *src_stats, FPoint target);
-	bool spawn(const std::string& enemy_type, Point target);
+	bool hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target);
+	bool spawn(const std::string& enemy_type, const Point& target);
 	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
@@ -379,7 +407,6 @@ public:
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
 	std::queue<Map_Enemy> enemies; // output; read by PowerManager
-	std::queue<int> party_buffs;
 
 	// shared sounds for power special effects
 	std::vector<SoundManager::SoundID> sfx;

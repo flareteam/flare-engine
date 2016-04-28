@@ -1,5 +1,6 @@
 /*
 Copyright © 2013 Igor Paliychuk
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -25,7 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Class: Event
  */
 Event::Event()
-	: type("")
+	: type(-1)
 	, components(std::vector<Event_Component>())
 	, location(Rect())
 	, hotspot(Rect())
@@ -75,20 +76,26 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 
 	if (infile.key == "type") {
 		// @ATTR event.type|[on_trigger:on_mapexit:on_leave:on_load:on_clear]|Type of map event.
-		std::string type = infile.val;
-		evnt->type = type;
-
-		if      (type == "on_trigger");
-		else if (type == "on_mapexit"); // no need to set keep_after_trigger to false correctly, it's ignored anyway
-		else if (type == "on_leave");
-		else if (type == "on_load") {
+		if (infile.val == "on_trigger") {
+			evnt->type = EVENT_ON_TRIGGER;
+		}
+		else if (infile.val == "on_mapexit") {
+			// no need to set keep_after_trigger to false correctly, it's ignored anyway
+			evnt->type = EVENT_ON_MAPEXIT;
+		}
+		else if (infile.val == "on_leave") {
+			evnt->type = EVENT_ON_LEAVE;
+		}
+		else if (infile.val == "on_load") {
+			evnt->type = EVENT_ON_LOAD;
 			evnt->keep_after_trigger = false;
 		}
-		else if (type == "on_clear") {
+		else if (infile.val == "on_clear") {
+			evnt->type = EVENT_ON_CLEAR;
 			evnt->keep_after_trigger = false;
 		}
 		else {
-			infile.error("EventManager: Event type '%s' unknown, change to \"on_trigger\" to suppress this warning.", type.c_str());
+			infile.error("EventManager: Event type '%s' unknown, change to \"on_trigger\" to suppress this warning.", infile.val.c_str());
 		}
 	}
 	else if (infile.key == "location") {
@@ -331,7 +338,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->x = toInt(infile.nextValue());
 	}
 	else if (infile.key == "requires_item") {
-		// @ATTR event.requires_item|integer,...|Event requires specific item
+		// @ATTR event.requires_item|integer,...|Event requires specific item (not equipped)
 		e->type = EC_REQUIRES_ITEM;
 
 		e->x = toInt(infile.nextValue());
@@ -350,7 +357,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "requires_not_item") {
-		// @ATTR event.requires_not_item|integer,...|Event requires not having a specific item
+		// @ATTR event.requires_not_item|integer,...|Event requires not having a specific item (not equipped)
 		e->type = EC_REQUIRES_NOT_ITEM;
 
 		e->x = toInt(infile.nextValue());
@@ -631,7 +638,7 @@ bool EventManager::executeEvent(Event &ev) {
 				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ev.type == "on_load" || static_cast<bool>(ec->z) == true)
+			if (ev.type == EVENT_ON_LOAD || static_cast<bool>(ec->z) == true)
 				loop = true;
 
 			SoundManager::SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
@@ -749,55 +756,9 @@ bool EventManager::executeEvent(Event &ev) {
 
 
 bool EventManager::isActive(const Event &e) {
-	for (unsigned i=0; i < e.components.size(); i++) {
-		if (e.components[i].type == EC_REQUIRES_NOT_STATUS) {
-			if (camp->checkStatus(e.components[i].s)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_STATUS) {
-			if (!camp->checkStatus(e.components[i].s)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_CURRENCY) {
-			if (!camp->checkCurrency(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_NOT_CURRENCY) {
-			if (camp->checkCurrency(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_ITEM) {
-			if (!camp->checkItem(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_NOT_ITEM) {
-			if (camp->checkItem(e.components[i].x)) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_LEVEL) {
-			if (camp->hero->level < e.components[i].x) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_NOT_LEVEL) {
-			if (camp->hero->level >= e.components[i].x) {
-				return false;
-			}
-		}
-		else if (e.components[i].type == EC_REQUIRES_CLASS) {
-			if (camp->hero->character_class != e.components[i].s)
-				return false;
-		}
-		else if (e.components[i].type == EC_REQUIRES_NOT_CLASS) {
-			if (camp->hero->character_class == e.components[i].s)
-				return false;
-		}
+	for (size_t i=0; i < e.components.size(); i++) {
+		if (!camp->checkAllRequirements(e.components[i]))
+			return false;
 	}
 	return true;
 }

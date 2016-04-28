@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -51,13 +52,11 @@ public:
 
 	void logic();
 	void render();
-	ItemStack click(Point position);
+	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
-	void add(ItemStack stack);
-	TooltipData checkTooltip(Point position);
-	bool full(int item);
-	void drop(Point position, ItemStack stack);
-	void add(ItemStack stack, int slot);
+	bool add(ItemStack stack, int slot, bool play_sound);
+	TooltipData checkTooltip(const Point& position);
+	bool drop(const Point& position, ItemStack stack);
 
 	int getRowsCount();
 
@@ -67,7 +66,9 @@ public:
 	MenuItemStorage stock;
 	bool updated;
 
-	TabList tablist;
+	std::string log_msg;
+
+	std::queue<ItemStack> drop_stack;
 };
 
 

@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -386,7 +387,7 @@ void SaveLoad::loadClass(int index) {
 	stack.quantity = 1;
 	while (carried != "") {
 		stack.item = popFirstInt(carried);
-		menu->inv->add(stack, CARRIED, -1, false);
+		menu->inv->add(stack, CARRIED, -1, false, false);
 	}
 
 	// apply stats, inventory, and powers
@@ -475,6 +476,6 @@ void SaveLoad::loadPowerTree() {
 }
 
 bool SaveLoad::gameSlotIsValid() {
-	// game slots are currently 1-4
-	return (game_slot >= 1 && game_slot <= 4);
+	// minimum game slot is 1
+	return (game_slot >= 1);
 }

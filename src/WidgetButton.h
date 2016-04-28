@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -51,7 +52,7 @@ private:
 	TooltipData tip_buf;
 	TooltipData tip_new;
 	WidgetTooltip *tip;
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(const Point& mouse);
 
 public:
 	WidgetButton(const std::string& _fileName = "images/menus/buttons/button_default.png");

@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -68,7 +69,7 @@ Loot& Loot::operator= (const Loot &other) {
 	return *this;
 }
 
-void Loot::loadAnimation(std::string _gfx) {
+void Loot::loadAnimation(const std::string& _gfx) {
 	gfx = _gfx;
 	if (gfx != "") {
 		anim->increaseCount(gfx);

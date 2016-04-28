@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2015-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -116,7 +117,7 @@ int SDLFontEngine::calc_width(const std::string& text) {
  * use_ellipsis == true: "Hello ..."
  * use_ellipsis == false: " World"
  */
-std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int& width, const bool& use_ellipsis) {
+std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis) {
 	if (width >= calc_width(text))
 		return text;
 
@@ -155,7 +156,7 @@ std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int& w
 	}
 }
 
-void SDLFontEngine::setFont(std::string _font) {
+void SDLFontEngine::setFont(const std::string& _font) {
 	for (unsigned int i=0; i<font_styles.size(); i++) {
 		if (font_styles[i].name == _font) {
 			active_font = &(font_styles[i]);
@@ -168,7 +169,7 @@ void SDLFontEngine::setFont(std::string _font) {
  * Render the given text at (x,y) on the target image.
  * Justify is left, right, or center
  */
-void SDLFontEngine::render(const std::string& text, int x, int y, int justify, Image *target, Color color) {
+void SDLFontEngine::render(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
 	Rect clip;
 	Image *graphics;
 	Sprite *temp;

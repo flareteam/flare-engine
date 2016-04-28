@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -176,7 +177,7 @@ void WidgetButton::refresh() {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData WidgetButton::checkTooltip(Point mouse) {
+TooltipData WidgetButton::checkTooltip(const Point& mouse) {
 	TooltipData _tip;
 
 	if (isWithin(pos, mouse) && tooltip != "") {

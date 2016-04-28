@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2014 Henrik Andersson
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -54,7 +55,7 @@ public:
 	void clear();
 
 	// add text with support for new lines
-	void addText(const std::string &text, Color color);
+	void addText(const std::string &text, const Color& color);
 	void addText(const std::string &text);
 
 	bool isEmpty();

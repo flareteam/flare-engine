@@ -4,6 +4,7 @@ Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -180,13 +181,13 @@ void MenuInventory::logic() {
 			removable_items.clear();
 			for (int i=0; i < MAX_EQUIPPED; i++) {
 				if (!inventory[EQUIPMENT][i].empty()) {
-					if (items->items[inventory[EQUIPMENT][i].item].type != "quest")
+					if (!items->items[inventory[EQUIPMENT][i].item].quest_item)
 						removable_items.push_back(inventory[EQUIPMENT][i].item);
 				}
 			}
 			for (int i=0; i < MAX_CARRIED; i++) {
 				if (!inventory[CARRIED][i].empty()) {
-					if (items->items[inventory[CARRIED][i].item].type != "quest")
+					if (!items->items[inventory[CARRIED][i].item].quest_item)
 						removable_items.push_back(inventory[CARRIED][i].item);
 				}
 			}
@@ -240,7 +241,7 @@ void MenuInventory::render() {
 	inventory[CARRIED].render();
 }
 
-int MenuInventory::areaOver(Point position) {
+int MenuInventory::areaOver(const Point& position) {
 	if (isWithin(carried_area, position)) {
 		return CARRIED;
 	}
@@ -265,7 +266,7 @@ int MenuInventory::areaOver(Point position) {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData MenuInventory::checkTooltip(Point position) {
+TooltipData MenuInventory::checkTooltip(const Point& position) {
 	int area;
 	int slot;
 	TooltipData tip;
@@ -303,7 +304,7 @@ TooltipData MenuInventory::checkTooltip(Point position) {
 /**
  * Click-start dragging in the inventory
  */
-ItemStack MenuInventory::click(Point position) {
+ItemStack MenuInventory::click(const Point& position) {
 	ItemStack item;
 
 	drag_prev_src = areaOver(position);
@@ -339,13 +340,14 @@ ItemStack MenuInventory::click(Point position) {
  */
 void MenuInventory::itemReturn(ItemStack stack) {
 	if (drag_prev_src == -1) {
-		add(stack, CARRIED, -1, false);
+		add(stack, CARRIED, -1, false, false);
 	}
 	else {
+		int prev_slot = inventory[drag_prev_src].drag_prev_slot;
 		inventory[drag_prev_src].itemReturn(stack);
 		// if returning equipment, prepare to change stats/sprites
 		if (drag_prev_src == EQUIPMENT) {
-			updateEquipment(inventory[EQUIPMENT].drag_prev_slot);
+			updateEquipment(prev_slot);
 		}
 	}
 	drag_prev_src = -1;
@@ -355,21 +357,33 @@ void MenuInventory::itemReturn(ItemStack stack) {
  * Dragging and dropping an item can be used to rearrange the inventory
  * and equip items
  */
-void MenuInventory::drop(Point position, ItemStack stack) {
+bool MenuInventory::drop(const Point& position, ItemStack stack) {
 	items->playSound(stack.item);
+
+	bool success = true;
 
 	int area = areaOver(position);
 	if (area < 0) {
-		// not dropped into a slot. Just return it to the previous slot.
-		itemReturn(stack);
-		return;
+		if (drag_prev_src == -1) {
+			success = add(stack, CARRIED, -1, false, true);
+		}
+		else {
+			// not dropped into a slot. Just return it to the previous slot.
+			itemReturn(stack);
+		}
+		return success;
 	}
 
 	int slot = inventory[area].slotOver(position);
 	if (slot == -1) {
-		// not dropped into a slot. Just return it to the previous slot.
-		itemReturn(stack);
-		return;
+		if (drag_prev_src == -1) {
+			success = add(stack, CARRIED, -1, false, true);
+		}
+		else {
+			// not dropped into a slot. Just return it to the previous slot.
+			itemReturn(stack);
+		}
+		return success;
 	}
 
 	int drag_prev_slot = -1;
@@ -384,7 +398,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 		if (slot_type[slot] == items->items[stack.item].type && items->requirementsMet(stats, stack.item) && stats->humanoid && inventory[EQUIPMENT].slots[slot]->enabled) {
 			if (inventory[area][slot].item == stack.item) {
 				// Merge the stacks
-				add(stack, area, slot, false);
+				success = add(stack, area, slot, false, false);
 			}
 			else {
 				// Swap the two stacks
@@ -392,11 +406,11 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 					itemReturn(inventory[area][slot]);
 				inventory[area][slot] = stack;
 				updateEquipment(slot);
-			}
 
-			// if this item has a power, place it on the action bar if possible
-			if (items->items[stack.item].power > 0) {
-				menu_act->addPower(items->items[stack.item].power, 0);
+				// if this item has a power, place it on the action bar if possible
+				if (items->items[stack.item].power > 0) {
+					menu_act->addPower(items->items[stack.item].power, 0);
+				}
 			}
 		}
 		else {
@@ -412,7 +426,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			if (slot != drag_prev_slot) {
 				if (inventory[area][slot].item == stack.item) {
 					// Merge the stacks
-					add(stack, area, slot, false);
+					success = add(stack, area, slot, false, false);
 				}
 				else if (inventory[area][slot].empty()) {
 					// Drop the stack
@@ -433,11 +447,9 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 			}
 		}
 		else {
-			// note: equipment slots 0-3 correspond with item types 0-3
-			// also check to see if the hero meets the requirements
 			if (inventory[area][slot].item == stack.item || drag_prev_src == -1) {
 				// Merge the stacks
-				add(stack, area, slot, false);
+				success = add(stack, area, slot, false, false);
 			}
 			else if (inventory[area][slot].empty()) {
 				// Drop the stack
@@ -467,6 +479,8 @@ void MenuInventory::drop(Point position, ItemStack stack) {
 	}
 
 	drag_prev_src = -1;
+
+	return success;
 }
 
 /**
@@ -474,7 +488,7 @@ void MenuInventory::drop(Point position, ItemStack stack) {
  * e.g. drink a potion
  * e.g. equip an item
  */
-void MenuInventory::activate(Point position) {
+void MenuInventory::activate(const Point& position) {
 	ItemStack stack;
 	Point nullpt;
 	nullpt.x = nullpt.y = 0;
@@ -493,12 +507,9 @@ void MenuInventory::activate(Point position) {
 		snd->play(sfx_open);
 		show_book = items->items[inventory[CARRIED][slot].item].book;
 	}
-	// can't interact with quest items
-	else if (items->items[inventory[CARRIED][slot].item].type == "quest") {
-		return;
-	}
 	// use a consumable item
-	else if (items->items[inventory[CARRIED][slot].item].type == "consumable" &&
+	else if (!items->items[inventory[CARRIED][slot].item].quest_item &&
+             items->items[inventory[CARRIED][slot].item].type == "consumable" &&
 	         items->items[inventory[CARRIED][slot].item].power > 0) {
 
 		int power_id = items->items[inventory[CARRIED][slot].item].power;
@@ -529,56 +540,42 @@ void MenuInventory::activate(Point position) {
 	}
 	// equip an item
 	else if (stats->humanoid && items->items[inventory[CARRIED][slot].item].type != "") {
-		int equip_slot = -1;
-		const ItemStack &src = inventory[CARRIED].storage[slot];
+		int equip_slot = getEquipSlotFromItem(inventory[CARRIED].storage[slot].item, false);
 
-		// find first empty(or just first) slot for item to equip
-		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			if (slot_type[i] == items->items[src.item].type) {
-				if (equip_slot == -1) {
-					// non-empty and matching
-					equip_slot = i;
-				}
-				else if (inventory[EQUIPMENT].storage[i].empty()) {
-					// empty and matching, no need to search more
-					equip_slot = i;
-					break;
-				}
+		if (equip_slot >= 0) {
+			stack = click(position);
+
+			if (inventory[EQUIPMENT][equip_slot].item == stack.item) {
+				// Merge the stacks
+				add(stack, EQUIPMENT, equip_slot, false, false);
 			}
-		}
-
-		if (equip_slot != -1) {
-			if (items->requirementsMet(stats, inventory[CARRIED][slot].item)) {
-				stack = click(position);
-				if( inventory[EQUIPMENT][equip_slot].item == stack.item) {
-					// Merge the stacks
-					add(stack, EQUIPMENT, equip_slot, false);
-				}
-				else if( inventory[EQUIPMENT][equip_slot].empty()) {
-					// Drop the stack
-					inventory[EQUIPMENT][equip_slot] = stack;
+			else if (inventory[EQUIPMENT][equip_slot].empty()) {
+				// Drop the stack
+				inventory[EQUIPMENT][equip_slot] = stack;
+			}
+			else {
+				if (inventory[CARRIED][slot].empty()) { // Don't forget this slot may have been emptied by the click()
+					// Swap the two stacks
+					itemReturn(inventory[EQUIPMENT][equip_slot]);
 				}
 				else {
-					if( inventory[CARRIED][slot].empty()) { // Don't forget this slot may have been emptied by the click()
-						// Swap the two stacks
-						itemReturn( inventory[EQUIPMENT][equip_slot]);
-					}
-					else {
-						// Drop the equipped item anywhere
-						add( inventory[EQUIPMENT][equip_slot]);
-					}
-					inventory[EQUIPMENT][equip_slot] = stack;
+					// Drop the equipped item anywhere
+					add(inventory[EQUIPMENT][equip_slot], CARRIED, -1, true, false);
 				}
-				updateEquipment( equip_slot);
-				items->playSound(inventory[EQUIPMENT][equip_slot].item);
+				inventory[EQUIPMENT][equip_slot] = stack;
+			}
 
-				// if this item has a power, place it on the action bar if possible
-				if (items->items[stack.item].power > 0) {
-					menu_act->addPower(items->items[stack.item].power, 0);
-				}
+			updateEquipment(equip_slot);
+			items->playSound(inventory[EQUIPMENT][equip_slot].item);
+
+			// if this item has a power, place it on the action bar if possible
+			if (items->items[stack.item].power > 0) {
+				menu_act->addPower(items->items[stack.item].power, 0);
 			}
 		}
-		else logError("MenuInventory: Can't find equip slot, corresponding to type %s", items->items[inventory[CARRIED][slot].item].type.c_str());
+		else if (equip_slot == -1) {
+			logError("MenuInventory: Can't find equip slot, corresponding to type %s", items->items[inventory[CARRIED][slot].item].type.c_str());
+		}
 	}
 
 	drag_prev_src = -1;
@@ -591,50 +588,71 @@ void MenuInventory::activate(Point position) {
  * @param area Area number where it will try to store the item
  * @param slot Slot number where it will try to store the item
  */
-void MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound) {
+bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip) {
 	if (stack.empty())
-		return;
+		return true;
+
+	bool success = true;
 
 	if (play_sound)
 		items->playSound(stack.item);
 
-	if (!stack.empty()) {
-		if (area < 0) {
-			area = CARRIED;
-		}
-		if (area == CARRIED) {
-			ItemStack leftover = inventory[CARRIED].add(stack, slot);
-			if (!leftover.empty()) {
-				drop_stack.push(leftover);
-			}
-		}
-		else if (area == EQUIPMENT) {
-			ItemStack &dest = inventory[EQUIPMENT].storage[slot];
-			ItemStack leftover;
-			leftover.item = stack.item;
+	if (auto_equip && AUTO_EQUIP) {
+		int equip_slot = getEquipSlotFromItem(stack.item, true);
 
-			if (dest.item != stack.item) {
-				// items don't match, so just add the stack to the carried area
-				leftover.quantity = stack.quantity;
-			}
-			else if (dest.quantity + stack.quantity > items->items[stack.item].max_quantity) {
-				// items match, so attempt to merge the stacks. Any leftover will be added to the carried area
-				leftover.quantity = dest.quantity + stack.quantity - items->items[stack.item].max_quantity;
-				stack.quantity = items->items[stack.item].max_quantity - dest.quantity;
-				add(stack, EQUIPMENT, slot, false);
-			}
-
-			if (!leftover.empty()) {
-				add(leftover, CARRIED, -1, false);
-			}
-		}
-
-		// if this item has a power, place it on the action bar if possible
-		if (items->items[stack.item].type == "consumable" && items->items[stack.item].power > 0) {
-			menu_act->addPower(items->items[stack.item].power, 0);
+		if (equip_slot >= 0) {
+			area = EQUIPMENT;
+			slot = equip_slot;
 		}
 	}
+
+	if (area == CARRIED) {
+		ItemStack leftover = inventory[CARRIED].add(stack, slot);
+		if (!leftover.empty()) {
+			log_msg = msg->get("Inventory is full.");
+			drop_stack.push(leftover);
+			success = false;
+		}
+	}
+	else if (area == EQUIPMENT) {
+		ItemStack &dest = inventory[EQUIPMENT].storage[slot];
+		ItemStack leftover;
+		leftover.item = stack.item;
+
+		if (!dest.empty() && dest.item != stack.item) {
+			// items don't match, so just add the stack to the carried area
+			leftover.quantity = stack.quantity;
+		}
+		else if (dest.quantity + stack.quantity > items->items[stack.item].max_quantity) {
+			// items match, so attempt to merge the stacks. Any leftover will be added to the carried area
+			leftover.quantity = dest.quantity + stack.quantity - items->items[stack.item].max_quantity;
+			stack.quantity = items->items[stack.item].max_quantity - dest.quantity;
+			if (stack.quantity > 0) {
+				add(stack, EQUIPMENT, slot, false, false);
+			}
+		}
+		else {
+			// put the item in the appropriate equipment slot
+			inventory[EQUIPMENT].add(stack, slot);
+			updateEquipment(slot);
+			leftover.clear();
+		}
+
+		if (!leftover.empty()) {
+			add(leftover, CARRIED, -1, false, false);
+		}
+
+		applyEquipment(inventory[EQUIPMENT].storage);
+	}
+
+	// if this item has a power, place it on the action bar if possible
+	if (success && items->items[stack.item].type == "consumable" && items->items[stack.item].power > 0) {
+		menu_act->addPower(items->items[stack.item].power, 0);
+	}
+
 	drag_prev_src = -1;
+
+	return success;
 }
 
 /**
@@ -674,7 +692,7 @@ void MenuInventory::addCurrency(int count) {
 		ItemStack stack;
 		stack.item = CURRENCY_ID;
 		stack.quantity = count;
-		add(stack, CARRIED, -1, false);
+		add(stack, CARRIED, -1, false, false);
 	}
 }
 
@@ -696,41 +714,59 @@ int MenuInventory::getCurrency() {
  * Check if there is enough currency to buy the given stack, and if so remove it from the current total and add the stack.
  * (Handle the drop into the equipment area, but add() don't handle it well in all circonstances. MenuManager::logic() allow only into the carried area.)
  */
-bool MenuInventory::buy(ItemStack stack, int tab) {
+bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
+	if (stack.empty()) {
+		return true;
+	}
+
 	int value_each;
-	if (tab == VENDOR_BUY) value_each = items->items[stack.item].price;
+	if (tab == VENDOR_BUY) value_each = items->items[stack.item].getPrice();
 	else value_each = items->items[stack.item].getSellPrice();
 
 	int count = value_each * stack.quantity;
 	if( getCurrency() >= count) {
+		if (dragging) {
+			drop(inpt->mouse, stack);
+		}
+		else {
+			add(stack, CARRIED, -1, true, true);
+		}
+
 		removeCurrency(count);
 		items->playSound(CURRENCY_ID);
 		return true;
 	}
 	else {
+		log_msg = msg->get("Not enough %s.", CURRENCY);
+		drop_stack.push(stack);
 		return false;
 	}
 }
 
 /**
- * Similar to sell(), but for use with stash
- */
-bool MenuInventory::stashAdd(ItemStack stack) {
-	// quest items can not be stored
-	if (items->items[stack.item].type == "quest") return false;
-
-	drag_prev_src = -1;
-	return true;
-}
-/**
  * Sell a specific stack of items
  */
 bool MenuInventory::sell(ItemStack stack) {
+	if (stack.empty()) {
+		return false;
+	}
+
 	// can't sell currency
 	if (stack.item == CURRENCY_ID) return false;
 
 	// items that have no price cannot be sold
-	if (items->items[stack.item].price == 0) return false;
+	if (items->items[stack.item].getPrice() == 0) {
+		items->playSound(stack.item);
+		log_msg = msg->get("This item can not be sold.");
+		return false;
+	}
+
+	// quest items can not be sold
+	if (items->items[stack.item].quest_item) {
+		items->playSound(stack.item);
+		log_msg = msg->get("This item can not be sold.");
+		return false;
+	}
 
 	int value_each = items->items[stack.item].getSellPrice();
 	int value = value_each * stack.quantity;
@@ -738,23 +774,6 @@ bool MenuInventory::sell(ItemStack stack) {
 	items->playSound(CURRENCY_ID);
 	drag_prev_src = -1;
 	return true;
-}
-
-/**
- * Cannot pick up new items if the inventory is full.
- * Full means no more carrying capacity (equipped capacity is ignored)
- */
-bool MenuInventory::full(ItemStack stack) {
-	return inventory[CARRIED].full(stack);
-}
-
-/**
- * An alternative version of the above full() function
- * This one only checks for a single item
- * It's primarily used when checking LootManager pickups
- */
-bool MenuInventory::full(int item) {
-	return inventory[CARRIED].full(item);
 }
 
 /**
@@ -849,7 +868,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		// check that each equipped item fit requirements
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			if (!items->requirementsMet(stats, equipped[i].item)) {
-				add(equipped[i]);
+				add(equipped[i], CARRIED, -1, true, false);
 				equipped[i].clear();
 				checkRequired = true;
 			}
@@ -883,7 +902,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		for (unsigned j=0; j<items->items[id].disable_slots.size(); ++j) {
 			for (int k=0; k<MAX_EQUIPPED; ++k) {
 				if (slot_type[k] == items->items[id].disable_slots[j]) {
-					add(inventory[EQUIPMENT].storage[k]);
+					add(inventory[EQUIPMENT].storage[k], CARRIED, -1, true, false);
 					inventory[EQUIPMENT].storage[k].clear();
 					inventory[EQUIPMENT].slots[k]->enabled = false;
 				}
@@ -1052,7 +1071,7 @@ void MenuInventory::fillEquipmentSlots() {
 			ItemStack stack;
 			stack.item = equip_item[i];
 			stack.quantity = (equip_quantity[i] > 0) ? equip_quantity[i] : 1;
-			add(stack, CARRIED, -1, false);
+			add(stack, CARRIED, -1, false, false);
 		}
 	}
 	delete [] equip_item;
@@ -1061,11 +1080,35 @@ void MenuInventory::fillEquipmentSlots() {
 
 int MenuInventory::getMaxPurchasable(int item, int vendor_tab) {
 	if (vendor_tab == VENDOR_BUY)
-		return currency / items->items[item].price;
-	else if (vendor_tab == VENDOR_BUY)
+		return currency / items->items[item].getPrice();
+	else if (vendor_tab == VENDOR_SELL)
 		return currency / items->items[item].getSellPrice();
 	else
 		return 0;
+}
+
+int MenuInventory::getEquipSlotFromItem(int item, bool only_empty_slots) {
+	if (!items->requirementsMet(stats, item))
+		return -2;
+
+	int equip_slot = -1;
+
+	// find first empty(or just first) slot for item to equip
+	for (int i = 0; i < MAX_EQUIPPED; i++) {
+		if (slot_type[i] == items->items[item].type) {
+			if (inventory[EQUIPMENT].storage[i].empty()) {
+				// empty and matching, no need to search more
+				equip_slot = i;
+				break;
+			}
+			else if (!only_empty_slots && equip_slot == -1) {
+				// non-empty and matching
+				equip_slot = i;
+			}
+		}
+	}
+
+	return equip_slot;
 }
 
 MenuInventory::~MenuInventory() {

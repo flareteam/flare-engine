@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -68,6 +69,18 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 
 	loadAnimations(&e);
 	e.loadSounds();
+
+	// set cooldown_hit to duration of hit animation if undefined
+	if (e.stats.cooldown_ticks == -1) {
+		Animation *hit_anim = e.animationSet->getAnimation("hit");
+		if (hit_anim) {
+			e.stats.cooldown_hit = hit_anim->getDuration();
+			delete hit_anim;
+		}
+		else {
+			e.stats.cooldown_hit = 0;
+		}
+	}
 
 	prototypes.push_back(e);
 	size_t prototype = prototypes.size() - 1;
@@ -232,6 +245,7 @@ void EnemyManager::handleSpawn() {
 			e->eb = new BehaviorStandard(e);
 
 		e->stats.hero_ally = espawn.hero_ally;
+		e->stats.enemy_ally = espawn.enemy_ally;
 		e->stats.summoned = true;
 		e->stats.summoned_power_index = espawn.summon_power_index;
 
@@ -321,18 +335,20 @@ void EnemyManager::handleSpawn() {
 		//synchronise tha party passives in the pc stat block with the passives in the allies stat blocks
 		//at the time the summon is spawned, it takes the passives available at that time. if the passives change later, the changes wont affect summons retrospectively. could be exploited with equipment switching
 		for (unsigned i=0; i< pc->stats.powers_passive.size(); i++) {
-			if (powers->powers[pc->stats.powers_passive[i]].passive && powers->powers[pc->stats.powers_passive[i]].buff_party && e->stats.hero_ally
-					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->stats.summoned_power_index)) {
+			int pwr = pc->stats.powers_passive[i];
+			if (powers->powers[pwr].passive && powers->powers[pwr].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
+					&& (powers->powers[pwr].buff_party_power_id == 0 || powers->powers[pwr].buff_party_power_id == e->stats.summoned_power_index)) {
 
-				e->stats.powers_passive.push_back(pc->stats.powers_passive[i]);
+				e->stats.powers_passive.push_back(pwr);
 			}
 		}
 
 		for (unsigned i=0; i<pc->stats.powers_list_items.size(); i++) {
-			if (powers->powers[pc->stats.powers_list_items[i]].passive && powers->powers[pc->stats.powers_list_items[i]].buff_party && e->stats.hero_ally
-					&& (powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == 0 || powers->powers[pc->stats.powers_passive[i]].buff_party_power_id == e->stats.summoned_power_index)) {
+			int pwr = pc->stats.powers_list_items[i];
+			if (powers->powers[pwr].passive && powers->powers[pwr].buff_party && (e->stats.hero_ally || e->stats.enemy_ally)
+					&& (powers->powers[pwr].buff_party_power_id == 0 || powers->powers[pwr].buff_party_power_id == e->stats.summoned_power_index)) {
 
-				e->stats.powers_passive.push_back(pc->stats.powers_list_items[i]);
+				e->stats.powers_passive.push_back(pwr);
 			}
 		}
 
@@ -342,18 +358,13 @@ void EnemyManager::handleSpawn() {
 	}
 }
 
-void EnemyManager::handlePartyBuff() {
-	while (!powers->party_buffs.empty()) {
-		int power_index = powers->party_buffs.front();
-		powers->party_buffs.pop();
-		Power *buff_power = &powers->powers[power_index];
-
-		for (unsigned int i=0; i < enemies.size(); i++) {
-			if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0 && (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies[i]->stats.summoned_power_index)) {
-				powers->effect(&enemies[i]->stats, &pc->stats, power_index,SOURCE_TYPE_HERO);
-			}
+bool EnemyManager::checkPartyMembers() {
+	for (unsigned int i=0; i < enemies.size(); i++) {
+		if(enemies[i]->stats.hero_ally && enemies[i]->stats.hp > 0) {
+			return true;
 		}
 	}
+	return false;
 }
 
 /**
@@ -368,8 +379,6 @@ void EnemyManager::logic() {
 	}
 
 	handleSpawn();
-
-	handlePartyBuff();
 
 	std::vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
@@ -402,7 +411,7 @@ void EnemyManager::logic() {
 	}
 }
 
-Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
+Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool alive_only) {
 	Point p;
 	Rect r;
 	for(unsigned int i = 0; i < enemies.size(); i++) {
@@ -424,7 +433,7 @@ Enemy* EnemyManager::enemyFocus(Point mouse, FPoint cam, bool alive_only) {
 	return NULL;
 }
 
-Enemy* EnemyManager::getNearestEnemy(FPoint pos) {
+Enemy* EnemyManager::getNearestEnemy(const FPoint& pos) {
 	Enemy* nearest = NULL;
 	float best_distance = std::numeric_limits<float>::max();
 

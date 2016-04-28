@@ -4,6 +4,7 @@ Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -28,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 #include "StatBlock.h"
 #include "Stats.h"
 #include "UtilsFileSystem.h"
@@ -38,30 +40,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <climits>
 #include <cstring>
 
-/**
- * Resizes vector vec, so it can fit index id.
- */
-template <typename Ty_>
-static inline void ensureFitsId(std::vector<Ty_>& vec, int id) {
-	// id's are always greater or equal 1;
-	if (id < 1) return;
-
-	typedef typename std::vector<Ty_>::size_type VecSz;
-
-	if (vec.size() <= VecSz(id+1))
-		vec.resize(id+1);
-}
-
-/**
- * Trims vector allocated memory to its size.
- *
- * Emulates C++2011 vector::shrink_to_fit().
- * It is sometimes also called "swap trick".
- */
-template <typename Ty_>
-static inline void shrinkVecToFit(std::vector<Ty_>& vec) {
-	if (vec.capacity() != vec.size())
-		std::vector<Ty_>(vec).swap(vec);
+bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
+	return stack1.item < stack2.item;
 }
 
 ItemManager::ItemManager()
@@ -98,8 +78,10 @@ void ItemManager::loadAll() {
 	 * vector is twice as large as needed. This memory is definitly not used,
 	 * so we can free it.
 	 */
-	shrinkVecToFit(items);
-	shrinkVecToFit(item_sets);
+	if (items.capacity() != items.size())
+		items.swap(items);
+	if (item_sets.capacity() != item_sets.size())
+		item_sets.swap(item_sets);
 
 	// do we need to print these messages?
 	if (items.empty()) logInfo("ItemManager: No items were found.");
@@ -217,6 +199,10 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			else
 				items[id].abs_max = items[id].abs_min;
 		}
+		else if (infile.key == "requires_level") {
+			// @ATTR requires_level|integer|The hero's level must match or exceed this value in order to equip this item.
+			items[id].requires_level = toInt(infile.val);
+		}
 		else if (infile.key == "requires_stat") {
 			// @ATTR requires_stat|[ [physical:mental:offense:defense], amount (integer) ]|Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats
 			if (clear_req_stat) {
@@ -293,6 +279,9 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 		else if (infile.key == "price")
 			// @ATTR price|integer|The amount of currency the item costs, if set to 0 the item cannot be sold.
 			items[id].price = toInt(infile.val);
+		else if (infile.key == "price_per_level")
+			// @ATTR price_per_level|integer|Additional price for each player level above 1
+			items[id].price_per_level = toInt(infile.val);
 		else if (infile.key == "price_sell")
 			// @ATTR price_sell|integer|The amount of currency the item is sold for, if set to 0 the sell prices is prices*vendor_ratio.
 			items[id].price_sell = toInt(infile.val);
@@ -314,6 +303,10 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 				items[id].disable_slots.push_back(slot_type);
 				slot_type = popFirstString(infile.val);
 			}
+		}
+		else if (infile.key == "quest_item") {
+			// @ATTR quest_item|bool|If true, this item is a quest item and can not be dropped, stashed, or sold.
+			items[id].quest_item = toBool(infile.val);
 		}
 		else {
 			infile.error("ItemManager: '%s' is not a valid key.", infile.key.c_str());
@@ -419,7 +412,7 @@ std::string ItemManager::getItemName(unsigned id) {
 	return items[id].name;
 }
 
-std::string ItemManager::getItemType(std::string _type) {
+std::string ItemManager::getItemType(const std::string& _type) {
 	for (unsigned i=0; i<item_types.size(); ++i) {
 		if (item_types[i].id == _type)
 			return item_types[i].name;
@@ -446,7 +439,11 @@ Color ItemManager::getItemColor(unsigned id) {
 }
 
 void ItemManager::addUnknownItem(unsigned id) {
-	ensureFitsId(items, id);
+	if (id > 0) {
+		size_t new_size = id+1;
+		if (items.size() <= new_size)
+			items.resize(new_size);
+	}
 }
 
 /**
@@ -470,7 +467,12 @@ void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
 			// @ATTR id|integer|A uniq id for the item set.
 			id_line = true;
 			id = toInt(infile.val);
-			ensureFitsId(item_sets, id+1);
+
+			if (id > 0) {
+				size_t new_size = id+1;
+				if (item_sets.size() <= new_size)
+					item_sets.resize(new_size);
+			}
 
 			clear_bonus = true;
 		}
@@ -597,7 +599,7 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	}
 }
 
-void ItemManager::playSound(int item, Point pos) {
+void ItemManager::playSound(int item, const Point& pos) {
 	snd->play(items[item].sfx_id, GLOBAL_VIRTUAL_CHANNEL, pos, false);
 }
 
@@ -637,13 +639,18 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		ss << getItemName(stack.item) << " (" << stack.quantity << ")";
 	tip.addText(ss.str(), color);
 
+	// quest item
+	if (items[stack.item].quest_item) {
+		tip.addText(msg->get("Quest Item"), color_bonus);
+	}
+
 	// only show the name of the currency item
 	if (stack.item == CURRENCY_ID)
 		return tip;
 
 	// flavor text
 	if (items[stack.item].flavor != "") {
-		tip.addText(items[stack.item].flavor, color_flavor);
+		tip.addText(substituteVarsInString(items[stack.item].flavor, pc), color_flavor);
 	}
 
 	// level
@@ -727,7 +734,14 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		tip.addText(items[stack.item].power_desc, color_bonus);
 	}
 
-	// requirement
+	// level requirement
+	if (items[stack.item].requires_level > 0) {
+		if (stats->level < items[stack.item].requires_level) color = color_requirements_not_met;
+		else color = color_normal;
+		tip.addText(msg->get("Requires Level %d", items[stack.item].requires_level), color);
+	}
+
+	// base stat requirement
 	for (unsigned i=0; i<items[stack.item].req_stat.size(); ++i) {
 		if (items[stack.item].req_val[i] > 0) {
 			if (items[stack.item].req_stat[i] == REQUIRES_PHYS) {
@@ -761,12 +775,12 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// buy or sell price
-	if (items[stack.item].price > 0 && stack.item != CURRENCY_ID) {
+	if (items[stack.item].getPrice() > 0 && stack.item != CURRENCY_ID) {
 
 		int price_per_unit;
 		if (context == VENDOR_BUY) {
-			price_per_unit = items[stack.item].price;
-			if (stats->currency < items[stack.item].price) color = color_requirements_not_met;
+			price_per_unit = items[stack.item].getPrice();
+			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
 				tip.addText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
@@ -826,6 +840,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
  */
 bool ItemManager::requirementsMet(const StatBlock *stats, int item) {
 	if (!stats) return false;
+
+	// level
+	if (items[item].requires_level > 0 && stats->level < items[item].requires_level) {
+		return false;
+	}
 
 	// base stats
 	for (unsigned i=0; i < items[item].req_stat.size(); ++i) {
@@ -899,12 +918,16 @@ void ItemStack::clear() {
 	quantity = 0;
 }
 
+int Item::getPrice() {
+	return price + (price_per_level * (pc->stats.level - 1));
+}
+
 int Item::getSellPrice() {
 	int new_price = 0;
 	if (price_sell != 0)
 		new_price = price_sell;
 	else
-		new_price = static_cast<int>(static_cast<float>(price) * VENDOR_RATIO);
+		new_price = static_cast<int>(static_cast<float>(getPrice()) * VENDOR_RATIO);
 	if (new_price == 0) new_price = 1;
 
 	return new_price;

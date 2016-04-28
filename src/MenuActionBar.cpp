@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -28,6 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "Menu.h"
 #include "MenuActionBar.h"
+#include "MenuInventory.h"
+#include "MenuManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
@@ -41,9 +44,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <climits>
 
 MenuActionBar::MenuActionBar(Avatar *_hero)
-	: emptyslot(NULL)
-	, disabled(NULL)
-	, attention(NULL)
+	: sprite_emptyslot(NULL)
+	, sprite_disabled(NULL)
+	, sprite_attention(NULL)
 	, hero(_hero)
 	, slots_count(0)
 	, drag_prev_slot(-1)
@@ -142,6 +145,7 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 	slot_item_count.resize(slots_count);
 	slot_enabled.resize(slots_count);
 	slot_activated.resize(slots_count);
+	slot_cooldown_size.resize(slots_count);
 
 	clear();
 
@@ -206,6 +210,7 @@ void MenuActionBar::clear() {
 		slot_enabled[i] = true;
 		locked[i] = false;
 		slot_activated[i] = false;
+		slot_cooldown_size[i] = 0;
 	}
 
 	// clear menu notifications
@@ -222,21 +227,21 @@ void MenuActionBar::loadGraphics() {
 
 	graphics = render_device->loadImage("images/menus/slot_empty.png");
 	if (graphics) {
-		emptyslot = graphics->createSprite();
-		emptyslot->setClip(0,0,ICON_SIZE,ICON_SIZE);
+		sprite_emptyslot = graphics->createSprite();
+		sprite_emptyslot->setClip(0,0,ICON_SIZE,ICON_SIZE);
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/disabled.png");
 	if (graphics) {
-		disabled = graphics->createSprite();
-		disabled->setClip(0,0,ICON_SIZE,ICON_SIZE);
+		sprite_disabled = graphics->createSprite();
+		sprite_disabled->setClip(0,0,ICON_SIZE,ICON_SIZE);
 		graphics->unref();
 	}
 
 	graphics = render_device->loadImage("images/menus/attention_glow.png");
 	if (graphics) {
-		attention = graphics->createSprite();
+		sprite_attention = graphics->createSprite();
 		graphics->unref();
 	}
 }
@@ -249,9 +254,9 @@ void MenuActionBar::renderAttention(int menu_id) {
 	dest.x = window_area.x + (menu_id * ICON_SIZE) + ICON_SIZE*15;
 	dest.y = window_area.y+3;
 	dest.w = dest.h = ICON_SIZE;
-	if (attention) {
-		attention->setDest(dest);
-		render_device->render(attention);
+	if (sprite_attention) {
+		sprite_attention->setDest(dest);
+		render_device->render(sprite_attention);
 	}
 
 	// put an asterisk on this icon if in colorblind mode
@@ -264,6 +269,56 @@ void MenuActionBar::renderAttention(int menu_id) {
 
 void MenuActionBar::logic() {
 	tablist.logic();
+
+	for (unsigned i = 0; i < slots_count; i++) {
+		if (!slots[i]) continue;
+
+		if (hotkeys[i] > 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
+			const Power &power = powers->getPower(hotkeys_mod[i]);
+
+			int item_id = power.requires_item;
+			int equipped_item_id = power.requires_equipped_item;
+
+			if (equipped_item_id > 0) {
+				// if a non-consumable item power is unequipped, disable that slot
+				if (!menu->inv->isItemEquipped(equipped_item_id)) {
+					setItemCount(i, 0, true);
+				}
+				else {
+					setItemCount(i, 1, true);
+				}
+			}
+			else if (item_id > 0) {
+				setItemCount(i, menu->inv->getItemCountCarried(item_id));
+			}
+			else {
+				setItemCount(i, -1);
+			}
+
+			//see if the slot should be greyed out
+			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
+							  && (hero->power_cast_ticks[hotkeys_mod[i]] == 0)
+							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
+							  && hero->stats.canUsePower(power, hotkeys_mod[i])
+							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
+
+			slots[i]->setIcon(power.icon);
+		}
+		else {
+			slot_enabled[i] = true;
+		}
+
+		if (hero->power_cast_ticks[hotkeys_mod[i]] > 0 && hero->power_cast_duration[hotkeys_mod[i]] > 0) {
+			slot_cooldown_size[i] = (ICON_SIZE * hero->power_cast_ticks[hotkeys_mod[i]]) / hero->power_cast_duration[hotkeys_mod[i]];
+		}
+		else if (hero->hero_cooldown[hotkeys_mod[i]] > 0 && powers->powers[hotkeys_mod[i]].cooldown > 0) {
+			slot_cooldown_size[i] = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
+		}
+		else {
+			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : ICON_SIZE);;
+		}
+	}
+
 }
 
 void MenuActionBar::render() {
@@ -274,18 +329,7 @@ void MenuActionBar::render() {
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 
-		if (hotkeys[i] != 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
-			const Power &power = powers->getPower(hotkeys_mod[i]);
-
-			//see if the slot should be greyed out
-			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
-							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
-							  && !hero->stats.effects.stun
-							  && hero->stats.alive
-							  && hero->stats.canUsePower(power, hotkeys_mod[i])
-							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
-
-			slots[i]->setIcon(power.icon);
+		if (hotkeys[i] != 0) {
 			slots[i]->render();
 		}
 		else {
@@ -293,9 +337,9 @@ void MenuActionBar::render() {
 			dest.x = slots[i]->pos.x;
 			dest.y = slots[i]->pos.y;
 			dest.h = dest.w = ICON_SIZE;
-			if (emptyslot) {
-				emptyslot->setDest(dest);
-				render_device->render(emptyslot);
+			if (sprite_emptyslot) {
+				sprite_emptyslot->setDest(dest);
+				render_device->render(sprite_emptyslot);
 			}
 			slots[i]->renderSelection();
 		}
@@ -307,9 +351,11 @@ void MenuActionBar::render() {
 	renderCooldowns();
 
 	// render log attention notifications
-	for (int i=0; i<4; i++)
-		if (requires_attention[i])
+	for (int i=0; i<4; i++) {
+		if (requires_attention[i] && !menus[i]->in_focus) {
 			renderAttention(i);
+		}
+	}
 }
 
 /**
@@ -325,14 +371,14 @@ void MenuActionBar::renderCooldowns() {
 			item_src.w = item_src.h = ICON_SIZE;
 
 			// Wipe from bottom to top
-			if (hero->hero_cooldown[hotkeys_mod[i]] && powers->powers[hotkeys_mod[i]].cooldown && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i)) {
-				item_src.h = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
+			if (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i) {
+				item_src.h = slot_cooldown_size[i];
 			}
 
-			if (disabled) {
-				disabled->setClip(item_src);
-				disabled->setDest(slots[i]->pos);
-				render_device->render(disabled);
+			if (sprite_disabled && item_src.h > 0) {
+				sprite_disabled->setClip(item_src);
+				sprite_disabled->setDest(slots[i]->pos);
+				render_device->render(sprite_disabled);
 			}
 
 			slots[i]->renderSelection();
@@ -441,6 +487,11 @@ void MenuActionBar::remove(const Point& mouse) {
  * add that power to the action queue
  */
 void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
+	if (inpt->pressing[ACTIONBAR_USE] && tablist.getCurrent() == -1 && slots_count > 10) {
+		tablist.setCurrent(slots[10]);
+		slots[10]->in_focus = true;
+	}
+
 	// check click and hotkey actions
 	for (unsigned i = 0; i < slots_count; i++) {
 		ActionData action;
@@ -557,6 +608,7 @@ int MenuActionBar::checkDrag(const Point& mouse) {
 			hotkeys[i] = 0;
 			last_mouse = mouse;
 			updated = true;
+			twostep_slot = -1;
 			return power_index;
 		}
 	}
@@ -579,6 +631,22 @@ void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &me
 	}
 	else if (menus[MENU_LOG]->checkClick()) {
 		menu_l = true;
+	}
+
+	// also allow ACTIONBAR_USE to open menus
+	if (inpt->pressing[ACTIONBAR_USE] && !inpt->lock[ACTIONBAR_USE]) {
+		inpt->lock[ACTIONBAR_USE] = true;
+
+		unsigned cur_slot = static_cast<unsigned>(tablist.getCurrent());
+
+		if (cur_slot == tablist.size()-4)
+			menu_c = true;
+		else if (cur_slot == tablist.size()-3)
+			menu_i = true;
+		else if (cur_slot == tablist.size()-2)
+			menu_p = true;
+		else if (cur_slot == tablist.size()-1)
+			menu_l = true;
 	}
 }
 
@@ -712,12 +780,12 @@ Point MenuActionBar::getSlotPos(int slot) {
 MenuActionBar::~MenuActionBar() {
 
 	menu_act = NULL;
-	if (emptyslot)
-		delete emptyslot;
-	if (disabled)
-		delete disabled;
-	if (attention)
-		delete attention;
+	if (sprite_emptyslot)
+		delete sprite_emptyslot;
+	if (sprite_disabled)
+		delete sprite_disabled;
+	if (sprite_attention)
+		delete sprite_attention;
 
 	labels.clear();
 	menu_labels.clear();

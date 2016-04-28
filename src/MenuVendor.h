@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -65,20 +66,26 @@ public:
 		return activetab;
 	}
 	void render();
-	ItemStack click(Point position);
+	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
-	TooltipData checkTooltip(Point position);
+	TooltipData checkTooltip(const Point& position);
 	void setInventory();
 	void saveInventory();
 	void sort(int type);
 	int getRowsCount();
 	void setNPC(NPC* _npc);
 	void removeFromPrevSlot(int quantity);
+	void lockTabControl();
+	void unlockTabControl();
 
 	Rect slots_area;
 
-	TabList tablist;
+	TabList tablist_buy;
+	TabList tablist_sell;
+
+	TabList* getCurrentTabList();
+	void defocusTabLists();
 };
 
 

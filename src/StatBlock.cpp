@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -32,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "MapCollision.h"
 #include "MenuPowers.h"
+#include "EnemyManager.h"
 #include "UtilsMath.h"
 #include <limits>
 
@@ -42,6 +44,7 @@ StatBlock::StatBlock()
 	, corpse_ticks(0)
 	, hero(false)
 	, hero_ally(false)
+	, enemy_ally(false)
 	, humanoid(false)
 	, permadeath(false)
 	, transformed(false)
@@ -93,6 +96,7 @@ StatBlock::StatBlock()
 	, absorb_min_add(0)
 	, absorb_max_add(0)
 	, speed(0.1f)
+	, charge_speed(0.0f)
 	, vulnerable(ELEMENTS.size(), 100)
 	, vulnerable_base(ELEMENTS.size(), 100)
 	, transform_duration(0)
@@ -107,9 +111,11 @@ StatBlock::StatBlock()
 	, knockback_srcpos()
 	, knockback_destpos()
 	, direction(0)
-	, cooldown_hit(0)
+	, cooldown_hit(-1)
 	, cooldown_hit_ticks(0)
 	, cur_state(0)
+	, state_ticks(0)
+	, hold_state(false)
 	, waypoints()		// enemy only
 	, waypoint_pause(MAX_FRAMES_PER_SEC)	// enemy only
 	, waypoint_pause_ticks(0)		// enemy only
@@ -177,6 +183,16 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	if (infile->key == "speed") {
 		// @ATTR speed|float|Movement speed
 		speed = speed_default = fvalue / MAX_FRAMES_PER_SEC;
+		return true;
+	}
+	else if (infile->key == "cooldown") {
+		// @ATTR cooldown|integer|Cooldown between attacks in 'ms' or 's'.
+		cooldown = parse_duration(infile->val);
+		return true;
+	}
+	else if (infile->key == "cooldown_hit") {
+		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
+		cooldown_hit = parse_duration(infile->val);
 		return true;
 	}
 	else {
@@ -319,9 +335,6 @@ void StatBlock::load(const std::string& filename) {
 			quest_loot_requires_not_status = infile.nextValue();
 			quest_loot_id = toInt(infile.nextValue());
 		}
-		// combat stats
-		// @ATTR cooldown|integer|Cooldown between attacks in 'ms' or 's'.
-		else if (infile.key == "cooldown") cooldown = parse_duration(infile.val);
 
 		// behavior stats
 		// @ATTR flying|boolean|Creature can move over gaps/water.
@@ -340,8 +353,6 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "chance_pursue") chance_pursue = num;
 		// @ATTR chance_flee|integer|Percentage chance that the creature will run away from their target.
 		else if (infile.key == "chance_flee") chance_flee = num;
-		// @ATTR cooldown_hit|duration|Duration of cooldown after being hit in 'ms' or 's'.
-		else if (infile.key == "cooldown_hit") cooldown_hit = parse_duration(infile.val);
 
 		else if (infile.key == "power") {
 			// @ATTR power|type (string), power id (integer), chance (integer)|A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, on_hit, on_death, on_half_dead, on_join_combat, on_debuff
@@ -562,6 +573,24 @@ void StatBlock::logic() {
 	if (hp <= 0 && !effects.triggered_death && !effects.revive) alive = false;
 	else alive = true;
 
+	// handle party buffs
+	if (enemies && powers) {
+		while (!party_buffs.empty()) {
+			int power_index = party_buffs.front();
+			party_buffs.pop();
+			Power *buff_power = &powers->powers[power_index];
+
+			for (size_t i=0; i < enemies->enemies.size(); ++i) {
+				if(enemies->enemies[i]->stats.hp > 0 &&
+				   ((enemies->enemies[i]->stats.hero_ally && hero) || (enemies->enemies[i]->stats.enemy_ally && enemies->enemies[i]->stats.summoner == this)) &&
+				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies->enemies[i]->stats.summoned_power_index)
+				) {
+					powers->effect(&enemies->enemies[i]->stats, this, power_index, (hero ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY));
+				}
+			}
+		}
+	}
+
 	// handle effect timers
 	effects.logic();
 
@@ -625,6 +654,15 @@ void StatBlock::logic() {
 	if(cooldown_hit_ticks > 0)
 		cooldown_hit_ticks--;
 
+	if (effects.stun) {
+		// stun stops charge attacks
+		state_ticks = 0;
+		charge_speed = 0;
+	}
+	else if (state_ticks > 0) {
+		state_ticks--;
+	}
+
 	// apply healing over time
 	if (effects.hpot > 0) {
 		comb->addMessage(msg->get("+%d HP",effects.hpot), pos, COMBAT_MESSAGE_BUFF);
@@ -660,13 +698,20 @@ void StatBlock::logic() {
 
 	if (effects.knockback_speed != 0) {
 		float theta = calcTheta(knockback_srcpos.x, knockback_srcpos.y, knockback_destpos.x, knockback_destpos.y);
-		knockback_speed.x = effects.knockback_speed * static_cast<float>(cos(theta));
-		knockback_speed.y = effects.knockback_speed * static_cast<float>(sin(theta));
-	}
+		knockback_speed.x = effects.knockback_speed * cosf(theta);
+		knockback_speed.y = effects.knockback_speed * sinf(theta);
 
-	if (effects.knockback_speed != 0) {
 		mapr->collider.unblock(pos.x, pos.y);
 		mapr->collider.move(pos.x, pos.y, knockback_speed.x, knockback_speed.y, movement_type, hero);
+		mapr->collider.block(pos.x, pos.y, hero_ally);
+	}
+	else if (charge_speed != 0.0f) {
+		float tmp_speed = charge_speed * speedMultiplyer[direction];
+		float dx = tmp_speed * static_cast<float>(directionDeltaX[direction]);
+		float dy = tmp_speed * static_cast<float>(directionDeltaY[direction]);
+
+		mapr->collider.unblock(pos.x, pos.y);
+		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, hero);
 		mapr->collider.block(pos.x, pos.y, hero_ally);
 	}
 }
@@ -675,29 +720,37 @@ StatBlock::~StatBlock() {
 	removeFromSummons();
 }
 
-bool StatBlock::canUsePower(const Power &power, unsigned powerid) const {
-	if (!menu_powers) return false;
-
-	// needed to unlock shapeshifter powers
-	if (transformed) return mp >= power.requires_mp;
-
-	//don't use untransform power if hero is not transformed
-	else if (power.spawn_type == "untransform" && !transformed) return false;
+bool StatBlock::canUsePower(const Power &power, int powerid) const {
+	if (!alive) {
+		// can't use powers when dead
+		return false;
+	}
+	else if (transformed) {
+		// needed to unlock shapeshifter powers
+		return mp >= power.requires_mp;
+	}
 	else {
-		return std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
-			   && mp >= power.requires_mp
-			   && (!power.sacrifice == false || hp > power.requires_hp)
-			   && menu_powers->meetsUsageStats(powerid)
-			   && !power.passive
-			   && (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
-			   && !power.meta_power
-			   && !effects.stun
-			   && (power.requires_item == -1 || (power.requires_item > 0 && items->requirementsMet(this, power.requires_item)));
+		return (
+			mp >= power.requires_mp
+			&& !power.passive
+			&& !power.meta_power
+			&& !effects.stun
+			&& (power.sacrifice || hp > power.requires_hp)
+			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
+			&& (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
+			&& !(power.spawn_type == "untransform" && !transformed)
+			&& std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
+			&& (!power.buff_party || (power.buff_party && enemies && enemies->checkPartyMembers()))
+			&& (power.requires_item == -1 || (power.requires_item > 0 && items->requirementsMet(this, power.requires_item)))
+		);
 	}
 
 }
 
 void StatBlock::loadHeroStats() {
+	// set the default global cooldown
+	cooldown = parse_duration("66ms");
+
 	// Redefine numbers from config file if present
 	FileParser infile;
 	// @CLASS StatBlock: Hero stats|Description of engine/stats.txt
@@ -769,7 +822,7 @@ void StatBlock::removeSummons() {
 		(*it)->hp = 0;
 		(*it)->effects.triggered_death = true;
 		(*it)->effects.clearEffects();
-		if (!(*it)->hero) {
+		if (!(*it)->hero && !(*it)->corpse) {
 			(*it)->cur_state = ENEMY_DEAD;
 			(*it)->corpse_ticks = CORPSE_TIMEOUT;
 		}
@@ -895,6 +948,17 @@ AIPower* StatBlock::getAIPower(AI_POWER ai_type) {
 
 		if (powers->powers[powers_ai[i].id].type == POWTYPE_SPAWN) {
 			if (summonLimitReached(powers_ai[i].id))
+				continue;
+		}
+
+		int live_summon_count = 0;
+		for (size_t j=0; j<summons.size(); ++j) {
+			if (summons[j]->hp > 0) {
+				++live_summon_count;
+			}
+		}
+		if (powers->powers[powers_ai[i].id].requires_spawns > 0) {
+			if (live_summon_count < powers->powers[powers_ai[i].id].requires_spawns)
 				continue;
 		}
 

@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -145,7 +146,7 @@ void MapRenderer::clearLayers() {
 	index_objectlayer = 0;
 }
 
-int MapRenderer::load(std::string fname) {
+int MapRenderer::load(const std::string& fname) {
 	// unload sounds
 	snd->reset();
 	while (!sids.empty()) {
@@ -157,6 +158,9 @@ int MapRenderer::load(std::string fname) {
 	while (!powers->enemies.empty()) {
 		powers->enemies.pop();
 	}
+
+	// clear combat text
+	comb->clear();
 
 	show_tooltip = false;
 
@@ -310,7 +314,7 @@ void MapRenderer::drawRenderable(std::vector<Renderable>::iterator r_cursor) {
 void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
-	Rect dest;
+	Point dest;
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2*tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / TILE_H) + 2*tset.max_size_y);
@@ -351,12 +355,13 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 			p.x += TILE_W;
 
 			if (const uint_fast16_t current_tile = layerdata[i][j]) {
-				dest.x = p.x - tset.tiles[current_tile].offset.x;
-				dest.y = p.y - tset.tiles[current_tile].offset.y;
+				const Tile_Def &tile = tset.tiles[current_tile];
+				dest.x = p.x - tile.offset.x;
+				dest.y = p.y - tile.offset.y;
 				// no need to set w and h in dest, as it is ignored
 				// by SDL_BlitSurface
-				tset.tiles[current_tile].tile->setDest(dest);
-				render_device->render(tset.tiles[current_tile].tile);
+				tile.tile->setDest(dest);
+				render_device->render(tile.tile);
 			}
 		}
 		j = static_cast<int_fast16_t>(j + tiles_width);
@@ -376,7 +381,7 @@ void MapRenderer::renderIsoBackObjects(std::vector<Renderable> &r) {
 }
 
 void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
-	Rect dest;
+	Point dest;
 
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2 * tset.max_size_x);
@@ -415,17 +420,19 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 		// draw one horizontal line
 		Point p = map_to_screen(float(i), float(j), shakycam.x, shakycam.y);
 		p = center_tile(p);
+		const Map_Layer &current_layer = layers[index_objectlayer];
 		while (j > j_end) {
 			--j;
 			++i;
 			++tiles_width;
 			p.x += TILE_W;
 
-			if (const uint_fast16_t current_tile = layers[index_objectlayer][i][j]) {
-				dest.x = p.x - tset.tiles[current_tile].offset.x;
-				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile->setDest(dest);
-				render_device->render(tset.tiles[current_tile].tile);
+			if (const uint_fast16_t current_tile = current_layer[i][j]) {
+				const Tile_Def &tile = tset.tiles[current_tile];
+				dest.x = p.x - tile.offset.x;
+				dest.y = p.y - tile.offset.y;
+				tile.tile->setDest(dest);
+				render_device->render(tile.tile);
 			}
 
 			// some renderable entities go in this layer
@@ -463,6 +470,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 
 void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
+	Point dest;
 	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
@@ -479,11 +487,11 @@ void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 		for (i = starti; i < max_tiles_width; i++) {
 
 			if (const unsigned short current_tile = layerdata[i][j]) {
-				Rect dest;
-				dest.x = p.x - tset.tiles[current_tile].offset.x;
-				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile->setDest(dest);
-				render_device->render(tset.tiles[current_tile].tile);
+				const Tile_Def &tile = tset.tiles[current_tile];
+				dest.x = p.x - tile.offset.x;
+				dest.y = p.y - tile.offset.y;
+				tile.tile->setDest(dest);
+				render_device->render(tile.tile);
 			}
 			p.x += TILE_W;
 		}
@@ -501,7 +509,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 	short int i;
 	short int j;
-	Rect dest;
+	Point dest;
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
 
@@ -524,10 +532,11 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 		for (i = starti; i<max_tiles_width; i++) {
 
 			if (const unsigned short current_tile = layers[index_objectlayer][i][j]) {
-				dest.x = p.x - tset.tiles[current_tile].offset.x;
-				dest.y = p.y - tset.tiles[current_tile].offset.y;
-				tset.tiles[current_tile].tile->setDest(dest);
-				render_device->render(tset.tiles[current_tile].tile);
+				const Tile_Def &tile = tset.tiles[current_tile];
+				dest.x = p.x - tile.offset.x;
+				dest.y = p.y - tile.offset.y;
+				tile.tile->setDest(dest);
+				render_device->render(tile.tile);
 			}
 			p.x += TILE_W;
 
@@ -568,7 +577,7 @@ void MapRenderer::executeOnLoadEvents() {
 		// skip inactive events
 		if (!EventManager::isActive(*it)) continue;
 
-		if ((*it).type == "on_load") {
+		if ((*it).type == EVENT_ON_LOAD) {
 			if (EventManager::executeEvent(*it))
 				it = events.erase(it);
 		}
@@ -587,12 +596,12 @@ void MapRenderer::executeOnMapExitEvents() {
 		// skip inactive events
 		if (!EventManager::isActive(*it)) continue;
 
-		if ((*it).type == "on_mapexit")
+		if ((*it).type == EVENT_ON_MAPEXIT)
 			EventManager::executeEvent(*it); // ignore repeat value
 	}
 }
 
-void MapRenderer::checkEvents(FPoint loc) {
+void MapRenderer::checkEvents(const FPoint& loc) {
 	Point maploc;
 	maploc.x = int(loc.x);
 	maploc.y = int(loc.y);
@@ -605,7 +614,7 @@ void MapRenderer::checkEvents(FPoint loc) {
 		// skip inactive events
 		if (!EventManager::isActive(*it)) continue;
 
-		if ((*it).type == "on_clear") {
+		if ((*it).type == EVENT_ON_CLEAR) {
 			if (enemies_cleared && EventManager::executeEvent(*it))
 				it = events.erase(it);
 			continue;
@@ -616,7 +625,7 @@ void MapRenderer::checkEvents(FPoint loc) {
 					  maploc.x <= (*it).location.x + (*it).location.w-1 &&
 					  maploc.y <= (*it).location.y + (*it).location.h-1;
 
-		if ((*it).type == "on_leave") {
+		if ((*it).type == EVENT_ON_LEAVE) {
 			if (inside) {
 				if (!(*it).getComponent(EC_WAS_INSIDE_EVENT_AREA)) {
 					(*it).components.push_back(Event_Component());
@@ -691,11 +700,12 @@ void MapRenderer::checkHotspots() {
 
 						if (const short current_tile = layers[index][x][y]) {
 							// first check if mouse pointer is in rectangle of that tile:
+							const Tile_Def &tile = tset.tiles[current_tile];
 							Rect dest;
-							dest.x = p.x - tset.tiles[current_tile].offset.x;
-							dest.y = p.y - tset.tiles[current_tile].offset.y;
-							dest.w = tset.tiles[current_tile].tile->getClip().w;
-							dest.h = tset.tiles[current_tile].tile->getClip().h;
+							dest.x = p.x - tile.offset.x;
+							dest.y = p.y - tile.offset.y;
+							dest.w = tile.tile->getClip().w;
+							dest.h = tile.tile->getClip().h;
 
 							if (isWithin(dest, inpt->mouse)) {
 								matched = true;
@@ -797,7 +807,7 @@ void MapRenderer::checkNearestEvent() {
 }
 
 void MapRenderer::checkTooltip() {
-	if (show_tooltip)
+	if (show_tooltip && SHOW_HUD)
 		tip->render(tip_buf, tip_pos, STYLE_TOPLABEL);
 }
 

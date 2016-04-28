@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Justin Jacobs
+Copyright © 2012-2016 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
 
@@ -72,7 +72,7 @@ public:
 
 	bool checkClick();
 	bool checkClick(int x, int y);
-	TooltipData checkTooltip(Point mouse);
+	TooltipData checkTooltip(const Point& mouse);
 	void append(const std::string& value, const std::string& tooltip);
 	void set(unsigned index, const std::string& value, const std::string& tooltip);
 	void remove(int index);
@@ -92,6 +92,7 @@ public:
 
 	bool getNext();
 	bool getPrev();
+	void defocus();
 
 	void select(int index);
 	void deselect(int index);

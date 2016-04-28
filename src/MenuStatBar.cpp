@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -28,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuStatBar.h"
 #include "ModManager.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "WidgetLabel.h"
@@ -35,7 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 
-MenuStatBar::MenuStatBar(std::string type)
+MenuStatBar::MenuStatBar(const std::string& type)
 	: bar(NULL)
 	, stat_cur(0)
 	, stat_max(0)
@@ -107,7 +109,7 @@ void MenuStatBar::loadGraphics() {
 	}
 }
 
-void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, Point _mouse, std::string _custom_string) {
+void MenuStatBar::update(unsigned long _stat_cur, unsigned long _stat_max, const Point& _mouse, const std::string& _custom_string) {
 	if (_custom_string != "") custom_string = _custom_string;
 	mouse = _mouse;
 	stat_cur = _stat_cur;
@@ -167,7 +169,7 @@ void MenuStatBar::render() {
 		else
 			label->set(bar_dest.x+bar_pos.w/2, bar_dest.y+bar_pos.h/2, JUSTIFY_CENTER, VALIGN_CENTER, "", color_normal);
 
-		if (isWithin(bar_dest,mouse)) {
+		if (STATBAR_LABELS || isWithin(bar_dest,mouse)) {
 			std::stringstream ss;
 			if (custom_string != "")
 				ss << custom_string;

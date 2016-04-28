@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -32,9 +33,9 @@ class WidgetLabel;
 
 class MenuMiniMap : public Menu {
 private:
-	Uint32 color_wall;
-	Uint32 color_obst;
-	Uint32 color_hero;
+	Color color_wall;
+	Color color_obst;
+	Color color_hero;
 
 	Sprite *map_surface;
 	Point map_size;
@@ -44,8 +45,8 @@ private:
 	WidgetLabel *label;
 
 	void createMapSurface();
-	void renderIso(FPoint hero_pos);
-	void renderOrtho(FPoint hero_pos);
+	void renderIso(const FPoint& hero_pos);
+	void renderOrtho(const FPoint& hero_pos);
 	void prerenderOrtho(MapCollision *collider);
 	void prerenderIso(MapCollision *collider);
 
@@ -55,9 +56,9 @@ public:
 	void align();
 
 	void render();
-	void render(FPoint hero_pos);
+	void render(const FPoint& hero_pos);
 	void prerender(MapCollision *collider, int map_w, int map_h);
-	void getMapTitle(std::string map_title);
+	void getMapTitle(const std::string& map_title);
 };
 
 

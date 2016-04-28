@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -29,6 +30,8 @@ WidgetTabControl::WidgetTabControl()
 
 	color_normal = font->getColor("widget_normal");
 	color_disabled = font->getColor("widget_disabled");
+
+	scroll_type = HORIZONTAL;
 }
 
 WidgetTabControl::~WidgetTabControl() {
@@ -71,6 +74,8 @@ int WidgetTabControl::getActiveTab() {
 void WidgetTabControl::setActiveTab(unsigned tab) {
 	if (tab > tabs.size())
 		active_tab = 0;
+	else if (tab == tabs.size())
+		active_tab = static_cast<unsigned>(tabs.size())-1;
 	else
 		active_tab = tab;
 }
@@ -182,6 +187,20 @@ void WidgetTabControl::render() {
 	for (unsigned i=0; i<tabs.size(); i++) {
 		renderTab(i);
 	}
+
+	// draw selection rectangle
+	if (in_focus) {
+		Point topLeft;
+		Point bottomRight;
+
+		topLeft.x = tabs[active_tab].x;
+		topLeft.y = tabs[active_tab].y;
+		bottomRight.x = topLeft.x + tabs[active_tab].w;
+		bottomRight.y = topLeft.y + tabs[active_tab].h;
+		Color color = Color(255,248,220,255);
+
+		render_device->drawRectangle(topLeft, bottomRight, color);
+	}
 }
 
 /**
@@ -240,4 +259,14 @@ void WidgetTabControl::renderTab(unsigned number) {
  */
 Rect WidgetTabControl::getContentArea() {
 	return content_area;
+}
+
+bool WidgetTabControl::getNext() {
+	setActiveTab(++active_tab);
+	return true;
+}
+
+bool WidgetTabControl::getPrev() {
+	setActiveTab(--active_tab);
+	return true;
 }

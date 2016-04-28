@@ -29,6 +29,8 @@ hardware_cursor=352,136,384,128
 dev_mode=352,168,384,160
 show_target=352,200,384,192
 loot_tooltips=352,232,384,224
+statbar_labels=352,264,384,256
+auto_equip=352,296,384,288
 
 [input]
 joystick_device=64,16,32,32

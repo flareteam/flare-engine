@@ -1,5 +1,5 @@
 /*
-Copyright © 2014 Justin Jacobs
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -41,7 +41,6 @@ protected:
 
 	WidgetLabel label;
 
-	TabList tablist;
 	LabelInfo title;
 	Rect history_area;
 

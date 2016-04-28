@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -103,7 +104,8 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	// disabled slots can't be clicked;
 	if (!enabled) return NO_CLICK;
 
-	if (continuous && pressed && checked && (inpt->lock[MAIN2] || inpt->lock[ACTIVATE] || inpt->touch_locked)) return ACTIVATED;
+	if (continuous && pressed && checked && (inpt->lock[MAIN2] || inpt->lock[ACTIVATE] || inpt->touch_locked))
+		return ACTIVATED;
 
 	// main button already in use, new click not allowed
 	if (inpt->lock[MAIN1]) return NO_CLICK;
@@ -116,6 +118,8 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 		checked = !checked;
 		if (checked)
 			return CHECKED;
+		else if (continuous)
+			return NO_CLICK;
 		else
 			return ACTIVATED;
 	}
@@ -168,18 +172,8 @@ void WidgetSlot::render() {
 	Rect src;
 
 	if (icon_id != -1 && icons) {
-		int columns = icons->getGraphicsWidth() / ICON_SIZE;
-		src.x = (icon_id % columns) * ICON_SIZE;
-		src.y = (icon_id / columns) * ICON_SIZE;
-
-		src.w = pos.w;
-		src.h = pos.h;
-
-		icons->local_frame = local_frame;
-		icons->setOffset(local_offset);
-		icons->setClip(src);
-		icons->setDest(pos);
-		render_device->render(icons);
+		icons->setIcon(icon_id, Point(pos.x, pos.y));
+		icons->render();
 
 		if (amount > 1 || max_amount > 1) {
 			std::stringstream ss;

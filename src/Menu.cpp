@@ -2,6 +2,7 @@
 Copyright © 2011-2012 kitano
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -42,7 +43,7 @@ Menu::~Menu() {
 	if (background) delete background;
 }
 
-void Menu::setBackground(std::string background_image) {
+void Menu::setBackground(const std::string& background_image) {
 	Image *graphics;
 
 	if (background) {
@@ -129,4 +130,15 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 	}
 
 	return true;
+}
+
+TabList* Menu::getCurrentTabList() {
+	if (tablist.getCurrent() != -1)
+		return (&tablist);
+
+	return NULL;
+}
+
+void Menu::defocusTabLists() {
+	tablist.defocus();
 }

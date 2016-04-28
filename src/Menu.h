@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 kitano
 Copyright © 2013-2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -27,13 +28,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "SoundManager.h"
+#include "Widget.h"
 
 class Menu {
 public:
 	Menu();
 	virtual ~Menu();
 
-	void setBackground(std::string background_image);
+	void setBackground(const std::string& background_image);
 	void setBackgroundDest(Rect &dest);
 	void setBackgroundClip(Rect &clip);
 	virtual void align();
@@ -48,6 +50,10 @@ public:
 
 	SoundManager::SoundID sfx_open;
 	SoundManager::SoundID sfx_close;
+
+	TabList tablist;
+	virtual TabList* getCurrentTabList();
+	virtual void defocusTabLists();
 
 private:
 	Sprite *background;

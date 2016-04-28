@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -37,8 +38,8 @@ const int TOOLTIP_MENU = 2;
 class WidgetTooltip {
 public:
 	WidgetTooltip();
-	Point calcPosition(STYLE style, Point pos, Point size);
-	void render(TooltipData &tip, Point pos, STYLE style);
+	Point calcPosition(STYLE style, const Point& pos, const Point& size);
+	void render(TooltipData &tip, const Point& pos, STYLE style);
 	bool createBuffer(TooltipData &tip);
 };
 

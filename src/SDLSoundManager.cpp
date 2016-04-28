@@ -1,5 +1,6 @@
 /*
 Copyright © 2013-2014 Henrik Andersson
+Copyright © 2015-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -64,13 +65,13 @@ SDLSoundManager::~SDLSoundManager() {
 	Mix_CloseAudio();
 }
 
-void SDLSoundManager::logic(FPoint c) {
+void SDLSoundManager::logic(const FPoint& center) {
 
 	PlaybackMapIterator it = playback.begin();
 	if (it == playback.end())
 		return;
 
-	lastPos = c;
+	lastPos = center;
 
 	std::vector<int> cleanup;
 
@@ -90,7 +91,7 @@ void SDLSoundManager::logic(FPoint c) {
 		}
 
 		/* control mixing playback depending on distance */
-		float v = calcDist(c, it->second.location) / static_cast<float>(SOUND_FALLOFF);
+		float v = calcDist(center, it->second.location) / static_cast<float>(SOUND_FALLOFF);
 		if (it->second.loop) {
 			if (v < 1.0 && it->second.paused) {
 				Mix_Resume(it->first);
@@ -105,7 +106,7 @@ void SDLSoundManager::logic(FPoint c) {
 		}
 
 		/* update sound mix with new distance/location to hero */
-		clamp(v, 0.0f, 1.0f);
+		v = std::min<float>(std::max<float>(v, 0.0f), 1.0f);
 		Uint8 dist = Uint8(255.0 * v);
 
 		Mix_SetPosition(it->first, 0, dist);
@@ -200,7 +201,7 @@ void SDLSoundManager::unload(SoundManager::SoundID sid) {
 
 
 
-void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, FPoint pos, bool loop) {
+void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, const FPoint& pos, bool loop) {
 
 	SoundMapIterator it;
 	VirtualChannelMapIterator vcit = channels.end();
@@ -244,7 +245,7 @@ void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, FPoin
 	Uint8 d = 0;
 	if (p.location.x != 0 || p.location.y != 0) {
 		float v = 255.0f * (calcDist(lastPos, p.location) / static_cast<float>(SOUND_FALLOFF));
-		clamp(v, 0.f, 255.f);
+		v = std::min<float>(std::max<float>(v, 0.0f), 255.0f);
 		d = Uint8(v);
 	}
 

@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2015 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -35,6 +36,10 @@ const int NPC_VOX_QUEST = 1;
 class NPC : public Entity {
 private:
 	bool isDialogType(const EVENT_COMPONENT_TYPE &type);
+
+	std::vector<Event_Component> random_table;
+	Point random_table_count;
+
 public:
 	NPC();
 	~NPC();

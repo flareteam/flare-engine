@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -38,7 +39,7 @@ MenuStash::MenuStash(StatBlock *_stats)
 	, color_normal(font->getColor("menu_normal"))
 	, stock()
 	, updated(false)
-
+	, log_msg("")
 {
 
 	setBackground("images/menus/stash.png");
@@ -145,9 +146,14 @@ void MenuStash::render() {
 /**
  * Dragging and dropping an item can be used to rearrange the stash
  */
-void MenuStash::drop(Point position, ItemStack stack) {
+bool MenuStash::drop(const Point& position, ItemStack stack) {
+	if (stack.empty()) {
+		return true;
+	}
+
 	int slot;
 	int drag_prev_slot;
+	bool success = true;
 
 	items->playSound(stack.item);
 
@@ -155,40 +161,70 @@ void MenuStash::drop(Point position, ItemStack stack) {
 	drag_prev_slot = stock.drag_prev_slot;
 
 	if (slot == -1) {
-		itemReturn(stack);
+		success = add(stack, slot, false);
 	}
-	else if (slot != drag_prev_slot) {
+	else if (drag_prev_slot != -1) {
 		if (stock[slot].item == stack.item || stock[slot].empty()) {
 			// Drop the stack, merging if needed
-			add(stack, slot);
+			success = add(stack, slot, false);
 		}
 		else if (drag_prev_slot != -1 && stock[drag_prev_slot].empty()) {
 			// Check if the previous slot is free (could still be used if SHIFT was used).
 			// Swap the two stacks
 			itemReturn(stock[slot]);
 			stock[slot] = stack;
+			updated = true;
 		}
 		else {
 			itemReturn(stack);
+			updated = true;
 		}
 	}
 	else {
-		itemReturn(stack); // cancel
+		success = add(stack, slot, false);
 	}
 
-	updated = true;
+	drag_prev_slot = -1;
+
+	return success;
 }
 
-void MenuStash::add(ItemStack stack, int slot) {
-	stock.add(stack, slot);
-	updated = true;
+bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
+	if (stack.empty()) {
+		return true;
+	}
+
+	if (play_sound) {
+		items->playSound(stack.item);
+	}
+
+	if (items->items[stack.item].quest_item) {
+		log_msg = msg->get("Can not store quest items in the stash.");
+		drop_stack.push(stack);
+		return false;
+	}
+
+	ItemStack leftover = stock.add(stack, slot);
+	if (!leftover.empty()) {
+		if (leftover.quantity != stack.quantity) {
+			updated = true;
+		}
+		log_msg = msg->get("Stash is full.");
+		drop_stack.push(leftover);
+		return false;
+	}
+	else {
+		updated = true;
+	}
+
+	return true;
 }
 
 /**
  * Start dragging a vendor item
  * Players can drag an item to their inventory.
  */
-ItemStack MenuStash::click(Point position) {
+ItemStack MenuStash::click(const Point& position) {
 	ItemStack stack = stock.click(position);
 	if (TOUCHSCREEN) {
 		tablist.setCurrent(stock.current_slot);
@@ -203,18 +239,8 @@ void MenuStash::itemReturn(ItemStack stack) {
 	stock.itemReturn(stack);
 }
 
-void MenuStash::add(ItemStack stack) {
-	items->playSound(stack.item);
-	stock.add(stack);
-	updated = true;
-}
-
-TooltipData MenuStash::checkTooltip(Point position) {
+TooltipData MenuStash::checkTooltip(const Point& position) {
 	return stock.checkTooltip(position, stats, PLAYER_INV);
-}
-
-bool MenuStash::full(int item) {
-	return stock.full(item);
 }
 
 int MenuStash::getRowsCount() {

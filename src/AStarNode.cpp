@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2011-2012 Nojan
 Copyright © 2012 Stefan Beller
+Copyright © 2012 Justin Jacobs
 
 This file is part of FLARE.
 

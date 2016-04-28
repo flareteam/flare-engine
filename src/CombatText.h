@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Thane Brimhall
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -47,7 +48,7 @@ public:
 	WidgetLabel *label;
 	int lifespan;
 	FPoint pos;
-	int floating_offset;
+	float floating_offset;
 	std::string text;
 	int displaytype;
 };
@@ -59,8 +60,9 @@ public:
 
 	void logic(const FPoint& _cam);
 	void render();
-	void addMessage(std::string message, FPoint location, int displaytype);
-	void addMessage(int num, FPoint location, int displaytype);
+	void addMessage(const std::string& message, const FPoint& location, int displaytype);
+	void addMessage(int num, const FPoint& location, int displaytype);
+	void clear();
 
 private:
 	FPoint cam;
@@ -68,7 +70,7 @@ private:
 
 	Color msg_color[5];
 	int duration;
-	int speed;
+	float speed;
 	int offset;
 };
 

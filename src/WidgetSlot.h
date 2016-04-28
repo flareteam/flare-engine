@@ -2,6 +2,7 @@
 Copyright © 2013 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2013 Justin Jacobs
 
 This file is part of FLARE.
 

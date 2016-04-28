@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -117,6 +118,7 @@ public:
 	int corpse_ticks;
 	bool hero; // else, enemy or other
 	bool hero_ally;
+	bool enemy_ally;
 	bool humanoid; // true for human, sceleton...; false for wyvern, snake...
 	bool permadeath;
 	bool transformed;
@@ -229,6 +231,7 @@ public:
 	int absorb_max_add;
 
 	float speed;
+	float charge_speed;
 
 	std::set<std::string> equip_flags;
 	std::vector<int> vulnerable;
@@ -254,6 +257,8 @@ public:
 
 	// state
 	int cur_state;
+	int state_ticks;
+	bool hold_state;
 
 	// waypoint patrolling
 	std::queue<FPoint> waypoints;
@@ -273,7 +278,7 @@ public:
 	std::vector<int> powers_passive;
 	std::vector<AIPower> powers_ai;
 
-	bool canUsePower(const Power &power, unsigned powerid) const;
+	bool canUsePower(const Power &power, int powerid) const;
 
 	float melee_range;
 	float threat_range;
@@ -341,6 +346,7 @@ public:
 	// links to summoned creatures and the entity which summoned this
 	std::vector<StatBlock*> summons;
 	StatBlock* summoner;
+	std::queue<int> party_buffs;
 
 	bool attacking;
 };

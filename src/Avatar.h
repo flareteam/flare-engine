@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -146,6 +147,8 @@ public:
 	bool close_menus;
 	bool allow_movement;
 	std::vector<int> hero_cooldown;
+	std::vector<int> power_cast_ticks;
+	std::vector<int> power_cast_duration;
 	FPoint enemy_pos; // positon of the highlighted enemy
 };
 

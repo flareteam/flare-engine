@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Thane Brimhall & Clint Bellanger
+Copyright © 2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -31,7 +32,7 @@ class GetText {
 private:
 	std::ifstream infile;
 	std::string line;
-	std::string sanitize(std::string input);
+	std::string sanitize(const std::string& input);
 
 public:
 	GetText();

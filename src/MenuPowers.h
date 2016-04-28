@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -51,22 +52,23 @@ public:
 
 class Power_Menu_Cell {
 public:
-	short id;
-	short tab;
+	int id;
+	int tab;
 	Point pos;
-	short requires_physoff;
-	short requires_physdef;
-	short requires_mentoff;
-	short requires_mentdef;
-	short requires_defense;
-	short requires_offense;
-	short requires_physical;
-	short requires_mental;
-	short requires_level;
-	short upgrade_level;
-	std::vector<short> upgrades;
+	int requires_physoff;
+	int requires_physdef;
+	int requires_mentoff;
+	int requires_mentdef;
+	int requires_defense;
+	int requires_offense;
+	int requires_physical;
+	int requires_mental;
+	int requires_level;
+	int upgrade_level;
+	std::vector<int> upgrades;
 
-	std::vector<short> requires_power;
+	std::vector<int> requires_power;
+	std::vector<int> requires_power_cell;
 
 	bool requires_point;
 	bool passive_on;
@@ -95,6 +97,29 @@ public:
 
 class MenuPowers : public Menu {
 private:
+	void loadGraphics();
+	void loadTab(FileParser &infile);
+	void loadPower(FileParser &infile);
+	void loadUpgrade(FileParser &infile);
+
+	bool checkRequirements(int pci);
+	bool checkUnlocked(int pci);
+	bool checkCellVisible(int pci);
+	bool checkUnlock(int pci);
+	bool checkUpgrade(int pci);
+
+	int getCellByPowerIndex(int power_index, const std::vector<Power_Menu_Cell>& cell);
+	int getNextLevelCell(int pci);
+
+	void replaceCellWithUpgrade(int pci, int uci);
+	void upgradePower(int pci);
+
+	void setUnlockedPowers();
+	int getPointsUsed();
+
+	void createTooltip(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
+	void renderPowers(int tab_num);
+
 	StatBlock *stats;
 	MenuActionBar *action_bar;
 	std::vector<Power_Menu_Cell> power_cell;           // the current visible power cells
@@ -115,7 +140,7 @@ private:
 	Point close_pos;
 	Rect tab_area;
 
-	short points_left;
+	int points_left;
 	std::vector<Power_Menu_Tab> tabs;
 	std::string default_background;
 
@@ -123,25 +148,9 @@ private:
 	WidgetLabel stat_up;
 	WidgetTabControl *tab_control;
 
-	void loadGraphics();
-	void displayBuild(int power_id);
-	bool powerUnlockable(int power_index);
-	void renderPowers(int tab_num);
-
 	Color color_bonus;
 	Color color_penalty;
 	Color color_flavor;
-
-	short id_by_powerIndex(short power_index, const std::vector<Power_Menu_Cell>& cell);
-	short nextLevel(short power_cell_index);
-	void replacePowerCellDataByUpgrade(short power_cell_index, short upgrade_cell_index);
-	short getPointsUsed();
-	void setUnlockedPowers();
-
-	bool powerIsVisible(short power_index);
-	void loadTab(FileParser &infile);
-	void loadPower(FileParser &infile);
-	void loadUpgrade(FileParser &infile);
 
 	bool tree_loaded;
 
@@ -151,27 +160,30 @@ public:
 	void align();
 
 	void loadPowerTree(const std::string &filename);
+
 	void logic();
 	void render();
-	TooltipData checkTooltip(Point mouse);
-	void generatePowerDescription(TooltipData* tip, int slot_num, const std::vector<Power_Menu_Cell>& power_cells, bool show_unlock_prompt);
-	bool baseRequirementsMet(int power_index);
-	bool requirementsMet(int power_index);
-	int click(Point mouse);
-	void upgradePower(short power_cell_index);
-	bool canUpgrade(short power_cell_index);
+
+	TooltipData checkTooltip(const Point& mouse);
+	int click(const Point& mouse);
+	void upgradeByCell(int pci);
+
 	void applyPowerUpgrades();
-	bool meetsUsageStats(unsigned powerid);
-	short getUnspent() {
-		return points_left;
-	}
 	void resetToBasePowers();
+
+	bool meetsUsageStats(int power_index);
 
 	std::vector<WidgetSlot*> slots; // power slot Widgets
 
 	bool newPowerNotification;
 
-	TabList tablist;
 
+	std::vector<TabList> tablist_pow;
+
+	bool isTabListSelected();
+	int getSelectedCellIndex();
+	void setNextTabList(TabList *tl);
+	TabList* getCurrentTabList();
+	void defocusTabLists();
 };
 #endif

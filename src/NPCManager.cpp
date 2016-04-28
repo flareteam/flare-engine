@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -87,7 +88,7 @@ void NPCManager::handleNewMap() {
 		Event_Component ec;
 
 		// the event hotspot is a 1x1 tile at the npc's feet
-		ev.type = "on_trigger";
+		ev.type = EVENT_ON_TRIGGER;
 		ev.keep_after_trigger = true;
 		Rect location;
 		location.x = static_cast<int>(npc->pos.x);
@@ -129,7 +130,7 @@ void NPCManager::logic() {
 	}
 }
 
-int NPCManager::getID(std::string npcName) {
+int NPCManager::getID(const std::string& npcName) {
 	for (unsigned i=0; i<npcs.size(); i++) {
 		if (npcs[i]->filename == npcName) return i;
 	}

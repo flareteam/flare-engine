@@ -20,6 +20,9 @@ endif (NOT MSVC)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g0")
+  if(MINGW)
+	set(CMAKE_CXX_FLAGS_RELEASE "-Wl,-subsystem,windows ${CMAKE_CXX_FLAGS_RELEASE}")
+  endif()
 elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
@@ -179,6 +182,7 @@ Set (FLARE_SOURCES
 	./src/GetText.cpp
 	./src/Hazard.cpp
 	./src/HazardManager.cpp
+	./src/IconManager.cpp
 	./src/InputState.cpp
 	./src/ItemManager.cpp
 	./src/ItemStorage.cpp
@@ -286,6 +290,7 @@ Set (FLARE_HEADERS
 	./src/GetText.h
 	./src/Hazard.h
 	./src/HazardManager.h
+	./src/IconManager.h
 	./src/InputState.h
 	./src/ItemManager.h
 	./src/ItemStorage.h

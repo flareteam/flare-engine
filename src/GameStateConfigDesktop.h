@@ -1,5 +1,5 @@
 /*
-Copyright © 2014 Justin Jacobs
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -64,6 +64,7 @@ private:
 	void updateKeybinds();
 
 	void logic();
+	bool logicMain();
 	void logicVideo();
 	void logicInput();
 	void logicKeybinds();
@@ -77,7 +78,14 @@ private:
 	void cleanupTabContents();
 	void cleanupDialogs();
 
+	TabList tablist_video;
+	TabList tablist_input;
+	TabList tablist_keybinds;
+
 	void scanKey(int button);
+
+	void disableMouseOptions();
+	void disableJoystickOptions();
 
 	WidgetCheckBox      * fullscreen_cb;
 	WidgetLabel         * fullscreen_lb;

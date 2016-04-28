@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -51,13 +52,13 @@ public:
 	~EnemyManager();
 	void handleNewMap();
 	void handleSpawn();
-	void handlePartyBuff();
+	bool checkPartyMembers();
 	void logic();
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP();
 	bool isCleared();
-	Enemy *enemyFocus(Point mouse, FPoint cam, bool alive_only);
-	Enemy *getNearestEnemy(FPoint pos);
+	Enemy *enemyFocus(const Point& mouse, const FPoint& cam, bool alive_only);
+	Enemy *getNearestEnemy(const FPoint& pos);
 
 	// vars
 	std::vector<Enemy*> enemies;

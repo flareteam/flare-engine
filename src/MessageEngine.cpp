@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Thane Brimhall
 Copyright © 2013 Henrik Andersson
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -137,7 +138,8 @@ std::string MessageEngine::str(unsigned long i) {
 }
 
 // unescape c formatted string
-std::string MessageEngine::unescape(std::string val) {
+std::string MessageEngine::unescape(const std::string& _val) {
+	std::string val = _val;
 
 	// unescape percentage %% to %
 	size_t pos;

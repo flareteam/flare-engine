@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -112,6 +113,7 @@ extern bool TEXTURE_FILTER;
 extern bool IGNORE_TEXTURE_FILTER;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
+extern std::string RENDER_DEVICE;
 
 // Input Settings
 extern bool MOUSE_MOVE;
@@ -131,6 +133,9 @@ extern bool DEV_MODE;
 extern bool DEV_HUD;
 extern bool SHOW_TARGET;
 extern bool LOOT_TOOLTIPS;
+extern bool STATBAR_LABELS;
+extern bool AUTO_EQUIP;
+extern bool SHOW_HUD;
 
 // Engine Settings
 extern bool MENUS_PAUSE;
@@ -205,7 +210,6 @@ extern int TOOLTIP_WIDTH; // max width of tooltips (wrap text)
 extern int TOOLTIP_MARGIN; // outer margin between tooltip text and the edge of the tooltip background
 extern int TOOLTIP_MARGIN_NPC;
 
-void setPaths();
 void loadTilesetSettings();
 void loadMiscSettings();
 bool loadSettings();

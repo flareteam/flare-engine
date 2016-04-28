@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -91,7 +92,6 @@ private:
 
 	void handleKeyboardNavigation();
 	void dragAndDropWithKeyboard();
-	void splitStack(ItemStack stack);
 
 public:
 	MenuManager(StatBlock *stats);

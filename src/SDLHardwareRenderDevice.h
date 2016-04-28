@@ -1,6 +1,6 @@
 /*
 Copyright © 2013 Igor Paliychuk
-Copyright © 2013-2014 Justin Jacobs
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -52,10 +52,8 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 
-	void fillWithColor(Uint32 color);
-	void drawPixel(int x, int y, Uint32 color);
-	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
-	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	void fillWithColor(const Color& color);
+	void drawPixel(int x, int y, const Color& color);
 	Image* resize(int width, int height);
 
 	SDL_Renderer *renderer;
@@ -67,34 +65,30 @@ class SDLHardwareRenderDevice : public RenderDevice {
 public:
 
 	SDLHardwareRenderDevice();
-	int createContext();
+	int createContext(bool allow_fallback = true);
 
-	virtual int render(Renderable& r, Rect dest);
+	virtual int render(Renderable& r, Rect& dest);
 	virtual int render(Sprite* r);
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest);
 
-	int renderText(FontStyle *font_style, const std::string& text, Color color, Rect& dest);
-	Image *renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended = true);
-	void drawPixel(int x, int y, Uint32 color);
-	void drawRectangle(const Point& p0, const Point& p1, Uint32 color);
+	int renderText(FontStyle *font_style, const std::string& text, const Color& color, Rect& dest);
+	Image *renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended = true);
+	void drawPixel(int x, int y, const Color& color);
+	void drawRectangle(const Point& p0, const Point& p1, const Color& color);
 	void blankScreen();
 	void commitFrame();
 	void destroyContext();
-	Rect getContextSize();
-	void listModes(std::vector<Rect> &modes);
-	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
-	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void windowResize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();
 	void freeImage(Image *image);
 
-	Image* loadImage(std::string filename,
-					 std::string errormessage = "Couldn't load image",
+	Image* loadImage(const std::string& filename,
+					 const std::string& errormessage = "Couldn't load image",
 					 bool IfNotFoundExit = false);
 private:
-	void drawLine(int x0, int y0, int x1, int y1, Uint32 color);
+	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 
 	SDL_Window *window;
 	SDL_Renderer *renderer;
@@ -105,4 +99,4 @@ private:
 
 #endif // SDL_VERSION_ATLEAST(2,0,0)
 
-#endif // SDLHARDWARERENDERDEVICE_H
+#endif

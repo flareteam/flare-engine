@@ -1,5 +1,5 @@
 /*
-Copyright © 2014 Justin Jacobs
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -30,12 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SDLSoundManager.h"
 #include "SDLInputState.h"
 
-RenderDevice* getRenderDevice(std::string name) {
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-	// Android and IOS always use the hardware renderer
-	return new SDLHardwareRenderDevice();
-#endif
-
+RenderDevice* getRenderDevice(const std::string& name) {
 	// "sdl" is the default
 	if (name != "") {
 		if (name == "sdl") return new SDLSoftwareRenderDevice();

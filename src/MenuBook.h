@@ -1,5 +1,6 @@
 /*
 Copyright © 2014 Igor Paliychuk
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -45,8 +46,6 @@ public:
 
 	std::string book_name;
 	bool book_loaded;
-
-	TabList tablist;
 
 private:
 	WidgetButton *closeButton;

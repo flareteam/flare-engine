@@ -2,6 +2,7 @@
 Copyright © 2013 Kurt Rinnert
 Copyright © 2013 Igor Paliychuk
 Copyright © 2014 Henrik Andersson
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -46,16 +47,17 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 
-	void fillWithColor(Uint32 color);
-	void drawPixel(int x, int y, Uint32 color);
-	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
-	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	void fillWithColor(const Color& color);
+	void drawPixel(int x, int y, const Color& color);
 	Image* resize(int width, int height);
 
 	SDL_Surface *surface;
 
 private:
-	Uint32 readPixel(int x, int y);
+#if !SDL_VERSION_ATLEAST(2,0,0)
+	Color readPixel(int x, int y);
+#endif
+	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 };
 
 class SDLSoftwareRenderDevice : public RenderDevice {
@@ -63,34 +65,31 @@ class SDLSoftwareRenderDevice : public RenderDevice {
 public:
 
 	SDLSoftwareRenderDevice();
-	int createContext();
+	int createContext(bool allow_fallback = true);
 
-	virtual int render(Renderable& r, Rect dest);
+	virtual int render(Renderable& r, Rect& dest);
 	virtual int render(Sprite* r);
 	virtual int renderToImage(Image* src_image, Rect& src, Image* dest_image, Rect& dest);
 
-	int renderText(FontStyle *font_style, const std::string& text, Color color, Rect& dest);
-	Image* renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended = true);
-	void drawPixel(int x, int y, Uint32 color);
-	void drawRectangle(const Point& p0, const Point& p1, Uint32 color);
+	int renderText(FontStyle *font_style, const std::string& text, const Color& color, Rect& dest);
+	Image* renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended = true);
+	void drawPixel(int x, int y, const Color& color);
+	void drawRectangle(const Point& p0, const Point& p1, const Color& color);
 	void blankScreen();
 	void commitFrame();
 	void destroyContext();
-	Rect getContextSize();
-	void listModes(std::vector<Rect> &modes);
-	Uint32 MapRGB(Uint8 r, Uint8 g, Uint8 b);
-	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void windowResize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();
 	void freeImage(Image *image);
 
-	Image* loadImage(std::string filename,
-					 std::string errormessage = "Couldn't load image",
+	Image* loadImage(const std::string& filename,
+					 const std::string& errormessage = "Couldn't load image",
 					 bool IfNotFoundExit = false);
 private:
-	void drawLine(int x0, int y0, int x1, int y1, Uint32 color);
+	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
 	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
 
 	SDL_Surface* screen;

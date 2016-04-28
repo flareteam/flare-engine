@@ -1,6 +1,7 @@
 /*
 Copyright © 2012-2013 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -84,7 +85,7 @@ public:
 	GameStateCutscene(GameState *game_state);
 	~GameStateCutscene();
 
-	bool load(std::string filename);
+	bool load(const std::string& filename);
 	void logic();
 	void render();
 

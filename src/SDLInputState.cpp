@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2015-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -23,43 +24,29 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  */
 
 #include "CommonIncludes.h"
+#include "Platform.h"
 #include "SDLInputState.h"
+#include "SaveLoad.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsDebug.h"
 #include "UtilsParsing.h"
-#include "SaveLoad.h"
-#include "SharedGameResources.h"
 
 #include <math.h>
 
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-
-int isExitEvent(void* userdata, SDL_Event* event)
-{
-	if (event->type == SDL_APP_TERMINATING)
-	{
-		logInfo("Terminating app, saving...");
-		save_load->saveGame();
-		logInfo("Saved, ready to exit.");
-		return 0;
-	}
-	return 1;
-}
-
-#endif
-
 SDLInputState::SDLInputState(void)
 	: InputState()
+	, joy(NULL)
+	, joy_num(0)
+	, joy_axis_num(0)
+	, resize_ticks(-1)
 {
 #if SDL_VERSION_ATLEAST(2,0,0)
-
-#if !defined(__ANDROID__) && !defined (__IPHONEOS__)
-	SDL_StartTextInput();
-#else
-	SDL_SetEventFilter(isExitEvent, NULL);
-#endif
-
+	// don't use keyboard for touchscreen devices
+	if (!PlatformOptions.is_mobile_device)
+		SDL_StartTextInput();
+	PlatformSetExitEventFilter();
 #else
 	SDL_EnableUNICODE(true);
 #endif
@@ -75,14 +62,55 @@ SDLInputState::SDLInputState(void)
 
 	loadKeyBindings();
 	setKeybindNames();
+
+	// print some information to the console about connected joysticks
+	if(SDL_NumJoysticks() > 0) {
+		logInfo("%d joystick(s) found.", SDL_NumJoysticks());
+		joy_num = SDL_NumJoysticks();
+	}
+	else {
+		logInfo("No joysticks were found.");
+		ENABLE_JOYSTICK = false;
+		return;
+	}
+
+	for(int i = 0; i < SDL_NumJoysticks(); i++) {
+		logInfo("  Joy %d) %s", i, getJoystickName(i).c_str());
+	}
+}
+
+void SDLInputState::initJoystick() {
+	// close our joystick handle if it's open
+	if (joy) {
+		SDL_JoystickClose(joy);
+		joy = NULL;
+	}
+
+	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
+		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
+		logInfo("Using joystick #%d.", JOYSTICK_DEVICE);
+	}
+
+	if (joy) {
+		joy_axis_num = SDL_JoystickNumAxes(joy);
+		joy_axis_prev.resize(joy_axis_num*2, 0);
+		joy_axis_deltas.resize(joy_axis_num*2, 0);
+	}
 }
 
 void SDLInputState::defaultQwertyKeyBindings () {
+#if SDL_VERSION_ATLEAST(2,0,0)
+	if (PlatformOptions.is_mobile_device) {
+		binding[CANCEL] = SDLK_AC_BACK;
+		binding[ACCEPT] = SDLK_MENU;
+	}
+	else {
+		binding[CANCEL] = SDLK_ESCAPE;
+		binding[ACCEPT] = SDLK_RETURN;
+	}
+#else
 	binding[CANCEL] = SDLK_ESCAPE;
 	binding[ACCEPT] = SDLK_RETURN;
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-    binding[CANCEL] = SDLK_AC_BACK;
-	binding[ACCEPT] = SDLK_MENU;
 #endif
 	binding[UP] = SDLK_w;
 	binding[DOWN] = SDLK_s;
@@ -112,8 +140,8 @@ void SDLInputState::defaultQwertyKeyBindings () {
 	binding[POWERS] = binding_alt[POWERS] = SDLK_p;
 	binding[LOG] = binding_alt[LOG] = SDLK_l;
 
-	binding[MAIN1] = binding_alt[MAIN1] = SDL_BUTTON_LEFT;
-	binding[MAIN2] = binding_alt[MAIN2] = SDL_BUTTON_RIGHT;
+	binding[MAIN1] = binding_alt[MAIN1] = (SDL_BUTTON_LEFT+MOUSE_BIND_OFFSET) * (-1);
+	binding[MAIN2] = binding_alt[MAIN2] = (SDL_BUTTON_RIGHT+MOUSE_BIND_OFFSET) * (-1);
 
 	binding[CTRL] = SDLK_LCTRL;
 	binding_alt[CTRL] = SDLK_RCTRL;
@@ -136,6 +164,8 @@ void SDLInputState::handle() {
 	InputState::handle();
 
 	SDL_Event event;
+	int bind_button = 0;
+	bool joy_hat_event = false;
 
 	if (! SDL_VERSION_ATLEAST(2,0,0)) {
 		SDL_GetMouseState(&mouse.x, &mouse.y);
@@ -175,87 +205,98 @@ void SDLInputState::handle() {
 		switch (event.type) {
 
 #if SDL_VERSION_ATLEAST(2,0,0)
-#if !defined(__ANDROID__) && !defined (__IPHONEOS__)
 			case SDL_MOUSEMOTION:
-				mouse.x = event.motion.x;
-				mouse.y = event.motion.y;
+				if (!PlatformOptions.is_mobile_device) {
+					mouse.x = event.motion.x;
+					mouse.y = event.motion.y;
+				}
 				break;
 			case SDL_MOUSEWHEEL:
-				if (event.wheel.y > 0) {
-					scroll_up = true;
-				} else if (event.wheel.y < 0) {
-					scroll_down = true;
+				if (!PlatformOptions.is_mobile_device) {
+					if (event.wheel.y > 0) {
+						scroll_up = true;
+					} else if (event.wheel.y < 0) {
+						scroll_down = true;
+					}
 				}
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				mouse.x = event.button.x;
-				mouse.y = event.button.y;
-				for (int key=0; key<key_count; key++) {
-					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
-						pressing[key] = true;
-						un_press[key] = false;
+				if (!PlatformOptions.is_mobile_device) {
+					mouse.x = event.button.x;
+					mouse.y = event.button.y;
+					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
+					for (int key=0; key<key_count; key++) {
+						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
+							pressing[key] = true;
+							un_press[key] = false;
+						}
 					}
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
-				mouse.x = event.button.x;
-				mouse.y = event.button.y;
-				for (int key=0; key<key_count; key++) {
-					if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
-						un_press[key] = true;
+				if (!PlatformOptions.is_mobile_device) {
+					mouse.x = event.button.x;
+					mouse.y = event.button.y;
+					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
+					for (int key=0; key<key_count; key++) {
+						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
+							un_press[key] = true;
+						}
+					}
+					last_button = bind_button;
+				}
+				break;
+			case SDL_WINDOWEVENT:
+				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+					resize_ticks = MAX_FRAMES_PER_SEC/4;
+				}
+				else if (PlatformOptions.is_mobile_device) {
+					// detect restoring hidden Mobile app to bypass frameskip
+					if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
+						logInfo("Minimizing app, saving...");
+						save_load->saveGame();
+						logInfo("Game saved");
+						window_minimized = true;
+						snd->pauseAll();
+					}
+					else if (event.window.event == SDL_WINDOWEVENT_RESTORED) {
+						window_restored = true;
+						snd->resumeAll();
 					}
 				}
-				last_button = event.button.button;
 				break;
-			case SDL_WINDOWEVENT:
-				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-					window_resized = true;
-					render_device->windowResize();
-				}
-				break;
-#else
-			// detect restoring hidden Mobile app to bypass frameskip
-			case SDL_WINDOWEVENT:
-				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-					window_resized = true;
-					render_device->windowResize();
-				}
-				else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED) {
-					logInfo("Minimizing app, saving...");
-					save_load->saveGame();
-					logInfo("Game saved");
-					window_minimized = true;
-					snd->pauseAll();
-				}
-				else if (event.window.event == SDL_WINDOWEVENT_RESTORED) {
-					window_restored = true;
-					snd->resumeAll();
-				}
-				break;
-			// Mobile touch events
-			case SDL_FINGERMOTION:
-				mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * VIEW_W);
-				mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * VIEW_H);
 
-				if (event.tfinger.dy > 0) {
-					scroll_up = true;
-				} else if (event.tfinger.dy < 0) {
-					scroll_down = true;
+			// Mobile touch events
+			// NOTE Should these be limited to mobile only?
+			case SDL_FINGERMOTION:
+				if (PlatformOptions.is_mobile_device) {
+					mouse.x = static_cast<int>((event.tfinger.x + event.tfinger.dx) * VIEW_W);
+					mouse.y = static_cast<int>((event.tfinger.y + event.tfinger.dy) * VIEW_H);
+
+					if (event.tfinger.dy > 0) {
+						scroll_up = true;
+					} else if (event.tfinger.dy < 0) {
+						scroll_down = true;
+					}
 				}
 				break;
 			case SDL_FINGERDOWN:
-				touch_locked = true;
-				mouse.x = static_cast<int>(event.tfinger.x * VIEW_W);
-				mouse.y = static_cast<int>(event.tfinger.y * VIEW_H);
-				pressing[MAIN1] = true;
-				un_press[MAIN1] = false;
+				if (PlatformOptions.is_mobile_device) {
+					touch_locked = true;
+					mouse.x = static_cast<int>(event.tfinger.x * VIEW_W);
+					mouse.y = static_cast<int>(event.tfinger.y * VIEW_H);
+					pressing[MAIN1] = true;
+					un_press[MAIN1] = false;
+				}
 				break;
 			case SDL_FINGERUP:
-				touch_locked = false;
-				un_press[MAIN1] = true;
-				last_button = binding[MAIN1];
+				if (PlatformOptions.is_mobile_device) {
+					touch_locked = false;
+					un_press[MAIN1] = true;
+					last_button = binding[MAIN1];
+				}
 				break;
-#endif
+
 #else
 			case SDL_MOUSEBUTTONDOWN:
 				if (event.button.button == SDL_BUTTON_WHEELUP) {
@@ -265,8 +306,9 @@ void SDLInputState::handle() {
 					scroll_down = true;
 				}
 				if (!lock_scroll || (event.button.button != SDL_BUTTON_WHEELUP && event.button.button != SDL_BUTTON_WHEELDOWN)) {
+					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 					for (int key=0; key<key_count; key++) {
-						if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
 							pressing[key] = true;
 							un_press[key] = false;
 						}
@@ -274,16 +316,17 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
+				bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 				for (int key=0; key<key_count; key++) {
 					if ((scroll_up && (binding[key] == SDL_BUTTON_WHEELUP || binding_alt[key] == SDL_BUTTON_WHEELUP)) ||
 					    (scroll_down && (binding[key] == SDL_BUTTON_WHEELDOWN || binding_alt[key] == SDL_BUTTON_WHEELDOWN))) {
 						un_press[key] = true;
 					}
-					else if (event.button.button == binding[key] || event.button.button == binding_alt[key]) {
+					else if (bind_button == binding[key] || bind_button == binding_alt[key]) {
 						un_press[key] = true;
 					}
 				}
-				last_button = event.button.button;
+				last_button = bind_button;
 				break;
 #endif
 			case SDL_KEYDOWN:
@@ -315,6 +358,7 @@ void SDLInputState::handle() {
 				*/
 			case SDL_JOYHATMOTION:
 				if(JOYSTICK_DEVICE == event.jhat.which && ENABLE_JOYSTICK) {
+					joy_hat_event = true;
 					switch (event.jhat.value) {
 						case SDL_HAT_CENTERED:
 							un_press[UP] = true;
@@ -434,148 +478,61 @@ void SDLInputState::handle() {
 	}
 
 	// joystick analog input
-	if(ENABLE_JOYSTICK) {
-		static bool joyReverseAxisX;
-		static bool joyReverseAxisY;
-		static bool joyHasMovedX;
-		static bool joyHasMovedY;
-		static int joyLastPosX;
-		static int joyLastPosY;
+	if(ENABLE_JOYSTICK && joy_axis_num > 0 && !joy_hat_event) {
+		std::vector<bool> joy_axis_pressed;
+		joy_axis_pressed.resize(joy_axis_num*2, false);
+		last_joyaxis = -1;
 
-		int joyAxisXval = SDL_JoystickGetAxis(joy, 0);
-		int joyAxisYval = SDL_JoystickGetAxis(joy, 1);
+		for (int i=0; i<joy_axis_num*2; i++) {
+			int axis = SDL_JoystickGetAxis(joy, i/2);
 
-		// axis 0
-		if(joyAxisXval < -JOY_DEADZONE) {
-			if(!joyReverseAxisX) {
-				if(joyLastPosX == JOY_POS_RIGHT) {
-					joyHasMovedX = 0;
-				}
-			}
-			else {
-				if(joyLastPosX == JOY_POS_LEFT) {
-					joyHasMovedX = 0;
-				}
-			}
-			if(joyHasMovedX == 0) {
-				if(!joyReverseAxisX) {
-					pressing[LEFT] = true;
-					un_press[LEFT] = false;
-					pressing[RIGHT] = false;
-					lock[RIGHT] = false;
-					joyLastPosX = JOY_POS_LEFT;
-				}
-				else {
-					pressing[RIGHT] = true;
-					un_press[RIGHT] = false;
-					pressing[LEFT] = false;
-					lock[LEFT] = false;
-					joyLastPosX = JOY_POS_RIGHT;
-				}
-				joyHasMovedX = 1;
-			}
-		}
-		if(joyAxisXval > JOY_DEADZONE) {
-			if(!joyReverseAxisX) {
-				if(joyLastPosX == JOY_POS_LEFT) {
-					joyHasMovedX = 0;
-				}
-			}
-			else {
-				if(joyLastPosX == JOY_POS_RIGHT) {
-					joyHasMovedX = 0;
-				}
-			}
-			if(joyHasMovedX == 0) {
-				if(!joyReverseAxisX) {
-					pressing[RIGHT] = true;
-					un_press[RIGHT] = false;
-					pressing[LEFT] = false;
-					lock[LEFT] = false;
-					joyLastPosX = JOY_POS_RIGHT;
-				}
-				else {
-					pressing[LEFT] = true;
-					un_press[LEFT] = false;
-					pressing[RIGHT] = false;
-					lock[RIGHT] = false;
-					joyLastPosX = JOY_POS_LEFT;
-				}
-				joyHasMovedX = 1;
-			}
-		}
-		if((joyAxisXval >= -JOY_DEADZONE) && (joyAxisXval < JOY_DEADZONE)) {
-			un_press[LEFT] = true;
-			un_press[RIGHT] = true;
-			joyHasMovedX = 0;
-			joyLastPosX = JOY_POS_CENTER;
-		}
+			joy_axis_deltas[i] = (axis - joy_axis_prev[i])/2;
+			joy_axis_prev[i] = axis;
 
-		// axis 1
-		if(joyAxisYval < -JOY_DEADZONE) {
-			if(!joyReverseAxisY) {
-				if(joyLastPosY == JOY_POS_DOWN) {
-					joyHasMovedY = 0;
-				}
+			if (i % 2 == 0) {
+				if (axis < -JOY_DEADZONE)
+					joy_axis_pressed[i] = true;
+				else if (axis <= JOY_DEADZONE)
+					joy_axis_pressed[i] = false;
 			}
 			else {
-				if(joyLastPosY == JOY_POS_UP) {
-					joyHasMovedY = 0;
-				}
-			}
-			if(joyHasMovedY == 0) {
-				if(!joyReverseAxisY) {
-					pressing[UP] = true;
-					un_press[UP] = false;
-					pressing[DOWN] = false;
-					lock[DOWN] = false;
-					joyLastPosY = JOY_POS_UP;
-				}
-				else {
-					pressing[DOWN] = true;
-					un_press[DOWN] = false;
-					pressing[UP] = false;
-					lock[UP] = false;
-					joyLastPosY = JOY_POS_DOWN;
-				}
-				joyHasMovedY = 1;
+				if (axis > JOY_DEADZONE)
+					joy_axis_pressed[i] = true;
+				else if (axis >= -JOY_DEADZONE)
+					joy_axis_pressed[i] = false;
 			}
 		}
-		if(joyAxisYval > JOY_DEADZONE) {
-			if(!joyReverseAxisY) {
-				if(joyLastPosY == JOY_POS_UP) {
-					joyHasMovedY = 0;
+		for (int i=0; i<joy_axis_num*2; i++) {
+			int bind_axis = (i+JOY_AXIS_OFFSET) * (-1);
+			for (int key=0; key<key_count; key++) {
+				if (bind_axis == binding_joy[key]) {
+					if (joy_axis_pressed[i]) {
+						pressing[key] = true;
+						un_press[key] = false;
+					}
+					else {
+						if (pressing[key]) {
+							un_press[key] = true;
+						}
+						pressing[key] = false;
+						lock[key] = false;
+					}
 				}
 			}
-			else {
-				if(joyLastPosY == JOY_POS_DOWN) {
-					joyHasMovedY = 0;
-				}
-			}
-			if(joyHasMovedY == 0) {
-				if(!joyReverseAxisY) {
-					pressing[DOWN] = true;
-					un_press[DOWN] = false;
-					pressing[UP] = false;
-					lock[UP] = false;
-					joyLastPosY = JOY_POS_DOWN;
-				}
-				else {
-					pressing[UP] = true;
-					un_press[UP] = false;
-					pressing[DOWN] = false;
-					lock[DOWN] = false;
-					joyLastPosY = JOY_POS_UP;
-				}
-				joyHasMovedY = 1;
+
+			if (joy_axis_pressed[i] && joy_axis_deltas[i] != 0) {
+				last_joyaxis = (i+JOY_AXIS_OFFSET) * (-1);
 			}
 		}
-		if((joyAxisYval >= -JOY_DEADZONE) && (joyAxisYval < JOY_DEADZONE)) {
-			un_press[UP] = true;
-			un_press[DOWN] = true;
-			joyHasMovedY = 0;
-			joyLastPosY = JOY_POS_CENTER;
-		}
+	}
+
+	if (resize_ticks > 0) {
+		resize_ticks--;
+	}
+	if (resize_ticks == 0) {
+		resize_ticks = -1;
+		window_resized = true;
+		render_device->windowResize();
 	}
 }
 
@@ -607,24 +564,44 @@ std::string SDLInputState::getBindingString(int key, int bindings_list) {
 	std::string none = msg->get("(none)");
 
 	if (bindings_list == INPUT_BINDING_DEFAULT) {
-		if (inpt->binding[key] < 0)
+		if (inpt->binding[key] == 0 || inpt->binding[key] == -1)
 			return none;
-		else if (inpt->binding[key] < 8)
-			return mouse_button[inpt->binding[key] - 1];
+		else if (inpt->binding[key] < -1) {
+			int real_button = (inpt->binding[key] + MOUSE_BIND_OFFSET) * (-1);
+
+			if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
+				return mouse_button[real_button - 1];
+			else
+				return msg->get("Mouse %d", real_button);
+		}
 		else
 			return getKeyName(inpt->binding[key]);
 	}
 	else if (bindings_list == INPUT_BINDING_ALT) {
-		if (inpt->binding_alt[key] < 0)
+		if (inpt->binding_alt[key] == 0 || inpt->binding_alt[key] == -1)
 			return none;
-		else if (inpt->binding[key] < 8)
-			return mouse_button[inpt->binding_alt[key] - 1];
+		else if (inpt->binding_alt[key] < -1) {
+			int real_button = (inpt->binding_alt[key] + MOUSE_BIND_OFFSET) * (-1);
+
+			if (real_button > 0 && real_button <= MOUSE_BUTTON_NAME_COUNT)
+				return mouse_button[real_button - 1];
+			else
+				return msg->get("Mouse %d", real_button);
+		}
 		else
 			return getKeyName(inpt->binding_alt[key]);
 	}
 	else if (bindings_list == INPUT_BINDING_JOYSTICK) {
-		if (inpt->binding_joy[key] < 0)
+		if (inpt->binding_joy[key] == -1)
 			return none;
+		else if (inpt->binding_joy[key] < -1) {
+			int axis = (inpt->binding_joy[key] + JOY_AXIS_OFFSET) * (-1);
+
+			if (axis % 2 == 0)
+				return msg->get("Axis %d -", axis/2);
+			else
+				return msg->get("Axis %d +", axis/2);
+		}
 		else
 			return msg->get("Button %d", inpt->binding_joy[key]);
 	}
@@ -633,5 +610,76 @@ std::string SDLInputState::getBindingString(int key, int bindings_list) {
 	}
 }
 
+std::string SDLInputState::getMovementString() {
+	std::stringstream ss;
+	ss << "[";
+
+	if (ENABLE_JOYSTICK) {
+		// can't rebind joystick axes
+		ss << inpt->getBindingString(LEFT, INPUT_BINDING_JOYSTICK) <<  "/";
+		ss << inpt->getBindingString(RIGHT, INPUT_BINDING_JOYSTICK) << "/";
+		ss << inpt->getBindingString(UP, INPUT_BINDING_JOYSTICK) << "/";
+		ss << inpt->getBindingString(DOWN, INPUT_BINDING_JOYSTICK);
+	}
+	else if (TOUCHSCREEN) {
+		ss << msg->get("%s on ground", msg->get("Tap"));
+	}
+	else if (MOUSE_MOVE) {
+		ss << msg->get("%s on ground", inpt->getBindingString(MAIN1));
+	}
+	else {
+		ss << inpt->getBindingString(LEFT) <<  "/";
+		ss << inpt->getBindingString(RIGHT) << "/";
+		ss << inpt->getBindingString(UP) << "/";
+		ss << inpt->getBindingString(DOWN);
+	}
+
+	ss << "]";
+	return ss.str();
+}
+
+std::string SDLInputState::getAttackString() {
+	std::stringstream ss;
+	ss << "[";
+
+	if (ENABLE_JOYSTICK) {
+		ss << inpt->getBindingString(ACTIONBAR_USE, INPUT_BINDING_JOYSTICK);
+	}
+	else if (TOUCHSCREEN) {
+		ss << msg->get("%s on enemy", msg->get("Tap"));
+	}
+	else if (MOUSE_MOVE) {
+		ss << msg->get("%s on enemy", inpt->getBindingString(MAIN1));
+	}
+	else {
+		ss << inpt->getBindingString(MAIN1);
+	}
+
+	ss << "]";
+	return ss.str();
+}
+
+std::string SDLInputState::getContinueString() {
+	std::stringstream ss;
+	ss << "[";
+
+	if (TOUCHSCREEN) {
+		ss << msg->get("Tap");
+	}
+	else {
+		int binding_type = (ENABLE_JOYSTICK ? INPUT_BINDING_JOYSTICK : INPUT_BINDING_DEFAULT);
+		ss << getBindingString(ACCEPT, binding_type);
+	}
+
+	ss << "]";
+	return ss.str();
+}
+
+int SDLInputState::getNumJoysticks() {
+	return joy_num;
+}
+
 SDLInputState::~SDLInputState() {
+	if (joy)
+		SDL_JoystickClose(joy);
 }

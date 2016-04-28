@@ -1,6 +1,7 @@
 /*
 Copyright © 2012 Stefan Beller
 Copyright © 2014 Henrik Andersson
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -16,8 +17,8 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#ifndef __ANIMATION_SET__
-#define __ANIMATION_SET__
+#ifndef ANIMATION_SET_H
+#define ANIMATION_SET_H
 
 #include "CommonIncludes.h"
 

@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -34,17 +35,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 
 MenuMiniMap::MenuMiniMap()
-	: color_wall(0)
-	, color_obst(0)
-	, color_hero(0)
+	: color_wall(128,128,128,255)
+	, color_obst(64,64,64,255)
+	, color_hero(255,255,255,255)
 	, map_surface(NULL) {
 
 	createMapSurface();
-	if (map_surface) {
-		color_wall = map_surface->getGraphics()->MapRGB(128,128,128);
-		color_obst = map_surface->getGraphics()->MapRGB(64,64,64);
-		color_hero = map_surface->getGraphics()->MapRGB(255,255,255);
-	}
 
 	// Load config settings
 	FileParser infile;
@@ -81,7 +77,7 @@ void MenuMiniMap::align() {
 	label->setPos(window_area.x, window_area.y);
 }
 
-void MenuMiniMap::getMapTitle(std::string map_title) {
+void MenuMiniMap::getMapTitle(const std::string& map_title) {
 	label->set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, map_title, font->getColor("menu_normal"), text_pos.font_style);
 }
 
@@ -102,7 +98,9 @@ void MenuMiniMap::createMapSurface() {
 void MenuMiniMap::render() {
 }
 
-void MenuMiniMap::render(FPoint hero_pos) {
+void MenuMiniMap::render(const FPoint& hero_pos) {
+	if (!SHOW_HUD) return;
+
 	if (!text_pos.hidden) label->render();
 
 	if (map_surface) {
@@ -118,7 +116,7 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 
 	map_size.x = map_w;
 	map_size.y = map_h;
-	map_surface->getGraphics()->fillWithColor(map_surface->getGraphics()->MapRGBA(0,0,0,0));
+	map_surface->getGraphics()->fillWithColor(Color(0,0,0,0));
 
 	if (TILESET_ORIENTATION == TILESET_ISOMETRIC)
 		prerenderIso(collider);
@@ -129,7 +127,7 @@ void MenuMiniMap::prerender(MapCollision *collider, int map_w, int map_h) {
 /**
  * Render a top-down version of the map (90 deg angle)
  */
-void MenuMiniMap::renderOrtho(FPoint hero_pos) {
+void MenuMiniMap::renderOrtho(const FPoint& hero_pos) {
 
 	const int herox = int(hero_pos.x);
 	const int heroy = int(hero_pos.y);
@@ -163,7 +161,7 @@ void MenuMiniMap::renderOrtho(FPoint hero_pos) {
 /**
  * Render an "isometric" version of the map (45 deg angle)
  */
-void MenuMiniMap::renderIso(FPoint hero_pos) {
+void MenuMiniMap::renderIso(const FPoint& hero_pos) {
 
 	const int herox = int(hero_pos.x);
 	const int heroy = int(hero_pos.y);
@@ -210,7 +208,7 @@ void MenuMiniMap::prerenderOrtho(MapCollision *collider) {
 
 void MenuMiniMap::prerenderIso(MapCollision *collider) {
 	// a 2x1 pixel area correlates to a tile, so we can traverse tiles using pixel counting
-	Uint32 draw_color;
+	Color draw_color;
 	int tile_type;
 
 	Point tile_cursor;

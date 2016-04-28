@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2015 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -34,6 +35,7 @@ Created and destroyed by main.cpp
 #include "CombatText.h"
 #include "CursorManager.h"
 #include "FontEngine.h"
+#include "IconManager.h"
 #include "InputState.h"
 #include "MessageEngine.h"
 #include "ModManager.h"
@@ -41,39 +43,16 @@ Created and destroyed by main.cpp
 #include "RenderDevice.h"
 #include "SaveLoad.h"
 
-extern SDL_Joystick *joy;
-
 extern AnimationManager *anim;
 extern CombatText *comb;
 extern CursorManager *curs;
 extern FontEngine *font;
+extern IconManager *icons;
 extern InputState *inpt;
 extern MessageEngine *msg;
 extern ModManager *mods;
 extern SoundManager *snd;
-extern Sprite *icons;
 extern RenderDevice *render_device;
 extern SaveLoad *save_load;
-
-class SharedResources {
-public:
-	static void loadIcons() {
-		Image *graphics;
-
-		if (!render_device)
-			return;
-
-		if (icons) {
-			delete icons;
-			icons = NULL;
-		}
-
-		graphics = render_device->loadImage("images/icons/icons.png", "Couldn't load icons", false);
-		if (graphics) {
-			icons = graphics->createSprite();
-			graphics->unref();
-		}
-	}
-};
 
 #endif

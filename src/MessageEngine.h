@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Thane Brimhall
 Copyright © 2013 Henrik Andersson
+Copyright © 2015-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -37,7 +38,7 @@ private:
 	std::map<std::string,std::string> messages;
 	std::string str(int i);
 	std::string str(unsigned long i);
-	std::string unescape(std::string msg);
+	std::string unescape(const std::string& _val);
 public:
 	MessageEngine();
 	std::string get(const std::string& key);

@@ -1,5 +1,5 @@
 /*
-Copyright © 2012 Justin Jacobs
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class Hazard;
 
-#define EFFECT_COUNT 21
+#define EFFECT_COUNT 28
 
 enum EFFECT_TYPE {
 	EFFECT_NONE = 0,
@@ -45,18 +45,25 @@ enum EFFECT_TYPE {
 	EFFECT_MPOT_PERCENT = 6,
 	EFFECT_SPEED = 7,
 	EFFECT_IMMUNITY = 8,
-	EFFECT_STUN = 9,
-	EFFECT_REVIVE = 10,
-	EFFECT_CONVERT = 11,
-	EFFECT_FEAR = 12,
-	EFFECT_OFFENSE = 13,
-	EFFECT_DEFENSE = 14,
-	EFFECT_PHYSICAL = 15,
-	EFFECT_MENTAL = 16,
-	EFFECT_DEATH_SENTENCE = 17,
-	EFFECT_SHIELD = 18,
-	EFFECT_HEAL = 19,
-	EFFECT_KNOCKBACK = 20
+	EFFECT_IMMUNITY_DAMAGE = 9,
+	EFFECT_IMMUNITY_SLOW = 10,
+	EFFECT_IMMUNITY_STUN = 11,
+	EFFECT_IMMUNITY_HP_STEAL = 12,
+	EFFECT_IMMUNITY_MP_STEAL = 13,
+	EFFECT_IMMUNITY_KNOCKBACK = 14,
+	EFFECT_IMMUNITY_DAMAGE_REFLECT = 15,
+	EFFECT_STUN = 16,
+	EFFECT_REVIVE = 17,
+	EFFECT_CONVERT = 18,
+	EFFECT_FEAR = 19,
+	EFFECT_OFFENSE = 20,
+	EFFECT_DEFENSE = 21,
+	EFFECT_PHYSICAL = 22,
+	EFFECT_MENTAL = 23,
+	EFFECT_DEATH_SENTENCE = 24,
+	EFFECT_SHIELD = 25,
+	EFFECT_HEAL = 26,
+	EFFECT_KNOCKBACK = 27
 };
 
 class Effect {
@@ -100,7 +107,7 @@ public:
 
 class EffectManager {
 private:
-	Animation* loadAnimation(std::string &s);
+	Animation* loadAnimation(const std::string &s);
 	void removeEffect(size_t id);
 	void removeAnimation(size_t id);
 
@@ -111,10 +118,10 @@ public:
 	void clearStatus();
 	void logic();
 	void addEffect(EffectDef &effect, int duration, int magnitude, bool item, int trigger, int passive_id, int source_type);
-	void removeEffectType(const int &type);
+	void removeEffectType(const int type);
 	void removeEffectPassive(int id);
 	void clearEffects();
-	void clearNegativeEffects();
+	void clearNegativeEffects(int type = -1);
 	void clearItemEffects();
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
@@ -130,7 +137,13 @@ public:
 	int mpot;
 	int mpot_percent;
 	float speed;
-	bool immunity;
+	bool immunity_damage;
+	bool immunity_slow;
+	bool immunity_stun;
+	bool immunity_hp_steal;
+	bool immunity_mp_steal;
+	bool immunity_knockback;
+	bool immunity_damage_reflect;
 	bool stun;
 	bool revive;
 	bool convert;

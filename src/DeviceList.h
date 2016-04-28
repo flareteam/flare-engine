@@ -1,5 +1,5 @@
 /*
-Copyright © 2014 Justin Jacobs
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -26,7 +26,7 @@ class FontEngine;
 class SoundManager;
 class InputState;
 
-RenderDevice* getRenderDevice(std::string name);
+RenderDevice* getRenderDevice(const std::string& name);
 
 FontEngine* getFontEngine();
 SoundManager* getSoundManager();

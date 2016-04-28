@@ -2,6 +2,7 @@
 Copyright © 2013 Kurt Rinnert
 Copyright © 2013 Igor Paliychuk
 Copyright © 2014 Henrik Andersson
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -48,10 +49,10 @@ int SDLSoftwareImage::getHeight() const {
 	return surface ? surface->h : 0;
 }
 
-void SDLSoftwareImage::fillWithColor(Uint32 color) {
+void SDLSoftwareImage::fillWithColor(const Color& color) {
 	if (!surface) return;
 
-	SDL_FillRect(surface, NULL, color);
+	SDL_FillRect(surface, NULL, MapRGBA(color.r, color.g, color.b, color.a));
 }
 
 /*
@@ -61,13 +62,18 @@ void SDLSoftwareImage::fillWithColor(Uint32 color) {
  * Source: SDL Documentation
  * http://www.libsdl.org/docs/html/guidevideo.html
  */
-void SDLSoftwareImage::drawPixel(int x, int y, Uint32 pixel) {
+void SDLSoftwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
+
+	Uint32 pixel = MapRGBA(color.r, color.g, color.b, color.a);
 
 	int bpp = surface->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to set */
 	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
+	if (SDL_MUSTLOCK(surface)) {
+		SDL_LockSurface(surface);
+	}
 	switch(bpp) {
 		case 1:
 			*p = static_cast<Uint8>(pixel);
@@ -93,11 +99,9 @@ void SDLSoftwareImage::drawPixel(int x, int y, Uint32 pixel) {
 			*(Uint32 *)p = pixel;
 			break;
 	}
-}
-
-Uint32 SDLSoftwareImage::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
-	if (!surface) return 0;
-	return SDL_MapRGB(surface->format, r, g, b);
+	if (SDL_MUSTLOCK(surface)) {
+		SDL_UnlockSurface(surface);
+	}
 }
 
 Uint32 SDLSoftwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
@@ -124,13 +128,16 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 											   surface->format->Amask);
 
 		if (scaled->surface) {
+#if SDL_VERSION_ATLEAST(2,0,0)
+			SDL_BlitScaled(surface, NULL, scaled->surface, NULL);
+#else
 			double _stretch_factor_x, _stretch_factor_y;
 			_stretch_factor_x = width / static_cast<double>(surface->w);
 			_stretch_factor_y = height / static_cast<double>(surface->h);
 
 			for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
 				for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
-					Uint32 spixel = readPixel(x, y);
+					Color spixel = readPixel(x, y);
 					for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
 						for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
 							Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
@@ -140,6 +147,7 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 					}
 				}
 			}
+#endif
 			// delete the old image and return the new one
 			this->unref();
 			return scaled;
@@ -152,8 +160,9 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 	return NULL;
 }
 
-Uint32 SDLSoftwareImage::readPixel(int x, int y) {
-	if (!surface) return 0;
+#if !SDL_VERSION_ATLEAST(2,0,0)
+Color SDLSoftwareImage::readPixel(int x, int y) {
+	if (!surface) return Color();
 
 	SDL_LockSurface(surface);
 	int bpp = surface->format->BytesPerPixel;
@@ -182,12 +191,17 @@ Uint32 SDLSoftwareImage::readPixel(int x, int y) {
 
 		default:
 			SDL_UnlockSurface(surface);
-			return 0;
+			return Color();
 	}
 
+	Uint8 r,g,b,a;
+	SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
+
 	SDL_UnlockSurface(surface);
-	return pixel;
+
+	return Color(r,g,b,a);
 }
+#endif
 
 SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	: screen(NULL)
@@ -213,7 +227,7 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 #endif
 }
 
-int SDLSoftwareRenderDevice::createContext() {
+int SDLSoftwareRenderDevice::createContext(bool allow_fallback) {
 
 #if SDL_VERSION_ATLEAST(2,0,0)
 	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
@@ -251,9 +265,7 @@ int SDLSoftwareRenderDevice::createContext() {
 	if (VSYNC) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
 	if (settings_changed || !is_initialized) {
-		if (is_initialized) {
-			destroyContext();
-		}
+		destroyContext();
 
 		window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
 		if (window) {
@@ -275,28 +287,30 @@ int SDLSoftwareRenderDevice::createContext() {
 		bool window_created = window != NULL && renderer != NULL && screen != NULL && texture != NULL;
 
 		if (!window_created) {
-			// try previous setting first
-			FULLSCREEN = fullscreen;
-			HWSURFACE = hwsurface;
-			VSYNC = vsync;
-			TEXTURE_FILTER = texture_filter;
-			if (createContext() == -1) {
-				// last resort, try turning everything off
-				FULLSCREEN = false;
-				HWSURFACE = false;
-				VSYNC = false;
-				TEXTURE_FILTER = false;
-				int last_resort = createContext();
-				if (last_resort == -1 && !is_initialized) {
-					// If this is the first attempt and it failed we are not
-					// getting anywhere.
-					logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
-					Exit(1);
+			if (allow_fallback) {
+				// try previous setting first
+				FULLSCREEN = fullscreen;
+				HWSURFACE = hwsurface;
+				VSYNC = vsync;
+				TEXTURE_FILTER = texture_filter;
+				if (createContext(false) == -1) {
+					// last resort, try turning everything off
+					FULLSCREEN = false;
+					HWSURFACE = false;
+					VSYNC = false;
+					TEXTURE_FILTER = false;
+					int last_resort = createContext(false);
+					if (last_resort == -1 && !is_initialized) {
+						// If this is the first attempt and it failed we are not
+						// getting anywhere.
+						logError("SDLSoftwareRenderDevice: createContext() failed: %s", SDL_GetError());
+						Exit(1);
+					}
+					return last_resort;
 				}
-				return last_resort;
-			}
-			else {
-				return 0;
+				else {
+					return 0;
+				}
 			}
 		}
 		else {
@@ -323,7 +337,8 @@ int SDLSoftwareRenderDevice::createContext() {
 		updateTitleBar();
 
 		// load persistent resources
-		SharedResources::loadIcons();
+		delete icons;
+		icons = new IconManager();
 		delete curs;
 		curs = new CursorManager();
 	}
@@ -374,10 +389,13 @@ int SDLSoftwareRenderDevice::createContext() {
 
 	if (is_initialized) {
 		windowResize();
+
+		// update title bar text and icon
 		updateTitleBar();
 
 		// load persistent resources
-		SharedResources::loadIcons();
+		delete icons;
+		icons = new IconManager();
 		delete curs;
 		curs = new CursorManager();
 	}
@@ -386,15 +404,7 @@ int SDLSoftwareRenderDevice::createContext() {
 #endif
 }
 
-Rect SDLSoftwareRenderDevice::getContextSize() {
-	Rect size;
-	size.x = size.y = 0;
-	size.h = screen->h;
-	size.w = screen->w;
-	return size;
-}
-
-int SDLSoftwareRenderDevice::render(Renderable& r, Rect dest) {
+int SDLSoftwareRenderDevice::render(Renderable& r, Rect& dest) {
 	SDL_Rect src = r.src;
 	SDL_Rect _dest = dest;
 	return SDL_BlitSurface(static_cast<SDLSoftwareImage *>(r.image)->surface, &src, screen, &_dest);
@@ -432,7 +442,7 @@ int SDLSoftwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* d
 int SDLSoftwareRenderDevice::renderText(
 	FontStyle *font_style,
 	const std::string& text,
-	Color color,
+	const Color& color,
 	Rect& dest
 ) {
 	int ret = 0;
@@ -451,7 +461,7 @@ int SDLSoftwareRenderDevice::renderText(
 	return ret;
 }
 
-Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended) {
+Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended) {
 	SDLSoftwareImage *image = new SDLSoftwareImage(this);
 	if (!image) return NULL;
 
@@ -469,11 +479,9 @@ Image* SDLSoftwareRenderDevice::renderTextToImage(FontStyle* font_style, const s
 	return NULL;
 }
 
-void SDLSoftwareRenderDevice::drawPixel(
-	int x,
-	int y,
-	Uint32 color
-) {
+void SDLSoftwareRenderDevice::drawPixel(int x, int y, const Color& color) {
+	Uint32 pixel = MapRGBA(color.r, color.g, color.b, color.a);
+
 	int bpp = screen->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to set */
 	Uint8 *p = (Uint8 *)screen->pixels + y * screen->pitch + x * bpp;
@@ -483,27 +491,27 @@ void SDLSoftwareRenderDevice::drawPixel(
 	}
 	switch(bpp) {
 		case 1:
-			*p = static_cast<Uint8>(color);
+			*p = static_cast<Uint8>(pixel);
 			break;
 
 		case 2:
-			*(Uint16 *)p = static_cast<Uint16>(color);
+			*(Uint16 *)p = static_cast<Uint16>(pixel);
 			break;
 
 		case 3:
 #if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-			p[0] = (color >> 16) & 0xff;
-			p[1] = (color >> 8) & 0xff;
-			p[2] = color & 0xff;
+			p[0] = (pixel >> 16) & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = pixel & 0xff;
 #else
-			p[0] = color & 0xff;
-			p[1] = (color >> 8) & 0xff;
-			p[2] = (color >> 16) & 0xff;
+			p[0] = pixel & 0xff;
+			p[1] = (pixel >> 8) & 0xff;
+			p[2] = (pixel >> 16) & 0xff;
 #endif
 			break;
 
 		case 4:
-			*(Uint32 *)p = color;
+			*(Uint32 *)p = pixel;
 			break;
 	}
 	if (SDL_MUSTLOCK(screen)) {
@@ -513,13 +521,7 @@ void SDLSoftwareRenderDevice::drawPixel(
 	return;
 }
 
-void SDLSoftwareRenderDevice::drawLine(
-	int x0,
-	int y0,
-	int x1,
-	int y1,
-	Uint32 color
-) {
+void SDLSoftwareRenderDevice::drawLine(int x0, int y0, int x1, int y1, const Color& color) {
 	const int dx = abs(x1-x0);
 	const int dy = abs(y1-y0);
 	const int sx = x0 < x1 ? 1 : -1;
@@ -545,11 +547,7 @@ void SDLSoftwareRenderDevice::drawLine(
 	while(x0 != x1 || y0 != y1);
 }
 
-void SDLSoftwareRenderDevice::drawRectangle(
-	const Point& p0,
-	const Point& p1,
-	Uint32 color
-) {
+void SDLSoftwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, const Color& color) {
 	if (SDL_MUSTLOCK(screen)) {
 		SDL_LockSurface(screen);
 	}
@@ -577,10 +575,19 @@ void SDLSoftwareRenderDevice::commitFrame() {
 #else
 	SDL_Flip(screen);
 #endif
+
 	return;
 }
 
 void SDLSoftwareRenderDevice::destroyContext() {
+	// we need to free all loaded graphics as they may be tied to the current context
+	RenderDevice::cacheRemoveAll();
+	reload_graphics = true;
+
+	if (icons) {
+		delete icons;
+		icons = NULL;
+	}
 	if (curs) {
 		delete curs;
 		curs = NULL;
@@ -613,10 +620,6 @@ void SDLSoftwareRenderDevice::destroyContext() {
 #endif
 
 	return;
-}
-
-Uint32 SDLSoftwareRenderDevice::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
-	return SDL_MapRGB(screen->format, r, g, b);
 }
 
 Uint32 SDLSoftwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
@@ -694,71 +697,7 @@ void SDLSoftwareRenderDevice::updateTitleBar() {
 #endif
 }
 
-void SDLSoftwareRenderDevice::listModes(std::vector<Rect> &modes) {
-#if SDL_VERSION_ATLEAST(2,0,0)
-	int mode_count = SDL_GetNumDisplayModes(0);
-
-	for (int i=0; i<mode_count; i++) {
-		SDL_DisplayMode display_mode;
-		SDL_GetDisplayMode(0, i, &display_mode);
-
-		if (display_mode.w == 0 || display_mode.h == 0) continue;
-
-		Rect mode_rect;
-		mode_rect.w = display_mode.w;
-		mode_rect.h = display_mode.h;
-		modes.push_back(mode_rect);
-
-		if (display_mode.w < MIN_SCREEN_W || display_mode.h < MIN_SCREEN_H) {
-			// make sure the resolution fits in the constraints of MIN_SCREEN_W and MIN_SCREEN_H
-			modes.pop_back();
-		}
-		else {
-			// check previous resolutions for duplicates. If one is found, drop the one we just added
-			for (unsigned j=0; j<modes.size()-1; ++j) {
-				if (modes[j].w == display_mode.w && modes[j].h == display_mode.h) {
-					modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
-#else
-	SDL_Rect** detect_modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
-
-	// Check if there are any modes available
-	if (detect_modes == (SDL_Rect**)0) {
-		logError("SDLSoftwareRenderDevice: No modes available!");
-		return;
-	}
-
-	// Check if our resolution is restricted
-	if (detect_modes == (SDL_Rect**)-1) {
-		logError("SDLSoftwareRenderDevice: All resolutions available.");
-	}
-
-	for (unsigned i=0; detect_modes[i]; ++i) {
-		modes.push_back(Rect(*detect_modes[i]));
-		if (detect_modes[i]->w < MIN_SCREEN_W || detect_modes[i]->h < MIN_SCREEN_H) {
-			// make sure the resolution fits in the constraints of MIN_SCREEN_W and MIN_SCREEN_H
-			modes.pop_back();
-		}
-		else {
-			// check previous resolutions for duplicates. If one is found, drop the one we just added
-			for (unsigned j=0; j<modes.size()-1; ++j) {
-				if (modes[j].w == detect_modes[i]->w && modes[j].h == detect_modes[i]->h) {
-					modes.pop_back();
-					break;
-				}
-			}
-		}
-	}
-#endif
-}
-
-
-Image *SDLSoftwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
-	// lookup image in cache
+Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, const std::string& errormessage, bool IfNotFoundExit) {	// lookup image in cache
 	Image *img;
 	img = cacheLookup(filename);
 	if (img != NULL) return img;

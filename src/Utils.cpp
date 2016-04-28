@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -18,6 +19,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "Avatar.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
@@ -29,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <ctype.h>
 #include <iomanip>
 
-Point floor(FPoint fp) {
+Point floor(const FPoint& fp) {
 	Point result;
 	result.x = int(fp.x);
 	result.y = int(fp.y);
@@ -75,24 +77,26 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 	return r;
 }
 
-Point center_tile(Point p) {
+Point center_tile(const Point& p) {
+	Point r = p;
+
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
-		p.x += TILE_W_HALF;
-		p.y += TILE_H_HALF;
+		r.x += TILE_W_HALF;
+		r.y += TILE_H_HALF;
 	}
 	else //TILESET_ISOMETRIC
-		p.y += TILE_H_HALF;
-	return p;
+		r.y += TILE_H_HALF;
+	return r;
 }
 
-FPoint collision_to_map(Point p) {
+FPoint collision_to_map(const Point& p) {
 	FPoint ret;
 	ret.x = static_cast<float>(p.x) + 0.5f;
 	ret.y = static_cast<float>(p.y) + 0.5f;
 	return ret;
 }
 
-Point map_to_collision(FPoint p) {
+Point map_to_collision(const FPoint& p) {
 	Point ret;
 	ret.x = int(p.x);
 	ret.y = int(p.y);
@@ -102,7 +106,7 @@ Point map_to_collision(FPoint p) {
 /**
  * Apply parameter distance to position and direction
  */
-FPoint calcVector(FPoint pos, int direction, float dist) {
+FPoint calcVector(const FPoint& pos, int direction, float dist) {
 	FPoint p;
 	p.x = pos.x;
 	p.y = pos.y;
@@ -143,21 +147,21 @@ FPoint calcVector(FPoint pos, int direction, float dist) {
 	return p;
 }
 
-float calcDist(FPoint p1, FPoint p2) {
+float calcDist(const FPoint& p1, const FPoint& p2) {
 	return static_cast<float>(sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y)));
 }
 
 /**
  * is target within the area defined by center and radius?
  */
-bool isWithin(FPoint center, float radius, FPoint target) {
+bool isWithin(const FPoint& center, float radius, const FPoint& target) {
 	return (calcDist(center, target) < radius);
 }
 
 /**
  * is target within the area defined by rectangle r?
  */
-bool isWithin(Rect r, Point target) {
+bool isWithin(const Rect& r, const Point& target) {
 	return target.x >= r.x && target.y >= r.y && target.x < r.x+r.w && target.y < r.y+r.h;
 }
 
@@ -190,7 +194,7 @@ float calcTheta(float x1, float y1, float x2, float y2) {
 		else theta = static_cast<float>(-M_PI)/2.0f;
 	}
 	else {
-		theta = static_cast<float>(atan(dy/dx));
+		theta = atanf(dy/dx);
 		if (dx < 0.0 && dy >= 0.0) theta += static_cast<float>(M_PI);
 		if (dx < 0.0 && dy < 0.0) theta -= static_cast<float>(M_PI);
 	}
@@ -365,7 +369,7 @@ size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
 	return a.find(b);
 }
 
-std::string getDurationString(const int& duration) {
+std::string getDurationString(const int duration) {
 	float real_duration = static_cast<float>(duration) / MAX_FRAMES_PER_SEC;
 
 	std::stringstream ss;
@@ -379,3 +383,92 @@ std::string getDurationString(const int& duration) {
 	}
 }
 
+std::string substituteVarsInString(const std::string &_s, Avatar* avatar) {
+	std::string s = _s;
+
+	size_t begin = s.find("${");
+	while (begin != std::string::npos) {
+		size_t end = s.find("}");
+
+		if (end == std::string::npos)
+			break;
+
+		size_t var_len = end-begin+1;
+		std::string var = s.substr(begin,var_len);
+
+		if (avatar && var == "${AVATAR_NAME}") {
+			s.replace(begin, var_len, avatar->stats.name);
+		}
+		else if (avatar && var == "${AVATAR_CLASS}") {
+			s.replace(begin, var_len, avatar->stats.getShortClass());
+		}
+		else if (var == "${INPUT_MOVEMENT}") {
+			s.replace(begin, var_len, inpt->getMovementString());
+		}
+		else if (var == "${INPUT_ATTACK}") {
+			s.replace(begin, var_len, inpt->getAttackString());
+		}
+		else if (var == "${INPUT_CONTINUE}") {
+			s.replace(begin, var_len, inpt->getContinueString());
+		}
+		else {
+			logError("'%s' is not a valid string variable name.", var.c_str());
+			// strip the brackets from the variable
+			s.replace(begin, var_len, var.substr(2, var.length()-3));
+		}
+
+		begin = s.find("${");
+	}
+
+	return s;
+}
+
+/**
+ * Keep two points within a certain range
+ */
+FPoint clampDistance(float range, const FPoint& src, const FPoint& target) {
+	FPoint limit_target = target;
+
+	if (range > 0) {
+		if (src.x+range < target.x)
+			limit_target.x = src.x+range;
+		if (src.x-range > target.x)
+			limit_target.x = src.x-range;
+		if (src.y+range < target.y)
+			limit_target.y = src.y+range;
+		if (src.y-range > target.y)
+			limit_target.y = src.y-range;
+	}
+
+	return limit_target;
+}
+
+/**
+ * Compares two rectangles and returns true if they overlap
+ */
+bool rectsOverlap(const Rect &a, const Rect &b) {
+	Point a_1(a.x, a.y);
+	Point a_2(a.x + a.w, a.y);
+	Point a_3(a.x, a.y + a.h);
+	Point a_4(a.x + a.w, a.y + a.h);
+
+	Point b_1(b.x, b.y);
+	Point b_2(b.x + b.w, b.y);
+	Point b_3(b.x, b.y + b.h);
+	Point b_4(b.x + b.w, b.y + b.h);
+
+	bool a_in_b = isWithin(b, a_1) || isWithin(b, a_2) || isWithin(b, a_3) || isWithin(b, a_4);
+	bool b_in_a = isWithin(a, b_1) || isWithin(a, b_2) || isWithin(a, b_3) || isWithin(a, b_4);
+
+	return a_in_b || b_in_a;
+}
+
+int rotateDirection(int direction, int val) {
+	direction += val;
+	if (direction > 7)
+		direction -= 7;
+	else if (direction < 0)
+		direction += 7;
+
+	return direction;
+}

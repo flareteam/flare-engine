@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Justin Jacobs
+Copyright © 2012-2016 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
 
@@ -32,6 +32,7 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	pos.h = height;
 	cursor = 0;
 	bg.r = bg.g = bg.b = 0;
+	bg.a = 255;
 	currentChild = -1;
 	scrollbar = new WidgetScrollBar();
 	update = true;
@@ -40,6 +41,8 @@ WidgetScrollBox::WidgetScrollBox(int width, int height)
 	line_height = 20;
 	resize(width, height);
 	tablist = TabList(VERTICAL);
+
+	scroll_type = VERTICAL;
 }
 
 WidgetScrollBox::~WidgetScrollBox() {
@@ -101,7 +104,7 @@ void WidgetScrollBox::scrollUp() {
 	scroll(-line_height);
 }
 
-Point WidgetScrollBox::input_assist(Point mouse) {
+Point WidgetScrollBox::input_assist(const Point& mouse) {
 	Point new_mouse;
 	if (isWithin(pos,mouse)) {
 		new_mouse.x = mouse.x-pos.x;
@@ -168,7 +171,7 @@ void WidgetScrollBox::resize(int w, int h) {
 	}
 
 	if (contents && !transparent) {
-		contents->getGraphics()->fillWithColor(contents->getGraphics()->MapRGB(bg.r,bg.g,bg.b));
+		contents->getGraphics()->fillWithColor(bg);
 	}
 
 	cursor = 0;
@@ -195,7 +198,7 @@ void WidgetScrollBox::refresh() {
 		}
 
 		if (contents && !transparent) {
-			contents->getGraphics()->fillWithColor(contents->getGraphics()->MapRGB(bg.r,bg.g,bg.b));
+			contents->getGraphics()->fillWithColor(bg);
 		}
 	}
 
@@ -237,13 +240,12 @@ void WidgetScrollBox::render() {
 	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
-		Uint32 color;
 
 		topLeft.x = dest.x + local_frame.x - local_offset.x;
 		topLeft.y = dest.y + local_frame.y - local_offset.y;
 		bottomRight.x = topLeft.x + dest.w;
 		bottomRight.y = topLeft.y + dest.h;
-		color = render_device->MapRGB(255,248,220);
+		Color color = Color(255,248,220,255);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;

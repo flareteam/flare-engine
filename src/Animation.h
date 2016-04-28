@@ -2,6 +2,7 @@
 Copyright © 2011-2012 kitano
 Copyright © 2012 Stefan Beller
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -92,12 +93,12 @@ public:
 	// which all belong to this animation.
 	// The render_offset is constant for all frames. The render_size is also
 	// the grid size.
-	void setupUncompressed(Point render_size, Point render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
+	void setupUncompressed(const Point& render_size, const Point& render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
 
 	void setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds = 8);
 
 	// kind can be used for direction(enemies, hero) or randomness(powers)
-	void addFrame(unsigned short index, unsigned short kind, Rect rect, Point _render_offset);
+	void addFrame(unsigned short index, unsigned short kind, const Rect& rect, const Point& _render_offset);
 
 	// advance the animation one frame
 	void advanceFrame();

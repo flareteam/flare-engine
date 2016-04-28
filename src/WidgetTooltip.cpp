@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -35,7 +36,7 @@ WidgetTooltip::WidgetTooltip() {
  * Knowing the total size of the text and the position of origin,
  * calculate the starting position of the background and text
  */
-Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
+Point WidgetTooltip::calcPosition(STYLE style, const Point& pos, const Point& size) {
 
 	Point tip_pos;
 
@@ -85,7 +86,7 @@ Point WidgetTooltip::calcPosition(STYLE style, Point pos, Point size) {
  * Tooltip position depends on the screen quadrant of the source.
  * Draw the buffered tooltip if it exists, else render the tooltip and buffer it
  */
-void WidgetTooltip::render(TooltipData &tip, Point pos, STYLE style) {
+void WidgetTooltip::render(TooltipData &tip, const Point& pos, STYLE style) {
 	if (tip.tip_buffer == NULL) {
 		if (!createBuffer(tip)) return;
 	}
@@ -140,7 +141,7 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 
 	// style the tooltip background
 	// currently this is plain black
-	graphics->fillWithColor(graphics->MapRGB(0,0,0));
+	graphics->fillWithColor(Color(0,0,0,255));
 
 	int cursor_y = TOOLTIP_MARGIN;
 

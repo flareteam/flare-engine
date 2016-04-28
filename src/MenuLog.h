@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -26,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
+#include "WidgetLog.h"
 
 class WidgetButton;
 class WidgetLog;
@@ -59,12 +61,17 @@ public:
 
 	void logic();
 	void render();
-	void add(const std::string& s, int log_type, bool prevent_spam = true);
+	void add(const std::string& s, int log_type, bool prevent_spam = true, Color* color = NULL, int style = WIDGETLOG_FONT_REGULAR);
 	void remove(int msg_index, int log_type);
 	void clear(int log_type);
 	void clear();
+	void addSeparator(int log_type);
+	void setNextTabList(TabList *tl);
 
-	TabList tablist;
+	std::vector<TabList> tablist_log;
+
+	TabList* getCurrentTabList();
+	void defocusTabLists();
 };
 
 #endif

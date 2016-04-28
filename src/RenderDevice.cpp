@@ -1,5 +1,6 @@
 /*
 Copyright © 2014 Henrik Andersson
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -174,7 +175,8 @@ RenderDevice::RenderDevice()
 	, vsync(false)
 	, texture_filter(false)
 	, min_screen(640, 480)
-	, is_initialized(false) {
+	, is_initialized(false)
+	, reload_graphics(false) {
 }
 
 RenderDevice::~RenderDevice() {
@@ -193,7 +195,7 @@ void RenderDevice::destroyContext() {
 	assert(cache.empty());
 }
 
-Image * RenderDevice::cacheLookup(std::string &filename) {
+Image * RenderDevice::cacheLookup(const std::string &filename) {
 	IMAGE_CACHE_CONTAINER_ITER it;
 	it = cache.find(filename);
 	if (it != cache.end()) {
@@ -203,7 +205,7 @@ Image * RenderDevice::cacheLookup(std::string &filename) {
 	return NULL;
 }
 
-void RenderDevice::cacheStore(std::string &filename, Image *image) {
+void RenderDevice::cacheStore(const std::string &filename, Image *image) {
 	if (image == NULL) return;
 	cache[filename] = image;
 }
@@ -218,6 +220,15 @@ void RenderDevice::cacheRemove(Image *image) {
 
 	if (it != cache.end()) {
 		cache.erase(it);
+	}
+}
+
+void RenderDevice::cacheRemoveAll() {
+	IMAGE_CACHE_CONTAINER_ITER it = cache.begin();
+
+	while (it != cache.end()) {
+		cacheRemove(it->second);
+		it = cache.begin();
 	}
 }
 
@@ -264,4 +275,13 @@ bool RenderDevice::localToGlobal(Sprite *r) {
 	m_dest.y = up + r->local_frame.y;
 
 	return true;
+}
+
+bool RenderDevice::reloadGraphics() {
+	if (reload_graphics) {
+		reload_graphics = false;
+		return true;
+	}
+
+	return false;
 }

@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Joseph Bleau
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -28,6 +29,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 enum ScrollType {VERTICAL, HORIZONTAL, TWO_DIRECTIONS};
 
+enum WidgetRelSelect {
+	WIDGET_SELECT_AUTO,
+	WIDGET_SELECT_LEFT,
+	WIDGET_SELECT_RIGHT,
+	WIDGET_SELECT_UP,
+	WIDGET_SELECT_DOWN
+};
+
 class Widget {
 public:
 	Widget();
@@ -44,6 +53,7 @@ public:
 	bool render_to_alpha;
 	bool in_focus;
 	bool focusable;
+	ScrollType scroll_type;
 	Rect pos; // This is the position of the button within the screen
 	Rect local_frame; // Local reference frame is this is a daughter widget
 	Point local_offset; // Offset in local frame is this is a daughter widget
@@ -63,6 +73,8 @@ private:
 	int MV_LEFT;
 	int MV_RIGHT;
 	int ACTIVATE;
+	TabList *prev_tablist;
+	TabList *next_tablist;
 public:
 	TabList(ScrollType _scrolltype = TWO_DIRECTIONS, int _LEFT = 4/*LEFT*/, int _RIGHT = 5/*RIGHT*/, int _ACTIVATE = 1/*ACCEPT*/);
 	~TabList();
@@ -76,11 +88,14 @@ public:
 	void setCurrent(Widget* widget);
 	int getCurrent();
 	unsigned size();
-	Widget* getNext(bool inner = true);	// Increment current selected, return widget
-	Widget* getPrev(bool inner = true);	// Decrement current selected, return widget
+	Widget* getNext(bool inner = true, WidgetRelSelect dir = WIDGET_SELECT_AUTO);	// Increment current selected, return widget
+	Widget* getPrev(bool inner = true, WidgetRelSelect dir = WIDGET_SELECT_AUTO);	// Decrement current selected, return widget
+	int getNextRelativeIndex(WidgetRelSelect dir);
 	void deactivatePrevious();
 	void activate();					// Fire off what happens when the user presses 'accept'
 	void defocus();						// Call when user clicks outside of a widget, resets current
+	void setPrevTabList(TabList *tl);
+	void setNextTabList(TabList *tl);
 
 	void logic(bool allow_keyboard = false);
 };

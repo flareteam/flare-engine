@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -48,6 +49,7 @@ private:
 
 	void loadGraphics();
 	void updateEquipment(int slot);
+	int getEquipSlotFromItem(int item, bool only_empty_slots);
 
 	WidgetLabel label_inventory;
 	WidgetLabel label_currency;
@@ -74,27 +76,24 @@ public:
 
 	void logic();
 	void render();
-	TooltipData checkTooltip(Point position);
-	int areaOver(Point position);
+	TooltipData checkTooltip(const Point& position);
+	int areaOver(const Point& position);
 
-	ItemStack click(Point position);
+	ItemStack click(const Point& position);
 	void itemReturn(ItemStack stack);
-	void drop(Point position, ItemStack stack);
-	void activate(Point position);
+	bool drop(const Point& position, ItemStack stack);
+	void activate(const Point& position);
 
-	void add( ItemStack stack, int area = CARRIED, int slot = -1, bool play_sound = true);
+	bool add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip);
 	void remove(int item);
 	void removeEquipped(int item);
 	void removeFromPrevSlot(int quantity);
 	void addCurrency(int count);
 	void removeCurrency(int count);
 	int getCurrency();
-	bool buy(ItemStack stack, int tab);
+	bool buy(ItemStack stack, int tab, bool dragging);
 	bool sell(ItemStack stack);
-	bool stashAdd(ItemStack stack);
 
-	bool full(ItemStack stack);
-	bool full(int item);
 	int getItemCountCarried(int item);
 	bool isItemEquipped(int item);
 	bool requirementsMet(int item);
@@ -130,9 +129,6 @@ public:
 	std::string show_book;
 
 	std::queue<ItemStack> drop_stack;
-
-	TabList tablist;
-
 };
 
 #endif

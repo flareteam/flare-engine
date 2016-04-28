@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
 Copyright © 2015 Igor Paliychuk
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -31,7 +32,7 @@ FontStyle::FontStyle() : name(""), path(""), ptsize(0), blend(true), line_height
 FontEngine::FontEngine() : cursor_y(0) {
 }
 
-Color FontEngine::getColor(std::string _color) {
+Color FontEngine::getColor(const std::string& _color) {
 	std::map<std::string,Color>::iterator it,end;
 	for (it=color_map.begin(), end=color_map.end(); it!=end; ++it) {
 		if (_color.compare(it->first) == 0) return it->second;
@@ -138,7 +139,7 @@ Rect FontEngine::position(const std::string& text, int x, int y, int justify) {
 /**
  * Word wrap to width
  */
-void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, Color color) {
+void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
 
 	std::string fulltext = text + " ";
 	cursor_y = y;
@@ -178,12 +179,12 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
 	render(text, x+1, y+1, justify, target, FONT_BLACK);
 	render(text, x, y, justify, target, color);
 }
 
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, Color color) {
+void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
 	render(text, x+1, y+1, justify, target, width, FONT_BLACK);
 	render(text, x, y, justify, target, width, color);
 }

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2015-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -30,6 +31,7 @@ public:
 	SDLInputState(void);
 	~SDLInputState();
 
+	void initJoystick();
 	void defaultQwertyKeyBindings();
 	void handle();
 	void hideCursor();
@@ -37,6 +39,19 @@ public:
 	std::string getJoystickName(int index);
 	std::string getKeyName(int key);
 	std::string getBindingString(int key, int bindings_list = INPUT_BINDING_DEFAULT);
+	std::string getMovementString();
+	std::string getAttackString();
+	std::string getContinueString();
+	int getNumJoysticks();
+
+private:
+	SDL_Joystick* joy;
+	int joy_num;
+	int joy_axis_num;
+	int resize_ticks;
+
+	std::vector<int> joy_axis_prev;
+	std::vector<int> joy_axis_deltas;
 };
 
 #endif

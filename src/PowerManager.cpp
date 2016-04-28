@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -144,12 +145,13 @@ void PowerManager::loadPowers() {
 			continue;
 
 		if (infile.key == "type") {
-			// @ATTR type|[fixed:missile:repeater:spawn:transform]|Defines the type of power definiton
+			// @ATTR type|[fixed:missile:repeater:spawn:transform:block]|Defines the type of power definiton
 			if (infile.val == "fixed") powers[input_id].type = POWTYPE_FIXED;
 			else if (infile.val == "missile") powers[input_id].type = POWTYPE_MISSILE;
 			else if (infile.val == "repeater") powers[input_id].type = POWTYPE_REPEATER;
 			else if (infile.val == "spawn") powers[input_id].type = POWTYPE_SPAWN;
 			else if (infile.val == "transform") powers[input_id].type = POWTYPE_TRANSFORM;
+			else if (infile.val == "block") powers[input_id].type = POWTYPE_BLOCK;
 			else infile.error("PowerManager: Unknown type '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "name")
@@ -162,13 +164,16 @@ void PowerManager::loadPowers() {
 			// @ATTR icon|string|The icon to visually represent the power eg. in skill tree or action bar.
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
-			// @ATTR new_state|string|When power is used, hero or enemy will change to this state. Must be one of the states [block, instant, user defined]
-			if (infile.val == "block") powers[input_id].new_state = POWSTATE_BLOCK;
-			else if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
+			// @ATTR new_state|string|When power is used, hero or enemy will change to this state. Must be one of the states [instant, user defined]
+			if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
 			else {
 				powers[input_id].new_state = POWSTATE_ATTACK;
 				powers[input_id].attack_anim = infile.val;
 			}
+		}
+		else if (infile.key == "state_duration") {
+			// @ATTR state_duration|duration|Sets the length of time the caster is in their state animation. A time longer than the animation length will cause the animation to pause on the last frame. Times shorter than the state animation length will have no effect.
+			powers[input_id].state_duration = parse_duration(infile.val);
 		}
 		else if (infile.key == "face")
 			// @ATTR face|bool|Power will make hero or enemy to face the target location.
@@ -247,6 +252,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "requires_targeting")
 			// @ATTR requires_targeting|bool|Power is only used when targeting using click-to-target.
 			powers[input_id].requires_targeting = toBool(infile.val);
+		else if (infile.key == "requires_spawns")
+			// @ATTR requires_spawns|integer|The caster must have at least this many summoned creatures to use this power.
+			powers[input_id].requires_spawns = toInt(infile.val);
 		else if (infile.key == "cooldown")
 			// @ATTR cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
 			powers[input_id].cooldown = parse_duration(infile.val);
@@ -255,8 +263,16 @@ void PowerManager::loadPowers() {
 			// @ATTR animation|string|The filename of the power animation.
 			powers[input_id].animation_name = infile.val;
 		else if (infile.key == "soundfx")
-			// @ATTR soundfx|string|Filename of a sound effect to play when use of power.
+			// @ATTR soundfx|string|Filename of a sound effect to play when the power is used.
 			powers[input_id].sfx_index = loadSFX(infile.val);
+		else if (infile.key == "soundfx_hit") {
+			// @ATTR soundfx_hit|string|Filename of a sound effect to play when the power's hazard hits a valid target.
+			int sfx_id = loadSFX(infile.val);
+			if (sfx_id != -1) {
+				powers[input_id].sfx_hit = sfx[sfx_id];
+				powers[input_id].sfx_hit_enable = true;
+			}
+		}
 		else if (infile.key == "directional")
 			// @ATTR directional|bool|The animation sprite sheet contains 8 directions, one per row.
 			powers[input_id].directional = toBool(infile.val);
@@ -281,6 +297,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "complete_animation")
 			// @ATTR complete_animation|bool|For hazards; Play the entire animation, even if the hazard has hit a target.
 			powers[input_id].complete_animation = toBool(infile.val);
+		else if (infile.key == "charge_speed")
+			// @ATTR charge_speed|float|Moves the caster at this speed in the direction they are facing until the state animation is finished.
+			powers[input_id].charge_speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
 		// hazard traits
 		else if (infile.key == "use_hazard")
 			// @ATTR use_hazard|bool|Power uses hazard.
@@ -306,9 +325,19 @@ void PowerManager::loadPowers() {
 			else if (infile.val == "melee")  powers[input_id].starting_pos = STARTING_POS_MELEE;
 			else infile.error("PowerManager: Unknown starting_pos '%s'", infile.val.c_str());
 		}
+		else if (infile.key == "relative_pos") {
+			// @ATTR relative_pos|bool|Hazard will move relative to the caster's position.
+			powers[input_id].relative_pos = toBool(infile.val);
+		}
 		else if (infile.key == "multitarget")
 			// @ATTR multitarget|bool|Allows a hazard power to hit more than one entity.
 			powers[input_id].multitarget = toBool(infile.val);
+		else if (infile.key == "multihit")
+			// @ATTR multihit|bool|Allows a hazard power to hit the same entity more than once.
+			powers[input_id].multihit = toBool(infile.val);
+		else if (infile.key == "expire_with_caster")
+			// @ATTR expire_with_caster|bool|If true, hazard will disappear when the caster dies.
+			powers[input_id].expire_with_caster = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
 			// @ATTR trait_armor_penetration|bool|Ignores the target's Absorbtion stat
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
@@ -325,7 +354,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "target_range")
-			// @ATTR target_range|float||The distance from the caster that the power can be activated
+			// @ATTR target_range|float|The distance from the caster that the power can be activated
 			powers[input_id].target_range = toFloat(infile.nextValue());
 		//steal effects
 		else if (infile.key == "hp_steal")
@@ -476,7 +505,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_accuracy_value = popFirstInt(infile.val);
 		}
 		else if (infile.key == "modifier_damage") {
-			// @ATTR modifier_damage|[multiply:add:absolute], integer|Changes this power's damage.
+			// @ATTR modifier_damage|[multiply:add:absolute], min (integer), max (integer)|Changes this power's damage. The "max" value is ignored, except in the case of "absolute" modifiers.
 			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
@@ -506,6 +535,22 @@ void PowerManager::loadPowers() {
 				powers[input_id].loot.push_back(Event_Component());
 				lootm->parseLoot(infile, &powers[input_id].loot.back(), &powers[input_id].loot);
 			}
+		}
+		else if (infile.key == "target_movement_normal") {
+			// @ATTR target_movement_normal|bool|Power can affect entities with normal movement (aka walking on ground)
+			powers[input_id].target_movement_normal = toBool(infile.val);
+		}
+		else if (infile.key == "target_movement_flying") {
+			// @ATTR target_movement_flying|bool|Power can affect flying entities
+			powers[input_id].target_movement_flying = toBool(infile.val);
+		}
+		else if (infile.key == "target_movement_intangible") {
+			// @ATTR target_movement_intangible|bool|Power can affect intangible entities
+			powers[input_id].target_movement_intangible = toBool(infile.val);
+		}
+		else if (infile.key == "walls_block_aoe") {
+			// @ATTR walls_block_aoe|bool|When true, prevents hazard aoe from hitting targets that are behind walls/pits.
+			powers[input_id].walls_block_aoe = toBool(infile.val);
 		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
@@ -575,33 +620,15 @@ void PowerManager::handleNewMap(MapCollision *_collider) {
 }
 
 /**
- * Keep two points within a certain range
- */
-FPoint PowerManager::limitRange(float range, FPoint src, FPoint target) {
-	if (range > 0) {
-		if (src.x+range < target.x)
-			target.x = src.x+range;
-		if (src.x-range > target.x)
-			target.x = src.x-range;
-		if (src.y+range < target.y)
-			target.y = src.y+range;
-		if (src.y-range > target.y)
-			target.y = src.y-range;
-	}
-
-	return target;
-}
-
-/**
  * Check if the target is valid (not an empty area or a wall)
  */
-bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	if (!collider) return false;
 
-	target = limitRange(powers[power_index].target_range,src_stats->pos,target);
+	FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 
-	if (!collider->is_empty(target.x, target.y) || collider->is_wall(target.x,target.y)) {
+	if (!collider->is_empty(limit_target.x, limit_target.y) || collider->is_wall(limit_target.x,limit_target.y)) {
 		if (powers[power_index].buff_teleport) {
 			return false;
 		}
@@ -622,7 +649,7 @@ bool PowerManager::hasValidTarget(int power_index, StatBlock *src_stats, FPoint 
  * @param target Aim position in map coordinates
  * @param haz A newly-initialized hazard
  */
-void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint target, Hazard *haz) {
+void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoint& target, Hazard *haz) {
 
 	//the hazard holds the statblock of its source
 	haz->src_stats = src_stats;
@@ -663,59 +690,40 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 		}
 	}
 
-	// Only apply stats from powers that are not defaults
-	// If we do this, we can init with multiple power layers
-	// (e.g. base spell plus weapon type)
-
-	if (powers[power_index].animation_name != "")
+	// animation properties
+	if (powers[power_index].animation_name != "") {
 		haz->loadAnimation(powers[power_index].animation_name);
-	if (powers[power_index].lifespan != 0)
-		haz->base_lifespan = haz->lifespan = powers[power_index].lifespan;
+	}
+
 	if (powers[power_index].directional) {
 		haz->directional = powers[power_index].directional;
 		haz->animationKind = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	}
-	else if (powers[power_index].visual_random)
+	else if (powers[power_index].visual_random) {
 		haz->animationKind = rand() % powers[power_index].visual_random;
-	else if (powers[power_index].visual_option)
+	}
+	else if (powers[power_index].visual_option) {
 		haz->animationKind = powers[power_index].visual_option;
+	}
 
+	haz->base_lifespan = haz->lifespan = powers[power_index].lifespan;
 	haz->on_floor = powers[power_index].floor;
 	haz->base_speed = powers[power_index].speed;
 	haz->complete_animation = powers[power_index].complete_animation;
 
 	// combat traits
-	if (powers[power_index].radius != 0) {
-		haz->radius = powers[power_index].radius;
-	}
-	if (powers[power_index].trait_elemental != -1) {
-		haz->trait_elemental = powers[power_index].trait_elemental;
-	}
+	haz->radius = powers[power_index].radius;
+	haz->trait_elemental = powers[power_index].trait_elemental;
+	haz->active = !powers[power_index].no_attack;
 
-	if (powers[power_index].no_attack) {
-		haz->active = false;
-	}
-
-	// note: it may look like this line would be more efficient:
-	// haz->multitarget = powers[power_index].multitarget
-	// but as mentioned above, only apply traits that are not the default!
-	// If haz->multitarget is already true, don't reset it to false.
-	// otherwise a base power with multitarget will lose multitarget from a power mod
-	// e.g. Piercing Shot in flare-game has multitarget
-	// but the generic Arrow missile or Sling Stone missile does not.
-	if (powers[power_index].multitarget) {
-		haz->multitarget = true;
-	}
-	if (powers[power_index].trait_armor_penetration) {
-		haz->trait_armor_penetration = true;
-	}
+	haz->multitarget = powers[power_index].multitarget;
+	haz->multihit = powers[power_index].multihit;
+	haz->expire_with_caster = powers[power_index].expire_with_caster;
+	haz->trait_armor_penetration = powers[power_index].trait_armor_penetration;
 	haz->trait_crits_impaired += powers[power_index].trait_crits_impaired;
 
-	if (powers[power_index].beacon) {
-		haz->beacon = true;
-	}
+	haz->beacon = powers[power_index].beacon;
 
-	// status effect durations
 	// steal effects
 	haz->hp_steal += powers[power_index].hp_steal;
 	haz->mp_steal += powers[power_index].mp_steal;
@@ -725,22 +733,25 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 		haz->pos = src_stats->pos;
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
-		haz->pos = limitRange(powers[power_index].target_range,src_stats->pos,target);
+		haz->pos = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 	}
 	else if (powers[power_index].starting_pos == STARTING_POS_MELEE) {
 		haz->pos = calcVector(src_stats->pos, src_stats->direction, src_stats->melee_range);
 	}
+
 	if (powers[power_index].target_neighbor > 0) {
 		haz->pos = collider->get_random_neighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
 	}
 
+	if (powers[power_index].relative_pos) {
+		haz->relative_pos = true;
+		haz->pos_offset.x = src_stats->pos.x - haz->pos.x;
+		haz->pos_offset.y = src_stats->pos.y - haz->pos.y;
+	}
+
 	// pre/post power effects
-	if (powers[power_index].post_power != 0) {
-		haz->post_power = powers[power_index].post_power;
-	}
-	if (powers[power_index].wall_power != 0) {
-		haz->wall_power = powers[power_index].wall_power;
-	}
+	haz->post_power = powers[power_index].post_power;
+	haz->wall_power = powers[power_index].wall_power;
 
 	// handle loot
 	if (!powers[power_index].loot.empty()) {
@@ -748,22 +759,33 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, FPoint targ
 	}
 
 	// flag missile powers for reflection
-	if (powers[power_index].type == POWTYPE_MISSILE)
-		haz->missile = true;
+	haz->missile = (powers[power_index].type == POWTYPE_MISSILE);
+
+	// targeting by movement type
+	haz->target_movement_normal = powers[power_index].target_movement_normal;
+	haz->target_movement_flying = powers[power_index].target_movement_flying;
+	haz->target_movement_intangible = powers[power_index].target_movement_intangible;
+
+	haz->walls_block_aoe = powers[power_index].walls_block_aoe;
+
+	if (powers[power_index].sfx_hit_enable) {
+		haz->sfx_hit = powers[power_index].sfx_hit;
+		haz->sfx_hit_enable = powers[power_index].sfx_hit_enable;
+	}
 }
 
 /**
  * Any attack-based effects are handled by hazards.
  * Self-enhancements (buffs) are handled by this function.
  */
-void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
+void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	// teleport to the target location
 	if (powers[power_index].buff_teleport) {
-		target = limitRange(powers[power_index].target_range,src_stats->pos,target);
+		FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			FPoint new_target = collider->get_random_neighbor(floor(target), powers[power_index].target_neighbor);
-			if (floor(new_target.x) == floor(target.x) && floor(new_target.y) == floor(target.y)) {
+			FPoint new_target = collider->get_random_neighbor(floor(limit_target), powers[power_index].target_neighbor);
+			if (floor(new_target.x) == floor(limit_target.x) && floor(new_target.y) == floor(limit_target.y)) {
 				src_stats->teleportation = false;
 			}
 			else {
@@ -774,19 +796,19 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, FPoint target) {
 		}
 		else {
 			src_stats->teleportation = true;
-			src_stats->teleport_destination.x = target.x;
-			src_stats->teleport_destination.y = target.y;
+			src_stats->teleport_destination.x = limit_target.x;
+			src_stats->teleport_destination.y = limit_target.y;
 		}
 	}
 
 	// handle all other effects
-	if (powers[power_index].buff || (powers[power_index].buff_party && src_stats->hero_ally)) {
+	if (powers[power_index].buff || (powers[power_index].buff_party && (src_stats->hero_ally || src_stats->enemy_ally))) {
 		int source_type = src_stats->hero ? SOURCE_TYPE_HERO : (src_stats->hero_ally ? SOURCE_TYPE_ALLY : SOURCE_TYPE_ENEMY);
 		effect(src_stats, src_stats, power_index, source_type);
 	}
 
 	if (powers[power_index].buff_party && !powers[power_index].passive) {
-		party_buffs.push(power_index);
+		src_stats->party_buffs.push(power_index);
 	}
 
 	// activate any post powers here if the power doesn't use a hazard
@@ -827,7 +849,6 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 
 			if (effect_data.type == "shield") {
 				// charge shield to max ment weapon damage * damage multiplier
-				// TODO: MULTIPLY and ADD don't account for mod_damage_value_max. Is this okay?
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
@@ -843,7 +864,6 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				// heal for ment weapon damage * damage multiplier
 				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
 
-				// TODO: MULTIPLY and ADD don't account for mod_damage_value_max. Is this okay?
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
@@ -886,7 +906,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::fixed(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	if (powers[power_index].use_hazard) {
 		int delay_iterator = 0;
@@ -922,7 +942,7 @@ bool PowerManager::fixed(int power_index, StatBlock *src_stats, FPoint target) {
  * @param target The mouse cursor position in map coordinates
  * return boolean true if successful
  */
-bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::missile(int power_index, StatBlock *src_stats, const FPoint& target) {
 	FPoint src;
 	if (powers[power_index].starting_pos == STARTING_POS_TARGET) {
 		src = target;
@@ -977,7 +997,7 @@ bool PowerManager::missile(int power_index, StatBlock *src_stats, FPoint target)
 /**
  * Repeaters are multiple hazards that spawn in a straight line
  */
-bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint& target) {
 
 	payPowerCost(power_index, src_stats);
 
@@ -989,13 +1009,14 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 	// calculate polar coordinates angle
 	float theta = calcTheta(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 
-	speed.x = powers[power_index].speed * static_cast<float>(cos(theta));
-	speed.y = powers[power_index].speed * static_cast<float>(sin(theta));
+	speed.x = powers[power_index].speed * cosf(theta);
+	speed.y = powers[power_index].speed * sinf(theta);
 
 	location_iterator = src_stats->pos;
 
 	playSound(power_index);
 
+	Hazard* parent_haz = NULL;
 	for (int i=0; i<powers[power_index].count; i++) {
 
 		location_iterator.x += speed.x;
@@ -1013,6 +1034,14 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 		haz->delay_frames = delay_iterator;
 		delay_iterator += powers[power_index].delay;
 
+		if (i == 0 && powers[power_index].count > 1) {
+			parent_haz = haz;
+		}
+		else if (parent_haz != NULL && i > 0) {
+			haz->parent = parent_haz;
+			parent_haz->children.push_back(haz);
+		}
+
 		hazards.push(haz);
 	}
 
@@ -1024,7 +1053,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, FPoint target
 /**
  * Spawn a creature. Does not create a hazard
  */
-bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& target) {
 	Map_Enemy espawn;
 	espawn.type = powers[power_index].spawn_type;
 	espawn.summoner = src_stats;
@@ -1058,6 +1087,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 	espawn.direction = calcDirection(src_stats->pos.x, src_stats->pos.y, target.x, target.y);
 	espawn.summon_power_index = power_index;
 	espawn.hero_ally = src_stats->hero || src_stats->hero_ally;
+	espawn.enemy_ally = !src_stats->hero;
 
 	for (int i=0; i < powers[power_index].count; i++) {
 		enemies.push(espawn);
@@ -1076,7 +1106,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, FPoint target) {
 /**
  * A simpler spawn routine for map events
  */
-bool PowerManager::spawn(const std::string& enemy_type, Point target) {
+bool PowerManager::spawn(const std::string& enemy_type, const Point& target) {
 
 	Map_Enemy espawn;
 
@@ -1093,7 +1123,7 @@ bool PowerManager::spawn(const std::string& enemy_type, Point target) {
 /**
  * Transform into a creature. Fully replaces entity characteristics
  */
-bool PowerManager::transform(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint& target) {
 	// locking the actionbar prevents power usage until after the hero is transformed
 	inpt->lockActionBar();
 
@@ -1172,7 +1202,7 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
 /**
  * Activate is basically a switch/redirect to the appropriate function
  */
-bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target) {
+bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint& target) {
 	if (static_cast<unsigned>(power_index) >= powers.size())
 		return false;
 
@@ -1184,7 +1214,7 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, FPoint target
 	if (src_stats->hp > 0 && powers[power_index].sacrifice == false && powers[power_index].requires_hp >= src_stats->hp)
 		return false;
 
-	if (powers[power_index].new_state == POWSTATE_BLOCK)
+	if (powers[power_index].type == POWTYPE_BLOCK)
 		return block(power_index, src_stats);
 
 	// logic for different types of powers are very different.  We allow these

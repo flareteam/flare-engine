@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -45,6 +46,8 @@ GameSwitcher::GameSwitcher()
 	: background(NULL)
 	, background_image(NULL)
 	, background_filename("")
+	, fps_ticks(0)
+	, last_fps(0)
 {
 
 	// The initial state is the intro cutscene and then title screen
@@ -159,7 +162,7 @@ void GameSwitcher::logic() {
 	// Check if a the game state is to be changed and change it if necessary, deleting the old state
 	GameState* newState = currentState->getRequestedGameState();
 	if (newState != NULL) {
-		if (currentState->reload_backgrounds)
+		if (currentState->reload_backgrounds || render_device->reloadGraphics())
 			loadBackgroundList();
 
 		delete currentState;
@@ -198,13 +201,20 @@ void GameSwitcher::logic() {
 }
 
 void GameSwitcher::showFPS(int fps) {
-	if (SHOW_FPS) {
+	if (SHOW_FPS && SHOW_HUD) {
 		if (!label_fps) label_fps = new WidgetLabel();
-		std::string sfps = toString(typeid(fps), &fps) + std::string(" fps");
-		Rect pos = fps_position;
-		alignToScreenEdge(fps_corner, &pos);
-		label_fps->set(pos.x, pos.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
+		if (fps_ticks == 0) {
+			fps_ticks = MAX_FRAMES_PER_SEC / 4;
+
+			int avg_fps = (fps + last_fps) / 2;
+			last_fps = fps;
+			std::string sfps = toString(typeid(avg_fps), &avg_fps) + std::string(" fps");
+			Rect pos = fps_position;
+			alignToScreenEdge(fps_corner, &pos);
+			label_fps->set(pos.x, pos.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
+		}
 		label_fps->render();
+		fps_ticks--;
 	}
 }
 

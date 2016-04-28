@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -49,9 +50,9 @@ private:
 	void renderCooldowns();
 	FPoint setTarget(bool have_aim, bool aim_assist);
 
-	Sprite *emptyslot;
-	Sprite *disabled;
-	Sprite *attention;
+	Sprite *sprite_emptyslot;
+	Sprite *sprite_disabled;
+	Sprite *sprite_attention;
 
 	Avatar *hero;
 	Rect src;
@@ -99,13 +100,11 @@ public:
 	std::vector<bool> slot_enabled;
 	bool requires_attention[4];
 	std::vector<bool> slot_activated;
+	std::vector<int> slot_cooldown_size;
 
 	int drag_prev_slot;
 	bool updated;
 	int twostep_slot;
-
-	TabList tablist;
-
 };
 
 #endif

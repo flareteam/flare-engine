@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -92,14 +93,14 @@ void WidgetLabel::setPos(int offset_x, int offset_y) {
 	applyOffsets();
 }
 
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color) {
 	set(_x, _y, _justify, _valign, _text, _color, "font_regular");
 }
 
 /**
  * A shortcut function to set all attributes simultaneously.
  */
-void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, std::string _font) {
+void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color, const std::string& _font) {
 
 	bool changed = false;
 	bool changed_pos = false;

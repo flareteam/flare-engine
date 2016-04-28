@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -22,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cstring>
 #include <cmath>
 #include <ctime>
+#include <limits.h>
 
 #include "Settings.h"
 #include "Stats.h"
@@ -32,12 +34,53 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 GameSwitcher *gswitch;
 
+#if !SDL_VERSION_ATLEAST(2,0,0)
+
+// TODO: Fix this
+
+/*#include <Windows.h>
+Uint64 SDL_GetPerformanceCounter()
+{
+	LARGE_INTEGER result;
+	QueryPerformanceCounter(&result);
+	return result.QuadPart;
+}
+
+Uint64 SDL_GetPerformanceFrequency()
+{
+	LARGE_INTEGER result;
+	QueryPerformanceFrequency(&result);
+	return result.QuadPart;
+}*/
+
+#define SDL_GetPerformanceFrequency() 1000
+#define SDL_GetPerformanceCounter() SDL_GetTicks()
+#endif
+
+#ifdef _WIN32
+#include "PlatformWin32.cpp"
+#elif __ANDROID__
+#include "PlatformAndroid.cpp"
+#elif __IPHONEOS__
+#include "PlatformIPhoneOS.cpp"
+#else
+// Linux stuff should work on Mac OSX/BSD/etc, too
+#include "PlatformLinux.cpp"
+#endif
+
 /**
  * Game initialization.
  */
 static void init(const std::string &render_device_name) {
+	PlatformInit(&PlatformOptions);
 
-	setPaths();
+	/**
+	 * Set system paths
+	 * PATH_CONF is for user-configurable settings files (e.g. keybindings)
+	 * PATH_USER is for user-specific data (e.g. save games)
+	 * PATH_DATA is for common game data (e.g. images, music)
+	 */
+	PlatformSetPaths();
 
 	// SDL Inits
 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0 ) {
@@ -83,7 +126,13 @@ static void init(const std::string &render_device_name) {
 	setStatNames();
 
 	// Create render Device and Rendering Context.
-	render_device = getRenderDevice(render_device_name);
+	if (PlatformOptions.default_renderer != "")
+		render_device = getRenderDevice(PlatformOptions.default_renderer);
+	else if (render_device_name != "")
+		render_device = getRenderDevice(render_device_name);
+	else
+		render_device = getRenderDevice(RENDER_DEVICE);
+
 	int status = render_device->createContext();
 
 	if (status == -1) {
@@ -98,39 +147,31 @@ static void init(const std::string &render_device_name) {
 
 	snd = getSoundManager();
 
-	// initialize Joysticks
-	if(SDL_NumJoysticks() == 1) {
-		logInfo("1 joystick was found:");
-	}
-	else if(SDL_NumJoysticks() > 1) {
-		logInfo("%d joysticks were found:", SDL_NumJoysticks());
-	}
-	else {
-		logInfo("No joysticks were found.");
-		ENABLE_JOYSTICK = false;
-	}
-	for(int i = 0; i < SDL_NumJoysticks(); i++) {
-		logInfo("  Joy %d) %s", i, inpt->getJoystickName(i).c_str());
-	}
-	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
-		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
-		logInfo("Using joystick #%d.", JOYSTICK_DEVICE);
-	}
+	inpt->initJoystick();
 
 	gswitch = new GameSwitcher();
 }
 
+static float getSecondsElapsed(uint64_t prev_ticks, uint64_t now_ticks) {
+	return (static_cast<float>(now_ticks - prev_ticks) / static_cast<float>(SDL_GetPerformanceFrequency()));
+}
+
 static void mainLoop () {
 	bool done = false;
-	int delay = int(floor((1000.f/MAX_FRAMES_PER_SEC)+0.5f));
-	int logic_ticks = SDL_GetTicks();
+
+	float seconds_per_frame = 1.f/static_cast<float>(MAX_FRAMES_PER_SEC);
+
+	uint64_t prev_ticks = SDL_GetPerformanceCounter();
+	uint64_t logic_ticks = SDL_GetPerformanceCounter();
+	uint64_t now_ticks = SDL_GetPerformanceCounter();
+
+	int last_fps = -1;
 
 	while ( !done ) {
 		int loops = 0;
-		int now_ticks = SDL_GetTicks();
-		int prev_ticks = now_ticks;
+		now_ticks = SDL_GetPerformanceCounter();
 
-		while (now_ticks > logic_ticks && loops < MAX_FRAMES_PER_SEC) {
+		while (now_ticks >= logic_ticks && loops < MAX_FRAMES_PER_SEC) {
 			// Frames where data loading happens (GameState switching and map loading)
 			// take a long time, so our loop here will think that the game "lagged" and
 			// try to compensate. To prevent this compensation, we mark those frames as
@@ -154,7 +195,7 @@ static void mainLoop () {
 			// Input done means the user closes the window.
 			done = gswitch->done || inpt->done;
 
-			logic_ticks += delay;
+			logic_ticks += static_cast<uint64_t>(seconds_per_frame * static_cast<float>(SDL_GetPerformanceFrequency()));
 			loops++;
 
 			// Android and IOS only
@@ -162,7 +203,7 @@ static void mainLoop () {
 			// As a result, the delta time when restoring the app is large, so the game will skip frames and appear to be running fast.
 			// To counter this, we reset our delta time here when restoring the app
 			if (inpt->window_minimized && inpt->window_restored) {
-				logic_ticks = now_ticks = SDL_GetTicks();
+				logic_ticks = now_ticks = SDL_GetPerformanceCounter();
 				inpt->window_minimized = inpt->window_restored = false;
 				break;
 			}
@@ -178,24 +219,38 @@ static void mainLoop () {
 		gswitch->render();
 
 		// display the FPS counter
-		// if the frame completed quickly, we estimate the delay here
-		now_ticks = SDL_GetTicks();
-		int delay_ticks = 0;
-		if (now_ticks - prev_ticks < delay) {
-			delay_ticks = delay - (now_ticks - prev_ticks);
-		}
-		if (now_ticks+delay_ticks - prev_ticks != 0) {
-			gswitch->showFPS(1000 / (now_ticks+delay_ticks - prev_ticks));
+		if (last_fps != -1) {
+		    gswitch->showFPS(last_fps);
 		}
 
 		render_device->commitFrame();
 
-		// delay quick frames
-		now_ticks = SDL_GetTicks();
-		if (now_ticks - prev_ticks < delay) {
-			SDL_Delay(delay - (now_ticks - prev_ticks));
+		// calculate the FPS
+		// if the frame completed quickly, we estimate the delay here
+		float fps_delay;
+		if (getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter()) < seconds_per_frame) {
+			fps_delay = seconds_per_frame;
+		} else {
+			fps_delay = getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter());
+		}
+		if (fps_delay != 0) {
+			last_fps = static_cast<int>((1000.f / fps_delay) / 1000.f);
+		} else {
+			last_fps = -1;
 		}
 
+		// delay quick frames
+		// thanks to David Gow: https://davidgow.net/handmadepenguin/ch18.html
+		if (getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter()) < seconds_per_frame) {
+			int32_t delay_ms = static_cast<int32_t>((seconds_per_frame - getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter())) * 1000.f) - 1;
+			if (delay_ms > 0) {
+				SDL_Delay(delay_ms);
+			}
+			while (getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter()) < seconds_per_frame) {
+				// Waiting...
+			}
+		}
+		prev_ticks = SDL_GetPerformanceCounter();
 	}
 }
 
@@ -282,6 +337,9 @@ int main(int argc, char *argv[]) {
                          The default is 'sdl'.\n\n\
 --no-audio               Disables sound effects and music.\n");
 			done = true;
+		}
+		else {
+			logError("'%s' is not a valid command line option. Try '--help' for a list of valid options.", argv[i]);
 		}
 	}
 

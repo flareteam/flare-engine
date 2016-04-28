@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -35,7 +36,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 
 class EnemyManager;
-class MenuInventory;
 class WidgetTooltip;
 
 // this means that normal items are 10x more common than epic items
@@ -61,6 +61,7 @@ private:
 
 	int drop_max;
 	int drop_radius;
+	float autopickup_range;
 
 	// loot refers to ItemManager indices
 	std::vector<Loot> loot;
@@ -82,15 +83,15 @@ public:
 
 	void handleNewMap();
 	void logic();
-	void renderTooltips(FPoint cam);
+	void renderTooltips(const FPoint& cam);
 
 	// called by enemy, who definitly wants to drop loot.
 	void addEnemyLoot(Enemy *e);
-	void addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero = false);
-	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL);
-	ItemStack checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv);
-	ItemStack checkAutoPickup(FPoint hero_pos, MenuInventory *inv);
-	ItemStack checkNearestPickup(FPoint hero_pos, MenuInventory *inv);
+	void addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero = false);
+	void checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos = NULL, std::vector<ItemStack> *itemstack_vec = NULL);
+	ItemStack checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos);
+	ItemStack checkAutoPickup(const FPoint& hero_pos);
+	ItemStack checkNearestPickup(const FPoint& hero_pos);
 
 	void addRenders(std::vector<Renderable> &ren, std::vector<Renderable> &ren_dead);
 
@@ -98,7 +99,6 @@ public:
 
 	StatBlock *hero;
 	int tooltip_margin; // pixels between loot drop center and label
-	bool full_msg;
 };
 
 #endif

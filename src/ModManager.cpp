@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -166,8 +167,12 @@ std::string ModManager::locate(const std::string& filename) {
 		}
 	}
 
-	// all else failing, simply return the filename
-	return PATH_DATA + filename;
+	// all else failing, simply return the filename if it exists
+	test_path = PATH_DATA + filename;
+	if (!fileExists(test_path))
+		test_path = "";
+
+	return test_path;
 }
 
 void amendPathToVector(const std::string &path, std::vector<std::string> &vec) {
@@ -229,7 +234,7 @@ void ModManager::setPaths() {
 	if (uniq_path_data) mod_paths.push_back(PATH_DATA);
 }
 
-Mod ModManager::loadMod(std::string name) {
+Mod ModManager::loadMod(const std::string& name) {
 	Mod mod;
 	std::ifstream infile;
 	std::string starts_with, line, key, val;

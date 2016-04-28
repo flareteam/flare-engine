@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Justin Jacobs
+Copyright © 2012-2016 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
 
 This file is part of FLARE.
@@ -37,7 +37,7 @@ public:
 	void setPos(int offset_x = 0, int offset_y = 0);
 
 	void addChildWidget(Widget* child);
-	Point input_assist(Point mouse);
+	Point input_assist(const Point& mouse);
 	void logic();
 	void logic(int x, int y);
 	void resize(int w, int h);

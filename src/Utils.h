@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -31,6 +32,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <stdint.h>
 #include <string>
 
+class Avatar;
+
 class Point {
 public:
 	int x, y;
@@ -51,7 +54,7 @@ public:
 	int x, y, w, h;
 	Rect() : x(0), y(0), w(0), h(0) {}
 	Rect(SDL_Rect _r) : x(_r.x), y(_r.y), w(_r.w), h(_r.h) {}
-	operator SDL_Rect() {
+	operator SDL_Rect() const {
 		SDL_Rect r;
 		r.x = x;
 		r.y = y;
@@ -67,7 +70,7 @@ public:
 	Color() : r(0), g(0), b(0), a(255) {}
 	Color(Uint8 _r, Uint8 _g, Uint8 _b) : r(_r), g(_g), b(_b), a(255) {}
 	Color(Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a) : r(_r), g(_g), b(_b), a(_a) {}
-	operator SDL_Color() {
+	operator SDL_Color() const {
 		SDL_Color c;
 		c.r = r;
 		c.g = g;
@@ -194,19 +197,19 @@ public:
 	}
 };
 
-Point floor(FPoint fp);
+Point floor(const FPoint& fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
 Point map_to_screen(float x, float y, float camx, float camy);
-Point center_tile(Point p);
-Point map_to_collision(FPoint p);
-FPoint collision_to_map(Point p);
-FPoint calcVector(FPoint pos, int direction, float dist);
-float calcDist(FPoint p1, FPoint p2);
+Point center_tile(const Point& p);
+Point map_to_collision(const FPoint& p);
+FPoint collision_to_map(const Point& p);
+FPoint calcVector(const FPoint& pos, int direction, float dist);
+float calcDist(const FPoint& p1, const FPoint& p2);
 float calcTheta(float x1, float y1, float x2, float y2);
 unsigned char calcDirection(float x0, float y0, float x1, float y1);
 unsigned char calcDirection(const FPoint &src, const FPoint &dst);
-bool isWithin(FPoint center, float radius, FPoint target);
-bool isWithin(Rect r, Point target);
+bool isWithin(const FPoint& center, float radius, const FPoint& target);
+bool isWithin(const Rect& r, const Point& target);
 
 std::string abbreviateKilo(int amount);
 void alignToScreenEdge(ALIGNMENT alignment, Rect *r);
@@ -224,6 +227,14 @@ Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align);
 
 size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b);
 
-std::string getDurationString(const int& duration);
+std::string getDurationString(const int duration);
+
+std::string substituteVarsInString(const std::string &_s, Avatar* avatar = NULL);
+
+FPoint clampDistance(float range, const FPoint& src, const FPoint& target);
+
+bool rectsOverlap(const Rect &a, const Rect &b);
+
+int rotateDirection(int direction, int val);
 
 #endif

@@ -5,7 +5,7 @@ Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
-Copyright © 2014 Justin Jacobs
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -68,6 +68,10 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, show_target_lb(new WidgetLabel())
 	, loot_tooltips_cb(new WidgetCheckBox())
 	, loot_tooltips_lb(new WidgetLabel())
+	, statbar_labels_cb(new WidgetCheckBox())
+	, statbar_labels_lb(new WidgetLabel())
+	, auto_equip_cb(new WidgetCheckBox())
+	, auto_equip_lb(new WidgetLabel())
 	, music_volume_sl(new WidgetSlider())
 	, music_volume_lb(new WidgetLabel())
 	, sound_volume_sl(new WidgetSlider())
@@ -244,6 +248,14 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR loot_tooltips|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show loot labels" checkbox relative to the frame.
 		placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), JUSTIFY_RIGHT);
 	}
+	else if (infile.key == "statbar_labels") {
+		// @ATTR statbar_labels|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show stat bar labels" checkbox relative to the frame.
+		placeLabeledWidget(statbar_labels_lb, statbar_labels_cb, x1, y1, x2, y2, msg->get("Always show stat bar labels"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "auto_equip") {
+		// @ATTR auto_equip|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Automatically equip items" checkbox relative to the frame.
+		placeLabeledWidget(auto_equip_lb, auto_equip_cb, x1, y1, x2, y2, msg->get("Automatically equip items"), JUSTIFY_RIGHT);
+	}
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Active Mods" list box relative to the frame.
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
@@ -288,6 +300,7 @@ bool GameStateConfigBase::parseStub(FileParser &infile) {
 	else if (infile.key == "mouse_move");
 	else if (infile.key == "hwsurface");
 	else if (infile.key == "vsync");
+	else if (infile.key == "texture_filter");
 	else if (infile.key == "enable_joystick");
 	else if (infile.key == "change_gamma");
 	else if (infile.key == "mouse_aim");
@@ -360,6 +373,10 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(show_target_lb, INTERFACE_TAB);
 	addChildWidget(loot_tooltips_cb, INTERFACE_TAB);
 	addChildWidget(loot_tooltips_lb, INTERFACE_TAB);
+	addChildWidget(statbar_labels_cb, INTERFACE_TAB);
+	addChildWidget(statbar_labels_lb, INTERFACE_TAB);
+	addChildWidget(auto_equip_cb, INTERFACE_TAB);
+	addChildWidget(auto_equip_lb, INTERFACE_TAB);
 	addChildWidget(language_lstb, INTERFACE_TAB);
 	addChildWidget(language_lb, INTERFACE_TAB);
 
@@ -374,28 +391,44 @@ void GameStateConfigBase::addChildWidgets() {
 }
 
 void GameStateConfigBase::setupTabList() {
-	tablist.add(ok_button);
-	tablist.add(defaults_button);
-	tablist.add(cancel_button);
+	tablist.add(tab_control);
+	tablist.setPrevTabList(&tablist_main);
 
-	tablist.add(music_volume_sl);
-	tablist.add(sound_volume_sl);
+	tablist_main.add(ok_button);
+	tablist_main.add(defaults_button);
+	tablist_main.add(cancel_button);
+	tablist_main.setPrevTabList(&tablist);
+	tablist_main.setNextTabList(&tablist);
+	tablist_main.lock();
 
-	tablist.add(combat_text_cb);
-	tablist.add(show_fps_cb);
-	tablist.add(colorblind_cb);
-	tablist.add(hardware_cursor_cb);
-	tablist.add(dev_mode_cb);
-	tablist.add(show_target_cb);
-	tablist.add(loot_tooltips_cb);
-	tablist.add(language_lstb);
+	tablist_audio.add(music_volume_sl);
+	tablist_audio.add(sound_volume_sl);
+	tablist_audio.setPrevTabList(&tablist);
+	tablist_audio.setNextTabList(&tablist_main);
+	tablist_audio.lock();
 
-	tablist.add(inactivemods_lstb);
-	tablist.add(activemods_lstb);
-	tablist.add(inactivemods_activate_btn);
-	tablist.add(activemods_deactivate_btn);
-	tablist.add(activemods_shiftup_btn);
-	tablist.add(activemods_shiftdown_btn);
+	tablist_interface.add(combat_text_cb);
+	tablist_interface.add(show_fps_cb);
+	tablist_interface.add(colorblind_cb);
+	tablist_interface.add(hardware_cursor_cb);
+	tablist_interface.add(dev_mode_cb);
+	tablist_interface.add(show_target_cb);
+	tablist_interface.add(loot_tooltips_cb);
+	tablist_interface.add(auto_equip_cb);
+	tablist_interface.add(language_lstb);
+	tablist_interface.setPrevTabList(&tablist);
+	tablist_interface.setNextTabList(&tablist_main);
+	tablist_interface.lock();
+
+	tablist_mods.add(inactivemods_lstb);
+	tablist_mods.add(activemods_lstb);
+	tablist_mods.add(inactivemods_activate_btn);
+	tablist_mods.add(activemods_deactivate_btn);
+	tablist_mods.add(activemods_shiftup_btn);
+	tablist_mods.add(activemods_shiftdown_btn);
+	tablist_mods.setPrevTabList(&tablist);
+	tablist_mods.setNextTabList(&tablist_main);
+	tablist_mods.lock();
 }
 
 void GameStateConfigBase::update() {
@@ -420,18 +453,30 @@ void GameStateConfigBase::updateAudio() {
 void GameStateConfigBase::updateInterface() {
 	if (COMBAT_TEXT) combat_text_cb->Check();
 	else combat_text_cb->unCheck();
+
 	if (SHOW_FPS) show_fps_cb->Check();
 	else show_fps_cb->unCheck();
+
 	if (COLORBLIND) colorblind_cb->Check();
 	else colorblind_cb->unCheck();
+
 	if (HARDWARE_CURSOR) hardware_cursor_cb->Check();
 	else hardware_cursor_cb->unCheck();
+
 	if (DEV_MODE) dev_mode_cb->Check();
 	else dev_mode_cb->unCheck();
+
 	if (SHOW_TARGET) show_target_cb->Check();
 	else show_target_cb->unCheck();
+
 	if (LOOT_TOOLTIPS) loot_tooltips_cb->Check();
 	else loot_tooltips_cb->unCheck();
+
+	if (STATBAR_LABELS) statbar_labels_cb->Check();
+	else statbar_labels_cb->unCheck();
+
+	if (AUTO_EQUIP) auto_equip_cb->Check();
+	else auto_equip_cb->unCheck();
 
 	refreshLanguages();
 }
@@ -458,9 +503,12 @@ void GameStateConfigBase::logic() {
 	// tab contents
 	active_tab = tab_control->getActiveTab();
 
-	if (active_tab == AUDIO_TAB)
+	if (active_tab == AUDIO_TAB) {
+		tablist.setNextTabList(&tablist_audio);
 		logicAudio();
+	}
 	else if (active_tab == INTERFACE_TAB) {
+		tablist.setNextTabList(&tablist_interface);
 		logicInterface();
 
 		// by default, hardware mouse cursor can not be turned off
@@ -468,8 +516,10 @@ void GameStateConfigBase::logic() {
 		hardware_cursor_cb->Check();
 		HARDWARE_CURSOR = true;
 	}
-	else if (active_tab == MODS_TAB)
+	else if (active_tab == MODS_TAB) {
+		tablist.setNextTabList(&tablist_mods);
 		logicMods();
+	}
 }
 
 bool GameStateConfigBase::logicMain() {
@@ -482,7 +532,11 @@ bool GameStateConfigBase::logicMain() {
 
 	// tabs & the bottom 3 main buttons
 	tab_control->logic();
-	tablist.logic(true);
+	tablist.logic();
+	tablist_main.logic();
+	tablist_audio.logic();
+	tablist_interface.logic();
+	tablist_mods.logic();
 
 	// Ok/Cancel Buttons
 	if (ok_button->checkClick()) {
@@ -535,9 +589,8 @@ void GameStateConfigBase::logicAccept() {
 	loadMiscSettings();
 	setStatNames();
 	refreshFont();
-	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
-		SDL_JoystickClose(joy);
-		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
+	if ((ENABLE_JOYSTICK) && (inpt->getNumJoysticks() > 0)) {
+		inpt->initJoystick();
 	}
 	cleanup();
 	render_device->createContext();
@@ -609,6 +662,14 @@ void GameStateConfigBase::logicInterface() {
 	else if (loot_tooltips_cb->checkClick()) {
 		if (loot_tooltips_cb->isChecked()) LOOT_TOOLTIPS=true;
 		else LOOT_TOOLTIPS=false;
+	}
+	else if (statbar_labels_cb->checkClick()) {
+		if (statbar_labels_cb->isChecked()) STATBAR_LABELS=true;
+		else STATBAR_LABELS=false;
+	}
+	else if (auto_equip_cb->checkClick()) {
+		if (auto_equip_cb->isChecked()) AUTO_EQUIP=true;
+		else AUTO_EQUIP=false;
 	}
 }
 

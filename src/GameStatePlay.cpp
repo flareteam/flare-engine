@@ -4,6 +4,7 @@ Copyright © 2012 Igor Paliychuk
 Copyright © 2012-2014 Henrik Andersson
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -104,11 +105,6 @@ GameStatePlay::GameStatePlay()
 
 	// LootManager needs hero StatBlock
 	loot->hero = &pc->stats;
-
-	// assign some object pointers after object creation, based on dependency order
-	camp->carried_items = &menu->inv->inventory[CARRIED];
-	camp->currency = &menu->inv->currency;
-	camp->hero = &pc->stats;
 
 	loading->set(0, 0, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), color_normal);
 
@@ -239,24 +235,22 @@ void GameStatePlay::checkLoot() {
 
 	// Autopickup
 	if (AUTOPICKUP_CURRENCY) {
-		pickup = loot->checkAutoPickup(pc->stats.pos, menu->inv);
-		if (!pickup.empty()) menu->inv->add(pickup);
+		pickup = loot->checkAutoPickup(pc->stats.pos);
+		if (!pickup.empty()) {
+			menu->inv->add(pickup, CARRIED, -1, true, true);
+			pickup.clear();
+		}
 	}
 
 	// Normal pickups
-	if (!pc->stats.attacking)
-		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos, menu->inv);
+	if (!pc->stats.attacking) {
+		pickup = loot->checkPickup(inpt->mouse, mapr->cam, pc->stats.pos);
+	}
 
 	if (!pickup.empty()) {
-		menu->inv->add(pickup);
+		menu->inv->add(pickup, CARRIED, -1, true, true);
 		camp->setStatus(items->items[pickup.item].pickup_status);
-	}
-	if (loot->full_msg) {
-		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
-		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-		menu->questlog->add(msg->get("Inventory is full."), LOG_TYPE_MESSAGES);
-		menu->hudlog->add(msg->get("Inventory is full."));
-		loot->full_msg = false;
+		pickup.clear();
 	}
 
 }
@@ -404,8 +398,16 @@ void GameStatePlay::checkLog() {
 
 	// MenuInventory has hints to help the player use items properly
 	if (menu->inv->log_msg != "") {
+		menu->questlog->add(menu->inv->log_msg, LOG_TYPE_MESSAGES);
 		menu->hudlog->add(menu->inv->log_msg);
 		menu->inv->log_msg = "";
+	}
+
+	// MenuStash can display a message when the stash is full
+	if (menu->stash->log_msg != "") {
+		menu->questlog->add(menu->stash->log_msg, LOG_TYPE_MESSAGES);
+		menu->hudlog->add(menu->stash->log_msg);
+		menu->stash->log_msg = "";
 	}
 
 	// PowerManager has hints for powers
@@ -625,21 +627,17 @@ void GameStatePlay::checkUsedItems() {
  * Marks the menu if it needs attention.
  */
 void GameStatePlay::checkNotifications() {
-	if (pc->newLevelNotification) {
+	if (pc->newLevelNotification || menu->chr->getUnspent() > 0) {
 		pc->newLevelNotification = false;
-		menu->act->requires_attention[MENU_CHARACTER] = true;
+		menu->act->requires_attention[MENU_CHARACTER] = !menu->chr->visible;
 	}
 	if (menu->pow->newPowerNotification) {
 		menu->pow->newPowerNotification = false;
-		menu->act->requires_attention[MENU_POWERS] = true;
-	}
-	if (quests->resetQuestNotification) { //remove if no quests
-		quests->resetQuestNotification = false;
-		menu->act->requires_attention[MENU_LOG] = false;
+		menu->act->requires_attention[MENU_POWERS] = !menu->pow->visible;
 	}
 	if (quests->newQuestNotification) {
 		quests->newQuestNotification = false;
-		menu->act->requires_attention[MENU_LOG] = true;
+		menu->act->requires_attention[MENU_LOG] = !menu->questlog->visible;
 	}
 
 	// if the player is transformed into a creature, don't notifications for the powers menu

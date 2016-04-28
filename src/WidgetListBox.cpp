@@ -1,6 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
-Copyright © 2012 Justin Jacobs
+Copyright © 2012-2016 Justin Jacobs
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
 
@@ -58,6 +58,8 @@ WidgetListBox::WidgetListBox(int height, const std::string& _fileName)
 		pos.h = (listboxs->getGraphicsHeight() / 3); // height of one item
 		graphics->unref();
 	}
+
+	scroll_type = VERTICAL;
 }
 
 bool WidgetListBox::checkClick() {
@@ -166,7 +168,7 @@ bool WidgetListBox::checkClick(int x, int y) {
  *
  * @param mouse The x,y screen coordinates of the mouse cursor
  */
-TooltipData WidgetListBox::checkTooltip(Point mouse) {
+TooltipData WidgetListBox::checkTooltip(const Point& mouse) {
 	TooltipData _tip;
 
 	for(unsigned i=0; i<rows.size(); i++) {
@@ -353,13 +355,12 @@ void WidgetListBox::render() {
 	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
-		Uint32 color;
 
 		topLeft.x = rows[0].x + local_frame.x - local_offset.x;
 		topLeft.y = rows[0].y + local_frame.y - local_offset.y;
 		bottomRight.x = rows[rows.size() - 1].x + rows[0].w + local_frame.x - local_offset.x;
 		bottomRight.y = rows[rows.size() - 1].y + rows[0].h + local_frame.y - local_offset.y;
-		color = render_device->MapRGB(255,248,220);
+		Color color = Color(255,248,220,255);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;
@@ -445,7 +446,10 @@ bool WidgetListBox::getNext() {
 	if (items.size() < 1) return false;
 
 	int sel = getSelected();
-	if (sel != -1) items[sel].selected = false;
+	if (sel != -1)
+		items[sel].selected = false;
+	else
+		sel = cursor-1;
 
 	if(sel == static_cast<int>(items.size())-1) {
 		items[0].selected = true;
@@ -463,8 +467,10 @@ bool WidgetListBox::getPrev() {
 	if (items.size() < 1) return false;
 
 	int sel = getSelected();
-	if (sel == -1) sel = 0;
-	items[sel].selected = false;
+	if (sel != -1)
+		items[sel].selected = false;
+	else
+		sel = cursor;
 
 	if(sel == 0) {
 		items[items.size()-1].selected = true;
@@ -476,6 +482,16 @@ bool WidgetListBox::getPrev() {
 	}
 
 	return true;
+}
+
+void WidgetListBox::defocus() {
+	Widget::defocus();
+
+	int sel = getSelected();
+	if (!can_select && sel != -1) {
+		items[sel].selected = false;
+	}
+
 }
 
 void WidgetListBox::select(int index) {

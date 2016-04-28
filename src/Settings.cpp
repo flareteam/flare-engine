@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2012 Stefan Beller
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -28,22 +29,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "Platform.h"
 #include "Settings.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
 #include "UtilsFileSystem.h"
 #include "SharedResources.h"
-
-#ifdef _MSC_VER
-#define log2(x)	logf(x)/logf(2)
-#endif
-
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-#include <SDL.h>
-#if defined(__ANDROID__)
-#include <jni.h>
-#endif
-#endif
 
 class ConfigEntry {
 public:
@@ -55,31 +46,35 @@ public:
 };
 
 ConfigEntry config[] = {
-	{ "fullscreen",       &typeid(FULLSCREEN),      "0",   &FULLSCREEN,      "fullscreen mode. 1 enable, 0 disable."},
-	{ "resolution_w",     &typeid(SCREEN_W),        "640", &SCREEN_W,        "display resolution. 640x480 minimum."},
-	{ "resolution_h",     &typeid(SCREEN_H),        "480", &SCREEN_H,        NULL},
-	{ "music_volume",     &typeid(MUSIC_VOLUME),    "96",  &MUSIC_VOLUME,    "music and sound volume (0 = silent, 128 = max)"},
-	{ "sound_volume",     &typeid(SOUND_VOLUME),    "128", &SOUND_VOLUME,    NULL},
-	{ "combat_text",      &typeid(COMBAT_TEXT),     "0",   &COMBAT_TEXT,     "display floating damage text. 1 enable, 0 disable."},
-	{ "mouse_move",       &typeid(MOUSE_MOVE),      "0",   &MOUSE_MOVE,      "use mouse to move (experimental). 1 enable, 0 disable."},
-	{ "hwsurface",        &typeid(HWSURFACE),       "1",   &HWSURFACE,       "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
-	{ "vsync",            &typeid(VSYNC),           "1",   &VSYNC,           NULL},
-	{ "texture_filter",   &typeid(TEXTURE_FILTER),  "1",   &TEXTURE_FILTER,  "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"},
-	{ "enable_joystick",  &typeid(ENABLE_JOYSTICK), "0",   &ENABLE_JOYSTICK, "joystick settings."},
-	{ "joystick_device",  &typeid(JOYSTICK_DEVICE), "0",   &JOYSTICK_DEVICE, NULL},
-	{ "joystick_deadzone",&typeid(JOY_DEADZONE),    "100", &JOY_DEADZONE,    NULL},
-	{ "language",         &typeid(LANGUAGE),        "en",  &LANGUAGE,        "2-letter language code."},
-	{ "change_gamma",     &typeid(CHANGE_GAMMA),    "0",   &CHANGE_GAMMA,    "allow changing gamma (experimental). 1 enable, 0 disable."},
-	{ "gamma",            &typeid(GAMMA),           "1.0", &GAMMA,           "screen gamma (0.5 = darkest, 2.0 = lightest)"},
-	{ "mouse_aim",        &typeid(MOUSE_AIM),       "1",   &MOUSE_AIM,       "use mouse to aim. 1 enable, 0 disable."},
-	{ "no_mouse",         &typeid(NO_MOUSE),        "0",   &NO_MOUSE,        "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
-	{ "show_fps",         &typeid(SHOW_FPS),        "0",   &SHOW_FPS,        "show frames per second. 1 enable, 0 disable."},
-	{ "colorblind",       &typeid(COLORBLIND),      "0",   &COLORBLIND,      "enable colorblind tooltips. 1 enable, 0 disable"},
-	{ "hardware_cursor",  &typeid(HARDWARE_CURSOR), "0",   &HARDWARE_CURSOR, "use the system mouse cursor. 1 enable, 0 disable"},
-	{ "dev_mode",         &typeid(DEV_MODE),        "0",   &DEV_MODE,        "allow opening the developer console. 1 enable, 0 disable"},
-	{ "dev_hud",          &typeid(DEV_HUD),         "1",   &DEV_HUD,         "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable"},
-	{ "show_target",      &typeid(SHOW_TARGET),     "0",   &SHOW_TARGET,     "show the targeting reticle on the ground when attacking. 1 enable, 0 disable"},
-	{ "loot_tooltips",    &typeid(LOOT_TOOLTIPS),   "1",   &LOOT_TOOLTIPS,   "always show loot tooltips. 1 enable, 0 disable"}
+	{ "fullscreen",        &typeid(FULLSCREEN),         "0",   &FULLSCREEN,         "fullscreen mode. 1 enable, 0 disable."},
+	{ "resolution_w",      &typeid(SCREEN_W),           "640", &SCREEN_W,           "display resolution. 640x480 minimum."},
+	{ "resolution_h",      &typeid(SCREEN_H),           "480", &SCREEN_H,           NULL},
+	{ "music_volume",      &typeid(MUSIC_VOLUME),       "96",  &MUSIC_VOLUME,       "music and sound volume (0 = silent, 128 = max)"},
+	{ "sound_volume",      &typeid(SOUND_VOLUME),       "128", &SOUND_VOLUME,       NULL},
+	{ "combat_text",       &typeid(COMBAT_TEXT),        "1",   &COMBAT_TEXT,        "display floating damage text. 1 enable, 0 disable."},
+	{ "mouse_move",        &typeid(MOUSE_MOVE),         "0",   &MOUSE_MOVE,         "use mouse to move (experimental). 1 enable, 0 disable."},
+	{ "hwsurface",         &typeid(HWSURFACE),          "1",   &HWSURFACE,          "hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable."},
+	{ "vsync",             &typeid(VSYNC),              "1",   &VSYNC,              NULL},
+	{ "texture_filter",    &typeid(TEXTURE_FILTER),     "1",   &TEXTURE_FILTER,     "texture filter quality. 0 nearest neighbor (worst), 1 linear (best)"},
+	{ "max_fps",           &typeid(MAX_FRAMES_PER_SEC), "60",  &MAX_FRAMES_PER_SEC, "maximum frames per second. default is 60"},
+	{ "renderer",          &typeid(RENDER_DEVICE),      "sdl", &RENDER_DEVICE,      "default render device. 'sdl' is the default setting"},
+	{ "enable_joystick",   &typeid(ENABLE_JOYSTICK),    "0",   &ENABLE_JOYSTICK,    "joystick settings."},
+	{ "joystick_device",   &typeid(JOYSTICK_DEVICE),    "0",   &JOYSTICK_DEVICE,    NULL},
+	{ "joystick_deadzone", &typeid(JOY_DEADZONE),       "100", &JOY_DEADZONE,       NULL},
+	{ "language",          &typeid(LANGUAGE),           "en",  &LANGUAGE,           "2-letter language code."},
+	{ "change_gamma",      &typeid(CHANGE_GAMMA),       "0",   &CHANGE_GAMMA,       "allow changing gamma (experimental). 1 enable, 0 disable."},
+	{ "gamma",             &typeid(GAMMA),              "1.0", &GAMMA,              "screen gamma (0.5 = darkest, 2.0 = lightest)"},
+	{ "mouse_aim",         &typeid(MOUSE_AIM),          "1",   &MOUSE_AIM,          "use mouse to aim. 1 enable, 0 disable."},
+	{ "no_mouse",          &typeid(NO_MOUSE),           "0",   &NO_MOUSE,           "make using mouse secondary, give full control to keyboard. 1 enable, 0 disable."},
+	{ "show_fps",          &typeid(SHOW_FPS),           "0",   &SHOW_FPS,           "show frames per second. 1 enable, 0 disable."},
+	{ "colorblind",        &typeid(COLORBLIND),         "0",   &COLORBLIND,         "enable colorblind tooltips. 1 enable, 0 disable"},
+	{ "hardware_cursor",   &typeid(HARDWARE_CURSOR),    "0",   &HARDWARE_CURSOR,    "use the system mouse cursor. 1 enable, 0 disable"},
+	{ "dev_mode",          &typeid(DEV_MODE),           "0",   &DEV_MODE,           "allow opening the developer console. 1 enable, 0 disable"},
+	{ "dev_hud",           &typeid(DEV_HUD),            "1",   &DEV_HUD,            "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable"},
+	{ "show_target",       &typeid(SHOW_TARGET),        "0",   &SHOW_TARGET,        "show the targeting reticle on the ground when attacking. 1 enable, 0 disable"},
+	{ "loot_tooltips",     &typeid(LOOT_TOOLTIPS),      "1",   &LOOT_TOOLTIPS,      "always show loot tooltips. 1 enable, 0 disable"},
+	{ "statbar_labels",    &typeid(STATBAR_LABELS),     "0",   &STATBAR_LABELS,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable"},
+	{ "auto_equip",        &typeid(AUTO_EQUIP),         "1",   &AUTO_EQUIP,         "automatically equip items. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
@@ -112,8 +107,8 @@ unsigned short ICON_SIZE;
 
 // Video Settings
 bool FULLSCREEN;
-unsigned short MAX_FRAMES_PER_SEC = 60;
 unsigned char BITS_PER_PIXEL = 32;
+unsigned short MAX_FRAMES_PER_SEC;
 unsigned short VIEW_W = 0;
 unsigned short VIEW_H = 0;
 unsigned short VIEW_W_HALF = 0;
@@ -128,6 +123,7 @@ bool TEXTURE_FILTER;
 bool IGNORE_TEXTURE_FILTER = false;
 bool CHANGE_GAMMA;
 float GAMMA;
+std::string RENDER_DEVICE;
 
 // Audio Settings
 bool AUDIO = true;
@@ -143,6 +139,9 @@ bool DEV_MODE;
 bool DEV_HUD;
 bool SHOW_TARGET;
 bool LOOT_TOOLTIPS;
+bool STATBAR_LABELS;
+bool AUTO_EQUIP;
+bool SHOW_HUD = true;
 
 // Input Settings
 bool MOUSE_MOVE;
@@ -214,259 +213,6 @@ float INTERACT_RANGE;
 bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
 float ENCOUNTER_DIST;
-
-/**
- * Set system paths
- * PATH_CONF is for user-configurable settings files (e.g. keybindings)
- * PATH_USER is for user-specific data (e.g. save games)
- * PATH_DATA is for common game data (e.g. images, music)
- */
-
-#ifdef _WIN32
-// Windows paths
-void setPaths() {
-
-	// handle Windows-specific path options
-	if (getenv("APPDATA") != NULL) {
-		PATH_CONF = PATH_USER = (std::string)getenv("APPDATA") + "\\flare";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
-
-		PATH_CONF += "\\config";
-		PATH_USER += "\\userdata";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
-	}
-	else {
-		PATH_CONF = "config";
-		PATH_USER = "userdata";
-		createDir(PATH_CONF);
-		createDir(PATH_USER);
-	}
-
-	createDir(PATH_USER + "\\mods");
-	createDir(PATH_USER + "\\saves");
-
-	PATH_DATA = "";
-	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) {
-		logError("Settings: Could not find specified game data directory.");
-		CUSTOM_PATH_DATA = "";
-	}
-
-	PATH_CONF = PATH_CONF + "/";
-	PATH_USER = PATH_USER + "/";
-}
-#elif __ANDROID__
-// Android paths
-std::string getPackageName()
-{
-	JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-
-	jobject activity = (jobject)SDL_AndroidGetActivity();
-	jclass clazz(env->GetObjectClass(activity));
-
-	jmethodID method_id = env->GetMethodID(clazz, "getPackageName", "()Ljava/lang/String;");
-	jstring packageName = (jstring)env->CallObjectMethod(activity,  method_id);
-	const char* name = env->GetStringUTFChars(packageName, NULL);
-	std::string result(name);
-	env->ReleaseStringUTFChars(packageName, name);
-
-	env->DeleteLocalRef(activity);
-	env->DeleteLocalRef(clazz);
-
-	return result;
-}
-
-void setPaths() {
-	const std::string externalSDList[] = {
-		"/mnt/extSdCard/Android",
-		"/storage/extSdCard/Android"
-		};
-	const int externalSDList_size = 2;
-
-	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
-
-	const std::string package_name = getPackageName();
-	const std::string user_folder = "data/" + package_name + "/files";
-
-	if (SDL_AndroidGetExternalStorageState() != 0)
-	{
-		PATH_USER = std::string(SDL_AndroidGetExternalStoragePath());
-	}
-	// NOTE: Next condition shouldn't be needed, but in theory SDL_AndroidGetExternalStoragePath() can fail.
-	else
-	{
-		const std::string internalSDList[] = {
-			"/sdcard/Android",
-			"/mnt/sdcard/Android",
-			"/storage/sdcard0/Android",
-			"/storage/emulated/0/Android",
-			"/storage/emulated/legacy/Android",
-			};
-		const int internalSDList_size = 5;
-
-		for (int i = 0; i < internalSDList_size; i++)
-		{
-			if (dirExists(internalSDList[i]))
-			{
-				PATH_USER = internalSDList[i] + "/" + user_folder;
-				break;
-			}
-		}
-	}
-	if (PATH_USER.empty())
-	{
-		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
-	}
-
-	for (int i = 0; i < externalSDList_size; i++)
-	{
-		if (dirExists(externalSDList[i]))
-		{
-			PATH_DATA = externalSDList[i] + "/" + user_folder;
-			if (!dirExists(PATH_DATA))
-			{
-				createDir(externalSDList[i] + "/data" + package_name);
-				createDir(externalSDList[i] + "/data" + package_name + "/files");
-			}
-			break;
-		}
-	}
-
-	PATH_USER += "/userdata";
-
-	createDir(PATH_CONF);
-	createDir(PATH_USER);
-	createDir(PATH_USER + "/mods");
-	createDir(PATH_USER + "/saves");
-
-	PATH_CONF += "/";
-	PATH_USER += "/";
-	PATH_DATA += "/";
-}
-#elif __amigaos4__
-// AmigaOS paths
-void setPaths() {
-	PATH_CONF = "PROGDIR:";
-	PATH_USER = "PROGDIR:";
-	PATH_DATA = "PROGDIR:";
-	if (dirExists(CUSTOM_PATH_DATA)) PATH_DATA = CUSTOM_PATH_DATA;
-	else if (!CUSTOM_PATH_DATA.empty()) logError("Settings: Could not find specified game data directory.");
-}
-#else
-void setPaths() {
-
-	// attempting to follow this spec:
-	// http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-
-	// set config path (settings, keybindings)
-	// $XDG_CONFIG_HOME/flare/
-	if (getenv("XDG_CONFIG_HOME") != NULL) {
-		PATH_CONF = (std::string)getenv("XDG_CONFIG_HOME") + "/flare/";
-	}
-	// $HOME/.config/flare/
-	else if (getenv("HOME") != NULL) {
-		PATH_CONF = (std::string)getenv("HOME") + "/.config/";
-		createDir(PATH_CONF);
-		PATH_CONF += "flare/";
-	}
-	// ./config/
-	else {
-		PATH_CONF = "./config/";
-	}
-
-	createDir(PATH_CONF);
-
-	// set user path (save games)
-	// $XDG_DATA_HOME/flare/
-	if (getenv("XDG_DATA_HOME") != NULL) {
-		PATH_USER = (std::string)getenv("XDG_DATA_HOME") + "/flare/";
-	}
-	// $HOME/.local/share/flare/
-	else if (getenv("HOME") != NULL) {
-		PATH_USER = (std::string)getenv("HOME") + "/.local/";
-		createDir(PATH_USER);
-		PATH_USER += "share/";
-		createDir(PATH_USER);
-		PATH_USER += "flare/";
-	}
-	// ./saves/
-	else {
-		PATH_USER = "./userdata/";
-	}
-
-	createDir(PATH_USER);
-	createDir(PATH_USER + "mods/");
-	createDir(PATH_USER + "saves/");
-
-	// data folder
-	// while PATH_CONF and PATH_USER are created if not found,
-	// PATH_DATA must already have the game data for the game to work.
-	// in most releases the data will be in the same folder as the executable
-	// - Windows apps are released as a simple folder
-	// - OSX apps are released in a .app folder
-	// Official linux distros might put the executable and data files
-	// in a more standard location.
-
-	// these flags are set to true when a valid directory is found
-	bool path_data = false;
-
-	// if the user specified a data path, try to use it
-	if (dirExists(CUSTOM_PATH_DATA)) {
-		if (!path_data) PATH_DATA = CUSTOM_PATH_DATA;
-		path_data = true;
-	}
-	else if (!CUSTOM_PATH_DATA.empty()) {
-		logError("Settings: Could not find specified game data directory.");
-		CUSTOM_PATH_DATA = "";
-	}
-
-	// Check for the local data before trying installed ones.
-	if (dirExists("./mods")) {
-		if (!path_data) PATH_DATA = "./";
-		path_data = true;
-	}
-
-	// check $XDG_DATA_DIRS options
-	// a list of directories in preferred order separated by :
-	if (getenv("XDG_DATA_DIRS") != NULL) {
-		std::string pathlist = (std::string)getenv("XDG_DATA_DIRS");
-		std::string pathtest;
-		pathtest = popFirstString(pathlist,':');
-		while (pathtest != "") {
-			if (!path_data) {
-				PATH_DATA = pathtest + "/flare/";
-				if (dirExists(PATH_DATA)) path_data = true;
-			}
-			if (path_data) break;
-			pathtest = popFirstString(pathlist,':');
-		}
-	}
-
-#if defined DATA_INSTALL_DIR
-	if (!path_data) PATH_DATA = DATA_INSTALL_DIR "/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-#endif
-
-	// check /usr/local/share/flare/ and /usr/share/flare/ next
-	if (!path_data) PATH_DATA = "/usr/local/share/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-
-	if (!path_data) PATH_DATA = "/usr/share/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-
-	// check "games" variants of these
-	if (!path_data) PATH_DATA = "/usr/local/share/games/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-
-	if (!path_data) PATH_DATA = "/usr/share/games/flare/";
-	if (!path_data && dirExists(PATH_DATA)) path_data = true;
-
-	// finally assume the local folder
-	if (!path_data)	PATH_DATA = "./";
-}
-#endif
 
 static ConfigEntry * getConfigEntry(const char * name) {
 
@@ -704,6 +450,12 @@ void loadMiscSettings() {
 		logError("Settings: virtual_height is undefined. Setting it to %d.", MIN_SCREEN_H);
 		VIEW_H = MIN_SCREEN_H;
 		VIEW_H_HALF = VIEW_H / 2;
+	}
+
+	// icon size can not be zero, so we set a default of 32x32, which is fantasycore's icon size
+	if (ICON_SIZE == 0) {
+		logError("Settings: icon_size is undefined. Setting it to 32.");
+		ICON_SIZE = 32;
 	}
 
 	// @CLASS Settings: Gameplay|Description of engine/gameplay.txt
@@ -1041,14 +793,14 @@ bool compareVersions(int maj0, int min0, int maj1, int min1) {
  * Set required settings for Mobile devices
  */
 void loadMobileDefaults() {
-#if defined(__ANDROID__) || defined (__IPHONEOS__)
-	MOUSE_MOVE = true;
-	MOUSE_AIM = true;
-	NO_MOUSE = false;
-	ENABLE_JOYSTICK = false;
-	HARDWARE_CURSOR = true;
-	TOUCHSCREEN = true;
-#endif
+	if (PlatformOptions.is_mobile_device) {
+		MOUSE_MOVE = true;
+		MOUSE_AIM = true;
+		NO_MOUSE = false;
+		ENABLE_JOYSTICK = false;
+		HARDWARE_CURSOR = true;
+		TOUCHSCREEN = true;
+	}
 }
 
 /**

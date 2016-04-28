@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012-2013 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -59,12 +60,14 @@ void Map::removeLayer(unsigned index) {
 	layers.erase(layers.begin() + index);
 }
 
-int Map::load(std::string fname) {
+int Map::load(const std::string& fname) {
 	FileParser infile;
 
 	clearEvents();
 	clearLayers();
 	clearQueues();
+
+	music_filename = "";
 
 	// @CLASS Map|Description of maps/
 	if (!infile.open(fname))

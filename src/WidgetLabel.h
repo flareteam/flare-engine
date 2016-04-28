@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -64,8 +65,8 @@ public:
 	~WidgetLabel();
 	void render();
 	void setPos(int offset_x = 0, int offset_y = 0);
-	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color);
-	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, Color _color, std::string _font);
+	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color);
+	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color, const std::string& _font);
 	void setX(int _x);
 	void setY(int _y);
 	int getX();

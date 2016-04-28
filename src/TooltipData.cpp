@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -71,7 +72,7 @@ void TooltipData::clear() {
 	}
 }
 
-void TooltipData::addText(const std::string &text, Color color) {
+void TooltipData::addText(const std::string &text, const Color& color) {
 	lines.push_back("");
 	colors.push_back(color);
 	for (unsigned int i=0; i<lines.size(); i++) {

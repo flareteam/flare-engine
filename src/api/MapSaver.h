@@ -19,8 +19,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * class MapSaver
  */
 
-#ifndef MAP_SAVER
-#define MAP_SAVER
+#ifndef MAP_SAVER_H
+#define MAP_SAVER_H
 
 #include "Map.h"
 
@@ -43,6 +43,8 @@ private:
 
 	Map* map;
 	std::string dest_file;
+
+	std::string EVENT_COMPONENT_NAME[39];
 };
 
 #endif //MAP_SAVER

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -63,7 +64,7 @@ public:
 	bool hasEntity(Entity*);
 	void addEntity(Entity*);
 
-	void loadAnimation(std::string &s);
+	void loadAnimation(const std::string &s);
 
 	void setAngle(const float& _angle);
 
@@ -76,6 +77,8 @@ public:
 
 	FPoint pos;
 	FPoint speed;
+	FPoint pos_offset;
+	bool relative_pos;
 	float base_speed;
 	float angle; // in radians
 	int base_lifespan;
@@ -100,6 +103,9 @@ public:
 	bool multitarget;
 	bool active;
 
+	bool multihit;
+	bool expire_with_caster;
+
 	bool remove_now;
 	bool hit_wall;
 
@@ -118,8 +124,24 @@ public:
 	int post_power;
 	int wall_power;
 
+	// targeting by movement type
+	bool target_movement_normal;
+	bool target_movement_flying;
+	bool target_movement_intangible;
+
+	bool walls_block_aoe;
+
+	// soundfx
+	unsigned long sfx_hit;
+	bool sfx_hit_enable;
+	bool sfx_hit_played;
+
 	// loot
 	std::vector<Event_Component> loot;
+
+	// for linking hazards together, e.g. repeaters
+	Hazard* parent;
+	std::vector<Hazard*> children;
 };
 
 #endif

@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -114,6 +115,7 @@ public:
 	int dmg_ment_max;     // maximum damage amount (mental)
 	int abs_min;          // minimum absorb amount
 	int abs_max;          // maximum absorb amount
+	int requires_level;   // Player level must match or exceed this value to use item
 	std::vector<int> req_stat;         // physical, mental, offense, defense
 	std::vector<int> req_val;          // 1-5 (used with req_stat)
 	std::string requires_class;
@@ -126,12 +128,15 @@ public:
 	std::vector<Point> replace_power;        // alter powers when this item is equipped. Power id 'x' is replaced with id 'y'
 	std::string power_desc;    // shows up in green text on the tooltip
 	int price;            // if price = 0 the item cannot be sold
+	int price_per_level;  // additional price for each character level above 1
 	int price_sell;       // if price_sell = 0, the sell price is price*vendor_ratio
 	int max_quantity;     // max count per stack
 	std::string pickup_status; // when this item is picked up, set a campaign state (usually for quest items)
 	std::string stepfx;        // sound effect played when walking (armors only)
 	std::vector<std::string> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
+	bool quest_item;
 
+	int getPrice();
 	int getSellPrice();
 
 	Item()
@@ -151,6 +156,7 @@ public:
 		, dmg_ment_max(0)
 		, abs_min(0)
 		, abs_max(0)
+		, requires_level(0)
 		, requires_class("")
 		, sfx("")
 		, sfx_id(0)
@@ -158,10 +164,12 @@ public:
 		, power(0)
 		, power_desc("")
 		, price(0)
+		, price_per_level(0)
 		, price_sell(0)
 		, max_quantity(1)
 		, pickup_status("")
-		, stepfx("") {
+		, stepfx("")
+		, quest_item(false) {
 	}
 
 	~Item() {
@@ -235,11 +243,11 @@ private:
 public:
 	ItemManager();
 	~ItemManager();
-	void playSound(int item, Point pos = Point(0,0));
+	void playSound(int item, const Point& pos = Point(0,0));
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context);
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemName(unsigned id);
-	std::string getItemType(std::string _type);
+	std::string getItemType(const std::string& _type);
 	Color getItemColor(unsigned id);
 	void addUnknownItem(unsigned id);
 	bool requirementsMet(const StatBlock *stats, int item);
@@ -249,5 +257,7 @@ public:
 	std::vector<ItemSet> item_sets;
 	std::vector<ItemQuality> item_qualities;
 };
+
+bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2);
 
 #endif

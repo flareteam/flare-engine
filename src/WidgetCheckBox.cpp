@@ -3,6 +3,7 @@ Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2015 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -113,13 +114,12 @@ void WidgetCheckBox::render() {
 	if (in_focus) {
 		Point topLeft;
 		Point bottomRight;
-		Uint32 color;
 
 		topLeft.x = pos.x + local_frame.x - local_offset.x;
 		topLeft.y = pos.y + local_frame.y - local_offset.y;
 		bottomRight.x = topLeft.x + pos.w;
 		bottomRight.y = topLeft.y + pos.h;
-		color = render_device->MapRGB(255,248,220);
+		Color color = Color(255,248,220,255);
 
 		// Only draw rectangle if it fits in local frame
 		bool draw = true;

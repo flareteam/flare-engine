@@ -1,6 +1,7 @@
 /*
 Copyright © 2012-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -134,7 +135,7 @@ void Scene::refreshWidgets() {
 			caption_box->resize(VIEW_W, caption_size.y);
 		}
 
-		caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * caption_margins.y));
+		caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * caption_margins.y) * (-1));
 
 		font->renderShadowed(caption, VIEW_W / 2, 0,
 							 JUSTIFY_CENTER,
@@ -229,7 +230,7 @@ void GameStateCutscene::render() {
 		scenes.front()->render();
 }
 
-bool GameStateCutscene::load(std::string filename) {
+bool GameStateCutscene::load(const std::string& filename) {
 	FileParser infile;
 
 	// @CLASS Cutscene|Description of cutscenes in cutscenes/

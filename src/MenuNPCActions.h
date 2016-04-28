@@ -1,5 +1,6 @@
 /*
 Copyright © 2013-2014 Henrik Andersson
+Copyright © 2013-2014 Justin Jacobs
 
 This file is part of FLARE.
 

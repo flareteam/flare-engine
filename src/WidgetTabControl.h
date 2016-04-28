@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -20,10 +21,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "SharedResources.h"
+#include "Widget.h"
 #include "WidgetLabel.h"
 
-class WidgetTabControl {
-
+class WidgetTabControl : public Widget {
 private:
 
 	void loadGraphics();
@@ -67,6 +68,9 @@ public:
 	void logic();
 	void logic(int x, int y);
 	void render();
+
+	bool getNext();
+	bool getPrev();
 };
 
 #endif

@@ -20,6 +20,45 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MapSaver::MapSaver(Map *_map) : map(_map)
 {
+	EVENT_COMPONENT_NAME[EC_TOOLTIP] = "tooltip";
+	EVENT_COMPONENT_NAME[EC_POWER_PATH] = "power_path";
+	EVENT_COMPONENT_NAME[EC_POWER_DAMAGE] = "power_damage";
+	EVENT_COMPONENT_NAME[EC_INTERMAP] = "intermap";
+	EVENT_COMPONENT_NAME[EC_INTRAMAP] = "intramap";
+	EVENT_COMPONENT_NAME[EC_MAPMOD] = "mapmod";
+	EVENT_COMPONENT_NAME[EC_SOUNDFX] = "soundfx";
+	EVENT_COMPONENT_NAME[EC_LOOT] = "loot"; // HALF-IMPLEMENTED
+	EVENT_COMPONENT_NAME[EC_LOOT_COUNT] = "loot_count"; // UNIMPLEMENTED
+	EVENT_COMPONENT_NAME[EC_MSG] = "msg";
+	EVENT_COMPONENT_NAME[EC_SHAKYCAM] = "shakycam";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_STATUS] = "requires_status";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_NOT_STATUS] = "requires_not_status";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_LEVEL] = "requires_level";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_NOT_LEVEL] = "requires_not_level";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_CURRENCY] = "requires_currency";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_NOT_CURRENCY] = "requires_not_currency";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_ITEM] = "requires_item";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_NOT_ITEM] = "requires_not_item";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_CLASS] = "requires_class";
+	EVENT_COMPONENT_NAME[EC_REQUIRES_NOT_CLASS] = "requires_not_class";
+	EVENT_COMPONENT_NAME[EC_SET_STATUS] = "set_status";
+	EVENT_COMPONENT_NAME[EC_UNSET_STATUS] = "unset_status";
+	EVENT_COMPONENT_NAME[EC_REMOVE_CURRENCY] = "remove_currency";
+	EVENT_COMPONENT_NAME[EC_REMOVE_ITEM] = "remove_item";
+	EVENT_COMPONENT_NAME[EC_REWARD_XP] = "reward_xp";
+	EVENT_COMPONENT_NAME[EC_REWARD_CURRENCY] = "reward_currency";
+	EVENT_COMPONENT_NAME[EC_REWARD_ITEM] = "reward_item";
+	EVENT_COMPONENT_NAME[EC_RESTORE] = "restore";
+	EVENT_COMPONENT_NAME[EC_POWER] = "power";
+	EVENT_COMPONENT_NAME[EC_SPAWN] = "spawn";
+	EVENT_COMPONENT_NAME[EC_STASH] = "stash";
+	EVENT_COMPONENT_NAME[EC_NPC] = "npc";
+	EVENT_COMPONENT_NAME[EC_MUSIC] = "music";
+	EVENT_COMPONENT_NAME[EC_CUTSCENE] = "cutscene";
+	EVENT_COMPONENT_NAME[EC_REPEAT] = "repeat";
+	EVENT_COMPONENT_NAME[EC_SAVE_GAME] = "save_game";
+	EVENT_COMPONENT_NAME[EC_BOOK] = "book";
+
 	dest_file = map->getFilename();
 }
 
@@ -28,6 +67,12 @@ MapSaver::~MapSaver()
 {
 }
 
+/*
+ * tileset_definitions is a string, containing tileset description
+ * for editing map in Tiled Editor. This data is not present in map,
+ * loaded by game, so when saving map from game tileset_definitions
+ * should be empty string
+ */
 bool MapSaver::saveMap(std::string tileset_definitions)
 {
 	std::ofstream outfile;
@@ -266,12 +311,19 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 	{
 		Event_Component e = components[i];
 
-		map_file << e.type << "=";
+		if (e.type > 0 && e.type < 39)
+		{
+			map_file << EVENT_COMPONENT_NAME[e.type] << "=";
+		}
+		else
+		{
+			continue;
+		}
 
-		if (e.type == "tooltip") {
+		if (e.type == EC_TOOLTIP) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "power_path") {
+		else if (e.type == EC_POWER_PATH) {
 			map_file << e.x << "," << e.y << ",";
 			if (e.s == "hero")
 			{
@@ -282,19 +334,19 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 				map_file << e.a << "," << e.b << std::endl;
 			}
 		}
-		else if (e.type == "power_damage") {
+		else if (e.type == EC_POWER_DAMAGE) {
 			map_file << e.a << "," << e.b << std::endl;
 		}
-		else if (e.type == "intermap") {
+		else if (e.type == EC_INTERMAP) {
 			map_file << e.s << "," << e.x << "," << e.y << std::endl;
 		}
-		else if (e.type == "intramap") {
+		else if (e.type == EC_INTRAMAP) {
 			map_file << e.x << "," << e.y << std::endl;
 		}
-		else if (e.type == "mapmod") {
+		else if (e.type == EC_MAPMOD) {
 			map_file << e.s << "," << e.x << "," << e.y << "," << e.z;
 
-			while (i+1 < components.size() && components[i+1].type == "mapmod")
+			while (i+1 < components.size() && components[i+1].type == EC_MAPMOD)
 			{
 				i++;
 				e = components[i];
@@ -302,7 +354,7 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "soundfx") {
+		else if (e.type == EC_SOUNDFX) {
 			map_file << e.s;
 			if (e.x != -1 && e.y != -1)
 			{
@@ -310,7 +362,7 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "loot") {
+		else if (e.type == EC_LOOT) {
 
 			std::stringstream chance;
 
@@ -321,7 +373,7 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 
 			map_file << e.s << "," << chance.str() << "," << e.a << "," << e.b;
 
-			while (i+1 < components.size() && components[i+1].type == "loot")
+			while (i+1 < components.size() && components[i+1].type == EC_LOOT)
 			{
 				i++;
 				e = components[i];
@@ -337,10 +389,15 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			// UNIMPLEMENTED
 			// Loot tables not supported
 		}
-		else if (e.type == "msg") {
+		else if (e.type == EC_LOOT_COUNT) {
+			// UNIMPLEMENTED
+			// Loot count not supported
+			map_file << std::endl;
+		}
+		else if (e.type == EC_MSG) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "shakycam") {
+		else if (e.type == EC_SHAKYCAM) {
 			std::string suffix = "ms";
 			int value = static_cast<int>(1000.f * e.x / MAX_FRAMES_PER_SEC);
 			if (value % 1000 == 0)
@@ -350,10 +407,10 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << value << suffix << std::endl;
 		}
-		else if (e.type == "requires_status") {
+		else if (e.type == EC_REQUIRES_STATUS) {
 			map_file << e.s;
 
-			while (i+1 < components.size() && components[i+1].type == "requires_status")
+			while (i+1 < components.size() && components[i+1].type == EC_REQUIRES_STATUS)
 			{
 				i++;
 				e = components[i];
@@ -361,10 +418,10 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "requires_not_status") {
+		else if (e.type == EC_REQUIRES_NOT_STATUS) {
 			map_file << e.s;
 
-			while (i+1 < components.size() && components[i+1].type == "requires_not_status")
+			while (i+1 < components.size() && components[i+1].type == EC_REQUIRES_NOT_STATUS)
 			{
 				i++;
 				e = components[i];
@@ -372,19 +429,22 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "requires_level") {
+		else if (e.type == EC_REQUIRES_LEVEL) {
 			map_file << e.x << std::endl;
 		}
-		else if (e.type == "requires_not_level") {
+		else if (e.type == EC_REQUIRES_NOT_LEVEL) {
 			map_file << e.x << std::endl;
 		}
-		else if (e.type == "requires_currency") {
+		else if (e.type == EC_REQUIRES_CURRENCY) {
 			map_file << e.x << std::endl;
 		}
-		else if (e.type == "requires_item") {
+		else if (e.type == EC_REQUIRES_NOT_CURRENCY) {
+			map_file << e.x << std::endl;
+		}
+		else if (e.type == EC_REQUIRES_ITEM) {
 			map_file << e.x;
 
-			while (i+1 < components.size() && components[i+1].type == "requires_item")
+			while (i+1 < components.size() && components[i+1].type == EC_REQUIRES_ITEM)
 			{
 				i++;
 				e = components[i];
@@ -392,13 +452,27 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "requires_class") {
+		else if (e.type == EC_REQUIRES_NOT_ITEM) {
+			map_file << e.x;
+
+			while (i+1 < components.size() && components[i+1].type == EC_REQUIRES_NOT_ITEM)
+			{
+				i++;
+				e = components[i];
+				map_file << "," << e.x;
+			}
+			map_file << std::endl;
+		}
+		else if (e.type == EC_REQUIRES_CLASS) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "set_status") {
+		else if (e.type == EC_REQUIRES_NOT_CLASS) {
+			map_file << e.s << std::endl;
+		}
+		else if (e.type == EC_SET_STATUS) {
 			map_file << e.s;
 
-			while (i+1 < components.size() && components[i+1].type == "set_status")
+			while (i+1 < components.size() && components[i+1].type == EC_SET_STATUS)
 			{
 				i++;
 				e = components[i];
@@ -406,10 +480,10 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "unset_status") {
+		else if (e.type == EC_UNSET_STATUS) {
 			map_file << e.s;
 
-			while (i+1 < components.size() && components[i+1].type == "unset_status")
+			while (i+1 < components.size() && components[i+1].type == EC_UNSET_STATUS)
 			{
 				i++;
 				e = components[i];
@@ -417,13 +491,13 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "remove_currency") {
+		else if (e.type == EC_REMOVE_CURRENCY) {
 			map_file << e.x << std::endl;
 		}
-		else if (e.type == "remove_item") {
+		else if (e.type == EC_REMOVE_ITEM) {
 			map_file << e.x;
 
-			while (i+1 < components.size() && components[i+1].type == "remove_item")
+			while (i+1 < components.size() && components[i+1].type == EC_REMOVE_ITEM)
 			{
 				i++;
 				e = components[i];
@@ -431,26 +505,26 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "reward_xp") {
+		else if (e.type == EC_REWARD_XP) {
 			map_file << e.x << std::endl;
 		}
-		else if (e.type == "reward_currency") {
+		else if (e.type == EC_REWARD_CURRENCY) {
 			map_file << e.x << std::endl;
 		}
-		else if (e.type == "reward_item") {
+		else if (e.type == EC_REWARD_ITEM) {
 			map_file << e.x << ",";
 			map_file << e.y << std::endl;
 		}
-		else if (e.type == "restore") {
+		else if (e.type == EC_RESTORE) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "power") {
+		else if (e.type == EC_POWER) {
 			map_file << e.x << std::endl;
 		}
-		else if (e.type == "spawn") {
+		else if (e.type == EC_SPAWN) {
 			map_file << e.s << "," << e.x << "," << e.y;
 
-			while (i+1 < components.size() && components[i+1].type == "spawn")
+			while (i+1 < components.size() && components[i+1].type == EC_SPAWN)
 			{
 				i++;
 				e = components[i];
@@ -458,22 +532,25 @@ void MapSaver::writeEventComponents(std::ofstream &map_file, int eventID)
 			}
 			map_file << std::endl;
 		}
-		else if (e.type == "stash") {
+		else if (e.type == EC_STASH) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "npc") {
+		else if (e.type == EC_NPC) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "music") {
+		else if (e.type == EC_MUSIC) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "cutscene") {
+		else if (e.type == EC_CUTSCENE) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "repeat") {
+		else if (e.type == EC_REPEAT) {
 			map_file << e.s << std::endl;
 		}
-		else if (e.type == "save_game") {
+		else if (e.type == EC_SAVE_GAME) {
+			map_file << e.s << std::endl;
+		}
+		else if (e.type == EC_BOOK) {
 			map_file << e.s << std::endl;
 		}
 	}

@@ -1,5 +1,6 @@
 /*
 Copyright © 2013 Ryan Dansie
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -121,7 +122,7 @@ void AStarContainer::remove(AStarNode* node) {
 	map_pos[node->getX()][node->getY()] = -1;
 }
 
-bool AStarContainer::exists(Point pos) {
+bool AStarContainer::exists(const Point& pos) {
 	return map_pos[pos.x][pos.y] != -1;
 }
 
@@ -133,7 +134,7 @@ bool AStarContainer::isEmpty() {
 	return size == 0;
 }
 
-void AStarContainer::updateParent(Point pos, Point parent_pos, float score) {
+void AStarContainer::updateParent(const Point& pos, const Point& parent_pos, float score) {
 	get(pos.x, pos.y)->setParent(parent_pos);
 	get(pos.x, pos.y)->setActualCost(score);
 
@@ -188,7 +189,7 @@ void AStarCloseContainer::add(AStarNode* node) {
 	size++;
 }
 
-bool AStarCloseContainer::exists(Point pos) {
+bool AStarCloseContainer::exists(const Point& pos) {
 	return map_pos[pos.x][pos.y] != -1;
 }
 

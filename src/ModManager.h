@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -58,7 +59,7 @@ private:
 public:
 	ModManager();
 	~ModManager();
-	Mod loadMod(std::string name);
+	Mod loadMod(const std::string& name);
 	void applyDepends();
 	bool haveFallbackMod();
 

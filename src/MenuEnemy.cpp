@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Pavel Kirpichyov (Cheshire)
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2014 Justin Jacobs
 
 This file is part of FLARE.
 

@@ -1,6 +1,7 @@
 /*
 Copyright © 2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -246,6 +247,40 @@ void BehaviorStandard::findTarget() {
 		move_to_safe_dist = true;
 
 	if (move_to_safe_dist) fleeing = true;
+
+	if (fleeing) {
+		FPoint target_pos = pursue_pos;
+
+		std::vector<int> flee_dirs;
+
+		int middle_dir = calcDirection(target_pos, e->stats.pos);
+		for (int i = -2; i <= 2; ++i) {
+			int test_dir = rotateDirection(middle_dir, i);
+
+			FPoint test_pos = calcVector(e->stats.pos, test_dir, 1);
+			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, false)) {
+				if (test_dir == e->stats.direction) {
+					// if we're already moving in a good direction, favor it over other directions
+					flee_dirs.clear();
+					flee_dirs.push_back(test_dir);
+					break;
+				}
+				else {
+					flee_dirs.push_back(test_dir);
+				}
+			}
+		}
+
+		if (flee_dirs.empty()) {
+			// trapped and can't move
+			move_to_safe_dist = false;
+			fleeing = false;
+		}
+		else {
+			int index = randBetween(0, static_cast<int>(flee_dirs.size())-1);
+			pursue_pos = calcVector(e->stats.pos, flee_dirs[index], 1);
+		}
+	}
 }
 
 /**
@@ -255,7 +290,7 @@ void BehaviorStandard::findTarget() {
 void BehaviorStandard::checkPower() {
 
 	// stunned enemies can't act
-	if (e->stats.effects.stun || fleeing) return;
+	if (e->stats.effects.stun || e->stats.effects.fear || fleeing) return;
 
 	// currently all enemy power use happens during combat
 	if (!e->stats.in_combat) return;
@@ -266,10 +301,9 @@ void BehaviorStandard::checkPower() {
 	// Note there are two stages to activating a power.
 	// First is the enemy choosing to use a power based on behavioral chance
 	// Second is the power actually firing off once the related animation reaches the active frame.
-	// (these are separate so that interruptions can take place)
+	// The second stage occurs in updateState()
 
-	// Begin Power Animation:
-	// standard enemies can begin a power-use animation if they're standing around or moving voluntarily.
+	// pick a power from the available powers for this creature
 	if (los && (e->stats.cur_state == ENEMY_STANCE || e->stats.cur_state == ENEMY_MOVE)) {
 		AIPower* ai_power = NULL;
 
@@ -289,36 +323,12 @@ void BehaviorStandard::checkPower() {
 		if (ai_power != NULL) {
 			e->stats.cur_state = ENEMY_POWER;
 			e->stats.activated_power = ai_power;
-			return;
 		}
 	}
 
-	// Activate Power:
-	// enemy has started the animation to use a power. Activate the power on the Active animation frame
-	if (e->stats.cur_state == ENEMY_POWER) {
-
-		// if we're at the active frame of a power animation,
-		// activate the power and set the local and global cooldowns
-		if (e->stats.activated_power != NULL && (e->activeAnimation->isActiveFrame() || e->instant_power)) {
-			e->instant_power = false;
-
-			int power_id = e->stats.activated_power->id;
-
-			powers->activate(power_id, &e->stats, pursue_pos);
-			e->stats.activated_power->ticks = powers->powers[power_id].cooldown;
-
-			int anim_duration = e->activeAnimation->getDuration();
-			if (e->stats.cooldown < anim_duration)
-				e->stats.cooldown_ticks = anim_duration;
-			else
-				e->stats.cooldown_ticks = e->stats.cooldown;
-
-			if (e->stats.activated_power->type == AI_POWER_HALF_DEAD) {
-				e->stats.half_dead_power = false;
-			}
-		}
+	if (e->stats.cur_state != ENEMY_POWER && e->stats.activated_power) {
+		e->stats.activated_power = NULL;
 	}
-
 }
 
 /**
@@ -403,10 +413,9 @@ void BehaviorStandard::checkMove() {
 				path.clear();
 			}
 
-			if(fleeing)
-				e->stats.direction = calcDirection(pursue_pos, e->stats.pos);
-			else
+			if (e->stats.charge_speed == 0.0f) {
 				e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+			}
 			e->stats.turn_ticks = 0;
 		}
 	}
@@ -447,7 +456,12 @@ void BehaviorStandard::checkMoveStateStance() {
 	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
 	if (hero_dist >= e->stats.threat_range/2 && e->stats.chance_flee > 0 && e->stats.waypoints.empty()) return;
 
-	if ((hero_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || fleeing) {
+	// try to move to the target if we're either:
+	// 1. too far away and chance_pursue roll succeeds
+	// 2. within range, but lack line-of-sight (required to attack)
+	bool should_move_to_target = (target_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los);
+
+	if (should_move_to_target || fleeing) {
 
 		if (e->move()) {
 			e->stats.cur_state = ENEMY_MOVE;
@@ -469,7 +483,7 @@ void BehaviorStandard::checkMoveStateStance() {
 
 void BehaviorStandard::checkMoveStateMove() {
 	// close enough to the hero or is at a safe distance
-	if ((target_dist < e->stats.melee_range && !fleeing) || (move_to_safe_dist && target_dist >= e->stats.threat_range/2)) {
+	if (pc->stats.alive && ((target_dist < e->stats.melee_range && !fleeing) || (move_to_safe_dist && target_dist >= e->stats.threat_range/2))) {
 		e->stats.cur_state = ENEMY_STANCE;
 		move_to_safe_dist = false;
 	}
@@ -527,18 +541,58 @@ void BehaviorStandard::updateState() {
 			power_state = powers->powers[power_id].new_state;
 
 			// animation based on power type
-			if (power_state == POWSTATE_INSTANT) e->instant_power = true;
-			else if (power_state == POWSTATE_ATTACK) e->setAnimation(powers->powers[power_id].attack_anim);
+			if (power_state == POWSTATE_INSTANT)
+				e->instant_power = true;
+			else if (power_state == POWSTATE_ATTACK)
+				e->setAnimation(powers->powers[power_id].attack_anim);
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (powers->powers[power_id].attack_anim == "swing" || powers->powers[power_id].attack_anim == "shoot") e->play_sfx_phys = true;
-				else if (powers->powers[power_id].attack_anim == "cast") e->play_sfx_ment = true;
+				if (powers->powers[power_id].attack_anim == "swing" || powers->powers[power_id].attack_anim == "shoot")
+					e->play_sfx_phys = true;
+				else if (powers->powers[power_id].attack_anim == "cast")
+					e->play_sfx_ment = true;
+
+				if (powers->powers[power_id].state_duration > 0)
+					e->stats.state_ticks = powers->powers[power_id].state_duration;
+
+				if (powers->powers[power_id].charge_speed != 0.0f)
+					e->stats.charge_speed = powers->powers[power_id].charge_speed;
 			}
 
-			if (e->activeAnimation->isLastFrame() || (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim)) {
-				e->stats.cur_state = ENEMY_STANCE;
+			// Activate Power:
+			// if we're at the active frame of a power animation,
+			// activate the power and set the local and global cooldowns
+			if ((e->activeAnimation->isActiveFrame() || e->instant_power) && !e->stats.hold_state) {
+				powers->activate(power_id, &e->stats, pursue_pos);
+
+				// set cooldown for all ai powers with the same power id
+				for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
+					if (e->stats.activated_power->id == e->stats.powers_ai[i].id) {
+						e->stats.powers_ai[i].ticks = powers->powers[power_id].cooldown;
+					}
+				}
+
+				if (e->stats.activated_power->type == AI_POWER_HALF_DEAD) {
+					e->stats.half_dead_power = false;
+				}
+
+				if (e->stats.state_ticks > 0)
+					e->stats.hold_state = true;
+			}
+
+			// animation is finished
+			if ((e->activeAnimation->isLastFrame() && e->stats.state_ticks == 0) ||
+			    (power_state == POWSTATE_ATTACK && e->activeAnimation->getName() != powers->powers[power_id].attack_anim) ||
+			    e->instant_power)
+			{
+				if (!e->instant_power)
+					e->stats.cooldown_ticks = e->stats.cooldown;
+				else
+					e->instant_power = false;
+
 				e->stats.activated_power = NULL;
+				e->stats.cur_state = ENEMY_STANCE;
 			}
 			break;
 
@@ -627,6 +681,12 @@ void BehaviorStandard::updateState() {
 		default:
 			break;
 	}
+
+	if (e->stats.state_ticks == 0 && e->stats.hold_state)
+		e->stats.hold_state = false;
+
+	if (e->stats.cur_state != ENEMY_POWER && e->stats.charge_speed != 0.0f)
+		e->stats.charge_speed = 0.0f;
 }
 
 FPoint BehaviorStandard::getWanderPoint() {

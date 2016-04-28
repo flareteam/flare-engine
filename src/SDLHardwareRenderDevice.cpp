@@ -1,6 +1,7 @@
 /*
 Copyright © 2013 Igor Paliychuk
 Copyright © 2013-2014 Justin Jacobs
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -53,22 +54,12 @@ int SDLHardwareImage::getHeight() const {
 	return (surface ? h : 0);
 }
 
-void SDLHardwareImage::fillWithColor(Uint32 color) {
+void SDLHardwareImage::fillWithColor(const Color& color) {
 	if (!surface) return;
-
-	Uint32 u_format;
-	SDL_QueryTexture(surface, &u_format, NULL, NULL, NULL);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (!format) return;
-
-	SDL_Color rgba;
-	SDL_GetRGBA(color, format, &rgba.r, &rgba.g, &rgba.b, &rgba.a);
-	SDL_FreeFormat(format);
 
 	SDL_SetRenderTarget(renderer, surface);
 	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, rgba.r, rgba.g , rgba.b, rgba.a);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g , color.b, color.a);
 	SDL_RenderClear(renderer);
 	SDL_SetRenderTarget(renderer, NULL);
 }
@@ -76,58 +67,14 @@ void SDLHardwareImage::fillWithColor(Uint32 color) {
 /*
  * Set the pixel at (x, y) to the given value
  */
-void SDLHardwareImage::drawPixel(int x, int y, Uint32 pixel) {
+void SDLHardwareImage::drawPixel(int x, int y, const Color& color) {
 	if (!surface) return;
-
-	Uint32 u_format;
-	SDL_QueryTexture(surface, &u_format, NULL, NULL, NULL);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (!format) return;
-
-	SDL_Color rgba;
-	SDL_GetRGBA(pixel, format, &rgba.r, &rgba.g, &rgba.b, &rgba.a);
-	SDL_FreeFormat(format);
 
 	SDL_SetRenderTarget(renderer, surface);
 	SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, rgba.r, rgba.g, rgba.b, rgba.a);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawPoint(renderer, x, y);
 	SDL_SetRenderTarget(renderer, NULL);
-}
-
-Uint32 SDLHardwareImage::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
-	if (!surface) return 0;
-
-	Uint32 u_format;
-	SDL_QueryTexture(surface, &u_format, NULL, NULL, NULL);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (format) {
-		Uint32 ret = SDL_MapRGB(format, r, g, b);
-		SDL_FreeFormat(format);
-		return ret;
-	}
-	else {
-		return 0;
-	}
-}
-
-Uint32 SDLHardwareImage::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	if (!surface) return 0;
-
-	Uint32 u_format;
-	SDL_QueryTexture(surface, &u_format, NULL, NULL, NULL);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (format) {
-		Uint32 ret = SDL_MapRGBA(format, r, g, b, a);
-		SDL_FreeFormat(format);
-		return ret;
-	}
-	else {
-		return 0;
-	}
 }
 
 Image* SDLHardwareImage::resize(int width, int height) {
@@ -174,7 +121,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	min_screen.y = MIN_SCREEN_H;
 }
 
-int SDLHardwareRenderDevice::createContext() {
+int SDLHardwareRenderDevice::createContext(bool allow_fallback) {
 	bool settings_changed = (fullscreen != FULLSCREEN || hwsurface != HWSURFACE || vsync != VSYNC || texture_filter != TEXTURE_FILTER);
 
 	Uint32 w_flags = 0;
@@ -214,9 +161,7 @@ int SDLHardwareRenderDevice::createContext() {
 	if (VSYNC) r_flags = r_flags | SDL_RENDERER_PRESENTVSYNC;
 
 	if (settings_changed || !is_initialized) {
-		if (is_initialized) {
-			destroyContext();
-		}
+		destroyContext();
 
 		window = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_w, window_h, w_flags);
 		if (window) {
@@ -238,28 +183,30 @@ int SDLHardwareRenderDevice::createContext() {
 		bool window_created = window != NULL && renderer != NULL;
 
 		if (!window_created) {
-			// try previous setting first
-			FULLSCREEN = fullscreen;
-			HWSURFACE = hwsurface;
-			VSYNC = vsync;
-			TEXTURE_FILTER = texture_filter;
-			if (createContext() == -1) {
-				// last resort, try turning everything off
-				FULLSCREEN = false;
-				HWSURFACE = false;
-				VSYNC = false;
-				TEXTURE_FILTER = false;
-				int last_resort = createContext();
-				if (last_resort == -1 && !is_initialized) {
-					// If this is the first attempt and it failed we are not
-					// getting anywhere.
-					logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
-					Exit(1);
+			if (allow_fallback) {
+				// try previous setting first
+				FULLSCREEN = fullscreen;
+				HWSURFACE = hwsurface;
+				VSYNC = vsync;
+				TEXTURE_FILTER = texture_filter;
+				if (createContext(false) == -1) {
+					// last resort, try turning everything off
+					FULLSCREEN = false;
+					HWSURFACE = false;
+					VSYNC = false;
+					TEXTURE_FILTER = false;
+					int last_resort = createContext(false);
+					if (last_resort == -1 && !is_initialized) {
+						// If this is the first attempt and it failed we are not
+						// getting anywhere.
+						logError("SDLHardwareRenderDevice: createContext() failed: %s", SDL_GetError());
+						Exit(1);
+					}
+					return last_resort;
 				}
-				return last_resort;
-			}
-			else {
-				return 0;
+				else {
+					return 0;
+				}
 			}
 		}
 		else {
@@ -286,7 +233,8 @@ int SDLHardwareRenderDevice::createContext() {
 		updateTitleBar();
 
 		// load persistent resources
-		SharedResources::loadIcons();
+		delete icons;
+		icons = new IconManager();
 		delete curs;
 		curs = new CursorManager();
 	}
@@ -294,7 +242,7 @@ int SDLHardwareRenderDevice::createContext() {
 	return (is_initialized ? 0 : -1);
 }
 
-int SDLHardwareRenderDevice::render(Renderable& r, Rect dest) {
+int SDLHardwareRenderDevice::render(Renderable& r, Rect& dest) {
 	dest.w = r.src.w;
 	dest.h = r.src.h;
     SDL_Rect src = r.src;
@@ -354,7 +302,7 @@ int SDLHardwareRenderDevice::renderToImage(Image* src_image, Rect& src, Image* d
 int SDLHardwareRenderDevice::renderText(
 	FontStyle *font_style,
 	const std::string& text,
-	Color color,
+	const Color& color,
 	Rect& dest
 ) {
 	int ret = 0;
@@ -389,7 +337,7 @@ int SDLHardwareRenderDevice::renderText(
 	return ret;
 }
 
-Image * SDLHardwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, Color color, bool blended) {
+Image * SDLHardwareRenderDevice::renderTextToImage(FontStyle* font_style, const std::string& text, const Color& color, bool blended) {
 	SDLHardwareImage *image = new SDLHardwareImage(this, renderer);
 
 	SDL_Surface *cleanup;
@@ -411,49 +359,17 @@ Image * SDLHardwareRenderDevice::renderTextToImage(FontStyle* font_style, const 
 	return NULL;
 }
 
-void SDLHardwareRenderDevice::drawPixel(
-	int x,
-	int y,
-	Uint32 color
-) {
-	Uint32 u_format = SDL_GetWindowPixelFormat(window);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (!format) return;
-
-	SDL_Color rgba;
-	SDL_GetRGBA(color, format, &rgba.r, &rgba.g, &rgba.b, &rgba.a);
-	SDL_FreeFormat(format);
-
-	SDL_SetRenderDrawColor(renderer, rgba.r, rgba.g, rgba.b, rgba.a);
+void SDLHardwareRenderDevice::drawPixel(int x, int y, const Color& color) {
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawPoint(renderer, x, y);
 }
 
-void SDLHardwareRenderDevice::drawLine(
-	int x0,
-	int y0,
-	int x1,
-	int y1,
-	Uint32 color
-) {
-	Uint32 u_format = SDL_GetWindowPixelFormat(window);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (!format) return;
-
-	SDL_Color rgba;
-	SDL_GetRGBA(color, format, &rgba.r, &rgba.g, &rgba.b, &rgba.a);
-	SDL_FreeFormat(format);
-
-	SDL_SetRenderDrawColor(renderer, rgba.r, rgba.g, rgba.b, rgba.a);
+void SDLHardwareRenderDevice::drawLine(int x0, int y0, int x1, int y1, const Color& color) {
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawLine(renderer, x0, y0, x1, y1);
 }
 
-void SDLHardwareRenderDevice::drawRectangle(
-	const Point& p0,
-	const Point& p1,
-	Uint32 color
-) {
+void SDLHardwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, const Color& color) {
 	drawLine(p0.x, p0.y, p1.x, p0.y, color);
 	drawLine(p1.x, p0.y, p1.x, p1.y, color);
 	drawLine(p0.x, p0.y, p0.x, p1.y, color);
@@ -477,6 +393,14 @@ void SDLHardwareRenderDevice::commitFrame() {
 }
 
 void SDLHardwareRenderDevice::destroyContext() {
+	// we need to free all loaded graphics as they may be tied to the current context
+	RenderDevice::cacheRemoveAll();
+	reload_graphics = true;
+
+	if (icons) {
+		delete icons;
+		icons = NULL;
+	}
 	if (curs) {
 		delete curs;
 		curs = NULL;
@@ -500,42 +424,6 @@ void SDLHardwareRenderDevice::destroyContext() {
 	}
 
 	return;
-}
-
-Rect SDLHardwareRenderDevice::getContextSize()
-{
-	return Rect();
-}
-
-void SDLHardwareRenderDevice::listModes(std::vector<Rect> &modes)
-{}
-
-Uint32 SDLHardwareRenderDevice::MapRGB(Uint8 r, Uint8 g, Uint8 b) {
-	Uint32 u_format = SDL_GetWindowPixelFormat(window);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (format) {
-		Uint32 ret = SDL_MapRGB(format, r, g, b);
-		SDL_FreeFormat(format);
-		return ret;
-	}
-	else {
-		return 0;
-	}
-}
-
-Uint32 SDLHardwareRenderDevice::MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	Uint32 u_format = SDL_GetWindowPixelFormat(window);
-	SDL_PixelFormat* format = SDL_AllocFormat(u_format);
-
-	if (format) {
-		Uint32 ret = SDL_MapRGBA(format, r, g, b, a);
-		SDL_FreeFormat(format);
-		return ret;
-	}
-	else {
-		return 0;
-	}
 }
 
 /**
@@ -583,7 +471,7 @@ void SDLHardwareRenderDevice::updateTitleBar() {
 	if (titlebar_icon) SDL_SetWindowIcon(window, titlebar_icon);
 }
 
-Image *SDLHardwareRenderDevice::loadImage(std::string filename, std::string errormessage, bool IfNotFoundExit) {
+Image *SDLHardwareRenderDevice::loadImage(const std::string&filename, const std::string& errormessage, bool IfNotFoundExit) {
 	// lookup image in cache
 	Image *img;
 	img = cacheLookup(filename);

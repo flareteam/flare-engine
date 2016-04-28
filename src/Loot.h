@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -42,7 +43,7 @@ public:
 	Loot& operator= (const Loot &other);
 	~Loot();
 
-	void loadAnimation(std::string _gfx);
+	void loadAnimation(const std::string& _gfx);
 
 	/**
 	 * If an item is flying, it hasn't completed its "flying loot" animation.

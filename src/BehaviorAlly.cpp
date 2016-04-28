@@ -1,5 +1,6 @@
 /*
 Copyright © 2013 Ryan Dansie
+Copyright © 2014-2015 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -123,8 +124,10 @@ void BehaviorAlly::findTarget() {
 
 void BehaviorAlly::checkMoveStateStance() {
 
-	if(e->stats.in_combat && target_dist > e->stats.melee_range)
-		e->stats.cur_state = ENEMY_MOVE;
+	if(e->stats.in_combat && target_dist > e->stats.melee_range) {
+		if (e->move())
+			e->stats.cur_state = ENEMY_MOVE;
+	}
 
 	if((!e->stats.in_combat && hero_dist > ALLY_FOLLOW_DISTANCE_WALK) || fleeing) {
 		if (e->move()) {

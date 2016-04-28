@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger and Thane Brimhall
 Copyright © 2014 Henrik Andersson
 Copyright © 2015 Igor Paliychuk
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -56,21 +57,21 @@ public:
 	FontEngine();
 	virtual ~FontEngine() {};
 
-	Color getColor(std::string _color);
+	Color getColor(const std::string& _color);
 
 	Point calc_size(const std::string& text_with_newlines, int width);
 
-	void render(const std::string& text, int x, int y, int justify, Image *target, int width, Color color);
-	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, Color color);
-	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, Color color);
+	void render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color);
+	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, const Color& color);
+	void renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color);
 
 	virtual int getLineHeight() = 0;
 	virtual int getFontHeight() = 0;
 
-	virtual void setFont(std::string _font) = 0;
+	virtual void setFont(const std::string& _font) = 0;
 	virtual int calc_width(const std::string& text) = 0;
-	virtual std::string trimTextToWidth(const std::string& text, const int& width, const bool& use_ellipsis) = 0;
-	virtual void render(const std::string& text, int x, int y, int justify, Image *target, Color color) = 0;
+	virtual std::string trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis) = 0;
+	virtual void render(const std::string& text, int x, int y, int justify, Image *target, const Color& color) = 0;
 
 	int cursor_y;
 

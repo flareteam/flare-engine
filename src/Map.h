@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012-2013 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -85,6 +86,7 @@ public:
 	std::queue<FPoint> waypoints;
 	int wander_radius;
 	bool hero_ally;
+	bool enemy_ally;
 	int summon_power_index;
 	StatBlock* summoner;
 	std::vector<std::string> requires_status;
@@ -97,6 +99,7 @@ public:
 		, waypoints(std::queue<FPoint>())
 		, wander_radius(4)
 		, hero_ally(false)
+		, enemy_ally(false)
 		, summon_power_index(0)
 		, summoner(NULL)
 		, requires_status()
@@ -128,7 +131,7 @@ public:
 	void setTileset(const std::string& tset) { tileset = tset; }
 	void removeLayer(unsigned index);
 
-	int load(std::string filename);
+	int load(const std::string& filename);
 
 	std::string music_filename;
 

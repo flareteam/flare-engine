@@ -1,5 +1,5 @@
 /*
-Copyright © 2012 Justin Jacobs
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -72,7 +72,13 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	mpot = emSource.mpot;
 	mpot_percent = emSource.mpot_percent;
 	speed = emSource.speed;
-	immunity = emSource.immunity;
+	immunity_damage = emSource.immunity_damage;
+	immunity_slow = emSource.immunity_slow;
+	immunity_stun = emSource.immunity_stun;
+	immunity_hp_steal = emSource.immunity_hp_steal;
+	immunity_mp_steal = emSource.immunity_mp_steal;
+	immunity_knockback = emSource.immunity_knockback;
+	immunity_damage_reflect = emSource.immunity_damage_reflect;
 	stun = emSource.stun;
 	revive = emSource.revive;
 	convert = emSource.convert;
@@ -109,7 +115,13 @@ void EffectManager::clearStatus() {
 	mpot = 0;
 	mpot_percent = 0;
 	speed = 100;
-	immunity = false;
+	immunity_damage = false;
+	immunity_slow = false;
+	immunity_stun = false;
+	immunity_hp_steal = false;
+	immunity_mp_steal = false;
+	immunity_knockback = false;
+	immunity_damage_reflect = false;
 	stun = false;
 	revive = false;
 	convert = false;
@@ -152,8 +164,32 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == EFFECT_MPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot_percent += effect_list[i].magnitude;
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
 			else if (effect_list[i].type == EFFECT_SPEED) speed = (static_cast<float>(effect_list[i].magnitude) * speed) / 100.f;
-			// @TYPE immunity|Removes and prevents bleed, slow, stun, HP/MP steal, and damage reflection. Magnitude is ignored.
-			else if (effect_list[i].type == EFFECT_IMMUNITY) immunity = true;
+
+			// @TYPE immunity|Applies all immunity effects. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY) {
+				immunity_damage = true;
+				immunity_slow = true;
+				immunity_stun = true;
+				immunity_hp_steal = true;
+				immunity_mp_steal = true;
+				immunity_knockback = true;
+				immunity_damage_reflect = true;
+			}
+			// @TYPE immunity_damage|Removes and prevents damage over time. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY_DAMAGE) immunity_damage = true;
+			// @TYPE immunity_slow|Removes and prevents slow effects. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY_SLOW) immunity_slow = true;
+			// @TYPE immunity_stun|Removes and prevents stun effects. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY_STUN) immunity_stun = true;
+			// @TYPE immunity_hp_steal|Prevents HP stealing. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY_HP_STEAL) immunity_hp_steal = true;
+			// @TYPE immunity_mp_steal|Prevents MP stealing. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY_MP_STEAL) immunity_mp_steal = true;
+			// @TYPE immunity_knockback|Removes and prevents knockback effects. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY_KNOCKBACK) immunity_knockback = true;
+			// @TYPE immunity_damage_reflect|Prevents damage reflection. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY_DAMAGE_REFLECT) immunity_damage_reflect = true;
+
 			// @TYPE stun|Can't move or attack. Being attacked breaks stun.
 			else if (effect_list[i].type == EFFECT_STUN) stun = true;
 			// @TYPE revive|Revives the player. Typically attached to a power that triggers when the player dies.
@@ -225,13 +261,14 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	int effect_type = getType(effect.type);
 
 	// if we're already immune, don't add negative effects
-	if (immunity) {
-		if (effect_type == EFFECT_DAMAGE) return;
-		else if (effect_type == EFFECT_DAMAGE_PERCENT) return;
-		else if (effect_type == EFFECT_SPEED && magnitude < 100) return;
-		else if (effect_type == EFFECT_STUN) return;
-		else if (effect_type == EFFECT_KNOCKBACK) return;
-	}
+	if (immunity_damage && (effect_type == EFFECT_DAMAGE || effect_type == EFFECT_DAMAGE_PERCENT))
+		return;
+	else if (immunity_slow && effect_type == EFFECT_SPEED && magnitude < 100)
+		return;
+	else if (immunity_stun && effect_type == EFFECT_STUN)
+		return;
+	else if (immunity_knockback && effect_type == EFFECT_KNOCKBACK)
+		return;
 
 	// only allow one knockback effect at a time
 	if (effect_type == EFFECT_KNOCKBACK && knockback_speed != 0)
@@ -246,9 +283,16 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 				removeEffect(i-1);
 		}
 		// if we're adding an immunity effect, remove all negative effects
-		if (effect_type == EFFECT_IMMUNITY) {
+		if (effect_type == EFFECT_IMMUNITY)
 			clearNegativeEffects();
-		}
+		else if (effect_type == EFFECT_IMMUNITY_DAMAGE)
+			clearNegativeEffects(EFFECT_IMMUNITY_DAMAGE);
+		else if (effect_type == EFFECT_IMMUNITY_SLOW)
+			clearNegativeEffects(EFFECT_IMMUNITY_SLOW);
+		else if (effect_type == EFFECT_IMMUNITY_STUN)
+			clearNegativeEffects(EFFECT_IMMUNITY_STUN);
+		else if (effect_type == EFFECT_IMMUNITY_KNOCKBACK)
+			clearNegativeEffects(EFFECT_IMMUNITY_KNOCKBACK);
 	}
 
 	Effect e;
@@ -288,7 +332,7 @@ void EffectManager::removeAnimation(size_t id) {
 	}
 }
 
-void EffectManager::removeEffectType(const int &type) {
+void EffectManager::removeEffectType(const int type) {
 	for (size_t i=effect_list.size(); i > 0; i--) {
 		if (effect_list[i-1].type == type) removeEffect(i-1);
 	}
@@ -311,13 +355,18 @@ void EffectManager::clearEffects() {
 	triggered_others = triggered_block = triggered_hit = triggered_halfdeath = triggered_joincombat = triggered_death = false;
 }
 
-void EffectManager::clearNegativeEffects() {
+void EffectManager::clearNegativeEffects(int type) {
 	for (size_t i=effect_list.size(); i > 0; i--) {
-		if (effect_list[i-1].type == EFFECT_DAMAGE) removeEffect(i-1);
-		else if (effect_list[i-1].type == EFFECT_DAMAGE_PERCENT) removeEffect(i-1);
-		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) removeEffect(i-1);
-		else if (effect_list[i-1].type == EFFECT_STUN) removeEffect(i-1);
-		else if (effect_list[i-1].type == EFFECT_KNOCKBACK) removeEffect(i-1);
+		if ((type == -1 || type == EFFECT_IMMUNITY_DAMAGE) && effect_list[i-1].type == EFFECT_DAMAGE)
+			removeEffect(i-1);
+		else if ((type == -1 || type == EFFECT_IMMUNITY_DAMAGE) && effect_list[i-1].type == EFFECT_DAMAGE_PERCENT)
+			removeEffect(i-1);
+		else if ((type == -1 || type == EFFECT_IMMUNITY_SLOW) && effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100)
+			removeEffect(i-1);
+		else if ((type == -1 || type == EFFECT_IMMUNITY_STUN) && effect_list[i-1].type == EFFECT_STUN)
+			removeEffect(i-1);
+		else if ((type == -1 || type == EFFECT_KNOCKBACK) && effect_list[i-1].type == EFFECT_KNOCKBACK)
+			removeEffect(i-1);
 	}
 }
 
@@ -352,7 +401,7 @@ int EffectManager::damageShields(int dmg) {
 	return over_dmg;
 }
 
-Animation* EffectManager::loadAnimation(std::string &s) {
+Animation* EffectManager::loadAnimation(const std::string &s) {
 	if (s != "") {
 		AnimationSet *animationSet = anim->getAnimationSet(s);
 		return animationSet->getAnimation();
@@ -371,6 +420,13 @@ int EffectManager::getType(const std::string& type) {
 	else if (type == "mpot_percent") return EFFECT_MPOT_PERCENT;
 	else if (type == "speed") return EFFECT_SPEED;
 	else if (type == "immunity") return EFFECT_IMMUNITY;
+	else if (type == "immunity_damage") return EFFECT_IMMUNITY_DAMAGE;
+	else if (type == "immunity_slow") return EFFECT_IMMUNITY_SLOW;
+	else if (type == "immunity_stun") return EFFECT_IMMUNITY_STUN;
+	else if (type == "immunity_hp_steal") return EFFECT_IMMUNITY_HP_STEAL;
+	else if (type == "immunity_mp_steal") return EFFECT_IMMUNITY_MP_STEAL;
+	else if (type == "immunity_knockback") return EFFECT_IMMUNITY_KNOCKBACK;
+	else if (type == "immunity_damage_reflect") return EFFECT_IMMUNITY_DAMAGE_REFLECT;
 	else if (type == "stun") return EFFECT_STUN;
 	else if (type == "revive") return EFFECT_REVIVE;
 	else if (type == "convert") return EFFECT_CONVERT;

@@ -3,7 +3,7 @@ Copyright © 2012 Clint Bellanger
 Copyright © 2012 davidriod
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
-Copyright © 2014 Justin Jacobs
+Copyright © 2014-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -65,7 +65,7 @@ public:
 	void updateMods();
 
 	virtual void logic();
-	bool logicMain();
+	virtual bool logicMain();
 	void logicDefaults();
 	virtual void logicAccept();
 	void logicCancel();
@@ -94,6 +94,11 @@ public:
 	virtual void cleanupDialogs();
 
 	TabList tablist;
+	TabList tablist_main;
+	TabList tablist_audio;
+	TabList tablist_interface;
+	TabList tablist_mods;
+
 	std::vector<int>      optiontab;
 	std::vector<Widget*>  child_widget;
 	WidgetTabControl    * tab_control;
@@ -116,6 +121,10 @@ public:
 	WidgetLabel         * show_target_lb;
 	WidgetCheckBox      * loot_tooltips_cb;
 	WidgetLabel         * loot_tooltips_lb;
+	WidgetCheckBox      * statbar_labels_cb;
+	WidgetLabel         * statbar_labels_lb;
+	WidgetCheckBox      * auto_equip_cb;
+	WidgetLabel         * auto_equip_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -37,8 +38,8 @@ public:
 
 	ItemStack & operator [] (int slot);
 
-	void setItems(std::string s);
-	void setQuantities(std::string s);
+	void setItems(const std::string& s);
+	void setQuantities(const std::string& s);
 	int getSlotNumber();
 	std::string getItems();
 	std::string getQuantities();

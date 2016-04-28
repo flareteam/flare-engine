@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2015 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -38,8 +39,26 @@ class ItemManager;
 class MenuConfirm;
 class WidgetButton;
 class WidgetLabel;
+class WidgetScrollBar;
 
-const int GAME_SLOT_MAX = 4;
+class GameSlot {
+public:
+	unsigned id;
+
+	StatBlock stats;
+	std::string current_map;
+
+	std::vector<int> equipped;
+	std::vector<Sprite *> sprites;
+
+	WidgetLabel label_name;
+	WidgetLabel label_level;
+	WidgetLabel label_class;
+	WidgetLabel label_map;
+
+	GameSlot();
+	~GameSlot();
+};
 
 class GameStateLoad : public GameState {
 private:
@@ -49,17 +68,22 @@ private:
 	std::string getMapName(const std::string& map_filename);
 	void updateButtons();
 	void refreshWidgets();
+	void logicLoading();
+	void readGameSlots();
+	void loadPreview(GameSlot *slot);
+
+	void scrollUp();
+	void scrollDown();
+	void refreshScrollBar();
 
 	TabList tablist;
 
 	WidgetButton *button_exit;
-	WidgetButton *button_action;
-	WidgetButton *button_alternate;
+	WidgetButton *button_new;
+	WidgetButton *button_load;
+	WidgetButton *button_delete;
 	WidgetLabel *label_loading;
-	WidgetLabel *label_name[GAME_SLOT_MAX];
-	WidgetLabel *label_level[GAME_SLOT_MAX];
-	WidgetLabel *label_class[GAME_SLOT_MAX];
-	WidgetLabel *label_map[GAME_SLOT_MAX];
+	WidgetScrollBar *scrollbar;
 
 	MenuConfirm *confirm;
 
@@ -67,12 +91,10 @@ private:
 	Sprite *selection;
 	Sprite *portrait_border;
 	Sprite *portrait;
-	std::vector<Sprite *> sprites[GAME_SLOT_MAX];
-	StatBlock stats[GAME_SLOT_MAX];
-	std::vector<int> equipped[GAME_SLOT_MAX];
 	std::vector<std::string> preview_layer;
-	Rect slot_pos[GAME_SLOT_MAX];
-	std::string current_map[GAME_SLOT_MAX];
+	std::vector<Rect> slot_pos;
+
+	std::vector<GameSlot *> game_slots;
 
 	bool loading_requested;
 	bool loading;
@@ -100,19 +122,18 @@ private:
 
 	Color color_normal;
 
+	int selected_slot;
+	int visible_slots;
+	int scroll_offset;
+	bool has_scroll_bar;
+	int game_slot_max;
+
 public:
 	GameStateLoad();
 	~GameStateLoad();
 
 	void logic();
-	void logicLoading();
 	void render();
-	void readGameSlot(int slot);
-	void readGameSlots();
-	void loadPreview(int slot);
-
-	bool load_game;
-	int selected_slot;
 };
 
 #endif

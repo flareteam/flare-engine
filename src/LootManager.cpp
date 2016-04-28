@@ -2,6 +2,7 @@
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -31,7 +32,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "LootManager.h"
 #include "Menu.h"
-#include "MenuInventory.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Utils.h"
@@ -46,6 +46,7 @@ LootManager::LootManager()
 	: sfx_loot(0)
 	, drop_max(1)
 	, drop_radius(1)
+	, autopickup_range(INTERACT_RANGE)
 	, hero(NULL)
 	, tooltip_margin(0)
 {
@@ -63,6 +64,10 @@ LootManager::LootManager()
 			else if (infile.key == "autopickup_currency") {
 				// @ATTR autopickup_currency|boolean|Enable autopickup for currency
 				AUTOPICKUP_CURRENCY = toBool(infile.val);
+			}
+			else if (infile.key == "autopickup_range") {
+				// @ATTR autopickup_range|float|Minimum distance the player must be from loot to trigger autopickup.
+				autopickup_range = toFloat(infile.val);
 			}
 			else if (infile.key == "currency_name") {
 				// This key is parsed in loadMiscSettings() in Settings.cpp
@@ -96,8 +101,6 @@ LootManager::LootManager()
 	loot.clear();
 
 	loadGraphics();
-
-	full_msg = false;
 
 	loadLootTables();
 }
@@ -156,7 +159,9 @@ void LootManager::logic() {
 /**
  * Show all tooltips for loot on the floor
  */
-void LootManager::renderTooltips(FPoint cam) {
+void LootManager::renderTooltips(const FPoint& cam) {
+	if (!SHOW_HUD) return;
+
 	Point dest;
 
 	std::vector<Loot>::iterator it;
@@ -219,10 +224,10 @@ void LootManager::checkEnemiesForLoot() {
 		if (!e->stats.loot_table.empty()) {
 			unsigned drops;
 			if (e->stats.loot_count.y != 0) {
-				drops = (rand() % e->stats.loot_count.y) + e->stats.loot_count.x;
+				drops = randBetween(e->stats.loot_count.x, e->stats.loot_count.y);
 			}
 			else {
-				drops = (rand() % drop_max) + 1;
+				drops = randBetween(1, drop_max);
 			}
 
 			for (unsigned j=0; j<drops; ++j) {
@@ -242,10 +247,10 @@ void LootManager::checkMapForLoot() {
 	if (!mapr->loot.empty()) {
 		unsigned drops;
 		if (mapr->loot_count.y != 0) {
-			drops = (rand() % mapr->loot_count.y) + mapr->loot_count.x;
+			drops = randBetween(mapr->loot_count.x, mapr->loot_count.y);
 		}
 		else {
-			drops = (rand() % drop_max) + 1;
+			drops = randBetween(1, drop_max);
 		}
 
 		for (unsigned i=0; i<drops; ++i) {
@@ -262,7 +267,7 @@ void LootManager::addEnemyLoot(Enemy *e) {
 	enemiesDroppingLoot.push_back(e);
 }
 
-void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos) {
+void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *pos, std::vector<ItemStack> *itemstack_vec) {
 	if (hero == NULL) {
 		logError("LootManager: checkLoot() failed, no hero.");
 		return;
@@ -311,7 +316,10 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 				new_loot.item = ec->c;
 			}
 
-			addLoot(new_loot, p);
+			if (itemstack_vec)
+				itemstack_vec->push_back(new_loot);
+			else
+				addLoot(new_loot, p);
 
 			loot_table.erase(loot_table.begin()+i-1);
 		}
@@ -381,11 +389,14 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			new_loot.item = ec->c;
 		}
 
-		addLoot(new_loot, p);
+		if (itemstack_vec)
+			itemstack_vec->push_back(new_loot);
+		else
+			addLoot(new_loot, p);
 	}
 }
 
-void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
+void LootManager::addLoot(ItemStack stack, const FPoint& pos, bool dropped_by_hero) {
 	if (static_cast<size_t>(stack.item) >= items->items.size()) {
 		logError("LootManager: Loot item with id %d is not valid.", stack.item);
 		return;
@@ -424,7 +435,7 @@ void LootManager::addLoot(ItemStack stack, FPoint pos, bool dropped_by_hero) {
  * Click on the map to pick up loot.  We need the camera position to translate
  * screen coordinates to map locations.
  */
-ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, MenuInventory *inv) {
+ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const FPoint& hero_pos) {
 	Rect r;
 	ItemStack loot_stack;
 
@@ -452,14 +463,9 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 					if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 						inpt->lock[MAIN1] = true;
 						if (!it->stack.empty()) {
-							if (!(inv->full(it->stack.item))) {
-								loot_stack = it->stack;
-								it = loot.erase(it);
-								return loot_stack;
-							}
-							else {
-								full_msg = true;
-							}
+							loot_stack = it->stack;
+							it = loot.erase(it);
+							return loot_stack;
 						}
 					}
 				}
@@ -469,7 +475,7 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
 
 	// check pressing Enter/Return
 	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
-		loot_stack = checkNearestPickup(hero_pos, inv);
+		loot_stack = checkNearestPickup(hero_pos);
 		if (!loot_stack.empty()) {
 			inpt->lock[ACCEPT] = true;
 		}
@@ -482,26 +488,24 @@ ItemStack LootManager::checkPickup(Point mouse, FPoint cam, FPoint hero_pos, Men
  * Autopickup loot if enabled in the engine
  * Currently, only currency is checked for autopickup
  */
-ItemStack LootManager::checkAutoPickup(FPoint hero_pos, MenuInventory *inv) {
+ItemStack LootManager::checkAutoPickup(const FPoint& hero_pos) {
 	ItemStack loot_stack;
 
 	std::vector<Loot>::iterator it;
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
-		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < INTERACT_RANGE && fabs(hero_pos.y - it->pos.y) < INTERACT_RANGE && !it->isFlying()) {
+		if (!it->dropped_by_hero && fabs(hero_pos.x - it->pos.x) < autopickup_range && fabs(hero_pos.y - it->pos.y) < autopickup_range && !it->isFlying()) {
 			if (it->stack.item == CURRENCY_ID && AUTOPICKUP_CURRENCY) {
-				if (!(inv->full(it->stack.item))) {
-					loot_stack = it->stack;
-					it = loot.erase(it);
-					return loot_stack;
-				}
+				loot_stack = it->stack;
+				it = loot.erase(it);
+				return loot_stack;
 			}
 		}
 	}
 	return loot_stack;
 }
 
-ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
+ItemStack LootManager::checkNearestPickup(const FPoint& hero_pos) {
 	ItemStack loot_stack;
 
 	float best_distance = std::numeric_limits<float>::max();
@@ -520,14 +524,9 @@ ItemStack LootManager::checkNearestPickup(FPoint hero_pos, MenuInventory *inv) {
 	}
 
 	if (nearest != loot.end() && !nearest->stack.empty()) {
-		if (!(inv->full(nearest->stack.item))) {
-			loot_stack = nearest->stack;
-			loot.erase(nearest);
-			return loot_stack;
-		}
-		else {
-			full_msg = true;
-		}
+		loot_stack = nearest->stack;
+		loot.erase(nearest);
+		return loot_stack;
 	}
 
 	return loot_stack;

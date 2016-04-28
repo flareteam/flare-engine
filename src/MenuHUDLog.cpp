@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -26,9 +27,15 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuHUDLog.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 #include "Settings.h"
+#include "Utils.h"
 
-MenuHUDLog::MenuHUDLog() {
+MenuHUDLog::MenuHUDLog()
+	: overlay_bg(NULL)
+	, click_to_dismiss(false)
+	, hide_overlay(false)
+{
 
 	// Load config settings
 	FileParser infile;
@@ -70,6 +77,22 @@ void MenuHUDLog::logic() {
 		else
 			remove(i);
 	}
+
+	// click to dismiss messages when rendered on top of other menus
+	if (overlay_bg && click_to_dismiss) {
+		if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+			Rect overlay_area;
+			overlay_area.x = static_cast<int>(overlay_bg->getDest().x);
+			overlay_area.y = static_cast<int>(overlay_bg->getDest().y);
+			overlay_area.w = overlay_bg->getGraphicsWidth();
+			overlay_area.h = overlay_bg->getGraphicsHeight();
+
+			if (isWithin(overlay_area, inpt->mouse)) {
+				inpt->lock[MAIN1] = true;
+				hide_overlay = true;
+			}
+		}
+	}
 }
 
 
@@ -77,9 +100,15 @@ void MenuHUDLog::logic() {
  * New messages appear on the screen for a brief time
  */
 void MenuHUDLog::render() {
+	if (msg_buffer.empty()) {
+		return;
+	}
+
+	click_to_dismiss = false;
+	hide_overlay = true;
 
 	Rect dest;
-	dest.x = window_area.x;
+	dest.x = window_area.x + paragraph_spacing;
 	dest.y = window_area.y+window_area.h;
 
 	// go through new messages
@@ -95,25 +124,71 @@ void MenuHUDLog::render() {
 
 
 /**
+ * Displays the last message with a shaded background
+ * It is meant to be displayed on top of other menus in place of the normal render output
+ */
+void MenuHUDLog::renderOverlay() {
+	if (msg_buffer.empty() || hide_overlay) {
+		return;
+	}
+
+	click_to_dismiss = true;
+
+	int msg_height = msg_buffer.back()->getGraphicsHeight() + paragraph_spacing*2;
+	bool resize_bg = !overlay_bg || overlay_bg->getGraphicsHeight() != msg_height;
+
+	if (resize_bg) {
+		if (overlay_bg) {
+			delete overlay_bg;
+			overlay_bg = NULL;
+		}
+
+		Image *temp = render_device->createImage(window_area.w, msg_height);
+
+		if (temp) {
+			// fill with translucent black
+			Color bg_color;
+			bg_color.a = 200;
+			temp->fillWithColor(bg_color);
+
+			overlay_bg = temp->createSprite();
+			overlay_bg->setDest(window_area.x, window_area.y + window_area.h - msg_height);
+		}
+	}
+
+	render_device->render(overlay_bg);
+
+	Rect dest;
+	dest.x = window_area.x + paragraph_spacing;
+	dest.y = window_area.y + window_area.h - msg_height + paragraph_spacing;
+
+	msg_buffer.back()->setDest(dest);
+	render_device->render(msg_buffer.back());
+}
+
+
+/**
  * Add a new message to the log
  */
 void MenuHUDLog::add(const std::string& s, bool prevent_spam) {
+	hide_overlay = false;
+
 	// Make sure we don't spam the same message repeatedly
 	if (log_msg.empty() || log_msg.back() != s || !prevent_spam) {
 		// add new message
-		log_msg.push_back(s);
-		msg_age.push_back(calcDuration(s));
+		log_msg.push_back(substituteVarsInString(s, pc));
+		msg_age.push_back(calcDuration(log_msg.back()));
 
 		// render the log entry and store it in a buffer
 		font->setFont("font_regular");
-		Point size = font->calc_size(s, window_area.w);
+		Point size = font->calc_size(log_msg.back(), window_area.w - (paragraph_spacing*2));
 		Image *graphics = render_device->createImage(size.x, size.y);
-		font->renderShadowed(s, 0, 0, JUSTIFY_LEFT, graphics, window_area.w, color_normal);
+		font->renderShadowed(log_msg.back(), 0, 0, JUSTIFY_LEFT, graphics, window_area.w - (paragraph_spacing*2), color_normal);
 		msg_buffer.push_back(graphics->createSprite());
 		graphics->unref();
 	}
 	else if (!msg_age.empty()) {
-		msg_age.back() = calcDuration(s);
+		msg_age.back() = calcDuration(log_msg.back());
 	}
 
 	// force HUD messages to vanish in order
@@ -147,6 +222,8 @@ void MenuHUDLog::clear() {
 }
 
 MenuHUDLog::~MenuHUDLog() {
+	delete overlay_bg;
+
 	for (unsigned i=0; i<msg_buffer.size(); i++) {
 		if (msg_buffer[i])
 			delete msg_buffer[i];

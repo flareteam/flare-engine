@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
+Copyright © 2012-2015 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -59,6 +60,9 @@ private:
 	Image *background_image;
 	std::string background_filename;
 	std::vector<std::string> background_list;
+
+	int fps_ticks;
+	int last_fps;
 
 public:
 	GameSwitcher();

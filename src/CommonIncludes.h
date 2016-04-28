@@ -1,5 +1,6 @@
 /*
 Copyright © 2013 Stefan Beller
+Copyright © 2013-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -16,8 +17,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #pragma once
-#ifndef SHARED_INCLUDES
-#define SHARED_INCLUDES
+#ifndef COMMON_INCLUDES_H
+#define COMMON_INCLUDES_H
 
 #include <algorithm>
 #include <fstream>

@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -28,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Hazard.h"
 #include "MapCollision.h"
 #include "SharedResources.h"
+#include "StatBlock.h"
 #include "Settings.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
@@ -47,6 +49,8 @@ Hazard::Hazard(MapCollision *_collider)
 	, target_party(false)
 	, pos()
 	, speed()
+	, pos_offset()
+	, relative_pos(false)
 	, base_speed(0)
 	, angle(0)
 	, base_lifespan(1)
@@ -59,6 +63,8 @@ Hazard::Hazard(MapCollision *_collider)
 	, complete_animation(false)
 	, multitarget(false)
 	, active(true)
+	, multihit(false)
+	, expire_with_caster(false)
 	, remove_now(false)
 	, hit_wall(false)
 	, hp_steal(0)
@@ -70,10 +76,42 @@ Hazard::Hazard(MapCollision *_collider)
 	, missile(false)
 	, directional(false)
 	, post_power(0)
-	, wall_power(0) {
+	, wall_power(0)
+	, target_movement_normal(true)
+	, target_movement_flying(true)
+	, target_movement_intangible(true)
+	, walls_block_aoe(false)
+	, sfx_hit(0)
+	, sfx_hit_enable(false)
+	, sfx_hit_played(false)
+	, parent(NULL) {
 }
 
 Hazard::~Hazard() {
+	if (!parent && !children.empty()) {
+		// make the next child the parent for the existing children
+		Hazard* new_parent = children[0];
+		new_parent->parent = NULL;
+
+		for (size_t i = 1; i < children.size(); ++i) {
+			children[i]->parent = new_parent;
+			new_parent->children.push_back(children[i]);
+		}
+
+		for (size_t i = 0; i < entitiesCollided.size(); ++i) {
+			new_parent->addEntity(entitiesCollided[i]);
+		}
+	}
+	else if (parent) {
+		// remove this hazard from the parent's list of children
+		for (size_t i = 0; i < parent->children.size(); ++i) {
+			if (parent->children[i] == this) {
+				parent->children.erase(parent->children.begin() + i);
+				break;
+			}
+		}
+	}
+
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
@@ -91,14 +129,30 @@ void Hazard::logic() {
 	// handle tickers
 	if (lifespan > 0) lifespan--;
 
+	if (expire_with_caster && !src_stats->alive)
+		lifespan = 0;
+
 	if (activeAnimation)
 		activeAnimation->advanceFrame();
 
 	// handle movement
+	bool check_collide = false;
 	if (!(speed.x == 0 && speed.y == 0)) {
 		pos.x += speed.x;
 		pos.y += speed.y;
+		check_collide = true;
+	}
+	else if (!(pos_offset.x == 0 && pos_offset.y == 0)) {
+		pos.x = src_stats->pos.x - pos_offset.x;
+		pos.y = src_stats->pos.y - pos_offset.y;
+		check_collide = true;
+	}
+	else if (relative_pos) {
+		pos.x = src_stats->pos.x;
+		pos.y = src_stats->pos.y;
+	}
 
+	if (check_collide) {
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
 		if (collider->is_wall(pos.x, pos.y)) {
@@ -111,7 +165,7 @@ void Hazard::logic() {
 	}
 }
 
-void Hazard::loadAnimation(std::string &s) {
+void Hazard::loadAnimation(const std::string &s) {
 	if (activeAnimation) {
 		anim->decreaseCount(animation_name);
 		delete activeAnimation;
@@ -132,13 +186,27 @@ bool Hazard::isDangerousNow() {
 }
 
 bool Hazard::hasEntity(Entity *ent) {
-	for(std::vector<Entity*>::iterator it = entitiesCollided.begin(); it != entitiesCollided.end(); ++it)
-		if(*it == ent) return true;
-	return false;
+	if (multihit) {
+		return false;
+	}
+
+	if (parent) {
+		return parent->hasEntity(ent);
+	}
+	else {
+		for(std::vector<Entity*>::iterator it = entitiesCollided.begin(); it != entitiesCollided.end(); ++it)
+			if(*it == ent) return true;
+		return false;
+	}
 }
 
 void Hazard::addEntity(Entity *ent) {
-	entitiesCollided.push_back(ent);
+	if (parent) {
+		parent->addEntity(ent);
+	}
+	else {
+		entitiesCollided.push_back(ent);
+	}
 }
 
 void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
@@ -146,6 +214,7 @@ void Hazard::addRenderable(std::vector<Renderable> &r, std::vector<Renderable> &
 		Renderable re = activeAnimation->getCurrentFrame(animationKind);
 		re.map_pos.x = pos.x;
 		re.map_pos.y = pos.y;
+		re.prio = (on_floor ? 0 : 2);
 		(on_floor ? r_dead : r).push_back(re);
 	}
 }
@@ -155,8 +224,8 @@ void Hazard::setAngle(const float& _angle) {
 	while (angle >= static_cast<float>(M_PI)*2) angle -= static_cast<float>(M_PI)*2;
 	while (angle < 0.0) angle += static_cast<float>(M_PI)*2;
 
-	speed.x = base_speed * static_cast<float>(cos(angle));
-	speed.y = base_speed * static_cast<float>(sin(angle));
+	speed.x = base_speed * cosf(angle);
+	speed.y = base_speed * sinf(angle);
 
 	if (directional)
 		animationKind = calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);

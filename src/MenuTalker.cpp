@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger and morris989
 Copyright © 2012 Stefan Beller
 Copyright © 2013-2014 Henrik Andersson
 Copyright © 2013 Kurt Rinnert
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -30,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "NPC.h"
 #include "Settings.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 #include "StatBlock.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
@@ -95,10 +97,6 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 	textbox = new WidgetScrollBox(text_pos.w, text_pos.h-(text_offset.y*2));
 	textbox->setBasePos(text_pos.x, text_pos.y + text_offset.y);
 
-	tablist.add(advanceButton);
-	tablist.add(closeButton);
-	tablist.add(textbox);
-
 	align();
 }
 
@@ -133,8 +131,6 @@ void MenuTalker::logic() {
 
 	if (!visible || npc==NULL) return;
 
-	tablist.logic();
-
 	advanceButton->enabled = false;
 	closeButton->enabled = false;
 
@@ -142,19 +138,13 @@ void MenuTalker::logic() {
 	if (static_cast<unsigned>(dialog_node) < npc->dialog.size() && !npc->dialog[dialog_node].empty() && event_cursor < npc->dialog[dialog_node].size()-1) {
 		if (npc->dialog[dialog_node][event_cursor+1].type != EC_NONE) {
 			advanceButton->enabled = true;
-			tablist.remove(closeButton);
-			tablist.add(advanceButton);
 		}
 		else {
 			closeButton->enabled = true;
-			tablist.remove(advanceButton);
-			tablist.add(closeButton);
 		}
 	}
 	else {
 		closeButton->enabled = true;
-		tablist.remove(advanceButton);
-		tablist.add(closeButton);
 	}
 
 	bool more;
@@ -213,7 +203,7 @@ void MenuTalker::createBuffer() {
 	label_name->set(window_area.x+text_pos.x+text_offset.x, window_area.y+text_pos.y+text_offset.y, JUSTIFY_LEFT, VALIGN_TOP, who, color_normal, font_who);
 
 
-	line = parseLine(npc->dialog[dialog_node][event_cursor].s);
+	line = substituteVarsInString(npc->dialog[dialog_node][event_cursor].s, pc);
 
 	// render dialog text to the scrollbox buffer
 	Point line_size = font->calc_size(line,textbox->pos.w-(text_offset.x*2));
@@ -315,20 +305,6 @@ void MenuTalker::setHero(StatBlock &stats) {
 		portrait = graphics->createSprite();
 		graphics->unref();
 	}
-}
-
-std::string MenuTalker::parseLine(const std::string &line) {
-	std::string new_line = line;
-
-	// name
-	size_t index = new_line.find("%N");
-	if (index != std::string::npos) new_line = new_line.replace(index, 2, hero_name);
-
-	// class
-	index = new_line.find("%C");
-	if (index != std::string::npos) new_line.replace(index, 2, hero_class);
-
-	return new_line;
 }
 
 void MenuTalker::setNPC(NPC* _npc) {

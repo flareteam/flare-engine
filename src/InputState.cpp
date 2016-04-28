@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Stefan Beller
+Copyright © 2012-2015 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -33,9 +34,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 InputState::InputState(void)
 	: done(false)
 	, mouse()
-	, last_key(0)
-	, last_button(0)
-	, last_joybutton(0)
+	, last_key(-1)
+	, last_button(-1)
+	, last_joybutton(-1)
+	, last_joyaxis(-1)
 	, scroll_up(false)
 	, scroll_down(false)
 	, lock_scroll(false)
@@ -63,6 +65,14 @@ void InputState::defaultJoystickBindings () {
 	binding_joy[ACTIONBAR_USE] = 3;
 	binding_joy[ACTIONBAR_BACK] = 4;
 	binding_joy[ACTIONBAR_FORWARD] = 5;
+
+	// axis 0
+	binding_joy[LEFT] = JOY_AXIS_OFFSET * (-1);
+	binding_joy[RIGHT] = (JOY_AXIS_OFFSET+1) * (-1);
+
+	// axis 1
+	binding_joy[UP] = (JOY_AXIS_OFFSET+2) * (-1);
+	binding_joy[DOWN] = (JOY_AXIS_OFFSET+3) * (-1);
 }
 
 /**
@@ -83,6 +93,14 @@ void InputState::loadKeyBindings() {
 	while (infile.next()) {
 		int key1 = popFirstInt(infile.val);
 		int key2 = popFirstInt(infile.val);
+
+		// if we're loading an older keybindings file, convert greater than 0 mouse binds to negative
+		if (key1 > 0 && key1 < 8) {
+			key1 = (key1 + MOUSE_BIND_OFFSET) * (-1);
+		}
+		if (key2 > 0 && key2 < 8) {
+			key2 = (key2 + MOUSE_BIND_OFFSET) * (-1);
+		}
 
 		// if we're loading an older keybindings file, we need to unbind all joystick bindings
 		int key3 = -1;
@@ -143,6 +161,12 @@ void InputState::saveKeyBindings() {
 	outfile.open((PATH_CONF + FILE_KEYBINDINGS).c_str(), std::ios::out);
 
 	if (outfile.is_open()) {
+		outfile << "# Keybindings\n";
+		outfile << "# FORMAT: {ACTION}={BIND},{BIND_ALT},{BIND_JOY}\n";
+		outfile << "# A bind value of -1 means unbound\n";
+		outfile << "# For BIND and BIND_ALT, a value of 0 is also unbound\n";
+		outfile << "# For BIND and BIND_ALT, any value less than -1 is a mouse button\n";
+		outfile << "# As an example, mouse button 1 would be -3 here. Button 2 would be -4, etc.\n\n";
 
 		outfile << "cancel=" << binding[CANCEL] << "," << binding_alt[CANCEL] << "," << binding_joy[CANCEL] << "\n";
 		outfile << "accept=" << binding[ACCEPT] << "," << binding_alt[ACCEPT] << "," << binding_joy[ACCEPT] << "\n";

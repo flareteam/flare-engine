@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -47,7 +48,7 @@ public:
 	void handleNewMap();
 	void logic();
 	void addRenders(std::vector<Renderable> &r);
-	int getID(std::string npcName);
+	int getID(const std::string& npcName);
 };
 
 #endif

@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and morris989
 Copyright © 2013-2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -37,8 +38,6 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
-	std::string parseLine(const std::string &line);
-
 	MenuManager *menu;
 
 	Sprite *portrait;
@@ -58,8 +57,6 @@ private:
 	std::string font_dialog;
 
 	Color color_normal;
-
-	TabList tablist;
 
 	WidgetLabel *label_name;
 	WidgetScrollBox *textbox;

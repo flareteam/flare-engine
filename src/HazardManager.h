@@ -1,5 +1,6 @@
 /*
 Copyright © 2011-2012 Clint Bellanger
+Copyright © 2012-2015 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -31,6 +32,9 @@ class Avatar;
 class Hazard;
 
 class HazardManager {
+private:
+	void hitEntity(size_t index, const bool hit);
+
 public:
 	HazardManager();
 	~HazardManager();

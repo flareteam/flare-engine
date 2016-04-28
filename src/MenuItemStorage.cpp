@@ -3,6 +3,7 @@ Copyright © 2011-2012 Clint Bellanger
 Copyright © 2012 Igor Paliychuk
 Copyright © 2013 Kurt Rinnert
 Copyright © 2014 Henrik Andersson
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -39,7 +40,7 @@ MenuItemStorage::MenuItemStorage()
 	, overlay_disabled(NULL) {
 }
 
-void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb_cols) {
+void MenuItemStorage::init(int _slot_number, const Rect& _area, int _icon_size, int _nb_cols) {
 	ItemStorage::init( _slot_number);
 	grid_area = _area;
 	grid_pos.x = _area.x;
@@ -63,7 +64,7 @@ void MenuItemStorage::init(int _slot_number, Rect _area, int _icon_size, int _nb
 /**
  * Overloaded function for case, if slot positions are predefined
  */
-void MenuItemStorage::init(int _slot_number, std::vector<Rect> _area, std::vector<std::string> _slot_type) {
+void MenuItemStorage::init(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type) {
 	ItemStorage::init( _slot_number);
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot();
@@ -128,7 +129,9 @@ void MenuItemStorage::render() {
 				render_device->render(overlay_disabled);
 			}
 		}
-		if (highlight[i]) renderHighlight(slots[i]->pos.x, slots[i]->pos.y, slots[i]->pos.w);
+		if (highlight[i] && !slots[i]->in_focus) {
+			renderHighlight(slots[i]->pos.x, slots[i]->pos.y, slots[i]->pos.w);
+		}
 	}
 }
 
@@ -144,7 +147,7 @@ void MenuItemStorage::renderHighlight(int x, int y, int _icon_size) {
 	}
 }
 
-int MenuItemStorage::slotOver(Point position) {
+int MenuItemStorage::slotOver(const Point& position) {
 	if (isWithin(grid_area, position) && nb_cols > 0) {
 		return (position.x - grid_area.x) / slots[0]->pos.w + (position.y - grid_area.y) / slots[0]->pos.w * nb_cols;
 	}
@@ -156,7 +159,7 @@ int MenuItemStorage::slotOver(Point position) {
 	return -1;
 }
 
-TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int context) {
+TooltipData MenuItemStorage::checkTooltip(const Point& position, StatBlock *stats, int context) {
 	TooltipData tip;
 	int slot = slotOver(position);
 
@@ -166,19 +169,20 @@ TooltipData MenuItemStorage::checkTooltip(Point position, StatBlock *stats, int 
 	return tip;
 }
 
-ItemStack MenuItemStorage::click(Point position) {
+ItemStack MenuItemStorage::click(const Point& position) {
 	ItemStack item;
 
 	drag_prev_slot = slotOver(position);
 
-	// try to click on the highlighted (aka in focus) slot
-	// since mouse clicks defocus slots before this point,
-	// we don't have to worry about the mouse being over another slot
+	// no selection, so defocus everything
 	if (drag_prev_slot == -1) {
 		for (unsigned int i=0; i<slots.size(); i++) {
 			if (slots[i]->in_focus) {
-				drag_prev_slot = i;
-				break;
+				slots[i]->defocus();
+			}
+
+			if (slots[i] == current_slot) {
+				current_slot = NULL;
 			}
 		}
 	}
@@ -194,7 +198,7 @@ ItemStack MenuItemStorage::click(Point position) {
 				return item;
 			}
 			else {
-				slots[drag_prev_slot]->in_focus = false;
+				slots[drag_prev_slot]->defocus();
 				current_slot = NULL;
 			}
 		}
@@ -210,6 +214,7 @@ ItemStack MenuItemStorage::click(Point position) {
 		return item;
 	}
 	else {
+		current_slot = NULL;
 		item.clear();
 		return item;
 	}
@@ -220,7 +225,7 @@ void MenuItemStorage::itemReturn(ItemStack stack) {
 	drag_prev_slot = -1;
 }
 
-void MenuItemStorage::highlightMatching(std::string type) {
+void MenuItemStorage::highlightMatching(const std::string& type) {
 	for (int i=0; i<slot_number; i++) {
 		if (slot_type[i] == type) highlight[i] = true;
 	}

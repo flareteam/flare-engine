@@ -1,6 +1,7 @@
 /*
 Copyright © 2011-2012 Clint Bellanger and kitano
 Copyright © 2012 Stefan Beller
+Copyright © 2012-2016 Justin Jacobs
 
 This file is part of FLARE.
 
@@ -179,6 +180,9 @@ bool Entity::move() {
 
 	if (stats.effects.stun || stats.effects.speed == 0) return false;
 
+	if (stats.charge_speed != 0.0f)
+		return false;
+
 	float speed = stats.speed * speedMultiplyer[stats.direction] * stats.effects.speed / 100;
 	float dx = speed * static_cast<float>(directionDeltaX[stats.direction]);
 	float dy = speed * static_cast<float>(directionDeltaY[stats.direction]);
@@ -214,6 +218,22 @@ bool Entity::takeHit(Hazard &h) {
 		return false;
 
 	if(stats.cur_state == AVATAR_DEAD && stats.hero)
+		return false;
+
+	// some attacks will always miss enemies of a certain movement type
+	if (stats.movement_type == MOVEMENT_NORMAL && !h.target_movement_normal)
+		return false;
+	else if (stats.movement_type == MOVEMENT_FLYING && !h.target_movement_flying)
+		return false;
+	else if (stats.movement_type == MOVEMENT_INTANGIBLE && !h.target_movement_intangible)
+		return false;
+
+	// prevent hazard aoe from hitting targets behind walls
+	if (h.walls_block_aoe && !mapr->collider.line_of_movement(stats.pos.x, stats.pos.y, h.pos.x, h.pos.y, MOVEMENT_NORMAL))
+		return false;
+
+	// entity can't be damaged when in hit state, be it animation or cooldown
+	if (stats.cooldown_hit_ticks > 0)
 		return false;
 
 	//if the target is an enemy and they are not already in combat, activate a beacon to draw other enemies into battle
@@ -380,23 +400,21 @@ bool Entity::takeHit(Hazard &h) {
 			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
 		}
 
-		if (!stats.effects.immunity) {
-			if (h.hp_steal != 0) {
-				int steal_amt = (std::min(dmg, prev_hp) * h.hp_steal) / 100;
-				if (steal_amt == 0) steal_amt = 1;
-				combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
-			}
-			if (h.mp_steal != 0) {
-				int steal_amt = (std::min(dmg, prev_hp) * h.mp_steal) / 100;
-				if (steal_amt == 0) steal_amt = 1;
-				combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
-				h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
-			}
+		if (!stats.effects.immunity_hp_steal && h.hp_steal != 0) {
+			int steal_amt = (std::min(dmg, prev_hp) * h.hp_steal) / 100;
+			if (steal_amt == 0) steal_amt = 1;
+			combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
+			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
+		}
+		if (!stats.effects.immunity_mp_steal && h.mp_steal != 0) {
+			int steal_amt = (std::min(dmg, prev_hp) * h.mp_steal) / 100;
+			if (steal_amt == 0) steal_amt = 1;
+			combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
+			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
 		}
 
 		// deal return damage
-		if (stats.get(STAT_RETURN_DAMAGE) > 0 && !h.src_stats->effects.immunity) {
+		if (!h.src_stats->effects.immunity_damage_reflect && stats.get(STAT_RETURN_DAMAGE) > 0) {
 			int dmg_return = static_cast<int>(static_cast<float>(dmg * stats.get(STAT_RETURN_DAMAGE)) / 100.f);
 
 			if (dmg_return == 0)
@@ -466,13 +484,14 @@ bool Entity::takeHit(Hazard &h) {
 
 		// don't go through a hit animation if stunned or successfully poised
 		// however, critical hits ignore poise
-		if (!stats.effects.stun && (!chance_poise || crit)) {
-			if(stats.cooldown_hit_ticks == 0) {
+		if(stats.cooldown_hit_ticks == 0) {
+			stats.cooldown_hit_ticks = stats.cooldown_hit;
+
+			if (!stats.effects.stun && (!chance_poise || crit)) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
 				else
 					stats.cur_state = ENEMY_HIT;
-				stats.cooldown_hit_ticks = stats.cooldown_hit;
 
 				if (stats.untransform_on_hit)
 					stats.transform_duration = 0;

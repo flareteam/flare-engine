@@ -47,6 +47,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/GetText.cpp \
 	../../../../../../src/Hazard.cpp \
 	../../../../../../src/HazardManager.cpp \
+	../../../../../../src/IconManager.cpp \
 	../../../../../../src/InputState.cpp \
 	../../../../../../src/ItemManager.cpp \
 	../../../../../../src/ItemStorage.cpp \
