@@ -111,7 +111,7 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 	max_kinds = _maxkinds;
 	times_played = 0;
 
-	active_frames.push_back(number_frames/2);
+	active_frames.push_back(static_cast<unsigned short>(number_frames-1)/2);
 
 	unsigned i = max_kinds*_frames;
 	gfx.resize(i);
