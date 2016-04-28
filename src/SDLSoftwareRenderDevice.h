@@ -55,7 +55,6 @@ public:
 
 private:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-	Color readPixel(int x, int y);
 };
 
 class SDLSoftwareRenderDevice : public RenderDevice {

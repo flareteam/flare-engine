@@ -127,22 +127,8 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 											   surface->format->Amask);
 
 		if (scaled->surface) {
-			double _stretch_factor_x, _stretch_factor_y;
-			_stretch_factor_x = width / static_cast<double>(surface->w);
-			_stretch_factor_y = height / static_cast<double>(surface->h);
+			SDL_BlitScaled(surface, NULL, scaled->surface, NULL);
 
-			for(Uint32 y = 0; y < (Uint32)surface->h; y++) {
-				for(Uint32 x = 0; x < (Uint32)surface->w; x++) {
-					Color spixel = readPixel(x, y);
-					for(Uint32 o_y = 0; o_y < _stretch_factor_y; ++o_y) {
-						for(Uint32 o_x = 0; o_x < _stretch_factor_x; ++o_x) {
-							Uint32 dx = (Sint32)(_stretch_factor_x * x) + o_x;
-							Uint32 dy = (Sint32)(_stretch_factor_y * y) + o_y;
-							scaled->drawPixel(dx, dy, spixel);
-						}
-					}
-				}
-			}
 			// delete the old image and return the new one
 			this->unref();
 			return scaled;
@@ -153,47 +139,6 @@ Image* SDLSoftwareImage::resize(int width, int height) {
 	}
 
 	return NULL;
-}
-
-Color SDLSoftwareImage::readPixel(int x, int y) {
-	if (!surface) return Color();
-
-	SDL_LockSurface(surface);
-	int bpp = surface->format->BytesPerPixel;
-	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
-	Uint32 pixel;
-
-	switch (bpp) {
-		case 1:
-			pixel = *p;
-			break;
-
-		case 2:
-			pixel = *(Uint16 *)p;
-			break;
-
-		case 3:
-			if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-				pixel = p[0] << 16 | p[1] << 8 | p[2];
-			else
-				pixel = p[0] | p[1] << 8 | p[2] << 16;
-			break;
-
-		case 4:
-			pixel = *(Uint32 *)p;
-			break;
-
-		default:
-			SDL_UnlockSurface(surface);
-			return Color();
-	}
-
-	Uint8 r,g,b,a;
-	SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
-
-	SDL_UnlockSurface(surface);
-
-	return Color(r,g,b,a);
 }
 
 SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
