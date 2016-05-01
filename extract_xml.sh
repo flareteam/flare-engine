@@ -10,27 +10,27 @@ do
     # Handle CLASS
     if [ "${fields[0]}" == "CLASS" ]; then
 	if [ $HAVE_CLASS -eq 1 ]; then
-	    echo '  </attributes>'
-	    echo '</class>'
+	    echo '	  </attributes>'
+	    echo '	</class>'
 	fi
-	echo '<class name="'${fields[1]}'">'
+	echo '	<class name="'${fields[1]}'">'
 	HAVE_CLASS=1
-	echo '  <description>'${fields[2]}'</description>'
-	echo '  <attributes>'
+	echo '	  <description>'${fields[2]}'</description>'
+	echo '	  <attributes>'
     fi
     # Handle ATTR
     if [ "${fields[0]}" == "ATTR" ]; then
-	echo '    <attribute name="'${fields[1]}'" type="'${fields[2]}'">'${fields[3]}'</attribute>'
+	echo '		  <attribute name="'${fields[1]}'" type="'${fields[2]}'">'${fields[3]}'</attribute>'
     fi
     # Handle TYPE
     if [ "${fields[0]}" == "TYPE" ]; then
-	echo '    <type name="'${fields[1]}'">'${fields[2]}'</type>'
+	echo '		<type name="'${fields[1]}'">'${fields[2]}'</type>'
     fi
 done
 
 # close last class if available
 if [ $HAVE_CLASS -eq 1 ]; then
-    echo '</attributes>'
-    echo '</class>'
+    echo '	  </attributes>'
+    echo '	</class>'
 fi
 echo "</classes>"
