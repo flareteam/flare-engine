@@ -26,7 +26,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Class: Event
  */
 Event::Event()
-	: type(-1)
+	: type("")
+	, activate_type(-1)
 	, components(std::vector<Event_Component>())
 	, location(Rect())
 	, hotspot(Rect())
@@ -75,27 +76,31 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	// @CLASS EventManager|Description of events in maps/ and npcs/
 
 	if (infile.key == "type") {
-		// @ATTR event.type|[on_trigger:on_mapexit:on_leave:on_load:on_clear]|Type of map event.
+		// @ATTR event.type|string|(IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.
+		evnt->type = infile.val;
+	}
+	else if (infile.key == "activate") {
+		// @ATTR event.activate|[on_trigger:on_mapexit:on_leave:on_load:on_clear]|Set the state in which the event will be activated (map events only).
 		if (infile.val == "on_trigger") {
-			evnt->type = EVENT_ON_TRIGGER;
+			evnt->activate_type = EVENT_ON_TRIGGER;
 		}
 		else if (infile.val == "on_mapexit") {
 			// no need to set keep_after_trigger to false correctly, it's ignored anyway
-			evnt->type = EVENT_ON_MAPEXIT;
+			evnt->activate_type = EVENT_ON_MAPEXIT;
 		}
 		else if (infile.val == "on_leave") {
-			evnt->type = EVENT_ON_LEAVE;
+			evnt->activate_type = EVENT_ON_LEAVE;
 		}
 		else if (infile.val == "on_load") {
-			evnt->type = EVENT_ON_LOAD;
+			evnt->activate_type = EVENT_ON_LOAD;
 			evnt->keep_after_trigger = false;
 		}
 		else if (infile.val == "on_clear") {
-			evnt->type = EVENT_ON_CLEAR;
+			evnt->activate_type = EVENT_ON_CLEAR;
 			evnt->keep_after_trigger = false;
 		}
 		else {
-			infile.error("EventManager: Event type '%s' unknown, change to \"on_trigger\" to suppress this warning.", infile.val.c_str());
+			infile.error("EventManager: Event activation type '%s' unknown, change to \"on_trigger\" to suppress this warning.", infile.val.c_str());
 		}
 	}
 	else if (infile.key == "location") {
@@ -638,7 +643,7 @@ bool EventManager::executeEvent(Event &ev) {
 				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ev.type == EVENT_ON_LOAD || static_cast<bool>(ec->z) == true)
+			if (ev.activate_type == EVENT_ON_LOAD || static_cast<bool>(ec->z) == true)
 				loop = true;
 
 			SoundManager::SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");

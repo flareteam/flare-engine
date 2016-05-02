@@ -257,7 +257,11 @@ void Map::loadLayer(FileParser &infile) {
 
 void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	if (infile.key == "type") {
-		// @ATTR enemygroup.type|string|The category of enemies that will spawn in this group.
+		// @ATTR enemygroup.type|string|(IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.
+		group->type = infile.val;
+	}
+	else if (infile.key == "category") {
+		// @ATTR enemygroup.category|string|The category of enemies that will spawn in this group.
 		group->category = infile.val;
 	}
 	else if (infile.key == "level") {
@@ -329,7 +333,11 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 void Map::loadNPC(FileParser &infile) {
 	std::string s;
 	if (infile.key == "type") {
-		// @ATTR npc.type|string|Filename of an NPC definition.
+		// @ATTR npc.type|string|(IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.
+		npcs.back().type = infile.val;
+	}
+	else if (infile.key == "filename") {
+		// @ATTR npc.filename|string|Filename of an NPC definition.
 		npcs.back().id = infile.val;
 	}
 	else if (infile.key == "requires_status") {

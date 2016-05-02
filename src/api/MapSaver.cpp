@@ -175,14 +175,24 @@ void MapSaver::writeEnemies(std::ofstream& map_file)
 	while (!group.empty())
 	{
 		map_file << "[enemy]" << std::endl;
-		map_file << "type=" << group.front().category << std::endl;
+
+		if (group.front().type == "")
+		{
+			map_file << "type=enemy" << std::endl;
+		}
+		else
+		{
+			map_file << "type=" << group.front().type << std::endl;
+		}
+
+		map_file << "location=" << group.front().pos.x << "," << group.front().pos.y << "," << group.front().area.x << "," << group.front().area.y << std::endl;
+
+		map_file << "category=" << group.front().category << std::endl;
 
 		if (group.front().levelmin != 0 || group.front().levelmax != 0)
 		{
 			map_file << "level=" << group.front().levelmin << "," << group.front().levelmax << std::endl;
 		}
-
-		map_file << "location=" << group.front().pos.x << "," << group.front().pos.y << "," << group.front().area.x << "," << group.front().area.y << std::endl;
 
 		if (group.front().numbermin != 1 || group.front().numbermax != 1)
 		{
@@ -243,8 +253,18 @@ void MapSaver::writeNPCs(std::ofstream& map_file)
 	while (!npcs.empty())
 	{
 		map_file << "[npc]" << std::endl;
-		map_file << "type=" << npcs.front().id << std::endl;
+
+		if (npcs.front().type == "")
+		{
+			map_file << "type=npc" << std::endl;
+		}
+		else
+		{
+			map_file << "type=" << npcs.front().type << std::endl;
+		}
+
 		map_file << "location=" << npcs.front().pos.x - 0.5f << "," << npcs.front().pos.y - 0.5f << ",1,1" << std::endl;
+		map_file << "filename=" << npcs.front.id << std::endl;
 
 		for (unsigned j = 0; j < npcs.front().requires_status.size(); j++)
 		{
@@ -266,10 +286,39 @@ void MapSaver::writeEvents(std::ofstream& map_file)
 	for (unsigned i = 0; i < map->events.size(); i++)
 	{
 		map_file << "[event]" << std::endl;
-		map_file << "type=" << map->events[i].type << std::endl;
+
+		if (map->events[i].type == "")
+		{
+			map_file << "type=event" << std::endl;
+		}
+		else
+		{
+			map_file << "type=" << map->events[i].type << std::endl;
+		}
 
 		Rect location = map->events[i].location;
 		map_file << "location=" << location.x << "," << location.y << "," << location.w << "," << location.h  << std::endl;
+
+		if (map->events[i].activate_type == EVENT_ON_TRIGGER)
+		{
+			map_file << "activate=on_trigger" << std::endl;
+		}
+		else if (map->events[i].activate_type == EVENT_ON_MAPEXIT)
+		{
+			map_file << "activate=on_mapexit" << std::endl;
+		}
+		else if (map->events[i].activate_type == EVENT_ON_LEAVE)
+		{
+			map_file << "activate=on_leave" << std::endl;
+		}
+		else if (map->events[i].activate_type == EVENT_ON_LOAD)
+		{
+			map_file << "activate=on_load" << std::endl;
+		}
+		else if (map->events[i].activate_type == EVENT_ON_CLEAR)
+		{
+			map_file << "activate=on_clear" << std::endl;
+		}
 
 		Rect hotspot = map->events[i].hotspot;
 		if (hotspot.x == location.x && hotspot.y == location.y && hotspot.w == location.w && hotspot.h == location.h)

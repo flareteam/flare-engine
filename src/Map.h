@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class Map_Group {
 public:
+	std::string type;
 	std::string category;
 	Point pos;
 	Point area;
@@ -47,7 +48,8 @@ public:
 	std::vector<std::string> requires_not_status;
 
 	Map_Group()
-		: category("")
+		: type("")
+		, category("")
 		, pos()
 		, area(1,1)
 		, levelmin(0)
@@ -65,13 +67,15 @@ public:
 
 class Map_NPC {
 public:
+	std::string type;
 	std::string id;
 	FPoint pos;
 	std::vector<std::string> requires_status;
 	std::vector<std::string> requires_not_status;
 
 	Map_NPC()
-		: id("")
+		: type("")
+		, id("")
 		, pos()
 		, requires_status()
 		, requires_not_status() {

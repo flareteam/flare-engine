@@ -88,7 +88,7 @@ void NPCManager::handleNewMap() {
 		Event_Component ec;
 
 		// the event hotspot is a 1x1 tile at the npc's feet
-		ev.type = EVENT_ON_TRIGGER;
+		ev.activate_type = EVENT_ON_TRIGGER;
 		ev.keep_after_trigger = true;
 		Rect location;
 		location.x = static_cast<int>(npc->pos.x);
