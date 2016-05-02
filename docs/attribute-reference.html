@@ -208,7 +208,9 @@ body {
 
 <p>Description of events in maps/ and npcs/</p>
 
-<p><strong>event.type</strong>, <em>[on_trigger:on_mapexit:on_leave:on_load:on_clear]</em>, Type of map event.</p>
+<p><strong>event.type</strong>, <em>string</em>, (IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.</p>
+
+<p><strong>event.activate</strong>, <em>[on_trigger:on_mapexit:on_leave:on_load:on_clear]</em>, Set the state in which the event will be activated (map events only).</p>
 
 <p><strong>event.location</strong>, <em>[x,y,w,h]</em>, Defines the location area for the event.</p>
 
@@ -756,7 +758,9 @@ body {
 
 <p><strong>layer.data</strong>, <em>raw</em>, Raw map layer data</p>
 
-<p><strong>enemygroup.type</strong>, <em>string</em>, The category of enemies that will spawn in this group.</p>
+<p><strong>enemygroup.type</strong>, <em>string</em>, (IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.</p>
+
+<p><strong>enemygroup.category</strong>, <em>string</em>, The category of enemies that will spawn in this group.</p>
 
 <p><strong>enemygroup.level</strong>, <em>[min(integer), max(integer)]</em>, Defines the level range of enemies in group. If only one number is given, it's the exact level.</p>
 
@@ -776,7 +780,9 @@ body {
 
 <p><strong>enemygroup.requires_not_status</strong>, <em>string</em>, Status required to be missing for loading enemies</p>
 
-<p><strong>npc.type</strong>, <em>string</em>, Filename of an NPC definition.</p>
+<p><strong>npc.type</strong>, <em>string</em>, (IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.</p>
+
+<p><strong>npc.filename</strong>, <em>string</em>, Filename of an NPC definition.</p>
 
 <p><strong>npc.requires_status</strong>, <em>string</em>, Status required for NPC load. There can be multiple states, separated by comma</p>
 
