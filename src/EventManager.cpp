@@ -569,8 +569,6 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
  * @return Returns true if the event shall not be run again.
  */
 bool EventManager::executeEvent(Event &ev) {
-	if(&ev == NULL) return false;
-
 	// skip executing events that are on cooldown
 	if (ev.cooldown_ticks > 0) return false;
 

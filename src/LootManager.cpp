@@ -298,7 +298,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 				p = hero->pos;
 			}
 			else {
-				if (src.x == p.x && src.y == p.y)
+				if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
 					p = hero->pos;
 
 				mapr->collider.block(p.x, p.y, false);
@@ -371,7 +371,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			p = hero->pos;
 		}
 		else {
-			if (src.x == p.x && src.y == p.y)
+			if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
 				p = hero->pos;
 
 			mapr->collider.block(p.x, p.y, false);

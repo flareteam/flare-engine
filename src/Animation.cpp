@@ -137,16 +137,11 @@ void Animation::addFrame(unsigned short index, unsigned short kind, const Rect& 
 }
 
 void Animation::advanceFrame() {
-
-	if (!this)
-		return;
-
 	if (frames.empty()) {
 		cur_frame_index = 0;
 		times_played++;
 		return;
 	}
-
 
 	unsigned short last_base_index = static_cast<unsigned short>(frames.size()-1);
 	switch(type) {
@@ -196,7 +191,7 @@ void Animation::advanceFrame() {
 
 Renderable Animation::getCurrentFrame(int kind) {
 	Renderable r;
-	if (this && !frames.empty()) {
+	if (!frames.empty()) {
 		const int index = (max_kinds*frames[cur_frame_index]) + kind;
 		r.src.x = gfx[index].x;
 		r.src.y = gfx[index].y;
