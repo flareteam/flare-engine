@@ -107,7 +107,7 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 	std::string value = val;
 
 	if (key == "pos") {
-		// @ATTR pos|x (integer), y (integer), w (integer), h (integer)|Menu position and dimensions
+		// @ATTR pos|rectangle|Menu position and dimensions
 		value = value + ',';
 		window_area = toRect(value);
 		setWindowPos(window_area.x, window_area.y);
@@ -117,11 +117,11 @@ bool Menu::parseMenuKey(const std::string &key, const std::string &val) {
 		alignment = parse_alignment(value);
 	}
 	else if (key == "soundfx_open") {
-		// @ATTR soundfx_open|string|Filename of a sound to play when opening this menu.
+		// @ATTR soundfx_open|filename|Filename of a sound to play when opening this menu.
 		sfx_open = snd->load(value, "Menu open tab");
 	}
 	else if (key == "soundfx_close") {
-		// @ATTR soundfx_close|string|Filename of a sound to play when closing this menu.
+		// @ATTR soundfx_close|filename|Filename of a sound to play when closing this menu.
 		sfx_close = snd->load(value, "Menu close tab");
 	}
 	else {

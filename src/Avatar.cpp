@@ -99,7 +99,7 @@ Avatar::Avatar()
 			if (step_def.empty()) continue;
 
 			if (infile.key == "step") {
-				// @ATTR step|string|Filename of a step sound effect.
+				// @ATTR step|filename|Filename of a step sound effect.
 				step_def.back().steps.push_back(infile.val);
 			}
 		}
@@ -172,7 +172,8 @@ void Avatar::loadLayerDefinitions() {
 	if (infile.open("engine/hero_layers.txt")) {
 		while(infile.next()) {
 			if (infile.key == "layer") {
-				// @ATTR layer|direction (integer), string, ...]|Defines the hero avatar sprite layer
+				// @ATTR layer|int, list(string) : Direction, Layer name(s)|Defines the hero avatar sprite layer
+				// TODO use parse_direction() here?
 				unsigned dir = popFirstInt(infile.val);
 				if (dir>7) {
 					infile.error("Avatar: Hero layer direction must be in range [0,7]");

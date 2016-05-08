@@ -251,7 +251,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 				scale_graphics = toBool(infile.val);
 			}
 			else if (infile.key == "caption_margins") {
-				// @ATTR caption_margins|[x,y]|Percentage-based margins for the caption text based on screen size
+				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
 				caption_margins.x = toFloat(infile.nextValue())/100.0f;
 				caption_margins.y = toFloat(infile.val)/100.0f;
 			}
@@ -272,7 +272,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 				sc.s = msg->get(infile.val);
 			}
 			else if (infile.key == "image") {
-				// @ATTR scene.image|string|Filename of an image that will be shown.
+				// @ATTR scene.image|filename|Filename of an image that will be shown.
 				sc.type = infile.key;
 				sc.s = infile.val;
 			}
@@ -282,7 +282,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 				sc.x = parse_duration(infile.val);
 			}
 			else if (infile.key == "soundfx") {
-				// @ATTR scene.soundfx|string|Filename of a sound that will be played
+				// @ATTR scene.soundfx|filename|Filename of a sound that will be played
 				sc.type = infile.key;
 				sc.s = infile.val;
 			}

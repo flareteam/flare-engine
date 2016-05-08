@@ -64,12 +64,13 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR close|x (integer), y (integer)|Position of the close button.
+			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR equipment_slot|x (integer), y (integer), size (integer), slot_type (string)|Position and item type of an equipment slot.
+			// @ATTR equipment_slot|repeatable(int, int, int, string) : X, Y, Size, Slot Type|Position and item type of an equipment slot.
+			// TODO is "Size" needed here? We could just use ICON_SIZE or the size of WidgetSlot
 			else if(infile.key == "equipment_slot") {
 				Rect area;
 				Point pos;
@@ -81,23 +82,24 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 				equipped_pos.push_back(pos);
 				slot_type.push_back(popFirstString(infile.val));
 			}
-			// @ATTR slot_name|string|The displayed name of the last defined equipment slot.
+			// @ATTR slot_name|repeatable(string)|The displayed name of the last defined equipment slot.
+			// TODO merge this with equipment_slot?
 			else if(infile.key == "slot_name") slot_desc.push_back(infile.val);
-			// @ATTR carried_area|x (integer), y (integer)|Position of the first normal inventory slot.
+			// @ATTR carried_area|point|Position of the first normal inventory slot.
 			else if(infile.key == "carried_area") {
 				Point pos;
 				carried_pos.x = carried_area.x = popFirstInt(infile.val);
 				carried_pos.y = carried_area.y = popFirstInt(infile.val);
 			}
-			// @ATTR carried_cols|integer|The number of columns for the normal inventory.
+			// @ATTR carried_cols|int|The number of columns for the normal inventory.
 			else if (infile.key == "carried_cols") carried_cols = std::max(1, toInt(infile.val));
-			// @ATTR carried_rows|integer|The number of rows for the normal inventory.
+			// @ATTR carried_rows|int|The number of rows for the normal inventory.
 			else if (infile.key == "carried_rows") carried_rows = std::max(1, toInt(infile.val));
 			// @ATTR label_title|label|Position of the "Inventory" label.
 			else if (infile.key == "label_title") title =  eatLabelInfo(infile.val);
 			// @ATTR currency|label|Position of the label that displays the total currency being carried.
 			else if (infile.key == "currency") currency_lbl =  eatLabelInfo(infile.val);
-			// @ATTR help|x (integer), y (integer), w (integer), h (integer)|A mouse-over area that displays some help text for inventory shortcuts.
+			// @ATTR help|rectangle|A mouse-over area that displays some help text for inventory shortcuts.
 			else if (infile.key == "help") help_pos = toRect(infile.val);
 
 			else infile.error("MenuInventory: '%s' is not a valid key.", infile.key.c_str());

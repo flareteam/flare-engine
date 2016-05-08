@@ -54,15 +54,15 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 			}
 
 			if (infile.key == "level") {
-				// @ATTR level|integer|Level of the enemy
+				// @ATTR level|int|Level of the enemy
 				new_enemy.level = toInt(infile.val);
 			}
 			else if (infile.key == "rarity") {
-				// @ATTR rarity|[common,uncommon,rare]|Enemy rarity
+				// @ATTR rarity|["common", "uncommon", "rare"]|Enemy rarity
 				new_enemy.rarity = infile.val;
 			}
 			else if (infile.key == "categories") {
-				// @ATTR categories|string,...|Comma separated list of enemy categories
+				// @ATTR categories|list(string)|Comma separated list of enemy categories
 				std::string cat;
 				while ( (cat = infile.nextValue()) != "") {
 					_categories[cat].push_back(new_enemy);

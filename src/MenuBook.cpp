@@ -55,13 +55,13 @@ void MenuBook::loadBook() {
 
 			infile.val = infile.val + ',';
 
-			// @ATTR close|x (integer), y (integer)|Position of the close button.
+			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				closeButton->setBasePos(x, y);
 			}
-			// @ATTR background|string|Filename for the background image.
+			// @ATTR background|filename|Filename for the background image.
 			else if (infile.key == "background") {
 				setBackground(popFirstString(infile.val));
 			}
@@ -122,11 +122,11 @@ void MenuBook::loadBook() {
 }
 
 void MenuBook::loadImage(FileParser &infile) {
-	// @ATTR image.image_pos|x (integer), y (integer)|Position of the image.
+	// @ATTR image.image_pos|point|Position of the image.
 	if (infile.key == "image_pos") {
 		image_dest.back() = toPoint(infile.val);
 	}
-	// @ATTR image.image|string|Filename of the image.
+	// @ATTR image.image|filename|Filename of the image.
 	else if (infile.key == "image") {
 		Image *graphics;
 		graphics = render_device->loadImage(popFirstString(infile.val));
@@ -141,7 +141,7 @@ void MenuBook::loadImage(FileParser &infile) {
 }
 
 void MenuBook::loadText(FileParser &infile) {
-	// @ATTR text.text_pos|x (integer), y (integer), w (integer), [left:center:right]|Position of the text.
+	// @ATTR text.text_pos|int, int, int, ["left", "center", "right"] : X, Y, Width, Text justify|Position of the text.
 	if (infile.key == "text_pos") {
 		size.back().x = popFirstInt(infile.val);
 		size.back().y = popFirstInt(infile.val);
@@ -152,7 +152,7 @@ void MenuBook::loadText(FileParser &infile) {
 		else if (_justify == "center") justify.back() = JUSTIFY_CENTER;
 		else if (_justify == "right") justify.back() = JUSTIFY_RIGHT;
 	}
-	// @ATTR text.text_font|r (integer), g (integer), b (integer), style (string)|Font color and style.
+	// @ATTR text.text_font|color, string : Font color, Font style|Font color and style.
 	else if (infile.key == "text_font") {
 		Color color;
 		color.r = static_cast<Uint8>(popFirstInt(infile.val));

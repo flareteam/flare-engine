@@ -113,33 +113,33 @@ GameStateLoad::GameStateLoad() : GameState()
 	// @CLASS GameStateLoad|Description of menus/gameload.txt
 	if (infile.open("menus/gameload.txt")) {
 		while (infile.next()) {
-			// @ATTR button_new|x (integer), y (integer)|Position of the "New Game" button.
+			// @ATTR button_new|point|Position of the "New Game" button.
 			if (infile.key == "button_new") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				button_new->setBasePos(x, y);
 			}
-			// @ATTR button_load|x (integer), y (integer)|Position of the "Load Game" button.
+			// @ATTR button_load|point|Position of the "Load Game" button.
 			else if (infile.key == "button_load") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				button_load->setBasePos(x, y);
 			}
-			// @ATTR button_delete|x (integer), y (integer)|Position of the "Delete Save" button.
+			// @ATTR button_delete|point|Position of the "Delete Save" button.
 			else if (infile.key == "button_delete") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				button_delete->setBasePos(x, y);
 			}
-			// @ATTR portrait|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the portrait image.
+			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
 				portrait_dest = toRect(infile.val);
 			}
-			// @ATTR gameslot|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the first game slot.
+			// @ATTR gameslot|rectangle|Position and dimensions of the first game slot.
 			else if (infile.key == "gameslot") {
 				gameslot_pos = toRect(infile.val);
 			}
-			// @ATTR preview|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the preview area in the first game slot. Only 'h' is used?
+			// @ATTR preview|rectangle|Position and dimensions of the preview area in the first game slot. Only 'height' is used?
 			else if (infile.key == "preview") {
 				preview_pos = toRect(infile.val);
 			}
@@ -163,11 +163,12 @@ GameStateLoad::GameStateLoad() : GameState()
 			else if (infile.key == "loading_label") {
 				loading_pos = eatLabelInfo(infile.val);
 			}
-			// @ATTR sprite|x (integer), y (integer)|Position for the avatar preview image in each slot
+			// @ATTR sprite|point|Position for the avatar preview image in each slot
+			// TODO deprecate this in favor of 'preview'?
 			else if (infile.key == "sprite") {
 				sprites_pos = toPoint(infile.val);
 			}
-			// @ATTR visible_slots|integer|The maximum numbers of visible save slots.
+			// @ATTR visible_slots|int|The maximum numbers of visible save slots.
 			else if (infile.key == "visible_slots") {
 				game_slot_max = toInt(infile.val);
 

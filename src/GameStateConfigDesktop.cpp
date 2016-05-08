@@ -180,54 +180,54 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		language_lstb->scrollbar_offset = x1;
 	}
 	else if (infile.key == "fullscreen") {
-		// @ATTR fullscreen|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Full Screen Mode" checkbox relative to the frame.
+		// @ATTR fullscreen|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Full Screen Mode" checkbox relative to the frame.
 		placeLabeledWidget(fullscreen_lb, fullscreen_cb, x1, y1, x2, y2, msg->get("Full Screen Mode"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "mouse_move") {
-		// @ATTR mouse_move|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Move hero using mouse" checkbox relative to the frame.
+		// @ATTR mouse_move|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Move hero using mouse" checkbox relative to the frame.
 		placeLabeledWidget(mouse_move_lb, mouse_move_cb, x1, y1, x2, y2, msg->get("Move hero using mouse"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "hwsurface") {
-		// @ATTR hwsurface|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Hardware surfaces" checkbox relative to the frame.
+		// @ATTR hwsurface|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Hardware surfaces" checkbox relative to the frame.
 		placeLabeledWidget(hwsurface_lb, hwsurface_cb, x1, y1, x2, y2, msg->get("Hardware surfaces"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "vsync") {
-		// @ATTR vsync|label x (integer), label y (integer), x (integer), y (integer)|Position of the "V-Sync" checkbox relative to the frame.
+		// @ATTR vsync|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "V-Sync" checkbox relative to the frame.
 		placeLabeledWidget(vsync_lb, vsync_cb, x1, y1, x2, y2, msg->get("V-Sync"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "texture_filter") {
-		// @ATTR texture_filter|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Texture Filtering" checkbox relative to the frame.
+		// @ATTR texture_filter|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Texture Filtering" checkbox relative to the frame.
 		placeLabeledWidget(texture_filter_lb, texture_filter_cb, x1, y1, x2, y2, msg->get("Texture Filtering"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "change_gamma") {
-		// @ATTR change_gamma|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Allow changing gamma" checkbox relative to the frame.
+		// @ATTR change_gamma|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Allow changing gamma" checkbox relative to the frame.
 		placeLabeledWidget(change_gamma_lb, change_gamma_cb, x1, y1, x2, y2, msg->get("Allow changing gamma"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "gamma") {
-		// @ATTR gamma|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Gamma" slider relative to the frame.
+		// @ATTR gamma|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Gamma" slider relative to the frame.
 		placeLabeledWidget(gamma_lb, gamma_sl, x1, y1, x2, y2, msg->get("Gamma"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "hws_note") {
-		// @ATTR hws_note|x (integer), y (integer)|Position of the "Disable for performance" label (next to Hardware surfaces) relative to the frame.
+		// @ATTR hws_note|point|Position of the "Disable for performance" label (next to Hardware surfaces) relative to the frame.
 		hws_note_lb->setBasePos(x1, y1);
 		hws_note_lb->set(msg->get("Disable for performance"));
 	}
 	else if (infile.key == "dbuf_note") {
-		// @ATTR dbuf_note|x (integer), y (integer)|Position of the "Disable for performance" label (next to Double buffering) relative to the frame.
+		// @ATTR dbuf_note|point|Position of the "Disable for performance" label (next to Double buffering) relative to the frame.
 		dbuf_note_lb->setBasePos(x1, y1);
 		dbuf_note_lb->set(msg->get("Disable for performance"));
 	}
 	else if (infile.key == "test_note") {
-		// @ATTR test_note|x (integer), y (integer)|Position of the "Experimental" label relative to the frame.
+		// @ATTR test_note|point|Position of the "Experimental" label relative to the frame.
 		test_note_lb->setBasePos(x1, y1);
 		test_note_lb->set(msg->get("Experimental"));
 	}
 	else if (infile.key == "enable_joystick") {
-		// @ATTR enable_joystick|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Use joystick" checkbox relative to the frame.
+		// @ATTR enable_joystick|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Use joystick" checkbox relative to the frame.
 		placeLabeledWidget(enable_joystick_lb, enable_joystick_cb, x1, y1, x2, y2, msg->get("Use joystick"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "joystick_device") {
-		// @ATTR joystick_device|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Joystick" list box relative to the frame.
+		// @ATTR joystick_device|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick" list box relative to the frame.
 		placeLabeledWidget(joystick_device_lb, joystick_device_lstb, x1, y1, x2, y2, msg->get("Joystick"));
 
 		for(int i = 0; i < inpt->getNumJoysticks(); i++) {
@@ -237,106 +237,106 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 		}
 	}
 	else if (infile.key == "mouse_aim") {
-		// @ATTR mouse_aim|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Mouse aim" checkbox relative to the frame.
+		// @ATTR mouse_aim|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mouse aim" checkbox relative to the frame.
 		placeLabeledWidget(mouse_aim_lb, mouse_aim_cb, x1, y1, x2, y2, msg->get("Mouse aim"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "no_mouse") {
-		// @ATTR no_mouse|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Do not use mouse" checkbox relative to the frame.
+		// @ATTR no_mouse|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Do not use mouse" checkbox relative to the frame.
 		placeLabeledWidget(no_mouse_lb, no_mouse_cb, x1, y1, x2, y2, msg->get("Do not use mouse"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "joystick_deadzone") {
-		// @ATTR joystick_deadzone|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Joystick Deadzone" slider relative to the frame.
+		// @ATTR joystick_deadzone|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Joystick Deadzone" slider relative to the frame.
 		placeLabeledWidget(joystick_deadzone_lb, joystick_deadzone_sl, x1, y1, x2, y2, msg->get("Joystick Deadzone"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "handheld_note") {
-		// @ATTR handheld_note|x (integer), y (integer)|Position of the "For handheld devices" label relative to the frame.
+		// @ATTR handheld_note|point|Position of the "For handheld devices" label relative to the frame.
 		handheld_note_lb->setBasePos(x1, y1);
 		handheld_note_lb->set(msg->get("For handheld devices"));
 	}
 	else if (infile.key == "secondary_offset") {
-		// @ATTR secondary_offset|x (integer), y (integer)|Offset of the second (and third) columns of keybinds.
+		// @ATTR secondary_offset|point|Offset of the second (and third) columns of keybinds.
 		secondary_offset.x = x1;
 		secondary_offset.y = y1;
 	}
 	else if (infile.key == "keybinds_bg_color") {
-		// @ATTR keybinds_bg_color|r (integer), g (integer), b (integer)|Background color for the keybindings scrollbox.
+		// @ATTR keybinds_bg_color|color|Background color for the keybindings scrollbox.
 		scrollpane_color.r = static_cast<Uint8>(x1);
 		scrollpane_color.g = static_cast<Uint8>(y1);
 		scrollpane_color.b = static_cast<Uint8>(x2);
 	}
 	else if (infile.key == "scrollpane") {
-		// @ATTR scrollpane|x (integer), y (integer), w (integer), h (integer)|Position of the keybinding scrollbox relative to the frame.
+		// @ATTR scrollpane|rectangle|Position of the keybinding scrollbox relative to the frame.
 		scrollpane.x = x1;
 		scrollpane.y = y1;
 		scrollpane.w = x2;
 		scrollpane.h = y2;
 	}
 	else if (infile.key == "scrollpane_contents") {
-		// @ATTR scrollpane_contents|integer|The vertical size of the keybinding scrollbox's contents.
+		// @ATTR scrollpane_contents|int|The vertical size of the keybinding scrollbox's contents.
 		scrollpane_contents = x1;
 	}
 
-	// @ATTR cancel|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Cancel" keybind relative to the keybinding scrollbox.
+	// @ATTR cancel|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Cancel" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "cancel") keybind_num = CANCEL;
-	// @ATTR accept|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Accept" keybind relative to the keybinding scrollbox.
+	// @ATTR accept|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Accept" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "accept") keybind_num = ACCEPT;
-	// @ATTR up|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Up" keybind relative to the keybinding scrollbox.
+	// @ATTR up|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Up" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "up") keybind_num = UP;
-	// @ATTR down|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Down" keybind relative to the keybinding scrollbox.
+	// @ATTR down|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Down" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "down") keybind_num = DOWN;
-	// @ATTR left|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Left" keybind relative to the keybinding scrollbox.
+	// @ATTR left|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Left" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "left") keybind_num = LEFT;
-	// @ATTR right|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Right" keybind relative to the keybinding scrollbox.
+	// @ATTR right|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Right" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "right") keybind_num = RIGHT;
-	// @ATTR bar1|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar1" keybind relative to the keybinding scrollbox.
+	// @ATTR bar1|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar1" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar1") keybind_num = BAR_1;
-	// @ATTR bar2|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar2" keybind relative to the keybinding scrollbox.
+	// @ATTR bar2|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar2" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar2") keybind_num = BAR_2;
-	// @ATTR bar3|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar3" keybind relative to the keybinding scrollbox.
+	// @ATTR bar3|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar3" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar3") keybind_num = BAR_3;
-	// @ATTR bar4|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar4" keybind relative to the keybinding scrollbox.
+	// @ATTR bar4|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar4" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar4") keybind_num = BAR_4;
-	// @ATTR bar5|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar5" keybind relative to the keybinding scrollbox.
+	// @ATTR bar5|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar5" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar5") keybind_num = BAR_5;
-	// @ATTR bar6|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar6" keybind relative to the keybinding scrollbox.
+	// @ATTR bar6|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar6" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar6") keybind_num = BAR_6;
-	// @ATTR bar7|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar7" keybind relative to the keybinding scrollbox.
+	// @ATTR bar7|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar7" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar7") keybind_num = BAR_7;
-	// @ATTR Bar8|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar8" keybind relative to the keybinding scrollbox.
+	// @ATTR Bar8|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar8" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar8") keybind_num = BAR_8;
-	// @ATTR bar9|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar9" keybind relative to the keybinding scrollbox.
+	// @ATTR bar9|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar9" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar9") keybind_num = BAR_9;
-	// @ATTR bar0|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Bar0" keybind relative to the keybinding scrollbox.
+	// @ATTR bar0|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Bar0" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "bar0") keybind_num = BAR_0;
-	// @ATTR main1|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Main1" keybind relative to the keybinding scrollbox.
+	// @ATTR main1|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Main1" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "main1") keybind_num = MAIN1;
-	// @ATTR main2|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Main2" keybind relative to the keybinding scrollbox.
+	// @ATTR main2|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Main2" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "main2") keybind_num = MAIN2;
-	// @ATTR character|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Character" keybind relative to the keybinding scrollbox.
+	// @ATTR character|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Character" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "character") keybind_num = CHARACTER;
-	// @ATTR inventory|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Inventory" keybind relative to the keybinding scrollbox.
+	// @ATTR inventory|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Inventory" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "inventory") keybind_num = INVENTORY;
-	// @ATTR powers|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Powers" keybind relative to the keybinding scrollbox.
+	// @ATTR powers|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Powers" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "powers") keybind_num = POWERS;
-	// @ATTR log|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Log" keybind relative to the keybinding scrollbox.
+	// @ATTR log|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Log" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "log") keybind_num = LOG;
-	// @ATTR ctrl|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Ctrl" keybind relative to the keybinding scrollbox.
+	// @ATTR ctrl|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Ctrl" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "ctrl") keybind_num = CTRL;
-	// @ATTR shift|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Shift" keybind relative to the keybinding scrollbox.
+	// @ATTR shift|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Shift" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "shift") keybind_num = SHIFT;
-	// @ATTR alt|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Alt" keybind relative to the keybinding scrollbox.
+	// @ATTR alt|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Alt" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "alt") keybind_num = ALT;
-	// @ATTR delete|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Delete" keybind relative to the keybinding scrollbox.
+	// @ATTR delete|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Delete" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "delete") keybind_num = DEL;
-	// @ATTR actionbar|label x (integer), label y (integer), x (integer), y (integer)|Position of the "ActionBar Accept" keybind relative to the keybinding scrollbox.
+	// @ATTR actionbar|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Accept" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "actionbar") keybind_num = ACTIONBAR;
-	// @ATTR actionbar_back|label x (integer), label y (integer), x (integer), y (integer)|Position of the "ActionBar Left" keybind relative to the keybinding scrollbox.
+	// @ATTR actionbar_back|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Left" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "actionbar_back") keybind_num = ACTIONBAR_BACK;
-	// @ATTR actionbar_forward|label x (integer), label y (integer), x (integer), y (integer)|Position of the "ActionBar Right" keybind relative to the keybinding scrollbox.
+	// @ATTR actionbar_forward|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Right" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "actionbar_forward") keybind_num = ACTIONBAR_FORWARD;
-	// @ATTR actionbar_use|label x (integer), label y (integer), x (integer), y (integer)|Position of the "ActionBar Use" keybind relative to the keybinding scrollbox.
+	// @ATTR actionbar_use|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "ActionBar Use" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "actionbar_use") keybind_num = ACTIONBAR_USE;
-	// @ATTR developer_menu|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Developer Menu" keybind relative to the keybinding scrollbox.
+	// @ATTR developer_menu|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Menu" keybind relative to the keybinding scrollbox.
 	else if (infile.key == "developer_menu") keybind_num = DEVELOPER_MENU;
 
 	else return false;

@@ -246,14 +246,14 @@ void loadTilesetSettings() {
 	if (infile.open("engine/tileset_config.txt", true, "Unable to open engine/tileset_config.txt! Defaulting to 64x32 isometric tiles.")) {
 		while (infile.next()) {
 			if (infile.key == "tile_size") {
-				// @ATTR tile_size|w (integet), h (integer)|The width and height of a tile.
+				// @ATTR tile_size|int, int : Width, Height|The width and height of a tile.
 				TILE_W = static_cast<unsigned short>(toInt(infile.nextValue()));
 				TILE_H = static_cast<unsigned short>(toInt(infile.nextValue()));
 				TILE_W_HALF = TILE_W /2;
 				TILE_H_HALF = TILE_H /2;
 			}
 			else if (infile.key == "orientation") {
-				// @ATTR orientation|[isometric, orthogonal]|The perspective of tiles; isometric or orthogonal.
+				// @ATTR orientation|["isometric", "orthogonal"]|The perspective of tiles; isometric or orthogonal.
 				if (infile.val == "isometric")
 					TILESET_ORIENTATION = TILESET_ISOMETRIC;
 				else if (infile.val == "orthogonal")
@@ -346,16 +346,16 @@ void loadMiscSettings() {
 	// @CLASS Settings: Misc|Description of engine/misc.txt
 	if (infile.open("engine/misc.txt")) {
 		while (infile.next()) {
-			// @ATTR save_hpmp|boolean|When saving the game, keep the hero's current HP and MP.
+			// @ATTR save_hpmp|bool|When saving the game, keep the hero's current HP and MP.
 			if (infile.key == "save_hpmp")
 				SAVE_HPMP = toBool(infile.val);
 			// @ATTR corpse_timeout|duration|Duration that a corpse can exist on the map in 'ms' or 's'.
 			else if (infile.key == "corpse_timeout")
 				CORPSE_TIMEOUT = parse_duration(infile.val);
-			// @ATTR sell_without_vendor|boolean|Allows selling items when not at a vendor via CTRL-Click.
+			// @ATTR sell_without_vendor|bool|Allows selling items when not at a vendor via CTRL-Click.
 			else if (infile.key == "sell_without_vendor")
 				SELL_WITHOUT_VENDOR = toBool(infile.val);
-			// @ATTR aim_assist|integer|The pixel offset for powers that use aim_assist.
+			// @ATTR aim_assist|int|The pixel offset for powers that use aim_assist.
 			else if (infile.key == "aim_assist")
 				AIM_ASSIST = toInt(infile.val);
 			// @ATTR window_title|string|Sets the text in the window's titlebar.
@@ -364,20 +364,20 @@ void loadMiscSettings() {
 			// @ATTR save_prefix|string|A string that's prepended to save filenames to prevent conflicts between mods.
 			else if (infile.key == "save_prefix")
 				SAVE_PREFIX = infile.val;
-			// @ATTR sound_falloff|integer|The maximum radius in tiles that any single sound is audible.
+			// @ATTR sound_falloff|int|The maximum radius in tiles that any single sound is audible.
 			else if (infile.key == "sound_falloff")
 				SOUND_FALLOFF = toInt(infile.val);
-			// @ATTR party_exp_percentage|integer|The percentage of XP given to allies.
+			// @ATTR party_exp_percentage|int|The percentage of XP given to allies.
 			else if (infile.key == "party_exp_percentage")
 				PARTY_EXP_PERCENTAGE = toInt(infile.val);
-			// @ATTR enable_ally_collision|boolean|Allows allies to block the player's path.
+			// @ATTR enable_ally_collision|bool|Allows allies to block the player's path.
 			else if (infile.key == "enable_ally_collision")
 				ENABLE_ALLY_COLLISION = toBool(infile.val);
-			// @ATTR enable_ally_collision_ai|boolean|Allows allies to block the path of other AI creatures.
+			// @ATTR enable_ally_collision_ai|bool|Allows allies to block the path of other AI creatures.
 			else if (infile.key == "enable_ally_collision_ai")
 				ENABLE_ALLY_COLLISION_AI = toBool(infile.val);
 			else if (infile.key == "currency_id") {
-				// @ATTR currency_id|integer|An item id that will be used as currency.
+				// @ATTR currency_id|item_id|An item id that will be used as currency.
 				CURRENCY_ID = toInt(infile.val);
 				if (CURRENCY_ID < 1) {
 					CURRENCY_ID = 1;
@@ -387,13 +387,13 @@ void loadMiscSettings() {
 			// @ATTR interact_range|float|Distance where the player can interact with objects and NPCs.
 			else if (infile.key == "interact_range")
 				INTERACT_RANGE = toFloat(infile.val);
-			// @ATTR menus_pause|boolean|Opening any menu will pause the game.
+			// @ATTR menus_pause|bool|Opening any menu will pause the game.
 			else if (infile.key == "menus_pause")
 				MENUS_PAUSE = toBool(infile.val);
-			// @ATTR save_onload|boolean|Save the game upon changing maps.
+			// @ATTR save_onload|bool|Save the game upon changing maps.
 			else if (infile.key == "save_onload")
 				SAVE_ONLOAD = toBool(infile.val);
-			// @ATTR save_onexit|boolean|Save the game upon quitting to the title screen or desktop.
+			// @ATTR save_onexit|bool|Save the game upon quitting to the title screen or desktop.
 			else if (infile.key == "save_onexit")
 				SAVE_ONEXIT = toBool(infile.val);
 
@@ -410,29 +410,29 @@ void loadMiscSettings() {
 	// @CLASS Settings: Resolution|Description of engine/resolutions.txt
 	if (infile.open("engine/resolutions.txt")) {
 		while (infile.next()) {
-			// @ATTR menu_frame_width|integer|Width of frame for New Game, Configuration, etc. menus.
+			// @ATTR menu_frame_width|int|Width of frame for New Game, Configuration, etc. menus.
 			if (infile.key == "menu_frame_width")
 				FRAME_W = static_cast<unsigned short>(toInt(infile.val));
-			// @ATTR menu_frame_height|integer|Height of frame for New Game, Configuration, etc. menus.
+			// @ATTR menu_frame_height|int|Height of frame for New Game, Configuration, etc. menus.
 			else if (infile.key == "menu_frame_height")
 				FRAME_H = static_cast<unsigned short>(toInt(infile.val));
-			// @ATTR icon_size|integer|Size of icons.
+			// @ATTR icon_size|int|Size of icons.
 			else if (infile.key == "icon_size")
 				ICON_SIZE = static_cast<unsigned short>(toInt(infile.val));
-			// @ATTR required_width|integer|Minimum window/screen resolution width.
+			// @ATTR required_width|int|Minimum window/screen resolution width.
 			else if (infile.key == "required_width") {
 				MIN_SCREEN_W = static_cast<unsigned short>(toInt(infile.val));
 			}
-			// @ATTR required_height|integer|Minimum window/screen resolution height.
+			// @ATTR required_height|int|Minimum window/screen resolution height.
 			else if (infile.key == "required_height") {
 				MIN_SCREEN_H = static_cast<unsigned short>(toInt(infile.val));
 			}
-			// @ATTR virtual_height|integer|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
+			// @ATTR virtual_height|int|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
 			else if (infile.key == "virtual_height") {
 				VIEW_H = static_cast<unsigned short>(toInt(infile.val));
 				VIEW_H_HALF = VIEW_H / 2;
 			}
-			// @ATTR ignore_texture_filter|boolean|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
+			// @ATTR ignore_texture_filter|bool|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
 			else if (infile.key == "ignore_texture_filter") {
 				IGNORE_TEXTURE_FILTER = toBool(infile.val);
 			}
@@ -462,7 +462,7 @@ void loadMiscSettings() {
 	if (infile.open("engine/gameplay.txt")) {
 		while (infile.next()) {
 			if (infile.key == "enable_playgame") {
-				// @ATTR enable_playgame|boolean|Enables the "Play Game" button on the main menu.
+				// @ATTR enable_playgame|bool|Enables the "Play Game" button on the main menu.
 				ENABLE_PLAYGAME = toBool(infile.val);
 			}
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
@@ -473,21 +473,21 @@ void loadMiscSettings() {
 	// @CLASS Settings: Combat|Description of engine/combat.txt
 	if (infile.open("engine/combat.txt")) {
 		while (infile.next()) {
-			// @ATTR max_absorb_percent|integer|Maximum percentage of damage that can be absorbed.
+			// @ATTR max_absorb_percent|int|Maximum percentage of damage that can be absorbed.
 			if (infile.key == "max_absorb_percent") MAX_ABSORB = static_cast<short>(toInt(infile.val));
-			// @ATTR max_resist_percent|integer|Maximum percentage of elemental damage that can be resisted.
+			// @ATTR max_resist_percent|int|Maximum percentage of elemental damage that can be resisted.
 			else if (infile.key == "max_resist_percent") MAX_RESIST = static_cast<short>(toInt(infile.val));
-			// @ATTR max_block_percent|integer|Maximum percentage of damage that can be blocked.
+			// @ATTR max_block_percent|int|Maximum percentage of damage that can be blocked.
 			else if (infile.key == "max_block_percent") MAX_BLOCK = static_cast<short>(toInt(infile.val));
-			// @ATTR max_avoidance_percent|integer|Maximum percentage chance that hazards can be avoided.
+			// @ATTR max_avoidance_percent|int|Maximum percentage chance that hazards can be avoided.
 			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = static_cast<short>(toInt(infile.val));
-			// @ATTR min_absorb_percent|integer|Minimum percentage of damage that can be absorbed.
+			// @ATTR min_absorb_percent|int|Minimum percentage of damage that can be absorbed.
 			else if (infile.key == "min_absorb_percent") MIN_ABSORB = static_cast<short>(toInt(infile.val));
-			// @ATTR min_resist_percent|integer|Minimum percentage of elemental damage that can be resisted.
+			// @ATTR min_resist_percent|int|Minimum percentage of elemental damage that can be resisted.
 			else if (infile.key == "min_resist_percent") MIN_RESIST = static_cast<short>(toInt(infile.val));
-			// @ATTR min_block_percent|integer|Minimum percentage of damage that can be blocked.
+			// @ATTR min_block_percent|int|Minimum percentage of damage that can be blocked.
 			else if (infile.key == "min_block_percent") MIN_BLOCK = static_cast<short>(toInt(infile.val));
-			// @ATTR min_avoidance_percent|integer|Minimum percentage chance that hazards can be avoided.
+			// @ATTR min_avoidance_percent|int|Minimum percentage chance that hazards can be avoided.
 			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = static_cast<short>(toInt(infile.val));
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
@@ -578,36 +578,36 @@ void loadMiscSettings() {
 				if (infile.key == "name") HERO_CLASSES.back().name = infile.val;
 				// @ATTR description|string|A description of this class.
 				else if (infile.key == "description") HERO_CLASSES.back().description = infile.val;
-				// @ATTR currency|integer|The amount of currency this class will start with.
+				// @ATTR currency|int|The amount of currency this class will start with.
 				else if (infile.key == "currency") HERO_CLASSES.back().currency = toInt(infile.val);
-				// @ATTR equipment|item (integer), ...|A list of items that are equipped when starting with this class.
+				// @ATTR equipment|list(item_id)|A list of items that are equipped when starting with this class.
 				else if (infile.key == "equipment") HERO_CLASSES.back().equipment = infile.val;
-				// @ATTR carried|item (integer), ...|A list of items that are placed in the normal inventorty when starting with this class.
+				// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
 				else if (infile.key == "carried") HERO_CLASSES.back().carried = infile.val;
-				// @ATTR physical|integer|Class starts with this physical stat.
+				// @ATTR physical|int|Class starts with this physical stat.
 				else if (infile.key == "physical") HERO_CLASSES.back().physical = toInt(infile.val);
-				// @ATTR mental|integer|Class starts with this mental stat.
+				// @ATTR mental|int|Class starts with this mental stat.
 				else if (infile.key == "mental") HERO_CLASSES.back().mental = toInt(infile.val);
-				// @ATTR offense|integer|Class starts with this offense stat.
+				// @ATTR offense|int|Class starts with this offense stat.
 				else if (infile.key == "offense") HERO_CLASSES.back().offense = toInt(infile.val);
-				// @ATTR defense|integer|Class starts with this defense stat.
+				// @ATTR defense|int|Class starts with this defense stat.
 				else if (infile.key == "defense") HERO_CLASSES.back().defense = toInt(infile.val);
 
 				else if (infile.key == "actionbar") {
-					// @ATTR actionbar|power (integer), ...|A list of powers to place in the action bar for the class.
+					// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
 					for (int i=0; i<12; i++) {
 						HERO_CLASSES.back().hotkeys[i] = toInt(infile.nextValue());
 					}
 				}
 				else if (infile.key == "powers") {
-					// @ATTR powers|power (integer), ...|A list of powers that are unlocked when starting this class.
+					// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
 					std::string power;
 					while ( (power = infile.nextValue()) != "") {
 						HERO_CLASSES.back().powers.push_back(toInt(power));
 					}
 				}
 				else if (infile.key == "campaign") {
-					// @ATTR campaign|status (string), ...|A list of campaign statuses that are set when starting this class.
+					// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
 					std::string status;
 					while ( (status = infile.nextValue()) != "") {
 						HERO_CLASSES.back().statuses.push_back(status);
@@ -637,17 +637,17 @@ void loadMiscSettings() {
 	// @CLASS Settings: Death penalty|Description of engine/death_penalty.txt
 	if (infile.open("engine/death_penalty.txt")) {
 		while (infile.next()) {
-			// @ATTR enable|boolean|Enable the death penalty.
+			// @ATTR enable|bool|Enable the death penalty.
 			if (infile.key == "enable") DEATH_PENALTY = toBool(infile.val);
-			// @ATTR permadeath|boolean|Force permadeath for all new saves.
+			// @ATTR permadeath|bool|Force permadeath for all new saves.
 			else if (infile.key == "permadeath") DEATH_PENALTY_PERMADEATH = toBool(infile.val);
-			// @ATTR currency|integer|Remove this percentage of currency.
+			// @ATTR currency|int|Remove this percentage of currency.
 			else if (infile.key == "currency") DEATH_PENALTY_CURRENCY = toInt(infile.val);
-			// @ATTR xp_total|integer|Remove this percentage of total XP.
+			// @ATTR xp_total|int|Remove this percentage of total XP.
 			else if (infile.key == "xp_total") DEATH_PENALTY_XP = toInt(infile.val);
-			// @ATTR xp_current_level|integer|Remove this percentage of the XP gained since the last level.
+			// @ATTR xp_current_level|int|Remove this percentage of the XP gained since the last level.
 			else if (infile.key == "xp_current_level") DEATH_PENALTY_XP_CURRENT = toInt(infile.val);
-			// @ATTR random_item|integer|Removes a random item from the player's inventory.
+			// @ATTR random_item|bool|Removes a random item from the player's inventory.
 			else if (infile.key == "random_item") DEATH_PENALTY_ITEM = toBool(infile.val);
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
@@ -658,16 +658,16 @@ void loadMiscSettings() {
 	// @CLASS Settings: Tooltips|Description of engine/tooltips.txt
 	if (infile.open("engine/tooltips.txt")) {
 		while (infile.next()) {
-			// @ATTR tooltip_offset|integer|Offset in pixels from the origin point (usually mouse cursor).
+			// @ATTR tooltip_offset|int|Offset in pixels from the origin point (usually mouse cursor).
 			if (infile.key == "tooltip_offset")
 				TOOLTIP_OFFSET = toInt(infile.val);
-			// @ATTR tooltip_width|integer|Maximum width of tooltip in pixels.
+			// @ATTR tooltip_width|int|Maximum width of tooltip in pixels.
 			else if (infile.key == "tooltip_width")
 				TOOLTIP_WIDTH = toInt(infile.val);
-			// @ATTR tooltip_margin|integer|Padding between the text and the tooltip borders.
+			// @ATTR tooltip_margin|int|Padding between the text and the tooltip borders.
 			else if (infile.key == "tooltip_margin")
 				TOOLTIP_MARGIN = toInt(infile.val);
-			// @ATTR npc_tooltip_margin|integer|Vertical offset for NPC labels.
+			// @ATTR npc_tooltip_margin|int|Vertical offset for NPC labels.
 			else if (infile.key == "npc_tooltip_margin")
 				TOOLTIP_MARGIN_NPC = toInt(infile.val);
 		}

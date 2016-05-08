@@ -186,7 +186,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		return true;
 	}
 	else if (infile->key == "cooldown") {
-		// @ATTR cooldown|integer|Cooldown between attacks in 'ms' or 's'.
+		// @ATTR cooldown|int|Cooldown between attacks in 'ms' or 's'.
 		cooldown = parse_duration(infile->val);
 		return true;
 	}
@@ -198,32 +198,32 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (infile->key == STAT_KEY[i]) {
-				// @ATTR $STATNAME|integer|The starting value for this stat.
+				// @ATTR $STATNAME|int|The starting value for this stat.
 				starting[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_KEY[i] + "_per_level") {
-				// @ATTR $STATNAME_per_level|integer|The value for this stat added per level.
+				// @ATTR $STATNAME_per_level|int|The value for this stat added per level.
 				per_level[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_KEY[i] + "_per_physical") {
-				// @ATTR $STATNAME_per_physical|integer|The value for this stat added per Physical.
+				// @ATTR $STATNAME_per_physical|int|The value for this stat added per Physical.
 				per_physical[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_KEY[i] + "_per_mental") {
-				// @ATTR $STATNAME_per_mental|integer|The value for this stat added per Mental.
+				// @ATTR $STATNAME_per_mental|int|The value for this stat added per Mental.
 				per_mental[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_KEY[i] + "_per_offense") {
-				// @ATTR $STATNAME_per_offense|integer|The value for this stat added per Offense.
+				// @ATTR $STATNAME_per_offense|int|The value for this stat added per Offense.
 				per_offense[i] = value;
 				return true;
 			}
 			else if (infile->key == STAT_KEY[i] + "_per_defense") {
-				// @ATTR $STATNAME_per_defense|integer|The value for this stat added per Defense.
+				// @ATTR $STATNAME_per_defense|int|The value for this stat added per Defense.
 				per_defense[i] = value;
 				return true;
 			}
@@ -231,7 +231,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 
 		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
 			if (infile->key == "vulnerable_" + ELEMENTS[i].id) {
-				// @ATTR vulnerable_$ELEMENT|integer|Percentage weakness to this element.
+				// @ATTR vulnerable_$ELEMENT|int|Percentage weakness to this element.
 				vulnerable[i] = vulnerable_base[i] = value;
 				return true;
 			}
@@ -247,19 +247,19 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 bool StatBlock::loadSfxStat(FileParser *infile) {
 	// @CLASS StatBlock: Sound effects|Description of heroes in engine/avatar/ and enemies in enemies/
 
-	// @ATTR sfx_phys|string|Filename of sound effect for physical attack.
+	// @ATTR sfx_phys|filename|Filename of sound effect for physical attack.
 	if (infile->key == "sfx_phys") sfx_phys = infile->val;
-	// @ATTR sfx_ment|string|Filename of sound effect for mental attack.
+	// @ATTR sfx_ment|filename|Filename of sound effect for mental attack.
 	else if (infile->key == "sfx_ment") sfx_ment = infile->val;
-	// @ATTR sfx_hit|string|Filename of sound effect for being hit.
+	// @ATTR sfx_hit|filename|Filename of sound effect for being hit.
 	else if (infile->key == "sfx_hit") sfx_hit = infile->val;
-	// @ATTR sfx_die|string|Filename of sound effect for dying.
+	// @ATTR sfx_die|filename|Filename of sound effect for dying.
 	else if (infile->key == "sfx_die") sfx_die = infile->val;
-	// @ATTR sfx_critdie|string|Filename of sound effect for dying to a critical hit.
+	// @ATTR sfx_critdie|filename|Filename of sound effect for dying to a critical hit.
 	else if (infile->key == "sfx_critdie") sfx_critdie = infile->val;
-	// @ATTR sfx_block|string|Filename of sound effect for blocking an incoming hit.
+	// @ATTR sfx_block|filename|Filename of sound effect for blocking an incoming hit.
 	else if (infile->key == "sfx_block") sfx_block = infile->val;
-	// @ATTR sfx_levelup|string|Filename of sound effect for leveling up.
+	// @ATTR sfx_levelup|filename|Filename of sound effect for leveling up.
 	else if (infile->key == "sfx_levelup") sfx_levelup = infile->val;
 	else return false;
 
@@ -289,17 +289,17 @@ void StatBlock::load(const std::string& filename) {
 
 		// @ATTR name|string|Name
 		if (infile.key == "name") name = msg->get(infile.val);
-		// @ATTR humanoid|boolean|This creature gives human traits when transformed into, such as the ability to talk with NPCs.
+		// @ATTR humanoid|bool|This creature gives human traits when transformed into, such as the ability to talk with NPCs.
 		else if (infile.key == "humanoid") humanoid = toBool(infile.val);
 
-		// @ATTR level|integer|Level
+		// @ATTR level|int|Level
 		else if (infile.key == "level") level = num;
 
 		// enemy death rewards and events
-		// @ATTR xp|integer|XP awarded upon death.
+		// @ATTR xp|int|XP awarded upon death.
 		else if (infile.key == "xp") xp = num;
 		else if (infile.key == "loot") {
-			// @ATTR loot|[currency:item (integer)], chance (integer), min (integer), max (integer)|Possible loot that can be dropped on death.
+			// @ATTR loot|repeatable(loot)|Possible loot that can be dropped on death.
 
 			// loot entries format:
 			// loot=[id],[percent_chance]
@@ -315,7 +315,7 @@ void StatBlock::load(const std::string& filename) {
 			loot->parseLoot(infile, &loot_table.back(), &loot_table);
 		}
 		else if (infile.key == "loot_count") {
-			// @ATTR loot_count|min (integer), max (integer)|Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.
+			// @ATTR loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.
 			loot_count.x = toInt(infile.nextValue());
 			loot_count.y = toInt(infile.nextValue());
 			if (loot_count.x != 0 || loot_count.y != 0) {
@@ -327,9 +327,9 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
 		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
 		else if (infile.key == "convert_status") convert_status = infile.val;
-		// @ATTR first_defeat_loot|integer|Drops this item upon first death.
+		// @ATTR first_defeat_loot|int|Drops this item upon first death.
 		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
-		// @ATTR quest_loot|[requires status (string), requires not status (string), item (integer)|Drops this item when campaign status is met.
+		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met.
 		else if (infile.key == "quest_loot") {
 			quest_loot_requires_status = infile.nextValue();
 			quest_loot_requires_not_status = infile.nextValue();
@@ -337,11 +337,11 @@ void StatBlock::load(const std::string& filename) {
 		}
 
 		// behavior stats
-		// @ATTR flying|boolean|Creature can move over gaps/water.
+		// @ATTR flying|bool|Creature can move over gaps/water.
 		else if (infile.key == "flying") flying = toBool(infile.val);
-		// @ATTR intangible|boolean|Creature can move through walls.
+		// @ATTR intangible|bool|Creature can move through walls.
 		else if (infile.key == "intangible") intangible = toBool(infile.val);
-		// @ATTR facing|boolean|Creature can turn to face their target.
+		// @ATTR facing|bool|Creature can turn to face their target.
 		else if (infile.key == "facing") facing = toBool(infile.val);
 
 		// @ATTR waypoint_pause|duration|Duration to wait at each waypoint in 'ms' or 's'.
@@ -349,13 +349,13 @@ void StatBlock::load(const std::string& filename) {
 
 		// @ATTR turn_delay|duration|Duration it takes for this creature to turn and face their target in 'ms' or 's'.
 		else if (infile.key == "turn_delay") turn_delay = parse_duration(infile.val);
-		// @ATTR chance_pursue|integer|Percentage change that the creature will chase their target.
+		// @ATTR chance_pursue|int|Percentage change that the creature will chase their target.
 		else if (infile.key == "chance_pursue") chance_pursue = num;
-		// @ATTR chance_flee|integer|Percentage chance that the creature will run away from their target.
+		// @ATTR chance_flee|int|Percentage chance that the creature will run away from their target.
 		else if (infile.key == "chance_flee") chance_flee = num;
 
 		else if (infile.key == "power") {
-			// @ATTR power|type (string), power id (integer), chance (integer)|A power that has a chance of being triggered in a certain state. States may be any of: melee, ranged, beacon, on_hit, on_death, on_half_dead, on_join_combat, on_debuff
+			// @ATTR power|["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, int : State, Power, Chance|A power that has a chance of being triggered in a certain state.
 			AIPower ai_power;
 
 			std::string ai_type = infile.nextValue();
@@ -386,7 +386,7 @@ void StatBlock::load(const std::string& filename) {
 		}
 
 		else if (infile.key == "passive_powers") {
-			// @ATTR passive_powers|power (integer), ...|A list of passive powers this creature has.
+			// @ATTR passive_powers|list(power_id)|A list of passive powers this creature has.
 			powers_passive.clear();
 			std::string p = infile.nextValue();
 			while (p != "") {
@@ -399,7 +399,7 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "melee_range") melee_range = fnum;
 		// @ATTR threat_range|float|Radius of the area this creature will be able to start chasing the hero.
 		else if (infile.key == "threat_range") threat_range = fnum;
-		// @ATTR combat_style|[default:aggressive:passive]|How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat.
+		// @ATTR combat_style|["default", "aggressive", "passive"]|How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat.
 		else if (infile.key == "combat_style") {
 			if (infile.val == "default") combat_style = COMBAT_DEFAULT;
 			else if (infile.val == "aggressive") combat_style = COMBAT_AGGRESSIVE;
@@ -407,14 +407,14 @@ void StatBlock::load(const std::string& filename) {
 			else infile.error("StatBlock: Unknown combat style '%s'", infile.val.c_str());
 		}
 
-		// @ATTR animations|string|Filename of an animation definition.
+		// @ATTR animations|filename|Filename of an animation definition.
 		else if (infile.key == "animations") animations = infile.val;
 
-		// @ATTR suppress_hp|boolean|Hides the enemy HP bar for this creature.
+		// @ATTR suppress_hp|bool|Hides the enemy HP bar for this creature.
 		else if (infile.key == "suppress_hp") suppress_hp = toBool(infile.val);
 
 		else if (infile.key == "categories") {
-			// @ATTR categories|category (string), ...|Categories that this enemy belongs to.
+			// @ATTR categories|list(string)|Categories that this enemy belongs to.
 			categories.clear();
 			std::string cat;
 			while ((cat = infile.nextValue()) != "") {
@@ -761,7 +761,7 @@ void StatBlock::loadHeroStats() {
 			bool valid = loadCoreStat(&infile);
 
 			if (infile.key == "max_points_per_stat") {
-				// @ATTR max_points_per_stat|integer|Maximum points for each primary stat.
+				// @ATTR max_points_per_stat|int|Maximum points for each primary stat.
 				max_points_per_stat = value;
 			}
 			else if (infile.key == "sfx_step") {
@@ -769,11 +769,11 @@ void StatBlock::loadHeroStats() {
 				sfx_step = infile.val;
 			}
 			else if (infile.key == "stat_points_per_level") {
-				// @ATTR stat_points_per_level|integer|The amount of stat points awarded each level.
+				// @ATTR stat_points_per_level|int|The amount of stat points awarded each level.
 				stat_points_per_level = value;
 			}
 			else if (infile.key == "power_points_per_level") {
-				// @ATTR power_points_per_level|integer|The amount of power points awarded each level.
+				// @ATTR power_points_per_level|int|The amount of power points awarded each level.
 				power_points_per_level = value;
 			}
 			else if (!valid) {
@@ -792,7 +792,7 @@ void StatBlock::loadHeroStats() {
 		while(infile.next()) {
 			unsigned key = toInt(infile.key);
 			if (key > 0) {
-				// @ATTR $LEVEL|integer|The amount of XP required for this level.
+				// @ATTR $LEVEL|int|The amount of XP required for this level.
 				if (key > xp_table.size())
 					xp_table.resize(key);
 				xp_table[key - 1] = toInt(infile.val);

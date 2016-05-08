@@ -76,17 +76,18 @@ void NPC::load(const std::string& npc_id) {
 				Event_Component e;
 				e.type = EC_NONE;
 				if (infile.key == "him" || infile.key == "her") {
-					// @ATTR dialog.him, dialog.her|string|A line of dialog from the NPC.
+					// @ATTR dialog.him|repeatable(string)|A line of dialog from the NPC.
+					// @ATTR dialog.her|repeatable(string)|A line of dialog from the NPC.
 					e.type = EC_NPC_DIALOG_THEM;
 					e.s = msg->get(infile.val);
 				}
 				else if (infile.key == "you") {
-					// @ATTR dialog.you|string|A line of dialog from the player.
+					// @ATTR dialog.you|repeatable(string)|A line of dialog from the player.
 					e.type = EC_NPC_DIALOG_YOU;
 					e.s = msg->get(infile.val);
 				}
 				else if (infile.key == "voice") {
-					// @ATTR dialog.voice|string|Filename of a voice sound file to play.
+					// @ATTR dialog.voice|repeatable(string)|Filename of a voice sound file to play.
 					e.type = EC_NPC_VOICE;
 					e.x = loadSound(infile.val, NPC_VOX_QUEST);
 				}
@@ -101,7 +102,7 @@ void NPC::load(const std::string& npc_id) {
 					e.s = infile.val;
 				}
 				else if (infile.key == "allow_movement") {
-					// @ATTR dialog.allow_movement|boolean|Restrict the player's mvoement during dialog.
+					// @ATTR dialog.allow_movement|bool|Restrict the player's mvoement during dialog.
 					e.type = EC_NPC_ALLOW_MOVEMENT;
 					e.s = infile.val;
 				}
@@ -133,27 +134,27 @@ void NPC::load(const std::string& npc_id) {
 					name = msg->get(infile.val);
 				}
 				else if (infile.key == "gfx") {
-					// @ATTR gfx|string|Filename of an animation definition.
+					// @ATTR gfx|filename|Filename of an animation definition.
 					gfx = infile.val;
 				}
 
 				// handle talkers
 				else if (infile.key == "talker") {
-					// @ATTR talker|boolean|Allows this NPC to be talked to.
+					// @ATTR talker|bool|Allows this NPC to be talked to.
 					talker = toBool(infile.val);
 				}
 				else if (infile.key == "portrait") {
-					// @ATTR portrait|string|Filename of a portrait image.
+					// @ATTR portrait|filename|Filename of a portrait image.
 					filename_portrait = infile.val;
 				}
 
 				// handle vendors
 				else if (infile.key == "vendor") {
-					// @ATTR vendor|string|Allows this NPC to buy/sell items.
+					// @ATTR vendor|bool|Allows this NPC to buy/sell items.
 					vendor = toBool(infile.val);
 				}
 				else if (infile.key == "constant_stock") {
-					// @ATTR constant_stock|item (integer), ...|A list of items this vendor has for sale.
+					// @ATTR constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale.
 					stack.quantity = 1;
 					while (infile.val != "") {
 						stack.item = toInt(infile.nextValue());
@@ -161,7 +162,7 @@ void NPC::load(const std::string& npc_id) {
 					}
 				}
 				else if (infile.key == "status_stock") {
-					// @ATTR status_stock|status (string), item (integer), ...|A list of items this vendor will have for sale if the required status is met.
+					// @ATTR status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met.
 					if (camp->checkStatus(infile.nextValue())) {
 						stack.quantity = 1;
 						while (infile.val != "") {
@@ -171,7 +172,7 @@ void NPC::load(const std::string& npc_id) {
 					}
 				}
 				else if (infile.key == "random_stock") {
-					// @ATTR random_stock|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Use a loot table to add random items to the stock; either a filename or an inline definition.
+					// @ATTR random_stock|list(loot)|Use a loot table to add random items to the stock; either a filename or an inline definition.
 					if (clear_random_table) {
 						random_table.clear();
 						clear_random_table = false;
@@ -181,7 +182,7 @@ void NPC::load(const std::string& npc_id) {
 					loot->parseLoot(infile, &random_table.back(), &random_table);
 				}
 				else if (infile.key == "random_stock_count") {
-					// @ATTR random_stock_count|min (integer), max (integer)|Sets the minimum (and optionally, the maximum) amount of random items this npc can have.
+					// @ATTR random_stock_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of random items this npc can have.
 					random_table_count.x = toInt(infile.nextValue());
 					random_table_count.y = toInt(infile.nextValue());
 					if (random_table_count.x != 0 || random_table_count.y != 0) {
@@ -192,7 +193,7 @@ void NPC::load(const std::string& npc_id) {
 
 				// handle vocals
 				else if (infile.key == "vox_intro") {
-					// @ATTR vox_intro|string|Filename of a sound file to play when initially interacting with the NPC.
+					// @ATTR vox_intro|repeatable(filename)|Filename of a sound file to play when initially interacting with the NPC.
 					loadSound(infile.val, NPC_VOX_INTRO);
 				}
 

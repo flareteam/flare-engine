@@ -50,7 +50,7 @@ MenuMiniMap::MenuMiniMap()
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR map_pos|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the map.
+			// @ATTR map_pos|rectangle|Position and dimensions of the map.
 			if(infile.key == "map_pos") {
 				pos = toRect(infile.val);
 			}

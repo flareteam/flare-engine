@@ -50,12 +50,12 @@ MenuLog::MenuLog() {
 			if(infile.key == "label_title") {
 				title = eatLabelInfo(infile.val);
 			}
-			// @ATTR close|x (integer), y (integer)|Position of the close button.
+			// @ATTR close|point|Position of the close button.
 			else if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR tab_area|x (integer), y (integer), w (integer), h (integer)|The position of the row of tabs, followed by the dimensions of the log text area.
+			// @ATTR tab_area|rectangle|The position of the row of tabs, followed by the dimensions of the log text area.
 			else if(infile.key == "tab_area") {
 				tab_area = toRect(infile.val);
 			}

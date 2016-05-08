@@ -35,7 +35,7 @@ CursorManager::CursorManager()
 	if (infile.open("engine/mouse_cursor.txt", true, "")) {
 		while (infile.next()) {
 			if (infile.key == "normal") {
-				// @ATTR normal|string|Filename of an image for the normal cursor.
+				// @ATTR normal|filename|Filename of an image for the normal cursor.
 				graphics = render_device->loadImage(popFirstString(infile.val));
 				if (graphics) {
 					cursor_normal = graphics->createSprite();
@@ -44,7 +44,7 @@ CursorManager::CursorManager()
 				offset_normal = toPoint(infile.val);
 			}
 			else if (infile.key == "interact") {
-				// @ATTR interact|string|Filename of an image for the object interaction cursor.
+				// @ATTR interact|filename|Filename of an image for the object interaction cursor.
 				graphics = render_device->loadImage(popFirstString(infile.val));
 				if (graphics) {
 					cursor_interact = graphics->createSprite();
@@ -53,7 +53,7 @@ CursorManager::CursorManager()
 				offset_interact = toPoint(infile.val);
 			}
 			else if (infile.key == "talk") {
-				// @ATTR talk|string|Filename of an image for the NPC interaction cursor.
+				// @ATTR talk|filename|Filename of an image for the NPC interaction cursor.
 				graphics = render_device->loadImage(popFirstString(infile.val));
 				if (graphics) {
 					cursor_talk = graphics->createSprite();
@@ -62,7 +62,7 @@ CursorManager::CursorManager()
 				offset_talk = toPoint(infile.val);
 			}
 			else if (infile.key == "attack") {
-				// @ATTR attack|string|Filename of an image for the cursor when attacking enemies.
+				// @ATTR attack|filename|Filename of an image for the cursor when attacking enemies.
 				graphics = render_device->loadImage(popFirstString(infile.val));
 				if (graphics) {
 					cursor_attack = graphics->createSprite();

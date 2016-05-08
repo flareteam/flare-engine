@@ -73,7 +73,7 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR slot|index(integer), x (integer), y (integer)|Index (max 10) and position for power slot.
+			// @ATTR slot|repeatable(int, int, int) : Index, X, Y|Index (max 10) and position for power slot.
 			if (infile.key == "slot") {
 				unsigned index = popFirstInt(infile.val, ',');
 				if (index == 0 || index > 10) {
@@ -85,41 +85,41 @@ MenuActionBar::MenuActionBar(Avatar *_hero)
 					addSlot(index-1, x, y);
 				}
 			}
-			// @ATTR slot_M1|x (integer), y (integer)|Position for the primary action slot.
+			// @ATTR slot_M1|point|Position for the primary action slot.
 			else if (infile.key == "slot_M1") {
 				int x = popFirstInt(infile.val, ',');
 				int y = popFirstInt(infile.val, ',');
 				addSlot(10, x, y);
 			}
-			// @ATTR slot_M2|x (integer), y (integer)|Position for the secondary action slot.
+			// @ATTR slot_M2|point|Position for the secondary action slot.
 			else if (infile.key == "slot_M2") {
 				int x = popFirstInt(infile.val, ',');
 				int y = popFirstInt(infile.val, ',');
 				addSlot(11, x, y);
 			}
 
-			// @ATTR char_menu|x (integer), y (integer)|Position for the Character menu button.
+			// @ATTR char_menu|point|Position for the Character menu button.
 			else if (infile.key == "char_menu") {
 				int x = popFirstInt(infile.val, ',');
 				int y = popFirstInt(infile.val, ',');
 				menus[MENU_CHARACTER]->setBasePos(x, y);
 				menus[MENU_CHARACTER]->pos.w = menus[MENU_CHARACTER]->pos.h = ICON_SIZE;
 			}
-			// @ATTR inv_menu|x (integer), y (integer)|Position for the Inventory menu button.
+			// @ATTR inv_menu|point|Position for the Inventory menu button.
 			else if (infile.key == "inv_menu") {
 				int x = popFirstInt(infile.val, ',');
 				int y = popFirstInt(infile.val, ',');
 				menus[MENU_INVENTORY]->setBasePos(x, y);
 				menus[MENU_INVENTORY]->pos.w = menus[MENU_INVENTORY]->pos.h = ICON_SIZE;
 			}
-			// @ATTR powers_menu|x (integer), y (integer)|Position for the Powers menu button.
+			// @ATTR powers_menu|point|Position for the Powers menu button.
 			else if (infile.key == "powers_menu") {
 				int x = popFirstInt(infile.val, ',');
 				int y = popFirstInt(infile.val, ',');
 				menus[MENU_POWERS]->setBasePos(x, y);
 				menus[MENU_POWERS]->pos.w = menus[MENU_POWERS]->pos.h = ICON_SIZE;
 			}
-			// @ATTR log_menu|x (integer), y (integer)|Position for the Log menu button.
+			// @ATTR log_menu|point|Position for the Log menu button.
 			else if (infile.key == "log_menu") {
 				int x = popFirstInt(infile.val, ',');
 				int y = popFirstInt(infile.val, ',');

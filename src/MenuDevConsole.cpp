@@ -52,24 +52,24 @@ MenuDevConsole::MenuDevConsole()
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR close|x (integer), y (integer)|Position of the close button.
+			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
 				button_close->setBasePos(pos.x, pos.y);
 			}
 			// @ATTR label_title|label|Position of the "Developer Console" label.
 			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
-			// @ATTR confirm|x (integer), y (integer)|Position of the "Execute" button.
+			// @ATTR confirm|point|Position of the "Execute" button.
 			else if(infile.key == "confirm") {
 				Point pos = toPoint(infile.val);
 				button_confirm->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR input|x (integer), y (integer)|Position of the command entry widget.
+			// @ATTR input|point|Position of the command entry widget.
 			else if(infile.key == "input") {
 				Point pos = toPoint(infile.val);
 				input_box->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR history|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the command history.
+			// @ATTR history|rectangle|Position and dimensions of the command history.
 			else if(infile.key == "history") history_area = toRect(infile.val);
 
 			else infile.error("MenuDevConsole: '%s' is not a valid key.", infile.key.c_str());

@@ -203,85 +203,85 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 	// @CLASS GameStateConfigBase|Description of menus/config.txt
 
 	if (infile.key == "listbox_scrollbar_offset") {
-		// @ATTR listbox_scrollbar_offset|integer|Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.
+		// @ATTR listbox_scrollbar_offset|int|Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.
 		activemods_lstb->scrollbar_offset = x1;
 		inactivemods_lstb->scrollbar_offset = x1;
 		language_lstb->scrollbar_offset = x1;
 	}
 	else if (infile.key == "music_volume") {
-		// @ATTR music_volume|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Music Volume" slider relative to the frame.
+		// @ATTR music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Music Volume" slider relative to the frame.
 		placeLabeledWidget(music_volume_lb, music_volume_sl, x1, y1, x2, y2, msg->get("Music Volume"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "sound_volume") {
-		// @ATTR sound_volume|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Sound Volume" slider relative to the frame.
+		// @ATTR sound_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Sound Volume" slider relative to the frame.
 		placeLabeledWidget(sound_volume_lb, sound_volume_sl, x1, y1, x2, y2, msg->get("Sound Volume"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "language") {
-		// @ATTR language|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Language" list box relative to the frame.
+		// @ATTR language|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Language" list box relative to the frame.
 		placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
 	}
 	else if (infile.key == "combat_text") {
-		// @ATTR combat_text|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show combat text" checkbox relative to the frame.
+		// @ATTR combat_text|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show combat text" checkbox relative to the frame.
 		placeLabeledWidget(combat_text_lb, combat_text_cb, x1, y1, x2, y2, msg->get("Show combat text"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "show_fps") {
-		// @ATTR show_fps|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show FPS" checkbox relative to the frame.
+		// @ATTR show_fps|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show FPS" checkbox relative to the frame.
 		placeLabeledWidget(show_fps_lb, show_fps_cb, x1, y1, x2, y2, msg->get("Show FPS"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "colorblind") {
-		// @ATTR colorblind|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Colorblind Mode" checkbox relative to the frame.
+		// @ATTR colorblind|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Colorblind Mode" checkbox relative to the frame.
 		placeLabeledWidget(colorblind_lb, colorblind_cb, x1, y1, x2, y2, msg->get("Colorblind Mode"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "hardware_cursor") {
-		// @ATTR hardware_cursor|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Hardware mouse cursor" checkbox relative to the frame.
+		// @ATTR hardware_cursor|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Hardware mouse cursor" checkbox relative to the frame.
 		placeLabeledWidget(hardware_cursor_lb, hardware_cursor_cb, x1, y1, x2, y2, msg->get("Hardware mouse cursor"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "dev_mode") {
-		// @ATTR dev_mode|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Developer Mode" checkbox relative to the frame.
+		// @ATTR dev_mode|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Mode" checkbox relative to the frame.
 		placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "show_target") {
-		// @ATTR show_target|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Show targeting animation" checkbox relative to the frame.
+		// @ATTR show_target|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show targeting animation" checkbox relative to the frame.
 		placeLabeledWidget(show_target_lb, show_target_cb, x1, y1, x2, y2, msg->get("Show targeting animation"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "loot_tooltips") {
-		// @ATTR loot_tooltips|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show loot labels" checkbox relative to the frame.
+		// @ATTR loot_tooltips|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Always show loot labels" checkbox relative to the frame.
 		placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "statbar_labels") {
-		// @ATTR statbar_labels|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Always show stat bar labels" checkbox relative to the frame.
+		// @ATTR statbar_labels|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Always show stat bar labels" checkbox relative to the frame.
 		placeLabeledWidget(statbar_labels_lb, statbar_labels_cb, x1, y1, x2, y2, msg->get("Always show stat bar labels"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "auto_equip") {
-		// @ATTR auto_equip|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Automatically equip items" checkbox relative to the frame.
+		// @ATTR auto_equip|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Automatically equip items" checkbox relative to the frame.
 		placeLabeledWidget(auto_equip_lb, auto_equip_cb, x1, y1, x2, y2, msg->get("Automatically equip items"), JUSTIFY_RIGHT);
 	}
 	else if (infile.key == "activemods") {
-		// @ATTR activemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Active Mods" list box relative to the frame.
+		// @ATTR activemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Active Mods" list box relative to the frame.
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
 	}
 	else if (infile.key == "inactivemods") {
-		// @ATTR inactivemods|label x (integer), label y (integer), x (integer), y (integer)|Position of the "Available Mods" list box relative to the frame.
+		// @ATTR inactivemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Available Mods" list box relative to the frame.
 		placeLabeledWidget(inactivemods_lb, inactivemods_lstb, x1, y1, x2, y2, msg->get("Available Mods"));
 	}
 	else if (infile.key == "activemods_shiftup") {
-		// @ATTR activemods_shiftup|x (integer), y (integer)|Position of the button to shift mods up in "Active Mods" relative to the frame.
+		// @ATTR activemods_shiftup|point|Position of the button to shift mods up in "Active Mods" relative to the frame.
 		activemods_shiftup_btn->setBasePos(x1, y1);
 		activemods_shiftup_btn->refresh();
 	}
 	else if (infile.key == "activemods_shiftdown") {
-		// @ATTR activemods_shiftdown|x (integer), y (integer)|Position of the button to shift mods down in "Active Mods" relative to the frame.
+		// @ATTR activemods_shiftdown|point|Position of the button to shift mods down in "Active Mods" relative to the frame.
 		activemods_shiftdown_btn->setBasePos(x1, y1);
 		activemods_shiftdown_btn->refresh();
 	}
 	else if (infile.key == "activemods_deactivate") {
-		// @ATTR activemods_deactivate|x (integer), y (integer)|Position of the "Disable" button relative to the frame.
+		// @ATTR activemods_deactivate|point|Position of the "Disable" button relative to the frame.
 		activemods_deactivate_btn->label = msg->get("<< Disable");
 		activemods_deactivate_btn->setBasePos(x1, y1);
 		activemods_deactivate_btn->refresh();
 	}
 	else if (infile.key == "inactivemods_activate") {
-		// @ATTR inactivemods_activate|x (integer), y (integer)|Position of the "Enable" button relative to the frame.
+		// @ATTR inactivemods_activate|point|Position of the "Enable" button relative to the frame.
 		inactivemods_activate_btn->label = msg->get("Enable >>");
 		inactivemods_activate_btn->setBasePos(x1, y1);
 		inactivemods_activate_btn->refresh();

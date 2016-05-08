@@ -84,11 +84,11 @@ void PowerManager::loadEffects() {
 			effects.back().type = infile.val;
 		}
 		else if (infile.key == "icon") {
-			// @ATTR effect.icon|integer|The icon to visually represent the effect in the status area
+			// @ATTR effect.icon|icon_id|The icon to visually represent the effect in the status area
 			effects.back().icon = toInt(infile.val);
 		}
 		else if (infile.key == "animation") {
-			// @ATTR effect.animation|string|The filename of effect animation.
+			// @ATTR effect.animation|filename|The filename of effect animation.
 			effects.back().animation = infile.val;
 		}
 		else if (infile.key == "can_stack") {
@@ -128,7 +128,7 @@ void PowerManager::loadPowers() {
 		// id needs to be the first component of each power.  That is how we write
 		// data to the correct power.
 		if (infile.key == "id") {
-			// @ATTR id|integer|Uniq identifier for the power definition.
+			// @ATTR power.id|power_id|Uniq identifier for the power definition.
 			input_id = toInt(infile.val);
 			skippingEntry = input_id < 1;
 			if (skippingEntry)
@@ -145,7 +145,7 @@ void PowerManager::loadPowers() {
 			continue;
 
 		if (infile.key == "type") {
-			// @ATTR type|[fixed:missile:repeater:spawn:transform:block]|Defines the type of power definiton
+			// @ATTR power.type|["fixed", "missile", "repeater", "spawn", "transform", "block"]|Defines the type of power definiton
 			if (infile.val == "fixed") powers[input_id].type = POWTYPE_FIXED;
 			else if (infile.val == "missile") powers[input_id].type = POWTYPE_MISSILE;
 			else if (infile.val == "repeater") powers[input_id].type = POWTYPE_REPEATER;
@@ -155,16 +155,16 @@ void PowerManager::loadPowers() {
 			else infile.error("PowerManager: Unknown type '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "name")
-			// @ATTR name|string|The name of the power
+			// @ATTR power.name|string|The name of the power
 			powers[input_id].name = msg->get(infile.val);
 		else if (infile.key == "description")
-			// @ATTR description|string|Description of the power
+			// @ATTR power.description|string|Description of the power
 			powers[input_id].description = msg->get(infile.val);
 		else if (infile.key == "icon")
-			// @ATTR icon|string|The icon to visually represent the power eg. in skill tree or action bar.
+			// @ATTR power.icon|icon_id|The icon to visually represent the power eg. in skill tree or action bar.
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
-			// @ATTR new_state|string|When power is used, hero or enemy will change to this state. Must be one of the states [instant, user defined]
+			// @ATTR power.new_state|string|When power is used, hero or enemy will change to this state. Must be one of the states ["instant", user defined]
 			if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
 			else {
 				powers[input_id].new_state = POWSTATE_ATTACK;
@@ -172,30 +172,30 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "state_duration") {
-			// @ATTR state_duration|duration|Sets the length of time the caster is in their state animation. A time longer than the animation length will cause the animation to pause on the last frame. Times shorter than the state animation length will have no effect.
+			// @ATTR power.state_duration|duration|Sets the length of time the caster is in their state animation. A time longer than the animation length will cause the animation to pause on the last frame. Times shorter than the state animation length will have no effect.
 			powers[input_id].state_duration = parse_duration(infile.val);
 		}
 		else if (infile.key == "face")
-			// @ATTR face|bool|Power will make hero or enemy to face the target location.
+			// @ATTR power.face|bool|Power will make hero or enemy to face the target location.
 			powers[input_id].face = toBool(infile.val);
 		else if (infile.key == "source_type") {
-			// @ATTR source_type|[hero:neutral:enemy]|Determines which entities the power can effect.
+			// @ATTR power.source_type|["hero", "neutral", "enemy"]|Determines which entities the power can effect.
 			if (infile.val == "hero") powers[input_id].source_type = SOURCE_TYPE_HERO;
 			else if (infile.val == "neutral") powers[input_id].source_type = SOURCE_TYPE_NEUTRAL;
 			else if (infile.val == "enemy") powers[input_id].source_type = SOURCE_TYPE_ENEMY;
 			else infile.error("PowerManager: Unknown source_type '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "beacon")
-			// @ATTR beacon|bool|True if enemy is calling its allies.
+			// @ATTR power.beacon|bool|True if enemy is calling its allies.
 			powers[input_id].beacon = toBool(infile.val);
 		else if (infile.key == "count")
-			// @ATTR count|integer|The count of hazards/effect or spawns to be created by this power.
+			// @ATTR power.count|int|The count of hazards/effect or spawns to be created by this power.
 			powers[input_id].count = toInt(infile.val);
 		else if (infile.key == "passive")
-			// @ATTR passive|bool|If power is unlocked when the hero or enemy spawns it will be automatically activated.
+			// @ATTR power.passive|bool|If power is unlocked when the hero or enemy spawns it will be automatically activated.
 			powers[input_id].passive = toBool(infile.val);
 		else if (infile.key == "passive_trigger") {
-			// @ATTR passive_trigger|[on_block:on_hit:on_halfdeath:on_joincombat:on_death]|This will only activate a passive power under a certain condition.
+			// @ATTR power.passive_trigger|["on_block", "on_hit", "on_halfdeath", "on_joincombat", "on_death"]|This will only activate a passive power under a certain condition.
 			if (infile.val == "on_block") powers[input_id].passive_trigger = TRIGGER_BLOCK;
 			else if (infile.val == "on_hit") powers[input_id].passive_trigger = TRIGGER_HIT;
 			else if (infile.val == "on_halfdeath") powers[input_id].passive_trigger = TRIGGER_HALFDEATH;
@@ -204,12 +204,12 @@ void PowerManager::loadPowers() {
 			else infile.error("PowerManager: Unknown passive trigger '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "meta_power") {
-			// @ATTR meta_power|boolean|If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.
+			// @ATTR power.meta_power|bool|If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.
 			powers[input_id].meta_power = toBool(infile.val);
 		}
 		// power requirements
 		else if (infile.key == "requires_flags") {
-			// @ATTR requires_flags|flag (string), ...|A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt
+			// @ATTR power.requires_flags|list(string)|A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt
 			powers[input_id].requires_flags.clear();
 			std::string flag = popFirstString(infile.val);
 
@@ -219,27 +219,27 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "requires_mp")
-			// @ATTR requires_mp|integer|Restrict power usage to a specified MP level.
+			// @ATTR power.requires_mp|int|Restrict power usage to a specified MP level.
 			powers[input_id].requires_mp = toInt(infile.val);
 		else if (infile.key == "requires_hp")
-			// @ATTR requires_hp|integer|Restrict power usage to a specified HP level.
+			// @ATTR power.requires_hp|int|Restrict power usage to a specified HP level.
 			powers[input_id].requires_hp = toInt(infile.val);
 		else if (infile.key == "sacrifice")
-			// @ATTR sacrifice|bool|If the power has requires_hp, allow it to kill the caster.
+			// @ATTR power.sacrifice|bool|If the power has requires_hp, allow it to kill the caster.
 			powers[input_id].sacrifice = toBool(infile.val);
 		else if (infile.key == "requires_los")
-			// @ATTR requires_los|bool|Requires a line-of-sight to target.
+			// @ATTR power.requires_los|bool|Requires a line-of-sight to target.
 			powers[input_id].requires_los = toBool(infile.val);
 		else if (infile.key == "requires_empty_target")
-			// @ATTR requires_empty_target|bool|The power can only be cast when target tile is empty.
+			// @ATTR power.requires_empty_target|bool|The power can only be cast when target tile is empty.
 			powers[input_id].requires_empty_target = toBool(infile.val);
 		else if (infile.key == "requires_item") {
-			// @ATTR requires_item|item_id, quantity (integer)|Requires a specific item of a specific quantity in inventory.
+			// @ATTR power.requires_item|item_id, int : Item, Quantity|Requires a specific item of a specific quantity in inventory.
 			powers[input_id].requires_item = toInt(infile.nextValue());
 			powers[input_id].requires_item_quantity = toInt(infile.nextValue(), 1);
 		}
 		else if (infile.key == "requires_equipped_item") {
-			// @ATTR requires_equipped_item|item_id, quantity (integer) |Requires a specific item of a specific quantity to be equipped on hero.
+			// @ATTR power.requires_equipped_item|item_id, int : Item, Quantity|Requires a specific item of a specific quantity to be equipped on hero.
 			powers[input_id].requires_equipped_item = toInt(infile.nextValue());
 			powers[input_id].requires_equipped_item_quantity = toInt(infile.nextValue());
 
@@ -250,23 +250,23 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "requires_targeting")
-			// @ATTR requires_targeting|bool|Power is only used when targeting using click-to-target.
+			// @ATTR power.requires_targeting|bool|Power is only used when targeting using click-to-target.
 			powers[input_id].requires_targeting = toBool(infile.val);
 		else if (infile.key == "requires_spawns")
-			// @ATTR requires_spawns|integer|The caster must have at least this many summoned creatures to use this power.
+			// @ATTR power.requires_spawns|int|The caster must have at least this many summoned creatures to use this power.
 			powers[input_id].requires_spawns = toInt(infile.val);
 		else if (infile.key == "cooldown")
-			// @ATTR cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
+			// @ATTR power.cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
 			powers[input_id].cooldown = parse_duration(infile.val);
 		// animation info
 		else if (infile.key == "animation")
-			// @ATTR animation|string|The filename of the power animation.
+			// @ATTR power.animation|filename|The filename of the power animation.
 			powers[input_id].animation_name = infile.val;
 		else if (infile.key == "soundfx")
-			// @ATTR soundfx|string|Filename of a sound effect to play when the power is used.
+			// @ATTR power.soundfx|filename|Filename of a sound effect to play when the power is used.
 			powers[input_id].sfx_index = loadSFX(infile.val);
 		else if (infile.key == "soundfx_hit") {
-			// @ATTR soundfx_hit|string|Filename of a sound effect to play when the power's hazard hits a valid target.
+			// @ATTR power.soundfx_hit|filename|Filename of a sound effect to play when the power's hazard hits a valid target.
 			int sfx_id = loadSFX(infile.val);
 			if (sfx_id != -1) {
 				powers[input_id].sfx_hit = sfx[sfx_id];
@@ -274,44 +274,44 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "directional")
-			// @ATTR directional|bool|The animation sprite sheet contains 8 directions, one per row.
+			// @ATTR power.directional|bool|The animation sprite sheet contains 8 directions, one per row.
 			powers[input_id].directional = toBool(infile.val);
 		else if (infile.key == "visual_random")
-			// @ATTR visual_random|integer|The animation sprite sheet contains rows of random options
+			// @ATTR power.visual_random|int|The animation sprite sheet contains rows of random options
 			powers[input_id].visual_random = toInt(infile.val);
 		else if (infile.key == "visual_option")
-			// @ATTR visual_option|integer|The animation sprite sheet containers rows of similar effects, use a specific option.
+			// @ATTR power.visual_option|int|The animation sprite sheet containers rows of similar effects, use a specific option.
 			powers[input_id].visual_option = toInt(infile.val);
 		else if (infile.key == "aim_assist")
-			// @ATTR aim_assist|bool|Power is aim assisted.
+			// @ATTR power.aim_assist|bool|Power is aim assisted.
 			powers[input_id].aim_assist = toBool(infile.val);
 		else if (infile.key == "speed")
-			// @ATTR speed|integer|The speed of missile hazard, the unit is defined as map units per frame.
+			// @ATTR power.speed|float|The speed of missile hazard, the unit is defined as map units per frame.
 			powers[input_id].speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
 		else if (infile.key == "lifespan")
-			// @ATTR lifespan|duration|How long the hazard/animation lasts in 'ms' or 's'.
+			// @ATTR power.lifespan|duration|How long the hazard/animation lasts in 'ms' or 's'.
 			powers[input_id].lifespan = parse_duration(infile.val);
 		else if (infile.key == "floor")
-			// @ATTR floor|bool|The hazard is drawn between the background and the object layer.
+			// @ATTR power.floor|bool|The hazard is drawn between the background and the object layer.
 			powers[input_id].floor = toBool(infile.val);
 		else if (infile.key == "complete_animation")
-			// @ATTR complete_animation|bool|For hazards; Play the entire animation, even if the hazard has hit a target.
+			// @ATTR power.complete_animation|bool|For hazards; Play the entire animation, even if the hazard has hit a target.
 			powers[input_id].complete_animation = toBool(infile.val);
 		else if (infile.key == "charge_speed")
-			// @ATTR charge_speed|float|Moves the caster at this speed in the direction they are facing until the state animation is finished.
+			// @ATTR power.charge_speed|float|Moves the caster at this speed in the direction they are facing until the state animation is finished.
 			powers[input_id].charge_speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
 		// hazard traits
 		else if (infile.key == "use_hazard")
-			// @ATTR use_hazard|bool|Power uses hazard.
+			// @ATTR power.use_hazard|bool|Power uses hazard.
 			powers[input_id].use_hazard = toBool(infile.val);
 		else if (infile.key == "no_attack")
-			// @ATTR no_attack|bool|Hazard won't affect other entities.
+			// @ATTR power.no_attack|bool|Hazard won't affect other entities.
 			powers[input_id].no_attack = toBool(infile.val);
 		else if (infile.key == "radius")
-			// @ATTR radius|integer|Radius in pixels
+			// @ATTR power.radius|float|Radius in pixels
 			powers[input_id].radius = toFloat(infile.val);
 		else if (infile.key == "base_damage") {
-			// @ATTR base_damage|[melee:ranged:ment]|
+			// @ATTR power.base_damage|["melee", "ranged", "ment"]|Determines which of the three primary damage stats will be used to calculate damage.
 			if (infile.val == "none")        powers[input_id].base_damage = BASE_DAMAGE_NONE;
 			else if (infile.val == "melee")  powers[input_id].base_damage = BASE_DAMAGE_MELEE;
 			else if (infile.val == "ranged") powers[input_id].base_damage = BASE_DAMAGE_RANGED;
@@ -319,92 +319,92 @@ void PowerManager::loadPowers() {
 			else infile.error("PowerManager: Unknown base_damage '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "starting_pos") {
-			// @ATTR starting_pos|[source, target, melee]|Start position for hazard
+			// @ATTR power.starting_pos|["source", "target", "melee"]|Start position for hazard
 			if (infile.val == "source")      powers[input_id].starting_pos = STARTING_POS_SOURCE;
 			else if (infile.val == "target") powers[input_id].starting_pos = STARTING_POS_TARGET;
 			else if (infile.val == "melee")  powers[input_id].starting_pos = STARTING_POS_MELEE;
 			else infile.error("PowerManager: Unknown starting_pos '%s'", infile.val.c_str());
 		}
 		else if (infile.key == "relative_pos") {
-			// @ATTR relative_pos|bool|Hazard will move relative to the caster's position.
+			// @ATTR power.relative_pos|bool|Hazard will move relative to the caster's position.
 			powers[input_id].relative_pos = toBool(infile.val);
 		}
 		else if (infile.key == "multitarget")
-			// @ATTR multitarget|bool|Allows a hazard power to hit more than one entity.
+			// @ATTR power.multitarget|bool|Allows a hazard power to hit more than one entity.
 			powers[input_id].multitarget = toBool(infile.val);
 		else if (infile.key == "multihit")
-			// @ATTR multihit|bool|Allows a hazard power to hit the same entity more than once.
+			// @ATTR power.multihit|bool|Allows a hazard power to hit the same entity more than once.
 			powers[input_id].multihit = toBool(infile.val);
 		else if (infile.key == "expire_with_caster")
-			// @ATTR expire_with_caster|bool|If true, hazard will disappear when the caster dies.
+			// @ATTR power.expire_with_caster|bool|If true, hazard will disappear when the caster dies.
 			powers[input_id].expire_with_caster = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
-			// @ATTR trait_armor_penetration|bool|Ignores the target's Absorbtion stat
+			// @ATTR power.trait_armor_penetration|bool|Ignores the target's Absorbtion stat
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
 		else if (infile.key == "trait_avoidance_ignore")
-			// @ATTR trait_avoidance_ignore|bool|Ignores the target's Avoidance stat
+			// @ATTR power.trait_avoidance_ignore|bool|Ignores the target's Avoidance stat
 			powers[input_id].trait_avoidance_ignore = toBool(infile.val);
 		else if (infile.key == "trait_crits_impaired")
-			// @ATTR trait_crits_impaired|integer|Increases critical hit percentage for slowed/immobile targets
+			// @ATTR power.trait_crits_impaired|integer|Increases critical hit percentage for slowed/immobile targets
 			powers[input_id].trait_crits_impaired = toInt(infile.val);
 		else if (infile.key == "trait_elemental") {
-			// @ATTR trait_elemental|string|Damage done is elemental. See engine/elements.txt
+			// @ATTR power.trait_elemental|string|Damage done is elemental. See engine/elements.txt
 			for (unsigned int i=0; i<ELEMENTS.size(); i++) {
 				if (infile.val == ELEMENTS[i].id) powers[input_id].trait_elemental = i;
 			}
 		}
 		else if (infile.key == "target_range")
-			// @ATTR target_range|float|The distance from the caster that the power can be activated
+			// @ATTR power.target_range|float|The distance from the caster that the power can be activated
 			powers[input_id].target_range = toFloat(infile.nextValue());
 		//steal effects
 		else if (infile.key == "hp_steal")
-			// @ATTR hp_steal|integer|Percentage of damage to steal into HP
+			// @ATTR power.hp_steal|int|Percentage of damage to steal into HP
 			powers[input_id].hp_steal = toInt(infile.val);
 		else if (infile.key == "mp_steal")
-			// @ATTR mp_steal|integer|Percentage of damage to steal into MP
+			// @ATTR power.mp_steal|int|Percentage of damage to steal into MP
 			powers[input_id].mp_steal = toInt(infile.val);
 		//missile modifiers
 		else if (infile.key == "missile_angle")
-			// @ATTR missile_angle|integer|Angle of missile
+			// @ATTR power.missile_angle|int|Angle of missile
 			powers[input_id].missile_angle = toInt(infile.val);
 		else if (infile.key == "angle_variance")
-			// @ATTR angle_variance|integer|Percentage of variance added to missile angle
+			// @ATTR power.angle_variance|int|Percentage of variance added to missile angle
 			powers[input_id].angle_variance = toInt(infile.val);
 		else if (infile.key == "speed_variance")
-			// @ATTR speed_variance|integer|Percentage of variance added to missile speed
+			// @ATTR power.speed_variance|float|Percentage of variance added to missile speed
 			powers[input_id].speed_variance = toFloat(infile.val);
 		//repeater modifiers
 		else if (infile.key == "delay")
-			// @ATTR delay|duration|Delay between repeats in 'ms' or 's'.
+			// @ATTR power.delay|duration|Delay between repeats in 'ms' or 's'.
 			powers[input_id].delay = parse_duration(infile.val);
 		// buff/debuff durations
 		else if (infile.key == "transform_duration")
-			// @ATTR transform_duration|duration|Duration for transform in 'ms' or 's'.
+			// @ATTR power.transform_duration|duration|Duration for transform in 'ms' or 's'.
 			powers[input_id].transform_duration = parse_duration(infile.val);
 		else if (infile.key == "manual_untransform")
-			// @ATTR manual_untransform|bool|Force manual untranform
+			// @ATTR power.manual_untransform|bool|Force manual untranform
 			powers[input_id].manual_untransform = toBool(infile.val);
 		else if (infile.key == "keep_equipment")
-			// @ATTR keep_equipment|bool|Keep equipment while transformed
+			// @ATTR power.keep_equipment|bool|Keep equipment while transformed
 			powers[input_id].keep_equipment = toBool(infile.val);
 		else if (infile.key == "untransform_on_hit")
-			// @ATTR untransform_on_hit|bool|Force untransform when the player is hit
+			// @ATTR power.untransform_on_hit|bool|Force untransform when the player is hit
 			powers[input_id].untransform_on_hit = toBool(infile.val);
 		// buffs
 		else if (infile.key == "buff")
-			// @ATTR buff|bool|Power is cast upon the caster.
+			// @ATTR power.buff|bool|Power is cast upon the caster.
 			powers[input_id].buff= toBool(infile.val);
 		else if (infile.key == "buff_teleport")
-			// @ATTR buff_teleport|bool|Power is a teleportation power.
+			// @ATTR power.buff_teleport|bool|Power is a teleportation power.
 			powers[input_id].buff_teleport = toBool(infile.val);
 		else if (infile.key == "buff_party")
-			// @ATTR buff_party|bool|Power is cast upon party members
+			// @ATTR power.buff_party|bool|Power is cast upon party members
 			powers[input_id].buff_party = toBool(infile.val);
 		else if (infile.key == "buff_party_power_id")
-			// @ATTR buff_party_power_id|integer|Buffs a power id for all party members
+			// @ATTR power.buff_party_power_id|power_id|Buffs a power id for all party members
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
-			// @ATTR post_effect|[effect_id, magnitude (integer), duration (duration)]|Post effect. Duration is in 'ms' or 's'.
+			// @ATTR power.post_effect|string, int, duration : Effect ID, Magnitude, Duration|Post effect. Duration is in 'ms' or 's'.
 			if (clear_post_effects) {
 				powers[input_id].post_effects.clear();
 				clear_post_effects = false;
@@ -422,20 +422,20 @@ void PowerManager::loadPowers() {
 		}
 		// pre and post power effects
 		else if (infile.key == "post_power")
-			// @ATTR post_power|power_id|Trigger a power if the hazard did damage.
+			// @ATTR power.post_power|power_id|Trigger a power if the hazard did damage.
 			powers[input_id].post_power = toInt(infile.val);
 		else if (infile.key == "wall_power")
-			// @ATTR wall_power|power_id|Trigger a power if the hazard hit a wall.
+			// @ATTR power.wall_power|power_id|Trigger a power if the hazard hit a wall.
 			powers[input_id].wall_power = toInt(infile.val);
 		// spawn info
 		else if (infile.key == "spawn_type")
-			// @ATTR spawn_type|string|Type of spawn.
+			// @ATTR power.spawn_type|string|For non-transform powers, an enemy is spawned from this category. For transform powers, the caster will transform into a creature from this category.
 			powers[input_id].spawn_type = infile.val;
 		else if (infile.key == "target_neighbor")
-			// @ATTR target_neighbor|integer|Target is changed to an adjacent tile within a radius.
+			// @ATTR power.target_neighbor|int|Target is changed to an adjacent tile within a radius.
 			powers[input_id].target_neighbor = toInt(infile.val);
 		else if (infile.key == "spawn_limit") {
-			// @ATTR spawn_limit|[fixed:stat:unlimited],stat[physical:mental:offense:defens]|
+			// @ATTR power.spawn_limit|["fixed", "stat", "unlimited"], [int, string] : Mode, Value|The maximum number of creatures that can be spawned and alive from this power. "fixed" takes an integer. "stat" takes a primary stat as a string (e.g. "physical").
 			std::string mode = popFirstString(infile.val);
 			if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
 			else if (mode == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
@@ -458,7 +458,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "spawn_level") {
-			// @ATTR spawn_level|[default:fixed:stat:level],stat[physical:mental:offense:defens]|
+			// @ATTR power.spawn_limit|["default", "fixed", "stat", "level"], [int, string] : Mode, Value|The level of spawned creatures. "fixed" and "level" take an integer. "stat" takes a primary stat as a string (e.g. "physical").
 			std::string mode = popFirstString(infile.val);
 			if (mode == "default") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_DEFAULT;
 			else if (mode == "fixed") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_FIXED;
@@ -484,10 +484,10 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "target_party")
-			// @ATTR target_party|bool|Hazard will only affect party members.
+			// @ATTR power.target_party|bool|Hazard will only affect party members.
 			powers[input_id].target_party = toBool(infile.val);
 		else if (infile.key == "target_categories") {
-			// @ATTR target_categories|string,...|Hazard will only affect enemies in these categories.
+			// @ATTR power.target_categories|list(string)|Hazard will only affect enemies in these categories.
 			powers[input_id].target_categories.clear();
 			std::string cat;
 			while ((cat = infile.nextValue()) != "") {
@@ -495,7 +495,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "modifier_accuracy") {
-			// @ATTR modifier_accuracy|[multiply:add:absolute], integer|Changes this power's accuracy.
+			// @ATTR power.modifier_accuracy|["multiply", "add", "absolute"], int : Mode, Value|Changes this power's accuracy.
 			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_accuracy_mode = STAT_MODIFIER_MODE_ADD;
@@ -505,7 +505,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_accuracy_value = popFirstInt(infile.val);
 		}
 		else if (infile.key == "modifier_damage") {
-			// @ATTR modifier_damage|[multiply:add:absolute], min (integer), max (integer)|Changes this power's damage. The "max" value is ignored, except in the case of "absolute" modifiers.
+			// @ATTR power.modifier_damage|["multiply", "add", "absolute"], int, int : Mode, Min, Max|Changes this power's damage. The "Max" value is ignored, except in the case of "absolute" modifiers.
 			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_damage_mode = STAT_MODIFIER_MODE_ADD;
@@ -516,7 +516,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_damage_value_max = popFirstInt(infile.val);
 		}
 		else if (infile.key == "modifier_critical") {
-			// @ATTR modifier_critical|[multiply:add:absolute], integer|Changes the chance that this power will land a critical hit.
+			// @ATTR power.modifier_critical|["multiply", "add", "absolute"], int : Mode, Value|Changes the chance that this power will land a critical hit.
 			std::string mode = popFirstString(infile.val);
 			if(mode == "multiply") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_MULTIPLY;
 			else if(mode == "add") powers[input_id].mod_crit_mode = STAT_MODIFIER_MODE_ADD;
@@ -526,7 +526,7 @@ void PowerManager::loadPowers() {
 			powers[input_id].mod_crit_value = popFirstInt(infile.val);
 		}
 		else if (infile.key == "loot") {
-			// @ATTR loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Give the player this loot when the power is used
+			// @ATTR power.loot|list(loot)|Give the player this loot when the power is used
 			if (clear_loot) {
 				powers[input_id].loot.clear();
 				clear_loot = false;
@@ -537,19 +537,19 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "target_movement_normal") {
-			// @ATTR target_movement_normal|bool|Power can affect entities with normal movement (aka walking on ground)
+			// @ATTR power.target_movement_normal|bool|Power can affect entities with normal movement (aka walking on ground)
 			powers[input_id].target_movement_normal = toBool(infile.val);
 		}
 		else if (infile.key == "target_movement_flying") {
-			// @ATTR target_movement_flying|bool|Power can affect flying entities
+			// @ATTR power.target_movement_flying|bool|Power can affect flying entities
 			powers[input_id].target_movement_flying = toBool(infile.val);
 		}
 		else if (infile.key == "target_movement_intangible") {
-			// @ATTR target_movement_intangible|bool|Power can affect intangible entities
+			// @ATTR power.target_movement_intangible|bool|Power can affect intangible entities
 			powers[input_id].target_movement_intangible = toBool(infile.val);
 		}
 		else if (infile.key == "walls_block_aoe") {
-			// @ATTR walls_block_aoe|bool|When true, prevents hazard aoe from hitting targets that are behind walls/pits.
+			// @ATTR power.walls_block_aoe|bool|When true, prevents hazard aoe from hitting targets that are behind walls/pits.
 			powers[input_id].walls_block_aoe = toBool(infile.val);
 		}
 

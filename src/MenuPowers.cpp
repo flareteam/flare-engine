@@ -65,9 +65,9 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 			if (infile.key == "label_title") title = eatLabelInfo(infile.val);
 			// @ATTR unspent_points|label|Position of the text that displays the amount of unused power points.
 			else if (infile.key == "unspent_points") unspent_points = eatLabelInfo(infile.val);
-			// @ATTR close|x (integer), y (integer)|Position of the close button.
+			// @ATTR close|point|Position of the close button.
 			else if (infile.key == "close") close_pos = toPoint(infile.val);
-			// @ATTR tab_area|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the tree pages.
+			// @ATTR tab_area|rectangle|Position and dimensions of the tree pages.
 			else if (infile.key == "tab_area") tab_area = toRect(infile.val);
 
 			else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());
@@ -180,7 +180,7 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 			}
 
 			if (infile.section == "") {
-				// @ATTR background|string|Filename of the default background image
+				// @ATTR background|filename|Filename of the default background image
 				if (infile.key == "background") default_background = infile.val;
 			}
 			else if (infile.section == "tab")
@@ -303,12 +303,12 @@ void MenuPowers::loadPowerTree(const std::string &filename) {
 void MenuPowers::loadTab(FileParser &infile) {
 	// @ATTR tab.title|string|The name of this power tree tab
 	if (infile.key == "title") tabs.back().title = infile.val;
-	// @ATTR tab.background|string|Filename of the background image for this tab's power tree
+	// @ATTR tab.background|filename|Filename of the background image for this tab's power tree
 	else if (infile.key == "background") tabs.back().background = infile.val;
 }
 
 void MenuPowers::loadPower(FileParser &infile) {
-	// @ATTR power.id|integer|A power id from powers/powers.txt for this slot.
+	// @ATTR power.id|int|A power id from powers/powers.txt for this slot.
 	if (infile.key == "id") {
 		int id = popFirstInt(infile.val);
 		if (id > 0) {
@@ -332,43 +332,45 @@ void MenuPowers::loadPower(FileParser &infile) {
 	if (skip_section)
 		return;
 
-	// @ATTR power.tab|integer|Tab index to place this power on, starting from 0.
+	// @ATTR power.tab|int|Tab index to place this power on, starting from 0.
 	if (infile.key == "tab") power_cell.back().tab = toInt(infile.val);
-	// @ATTR power.position|x (integer), y (integer)|Position of this power icon; relative to MenuPowers "pos".
+	// @ATTR power.position|point|Position of this power icon; relative to MenuPowers "pos".
 	else if (infile.key == "position") power_cell.back().pos = toPoint(infile.val);
 
-	// @ATTR power.requires_physoff|integer|Power requires Physical and Offense stat of this value.
+	// @ATTR power.requires_physoff|int|Power requires Physical and Offense stat of this value.
 	else if (infile.key == "requires_physoff") power_cell.back().requires_physoff = toInt(infile.val);
-	// @ATTR power.requires_physdef|integer|Power requires Physical and Defense stat of this value.
+	// @ATTR power.requires_physdef|int|Power requires Physical and Defense stat of this value.
 	else if (infile.key == "requires_physdef") power_cell.back().requires_physdef = toInt(infile.val);
-	// @ATTR power.requires_mentoff|integer|Power requires Mental and Offense stat of this value.
+	// @ATTR power.requires_mentoff|int|Power requires Mental and Offense stat of this value.
 	else if (infile.key == "requires_mentoff") power_cell.back().requires_mentoff = toInt(infile.val);
-	// @ATTR power.requires_mentdef|integer|Power requires Mental and Defense stat of this value.
+	// @ATTR power.requires_mentdef|int|Power requires Mental and Defense stat of this value.
 	else if (infile.key == "requires_mentdef") power_cell.back().requires_mentdef = toInt(infile.val);
 
-	// @ATTR power.requires_defense|integer|Power requires Defense stat of this value.
+	// @ATTR power.requires_defense|int|Power requires Defense stat of this value.
 	else if (infile.key == "requires_defense") power_cell.back().requires_defense = toInt(infile.val);
-	// @ATTR power.requires_offense|integer|Power requires Offense stat of this value.
+	// @ATTR power.requires_offense|int|Power requires Offense stat of this value.
 	else if (infile.key == "requires_offense") power_cell.back().requires_offense = toInt(infile.val);
-	// @ATTR power.requires_physical|integer|Power requires Physical stat of this value.
+	// @ATTR power.requires_physical|int|Power requires Physical stat of this value.
 	else if (infile.key == "requires_physical") power_cell.back().requires_physical = toInt(infile.val);
-	// @ATTR power.requires_mental|integer|Power requires Mental stat of this value.
+	// @ATTR power.requires_mental|int|Power requires Mental stat of this value.
 	else if (infile.key == "requires_mental") power_cell.back().requires_mental = toInt(infile.val);
 
-	// @ATTR power.requires_point|boolean|Power requires a power point to unlock.
+	// @ATTR power.requires_point|bool|Power requires a power point to unlock.
 	else if (infile.key == "requires_point") power_cell.back().requires_point = toBool(infile.val);
-	// @ATTR power.requires_level|integer|Power requires at least this level for the hero.
+	// @ATTR power.requires_level|int|Power requires at least this level for the hero.
 	else if (infile.key == "requires_level") power_cell.back().requires_level = toInt(infile.val);
-	// @ATTR power.requires_power|integer|Power requires another power id.
+	// @ATTR power.requires_power|power_id|Power requires another power id.
 	else if (infile.key == "requires_power") power_cell.back().requires_power.push_back(toInt(infile.val));
 
-	// @ATTR power.visible_requires_status|string|Hide the power if we don't have this campaign status.
+	// @ATTR power.visible_requires_status|repeatable(string)|Hide the power if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell.back().visible_requires_status.push_back(infile.val);
-	// @ATTR power.visible_requires_not_status|string|Hide the power if we have this campaign status.
+	// @ATTR power.visible_requires_not_status|repeatable(string)|Hide the power if we have this campaign status.
 	else if (infile.key == "visible_requires_not_status") power_cell.back().visible_requires_not.push_back(infile.val);
 
-	// @ATTR power.upgrades|id (integer), ...|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.
+	// @ATTR power.upgrades|list(power_id)|A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.
 	else if (infile.key == "upgrades") {
+		// TODO since we allocate our upgrade button here, it should NOT be repeatable
+
 		upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
 		std::string repeat_val = infile.nextValue();
 		while (repeat_val != "") {
@@ -384,7 +386,7 @@ void MenuPowers::loadPower(FileParser &infile) {
 }
 
 void MenuPowers::loadUpgrade(FileParser &infile) {
-	// @ATTR upgrade.id|integer|A power id from powers/powers.txt for this upgrade.
+	// @ATTR upgrade.id|int|A power id from powers/powers.txt for this upgrade.
 	if (infile.key == "id") {
 		int id = popFirstInt(infile.val);
 		if (id > 0) {
@@ -402,34 +404,34 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 	if (skip_section)
 		return;
 
-	// @ATTR upgrade.requires_physoff|integer|Upgrade requires Physical and Offense stat of this value.
+	// @ATTR upgrade.requires_physoff|int|Upgrade requires Physical and Offense stat of this value.
 	if (infile.key == "requires_physoff") power_cell_upgrade.back().requires_physoff = toInt(infile.val);
-	// @ATTR upgrade.requires_physdef|integer|Upgrade requires Physical and Defense stat of this value.
+	// @ATTR upgrade.requires_physdef|int|Upgrade requires Physical and Defense stat of this value.
 	else if (infile.key == "requires_physdef") power_cell_upgrade.back().requires_physdef = toInt(infile.val);
-	// @ATTR upgrade.requires_mentoff|integer|Upgrade requires Mental and Offense stat of this value.
+	// @ATTR upgrade.requires_mentoff|int|Upgrade requires Mental and Offense stat of this value.
 	else if (infile.key == "requires_mentoff") power_cell_upgrade.back().requires_mentoff = toInt(infile.val);
-	// @ATTR upgrade.requires_mentdef|integer|Upgrade requires Mental and Defense stat of this value.
+	// @ATTR upgrade.requires_mentdef|int|Upgrade requires Mental and Defense stat of this value.
 	else if (infile.key == "requires_mentdef") power_cell_upgrade.back().requires_mentdef = toInt(infile.val);
 
-	// @ATTR upgrade.requires_defense|integer|Upgrade requires Defense stat of this value.
+	// @ATTR upgrade.requires_defense|int|Upgrade requires Defense stat of this value.
 	else if (infile.key == "requires_defense") power_cell_upgrade.back().requires_defense = toInt(infile.val);
-	// @ATTR upgrade.requires_offense|integer|Upgrade requires Offense stat of this value.
+	// @ATTR upgrade.requires_offense|int|Upgrade requires Offense stat of this value.
 	else if (infile.key == "requires_offense") power_cell_upgrade.back().requires_offense = toInt(infile.val);
-	// @ATTR upgrade.requires_physical|integer|Upgrade requires Physical stat of this value.
+	// @ATTR upgrade.requires_physical|int|Upgrade requires Physical stat of this value.
 	else if (infile.key == "requires_physical") power_cell_upgrade.back().requires_physical = toInt(infile.val);
-	// @ATTR upgrade.requires_mental|integer|Upgrade requires Mental stat of this value.
+	// @ATTR upgrade.requires_mental|int|Upgrade requires Mental stat of this value.
 	else if (infile.key == "requires_mental") power_cell_upgrade.back().requires_mental = toInt(infile.val);
 
-	// @ATTR upgrade.requires_point|boolean|Upgrade requires a power point to unlock.
+	// @ATTR upgrade.requires_point|bool|Upgrade requires a power point to unlock.
 	else if (infile.key == "requires_point") power_cell_upgrade.back().requires_point = toBool(infile.val);
-	// @ATTR upgrade.requires_level|integer|Upgrade requires at least this level for the hero.
+	// @ATTR upgrade.requires_level|int|Upgrade requires at least this level for the hero.
 	else if (infile.key == "requires_level") power_cell_upgrade.back().requires_level = toInt(infile.val);
-	// @ATTR upgrade.requires_power|integer|Upgrade requires another power id.
+	// @ATTR upgrade.requires_power|int|Upgrade requires another power id.
 	else if (infile.key == "requires_power") power_cell_upgrade.back().requires_power.push_back(toInt(infile.val));
 
-	// @ATTR upgrade.visible_requires_status|string|Hide the upgrade if we don't have this campaign status.
+	// @ATTR upgrade.visible_requires_status|repeatable(string)|Hide the upgrade if we don't have this campaign status.
 	else if (infile.key == "visible_requires_status") power_cell_upgrade.back().visible_requires_status.push_back(infile.val);
-	// @ATTR upgrade.visible_requires_not_status|string|Hide the upgrade if we have this campaign status.
+	// @ATTR upgrade.visible_requires_not_status|repeatable(string)|Hide the upgrade if we have this campaign status.
 	else if (infile.key == "visible_requires_not_status") power_cell_upgrade.back().visible_requires_not.push_back(infile.val);
 
 	else infile.error("MenuPowers: '%s' is not a valid key.", infile.key.c_str());

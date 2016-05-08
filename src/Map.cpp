@@ -171,32 +171,33 @@ void Map::loadHeader(FileParser &infile) {
 		this->title = msg->get(infile.val);
 	}
 	else if (infile.key == "width") {
-		// @ATTR width|integer|Width of map
+		// @ATTR width|int|Width of map
 		this->w = static_cast<unsigned short>(std::max(toInt(infile.val), 1));
 	}
 	else if (infile.key == "height") {
-		// @ATTR height|integer|Height of map
+		// @ATTR height|int|Height of map
 		this->h = static_cast<unsigned short>(std::max(toInt(infile.val), 1));
 	}
 	else if (infile.key == "tileset") {
-		// @ATTR tileset|string|Filename of a tileset definition to use for map
+		// @ATTR tileset|filename|Filename of a tileset definition to use for map
 		this->tileset = infile.val;
 	}
 	else if (infile.key == "music") {
-		// @ATTR music|string|Filename of background music to use for map
+		// @ATTR music|filename|Filename of background music to use for map
 		music_filename = infile.val;
 	}
 	else if (infile.key == "location") {
-		// @ATTR location|[x(integer), y(integer), direction(integer))|Spawn point location in map
+		// @ATTR location|int, int, int : X, Y, Direction|Spawn point location in map
+		// TODO use parse_direction() here?
 		spawn.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
 		spawn.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
 		spawn_dir = static_cast<unsigned char>(toInt(infile.nextValue()));
 	}
 	else if (infile.key == "tilewidth") {
-		// @ATTR tilewidth|integer|Inherited from Tiled map file. Unused by engine.
+		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.
 	}
 	else if (infile.key == "tileheight") {
-		// @ATTR tileheight|integer|Inherited from Tiled map file. Unused by engine.
+		// @ATTR tileheight|int|Inherited from Tiled map file. Unused by engine.
 	}
 	else if (infile.key == "orientation") {
 		// this is only used by Tiled when importing Flare maps
@@ -265,24 +266,24 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->category = infile.val;
 	}
 	else if (infile.key == "level") {
-		// @ATTR enemygroup.level|[min(integer), max(integer)]|Defines the level range of enemies in group. If only one number is given, it's the exact level.
+		// @ATTR enemygroup.level|int, int : Min, Max|Defines the level range of enemies in group. If only one number is given, it's the exact level.
 		group->levelmin = std::max(0, toInt(infile.nextValue()));
 		group->levelmax = std::max(0, toInt(infile.nextValue(), group->levelmin));
 	}
 	else if (infile.key == "location") {
-		// @ATTR enemygroup.location|[x(integer), y(integer), x2(integer), y2(integer)]|Location area for enemygroup
+		// @ATTR enemygroup.location|rectangle|Location area for enemygroup
 		group->pos.x = toInt(infile.nextValue());
 		group->pos.y = toInt(infile.nextValue());
 		group->area.x = toInt(infile.nextValue());
 		group->area.y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "number") {
-		// @ATTR enemygroup.number|[min(integer), max(integer]|Defines the range of enemies in group. If only one number is given, it's the exact amount.
+		// @ATTR enemygroup.number|int, int : Min, Max|Defines the range of enemies in group. If only one number is given, it's the exact amount.
 		group->numbermin = std::max(0, toInt(infile.nextValue()));
 		group->numbermax = std::max(0, toInt(infile.nextValue(), group->numbermin));
 	}
 	else if (infile.key == "chance") {
-		// @ATTR enemygroup.chance|integer|Percentage of chance
+		// @ATTR enemygroup.chance|int|Percentage of chance
 		float n = static_cast<float>(std::max(0, toInt(infile.nextValue()))) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
@@ -291,7 +292,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->direction = parse_direction(infile.val);
 	}
 	else if (infile.key == "waypoints") {
-		// @ATTR enemygroup.waypoints|[x(integer), y(integer)]|Enemy waypoints; single enemy only; negates wander_radius
+		// @ATTR enemygroup.waypoints|list(point)|Enemy waypoints; single enemy only; negates wander_radius
 		std::string none = "";
 		std::string a = infile.nextValue();
 		std::string b = infile.nextValue();
@@ -309,7 +310,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->wander_radius = 0;
 	}
 	else if (infile.key == "wander_radius") {
-		// @ATTR enemygroup.wander_radius|integer|The radius (in tiles) that an enemy will wander around randomly; negates waypoints
+		// @ATTR enemygroup.wander_radius|int|The radius (in tiles) that an enemy will wander around randomly; negates waypoints
 		group->wander_radius = std::max(0, toInt(infile.nextValue()));
 
 		// clear waypoints, since wandering will use the waypoint queue
@@ -319,6 +320,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "requires_status") {
 		// @ATTR enemygroup.requires_status|string|Status required for loading enemies
+		// TODO change this to list(string) instead of just string?
 		group->requires_status.push_back(infile.nextValue());
 	}
 	else if (infile.key == "requires_not_status") {
@@ -341,17 +343,17 @@ void Map::loadNPC(FileParser &infile) {
 		npcs.back().id = infile.val;
 	}
 	else if (infile.key == "requires_status") {
-		// @ATTR npc.requires_status|string|Status required for NPC load. There can be multiple states, separated by comma
+		// @ATTR npc.requires_status|list(string)|Status required for NPC load. There can be multiple states, separated by comma
 		while ( (s = infile.nextValue()) != "")
 			npcs.back().requires_status.push_back(s);
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR npc.requires_not_status|string|Status required to be missing for NPC load. There can be multiple states, separated by comma
+		// @ATTR npc.requires_not_status|list(string)|Status required to be missing for NPC load. There can be multiple states, separated by comma
 		while ( (s = infile.nextValue()) != "")
 			npcs.back().requires_not_status.push_back(s);
 	}
 	else if (infile.key == "location") {
-		// @ATTR npc.location|[x(integer), y(integer)]|Location of NPC
+		// @ATTR npc.location|point|Location of NPC
 		npcs.back().pos.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
 		npcs.back().pos.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
 

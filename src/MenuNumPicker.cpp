@@ -61,22 +61,22 @@ MenuNumPicker::MenuNumPicker()
 				title = eatLabelInfo(infile.val);
 			}
 			else if (infile.key == "confirm") {
-				// @ATTR confirm|x (integer), y (integer)|Position of the "OK" button.
+				// @ATTR confirm|point|Position of the "OK" button.
 				Point pos = toPoint(infile.val);
 				button_ok->setBasePos(pos.x, pos.y);
 			}
 			else if (infile.key == "increase") {
-				// @ATTR increase|x (integer), y (integer)|Position of the button used to increase the value.
+				// @ATTR increase|point|Position of the button used to increase the value.
 				Point pos = toPoint(infile.val);
 				button_up->setBasePos(pos.x, pos.y);
 			}
 			else if (infile.key == "decrease") {
-				// @ATTR decrease|x (integer), y (integer)|Position of the button used to decrease the value.
+				// @ATTR decrease|point|Position of the button used to decrease the value.
 				Point pos = toPoint(infile.val);
 				button_down->setBasePos(pos.x, pos.y);
 			}
 			else if (infile.key == "input") {
-				// @ATTR input|x (integer), y (integer)|Position of the text input box.
+				// @ATTR input|point|Position of the text input box.
 				Point pos = toPoint(infile.val);
 				input_box->setBasePos(pos.x, pos.y);
 			}

@@ -46,7 +46,7 @@ MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR orientation|boolean|True is vertical orientation; False is horizontal orientation.
+			// @ATTR orientation|bool|True is vertical orientation; False is horizontal orientation.
 			if(infile.key == "orientation") {
 				orientation = toBool(infile.val);
 			}

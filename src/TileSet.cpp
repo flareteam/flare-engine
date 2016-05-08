@@ -91,11 +91,11 @@ void TileSet::load(const std::string& filename) {
 	if (infile.open(filename)) {
 		while (infile.next()) {
 			if (infile.key == "img") {
-				// @ATTR img|string|Filename of a tile sheet image.
+				// @ATTR img|filename|Filename of a tile sheet image.
 				loadGraphics(infile.val);
 			}
 			else if (infile.key == "tile") {
-				// @ATTR tile|index (integer), x (integer), y (integer), w (integer), h (integer), x offset (integer), y offset (integer)|A single tile definition.
+				// @ATTR tile|int, int, int, int, int, int, int : Index, X, Y, Width, Height, X offset, Y offset|A single tile definition.
 
 				// Verify that we have graphics for tiles
 				if (!sprites) {
@@ -120,7 +120,7 @@ void TileSet::load(const std::string& filename) {
 				max_size_y = std::max(max_size_y, (tiles[index].tile->getClip().h / TILE_H) + 1);
 			}
 			else if (infile.key == "transparency") {
-				// @ATTR transparency|r (integer), g (integer), b (integer)|An RGB color to key out and treat as transparent.
+				// @ATTR transparency|color|An RGB color to key out and treat as transparent.
 				alpha_background = false;
 
 				trans_r = (Uint8)popFirstInt(infile.val);
@@ -129,7 +129,7 @@ void TileSet::load(const std::string& filename) {
 
 			}
 			else if (infile.key == "animation") {
-				// @ATTR animation|tile index (integer), x (integer), y (integer), duration (duration), ...|An animation for a tile. Durations are in 'ms' or 's'.
+				// @ATTR animation|list(int, int, int, duration) : Tile index, X, Y, duration|An animation for a tile. Durations are in 'ms' or 's'.
 				int frame = 0;
 				unsigned TILE_ID = toInt(infile.nextValue());
 

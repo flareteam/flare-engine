@@ -81,7 +81,7 @@ void GameSwitcher::loadMusic() {
 		// @CLASS GameSwitcher: Default music|Description of engine/default_music.txt
 		if (infile.open("engine/default_music.txt", true, "")) {
 			while (infile.next()) {
-				// @ATTR music|string|Filename of a music file to play during game states that don't already have music.
+				// @ATTR music|filename|Filename of a music file to play during game states that don't already have music.
 				if (infile.key == "music") music_filename = infile.val;
 				else infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());
 			}
@@ -104,7 +104,7 @@ void GameSwitcher::loadBackgroundList() {
 	// @CLASS GameSwitcher: Background images|Description of engine/menu_backgrounds.txt
 	if (infile.open("engine/menu_backgrounds.txt", true, "")) {
 		while (infile.next()) {
-			// @ATTR background|string|Filename of a background image to be added to the pool of random menu backgrounds
+			// @ATTR background|repeatable(filename)|Filename of a background image to be added to the pool of random menu backgrounds
 			if (infile.key == "background") background_list.push_back(infile.val);
 			else infile.error("GameSwitcher: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -224,13 +224,13 @@ void GameSwitcher::loadFPS() {
 	// @CLASS GameSwitcher: FPS counter|Description of menus/fps.txt
 	if (infile.open("menus/fps.txt")) {
 		while(infile.next()) {
-			// @ATTR position|x (integer), y (integer), align (alignment)|Position of the fps counter.
+			// @ATTR position|int, int, alignment : X, Y, Alignment|Position of the fps counter.
 			if(infile.key == "position") {
 				fps_position.x = popFirstInt(infile.val);
 				fps_position.y = popFirstInt(infile.val);
 				fps_corner = parse_alignment(popFirstString(infile.val));
 			}
-			// @ATTR color|r (integer), g (integer), b (integer)|Color of the fps counter text.
+			// @ATTR color|color|Color of the fps counter text.
 			else if(infile.key == "color") {
 				fps_color = toRGB(infile.val);
 			}

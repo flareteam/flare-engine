@@ -58,11 +58,11 @@ LootManager::LootManager()
 	if (infile.open("engine/loot.txt")) {
 		while (infile.next()) {
 			if (infile.key == "tooltip_margin") {
-				// @ATTR tooltip_margin|integer|Vertical offset of the loot tooltip from the loot itself.
+				// @ATTR tooltip_margin|int|Vertical offset of the loot tooltip from the loot itself.
 				tooltip_margin = toInt(infile.val);
 			}
 			else if (infile.key == "autopickup_currency") {
-				// @ATTR autopickup_currency|boolean|Enable autopickup for currency
+				// @ATTR autopickup_currency|bool|Enable autopickup for currency
 				AUTOPICKUP_CURRENCY = toBool(infile.val);
 			}
 			else if (infile.key == "autopickup_range") {
@@ -73,20 +73,20 @@ LootManager::LootManager()
 				// This key is parsed in loadMiscSettings() in Settings.cpp
 			}
 			else if (infile.key == "vendor_ratio") {
-				// @ATTR vendor_ratio|integer|Prices ratio for vendors
+				// @ATTR vendor_ratio|int|Prices ratio for vendors
 				VENDOR_RATIO = static_cast<float>(toInt(infile.val)) / 100.0f;
 			}
 			else if (infile.key == "sfx_loot") {
-				// @ATTR sfx_loot|string|Filename of a sound effect to play for dropping loot.
+				// @ATTR sfx_loot|filename|Filename of a sound effect to play for dropping loot.
 				sfx_loot =  snd->load(infile.val, "LootManager dropping loot");
 			}
 			else if (infile.key == "drop_max") {
-				// @ATTR drop_max|integer|The maximum number of random item stacks that can drop at once
+				// @ATTR drop_max|int|The maximum number of random item stacks that can drop at once
 				drop_max = toInt(infile.val);
 				clampFloor(drop_max, 1);
 			}
 			else if (infile.key == "drop_radius") {
-				// @ATTR drop_radius|integer|The distance (in tiles) away from the origin that loot can drop
+				// @ATTR drop_radius|int|The distance (in tiles) away from the origin that loot can drop
 				drop_radius = toInt(infile.val);
 				clampFloor(drop_radius, 1);
 			}

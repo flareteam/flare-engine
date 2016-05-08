@@ -91,35 +91,35 @@ void QuestLog::load(const std::string& filename) {
 
 		Event ev;
 		if (infile.key == "requires_status") {
-			// @ATTR quest.requires_status|string|Quest requires this campaign status
+			// @ATTR quest.requires_status|list(string)|Quest requires this campaign status
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_status") {
-			// @ATTR quest.requires_not_status|string|Quest requires not having this campaign status.
+			// @ATTR quest.requires_not_status|list(string)|Quest requires not having this campaign status.
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_level") {
-			// @ATTR quest.requires_level|integer|Quest requires hero level
+			// @ATTR quest.requires_level|int|Quest requires hero level
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_level") {
-			// @ATTR quest.requires_not_level|integer|Quest requires not hero level
+			// @ATTR quest.requires_not_level|int|Quest requires not hero level
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_currency") {
-			// @ATTR quest.requires_currency|integer|Quest requires atleast this much currency
+			// @ATTR quest.requires_currency|int|Quest requires atleast this much currency
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_currency") {
-			// @ATTR quest.requires_not_currency|integer|Quest requires no more than this much currency
+			// @ATTR quest.requires_not_currency|int|Quest requires no more than this much currency
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_item") {
-			// @ATTR quest.requires_item|integer,...|Quest requires specific item (not equipped)
+			// @ATTR quest.requires_item|list(item_id)|Quest requires specific item (not equipped)
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_item") {
-			// @ATTR quest.requires_not_item|integer,...|Quest requires not having a specific item (not equipped)
+			// @ATTR quest.requires_not_item|list(item_id)|Quest requires not having a specific item (not equipped)
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_class") {

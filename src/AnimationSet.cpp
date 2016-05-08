@@ -69,7 +69,7 @@ void AnimationSet::load() {
 	loaded = true;
 
 	FileParser parser;
-	// @CLASS Animation|Description of animations in animations/
+	// @CLASS AnimationSet|Description of animations in animations/
 	if (!parser.open(name, true, "Error loading animation definition: " + name))
 		return;
 
@@ -108,7 +108,7 @@ void AnimationSet::load() {
 			}
 		}
 		if (parser.key == "image") {
-			// @ATTR image|string|Filename of sprite-sheet image.
+			// @ATTR image|filename|Filename of sprite-sheet image.
 			if (sprite != NULL) {
 				parser.error("AnimationSet: Multiple images specified. Dragons be here!");
 				Exit(128);
@@ -117,11 +117,11 @@ void AnimationSet::load() {
 			sprite = render_device->loadImage(parser.val);
 		}
 		else if (parser.key == "position") {
-			// @ATTR position|integer|Number of frames to the right to use as the first frame. Unpacked animations only.
+			// @ATTR position|int|Number of frames to the right to use as the first frame. Unpacked animations only.
 			position = static_cast<unsigned short>(toInt(parser.val));
 		}
 		else if (parser.key == "frames") {
-			// @ATTR frames|integer|The total number of frames
+			// @ATTR frames|int|The total number of frames
 			frames = static_cast<unsigned short>(toInt(parser.val));
 			if (parent && frames != parent_anim_frames) {
 				parser.error("AnimationSet: Frame count %d != %d for matching animation in %s", frames, parent_anim_frames, parent->getName().c_str());
@@ -129,24 +129,24 @@ void AnimationSet::load() {
 			}
 		}
 		else if (parser.key == "duration") {
-			// @ATTR duration|integer|The duration of the entire animation in 'ms' or 's'.
+			// @ATTR duration|duration|The duration of the entire animation in 'ms' or 's'.
 			duration = static_cast<unsigned short>(parse_duration(parser.val));
 		}
 		else if (parser.key == "type")
-			// @ATTR type|[play_once, back_forth, looped]|How to loop (or not loop) this animation.
+			// @ATTR type|["play_once", "back_forth", "looped"]|How to loop (or not loop) this animation.
 			type = parser.val;
 		else if (parser.key == "render_size") {
-			// @ATTR render_size|w (integer), h (integer)|Width and height of animation.
+			// @ATTR render_size|int, int : Width, Height|Width and height of animation.
 			render_size.x = toInt(parser.nextValue());
 			render_size.y = toInt(parser.nextValue());
 		}
 		else if (parser.key == "render_offset") {
-			// @ATTR render_offset|x (integer), y (integer)|Render x/y offset.
+			// @ATTR render_offset|int, int : X offset, Y offset|Render x/y offset.
 			render_offset.x = toInt(parser.nextValue());
 			render_offset.y = toInt(parser.nextValue());
 		}
 		else if (parser.key == "active_frame") {
-			// @ATTR active_frame|[all:frame (integer), ...]|A list of frames marked as "active". Also, "all" can be used to mark all frames as active.
+			// @ATTR active_frame|[list(int), "all"]|A list of frames marked as "active". Also, "all" can be used to mark all frames as active.
 			active_frames.clear();
 			std::string nv = parser.nextValue();
 			if (nv == "all") {
@@ -162,7 +162,7 @@ void AnimationSet::load() {
 			}
 		}
 		else if (parser.key == "frame") {
-			// @ATTR frame|index (integer), direction (integer), x (integer), y (integer), w (integer), h (integer), x offset (integer), y offset (integer)|A single frame of a compressed animation.
+			// @ATTR frame|int, int, int, int, int, int, int, int : Index, Direction, X, Y, Width, Height, X offset, Y offset|A single frame of a compressed animation.
 			if (compressed_loading == false) { // first frame statement in section
 				newanim = new Animation(_name, type, sprite);
 				newanim->setup(frames, duration);

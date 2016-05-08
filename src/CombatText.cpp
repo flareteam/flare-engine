@@ -66,11 +66,11 @@ CombatText::CombatText() {
 				duration = parse_duration(infile.val);
 			}
 			else if(infile.key == "speed") {
-				// @ATTR speed|integer|Motion speed of the combat text.
+				// @ATTR speed|int|Motion speed of the combat text.
 				speed = static_cast<float>(toInt(infile.val) * 60) / MAX_FRAMES_PER_SEC;
 			}
 			else if (infile.key == "offset") {
-				// @ATTR offset|integer|The vertical offset for the combat text's starting position.
+				// @ATTR offset|int|The vertical offset for the combat text's starting position.
 				offset = toInt(infile.val);
 			}
 			else {

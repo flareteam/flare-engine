@@ -96,38 +96,38 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR close|x (integer), y (integer)|Position of the close button.
+			// @ATTR close|point|Position of the close button.
 			if(infile.key == "close") {
 				Point pos = toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y);
 			}
 			// @ATTR label_title|label|Position of the "Character" text.
 			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
-			// @ATTR upgrade_physical|x (integer), y (integer)|Position of the button used to add a stat point to Physical.
+			// @ATTR upgrade_physical|point|Position of the button used to add a stat point to Physical.
 			else if(infile.key == "upgrade_physical") {
 				Point pos = toPoint(infile.val);
 				upgradeButton[0]->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR upgrade_mental|x (integer), y (integer)|Position of the button used to add a stat point to Mental.
+			// @ATTR upgrade_mental|point|Position of the button used to add a stat point to Mental.
 			else if(infile.key == "upgrade_mental")	{
 				Point pos = toPoint(infile.val);
 				upgradeButton[1]->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR upgrade_offense|x (integer), y (integer)|Position of the button used to add a stat point to Offense.
+			// @ATTR upgrade_offense|point|Position of the button used to add a stat point to Offense.
 			else if(infile.key == "upgrade_offense") {
 				Point pos = toPoint(infile.val);
 				upgradeButton[2]->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR upgrade_defense|x (integer), y (integer)|Position of the button used to add a stat point to Defense.
+			// @ATTR upgrade_defense|point|Position of the button used to add a stat point to Defense.
 			else if(infile.key == "upgrade_defense") {
 				Point pos = toPoint(infile.val);
 				upgradeButton[3]->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR statlist|x (integer), y (integer)|Position of the scrollbox containing non-primary stats.
+			// @ATTR statlist|point|Position of the scrollbox containing non-primary stats.
 			else if(infile.key == "statlist") statlist_pos = toPoint(infile.val);
-			// @ATTR statlist_rows|integer|The height of the statlist in rows.
+			// @ATTR statlist_rows|int|The height of the statlist in rows.
 			else if (infile.key == "statlist_rows") statlist_rows = toInt(infile.val);
-			// @ATTR statlist_scrollbar_offset|integer|Right margin in pixels for the statlist's scrollbar.
+			// @ATTR statlist_scrollbar_offset|int|Right margin in pixels for the statlist's scrollbar.
 			else if (infile.key == "statlist_scrollbar_offset") statlist_scrollbar_offset = toInt(infile.val);
 
 			// @ATTR label_name|label|Position of the "Name" text.
@@ -161,32 +161,32 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 				cstat[CSTAT_DEFENSE].visible = !label_pos[CSTAT_DEFENSE].hidden;
 			}
 
-			// @ATTR name|x (integer), y (integer), w (integer), h (integer)|Position of the player's name and dimensions of the tooltip hotspot.
+			// @ATTR name|rectangle|Position of the player's name and dimensions of the tooltip hotspot.
 			else if(infile.key == "name") {
 				value_pos[CSTAT_NAME] = toRect(infile.val);
 				cstat[CSTAT_NAME].value->setBasePos(value_pos[CSTAT_NAME].x + 4, value_pos[CSTAT_NAME].y + (value_pos[CSTAT_NAME].h/2)); // TODO remove 4 from x value
 			}
-			// @ATTR level|x (integer), y (integer), w (integer), h (integer)|Position of the player's level and dimensions of the tooltip hotspot.
+			// @ATTR level|rectangle|Position of the player's level and dimensions of the tooltip hotspot.
 			else if(infile.key == "level") {
 				value_pos[CSTAT_LEVEL] = toRect(infile.val);
 				cstat[CSTAT_LEVEL].value->setBasePos(value_pos[CSTAT_LEVEL].x + (value_pos[CSTAT_LEVEL].w/2), value_pos[CSTAT_LEVEL].y + (value_pos[CSTAT_LEVEL].h/2));
 			}
-			// @ATTR physical|x (integer), y (integer), w (integer), h (integer)|Position of the player's physical stat and dimensions of the tooltip hotspot.
+			// @ATTR physical|rectangle|Position of the player's physical stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "physical") {
 				value_pos[CSTAT_PHYSICAL] = toRect(infile.val);
 				cstat[CSTAT_PHYSICAL].value->setBasePos(value_pos[CSTAT_PHYSICAL].x + (value_pos[CSTAT_PHYSICAL].w/2), value_pos[CSTAT_PHYSICAL].y + (value_pos[CSTAT_PHYSICAL].h/2));
 			}
-			// @ATTR mental|x (integer), y (integer), w (integer), h (integer)|Position of the player's mental stat and dimensions of the tooltip hotspot.
+			// @ATTR mental|rectangle|Position of the player's mental stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "mental") {
 				value_pos[CSTAT_MENTAL] = toRect(infile.val);
 				cstat[CSTAT_MENTAL].value->setBasePos(value_pos[CSTAT_MENTAL].x + (value_pos[CSTAT_MENTAL].w/2), value_pos[CSTAT_MENTAL].y + (value_pos[CSTAT_MENTAL].h/2));
 			}
-			// @ATTR offense|x (integer), y (integer), w (integer), h (integer)|Position of the player's offense stat and dimensions of the tooltip hotspot.
+			// @ATTR offense|rectangle|Position of the player's offense stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "offense") {
 				value_pos[CSTAT_OFFENSE] = toRect(infile.val);
 				cstat[CSTAT_OFFENSE].value->setBasePos(value_pos[CSTAT_OFFENSE].x + (value_pos[CSTAT_OFFENSE].w/2), value_pos[CSTAT_OFFENSE].y + (value_pos[CSTAT_OFFENSE].h/2));
 			}
-			// @ATTR defense|x (integer), y (integer), w (integer), h (integer)|Position of the player's defense stat and dimensions of the tooltip hotspot.
+			// @ATTR defense|rectangle|Position of the player's defense stat and dimensions of the tooltip hotspot.
 			else if(infile.key == "defense") {
 				value_pos[CSTAT_DEFENSE] = toRect(infile.val);
 				cstat[CSTAT_DEFENSE].value->setBasePos(value_pos[CSTAT_DEFENSE].x + (value_pos[CSTAT_DEFENSE].w/2), value_pos[CSTAT_DEFENSE].y + (value_pos[CSTAT_DEFENSE].h/2));
@@ -195,22 +195,22 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
 			else if(infile.key == "unspent") unspent_pos = eatLabelInfo(infile.val);
 
-			// @ATTR show_upgrade_physical|boolean|Hide the Physical upgrade button if set to false.
+			// @ATTR show_upgrade_physical|bool|Hide the Physical upgrade button if set to false.
 			else if (infile.key == "show_upgrade_physical") show_upgrade[0] = toBool(infile.val);
-			// @ATTR show_upgrade_mental|boolean|Hide the Mental upgrade button if set to false.
+			// @ATTR show_upgrade_mental|bool|Hide the Mental upgrade button if set to false.
 			else if (infile.key == "show_upgrade_mental") show_upgrade[1] = toBool(infile.val);
-			// @ATTR show_upgrade_offense|boolean|Hide the Offense upgrade button if set to false.
+			// @ATTR show_upgrade_offense|bool|Hide the Offense upgrade button if set to false.
 			else if (infile.key == "show_upgrade_offense") show_upgrade[2] = toBool(infile.val);
-			// @ATTR show_upgrade_defense|boolean|Hide the Defense upgrade button if set to false.
+			// @ATTR show_upgrade_defense|bool|Hide the Defense upgrade button if set to false.
 			else if (infile.key == "show_upgrade_defense") show_upgrade[3] = toBool(infile.val);
 
-			// @ATTR show_resists|boolean|Hide the elemental "Resistance" stats in the statlist if set to false.
+			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = toBool(infile.val);
 
 			else {
 				bool found_key = false;
 				for (unsigned i=0; i<STAT_COUNT; ++i) {
-					// @ATTR show_$STAT|boolean|Hide the matching stat in the statlist if set to false.
+					// @ATTR show_$STAT|bool|Hide the matching stat in the statlist if set to false.
 					if (infile.key == "show_" + STAT_KEY[i]) {
 						found_key = true;
 						show_stat[i] = toBool(infile.val);

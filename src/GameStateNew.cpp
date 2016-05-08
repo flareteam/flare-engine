@@ -89,25 +89,25 @@ GameStateNew::GameStateNew()
 	// @CLASS GameStateNew: Layout|Description of menus/gamenew.txt
 	if (infile.open("menus/gamenew.txt")) {
 		while (infile.next()) {
-			// @ATTR button_prev|x (integer), y (integer)|Position of button to choose the previous preset hero.
+			// @ATTR button_prev|point|Position of button to choose the previous preset hero.
 			if (infile.key == "button_prev") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				button_prev->setBasePos(x, y);
 			}
-			// @ATTR button_next|x (integer), y (integer)|Position of button to choose the next preset hero.
+			// @ATTR button_next|point|Position of button to choose the next preset hero.
 			else if (infile.key == "button_next") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				button_next->setBasePos(x, y);
 			}
-			// @ATTR button_permadeath|x (integer), y (integer)|Position of checkbox for toggling permadeath.
+			// @ATTR button_permadeath|point|Position of checkbox for toggling permadeath.
 			else if (infile.key == "button_permadeath") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				button_permadeath->setBasePos(x, y);
 			}
-			// @ATTR name_input|x (integer), y (integer)|Position of the hero name textbox.
+			// @ATTR name_input|point|Position of the hero name textbox.
 			else if (infile.key == "name_input") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
@@ -129,17 +129,17 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "classlist_label") {
 				classlist_label = eatLabelInfo(infile.val);
 			}
-			// @ATTR portrait|x (integer), y (integer), w (integer), h (integer)|Position and dimensions of the portrait image.
+			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {
 				portrait_pos = toRect(infile.val);
 			}
-			// @ATTR class_list|x (integer), y (integer)|Position of the class list.
+			// @ATTR class_list|point|Position of the class list.
 			else if (infile.key == "class_list") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
 				class_list->setBasePos(x, y);
 			}
-			// @ATTR show_classlist|boolean|Allows hiding the class list.
+			// @ATTR show_classlist|bool|Allows hiding the class list.
 			else if (infile.key == "show_classlist") {
 				show_classlist = toBool(infile.val);
 			}
@@ -235,7 +235,7 @@ void GameStateNew::loadOptions(const std::string& filename) {
 	if (!fin.open("engine/" + filename)) return;
 
 	while (fin.next()) {
-		// @ATTR option|base (string), head (string), portrait (string), name (string)|A default body, head, portrait, and name for a hero.
+		// @ATTR option|string, string, filename, string : Base, Head, Portrait, Name|A default body, head, portrait, and name for a hero.
 		if (fin.key == "option") {
 			base.push_back(fin.nextValue());
 			head.push_back(fin.nextValue());

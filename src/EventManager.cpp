@@ -80,7 +80,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->type = infile.val;
 	}
 	else if (infile.key == "activate") {
-		// @ATTR event.activate|[on_trigger:on_mapexit:on_leave:on_load:on_clear]|Set the state in which the event will be activated (map events only).
+		// @ATTR event.activate|["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear"]|Set the state in which the event will be activated (map events only).
 		if (infile.val == "on_trigger") {
 			evnt->activate_type = EVENT_ON_TRIGGER;
 		}
@@ -104,7 +104,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		}
 	}
 	else if (infile.key == "location") {
-		// @ATTR event.location|[x,y,w,h]|Defines the location area for the event.
+		// @ATTR event.location|rectangle|Defines the location area for the event.
 		evnt->location.x = toInt(infile.nextValue());
 		evnt->location.y = toInt(infile.nextValue());
 		evnt->location.w = toInt(infile.nextValue());
@@ -116,7 +116,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		}
 	}
 	else if (infile.key == "hotspot") {
-		//  @ATTR event.hotspot|[ [x, y, w, h] : location ]|Event uses location as hotspot or defined by rect.
+		//  @ATTR event.hotspot|["location", rectangle]|Event uses location as hotspot or defined by rect.
 		if (infile.val == "location") {
 			evnt->hotspot.x = evnt->location.x;
 			evnt->hotspot.y = evnt->location.y;
@@ -138,7 +138,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->cooldown = parse_duration(infile.val);
 	}
 	else if (infile.key == "reachable_from") {
-		// @ATTR event.reachable_from|[x,y,w,h]|If the hero is inside this rectangle, they can activate the event.
+		// @ATTR event.reachable_from|rectangle|If the hero is inside this rectangle, they can activate the event.
 		evnt->reachable_from.x = toInt(infile.nextValue());
 		evnt->reachable_from.y = toInt(infile.nextValue());
 		evnt->reachable_from.w = toInt(infile.nextValue());
@@ -170,7 +170,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = msg->get(infile.val);
 	}
 	else if (infile.key == "power_path") {
-		// @ATTR event.power_path|[hero:[x,y]]|Event power path
+		// @ATTR event.power_path|["hero", point]|Event power path
 		e->type = EC_POWER_PATH;
 
 		// x,y are src, if s=="hero" we target the hero,
@@ -188,14 +188,15 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "power_damage") {
-		// @ATTR event.power_damage|min(integer), max(integer)|Range of power damage
+		// @ATTR event.power_damage|int, int : Min, Max|Range of power damage
 		e->type = EC_POWER_DAMAGE;
 
 		e->a = toInt(infile.nextValue());
 		e->b = toInt(infile.nextValue());
 	}
+	// TODO should intermap and intramap be combined?
 	else if (infile.key == "intermap") {
-		// @ATTR event.intermap|[map(string),x(integer),y(integer)]|Jump to specific map at location specified.
+		// @ATTR event.intermap|filename, int, int : Map file, X, Y|Jump to specific map at location specified.
 		e->type = EC_INTERMAP;
 
 		e->s = infile.nextValue();
@@ -203,14 +204,14 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "intramap") {
-		// @ATTR event.intramap|[x(integer),y(integer)]|Jump to specific position within current map.
+		// @ATTR event.intramap|int, int : X, Y|Jump to specific position within current map.
 		e->type = EC_INTRAMAP;
 
 		e->x = toInt(infile.nextValue());
 		e->y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "mapmod") {
-		// @ATTR event.mapmod|[string,int,int,int],..|Modify map tiles
+		// @ATTR event.mapmod|list(string, int, int, int) : Layer, X, Y, Tile ID|Modify map tiles
 		e->type = EC_MAPMOD;
 
 		e->s = infile.nextValue();
@@ -235,7 +236,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "soundfx") {
-		// @ATTR event.soundfx|[soundfile(string),x(integer),y(integer),loop(boolean)]|Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.
+		// @ATTR event.soundfx|filename, int, int, bool : Sound file, X, Y, loop|Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.
 		e->type = EC_SOUNDFX;
 
 		e->s = infile.nextValue();
@@ -252,13 +253,13 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		if (s != "") e->z = static_cast<int>(toBool(s));
 	}
 	else if (infile.key == "loot") {
-		// @ATTR event.loot|[string,drop_chance([fixed:chance(integer)]),quantity_min(integer),quantity_max(integer)],...|Add loot to the event; either a filename or an inline definition.
+		// @ATTR event.loot|list(loot)|Add loot to the event.
 		e->type = EC_LOOT;
 
 		loot->parseLoot(infile, e, &evnt->components);
 	}
 	else if (infile.key == "loot_count") {
-		// @ATTR event.loot_count|min (integer), max (integer)|Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.
+		// @ATTR event.loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.
 		e->type = EC_LOOT_COUNT;
 
 		e->x = toInt(infile.nextValue());
@@ -281,7 +282,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->x = parse_duration(infile.val);
 	}
 	else if (infile.key == "requires_status") {
-		// @ATTR event.requires_status|string,...|Event requires list of statuses
+		// @ATTR event.requires_status|list(string)|Event requires list of statuses
 		e->type = EC_REQUIRES_STATUS;
 
 		e->s = infile.nextValue();
@@ -300,7 +301,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR event.requires_not_status|string,...|Event requires not list of statuses
+		// @ATTR event.requires_not_status|list(string)|Event requires not list of statuses
 		e->type = EC_REQUIRES_NOT_STATUS;
 
 		e->s = infile.nextValue();
@@ -319,31 +320,31 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "requires_level") {
-		// @ATTR event.requires_level|integer|Event requires hero level
+		// @ATTR event.requires_level|int|Event requires hero level
 		e->type = EC_REQUIRES_LEVEL;
 
 		e->x = toInt(infile.nextValue());
 	}
 	else if (infile.key == "requires_not_level") {
-		// @ATTR event.requires_not_level|integer|Event requires not hero level
+		// @ATTR event.requires_not_level|int|Event requires not hero level
 		e->type = EC_REQUIRES_NOT_LEVEL;
 
 		e->x = toInt(infile.nextValue());
 	}
 	else if (infile.key == "requires_currency") {
-		// @ATTR event.requires_currency|integer|Event requires atleast this much currency
+		// @ATTR event.requires_currency|int|Event requires atleast this much currency
 		e->type = EC_REQUIRES_CURRENCY;
 
 		e->x = toInt(infile.nextValue());
 	}
 	else if (infile.key == "requires_not_currency") {
-		// @ATTR event.requires_not_currency|integer|Event requires no more than this much currency
+		// @ATTR event.requires_not_currency|int|Event requires no more than this much currency
 		e->type = EC_REQUIRES_NOT_CURRENCY;
 
 		e->x = toInt(infile.nextValue());
 	}
 	else if (infile.key == "requires_item") {
-		// @ATTR event.requires_item|integer,...|Event requires specific item (not equipped)
+		// @ATTR event.requires_item|list(item_id)|Event requires specific item (not equipped)
 		e->type = EC_REQUIRES_ITEM;
 
 		e->x = toInt(infile.nextValue());
@@ -362,7 +363,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "requires_not_item") {
-		// @ATTR event.requires_not_item|integer,...|Event requires not having a specific item (not equipped)
+		// @ATTR event.requires_not_item|list(item_id)|Event requires not having a specific item (not equipped)
 		e->type = EC_REQUIRES_NOT_ITEM;
 
 		e->x = toInt(infile.nextValue());
@@ -393,7 +394,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->s = infile.nextValue();
 	}
 	else if (infile.key == "set_status") {
-		// @ATTR event.set_status|string,...|Sets specified statuses
+		// @ATTR event.set_status|list(string)|Sets specified statuses
 		e->type = EC_SET_STATUS;
 
 		e->s = infile.nextValue();
@@ -412,7 +413,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "unset_status") {
-		// @ATTR event.unset_status|string,...|Unsets specified statuses
+		// @ATTR event.unset_status|list(string)|Unsets specified statuses
 		e->type = EC_UNSET_STATUS;
 
 		e->s = infile.nextValue();
@@ -431,14 +432,14 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "remove_currency") {
-		// @ATTR event.remove_currency|integer|Removes specified amount of currency from hero inventory
+		// @ATTR event.remove_currency|int|Removes specified amount of currency from hero inventory
 		e->type = EC_REMOVE_CURRENCY;
 
 		e->x = toInt(infile.val);
 		clampFloor(e->x, 0);
 	}
 	else if (infile.key == "remove_item") {
-		// @ATTR event.remove_item|integer,...|Removes specified item from hero inventory
+		// @ATTR event.remove_item|list(item_id)|Removes specified item from hero inventory
 		e->type = EC_REMOVE_ITEM;
 
 		e->x = toInt(infile.nextValue());
@@ -457,21 +458,21 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "reward_xp") {
-		// @ATTR event.reward_xp|integer|Reward hero with specified amount of experience points.
+		// @ATTR event.reward_xp|int|Reward hero with specified amount of experience points.
 		e->type = EC_REWARD_XP;
 
 		e->x = toInt(infile.val);
 		clampFloor(e->x, 0);
 	}
 	else if (infile.key == "reward_currency") {
-		// @ATTR event.reward_currency|integer|Reward hero with specified amount of currency.
+		// @ATTR event.reward_currency|int|Reward hero with specified amount of currency.
 		e->type = EC_REWARD_CURRENCY;
 
 		e->x = toInt(infile.val);
 		clampFloor(e->x, 0);
 	}
 	else if (infile.key == "reward_item") {
-		// @ATTR event.reward_item|x(integer),y(integer)|Reward hero with y number of item x.
+		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x.
 		e->type = EC_REWARD_ITEM;
 
 		e->x = toInt(infile.nextValue());
@@ -479,7 +480,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		clampFloor(e->y, 0);
 	}
 	else if (infile.key == "restore") {
-		// @ATTR event.restore|string|Restore the hero's HP, MP, and/or status.
+		// @ATTR event.restore|["hp", "mp", "hpmp", "status", "all"]|Restore the hero's HP, MP, and/or status.
 		e->type = EC_RESTORE;
 
 		e->s = infile.val;
@@ -491,7 +492,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->x = toInt(infile.val);
 	}
 	else if (infile.key == "spawn") {
-		// @ATTR event.spawn|[string,x(integer),y(integer)], ...|Spawn an enemy from this category at location
+		// @ATTR event.spawn|list(string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location
 		e->type = EC_SPAWN;
 
 		e->s = infile.nextValue();
@@ -515,43 +516,43 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "stash") {
-		// @ATTR event.stash|boolean|Opens the Stash menu.
+		// @ATTR event.stash|bool|If true, the Stash menu if opened.
 		e->type = EC_STASH;
 
 		e->s = infile.val;
 	}
 	else if (infile.key == "npc") {
-		// @ATTR event.npc|string|Filename of an NPC to start dialog with.
+		// @ATTR event.npc|filename|Filename of an NPC to start dialog with.
 		e->type = EC_NPC;
 
 		e->s = infile.val;
 	}
 	else if (infile.key == "music") {
-		// @ATTR event.music|string|Change background music to specified file.
+		// @ATTR event.music|filename|Change background music to specified file.
 		e->type = EC_MUSIC;
 
 		e->s = infile.val;
 	}
 	else if (infile.key == "cutscene") {
-		// @ATTR event.cutscene|string|Show specified cutscene by filename.
+		// @ATTR event.cutscene|filename|Show specified cutscene by filename.
 		e->type = EC_CUTSCENE;
 
 		e->s = infile.val;
 	}
 	else if (infile.key == "repeat") {
-		// @ATTR event.repeat|boolean|Allows the event to be triggered again.
+		// @ATTR event.repeat|bool|If true, the event to be triggered again.
 		e->type = EC_REPEAT;
 
 		e->s = infile.val;
 	}
 	else if (infile.key == "save_game") {
-		// @ATTR event.save_game|boolean|Saves the game when the event is triggered. The respawn position is set to where the player is standing.
+		// @ATTR event.save_game|bool|If true, the game is saved when the event is triggered. The respawn position is set to where the player is standing.
 		e->type = EC_SAVE_GAME;
 
 		e->s = infile.val;
 	}
 	else if (infile.key == "book") {
-		// @ATTR event.book|string|Opens a book by filename.
+		// @ATTR event.book|filename|Opens a book by filename.
 		e->type = EC_BOOK;
 
 		e->s = infile.val;

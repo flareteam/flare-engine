@@ -55,21 +55,21 @@ MenuStash::MenuStash(StatBlock *_stats)
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR close|x (integer), y (integer)|Position of the close button.
+			// @ATTR close|point|Position of the close button.
 			if (infile.key == "close") {
 				Point pos = toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR slots_area|x (integer), y (integer)|Position of the top-left slot.
+			// @ATTR slots_area|point|Position of the top-left slot.
 			else if (infile.key == "slots_area") {
 				slots_area.x = popFirstInt(infile.val);
 				slots_area.y = popFirstInt(infile.val);
 			}
-			// @ATTR stash_cols|integer|The number of columns for the grid of slots.
+			// @ATTR stash_cols|int|The number of columns for the grid of slots.
 			else if (infile.key == "stash_cols") {
 				slots_cols = std::max(1, toInt(infile.val));
 			}
-			// @ATTR stash_rows|integer|The number of rows for the grid of slots.
+			// @ATTR stash_rows|int|The number of rows for the grid of slots.
 			else if (infile.key == "stash_rows") {
 				slots_rows = std::max(1, toInt(infile.val));
 			}
