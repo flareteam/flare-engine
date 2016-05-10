@@ -3,7 +3,7 @@ IFS=$'\n'
 HAVE_CLASS=0
 echo "<?xml version=\"1.0\"?>"
 echo "<classes>"
-for line in `grep '@CLASS\|@ATTR\|@TYPE' src/*.cpp | sed s/^.*@//g | sed 's/CLASS /CLASS|/g' | sed 's/ATTR /ATTR|/g' | sed 's/TYPE /TYPE|/g'`
+for line in `grep '@CLASS\|@ATTR\|@TYPE' src/*.cpp | sed s/^.*@//g | sed 's/CLASS /CLASS|/g' | sed 's/ATTR /ATTR|/g' | sed 's/TYPE /TYPE|/g' | sed 's/"/\&quot;/g'`
 do
     IFS='|'
     fields=($line)
