@@ -1,30 +1,49 @@
 ### Attribute description
-Attribute descriptions are in the following format: section.attributename, _valuetype_, short attribute description
+Attribute descriptions are in the following format: section.attributename, *valuetype*, short attribute description
 
-Here follows a list of defined attribute valuetypes used in the reference documentation:
+#### Valuetype syntax
 
-_bool_, a string value of _true_ or _false_
+*[val1, ...]*, Multiple values between a set of square brackets denotes possible types/values for a single field.
 
-_integer_, a signed integer value
+*"..."*, Anything between double quotes is a string literal. This is mostly used in conjunction with the above square brackets syntax.
 
-_string_, a string value
+*list(...)*, Lists are a series of values that can repeat on a single line, separated by commas/semicolons. Example of list(int, bool): "1,false;2,true"
 
-_xyz\_id_, specifies an id reference of type xyz
+*repeatable(...)*, Repeatable keys can be used for multiple lines. An example of this would be an item with multiple "bonus" lines.
 
-_duration_, durations can be specified in seconds and milliseconds with integer suffix s, ms (eg. 20s, 20000ms)
+#### List of available valuetypes
 
-_[val1 : val2]_, this describes a list of fixed string values for attribute
+*bool*, a string value of *true* or *false*
 
-_[val1 (xyz\_id), val2 (duration), val3 (integer)]_, comma seperated values ex: 43,4s,200
+*int*, a signed integer value
 
-_[val1 (string), ...]_, comma separated list of _n_ values
+*string*, a text string value
 
-_float_, a floating point number
+*float*, a floating point number
 
-_alignment_, can be any of: topleft, top, topright, left, center, right, bottomleft, bottom, bottomright
+*item_id*, specifies an integer item identifer (greater than 0)
 
-_label_, specified as: "hidden" or as: x (integer), y (integer), justify (string), valign (string), style (string); justify can be [left:center:right]; valign can be [top:center:bottom]; style is any font style defined in engine/font_settings.txt
+*power_id*, specifies an integer power identifer (greater than 0)
 
-_direction_, directions can be N, NE, E, SE, S, SW, W, NW, or an integer value in the range of [0-7] inclusive
+*icon_id*, specifies an integer icon identifer (greater than or equal to 0)
 
+*point*, defined as: '*int, int : X, Y*'
+
+*rectangle*, defined as: '*int, int, int, int : X, Y, Width, Height*'
+
+*filename*, a string path to a file relative to the base of the mod directory (e.g. "animations/hero.txt")
+
+*color*, defined as: '*int, int, int : Red, Green, Blue*'
+
+*alignment*, defined as: '*["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]*'
+
+*direction*, defined as: '*["N", "NE", "E", "SE", "S", "SW", "W", "NW", int]*'. If defined as an integer, the value must be between 0-7 inclusive.
+
+*duration*, durations can be specified in seconds and milliseconds with integer suffix s, ms (eg. 20s, 20000ms)
+
+*label*, defined as: *"hidden"* **OR** '*int, int, ["left", "right", "center"], ["top", "center", "bottom"], string : X, Y, Justify, Vertical Align, Font style*'. The font style can be any style defined in engine/font\_settings.txt.
+
+*loot*, defined as: '*filename*' **OR** '*["fixed", int], int, int : Drop chance, Min quantity, Max quantity*'. There is a limitation when defining as part of a list(...): filenames can only be used in the first list element.
+
+*raw*, This is plain text, including line breaks. It is used only for map layer data.
 
