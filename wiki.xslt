@@ -30,11 +30,13 @@
 <xsl:with-param name="text" select="description" />
 </xsl:call-template>
 </xsl:variable>
+<xsl:if test="attributes/attribute">
 ***
 #### <xsl:value-of select="$class-name"/>
 <xsl:text>&#xa;</xsl:text>
 <xsl:value-of select="$class-desc"/>
 <xsl:text>&#xa;</xsl:text>
+</xsl:if>
 <xsl:for-each select="attributes/attribute">
 <xsl:variable name="attr-name">
 <xsl:call-template name="escape_underscore">
@@ -42,18 +44,46 @@
 </xsl:call-template>
 </xsl:variable>
 <xsl:variable name="attr-type">
-<xsl:call-template name="escape_underscore">
-<xsl:with-param name="text" select="@type" />
-</xsl:call-template>
+<!-- Don't need to escape this because we put it in code tags -->
+<xsl:value-of select="@type"/>
+</xsl:variable>
+<xsl:variable name="attr-vars">
+<!-- Don't need to escape this because we put it in code tags -->
+<xsl:value-of select="@vars"/>
 </xsl:variable>
 <xsl:variable name="attr-desc">
 <xsl:call-template name="escape_underscore">
 <xsl:with-param name="text" select="." />
 </xsl:call-template>
 </xsl:variable>
-**<xsl:value-of select="$attr-name"/>**, _<xsl:value-of select="$attr-type"/>_, <xsl:value-of select="$attr-desc"/>
+**<xsl:value-of select="$attr-name"/>** | `<xsl:value-of select="$attr-type"/><xsl:if test="$attr-vars != ''"> : <xsl:value-of select="$attr-vars"/></xsl:if>` | <xsl:value-of select="$attr-desc"/>
 <xsl:text>&#xa;</xsl:text>
 </xsl:for-each>
+<xsl:text>&#xa;</xsl:text>
+</xsl:for-each>
+***
+### Predefined Strings
+<xsl:text>&#xa;</xsl:text>
+Below are some strings that are used in various attributes.
+<xsl:for-each select="class">
+<xsl:text>&#xa;</xsl:text>
+<xsl:variable name="class-name">
+<xsl:call-template name="escape_underscore">
+<xsl:with-param name="text" select="@name" />
+</xsl:call-template>
+</xsl:variable>
+<xsl:variable name="class-desc">
+<xsl:call-template name="escape_underscore">
+<xsl:with-param name="text" select="description" />
+</xsl:call-template>
+</xsl:variable>
+<xsl:if test="attributes/type">
+***
+#### <xsl:value-of select="$class-name"/>
+<xsl:text>&#xa;</xsl:text>
+<xsl:value-of select="$class-desc"/>
+<xsl:text>&#xa;</xsl:text>
+</xsl:if>
 <xsl:for-each select="attributes/type">
 <xsl:variable name="type-name">
 <xsl:call-template name="escape_underscore">
@@ -65,7 +95,7 @@
 <xsl:with-param name="text" select="." />
 </xsl:call-template>
 </xsl:variable>
-**<xsl:value-of select="$type-name"/>**, <xsl:value-of select="$type-desc"/>
+**<xsl:value-of select="$type-name"/>** | <xsl:value-of select="$type-desc"/>
 <xsl:text>&#xa;</xsl:text>
 </xsl:for-each>
 <xsl:text>&#xa;</xsl:text>

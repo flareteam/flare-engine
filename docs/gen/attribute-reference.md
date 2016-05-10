@@ -1,49 +1,49 @@
 ### Attribute description
-Attribute descriptions are in the following format: section.attributename, *valuetype*, short attribute description
+Attribute descriptions are in the following format: section.attributename, `valuetype`, short attribute description
 
 #### Valuetype syntax
 
-*[val1, ...]*, Multiple values between a set of square brackets denotes possible types/values for a single field.
+`[val1, ...]`, Multiple values between a set of square brackets denotes possible types/values for a single field.
 
-*"..."*, Anything between double quotes is a string literal. This is mostly used in conjunction with the above square brackets syntax.
+`"..."`, Anything between double quotes is a string literal. This is mostly used in conjunction with the above square brackets syntax.
 
-*list(...)*, Lists are a series of values that can repeat on a single line, separated by commas/semicolons. Example of list(int, bool): "1,false;2,true"
+`list(...)`, Lists are a series of values that can repeat on a single line, separated by commas/semicolons. Example of list(int, bool): "1,false;2,true"
 
-*repeatable(...)*, Repeatable keys can be used for multiple lines. An example of this would be an item with multiple "bonus" lines.
+`repeatable(...)`, Repeatable keys can be used for multiple lines. An example of this would be an item with multiple "bonus" lines.
 
 #### List of available valuetypes
 
-*bool*, a string value of *true* or *false*
+`bool`, a string value of `true` or `false`
 
-*int*, a signed integer value
+`int`, a signed integer value
 
-*string*, a text string value
+`string`, a text string value
 
-*float*, a floating point number
+`float`, a floating point number
 
-*item_id*, specifies an integer item identifer (greater than 0)
+`item_id`, specifies an integer item identifer (greater than 0)
 
-*power_id*, specifies an integer power identifer (greater than 0)
+`power_id`, specifies an integer power identifer (greater than 0)
 
-*icon_id*, specifies an integer icon identifer (greater than or equal to 0)
+`icon_id`, specifies an integer icon identifer (greater than or equal to 0)
 
-*point*, defined as: '*int, int : X, Y*'
+`point`, defined as: `int, int : X, Y`
 
-*rectangle*, defined as: '*int, int, int, int : X, Y, Width, Height*'
+`rectangle`, defined as: `int, int, int, int : X, Y, Width, Height`
 
-*filename*, a string path to a file relative to the base of the mod directory (e.g. "animations/hero.txt")
+`filename`, a string path to a file relative to the base of the mod directory (e.g. "animations/hero.txt")
 
-*color*, defined as: '*int, int, int : Red, Green, Blue*'
+`color`, defined as: `int, int, int : Red, Green, Blue`
 
-*alignment*, defined as: '*["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]*'
+`alignment`, defined as: `["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]`
 
-*direction*, defined as: '*["N", "NE", "E", "SE", "S", "SW", "W", "NW", int]*'. If defined as an integer, the value must be between 0-7 inclusive.
+`direction`, defined as: `["N", "NE", "E", "SE", "S", "SW", "W", "NW", int]`. If defined as an integer, the value must be between 0-7 inclusive.
 
-*duration*, durations can be specified in seconds and milliseconds with integer suffix s, ms (eg. 20s, 20000ms)
+`duration`, durations can be specified in seconds and milliseconds with integer suffix s, ms (eg. 20s, 20000ms)
 
-*label*, defined as: *"hidden"* **OR** '*int, int, ["left", "right", "center"], ["top", "center", "bottom"], string : X, Y, Justify, Vertical Align, Font style*'. The font style can be any style defined in engine/font\_settings.txt.
+`label`, defined as: `"hidden"` **or** `int, int, ["left", "right", "center"], ["top", "center", "bottom"], string : X, Y, Justify, Vertical Align, Font style`. The font style can be any style defined in engine/font\_settings.txt.
 
-*loot*, defined as: '*filename*' **OR** '*["fixed", int], int, int : Drop chance, Min quantity, Max quantity*'. There is a limitation when defining as part of a list(...): filenames can only be used in the first list element.
+`loot`, defined as: `filename` **or** `["fixed", int], int, int : Drop chance, Min quantity, Max quantity`. There is a limitation when defining as part of a list(...): filenames can only be used in the first list element.
 
-*raw*, This is plain text, including line breaks. It is used only for map layer data.
+`raw`, This is plain text, including line breaks. It is used only for map layer data.
 
