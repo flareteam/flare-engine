@@ -209,11 +209,11 @@ void EffectManager::logic() {
 			// @TYPE mental|Increase Mental stat.
 			else if (effect_list[i].type == EFFECT_MENTAL) bonus_mental += effect_list[i].magnitude;
 
-			// @TYPE $STATNAME|Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_melee_min, xp_gain
+			// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, dmg_melee_min, xp_gain
 			else if (effect_list[i].type >= EFFECT_COUNT && effect_list[i].type < EFFECT_COUNT+STAT_COUNT) {
 				bonus[effect_list[i].type - EFFECT_COUNT] += effect_list[i].magnitude;
 			}
-			// @TYPE $ELEMENT_resist|Increase Resistance % to $ELEMENT, where $ELEMENT is any found in engine/elements.txt. Example: fire_resist
+			// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
 			else if (effect_list[i].type >= EFFECT_COUNT + STAT_COUNT) {
 				bonus_resist[effect_list[i].type - EFFECT_COUNT - STAT_COUNT] += effect_list[i].magnitude;
 			}

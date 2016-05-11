@@ -598,7 +598,7 @@ body {
 
 <p><strong>requires_class</strong> | <code>string</code> | The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(string, int) : Stat name, Value</code> | Adds a bonus to the item by $STATNAME, example  bonus=hp, 50</p>
+<p><strong>bonus</strong> | <code>repeatable(string, int) : Stat name, Value</code> | Adds a bonus to the item by stat name, example  bonus=hp, 50</p>
 
 <p><strong>soundfx</strong> | <code>filename</code> | Sound effect filename to play for the specific item.</p>
 
@@ -1632,19 +1632,19 @@ body {
 
 <p><strong>cooldown_hit</strong> | <code>duration</code> | Duration of cooldown after being hit in 'ms' or 's'.</p>
 
-<p><strong>$STATNAME</strong> | <code>int</code> | The starting value for this stat.</p>
+<p><strong>stat</strong> | <code>string, int : Stat name, Value</code> | The starting value for this stat.</p>
 
-<p><strong>$STATNAME_per_level</strong> | <code>int</code> | The value for this stat added per level.</p>
+<p><strong>stat_per_level</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per level.</p>
 
-<p><strong>$STATNAME_per_physical</strong> | <code>int</code> | The value for this stat added per Physical.</p>
+<p><strong>stat_per_physical</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per Physical.</p>
 
-<p><strong>$STATNAME_per_mental</strong> | <code>int</code> | The value for this stat added per Mental.</p>
+<p><strong>stat_per_mental</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per Mental.</p>
 
-<p><strong>$STATNAME_per_offense</strong> | <code>int</code> | The value for this stat added per Offense.</p>
+<p><strong>stat_per_offense</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per Offense.</p>
 
-<p><strong>$STATNAME_per_defense</strong> | <code>int</code> | The value for this stat added per Defense.</p>
+<p><strong>stat_per_defense</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per Defense.</p>
 
-<p><strong>vulnerable_$ELEMENT</strong> | <code>int</code> | Percentage weakness to this element.</p>
+<p><strong>vulnerable</strong> | <code>string, int : Element, Value</code> | Percentage weakness to this element.</p>
 
 <hr />
 
@@ -1742,7 +1742,7 @@ body {
 
 <p>Description of engine/xp_table.txt</p>
 
-<p><strong>$LEVEL</strong> | <code>int</code> | The amount of XP required for this level.</p>
+<p><strong>level</strong> | <code>int, int : Level, XP</code> | The amount of XP required for this level.</p>
 
 <hr />
 
@@ -1818,9 +1818,9 @@ body {
 
 <p><strong>mental</strong> | Increase Mental stat.</p>
 
-<p><strong>$STATNAME</strong> | Increases $STATNAME, where $STATNAME is any of the base stats. Examples: hp, dmg_melee_min, xp_gain</p>
+<p><strong>${STATNAME}</strong> | Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, dmg_melee_min, xp_gain</p>
 
-<p><strong>$ELEMENT_resist</strong> | Increase Resistance % to $ELEMENT, where $ELEMENT is any found in engine/elements.txt. Example: fire_resist</p>
+<p><strong>${ELEMENT}_resist</strong> | Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist</p>
 
 <p><strong>death_sentence</strong> | Causes sudden death at the end of the effect duration.</p>
 
@@ -1832,7 +1832,7 @@ body {
 
 <h4>Stats</h4>
 
-<p>Description of the base stats, aka $STATNAME</p>
+<p>Description of the base stats, aka "stat name" or ${STATNAME}</p>
 
 <p><strong>hp</strong> | Hit points</p>
 

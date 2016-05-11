@@ -228,7 +228,7 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			items[id].requires_class = infile.val;
 		}
 		else if (infile.key == "bonus") {
-			// @ATTR bonus|repeatable(string, int) : Stat name, Value|Adds a bonus to the item by $STATNAME, example: bonus=hp, 50
+			// @ATTR bonus|repeatable(string, int) : Stat name, Value|Adds a bonus to the item by stat name, example: bonus=hp, 50
 			if (clear_bonus) {
 				items[id].bonus.clear();
 				clear_bonus = false;

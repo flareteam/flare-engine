@@ -29,7 +29,7 @@ bool STAT_PERCENT[STAT_COUNT];
 // STAT_DESC values are the translated descriptions of stats visible in Character menu tooltips
 // STAT_PERCENT is used to determine if we should treat the value as a percentage when displaying it (i.e. use %)
 void setStatNames() {
-	// @CLASS Stats|Description of the base stats, aka $STATNAME
+	// @CLASS Stats|Description of the base stats, aka "stat name" or ${STATNAME}
 
 	// @TYPE hp|Hit points
 	STAT_KEY[STAT_HP_MAX] = "hp";
