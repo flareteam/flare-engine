@@ -790,12 +790,15 @@ void StatBlock::loadHeroStats() {
 	// @CLASS StatBlock: XP table|Description of engine/xp_table.txt
 	if (infile.open("engine/xp_table.txt")) {
 		while(infile.next()) {
-			unsigned key = toInt(infile.key);
-			if (key > 0) {
-				// @ATTR $LEVEL|int|The amount of XP required for this level.
-				if (key > xp_table.size())
-					xp_table.resize(key);
-				xp_table[key - 1] = toInt(infile.val);
+			if (infile.key == "level") {
+				// @ATTR level|int, int : Level, XP|The amount of XP required for this level.
+				unsigned lvl_id = toInt(infile.nextValue());
+				unsigned long lvl_xp = toUnsignedLong(infile.nextValue());
+
+				if (lvl_id > xp_table.size())
+					xp_table.resize(lvl_id);
+
+				xp_table[lvl_id - 1] = lvl_xp;
 			}
 		}
 		infile.close();
