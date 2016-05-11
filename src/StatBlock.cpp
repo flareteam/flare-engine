@@ -177,11 +177,9 @@ StatBlock::StatBlock()
 bool StatBlock::loadCoreStat(FileParser *infile) {
 	// @CLASS StatBlock: Core stats|Description of engine/stats.txt and enemies in enemies/
 
-	int value = toInt(infile->val, 0);
-	float fvalue = toFloat(infile->val, 0);
-
 	if (infile->key == "speed") {
 		// @ATTR speed|float|Movement speed
+		float fvalue = toFloat(infile->val, 0);
 		speed = speed_default = fvalue / MAX_FRAMES_PER_SEC;
 		return true;
 	}
@@ -195,43 +193,85 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		cooldown_hit = parse_duration(infile->val);
 		return true;
 	}
-	else {
+	else if (infile->key == "stat") {
+		// @ATTR stat|string, int : Stat name, Value|The starting value for this stat.
+		std::string stat = popFirstString(infile->val, ',');
+		int value = popFirstInt(infile->val, ',');
+
 		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (infile->key == STAT_KEY[i]) {
-				// @ATTR $STATNAME|int|The starting value for this stat.
+			if (STAT_KEY[i] == stat) {
 				starting[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_KEY[i] + "_per_level") {
-				// @ATTR $STATNAME_per_level|int|The value for this stat added per level.
+		}
+	}
+	else if (infile->key == "stat_per_level") {
+		// @ATTR stat_per_level|string, int : Stat name, Value|The value for this stat added per level.
+		std::string stat = popFirstString(infile->val, ',');
+		int value = popFirstInt(infile->val, ',');
+
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (STAT_KEY[i] == stat) {
 				per_level[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_KEY[i] + "_per_physical") {
-				// @ATTR $STATNAME_per_physical|int|The value for this stat added per Physical.
+		}
+	}
+	else if (infile->key == "stat_per_physical") {
+		// @ATTR stat_per_physical|string, int : Stat name, Value|The value for this stat added per Physical.
+		std::string stat = popFirstString(infile->val, ',');
+		int value = popFirstInt(infile->val, ',');
+
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (STAT_KEY[i] == stat) {
 				per_physical[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_KEY[i] + "_per_mental") {
-				// @ATTR $STATNAME_per_mental|int|The value for this stat added per Mental.
+		}
+	}
+	else if (infile->key == "stat_per_mental") {
+		// @ATTR stat_per_mental|string, int : Stat name, Value|The value for this stat added per Mental.
+		std::string stat = popFirstString(infile->val, ',');
+		int value = popFirstInt(infile->val, ',');
+
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (STAT_KEY[i] == stat) {
 				per_mental[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_KEY[i] + "_per_offense") {
-				// @ATTR $STATNAME_per_offense|int|The value for this stat added per Offense.
+		}
+	}
+	else if (infile->key == "stat_per_offense") {
+		// @ATTR stat_per_offense|string, int : Stat name, Value|The value for this stat added per Offense.
+		std::string stat = popFirstString(infile->val, ',');
+		int value = popFirstInt(infile->val, ',');
+
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (STAT_KEY[i] == stat) {
 				per_offense[i] = value;
 				return true;
 			}
-			else if (infile->key == STAT_KEY[i] + "_per_defense") {
-				// @ATTR $STATNAME_per_defense|int|The value for this stat added per Defense.
+		}
+	}
+	else if (infile->key == "stat_per_defense") {
+		// @ATTR stat_per_defense|string, int : Stat name, Value|The value for this stat added per Defense.
+		std::string stat = popFirstString(infile->val, ',');
+		int value = popFirstInt(infile->val, ',');
+
+		for (unsigned i=0; i<STAT_COUNT; i++) {
+			if (STAT_KEY[i] == stat) {
 				per_defense[i] = value;
 				return true;
 			}
 		}
+	}
+	else if (infile->key == "vulnerable") {
+		// @ATTR vulnerable|string, int : Element, Value|Percentage weakness to this element.
+		std::string element = popFirstString(infile->val, ',');
+		int value = popFirstInt(infile->val, ',');
 
 		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
-			if (infile->key == "vulnerable_" + ELEMENTS[i].id) {
-				// @ATTR vulnerable_$ELEMENT|int|Percentage weakness to this element.
+			if (element == ELEMENTS[i].id) {
 				vulnerable[i] = vulnerable_base[i] = value;
 				return true;
 			}
