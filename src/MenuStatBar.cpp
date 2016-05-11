@@ -62,7 +62,7 @@ MenuStatBar::MenuStatBar(const std::string& type)
 			if(infile.key == "bar_pos") {
 				bar_pos = toRect(infile.val);
 			}
-			// @ATTR text_pos|label|Position of the "$CURRENT/$TOTAL" text.
+			// @ATTR text_pos|label|Position of the text displaying the current value of the relevant stat.
 			else if(infile.key == "text_pos") {
 				custom_text_pos = true;
 				text_pos = eatLabelInfo(infile.val);

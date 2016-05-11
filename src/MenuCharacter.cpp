@@ -210,7 +210,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			else {
 				bool found_key = false;
 				for (unsigned i=0; i<STAT_COUNT; ++i) {
-					// @ATTR show_$STAT|bool|Hide the matching stat in the statlist if set to false.
+					// @ATTR show_$STATNAME|bool|Hide the matching stat in the statlist if set to false.
 					if (infile.key == "show_" + STAT_KEY[i]) {
 						found_key = true;
 						show_stat[i] = toBool(infile.val);
