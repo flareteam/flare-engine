@@ -1404,7 +1404,9 @@ body {
 
 <p>Description of engine/font_settings.txt</p>
 
-<p><strong>$STYLE.default, $STYLE.$LANGUAGE</strong> | <code>filename, int, bool : Font file, Point size, Blending</code> | Filename, point size, and blend mode of the font to use for this language. $STYLE can be something like "font_normal" or "font_bold". $LANGUAGE can be a 2-letter region code.</p>
+<p><strong>font.id</strong> | <code>string</code> | An identifier used to reference this font.</p>
+
+<p><strong>font.style</strong> | <code>repeatable(["default", string], filename, int, bool) : Language, Font file, Point size, Blending</code> | Filename, point size, and blend mode of the font to use for this language. Language can be "default" or a 2-letter region code.</p>
 
 <p><strong>menu_normal</strong> | <code>color</code> | Basic menu text color. Recommended  white.</p>
 
@@ -1429,8 +1431,6 @@ body {
 <p><strong>item_penalty</strong> | <code>color</code> | Item penalty text color. Recommended  red.</p>
 
 <p><strong>item_flavor</strong> | <code>color</code> | Item flavor text color. Recommended  grey.</p>
-
-<p><strong>item_$QUALITY</strong> | <code>color</code> | Colors for item quality. $QUALITY should match qualities used in items/items.txt</p>
 
 <hr />
 
