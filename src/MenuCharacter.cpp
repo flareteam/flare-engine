@@ -207,20 +207,20 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = toBool(infile.val);
 
-			else {
-				bool found_key = false;
+			// @ATTR show_stat|string, bool : Stat name, Visible|Hide the matching stat in the statlist if set to false.
+			else if (infile.key == "show_stat") {
+				std::string stat_name = popFirstString(infile.val, ',');
+
 				for (unsigned i=0; i<STAT_COUNT; ++i) {
-					// @ATTR show_$STATNAME|bool|Hide the matching stat in the statlist if set to false.
-					if (infile.key == "show_" + STAT_KEY[i]) {
-						found_key = true;
-						show_stat[i] = toBool(infile.val);
+					if (stat_name == STAT_KEY[i]) {
+						show_stat[i] = toBool(popFirstString(infile.val, ','));
 						break;
 					}
 				}
+			}
 
-				if (!found_key) {
-					infile.error("MenuCharacter: '%s' is not a valid key.", infile.key.c_str());
-				}
+			else {
+				infile.error("MenuCharacter: '%s' is not a valid key.", infile.key.c_str());
 			}
 		}
 		infile.close();
