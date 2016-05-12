@@ -172,9 +172,8 @@ void Avatar::loadLayerDefinitions() {
 	if (infile.open("engine/hero_layers.txt")) {
 		while(infile.next()) {
 			if (infile.key == "layer") {
-				// @ATTR layer|int, list(string) : Direction, Layer name(s)|Defines the hero avatar sprite layer
-				// TODO use parse_direction() here?
-				unsigned dir = popFirstInt(infile.val);
+				// @ATTR layer|direction, list(string) : Direction, Layer name(s)|Defines the hero avatar sprite layer
+				unsigned dir = parse_direction(popFirstString(infile.val));
 				if (dir>7) {
 					infile.error("Avatar: Hero layer direction must be in range [0,7]");
 					Exit(1);

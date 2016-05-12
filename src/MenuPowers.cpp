@@ -963,7 +963,6 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		}
 		if (pwr.trait_elemental > -1) {
 			ss.str("");
-			// TODO Print specific element here
 			ss << msg->get("%s Elemental Damage", ELEMENTS[pwr.trait_elemental].name.c_str());
 			tip->addText(ss.str(), color_bonus);
 		}

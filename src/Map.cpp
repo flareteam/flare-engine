@@ -187,11 +187,10 @@ void Map::loadHeader(FileParser &infile) {
 		music_filename = infile.val;
 	}
 	else if (infile.key == "location") {
-		// @ATTR location|int, int, int : X, Y, Direction|Spawn point location in map
-		// TODO use parse_direction() here?
+		// @ATTR location|int, int, direction : X, Y, Direction|Spawn point location in map
 		spawn.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
 		spawn.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
-		spawn_dir = static_cast<unsigned char>(toInt(infile.nextValue()));
+		spawn_dir = static_cast<unsigned char>(parse_direction(infile.nextValue()));
 	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.
