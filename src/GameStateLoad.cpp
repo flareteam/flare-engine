@@ -67,6 +67,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	, delete_items(true)
 	, current_frame(0)
 	, frame_ticker(0)
+	, stance_frames(1)
 	, stance_ticks_per_frame(1)
 	, stance_duration(1)
 	, stance_type(PLAY_ONCE)
@@ -139,10 +140,6 @@ GameStateLoad::GameStateLoad() : GameState()
 			else if (infile.key == "gameslot") {
 				gameslot_pos = toRect(infile.val);
 			}
-			// @ATTR preview|rectangle|Position and dimensions of the preview area in the first game slot. Only 'height' is used?
-			else if (infile.key == "preview") {
-				preview_pos = toRect(infile.val);
-			}
 			// @ATTR name|label|The label for the hero's name. Position is relative to game slot position.
 			else if (infile.key == "name") {
 				name_pos = eatLabelInfo(infile.val);
@@ -164,7 +161,6 @@ GameStateLoad::GameStateLoad() : GameState()
 				loading_pos = eatLabelInfo(infile.val);
 			}
 			// @ATTR sprite|point|Position for the avatar preview image in each slot
-			// TODO deprecate this in favor of 'preview'?
 			else if (infile.key == "sprite") {
 				sprites_pos = toPoint(infile.val);
 			}
@@ -206,11 +202,7 @@ GameStateLoad::GameStateLoad() : GameState()
 	button_load->refresh();
 	button_delete->refresh();
 
-	loadGraphics();
-	readGameSlots();
-
 	// animation data
-	int stance_frames = 0;
 	if (infile.open("animations/hero.txt")) {
 		while (infile.next()) {
 			if (infile.section == "stance") {
@@ -238,6 +230,9 @@ GameStateLoad::GameStateLoad() : GameState()
 
 	stance_frames = std::max(1, stance_frames);
 	stance_ticks_per_frame = std::max(1, (stance_duration / stance_frames));
+
+	loadGraphics();
+	readGameSlots();
 
 	color_normal = font->getColor("menu_normal");
 
@@ -419,9 +414,8 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 		slot->sprites[i] = NULL;
 		if (graphics) {
 			slot->sprites[i] = graphics->createSprite();
-			slot->sprites[i]->setClip(0, 0,
-									  slot->sprites[i]->getGraphicsWidth(),
-									  slot->sprites[i]->getGraphicsHeight());
+			int frame_width = slot->sprites[i]->getGraphicsWidth() / stance_frames;
+			slot->sprites[i]->setClip(0, 0, frame_width, slot->sprites[i]->getGraphicsHeight());
 			graphics->unref();
 		}
 	}
@@ -453,6 +447,8 @@ void GameStateLoad::logic() {
 		}
 		frame_ticker++;
 	}
+
+	current_frame = std::min(current_frame, stance_frames-1);
 
 	if (!confirm->visible) {
 		tablist.logic(true);
@@ -776,12 +772,13 @@ void GameStateLoad::render() {
 		// render character preview
 		dest.x = slot_pos[slot].x + sprites_pos.x;
 		dest.y = slot_pos[slot].y + sprites_pos.y;
-		src.x = current_frame * preview_pos.h;
-		src.y = 0;
-		src.w = src.h = preview_pos.h;
 
 		for (size_t i=0; i<game_slots[off_slot]->sprites.size(); i++) {
 			if (game_slots[off_slot]->sprites[i] == NULL) continue;
+
+			src = game_slots[off_slot]->sprites[i]->getClip();
+			src.x = current_frame * src.w;
+
 			game_slots[off_slot]->sprites[i]->setClip(src);
 			game_slots[off_slot]->sprites[i]->setDest(dest);
 			render_device->render(game_slots[off_slot]->sprites[i]);

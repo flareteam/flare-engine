@@ -7,7 +7,6 @@ button_load=338,384
 button_delete=480,384
 portrait=320,32,320,320
 gameslot=0,32,288,96
-preview=0,0,512,128
 name=16,12,left,top
 level=24,36,left,top
 class=24,52,left,top

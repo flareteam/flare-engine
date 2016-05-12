@@ -113,12 +113,12 @@ private:
 	// animation info
 	int current_frame;
 	int frame_ticker;
+	int stance_frames;
 	int stance_ticks_per_frame;
 	int stance_duration;
 	animation_type stance_type;
 
 	Rect gameslot_pos;
-	Rect preview_pos;
 
 	Color color_normal;
 
