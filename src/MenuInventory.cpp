@@ -69,22 +69,18 @@ MenuInventory::MenuInventory(StatBlock *_stats) {
 				Point pos = toPoint(infile.val);
 				closeButton->setBasePos(pos.x, pos.y);
 			}
-			// @ATTR equipment_slot|repeatable(int, int, int, string) : X, Y, Size, Slot Type|Position and item type of an equipment slot.
-			// TODO is "Size" needed here? We could just use ICON_SIZE or the size of WidgetSlot
+			// @ATTR equipment_slot|repeatable(int, int, string) : X, Y, Slot Type|Position and item type of an equipment slot.
 			else if(infile.key == "equipment_slot") {
 				Rect area;
 				Point pos;
 
 				pos.x = area.x = popFirstInt(infile.val);
 				pos.y = area.y = popFirstInt(infile.val);
-				area.w = area.h = popFirstInt(infile.val);
+				area.w = area.h = ICON_SIZE;
 				equipped_area.push_back(area);
 				equipped_pos.push_back(pos);
 				slot_type.push_back(popFirstString(infile.val));
 			}
-			// @ATTR slot_name|repeatable(string)|The displayed name of the last defined equipment slot.
-			// TODO merge this with equipment_slot?
-			else if(infile.key == "slot_name") slot_desc.push_back(infile.val);
 			// @ATTR carried_area|point|Position of the first normal inventory slot.
 			else if(infile.key == "carried_area") {
 				Point pos;
@@ -297,7 +293,7 @@ TooltipData MenuInventory::checkTooltip(const Point& position) {
 		tip = inventory[area].checkTooltip(position, stats, PLAYER_INV);
 	}
 	else if (area == EQUIPMENT && inventory[area][slot].empty()) {
-		tip.addText(msg->get(slot_desc[slot]));
+		tip.addText(msg->get(items->getItemType(slot_type[slot])));
 	}
 
 	return tip;
