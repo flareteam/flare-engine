@@ -318,13 +318,18 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		}
 	}
 	else if (infile.key == "requires_status") {
-		// @ATTR enemygroup.requires_status|string|Status required for loading enemies
-		// TODO change this to list(string) instead of just string?
-		group->requires_status.push_back(infile.nextValue());
+		// @ATTR enemygroup.requires_status|list(string)|Status required for loading enemies
+		std::string s;
+		while ((s = infile.nextValue()) != "") {
+			group->requires_status.push_back(s);
+		}
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR enemygroup.requires_not_status|string|Status required to be missing for loading enemies
-		group->requires_not_status.push_back(infile.nextValue());
+		// @ATTR enemygroup.requires_not_status|list(string)|Status required to be missing for loading enemies
+		std::string s;
+		while ((s = infile.nextValue()) != "") {
+			group->requires_not_status.push_back(s);
+		}
 	}
 	else {
 		infile.error("Map: '%s' is not a valid key.", infile.key.c_str());
