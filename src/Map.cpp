@@ -261,7 +261,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 		group->type = infile.val;
 	}
 	else if (infile.key == "category") {
-		// @ATTR enemygroup.category|string|The category of enemies that will spawn in this group.
+		// @ATTR enemygroup.category|predefined_string|The category of enemies that will spawn in this group.
 		group->category = infile.val;
 	}
 	else if (infile.key == "level") {

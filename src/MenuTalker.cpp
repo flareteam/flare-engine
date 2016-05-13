@@ -81,9 +81,9 @@ MenuTalker::MenuTalker(MenuManager *_menu)
 			else if (infile.key == "portrait_he") portrait_he = toRect(infile.val);
 			// @ATTR portrait_you|rectangle|Position and dimensions of the player's portrait graphics.
 			else if (infile.key == "portrait_you") portrait_you = toRect(infile.val);
-			// @ATTR font_who|string|Font style to use for the name of the currently talking person.
+			// @ATTR font_who|predefined_string|Font style to use for the name of the currently talking person.
 			else if (infile.key == "font_who") font_who = infile.val;
-			// @ATTR font_dialog|string|Font style to use for the dialog text.
+			// @ATTR font_dialog|predefined_string|Font style to use for the dialog text.
 			else if (infile.key == "font_dialog") font_dialog = infile.val;
 
 			else infile.error("MenuTalker: '%s' is not a valid key.", infile.key.c_str());

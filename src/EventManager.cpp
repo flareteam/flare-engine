@@ -211,7 +211,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->y = toInt(infile.nextValue());
 	}
 	else if (infile.key == "mapmod") {
-		// @ATTR event.mapmod|list(string, int, int, int) : Layer, X, Y, Tile ID|Modify map tiles
+		// @ATTR event.mapmod|list(predefined_string, int, int, int) : Layer, X, Y, Tile ID|Modify map tiles
 		e->type = EC_MAPMOD;
 
 		e->s = infile.nextValue();
@@ -382,13 +382,13 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		}
 	}
 	else if (infile.key == "requires_class") {
-		// @ATTR event.requires_class|string|Event requires this base class
+		// @ATTR event.requires_class|predefined_string|Event requires this base class
 		e->type = EC_REQUIRES_CLASS;
 
 		e->s = infile.nextValue();
 	}
 	else if (infile.key == "requires_not_class") {
-		// @ATTR event.requires_not_class|string|Event requires not this base class
+		// @ATTR event.requires_not_class|predefined_string|Event requires not this base class
 		e->type = EC_REQUIRES_NOT_CLASS;
 
 		e->s = infile.nextValue();
@@ -492,7 +492,7 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		e->x = toInt(infile.val);
 	}
 	else if (infile.key == "spawn") {
-		// @ATTR event.spawn|list(string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location
+		// @ATTR event.spawn|list(predefined_string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location
 		e->type = EC_SPAWN;
 
 		e->s = infile.nextValue();

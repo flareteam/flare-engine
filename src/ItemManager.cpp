@@ -150,15 +150,15 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			items[id].book = infile.val;
 		}
 		else if (infile.key == "quality") {
-			// @ATTR quality|string|Item quality matching an id in items/qualities.txt
+			// @ATTR quality|predefined_string|Item quality matching an id in items/qualities.txt
 			items[id].quality = infile.val;
 		}
 		else if (infile.key == "item_type") {
-			// @ATTR item_type|string|Equipment slot matching an id in items/types.txt
+			// @ATTR item_type|predefined_string|Equipment slot matching an id in items/types.txt
 			items[id].type = infile.val;
 		}
 		else if (infile.key == "equip_flags") {
-			// @ATTR equip_flags|list(string)|A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.
+			// @ATTR equip_flags|list(predefined_string)|A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.
 			items[id].equip_flags.clear();
 			std::string flag = popFirstString(infile.val);
 
@@ -224,11 +224,11 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			items[id].req_val.push_back(toInt(infile.nextValue()));
 		}
 		else if (infile.key == "requires_class") {
-			// @ATTR requires_class|string|The hero's base class (engine/classes.txt) must match for this item to be equipped.
+			// @ATTR requires_class|predefined_string|The hero's base class (engine/classes.txt) must match for this item to be equipped.
 			items[id].requires_class = infile.val;
 		}
 		else if (infile.key == "bonus") {
-			// @ATTR bonus|repeatable(string, int) : Stat name, Value|Adds a bonus to the item by stat name, example: bonus=hp, 50
+			// @ATTR bonus|repeatable(predefined_string, int) : Stat name, Value|Adds a bonus to the item by stat name, example: bonus=hp, 50
 			if (clear_bonus) {
 				items[id].bonus.clear();
 				clear_bonus = false;
@@ -292,10 +292,10 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			// @ATTR pickup_status|string|Set a campaign status when item is picked up, this is used for quest items.
 			items[id].pickup_status = infile.val;
 		else if (infile.key == "stepfx")
-			// @ATTR stepfx|string|Sound effect when walking, this applies only to armors.
+			// @ATTR stepfx|predefined_string|Sound effect when walking, this applies only to armors.
 			items[id].stepfx = infile.val;
 		else if (infile.key == "disable_slots") {
-			// @ATTR disable_slots|list(string)|A comma separated list of equip slot types to disable when this item is equipped.
+			// @ATTR disable_slots|list(predefined_string)|A comma separated list of equip slot types to disable when this item is equipped.
 			items[id].disable_slots.clear();
 			std::string slot_type = popFirstString(infile.val);
 

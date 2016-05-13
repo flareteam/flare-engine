@@ -59,7 +59,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 				style->name = infile.val;
 			}
 			else if (infile.key == "style") {
-				// @ATTR font.style|repeatable(["default", string], filename, int, bool) : Language, Font file, Point size, Blending|Filename, point size, and blend mode of the font to use for this language. Language can be "default" or a 2-letter region code.
+				// @ATTR font.style|repeatable(["default", predefined_string], filename, int, bool) : Language, Font file, Point size, Blending|Filename, point size, and blend mode of the font to use for this language. Language can be "default" or a 2-letter region code.
 
 				std::string lang = popFirstString(infile.val);
 

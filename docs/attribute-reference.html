@@ -68,6 +68,8 @@ body {
 
 <p><code>color</code>, defined as: <code>int, int, int : Red, Green, Blue</code></p>
 
+<p><code>predefined_string</code>, same as a string, but uses a value defined elsewhere</p>
+
 <p><code>alignment</code>, defined as: <code>["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]</code></p>
 
 <p><code>direction</code>, defined as: <code>["N", "NE", "E", "SE", "S", "SW", "W", "NW", int]</code>. If defined as an integer, the value must be between 0-7 inclusive.</p>
@@ -157,7 +159,7 @@ body {
 
 <p><strong>rarity</strong> | <code>["common", "uncommon", "rare"]</code> | Enemy rarity</p>
 
-<p><strong>categories</strong> | <code>list(string)</code> | Comma separated list of enemy categories</p>
+<p><strong>categories</strong> | <code>list(predefined_string)</code> | Comma separated list of enemy categories</p>
 
 <hr />
 
@@ -187,7 +189,7 @@ body {
 
 <p><strong>event.intramap</strong> | <code>int, int : X, Y</code> | Jump to specific position within current map.</p>
 
-<p><strong>event.mapmod</strong> | <code>list(string, int, int, int) : Layer, X, Y, Tile ID</code> | Modify map tiles</p>
+<p><strong>event.mapmod</strong> | <code>list(predefined_string, int, int, int) : Layer, X, Y, Tile ID</code> | Modify map tiles</p>
 
 <p><strong>event.soundfx</strong> | <code>filename, int, int, bool : Sound file, X, Y, loop</code> | Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.</p>
 
@@ -215,9 +217,9 @@ body {
 
 <p><strong>event.requires_not_item</strong> | <code>list(item_id)</code> | Event requires not having a specific item (not equipped)</p>
 
-<p><strong>event.requires_class</strong> | <code>string</code> | Event requires this base class</p>
+<p><strong>event.requires_class</strong> | <code>predefined_string</code> | Event requires this base class</p>
 
-<p><strong>event.requires_not_class</strong> | <code>string</code> | Event requires not this base class</p>
+<p><strong>event.requires_not_class</strong> | <code>predefined_string</code> | Event requires not this base class</p>
 
 <p><strong>event.set_status</strong> | <code>list(string)</code> | Sets specified statuses</p>
 
@@ -237,7 +239,7 @@ body {
 
 <p><strong>event.power</strong> | <code>power_id</code> | Specify power coupled with event.</p>
 
-<p><strong>event.spawn</strong> | <code>list(string, int, int) : Enemy category, X, Y</code> | Spawn an enemy from this category at location</p>
+<p><strong>event.spawn</strong> | <code>list(predefined_string, int, int) : Enemy category, X, Y</code> | Spawn an enemy from this category at location</p>
 
 <p><strong>event.stash</strong> | <code>bool</code> | If true, the Stash menu if opened.</p>
 
@@ -577,11 +579,11 @@ body {
 
 <p><strong>book</strong> | <code>filename</code> | A book file to open when this item is activated.</p>
 
-<p><strong>quality</strong> | <code>string</code> | Item quality matching an id in items/qualities.txt</p>
+<p><strong>quality</strong> | <code>predefined_string</code> | Item quality matching an id in items/qualities.txt</p>
 
-<p><strong>item_type</strong> | <code>string</code> | Equipment slot matching an id in items/types.txt</p>
+<p><strong>item_type</strong> | <code>predefined_string</code> | Equipment slot matching an id in items/types.txt</p>
 
-<p><strong>equip_flags</strong> | <code>list(string)</code> | A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.</p>
+<p><strong>equip_flags</strong> | <code>list(predefined_string)</code> | A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.</p>
 
 <p><strong>dmg_melee</strong> | <code>int, int : Min, Max</code> | Defines the item melee damage, if only min is specified the melee damage is fixed.</p>
 
@@ -595,9 +597,9 @@ body {
 
 <p><strong>requires_stat</strong> | <code>repeatable(["physical", "mental", "offense", "defense"], int) : Primary stat name, Value</code> | Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats</p>
 
-<p><strong>requires_class</strong> | <code>string</code> | The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
+<p><strong>requires_class</strong> | <code>predefined_string</code> | The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
-<p><strong>bonus</strong> | <code>repeatable(string, int) : Stat name, Value</code> | Adds a bonus to the item by stat name, example  bonus=hp, 50</p>
+<p><strong>bonus</strong> | <code>repeatable(predefined_string, int) : Stat name, Value</code> | Adds a bonus to the item by stat name, example  bonus=hp, 50</p>
 
 <p><strong>soundfx</strong> | <code>filename</code> | Sound effect filename to play for the specific item.</p>
 
@@ -621,9 +623,9 @@ body {
 
 <p><strong>pickup_status</strong> | <code>string</code> | Set a campaign status when item is picked up, this is used for quest items.</p>
 
-<p><strong>stepfx</strong> | <code>string</code> | Sound effect when walking, this applies only to armors.</p>
+<p><strong>stepfx</strong> | <code>predefined_string</code> | Sound effect when walking, this applies only to armors.</p>
 
-<p><strong>disable_slots</strong> | <code>list(string)</code> | A comma separated list of equip slot types to disable when this item is equipped.</p>
+<p><strong>disable_slots</strong> | <code>list(predefined_string)</code> | A comma separated list of equip slot types to disable when this item is equipped.</p>
 
 <p><strong>quest_item</strong> | <code>bool</code> | If true, this item is a quest item and can not be dropped, stashed, or sold.</p>
 
@@ -715,7 +717,7 @@ body {
 
 <p><strong>enemygroup.type</strong> | <code>string</code> | (IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.</p>
 
-<p><strong>enemygroup.category</strong> | <code>string</code> | The category of enemies that will spawn in this group.</p>
+<p><strong>enemygroup.category</strong> | <code>predefined_string</code> | The category of enemies that will spawn in this group.</p>
 
 <p><strong>enemygroup.level</strong> | <code>int, int : Min, Max</code> | Defines the level range of enemies in group. If only one number is given, it's the exact level.</p>
 
@@ -1117,9 +1119,9 @@ body {
 
 <p><strong>portrait_you</strong> | <code>rectangle</code> | Position and dimensions of the player's portrait graphics.</p>
 
-<p><strong>font_who</strong> | <code>string</code> | Font style to use for the name of the currently talking person.</p>
+<p><strong>font_who</strong> | <code>predefined_string</code> | Font style to use for the name of the currently talking person.</p>
 
-<p><strong>font_dialog</strong> | <code>string</code> | Font style to use for the dialog text.</p>
+<p><strong>font_dialog</strong> | <code>predefined_string</code> | Font style to use for the dialog text.</p>
 
 <hr />
 
@@ -1211,7 +1213,7 @@ body {
 
 <p><strong>power.icon</strong> | <code>icon_id</code> | The icon to visually represent the power eg. in skill tree or action bar.</p>
 
-<p><strong>power.new_state</strong> | <code>string</code> | When power is used, hero or enemy will change to this state. Must be one of the states ["instant", user defined]</p>
+<p><strong>power.new_state</strong> | <code>predefined_string</code> | When power is used, hero or enemy will change to this state. Must be one of the states ["instant", user defined]</p>
 
 <p><strong>power.state_duration</strong> | <code>duration</code> | Sets the length of time the caster is in their state animation. A time longer than the animation length will cause the animation to pause on the last frame. Times shorter than the state animation length will have no effect.</p>
 
@@ -1229,7 +1231,7 @@ body {
 
 <p><strong>power.meta_power</strong> | <code>bool</code> | If true, this power can not be used on it's own. Instead, it should be replaced via an item with a replace_power entry.</p>
 
-<p><strong>power.requires_flags</strong> | <code>list(string)</code> | A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt</p>
+<p><strong>power.requires_flags</strong> | <code>list(predefined_string)</code> | A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt</p>
 
 <p><strong>power.requires_mp</strong> | <code>int</code> | Restrict power usage to a specified MP level.</p>
 
@@ -1297,9 +1299,9 @@ body {
 
 <p><strong>power.trait_avoidance_ignore</strong> | <code>bool</code> | Ignores the target's Avoidance stat</p>
 
-<p><strong>power.trait_crits_impaired</strong> | <code>integer</code> | Increases critical hit percentage for slowed/immobile targets</p>
+<p><strong>power.trait_crits_impaired</strong> | <code>int</code> | Increases critical hit percentage for slowed/immobile targets</p>
 
-<p><strong>power.trait_elemental</strong> | <code>string</code> | Damage done is elemental. See engine/elements.txt</p>
+<p><strong>power.trait_elemental</strong> | <code>predefined_string</code> | Damage done is elemental. See engine/elements.txt</p>
 
 <p><strong>power.target_range</strong> | <code>float</code> | The distance from the caster that the power can be activated</p>
 
@@ -1331,23 +1333,23 @@ body {
 
 <p><strong>power.buff_party_power_id</strong> | <code>power_id</code> | Buffs a power id for all party members</p>
 
-<p><strong>power.post_effect</strong> | <code>string, int, duration : Effect ID, Magnitude, Duration</code> | Post effect. Duration is in 'ms' or 's'.</p>
+<p><strong>power.post_effect</strong> | <code>predefined_string, int, duration : Effect ID, Magnitude, Duration</code> | Post effect. Duration is in 'ms' or 's'.</p>
 
 <p><strong>power.post_power</strong> | <code>power_id</code> | Trigger a power if the hazard did damage.</p>
 
 <p><strong>power.wall_power</strong> | <code>power_id</code> | Trigger a power if the hazard hit a wall.</p>
 
-<p><strong>power.spawn_type</strong> | <code>string</code> | For non-transform powers, an enemy is spawned from this category. For transform powers, the caster will transform into a creature from this category.</p>
+<p><strong>power.spawn_type</strong> | <code>predefined_string</code> | For non-transform powers, an enemy is spawned from this category. For transform powers, the caster will transform into a creature from this category.</p>
 
 <p><strong>power.target_neighbor</strong> | <code>int</code> | Target is changed to an adjacent tile within a radius.</p>
 
-<p><strong>power.spawn_limit</strong> | <code>["fixed", "stat", "unlimited"], [int, string] : Mode, Value</code> | The maximum number of creatures that can be spawned and alive from this power. "fixed" takes an integer. "stat" takes a primary stat as a string (e.g. "physical").</p>
+<p><strong>power.spawn_limit</strong> | <code>["fixed", "stat", "unlimited"], [int, predefined_string] : Mode, Value</code> | The maximum number of creatures that can be spawned and alive from this power. "fixed" takes an integer. "stat" takes a primary stat as a string (e.g. "physical").</p>
 
-<p><strong>power.spawn_limit</strong> | <code>["default", "fixed", "stat", "level"], [int, string] : Mode, Value</code> | The level of spawned creatures. "fixed" and "level" take an integer. "stat" takes a primary stat as a string (e.g. "physical").</p>
+<p><strong>power.spawn_limit</strong> | <code>["default", "fixed", "stat", "level"], [int, predefined_string] : Mode, Value</code> | The level of spawned creatures. "fixed" and "level" take an integer. "stat" takes a primary stat as a string (e.g. "physical").</p>
 
 <p><strong>power.target_party</strong> | <code>bool</code> | Hazard will only affect party members.</p>
 
-<p><strong>power.target_categories</strong> | <code>list(string)</code> | Hazard will only affect enemies in these categories.</p>
+<p><strong>power.target_categories</strong> | <code>list(predefined_string)</code> | Hazard will only affect enemies in these categories.</p>
 
 <p><strong>power.modifier_accuracy</strong> | <code>["multiply", "add", "absolute"], int : Mode, Value</code> | Changes this power's accuracy.</p>
 
@@ -1389,9 +1391,9 @@ body {
 
 <p><strong>quest.requires_not_item</strong> | <code>list(item_id)</code> | Quest requires not having a specific item (not equipped)</p>
 
-<p><strong>quest.requires_class</strong> | <code>string</code> | Quest requires this base class</p>
+<p><strong>quest.requires_class</strong> | <code>predefined_string</code> | Quest requires this base class</p>
 
-<p><strong>quest.requires_not_class</strong> | <code>string</code> | Quest requires not this base class</p>
+<p><strong>quest.requires_not_class</strong> | <code>predefined_string</code> | Quest requires not this base class</p>
 
 <p><strong>quest.quest_text</strong> | <code>string</code> | Text that gets displayed in the Quest log when this quest is active.</p>
 
@@ -1403,7 +1405,7 @@ body {
 
 <p><strong>font.id</strong> | <code>string</code> | An identifier used to reference this font.</p>
 
-<p><strong>font.style</strong> | <code>repeatable(["default", string], filename, int, bool) : Language, Font file, Point size, Blending</code> | Filename, point size, and blend mode of the font to use for this language. Language can be "default" or a 2-letter region code.</p>
+<p><strong>font.style</strong> | <code>repeatable(["default", predefined_string], filename, int, bool) : Language, Font file, Point size, Blending</code> | Filename, point size, and blend mode of the font to use for this language. Language can be "default" or a 2-letter region code.</p>
 
 <p><strong>menu_normal</strong> | <code>color</code> | Basic menu text color. Recommended  white.</p>
 
@@ -1631,17 +1633,17 @@ body {
 
 <p><strong>stat</strong> | <code>string, int : Stat name, Value</code> | The starting value for this stat.</p>
 
-<p><strong>stat_per_level</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per level.</p>
+<p><strong>stat_per_level</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per level.</p>
 
-<p><strong>stat_per_physical</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per Physical.</p>
+<p><strong>stat_per_physical</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per Physical.</p>
 
-<p><strong>stat_per_mental</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per Mental.</p>
+<p><strong>stat_per_mental</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per Mental.</p>
 
-<p><strong>stat_per_offense</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per Offense.</p>
+<p><strong>stat_per_offense</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per Offense.</p>
 
-<p><strong>stat_per_defense</strong> | <code>string, int : Stat name, Value</code> | The value for this stat added per Defense.</p>
+<p><strong>stat_per_defense</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per Defense.</p>
 
-<p><strong>vulnerable</strong> | <code>string, int : Element, Value</code> | Percentage weakness to this element.</p>
+<p><strong>vulnerable</strong> | <code>predefined_string, int : Element, Value</code> | Percentage weakness to this element.</p>
 
 <hr />
 
@@ -1685,7 +1687,7 @@ body {
 
 <p><strong>convert_status</strong> | <code>string</code> | Campaign status to set upon being converted to a player ally.</p>
 
-<p><strong>first_defeat_loot</strong> | <code>int</code> | Drops this item upon first death.</p>
+<p><strong>first_defeat_loot</strong> | <code>item_id</code> | Drops this item upon first death.</p>
 
 <p><strong>quest_loot</strong> | <code>string, string, item_id : Required status, Required not status, Item</code> | Drops this item when campaign status is met.</p>
 

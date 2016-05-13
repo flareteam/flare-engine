@@ -164,7 +164,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.icon|icon_id|The icon to visually represent the power eg. in skill tree or action bar.
 			powers[input_id].icon = toInt(infile.val);
 		else if (infile.key == "new_state") {
-			// @ATTR power.new_state|string|When power is used, hero or enemy will change to this state. Must be one of the states ["instant", user defined]
+			// @ATTR power.new_state|predefined_string|When power is used, hero or enemy will change to this state. Must be one of the states ["instant", user defined]
 			if (infile.val == "instant") powers[input_id].new_state = POWSTATE_INSTANT;
 			else {
 				powers[input_id].new_state = POWSTATE_ATTACK;
@@ -209,7 +209,7 @@ void PowerManager::loadPowers() {
 		}
 		// power requirements
 		else if (infile.key == "requires_flags") {
-			// @ATTR power.requires_flags|list(string)|A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt
+			// @ATTR power.requires_flags|list(predefined_string)|A comma separated list of equip flags that are required to use this power. See engine/equip_flags.txt
 			powers[input_id].requires_flags.clear();
 			std::string flag = popFirstString(infile.val);
 
@@ -345,10 +345,10 @@ void PowerManager::loadPowers() {
 			// @ATTR power.trait_avoidance_ignore|bool|Ignores the target's Avoidance stat
 			powers[input_id].trait_avoidance_ignore = toBool(infile.val);
 		else if (infile.key == "trait_crits_impaired")
-			// @ATTR power.trait_crits_impaired|integer|Increases critical hit percentage for slowed/immobile targets
+			// @ATTR power.trait_crits_impaired|int|Increases critical hit percentage for slowed/immobile targets
 			powers[input_id].trait_crits_impaired = toInt(infile.val);
 		else if (infile.key == "trait_elemental") {
-			// @ATTR power.trait_elemental|string|Damage done is elemental. See engine/elements.txt
+			// @ATTR power.trait_elemental|predefined_string|Damage done is elemental. See engine/elements.txt
 			for (unsigned int i=0; i<ELEMENTS.size(); i++) {
 				if (infile.val == ELEMENTS[i].id) powers[input_id].trait_elemental = i;
 			}
@@ -404,7 +404,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.buff_party_power_id|power_id|Buffs a power id for all party members
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
-			// @ATTR power.post_effect|string, int, duration : Effect ID, Magnitude, Duration|Post effect. Duration is in 'ms' or 's'.
+			// @ATTR power.post_effect|predefined_string, int, duration : Effect ID, Magnitude, Duration|Post effect. Duration is in 'ms' or 's'.
 			if (clear_post_effects) {
 				powers[input_id].post_effects.clear();
 				clear_post_effects = false;
@@ -429,13 +429,13 @@ void PowerManager::loadPowers() {
 			powers[input_id].wall_power = toInt(infile.val);
 		// spawn info
 		else if (infile.key == "spawn_type")
-			// @ATTR power.spawn_type|string|For non-transform powers, an enemy is spawned from this category. For transform powers, the caster will transform into a creature from this category.
+			// @ATTR power.spawn_type|predefined_string|For non-transform powers, an enemy is spawned from this category. For transform powers, the caster will transform into a creature from this category.
 			powers[input_id].spawn_type = infile.val;
 		else if (infile.key == "target_neighbor")
 			// @ATTR power.target_neighbor|int|Target is changed to an adjacent tile within a radius.
 			powers[input_id].target_neighbor = toInt(infile.val);
 		else if (infile.key == "spawn_limit") {
-			// @ATTR power.spawn_limit|["fixed", "stat", "unlimited"], [int, string] : Mode, Value|The maximum number of creatures that can be spawned and alive from this power. "fixed" takes an integer. "stat" takes a primary stat as a string (e.g. "physical").
+			// @ATTR power.spawn_limit|["fixed", "stat", "unlimited"], [int, predefined_string] : Mode, Value|The maximum number of creatures that can be spawned and alive from this power. "fixed" takes an integer. "stat" takes a primary stat as a string (e.g. "physical").
 			std::string mode = popFirstString(infile.val);
 			if (mode == "fixed") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_FIXED;
 			else if (mode == "stat") powers[input_id].spawn_limit_mode = SPAWN_LIMIT_MODE_STAT;
@@ -458,7 +458,7 @@ void PowerManager::loadPowers() {
 			}
 		}
 		else if (infile.key == "spawn_level") {
-			// @ATTR power.spawn_limit|["default", "fixed", "stat", "level"], [int, string] : Mode, Value|The level of spawned creatures. "fixed" and "level" take an integer. "stat" takes a primary stat as a string (e.g. "physical").
+			// @ATTR power.spawn_limit|["default", "fixed", "stat", "level"], [int, predefined_string] : Mode, Value|The level of spawned creatures. "fixed" and "level" take an integer. "stat" takes a primary stat as a string (e.g. "physical").
 			std::string mode = popFirstString(infile.val);
 			if (mode == "default") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_DEFAULT;
 			else if (mode == "fixed") powers[input_id].spawn_level_mode = SPAWN_LEVEL_MODE_FIXED;
@@ -487,7 +487,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.target_party|bool|Hazard will only affect party members.
 			powers[input_id].target_party = toBool(infile.val);
 		else if (infile.key == "target_categories") {
-			// @ATTR power.target_categories|list(string)|Hazard will only affect enemies in these categories.
+			// @ATTR power.target_categories|list(predefined_string)|Hazard will only affect enemies in these categories.
 			powers[input_id].target_categories.clear();
 			std::string cat;
 			while ((cat = infile.nextValue()) != "") {

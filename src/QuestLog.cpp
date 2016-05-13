@@ -123,11 +123,11 @@ void QuestLog::load(const std::string& filename) {
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_class") {
-			// @ATTR quest.requires_class|string|Quest requires this base class
+			// @ATTR quest.requires_class|predefined_string|Quest requires this base class
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "requires_not_class") {
-			// @ATTR quest.requires_not_class|string|Quest requires not this base class
+			// @ATTR quest.requires_not_class|predefined_string|Quest requires not this base class
 			EventManager::loadEventComponent(infile, &ev, NULL);
 		}
 		else if (infile.key == "quest_text") {

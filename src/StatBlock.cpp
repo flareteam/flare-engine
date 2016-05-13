@@ -206,7 +206,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_level") {
-		// @ATTR stat_per_level|string, int : Stat name, Value|The value for this stat added per level.
+		// @ATTR stat_per_level|predefined_string, int : Stat name, Value|The value for this stat added per level.
 		std::string stat = popFirstString(infile->val, ',');
 		int value = popFirstInt(infile->val, ',');
 
@@ -218,7 +218,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_physical") {
-		// @ATTR stat_per_physical|string, int : Stat name, Value|The value for this stat added per Physical.
+		// @ATTR stat_per_physical|predefined_string, int : Stat name, Value|The value for this stat added per Physical.
 		std::string stat = popFirstString(infile->val, ',');
 		int value = popFirstInt(infile->val, ',');
 
@@ -230,7 +230,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_mental") {
-		// @ATTR stat_per_mental|string, int : Stat name, Value|The value for this stat added per Mental.
+		// @ATTR stat_per_mental|predefined_string, int : Stat name, Value|The value for this stat added per Mental.
 		std::string stat = popFirstString(infile->val, ',');
 		int value = popFirstInt(infile->val, ',');
 
@@ -242,7 +242,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_offense") {
-		// @ATTR stat_per_offense|string, int : Stat name, Value|The value for this stat added per Offense.
+		// @ATTR stat_per_offense|predefined_string, int : Stat name, Value|The value for this stat added per Offense.
 		std::string stat = popFirstString(infile->val, ',');
 		int value = popFirstInt(infile->val, ',');
 
@@ -254,7 +254,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "stat_per_defense") {
-		// @ATTR stat_per_defense|string, int : Stat name, Value|The value for this stat added per Defense.
+		// @ATTR stat_per_defense|predefined_string, int : Stat name, Value|The value for this stat added per Defense.
 		std::string stat = popFirstString(infile->val, ',');
 		int value = popFirstInt(infile->val, ',');
 
@@ -266,7 +266,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		}
 	}
 	else if (infile->key == "vulnerable") {
-		// @ATTR vulnerable|string, int : Element, Value|Percentage weakness to this element.
+		// @ATTR vulnerable|predefined_string, int : Element, Value|Percentage weakness to this element.
 		std::string element = popFirstString(infile->val, ',');
 		int value = popFirstInt(infile->val, ',');
 
@@ -367,7 +367,7 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "defeat_status") defeat_status = infile.val;
 		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
 		else if (infile.key == "convert_status") convert_status = infile.val;
-		// @ATTR first_defeat_loot|int|Drops this item upon first death.
+		// @ATTR first_defeat_loot|item_id|Drops this item upon first death.
 		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
 		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met.
 		else if (infile.key == "quest_loot") {

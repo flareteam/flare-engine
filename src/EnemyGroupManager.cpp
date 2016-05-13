@@ -62,7 +62,7 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 				new_enemy.rarity = infile.val;
 			}
 			else if (infile.key == "categories") {
-				// @ATTR categories|list(string)|Comma separated list of enemy categories
+				// @ATTR categories|list(predefined_string)|Comma separated list of enemy categories
 				std::string cat;
 				while ( (cat = infile.nextValue()) != "") {
 					_categories[cat].push_back(new_enemy);

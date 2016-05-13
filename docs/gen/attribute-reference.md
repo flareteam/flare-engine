@@ -35,6 +35,8 @@ Attribute descriptions are in the following format: section.attributename, `valu
 
 `color`, defined as: `int, int, int : Red, Green, Blue`
 
+`predefined_string`, same as a string, but uses a value defined elsewhere
+
 `alignment`, defined as: `["topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"]`
 
 `direction`, defined as: `["N", "NE", "E", "SE", "S", "SW", "W", "NW", int]`. If defined as an integer, the value must be between 0-7 inclusive.
