@@ -30,6 +30,7 @@ WidgetInput::WidgetInput(const std::string& filename)
 	, hover(false)
 	, cursor_frame(0)
 	, del_frame(0)
+	, max_del_frame(0)
 	, inFocus(false)
 	, max_length(0)
 	, only_numbers(false)
@@ -103,10 +104,15 @@ bool WidgetInput::logic(int x, int y) {
 			}
 		}
 
+		if (!inpt->pressing[DEL]) {
+			max_del_frame = MAX_FRAMES_PER_SEC;
+		}
+
 		// handle backspaces
 		if (!inpt->lock[DEL] && inpt->pressing[DEL]) {
 			inpt->lock[DEL] = true;
 			del_frame = 0;
+			max_del_frame = std::max(MAX_FRAMES_PER_SEC/8, max_del_frame - (MAX_FRAMES_PER_SEC/4));
 			// remove utf-8 character
 			int n = static_cast<int>(text.length()-1);
 			while (n > 0 && ((text[n] & 0xc0) == 0x80) ) n--;
@@ -116,7 +122,7 @@ bool WidgetInput::logic(int x, int y) {
 			// delay unlocking of DEL lock
 			del_frame++;
 		}
-		if (inpt->lock[DEL] && del_frame >= MAX_FRAMES_PER_SEC / 8) {
+		if (inpt->pressing[DEL] && inpt->lock[DEL] && del_frame >= max_del_frame) {
 			// after X frames allow DEL again
 			inpt->lock[DEL]	= false;
 		}
