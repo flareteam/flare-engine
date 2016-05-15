@@ -1,0 +1,40 @@
+##### TODO: Edit this to set appropriate buttons for GCW-Zero
+
+# Keybindings
+# FORMAT: {ACTION}={BIND},{BIND_ALT},{BIND_JOY}
+# A bind value of -1 means unbound
+# For BIND and BIND_ALT, a value of 0 is also unbound
+# For BIND and BIND_ALT, any value less than -1 is a mouse button
+# As an example, mouse button 1 would be -3 here. Button 2 would be -4, etc.
+
+cancel=27,27,0
+accept=13,32,1
+up=119,1073741906,-4
+down=115,1073741905,-5
+left=97,1073741904,-2
+right=100,1073741903,-3
+bar1=49,49,-1
+bar2=50,50,-1
+bar3=51,51,-1
+bar4=52,52,-1
+bar5=53,53,-1
+bar6=54,54,-1
+bar7=55,55,-1
+bar8=56,56,-1
+bar9=57,57,-1
+bar0=48,48,-1
+main1=-3,-3,-1
+main2=-5,-5,-1
+character=99,99,-1
+inventory=105,105,-1
+powers=112,112,-1
+log=108,108,-1
+ctrl=1073742048,1073742052,-1
+shift=1073742049,1073742053,-1
+alt=1073742050,1073742054,-1
+delete=127,8,-1
+actionbar=98,98,2
+actionbar_back=122,122,4
+actionbar_forward=120,120,5
+actionbar_use=110,110,3
+developer_menu=1073741886,1073741886,-1

@@ -1,0 +1,79 @@
+##### TODO: Edit this to set appropriate settings for GCW-Zero
+
+## flare-engine settings file ##
+# fullscreen mode. 1 enable, 0 disable.
+fullscreen=0
+
+# display resolution. 640x480 minimum.
+resolution_w=640
+resolution_h=480
+
+# music and sound volume (0 = silent, 128 = max)
+music_volume=96
+sound_volume=128
+
+# display floating damage text. 1 enable, 0 disable.
+combat_text=1
+
+# use mouse to move (experimental). 1 enable, 0 disable.
+mouse_move=0
+
+# hardware surfaces, v-sync. Try disabling for performance. 1 enable, 0 disable.
+hwsurface=1
+vsync=1
+
+# texture filter quality. 0 nearest neighbor (worst), 1 linear (best)
+texture_filter=1
+
+# maximum frames per second. default is 60
+max_fps=60
+
+# default render device. 'sdl' is the default setting
+renderer=sdl
+
+# joystick settings.
+enable_joystick=0
+joystick_device=0
+joystick_deadzone=100
+
+# 2-letter language code.
+language=en
+
+# allow changing gamma (experimental). 1 enable, 0 disable.
+change_gamma=0
+
+# screen gamma (0.5 = darkest, 2.0 = lightest)
+gamma=1
+
+# use mouse to aim. 1 enable, 0 disable.
+mouse_aim=1
+
+# make using mouse secondary, give full control to keyboard. 1 enable, 0 disable.
+no_mouse=0
+
+# show frames per second. 1 enable, 0 disable.
+show_fps=0
+
+# enable colorblind tooltips. 1 enable, 0 disable
+colorblind=0
+
+# use the system mouse cursor. 1 enable, 0 disable
+hardware_cursor=0
+
+# allow opening the developer console. 1 enable, 0 disable
+dev_mode=0
+
+# shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable
+dev_hud=1
+
+# show the targeting reticle on the ground when attacking. 1 enable, 0 disable
+show_target=0
+
+# always show loot tooltips. 1 enable, 0 disable
+loot_tooltips=1
+
+# always show labels on HP/MP/XP bars. 1 enable, 0 disable
+statbar_labels=0
+
+# automatically equip items. 1 enable, 0 disable
+auto_equip=1

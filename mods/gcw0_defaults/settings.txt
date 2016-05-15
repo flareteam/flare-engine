@@ -1,0 +1,2 @@
+description=Default settings & button mapping for the GCW-Zero
+game=default
