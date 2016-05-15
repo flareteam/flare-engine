@@ -40,6 +40,8 @@ GameSwitcher *gswitch;
 #include "PlatformAndroid.cpp"
 #elif __IPHONEOS__
 #include "PlatformIPhoneOS.cpp"
+#elif __GCW0__
+#include "PlatformGCW0.cpp"
 #else
 // Linux stuff should work on Mac OSX/BSD/etc, too
 #include "PlatformLinux.cpp"
