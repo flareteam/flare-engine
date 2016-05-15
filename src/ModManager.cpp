@@ -306,7 +306,7 @@ void ModManager::applyDepends() {
 
 	for (unsigned i=0; i<mod_list.size(); i++) {
 		// skip the mod if the game doesn't match
-		if (mod_list[i].game != game && mod_list[i].name != FALLBACK_MOD) {
+		if (game != FALLBACK_GAME && mod_list[i].game != FALLBACK_GAME && mod_list[i].game != game && mod_list[i].name != FALLBACK_MOD) {
 			logError("ModManager: Tried to enable \"%s\", but failed. Game does not match \"%s\".", mod_list[i].name.c_str(), game.c_str());
 			continue;
 		}
@@ -338,7 +338,7 @@ void ModManager::applyDepends() {
 					// if we don't already have this dependency, try to load it from the list of available mods
 					if (find(mod_dirs.begin(), mod_dirs.end(), mod_list[i].depends[j]) != mod_dirs.end()) {
 						Mod new_depend = loadMod(mod_list[i].depends[j]);
-						if (new_depend.game != game) {
+						if (game != FALLBACK_GAME && new_depend.game != FALLBACK_GAME && new_depend.game != game) {
 							logError("ModManager: Tried to enable dependency \"%s\" for \"%s\", but failed. Game does not match \"%s\".", new_depend.name.c_str(), mod_list[i].name.c_str(), game.c_str());
 							depends_met = false;
 							break;

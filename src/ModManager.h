@@ -27,6 +27,7 @@ mods in priority order when loading data files.
 #define MOD_MANAGER_H
 
 #define FALLBACK_MOD "default"
+#define FALLBACK_GAME "default"
 
 #include "CommonIncludes.h"
 
