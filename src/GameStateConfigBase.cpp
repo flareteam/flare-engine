@@ -900,7 +900,7 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 		}
 
 		ret = mod->description;
-		if (mod->game != "") {
+		if (mod->game != "" && mod->game != FALLBACK_GAME) {
 			if (ret != "") ret += '\n';
 			ret += msg->get("Game: ");
 			ret += mod->game;
