@@ -843,6 +843,12 @@ void StatBlock::loadHeroStats() {
 		}
 		infile.close();
 	}
+
+	if (xp_table.empty()) {
+		logError("StatBlock: No XP table defined.");
+		xp_table.push_back(0);
+	}
+
 	max_spendable_stat_points = static_cast<int>(xp_table.size()) * stat_points_per_level;
 }
 
