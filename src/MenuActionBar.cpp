@@ -270,6 +270,10 @@ void MenuActionBar::renderAttention(int menu_id) {
 void MenuActionBar::logic() {
 	tablist.logic();
 
+	// hero has no powers
+	if (hero->power_cast_ticks.empty())
+		return;
+
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (!slots[i]) continue;
 

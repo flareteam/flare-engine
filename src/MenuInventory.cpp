@@ -803,8 +803,9 @@ void MenuInventory::updateEquipment(int slot) {
  * Given the equipped items, calculate the hero's stats
  */
 void MenuInventory::applyEquipment(ItemStack *equipped) {
+	if (items->items.empty())
+		return;
 
-	const std::vector<Item> &pc_items = items->items;
 	int item_id;
 
 	// calculate bonuses to basic stats, added by items
@@ -814,7 +815,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		stats->offense_additional = stats->defense_additional = stats->physical_additional = stats->mental_additional = 0;
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			item_id = equipped[i].item;
-			const Item &item = pc_items[item_id];
+			const Item &item = items->items[item_id];
 			unsigned bonus_counter = 0;
 			while (bonus_counter < item.bonus.size()) {
 				if (item.bonus[bonus_counter].base_index == 0) //physical
@@ -912,7 +913,8 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 }
 
 void MenuInventory::applyItemStats(ItemStack *equipped) {
-	const std::vector<Item> &pc_items = items->items;
+	if (items->items.empty())
+		return;
 
 	// reset additional values
 	stats->dmg_melee_min_add = stats->dmg_melee_max_add = 0;
@@ -923,7 +925,7 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
 		int item_id = equipped[i].item;
-		const Item &item = pc_items[item_id];
+		const Item &item = items->items[item_id];
 
 		// apply base stats
 		stats->dmg_melee_min_add += item.dmg_melee_min;

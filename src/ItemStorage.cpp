@@ -54,7 +54,7 @@ void ItemStorage::setItems(const std::string& s) {
 			logError("ItemStorage: Item on position %d has negative id, skipping", i);
 			storage[i].clear();
 		}
-		else if (items->items.empty() || static_cast<unsigned>(storage[i].item) > items->items.size()-1) {
+		else if ((items->items.empty() && storage[i].item > 0) || static_cast<unsigned>(storage[i].item) > items->items.size()-1) {
 			logError("ItemStorage: Item id (%d) out of bounds 1-%d, marking as unknown", storage[i].item, static_cast<int>(items->items.size()));
 			items->addUnknownItem(storage[i].item);
 		}
