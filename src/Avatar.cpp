@@ -318,7 +318,7 @@ void Avatar::handlePower(std::vector<ActionData> &action_queue) {
 
 	for (unsigned i=0; i<action_queue.size(); i++) {
 		ActionData &action = action_queue[i];
-		const Power &power = powers->getPower(action.power);
+		const Power &power = powers->powers[action.power];
 
 		if (power.type == POWTYPE_BLOCK)
 			blocking = true;
@@ -647,7 +647,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					mapr->collider.block(stats.pos.x, stats.pos.y, false);
 
 					powers->activate(current_power, &stats, act_target);
-					hero_cooldown[current_power] = powers->getPower(current_power).cooldown;
+					hero_cooldown[current_power] = powers->powers[current_power].cooldown;
 
 					if (stats.state_ticks > 0)
 						stats.hold_state = true;

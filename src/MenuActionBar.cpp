@@ -278,7 +278,7 @@ void MenuActionBar::logic() {
 		if (!slots[i]) continue;
 
 		if (hotkeys[i] > 0 && static_cast<unsigned>(hotkeys_mod[i]) < powers->powers.size()) {
-			const Power &power = powers->getPower(hotkeys_mod[i]);
+			const Power &power = powers->powers[hotkeys_mod[i]];
 
 			int item_id = power.requires_item;
 			int equipped_item_id = power.requires_equipped_item;
@@ -523,7 +523,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				// if a power requires a fixed target (like teleportation), break up activation into two parts
 				// the first step is to mark the slot that was clicked on
 				if (action.power > 0) {
-					const Power &power = powers->getPower(action.power);
+					const Power &power = powers->powers[action.power];
 					if (power.starting_pos == STARTING_POS_TARGET || power.buff_teleport) {
 						twostep_slot = i;
 						action.power = 0;
@@ -562,7 +562,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 
 		// a power slot was activated
 		if (action.power > 0 && static_cast<unsigned>(action.power) < powers->powers.size()) {
-			const Power &power = powers->getPower(action.power);
+			const Power &power = powers->powers[action.power];
 			bool can_use_power = true;
 			action.instant_item = (power.new_state == POWSTATE_INSTANT && power.requires_item > 0);
 
