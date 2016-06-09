@@ -26,15 +26,43 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuExit.h"
 #include "SharedResources.h"
 #include "Settings.h"
+#include "UtilsParsing.h"
 
 MenuExit::MenuExit() : Menu() {
 
+	buttonExit = new WidgetButton();
+	buttonClose = new WidgetButton();
+
+	// widgets for game options
+	music_volume_sl = new WidgetSlider();
+	sound_volume_sl = new WidgetSlider();
+
 	// Load config settings
+	// TODO attribute docs
 	FileParser infile;
 	if(infile.open("menus/exit.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
+			else if (infile.key == "title") {
+				title = eatLabelInfo(infile.val);
+			}
+			else if (infile.key == "exit") {
+				Point p = toPoint(infile.val);
+				buttonExit->setBasePos(p.x, p.y);
+			}
+			else if (infile.key == "continue") {
+				Point p = toPoint(infile.val);
+				buttonClose->setBasePos(p.x, p.y);
+			}
+			else if (infile.key == "music_volume") {
+				Rect r = toRect(infile.val);
+				placeOptionWidgets(&music_volume_lb, music_volume_sl, r.x, r.y, r.w, r.h, msg->get("Music Volume"));
+			}
+			else if (infile.key == "sound_volume") {
+				Rect r = toRect(infile.val);
+				placeOptionWidgets(&sound_volume_lb, sound_volume_sl, r.x, r.y, r.w, r.h, msg->get("Sound Volume"));
+			}
 			else
 				infile.error("MenuExit: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -42,17 +70,25 @@ MenuExit::MenuExit() : Menu() {
 	}
 
 	exitClicked = false;
-
-	buttonExit = new WidgetButton();
+	reload_music = false;
 
 	if (SAVE_ONEXIT)
 		buttonExit->label = msg->get("Save & Exit");
 	else
 		buttonExit->label = msg->get("Exit");
 
-	buttonClose = new WidgetButton("images/menus/buttons/button_x.png");
+	buttonClose->label = msg->get("Continue");
 
-	setBackground("images/menus/confirm_bg.png");
+	setBackground("images/menus/pause_menu.png");
+
+	if (AUDIO) {
+		music_volume_sl->set(0, 128, MUSIC_VOLUME);
+		sound_volume_sl->set(0, 128, SOUND_VOLUME);
+	}
+	else {
+		music_volume_sl->set(0, 128, 0);
+		sound_volume_sl->set(0, 128, 0);
+	}
 
 	tablist.add(buttonExit);
 	tablist.add(buttonClose);
@@ -63,14 +99,21 @@ MenuExit::MenuExit() : Menu() {
 void MenuExit::align() {
 	Menu::align();
 
-	buttonExit->pos.x = window_area.x + window_area.w/2 - buttonExit->pos.w/2;
-	buttonExit->pos.y = window_area.y + window_area.h/2;
+	title_lb.set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Paused"), font->getColor("menu_normal"), title.font_style);
+
+	buttonExit->setPos(window_area.x, window_area.y);
 	buttonExit->refresh();
 
-	buttonClose->pos.x = window_area.x + window_area.w;
-	buttonClose->pos.y = window_area.y;
+	buttonClose->setPos(window_area.x, window_area.y);
+	buttonClose->refresh();
 
-	label.set(window_area.x + window_area.w/2, window_area.y + window_area.h - (buttonExit->pos.h * 2), JUSTIFY_CENTER, VALIGN_TOP, msg->get("Exit to title?"), font->getColor("menu_normal"));
+	for (size_t i=0; i<option_labels.size(); ++i) {
+		option_labels[i]->setPos(window_area.x, window_area.y);
+	}
+
+	for (size_t i=0; i<option_widgets.size(); ++i) {
+		option_widgets[i]->setPos(window_area.x, window_area.y);
+	}
 }
 
 void MenuExit::logic() {
@@ -80,8 +123,18 @@ void MenuExit::logic() {
 		if (buttonExit->checkClick()) {
 			exitClicked = true;
 		}
-		if (buttonClose->checkClick()) {
+		else if (buttonClose->checkClick()) {
 			visible = false;
+		}
+		else if (AUDIO && music_volume_sl->checkClick()) {
+			if (MUSIC_VOLUME == 0)
+				reload_music = true;
+			MUSIC_VOLUME = static_cast<short>(music_volume_sl->getValue());
+			snd->setVolumeMusic(MUSIC_VOLUME);
+		}
+		else if (AUDIO && sound_volume_sl->checkClick()) {
+			SOUND_VOLUME = static_cast<short>(sound_volume_sl->getValue());
+			snd->setVolumeSFX(SOUND_VOLUME);
 		}
 	}
 }
@@ -91,15 +144,40 @@ void MenuExit::render() {
 		// background
 		Menu::render();
 
-		label.render();
+		title_lb.render();
 
 		buttonExit->render();
 		buttonClose->render();
+
+		for (size_t i=0; i<option_labels.size(); ++i) {
+			option_labels[i]->render();
+		}
+
+		for (size_t i=0; i<option_widgets.size(); ++i) {
+			option_widgets[i]->render();
+		}
+	}
+}
+
+void MenuExit::placeOptionWidgets(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str) {
+	if (w) {
+		w->setBasePos(x2, y2);
+		option_widgets.push_back(w);
+	}
+
+	if (lb) {
+		lb->setBasePos(x1, y1);
+		lb->set(str);
+		lb->setJustify(JUSTIFY_CENTER);
+		option_labels.push_back(lb);
 	}
 }
 
 MenuExit::~MenuExit() {
 	delete buttonExit;
 	delete buttonClose;
+
+	delete music_volume_sl;
+	delete sound_volume_sl;
 }
 

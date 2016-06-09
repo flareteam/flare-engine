@@ -41,6 +41,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuCharacter.h"
 #include "MenuBook.h"
 #include "MenuEnemy.h"
+#include "MenuExit.h"
 #include "MenuHUDLog.h"
 #include "MenuInventory.h"
 #include "MenuLog.h"
@@ -347,6 +348,9 @@ void GameStatePlay::checkCancel() {
 	if (menu->requestingExit()) {
 		if (SAVE_ONEXIT)
 			save_load->saveGame();
+
+		// audio levels can be changed in the pause menu, so update our settings file
+		saveSettings();
 
 		snd->stopMusic();
 		delete requestedGameState;
@@ -980,6 +984,12 @@ void GameStatePlay::logic() {
 		}
 
 		updateActionBar();
+	}
+
+	// reload music if changed in the pause menu
+	if (menu->exit->reload_music) {
+		mapr->loadMusic();
+		menu->exit->reload_music = false;
 	}
 }
 

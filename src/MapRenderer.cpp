@@ -222,8 +222,15 @@ int MapRenderer::load(const std::string& fname) {
 }
 
 void MapRenderer::loadMusic() {
-	// load and play music
-	snd->loadMusic(music_filename);
+	if (!AUDIO) return;
+
+	if (MUSIC_VOLUME > 0) {
+		// load and play music
+		snd->loadMusic(music_filename);
+	}
+	else {
+		snd->stopMusic();
+	}
 }
 
 void MapRenderer::logic() {

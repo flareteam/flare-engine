@@ -27,16 +27,27 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Menu.h"
 #include "WidgetButton.h"
+#include "WidgetSlider.h"
 
 class MenuExit : public Menu {
 protected:
-	void loadGraphics();
+	void placeOptionWidgets(WidgetLabel *lb, Widget *w, int x1, int y1, int x2, int y2, std::string const& str);
 
 	WidgetButton *buttonExit;
 	WidgetButton *buttonClose;
-	WidgetLabel label;
+	WidgetLabel title_lb;
+	LabelInfo title;
+
+	WidgetSlider *music_volume_sl;
+	WidgetSlider *sound_volume_sl;
+
+	WidgetLabel music_volume_lb;
+	WidgetLabel sound_volume_lb;
 
 	bool exitClicked;
+
+	std::vector<WidgetLabel*> option_labels;
+	std::vector<Widget*> option_widgets;
 
 public:
 	MenuExit();
@@ -49,6 +60,8 @@ public:
 	bool isExitRequested() {
 		return exitClicked;
 	}
+
+	bool reload_music;
 };
 
 #endif
