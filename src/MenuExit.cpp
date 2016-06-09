@@ -38,28 +38,33 @@ MenuExit::MenuExit() : Menu() {
 	sound_volume_sl = new WidgetSlider();
 
 	// Load config settings
-	// TODO attribute docs
 	FileParser infile;
+	// @CLASS MenuExit|Description of menus/exit.txt
 	if(infile.open("menus/exit.txt")) {
 		while(infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 			else if (infile.key == "title") {
+				// @ATTR title|label|Position of the "Paused" text.
 				title = eatLabelInfo(infile.val);
 			}
 			else if (infile.key == "exit") {
+				// @ATTR exit|point|Position of the "Save and Exit" button.
 				Point p = toPoint(infile.val);
 				buttonExit->setBasePos(p.x, p.y);
 			}
 			else if (infile.key == "continue") {
+				// @ATTR continue|point|Position of the "Continue" button.
 				Point p = toPoint(infile.val);
 				buttonClose->setBasePos(p.x, p.y);
 			}
 			else if (infile.key == "music_volume") {
+				// @ATTR music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Music Volume" slider relative to the frame.
 				Rect r = toRect(infile.val);
 				placeOptionWidgets(&music_volume_lb, music_volume_sl, r.x, r.y, r.w, r.h, msg->get("Music Volume"));
 			}
 			else if (infile.key == "sound_volume") {
+				// @ATTR sound_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Sound Volume" slider relative to the frame.
 				Rect r = toRect(infile.val);
 				placeOptionWidgets(&sound_volume_lb, sound_volume_sl, r.x, r.y, r.w, r.h, msg->get("Sound Volume"));
 			}

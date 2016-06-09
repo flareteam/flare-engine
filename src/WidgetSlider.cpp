@@ -33,6 +33,7 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	: enabled(true)
 	, sl(NULL)
 	, pressed(false)
+	, changed_without_mouse(false)
 	, minimum(0)
 	, maximum(0)
 	, value(0) {
@@ -83,13 +84,16 @@ bool WidgetSlider::checkClick (int x, int y) {
 		return false;
 	}
 
+	// getNext() or getPrev() was used to change the slider, so treat it as a "click"
+	if (changed_without_mouse) {
+		changed_without_mouse = false;
+		return true;
+	}
+
 	// buttons already in use, new click not allowed
 	if (inpt->lock[UP]) return false;
 	if (inpt->lock[DOWN]) return false;
 
-	if (!pressed && !inpt->lock[UP] && !inpt->lock[DOWN] && !inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-		return true;
-	}
 	if (pressed) {
 		//
 		// The knob has been released
@@ -199,6 +203,8 @@ bool WidgetSlider::getPrev() {
 	pos_knob.x = pos.x + ((value-minimum)* pos.w)/(maximum-minimum) - (pos_knob.w/2);
 	pos_knob.y = pos.y;
 
+	changed_without_mouse = true;
+
 	return true;
 }
 
@@ -211,6 +217,8 @@ bool WidgetSlider::getNext() {
 
 	pos_knob.x = pos.x + ((value-minimum)* pos.w)/(maximum-minimum) - (pos_knob.w/2);
 	pos_knob.y = pos.y;
+
+	changed_without_mouse = true;
 
 	return true;
 }

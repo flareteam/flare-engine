@@ -46,6 +46,7 @@ public:
 private:
 	Sprite *sl;
 	bool pressed;
+	bool changed_without_mouse;
 	int minimum;
 	int maximum;
 	int value;
