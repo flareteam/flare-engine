@@ -626,15 +626,19 @@ int MenuActionBar::checkDrag(const Point& mouse) {
 void MenuActionBar::checkMenu(bool &menu_c, bool &menu_i, bool &menu_p, bool &menu_l) {
 	if (menus[MENU_CHARACTER]->checkClick()) {
 		menu_c = true;
+		menus[MENU_CHARACTER]->deactivate();
 	}
 	else if (menus[MENU_INVENTORY]->checkClick()) {
 		menu_i = true;
+		menus[MENU_INVENTORY]->deactivate();
 	}
 	else if (menus[MENU_POWERS]->checkClick()) {
 		menu_p = true;
+		menus[MENU_POWERS]->deactivate();
 	}
 	else if (menus[MENU_LOG]->checkClick()) {
 		menu_l = true;
+		menus[MENU_LOG]->deactivate();
 	}
 
 	// also allow ACTIONBAR_USE to open menus

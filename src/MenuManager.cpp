@@ -1055,6 +1055,9 @@ void MenuManager::dragAndDropWithKeyboard() {
 				keyboard_dragging = true;
 				drag_src = DRAG_SRC_ACTIONBAR;
 			}
+			else {
+				act->slots[slot_index]->deactivate();
+			}
 		}
 		// drop power/item from other menu
 		else if (slotClick == CHECKED && drag_src != DRAG_SRC_ACTIONBAR && (!drag_stack.empty() || drag_power > 0)) {
