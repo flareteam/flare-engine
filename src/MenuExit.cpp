@@ -95,8 +95,10 @@ MenuExit::MenuExit() : Menu() {
 		sound_volume_sl->set(0, 128, 0);
 	}
 
-	tablist.add(buttonExit);
 	tablist.add(buttonClose);
+	tablist.add(buttonExit);
+	tablist.add(music_volume_sl);
+	tablist.add(sound_volume_sl);
 
 	align();
 }
