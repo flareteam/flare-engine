@@ -198,6 +198,8 @@ public:
 	virtual void drawPixel(int x, int y, const Color& color) = 0;
 	virtual void drawRectangle(const Point& p0, const Point& p1, const Color& color) = 0;
 	virtual void windowResize() = 0;
+	virtual void showMouseCursor() = 0;
+	virtual void hideMouseCursor() = 0;
 
 	bool reloadGraphics();
 

@@ -37,6 +37,8 @@ public:
 	void render();
 	void setCursor(CURSOR_TYPE type);
 
+	bool show_cursor;
+
 private:
 	Sprite *cursor_normal;
 	Sprite *cursor_interact;

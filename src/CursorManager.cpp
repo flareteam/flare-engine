@@ -23,7 +23,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 
 CursorManager::CursorManager()
-	: cursor_normal(NULL)
+	: show_cursor(true)
+	, cursor_normal(NULL)
 	, cursor_interact(NULL)
 	, cursor_talk(NULL)
 	, cursor_attack(NULL)
@@ -86,6 +87,9 @@ CursorManager::~CursorManager() {
 }
 
 void CursorManager::logic() {
+	if (!show_cursor)
+		return;
+
 	if (HARDWARE_CURSOR) {
 		inpt->showCursor();
 		return;
@@ -106,7 +110,7 @@ void CursorManager::logic() {
 }
 
 void CursorManager::render() {
-	if (HARDWARE_CURSOR) return;
+	if (HARDWARE_CURSOR || !show_cursor) return;
 
 	if (cursor_current != NULL) {
 		if (offset_current != NULL) {

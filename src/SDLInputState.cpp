@@ -176,6 +176,9 @@ void SDLInputState::handle() {
 				if (!PlatformOptions.is_mobile_device) {
 					mouse.x = event.motion.x;
 					mouse.y = event.motion.y;
+
+					if (!curs->show_cursor)
+						render_device->showMouseCursor();
 				}
 				break;
 			case SDL_MOUSEWHEEL:
@@ -293,6 +296,7 @@ void SDLInputState::handle() {
 				*/
 			case SDL_JOYHATMOTION:
 				if(JOYSTICK_DEVICE == event.jhat.which && ENABLE_JOYSTICK) {
+					render_device->hideMouseCursor();
 					joy_hat_event = true;
 					switch (event.jhat.value) {
 						case SDL_HAT_CENTERED:
@@ -388,6 +392,7 @@ void SDLInputState::handle() {
 				if(JOYSTICK_DEVICE == event.jbutton.which && ENABLE_JOYSTICK) {
 					for (int key=0; key<key_count; key++) {
 						if (event.jbutton.button == binding_joy[key]) {
+							render_device->hideMouseCursor();
 							pressing[key] = true;
 							un_press[key] = false;
 						}
@@ -456,6 +461,7 @@ void SDLInputState::handle() {
 			}
 
 			if (joy_axis_pressed[i] && joy_axis_deltas[i] != 0) {
+				render_device->hideMouseCursor();
 				last_joyaxis = (i+JOY_AXIS_OFFSET) * (-1);
 			}
 		}

@@ -617,3 +617,15 @@ void SDLSoftwareRenderDevice::windowResize() {
 	updateScreenVars();
 }
 
+void SDLSoftwareRenderDevice::showMouseCursor() {
+	curs->show_cursor = true;
+}
+
+void SDLSoftwareRenderDevice::hideMouseCursor() {
+	// place the mouse in the bottom-right of the screen by default because
+	// flare-game doesn't place any menus here
+	SDL_WarpMouseInWindow(window, SCREEN_W, SCREEN_H);
+
+	curs->show_cursor = false;
+	inpt->hideCursor();
+}
