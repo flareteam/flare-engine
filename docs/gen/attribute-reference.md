@@ -45,7 +45,7 @@ Attribute descriptions are in the following format: section.attributename, `valu
 
 `label`, defined as: `"hidden"` **or** `int, int, ["left", "right", "center"], ["top", "center", "bottom"], string : X, Y, Justify, Vertical Align, Font style`. The font style can be any style defined in engine/font\_settings.txt.
 
-`loot`, defined as: `filename` **or** `["fixed", int], int, int : Drop chance, Min quantity, Max quantity`. There is a limitation when defining as part of a list(...): filenames can only be used in the first list element.
+`loot`, defined as: `filename` **or** `["currency", item_id], ["fixed", int], int, int : Item, Drop chance, Min quantity, Max quantity`. There is a limitation when defining as part of a list(...): filenames can only be used in the first list element.
 
 `raw`, This is plain text, including line breaks. It is used only for map layer data.
 
