@@ -600,7 +600,9 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 }
 
 void ItemManager::playSound(int item, const Point& pos) {
-	snd->play(items[item].sfx_id, GLOBAL_VIRTUAL_CHANNEL, pos, false);
+	std::stringstream channel_name;
+	channel_name << "item_" << items[item].sfx_id;
+	snd->play(items[item].sfx_id, channel_name.str(), pos, false);
 }
 
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {
