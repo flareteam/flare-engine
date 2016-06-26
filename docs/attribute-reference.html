@@ -1187,6 +1187,10 @@ body {
 
 <p><strong>vendor</strong> | <code>bool</code> | Allows this NPC to buy/sell items.</p>
 
+<p><strong>vendor_requires_status</strong> | <code>list(string)</code> | The player must have these statuses in order to use this NPC as a vendor.</p>
+
+<p><strong>vendor_requires_not_status</strong> | <code>list(string)</code> | The player must not have these statuses in order to use this NPC as a vendor.</p>
+
 <p><strong>constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor has for sale.</p>
 
 <p><strong>status_stock</strong> | <code>repeatable(string, list(item_id)) : Required status, Item(s)</code> | A list of items this vendor will have for sale if the required status is met.</p>

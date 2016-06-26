@@ -157,6 +157,18 @@ void NPC::load(const std::string& npc_id) {
 					// @ATTR vendor|bool|Allows this NPC to buy/sell items.
 					vendor = toBool(infile.val);
 				}
+				else if (infile.key == "vendor_requires_status") {
+					// @ATTR vendor_requires_status|list(string)|The player must have these statuses in order to use this NPC as a vendor.
+					while (infile.val != "") {
+						vendor_requires_status.push_back(infile.nextValue());
+					}
+				}
+				else if (infile.key == "vendor_requires_not_status") {
+					// @ATTR vendor_requires_not_status|list(string)|The player must not have these statuses in order to use this NPC as a vendor.
+					while (infile.val != "") {
+						vendor_requires_not_status.push_back(infile.nextValue());
+					}
+				}
 				else if (infile.key == "constant_stock") {
 					// @ATTR constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale.
 					stack.quantity = 1;
@@ -373,6 +385,23 @@ bool NPC::checkMovement(unsigned int dialog_node) {
 				return toBool(dialog[dialog_node][i].s);
 		}
 	}
+	return true;
+}
+
+bool NPC::checkVendor() {
+	if (!vendor)
+		return false;
+
+	for (size_t i = 0; i < vendor_requires_status.size(); ++i) {
+		if (!camp->checkStatus(vendor_requires_status[i]))
+			return false;
+	}
+
+	for (size_t i = 0; i < vendor_requires_not_status.size(); ++i) {
+		if (camp->checkStatus(vendor_requires_not_status[i]))
+			return false;
+	}
+
 	return true;
 }
 

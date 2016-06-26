@@ -51,6 +51,7 @@ public:
 	void getDialogNodes(std::vector<int> &result);
 	std::string getDialogTopic(unsigned int dialog_node);
 	bool checkMovement(unsigned int dialog_node);
+	bool checkVendor();
 	bool processDialog(unsigned int dialog_node, unsigned int& event_cursor);
 	void processEvent(unsigned int dialog_node, unsigned int cursor);
 	virtual Renderable getRender();
@@ -71,6 +72,8 @@ public:
 	bool vendor;
 	ItemStorage stock;
 	int stock_count;
+	std::vector<std::string> vendor_requires_status;
+	std::vector<std::string> vendor_requires_not_status;
 
 	// vocals
 	std::vector<SoundManager::SoundID> vox_intro;

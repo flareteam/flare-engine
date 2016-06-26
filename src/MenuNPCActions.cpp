@@ -251,7 +251,8 @@ void MenuNPCActions::setNPC(NPC *pnpc) {
 		topics = 1;
 
 	/* if npc is a vendor add entry */
-	if (npc->vendor) {
+	bool can_trade = npc->checkVendor();
+	if (can_trade) {
 		if (topics)
 			npc_actions.push_back(Action());
 		npc_actions.push_back(Action("id_vendor", vendor_label));
@@ -263,7 +264,7 @@ void MenuNPCActions::setNPC(NPC *pnpc) {
 
 	/* if npc is not a vendor and only one topic is
 	 available select the topic automatically */
-	if (!npc->vendor && topics == 1) {
+	if (!can_trade && topics == 1) {
 		dialog_selected = true;
 		selected_dialog_node = first_dialog_node;
 		is_selected = true;
@@ -272,7 +273,7 @@ void MenuNPCActions::setNPC(NPC *pnpc) {
 
 	/* if there is no dialogs and npc is a vendor set
 	 vendor_selected automatically */
-	if (npc->vendor && topics == 0) {
+	if (can_trade && topics == 0) {
 		vendor_selected = true;
 		is_selected = true;
 		return;
