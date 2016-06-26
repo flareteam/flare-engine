@@ -137,6 +137,10 @@ void NPC::load(const std::string& npc_id) {
 					// @ATTR gfx|filename|Filename of an animation definition.
 					gfx = infile.val;
 				}
+				else if (infile.key == "direction") {
+					// @ATTR direction|direction|The direction to use for this NPC's stance animation.
+					direction = parse_direction(infile.val);
+				}
 
 				// handle talkers
 				else if (infile.key == "talker") {
