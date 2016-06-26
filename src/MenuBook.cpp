@@ -33,6 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuBook::MenuBook()
 	: book_name("")
+	, last_book_name("")
 	, book_loaded(false) {
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
@@ -42,6 +43,12 @@ MenuBook::MenuBook()
 }
 
 void MenuBook::loadBook() {
+	if (last_book_name != book_name) {
+		last_book_name = "";
+		book_loaded = false;
+		clearBook();
+	}
+
 	if (book_loaded) return;
 
 	// Read data from config file
@@ -49,6 +56,8 @@ void MenuBook::loadBook() {
 
 	// @CLASS MenuBook|Description of books in books/
 	if (infile.open(book_name)) {
+		last_book_name = book_name;
+
 		while (infile.next()) {
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
@@ -222,6 +231,7 @@ void MenuBook::logic() {
 
 		visible = false;
 		book_name = "";
+		last_book_name = "";
 		book_loaded = false;
 	}
 }

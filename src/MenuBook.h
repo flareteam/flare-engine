@@ -45,6 +45,7 @@ public:
 	void render();
 
 	std::string book_name;
+	std::string last_book_name;
 	bool book_loaded;
 
 private:
