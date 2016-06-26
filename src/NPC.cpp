@@ -467,14 +467,16 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 }
 
 void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
+	if (dialog_node >= dialog.size())
+		return;
 
 	Event ev;
 
-	if (dialog_node < dialog.size() && cursor < dialog[dialog_node].size() && isDialogType(dialog[dialog_node][cursor].type)) {
+	if (cursor < dialog[dialog_node].size() && isDialogType(dialog[dialog_node][cursor].type)) {
 		cursor++;
 	}
 
-	while (dialog_node < dialog.size() && cursor < dialog[dialog_node].size() && !isDialogType(dialog[dialog_node][cursor].type)) {
+	while (cursor < dialog[dialog_node].size() && !isDialogType(dialog[dialog_node][cursor].type)) {
 		ev.components.push_back(dialog[dialog_node][cursor]);
 		cursor++;
 	}
@@ -491,7 +493,7 @@ Renderable NPC::getRender() {
 }
 
 bool NPC::isDialogType(const EVENT_COMPONENT_TYPE &type) {
-	return type == EC_NPC_DIALOG_THEM || type == EC_NPC_DIALOG_YOU || type == EC_NPC_VOICE;
+	return type == EC_NPC_DIALOG_THEM || type == EC_NPC_DIALOG_YOU;
 }
 
 NPC::~NPC() {
