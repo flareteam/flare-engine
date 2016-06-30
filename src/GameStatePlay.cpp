@@ -815,6 +815,8 @@ void GameStatePlay::checkSaveEvent() {
 void GameStatePlay::updateActionBar(unsigned index) {
 	if (menu->act->slots_count == 0 || index > menu->act->slots_count - 1) return;
 
+	if (items->items.empty()) return;
+
 	for (unsigned i = index; i < menu->act->slots_count; i++) {
 		if (menu->act->hotkeys[i] == 0) continue;
 
