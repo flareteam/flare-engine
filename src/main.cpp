@@ -142,7 +142,7 @@ static void mainLoop () {
 
 	uint64_t prev_ticks = SDL_GetPerformanceCounter();
 	uint64_t logic_ticks = SDL_GetPerformanceCounter();
-	uint64_t now_ticks = SDL_GetPerformanceCounter();
+	uint64_t now_ticks;
 
 	int last_fps = -1;
 
