@@ -184,8 +184,6 @@ bool MenuStash::drop(const Point& position, ItemStack stack) {
 		success = add(stack, slot, false);
 	}
 
-	drag_prev_slot = -1;
-
 	return success;
 }
 
