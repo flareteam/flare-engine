@@ -36,6 +36,7 @@ gmon.out
 /flare-android-project/.idea
 /flare-android-project/build
 /flare-android-project/app/build
+/flare-android-project/app/app.iml
 /flare-android-project/local.properties
 /flare-android-project/app/src/main/libs
 /flare-android-project/app/src/main/obj
