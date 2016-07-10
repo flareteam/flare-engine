@@ -1,21 +1,107 @@
-#this scales art to width of flare window
-#scale_gfx=true
 caption_margins=5,5
+# menu_backgrounds=true
 
-[scene]
-image=images/menus/logo.png
-caption=Flare Engine Credits
-pause=2s
-caption=Lead Programmers - Clint Bellanger, Henrik Andersson, Igor Paliychuk, Justin Jacobs, Stefan Beller, and Thane Brimhall
-pause=10s
-caption=Programmers - Anton Golov, Artur Rojek, blazindragon, Bonbadil, Chris Oelmueller, David Bariod, Daniel Santos, Gallaecio, Joseph Bleu, Juan PabloTamayo, Kitano, Kyle Belanger, LongerDev, Manuel A. Fernandez Montecelo, Matthew Krohn, Nojan, Pavel Kirpichyov, runtime-x86, and Ryan Dansie
-pause=20s
-caption=Default Art - Clint Bellanger
-pause=10s
-caption=Translators - Adrian Chaves Fernandez, Andrea Ranaldi, Andreas Berheim Brudin, Bas Doodeman, Bonbadil, Carlos Sanchez, Chris Oelmueller, Christoph J. Thompson, Evgen Pavlov, Giovanni Dalla Torre, gunchleoc, Hans Joachim Desserud, Igor Paliychuk, Juan Pablo Tamayo, losine, Michael Papageorgiou, Mikhail Karalevich, Miro Jánošík, Morgan Strauss, Nikita Vanku, Paul Wortmann, Pawel Puszczynski, Quentin Stievenart, Sergey Basalaev, Stefan Beller, Thomas Glamsch, Timo Sievänen, Wuzzy2, and Yannis Anthymidis
-pause=20s
-caption=Distributors - Ablu, Feillyne, Jan-Hendrik Peters, Manuel A. Fernandez Montecelo, miffe
-pause=10s
-caption=Special Thanks - Bart Kelsey and the community at OpenGameArt, for giving constant feedback and testing. Thorbjørn Lindeijer, Stefan Beller, and Ranie Jade Ramiso for Tiled and the Flare map exporter.
-pause=20s
+[vscroll]
+image=images/credits/flare_default.png
+separator=8
+
+text=Flare Engine Credits
+separator=32
+
+text=Lead Programmers
+separator=16
+text=Clint Bellanger
+text=Henrik Andersson
+text=Igor Paliychuk
+text=Justin Jacobs
+text=Stefan Beller
+text=Thane Brimhall
+separator=32
+
+text=Programmers
+separator=16
+text=Anton Golov
+text=Artur Rojek
+text=blazindragon
+text=Bonbadil
+text=Chris Oelmueller
+text=David Bariod
+text=Daniel Santos
+text=Gallaecio
+text=Joseph Bleu
+text=Juan PabloTamayo
+text=Kitano
+text=Kyle Belanger
+text=LongerDev
+text=Manuel A. Fernandez Montecelo
+text=Matthew Krohn
+text=Nojan
+text=Pavel Kirpichyov
+text=runtime-x86
+text=Ryan Dansie
+separator=32
+
+text=Default Art
+separator=16
+text=Clint Bellanger
+separator=32
+
+text=Translators
+separator=16
+text=Adrian Chaves Fernandez
+text=Andrea Ranaldi
+text=Andreas Berheim Brudin
+text=Bas Doodeman
+text=Bonbadil
+text=Carlos Sanchez
+text=Chris Oelmueller
+text=Christoph J. Thompson
+text=Evgen Pavlov
+text=Giovanni Dalla Torre
+text=gunchleoc
+text=Hans Joachim Desserud
+text=Igor Paliychuk
+text=Juan Pablo Tamayo
+text=losine
+text=Michael Papageorgiou
+text=Mikhail Karalevich
+text=Miro Jánošík
+text=Morgan Strauss
+text=Nikita Vanku
+text=Paul Wortmann
+text=Pawel Puszczynski
+text=Quentin Stievenart
+text=Sergey Basalaev
+text=Stefan Beller
+text=Thomas Glamsch
+text=Timo Sievänen
+text=Wuzzy2
+text=Yannis Anthymidis
+separator=32
+
+text=Distributors
+separator=16
+text=Ablu
+text=Feillyne
+text=Jan-Hendrik Peters
+text=Manuel A. Fernandez Montecelo
+text=miffe
+separator=32
+
+text=Special Thanks
+separator=16
+image=images/credits/oga.png
+separator=8
+text=For giving constant feedback and testing:
+text=Bart Kelsey
+text=The community at OpenGameArt
+separator=16
+image=images/credits/tiled.png
+separator=8
+text=For Tiled and the Flare map exporter:
+text=Thorbjørn Lindeijer
+text=Stefan Beller
+text=Ranie Jade Ramiso
+
+separator=64
 

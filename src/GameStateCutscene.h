@@ -26,10 +26,25 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
+#include "WidgetLabel.h"
 
-#include <list>
+enum {
+	CUTSCENE_STATIC = 0,
+	CUTSCENE_VSCROLL = 1
+};
 
 class WidgetScrollBox;
+
+class CutsceneSettings {
+public:
+	FPoint caption_margins;
+	bool scale_graphics;
+	float vscroll_speed;
+	CutsceneSettings()
+		: scale_graphics(false)
+		, vscroll_speed(4.0)
+	{}
+};
 
 class SceneComponent {
 public:
@@ -45,30 +60,46 @@ public:
 	}
 };
 
+class VScrollComponent {
+public:
+	Point pos;
+	Sprite *image;
+	Point image_size;
+	WidgetLabel *text;
+	int separator_h;
+
+	VScrollComponent()
+		: image(NULL)
+		, text(NULL)
+		, separator_h(0)
+	{}
+};
+
 class Scene {
 private:
+	CutsceneSettings settings;
 	int frame_counter;
 	int pause_frames;
 	std::string caption;
-	Point caption_size;
 	Sprite *art;
 	Sprite *art_scaled;
 	Point art_size;
 	SoundManager::SoundID sid;
 	WidgetScrollBox *caption_box;
 	bool done;
-	FPoint caption_margins;
-	bool scale_graphics;
+	int vscroll_offset;
+	int vscroll_ticks;
 
 public:
-	Scene(const FPoint& _caption_margins, bool _scale_graphics);
+	Scene(const CutsceneSettings& _settings, short _cutscene_type);
 	~Scene();
 	void refreshWidgets();
 	bool logic();
 	void render();
 
+	short cutscene_type;
 	std::queue<SceneComponent> components;
-
+	std::vector<VScrollComponent> vscroll_components;
 };
 
 class GameStateCutscene : public GameState {

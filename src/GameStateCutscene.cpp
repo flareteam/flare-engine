@@ -25,18 +25,19 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SaveLoad.h"
 
-Scene::Scene(const FPoint& _caption_margins, bool _scale_graphics)
-	: frame_counter(0)
+Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
+	: settings(_settings)
+	, frame_counter(0)
 	, pause_frames(0)
 	, caption("")
-	, caption_size(0,0)
 	, art(NULL)
 	, art_scaled(NULL)
 	, sid(-1)
 	, caption_box(NULL)
 	, done(false)
-	, caption_margins(_caption_margins)
-	, scale_graphics(_scale_graphics)
+	, vscroll_offset(0)
+	, vscroll_ticks(0)
+	, cutscene_type(_cutscene_type)
 {
 }
 
@@ -47,17 +48,24 @@ Scene::~Scene() {
 	while(!components.empty()) {
 		components.pop();
 	}
+
+	for (size_t i = 0; i < vscroll_components.size(); ++i) {
+		if (vscroll_components[i].image)
+			delete vscroll_components[i].image;
+		if (vscroll_components[i].text)
+			delete vscroll_components[i].text;
+	}
 }
 
 bool Scene::logic() {
 	if (done) return false;
 
 	bool skip = false;
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
+	if (inpt->pressing[MAIN1] && (!inpt->lock[MAIN1] || cutscene_type == CUTSCENE_VSCROLL)) {
 		inpt->lock[MAIN1] = true;
 		skip = true;
 	}
-	if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+	if (inpt->pressing[ACCEPT] && (!inpt->lock[ACCEPT] || cutscene_type == CUTSCENE_VSCROLL)) {
 		inpt->lock[ACCEPT] = true;
 		skip = true;
 	}
@@ -66,108 +74,192 @@ bool Scene::logic() {
 		done = true;
 	}
 
-	/* Pause until specified frame */
-	if (!skip && pause_frames != 0 && frame_counter < pause_frames) {
-		++frame_counter;
-		return true;
-	}
-
-	/* parse scene components until next pause */
-	while (!components.empty() && components.front().type != "pause") {
-
-		if (components.front().type == "caption") {
-			caption = components.front().s;
-		}
-		else if (components.front().type == "image") {
-			if (art) {
-				delete art;
-				art = NULL;
-			}
-			if (art_scaled) {
-				delete art_scaled;
-				art_scaled = NULL;
-			}
-			Image *graphics = render_device->loadImage(components.front().s);
-			if (graphics != NULL) {
-				art = graphics->createSprite();
-				art_size.x = art->getGraphicsWidth();
-				art_size.y = art->getGraphicsHeight();
-				graphics->unref();
-			}
-		}
-		else if (components.front().type == "soundfx") {
-			if (sid != 0)
-				snd->unload(sid);
-
-			sid = snd->load(components.front().s, "Cutscenes");
-			snd->play(sid);
+	if (cutscene_type == CUTSCENE_STATIC) {
+		/* Pause until specified frame */
+		if (!skip && pause_frames != 0 && frame_counter < pause_frames) {
+			++frame_counter;
+			return true;
 		}
 
+		/* parse scene components until next pause */
+		while (!components.empty() && components.front().type != "pause") {
+
+			if (components.front().type == "caption") {
+				caption = components.front().s;
+			}
+			else if (components.front().type == "image") {
+				if (art) {
+					delete art;
+					art = NULL;
+				}
+				if (art_scaled) {
+					delete art_scaled;
+					art_scaled = NULL;
+				}
+				Image *graphics = render_device->loadImage(components.front().s);
+				if (graphics != NULL) {
+					art = graphics->createSprite();
+					art_size.x = art->getGraphicsWidth();
+					art_size.y = art->getGraphicsHeight();
+					graphics->unref();
+				}
+			}
+			else if (components.front().type == "soundfx") {
+				if (sid != 0)
+					snd->unload(sid);
+
+				sid = snd->load(components.front().s, "Cutscenes");
+				snd->play(sid);
+			}
+
+			components.pop();
+		}
+
+		/* check if current scene has reached the end */
+		if (components.empty())
+			return false;
+
+		/* setup frame pausing */
+		frame_counter = 0;
+		pause_frames = components.front().x;
 		components.pop();
+
+		refreshWidgets();
 	}
+	else if (cutscene_type == CUTSCENE_VSCROLL) {
+		// populate the list of text/images from config file data
+		int next_y = 0;
+		while (!components.empty()) {
+			if (components.front().type == "text") {
+				VScrollComponent vsc;
+				vsc.pos.x = VIEW_W/2;
+				vsc.pos.y = VIEW_H/2 + next_y;
 
-	/* check if current scene has reached the end */
-	if (components.empty())
-		return false;
+				vsc.text = new WidgetLabel();
+				if (vsc.text) {
+					vsc.text->set(vsc.pos.x, vsc.pos.y, JUSTIFY_CENTER, VALIGN_TOP, components.front().s, font->getColor("widget_normal"), "font_captions");
+					next_y += vsc.text->bounds.h;
+				}
 
-	/* setup frame pausing */
-	frame_counter = 0;
-	pause_frames = components.front().x;
-	components.pop();
+				vscroll_components.push_back(vsc);
+			}
+			else if (components.front().type == "image") {
+				VScrollComponent vsc;
 
-	refreshWidgets();
+				Image *graphics = render_device->loadImage(components.front().s);
+				if (graphics != NULL) {
+					vsc.image = graphics->createSprite();
+					if (vsc.image) {
+						vsc.image_size.x = vsc.image->getGraphicsWidth();
+						vsc.image_size.y = vsc.image->getGraphicsHeight();
+
+						vsc.pos.x = VIEW_W/2 - vsc.image_size.x/2;
+						vsc.pos.y = VIEW_H/2 + next_y;
+
+						next_y += vsc.image_size.y;
+
+						vscroll_components.push_back(vsc);
+					}
+					graphics->unref();
+				}
+			}
+			else if (components.front().type == "separator") {
+				VScrollComponent vsc;
+				vsc.pos.y = VIEW_H/2 + next_y + components.front().x/2;
+				next_y += components.front().x;
+
+				vscroll_components.push_back(vsc);
+			}
+			components.pop();
+		}
+
+		vscroll_offset = static_cast<int>(static_cast<float>(vscroll_ticks) * (settings.vscroll_speed * MAX_FRAMES_PER_SEC) / VIEW_H);
+		if (skip)
+			vscroll_ticks += 8;
+		else
+			vscroll_ticks++;
+
+		refreshWidgets();
+
+		// scroll has reached the end, quit the scene
+		if (!vscroll_components.empty()) {
+			VScrollComponent& vsc = vscroll_components.back();
+			if (vsc.text && (vsc.text->bounds.y + vsc.text->bounds.h < 0)) {
+				return false;
+			}
+			else if ((vsc.pos.y + vsc.separator_h) - vscroll_offset < 0) {
+				return false;
+			}
+		}
+	}
 
 	return true;
 }
 
 void Scene::refreshWidgets() {
-	if (!caption.empty()) {
-		int caption_width = VIEW_W - static_cast<int>(VIEW_W * (caption_margins.x * 2.0f));
-		font->setFont("font_captions");
-		caption_size = font->calc_size(caption, caption_width);
+	if (cutscene_type ==  CUTSCENE_STATIC) {
+		if (!caption.empty()) {
+			int caption_width = VIEW_W - static_cast<int>(VIEW_W * (settings.caption_margins.x * 2.0f));
+			font->setFont("font_captions");
+			Point caption_size = font->calc_size(caption, caption_width);
 
-		if (!caption_box) {
-			caption_box = new WidgetScrollBox(VIEW_W, caption_size.y);
-			caption_box->setBasePos(0, 0, ALIGN_BOTTOM);
-		}
-		else {
-			caption_box->pos.h = caption_size.y;
-			caption_box->resize(VIEW_W, caption_size.y);
-		}
-
-		caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * caption_margins.y) * (-1));
-
-		font->renderShadowed(caption, VIEW_W / 2, 0,
-							 JUSTIFY_CENTER,
-							 caption_box->contents->getGraphics(),
-							 caption_width,
-							 FONT_WHITE);
-	}
-
-	if (art) {
-		Rect art_dest;
-		if (scale_graphics) {
-			art_dest = resizeToScreen(art_size.x, art_size.y, false, ALIGN_CENTER);
-
-			art->getGraphics()->ref(); // resize unref's our image (which we want to keep), so counter that here
-			Image *resized = art->getGraphics()->resize(art_dest.w, art_dest.h);
-			if (resized != NULL) {
-				if (art_scaled) {
-					delete art_scaled;
-				}
-				art_scaled = resized->createSprite();
-				resized->unref();
+			if (!caption_box) {
+				caption_box = new WidgetScrollBox(VIEW_W, caption_size.y);
+				caption_box->setBasePos(0, 0, ALIGN_BOTTOM);
+			}
+			else {
+				caption_box->pos.h = caption_size.y;
+				caption_box->resize(VIEW_W, caption_size.y);
 			}
 
-			if (art_scaled)
-				art_scaled->setDest(art_dest);
-		}
-		else {
-			art_dest.w = art_size.x;
-			art_dest.h = art_size.y;
+			caption_box->setPos(0, static_cast<int>(static_cast<float>(VIEW_H) * settings.caption_margins.y) * (-1));
 
-			alignToScreenEdge(ALIGN_CENTER, &art_dest);
-			art->setDest(art_dest);
+			font->renderShadowed(caption, VIEW_W / 2, 0,
+								 JUSTIFY_CENTER,
+								 caption_box->contents->getGraphics(),
+								 caption_width,
+								 FONT_WHITE);
+		}
+
+		if (art) {
+			Rect art_dest;
+			if (settings.scale_graphics) {
+				art_dest = resizeToScreen(art_size.x, art_size.y, false, ALIGN_CENTER);
+
+				art->getGraphics()->ref(); // resize unref's our image (which we want to keep), so counter that here
+				Image *resized = art->getGraphics()->resize(art_dest.w, art_dest.h);
+				if (resized != NULL) {
+					if (art_scaled) {
+						delete art_scaled;
+					}
+					art_scaled = resized->createSprite();
+					resized->unref();
+				}
+
+				if (art_scaled)
+					art_scaled->setDest(art_dest);
+			}
+			else {
+				art_dest.w = art_size.x;
+				art_dest.h = art_size.y;
+
+				alignToScreenEdge(ALIGN_CENTER, &art_dest);
+				art->setDest(art_dest);
+			}
+		}
+	}
+	else if (cutscene_type == CUTSCENE_VSCROLL) {
+		// position elements relative to the vertical offset
+		for (size_t i = 0; i < vscroll_components.size(); ++i) {
+			if (vscroll_components[i].text) {
+				vscroll_components[i].text->setX(VIEW_W/2);
+				vscroll_components[i].text->setY(vscroll_components[i].pos.y - vscroll_offset);
+			}
+			else if (vscroll_components[i].image) {
+				int x = VIEW_W/2 - vscroll_components[i].image_size.x/2;
+				int y = vscroll_components[i].pos.y - vscroll_offset;
+				vscroll_components[i].image->setDest(x, y);
+			}
 		}
 	}
 }
@@ -176,22 +268,41 @@ void Scene::render() {
 	if (inpt->window_resized)
 		refreshWidgets();
 
-	if (art_scaled) {
-		render_device->render(art_scaled);
-	}
-	else if (art) {
-		render_device->render(art);
-	}
+	if (cutscene_type == CUTSCENE_STATIC) {
+		if (art_scaled) {
+			render_device->render(art_scaled);
+		}
+		else if (art) {
+			render_device->render(art);
+		}
 
-	if (caption_box && caption != "") {
-		caption_box->render();
+		if (caption_box && caption != "") {
+			caption_box->render();
+		}
+	}
+	else if (cutscene_type == CUTSCENE_VSCROLL) {
+		// Color color = font->getColor("widget_normal");
+
+		for (size_t i = 0; i < vscroll_components.size(); ++i) {
+			VScrollComponent& vsc = vscroll_components[i];
+
+			if (vsc.text) {
+				if (vsc.text->bounds.y <= VIEW_H && (vsc.text->bounds.y + vsc.text->bounds.h >= 0)) {
+					vsc.text->render();
+				}
+			}
+			else if (vsc.image) {
+				Point dest = floor(vsc.image->getDest());
+				if (dest.y <= VIEW_H && (dest.y + vsc.image_size.y >= 0)) {
+					render_device->render(vsc.image);
+				}
+			}
+		}
 	}
 }
 
 GameStateCutscene::GameStateCutscene(GameState *game_state)
 	: previous_gamestate(game_state)
-	, scale_graphics(false)
-	, caption_margins(0.1f, 0.0f)
 	, game_slot(-1)
 {
 	has_background = false;
@@ -231,6 +342,7 @@ void GameStateCutscene::render() {
 }
 
 bool GameStateCutscene::load(const std::string& filename) {
+	CutsceneSettings settings;
 	FileParser infile;
 
 	// @CLASS Cutscene|Description of cutscenes in cutscenes/
@@ -241,19 +353,31 @@ bool GameStateCutscene::load(const std::string& filename) {
 	while (infile.next()) {
 
 		if (infile.new_section) {
-			if (infile.section == "scene")
-				scenes.push(new Scene(caption_margins, scale_graphics));
+			if (infile.section == "scene") {
+				scenes.push(new Scene(settings, CUTSCENE_STATIC));
+			}
+			else if (infile.section == "vscroll") {
+				// if the previous scene was also a vertical scroller, don't create a new scene
+				// instead, the previous scene will be extended
+				if (scenes.empty() || scenes.front()->cutscene_type != CUTSCENE_VSCROLL) {
+					scenes.push(new Scene(settings, CUTSCENE_VSCROLL));
+				}
+			}
 		}
 
 		if (infile.section.empty()) {
 			if (infile.key == "scale_gfx") {
 				// @ATTR scale_gfx|bool|The graphics will be scaled to fit screen width
-				scale_graphics = toBool(infile.val);
+				settings.scale_graphics = toBool(infile.val);
 			}
 			else if (infile.key == "caption_margins") {
 				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
-				caption_margins.x = toFloat(infile.nextValue())/100.0f;
-				caption_margins.y = toFloat(infile.val)/100.0f;
+				settings.caption_margins.x = toFloat(infile.nextValue())/100.0f;
+				settings.caption_margins.y = toFloat(infile.val)/100.0f;
+			}
+			else if (infile.key == "vscroll_speed") {
+				// @ATTR vscroll_speed|float|The speed at which elements will scroll in 'vscroll' scenes.
+				settings.vscroll_speed = toFloat(infile.val);
 			}
 			else if (infile.key == "menu_backgrounds") {
 				// @ATTR menu_backgrounds|bool|This cutscene will use a random fullscreen background image, like the title screen does
@@ -285,6 +409,32 @@ bool GameStateCutscene::load(const std::string& filename) {
 				// @ATTR scene.soundfx|filename|Filename of a sound that will be played
 				sc.type = infile.key;
 				sc.s = infile.val;
+			}
+			else {
+				infile.error("GameStateCutscene: '%s' is not a valid key.", infile.key.c_str());
+			}
+
+			if (sc.type != "")
+				scenes.back()->components.push(sc);
+
+		}
+		else if (infile.section == "vscroll") {
+			SceneComponent sc = SceneComponent();
+
+			if (infile.key == "text") {
+				// @ATTR vscroll.text|string|A single, non-wrapping line of text.
+				sc.type = infile.key;
+				sc.s = msg->get(infile.val);
+			}
+			else if (infile.key == "image") {
+				// @ATTR vscroll.image|filename|Filename of an image that will be shown.
+				sc.type = infile.key;
+				sc.s = infile.val;
+			}
+			else if (infile.key == "separator") {
+				// @ATTR vscroll.separator|int|Places an invisible gap of a specified height between elements.
+				sc.type = infile.key;
+				sc.x = toInt(infile.nextValue());
 			}
 			else {
 				infile.error("GameStateCutscene: '%s' is not a valid key.", infile.key.c_str());
