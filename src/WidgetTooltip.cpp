@@ -30,6 +30,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 int TOOLTIP_CONTEXT = TOOLTIP_NONE;
 
 WidgetTooltip::WidgetTooltip() {
+	background = render_device->loadImage("images/menus/tooltips.png", "", false);
+}
+
+WidgetTooltip::~WidgetTooltip() {
+	if (background)
+		background->unref();
 }
 
 /**
@@ -140,8 +146,49 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	}
 
 	// style the tooltip background
-	// currently this is plain black
-	graphics->fillWithColor(Color(0,0,0,255));
+	if (!background) {
+		graphics->fillWithColor(Color(0,0,0,255));
+	}
+	else {
+		Rect src;
+		Rect dest;
+
+		// top left
+		src.x = 0;
+		src.y = 0;
+		src.w = graphics->getWidth()-TOOLTIP_BACKGROUND_BORDER;
+		src.h = graphics->getHeight()-TOOLTIP_BACKGROUND_BORDER;
+		dest.x = 0;
+		dest.y = 0;
+		render_device->renderToImage(background, src, graphics, dest);
+
+		// right
+		src.x = background->getWidth()-TOOLTIP_BACKGROUND_BORDER;
+		src.y = 0;
+		src.w = TOOLTIP_BACKGROUND_BORDER;
+		src.h = graphics->getHeight()-TOOLTIP_BACKGROUND_BORDER;
+		dest.x = graphics->getWidth()-TOOLTIP_BACKGROUND_BORDER;
+		dest.y = 0;
+		render_device->renderToImage(background, src, graphics, dest);
+
+		// bottom
+		src.x = 0;
+		src.y = background->getHeight()-TOOLTIP_BACKGROUND_BORDER;
+		src.w = graphics->getWidth()-TOOLTIP_BACKGROUND_BORDER;
+		src.h = TOOLTIP_BACKGROUND_BORDER;
+		dest.x = 0;
+		dest.y = graphics->getHeight()-TOOLTIP_BACKGROUND_BORDER;
+		render_device->renderToImage(background, src, graphics, dest);
+
+		// bottom right
+		src.x = background->getWidth()-TOOLTIP_BACKGROUND_BORDER;
+		src.y = background->getHeight()-TOOLTIP_BACKGROUND_BORDER;
+		src.w = TOOLTIP_BACKGROUND_BORDER;
+		src.h = TOOLTIP_BACKGROUND_BORDER;
+		dest.x = graphics->getWidth()-TOOLTIP_BACKGROUND_BORDER;
+		dest.y = graphics->getHeight()-TOOLTIP_BACKGROUND_BORDER;
+		render_device->renderToImage(background, src, graphics, dest);
+	}
 
 	int cursor_y = TOOLTIP_MARGIN;
 

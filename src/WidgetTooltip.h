@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define WIDGET_TOOLTIP_H
 
 #include "CommonIncludes.h"
+#include "RenderDevice.h"
 #include "SharedResources.h"
 #include "TooltipData.h"
 #include "Utils.h"
@@ -38,9 +39,13 @@ const int TOOLTIP_MENU = 2;
 class WidgetTooltip {
 public:
 	WidgetTooltip();
+	~WidgetTooltip();
 	Point calcPosition(STYLE style, const Point& pos, const Point& size);
 	void render(TooltipData &tip, const Point& pos, STYLE style);
 	bool createBuffer(TooltipData &tip);
+
+private:
+	Image *background;
 };
 
 #endif

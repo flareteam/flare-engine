@@ -209,6 +209,7 @@ extern int TOOLTIP_OFFSET; // distance between cursor and tooltip
 extern int TOOLTIP_WIDTH; // max width of tooltips (wrap text)
 extern int TOOLTIP_MARGIN; // outer margin between tooltip text and the edge of the tooltip background
 extern int TOOLTIP_MARGIN_NPC;
+extern int TOOLTIP_BACKGROUND_BORDER;
 
 void loadTilesetSettings();
 void loadMiscSettings();
