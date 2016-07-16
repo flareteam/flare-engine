@@ -168,6 +168,8 @@ void LootManager::renderTooltips(const FPoint& cam) {
 	for (it = loot.end(); it != loot.begin(); ) {
 		--it;
 
+		it->tip_visible = false;
+
 		if (it->on_ground) {
 			Point p = map_to_screen(it->pos.x, it->pos.y, cam.x, cam.y);
 			dest.x = p.x;
@@ -184,15 +186,17 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			hover.h = TILE_H;
 
 			if (LOOT_TOOLTIPS || inpt->pressing[ALT] || isWithin(hover, inpt->mouse)) {
+				it->tip_visible = true;
+
 				// create tooltip data if needed
 				if (it->tip.isEmpty()) {
-
 					if (!it->stack.empty()) {
 						it->tip = items->getShortTooltip(it->stack);
 					}
 				}
 
 				tip->render(it->tip, dest, STYLE_TOPLABEL);
+				it->tip_bounds = tip->bounds;
 
 				// only display one tooltip if we got it from hovering
 				if (!LOOT_TOOLTIPS && !inpt->pressing[ALT])
@@ -458,7 +462,7 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 				r.h = TILE_H;
 
 				// clicked in pickup hotspot?
-				if (isWithin(r, mouse)) {
+				if ((it->tip_visible && isWithin(it->tip_bounds, mouse)) || isWithin(r, mouse)) {
 					curs->setCursor(CURSOR_INTERACT);
 					if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 						inpt->lock[MAIN1] = true;

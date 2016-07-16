@@ -23,6 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Loot::Loot()
 	: gfx("")
 	, animation(NULL)
+	, tip_visible(false)
 	, dropped_by_hero(false)
 	, on_ground(false)
 	, sound_played(false) {

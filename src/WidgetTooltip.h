@@ -44,6 +44,8 @@ public:
 	void render(TooltipData &tip, const Point& pos, STYLE style);
 	bool createBuffer(TooltipData &tip);
 
+	Rect bounds;
+
 private:
 	Image *background;
 };

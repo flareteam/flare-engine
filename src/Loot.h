@@ -34,6 +34,8 @@ public:
 	FPoint pos;
 	Animation *animation;
 	TooltipData tip;
+	Rect tip_bounds;
+	bool tip_visible;
 	bool dropped_by_hero;
 	bool on_ground;
 	bool sound_played;

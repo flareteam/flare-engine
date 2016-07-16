@@ -105,6 +105,12 @@ void WidgetTooltip::render(TooltipData &tip, const Point& pos, STYLE style) {
 
 	tip.tip_buffer->setDestX(tip_pos.x);
 	tip.tip_buffer->setDestY(tip_pos.y);
+
+	bounds.x = tip_pos.x;
+	bounds.y = tip_pos.y;
+	bounds.w = size.x;
+	bounds.h = size.y;
+
 	render_device->render(tip.tip_buffer);
 }
 
