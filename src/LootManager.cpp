@@ -165,9 +165,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 	Point dest;
 
 	std::vector<Loot>::iterator it;
-	for (it = loot.end(); it != loot.begin(); ) {
-		--it;
-
+	for (it = loot.begin(); it != loot.end(); ) {
 		it->tip_visible = false;
 
 		if (it->on_ground) {
@@ -203,6 +201,8 @@ void LootManager::renderTooltips(const FPoint& cam) {
 					break;
 			}
 		}
+
+		++it;
 	}
 }
 
