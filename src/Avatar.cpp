@@ -468,9 +468,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	stats.logic();
 
-	bool allowed_to_move;
-	bool allowed_to_use_power = true;
-
 	// check for revive
 	if (stats.hp <= 0 && stats.effects.revive) {
 		stats.hp = stats.get(STAT_HP_MAX);
@@ -550,6 +547,9 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 	}
 
 	if (!stats.effects.stun) {
+		bool allowed_to_move;
+		bool allowed_to_use_power = true;
+
 		switch(stats.cur_state) {
 			case AVATAR_STANCE:
 
