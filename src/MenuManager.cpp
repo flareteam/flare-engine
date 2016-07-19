@@ -564,7 +564,7 @@ void MenuManager::logic() {
 			resetDrag();
 
 			for (size_t i=0; i<menus.size(); ++i) {
-				if (!menus[i]->visible || (menus[i]->visible && !isWithin(menus[i]->window_area, inpt->mouse))) {
+				if (!menus[i]->visible || !isWithin(menus[i]->window_area, inpt->mouse)) {
 					menus[i]->defocusTabLists();
 				}
 			}
