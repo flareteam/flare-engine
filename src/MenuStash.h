@@ -58,8 +58,6 @@ public:
 	TooltipData checkTooltip(const Point& position);
 	bool drop(const Point& position, ItemStack stack);
 
-	int getRowsCount();
-
 	void removeFromPrevSlot(int quantity);
 
 	Rect slots_area;

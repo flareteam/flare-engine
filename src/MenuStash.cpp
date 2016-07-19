@@ -241,10 +241,6 @@ TooltipData MenuStash::checkTooltip(const Point& position) {
 	return stock.checkTooltip(position, stats, PLAYER_INV);
 }
 
-int MenuStash::getRowsCount() {
-	return slots_rows;
-}
-
 void MenuStash::removeFromPrevSlot(int quantity) {
 	int drag_prev_slot = stock.drag_prev_slot;
 	if (drag_prev_slot > -1) {
