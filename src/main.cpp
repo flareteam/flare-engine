@@ -142,13 +142,12 @@ static void mainLoop () {
 
 	uint64_t prev_ticks = SDL_GetPerformanceCounter();
 	uint64_t logic_ticks = SDL_GetPerformanceCounter();
-	uint64_t now_ticks;
 
 	int last_fps = -1;
 
 	while ( !done ) {
 		int loops = 0;
-		now_ticks = SDL_GetPerformanceCounter();
+		uint64_t now_ticks = SDL_GetPerformanceCounter();
 
 		while (now_ticks >= logic_ticks && loops < MAX_FRAMES_PER_SEC) {
 			// Frames where data loading happens (GameState switching and map loading)
