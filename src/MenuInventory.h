@@ -69,6 +69,8 @@ private:
 	std::vector<Point> equipped_pos;
 	Point carried_pos;
 
+	int tap_to_activate_ticks;
+
 public:
 	explicit MenuInventory(StatBlock *stats);
 	~MenuInventory();
