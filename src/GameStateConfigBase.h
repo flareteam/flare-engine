@@ -49,7 +49,7 @@ public:
 	short INTERFACE_TAB;
 	short MODS_TAB;
 
-	GameStateConfigBase(bool do_init = true);
+	explicit GameStateConfigBase(bool do_init = true);
 	~GameStateConfigBase();
 
 	virtual void init();

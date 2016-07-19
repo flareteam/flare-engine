@@ -42,7 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /** SDL Image */
 class SDLSoftwareImage : public Image {
 public:
-	SDLSoftwareImage(RenderDevice *device);
+	explicit SDLSoftwareImage(RenderDevice *device);
 	virtual ~SDLSoftwareImage();
 	int getWidth() const;
 	int getHeight() const;

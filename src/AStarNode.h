@@ -47,7 +47,7 @@ protected:
 
 public:
 	AStarNode();
-	AStarNode(const Point &p);
+	explicit AStarNode(const Point &p);
 	AStarNode(const AStarNode& copy);
 
 	int getX() const;

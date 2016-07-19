@@ -70,7 +70,7 @@ private:
 	Point carried_pos;
 
 public:
-	MenuInventory(StatBlock *stats);
+	explicit MenuInventory(StatBlock *stats);
 	~MenuInventory();
 	void align();
 

@@ -53,7 +53,7 @@ class Rect {
 public:
 	int x, y, w, h;
 	Rect() : x(0), y(0), w(0), h(0) {}
-	Rect(SDL_Rect _r) : x(_r.x), y(_r.y), w(_r.w), h(_r.h) {}
+	explicit Rect(SDL_Rect _r) : x(_r.x), y(_r.y), w(_r.w), h(_r.h) {}
 	operator SDL_Rect() const {
 		SDL_Rect r;
 		r.x = x;

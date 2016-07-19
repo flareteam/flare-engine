@@ -29,7 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Widget.h"
 
 class CampaignManager;
-class MenuManager;
+class MenuNPCActions;
 class NPC;
 class StatBlock;
 class WidgetButton;
@@ -38,7 +38,7 @@ class WidgetScrollBox;
 
 class MenuTalker : public Menu {
 private:
-	MenuManager *menu;
+	MenuNPCActions *npc_menu;
 
 	Sprite *portrait;
 	std::string hero_name;
@@ -62,7 +62,7 @@ private:
 	WidgetScrollBox *textbox;
 
 public:
-	MenuTalker(MenuManager *menu);
+	explicit MenuTalker(MenuNPCActions *_npc_menu);
 	~MenuTalker();
 	void align();
 

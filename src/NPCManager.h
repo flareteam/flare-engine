@@ -40,7 +40,7 @@ private:
 	TooltipData tip_buf;
 
 public:
-	NPCManager(StatBlock *stats);
+	explicit NPCManager(StatBlock *stats);
 	NPCManager(const NPCManager &copy); // not implemented
 	~NPCManager();
 

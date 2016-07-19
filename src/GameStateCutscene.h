@@ -111,7 +111,7 @@ private:
 	std::queue<Scene*> scenes;
 
 public:
-	GameStateCutscene(GameState *game_state);
+	explicit GameStateCutscene(GameState *game_state);
 	~GameStateCutscene();
 
 	bool load(const std::string& filename);

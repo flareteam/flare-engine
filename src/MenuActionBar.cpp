@@ -31,23 +31,21 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuActionBar.h"
 #include "MenuInventory.h"
 #include "MenuManager.h"
+#include "Settings.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
-#include "Settings.h"
 #include "StatBlock.h"
 #include "TooltipData.h"
 #include "UtilsParsing.h"
-#include "WidgetSlot.h"
 #include "WidgetLabel.h"
-#include "SharedGameResources.h"
+#include "WidgetSlot.h"
 
 #include <climits>
 
-MenuActionBar::MenuActionBar(Avatar *_hero)
+MenuActionBar::MenuActionBar()
 	: sprite_emptyslot(NULL)
 	, sprite_disabled(NULL)
 	, sprite_attention(NULL)
-	, hero(_hero)
 	, slots_count(0)
 	, drag_prev_slot(-1)
 	, updated(false)
@@ -271,7 +269,7 @@ void MenuActionBar::logic() {
 	tablist.logic();
 
 	// hero has no powers
-	if (hero->power_cast_ticks.empty())
+	if (pc->power_cast_ticks.empty())
 		return;
 
 	for (unsigned i = 0; i < slots_count; i++) {
@@ -300,10 +298,10 @@ void MenuActionBar::logic() {
 			}
 
 			//see if the slot should be greyed out
-			slot_enabled[i] = (hero->hero_cooldown[hotkeys_mod[i]] == 0)
-							  && (hero->power_cast_ticks[hotkeys_mod[i]] == 0)
+			slot_enabled[i] = (pc->hero_cooldown[hotkeys_mod[i]] == 0)
+							  && (pc->power_cast_ticks[hotkeys_mod[i]] == 0)
 							  && (slot_item_count[i] == -1 || (slot_item_count[i] > 0 && power.requires_item_quantity <= slot_item_count[i]))
-							  && hero->stats.canUsePower(power, hotkeys_mod[i])
+							  && pc->stats.canUsePower(power, hotkeys_mod[i])
 							  && (twostep_slot == -1 || static_cast<unsigned>(twostep_slot) == i);
 
 			slots[i]->setIcon(power.icon);
@@ -312,11 +310,11 @@ void MenuActionBar::logic() {
 			slot_enabled[i] = true;
 		}
 
-		if (hero->power_cast_ticks[hotkeys_mod[i]] > 0 && hero->power_cast_duration[hotkeys_mod[i]] > 0) {
-			slot_cooldown_size[i] = (ICON_SIZE * hero->power_cast_ticks[hotkeys_mod[i]]) / hero->power_cast_duration[hotkeys_mod[i]];
+		if (pc->power_cast_ticks[hotkeys_mod[i]] > 0 && pc->power_cast_duration[hotkeys_mod[i]] > 0) {
+			slot_cooldown_size[i] = (ICON_SIZE * pc->power_cast_ticks[hotkeys_mod[i]]) / pc->power_cast_duration[hotkeys_mod[i]];
 		}
-		else if (hero->hero_cooldown[hotkeys_mod[i]] > 0 && powers->powers[hotkeys_mod[i]].cooldown > 0) {
-			slot_cooldown_size[i] = (ICON_SIZE * hero->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
+		else if (pc->hero_cooldown[hotkeys_mod[i]] > 0 && powers->powers[hotkeys_mod[i]].cooldown > 0) {
+			slot_cooldown_size[i] = (ICON_SIZE * pc->hero_cooldown[hotkeys_mod[i]]) / powers->powers[hotkeys_mod[i]].cooldown;
 		}
 		else {
 			slot_cooldown_size[i] = (slot_enabled[i] ? 0 : ICON_SIZE);;
@@ -686,12 +684,12 @@ void MenuActionBar::resetSlots() {
 FPoint MenuActionBar::setTarget(bool have_aim, bool aim_assist) {
 	if (have_aim && MOUSE_AIM) {
 		if (aim_assist)
-			return screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, hero->stats.pos.x, hero->stats.pos.y);
+			return screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, pc->stats.pos.x, pc->stats.pos.y);
 		else
-			return screen_to_map(inpt->mouse.x,  inpt->mouse.y, hero->stats.pos.x, hero->stats.pos.y);
+			return screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
 	}
 	else {
-		return calcVector(hero->stats.pos, hero->stats.direction, hero->stats.melee_range);
+		return calcVector(pc->stats.pos, pc->stats.direction, pc->stats.melee_range);
 	}
 }
 

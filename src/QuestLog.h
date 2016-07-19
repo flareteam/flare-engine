@@ -42,7 +42,7 @@ private:
 	std::vector<std::string> quest_names;
 
 public:
-	QuestLog(MenuLog *_log);
+	explicit QuestLog(MenuLog *_log);
 	~QuestLog();
 	void loadAll();
 	void load(const std::string& filename);

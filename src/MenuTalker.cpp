@@ -25,7 +25,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "FileParser.h"
 #include "Menu.h"
-#include "MenuManager.h"
 #include "MenuNPCActions.h"
 #include "MenuTalker.h"
 #include "NPC.h"
@@ -38,9 +37,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetLabel.h"
 #include "WidgetScrollBox.h"
 
-MenuTalker::MenuTalker(MenuManager *_menu)
+MenuTalker::MenuTalker(MenuNPCActions *_npc_menu)
 	: Menu()
-	, menu(_menu)
+	, npc_menu(_npc_menu)
 	, portrait(NULL)
 	, dialog_node(0)
 	, event_cursor(0)
@@ -171,12 +170,12 @@ void MenuTalker::logic() {
 	}
 	else {
 		// show the NPC Action Menu
-		menu->npc->setNPC(npc);
+		npc_menu->setNPC(npc);
 
-		if (!menu->npc->selection())
-			menu->npc->visible = true;
+		if (!npc_menu->selection())
+			npc_menu->visible = true;
 		else
-			menu->npc->setNPC(NULL);
+			npc_menu->setNPC(NULL);
 
 		// end dialog
 		setNPC(NULL);

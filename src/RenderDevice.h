@@ -74,7 +74,7 @@ public:
 	int getGraphicsWidth();
 	int getGraphicsHeight();
 private:
-	Sprite(Image *);
+	explicit Sprite(Image *);
 	friend class Image;
 
 protected:
@@ -122,7 +122,7 @@ public:
 	class Sprite *createSprite(bool clipToSize = true);
 
 private:
-	Image(RenderDevice *device);
+	explicit Image(RenderDevice *device);
 	virtual ~Image();
 	friend class SDLSoftwareImage;
 	friend class SDLHardwareImage;

@@ -46,7 +46,7 @@ public:
 
 	Image *sprite;
 
-	AnimationSet(const std::string &animationname);
+	explicit AnimationSet(const std::string &animationname);
 	AnimationSet(const AnimationSet &a); // copy constructor not implemented.
 	~AnimationSet();
 

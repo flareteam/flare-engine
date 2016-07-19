@@ -97,42 +97,43 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, menus_open(false) {
 
 	hp = new MenuStatBar("hp");
-	menus.push_back(hp); // menus[0]
 	mp = new MenuStatBar("mp");
-	menus.push_back(mp); // menus[1]
 	xp = new MenuStatBar("xp");
-	menus.push_back(xp); // menus[2]
 	effects = new MenuActiveEffects(stats);
-	menus.push_back(effects); // menus[3]
 	hudlog = new MenuHUDLog();
-	menus.push_back(hudlog); // menus[4]
-	act = new MenuActionBar(pc);
-	menus.push_back(act); // menus[5]
+	act = new MenuActionBar();
 	enemy = new MenuEnemy();
-	menus.push_back(enemy); // menus[6]
 	vendor = new MenuVendor(stats);
-	menus.push_back(vendor); // menus[7]
-	talker = new MenuTalker(this);
-	menus.push_back(talker); // menus[8]
-	exit = new MenuExit();
-	menus.push_back(exit); // menus[9]
-	mini = new MenuMiniMap();
-	menus.push_back(mini); // menus[10]
-	chr = new MenuCharacter(stats);
-	menus.push_back(chr); // menus[11]
-	inv = new MenuInventory(stats);
-	menus.push_back(inv); // menus[12]
-	pow = new MenuPowers(stats, act);
-	menus.push_back(pow); // menus[13]
-	questlog = new MenuLog();
-	menus.push_back(questlog); // menus[14]
-	stash = new MenuStash(stats);
-	menus.push_back(stash); // menus[15]
 	npc = new MenuNPCActions();
-	menus.push_back(npc); // menus[16]
+	talker = new MenuTalker(npc);
+	exit = new MenuExit();
+	mini = new MenuMiniMap();
+	chr = new MenuCharacter(stats);
+	inv = new MenuInventory(stats);
+	pow = new MenuPowers(stats, act);
+	questlog = new MenuLog();
+	stash = new MenuStash(stats);
 	book = new MenuBook();
-	menus.push_back(book); // menus[17]
 	num_picker = new MenuNumPicker();
+
+	menus.push_back(hp); // menus[0]
+	menus.push_back(mp); // menus[1]
+	menus.push_back(xp); // menus[2]
+	menus.push_back(effects); // menus[3]
+	menus.push_back(hudlog); // menus[4]
+	menus.push_back(act); // menus[5]
+	menus.push_back(enemy); // menus[6]
+	menus.push_back(vendor); // menus[7]
+	menus.push_back(talker); // menus[8]
+	menus.push_back(exit); // menus[9]
+	menus.push_back(mini); // menus[10]
+	menus.push_back(chr); // menus[11]
+	menus.push_back(inv); // menus[12]
+	menus.push_back(pow); // menus[13]
+	menus.push_back(questlog); // menus[14]
+	menus.push_back(stash); // menus[15]
+	menus.push_back(npc); // menus[16]
+	menus.push_back(book); // menus[17]
 	menus.push_back(num_picker); // menus[18]
 
 	if (DEV_MODE) {

@@ -382,7 +382,7 @@ private:
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
 public:
-	PowerManager(LootManager *_lootm);
+	explicit PowerManager(LootManager *_lootm);
 	~PowerManager();
 
 	LootManager *lootm;

@@ -23,7 +23,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class BehaviorAlly : public BehaviorStandard {
 public:
-	BehaviorAlly(Enemy *_e);
+	explicit BehaviorAlly(Enemy *_e);
 	virtual ~BehaviorAlly();
 protected:
 private:

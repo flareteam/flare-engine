@@ -46,7 +46,7 @@ private:
 	Color color_normal;
 
 public:
-	MenuStash(StatBlock *stats);
+	explicit MenuStash(StatBlock *stats);
 	~MenuStash();
 	void align();
 

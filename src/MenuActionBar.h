@@ -54,7 +54,6 @@ private:
 	Sprite *sprite_disabled;
 	Sprite *sprite_attention;
 
-	Avatar *hero;
 	Rect src;
 
 	std::vector<std::string> labels;
@@ -65,7 +64,7 @@ private:
 
 public:
 
-	MenuActionBar(Avatar *hero);
+	MenuActionBar();
 	~MenuActionBar();
 	void align();
 	void loadGraphics();

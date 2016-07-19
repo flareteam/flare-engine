@@ -49,7 +49,7 @@ private:
 	std::string bar_gfx_background;
 
 public:
-	MenuStatBar(const std::string& type);
+	explicit MenuStatBar(const std::string& type);
 	~MenuStatBar();
 	void loadGraphics();
 	void update(unsigned long _stat_cur, unsigned long _stat_max, const Point& _mouse, const std::string& _custom_string = "");

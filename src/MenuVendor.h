@@ -51,7 +51,7 @@ private:
 	Color color_normal;
 
 public:
-	MenuVendor(StatBlock *stats);
+	explicit MenuVendor(StatBlock *stats);
 	~MenuVendor();
 	void align();
 

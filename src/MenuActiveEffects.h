@@ -41,7 +41,7 @@ private:
 	void renderIcon(int icon_id, int index, int current, int max);
 
 public:
-	MenuActiveEffects(StatBlock *_stats);
+	explicit MenuActiveEffects(StatBlock *_stats);
 	~MenuActiveEffects();
 	void loadGraphics();
 	void render();

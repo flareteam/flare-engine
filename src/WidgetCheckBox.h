@@ -30,7 +30,7 @@ class Widget;
 
 class WidgetCheckBox : public Widget {
 public:
-	WidgetCheckBox (const std::string &fname = "images/menus/buttons/checkbox_default.png");
+	explicit WidgetCheckBox (const std::string &fname = "images/menus/buttons/checkbox_default.png");
 	~WidgetCheckBox ();
 
 	void activate();

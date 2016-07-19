@@ -55,7 +55,7 @@ private:
 	TooltipData checkTooltip(const Point& mouse);
 
 public:
-	WidgetButton(const std::string& _fileName = "images/menus/buttons/button_default.png");
+	explicit WidgetButton(const std::string& _fileName = "images/menus/buttons/button_default.png");
 	~WidgetButton();
 
 	void activate();

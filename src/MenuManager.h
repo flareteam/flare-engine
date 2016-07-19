@@ -94,7 +94,7 @@ private:
 	void dragAndDropWithKeyboard();
 
 public:
-	MenuManager(StatBlock *stats);
+	explicit MenuManager(StatBlock *stats);
 	MenuManager(const MenuManager &copy); // not implemented
 	~MenuManager();
 	void alignAll();

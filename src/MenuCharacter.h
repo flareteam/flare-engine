@@ -96,7 +96,7 @@ private:
 	std::vector<int>* base_bonus[4];
 
 public:
-	MenuCharacter(StatBlock *stats);
+	explicit MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
 	void align();
 

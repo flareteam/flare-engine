@@ -56,7 +56,7 @@ protected:
 	Color color_normal;
 
 public:
-	WidgetInput(const std::string& filename = "images/menus/input.png");
+	explicit WidgetInput(const std::string& filename = "images/menus/input.png");
 	~WidgetInput();
 	void setPos(int offset_x = 0, int offset_y = 0);
 
