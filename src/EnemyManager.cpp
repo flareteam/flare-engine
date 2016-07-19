@@ -491,7 +491,7 @@ void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable
 	std::vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
 		bool dead = (*it)->stats.corpse;
-		if (!dead || (dead && (*it)->stats.corpse_ticks > 0)) {
+		if (!dead || (*it)->stats.corpse_ticks > 0) {
 			Renderable re = (*it)->getRender();
 			re.prio = 1;
 
