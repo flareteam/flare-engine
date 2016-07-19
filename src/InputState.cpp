@@ -32,7 +32,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <math.h>
 
 InputState::InputState(void)
-	: done(false)
+	: binding()
+	, binding_alt()
+	, binding_joy()
+	, pressing()
+	, lock()
+	, done(false)
 	, mouse()
 	, last_key(-1)
 	, last_button(-1)
@@ -48,6 +53,7 @@ InputState::InputState(void)
 	, window_resized(false)
 	, pressing_up(false)
 	, pressing_down(false)
+	, un_press()
 	, current_touch()
 	, dump_event(false)
 {
