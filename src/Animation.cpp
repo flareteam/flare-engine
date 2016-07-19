@@ -92,7 +92,48 @@ void Animation::setupUncompressed(const Point& _render_size, const Point& _rende
 void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned short _maxkinds) {
 	frame_count = _frames;
 
-	calculateFrames(frames, _frames, _duration);
+	frames.clear();
+
+	if (_frames > 0 && _duration % _frames == 0) {
+		// if we can evenly space frames among the duration, do it
+		const unsigned short divided = _duration/_frames;
+		for (unsigned short i = 0; i < _frames; ++i) {
+			for (unsigned j = 0; j < divided; ++j) {
+				frames.push_back(i);
+			}
+		}
+	}
+	else {
+		// we can't evenly space frames, so we try using Bresenham's line algorithm to lay them out
+		// TODO the plain Bresenham algorithm isn't ideal and can cause weird results. Experimentation is needed here
+		int x0 = 0;
+		unsigned short y0 = 0;
+		int x1 = _duration-1;
+		int y1 = _frames-1;
+
+		int dx = x1-x0;
+		int dy = y1-y0;
+
+		int D = 2*dy - dx;
+
+		frames.push_back(y0);
+
+		int x = x0+1;
+		unsigned short y = y0;
+
+		while (x<=x1) {
+			if (D > 0) {
+				y++;
+				frames.push_back(y);
+				D = D + ((2*dy)-(2*dx));
+			}
+			else {
+				frames.push_back(y);
+				D = D + (2*dy);
+			}
+			x++;
+		}
+	}
 
 	if (!frames.empty()) number_frames = static_cast<unsigned short>(frames.back()+1);
 
@@ -299,51 +340,6 @@ int Animation::getDuration() {
 
 bool Animation::isCompleted() {
 	return (type == PLAY_ONCE && times_played > 0);
-}
-
-void Animation::calculateFrames(std::vector<unsigned short> &fvec, const unsigned short &_frames, const unsigned short &_duration) {
-	fvec.clear();
-
-	if (_frames > 0 && _duration % _frames == 0) {
-		const unsigned short divided = _duration/_frames;
-		// if we can evenly space frames among the duration, do it
-		for (unsigned short i = 0; i < _frames; ++i) {
-			for (unsigned j = 0; j < divided; ++j) {
-				fvec.push_back(i);
-			}
-		}
-	}
-	else {
-		// we can't evenly space frames, so we try using Bresenham's line algorithm to lay them out
-		// TODO the plain Bresenham algorithm isn't ideal and can cause weird results. Experimentation is needed here
-		int x0 = 0;
-		unsigned short y0 = 0;
-		int x1 = _duration-1;
-		int y1 = _frames-1;
-
-		int dx = x1-x0;
-		int dy = y1-y0;
-
-		int D = 2*dy - dx;
-
-		fvec.push_back(y0);
-
-		int x = x0+1;
-		unsigned short y = y0;
-
-		while (x<=x1) {
-			if (D > 0) {
-				y++;
-				fvec.push_back(y);
-				D = D + ((2*dy)-(2*dx));
-			}
-			else {
-				fvec.push_back(y);
-				D = D + (2*dy);
-			}
-			x++;
-		}
-	}
 }
 
 unsigned short Animation::getLastFrameIndex(const short &frame) {

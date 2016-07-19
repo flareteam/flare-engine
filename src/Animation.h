@@ -43,7 +43,6 @@ enum animation_type {
 
 class Animation {
 protected:
-	void calculateFrames(std::vector<unsigned short> &fvec, const unsigned short &_frames, const unsigned short &_duration);
 	unsigned short getLastFrameIndex(const short &frame); // given a frame, gets the last index of frames that matches
 
 	const std::string name;
@@ -107,8 +106,6 @@ public:
 	// returns false on error. Error may occur when frame count of other is
 	// larger than this animation's
 	bool syncTo(const Animation *other);
-
-	bool isHoveredBy(const Point &);
 
 	// return the Renderable of the current frame
 	Renderable getCurrentFrame(int direction);
