@@ -79,7 +79,6 @@ public:
 	TabList(ScrollType _scrolltype = TWO_DIRECTIONS, int _LEFT = 4/*LEFT*/, int _RIGHT = 5/*RIGHT*/, int _ACTIVATE = 1/*ACCEPT*/);
 	~TabList();
 
-	bool isLocked();
 	void lock();
 	void unlock();
 	void add(Widget* widget);			// Add a widget

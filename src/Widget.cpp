@@ -78,9 +78,6 @@ TabList::TabList(ScrollType _scrolltype, int _LEFT, int _RIGHT, int _ACTIVATE)
 TabList::~TabList() {
 }
 
-bool TabList::isLocked() {
-	return locked;
-}
 
 void TabList::lock() {
 	locked = true;
