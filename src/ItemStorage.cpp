@@ -188,11 +188,10 @@ void ItemStorage::subtract(int slot, int quantity) {
  * Remove a quantity of a given item by its ID
  */
 bool ItemStorage::remove(int item, int quantity) {
-	int lowest_quantity, lowest_slot;
+	const int lowest_quantity = INT_MAX;
 
 	while (quantity > 0) {
-		lowest_quantity = INT_MAX;
-		lowest_slot = -1;
+		int lowest_slot = -1;
 
 		for (int i=0; i<slot_number; i++) {
 			if (storage[i].item == item && storage[i].quantity < lowest_quantity) {
