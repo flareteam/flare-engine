@@ -277,10 +277,6 @@ void MenuVendor::sort(int type) {
 	}
 }
 
-int MenuVendor::getRowsCount() {
-	return slots_rows;
-}
-
 void MenuVendor::setNPC(NPC* _npc) {
 	npc = _npc;
 

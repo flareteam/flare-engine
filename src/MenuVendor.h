@@ -73,7 +73,6 @@ public:
 	void setInventory();
 	void saveInventory();
 	void sort(int type);
-	int getRowsCount();
 	void setNPC(NPC* _npc);
 	void removeFromPrevSlot(int quantity);
 	void lockTabControl();
