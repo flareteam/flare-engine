@@ -148,7 +148,7 @@ void MenuDevConsole::logic() {
 				if (input_scrollback_pos < input_scrollback.size()) {
 					input_box->setText(input_scrollback[input_scrollback_pos]);
 				}
-				else if (input_scrollback_pos >= input_scrollback.size()) {
+				else {
 					input_scrollback_pos = input_scrollback.size();
 					input_box->setText("");
 				}
