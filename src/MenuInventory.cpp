@@ -35,25 +35,23 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
 
-MenuInventory::MenuInventory(StatBlock *_stats) {
-	stats = _stats;
-	MAX_EQUIPPED = 4;
-	MAX_CARRIED = 64;
+MenuInventory::MenuInventory(StatBlock *_stats)
+	: stats(_stats)
+	, MAX_EQUIPPED(4)
+	, MAX_CARRIED(64)
+	, carried_cols(4)
+	, carried_rows(4)
+	, tap_to_activate_ticks(0)
+	, currency(0)
+	, drag_prev_src(-1)
+	, changed_equipment(true)
+	, inv_ctrl(INV_CTRL_NONE)
+	, log_msg("")
+	, show_book("")
+{
 	visible = false;
 
 	setBackground("images/menus/inventory.png");
-
-	currency = 0;
-
-	carried_cols = 4; // default to 4 if menus/inventory.txt::carried_cols not set
-	carried_rows = 4; // default to 4 if menus/inventory.txt::carried_rows not set
-
-	drag_prev_src = -1;
-	changed_equipment = true;
-	inv_ctrl = INV_CTRL_NONE;
-	log_msg = "";
-	show_book = "";
-	tap_to_activate_ticks = 0;
 
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
