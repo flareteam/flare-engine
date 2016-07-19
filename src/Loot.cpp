@@ -39,6 +39,8 @@ Loot::Loot(const Loot &other) {
 	if (animation)
 		animation->syncTo(other.animation);
 	tip = other.tip;
+	tip_bounds = other.tip_bounds;
+	tip_visible = other.tip_visible;
 	dropped_by_hero = other.dropped_by_hero;
 	on_ground = other.on_ground;
 	sound_played = other.sound_played;
@@ -64,6 +66,8 @@ Loot& Loot::operator= (const Loot &other) {
 	pos.x = other.pos.x;
 	pos.y = other.pos.y;
 	tip = other.tip;
+	tip_bounds = other.tip_bounds;
+	tip_visible = other.tip_visible;
 	dropped_by_hero = other.dropped_by_hero;
 	on_ground = other.on_ground;
 	sound_played = other.sound_played;
