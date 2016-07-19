@@ -64,10 +64,10 @@ void NPC::load(const std::string& npc_id) {
 
 	std::string filename_portrait = "";
 
-	bool clear_random_table = true;
-
 	// @CLASS NPC|Description of NPCs in npcs/
 	if (infile.open(npc_id)) {
+		bool clear_random_table = true;
+
 		while (infile.next()) {
 			if (infile.section == "dialog") {
 				if (infile.new_section) {
