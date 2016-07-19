@@ -104,7 +104,6 @@ public:
 	void applyBonus(const BonusData* bdata);
 
 	int getEquippedCount();
-	int getCarriedRows();
 
 	void clearHighlight();
 
