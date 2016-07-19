@@ -37,7 +37,6 @@ protected:
 	WidgetButton *button_down;
 	WidgetInput *input_box;
 	WidgetLabel label;
-	TabList	tablist;
 
 	LabelInfo title;
 
