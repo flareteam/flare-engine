@@ -107,8 +107,6 @@ private:
 	GameState *previous_gamestate;
 	std::string dest_map;
 	Point dest_pos;
-	bool scale_graphics;
-	FPoint caption_margins;
 
 	std::queue<Scene*> scenes;
 
