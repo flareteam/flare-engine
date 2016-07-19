@@ -29,6 +29,7 @@ WidgetLog::WidgetLog (int width, int height)
 	: scroll_box(new WidgetScrollBox(width, height))
 	, padding(4)
 	, max_messages(WIDGETLOG_MAX_MESSAGES)
+	, updated(false)
 {
 	setFont(WIDGETLOG_FONT_REGULAR);
 	color_normal = font->getColor("menu_normal");
