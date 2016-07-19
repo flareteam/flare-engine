@@ -280,6 +280,7 @@ public:
 		, animation_name("")
 		, sfx_index(-1)
 		, sfx_hit(0)
+		, sfx_hit_enable(false)
 		, directional(false)
 		, visual_random(0)
 		, visual_option(0)
