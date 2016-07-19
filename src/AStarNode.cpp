@@ -28,14 +28,6 @@ AStarNode::AStarNode()
 	, parent() {
 }
 
-AStarNode::AStarNode(const int a, const int b)
-	: x(a)
-	, y(b)
-	, g(0)
-	, h(0)
-	, parent() {
-}
-
 AStarNode::AStarNode(const Point &p)
 	: x(p.x)
 	, y(p.y)

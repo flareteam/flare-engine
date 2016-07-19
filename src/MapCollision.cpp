@@ -444,7 +444,7 @@ bool MapCollision::compute_path(const FPoint& start_pos, const FPoint& end_pos, 
 
 			// if neighbour isn't inside open, add it as a new Node
 			if(!open.exists(neighbour)) {
-				AStarNode* newNode = new AStarNode(neighbour.x,neighbour.y);
+				AStarNode* newNode = new AStarNode(neighbour);
 				newNode->setActualCost(node->getActualCost() + static_cast<float>(calcDist(current,neighbour)));
 				newNode->setParent(current);
 				newNode->setEstimatedCost(static_cast<float>(calcDist(neighbour,end)));
