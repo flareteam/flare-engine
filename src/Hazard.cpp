@@ -175,7 +175,7 @@ void Hazard::loadAnimation(const std::string &s) {
 	if (animation_name != "") {
 		anim->increaseCount(animation_name);
 		AnimationSet *animationSet = anim->getAnimationSet(animation_name);
-		activeAnimation = animationSet->getAnimation();
+		activeAnimation = animationSet->getAnimation("");
 	}
 }
 

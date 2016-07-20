@@ -79,7 +79,7 @@ void Loot::loadAnimation(const std::string& _gfx) {
 	if (gfx != "") {
 		anim->increaseCount(gfx);
 		AnimationSet *as = anim->getAnimationSet(gfx);
-		animation = as->getAnimation();
+		animation = as->getAnimation("");
 	}
 	else {
 		animation = 0;

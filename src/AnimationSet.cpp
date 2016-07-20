@@ -33,15 +33,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Animation *AnimationSet::getAnimation(const std::string &_name) {
 	if (!loaded)
 		load();
-	for (size_t i = 0; i < animations.size(); i++)
-		if (animations[i]->getName() == _name)
-			return new Animation(*animations[i]);
-	return new Animation(*defaultAnimation);
-}
 
-Animation *AnimationSet::getAnimation() {
-	if (!loaded)
-		load();
+	if (!_name.empty()) {
+		for (size_t i = 0; i < animations.size(); i++) {
+			if (animations[i]->getName() == _name)
+				return new Animation(*animations[i]);
+		}
+	}
+
 	return new Animation(*defaultAnimation);
 }
 

@@ -404,7 +404,7 @@ int EffectManager::damageShields(int dmg) {
 Animation* EffectManager::loadAnimation(const std::string &s) {
 	if (s != "") {
 		AnimationSet *animationSet = anim->getAnimationSet(s);
-		return animationSet->getAnimation();
+		return animationSet->getAnimation("");
 	}
 	return NULL;
 }

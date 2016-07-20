@@ -42,7 +42,7 @@ EnemyManager::EnemyManager()
 void EnemyManager::loadAnimations(Enemy *e) {
 	anim->increaseCount(e->stats.animations);
 	e->animationSet = anim->getAnimationSet(e->stats.animations);
-	e->activeAnimation = e->animationSet->getAnimation();
+	e->activeAnimation = e->animationSet->getAnimation("");
 }
 
 Enemy *EnemyManager::getEnemyPrototype(const std::string& type_id) {
@@ -273,7 +273,7 @@ void EnemyManager::handleSpawn() {
 			anim->increaseCount(e->stats.animations);
 			e->animationSet = anim->getAnimationSet(e->stats.animations);
 			if (e->animationSet)
-				e->activeAnimation = e->animationSet->getAnimation();
+				e->activeAnimation = e->animationSet->getAnimation("");
 			else
 				logError("EnemyManager: Animations file could not be loaded for %s", espawn.type.c_str());
 		}

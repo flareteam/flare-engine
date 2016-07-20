@@ -240,7 +240,7 @@ void NPC::loadGraphics(const std::string& filename_portrait) {
 	if (gfx != "") {
 		anim->increaseCount(gfx);
 		animationSet = anim->getAnimationSet(gfx);
-		activeAnimation = animationSet->getAnimation();
+		activeAnimation = animationSet->getAnimation("");
 	}
 
 	if (filename_portrait != "") {

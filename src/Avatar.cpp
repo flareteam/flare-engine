@@ -62,7 +62,7 @@ Avatar::Avatar()
 	// load the hero's animations from hero definition file
 	anim->increaseCount("animations/hero.txt");
 	animationSet = anim->getAnimationSet("animations/hero.txt");
-	activeAnimation = animationSet->getAnimation();
+	activeAnimation = animationSet->getAnimation("");
 
 	// set cooldown_hit to duration of hit animation if undefined
 	if (stats.cooldown_hit == -1) {
@@ -82,7 +82,7 @@ Avatar::Avatar()
 	if (SHOW_TARGET) {
 		anim->increaseCount("animations/target.txt");
 		target_animset = anim->getAnimationSet("animations/target.txt");
-		target_anim = target_animset->getAnimation();
+		target_anim = target_animset->getAnimation("");
 	}
 
 	// load foot-step definitions
@@ -834,7 +834,7 @@ void Avatar::transform() {
 	anim->increaseCount(charmed_stats->animations);
 	animationSet = anim->getAnimationSet(charmed_stats->animations);
 	delete activeAnimation;
-	activeAnimation = animationSet->getAnimation();
+	activeAnimation = animationSet->getAnimation("");
 	stats.cur_state = AVATAR_STANCE;
 
 	// base stats
@@ -898,7 +898,7 @@ void Avatar::untransform() {
 	anim->decreaseCount(charmed_stats->animations);
 	animationSet = anim->getAnimationSet("animations/hero.txt");
 	delete activeAnimation;
-	activeAnimation = animationSet->getAnimation();
+	activeAnimation = animationSet->getAnimation("");
 	stats.cur_state = AVATAR_STANCE;
 
 	// This is a bit of a hack.

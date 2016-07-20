@@ -39,6 +39,7 @@ private:
 	AnimationSet *parent;
 
 	void load();
+	unsigned getAnimationFrames(const std::string &_name);
 
 public:
 
@@ -56,15 +57,6 @@ public:
 	 * a default animation is returned.
 	 */
 	Animation *getAnimation(const std::string &name);
-
-	/**
-	 * callee is responsible to free the returned animation.
-	 * returns the default animation. This is the animation, which is first defined
-	 * in the animation definition file.
-	 */
-	Animation *getAnimation();
-
-	unsigned getAnimationFrames(const std::string &_name);
 
 	const std::string &getName() {
 		return name;
