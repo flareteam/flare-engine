@@ -42,7 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Avatar::Avatar()
 	: Entity()
 	, lockAttack(false)
-	, lock_cursor(false)
+	, attack_cursor(false)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
 	, act_target()
@@ -421,14 +421,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		}
 	}
 
-	// change the cursor if we're attacking
-	if (action_queue.empty()) {
-		lock_cursor = false;
-	}
-	else if (lock_cursor) {
-		curs->setCursor(CURSOR_ATTACK);
-	}
-
 	// save a valid tile position in the event that we untransform on an invalid tile
 	if (stats.transformed && mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
 		transform_pos = stats.pos;
@@ -516,6 +508,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			case AVATAR_ATTACK:
 
 				setAnimation(attack_anim);
+
+				if (attack_cursor) {
+					curs->setCursor(CURSOR_ATTACK);
+				}
 
 				if (MOUSE_MOVE) lockAttack = true;
 
@@ -683,17 +679,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						stats.direction = calcDirection(stats.pos, target);
 					}
 
-					// draw a target on the ground if we're attacking
-					if (!power.buff && !power.buff_teleport &&
-						power.type != POWTYPE_TRANSFORM && power.type != POWTYPE_BLOCK &&
-						!(power.starting_pos == STARTING_POS_SOURCE && power.speed == 0))
-					{
-						lock_cursor = true;
-					}
-					else {
-						curs->setCursor(CURSOR_NORMAL);
-					}
-
 					if (power.new_state != POWSTATE_INSTANT) {
 						current_power = action.power;
 						act_target = target;
@@ -725,6 +710,16 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 							}
 							break;
 					}
+
+					// if the player is attacking, show the attack cursor
+					attack_cursor = (
+						stats.cur_state == AVATAR_ATTACK &&
+						!power.buff && !power.buff_teleport &&
+						power.type != POWTYPE_TRANSFORM &&
+						power.type != POWTYPE_BLOCK &&
+						!(power.starting_pos == STARTING_POS_SOURCE && power.speed == 0)
+					);
+
 				}
 			}
 

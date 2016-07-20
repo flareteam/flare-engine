@@ -89,7 +89,7 @@ private:
 	bool transform_triggered;
 	std::string last_transform;
 
-	bool lock_cursor; // keeps the attacking cursor while holding down the power key/button
+	bool attack_cursor;
 
 public:
 	Avatar();
