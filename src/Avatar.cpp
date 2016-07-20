@@ -42,11 +42,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 Avatar::Avatar()
 	: Entity()
 	, lockAttack(false)
-	, path()
-	, prev_target()
-	, target_visible(false)
-	, target_anim(NULL)
-	, target_animset(NULL)
 	, lock_cursor(false)
 	, hero_stats(NULL)
 	, charmed_stats(NULL)
@@ -77,13 +72,6 @@ Avatar::Avatar()
 	}
 
 	loadLayerDefinitions();
-
-	// load target animation
-	if (SHOW_TARGET) {
-		anim->increaseCount("animations/target.txt");
-		target_animset = anim->getAnimationSet("animations/target.txt");
-		target_anim = target_animset->getAnimation("");
-	}
 
 	// load foot-step definitions
 	// @CLASS Avatar: Step sounds|Description of items/step_sounds.txt
@@ -433,14 +421,6 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		}
 	}
 
-	if (target_anim && target_anim->getTimesPlayed() >= 1) {
-		target_visible = false;
-		target_anim->reset();
-	}
-
-	if (target_anim && target_visible)
-		target_anim->advanceFrame();
-
 	// change the cursor if we're attacking
 	if (action_queue.empty()) {
 		lock_cursor = false;
@@ -708,24 +688,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						power.type != POWTYPE_TRANSFORM && power.type != POWTYPE_BLOCK &&
 						!(power.starting_pos == STARTING_POS_SOURCE && power.speed == 0))
 					{
-						if (power.starting_pos == STARTING_POS_TARGET && power.target_range > 0) {
-							target_pos = clampDistance(power.target_range, stats.pos, target);
-						}
-						else if (power.starting_pos == STARTING_POS_MELEE && power.type == POWTYPE_FIXED) {
-							target_pos = calcVector(stats.pos, stats.direction, stats.melee_range);
-						}
-						else {
-							target_pos = target;
-						}
-
-						if (target_anim) {
-							target_visible = true;
-							target_anim->reset();
-						}
 						lock_cursor = true;
 					}
 					else {
-						// curs->setCursor(CURSOR_NORMAL);
+						curs->setCursor(CURSOR_NORMAL);
 					}
 
 					if (power.new_state != POWSTATE_INSTANT) {
@@ -960,15 +926,7 @@ void Avatar::resetActiveAnimation() {
 			anims[i]->reset();
 }
 
-void Avatar::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
-	// target
-	if (target_anim && target_visible) {
-		Renderable ren = target_anim->getCurrentFrame(0);
-		ren.map_pos = target_pos;
-		ren.prio = 0;
-		r_dead.push_back(ren);
-	}
-
+void Avatar::addRenders(std::vector<Renderable> &r) {
 	if (!stats.transformed) {
 		for (unsigned i = 0; i < layer_def[stats.direction].size(); ++i) {
 			unsigned index = layer_def[stats.direction][i];
@@ -998,11 +956,6 @@ void Avatar::addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_d
 }
 
 Avatar::~Avatar() {
-	if (SHOW_TARGET) {
-		anim->decreaseCount("animations/target.txt");
-		delete target_anim;
-	}
-
 	if (stats.transformed && charmed_stats && charmed_stats->animations != "") {
 		anim->decreaseCount(charmed_stats->animations);
 	}

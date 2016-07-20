@@ -64,8 +64,6 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, colorblind_lb(new WidgetLabel())
 	, dev_mode_cb(new WidgetCheckBox())
 	, dev_mode_lb(new WidgetLabel())
-	, show_target_cb(new WidgetCheckBox())
-	, show_target_lb(new WidgetLabel())
 	, loot_tooltips_cb(new WidgetCheckBox())
 	, loot_tooltips_lb(new WidgetLabel())
 	, statbar_labels_cb(new WidgetCheckBox())
@@ -240,10 +238,6 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR dev_mode|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Developer Mode" checkbox relative to the frame.
 		placeLabeledWidget(dev_mode_lb, dev_mode_cb, x1, y1, x2, y2, msg->get("Developer Mode"), JUSTIFY_RIGHT);
 	}
-	else if (infile.key == "show_target") {
-		// @ATTR show_target|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Show targeting animation" checkbox relative to the frame.
-		placeLabeledWidget(show_target_lb, show_target_cb, x1, y1, x2, y2, msg->get("Show targeting animation"), JUSTIFY_RIGHT);
-	}
 	else if (infile.key == "loot_tooltips") {
 		// @ATTR loot_tooltips|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Always show loot labels" checkbox relative to the frame.
 		placeLabeledWidget(loot_tooltips_lb, loot_tooltips_cb, x1, y1, x2, y2, msg->get("Always show loot labels"), JUSTIFY_RIGHT);
@@ -369,8 +363,6 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(hardware_cursor_lb, INTERFACE_TAB);
 	addChildWidget(dev_mode_cb, INTERFACE_TAB);
 	addChildWidget(dev_mode_lb, INTERFACE_TAB);
-	addChildWidget(show_target_cb, INTERFACE_TAB);
-	addChildWidget(show_target_lb, INTERFACE_TAB);
 	addChildWidget(loot_tooltips_cb, INTERFACE_TAB);
 	addChildWidget(loot_tooltips_lb, INTERFACE_TAB);
 	addChildWidget(statbar_labels_cb, INTERFACE_TAB);
@@ -412,7 +404,6 @@ void GameStateConfigBase::setupTabList() {
 	tablist_interface.add(colorblind_cb);
 	tablist_interface.add(hardware_cursor_cb);
 	tablist_interface.add(dev_mode_cb);
-	tablist_interface.add(show_target_cb);
 	tablist_interface.add(loot_tooltips_cb);
 	tablist_interface.add(auto_equip_cb);
 	tablist_interface.add(language_lstb);
@@ -465,9 +456,6 @@ void GameStateConfigBase::updateInterface() {
 
 	if (DEV_MODE) dev_mode_cb->Check();
 	else dev_mode_cb->unCheck();
-
-	if (SHOW_TARGET) show_target_cb->Check();
-	else show_target_cb->unCheck();
 
 	if (LOOT_TOOLTIPS) loot_tooltips_cb->Check();
 	else loot_tooltips_cb->unCheck();
@@ -654,10 +642,6 @@ void GameStateConfigBase::logicInterface() {
 	else if (dev_mode_cb->checkClick()) {
 		if (dev_mode_cb->isChecked()) DEV_MODE=true;
 		else DEV_MODE=false;
-	}
-	else if (show_target_cb->checkClick()) {
-		if (show_target_cb->isChecked()) SHOW_TARGET=true;
-		else SHOW_TARGET=false;
 	}
 	else if (loot_tooltips_cb->checkClick()) {
 		if (loot_tooltips_cb->isChecked()) LOOT_TOOLTIPS=true;

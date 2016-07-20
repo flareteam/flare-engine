@@ -89,16 +89,6 @@ private:
 	bool transform_triggered;
 	std::string last_transform;
 
-	//variables for patfinding
-	std::vector<FPoint> path;
-	FPoint prev_target;
-
-	// visible power target
-	FPoint target_pos;
-	bool target_visible;
-	Animation *target_anim;
-	AnimationSet *target_animset;
-
 	bool lock_cursor; // keeps the attacking cursor while holding down the power key/button
 
 public:
@@ -117,7 +107,7 @@ public:
 	}
 	void checkTransform();
 
-	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+	void addRenders(std::vector<Renderable> &r);
 
 	virtual void resetActiveAnimation();
 	virtual Renderable getRender() {

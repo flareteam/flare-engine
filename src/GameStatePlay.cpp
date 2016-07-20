@@ -1006,7 +1006,7 @@ void GameStatePlay::render() {
 	std::vector<Renderable> rens;
 	std::vector<Renderable> rens_dead;
 
-	pc->addRenders(rens, rens_dead);
+	pc->addRenders(rens);
 
 	enemies->addRenders(rens, rens_dead);
 
