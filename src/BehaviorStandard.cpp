@@ -26,18 +26,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsMath.h"
 #include "SharedGameResources.h"
 
-BehaviorStandard::BehaviorStandard(Enemy *_e) : EnemyBehavior(_e)
+BehaviorStandard::BehaviorStandard(Enemy *_e)
+	: EnemyBehavior(_e)
 	, path()
 	, prev_target()
 	, collided(false)
 	, path_found(false)
-	, chance_calc_path(0) {
-	los = false;
-	hero_dist = 0;
-	target_dist = 0;
-	pursue_pos.x = pursue_pos.y = -1;
-	fleeing = false;
-	move_to_safe_dist = false;
+	, chance_calc_path(0)
+	, hero_dist(0)
+	, target_dist(0)
+	, pursue_pos(-1, -1)
+	, los(false)
+	, fleeing(false)
+	, move_to_safe_dist(false)
+{
 }
 
 /**
