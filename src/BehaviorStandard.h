@@ -54,6 +54,8 @@ protected:
 	//when fleeing, the enemy moves away from the pursue_pos
 	bool fleeing;
 	bool move_to_safe_dist;
+	int flee_ticks;
+	int flee_cooldown;
 
 public:
 	explicit BehaviorStandard(Enemy *_e);

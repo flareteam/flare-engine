@@ -39,6 +39,8 @@ BehaviorStandard::BehaviorStandard(Enemy *_e)
 	, los(false)
 	, fleeing(false)
 	, move_to_safe_dist(false)
+	, flee_ticks(0)
+	, flee_cooldown(0)
 {
 }
 
@@ -245,8 +247,16 @@ void BehaviorStandard::findTarget() {
 	if(e->stats.effects.fear) fleeing = true;
 
 	// If we have a successful chance_flee roll, try to move to a safe distance
-	if (e->stats.cur_state == ENEMY_STANCE && !move_to_safe_dist && hero_dist < e->stats.threat_range/2 && hero_dist >= e->stats.melee_range && percentChance(e->stats.chance_flee))
+	if (
+			e->stats.cur_state == ENEMY_STANCE &&
+			!move_to_safe_dist && hero_dist < e->stats.threat_range/2 &&
+			hero_dist >= e->stats.melee_range &&
+			percentChance(e->stats.chance_flee) &&
+			flee_cooldown == 0
+		)
+	{
 		move_to_safe_dist = true;
+	}
 
 	if (move_to_safe_dist) fleeing = true;
 
@@ -281,6 +291,10 @@ void BehaviorStandard::findTarget() {
 		else {
 			int index = randBetween(0, static_cast<int>(flee_dirs.size())-1);
 			pursue_pos = calcVector(e->stats.pos, flee_dirs[index], 1);
+
+			if (flee_ticks == 0) {
+				flee_ticks = e->stats.flee_duration;
+			}
 		}
 	}
 }
@@ -422,6 +436,12 @@ void BehaviorStandard::checkMove() {
 		}
 	}
 
+	if (flee_ticks > 0)
+		flee_ticks--;
+
+	if (flee_cooldown > 0)
+		flee_cooldown--;
+
 	// try to start moving
 	if (e->stats.cur_state == ENEMY_STANCE) {
 		checkMoveStateStance();
@@ -484,10 +504,24 @@ void BehaviorStandard::checkMoveStateStance() {
 }
 
 void BehaviorStandard::checkMoveStateMove() {
+	// in order to prevent infinite fleeing, we re-roll our chance to flee after a certain duration
+	bool stop_fleeing = fleeing && flee_ticks == 0 && !percentChance(e->stats.chance_flee);
+
+	if (!stop_fleeing && flee_ticks == 0) {
+		// if the roll to continue fleeing succeeds, but the flee duration has expired, we don't want to reset the duration to the full amount
+		// instead, we scehdule the next re-roll to happen on the next frame
+		// this will continue until a roll fails, returning to the stance state
+		flee_ticks = 1;
+	}
+
 	// close enough to the hero or is at a safe distance
-	if (pc->stats.alive && ((target_dist < e->stats.melee_range && !fleeing) || (move_to_safe_dist && target_dist >= e->stats.threat_range/2))) {
+	if (pc->stats.alive && ((target_dist < e->stats.melee_range && !fleeing) || (move_to_safe_dist && target_dist >= e->stats.threat_range/2) || stop_fleeing)) {
+		if (stop_fleeing) {
+			flee_cooldown = e->stats.flee_cooldown;
+		}
 		e->stats.cur_state = ENEMY_STANCE;
 		move_to_safe_dist = false;
+		fleeing = false;
 	}
 
 	// try to continue moving

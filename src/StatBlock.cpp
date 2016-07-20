@@ -140,6 +140,8 @@ StatBlock::StatBlock()
 	, activated_power(NULL) // enemy only
 	, half_dead_power(false) // enemy only
 	, suppress_hp(false)
+	, flee_duration(MAX_FRAMES_PER_SEC) // enemy only
+	, flee_cooldown(MAX_FRAMES_PER_SEC) // enemy only
 	, teleportation(false)
 	, teleport_destination()
 	, currency(0)
@@ -461,6 +463,11 @@ void StatBlock::load(const std::string& filename) {
 				categories.push_back(cat);
 			}
 		}
+
+		// @ATTR flee_duration|duration|The minimum amount of time that this creature will flee. They may flee longer than the specified time.
+		else if (infile.key == "flee_duration") flee_duration = parse_duration(infile.val);
+		// @ATTR flee_cooldown|duration|The amount of time this creature must wait before they can start fleeing again.
+		else if (infile.key == "flee_cooldown") flee_cooldown = parse_duration(infile.val);
 
 		// this is only used for EnemyGroupManager
 		// we check for them here so that we don't get an error saying they are invalid

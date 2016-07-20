@@ -279,8 +279,6 @@ body {
 
 <p><strong>dev_mode</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Developer Mode" checkbox relative to the frame.</p>
 
-<p><strong>show_target</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Show targeting animation" checkbox relative to the frame.</p>
-
 <p><strong>loot_tooltips</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Always show loot labels" checkbox relative to the frame.</p>
 
 <p><strong>statbar_labels</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Always show stat bar labels" checkbox relative to the frame.</p>
@@ -1641,6 +1639,8 @@ body {
 
 <p><strong>npc_tooltip_margin</strong> | <code>int</code> | Vertical offset for NPC labels.</p>
 
+<p><strong>tooltip_background_border</strong> | <code>int</code> | The pixel size of the border in "images/menus/tooltips.png".</p>
+
 <hr />
 
 <h4>Settings: Loot</h4>
@@ -1750,6 +1750,10 @@ body {
 <p><strong>suppress_hp</strong> | <code>bool</code> | Hides the enemy HP bar for this creature.</p>
 
 <p><strong>categories</strong> | <code>list(string)</code> | Categories that this enemy belongs to.</p>
+
+<p><strong>flee_duration</strong> | <code>duration</code> | The minimum amount of time that this creature will flee. They may flee longer than the specified time.</p>
+
+<p><strong>flee_cooldown</strong> | <code>duration</code> | The amount of time this creature must wait before they can start fleeing again.</p>
 
 <hr />
 

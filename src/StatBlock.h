@@ -293,6 +293,8 @@ public:
 	AIPower* activated_power;
 	bool half_dead_power;
 	bool suppress_hp; // hide an enemy HP bar
+	int flee_duration;
+	int flee_cooldown;
 
 	std::vector<Event_Component> loot_table;
 	Point loot_count;
