@@ -152,7 +152,15 @@ void Avatar::init() {
 	setPowers = false;
 	revertPowers = false;
 	last_transform = "";
-	untransform_power = getUntransformPower();
+
+	// Find untransform power index to use for manual untransfrom ability
+	untransform_power = 0;
+	for (unsigned id=0; id<powers->powers.size(); id++) {
+		if (powers->powers[id].spawn_type == "untransform" && powers->powers[id].requires_item == -1) {
+			untransform_power = id;
+			break;
+		}
+	}
 
 	hero_cooldown = std::vector<int>(powers->powers.size(), 0);
 	power_cast_ticks = std::vector<int>(powers->powers.size(), 0);
@@ -311,105 +319,6 @@ void Avatar::set_direction() {
 				 (inpt->pressing[LEFT] && !inpt->lock[LEFT]) || (inpt->pressing[RIGHT] && !inpt->lock[RIGHT])))
 			stats.direction = static_cast<unsigned char>((stats.direction == 7) ? 0 : stats.direction + 1);
 	}
-}
-
-void Avatar::handlePower(std::vector<ActionData> &action_queue) {
-	bool blocking = false;
-
-	for (unsigned i=0; i<action_queue.size(); i++) {
-		ActionData &action = action_queue[i];
-		const Power &power = powers->powers[action.power];
-
-		if (power.type == POWTYPE_BLOCK)
-			blocking = true;
-
-		if (action.power != 0 && (stats.cooldown_ticks == 0 || action.instant_item)) {
-			FPoint target = action.target;
-
-			// check requirements
-			if ((stats.cur_state == AVATAR_ATTACK || stats.cur_state == AVATAR_HIT) && !action.instant_item)
-				continue;
-			if (!stats.canUsePower(power, action.power))
-				continue;
-			if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
-				continue;
-			if (power.requires_empty_target && !mapr->collider.is_empty(target.x, target.y))
-				continue;
-			if (hero_cooldown[action.power] > 0)
-				continue;
-			if (!powers->hasValidTarget(action.power, &stats, target))
-				continue;
-
-			// automatically target the selected enemy with melee attacks
-			if (power.type == POWTYPE_FIXED && power.starting_pos == STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
-				target = enemy_pos;
-			}
-
-			// is this a power that requires changing direction?
-			if (power.face) {
-				stats.direction = calcDirection(stats.pos, target);
-			}
-
-			// draw a target on the ground if we're attacking
-			if (!power.buff && !power.buff_teleport &&
-			    power.type != POWTYPE_TRANSFORM && power.type != POWTYPE_BLOCK &&
-			    !(power.starting_pos == STARTING_POS_SOURCE && power.speed == 0))
-			{
-				if (power.starting_pos == STARTING_POS_TARGET && power.target_range > 0) {
-					target_pos = clampDistance(power.target_range, stats.pos, target);
-				}
-				else if (power.starting_pos == STARTING_POS_MELEE) {
-					target_pos = calcVector(stats.pos, stats.direction, stats.melee_range);
-				}
-				else {
-					target_pos = target;
-				}
-
-				if (target_anim) {
-					target_visible = true;
-					target_anim->reset();
-				}
-				lock_cursor = true;
-			}
-			else {
-				curs->setCursor(CURSOR_NORMAL);
-			}
-
-			if (power.new_state != POWSTATE_INSTANT) {
-				current_power = action.power;
-				act_target = target;
-				attack_anim = power.attack_anim;
-			}
-
-			if (power.state_duration > 0)
-				stats.state_ticks = power.state_duration;
-
-			if (power.charge_speed != 0.0f)
-				stats.charge_speed = power.charge_speed;
-
-			switch (power.new_state) {
-				case POWSTATE_ATTACK:	// handle attack powers
-					stats.cur_state = AVATAR_ATTACK;
-					break;
-
-				case POWSTATE_INSTANT:	// handle instant powers
-					powers->activate(action.power, &stats, target);
-					hero_cooldown[action.power] = power.cooldown;
-					break;
-
-				default:
-					if (power.type == POWTYPE_BLOCK) {
-						stats.cur_state = AVATAR_BLOCK;
-						powers->activate(action.power, &stats, target);
-						hero_cooldown[action.power] = power.cooldown;
-						stats.refresh_stats = true;
-					}
-					break;
-			}
-		}
-	}
-
-	stats.blocking = blocking;
 }
 
 /**
@@ -757,8 +666,105 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 		}
 
 		// handle power usage
-		if (allowed_to_use_power)
-			handlePower(action_queue);
+		if (allowed_to_use_power) {
+			bool blocking = false;
+
+			for (unsigned i=0; i<action_queue.size(); i++) {
+				ActionData &action = action_queue[i];
+				const Power &power = powers->powers[action.power];
+
+				if (power.type == POWTYPE_BLOCK)
+					blocking = true;
+
+				if (action.power != 0 && (stats.cooldown_ticks == 0 || action.instant_item)) {
+					FPoint target = action.target;
+
+					// check requirements
+					if ((stats.cur_state == AVATAR_ATTACK || stats.cur_state == AVATAR_HIT) && !action.instant_item)
+						continue;
+					if (!stats.canUsePower(power, action.power))
+						continue;
+					if (power.requires_los && !mapr->collider.line_of_sight(stats.pos.x, stats.pos.y, target.x, target.y))
+						continue;
+					if (power.requires_empty_target && !mapr->collider.is_empty(target.x, target.y))
+						continue;
+					if (hero_cooldown[action.power] > 0)
+						continue;
+					if (!powers->hasValidTarget(action.power, &stats, target))
+						continue;
+
+					// automatically target the selected enemy with melee attacks
+					if (power.type == POWTYPE_FIXED && power.starting_pos == STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
+						target = enemy_pos;
+					}
+
+					// is this a power that requires changing direction?
+					if (power.face) {
+						stats.direction = calcDirection(stats.pos, target);
+					}
+
+					// draw a target on the ground if we're attacking
+					if (!power.buff && !power.buff_teleport &&
+						power.type != POWTYPE_TRANSFORM && power.type != POWTYPE_BLOCK &&
+						!(power.starting_pos == STARTING_POS_SOURCE && power.speed == 0))
+					{
+						if (power.starting_pos == STARTING_POS_TARGET && power.target_range > 0) {
+							target_pos = clampDistance(power.target_range, stats.pos, target);
+						}
+						else if (power.starting_pos == STARTING_POS_MELEE && power.type == POWTYPE_FIXED) {
+							target_pos = calcVector(stats.pos, stats.direction, stats.melee_range);
+						}
+						else {
+							target_pos = target;
+						}
+
+						if (target_anim) {
+							target_visible = true;
+							target_anim->reset();
+						}
+						lock_cursor = true;
+					}
+					else {
+						// curs->setCursor(CURSOR_NORMAL);
+					}
+
+					if (power.new_state != POWSTATE_INSTANT) {
+						current_power = action.power;
+						act_target = target;
+						attack_anim = power.attack_anim;
+					}
+
+					if (power.state_duration > 0)
+						stats.state_ticks = power.state_duration;
+
+					if (power.charge_speed != 0.0f)
+						stats.charge_speed = power.charge_speed;
+
+					switch (power.new_state) {
+						case POWSTATE_ATTACK:	// handle attack powers
+							stats.cur_state = AVATAR_ATTACK;
+							break;
+
+						case POWSTATE_INSTANT:	// handle instant powers
+							powers->activate(action.power, &stats, target);
+							hero_cooldown[action.power] = power.cooldown;
+							break;
+
+						default:
+							if (power.type == POWTYPE_BLOCK) {
+								stats.cur_state = AVATAR_BLOCK;
+								powers->activate(action.power, &stats, target);
+								hero_cooldown[action.power] = power.cooldown;
+								stats.refresh_stats = true;
+							}
+							break;
+					}
+				}
+			}
+
+			stats.blocking = blocking;
+		}
+
 	}
 
 	// calc new cam position from player position
@@ -945,17 +951,6 @@ void Avatar::setAnimation(std::string name) {
 		else
 			anims[i] = 0;
 	}
-}
-
-/**
- * Find untransform power index to use for manual untransfrom ability
- */
-int Avatar::getUntransformPower() {
-	for (unsigned id=0; id<powers->powers.size(); id++) {
-		if (powers->powers[id].spawn_type == "untransform" && powers->powers[id].requires_item == -1)
-			return id;
-	}
-	return 0;
 }
 
 void Avatar::resetActiveAnimation() {

@@ -68,13 +68,19 @@ public:
 
 class Avatar : public Entity {
 private:
+	void loadLayerDefinitions();
+	bool pressing_move();
+	void set_direction();
+	void transform();
+	void untransform();
+	void setAnimation(std::string name);
+
 	bool lockAttack;
 
 	std::vector<Step_sfx> step_def;
 
 	std::vector<SoundManager::SoundID> sound_steps;
 
-	void setAnimation(std::string name);
 	std::vector<AnimationSet*> animsets; // hold the animations for all equipped items in the right order of drawing.
 	std::vector<Animation*> anims; // hold the animations for all equipped items in the right order of drawing.
 
@@ -82,13 +88,10 @@ private:
 
 	bool transform_triggered;
 	std::string last_transform;
-	int getUntransformPower();
 
 	//variables for patfinding
 	std::vector<FPoint> path;
 	FPoint prev_target;
-
-	void handlePower(std::vector<ActionData> &action_queue);
 
 	// visible power target
 	FPoint target_pos;
@@ -103,26 +106,30 @@ public:
 	~Avatar();
 
 	void init();
-	void loadLayerDefinitions();
-	std::vector<std::string> layer_reference_order;
-	std::vector<std::vector<unsigned> > layer_def;
 	void loadGraphics(std::vector<Layer_gfx> _img_gfx);
 	void loadStepFX(const std::string& stepname);
 
 	void logic(std::vector<ActionData> &action_queue, bool restrict_power_use, bool npc);
-	bool pressing_move();
-	void set_direction();
-	std::string log_msg;
-
-	std::string attack_anim;
 
 	// transformation handling
-	void transform();
-	void untransform();
 	bool isTransforming() {
 		return transform_triggered;
 	}
 	void checkTransform();
+
+	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
+
+	virtual void resetActiveAnimation();
+	virtual Renderable getRender() {
+		return Renderable();
+	}
+
+	std::vector<std::string> layer_reference_order;
+	std::vector<std::vector<unsigned> > layer_def;
+
+	std::string log_msg;
+
+	std::string attack_anim;
 	bool setPowers;
 	bool revertPowers;
 	int untransform_power;
@@ -130,12 +137,6 @@ public:
 	StatBlock *charmed_stats;
 	FPoint transform_pos;
 	std::string transform_map;
-
-	virtual void resetActiveAnimation();
-	virtual Renderable getRender() {
-		return Renderable();
-	}
-	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 
 	// vars
 	Hazard *haz;
