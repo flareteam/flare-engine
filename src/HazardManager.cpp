@@ -34,7 +34,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 HazardManager::HazardManager()
 	: last_enemy(NULL)
 {
-	Color mark_color = {255, 0, 0, 255};
+	Color mark_color(255, 0, 0, 255);
 
 	int marker_size = TILE_H_HALF+1;
 	dev_marker.image = render_device->createImage(marker_size, marker_size);
