@@ -66,8 +66,6 @@ private:
 
 	/** Container to store enemy data */
 	std::map <std::string, std::vector<Enemy_Level> > _categories;
-
-	void parseEnemyFilesAndStore();
 };
 
 #endif

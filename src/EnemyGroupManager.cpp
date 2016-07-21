@@ -28,13 +28,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cassert>
 
 EnemyGroupManager::EnemyGroupManager() {
-	parseEnemyFilesAndStore();
-}
-
-EnemyGroupManager::~EnemyGroupManager() {
-}
-
-void EnemyGroupManager::parseEnemyFilesAndStore() {
 	std::vector<std::string> enemy_paths = mods->list("enemies", false);
 
 	for (unsigned i=0; i<enemy_paths.size(); ++i) {
@@ -71,6 +64,9 @@ void EnemyGroupManager::parseEnemyFilesAndStore() {
 		}
 		infile.close();
 	}
+}
+
+EnemyGroupManager::~EnemyGroupManager() {
 }
 
 Enemy_Level EnemyGroupManager::getRandomEnemy(const std::string& category, int minlevel, int maxlevel) const {
