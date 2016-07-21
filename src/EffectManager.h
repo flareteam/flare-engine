@@ -110,12 +110,13 @@ private:
 	Animation* loadAnimation(const std::string &s);
 	void removeEffect(size_t id);
 	void removeAnimation(size_t id);
+	void clearStatus();
+	int getType(const std::string& type);
 
 public:
 	EffectManager();
 	~EffectManager();
 	EffectManager& operator= (const EffectManager &emSource);
-	void clearStatus();
 	void logic();
 	void addEffect(EffectDef &effect, int duration, int magnitude, bool item, int trigger, int passive_id, int source_type);
 	void removeEffectType(const int type);
@@ -125,7 +126,6 @@ public:
 	void clearItemEffects();
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
-	int getType(const std::string& type);
 	bool isDebuffed();
 
 	std::vector<Effect> effect_list;
