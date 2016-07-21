@@ -126,7 +126,7 @@ void GameStatePlay::refreshWidgets() {
 void GameStatePlay::resetGame() {
 	mapr->load("maps/spawn.txt");
 	setLoadingFrame();
-	camp->clearAll();
+	camp->status.clear();
 	pc->init();
 	pc->stats.currency = 0;
 	menu->act->clear();

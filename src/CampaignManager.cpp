@@ -41,11 +41,6 @@ CampaignManager::CampaignManager()
 	, bonus_xp(0.0) {
 }
 
-void CampaignManager::clearAll() {
-	// clear campaign data
-	status.clear();
-}
-
 /**
  * Take the savefile campaign= and convert to status array
  */

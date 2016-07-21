@@ -36,7 +36,6 @@ public:
 	CampaignManager();
 	~CampaignManager();
 
-	void clearAll();
 	void setAll(const std::string& s);
 	std::string getAll();
 	bool checkStatus(const std::string& s);
