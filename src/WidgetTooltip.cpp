@@ -199,7 +199,11 @@ bool WidgetTooltip::createBuffer(TooltipData &tip) {
 	int cursor_y = TOOLTIP_MARGIN;
 
 	for (unsigned int i=0; i<tip.lines.size(); i++) {
-		font->render(tip.lines[i], TOOLTIP_MARGIN, cursor_y, JUSTIFY_LEFT, graphics, size.x, tip.colors[i]);
+		if (background)
+			font->renderShadowed(tip.lines[i], TOOLTIP_MARGIN, cursor_y, JUSTIFY_LEFT, graphics, size.x, tip.colors[i]);
+		else
+			font->render(tip.lines[i], TOOLTIP_MARGIN, cursor_y, JUSTIFY_LEFT, graphics, size.x, tip.colors[i]);
+
 		cursor_y = font->cursor_y;
 	}
 
