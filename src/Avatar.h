@@ -91,6 +91,9 @@ private:
 
 	bool attack_cursor;
 
+protected:
+	virtual void resetActiveAnimation();
+
 public:
 	Avatar();
 	~Avatar();
@@ -108,11 +111,6 @@ public:
 	void checkTransform();
 
 	void addRenders(std::vector<Renderable> &r);
-
-	virtual void resetActiveAnimation();
-	virtual Renderable getRender() {
-		return Renderable();
-	}
 
 	std::vector<std::string> layer_reference_order;
 	std::vector<std::vector<unsigned> > layer_def;

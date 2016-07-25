@@ -39,6 +39,7 @@ protected:
 	Image *sprites;
 
 	void move_from_offending_tile();
+	virtual void resetActiveAnimation();
 
 public:
 	Entity();
@@ -49,7 +50,6 @@ public:
 	void unloadSounds();
 	bool move();
 	bool takeHit(Hazard &h);
-	virtual void resetActiveAnimation();
 	virtual void doRewards(int) {}
 
 	// sound effects
@@ -69,9 +69,6 @@ public:
 	bool play_sfx_die;
 	bool play_sfx_critdie;
 	bool play_sfx_block;
-
-	// Each child of Entity defines its own rendering method
-	virtual Renderable getRender() = 0;
 
 	bool setAnimation(const std::string& animation);
 	Animation *activeAnimation;

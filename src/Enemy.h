@@ -44,7 +44,7 @@ public:
 
 	std::string type;
 
-	virtual Renderable getRender();
+	Renderable getRender();
 
 	Hazard *haz;
 	EnemyBehavior *eb;
