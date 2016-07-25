@@ -29,6 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class FileParser {
 private:
+	void errorBuf(const char* buffer);
+
 	std::vector<std::string> filenames;
 	unsigned current_index;
 	std::string errormessage;
@@ -71,7 +73,6 @@ public:
 	std::string nextValue(); // next value inside one line.
 	std::string getRawLine();
 	void error(const char* format, ...);
-	void errorBuf(const char* buffer);
 	void incrementLineNum();
 
 	/**
