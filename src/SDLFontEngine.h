@@ -43,6 +43,9 @@ private:
 	std::vector<SDLFontStyle> font_styles;
 	SDLFontStyle *active_font;
 
+protected:
+	void renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color);
+
 public:
 	SDLFontEngine();
 	~SDLFontEngine();
@@ -54,7 +57,6 @@ public:
 
 	int calc_width(const std::string& text);
 	std::string trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis);
-	void render(const std::string& text, int x, int y, int justify, Image *target, const Color& color);
 };
 
 #endif

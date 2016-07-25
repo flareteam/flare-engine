@@ -154,14 +154,14 @@ void WidgetInput::render() {
 	font->setFont("font_regular");
 
 	if (!inFocus) {
-		font->render(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
+		font->render(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
 	}
 	else {
 		if (cursor_frame < MAX_FRAMES_PER_SEC) {
-			font->renderShadowed(trimmed_text + "|", font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
+			font->renderShadowed(trimmed_text + "|", font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
 		}
 		else {
-			font->renderShadowed(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, color_normal);
+			font->renderShadowed(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
 		}
 	}
 }

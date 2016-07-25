@@ -140,6 +140,11 @@ Rect FontEngine::position(const std::string& text, int x, int y, int justify) {
  * Word wrap to width
  */
 void FontEngine::render(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
+	if (width == 0) {
+		// a width of 0 means we won't try to wrap text
+		renderInternal(text, x, y, justify, target, color);
+		return;
+	}
 
 	std::string fulltext = text + " ";
 	cursor_y = y;
@@ -159,7 +164,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 		builder << next_word;
 
 		if (calc_width(builder.str()) > width) {
-			render(builder_prev.str(), x, cursor_y, justify, target, color);
+			renderInternal(builder_prev.str(), x, cursor_y, justify, target, color);
 			cursor_y += getLineHeight();
 			builder_prev.str("");
 			builder.str("");
@@ -174,14 +179,9 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 		next_word = getNextToken(fulltext, cursor, space); // next word
 	}
 
-	render(builder.str(), x, cursor_y, justify, target, color);
+	renderInternal(builder.str(), x, cursor_y, justify, target, color);
 	cursor_y += getLineHeight();
 
-}
-
-void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
-	render(text, x+1, y+1, justify, target, FONT_BLACK);
-	render(text, x, y, justify, target, color);
 }
 
 void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {

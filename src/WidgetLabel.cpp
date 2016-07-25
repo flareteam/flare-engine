@@ -244,7 +244,7 @@ void WidgetLabel::recacheTextSprite() {
 	image = render_device->createImage(bounds.w, bounds.h);
 	if (!image) return;
 
-	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, image, color);
+	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, image, 0, color);
 	label = image->createSprite();
 	image->unref();
 
