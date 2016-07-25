@@ -89,7 +89,7 @@ CombatText::~CombatText() {
 	}
 }
 
-void CombatText::addMessage(const std::string& message, const FPoint& location, int displaytype) {
+void CombatText::addString(const std::string& message, const FPoint& location, int displaytype) {
 	if (COMBAT_TEXT) {
 		Combat_Text_Item *c = new Combat_Text_Item();
 		WidgetLabel *label = new WidgetLabel();
@@ -107,11 +107,11 @@ void CombatText::addMessage(const std::string& message, const FPoint& location, 
 	}
 }
 
-void CombatText::addMessage(int num, const FPoint& location, int displaytype) {
+void CombatText::addInt(int num, const FPoint& location, int displaytype) {
 	if (COMBAT_TEXT) {
 		std::stringstream ss;
 		ss << num;
-		addMessage(ss.str(), location, displaytype);
+		addString(ss.str(), location, displaytype);
 	}
 }
 

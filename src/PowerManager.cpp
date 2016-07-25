@@ -858,7 +858,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				else
 					magnitude = caster_stats->get(STAT_DMG_MENT_MAX);
 
-				comb->addMessage(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
+				comb->addString(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
 			else if (effect_data.type == "heal") {
 				// heal for ment weapon damage * damage multiplier
@@ -871,7 +871,7 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 
-				comb->addMessage(msg->get("+%d HP",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
+				comb->addString(msg->get("+%d HP",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 				src_stats->hp += magnitude;
 				if (src_stats->hp > src_stats->get(STAT_HP_MAX)) src_stats->hp = src_stats->get(STAT_HP_MAX);
 			}

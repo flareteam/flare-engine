@@ -687,12 +687,12 @@ void StatBlock::logic() {
 	// apply bleed
 	if (effects.damage > 0 && hp > 0) {
 		takeDamage(effects.damage);
-		comb->addMessage(effects.damage, pos, COMBAT_MESSAGE_TAKEDMG);
+		comb->addInt(effects.damage, pos, COMBAT_MESSAGE_TAKEDMG);
 	}
 	if (effects.damage_percent > 0 && hp > 0) {
 		int damage = (get(STAT_HP_MAX)*effects.damage_percent)/100;
 		takeDamage(damage);
-		comb->addMessage(damage, pos, COMBAT_MESSAGE_TAKEDMG);
+		comb->addInt(damage, pos, COMBAT_MESSAGE_TAKEDMG);
 	}
 
 	if(effects.death_sentence)
@@ -712,24 +712,24 @@ void StatBlock::logic() {
 
 	// apply healing over time
 	if (effects.hpot > 0) {
-		comb->addMessage(msg->get("+%d HP",effects.hpot), pos, COMBAT_MESSAGE_BUFF);
+		comb->addString(msg->get("+%d HP",effects.hpot), pos, COMBAT_MESSAGE_BUFF);
 		hp += effects.hpot;
 		if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
 	}
 	if (effects.hpot_percent > 0) {
 		int hpot = (get(STAT_HP_MAX)*effects.hpot_percent)/100;
-		comb->addMessage(msg->get("+%d HP",hpot), pos, COMBAT_MESSAGE_BUFF);
+		comb->addString(msg->get("+%d HP",hpot), pos, COMBAT_MESSAGE_BUFF);
 		hp += hpot;
 		if (hp > get(STAT_HP_MAX)) hp = get(STAT_HP_MAX);
 	}
 	if (effects.mpot > 0) {
-		comb->addMessage(msg->get("+%d MP",effects.mpot), pos, COMBAT_MESSAGE_BUFF);
+		comb->addString(msg->get("+%d MP",effects.mpot), pos, COMBAT_MESSAGE_BUFF);
 		mp += effects.mpot;
 		if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
 	}
 	if (effects.mpot_percent > 0) {
 		int mpot = (get(STAT_MP_MAX)*effects.mpot_percent)/100;
-		comb->addMessage(msg->get("+%d MP",mpot), pos, COMBAT_MESSAGE_BUFF);
+		comb->addString(msg->get("+%d MP",mpot), pos, COMBAT_MESSAGE_BUFF);
 		mp += mpot;
 		if (mp > get(STAT_MP_MAX)) mp = get(STAT_MP_MAX);
 	}

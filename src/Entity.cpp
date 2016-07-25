@@ -290,7 +290,7 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	if (percentChance(true_avoidance)) {
-		combat_text->addMessage(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
+		combat_text->addString(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
 		return false;
 	}
 
@@ -373,12 +373,12 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	if(stats.hero)
-		combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_TAKEDMG);
+		combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_TAKEDMG);
 	else {
 		if(crit)
-			combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_CRIT);
+			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_CRIT);
 		else
-			combat_text->addMessage(dmg, stats.pos, COMBAT_MESSAGE_GIVEDMG);
+			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_GIVEDMG);
 	}
 
 	// temporarily save the current HP for calculating HP/MP steal on final blow
@@ -403,13 +403,13 @@ bool Entity::takeHit(Hazard &h) {
 		if (!stats.effects.immunity_hp_steal && h.hp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * h.hp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
-			combat_text->addMessage(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
+			combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 		}
 		if (!stats.effects.immunity_mp_steal && h.mp_steal != 0) {
 			int steal_amt = (std::min(dmg, prev_hp) * h.mp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
-			combat_text->addMessage(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
+			combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
 		}
 
@@ -421,7 +421,7 @@ bool Entity::takeHit(Hazard &h) {
 				dmg_return = 1;
 
 			h.src_stats->takeDamage(dmg_return);
-			comb->addMessage(dmg_return, h.src_stats->pos, COMBAT_MESSAGE_GIVEDMG);
+			comb->addInt(dmg_return, h.src_stats->pos, COMBAT_MESSAGE_GIVEDMG);
 		}
 	}
 
