@@ -169,12 +169,13 @@ void MenuLog::remove(int msg_index, int log_type) {
 }
 
 void MenuLog::clear(int log_type) {
-	log[log_type]->clear();
-}
-
-void MenuLog::clear() {
-	for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
-		log[i]->clear();
+	if (log_type == LOG_TYPE_ALL) {
+		for (unsigned i=0; i<LOG_TYPE_COUNT; i++) {
+			log[i]->clear();
+		}
+	}
+	else {
+		log[log_type]->clear();
 	}
 }
 

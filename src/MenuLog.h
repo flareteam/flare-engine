@@ -36,6 +36,7 @@ class WidgetTabControl;
 const unsigned LOG_TYPE_COUNT = 2;
 const int LOG_TYPE_QUESTS = 0;
 const int LOG_TYPE_MESSAGES = 1;
+const int LOG_TYPE_ALL = -1;
 
 class MenuLog : public Menu {
 private:
@@ -63,8 +64,7 @@ public:
 	void render();
 	void add(const std::string& s, int log_type, bool prevent_spam = true, Color* color = NULL, int style = WIDGETLOG_FONT_REGULAR);
 	void remove(int msg_index, int log_type);
-	void clear(int log_type);
-	void clear();
+	void clear(int log_type = LOG_TYPE_ALL);
 	void addSeparator(int log_type);
 	void setNextTabList(TabList *tl);
 
