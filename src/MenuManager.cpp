@@ -582,7 +582,6 @@ void MenuManager::logic() {
 
 			if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
-				vendor->tabsLogic();
 				if (inpt->pressing[CTRL]) {
 					// buy item from a vendor
 					stack = vendor->click(inpt->mouse);

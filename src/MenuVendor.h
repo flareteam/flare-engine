@@ -60,7 +60,6 @@ public:
 	MenuItemStorage stock[2]; // items the vendor currently has in stock
 
 	void logic();
-	void tabsLogic();
 	void setTab(int tab);
 	int getTab() {
 		return activetab;
@@ -70,7 +69,6 @@ public:
 	void itemReturn(ItemStack stack);
 	void add(ItemStack stack);
 	TooltipData checkTooltip(const Point& position);
-	void setInventory();
 	void saveInventory();
 	void sort(int type);
 	void setNPC(NPC* _npc);
