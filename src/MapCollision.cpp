@@ -41,8 +41,6 @@ MapCollision::MapCollision()
 }
 
 void MapCollision::setmap(const Map_Layer& _colmap, unsigned short w, unsigned short h) {
-	clearmap();
-
 	colmap.resize(w);
 	for (unsigned i=0; i<w; ++i) {
 		colmap[i].resize(h);
@@ -53,9 +51,6 @@ void MapCollision::setmap(const Map_Layer& _colmap, unsigned short w, unsigned s
 
 	map_size.x = w;
 	map_size.y = h;
-}
-
-void MapCollision::clearmap() {
 }
 
 int sgn(float f) {
@@ -536,6 +531,5 @@ FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ig
 }
 
 MapCollision::~MapCollision() {
-	clearmap();
 }
 

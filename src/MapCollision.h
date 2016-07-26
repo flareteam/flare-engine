@@ -75,8 +75,6 @@ private:
 
 	bool is_valid_tile(const int& x, const int& y, MOVEMENTTYPE movement_type, bool is_hero) const;
 
-	void clearmap();
-
 public:
 	MapCollision();
 	~MapCollision();
