@@ -92,17 +92,14 @@ public:
 	void removeFromPrevSlot(int quantity);
 	void addCurrency(int count);
 	void removeCurrency(int count);
-	int getCurrency();
 	bool buy(ItemStack stack, int tab, bool dragging);
 	bool sell(ItemStack stack);
 
-	int getItemCountCarried(int item);
-	bool isItemEquipped(int item);
 	bool requirementsMet(int item);
 
-	void applyEquipment(ItemStack *equipped);
-	void applyItemStats(ItemStack *equipped);
-	void applyItemSetBonuses(ItemStack *equipped);
+	void applyEquipment();
+	void applyItemStats();
+	void applyItemSetBonuses();
 	void applyBonus(const BonusData* bdata);
 
 	int getEquippedCount();

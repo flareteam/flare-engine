@@ -366,7 +366,7 @@ void MenuManager::logic() {
 
 	if (chr->checkUpgrade() || stats->level_up) {
 		// apply equipment and max hp/mp
-		inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
+		inv->applyEquipment();
 		stats->hp = stats->get(STAT_HP_MAX);
 		stats->mp = stats->get(STAT_MP_MAX);
 		stats->level_up = false;
@@ -752,7 +752,7 @@ void MenuManager::logic() {
 				else if (act->isWithinSlots(inpt->mouse)) {
 					// The action bar is not storage!
 					inv->itemReturn(drag_stack);
-					inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
+					inv->applyEquipment();
 
 					// put an item with a power on the action bar
 					if (items->items[drag_stack.item].power != 0) {
@@ -849,7 +849,7 @@ void MenuManager::logic() {
 
 	// handle equipment changes affecting hero stats
 	if (inv->changed_equipment) {
-		inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
+		inv->applyEquipment();
 		// the equipment flags get reset in GameStatePlay
 	}
 
@@ -1083,7 +1083,7 @@ void MenuManager::dragAndDropWithKeyboard() {
 			}
 			act->slots[slot_index]->checked = false;
 			resetDrag();
-			inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
+			inv->applyEquipment();
 		}
 		// rearrange actionbar
 		else if ((slotClick == CHECKED || slotClick == ACTIVATED) && drag_src == DRAG_SRC_ACTIONBAR && drag_power > 0) {

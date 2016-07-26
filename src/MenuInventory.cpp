@@ -201,7 +201,7 @@ void MenuInventory::logic() {
 	}
 
 	// a copy of currency is kept in stats, to help with various situations
-	stats->currency = currency = getCurrency();
+	stats->currency = currency = inventory[CARRIED].count(CURRENCY_ID);
 
 	// check close button
 	if (visible) {
@@ -526,7 +526,7 @@ void MenuInventory::activate(const Point& position) {
 		int power_id = items->items[inventory[CARRIED][slot].item].power;
 
 		// if the power consumes items, make sure we have enough
-		if (powers->powers[power_id].requires_item > 0 && powers->powers[power_id].requires_item_quantity > getItemCountCarried(powers->powers[power_id].requires_item)) {
+		if (powers->powers[power_id].requires_item > 0 && powers->powers[power_id].requires_item_quantity > inventory[CARRIED].count(powers->powers[power_id].requires_item)) {
 			log_msg = msg->get("You don't have enough of the required item.");
 			return;
 		}
@@ -653,7 +653,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 			add(leftover, CARRIED, -1, false, false);
 		}
 
-		applyEquipment(inventory[EQUIPMENT].storage);
+		applyEquipment();
 	}
 
 	// if this item has a power, place it on the action bar if possible
@@ -672,7 +672,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 void MenuInventory::remove(int item) {
 	if( !inventory[CARRIED].remove(item)) {
 		inventory[EQUIPMENT].remove(item);
-		applyEquipment(inventory[EQUIPMENT].storage);
+		applyEquipment();
 	}
 }
 
@@ -681,7 +681,7 @@ void MenuInventory::remove(int item) {
  */
 void MenuInventory::removeEquipped(int item) {
 	inventory[EQUIPMENT].remove(item);
-	applyEquipment(inventory[EQUIPMENT].storage);
+	applyEquipment();
 }
 
 void MenuInventory::removeFromPrevSlot(int quantity) {
@@ -715,13 +715,6 @@ void MenuInventory::removeCurrency(int count) {
 }
 
 /**
- * Count the number of currency items in the inventory
- */
-int MenuInventory::getCurrency() {
-	return getItemCountCarried(CURRENCY_ID);
-}
-
-/**
  * Check if there is enough currency to buy the given stack, and if so remove it from the current total and add the stack.
  * (Handle the drop into the equipment area, but add() don't handle it well in all circonstances. MenuManager::logic() allow only into the carried area.)
  */
@@ -735,7 +728,7 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 	else value_each = items->items[stack.item].getSellPrice();
 
 	int count = value_each * stack.quantity;
-	if( getCurrency() >= count) {
+	if( inventory[CARRIED].count(CURRENCY_ID) >= count) {
 		if (dragging) {
 			drop(inpt->mouse, stack);
 		}
@@ -787,20 +780,6 @@ bool MenuInventory::sell(ItemStack stack) {
 	return true;
 }
 
-/**
- * Get the number of the specified item carried (not equipped)
- */
-int MenuInventory::getItemCountCarried(int item) {
-	return inventory[CARRIED].count(item);
-}
-
-/**
- * Check to see if the given item is equipped
- */
-bool MenuInventory::isItemEquipped(int item) {
-	return inventory[EQUIPMENT].contain(item);
-}
-
 void MenuInventory::updateEquipment(int slot) {
 
 	if (slot == -1) {
@@ -815,7 +794,7 @@ void MenuInventory::updateEquipment(int slot) {
 /**
  * Given the equipped items, calculate the hero's stats
  */
-void MenuInventory::applyEquipment(ItemStack *equipped) {
+void MenuInventory::applyEquipment() {
 	if (items->items.empty())
 		return;
 
@@ -827,7 +806,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		checkRequired = false;
 		stats->offense_additional = stats->defense_additional = stats->physical_additional = stats->mental_additional = 0;
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			item_id = equipped[i].item;
+			item_id = inventory[EQUIPMENT].storage[i].item;
 			const Item &item = items->items[item_id];
 			unsigned bonus_counter = 0;
 			while (bonus_counter < item.bonus.size()) {
@@ -850,7 +829,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		std::vector<int>::iterator it;
 
 		for (int i=0; i<MAX_EQUIPPED; i++) {
-			item_id = equipped[i].item;
+			item_id = inventory[EQUIPMENT].storage[i].item;
 			it = std::find(set.begin(), set.end(), items->items[item_id].set);
 			if (items->items[item_id].set > 0 && it != set.end()) {
 				quantity[std::distance(set.begin(), it)] += 1;
@@ -879,9 +858,9 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 		}
 		// check that each equipped item fit requirements
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
-			if (!items->requirementsMet(stats, equipped[i].item)) {
-				add(equipped[i], CARRIED, -1, true, false);
-				equipped[i].clear();
+			if (!items->requirementsMet(stats, inventory[EQUIPMENT].storage[i].item)) {
+				add(inventory[EQUIPMENT].storage[i], CARRIED, -1, true, false);
+				inventory[EQUIPMENT].storage[i].clear();
 				checkRequired = true;
 			}
 		}
@@ -902,8 +881,8 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	// remove all effects and bonuses added by items
 	stats->effects.clearItemEffects();
 
-	applyItemStats(equipped);
-	applyItemSetBonuses(equipped);
+	applyItemStats();
+	applyItemSetBonuses();
 
 
 	// disable any incompatible slots, unequipping items if neccessary
@@ -925,7 +904,7 @@ void MenuInventory::applyEquipment(ItemStack *equipped) {
 	stats->refresh_stats = true;
 }
 
-void MenuInventory::applyItemStats(ItemStack *equipped) {
+void MenuInventory::applyItemStats() {
 	if (items->items.empty())
 		return;
 
@@ -937,7 +916,7 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 
 	// apply stats from all items
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		int item_id = equipped[i].item;
+		int item_id = inventory[EQUIPMENT].storage[i].item;
 		const Item &item = items->items[item_id];
 
 		// apply base stats
@@ -974,14 +953,14 @@ void MenuInventory::applyItemStats(ItemStack *equipped) {
 	}
 }
 
-void MenuInventory::applyItemSetBonuses(ItemStack *equipped) {
+void MenuInventory::applyItemSetBonuses() {
 	// calculate bonuses. added by item sets
 	std::vector<int> set;
 	std::vector<int> quantity;
 	std::vector<int>::iterator it;
 
 	for (int i=0; i<MAX_EQUIPPED; i++) {
-		int item_id = equipped[i].item;
+		int item_id = inventory[EQUIPMENT].storage[i].item;
 		it = std::find(set.begin(), set.end(), items->items[item_id].set);
 		if (items->items[item_id].set > 0 && it != set.end()) {
 			quantity[std::distance(set.begin(), it)] += 1;

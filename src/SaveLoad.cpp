@@ -443,7 +443,7 @@ void SaveLoad::applyPlayerData() {
 	// initialize vars
 	pc->stats.recalc();
 	pc->stats.loadHeroSFX();
-	menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
+	menu->inv->applyEquipment();
 	pc->stats.logic(); // run stat logic once to apply items bonuses
 
 	// just for aesthetics, turn the hero to face the camera

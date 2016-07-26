@@ -621,7 +621,8 @@ void GameStatePlay::checkUsedItems() {
 		menu->inv->remove(powers->used_items[i]);
 	}
 	for (unsigned i=0; i<powers->used_equipped_items.size(); i++) {
-		menu->inv->removeEquipped(powers->used_equipped_items[i]);
+		menu->inv->inventory[EQUIPMENT].remove(powers->used_equipped_items[i]);
+		menu->inv->applyEquipment();
 	}
 	powers->used_items.clear();
 	powers->used_equipped_items.clear();
@@ -939,7 +940,7 @@ void GameStatePlay::logic() {
 
 		// reapply equipment if the transformation allows it
 		if (pc->stats.transform_with_equipment)
-			menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
+			menu->inv->applyEquipment();
 	}
 	// revert hero powers
 	if (pc->revertPowers) {
@@ -954,7 +955,7 @@ void GameStatePlay::logic() {
 		menu->act->updated = true;
 
 		// also reapply equipment here, to account items that give bonuses to base stats
-		menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
+		menu->inv->applyEquipment();
 	}
 
 	// when the hero (re)spawns, reapply equipment & passive effects
@@ -962,7 +963,7 @@ void GameStatePlay::logic() {
 		pc->stats.alive = true;
 		pc->stats.corpse = false;
 		pc->stats.cur_state = AVATAR_STANCE;
-		menu->inv->applyEquipment(menu->inv->inventory[EQUIPMENT].storage);
+		menu->inv->applyEquipment();
 		menu->inv->changed_equipment = true;
 		checkEquipmentChange();
 		powers->activatePassives(&pc->stats);

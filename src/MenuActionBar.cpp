@@ -262,7 +262,7 @@ void MenuActionBar::logic() {
 
 			if (equipped_item_id > 0) {
 				// if a non-consumable item power is unequipped, disable that slot
-				if (!menu->inv->isItemEquipped(equipped_item_id)) {
+				if (!menu->inv->inventory[EQUIPMENT].contain(equipped_item_id)) {
 					setItemCount(i, 0, true);
 				}
 				else {
@@ -270,7 +270,7 @@ void MenuActionBar::logic() {
 				}
 			}
 			else if (item_id > 0) {
-				setItemCount(i, menu->inv->getItemCountCarried(item_id));
+				setItemCount(i, menu->inv->inventory[CARRIED].count(item_id));
 			}
 			else {
 				setItemCount(i, -1);
