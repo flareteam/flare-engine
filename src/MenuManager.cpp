@@ -842,6 +842,11 @@ void MenuManager::logic() {
 		}
 	}
 
+	// return items that are currently begin dragged when returning to title screen or exiting game
+	if (done || inpt->done) {
+		resetDrag();
+	}
+
 	// handle equipment changes affecting hero stats
 	if (inv->changed_equipment) {
 		inv->applyEquipment(inv->inventory[EQUIPMENT].storage);
