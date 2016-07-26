@@ -249,13 +249,6 @@ bool ItemStorage::full(ItemStack stack) {
 	return true;
 }
 
-bool ItemStorage::full(int item) {
-	ItemStack stack;
-	stack.item = item;
-	stack.quantity = 1;
-	return full(stack);
-}
-
 /**
  * Get the number of the specified item carried (not equipped)
  */
