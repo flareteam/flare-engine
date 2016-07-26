@@ -111,8 +111,8 @@ MenuInventory::MenuInventory(StatBlock *_stats)
 	color_normal = font->getColor("menu_normal");
 	color_high = font->getColor("menu_bonus");
 
-	inventory[EQUIPMENT].init(MAX_EQUIPPED, equipped_area, slot_type);
-	inventory[CARRIED].init(MAX_CARRIED, carried_area, ICON_SIZE, carried_cols);
+	inventory[EQUIPMENT].initFromList(MAX_EQUIPPED, equipped_area, slot_type);
+	inventory[CARRIED].initGrid(MAX_CARRIED, carried_area, carried_cols);
 
 	for (int i = 0; i < MAX_EQUIPPED; i++) {
 		tablist.add(inventory[EQUIPMENT].slots[i]);

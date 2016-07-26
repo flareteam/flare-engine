@@ -40,7 +40,7 @@ MenuItemStorage::MenuItemStorage()
 	, overlay_disabled(NULL) {
 }
 
-void MenuItemStorage::init(int _slot_number, const Rect& _area, int _icon_size, int _nb_cols) {
+void MenuItemStorage::initGrid(int _slot_number, const Rect& _area, int _nb_cols) {
 	ItemStorage::init( _slot_number);
 	grid_area = _area;
 	grid_pos.x = _area.x;
@@ -53,18 +53,15 @@ void MenuItemStorage::init(int _slot_number, const Rect& _area, int _icon_size, 
 	highlight = new bool[_slot_number];
 	for (int i=0; i<_slot_number; i++) {
 		highlight[i] = false;
-		slots[i]->pos.x = grid_area.x + (i % nb_cols * _icon_size);
-		slots[i]->pos.y = grid_area.y + (i / nb_cols * _icon_size);
-		slots[i]->pos.h = slots[i]->pos.w = _icon_size;
+		slots[i]->pos.x = grid_area.x + (i % nb_cols * ICON_SIZE);
+		slots[i]->pos.y = grid_area.y + (i / nb_cols * ICON_SIZE);
+		slots[i]->pos.h = slots[i]->pos.w = ICON_SIZE;
 		slots[i]->setBasePos(slots[i]->pos.x, slots[i]->pos.y);
 	}
 	loadGraphics();
 }
 
-/**
- * Overloaded function for case, if slot positions are predefined
- */
-void MenuItemStorage::init(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type) {
+void MenuItemStorage::initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type) {
 	ItemStorage::init( _slot_number);
 	for (int i = 0; i < _slot_number; i++) {
 		WidgetSlot *slot = new WidgetSlot();
@@ -130,19 +127,10 @@ void MenuItemStorage::render() {
 			}
 		}
 		if (highlight[i] && !slots[i]->in_focus) {
-			renderHighlight(slots[i]->pos.x, slots[i]->pos.y, slots[i]->pos.w);
-		}
-	}
-}
-
-void MenuItemStorage::renderHighlight(int x, int y, int _icon_size) {
-	if (_icon_size == ICON_SIZE) {
-		Rect dest;
-		dest.x = x;
-		dest.y = y;
-		if (highlight_image) {
-			highlight_image->setDest(dest);
-			render_device->render(highlight_image);
+			if (highlight_image) {
+				highlight_image->setDest(slots[i]->pos);
+				render_device->render(highlight_image);
+			}
 		}
 	}
 }

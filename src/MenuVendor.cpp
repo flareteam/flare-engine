@@ -91,8 +91,8 @@ MenuVendor::MenuVendor(StatBlock *_stats)
 	slots_area.w = slots_cols*ICON_SIZE;
 	slots_area.h = slots_rows*ICON_SIZE;
 
-	stock[VENDOR_BUY].init(VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
-	stock[VENDOR_SELL].init(VENDOR_SLOTS, slots_area, ICON_SIZE, slots_cols);
+	stock[VENDOR_BUY].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
+	stock[VENDOR_SELL].initGrid(VENDOR_SLOTS, slots_area, slots_cols);
 	buyback_stock.init(NPC_VENDOR_MAX_STOCK);
 
 	tablist.add(tabControl);

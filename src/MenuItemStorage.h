@@ -36,15 +36,14 @@ class TooltipData;
 class MenuItemStorage : public ItemStorage {
 protected:
 	void loadGraphics();
-	void renderHighlight(int x, int y, int _icon_size);
 	Rect grid_area;
 	Point grid_pos;
 	int nb_cols;
 
 public:
 	MenuItemStorage();
-	void init(int _slot_number, const Rect& _area, int icon_size, int nb_cols);
-	void init(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type);
+	void initGrid(int _slot_number, const Rect& _area, int nb_cols);
+	void initFromList(int _slot_number, const std::vector<Rect>& _area, const std::vector<std::string>& _slot_type);
 	~MenuItemStorage();
 
 	// rendering

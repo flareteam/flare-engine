@@ -92,7 +92,7 @@ MenuStash::MenuStash(StatBlock *_stats)
 	slots_area.w = slots_cols*ICON_SIZE;
 	slots_area.h = slots_rows*ICON_SIZE;
 
-	stock.init( STASH_SLOTS, slots_area, ICON_SIZE, slots_cols);
+	stock.initGrid(STASH_SLOTS, slots_area, slots_cols);
 	for (int i = 0; i < STASH_SLOTS; i++) {
 		tablist.add(stock.slots[i]);
 	}
