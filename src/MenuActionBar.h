@@ -47,8 +47,8 @@ const int ACTIONBAR_MAIN = 10;
 
 class MenuActionBar : public Menu {
 private:
-	void renderCooldowns();
 	FPoint setTarget(bool have_aim, bool aim_assist);
+	void addSlot(unsigned index, int x, int y);
 
 	Sprite *sprite_emptyslot;
 	Sprite *sprite_disabled;
@@ -60,7 +60,6 @@ private:
 	std::vector<std::string> menu_labels;
 
 	Point last_mouse;
-	void addSlot(unsigned index, int x, int y);
 
 public:
 
@@ -68,7 +67,6 @@ public:
 	~MenuActionBar();
 	void align();
 	void loadGraphics();
-	void renderAttention(int menu_id);
 	void logic();
 	void render();
 	void checkAction(std::vector<ActionData> &action_queue);
