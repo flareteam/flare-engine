@@ -54,8 +54,10 @@ void HazardManager::logic() {
 
 	// remove all hazards with lifespan 0.  Most hazards still display their last frame.
 	for (size_t i=h.size(); i>0; i--) {
-		if (h[i-1]->lifespan == 0)
-			expire(i-1);
+		if (h[i-1]->lifespan == 0) {
+			delete h[i-1];
+			h.erase(h.begin()+(i-1));
+		}
 	}
 
 	checkNewHazards();
@@ -66,7 +68,8 @@ void HazardManager::logic() {
 
 		// remove all hazards that need to die immediately (e.g. exit the map)
 		if (h[i-1]->remove_now) {
-			expire(i-1);
+			delete h[i-1];
+			h.erase(h.begin()+(i-1));
 			continue;
 		}
 
@@ -159,7 +162,6 @@ void HazardManager::checkNewHazards() {
 	while (!powers->hazards.empty()) {
 		Hazard *new_haz = powers->hazards.front();
 		powers->hazards.pop();
-		//new_haz->setCollision(collider);
 
 		h.push_back(new_haz);
 	}
@@ -179,17 +181,13 @@ void HazardManager::checkNewHazards() {
 	}
 }
 
-void HazardManager::expire(size_t index) {
-	delete h[index];
-	h.erase(h.begin()+index);
-}
-
 /**
  * Reset all hazards and get new collision object
  */
 void HazardManager::handleNewMap() {
-	for (unsigned int i = 0; i < h.size(); i++)
+	for (unsigned int i = 0; i < h.size(); i++) {
 		delete h[i];
+	}
 	h.clear();
 	last_enemy = NULL;
 }
