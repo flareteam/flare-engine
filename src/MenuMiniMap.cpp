@@ -77,7 +77,7 @@ void MenuMiniMap::align() {
 	label->setPos(window_area.x, window_area.y);
 }
 
-void MenuMiniMap::getMapTitle(const std::string& map_title) {
+void MenuMiniMap::setMapTitle(const std::string& map_title) {
 	label->set(window_area.x+text_pos.x, window_area.y+text_pos.y, text_pos.justify, text_pos.valign, map_title, font->getColor("menu_normal"), text_pos.font_style);
 }
 

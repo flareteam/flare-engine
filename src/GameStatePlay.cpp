@@ -1028,7 +1028,7 @@ void GameStatePlay::render() {
 		menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 		mapr->map_change = false;
 	}
-	menu->mini->getMapTitle(mapr->title);
+	menu->mini->setMapTitle(mapr->title);
 	menu->mini->render(pc->stats.pos);
 	menu->render();
 

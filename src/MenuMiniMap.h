@@ -58,7 +58,7 @@ public:
 	void render();
 	void render(const FPoint& hero_pos);
 	void prerender(MapCollision *collider, int map_w, int map_h);
-	void getMapTitle(const std::string& map_title);
+	void setMapTitle(const std::string& map_title);
 };
 
 
