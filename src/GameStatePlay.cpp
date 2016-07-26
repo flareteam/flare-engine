@@ -1055,10 +1055,6 @@ bool GameStatePlay::isPaused() {
 	return menu->pause;
 }
 
-Avatar *GameStatePlay::getAvatar() const {
-	return pc;
-}
-
 GameStatePlay::~GameStatePlay() {
 	if (loading_bg)	delete loading_bg;
 	delete quests;

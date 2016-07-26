@@ -109,15 +109,10 @@ public:
 	~GameStatePlay();
 	void refreshWidgets();
 
-	void initialize();
-
 	bool isPaused();
 	void logic();
 	void render();
-	void showFPS(int fps);
 	void resetGame();
-
-	Avatar *getAvatar() const;
 };
 
 #endif

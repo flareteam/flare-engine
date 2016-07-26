@@ -296,7 +296,7 @@ void GameStateNew::logic() {
 		inpt->lock_all = true;
 		delete_items = false;
 		GameStatePlay* play = new GameStatePlay();
-		Avatar *avatar = play->getAvatar();
+		Avatar *avatar = pc;
 		avatar->stats.gfx_base = base[current_option];
 		avatar->stats.gfx_head = head[current_option];
 		avatar->stats.gfx_portrait = portrait[current_option];
