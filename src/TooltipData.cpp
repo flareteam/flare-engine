@@ -72,7 +72,7 @@ void TooltipData::clear() {
 	}
 }
 
-void TooltipData::addText(const std::string &text, const Color& color) {
+void TooltipData::addColoredText(const std::string &text, const Color& color) {
 	lines.push_back("");
 	colors.push_back(color);
 	for (unsigned int i=0; i<lines.size(); i++) {
@@ -95,7 +95,7 @@ void TooltipData::addText(const std::string &text, const Color& color) {
 }
 
 void TooltipData::addText(const std::string &text) {
-	addText(text, default_color);
+	addColoredText(text, default_color);
 }
 
 bool TooltipData::isEmpty() {

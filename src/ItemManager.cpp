@@ -618,7 +618,7 @@ TooltipData ItemManager::getShortTooltip(ItemStack stack) {
 	else {
 		ss << getItemName(stack.item);
 	}
-	tip.addText(ss.str(), getItemColor(stack.item));
+	tip.addColoredText(ss.str(), getItemColor(stack.item));
 
 	return tip;
 }
@@ -639,11 +639,11 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		ss << getItemName(stack.item);
 	else
 		ss << getItemName(stack.item) << " (" << stack.quantity << ")";
-	tip.addText(ss.str(), color);
+	tip.addColoredText(ss.str(), color);
 
 	// quest item
 	if (items[stack.item].quest_item) {
-		tip.addText(msg->get("Quest Item"), color_bonus);
+		tip.addColoredText(msg->get("Quest Item"), color_bonus);
 	}
 
 	// only show the name of the currency item
@@ -652,7 +652,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 	// flavor text
 	if (items[stack.item].flavor != "") {
-		tip.addText(substituteVarsInString(items[stack.item].flavor, pc), color_flavor);
+		tip.addColoredText(substituteVarsInString(items[stack.item].flavor, pc), color_flavor);
 	}
 
 	// level
@@ -670,7 +670,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		color = color_normal;
 		for (size_t i=0; i<item_qualities.size(); ++i) {
 			if (item_qualities[i].id == items[stack.item].quality) {
-				tip.addText(msg->get("Quality: %s", msg->get(item_qualities[i].name)), color);
+				tip.addColoredText(msg->get("Quality: %s", msg->get(item_qualities[i].name)), color);
 				break;
 			}
 		}
@@ -727,20 +727,20 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			getBonusString(ss, bdata);
 		}
 
-		tip.addText(ss.str(), color);
+		tip.addColoredText(ss.str(), color);
 		bonus_counter++;
 	}
 
 	// power
 	if (items[stack.item].power_desc != "") {
-		tip.addText(items[stack.item].power_desc, color_bonus);
+		tip.addColoredText(items[stack.item].power_desc, color_bonus);
 	}
 
 	// level requirement
 	if (items[stack.item].requires_level > 0) {
 		if (stats->level < items[stack.item].requires_level) color = color_requirements_not_met;
 		else color = color_normal;
-		tip.addText(msg->get("Requires Level %d", items[stack.item].requires_level), color);
+		tip.addColoredText(msg->get("Requires Level %d", items[stack.item].requires_level), color);
 	}
 
 	// base stat requirement
@@ -749,22 +749,22 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			if (items[stack.item].req_stat[i] == REQUIRES_PHYS) {
 				if (stats->get_physical() < items[stack.item].req_val[i]) color = color_requirements_not_met;
 				else color = color_normal;
-				tip.addText(msg->get("Requires Physical %d", items[stack.item].req_val[i]), color);
+				tip.addColoredText(msg->get("Requires Physical %d", items[stack.item].req_val[i]), color);
 			}
 			else if (items[stack.item].req_stat[i] == REQUIRES_MENT) {
 				if (stats->get_mental() < items[stack.item].req_val[i]) color = color_requirements_not_met;
 				else color = color_normal;
-				tip.addText(msg->get("Requires Mental %d", items[stack.item].req_val[i]), color);
+				tip.addColoredText(msg->get("Requires Mental %d", items[stack.item].req_val[i]), color);
 			}
 			else if (items[stack.item].req_stat[i] == REQUIRES_OFF) {
 				if (stats->get_offense() < items[stack.item].req_val[i]) color = color_requirements_not_met;
 				else color = color_normal;
-				tip.addText(msg->get("Requires Offense %d", items[stack.item].req_val[i]), color);
+				tip.addColoredText(msg->get("Requires Offense %d", items[stack.item].req_val[i]), color);
 			}
 			else if (items[stack.item].req_stat[i] == REQUIRES_DEF) {
 				if (stats->get_defense() < items[stack.item].req_val[i]) color = color_requirements_not_met;
 				else color = color_normal;
-				tip.addText(msg->get("Requires Defense %d", items[stack.item].req_val[i]), color);
+				tip.addColoredText(msg->get("Requires Defense %d", items[stack.item].req_val[i]), color);
 			}
 		}
 	}
@@ -773,7 +773,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	if (items[stack.item].requires_class != "") {
 		if (items[stack.item].requires_class != stats->character_class) color = color_requirements_not_met;
 		else color = color_normal;
-		tip.addText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class)), color);
+		tip.addColoredText(msg->get("Requires Class: %s", msg->get(items[stack.item].requires_class)), color);
 	}
 
 	// buy or sell price
@@ -785,18 +785,18 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
-				tip.addText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
 			else
-				tip.addText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
 		}
 		else if (context == VENDOR_SELL) {
 			price_per_unit = items[stack.item].getSellPrice();
 			if (stats->currency < price_per_unit) color = color_requirements_not_met;
 			else color = color_normal;
 			if (items[stack.item].max_quantity <= 1)
-				tip.addText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s", price_per_unit, CURRENCY), color);
 			else
-				tip.addText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
+				tip.addColoredText(msg->get("Buy Price: %d %s each", price_per_unit, CURRENCY), color);
 		}
 		else if (context == PLAYER_INV) {
 			price_per_unit = items[stack.item].getSellPrice();
@@ -813,7 +813,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		ItemSet set = item_sets[items[stack.item].set];
 		bonus_counter = 0;
 
-		tip.addText("\n" + msg->get("Set: ") + msg->get(item_sets[items[stack.item].set].name), set.color);
+		tip.addColoredText("\n" + msg->get("Set: ") + msg->get(item_sets[items[stack.item].set].name), set.color);
 
 		while (bonus_counter < set.bonus.size()) {
 			ss.str("");
@@ -829,7 +829,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 				getBonusString(ss, bdata);
 			}
 
-			tip.addText(ss.str(), set.color);
+			tip.addColoredText(ss.str(), set.color);
 			bonus_counter++;
 		}
 	}

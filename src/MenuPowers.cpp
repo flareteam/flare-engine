@@ -671,7 +671,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		tip->addText(powers->powers[power_cells[slot_num].id].name);
 
 	if (powers->powers[power_cells[slot_num].id].passive) tip->addText("Passive");
-	tip->addText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), color_flavor);
+	tip->addColoredText(substituteVarsInString(powers->powers[power_cells[slot_num].id].description, pc), color_flavor);
 
 	// add mana cost
 	if (powers->powers[power_cells[slot_num].id].requires_mp > 0) {
@@ -867,7 +867,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				}
 			}
 
-			tip->addText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), color_bonus);
 		}
 	}
 
@@ -904,7 +904,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << " (x" << pwr.count << ")";
 
 			if (!ss.str().empty())
-				tip->addText(ss.str(), color_bonus);
+				tip->addColoredText(ss.str(), color_bonus);
 		}
 
 		// modifier_accuracy
@@ -924,7 +924,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			ss << msg->get("Base Accuracy");
 
 			if (!ss.str().empty())
-				tip->addText(ss.str(), color_bonus);
+				tip->addColoredText(ss.str(), color_bonus);
 		}
 
 		// modifier_critical
@@ -944,28 +944,28 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			ss << msg->get("Base Critical Chance");
 
 			if (!ss.str().empty())
-				tip->addText(ss.str(), color_bonus);
+				tip->addColoredText(ss.str(), color_bonus);
 		}
 
 		if (pwr.trait_armor_penetration) {
 			ss.str("");
 			ss << msg->get("Ignores Absorbtion");
-			tip->addText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), color_bonus);
 		}
 		if (pwr.trait_avoidance_ignore) {
 			ss.str("");
 			ss << msg->get("Ignores Avoidance");
-			tip->addText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), color_bonus);
 		}
 		if (pwr.trait_crits_impaired > 0) {
 			ss.str("");
 			ss << msg->get("%d%% Chance to crit slowed targets", pwr.trait_crits_impaired);
-			tip->addText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), color_bonus);
 		}
 		if (pwr.trait_elemental > -1) {
 			ss.str("");
 			ss << msg->get("%s Elemental Damage", ELEMENTS[pwr.trait_elemental].name.c_str());
-			tip->addText(ss.str(), color_bonus);
+			tip->addColoredText(ss.str(), color_bonus);
 		}
 	}
 
@@ -980,49 +980,49 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 
 	// add requirement
 	if ((power_cells[slot_num].requires_physoff > 0) && (stats->physoff() < power_cells[slot_num].requires_physoff)) {
-		tip->addText(msg->get("Requires Physical Offense %d", power_cells[slot_num].requires_physoff), color_penalty);
+		tip->addColoredText(msg->get("Requires Physical Offense %d", power_cells[slot_num].requires_physoff), color_penalty);
 	}
 	else if((power_cells[slot_num].requires_physoff > 0) && (stats->physoff() >= power_cells[slot_num].requires_physoff)) {
 		tip->addText(msg->get("Requires Physical Offense %d", power_cells[slot_num].requires_physoff));
 	}
 	if ((power_cells[slot_num].requires_physdef > 0) && (stats->physdef() < power_cells[slot_num].requires_physdef)) {
-		tip->addText(msg->get("Requires Physical Defense %d", power_cells[slot_num].requires_physdef), color_penalty);
+		tip->addColoredText(msg->get("Requires Physical Defense %d", power_cells[slot_num].requires_physdef), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_physdef > 0) && (stats->physdef() >= power_cells[slot_num].requires_physdef)) {
 		tip->addText(msg->get("Requires Physical Defense %d", power_cells[slot_num].requires_physdef));
 	}
 	if ((power_cells[slot_num].requires_mentoff > 0) && (stats->mentoff() < power_cells[slot_num].requires_mentoff)) {
-		tip->addText(msg->get("Requires Mental Offense %d", power_cells[slot_num].requires_mentoff), color_penalty);
+		tip->addColoredText(msg->get("Requires Mental Offense %d", power_cells[slot_num].requires_mentoff), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_mentoff > 0) && (stats->mentoff() >= power_cells[slot_num].requires_mentoff)) {
 		tip->addText(msg->get("Requires Mental Offense %d", power_cells[slot_num].requires_mentoff));
 	}
 	if ((power_cells[slot_num].requires_mentdef > 0) && (stats->mentdef() < power_cells[slot_num].requires_mentdef)) {
-		tip->addText(msg->get("Requires Mental Defense %d", power_cells[slot_num].requires_mentdef), color_penalty);
+		tip->addColoredText(msg->get("Requires Mental Defense %d", power_cells[slot_num].requires_mentdef), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_mentdef > 0) && (stats->mentdef() >= power_cells[slot_num].requires_mentdef)) {
 		tip->addText(msg->get("Requires Mental Defense %d", power_cells[slot_num].requires_mentdef));
 	}
 	if ((power_cells[slot_num].requires_offense > 0) && (stats->get_offense() < power_cells[slot_num].requires_offense)) {
-		tip->addText(msg->get("Requires Offense %d", power_cells[slot_num].requires_offense), color_penalty);
+		tip->addColoredText(msg->get("Requires Offense %d", power_cells[slot_num].requires_offense), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_offense > 0) && (stats->get_offense() >= power_cells[slot_num].requires_offense)) {
 		tip->addText(msg->get("Requires Offense %d", power_cells[slot_num].requires_offense));
 	}
 	if ((power_cells[slot_num].requires_defense > 0) && (stats->get_defense() < power_cells[slot_num].requires_defense)) {
-		tip->addText(msg->get("Requires Defense %d", power_cells[slot_num].requires_defense), color_penalty);
+		tip->addColoredText(msg->get("Requires Defense %d", power_cells[slot_num].requires_defense), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_defense > 0) && (stats->get_defense() >= power_cells[slot_num].requires_defense)) {
 		tip->addText(msg->get("Requires Defense %d", power_cells[slot_num].requires_defense));
 	}
 	if ((power_cells[slot_num].requires_physical > 0) && (stats->get_physical() < power_cells[slot_num].requires_physical)) {
-		tip->addText(msg->get("Requires Physical %d", power_cells[slot_num].requires_physical), color_penalty);
+		tip->addColoredText(msg->get("Requires Physical %d", power_cells[slot_num].requires_physical), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_physical > 0) && (stats->get_physical() >= power_cells[slot_num].requires_physical)) {
 		tip->addText(msg->get("Requires Physical %d", power_cells[slot_num].requires_physical));
 	}
 	if ((power_cells[slot_num].requires_mental > 0) && (stats->get_mental() < power_cells[slot_num].requires_mental)) {
-		tip->addText(msg->get("Requires Mental %d", power_cells[slot_num].requires_mental), color_penalty);
+		tip->addColoredText(msg->get("Requires Mental %d", power_cells[slot_num].requires_mental), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_mental > 0) && (stats->get_mental() >= power_cells[slot_num].requires_mental)) {
 		tip->addText(msg->get("Requires Mental %d", power_cells[slot_num].requires_mental));
@@ -1030,7 +1030,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 
 	// Draw required Level Tooltip
 	if ((power_cells[slot_num].requires_level > 0) && stats->level < power_cells[slot_num].requires_level) {
-		tip->addText(msg->get("Requires Level %d", power_cells[slot_num].requires_level), color_penalty);
+		tip->addColoredText(msg->get("Requires Level %d", power_cells[slot_num].requires_level), color_penalty);
 	}
 	else if ((power_cells[slot_num].requires_level > 0) && stats->level >= power_cells[slot_num].requires_level) {
 		tip->addText(msg->get("Requires Level %d", power_cells[slot_num].requires_level));
@@ -1052,7 +1052,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 		// Required Power Tooltip
 		int req_cell_index = getCellByPowerIndex(power_cells[slot_num].requires_power[j], power_cell_all);
 		if (!checkUnlocked(req_cell_index)) {
-			tip->addText(msg->get("Requires Power: %s", req_power_name), color_penalty);
+			tip->addColoredText(msg->get("Requires Power: %s", req_power_name), color_penalty);
 		}
 		else {
 			tip->addText(msg->get("Requires Power: %s", req_power_name));
@@ -1064,11 +1064,11 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	if (power_cells[slot_num].requires_point && !(std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cells[slot_num].id) != stats->powers_list.end())) {
 		int unlock_id = getCellByPowerIndex(power_cells[slot_num].id, power_cell_all);
 		if (show_unlock_prompt && points_left > 0 && checkUnlock(unlock_id)) {
-			tip->addText(msg->get("Click to Unlock (uses 1 Skill Point)"), color_bonus);
+			tip->addColoredText(msg->get("Click to Unlock (uses 1 Skill Point)"), color_bonus);
 		}
 		else {
 			if (power_cells[slot_num].requires_point && points_left < 1)
-				tip->addText(msg->get("Requires 1 Skill Point"), color_penalty);
+				tip->addColoredText(msg->get("Requires 1 Skill Point"), color_penalty);
 			else
 				tip->addText(msg->get("Requires 1 Skill Point"));
 		}
