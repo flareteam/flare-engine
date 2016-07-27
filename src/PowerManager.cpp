@@ -1104,23 +1104,6 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 }
 
 /**
- * A simpler spawn routine for map events
- */
-bool PowerManager::spawn(const std::string& enemy_type, const Point& target) {
-
-	Map_Enemy espawn;
-
-	espawn.type = enemy_type;
-	espawn.pos = target;
-
-	// quick spawns start facing a random direction
-	espawn.direction = rand() % 8;
-
-	enemies.push(espawn);
-	return true;
-}
-
-/**
  * Transform into a creature. Fully replaces entity characteristics
  */
 bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint& target) {

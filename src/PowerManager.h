@@ -392,7 +392,6 @@ public:
 	bool activate(int power_index, StatBlock *src_stats, const FPoint& target);
 	bool canUsePower(unsigned id) const;
 	bool hasValidTarget(int power_index, StatBlock *src_stats, const FPoint& target);
-	bool spawn(const std::string& enemy_type, const Point& target);
 	bool effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type);
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);

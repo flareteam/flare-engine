@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#include "EnemyManager.h"
 #include "EventManager.h"
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
@@ -696,7 +697,7 @@ bool EventManager::executeEvent(Event &ev) {
 			Point spawn_pos;
 			spawn_pos.x = ec->x;
 			spawn_pos.y = ec->y;
-			powers->spawn(ec->s, spawn_pos);
+			enemies->spawn(ec->s, spawn_pos);
 		}
 		else if (ec->type == EC_POWER) {
 			Event_Component *ec_path = ev.getComponent(EC_POWER_PATH);

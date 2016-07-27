@@ -57,6 +57,7 @@ public:
 	void addRenders(std::vector<Renderable> &r, std::vector<Renderable> &r_dead);
 	void checkEnemiesforXP();
 	bool isCleared();
+	void spawn(const std::string& enemy_type, const Point& target);
 	Enemy *enemyFocus(const Point& mouse, const FPoint& cam, bool alive_only);
 	Enemy *getNearestEnemy(const FPoint& pos);
 

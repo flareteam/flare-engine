@@ -482,6 +482,18 @@ bool EnemyManager::isCleared() {
 	return true;
 }
 
+void EnemyManager::spawn(const std::string& enemy_type, const Point& target) {
+	Map_Enemy espawn;
+
+	espawn.type = enemy_type;
+	espawn.pos = target;
+
+	// quick spawns start facing a random direction
+	espawn.direction = rand() % 8;
+
+	powers->enemies.push(espawn);
+}
+
 /**
  * addRenders()
  * Map objects need to be drawn in Z order, so we allow a parent object (GameEngine)
