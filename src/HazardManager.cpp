@@ -94,7 +94,7 @@ void HazardManager::logic() {
 
 					// only check living enemies
 					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemies->enemies[eindex]->stats.hero_ally == h[i]->target_party)) {
-						if (isWithin(h[i]->pos, h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
+						if (isWithinRadius(h[i]->pos, h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
 								h[i]->addEntity(enemies->enemies[eindex]);
 								if (!h[i]->beacon) last_enemy = enemies->enemies[eindex];
@@ -111,7 +111,7 @@ void HazardManager::logic() {
 			// process hazards that can hurt the hero
 			if (h[i]->source_type != SOURCE_TYPE_HERO && h[i]->source_type != SOURCE_TYPE_ALLY) { //enemy or neutral sources
 				if (pc->stats.hp > 0 && h[i]->active) {
-					if (isWithin(h[i]->pos, h[i]->radius, pc->stats.pos)) {
+					if (isWithinRadius(h[i]->pos, h[i]->radius, pc->stats.pos)) {
 						if (!h[i]->hasEntity(pc)) {
 							h[i]->addEntity(pc);
 							// hit!
@@ -125,7 +125,7 @@ void HazardManager::logic() {
 				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
 					// only check living allies
 					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && enemies->enemies[eindex]->stats.hero_ally) {
-						if (isWithin(h[i]->pos, h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
+						if (isWithinRadius(h[i]->pos, h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
 							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
 								h[i]->addEntity(enemies->enemies[eindex]);
 								// hit!

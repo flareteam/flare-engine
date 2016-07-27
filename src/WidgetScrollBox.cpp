@@ -106,7 +106,7 @@ void WidgetScrollBox::scrollUp() {
 
 Point WidgetScrollBox::input_assist(const Point& mouse) {
 	Point new_mouse;
-	if (isWithin(pos,mouse)) {
+	if (isWithinRect(pos,mouse)) {
 		new_mouse.x = mouse.x-pos.x;
 		new_mouse.y = mouse.y-pos.y+cursor;
 	}
@@ -125,7 +125,7 @@ void WidgetScrollBox::logic() {
 void WidgetScrollBox::logic(int x, int y) {
 	Point mouse(x, y);
 
-	if (isWithin(pos,mouse)) {
+	if (isWithinRect(pos,mouse)) {
 		inpt->lock_scroll = true;
 		if (inpt->scroll_up) scrollUp();
 		if (inpt->scroll_down) scrollDown();

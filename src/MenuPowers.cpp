@@ -1294,7 +1294,7 @@ TooltipData MenuPowers::checkTooltip(const Point& mouse) {
 		int cell_index = getCellByPowerIndex(power_cell[i].id, power_cell_all);
 		if (!checkCellVisible(cell_index)) continue;
 
-		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
 			bool base_unlocked = checkUnlocked(cell_index) || std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end();
 
 			createTooltip(&tip, static_cast<int>(i), power_cell, !base_unlocked);
@@ -1320,7 +1320,7 @@ int MenuPowers::click(const Point& mouse) {
 	int active_tab = (tab_control) ? tab_control->getActiveTab() : 0;
 
 	for (size_t i=0; i<power_cell.size(); i++) {
-		if (slots[i] && isWithin(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
+		if (slots[i] && isWithinRect(slots[i]->pos, mouse) && (power_cell[i].tab == active_tab)) {
 			if (TOUCHSCREEN) {
 				if (!slots[i]->in_focus) {
 					slots[i]->in_focus = true;

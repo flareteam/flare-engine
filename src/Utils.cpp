@@ -77,18 +77,6 @@ Point map_to_screen(float x, float y, float camx, float camy) {
 	return r;
 }
 
-Point center_tile(const Point& p) {
-	Point r = p;
-
-	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
-		r.x += TILE_W_HALF;
-		r.y += TILE_H_HALF;
-	}
-	else //TILESET_ISOMETRIC
-		r.y += TILE_H_HALF;
-	return r;
-}
-
 FPoint collision_to_map(const Point& p) {
 	FPoint ret;
 	ret.x = static_cast<float>(p.x) + 0.5f;
@@ -154,19 +142,15 @@ float calcDist(const FPoint& p1, const FPoint& p2) {
 /**
  * is target within the area defined by center and radius?
  */
-bool isWithin(const FPoint& center, float radius, const FPoint& target) {
+bool isWithinRadius(const FPoint& center, float radius, const FPoint& target) {
 	return (calcDist(center, target) < radius);
 }
 
 /**
  * is target within the area defined by rectangle r?
  */
-bool isWithin(const Rect& r, const Point& target) {
+bool isWithinRect(const Rect& r, const Point& target) {
 	return target.x >= r.x && target.y >= r.y && target.x < r.x+r.w && target.y < r.y+r.h;
-}
-
-unsigned char calcDirection(const FPoint &src, const FPoint &dst) {
-	return calcDirection(src.x, src.y, dst.x, dst.y);
 }
 
 unsigned char calcDirection(float x0, float y0, float x1, float y1) {
@@ -443,8 +427,8 @@ bool rectsOverlap(const Rect &a, const Rect &b) {
 	Point b_3(b.x, b.y + b.h);
 	Point b_4(b.x + b.w, b.y + b.h);
 
-	bool a_in_b = isWithin(b, a_1) || isWithin(b, a_2) || isWithin(b, a_3) || isWithin(b, a_4);
-	bool b_in_a = isWithin(a, b_1) || isWithin(a, b_2) || isWithin(a, b_3) || isWithin(a, b_4);
+	bool a_in_b = isWithinRect(b, a_1) || isWithinRect(b, a_2) || isWithinRect(b, a_3) || isWithinRect(b, a_4);
+	bool b_in_a = isWithinRect(a, b_1) || isWithinRect(a, b_2) || isWithinRect(a, b_3) || isWithinRect(a, b_4);
 
 	return a_in_b || b_in_a;
 }

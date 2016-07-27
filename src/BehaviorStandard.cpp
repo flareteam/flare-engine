@@ -265,7 +265,7 @@ void BehaviorStandard::findTarget() {
 
 		std::vector<int> flee_dirs;
 
-		int middle_dir = calcDirection(target_pos, e->stats.pos);
+		int middle_dir = calcDirection(target_pos.x, target_pos.y, e->stats.pos.x, e->stats.pos.y);
 		for (int i = -2; i <= 2; ++i) {
 			int test_dir = rotateDirection(middle_dir, i);
 
@@ -430,7 +430,7 @@ void BehaviorStandard::checkMove() {
 			}
 
 			if (e->stats.charge_speed == 0.0f) {
-				e->stats.direction = calcDirection(e->stats.pos, pursue_pos);
+				e->stats.direction = calcDirection(e->stats.pos.x, e->stats.pos.y, pursue_pos.x, pursue_pos.y);
 			}
 			e->stats.turn_ticks = 0;
 		}

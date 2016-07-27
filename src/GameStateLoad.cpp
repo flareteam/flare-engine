@@ -485,10 +485,10 @@ void GameStateLoad::logic() {
 			Rect scroll_area = slot_pos[0];
 			scroll_area.h = slot_pos[0].h * game_slot_max;
 
-			if (isWithin(scroll_area, inpt->mouse)) {
+			if (isWithinRect(scroll_area, inpt->mouse)) {
 				if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 					for (int i=0; i<visible_slots; ++i) {
-						if (isWithin(slot_pos[i], inpt->mouse)) {
+						if (isWithinRect(slot_pos[i], inpt->mouse)) {
 							inpt->lock[MAIN1] = true;
 							selected_slot = i + scroll_offset;
 							updateButtons();

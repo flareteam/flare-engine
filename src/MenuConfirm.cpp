@@ -94,7 +94,7 @@ void MenuConfirm::logic() {
 
 		// check if the mouse cursor is hovering over the close button
 		// this is for the confirm dialog that shows when changing keybinds
-		isWithinButtons = isWithin(buttonClose->pos, inpt->mouse) || (hasConfirmButton && isWithin(buttonConfirm->pos, inpt->mouse));
+		isWithinButtons = isWithinRect(buttonClose->pos, inpt->mouse) || (hasConfirmButton && isWithinRect(buttonConfirm->pos, inpt->mouse));
 	}
 }
 

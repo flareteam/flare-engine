@@ -72,7 +72,7 @@ bool WidgetInput::logic(int x, int y) {
 	Point mouse(x, y);
 
 	// Change the hover state
-	hover = isWithin(pos, mouse);
+	hover = isWithinRect(pos, mouse);
 
 	if (checkClick()) {
 		inFocus = true;
@@ -80,7 +80,7 @@ bool WidgetInput::logic(int x, int y) {
 
 	// if clicking elsewhere unfocus the text box
 	if (inpt->pressing[MAIN1]) {
-		if (!isWithin(pos, inpt->mouse)) {
+		if (!isWithinRect(pos, inpt->mouse)) {
 			inFocus = false;
 		}
 	}
@@ -187,7 +187,7 @@ bool WidgetInput::checkClick() {
 	if (pressed && !inpt->lock[MAIN1]) {
 		pressed = false;
 
-		if (isWithin(pos, inpt->mouse)) {
+		if (isWithinRect(pos, inpt->mouse)) {
 
 			// activate upon release
 			return true;
@@ -198,7 +198,7 @@ bool WidgetInput::checkClick() {
 
 	// detect new click
 	if (inpt->pressing[MAIN1]) {
-		if (isWithin(pos, inpt->mouse)) {
+		if (isWithinRect(pos, inpt->mouse)) {
 
 			inpt->lock[MAIN1] = true;
 			pressed = true;

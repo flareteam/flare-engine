@@ -87,7 +87,7 @@ void MenuHUDLog::logic() {
 			overlay_area.w = overlay_bg->getGraphicsWidth();
 			overlay_area.h = overlay_bg->getGraphicsHeight();
 
-			if (isWithin(overlay_area, inpt->mouse)) {
+			if (isWithinRect(overlay_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 				hide_overlay = true;
 			}

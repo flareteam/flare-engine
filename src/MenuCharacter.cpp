@@ -505,7 +505,7 @@ void MenuCharacter::render() {
 TooltipData MenuCharacter::checkTooltip() {
 
 	for (int i=0; i<CSTAT_COUNT; i++) {
-		if (isWithin(cstat[i].hover, inpt->mouse) && !cstat[i].tip.isEmpty() && cstat[i].visible)
+		if (isWithinRect(cstat[i].hover, inpt->mouse) && !cstat[i].tip.isEmpty() && cstat[i].visible)
 			return cstat[i].tip;
 	}
 

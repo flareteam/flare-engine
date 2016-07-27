@@ -425,7 +425,7 @@ Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool aliv
 		r.x = p.x - enemies[i]->getRender().offset.x;
 		r.y = p.y - enemies[i]->getRender().offset.y;
 
-		if (isWithin(r, mouse)) {
+		if (isWithinRect(r, mouse)) {
 			Enemy *enemy = enemies[i];
 			return enemy;
 		}

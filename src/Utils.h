@@ -195,16 +195,14 @@ public:
 Point FPointToPoint(const FPoint& fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
 Point map_to_screen(float x, float y, float camx, float camy);
-Point center_tile(const Point& p);
 Point map_to_collision(const FPoint& p);
 FPoint collision_to_map(const Point& p);
 FPoint calcVector(const FPoint& pos, int direction, float dist);
 float calcDist(const FPoint& p1, const FPoint& p2);
 float calcTheta(float x1, float y1, float x2, float y2);
 unsigned char calcDirection(float x0, float y0, float x1, float y1);
-unsigned char calcDirection(const FPoint &src, const FPoint &dst);
-bool isWithin(const FPoint& center, float radius, const FPoint& target);
-bool isWithin(const Rect& r, const Point& target);
+bool isWithinRadius(const FPoint& center, float radius, const FPoint& target);
+bool isWithinRect(const Rect& r, const Point& target);
 
 std::string abbreviateKilo(int amount);
 void alignToScreenEdge(ALIGNMENT alignment, Rect *r);

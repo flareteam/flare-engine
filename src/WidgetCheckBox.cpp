@@ -90,7 +90,7 @@ bool WidgetCheckBox::checkClick (int x, int y) {
 	}
 
 	if (inpt->pressing[MAIN1]) {
-		if (isWithin(pos, mouse)) {
+		if (isWithinRect(pos, mouse)) {
 			pressed = true;
 			inpt->lock[MAIN1] = true;
 		}

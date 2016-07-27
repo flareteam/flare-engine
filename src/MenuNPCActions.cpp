@@ -307,7 +307,7 @@ void MenuNPCActions::logic() {
 		bool got_action = false;
 		for (size_t i=0; i<npc_actions.size(); i++) {
 
-			if (!isWithin(npc_actions[i].rect, inpt->mouse))
+			if (!isWithinRect(npc_actions[i].rect, inpt->mouse))
 				continue;
 
 			got_action = true;

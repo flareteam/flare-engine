@@ -358,7 +358,7 @@ void TabList::logic(bool allow_keyboard) {
 	}
 
 	// If mouse is clicked, defocus current tabindex item
-	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && current_is_valid() && !isWithin(widgets[getCurrent()]->pos, inpt->mouse)) {
+	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && current_is_valid() && !isWithinRect(widgets[getCurrent()]->pos, inpt->mouse)) {
 		defocus();
 	}
 }

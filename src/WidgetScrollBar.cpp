@@ -71,14 +71,14 @@ int WidgetScrollBar::checkClick(int x, int y) {
 	// main click released, so the ScrollBar state goes back to unpressed
 	if (pressed_up && !inpt->lock[MAIN1]) {
 		pressed_up = false;
-		if (isWithin(pos_up, mouse)) {
+		if (isWithinRect(pos_up, mouse)) {
 			// activate upon release
 			return 1;
 		}
 	}
 	if (pressed_down && !inpt->lock[MAIN1]) {
 		pressed_down = false;
-		if (isWithin(pos_down, mouse)) {
+		if (isWithinRect(pos_down, mouse)) {
 			// activate upon release
 			return 2;
 		}
@@ -102,15 +102,15 @@ int WidgetScrollBar::checkClick(int x, int y) {
 
 	// detect new click
 	if (inpt->pressing[MAIN1]) {
-		if (isWithin(pos_up, mouse)) {
+		if (isWithinRect(pos_up, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_up = true;
 		}
-		else if (isWithin(pos_down, mouse)) {
+		else if (isWithinRect(pos_down, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_down = true;
 		}
-		else if (isWithin(pos_knob, mouse)) {
+		else if (isWithinRect(pos_knob, mouse)) {
 			inpt->lock[MAIN1] = true;
 			pressed_knob = true;
 		}

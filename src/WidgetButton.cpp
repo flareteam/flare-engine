@@ -80,7 +80,7 @@ bool WidgetButton::checkClick(int x, int y) {
 	Point mouse(x,y);
 
 	// Change the hover state
-	hover = isWithin(pos, mouse);
+	hover = isWithinRect(pos, mouse);
 
 	// Check the tooltip
 	tip_new = checkTooltip(mouse);
@@ -102,7 +102,7 @@ bool WidgetButton::checkClick(int x, int y) {
 
 	// detect new click
 	if (inpt->pressing[MAIN1]) {
-		if (isWithin(pos, mouse)) {
+		if (isWithinRect(pos, mouse)) {
 
 			inpt->lock[MAIN1] = true;
 			pressed = true;
@@ -180,7 +180,7 @@ void WidgetButton::refresh() {
 TooltipData WidgetButton::checkTooltip(const Point& mouse) {
 	TooltipData _tip;
 
-	if (isWithin(pos, mouse) && tooltip != "") {
+	if (isWithinRect(pos, mouse) && tooltip != "") {
 		_tip.addText(tooltip);
 	}
 

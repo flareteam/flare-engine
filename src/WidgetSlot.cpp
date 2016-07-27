@@ -127,7 +127,7 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	// detect new click
 	// use MAIN1 only for selecting
 	if (inpt->pressing[MAIN1]) {
-		if (isWithin(pos, mouse)) {
+		if (isWithinRect(pos, mouse)) {
 
 			inpt->lock[MAIN1] = true;
 			pressed = true;
@@ -136,7 +136,7 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 	}
 	// use MAIN2 only for activating
 	if (inpt->pressing[MAIN2]) {
-		if (isWithin(pos, mouse)) {
+		if (isWithinRect(pos, mouse)) {
 
 			inpt->lock[MAIN2] = true;
 			pressed = true;
@@ -146,7 +146,7 @@ CLICK_TYPE WidgetSlot::checkClick(int x, int y) {
 
 	// handle touch presses for action bar
 	if (continuous && inpt->touch_locked) {
-		if (isWithin(pos, mouse)) {
+		if (isWithinRect(pos, mouse)) {
 			pressed = true;
 			checked = true;
 			return ACTIVATED;

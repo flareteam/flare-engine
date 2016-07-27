@@ -243,19 +243,19 @@ void MenuInventory::render() {
 }
 
 int MenuInventory::areaOver(const Point& position) {
-	if (isWithin(carried_area, position)) {
+	if (isWithinRect(carried_area, position)) {
 		return CARRIED;
 	}
 	else {
 		for (unsigned int i=0; i<equipped_area.size(); i++) {
-			if (isWithin(equipped_area[i], position)) {
+			if (isWithinRect(equipped_area[i], position)) {
 				return EQUIPMENT;
 			}
 		}
 	}
 
 	// point is inside the inventory menu, but not over a slot
-	if (isWithin(window_area, position)) {
+	if (isWithinRect(window_area, position)) {
 		return INV_WINDOW;
 	}
 

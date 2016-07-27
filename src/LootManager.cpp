@@ -183,7 +183,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			hover.w = TILE_W;
 			hover.h = TILE_H;
 
-			if (LOOT_TOOLTIPS || inpt->pressing[ALT] || isWithin(hover, inpt->mouse)) {
+			if (LOOT_TOOLTIPS || inpt->pressing[ALT] || isWithinRect(hover, inpt->mouse)) {
 				it->tip_visible = true;
 
 				// create tooltip data if needed
@@ -462,7 +462,7 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 				r.h = TILE_H;
 
 				// clicked in pickup hotspot?
-				if ((it->tip_visible && isWithin(it->tip_bounds, mouse)) || isWithin(r, mouse)) {
+				if ((it->tip_visible && isWithinRect(it->tip_bounds, mouse)) || isWithinRect(r, mouse)) {
 					curs->setCursor(CURSOR_INTERACT);
 					if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 						inpt->lock[MAIN1] = true;

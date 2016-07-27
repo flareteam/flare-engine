@@ -331,15 +331,15 @@ void MenuManager::logic() {
 
 	// Stop attacking if the cursor is inside an interactable menu
 	if (stats->attacking) {
-		if (isWithin(act->window_area, inpt->mouse) ||
-			(book->visible && isWithin(book->window_area, inpt->mouse)) ||
-			(chr->visible && isWithin(chr->window_area, inpt->mouse)) ||
-			(inv->visible && isWithin(inv->window_area, inpt->mouse)) ||
-			(vendor->visible && isWithin(vendor->window_area, inpt->mouse)) ||
-			(pow->visible && isWithin(pow->window_area, inpt->mouse)) ||
-			(questlog->visible && isWithin(questlog->window_area, inpt->mouse)) ||
-			(talker->visible && isWithin(talker->window_area, inpt->mouse)) ||
-			(stash->visible && isWithin(stash->window_area, inpt->mouse)))
+		if (isWithinRect(act->window_area, inpt->mouse) ||
+			(book->visible && isWithinRect(book->window_area, inpt->mouse)) ||
+			(chr->visible && isWithinRect(chr->window_area, inpt->mouse)) ||
+			(inv->visible && isWithinRect(inv->window_area, inpt->mouse)) ||
+			(vendor->visible && isWithinRect(vendor->window_area, inpt->mouse)) ||
+			(pow->visible && isWithinRect(pow->window_area, inpt->mouse)) ||
+			(questlog->visible && isWithinRect(questlog->window_area, inpt->mouse)) ||
+			(talker->visible && isWithinRect(talker->window_area, inpt->mouse)) ||
+			(stash->visible && isWithinRect(stash->window_area, inpt->mouse)))
 		{
 			inpt->pressing[MAIN1] = false;
 			inpt->pressing[MAIN2] = false;
@@ -535,19 +535,19 @@ void MenuManager::logic() {
 		// handle right-click
 		if (!mouse_dragging && inpt->pressing[MAIN2] && !inpt->lock[MAIN2]) {
 			// exit menu
-			if (exit->visible && isWithin(exit->window_area, inpt->mouse)) {
+			if (exit->visible && isWithinRect(exit->window_area, inpt->mouse)) {
 				inpt->lock[MAIN2] = true;
 			}
 
 			// book menu
-			if (book->visible && isWithin(book->window_area, inpt->mouse)) {
+			if (book->visible && isWithinRect(book->window_area, inpt->mouse)) {
 				inpt->lock[MAIN2] = true;
 			}
 
 			// activate inventory item
-			else if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
+			else if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
 				inpt->lock[MAIN2] = true;
-				if (isWithin(inv->carried_area, inpt->mouse)) {
+				if (isWithinRect(inv->carried_area, inpt->mouse)) {
 					inv->activate(inpt->mouse);
 				}
 			}
@@ -555,7 +555,7 @@ void MenuManager::logic() {
 
 		// handle left-click for book menu first
 		if (!mouse_dragging && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
-			if (book->visible && isWithin(book->window_area, inpt->mouse)) {
+			if (book->visible && isWithinRect(book->window_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 			}
 		}
@@ -565,22 +565,22 @@ void MenuManager::logic() {
 			resetDrag();
 
 			for (size_t i=0; i<menus.size(); ++i) {
-				if (!menus[i]->visible || !isWithin(menus[i]->window_area, inpt->mouse)) {
+				if (!menus[i]->visible || !isWithinRect(menus[i]->window_area, inpt->mouse)) {
 					menus[i]->defocusTabLists();
 				}
 			}
 
 			// exit menu
-			if (exit->visible && isWithin(exit->window_area, inpt->mouse)) {
+			if (exit->visible && isWithinRect(exit->window_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 			}
 
 
-			if (chr->visible && isWithin(chr->window_area, inpt->mouse)) {
+			if (chr->visible && isWithinRect(chr->window_area, inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 			}
 
-			if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
+			if (vendor->visible && isWithinRect(vendor->window_area,inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 				if (inpt->pressing[CTRL]) {
 					// buy item from a vendor
@@ -611,7 +611,7 @@ void MenuManager::logic() {
 				}
 			}
 
-			if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
+			if (stash->visible && isWithinRect(stash->window_area,inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 				if (inpt->pressing[CTRL]) {
 					// take an item from the stash
@@ -636,12 +636,12 @@ void MenuManager::logic() {
 				}
 			}
 
-			if (questlog->visible && isWithin(questlog->window_area,inpt->mouse)) {
+			if (questlog->visible && isWithinRect(questlog->window_area,inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 			}
 
 			// pick up an inventory item
-			if (inv->visible && isWithin(inv->window_area,inpt->mouse)) {
+			if (inv->visible && isWithinRect(inv->window_area,inpt->mouse)) {
 				if (inpt->pressing[CTRL]) {
 					inpt->lock[MAIN1] = true;
 					stack = inv->click(inpt->mouse);
@@ -676,7 +676,7 @@ void MenuManager::logic() {
 				}
 			}
 			// pick up a power
-			if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
+			if (pow->visible && isWithinRect(pow->window_area,inpt->mouse)) {
 				inpt->lock[MAIN1] = true;
 
 				// check for unlock/dragging
@@ -745,7 +745,7 @@ void MenuManager::logic() {
 			// rearranging inventory or dropping items
 			else if (drag_src == DRAG_SRC_INVENTORY) {
 
-				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
+				if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
 					inv->drop(inpt->mouse, drag_stack);
 				}
 				else if (act->isWithinSlots(inpt->mouse)) {
@@ -758,7 +758,7 @@ void MenuManager::logic() {
 						act->drop(inpt->mouse, items->items[drag_stack.item].power, false);
 					}
 				}
-				else if (vendor->visible && isWithin(vendor->window_area, inpt->mouse)) {
+				else if (vendor->visible && isWithinRect(vendor->window_area, inpt->mouse)) {
 					if (inv->sell( drag_stack)) {
 						vendor->setTab(VENDOR_SELL);
 						vendor->add( drag_stack);
@@ -767,7 +767,7 @@ void MenuManager::logic() {
 						inv->itemReturn(drag_stack);
 					}
 				}
-				else if (stash->visible && isWithin(stash->window_area, inpt->mouse)) {
+				else if (stash->visible && isWithinRect(stash->window_area, inpt->mouse)) {
 					stash->stock.drag_prev_slot = -1;
 					if (!stash->drop(inpt->mouse, drag_stack)) {
 						inv->itemReturn(stash->drop_stack.front());
@@ -794,7 +794,7 @@ void MenuManager::logic() {
 			else if (drag_src == DRAG_SRC_VENDOR) {
 
 				// dropping an item from vendor (we only allow to drop into the carried area)
-				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
+				if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
 					if (!inv->buy(drag_stack, vendor->getTab(), true)) {
 						vendor->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
@@ -808,14 +808,14 @@ void MenuManager::logic() {
 			else if (drag_src == DRAG_SRC_STASH) {
 
 				// dropping an item from stash (we only allow to drop into the carried area)
-				if (inv->visible && isWithin(inv->window_area, inpt->mouse)) {
+				if (inv->visible && isWithinRect(inv->window_area, inpt->mouse)) {
 					if (!inv->drop(inpt->mouse, drag_stack)) {
 						stash->itemReturn(inv->drop_stack.front());
 						inv->drop_stack.pop();
 					}
 					stash->updated = true;
 				}
-				else if (stash->visible && isWithin(stash->window_area, inpt->mouse)) {
+				else if (stash->visible && isWithinRect(stash->window_area, inpt->mouse)) {
 					if (!stash->drop(inpt->mouse,drag_stack)) {
 						drop_stack.push(stash->drop_stack.front());
 						stash->drop_stack.pop();
@@ -1195,23 +1195,23 @@ void MenuManager::render() {
 
 			// Find tooltips depending on mouse position
 			if (!book->visible) {
-				if (chr->visible && isWithin(chr->window_area,inpt->mouse)) {
+				if (chr->visible && isWithinRect(chr->window_area,inpt->mouse)) {
 					tip_new = chr->checkTooltip();
 				}
-				if (vendor->visible && isWithin(vendor->window_area,inpt->mouse)) {
+				if (vendor->visible && isWithinRect(vendor->window_area,inpt->mouse)) {
 					tip_new = vendor->checkTooltip(inpt->mouse);
 				}
-				if (stash->visible && isWithin(stash->window_area,inpt->mouse)) {
+				if (stash->visible && isWithinRect(stash->window_area,inpt->mouse)) {
 					tip_new = stash->checkTooltip(inpt->mouse);
 				}
-				if (pow->visible && isWithin(pow->window_area,inpt->mouse)) {
+				if (pow->visible && isWithinRect(pow->window_area,inpt->mouse)) {
 					tip_new = pow->checkTooltip(inpt->mouse);
 				}
-				if (inv->visible && !mouse_dragging && isWithin(inv->window_area,inpt->mouse)) {
+				if (inv->visible && !mouse_dragging && isWithinRect(inv->window_area,inpt->mouse)) {
 					tip_new = inv->checkTooltip(inpt->mouse);
 				}
 			}
-			if (isWithin(act->window_area,inpt->mouse)) {
+			if (isWithinRect(act->window_area,inpt->mouse)) {
 				tip_new = act->checkTooltip(inpt->mouse);
 			}
 

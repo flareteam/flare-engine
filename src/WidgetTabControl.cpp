@@ -167,10 +167,10 @@ void WidgetTabControl::logic() {
 void WidgetTabControl::logic(int x, int y) {
 	Point mouse(x, y);
 	// If the click was in the tabs area;
-	if(isWithin(tabs_area, mouse) && inpt->pressing[MAIN1]) {
+	if(isWithinRect(tabs_area, mouse) && inpt->pressing[MAIN1]) {
 		// Mark the clicked tab as active_tab.
 		for (unsigned i=0; i<tabs.size(); i++) {
-			if(isWithin(tabs[i], mouse)) {
+			if(isWithinRect(tabs[i], mouse)) {
 				active_tab = i;
 				return;
 			}

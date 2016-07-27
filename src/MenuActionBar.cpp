@@ -369,7 +369,7 @@ void MenuActionBar::render() {
 TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 	TooltipData tip;
 
-	if (isWithin(menus[MENU_CHARACTER]->pos, mouse)) {
+	if (isWithinRect(menus[MENU_CHARACTER]->pos, mouse)) {
 		if (COLORBLIND && requires_attention[MENU_CHARACTER])
 			tip.addText(msg->get("Character") + " (*)");
 		else
@@ -378,7 +378,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 		tip.addText(menu_labels[MENU_CHARACTER]);
 		return tip;
 	}
-	if (isWithin(menus[MENU_INVENTORY]->pos, mouse)) {
+	if (isWithinRect(menus[MENU_INVENTORY]->pos, mouse)) {
 		if (COLORBLIND && requires_attention[MENU_INVENTORY])
 			tip.addText(msg->get("Inventory") + " (*)");
 		else
@@ -387,7 +387,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 		tip.addText(menu_labels[MENU_INVENTORY]);
 		return tip;
 	}
-	if (isWithin(menus[MENU_POWERS]->pos, mouse)) {
+	if (isWithinRect(menus[MENU_POWERS]->pos, mouse)) {
 		if (COLORBLIND && requires_attention[MENU_POWERS])
 			tip.addText(msg->get("Powers") + " (*)");
 		else
@@ -396,7 +396,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 		tip.addText(menu_labels[MENU_POWERS]);
 		return tip;
 	}
-	if (isWithin(menus[MENU_LOG]->pos, mouse)) {
+	if (isWithinRect(menus[MENU_LOG]->pos, mouse)) {
 		if (COLORBLIND && requires_attention[MENU_LOG])
 			tip.addText(msg->get("Log") + " (*)");
 		else
@@ -406,7 +406,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
 		return tip;
 	}
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
 			if (hotkeys_mod[i] != 0) {
 				tip.addText(powers->powers[hotkeys_mod[i]].name);
 			}
@@ -422,7 +422,7 @@ TooltipData MenuActionBar::checkTooltip(const Point& mouse) {
  */
 void MenuActionBar::drop(const Point& mouse, int power_index, bool rearranging) {
 	for (unsigned i = 0; i < slots_count; i++) {
-		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
 			if (rearranging) {
 				if ((locked[i] && !locked[drag_prev_slot]) || (!locked[i] && locked[drag_prev_slot])) {
 					locked[i] = !locked[i];
@@ -450,7 +450,7 @@ void MenuActionBar::actionReturn(int power_index) {
  */
 void MenuActionBar::remove(const Point& mouse) {
 	for (unsigned i=0; i<slots_count; i++) {
-		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
 			if (locked[i]) return;
 			hotkeys[i] = 0;
 			updated = true;
@@ -521,12 +521,12 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
 			}
-			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !isWithin(window_area, inpt->mouse)) {
+			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !isWithinRect(window_area, inpt->mouse)) {
 				have_aim = true;
 				action.power = hotkeys_mod[10];
 				twostep_slot = -1;
 			}
-			else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2] && !isWithin(window_area, inpt->mouse)) {
+			else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2] && !isWithinRect(window_area, inpt->mouse)) {
 				have_aim = true;
 				action.power = hotkeys_mod[11];
 				twostep_slot = -1;
@@ -579,7 +579,7 @@ int MenuActionBar::checkDrag(const Point& mouse) {
 	int power_index;
 
 	for (unsigned i=0; i<slots_count; i++) {
-		if (slots[i] && isWithin(slots[i]->pos, mouse)) {
+		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
 			drag_prev_slot = i;
 			power_index = hotkeys[i];
 			hotkeys[i] = 0;
@@ -692,7 +692,7 @@ void MenuActionBar::setItemCount(unsigned index, int count, bool is_equipped) {
 
 bool MenuActionBar::isWithinSlots(const Point& mouse) {
 	for (unsigned i=0; i<slots_count; i++) {
-		if (slots[i] && isWithin(slots[i]->pos, mouse))
+		if (slots[i] && isWithinRect(slots[i]->pos, mouse))
 			return true;
 	}
 	return false;
@@ -700,7 +700,7 @@ bool MenuActionBar::isWithinSlots(const Point& mouse) {
 
 bool MenuActionBar::isWithinMenus(const Point& mouse) {
 	for (unsigned i=0; i<4; i++) {
-		if (isWithin(menus[i]->pos, mouse))
+		if (isWithinRect(menus[i]->pos, mouse))
 			return true;
 	}
 	return false;

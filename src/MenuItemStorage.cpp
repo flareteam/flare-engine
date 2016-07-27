@@ -136,12 +136,12 @@ void MenuItemStorage::render() {
 }
 
 int MenuItemStorage::slotOver(const Point& position) {
-	if (isWithin(grid_area, position) && nb_cols > 0) {
+	if (isWithinRect(grid_area, position) && nb_cols > 0) {
 		return (position.x - grid_area.x) / slots[0]->pos.w + (position.y - grid_area.y) / slots[0]->pos.w * nb_cols;
 	}
 	else if (nb_cols == 0) {
 		for (unsigned int i=0; i<slots.size(); i++) {
-			if (isWithin(slots[i]->pos, position)) return i;
+			if (isWithinRect(slots[i]->pos, position)) return i;
 		}
 	}
 	return -1;

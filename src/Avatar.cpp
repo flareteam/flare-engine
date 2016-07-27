@@ -290,7 +290,7 @@ void Avatar::set_direction() {
 	// handle direction changes
 	if (MOUSE_MOVE) {
 		FPoint target = screen_to_map(inpt->mouse.x, inpt->mouse.y, stats.pos.x, stats.pos.y);
-		stats.direction = calcDirection(stats.pos, target);
+		stats.direction = calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 	}
 	else {
 		if (inpt->pressing[UP] && !inpt->lock[UP] && inpt->pressing[LEFT] && !inpt->lock[LEFT]) stats.direction = 1;
@@ -676,7 +676,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					// is this a power that requires changing direction?
 					if (power.face) {
-						stats.direction = calcDirection(stats.pos, target);
+						stats.direction = calcDirection(stats.pos.x, stats.pos.y, target.x, target.y);
 					}
 
 					if (power.new_state != POWSTATE_INSTANT) {

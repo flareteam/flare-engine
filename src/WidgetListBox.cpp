@@ -88,7 +88,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 	scroll_area.w = rows[0].w;
 	scroll_area.h = rows[0].h * static_cast<int>(rows.size());
 
-	if (isWithin(scroll_area,mouse)) {
+	if (isWithinRect(scroll_area,mouse)) {
 		inpt->lock_scroll = true;
 		if (inpt->scroll_up) scrollUp();
 		if (inpt->scroll_down) scrollDown();
@@ -124,7 +124,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 
 		for(unsigned i=0; i<rows.size(); i++) {
 			if (i<items.size()) {
-				if (isWithin(rows[i], mouse) && items[i+cursor].value != "") {
+				if (isWithinRect(rows[i], mouse) && items[i+cursor].value != "") {
 					// deselect other options if multi-select is disabled
 					if (!multi_select) {
 						for (unsigned j=0; j<items.size(); j++) {
@@ -151,7 +151,7 @@ bool WidgetListBox::checkClick(int x, int y) {
 	// detect new click
 	if (inpt->pressing[MAIN1]) {
 		for (unsigned i=0; i<rows.size(); i++) {
-			if (isWithin(rows[i], mouse)) {
+			if (isWithinRect(rows[i], mouse)) {
 
 				inpt->lock[MAIN1] = true;
 				pressed = true;
@@ -173,7 +173,7 @@ TooltipData WidgetListBox::checkTooltip(const Point& mouse) {
 
 	for(unsigned i=0; i<rows.size(); i++) {
 		if (i<items.size()) {
-			if (isWithin(rows[i], mouse) && items[i+cursor].tooltip != "") {
+			if (isWithinRect(rows[i], mouse) && items[i+cursor].tooltip != "") {
 				_tip.addText(items[i+cursor].tooltip);
 				break;
 			}
