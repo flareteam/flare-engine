@@ -292,7 +292,7 @@ void Scene::render() {
 				}
 			}
 			else if (vsc.image) {
-				Point dest = floor(vsc.image->getDest());
+				Point dest = FPointToPoint(vsc.image->getDest());
 				if (dest.y <= VIEW_H && (dest.y + vsc.image_size.y >= 0)) {
 					render_device->render(vsc.image);
 				}

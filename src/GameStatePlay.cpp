@@ -275,7 +275,7 @@ void GameStatePlay::checkTeleport() {
 		// if we're not changing map, move allies to a the player's new position
 		// when changing maps, enemies->handleNewMap() does something similar to this
 		if (mapr->teleport_mapname == "") {
-			FPoint spawn_pos = mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1, false);
+			FPoint spawn_pos = mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1, false);
 			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
 				if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
 					mapr->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
@@ -792,7 +792,7 @@ void GameStatePlay::checkCutscene() {
 
 	}
 	else {
-		mapr->respawn_point = floor(pc->stats.pos);
+		mapr->respawn_point = FPointToPoint(pc->stats.pos);
 	}
 
 	if (SAVE_ONLOAD)
@@ -804,7 +804,7 @@ void GameStatePlay::checkCutscene() {
 
 void GameStatePlay::checkSaveEvent() {
 	if (mapr->save_game) {
-		mapr->respawn_point = floor(pc->stats.pos);
+		mapr->respawn_point = FPointToPoint(pc->stats.pos);
 		save_load->saveGame();
 		mapr->save_game = false;
 	}

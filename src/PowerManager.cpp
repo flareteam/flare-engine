@@ -740,7 +740,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 
 	if (powers[power_index].target_neighbor > 0) {
-		haz->pos = collider->get_random_neighbor(floor(src_stats->pos), powers[power_index].target_neighbor, true);
+		haz->pos = collider->get_random_neighbor(FPointToPoint(src_stats->pos), powers[power_index].target_neighbor, true);
 	}
 
 	if (powers[power_index].relative_pos) {
@@ -784,7 +784,7 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 	if (powers[power_index].buff_teleport) {
 		FPoint limit_target = clampDistance(powers[power_index].target_range,src_stats->pos,target);
 		if (powers[power_index].target_neighbor > 0) {
-			FPoint new_target = collider->get_random_neighbor(floor(limit_target), powers[power_index].target_neighbor);
+			FPoint new_target = collider->get_random_neighbor(FPointToPoint(limit_target), powers[power_index].target_neighbor);
 			if (floor(new_target.x) == floor(limit_target.x) && floor(new_target.y) == floor(limit_target.y)) {
 				src_stats->teleportation = false;
 			}
@@ -1076,7 +1076,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 	}
 
 	if (target_neighbor > 0) {
-		espawn.pos = floor(collider->get_random_neighbor(floor(src_stats->pos), target_neighbor));
+		espawn.pos = FPointToPoint(collider->get_random_neighbor(FPointToPoint(src_stats->pos), target_neighbor));
 	}
 
 	// can't spawn on a blocked tile

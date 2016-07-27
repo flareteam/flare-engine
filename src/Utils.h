@@ -192,7 +192,7 @@ public:
 	}
 };
 
-Point floor(const FPoint& fp);
+Point FPointToPoint(const FPoint& fp);
 FPoint screen_to_map(int x, int y, float camx, float camy);
 Point map_to_screen(float x, float y, float camx, float camy);
 Point center_tile(const Point& p);

@@ -31,7 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <ctype.h>
 #include <iomanip>
 
-Point floor(const FPoint& fp) {
+Point FPointToPoint(const FPoint& fp) {
 	Point result;
 	result.x = int(fp.x);
 	result.y = int(fp.y);

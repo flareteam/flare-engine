@@ -166,7 +166,7 @@ void EnemyManager::handleNewMap () {
 		mapr->collider.block(me.pos.x, me.pos.y, false);
 	}
 
-	FPoint spawn_pos = mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1, false);
+	FPoint spawn_pos = mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1, false);
 	while (!allies.empty()) {
 
 		Enemy *e = allies.front();

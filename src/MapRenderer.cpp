@@ -322,7 +322,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	int_fast16_t i; // first index of the map array
 	int_fast16_t j; // second index of the map array
 	Point dest;
-	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2*tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / TILE_H) + 2*tset.max_size_y);
 
@@ -390,7 +390,7 @@ void MapRenderer::renderIsoBackObjects(std::vector<Renderable> &r) {
 void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 	Point dest;
 
-	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width = static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2 * tset.max_size_x);
 	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>(((VIEW_H / TILE_H) + 2 * tset.max_size_y)*2);
 
@@ -478,7 +478,7 @@ void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> 
 void MapRenderer::renderOrthoLayer(const Map_Layer& layerdata) {
 
 	Point dest;
-	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
@@ -520,7 +520,7 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 	std::vector<Renderable>::iterator r_cursor = r.begin();
 	std::vector<Renderable>::iterator r_end = r.end();
 
-	const Point upperleft = floor(screen_to_map(0, 0, shakycam.x, shakycam.y));
+	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
 
 	short int startj = static_cast<short int>(std::max(0, upperleft.y));
 	short int starti = static_cast<short int>(std::max(0, upperleft.x));
@@ -736,7 +736,7 @@ void MapRenderer::checkHotspots() {
 					// new tooltip?
 					createTooltip((*it).getComponent(EC_TOOLTIP));
 
-					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, floor(cam)))
+					if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, FPointToPoint(cam)))
 							&& calcDist(cam, (*it).center) < INTERACT_RANGE) {
 
 						// only check events if the player is clicking
@@ -783,7 +783,7 @@ void MapRenderer::checkNearestEvent() {
 		if ((*it).cooldown_ticks != 0) continue;
 
 		float distance = calcDist(cam, (*it).center);
-		if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, floor(cam)))
+		if ((((*it).reachable_from.w == 0 && (*it).reachable_from.h == 0) || isWithin((*it).reachable_from, FPointToPoint(cam)))
 				&& distance < INTERACT_RANGE && distance < best_distance) {
 			best_distance = distance;
 			nearest = it;

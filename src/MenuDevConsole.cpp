@@ -242,7 +242,7 @@ void MenuDevConsole::execute() {
 					spawn_pos.x = toInt(args[2]);
 					spawn_pos.y = toInt(args[3]);
 				} else {
-					spawn_pos = floor(mapr->collider.get_random_neighbor(floor(pc->stats.pos), 1));
+					spawn_pos = FPointToPoint(mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1));
 				}
 				enemies->spawn(args[1], spawn_pos);
 				log_history->add(msg->get("Spawning enemy from category: ") + args[1]);

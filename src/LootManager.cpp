@@ -290,7 +290,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 		if (ec->z == 0) {
 			Point src;
 			if (pos) {
-				src = floor(*pos);
+				src = FPointToPoint(*pos);
 			}
 			else {
 				src.x = ec->x;
@@ -306,7 +306,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 					p = hero->pos;
 
 				mapr->collider.block(p.x, p.y, false);
-				tiles_to_unblock.push_back(floor(p));
+				tiles_to_unblock.push_back(FPointToPoint(p));
 			}
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
@@ -363,7 +363,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 
 		Point src;
 		if (pos) {
-			src = floor(*pos);
+			src = FPointToPoint(*pos);
 		}
 		else {
 			src.x = ec->x;
@@ -379,7 +379,7 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 				p = hero->pos;
 
 			mapr->collider.block(p.x, p.y, false);
-			tiles_to_unblock.push_back(floor(p));
+			tiles_to_unblock.push_back(FPointToPoint(p));
 		}
 
 		new_loot.quantity = randBetween(ec->a,ec->b);
