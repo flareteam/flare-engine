@@ -45,7 +45,6 @@ public:
 private:
 	void applyPlayerData();
 	void loadPowerTree();
-	bool gameSlotIsValid();
 
 	int game_slot;
 };

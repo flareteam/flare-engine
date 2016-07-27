@@ -60,7 +60,7 @@ SaveLoad::~SaveLoad() {
  */
 void SaveLoad::saveGame() {
 
-	if (!gameSlotIsValid()) return;
+	if (game_slot <= 0) return;
 
 	// if needed, create the save file structure
 	createSaveDir(game_slot);
@@ -201,11 +201,11 @@ void SaveLoad::saveGame() {
  * When loading the game, load from file if possible
  */
 void SaveLoad::loadGame() {
+	if (game_slot <= 0) return;
+
 	int saved_hp = 0;
 	int saved_mp = 0;
 	int currency = 0;
-
-	if (!gameSlotIsValid()) return;
 
 	FileParser infile;
 	std::vector<int> hotkeys(ACTIONBAR_MAX, -1);
@@ -359,12 +359,12 @@ void SaveLoad::loadGame() {
  * Load a class definition, index
  */
 void SaveLoad::loadClass(int index) {
+	if (game_slot <= 0) return;
+
 	if (index < 0 || static_cast<unsigned>(index) >= HERO_CLASSES.size()) {
 		logError("SaveLoad: Class index out of bounds.");
 		return;
 	}
-
-	if (!gameSlotIsValid()) return;
 
 	pc->stats.character_class = HERO_CLASSES[index].name;
 	pc->stats.physical_character += HERO_CLASSES[index].physical;
@@ -475,7 +475,3 @@ void SaveLoad::loadPowerTree() {
 	menu->pow->loadPowerTree("powers/trees/default.txt");
 }
 
-bool SaveLoad::gameSlotIsValid() {
-	// minimum game slot is 1
-	return (game_slot >= 1);
-}
