@@ -307,6 +307,12 @@ void GameStatePlay::checkTeleport() {
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 			npc_id = nearest_npc = -1;
 
+			// use the default hero spawn position for this map
+			if (mapr->teleport_destination.x == -1 && mapr->teleport_destination.y == -1) {
+				mapr->cam.x = pc->stats.pos.x = mapr->hero_pos.x;
+				mapr->cam.y = pc->stats.pos.y = mapr->hero_pos.y;
+			}
+
 			// store this as the new respawn point (provided the tile is open)
 			if (mapr->collider.is_valid_position(pc->stats.pos.x, pc->stats.pos.y, MOVEMENT_NORMAL, true)) {
 				mapr->respawn_map = teleport_mapname;

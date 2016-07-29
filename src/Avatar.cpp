@@ -104,9 +104,10 @@ void Avatar::init() {
 	// other init
 	sprites = 0;
 	stats.cur_state = AVATAR_STANCE;
-	stats.pos.x = mapr->spawn.x;
-	stats.pos.y = mapr->spawn.y;
-	stats.direction = mapr->spawn_dir;
+	if (mapr->hero_pos_enabled) {
+		stats.pos.x = mapr->hero_pos.x;
+		stats.pos.y = mapr->hero_pos.y;
+	}
 	current_power = 0;
 	newLevelNotification = false;
 

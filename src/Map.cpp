@@ -32,8 +32,8 @@ Map::Map()
 	, events()
 	, w(1)
 	, h(1)
-	, spawn()
-	, spawn_dir(0) {
+	, hero_pos_enabled(false)
+	, hero_pos() {
 }
 
 Map::~Map() {
@@ -68,6 +68,13 @@ int Map::load(const std::string& fname) {
 	clearQueues();
 
 	music_filename = "";
+
+	collision_layer = -1;
+	w = 1;
+	h = 1;
+	hero_pos_enabled = false;
+	hero_pos.x = 0;
+	hero_pos.y = 0;
 
 	// @CLASS Map|Description of maps/
 	if (!infile.open(fname))
@@ -151,7 +158,7 @@ int Map::load(const std::string& fname) {
 		}
 	}
 
-	// ensure that our map contains a collison layer
+	// ensure that our map contains a collision layer
 	if (std::find(layernames.begin(), layernames.end(), "collision") == layernames.end()) {
 		layernames.push_back("collision");
 		layers.resize(layers.size()+1);
@@ -160,6 +167,10 @@ int Map::load(const std::string& fname) {
 			layers.back()[i].resize(h, 0);
 		}
 		collision_layer = static_cast<int>(layers.size())-1;
+	}
+
+	if (!hero_pos_enabled) {
+		logError("Map: Hero spawn position (hero_pos) not defined in map header. Defaulting to (0,0).");
 	}
 
 	return 0;
@@ -186,11 +197,11 @@ void Map::loadHeader(FileParser &infile) {
 		// @ATTR music|filename|Filename of background music to use for map
 		music_filename = infile.val;
 	}
-	else if (infile.key == "location") {
-		// @ATTR location|int, int, direction : X, Y, Direction|Spawn point location in map
-		spawn.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
-		spawn.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
-		spawn_dir = static_cast<unsigned char>(parse_direction(popFirstString(infile.val)));
+	else if (infile.key == "hero_pos") {
+		// @ATTR hero_pos|point|The player will spawn in this location if no point was previously given.
+		hero_pos.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+		hero_pos.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+		hero_pos_enabled = true;
 	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.

@@ -158,8 +158,8 @@ public:
 	std::string title;
 	unsigned short w;
 	unsigned short h;
-	FPoint spawn;
-	unsigned char spawn_dir;
+	bool hero_pos_enabled;
+	FPoint hero_pos;
 
 };
 

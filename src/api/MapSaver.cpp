@@ -126,6 +126,7 @@ void MapSaver::writeHeader(std::ofstream& map_file)
 	map_file << "music=" << map->music_filename << std::endl;
 	map_file << "tileset=" << map->getTileset() << std::endl;
 	map_file << "title=" << map->title << std::endl;
+	map_file << "hero_pos" << static_cast<int>(map->hero_pos.x) << "," << static_cast<int>(map->hero_pos.y) << std::endl;
 
 	map_file << std::endl;
 }

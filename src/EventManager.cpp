@@ -207,8 +207,14 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->type = EC_INTERMAP;
 
 		e->s = popFirstString(val);
-		e->x = popFirstInt(val);
-		e->y = popFirstInt(val);
+		e->x = -1;
+		e->y = -1;
+
+		std::string test_x = popFirstString(val);
+		if (!test_x.empty()) {
+			e->x = toInt(test_x);
+			e->y = popFirstInt(val);
+		}
 	}
 	else if (key == "intramap") {
 		// @ATTR event.intramap|int, int : X, Y|Jump to specific position within current map.
@@ -607,8 +613,16 @@ bool EventManager::executeEvent(Event &ev) {
 			if (fileExists(mods->locate(ec->s))) {
 				mapr->teleportation = true;
 				mapr->teleport_mapname = ec->s;
-				mapr->teleport_destination.x = static_cast<float>(ec->x) + 0.5f;
-				mapr->teleport_destination.y = static_cast<float>(ec->y) + 0.5f;
+
+				if (ec->x == -1 && ec->y == -1) {
+					// the teleport destination will be set to the map's hero_pos once the map is loaded
+					mapr->teleport_destination.x = -1;
+					mapr->teleport_destination.y = -1;
+				}
+				else {
+					mapr->teleport_destination.x = static_cast<float>(ec->x) + 0.5f;
+					mapr->teleport_destination.y = static_cast<float>(ec->y) + 0.5f;
+				}
 			}
 			else {
 				ev.keep_after_trigger = false;
