@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 MenuDevConsole::MenuDevConsole()
 	: Menu()
+	, first_open(false)
 	, input_scrollback_pos(0)
 {
 
@@ -112,6 +113,13 @@ void MenuDevConsole::align() {
 
 void MenuDevConsole::logic() {
 	if (visible) {
+		if (!first_open) {
+			first_open = true;
+			log_history->add("exec \"msg=Hello World\"");
+			log_history->add(msg->get("Arguments with spaces should be enclosed with double quotes. Example:"));
+			log_history->add(msg->get("Type 'help' to get a list of commands. "));
+		}
+
 		if (!input_box->inFocus) {
 			tablist.logic();
 		}
@@ -197,7 +205,15 @@ void MenuDevConsole::execute() {
 	std::string arg = popFirstString(command, ' ');
 	while (arg != "") {
 		args.push_back(arg);
-		arg = popFirstString(command, ' ');
+
+		if (!command.empty() && command.at(0) == '"') {
+			command = command.substr(1); // remove first quote
+			arg = popFirstString(command, '"');
+			command = command.substr(1); // remove trailing space
+		}
+		else {
+			arg = popFirstString(command, ' ');
+		}
 	}
 
 
@@ -206,19 +222,12 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
-		log_history->add("remove_item - " + msg->get("Removes an item of a given ID from the player's inventory"), false);
-		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), false);
-		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), false);
-		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
-		log_history->add("teleport - " + msg->get("teleports the player to a specific tile, and optionally, a specific map"), false);
-		log_history->add("unset_status - " + msg->get("unsets the given campaign statuses if they are set"), false);
-		log_history->add("set_status - " + msg->get("sets the given campaign statuses"), false);
-		log_history->add("give_xp - " + msg->get("rewards the player with the specified amount of experience points"), false);
-		log_history->add("give_currency - " + msg->get("adds the specified amount of currency to the player's inventory"), false);
-		log_history->add("give_item - " + msg->get("adds an item to the player's inventory"), false);
-		log_history->add("spawn_enemy - " + msg->get("spawns an enemy matching the given category next to the player"), false);
 		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), false);
 		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), false);
+		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
+		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), false);
+		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), false);
+		log_history->add("exec - " + msg->get("parses a series of event components and executes them as a single event"), false);
 		log_history->add("clear - " + msg->get("clears the command history"), false);
 		log_history->add("help - " + msg->get("displays this text"), false);
 	}
@@ -232,134 +241,6 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "toggle_hud") {
 		SHOW_HUD = !SHOW_HUD;
 		log_history->add(msg->get("Toggled the hud"), false);
-	}
-	else if (args[0] == "spawn_enemy") {
-		if (args.size() > 1) {
-			Enemy_Level el = enemyg->getRandomEnemy(args[1], 0, 0);
-			if (el.type != "") {
-				Point spawn_pos;
-				if (args.size() == 4) {
-					spawn_pos.x = toInt(args[2]);
-					spawn_pos.y = toInt(args[3]);
-				} else {
-					spawn_pos = FPointToPoint(mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1));
-				}
-				enemies->spawn(args[1], spawn_pos);
-				log_history->add(msg->get("Spawning enemy from category: ") + args[1]);
-			}
-			else {
-				log_history->add(msg->get("ERROR: Invalid enemy category"), false, &color_error);
-			}
-		}
-		else {
-			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <category> [<x> <y>]"), false, &color_hint);
-		}
-	}
-	else if (args[0] == "give_item") {
-		if (args.size() > 1) {
-			int id = toInt(args[1]);
-			if (id <= 0 || static_cast<unsigned>(id) >= items->items.size()) {
-				log_history->add(msg->get("ERROR: Invalid item ID"), false, &color_error);
-				return;
-			}
-
-			int quantity = (args.size() > 2) ? toInt(args[2]) : 1;
-
-			if (quantity > 0) {
-				if (id == CURRENCY_ID) {
-					camp->rewardCurrency(quantity);
-				}
-				else {
-					ItemStack stack;
-					stack.item = id;
-					stack.quantity = quantity;
-					camp->rewardItem(stack);
-				}
-				log_history->add(msg->get("Added item: ") + items->getItemName(id) + " (" + toString(typeid(int), &quantity) + ")", false);
-			}
-		}
-		else {
-			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <item_id> [<quantity>]"), false, &color_hint);
-		}
-	}
-	else if (args[0] == "give_currency") {
-		int quantity = (args.size() > 1) ? toInt(args[1]) : 0;
-		if (quantity > 0) {
-			camp->rewardCurrency(quantity);
-			log_history->add(msg->get("Added currency: ") + toString(typeid(int), &quantity), false);
-		}
-		if (args.size() < 2) {
-			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <quantity>"), false, &color_hint);
-		}
-	}
-	else if (args[0] == "give_xp") {
-		int quantity = (args.size() > 1) ? toInt(args[1]) : 0;
-		if (quantity > 0) {
-			camp->rewardXP(quantity, true);
-			log_history->add(msg->get("Added XP: ") + toString(typeid(int), &quantity), false);
-		}
-		if (args.size() < 2) {
-			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <quantity>"), false, &color_hint);
-		}
-	}
-	else if (args[0] == "set_status") {
-		for (unsigned i = 1; i < args.size(); ++i) {
-			camp->setStatus(args[i]);
-			log_history->add(msg->get("Set campaign status: ") + args[i], false);
-		}
-		if (args.size() < 2) {
-			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
-		}
-	}
-	else if (args[0] == "unset_status") {
-		for (unsigned i = 1; i < args.size(); ++i) {
-			if (camp->checkStatus(args[i])) {
-				camp->unsetStatus(args[i]);
-				log_history->add(msg->get("Unset campaign status: ") + args[i], false);
-			}
-			else {
-				log_history->add(msg->get("ERROR: Unknown campaign status: ") + args[i], false, &color_error);
-			}
-		}
-		if (args.size() < 2) {
-			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <status_1> [<status_2> <status_3> ...]"), false, &color_hint);
-		}
-	}
-	else if (args[0] == "teleport") {
-		if (args.size() > 2) {
-			FPoint dest;
-			dest.x = static_cast<float>(toInt(args[1])) + 0.5f;
-			dest.y = static_cast<float>(toInt(args[2])) + 0.5f;
-
-			if (args.size() > 3) {
-				if (fileExists(mods->locate(args[3]))) {
-					mapr->teleportation = true;
-					mapr->teleport_destination.x = dest.x;
-					mapr->teleport_destination.y = dest.y;
-					mapr->teleport_mapname = args[3];
-					log_history->add(msg->get("Teleporting to: ") + args[1] + ", " + args[2] + ", " + args[3], false);
-				}
-				else {
-					log_history->add(msg->get("ERROR: Unknown map: ") + args[3], false, &color_error);
-				}
-			}
-			else {
-				mapr->teleportation = true;
-				mapr->teleport_destination.x = dest.x;
-				mapr->teleport_destination.y = dest.y;
-				log_history->add(msg->get("Teleporting to: ") + args[1] + ", " + args[2], false);
-			}
-		}
-		else {
-			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <x> <y> [<map>]"), false, &color_hint);
-		}
 	}
 	else if (args[0] == "respec") {
 		pc->stats.level = 1;
@@ -444,24 +325,26 @@ void MenuDevConsole::execute() {
 			log_history->setMaxMessages(); // reset
 		}
 	}
-	else if (args[0] == "remove_item") {
+	else if (args[0] == "exec") {
 		if (args.size() > 1) {
-			int id = toInt(args[1]);
-			if (id <= 0 || static_cast<unsigned>(id) >= items->items.size()) {
-				log_history->add(msg->get("ERROR: Invalid item ID"), false, &color_error);
-				return;
+			Event evnt;
+
+			for (size_t i = 1; i < args.size(); ++i) {
+				std::string key = popFirstString(args[i], '=');
+				std::string val = args[i];
+
+				if (!EventManager::loadEventComponentString(key, val, &evnt, NULL)) {
+					log_history->add(msg->get("ERROR: '%s' is not a valid event key", key.c_str()), false, &color_error);
+				}
 			}
 
-			int quantity = (args.size() > 2) ? toInt(args[2]) : 1;
-
-			if (quantity > 0) {
-				camp->removeItem(id);
-				log_history->add(msg->get("Removed item: ") + items->getItemName(id) + " (" + toString(typeid(int), &quantity) + ")", false);
+			if (EventManager::isActive(evnt)) {
+				EventManager::executeEvent(evnt);
 			}
 		}
 		else {
 			log_history->add(msg->get("ERROR: Too few arguments"), false, &color_error);
-			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <item_id> [<quantity>]"), false, &color_hint);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <key>=<val> <key>=<val> ..."), false, &color_hint);
 		}
 	}
 	else {

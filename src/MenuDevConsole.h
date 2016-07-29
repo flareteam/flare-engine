@@ -48,6 +48,8 @@ protected:
 	Color color_error;
 	Color color_hint;
 
+	bool first_open;
+
 	unsigned long input_scrollback_pos;
 	std::vector<std::string> input_scrollback;
 
