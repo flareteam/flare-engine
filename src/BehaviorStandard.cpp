@@ -504,8 +504,22 @@ void BehaviorStandard::checkMoveStateStance() {
 }
 
 void BehaviorStandard::checkMoveStateMove() {
+	bool can_attack = true;
+
+	if (e->stats.cooldown_ticks > 0) {
+		can_attack = false;
+	}
+	else {
+		can_attack = false;
+		for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
+			if (e->stats.powers_ai[i].ticks == 0) {
+				can_attack = true;
+				break;
+			}
+		}
+	}
 	// in order to prevent infinite fleeing, we re-roll our chance to flee after a certain duration
-	bool stop_fleeing = fleeing && flee_ticks == 0 && !percentChance(e->stats.chance_flee);
+	bool stop_fleeing = can_attack && fleeing && flee_ticks == 0 && !percentChance(e->stats.chance_flee);
 
 	if (!stop_fleeing && flee_ticks == 0) {
 		// if the roll to continue fleeing succeeds, but the flee duration has expired, we don't want to reset the duration to the full amount
