@@ -564,6 +564,12 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		e->s = val;
 	}
+	else if (key == "script") {
+		// @ATTR event.script|filename|Loads and executes an Event from a file.
+		e->type = EC_SCRIPT;
+
+		e->s = val;
+	}
 	else {
 		return false;
 	}
@@ -762,6 +768,21 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == EC_BOOK) {
 			mapr->show_book = ec->s;
+		}
+		else if (ec->type == EC_SCRIPT) {
+			FileParser script_file;
+			Event script_evnt;
+
+			if (script_file.open(ec->s)) {
+				while (script_file.next()) {
+					loadEventComponent(script_file, &script_evnt, NULL);
+				}
+				script_file.close();
+
+				if (isActive(script_evnt)) {
+					executeEvent(script_evnt);
+				}
+			}
 		}
 	}
 	return !ev.keep_after_trigger;
