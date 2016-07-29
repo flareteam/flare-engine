@@ -549,12 +549,12 @@ void LootManager::addRenders(std::vector<Renderable> &ren, std::vector<Renderabl
 	}
 }
 
-void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<Event_Component> *ec_list) {
+void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Event_Component> *ec_list) {
 	if (e == NULL) return;
 
 	std::string chance;
 	bool first_is_filename = false;
-	e->s = popFirstString(infile.val);
+	e->s = popFirstString(val);
 
 	if (e->s == "currency")
 		e->c = CURRENCY_ID;
@@ -577,20 +577,20 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 		e->type = EC_LOOT;
 
 		// drop chance
-		chance = popFirstString(infile.val);
+		chance = popFirstString(val);
 		if (chance == "fixed") e->z = 0;
 		else e->z = toInt(chance);
 
 		// quantity min/max
-		e->a = popFirstInt(infile.val);
+		e->a = popFirstInt(val);
 		clampFloor(e->a, 1);
-		e->b = popFirstInt(infile.val);
+		e->b = popFirstInt(val);
 		clampFloor(e->b, e->a);
 	}
 
 	// add repeating loot
 	if (ec_list) {
-		std::string repeat_val = popFirstString(infile.val);
+		std::string repeat_val = popFirstString(val);
 		while (repeat_val != "") {
 			ec_list->push_back(Event_Component());
 			Event_Component *ec = &ec_list->back();
@@ -607,20 +607,20 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 
 				getLootTable(repeat_val, ec_list);
 
-				repeat_val = popFirstString(infile.val);
+				repeat_val = popFirstString(val);
 				continue;
 			}
 
-			chance = popFirstString(infile.val);
+			chance = popFirstString(val);
 			if (chance == "fixed") ec->z = 0;
 			else ec->z = toInt(chance);
 
-			ec->a = popFirstInt(infile.val);
+			ec->a = popFirstInt(val);
 			clampFloor(ec->a, 1);
-			ec->b = popFirstInt(infile.val);
+			ec->b = popFirstInt(val);
 			clampFloor(ec->b, ec->a);
 
-			repeat_val = popFirstString(infile.val);
+			repeat_val = popFirstString(val);
 		}
 	}
 }
@@ -642,7 +642,7 @@ void LootManager::loadLootTables() {
 				if (infile.key == "loot") {
 					ec_list->push_back(Event_Component());
 					ec = &ec_list->back();
-					parseLoot(infile, ec, ec_list);
+					parseLoot(infile.val, ec, ec_list);
 				}
 			}
 			else if (infile.section == "loot") {

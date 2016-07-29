@@ -195,7 +195,7 @@ void NPC::load(const std::string& npc_id) {
 					}
 
 					random_table.push_back(Event_Component());
-					loot->parseLoot(infile, &random_table.back(), &random_table);
+					loot->parseLoot(infile.val, &random_table.back(), &random_table);
 				}
 				else if (infile.key == "random_stock_count") {
 					// @ATTR random_stock_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of random items this npc can have.

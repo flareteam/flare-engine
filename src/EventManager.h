@@ -60,6 +60,7 @@ public:
 	~EventManager();
 	static void loadEvent(FileParser &infile, Event* evnt);
 	static void loadEventComponent(FileParser &infile, Event* evnt, Event_Component* ec);
+	static bool loadEventComponentString(std::string &key, std::string &val, Event* evnt, Event_Component* ec);
 
 	static bool executeEvent(Event &e);
 	static bool isActive(const Event &e);

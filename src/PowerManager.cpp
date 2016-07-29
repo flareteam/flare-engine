@@ -533,7 +533,7 @@ void PowerManager::loadPowers() {
 			}
 			if (lootm) {
 				powers[input_id].loot.push_back(Event_Component());
-				lootm->parseLoot(infile, &powers[input_id].loot.back(), &powers[input_id].loot);
+				lootm->parseLoot(infile.val, &powers[input_id].loot.back(), &powers[input_id].loot);
 			}
 		}
 		else if (infile.key == "target_movement_normal") {

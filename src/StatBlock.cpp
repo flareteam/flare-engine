@@ -354,7 +354,7 @@ void StatBlock::load(const std::string& filename) {
 			}
 
 			loot_table.push_back(Event_Component());
-			loot->parseLoot(infile, &loot_table.back(), &loot_table);
+			loot->parseLoot(infile.val, &loot_table.back(), &loot_table);
 		}
 		else if (infile.key == "loot_count") {
 			// @ATTR loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.
