@@ -145,22 +145,25 @@ void parse_key_pair(const std::string& s, std::string &key, std::string &val) {
  * This is basically a really lazy "split" replacement
  */
 int popFirstInt(std::string &s, char separator) {
-	int num = 0;
-	size_t seppos = s.find_first_of(separator);
-	if (seppos == std::string::npos) {
-		num = toInt(s);
-		s = "";
-	}
-	else {
-		num = toInt(s.substr(0, seppos));
-		s = s.substr(seppos+1, s.length());
-	}
-	return num;
+	return toInt(popFirstString(s, separator));
 }
 
 std::string popFirstString(std::string &s, char separator) {
 	std::string outs = "";
-	size_t seppos = s.find_first_of(separator);
+	size_t seppos;
+
+	if (separator == 0) {
+		seppos = s.find_first_of(',');
+		size_t alt_seppos = s.find_first_of(';');
+
+		if (alt_seppos != std::string::npos && alt_seppos < seppos) {
+			seppos = alt_seppos; // return the first ',' or ';'
+		}
+	}
+	else {
+		seppos = s.find_first_of(separator);
+	}
+
 	if (seppos == std::string::npos) {
 		outs = s;
 		s = "";

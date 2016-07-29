@@ -237,10 +237,10 @@ void GameStateNew::loadOptions(const std::string& filename) {
 	while (fin.next()) {
 		// @ATTR option|string, string, filename, string : Base, Head, Portrait, Name|A default body, head, portrait, and name for a hero.
 		if (fin.key == "option") {
-			base.push_back(fin.nextValue());
-			head.push_back(fin.nextValue());
-			portrait.push_back(fin.nextValue());
-			name.push_back(msg->get(fin.nextValue()));
+			base.push_back(popFirstString(fin.val));
+			head.push_back(popFirstString(fin.val));
+			portrait.push_back(popFirstString(fin.val));
+			name.push_back(msg->get(popFirstString(fin.val)));
 		}
 	}
 	fin.close();

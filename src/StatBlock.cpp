@@ -197,8 +197,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "stat") {
 		// @ATTR stat|string, int : Stat name, Value|The starting value for this stat.
-		std::string stat = popFirstString(infile->val, ',');
-		int value = popFirstInt(infile->val, ',');
+		std::string stat = popFirstString(infile->val);
+		int value = popFirstInt(infile->val);
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (STAT_KEY[i] == stat) {
@@ -209,8 +209,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "stat_per_level") {
 		// @ATTR stat_per_level|predefined_string, int : Stat name, Value|The value for this stat added per level.
-		std::string stat = popFirstString(infile->val, ',');
-		int value = popFirstInt(infile->val, ',');
+		std::string stat = popFirstString(infile->val);
+		int value = popFirstInt(infile->val);
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (STAT_KEY[i] == stat) {
@@ -221,8 +221,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "stat_per_physical") {
 		// @ATTR stat_per_physical|predefined_string, int : Stat name, Value|The value for this stat added per Physical.
-		std::string stat = popFirstString(infile->val, ',');
-		int value = popFirstInt(infile->val, ',');
+		std::string stat = popFirstString(infile->val);
+		int value = popFirstInt(infile->val);
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (STAT_KEY[i] == stat) {
@@ -233,8 +233,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "stat_per_mental") {
 		// @ATTR stat_per_mental|predefined_string, int : Stat name, Value|The value for this stat added per Mental.
-		std::string stat = popFirstString(infile->val, ',');
-		int value = popFirstInt(infile->val, ',');
+		std::string stat = popFirstString(infile->val);
+		int value = popFirstInt(infile->val);
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (STAT_KEY[i] == stat) {
@@ -245,8 +245,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "stat_per_offense") {
 		// @ATTR stat_per_offense|predefined_string, int : Stat name, Value|The value for this stat added per Offense.
-		std::string stat = popFirstString(infile->val, ',');
-		int value = popFirstInt(infile->val, ',');
+		std::string stat = popFirstString(infile->val);
+		int value = popFirstInt(infile->val);
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (STAT_KEY[i] == stat) {
@@ -257,8 +257,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "stat_per_defense") {
 		// @ATTR stat_per_defense|predefined_string, int : Stat name, Value|The value for this stat added per Defense.
-		std::string stat = popFirstString(infile->val, ',');
-		int value = popFirstInt(infile->val, ',');
+		std::string stat = popFirstString(infile->val);
+		int value = popFirstInt(infile->val);
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (STAT_KEY[i] == stat) {
@@ -269,8 +269,8 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 	}
 	else if (infile->key == "vulnerable") {
 		// @ATTR vulnerable|predefined_string, int : Element, Value|Percentage weakness to this element.
-		std::string element = popFirstString(infile->val, ',');
-		int value = popFirstInt(infile->val, ',');
+		std::string element = popFirstString(infile->val);
+		int value = popFirstInt(infile->val);
 
 		for (unsigned int i=0; i<ELEMENTS.size(); i++) {
 			if (element == ELEMENTS[i].id) {
@@ -358,8 +358,8 @@ void StatBlock::load(const std::string& filename) {
 		}
 		else if (infile.key == "loot_count") {
 			// @ATTR loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.
-			loot_count.x = toInt(infile.nextValue());
-			loot_count.y = toInt(infile.nextValue());
+			loot_count.x = popFirstInt(infile.val);
+			loot_count.y = popFirstInt(infile.val);
 			if (loot_count.x != 0 || loot_count.y != 0) {
 				clampFloor(loot_count.x, 1);
 				clampFloor(loot_count.y, loot_count.x);
@@ -373,9 +373,9 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "first_defeat_loot") first_defeat_loot = num;
 		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met.
 		else if (infile.key == "quest_loot") {
-			quest_loot_requires_status = infile.nextValue();
-			quest_loot_requires_not_status = infile.nextValue();
-			quest_loot_id = toInt(infile.nextValue());
+			quest_loot_requires_status = popFirstString(infile.val);
+			quest_loot_requires_not_status = popFirstString(infile.val);
+			quest_loot_id = popFirstInt(infile.val);
 		}
 
 		// behavior stats
@@ -400,13 +400,13 @@ void StatBlock::load(const std::string& filename) {
 			// @ATTR power|["melee", "ranged", "beacon", "on_hit", "on_death", "on_half_dead", "on_join_combat", "on_debuff"], power_id, int : State, Power, Chance|A power that has a chance of being triggered in a certain state.
 			AIPower ai_power;
 
-			std::string ai_type = infile.nextValue();
+			std::string ai_type = popFirstString(infile.val);
 
-			ai_power.id = powers->verifyID(toInt(infile.nextValue()), &infile, false);
+			ai_power.id = powers->verifyID(popFirstInt(infile.val), &infile, false);
 			if (ai_power.id == 0)
 				continue; // verifyID() will print our error message
 
-			ai_power.chance = toInt(infile.nextValue());
+			ai_power.chance = popFirstInt(infile.val);
 
 			if (ai_type == "melee") ai_power.type = AI_POWER_MELEE;
 			else if (ai_type == "ranged") ai_power.type = AI_POWER_RANGED;
@@ -430,10 +430,10 @@ void StatBlock::load(const std::string& filename) {
 		else if (infile.key == "passive_powers") {
 			// @ATTR passive_powers|list(power_id)|A list of passive powers this creature has.
 			powers_passive.clear();
-			std::string p = infile.nextValue();
+			std::string p = popFirstString(infile.val);
 			while (p != "") {
 				powers_passive.push_back(toInt(p));
-				p = infile.nextValue();
+				p = popFirstString(infile.val);
 			}
 		}
 
@@ -459,7 +459,7 @@ void StatBlock::load(const std::string& filename) {
 			// @ATTR categories|list(string)|Categories that this enemy belongs to.
 			categories.clear();
 			std::string cat;
-			while ((cat = infile.nextValue()) != "") {
+			while ((cat = popFirstString(infile.val)) != "") {
 				categories.push_back(cat);
 			}
 		}
@@ -839,8 +839,8 @@ void StatBlock::loadHeroStats() {
 		while(infile.next()) {
 			if (infile.key == "level") {
 				// @ATTR level|int, int : Level, XP|The amount of XP required for this level.
-				unsigned lvl_id = toInt(infile.nextValue());
-				unsigned long lvl_xp = toUnsignedLong(infile.nextValue());
+				unsigned lvl_id = popFirstInt(infile.val);
+				unsigned long lvl_xp = toUnsignedLong(popFirstString(infile.val));
 
 				if (lvl_id > xp_table.size())
 					xp_table.resize(lvl_id);

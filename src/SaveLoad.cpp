@@ -220,26 +220,26 @@ void SaveLoad::loadGame() {
 				pc->stats.permadeath = toBool(infile.val);
 			}
 			else if (infile.key == "option") {
-				pc->stats.gfx_base = infile.nextValue();
-				pc->stats.gfx_head = infile.nextValue();
-				pc->stats.gfx_portrait = infile.nextValue();
+				pc->stats.gfx_base = popFirstString(infile.val);
+				pc->stats.gfx_head = popFirstString(infile.val);
+				pc->stats.gfx_portrait = popFirstString(infile.val);
 			}
 			else if (infile.key == "class") {
-				pc->stats.character_class = infile.nextValue();
-				pc->stats.character_subclass = infile.nextValue();
+				pc->stats.character_class = popFirstString(infile.val);
+				pc->stats.character_subclass = popFirstString(infile.val);
 			}
 			else if (infile.key == "xp") {
 				pc->stats.xp = toUnsignedLong(infile.val);
 			}
 			else if (infile.key == "hpmp") {
-				saved_hp = toInt(infile.nextValue());
-				saved_mp = toInt(infile.nextValue());
+				saved_hp = popFirstInt(infile.val);
+				saved_mp = popFirstInt(infile.val);
 			}
 			else if (infile.key == "build") {
-				pc->stats.physical_character = toInt(infile.nextValue());
-				pc->stats.mental_character = toInt(infile.nextValue());
-				pc->stats.offense_character = toInt(infile.nextValue());
-				pc->stats.defense_character = toInt(infile.nextValue());
+				pc->stats.physical_character = popFirstInt(infile.val);
+				pc->stats.mental_character = popFirstInt(infile.val);
+				pc->stats.offense_character = popFirstInt(infile.val);
+				pc->stats.defense_character = popFirstInt(infile.val);
 				if (pc->stats.physical_character < 0 || pc->stats.physical_character > pc->stats.max_points_per_stat ||
 						pc->stats.mental_character < 0 || pc->stats.mental_character > pc->stats.max_points_per_stat ||
 						pc->stats.offense_character < 0 || pc->stats.offense_character > pc->stats.max_points_per_stat ||
@@ -268,10 +268,10 @@ void SaveLoad::loadGame() {
 				menu->inv->inventory[CARRIED].setQuantities(infile.val);
 			}
 			else if (infile.key == "spawn") {
-				mapr->teleport_mapname = infile.nextValue();
+				mapr->teleport_mapname = popFirstString(infile.val);
 				if (mapr->teleport_mapname != "" && fileExists(mods->locate(mapr->teleport_mapname))) {
-					mapr->teleport_destination.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
-					mapr->teleport_destination.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+					mapr->teleport_destination.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+					mapr->teleport_destination.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
 					mapr->teleportation = true;
 					// prevent spawn.txt from putting us on the starting map
 					mapr->clearEvents();
@@ -286,7 +286,7 @@ void SaveLoad::loadGame() {
 			}
 			else if (infile.key == "actionbar") {
 				for (int i = 0; i < ACTIONBAR_MAX; i++) {
-					hotkeys[i] = toInt(infile.nextValue());
+					hotkeys[i] = popFirstInt(infile.val);
 					if (hotkeys[i] < 0) {
 						logError("SaveLoad: Hotkey power on position %d has negative id, skipping", i);
 						hotkeys[i] = 0;
@@ -303,15 +303,15 @@ void SaveLoad::loadGame() {
 				menu->act->set(hotkeys);
 			}
 			else if (infile.key == "transformed") {
-				pc->stats.transform_type = infile.nextValue();
+				pc->stats.transform_type = popFirstString(infile.val);
 				if (pc->stats.transform_type != "") {
 					pc->stats.transform_duration = -1;
-					pc->stats.manual_untransform = toBool(infile.nextValue());
+					pc->stats.manual_untransform = toBool(popFirstString(infile.val));
 				}
 			}
 			else if (infile.key == "powers") {
 				std::string power;
-				while ( (power = infile.nextValue()) != "") {
+				while ( (power = popFirstString(infile.val)) != "") {
 					if (toInt(power) > 0)
 						pc->stats.powers_list.push_back(toInt(power));
 				}

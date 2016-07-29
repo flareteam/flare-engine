@@ -70,7 +70,6 @@ public:
 
 	void close();
 	bool next();
-	std::string nextValue(); // next value inside one line.
 	std::string getRawLine();
 	void error(const char* format, ...);
 	void incrementLineNum();

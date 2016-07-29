@@ -372,8 +372,8 @@ bool GameStateCutscene::load(const std::string& filename) {
 			}
 			else if (infile.key == "caption_margins") {
 				// @ATTR caption_margins|float, float : X margin, Y margin|Percentage-based margins for the caption text based on screen size
-				settings.caption_margins.x = toFloat(infile.nextValue())/100.0f;
-				settings.caption_margins.y = toFloat(infile.val)/100.0f;
+				settings.caption_margins.x = toFloat(popFirstString(infile.val))/100.0f;
+				settings.caption_margins.y = toFloat(popFirstString(infile.val))/100.0f;
 			}
 			else if (infile.key == "vscroll_speed") {
 				// @ATTR vscroll_speed|float|The speed at which elements will scroll in 'vscroll' scenes.
@@ -434,7 +434,7 @@ bool GameStateCutscene::load(const std::string& filename) {
 			else if (infile.key == "separator") {
 				// @ATTR vscroll.separator|int|Places an invisible gap of a specified height between elements.
 				sc.type = infile.key;
-				sc.x = toInt(infile.nextValue());
+				sc.x = toInt(infile.val);
 			}
 			else {
 				infile.error("GameStateCutscene: '%s' is not a valid key.", infile.key.c_str());

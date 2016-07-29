@@ -209,11 +209,11 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 
 			// @ATTR show_stat|string, bool : Stat name, Visible|Hide the matching stat in the statlist if set to false.
 			else if (infile.key == "show_stat") {
-				std::string stat_name = popFirstString(infile.val, ',');
+				std::string stat_name = popFirstString(infile.val);
 
 				for (unsigned i=0; i<STAT_COUNT; ++i) {
 					if (stat_name == STAT_KEY[i]) {
-						show_stat[i] = toBool(popFirstString(infile.val, ','));
+						show_stat[i] = toBool(popFirstString(infile.val));
 						break;
 					}
 				}

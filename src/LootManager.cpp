@@ -554,7 +554,7 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 
 	std::string chance;
 	bool first_is_filename = false;
-	e->s = infile.nextValue();
+	e->s = popFirstString(infile.val);
 
 	if (e->s == "currency")
 		e->c = CURRENCY_ID;
@@ -577,20 +577,20 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 		e->type = EC_LOOT;
 
 		// drop chance
-		chance = infile.nextValue();
+		chance = popFirstString(infile.val);
 		if (chance == "fixed") e->z = 0;
 		else e->z = toInt(chance);
 
 		// quantity min/max
-		e->a = toInt(infile.nextValue());
+		e->a = popFirstInt(infile.val);
 		clampFloor(e->a, 1);
-		e->b = toInt(infile.nextValue());
+		e->b = popFirstInt(infile.val);
 		clampFloor(e->b, e->a);
 	}
 
 	// add repeating loot
 	if (ec_list) {
-		std::string repeat_val = infile.nextValue();
+		std::string repeat_val = popFirstString(infile.val);
 		while (repeat_val != "") {
 			ec_list->push_back(Event_Component());
 			Event_Component *ec = &ec_list->back();
@@ -607,20 +607,20 @@ void LootManager::parseLoot(FileParser &infile, Event_Component *e, std::vector<
 
 				getLootTable(repeat_val, ec_list);
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 				continue;
 			}
 
-			chance = infile.nextValue();
+			chance = popFirstString(infile.val);
 			if (chance == "fixed") ec->z = 0;
 			else ec->z = toInt(chance);
 
-			ec->a = toInt(infile.nextValue());
+			ec->a = popFirstInt(infile.val);
 			clampFloor(ec->a, 1);
-			ec->b = toInt(infile.nextValue());
+			ec->b = popFirstInt(infile.val);
 			clampFloor(ec->b, ec->a);
 
-			repeat_val = infile.nextValue();
+			repeat_val = popFirstString(infile.val);
 		}
 	}
 }
@@ -675,9 +675,9 @@ void LootManager::loadLootTables() {
 						ec->z = toInt(infile.val);
 				}
 				else if (infile.key == "quantity") {
-					ec->a = toInt(infile.nextValue());
+					ec->a = popFirstInt(infile.val);
 					clampFloor(ec->a, 1);
-					ec->b = toInt(infile.nextValue());
+					ec->b = popFirstInt(infile.val);
 					clampFloor(ec->b, ec->a);
 				}
 			}

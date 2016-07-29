@@ -235,13 +235,13 @@ void PowerManager::loadPowers() {
 			powers[input_id].requires_empty_target = toBool(infile.val);
 		else if (infile.key == "requires_item") {
 			// @ATTR power.requires_item|item_id, int : Item, Quantity|Requires a specific item of a specific quantity in inventory.
-			powers[input_id].requires_item = toInt(infile.nextValue());
-			powers[input_id].requires_item_quantity = toInt(infile.nextValue(), 1);
+			powers[input_id].requires_item = popFirstInt(infile.val);
+			powers[input_id].requires_item_quantity = toInt(popFirstString(infile.val), 1);
 		}
 		else if (infile.key == "requires_equipped_item") {
 			// @ATTR power.requires_equipped_item|item_id, int : Item, Quantity|Requires a specific item of a specific quantity to be equipped on hero.
-			powers[input_id].requires_equipped_item = toInt(infile.nextValue());
-			powers[input_id].requires_equipped_item_quantity = toInt(infile.nextValue());
+			powers[input_id].requires_equipped_item = popFirstInt(infile.val);
+			powers[input_id].requires_equipped_item_quantity = popFirstInt(infile.val);
 
 			// a maximum of 1 equipped item can be consumed at a time
 			if (powers[input_id].requires_equipped_item_quantity > 1) {
@@ -355,7 +355,7 @@ void PowerManager::loadPowers() {
 		}
 		else if (infile.key == "target_range")
 			// @ATTR power.target_range|float|The distance from the caster that the power can be activated
-			powers[input_id].target_range = toFloat(infile.nextValue());
+			powers[input_id].target_range = toFloat(popFirstString(infile.val));
 		//steal effects
 		else if (infile.key == "hp_steal")
 			// @ATTR power.hp_steal|int|Percentage of damage to steal into HP
@@ -490,7 +490,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.target_categories|list(predefined_string)|Hazard will only affect enemies in these categories.
 			powers[input_id].target_categories.clear();
 			std::string cat;
-			while ((cat = infile.nextValue()) != "") {
+			while ((cat = popFirstString(infile.val)) != "") {
 				powers[input_id].target_categories.push_back(cat);
 			}
 		}

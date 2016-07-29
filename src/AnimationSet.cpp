@@ -136,25 +136,25 @@ void AnimationSet::load() {
 			type = parser.val;
 		else if (parser.key == "render_size") {
 			// @ATTR render_size|int, int : Width, Height|Width and height of animation.
-			render_size.x = toInt(parser.nextValue());
-			render_size.y = toInt(parser.nextValue());
+			render_size.x = popFirstInt(parser.val);
+			render_size.y = popFirstInt(parser.val);
 		}
 		else if (parser.key == "render_offset") {
 			// @ATTR render_offset|int, int : X offset, Y offset|Render x/y offset.
-			render_offset.x = toInt(parser.nextValue());
-			render_offset.y = toInt(parser.nextValue());
+			render_offset.x = popFirstInt(parser.val);
+			render_offset.y = popFirstInt(parser.val);
 		}
 		else if (parser.key == "active_frame") {
 			// @ATTR active_frame|[list(int), "all"]|A list of frames marked as "active". Also, "all" can be used to mark all frames as active.
 			active_frames.clear();
-			std::string nv = parser.nextValue();
+			std::string nv = popFirstString(parser.val);
 			if (nv == "all") {
 				active_frames.push_back(-1);
 			}
 			else {
 				while (nv != "") {
 					active_frames.push_back(static_cast<short>(toInt(nv)));
-					nv = parser.nextValue();
+					nv = popFirstString(parser.val);
 				}
 				std::sort(active_frames.begin(), active_frames.end());
 				active_frames.erase(std::unique(active_frames.begin(), active_frames.end()), active_frames.end());
@@ -174,14 +174,14 @@ void AnimationSet::load() {
 			// frame = index, direction, x, y, w, h, offsetx, offsety
 			Rect r;
 			Point offset;
-			const unsigned short index = static_cast<unsigned short>(toInt(parser.nextValue()));
-			const unsigned short direction = static_cast<unsigned short>(toInt(parser.nextValue()));
-			r.x = toInt(parser.nextValue());
-			r.y = toInt(parser.nextValue());
-			r.w = toInt(parser.nextValue());
-			r.h = toInt(parser.nextValue());
-			offset.x = toInt(parser.nextValue());
-			offset.y = toInt(parser.nextValue());
+			const unsigned short index = static_cast<unsigned short>(popFirstInt(parser.val));
+			const unsigned short direction = static_cast<unsigned short>(popFirstInt(parser.val));
+			r.x = popFirstInt(parser.val);
+			r.y = popFirstInt(parser.val);
+			r.w = popFirstInt(parser.val);
+			r.h = popFirstInt(parser.val);
+			offset.x = popFirstInt(parser.val);
+			offset.y = popFirstInt(parser.val);
 			newanim->addFrame(index, direction, r, offset);
 		}
 		else {

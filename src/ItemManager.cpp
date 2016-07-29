@@ -143,7 +143,7 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			items[id].level = toInt(infile.val);
 		else if (infile.key == "icon") {
 			// @ATTR icon|icon_id|An id for the icon to display for this item.
-			items[id].icon = toInt(infile.nextValue());
+			items[id].icon = toInt(infile.val);
 		}
 		else if (infile.key == "book") {
 			// @ATTR book|filename|A book file to open when this item is activated.
@@ -169,33 +169,33 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 		}
 		else if (infile.key == "dmg_melee") {
 			// @ATTR dmg_melee|int, int : Min, Max|Defines the item melee damage, if only min is specified the melee damage is fixed.
-			items[id].dmg_melee_min = toInt(infile.nextValue());
+			items[id].dmg_melee_min = popFirstInt(infile.val);
 			if (infile.val.length() > 0)
-				items[id].dmg_melee_max = toInt(infile.nextValue());
+				items[id].dmg_melee_max = popFirstInt(infile.val);
 			else
 				items[id].dmg_melee_max = items[id].dmg_melee_min;
 		}
 		else if (infile.key == "dmg_ranged") {
 			// @ATTR dmg_ranged|int, int : Min, Max|Defines the item ranged damage, if only min is specified the ranged damage is fixed.
-			items[id].dmg_ranged_min = toInt(infile.nextValue());
+			items[id].dmg_ranged_min = popFirstInt(infile.val);
 			if (infile.val.length() > 0)
-				items[id].dmg_ranged_max = toInt(infile.nextValue());
+				items[id].dmg_ranged_max = popFirstInt(infile.val);
 			else
 				items[id].dmg_ranged_max = items[id].dmg_ranged_min;
 		}
 		else if (infile.key == "dmg_ment") {
 			// @ATTR dmg_ment|int, int : Min, Max|Defines the item mental damage, if only min is specified the ranged damage is fixed.
-			items[id].dmg_ment_min = toInt(infile.nextValue());
+			items[id].dmg_ment_min = popFirstInt(infile.val);
 			if (infile.val.length() > 0)
-				items[id].dmg_ment_max = toInt(infile.nextValue());
+				items[id].dmg_ment_max = popFirstInt(infile.val);
 			else
 				items[id].dmg_ment_max = items[id].dmg_ment_min;
 		}
 		else if (infile.key == "abs") {
 			// @ATTR abs|int, int : Min, Max|Defines the item absorb value, if only min is specified the absorb value is fixed.
-			items[id].abs_min = toInt(infile.nextValue());
+			items[id].abs_min = popFirstInt(infile.val);
 			if (infile.val.length() > 0)
-				items[id].abs_max = toInt(infile.nextValue());
+				items[id].abs_max = popFirstInt(infile.val);
 			else
 				items[id].abs_max = items[id].abs_min;
 		}
@@ -210,7 +210,7 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 				items[id].req_val.clear();
 				clear_req_stat = false;
 			}
-			std::string s = infile.nextValue();
+			std::string s = popFirstString(infile.val);
 			if (s == "physical")
 				items[id].req_stat.push_back(REQUIRES_PHYS);
 			else if (s == "mental")
@@ -221,7 +221,7 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 				items[id].req_stat.push_back(REQUIRES_DEF);
 			else
 				infile.error("%s unrecognized at; requires_stat must be one of [physical:mental:offense:defense]", s.c_str());
-			items[id].req_val.push_back(toInt(infile.nextValue()));
+			items[id].req_val.push_back(popFirstInt(infile.val));
 		}
 		else if (infile.key == "requires_class") {
 			// @ATTR requires_class|predefined_string|The hero's base class (engine/classes.txt) must match for this item to be equipped.
@@ -493,7 +493,7 @@ void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
 		else if (infile.key == "items") {
 			// @ATTR items|list(item_id)|List of item id's that is part of the set.
 			item_sets[id].items.clear();
-			std::string item_id = infile.nextValue();
+			std::string item_id = popFirstString(infile.val);
 			while (item_id != "") {
 				int temp_id = toInt(item_id);
 				if (temp_id > 0 && temp_id < static_cast<int>(items.size())) {
@@ -504,7 +504,7 @@ void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
 					const int maxsize = static_cast<int>(items.size()-1);
 					infile.error("ItemManager: Item index out of bounds 1-%d, skipping item.", maxsize);
 				}
-				item_id = infile.nextValue();
+				item_id = popFirstString(infile.val);
 			}
 		}
 		else if (infile.key == "color") {
@@ -518,7 +518,7 @@ void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
 				clear_bonus = false;
 			}
 			Set_bonus bonus;
-			bonus.requirement = toInt(infile.nextValue());
+			bonus.requirement = popFirstInt(infile.val);
 			parseBonus(bonus, infile);
 			item_sets[id].bonus.push_back(bonus);
 		}
@@ -530,8 +530,8 @@ void ItemManager::loadSets(const std::string& filename, bool locateFileName) {
 }
 
 void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
-	std::string bonus_str = infile.nextValue();
-	bdata.value = toInt(infile.nextValue());
+	std::string bonus_str = popFirstString(infile.val);
+	bdata.value = popFirstInt(infile.val);
 
 	if (bonus_str == "speed") {
 		bdata.is_speed = true;

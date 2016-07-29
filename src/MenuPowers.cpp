@@ -373,10 +373,10 @@ void MenuPowers::loadPower(FileParser &infile) {
 			upgradeButtons.back() = new WidgetButton("images/menus/buttons/button_plus.png");
 		}
 
-		std::string repeat_val = infile.nextValue();
+		std::string repeat_val = popFirstString(infile.val);
 		while (repeat_val != "") {
 			power_cell.back().upgrades.push_back(toInt(repeat_val));
-			repeat_val = infile.nextValue();
+			repeat_val = popFirstString(infile.val);
 		}
 
 		if (!power_cell.back().upgrades.empty())

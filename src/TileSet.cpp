@@ -131,22 +131,22 @@ void TileSet::load(const std::string& filename) {
 			else if (infile.key == "animation") {
 				// @ATTR animation|list(int, int, int, duration) : Tile index, X, Y, duration|An animation for a tile. Durations are in 'ms' or 's'.
 				int frame = 0;
-				unsigned TILE_ID = toInt(infile.nextValue());
+				unsigned TILE_ID = popFirstInt(infile.val);
 
 				if (TILE_ID >= anim.size())
 					anim.resize(TILE_ID + 1);
 
-				std::string repeat_val = infile.nextValue();
+				std::string repeat_val = popFirstString(infile.val);
 				while (repeat_val != "") {
 					anim[TILE_ID].frames++;
 					anim[TILE_ID].pos.resize(frame + 1);
 					anim[TILE_ID].frame_duration.resize(frame + 1);
 					anim[TILE_ID].pos[frame].x = toInt(repeat_val);
-					anim[TILE_ID].pos[frame].y = toInt(infile.nextValue());
-					anim[TILE_ID].frame_duration[frame] = static_cast<unsigned short>(parse_duration(infile.nextValue()));
+					anim[TILE_ID].pos[frame].y = popFirstInt(infile.val);
+					anim[TILE_ID].frame_duration[frame] = static_cast<unsigned short>(parse_duration(popFirstString(infile.val)));
 
 					frame++;
-					repeat_val = infile.nextValue();
+					repeat_val = popFirstString(infile.val);
 				}
 			}
 			else {

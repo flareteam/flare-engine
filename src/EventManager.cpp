@@ -106,10 +106,10 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR event.location|rectangle|Defines the location area for the event.
-		evnt->location.x = toInt(infile.nextValue());
-		evnt->location.y = toInt(infile.nextValue());
-		evnt->location.w = toInt(infile.nextValue());
-		evnt->location.h = toInt(infile.nextValue());
+		evnt->location.x = popFirstInt(infile.val);
+		evnt->location.y = popFirstInt(infile.val);
+		evnt->location.w = popFirstInt(infile.val);
+		evnt->location.h = popFirstInt(infile.val);
 
 		if (evnt->center.x == -1 && evnt->center.y == -1) {
 			evnt->center.x = static_cast<float>(evnt->location.x) + static_cast<float>(evnt->location.w)/2;
@@ -125,10 +125,10 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 			evnt->hotspot.h = evnt->location.h;
 		}
 		else {
-			evnt->hotspot.x = toInt(infile.nextValue());
-			evnt->hotspot.y = toInt(infile.nextValue());
-			evnt->hotspot.w = toInt(infile.nextValue());
-			evnt->hotspot.h = toInt(infile.nextValue());
+			evnt->hotspot.x = popFirstInt(infile.val);
+			evnt->hotspot.y = popFirstInt(infile.val);
+			evnt->hotspot.w = popFirstInt(infile.val);
+			evnt->hotspot.h = popFirstInt(infile.val);
 		}
 
 		evnt->center.x = static_cast<float>(evnt->hotspot.x) + static_cast<float>(evnt->hotspot.w)/2;
@@ -140,10 +140,10 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 	}
 	else if (infile.key == "reachable_from") {
 		// @ATTR event.reachable_from|rectangle|If the hero is inside this rectangle, they can activate the event.
-		evnt->reachable_from.x = toInt(infile.nextValue());
-		evnt->reachable_from.y = toInt(infile.nextValue());
-		evnt->reachable_from.w = toInt(infile.nextValue());
-		evnt->reachable_from.h = toInt(infile.nextValue());
+		evnt->reachable_from.x = popFirstInt(infile.val);
+		evnt->reachable_from.y = popFirstInt(infile.val);
+		evnt->reachable_from.w = popFirstInt(infile.val);
+		evnt->reachable_from.h = popFirstInt(infile.val);
 	}
 	else {
 		loadEventComponent(infile, evnt, NULL);
@@ -176,63 +176,63 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 
 		// x,y are src, if s=="hero" we target the hero,
 		// else we'll use values in a,b as coordinates
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
+		e->y = popFirstInt(infile.val);
 
-		std::string dest = infile.nextValue();
+		std::string dest = popFirstString(infile.val);
 		if (dest == "hero") {
 			e->s = "hero";
 		}
 		else {
 			e->a = toInt(dest);
-			e->b = toInt(infile.nextValue());
+			e->b = popFirstInt(infile.val);
 		}
 	}
 	else if (infile.key == "power_damage") {
 		// @ATTR event.power_damage|int, int : Min, Max|Range of power damage
 		e->type = EC_POWER_DAMAGE;
 
-		e->a = toInt(infile.nextValue());
-		e->b = toInt(infile.nextValue());
+		e->a = popFirstInt(infile.val);
+		e->b = popFirstInt(infile.val);
 	}
 	// TODO should intermap and intramap be combined?
 	else if (infile.key == "intermap") {
 		// @ATTR event.intermap|filename, int, int : Map file, X, Y|Jump to specific map at location specified.
 		e->type = EC_INTERMAP;
 
-		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
+		e->s = popFirstString(infile.val);
+		e->x = popFirstInt(infile.val);
+		e->y = popFirstInt(infile.val);
 	}
 	else if (infile.key == "intramap") {
 		// @ATTR event.intramap|int, int : X, Y|Jump to specific position within current map.
 		e->type = EC_INTRAMAP;
 
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
+		e->y = popFirstInt(infile.val);
 	}
 	else if (infile.key == "mapmod") {
 		// @ATTR event.mapmod|list(predefined_string, int, int, int) : Layer, X, Y, Tile ID|Modify map tiles
 		e->type = EC_MAPMOD;
 
-		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
-		e->z = toInt(infile.nextValue());
+		e->s = popFirstString(infile.val);
+		e->x = popFirstInt(infile.val);
+		e->y = popFirstInt(infile.val);
+		e->z = popFirstInt(infile.val);
 
 		// add repeating mapmods
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_MAPMOD;
 				e->s = repeat_val;
-				e->x = toInt(infile.nextValue());
-				e->y = toInt(infile.nextValue());
-				e->z = toInt(infile.nextValue());
+				e->x = popFirstInt(infile.val);
+				e->y = popFirstInt(infile.val);
+				e->z = popFirstInt(infile.val);
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}
@@ -240,17 +240,17 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.soundfx|filename, int, int, bool : Sound file, X, Y, loop|Filename of a sound to play. Optionally, it can be played at a specific location and/or looped.
 		e->type = EC_SOUNDFX;
 
-		e->s = infile.nextValue();
+		e->s = popFirstString(infile.val);
 		e->x = e->y = -1;
 		e->z = static_cast<int>(false);
 
-		std::string s = infile.nextValue();
+		std::string s = popFirstString(infile.val);
 		if (s != "") e->x = toInt(s);
 
-		s = infile.nextValue();
+		s = popFirstString(infile.val);
 		if (s != "") e->y = toInt(s);
 
-		s = infile.nextValue();
+		s = popFirstString(infile.val);
 		if (s != "") e->z = static_cast<int>(toBool(s));
 	}
 	else if (infile.key == "loot") {
@@ -263,8 +263,8 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.loot_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of loot this event can drop. Overrides the global drop_max setting.
 		e->type = EC_LOOT_COUNT;
 
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
+		e->y = popFirstInt(infile.val);
 		if (e->x != 0 || e->y != 0) {
 			clampFloor(e->x, 1);
 			clampFloor(e->y, e->x);
@@ -286,18 +286,18 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.requires_status|list(string)|Event requires list of statuses
 		e->type = EC_REQUIRES_STATUS;
 
-		e->s = infile.nextValue();
+		e->s = popFirstString(infile.val);
 
 		// add repeating requires_status
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REQUIRES_STATUS;
 				e->s = repeat_val;
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}
@@ -305,18 +305,18 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.requires_not_status|list(string)|Event requires not list of statuses
 		e->type = EC_REQUIRES_NOT_STATUS;
 
-		e->s = infile.nextValue();
+		e->s = popFirstString(infile.val);
 
 		// add repeating requires_not
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REQUIRES_NOT_STATUS;
 				e->s = repeat_val;
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}
@@ -324,42 +324,42 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.requires_level|int|Event requires hero level
 		e->type = EC_REQUIRES_LEVEL;
 
-		e->x = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
 	}
 	else if (infile.key == "requires_not_level") {
 		// @ATTR event.requires_not_level|int|Event requires not hero level
 		e->type = EC_REQUIRES_NOT_LEVEL;
 
-		e->x = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
 	}
 	else if (infile.key == "requires_currency") {
 		// @ATTR event.requires_currency|int|Event requires atleast this much currency
 		e->type = EC_REQUIRES_CURRENCY;
 
-		e->x = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
 	}
 	else if (infile.key == "requires_not_currency") {
 		// @ATTR event.requires_not_currency|int|Event requires no more than this much currency
 		e->type = EC_REQUIRES_NOT_CURRENCY;
 
-		e->x = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
 	}
 	else if (infile.key == "requires_item") {
 		// @ATTR event.requires_item|list(item_id)|Event requires specific item (not equipped)
 		e->type = EC_REQUIRES_ITEM;
 
-		e->x = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
 
 		// add repeating requires_item
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REQUIRES_ITEM;
 				e->x = toInt(repeat_val);
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}
@@ -367,18 +367,18 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.requires_not_item|list(item_id)|Event requires not having a specific item (not equipped)
 		e->type = EC_REQUIRES_NOT_ITEM;
 
-		e->x = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
 
 		// add repeating requires_not_item
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REQUIRES_NOT_ITEM;
 				e->x = toInt(repeat_val);
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}
@@ -386,30 +386,30 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.requires_class|predefined_string|Event requires this base class
 		e->type = EC_REQUIRES_CLASS;
 
-		e->s = infile.nextValue();
+		e->s = popFirstString(infile.val);
 	}
 	else if (infile.key == "requires_not_class") {
 		// @ATTR event.requires_not_class|predefined_string|Event requires not this base class
 		e->type = EC_REQUIRES_NOT_CLASS;
 
-		e->s = infile.nextValue();
+		e->s = popFirstString(infile.val);
 	}
 	else if (infile.key == "set_status") {
 		// @ATTR event.set_status|list(string)|Sets specified statuses
 		e->type = EC_SET_STATUS;
 
-		e->s = infile.nextValue();
+		e->s = popFirstString(infile.val);
 
 		// add repeating set_status
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_SET_STATUS;
 				e->s = repeat_val;
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}
@@ -417,18 +417,18 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.unset_status|list(string)|Unsets specified statuses
 		e->type = EC_UNSET_STATUS;
 
-		e->s = infile.nextValue();
+		e->s = popFirstString(infile.val);
 
 		// add repeating unset_status
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_UNSET_STATUS;
 				e->s = repeat_val;
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}
@@ -443,18 +443,18 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.remove_item|list(item_id)|Removes specified item from hero inventory
 		e->type = EC_REMOVE_ITEM;
 
-		e->x = toInt(infile.nextValue());
+		e->x = popFirstInt(infile.val);
 
 		// add repeating remove_item
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_REMOVE_ITEM;
 				e->x = toInt(repeat_val);
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}
@@ -476,8 +476,8 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x.
 		e->type = EC_REWARD_ITEM;
 
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.val);
+		e->x = popFirstInt(infile.val);
+		e->y = popFirstInt(infile.val);
 		clampFloor(e->y, 0);
 	}
 	else if (infile.key == "restore") {
@@ -496,23 +496,23 @@ void EventManager::loadEventComponent(FileParser &infile, Event* evnt, Event_Com
 		// @ATTR event.spawn|list(predefined_string, int, int) : Enemy category, X, Y|Spawn an enemy from this category at location
 		e->type = EC_SPAWN;
 
-		e->s = infile.nextValue();
-		e->x = toInt(infile.nextValue());
-		e->y = toInt(infile.nextValue());
+		e->s = popFirstString(infile.val);
+		e->x = popFirstInt(infile.val);
+		e->y = popFirstInt(infile.val);
 
 		// add repeating spawn
 		if (evnt) {
-			std::string repeat_val = infile.nextValue();
+			std::string repeat_val = popFirstString(infile.val);
 			while (repeat_val != "") {
 				evnt->components.push_back(Event_Component());
 				e = &evnt->components.back();
 				e->type = EC_SPAWN;
 
 				e->s = repeat_val;
-				e->x = toInt(infile.nextValue());
-				e->y = toInt(infile.nextValue());
+				e->x = popFirstInt(infile.val);
+				e->y = popFirstInt(infile.val);
 
-				repeat_val = infile.nextValue();
+				repeat_val = popFirstString(infile.val);
 			}
 		}
 	}

@@ -57,7 +57,7 @@ EnemyGroupManager::EnemyGroupManager() {
 			else if (infile.key == "categories") {
 				// @ATTR categories|list(predefined_string)|Comma separated list of enemy categories
 				std::string cat;
-				while ( (cat = infile.nextValue()) != "") {
+				while ( (cat = popFirstString(infile.val)) != "") {
 					_categories[cat].push_back(new_enemy);
 				}
 			}

@@ -217,27 +217,6 @@ std::string FileParser::getRawLine() {
 	return line;
 }
 
-std::string FileParser::nextValue() {
-	if (val == "") {
-		return ""; // not found
-	}
-	std::string s;
-	size_t seppos = val.find_first_of(',');
-	size_t alt_seppos = val.find_first_of(';');
-	if (alt_seppos != std::string::npos && alt_seppos < seppos)
-		seppos = alt_seppos; // return the first ',' or ';'
-
-	if (seppos == std::string::npos) {
-		s = val;
-		val = "";
-	}
-	else {
-		s = val.substr(0, seppos);
-		val = val.substr(seppos+1);
-	}
-	return s;
-}
-
 void FileParser::error(const char* format, ...) {
 	char buffer[4096];
 	va_list args;

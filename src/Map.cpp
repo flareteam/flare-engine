@@ -188,9 +188,9 @@ void Map::loadHeader(FileParser &infile) {
 	}
 	else if (infile.key == "location") {
 		// @ATTR location|int, int, direction : X, Y, Direction|Spawn point location in map
-		spawn.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
-		spawn.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
-		spawn_dir = static_cast<unsigned char>(parse_direction(infile.nextValue()));
+		spawn.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+		spawn.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+		spawn_dir = static_cast<unsigned char>(parse_direction(popFirstString(infile.val)));
 	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.
@@ -247,7 +247,7 @@ void Map::loadLayer(FileParser &infile) {
 			}
 
 			for (int i=0; i<w; i++)
-				layers.back()[i][j] = static_cast<unsigned short>(popFirstInt(val, ','));
+				layers.back()[i][j] = static_cast<unsigned short>(popFirstInt(val));
 		}
 	}
 	else {
@@ -266,24 +266,24 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "level") {
 		// @ATTR enemygroup.level|int, int : Min, Max|Defines the level range of enemies in group. If only one number is given, it's the exact level.
-		group->levelmin = std::max(0, toInt(infile.nextValue()));
-		group->levelmax = std::max(0, toInt(infile.nextValue(), group->levelmin));
+		group->levelmin = std::max(0, popFirstInt(infile.val));
+		group->levelmax = std::max(0, toInt(popFirstString(infile.val), group->levelmin));
 	}
 	else if (infile.key == "location") {
 		// @ATTR enemygroup.location|rectangle|Location area for enemygroup
-		group->pos.x = toInt(infile.nextValue());
-		group->pos.y = toInt(infile.nextValue());
-		group->area.x = toInt(infile.nextValue());
-		group->area.y = toInt(infile.nextValue());
+		group->pos.x = popFirstInt(infile.val);
+		group->pos.y = popFirstInt(infile.val);
+		group->area.x = popFirstInt(infile.val);
+		group->area.y = popFirstInt(infile.val);
 	}
 	else if (infile.key == "number") {
 		// @ATTR enemygroup.number|int, int : Min, Max|Defines the range of enemies in group. If only one number is given, it's the exact amount.
-		group->numbermin = std::max(0, toInt(infile.nextValue()));
-		group->numbermax = std::max(0, toInt(infile.nextValue(), group->numbermin));
+		group->numbermin = std::max(0, popFirstInt(infile.val));
+		group->numbermax = std::max(0, toInt(popFirstString(infile.val), group->numbermin));
 	}
 	else if (infile.key == "chance") {
 		// @ATTR enemygroup.chance|int|Percentage of chance
-		float n = static_cast<float>(std::max(0, toInt(infile.nextValue()))) / 100.0f;
+		float n = static_cast<float>(std::max(0, popFirstInt(infile.val))) / 100.0f;
 		group->chance = std::min(1.0f, std::max(0.0f, n));
 	}
 	else if (infile.key == "direction") {
@@ -293,16 +293,16 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	else if (infile.key == "waypoints") {
 		// @ATTR enemygroup.waypoints|list(point)|Enemy waypoints; single enemy only; negates wander_radius
 		std::string none = "";
-		std::string a = infile.nextValue();
-		std::string b = infile.nextValue();
+		std::string a = popFirstString(infile.val);
+		std::string b = popFirstString(infile.val);
 
 		while (a != none) {
 			FPoint p;
 			p.x = static_cast<float>(toInt(a)) + 0.5f;
 			p.y = static_cast<float>(toInt(b)) + 0.5f;
 			group->waypoints.push(p);
-			a = infile.nextValue();
-			b = infile.nextValue();
+			a = popFirstString(infile.val);
+			b = popFirstString(infile.val);
 		}
 
 		// disable wander radius, since we can't have waypoints and wandering at the same time
@@ -310,7 +310,7 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "wander_radius") {
 		// @ATTR enemygroup.wander_radius|int|The radius (in tiles) that an enemy will wander around randomly; negates waypoints
-		group->wander_radius = std::max(0, toInt(infile.nextValue()));
+		group->wander_radius = std::max(0, popFirstInt(infile.val));
 
 		// clear waypoints, since wandering will use the waypoint queue
 		while (!group->waypoints.empty()) {
@@ -320,14 +320,14 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	else if (infile.key == "requires_status") {
 		// @ATTR enemygroup.requires_status|list(string)|Status required for loading enemies
 		std::string s;
-		while ((s = infile.nextValue()) != "") {
+		while ((s = popFirstString(infile.val)) != "") {
 			group->requires_status.push_back(s);
 		}
 	}
 	else if (infile.key == "requires_not_status") {
 		// @ATTR enemygroup.requires_not_status|list(string)|Status required to be missing for loading enemies
 		std::string s;
-		while ((s = infile.nextValue()) != "") {
+		while ((s = popFirstString(infile.val)) != "") {
 			group->requires_not_status.push_back(s);
 		}
 	}
@@ -348,18 +348,18 @@ void Map::loadNPC(FileParser &infile) {
 	}
 	else if (infile.key == "requires_status") {
 		// @ATTR npc.requires_status|list(string)|Status required for NPC load. There can be multiple states, separated by comma
-		while ( (s = infile.nextValue()) != "")
+		while ( (s = popFirstString(infile.val)) != "")
 			npcs.back().requires_status.push_back(s);
 	}
 	else if (infile.key == "requires_not_status") {
 		// @ATTR npc.requires_not_status|list(string)|Status required to be missing for NPC load. There can be multiple states, separated by comma
-		while ( (s = infile.nextValue()) != "")
+		while ( (s = popFirstString(infile.val)) != "")
 			npcs.back().requires_not_status.push_back(s);
 	}
 	else if (infile.key == "location") {
 		// @ATTR npc.location|point|Location of NPC
-		npcs.back().pos.x = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
-		npcs.back().pos.y = static_cast<float>(toInt(infile.nextValue())) + 0.5f;
+		npcs.back().pos.x = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
+		npcs.back().pos.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
 
 		// make sure this NPC has a collision tile
 		// otherwise, it becomes possible for the player to stand "inside" the npc, which will trigger their event infinitely

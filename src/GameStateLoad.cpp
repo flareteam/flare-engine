@@ -314,31 +314,31 @@ void GameStateLoad::readGameSlots() {
 			if (infile.key == "name")
 				game_slots[i]->stats.name = infile.val;
 			else if (infile.key == "class") {
-				game_slots[i]->stats.character_class = infile.nextValue();
-				game_slots[i]->stats.character_subclass = infile.nextValue();
+				game_slots[i]->stats.character_class = popFirstString(infile.val);
+				game_slots[i]->stats.character_subclass = popFirstString(infile.val);
 			}
 			else if (infile.key == "xp")
 				game_slots[i]->stats.xp = toInt(infile.val);
 			else if (infile.key == "build") {
-				game_slots[i]->stats.physical_character = toInt(infile.nextValue());
-				game_slots[i]->stats.mental_character = toInt(infile.nextValue());
-				game_slots[i]->stats.offense_character = toInt(infile.nextValue());
-				game_slots[i]->stats.defense_character = toInt(infile.nextValue());
+				game_slots[i]->stats.physical_character = popFirstInt(infile.val);
+				game_slots[i]->stats.mental_character = popFirstInt(infile.val);
+				game_slots[i]->stats.offense_character = popFirstInt(infile.val);
+				game_slots[i]->stats.defense_character = popFirstInt(infile.val);
 			}
 			else if (infile.key == "equipped") {
-				std::string repeat_val = infile.nextValue();
+				std::string repeat_val = popFirstString(infile.val);
 				while (repeat_val != "") {
 					game_slots[i]->equipped.push_back(toInt(repeat_val));
-					repeat_val = infile.nextValue();
+					repeat_val = popFirstString(infile.val);
 				}
 			}
 			else if (infile.key == "option") {
-				game_slots[i]->stats.gfx_base = infile.nextValue();
-				game_slots[i]->stats.gfx_head = infile.nextValue();
-				game_slots[i]->stats.gfx_portrait = infile.nextValue();
+				game_slots[i]->stats.gfx_base = popFirstString(infile.val);
+				game_slots[i]->stats.gfx_head = popFirstString(infile.val);
+				game_slots[i]->stats.gfx_portrait = popFirstString(infile.val);
 			}
 			else if (infile.key == "spawn") {
-				game_slots[i]->current_map = getMapName(infile.nextValue());
+				game_slots[i]->current_map = getMapName(popFirstString(infile.val));
 			}
 			else if (infile.key == "permadeath") {
 				game_slots[i]->stats.permadeath = toBool(infile.val);

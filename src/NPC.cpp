@@ -160,29 +160,29 @@ void NPC::load(const std::string& npc_id) {
 				else if (infile.key == "vendor_requires_status") {
 					// @ATTR vendor_requires_status|list(string)|The player must have these statuses in order to use this NPC as a vendor.
 					while (infile.val != "") {
-						vendor_requires_status.push_back(infile.nextValue());
+						vendor_requires_status.push_back(popFirstString(infile.val));
 					}
 				}
 				else if (infile.key == "vendor_requires_not_status") {
 					// @ATTR vendor_requires_not_status|list(string)|The player must not have these statuses in order to use this NPC as a vendor.
 					while (infile.val != "") {
-						vendor_requires_not_status.push_back(infile.nextValue());
+						vendor_requires_not_status.push_back(popFirstString(infile.val));
 					}
 				}
 				else if (infile.key == "constant_stock") {
 					// @ATTR constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale.
 					stack.quantity = 1;
 					while (infile.val != "") {
-						stack.item = toInt(infile.nextValue());
+						stack.item = popFirstInt(infile.val);
 						stock.add(stack);
 					}
 				}
 				else if (infile.key == "status_stock") {
 					// @ATTR status_stock|repeatable(string, list(item_id)) : Required status, Item(s)|A list of items this vendor will have for sale if the required status is met.
-					if (camp->checkStatus(infile.nextValue())) {
+					if (camp->checkStatus(popFirstString(infile.val))) {
 						stack.quantity = 1;
 						while (infile.val != "") {
-							stack.item = toInt(infile.nextValue());
+							stack.item = popFirstInt(infile.val);
 							stock.add(stack);
 						}
 					}
@@ -199,8 +199,8 @@ void NPC::load(const std::string& npc_id) {
 				}
 				else if (infile.key == "random_stock_count") {
 					// @ATTR random_stock_count|int, int : Min, Max|Sets the minimum (and optionally, the maximum) amount of random items this npc can have.
-					random_table_count.x = toInt(infile.nextValue());
-					random_table_count.y = toInt(infile.nextValue());
+					random_table_count.x = popFirstInt(infile.val);
+					random_table_count.y = popFirstInt(infile.val);
 					if (random_table_count.x != 0 || random_table_count.y != 0) {
 						clampFloor(random_table_count.x, 1);
 						clampFloor(random_table_count.y, random_table_count.x);

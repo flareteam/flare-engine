@@ -246,8 +246,8 @@ void loadTilesetSettings() {
 		while (infile.next()) {
 			if (infile.key == "tile_size") {
 				// @ATTR tile_size|int, int : Width, Height|The width and height of a tile.
-				TILE_W = static_cast<unsigned short>(toInt(infile.nextValue()));
-				TILE_H = static_cast<unsigned short>(toInt(infile.nextValue()));
+				TILE_W = static_cast<unsigned short>(popFirstInt(infile.val));
+				TILE_H = static_cast<unsigned short>(popFirstInt(infile.val));
 				TILE_W_HALF = TILE_W /2;
 				TILE_H_HALF = TILE_H /2;
 			}
@@ -596,20 +596,20 @@ void loadMiscSettings() {
 				else if (infile.key == "actionbar") {
 					// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
 					for (int i=0; i<12; i++) {
-						HERO_CLASSES.back().hotkeys[i] = toInt(infile.nextValue());
+						HERO_CLASSES.back().hotkeys[i] = popFirstInt(infile.val);
 					}
 				}
 				else if (infile.key == "powers") {
 					// @ATTR powers|list(power_id)|A list of powers that are unlocked when starting this class.
 					std::string power;
-					while ( (power = infile.nextValue()) != "") {
+					while ( (power = popFirstString(infile.val)) != "") {
 						HERO_CLASSES.back().powers.push_back(toInt(power));
 					}
 				}
 				else if (infile.key == "campaign") {
 					// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
 					std::string status;
-					while ( (status = infile.nextValue()) != "") {
+					while ( (status = popFirstString(infile.val)) != "") {
 						HERO_CLASSES.back().statuses.push_back(status);
 					}
 				}

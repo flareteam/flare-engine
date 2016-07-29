@@ -39,8 +39,8 @@ IconManager::IconManager()
 		while (infile.next()) {
 			if (infile.key == "icon_set") {
 				// @ATTR icon_set|repeatable(icon_id, filename) : First ID, Image file|Defines an icon graphics file to load, as well as the index of the first icon.
-				int first_id = popFirstInt(infile.val, ',');
-				std::string filename = popFirstString(infile.val, ',');
+				int first_id = popFirstInt(infile.val);
+				std::string filename = popFirstString(infile.val);
 
 				icon_sets.resize(icon_sets.size()+1);
 				if (!loadIconSet(icon_sets.back(), filename, first_id)) {
