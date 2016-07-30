@@ -695,6 +695,7 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->loot.push_back(*ec);
 		}
 		else if (ec->type == EC_MSG) {
+			// TODO support multiple log messages in a single frame
 			mapr->log_msg = ec->s;
 		}
 		else if (ec->type == EC_SHAKYCAM) {
@@ -785,16 +786,26 @@ bool EventManager::executeEvent(Event &ev) {
 		}
 		else if (ec->type == EC_SCRIPT) {
 			FileParser script_file;
-			Event script_evnt;
+			std::queue<Event> script_evnt;
 
 			if (script_file.open(ec->s)) {
 				while (script_file.next()) {
-					loadEventComponent(script_file, &script_evnt, NULL);
+					if (script_file.new_section && script_file.section == "event") {
+						script_evnt.push(Event());
+					}
+
+					if (script_evnt.empty())
+						continue;
+
+					loadEventComponent(script_file, &script_evnt.back(), NULL);
 				}
 				script_file.close();
 
-				if (isActive(script_evnt)) {
-					executeEvent(script_evnt);
+				while (!script_evnt.empty()) {
+					if (isActive(script_evnt.front())) {
+						executeEvent(script_evnt.front());
+					}
+					script_evnt.pop();
 				}
 			}
 		}
