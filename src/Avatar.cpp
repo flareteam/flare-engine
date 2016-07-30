@@ -128,7 +128,9 @@ void Avatar::init() {
 	stats.speed = 0.2f;
 	stats.recalc();
 
-	log_msg = "";
+	while (!log_msg.empty()) {
+		log_msg.pop();
+	}
 	respawn = false;
 
 	stats.cooldown_ticks = 0;
@@ -384,7 +386,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 			ss << " " << msg->get("You may increase one attribute through the Character Menu.");
 			newLevelNotification = true;
 		}
-		log_msg = ss.str();
+		log_msg.push(ss.str());
 		stats.recalc();
 		snd->play(sound_levelup);
 
@@ -599,12 +601,10 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					snd->play(sound_die);
 
 					if (stats.permadeath) {
-						log_msg = msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title.");
-						log_msg = substituteVarsInString(log_msg, this);
+						log_msg.push(substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this));
 					}
 					else {
-						log_msg = msg->get("You are defeated. ${INPUT_CONTINUE} to continue.");
-						log_msg = substituteVarsInString(log_msg, this);
+						log_msg.push(substituteVarsInString(msg->get("You are defeated. ${INPUT_CONTINUE} to continue."), this));
 					}
 
 					// if the player is attacking, we need to block further input
@@ -831,7 +831,7 @@ void Avatar::untransform() {
 	// For timed transformations, move the player to the last valid tile when untransforming
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 	if (!mapr->collider.is_valid_position(stats.pos.x,stats.pos.y,MOVEMENT_NORMAL, true)) {
-		log_msg = msg->get("Transformation expired. You have been moved back to a safe place.");
+		log_msg.push(msg->get("Transformation expired. You have been moved back to a safe place."));
 		if (transform_map != mapr->getFilename()) {
 			mapr->teleportation = true;
 			mapr->teleport_mapname = transform_map;

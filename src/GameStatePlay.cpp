@@ -385,46 +385,10 @@ void GameStatePlay::checkLog() {
 		menu->hudlog->clear();
 	}
 
-	// Map events can create messages
-	if (mapr->log_msg != "") {
-		menu->questlog->add(mapr->log_msg, LOG_TYPE_MESSAGES, false);
-		menu->hudlog->add(mapr->log_msg, false);
-		mapr->log_msg = "";
-	}
-
-	// The avatar can create messages (e.g. level up)
-	if (pc->log_msg != "") {
-		menu->questlog->add(pc->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(pc->log_msg);
-		pc->log_msg = "";
-	}
-
-	// Campaign events can create messages (e.g. quest rewards)
-	if (camp->log_msg != "") {
-		menu->questlog->add(camp->log_msg, LOG_TYPE_MESSAGES, false);
-		menu->hudlog->add(camp->log_msg, false);
-		camp->log_msg = "";
-	}
-
-	// MenuInventory has hints to help the player use items properly
-	if (menu->inv->log_msg != "") {
-		menu->questlog->add(menu->inv->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(menu->inv->log_msg);
-		menu->inv->log_msg = "";
-	}
-
-	// MenuStash can display a message when the stash is full
-	if (menu->stash->log_msg != "") {
-		menu->questlog->add(menu->stash->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(menu->stash->log_msg);
-		menu->stash->log_msg = "";
-	}
-
-	// PowerManager has hints for powers
-	if (powers->log_msg != "") {
-		menu->questlog->add(powers->log_msg, LOG_TYPE_MESSAGES);
-		menu->hudlog->add(powers->log_msg);
-		powers->log_msg = "";
+	while (!pc->log_msg.empty()) {
+		menu->questlog->add(pc->log_msg.front(), LOG_TYPE_MESSAGES);
+		menu->hudlog->add(pc->log_msg.front());
+		pc->log_msg.pop();
 	}
 }
 

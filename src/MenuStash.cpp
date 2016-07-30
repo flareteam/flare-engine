@@ -27,10 +27,10 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "MenuStash.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 #include "WidgetButton.h"
-#include "SharedGameResources.h"
 
 MenuStash::MenuStash(StatBlock *_stats)
 	: Menu()
@@ -39,7 +39,6 @@ MenuStash::MenuStash(StatBlock *_stats)
 	, color_normal(font->getColor("menu_normal"))
 	, stock()
 	, updated(false)
-	, log_msg("")
 {
 
 	setBackground("images/menus/stash.png");
@@ -197,7 +196,7 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 	}
 
 	if (items->items[stack.item].quest_item) {
-		log_msg = msg->get("Can not store quest items in the stash.");
+		pc->log_msg.push(msg->get("Can not store quest items in the stash."));
 		drop_stack.push(stack);
 		return false;
 	}
@@ -207,7 +206,7 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 		if (leftover.quantity != stack.quantity) {
 			updated = true;
 		}
-		log_msg = msg->get("Stash is full.");
+		pc->log_msg.push(msg->get("Stash is full."));
 		drop_stack.push(leftover);
 		return false;
 	}

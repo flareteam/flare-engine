@@ -129,9 +129,6 @@ public:
 	bool cutscene;
 	std::string cutscene_file;
 
-	// message handling
-	std::string log_msg;
-
 	// shaky cam
 	int shaky_cam_ticks;
 

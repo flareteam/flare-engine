@@ -64,8 +64,6 @@ public:
 	MenuItemStorage stock;
 	bool updated;
 
-	std::string log_msg;
-
 	std::queue<ItemStack> drop_stack;
 };
 

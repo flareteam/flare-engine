@@ -626,7 +626,7 @@ bool EventManager::executeEvent(Event &ev) {
 			}
 			else {
 				ev.keep_after_trigger = false;
-				mapr->log_msg = msg->get("Unknown destination");
+				pc->log_msg.push(msg->get("Unknown destination"));
 			}
 		}
 		else if (ec->type == EC_INTRAMAP) {
@@ -695,8 +695,7 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->loot.push_back(*ec);
 		}
 		else if (ec->type == EC_MSG) {
-			// TODO support multiple log messages in a single frame
-			mapr->log_msg = ec->s;
+			pc->log_msg.push(ec->s);
 		}
 		else if (ec->type == EC_SHAKYCAM) {
 			mapr->shaky_cam_ticks = ec->x;

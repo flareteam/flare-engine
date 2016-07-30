@@ -115,7 +115,7 @@ public:
 	std::vector<std::string> layer_reference_order;
 	std::vector<std::vector<unsigned> > layer_def;
 
-	std::string log_msg;
+	std::queue<std::string> log_msg;
 
 	std::string attack_anim;
 	bool setPowers;

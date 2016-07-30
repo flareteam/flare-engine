@@ -49,11 +49,9 @@ public:
 	void rewardCurrency(int amount);
 	void rewardXP(int amount, bool show_message);
 	void restoreHPMP(const std::string& s);
-	void addMsg(const std::string& msg);
 	bool checkAllRequirements(const Event_Component& ec);
 
 	std::vector<std::string> status;
-	std::string log_msg;
 	std::queue<ItemStack> drop_stack;
 
 	float bonus_xp;		// Fractional XP points not yet awarded (e.g. killing 1 XP enemies with a +25% ring)

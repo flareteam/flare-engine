@@ -386,7 +386,6 @@ public:
 	~PowerManager();
 
 	LootManager *lootm;
-	std::string log_msg;
 
 	void handleNewMap(MapCollision *_collider);
 	bool activate(int power_index, StatBlock *src_stats, const FPoint& target);

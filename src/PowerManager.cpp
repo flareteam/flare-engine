@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapCollision.h"
 #include "PowerManager.h"
 #include "Settings.h"
+#include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "StatBlock.h"
 #include "Utils.h"
@@ -47,7 +48,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 PowerManager::PowerManager(LootManager *_lootm)
 	: collider(NULL)
 	, lootm(_lootm)
-	, log_msg("")
 	, used_items()
 	, used_equipped_items() {
 	loadEffects();
@@ -1111,7 +1111,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint
 	inpt->lockActionBar();
 
 	if (src_stats->transformed && powers[power_index].spawn_type != "untransform") {
-		log_msg = msg->get("You are already transformed, untransform first.");
+		pc->log_msg.push(msg->get("You are already transformed, untransform first."));
 		return false;
 	}
 
@@ -1123,7 +1123,7 @@ bool PowerManager::transform(int power_index, StatBlock *src_stats, const FPoint
 			src_stats->transform_type = "untransform"; // untransform() is called only if type !=""
 		}
 		else {
-			log_msg = msg->get("Could not untransform at this position.");
+			pc->log_msg.push(msg->get("Could not untransform at this position."));
 			inpt->unlockActionBar();
 			collider->block(src_stats->pos.x, src_stats->pos.y, false);
 			return false;

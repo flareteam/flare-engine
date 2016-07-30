@@ -122,7 +122,6 @@ public:
 
 	short inv_ctrl;
 
-	std::string log_msg;
 	std::string show_book;
 
 	std::queue<ItemStack> drop_stack;
