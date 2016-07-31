@@ -41,6 +41,12 @@ const int SOURCE_TYPE_NEUTRAL = 1;
 const int SOURCE_TYPE_ENEMY = 2;
 const int SOURCE_TYPE_ALLY = 3;
 
+// determines when to exec the script if specified
+// cast is handled in PowerManager
+const int SCRIPT_TRIGGER_CAST = 0;
+const int SCRIPT_TRIGGER_HIT = 1;
+const int SCRIPT_TRIGGER_WALL = 2;
+
 class Hazard {
 private:
 	const MapCollision *collider;
@@ -139,6 +145,10 @@ public:
 	// for linking hazards together, e.g. repeaters
 	Hazard* parent;
 	std::vector<Hazard*> children;
+
+	// event scripts
+	int script_trigger;
+	std::string script;
 };
 
 #endif

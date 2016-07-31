@@ -243,6 +243,9 @@ public:
 
 	bool walls_block_aoe;
 
+	int script_trigger;
+	std::string script;
+
 	Power()
 		: type(-1)
 		, name("")
@@ -348,7 +351,10 @@ public:
 		, target_movement_flying(true)
 		, target_movement_intangible(true)
 
-		, walls_block_aoe(false) {
+		, walls_block_aoe(false)
+
+		, script_trigger(-1)
+		, script("") {
 	}
 
 };

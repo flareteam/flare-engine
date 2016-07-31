@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Avatar.h"
 #include "Animation.h"
 #include "EnemyManager.h"
+#include "EventManager.h"
 #include "Hazard.h"
 #include "HazardManager.h"
 #include "SharedGameResources.h"
@@ -75,9 +76,18 @@ void HazardManager::logic() {
 
 
 		// if a moving hazard hits a wall, check for an after-effect
-		if (h[i-1]->hit_wall && h[i-1]->wall_power > 0) {
-			powers->activate(h[i-1]->wall_power, h[i-1]->src_stats, h[i-1]->pos);
-			if (powers->powers[h[i-1]->wall_power].directional) powers->hazards.back()->animationKind = h[i-1]->animationKind;
+		if (h[i-1]->hit_wall) {
+			if (h[i-1]->script_trigger == SCRIPT_TRIGGER_WALL) {
+				EventManager::executeScript(h[i-1]->script, h[i-1]->pos.x, h[i-1]->pos.y);
+			}
+
+			if (h[i-1]->wall_power > 0) {
+				powers->activate(h[i-1]->wall_power, h[i-1]->src_stats, h[i-1]->pos);
+
+				if (powers->powers[h[i-1]->wall_power].directional) {
+					powers->hazards.back()->animationKind = h[i-1]->animationKind;
+				}
+			}
 		}
 
 	}
@@ -143,13 +153,19 @@ void HazardManager::logic() {
 }
 
 void HazardManager::hitEntity(size_t index, const bool hit) {
-	if (!h[index]->multitarget && hit) {
+	if (!hit) return;
+
+	if (!h[index]->multitarget) {
 		h[index]->active = false;
 		if (!h[index]->complete_animation) h[index]->lifespan = 0;
 	}
-	if (hit && h[index]->sfx_hit_enable && !h[index]->sfx_hit_played) {
+	if (h[index]->sfx_hit_enable && !h[index]->sfx_hit_played) {
 		snd->play(h[index]->sfx_hit);
 		h[index]->sfx_hit_played = true;
+	}
+
+	if (h[index]->script_trigger == SCRIPT_TRIGGER_HIT) {
+		EventManager::executeScript(h[index]->script, h[index]->pos.x, h[index]->pos.y);
 	}
 }
 

@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
+#include "EventManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
 #include "MapCollision.h"
@@ -538,6 +539,16 @@ void PowerManager::loadPowers() {
 			// @ATTR power.walls_block_aoe|bool|When true, prevents hazard aoe from hitting targets that are behind walls/pits.
 			powers[input_id].walls_block_aoe = toBool(infile.val);
 		}
+		else if (infile.key == "script") {
+			// @ATTR power.script|["on_cast", "on_hit", "on_wall"], filename : Trigger, Filename|Loads and executes a script file when the trigger is activated.
+			std::string trigger = popFirstString(infile.val);
+			if (trigger == "on_cast") powers[input_id].script_trigger = SCRIPT_TRIGGER_CAST;
+			else if (trigger == "on_hit") powers[input_id].script_trigger = SCRIPT_TRIGGER_HIT;
+			else if (trigger == "on_wall") powers[input_id].script_trigger = SCRIPT_TRIGGER_WALL;
+			else infile.error("PowerManager: Unknown script trigger '%s'", trigger.c_str());
+
+			powers[input_id].script = popFirstString(infile.val);
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -752,6 +763,11 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	if (powers[power_index].sfx_hit_enable) {
 		haz->sfx_hit = powers[power_index].sfx_hit;
 		haz->sfx_hit_enable = powers[power_index].sfx_hit_enable;
+	}
+
+	if (powers[power_index].script_trigger != -1) {
+		haz->script_trigger = powers[power_index].script_trigger;
+		haz->script = powers[power_index].script;
 	}
 }
 
@@ -1173,6 +1189,10 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 
 	if (powers[power_index].type == POWTYPE_BLOCK)
 		return block(power_index, src_stats);
+
+	if (powers[power_index].script_trigger == SCRIPT_TRIGGER_CAST) {
+		EventManager::executeScript(powers[power_index].script, src_stats->pos.x, src_stats->pos.y);
+	}
 
 	// logic for different types of powers are very different.  We allow these
 	// separate functions to handle the details.

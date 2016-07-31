@@ -84,7 +84,9 @@ Hazard::Hazard(MapCollision *_collider)
 	, sfx_hit(0)
 	, sfx_hit_enable(false)
 	, sfx_hit_played(false)
-	, parent(NULL) {
+	, parent(NULL)
+	, script_trigger(-1)
+	, script("") {
 }
 
 Hazard::~Hazard() {

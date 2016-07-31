@@ -807,10 +807,10 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 		while (script_file.next()) {
 			if (script_file.new_section && script_file.section == "event") {
 				Event tmp_evnt;
-				tmp_evnt.location.x = static_cast<int>(x);
-				tmp_evnt.location.y = static_cast<int>(y);
-				tmp_evnt.location.w = 1;
-				tmp_evnt.location.h = 1;
+				tmp_evnt.location.x = tmp_evnt.hotspot.x = static_cast<int>(x);
+				tmp_evnt.location.y = tmp_evnt.hotspot.y = static_cast<int>(y);
+				tmp_evnt.location.w = tmp_evnt.hotspot.w = 1;
+				tmp_evnt.location.h = tmp_evnt.hotspot.h = 1;
 				tmp_evnt.center.x = static_cast<float>(tmp_evnt.location.x) + 0.5f;
 				tmp_evnt.center.y = static_cast<float>(tmp_evnt.location.y) + 0.5f;
 
