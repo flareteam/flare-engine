@@ -784,7 +784,7 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->show_book = ec->s;
 		}
 		else if (ec->type == EC_SCRIPT) {
-			executeScript(ec->s);
+			executeScript(ec->s, pc->stats.pos.x, pc->stats.pos.y);
 		}
 	}
 	return !ev.keep_after_trigger;
@@ -799,14 +799,22 @@ bool EventManager::isActive(const Event &e) {
 	return true;
 }
 
-void EventManager::executeScript(const std::string& filename) {
+void EventManager::executeScript(const std::string& filename, float x, float y) {
 	FileParser script_file;
 	std::queue<Event> script_evnt;
 
 	if (script_file.open(filename)) {
 		while (script_file.next()) {
 			if (script_file.new_section && script_file.section == "event") {
-				script_evnt.push(Event());
+				Event tmp_evnt;
+				tmp_evnt.location.x = static_cast<int>(x);
+				tmp_evnt.location.y = static_cast<int>(y);
+				tmp_evnt.location.w = 1;
+				tmp_evnt.location.h = 1;
+				tmp_evnt.center.x = static_cast<float>(tmp_evnt.location.x) + 0.5f;
+				tmp_evnt.center.y = static_cast<float>(tmp_evnt.location.y) + 0.5f;
+
+				script_evnt.push(tmp_evnt);
 			}
 
 			if (script_evnt.empty())

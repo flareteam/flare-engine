@@ -64,7 +64,7 @@ public:
 
 	static bool executeEvent(Event &e);
 	static bool isActive(const Event &e);
-	static void executeScript(const std::string& filename);
+	static void executeScript(const std::string& filename, float x, float y);
 };
 
 
