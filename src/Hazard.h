@@ -136,9 +136,6 @@ public:
 	bool sfx_hit_enable;
 	bool sfx_hit_played;
 
-	// loot
-	std::vector<Event_Component> loot;
-
 	// for linking hazards together, e.g. repeaters
 	Hazard* parent;
 	std::vector<Hazard*> children;

@@ -93,7 +93,7 @@ GameStatePlay::GameStatePlay()
 		items = new ItemManager();
 
 	loot = new LootManager();
-	powers = new PowerManager(loot);
+	powers = new PowerManager();
 	camp = new CampaignManager();
 	mapr = new MapRenderer();
 	pc = new Avatar();
@@ -574,12 +574,6 @@ void GameStatePlay::checkLootDrop() {
 			loot->addLoot(menu->inv->drop_stack.front(), pc->stats.pos, true);
 		}
 		menu->inv->drop_stack.pop();
-	}
-
-	// check loot dropped by powers
-	if (!powers->loot.empty()) {
-		loot->checkLoot(powers->loot);
-		powers->loot.clear();
 	}
 }
 

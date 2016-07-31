@@ -29,7 +29,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define POWER_MANAGER_H
 
 #include "FileParser.h"
-#include "LootManager.h"
 #include "MapRenderer.h"
 #include "Map.h"
 
@@ -244,9 +243,6 @@ public:
 
 	bool walls_block_aoe;
 
-	// loot
-	std::vector<Event_Component> loot;
-
 	Power()
 		: type(-1)
 		, name("")
@@ -382,10 +378,8 @@ private:
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
 public:
-	explicit PowerManager(LootManager *_lootm);
+	explicit PowerManager();
 	~PowerManager();
-
-	LootManager *lootm;
 
 	void handleNewMap(MapCollision *_collider);
 	bool activate(int power_index, StatBlock *src_stats, const FPoint& target);
@@ -408,8 +402,6 @@ public:
 
 	std::vector<int> used_items;
 	std::vector<int> used_equipped_items;
-
-	std::vector<Event_Component> loot;
 };
 
 #endif

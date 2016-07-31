@@ -45,9 +45,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 /**
  * PowerManager constructor
  */
-PowerManager::PowerManager(LootManager *_lootm)
+PowerManager::PowerManager()
 	: collider(NULL)
-	, lootm(_lootm)
 	, used_items()
 	, used_equipped_items() {
 	loadEffects();
@@ -119,7 +118,6 @@ void PowerManager::loadPowers() {
 		return;
 
 	bool clear_post_effects = true;
-	bool clear_loot = true;
 
 	int input_id = 0;
 	bool skippingEntry = false;
@@ -137,7 +135,6 @@ void PowerManager::loadPowers() {
 				powers.resize(input_id + 1);
 
 			clear_post_effects = true;
-			clear_loot = true;
 
 			continue;
 		}
@@ -525,17 +522,6 @@ void PowerManager::loadPowers() {
 
 			powers[input_id].mod_crit_value = popFirstInt(infile.val);
 		}
-		else if (infile.key == "loot") {
-			// @ATTR power.loot|list(loot)|Give the player this loot when the power is used
-			if (clear_loot) {
-				powers[input_id].loot.clear();
-				clear_loot = false;
-			}
-			if (lootm) {
-				powers[input_id].loot.push_back(Event_Component());
-				lootm->parseLoot(infile.val, &powers[input_id].loot.back(), &powers[input_id].loot);
-			}
-		}
 		else if (infile.key == "target_movement_normal") {
 			// @ATTR power.target_movement_normal|bool|Power can affect entities with normal movement (aka walking on ground)
 			powers[input_id].target_movement_normal = toBool(infile.val);
@@ -753,11 +739,6 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	haz->post_power = powers[power_index].post_power;
 	haz->wall_power = powers[power_index].wall_power;
 
-	// handle loot
-	if (!powers[power_index].loot.empty()) {
-		haz->loot = powers[power_index].loot;
-	}
-
 	// flag missile powers for reflection
 	haz->missile = (powers[power_index].type == POWTYPE_MISSILE);
 
@@ -815,13 +796,6 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 	// otherwise the post power will chain off the hazard itself
 	if (!powers[power_index].use_hazard) {
 		activate(powers[power_index].post_power, src_stats, src_stats->pos);
-
-		// handle loot
-		for (unsigned i=0; i<powers[power_index].loot.size(); i++) {
-			loot.push_back(powers[power_index].loot[i]);
-			loot.back().x = static_cast<int>(src_stats->pos.x);
-			loot.back().y = static_cast<int>(src_stats->pos.y);
-		}
 	}
 }
 
