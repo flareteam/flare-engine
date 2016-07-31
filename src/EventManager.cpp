@@ -820,6 +820,11 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 			if (script_evnt.empty())
 				continue;
 
+			if (script_file.key == "script" && script_file.val == filename) {
+				script_file.error("EventManager: Calling a script from within itself is not allowed.");
+				continue;
+			}
+
 			loadEventComponent(script_file, &script_evnt.back(), NULL);
 		}
 		script_file.close();
