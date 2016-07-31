@@ -117,17 +117,22 @@ bool CampaignManager::checkItem(int item_id) {
 }
 
 void CampaignManager::removeCurrency(int quantity) {
-	menu->inv->removeCurrency(quantity);
-	pc->log_msg.push(msg->get("%d %s removed.", quantity, CURRENCY));
-	items->playSound(CURRENCY_ID);
+	int max_amount = std::min(quantity, menu->inv->currency);
+
+	if (max_amount > 0) {
+		menu->inv->removeCurrency(max_amount);
+		pc->log_msg.push(msg->get("%d %s removed.", max_amount, CURRENCY));
+		items->playSound(CURRENCY_ID);
+	}
 }
 
 void CampaignManager::removeItem(int item_id) {
 	if (item_id < 0 || static_cast<unsigned>(item_id) >= items->items.size()) return;
 
-	menu->inv->remove(item_id);
-	pc->log_msg.push(msg->get("%s removed.", items->getItemName(item_id)));
-	items->playSound(item_id);
+	if (menu->inv->remove(item_id)) {
+		pc->log_msg.push(msg->get("%s removed.", items->getItemName(item_id)));
+		items->playSound(item_id);
+	}
 }
 
 void CampaignManager::rewardItem(ItemStack istack) {

@@ -668,11 +668,17 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 /**
  * Remove one given item from the player's inventory.
  */
-void MenuInventory::remove(int item) {
-	if( !inventory[CARRIED].remove(item)) {
-		inventory[EQUIPMENT].remove(item);
-		applyEquipment();
+bool MenuInventory::remove(int item) {
+	if(!inventory[CARRIED].remove(item)) {
+		if (!inventory[EQUIPMENT].remove(item)) {
+			return false;
+		}
+		else {
+			applyEquipment();
+		}
 	}
+
+	return true;
 }
 
 /**
