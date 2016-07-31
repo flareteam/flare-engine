@@ -196,7 +196,7 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 	}
 
 	if (items->items[stack.item].quest_item) {
-		pc->log_msg.push(msg->get("Can not store quest items in the stash."));
+		pc->logMsg(msg->get("Can not store quest items in the stash."), true);
 		drop_stack.push(stack);
 		return false;
 	}
@@ -206,7 +206,7 @@ bool MenuStash::add(ItemStack stack, int slot, bool play_sound) {
 		if (leftover.quantity != stack.quantity) {
 			updated = true;
 		}
-		pc->log_msg.push(msg->get("Stash is full."));
+		pc->logMsg(msg->get("Stash is full."), true);
 		drop_stack.push(leftover);
 		return false;
 	}

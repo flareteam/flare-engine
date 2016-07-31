@@ -386,8 +386,12 @@ void GameStatePlay::checkLog() {
 	}
 
 	while (!pc->log_msg.empty()) {
-		menu->questlog->add(pc->log_msg.front(), LOG_TYPE_MESSAGES);
-		menu->hudlog->add(pc->log_msg.front());
+		const std::string& str = pc->log_msg.front().first;
+		const bool prevent_spam = pc->log_msg.front().second;
+
+		menu->questlog->add(str, LOG_TYPE_MESSAGES, prevent_spam);
+		menu->hudlog->add(str, prevent_spam);
+
 		pc->log_msg.pop();
 	}
 }

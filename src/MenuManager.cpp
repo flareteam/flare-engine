@@ -782,7 +782,7 @@ void MenuManager::logic() {
 						drop_stack.push(drag_stack);
 					}
 					else {
-						pc->log_msg.push(msg->get("This item can not be dropped."));
+						pc->logMsg(msg->get("This item can not be dropped."), true);
 						items->playSound(drag_stack.item);
 
 						inv->itemReturn(drag_stack);
