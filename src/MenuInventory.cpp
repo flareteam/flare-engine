@@ -681,14 +681,6 @@ bool MenuInventory::remove(int item) {
 	return true;
 }
 
-/**
- * Remove an equipped item from the player's inventory.
- */
-void MenuInventory::removeEquipped(int item) {
-	inventory[EQUIPMENT].remove(item);
-	applyEquipment();
-}
-
 void MenuInventory::removeFromPrevSlot(int quantity) {
 	if (drag_prev_src > -1 && inventory[drag_prev_src].drag_prev_slot > -1) {
 		int drag_prev_slot = inventory[drag_prev_src].drag_prev_slot;
