@@ -88,7 +88,6 @@ public:
 
 	bool add(ItemStack stack, int area, int slot, bool play_sound, bool auto_equip);
 	bool remove(int item);
-	void removeEquipped(int item);
 	void removeFromPrevSlot(int quantity);
 	void addCurrency(int count);
 	void removeCurrency(int count);
