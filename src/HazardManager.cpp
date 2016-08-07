@@ -217,7 +217,7 @@ void HazardManager::addRenders(std::vector<Renderable> &r, std::vector<Renderabl
 	for (unsigned int i=0; i<h.size(); i++) {
 		h[i]->addRenderable(r, r_dead);
 
-		if (DEV_HUD && h[i]->delay_frames == 0) {
+		if (DEV_MODE && DEV_HUD && h[i]->delay_frames == 0) {
 			dev_marker.map_pos = h[i]->pos;
 			dev_marker.prio = 3;
 			r.push_back(dev_marker);
