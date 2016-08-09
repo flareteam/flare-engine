@@ -532,7 +532,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.stash|bool|If true, the Stash menu if opened.
 		e->type = EC_STASH;
 
-		e->s = val;
+		e->x = static_cast<int>(toBool(val));
 	}
 	else if (key == "npc") {
 		// @ATTR event.npc|filename|Filename of an NPC to start dialog with.
@@ -556,13 +556,13 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.repeat|bool|If true, the event to be triggered again.
 		e->type = EC_REPEAT;
 
-		e->s = val;
+		e->x = static_cast<int>(toBool(val));
 	}
 	else if (key == "save_game") {
 		// @ATTR event.save_game|bool|If true, the game is saved when the event is triggered. The respawn position is set to where the player is standing.
 		e->type = EC_SAVE_GAME;
 
-		e->s = val;
+		e->x = static_cast<int>(toBool(val));
 	}
 	else if (key == "book") {
 		// @ATTR event.book|filename|Opens a book by filename.
@@ -754,7 +754,7 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->activatePower(ec->x, ec->y, target);
 		}
 		else if (ec->type == EC_STASH) {
-			mapr->stash = toBool(ec->s);
+			mapr->stash = static_cast<bool>(ec->x);
 			if (mapr->stash) {
 				mapr->stash_pos.x = static_cast<float>(ev.location.x) + 0.5f;
 				mapr->stash_pos.y = static_cast<float>(ev.location.y) + 0.5f;
@@ -772,10 +772,10 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->cutscene_file = ec->s;
 		}
 		else if (ec->type == EC_REPEAT) {
-			ev.keep_after_trigger = toBool(ec->s);
+			ev.keep_after_trigger = static_cast<bool>(ec->x);
 		}
 		else if (ec->type == EC_SAVE_GAME) {
-			mapr->save_game = toBool(ec->s);
+			mapr->save_game = static_cast<bool>(ec->x);
 		}
 		else if (ec->type == EC_NPC_ID) {
 			mapr->npc_id = ec->x;
