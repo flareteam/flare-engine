@@ -620,6 +620,13 @@ void MapRenderer::checkEvents(const FPoint& loc) {
 		// skip inactive events
 		if (!EventManager::isActive(*it)) continue;
 
+		// static events are run every frame without interaction from the player
+		if ((*it).activate_type == EVENT_STATIC) {
+			if (EventManager::executeEvent(*it))
+				it = events.erase(it);
+			continue;
+		}
+
 		if ((*it).activate_type == EVENT_ON_CLEAR) {
 			if (enemies_cleared && EventManager::executeEvent(*it))
 				it = events.erase(it);

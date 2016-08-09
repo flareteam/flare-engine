@@ -81,7 +81,7 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		evnt->type = infile.val;
 	}
 	else if (infile.key == "activate") {
-		// @ATTR event.activate|["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear"]|Set the state in which the event will be activated (map events only).
+		// @ATTR event.activate|["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear", "static"]|Set the state in which the event will be activated (map events only).
 		if (infile.val == "on_trigger") {
 			evnt->activate_type = EVENT_ON_TRIGGER;
 		}
@@ -99,6 +99,9 @@ void EventManager::loadEvent(FileParser &infile, Event* evnt) {
 		else if (infile.val == "on_clear") {
 			evnt->activate_type = EVENT_ON_CLEAR;
 			evnt->keep_after_trigger = false;
+		}
+		else if (infile.val == "static") {
+			evnt->activate_type = EVENT_STATIC;
 		}
 		else {
 			infile.error("EventManager: Event activation type '%s' unknown, change to \"on_trigger\" to suppress this warning.", infile.val.c_str());
