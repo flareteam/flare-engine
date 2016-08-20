@@ -424,7 +424,7 @@ void MenuManager::logic() {
 			if (act->twostep_slot != -1) {
 				act->twostep_slot = -1;
 			}
-			else if (devconsole->visible) {
+			else if (DEV_MODE && devconsole->visible) {
 				devconsole->visible = false;
 				devconsole->reset();
 			}
