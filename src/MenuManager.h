@@ -138,6 +138,7 @@ public:
 	bool requestingExit() {
 		return done;
 	}
+	bool isNPCMenuVisible();
 };
 
 #endif

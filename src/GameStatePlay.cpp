@@ -73,8 +73,7 @@ GameStatePlay::GameStatePlay()
 	, loading_bg(NULL)
 	// Load the loading screen image (we currently use the confirm dialog background):
 	, npc_id(-1)
-	, eventDialogOngoing(false)
-	, eventPendingDialog(false)
+	, npc_from_map(true)
 	, color_normal(font->getColor("menu_normal"))
 	, nearest_npc(-1) {
 
@@ -300,9 +299,7 @@ void GameStatePlay::checkTeleport() {
 			powers->handleNewMap(&mapr->collider);
 			menu->enemy->handleNewMap();
 			npcs->handleNewMap();
-			menu->npc->setNPC(NULL);
-			menu->vendor->setNPC(NULL);
-			menu->talker->setNPC(NULL);
+			resetNPC();
 			menu->stash->visible = false;
 			menu->mini->prerender(&mapr->collider, mapr->w, mapr->h);
 			npc_id = nearest_npc = -1;
@@ -625,45 +622,75 @@ void GameStatePlay::checkNotifications() {
  * If an NPC is giving a reward, process it
  */
 void GameStatePlay::checkNPCInteraction() {
-	if (pc->stats.attacking) return;
+	if (pc->stats.attacking || !pc->stats.humanoid)
+		return;
 
-	if (mapr->npc_id != -1)
-		npc_id = mapr->npc_id;
-
-	bool player_ok = pc->stats.alive && pc->stats.humanoid;
-	float interact_distance = 0;
-	// check distance to this npc
-	if (npc_id != -1) {
-		interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+	// reset movement restrictions when we're not in dialog
+	if (!menu->talker->visible) {
+		pc->allow_movement = true;
 	}
 
+	if (npc_id != -1 && !menu->isNPCMenuVisible()) {
+		// if we have an NPC, but no NPC windows are open, clear the NPC
+		resetNPC();
+	}
+
+	// get NPC by ID
+	// event NPCs take precedence over map NPCs
 	if (mapr->event_npc != "") {
-		npc_id = mapr->npc_id = npcs->getID(mapr->event_npc);
+		// if the player is already interacting with an NPC when triggering an event NPC, clear the current NPC
 		if (npc_id != -1) {
-			eventDialogOngoing = true;
-			eventPendingDialog = true;
+			resetNPC();
 		}
-		mapr->event_npc = "";
+		npc_id = mapr->npc_id = npcs->getID(mapr->event_npc);
+		npc_from_map = false;
 	}
-
-	// if close enough to the NPC, open the appropriate interaction screen
-
-	if (npc_id != -1 && mapr->npc_id != -1 && ((interact_distance < INTERACT_RANGE && player_ok) || eventPendingDialog)) {
-
-		if (inpt->pressing[MAIN1] && !NO_MOUSE) inpt->lock[MAIN1] = true;
-		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
-
-		menu->npc->setNPC(npcs->npcs[npc_id]);
-
-		// only show npc action menu if multiple actions are available
-		if (!menu->npc->empty() && !menu->npc->selection())
-			menu->npc->visible = true;
+	else if (mapr->npc_id != -1) {
+		npc_id = mapr->npc_id;
+		npc_from_map = true;
 	}
-
+	mapr->event_npc = "";
 	mapr->npc_id = -1;
 
+	if (npc_id == -1)
+		return;
+
+	if (npc_id != -1) {
+		bool interact_with_npc = false;
+		if (npc_from_map) {
+			float interact_distance = calcDist(pc->stats.pos, npcs->npcs[npc_id]->pos);
+
+			if (interact_distance < INTERACT_RANGE) {
+				interact_with_npc = true;
+			}
+			else {
+				resetNPC();
+			}
+		}
+		else {
+			// npc is from event
+			interact_with_npc = true;
+
+			// since its impossible for the player to walk away from event NPCs, we disable their movement here
+			pc->allow_movement = false;
+		}
+
+		if (interact_with_npc) {
+			if (!menu->isNPCMenuVisible()) {
+				if (inpt->pressing[MAIN1] && !NO_MOUSE) inpt->lock[MAIN1] = true;
+				if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
+
+				menu->npc->setNPC(npcs->npcs[npc_id]);
+
+				// only show npc action menu if multiple actions are available
+				if (!menu->npc->empty() && !menu->npc->selection())
+					menu->npc->visible = true;
+			}
+		}
+	}
+
 	// check if a NPC action selection is made
-	if (npc_id != -1 && (menu->npc->selection() || eventPendingDialog)) {
+	if (npc_id != -1 && menu->npc->selection()) {
 		if (menu->npc->vendor_selected && !menu->vendor->visible) {
 			// begin trading
 			menu->closeAll();
@@ -675,34 +702,14 @@ void GameStatePlay::checkNPCInteraction() {
 			menu->closeAll();
 			menu->talker->setNPC(npcs->npcs[npc_id]);
 			menu->talker->chooseDialogNode(menu->npc->selected_dialog_node);
-			pc->allow_movement = npcs->npcs[npc_id]->checkMovement(menu->npc->selected_dialog_node);
+
+			if (npc_from_map) {
+				pc->allow_movement = npcs->npcs[npc_id]->checkMovement(menu->npc->selected_dialog_node);
+			}
 		}
 
 		menu->npc->setNPC(NULL);
-		eventPendingDialog = false;
 	}
-
-	if (npc_id != -1 && !eventDialogOngoing) {
-		// check for walking away from an NPC
-		if (interact_distance > INTERACT_RANGE || !player_ok) {
-			menu->npc->setNPC(NULL);
-			menu->vendor->setNPC(NULL);
-			menu->talker->setNPC(NULL);
-		}
-	}
-	else if (!menu->vendor->visible && !menu->talker->visible) {
-		eventDialogOngoing = false;
-	}
-
-	// reset movement restrictions when we're not in dialog
-	if (!menu->talker->visible) {
-		pc->allow_movement = true;
-	}
-
-	if (npc_id != -1 && !menu->talker->visible && !menu->vendor->visible && !menu->npc->visible) {
-		npc_id = -1;
-	}
-
 }
 
 void GameStatePlay::checkStash() {
@@ -1022,6 +1029,14 @@ void GameStatePlay::showLoading() {
 
 bool GameStatePlay::isPaused() {
 	return menu->pause;
+}
+
+void GameStatePlay::resetNPC() {
+	npc_id = -1;
+	npc_from_map = true;
+	menu->npc->setNPC(NULL);
+	menu->vendor->setNPC(NULL);
+	menu->talker->setNPC(NULL);
 }
 
 GameStatePlay::~GameStatePlay() {

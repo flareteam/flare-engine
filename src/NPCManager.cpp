@@ -134,6 +134,15 @@ int NPCManager::getID(const std::string& npcName) {
 	for (unsigned i=0; i<npcs.size(); i++) {
 		if (npcs[i]->filename == npcName) return i;
 	}
+
+	// could not find NPC, try loading it here
+	NPC *n = new NPC();
+	if (n) {
+		n->load(npcName);
+		npcs.push_back(n);
+		return static_cast<int>(npcs.size()-1);
+	}
+
 	return -1;
 }
 

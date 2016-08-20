@@ -91,10 +91,10 @@ private:
 	void updateActionBar(unsigned index = 0);
 	void showLoading();
 	void loadTitles();
+	void resetNPC();
 
 	int npc_id;
-	bool eventDialogOngoing;
-	bool eventPendingDialog;
+	bool npc_from_map;
 
 	Color color_normal;
 

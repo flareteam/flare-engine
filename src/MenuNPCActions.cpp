@@ -205,6 +205,8 @@ void MenuNPCActions::update() {
 }
 
 void MenuNPCActions::setNPC(NPC *pnpc) {
+	if (npc == pnpc)
+		return;
 
 	// clear actions menu
 	npc_actions.clear();
@@ -352,7 +354,6 @@ void MenuNPCActions::logic() {
 		}
 
 		is_selected = true;
-		visible = false;
 	}
 
 }

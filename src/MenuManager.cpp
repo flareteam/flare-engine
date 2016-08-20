@@ -1411,6 +1411,9 @@ bool MenuManager::isDragging() {
 	return drag_src != 0;
 }
 
+bool MenuManager::isNPCMenuVisible() {
+	return npc->visible || talker->visible || vendor->visible;
+}
 MenuManager::~MenuManager() {
 
 	tip_buf.clear();
