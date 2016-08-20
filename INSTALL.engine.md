@@ -26,8 +26,14 @@ ln -s ../flare-engine/flare # symlink the executable
 ./flare # flame on!
 ```
 
-However you can also build the engine with just
-[one call to your compiler](#one_call_build) including all source files at once.
+As a side note, I recommend enabling debugging symbols in order to provide more details if you run into a crash.
+This can be done by changing the cmake command in the block above to:
+
+```
+cmake . -DCMAKE_BUILD_TYPE=Debug
+```
+
+You can also build the engine with just [one call to your compiler](#one_call_build) including all source files at once.
 This might be useful if you are trying to run a flare based game on an obscure platform,
 as you only need a c++ compiler and the ported SDL package.
 
@@ -191,13 +197,13 @@ If the game fails to start, some of the following tips might help:
    ```
 
    Last command will install built libraries system-wide.
-   
+
    If you want to build SDL2 from Visual C++ project, open SDL2 project in Visual Studio, go to
-   
+
    ```
    Project Properties -> C/C++ -> Code Generation -> Enable Enhanced Instruction Set
    ```
 
    and select <i>No Enhanced Instructions (/arch:IA32)</i>. You might really need to rebuild also SDL2_mixer, SDL2_image and SDL2_ttf when you want to use libraries, built with Visual Studio.
-   
+
    If you want to build using cmake, use cmake-gui, and uncheck SSE checkbox after executing Configure command.
