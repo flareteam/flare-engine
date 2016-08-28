@@ -183,7 +183,7 @@ void LootManager::renderTooltips(const FPoint& cam) {
 			hover.w = TILE_W;
 			hover.h = TILE_H;
 
-			if (LOOT_TOOLTIPS || inpt->pressing[ALT] || isWithinRect(hover, inpt->mouse)) {
+			if ((LOOT_TOOLTIPS && !inpt->pressing[ALT]) || (!LOOT_TOOLTIPS && inpt->pressing[ALT]) || isWithinRect(hover, inpt->mouse)) {
 				it->tip_visible = true;
 
 				// create tooltip data if needed
