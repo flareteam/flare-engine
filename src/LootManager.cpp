@@ -296,17 +296,22 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 				src.x = ec->x;
 				src.y = ec->y;
 			}
-			p = mapr->collider.get_random_neighbor(src, drop_radius);
+			p.x = static_cast<float>(src.x) + 0.5f;
+			p.y = static_cast<float>(src.y) + 0.5f;
 
 			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
-				p = hero->pos;
-			}
-			else {
-				if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
-					p = hero->pos;
+				p = mapr->collider.get_random_neighbor(src, drop_radius);
 
-				mapr->collider.block(p.x, p.y, false);
-				tiles_to_unblock.push_back(FPointToPoint(p));
+				if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
+					p = hero->pos;
+				}
+				else {
+					if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
+						p = hero->pos;
+
+					mapr->collider.block(p.x, p.y, false);
+					tiles_to_unblock.push_back(FPointToPoint(p));
+				}
 			}
 
 			new_loot.quantity = randBetween(ec->a,ec->b);
@@ -369,17 +374,22 @@ void LootManager::checkLoot(std::vector<Event_Component> &loot_table, FPoint *po
 			src.x = ec->x;
 			src.y = ec->y;
 		}
-		p = mapr->collider.get_random_neighbor(src, drop_radius);
+		p.x = static_cast<float>(src.x) + 0.5f;
+		p.y = static_cast<float>(src.y) + 0.5f;
 
 		if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
-			p = hero->pos;
-		}
-		else {
-			if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
-				p = hero->pos;
+			p = mapr->collider.get_random_neighbor(src, drop_radius);
 
-			mapr->collider.block(p.x, p.y, false);
-			tiles_to_unblock.push_back(FPointToPoint(p));
+			if (!mapr->collider.is_valid_position(p.x, p.y, MOVEMENT_NORMAL, false)) {
+				p = hero->pos;
+			}
+			else {
+				if (src.x == static_cast<int>(p.x) && src.y == static_cast<int>(p.y))
+					p = hero->pos;
+
+				mapr->collider.block(p.x, p.y, false);
+				tiles_to_unblock.push_back(FPointToPoint(p));
+			}
 		}
 
 		new_loot.quantity = randBetween(ec->a,ec->b);
