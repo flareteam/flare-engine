@@ -40,6 +40,8 @@ public:
 	void render();
 	void renderToImage(Image *img);
 
+	Point text_offset;
+
 private:
 	bool loadIconSet(IconSet& icon_set, const std::string& filename, int first_id);
 

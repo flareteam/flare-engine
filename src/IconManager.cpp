@@ -47,6 +47,10 @@ IconManager::IconManager()
 					icon_sets.pop_back();
 				}
 			}
+			else if (infile.key == "text_offset") {
+				// @ATTR text_offset|point|A pixel offset from the top-left to place item quantity text on icons.
+				text_offset = toPoint(infile.val);
+			}
 		}
 		infile.close();
 	}

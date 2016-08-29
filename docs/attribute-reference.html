@@ -169,7 +169,7 @@ body {
 
 <p><strong>event.type</strong> | <code>string</code> | (IGNORED BY ENGINE) The "type" field, as used by Tiled and other mapping tools.</p>
 
-<p><strong>event.activate</strong> | <code>["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear"]</code> | Set the state in which the event will be activated (map events only).</p>
+<p><strong>event.activate</strong> | <code>["on_trigger", "on_load", "on_leave", "on_mapexit", "on_clear", "static"]</code> | Set the state in which the event will be activated (map events only).</p>
 
 <p><strong>event.location</strong> | <code>rectangle</code> | Defines the location area for the event.</p>
 
@@ -568,6 +568,8 @@ body {
 <p>Description of engine/icons.txt</p>
 
 <p><strong>icon_set</strong> | <code>repeatable(icon_id, filename) : First ID, Image file</code> | Defines an icon graphics file to load, as well as the index of the first icon.</p>
+
+<p><strong>text_offset</strong> | <code>point</code> | A pixel offset from the top-left to place item quantity text on icons.</p>
 
 <hr />
 
