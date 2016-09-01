@@ -94,7 +94,7 @@ void WidgetLog::refresh() {
 		if (separators[i])
 			y += paragraph_spacing+1;
 	}
-	y+=padding;
+	y+=(padding*2);
 	scroll_box->resize(scroll_box->pos.w, y);
 
 	// Render messages into the scrollbox area
