@@ -347,6 +347,7 @@ void MenuManager::logic() {
 	}
 
 	book->logic();
+	effects->logic();
 	act->logic();
 	hudlog->logic();
 	enemy->logic();

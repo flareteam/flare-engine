@@ -70,57 +70,58 @@ void MenuActiveEffects::loadGraphics() {
 	}
 }
 
-void MenuActiveEffects::renderIcon(int icon_id, int index, int current, int max) {
-	if (icon_id > -1) {
-		Point pos;
-		Rect src, overlay;
+void MenuActiveEffects::logic() {
+	effect_icons.clear();
+
+	for (size_t i = 0; i < stats->effects.effect_list.size(); ++i) {
+		if (stats->effects.effect_list[i].icon == -1)
+			continue;
+
+		const Effect &ed = stats->effects.effect_list[i];
+		EffectIcon ei;
+		ei.icon = ed.icon;
+
+		// icon position
 		if (orientation == 0) {
-			pos.x = window_area.x + (index * ICON_SIZE);
-			pos.y = window_area.y;
+			ei.pos.x = window_area.x + (static_cast<int>(effect_icons.size()) * ICON_SIZE);
+			ei.pos.y = window_area.y;
 		}
 		else if (orientation == 1) {
-			pos.x = window_area.x;
-			pos.y = window_area.y + (index * ICON_SIZE);
+			ei.pos.x = window_area.x;
+			ei.pos.y = window_area.y + (static_cast<int>(effect_icons.size()) * ICON_SIZE);
 		}
+		ei.pos.w = ei.pos.h = ICON_SIZE;
 
-		icons->setIcon(icon_id, pos);
-		icons->render();
+		// timer overlay
+		ei.overlay.x = 0;
+		ei.overlay.w = ICON_SIZE;
 
-		if (max > 0) {
-			overlay.x = 0;
-			overlay.y = (ICON_SIZE * current) / max;
-			overlay.w = ICON_SIZE;
-			overlay.h = ICON_SIZE - overlay.y;
-
-			if (timer) {
-				timer->setClip(overlay);
-				timer->setDest(pos);
-				render_device->render(timer);
-			}
+		if (ed.type == EFFECT_SHIELD) {
+			ei.overlay.y = (ICON_SIZE * ed.magnitude) / ed.magnitude_max;
 		}
+		else if (ed.type == EFFECT_HEAL) {
+			ei.overlay.y = ICON_SIZE;
+		}
+		else {
+			ei.overlay.y = (ICON_SIZE * ed.ticks) / ed.duration;
+		}
+		ei.overlay.h = ICON_SIZE - ei.overlay.y;
+
+		effect_icons.push_back(ei);
 	}
 }
 
 void MenuActiveEffects::render() {
-	int count=-1;
+	for (size_t i = 0; i < effect_icons.size(); ++i) {
+		Point icon_pos(effect_icons[i].pos.x, effect_icons[i].pos.y);
+		icons->setIcon(effect_icons[i].icon, icon_pos);
+		icons->render();
 
-	// Step through the list of effects and render those that are active
-	for (unsigned int i=0; i<stats->effects.effect_list.size(); i++) {
-		int type = stats->effects.effect_list[i].type;
-		int icon = stats->effects.effect_list[i].icon;
-		int ticks = stats->effects.effect_list[i].ticks;
-		int duration = stats->effects.effect_list[i].duration;
-		int magnitude = stats->effects.effect_list[i].magnitude;
-		int magnitude_max = stats->effects.effect_list[i].magnitude_max;
-
-		if (icon >= 0) count++;
-
-		if (type == EFFECT_SHIELD)
-			renderIcon(icon,count,magnitude,magnitude_max);
-		else if (type == EFFECT_HEAL)
-			renderIcon(icon,count,0,0);
-		else if (ticks >= 0 && duration >= 0)
-			renderIcon(icon,count,ticks,duration);
+		if (timer) {
+			timer->setClip(effect_icons[i].overlay);
+			timer->setDest(effect_icons[i].pos);
+			render_device->render(timer);
+		}
 	}
 }
 

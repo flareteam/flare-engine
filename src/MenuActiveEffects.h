@@ -32,18 +32,29 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class StatBlock;
 
+class EffectIcon {
+public:
+	int icon;
+	Rect pos;
+	Rect overlay;
+
+	EffectIcon()
+		: icon(-1)
+	{}
+};
+
 class MenuActiveEffects : public Menu {
 private:
 	Sprite *timer;
 	StatBlock *stats;
 	bool orientation;
-
-	void renderIcon(int icon_id, int index, int current, int max);
+	std::vector<EffectIcon> effect_icons;
 
 public:
 	explicit MenuActiveEffects(StatBlock *_stats);
 	~MenuActiveEffects();
 	void loadGraphics();
+	void logic();
 	void render();
 };
 
