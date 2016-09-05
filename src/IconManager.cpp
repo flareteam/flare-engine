@@ -54,7 +54,8 @@ IconManager::IconManager()
 		}
 		infile.close();
 	}
-	else {
+
+	if (icon_sets.empty()) {
 		// no icons.txt file, so load icons.png legacy-style
 		icon_sets.resize(1);
 		if (!loadIconSet(icon_sets.back(), "images/icons/icons.png", 0)) {
