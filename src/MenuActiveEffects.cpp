@@ -37,7 +37,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 	: timer(NULL)
 	, stats(_stats)
-	, orientation(false) { // horizontal
+	, is_vertical(false)
+{
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuActiveEffects|Description of menus/activeeffects.txt
@@ -46,9 +47,9 @@ MenuActiveEffects::MenuActiveEffects(StatBlock *_stats)
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR orientation|bool|True is vertical orientation; False is horizontal orientation.
-			if(infile.key == "orientation") {
-				orientation = toBool(infile.val);
+			// @ATTR vertical|bool|True is vertical orientation; False is horizontal orientation.
+			if(infile.key == "vertical") {
+				is_vertical = toBool(infile.val);
 			}
 			else {
 				infile.error("MenuActiveEffects: '%s' is not a valid key.", infile.key.c_str());
@@ -84,11 +85,11 @@ void MenuActiveEffects::logic() {
 		ei.type = ed.type;
 
 		// icon position
-		if (orientation == 0) {
+		if (!is_vertical) {
 			ei.pos.x = window_area.x + (static_cast<int>(effect_icons.size()) * ICON_SIZE);
 			ei.pos.y = window_area.y;
 		}
-		else if (orientation == 1) {
+		else {
 			ei.pos.x = window_area.x;
 			ei.pos.y = window_area.y + (static_cast<int>(effect_icons.size()) * ICON_SIZE);
 		}
@@ -117,11 +118,11 @@ void MenuActiveEffects::logic() {
 		effect_icons.push_back(ei);
 	}
 
-	if (orientation == 0) {
+	if (!is_vertical) {
 		window_area.w = static_cast<int>(effect_icons.size()) * ICON_SIZE;
 		window_area.h = ICON_SIZE;
 	}
-	else if (orientation == 1) {
+	else {
 		window_area.w = ICON_SIZE;
 		window_area.h = static_cast<int>(effect_icons.size()) * ICON_SIZE;
 	}

@@ -55,7 +55,7 @@ class MenuActiveEffects : public Menu {
 private:
 	Sprite *timer;
 	StatBlock *stats;
-	bool orientation;
+	bool is_vertical;
 	std::vector<EffectIcon> effect_icons;
 
 public:
