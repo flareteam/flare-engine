@@ -68,6 +68,7 @@ enum EFFECT_TYPE {
 
 class Effect {
 public:
+	std::string id;
 	std::string name;
 	int icon;
 	int ticks;
@@ -84,7 +85,8 @@ public:
 	int source_type;
 
 	Effect()
-		: name("")
+		: id("")
+		, name("")
 		, icon(-1)
 		, ticks(0)
 		, duration(-1)

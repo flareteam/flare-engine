@@ -1216,6 +1216,9 @@ void MenuManager::render() {
 					tip_new = inv->checkTooltip(inpt->mouse);
 				}
 			}
+			if (isWithinRect(effects->window_area, inpt->mouse)) {
+				tip_new = effects->checkTooltip(inpt->mouse);
+			}
 			if (isWithinRect(act->window_area,inpt->mouse)) {
 				tip_new = act->checkTooltip(inpt->mouse);
 			}

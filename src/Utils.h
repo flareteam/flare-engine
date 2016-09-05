@@ -178,6 +178,7 @@ class EffectDef {
 public:
 	std::string id;
 	std::string type;
+	std::string name;
 	int icon;
 	std::string animation;
 	bool can_stack;
@@ -186,6 +187,7 @@ public:
 	EffectDef()
 		: id("")
 		, type("")
+		, name("")
 		, icon(-1)
 		, animation("")
 		, can_stack(true)

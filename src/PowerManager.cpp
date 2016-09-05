@@ -83,6 +83,10 @@ void PowerManager::loadEffects() {
 			// @ATTR effect.type|string|Defines the type of effect
 			effects.back().type = infile.val;
 		}
+		else if (infile.key == "name") {
+			// @ATTR effect.name|string|A displayed name that is shown when hovering the mouse over the effect icon.
+			effects.back().name = infile.val;
+		}
 		else if (infile.key == "icon") {
 			// @ATTR effect.icon|icon_id|The icon to visually represent the effect in the status area
 			effects.back().icon = toInt(infile.val);

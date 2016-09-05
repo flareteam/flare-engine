@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "Menu.h"
+#include "TooltipData.h"
 #include "Utils.h"
 
 class StatBlock;
@@ -37,6 +38,7 @@ public:
 	int icon;
 	Rect pos;
 	Rect overlay;
+	std::string name;
 
 	EffectIcon()
 		: icon(-1)
@@ -56,6 +58,7 @@ public:
 	void loadGraphics();
 	void logic();
 	void render();
+	TooltipData checkTooltip(const Point& mouse);
 };
 
 #endif

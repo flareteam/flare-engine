@@ -46,6 +46,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	effect_list.resize(emSource.effect_list.size());
 
 	for (unsigned i=0; i<effect_list.size(); i++) {
+		effect_list[i].id = emSource.effect_list[i].id;
 		effect_list[i].name = emSource.effect_list[i].name;
 		effect_list[i].icon = emSource.effect_list[i].icon;
 		effect_list[i].ticks = emSource.effect_list[i].ticks;
@@ -275,7 +276,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 		return;
 
 	for (size_t i=effect_list.size(); i>0; i--) {
-		if (effect_list[i-1].name == effect.id) {
+		if (effect_list[i-1].id == effect.id) {
 			if (trigger > -1 && effect_list[i-1].trigger == trigger)
 				return; // trigger effects can only be cast once per trigger
 
@@ -297,7 +298,8 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 
 	Effect e;
 
-	e.name = effect.id;
+	e.id = effect.id;
+	e.name = effect.name;
 	e.icon = effect.icon;
 	e.type = effect_type;
 	e.render_above = effect.render_above;

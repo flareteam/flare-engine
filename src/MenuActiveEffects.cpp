@@ -80,6 +80,7 @@ void MenuActiveEffects::logic() {
 		const Effect &ed = stats->effects.effect_list[i];
 		EffectIcon ei;
 		ei.icon = ed.icon;
+		ei.name = ed.name;
 
 		// icon position
 		if (orientation == 0) {
@@ -109,6 +110,16 @@ void MenuActiveEffects::logic() {
 
 		effect_icons.push_back(ei);
 	}
+
+	if (orientation == 0) {
+		window_area.w = static_cast<int>(effect_icons.size()) * ICON_SIZE;
+		window_area.h = ICON_SIZE;
+	}
+	else if (orientation == 1) {
+		window_area.w = ICON_SIZE;
+		window_area.h = static_cast<int>(effect_icons.size()) * ICON_SIZE;
+	}
+	Menu::align();
 }
 
 void MenuActiveEffects::render() {
@@ -123,6 +134,19 @@ void MenuActiveEffects::render() {
 			render_device->render(timer);
 		}
 	}
+}
+
+TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
+	TooltipData tip;
+
+	for (size_t i = 0; i < effect_icons.size(); ++i) {
+		if (!effect_icons[i].name.empty() && isWithinRect(effect_icons[i].pos, mouse)) {
+			tip.addText(msg->get(effect_icons[i].name));
+			break;
+		}
+	}
+
+	return tip;
 }
 
 MenuActiveEffects::~MenuActiveEffects() {
