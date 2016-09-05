@@ -147,15 +147,19 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 	TooltipData tip;
 
 	for (size_t i = 0; i < effect_icons.size(); ++i) {
-		if (!effect_icons[i].name.empty() && isWithinRect(effect_icons[i].pos, mouse)) {
-			tip.addText(msg->get(effect_icons[i].name));
+		if (isWithinRect(effect_icons[i].pos, mouse)) {
+			if (!effect_icons[i].name.empty())
+				tip.addText(msg->get(effect_icons[i].name));
+
+			if (effect_icons[i].type == EFFECT_HEAL)
+				continue;
 
 			std::stringstream ss;
 			if (effect_icons[i].type == EFFECT_SHIELD) {
 				ss << "(" << effect_icons[i].current << "/" << effect_icons[i].max << ")";
 				tip.addText(ss.str());
 			}
-			else if (effect_icons[i].type != EFFECT_HEAL) {
+			else {
 				ss << msg->get("Remaining:") << " " << getDurationString(effect_icons[i].current, 1);
 				tip.addText(ss.str());
 			}
