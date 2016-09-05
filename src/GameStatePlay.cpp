@@ -63,9 +63,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuPowers.h"
 #include "SaveLoad.h"
 
-const int MENU_ENEMY_TIMEOUT = MAX_FRAMES_PER_SEC * 10;
-
-
 GameStatePlay::GameStatePlay()
 	: GameState()
 	, enemy(NULL)
@@ -75,8 +72,9 @@ GameStatePlay::GameStatePlay()
 	, npc_id(-1)
 	, npc_from_map(true)
 	, color_normal(font->getColor("menu_normal"))
-	, nearest_npc(-1) {
-
+	, nearest_npc(-1)
+	, menu_enemy_timeout(MAX_FRAMES_PER_SEC*10)
+{
 	Image *graphics;
 	hasMusic = true;
 	has_background = false;
@@ -178,7 +176,7 @@ void GameStatePlay::checkEnemyFocus() {
 		// set the actual menu with the enemy selected above
 		if (!enemy->stats.suppress_hp) {
 			menu->enemy->enemy = enemy;
-			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
+			menu->enemy->timeout = menu_enemy_timeout;
 		}
 	}
 	else if (!NO_MOUSE) {
@@ -186,7 +184,7 @@ void GameStatePlay::checkEnemyFocus() {
 		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, false);
 		if (temp_enemy) {
 			menu->enemy->enemy = temp_enemy;
-			menu->enemy->timeout = MENU_ENEMY_TIMEOUT;
+			menu->enemy->timeout = menu_enemy_timeout;
 		}
 	}
 

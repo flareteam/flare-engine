@@ -104,6 +104,8 @@ private:
 
 	std::vector<ActionData> action_queue;
 
+	int menu_enemy_timeout;
+
 public:
 	GameStatePlay();
 	~GameStatePlay();
