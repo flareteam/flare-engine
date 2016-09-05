@@ -155,7 +155,7 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 				tip.addText(ss.str());
 			}
 			else if (effect_icons[i].type != EFFECT_HEAL) {
-				ss << msg->get("Remaining:") << " " << getDurationString(effect_icons[i].current);
+				ss << msg->get("Remaining:") << " " << getDurationString(effect_icons[i].current, 1);
 				tip.addText(ss.str());
 			}
 
