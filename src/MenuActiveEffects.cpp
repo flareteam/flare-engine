@@ -81,6 +81,7 @@ void MenuActiveEffects::logic() {
 		EffectIcon ei;
 		ei.icon = ed.icon;
 		ei.name = ed.name;
+		ei.type = ed.type;
 
 		// icon position
 		if (orientation == 0) {
@@ -99,12 +100,17 @@ void MenuActiveEffects::logic() {
 
 		if (ed.type == EFFECT_SHIELD) {
 			ei.overlay.y = (ICON_SIZE * ed.magnitude) / ed.magnitude_max;
+			ei.current = ed.magnitude;
+			ei.max = ed.magnitude_max;
 		}
 		else if (ed.type == EFFECT_HEAL) {
 			ei.overlay.y = ICON_SIZE;
+			// current and max are ignored
 		}
 		else {
 			ei.overlay.y = (ICON_SIZE * ed.ticks) / ed.duration;
+			ei.current = ed.ticks;
+			ei.max = ed.duration;
 		}
 		ei.overlay.h = ICON_SIZE - ei.overlay.y;
 
@@ -142,6 +148,17 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 	for (size_t i = 0; i < effect_icons.size(); ++i) {
 		if (!effect_icons[i].name.empty() && isWithinRect(effect_icons[i].pos, mouse)) {
 			tip.addText(msg->get(effect_icons[i].name));
+
+			std::stringstream ss;
+			if (effect_icons[i].type == EFFECT_SHIELD) {
+				ss << "(" << effect_icons[i].current << "/" << effect_icons[i].max << ")";
+				tip.addText(ss.str());
+			}
+			else if (effect_icons[i].type != EFFECT_HEAL) {
+				ss << msg->get("Remaining:") << " " << getDurationString(effect_icons[i].current);
+				tip.addText(ss.str());
+			}
+
 			break;
 		}
 	}

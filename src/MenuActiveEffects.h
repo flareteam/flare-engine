@@ -36,12 +36,18 @@ class StatBlock;
 class EffectIcon {
 public:
 	int icon;
+	int type;
+	int current;
+	int max;
 	Rect pos;
 	Rect overlay;
 	std::string name;
 
 	EffectIcon()
 		: icon(-1)
+		, type(0)
+		, current(0)
+		, max(0)
 	{}
 };
 
