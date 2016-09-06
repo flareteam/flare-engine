@@ -799,6 +799,8 @@ void GameStateConfigBase::refreshLanguages() {
 void GameStateConfigBase::refreshFont() {
 	delete font;
 	font = getFontEngine();
+	delete comb;
+	comb = new CombatText();
 }
 
 void GameStateConfigBase::enableMods() {
