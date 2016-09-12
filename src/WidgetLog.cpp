@@ -99,6 +99,7 @@ void WidgetLog::refresh() {
 
 	// Render messages into the scrollbox area
 	for (size_t i = messages.size(); i > 0; i--) {
+		setFont(styles[i-1]);
 		Point size = font->calc_size(messages[i-1], content_width);
 		Image* render_target = scroll_box->contents->getGraphics();
 
@@ -109,7 +110,6 @@ void WidgetLog::refresh() {
 
 			y2 += paragraph_spacing;
 		}
-		setFont(styles[i-1]);
 		font->renderShadowed(messages[i-1], padding, y2, JUSTIFY_LEFT, render_target, content_width, colors[i-1]);
 		y2 += size.y+paragraph_spacing;
 
