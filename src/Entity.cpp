@@ -52,12 +52,6 @@ Entity::Entity()
 	, sound_critdie(0)
 	, sound_block(0)
 	, sound_levelup(0)
-	, play_sfx_phys(false)
-	, play_sfx_ment(false)
-	, play_sfx_hit(false)
-	, play_sfx_die(false)
-	, play_sfx_critdie(false)
-	, play_sfx_block(false)
 	, activeAnimation(NULL)
 	, animationSet(NULL) {
 }
@@ -71,12 +65,6 @@ Entity::Entity(const Entity &e)
 	, sound_critdie(e.sound_critdie)
 	, sound_block(e.sound_block)
 	, sound_levelup(e.sound_levelup)
-	, play_sfx_phys(e.play_sfx_phys)
-	, play_sfx_ment(e.play_sfx_ment)
-	, play_sfx_hit(e.play_sfx_hit)
-	, play_sfx_die(e.play_sfx_die)
-	, play_sfx_critdie(e.play_sfx_critdie)
-	, play_sfx_block(e.play_sfx_block)
 	, activeAnimation(new Animation(*e.activeAnimation))
 	, animationSet(e.animationSet)
 	, stats(StatBlock(e.stats)) {
@@ -283,7 +271,7 @@ bool Entity::takeHit(Hazard &h) {
 		h.lifespan = h.base_lifespan;
 
 		if (activeAnimation->getName() == "block") {
-			play_sfx_block = true;
+			snd->play(sound_block);
 		}
 
 		return false;
@@ -346,7 +334,7 @@ bool Entity::takeHit(Hazard &h) {
 				if (MAX_RESIST < 100) dmg = 1;
 			}
 			if (activeAnimation->getName() == "block") {
-				play_sfx_block = true;
+				snd->play(sound_block);
 				resetActiveAnimation();
 			}
 		}
@@ -451,7 +439,7 @@ bool Entity::takeHit(Hazard &h) {
 		}
 
 		// play hit sound effect
-		play_sfx_hit = true;
+		snd->play(sound_hit);
 
 		// if this hit caused a debuff, activate an on_debuff power
 		if (!was_debuffed && stats.effects.isDebuffed()) {

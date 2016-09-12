@@ -599,9 +599,9 @@ void BehaviorStandard::updateState() {
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
 				if (powers->powers[power_id].attack_anim == "swing" || powers->powers[power_id].attack_anim == "shoot")
-					e->play_sfx_phys = true;
+					snd->play(e->sound_melee);
 				else if (powers->powers[power_id].attack_anim == "cast")
-					e->play_sfx_ment = true;
+					snd->play(e->sound_mental);
 
 				if (powers->powers[power_id].state_duration > 0)
 					e->stats.state_ticks = powers->powers[power_id].state_duration;
@@ -675,7 +675,7 @@ void BehaviorStandard::updateState() {
 
 			e->setAnimation("die");
 			if (e->activeAnimation->isFirstFrame()) {
-				e->play_sfx_die = true;
+				snd->play(e->sound_die);
 				e->stats.corpse_ticks = CORPSE_TIMEOUT;
 				e->stats.effects.clearEffects();
 			}
@@ -706,7 +706,7 @@ void BehaviorStandard::updateState() {
 
 			e->setAnimation("critdie");
 			if (e->activeAnimation->isFirstFrame()) {
-				e->play_sfx_critdie = true;
+				snd->play(e->sound_critdie);
 				e->stats.corpse_ticks = CORPSE_TIMEOUT;
 				e->stats.effects.clearEffects();
 			}

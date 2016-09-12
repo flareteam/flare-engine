@@ -382,29 +382,6 @@ void EnemyManager::logic() {
 
 	std::vector<Enemy*>::iterator it;
 	for (it = enemies.begin(); it != enemies.end(); ++it) {
-		// hazards are processed after Avatar and Enemy[]
-		// so process and clear sound effects from previous frames
-		// check sound effects
-		if (AUDIO) {
-			if ((*it)->play_sfx_phys)
-				snd->play((*it)->sound_melee, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-			if ((*it)->play_sfx_ment)
-				snd->play((*it)->sound_mental, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-			if ((*it)->play_sfx_hit)
-				snd->play((*it)->sound_hit, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-			if ((*it)->play_sfx_die)
-				snd->play((*it)->sound_die, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-			if ((*it)->play_sfx_critdie)
-				snd->play((*it)->sound_critdie, GLOBAL_VIRTUAL_CHANNEL, (*it)->stats.pos, false);
-
-			// clear sound flags
-			(*it)->play_sfx_hit = false;
-			(*it)->play_sfx_phys = false;
-			(*it)->play_sfx_ment = false;
-			(*it)->play_sfx_die = false;
-			(*it)->play_sfx_critdie = false;
-		}
-
 		// new actions this round
 		(*it)->stats.hero_stealth = hero_stealth;
 		(*it)->logic();

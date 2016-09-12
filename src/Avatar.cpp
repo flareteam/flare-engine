@@ -324,33 +324,6 @@ void Avatar::set_direction() {
  * @param npc True if the player is talking to an NPC. Can limit ability to move/attack in certain conditions
  */
 void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_use, bool npc) {
-
-	// hazards are processed after Avatar and Enemy[]
-	// so process and clear sound effects from previous frames
-	// check sound effects
-	if (AUDIO) {
-		if (play_sfx_phys)
-			snd->play(sound_melee, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (play_sfx_ment)
-			snd->play(sound_mental, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (play_sfx_hit)
-			snd->play(sound_hit, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (play_sfx_die)
-			snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if (play_sfx_critdie)
-			snd->play(sound_die, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-		if(play_sfx_block)
-			snd->play(sound_block, GLOBAL_VIRTUAL_CHANNEL, stats.pos, false);
-
-		// clear sound flags
-		play_sfx_hit = false;
-		play_sfx_phys = false;
-		play_sfx_ment = false;
-		play_sfx_die = false;
-		play_sfx_critdie = false;
-		play_sfx_block = false;
-	}
-
 	// clear current space to allow correct movement
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
 
