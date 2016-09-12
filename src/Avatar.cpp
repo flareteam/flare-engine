@@ -492,11 +492,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				if (MOUSE_MOVE) lockAttack = true;
 
 				if (activeAnimation->isFirstFrame()) {
-					if (attack_anim == "swing")
-						snd->play(sound_melee);
-					else if (attack_anim == "cast")
-						snd->play(sound_mental);
-
+					playAttackSound(attack_anim);
 					power_cast_duration[current_power] = activeAnimation->getDuration();
 					power_cast_ticks[current_power] = power_cast_duration[current_power];
 				}

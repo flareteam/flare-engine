@@ -326,9 +326,8 @@ public:
 	std::string animations;
 
 	// default sounds
+	std::vector<std::pair<std::string, std::string> > sfx_attack;
 	std::string sfx_step;
-	std::string sfx_phys;
-	std::string sfx_ment;
 	std::string sfx_hit;
 	std::string sfx_die;
 	std::string sfx_critdie;

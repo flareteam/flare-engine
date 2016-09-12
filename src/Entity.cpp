@@ -45,8 +45,7 @@ const float speedMultiplyer[8] = { static_cast<float>(1.0/M_SQRT2), 1.0f, static
 
 Entity::Entity()
 	: sprites(NULL)
-	, sound_melee(0)
-	, sound_mental(0)
+	, sound_attack()
 	, sound_hit(0)
 	, sound_die(0)
 	, sound_critdie(0)
@@ -58,8 +57,7 @@ Entity::Entity()
 
 Entity::Entity(const Entity &e)
 	: sprites(e.sprites)
-	, sound_melee(e.sound_melee)
-	, sound_mental(e.sound_mental)
+	, sound_attack(e.sound_attack)
 	, sound_hit(e.sound_hit)
 	, sound_die(e.sound_die)
 	, sound_critdie(e.sound_critdie)
@@ -71,20 +69,16 @@ Entity::Entity(const Entity &e)
 }
 
 void Entity::loadSounds(StatBlock *src_stats) {
-	snd->unload(sound_melee);
-	snd->unload(sound_mental);
-	snd->unload(sound_hit);
-	snd->unload(sound_die);
-	snd->unload(sound_critdie);
-	snd->unload(sound_block);
-	snd->unload(sound_levelup);
+	unloadSounds();
 
 	if (!src_stats) src_stats = &stats;
 
-	if (src_stats->sfx_phys != "")
-		sound_melee = snd->load(src_stats->sfx_phys, "Entity melee attack");
-	if (src_stats->sfx_ment != "")
-		sound_mental = snd->load(src_stats->sfx_ment, "Entity mental attack");
+	for (size_t i = 0; i < src_stats->sfx_attack.size(); ++i) {
+		std::string anim_name = src_stats->sfx_attack[i].first;
+		SoundManager::SoundID sid = snd->load(src_stats->sfx_attack[i].second, "Entity attack");
+		sound_attack.push_back(std::pair<std::string, SoundManager::SoundID>(anim_name, sid));
+	}
+
 	if (src_stats->sfx_hit != "")
 		sound_hit = snd->load(src_stats->sfx_hit, "Entity was hit");
 	if (src_stats->sfx_die != "")
@@ -98,8 +92,9 @@ void Entity::loadSounds(StatBlock *src_stats) {
 }
 
 void Entity::unloadSounds() {
-	snd->unload(sound_melee);
-	snd->unload(sound_mental);
+	for (size_t i = 0; i < sound_attack.size(); ++i) {
+		snd->unload(sound_attack[i].second);
+	}
 	snd->unload(sound_hit);
 	snd->unload(sound_die);
 	snd->unload(sound_critdie);
@@ -107,6 +102,14 @@ void Entity::unloadSounds() {
 	snd->unload(sound_levelup);
 }
 
+void Entity::playAttackSound(const std::string& attack_name) {
+	for (size_t i = 0; i < sound_attack.size(); ++i) {
+		if (sound_attack[i].first == attack_name) {
+			snd->play(sound_attack[i].second);
+			return;
+		}
+	}
+}
 
 void Entity::move_from_offending_tile() {
 

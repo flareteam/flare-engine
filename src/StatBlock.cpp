@@ -157,9 +157,8 @@ StatBlock::StatBlock()
 	, gfx_portrait("")
 	, transform_type("")
 	, animations("")
+	, sfx_attack()
 	, sfx_step("")
-	, sfx_phys("")
-	, sfx_ment("")
 	, sfx_hit("")
 	, sfx_die("")
 	, sfx_critdie("")
@@ -289,10 +288,23 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 bool StatBlock::loadSfxStat(FileParser *infile) {
 	// @CLASS StatBlock: Sound effects|Description of heroes in engine/avatar/ and enemies in enemies/
 
-	// @ATTR sfx_phys|filename|Filename of sound effect for physical attack.
-	if (infile->key == "sfx_phys") sfx_phys = infile->val;
-	// @ATTR sfx_ment|filename|Filename of sound effect for mental attack.
-	else if (infile->key == "sfx_ment") sfx_ment = infile->val;
+	// @ATTR sfx_attack|predefined_string, filename : Animation name, Sound file|Filename of sound effect for the specified attack animation.
+	if (infile->key == "sfx_attack") {
+		std::string anim_name = popFirstString(infile->val);
+		std::string filename = popFirstString(infile->val);
+
+		bool found_anim_name = false;
+		for (size_t i = 0; i < sfx_attack.size(); ++i) {
+			if (anim_name == sfx_attack[i].first) {
+				sfx_attack[i].second = filename;
+				break;
+			}
+		}
+
+		if (!found_anim_name) {
+			sfx_attack.push_back(std::pair<std::string, std::string>(anim_name, filename));
+		}
+	}
 	// @ATTR sfx_hit|filename|Filename of sound effect for being hit.
 	else if (infile->key == "sfx_hit") sfx_hit = infile->val;
 	// @ATTR sfx_die|filename|Filename of sound effect for dying.

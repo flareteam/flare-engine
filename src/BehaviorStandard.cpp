@@ -598,10 +598,7 @@ void BehaviorStandard::updateState() {
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
-				if (powers->powers[power_id].attack_anim == "swing" || powers->powers[power_id].attack_anim == "shoot")
-					snd->play(e->sound_melee);
-				else if (powers->powers[power_id].attack_anim == "cast")
-					snd->play(e->sound_mental);
+				e->playAttackSound(powers->powers[power_id].attack_anim);
 
 				if (powers->powers[power_id].state_duration > 0)
 					e->stats.state_ticks = powers->powers[power_id].state_duration;
