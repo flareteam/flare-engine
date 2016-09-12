@@ -252,10 +252,7 @@ bool Entity::takeHit(Hazard &h) {
 		avoidance = stats.get(STAT_AVOIDANCE);
 	}
 
-	int true_avoidance = 100 - (accuracy + 25 - avoidance);
-	//if we are using an absolute accuracy, offset the constant 25 added to the accuracy
-	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-		true_avoidance += 25;
+	int true_avoidance = 100 - (accuracy - avoidance);
 	clampFloor(true_avoidance, MIN_AVOIDANCE);
 	clampCeil(true_avoidance, MAX_AVOIDANCE);
 
