@@ -204,6 +204,11 @@ bool Entity::takeHit(Hazard &h) {
 			return false;
 	}
 
+	// check if this entity allows attacks from this power id
+	if (!stats.power_filter.empty() && std::find(stats.power_filter.begin(), stats.power_filter.end(), h.power_index) == stats.power_filter.end()) {
+		return false;
+	}
+
 	//if the target is already dead, they cannot be hit
 	if ((stats.cur_state == ENEMY_DEAD || stats.cur_state == ENEMY_CRITDEAD) && !stats.hero)
 		return false;

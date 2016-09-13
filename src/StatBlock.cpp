@@ -278,6 +278,14 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 			}
 		}
 	}
+	else if (infile->key == "power_filter") {
+		// @ATTR power_filter|list(power_id)|Only these powers are allowed to hit this entity.
+		std::string power_id = popFirstString(infile->val);
+		while (!power_id.empty()) {
+			power_filter.push_back(toInt(power_id));
+			power_id = popFirstString(infile->val);
+		}
+	}
 
 	return false;
 }
