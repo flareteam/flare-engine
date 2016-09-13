@@ -165,6 +165,8 @@ short MIN_ABSORB;
 short MIN_RESIST;
 short MIN_BLOCK;
 short MIN_AVOIDANCE;
+short MIN_MISS_DAMAGE;
+short MAX_MISS_DAMAGE;
 
 // Elemental types
 std::vector<Element> ELEMENTS;
@@ -312,6 +314,8 @@ void loadMiscSettings() {
 	MIN_RESIST = 0;
 	MIN_BLOCK = 0;
 	MIN_AVOIDANCE = 0;
+	MIN_MISS_DAMAGE = 0;
+	MAX_MISS_DAMAGE = 0;
 	CURRENCY = "Gold";
 	VENDOR_RATIO = 0.25;
 	DEATH_PENALTY = true;
@@ -489,6 +493,13 @@ void loadMiscSettings() {
 			else if (infile.key == "min_block_percent") MIN_BLOCK = static_cast<short>(toInt(infile.val));
 			// @ATTR min_avoidance_percent|int|Minimum percentage chance that hazards can be avoided.
 			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = static_cast<short>(toInt(infile.val));
+
+			// @ATTR miss_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a miss occurs.
+			else if (infile.key == "miss_damage_percent") {
+				MIN_MISS_DAMAGE = static_cast<short>(popFirstInt(infile.val));
+				MAX_MISS_DAMAGE = static_cast<short>(popFirstInt(infile.val));
+				MAX_MISS_DAMAGE = std::max<short>(MAX_MISS_DAMAGE, MIN_MISS_DAMAGE);
+			}
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}
