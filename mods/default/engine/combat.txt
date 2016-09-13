@@ -1,5 +1,5 @@
-#max_absorb_percent=90
-#max_resist_percent=90
-#max_block_percent=100
-#max_avoidance_percent=99
+#absorb_percent=0,90
+#resist_percent=0,90
+#block_percent=0,100
+#avoidance_percent=0,99
 

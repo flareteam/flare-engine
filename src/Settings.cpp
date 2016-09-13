@@ -306,10 +306,10 @@ void loadMiscSettings() {
 	IGNORE_TEXTURE_FILTER = false;
 	ICON_SIZE = 0;
 	AUTOPICKUP_CURRENCY = false;
-	MAX_ABSORB = 90;
-	MAX_RESIST = 90;
+	MAX_ABSORB = 100;
+	MAX_RESIST = 100;
 	MAX_BLOCK = 100;
-	MAX_AVOIDANCE = 99;
+	MAX_AVOIDANCE = 100;
 	MIN_ABSORB = 0;
 	MIN_RESIST = 0;
 	MIN_BLOCK = 0;
@@ -477,23 +477,30 @@ void loadMiscSettings() {
 	// @CLASS Settings: Combat|Description of engine/combat.txt
 	if (infile.open("engine/combat.txt")) {
 		while (infile.next()) {
-			// @ATTR max_absorb_percent|int|Maximum percentage of damage that can be absorbed.
-			if (infile.key == "max_absorb_percent") MAX_ABSORB = static_cast<short>(toInt(infile.val));
-			// @ATTR max_resist_percent|int|Maximum percentage of elemental damage that can be resisted.
-			else if (infile.key == "max_resist_percent") MAX_RESIST = static_cast<short>(toInt(infile.val));
-			// @ATTR max_block_percent|int|Maximum percentage of damage that can be blocked.
-			else if (infile.key == "max_block_percent") MAX_BLOCK = static_cast<short>(toInt(infile.val));
-			// @ATTR max_avoidance_percent|int|Maximum percentage chance that hazards can be avoided.
-			else if (infile.key == "max_avoidance_percent") MAX_AVOIDANCE = static_cast<short>(toInt(infile.val));
-			// @ATTR min_absorb_percent|int|Minimum percentage of damage that can be absorbed.
-			else if (infile.key == "min_absorb_percent") MIN_ABSORB = static_cast<short>(toInt(infile.val));
-			// @ATTR min_resist_percent|int|Minimum percentage of elemental damage that can be resisted.
-			else if (infile.key == "min_resist_percent") MIN_RESIST = static_cast<short>(toInt(infile.val));
-			// @ATTR min_block_percent|int|Minimum percentage of damage that can be blocked.
-			else if (infile.key == "min_block_percent") MIN_BLOCK = static_cast<short>(toInt(infile.val));
-			// @ATTR min_avoidance_percent|int|Minimum percentage chance that hazards can be avoided.
-			else if (infile.key == "min_avoidance_percent") MIN_AVOIDANCE = static_cast<short>(toInt(infile.val));
-
+			if (infile.key == "absorb_percent") {
+				// @ATTR absorb_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed.
+				MIN_ABSORB = static_cast<short>(popFirstInt(infile.val));
+				MAX_ABSORB = static_cast<short>(popFirstInt(infile.val));
+				MAX_ABSORB = std::max<short>(MAX_ABSORB, MIN_ABSORB);
+			}
+			else if (infile.key == "resist_percent") {
+				// @ATTR resist_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be resisted.
+				MIN_RESIST = static_cast<short>(popFirstInt(infile.val));
+				MAX_RESIST = static_cast<short>(popFirstInt(infile.val));
+				MAX_RESIST = std::max<short>(MAX_RESIST, MIN_RESIST);
+			}
+			else if (infile.key == "block_percent") {
+				// @ATTR block_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be blocked.
+				MIN_BLOCK = static_cast<short>(popFirstInt(infile.val));
+				MAX_BLOCK = static_cast<short>(popFirstInt(infile.val));
+				MAX_BLOCK = std::max<short>(MAX_BLOCK, MIN_BLOCK);
+			}
+			else if (infile.key == "avoidance_percent") {
+				// @ATTR avoidance_percent|int, int : Minimum, Maximum|Limits the percentage chance that damage will be avoided.
+				MIN_AVOIDANCE = static_cast<short>(popFirstInt(infile.val));
+				MAX_AVOIDANCE = static_cast<short>(popFirstInt(infile.val));
+				MAX_AVOIDANCE = std::max<short>(MAX_AVOIDANCE, MIN_AVOIDANCE);
+			}
 			// @ATTR miss_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a miss occurs.
 			else if (infile.key == "miss_damage_percent") {
 				MIN_MISS_DAMAGE = static_cast<short>(popFirstInt(infile.val));
