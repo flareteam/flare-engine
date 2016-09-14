@@ -139,6 +139,8 @@ void GameStatePlay::resetGame() {
 	// Finalize new character settings
 	menu->talker->setHero(pc->stats);
 	pc->loadSounds();
+
+	mapr->executeOnLoadEvents();
 }
 
 /**
@@ -328,11 +330,13 @@ void GameStatePlay::checkTeleport() {
 			else if (SAVE_ONLOAD) {
 				save_load->saveGame();
 			}
+
+			mapr->executeOnLoadEvents();
 		}
 
 		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
-		pc->stats.teleportation = false; // teleport spell
+		pc->stats.teleportation = false;
 
 	}
 

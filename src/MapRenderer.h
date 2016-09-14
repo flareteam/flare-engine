@@ -54,9 +54,6 @@ private:
 
 	void clearQueues();
 
-	// some events are automatically triggered when the map is loaded
-	void executeOnLoadEvents();
-
 	void drawRenderable(std::vector<Renderable>::iterator r_cursor);
 
 	void renderIsoLayer(const Map_Layer& layerdata);
@@ -95,6 +92,9 @@ public:
 	void checkHotspots();
 	void checkNearestEvent();
 	void checkTooltip();
+
+	// some events are automatically triggered when the map is loaded
+	void executeOnLoadEvents();
 
 	// some events are triggered on exiting the map
 	void executeOnMapExitEvents();

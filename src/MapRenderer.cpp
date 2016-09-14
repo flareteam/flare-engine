@@ -213,10 +213,6 @@ int MapRenderer::load(const std::string& fname) {
 		}
 	}
 
-	// some events automatically trigger when the map loads
-	// e.g. change map state based on campaign status
-	executeOnLoadEvents();
-
 	return 0;
 }
 
