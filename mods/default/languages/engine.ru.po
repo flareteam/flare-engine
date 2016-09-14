@@ -5,52 +5,51 @@
 #
 # Sergey Basalaev <sbasalaev@gmail.com>, 2011-2013.
 # Evgen Pavlov <sonjekua@gmail.com>, 2013.
+# Pavel Maryanov <acid@jack.kiev.ua>, 2016.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: flare-engine 0.18\n"
+"Project-Id-Version: flare-engine 1.00\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-02 21:38-0400\n"
-"PO-Revision-Date: 2015-06-01 01:07+0600\n"
-"Last-Translator: Sergey Basalaev <sbasalaev@gmail.com>\n"
-"Language-Team: Russian https://github.com/SBasalaev/flare-game/wiki/\n"
+"PO-Revision-Date: 2016-09-09 13:44+0200\n"
+"Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
+"Language-Team: Russian <gnu@dn07.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.5\n"
 
 #: ../../../src/Avatar.cpp:474
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Поздравляем, вы достигли уровня %d!"
+msgstr "Поздравляем! Вы достигли уровня %d!"
 
 #: ../../../src/Avatar.cpp:476
 msgid "You may increase one attribute through the Character Menu."
-msgstr "Вы можете увеличить один атрибут через меню Персонаж."
+msgstr "Вы можете увеличить один атрибут в меню персонажа."
 
 #: ../../../src/Avatar.cpp:702
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Вы убиты.  Игра окончена! Нажмите Ввод, чтобы выйти в Меню."
+msgstr "Вы потерпели поражение. Игра окончена! Нажмите ${INPUT_CONTINUE}, чтобы выйти в меню."
 
 #: ../../../src/Avatar.cpp:706
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Вы потерпели поражение.  Нажмите Ввод для продолжения."
+msgstr "Вы потерпели поражение. Нажмите ${INPUT_CONTINUE} для продолжения."
 
 #: ../../../src/Avatar.cpp:851
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr "Трансформация прошла. Вы были возвращены в безопасное место."
+msgstr "Трансформация завершилась. Вы были возвращены в безопасное место."
 
 #: ../../../src/CampaignManager.cpp:126
 #, c-format
 msgid "%d %s removed."
-msgstr "%d %s удалено."
+msgstr "%d %s убрано."
 
 #: ../../../src/CampaignManager.cpp:134
 #, c-format
 msgid "%s removed."
-msgstr "%s удалено."
+msgstr "%s убран."
 
 #: ../../../src/CampaignManager.cpp:146
 #, c-format
@@ -110,7 +109,7 @@ msgstr "+%d маны"
 
 #: ../../../src/EventManager.cpp:595
 msgid "Unknown destination"
-msgstr "Место назначения неизвестно"
+msgstr "Неизвестное место назначения"
 
 #: ../../../src/GameStateConfigBase.cpp:89
 #: ../../../src/GameStateConfigBase.cpp:111
@@ -159,7 +158,7 @@ msgstr "Язык"
 
 #: ../../../src/GameStateConfigBase.cpp:225
 msgid "Show combat text"
-msgstr "Показывать сообщения битвы"
+msgstr "Сообщения битвы"
 
 #: ../../../src/GameStateConfigBase.cpp:229
 msgid "Show FPS"
@@ -179,20 +178,19 @@ msgstr "Режим разработчика"
 
 #: ../../../src/GameStateConfigBase.cpp:245
 msgid "Show targeting animation"
-msgstr "Показывать анимацию прицела"
+msgstr "Анимация прицела"
 
 #: ../../../src/GameStateConfigBase.cpp:249
 msgid "Always show loot labels"
-msgstr "Всегда показывать метки сокровищ"
+msgstr "Метки сокровищ"
 
 #: ../../../src/GameStateConfigBase.cpp:253
-#, fuzzy
 msgid "Always show stat bar labels"
-msgstr "Всегда показывать метки сокровищ"
+msgstr "Метки в строке состояния"
 
 #: ../../../src/GameStateConfigBase.cpp:257
 msgid "Automatically equip items"
-msgstr ""
+msgstr "Сразу надевать предметы"
 
 #: ../../../src/GameStateConfigBase.cpp:261
 msgid "Active Mods"
@@ -216,11 +214,11 @@ msgstr "Игра: "
 
 #: ../../../src/GameStateConfigBase.cpp:910
 msgid "Requires version: "
-msgstr "Требуется версия: "
+msgstr "Требуется версия:  "
 
 #: ../../../src/GameStateConfigBase.cpp:924
 msgid "Requires mods: "
-msgstr "Требуются моды: "
+msgstr "Требуются дополнения: "
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:688
@@ -250,7 +248,7 @@ msgstr "Полноэкранный режим"
 
 #: ../../../src/GameStateConfigDesktop.cpp:188
 msgid "Move hero using mouse"
-msgstr "Перемещать героя мышью"
+msgstr "Управлять мышью"
 
 #: ../../../src/GameStateConfigDesktop.cpp:192
 msgid "Hardware surfaces"
@@ -275,11 +273,11 @@ msgstr "Гамма"
 #: ../../../src/GameStateConfigDesktop.cpp:213
 #: ../../../src/GameStateConfigDesktop.cpp:218
 msgid "Disable for performance"
-msgstr "Уберите, если игра тормозит"
+msgstr "Отключите, если игра тормозит"
 
 #: ../../../src/GameStateConfigDesktop.cpp:223
 msgid "Experimental"
-msgstr "Экспериментальное"
+msgstr "Экспериментально"
 
 #: ../../../src/GameStateConfigDesktop.cpp:227
 msgid "Use joystick"
@@ -291,7 +289,7 @@ msgstr "Джойстик"
 
 #: ../../../src/GameStateConfigDesktop.cpp:241
 msgid "Mouse aim"
-msgstr "Прицел мышью"
+msgstr "Целиться мышью"
 
 #: ../../../src/GameStateConfigDesktop.cpp:245
 msgid "Do not use mouse"
@@ -497,15 +495,15 @@ msgstr "Главное2"
 
 #: ../../../src/InputState.cpp:301
 msgid "Ctrl"
-msgstr "Ctrl"
+msgstr "CTRL"
 
 #: ../../../src/InputState.cpp:302
 msgid "Shift"
-msgstr "Shift"
+msgstr "SHIFT"
 
 #: ../../../src/InputState.cpp:303
 msgid "Alt"
-msgstr "Alt"
+msgstr "ALT"
 
 #: ../../../src/InputState.cpp:304
 msgid "Delete"
@@ -533,36 +531,31 @@ msgstr "Меню разработчика"
 
 #: ../../../src/InputState.cpp:311
 msgid "Left Mouse"
-msgstr ""
+msgstr "левая кнопка мыши"
 
 #: ../../../src/InputState.cpp:312
 msgid "Middle Mouse"
-msgstr ""
+msgstr "средняя кнопка мыши"
 
 #: ../../../src/InputState.cpp:313
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Вправо"
+msgstr "правая кнопка мыши"
 
 #: ../../../src/InputState.cpp:314
-#, fuzzy
 msgid "Wheel Up"
-msgstr "колесо вверх"
+msgstr "прокрутка вверх"
 
 #: ../../../src/InputState.cpp:315
-#, fuzzy
 msgid "Wheel Down"
-msgstr "колесо вниз"
+msgstr "прокрутка вниз"
 
 #: ../../../src/InputState.cpp:316
-#, fuzzy
 msgid "Mouse X1"
-msgstr "Прицел мышью"
+msgstr "мышь X1"
 
 #: ../../../src/InputState.cpp:317
-#, fuzzy
 msgid "Mouse X2"
-msgstr "Прицел мышью"
+msgstr "мышь X2"
 
 #: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
@@ -571,7 +564,7 @@ msgstr "Неизвестный предмет"
 #: ../../../src/ItemManager.cpp:587 ../../../src/MenuCharacter.cpp:350
 #, c-format
 msgid "%s Resistance"
-msgstr ""
+msgstr "сопротивление %s"
 
 #: ../../../src/ItemManager.cpp:591 ../../../src/MenuCharacter.cpp:42
 #: ../../../src/MenuPowers.cpp:793
@@ -594,9 +587,8 @@ msgid "Defense"
 msgstr "Защита"
 
 #: ../../../src/ItemManager.cpp:643
-#, fuzzy
 msgid "Quest Item"
-msgstr "Задания"
+msgstr "Предмет задания"
 
 #: ../../../src/ItemManager.cpp:670
 #, c-format
@@ -706,18 +698,18 @@ msgstr "Цена продажи: %d %s каждый"
 
 #: ../../../src/ItemManager.cpp:813
 msgid "Set: "
-msgstr "Установить: "
+msgstr "Задать: "
 
 #: ../../../src/ItemManager.cpp:820
 #, c-format
 msgid "%d items: "
-msgstr "%d предметов: "
+msgstr "%d предметов:  "
 
 #: ../../../src/MenuActionBar.cpp:184 ../../../src/MenuActionBar.cpp:190
 #: ../../../src/MenuActionBar.cpp:195
 #, c-format
 msgid "Hotkey: %s"
-msgstr ""
+msgstr "Горячая клавиша: %s"
 
 #: ../../../src/MenuCharacter.cpp:40
 msgid "Name"
@@ -748,32 +740,32 @@ msgstr "базовое (%d), бонус (%d)"
 
 #: ../../../src/MenuCharacter.cpp:373
 msgid "Related stats:"
-msgstr ""
+msgstr "Связанные атрибуты:"
 
 #: ../../../src/MenuCharacter.cpp:399
 #, c-format
 msgid "Each level grants %d. "
-msgstr "Каждый уровень даёт %d. "
+msgstr "Каждый уровень даёт %d.  "
 
 #: ../../../src/MenuCharacter.cpp:401
 #, c-format
 msgid "Each point of Physical grants %d. "
-msgstr "Каждое очко силы даёт %d. "
+msgstr "Каждое очко силы даёт %d.  "
 
 #: ../../../src/MenuCharacter.cpp:403
 #, c-format
 msgid "Each point of Mental grants %d. "
-msgstr "Каждое очко интеллекта даёт %d. "
+msgstr "Каждое очко интеллекта даёт %d.  "
 
 #: ../../../src/MenuCharacter.cpp:405
 #, c-format
 msgid "Each point of Offense grants %d. "
-msgstr "Каждое очко ловкости даёт %d. "
+msgstr "Каждое очко ловкости даёт %d.  "
 
 #: ../../../src/MenuCharacter.cpp:407
 #, c-format
 msgid "Each point of Defense grants %d. "
-msgstr "Каждое очко защиты даёт %d. "
+msgstr "Каждое очко защиты даёт %d.  "
 
 #: ../../../src/MenuDevConsole.cpp:44
 msgid "Execute"
@@ -784,25 +776,24 @@ msgid "Developer Console"
 msgstr "Консоль разработчика"
 
 #: ../../../src/MenuDevConsole.cpp:208
-#, fuzzy
 msgid "Removes an item of a given ID from the player's inventory"
-msgstr "добавляет предмет в инвентарь игрока"
+msgstr "Удаляет предмет с указанным идентификатором из инвентаря игрока"
 
 #: ../../../src/MenuDevConsole.cpp:209
 msgid "Prints a list of items that match a search term. No search term will list all items"
-msgstr ""
+msgstr "Выводит список найденных предметов. Если ничего не указать, показывает все предметы."
 
 #: ../../../src/MenuDevConsole.cpp:210
 msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr ""
+msgstr "Выводит найденные статусы активных кампаний. Если ничего не указать, показывает все активные статусы."
 
 #: ../../../src/MenuDevConsole.cpp:211
 msgid "resets the player to level 1, with no stat or skill points spent"
-msgstr ""
+msgstr "сбрасывает уровень игрока до 1, без атрибутов и потраченных очков навыков"
 
 #: ../../../src/MenuDevConsole.cpp:212
 msgid "teleports the player to a specific tile, and optionally, a specific map"
-msgstr "телепортирует игрока на указанный тайл и, опционально, указанную карту"
+msgstr "телепортирует игрока на указанный тайл и (необязательно) на указанную карту"
 
 #: ../../../src/MenuDevConsole.cpp:213
 msgid "unsets the given campaign statuses if they are set"
@@ -829,13 +820,12 @@ msgid "spawns an enemy matching the given category next to the player"
 msgstr "порождает врага указанной категории рядом с игроком"
 
 #: ../../../src/MenuDevConsole.cpp:219
-#, fuzzy
 msgid "turns on/off all of the HUD elements"
-msgstr "переключает дисплей разработчика"
+msgstr "переключает отображение элементов интерфейса"
 
 #: ../../../src/MenuDevConsole.cpp:220
 msgid "turns on/off the developer hud"
-msgstr "переключает дисплей разработчика"
+msgstr "переключает интерфейс разработчика"
 
 #: ../../../src/MenuDevConsole.cpp:221
 msgid "clears the command history"
@@ -847,27 +837,26 @@ msgstr "показывает этот текст"
 
 #: ../../../src/MenuDevConsole.cpp:229
 msgid "Toggled the developer hud"
-msgstr "Переключен дисплей разработчика"
+msgstr "Переключён интерфейс разработчика"
 
 #: ../../../src/MenuDevConsole.cpp:233
-#, fuzzy
 msgid "Toggled the hud"
-msgstr "Переключен дисплей разработчика"
+msgstr "Переключён интерфейс"
 
 #: ../../../src/MenuDevConsole.cpp:247
 msgid "Spawning enemy from category: "
-msgstr "Рождается враг из категории: "
+msgstr "Порождение врага из категории: "
 
 #: ../../../src/MenuDevConsole.cpp:250
 msgid "ERROR: Invalid enemy category"
-msgstr "ОШИБКА: Неверная категория врага"
+msgstr "ОШИБКА: недопустимая категория врага"
 
 #: ../../../src/MenuDevConsole.cpp:254 ../../../src/MenuDevConsole.cpp:282
 #: ../../../src/MenuDevConsole.cpp:293 ../../../src/MenuDevConsole.cpp:304
 #: ../../../src/MenuDevConsole.cpp:314 ../../../src/MenuDevConsole.cpp:329
 #: ../../../src/MenuDevConsole.cpp:359 ../../../src/MenuDevConsole.cpp:462
 msgid "ERROR: Too few arguments"
-msgstr "ОШИБКА: Слишком мало аргументов"
+msgstr "ОШИБКА: недостаточно аргументов"
 
 #: ../../../src/MenuDevConsole.cpp:255 ../../../src/MenuDevConsole.cpp:283
 #: ../../../src/MenuDevConsole.cpp:294 ../../../src/MenuDevConsole.cpp:305
@@ -882,7 +871,7 @@ msgstr " <категория> [<x> <y>]"
 
 #: ../../../src/MenuDevConsole.cpp:262 ../../../src/MenuDevConsole.cpp:450
 msgid "ERROR: Invalid item ID"
-msgstr "ОШИБКА: Неверный ID предмета"
+msgstr "ОШИБКА: недопустимый идентификатор предмета"
 
 #: ../../../src/MenuDevConsole.cpp:278
 msgid "Added item: "
@@ -906,7 +895,7 @@ msgstr "Добавлен опыт: "
 
 #: ../../../src/MenuDevConsole.cpp:311
 msgid "Set campaign status: "
-msgstr "Установить статус кампании: "
+msgstr "Установить статус кампании:  "
 
 #: ../../../src/MenuDevConsole.cpp:315 ../../../src/MenuDevConsole.cpp:330
 msgid " <status_1> [<status_2> <status_3> ...]"
@@ -914,11 +903,11 @@ msgstr " <статус_1> [<статус_2> <статус_3> ...]"
 
 #: ../../../src/MenuDevConsole.cpp:322
 msgid "Unset campaign status: "
-msgstr "Сбросить статус кампании: "
+msgstr "Сбросить статус кампании:  "
 
 #: ../../../src/MenuDevConsole.cpp:325
 msgid "ERROR: Unknown campaign status: "
-msgstr "ОШИБКА: Неизвестный статус кампании: "
+msgstr "ОШИБКА: неизвестный статус кампании: "
 
 #: ../../../src/MenuDevConsole.cpp:345 ../../../src/MenuDevConsole.cpp:355
 msgid "Teleporting to: "
@@ -926,24 +915,23 @@ msgstr "Телепортация в: "
 
 #: ../../../src/MenuDevConsole.cpp:348
 msgid "ERROR: Unknown map: "
-msgstr "ОШИБКА: Неизвестная карта: "
+msgstr "ОШИБКА: неизвестная карта: "
 
 #: ../../../src/MenuDevConsole.cpp:360
 msgid " <x> <y> [<map>]"
 msgstr " <x> <y> [<карта>]"
 
 #: ../../../src/MenuDevConsole.cpp:458
-#, fuzzy
 msgid "Removed item: "
-msgstr "Добавлен предмет: "
+msgstr "Удалён предмет: "
 
 #: ../../../src/MenuDevConsole.cpp:467
 msgid "ERROR: Unknown command"
-msgstr "ОШИБКА: Неизвестная команда"
+msgstr "ОШИБКА: неизвестная команда"
 
 #: ../../../src/MenuDevConsole.cpp:468
 msgid "HINT: Type help"
-msgstr "ПОДСКАЗКА: Наберите help"
+msgstr "ПОДСКАЗКА: наберите help"
 
 #: ../../../src/MenuDevHUD.cpp:56
 msgid "Player (x,y): "
@@ -981,7 +969,7 @@ msgstr "Выйти в меню?"
 #: ../../../src/MenuInventory.cpp:158
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr "Потеряно %d%% из %s. "
+msgstr "Потеряно %d%% %s. "
 
 #: ../../../src/MenuInventory.cpp:165
 #, c-format
@@ -1005,28 +993,28 @@ msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:276
 msgid "Pick up item(s):"
-msgstr ""
+msgstr "Подобраны предметы:"
 
 #: ../../../src/MenuInventory.cpp:277
 msgid "Use or equip item:"
-msgstr ""
+msgstr "Использовать или надеть предмет:"
 
 #: ../../../src/MenuInventory.cpp:278
 #, c-format
 msgid "%s modifiers"
-msgstr ""
+msgstr "%s модификаторов"
 
 #: ../../../src/MenuInventory.cpp:279
 msgid "Select a quantity of item:"
-msgstr ""
+msgstr "Выберите количество предметов:"
 
 #: ../../../src/MenuInventory.cpp:282
 msgid "Stash item stack:"
-msgstr ""
+msgstr "Спрятать набор предметов в тайник:"
 
 #: ../../../src/MenuInventory.cpp:284
 msgid "Sell item stack:"
-msgstr ""
+msgstr "Продать набор предметов:"
 
 #: ../../../src/MenuInventory.cpp:518
 msgid "You don't have enough of the required item."
@@ -1046,9 +1034,8 @@ msgid "Not enough %s."
 msgstr "Недостаточно %s."
 
 #: ../../../src/MenuInventory.cpp:757 ../../../src/MenuInventory.cpp:764
-#, fuzzy
 msgid "This item can not be sold."
-msgstr "Этот предмет можно использовать только с панели действия."
+msgstr "Этот предмет нельзя продать."
 
 #: ../../../src/MenuLog.cpp:84
 msgid "Notes"
@@ -1064,9 +1051,8 @@ msgid "XP: %d/%d"
 msgstr "Опыт: %d/%d"
 
 #: ../../../src/MenuManager.cpp:808
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "Этот предмет можно использовать только с панели действия."
+msgstr "Этот предмет нельзя выбросить."
 
 #: ../../../src/MenuNPCActions.cpp:70
 msgid "Trade"
@@ -1074,7 +1060,7 @@ msgstr "Торговать"
 
 #: ../../../src/MenuNumPicker.cpp:107
 msgid "Enter amount:"
-msgstr ""
+msgstr "Введите количество:"
 
 #: ../../../src/MenuPowers.cpp:674
 #, c-format
@@ -1087,136 +1073,130 @@ msgid "Costs %d HP"
 msgstr "Стоит %d жизни"
 
 #: ../../../src/MenuPowers.cpp:683
-#, fuzzy
 msgid "Cooldown:"
-msgstr "Восстановление: %s секунд"
+msgstr "Восстановление:"
 
 #: ../../../src/MenuPowers.cpp:727 ../../../src/MenuPowers.cpp:730
 msgid "Damage per second"
-msgstr ""
+msgstr "урон в секунду"
 
 #: ../../../src/MenuPowers.cpp:733 ../../../src/MenuPowers.cpp:736
 msgid "HP per second"
-msgstr ""
+msgstr "жизнь в секунду"
 
 #: ../../../src/MenuPowers.cpp:739 ../../../src/MenuPowers.cpp:742
 msgid "MP per second"
-msgstr ""
+msgstr "мана в секунду"
 
 #: ../../../src/MenuPowers.cpp:746
 msgid "Immobilize"
-msgstr ""
+msgstr "Зафиксировать"
 
 #: ../../../src/MenuPowers.cpp:751
 msgid "Immunity"
-msgstr ""
+msgstr "Устойчивость"
 
 #: ../../../src/MenuPowers.cpp:754
 msgid "Immunity to damage over time"
-msgstr ""
+msgstr "Устойчивость к урону в течение долгого времени"
 
 #: ../../../src/MenuPowers.cpp:757
 msgid "Immunity to slow"
-msgstr ""
+msgstr "Устойчивость к снегу"
 
 #: ../../../src/MenuPowers.cpp:760
 msgid "Immunity to stun"
-msgstr ""
+msgstr "Устойчивость к оглушению"
 
 #: ../../../src/MenuPowers.cpp:763
 msgid "Immunity to HP steal"
-msgstr ""
+msgstr "Устойчивость к краже жизни"
 
 #: ../../../src/MenuPowers.cpp:766
 msgid "Immunity to MP steal"
-msgstr ""
+msgstr "Устойчивость к краже маны"
 
 #: ../../../src/MenuPowers.cpp:769
 msgid "Immunity to knockback"
-msgstr ""
+msgstr "Устойчивость к сбиванию с ног"
 
 #: ../../../src/MenuPowers.cpp:772
 msgid "Immunity to damage reflection"
-msgstr ""
+msgstr "Устойчивость к отражению урона"
 
 #: ../../../src/MenuPowers.cpp:775
 msgid "Stun"
-msgstr ""
+msgstr "Оглушение"
 
 #: ../../../src/MenuPowers.cpp:778
 msgid "Automatic revive on death"
-msgstr ""
+msgstr "Автоматически возрождаться после смерти"
 
 #: ../../../src/MenuPowers.cpp:781
 msgid "Convert"
-msgstr ""
+msgstr "Преобразовать"
 
 #: ../../../src/MenuPowers.cpp:784
 msgid "Fear"
-msgstr ""
+msgstr "Страх"
 
 #: ../../../src/MenuPowers.cpp:799
 msgid "Lifespan"
-msgstr ""
+msgstr "Продолжительность жизни"
 
 #: ../../../src/MenuPowers.cpp:820
 msgid "Magical Shield"
-msgstr ""
+msgstr "Магический щит"
 
 #: ../../../src/MenuPowers.cpp:846
 msgid "Healing"
-msgstr ""
+msgstr "Лечение"
 
 #: ../../../src/MenuPowers.cpp:849
 msgid "Knockback"
-msgstr ""
+msgstr "Сбивание с ног"
 
 #: ../../../src/MenuPowers.cpp:891
 msgid "Damage"
-msgstr ""
+msgstr "Урон"
 
 #: ../../../src/MenuPowers.cpp:893
-#, fuzzy
 msgid "Melee Damage"
-msgstr "Ближний урон:"
+msgstr "ближний урон"
 
 #: ../../../src/MenuPowers.cpp:895
-#, fuzzy
 msgid "Ranged Damage"
-msgstr "Дальний урон:"
+msgstr "дальний урон"
 
 #: ../../../src/MenuPowers.cpp:897
-#, fuzzy
 msgid "Mental Damage"
-msgstr "Ментальный урон:"
+msgstr "ментальный урон"
 
 #: ../../../src/MenuPowers.cpp:920
-#, fuzzy
 msgid "Base Accuracy"
-msgstr "Меткость: "
+msgstr "Базовая меткость"
 
 #: ../../../src/MenuPowers.cpp:940
 msgid "Base Critical Chance"
-msgstr ""
+msgstr "Базовый шанс критического урона"
 
 #: ../../../src/MenuPowers.cpp:948
 msgid "Ignores Absorbtion"
-msgstr ""
+msgstr "Игнорирует поглощение"
 
 #: ../../../src/MenuPowers.cpp:953
-#, fuzzy
 msgid "Ignores Avoidance"
-msgstr "Уклонение: "
+msgstr "Игнорирует уклонение"
 
 #: ../../../src/MenuPowers.cpp:958
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr ""
+msgstr "%d%% шанс критического урона по замедленным целям"
 
 #: ../../../src/MenuPowers.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "%s Elemental Damage"
-msgstr "Ментальный урон:"
+msgstr "%s стихийный урон"
 
 #: ../../../src/MenuPowers.cpp:973
 #, c-format
@@ -1226,22 +1206,22 @@ msgstr "Требуется %s"
 #: ../../../src/MenuPowers.cpp:980 ../../../src/MenuPowers.cpp:983
 #, c-format
 msgid "Requires Physical Offense %d"
-msgstr "Требуется сила+ловкость %d"
+msgstr "Требуется сила + ловкость %d"
 
 #: ../../../src/MenuPowers.cpp:986 ../../../src/MenuPowers.cpp:989
 #, c-format
 msgid "Requires Physical Defense %d"
-msgstr "Требуется сила+защита %d"
+msgstr "Требуется сила + защита %d"
 
 #: ../../../src/MenuPowers.cpp:992 ../../../src/MenuPowers.cpp:995
 #, c-format
 msgid "Requires Mental Offense %d"
-msgstr "Требуется интеллект+ловкость %d"
+msgstr "Требуется интеллект + ловкость %d"
 
 #: ../../../src/MenuPowers.cpp:998 ../../../src/MenuPowers.cpp:1001
 #, c-format
 msgid "Requires Mental Defense %d"
-msgstr "Требуется интеллект+защита %d"
+msgstr "Требуется интеллект + защита %d"
 
 #: ../../../src/MenuPowers.cpp:1052 ../../../src/MenuPowers.cpp:1055
 #, c-format
@@ -1250,12 +1230,11 @@ msgstr "Требуется сила: %s"
 
 #: ../../../src/MenuPowers.cpp:1064
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr ""
+msgstr "Щёлкните, чтобы разблокировать (тратится 1 очко навыка)"
 
 #: ../../../src/MenuPowers.cpp:1068 ../../../src/MenuPowers.cpp:1070
-#, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Требуется %d очков навыка"
+msgstr "Требуется 1 очко навыка"
 
 #: ../../../src/MenuPowers.cpp:1273
 msgid "Unspent skill points:"
@@ -1271,12 +1250,11 @@ msgstr "Общие запасы"
 
 #: ../../../src/MenuStash.cpp:201
 msgid "Can not store quest items in the stash."
-msgstr ""
+msgstr "Предметы заданий нельзя хранить в тайнике."
 
 #: ../../../src/MenuStash.cpp:211
-#, fuzzy
 msgid "Stash is full."
-msgstr "Инвентарь полон."
+msgstr "Тайник заполнен."
 
 #: ../../../src/MenuVendor.cpp:50
 msgid "Buyback"
@@ -1289,7 +1267,7 @@ msgstr "Торговец"
 #: ../../../src/PowerManager.cpp:852
 #, c-format
 msgid "+%d Shield"
-msgstr "+%d Щит"
+msgstr "+%d щит"
 
 #: ../../../src/PowerManager.cpp:1114
 msgid "You are already transformed, untransform first."
@@ -1297,310 +1275,190 @@ msgstr "Вы уже трансформированы, сперва растра�
 
 #: ../../../src/PowerManager.cpp:1126
 msgid "Could not untransform at this position."
-msgstr "Невозможно растрансформироваться здесь."
+msgstr "Здесь нельзя растрансформироваться."
 
 #: ../../../src/SaveLoad.cpp:195 ../../../src/SaveLoad.cpp:196
 msgid "Game saved."
 msgstr "Игра сохранена."
 
 #: ../../../src/SDLInputState.cpp:492 ../../../src/SDLInputState.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "Прицел мышью"
+msgstr "Мышь %d"
 
 #: ../../../src/SDLInputState.cpp:518
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Ось %d -"
 
 #: ../../../src/SDLInputState.cpp:520
 #, c-format
 msgid "Axis %d +"
-msgstr ""
+msgstr "Ось %d +"
 
 #: ../../../src/SDLInputState.cpp:542 ../../../src/SDLInputState.cpp:566
 #: ../../../src/SDLInputState.cpp:584
 msgid "Tap"
-msgstr ""
+msgstr "Коснитесь"
 
 #: ../../../src/SDLInputState.cpp:542 ../../../src/SDLInputState.cpp:545
 #, c-format
 msgid "%s on ground"
-msgstr ""
+msgstr "%s по земле"
 
 #: ../../../src/SDLInputState.cpp:566 ../../../src/SDLInputState.cpp:569
 #, c-format
 msgid "%s on enemy"
-msgstr ""
+msgstr "%s по врагу"
 
 #: ../../../src/Settings.cpp:632
 msgid "Adventurer"
-msgstr "Приключенец"
+msgstr "авантюрист"
 
 #: ../../../src/Stats.cpp:36
-#, fuzzy
 msgid "Max HP"
-msgstr "Максимум здоровья:"
+msgstr "здоровья"
 
 #: ../../../src/Stats.cpp:41
-#, fuzzy
 msgid "HP Regen"
-msgstr "Восстановление здоровья:"
+msgstr "восстановление здоровья"
 
 #: ../../../src/Stats.cpp:42
-#, fuzzy
 msgid "Ticks of HP regen per minute."
-msgstr "Восстановливается единиц здоровья в минуту. "
+msgstr "Восстановление единиц здоровья в минуту."
 
 #: ../../../src/Stats.cpp:46
-#, fuzzy
 msgid "Max MP"
-msgstr "Максимум маны:"
+msgstr "маны"
 
 #: ../../../src/Stats.cpp:51
-#, fuzzy
 msgid "MP Regen"
-msgstr "Восстановление маны:"
+msgstr "восстановление маны"
 
 #: ../../../src/Stats.cpp:52
-#, fuzzy
 msgid "Ticks of MP regen per minute."
-msgstr "Восстанавливается единиц маны в минуту. "
+msgstr "Восстановление единиц маны в минуту."
 
 #: ../../../src/Stats.cpp:56
-#, fuzzy
 msgid "Accuracy"
-msgstr "Меткость: "
+msgstr "меткость"
 
 #: ../../../src/Stats.cpp:61
-#, fuzzy
 msgid "Avoidance"
-msgstr "Уклонение: "
+msgstr "уклонение"
 
 #: ../../../src/Stats.cpp:66
-#, fuzzy
 msgid "Melee Damage Min"
-msgstr "Ближний урон:"
+msgstr "мин. ближний урон"
 
 #: ../../../src/Stats.cpp:71
-#, fuzzy
 msgid "Melee Damage Max"
-msgstr "Ближний урон:"
+msgstr "макс. ближний урон"
 
 #: ../../../src/Stats.cpp:76
-#, fuzzy
 msgid "Ranged Damage Min"
-msgstr "Дальний урон:"
+msgstr "мин. дальний урон"
 
 #: ../../../src/Stats.cpp:81
-#, fuzzy
 msgid "Ranged Damage Max"
-msgstr "Дальний урон:"
+msgstr "макс. дальний урон"
 
 #: ../../../src/Stats.cpp:86
-#, fuzzy
 msgid "Mental Damage Min"
-msgstr "Ментальный урон:"
+msgstr "мин. ментальный урон"
 
 #: ../../../src/Stats.cpp:91
-#, fuzzy
 msgid "Mental Damage Max"
-msgstr "Ментальный урон:"
+msgstr "макс. ментальный урон"
 
 #: ../../../src/Stats.cpp:96
-#, fuzzy
 msgid "Absorb Min"
-msgstr "Поглощение:"
+msgstr "мин. поглощение"
 
 #: ../../../src/Stats.cpp:101
-#, fuzzy
 msgid "Absorb Max"
-msgstr "Поглощение:"
+msgstr "макс. поглощение"
 
 #: ../../../src/Stats.cpp:106
 msgid "Critical Hit Chance"
-msgstr ""
+msgstr "шанс критического урона"
 
 #: ../../../src/Stats.cpp:111
-#, fuzzy
 msgid "Bonus XP"
-msgstr "Бонус опыта: "
+msgstr "бонус опыта"
 
 #: ../../../src/Stats.cpp:112
-#, fuzzy
 msgid "Increases the XP gained per kill."
-msgstr "Увеличивает количество опыта, получаемого за убийство"
+msgstr "Увеличивает количество опыта, получаемого за убийство."
 
 #: ../../../src/Stats.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Bonus %s"
-msgstr "Бонус"
+msgstr "бонус %s"
 
 #: ../../../src/Stats.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Increases the %s found per drop."
-msgstr "Увеличивает количество выпадающего %s"
+msgstr "Увеличивает количество выпадающего %s."
 
 #: ../../../src/Stats.cpp:121
-#, fuzzy
 msgid "Item Find Chance"
-msgstr "Бонус нахождения предметов: "
+msgstr "бонус нахождения предметов"
 
 #: ../../../src/Stats.cpp:122
-#, fuzzy
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Повышает вероятность выпадения предмета при смерти противника"
+msgstr "Повышает вероятность выпадения предмета при смерти противника."
 
 #: ../../../src/Stats.cpp:126
-#, fuzzy
 msgid "Stealth"
-msgstr "Скрытность: "
+msgstr "скрытность"
 
 #: ../../../src/Stats.cpp:127
-#, fuzzy
 msgid "Increases your ability to move undetected."
-msgstr "Повышает способность двигаться незамеченным"
+msgstr "Улучшение способности двигаться незамеченным."
 
 #: ../../../src/Stats.cpp:131
-#, fuzzy
 msgid "Poise"
-msgstr "Самообладание: "
+msgstr "самообладание"
 
 #: ../../../src/Stats.cpp:132
-#, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Уменьшает шанс задержки при получении урона"
+msgstr "Уменьшение вероятности оглушения при получении урона."
 
 #: ../../../src/Stats.cpp:136
-#, fuzzy
 msgid "Missile Reflect Chance"
-msgstr "Шанс отражения: "
+msgstr "шанс отражения"
 
 #: ../../../src/Stats.cpp:137
-#, fuzzy
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr "Увеличивает шанс отражения выстрелов обратно во врагов"
+msgstr "Увеличение шанса отражения выстрелов обратно во врагов."
 
 #: ../../../src/Stats.cpp:141
 msgid "Damage Reflection"
-msgstr ""
+msgstr "отражение урона"
 
 #: ../../../src/Stats.cpp:142
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr ""
+msgstr "Часть полученного урона наносится обратно атакующему."
 
 #: ../../../src/Stats.cpp:146
 msgid "Base HP"
-msgstr ""
+msgstr "Базовая жизнь"
 
 #: ../../../src/Stats.cpp:151
 msgid "Base MP"
-msgstr ""
+msgstr "Базовая мана"
 
-# сокращение для «кило»
 #: ../../../src/Utils.cpp:208
 msgid "k"
 msgstr "к"
 
 #: ../../../src/Utils.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "%s second"
-msgstr "Восстановление: %s секунд"
+msgstr "%s секунда"
 
 #: ../../../src/Utils.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "%s seconds"
-msgstr "Восстановление: %s секунд"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Пустой слот"
-
-#, fuzzy
-#~ msgid "Prints out all of the campaign status that are set"
-#~ msgstr "сбрасывает указанные статусы кампаний, если они установлены"
-
-#, fuzzy
-#~ msgid "Move only one item:"
-#~ msgstr "Используйте SHIFT, чтобы переместить только один предмет."
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "Используйте CTRL+щелчок на предмете в инвентаре, чтобы продать его."
-
-#~ msgid "Show Hotkeys Labels"
-#~ msgstr "Метки горячих клавиш"
-
-#~ msgid "Level %d %s"
-#~ msgstr "Уровень %d %s"
-
-#~ msgid "lmb"
-#~ msgstr "ЛКМ"
-
-#~ msgid "mmb"
-#~ msgstr "СКМ"
-
-#~ msgid "rmb"
-#~ msgstr "ПКМ"
-
-#~ msgid "mbx1"
-#~ msgstr "КМx1"
-
-#~ msgid "mbx2"
-#~ msgstr "КМx2"
-
-# качество - средний род
-#~ msgid "Low"
-#~ msgstr "Низкое"
-
-# качество - средний род
-#~ msgid "Normal"
-#~ msgstr "Среднее"
-
-# качество - средний род
-#~ msgid "High"
-#~ msgstr "Высокое"
-
-# качество - средний род
-#~ msgid "Epic"
-#~ msgstr "Эпическое"
-
-#~ msgid "Increases %s by %d"
-#~ msgstr "Увеличивает %s на %d"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Уменьшает %s на %d"
-
-#~ msgid "Crit:"
-#~ msgstr "Критический урон:"
-
-#~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "Сила (С) увеличивает владение оружием ближнего боя и полное здоровье."
-
-#~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "Интеллект (И) увеличивает владение ментальным оружием и полную ману."
-
-#~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "Ловкость (Л) увеличивает владению оружием дальнего боя и меткость."
-
-#~ msgid "Defense (D) increases armor proficiency and avoidance."
-#~ msgstr "Защита (З) увеличивает владение бронёй и уклонение."
-
-#~ msgid "Click to Unlock"
-#~ msgstr "Щёлкните, чтобы разблокировать"
-
-#~ msgid "Double buffering"
-#~ msgstr "Двойная буферизация"
-
-#~ msgid "Resolution"
-#~ msgstr "Разрешение"
-
-#~ msgid "Use this resolution?"
-#~ msgstr "Использовать это разрешение?"
-
-#~ msgid "Requires a physical weapon"
-#~ msgstr "Требуется оружие ближнего боя"
-
-#~ msgid "Requires a mental weapon"
-#~ msgstr "Требуется ментальное оружие"
-
-#~ msgid "Requires an offense weapon"
-#~ msgstr "Требуется оружие дальнего боя"
+msgstr "%s секунды"
