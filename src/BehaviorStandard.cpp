@@ -105,26 +105,14 @@ void BehaviorStandard::doUpkeep() {
 	// check for bleeding to death
 	if (e->stats.hp <= 0 && !(e->stats.cur_state == ENEMY_DEAD || e->stats.cur_state == ENEMY_CRITDEAD)) {
 		//work out who the kill is attributed to
-		bool source_hero = false;
-		bool source_ally = false;
-		bool source_enemy = false;
-		for (unsigned i=0; i<e->stats.effects.effect_list.size(); i++) {
-			if (e->stats.effects.effect_list[i].type == EFFECT_DAMAGE) {
-				switch(e->stats.effects.effect_list[i].source_type) {
-					case(SOURCE_TYPE_ALLY):
-						source_ally = true;
-						break;
-					case(SOURCE_TYPE_ENEMY):
-						source_enemy = true;
-						break;
-					case(SOURCE_TYPE_HERO):
-						source_hero = true;
-						break;
-				}
+		int bleed_source_type = -1;
+
+		for (size_t i = 0; i < e->stats.effects.effect_list.size(); ++i) {
+			if (e->stats.effects.effect_list[i].type == EFFECT_DAMAGE || e->stats.effects.effect_list[i].type == EFFECT_DAMAGE_PERCENT) {
+				bleed_source_type = e->stats.effects.effect_list[i].source_type;
+				break;
 			}
 		}
-
-		int bleed_source_type = source_hero ? SOURCE_TYPE_HERO : (source_ally ? SOURCE_TYPE_ALLY : (source_enemy ? SOURCE_TYPE_ENEMY : SOURCE_TYPE_NEUTRAL));
 
 		e->doRewards(bleed_source_type);
 
