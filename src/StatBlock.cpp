@@ -129,8 +129,8 @@ StatBlock::StatBlock()
 	, powers_ai() // enemy only
 	, melee_range(1.0f) //both
 	, threat_range(0)  // enemy
-	, threat_range_close(0)  // enemy
 	, threat_range_far(0)  // enemy
+	, flee_range(0)  // enemy
 	, combat_style(COMBAT_DEFAULT)//enemy
 	, hero_stealth(0)
 	, turn_delay(0)
@@ -340,6 +340,7 @@ void StatBlock::load(const std::string& filename) {
 		return;
 
 	bool clear_loot = true;
+	bool flee_range_defined = false;
 
 	while (infile.next()) {
 		if (infile.new_section) {
@@ -461,21 +462,20 @@ void StatBlock::load(const std::string& filename) {
 
 		// @ATTR melee_range|float|Minimum distance from target required to use melee powers.
 		else if (infile.key == "melee_range") melee_range = fnum;
-		// @ATTR threat_range|float, float, float : Normal, Close, Far|The first value is the radius of the area this creature will be able to start chasing the hero. The next two values are optional. The second value is the radius at which this creature will start moving to a safe distance. The third value is the radius at which this creature will stop pursuing their target.
+		// @ATTR threat_range|float, float: Engage distance, Stop distance|The first value is the radius of the area this creature will be able to start chasing the hero. The second, optional, value is the radius at which this creature will stop pursuing their target and defaults to double the first value.
 		else if (infile.key == "threat_range") {
 			threat_range = toFloat(popFirstString(infile.val));
-
-			std::string tr_close = popFirstString(infile.val);
-			if (!tr_close.empty())
-				threat_range_close = toFloat(tr_close);
-			else
-				threat_range_close = threat_range / 2;
 
 			std::string tr_far = popFirstString(infile.val);
 			if (!tr_far.empty())
 				threat_range_far = toFloat(tr_far);
 			else
 				threat_range_far = threat_range * 2;
+		}
+		// @ATTR flee_range|float|The radius at which this creature will start moving to a safe distance. Defaults to half of the threat_range.
+		else if (infile.key == "flee_range") {
+			flee_range = fnum;
+			flee_range_defined = true;
 		}
 		// @ATTR combat_style|["default", "aggressive", "passive"]|How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat.
 		else if (infile.key == "combat_style") {
@@ -517,6 +517,9 @@ void StatBlock::load(const std::string& filename) {
 
 	hp = starting[STAT_HP_MAX];
 	mp = starting[STAT_MP_MAX];
+
+	if (!flee_range_defined)
+		flee_range = threat_range / 2;
 
 	applyEffects();
 }

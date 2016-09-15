@@ -1741,7 +1741,9 @@ body {
 
 <p><strong>melee_range</strong> | <code>float</code> | Minimum distance from target required to use melee powers.</p>
 
-<p><strong>threat_range</strong> | <code>float, float, float : Normal, Close, Far</code> | The first value is the radius of the area this creature will be able to start chasing the hero. The next two values are optional. The second value is the radius at which this creature will start moving to a safe distance. The third value is the radius at which this creature will stop pursuing their target.</p>
+<p><strong>threat_range</strong> | <code>float, float : Engage distance, Stop distance</code> | The first value is the radius of the area this creature will be able to start chasing the hero. The second, optional, value is the radius at which this creature will stop pursuing their target and defaults to double the first value.</p>
+
+<p><strong>flee_range</strong> | <code>float</code> | The radius at which this creature will start moving to a safe distance. Defaults to half of the threat_range.</p>
 
 <p><strong>combat_style</strong> | <code>["default", "aggressive", "passive"]</code> | How the creature will enter combat. Default is within range of the hero; Aggressive is always in combat; Passive must be attacked to enter combat.</p>
 
