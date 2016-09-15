@@ -8,11 +8,10 @@
 # Pavel Maryanov <acid@jack.kiev.ua>, 2016.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: flare-engine 1.00\n"
+msgstr "Project-Id-Version: flare-engine 1.00\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-15 02:31-0400\n"
-"PO-Revision-Date: 2016-09-09 13:44+0200\n"
+"PO-Revision-Date: 2016-09-15 09:50+0200\n"
 "Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
 "Language-Team: Russian <gnu@dn07.ru>\n"
 "Language: ru\n"
@@ -708,9 +707,8 @@ msgid "Hotkey: %s"
 msgstr "Горячая клавиша: %s"
 
 #: ../../../src/MenuActiveEffects.cpp:163
-#, fuzzy
 msgid "Remaining:"
-msgstr "очков осталось"
+msgstr "Осталось:"
 
 #: ../../../src/MenuCharacter.cpp:41
 msgid "Name"
@@ -778,11 +776,11 @@ msgstr "Консоль разработчика"
 
 #: ../../../src/MenuDevConsole.cpp:119
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr ""
+msgstr "Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
 
 #: ../../../src/MenuDevConsole.cpp:120
 msgid "Type 'help' to get a list of commands. "
-msgstr ""
+msgstr "Введите 'help', чтобы получить список команд. "
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off all of the HUD elements"
@@ -806,7 +804,7 @@ msgstr "Выводит список найденных предметов. Ес�
 
 #: ../../../src/MenuDevConsole.cpp:230
 msgid "parses a series of event components and executes them as a single event"
-msgstr ""
+msgstr "анализирует набор компонентов событий и выполняет их как одно событие"
 
 #: ../../../src/MenuDevConsole.cpp:231
 msgid "clears the command history"
@@ -827,7 +825,7 @@ msgstr "Переключён интерфейс"
 #: ../../../src/MenuDevConsole.cpp:337
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr ""
+msgstr "ОШИБКА: «%s» — недопустимый ключ события"
 
 #: ../../../src/MenuDevConsole.cpp:346
 msgid "ERROR: Too few arguments"
@@ -839,7 +837,7 @@ msgstr "ПОДСКАЗКА: "
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid " <key>=<val> <key>=<val> ..."
-msgstr ""
+msgstr " <ключ>=<значение> <ключ>=<значение> ..."
 
 #: ../../../src/MenuDevConsole.cpp:351
 msgid "ERROR: Unknown command"
@@ -880,11 +878,11 @@ msgstr "Выйти"
 
 #: ../../../src/MenuExit.cpp:85
 msgid "Continue"
-msgstr ""
+msgstr "Продолжить"
 
 #: ../../../src/MenuExit.cpp:109
 msgid "Paused"
-msgstr ""
+msgstr "Пауза"
 
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
@@ -1382,84 +1380,3 @@ msgstr "%s секунда"
 #, c-format
 msgid "%s seconds"
 msgstr "%s секунды"
-
-#~ msgid "Show targeting animation"
-#~ msgstr "Анимация прицела"
-
-#~ msgid "Removes an item of a given ID from the player's inventory"
-#~ msgstr "Удаляет предмет с указанным идентификатором из инвентаря игрока"
-
-#~ msgid "teleports the player to a specific tile, and optionally, a specific map"
-#~ msgstr "телепортирует игрока на указанный тайл и (необязательно) на указанную карту"
-
-#~ msgid "unsets the given campaign statuses if they are set"
-#~ msgstr "сбрасывает указанные статусы кампаний, если они установлены"
-
-#~ msgid "sets the given campaign statuses"
-#~ msgstr "устанавливает заданные статусы кампаний"
-
-#~ msgid "rewards the player with the specified amount of experience points"
-#~ msgstr "вознаграждает игрока указанным количеством очков опыта"
-
-#~ msgid "adds the specified amount of currency to the player's inventory"
-#~ msgstr "добавляет указанное количество валюты в инвентарь игрока"
-
-#~ msgid "adds an item to the player's inventory"
-#~ msgstr "добавляет предмет в инвентарь игрока"
-
-#~ msgid "spawns an enemy matching the given category next to the player"
-#~ msgstr "порождает врага указанной категории рядом с игроком"
-
-#~ msgid "Spawning enemy from category: "
-#~ msgstr "Порождение врага из категории: "
-
-#~ msgid "ERROR: Invalid enemy category"
-#~ msgstr "ОШИБКА: недопустимая категория врага"
-
-#~ msgid " <category> [<x> <y>]"
-#~ msgstr " <категория> [<x> <y>]"
-
-#~ msgid "ERROR: Invalid item ID"
-#~ msgstr "ОШИБКА: недопустимый идентификатор предмета"
-
-#~ msgid "Added item: "
-#~ msgstr "Добавлен предмет: "
-
-#~ msgid " <item_id> [<quantity>]"
-#~ msgstr " <id_предмета> [<количество>]"
-
-#~ msgid "Added currency: "
-#~ msgstr "Добавлена валюта: "
-
-#~ msgid " <quantity>"
-#~ msgstr " <количество>"
-
-#~ msgid "Added XP: "
-#~ msgstr "Добавлен опыт: "
-
-#~ msgid "Set campaign status: "
-#~ msgstr "Установить статус кампании:  "
-
-#~ msgid " <status_1> [<status_2> <status_3> ...]"
-#~ msgstr " <статус_1> [<статус_2> <статус_3> ...]"
-
-#~ msgid "Unset campaign status: "
-#~ msgstr "Сбросить статус кампании:  "
-
-#~ msgid "ERROR: Unknown campaign status: "
-#~ msgstr "ОШИБКА: неизвестный статус кампании: "
-
-#~ msgid "Teleporting to: "
-#~ msgstr "Телепортация в: "
-
-#~ msgid "ERROR: Unknown map: "
-#~ msgstr "ОШИБКА: неизвестная карта: "
-
-#~ msgid " <x> <y> [<map>]"
-#~ msgstr " <x> <y> [<карта>]"
-
-#~ msgid "Removed item: "
-#~ msgstr "Удалён предмет: "
-
-#~ msgid "Exit to title?"
-#~ msgstr "Выйти в меню?"
