@@ -243,24 +243,7 @@ bool Entity::takeHit(Hazard &h) {
 	// prepare the combat text
 	CombatText *combat_text = comb;
 
-	// if it's a miss, do nothing
-	int accuracy = h.accuracy;
-	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
-		accuracy = accuracy * powers->powers[h.power_index].mod_accuracy_value / 100;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
-		accuracy += powers->powers[h.power_index].mod_accuracy_value;
-	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
-		accuracy = powers->powers[h.power_index].mod_accuracy_value;
-
-	int avoidance = 0;
-	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
-		avoidance = stats.get(STAT_AVOIDANCE);
-	}
-
-	int true_avoidance = 100 - (accuracy - avoidance);
-	clampFloor(true_avoidance, MIN_AVOIDANCE);
-	clampCeil(true_avoidance, MAX_AVOIDANCE);
-
+	//check if it is missile, and if it has to be reflected
 	if (h.missile && percentChance(stats.get(STAT_REFLECT))) {
 		// reflect the missile 180 degrees
 		h.setAngle(h.angle+static_cast<float>(M_PI));
@@ -280,11 +263,6 @@ bool Entity::takeHit(Hazard &h) {
 		}
 
 		return false;
-	}
-
-	bool missed = false;
-	if (percentChance(true_avoidance)) {
-		missed = true;
 	}
 
 	// calculate base damage
@@ -366,6 +344,28 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	// misses cause reduced damage
+	int accuracy = h.accuracy;
+	if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_MULTIPLY)
+		accuracy *= powers->powers[h.power_index].mod_accuracy_value / 100;
+	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ADD)
+		accuracy += powers->powers[h.power_index].mod_accuracy_value;
+	else if(powers->powers[h.power_index].mod_accuracy_mode == STAT_MODIFIER_MODE_ABSOLUTE)
+		accuracy = powers->powers[h.power_index].mod_accuracy_value;
+
+	int avoidance = 0;
+	if(!powers->powers[h.power_index].trait_avoidance_ignore) {
+		avoidance = stats.get(STAT_AVOIDANCE);
+	}
+
+	int true_avoidance = 100 - (accuracy - avoidance);
+	clampFloor(true_avoidance, MIN_AVOIDANCE);
+	clampCeil(true_avoidance, MAX_AVOIDANCE);
+
+	bool missed = false;
+	if (percentChance(true_avoidance)) {
+		missed = true;
+	}
+
 	if (missed) {
 		dmg = (dmg * randBetween(MIN_MISS_DAMAGE, MAX_MISS_DAMAGE)) / 100;
 	}
