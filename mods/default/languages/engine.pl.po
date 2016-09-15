@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-15 02:31-0400\n"
-"PO-Revision-Date: 2016-04-01 18:26+0100\n"
+"PO-Revision-Date: 2016-09-15 11:38+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: \n"
 "Language: Polish\n"
@@ -704,9 +704,8 @@ msgid "Hotkey: %s"
 msgstr "Klawisz skrótu: %s"
 
 #: ../../../src/MenuActiveEffects.cpp:163
-#, fuzzy
 msgid "Remaining:"
-msgstr "Pozostałe punkty"
+msgstr "Pozostało:"
 
 #: ../../../src/MenuCharacter.cpp:41
 msgid "Name"
@@ -774,11 +773,11 @@ msgstr "Konsola deweloperska"
 
 #: ../../../src/MenuDevConsole.cpp:119
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr ""
+msgstr "Argumenty zawierające spacje powinny zamknięte w cudzysłowie. Przykład:"
 
 #: ../../../src/MenuDevConsole.cpp:120
 msgid "Type 'help' to get a list of commands. "
-msgstr ""
+msgstr "Wpisz 'help' aby uzyskać listę komend. "
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off all of the HUD elements"
@@ -802,7 +801,7 @@ msgstr "Wyświetla listę przedmiotów pasujących do podanego wyrażenia. Brak 
 
 #: ../../../src/MenuDevConsole.cpp:230
 msgid "parses a series of event components and executes them as a single event"
-msgstr ""
+msgstr "parsuje ciąg komponentów zdarzeń i wykonuje je jako jedno zdarzenie"
 
 #: ../../../src/MenuDevConsole.cpp:231
 msgid "clears the command history"
@@ -823,7 +822,7 @@ msgstr "Włączono interfejs użytkownika"
 #: ../../../src/MenuDevConsole.cpp:337
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr ""
+msgstr "BŁĄD: '%s' nie jest prawidłowym klawiszem do zdarzenia"
 
 #: ../../../src/MenuDevConsole.cpp:346
 msgid "ERROR: Too few arguments"
@@ -835,7 +834,7 @@ msgstr "WSKAZÓWKA: "
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid " <key>=<val> <key>=<val> ..."
-msgstr ""
+msgstr " <key>=<val> <key>=<val> ..."
 
 #: ../../../src/MenuDevConsole.cpp:351
 msgid "ERROR: Unknown command"
@@ -876,11 +875,11 @@ msgstr "Wyjdź"
 
 #: ../../../src/MenuExit.cpp:85
 msgid "Continue"
-msgstr ""
+msgstr "Kontynuuj"
 
 #: ../../../src/MenuExit.cpp:109
 msgid "Paused"
-msgstr ""
+msgstr "Pauza"
 
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
@@ -967,9 +966,8 @@ msgid "XP: %d/%d"
 msgstr "PD: %d/%d"
 
 #: ../../../src/MenuManager.cpp:790
-#, fuzzy
 msgid "This item can not be dropped."
-msgstr "Tego przedmiotu nie można sprzedać."
+msgstr "Tego przedmiotu nie można upuścić."
 
 #: ../../../src/MenuNPCActions.cpp:71
 msgid "Trade"
