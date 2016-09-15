@@ -282,6 +282,8 @@ public:
 
 	float melee_range;
 	float threat_range;
+	float threat_range_close;
+	float threat_range_far;
 	int combat_style; // determines how the creature enters combat
 	int hero_stealth;
 	int turn_delay;
