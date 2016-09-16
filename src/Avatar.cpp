@@ -776,12 +776,12 @@ void Avatar::transform() {
 
 	// base stats
 	for (unsigned int i=0; i<STAT_COUNT; ++i) {
-		clampFloor(stats.starting[i], charmed_stats->starting[i]);
+		stats.starting[i] = std::max(stats.starting[i], charmed_stats->starting[i]);
 	}
 
 	// resistances
 	for (unsigned int i=0; i<stats.vulnerable.size(); i++) {
-		clampCeil(stats.vulnerable[i], charmed_stats->vulnerable[i]);
+		stats.vulnerable[i] = std::min(stats.vulnerable[i], charmed_stats->vulnerable[i]);
 	}
 
 	loadSounds(charmed_stats);

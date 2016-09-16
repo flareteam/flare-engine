@@ -169,7 +169,7 @@ GameStateLoad::GameStateLoad() : GameState()
 				game_slot_max = toInt(infile.val);
 
 				// can't have less than 1 game slot visible
-				clampFloor(game_slot_max, 1);
+				game_slot_max = std::max(game_slot_max, 1);
 			}
 			else {
 				infile.error("GameStateLoad: '%s' is not a valid key.", infile.key.c_str());

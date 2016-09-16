@@ -281,8 +281,8 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->x = popFirstInt(val);
 		e->y = popFirstInt(val);
 		if (e->x != 0 || e->y != 0) {
-			clampFloor(e->x, 1);
-			clampFloor(e->y, e->x);
+			e->x = std::max(e->x, 1);
+			e->y = std::max(e->y, e->x);
 		}
 	}
 	else if (key == "msg") {
@@ -451,8 +451,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.remove_currency|int|Removes specified amount of currency from hero inventory
 		e->type = EC_REMOVE_CURRENCY;
 
-		e->x = toInt(val);
-		clampFloor(e->x, 0);
+		e->x = std::max(toInt(val), 0);
 	}
 	else if (key == "remove_item") {
 		// @ATTR event.remove_item|list(item_id)|Removes specified item from hero inventory
@@ -477,23 +476,20 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		// @ATTR event.reward_xp|int|Reward hero with specified amount of experience points.
 		e->type = EC_REWARD_XP;
 
-		e->x = toInt(val);
-		clampFloor(e->x, 0);
+		e->x = std::max(toInt(val), 0);
 	}
 	else if (key == "reward_currency") {
 		// @ATTR event.reward_currency|int|Reward hero with specified amount of currency.
 		e->type = EC_REWARD_CURRENCY;
 
-		e->x = toInt(val);
-		clampFloor(e->x, 0);
+		e->x = std::max(toInt(val), 0);
 	}
 	else if (key == "reward_item") {
 		// @ATTR event.reward_item|item_id, int : Item, Quantity|Reward hero with y number of item x.
 		e->type = EC_REWARD_ITEM;
 
 		e->x = popFirstInt(val);
-		e->y = popFirstInt(val);
-		clampFloor(e->y, 0);
+		e->y = std::max(popFirstInt(val), 0);
 	}
 	else if (key == "restore") {
 		// @ATTR event.restore|["hp", "mp", "hpmp", "status", "all"]|Restore the hero's HP, MP, and/or status.

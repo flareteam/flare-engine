@@ -82,13 +82,11 @@ LootManager::LootManager()
 			}
 			else if (infile.key == "drop_max") {
 				// @ATTR drop_max|int|The maximum number of random item stacks that can drop at once
-				drop_max = toInt(infile.val);
-				clampFloor(drop_max, 1);
+				drop_max = std::max(toInt(infile.val), 1);
 			}
 			else if (infile.key == "drop_radius") {
 				// @ATTR drop_radius|int|The distance (in tiles) away from the origin that loot can drop
-				drop_radius = toInt(infile.val);
-				clampFloor(drop_radius, 1);
+				drop_radius = std::max(toInt(infile.val), 1);
 			}
 			else {
 				infile.error("LootManager: '%s' is not a valid key.", infile.key.c_str());
@@ -592,10 +590,8 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 		else e->z = toInt(chance);
 
 		// quantity min/max
-		e->a = popFirstInt(val);
-		clampFloor(e->a, 1);
-		e->b = popFirstInt(val);
-		clampFloor(e->b, e->a);
+		e->a = std::max(popFirstInt(val), 1);
+		e->b = std::max(popFirstInt(val), e->a);
 	}
 
 	// add repeating loot
@@ -625,10 +621,8 @@ void LootManager::parseLoot(std::string &val, Event_Component *e, std::vector<Ev
 			if (chance == "fixed") ec->z = 0;
 			else ec->z = toInt(chance);
 
-			ec->a = popFirstInt(val);
-			clampFloor(ec->a, 1);
-			ec->b = popFirstInt(val);
-			clampFloor(ec->b, ec->a);
+			ec->a = std::max(popFirstInt(val), 1);
+			ec->b = std::max(popFirstInt(val), ec->a);
 
 			repeat_val = popFirstString(val);
 		}
@@ -685,10 +679,8 @@ void LootManager::loadLootTables() {
 						ec->z = toInt(infile.val);
 				}
 				else if (infile.key == "quantity") {
-					ec->a = popFirstInt(infile.val);
-					clampFloor(ec->a, 1);
-					ec->b = popFirstInt(infile.val);
-					clampFloor(ec->b, ec->a);
+					ec->a = std::max(popFirstInt(infile.val), 1);
+					ec->b = std::max(popFirstInt(infile.val), ec->a);
 				}
 			}
 		}

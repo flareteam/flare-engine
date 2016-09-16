@@ -55,18 +55,18 @@ void MenuDevHUD::align() {
 	ss.str("");
 	ss << msg->get("Player (x,y): ") << pc->stats.pos.x << ", " << pc->stats.pos.y;
 	player_pos.set(window_area.x, window_area.y, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
-	clampFloor(line_width, player_pos.bounds.w);
+	line_width = std::max(line_width, player_pos.bounds.w);
 
 	FPoint target = screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
 	ss.str("");
 	ss << msg->get("Target (x,y): ") << target.x << ", " << target.y;
 	target_pos.set(window_area.x, window_area.y+line_height, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
-	clampFloor(line_width, target_pos.bounds.w);
+	line_width = std::max(line_width, target_pos.bounds.w);
 
 	ss.str("");
 	ss << msg->get("Mouse (x,y): ") << inpt->mouse.x << ", " << inpt->mouse.y;
 	mouse_pos.set(window_area.x, window_area.y+line_height*2, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
-	clampFloor(line_width, mouse_pos.bounds.w);
+	line_width = std::max(line_width, mouse_pos.bounds.w);
 
 	window_area = original_area;
 	window_area.w = line_width;

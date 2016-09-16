@@ -30,24 +30,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #endif
 
 /**
- * Clamps value to floor.
- *
- * Postcondition: value >= floor
- */
-inline void clampFloor(int& value, const int floor) {
-	value = std::max<int>(value, floor);
-}
-
-/**
- * Clamps value to ceiling.
- *
- * Postcondition: value <= ceiling
- */
-inline void clampCeil(int& value, const int ceiling) {
-	value = std::min<int>(value, ceiling);
-}
-
-/**
  * Returns sign of value.
  */
 inline int signum(const int value) {

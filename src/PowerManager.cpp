@@ -248,7 +248,7 @@ void PowerManager::loadPowers() {
 			// a maximum of 1 equipped item can be consumed at a time
 			if (powers[input_id].requires_equipped_item_quantity > 1) {
 				infile.error("PowerManager: Only 1 equipped item can be consumed at a time.");
-				clampCeil(powers[input_id].requires_equipped_item_quantity, 1);
+				powers[input_id].requires_equipped_item_quantity = std::min(powers[input_id].requires_equipped_item_quantity, 1);
 			}
 		}
 		else if (infile.key == "requires_targeting")

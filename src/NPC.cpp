@@ -202,8 +202,8 @@ void NPC::load(const std::string& npc_id) {
 					random_table_count.x = popFirstInt(infile.val);
 					random_table_count.y = popFirstInt(infile.val);
 					if (random_table_count.x != 0 || random_table_count.y != 0) {
-						clampFloor(random_table_count.x, 1);
-						clampFloor(random_table_count.y, random_table_count.x);
+						random_table_count.x = std::max(random_table_count.x, 1);
+						random_table_count.y = std::max(random_table_count.y, random_table_count.x);
 					}
 				}
 

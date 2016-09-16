@@ -384,8 +384,8 @@ void StatBlock::load(const std::string& filename) {
 			loot_count.x = popFirstInt(infile.val);
 			loot_count.y = popFirstInt(infile.val);
 			if (loot_count.x != 0 || loot_count.y != 0) {
-				clampFloor(loot_count.x, 1);
-				clampFloor(loot_count.y, loot_count.x);
+				loot_count.x = std::max(loot_count.x, 1);
+				loot_count.y = std::max(loot_count.y, loot_count.x);
 			}
 		}
 		// @ATTR defeat_status|string|Campaign status to set upon death.
@@ -574,11 +574,11 @@ void StatBlock::calcBase() {
 	int off0 = get_offense() -1;
 	int def0 = get_defense() -1;
 
-	clampFloor(lev0,0);
-	clampFloor(phys0,0);
-	clampFloor(ment0,0);
-	clampFloor(off0,0);
-	clampFloor(def0,0);
+	lev0 = std::max(lev0, 0);
+	phys0 = std::max(phys0, 0);
+	ment0 = std::max(ment0, 0);
+	off0 = std::max(off0, 0);
+	def0 = std::max(def0, 0);
 
 	for (int i=0; i<STAT_COUNT; i++) {
 		base[i] = starting[i];
@@ -600,14 +600,14 @@ void StatBlock::calcBase() {
 	base[STAT_ABS_MAX] += absorb_max_add;
 
 	// increase damage and absorb to minimum amounts
-	clampFloor(base[STAT_DMG_MELEE_MIN], 0);
-	clampFloor(base[STAT_DMG_MELEE_MAX], base[STAT_DMG_MELEE_MIN]);
-	clampFloor(base[STAT_DMG_RANGED_MIN], 0);
-	clampFloor(base[STAT_DMG_RANGED_MAX], base[STAT_DMG_RANGED_MIN]);
-	clampFloor(base[STAT_DMG_MENT_MIN], 0);
-	clampFloor(base[STAT_DMG_MENT_MAX], base[STAT_DMG_MENT_MIN]);
-	clampFloor(base[STAT_ABS_MIN], 0);
-	clampFloor(base[STAT_ABS_MAX], base[STAT_ABS_MIN]);
+	base[STAT_DMG_MELEE_MIN] = std::max(base[STAT_DMG_MELEE_MIN], 0);
+	base[STAT_DMG_MELEE_MAX] = std::max(base[STAT_DMG_MELEE_MAX], base[STAT_DMG_MELEE_MIN]);
+	base[STAT_DMG_RANGED_MIN] = std::max(base[STAT_DMG_RANGED_MIN], 0);
+	base[STAT_DMG_RANGED_MAX] = std::max(base[STAT_DMG_RANGED_MAX], base[STAT_DMG_RANGED_MIN]);
+	base[STAT_DMG_MENT_MIN] = std::max(base[STAT_DMG_MENT_MIN], 0);
+	base[STAT_DMG_MENT_MAX] = std::max(base[STAT_DMG_MENT_MAX], base[STAT_DMG_MENT_MIN]);
+	base[STAT_ABS_MIN] = std::max(base[STAT_ABS_MIN], 0);
+	base[STAT_ABS_MAX] = std::max(base[STAT_ABS_MAX], base[STAT_ABS_MIN]);
 }
 
 /**

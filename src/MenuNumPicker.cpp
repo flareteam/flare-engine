@@ -180,9 +180,7 @@ void MenuNumPicker::setValueBounds(int low, int high) {
 }
 
 void MenuNumPicker::setValue(int val) {
-	value = val;
-	clampFloor(value, value_min);
-	clampCeil(value, value_max);
+	value = std::min(std::max(val, value_min), value_max);
 	updateInput();
 }
 

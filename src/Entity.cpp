@@ -278,9 +278,7 @@ bool Entity::takeHit(Hazard &h) {
 		avoidance = stats.get(STAT_AVOIDANCE);
 	}
 
-	int true_avoidance = 100 - (accuracy - avoidance);
-	clampFloor(true_avoidance, MIN_AVOIDANCE);
-	clampCeil(true_avoidance, MAX_AVOIDANCE);
+	int true_avoidance = std::min(std::max(100 - (accuracy - avoidance), MIN_AVOIDANCE), MAX_AVOIDANCE);
 
 	bool missed = false;
 	if (percentChance(true_avoidance)) {
@@ -300,10 +298,11 @@ bool Entity::takeHit(Hazard &h) {
 	// apply elemental resistance
 	if (h.trait_elemental >= 0 && unsigned(h.trait_elemental) < stats.vulnerable.size()) {
 		unsigned i = h.trait_elemental;
-		int vulnerable = stats.vulnerable[i];
-		clampFloor(vulnerable,MIN_RESIST);
+
+		int vulnerable = std::max(stats.vulnerable[i], MIN_RESIST);
 		if (stats.vulnerable[i] < 100)
-			clampCeil(vulnerable,MAX_RESIST);
+			vulnerable = std::min(vulnerable, MAX_RESIST);
+
 		dmg = (dmg * vulnerable) / 100;
 	}
 
