@@ -173,16 +173,16 @@ extern std::string LANGUAGE;
 extern bool AUTOPICKUP_CURRENCY;
 
 // Combat calculation caps
-extern short MAX_ABSORB;
-extern short MAX_RESIST;
-extern short MAX_BLOCK;
-extern short MAX_AVOIDANCE;
-extern short MIN_ABSORB;
-extern short MIN_RESIST;
-extern short MIN_BLOCK;
-extern short MIN_AVOIDANCE;
-extern short MIN_MISS_DAMAGE;
-extern short MAX_MISS_DAMAGE;
+extern int MAX_ABSORB;
+extern int MAX_RESIST;
+extern int MAX_BLOCK;
+extern int MAX_AVOIDANCE;
+extern int MIN_ABSORB;
+extern int MIN_RESIST;
+extern int MIN_BLOCK;
+extern int MIN_AVOIDANCE;
+extern int MIN_MISS_DAMAGE;
+extern int MAX_MISS_DAMAGE;
 
 // Elemental types
 extern std::vector<Element> ELEMENTS;

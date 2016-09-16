@@ -157,16 +157,16 @@ std::string LANGUAGE = "en";
 bool AUTOPICKUP_CURRENCY;
 
 // Combat calculation caps (percentage)
-short MAX_ABSORB;
-short MAX_RESIST;
-short MAX_BLOCK;
-short MAX_AVOIDANCE;
-short MIN_ABSORB;
-short MIN_RESIST;
-short MIN_BLOCK;
-short MIN_AVOIDANCE;
-short MIN_MISS_DAMAGE;
-short MAX_MISS_DAMAGE;
+int MAX_ABSORB;
+int MAX_RESIST;
+int MAX_BLOCK;
+int MAX_AVOIDANCE;
+int MIN_ABSORB;
+int MIN_RESIST;
+int MIN_BLOCK;
+int MIN_AVOIDANCE;
+int MIN_MISS_DAMAGE;
+int MAX_MISS_DAMAGE;
 
 // Elemental types
 std::vector<Element> ELEMENTS;
@@ -479,33 +479,33 @@ void loadMiscSettings() {
 		while (infile.next()) {
 			if (infile.key == "absorb_percent") {
 				// @ATTR absorb_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be absorbed.
-				MIN_ABSORB = static_cast<short>(popFirstInt(infile.val));
-				MAX_ABSORB = static_cast<short>(popFirstInt(infile.val));
-				MAX_ABSORB = std::max<short>(MAX_ABSORB, MIN_ABSORB);
+				MIN_ABSORB = popFirstInt(infile.val);
+				MAX_ABSORB = popFirstInt(infile.val);
+				MAX_ABSORB = std::max(MAX_ABSORB, MIN_ABSORB);
 			}
 			else if (infile.key == "resist_percent") {
 				// @ATTR resist_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be resisted.
-				MIN_RESIST = static_cast<short>(popFirstInt(infile.val));
-				MAX_RESIST = static_cast<short>(popFirstInt(infile.val));
-				MAX_RESIST = std::max<short>(MAX_RESIST, MIN_RESIST);
+				MIN_RESIST = popFirstInt(infile.val);
+				MAX_RESIST = popFirstInt(infile.val);
+				MAX_RESIST = std::max(MAX_RESIST, MIN_RESIST);
 			}
 			else if (infile.key == "block_percent") {
 				// @ATTR block_percent|int, int : Minimum, Maximum|Limits the percentage of damage that can be blocked.
-				MIN_BLOCK = static_cast<short>(popFirstInt(infile.val));
-				MAX_BLOCK = static_cast<short>(popFirstInt(infile.val));
-				MAX_BLOCK = std::max<short>(MAX_BLOCK, MIN_BLOCK);
+				MIN_BLOCK = popFirstInt(infile.val);
+				MAX_BLOCK = popFirstInt(infile.val);
+				MAX_BLOCK = std::max(MAX_BLOCK, MIN_BLOCK);
 			}
 			else if (infile.key == "avoidance_percent") {
 				// @ATTR avoidance_percent|int, int : Minimum, Maximum|Limits the percentage chance that damage will be avoided.
-				MIN_AVOIDANCE = static_cast<short>(popFirstInt(infile.val));
-				MAX_AVOIDANCE = static_cast<short>(popFirstInt(infile.val));
-				MAX_AVOIDANCE = std::max<short>(MAX_AVOIDANCE, MIN_AVOIDANCE);
+				MIN_AVOIDANCE = popFirstInt(infile.val);
+				MAX_AVOIDANCE = popFirstInt(infile.val);
+				MAX_AVOIDANCE = std::max(MAX_AVOIDANCE, MIN_AVOIDANCE);
 			}
 			// @ATTR miss_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a miss occurs.
 			else if (infile.key == "miss_damage_percent") {
-				MIN_MISS_DAMAGE = static_cast<short>(popFirstInt(infile.val));
-				MAX_MISS_DAMAGE = static_cast<short>(popFirstInt(infile.val));
-				MAX_MISS_DAMAGE = std::max<short>(MAX_MISS_DAMAGE, MIN_MISS_DAMAGE);
+				MIN_MISS_DAMAGE = popFirstInt(infile.val);
+				MAX_MISS_DAMAGE = popFirstInt(infile.val);
+				MAX_MISS_DAMAGE = std::max(MAX_MISS_DAMAGE, MIN_MISS_DAMAGE);
 			}
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
