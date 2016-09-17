@@ -721,7 +721,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 
 			for (size_t j=0; j<ELEMENTS.size(); ++j) {
 				if (pwr.post_effects[i].id == ELEMENTS[j].id + "_resist") {
-					ss << "% " << msg->get(ELEMENTS[j].name);
+					ss << "% " << msg->get("%s Resistance", ELEMENTS[j].name.c_str());
 					break;
 				}
 			}
