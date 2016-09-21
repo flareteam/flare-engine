@@ -278,7 +278,9 @@ bool Entity::takeHit(Hazard &h) {
 		avoidance = stats.get(STAT_AVOIDANCE);
 	}
 
-	int true_avoidance = std::min(std::max(100 - (accuracy - avoidance), MIN_AVOIDANCE), MAX_AVOIDANCE);
+	int true_avoidance = 100 - (accuracy - avoidance);
+	bool is_overhit = (true_avoidance < 0) ? percentChance(abs(true_avoidance)) : false;
+	true_avoidance = std::min(std::max(true_avoidance, MIN_AVOIDANCE), MAX_AVOIDANCE);
 
 	bool missed = false;
 	if (percentChance(true_avoidance)) {
@@ -359,9 +361,14 @@ bool Entity::takeHit(Hazard &h) {
 
 	bool crit = percentChance(true_crit_chance);
 	if (crit) {
-		dmg *= 2;
+		// default is dmg * 2
+		dmg = (dmg * randBetween(MIN_CRIT_DAMAGE, MAX_CRIT_DAMAGE)) / 100;
 		if(!stats.hero)
 			mapr->shaky_cam_ticks = MAX_FRAMES_PER_SEC/2;
+	}
+	else if (is_overhit) {
+		dmg = (dmg * randBetween(MIN_OVERHIT_DAMAGE, MAX_OVERHIT_DAMAGE)) / 100;
+		// Should we use shakycam for overhits?
 	}
 
 	// misses cause reduced damage
@@ -376,7 +383,7 @@ bool Entity::takeHit(Hazard &h) {
 	else if(stats.hero)
 		combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_TAKEDMG);
 	else {
-		if(crit)
+		if(crit || is_overhit)
 			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_CRIT);
 		else if (missed)
 			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_MISS);

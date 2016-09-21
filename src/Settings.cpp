@@ -167,6 +167,10 @@ int MIN_BLOCK;
 int MIN_AVOIDANCE;
 int MIN_MISS_DAMAGE;
 int MAX_MISS_DAMAGE;
+int MIN_CRIT_DAMAGE;
+int MAX_CRIT_DAMAGE;
+int MIN_OVERHIT_DAMAGE;
+int MAX_OVERHIT_DAMAGE;
 
 // Elemental types
 std::vector<Element> ELEMENTS;
@@ -316,6 +320,10 @@ void loadMiscSettings() {
 	MIN_AVOIDANCE = 0;
 	MIN_MISS_DAMAGE = 0;
 	MAX_MISS_DAMAGE = 0;
+	MIN_CRIT_DAMAGE = 200;
+	MAX_CRIT_DAMAGE = 200;
+	MIN_OVERHIT_DAMAGE = 100;
+	MAX_OVERHIT_DAMAGE = 100;
 	CURRENCY = "Gold";
 	VENDOR_RATIO = 0.25;
 	DEATH_PENALTY = true;
@@ -506,6 +514,18 @@ void loadMiscSettings() {
 				MIN_MISS_DAMAGE = popFirstInt(infile.val);
 				MAX_MISS_DAMAGE = popFirstInt(infile.val);
 				MAX_MISS_DAMAGE = std::max(MAX_MISS_DAMAGE, MIN_MISS_DAMAGE);
+			}
+			// @ATTR crit_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when a critical hit occurs.
+			else if (infile.key == "crit_damage_percent") {
+				MIN_CRIT_DAMAGE = popFirstInt(infile.val);
+				MAX_CRIT_DAMAGE = popFirstInt(infile.val);
+				MAX_CRIT_DAMAGE = std::max(MAX_CRIT_DAMAGE, MIN_CRIT_DAMAGE);
+			}
+			// @ATTR overhit_damage_percent|int, int : Minimum, Maximum|The percentage of damage dealt when an overhit occurs.
+			else if (infile.key == "overhit_damage_percent") {
+				MIN_OVERHIT_DAMAGE = popFirstInt(infile.val);
+				MAX_OVERHIT_DAMAGE = popFirstInt(infile.val);
+				MAX_OVERHIT_DAMAGE = std::max(MAX_OVERHIT_DAMAGE, MIN_OVERHIT_DAMAGE);
 			}
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());

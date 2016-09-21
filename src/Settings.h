@@ -183,6 +183,10 @@ extern int MIN_BLOCK;
 extern int MIN_AVOIDANCE;
 extern int MIN_MISS_DAMAGE;
 extern int MAX_MISS_DAMAGE;
+extern int MIN_CRIT_DAMAGE;
+extern int MAX_CRIT_DAMAGE;
+extern int MIN_OVERHIT_DAMAGE;
+extern int MAX_OVERHIT_DAMAGE;
 
 // Elemental types
 extern std::vector<Element> ELEMENTS;
