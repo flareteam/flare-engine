@@ -110,7 +110,7 @@ void IconManager::setIcon(int icon_id, Point dest_pos) {
 			current_set = &icon_sets[i-1];
 			break;
 		}
-		else if (i == 0) {
+		else if (i-1 == 0) {
 			// we've reached the end of the set list, but could not find our icon
 			current_set = NULL;
 			return;
