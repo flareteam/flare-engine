@@ -337,15 +337,6 @@ void MenuPowers::loadPower(FileParser &infile) {
 	// @ATTR power.position|point|Position of this power icon; relative to MenuPowers "pos".
 	else if (infile.key == "position") power_cell.back().pos = toPoint(infile.val);
 
-	// @ATTR power.requires_physoff|int|Power requires Physical and Offense stat of this value.
-	else if (infile.key == "requires_physoff") power_cell.back().requires_physoff = toInt(infile.val);
-	// @ATTR power.requires_physdef|int|Power requires Physical and Defense stat of this value.
-	else if (infile.key == "requires_physdef") power_cell.back().requires_physdef = toInt(infile.val);
-	// @ATTR power.requires_mentoff|int|Power requires Mental and Offense stat of this value.
-	else if (infile.key == "requires_mentoff") power_cell.back().requires_mentoff = toInt(infile.val);
-	// @ATTR power.requires_mentdef|int|Power requires Mental and Defense stat of this value.
-	else if (infile.key == "requires_mentdef") power_cell.back().requires_mentdef = toInt(infile.val);
-
 	// @ATTR power.requires_defense|int|Power requires Defense stat of this value.
 	else if (infile.key == "requires_defense") power_cell.back().requires_defense = toInt(infile.val);
 	// @ATTR power.requires_offense|int|Power requires Offense stat of this value.
@@ -405,17 +396,8 @@ void MenuPowers::loadUpgrade(FileParser &infile) {
 	if (skip_section)
 		return;
 
-	// @ATTR upgrade.requires_physoff|int|Upgrade requires Physical and Offense stat of this value.
-	if (infile.key == "requires_physoff") power_cell_upgrade.back().requires_physoff = toInt(infile.val);
-	// @ATTR upgrade.requires_physdef|int|Upgrade requires Physical and Defense stat of this value.
-	else if (infile.key == "requires_physdef") power_cell_upgrade.back().requires_physdef = toInt(infile.val);
-	// @ATTR upgrade.requires_mentoff|int|Upgrade requires Mental and Offense stat of this value.
-	else if (infile.key == "requires_mentoff") power_cell_upgrade.back().requires_mentoff = toInt(infile.val);
-	// @ATTR upgrade.requires_mentdef|int|Upgrade requires Mental and Defense stat of this value.
-	else if (infile.key == "requires_mentdef") power_cell_upgrade.back().requires_mentdef = toInt(infile.val);
-
 	// @ATTR upgrade.requires_defense|int|Upgrade requires Defense stat of this value.
-	else if (infile.key == "requires_defense") power_cell_upgrade.back().requires_defense = toInt(infile.val);
+	if (infile.key == "requires_defense") power_cell_upgrade.back().requires_defense = toInt(infile.val);
 	// @ATTR upgrade.requires_offense|int|Upgrade requires Offense stat of this value.
 	else if (infile.key == "requires_offense") power_cell_upgrade.back().requires_offense = toInt(infile.val);
 	// @ATTR upgrade.requires_physical|int|Upgrade requires Physical stat of this value.
@@ -446,11 +428,7 @@ bool MenuPowers::checkRequirements(int pci) {
 		if (!checkUnlocked(power_cell_all[pci].requires_power_cell[i]))
 			return false;
 
-	if ((stats->physoff() >= power_cell_all[pci].requires_physoff) &&
-			(stats->physdef() >= power_cell_all[pci].requires_physdef) &&
-			(stats->mentoff() >= power_cell_all[pci].requires_mentoff) &&
-			(stats->mentdef() >= power_cell_all[pci].requires_mentdef) &&
-			(stats->get_defense() >= power_cell_all[pci].requires_defense) &&
+	if((stats->get_defense() >= power_cell_all[pci].requires_defense) &&
 			(stats->get_offense() >= power_cell_all[pci].requires_offense) &&
 			(stats->get_physical() >= power_cell_all[pci].requires_physical) &&
 			(stats->get_mental() >= power_cell_all[pci].requires_mental) &&
@@ -572,10 +550,6 @@ int MenuPowers::getNextLevelCell(int pci) {
 
 void MenuPowers::replaceCellWithUpgrade(int pci, int uci) {
 	power_cell[pci].id = power_cell_upgrade[uci].id;
-	power_cell[pci].requires_physoff = power_cell_upgrade[uci].requires_physoff;
-	power_cell[pci].requires_physdef = power_cell_upgrade[uci].requires_physdef;
-	power_cell[pci].requires_mentoff = power_cell_upgrade[uci].requires_mentoff;
-	power_cell[pci].requires_mentdef = power_cell_upgrade[uci].requires_mentdef;
 	power_cell[pci].requires_defense = power_cell_upgrade[uci].requires_defense;
 	power_cell[pci].requires_offense = power_cell_upgrade[uci].requires_offense;
 	power_cell[pci].requires_physical = power_cell_upgrade[uci].requires_physical;
@@ -979,30 +953,6 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 	}
 
 	// add requirement
-	if ((power_cells[slot_num].requires_physoff > 0) && (stats->physoff() < power_cells[slot_num].requires_physoff)) {
-		tip->addColoredText(msg->get("Requires Physical Offense %d", power_cells[slot_num].requires_physoff), color_penalty);
-	}
-	else if((power_cells[slot_num].requires_physoff > 0) && (stats->physoff() >= power_cells[slot_num].requires_physoff)) {
-		tip->addText(msg->get("Requires Physical Offense %d", power_cells[slot_num].requires_physoff));
-	}
-	if ((power_cells[slot_num].requires_physdef > 0) && (stats->physdef() < power_cells[slot_num].requires_physdef)) {
-		tip->addColoredText(msg->get("Requires Physical Defense %d", power_cells[slot_num].requires_physdef), color_penalty);
-	}
-	else if ((power_cells[slot_num].requires_physdef > 0) && (stats->physdef() >= power_cells[slot_num].requires_physdef)) {
-		tip->addText(msg->get("Requires Physical Defense %d", power_cells[slot_num].requires_physdef));
-	}
-	if ((power_cells[slot_num].requires_mentoff > 0) && (stats->mentoff() < power_cells[slot_num].requires_mentoff)) {
-		tip->addColoredText(msg->get("Requires Mental Offense %d", power_cells[slot_num].requires_mentoff), color_penalty);
-	}
-	else if ((power_cells[slot_num].requires_mentoff > 0) && (stats->mentoff() >= power_cells[slot_num].requires_mentoff)) {
-		tip->addText(msg->get("Requires Mental Offense %d", power_cells[slot_num].requires_mentoff));
-	}
-	if ((power_cells[slot_num].requires_mentdef > 0) && (stats->mentdef() < power_cells[slot_num].requires_mentdef)) {
-		tip->addColoredText(msg->get("Requires Mental Defense %d", power_cells[slot_num].requires_mentdef), color_penalty);
-	}
-	else if ((power_cells[slot_num].requires_mentdef > 0) && (stats->mentdef() >= power_cells[slot_num].requires_mentdef)) {
-		tip->addText(msg->get("Requires Mental Defense %d", power_cells[slot_num].requires_mentdef));
-	}
 	if ((power_cells[slot_num].requires_offense > 0) && (stats->get_offense() < power_cells[slot_num].requires_offense)) {
 		tip->addColoredText(msg->get("Requires Offense %d", power_cells[slot_num].requires_offense), color_penalty);
 	}
@@ -1409,11 +1359,7 @@ bool MenuPowers::meetsUsageStats(int power_index) {
 	// If we didn't find power in power_menu, than it has no stats requirements
 	if (id == -1) return true;
 
-	return stats->physoff() >= power_cell[id].requires_physoff
-		   && stats->physdef() >= power_cell[id].requires_physdef
-		   && stats->mentoff() >= power_cell[id].requires_mentoff
-		   && stats->mentdef() >= power_cell[id].requires_mentdef
-		   && stats->get_defense() >= power_cell[id].requires_defense
+	return stats->get_defense() >= power_cell[id].requires_defense
 		   && stats->get_offense() >= power_cell[id].requires_offense
 		   && stats->get_mental() >= power_cell[id].requires_mental
 		   && stats->get_physical() >= power_cell[id].requires_physical;

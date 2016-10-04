@@ -185,26 +185,6 @@ public:
 		return mental_character + mental_additional;
 	}
 
-	// derived stats ("disciplines")
-	int physoff() {
-		return get_physical() + get_offense();
-	}
-	int physdef() {
-		return get_physical() + get_defense();
-	}
-	int mentoff() {
-		return get_mental() + get_offense();
-	}
-	int mentdef() {
-		return get_mental() + get_defense();
-	}
-	int physment() {
-		return get_physical() + get_mental();
-	}
-	int offdef() {
-		return get_offense() + get_defense();
-	}
-
 	// Base class picked when starting a new game. Defaults to "Adventurer".
 	std::string character_class;
 	// Class derived from certain properties defined in engine/titles.txt

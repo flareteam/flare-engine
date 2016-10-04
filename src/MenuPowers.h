@@ -55,10 +55,6 @@ public:
 	int id;
 	int tab;
 	Point pos;
-	int requires_physoff;
-	int requires_physdef;
-	int requires_mentoff;
-	int requires_mentdef;
 	int requires_defense;
 	int requires_offense;
 	int requires_physical;
@@ -78,10 +74,6 @@ public:
 		: id(-1)
 		, tab(0)
 		, pos(Point())
-		, requires_physoff(0)
-		, requires_physdef(0)
-		, requires_mentoff(0)
-		, requires_mentdef(0)
 		, requires_defense(0)
 		, requires_offense(0)
 		, requires_physical(0)
