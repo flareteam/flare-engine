@@ -85,7 +85,6 @@ private:
 	LabelInfo unspent_pos;
 	LabelInfo label_pos[CSTAT_COUNT];
 	Rect value_pos[CSTAT_COUNT];
-	bool show_upgrade[4];
 	bool show_stat[STAT_COUNT];
 	bool show_resists;
 

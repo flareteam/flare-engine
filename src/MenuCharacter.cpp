@@ -75,7 +75,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	for (int i=0; i<4; i++) {
 		upgradeButton[i] = new WidgetButton("images/menus/buttons/upgrade.png");
 		upgradeButton[i]->enabled = false;
-		show_upgrade[i] = true;
 	}
 	physical_up = false;
 	mental_up = false;
@@ -194,15 +193,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 
 			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
 			else if(infile.key == "unspent") unspent_pos = eatLabelInfo(infile.val);
-
-			// @ATTR show_upgrade_physical|bool|Hide the Physical upgrade button if set to false.
-			else if (infile.key == "show_upgrade_physical") show_upgrade[0] = toBool(infile.val);
-			// @ATTR show_upgrade_mental|bool|Hide the Mental upgrade button if set to false.
-			else if (infile.key == "show_upgrade_mental") show_upgrade[1] = toBool(infile.val);
-			// @ATTR show_upgrade_offense|bool|Hide the Offense upgrade button if set to false.
-			else if (infile.key == "show_upgrade_offense") show_upgrade[2] = toBool(infile.val);
-			// @ATTR show_upgrade_defense|bool|Hide the Defense upgrade button if set to false.
-			else if (infile.key == "show_upgrade_defense") show_upgrade[3] = toBool(infile.val);
 
 			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = toBool(infile.val);
@@ -437,19 +427,19 @@ void MenuCharacter::logic() {
 	}
 
 	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points) {
-		if (stats->physical_character < stats->max_points_per_stat && show_upgrade[0]) {
+		if (stats->physical_character < stats->max_points_per_stat) {
 			upgradeButton[0]->enabled = true;
 			tablist.add(upgradeButton[0]);
 		}
-		if (stats->mental_character  < stats->max_points_per_stat && show_upgrade[1]) {
+		if (stats->mental_character  < stats->max_points_per_stat) {
 			upgradeButton[1]->enabled = true;
 			tablist.add(upgradeButton[1]);
 		}
-		if (stats->offense_character < stats->max_points_per_stat && show_upgrade[2]) {
+		if (stats->offense_character < stats->max_points_per_stat) {
 			upgradeButton[2]->enabled = true;
 			tablist.add(upgradeButton[2]);
 		}
-		if (stats->defense_character < stats->max_points_per_stat && show_upgrade[3]) {
+		if (stats->defense_character < stats->max_points_per_stat) {
 			upgradeButton[3]->enabled = true;
 			tablist.add(upgradeButton[3]);
 		}
