@@ -441,8 +441,11 @@ void GameStatePlay::loadTitles() {
 			else if (infile.key == "requires_status") titles.back().requires_status = infile.val;
 			// @ATTR title.requires_not_status|string|Requires not status.
 			else if (infile.key == "requires_not_status") titles.back().requires_not = infile.val;
-			// @ATTR title.primary_stat|["physical", "mental", "offense", "defense", "physoff", "physment", "physdef", "mentoff", "offdef", "mentdef"]|Required primary stat.
-			else if (infile.key == "primary_stat") titles.back().primary_stat = infile.val;
+			// @ATTR title.primary_stat|predefined_string, predefined_string : Primary stat, Lesser primary stat|Required primary stat(s). The lesser stat is optional.
+			else if (infile.key == "primary_stat") {
+				titles.back().primary_stat_1 = popFirstString(infile.val);
+				titles.back().primary_stat_2 = popFirstString(infile.val);
+			}
 			else infile.error("GameStatePlay: '%s' is not a valid key.", infile.key.c_str());
 		}
 		infile.close();
@@ -450,59 +453,26 @@ void GameStatePlay::loadTitles() {
 }
 
 void GameStatePlay::checkTitle() {
-	if (!pc->stats.check_title || titles.empty()) return;
+	if (!pc->stats.check_title || titles.empty())
+		return;
 
 	int title_id = -1;
 
 	for (unsigned i=0; i<titles.size(); i++) {
-		if (titles[i].title == "") continue;
+		if (titles[i].title.empty())
+			continue;
 
-		if (titles[i].level > 0 && pc->stats.level < titles[i].level) continue;
-		if (titles[i].power > 0 && std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), titles[i].power) == pc->stats.powers_list.end()) continue;
-		if (titles[i].requires_status != "" && !camp->checkStatus(titles[i].requires_status)) continue;
-		if (titles[i].requires_not != "" && camp->checkStatus(titles[i].requires_not)) continue;
-		if (titles[i].primary_stat != "") {
-			if (titles[i].primary_stat == "physical") {
-				if (pc->stats.get_physical() <= pc->stats.get_mental() || pc->stats.get_physical() <= pc->stats.get_offense() || pc->stats.get_physical() <= pc->stats.get_defense())
-					continue;
-			}
-			else if (titles[i].primary_stat == "offense") {
-				if (pc->stats.get_offense() <= pc->stats.get_mental() || pc->stats.get_offense() <= pc->stats.get_physical() || pc->stats.get_offense() <= pc->stats.get_defense())
-					continue;
-			}
-			else if (titles[i].primary_stat == "mental") {
-				if (pc->stats.get_mental() <= pc->stats.get_physical() || pc->stats.get_mental() <= pc->stats.get_offense() || pc->stats.get_mental() <= pc->stats.get_defense())
-					continue;
-			}
-			else if (titles[i].primary_stat == "defense") {
-				if (pc->stats.get_defense() <= pc->stats.get_mental() || pc->stats.get_defense() <= pc->stats.get_offense() || pc->stats.get_defense() <= pc->stats.get_physical())
-					continue;
-			}
-			else if (titles[i].primary_stat == "physoff") {
-				if (pc->stats.physoff() <= pc->stats.physdef() || pc->stats.physoff() <= pc->stats.mentoff() || pc->stats.physoff() <= pc->stats.mentdef() || pc->stats.physoff() <= pc->stats.physment() || pc->stats.physoff() <= pc->stats.offdef())
-					continue;
-			}
-			else if (titles[i].primary_stat == "physment") {
-				if (pc->stats.physment() <= pc->stats.physdef() || pc->stats.physment() <= pc->stats.mentoff() || pc->stats.physment() <= pc->stats.mentdef() || pc->stats.physment() <= pc->stats.physoff() || pc->stats.physment() <= pc->stats.offdef())
-					continue;
-			}
-			else if (titles[i].primary_stat == "physdef") {
-				if (pc->stats.physdef() <= pc->stats.physoff() || pc->stats.physdef() <= pc->stats.mentoff() || pc->stats.physdef() <= pc->stats.mentdef() || pc->stats.physdef() <= pc->stats.physment() || pc->stats.physdef() <= pc->stats.offdef())
-					continue;
-			}
-			else if (titles[i].primary_stat == "mentoff") {
-				if (pc->stats.mentoff() <= pc->stats.physdef() || pc->stats.mentoff() <= pc->stats.physoff() || pc->stats.mentoff() <= pc->stats.mentdef() || pc->stats.mentoff() <= pc->stats.physment() || pc->stats.mentoff() <= pc->stats.offdef())
-					continue;
-			}
-			else if (titles[i].primary_stat == "offdef") {
-				if (pc->stats.offdef() <= pc->stats.physdef() || pc->stats.offdef() <= pc->stats.mentoff() || pc->stats.offdef() <= pc->stats.mentdef() || pc->stats.offdef() <= pc->stats.physment() || pc->stats.offdef() <= pc->stats.physoff())
-					continue;
-			}
-			else if (titles[i].primary_stat == "mentdef") {
-				if (pc->stats.mentdef() <= pc->stats.physdef() || pc->stats.mentdef() <= pc->stats.mentoff() || pc->stats.mentdef() <= pc->stats.physoff() || pc->stats.mentdef() <= pc->stats.physment() || pc->stats.mentdef() <= pc->stats.offdef())
-					continue;
-			}
-		}
+		if (titles[i].level > 0 && pc->stats.level < titles[i].level)
+			continue;
+		if (titles[i].power > 0 && std::find(pc->stats.powers_list.begin(), pc->stats.powers_list.end(), titles[i].power) == pc->stats.powers_list.end())
+			continue;
+		if (!titles[i].requires_status.empty() && !camp->checkStatus(titles[i].requires_status))
+			continue;
+		if (!titles[i].requires_not.empty() && camp->checkStatus(titles[i].requires_not))
+			continue;
+		if (!titles[i].primary_stat_1.empty() && !checkPrimaryStat(titles[i].primary_stat_1, titles[i].primary_stat_2))
+			continue;
+
 		// Title meets the requirements
 		title_id = i;
 		break;
@@ -1046,6 +1016,60 @@ void GameStatePlay::resetNPC() {
 	menu->npc->setNPC(NULL);
 	menu->vendor->setNPC(NULL);
 	menu->talker->setNPC(NULL);
+}
+
+bool GameStatePlay::checkPrimaryStat(const std::string& first, const std::string& second) {
+	// TODO primary stats will be definined in a separate file in the future
+	// for now, we make a temporary set of them here in this function
+	std::vector<int> vals;
+	vals.push_back(pc->stats.get_physical());
+	vals.push_back(pc->stats.get_mental());
+	vals.push_back(pc->stats.get_offense());
+	vals.push_back(pc->stats.get_defense());
+
+	int high = 0;
+	size_t high_index = vals.size();
+	size_t low_index = vals.size();
+
+	for (size_t i = 0; i < vals.size(); ++i) {
+		if (vals[i] > high) {
+			if (high_index != vals.size()) {
+				low_index = high_index;
+			}
+			high = vals[i];
+			high_index = i;
+		}
+		else if (vals[i] == high && low_index == vals.size()) {
+			low_index = i;
+		}
+	}
+
+	// if the first primary stat doesn't match, we don't care about the second one
+	if (high_index == 0 && first != "physical")
+		return false;
+	else if (high_index == 1 && first != "mental")
+		return false;
+	else if (high_index == 2 && first != "offense")
+		return false;
+	else if (high_index == 3 && first != "defense")
+		return false;
+
+	if (!second.empty()) {
+		if (low_index == 0 && second != "physical")
+			return false;
+		else if (low_index == 1 && second != "mental")
+			return false;
+		else if (low_index == 2 && second != "offense")
+			return false;
+		else if (low_index == 3 && second != "defense")
+			return false;
+	}
+	else if (second.empty() && vals[high_index] == vals[low_index]) {
+		// titles that require a single stat are ignored if two stats are equal
+		return false;
+	}
+
+	return true;
 }
 
 GameStatePlay::~GameStatePlay() {

@@ -49,7 +49,8 @@ public:
 	int power;
 	std::string requires_status;
 	std::string requires_not;
-	std::string primary_stat;
+	std::string primary_stat_1;
+	std::string primary_stat_2;
 
 	Title()
 		: title("")
@@ -57,7 +58,8 @@ public:
 		, power(0)
 		, requires_status("")
 		, requires_not("")
-		, primary_stat("") {
+		, primary_stat_1("")
+		, primary_stat_2("") {
 	}
 };
 
@@ -92,6 +94,7 @@ private:
 	void showLoading();
 	void loadTitles();
 	void resetNPC();
+	bool checkPrimaryStat(const std::string& first, const std::string& second);
 
 	int npc_id;
 	bool npc_from_map;
