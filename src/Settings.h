@@ -45,6 +45,12 @@ public:
 
 const int ACTIONBAR_MAX = 12; // maximum number of slots in MenuActionBar
 
+class PrimaryStat {
+public:
+	std::string id;
+	std::string name;
+};
+
 class HeroClass {
 public:
 	std::string name;
@@ -187,6 +193,9 @@ extern int MIN_CRIT_DAMAGE;
 extern int MAX_CRIT_DAMAGE;
 extern int MIN_OVERHIT_DAMAGE;
 extern int MAX_OVERHIT_DAMAGE;
+
+// Primary stats
+extern std::vector<PrimaryStat> PRIMARY_STATS;
 
 // Elemental types
 extern std::vector<Element> ELEMENTS;

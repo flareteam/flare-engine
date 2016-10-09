@@ -172,6 +172,9 @@ int MAX_CRIT_DAMAGE;
 int MIN_OVERHIT_DAMAGE;
 int MAX_OVERHIT_DAMAGE;
 
+// Primary stats
+std::vector<PrimaryStat> PRIMARY_STATS;
+
 // Elemental types
 std::vector<Element> ELEMENTS;
 
@@ -724,6 +727,37 @@ void loadMiscSettings() {
 			}
 		}
 		infile.close();
+	}
+
+	// @CLASS Settings: Primary Stats|Description of engine/primary_stats.txt
+	if (infile.open("engine/primary_stats.txt")) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "stat") {
+					// check if the previous stat is empty and remove it if there is no identifier
+					if (!PRIMARY_STATS.empty() && PRIMARY_STATS.back().id == "") {
+						PRIMARY_STATS.pop_back();
+					}
+					PRIMARY_STATS.resize(PRIMARY_STATS.size()+1);
+				}
+			}
+
+			if (PRIMARY_STATS.empty() || infile.section != "stat")
+				continue;
+
+			// @ATTR stat.id|string|An identifier for this primary stat.
+			if (infile.key == "id") PRIMARY_STATS.back().id = infile.val;
+			// @ATTR stat.name|string|The displayed name of this primary stat.
+			else if (infile.key == "name") PRIMARY_STATS.back().name = infile.val;
+
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+
+		// check if the last stat is empty and remove it if there is no identifier
+		if (!PRIMARY_STATS.empty() && PRIMARY_STATS.back().id == "") {
+			PRIMARY_STATS.pop_back();
+		}
 	}
 }
 

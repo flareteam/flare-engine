@@ -1,0 +1,16 @@
+[stat]
+id=physical
+name=Physical
+
+[stat]
+id=mental
+name=Mental
+
+[stat]
+id=offense
+name=Offense
+
+[stat]
+id=defense
+name=Defense
+
