@@ -1042,6 +1042,9 @@ bool GameStatePlay::checkPrimaryStat(const std::string& first, const std::string
 		else if (vals[i] == high && low_index == vals.size()) {
 			low_index = i;
 		}
+		else if (low_index == vals.size() || (low_index < vals.size() && vals[i] > vals[low_index])) {
+			low_index = i;
+		}
 	}
 
 	// if the first primary stat doesn't match, we don't care about the second one
