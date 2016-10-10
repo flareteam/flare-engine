@@ -605,7 +605,7 @@ body {
 
 <p><strong>requires_level</strong> | <code>int</code> | The hero's level must match or exceed this value in order to equip this item.</p>
 
-<p><strong>requires_stat</strong> | <code>repeatable(["physical", "mental", "offense", "defense"], int) : Primary stat name, Value</code> | Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats</p>
+<p><strong>requires_stat</strong> | <code>repeatable(predefined_string, int) : Primary stat name, Value</code> | Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats</p>
 
 <p><strong>requires_class</strong> | <code>predefined_string</code> | The hero's base class (engine/classes.txt) must match for this item to be equipped.</p>
 
@@ -815,13 +815,7 @@ body {
 
 <p><strong>label_title</strong> | <code>label</code> | Position of the "Character" text.</p>
 
-<p><strong>upgrade_physical</strong> | <code>point</code> | Position of the button used to add a stat point to Physical.</p>
-
-<p><strong>upgrade_mental</strong> | <code>point</code> | Position of the button used to add a stat point to Mental.</p>
-
-<p><strong>upgrade_offense</strong> | <code>point</code> | Position of the button used to add a stat point to Offense.</p>
-
-<p><strong>upgrade_defense</strong> | <code>point</code> | Position of the button used to add a stat point to Defense.</p>
+<p><strong>upgrade_primary</strong> | <code>predefined_string, point</code> | Position of the button used to add a stat point to this primary stat.</p>
 
 <p><strong>statlist</strong> | <code>point</code> | Position of the scrollbox containing non-primary stats.</p>
 
@@ -833,25 +827,13 @@ body {
 
 <p><strong>label_level</strong> | <code>label</code> | Position of the "Level" text.</p>
 
-<p><strong>label_physical</strong> | <code>label</code> | Position of the "Physical" text.</p>
-
-<p><strong>label_mental</strong> | <code>label</code> | Position of the "Mental" text.</p>
-
-<p><strong>label_offense</strong> | <code>label</code> | Position of the "Offense" text.</p>
-
-<p><strong>label_defense</strong> | <code>label</code> | Position of the "Defense" text.</p>
+<p><strong>label_primary</strong> | <code>predefined_string, label</code> | Position of the text label for this primary stat.</p>
 
 <p><strong>name</strong> | <code>rectangle</code> | Position of the player's name and dimensions of the tooltip hotspot.</p>
 
 <p><strong>level</strong> | <code>rectangle</code> | Position of the player's level and dimensions of the tooltip hotspot.</p>
 
-<p><strong>physical</strong> | <code>rectangle</code> | Position of the player's physical stat and dimensions of the tooltip hotspot.</p>
-
-<p><strong>mental</strong> | <code>rectangle</code> | Position of the player's mental stat and dimensions of the tooltip hotspot.</p>
-
-<p><strong>offense</strong> | <code>rectangle</code> | Position of the player's offense stat and dimensions of the tooltip hotspot.</p>
-
-<p><strong>defense</strong> | <code>rectangle</code> | Position of the player's defense stat and dimensions of the tooltip hotspot.</p>
+<p><strong>primary</strong> | <code>predefined_string, rectangle</code> | Position of this primary stat value display and dimensions of its tooltip hotspot.</p>
 
 <p><strong>unspent</strong> | <code>label</code> | Position of the label showing the number of unspent stat points.</p>
 
@@ -1027,13 +1009,7 @@ body {
 
 <p><strong>power.position</strong> | <code>point</code> | Position of this power icon; relative to MenuPowers "pos".</p>
 
-<p><strong>power.requires_defense</strong> | <code>int</code> | Power requires Defense stat of this value.</p>
-
-<p><strong>power.requires_offense</strong> | <code>int</code> | Power requires Offense stat of this value.</p>
-
-<p><strong>power.requires_physical</strong> | <code>int</code> | Power requires Physical stat of this value.</p>
-
-<p><strong>power.requires_mental</strong> | <code>int</code> | Power requires Mental stat of this value.</p>
+<p><strong>power.requires_primary</strong> | <code>predefined_string, int : Primary stat name, Required value</code> | Power requires this primary stat to be at least the specificed value.</p>
 
 <p><strong>power.requires_point</strong> | <code>bool</code> | Power requires a power point to unlock.</p>
 
@@ -1049,13 +1025,7 @@ body {
 
 <p><strong>upgrade.id</strong> | <code>int</code> | A power id from powers/powers.txt for this upgrade.</p>
 
-<p><strong>upgrade.requires_defense</strong> | <code>int</code> | Upgrade requires Defense stat of this value.</p>
-
-<p><strong>upgrade.requires_offense</strong> | <code>int</code> | Upgrade requires Offense stat of this value.</p>
-
-<p><strong>upgrade.requires_physical</strong> | <code>int</code> | Upgrade requires Physical stat of this value.</p>
-
-<p><strong>upgrade.requires_mental</strong> | <code>int</code> | Upgrade requires Mental stat of this value.</p>
+<p><strong>upgrade.requires_primary</strong> | <code>predefined_string, int : Primary stat name, Required value</code> | Upgrade requires this primary stat to be at least the specificed value.</p>
 
 <p><strong>upgrade.requires_point</strong> | <code>bool</code> | Upgrade requires a power point to unlock.</p>
 
@@ -1571,13 +1541,7 @@ body {
 
 <p><strong>carried</strong> | <code>list(item_id)</code> | A list of items that are placed in the normal inventorty when starting with this class.</p>
 
-<p><strong>physical</strong> | <code>int</code> | Class starts with this physical stat.</p>
-
-<p><strong>mental</strong> | <code>int</code> | Class starts with this mental stat.</p>
-
-<p><strong>offense</strong> | <code>int</code> | Class starts with this offense stat.</p>
-
-<p><strong>defense</strong> | <code>int</code> | Class starts with this defense stat.</p>
+<p><strong>primary</strong> | <code>predefined_string, int : Primary stat name, Default value</code> | Class starts with this value for the specified stat.</p>
 
 <p><strong>actionbar</strong> | <code>list(power_id)</code> | A list of powers to place in the action bar for the class.</p>
 
@@ -1631,6 +1595,16 @@ body {
 
 <hr />
 
+<h4>Settings: Primary Stats</h4>
+
+<p>Description of engine/primary_stats.txt</p>
+
+<p><strong>stat.id</strong> | <code>string</code> | An identifier for this primary stat.</p>
+
+<p><strong>stat.name</strong> | <code>string</code> | The displayed name of this primary stat.</p>
+
+<hr />
+
 <h4>StatBlock: Core stats</h4>
 
 <p>Description of engine/stats.txt and enemies in enemies/</p>
@@ -1645,13 +1619,7 @@ body {
 
 <p><strong>stat_per_level</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per level.</p>
 
-<p><strong>stat_per_physical</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per Physical.</p>
-
-<p><strong>stat_per_mental</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per Mental.</p>
-
-<p><strong>stat_per_offense</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per Offense.</p>
-
-<p><strong>stat_per_defense</strong> | <code>predefined_string, int : Stat name, Value</code> | The value for this stat added per Defense.</p>
+<p><strong>stat_per_primary</strong> | <code>predefined_string, predefined_string, int : Primary Stat, Stat name, Value</code> | The value for this stat added for every point allocated to this primary stat.</p>
 
 <p><strong>vulnerable</strong> | <code>predefined_string, int : Element, Value</code> | Percentage weakness to this element.</p>
 
@@ -1825,17 +1793,11 @@ body {
 
 <p><strong>knockback</strong> | Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.</p>
 
-<p><strong>offense</strong> | Increase Offense stat.</p>
-
-<p><strong>defense</strong> | Increase Defense stat.</p>
-
-<p><strong>physical</strong> | Increase Physical stat.</p>
-
-<p><strong>mental</strong> | Increase Mental stat.</p>
-
 <p><strong>${STATNAME}</strong> | Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, dmg_melee_min, xp_gain</p>
 
 <p><strong>${ELEMENT}_resist</strong> | Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist</p>
+
+<p><strong>${PRIMARYSTAT}</strong> | Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical</p>
 
 <p><strong>death_sentence</strong> | Causes sudden death at the end of the effect duration.</p>
 

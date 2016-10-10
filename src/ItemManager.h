@@ -38,11 +38,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 class StatBlock;
 
-const int REQUIRES_PHYS = 0;
-const int REQUIRES_MENT = 1;
-const int REQUIRES_OFF = 2;
-const int REQUIRES_DEF = 3;
-
 class LootAnimation {
 public:
 	std::string name;
@@ -116,7 +111,7 @@ public:
 	int abs_min;          // minimum absorb amount
 	int abs_max;          // maximum absorb amount
 	int requires_level;   // Player level must match or exceed this value to use item
-	std::vector<int> req_stat;         // physical, mental, offense, defense
+	std::vector<size_t> req_stat;         // physical, mental, offense, defense
 	std::vector<int> req_val;          // 1-5 (used with req_stat)
 	std::string requires_class;
 	std::vector<BonusData> bonus;   // stat to increase/decrease e.g. hp, accuracy, speed

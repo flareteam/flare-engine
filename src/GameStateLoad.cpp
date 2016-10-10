@@ -320,10 +320,9 @@ void GameStateLoad::readGameSlots() {
 			else if (infile.key == "xp")
 				game_slots[i]->stats.xp = toInt(infile.val);
 			else if (infile.key == "build") {
-				game_slots[i]->stats.physical_character = popFirstInt(infile.val);
-				game_slots[i]->stats.mental_character = popFirstInt(infile.val);
-				game_slots[i]->stats.offense_character = popFirstInt(infile.val);
-				game_slots[i]->stats.defense_character = popFirstInt(infile.val);
+				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+					game_slots[i]->stats.primary[j] = popFirstInt(infile.val);
+				}
 			}
 			else if (infile.key == "equipped") {
 				std::string repeat_val = popFirstString(infile.val);

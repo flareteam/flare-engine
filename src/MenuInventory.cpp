@@ -801,20 +801,20 @@ void MenuInventory::applyEquipment() {
 	bool checkRequired = true;
 	while(checkRequired) {
 		checkRequired = false;
-		stats->offense_additional = stats->defense_additional = stats->physical_additional = stats->mental_additional = 0;
+
+		for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+			stats->primary_additional[j] = 0;
+		}
+
 		for (int i = 0; i < MAX_EQUIPPED; i++) {
 			item_id = inventory[EQUIPMENT].storage[i].item;
 			const Item &item = items->items[item_id];
 			unsigned bonus_counter = 0;
 			while (bonus_counter < item.bonus.size()) {
-				if (item.bonus[bonus_counter].base_index == 0) //physical
-					stats->physical_additional += item.bonus[bonus_counter].value;
-				else if (item.bonus[bonus_counter].base_index == 1) //mental
-					stats->mental_additional += item.bonus[bonus_counter].value;
-				else if (item.bonus[bonus_counter].base_index == 2) //offense
-					stats->offense_additional += item.bonus[bonus_counter].value;
-				else if (item.bonus[bonus_counter].base_index == 3) //defense
-					stats->defense_additional += item.bonus[bonus_counter].value;
+				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+					if (item.bonus[bonus_counter].base_index == static_cast<int>(j))
+						stats->primary_additional[j] += item.bonus[bonus_counter].value;
+				}
 
 				bonus_counter++;
 			}
@@ -843,14 +843,10 @@ void MenuInventory::applyEquipment() {
 			for (unsigned bonus_counter=0; bonus_counter<temp_set.bonus.size(); bonus_counter++) {
 				if (temp_set.bonus[bonus_counter].requirement != quantity[k]) continue;
 
-				if (temp_set.bonus[bonus_counter].base_index == 0) //physical
-					stats->physical_additional += temp_set.bonus[bonus_counter].value;
-				else if (temp_set.bonus[bonus_counter].base_index == 1) //mental
-					stats->mental_additional += temp_set.bonus[bonus_counter].value;
-				else if (temp_set.bonus[bonus_counter].base_index == 2) //offense
-					stats->offense_additional += temp_set.bonus[bonus_counter].value;
-				else if (temp_set.bonus[bonus_counter].base_index == 3) //defense
-					stats->defense_additional += temp_set.bonus[bonus_counter].value;
+				for (size_t j = 0; j < PRIMARY_STATS.size(); ++j) {
+					if (temp_set.bonus[bonus_counter].base_index == static_cast<int>(j))
+						stats->primary_additional[j] += temp_set.bonus[bonus_counter].value;
+				}
 			}
 		}
 		// check that each equipped item fit requirements

@@ -137,43 +137,25 @@ public:
 	int power_points_per_level;
 
 	// base stats ("attributes")
-	int offense_character;
-	int defense_character;
-	int physical_character;
-	int mental_character;
+	std::vector<int> primary;
 
 	// combat stats
 	std::vector<int> starting; // default level 1 values per stat. Read from file and never changes at runtime.
 	std::vector<int> base; // values before any active effects are applied
 	std::vector<int> current; // values after all active effects are applied
 	std::vector<int> per_level; // value increases each level after level 1
-	std::vector<int> per_physical;
-	std::vector<int> per_mental;
-	std::vector<int> per_offense;
-	std::vector<int> per_defense;
+	std::vector< std::vector<int> > per_primary;
 
 	int get(STAT stat) {
 		return current[stat];
 	}
 
 	// additional values to base stats, given by items
-	int offense_additional;
-	int defense_additional;
-	int physical_additional;
-	int mental_additional;
+	std::vector<int> primary_additional;
 
-	// getters for full base stats (character + additional)
-	int get_offense()  const {
-		return offense_character + offense_additional;
-	}
-	int get_defense()  const {
-		return defense_character + defense_additional;
-	}
-	int get_physical() const {
-		return physical_character + physical_additional;
-	}
-	int get_mental()   const {
-		return mental_character + mental_additional;
+	// getter for full base stats (character + additional)
+	int get_primary(size_t index) const {
+		return primary[index] + primary_additional[index];
 	}
 
 	// Base class picked when starting a new game. Defaults to "Adventurer".

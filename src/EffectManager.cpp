@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 EffectManager::EffectManager()
 	: bonus(std::vector<int>(STAT_COUNT, 0))
 	, bonus_resist(std::vector<int>(ELEMENTS.size(), 0))
+	, bonus_primary(std::vector<int>(PRIMARY_STATS.size(), 0))
 	, triggered_others(false)
 	, triggered_block(false)
 	, triggered_hit(false)
@@ -86,16 +87,15 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	death_sentence = emSource.death_sentence;
 	fear = emSource.fear;
 	knockback_speed = emSource.knockback_speed;
-	bonus_offense = emSource.bonus_offense;
-	bonus_defense = emSource.bonus_defense;
-	bonus_physical = emSource.bonus_physical;
-	bonus_mental = emSource.bonus_mental;
 
 	for (size_t i=0; i<emSource.bonus.size(); i++) {
 		bonus[i] = emSource.bonus[i];
 	}
 	for (size_t i=0; i<emSource.bonus_resist.size(); i++) {
 		bonus_resist[i] = emSource.bonus_resist[i];
+	}
+	for (size_t i=0; i<emSource.bonus_primary.size(); i++) {
+		bonus_primary[i] = emSource.bonus_primary[i];
 	}
 
 	triggered_others = emSource.triggered_others;
@@ -130,17 +130,16 @@ void EffectManager::clearStatus() {
 	fear = false;
 	knockback_speed = 0;
 
-	bonus_offense = 0;
-	bonus_defense = 0;
-	bonus_physical = 0;
-	bonus_mental = 0;
-
 	for (unsigned i=0; i<STAT_COUNT; i++) {
 		bonus[i] = 0;
 	}
 
 	for (unsigned i=0; i<bonus_resist.size(); i++) {
 		bonus_resist[i] = 0;
+	}
+
+	for (unsigned i=0; i<bonus_primary.size(); i++) {
+		bonus_primary[i] = 0;
 	}
 }
 
@@ -201,22 +200,18 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == EFFECT_FEAR) fear = true;
 			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
 			else if (effect_list[i].type == EFFECT_KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/static_cast<float>(MAX_FRAMES_PER_SEC);
-			// @TYPE offense|Increase Offense stat.
-			else if (effect_list[i].type == EFFECT_OFFENSE) bonus_offense += effect_list[i].magnitude;
-			// @TYPE defense|Increase Defense stat.
-			else if (effect_list[i].type == EFFECT_DEFENSE) bonus_defense += effect_list[i].magnitude;
-			// @TYPE physical|Increase Physical stat.
-			else if (effect_list[i].type == EFFECT_PHYSICAL) bonus_physical += effect_list[i].magnitude;
-			// @TYPE mental|Increase Mental stat.
-			else if (effect_list[i].type == EFFECT_MENTAL) bonus_mental += effect_list[i].magnitude;
 
 			// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, dmg_melee_min, xp_gain
 			else if (effect_list[i].type >= EFFECT_COUNT && effect_list[i].type < EFFECT_COUNT+STAT_COUNT) {
 				bonus[effect_list[i].type - EFFECT_COUNT] += effect_list[i].magnitude;
 			}
 			// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
-			else if (effect_list[i].type >= EFFECT_COUNT + STAT_COUNT) {
+			else if (effect_list[i].type >= EFFECT_COUNT + STAT_COUNT && effect_list[i].type < EFFECT_COUNT+STAT_COUNT+static_cast<int>(ELEMENTS.size())) {
 				bonus_resist[effect_list[i].type - EFFECT_COUNT - STAT_COUNT] += effect_list[i].magnitude;
+			}
+			// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
+			else if (effect_list[i].type >= EFFECT_COUNT) {
+				bonus_primary[effect_list[i].type - EFFECT_COUNT - STAT_COUNT - ELEMENTS.size()] += effect_list[i].magnitude;
 			}
 
 			if (effect_list[i].duration > 0) {
@@ -433,10 +428,6 @@ int EffectManager::getType(const std::string& type) {
 	else if (type == "revive") return EFFECT_REVIVE;
 	else if (type == "convert") return EFFECT_CONVERT;
 	else if (type == "fear") return EFFECT_FEAR;
-	else if (type == "offense") return EFFECT_OFFENSE;
-	else if (type == "defense") return EFFECT_DEFENSE;
-	else if (type == "physical") return EFFECT_PHYSICAL;
-	else if (type == "mental") return EFFECT_MENTAL;
 	else if (type == "death_sentence") return EFFECT_DEATH_SENTENCE;
 	else if (type == "shield") return EFFECT_SHIELD;
 	else if (type == "heal") return EFFECT_HEAL;
@@ -451,6 +442,12 @@ int EffectManager::getType(const std::string& type) {
 		for (unsigned i=0; i<bonus_resist.size(); i++) {
 			if (type == ELEMENTS[i].id + "_resist") {
 				return EFFECT_COUNT+STAT_COUNT+i;
+			}
+		}
+
+		for (unsigned i=0; i<bonus_primary.size(); i++) {
+			if (type == PRIMARY_STATS[i].id) {
+				return EFFECT_COUNT+STAT_COUNT+static_cast<int>(ELEMENTS.size())+i;
 			}
 		}
 	}

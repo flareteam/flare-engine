@@ -37,25 +37,28 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	stats = _stats;
 
+	// 2 is added here to account for CSTAT_NAME and CSTAT_LEVEL
+	cstat.resize(PRIMARY_STATS.size() + 2);
+
 	// Labels for major stats
-	cstat_labels[CSTAT_NAME] = msg->get("Name");
-	cstat_labels[CSTAT_LEVEL] = msg->get("Level");
-	cstat_labels[CSTAT_PHYSICAL] = msg->get("Physical");
-	cstat_labels[CSTAT_MENTAL] = msg->get("Mental");
-	cstat_labels[CSTAT_OFFENSE] = msg->get("Offense");
-	cstat_labels[CSTAT_DEFENSE] = msg->get("Defense");
+	cstat[CSTAT_NAME].label_text = msg->get("Name");
+	cstat[CSTAT_LEVEL].label_text = msg->get("Level");
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		cstat[i+2].label_text = PRIMARY_STATS[i].name;
+	}
 
 	skill_points = 0;
 
 	visible = false;
 
-	for (int i=0; i<CSTAT_COUNT; i++) {
+	for (size_t i = 0; i < cstat.size(); ++i) {
 		cstat[i].label = new WidgetLabel();
 		cstat[i].value = new WidgetLabel();
 		cstat[i].hover.x = cstat[i].hover.y = 0;
 		cstat[i].hover.w = cstat[i].hover.h = 0;
 		cstat[i].visible = true;
 	}
+
 	for (int i=0; i<STAT_COUNT; i++) {
 		show_stat[i] = true;
 	}
@@ -72,14 +75,14 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
 
 	// Upgrade buttons
-	for (int i=0; i<4; i++) {
+	primary_up.resize(PRIMARY_STATS.size());
+	upgradeButton.resize(PRIMARY_STATS.size());
+
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		primary_up[i] = false;
 		upgradeButton[i] = new WidgetButton("images/menus/buttons/upgrade.png");
 		upgradeButton[i]->enabled = false;
 	}
-	physical_up = false;
-	mental_up = false;
-	offense_up = false;
-	defense_up = false;
 
 	// menu title
 	labelCharacter = new WidgetLabel();
@@ -102,25 +105,18 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			}
 			// @ATTR label_title|label|Position of the "Character" text.
 			else if(infile.key == "label_title") title = eatLabelInfo(infile.val);
-			// @ATTR upgrade_physical|point|Position of the button used to add a stat point to Physical.
-			else if(infile.key == "upgrade_physical") {
-				Point pos = toPoint(infile.val);
-				upgradeButton[0]->setBasePos(pos.x, pos.y);
-			}
-			// @ATTR upgrade_mental|point|Position of the button used to add a stat point to Mental.
-			else if(infile.key == "upgrade_mental")	{
-				Point pos = toPoint(infile.val);
-				upgradeButton[1]->setBasePos(pos.x, pos.y);
-			}
-			// @ATTR upgrade_offense|point|Position of the button used to add a stat point to Offense.
-			else if(infile.key == "upgrade_offense") {
-				Point pos = toPoint(infile.val);
-				upgradeButton[2]->setBasePos(pos.x, pos.y);
-			}
-			// @ATTR upgrade_defense|point|Position of the button used to add a stat point to Defense.
-			else if(infile.key == "upgrade_defense") {
-				Point pos = toPoint(infile.val);
-				upgradeButton[3]->setBasePos(pos.x, pos.y);
+			// @ATTR upgrade_primary|predefined_string, point : Primary stat name, Button position|Position of the button used to add a stat point to this primary stat.
+			else if(infile.key == "upgrade_primary") {
+				std::string prim_stat = popFirstString(infile.val);
+				size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+
+				if (prim_stat_index != PRIMARY_STATS.size()) {
+					Point pos = toPoint(infile.val);
+					upgradeButton[prim_stat_index]->setBasePos(pos.x, pos.y);
+				}
+				else {
+					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
+				}
 			}
 			// @ATTR statlist|point|Position of the scrollbox containing non-primary stats.
 			else if(infile.key == "statlist") statlist_pos = toPoint(infile.val);
@@ -131,64 +127,51 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 
 			// @ATTR label_name|label|Position of the "Name" text.
 			else if(infile.key == "label_name") {
-				label_pos[CSTAT_NAME] = eatLabelInfo(infile.val);
-				cstat[CSTAT_NAME].visible = !label_pos[CSTAT_NAME].hidden;
+				cstat[CSTAT_NAME].label_info = eatLabelInfo(infile.val);
+				cstat[CSTAT_NAME].visible = !cstat[CSTAT_NAME].label_info.hidden;
 			}
 			// @ATTR label_level|label|Position of the "Level" text.
 			else if(infile.key == "label_level") {
-				label_pos[CSTAT_LEVEL] = eatLabelInfo(infile.val);
-				cstat[CSTAT_LEVEL].visible = !label_pos[CSTAT_LEVEL].hidden;
+				cstat[CSTAT_LEVEL].label_info = eatLabelInfo(infile.val);
+				cstat[CSTAT_LEVEL].visible = !cstat[CSTAT_LEVEL].label_info.hidden;
 			}
-			// @ATTR label_physical|label|Position of the "Physical" text.
-			else if(infile.key == "label_physical") {
-				label_pos[CSTAT_PHYSICAL] = eatLabelInfo(infile.val);
-				cstat[CSTAT_PHYSICAL].visible = !label_pos[CSTAT_PHYSICAL].hidden;
-			}
-			// @ATTR label_mental|label|Position of the "Mental" text.
-			else if(infile.key == "label_mental") {
-				label_pos[CSTAT_MENTAL] = eatLabelInfo(infile.val);
-				cstat[CSTAT_MENTAL].visible = !label_pos[CSTAT_MENTAL].hidden;
-			}
-			// @ATTR label_offense|label|Position of the "Offense" text.
-			else if(infile.key == "label_offense") {
-				label_pos[CSTAT_OFFENSE] = eatLabelInfo(infile.val);
-				cstat[CSTAT_OFFENSE].visible = !label_pos[CSTAT_OFFENSE].hidden;
-			}
-			// @ATTR label_defense|label|Position of the "Defense" text.
-			else if(infile.key == "label_defense") {
-				label_pos[CSTAT_DEFENSE] = eatLabelInfo(infile.val);
-				cstat[CSTAT_DEFENSE].visible = !label_pos[CSTAT_DEFENSE].hidden;
+			// @ATTR label_primary|predefined_string, label : Primary stat name : Text positioning|Position of the text label for this primary stat.
+			else if(infile.key == "label_primary") {
+				std::string prim_stat = popFirstString(infile.val);
+				size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+
+				if (prim_stat_index != PRIMARY_STATS.size()) {
+					cstat[prim_stat_index+2].label_info = eatLabelInfo(infile.val);
+					cstat[prim_stat_index+2].visible = !cstat[prim_stat_index+2].label_info.hidden;
+				}
+				else {
+					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
+				}
 			}
 
 			// @ATTR name|rectangle|Position of the player's name and dimensions of the tooltip hotspot.
 			else if(infile.key == "name") {
-				value_pos[CSTAT_NAME] = toRect(infile.val);
-				cstat[CSTAT_NAME].value->setBasePos(value_pos[CSTAT_NAME].x + 4, value_pos[CSTAT_NAME].y + (value_pos[CSTAT_NAME].h/2)); // TODO remove 4 from x value
+				cstat[CSTAT_NAME].value_pos = toRect(infile.val);
+				cstat[CSTAT_NAME].value->setBasePos(cstat[CSTAT_NAME].value_pos.x + 4, cstat[CSTAT_NAME].value_pos.y + (cstat[CSTAT_NAME].value_pos.h/2)); // TODO remove 4 from x value
 			}
 			// @ATTR level|rectangle|Position of the player's level and dimensions of the tooltip hotspot.
 			else if(infile.key == "level") {
-				value_pos[CSTAT_LEVEL] = toRect(infile.val);
-				cstat[CSTAT_LEVEL].value->setBasePos(value_pos[CSTAT_LEVEL].x + (value_pos[CSTAT_LEVEL].w/2), value_pos[CSTAT_LEVEL].y + (value_pos[CSTAT_LEVEL].h/2));
+				cstat[CSTAT_LEVEL].value_pos = toRect(infile.val);
+				cstat[CSTAT_LEVEL].value->setBasePos(cstat[CSTAT_LEVEL].value_pos.x + (cstat[CSTAT_LEVEL].value_pos.w/2), cstat[CSTAT_LEVEL].value_pos.y + (cstat[CSTAT_LEVEL].value_pos.h/2));
 			}
-			// @ATTR physical|rectangle|Position of the player's physical stat and dimensions of the tooltip hotspot.
-			else if(infile.key == "physical") {
-				value_pos[CSTAT_PHYSICAL] = toRect(infile.val);
-				cstat[CSTAT_PHYSICAL].value->setBasePos(value_pos[CSTAT_PHYSICAL].x + (value_pos[CSTAT_PHYSICAL].w/2), value_pos[CSTAT_PHYSICAL].y + (value_pos[CSTAT_PHYSICAL].h/2));
-			}
-			// @ATTR mental|rectangle|Position of the player's mental stat and dimensions of the tooltip hotspot.
-			else if(infile.key == "mental") {
-				value_pos[CSTAT_MENTAL] = toRect(infile.val);
-				cstat[CSTAT_MENTAL].value->setBasePos(value_pos[CSTAT_MENTAL].x + (value_pos[CSTAT_MENTAL].w/2), value_pos[CSTAT_MENTAL].y + (value_pos[CSTAT_MENTAL].h/2));
-			}
-			// @ATTR offense|rectangle|Position of the player's offense stat and dimensions of the tooltip hotspot.
-			else if(infile.key == "offense") {
-				value_pos[CSTAT_OFFENSE] = toRect(infile.val);
-				cstat[CSTAT_OFFENSE].value->setBasePos(value_pos[CSTAT_OFFENSE].x + (value_pos[CSTAT_OFFENSE].w/2), value_pos[CSTAT_OFFENSE].y + (value_pos[CSTAT_OFFENSE].h/2));
-			}
-			// @ATTR defense|rectangle|Position of the player's defense stat and dimensions of the tooltip hotspot.
-			else if(infile.key == "defense") {
-				value_pos[CSTAT_DEFENSE] = toRect(infile.val);
-				cstat[CSTAT_DEFENSE].value->setBasePos(value_pos[CSTAT_DEFENSE].x + (value_pos[CSTAT_DEFENSE].w/2), value_pos[CSTAT_DEFENSE].y + (value_pos[CSTAT_DEFENSE].h/2));
+			// @ATTR primary|predefined_string, rectangle : Primary stat name, Hotspot position|Position of this primary stat value display and dimensions of its tooltip hotspot.
+			else if(infile.key == "primary") {
+				std::string prim_stat = popFirstString(infile.val);
+				size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+
+				if (prim_stat_index != PRIMARY_STATS.size()) {
+					Rect r = toRect(infile.val);
+					cstat[prim_stat_index+2].value_pos = r;
+					cstat[prim_stat_index+2].value->setBasePos(r.x + (r.w/2), r.y + (r.h/2));
+				}
+				else {
+					infile.error("MenuCharacter: '%s' is not a valid primary stat.", prim_stat.c_str());
+				}
 			}
 
 			// @ATTR unspent|label|Position of the label showing the number of unspent stat points.
@@ -231,20 +214,15 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 
 	align();
 
-	base_stats[0] = &stats->physical_character;
-	base_stats[1] = &stats->mental_character;
-	base_stats[2] = &stats->offense_character;
-	base_stats[3] = &stats->defense_character;
+	base_stats.resize(PRIMARY_STATS.size());
+	base_stats_add.resize(PRIMARY_STATS.size());
+	base_bonus.resize(PRIMARY_STATS.size());
 
-	base_stats_add[0] = &stats->physical_additional;
-	base_stats_add[1] = &stats->mental_additional;
-	base_stats_add[2] = &stats->offense_additional;
-	base_stats_add[3] = &stats->defense_additional;
-
-	base_bonus[0] = &stats->per_physical;
-	base_bonus[1] = &stats->per_mental;
-	base_bonus[2] = &stats->per_offense;
-	base_bonus[3] = &stats->per_defense;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		base_stats[i] = &stats->primary[i];
+		base_stats_add[i] = &stats->primary_additional[i];
+		base_bonus[i] = &stats->per_primary[i];
+	}
 }
 
 void MenuCharacter::align() {
@@ -257,19 +235,25 @@ void MenuCharacter::align() {
 	labelCharacter->set(window_area.x+title.x, window_area.y+title.y, title.justify, title.valign, msg->get("Character"), font->getColor("menu_normal"), title.font_style);
 
 	// upgrade buttons
-	for (int i=0; i<4; i++) {
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 		upgradeButton[i]->setPos(window_area.x, window_area.y);
 	}
 
 	// stat list
 	statList->setPos(window_area.x, window_area.y);
 
-	for (int i=0; i<CSTAT_COUNT; i++) {
+	for (size_t i = 0; i < cstat.size(); ++i) {
 		// setup static labels
-		cstat[i].label->set(window_area.x+label_pos[i].x, window_area.y+label_pos[i].y, label_pos[i].justify, label_pos[i].valign, cstat_labels[i], font->getColor("menu_normal"), label_pos[i].font_style);
+		cstat[i].label->set(window_area.x + cstat[i].label_info.x,
+							window_area.y + cstat[i].label_info.y,
+							cstat[i].label_info.justify,
+							cstat[i].label_info.valign,
+							cstat[i].label_text,
+							font->getColor("menu_normal"),
+							cstat[i].label_info.font_style);
 
 		// setup hotspot locations
-		cstat[i].setHover(window_area.x+value_pos[i].x, window_area.y+value_pos[i].y, value_pos[i].w, value_pos[i].h);
+		cstat[i].setHover(window_area.x + cstat[i].value_pos.x, window_area.y + cstat[i].value_pos.y, cstat[i].value_pos.w, cstat[i].value_pos.h);
 
 		// setup value labels
 		cstat[i].value->setPos(window_area.x, window_area.y);
@@ -295,21 +279,11 @@ void MenuCharacter::refreshStats() {
 	ss << stats->level;
 	cstat[CSTAT_LEVEL].value->set(cstat[CSTAT_LEVEL].value->pos.x, cstat[CSTAT_LEVEL].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), font->getColor("menu_normal"));
 
-	ss.str("");
-	ss << stats->get_physical();
-	cstat[CSTAT_PHYSICAL].value->set(cstat[CSTAT_PHYSICAL].value->pos.x, cstat[CSTAT_PHYSICAL].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->physical_additional));
-
-	ss.str("");
-	ss << stats->get_mental();
-	cstat[CSTAT_MENTAL].value->set(cstat[CSTAT_MENTAL].value->pos.x, cstat[CSTAT_MENTAL].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->mental_additional));
-
-	ss.str("");
-	ss << stats->get_offense();
-	cstat[CSTAT_OFFENSE].value->set(cstat[CSTAT_OFFENSE].value->pos.x, cstat[CSTAT_OFFENSE].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->offense_additional));
-
-	ss.str("");
-	ss << stats->get_defense();
-	cstat[CSTAT_DEFENSE].value->set(cstat[CSTAT_DEFENSE].value->pos.x, cstat[CSTAT_DEFENSE].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->defense_additional));
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		ss.str("");
+		ss << stats->get_primary(i);
+		cstat[i+2].value->set(cstat[i+2].value->pos.x, cstat[i+2].value->pos.y, JUSTIFY_CENTER, VALIGN_CENTER, ss.str(), bonusColor(stats->primary_additional[i]));
+	}
 
 	ss.str("");
 	if (skill_points > 0) ss << skill_points << " " << msg->get("points remaining");
@@ -353,9 +327,9 @@ void MenuCharacter::refreshStats() {
 		cstat[CSTAT_LEVEL].tip.addText(msg->get("Next: %d", stats->xp_table[stats->level]));
 	}
 
-	for (unsigned j=2; j<static_cast<unsigned>(CSTAT_COUNT); ++j) {
+	for (size_t j = 2; j < cstat.size(); ++j) {
 		cstat[j].tip.clear();
-		cstat[j].tip.addText(cstat_labels[j]);
+		cstat[j].tip.addText(cstat[j].label_text);
 		cstat[j].tip.addText(msg->get("base (%d), bonus (%d)", *(base_stats[j-2]), *(base_stats_add[j-2])));
 		bool have_bonus = false;
 		for (unsigned i=0; i<STAT_COUNT; ++i) {
@@ -388,14 +362,11 @@ std::string MenuCharacter::statTooltip(int stat) {
 
 	if (stats->per_level[stat] > 0)
 		tooltip_text += msg->get("Each level grants %d. ", stats->per_level[stat]);
-	if (stats->per_physical[stat] > 0)
-		tooltip_text += msg->get("Each point of Physical grants %d. ", stats->per_physical[stat]);
-	if (stats->per_mental[stat] > 0)
-		tooltip_text += msg->get("Each point of Mental grants %d. ", stats->per_mental[stat]);
-	if (stats->per_offense[stat] > 0)
-		tooltip_text += msg->get("Each point of Offense grants %d. ", stats->per_offense[stat]);
-	if (stats->per_defense[stat] > 0)
-		tooltip_text += msg->get("Each point of Defense grants %d. ", stats->per_defense[stat]);
+
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		if (stats->per_primary[i][stat] > 0)
+			tooltip_text += msg->get("Each point of %s grants %d. ", stats->per_primary[i][stat], PRIMARY_STATS[i].name.c_str());
+	}
 
 	return tooltip_text;
 }
@@ -410,12 +381,18 @@ void MenuCharacter::logic() {
 		snd->play(sfx_close);
 	}
 
-	int spent = stats->physical_character + stats->mental_character + stats->offense_character + stats->defense_character -4;
+	int spent = 0;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		spent += stats->primary[i];
+	}
+	// players start with 1 point in each stat, so we nullify that here
+	spent -= static_cast<int>(PRIMARY_STATS.size());
+
 	skill_points = (stats->level * stats->stat_points_per_level) - spent;
 
 	if (skill_points == 0) {
 		// upgrade buttons
-		for (int i=0; i<4; i++) {
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 			upgradeButton[i]->enabled = false;
 			tablist.remove(upgradeButton[i]);
 		}
@@ -427,28 +404,18 @@ void MenuCharacter::logic() {
 	}
 
 	if (stats->hp > 0 && spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points) {
-		if (stats->physical_character < stats->max_points_per_stat) {
-			upgradeButton[0]->enabled = true;
-			tablist.add(upgradeButton[0]);
-		}
-		if (stats->mental_character  < stats->max_points_per_stat) {
-			upgradeButton[1]->enabled = true;
-			tablist.add(upgradeButton[1]);
-		}
-		if (stats->offense_character < stats->max_points_per_stat) {
-			upgradeButton[2]->enabled = true;
-			tablist.add(upgradeButton[2]);
-		}
-		if (stats->defense_character < stats->max_points_per_stat) {
-			upgradeButton[3]->enabled = true;
-			tablist.add(upgradeButton[3]);
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+			if (stats->primary[i] < stats->max_points_per_stat) {
+				upgradeButton[i]->enabled = true;
+				tablist.add(upgradeButton[i]);
+			}
 		}
 	}
 
-	if (upgradeButton[0]->checkClick()) physical_up = true;
-	if (upgradeButton[1]->checkClick()) mental_up = true;
-	if (upgradeButton[2]->checkClick()) offense_up = true;
-	if (upgradeButton[3]->checkClick()) defense_up = true;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		if (upgradeButton[i]->checkClick())
+			primary_up[i] = true;
+	}
 
 	statList->checkClick();
 
@@ -473,7 +440,7 @@ void MenuCharacter::render() {
 	labelUnspent->render();
 
 	// labels and values
-	for (int i=0; i<CSTAT_COUNT; i++) {
+	for (size_t i = 0; i < cstat.size(); ++i) {
 		if (cstat[i].visible) {
 			cstat[i].label->render();
 			cstat[i].value->render();
@@ -481,7 +448,7 @@ void MenuCharacter::render() {
 	}
 
 	// upgrade buttons
-	for (int i=0; i<4; i++) {
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 		if (upgradeButton[i]->enabled) upgradeButton[i]->render();
 	}
 
@@ -494,7 +461,7 @@ void MenuCharacter::render() {
  */
 TooltipData MenuCharacter::checkTooltip() {
 
-	for (int i=0; i<CSTAT_COUNT; i++) {
+	for (size_t i = 0; i < cstat.size(); ++i) {
 		if (isWithinRect(cstat[i].hover, inpt->mouse) && !cstat[i].tip.isEmpty() && cstat[i].visible)
 			return cstat[i].tip;
 	}
@@ -507,39 +474,25 @@ TooltipData MenuCharacter::checkTooltip() {
  * Return true if a stat was upgraded.
  */
 bool MenuCharacter::checkUpgrade() {
-	int spent = stats->physical_character + stats->mental_character + stats->offense_character + stats->defense_character -4;
+	int spent = 0;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		spent += stats->primary[i];
+	}
+	// players start with 1 point in each stat, so we nullify that here
+	spent -= static_cast<int>(PRIMARY_STATS.size());
+
 	skill_points = (stats->level * stats->stat_points_per_level) - spent;
 
 	// check to see if there are skill points available
 	if (spent < (stats->level * stats->stat_points_per_level) && spent < stats->max_spendable_stat_points) {
 
-		// physical
-		if (physical_up) {
-			stats->physical_character++;
-			stats->recalc(); // equipment applied by MenuManager
-			physical_up = false;
-			return true;
-		}
-		// mental
-		else if (mental_up) {
-			stats->mental_character++;
-			stats->recalc(); // equipment applied by MenuManager
-			mental_up = false;
-			return true;
-		}
-		// offense
-		else if (offense_up) {
-			stats->offense_character++;
-			stats->recalc(); // equipment applied by MenuManager
-			offense_up = false;
-			return true;
-		}
-		// defense
-		else if (defense_up) {
-			stats->defense_character++;
-			stats->recalc(); // equipment applied by MenuManager
-			defense_up = false;
-			return true;
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+			if (primary_up[i]) {
+				stats->primary[i]++;
+				stats->recalc(); // equipment applied by MenuManager
+				primary_up[i] = false;
+				return true;
+			}
 		}
 	}
 
@@ -550,11 +503,11 @@ MenuCharacter::~MenuCharacter() {
 	delete closeButton;
 	delete labelCharacter;
 	delete labelUnspent;
-	for (int i=0; i<CSTAT_COUNT; i++) {
+	for (size_t i = 0; i < cstat.size(); ++i) {
 		delete cstat[i].label;
 		delete cstat[i].value;
 	}
-	for (int i=0; i<4; i++) {
+	for (size_t i = 0; i < upgradeButton.size(); ++i) {
 		delete upgradeButton[i];
 	}
 	delete statList;

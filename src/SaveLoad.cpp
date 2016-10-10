@@ -100,7 +100,13 @@ void SaveLoad::saveGame() {
 		if (SAVE_HPMP) outfile << "hpmp=" << pc->stats.hp << "," << pc->stats.mp << "\n";
 
 		// stat spec
-		outfile << "build=" << pc->stats.physical_character << "," << pc->stats.mental_character << "," << pc->stats.offense_character << "," << pc->stats.defense_character << "\n";
+		outfile << "build=";
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+			outfile << pc->stats.primary[i];
+			if (i < PRIMARY_STATS.size() - 1)
+				outfile << ",";
+		}
+		outfile << "\n";
 
 		// equipped gear
 		outfile << "equipped_quantity=" << menu->inv->inventory[EQUIPMENT].getQuantities() << "\n";
@@ -236,20 +242,12 @@ void SaveLoad::loadGame() {
 				saved_mp = popFirstInt(infile.val);
 			}
 			else if (infile.key == "build") {
-				pc->stats.physical_character = popFirstInt(infile.val);
-				pc->stats.mental_character = popFirstInt(infile.val);
-				pc->stats.offense_character = popFirstInt(infile.val);
-				pc->stats.defense_character = popFirstInt(infile.val);
-				if (pc->stats.physical_character < 0 || pc->stats.physical_character > pc->stats.max_points_per_stat ||
-						pc->stats.mental_character < 0 || pc->stats.mental_character > pc->stats.max_points_per_stat ||
-						pc->stats.offense_character < 0 || pc->stats.offense_character > pc->stats.max_points_per_stat ||
-						pc->stats.defense_character < 0 || pc->stats.defense_character > pc->stats.max_points_per_stat) {
-
-					logError("SaveLoad: Some basic stats are out of bounds, setting to zero");
-					pc->stats.physical_character = 0;
-					pc->stats.mental_character = 0;
-					pc->stats.offense_character = 0;
-					pc->stats.defense_character = 0;
+				for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+					pc->stats.primary[i] = popFirstInt(infile.val);
+					if (pc->stats.primary[i] < 0 || pc->stats.primary[i] > pc->stats.max_points_per_stat) {
+						logInfo("SaveLoad: Primary stat value for '%s' is out of bounds, setting to zero.", PRIMARY_STATS[i].id.c_str());
+						pc->stats.primary[i] = 0;
+					}
 				}
 			}
 			else if (infile.key == "currency") {
@@ -367,10 +365,9 @@ void SaveLoad::loadClass(int index) {
 	}
 
 	pc->stats.character_class = HERO_CLASSES[index].name;
-	pc->stats.physical_character += HERO_CLASSES[index].physical;
-	pc->stats.mental_character += HERO_CLASSES[index].mental;
-	pc->stats.offense_character += HERO_CLASSES[index].offense;
-	pc->stats.defense_character += HERO_CLASSES[index].defense;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		pc->stats.primary[i] += HERO_CLASSES[index].primary[i];
+	}
 	menu->inv->addCurrency(HERO_CLASSES[index].currency);
 	menu->inv->inventory[EQUIPMENT].setItems(HERO_CLASSES[index].equipment);
 	for (unsigned i=0; i<HERO_CLASSES[index].powers.size(); i++) {

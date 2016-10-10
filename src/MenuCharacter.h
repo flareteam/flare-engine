@@ -35,11 +35,6 @@ class WidgetListBox;
 
 const int CSTAT_NAME = 0;
 const int CSTAT_LEVEL = 1;
-const int CSTAT_PHYSICAL = 2;
-const int CSTAT_MENTAL = 3;
-const int CSTAT_OFFENSE = 4;
-const int CSTAT_DEFENSE = 5;
-const int CSTAT_COUNT = 6;
 
 class CharStat {
 public:
@@ -48,6 +43,9 @@ public:
 	Rect hover;
 	TooltipData tip;
 	bool visible;
+	LabelInfo label_info;
+	std::string label_text;
+	Rect value_pos;
 
 	void setHover(int x, int y, int w, int h) {
 		hover.x=x;
@@ -62,20 +60,16 @@ private:
 	StatBlock *stats;
 
 	WidgetButton *closeButton;
-	WidgetButton *upgradeButton[4];
 	WidgetLabel *labelCharacter;
 	WidgetLabel *labelUnspent;
 	WidgetListBox *statList;
-	CharStat cstat[CSTAT_COUNT];
+	std::vector<WidgetButton*> upgradeButton;
 
 	void loadGraphics();
 	Color bonusColor(int stat);
 	std::string statTooltip(int stat);
 	int skill_points;
-	bool physical_up;
-	bool mental_up;
-	bool offense_up;
-	bool defense_up;
+	std::vector<bool> primary_up;
 
 	// label and widget positions
 	LabelInfo title;
@@ -83,16 +77,14 @@ private:
 	int statlist_rows;
 	int statlist_scrollbar_offset;
 	LabelInfo unspent_pos;
-	LabelInfo label_pos[CSTAT_COUNT];
-	Rect value_pos[CSTAT_COUNT];
 	bool show_stat[STAT_COUNT];
 	bool show_resists;
 
-	std::string cstat_labels[CSTAT_COUNT];
+	std::vector<CharStat> cstat;
 
-	int* base_stats[4];
-	int* base_stats_add[4];
-	std::vector<int>* base_bonus[4];
+	std::vector<int*> base_stats;
+	std::vector<int*> base_stats_add;
+	std::vector< std::vector<int>* > base_bonus;
 
 public:
 	explicit MenuCharacter(StatBlock *stats);

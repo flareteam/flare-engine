@@ -451,11 +451,14 @@ void PowerManager::loadPowers() {
 					powers[input_id].spawn_limit_every = popFirstInt(infile.val);
 
 					std::string stat = popFirstString(infile.val);
-					if (stat == "physical") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_PHYSICAL;
-					else if (stat == "mental") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_MENTAL;
-					else if (stat == "offense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_OFFENSE;
-					else if (stat == "defense") powers[input_id].spawn_limit_stat = SPAWN_LIMIT_STAT_DEFENSE;
-					else infile.error("PowerManager: Unknown spawn_limit_stat '%s'", stat.c_str());
+					size_t prim_stat_index = getPrimaryStatIndex(stat);
+
+					if (prim_stat_index != PRIMARY_STATS.size()) {
+						powers[input_id].spawn_limit_stat = prim_stat_index;
+					}
+					else {
+						infile.error("PowerManager: '%s' is not a valid primary stat.", stat.c_str());
+					}
 				}
 			}
 		}
@@ -476,11 +479,14 @@ void PowerManager::loadPowers() {
 
 					if(powers[input_id].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
 						std::string stat = popFirstString(infile.val);
-						if (stat == "physical") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_PHYSICAL;
-						else if (stat == "mental") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_MENTAL;
-						else if (stat == "offense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_OFFENSE;
-						else if (stat == "defense") powers[input_id].spawn_level_stat = SPAWN_LEVEL_STAT_DEFENSE;
-						else infile.error("PowerManager: Unknown spawn_level_stat '%s'", stat.c_str());
+						size_t prim_stat_index = getPrimaryStatIndex(stat);
+
+						if (prim_stat_index != PRIMARY_STATS.size()) {
+							powers[input_id].spawn_level_stat = prim_stat_index;
+						}
+						else {
+							infile.error("PowerManager: '%s' is not a valid primary stat.", stat.c_str());
+						}
 					}
 				}
 			}

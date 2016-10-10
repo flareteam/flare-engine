@@ -117,14 +117,10 @@ void Avatar::init() {
 	stats.humanoid = true;
 	stats.level = 1;
 	stats.xp = 0;
-	stats.physical_character = 1;
-	stats.mental_character = 1;
-	stats.defense_character = 1;
-	stats.offense_character = 1;
-	stats.physical_additional = 0;
-	stats.mental_additional = 0;
-	stats.offense_additional = 0;
-	stats.defense_additional = 0;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		stats.primary[i] = 1;
+		stats.primary_additional[i] = 0;
+	}
 	stats.speed = 0.2f;
 	stats.recalc();
 

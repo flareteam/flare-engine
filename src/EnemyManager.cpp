@@ -297,14 +297,12 @@ void EnemyManager::handleSpawn() {
 			if(powers->powers[e->stats.summoned_power_index].spawn_level_mode == SPAWN_LEVEL_MODE_STAT) {
 				if(e->stats.summoner != NULL && powers->powers[e->stats.summoned_power_index].spawn_level_every != 0) {
 					int stat_val = 0;
-					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_DEFENSE)
-						stat_val = e->stats.summoner->get_defense();
-					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_OFFENSE)
-						stat_val = e->stats.summoner->get_offense();
-					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_MENTAL)
-						stat_val = e->stats.summoner->get_mental();
-					if(powers->powers[e->stats.summoned_power_index].spawn_level_stat == SPAWN_LEVEL_STAT_PHYSICAL)
-						stat_val = e->stats.summoner->get_physical();
+					for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+						if (powers->powers[e->stats.summoned_power_index].spawn_level_stat == i) {
+							stat_val = e->stats.summoner->get_primary(i);
+							break;
+						}
+					}
 
 					e->stats.level = powers->powers[e->stats.summoned_power_index].spawn_level_qty
 									 * (stat_val / powers->powers[e->stats.summoned_power_index].spawn_level_every);

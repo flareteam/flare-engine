@@ -64,22 +64,10 @@ StatBlock::StatBlock()
 	, check_title(false)
 	, stat_points_per_level(1)
 	, power_points_per_level(1)
-	, offense_character(0)
-	, defense_character(0)
-	, physical_character(0)
-	, mental_character(0)
 	, starting(std::vector<int>(STAT_COUNT,0))
 	, base(std::vector<int>(STAT_COUNT,0))
 	, current(std::vector<int>(STAT_COUNT,0))
 	, per_level(std::vector<int>(STAT_COUNT,0))
-	, per_physical(std::vector<int>(STAT_COUNT,0))
-	, per_mental(std::vector<int>(STAT_COUNT,0))
-	, per_offense(std::vector<int>(STAT_COUNT,0))
-	, per_defense(std::vector<int>(STAT_COUNT,0))
-	, offense_additional(0)
-	, defense_additional(0)
-	, physical_additional(0)
-	, mental_additional(0)
 	, character_class("")
 	, character_subclass("")
 	, hp(0)
@@ -174,7 +162,15 @@ StatBlock::StatBlock()
 	, pres_mp(0)
 	, summons()
 	, summoner(NULL)
-	, attacking(false) {
+	, attacking(false)
+{
+	primary.resize(PRIMARY_STATS.size(), 0);
+	primary_additional.resize(PRIMARY_STATS.size(), 0);
+	per_primary.resize(PRIMARY_STATS.size());
+
+	for (size_t i = 0; i < per_primary.size(); ++i) {
+		per_primary[i].resize(STAT_COUNT, 0);
+	}
 }
 
 bool StatBlock::loadCoreStat(FileParser *infile) {
@@ -220,50 +216,17 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 			}
 		}
 	}
-	else if (infile->key == "stat_per_physical") {
-		// @ATTR stat_per_physical|predefined_string, int : Stat name, Value|The value for this stat added per Physical.
+	else if (infile->key == "stat_per_primary") {
+		// @ATTR stat_per_primary|predefined_string, predefined_string, int : Primary Stat, Stat name, Value|The value for this stat added for every point allocated to this primary stat.
+		std::string prim_stat = popFirstString(infile->val);
+		size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+
 		std::string stat = popFirstString(infile->val);
 		int value = popFirstInt(infile->val);
 
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (STAT_KEY[i] == stat) {
-				per_physical[i] = value;
-				return true;
-			}
-		}
-	}
-	else if (infile->key == "stat_per_mental") {
-		// @ATTR stat_per_mental|predefined_string, int : Stat name, Value|The value for this stat added per Mental.
-		std::string stat = popFirstString(infile->val);
-		int value = popFirstInt(infile->val);
-
-		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (STAT_KEY[i] == stat) {
-				per_mental[i] = value;
-				return true;
-			}
-		}
-	}
-	else if (infile->key == "stat_per_offense") {
-		// @ATTR stat_per_offense|predefined_string, int : Stat name, Value|The value for this stat added per Offense.
-		std::string stat = popFirstString(infile->val);
-		int value = popFirstInt(infile->val);
-
-		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (STAT_KEY[i] == stat) {
-				per_offense[i] = value;
-				return true;
-			}
-		}
-	}
-	else if (infile->key == "stat_per_defense") {
-		// @ATTR stat_per_defense|predefined_string, int : Stat name, Value|The value for this stat added per Defense.
-		std::string stat = popFirstString(infile->val);
-		int value = popFirstInt(infile->val);
-
-		for (unsigned i=0; i<STAT_COUNT; i++) {
-			if (STAT_KEY[i] == stat) {
-				per_defense[i] = value;
+				per_primary[prim_stat_index][i] = value;
 				return true;
 			}
 		}
@@ -568,25 +531,14 @@ void StatBlock::recalc() {
  */
 void StatBlock::calcBase() {
 	// bonuses are skipped for the default level 1 of a stat
-	int lev0 = level -1;
-	int phys0 = get_physical() -1;
-	int ment0 = get_mental() -1;
-	int off0 = get_offense() -1;
-	int def0 = get_defense() -1;
+	int lev0 = std::max(level - 1, 0);
 
-	lev0 = std::max(lev0, 0);
-	phys0 = std::max(phys0, 0);
-	ment0 = std::max(ment0, 0);
-	off0 = std::max(off0, 0);
-	def0 = std::max(def0, 0);
-
-	for (int i=0; i<STAT_COUNT; i++) {
+	for (int i = 0; i < STAT_COUNT; ++i) {
 		base[i] = starting[i];
 		base[i] += lev0 * per_level[i];
-		base[i] += phys0 * per_physical[i];
-		base[i] += ment0 * per_mental[i];
-		base[i] += off0 * per_offense[i];
-		base[i] += def0 * per_defense[i];
+		for (size_t j = 0; j < per_primary.size(); ++j) {
+			base[i] += std::max(get_primary(j) - 1, 0) * per_primary[j][i];
+		}
 	}
 
 	// add damage/absorb from equipment
@@ -623,15 +575,12 @@ void StatBlock::applyEffects() {
 
 	// calculate primary stats
 	// refresh the character menu if there has been a change
-	if (get_physical() != physical_character + effects.bonus_physical ||
-			get_mental() != mental_character + effects.bonus_mental ||
-			get_offense() != offense_character + effects.bonus_offense ||
-			get_defense() != defense_character + effects.bonus_defense) refresh_stats = true;
+	for (size_t i = 0; i < primary.size(); ++i) {
+		if (get_primary(i) != primary[i] + effects.bonus_primary[i])
+			refresh_stats = true;
 
-	offense_additional = effects.bonus_offense;
-	defense_additional = effects.bonus_defense;
-	physical_additional = effects.bonus_physical;
-	mental_additional = effects.bonus_mental;
+		primary_additional[i] = effects.bonus_primary[i];
+	}
 
 	calcBase();
 
@@ -953,19 +902,11 @@ bool StatBlock::summonLimitReached(int power_id) const {
 		max_summons = spawn_power->spawn_limit_qty;
 	else if(spawn_power->spawn_limit_mode == SPAWN_LIMIT_MODE_STAT) {
 		int stat_val = 1;
-		switch(spawn_power->spawn_limit_stat) {
-			case SPAWN_LIMIT_STAT_PHYSICAL:
-				stat_val = get_physical();
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+			if (spawn_power->spawn_limit_stat == i) {
+				stat_val = get_primary(i);
 				break;
-			case SPAWN_LIMIT_STAT_MENTAL:
-				stat_val = get_mental();
-				break;
-			case SPAWN_LIMIT_STAT_OFFENSE:
-				stat_val = get_offense();
-				break;
-			case SPAWN_LIMIT_STAT_DEFENSE:
-				stat_val = get_defense();
-				break;
+			}
 		}
 		max_summons = (stat_val / (spawn_power->spawn_limit_every == 0 ? 1 : spawn_power->spawn_limit_every)) * spawn_power->spawn_limit_qty;
 	}

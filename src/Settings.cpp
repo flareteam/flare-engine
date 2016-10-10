@@ -36,6 +36,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsFileSystem.h"
 #include "SharedResources.h"
 
+
+HeroClass::HeroClass()
+	: name("")
+	, description("")
+	, currency(0)
+	, equipment("")
+	, carried("")
+	, primary(PRIMARY_STATS.size(), 0)
+	, hotkeys(std::vector<int>(ACTIONBAR_MAX, 0))
+	, power_tree("") {
+}
+
 class ConfigEntry {
 public:
 	const char * name;
@@ -305,6 +317,7 @@ void loadTilesetSettings() {
 
 void loadMiscSettings() {
 	// reset to defaults
+	PRIMARY_STATS.clear();
 	ELEMENTS.clear();
 	EQUIP_FLAGS.clear();
 	HERO_CLASSES.clear();
@@ -598,6 +611,37 @@ void loadMiscSettings() {
 		}
 	}
 
+	// @CLASS Settings: Primary Stats|Description of engine/primary_stats.txt
+	if (infile.open("engine/primary_stats.txt")) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "stat") {
+					// check if the previous stat is empty and remove it if there is no identifier
+					if (!PRIMARY_STATS.empty() && PRIMARY_STATS.back().id == "") {
+						PRIMARY_STATS.pop_back();
+					}
+					PRIMARY_STATS.resize(PRIMARY_STATS.size()+1);
+				}
+			}
+
+			if (PRIMARY_STATS.empty() || infile.section != "stat")
+				continue;
+
+			// @ATTR stat.id|string|An identifier for this primary stat.
+			if (infile.key == "id") PRIMARY_STATS.back().id = infile.val;
+			// @ATTR stat.name|string|The displayed name of this primary stat.
+			else if (infile.key == "name") PRIMARY_STATS.back().name = msg->get(infile.val);
+
+			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
+		}
+		infile.close();
+
+		// check if the last stat is empty and remove it if there is no identifier
+		if (!PRIMARY_STATS.empty() && PRIMARY_STATS.back().id == "") {
+			PRIMARY_STATS.pop_back();
+		}
+	}
+
 	// @CLASS Settings: Classes|Description of engine/classes.txt
 	if (infile.open("engine/classes.txt")) {
 		while (infile.next()) {
@@ -625,14 +669,18 @@ void loadMiscSettings() {
 				else if (infile.key == "equipment") HERO_CLASSES.back().equipment = infile.val;
 				// @ATTR carried|list(item_id)|A list of items that are placed in the normal inventorty when starting with this class.
 				else if (infile.key == "carried") HERO_CLASSES.back().carried = infile.val;
-				// @ATTR physical|int|Class starts with this physical stat.
-				else if (infile.key == "physical") HERO_CLASSES.back().physical = toInt(infile.val);
-				// @ATTR mental|int|Class starts with this mental stat.
-				else if (infile.key == "mental") HERO_CLASSES.back().mental = toInt(infile.val);
-				// @ATTR offense|int|Class starts with this offense stat.
-				else if (infile.key == "offense") HERO_CLASSES.back().offense = toInt(infile.val);
-				// @ATTR defense|int|Class starts with this defense stat.
-				else if (infile.key == "defense") HERO_CLASSES.back().defense = toInt(infile.val);
+				// @ATTR primary|predefined_string, int : Primary stat name, Default value|Class starts with this value for the specified stat.
+				else if (infile.key == "primary") {
+					std::string prim_stat = popFirstString(infile.val);
+					size_t prim_stat_index = getPrimaryStatIndex(prim_stat);
+
+					if (prim_stat_index != PRIMARY_STATS.size()) {
+						HERO_CLASSES.back().primary[prim_stat_index] = toInt(infile.val);
+					}
+					else {
+						infile.error("Settings: '%s' is not a valid primary stat.", prim_stat.c_str());
+					}
+				}
 
 				else if (infile.key == "actionbar") {
 					// @ATTR actionbar|list(power_id)|A list of powers to place in the action bar for the class.
@@ -727,37 +775,6 @@ void loadMiscSettings() {
 			}
 		}
 		infile.close();
-	}
-
-	// @CLASS Settings: Primary Stats|Description of engine/primary_stats.txt
-	if (infile.open("engine/primary_stats.txt")) {
-		while (infile.next()) {
-			if (infile.new_section) {
-				if (infile.section == "stat") {
-					// check if the previous stat is empty and remove it if there is no identifier
-					if (!PRIMARY_STATS.empty() && PRIMARY_STATS.back().id == "") {
-						PRIMARY_STATS.pop_back();
-					}
-					PRIMARY_STATS.resize(PRIMARY_STATS.size()+1);
-				}
-			}
-
-			if (PRIMARY_STATS.empty() || infile.section != "stat")
-				continue;
-
-			// @ATTR stat.id|string|An identifier for this primary stat.
-			if (infile.key == "id") PRIMARY_STATS.back().id = infile.val;
-			// @ATTR stat.name|string|The displayed name of this primary stat.
-			else if (infile.key == "name") PRIMARY_STATS.back().name = infile.val;
-
-			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
-		}
-		infile.close();
-
-		// check if the last stat is empty and remove it if there is no identifier
-		if (!PRIMARY_STATS.empty() && PRIMARY_STATS.back().id == "") {
-			PRIMARY_STATS.pop_back();
-		}
 	}
 }
 
@@ -888,4 +905,13 @@ void updateScreenVars() {
 		else if (TILESET_ORIENTATION == TILESET_ORTHOGONAL)
 			ENCOUNTER_DIST = sqrtf(powf(static_cast<float>(VIEW_W/TILE_W), 2.f) + powf(static_cast<float>(VIEW_H/TILE_H), 2.f)) / 2.f;
 	}
+}
+
+size_t getPrimaryStatIndex(const std::string& id_str) {
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		if (id_str == PRIMARY_STATS[i].id)
+			return i;
+	}
+
+	return PRIMARY_STATS.size();
 }

@@ -58,28 +58,13 @@ public:
 	int currency;
 	std::string equipment;
 	std::string carried;
-	int physical;
-	int mental;
-	int offense;
-	int defense;
+	std::vector<int> primary;
 	std::vector<int> hotkeys;
 	std::vector<int> powers;
 	std::vector<std::string> statuses;
 	std::string power_tree;
 
-	HeroClass()
-		: name("")
-		, description("")
-		, currency(0)
-		, equipment("")
-		, carried("")
-		, physical(0)
-		, mental(0)
-		, offense(0)
-		, defense(0)
-		, hotkeys(std::vector<int>(ACTIONBAR_MAX, 0))
-		, power_tree("") {
-	}
+	HeroClass();
 };
 
 // Path info
@@ -232,6 +217,7 @@ bool saveSettings();
 bool loadDefaults();
 void loadMobileDefaults();
 void updateScreenVars();
+size_t getPrimaryStatIndex(const std::string& id_str);
 
 // version information
 std::string getVersionString();

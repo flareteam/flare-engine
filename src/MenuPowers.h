@@ -27,12 +27,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_POWERS_H
 
 #include "CommonIncludes.h"
+#include "FileParser.h"
 #include "Menu.h"
+#include "Settings.h"
 #include "Utils.h"
 #include "WidgetButton.h"
 #include "WidgetLabel.h"
 #include "WidgetTabControl.h"
-#include "FileParser.h"
 
 class StatBlock;
 class TooltipData;
@@ -55,10 +56,7 @@ public:
 	int id;
 	int tab;
 	Point pos;
-	int requires_defense;
-	int requires_offense;
-	int requires_physical;
-	int requires_mental;
+	std::vector<int> requires_primary;
 	int requires_level;
 	int upgrade_level;
 	std::vector<int> upgrades;
@@ -74,10 +72,7 @@ public:
 		: id(-1)
 		, tab(0)
 		, pos(Point())
-		, requires_defense(0)
-		, requires_offense(0)
-		, requires_physical(0)
-		, requires_mental(0)
+		, requires_primary(PRIMARY_STATS.size(), 0)
 		, requires_level(0)
 		, upgrade_level(0)
 		, upgrades()

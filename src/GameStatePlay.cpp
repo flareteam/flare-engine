@@ -1019,55 +1019,36 @@ void GameStatePlay::resetNPC() {
 }
 
 bool GameStatePlay::checkPrimaryStat(const std::string& first, const std::string& second) {
-	// TODO primary stats will be definined in a separate file in the future
-	// for now, we make a temporary set of them here in this function
-	std::vector<int> vals;
-	vals.push_back(pc->stats.get_physical());
-	vals.push_back(pc->stats.get_mental());
-	vals.push_back(pc->stats.get_offense());
-	vals.push_back(pc->stats.get_defense());
-
 	int high = 0;
-	size_t high_index = vals.size();
-	size_t low_index = vals.size();
+	size_t high_index = PRIMARY_STATS.size();
+	size_t low_index = PRIMARY_STATS.size();
 
-	for (size_t i = 0; i < vals.size(); ++i) {
-		if (vals[i] > high) {
-			if (high_index != vals.size()) {
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		int stat = pc->stats.get_primary(i);
+		if (stat > high) {
+			if (high_index != PRIMARY_STATS.size()) {
 				low_index = high_index;
 			}
-			high = vals[i];
+			high = stat;
 			high_index = i;
 		}
-		else if (vals[i] == high && low_index == vals.size()) {
+		else if (stat == high && low_index == PRIMARY_STATS.size()) {
 			low_index = i;
 		}
-		else if (low_index == vals.size() || (low_index < vals.size() && vals[i] > vals[low_index])) {
+		else if (low_index == PRIMARY_STATS.size() || (low_index < PRIMARY_STATS.size() && stat > pc->stats.get_primary(low_index))) {
 			low_index = i;
 		}
 	}
 
 	// if the first primary stat doesn't match, we don't care about the second one
-	if (high_index == 0 && first != "physical")
-		return false;
-	else if (high_index == 1 && first != "mental")
-		return false;
-	else if (high_index == 2 && first != "offense")
-		return false;
-	else if (high_index == 3 && first != "defense")
+	if (high_index != PRIMARY_STATS.size() && first != PRIMARY_STATS[high_index].id)
 		return false;
 
 	if (!second.empty()) {
-		if (low_index == 0 && second != "physical")
-			return false;
-		else if (low_index == 1 && second != "mental")
-			return false;
-		else if (low_index == 2 && second != "offense")
-			return false;
-		else if (low_index == 3 && second != "defense")
+		if (low_index != PRIMARY_STATS.size() && second != PRIMARY_STATS[low_index].id)
 			return false;
 	}
-	else if (second.empty() && vals[high_index] == vals[low_index]) {
+	else if (second.empty() && pc->stats.get_primary(high_index) == pc->stats.get_primary(low_index)) {
 		// titles that require a single stat are ignored if two stats are equal
 		return false;
 	}

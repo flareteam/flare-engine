@@ -204,23 +204,18 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			items[id].requires_level = toInt(infile.val);
 		}
 		else if (infile.key == "requires_stat") {
-			// @ATTR requires_stat|repeatable(["physical", "mental", "offense", "defense"], int) : Primary stat name, Value|Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats
+			// @ATTR requires_stat|repeatable(predefined_string, int) : Primary stat name, Value|Make item require specific stat level ex. requires_stat=physical,6 will require hero to have level 6 in physical stats
 			if (clear_req_stat) {
 				items[id].req_stat.clear();
 				items[id].req_val.clear();
 				clear_req_stat = false;
 			}
 			std::string s = popFirstString(infile.val);
-			if (s == "physical")
-				items[id].req_stat.push_back(REQUIRES_PHYS);
-			else if (s == "mental")
-				items[id].req_stat.push_back(REQUIRES_MENT);
-			else if (s == "offense")
-				items[id].req_stat.push_back(REQUIRES_OFF);
-			else if (s == "defense")
-				items[id].req_stat.push_back(REQUIRES_DEF);
+			size_t req_stat_index = getPrimaryStatIndex(s);
+			if (req_stat_index != PRIMARY_STATS.size())
+				items[id].req_stat.push_back(req_stat_index);
 			else
-				infile.error("%s unrecognized at; requires_stat must be one of [physical:mental:offense:defense]", s.c_str());
+				infile.error("ItemManager: '%s' is not a valid primary stat.", s.c_str());
 			items[id].req_val.push_back(popFirstInt(infile.val));
 		}
 		else if (infile.key == "requires_class") {
@@ -746,26 +741,12 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	// base stat requirement
 	for (unsigned i=0; i<items[stack.item].req_stat.size(); ++i) {
 		if (items[stack.item].req_val[i] > 0) {
-			if (items[stack.item].req_stat[i] == REQUIRES_PHYS) {
-				if (stats->get_physical() < items[stack.item].req_val[i]) color = color_requirements_not_met;
-				else color = color_normal;
-				tip.addColoredText(msg->get("Requires Physical %d", items[stack.item].req_val[i]), color);
-			}
-			else if (items[stack.item].req_stat[i] == REQUIRES_MENT) {
-				if (stats->get_mental() < items[stack.item].req_val[i]) color = color_requirements_not_met;
-				else color = color_normal;
-				tip.addColoredText(msg->get("Requires Mental %d", items[stack.item].req_val[i]), color);
-			}
-			else if (items[stack.item].req_stat[i] == REQUIRES_OFF) {
-				if (stats->get_offense() < items[stack.item].req_val[i]) color = color_requirements_not_met;
-				else color = color_normal;
-				tip.addColoredText(msg->get("Requires Offense %d", items[stack.item].req_val[i]), color);
-			}
-			else if (items[stack.item].req_stat[i] == REQUIRES_DEF) {
-				if (stats->get_defense() < items[stack.item].req_val[i]) color = color_requirements_not_met;
-				else color = color_normal;
-				tip.addColoredText(msg->get("Requires Defense %d", items[stack.item].req_val[i]), color);
-			}
+			if (stats->get_primary(items[stack.item].req_stat[i]) < items[stack.item].req_val[i])
+				color = color_requirements_not_met;
+			else
+				color = color_normal;
+
+			tip.addColoredText(msg->get("Requires %s %d", items[stack.item].req_val[i], PRIMARY_STATS[items[stack.item].req_stat[i]].name.c_str()), color);
 		}
 	}
 
@@ -850,22 +831,8 @@ bool ItemManager::requirementsMet(const StatBlock *stats, int item) {
 
 	// base stats
 	for (unsigned i=0; i < items[item].req_stat.size(); ++i) {
-		if (items[item].req_stat[i] == REQUIRES_PHYS) {
-			if (stats->get_physical() < items[item].req_val[i])
-				return false;
-		}
-		if (items[item].req_stat[i] == REQUIRES_MENT) {
-			if (stats->get_mental() < items[item].req_val[i])
-				return false;
-		}
-		if (items[item].req_stat[i] == REQUIRES_OFF) {
-			if (stats->get_offense() < items[item].req_val[i])
-				return false;
-		}
-		if (items[item].req_stat[i] == REQUIRES_DEF) {
-			if (stats->get_defense() < items[item].req_val[i])
-				return false;
-		}
+		if (stats->get_primary(items[item].req_stat[i]) < items[item].req_val[i])
+			return false;
 	}
 
 	// class

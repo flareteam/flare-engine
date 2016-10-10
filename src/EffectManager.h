@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class Hazard;
 
-#define EFFECT_COUNT 28
+#define EFFECT_COUNT 24
 
 enum EFFECT_TYPE {
 	EFFECT_NONE = 0,
@@ -56,14 +56,10 @@ enum EFFECT_TYPE {
 	EFFECT_REVIVE = 17,
 	EFFECT_CONVERT = 18,
 	EFFECT_FEAR = 19,
-	EFFECT_OFFENSE = 20,
-	EFFECT_DEFENSE = 21,
-	EFFECT_PHYSICAL = 22,
-	EFFECT_MENTAL = 23,
-	EFFECT_DEATH_SENTENCE = 24,
-	EFFECT_SHIELD = 25,
-	EFFECT_HEAL = 26,
-	EFFECT_KNOCKBACK = 27
+	EFFECT_DEATH_SENTENCE = 20,
+	EFFECT_SHIELD = 21,
+	EFFECT_HEAL = 22,
+	EFFECT_KNOCKBACK = 23
 };
 
 class Effect {
@@ -153,12 +149,9 @@ public:
 	bool fear;
 	float knockback_speed;
 
-	int bonus_offense;
-	int bonus_defense;
-	int bonus_physical;
-	int bonus_mental;
 	std::vector<int> bonus;
 	std::vector<int> bonus_resist;
+	std::vector<int> bonus_primary;
 
 	bool triggered_others;
 	bool triggered_block;

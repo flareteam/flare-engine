@@ -245,10 +245,10 @@ void MenuDevConsole::execute() {
 	else if (args[0] == "respec") {
 		pc->stats.level = 1;
 		pc->stats.xp = 0;
-		pc->stats.offense_character = 1;
-		pc->stats.defense_character = 1;
-		pc->stats.physical_character = 1;
-		pc->stats.mental_character = 1;
+		for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+			pc->stats.primary[i] = 1;
+			pc->stats.primary_additional[i] = 0;
+		}
 		pc->stats.powers_list.clear();
 		pc->stats.powers_passive.clear();
 		pc->stats.effects.clearEffects();
