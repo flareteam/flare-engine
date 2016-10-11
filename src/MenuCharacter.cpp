@@ -135,7 +135,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 				cstat[CSTAT_LEVEL].label_info = eatLabelInfo(infile.val);
 				cstat[CSTAT_LEVEL].visible = !cstat[CSTAT_LEVEL].label_info.hidden;
 			}
-			// @ATTR label_primary|predefined_string, label : Primary stat name : Text positioning|Position of the text label for this primary stat.
+			// @ATTR label_primary|predefined_string, label : Primary stat name, Text positioning|Position of the text label for this primary stat.
 			else if(infile.key == "label_primary") {
 				std::string prim_stat = popFirstString(infile.val);
 				size_t prim_stat_index = getPrimaryStatIndex(prim_stat);

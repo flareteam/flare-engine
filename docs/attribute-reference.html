@@ -815,7 +815,7 @@ body {
 
 <p><strong>label_title</strong> | <code>label</code> | Position of the "Character" text.</p>
 
-<p><strong>upgrade_primary</strong> | <code>predefined_string, point</code> | Position of the button used to add a stat point to this primary stat.</p>
+<p><strong>upgrade_primary</strong> | <code>predefined_string, point : Primary stat name, Button position</code> | Position of the button used to add a stat point to this primary stat.</p>
 
 <p><strong>statlist</strong> | <code>point</code> | Position of the scrollbox containing non-primary stats.</p>
 
@@ -827,13 +827,13 @@ body {
 
 <p><strong>label_level</strong> | <code>label</code> | Position of the "Level" text.</p>
 
-<p><strong>label_primary</strong> | <code>predefined_string, label</code> | Position of the text label for this primary stat.</p>
+<p><strong>label_primary</strong> | <code>predefined_string, label : Primary stat name, Text positioning</code> | Position of the text label for this primary stat.</p>
 
 <p><strong>name</strong> | <code>rectangle</code> | Position of the player's name and dimensions of the tooltip hotspot.</p>
 
 <p><strong>level</strong> | <code>rectangle</code> | Position of the player's level and dimensions of the tooltip hotspot.</p>
 
-<p><strong>primary</strong> | <code>predefined_string, rectangle</code> | Position of this primary stat value display and dimensions of its tooltip hotspot.</p>
+<p><strong>primary</strong> | <code>predefined_string, rectangle : Primary stat name, Hotspot position</code> | Position of this primary stat value display and dimensions of its tooltip hotspot.</p>
 
 <p><strong>unspent</strong> | <code>label</code> | Position of the label showing the number of unspent stat points.</p>
 
@@ -1527,6 +1527,16 @@ body {
 
 <hr />
 
+<h4>Settings: Primary Stats</h4>
+
+<p>Description of engine/primary_stats.txt</p>
+
+<p><strong>stat.id</strong> | <code>string</code> | An identifier for this primary stat.</p>
+
+<p><strong>stat.name</strong> | <code>string</code> | The displayed name of this primary stat.</p>
+
+<hr />
+
 <h4>Settings: Classes</h4>
 
 <p>Description of engine/classes.txt</p>
@@ -1592,16 +1602,6 @@ body {
 <p>Description of engine/loot.txt</p>
 
 <p><strong>currency_name</strong> | <code>string</code> | Define the name of currency in game</p>
-
-<hr />
-
-<h4>Settings: Primary Stats</h4>
-
-<p>Description of engine/primary_stats.txt</p>
-
-<p><strong>stat.id</strong> | <code>string</code> | An identifier for this primary stat.</p>
-
-<p><strong>stat.name</strong> | <code>string</code> | The displayed name of this primary stat.</p>
 
 <hr />
 
