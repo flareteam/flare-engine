@@ -246,20 +246,28 @@ void MenuTalker::render() {
 		// show active portrait
 		EVENT_COMPONENT_TYPE etype = npc->dialog[dialog_node][event_cursor].type;
 		if (etype == EC_NPC_DIALOG_THEM) {
-			Sprite *r = npc->portrait;
-			if (r) {
+			if (npc->npc_portrait) {
 				src.w = dest.w = portrait_he.w;
 				src.h = dest.h = portrait_he.h;
 				dest.x = offset_x + portrait_he.x;
 				dest.y = offset_y + portrait_he.y;
 
-				r->setClip(src);
-				r->setDest(dest);
-				render_device->render(r);
+				npc->npc_portrait->setClip(src);
+				npc->npc_portrait->setDest(dest);
+				render_device->render(npc->npc_portrait);
 			}
 		}
 		else if (etype == EC_NPC_DIALOG_YOU) {
-			if (portrait) {
+			if (npc->hero_portrait) {
+				src.w = dest.w = portrait_you.w;
+				src.h = dest.h = portrait_you.h;
+				dest.x = offset_x + portrait_you.x;
+				dest.y = offset_y + portrait_you.y;
+				npc->hero_portrait->setClip(src);
+				npc->hero_portrait->setDest(dest);
+				render_device->render(npc->hero_portrait);
+			}
+			else if (portrait) {
 				src.w = dest.w = portrait_you.w;
 				src.h = dest.h = portrait_you.h;
 				dest.x = offset_x + portrait_you.x;

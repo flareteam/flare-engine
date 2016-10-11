@@ -40,11 +40,13 @@ private:
 	std::vector<Event_Component> random_table;
 	Point random_table_count;
 
+	std::vector<std::string> portrait_filenames;
+
 public:
 	NPC();
 	~NPC();
 	void load(const std::string& npc_id);
-	void loadGraphics(const std::string& filename_portrait);
+	void loadGraphics();
 	int loadSound(const std::string& fname, int type);
 	void logic();
 	bool playSound(int type, int id=-1);
@@ -65,7 +67,9 @@ public:
 	int direction;
 
 	// talker info
-	Sprite *portrait;
+	Sprite* npc_portrait;
+	Sprite* hero_portrait;
+	std::vector<Sprite*> portraits;
 	bool talker;
 
 	// vendor info

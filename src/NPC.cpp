@@ -41,7 +41,8 @@ NPC::NPC()
 	, gfx("")
 	, pos()
 	, direction(0)
-	, portrait(NULL)
+	, npc_portrait(NULL)
+	, hero_portrait(NULL)
 	, talker(false)
 	, vendor(false)
 	, stock()
@@ -62,7 +63,7 @@ void NPC::load(const std::string& npc_id) {
 	FileParser infile;
 	ItemStack stack;
 
-	std::string filename_portrait = "";
+	portrait_filenames.resize(1);
 
 	// @CLASS NPC|Description of NPCs in npcs/
 	if (infile.open(npc_id)) {
@@ -106,6 +107,19 @@ void NPC::load(const std::string& npc_id) {
 					e.type = EC_NPC_ALLOW_MOVEMENT;
 					e.s = infile.val;
 				}
+				else if (infile.key == "portrait_him" || infile.key == "portrait_her") {
+					// @ATTR dialog.portrait_him|repeatable(filename)|Filename of a portrait to display for the NPC during this dialog.
+					// @ATTR dialog.portrait_her|repeatable(filename)|Filename of a portrait to display for the NPC during this dialog.
+					e.type = EC_NPC_PORTRAIT_THEM;
+					e.s = infile.val;
+					portrait_filenames.push_back(e.s);
+				}
+				else if (infile.key == "portrait_you") {
+					// @ATTR dialog.portrait_you|repeatable(filename)|Filename of a portrait to display for the player during this dialog.
+					e.type = EC_NPC_PORTRAIT_YOU;
+					e.s = infile.val;
+					portrait_filenames.push_back(e.s);
+				}
 				else {
 					Event ev;
 					EventManager::loadEventComponent(infile, &ev, NULL);
@@ -148,8 +162,8 @@ void NPC::load(const std::string& npc_id) {
 					talker = toBool(infile.val);
 				}
 				else if (infile.key == "portrait") {
-					// @ATTR portrait|filename|Filename of a portrait image.
-					filename_portrait = infile.val;
+					// @ATTR portrait|filename|Filename of the default portrait image.
+					portrait_filenames[0] = infile.val;
 				}
 
 				// handle vendors
@@ -220,7 +234,7 @@ void NPC::load(const std::string& npc_id) {
 		}
 		infile.close();
 	}
-	loadGraphics(filename_portrait);
+	loadGraphics();
 
 	// fill inventory with items from random stock table
 	unsigned rand_count = randBetween(random_table_count.x, random_table_count.y);
@@ -235,7 +249,7 @@ void NPC::load(const std::string& npc_id) {
 	}
 }
 
-void NPC::loadGraphics(const std::string& filename_portrait) {
+void NPC::loadGraphics() {
 
 	if (gfx != "") {
 		anim->increaseCount(gfx);
@@ -243,13 +257,16 @@ void NPC::loadGraphics(const std::string& filename_portrait) {
 		activeAnimation = animationSet->getAnimation("");
 	}
 
-	if (filename_portrait != "") {
-		Image *graphics;
-		graphics = render_device->loadImage(filename_portrait,
-				   "Couldn't load NPC portrait", false);
-		if (graphics) {
-			portrait = graphics->createSprite();
-			graphics->unref();
+	portraits.resize(portrait_filenames.size(), NULL);
+
+	for (size_t i = 0; i < portrait_filenames.size(); ++i) {
+		if (!portrait_filenames[i].empty()) {
+			Image *graphics;
+			graphics = render_device->loadImage(portrait_filenames[i], "Couldn't load NPC portrait", false);
+			if (graphics) {
+				portraits[i] = graphics->createSprite();
+				graphics->unref();
+			}
 		}
 	}
 }
@@ -414,6 +431,9 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 	if (dialog_node >= dialog.size())
 		return false;
 
+	npc_portrait = portraits[0];
+	hero_portrait = NULL;
+
 	while (event_cursor < dialog[dialog_node].size()) {
 
 		// we've already determined requirements are met, so skip these
@@ -455,6 +475,24 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 		}
 		else if (dialog[dialog_node][event_cursor].type == EC_NPC_VOICE) {
 			playSound(NPC_VOX_QUEST, dialog[dialog_node][event_cursor].x);
+		}
+		else if (dialog[dialog_node][event_cursor].type == EC_NPC_PORTRAIT_THEM) {
+			npc_portrait = portraits[0];
+			for (size_t i = 0; i < portrait_filenames.size(); ++i) {
+				if (dialog[dialog_node][event_cursor].s == portrait_filenames[i]) {
+					npc_portrait = portraits[i];
+					break;
+				}
+			}
+		}
+		else if (dialog[dialog_node][event_cursor].type == EC_NPC_PORTRAIT_YOU) {
+			hero_portrait = NULL;
+			for (size_t i = 0; i < portrait_filenames.size(); ++i) {
+				if (dialog[dialog_node][event_cursor].s == portrait_filenames[i]) {
+					hero_portrait = portraits[i];
+					break;
+				}
+			}
 		}
 		else if (dialog[dialog_node][event_cursor].type == EC_NONE) {
 			// conversation ends
@@ -498,7 +536,9 @@ bool NPC::isDialogType(const EVENT_COMPONENT_TYPE &type) {
 
 NPC::~NPC() {
 
-	if (portrait) delete portrait;
+	for (size_t i = 0; i < portraits.size(); ++i) {
+		delete portraits[i];
+	}
 
 	if (gfx != "") {
 		anim->decreaseCount(gfx);
