@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-15 02:31+\n"
+"POT-Creation-Date: 2016-10-11 10:52+\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,6 +14,22 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../engine/primary_stats.txt:3
+msgid "Physical"
+msgstr ""
+
+#: ../engine/primary_stats.txt:7
+msgid "Mental"
+msgstr ""
+
+#: ../engine/primary_stats.txt:11
+msgid "Offense"
+msgstr ""
+
+#: ../engine/primary_stats.txt:15
+msgid "Defense"
+msgstr ""
 
 #: ../cutscenes/credits.txt:8
 msgid "Flare Engine Credits"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine data\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-15 02:31+\n"
+"POT-Creation-Date: 2016-10-11 10:52+\n"
 "PO-Revision-Date: 2016-09-17 14:31+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
@@ -13,9 +13,24 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : "
-"(n > 2 && n < 20) ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;\n"
 "X-Generator: Virtaal 0.7.1\n"
+
+#: ../engine/primary_stats.txt:3
+msgid "Physical"
+msgstr ""
+
+#: ../engine/primary_stats.txt:7
+msgid "Mental"
+msgstr ""
+
+#: ../engine/primary_stats.txt:11
+msgid "Offense"
+msgstr ""
+
+#: ../engine/primary_stats.txt:15
+msgid "Defense"
+msgstr ""
 
 #: ../cutscenes/credits.txt:8
 msgid "Flare Engine Credits"

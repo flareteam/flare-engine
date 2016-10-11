@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-15 02:31-0400\n"
+"POT-Creation-Date: 2016-10-11 10:52-0400\n"
 "PO-Revision-Date: 2012-07-02 19:21+0100\n"
 "Last-Translator: Gianfranco Del Borrello <jeffry84@hotmail.it>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -17,26 +17,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../../src/Avatar.cpp:357
+#: ../../../src/Avatar.cpp:353
 #, c-format
 msgid "Congratulations, you have reached level %d!"
 msgstr "Congratulazioni, hai raggiunto il livello %d!"
 
-#: ../../../src/Avatar.cpp:359
+#: ../../../src/Avatar.cpp:355
 msgid "You may increase one attribute through the Character Menu."
 msgstr "Puoi aumentare un attributo nel Menu Personaggio."
 
-#: ../../../src/Avatar.cpp:573
+#: ../../../src/Avatar.cpp:569
 #, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "Sei stato sconfitto. Partita finita! Premi Invio per tornare al Titolo."
 
-#: ../../../src/Avatar.cpp:576
+#: ../../../src/Avatar.cpp:572
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Sei stato sconfitto. Premi Invio per continuare."
 
-#: ../../../src/Avatar.cpp:803
+#: ../../../src/Avatar.cpp:799
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Trasformazione finita. Sei stato riportato in un luogo sicuro."
 
@@ -90,23 +90,23 @@ msgstr "Effetti negativi rimossi."
 msgid "HP and MP restored, negative effects removed"
 msgstr "HP e MP ripristinati, effetti negativi rimossi"
 
-#: ../../../src/Entity.cpp:374
+#: ../../../src/Entity.cpp:380
 msgid "miss"
 msgstr "mancato"
 
-#: ../../../src/Entity.cpp:410 ../../../src/PowerManager.cpp:868
-#: ../../../src/StatBlock.cpp:735 ../../../src/StatBlock.cpp:741
+#: ../../../src/Entity.cpp:416 ../../../src/PowerManager.cpp:874
+#: ../../../src/StatBlock.cpp:703 ../../../src/StatBlock.cpp:709
 #, c-format
 msgid "+%d HP"
 msgstr "+%d HP"
 
-#: ../../../src/Entity.cpp:416 ../../../src/StatBlock.cpp:746
-#: ../../../src/StatBlock.cpp:752
+#: ../../../src/Entity.cpp:422 ../../../src/StatBlock.cpp:714
+#: ../../../src/StatBlock.cpp:720
 #, c-format
 msgid "+%d MP"
 msgstr "+%d MP"
 
-#: ../../../src/EventManager.cpp:632
+#: ../../../src/EventManager.cpp:628
 msgid "Unknown destination"
 msgstr "Destinazione sconosciuta"
 
@@ -335,33 +335,33 @@ msgstr "Torna al Titolo"
 msgid "New Game"
 msgstr "Nuova Partita"
 
-#: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateLoad.cpp:620
+#: ../../../src/GameStateLoad.cpp:97 ../../../src/GameStateLoad.cpp:619
 msgid "Choose a Slot"
 msgstr "Scegli Slot"
 
-#: ../../../src/GameStateLoad.cpp:593 ../../../src/GameStateLoad.cpp:614
+#: ../../../src/GameStateLoad.cpp:592 ../../../src/GameStateLoad.cpp:613
 msgid "Enable a story mod to continue"
 msgstr "Abilita un mod storia per continuare"
 
-#: ../../../src/GameStateLoad.cpp:609
+#: ../../../src/GameStateLoad.cpp:608
 msgid "Load Game"
 msgstr "Carica Partita"
 
-#: ../../../src/GameStateLoad.cpp:710
+#: ../../../src/GameStateLoad.cpp:709
 msgid "Entering game world..."
 msgstr "Entrata nel mondo del gioco..."
 
-#: ../../../src/GameStateLoad.cpp:713
+#: ../../../src/GameStateLoad.cpp:712
 msgid "Loading saved game..."
 msgstr "Caricamento partita salvata..."
 
-#: ../../../src/GameStateLoad.cpp:754 ../../../src/ItemManager.cpp:660
-#: ../../../src/MenuPowers.cpp:669 ../../../src/MenuPowers.cpp:1047
+#: ../../../src/GameStateLoad.cpp:753 ../../../src/ItemManager.cpp:655
+#: ../../../src/MenuPowers.cpp:651 ../../../src/MenuPowers.cpp:984
 #, c-format
 msgid "Level %d"
 msgstr "Livello %d"
 
-#: ../../../src/GameStateLoad.cpp:756
+#: ../../../src/GameStateLoad.cpp:755
 #, fuzzy
 msgid "Permadeath"
 msgstr "Morte definitiva"
@@ -475,7 +475,7 @@ msgid "Bar0"
 msgstr "Barra0"
 
 #: ../../../src/InputState.cpp:302 ../../../src/MenuActionBar.cpp:374
-#: ../../../src/MenuActionBar.cpp:376 ../../../src/MenuCharacter.cpp:267
+#: ../../../src/MenuActionBar.cpp:376 ../../../src/MenuCharacter.cpp:235
 msgid "Character"
 msgstr "Personaggio"
 
@@ -573,151 +573,130 @@ msgstr "Mouse X2"
 msgid "Mouse X2"
 msgstr "Mouse X2"
 
-#: ../../../src/ItemManager.cpp:407 ../../../src/ItemManager.cpp:410
+#: ../../../src/ItemManager.cpp:402 ../../../src/ItemManager.cpp:405
 msgid "Unknown Item"
 msgstr "Oggetto sconosciuto"
 
-#: ../../../src/ItemManager.cpp:588 ../../../src/MenuCharacter.cpp:351
+#: ../../../src/ItemManager.cpp:583 ../../../src/MenuCharacter.cpp:315
+#: ../../../src/MenuPowers.cpp:706
 #, fuzzy, c-format
 msgid "%s Resistance"
 msgstr "Resistenza al Freddo"
 
-#: ../../../src/ItemManager.cpp:592 ../../../src/MenuCharacter.cpp:43
-#: ../../../src/MenuPowers.cpp:797
+#: ../../../src/ItemManager.cpp:587
 msgid "Physical"
 msgstr "Fisico"
 
-#: ../../../src/ItemManager.cpp:594 ../../../src/MenuCharacter.cpp:44
-#: ../../../src/MenuPowers.cpp:800
+#: ../../../src/ItemManager.cpp:589
 msgid "Mental"
 msgstr "Mentale"
 
-#: ../../../src/ItemManager.cpp:596 ../../../src/MenuCharacter.cpp:45
-#: ../../../src/MenuPowers.cpp:791
+#: ../../../src/ItemManager.cpp:591
 msgid "Offense"
 msgstr "Offensivo"
 
-#: ../../../src/ItemManager.cpp:598 ../../../src/MenuCharacter.cpp:46
-#: ../../../src/MenuPowers.cpp:794
+#: ../../../src/ItemManager.cpp:593
 msgid "Defense"
 msgstr "Difensivo"
 
-#: ../../../src/ItemManager.cpp:646
+#: ../../../src/ItemManager.cpp:641
 msgid "Quest Item"
 msgstr "Oggetto della missione"
 
-#: ../../../src/ItemManager.cpp:673
+#: ../../../src/ItemManager.cpp:668
 #, c-format
 msgid "Quality: %s"
 msgstr "Qualità: %s"
 
-#: ../../../src/ItemManager.cpp:682
+#: ../../../src/ItemManager.cpp:677
 #, c-format
 msgid "Melee damage: %d-%d"
 msgstr "Danno da mischia: %d-%d"
 
-#: ../../../src/ItemManager.cpp:684
+#: ../../../src/ItemManager.cpp:679
 #, c-format
 msgid "Melee damage: %d"
 msgstr "Danno da mischia: %d"
 
-#: ../../../src/ItemManager.cpp:688
+#: ../../../src/ItemManager.cpp:683
 #, c-format
 msgid "Ranged damage: %d-%d"
 msgstr "Danno da lancio: %d-%d"
 
-#: ../../../src/ItemManager.cpp:690
+#: ../../../src/ItemManager.cpp:685
 #, c-format
 msgid "Ranged damage: %d"
 msgstr "Danno da lancio: %d"
 
-#: ../../../src/ItemManager.cpp:694
+#: ../../../src/ItemManager.cpp:689
 #, c-format
 msgid "Mental damage: %d-%d"
 msgstr "Danno mentale: %d-%d"
 
-#: ../../../src/ItemManager.cpp:696
+#: ../../../src/ItemManager.cpp:691
 #, c-format
 msgid "Mental damage: %d"
 msgstr "Danno mentale: %d"
 
-#: ../../../src/ItemManager.cpp:702
+#: ../../../src/ItemManager.cpp:697
 #, c-format
 msgid "Absorb: %d-%d"
 msgstr "Assorbimento: %d-%d"
 
-#: ../../../src/ItemManager.cpp:704
+#: ../../../src/ItemManager.cpp:699
 #, c-format
 msgid "Absorb: %d"
 msgstr "Assorbimento: %d"
 
-#: ../../../src/ItemManager.cpp:715 ../../../src/ItemManager.cpp:826
-#: ../../../src/MenuPowers.cpp:752
+#: ../../../src/ItemManager.cpp:710 ../../../src/ItemManager.cpp:807
+#: ../../../src/MenuPowers.cpp:741
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Velocità"
 
-#: ../../../src/ItemManager.cpp:743 ../../../src/MenuPowers.cpp:1033
-#: ../../../src/MenuPowers.cpp:1036
+#: ../../../src/ItemManager.cpp:738 ../../../src/MenuPowers.cpp:970
+#: ../../../src/MenuPowers.cpp:973
 #, fuzzy, c-format
 msgid "Requires Level %d"
 msgstr "Richiede Livello %d"
 
-#: ../../../src/ItemManager.cpp:752 ../../../src/MenuPowers.cpp:1019
-#: ../../../src/MenuPowers.cpp:1022
-#, c-format
-msgid "Requires Physical %d"
-msgstr "Richiesto Potere Fisico %d"
+#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:962
+#: ../../../src/MenuPowers.cpp:964
+#, fuzzy, c-format
+msgid "Requires %s %d"
+msgstr "Richiede %s"
 
-#: ../../../src/ItemManager.cpp:757 ../../../src/MenuPowers.cpp:1025
-#: ../../../src/MenuPowers.cpp:1028
-#, c-format
-msgid "Requires Mental %d"
-msgstr "Richiede Potere Mentale %d"
-
-#: ../../../src/ItemManager.cpp:762 ../../../src/MenuPowers.cpp:1007
-#: ../../../src/MenuPowers.cpp:1010
-#, c-format
-msgid "Requires Offense %d"
-msgstr "Richiede Potere Offensivo %d"
-
-#: ../../../src/ItemManager.cpp:767 ../../../src/MenuPowers.cpp:1013
-#: ../../../src/MenuPowers.cpp:1016
-#, c-format
-msgid "Requires Defense %d"
-msgstr "Richiede Potere Difensivo %d"
-
-#: ../../../src/ItemManager.cpp:776
+#: ../../../src/ItemManager.cpp:757
 #, fuzzy, c-format
 msgid "Requires Class: %s"
 msgstr "Richiede Classe %d"
 
-#: ../../../src/ItemManager.cpp:788 ../../../src/ItemManager.cpp:797
+#: ../../../src/ItemManager.cpp:769 ../../../src/ItemManager.cpp:778
 #, fuzzy, c-format
 msgid "Buy Price: %d %s"
 msgstr "Prezzo d'acquisto: %d %s"
 
-#: ../../../src/ItemManager.cpp:790 ../../../src/ItemManager.cpp:799
+#: ../../../src/ItemManager.cpp:771 ../../../src/ItemManager.cpp:780
 #, fuzzy, c-format
 msgid "Buy Price: %d %s each"
 msgstr "Prezzo d'acquisto: %d %s ciascuno"
 
-#: ../../../src/ItemManager.cpp:805
+#: ../../../src/ItemManager.cpp:786
 #, fuzzy, c-format
 msgid "Sell Price: %d %s"
 msgstr "Prezzo di vendita: %d %s"
 
-#: ../../../src/ItemManager.cpp:807
+#: ../../../src/ItemManager.cpp:788
 #, fuzzy, c-format
 msgid "Sell Price: %d %s each"
 msgstr "Prezzo di vendita: %d %s ciascuno"
 
-#: ../../../src/ItemManager.cpp:816
+#: ../../../src/ItemManager.cpp:797
 #, fuzzy
 msgid "Set: "
 msgstr "Imposta: "
 
-#: ../../../src/ItemManager.cpp:823
+#: ../../../src/ItemManager.cpp:804
 #, c-format
 msgid "%d items: "
 msgstr "%d oggetti: "
@@ -733,61 +712,46 @@ msgstr "Richiamo: %s"
 msgid "Remaining:"
 msgstr "punti rimanenti"
 
-#: ../../../src/MenuCharacter.cpp:41
+#: ../../../src/MenuCharacter.cpp:44
 msgid "Name"
 msgstr "Nome"
 
-#: ../../../src/MenuCharacter.cpp:42
+#: ../../../src/MenuCharacter.cpp:45
 msgid "Level"
 msgstr "Livello"
 
-#: ../../../src/MenuCharacter.cpp:325
+#: ../../../src/MenuCharacter.cpp:289
 msgid "points remaining"
 msgstr "punti rimanenti"
 
-#: ../../../src/MenuCharacter.cpp:361 ../../../src/MenuManager.cpp:292
+#: ../../../src/MenuCharacter.cpp:325 ../../../src/MenuManager.cpp:292
 #, c-format
 msgid "XP: %d"
 msgstr "XP: %d"
 
-#: ../../../src/MenuCharacter.cpp:363
+#: ../../../src/MenuCharacter.cpp:327
 #, c-format
 msgid "Next: %d"
 msgstr "Prossimo: %d"
 
-#: ../../../src/MenuCharacter.cpp:369
+#: ../../../src/MenuCharacter.cpp:333
 #, c-format
 msgid "base (%d), bonus (%d)"
 msgstr "base (%d), bonus (%d)"
 
-#: ../../../src/MenuCharacter.cpp:374
+#: ../../../src/MenuCharacter.cpp:338
 msgid "Related stats:"
 msgstr "Statistiche associate: "
 
-#: ../../../src/MenuCharacter.cpp:400
+#: ../../../src/MenuCharacter.cpp:364
 #, fuzzy, c-format
 msgid "Each level grants %d. "
 msgstr "Ogni Livello ottieni %d"
 
-#: ../../../src/MenuCharacter.cpp:402
+#: ../../../src/MenuCharacter.cpp:368
 #, fuzzy, c-format
-msgid "Each point of Physical grants %d. "
-msgstr "Per ogni punto Fisico ottieni %d"
-
-#: ../../../src/MenuCharacter.cpp:404
-#, fuzzy, c-format
-msgid "Each point of Mental grants %d. "
-msgstr "Per ogni punto Mentale ottieni %d"
-
-#: ../../../src/MenuCharacter.cpp:406
-#, fuzzy, c-format
-msgid "Each point of Offense grants %d. "
+msgid "Each point of %s grants %d. "
 msgstr "Per ogni punto Offensivo ottieni %d"
-
-#: ../../../src/MenuCharacter.cpp:408
-#, fuzzy, c-format
-msgid "Each point of Defense grants %d. "
-msgstr "Per ogni punto Difensivo ottieni %d"
 
 #: ../../../src/MenuDevConsole.cpp:46
 msgid "Execute"
@@ -1009,194 +973,174 @@ msgstr "Commercio"
 msgid "Enter amount:"
 msgstr "Inserisci quantità:"
 
-#: ../../../src/MenuPowers.cpp:678
+#: ../../../src/MenuPowers.cpp:660
 #, c-format
 msgid "Costs %d MP"
 msgstr "Costa %d MP"
 
-#: ../../../src/MenuPowers.cpp:682
+#: ../../../src/MenuPowers.cpp:664
 #, fuzzy, c-format
 msgid "Costs %d HP"
 msgstr "Costa %d MP"
 
-#: ../../../src/MenuPowers.cpp:687
+#: ../../../src/MenuPowers.cpp:669
 #, fuzzy
 msgid "Cooldown:"
 msgstr "Raffreddamento: %s secondi"
 
-#: ../../../src/MenuPowers.cpp:731 ../../../src/MenuPowers.cpp:734
+#: ../../../src/MenuPowers.cpp:720 ../../../src/MenuPowers.cpp:723
 msgid "Damage per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:737 ../../../src/MenuPowers.cpp:740
+#: ../../../src/MenuPowers.cpp:726 ../../../src/MenuPowers.cpp:729
 msgid "HP per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:743 ../../../src/MenuPowers.cpp:746
+#: ../../../src/MenuPowers.cpp:732 ../../../src/MenuPowers.cpp:735
 msgid "MP per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:750
+#: ../../../src/MenuPowers.cpp:739
 msgid "Immobilize"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:755
+#: ../../../src/MenuPowers.cpp:744
 msgid "Immunity"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:758
+#: ../../../src/MenuPowers.cpp:747
 msgid "Immunity to damage over time"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:761
+#: ../../../src/MenuPowers.cpp:750
 msgid "Immunity to slow"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:764
+#: ../../../src/MenuPowers.cpp:753
 msgid "Immunity to stun"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:767
+#: ../../../src/MenuPowers.cpp:756
 msgid "Immunity to HP steal"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:770
+#: ../../../src/MenuPowers.cpp:759
 msgid "Immunity to MP steal"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:773
+#: ../../../src/MenuPowers.cpp:762
 msgid "Immunity to knockback"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:776
+#: ../../../src/MenuPowers.cpp:765
 msgid "Immunity to damage reflection"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:779
+#: ../../../src/MenuPowers.cpp:768
 msgid "Stun"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:782
+#: ../../../src/MenuPowers.cpp:771
 msgid "Automatic revive on death"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:785
+#: ../../../src/MenuPowers.cpp:774
 msgid "Convert"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:788
+#: ../../../src/MenuPowers.cpp:777
 msgid "Fear"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:803
+#: ../../../src/MenuPowers.cpp:780
 msgid "Lifespan"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:824
+#: ../../../src/MenuPowers.cpp:801
 msgid "Magical Shield"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:850
+#: ../../../src/MenuPowers.cpp:827
 msgid "Healing"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:853
+#: ../../../src/MenuPowers.cpp:830
 msgid "Knockback"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:895
+#: ../../../src/MenuPowers.cpp:872
 msgid "Damage"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:897
+#: ../../../src/MenuPowers.cpp:874
 #, fuzzy
 msgid "Melee Damage"
 msgstr "Danno da Mischia Minimo"
 
-#: ../../../src/MenuPowers.cpp:899
+#: ../../../src/MenuPowers.cpp:876
 #, fuzzy
 msgid "Ranged Damage"
 msgstr "Danno da Lancio Minimo"
 
-#: ../../../src/MenuPowers.cpp:901
+#: ../../../src/MenuPowers.cpp:878
 #, fuzzy
 msgid "Mental Damage"
 msgstr "Danno Mentale Minimo"
 
-#: ../../../src/MenuPowers.cpp:924
+#: ../../../src/MenuPowers.cpp:901
 #, fuzzy
 msgid "Base Accuracy"
 msgstr "Precisione"
 
-#: ../../../src/MenuPowers.cpp:944
+#: ../../../src/MenuPowers.cpp:921
 #, fuzzy
 msgid "Base Critical Chance"
 msgstr "Possibilità di Colpo Critico"
 
-#: ../../../src/MenuPowers.cpp:952
+#: ../../../src/MenuPowers.cpp:929
 msgid "Ignores Absorbtion"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:957
+#: ../../../src/MenuPowers.cpp:934
 #, fuzzy
 msgid "Ignores Avoidance"
 msgstr "Schivare"
 
-#: ../../../src/MenuPowers.cpp:962
+#: ../../../src/MenuPowers.cpp:939
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:967
+#: ../../../src/MenuPowers.cpp:944
 #, fuzzy, c-format
 msgid "%s Elemental Damage"
 msgstr "Danno Mentale Minimo"
 
-#: ../../../src/MenuPowers.cpp:976
+#: ../../../src/MenuPowers.cpp:953
 #, fuzzy, c-format
 msgid "Requires a %s"
 msgstr "Richiede %s"
 
-#: ../../../src/MenuPowers.cpp:983 ../../../src/MenuPowers.cpp:986
-#, c-format
-msgid "Requires Physical Offense %d"
-msgstr "Richiede Potere Fisico Offensivo %d"
-
-#: ../../../src/MenuPowers.cpp:989 ../../../src/MenuPowers.cpp:992
-#, c-format
-msgid "Requires Physical Defense %d"
-msgstr "Richiede Potere Fisico Difensivo %d"
-
-#: ../../../src/MenuPowers.cpp:995 ../../../src/MenuPowers.cpp:998
-#, c-format
-msgid "Requires Mental Offense %d"
-msgstr "Richiede Potere Mentale Offensivo %d"
-
-#: ../../../src/MenuPowers.cpp:1001 ../../../src/MenuPowers.cpp:1004
-#, c-format
-msgid "Requires Mental Defense %d"
-msgstr "Richiede Potere Mentale Difensivo %d"
-
-#: ../../../src/MenuPowers.cpp:1055 ../../../src/MenuPowers.cpp:1058
+#: ../../../src/MenuPowers.cpp:992 ../../../src/MenuPowers.cpp:995
 #, fuzzy, c-format
 msgid "Requires Power: %s"
 msgstr "Richiede Potere: %s"
 
-#: ../../../src/MenuPowers.cpp:1067
+#: ../../../src/MenuPowers.cpp:1004
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Clicca per sbloccare (usa 1 Punto Abilità)"
 
-#: ../../../src/MenuPowers.cpp:1071 ../../../src/MenuPowers.cpp:1073
+#: ../../../src/MenuPowers.cpp:1008 ../../../src/MenuPowers.cpp:1010
 #, fuzzy
 msgid "Requires 1 Skill Point"
 msgstr "Richiede 1 Punto Abilità"
 
-#: ../../../src/MenuPowers.cpp:1276
+#: ../../../src/MenuPowers.cpp:1213
 #, fuzzy
 msgid "Unspent skill points:"
 msgstr "Punti abilità non utilizzati:"
 
-#: ../../../src/MenuPowers.cpp:1304
+#: ../../../src/MenuPowers.cpp:1241
 #, fuzzy
 msgid "Next Level:"
 msgstr "Prossimo livello:"
@@ -1222,20 +1166,20 @@ msgstr "Ricompra"
 msgid "Vendor"
 msgstr "Venditore"
 
-#: ../../../src/PowerManager.cpp:855
+#: ../../../src/PowerManager.cpp:861
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Scudo"
 
-#: ../../../src/PowerManager.cpp:1108
+#: ../../../src/PowerManager.cpp:1114
 msgid "You are already transformed, untransform first."
 msgstr "Sei già trasformato, annulla trasformazione prima."
 
-#: ../../../src/PowerManager.cpp:1120
+#: ../../../src/PowerManager.cpp:1126
 msgid "Could not untransform at this position."
 msgstr "Impossibile detrasformarsi da questa posizione."
 
-#: ../../../src/SaveLoad.cpp:196 ../../../src/SaveLoad.cpp:197
+#: ../../../src/SaveLoad.cpp:202 ../../../src/SaveLoad.cpp:203
 msgid "Game saved."
 msgstr "Partita salvata."
 
@@ -1269,7 +1213,7 @@ msgstr ""
 msgid "%s on enemy"
 msgstr ""
 
-#: ../../../src/Settings.cpp:651
+#: ../../../src/Settings.cpp:722
 msgid "Adventurer"
 msgstr "Avventuriero"
 
@@ -1447,6 +1391,42 @@ msgstr "Raffreddamento: %s secondi"
 #, fuzzy, c-format
 msgid "%s seconds"
 msgstr "Raffreddamento: %s secondi"
+
+#~ msgid "Requires Physical %d"
+#~ msgstr "Richiesto Potere Fisico %d"
+
+#~ msgid "Requires Mental %d"
+#~ msgstr "Richiede Potere Mentale %d"
+
+#~ msgid "Requires Offense %d"
+#~ msgstr "Richiede Potere Offensivo %d"
+
+#~ msgid "Requires Defense %d"
+#~ msgstr "Richiede Potere Difensivo %d"
+
+#, fuzzy
+#~ msgid "Each point of Physical grants %d. "
+#~ msgstr "Per ogni punto Fisico ottieni %d"
+
+#, fuzzy
+#~ msgid "Each point of Mental grants %d. "
+#~ msgstr "Per ogni punto Mentale ottieni %d"
+
+#, fuzzy
+#~ msgid "Each point of Defense grants %d. "
+#~ msgstr "Per ogni punto Difensivo ottieni %d"
+
+#~ msgid "Requires Physical Offense %d"
+#~ msgstr "Richiede Potere Fisico Offensivo %d"
+
+#~ msgid "Requires Physical Defense %d"
+#~ msgstr "Richiede Potere Fisico Difensivo %d"
+
+#~ msgid "Requires Mental Offense %d"
+#~ msgstr "Richiede Potere Mentale Offensivo %d"
+
+#~ msgid "Requires Mental Defense %d"
+#~ msgstr "Richiede Potere Mentale Difensivo %d"
 
 #~ msgid "Show targeting animation"
 #~ msgstr "Mostra animazione mira"

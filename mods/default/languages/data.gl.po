@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-15 02:31+\n"
+"POT-Creation-Date: 2016-10-11 10:52+\n"
 "PO-Revision-Date: 2013-12-06 15:09+0100\n"
 "Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -16,6 +16,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 1.5\n"
+
+#: ../engine/primary_stats.txt:3
+msgid "Physical"
+msgstr ""
+
+#: ../engine/primary_stats.txt:7
+msgid "Mental"
+msgstr ""
+
+#: ../engine/primary_stats.txt:11
+msgid "Offense"
+msgstr ""
+
+#: ../engine/primary_stats.txt:15
+msgid "Defense"
+msgstr ""
 
 #: ../cutscenes/credits.txt:8
 msgid "Flare Engine Credits"
