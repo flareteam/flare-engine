@@ -743,6 +743,7 @@ void GameStateLoad::render() {
 		// name
 		label.x = slot_pos[slot].x + name_pos.x;
 		label.y = slot_pos[slot].y + name_pos.y;
+		game_slots[off_slot]->label_map.setMaxWidth(sprites_pos.x - name_pos.x);
 		game_slots[off_slot]->label_name.set(label.x, label.y, name_pos.justify, name_pos.valign, game_slots[off_slot]->stats.name, color_used, name_pos.font_style);
 		game_slots[off_slot]->label_name.render();
 
@@ -753,18 +754,21 @@ void GameStateLoad::render() {
 		ss << msg->get("Level %d", game_slots[off_slot]->stats.level);
 		if (game_slots[off_slot]->stats.permadeath)
 			ss << ", " + msg->get("Permadeath");
+		game_slots[off_slot]->label_map.setMaxWidth(sprites_pos.x - level_pos.x);
 		game_slots[off_slot]->label_level.set(label.x, label.y, level_pos.justify, level_pos.valign, ss.str(), color_normal, level_pos.font_style);
 		game_slots[off_slot]->label_level.render();
 
 		// class
 		label.x = slot_pos[slot].x + class_pos.x;
 		label.y = slot_pos[slot].y + class_pos.y;
+		game_slots[off_slot]->label_map.setMaxWidth(sprites_pos.x - class_pos.x);
 		game_slots[off_slot]->label_class.set(label.x, label.y, class_pos.justify, class_pos.valign, game_slots[off_slot]->stats.getLongClass(), color_normal, class_pos.font_style);
 		game_slots[off_slot]->label_class.render();
 
 		// map
 		label.x = slot_pos[slot].x + map_pos.x;
 		label.y = slot_pos[slot].y + map_pos.y;
+		game_slots[off_slot]->label_map.setMaxWidth(sprites_pos.x - map_pos.x);
 		game_slots[off_slot]->label_map.set(label.x, label.y, map_pos.justify, map_pos.valign, game_slots[off_slot]->current_map, color_normal, map_pos.font_style);
 		game_slots[off_slot]->label_map.render();
 

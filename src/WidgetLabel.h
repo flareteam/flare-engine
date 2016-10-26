@@ -53,18 +53,21 @@ private:
 	void recacheTextSprite();
 	void applyOffsets();
 
-	std::string text;
-	Color color;
 	int justify;
 	int valign;
-	std::string font_style;
+	int max_width;
 	Sprite *label;
+
+	std::string text;
+	std::string font_style;
+	Color color;
 
 public:
 	WidgetLabel();
 	~WidgetLabel();
 	void render();
 	void setPos(int offset_x = 0, int offset_y = 0);
+	void setMaxWidth(int width);
 	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color);
 	void set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color, const std::string& _font);
 	void setX(int _x);

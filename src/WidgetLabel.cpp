@@ -65,12 +65,14 @@ LabelInfo eatLabelInfo(std::string val) {
 }
 
 WidgetLabel::WidgetLabel()
-	: text("")
-	, color(font->getColor("widget_normal"))
-	, justify(JUSTIFY_LEFT)
+	: justify(JUSTIFY_LEFT)
 	, valign(VALIGN_TOP)
+	, max_width(0)
+	, label(NULL)
+	, text("")
 	, font_style("font_regular")
-	, label(NULL) {
+	, color(font->getColor("widget_normal"))
+{
 	bounds.x = bounds.y = 0;
 	bounds.w = bounds.h = 0;
 
@@ -91,6 +93,13 @@ void WidgetLabel::render() {
 void WidgetLabel::setPos(int offset_x, int offset_y) {
 	Widget::setPos(offset_x, offset_y);
 	applyOffsets();
+}
+
+void WidgetLabel::setMaxWidth(int width) {
+	if (width != max_width) {
+		max_width = width;
+		recacheTextSprite();
+	}
 }
 
 void WidgetLabel::set(int _x, int _y, int _justify, int _valign, const std::string& _text, const Color& _color) {
@@ -237,14 +246,24 @@ void WidgetLabel::recacheTextSprite() {
 		label = NULL;
 	}
 
+	if (text.empty())
+		return;
+
+	std::string temp_text = text;
+
 	font->setFont(font_style);
-	bounds.w = font->calc_width(text);
+	bounds.w = font->calc_width(temp_text);
 	bounds.h = font->getFontHeight();
+
+	if (max_width > 0 && bounds.w > max_width) {
+		temp_text = font->trimTextToWidth(text, max_width, true);
+		bounds.w = font->calc_width(temp_text);
+	}
 
 	image = render_device->createImage(bounds.w, bounds.h);
 	if (!image) return;
 
-	font->renderShadowed(text, 0, 0, JUSTIFY_LEFT, image, 0, color);
+	font->renderShadowed(temp_text, 0, 0, JUSTIFY_LEFT, image, 0, color);
 	label = image->createSprite();
 	image->unref();
 
