@@ -127,6 +127,7 @@ private:
 	int scroll_offset;
 	bool has_scroll_bar;
 	int game_slot_max;
+	int text_trim_boundary;
 
 public:
 	GameStateLoad();
