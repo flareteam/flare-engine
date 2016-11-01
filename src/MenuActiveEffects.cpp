@@ -109,7 +109,10 @@ void MenuActiveEffects::logic() {
 			// current and max are ignored
 		}
 		else {
-			ei.overlay.y = (ICON_SIZE * ed.ticks) / ed.duration;
+			if (ed.duration > 0)
+				ei.overlay.y = (ICON_SIZE * ed.ticks) / ed.duration;
+			else
+				ei.overlay.y = ICON_SIZE;
 			ei.current = ed.ticks;
 			ei.max = ed.duration;
 		}
@@ -159,7 +162,7 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 				ss << "(" << effect_icons[i].current << "/" << effect_icons[i].max << ")";
 				tip.addText(ss.str());
 			}
-			else {
+			else if (effect_icons[i].max > 0) {
 				ss << msg->get("Remaining:") << " " << getDurationString(effect_icons[i].current, 1);
 				tip.addText(ss.str());
 			}
