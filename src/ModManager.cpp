@@ -56,7 +56,9 @@ bool Mod::operator!= (const Mod &mod) const {
 	return !(*this == mod);
 }
 
-ModManager::ModManager() {
+ModManager::ModManager(const std::vector<std::string> *_cmd_line_mods)
+	: cmd_line_mods(_cmd_line_mods)
+{
 	loc_cache.clear();
 	mod_dirs.clear();
 	mod_list.clear();
@@ -86,9 +88,6 @@ ModManager::ModManager() {
  * Later mods override previous mods
  */
 void ModManager::loadModList() {
-	std::ifstream infile;
-	std::string line;
-	std::string starts_with;
 	bool found_any_mod = false;
 
 	// Add the fallback mod by default
@@ -99,43 +98,68 @@ void ModManager::loadModList() {
 	}
 
 	// Add all other mods.
-	std::string place1 = PATH_CONF + "mods.txt";
-	std::string place2 = PATH_DATA + "mods/mods.txt";
+	if (!cmd_line_mods || cmd_line_mods->empty()) {
+		std::ifstream infile;
+		std::string line;
+		std::string starts_with;
 
-	infile.open(place1.c_str(), std::ios::in);
+		std::string place1 = PATH_CONF + "mods.txt";
+		std::string place2 = PATH_DATA + "mods/mods.txt";
 
-	if (!infile.is_open()) {
-		infile.clear();
-		infile.open(place2.c_str(), std::ios::in);
-	}
-	if (!infile.is_open()) {
-		logError("ModManager: Error during loadModList() -- couldn't open mods.txt, to be located at:");
-		logError("%s\n%s\n", place1.c_str(), place2.c_str());
-	}
+		infile.open(place1.c_str(), std::ios::in);
 
-	while (infile.good()) {
-		line = getLine(infile);
+		if (!infile.is_open()) {
+			infile.clear();
+			infile.open(place2.c_str(), std::ios::in);
+		}
+		if (!infile.is_open()) {
+			logError("ModManager: Error during loadModList() -- couldn't open mods.txt, to be located at:");
+			logError("%s\n%s\n", place1.c_str(), place2.c_str());
+		}
 
-		// skip ahead if this line is empty
-		if (line.length() == 0) continue;
+		while (infile.good()) {
+			line = getLine(infile);
 
-		// skip comments
-		starts_with = line.at(0);
-		if (starts_with == "#") continue;
+			// skip ahead if this line is empty
+			if (line.length() == 0) continue;
 
-		// add the mod if it exists in the mods folder
-		if (line != FALLBACK_MOD) {
-			if (find(mod_dirs.begin(), mod_dirs.end(), line) != mod_dirs.end()) {
-				mod_list.push_back(loadMod(line));
-				found_any_mod = true;
-			}
-			else {
-				logError("ModManager: Mod \"%s\" not found, skipping", line.c_str());
+			// skip comments
+			starts_with = line.at(0);
+			if (starts_with == "#") continue;
+
+			// add the mod if it exists in the mods folder
+			if (line != FALLBACK_MOD) {
+				if (find(mod_dirs.begin(), mod_dirs.end(), line) != mod_dirs.end()) {
+					mod_list.push_back(loadMod(line));
+					found_any_mod = true;
+				}
+				else {
+					logError("ModManager: Mod \"%s\" not found, skipping", line.c_str());
+				}
 			}
 		}
+		infile.close();
+		infile.clear();
 	}
-	infile.close();
-	infile.clear();
+	else {
+		for (size_t i = 0; i < cmd_line_mods->size(); ++i) {
+			std::string line = (*cmd_line_mods)[i];
+
+			// add the mod if it exists in the mods folder
+			if (line != FALLBACK_MOD) {
+				if (find(mod_dirs.begin(), mod_dirs.end(), line) != mod_dirs.end()) {
+					mod_list.push_back(loadMod(line));
+					found_any_mod = true;
+				}
+				else {
+					logError("ModManager: Mod \"%s\" not found, skipping", line.c_str());
+				}
+			}
+		}
+
+		saveMods();
+	}
+
 	if (!found_any_mod && mod_list.size() == 1) {
 		logError("ModManager: Couldn't locate any Flare mod. Check if the game data are installed \
                   correctly. Expected to find the data in the $XDG_DATA_DIRS path, in \
@@ -387,6 +411,30 @@ bool ModManager::haveFallbackMod() {
 			return true;
 	}
 	return false;
+}
+
+void ModManager::saveMods() {
+	std::ofstream outfile;
+	outfile.open((PATH_CONF + "mods.txt").c_str(), std::ios::out);
+
+	if (outfile.is_open()) {
+		// comment
+		outfile << "## flare-engine mods list file ##" << "\n";
+
+		outfile << "# Mods lower on the list will overwrite data in the entries higher on the list" << "\n";
+		outfile << "\n";
+
+		for (unsigned int i = 0; i < mod_list.size(); i++) {
+			if (mod_list[i].name != FALLBACK_MOD)
+				outfile << mod_list[i].name << "\n";
+		}
+	}
+	if (outfile.bad())
+		logError("GameStateConfigBase: Unable to save mod list into file. No write access or disk is full!");
+
+	outfile.close();
+	outfile.clear();
+
 }
 
 ModManager::~ModManager() {

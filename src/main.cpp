@@ -47,10 +47,16 @@ GameSwitcher *gswitch;
 #include "PlatformLinux.cpp"
 #endif
 
+class CmdLineArgs {
+public:
+	std::string render_device_name;
+	std::vector<std::string> mod_list;
+};
+
 /**
  * Game initialization.
  */
-static void init(const std::string &render_device_name) {
+static void init(const CmdLineArgs& cmd_line_args) {
 	PlatformInit(&PlatformOptions);
 
 	/**
@@ -70,7 +76,7 @@ static void init(const std::string &render_device_name) {
 
 	// Shared Resources set-up
 
-	mods = new ModManager();
+	mods = new ModManager(&(cmd_line_args.mod_list));
 
 	if (!mods->haveFallbackMod()) {
 		logError("main: Could not find the default mod in the following locations:");
@@ -107,8 +113,8 @@ static void init(const std::string &render_device_name) {
 	// Create render Device and Rendering Context.
 	if (PlatformOptions.default_renderer != "")
 		render_device = getRenderDevice(PlatformOptions.default_renderer);
-	else if (render_device_name != "")
-		render_device = getRenderDevice(render_device_name);
+	else if (cmd_line_args.render_device_name != "")
+		render_device = getRenderDevice(cmd_line_args.render_device_name);
 	else
 		render_device = getRenderDevice(RENDER_DEVICE);
 
@@ -282,7 +288,7 @@ std::string parseArgValue(const std::string &arg) {
 int main(int argc, char *argv[]) {
 	bool debug_event = false;
 	bool done = false;
-	std::string render_device_name = "";
+	CmdLineArgs cmd_line_args;
 
 	for (int i = 1 ; i < argc; i++) {
 		std::string arg_full = std::string(argv[i]);
@@ -300,20 +306,27 @@ int main(int argc, char *argv[]) {
 			done = true;
 		}
 		else if (arg == "renderer") {
-			render_device_name = parseArgValue(arg_full);
+			cmd_line_args.render_device_name = parseArgValue(arg_full);
 		}
 		else if (arg == "no-audio") {
 			AUDIO = false;
 		}
+		else if (arg == "mods") {
+			std::string mod_list_str = parseArgValue(arg_full);
+			while (!mod_list_str.empty()) {
+				cmd_line_args.mod_list.push_back(popFirstString(mod_list_str));
+			}
+		}
 		else if (arg == "help") {
 			printf("\
---help                   Prints this message.\n\n\
---version                Prints the release version.\n\n\
---data-path=<PATH>       Specifies an exact path to look for mod data.\n\n\
---debug-event            Prints verbose hardware input information.\n\n\
+--help                   Prints this message.\n\
+--version                Prints the release version.\n\
+--data-path=<PATH>       Specifies an exact path to look for mod data.\n\
+--debug-event            Prints verbose hardware input information.\n\
 --renderer=<RENDERER>    Specifies the rendering backend to use.\n\
-                         The default is 'sdl'.\n\n\
---no-audio               Disables sound effects and music.\n");
+                         The default is 'sdl'.\n\
+--no-audio               Disables sound effects and music.\n\
+--mods=<MOD>,...         Starts the game with only these mods enabled.\n");
 			done = true;
 		}
 		else {
@@ -323,7 +336,7 @@ int main(int argc, char *argv[]) {
 
 	if (!done) {
 		srand(static_cast<unsigned int>(time(NULL)));
-		init(render_device_name);
+		init(cmd_line_args);
 
 		if (debug_event)
 			inpt->enableEventLog();

@@ -571,7 +571,7 @@ void GameStateConfigBase::logicAccept() {
 		reload_music = true;
 		reload_backgrounds = true;
 		delete mods;
-		mods = new ModManager();
+		mods = new ModManager(NULL);
 		loadTilesetSettings();
 	}
 	loadMiscSettings();
@@ -837,27 +837,7 @@ bool GameStateConfigBase::setMods() {
 	}
 
 	mods->applyDepends();
-
-	std::ofstream outfile;
-	outfile.open((PATH_CONF + "mods.txt").c_str(), std::ios::out);
-
-	if (outfile.is_open()) {
-		// comment
-		outfile << "## flare-engine mods list file ##" << "\n";
-
-		outfile << "# Mods lower on the list will overwrite data in the entries higher on the list" << "\n";
-		outfile << "\n";
-
-		for (unsigned int i = 0; i < mods->mod_list.size(); i++) {
-			if (mods->mod_list[i].name != FALLBACK_MOD)
-				outfile << mods->mod_list[i].name << "\n";
-		}
-	}
-	if (outfile.bad())
-		logError("GameStateConfigBase: Unable to save mod list into file. No write access or disk is full!");
-
-	outfile.close();
-	outfile.clear();
+	mods->saveMods();
 
 	if (mods->mod_list != temp_list)
 		return true;
