@@ -41,6 +41,7 @@ SDLInputState::SDLInputState(void)
 	, joy_num(0)
 	, joy_axis_num(0)
 	, resize_ticks(-1)
+	, joystick_init(false)
 {
 	// don't use keyboard for touchscreen devices
 	if (!PlatformOptions.is_mobile_device)
@@ -83,7 +84,8 @@ void SDLInputState::initJoystick() {
 		joy = NULL;
 	}
 
-	if ((ENABLE_JOYSTICK) && (SDL_NumJoysticks() > 0)) {
+	joy_num = SDL_NumJoysticks();
+	if (ENABLE_JOYSTICK && joy_num > 0) {
 		joy = SDL_JoystickOpen(JOYSTICK_DEVICE);
 		logInfo("Using joystick #%d.", JOYSTICK_DEVICE);
 	}
@@ -295,7 +297,7 @@ void SDLInputState::handle() {
 					break;
 				*/
 			case SDL_JOYHATMOTION:
-				if(JOYSTICK_DEVICE == event.jhat.which && ENABLE_JOYSTICK) {
+				if (joy && SDL_JoystickInstanceID(joy) == event.jhat.which && ENABLE_JOYSTICK) {
 					render_device->hideMouseCursor();
 					joy_hat_event = true;
 					switch (event.jhat.value) {
@@ -389,7 +391,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_JOYBUTTONDOWN:
-				if(JOYSTICK_DEVICE == event.jbutton.which && ENABLE_JOYSTICK) {
+				if (joy && SDL_JoystickInstanceID(joy) == event.jbutton.which && ENABLE_JOYSTICK) {
 					for (int key=0; key<key_count; key++) {
 						if (event.jbutton.button == binding_joy[key]) {
 							render_device->hideMouseCursor();
@@ -400,7 +402,7 @@ void SDLInputState::handle() {
 				}
 				break;
 			case SDL_JOYBUTTONUP:
-				if(JOYSTICK_DEVICE == event.jbutton.which && ENABLE_JOYSTICK) {
+				if (joy && SDL_JoystickInstanceID(joy) == event.jbutton.which && ENABLE_JOYSTICK) {
 					for (int key=0; key<key_count; key++) {
 						if (event.jbutton.button == binding_joy[key]) {
 							un_press[key] = true;
@@ -408,6 +410,22 @@ void SDLInputState::handle() {
 						last_joybutton = event.jbutton.button;
 					}
 				}
+				break;
+			case SDL_JOYDEVICEADDED:
+				if (!joystick_init) {
+					joystick_init = true;
+				}
+				else {
+					logInfo("SDLInputState: Joystick added.");
+					joysticks_changed = true;
+					initJoystick();
+				}
+				break;
+			case SDL_JOYDEVICEREMOVED:
+				logInfo("SDLInputState: Joystick removed.");
+				joysticks_changed = true;
+				ENABLE_JOYSTICK = false;
+				initJoystick();
 				break;
 			case SDL_QUIT:
 				done = 1;
@@ -475,6 +493,11 @@ void SDLInputState::handle() {
 		window_resized = true;
 		render_device->windowResize();
 	}
+
+	// this flag is used to guard against removing and then adding an already connected controller on startup
+	// once this function runs once, it is assumed startup is finished
+	if (!joystick_init)
+		joystick_init = true;
 }
 
 void SDLInputState::hideCursor() {

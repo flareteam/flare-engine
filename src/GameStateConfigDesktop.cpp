@@ -618,6 +618,17 @@ void GameStateConfigDesktop::logicVideo() {
 }
 
 void GameStateConfigDesktop::logicInput() {
+	if (inpt->joysticks_changed) {
+		disableJoystickOptions();
+		joystick_device_lstb->clear();
+		for(int i = 0; i < inpt->getNumJoysticks(); i++) {
+			std::string joystick_name = inpt->getJoystickName(i);
+			if (joystick_name != "")
+				joystick_device_lstb->append(joystick_name, joystick_name);
+		}
+		inpt->joysticks_changed = false;
+	}
+
 	if (mouse_move_cb->checkClick()) {
 		if (mouse_move_cb->isChecked()) {
 			MOUSE_MOVE=true;

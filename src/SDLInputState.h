@@ -49,6 +49,7 @@ private:
 	int joy_num;
 	int joy_axis_num;
 	int resize_ticks;
+	bool joystick_init;
 
 	std::vector<int> joy_axis_prev;
 	std::vector<int> joy_axis_deltas;

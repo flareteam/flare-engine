@@ -139,6 +139,7 @@ public:
 	bool window_resized;
 	bool pressing_up;
 	bool pressing_down;
+	bool joysticks_changed;
 
 protected:
 	bool un_press[key_count];
