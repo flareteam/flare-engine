@@ -486,6 +486,7 @@ Image *SDLHardwareRenderDevice::loadImage(const std::string&filename, const std:
 		if (!errormessage.empty())
 			logError("SDLHardwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
+			mods->resetModConfig();
 			Exit(1);
 		}
 		return NULL;

@@ -66,6 +66,7 @@ public:
 	void applyDepends();
 	bool haveFallbackMod();
 	void saveMods();
+	void resetModConfig();
 
 	// Returns the filename within the latest mod, in which the provided generic
 	// filename was found.

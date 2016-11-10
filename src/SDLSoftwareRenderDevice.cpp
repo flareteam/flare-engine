@@ -550,6 +550,7 @@ Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, const std
 		if (!errormessage.empty())
 			logError("SDLSoftwareRenderDevice: [%s] %s: %s", filename.c_str(), errormessage.c_str(), IMG_GetError());
 		if (IfNotFoundExit) {
+			mods->resetModConfig();
 			Exit(1);
 		}
 	}

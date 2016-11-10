@@ -27,7 +27,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "SharedResources.h"
 #include "Settings.h"
-#include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
 
 SDLFontStyle::SDLFontStyle() : FontStyle(), ttfont(NULL) {
@@ -37,6 +36,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	// Initiate SDL_ttf
 	if(!TTF_WasInit() && TTF_Init()==-1) {
 		logError("SDLFontEngine: TTF_Init: %s", TTF_GetError());
+		mods->resetModConfig();
 		Exit(2);
 	}
 
@@ -109,11 +109,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	setFont("font_regular");
 	if (!active_font) {
 		logError("FontEngine: Unable to determine default font!");
-
-		// reset the user's mod configuration
-		logInfo("FontEngine: Deleting '%s' in attempt to recover.", std::string(PATH_CONF + "mods.txt").c_str());
-		removeFile(PATH_CONF + "mods.txt");
-
+		mods->resetModConfig();
 		Exit(1);
 	}
 }

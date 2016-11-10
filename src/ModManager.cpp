@@ -437,5 +437,11 @@ void ModManager::saveMods() {
 
 }
 
+void ModManager::resetModConfig() {
+	std::string config_path = PATH_CONF + "mods.txt";
+	logError("ModManager: Game data is either missing or misconfigured. Deleting '%s' in attempt to recover.", config_path.c_str());
+	removeFile(config_path);
+}
+
 ModManager::~ModManager() {
 }
