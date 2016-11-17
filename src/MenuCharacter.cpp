@@ -291,6 +291,7 @@ void MenuCharacter::refreshStats() {
 	labelUnspent->set(window_area.x+unspent_pos.x, window_area.y+unspent_pos.y, unspent_pos.justify, unspent_pos.valign, ss.str(), font->getColor("menu_bonus"), unspent_pos.font_style);
 
 	// scrolling stat list
+	unsigned stat_index = 0;
 	for (unsigned i=0; i<STAT_COUNT; ++i) {
 		if (!show_stat[i]) continue;
 
@@ -306,14 +307,15 @@ void MenuCharacter::refreshStats() {
 			full_tooltip += "\n";
 		full_tooltip += stat_tooltip;
 
-		statList->set(i, ss.str(), full_tooltip);
+		statList->set(stat_index, ss.str(), full_tooltip);
+		stat_index++;
 	}
 
 	if (show_resists) {
 		for (unsigned int j=0; j<stats->vulnerable.size(); ++j) {
 			ss.str("");
 			ss << msg->get("%s Resistance", ELEMENTS[j].name.c_str()) << ": " << (100 - stats->vulnerable[j]) << "%";
-			statList->set(j+STAT_COUNT-2, ss.str(),"");
+			statList->set(j+stat_index-2, ss.str(),"");
 		}
 	}
 
