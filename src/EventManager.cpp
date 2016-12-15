@@ -489,7 +489,7 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 		e->type = EC_REWARD_ITEM;
 
 		e->x = popFirstInt(val);
-		e->y = std::max(popFirstInt(val), 0);
+		e->y = std::max(popFirstInt(val), 1);
 	}
 	else if (key == "restore") {
 		// @ATTR event.restore|["hp", "mp", "hpmp", "status", "all"]|Restore the hero's HP, MP, and/or status.
