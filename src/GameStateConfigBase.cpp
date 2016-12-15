@@ -852,6 +852,8 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 		std::string max_version = "";
 		std::stringstream ss;
 
+		ret = mod->name + "\n\n";
+
 		if (mod->min_version_major > 0 || mod->min_version_minor > 0) {
 			ss << mod->min_version_major << "." << std::setfill('0') << std::setw(2) << mod->min_version_minor;
 			min_version = ss.str();
@@ -865,7 +867,7 @@ std::string GameStateConfigBase::createModTooltip(Mod *mod) {
 			ss.str("");
 		}
 
-		ret = mod->description;
+		ret += mod->description;
 		if (mod->game != "" && mod->game != FALLBACK_GAME) {
 			if (ret != "") ret += '\n';
 			ret += msg->get("Game: ");
