@@ -127,6 +127,10 @@ public:
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;
 	WidgetLabel         * sound_volume_lb;
+	WidgetCheckBox			* mute_sound_volume_cb;
+	WidgetLabel					* mute_sound_volume_lb;
+	WidgetCheckBox			* mute_music_volume_cb;
+	WidgetLabel					* mute_music_volume_lb;
 	WidgetListBox       * activemods_lstb;
 	WidgetLabel         * activemods_lb;
 	WidgetListBox       * inactivemods_lstb;

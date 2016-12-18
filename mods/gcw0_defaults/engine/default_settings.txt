@@ -11,6 +11,8 @@ resolution_h=480
 # music and sound volume (0 = silent, 128 = max)
 music_volume=96
 sound_volume=128
+mute_music_volume=0
+mute_sound_volume=0
 
 # display floating damage text. 1 enable, 0 disable.
 combat_text=1

@@ -87,6 +87,8 @@ extern unsigned short ICON_SIZE;
 extern bool AUDIO;					// initialize the audio subsystem at all?
 extern unsigned short MUSIC_VOLUME;
 extern unsigned short SOUND_VOLUME;
+extern bool MUSIC_OFF;
+extern bool SOUND_OFF;
 extern bool FULLSCREEN;
 extern unsigned char BITS_PER_PIXEL;
 extern unsigned short MAX_FRAMES_PER_SEC;
