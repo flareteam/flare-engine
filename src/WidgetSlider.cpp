@@ -36,7 +36,9 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 	, changed_without_mouse(false)
 	, minimum(0)
 	, maximum(0)
-	, value(0) {
+	, value(0)
+	, tip_buf()
+	, tip(new WidgetTooltip()) {
 
 	Image *graphics;
 	graphics = render_device->loadImage(fname, "loading slider graphics", true);
@@ -56,6 +58,7 @@ WidgetSlider::WidgetSlider (const std::string& fname)
 
 WidgetSlider::~WidgetSlider () {
 	if (sl) delete sl;
+	delete tip;
 }
 
 void WidgetSlider::setPos(int offset_x, int offset_y) {
@@ -189,6 +192,21 @@ void WidgetSlider::render () {
 		}
 		if (draw) {
 			render_device->drawRectangle(topLeft, bottomRight, color);
+		}
+	}
+
+	if (pressed || in_focus) {
+		std::stringstream ss;
+		TooltipData tip_new;
+
+		ss << value;
+		tip_new.addText(ss.str());
+		if (!tip_new.isEmpty()) {
+			if (!tip_new.compare(&tip_buf)) {
+				tip_buf.clear();
+				tip_buf = tip_new;
+			}
+			tip->render(tip_buf, Point(pos_knob.x + pos_knob.w*2, pos_knob.y + (pos_knob.h/2)), STYLE_TOPLABEL);
 		}
 	}
 }
