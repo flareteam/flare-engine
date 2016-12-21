@@ -270,6 +270,7 @@ bool StatBlock::loadSfxStat(FileParser *infile) {
 		for (size_t i = 0; i < sfx_attack.size(); ++i) {
 			if (anim_name == sfx_attack[i].first) {
 				sfx_attack[i].second = filename;
+				found_anim_name = true;
 				break;
 			}
 		}
