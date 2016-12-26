@@ -570,8 +570,10 @@ void SDLSoftwareRenderDevice::freeImage(Image *image) {
 
 	cacheRemove(image);
 
-	if (static_cast<SDLSoftwareImage *>(image)->surface)
-		SDL_FreeSurface(static_cast<SDLSoftwareImage *>(image)->surface);
+	SDLSoftwareImage *sdl_image = dynamic_cast<SDLSoftwareImage *>(image);
+
+	if (sdl_image && sdl_image->surface)
+		SDL_FreeSurface(sdl_image->surface);
 }
 
 void SDLSoftwareRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
@@ -602,7 +604,7 @@ void SDLSoftwareRenderDevice::windowResize() {
 		VIEW_W = MIN_SCREEN_W;
 	}
 
-	VIEW_W_HALF = VIEW_W/2;
+	VIEW_W_HALF = static_cast<short unsigned int>(VIEW_W/2);
 
 	SDL_RenderSetLogicalSize(renderer, VIEW_W, VIEW_H);
 

@@ -502,8 +502,10 @@ void SDLHardwareRenderDevice::freeImage(Image *image) {
 
 	cacheRemove(image);
 
-	if (static_cast<SDLHardwareImage *>(image)->surface) {
-		SDL_DestroyTexture(static_cast<SDLHardwareImage *>(image)->surface);
+	SDLHardwareImage *sdl_image = dynamic_cast<SDLHardwareImage *>(image);
+
+	if (sdl_image && sdl_image->surface) {
+		SDL_DestroyTexture(sdl_image->surface);
 	}
 }
 
@@ -521,7 +523,7 @@ void SDLHardwareRenderDevice::windowResize() {
 		VIEW_W = MIN_SCREEN_W;
 	}
 
-	VIEW_W_HALF = VIEW_W/2;
+	VIEW_W_HALF = static_cast<short unsigned int>(VIEW_W/2);
 
 	SDL_RenderSetLogicalSize(renderer, VIEW_W, VIEW_H);
 
