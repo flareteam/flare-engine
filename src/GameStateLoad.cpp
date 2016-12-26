@@ -841,6 +841,9 @@ GameStateLoad::~GameStateLoad() {
 		items = NULL;
 	}
 
+	for (size_t i = 0; i < game_slots.size(); ++i) {
+		delete game_slots[i];
+	}
 	game_slots.clear();
 
 	delete label_loading;
