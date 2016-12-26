@@ -191,9 +191,7 @@ void SDLFontEngine::setFont(const std::string& _font) {
  * Justify is left, right, or center
  */
 void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
-	Rect clip;
 	Image *graphics;
-	Sprite *temp;
 
 	Rect dest_rect = position(text, x, y, justify);
 
@@ -203,18 +201,15 @@ void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int ju
 		return;
 	}
 
-	// Render text into target Image
+	// Render text into target
 	graphics = render_device->renderTextToImage(active_font, text, color, active_font->blend);
-	if (!graphics) return;
-	temp = graphics->createSprite();
-	graphics->unref();
-
-	// Render text graphics into target
-	clip = temp->getClip();
-	render_device->renderToImage(temp->getGraphics(), clip, target, dest_rect);
+	Rect clip;
+	clip.w = graphics->getWidth();
+	clip.h = graphics->getHeight();
+	render_device->renderToImage(graphics, clip, target, dest_rect);
 
 	// text is cached, we can free temp resource
-	delete temp;
+	graphics->unref();
 }
 
 SDLFontEngine::~SDLFontEngine() {
