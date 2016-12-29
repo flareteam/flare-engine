@@ -263,7 +263,7 @@ void calculatePriosIso(std::vector<Renderable> &r) {
 		const unsigned tiley = static_cast<const unsigned>(floor(it->map_pos.y));
 		const int commax = static_cast<const int>((it->map_pos.x - static_cast<float>(tilex)) * (2<<16));
 		const int commay = static_cast<const int>((it->map_pos.y - static_cast<float>(tiley)) * (2<<16));
-		it->prio += (static_cast<uint64_t>(tilex + tiley) << 54) + (static_cast<uint64_t>(tilex) << 42) + ((commax + commay) << 16);
+		it->prio += (static_cast<uint64_t>(tilex + tiley) << 54) + (static_cast<uint64_t>(tilex) << 42) + (static_cast<uint64_t>(commax + commay) << 16);
 	}
 }
 
@@ -272,7 +272,7 @@ void calculatePriosOrtho(std::vector<Renderable> &r) {
 		const unsigned tilex = static_cast<const unsigned>(floor(it->map_pos.x));
 		const unsigned tiley = static_cast<const unsigned>(floor(it->map_pos.y));
 		const int commay = static_cast<const int>(1024 * it->map_pos.y);
-		it->prio += (static_cast<uint64_t>(tiley) << 48) + (static_cast<uint64_t>(tilex) << 32) + (commay << 16);
+		it->prio += (static_cast<uint64_t>(tiley) << 48) + (static_cast<uint64_t>(tilex) << 32) + (static_cast<uint64_t>(commay) << 16);
 	}
 }
 
