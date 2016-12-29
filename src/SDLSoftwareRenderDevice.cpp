@@ -38,6 +38,8 @@ SDLSoftwareImage::SDLSoftwareImage(RenderDevice *_device)
 }
 
 SDLSoftwareImage::~SDLSoftwareImage() {
+	if (surface)
+		SDL_FreeSurface(surface);
 }
 
 int SDLSoftwareImage::getWidth() const {
@@ -569,9 +571,6 @@ void SDLSoftwareRenderDevice::freeImage(Image *image) {
 	if (!image) return;
 
 	cacheRemove(image);
-
-	if (static_cast<SDLSoftwareImage *>(image)->surface)
-		SDL_FreeSurface(static_cast<SDLSoftwareImage *>(image)->surface);
 }
 
 void SDLSoftwareRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {

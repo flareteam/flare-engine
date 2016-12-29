@@ -30,7 +30,7 @@ Image::Image(RenderDevice *_device)
 }
 
 Image::~Image() {
-	/* free resource allocated by renderdevice */
+	// remove this image from the cache
 	device->freeImage(this);
 }
 
