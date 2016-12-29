@@ -567,12 +567,6 @@ Image *SDLSoftwareRenderDevice::loadImage(const std::string& filename, const std
 	return image;
 }
 
-void SDLSoftwareRenderDevice::freeImage(Image *image) {
-	if (!image) return;
-
-	cacheRemove(image);
-}
-
 void SDLSoftwareRenderDevice::setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask) {
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	*rmask = 0xff000000;

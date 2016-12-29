@@ -285,3 +285,9 @@ bool RenderDevice::reloadGraphics() {
 
 	return false;
 }
+
+void RenderDevice::freeImage(Image *image) {
+	if (!image) return;
+
+	cacheRemove(image);
+}

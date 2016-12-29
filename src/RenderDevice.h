@@ -91,7 +91,8 @@ protected:
  * by OpenGL render device this is a texture.
  *
  * Image uses a refrence counter to control when to free the resource, when the
- * last reference is released, the Image is freed using RenderDevice::freeImage().
+ * last reference is released, the Image is deleted and then removed from cache
+ * using RenderDevice::freeImage().
  *
  * The caller who instantiates an Image is responsible for release the reference
  * to the image when not used anymore.
@@ -185,7 +186,7 @@ public:
 							 const std::string& errormessage = "Couldn't load image",
 							 bool IfNotFoundExit = false) = 0;
 	virtual Image *createImage(int width, int height) = 0;
-	virtual void freeImage(Image *image) = 0;
+	void freeImage(Image *image);
 
 	/** Screen operations */
 	virtual int render(Sprite* r) = 0;

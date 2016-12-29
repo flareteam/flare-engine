@@ -81,7 +81,6 @@ public:
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();
-	void freeImage(Image *image);
 
 	Image* loadImage(const std::string& filename,
 					 const std::string& errormessage = "Couldn't load image",

@@ -499,12 +499,6 @@ Image *SDLHardwareRenderDevice::loadImage(const std::string&filename, const std:
 	return image;
 }
 
-void SDLHardwareRenderDevice::freeImage(Image *image) {
-	if (!image) return;
-
-	cacheRemove(image);
-}
-
 void SDLHardwareRenderDevice::windowResize() {
 	int w,h;
 	SDL_GetWindowSize(window, &w, &h);
