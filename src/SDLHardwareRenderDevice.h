@@ -77,8 +77,6 @@ public:
 	void commitFrame();
 	void destroyContext();
 	void windowResize();
-	void showMouseCursor();
-	void hideMouseCursor();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void updateTitleBar();

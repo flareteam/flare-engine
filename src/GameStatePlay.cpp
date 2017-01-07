@@ -151,7 +151,7 @@ void GameStatePlay::resetGame() {
 void GameStatePlay::checkEnemyFocus() {
 	// check the last hit enemy first
 	// if there's none, then either get the nearest enemy or one under the mouse (depending on mouse mode)
-	if (NO_MOUSE) {
+	if (!inpt->usingMouse()) {
 		if (hazards->last_enemy) {
 			if (enemy == hazards->last_enemy) {
 				if (menu->enemy->timeout > 0 && hazards->last_enemy->stats.hp > 0) return;
@@ -181,7 +181,7 @@ void GameStatePlay::checkEnemyFocus() {
 			menu->enemy->timeout = menu_enemy_timeout;
 		}
 	}
-	else if (!NO_MOUSE) {
+	else if (inpt->usingMouse()) {
 		// if we're using a mouse and we didn't select an enemy, try selecting a dead one instead
 		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, false);
 		if (temp_enemy) {
@@ -656,7 +656,7 @@ void GameStatePlay::checkNPCInteraction() {
 
 		if (interact_with_npc) {
 			if (!menu->isNPCMenuVisible()) {
-				if (inpt->pressing[MAIN1] && !NO_MOUSE) inpt->lock[MAIN1] = true;
+				if (inpt->pressing[MAIN1] && inpt->usingMouse()) inpt->lock[MAIN1] = true;
 				if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 
 				menu->npc->setNPC(npcs->npcs[npc_id]);

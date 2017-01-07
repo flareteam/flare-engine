@@ -296,7 +296,7 @@ bool MenuNPCActions::selection() {
 void MenuNPCActions::logic() {
 	if (!visible) return;
 
-	if (NO_MOUSE) {
+	if (!inpt->usingMouse()) {
 		if (inpt->lock[ACCEPT])
 			return;
 		keyboardLogic();
@@ -331,7 +331,7 @@ void MenuNPCActions::logic() {
 	}
 
 	/* is main1 pressed */
-	if (static_cast<int>(current_action) > -1 && ((inpt->pressing[MAIN1] && !NO_MOUSE) || (inpt->pressing[ACCEPT] && NO_MOUSE))) {
+	if (static_cast<int>(current_action) > -1 && ((inpt->pressing[MAIN1] && inpt->usingMouse()) || (inpt->pressing[ACCEPT] && NO_MOUSE))) {
 		if (inpt->pressing[MAIN1]) inpt->lock[MAIN1] = true;
 		if (inpt->pressing[ACCEPT]) inpt->lock[ACCEPT] = true;
 

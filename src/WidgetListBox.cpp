@@ -171,6 +171,9 @@ bool WidgetListBox::checkClick(int x, int y) {
 TooltipData WidgetListBox::checkTooltip(const Point& mouse) {
 	TooltipData _tip;
 
+	if (!inpt->usingMouse())
+		return _tip;
+
 	for(unsigned i=0; i<rows.size(); i++) {
 		if (i<items.size()) {
 			if (isWithinRect(rows[i], mouse) && items[i+cursor].tooltip != "") {

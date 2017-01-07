@@ -116,6 +116,7 @@ public:
 	virtual std::string getAttackString() = 0;
 	virtual std::string getContinueString() = 0;
 	virtual int getNumJoysticks() = 0;
+	virtual bool usingMouse() = 0;
 
 	void enableEventLog();
 
@@ -129,6 +130,7 @@ public:
 	int last_button;
 	int last_joybutton;
 	int last_joyaxis;
+	bool last_is_joystick;
 	bool scroll_up;
 	bool scroll_down;
 	bool lock_scroll;

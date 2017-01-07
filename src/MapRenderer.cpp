@@ -667,7 +667,7 @@ void MapRenderer::checkEvents(const FPoint& loc) {
  * executes
  */
 void MapRenderer::checkHotspots() {
-	if (NO_MOUSE) return;
+	if (!inpt->usingMouse()) return;
 
 	show_tooltip = false;
 
@@ -765,7 +765,7 @@ void MapRenderer::checkHotspots() {
 }
 
 void MapRenderer::checkNearestEvent() {
-	if (NO_MOUSE) show_tooltip = false;
+	if (!inpt->usingMouse()) show_tooltip = false;
 
 	std::vector<Event>::iterator it;
 	std::vector<Event>::iterator nearest = events.end();
@@ -794,7 +794,7 @@ void MapRenderer::checkNearestEvent() {
 	}
 
 	if (nearest != events.end()) {
-		if (NO_MOUSE || TOUCHSCREEN) {
+		if (!inpt->usingMouse() || TOUCHSCREEN) {
 			// new tooltip?
 			createTooltip((*nearest).getComponent(EC_TOOLTIP));
 			tip_pos = map_to_screen((*nearest).center.x, (*nearest).center.y, shakycam.x, shakycam.y);

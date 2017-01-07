@@ -452,7 +452,7 @@ ItemStack LootManager::checkPickup(const Point& mouse, const FPoint& cam, const 
 	ItemStack loot_stack;
 
 	// check left mouse click
-	if (!NO_MOUSE) {
+	if (inpt->usingMouse()) {
 		// I'm starting at the end of the loot list so that more recently-dropped
 		// loot is picked up first.  If a player drops several loot in the same
 		// location, picking it back up will work like a stack.

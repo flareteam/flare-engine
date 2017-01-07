@@ -316,7 +316,7 @@ void MenuManager::logic() {
 
 			num_picker->confirm_clicked = false;
 			num_picker->visible = false;
-			if (!NO_MOUSE) {
+			if (inpt->usingMouse()) {
 				sticky_dragging = true;
 			}
 		}
@@ -326,7 +326,7 @@ void MenuManager::logic() {
 		}
 	}
 
-	if (NO_MOUSE)
+	if (!inpt->usingMouse())
 		handleKeyboardNavigation();
 
 	// Stop attacking if the cursor is inside an interactable menu
@@ -602,7 +602,7 @@ void MenuManager::logic() {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_VENDOR;
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
+					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
 						int max_quantity = std::min(inv->getMaxPurchasable(drag_stack.item, vendor->getTab()), drag_stack.quantity);
 						if (max_quantity >= 1) {
 							num_picker->setValueBounds(1, max_quantity);
@@ -634,7 +634,7 @@ void MenuManager::logic() {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_STASH;
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
+					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
 						num_picker->setValueBounds(1, drag_stack.quantity);
 						num_picker->visible = true;
 					}
@@ -674,7 +674,7 @@ void MenuManager::logic() {
 						mouse_dragging = true;
 						drag_src = DRAG_SRC_INVENTORY;
 					}
-					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || NO_MOUSE || inpt->touch_locked)) {
+					if (drag_stack.quantity > 1 && (inpt->pressing[SHIFT] || !inpt->usingMouse() || inpt->touch_locked)) {
 						num_picker->setValueBounds(1, drag_stack.quantity);
 						num_picker->visible = true;
 					}
@@ -837,7 +837,7 @@ void MenuManager::logic() {
 			drag_src = 0;
 			mouse_dragging = false;
 		}
-		if (NO_MOUSE)
+		if (!inpt->usingMouse())
 			dragAndDropWithKeyboard();
 	}
 	else {
@@ -1193,7 +1193,7 @@ void MenuManager::render() {
 	}
 
 	if (!num_picker->visible && !mouse_dragging && !sticky_dragging) {
-		if (NO_MOUSE || TOUCHSCREEN)
+		if (!inpt->usingMouse() || TOUCHSCREEN)
 			handleKeyboardTooltips();
 		else {
 			TooltipData tip_new;

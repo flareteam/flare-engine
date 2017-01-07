@@ -43,6 +43,7 @@ public:
 	std::string getAttackString();
 	std::string getContinueString();
 	int getNumJoysticks();
+	bool usingMouse();
 
 private:
 	SDL_Joystick* joy;

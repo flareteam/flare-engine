@@ -305,7 +305,7 @@ void TabList::setNextTabList(TabList *tl) {
 
 void TabList::logic(bool allow_keyboard) {
 	if (locked) return;
-	if (NO_MOUSE || allow_keyboard) {
+	if (!inpt->usingMouse() || allow_keyboard) {
 		ScrollType inner_scrolltype = VERTICAL;
 
 		if (current_is_valid() && widgets.at(current)->scroll_type != TWO_DIRECTIONS) {
@@ -359,6 +359,11 @@ void TabList::logic(bool allow_keyboard) {
 
 	// If mouse is clicked, defocus current tabindex item
 	if (inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && current_is_valid() && !isWithinRect(widgets[getCurrent()]->pos, inpt->mouse)) {
+		defocus();
+	}
+
+	// Also defocus if we start using the mouse
+	if (current != -1 && inpt->usingMouse()) {
 		defocus();
 	}
 }

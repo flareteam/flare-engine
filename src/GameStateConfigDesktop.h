@@ -84,6 +84,7 @@ private:
 
 	void scanKey(int button);
 
+	void enableMouseOptions();
 	void disableMouseOptions();
 	void disableJoystickOptions();
 

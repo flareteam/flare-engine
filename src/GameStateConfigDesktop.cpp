@@ -632,14 +632,14 @@ void GameStateConfigDesktop::logicInput() {
 	if (mouse_move_cb->checkClick()) {
 		if (mouse_move_cb->isChecked()) {
 			MOUSE_MOVE=true;
-			disableJoystickOptions();
+			enableMouseOptions();
 		}
 		else MOUSE_MOVE=false;
 	}
 	else if (mouse_aim_cb->checkClick()) {
 		if (mouse_aim_cb->isChecked()) {
 			MOUSE_AIM=true;
-			disableJoystickOptions();
+			enableMouseOptions();
 		}
 		else MOUSE_AIM=false;
 	}
@@ -658,7 +658,6 @@ void GameStateConfigDesktop::logicInput() {
 				inpt->initJoystick();
 				joystick_device_lstb->select(JOYSTICK_DEVICE);
 			}
-			disableMouseOptions();
 
 			if (inpt->getNumJoysticks() > 0)
 				joystick_device_lstb->refresh();
@@ -678,7 +677,6 @@ void GameStateConfigDesktop::logicInput() {
 			if (inpt->getNumJoysticks() > 0) {
 				inpt->initJoystick();
 			}
-			disableMouseOptions();
 		}
 		else {
 			enable_joystick_cb->unCheck();
@@ -855,6 +853,11 @@ void GameStateConfigDesktop::cleanupDialogs() {
 	}
 }
 
+void GameStateConfigDesktop::enableMouseOptions() {
+	no_mouse_cb->unCheck();
+	NO_MOUSE = false;
+}
+
 void GameStateConfigDesktop::disableMouseOptions() {
 	mouse_aim_cb->unCheck();
 	MOUSE_AIM=false;
@@ -874,7 +877,4 @@ void GameStateConfigDesktop::disableJoystickOptions() {
 
 	if (inpt->getNumJoysticks() > 0)
 		joystick_device_lstb->refresh();
-
-	no_mouse_cb->unCheck();
-	NO_MOUSE = false;
 }
