@@ -112,8 +112,8 @@ void MenuEnemy::render() {
 	int hp_bar_length = 0;
 	if (enemy->stats.get(STAT_HP_MAX) == 0)
 		hp_bar_length = 0;
-	else
-		hp_bar_length = (enemy->stats.hp * 100) / enemy->stats.get(STAT_HP_MAX);
+	else if (bar_hp)
+		hp_bar_length = (enemy->stats.hp * bar_hp->getGraphics()->getWidth()) / enemy->stats.get(STAT_HP_MAX);
 
 	// draw hp bar background
 	setBackgroundClip(src);
