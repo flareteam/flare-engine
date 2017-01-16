@@ -176,7 +176,7 @@ void AnimationSet::load() {
 			Rect r;
 			Point offset;
 			const unsigned short index = static_cast<unsigned short>(popFirstInt(parser.val));
-			const unsigned short direction = static_cast<unsigned short>(popFirstInt(parser.val));
+			const unsigned short direction = static_cast<unsigned short>(parse_direction(popFirstString(parser.val)));
 			r.x = popFirstInt(parser.val);
 			r.y = popFirstInt(parser.val);
 			r.w = popFirstInt(parser.val);
