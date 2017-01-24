@@ -35,7 +35,7 @@ int getFileList(const std::string &dir, const std::string &ext, std::vector<std:
 int getDirList(const std::string &dir, std::vector<std::string> &dirs);
 
 
-bool isDirectory(const std::string &path);
+bool isDirectory(const std::string &path, bool show_error = true);
 
 bool removeFile(const std::string &file);
 bool removeDir(const std::string &dir);

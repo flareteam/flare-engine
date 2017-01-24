@@ -50,18 +50,20 @@ bool pathExists(const std::string &path) {
  */
 
 void createDir(const std::string &path) {
-	if (isDirectory(path))
+	if (isDirectory(path, false))
 		return;
 
 	// TODO check return value?
 	PlatformDirCreate(path);
 }
 
-bool isDirectory(const std::string &path) {
+bool isDirectory(const std::string &path, bool show_error) {
 	struct stat st;
 	if (stat(path.c_str(), &st) == -1) {
-		std::string error_msg = "isDirectory (" + path + ")";
-		perror(error_msg.c_str());
+		if (show_error) {
+			std::string error_msg = "isDirectory (" + path + ")";
+			perror(error_msg.c_str());
+		}
 		return false;
 	}
 	else {
@@ -74,6 +76,8 @@ bool isDirectory(const std::string &path) {
  * The filename parameter should include the entire path to this file
  */
 bool fileExists(const std::string &filename) {
+	if (isDirectory(filename, false)) return false;
+
 	std::ifstream infile(filename.c_str());
 	bool exists = infile.is_open();
 	if (exists) infile.close();
