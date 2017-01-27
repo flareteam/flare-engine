@@ -33,7 +33,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class Hazard;
 
-#define EFFECT_COUNT 24
+#define EFFECT_COUNT 25
 
 enum EFFECT_TYPE {
 	EFFECT_NONE = 0,
@@ -52,14 +52,15 @@ enum EFFECT_TYPE {
 	EFFECT_IMMUNITY_MP_STEAL = 13,
 	EFFECT_IMMUNITY_KNOCKBACK = 14,
 	EFFECT_IMMUNITY_DAMAGE_REFLECT = 15,
-	EFFECT_STUN = 16,
-	EFFECT_REVIVE = 17,
-	EFFECT_CONVERT = 18,
-	EFFECT_FEAR = 19,
-	EFFECT_DEATH_SENTENCE = 20,
-	EFFECT_SHIELD = 21,
-	EFFECT_HEAL = 22,
-	EFFECT_KNOCKBACK = 23
+	EFFECT_IMMUNITY_STAT_DEBUFF = 16,
+	EFFECT_STUN = 17,
+	EFFECT_REVIVE = 18,
+	EFFECT_CONVERT = 19,
+	EFFECT_FEAR = 20,
+	EFFECT_DEATH_SENTENCE = 21,
+	EFFECT_SHIELD = 22,
+	EFFECT_HEAL = 23,
+	EFFECT_KNOCKBACK = 24
 };
 
 class Effect {
@@ -142,6 +143,7 @@ public:
 	bool immunity_mp_steal;
 	bool immunity_knockback;
 	bool immunity_damage_reflect;
+	bool immunity_stat_debuff;
 	bool stun;
 	bool revive;
 	bool convert;

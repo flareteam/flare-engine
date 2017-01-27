@@ -82,6 +82,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	immunity_mp_steal = emSource.immunity_mp_steal;
 	immunity_knockback = emSource.immunity_knockback;
 	immunity_damage_reflect = emSource.immunity_damage_reflect;
+	immunity_stat_debuff = emSource.immunity_stat_debuff;
 	stun = emSource.stun;
 	revive = emSource.revive;
 	convert = emSource.convert;
@@ -125,6 +126,7 @@ void EffectManager::clearStatus() {
 	immunity_mp_steal = false;
 	immunity_knockback = false;
 	immunity_damage_reflect = false;
+	immunity_stat_debuff = false;
 	stun = false;
 	revive = false;
 	convert = false;
@@ -188,6 +190,7 @@ void EffectManager::logic() {
 				immunity_mp_steal = true;
 				immunity_knockback = true;
 				immunity_damage_reflect = true;
+				immunity_stat_debuff = true;
 			}
 			// @TYPE immunity_damage|Removes and prevents damage over time. Magnitude is ignored.
 			else if (effect_list[i].type == EFFECT_IMMUNITY_DAMAGE) immunity_damage = true;
@@ -203,6 +206,8 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == EFFECT_IMMUNITY_KNOCKBACK) immunity_knockback = true;
 			// @TYPE immunity_damage_reflect|Prevents damage reflection. Magnitude is ignored.
 			else if (effect_list[i].type == EFFECT_IMMUNITY_DAMAGE_REFLECT) immunity_damage_reflect = true;
+			// @TYPE immunity_stat_debuff|Prevents stat value altering effects that have a magnitude less than 0. Magnitude is ignored.
+			else if (effect_list[i].type == EFFECT_IMMUNITY_STAT_DEBUFF) immunity_stat_debuff = true;
 
 			// @TYPE stun|Can't move or attack. Being attacked breaks stun.
 			else if (effect_list[i].type == EFFECT_STUN) stun = true;
@@ -267,6 +272,8 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	else if (immunity_stun && effect_type == EFFECT_STUN)
 		return;
 	else if (immunity_knockback && effect_type == EFFECT_KNOCKBACK)
+		return;
+	else if (immunity_stat_debuff && effect_type > EFFECT_COUNT && magnitude < 0)
 		return;
 
 	// only allow one knockback effect at a time
@@ -366,7 +373,9 @@ void EffectManager::clearNegativeEffects(int type) {
 			removeEffect(i-1);
 		else if ((type == -1 || type == EFFECT_IMMUNITY_STUN) && effect_list[i-1].type == EFFECT_STUN)
 			removeEffect(i-1);
-		else if ((type == -1 || type == EFFECT_KNOCKBACK) && effect_list[i-1].type == EFFECT_KNOCKBACK)
+		else if ((type == -1 || type == EFFECT_IMMUNITY_KNOCKBACK) && effect_list[i-1].type == EFFECT_KNOCKBACK)
+			removeEffect(i-1);
+		else if ((type == -1 || type == EFFECT_IMMUNITY_STAT_DEBUFF) && effect_list[i-1].type > EFFECT_COUNT && effect_list[i-1].magnitude_max < 0)
 			removeEffect(i-1);
 	}
 }
@@ -428,6 +437,7 @@ int EffectManager::getType(const std::string& type) {
 	else if (type == "immunity_mp_steal") return EFFECT_IMMUNITY_MP_STEAL;
 	else if (type == "immunity_knockback") return EFFECT_IMMUNITY_KNOCKBACK;
 	else if (type == "immunity_damage_reflect") return EFFECT_IMMUNITY_DAMAGE_REFLECT;
+	else if (type == "immunity_stat_debuff") return EFFECT_IMMUNITY_STAT_DEBUFF;
 	else if (type == "stun") return EFFECT_STUN;
 	else if (type == "revive") return EFFECT_REVIVE;
 	else if (type == "convert") return EFFECT_CONVERT;
@@ -467,6 +477,7 @@ bool EffectManager::isDebuffed() {
 		else if (effect_list[i-1].type == EFFECT_SPEED && effect_list[i-1].magnitude_max < 100) return true;
 		else if (effect_list[i-1].type == EFFECT_STUN) return true;
 		else if (effect_list[i-1].type == EFFECT_KNOCKBACK) return true;
+		else if (effect_list[i-1].type > EFFECT_COUNT && effect_list[i-1].magnitude_max < 0) return true;
 	}
 	return false;
 }
