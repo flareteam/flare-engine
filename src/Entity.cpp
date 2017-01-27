@@ -332,16 +332,18 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = dmg - absorption;
 		if (dmg <= 0) {
 			dmg = 0;
-			if (h.trait_elemental < 0) {
-				if (stats.effects.triggered_block && MAX_BLOCK < 100) dmg = 1;
-				else if (!stats.effects.triggered_block && MAX_ABSORB < 100) dmg = 1;
-			}
-			else {
-				if (MAX_RESIST < 100) dmg = 1;
-			}
-			if (activeAnimation->getName() == "block") {
-				snd->play(sound_block);
-				resetActiveAnimation();
+			if (!powers->powers[h.power_index].ignore_zero_damage) {
+				if (h.trait_elemental < 0) {
+					if (stats.effects.triggered_block && MAX_BLOCK < 100) dmg = 1;
+					else if (!stats.effects.triggered_block && MAX_ABSORB < 100) dmg = 1;
+				}
+				else {
+					if (MAX_RESIST < 100) dmg = 1;
+				}
+				if (activeAnimation->getName() == "block") {
+					snd->play(sound_block);
+					resetActiveAnimation();
+				}
 			}
 		}
 	}
@@ -376,19 +378,21 @@ bool Entity::takeHit(Hazard &h) {
 		dmg = (dmg * randBetween(MIN_MISS_DAMAGE, MAX_MISS_DAMAGE)) / 100;
 	}
 
-	if (dmg == 0) {
-		combat_text->addString(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
-		return false;
-	}
-	else if(stats.hero)
-		combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_TAKEDMG);
-	else {
-		if(crit || is_overhit)
-			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_CRIT);
-		else if (missed)
-			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_MISS);
-		else
-			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_GIVEDMG);
+	if (!powers->powers[h.power_index].ignore_zero_damage) {
+		if (dmg == 0) {
+			combat_text->addString(msg->get("miss"), stats.pos, COMBAT_MESSAGE_MISS);
+			return false;
+		}
+		else if(stats.hero)
+			combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_TAKEDMG);
+		else {
+			if(crit || is_overhit)
+				combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_CRIT);
+			else if (missed)
+				combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_MISS);
+			else
+				combat_text->addInt(dmg, stats.pos, COMBAT_MESSAGE_GIVEDMG);
+		}
 	}
 
 	// temporarily save the current HP for calculating HP/MP steal on final blow
@@ -401,7 +405,7 @@ bool Entity::takeHit(Hazard &h) {
 	stats.takeDamage(dmg);
 
 	// after effects
-	if (dmg > 0) {
+	if (dmg > 0 || powers->powers[h.power_index].ignore_zero_damage) {
 
 		// damage always breaks stun
 		stats.effects.removeEffectType(EFFECT_STUN);
@@ -436,7 +440,7 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	// post effect power
-	if (h.post_power > 0 && dmg > 0) {
+	if (h.post_power > 0 && (dmg > 0 || powers->powers[h.power_index].ignore_zero_damage)) {
 		powers->activate(h.post_power, h.src_stats, stats.pos);
 	}
 

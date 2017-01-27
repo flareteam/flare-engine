@@ -340,6 +340,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "expire_with_caster")
 			// @ATTR power.expire_with_caster|bool|If true, hazard will disappear when the caster dies.
 			powers[input_id].expire_with_caster = toBool(infile.val);
+		else if (infile.key == "ignore_zero_damage")
+			// @ATTR power.ignore_zero_damage|bool|If true, hazard can still hit the player when damage is 0, triggering post_power and post_effects.
+			powers[input_id].ignore_zero_damage = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
 			// @ATTR power.trait_armor_penetration|bool|Ignores the target's Absorbtion stat
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
