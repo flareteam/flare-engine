@@ -33,7 +33,8 @@ EffectManager::EffectManager()
 	, triggered_hit(false)
 	, triggered_halfdeath(false)
 	, triggered_joincombat(false)
-	, triggered_death(false) {
+	, triggered_death(false)
+	, refresh_stats(false) {
 	clearStatus();
 }
 
@@ -104,6 +105,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	triggered_halfdeath = emSource.triggered_halfdeath;
 	triggered_joincombat = emSource.triggered_joincombat;
 	triggered_death = emSource.triggered_death;
+	refresh_stats = emSource.refresh_stats;
 
 	return *this;
 }
@@ -150,6 +152,18 @@ void EffectManager::logic() {
 		// @CLASS EffectManager|Description of "type" in powers/effects.txt
 		// expire timed effects and total up magnitudes of active effects
 		if (effect_list[i].duration >= 0) {
+			if (effect_list[i].duration > 0) {
+				if (effect_list[i].ticks > 0) effect_list[i].ticks--;
+				if (effect_list[i].ticks == 0) {
+					//death sentence is only applied at the end of the timer
+					// @TYPE death_sentence|Causes sudden death at the end of the effect duration.
+					if (effect_list[i].type == EFFECT_DEATH_SENTENCE) death_sentence = true;
+					removeEffect(i);
+					i--;
+					continue;
+				}
+			}
+
 			// @TYPE damage|Damage per second
 			if (effect_list[i].type == EFFECT_DAMAGE && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) damage += effect_list[i].magnitude;
 			// @TYPE damage_percent|Damage per second (percentage of max HP)
@@ -213,18 +227,6 @@ void EffectManager::logic() {
 			else if (effect_list[i].type >= EFFECT_COUNT) {
 				bonus_primary[effect_list[i].type - EFFECT_COUNT - STAT_COUNT - ELEMENTS.size()] += effect_list[i].magnitude;
 			}
-
-			if (effect_list[i].duration > 0) {
-				if (effect_list[i].ticks > 0) effect_list[i].ticks--;
-				if (effect_list[i].ticks == 0) {
-					//death sentence is only applied at the end of the timer
-					// @TYPE death_sentence|Causes sudden death at the end of the effect duration.
-					if (effect_list[i].type == EFFECT_DEATH_SENTENCE) death_sentence = true;
-					removeEffect(i);
-					i--;
-					continue;
-				}
-			}
 		}
 		// expire shield effects
 		if (effect_list[i].magnitude_max > 0 && effect_list[i].magnitude == 0) {
@@ -255,6 +257,7 @@ void EffectManager::logic() {
 
 void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bool item, int trigger, int passive_id, int source_type) {
 	int effect_type = getType(effect.type);
+	refresh_stats = true;
 
 	// if we're already immune, don't add negative effects
 	if (immunity_damage && (effect_type == EFFECT_DAMAGE || effect_type == EFFECT_DAMAGE_PERCENT))
@@ -318,6 +321,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 void EffectManager::removeEffect(size_t id) {
 	removeAnimation(id);
 	effect_list.erase(effect_list.begin()+id);
+	refresh_stats = true;
 }
 
 void EffectManager::removeAnimation(size_t id) {

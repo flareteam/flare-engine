@@ -633,6 +633,11 @@ void StatBlock::logic() {
 	// apply bonuses from items/effects to base stats
 	applyEffects();
 
+	if (hero && effects.refresh_stats) {
+		refresh_stats = true;
+		effects.refresh_stats = false;
+	}
+
 	// preserve ratio on maxmp and maxhp changes
 	float ratio;
 	if (prev_maxhp != get(STAT_HP_MAX)) {

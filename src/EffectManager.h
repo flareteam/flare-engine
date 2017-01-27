@@ -159,6 +159,8 @@ public:
 	bool triggered_halfdeath;
 	bool triggered_joincombat;
 	bool triggered_death;
+
+	bool refresh_stats;
 };
 
 #endif
