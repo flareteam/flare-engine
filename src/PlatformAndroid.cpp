@@ -73,11 +73,10 @@ void PlatformInit(struct PlatformOptions_t *options) {
 }
 
 void PlatformSetPaths() {
-	const std::string externalSDList[] = {
-		"/mnt/extSdCard/Android",
-		"/storage/extSdCard/Android"
-		};
-	const int externalSDList_size = 2;
+	std::vector<std::string> externalSDList;
+	externalSDList.push_back("/mnt/extSdCard/Android");
+	externalSDList.push_back("/storage/extSdCard/Android");
+	externalSDList.push_back("/mnt/m_external_sd/Android");
 
 	PATH_CONF = std::string(SDL_AndroidGetInternalStoragePath()) + "/config";
 
@@ -91,16 +90,15 @@ void PlatformSetPaths() {
 	// NOTE: Next condition shouldn't be needed, but in theory SDL_AndroidGetExternalStoragePath() can fail.
 	else
 	{
-		const std::string internalSDList[] = {
-			"/sdcard/Android",
-			"/mnt/sdcard/Android",
-			"/storage/sdcard0/Android",
-			"/storage/emulated/0/Android",
-			"/storage/emulated/legacy/Android",
-			};
-		const int internalSDList_size = 5;
+		std::vector<std::string> internalSDList;
+		internalSDList.push_back("/sdcard/Android");
+		internalSDList.push_back("/mnt/sdcard/Android");
+		internalSDList.push_back("/storage/sdcard0/Android");
+		internalSDList.push_back("/storage/emulated/0/Android");
+		internalSDList.push_back("/storage/emulated/legacy/Android");
+		internalSDList.push_back("/mnt/m_internal_storage/Android");
 
-		for (int i = 0; i < internalSDList_size; i++)
+		for (int i = 0; i < internalSDList.size(); i++)
 		{
 			if (dirExists(internalSDList[i]))
 			{
@@ -114,7 +112,7 @@ void PlatformSetPaths() {
 		logError("Settings: Android external storage unavailable: %s", SDL_GetError());
 	}
 
-	for (int i = 0; i < externalSDList_size; i++)
+	for (int i = 0; i < externalSDList.size(); i++)
 	{
 		if (dirExists(externalSDList[i]))
 		{
