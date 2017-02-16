@@ -637,7 +637,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 						continue;
 
 					// automatically target the selected enemy with melee attacks
-					if (power.type == POWTYPE_FIXED && power.starting_pos == STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
+					if (inpt->usingMouse() && power.type == POWTYPE_FIXED && power.starting_pos == STARTING_POS_MELEE && enemy_pos.x != -1 && enemy_pos.y != -1) {
 						target = enemy_pos;
 					}
 

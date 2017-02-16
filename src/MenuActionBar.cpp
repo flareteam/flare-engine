@@ -517,17 +517,17 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 
 			// pressing hotkey
 			else if (i<10 && inpt->pressing[i+BAR_1]) {
-				have_aim = true;
+				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[i];
 				twostep_slot = -1;
 			}
 			else if (i==10 && inpt->pressing[MAIN1] && !inpt->lock[MAIN1] && !isWithinRect(window_area, inpt->mouse)) {
-				have_aim = true;
+				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[10];
 				twostep_slot = -1;
 			}
 			else if (i==11 && inpt->pressing[MAIN2] && !inpt->lock[MAIN2] && !isWithinRect(window_area, inpt->mouse)) {
-				have_aim = true;
+				have_aim = inpt->usingMouse();
 				action.power = hotkeys_mod[11];
 				twostep_slot = -1;
 			}
