@@ -610,7 +610,7 @@ bool MenuInventory::add(ItemStack stack, int area, int slot, bool play_sound, bo
 	if (auto_equip && AUTO_EQUIP) {
 		int equip_slot = getEquipSlotFromItem(stack.item, true);
 
-		if (equip_slot >= 0) {
+		if (equip_slot >= 0 && inventory[EQUIPMENT].slots[equip_slot]->enabled) {
 			area = EQUIPMENT;
 			slot = equip_slot;
 		}
