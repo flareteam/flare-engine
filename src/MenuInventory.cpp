@@ -524,6 +524,18 @@ void MenuInventory::activate(const Point& position) {
 
 		int power_id = items->items[inventory[CARRIED][slot].item].power;
 
+		// equipment might want to replace powers, so do it here
+		for (int i = 0; i < inventory[EQUIPMENT].getSlotNumber(); ++i) {
+			int id = inventory[EQUIPMENT][i].item;
+
+			for (size_t j = 0; j < items->items[id].replace_power.size(); ++j) {
+				if (power_id == items->items[id].replace_power[j].x) {
+					power_id = items->items[id].replace_power[j].y;
+					break;
+				}
+			}
+		}
+
 		// if the power consumes items, make sure we have enough
 		if (powers->powers[power_id].requires_item > 0 && powers->powers[power_id].requires_item_quantity > inventory[CARRIED].count(powers->powers[power_id].requires_item)) {
 			pc->logMsg(msg->get("You don't have enough of the required item."), true);
