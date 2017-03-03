@@ -878,10 +878,12 @@ void MenuInventory::applyEquipment() {
 	applyItemSetBonuses();
 
 
-	// disable any incompatible slots, unequipping items if neccessary
+	// enable all slots by default
 	for (int i=0; i<MAX_EQUIPPED; ++i) {
 		inventory[EQUIPMENT].slots[i]->enabled = true;
-
+	}
+	// disable any incompatible slots, unequipping items if neccessary
+	for (int i=0; i<MAX_EQUIPPED; ++i) {
 		int id = inventory[EQUIPMENT][i].item;
 		for (unsigned j=0; j<items->items[id].disable_slots.size(); ++j) {
 			for (int k=0; k<MAX_EQUIPPED; ++k) {
