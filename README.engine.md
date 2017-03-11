@@ -52,7 +52,7 @@ The following links are specific to the engine
 
 ## Building from Source
 
-Please see the [INSTALL.md](INSTALL.engine.md) file for instructions.
+Flare uses SDL2, SDL2\_image, SDL2\_mixer, and SDL2\_ttf. Please see the [INSTALL.md](INSTALL.engine.md) file for instructions.
 
 ## Settings
 
