@@ -18,6 +18,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "EnemyManager.h"
 #include "EventManager.h"
+#include "FileParser.h"
 #include "UtilsParsing.h"
 #include "SharedGameResources.h"
 #include "UtilsFileSystem.h"
@@ -218,6 +219,15 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 			e->x = toInt(test_x);
 			e->y = popFirstInt(val);
 		}
+	}
+	else if (key == "intermap_random") {
+		// @ATTR event.intermap_random|filename|Pick a random map from a map list file and teleport to it.
+		Event_Component random_ec = getRandomMapFromFile(popFirstString(val));
+
+		e->type = EC_INTERMAP;
+		e->s = random_ec.s;
+		e->x = random_ec.x;
+		e->y = random_ec.y;
 	}
 	else if (key == "intramap") {
 		// @ATTR event.intramap|int, int : X, Y|Jump to specific position within current map.
@@ -835,4 +845,37 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 			script_evnt.pop();
 		}
 	}
+}
+
+Event_Component EventManager::getRandomMapFromFile(const std::string& fname) {
+	FileParser infile;
+	std::vector<Event_Component> ec_list;
+
+	// @CLASS EventManager: Random Map List|Description of maps/random/lists/
+	if (infile.open(fname)) {
+		while (infile.next()) {
+			// @ATTR map|filename, int, int : Map file, X, Y|Adds a map and optional spawn position to the random list of maps to teleport to.
+			if (infile.key == "map") {
+				Event_Component ec;
+				ec.s = popFirstString(infile.val);
+				ec.x = -1;
+				ec.y = -1;
+
+				std::string test_x = popFirstString(infile.val);
+				if (!test_x.empty()) {
+					ec.x = toInt(test_x);
+					ec.y = popFirstInt(infile.val);
+				}
+
+				ec_list.push_back(ec);
+			}
+		}
+
+		infile.close();
+	}
+
+	if (ec_list.empty())
+		return Event_Component();
+	else
+		return ec_list[rand() % ec_list.size()];
 }

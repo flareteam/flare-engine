@@ -187,6 +187,8 @@ body {
 
 <p><strong>event.intermap</strong> | <code>filename, int, int : Map file, X, Y</code> | Jump to specific map at location specified.</p>
 
+<p><strong>event.intermap_random</strong> | <code>filename</code> | Pick a random map from a map list file and teleport to it.</p>
+
 <p><strong>event.intramap</strong> | <code>int, int : X, Y</code> | Jump to specific position within current map.</p>
 
 <p><strong>event.mapmod</strong> | <code>list(predefined_string, int, int, int) : Layer, X, Y, Tile ID</code> | Modify map tiles</p>
@@ -256,6 +258,14 @@ body {
 <p><strong>event.book</strong> | <code>filename</code> | Opens a book by filename.</p>
 
 <p><strong>event.script</strong> | <code>filename</code> | Loads and executes an Event from a file.</p>
+
+<hr />
+
+<h4>EventManager: Random Map List</h4>
+
+<p>Description of maps/random/lists/</p>
+
+<p><strong>map</strong> | <code>filename, int, int : Map file, X, Y</code> | Adds a map and optional spawn position to the random list of maps to teleport to.</p>
 
 <hr />
 
