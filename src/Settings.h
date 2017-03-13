@@ -105,6 +105,7 @@ extern bool IGNORE_TEXTURE_FILTER;
 extern bool CHANGE_GAMMA;
 extern float GAMMA;
 extern std::string RENDER_DEVICE;
+extern std::vector<unsigned short> VIRTUAL_HEIGHTS;
 
 // Input Settings
 extern bool MOUSE_MOVE;

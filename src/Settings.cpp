@@ -135,6 +135,7 @@ bool IGNORE_TEXTURE_FILTER = false;
 bool CHANGE_GAMMA;
 float GAMMA;
 std::string RENDER_DEVICE;
+std::vector<unsigned short> VIRTUAL_HEIGHTS;
 
 // Audio Settings
 bool AUDIO = true;
@@ -456,9 +457,20 @@ void loadMiscSettings() {
 			else if (infile.key == "required_height") {
 				MIN_SCREEN_H = static_cast<unsigned short>(toInt(infile.val));
 			}
-			// @ATTR virtual_height|int|The height (in pixels) of the game's actual rendering area. The width will be resized to match the window's aspect ration, and everything will be scaled up to fill the window.
+			// @ATTR virtual_height|list(int)|A list of heights (in pixels) that the game can use for its actual rendering area. The virtual height chosen is based on the current window height. The width will be resized to match the window's aspect ratio, and everything will be scaled up to fill the window.
 			else if (infile.key == "virtual_height") {
-				VIEW_H = static_cast<unsigned short>(toInt(infile.val));
+				std::string v_height = popFirstString(infile.val);
+				while (!v_height.empty()) {
+					VIRTUAL_HEIGHTS.push_back(static_cast<unsigned short>(toInt(v_height)));
+					v_height = popFirstString(infile.val);
+				}
+
+				std::sort(VIRTUAL_HEIGHTS.begin(), VIRTUAL_HEIGHTS.end());
+
+				if (!VIRTUAL_HEIGHTS.empty()) {
+					VIEW_H = VIRTUAL_HEIGHTS.back();
+				}
+
 				VIEW_H_HALF = VIEW_H / 2;
 			}
 			// @ATTR ignore_texture_filter|bool|If true, this ignores the "Texture Filtering" video setting and uses only nearest-neighbor scaling. This is good for games that use pixel art assets.
@@ -477,6 +489,7 @@ void loadMiscSettings() {
 	// set the default virtual height if it's not defined
 	if (VIEW_H == 0) {
 		logError("Settings: virtual_height is undefined. Setting it to %d.", MIN_SCREEN_H);
+		VIRTUAL_HEIGHTS.push_back(MIN_SCREEN_H);
 		VIEW_H = MIN_SCREEN_H;
 		VIEW_H_HALF = VIEW_H / 2;
 	}

@@ -587,6 +587,14 @@ void SDLSoftwareRenderDevice::windowResize() {
 	SCREEN_W = static_cast<unsigned short>(w);
 	SCREEN_H = static_cast<unsigned short>(h);
 
+	for (size_t i = 0; i < VIRTUAL_HEIGHTS.size(); ++i) {
+		if (SCREEN_H >= VIRTUAL_HEIGHTS[i]) {
+			VIEW_H = VIRTUAL_HEIGHTS[i];
+		}
+	}
+
+	VIEW_H_HALF = VIEW_H / 2;
+
 	float scale = static_cast<float>(VIEW_H) / static_cast<float>(SCREEN_H);
 	VIEW_W = static_cast<unsigned short>(static_cast<float>(SCREEN_W) * scale);
 
