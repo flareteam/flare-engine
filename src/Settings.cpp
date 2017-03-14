@@ -459,6 +459,7 @@ void loadMiscSettings() {
 			}
 			// @ATTR virtual_height|list(int)|A list of heights (in pixels) that the game can use for its actual rendering area. The virtual height chosen is based on the current window height. The width will be resized to match the window's aspect ratio, and everything will be scaled up to fill the window.
 			else if (infile.key == "virtual_height") {
+				VIRTUAL_HEIGHTS.clear();
 				std::string v_height = popFirstString(infile.val);
 				while (!v_height.empty()) {
 					VIRTUAL_HEIGHTS.push_back(static_cast<unsigned short>(toInt(v_height)));
