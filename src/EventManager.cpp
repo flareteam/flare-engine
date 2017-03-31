@@ -858,16 +858,18 @@ Event_Component EventManager::getRandomMapFromFile(const std::string& fname) {
 			if (infile.key == "map") {
 				Event_Component ec;
 				ec.s = popFirstString(infile.val);
-				ec.x = -1;
-				ec.y = -1;
+				if (ec.s != mapr->getFilename()) {
+					ec.x = -1;
+					ec.y = -1;
 
-				std::string test_x = popFirstString(infile.val);
-				if (!test_x.empty()) {
-					ec.x = toInt(test_x);
-					ec.y = popFirstInt(infile.val);
+					std::string test_x = popFirstString(infile.val);
+					if (!test_x.empty()) {
+						ec.x = toInt(test_x);
+						ec.y = popFirstInt(infile.val);
+					}
+
+					ec_list.push_back(ec);
 				}
-
-				ec_list.push_back(ec);
 			}
 		}
 
