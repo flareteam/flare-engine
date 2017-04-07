@@ -154,7 +154,7 @@ SoundManager::SoundID SDLSoundManager::load(const std::string& filename, const s
 	SoundMapIterator it;
 	std::locale loc;
 
-	if (!AUDIO || !SOUND_VOLUME)
+	if (!AUDIO)
 		return 0;
 
 	const std::collate<char>& coll = std::use_facet<std::collate<char> >(loc);
@@ -286,7 +286,7 @@ void SDLSoundManager::setVolumeSFX(int value) {
 }
 
 void SDLSoundManager::loadMusic(const std::string& filename) {
-	if (!AUDIO || MUSIC_VOLUME == 0)
+	if (!AUDIO)
 		return;
 
 	if (filename == music_filename) {
