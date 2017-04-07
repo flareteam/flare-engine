@@ -211,6 +211,10 @@ extern int TOOLTIP_MARGIN; // outer margin between tooltip text and the edge of 
 extern int TOOLTIP_MARGIN_NPC;
 extern int TOOLTIP_BACKGROUND_BORDER;
 
+// Command-line settings
+extern std::string LOAD_SLOT;
+extern std::string LOAD_SCRIPT;
+
 void loadTilesetSettings();
 void loadMiscSettings();
 bool loadSettings();

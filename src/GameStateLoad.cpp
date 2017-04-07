@@ -247,6 +247,17 @@ GameStateLoad::GameStateLoad() : GameState()
 
 	refreshWidgets();
 	updateButtons();
+
+	// if we specified a slot to load at launch, load it now
+	if (!LOAD_SLOT.empty()) {
+		size_t load_slot_id = toInt(LOAD_SLOT) - 1;
+		LOAD_SLOT.clear();
+
+		if (load_slot_id < game_slots.size()) {
+			selected_slot = static_cast<int>(load_slot_id);
+			loading_requested = true;
+		}
+	}
 }
 
 void GameStateLoad::loadGraphics() {
@@ -800,6 +811,8 @@ void GameStateLoad::render() {
 			game_slots[off_slot]->sprites[i]->setDest(dest);
 			render_device->render(game_slots[off_slot]->sprites[i]);
 		}
+
+		// TODO slot number? Possibly displayed in corner of sprite preview
 	}
 
 	// display selection

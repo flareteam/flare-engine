@@ -216,6 +216,10 @@ int TOOLTIP_MARGIN;
 int TOOLTIP_MARGIN_NPC;
 int TOOLTIP_BACKGROUND_BORDER;
 
+// Command-line settings
+std::string LOAD_SLOT;
+std::string LOAD_SCRIPT;
+
 // Other Settings
 bool MENUS_PAUSE;
 bool SAVE_HPMP;

@@ -570,6 +570,21 @@ void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable
 }
 
 void MapRenderer::executeOnLoadEvents() {
+	// if set from the command-line, execute a given script if this is our first map load
+	if (!LOAD_SCRIPT.empty() && filename != "maps/spawn.txt") {
+		Event evnt;
+		Event_Component ec;
+
+		ec.type = EC_SCRIPT;
+		ec.s = LOAD_SCRIPT;
+		LOAD_SCRIPT.clear();
+
+		evnt.components.push_back(ec);
+		EventManager::executeEvent(evnt);
+
+		return;
+	}
+
 	std::vector<Event>::iterator it;
 
 	// loop in reverse because we may erase elements

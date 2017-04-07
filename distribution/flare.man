@@ -28,9 +28,12 @@ Prints verbose hardware input information.
 Specifies the rendering backend to use. The default is 'sdl'. Also available is 'sdl_hardware', which is a GPU-based renderer.
 .IP "\fB\-\-no-audio\fP"
 Disables sound effects and music.
-.IP "\fB\-\-mods\fP"
+.IP "\fB\-\-mods=\fImod,...\fP"
 Starts the game with only these mods enabled.
-
+.IP "\fB\-\-load-slot=\fIslot\fP"
+Loads a save slot by numerical index.
+.IP "\fB\-\-load-script=\fIscript\fP"
+Execute's a script upon loading a saved game. The script path is mod-relative.
 
 .SH FILES
 .TP

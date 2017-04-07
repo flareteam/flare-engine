@@ -318,6 +318,12 @@ int main(int argc, char *argv[]) {
 				cmd_line_args.mod_list.push_back(popFirstString(mod_list_str));
 			}
 		}
+		else if (arg == "load-slot") {
+			LOAD_SLOT = parseArgValue(arg_full);
+		}
+		else if (arg == "load-script") {
+			LOAD_SCRIPT = parseArgValue(arg_full);
+		}
 		else if (arg == "help") {
 			printf("\
 --help                   Prints this message.\n\
@@ -327,7 +333,10 @@ int main(int argc, char *argv[]) {
 --renderer=<RENDERER>    Specifies the rendering backend to use.\n\
                          The default is 'sdl'.\n\
 --no-audio               Disables sound effects and music.\n\
---mods=<MOD>,...         Starts the game with only these mods enabled.\n");
+--mods=<MOD>,...         Starts the game with only these mods enabled.\n\
+--load-slot=<SLOT>       Loads a save slot by numerical index.\n\
+--load-script=<SCRIPT>   Execute's a script upon loading a saved game.\n\
+                         The script path is mod-relative.\n");
 			done = true;
 		}
 		else {

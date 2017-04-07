@@ -95,3 +95,5 @@ In addition, there is a `mods` directory in this location, which can be used to 
 | `--renderer`      | Specifies the rendering backend to use. The default is 'sdl'. Also available is 'sdl\_hardware', which is a GPU-based renderer.
 | `--no-audio`      | Disables sound effects and music.
 | `--mods`          | Starts the game with only these mods enabled.
+| `--load-slot`     | Loads a save slot by numerical index.
+| `--load-script`   | Execute's a script upon loading a saved game. The script path is mod-relative.

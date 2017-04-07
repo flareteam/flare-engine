@@ -125,6 +125,11 @@ GameStateTitle::GameStateTitle()
 	tablist.add(button_exit);
 
 	refreshWidgets();
+
+	if (ENABLE_PLAYGAME && !LOAD_SLOT.empty()) {
+		delete requestedGameState;
+		requestedGameState = new GameStateLoad();
+	}
 }
 
 void GameStateTitle::logic() {
