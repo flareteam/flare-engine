@@ -11,6 +11,7 @@ name=16,12,left,top
 level=24,36,left,top
 class=24,52,left,top
 map=24,68,left,top
+slot_number=276,8,right,top
 sprite=178,-24
 loading_label=480,366,center,top
 text_trim_boundary=178

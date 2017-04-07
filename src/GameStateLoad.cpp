@@ -157,6 +157,10 @@ GameStateLoad::GameStateLoad() : GameState()
 			else if (infile.key == "map") {
 				map_pos = eatLabelInfo(infile.val);
 			}
+			// @ATTR slot_number|label|The label for the save slot index. Position is relative to game slot position.
+			else if (infile.key == "slot_number") {
+				slot_number_pos = eatLabelInfo(infile.val);
+			}
 			// @ATTR loading_label|label|The label for the "Entering game world..."/"Loading saved game..." text.
 			else if (infile.key == "loading_label") {
 				loading_pos = eatLabelInfo(infile.val);
@@ -812,7 +816,16 @@ void GameStateLoad::render() {
 			render_device->render(game_slots[off_slot]->sprites[i]);
 		}
 
-		// TODO slot number? Possibly displayed in corner of sprite preview
+		// slot number
+		std::stringstream off_slot_str;
+		off_slot_str << "#" << off_slot + 1;
+		label.x = slot_pos[slot].x + slot_number_pos.x;
+		label.y = slot_pos[slot].y + slot_number_pos.y;
+		game_slots[off_slot]->label_slot_number.set(label.x, label.y, slot_number_pos.justify, slot_number_pos.valign, off_slot_str.str(), color_normal, slot_number_pos.font_style);
+		if (text_trim_boundary > 0 && game_slots[off_slot]->label_slot_number.bounds.x + game_slots[off_slot]->label_slot_number.bounds.w >= text_trim_boundary + slot_dest.x)
+			game_slots[off_slot]->label_slot_number.setMaxWidth(text_trim_boundary - (game_slots[off_slot]->label_slot_number.bounds.x - slot_dest.x));
+		game_slots[off_slot]->label_slot_number.render();
+
 	}
 
 	// display selection

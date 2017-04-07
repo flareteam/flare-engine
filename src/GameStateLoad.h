@@ -55,6 +55,7 @@ public:
 	WidgetLabel label_level;
 	WidgetLabel label_class;
 	WidgetLabel label_map;
+	WidgetLabel label_slot_number;
 
 	GameSlot();
 	~GameSlot();
@@ -105,6 +106,7 @@ private:
 	LabelInfo level_pos;
 	LabelInfo class_pos;
 	LabelInfo map_pos;
+	LabelInfo slot_number_pos;
 	LabelInfo loading_pos;
 	Point sprites_pos;
 
