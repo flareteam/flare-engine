@@ -28,8 +28,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "ItemManager.h"
 #include "Settings.h"
-#include "SharedResources.h"
 #include "SharedGameResources.h"
+#include "SharedResources.h"
 #include "StatBlock.h"
 #include "Stats.h"
 #include "UtilsFileSystem.h"
@@ -568,6 +568,11 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 }
 
 void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
+	if (bdata->is_speed) {
+		ss << msg->get("%d%% Speed", bdata->value);
+		return;
+	}
+
 	if (bdata->value > 0)
 		ss << "+" << bdata->value;
 	else
@@ -707,7 +712,6 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 		BonusData* bdata = &items[stack.item].bonus[bonus_counter];
 
 		if (bdata->is_speed) {
-			ss << msg->get("%d%% Speed", bdata->value);
 			if (bdata->value >= 100) color = color_bonus;
 			else color = color_penalty;
 		}
@@ -718,10 +722,9 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 			else {
 				color = color_penalty;
 			}
-
-			getBonusString(ss, bdata);
 		}
 
+		getBonusString(ss, bdata);
 		tip.addColoredText(ss.str(), color);
 		bonus_counter++;
 	}
@@ -803,13 +806,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 			ss << msg->get("%d items: ", bdata->requirement);
 
-			if (bdata->is_speed) {
-				ss << msg->get("%d%% Speed", bdata->value);
-			}
-			else {
-				getBonusString(ss, bdata);
-			}
-
+			getBonusString(ss, bdata);
 			tip.addColoredText(ss.str(), set.color);
 			bonus_counter++;
 		}
