@@ -79,6 +79,7 @@ public:
 	void windowResize();
 	Image *createImage(int width, int height);
 	void setGamma(float g);
+	void resetGamma();
 	void updateTitleBar();
 
 	Image* loadImage(const std::string& filename,

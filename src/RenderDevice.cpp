@@ -291,3 +291,7 @@ void RenderDevice::freeImage(Image *image) {
 
 	cacheRemove(image);
 }
+
+bool RenderDevice::isFullscreen() {
+	return fullscreen;
+}

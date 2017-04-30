@@ -127,10 +127,6 @@ static void init(const CmdLineArgs& cmd_line_args) {
 		Exit(1);
 	}
 
-	// Set Gamma
-	if (CHANGE_GAMMA)
-		render_device->setGamma(GAMMA);
-
 	snd = getSoundManager();
 
 	inpt->initJoystick();

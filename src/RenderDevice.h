@@ -179,6 +179,7 @@ public:
 	virtual int createContext(bool allow_fallback = true) = 0;
 	virtual void destroyContext() = 0;
 	virtual void setGamma(float g) = 0;
+	virtual void resetGamma() = 0;
 	virtual void updateTitleBar() = 0;
 
 	/** factory functions for Image */
@@ -202,6 +203,8 @@ public:
 
 	bool reloadGraphics();
 
+	bool isFullscreen();
+
 protected:
 	/* Compute clipping and global position from local frame. */
 	bool localToGlobal(Sprite *r);
@@ -223,6 +226,11 @@ protected:
 
 	Rect m_clip;
 	Rect m_dest;
+
+	/* Stores the system gamma levels so they can be restored later */
+	uint16_t gamma_r[256];
+	uint16_t gamma_g[256];
+	uint16_t gamma_b[256];
 
 private:
 	typedef std::map<std::string, Image *> IMAGE_CACHE_CONTAINER;

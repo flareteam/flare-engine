@@ -220,7 +220,7 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 	else if (infile.key == "test_note") {
 		// @ATTR test_note|point|Position of the "Experimental" label relative to the frame.
 		test_note_lb->setBasePos(x1, y1);
-		test_note_lb->set(msg->get("Experimental"));
+		test_note_lb->set(msg->get("Experimental; requires Full Screen Mode"));
 	}
 	else if (infile.key == "enable_joystick") {
 		// @ATTR enable_joystick|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Use joystick" checkbox relative to the frame.
@@ -470,14 +470,17 @@ void GameStateConfigDesktop::updateVideo() {
 	else vsync_cb->unCheck();
 	if (TEXTURE_FILTER) texture_filter_cb->Check();
 	else texture_filter_cb->unCheck();
-	if (CHANGE_GAMMA) change_gamma_cb->Check();
+	if (render_device->isFullscreen() && CHANGE_GAMMA) {
+		change_gamma_cb->Check();
+		render_device->setGamma(GAMMA);
+	}
 	else {
 		change_gamma_cb->unCheck();
 		GAMMA = 1.0;
 		gamma_sl->enabled = false;
+		render_device->resetGamma();
 	}
 	gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
-	render_device->setGamma(GAMMA);
 }
 
 void GameStateConfigDesktop::updateInput() {
@@ -595,7 +598,7 @@ void GameStateConfigDesktop::logicVideo() {
 		if (texture_filter_cb->isChecked()) TEXTURE_FILTER=true;
 		else TEXTURE_FILTER=false;
 	}
-	else if (change_gamma_cb->checkClick()) {
+	else if (render_device->isFullscreen() && change_gamma_cb->checkClick()) {
 		if (change_gamma_cb->isChecked()) {
 			CHANGE_GAMMA = true;
 			gamma_sl->enabled = true;
@@ -605,10 +608,10 @@ void GameStateConfigDesktop::logicVideo() {
 			GAMMA = 1.0;
 			gamma_sl->enabled = false;
 			gamma_sl->set(5, 20, static_cast<int>(GAMMA*10.0));
-			render_device->setGamma(GAMMA);
+			render_device->resetGamma();
 		}
 	}
-	else if (CHANGE_GAMMA) {
+	else if (render_device->isFullscreen() && CHANGE_GAMMA) {
 		gamma_sl->enabled = true;
 		if (gamma_sl->checkClick()) {
 			GAMMA = static_cast<float>(gamma_sl->getValue())*0.1f;
