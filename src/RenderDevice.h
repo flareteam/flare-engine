@@ -203,8 +203,6 @@ public:
 
 	bool reloadGraphics();
 
-	bool isFullscreen();
-
 protected:
 	/* Compute clipping and global position from local frame. */
 	bool localToGlobal(Sprite *r);
