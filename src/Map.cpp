@@ -388,5 +388,8 @@ int Map::addEventStatBlock(Event &evnt) {
 	immunity_effect.type = "immunity";
 	statb->effects.addEffect(immunity_effect, 0, 0, false, -1, 0, SOURCE_TYPE_ENEMY);
 
+	// ensure that stats are ready to be used by running logic once
+	statb->logic();
+
 	return static_cast<int>(statblocks.size())-1;
 }
