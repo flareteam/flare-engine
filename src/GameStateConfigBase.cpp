@@ -597,6 +597,7 @@ void GameStateConfigBase::logicCancel() {
 	setStatNames();
 	update();
 	cleanup();
+	render_device->windowResize();
 	render_device->updateTitleBar();
 	delete requestedGameState;
 	requestedGameState = new GameStateTitle();
