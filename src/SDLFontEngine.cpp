@@ -85,6 +85,7 @@ SDLFontEngine::SDLFontEngine() : FontEngine(), active_font(NULL) {
 	}
 
 	// set the font colors
+	// @CLASS SDLFontEngine: Font colors|Description of engine/font_colors.txt
 	Color color;
 	if (infile.open("engine/font_colors.txt")) {
 		while (infile.next()) {
