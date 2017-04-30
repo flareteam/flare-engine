@@ -108,53 +108,12 @@ int Map::load(const std::string& fname) {
 
 	infile.close();
 
-	// create a temporary EffectDef for immunity; will be used for map StatBlocks
-	EffectDef immunity_effect;
-	immunity_effect.id = "MAP_EVENT_IMMUNITY";
-	immunity_effect.type = "immunity";
-
 	// create StatBlocks for events that need powers
 	for (unsigned i=0; i<events.size(); ++i) {
 		Event_Component *ec_power = events[i].getComponent(EC_POWER);
 		if (ec_power) {
-			statblocks.push_back(StatBlock());
-			StatBlock *statb = &statblocks.back();
-
-			if (!statb) {
-				logError("Map: Could not create StatBlock for Event.");
-				continue;
-			}
-
 			// store the index of this StatBlock so that we can find it when the event is activated
-			ec_power->y = static_cast<int>(statblocks.size())-1;
-
-			statb->starting[STAT_ACCURACY] = 1000; // always hit the target
-
-			Event_Component *ec_path = events[i].getComponent(EC_POWER_PATH);
-			if (ec_path) {
-				// source is power path start
-				statb->pos.x = static_cast<float>(ec_path->x) + 0.5f;
-				statb->pos.y = static_cast<float>(ec_path->y) + 0.5f;
-			}
-			else {
-				// source is event location
-				statb->pos.x = static_cast<float>(events[i].location.x) + 0.5f;
-				statb->pos.y = static_cast<float>(events[i].location.y) + 0.5f;
-			}
-
-			Event_Component *ec_damage = events[i].getComponent(EC_POWER_DAMAGE);
-			if (ec_damage) {
-				statb->starting[STAT_DMG_MELEE_MIN] = statb->starting[STAT_DMG_RANGED_MIN] = statb->starting[STAT_DMG_MENT_MIN] = ec_damage->a;
-				statb->starting[STAT_DMG_MELEE_MAX] = statb->starting[STAT_DMG_RANGED_MAX] = statb->starting[STAT_DMG_MENT_MAX] = ec_damage->b;
-			}
-
-			// this is used to store cooldown ticks for a map power
-			// the power id, type, etc are not used
-			statb->powers_ai.resize(1);
-
-			// make this StatBlock immune to negative status effects
-			// this is mostly to prevent a player with a damage return bonus from damaging this StatBlock
-			statb->effects.addEffect(immunity_effect, 0, 0, false, -1, 0, SOURCE_TYPE_ENEMY);
+			ec_power->y = addEventStatBlock(events[i]);
 		}
 	}
 
@@ -393,3 +352,41 @@ void Map::loadNPC(FileParser &infile) {
 	}
 }
 
+int Map::addEventStatBlock(Event &evnt) {
+	statblocks.push_back(StatBlock());
+	StatBlock *statb = &statblocks.back();
+
+	statb->starting[STAT_ACCURACY] = 1000; // always hit the target
+
+	Event_Component *ec_path = evnt.getComponent(EC_POWER_PATH);
+	if (ec_path) {
+		// source is power path start
+		statb->pos.x = static_cast<float>(ec_path->x) + 0.5f;
+		statb->pos.y = static_cast<float>(ec_path->y) + 0.5f;
+	}
+	else {
+		// source is event location
+		statb->pos.x = static_cast<float>(evnt.location.x) + 0.5f;
+		statb->pos.y = static_cast<float>(evnt.location.y) + 0.5f;
+	}
+
+	Event_Component *ec_damage = evnt.getComponent(EC_POWER_DAMAGE);
+	if (ec_damage) {
+		statb->starting[STAT_DMG_MELEE_MIN] = statb->starting[STAT_DMG_RANGED_MIN] = statb->starting[STAT_DMG_MENT_MIN] = ec_damage->a;
+		statb->starting[STAT_DMG_MELEE_MAX] = statb->starting[STAT_DMG_RANGED_MAX] = statb->starting[STAT_DMG_MENT_MAX] = ec_damage->b;
+	}
+
+	// this is used to store cooldown ticks for a map power
+	// the power id, type, etc are not used
+	statb->powers_ai.resize(1);
+
+	// make this StatBlock immune to negative status effects
+	// this is mostly to prevent a player with a damage return bonus from damaging this StatBlock
+	// create a temporary EffectDef for immunity; will be used for map StatBlocks
+	EffectDef immunity_effect;
+	immunity_effect.id = "MAP_EVENT_IMMUNITY";
+	immunity_effect.type = "immunity";
+	statb->effects.addEffect(immunity_effect, 0, 0, false, -1, 0, SOURCE_TYPE_ENEMY);
+
+	return static_cast<int>(statblocks.size())-1;
+}

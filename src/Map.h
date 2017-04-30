@@ -144,6 +144,8 @@ public:
 
 	void clearEvents();
 
+	int addEventStatBlock(Event &evnt);
+
 	// enemy load handling
 	std::queue<Map_Enemy> enemies;
 	std::queue<Map_Group> enemy_groups;

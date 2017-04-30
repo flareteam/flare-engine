@@ -856,6 +856,12 @@ void EventManager::executeScript(const std::string& filename, float x, float y) 
 		script_file.close();
 
 		while (!script_evnt.empty()) {
+			// create StatBlocks if we need them
+			Event_Component *ec_power = script_evnt.front().getComponent(EC_POWER);
+			if (ec_power) {
+				ec_power->y = mapr->addEventStatBlock(script_evnt.front());
+			}
+
 			if (isActive(script_evnt.front())) {
 				executeEvent(script_evnt.front());
 			}
