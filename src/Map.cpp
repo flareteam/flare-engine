@@ -356,7 +356,7 @@ int Map::addEventStatBlock(Event &evnt) {
 	statblocks.push_back(StatBlock());
 	StatBlock *statb = &statblocks.back();
 
-	statb->starting[STAT_ACCURACY] = 1000; // always hit the target
+	statb->perfect_accuracy = true; // never miss AND never overhit
 
 	Event_Component *ec_path = evnt.getComponent(EC_POWER_PATH);
 	if (ec_path) {

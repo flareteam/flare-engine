@@ -279,11 +279,11 @@ bool Entity::takeHit(Hazard &h) {
 	}
 
 	int true_avoidance = 100 - (accuracy - avoidance);
-	bool is_overhit = (true_avoidance < 0) ? percentChance(abs(true_avoidance)) : false;
+	bool is_overhit = (true_avoidance < 0 && !h.src_stats->perfect_accuracy) ? percentChance(abs(true_avoidance)) : false;
 	true_avoidance = std::min(std::max(true_avoidance, MIN_AVOIDANCE), MAX_AVOIDANCE);
 
 	bool missed = false;
-	if (percentChance(true_avoidance)) {
+	if (!h.src_stats->perfect_accuracy && percentChance(true_avoidance)) {
 		missed = true;
 	}
 

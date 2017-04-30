@@ -132,6 +132,7 @@ StatBlock::StatBlock()
 	, suppress_hp(false)
 	, flee_duration(MAX_FRAMES_PER_SEC) // enemy only
 	, flee_cooldown(MAX_FRAMES_PER_SEC) // enemy only
+	, perfect_accuracy(false)
 	, teleportation(false)
 	, teleport_destination()
 	, currency(0)

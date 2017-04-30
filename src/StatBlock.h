@@ -250,6 +250,7 @@ public:
 	bool suppress_hp; // hide an enemy HP bar
 	int flee_duration;
 	int flee_cooldown;
+	bool perfect_accuracy;
 
 	std::vector<Event_Component> loot_table;
 	Point loot_count;
