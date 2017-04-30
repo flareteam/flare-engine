@@ -585,6 +585,12 @@ bool EventManager::loadEventComponentString(std::string &key, std::string &val, 
 
 		e->s = val;
 	}
+	else if (key == "chance_exec") {
+		// @ATTR event.chance_exec|int|Percentage chance that this event will execute when triggered.
+		e->type = EC_CHANCE_EXEC;
+
+		e->x = popFirstInt(val);
+	}
 	else {
 		return false;
 	}
@@ -605,6 +611,17 @@ bool EventManager::executeEvent(Event &ev) {
 
 	// set cooldown
 	ev.cooldown_ticks = ev.cooldown;
+
+	// if chance_exec roll fails, don't execute the event
+	// we respect the value of "repeat", even if the event doesn't execute
+	Event_Component *ec_chance_exec = ev.getComponent(EC_CHANCE_EXEC);
+	if (ec_chance_exec && !percentChance(ec_chance_exec->x)) {
+		Event_Component *ec_repeat = ev.getComponent(EC_REPEAT);
+		if (ec_repeat) {
+			ev.keep_after_trigger = static_cast<bool>(ec_repeat->x);
+		}
+		return !ev.keep_after_trigger;
+	}
 
 	Event_Component *ec;
 
