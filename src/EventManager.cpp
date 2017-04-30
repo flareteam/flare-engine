@@ -810,7 +810,10 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->show_book = ec->s;
 		}
 		else if (ec->type == EC_SCRIPT) {
-			executeScript(ec->s, pc->stats.pos.x, pc->stats.pos.y);
+			if (ev.center.x != -1 && ev.center.y != -1)
+				executeScript(ec->s, ev.center.x, ev.center.y);
+			else
+				executeScript(ec->s, pc->stats.pos.x, pc->stats.pos.y);
 		}
 	}
 	return !ev.keep_after_trigger;
