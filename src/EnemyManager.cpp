@@ -71,7 +71,7 @@ size_t EnemyManager::loadEnemyPrototype(const std::string& type_id) {
 	e.loadSounds();
 
 	// set cooldown_hit to duration of hit animation if undefined
-	if (e.stats.cooldown_ticks == -1) {
+	if (e.stats.cooldown_hit == -1) {
 		Animation *hit_anim = e.animationSet->getAnimation("hit");
 		if (hit_anim) {
 			e.stats.cooldown_hit = hit_anim->getDuration();
