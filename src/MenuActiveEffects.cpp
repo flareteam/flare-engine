@@ -87,7 +87,7 @@ void MenuActiveEffects::logic() {
 			continue;
 
 		const Effect &ed = stats->effects.effect_list[i];
-		
+
 		if(ed.group_stack){
 			alreadyOn = false;
 			for(size_t j=0; j < effect_icons.size(); ++j){
@@ -121,16 +121,13 @@ void MenuActiveEffects::logic() {
 						effect_icons[j].stacksLabel->setMaxWidth(ICON_SIZE);
 					}
 
-					std::stringstream ss;
-					
-					ss << msg->get("x%d", effect_icons[j].stacks);
-					effect_icons[j].stacksLabel->set(ss.str());	
+					effect_icons[j].stacksLabel->set(msg->get("x%d", effect_icons[j].stacks));
 
 					alreadyOn = true;
 					break;
 				}
 			}
-			
+
 			if(alreadyOn){
 				continue;
 			}
@@ -230,10 +227,8 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 			}
 
 			if(effect_icons[i].type != EFFECT_SHIELD){
-				std::stringstream ss2;
 				if(effect_icons[i].stacks > 1){
-					ss2 << msg->get("x%d stacks", effect_icons[i].stacks);;
-					tip.addText(ss2.str());
+					tip.addText(msg->get("x%d stacks", effect_icons[i].stacks));
 				}
 			}
 
