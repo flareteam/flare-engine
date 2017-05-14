@@ -72,17 +72,75 @@ void MenuActiveEffects::loadGraphics() {
 }
 
 void MenuActiveEffects::logic() {
+	for(size_t i; i < effect_icons.size(); ++i){
+		if(effect_icons[i].stacksLabel){
+			delete effect_icons[i].stacksLabel;
+		}
+	}
+
 	effect_icons.clear();
+
+	bool alreadyOn;
 
 	for (size_t i = 0; i < stats->effects.effect_list.size(); ++i) {
 		if (stats->effects.effect_list[i].icon == -1)
 			continue;
 
 		const Effect &ed = stats->effects.effect_list[i];
+		
+		if(ed.group_stack){
+			alreadyOn = false;
+			for(size_t j=0; j < effect_icons.size(); ++j){
+				if(effect_icons[j].type == ed.type && effect_icons[j].name == ed.name){
+					effect_icons[j].stacks++;
+
+					if(ed.type == EFFECT_SHIELD){
+						if(ed.magnitude < effect_icons[j].overlay.y/ICON_SIZE*effect_icons[j].max){
+							effect_icons[j].overlay.y = (ICON_SIZE * ed.magnitude)/ ed.magnitude_max;
+						}
+						effect_icons[j].current += ed.magnitude;
+						effect_icons[j].max += ed.magnitude_max;
+					}else if (ed.type == EFFECT_HEAL){
+						//No special behavior
+					}else{
+						if(ed.ticks < effect_icons[j].current){
+							if (ed.duration > 0)
+								effect_icons[j].overlay.y = (ICON_SIZE * ed.ticks) / ed.duration;
+							else
+								effect_icons[j].overlay.y = ICON_SIZE;
+							effect_icons[j].current = ed.ticks;
+							effect_icons[j].max = ed.duration;
+						}
+					}
+
+					if(!effect_icons[j].stacksLabel){
+						effect_icons[j].stacksLabel = new WidgetLabel();
+
+						effect_icons[j].stacksLabel->setX(effect_icons[j].pos.x);
+						effect_icons[j].stacksLabel->setY(effect_icons[j].pos.y);
+						effect_icons[j].stacksLabel->setMaxWidth(ICON_SIZE);
+					}
+
+					std::stringstream ss;
+					
+					ss << msg->get("x%d", effect_icons[j].stacks);
+					effect_icons[j].stacksLabel->set(ss.str());	
+
+					alreadyOn = true;
+					break;
+				}
+			}
+			
+			if(alreadyOn){
+				continue;
+			}
+		}
+
 		EffectIcon ei;
 		ei.icon = ed.icon;
 		ei.name = ed.name;
 		ei.type = ed.type;
+		ei.stacks = 1;
 
 		// icon position
 		if (!is_vertical) {
@@ -143,6 +201,10 @@ void MenuActiveEffects::render() {
 			timer->setDest(effect_icons[i].pos);
 			render_device->render(timer);
 		}
+
+		if(effect_icons[i].stacksLabel){
+			effect_icons[i].stacksLabel->render();
+		}
 	}
 }
 
@@ -165,6 +227,14 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 			else if (effect_icons[i].max > 0) {
 				ss << msg->get("Remaining:") << " " << getDurationString(effect_icons[i].current, 1);
 				tip.addText(ss.str());
+			}
+
+			if(effect_icons[i].type != EFFECT_SHIELD){
+				std::stringstream ss2;
+				if(effect_icons[i].stacks > 1){
+					ss2 << msg->get("x%d stacks", effect_icons[i].stacks);;
+					tip.addText(ss2.str());
+				}
 			}
 
 			break;

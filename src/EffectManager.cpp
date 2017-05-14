@@ -308,6 +308,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	e.icon = effect.icon;
 	e.type = effect_type;
 	e.render_above = effect.render_above;
+	e.group_stack = effect.group_stack;
 
 	if (effect.animation != "") {
 		anim->increaseCount(effect.animation);

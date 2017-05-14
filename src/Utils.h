@@ -185,6 +185,7 @@ public:
 	int icon;
 	std::string animation;
 	bool can_stack;
+	bool group_stack;
 	bool render_above;
 
 	EffectDef()
@@ -194,6 +195,7 @@ public:
 		, icon(-1)
 		, animation("")
 		, can_stack(true)
+		, group_stack(false)
 		, render_above(false) {
 	}
 };

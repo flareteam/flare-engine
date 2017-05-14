@@ -80,6 +80,7 @@ public:
 	bool render_above;
 	int passive_id;
 	int source_type;
+	bool group_stack;
 
 	Effect()
 		: id("")
@@ -96,7 +97,8 @@ public:
 		, trigger(-1)
 		, render_above(false)
 		, passive_id(0)
-		, source_type(SOURCE_TYPE_HERO) {
+		, source_type(SOURCE_TYPE_HERO)
+		, group_stack(false){
 	}
 
 	~Effect() {
