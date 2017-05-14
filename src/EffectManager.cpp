@@ -61,6 +61,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 		effect_list[i].render_above = emSource.effect_list[i].render_above;
 		effect_list[i].passive_id = emSource.effect_list[i].passive_id;
 		effect_list[i].source_type = emSource.effect_list[i].source_type;
+		effect_list[i].group_stack = emSource.effect_list[i].group_stack;
 
 		if (emSource.effect_list[i].animation_name != "") {
 			effect_list[i].animation_name = emSource.effect_list[i].animation_name;
