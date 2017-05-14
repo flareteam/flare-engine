@@ -99,6 +99,10 @@ void PowerManager::loadEffects() {
 			// @ATTR effect.can_stack|bool|Allows multiple instances of this effect
 			effects.back().can_stack = toBool(infile.val);
 		}
+		else if (infile.key == "group_stack") {
+			// TODO
+			effects.back().group_stack = toBool(infile.val);
+		}
 		else if (infile.key == "render_above") {
 			// @ATTR effect.render_above|bool|Effect is rendered above
 			effects.back().render_above = toBool(infile.val);

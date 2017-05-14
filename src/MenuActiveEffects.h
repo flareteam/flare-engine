@@ -39,15 +39,19 @@ public:
 	int type;
 	int current;
 	int max;
+	int stacks;
 	Rect pos;
 	Rect overlay;
 	std::string name;
+	WidgetLabel* stacksLabel;
 
 	EffectIcon()
 		: icon(-1)
 		, type(0)
 		, current(0)
 		, max(0)
+		, stacks(0)
+		, stacksLabel(nullptr)
 	{}
 };
 
