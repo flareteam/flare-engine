@@ -100,7 +100,7 @@ void PowerManager::loadEffects() {
 			effects.back().can_stack = toBool(infile.val);
 		}
 		else if (infile.key == "group_stack") {
-			// TODO
+			// @ATTR effect.group_stack|bool|For effects that can stack, setting this to true will combine those effects into a single status icon.
 			effects.back().group_stack = toBool(infile.val);
 		}
 		else if (infile.key == "render_above") {
