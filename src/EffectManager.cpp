@@ -281,13 +281,23 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	if (effect_type == EFFECT_KNOCKBACK && knockback_speed != 0)
 		return;
 
+	bool insert_effect = false;
+	size_t insert_pos;
+
 	for (size_t i=effect_list.size(); i>0; i--) {
 		if (effect_list[i-1].id == effect.id) {
 			if (trigger > -1 && effect_list[i-1].trigger == trigger)
 				return; // trigger effects can only be cast once per trigger
 
-			if (!effect.can_stack)
+			if (!effect.can_stack) {
 				removeEffect(i-1);
+			}
+			else if (insert_effect == false) {
+				// to keep matching effects together, they are inserted after the most recent matching effect
+				// otherwise, they are added to the end of the effect list
+				insert_effect = true;
+				insert_pos = i;
+			}
 		}
 		// if we're adding an immunity effect, remove all negative effects
 		if (effect_type == EFFECT_IMMUNITY)
@@ -324,7 +334,10 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	e.passive_id = passive_id;
 	e.source_type = source_type;
 
-	effect_list.push_back(e);
+	if (insert_effect)
+		effect_list.insert(effect_list.begin() + insert_pos, e);
+	else
+		effect_list.push_back(e);
 }
 
 void EffectManager::removeEffect(size_t id) {
