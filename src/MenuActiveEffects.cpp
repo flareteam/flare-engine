@@ -72,6 +72,12 @@ void MenuActiveEffects::loadGraphics() {
 }
 
 void MenuActiveEffects::logic() {
+	for(size_t i; i < effect_icons.size(); ++i){
+		if(effect_icons[i].stacksLabel){
+			delete effect_icons[i].stacksLabel;
+		}
+	}
+
 	effect_icons.clear();
 
 	bool alreadyOn;
@@ -85,7 +91,7 @@ void MenuActiveEffects::logic() {
 		if(ed.group_stack){
 			alreadyOn = false;
 			for(size_t j=0; j < effect_icons.size(); ++j){
-				if(effect_icons[j].type == ed.type && effect_icons[j].name.compare(ed.name) == 0){
+				if(effect_icons[j].type == ed.type && effect_icons[j].name == ed.name){
 					effect_icons[j].stacks++;
 
 					if(ed.type == EFFECT_SHIELD){
@@ -117,7 +123,7 @@ void MenuActiveEffects::logic() {
 
 					std::stringstream ss;
 					
-					ss << "x" << effect_icons[j].stacks;
+					ss << msg->get("x%d", effect_icons[j].stacks);
 					effect_icons[j].stacksLabel->set(ss.str());	
 
 					alreadyOn = true;
@@ -226,7 +232,7 @@ TooltipData MenuActiveEffects::checkTooltip(const Point& mouse) {
 			if(effect_icons[i].type != EFFECT_SHIELD){
 				std::stringstream ss2;
 				if(effect_icons[i].stacks > 1){
-					ss2 << "x" << effect_icons[i].stacks << " stacks";
+					ss2 << msg->get("x%d stacks", effect_icons[i].stacks);;
 					tip.addText(ss2.str());
 				}
 			}

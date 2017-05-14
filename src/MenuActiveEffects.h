@@ -51,7 +51,7 @@ public:
 		, current(0)
 		, max(0)
 		, stacks(0)
-		, stacksLabel(nullptr)
+		, stacksLabel(NULL)
 	{}
 };
 
