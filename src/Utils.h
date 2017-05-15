@@ -185,6 +185,7 @@ public:
 	int icon;
 	std::string animation;
 	bool can_stack;
+	int max_stacks;
 	bool group_stack;
 	bool render_above;
 
@@ -195,6 +196,7 @@ public:
 		, icon(-1)
 		, animation("")
 		, can_stack(true)
+		, max_stacks(-1)
 		, group_stack(false)
 		, render_above(false) {
 	}

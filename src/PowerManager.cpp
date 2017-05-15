@@ -99,6 +99,10 @@ void PowerManager::loadEffects() {
 			// @ATTR effect.can_stack|bool|Allows multiple instances of this effect
 			effects.back().can_stack = toBool(infile.val);
 		}
+		else if (infile.key == "max_stacks") {
+			// @ATTR effect.max_stacks|int|Maximum allowed instances of this effect, -1 for no limits
+			effects.back().max_stacks = toInt(infile.val);
+		}
 		else if (infile.key == "group_stack") {
 			// @ATTR effect.group_stack|bool|For effects that can stack, setting this to true will combine those effects into a single status icon.
 			effects.back().group_stack = toBool(infile.val);

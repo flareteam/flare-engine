@@ -80,55 +80,44 @@ void MenuActiveEffects::logic() {
 
 	effect_icons.clear();
 
-	bool alreadyOn;
-
 	for (size_t i = 0; i < stats->effects.effect_list.size(); ++i) {
 		if (stats->effects.effect_list[i].icon == -1)
 			continue;
 
 		const Effect &ed = stats->effects.effect_list[i];
 
+		int most_recent_id;
 		if(ed.group_stack){
-			alreadyOn = false;
-			for(size_t j=0; j < effect_icons.size(); ++j){
-				if(effect_icons[j].type == ed.type && effect_icons[j].name == ed.name){
-					effect_icons[j].stacks++;
+			if( effect_icons.size()>0 
+				&& effect_icons[(most_recent_id=static_cast<int>(effect_icons.size())-1)].type == ed.type 
+				&& effect_icons[most_recent_id].name == ed.name){
 
-					if(ed.type == EFFECT_SHIELD){
-						if(ed.magnitude < effect_icons[j].overlay.y/ICON_SIZE*effect_icons[j].max){
-							effect_icons[j].overlay.y = (ICON_SIZE * ed.magnitude)/ ed.magnitude_max;
-						}
-						effect_icons[j].current += ed.magnitude;
-						effect_icons[j].max += ed.magnitude_max;
-					}else if (ed.type == EFFECT_HEAL){
-						//No special behavior
-					}else{
-						if(ed.ticks < effect_icons[j].current){
-							if (ed.duration > 0)
-								effect_icons[j].overlay.y = (ICON_SIZE * ed.ticks) / ed.duration;
-							else
-								effect_icons[j].overlay.y = ICON_SIZE;
-							effect_icons[j].current = ed.ticks;
-							effect_icons[j].max = ed.duration;
-						}
+				effect_icons[most_recent_id].stacks++;
+
+				if(ed.type == EFFECT_SHIELD){
+					//Shields stacks in momment of addition, we never have to reach that
+				}else if (ed.type == EFFECT_HEAL){
+					//No special behavior
+				}else{
+					if(ed.ticks < effect_icons[most_recent_id].current){
+						if (ed.duration > 0)
+							effect_icons[most_recent_id].overlay.y = (ICON_SIZE * ed.ticks) / ed.duration;
+						else
+							effect_icons[most_recent_id].overlay.y = ICON_SIZE;
+						effect_icons[most_recent_id].current = ed.ticks;
+						effect_icons[most_recent_id].max = ed.duration;
 					}
-
-					if(!effect_icons[j].stacksLabel){
-						effect_icons[j].stacksLabel = new WidgetLabel();
-
-						effect_icons[j].stacksLabel->setX(effect_icons[j].pos.x);
-						effect_icons[j].stacksLabel->setY(effect_icons[j].pos.y);
-						effect_icons[j].stacksLabel->setMaxWidth(ICON_SIZE);
-					}
-
-					effect_icons[j].stacksLabel->set(msg->get("x%d", effect_icons[j].stacks));
-
-					alreadyOn = true;
-					break;
 				}
-			}
 
-			if(alreadyOn){
+				if(!effect_icons[most_recent_id].stacksLabel){
+					effect_icons[most_recent_id].stacksLabel = new WidgetLabel();
+					effect_icons[most_recent_id].stacksLabel->setX(effect_icons[most_recent_id].pos.x);
+					effect_icons[most_recent_id].stacksLabel->setY(effect_icons[most_recent_id].pos.y);
+					effect_icons[most_recent_id].stacksLabel->setMaxWidth(ICON_SIZE);
+				}
+
+				effect_icons[most_recent_id].stacksLabel->set(msg->get("x%d", effect_icons[most_recent_id].stacks));
+
 				continue;
 			}
 		}

@@ -282,6 +282,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 		return;
 
 	bool insert_effect = false;
+	int stacks_applied = 0;
 	size_t insert_pos;
 
 	for (size_t i=effect_list.size(); i>0; i--) {
@@ -292,11 +293,30 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 			if (!effect.can_stack) {
 				removeEffect(i-1);
 			}
-			else if (insert_effect == false) {
-				// to keep matching effects together, they are inserted after the most recent matching effect
-				// otherwise, they are added to the end of the effect list
-				insert_effect = true;
-				insert_pos = i;
+			else{
+				if(effect_type == EFFECT_SHIELD && effect.group_stack){
+					effect_list[i-1].magnitude += magnitude;
+
+					if(effect.max_stacks == -1
+						|| effect_list[i-1].magnitude_max/magnitude < effect.max_stacks){
+						effect_list[i-1].magnitude_max += magnitude;
+					}
+
+					if(effect_list[i-1].magnitude > effect_list[i-1].magnitude_max){
+						effect_list[i-1].magnitude = effect_list[i-1].magnitude_max;
+					}
+
+					return;
+				}
+
+				 if (insert_effect == false) {
+					// to keep matching effects together, they are inserted after the most recent matching effect
+					// otherwise, they are added to the end of the effect list
+					insert_effect = true;
+					insert_pos = i;
+				}
+
+				stacks_applied++;
 			}
 		}
 		// if we're adding an immunity effect, remove all negative effects
@@ -334,10 +354,15 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	e.passive_id = passive_id;
 	e.source_type = source_type;
 
-	if (insert_effect)
-		effect_list.insert(effect_list.begin() + insert_pos, e);
-	else
-		effect_list.push_back(e);
+	if(effect.max_stacks != -1 && stacks_applied >= effect.max_stacks){
+		//Replace the oldest effect of the type
+		effect_list[insert_pos-stacks_applied] = e;
+	}else{
+		if (insert_effect)
+			effect_list.insert(effect_list.begin() + insert_pos, e);
+		else
+			effect_list.push_back(e);
+	}
 }
 
 void EffectManager::removeEffect(size_t id) {
