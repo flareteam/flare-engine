@@ -298,7 +298,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 					effect_list[i-1].magnitude += magnitude;
 
 					if(effect.max_stacks == -1
-						|| effect_list[i-1].magnitude_max/magnitude < effect.max_stacks){
+						|| (magnitude != 0 && effect_list[i-1].magnitude_max/magnitude < effect.max_stacks)){
 						effect_list[i-1].magnitude_max += magnitude;
 					}
 
@@ -356,8 +356,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 
 	if(effect.max_stacks != -1 && stacks_applied >= effect.max_stacks){
 		//Remove the oldest effect of the type
-		removeAnimation(insert_pos-stacks_applied);
-		effect_list.erase(effect_list.begin()+insert_pos-stacks_applied);
+		removeEffect(insert_pos-stacks_applied);
 
 		//All elemnts have shiftef to left
 		insert_pos--;

@@ -86,10 +86,10 @@ void MenuActiveEffects::logic() {
 
 		const Effect &ed = stats->effects.effect_list[i];
 
-		int most_recent_id;
+		size_t most_recent_id = effect_icons.size()-1;
 		if(ed.group_stack){
-			if( effect_icons.size()>0 
-				&& effect_icons[(most_recent_id=static_cast<int>(effect_icons.size())-1)].type == ed.type 
+			if( effect_icons.size()>0
+				&& effect_icons[most_recent_id].type == ed.type
 				&& effect_icons[most_recent_id].name == ed.name){
 
 				effect_icons[most_recent_id].stacks++;
