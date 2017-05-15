@@ -355,14 +355,18 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	e.source_type = source_type;
 
 	if(effect.max_stacks != -1 && stacks_applied >= effect.max_stacks){
-		//Replace the oldest effect of the type
-		effect_list[insert_pos-stacks_applied] = e;
-	}else{
-		if (insert_effect)
-			effect_list.insert(effect_list.begin() + insert_pos, e);
-		else
-			effect_list.push_back(e);
+		//Remove the oldest effect of the type
+		removeAnimation(insert_pos-stacks_applied);
+		effect_list.erase(effect_list.begin()+insert_pos-stacks_applied);
+
+		//All elemnts have shiftef to left
+		insert_pos--;
 	}
+
+	if (insert_effect)
+		effect_list.insert(effect_list.begin() + insert_pos, e);
+	else
+		effect_list.push_back(e);
 }
 
 void EffectManager::removeEffect(size_t id) {
