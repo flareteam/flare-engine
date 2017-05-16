@@ -87,8 +87,6 @@ GameStateLoad::GameStateLoad() : GameState()
 	confirm = new MenuConfirm(msg->get("Delete Save"), msg->get("Delete this save?"));
 	button_exit = new WidgetButton();
 	button_exit->label = msg->get("Exit to Title");
-	button_exit->setBasePos(0, 0, ALIGN_BOTTOM);
-	button_exit->refresh();
 
 	button_new = new WidgetButton();
 	button_new->label = msg->get("New Game");
@@ -115,23 +113,33 @@ GameStateLoad::GameStateLoad() : GameState()
 	// @CLASS GameStateLoad|Description of menus/gameload.txt
 	if (infile.open("menus/gameload.txt")) {
 		while (infile.next()) {
-			// @ATTR button_new|point|Position of the "New Game" button.
+			// @ATTR button_new|int, int, alignment : X, Y, Alignment|Position of the "New Game" button.
 			if (infile.key == "button_new") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				button_new->setBasePos(x, y);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_new->setBasePos(x, y, a);
 			}
-			// @ATTR button_load|point|Position of the "Load Game" button.
+			// @ATTR button_load|int, int, alignment : X, Y, Alignment|Position of the "Load Game" button.
 			else if (infile.key == "button_load") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				button_load->setBasePos(x, y);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_load->setBasePos(x, y, a);
 			}
-			// @ATTR button_delete|point|Position of the "Delete Save" button.
+			// @ATTR button_delete|int, int, alignment : X, Y, Alignment|Position of the "Delete Save" button.
 			else if (infile.key == "button_delete") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				button_delete->setBasePos(x, y);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_delete->setBasePos(x, y, a);
+			}
+			// @ATTR button_exit|int, int, alignment : X, Y, Alignment|Position of the "Exit to Title" button.
+			else if (infile.key == "button_exit") {
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_exit->setBasePos(x, y, a);
 			}
 			// @ATTR portrait|rectangle|Position and dimensions of the portrait image.
 			else if (infile.key == "portrait") {

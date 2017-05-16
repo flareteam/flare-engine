@@ -57,12 +57,9 @@ GameStateNew::GameStateNew()
 	// set up buttons
 	button_exit = new WidgetButton();
 	button_exit->label = msg->get("Cancel");
-	button_exit->setBasePos(-(button_exit->pos.w/2), 0, ALIGN_BOTTOM);
-	button_exit->refresh();
 
 	button_create = new WidgetButton();
 	button_create->label = msg->get("Create");
-	button_create->setBasePos(button_create->pos.w/2, 0, ALIGN_BOTTOM);
 	button_create->enabled = false;
 	button_create->refresh();
 
@@ -89,29 +86,47 @@ GameStateNew::GameStateNew()
 	// @CLASS GameStateNew: Layout|Description of menus/gamenew.txt
 	if (infile.open("menus/gamenew.txt")) {
 		while (infile.next()) {
-			// @ATTR button_prev|point|Position of button to choose the previous preset hero.
+			// @ATTR button_prev|int, int, alignment : X, Y, Alignment|Position of button to choose the previous preset hero.
 			if (infile.key == "button_prev") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				button_prev->setBasePos(x, y);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_prev->setBasePos(x, y, a);
 			}
-			// @ATTR button_next|point|Position of button to choose the next preset hero.
+			// @ATTR button_next|int, int, alignment : X, Y, Alignment|Position of button to choose the next preset hero.
 			else if (infile.key == "button_next") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				button_next->setBasePos(x, y);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_next->setBasePos(x, y, a);
 			}
-			// @ATTR button_permadeath|point|Position of checkbox for toggling permadeath.
+			// @ATTR button_exit|int, int, alignment : X, Y, Alignment|Position of "Cancel" button.
+			else if (infile.key == "button_exit") {
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_exit->setBasePos(x, y, a);
+			}
+			// @ATTR button_create|int, int, alignment : X, Y, Alignment|Position of "Create" button.
+			else if (infile.key == "button_create") {
+				int x = popFirstInt(infile.val);
+				int y = popFirstInt(infile.val);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_create->setBasePos(x, y, a);
+			}
+			// @ATTR button_permadeath|int, int, alignment : X, Y, Alignment|Position of checkbox for toggling permadeath.
 			else if (infile.key == "button_permadeath") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				button_permadeath->setBasePos(x, y);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				button_permadeath->setBasePos(x, y, a);
 			}
-			// @ATTR name_input|point|Position of the hero name textbox.
+			// @ATTR name_input|int, int, alignment : X, Y, Alignment|Position of the hero name textbox.
 			else if (infile.key == "name_input") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				input_name->setBasePos(x, y);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				input_name->setBasePos(x, y, a);
 			}
 			// @ATTR portrait_label|label|Label for the "Choose a Portrait" text.
 			else if (infile.key == "portrait_label") {
@@ -133,11 +148,12 @@ GameStateNew::GameStateNew()
 			else if (infile.key == "portrait") {
 				portrait_pos = toRect(infile.val);
 			}
-			// @ATTR class_list|point|Position of the class list.
+			// @ATTR class_list|int, int, alignment : X, Y, Alignment|Position of the class list.
 			else if (infile.key == "class_list") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				class_list->setBasePos(x, y);
+				ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+				class_list->setBasePos(x, y, a);
 			}
 			// @ATTR show_classlist|bool|Allows hiding the class list.
 			else if (infile.key == "show_classlist") {

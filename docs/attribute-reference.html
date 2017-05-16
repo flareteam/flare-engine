@@ -275,6 +275,12 @@ body {
 
 <p>Description of menus/config.txt</p>
 
+<p><strong>button_ok</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the "OK" button.</p>
+
+<p><strong>button_defaults</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the "Defaults" button.</p>
+
+<p><strong>button_cancel</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the "Cancel" button.</p>
+
 <p><strong>listbox_scrollbar_offset</strong> | <code>int</code> | Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.</p>
 
 <p><strong>music_volume</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Music Volume" slider relative to the frame.</p>
@@ -453,11 +459,13 @@ body {
 
 <p>Description of menus/gameload.txt</p>
 
-<p><strong>button_new</strong> | <code>point</code> | Position of the "New Game" button.</p>
+<p><strong>button_new</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the "New Game" button.</p>
 
-<p><strong>button_load</strong> | <code>point</code> | Position of the "Load Game" button.</p>
+<p><strong>button_load</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the "Load Game" button.</p>
 
-<p><strong>button_delete</strong> | <code>point</code> | Position of the "Delete Save" button.</p>
+<p><strong>button_delete</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the "Delete Save" button.</p>
+
+<p><strong>button_exit</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the "Exit to Title" button.</p>
 
 <p><strong>portrait</strong> | <code>rectangle</code> | Position and dimensions of the portrait image.</p>
 
@@ -487,13 +495,17 @@ body {
 
 <p>Description of menus/gamenew.txt</p>
 
-<p><strong>button_prev</strong> | <code>point</code> | Position of button to choose the previous preset hero.</p>
+<p><strong>button_prev</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of button to choose the previous preset hero.</p>
 
-<p><strong>button_next</strong> | <code>point</code> | Position of button to choose the next preset hero.</p>
+<p><strong>button_next</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of button to choose the next preset hero.</p>
 
-<p><strong>button_permadeath</strong> | <code>point</code> | Position of checkbox for toggling permadeath.</p>
+<p><strong>button_exit</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of "Cancel" button.</p>
 
-<p><strong>name_input</strong> | <code>point</code> | Position of the hero name textbox.</p>
+<p><strong>button_create</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of "Create" button.</p>
+
+<p><strong>button_permadeath</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of checkbox for toggling permadeath.</p>
+
+<p><strong>name_input</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the hero name textbox.</p>
 
 <p><strong>portrait_label</strong> | <code>label</code> | Label for the "Choose a Portrait" text.</p>
 
@@ -505,7 +517,7 @@ body {
 
 <p><strong>portrait</strong> | <code>rectangle</code> | Position and dimensions of the portrait image.</p>
 
-<p><strong>class_list</strong> | <code>point</code> | Position of the class list.</p>
+<p><strong>class_list</strong> | <code>int, int, alignment : X, Y, Alignment</code> | Position of the class list.</p>
 
 <p><strong>show_classlist</strong> | <code>bool</code> | Allows hiding the class list.</p>
 
@@ -1196,6 +1208,8 @@ body {
 <p><strong>effect.animation</strong> | <code>filename</code> | The filename of effect animation.</p>
 
 <p><strong>effect.can_stack</strong> | <code>bool</code> | Allows multiple instances of this effect</p>
+
+<p><strong>effect.max_stacks</strong> | <code>int</code> | Maximum allowed instances of this effect, -1 for no limits</p>
 
 <p><strong>effect.group_stack</strong> | <code>bool</code> | For effects that can stack, setting this to true will combine those effects into a single status icon.</p>
 

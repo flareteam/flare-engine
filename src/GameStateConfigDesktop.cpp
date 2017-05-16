@@ -150,6 +150,9 @@ void GameStateConfigDesktop::readConfig() {
 	FileParser infile;
 	if (infile.open("menus/config.txt")) {
 		while (infile.next()) {
+			if (parseKeyButtons(infile))
+				continue;
+
 			int x1 = popFirstInt(infile.val);
 			int y1 = popFirstInt(infile.val);
 			int x2 = popFirstInt(infile.val);

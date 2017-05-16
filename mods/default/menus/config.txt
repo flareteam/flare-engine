@@ -3,6 +3,10 @@
 # First two values are for label position (x,y) and two last for control (x,y)
 # Buttons don't have separate labels
 
+button_ok=0,-56,bottom
+button_defaults=0,-28,bottom
+button_cancel=0,0,bottom
+
 listbox_scrollbar_offset=2
 
 [video]

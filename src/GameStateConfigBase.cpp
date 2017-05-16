@@ -103,16 +103,8 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	tab_control = new WidgetTabControl();
 
 	ok_button->label = msg->get("OK");
-	ok_button->setBasePos(0, -(cancel_button->pos.h*2), ALIGN_BOTTOM);
-	ok_button->refresh();
-
 	defaults_button->label = msg->get("Defaults");
-	defaults_button->setBasePos(0, -(cancel_button->pos.h), ALIGN_BOTTOM);
-	defaults_button->refresh();
-
 	cancel_button->label = msg->get("Cancel");
-	cancel_button->setBasePos(0, 0, ALIGN_BOTTOM);
-	cancel_button->refresh();
 
 	language_lstb->can_deselect = false;
 
@@ -180,6 +172,9 @@ void GameStateConfigBase::readConfig() {
 	FileParser infile;
 	if (infile.open("menus/config.txt")) {
 		while (infile.next()) {
+			if (parseKeyButtons(infile))
+				continue;
+
 			int x1 = popFirstInt(infile.val);
 			int y1 = popFirstInt(infile.val);
 			int x2 = popFirstInt(infile.val);
@@ -197,9 +192,37 @@ void GameStateConfigBase::readConfig() {
 	}
 }
 
-bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2) {
+bool GameStateConfigBase::parseKeyButtons(FileParser &infile) {
 	// @CLASS GameStateConfigBase|Description of menus/config.txt
 
+	if (infile.key == "button_ok") {
+		// @ATTR button_ok|int, int, alignment : X, Y, Alignment|Position of the "OK" button.
+		int x = popFirstInt(infile.val);
+		int y = popFirstInt(infile.val);
+		ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+		ok_button->setBasePos(x, y, a);
+	}
+	else if (infile.key == "button_defaults") {
+		// @ATTR button_defaults|int, int, alignment : X, Y, Alignment|Position of the "Defaults" button.
+		int x = popFirstInt(infile.val);
+		int y = popFirstInt(infile.val);
+		ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+		defaults_button->setBasePos(x, y, a);
+	}
+	else if (infile.key == "button_cancel") {
+		// @ATTR button_cancel|int, int, alignment : X, Y, Alignment|Position of the "Cancel" button.
+		int x = popFirstInt(infile.val);
+		int y = popFirstInt(infile.val);
+		ALIGNMENT a = parse_alignment(popFirstString(infile.val));
+		cancel_button->setBasePos(x, y, a);
+	}
+	else {
+		return false;
+	}
+
+	return true;
+}
+bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2) {
 	if (infile.key == "listbox_scrollbar_offset") {
 		// @ATTR listbox_scrollbar_offset|int|Horizontal offset from the right of listboxes (mods, languages, etc) to place the scrollbar.
 		activemods_lstb->scrollbar_offset = x1;

@@ -54,6 +54,7 @@ public:
 
 	virtual void init();
 	virtual void readConfig();
+	bool parseKeyButtons(FileParser &infile);
 	bool parseKey(FileParser &infile, int &x1, int &y1, int &x2, int &y2);
 	bool parseStub(FileParser &infile);
 	void addChildWidgets();
