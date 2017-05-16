@@ -40,7 +40,7 @@ as you only need a c++ compiler and the ported SDL package.
 ## Dependencies
 
 To build Flare you need the [2.0 Development Libraries for SDL][libsdl]:
-SDL_image, SDL_mixer, and SDL_ttf, with the equivalent [2.0 Runtime Libraries][runtimesdl] to run the game;
+SDL\_image, SDL\_mixer, and SDL\_ttf, with the equivalent [2.0 Runtime Libraries][runtimesdl] to run the game;
 or follow the steps below for your Operating System of choice.
 
 [libsdl]: http://www.libsdl.org/download-2.0.php
@@ -143,13 +143,13 @@ If you prefer building directly with C++, the command will be something like thi
 **GNU/Linux** (depending on where your SDL includes are):
 
 ```sh
-g++ -I /usr/include/SDL src/*.cpp src/*.c -o flare -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+g++ -I /usr/include/SDL src/*.cpp -o flare -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 ```
 
 **Windows** plus [MinGW]:
 
 ```
-g++ -I C:\MinGW\include\SDL src\*.cpp src\*.c -o flare.exe -lmingw32 -lSDLmain -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+g++ -I C:\MinGW\include\SDL src\*.cpp -o flare.exe -lmingw32 -lSDLmain -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 ```
 
 [MinGW]: http://www.mingw.org/
@@ -204,6 +204,6 @@ If the game fails to start, some of the following tips might help:
    Project Properties -> C/C++ -> Code Generation -> Enable Enhanced Instruction Set
    ```
 
-   and select <i>No Enhanced Instructions (/arch:IA32)</i>. You might really need to rebuild also SDL2_mixer, SDL2_image and SDL2_ttf when you want to use libraries, built with Visual Studio.
+   and select <i>No Enhanced Instructions (/arch:IA32)</i>. You might really need to rebuild also SDL2\_mixer, SDL2\_image and SDL2\_ttf when you want to use libraries, built with Visual Studio.
 
    If you want to build using cmake, use cmake-gui, and uncheck SSE checkbox after executing Configure command.

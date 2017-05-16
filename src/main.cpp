@@ -35,6 +35,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 GameSwitcher *gswitch;
 
+#define PLATFORM_CPP_INCLUDE
+
 #ifdef _WIN32
 #include "PlatformWin32.cpp"
 #elif __ANDROID__

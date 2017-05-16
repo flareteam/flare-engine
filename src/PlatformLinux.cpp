@@ -15,10 +15,12 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
+#ifdef PLATFORM_CPP_INCLUDE
 #ifndef PLATFORM_CPP
 #define PLATFORM_CPP
 
 #include "Platform.h"
+#include "Settings.h"
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
@@ -173,4 +175,5 @@ bool PlatformDirRemove(const std::string& path) {
 	return true;
 }
 
-#endif
+#endif // PLATFORM_CPP
+#endif // PLATFORM_CPP_INCLUDE
