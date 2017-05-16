@@ -55,6 +55,11 @@ ItemManager::ItemManager()
 	item_sets.reserve(5);
 
 	loadAll();
+
+	// make sure we have at least 1 item
+	if (items.empty()) {
+		addUnknownItem(1);
+	}
 }
 
 /**
