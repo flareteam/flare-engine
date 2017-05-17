@@ -1,26 +1,27 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# GunChleoc <fios@foramnagaidhlig.net>, 2013, 2014, 2016.
+# GunChleoc <fios@foramnagaidhlig.net>, 2013, 2014, 2016, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-11 10:52-0400\n"
-"PO-Revision-Date: 2016-09-17 15:28+0100\n"
+"PO-Revision-Date: 2017-05-17 14:53+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
 "Language: gd\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : "
+"(n > 2 && n < 20) ? 2 : 3;\n"
 "X-Generator: Virtaal 0.7.1\n"
 
 #: ../../../src/Avatar.cpp:353
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "Meal do naidheachd, ruig thu leibheil %d!"
+msgstr "Meal do naidheachd, ràinig thu leibheil %d!"
 
 #: ../../../src/Avatar.cpp:355
 msgid "You may increase one attribute through the Character Menu."
@@ -578,7 +579,7 @@ msgstr "Dìon"
 
 #: ../../../src/ItemManager.cpp:641
 msgid "Quest Item"
-msgstr "Nì siridh"
+msgstr "Nì cinn-turais"
 
 #: ../../../src/ItemManager.cpp:668
 #, c-format
@@ -639,9 +640,9 @@ msgstr "Feum air leibheil %d"
 
 #: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:962
 #: ../../../src/MenuPowers.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Feum air %s"
+msgstr "Feum air %s %d"
 
 #: ../../../src/ItemManager.cpp:757
 #, c-format
@@ -724,9 +725,9 @@ msgid "Each level grants %d. "
 msgstr "Bheir gach leibheil %d dhut. "
 
 #: ../../../src/MenuCharacter.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d. "
-msgstr "Bheir gach puing dhen bhuadh ionnsaighe %d dhut. "
+msgstr "Bheir gach puing dhe %s %d dhut. "
 
 #: ../../../src/MenuDevConsole.cpp:46
 msgid "Execute"
@@ -923,7 +924,7 @@ msgstr "Nòtaichean"
 
 #: ../../../src/MenuLog.cpp:86
 msgid "Quests"
-msgstr "Sireadh"
+msgstr "Cinn-turais"
 
 #: ../../../src/MenuManager.cpp:294
 #, c-format
@@ -1110,7 +1111,7 @@ msgstr "Stòr co-roinnte"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
-msgstr "Cha ghabh nithean siridh a chur dhan stòr."
+msgstr "Cha ghabh nithean cinn-turais a chur dhan stòr."
 
 #: ../../../src/MenuStash.cpp:209
 msgid "Stash is full."
