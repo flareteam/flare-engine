@@ -37,6 +37,8 @@ TooltipData::TooltipData(const TooltipData &tdSource)
 	// Allow the new copy to create its own buffer
 	// Otherwise the same buffer will be deleted twice, causing a mem error
 
+	default_color = tdSource.default_color;
+
 	lines.clear();
 	colors.clear();
 
@@ -53,6 +55,7 @@ TooltipData& TooltipData::operator= (const TooltipData &tdSource) {
 	// Otherwise the same buffer will be deleted twice, causing a mem error
 
 	tip_buffer = NULL;
+	default_color = tdSource.default_color;
 	clear();
 
 	for (unsigned int i=0; i<tdSource.lines.size(); i++) {
