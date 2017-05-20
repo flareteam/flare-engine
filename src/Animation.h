@@ -48,6 +48,7 @@ protected:
 	const std::string name;
 	const animation_type type;
 	Image *sprite;
+	uint8_t blend_mode;
 
 	unsigned short number_frames; // how many ticks this animation lasts.
 	unsigned short cur_frame;     // counts up until reaching number_frames.
@@ -79,7 +80,7 @@ protected:
 	unsigned frame_count; // the frame count as it appears in the data files (i.e. not converted to engine frames)
 
 public:
-	Animation(const std::string &_name, const std::string &_type, Image *_sprite);
+	Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode);
 
 	// returns a copy of this:
 	Animation(const Animation&);

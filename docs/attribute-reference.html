@@ -89,21 +89,23 @@ body {
 
 <p><strong>image</strong> | <code>filename</code> | Filename of sprite-sheet image.</p>
 
-<p><strong>position</strong> | <code>int</code> | Number of frames to the right to use as the first frame. Unpacked animations only.</p>
-
-<p><strong>frames</strong> | <code>int</code> | The total number of frames</p>
-
-<p><strong>duration</strong> | <code>duration</code> | The duration of the entire animation in 'ms' or 's'.</p>
-
-<p><strong>type</strong> | <code>["play_once", "back_forth", "looped"]</code> | How to loop (or not loop) this animation.</p>
-
 <p><strong>render_size</strong> | <code>int, int : Width, Height</code> | Width and height of animation.</p>
 
 <p><strong>render_offset</strong> | <code>int, int : X offset, Y offset</code> | Render x/y offset.</p>
 
-<p><strong>active_frame</strong> | <code>[list(int), "all"]</code> | A list of frames marked as "active". Also, "all" can be used to mark all frames as active.</p>
+<p><strong>blend_mode</strong> | <code>["normal", "add"]</code> | The type of blending used when rendering this animation.</p>
 
-<p><strong>frame</strong> | <code>int, int, int, int, int, int, int, int : Index, Direction, X, Y, Width, Height, X offset, Y offset</code> | A single frame of a compressed animation.</p>
+<p><strong>animation.position</strong> | <code>int</code> | Number of frames to the right to use as the first frame. Unpacked animations only.</p>
+
+<p><strong>animation.frames</strong> | <code>int</code> | The total number of frames</p>
+
+<p><strong>animation.duration</strong> | <code>duration</code> | The duration of the entire animation in 'ms' or 's'.</p>
+
+<p><strong>animation.type</strong> | <code>["play_once", "back_forth", "looped"]</code> | How to loop (or not loop) this animation.</p>
+
+<p><strong>animation.active_frame</strong> | <code>[list(int), "all"]</code> | A list of frames marked as "active". Also, "all" can be used to mark all frames as active.</p>
+
+<p><strong>animation.frame</strong> | <code>int, int, int, int, int, int, int, int : Index, Direction, X, Y, Width, Height, X offset, Y offset</code> | A single frame of a compressed animation.</p>
 
 <hr />
 

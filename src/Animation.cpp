@@ -30,13 +30,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "Animation.h"
 
-Animation::Animation(const std::string &_name, const std::string &_type, Image *_sprite)
+Animation::Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode)
 	: name(_name)
 	, type(	_type == "play_once" ? PLAY_ONCE :
 			_type == "back_forth" ? BACK_FORTH :
 			_type == "looped" ? LOOPED :
 			NONE)
 	, sprite(_sprite)
+	, blend_mode(_blend_mode)
 	, number_frames(0)
 	, cur_frame(0)
 	, cur_frame_index(0)
@@ -58,6 +59,7 @@ Animation::Animation(const Animation& a)
 	: name(a.name)
 	, type(a.type)
 	, sprite(a.sprite)
+	, blend_mode(a.blend_mode)
 	, number_frames(a.number_frames)
 	, cur_frame(0)
 	, cur_frame_index(a.cur_frame_index)
@@ -241,6 +243,7 @@ Renderable Animation::getCurrentFrame(int kind) {
 		r.offset.x = render_offset[index].x;
 		r.offset.y = render_offset[index].y;
 		r.image = sprite;
+		r.blend_mode = blend_mode;
 	}
 	return r;
 }

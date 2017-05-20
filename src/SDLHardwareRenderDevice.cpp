@@ -261,7 +261,17 @@ int SDLHardwareRenderDevice::render(Renderable& r, Rect& dest) {
     SDL_Rect src = r.src;
     SDL_Rect _dest = dest;
 	SDL_SetRenderTarget(renderer, texture);
-	return SDL_RenderCopy(renderer, static_cast<SDLHardwareImage *>(r.image)->surface, &src, &_dest);
+
+	SDL_Texture *surface = static_cast<SDLHardwareImage *>(r.image)->surface;
+
+	if (r.blend_mode == RENDERABLE_BLEND_ADD) {
+		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_ADD);
+	}
+	else { // RENDERABLE_BLEND_NORMAL
+		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
+	}
+
+	return SDL_RenderCopy(renderer, surface, &src, &_dest);
 }
 
 int SDLHardwareRenderDevice::render(Sprite *r) {
