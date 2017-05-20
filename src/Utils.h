@@ -188,6 +188,8 @@ public:
 	int max_stacks;
 	bool group_stack;
 	bool render_above;
+	Color color_mod;
+	uint8_t alpha_mod;
 
 	EffectDef()
 		: id("")
@@ -198,7 +200,9 @@ public:
 		, can_stack(true)
 		, max_stacks(-1)
 		, group_stack(false)
-		, render_above(false) {
+		, render_above(false)
+		, color_mod(255, 255, 255)
+		, alpha_mod(255) {
 	}
 };
 

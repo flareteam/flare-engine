@@ -304,6 +304,9 @@ int SDLSoftwareRenderDevice::render(Renderable& r, Rect& dest) {
 		SDL_SetSurfaceBlendMode(surface, SDL_BLENDMODE_BLEND);
 	}
 
+	SDL_SetSurfaceColorMod(surface, r.color_mod.r, r.color_mod.g, r.color_mod.b);
+	SDL_SetSurfaceAlphaMod(surface, r.alpha_mod);
+
 	return SDL_BlitSurface(surface, &src, screen, &_dest);
 }
 

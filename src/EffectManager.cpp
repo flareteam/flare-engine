@@ -62,6 +62,8 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 		effect_list[i].passive_id = emSource.effect_list[i].passive_id;
 		effect_list[i].source_type = emSource.effect_list[i].source_type;
 		effect_list[i].group_stack = emSource.effect_list[i].group_stack;
+		effect_list[i].color_mod = emSource.effect_list[i].color_mod;
+		effect_list[i].alpha_mod = emSource.effect_list[i].alpha_mod;
 
 		if (emSource.effect_list[i].animation_name != "") {
 			effect_list[i].animation_name = emSource.effect_list[i].animation_name;
@@ -340,6 +342,8 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	e.type = effect_type;
 	e.render_above = effect.render_above;
 	e.group_stack = effect.group_stack;
+	e.color_mod = effect.color_mod;
+	e.alpha_mod = effect.alpha_mod;
 
 	if (effect.animation != "") {
 		anim->increaseCount(effect.animation);
@@ -525,3 +529,24 @@ bool EffectManager::isDebuffed() {
 	return false;
 }
 
+Color EffectManager::getCurrentColor() {
+	Color no_color_mod = Color(255, 255, 255);
+
+	for (size_t i=effect_list.size(); i > 0; i--) {
+		if (effect_list[i-1].color_mod != no_color_mod)
+			return effect_list[i-1].color_mod;
+	}
+
+	return no_color_mod;
+}
+
+uint8_t EffectManager::getCurrentAlpha() {
+	uint8_t no_alpha_mod = 255;
+
+	for (size_t i=effect_list.size(); i > 0; i--) {
+		if (effect_list[i-1].alpha_mod != no_alpha_mod)
+			return effect_list[i-1].alpha_mod;
+	}
+
+	return no_alpha_mod;
+}

@@ -111,6 +111,14 @@ void PowerManager::loadEffects() {
 			// @ATTR effect.render_above|bool|Effect is rendered above
 			effects.back().render_above = toBool(infile.val);
 		}
+		else if (infile.key == "color_mod") {
+			// @ATTR color_mod|color|Changes the color of the afflicted entity.
+			effects.back().color_mod = toRGB(infile.val);
+		}
+		else if (infile.key == "alpha_mod") {
+			// @ATTR alpha_mod|int|Changes the alpha of the afflicted entity.
+			effects.back().alpha_mod = static_cast<uint8_t>(toInt(infile.val));
+		}
 		else {
 			infile.error("PowerManager: '%s' is not a valid key.", infile.key.c_str());
 		}

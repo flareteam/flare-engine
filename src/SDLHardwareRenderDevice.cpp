@@ -271,6 +271,9 @@ int SDLHardwareRenderDevice::render(Renderable& r, Rect& dest) {
 		SDL_SetTextureBlendMode(surface, SDL_BLENDMODE_BLEND);
 	}
 
+	SDL_SetTextureColorMod(surface, r.color_mod.r, r.color_mod.g, r.color_mod.b);
+	SDL_SetTextureAlphaMod(surface, r.alpha_mod);
+
 	return SDL_RenderCopy(renderer, surface, &src, &_dest);
 }
 

@@ -81,6 +81,8 @@ public:
 	int passive_id;
 	int source_type;
 	bool group_stack;
+	Color color_mod;
+	uint8_t alpha_mod;
 
 	Effect()
 		: id("")
@@ -98,7 +100,9 @@ public:
 		, render_above(false)
 		, passive_id(0)
 		, source_type(SOURCE_TYPE_HERO)
-		, group_stack(false){
+		, group_stack(false)
+		, color_mod(255, 255, 255)
+		, alpha_mod(255) {
 	}
 
 	~Effect() {
@@ -128,6 +132,8 @@ public:
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
 	bool isDebuffed();
+	Color getCurrentColor();
+	uint8_t getCurrentAlpha();
 
 	std::vector<Effect> effect_list;
 

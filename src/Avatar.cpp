@@ -896,6 +896,8 @@ void Avatar::addRenders(std::vector<Renderable> &r) {
 				Renderable ren = anims[index]->getCurrentFrame(stats.direction);
 				ren.map_pos = stats.pos;
 				ren.prio = i+1;
+				ren.color_mod = stats.effects.getCurrentColor();
+				ren.alpha_mod = stats.effects.getCurrentAlpha();
 				r.push_back(ren);
 			}
 		}
@@ -903,6 +905,8 @@ void Avatar::addRenders(std::vector<Renderable> &r) {
 	else {
 		Renderable ren = activeAnimation->getCurrentFrame(stats.direction);
 		ren.map_pos = stats.pos;
+		ren.color_mod = stats.effects.getCurrentColor();
+		ren.alpha_mod = stats.effects.getCurrentAlpha();
 		r.push_back(ren);
 	}
 	// add effects

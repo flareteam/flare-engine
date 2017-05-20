@@ -484,6 +484,8 @@ void EnemyManager::addRenders(std::vector<Renderable> &r, std::vector<Renderable
 		if (!dead || (*it)->stats.corpse_ticks > 0) {
 			Renderable re = (*it)->getRender();
 			re.prio = 1;
+			re.color_mod = (*it)->stats.effects.getCurrentColor();
+			re.alpha_mod = (*it)->stats.effects.getCurrentAlpha();
 
 			// draw corpses below objects so that floor loot is more visible
 			(dead ? r_dead : r).push_back(re);

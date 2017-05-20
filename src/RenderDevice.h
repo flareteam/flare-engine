@@ -148,6 +148,8 @@ public:
 	uint64_t prio;     // 64-32 bit for map position, 31-16 for intertile position, 15-0 user dependent, such as Avatar.
 
 	uint8_t blend_mode;
+	Color color_mod;
+	uint8_t alpha_mod;
 
 	Renderable()
 		: image(NULL)
@@ -155,7 +157,9 @@ public:
 		, map_pos()
 		, offset()
 		, prio(0)
-		, blend_mode(RENDERABLE_BLEND_NORMAL) {
+		, blend_mode(RENDERABLE_BLEND_NORMAL)
+		, color_mod(255, 255, 255)
+		, alpha_mod(255) {
 	}
 };
 
