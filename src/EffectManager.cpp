@@ -399,6 +399,23 @@ void EffectManager::removeEffectPassive(int id) {
 	}
 }
 
+void EffectManager::removeEffectID(const std::vector< std::pair<std::string, int> >& remove_effects) {
+	for (size_t i = 0; i < remove_effects.size(); i++) {
+		int count = remove_effects[i].second;
+		bool remove_all = (count == 0 ? true : false);
+
+		for (size_t j = effect_list.size(); j > 0; j--) {
+			if (!remove_all && count <= 0)
+				break;
+
+			if (effect_list[j-1].id == remove_effects[i].first) {
+				removeEffect(j-1);
+				count--;
+			}
+		}
+	}
+}
+
 void EffectManager::clearEffects() {
 	for (size_t i=effect_list.size(); i > 0; i--) {
 		removeEffect(i-1);

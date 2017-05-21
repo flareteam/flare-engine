@@ -237,6 +237,8 @@ public:
 	int script_trigger;
 	std::string script;
 
+	std::vector< std::pair<std::string, int> > remove_effects;
+
 	Power()
 		: type(-1)
 		, name("")
@@ -346,7 +348,9 @@ public:
 		, walls_block_aoe(false)
 
 		, script_trigger(-1)
-		, script("") {
+		, script("")
+
+		, remove_effects() {
 	}
 
 };

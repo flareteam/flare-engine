@@ -578,6 +578,12 @@ void PowerManager::loadPowers() {
 
 			powers[input_id].script = popFirstString(infile.val);
 		}
+		else if (infile.key == "remove_effect") {
+			// @ATTR power.remove_effect|repeatable(predefined_string, int) : Effect ID, Number of stacks|Removes a number of instances of a specific Effect ID. Ommitting the number of instances, or setting it to zero, will remove all instances/stacks.
+			std::string first = popFirstString(infile.val);
+			int second = popFirstInt(infile.val);
+			powers[input_id].remove_effects.push_back(std::pair<std::string, int>(first, second));
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -839,7 +845,9 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 
 	// activate any post powers here if the power doesn't use a hazard
 	// otherwise the post power will chain off the hazard itself
+	// this is also where Effects are removed for non-hazard powers
 	if (!powers[power_index].use_hazard) {
+		src_stats->effects.removeEffectID(powers[power_index].remove_effects);
 		activate(powers[power_index].post_power, src_stats, src_stats->pos);
 	}
 }
