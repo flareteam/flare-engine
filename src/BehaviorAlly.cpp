@@ -19,6 +19,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "BehaviorAlly.h"
 #include "Enemy.h"
 #include "SharedGameResources.h"
+#include "UtilsMath.h"
 
 const float ALLY_FLEE_DISTANCE = 2;
 const float ALLY_FOLLOW_DISTANCE_WALK = 5.5;
@@ -120,40 +121,131 @@ void BehaviorAlly::findTarget() {
 
 	if(e->stats.effects.fear) fleeing = true;
 
+	// If we have a successful chance_flee roll, try to move to a safe distance
+	if (
+			e->stats.cur_state == ENEMY_STANCE &&
+			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
+			hero_dist >= e->stats.melee_range &&
+			percentChance(e->stats.chance_flee) &&
+			flee_cooldown == 0
+		)
+	{
+		move_to_safe_dist = true;
+	}
+
+	if (move_to_safe_dist) fleeing = true;
+
+	if (fleeing) {
+		FPoint target_pos = pursue_pos;
+
+		std::vector<int> flee_dirs;
+
+		int middle_dir = calcDirection(target_pos.x, target_pos.y, e->stats.pos.x, e->stats.pos.y);
+		for (int i = -2; i <= 2; ++i) {
+			int test_dir = rotateDirection(middle_dir, i);
+
+			FPoint test_pos = calcVector(e->stats.pos, test_dir, 1);
+			if (mapr->collider.is_valid_position(test_pos.x, test_pos.y, e->stats.movement_type, false)) {
+				if (test_dir == e->stats.direction) {
+					// if we're already moving in a good direction, favor it over other directions
+					flee_dirs.clear();
+					flee_dirs.push_back(test_dir);
+					break;
+				}
+				else {
+					flee_dirs.push_back(test_dir);
+				}
+			}
+		}
+
+		if (flee_dirs.empty()) {
+			// trapped and can't move
+			move_to_safe_dist = false;
+			fleeing = false;
+		}
+		else {
+			int index = randBetween(0, static_cast<int>(flee_dirs.size())-1);
+			pursue_pos = calcVector(e->stats.pos, flee_dirs[index], 1);
+
+			if (flee_ticks == 0) {
+				flee_ticks = e->stats.flee_duration;
+			}
+		}
+	}
 }
 
 void BehaviorAlly::checkMoveStateStance() {
 
-	if(e->stats.in_combat && target_dist > e->stats.melee_range) {
-		if (e->move())
-			e->stats.cur_state = ENEMY_MOVE;
-	}
+	// If the enemy is capable of fleeing and is at a safe distance, have it hold its position instead of moving
+	if (hero_dist >= e->stats.flee_range && e->stats.chance_flee > 0) return;
 
-	if((!e->stats.in_combat && hero_dist > ALLY_FOLLOW_DISTANCE_WALK) || fleeing) {
-		if (e->move()) {
-			e->stats.cur_state = ENEMY_MOVE;
+	// try to move to the target if we're either:
+	// 1. too far away and chance_pursue roll succeeds
+	// 2. within range, but lack line-of-sight (required to attack)
+	bool should_move_to_target = (target_dist > e->stats.melee_range && percentChance(e->stats.chance_pursue)) || (target_dist <= e->stats.melee_range && !los) || (hero_dist > ALLY_FOLLOW_DISTANCE_WALK);
+
+	if (should_move_to_target || fleeing) {
+		if(e->stats.in_combat && target_dist > e->stats.melee_range) {
+			if (e->move())
+				e->stats.cur_state = ENEMY_MOVE;
 		}
-		else {
-			collided = true;
-			unsigned char prev_direction = e->stats.direction;
 
-			// hit an obstacle, try the next best angle
-			e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+		if((!e->stats.in_combat && hero_dist > ALLY_FOLLOW_DISTANCE_WALK) || fleeing) {
 			if (e->move()) {
 				e->stats.cur_state = ENEMY_MOVE;
 			}
-			else e->stats.direction = prev_direction;
+			else {
+				collided = true;
+				unsigned char prev_direction = e->stats.direction;
+
+				// hit an obstacle, try the next best angle
+				e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
+				if (e->move()) {
+					e->stats.cur_state = ENEMY_MOVE;
+				}
+				else e->stats.direction = prev_direction;
+			}
 		}
 	}
 }
 
 void BehaviorAlly::checkMoveStateMove() {
+	bool can_attack = true;
+
+	if (e->stats.cooldown_ticks > 0) {
+		can_attack = false;
+	}
+	else {
+		can_attack = false;
+		for (size_t i = 0; i < e->stats.powers_ai.size(); ++i) {
+			if (e->stats.powers_ai[i].ticks == 0) {
+				can_attack = true;
+				break;
+			}
+		}
+	}
+	// in order to prevent infinite fleeing, we re-roll our chance to flee after a certain duration
+	bool stop_fleeing = can_attack && fleeing && flee_ticks == 0 && !percentChance(e->stats.chance_flee);
+
+	if (!stop_fleeing && flee_ticks == 0) {
+		// if the roll to continue fleeing succeeds, but the flee duration has expired, we don't want to reset the duration to the full amount
+		// instead, we scehdule the next re-roll to happen on the next frame
+		// this will continue until a roll fails, returning to the stance state
+		flee_ticks = 1;
+	}
+
 	//if close enough to hero, stop miving
 	if((hero_dist < ALLY_FOLLOW_DISTANCE_STOP && !e->stats.in_combat && !fleeing)
 			|| (target_dist < e->stats.melee_range && e->stats.in_combat && !fleeing)
-			|| (move_to_safe_dist && target_dist >= e->stats.threat_range/2)) {
+			|| (move_to_safe_dist && target_dist >= e->stats.threat_range/2)
+			|| stop_fleeing)
+	{
+		if (stop_fleeing) {
+			flee_cooldown = e->stats.flee_cooldown;
+		}
 		e->stats.cur_state = ENEMY_STANCE;
 		move_to_safe_dist = false;
+		fleeing = false;
 	}
 
 	// try to continue moving
