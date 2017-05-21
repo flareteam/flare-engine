@@ -135,6 +135,7 @@ public:
 	bool isDebuffed();
 	Color getCurrentColor();
 	uint8_t getCurrentAlpha();
+	bool hasEffect(const std::string& id, int req_count);
 
 	std::vector<Effect> effect_list;
 

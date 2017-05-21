@@ -579,10 +579,16 @@ void PowerManager::loadPowers() {
 			powers[input_id].script = popFirstString(infile.val);
 		}
 		else if (infile.key == "remove_effect") {
-			// @ATTR power.remove_effect|repeatable(predefined_string, int) : Effect ID, Number of stacks|Removes a number of instances of a specific Effect ID. Ommitting the number of instances, or setting it to zero, will remove all instances/stacks.
+			// @ATTR power.remove_effect|repeatable(predefined_string, int) : Effect ID, Number of Effect instances|Removes a number of instances of a specific Effect ID. Omitting the number of instances, or setting it to zero, will remove all instances/stacks.
 			std::string first = popFirstString(infile.val);
 			int second = popFirstInt(infile.val);
 			powers[input_id].remove_effects.push_back(std::pair<std::string, int>(first, second));
+		}
+		else if (infile.key == "replace_by_effect") {
+			// @ATTR power.replace_by_effect|int, predefined_string, int : Power ID, Effect ID, Number of Effect instances|If the caster has at least the number of instances of the Effect ID, the defined Power ID will be cast instead.
+			powers[input_id].replace_by_effect_power = popFirstInt(infile.val);
+			powers[input_id].replace_by_effect_id = popFirstString(infile.val);
+			powers[input_id].replace_by_effect_count = popFirstInt(infile.val);
 		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
@@ -1215,6 +1221,12 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
 bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint& target) {
 	if (static_cast<unsigned>(power_index) >= powers.size())
 		return false;
+
+	if (powers[power_index].replace_by_effect_power > 0 &&
+	    src_stats->effects.hasEffect(powers[power_index].replace_by_effect_id, powers[power_index].replace_by_effect_count))
+	{
+		return activate(powers[power_index].replace_by_effect_power, src_stats, target);
+	}
 
 	if (src_stats->hero) {
 		if (powers[power_index].requires_mp > src_stats->mp)

@@ -567,3 +567,18 @@ uint8_t EffectManager::getCurrentAlpha() {
 
 	return no_alpha_mod;
 }
+
+bool EffectManager::hasEffect(const std::string& id, int req_count) {
+	if (req_count <= 0)
+		return false;
+
+	int count = 0;
+
+	for (size_t i=effect_list.size(); i > 0; i--) {
+		if (effect_list[i-1].id == id)
+			count++;
+	}
+
+	return count >= req_count;
+}
+
