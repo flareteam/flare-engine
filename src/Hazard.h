@@ -54,6 +54,7 @@ private:
 	std::vector<Entity*> entitiesCollided;
 	Animation *activeAnimation;
 	std::string animation_name;
+    void reflect();
 
 public:
 	explicit Hazard(MapCollision *_collider);
@@ -130,6 +131,8 @@ public:
 	int post_power;
 	int wall_power;
 
+	bool wall_reflect;
+	
 	// targeting by movement type
 	bool target_movement_normal;
 	bool target_movement_flying;

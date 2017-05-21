@@ -77,6 +77,7 @@ Hazard::Hazard(MapCollision *_collider)
 	, directional(false)
 	, post_power(0)
 	, wall_power(0)
+	, wall_reflect(false)
 	, target_movement_normal(true)
 	, target_movement_flying(true)
 	, target_movement_intangible(true)
@@ -158,13 +159,39 @@ void Hazard::logic() {
 		// very simplified collider, could skim around corners
 		// or even pass through thin walls if speed > tilesize
 		if (collider->is_wall(pos.x, pos.y)) {
-			lifespan = 0;
+		
 			hit_wall = true;
-
-			if (collider->is_outside_map(int(pos.x), int(pos.y)))
-				remove_now = true;
+			
+			if (wall_reflect) {
+				this->reflect();
+			}
+			else {
+				lifespan = 0;
+				if (collider->is_outside_map(int(pos.x), int(pos.y)))
+					remove_now = true;
+		    }
 		}
 	}
+}
+
+void Hazard::reflect() {
+  if (!collider->is_wall(pos.x - speed.x, pos.y)) {
+    speed.x *= -1;
+	pos.x += speed.x;
+  }
+  else if (!collider->is_wall(pos.x, pos.y - speed.y)) {
+    speed.y *= -1;
+	pos.y += speed.y;
+  }
+  else {
+    speed.x *= -1;
+	speed.y *= -1;
+	pos.x += speed.x;
+	pos.y += speed.y;
+  }
+  
+  if (directional)
+	animationKind = calcDirection(pos.x, pos.y, pos.x + speed.x, pos.y + speed.y);
 }
 
 void Hazard::loadAnimation(const std::string &s) {

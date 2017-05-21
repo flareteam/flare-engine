@@ -213,6 +213,7 @@ public:
 
 	int post_power;
 	int wall_power;
+	bool wall_reflect;
 
 	// spawn info
 	std::string spawn_type;
@@ -333,6 +334,7 @@ public:
 
 		, post_power(0)
 		, wall_power(0)
+		, wall_reflect(false)
 
 		, spawn_type("")
 		, target_neighbor(0)

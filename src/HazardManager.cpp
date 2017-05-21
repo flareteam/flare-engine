@@ -88,6 +88,9 @@ void HazardManager::logic() {
 					powers->hazards.back()->animationKind = h[i-1]->animationKind;
 				}
 			}
+			
+			// clear wall hit
+			h[i-1]->hit_wall = false;
 		}
 
 	}
