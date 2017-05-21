@@ -497,7 +497,7 @@ bool Entity::takeHit(Hazard &h) {
 		if(stats.cooldown_hit_ticks == 0) {
 			stats.cooldown_hit_ticks = stats.cooldown_hit;
 
-			if (!stats.effects.stun && (!chance_poise || crit)) {
+			if (!stats.effects.stun && (!chance_poise || crit) && !stats.prevent_interrupt) {
 				if(stats.hero)
 					stats.cur_state = AVATAR_HIT;
 				else

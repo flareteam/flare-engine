@@ -116,6 +116,7 @@ public:
 	int icon; // just the number.  The caller menu will have access to the surface.
 	int new_state; // when using this power the user (avatar/enemy) starts a new state
 	int state_duration; // can be used to extend the length of a state animation by pausing on the last frame
+	bool prevent_interrupt; // prevents hits from interrupting the casting state
 	std::string attack_anim; // name of the animation to play when using this power, if it is not block
 	bool face; // does the user turn to face the mouse cursor when using this power?
 	int source_type; //hero, neutral, or enemy
@@ -251,6 +252,7 @@ public:
 		, icon(-1)
 		, new_state(-1)
 		, state_duration(0)
+		, prevent_interrupt(false)
 		, attack_anim("")
 		, face(false)
 		, source_type(-1)

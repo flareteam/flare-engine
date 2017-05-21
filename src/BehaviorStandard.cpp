@@ -577,6 +577,7 @@ void BehaviorStandard::updateState() {
 
 			power_id = e->stats.activated_power->id;
 			power_state = powers->powers[power_id].new_state;
+			e->stats.prevent_interrupt = powers->powers[power_id].prevent_interrupt;
 
 			// animation based on power type
 			if (power_state == POWSTATE_INSTANT)
@@ -628,6 +629,7 @@ void BehaviorStandard::updateState() {
 
 				e->stats.activated_power = NULL;
 				e->stats.cur_state = ENEMY_STANCE;
+				e->stats.prevent_interrupt = false;
 			}
 			break;
 

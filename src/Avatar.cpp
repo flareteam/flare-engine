@@ -511,6 +511,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					stats.cur_state = AVATAR_STANCE;
 					stats.cooldown_ticks = stats.cooldown;
 					allowed_to_use_power = false;
+					stats.prevent_interrupt = false;
 				}
 
 				break;
@@ -657,6 +658,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 					if (power.charge_speed != 0.0f)
 						stats.charge_speed = power.charge_speed;
+
+					stats.prevent_interrupt = power.prevent_interrupt;
 
 					switch (power.new_state) {
 						case POWSTATE_ATTACK:	// handle attack powers

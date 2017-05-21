@@ -104,6 +104,7 @@ StatBlock::StatBlock()
 	, cur_state(0)
 	, state_ticks(0)
 	, hold_state(false)
+	, prevent_interrupt(false)
 	, waypoints()		// enemy only
 	, waypoint_pause(MAX_FRAMES_PER_SEC)	// enemy only
 	, waypoint_pause_ticks(0)		// enemy only
