@@ -489,7 +489,8 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 				if (MOUSE_MOVE) lockAttack = true;
 
 				if (activeAnimation->isFirstFrame()) {
-					activeAnimation->setSpeed(stats.effects.attack_speed);
+					float attack_speed = (stats.effects.attack_speed * powers->powers[current_power].attack_speed) / 100.0f;
+					activeAnimation->setSpeed(attack_speed);
 					playAttackSound(attack_anim);
 					power_cast_duration[current_power] = activeAnimation->getDuration();
 					power_cast_ticks[current_power] = power_cast_duration[current_power];

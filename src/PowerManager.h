@@ -156,6 +156,7 @@ public:
 	bool floor; // the hazard is drawn between the background and object layers
 	bool complete_animation;
 	float charge_speed;
+	float attack_speed;
 
 	// hazard traits
 	bool use_hazard;
@@ -289,6 +290,7 @@ public:
 		, floor(false)
 		, complete_animation(false)
 		, charge_speed(0.0f)
+		, attack_speed(100.0f)
 
 		, use_hazard(false)
 		, no_attack(false)
