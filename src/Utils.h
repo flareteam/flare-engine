@@ -190,6 +190,7 @@ public:
 	bool render_above;
 	Color color_mod;
 	uint8_t alpha_mod;
+	std::string attack_speed_anim;
 
 	EffectDef()
 		: id("")
@@ -202,7 +203,8 @@ public:
 		, group_stack(false)
 		, render_above(false)
 		, color_mod(255, 255, 255)
-		, alpha_mod(255) {
+		, alpha_mod(255)
+		, attack_speed_anim("") {
 	}
 };
 

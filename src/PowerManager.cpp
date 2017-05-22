@@ -112,12 +112,16 @@ void PowerManager::loadEffects() {
 			effects.back().render_above = toBool(infile.val);
 		}
 		else if (infile.key == "color_mod") {
-			// @ATTR color_mod|color|Changes the color of the afflicted entity.
+			// @ATTR effect.color_mod|color|Changes the color of the afflicted entity.
 			effects.back().color_mod = toRGB(infile.val);
 		}
 		else if (infile.key == "alpha_mod") {
-			// @ATTR alpha_mod|int|Changes the alpha of the afflicted entity.
+			// @ATTR effect.alpha_mod|int|Changes the alpha of the afflicted entity.
 			effects.back().alpha_mod = static_cast<uint8_t>(toInt(infile.val));
+		}
+		else if (infile.key == "attack_speed_anim") {
+			// @ATTR effect.attack_speed_anim|string|If the type of Effect is attack_speed, this defines the attack animation that will have its speed changed.
+			effects.back().attack_speed_anim = infile.val;
 		}
 		else {
 			infile.error("PowerManager: '%s' is not a valid key.", infile.key.c_str());

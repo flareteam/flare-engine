@@ -64,6 +64,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 		effect_list[i].group_stack = emSource.effect_list[i].group_stack;
 		effect_list[i].color_mod = emSource.effect_list[i].color_mod;
 		effect_list[i].alpha_mod = emSource.effect_list[i].alpha_mod;
+		effect_list[i].attack_speed_anim = emSource.effect_list[i].attack_speed_anim;
 
 		if (emSource.effect_list[i].animation_name != "") {
 			effect_list[i].animation_name = emSource.effect_list[i].animation_name;
@@ -78,7 +79,6 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	mpot = emSource.mpot;
 	mpot_percent = emSource.mpot_percent;
 	speed = emSource.speed;
-	attack_speed = emSource.attack_speed;
 	immunity_damage = emSource.immunity_damage;
 	immunity_slow = emSource.immunity_slow;
 	immunity_stun = emSource.immunity_stun;
@@ -123,7 +123,6 @@ void EffectManager::clearStatus() {
 	mpot = 0;
 	mpot_percent = 0;
 	speed = 100;
-	attack_speed = 100;
 	immunity_damage = false;
 	immunity_slow = false;
 	immunity_stun = false;
@@ -186,7 +185,7 @@ void EffectManager::logic() {
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
 			else if (effect_list[i].type == EFFECT_SPEED) speed = (static_cast<float>(effect_list[i].magnitude) * speed) / 100.f;
 			// @TYPE attack_speed|Changes attack speed. A magnitude of 100 is 100% speed (aka normal speed).
-			else if (effect_list[i].type == EFFECT_ATTACK_SPEED) attack_speed = (static_cast<float>(effect_list[i].magnitude) * attack_speed) / 100.f;
+			// attack speed is calculated when getAttackSpeed() is called
 
 			// @TYPE immunity|Applies all immunity effects. Magnitude is ignored.
 			else if (effect_list[i].type == EFFECT_IMMUNITY) {
@@ -353,6 +352,7 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	e.group_stack = effect.group_stack;
 	e.color_mod = effect.color_mod;
 	e.alpha_mod = effect.alpha_mod;
+	e.attack_speed_anim = effect.attack_speed_anim;
 
 	if (effect.animation != "") {
 		anim->increaseCount(effect.animation);
@@ -592,3 +592,17 @@ bool EffectManager::hasEffect(const std::string& id, int req_count) {
 	return count >= req_count;
 }
 
+float EffectManager::getAttackSpeed(const std::string& anim_name) {
+	float attack_speed = 100;
+
+	for (size_t i = 0; i < effect_list.size(); ++i) {
+		if (effect_list[i].type != EFFECT_ATTACK_SPEED)
+			continue;
+
+		if (effect_list[i].attack_speed_anim.empty() || (!effect_list[i].attack_speed_anim.empty() && effect_list[i].attack_speed_anim == anim_name)) {
+			attack_speed = (static_cast<float>(effect_list[i].magnitude) * attack_speed) / 100.0f;
+		}
+	}
+
+	return attack_speed;
+}

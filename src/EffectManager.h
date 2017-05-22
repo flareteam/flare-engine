@@ -84,6 +84,7 @@ public:
 	bool group_stack;
 	Color color_mod;
 	uint8_t alpha_mod;
+	std::string attack_speed_anim;
 
 	Effect()
 		: id("")
@@ -103,7 +104,8 @@ public:
 		, source_type(SOURCE_TYPE_HERO)
 		, group_stack(false)
 		, color_mod(255, 255, 255)
-		, alpha_mod(255) {
+		, alpha_mod(255)
+		, attack_speed_anim("") {
 	}
 
 	~Effect() {
@@ -137,6 +139,7 @@ public:
 	Color getCurrentColor();
 	uint8_t getCurrentAlpha();
 	bool hasEffect(const std::string& id, int req_count);
+	float getAttackSpeed(const std::string& anim_name);
 
 	std::vector<Effect> effect_list;
 
@@ -147,7 +150,6 @@ public:
 	int mpot;
 	int mpot_percent;
 	float speed;
-	float attack_speed;
 	bool immunity_damage;
 	bool immunity_slow;
 	bool immunity_stun;
