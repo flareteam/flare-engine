@@ -326,9 +326,14 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "charge_speed")
 			// @ATTR power.charge_speed|float|Moves the caster at this speed in the direction they are facing until the state animation is finished.
 			powers[input_id].charge_speed = toFloat(infile.val) / MAX_FRAMES_PER_SEC;
-		else if (infile.key == "attack_speed")
+		else if (infile.key == "attack_speed") {
 			// @ATTR power.attack_speed|int|Changes attack animation speed for this Power. A value of 100 is 100% speed (aka normal speed).
 			powers[input_id].attack_speed = static_cast<float>(toInt(infile.val));
+			if (powers[input_id].attack_speed < 100) {
+				logInfo("PowerManager: Attack speeds less than 100 are unsupported.");
+				powers[input_id].attack_speed = 100;
+			}
+		}
 		// hazard traits
 		else if (infile.key == "use_hazard")
 			// @ATTR power.use_hazard|bool|Power uses hazard.
