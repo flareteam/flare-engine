@@ -55,6 +55,7 @@ protected:
 
 	unsigned short cur_frame_index; // which frame in this animation is currently being displayed? range: 0..gfx.size()-1
 	unsigned short cur_frame_duration;  // how many ticks is the current image being displayed yet? range: 0..duration[cur_frame]-1
+	float cur_frame_index_f; // more granular control over cur_frame_index
 
 	unsigned short max_kinds;
 
@@ -74,10 +75,13 @@ protected:
 	std::vector<short> active_frames;	// which of the visible diffferent frames are active?
 	// This should contain indexes of the gfx vector.
 	// Assume it is sorted, one index occurs at max once.
+	bool active_frame_triggered;
 
 	unsigned short elapsed_frames; // counts the total number of frames for back-forth animations
 
 	unsigned frame_count; // the frame count as it appears in the data files (i.e. not converted to engine frames)
+
+	float speed; // how fast the animation plays
 
 public:
 	Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode);
@@ -134,6 +138,8 @@ public:
 	bool isCompleted();
 
 	unsigned getFrameCount() { return frame_count; }
+
+	void setSpeed(float val);
 };
 
 #endif

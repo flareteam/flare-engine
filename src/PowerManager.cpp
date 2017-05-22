@@ -613,6 +613,8 @@ void PowerManager::loadPowers() {
 bool PowerManager::isValidEffect(const std::string& type) {
 	if (type == "speed")
 		return true;
+	if (type == "attack_speed")
+		return true;
 
 	if (type == "physical")
 		return true;

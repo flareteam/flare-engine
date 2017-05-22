@@ -42,6 +42,7 @@ Animation::Animation(const std::string &_name, const std::string &_type, Image *
 	, cur_frame(0)
 	, cur_frame_index(0)
 	, cur_frame_duration(0)
+	, cur_frame_index_f(0)
 	, max_kinds(0)
 	, additional_data(0)
 	, times_played(0)
@@ -49,8 +50,10 @@ Animation::Animation(const std::string &_name, const std::string &_type, Image *
 	, render_offset()
 	, frames()
 	, active_frames()
+	, active_frame_triggered(false)
 	, elapsed_frames(0)
-	, frame_count(0) {
+	, frame_count(0)
+	, speed(1.0f) {
 	if (type == NONE)
 		logError("Animation: Type %s is unknown", _type.c_str());
 }
@@ -64,6 +67,7 @@ Animation::Animation(const Animation& a)
 	, cur_frame(0)
 	, cur_frame_index(a.cur_frame_index)
 	, cur_frame_duration(a.cur_frame_duration)
+	, cur_frame_index_f(a.cur_frame_index_f)
 	, max_kinds(a.max_kinds)
 	, additional_data(a.additional_data)
 	, times_played(0)
@@ -71,8 +75,10 @@ Animation::Animation(const Animation& a)
 	, render_offset(std::vector<Point>(a.render_offset))
 	, frames(std::vector<unsigned short>(a.frames))
 	, active_frames(std::vector<short>(a.active_frames))
+	, active_frame_triggered(false)
 	, elapsed_frames(0)
-	, frame_count(0) {
+	, frame_count(0)
+	, speed(a.speed) {
 }
 
 void Animation::setupUncompressed(const Point& _render_size, const Point& _render_offset, unsigned short _position, unsigned short _frames, unsigned short _duration, unsigned short _maxkinds) {
@@ -151,6 +157,7 @@ void Animation::setup(unsigned short _frames, unsigned short _duration, unsigned
 	}
 	cur_frame = 0;
 	cur_frame_index = 0;
+	cur_frame_index_f = 0;
 	max_kinds = _maxkinds;
 	times_played = 0;
 
@@ -182,6 +189,7 @@ void Animation::addFrame(unsigned short index, unsigned short kind, const Rect& 
 void Animation::advanceFrame() {
 	if (frames.empty()) {
 		cur_frame_index = 0;
+		cur_frame_index_f = 0;
 		times_played++;
 		return;
 	}
@@ -190,18 +198,22 @@ void Animation::advanceFrame() {
 	switch(type) {
 		case PLAY_ONCE:
 
-			if (cur_frame_index < last_base_index)
-				cur_frame_index++;
+			if (cur_frame_index < last_base_index) {
+				cur_frame_index_f += speed;
+				cur_frame_index = static_cast<unsigned short>(cur_frame_index_f);
+			}
 			else
 				times_played = 1;
 			break;
 
 		case LOOPED:
 			if (cur_frame_index < last_base_index) {
-				cur_frame_index++;
+				cur_frame_index_f += speed;
+				cur_frame_index = static_cast<unsigned short>(cur_frame_index_f);
 			}
 			else {
 				cur_frame_index = 0;
+				cur_frame_index_f = 0;
 				times_played++;
 			}
 			break;
@@ -209,14 +221,18 @@ void Animation::advanceFrame() {
 		case BACK_FORTH:
 
 			if (additional_data == 1) {
-				if (cur_frame_index < last_base_index)
-					cur_frame_index++;
+				if (cur_frame_index < last_base_index) {
+					cur_frame_index_f += speed;
+					cur_frame_index = static_cast<unsigned short>(cur_frame_index_f);
+				}
 				else
 					additional_data = -1;
 			}
 			else if (additional_data == -1) {
-				if (cur_frame_index > 0)
-					cur_frame_index--;
+				if (cur_frame_index > 0) {
+					cur_frame_index_f -= speed;
+					cur_frame_index = static_cast<unsigned short>(cur_frame_index_f);
+				}
 				else {
 					additional_data = 1;
 					times_played++;
@@ -227,6 +243,8 @@ void Animation::advanceFrame() {
 		case NONE:
 			break;
 	}
+	cur_frame_index = std::max<short>(0, cur_frame_index);
+	cur_frame_index = (cur_frame_index > last_base_index ? last_base_index : cur_frame_index);
 
 	if (cur_frame != frames[cur_frame_index]) elapsed_frames++;
 	cur_frame = frames[cur_frame_index];
@@ -251,14 +269,17 @@ Renderable Animation::getCurrentFrame(int kind) {
 void Animation::reset() {
 	cur_frame = 0;
 	cur_frame_index = 0;
+	cur_frame_index_f = 0;
 	times_played = 0;
 	additional_data = 1;
 	elapsed_frames = 0;
+	active_frame_triggered = false;
 }
 
 bool Animation::syncTo(const Animation *other) {
 	cur_frame = other->cur_frame;
 	cur_frame_index = other->cur_frame_index;
+	cur_frame_index_f = other->cur_frame_index_f;
 	times_played = other->times_played;
 	additional_data = other->additional_data;
 	elapsed_frames = other->elapsed_frames;
@@ -267,11 +288,13 @@ bool Animation::syncTo(const Animation *other) {
 		if (frames.empty()) {
 			logError("Animation: '%s' animation has no frames, but current frame index is greater than 0.", name.c_str());
 			cur_frame_index = 0;
+			cur_frame_index_f = 0;
 			return false;
 		}
 		else {
 			logError("Animation: Current frame index (%d) was larger than the last frame index (%d) when syncing '%s' animation.", cur_frame_index, frames.size()-1, name.c_str());
 			cur_frame_index = static_cast<unsigned short>(frames.size()-1);
+			cur_frame_index_f = cur_frame_index;
 			return false;
 		}
 	}
@@ -323,10 +346,16 @@ bool Animation::isActiveFrame() {
 			return cur_frame_index == getLastFrameIndex(cur_frame);
 	}
 	else {
-		if (std::find(active_frames.begin(), active_frames.end(), cur_frame) != active_frames.end())
-			return cur_frame_index == getLastFrameIndex(cur_frame);
+		if (std::find(active_frames.begin(), active_frames.end(), cur_frame) != active_frames.end()) {
+			if (cur_frame_index == getLastFrameIndex(cur_frame)) {
+				if (type == PLAY_ONCE)
+					active_frame_triggered = true;
+
+				return true;
+			}
+		}
 	}
-	return false;
+	return (isLastFrame() && type == PLAY_ONCE && !active_frame_triggered && !active_frames.empty());
 }
 
 int Animation::getTimesPlayed() {
@@ -338,7 +367,7 @@ std::string Animation::getName() {
 }
 
 int Animation::getDuration() {
-	return static_cast<int>(frames.size());
+	return static_cast<int>(static_cast<float>(frames.size()) / speed);
 }
 
 bool Animation::isCompleted() {
@@ -363,4 +392,8 @@ unsigned short Animation::getLastFrameIndex(const short &frame) {
 		}
 		return static_cast<unsigned short>(frames.size()-1);
 	}
+}
+
+void Animation::setSpeed(float val) {
+	speed = val / 100.0f;
 }

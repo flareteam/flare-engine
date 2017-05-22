@@ -56,12 +56,14 @@ public:
 	int resist_index; // engine/elements.txt
 	int base_index; // physical, mental, offense, defense
 	bool is_speed;
+	bool is_attack_speed;
 	int value;
 	BonusData()
 		: stat_index(-1)
 		, resist_index(-1)
 		, base_index(-1)
 		, is_speed(false)
+		, is_attack_speed(false)
 		, value(0) {
 	}
 };

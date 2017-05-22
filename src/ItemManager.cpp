@@ -537,6 +537,10 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		bdata.is_speed = true;
 		return;
 	}
+	else if (bonus_str == "attack_speed") {
+		bdata.is_attack_speed = true;
+		return;
+	}
 
 	for (unsigned i=0; i<STAT_COUNT; ++i) {
 		if (bonus_str == STAT_KEY[i]) {
@@ -575,6 +579,10 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	if (bdata->is_speed) {
 		ss << msg->get("%d%% Speed", bdata->value);
+		return;
+	}
+	else if (bdata->is_attack_speed) {
+		ss << msg->get("%d%% Attack Speed", bdata->value);
 		return;
 	}
 
@@ -716,7 +724,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 
 		BonusData* bdata = &items[stack.item].bonus[bonus_counter];
 
-		if (bdata->is_speed) {
+		if (bdata->is_speed || bdata->is_attack_speed) {
 			if (bdata->value >= 100) color = color_bonus;
 			else color = color_penalty;
 		}

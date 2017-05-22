@@ -587,6 +587,7 @@ void BehaviorStandard::updateState() {
 
 			// sound effect based on power type
 			if (e->activeAnimation->isFirstFrame()) {
+				e->activeAnimation->setSpeed(e->stats.effects.attack_speed);
 				e->playAttackSound(powers->powers[power_id].attack_anim);
 
 				if (powers->powers[power_id].state_duration > 0)

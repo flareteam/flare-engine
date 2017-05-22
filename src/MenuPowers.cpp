@@ -740,6 +740,9 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				else
 					ss << msg->get("%d%% Speed", pwr.post_effects[i].magnitude);
 			}
+			else if (effect_ptr->type == "attack_speed") {
+				ss << msg->get("%d%% Attack Speed", pwr.post_effects[i].magnitude);
+			}
 			else if (effect_ptr->type == "immunity") {
 				ss << msg->get("Immunity");
 			}

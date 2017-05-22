@@ -78,6 +78,7 @@ EffectManager& EffectManager::operator= (const EffectManager &emSource) {
 	mpot = emSource.mpot;
 	mpot_percent = emSource.mpot_percent;
 	speed = emSource.speed;
+	attack_speed = emSource.attack_speed;
 	immunity_damage = emSource.immunity_damage;
 	immunity_slow = emSource.immunity_slow;
 	immunity_stun = emSource.immunity_stun;
@@ -122,6 +123,7 @@ void EffectManager::clearStatus() {
 	mpot = 0;
 	mpot_percent = 0;
 	speed = 100;
+	attack_speed = 100;
 	immunity_damage = false;
 	immunity_slow = false;
 	immunity_stun = false;
@@ -183,6 +185,8 @@ void EffectManager::logic() {
 			else if (effect_list[i].type == EFFECT_MPOT_PERCENT && effect_list[i].ticks % MAX_FRAMES_PER_SEC == 1) mpot_percent += effect_list[i].magnitude;
 			// @TYPE speed|Changes movement speed. A magnitude of 100 is 100% speed (aka normal speed).
 			else if (effect_list[i].type == EFFECT_SPEED) speed = (static_cast<float>(effect_list[i].magnitude) * speed) / 100.f;
+			// @TYPE attack_speed|Changes attack speed. A magnitude of 100 is 100% speed (aka normal speed).
+			else if (effect_list[i].type == EFFECT_ATTACK_SPEED) attack_speed = (static_cast<float>(effect_list[i].magnitude) * attack_speed) / 100.f;
 
 			// @TYPE immunity|Applies all immunity effects. Magnitude is ignored.
 			else if (effect_list[i].type == EFFECT_IMMUNITY) {
@@ -282,6 +286,11 @@ void EffectManager::addEffect(EffectDef &effect, int duration, int magnitude, bo
 	// only allow one knockback effect at a time
 	if (effect_type == EFFECT_KNOCKBACK && knockback_speed != 0)
 		return;
+
+	if (effect_type == EFFECT_ATTACK_SPEED && magnitude < 100) {
+		logInfo("EffectManager: Attack speeds less than 100 are unsupported.");
+		return;
+	}
 
 	bool insert_effect = false;
 	int stacks_applied = 0;
@@ -493,6 +502,7 @@ int EffectManager::getType(const std::string& type) {
 	else if (type == "mpot") return EFFECT_MPOT;
 	else if (type == "mpot_percent") return EFFECT_MPOT_PERCENT;
 	else if (type == "speed") return EFFECT_SPEED;
+	else if (type == "attack_speed") return EFFECT_ATTACK_SPEED;
 	else if (type == "immunity") return EFFECT_IMMUNITY;
 	else if (type == "immunity_damage") return EFFECT_IMMUNITY_DAMAGE;
 	else if (type == "immunity_slow") return EFFECT_IMMUNITY_SLOW;
