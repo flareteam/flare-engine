@@ -444,7 +444,7 @@ bool Entity::takeHit(Hazard &h) {
 		stats.effects.removeEffectID(powers->powers[h.power_index].remove_effects);
 
 		// post power
-		if (h.post_power > 0) {
+		if (h.post_power > 0 && percentChance(h.post_power_chance)) {
 			powers->activate(h.post_power, h.src_stats, stats.pos);
 		}
 	}

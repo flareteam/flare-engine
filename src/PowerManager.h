@@ -214,7 +214,9 @@ public:
 	std::vector<PostEffect> post_effects;
 
 	int post_power;
+	int post_power_chance;
 	int wall_power;
+	int wall_power_chance;
 	bool wall_reflect;
 
 	// spawn info
@@ -337,7 +339,9 @@ public:
 		, buff_party_power_id(0)
 
 		, post_power(0)
+		, post_power_chance(100)
 		, wall_power(0)
+		, wall_power_chance(100)
 		, wall_reflect(false)
 
 		, spawn_type("")

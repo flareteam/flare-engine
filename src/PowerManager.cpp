@@ -458,12 +458,22 @@ void PowerManager::loadPowers() {
 			}
 		}
 		// pre and post power effects
-		else if (infile.key == "post_power")
-			// @ATTR power.post_power|power_id|Trigger a power if the hazard did damage.
-			powers[input_id].post_power = toInt(infile.val);
-		else if (infile.key == "wall_power")
-			// @ATTR power.wall_power|power_id|Trigger a power if the hazard hit a wall.
-			powers[input_id].wall_power = toInt(infile.val);
+		else if (infile.key == "post_power") {
+			// @ATTR power.post_power|power_id, int : Power, Chance to cast|Trigger a power if the hazard did damage.
+			powers[input_id].post_power = popFirstInt(infile.val);
+			std::string chance = popFirstString(infile.val);
+			if (!chance.empty()) {
+				powers[input_id].post_power_chance = toInt(chance);
+			}
+		}
+		else if (infile.key == "wall_power") {
+			// @ATTR power.wall_power|power_id, int : Power, Chance to cast|Trigger a power if the hazard hit a wall.
+			powers[input_id].wall_power = popFirstInt(infile.val);
+			std::string chance = popFirstString(infile.val);
+			if (!chance.empty()) {
+				powers[input_id].wall_power_chance = toInt(chance);
+			}
+		}
 		else if (infile.key == "wall_reflect")
 			// @ATTR power.wall_reflect|bool|Moving power will bounce off walls and keep going
 			powers[input_id].wall_reflect = toBool(infile.val);
@@ -811,7 +821,9 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 
 	// pre/post power effects
 	haz->post_power = powers[power_index].post_power;
+	haz->post_power_chance = powers[power_index].post_power_chance;
 	haz->wall_power = powers[power_index].wall_power;
+	haz->wall_power_chance = powers[power_index].wall_power_chance;
 	haz->wall_reflect = powers[power_index].wall_reflect;
 
 	// flag missile powers for reflection
@@ -877,7 +889,9 @@ void PowerManager::buff(int power_index, StatBlock *src_stats, const FPoint& tar
 	// this is also where Effects are removed for non-hazard powers
 	if (!powers[power_index].use_hazard) {
 		src_stats->effects.removeEffectID(powers[power_index].remove_effects);
-		activate(powers[power_index].post_power, src_stats, src_stats->pos);
+		if (percentChance(powers[power_index].post_power_chance)) {
+			activate(powers[power_index].post_power, src_stats, src_stats->pos);
+		}
 	}
 }
 

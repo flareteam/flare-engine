@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "HazardManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
+#include "UtilsMath.h"
 
 HazardManager::HazardManager()
 	: last_enemy(NULL)
@@ -81,14 +82,14 @@ void HazardManager::logic() {
 				EventManager::executeScript(h[i-1]->script, h[i-1]->pos.x, h[i-1]->pos.y);
 			}
 
-			if (h[i-1]->wall_power > 0) {
+			if (h[i-1]->wall_power > 0 && percentChance(h[i-1]->wall_power_chance)) {
 				powers->activate(h[i-1]->wall_power, h[i-1]->src_stats, h[i-1]->pos);
 
 				if (powers->powers[h[i-1]->wall_power].directional) {
 					powers->hazards.back()->animationKind = h[i-1]->animationKind;
 				}
 			}
-			
+
 			// clear wall hit
 			h[i-1]->hit_wall = false;
 		}

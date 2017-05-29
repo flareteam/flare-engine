@@ -129,10 +129,12 @@ public:
 
 	// pre/post power effects
 	int post_power;
+	int post_power_chance;
 	int wall_power;
+	int wall_power_chance;
 
 	bool wall_reflect;
-	
+
 	// targeting by movement type
 	bool target_movement_normal;
 	bool target_movement_flying;
