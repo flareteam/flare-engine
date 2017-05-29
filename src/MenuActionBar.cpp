@@ -71,7 +71,7 @@ MenuActionBar::MenuActionBar()
 			if (parseMenuKey(infile.key, infile.val))
 				continue;
 
-			// @ATTR slot|repeatable(int, int, int) : Index, X, Y|Index (max 10) and position for power slot.
+			// @ATTR slot|repeatable(int, int, int, bool) : Index, X, Y, Locked|Index (max 10) and position for power slot. If a slot is locked, its Power can't be changed by the player.
 			if (infile.key == "slot") {
 				unsigned index = popFirstInt(infile.val);
 				if (index == 0 || index > 10) {
@@ -80,20 +80,26 @@ MenuActionBar::MenuActionBar()
 				else {
 					int x = popFirstInt(infile.val);
 					int y = popFirstInt(infile.val);
-					addSlot(index-1, x, y);
+					std::string val = popFirstString(infile.val);
+					bool is_locked = (val.empty() ? false : toBool(val));
+					addSlot(index-1, x, y, is_locked);
 				}
 			}
-			// @ATTR slot_M1|point|Position for the primary action slot.
+			// @ATTR slot_M1|point, bool : Position, Locked|Position for the primary action slot. If the slot is locked, its Power can't be changed by the player.
 			else if (infile.key == "slot_M1") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				addSlot(10, x, y);
+				std::string val = popFirstString(infile.val);
+				bool is_locked = (val.empty() ? false : toBool(val));
+				addSlot(10, x, y, is_locked);
 			}
-			// @ATTR slot_M2|point|Position for the secondary action slot.
+			// @ATTR slot_M2|point, bool : Position Locked|Position for the secondary action slot. If the slot is locked, its Power can't be changed by the player.
 			else if (infile.key == "slot_M2") {
 				int x = popFirstInt(infile.val);
 				int y = popFirstInt(infile.val);
-				addSlot(11, x, y);
+				std::string val = popFirstString(infile.val);
+				bool is_locked = (val.empty() ? false : toBool(val));
+				addSlot(11, x, y, is_locked);
 			}
 
 			// @ATTR char_menu|point|Position for the Character menu button.
@@ -154,7 +160,7 @@ MenuActionBar::MenuActionBar()
 	menu_act = this;
 }
 
-void MenuActionBar::addSlot(unsigned index, int x, int y) {
+void MenuActionBar::addSlot(unsigned index, int x, int y, bool is_locked) {
 	if (index >= slots.size()) {
 		labels.resize(index+1);
 		slots.resize(index+1, NULL);
@@ -164,6 +170,9 @@ void MenuActionBar::addSlot(unsigned index, int x, int y) {
 	slots[index]->setBasePos(x, y);
 	slots[index]->pos.w = slots[index]->pos.h = ICON_SIZE;
 	slots[index]->continuous = true;
+
+	prevent_changing.resize(slots.size());
+	prevent_changing[index] = is_locked;
 
 	tablist.add(slots[index]);
 }
@@ -424,13 +433,17 @@ void MenuActionBar::drop(const Point& mouse, int power_index, bool rearranging) 
 	for (unsigned i = 0; i < slots_count; i++) {
 		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
 			if (rearranging) {
+				if (prevent_changing[i]) {
+					actionReturn(power_index);
+					return;
+				}
 				if ((locked[i] && !locked[drag_prev_slot]) || (!locked[i] && locked[drag_prev_slot])) {
 					locked[i] = !locked[i];
 					locked[drag_prev_slot] = !locked[drag_prev_slot];
 				}
 				hotkeys[drag_prev_slot] = hotkeys[i];
 			}
-			else if (locked[i]) return;
+			else if (locked[i] || prevent_changing[i]) return;
 			hotkeys[i] = power_index;
 			updated = true;
 			return;
@@ -580,6 +593,9 @@ int MenuActionBar::checkDrag(const Point& mouse) {
 
 	for (unsigned i=0; i<slots_count; i++) {
 		if (slots[i] && isWithinRect(slots[i]->pos, mouse)) {
+			if (prevent_changing[i])
+				return 0;
+
 			drag_prev_slot = i;
 			power_index = hotkeys[i];
 			hotkeys[i] = 0;
@@ -729,6 +745,9 @@ void MenuActionBar::addPower(const int id, const int target_id) {
 	// MAIN slots have priority
 	for (unsigned i=10; i<12; ++i) {
 		if (hotkeys[i] == target_id) {
+			if (target_id == 0 && prevent_changing[i]) {
+				continue;
+			}
 			hotkeys[i] = id;
 			updated = true;
 			if (target_id == 0)
@@ -739,6 +758,9 @@ void MenuActionBar::addPower(const int id, const int target_id) {
 	// now try 0-9 slots
 	for (unsigned i=0; i<10; ++i) {
 		if (hotkeys[i] == target_id) {
+			if (target_id == 0 && prevent_changing[i]) {
+				continue;
+			}
 			hotkeys[i] = id;
 			updated = true;
 			if (target_id == 0)

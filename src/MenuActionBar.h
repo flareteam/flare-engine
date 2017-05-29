@@ -48,7 +48,7 @@ const int ACTIONBAR_MAIN = 10;
 class MenuActionBar : public Menu {
 private:
 	FPoint setTarget(bool have_aim, bool aim_assist);
-	void addSlot(unsigned index, int x, int y);
+	void addSlot(unsigned index, int x, int y, bool is_locked);
 
 	Sprite *sprite_emptyslot;
 	Sprite *sprite_disabled;
@@ -91,6 +91,7 @@ public:
 	std::vector<int> hotkeys_temp; // temp for shapeshifting
 	std::vector<int> hotkeys_mod; // hotkeys can be changed by items
 	std::vector<bool> locked; // if slot is locked, you cannot drop it
+	std::vector<bool> prevent_changing;
 	std::vector<WidgetSlot *> slots; // hotkey slots
 	WidgetSlot *menus[4]; // menu buttons
 	std::vector<int> slot_item_count; // -1 means this power isn't item based.  0 means out of items.  1+ means sufficient items.

@@ -793,11 +793,11 @@ body {
 
 <p>Description of menus/actionbar.txt</p>
 
-<p><strong>slot</strong> | <code>repeatable(int, int, int) : Index, X, Y</code> | Index (max 10) and position for power slot.</p>
+<p><strong>slot</strong> | <code>repeatable(int, int, int, bool) : Index, X, Y, Locked</code> | Index (max 10) and position for power slot. If a slot is locked, its Power can't be changed by the player.</p>
 
-<p><strong>slot_M1</strong> | <code>point</code> | Position for the primary action slot.</p>
+<p><strong>slot_M1</strong> | <code>point, bool : Position, Locked</code> | Position for the primary action slot. If the slot is locked, its Power can't be changed by the player.</p>
 
-<p><strong>slot_M2</strong> | <code>point</code> | Position for the secondary action slot.</p>
+<p><strong>slot_M2</strong> | <code>point, bool : Position Locked</code> | Position for the secondary action slot. If the slot is locked, its Power can't be changed by the player.</p>
 
 <p><strong>char_menu</strong> | <code>point</code> | Position for the Character menu button.</p>
 
