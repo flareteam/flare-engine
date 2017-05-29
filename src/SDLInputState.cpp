@@ -118,16 +118,16 @@ void SDLInputState::defaultQwertyKeyBindings () {
 	binding_alt[LEFT] = SDLK_LEFT;
 	binding_alt[RIGHT] = SDLK_RIGHT;
 
-	binding[BAR_1] = binding_alt[BAR_1] = SDLK_1;
-	binding[BAR_2] = binding_alt[BAR_2] = SDLK_2;
-	binding[BAR_3] = binding_alt[BAR_3] = SDLK_3;
-	binding[BAR_4] = binding_alt[BAR_4] = SDLK_4;
-	binding[BAR_5] = binding_alt[BAR_5] = SDLK_5;
-	binding[BAR_6] = binding_alt[BAR_6] = SDLK_6;
-	binding[BAR_7] = binding_alt[BAR_7] = SDLK_7;
-	binding[BAR_8] = binding_alt[BAR_8] = SDLK_8;
-	binding[BAR_9] = binding_alt[BAR_9] = SDLK_9;
-	binding[BAR_0] = binding_alt[BAR_0] = SDLK_0;
+	binding[BAR_1] = binding_alt[BAR_1] = SDLK_q;
+	binding[BAR_2] = binding_alt[BAR_2] = SDLK_e;
+	binding[BAR_3] = binding_alt[BAR_3] = SDLK_r;
+	binding[BAR_4] = binding_alt[BAR_4] = SDLK_f;
+	binding[BAR_5] = binding_alt[BAR_5] = SDLK_1;
+	binding[BAR_6] = binding_alt[BAR_6] = SDLK_2;
+	binding[BAR_7] = binding_alt[BAR_7] = SDLK_3;
+	binding[BAR_8] = binding_alt[BAR_8] = SDLK_4;
+	binding[BAR_9] = binding_alt[BAR_9] = SDLK_5;
+	binding[BAR_0] = binding_alt[BAR_0] = SDLK_6;
 
 	binding[CHARACTER] = binding_alt[CHARACTER] = SDLK_c;
 	binding[INVENTORY] = binding_alt[INVENTORY] = SDLK_i;
