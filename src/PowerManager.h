@@ -84,11 +84,13 @@ public:
 	std::string id;
 	int magnitude;
 	int duration;
+	int chance;
 
 	PostEffect()
 		: id("")
 		, magnitude(0)
-		, duration(0) {
+		, duration(0)
+		, chance(100) {
 	}
 };
 

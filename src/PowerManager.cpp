@@ -441,7 +441,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.buff_party_power_id|power_id|Buffs a power id for all party members
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
-			// @ATTR power.post_effect|predefined_string, int, duration : Effect ID, Magnitude, Duration|Post effect. Duration is in 'ms' or 's'.
+			// @ATTR power.post_effect|predefined_string, int, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect. Duration is in 'ms' or 's'.
 			if (clear_post_effects) {
 				powers[input_id].post_effects.clear();
 				clear_post_effects = false;
@@ -454,6 +454,10 @@ void PowerManager::loadPowers() {
 			else {
 				pe.magnitude = popFirstInt(infile.val);
 				pe.duration = parse_duration(popFirstString(infile.val));
+				std::string chance = popFirstString(infile.val);
+				if (!chance.empty()) {
+					pe.chance = toInt(chance);
+				}
 				powers[input_id].post_effects.push_back(pe);
 			}
 		}
@@ -906,6 +910,8 @@ void PowerManager::playSound(int power_index) {
 
 bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int power_index, int source_type) {
 	for (unsigned i=0; i<powers[power_index].post_effects.size(); i++) {
+		if (!percentChance(powers[power_index].post_effects[i].chance))
+			return false;
 
 		EffectDef effect_data;
 		EffectDef* effect_ptr = getEffectDef(powers[power_index].post_effects[i].id);
