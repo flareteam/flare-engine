@@ -53,6 +53,7 @@ StatBlock::StatBlock()
 	, summoned(false)
 	, summoned_power_index(0)
 	, encountered(false)
+	, target_corpse(NULL) // hero only
 	, movement_type(MOVEMENT_NORMAL)
 	, flying(false)
 	, intangible(false)
@@ -779,6 +780,7 @@ bool StatBlock::canUsePower(const Power &power, int powerid) const {
 			&& !power.meta_power
 			&& !effects.stun
 			&& (power.sacrifice || hp > power.requires_hp)
+			&& (!power.requires_corpse || (power.requires_corpse && target_corpse && target_corpse->corpse_ticks > 0))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
 			&& (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
 			&& !(power.spawn_type == "untransform" && !transformed)

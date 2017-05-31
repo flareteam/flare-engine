@@ -118,6 +118,7 @@ public:
 	bool summoned;
 	int summoned_power_index;
 	bool encountered; // enemy only
+	StatBlock* target_corpse;
 
 	MOVEMENTTYPE movement_type;
 	bool flying;

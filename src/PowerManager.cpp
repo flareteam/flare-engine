@@ -624,6 +624,17 @@ void PowerManager::loadPowers() {
 			powers[input_id].replace_by_effect_id = popFirstString(infile.val);
 			powers[input_id].replace_by_effect_count = popFirstInt(infile.val);
 		}
+		else if (infile.key == "requires_corpse") {
+			// @ATTR power.requires_corpse|["consume", bool]|If true, a corpse must be targeted for this power to be used. If "consume", then the corpse is also consumed on Power use.
+			if (infile.val == "consume") {
+				powers[input_id].requires_corpse = true;
+				powers[input_id].remove_corpse = true;
+			}
+			else {
+				powers[input_id].requires_corpse = toBool(infile.val);
+				powers[input_id].remove_corpse = false;
+			}
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -1274,6 +1285,9 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 	if (src_stats->hero) {
 		if (powers[power_index].requires_mp > src_stats->mp)
 			return false;
+
+		if (powers[power_index].requires_corpse && !src_stats->target_corpse)
+			return false;
 	}
 
 	if (src_stats->hp > 0 && powers[power_index].sacrifice == false && powers[power_index].requires_hp >= src_stats->hp)
@@ -1337,6 +1351,12 @@ void PowerManager::payPowerCost(int power_index, StatBlock *src_stats) {
 		}
 		src_stats->hp -= powers[power_index].requires_hp;
 		src_stats->hp = (src_stats->hp < 0 ? 0 : src_stats->hp);
+
+		// consume corpses
+		if (powers[power_index].requires_corpse && powers[power_index].remove_corpse && src_stats->target_corpse) {
+			src_stats->target_corpse->corpse_ticks = 0;
+			src_stats->target_corpse = NULL;
+		}
 	}
 }
 

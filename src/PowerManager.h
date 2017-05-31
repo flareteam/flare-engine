@@ -250,6 +250,9 @@ public:
 	std::string replace_by_effect_id;
 	int replace_by_effect_count;
 
+	bool requires_corpse;
+	bool remove_corpse;
+
 	Power()
 		: type(-1)
 		, name("")
@@ -370,7 +373,10 @@ public:
 
 		, replace_by_effect_power(0)
 		, replace_by_effect_id("")
-		, replace_by_effect_count(0) {
+		, replace_by_effect_count(0)
+
+		, requires_corpse(false)
+		, remove_corpse(false) {
 	}
 
 };

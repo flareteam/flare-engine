@@ -149,6 +149,8 @@ void GameStatePlay::resetGame() {
  * This function also sets enemy mouseover for Menu Enemy.
  */
 void GameStatePlay::checkEnemyFocus() {
+	pc->stats.target_corpse = NULL;
+
 	// check the last hit enemy first
 	// if there's none, then either get the nearest enemy or one under the mouse (depending on mouse mode)
 	if (!inpt->usingMouse()) {
@@ -185,6 +187,7 @@ void GameStatePlay::checkEnemyFocus() {
 		// if we're using a mouse and we didn't select an enemy, try selecting a dead one instead
 		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, false);
 		if (temp_enemy) {
+			pc->stats.target_corpse = &(temp_enemy->stats);
 			menu->enemy->enemy = temp_enemy;
 			menu->enemy->timeout = menu_enemy_timeout;
 		}
