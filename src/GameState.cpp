@@ -17,6 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 #include "GameState.h"
+#include "Settings.h"
 
 GameState::GameState()
 	: hasMusic(false)
@@ -26,7 +27,16 @@ GameState::GameState()
 	, save_settings_on_exit(true)
 	, load_counter(0)
 	, requestedGameState(NULL)
-	, exitRequested(false) {
+	, exitRequested(false)
+	, loading_bg(NULL)
+{
+	loading_label.set(0, 0, JUSTIFY_CENTER, VALIGN_CENTER, msg->get("Loading..."), font->getColor("menu_normal"));
+
+	Image *temp = render_device->loadImage("images/menus/confirm_bg.png");
+	if (temp) {
+		loading_bg = temp->createSprite();
+		temp->unref();
+	}
 }
 
 GameState* GameState::getRequestedGameState() {
@@ -50,5 +60,23 @@ bool GameState::isPaused() {
 	return false;
 }
 
+void GameState::showLoading() {
+	if (loading_bg == NULL) return;
+
+	Rect dest;
+	dest.x = VIEW_W_HALF - loading_bg->getGraphicsWidth()/2;
+	dest.y = VIEW_H_HALF - loading_bg->getGraphicsHeight()/2;
+
+	loading_bg->setDest(dest);
+	render_device->render(loading_bg);
+
+	loading_label.setPos(VIEW_W_HALF, VIEW_H_HALF);
+	loading_label.render();
+
+	render_device->commitFrame();
+}
+
 GameState::~GameState() {
+	if (loading_bg)
+		delete loading_bg;
 }

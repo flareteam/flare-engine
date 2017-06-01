@@ -71,9 +71,6 @@ private:
 	NPCManager *npcs;
 	QuestLog *quests;
 
-	WidgetLabel *loading;
-	Sprite *loading_bg;
-
 	bool restrictPowerUse();
 	void checkEnemyFocus();
 	void checkLoot();
@@ -91,15 +88,12 @@ private:
 	void checkCutscene();
 	void checkSaveEvent();
 	void updateActionBar(unsigned index = 0);
-	void showLoading();
 	void loadTitles();
 	void resetNPC();
 	bool checkPrimaryStat(const std::string& first, const std::string& second);
 
 	int npc_id;
 	bool npc_from_map;
-
-	Color color_normal;
 
 	std::vector<Title> titles;
 

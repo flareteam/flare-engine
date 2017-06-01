@@ -21,6 +21,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMESTATE_H
 
 #include "CommonIncludes.h"
+#include "SharedResources.h"
+#include "WidgetLabel.h"
 
 class GameState {
 public:
@@ -37,6 +39,7 @@ public:
 	}
 	void setLoadingFrame();
 	virtual bool isPaused();
+	void showLoading();
 
 	bool hasMusic;
 	bool has_background;
@@ -49,6 +52,8 @@ public:
 protected:
 	GameState* requestedGameState;
 	bool exitRequested;
+	Sprite *loading_bg;
+	WidgetLabel loading_label;
 };
 
 #endif
