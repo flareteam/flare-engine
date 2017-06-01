@@ -127,8 +127,8 @@ GameStateTitle::GameStateTitle()
 	refreshWidgets();
 
 	if (ENABLE_PLAYGAME && !LOAD_SLOT.empty()) {
-		delete requestedGameState;
-		requestedGameState = new GameStateLoad();
+		showLoading();
+		setRequestedGameState(new GameStateLoad());
 	}
 }
 
@@ -148,17 +148,18 @@ void GameStateTitle::logic() {
 	tablist.logic(true);
 
 	if (button_play->checkClick()) {
-		delete requestedGameState;
-		requestedGameState = new GameStateLoad();
+		showLoading();
+		setRequestedGameState(new GameStateLoad());
 	}
 	else if (button_cfg->checkClick()) {
-		delete requestedGameState;
+		showLoading();
 		if (PlatformOptions.config_menu_type == CONFIG_MENU_TYPE_DESKTOP)
-			requestedGameState = new GameStateConfigDesktop();
+			setRequestedGameState(new GameStateConfigDesktop());
 		else
-			requestedGameState = new GameStateConfigBase();
+			setRequestedGameState(new GameStateConfigBase());
 	}
 	else if (button_credits->checkClick()) {
+		showLoading();
 		GameStateTitle *title = new GameStateTitle();
 		GameStateCutscene *credits = new GameStateCutscene(title);
 
@@ -167,8 +168,7 @@ void GameStateTitle::logic() {
 			delete title;
 		}
 		else {
-			delete requestedGameState;
-			requestedGameState = credits;
+			setRequestedGameState(credits);
 		}
 	}
 	else if (PlatformOptions.has_exit_button && button_exit->checkClick()) {

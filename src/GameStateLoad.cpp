@@ -485,8 +485,8 @@ void GameStateLoad::logic() {
 		tablist.logic(true);
 		if (button_exit->checkClick() || (inpt->pressing[CANCEL] && !inpt->lock[CANCEL])) {
 			inpt->lock[CANCEL] = true;
-			delete requestedGameState;
-			requestedGameState = new GameStateTitle();
+			showLoading();
+			setRequestedGameState(new GameStateTitle());
 		}
 
 		if (loading_requested) {
@@ -499,10 +499,11 @@ void GameStateLoad::logic() {
 
 		if (button_new->checkClick()) {
 			// create a new game
+			showLoading();
 			GameStateNew* newgame = new GameStateNew();
 			newgame->game_slot = (game_slots.empty() ? 1 : game_slots.back()->id+1);
-			requestedGameState = newgame;
 			delete_items = false;
+			setRequestedGameState(newgame);
 		}
 		else if (button_load->checkClick()) {
 			loading_requested = true;
@@ -605,13 +606,14 @@ void GameStateLoad::logicLoading() {
 	// load an existing game
 	inpt->lock_all = true;
 	delete_items = false;
+	showLoading();
 	GameStatePlay* play = new GameStatePlay();
 	play->resetGame();
 	save_load->setGameSlot(game_slots[selected_slot]->id);
 	save_load->loadGame();
-	requestedGameState = play;
 	loaded = true;
 	loading = false;
+	setRequestedGameState(play);
 }
 
 void GameStateLoad::updateButtons() {

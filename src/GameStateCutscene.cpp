@@ -315,18 +315,19 @@ void GameStateCutscene::logic() {
 
 	if (scenes.empty()) {
 		if (game_slot != -1) {
+			showLoading();
 			GameStatePlay *gsp = new GameStatePlay();
 			gsp->resetGame();
 			save_load->setGameSlot(game_slot);
 			save_load->loadGame();
 
-			previous_gamestate = gsp;
+			setRequestedGameState(gsp);
+			return;
 		}
 
 		/* return to previous gamestate */
-		delete requestedGameState;
-		requestedGameState = previous_gamestate;
-		requestedGameState->refreshWidgets();
+		showLoading();
+		setRequestedGameState(previous_gamestate);
 		return;
 	}
 

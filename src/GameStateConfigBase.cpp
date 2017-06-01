@@ -604,10 +604,17 @@ void GameStateConfigBase::logicAccept() {
 		inpt->initJoystick();
 	}
 	cleanup();
+
+	showLoading();
+	// need to delete the "Loading..." message here, as we're recreating our render context
+	if (loading_tip) {
+		delete loading_tip;
+		loading_tip = NULL;
+	}
+
 	render_device->createContext();
 	saveSettings();
-	delete requestedGameState;
-	requestedGameState = new GameStateTitle();
+	setRequestedGameState(new GameStateTitle());
 }
 
 void GameStateConfigBase::logicCancel() {
@@ -622,8 +629,8 @@ void GameStateConfigBase::logicCancel() {
 	cleanup();
 	render_device->windowResize();
 	render_device->updateTitleBar();
-	delete requestedGameState;
-	requestedGameState = new GameStateTitle();
+	showLoading();
+	setRequestedGameState(new GameStateTitle());
 }
 
 void GameStateConfigBase::logicAudio() {

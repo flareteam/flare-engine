@@ -300,17 +300,18 @@ void GameStateNew::logic() {
 	}
 
 	if ((inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) || button_exit->checkClick()) {
-		delete_items = false;
 		if (inpt->pressing[CANCEL])
 			inpt->lock[CANCEL] = true;
-		delete requestedGameState;
-		requestedGameState = new GameStateLoad();
+		delete_items = false;
+		showLoading();
+		setRequestedGameState(new GameStateLoad());
 	}
 
 	if (button_create->checkClick()) {
 		// start the new game
 		inpt->lock_all = true;
 		delete_items = false;
+		showLoading();
 		GameStatePlay* play = new GameStatePlay();
 		Avatar *avatar = pc;
 		avatar->stats.gfx_base = base[current_option];
@@ -321,7 +322,7 @@ void GameStateNew::logic() {
 		save_load->setGameSlot(game_slot);
 		play->resetGame();
 		save_load->loadClass(class_list->getSelected());
-		requestedGameState = play;
+		setRequestedGameState(play);
 	}
 
 	// scroll through portrait options

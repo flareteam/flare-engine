@@ -314,8 +314,8 @@ void GameStatePlay::checkTeleport() {
 				removeSaveDir(save_load->getGameSlot());
 
 				snd->stopMusic();
-				delete requestedGameState;
-				requestedGameState = new GameStateTitle();
+				showLoading();
+				setRequestedGameState(new GameStateTitle());
 			}
 			else if (SAVE_ONLOAD) {
 				save_load->saveGame();
@@ -354,8 +354,8 @@ void GameStatePlay::checkCancel() {
 		saveSettings();
 
 		snd->stopMusic();
-		delete requestedGameState;
-		requestedGameState = new GameStateTitle();
+		showLoading();
+		setRequestedGameState(new GameStateTitle());
 
 		save_load->setGameSlot(0);
 	}
@@ -715,6 +715,7 @@ void GameStatePlay::checkCutscene() {
 	if (!mapr->cutscene)
 		return;
 
+	showLoading();
 	GameStateCutscene *cutscene = new GameStateCutscene(NULL);
 
 	if (!cutscene->load(mapr->cutscene_file)) {
@@ -741,8 +742,7 @@ void GameStatePlay::checkCutscene() {
 	if (SAVE_ONLOAD)
 		save_load->saveGame();
 
-	delete requestedGameState;
-	requestedGameState = cutscene;
+	setRequestedGameState(cutscene);
 }
 
 void GameStatePlay::checkSaveEvent() {
