@@ -579,6 +579,7 @@ void GameStateConfigBase::logicDefaults() {
 		inpt->defaultQwertyKeyBindings();
 		inpt->defaultJoystickBindings();
 		update();
+		render_device->windowResize();
 		defaults_confirm->visible = false;
 		defaults_confirm->confirmClicked = false;
 	}
