@@ -785,6 +785,7 @@ bool StatBlock::canUsePower(const Power &power, int powerid) const {
 			&& !effects.stun
 			&& (power.sacrifice || hp > power.requires_hp)
 			&& (!power.requires_corpse || (power.requires_corpse && ((target_corpse && target_corpse->corpse_ticks > 0) || (target_nearest_corpse && powers->checkNearestTargeting(power, this, true) && target_nearest_corpse->corpse_ticks > 0))))
+			&& (checkRequiredSpawns(power.requires_spawns))
 			&& (menu_powers && menu_powers->meetsUsageStats(powerid))
 			&& (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
 			&& !(power.spawn_type == "untransform" && !transformed)
@@ -1001,16 +1002,8 @@ AIPower* StatBlock::getAIPower(AI_POWER ai_type) {
 				continue;
 		}
 
-		int live_summon_count = 0;
-		for (size_t j=0; j<summons.size(); ++j) {
-			if (summons[j]->hp > 0) {
-				++live_summon_count;
-			}
-		}
-		if (powers->powers[powers_ai[i].id].requires_spawns > 0) {
-			if (live_summon_count < powers->powers[powers_ai[i].id].requires_spawns)
-				continue;
-		}
+		if (!checkRequiredSpawns(powers->powers[powers_ai[i].id].requires_spawns))
+			continue;
 
 		possible_ids.push_back(i);
 	}
@@ -1021,4 +1014,21 @@ AIPower* StatBlock::getAIPower(AI_POWER ai_type) {
 	}
 
 	return NULL;
+}
+
+bool StatBlock::checkRequiredSpawns(int req_amount) const {
+	if (req_amount <= 0)
+		return true;
+
+	int live_summon_count = 0;
+	for (size_t j=0; j<summons.size(); ++j) {
+		if (summons[j]->hp > 0) {
+			++live_summon_count;
+		}
+	}
+
+	if (live_summon_count < req_amount)
+		return false;
+
+	return true;
 }
