@@ -52,12 +52,11 @@ void GameSlotPreview::loadLayerDefinitions() {
 	layer_def = std::vector<std::vector<unsigned> >(8, std::vector<unsigned>());
 	layer_reference_order = std::vector<std::string>();
 
+	// NOTE: This is documented in Avatar.cpp
 	FileParser infile;
-	// @CLASS GameSlotPreview: Hero layers|Description of engine/hero_layers.txt
 	if (infile.open("engine/hero_layers.txt")) {
 		while(infile.next()) {
 			if (infile.key == "layer") {
-				// @ATTR layer|direction, list(string) : Direction, Layer name(s)|Defines the hero avatar sprite layer
 				unsigned dir = parse_direction(popFirstString(infile.val));
 				if (dir>7) {
 					infile.error("GameSlotPreview: Hero layer direction must be in range [0,7]");
