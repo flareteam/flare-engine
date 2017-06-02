@@ -29,8 +29,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef GAMESTATELOAD_H
 #define GAMESTATELOAD_H
 
-#include "Animation.h"
 #include "CommonIncludes.h"
+#include "GameSlotPreview.h"
 #include "GameState.h"
 #include "StatBlock.h"
 #include "WidgetLabel.h"
@@ -41,6 +41,8 @@ class WidgetButton;
 class WidgetLabel;
 class WidgetScrollBar;
 
+#define GAMESLOT_PREVIEW_TURN_DURATION MAX_FRAMES_PER_SEC/2
+
 class GameSlot {
 public:
 	unsigned id;
@@ -49,7 +51,8 @@ public:
 	std::string current_map;
 
 	std::vector<int> equipped;
-	std::vector<Sprite *> sprites;
+	GameSlotPreview preview;
+	int preview_turn_ticks;
 
 	WidgetLabel label_name;
 	WidgetLabel label_level;
@@ -76,6 +79,7 @@ private:
 	void scrollUp();
 	void scrollDown();
 	void refreshScrollBar();
+	void setSelectedSlot(int slot);
 
 	TabList tablist;
 
@@ -92,7 +96,6 @@ private:
 	Sprite *selection;
 	Sprite *portrait_border;
 	Sprite *portrait;
-	std::vector<std::string> preview_layer;
 	std::vector<Rect> slot_pos;
 
 	std::vector<GameSlot *> game_slots;
@@ -111,14 +114,6 @@ private:
 	Point sprites_pos;
 
 	Rect portrait_dest;
-
-	// animation info
-	int current_frame;
-	int frame_ticker;
-	int stance_frames;
-	int stance_ticks_per_frame;
-	int stance_duration;
-	animation_type stance_type;
 
 	Rect gameslot_pos;
 

@@ -46,14 +46,11 @@ bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
 }
 
 GameSlot::GameSlot()
-	: id(0) {
+	: id(0)
+	, preview_turn_ticks(GAMESLOT_PREVIEW_TURN_DURATION) {
 }
 
 GameSlot::~GameSlot() {
-	for (size_t i=0; i<sprites.size(); ++i) {
-		delete sprites[i];
-	}
-	sprites.clear();
 }
 
 GameStateLoad::GameStateLoad() : GameState()
@@ -65,12 +62,6 @@ GameStateLoad::GameStateLoad() : GameState()
 	, loading(false)
 	, loaded(false)
 	, delete_items(true)
-	, current_frame(0)
-	, frame_ticker(0)
-	, stance_frames(1)
-	, stance_ticks_per_frame(1)
-	, stance_duration(1)
-	, stance_type(PLAY_ONCE)
 	, selected_slot(-1)
 	, visible_slots(0)
 	, scroll_offset(0)
@@ -199,58 +190,9 @@ GameStateLoad::GameStateLoad() : GameState()
 	if (text_trim_boundary == 0 || text_trim_boundary > gameslot_pos.w)
 		text_trim_boundary = gameslot_pos.w;
 
-	// get displayable types list
-	bool found_layer = false;
-	if (infile.open("engine/hero_layers.txt")) {
-		while(infile.next()) {
-			if (infile.key == "layer") {
-				unsigned dir = popFirstInt(infile.val);
-				if (dir != 6) continue;
-				else found_layer = true;
-
-				std::string layer = popFirstString(infile.val);
-				while (layer != "") {
-					preview_layer.push_back(layer);
-					layer = popFirstString(infile.val);
-				}
-			}
-		}
-		infile.close();
-	}
-	if (!found_layer) logError("GameStateLoad: Could not find layers for direction 6");
-
 	button_new->refresh();
 	button_load->refresh();
 	button_delete->refresh();
-
-	// animation data
-	if (infile.open("animations/hero.txt")) {
-		while (infile.next()) {
-			if (infile.section == "stance") {
-				if (infile.key == "frames") {
-					stance_frames = toInt(infile.val);
-				}
-				else if (infile.key == "duration") {
-					stance_duration = parse_duration(infile.val);
-				}
-				else if (infile.key == "type") {
-					if (infile.val == "play_once")
-						stance_type = PLAY_ONCE;
-					else if (infile.val == "looped")
-						stance_type = LOOPED;
-					else if (infile.val == "back_forth")
-						stance_type = BACK_FORTH;
-				}
-				else {
-					infile.error("GameStateLoad: '%s' is not a valid key.", infile.key.c_str());
-				}
-			}
-		}
-		infile.close();
-	}
-
-	stance_frames = std::max(1, stance_frames);
-	stance_ticks_per_frame = std::max(1, (stance_duration / stance_frames));
 
 	loadGraphics();
 	readGameSlots();
@@ -266,7 +208,7 @@ GameStateLoad::GameStateLoad() : GameState()
 		LOAD_SLOT.clear();
 
 		if (load_slot_id < game_slots.size()) {
-			selected_slot = static_cast<int>(load_slot_id);
+			setSelectedSlot(static_cast<int>(load_slot_id));
 			loading_requested = true;
 		}
 	}
@@ -378,6 +320,9 @@ void GameStateLoad::readGameSlots() {
 		infile.close();
 
 		game_slots[i]->stats.recalc();
+		game_slots[i]->stats.direction = 6;
+		game_slots[i]->preview.setStatBlock(&(game_slots[i]->stats));
+
 		loadPreview(game_slots[i]);
 	}
 }
@@ -399,14 +344,8 @@ std::string GameStateLoad::getMapName(const std::string& map_filename) {
 void GameStateLoad::loadPreview(GameSlot* slot) {
 	if (!slot) return;
 
-	Image *graphics;
 	std::vector<std::string> img_gfx;
-
-	for (unsigned int i=0; i<slot->sprites.size(); i++) {
-		if (slot->sprites[i])
-			delete slot->sprites[i];
-	}
-	slot->sprites.clear();
+	std::vector<std::string> &preview_layer = slot->preview.layer_reference_order;
 
 	// fall back to default if it exists
 	for (unsigned int i=0; i<preview_layer.size(); i++) {
@@ -435,22 +374,7 @@ void GameStateLoad::loadPreview(GameSlot* slot) {
 		}
 	}
 
-	// composite the hero graphic
-	slot->sprites.resize(img_gfx.size());
-	for (unsigned int i=0; i<img_gfx.size(); i++) {
-		if (img_gfx[i] == "")
-			continue;
-
-		graphics = render_device->loadImage("images/avatar/" + slot->stats.gfx_base + "/preview/" + img_gfx[i] + ".png");
-		slot->sprites[i] = NULL;
-		if (graphics) {
-			slot->sprites[i] = graphics->createSprite();
-			int frame_width = slot->sprites[i]->getGraphicsWidth() / stance_frames;
-			slot->sprites[i]->setClip(0, 0, frame_width, slot->sprites[i]->getGraphicsHeight());
-			graphics->unref();
-		}
-	}
-
+	slot->preview.loadGraphics(img_gfx);
 }
 
 
@@ -459,27 +383,21 @@ void GameStateLoad::logic() {
 	if (inpt->window_resized)
 		refreshWidgets();
 
-	// animate the avatar preview images
-	if (stance_type == PLAY_ONCE && frame_ticker < stance_duration) {
-		current_frame = frame_ticker / stance_ticks_per_frame;
-		frame_ticker++;
-	}
-	else {
-		if (stance_type == LOOPED) {
-			if (frame_ticker == stance_duration) frame_ticker = 0;
-			current_frame = frame_ticker / stance_ticks_per_frame;
-		}
-		else if (stance_type == BACK_FORTH) {
-			if (frame_ticker == stance_duration*2) frame_ticker = 0;
-			if (frame_ticker < stance_duration)
-				current_frame = frame_ticker / stance_ticks_per_frame;
-			else
-				current_frame = ((stance_duration*2) - frame_ticker -1) / stance_ticks_per_frame;
-		}
-		frame_ticker++;
-	}
+	for (size_t i = 0; i < game_slots.size(); ++i) {
+		if (static_cast<int>(i) == selected_slot) {
+			if (game_slots[i]->preview_turn_ticks > 0)
+				game_slots[i]->preview_turn_ticks--;
 
-	current_frame = std::min(current_frame, stance_frames-1);
+			if (game_slots[i]->preview_turn_ticks == 0) {
+				game_slots[i]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
+
+				game_slots[i]->stats.direction++;
+				if (game_slots[i]->stats.direction > 7)
+					game_slots[i]->stats.direction = 0;
+			}
+		}
+		game_slots[i]->preview.logic();
+	}
 
 	if (!confirm->visible) {
 		tablist.logic(true);
@@ -522,7 +440,7 @@ void GameStateLoad::logic() {
 					for (int i=0; i<visible_slots; ++i) {
 						if (isWithinRect(slot_pos[i], inpt->mouse)) {
 							inpt->lock[MAIN1] = true;
-							selected_slot = i + scroll_offset;
+							setSelectedSlot(i + scroll_offset);
 							updateButtons();
 							break;
 						}
@@ -559,20 +477,20 @@ void GameStateLoad::logic() {
 
 			if (outside_scrollbar && inpt->pressing[MAIN1] && !inpt->lock[MAIN1]) {
 				inpt->lock[MAIN1] = true;
-				selected_slot = -1;
+				setSelectedSlot(-1);
 				updateButtons();
 			}
 
 			// Allow characters to be navigateable via up/down keys
 			if (inpt->pressing[UP] && !inpt->lock[UP]) {
 				inpt->lock[UP] = true;
-				selected_slot = (--selected_slot < 0) ? static_cast<int>(game_slots.size()) - 1 : selected_slot;
+				setSelectedSlot((selected_slot - 1 < 0) ? static_cast<int>(game_slots.size()) - 1 : selected_slot - 1);
 				scroll_offset = std::min(static_cast<int>(game_slots.size()) - visible_slots, selected_slot);
 				updateButtons();
 			}
 			else if (inpt->pressing[DOWN] && !inpt->lock[DOWN]) {
 				inpt->lock[DOWN] = true;
-				selected_slot = (++selected_slot == static_cast<int>(game_slots.size())) ? 0 : selected_slot;
+				setSelectedSlot((selected_slot + 1 == static_cast<int>(game_slots.size())) ? 0 : selected_slot + 1);
 				scroll_offset = std::max(0, selected_slot-visible_slots+1);
 				updateButtons();
 			}
@@ -588,7 +506,7 @@ void GameStateLoad::logic() {
 			game_slots.erase(game_slots.begin()+selected_slot);
 
 			visible_slots = (game_slot_max > static_cast<int>(game_slots.size()) ? static_cast<int>(game_slots.size()) : game_slot_max);
-			selected_slot = -1;
+			setSelectedSlot(-1);
 
 			while (scroll_offset + visible_slots > static_cast<int>(game_slots.size())) {
 				scroll_offset--;
@@ -814,17 +732,8 @@ void GameStateLoad::render() {
 		// render character preview
 		dest.x = slot_pos[slot].x + sprites_pos.x;
 		dest.y = slot_pos[slot].y + sprites_pos.y;
-
-		for (size_t i=0; i<game_slots[off_slot]->sprites.size(); i++) {
-			if (game_slots[off_slot]->sprites[i] == NULL) continue;
-
-			src = game_slots[off_slot]->sprites[i]->getClip();
-			src.x = current_frame * src.w;
-
-			game_slots[off_slot]->sprites[i]->setClip(src);
-			game_slots[off_slot]->sprites[i]->setDest(dest);
-			render_device->render(game_slots[off_slot]->sprites[i]);
-		}
+		game_slots[off_slot]->preview.setPos(Point(dest.x, dest.y));
+		game_slots[off_slot]->preview.render();
 
 		// slot number
 		std::stringstream off_slot_str;
@@ -855,6 +764,22 @@ void GameStateLoad::render() {
 	button_new->render();
 	button_load->render();
 	button_delete->render();
+}
+
+void GameStateLoad::setSelectedSlot(int slot) {
+	if (selected_slot != -1) {
+		game_slots[selected_slot]->stats.direction = 6;
+		game_slots[selected_slot]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
+		game_slots[selected_slot]->preview.setAnimation("stance");
+	}
+
+	if (slot != -1) {
+		game_slots[slot]->stats.direction = 6;
+		game_slots[slot]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
+		game_slots[slot]->preview.setAnimation("run");
+	}
+
+	selected_slot = slot;
 }
 
 GameStateLoad::~GameStateLoad() {
