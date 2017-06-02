@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Avatar.h"
 #include "Menu.h"
+#include "PowerManager.h"
 #include "Utils.h"
 #include "WidgetLabel.h"
 
@@ -47,7 +48,7 @@ const int ACTIONBAR_MAIN = 10;
 
 class MenuActionBar : public Menu {
 private:
-	FPoint setTarget(bool have_aim, bool aim_assist);
+	FPoint setTarget(bool have_aim, const Power& pow);
 	void addSlot(unsigned index, int x, int y, bool is_locked);
 
 	Sprite *sprite_emptyslot;

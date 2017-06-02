@@ -136,6 +136,12 @@ void GameStatePlay::resetGame() {
  */
 void GameStatePlay::checkEnemyFocus() {
 	pc->stats.target_corpse = NULL;
+	pc->stats.target_nearest = NULL;
+	pc->stats.target_nearest_corpse = NULL;
+	pc->stats.target_nearest_dist = 0;
+	pc->stats.target_nearest_corpse_dist = 0;
+
+	FPoint src_pos = pc->stats.pos;
 
 	// check the last hit enemy first
 	// if there's none, then either get the nearest enemy or one under the mouse (depending on mouse mode)
@@ -159,6 +165,8 @@ void GameStatePlay::checkEnemyFocus() {
 		else {
 			enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
 			if (enemy) curs->setCursor(CURSOR_ATTACK);
+			src_pos = screen_to_map(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
+
 		}
 	}
 
@@ -187,6 +195,14 @@ void GameStatePlay::checkEnemyFocus() {
 		pc->enemy_pos.x = -1;
 		pc->enemy_pos.y = -1;
 	}
+
+	// save the positions of the nearest enemies for powers that use "target_nearest"
+	Enemy *nearest = enemies->getNearestEnemy(src_pos, false, &(pc->stats.target_nearest_dist));
+	if (nearest)
+		pc->stats.target_nearest = &(nearest->stats);
+	Enemy *nearest_corpse = enemies->getNearestEnemy(src_pos, true, &(pc->stats.target_nearest_corpse_dist));
+	if (nearest_corpse)
+		pc->stats.target_nearest_corpse = &(nearest_corpse->stats);
 }
 
 /**

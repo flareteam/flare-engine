@@ -253,6 +253,8 @@ public:
 	bool requires_corpse;
 	bool remove_corpse;
 
+	float target_nearest;
+
 	Power()
 		: type(-1)
 		, name("")
@@ -376,7 +378,9 @@ public:
 		, replace_by_effect_count(0)
 
 		, requires_corpse(false)
-		, remove_corpse(false) {
+		, remove_corpse(false)
+
+		, target_nearest(0) {
 	}
 
 };
@@ -417,13 +421,14 @@ public:
 	void activatePassives(StatBlock *src_stats);
 	void activateSinglePassive(StatBlock *src_stats, int id);
 	int verifyID(int power_id, FileParser* infile = NULL, bool allow_zero = true);
+	bool checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses);
 
 	EffectDef* getEffectDef(const std::string& id);
 
 	std::vector<EffectDef> effects;
 	std::vector<Power> powers;
 	std::queue<Hazard *> hazards; // output; read by HazardManager
-	std::queue<Map_Enemy> enemies; // output; read by PowerManager
+	std::queue<Map_Enemy> map_enemies; // output; read by PowerManager
 
 	// shared sounds for power special effects
 	std::vector<SoundManager::SoundID> sfx;

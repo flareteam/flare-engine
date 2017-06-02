@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Animation.h"
 #include "AnimationManager.h"
 #include "AnimationSet.h"
+#include "EnemyManager.h"
 #include "EventManager.h"
 #include "FileParser.h"
 #include "Hazard.h"
@@ -635,6 +636,10 @@ void PowerManager::loadPowers() {
 				powers[input_id].remove_corpse = false;
 			}
 		}
+		else if (infile.key == "target_nearest") {
+			// @ATTR power.target_nearest|float|Will automatically target the nearest enemy within the specified range.
+			powers[input_id].target_nearest = toFloat(infile.val);
+		}
 
 		else infile.error("PowerManager: '%s' is not a valid key", infile.key.c_str());
 	}
@@ -1177,7 +1182,7 @@ bool PowerManager::spawn(int power_index, StatBlock *src_stats, const FPoint& ta
 	espawn.enemy_ally = !src_stats->hero;
 
 	for (int i=0; i < powers[power_index].count; i++) {
-		enemies.push(espawn);
+		map_enemies.push(espawn);
 	}
 	payPowerCost(power_index, src_stats);
 
@@ -1285,6 +1290,9 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 	if (src_stats->hero) {
 		if (powers[power_index].requires_mp > src_stats->mp)
 			return false;
+
+		if (!src_stats->target_corpse && src_stats->target_nearest_corpse && checkNearestTargeting(powers[power_index], src_stats, true))
+			src_stats->target_corpse = src_stats->target_nearest_corpse;
 
 		if (powers[power_index].requires_corpse && !src_stats->target_corpse)
 			return false;
@@ -1459,6 +1467,21 @@ int PowerManager::verifyID(int power_id, FileParser* infile, bool allow_zero) {
 		return 0;
 	}
 	return power_id;
+}
+
+bool PowerManager::checkNearestTargeting(const Power &pow, const StatBlock *src_stats, bool check_corpses) {
+	if (!src_stats)
+		return false;
+
+	if (pow.target_nearest <= 0)
+		return true;
+
+	if (!check_corpses && src_stats->target_nearest && pow.target_nearest > src_stats->target_nearest_dist)
+		return true;
+	else if (check_corpses && src_stats->target_nearest_corpse && pow.target_nearest > src_stats->target_nearest_corpse_dist)
+		return true;
+
+	return false;
 }
 
 PowerManager::~PowerManager() {

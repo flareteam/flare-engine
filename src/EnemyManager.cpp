@@ -233,9 +233,9 @@ void EnemyManager::handleSpawn() {
 
 	Map_Enemy espawn;
 
-	while (!powers->enemies.empty()) {
-		espawn = powers->enemies.front();
-		powers->enemies.pop();
+	while (!powers->map_enemies.empty()) {
+		espawn = powers->map_enemies.front();
+		powers->map_enemies.pop();
 
 		Enemy *e = new Enemy();
 		// factory
@@ -411,12 +411,15 @@ Enemy* EnemyManager::enemyFocus(const Point& mouse, const FPoint& cam, bool aliv
 	return NULL;
 }
 
-Enemy* EnemyManager::getNearestEnemy(const FPoint& pos) {
+Enemy* EnemyManager::getNearestEnemy(const FPoint& pos, bool get_corpse, float *saved_distance) {
 	Enemy* nearest = NULL;
 	float best_distance = std::numeric_limits<float>::max();
 
 	for (unsigned i=0; i<enemies.size(); i++) {
-		if(enemies[i]->stats.cur_state == ENEMY_DEAD || enemies[i]->stats.cur_state == ENEMY_CRITDEAD) {
+		if(!get_corpse && (enemies[i]->stats.cur_state == ENEMY_DEAD || enemies[i]->stats.cur_state == ENEMY_CRITDEAD)) {
+			continue;
+		}
+		if (get_corpse && !enemies[i]->stats.corpse) {
 			continue;
 		}
 
@@ -427,7 +430,11 @@ Enemy* EnemyManager::getNearestEnemy(const FPoint& pos) {
 		}
 	}
 
-	if (best_distance > INTERACT_RANGE) nearest = NULL;
+	if (nearest && saved_distance)
+		*saved_distance = best_distance;
+
+	if (!saved_distance && best_distance > INTERACT_RANGE)
+		nearest = NULL;
 
 	return nearest;
 }
@@ -469,7 +476,7 @@ void EnemyManager::spawn(const std::string& enemy_type, const Point& target) {
 	// quick spawns start facing a random direction
 	espawn.direction = rand() % 8;
 
-	powers->enemies.push(espawn);
+	powers->map_enemies.push(espawn);
 }
 
 /**

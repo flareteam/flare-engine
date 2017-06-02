@@ -556,7 +556,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 			for (unsigned j=0; j<action_queue.size(); j++) {
 				if (action_queue[j].hotkey == i) {
 					// this power is already in the action queue, update its target
-					action_queue[j].target = setTarget(have_aim, power.aim_assist);
+					action_queue[j].target = setTarget(have_aim, power);
 					can_use_power = false;
 					break;
 				}
@@ -569,7 +569,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 				continue;
 
 			// set the target depending on how the power was triggered
-			action.target = setTarget(have_aim, power.aim_assist);
+			action.target = setTarget(have_aim, power);
 
 			// add it to the queue
 			action_queue.push_back(action);
@@ -672,12 +672,24 @@ void MenuActionBar::resetSlots() {
 /**
  * Set a target depending on how a power was triggered
  */
-FPoint MenuActionBar::setTarget(bool have_aim, bool aim_assist) {
+FPoint MenuActionBar::setTarget(bool have_aim, const Power& pow) {
 	if (have_aim && MOUSE_AIM) {
-		if (aim_assist)
-			return screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, pc->stats.pos.x, pc->stats.pos.y);
+		FPoint map_pos;
+		if (pow.aim_assist)
+			map_pos = screen_to_map(inpt->mouse.x,  inpt->mouse.y + AIM_ASSIST, pc->stats.pos.x, pc->stats.pos.y);
 		else
-			return screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
+			map_pos = screen_to_map(inpt->mouse.x,  inpt->mouse.y, pc->stats.pos.x, pc->stats.pos.y);
+
+		if (pow.target_nearest > 0) {
+			if (!pow.requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, false)) {
+				map_pos = pc->stats.target_nearest->pos;
+			}
+			else if (pow.requires_corpse && powers->checkNearestTargeting(pow, &pc->stats, true)) {
+				map_pos = pc->stats.target_nearest_corpse->pos;
+			}
+		}
+
+		return map_pos;
 	}
 	else {
 		return calcVector(pc->stats.pos, pc->stats.direction, pc->stats.melee_range);

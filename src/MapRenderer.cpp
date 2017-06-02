@@ -154,8 +154,8 @@ int MapRenderer::load(const std::string& fname) {
 	}
 
 	// clear enemy spawn queue
-	while (!powers->enemies.empty()) {
-		powers->enemies.pop();
+	while (!powers->map_enemies.empty()) {
+		powers->map_enemies.pop();
 	}
 
 	// clear combat text
