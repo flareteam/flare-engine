@@ -767,13 +767,13 @@ void GameStateLoad::render() {
 }
 
 void GameStateLoad::setSelectedSlot(int slot) {
-	if (selected_slot != -1) {
+	if (selected_slot != -1 && static_cast<size_t>(selected_slot) < game_slots.size()) {
 		game_slots[selected_slot]->stats.direction = 6;
 		game_slots[selected_slot]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
 		game_slots[selected_slot]->preview.setAnimation("stance");
 	}
 
-	if (slot != -1) {
+	if (slot != -1 && static_cast<size_t>(slot) < game_slots.size()) {
 		game_slots[slot]->stats.direction = 6;
 		game_slots[slot]->preview_turn_ticks = GAMESLOT_PREVIEW_TURN_DURATION;
 		game_slots[slot]->preview.setAnimation("run");
