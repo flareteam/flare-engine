@@ -681,14 +681,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				ss << "+";
 			}
 
-			if (pwr.passive) {
-				// since leveled passive powers stack, we need to get the total magnitude for all levels
-				// TODO: don't stack leveled passive powers?
-				ss << pwr.post_effects[i].magnitude * power_cells[slot_num].upgrade_level;
-			}
-			else {
-				ss << pwr.post_effects[i].magnitude;
-			}
+			ss << pwr.post_effects[i].magnitude;
 
 			for (size_t j=0; j<STAT_COUNT; ++j) {
 				if (pwr.post_effects[i].id == STAT_KEY[j]) {
@@ -1084,15 +1077,19 @@ void MenuPowers::logic() {
 			std::vector<int>::iterator it = std::find(stats->powers_passive.begin(), stats->powers_passive.end(), power_cell_unlocked[i].id);
 
 			int cell_index = getCellByPowerIndex(power_cell_unlocked[i].id, power_cell_all);
+			bool is_current_upgrade_max = (getCellByPowerIndex(power_cell_unlocked[i].id, power_cell) != -1);
+
 			if (it != stats->powers_passive.end()) {
-				if (!checkRequirements(cell_index) && power_cell_unlocked[i].passive_on) {
+				if (!is_current_upgrade_max || (!checkRequirements(cell_index) && power_cell_unlocked[i].passive_on)) {
+					// passive power is activated, but does not meet requirements, so remove it
 					stats->powers_passive.erase(it);
 					stats->effects.removeEffectPassive(power_cell_unlocked[i].id);
 					power_cell[i].passive_on = false;
 					stats->refresh_stats = true;
 				}
 			}
-			else if (((checkRequirements(cell_index) && !power_cell_unlocked[i].requires_point) || unlocked_power) && !power_cell_unlocked[i].passive_on) {
+			else if (is_current_upgrade_max && ((checkRequirements(cell_index) && !power_cell_unlocked[i].requires_point) || unlocked_power) && !power_cell_unlocked[i].passive_on) {
+				// passive power has not been activated, so activate it here
 				stats->powers_passive.push_back(power_cell_unlocked[i].id);
 				power_cell_unlocked[i].passive_on = true;
 				// for passives without special triggers, we need to trigger them here
