@@ -95,6 +95,8 @@ void PowerManager::loadEffects() {
 		else if (infile.key == "animation") {
 			// @ATTR effect.animation|filename|The filename of effect animation.
 			effects.back().animation = infile.val;
+			anim->increaseCount(effects.back().animation);
+			anim->getAnimationSet(effects.back().animation)->getAnimation("");
 		}
 		else if (infile.key == "can_stack") {
 			// @ATTR effect.can_stack|bool|Allows multiple instances of this effect
@@ -286,9 +288,12 @@ void PowerManager::loadPowers() {
 			// @ATTR power.cooldown|duration|Specify the duration for cooldown of the power in 'ms' or 's'.
 			powers[input_id].cooldown = parse_duration(infile.val);
 		// animation info
-		else if (infile.key == "animation")
+		else if (infile.key == "animation") {
 			// @ATTR power.animation|filename|The filename of the power animation.
 			powers[input_id].animation_name = infile.val;
+			anim->increaseCount(powers[input_id].animation_name);
+			anim->getAnimationSet(powers[input_id].animation_name)->getAnimation("");
+		}
 		else if (infile.key == "soundfx")
 			// @ATTR power.soundfx|filename|Filename of a sound effect to play when the power is used.
 			powers[input_id].sfx_index = loadSFX(infile.val);
@@ -1485,6 +1490,19 @@ bool PowerManager::checkNearestTargeting(const Power &pow, const StatBlock *src_
 }
 
 PowerManager::~PowerManager() {
+	for (size_t i = 0; i < powers.size(); ++i) {
+		if (powers[i].animation_name.empty())
+			continue;
+
+		anim->decreaseCount(powers[i].animation_name);
+	}
+
+	for (size_t i = 0; i < effects.size(); ++i) {
+		if (effects[i].animation.empty())
+			continue;
+
+		anim->decreaseCount(effects[i].animation);
+	}
 
 	for (unsigned i=0; i<sfx.size(); i++) {
 		snd->unload(sfx[i]);

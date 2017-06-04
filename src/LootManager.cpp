@@ -115,6 +115,7 @@ void LootManager::loadGraphics() {
 
 		for (unsigned int j=0; j<items->items[i].loot_animation.size(); j++) {
 			anim->increaseCount(items->items[i].loot_animation[j].name);
+			anim->getAnimationSet(items->items[i].loot_animation[j].name)->getAnimation("");
 		}
 	}
 }
