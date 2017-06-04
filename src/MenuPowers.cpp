@@ -838,6 +838,12 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 				else {
 					ss << " (" << getDurationString(pwr.post_effects[i].duration) << ")";
 				}
+
+				if (pwr.post_effects[i].chance != 100)
+					ss << " ";
+			}
+			if (pwr.post_effects[i].chance != 100) {
+				ss << "(" << msg->get("%d%% chance", pwr.post_effects[i].chance) << ")";
 			}
 
 			tip->addColoredText(ss.str(), color_bonus);
