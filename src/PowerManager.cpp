@@ -444,7 +444,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.buff_party|bool|Power is cast upon party members
 			powers[input_id].buff_party = toBool(infile.val);
 		else if (infile.key == "buff_party_power_id")
-			// @ATTR power.buff_party_power_id|power_id|Buffs a power id for all party members
+			// @ATTR power.buff_party_power_id|power_id|Only party members that were spawned with this power ID are affected by "buff_party=true". Setting this to 0 will affect all party members.
 			powers[input_id].buff_party_power_id = toInt(infile.val);
 		else if (infile.key == "post_effect") {
 			// @ATTR power.post_effect|predefined_string, int, duration , int: Effect ID, Magnitude, Duration, Chance to apply|Post effect. Duration is in 'ms' or 's'.
