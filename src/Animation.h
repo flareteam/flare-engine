@@ -49,6 +49,8 @@ protected:
 	const animation_type type;
 	Image *sprite;
 	uint8_t blend_mode;
+	uint8_t alpha_mod;
+	Color color_mod;
 
 	unsigned short number_frames; // how many ticks this animation lasts.
 	unsigned short cur_frame;     // counts up until reaching number_frames.
@@ -84,7 +86,7 @@ protected:
 	float speed; // how fast the animation plays
 
 public:
-	Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode);
+	Animation(const std::string &_name, const std::string &_type, Image *_sprite, uint8_t _blend_mode, uint8_t _alpha_mod, Color _color_mod);
 
 	// returns a copy of this:
 	Animation(const Animation&);

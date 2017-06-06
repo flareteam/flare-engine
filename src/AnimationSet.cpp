@@ -59,7 +59,7 @@ AnimationSet::AnimationSet(const std::string &animationname)
 	, parent(NULL)
 	, animations()
 	, sprite(NULL) {
-	defaultAnimation = new Animation("default", "play_once", NULL, RENDERABLE_BLEND_NORMAL);
+	defaultAnimation = new Animation("default", "play_once", NULL, RENDERABLE_BLEND_NORMAL, 255, Color(255,255,255));
 	defaultAnimation->setupUncompressed(Point(), Point(), 0, 1, 0);
 }
 
@@ -77,6 +77,8 @@ void AnimationSet::load() {
 	unsigned short frames = 0;
 	unsigned short duration = 0;
 	uint8_t blend_mode = RENDERABLE_BLEND_NORMAL;
+	uint8_t alpha_mod = 255;
+	Color color_mod = Color(255,255,255);
 	Point render_size;
 	Point render_offset;
 	std::string type = "";
@@ -93,7 +95,7 @@ void AnimationSet::load() {
 		// create the animation if finished parsing a section
 		if (parser.new_section) {
 			if (!first_section && !compressed_loading) {
-				Animation *a = new Animation(_name, type, sprite, blend_mode);
+				Animation *a = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
 				a->setupUncompressed(render_size, render_offset, position, frames, duration);
 				if (!active_frames.empty())
 					a->setActiveFrames(active_frames);
@@ -140,6 +142,14 @@ void AnimationSet::load() {
 					blend_mode = RENDERABLE_BLEND_NORMAL;
 				}
 			}
+			else if (parser.key == "alpha_mod") {
+				// @ATTR alpha_mod|int|Changes the default alpha of this animation. 255 is fully opaque.
+				alpha_mod = static_cast<uint8_t>(popFirstInt(parser.val));
+			}
+			else if (parser.key == "color_mod") {
+				// @ATTR color_mod|color|Changes the default color mod of this animation. "255,255,255" is no color mod.
+				color_mod = toRGB(parser.val);
+			}
 			else {
 				parser.error("AnimationSet: '%s' is not a valid key.", parser.key.c_str());
 			}
@@ -183,7 +193,7 @@ void AnimationSet::load() {
 			else if (parser.key == "frame") {
 				// @ATTR animation.frame|int, int, int, int, int, int, int, int : Index, Direction, X, Y, Width, Height, X offset, Y offset|A single frame of a compressed animation.
 				if (compressed_loading == false) { // first frame statement in section
-					newanim = new Animation(_name, type, sprite, blend_mode);
+					newanim = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
 					newanim->setup(frames, duration);
 					if (!active_frames.empty())
 						newanim->setActiveFrames(active_frames);
@@ -219,7 +229,7 @@ void AnimationSet::load() {
 
 	if (!compressed_loading) {
 		// add final animation
-		Animation *a = new Animation(_name, type, sprite, blend_mode);
+		Animation *a = new Animation(_name, type, sprite, blend_mode, alpha_mod, color_mod);
 		a->setupUncompressed(render_size, render_offset, position, frames, duration);
 		if (!active_frames.empty())
 			a->setActiveFrames(active_frames);

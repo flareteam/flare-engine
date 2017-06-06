@@ -556,26 +556,34 @@ bool EffectManager::isDebuffed() {
 	return false;
 }
 
-Color EffectManager::getCurrentColor() {
-	Color no_color_mod = Color(255, 255, 255);
+void EffectManager::getCurrentColor(Color& color_mod) {
+	Color default_color = color_mod;
+	Color no_color = Color(255, 255, 255);
 
 	for (size_t i=effect_list.size(); i > 0; i--) {
-		if (effect_list[i-1].color_mod != no_color_mod)
-			return effect_list[i-1].color_mod;
-	}
+		if (effect_list[i-1].color_mod == no_color)
+			continue;
 
-	return no_color_mod;
+		if (effect_list[i-1].color_mod != default_color) {
+			color_mod = effect_list[i-1].color_mod;
+			return;
+		}
+	}
 }
 
-uint8_t EffectManager::getCurrentAlpha() {
-	uint8_t no_alpha_mod = 255;
+void EffectManager::getCurrentAlpha(uint8_t& alpha_mod) {
+	uint8_t default_alpha = alpha_mod;
+	uint8_t no_alpha = 255;
 
 	for (size_t i=effect_list.size(); i > 0; i--) {
-		if (effect_list[i-1].alpha_mod != no_alpha_mod)
-			return effect_list[i-1].alpha_mod;
-	}
+		if (effect_list[i-1].alpha_mod == no_alpha)
+			continue;
 
-	return no_alpha_mod;
+		if (effect_list[i-1].alpha_mod != default_alpha) {
+			alpha_mod = effect_list[i-1].alpha_mod;
+			return;
+		}
+	}
 }
 
 bool EffectManager::hasEffect(const std::string& id, int req_count) {

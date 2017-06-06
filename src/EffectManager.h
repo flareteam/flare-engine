@@ -136,8 +136,8 @@ public:
 	void clearTriggerEffects(int trigger);
 	int damageShields(int dmg);
 	bool isDebuffed();
-	Color getCurrentColor();
-	uint8_t getCurrentAlpha();
+	void getCurrentColor(Color& color_mod);
+	void getCurrentAlpha(uint8_t& alpha_mod);
 	bool hasEffect(const std::string& id, int req_count);
 	float getAttackSpeed(const std::string& anim_name);
 
