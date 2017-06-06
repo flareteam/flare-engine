@@ -633,6 +633,13 @@ void MenuPowers::setUnlockedPowers() {
 				}
 			}
 		}
+		else {
+			// power is unlocked, but not in the player's powers_list
+			int pci = getCellByPowerIndex(power_cell[i].id, power_cell_all);
+			if (checkUnlocked(pci)) {
+				stats->powers_list.push_back(power_cell[i].id);
+			}
+		}
 	}
 }
 
@@ -1077,6 +1084,8 @@ void MenuPowers::renderPowers(int tab_num) {
 }
 
 void MenuPowers::logic() {
+	setUnlockedPowers();
+
 	for (size_t i=0; i<power_cell_unlocked.size(); i++) {
 		if (static_cast<size_t>(power_cell_unlocked[i].id) < powers->powers.size() && powers->powers[power_cell_unlocked[i].id].passive) {
 			bool unlocked_power = std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell_unlocked[i].id) != stats->powers_list.end();
