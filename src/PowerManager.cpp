@@ -663,14 +663,10 @@ bool PowerManager::isValidEffect(const std::string& type) {
 	if (type == "attack_speed")
 		return true;
 
-	if (type == "physical")
-		return true;
-	if (type == "mental")
-		return true;
-	if (type == "offense")
-		return true;
-	if (type == "defense")
-		return true;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		if (type == PRIMARY_STATS[i].id)
+			return true;
+	}
 
 	for (int i=0; i<STAT_COUNT; ++i) {
 		if (type == STAT_KEY[i])

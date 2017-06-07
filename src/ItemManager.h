@@ -54,7 +54,7 @@ class BonusData {
 public:
 	int stat_index; // Stats.h
 	int resist_index; // engine/elements.txt
-	int base_index; // physical, mental, offense, defense
+	int base_index;
 	bool is_speed;
 	bool is_attack_speed;
 	int value;

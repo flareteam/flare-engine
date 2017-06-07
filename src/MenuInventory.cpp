@@ -1001,19 +1001,8 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	else if (bdata->resist_index != -1) {
 		ed.id = ed.type = ELEMENTS[bdata->resist_index].id + "_resist";
 	}
-	else if (bdata->base_index != -1) {
-		if (bdata->base_index == 0) {
-			ed.id = ed.type = "physical";
-		}
-		else if (bdata->base_index == 1) {
-			ed.id = ed.type = "mental";
-		}
-		else if (bdata->base_index == 2) {
-			ed.id = ed.type = "offense";
-		}
-		else if (bdata->base_index == 3) {
-			ed.id = ed.type = "defense";
-		}
+	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < PRIMARY_STATS.size()) {
+		ed.id = ed.type = PRIMARY_STATS[bdata->base_index].id;
 	}
 
 	stats->effects.addEffect(ed, 0, bdata->value, true, -1, 0, SOURCE_TYPE_HERO);

@@ -556,21 +556,11 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		}
 	}
 
-	if (bonus_str == "physical") {
-		bdata.base_index = 0;
-		return;
-	}
-	else if (bonus_str == "mental") {
-		bdata.base_index = 1;
-		return;
-	}
-	else if (bonus_str == "offense") {
-		bdata.base_index = 2;
-		return;
-	}
-	else if (bonus_str == "defense") {
-		bdata.base_index = 3;
-		return;
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		if (bonus_str == PRIMARY_STATS[i].id) {
+			bdata.base_index = static_cast<int>(i);
+			return;
+		}
 	}
 
 	infile.error("ItemManager: Unknown bonus type '%s'.", bonus_str.c_str());
@@ -600,15 +590,8 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 	else if (bdata->resist_index != -1) {
 		ss << "% " << msg->get("%s Resistance", ELEMENTS[bdata->resist_index].name.c_str());
 	}
-	else if (bdata->base_index != -1) {
-		if (bdata->base_index == 0)
-			ss << " " << msg->get("Physical");
-		else if (bdata->base_index == 1)
-			ss << " " << msg->get("Mental");
-		else if (bdata->base_index == 2)
-			ss << " " << msg->get("Offense");
-		else if (bdata->base_index == 3)
-			ss << " " << msg->get("Defense");
+	else if (bdata->base_index > -1 && static_cast<size_t>(bdata->base_index) < PRIMARY_STATS.size()) {
+		ss << " " << PRIMARY_STATS[bdata->base_index].name;
 	}
 }
 
