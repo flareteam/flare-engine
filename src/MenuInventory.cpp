@@ -995,6 +995,9 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	if (bdata->is_speed) {
 		ed.id = ed.type = "speed";
 	}
+	else if (bdata->is_attack_speed) {
+		ed.id = ed.type = "attack_speed";
+	}
 	else if (bdata->stat_index != -1) {
 		ed.id = ed.type = STAT_KEY[bdata->stat_index];
 	}
