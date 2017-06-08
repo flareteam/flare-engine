@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Menu.h"
 #include "WidgetButton.h"
 #include "WidgetSlider.h"
+#include "WidgetCheckBox.h"
 
 class MenuExit : public Menu {
 protected:
@@ -43,6 +44,9 @@ protected:
 
 	WidgetLabel music_volume_lb;
 	WidgetLabel sound_volume_lb;
+
+	WidgetCheckBox *mute_music_volume_cb;
+	WidgetCheckBox *mute_sound_volume_cb;
 
 	bool exitClicked;
 

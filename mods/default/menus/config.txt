@@ -23,6 +23,8 @@ test_note=288,164
 [audio]
 music_volume=240,40,256,32
 sound_volume=240,72,256,64
+mute_music_volume=240,104,256,96
+mute_sound_volume=240,136,256,128
 
 [interface]
 language=64,16,32,32

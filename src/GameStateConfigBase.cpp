@@ -74,6 +74,10 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, music_volume_lb(new WidgetLabel())
 	, sound_volume_sl(new WidgetSlider())
 	, sound_volume_lb(new WidgetLabel())
+	, mute_sound_volume_cb(new WidgetCheckBox())
+	, mute_sound_volume_lb(new WidgetLabel())
+	, mute_music_volume_cb(new WidgetCheckBox())
+	, mute_music_volume_lb(new WidgetLabel())
 	, activemods_lstb(new WidgetListBox(10))
 	, activemods_lb(new WidgetLabel())
 	, inactivemods_lstb(new WidgetListBox(10))
@@ -237,6 +241,14 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR sound_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Sound Volume" slider relative to the frame.
 		placeLabeledWidget(sound_volume_lb, sound_volume_sl, x1, y1, x2, y2, msg->get("Sound Volume"), JUSTIFY_RIGHT);
 	}
+	else if (infile.key == "mute_music_volume") {
+		// @ATTR mute_music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mute Music Volume" checkbox relative to the frame.
+		placeLabeledWidget(mute_music_volume_lb, mute_music_volume_cb, x1, y1, x2, y2, msg->get("Mute Music Volume"), JUSTIFY_RIGHT);
+	}
+	else if (infile.key == "mute_sound_volume") {
+		// @ATTR mute_sound_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mute Sound Volume" checkbox relative to the frame.
+		placeLabeledWidget(mute_sound_volume_lb, mute_sound_volume_cb, x1, y1, x2, y2, msg->get("Mute Sound Volume"), JUSTIFY_RIGHT);
+	}
 	else if (infile.key == "language") {
 		// @ATTR language|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Language" list box relative to the frame.
 		placeLabeledWidget(language_lb, language_lstb, x1, y1, x2, y2, msg->get("Language"));
@@ -376,6 +388,11 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(sound_volume_sl, AUDIO_TAB);
 	addChildWidget(sound_volume_lb, AUDIO_TAB);
 
+	addChildWidget(mute_music_volume_cb, AUDIO_TAB);
+	addChildWidget(mute_music_volume_lb, AUDIO_TAB);
+	addChildWidget(mute_sound_volume_cb, AUDIO_TAB);
+	addChildWidget(mute_sound_volume_lb, AUDIO_TAB);
+
 	addChildWidget(combat_text_cb, INTERFACE_TAB);
 	addChildWidget(combat_text_lb, INTERFACE_TAB);
 	addChildWidget(show_fps_cb, INTERFACE_TAB);
@@ -418,6 +435,8 @@ void GameStateConfigBase::setupTabList() {
 
 	tablist_audio.add(music_volume_sl);
 	tablist_audio.add(sound_volume_sl);
+	tablist_audio.add(mute_music_volume_cb);
+	tablist_audio.add(mute_sound_volume_cb);
 	tablist_audio.setPrevTabList(&tablist);
 	tablist_audio.setNextTabList(&tablist_main);
 	tablist_audio.lock();
@@ -457,6 +476,18 @@ void GameStateConfigBase::updateAudio() {
 		snd->setVolumeMusic(MUSIC_VOLUME);
 		sound_volume_sl->set(0,128,SOUND_VOLUME);
 		snd->setVolumeSFX(SOUND_VOLUME);
+
+		if(MUSIC_OFF == false) mute_music_volume_cb->unCheck();
+		else {
+			mute_music_volume_cb->Check();
+			snd->setVolumeMusic(0);
+		}
+
+		if(SOUND_OFF == false) mute_sound_volume_cb->unCheck();
+		else {
+			mute_sound_volume_cb->Check();
+			snd->setVolumeSFX(0);
+		}
 	}
 	else {
 		music_volume_sl->set(0,128,0);
@@ -636,15 +667,35 @@ void GameStateConfigBase::logicCancel() {
 
 void GameStateConfigBase::logicAudio() {
 	if (AUDIO) {
-		if (music_volume_sl->checkClick()) {
+		if (!MUSIC_OFF && music_volume_sl->checkClick()) {
 			if (MUSIC_VOLUME == 0)
 				reload_music = true;
 			MUSIC_VOLUME = static_cast<short>(music_volume_sl->getValue());
 			snd->setVolumeMusic(MUSIC_VOLUME);
 		}
-		else if (sound_volume_sl->checkClick()) {
+		else if (!SOUND_OFF && sound_volume_sl->checkClick()) {
 			SOUND_VOLUME = static_cast<short>(sound_volume_sl->getValue());
 			snd->setVolumeSFX(SOUND_VOLUME);
+		}
+		else if (mute_music_volume_cb->checkClick()) {
+			if (mute_music_volume_cb->isChecked()) {
+				MUSIC_OFF=true;
+				snd->setVolumeMusic(0);
+			}
+			else {
+				MUSIC_OFF=false;
+				snd->setVolumeMusic(MUSIC_VOLUME);
+			}
+		}
+		else if (mute_sound_volume_cb->checkClick()) {
+			if (mute_sound_volume_cb->isChecked()) {
+				SOUND_OFF=true;
+				snd->setVolumeSFX(0);
+			}
+			else {
+				SOUND_OFF=false;
+				snd->setVolumeSFX(SOUND_VOLUME);
+			}
 		}
 	}
 }

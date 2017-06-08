@@ -37,6 +37,10 @@ MenuExit::MenuExit() : Menu() {
 	music_volume_sl = new WidgetSlider();
 	sound_volume_sl = new WidgetSlider();
 
+	mute_music_volume_cb = new WidgetCheckBox();
+	mute_sound_volume_cb = new WidgetCheckBox();
+
+
 	// Load config settings
 	FileParser infile;
 	// @CLASS MenuExit|Description of menus/exit.txt
@@ -68,6 +72,16 @@ MenuExit::MenuExit() : Menu() {
 				Rect r = toRect(infile.val);
 				placeOptionWidgets(&sound_volume_lb, sound_volume_sl, r.x, r.y, r.w, r.h, msg->get("Sound Volume"));
 			}
+			else if (infile.key == "mute_music_volume") {
+				// @ATTR mute_music_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mute Music Volume" checkbox relative to the frame.
+				Rect r = toRect(infile.val);
+				placeOptionWidgets(NULL, mute_music_volume_cb, r.x, r.y, r.w, r.h, msg->get(""));
+			}
+			else if (infile.key == "mute_sound_volume") {
+				// @ATTR mute_sound_volume|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Mute Sound Volume" checkbox relative to the frame.
+				Rect r = toRect(infile.val);
+				placeOptionWidgets(NULL, mute_sound_volume_cb, r.x, r.y, r.w, r.h, msg->get(""));
+			}
 			else
 				infile.error("MenuExit: '%s' is not a valid key.", infile.key.c_str());
 		}
@@ -89,6 +103,11 @@ MenuExit::MenuExit() : Menu() {
 	if (AUDIO) {
 		music_volume_sl->set(0, 128, MUSIC_VOLUME);
 		sound_volume_sl->set(0, 128, SOUND_VOLUME);
+		if(MUSIC_OFF) mute_music_volume_cb->Check();
+		else mute_music_volume_cb->unCheck();
+
+		if(SOUND_OFF) mute_sound_volume_cb->Check();
+		else mute_sound_volume_cb->unCheck();
 	}
 	else {
 		music_volume_sl->set(0, 128, 0);
@@ -99,6 +118,8 @@ MenuExit::MenuExit() : Menu() {
 	tablist.add(buttonExit);
 	tablist.add(music_volume_sl);
 	tablist.add(sound_volume_sl);
+	tablist.add(mute_music_volume_cb);
+	tablist.add(mute_sound_volume_cb);
 
 	align();
 }
@@ -133,15 +154,39 @@ void MenuExit::logic() {
 		else if (buttonClose->checkClick()) {
 			visible = false;
 		}
-		else if (AUDIO && music_volume_sl->checkClick()) {
-			if (MUSIC_VOLUME == 0)
-				reload_music = true;
-			MUSIC_VOLUME = static_cast<short>(music_volume_sl->getValue());
-			snd->setVolumeMusic(MUSIC_VOLUME);
-		}
-		else if (AUDIO && sound_volume_sl->checkClick()) {
-			SOUND_VOLUME = static_cast<short>(sound_volume_sl->getValue());
-			snd->setVolumeSFX(SOUND_VOLUME);
+		else {
+			if (AUDIO) {
+				if (!MUSIC_OFF && music_volume_sl->checkClick()) {
+					if (MUSIC_VOLUME == 0)
+						reload_music = true;
+					MUSIC_VOLUME = static_cast<short>(music_volume_sl->getValue());
+					snd->setVolumeMusic(MUSIC_VOLUME);
+				}
+				else if (!SOUND_OFF && sound_volume_sl->checkClick()) {
+					SOUND_VOLUME = static_cast<short>(sound_volume_sl->getValue());
+					snd->setVolumeSFX(SOUND_VOLUME);
+				}
+				else if (mute_music_volume_cb->checkClick()) {
+					if (mute_music_volume_cb->isChecked()) {
+						MUSIC_OFF=true;
+						snd->setVolumeMusic(0);
+					}
+					else {
+						MUSIC_OFF=false;
+						snd->setVolumeMusic(MUSIC_VOLUME);
+					}
+				}
+				else if (mute_sound_volume_cb->checkClick()) {
+					if (mute_sound_volume_cb->isChecked()) {
+						SOUND_OFF=true;
+						snd->setVolumeSFX(0);
+					}
+					else {
+						SOUND_OFF=false;
+						snd->setVolumeSFX(SOUND_VOLUME);
+					}
+				}
+			}
 		}
 	}
 }
@@ -186,5 +231,7 @@ MenuExit::~MenuExit() {
 
 	delete music_volume_sl;
 	delete sound_volume_sl;
-}
 
+	delete mute_sound_volume_cb;
+	delete mute_music_volume_cb;
+}
