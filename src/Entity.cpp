@@ -314,14 +314,18 @@ bool Entity::takeHit(Hazard &h) {
 
 		if (absorption > 0 && dmg > 0) {
 			int abs = absorption;
-			if ((abs*100)/dmg < MIN_BLOCK)
-				absorption = (dmg * MIN_BLOCK) /100;
-			if ((abs*100)/dmg > MAX_BLOCK)
-				absorption = (dmg * MAX_BLOCK) /100;
-			if ((abs*100)/dmg < MIN_ABSORB && !stats.effects.triggered_block)
-				absorption = (dmg * MIN_ABSORB) /100;
-			if ((abs*100)/dmg > MAX_ABSORB && !stats.effects.triggered_block)
-				absorption = (dmg * MAX_ABSORB) /100;
+			if (stats.effects.triggered_block) {
+				if ((abs*100)/dmg < MIN_BLOCK)
+					absorption = (dmg * MIN_BLOCK) /100;
+				if ((abs*100)/dmg > MAX_BLOCK)
+					absorption = (dmg * MAX_BLOCK) /100;
+				}
+			else {
+				if ((abs*100)/dmg < MIN_ABSORB)
+					absorption = (dmg * MIN_ABSORB) /100;
+				if ((abs*100)/dmg > MAX_ABSORB)
+					absorption = (dmg * MAX_ABSORB) /100;
+			}
 
 			// Sometimes, the absorb limits cause absorbtion to drop to 1
 			// This could be confusing to a player that has something with an absorb of 1 equipped
