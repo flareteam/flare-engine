@@ -29,6 +29,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Entity;
 
 #include "CommonIncludes.h"
+#include "MapCollision.h"
 #include "Utils.h"
 
 class Animation;
@@ -92,6 +93,7 @@ public:
 	int lifespan; // ticks down to zero
 	float radius;
 	int power_index;
+	MOVEMENTTYPE movement_type;
 
 	int animationKind;	// direction or other, it is a specific value according to
 	// some hazard animations are 8-directional

@@ -229,17 +229,19 @@ bool MapCollision::is_wall(const float& x, const float& y) const {
 /**
  * Is this a valid tile for an entity with this movement type?
  */
-bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, MOVEMENTTYPE movement_type, bool is_hero) const {
+bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, MOVEMENTTYPE movement_type, bool is_hero, bool is_entity) const {
 	// outside the map isn't valid
 	if (is_outside_map(tile_x,tile_y)) return false;
 
-	if(is_hero) {
-		if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !ENABLE_ALLY_COLLISION) return true;
-	}
-	else if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES) return false;
+	if (is_entity) {
+		if(is_hero) {
+			if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES && !ENABLE_ALLY_COLLISION) return true;
+		}
+		else if(colmap[tile_x][tile_y] == BLOCKS_ENEMIES) return false;
 
-	// occupied by an entity isn't valid
-	if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES) return false;
+		// occupied by an entity isn't valid
+		if (colmap[tile_x][tile_y] == BLOCKS_ENTITIES) return false;
+	}
 
 	// intangible creatures can be everywhere
 	if (movement_type == MOVEMENT_INTANGIBLE) return true;
@@ -259,10 +261,10 @@ bool MapCollision::is_valid_tile(const int& tile_x, const int& tile_y, MOVEMENTT
 /**
  * Is this a valid position for an entity with this movement type?
  */
-bool MapCollision::is_valid_position(const float& x, const float& y, MOVEMENTTYPE movement_type, bool is_hero) const {
+bool MapCollision::is_valid_position(const float& x, const float& y, MOVEMENTTYPE movement_type, bool is_hero, bool is_entity) const {
 	if (x < 0 || y < 0) return false;
 
-	return is_valid_tile(int(x), int(y), movement_type, is_hero);
+	return is_valid_tile(int(x), int(y), movement_type, is_hero, is_entity);
 }
 
 /**

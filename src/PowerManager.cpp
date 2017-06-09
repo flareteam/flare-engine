@@ -384,6 +384,13 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "lock_target_to_direction")
 			// @ATTR power.lock_target_to_direction|bool|If true, the target is "snapped" to one of the 8 directions.
 			powers[input_id].lock_target_to_direction = toBool(infile.val);
+		else if (infile.key == "movement_type") {
+			// @ATTR power.movement_type|["ground", "flying", "intangible"]|For moving hazards (missile/repeater), this defines which parts of the map it can collide with. The default is "flying".
+			if (infile.val == "ground")         powers[input_id].movement_type = MOVEMENT_NORMAL;
+			else if (infile.val == "flying")    powers[input_id].movement_type = MOVEMENT_FLYING;
+			else if (infile.val == "intangible") powers[input_id].movement_type = MOVEMENT_INTANGIBLE;
+			else infile.error("PowerManager: Unknown movement_type '%s'", infile.val.c_str());
+		}
 		else if (infile.key == "trait_armor_penetration")
 			// @ATTR power.trait_armor_penetration|bool|Ignores the target's Absorbtion stat
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
@@ -878,6 +885,8 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 		haz->script_trigger = powers[power_index].script_trigger;
 		haz->script = powers[power_index].script;
 	}
+
+	haz->movement_type = powers[power_index].movement_type;
 }
 
 /**
@@ -1128,7 +1137,7 @@ bool PowerManager::repeater(int power_index, StatBlock *src_stats, const FPoint&
 		location_iterator.y += speed.y;
 
 		// only travels until it hits a wall
-		if (collider->is_wall(location_iterator.x, location_iterator.y)) {
+		if (!collider->is_valid_position(location_iterator.x, location_iterator.y, powers[power_index].movement_type, false, false)) {
 			break; // no more hazards
 		}
 

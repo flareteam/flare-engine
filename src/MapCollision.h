@@ -73,7 +73,7 @@ private:
 	bool small_step(
 		float &x, float &y, float step_x, float step_y, MOVEMENTTYPE movement_type, bool is_hero);
 
-	bool is_valid_tile(const int& x, const int& y, MOVEMENTTYPE movement_type, bool is_hero) const;
+	bool is_valid_tile(const int& x, const int& y, MOVEMENTTYPE movement_type, bool is_hero, bool is_entity = true) const;
 
 public:
 	MapCollision();
@@ -87,7 +87,7 @@ public:
 	bool is_empty(const float& x, const float& y) const;
 	bool is_wall(const float& x, const float& y) const;
 
-	bool is_valid_position(const float& x, const float& y, MOVEMENTTYPE movement_type, bool is_hero) const;
+	bool is_valid_position(const float& x, const float& y, MOVEMENTTYPE movement_type, bool is_hero, bool is_entity = true) const;
 
 	bool line_of_sight(const float& x1, const float& y1, const float& x2, const float& y2);
 	bool line_of_movement(const float& x1, const float& y1, const float& x2, const float& y2, MOVEMENTTYPE movement_type);
