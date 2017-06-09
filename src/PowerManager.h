@@ -409,6 +409,8 @@ private:
 
 	void payPowerCost(int power_index, StatBlock *src_stats);
 
+	void activatePassiveByTrigger(int power_id, StatBlock *src_stats, bool& triggered_others);
+
 public:
 	explicit PowerManager();
 	~PowerManager();
