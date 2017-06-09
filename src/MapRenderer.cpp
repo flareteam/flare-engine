@@ -319,7 +319,7 @@ void MapRenderer::renderIsoLayer(const Map_Layer& layerdata) {
 	Point dest;
 	const Point upperleft = FPointToPoint(screen_to_map(0, 0, shakycam.x, shakycam.y));
 	const int_fast16_t max_tiles_width =   static_cast<int_fast16_t>((VIEW_W / TILE_W) + 2*tset.max_size_x);
-	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / TILE_H) + 2*tset.max_size_y);
+	const int_fast16_t max_tiles_height = static_cast<int_fast16_t>((2 * VIEW_H / TILE_H) + 2*(tset.max_size_y+1));
 
 	j = static_cast<int_fast16_t>(upperleft.y - tset.max_size_y/2 + tset.max_size_x);
 	i = static_cast<int_fast16_t>(upperleft.x - tset.max_size_y/2 - tset.max_size_x);
