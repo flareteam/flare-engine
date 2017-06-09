@@ -312,7 +312,7 @@ void PowerManager::loadPowers() {
 			// @ATTR power.visual_random|int|The animation sprite sheet contains rows of random options
 			powers[input_id].visual_random = toInt(infile.val);
 		else if (infile.key == "visual_option")
-			// @ATTR power.visual_option|int|The animation sprite sheet containers rows of similar effects, use a specific option.
+			// @ATTR power.visual_option|int|The animation sprite sheet containers rows of similar effects, use a specific option. If using visual_random, this serves as an offset for the lowest random index.
 			powers[input_id].visual_option = toInt(infile.val);
 		else if (infile.key == "aim_assist")
 			// @ATTR power.aim_assist|bool|If true, power targeting will be offset vertically by the number of pixels set with "aim_assist" in engine/misc.txt.
@@ -800,6 +800,7 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 	}
 	else if (powers[power_index].visual_random) {
 		haz->animationKind = rand() % powers[power_index].visual_random;
+		haz->animationKind += powers[power_index].visual_option;
 	}
 	else if (powers[power_index].visual_option) {
 		haz->animationKind = powers[power_index].visual_option;
