@@ -1261,6 +1261,7 @@ bool PowerManager::block(int power_index, StatBlock *src_stats) {
 		return false;
 
 	src_stats->effects.triggered_block = true;
+	src_stats->block_power = power_index;
 
 	// apply any attached effects
 	// passive_trigger MUST be "TRIGGER_BLOCK", since that is how we will later remove effects added by blocking

@@ -58,6 +58,7 @@ StatBlock::StatBlock()
 	, target_nearest_corpse(NULL) // hero only
 	, target_nearest_dist(0) // hero only
 	, target_nearest_corpse_dist(0) // hero only
+	, block_power(0)
 	, movement_type(MOVEMENT_NORMAL)
 	, flying(false)
 	, intangible(false)

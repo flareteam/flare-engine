@@ -124,6 +124,7 @@ public:
 	StatBlock* target_nearest_corpse;
 	float target_nearest_dist;
 	float target_nearest_corpse_dist;
+	int block_power;
 
 	MOVEMENTTYPE movement_type;
 	bool flying;
