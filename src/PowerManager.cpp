@@ -468,6 +468,14 @@ void PowerManager::loadPowers() {
 			}
 		}
 		// pre and post power effects
+		else if (infile.key == "pre_power") {
+			// @ATTR power.pre_power|power_id, int : Power, Chance to cast|Trigger a power immediately when casting this one.
+			powers[input_id].pre_power = popFirstInt(infile.val);
+			std::string chance = popFirstString(infile.val);
+			if (!chance.empty()) {
+				powers[input_id].pre_power_chance = toInt(chance);
+			}
+		}
 		else if (infile.key == "post_power") {
 			// @ATTR power.post_power|power_id, int : Power, Chance to cast|Trigger a power if the hazard did damage.
 			powers[input_id].post_power = popFirstInt(infile.val);

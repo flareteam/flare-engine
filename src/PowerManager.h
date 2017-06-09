@@ -215,6 +215,8 @@ public:
 
 	std::vector<PostEffect> post_effects;
 
+	int pre_power;
+	int pre_power_chance;
 	int post_power;
 	int post_power_chance;
 	int wall_power;
@@ -345,6 +347,8 @@ public:
 		, buff_party(false)
 		, buff_party_power_id(0)
 
+		, pre_power(0)
+		, pre_power_chance(100)
 		, post_power(0)
 		, post_power_chance(100)
 		, wall_power(0)
