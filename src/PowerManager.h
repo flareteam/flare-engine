@@ -171,6 +171,7 @@ public:
 	bool multihit;
 	bool expire_with_caster;
 	bool ignore_zero_damage;
+	bool lock_target_to_direction;
 	float target_range;
 	bool target_party;
 	std::vector<std::string> target_categories;
@@ -313,6 +314,7 @@ public:
 		, multihit(false)
 		, expire_with_caster(false)
 		, ignore_zero_damage(false)
+		, lock_target_to_direction(false)
 		, target_range(0)
 		, target_party(false)
 		, mod_accuracy_mode(-1)

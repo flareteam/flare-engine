@@ -381,6 +381,9 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "ignore_zero_damage")
 			// @ATTR power.ignore_zero_damage|bool|If true, hazard can still hit the player when damage is 0, triggering post_power and post_effects.
 			powers[input_id].ignore_zero_damage = toBool(infile.val);
+		else if (infile.key == "lock_target_to_direction")
+			// @ATTR power.lock_target_to_direction|bool|If true, the target is "snapped" to one of the 8 directions.
+			powers[input_id].lock_target_to_direction = toBool(infile.val);
 		else if (infile.key == "trait_armor_penetration")
 			// @ATTR power.trait_armor_penetration|bool|Ignores the target's Absorbtion stat
 			powers[input_id].trait_armor_penetration = toBool(infile.val);
@@ -1319,19 +1322,27 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 		EventManager::executeScript(powers[power_index].script, src_stats->pos.x, src_stats->pos.y);
 	}
 
+	// check if we need to snap the target to one of the 8 directions
+	FPoint new_target = target;
+	if (powers[power_index].lock_target_to_direction) {
+		float dist = calcDist(src_stats->pos, new_target);
+		int dir = calcDirection(src_stats->pos.x, src_stats->pos.y, new_target.x, new_target.y);
+		new_target = calcVector(src_stats->pos, dir, dist);
+	}
+
 	// logic for different types of powers are very different.  We allow these
 	// separate functions to handle the details.
 	switch(powers[power_index].type) {
 		case POWTYPE_FIXED:
-			return fixed(power_index, src_stats, target);
+			return fixed(power_index, src_stats, new_target);
 		case POWTYPE_MISSILE:
-			return missile(power_index, src_stats, target);
+			return missile(power_index, src_stats, new_target);
 		case POWTYPE_REPEATER:
-			return repeater(power_index, src_stats, target);
+			return repeater(power_index, src_stats, new_target);
 		case POWTYPE_SPAWN:
-			return spawn(power_index, src_stats, target);
+			return spawn(power_index, src_stats, new_target);
 		case POWTYPE_TRANSFORM:
-			return transform(power_index, src_stats, target);
+			return transform(power_index, src_stats, new_target);
 	}
 
 	return false;
