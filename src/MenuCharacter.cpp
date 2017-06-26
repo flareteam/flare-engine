@@ -315,7 +315,7 @@ void MenuCharacter::refreshStats() {
 		for (unsigned int j=0; j<stats->vulnerable.size(); ++j) {
 			ss.str("");
 			ss << msg->get("%s Resistance", ELEMENTS[j].name.c_str()) << ": " << (100 - stats->vulnerable[j]) << "%";
-			statList->set(j+stat_index-2, ss.str(),"");
+			statList->set(j+stat_index, ss.str(),"");
 		}
 	}
 
