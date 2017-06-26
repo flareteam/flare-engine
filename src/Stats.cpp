@@ -141,6 +141,16 @@ void setStatNames() {
 	STAT_NAME[STAT_RETURN_DAMAGE] = msg->get("Damage Reflection");
 	STAT_DESC[STAT_RETURN_DAMAGE] = msg->get("Deals a percentage of damage taken back to the attacker.");
 	STAT_PERCENT[STAT_RETURN_DAMAGE] = true;
+	// @TYPE hp_steal|Percentage of HP stolen when damaging a target
+	STAT_KEY[STAT_HP_STEAL] = "hp_steal";
+	STAT_NAME[STAT_HP_STEAL] = msg->get("HP Steal");
+	STAT_DESC[STAT_HP_STEAL] = msg->get("Percentage of HP stolen per hit.");
+	STAT_PERCENT[STAT_HP_STEAL] = true;
+	// @TYPE mp_steal|Percentage of MP stolen when damaging a target
+	STAT_KEY[STAT_MP_STEAL] = "mp_steal";
+	STAT_NAME[STAT_MP_STEAL] = msg->get("MP Steal");
+	STAT_DESC[STAT_MP_STEAL] = msg->get("Percentage of MP stolen per hit.");
+	STAT_PERCENT[STAT_MP_STEAL] = true;
 	// @TYPE hp_percent|Base HP altered by percentage
 	STAT_KEY[STAT_HP_PERCENT] = "hp_percent";
 	STAT_NAME[STAT_HP_PERCENT] = msg->get("Base HP");

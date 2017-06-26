@@ -418,14 +418,18 @@ bool Entity::takeHit(Hazard &h) {
 			powers->effect(&stats, h.src_stats, h.power_index,h.source_type);
 		}
 
-		if (!stats.effects.immunity_hp_steal && h.hp_steal != 0) {
-			int steal_amt = (std::min(dmg, prev_hp) * h.hp_steal) / 100;
+		// HP/MP steal is cumulative between stat bonus and power bonus
+		// TODO should hp_steal and mp_steal be capped at 100?
+		int hp_steal = h.hp_steal + h.src_stats->get(STAT_HP_STEAL);
+		if (!stats.effects.immunity_hp_steal && hp_steal != 0) {
+			int steal_amt = (std::min(dmg, prev_hp) * hp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
 			combat_text->addString(msg->get("+%d HP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 			h.src_stats->hp = std::min(h.src_stats->hp + steal_amt, h.src_stats->get(STAT_HP_MAX));
 		}
-		if (!stats.effects.immunity_mp_steal && h.mp_steal != 0) {
-			int steal_amt = (std::min(dmg, prev_hp) * h.mp_steal) / 100;
+		int mp_steal = h.mp_steal + h.src_stats->get(STAT_MP_STEAL);
+		if (!stats.effects.immunity_mp_steal && mp_steal != 0) {
+			int steal_amt = (std::min(dmg, prev_hp) * mp_steal) / 100;
 			if (steal_amt == 0) steal_amt = 1;
 			combat_text->addString(msg->get("+%d MP",steal_amt), h.src_stats->pos, COMBAT_MESSAGE_BUFF);
 			h.src_stats->mp = std::min(h.src_stats->mp + steal_amt, h.src_stats->get(STAT_MP_MAX));
