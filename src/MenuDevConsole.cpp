@@ -225,6 +225,7 @@ void MenuDevConsole::execute() {
 		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), false);
 		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), false);
 		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
+		log_history->add("list_maps - " + msg->get("Prints out all the map filenames located in the \"maps/\" directory."), false);
 		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), false);
 		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), false);
 		log_history->add("exec - " + msg->get("parses a series of event components and executes them as a single event"), false);
@@ -320,6 +321,46 @@ void MenuDevConsole::execute() {
 				ss.str("");
 				ss << items->getItemName(static_cast<int>(id)) << " (" << id <<")";
 				log_history->add(ss.str(), false, &item_color);
+			}
+
+			log_history->setMaxMessages(); // reset
+		}
+	}
+	else if (args[0] == "list_maps") {
+		std::vector<std::string> map_filenames = mods->list("maps", false);
+
+		for (size_t i=0; i<map_filenames.size(); ++i) {
+			// Remove "maps/" from all of the filenames so that it doesn't affect search results
+			// We'll still print out the "maps/" later during the output
+			map_filenames[i].erase(0,5);
+		}
+
+		std::sort(map_filenames.begin(), map_filenames.end());
+
+		std::stringstream ss;
+
+		std::string search_terms;
+		for (size_t i=1; i<args.size(); i++) {
+			search_terms += args[i];
+
+			if (i+1 != args.size())
+				search_terms += ' ';
+		}
+
+		std::vector<size_t> matching_ids;
+
+		for (size_t i=0; i<map_filenames.size(); ++i) {
+			if (!search_terms.empty() && stringFindCaseInsensitive(map_filenames[i], search_terms) == std::string::npos)
+				continue;
+
+			matching_ids.push_back(i);
+		}
+
+		if (!matching_ids.empty()) {
+			log_history->setMaxMessages(static_cast<unsigned>(matching_ids.size()));
+
+			for (size_t i=matching_ids.size(); i>0; i--) {
+				log_history->add("maps/" + map_filenames[matching_ids[i-1]], false);
 			}
 
 			log_history->setMaxMessages(); // reset
