@@ -258,6 +258,7 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 			power_filter.push_back(toInt(power_id));
 			power_id = popFirstString(infile->val);
 		}
+		return true;
 	}
 
 	return false;
