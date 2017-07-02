@@ -506,10 +506,16 @@ bool Entity::takeHit(Hazard &h) {
 			stats.cooldown_hit_ticks = stats.cooldown_hit;
 
 			if (!stats.effects.stun && (!chance_poise || crit) && !stats.prevent_interrupt) {
-				if(stats.hero)
+				if(stats.hero) {
 					stats.cur_state = AVATAR_HIT;
-				else
+				}
+				else {
+					if (stats.cur_state == ENEMY_POWER) {
+						stats.cooldown_ticks = stats.cooldown;
+						stats.activated_power = NULL;
+					}
 					stats.cur_state = ENEMY_HIT;
+				}
 
 				if (stats.untransform_on_hit)
 					stats.transform_duration = 0;
