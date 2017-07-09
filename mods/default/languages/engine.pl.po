@@ -638,8 +638,8 @@ msgstr "Wymaga %d poziomu"
 
 #: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:962
 #: ../../../src/MenuPowers.cpp:964
-#, fuzzy, c-format
-msgid "Requires %s %d"
+#, c-format
+msgid "Requires %s"
 msgstr "Wymaga %s"
 
 #: ../../../src/ItemManager.cpp:757
@@ -723,9 +723,9 @@ msgid "Each level grants %d. "
 msgstr "Każdy poziom zapewnia %d. "
 
 #: ../../../src/MenuCharacter.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d. "
-msgstr "Każdy punkt Ataku dodaje %d. "
+msgstr "Każdy punkt %s dodaje %d. "
 
 #: ../../../src/MenuDevConsole.cpp:46
 msgid "Execute"
@@ -1442,7 +1442,6 @@ msgstr "%s sekund"
 #~ msgid "Prints out all of the campaign status that are set"
 #~ msgstr "Wyświetla wszystkie statusy przypisane do kampanii"
 
-#, fuzzy
 #~ msgid "Move only one item:"
 #~ msgstr "Przenieś tylko jeden przedmiot:"
 
