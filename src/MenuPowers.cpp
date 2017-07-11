@@ -48,6 +48,7 @@ MenuPowers::MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar)
 	, default_background("")
 	, tab_control(NULL)
 	, tree_loaded(false)
+	, prev_powers_list_size(0)
 	, newPowerNotification(false)
 {
 
@@ -449,7 +450,8 @@ bool MenuPowers::checkUnlocked(int pci) {
 	// If we didn't find power in power_menu, than it has no requirements
 	if (pci == -1) return true;
 
-	if (!checkCellVisible(pci)) return false;
+	if (!checkCellVisible(pci))
+		return false;
 
 	// If power_id is saved into vector, it's unlocked anyway
 	// check power_cell_unlocked and stats->powers_list
@@ -457,10 +459,13 @@ bool MenuPowers::checkUnlocked(int pci) {
 		if (power_cell_unlocked[i].id == power_cell_all[pci].id)
 			return true;
 	}
-	if (std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell_all[pci].id) != stats->powers_list.end()) return true;
+	if (std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell_all[pci].id) != stats->powers_list.end())
+		return true;
 
 	// Check the rest requirements
-	if (checkRequirements(pci) && !power_cell_all[pci].requires_point) return true;
+	if (!power_cell_all[pci].requires_point && checkRequirements(pci))
+		return true;
+
 	return false;
 }
 
@@ -604,10 +609,20 @@ void MenuPowers::upgradePower(int pci) {
 
 void MenuPowers::setUnlockedPowers() {
 	std::vector<int> power_ids;
-	power_cell_unlocked.clear();
+	bool unlocked_cleared = false;
+
+	// only clear/repopulate power_cell_unlocked if the size of the hero's powers_list has changed
+	if (prev_powers_list_size != stats->powers_list.size() || power_cell_unlocked.empty()) {
+		prev_powers_list_size = stats->powers_list.size();
+		power_cell_unlocked.clear();
+		unlocked_cleared = true;
+	}
 
 	for (size_t i=0; i<power_cell.size(); ++i) {
 		if (std::find(stats->powers_list.begin(), stats->powers_list.end(), power_cell[i].id) != stats->powers_list.end()) {
+			if (!unlocked_cleared)
+				continue;
+
 			// base power
 			if (std::find(power_ids.begin(), power_ids.end(), power_cell[i].id) == power_ids.end()) {
 				power_ids.push_back(power_cell_base[i].id);
@@ -640,6 +655,11 @@ void MenuPowers::setUnlockedPowers() {
 				stats->powers_list.push_back(power_cell[i].id);
 			}
 		}
+	}
+
+	// the hero's powers_list may have grown, so we need to re-check unlocked powers
+	if (prev_powers_list_size != stats->powers_list.size()) {
+		setUnlockedPowers();
 	}
 }
 

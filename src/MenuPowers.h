@@ -141,6 +141,8 @@ private:
 
 	bool tree_loaded;
 
+	size_t prev_powers_list_size;
+
 public:
 	MenuPowers(StatBlock *_stats, MenuActionBar *_action_bar);
 	~MenuPowers();
