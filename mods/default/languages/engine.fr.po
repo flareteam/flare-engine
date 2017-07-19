@@ -213,12 +213,12 @@ msgstr "Jeu : "
 #: ../../../src/GameStateConfigBase.cpp:896
 #, fuzzy
 msgid "Requires version: "
-msgstr "Nécessite le pouvoir: %s"
+msgstr "Nécessite la version: "
 
 #: ../../../src/GameStateConfigBase.cpp:910
 #, fuzzy
 msgid "Requires mods: "
-msgstr "Nécessite le pouvoir: %s"
+msgstr "Nécessite les mods: "
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:687
@@ -294,16 +294,16 @@ msgstr "Visée à la souris"
 #: ../../../src/GameStateConfigDesktop.cpp:245
 #, fuzzy
 msgid "Do not use mouse"
-msgstr "Ne pas utiliser la souris"
+msgstr "Sans la souris"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 #, fuzzy
 msgid "Joystick Deadzone"
-msgstr "Manette"
+msgstr "Zone morte de la Manette"
 
 #: ../../../src/GameStateConfigDesktop.cpp:254
 msgid "For handheld devices"
-msgstr ""
+msgstr "Pour les terminaux portables"
 
 #: ../../../src/GameStateConfigDesktop.cpp:747
 #: ../../../src/SDLInputState.cpp:497
@@ -342,7 +342,7 @@ msgstr "Activez un mod scenario pour continuer"
 
 #: ../../../src/GameStateLoad.cpp:608
 msgid "Load Game"
-msgstr "Charger"
+msgstr "Charger la partie"
 
 #: ../../../src/GameStateLoad.cpp:709
 msgid "Entering game world..."
@@ -377,7 +377,7 @@ msgstr "Choisissez un nom"
 
 #: ../../../src/GameStateNew.cpp:166
 msgid "Permadeath?"
-msgstr "Mort permanente (permadeath) ? "
+msgstr "Mort permanente ? "
 
 #: ../../../src/GameStateNew.cpp:170
 msgid "Choose a Class"
@@ -599,7 +599,7 @@ msgstr "Objet de quête"
 #: ../../../src/ItemManager.cpp:668
 #, c-format
 msgid "Quality: %s"
-msgstr "Qualitée: %s"
+msgstr "Qualité: %s"
 
 #: ../../../src/ItemManager.cpp:677
 #, c-format
@@ -657,7 +657,7 @@ msgstr "Nécessite le niveau %d"
 #: ../../../src/MenuPowers.cpp:964
 #, fuzzy, c-format
 msgid "Requires %s %d"
-msgstr "Nécessite %s %d"
+msgstr "Nécessite %d de %s"
 
 #: ../../../src/ItemManager.cpp:757
 #, fuzzy, c-format
@@ -733,7 +733,7 @@ msgstr "base (%d), bonus (%d)"
 
 #: ../../../src/MenuCharacter.cpp:338
 msgid "Related stats:"
-msgstr ""
+msgstr "Statistiques liées: "
 
 #: ../../../src/MenuCharacter.cpp:364
 #, c-format
@@ -743,7 +743,7 @@ msgstr "Chaque niveau donne %d"
 #: ../../../src/MenuCharacter.cpp:368
 #, fuzzy, c-format
 msgid "Each point of %s grants %d. "
-msgstr "Chaque point of %s donne %d."
+msgstr "Chaque point de %s donne %d."
 
 #: ../../../src/MenuDevConsole.cpp:46
 msgid "Execute"
@@ -866,7 +866,7 @@ msgstr "En pause"
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr "Perdu %d%% de %s"
+msgstr "Perdu %d%% de %s. "
 
 #: ../../../src/MenuInventory.cpp:162
 #, c-format
@@ -899,7 +899,7 @@ msgstr "Utilisez ou équipez un objet:"
 #: ../../../src/MenuInventory.cpp:279
 #, c-format
 msgid "%s modifiers"
-msgstr "%s modifiés"
+msgstr "modificateurs de %s"
 
 #: ../../../src/MenuInventory.cpp:280
 msgid "Select a quantity of item:"
@@ -1106,7 +1106,7 @@ msgstr "%s dégâts Élémentaux"
 #: ../../../src/MenuPowers.cpp:953
 #, fuzzy, c-format
 msgid "Requires a %s"
-msgstr "Nécessite %s"
+msgstr "Nécessite un %s"
 
 #: ../../../src/MenuPowers.cpp:992 ../../../src/MenuPowers.cpp:995
 #, c-format
@@ -1155,7 +1155,7 @@ msgstr "Vendeur"
 #: ../../../src/PowerManager.cpp:861
 #, c-format
 msgid "+%d Shield"
-msgstr "+%d Bouclier"
+msgstr "Bouclier +%d"
 
 #: ../../../src/PowerManager.cpp:1114
 msgid "You are already transformed, untransform first."
@@ -1303,17 +1303,17 @@ msgstr "Bonus %s"
 #: ../../../src/Stats.cpp:117
 #, fuzzy, c-format
 msgid "Increases the %s found per drop."
-msgstr "Augmente les %s trouvés par jet"
+msgstr "Augmente les %s trouvés par lâcher"
 
 #: ../../../src/Stats.cpp:121
 #, fuzzy
 msgid "Item Find Chance"
-msgstr "Bonus de découverte d'objets"
+msgstr "Probailité de découverte d'objets"
 
 #: ../../../src/Stats.cpp:122
 #, fuzzy
 msgid "Increases the chance that an enemy will drop an item."
-msgstr "Augmente les chances qu'un enemi abattu cedera un objet"
+msgstr "Augmente les chances qu'un enemi abattu lâchera un objet"
 
 #: ../../../src/Stats.cpp:126
 #, fuzzy
@@ -1337,7 +1337,7 @@ msgstr "Réduit vos chances de trébucher quand vous êtes touché."
 
 #: ../../../src/Stats.cpp:136
 msgid "Missile Reflect Chance"
-msgstr "Chance de renvoi de Missile"
+msgstr "Chance de renvoi de missile"
 
 #: ../../../src/Stats.cpp:137
 msgid "Increases your chance of reflecting missiles back at enemies."
@@ -1448,7 +1448,7 @@ msgstr "%s secondes"
 #~ msgstr "Résolution"
 
 #~ msgid "Level %d %s"
-#~ msgstr "Niveau %d %s"
+#~ msgstr "%s de niveau %d"
 
 #, fuzzy
 #~ msgid "Flare Alpha v0.19"
