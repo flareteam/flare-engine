@@ -865,22 +865,22 @@ msgstr "Pause"
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr ""
+msgstr "Perdu %d%% of %s"
 
 #: ../../../src/MenuInventory.cpp:162
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr ""
+msgstr "Perdu %d%% du total d'XP. "
 
 #: ../../../src/MenuInventory.cpp:167
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr ""
+msgstr "Perdu %d%% du niveau d'XP actuel. "
 
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
 msgid "Lost %s."
-msgstr ""
+msgstr "Perdu %s."
 
 #: ../../../src/MenuInventory.cpp:236 ../../../src/MenuStash.cpp:136
 #, c-format
@@ -893,16 +893,16 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:278
 msgid "Use or equip item:"
-msgstr ""
+msgstr "Utilisez ou équipez un objet:"
 
 #: ../../../src/MenuInventory.cpp:279
 #, c-format
 msgid "%s modifiers"
-msgstr ""
+msgstr "%s modifiés"
 
 #: ../../../src/MenuInventory.cpp:280
 msgid "Select a quantity of item:"
-msgstr ""
+msgstr "Sélectionnez une quantitée d'objet:"
 
 #: ../../../src/MenuInventory.cpp:283
 msgid "Stash item stack:"
@@ -914,7 +914,7 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:529
 msgid "You don't have enough of the required item."
-msgstr ""
+msgstr "Vous n'avez pas assez de l'objet nécessaire."
 
 #: ../../../src/MenuInventory.cpp:547
 msgid "This item can only be used from the action bar."
