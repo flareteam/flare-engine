@@ -950,7 +950,7 @@ msgstr "XP: %d/%d"
 #: ../../../src/MenuManager.cpp:790
 #, fuzzy
 msgid "This item can not be dropped."
-msgstr "Cet objet ne peut être utilisé que depuis la barre d'action."
+msgstr "Cet objet ne peut être jeté."
 
 #: ../../../src/MenuNPCActions.cpp:71
 msgid "Trade"
@@ -973,55 +973,55 @@ msgstr "Consomme %d PV"
 #: ../../../src/MenuPowers.cpp:669
 #, fuzzy
 msgid "Cooldown:"
-msgstr "Récupération : %d secondes"
+msgstr "Récupération:"
 
 #: ../../../src/MenuPowers.cpp:720 ../../../src/MenuPowers.cpp:723
 msgid "Damage per second"
-msgstr ""
+msgstr "Dommages par secondes"
 
 #: ../../../src/MenuPowers.cpp:726 ../../../src/MenuPowers.cpp:729
 msgid "HP per second"
-msgstr ""
+msgstr "PV par seconde"
 
 #: ../../../src/MenuPowers.cpp:732 ../../../src/MenuPowers.cpp:735
 msgid "MP per second"
-msgstr ""
+msgstr "PM par seconde"
 
 #: ../../../src/MenuPowers.cpp:739
 msgid "Immobilize"
-msgstr ""
+msgstr "Immobilise"
 
 #: ../../../src/MenuPowers.cpp:744
 msgid "Immunity"
-msgstr ""
+msgstr "Immunité"
 
 #: ../../../src/MenuPowers.cpp:747
 msgid "Immunity to damage over time"
-msgstr ""
+msgstr "Immunité au dommage progressifs"
 
 #: ../../../src/MenuPowers.cpp:750
 msgid "Immunity to slow"
-msgstr ""
+msgstr "Immunité à la lenteur"
 
 #: ../../../src/MenuPowers.cpp:753
 msgid "Immunity to stun"
-msgstr ""
+msgstr "Immunité à l'étourdissement"
 
 #: ../../../src/MenuPowers.cpp:756
 msgid "Immunity to HP steal"
-msgstr ""
+msgstr "Immunité au vol de PV"
 
 #: ../../../src/MenuPowers.cpp:759
 msgid "Immunity to MP steal"
-msgstr ""
+msgstr "Immunité au vol de PM"
 
 #: ../../../src/MenuPowers.cpp:762
 msgid "Immunity to knockback"
-msgstr ""
+msgstr "Immunité au recul"
 
 #: ../../../src/MenuPowers.cpp:765
 msgid "Immunity to damage reflection"
-msgstr ""
+msgstr "Immunité au renvoi de dommage"
 
 #: ../../../src/MenuPowers.cpp:768
 msgid "Stun"
