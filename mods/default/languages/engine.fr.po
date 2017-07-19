@@ -39,17 +39,17 @@ msgstr "Vous êtes vaincu.  Vous perdez la moitié de votre %s. Appuyez sur Entr
 
 #: ../../../src/Avatar.cpp:799
 msgid "Transformation expired. You have been moved back to a safe place."
-msgstr ""
+msgstr "Transformation expirée. On vous a ramené à un endroit sûr."
 
 #: ../../../src/CampaignManager.cpp:124
 #, c-format
 msgid "%d %s removed."
-msgstr ""
+msgstr "%d %s supprimé."
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%s removed."
-msgstr ""
+msgstr "%s supprimé."
 
 #: ../../../src/CampaignManager.cpp:146
 #, c-format
@@ -166,7 +166,7 @@ msgstr "Afficher les FPS"
 
 #: ../../../src/GameStateConfigBase.cpp:231
 msgid "Colorblind Mode"
-msgstr ""
+msgstr "Mode daltonien"
 
 #: ../../../src/GameStateConfigBase.cpp:235
 #, fuzzy
@@ -175,15 +175,15 @@ msgstr "Hardware surfaces"
 
 #: ../../../src/GameStateConfigBase.cpp:239
 msgid "Developer Mode"
-msgstr ""
+msgstr "Mode développeur"
 
 #: ../../../src/GameStateConfigBase.cpp:243
 msgid "Always show loot labels"
-msgstr ""
+msgstr "Toujours montrer les étiquettes de butin"
 
 #: ../../../src/GameStateConfigBase.cpp:247
 msgid "Always show stat bar labels"
-msgstr ""
+msgstr "Toujours montrer les étiquettes de la bare de statistiques"
 
 #: ../../../src/GameStateConfigBase.cpp:251
 msgid "Automatically equip items"
