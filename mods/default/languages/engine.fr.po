@@ -1081,31 +1081,31 @@ msgstr "Précision de base"
 
 #: ../../../src/MenuPowers.cpp:921
 msgid "Base Critical Chance"
-msgstr ""
+msgstr "Chance criticales de base"
 
 #: ../../../src/MenuPowers.cpp:929
 msgid "Ignores Absorbtion"
-msgstr ""
+msgstr "Ignore l'Absorption"
 
 #: ../../../src/MenuPowers.cpp:934
 #, fuzzy
 msgid "Ignores Avoidance"
-msgstr "Esquive :"
+msgstr "Ignore l'Esquive"
 
 #: ../../../src/MenuPowers.cpp:939
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr ""
+msgstr "%d%% chance de "
 
 #: ../../../src/MenuPowers.cpp:944
 #, fuzzy, c-format
 msgid "%s Elemental Damage"
-msgstr "Dégâts mentaux :"
+msgstr "%s dégâts Élémentaux"
 
 #: ../../../src/MenuPowers.cpp:953
 #, fuzzy, c-format
 msgid "Requires a %s"
-msgstr "Nécessite %d de Mental"
+msgstr "Nécessite %s"
 
 #: ../../../src/MenuPowers.cpp:992 ../../../src/MenuPowers.cpp:995
 #, c-format
