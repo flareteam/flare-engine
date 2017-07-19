@@ -1282,12 +1282,12 @@ msgstr "Absorbe Max"
 
 #: ../../../src/Stats.cpp:106
 msgid "Critical Hit Chance"
-msgstr ""
+msgstr "Chance de coups critiques"
 
 #: ../../../src/Stats.cpp:111
 #, fuzzy
 msgid "Bonus XP"
-msgstr "Bonus XP : "
+msgstr "Bonus d'XP"
 
 #: ../../../src/Stats.cpp:112
 #, fuzzy
@@ -1297,17 +1297,17 @@ msgstr "Augmente l'XP recupérée par ennemi abattu"
 #: ../../../src/Stats.cpp:116
 #, fuzzy, c-format
 msgid "Bonus %s"
-msgstr "Bonus"
+msgstr "Bonus %s"
 
 #: ../../../src/Stats.cpp:117
 #, fuzzy, c-format
 msgid "Increases the %s found per drop."
-msgstr "Augmente les %s trouvés par cession"
+msgstr "Augmente les %s trouvés par jet"
 
 #: ../../../src/Stats.cpp:121
 #, fuzzy
 msgid "Item Find Chance"
-msgstr "Bonus de découverte d'objets: "
+msgstr "Bonus de découverte d'objets"
 
 #: ../../../src/Stats.cpp:122
 #, fuzzy
@@ -1317,26 +1317,26 @@ msgstr "Augmente les chances qu'un enemi abattu cedera un objet"
 #: ../../../src/Stats.cpp:126
 #, fuzzy
 msgid "Stealth"
-msgstr "Furtivité: "
+msgstr "Furtivité"
 
 #: ../../../src/Stats.cpp:127
 #, fuzzy
 msgid "Increases your ability to move undetected."
-msgstr "Augmente votre aptitude au déplacement sans détection"
+msgstr "Augmente votre aptitude au déplacement sans détection."
 
 #: ../../../src/Stats.cpp:131
 #, fuzzy
 msgid "Poise"
-msgstr "Aplomb : "
+msgstr "Aplomb"
 
 #: ../../../src/Stats.cpp:132
 #, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "Réduit vos chances de trébucher quand vous êtes touché"
+msgstr "Réduit vos chances de trébucher quand vous êtes touché."
 
 #: ../../../src/Stats.cpp:136
 msgid "Missile Reflect Chance"
-msgstr ""
+msgstr "Chance de renvoi de Missile"
 
 #: ../../../src/Stats.cpp:137
 msgid "Increases your chance of reflecting missiles back at enemies."
@@ -1344,7 +1344,7 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:141
 msgid "Damage Reflection"
-msgstr ""
+msgstr "Renvoi de Dommages"
 
 #: ../../../src/Stats.cpp:142
 msgid "Deals a percentage of damage taken back to the attacker."
@@ -1352,11 +1352,11 @@ msgstr ""
 
 #: ../../../src/Stats.cpp:146
 msgid "Base HP"
-msgstr ""
+msgstr "PV de base"
 
 #: ../../../src/Stats.cpp:151
 msgid "Base MP"
-msgstr ""
+msgstr "PM de base"
 
 #: ../../../src/Utils.cpp:193
 #, fuzzy
@@ -1366,12 +1366,12 @@ msgstr "Ok"
 #: ../../../src/Utils.cpp:355
 #, fuzzy, c-format
 msgid "%s second"
-msgstr "Récupération : %d secondes"
+msgstr "%s seconde"
 
 #: ../../../src/Utils.cpp:358
 #, fuzzy, c-format
 msgid "%s seconds"
-msgstr "Récupération : %d secondes"
+msgstr "%s secondes"
 
 #~ msgid "Requires Physical %d"
 #~ msgstr "Nécéssite %d de Physique"
@@ -1387,15 +1387,15 @@ msgstr "Récupération : %d secondes"
 
 #, fuzzy
 #~ msgid "Each point of Physical grants %d. "
-#~ msgstr "Chaque point de Physique donne +%d PV. Chaque niveau donne +%d PV"
+#~ msgstr "Chaque point de Physique donne %d."
 
 #, fuzzy
 #~ msgid "Each point of Mental grants %d. "
-#~ msgstr "Chaque point de Mental donne +%d PM. Chaque niveau donne +%d PM"
+#~ msgstr "Chaque point de Mental donne %d."
 
 #, fuzzy
 #~ msgid "Each point of Defense grants %d. "
-#~ msgstr "Chaque point de Mental donne +%d PM. Chaque niveau donne +%d PM"
+#~ msgstr "Chaque point de Mental donne %d."
 
 #~ msgid "Requires Physical Offense %d"
 #~ msgstr "Nécessite Attaque Physique %d"
@@ -1411,22 +1411,22 @@ msgstr "Récupération : %d secondes"
 
 #, fuzzy
 #~ msgid "Added item: "
-#~ msgstr "%d items :"
+#~ msgstr "Objet ajouté: "
 
 #, fuzzy
 #~ msgid "Removed item: "
-#~ msgstr "%d items :"
+#~ msgstr "Objet supprimé: "
 
 #, fuzzy
 #~ msgid "Exit to title?"
-#~ msgstr "Retour au menu"
+#~ msgstr "Retour au menu ?"
 
 #~ msgid "Empty Slot"
 #~ msgstr "Pas de partie"
 
 #, fuzzy
 #~ msgid "Move only one item:"
-#~ msgstr "Utilisez SHIFT pour déplacer un seul objet."
+#~ msgstr "Déplacer un seul objet:"
 
 #~ msgid "CTRL-click a carried item to sell it."
 #~ msgstr "Cliquez sur un objet de l'inventaire avec CTRL enfoncé pour le vendre."
@@ -1451,7 +1451,7 @@ msgstr "Récupération : %d secondes"
 
 #, fuzzy
 #~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare Alpha v0.18"
+#~ msgstr "Flare Alpha v0.19"
 
 #~ msgid "lmb"
 #~ msgstr "bgs"
@@ -1488,7 +1488,7 @@ msgstr "Récupération : %d secondes"
 #~ msgstr "La Défense (D) augmente la compétence avec des armures et l'esquive."
 
 #~ msgid "Save and exit to title?"
-#~ msgstr "Sauver et quitter ?"
+#~ msgstr "Sauver et retourner au menu ?"
 
 #~ msgid "Click to Unlock"
 #~ msgstr "Cliquer pour débloquer"
