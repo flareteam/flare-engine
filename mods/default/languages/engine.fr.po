@@ -187,7 +187,7 @@ msgstr "Toujours montrer les étiquettes de la bare de statistiques"
 
 #: ../../../src/GameStateConfigBase.cpp:251
 msgid "Automatically equip items"
-msgstr ""
+msgstr "Équiper automatiquement les objets"
 
 #: ../../../src/GameStateConfigBase.cpp:255
 msgid "Active Mods"
@@ -207,7 +207,7 @@ msgstr "Activer >>"
 
 #: ../../../src/GameStateConfigBase.cpp:891
 msgid "Game: "
-msgstr ""
+msgstr "Jeu : "
 
 #: ../../../src/GameStateConfigBase.cpp:896
 #, fuzzy
@@ -222,12 +222,12 @@ msgstr "Nécessite le pouvoir: %s"
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:687
 msgid "Clear"
-msgstr ""
+msgstr "Effacer"
 
 #: ../../../src/GameStateConfigDesktop.cpp:77
 #: ../../../src/GameStateConfigDesktop.cpp:685
 msgid "Assign: "
-msgstr "Assigner"
+msgstr "Assigner: "
 
 #: ../../../src/GameStateConfigDesktop.cpp:109
 msgid "Video"
@@ -255,11 +255,11 @@ msgstr "Hardware surfaces"
 
 #: ../../../src/GameStateConfigDesktop.cpp:196
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 #: ../../../src/GameStateConfigDesktop.cpp:200
 msgid "Texture Filtering"
-msgstr ""
+msgstr "Filtrage de textures"
 
 #: ../../../src/GameStateConfigDesktop.cpp:204
 msgid "Allow changing gamma"
@@ -272,7 +272,7 @@ msgstr "Gamma"
 #: ../../../src/GameStateConfigDesktop.cpp:213
 #: ../../../src/GameStateConfigDesktop.cpp:218
 msgid "Disable for performance"
-msgstr "Désactiver = meilleures perf."
+msgstr "Désactiver = meilleures performances"
 
 #: ../../../src/GameStateConfigDesktop.cpp:223
 msgid "Experimental"
@@ -293,7 +293,7 @@ msgstr "Visée à la souris"
 #: ../../../src/GameStateConfigDesktop.cpp:245
 #, fuzzy
 msgid "Do not use mouse"
-msgstr "Déplacement du héro à la souris"
+msgstr "Ne pas utiliser la souris"
 
 #: ../../../src/GameStateConfigDesktop.cpp:249
 #, fuzzy
@@ -307,13 +307,13 @@ msgstr ""
 #: ../../../src/GameStateConfigDesktop.cpp:747
 #: ../../../src/SDLInputState.cpp:497
 msgid "(none)"
-msgstr ""
+msgstr "(rien)"
 
 #: ../../../src/GameStateConfigDesktop.cpp:792
 #: ../../../src/SDLInputState.cpp:539
 #, c-format
 msgid "Button %d"
-msgstr ""
+msgstr "Bouton %d"
 
 #: ../../../src/GameStateLoad.cpp:86 ../../../src/GameStateLoad.cpp:101
 msgid "Delete Save"
@@ -360,7 +360,7 @@ msgstr "Niveau %d"
 #: ../../../src/GameStateLoad.cpp:755
 #, fuzzy
 msgid "Permadeath"
-msgstr "Mort permanente (permadeath) ? "
+msgstr "Mort permanente"
 
 #: ../../../src/GameStateNew.cpp:64
 msgid "Create"
@@ -400,7 +400,7 @@ msgstr "Configuration"
 
 #: ../../../src/GameStateTitle.cpp:111
 msgid "Credits"
-msgstr ""
+msgstr "Crédits"
 
 #: ../../../src/GameStateTitle.cpp:114
 msgid "Exit Game"
@@ -489,11 +489,11 @@ msgstr "Journal"
 
 #: ../../../src/InputState.cpp:306
 msgid "Main1"
-msgstr "1ere Main"
+msgstr "1ère Main"
 
 #: ../../../src/InputState.cpp:307
 msgid "Main2"
-msgstr "2eme Main"
+msgstr "2ème Main"
 
 #: ../../../src/InputState.cpp:308
 msgid "Ctrl"
@@ -505,11 +505,11 @@ msgstr "Maj"
 
 #: ../../../src/InputState.cpp:310
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: ../../../src/InputState.cpp:311
 msgid "Delete"
-msgstr "Suppr."
+msgstr "Supprimer"
 
 #: ../../../src/InputState.cpp:312
 msgid "ActionBar Accept"
@@ -517,32 +517,32 @@ msgstr ""
 
 #: ../../../src/InputState.cpp:313
 msgid "ActionBar Left"
-msgstr ""
+msgstr "Barre d'action Gauche"
 
 #: ../../../src/InputState.cpp:314
 msgid "ActionBar Right"
-msgstr ""
+msgstr "Barre d'action Droite"
 
 #: ../../../src/InputState.cpp:315
 msgid "ActionBar Use"
-msgstr ""
+msgstr "Utilisation de la barre d'action"
 
 #: ../../../src/InputState.cpp:316
 msgid "Developer Menu"
-msgstr ""
+msgstr "Menu du développeur"
 
 #: ../../../src/InputState.cpp:318
 msgid "Left Mouse"
-msgstr ""
+msgstr "Clic gauche"
 
 #: ../../../src/InputState.cpp:319
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Clic molette"
 
 #: ../../../src/InputState.cpp:320
 #, fuzzy
 msgid "Right Mouse"
-msgstr "Droite"
+msgstr "Clic droit"
 
 #: ../../../src/InputState.cpp:321
 #, fuzzy
@@ -566,13 +566,13 @@ msgstr "Visée à la souris"
 
 #: ../../../src/ItemManager.cpp:402 ../../../src/ItemManager.cpp:405
 msgid "Unknown Item"
-msgstr ""
+msgstr "Objet inconnu"
 
 #: ../../../src/ItemManager.cpp:583 ../../../src/MenuCharacter.cpp:315
 #: ../../../src/MenuPowers.cpp:706
 #, c-format
 msgid "%s Resistance"
-msgstr ""
+msgstr "%s Resistance"
 
 #: ../../../src/ItemManager.cpp:587
 msgid "Physical"
