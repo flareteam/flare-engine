@@ -36,7 +36,7 @@ msgstr "Vous êtes vaincu. Votre personnage est mort ! Pressez Entrée pour reve
 #: ../../../src/Avatar.cpp:572
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Vous êtes vaincu.  Vous perdez la moitié de votre %s. Appuyez sur Entrée pour continuer."
+msgstr "Vous êtes vaincu.  Vous perdez la moitié de votre Or. Appuyez sur Entrée pour continuer."
 
 #: ../../../src/Avatar.cpp:799
 msgid "Transformation expired. You have been moved back to a safe place."
