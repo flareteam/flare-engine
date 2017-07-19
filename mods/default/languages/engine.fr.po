@@ -927,12 +927,12 @@ msgstr "L'inventaire est complet."
 #: ../../../src/MenuInventory.cpp:741
 #, fuzzy, c-format
 msgid "Not enough %s."
-msgstr "Pas assez d'argent."
+msgstr "Pas assez de %s."
 
 #: ../../../src/MenuInventory.cpp:761 ../../../src/MenuInventory.cpp:768
 #, fuzzy
 msgid "This item can not be sold."
-msgstr "Cet objet ne peut être utilisé que depuis la barre d'action."
+msgstr "Cet objet ne peut être vendu."
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
