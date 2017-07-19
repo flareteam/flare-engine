@@ -750,7 +750,7 @@ msgstr "Éxécuter"
 
 #: ../../../src/MenuDevConsole.cpp:111
 msgid "Developer Console"
-msgstr ""
+msgstr "Console de développement"
 
 #: ../../../src/MenuDevConsole.cpp:119
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -758,7 +758,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:120
 msgid "Type 'help' to get a list of commands. "
-msgstr ""
+msgstr "Tapez 'help' pour avoir une liste des commandes."
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off all of the HUD elements"
@@ -786,7 +786,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:231
 msgid "clears the command history"
-msgstr ""
+msgstr "Effacer l'historique de commandes"
 
 #: ../../../src/MenuDevConsole.cpp:232
 msgid "displays this text"
@@ -803,11 +803,11 @@ msgstr ""
 #: ../../../src/MenuDevConsole.cpp:337
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr ""
+msgstr "ERREUR: '%s' n'est pas une clé d'évènement valide"
 
 #: ../../../src/MenuDevConsole.cpp:346
 msgid "ERROR: Too few arguments"
-msgstr ""
+msgstr "ERREUR: Trop peu d'arguments"
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid "HINT: "
@@ -819,7 +819,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:351
 msgid "ERROR: Unknown command"
-msgstr ""
+msgstr "ERREUR: Commande inconnue"
 
 #: ../../../src/MenuDevConsole.cpp:352
 msgid "HINT: Type help"
@@ -827,15 +827,15 @@ msgstr ""
 
 #: ../../../src/MenuDevHUD.cpp:56
 msgid "Player (x,y): "
-msgstr ""
+msgstr "Joueur (x,y): "
 
 #: ../../../src/MenuDevHUD.cpp:62
 msgid "Target (x,y): "
-msgstr ""
+msgstr "Cible (x,y): "
 
 #: ../../../src/MenuDevHUD.cpp:67
 msgid "Mouse (x,y): "
-msgstr ""
+msgstr "Souris (x,y): "
 
 #: ../../../src/MenuEnemy.cpp:137
 msgid "Dead"
@@ -848,7 +848,7 @@ msgstr "%s niveau %d"
 
 #: ../../../src/MenuExit.cpp:81
 msgid "Save & Exit"
-msgstr ""
+msgstr "Sauvegarder & Quitter"
 
 #: ../../../src/MenuExit.cpp:83
 msgid "Exit"
@@ -856,11 +856,11 @@ msgstr "Quitter"
 
 #: ../../../src/MenuExit.cpp:85
 msgid "Continue"
-msgstr ""
+msgstr "Continuer"
 
 #: ../../../src/MenuExit.cpp:109
 msgid "Paused"
-msgstr ""
+msgstr "Pause"
 
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
