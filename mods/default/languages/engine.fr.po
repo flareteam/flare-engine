@@ -1025,59 +1025,59 @@ msgstr "Immunité au renvoi de dommage"
 
 #: ../../../src/MenuPowers.cpp:768
 msgid "Stun"
-msgstr ""
+msgstr "Étourdissement"
 
 #: ../../../src/MenuPowers.cpp:771
 msgid "Automatic revive on death"
-msgstr ""
+msgstr "Résurection automatique lors de la mort"
 
 #: ../../../src/MenuPowers.cpp:774
 msgid "Convert"
-msgstr ""
+msgstr "Convertir"
 
 #: ../../../src/MenuPowers.cpp:777
 msgid "Fear"
-msgstr ""
+msgstr "Peur"
 
 #: ../../../src/MenuPowers.cpp:780
 msgid "Lifespan"
-msgstr ""
+msgstr "Durée de vie"
 
 #: ../../../src/MenuPowers.cpp:801
 msgid "Magical Shield"
-msgstr ""
+msgstr "Bouclier magique"
 
 #: ../../../src/MenuPowers.cpp:827
 msgid "Healing"
-msgstr ""
+msgstr "Soin"
 
 #: ../../../src/MenuPowers.cpp:830
 msgid "Knockback"
-msgstr ""
+msgstr "Recul"
 
 #: ../../../src/MenuPowers.cpp:872
 msgid "Damage"
-msgstr ""
+msgstr "Dommage"
 
 #: ../../../src/MenuPowers.cpp:874
 #, fuzzy
 msgid "Melee Damage"
-msgstr "Dégâts en corps à corps :"
+msgstr "Dégâts en corps à corps"
 
 #: ../../../src/MenuPowers.cpp:876
 #, fuzzy
 msgid "Ranged Damage"
-msgstr "Dégâts à distance :"
+msgstr "Dégâts à distance"
 
 #: ../../../src/MenuPowers.cpp:878
 #, fuzzy
 msgid "Mental Damage"
-msgstr "Dégâts mentaux :"
+msgstr "Dégâts mentaux"
 
 #: ../../../src/MenuPowers.cpp:901
 #, fuzzy
 msgid "Base Accuracy"
-msgstr "Précision :"
+msgstr "Précision de base"
 
 #: ../../../src/MenuPowers.cpp:921
 msgid "Base Critical Chance"
