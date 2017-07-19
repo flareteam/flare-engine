@@ -1114,21 +1114,21 @@ msgstr "Nécessite le pouvoir: %s"
 
 #: ../../../src/MenuPowers.cpp:1004
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr ""
+msgstr "Cliquez pour débloquer (utilise 1 Skill Point)"
 
 #: ../../../src/MenuPowers.cpp:1008 ../../../src/MenuPowers.cpp:1010
 #, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Nécessite %d points de compétence"
+msgstr "Nécessite 1 Skill Point"
 
 #: ../../../src/MenuPowers.cpp:1213
 msgid "Unspent skill points:"
-msgstr "Pts de compétence non dépensés:"
+msgstr "Points de compétence non dépensés:"
 
 #: ../../../src/MenuPowers.cpp:1241
 #, fuzzy
 msgid "Next Level:"
-msgstr "Niveau"
+msgstr "Niveau suivant:"
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
@@ -1141,7 +1141,7 @@ msgstr ""
 #: ../../../src/MenuStash.cpp:209
 #, fuzzy
 msgid "Stash is full."
-msgstr "L'inventaire est complet."
+msgstr "Le coffre est complet."
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1162,16 +1162,16 @@ msgstr "Vous êtes deja transformé, reprenez forme humaine avant."
 
 #: ../../../src/PowerManager.cpp:1126
 msgid "Could not untransform at this position."
-msgstr ""
+msgstr "Vous ne pouvez pas reprendre forme humaine à cette position."
 
 #: ../../../src/SaveLoad.cpp:202 ../../../src/SaveLoad.cpp:203
 msgid "Game saved."
-msgstr ""
+msgstr "Jeu sauvegardé."
 
 #: ../../../src/SDLInputState.cpp:508 ../../../src/SDLInputState.cpp:522
 #, fuzzy, c-format
 msgid "Mouse %d"
-msgstr "Visée à la souris"
+msgstr "Souris %d"
 
 #: ../../../src/SDLInputState.cpp:534
 #, c-format
@@ -1196,7 +1196,7 @@ msgstr ""
 #: ../../../src/SDLInputState.cpp:582 ../../../src/SDLInputState.cpp:585
 #, c-format
 msgid "%s on enemy"
-msgstr ""
+msgstr "%s sur l'ennemi"
 
 #: ../../../src/Settings.cpp:722
 msgid "Adventurer"
@@ -1205,12 +1205,12 @@ msgstr "Aventurier"
 #: ../../../src/Stats.cpp:36
 #, fuzzy
 msgid "Max HP"
-msgstr "PV max :"
+msgstr "PV max"
 
 #: ../../../src/Stats.cpp:41
 #, fuzzy
 msgid "HP Regen"
-msgstr "Régén. PV :"
+msgstr "Régén. PV"
 
 #: ../../../src/Stats.cpp:42
 msgid "Ticks of HP regen per minute."
@@ -1219,12 +1219,12 @@ msgstr ""
 #: ../../../src/Stats.cpp:46
 #, fuzzy
 msgid "Max MP"
-msgstr "PM max :"
+msgstr "PM max"
 
 #: ../../../src/Stats.cpp:51
 #, fuzzy
 msgid "MP Regen"
-msgstr "Régén. PM :"
+msgstr "Régén. PM"
 
 #: ../../../src/Stats.cpp:52
 msgid "Ticks of MP regen per minute."
@@ -1233,52 +1233,52 @@ msgstr ""
 #: ../../../src/Stats.cpp:56
 #, fuzzy
 msgid "Accuracy"
-msgstr "Précision :"
+msgstr "Précision"
 
 #: ../../../src/Stats.cpp:61
 #, fuzzy
 msgid "Avoidance"
-msgstr "Esquive :"
+msgstr "Esquive"
 
 #: ../../../src/Stats.cpp:66
 #, fuzzy
 msgid "Melee Damage Min"
-msgstr "Dégâts en corps à corps :"
+msgstr "Dégâts en corps à corps Min"
 
 #: ../../../src/Stats.cpp:71
 #, fuzzy
 msgid "Melee Damage Max"
-msgstr "Dégâts en corps à corps :"
+msgstr "Dégâts en corps à corps Max"
 
 #: ../../../src/Stats.cpp:76
 #, fuzzy
 msgid "Ranged Damage Min"
-msgstr "Dégâts à distance :"
+msgstr "Dégâts à distance Min"
 
 #: ../../../src/Stats.cpp:81
 #, fuzzy
 msgid "Ranged Damage Max"
-msgstr "Dégâts à distance :"
+msgstr "Dégâts à distance Max"
 
 #: ../../../src/Stats.cpp:86
 #, fuzzy
 msgid "Mental Damage Min"
-msgstr "Dégâts mentaux :"
+msgstr "Dégâts mentaux Min"
 
 #: ../../../src/Stats.cpp:91
 #, fuzzy
 msgid "Mental Damage Max"
-msgstr "Dégâts mentaux :"
+msgstr "Dégâts mentaux Max"
 
 #: ../../../src/Stats.cpp:96
 #, fuzzy
 msgid "Absorb Min"
-msgstr "Absorbe :"
+msgstr "Absorbe Min"
 
 #: ../../../src/Stats.cpp:101
 #, fuzzy
 msgid "Absorb Max"
-msgstr "Absorbe :"
+msgstr "Absorbe Max"
 
 #: ../../../src/Stats.cpp:106
 msgid "Critical Hit Chance"
