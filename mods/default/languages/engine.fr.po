@@ -593,12 +593,12 @@ msgstr "Défense"
 #: ../../../src/ItemManager.cpp:641
 #, fuzzy
 msgid "Quest Item"
-msgstr "Quêtes"
+msgstr "Objet de quête"
 
 #: ../../../src/ItemManager.cpp:668
 #, c-format
 msgid "Quality: %s"
-msgstr ""
+msgstr "Qualitée: %s"
 
 #: ../../../src/ItemManager.cpp:677
 #, c-format
@@ -656,12 +656,12 @@ msgstr "Nécessite le niveau %d"
 #: ../../../src/MenuPowers.cpp:964
 #, fuzzy, c-format
 msgid "Requires %s %d"
-msgstr "Nécessite %d de Mental"
+msgstr "Nécessite %s %d"
 
 #: ../../../src/ItemManager.cpp:757
 #, fuzzy, c-format
 msgid "Requires Class: %s"
-msgstr "Nécessite %d de Mental"
+msgstr "Nécessite: %s"
 
 #: ../../../src/ItemManager.cpp:769 ../../../src/ItemManager.cpp:778
 #, c-format
@@ -690,18 +690,18 @@ msgstr "État : "
 #: ../../../src/ItemManager.cpp:804
 #, c-format
 msgid "%d items: "
-msgstr "%d items :"
+msgstr "%d objets :"
 
 #: ../../../src/MenuActionBar.cpp:186 ../../../src/MenuActionBar.cpp:192
 #: ../../../src/MenuActionBar.cpp:197
 #, c-format
 msgid "Hotkey: %s"
-msgstr ""
+msgstr "Touche: %s"
 
 #: ../../../src/MenuActiveEffects.cpp:163
 #, fuzzy
 msgid "Remaining:"
-msgstr "Points restants"
+msgstr "Restants:"
 
 #: ../../../src/MenuCharacter.cpp:44
 msgid "Name"
@@ -737,16 +737,16 @@ msgstr ""
 #: ../../../src/MenuCharacter.cpp:364
 #, c-format
 msgid "Each level grants %d. "
-msgstr ""
+msgstr "Chaque niveau donne %d"
 
 #: ../../../src/MenuCharacter.cpp:368
 #, fuzzy, c-format
 msgid "Each point of %s grants %d. "
-msgstr "Chaque point de Mental donne +%d PM. Chaque niveau donne +%d PM"
+msgstr "Chaque point of %s donne %d."
 
 #: ../../../src/MenuDevConsole.cpp:46
 msgid "Execute"
-msgstr ""
+msgstr "Éxécuter"
 
 #: ../../../src/MenuDevConsole.cpp:111
 msgid "Developer Console"
