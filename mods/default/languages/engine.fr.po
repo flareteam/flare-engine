@@ -1,6 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
+# Sang-froid <remi.millerat@gmail.com>, 2017
 # Christoph J. Thompson <cjsthompson@gmail.com>, 2013
 # Quentin 'acieroid' Stievenart <quentin.stievenart@gmail.com>, 2011
 #
