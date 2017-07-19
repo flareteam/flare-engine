@@ -489,11 +489,11 @@ msgstr "Journal"
 
 #: ../../../src/InputState.cpp:306
 msgid "Main1"
-msgstr "1ère Main"
+msgstr "Principal 1"
 
 #: ../../../src/InputState.cpp:307
 msgid "Main2"
-msgstr "2ème Main"
+msgstr "Principal 2"
 
 #: ../../../src/InputState.cpp:308
 msgid "Ctrl"
@@ -754,7 +754,7 @@ msgstr "Console de développement"
 
 #: ../../../src/MenuDevConsole.cpp:119
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr ""
+msgstr "Les arguments contenants des espaces devraient être mis entre guillemets. Exemple :"
 
 #: ../../../src/MenuDevConsole.cpp:120
 msgid "Type 'help' to get a list of commands. "
@@ -762,27 +762,27 @@ msgstr "Tapez 'help' pour avoir une liste des commandes."
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off all of the HUD elements"
-msgstr ""
+msgstr "Activer/Désactiver tous les éléments de l'affichage HUD"
 
 #: ../../../src/MenuDevConsole.cpp:226
 msgid "turns on/off the developer hud"
-msgstr ""
+msgstr "Activer/Désactiver l'affichage HUD"
 
 #: ../../../src/MenuDevConsole.cpp:227
 msgid "resets the player to level 1, with no stat or skill points spent"
-msgstr ""
+msgstr "Rétablir le joueur au niveau 1, sans statistiques ni dépense de points de compétences"
 
 #: ../../../src/MenuDevConsole.cpp:228
 msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr ""
+msgstr "Affiche les états de la campagne active qui correspondent au terme recherché. L'absence de terme de recherche affichera la liste de tous les états actifs"
 
 #: ../../../src/MenuDevConsole.cpp:229
 msgid "Prints a list of items that match a search term. No search term will list all items"
-msgstr ""
+msgstr "Affiche une liste des objets qui correspondent au terme recherché. L'absence de terme de recherche affichera tous les objets"
 
 #: ../../../src/MenuDevConsole.cpp:230
 msgid "parses a series of event components and executes them as a single event"
-msgstr ""
+msgstr "parcourt une série de composants d'événements et les exécutent en tant qu'événement unique"
 
 #: ../../../src/MenuDevConsole.cpp:231
 msgid "clears the command history"
@@ -790,15 +790,15 @@ msgstr "Effacer l'historique de commandes"
 
 #: ../../../src/MenuDevConsole.cpp:232
 msgid "displays this text"
-msgstr ""
+msgstr "affiche ce texte"
 
 #: ../../../src/MenuDevConsole.cpp:239
 msgid "Toggled the developer hud"
-msgstr ""
+msgstr "Affichage HUD développeur basculé"
 
 #: ../../../src/MenuDevConsole.cpp:243
 msgid "Toggled the hud"
-msgstr ""
+msgstr "Affichage HUD basculé"
 
 #: ../../../src/MenuDevConsole.cpp:337
 #, c-format
@@ -811,7 +811,7 @@ msgstr "ERREUR: Trop peu d'arguments"
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid "HINT: "
-msgstr ""
+msgstr "SUGGESTION : "
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid " <key>=<val> <key>=<val> ..."
@@ -823,7 +823,7 @@ msgstr "ERREUR: Commande inconnue"
 
 #: ../../../src/MenuDevConsole.cpp:352
 msgid "HINT: Type help"
-msgstr ""
+msgstr "SUGGESTION : tapez help"
 
 #: ../../../src/MenuDevHUD.cpp:56
 msgid "Player (x,y): "
@@ -860,12 +860,12 @@ msgstr "Continuer"
 
 #: ../../../src/MenuExit.cpp:109
 msgid "Paused"
-msgstr "Pause"
+msgstr "En pause"
 
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
 msgid "Lost %d%% of %s. "
-msgstr "Perdu %d%% of %s"
+msgstr "Perdu %d%% de %s"
 
 #: ../../../src/MenuInventory.cpp:162
 #, c-format
@@ -889,7 +889,7 @@ msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:277
 msgid "Pick up item(s):"
-msgstr ""
+msgstr "Rammaser les objet(s):"
 
 #: ../../../src/MenuInventory.cpp:278
 msgid "Use or equip item:"
@@ -906,15 +906,15 @@ msgstr "Sélectionnez une quantitée d'objet:"
 
 #: ../../../src/MenuInventory.cpp:283
 msgid "Stash item stack:"
-msgstr ""
+msgstr "Mettre au coffre la pile d'objets :"
 
 #: ../../../src/MenuInventory.cpp:285
 msgid "Sell item stack:"
-msgstr ""
+msgstr "Vendre la pile d'objets :"
 
 #: ../../../src/MenuInventory.cpp:529
 msgid "You don't have enough of the required item."
-msgstr "Vous n'avez pas assez de l'objet nécessaire."
+msgstr "Vous n'avez pas l'objet nécessaire en quantité suffisante."
 
 #: ../../../src/MenuInventory.cpp:547
 msgid "This item can only be used from the action bar."
@@ -958,7 +958,7 @@ msgstr "Commercer"
 
 #: ../../../src/MenuNumPicker.cpp:107
 msgid "Enter amount:"
-msgstr ""
+msgstr "Saisir la quantité :"
 
 #: ../../../src/MenuPowers.cpp:660
 #, c-format
@@ -997,7 +997,7 @@ msgstr "Immunité"
 
 #: ../../../src/MenuPowers.cpp:747
 msgid "Immunity to damage over time"
-msgstr "Immunité au dommage progressifs"
+msgstr "Immunité aux dommages progressifs"
 
 #: ../../../src/MenuPowers.cpp:750
 msgid "Immunity to slow"
@@ -1095,7 +1095,7 @@ msgstr "Ignore l'Esquive"
 #: ../../../src/MenuPowers.cpp:939
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr "%d%% chance de "
+msgstr "%d%% chances de coup critique sur les cibles lentes"
 
 #: ../../../src/MenuPowers.cpp:944
 #, fuzzy, c-format
@@ -1114,12 +1114,12 @@ msgstr "Nécessite le pouvoir: %s"
 
 #: ../../../src/MenuPowers.cpp:1004
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr "Cliquez pour débloquer (utilise 1 Skill Point)"
+msgstr "Cliquez pour débloquer (utilise 1 point de compétence)"
 
 #: ../../../src/MenuPowers.cpp:1008 ../../../src/MenuPowers.cpp:1010
 #, fuzzy
 msgid "Requires 1 Skill Point"
-msgstr "Nécessite 1 Skill Point"
+msgstr "Nécessite 1 point de compétence"
 
 #: ../../../src/MenuPowers.cpp:1213
 msgid "Unspent skill points:"
@@ -1136,7 +1136,7 @@ msgstr "Coffre commun"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
-msgstr ""
+msgstr "Impossible de stocker l'objet d'une quête dans le coffre."
 
 #: ../../../src/MenuStash.cpp:209
 #, fuzzy
@@ -1176,22 +1176,22 @@ msgstr "Souris %d"
 #: ../../../src/SDLInputState.cpp:534
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Axe %d -"
 
 #: ../../../src/SDLInputState.cpp:536
 #, c-format
 msgid "Axis %d +"
-msgstr ""
+msgstr "Axe %d +"
 
 #: ../../../src/SDLInputState.cpp:558 ../../../src/SDLInputState.cpp:582
 #: ../../../src/SDLInputState.cpp:600
 msgid "Tap"
-msgstr ""
+msgstr "Touchez"
 
 #: ../../../src/SDLInputState.cpp:558 ../../../src/SDLInputState.cpp:561
 #, c-format
 msgid "%s on ground"
-msgstr ""
+msgstr "%s au sol"
 
 #: ../../../src/SDLInputState.cpp:582 ../../../src/SDLInputState.cpp:585
 #, c-format
@@ -1214,7 +1214,7 @@ msgstr "Régén. PV"
 
 #: ../../../src/Stats.cpp:42
 msgid "Ticks of HP regen per minute."
-msgstr ""
+msgstr "Quantité de PV regénérés par minute."
 
 #: ../../../src/Stats.cpp:46
 #, fuzzy
@@ -1228,7 +1228,7 @@ msgstr "Régén. PM"
 
 #: ../../../src/Stats.cpp:52
 msgid "Ticks of MP regen per minute."
-msgstr ""
+msgstr "Quanité de PM regénérés par minute."
 
 #: ../../../src/Stats.cpp:56
 #, fuzzy
@@ -1340,7 +1340,7 @@ msgstr "Chance de renvoi de Missile"
 
 #: ../../../src/Stats.cpp:137
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr ""
+msgstr "Augmente vos chances de renvoi de missile vers les ennemis."
 
 #: ../../../src/Stats.cpp:141
 msgid "Damage Reflection"
@@ -1348,7 +1348,7 @@ msgstr "Renvoi de Dommages"
 
 #: ../../../src/Stats.cpp:142
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr ""
+msgstr "Inflige à l'attaquant un pourcentage des dommages reçus."
 
 #: ../../../src/Stats.cpp:146
 msgid "Base HP"
@@ -1464,7 +1464,7 @@ msgstr "%s secondes"
 
 #, fuzzy
 #~ msgid "Low"
-#~ msgstr "Journal"
+#~ msgstr "Bas"
 
 #~ msgid "Increases %s by %d"
 #~ msgstr "Augmente %s de %d"
