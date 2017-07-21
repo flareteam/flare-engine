@@ -153,6 +153,7 @@ void MenuHUDLog::renderOverlay() {
 
 			overlay_bg = temp->createSprite();
 			overlay_bg->setDest(window_area.x, window_area.y + window_area.h - msg_height);
+			temp->unref();
 		}
 	}
 
