@@ -177,6 +177,7 @@ Set (FLARE_SOURCES
 	./src/SharedResources.cpp
 	./src/StatBlock.cpp
 	./src/Stats.cpp
+	./src/Subtitles.cpp
 	./src/TileSet.cpp
 	./src/TooltipData.cpp
 	./src/Utils.cpp
@@ -285,6 +286,7 @@ Set (FLARE_HEADERS
 	./src/StatBlock.h
 	./src/Stats.h
 	./src/SoundManager.h
+	./src/Subtitles.h
 	./src/TileSet.h
 	./src/TooltipData.h
 	./src/Utils.h

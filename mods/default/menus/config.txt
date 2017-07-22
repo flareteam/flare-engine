@@ -34,6 +34,7 @@ dev_mode=368,164,384,160
 loot_tooltips=368,196,384,192
 statbar_labels=368,228,384,224
 auto_equip=368,260,384,256
+subtitles=368,292,384,288
 
 [input]
 joystick_device=64,16,32,32

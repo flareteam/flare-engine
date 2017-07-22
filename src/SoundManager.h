@@ -54,6 +54,8 @@ public:
 
 	virtual void logic(const FPoint& center) = 0;
 	virtual void reset() = 0;
+
+	virtual SoundID getLastPlayedSID() = 0;
 };
 
 /**

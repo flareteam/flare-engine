@@ -49,6 +49,7 @@ class MenuStash;
 class MenuDevHUD;
 class MenuDevConsole;
 class StatBlock;
+class Subtitles;
 class WidgetTooltip;
 
 const int DRAG_SRC_POWERS = 1;
@@ -129,6 +130,8 @@ public:
 
 	MenuDevHUD *devhud;
 	MenuDevConsole *devconsole;
+
+	Subtitles *subtitles;
 
 	bool pause;
 	bool menus_open;

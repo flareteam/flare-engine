@@ -124,6 +124,8 @@ public:
 	WidgetLabel         * statbar_labels_lb;
 	WidgetCheckBox      * auto_equip_cb;
 	WidgetLabel         * auto_equip_lb;
+	WidgetCheckBox      * subtitles_cb;
+	WidgetLabel         * subtitles_lb;
 	WidgetSlider        * music_volume_sl;
 	WidgetLabel         * music_volume_lb;
 	WidgetSlider        * sound_volume_sl;

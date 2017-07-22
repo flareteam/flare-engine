@@ -70,6 +70,8 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 	, statbar_labels_lb(new WidgetLabel())
 	, auto_equip_cb(new WidgetCheckBox())
 	, auto_equip_lb(new WidgetLabel())
+	, subtitles_cb(new WidgetCheckBox())
+	, subtitles_lb(new WidgetLabel())
 	, music_volume_sl(new WidgetSlider())
 	, music_volume_lb(new WidgetLabel())
 	, sound_volume_sl(new WidgetSlider())
@@ -273,6 +275,10 @@ bool GameStateConfigBase::parseKey(FileParser &infile, int &x1, int &y1, int &x2
 		// @ATTR auto_equip|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Automatically equip items" checkbox relative to the frame.
 		placeLabeledWidget(auto_equip_lb, auto_equip_cb, x1, y1, x2, y2, msg->get("Automatically equip items"), JUSTIFY_RIGHT);
 	}
+	else if (infile.key == "subtitles") {
+		// @ATTR subtitles|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Subtitles" checkbox relative to the frame.
+		placeLabeledWidget(subtitles_lb, subtitles_cb, x1, y1, x2, y2, msg->get("Subtitles"), JUSTIFY_RIGHT);
+	}
 	else if (infile.key == "activemods") {
 		// @ATTR activemods|int, int, int, int : Label X, Label Y, Widget X, Widget Y|Position of the "Active Mods" list box relative to the frame.
 		placeLabeledWidget(activemods_lb, activemods_lstb, x1, y1, x2, y2, msg->get("Active Mods"));
@@ -392,6 +398,8 @@ void GameStateConfigBase::addChildWidgets() {
 	addChildWidget(statbar_labels_lb, INTERFACE_TAB);
 	addChildWidget(auto_equip_cb, INTERFACE_TAB);
 	addChildWidget(auto_equip_lb, INTERFACE_TAB);
+	addChildWidget(subtitles_cb, INTERFACE_TAB);
+	addChildWidget(subtitles_lb, INTERFACE_TAB);
 	addChildWidget(language_lstb, INTERFACE_TAB);
 	addChildWidget(language_lb, INTERFACE_TAB);
 
@@ -429,6 +437,7 @@ void GameStateConfigBase::setupTabList() {
 	tablist_interface.add(dev_mode_cb);
 	tablist_interface.add(loot_tooltips_cb);
 	tablist_interface.add(auto_equip_cb);
+	tablist_interface.add(subtitles_cb);
 	tablist_interface.add(language_lstb);
 	tablist_interface.setPrevTabList(&tablist);
 	tablist_interface.setNextTabList(&tablist_main);
@@ -488,6 +497,9 @@ void GameStateConfigBase::updateInterface() {
 
 	if (AUTO_EQUIP) auto_equip_cb->Check();
 	else auto_equip_cb->unCheck();
+
+	if (SUBTITLES) subtitles_cb->Check();
+	else subtitles_cb->unCheck();
 
 	refreshLanguages();
 }
@@ -686,6 +698,10 @@ void GameStateConfigBase::logicInterface() {
 	else if (auto_equip_cb->checkClick()) {
 		if (auto_equip_cb->isChecked()) AUTO_EQUIP=true;
 		else AUTO_EQUIP=false;
+	}
+	else if (subtitles_cb->checkClick()) {
+		if (subtitles_cb->isChecked()) SUBTITLES=true;
+		else SUBTITLES=false;
 	}
 }
 

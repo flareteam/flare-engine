@@ -50,6 +50,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "WidgetTooltip.h"
 #include "SharedGameResources.h"
+#include "Subtitles.h"
 
 MenuManager::MenuManager(StatBlock *_stats)
 	: stats(_stats)
@@ -93,6 +94,7 @@ MenuManager::MenuManager(StatBlock *_stats)
 	, stash(NULL)
 	, devhud(NULL)
 	, devconsole(NULL)
+	, subtitles(NULL)
 	, pause(false)
 	, menus_open(false) {
 
@@ -140,6 +142,8 @@ MenuManager::MenuManager(StatBlock *_stats)
 		devconsole = new MenuDevConsole();
 		devhud = new MenuDevHUD();
 	}
+
+	subtitles = new Subtitles();
 
 	tip = new WidgetTooltip();
 
@@ -284,6 +288,8 @@ void MenuManager::handleKeyboardNavigation() {
 }
 void MenuManager::logic() {
 	ItemStack stack;
+
+	subtitles->logic(snd->getLastPlayedSID());
 
 	hp->update(stats->hp, stats->get(STAT_HP_MAX), inpt->mouse);
 	mp->update(stats->mp, stats->get(STAT_MP_MAX), inpt->mouse);
@@ -1192,6 +1198,8 @@ void MenuManager::render() {
 		hudlog->renderOverlay();
 	}
 
+	subtitles->render();
+
 	if (!num_picker->visible && !mouse_dragging && !sticky_dragging) {
 		if (!inpt->usingMouse() || TOUCHSCREEN)
 			handleKeyboardTooltips();
@@ -1447,6 +1455,8 @@ MenuManager::~MenuManager() {
 		delete devhud;
 		delete devconsole;
 	}
+
+	delete subtitles;
 
 	if (drag_icon) delete drag_icon;
 }

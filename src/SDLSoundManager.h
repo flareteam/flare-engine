@@ -49,6 +49,8 @@ public:
 	void logic(const FPoint& center);
 	void reset();
 
+	SoundManager::SoundID getLastPlayedSID();
+
 private:
 	typedef std::map<std::string, int> VirtualChannelMap;
 	typedef VirtualChannelMap::iterator VirtualChannelMapIterator;
@@ -69,6 +71,8 @@ private:
 
 	Mix_Music* music;
 	std::string music_filename;
+
+	SoundID last_played_sid;
 };
 
 #endif

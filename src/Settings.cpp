@@ -85,7 +85,8 @@ ConfigEntry config[] = {
 	{ "dev_hud",           &typeid(DEV_HUD),            "1",   &DEV_HUD,            "shows some additional information on-screen when developer mode is enabled. 1 enable, 0 disable"},
 	{ "loot_tooltips",     &typeid(LOOT_TOOLTIPS),      "1",   &LOOT_TOOLTIPS,      "always show loot tooltips. 1 enable, 0 disable"},
 	{ "statbar_labels",    &typeid(STATBAR_LABELS),     "0",   &STATBAR_LABELS,     "always show labels on HP/MP/XP bars. 1 enable, 0 disable"},
-	{ "auto_equip",        &typeid(AUTO_EQUIP),         "1",   &AUTO_EQUIP,         "automatically equip items. 1 enable, 0 disable"}
+	{ "auto_equip",        &typeid(AUTO_EQUIP),         "1",   &AUTO_EQUIP,         "automatically equip items. 1 enable, 0 disable"},
+	{ "subtitles",         &typeid(SUBTITLES),          "0",   &SUBTITLES,          "displays subtitles. 1 enable, 0 disable"}
 };
 const int config_size = sizeof(config) / sizeof(ConfigEntry);
 
@@ -152,6 +153,7 @@ bool DEV_HUD;
 bool LOOT_TOOLTIPS;
 bool STATBAR_LABELS;
 bool AUTO_EQUIP;
+bool SUBTITLES;
 bool SHOW_HUD = true;
 
 // Input Settings

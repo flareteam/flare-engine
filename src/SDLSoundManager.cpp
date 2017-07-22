@@ -45,6 +45,7 @@ SDLSoundManager::SDLSoundManager()
 	: SoundManager()
 	, music(NULL)
 	, music_filename("")
+	, last_played_sid(-1)
 {
 	if (AUDIO && Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024)) {
 		logError("SDLSoundManager: Error during Mix_OpenAudio: %s", SDL_GetError());
@@ -206,6 +207,10 @@ void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, const
 	SoundMapIterator it;
 	VirtualChannelMapIterator vcit = channels.end();
 
+	// since last_played_sid is primarily used for subtitles, it doesn't make sense to count looped sounds
+	if (!loop && sid)
+		last_played_sid = sid;
+
 	if (!sid || !AUDIO || !SOUND_VOLUME)
 		return;
 
@@ -338,4 +343,10 @@ void SDLSoundManager::setVolumeMusic(int value) {
 
 bool SDLSoundManager::isPlayingMusic() {
 	return (AUDIO && music && MUSIC_VOLUME > 0 && Mix_PlayingMusic());
+}
+
+SoundManager::SoundID SDLSoundManager::getLastPlayedSID() {
+	SoundManager::SoundID ret = last_played_sid;
+	last_played_sid = -1;
+	return ret;
 }
