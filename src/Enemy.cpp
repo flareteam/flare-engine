@@ -30,6 +30,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsMath.h"
 #include <math.h>
+#include <cassert>
 
 Enemy::Enemy() : Entity() {
 

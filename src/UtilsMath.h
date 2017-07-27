@@ -20,7 +20,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef UTILS_MATH_H
 #define UTILS_MATH_H 1
 
-#include <cassert>
 #include <cstdlib>
 #include <algorithm> // for std::min()/std::max()
 #include "math.h"

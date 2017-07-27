@@ -24,6 +24,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
  * Handle collisions between objects and the map
  */
 
+#ifdef __EMSCRIPTEN__
+// some of our movement code asserts fail on Emscripten builds
+// since the game can still run with occasionally bugged movement, we can disable those asserts
+#define NDEBUG
+#endif
+
 #include "AStarNode.h"
 #include "MapCollision.h"
 #include "Settings.h"
@@ -535,3 +541,7 @@ FPoint MapCollision::get_random_neighbor(const Point& target, int range, bool ig
 MapCollision::~MapCollision() {
 }
 
+// re-enable asserts in other files
+#ifdef __EMSCRIPTEN__
+#undef NDEBUG
+#endif

@@ -33,8 +33,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapRenderer.h"
 #include "Map.h"
 
-#include <cassert>
-
 class AnimationSet;
 class Hazard;
 

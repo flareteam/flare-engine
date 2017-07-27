@@ -63,6 +63,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuPowers.h"
 #include "SaveLoad.h"
 
+#include <cassert>
+
 GameStatePlay::GameStatePlay()
 	: GameState()
 	, enemy(NULL)
