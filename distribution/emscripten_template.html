@@ -1,0 +1,78 @@
+
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+	body {
+		background:#000;
+		color: #fff;
+	}
+    canvas.emscripten {
+        border: 0px none;
+        margin-left:auto;
+        margin-right:auto;
+        display:block
+    }
+
+    /* p#fullScreenButton { */
+    /*     text-align: center; */
+    /*     background-color: #FF890A; */
+    /*     font-family: Sans-Serif; */
+    /*     padding: 10px; */
+    /*     user-select: none; */
+    /*     cursor: pointer; */
+    /*     color: #fff; */
+    /* } */
+
+    #loadingDiv {
+        text-align: center;
+    }
+</style>
+    </head>
+
+    <body>
+      <div id="loadingDiv">Loading...</div>
+      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+      <div style="width:200px; margin-left:auto; margin-right:auto">
+      <!-- <p id="fullScreenButton" onclick="Module.requestFullscreen(false, false)">Click for full&#45;screen</p> -->
+      </div>
+
+
+
+    <script type='text/javascript'>
+        var Module = {
+            onRuntimeInitialized: function() {
+                var e = document.getElementById('loadingDiv');
+                e.style.visibility = 'hidden';
+            },
+            canvas: (function() {
+                var canvas = document.getElementById('canvas');
+                return canvas;
+                })()
+        };
+    </script>
+    <script>
+
+          (function() {
+            var memoryInitializer = 'index.html.mem';
+            if (typeof Module['locateFile'] === 'function') {
+              memoryInitializer = Module['locateFile'](memoryInitializer);
+            } else if (Module['memoryInitializerPrefixURL']) {
+              memoryInitializer = Module['memoryInitializerPrefixURL'] + memoryInitializer;
+            }
+            var xhr = Module['memoryInitializerRequest'] = new XMLHttpRequest();
+            xhr.open('GET', memoryInitializer, true);
+            xhr.responseType = 'arraybuffer';
+            xhr.send(null);
+          })();
+
+          var script = document.createElement('script');
+          script.src = "index.js";
+          document.body.appendChild(script);
+
+</script>
+
+    </body>
+</html>
+

@@ -26,11 +26,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <stdlib.h>
 
-PlatformOptions_t PlatformOptions = {true, false, CONFIG_MENU_TYPE_DESKTOP, ""};
+PlatformOptions_t PlatformOptions = {};
 
 void PlatformInit(struct PlatformOptions_t *options) {
 	options->has_exit_button = true;
 	options->is_mobile_device = false;
+	options->force_hardware_cursor = false;
 	options->config_menu_type = CONFIG_MENU_TYPE_DESKTOP;
 	options->default_renderer="";
 }
@@ -90,6 +91,11 @@ bool PlatformDirRemove(const std::string& path) {
 	}
 	return true;
 }
+
+// unused
+void PlatformFSInit() {}
+bool PlatformFSCheckReady() { return true; }
+void PlatformFSCommit() {}
 
 #endif // PLATFORM_CPP
 #endif // PLATFORM_CPP_INCLUDE

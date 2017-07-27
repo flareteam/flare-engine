@@ -18,6 +18,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "ModManager.h"
+#include "Platform.h"
 #include "Settings.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
@@ -434,6 +435,8 @@ void ModManager::saveMods() {
 
 	outfile.close();
 	outfile.clear();
+
+	PlatformFSCommit();
 
 }
 

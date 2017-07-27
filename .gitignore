@@ -50,3 +50,6 @@ gmon.out
 
 # qt creator
 *.autosave
+
+# emscripten output
+emscripten/

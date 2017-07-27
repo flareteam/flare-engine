@@ -23,7 +23,11 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #ifndef SDL_SOUND_MANAGER_H
 #define SDL_SOUND_MANAGER_H
 
+#ifdef __EMSCRIPTEN__
+#include <SDL/SDL_mixer.h>
+#else
 #include <SDL_mixer.h>
+#endif
 
 #include "SoundManager.h"
 
@@ -63,6 +67,8 @@ private:
 
 	static void channel_finished(int channel);
 	void on_channel_finished(int channel);
+
+	int SetChannelPosition(int channel, Sint16 angle, Uint8 distance);
 
 	SoundMap sounds;
 	VirtualChannelMap channels;

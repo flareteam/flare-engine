@@ -35,6 +35,12 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 GameSwitcher *gswitch;
 
+class CmdLineArgs {
+public:
+	std::string render_device_name;
+	std::vector<std::string> mod_list;
+};
+
 #define PLATFORM_CPP_INCLUDE
 
 #ifdef _WIN32
@@ -45,16 +51,13 @@ GameSwitcher *gswitch;
 #include "PlatformIPhoneOS.cpp"
 #elif __GCW0__
 #include "PlatformGCW0.cpp"
+#elif __EMSCRIPTEN__
+#include "PlatformEmscripten.cpp"
+bool init_finished = false;
 #else
 // Linux stuff should work on Mac OSX/BSD/etc, too
 #include "PlatformLinux.cpp"
 #endif
-
-class CmdLineArgs {
-public:
-	std::string render_device_name;
-	std::vector<std::string> mod_list;
-};
 
 /**
  * Game initialization.
@@ -112,6 +115,13 @@ static void init(const CmdLineArgs& cmd_line_args) {
 	// Load miscellaneous settings
 	loadMiscSettings();
 	setStatNames();
+
+#ifdef __EMSCRIPTEN__
+	// can't change window size dynamically with Emscripten, so default to 16:9 aspect ratio
+	// TODO should something like this be part of the Platform files?
+	SCREEN_W = 854;
+	SCREEN_H = 480;
+#endif
 
 	// Create render Device and Rendering Context.
 	if (PlatformOptions.default_renderer != "")
@@ -284,6 +294,29 @@ std::string parseArgValue(const std::string &arg) {
 	return result;
 }
 
+#ifdef __EMSCRIPTEN__
+void EmscriptenMainLoop() {
+	if (!init_finished) {
+		if (PlatformFSCheckReady()) {
+			// browsers don't have command line args, so pass default struct to init
+			init(CmdLineArgs());
+			init_finished = true;
+		}
+		return;
+	}
+
+	SDL_PumpEvents();
+	inpt->handle();
+
+	gswitch->logic();
+	inpt->resetScroll();
+
+	render_device->blankScreen();
+	gswitch->render();
+	render_device->commitFrame();
+}
+#endif
+
 int main(int argc, char *argv[]) {
 	bool debug_event = false;
 	bool done = false;
@@ -344,12 +377,17 @@ int main(int argc, char *argv[]) {
 
 	if (!done) {
 		srand(static_cast<unsigned int>(time(NULL)));
+#ifdef __EMSCRIPTEN__
+		PlatformFSInit();
+		emscripten_set_main_loop(EmscriptenMainLoop, 0, 1);
+#else
 		init(cmd_line_args);
 
 		if (debug_event)
 			inpt->enableEventLog();
 
 		mainLoop();
+#endif
 
 		if (gswitch)
 			gswitch->saveUserSettings();

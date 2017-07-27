@@ -860,6 +860,8 @@ bool saveSettings() {
 		if (outfile.bad()) logError("Settings: Unable to write settings file. No write access or disk is full!");
 		outfile.close();
 		outfile.clear();
+
+		PlatformFSCommit();
 	}
 	return true;
 }

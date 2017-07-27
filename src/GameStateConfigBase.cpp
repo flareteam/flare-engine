@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "GameStateConfigBase.h"
 #include "GameStateTitle.h"
 #include "MenuConfirm.h"
+#include "Platform.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "Stats.h"
@@ -534,10 +535,11 @@ void GameStateConfigBase::logic() {
 		tablist.setNextTabList(&tablist_interface);
 		logicInterface();
 
-		// by default, hardware mouse cursor can not be turned off
-		// that is because this class is used as-is on non-desktop platforms
-		hardware_cursor_cb->Check();
-		HARDWARE_CURSOR = true;
+		if (PlatformOptions.force_hardware_cursor) {
+			// for some platforms, hardware mouse cursor can not be turned off
+			hardware_cursor_cb->Check();
+			HARDWARE_CURSOR = true;
+		}
 	}
 	else if (active_tab == MODS_TAB) {
 		tablist.setNextTabList(&tablist_mods);

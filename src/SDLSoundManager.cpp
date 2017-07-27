@@ -110,7 +110,7 @@ void SDLSoundManager::logic(const FPoint& center) {
 		v = std::min<float>(std::max<float>(v, 0.0f), 1.0f);
 		Uint8 dist = Uint8(255.0 * v);
 
-		Mix_SetPosition(it->first, 0, dist);
+		SetChannelPosition(it->first, 0, dist);
 		++it;
 	}
 
@@ -254,7 +254,7 @@ void SDLSoundManager::play(SoundManager::SoundID sid, std::string channel, const
 		d = Uint8(v);
 	}
 
-	Mix_SetPosition(c, 0, d);
+	SetChannelPosition(c, 0, d);
 
 	if (vcit != channels.end())
 		vcit->second = c;
@@ -279,7 +279,7 @@ void SDLSoundManager::on_channel_finished(int channel) {
 
 	pit->second.finished = true;
 
-	Mix_SetPosition(channel, 0, 0);
+	SetChannelPosition(channel, 0, 0);
 }
 
 void SDLSoundManager::channel_finished(int channel) {
@@ -345,8 +345,18 @@ bool SDLSoundManager::isPlayingMusic() {
 	return (AUDIO && music && MUSIC_VOLUME > 0 && Mix_PlayingMusic());
 }
 
+int SDLSoundManager::SetChannelPosition(int channel, Sint16 angle, Uint8 distance) {
+#ifdef __EMSCRIPTEN__
+	// TODO fix for Emscripten
+	return 0;
+#else
+	return Mix_SetPosition(channel, angle, distance);
+#endif
+}
+
 SoundManager::SoundID SDLSoundManager::getLastPlayedSID() {
 	SoundManager::SoundID ret = last_played_sid;
 	last_played_sid = -1;
 	return ret;
 }
+

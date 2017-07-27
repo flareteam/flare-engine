@@ -42,6 +42,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MenuManager.h"
 #include "MenuStash.h"
 #include "MenuTalker.h"
+#include "Platform.h"
 #include "Settings.h"
 #include "Utils.h"
 #include "UtilsFileSystem.h"
@@ -172,6 +173,8 @@ void SaveLoad::saveGame() {
 		if (outfile.bad()) logError("SaveLoad: Unable to save the game. No write access or disk is full!");
 		outfile.close();
 		outfile.clear();
+
+		PlatformFSCommit();
 	}
 
 	// Save stash
@@ -196,6 +199,8 @@ void SaveLoad::saveGame() {
 		if (outfile.bad()) logError("SaveLoad: Unable to save stash. No write access or disk is full!");
 		outfile.close();
 		outfile.clear();
+
+		PlatformFSCommit();
 	}
 
 	// display a log message saying that we saved the game

@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "FileParser.h"
 #include "InputState.h"
+#include "Platform.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
@@ -214,6 +215,8 @@ void InputState::saveKeyBindings() {
 		if (outfile.bad()) logError("InputState: Unable to write keybindings config file. No write access or disk is full!");
 		outfile.close();
 		outfile.clear();
+
+		PlatformFSCommit();
 	}
 
 }
