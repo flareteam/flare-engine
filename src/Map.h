@@ -162,6 +162,7 @@ public:
 	unsigned short h;
 	bool hero_pos_enabled;
 	FPoint hero_pos;
+	std::string background_filename;
 
 };
 

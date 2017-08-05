@@ -311,6 +311,8 @@ body {
 
 <p><strong>auto_equip</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Automatically equip items" checkbox relative to the frame.</p>
 
+<p><strong>subtitles</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Subtitles" checkbox relative to the frame.</p>
+
 <p><strong>activemods</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Active Mods" list box relative to the frame.</p>
 
 <p><strong>inactivemods</strong> | <code>int, int, int, int : Label X, Label Y, Widget X, Widget Y</code> | Position of the "Available Mods" list box relative to the frame.</p>
@@ -733,6 +735,16 @@ body {
 
 <hr />
 
+<h4>MapBackground</h4>
+
+<p>Description of maps/backgrounds/</p>
+
+<p><strong>layer.image</strong> | <code>filename</code> | Image file to use as a scrolling background.</p>
+
+<p><strong>layer.speed</strong> | <code>float</code> | Speed at which the background will move relative to the camera.</p>
+
+<hr />
+
 <h4>Map</h4>
 
 <p>Description of maps/</p>
@@ -748,6 +760,8 @@ body {
 <p><strong>music</strong> | <code>filename</code> | Filename of background music to use for map</p>
 
 <p><strong>hero_pos</strong> | <code>point</code> | The player will spawn in this location if no point was previously given.</p>
+
+<p><strong>background</strong> | <code>filename</code> | Filename of a parallax background definition.</p>
 
 <p><strong>tilewidth</strong> | <code>int</code> | Inherited from Tiled map file. Unused by engine.</p>
 

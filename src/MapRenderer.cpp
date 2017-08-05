@@ -163,6 +163,8 @@ int MapRenderer::load(const std::string& fname) {
 
 	show_tooltip = false;
 
+	background_filename = "";
+
 	Map::load(fname);
 
 	loadMusic();
@@ -212,6 +214,9 @@ int MapRenderer::load(const std::string& fname) {
 			corrupted.pop_back();
 		}
 	}
+
+	map_background.load(background_filename);
+	map_background.setMapCenter(w/2, h/2);
 
 	return 0;
 }
@@ -286,6 +291,8 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 		shakycam.x = cam.x + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
 		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
 	}
+
+	map_background.render(shakycam);
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
 		calculatePriosOrtho(r);

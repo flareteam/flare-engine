@@ -162,6 +162,10 @@ void Map::loadHeader(FileParser &infile) {
 		hero_pos.y = static_cast<float>(popFirstInt(infile.val)) + 0.5f;
 		hero_pos_enabled = true;
 	}
+	else if (infile.key == "background") {
+		// @ATTR background|filename|Filename of a parallax background definition.
+		background_filename = infile.val;
+	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.
 	}
