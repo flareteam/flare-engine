@@ -339,17 +339,22 @@ size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b) {
 	return a.find(b);
 }
 
-std::string getDurationString(const int duration, size_t precision) {
-	float real_duration = static_cast<float>(duration) / MAX_FRAMES_PER_SEC;
-
+std::string floatToString(const float value, size_t precision) {
 	std::stringstream ss;
-	ss << real_duration;
+	ss << value;
 	std::string temp = ss.str();
 
 	size_t decimal = temp.find(".");
-	if (temp.length() > decimal + precision + 1) {
+	if (decimal != std::string::npos && temp.length() > decimal + precision + 1) {
 		temp = temp.substr(0, decimal + precision + 1);
 	}
+
+	return temp;
+}
+
+std::string getDurationString(const int duration, size_t precision) {
+	float real_duration = static_cast<float>(duration) / MAX_FRAMES_PER_SEC;
+	std::string temp = floatToString(real_duration, precision);
 
 	if (real_duration == 1.f) {
 		return msg->get("%s second", temp.c_str());

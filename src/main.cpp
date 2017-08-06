@@ -148,7 +148,7 @@ static void mainLoop () {
 	uint64_t prev_ticks = SDL_GetPerformanceCounter();
 	uint64_t logic_ticks = SDL_GetPerformanceCounter();
 
-	int last_fps = -1;
+	float last_fps = -1;
 
 	while ( !done ) {
 		int loops = 0;
@@ -217,7 +217,7 @@ static void mainLoop () {
 			fps_delay = getSecondsElapsed(prev_ticks, SDL_GetPerformanceCounter());
 		}
 		if (fps_delay != 0) {
-			last_fps = static_cast<int>((1000.f / fps_delay) / 1000.f);
+			last_fps = (1000.f / fps_delay) / 1000.f;
 		} else {
 			last_fps = -1;
 		}

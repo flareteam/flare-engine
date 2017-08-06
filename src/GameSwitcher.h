@@ -62,7 +62,7 @@ private:
 	std::vector<std::string> background_list;
 
 	int fps_ticks;
-	int last_fps;
+	float last_fps;
 
 public:
 	GameSwitcher();
@@ -76,7 +76,7 @@ public:
 	bool isPaused();
 	void logic();
 	void render();
-	void showFPS(int fps);
+	void showFPS(float fps);
 	void saveUserSettings();
 	bool done;
 };

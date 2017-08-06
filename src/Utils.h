@@ -236,6 +236,7 @@ Rect resizeToScreen(int w, int h, bool crop, ALIGNMENT align);
 
 size_t stringFindCaseInsensitive(const std::string &_a, const std::string &_b);
 
+std::string floatToString(const float value, size_t precision);
 std::string getDurationString(const int duration, size_t precision = 2);
 
 std::string substituteVarsInString(const std::string &_s, Avatar* avatar = NULL);

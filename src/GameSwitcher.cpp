@@ -38,9 +38,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Settings.h"
 #include "FileParser.h"
+#include "Utils.h"
 #include "UtilsParsing.h"
-
-#include <typeinfo>
 
 GameSwitcher::GameSwitcher()
 	: background(NULL)
@@ -200,15 +199,16 @@ void GameSwitcher::logic() {
 	}
 }
 
-void GameSwitcher::showFPS(int fps) {
+void GameSwitcher::showFPS(float fps) {
 	if (SHOW_FPS && SHOW_HUD) {
 		if (!label_fps) label_fps = new WidgetLabel();
 		if (fps_ticks == 0) {
 			fps_ticks = MAX_FRAMES_PER_SEC / 4;
 
-			int avg_fps = (fps + last_fps) / 2;
+			float avg_fps = (fps + last_fps) / 2.f;
 			last_fps = fps;
-			std::string sfps = toString(typeid(avg_fps), &avg_fps) + std::string(" fps");
+			std::string sfps = floatToString(avg_fps, 2) + std::string (" fps");
+			// std::string sfps = toString(typeid(avg_fps), &avg_fps) + std::string(" fps");
 			Rect pos = fps_position;
 			alignToScreenEdge(fps_corner, &pos);
 			label_fps->set(pos.x, pos.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
