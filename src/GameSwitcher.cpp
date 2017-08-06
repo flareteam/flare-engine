@@ -208,7 +208,6 @@ void GameSwitcher::showFPS(float fps) {
 			float avg_fps = (fps + last_fps) / 2.f;
 			last_fps = fps;
 			std::string sfps = floatToString(avg_fps, 2) + std::string (" fps");
-			// std::string sfps = toString(typeid(avg_fps), &avg_fps) + std::string(" fps");
 			Rect pos = fps_position;
 			alignToScreenEdge(fps_corner, &pos);
 			label_fps->set(pos.x, pos.y, JUSTIFY_LEFT, VALIGN_TOP, sfps, fps_color);
