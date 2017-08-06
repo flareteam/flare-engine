@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsParsing.h"
 
+#include <math.h>
 #include <cassert>
 
 MapBackground::MapBackground() {
@@ -94,8 +95,8 @@ void MapBackground::render(const FPoint& cam) {
 		center_tile.y -= height/2;
 
 		Point draw_pos;
-		draw_pos.x = center_tile.x - static_cast<int>(std::ceil(static_cast<float>(VIEW_W_HALF + center_tile.x) / static_cast<float>(width))) * width;
-		draw_pos.y = center_tile.y - static_cast<int>(std::ceil(static_cast<float>(VIEW_H_HALF + center_tile.y) / static_cast<float>(height))) * height;
+		draw_pos.x = center_tile.x - static_cast<int>(ceil(static_cast<float>(VIEW_W_HALF + center_tile.x) / static_cast<float>(width))) * width;
+		draw_pos.y = center_tile.y - static_cast<int>(ceil(static_cast<float>(VIEW_H_HALF + center_tile.y) / static_cast<float>(height))) * height;
 		Point start_pos = draw_pos;
 
 		while (draw_pos.x < VIEW_W) {
