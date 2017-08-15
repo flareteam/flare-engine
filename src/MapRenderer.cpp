@@ -292,7 +292,7 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
 	}
 
-	map_parallax.render(shakycam);
+	map_parallax.render(shakycam, "");
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
 		calculatePriosOrtho(r);
@@ -464,15 +464,22 @@ void MapRenderer::renderIsoFrontObjects(std::vector<Renderable> &r) {
 
 void MapRenderer::renderIso(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	size_t index = 0;
-	while (index < index_objectlayer)
-		renderIsoLayer(layers[index++]);
+	while (index < index_objectlayer) {
+		renderIsoLayer(layers[index]);
+		map_parallax.render(shakycam, layernames[index]);
+		index++;
+	}
 
 	renderIsoBackObjects(r_dead);
 	renderIsoFrontObjects(r);
+	map_parallax.render(shakycam, layernames[index]);
 
 	index++;
-	while (index < layers.size())
-		renderIsoLayer(layers[index++]);
+	while (index < layers.size()) {
+		renderIsoLayer(layers[index]);
+		map_parallax.render(shakycam, layernames[index]);
+		index++;
+	}
 
 	checkTooltip();
 }
@@ -563,15 +570,22 @@ void MapRenderer::renderOrthoFrontObjects(std::vector<Renderable> &r) {
 
 void MapRenderer::renderOrtho(std::vector<Renderable> &r, std::vector<Renderable> &r_dead) {
 	unsigned index = 0;
-	while (index < index_objectlayer)
-		renderOrthoLayer(layers[index++]);
+	while (index < index_objectlayer) {
+		renderOrthoLayer(layers[index]);
+		map_parallax.render(shakycam, layernames[index]);
+		index++;
+	}
 
 	renderOrthoBackObjects(r_dead);
 	renderOrthoFrontObjects(r);
-	index++;
+	map_parallax.render(shakycam, layernames[index]);
 
-	while (index < layers.size())
-		renderOrthoLayer(layers[index++]);
+	index++;
+	while (index < layers.size()) {
+		renderOrthoLayer(layers[index]);
+		map_parallax.render(shakycam, layernames[index]);
+		index++;
+	}
 
 	checkTooltip();
 }

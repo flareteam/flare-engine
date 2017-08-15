@@ -24,7 +24,9 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <math.h>
 
-MapParallax::MapParallax() {
+MapParallax::MapParallax()
+	: current_layer(0)
+{
 }
 
 MapParallax::~MapParallax() {
@@ -70,6 +72,10 @@ void MapParallax::load(const std::string& filename) {
 				layers.back().fixed_speed.x = toFloat(popFirstString(infile.val));
 				layers.back().fixed_speed.y = toFloat(popFirstString(infile.val));
 			}
+			else if (infile.key == "map_layer") {
+				// @ATTR layer.map_layer|string|The tile map layer that this parallax layer will be rendered on top of.
+				layers.back().map_layer = infile.val;
+			}
 		}
 
 		infile.close();
@@ -81,8 +87,14 @@ void MapParallax::setMapCenter(int x, int y) {
 	map_center.y = static_cast<float>(y) + 0.5f;
 }
 
-void MapParallax::render(const FPoint& cam) {
-	for (size_t i = 0; i < layers.size(); ++i) {
+void MapParallax::render(const FPoint& cam, const std::string& map_layer) {
+	if (map_layer.empty())
+		current_layer = 0;
+
+	for (size_t i = current_layer; i < layers.size(); ++i) {
+		if (layers[i].map_layer != map_layer)
+			continue;
+
 		int width = layers[i].sprite->getGraphicsWidth();
 		int height = layers[i].sprite->getGraphicsHeight();
 
@@ -122,6 +134,8 @@ void MapParallax::render(const FPoint& cam) {
 			}
 			draw_pos.x += width;
 		}
+
+		current_layer++;
 	}
 }
 

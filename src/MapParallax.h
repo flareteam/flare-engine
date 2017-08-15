@@ -29,9 +29,11 @@ public:
 	float speed;
 	FPoint fixed_speed;
 	FPoint fixed_offset;
+	std::string map_layer;
 
 	MapParallaxLayer()
 		: sprite(NULL)
+		, map_layer("")
 	{}
 };
 
@@ -42,11 +44,12 @@ public:
 	void clear();
 	void load(const std::string& filename);
 	void setMapCenter(int x, int y);
-	void render(const FPoint& cam);
+	void render(const FPoint& cam, const std::string& map_layer);
 
 private:
 	std::vector<MapParallaxLayer> layers;
 	FPoint map_center;
+	size_t current_layer;
 };
 
 #endif
