@@ -163,7 +163,7 @@ int MapRenderer::load(const std::string& fname) {
 
 	show_tooltip = false;
 
-	background_filename = "";
+	parallax_filename = "";
 
 	Map::load(fname);
 
@@ -215,7 +215,7 @@ int MapRenderer::load(const std::string& fname) {
 		}
 	}
 
-	map_parallax.load(background_filename);
+	map_parallax.load(parallax_filename);
 	map_parallax.setMapCenter(w/2, h/2);
 
 	return 0;

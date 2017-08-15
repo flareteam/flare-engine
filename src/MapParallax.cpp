@@ -44,7 +44,7 @@ void MapParallax::clear() {
 void MapParallax::load(const std::string& filename) {
 	clear();
 
-	// @CLASS MapParallax|Description of maps/backgrounds/
+	// @CLASS MapParallax|Description of maps/parallax/
 	FileParser infile;
 	if (infile.open(filename)) {
 		while (infile.next()) {
