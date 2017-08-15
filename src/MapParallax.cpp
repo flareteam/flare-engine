@@ -23,7 +23,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "UtilsParsing.h"
 
 #include <math.h>
-#include <cassert>
 
 MapParallax::MapParallax() {
 }
@@ -33,12 +32,11 @@ MapParallax::~MapParallax() {
 }
 
 void MapParallax::clear() {
-	for (size_t i = 0; i < sprites.size(); ++i) {
-		delete sprites[i];
+	for (size_t i = 0; i < layers.size(); ++i) {
+		delete layers[i].sprite;
 	}
 
-	sprites.clear();
-	speeds.clear();
+	layers.clear();
 }
 
 void MapParallax::load(const std::string& filename) {
@@ -49,40 +47,33 @@ void MapParallax::load(const std::string& filename) {
 	if (infile.open(filename)) {
 		while (infile.next()) {
 			if (infile.new_section && infile.section == "layer") {
-				sprites.resize(sprites.size()+1, NULL);
-				speeds.resize(speeds.size()+1);
-				fixed_speeds.resize(fixed_speeds.size()+1);
-				fixed_offsets.resize(fixed_offsets.size()+1);
+				layers.resize(layers.size()+1);
 			}
 
-			if (sprites.empty() || speeds.empty())
+			if (layers.empty())
 				continue;
 
 			if (infile.key == "image") {
 				// @ATTR layer.image|filename|Image file to use as a scrolling background.
 				Image *graphics = render_device->loadImage(infile.val);
 				if (graphics) {
-					sprites.back() = graphics->createSprite();
+					layers.back().sprite = graphics->createSprite();
 					graphics->unref();
 				}
 			}
 			else if (infile.key == "speed") {
 				// @ATTR layer.speed|float|Speed at which the background will move relative to the camera.
-				speeds.back() = toFloat(infile.val);
+				layers.back().speed = toFloat(infile.val);
 			}
 			else if (infile.key == "fixed_speed") {
 				// @ATTR layer.fixed_speed|float, float : X speed, Y speed|Speed at which the background will move independent of the camera movement.
-				fixed_speeds.back().x = toFloat(popFirstString(infile.val));
-				fixed_speeds.back().y = toFloat(popFirstString(infile.val));
+				layers.back().fixed_speed.x = toFloat(popFirstString(infile.val));
+				layers.back().fixed_speed.y = toFloat(popFirstString(infile.val));
 			}
 		}
 
 		infile.close();
 	}
-
-	assert(sprites.size() == speeds.size());
-	assert(sprites.size() == fixed_speeds.size());
-	assert(sprites.size() == fixed_offsets.size());
 }
 
 void MapParallax::setMapCenter(int x, int y) {
@@ -91,28 +82,28 @@ void MapParallax::setMapCenter(int x, int y) {
 }
 
 void MapParallax::render(const FPoint& cam) {
-	for (size_t i = 0; i < sprites.size(); ++i) {
-		int width = sprites[i]->getGraphicsWidth();
-		int height = sprites[i]->getGraphicsHeight();
+	for (size_t i = 0; i < layers.size(); ++i) {
+		int width = layers[i].sprite->getGraphicsWidth();
+		int height = layers[i].sprite->getGraphicsHeight();
 
-		fixed_offsets[i].x += fixed_speeds[i].x;
-		fixed_offsets[i].y += fixed_speeds[i].y;
+		layers[i].fixed_offset.x += layers[i].fixed_speed.x;
+		layers[i].fixed_offset.y += layers[i].fixed_speed.y;
 
-		if (fixed_offsets[i].x > static_cast<float>(width))
-			fixed_offsets[i].x -= static_cast<float>(width);
-		if (fixed_offsets[i].x < static_cast<float>(width*(-1)))
-			fixed_offsets[i].x += static_cast<float>(width);
+		if (layers[i].fixed_offset.x > static_cast<float>(width))
+			layers[i].fixed_offset.x -= static_cast<float>(width);
+		if (layers[i].fixed_offset.x < static_cast<float>(-width))
+			layers[i].fixed_offset.x += static_cast<float>(width);
 
-		if (fixed_offsets[i].y > static_cast<float>(height))
-			fixed_offsets[i].y -= static_cast<float>(height);
-		if (fixed_offsets[i].y < static_cast<float>(height*(-1)))
-			fixed_offsets[i].y += static_cast<float>(height);
+		if (layers[i].fixed_offset.y > static_cast<float>(height))
+			layers[i].fixed_offset.y -= static_cast<float>(height);
+		if (layers[i].fixed_offset.y < static_cast<float>(-height))
+			layers[i].fixed_offset.y += static_cast<float>(height);
 
 		FPoint dp;
 		dp.x = map_center.x - cam.x;
 		dp.y = map_center.y - cam.y;
 
-		Point center_tile = map_to_screen(map_center.x + (dp.x * speeds[i]) + fixed_offsets[i].x, map_center.y + (dp.y * speeds[i]) + fixed_offsets[i].y, cam.x, cam.y);
+		Point center_tile = map_to_screen(map_center.x + (dp.x * layers[i].speed) + layers[i].fixed_offset.x, map_center.y + (dp.y * layers[i].speed) + layers[i].fixed_offset.y, cam.x, cam.y);
 		center_tile.x -= width/2;
 		center_tile.y -= height/2;
 
@@ -124,8 +115,8 @@ void MapParallax::render(const FPoint& cam) {
 		while (draw_pos.x < VIEW_W) {
 			draw_pos.y = start_pos.y;
 			while (draw_pos.y < VIEW_H) {
-				sprites[i]->setDest(draw_pos.x, draw_pos.y);
-				render_device->render(sprites[i]);
+				layers[i].sprite->setDest(draw_pos.x, draw_pos.y);
+				render_device->render(layers[i].sprite);
 
 				draw_pos.y += height;
 			}

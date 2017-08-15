@@ -23,6 +23,18 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "RenderDevice.h"
 #include "Utils.h"
 
+class MapParallaxLayer {
+public:
+	Sprite *sprite;
+	float speed;
+	FPoint fixed_speed;
+	FPoint fixed_offset;
+
+	MapParallaxLayer()
+		: sprite(NULL)
+	{}
+};
+
 class MapParallax {
 public:
 	MapParallax();
@@ -33,10 +45,7 @@ public:
 	void render(const FPoint& cam);
 
 private:
-	std::vector<Sprite*> sprites;
-	std::vector<float> speeds;
-	std::vector<FPoint> fixed_speeds;
-	std::vector<FPoint> fixed_offsets;
+	std::vector<MapParallaxLayer> layers;
 	FPoint map_center;
 };
 
