@@ -51,6 +51,8 @@ void MapBackground::load(const std::string& filename) {
 			if (infile.new_section && infile.section == "layer") {
 				sprites.resize(sprites.size()+1, NULL);
 				speeds.resize(speeds.size()+1);
+				fixed_speeds.resize(fixed_speeds.size()+1);
+				fixed_offsets.resize(fixed_offsets.size()+1);
 			}
 
 			if (sprites.empty() || speeds.empty())
@@ -68,12 +70,19 @@ void MapBackground::load(const std::string& filename) {
 				// @ATTR layer.speed|float|Speed at which the background will move relative to the camera.
 				speeds.back() = toFloat(infile.val);
 			}
+			else if (infile.key == "fixed_speed") {
+				// @ATTR layer.fixed_speed|float, float : X speed, Y speed|Speed at which the background will move independent of the camera movement.
+				fixed_speeds.back().x = toFloat(popFirstString(infile.val));
+				fixed_speeds.back().y = toFloat(popFirstString(infile.val));
+			}
 		}
 
 		infile.close();
 	}
 
 	assert(sprites.size() == speeds.size());
+	assert(sprites.size() == fixed_speeds.size());
+	assert(sprites.size() == fixed_offsets.size());
 }
 
 void MapBackground::setMapCenter(int x, int y) {
@@ -86,11 +95,24 @@ void MapBackground::render(const FPoint& cam) {
 		int width = sprites[i]->getGraphicsWidth();
 		int height = sprites[i]->getGraphicsHeight();
 
+		fixed_offsets[i].x += fixed_speeds[i].x;
+		fixed_offsets[i].y += fixed_speeds[i].y;
+
+		if (fixed_offsets[i].x > static_cast<float>(width))
+			fixed_offsets[i].x -= static_cast<float>(width);
+		if (fixed_offsets[i].x < static_cast<float>(width*(-1)))
+			fixed_offsets[i].x += static_cast<float>(width);
+
+		if (fixed_offsets[i].y > static_cast<float>(height))
+			fixed_offsets[i].y -= static_cast<float>(height);
+		if (fixed_offsets[i].y < static_cast<float>(height*(-1)))
+			fixed_offsets[i].y += static_cast<float>(height);
+
 		FPoint dp;
 		dp.x = map_center.x - cam.x;
 		dp.y = map_center.y - cam.y;
 
-		Point center_tile = map_to_screen(map_center.x + (dp.x * speeds[i]), map_center.y + (dp.y * speeds[i]), cam.x, cam.y);
+		Point center_tile = map_to_screen(map_center.x + (dp.x * speeds[i]) + fixed_offsets[i].x, map_center.y + (dp.y * speeds[i]) + fixed_offsets[i].y, cam.x, cam.y);
 		center_tile.x -= width/2;
 		center_tile.y -= height/2;
 

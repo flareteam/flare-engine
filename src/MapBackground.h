@@ -35,6 +35,8 @@ public:
 private:
 	std::vector<Sprite*> sprites;
 	std::vector<float> speeds;
+	std::vector<FPoint> fixed_speeds;
+	std::vector<FPoint> fixed_offsets;
 	FPoint map_center;
 };
 
