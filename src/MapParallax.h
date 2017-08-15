@@ -16,17 +16,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
 
-#ifndef MAPBACKGROUND_H
-#define MAPBACKGROUND_H
+#ifndef MAPPARALLAX_H
+#define MAPPARALLAX_H
 
 #include "CommonIncludes.h"
 #include "RenderDevice.h"
 #include "Utils.h"
 
-class MapBackground {
+class MapParallax {
 public:
-	MapBackground();
-	~MapBackground();
+	MapParallax();
+	~MapParallax();
 	void clear();
 	void load(const std::string& filename);
 	void setMapCenter(int x, int y);

@@ -55,7 +55,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	../../../../../../src/Loot.cpp \
 	../../../../../../src/LootManager.cpp \
 	../../../../../../src/Map.cpp \
-	../../../../../../src/MapBackground.cpp \
+	../../../../../../src/MapParallax.cpp \
 	../../../../../../src/MapCollision.cpp \
 	../../../../../../src/MapRenderer.cpp \
 	../../../../../../src/Menu.cpp \

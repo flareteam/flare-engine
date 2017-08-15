@@ -215,8 +215,8 @@ int MapRenderer::load(const std::string& fname) {
 		}
 	}
 
-	map_background.load(background_filename);
-	map_background.setMapCenter(w/2, h/2);
+	map_parallax.load(background_filename);
+	map_parallax.setMapCenter(w/2, h/2);
 
 	return 0;
 }
@@ -292,7 +292,7 @@ void MapRenderer::render(std::vector<Renderable> &r, std::vector<Renderable> &r_
 		shakycam.y = cam.y + static_cast<float>((rand() % 16 - 8)) * 0.0078125f;
 	}
 
-	map_background.render(shakycam);
+	map_parallax.render(shakycam);
 
 	if (TILESET_ORIENTATION == TILESET_ORTHOGONAL) {
 		calculatePriosOrtho(r);

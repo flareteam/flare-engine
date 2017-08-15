@@ -17,7 +17,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 
 #include "FileParser.h"
-#include "MapBackground.h"
+#include "MapParallax.h"
 #include "Settings.h"
 #include "SharedResources.h"
 #include "UtilsParsing.h"
@@ -25,14 +25,14 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <math.h>
 #include <cassert>
 
-MapBackground::MapBackground() {
+MapParallax::MapParallax() {
 }
 
-MapBackground::~MapBackground() {
+MapParallax::~MapParallax() {
 	clear();
 }
 
-void MapBackground::clear() {
+void MapParallax::clear() {
 	for (size_t i = 0; i < sprites.size(); ++i) {
 		delete sprites[i];
 	}
@@ -41,10 +41,10 @@ void MapBackground::clear() {
 	speeds.clear();
 }
 
-void MapBackground::load(const std::string& filename) {
+void MapParallax::load(const std::string& filename) {
 	clear();
 
-	// @CLASS MapBackground|Description of maps/backgrounds/
+	// @CLASS MapParallax|Description of maps/backgrounds/
 	FileParser infile;
 	if (infile.open(filename)) {
 		while (infile.next()) {
@@ -85,12 +85,12 @@ void MapBackground::load(const std::string& filename) {
 	assert(sprites.size() == fixed_offsets.size());
 }
 
-void MapBackground::setMapCenter(int x, int y) {
+void MapParallax::setMapCenter(int x, int y) {
 	map_center.x = static_cast<float>(x) + 0.5f;
 	map_center.y = static_cast<float>(y) + 0.5f;
 }
 
-void MapBackground::render(const FPoint& cam) {
+void MapParallax::render(const FPoint& cam) {
 	for (size_t i = 0; i < sprites.size(); ++i) {
 		int width = sprites[i]->getGraphicsWidth();
 		int height = sprites[i]->getGraphicsHeight();
