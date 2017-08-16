@@ -90,6 +90,7 @@ MenuNumPicker::MenuNumPicker()
 
 	tablist.add(button_up);
 	tablist.add(button_down);
+	tablist.add(input_box);
 	tablist.add(button_ok);
 
 	align();
@@ -111,7 +112,9 @@ void MenuNumPicker::align() {
 
 void MenuNumPicker::logic() {
 	if (visible) {
-		tablist.logic();
+		if (!input_box->edit_mode) {
+			tablist.logic();
+		}
 
 		input_box->logic();
 

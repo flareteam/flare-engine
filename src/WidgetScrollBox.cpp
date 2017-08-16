@@ -119,7 +119,9 @@ Point WidgetScrollBox::input_assist(const Point& mouse) {
 
 void WidgetScrollBox::logic() {
 	logic(inpt->mouse.x,inpt->mouse.y);
-	tablist.logic();
+	if (in_focus) {
+		tablist.logic();
+	}
 }
 
 void WidgetScrollBox::logic(int x, int y) {

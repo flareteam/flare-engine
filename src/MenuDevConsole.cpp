@@ -90,7 +90,8 @@ MenuDevConsole::MenuDevConsole()
 	color_hint = font->getColor("menu_bonus");
 
 	align();
-	input_box->inFocus = true;
+	input_box->edit_mode = true;
+	input_box->accept_to_defocus = false;
 }
 
 MenuDevConsole::~MenuDevConsole() {
@@ -120,7 +121,7 @@ void MenuDevConsole::logic() {
 			log_history->add(msg->get("Type 'help' to get a list of commands. "));
 		}
 
-		if (!input_box->inFocus) {
+		if (!input_box->edit_mode) {
 			tablist.logic();
 		}
 
@@ -134,15 +135,11 @@ void MenuDevConsole::logic() {
 		else if (button_confirm->checkClick()) {
 			execute();
 		}
-		else if (input_box->inFocus && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		else if (input_box->edit_mode && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 			inpt->lock[ACCEPT] = true;
 			execute();
 		}
-		else if (input_box->inFocus && inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
-			inpt->lock[CANCEL] = true;
-			input_box->inFocus = false;
-		}
-		else if (input_box->inFocus && inpt->pressing_up) {
+		else if (input_box->edit_mode && inpt->pressing_up) {
 			inpt->pressing_up = false;
 			if (!input_scrollback.empty()) {
 				if (input_scrollback_pos != 0)
@@ -150,7 +147,7 @@ void MenuDevConsole::logic() {
 				input_box->setText(input_scrollback[input_scrollback_pos]);
 			}
 		}
-		else if (input_box->inFocus && inpt->pressing_down) {
+		else if (input_box->edit_mode && inpt->pressing_down) {
 			inpt->pressing_down = false;
 			if (!input_scrollback.empty()) {
 				input_scrollback_pos++;
@@ -180,12 +177,12 @@ void MenuDevConsole::render() {
 }
 
 bool MenuDevConsole::inputFocus() {
-	return visible && input_box->inFocus;
+	return visible && input_box->edit_mode;
 }
 
 void MenuDevConsole::reset() {
 	input_box->setText("");
-	input_box->inFocus = true;
+	input_box->edit_mode = true;
 	// log_history->clear();
 }
 

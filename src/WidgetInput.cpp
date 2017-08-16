@@ -31,9 +31,10 @@ WidgetInput::WidgetInput(const std::string& filename)
 	, cursor_frame(0)
 	, del_frame(0)
 	, max_del_frame(0)
-	, inFocus(false)
+	, edit_mode(false)
 	, max_length(0)
 	, only_numbers(false)
+	, accept_to_defocus(true)
 {
 
 	loadGraphics(filename);
@@ -63,6 +64,11 @@ void WidgetInput::trimText() {
 	trimmed_text = font->trimTextToWidth(text, pos.w-padding, false);
 }
 
+void WidgetInput::activate() {
+	if (!edit_mode)
+		edit_mode = true;
+}
+
 void WidgetInput::logic() {
 	if (logic(inpt->mouse.x,inpt->mouse.y))
 		return;
@@ -75,17 +81,17 @@ bool WidgetInput::logic(int x, int y) {
 	hover = isWithinRect(pos, mouse);
 
 	if (checkClick()) {
-		inFocus = true;
+		edit_mode = true;
 	}
 
 	// if clicking elsewhere unfocus the text box
 	if (inpt->pressing[MAIN1]) {
 		if (!isWithinRect(pos, inpt->mouse)) {
-			inFocus = false;
+			edit_mode = false;
 		}
 	}
 
-	if (inFocus) {
+	if (edit_mode) {
 
 		if (inpt->inkeys != "") {
 			// handle text input
@@ -96,11 +102,10 @@ bool WidgetInput::logic(int x, int y) {
 			}
 
 			// HACK: this prevents normal keys from triggering common menu shortcuts
-			if (inpt->pressing[ACCEPT]) {
-				inpt->lock[ACCEPT] = true;
-			}
-			else if (inpt->pressing[CANCEL]) {
-				inpt->lock[CANCEL] = true;
+			for (size_t i = 0; i < inpt->key_count; ++i) {
+				if (inpt->pressing[i]) {
+					inpt->lock[i] = true;
+				}
 			}
 		}
 
@@ -132,14 +137,24 @@ bool WidgetInput::logic(int x, int y) {
 		cursor_frame++;
 		if (cursor_frame == MAX_FRAMES_PER_SEC+MAX_FRAMES_PER_SEC) cursor_frame = 0;
 
+		// defocus with Enter or Escape
+		if (accept_to_defocus && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+			inpt->lock[ACCEPT] = true;
+			edit_mode = false;
+		}
+		else if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+			inpt->lock[CANCEL] = true;
+			edit_mode = false;
+		}
 	}
+
 	return true;
 }
 
 void WidgetInput::render() {
 	Rect src;
 	src.x = 0;
-	src.y = (inFocus ? pos.h : 0);
+	src.y = (edit_mode ? pos.h : 0);
 	src.w = pos.w;
 	src.h = pos.h;
 
@@ -153,7 +168,7 @@ void WidgetInput::render() {
 
 	font->setFont("font_regular");
 
-	if (!inFocus) {
+	if (!edit_mode) {
 		font->render(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
 	}
 	else {
@@ -162,6 +177,31 @@ void WidgetInput::render() {
 		}
 		else {
 			font->renderShadowed(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
+		}
+	}
+
+	if (in_focus && !edit_mode) {
+		Point topLeft;
+		Point bottomRight;
+
+		topLeft.x = pos.x + local_frame.x - local_offset.x;
+		topLeft.y = pos.y + local_frame.y - local_offset.y;
+		bottomRight.x = topLeft.x + pos.w;
+		bottomRight.y = topLeft.y + pos.h;
+		Color color = Color(255,248,220,255);
+
+		// Only draw rectangle if it fits in local frame
+		bool draw = true;
+		if (local_frame.w &&
+				(topLeft.x<local_frame.x || bottomRight.x>(local_frame.x+local_frame.w))) {
+			draw = false;
+		}
+		if (local_frame.h &&
+				(topLeft.y<local_frame.y || bottomRight.y>(local_frame.y+local_frame.h))) {
+			draw = false;
+		}
+		if (draw) {
+			render_device->drawRectangle(topLeft, bottomRight, color);
 		}
 	}
 }

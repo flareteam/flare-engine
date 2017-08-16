@@ -205,6 +205,7 @@ GameStateNew::GameStateNew()
 	// Set up tab list
 	tablist.add(button_exit);
 	tablist.add(button_create);
+	tablist.add(input_name);
 	tablist.add(button_permadeath);
 	tablist.add(button_prev);
 	tablist.add(button_next);
@@ -279,8 +280,10 @@ void GameStateNew::logic() {
 	if (inpt->window_resized)
 		refreshWidgets();
 
-	if (!input_name->inFocus)
+	if (!input_name->edit_mode)
 		tablist.logic(true);
+
+	input_name->logic();
 
 	button_permadeath->checkClick();
 	if (show_classlist) class_list->checkClick();
@@ -338,8 +341,6 @@ void GameStateNew::logic() {
 		loadPortrait(portrait[current_option]);
 		setName(name[current_option]);
 	}
-
-	input_name->logic();
 
 	if (input_name->getText() != name[current_option]) modified_name = true;
 }

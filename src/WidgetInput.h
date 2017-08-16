@@ -60,6 +60,7 @@ public:
 	~WidgetInput();
 	void setPos(int offset_x = 0, int offset_y = 0);
 
+	void activate();
 	void logic();
 	bool logic(int x, int y);
 	void render();
@@ -73,9 +74,10 @@ public:
 	}
 	void setPosition(int x, int y);
 
-	bool inFocus;
+	bool edit_mode;
 	unsigned int max_length;
 	bool only_numbers;
+	bool accept_to_defocus;
 };
 
 #endif
