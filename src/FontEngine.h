@@ -69,7 +69,7 @@ public:
 
 	virtual void setFont(const std::string& _font) = 0;
 	virtual int calc_width(const std::string& text) = 0;
-	virtual std::string trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis) = 0;
+	virtual std::string trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis, size_t left_pos) = 0;
 
 	int cursor_y;
 

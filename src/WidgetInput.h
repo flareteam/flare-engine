@@ -47,7 +47,8 @@ protected:
 
 	std::string text; // the text that has been typed into the box
 	std::string trimmed_text; // a trimmed version of text that is rendered
-	int cursor_frame;
+	std::string trimmed_text_cursor; // same as trimmed_text, but with a '|' inserted to represent the cursor
+	size_t cursor_pos;
 	int del_frame;
 	int max_del_frame;
 
@@ -69,7 +70,8 @@ public:
 		return text;
 	}
 	void setText(std::string _text) {
-		trimmed_text = text = _text;
+		text = _text;
+		cursor_pos = text.length();
 		trimText();
 	}
 	void setPosition(int x, int y);

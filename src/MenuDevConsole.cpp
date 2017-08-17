@@ -90,7 +90,7 @@ MenuDevConsole::MenuDevConsole()
 	color_hint = font->getColor("menu_bonus");
 
 	align();
-	input_box->edit_mode = true;
+	reset();
 	input_box->accept_to_defocus = false;
 }
 

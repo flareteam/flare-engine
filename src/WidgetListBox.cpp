@@ -432,7 +432,7 @@ void WidgetListBox::refresh() {
 			if (disable_text_trim)
 				temp = items[i+cursor].value;
 			else
-				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, true);
+				temp = font->trimTextToWidth(items[i+cursor].value, pos.w-right_margin-padding, true, 0);
 		}
 
 		if(i+cursor < items.size() && items[i+cursor].selected) {

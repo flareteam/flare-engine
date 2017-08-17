@@ -157,8 +157,11 @@ int SDLFontEngine::calc_width(const std::string& text) {
  * Example with "Hello World" (let's assume a monospace font and a width that can fit 6 characters):
  * use_ellipsis == true: "Hello ..."
  * use_ellipsis == false: " World"
+ *
+ * left_pos is only used when use_ellipsis is false.
+ * It ensures that this character is visible, chopping the end of the string if needed.
  */
-std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis) {
+std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis, size_t left_pos) {
 	if (width >= calc_width(text))
 		return text;
 
@@ -173,6 +176,12 @@ std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int wi
 			else
 				break;
 		}
+		else if (left_pos < text_length - ret_length) {
+			if (total_width < calc_width(text.substr(left_pos,ret_length)))
+				ret_length = i;
+			else
+				break;
+		}
 		else {
 			if (total_width < calc_width(text.substr(text_length-ret_length)))
 				ret_length = i;
@@ -182,7 +191,10 @@ std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int wi
 	}
 
 	if (!use_ellipsis) {
-		return text.substr(text_length-ret_length);
+		if (left_pos < text_length - ret_length)
+			return text.substr(left_pos, ret_length);
+		else
+			return text.substr(text_length-ret_length);
 	}
 	else {
 		if (text_length <= 3)

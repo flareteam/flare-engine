@@ -28,7 +28,7 @@ WidgetInput::WidgetInput(const std::string& filename)
 	, enabled(true)
 	, pressed(false)
 	, hover(false)
-	, cursor_frame(0)
+	, cursor_pos(0)
 	, del_frame(0)
 	, max_del_frame(0)
 	, edit_mode(false)
@@ -60,8 +60,14 @@ void WidgetInput::loadGraphics(const std::string& filename) {
 }
 
 void WidgetInput::trimText() {
-	int padding =font->getFontHeight();
-	trimmed_text = font->trimTextToWidth(text, pos.w-padding, false);
+	std::string text_with_cursor = text;
+	text_with_cursor.insert(cursor_pos, "|");
+
+	int padding = font->getFontHeight();
+	trimmed_text = font->trimTextToWidth(text, pos.w-padding, false, text.length());
+
+	size_t trim_pos = (cursor_pos > 0 ? cursor_pos - 1 : cursor_pos);
+	trimmed_text_cursor = font->trimTextToWidth(text_with_cursor, pos.w-padding, false, trim_pos);
 }
 
 void WidgetInput::activate() {
@@ -97,7 +103,8 @@ bool WidgetInput::logic(int x, int y) {
 			// handle text input
 			// only_numbers will restrict our input to 0-9 characters
 			if (!only_numbers || (inpt->inkeys[0] >= 48 && inpt->inkeys[0] <= 57)) {
-				text += inpt->inkeys;
+				text.insert(cursor_pos, inpt->inkeys);
+				cursor_pos += inpt->inkeys.length();
 				trimText();
 			}
 
@@ -118,11 +125,17 @@ bool WidgetInput::logic(int x, int y) {
 			inpt->lock[DEL] = true;
 			del_frame = 0;
 			max_del_frame = std::max(MAX_FRAMES_PER_SEC/8, max_del_frame - (MAX_FRAMES_PER_SEC/4));
-			// remove utf-8 character
-			int n = static_cast<int>(text.length()-1);
-			while (n > 0 && ((text[n] & 0xc0) == 0x80) ) n--;
-			text = text.substr(0, n);
-			trimText();
+			if (!text.empty() && cursor_pos > 0) {
+				// remove utf-8 character
+				// size_t old_cursor_pos = cursor_pos;
+				size_t n = cursor_pos-1;
+				while ((text[n] & 0xc0) == 0x80) {
+					n--;
+				}
+				text = text.substr(0, n) + text.substr(cursor_pos, text.length());
+				cursor_pos--;
+				trimText();
+			}
 		} else if (inpt->pressing[DEL]) {
 			// delay unlocking of DEL lock
 			del_frame++;
@@ -132,10 +145,17 @@ bool WidgetInput::logic(int x, int y) {
 			inpt->lock[DEL]	= false;
 		}
 
-		// animate cursor
-		// cursor visible one second, invisible the next
-		cursor_frame++;
-		if (cursor_frame == MAX_FRAMES_PER_SEC+MAX_FRAMES_PER_SEC) cursor_frame = 0;
+		// cursor movement
+		if (!text.empty() && cursor_pos > 0 && inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
+			inpt->lock[LEFT] = true;
+			cursor_pos--;
+			trimText();
+		}
+		else if (!text.empty() && cursor_pos < text.length() && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+			inpt->lock[RIGHT] = true;
+			cursor_pos++;
+			trimText();
+		}
 
 		// defocus with Enter or Escape
 		if (accept_to_defocus && inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
@@ -172,12 +192,7 @@ void WidgetInput::render() {
 		font->render(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
 	}
 	else {
-		if (cursor_frame < MAX_FRAMES_PER_SEC) {
-			font->renderShadowed(trimmed_text + "|", font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
-		}
-		else {
-			font->renderShadowed(trimmed_text, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
-		}
+		font->renderShadowed(trimmed_text_cursor, font_pos.x, font_pos.y, JUSTIFY_LEFT, NULL, 0, color_normal);
 	}
 
 	if (in_focus && !edit_mode) {
