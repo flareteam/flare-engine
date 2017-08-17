@@ -419,10 +419,12 @@ void MenuManager::logic() {
 				inpt->lock[CANCEL] = true;
 				menus[i]->defocusTabLists();
 			}
-			tablist = devconsole->getCurrentTabList();
-			if (tablist) {
-				inpt->lock[CANCEL] = true;
-				devconsole->defocusTabLists();
+			if (DEV_MODE) {
+				tablist = devconsole->getCurrentTabList();
+				if (tablist) {
+					inpt->lock[CANCEL] = true;
+					devconsole->defocusTabLists();
+				}
 			}
 		}
 	}
