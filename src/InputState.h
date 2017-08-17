@@ -123,6 +123,11 @@ public:
 	bool pressing[key_count];
 	bool lock[key_count];
 
+	// handle repeating keys, such as when holding Backspace to delete text in WidgetInput
+	bool slow_repeat[key_count];
+	int repeat_ticks[key_count];
+	int max_repeat_ticks[key_count];
+
 	bool done;
 	Point mouse;
 	std::string inkeys;

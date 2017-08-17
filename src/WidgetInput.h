@@ -49,8 +49,6 @@ protected:
 	std::string trimmed_text; // a trimmed version of text that is rendered
 	std::string trimmed_text_cursor; // same as trimmed_text, but with a '|' inserted to represent the cursor
 	size_t cursor_pos;
-	int del_frame;
-	int max_del_frame;
 
 	Point font_pos;
 

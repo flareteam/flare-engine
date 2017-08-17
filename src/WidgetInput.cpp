@@ -29,8 +29,6 @@ WidgetInput::WidgetInput(const std::string& filename)
 	, pressed(false)
 	, hover(false)
 	, cursor_pos(0)
-	, del_frame(0)
-	, max_del_frame(0)
 	, edit_mode(false)
 	, max_length(0)
 	, only_numbers(false)
@@ -98,6 +96,9 @@ bool WidgetInput::logic(int x, int y) {
 	}
 
 	if (edit_mode) {
+		inpt->slow_repeat[DEL] = true;
+		inpt->slow_repeat[LEFT] = true;
+		inpt->slow_repeat[RIGHT] = true;
 
 		if (inpt->inkeys != "") {
 			// handle text input
@@ -112,19 +113,13 @@ bool WidgetInput::logic(int x, int y) {
 			for (size_t i = 0; i < inpt->key_count; ++i) {
 				if (inpt->pressing[i]) {
 					inpt->lock[i] = true;
+					inpt->repeat_ticks[i] = 1;
 				}
 			}
 		}
 
-		if (!inpt->pressing[DEL]) {
-			max_del_frame = MAX_FRAMES_PER_SEC;
-		}
-
 		// handle backspaces
-		if (!inpt->lock[DEL] && inpt->pressing[DEL]) {
-			inpt->lock[DEL] = true;
-			del_frame = 0;
-			max_del_frame = std::max(MAX_FRAMES_PER_SEC/8, max_del_frame - (MAX_FRAMES_PER_SEC/4));
+		if (inpt->pressing[DEL] && inpt->repeat_ticks[DEL] == 0) {
 			if (!text.empty() && cursor_pos > 0) {
 				// remove utf-8 character
 				// size_t old_cursor_pos = cursor_pos;
@@ -136,22 +131,14 @@ bool WidgetInput::logic(int x, int y) {
 				cursor_pos--;
 				trimText();
 			}
-		} else if (inpt->pressing[DEL]) {
-			// delay unlocking of DEL lock
-			del_frame++;
-		}
-		if (inpt->pressing[DEL] && inpt->lock[DEL] && del_frame >= max_del_frame) {
-			// after X frames allow DEL again
-			inpt->lock[DEL]	= false;
 		}
 
 		// cursor movement
-		if (!text.empty() && cursor_pos > 0 && inpt->pressing[LEFT] && !inpt->lock[LEFT]) {
-			inpt->lock[LEFT] = true;
+		if (!text.empty() && cursor_pos > 0 && inpt->pressing[LEFT] && inpt->repeat_ticks[LEFT] == 0) {
 			cursor_pos--;
 			trimText();
 		}
-		else if (!text.empty() && cursor_pos < text.length() && inpt->pressing[RIGHT] && !inpt->lock[RIGHT]) {
+		else if (!text.empty() && cursor_pos < text.length() && inpt->pressing[RIGHT] && inpt->repeat_ticks[RIGHT] == 0) {
 			inpt->lock[RIGHT] = true;
 			cursor_pos++;
 			trimText();
@@ -166,6 +153,11 @@ bool WidgetInput::logic(int x, int y) {
 			inpt->lock[CANCEL] = true;
 			edit_mode = false;
 		}
+	}
+	else {
+		inpt->slow_repeat[DEL] = false;
+		inpt->slow_repeat[LEFT] = false;
+		inpt->slow_repeat[RIGHT] = false;
 	}
 
 	return true;

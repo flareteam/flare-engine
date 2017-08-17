@@ -511,6 +511,30 @@ void SDLInputState::handle() {
 	// once this function runs once, it is assumed startup is finished
 	if (!joystick_init)
 		joystick_init = true;
+
+	// handle slow key repeating
+	for (int i = 0; i < key_count; i++) {
+		if (slow_repeat[i]) {
+			if (!pressing[i]) {
+				// key not pressed, reset delay
+				max_repeat_ticks[i] = MAX_FRAMES_PER_SEC;
+			}
+			else if (pressing[i] && !lock[i]) {
+				// lock key and set delay
+				lock[i] = true;
+				repeat_ticks[i] = 0;
+				max_repeat_ticks[i] = std::max(MAX_FRAMES_PER_SEC/10, max_repeat_ticks[i] - (MAX_FRAMES_PER_SEC/2));
+			}
+			else if (pressing[i] && lock[i]) {
+				// delay unlocking key
+				repeat_ticks[i]++;
+
+				if (repeat_ticks[i] >= max_repeat_ticks[i]) {
+					lock[i] = false;
+				}
+			}
+		}
+	}
 }
 
 void SDLInputState::hideCursor() {
