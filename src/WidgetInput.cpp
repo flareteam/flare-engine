@@ -100,6 +100,7 @@ bool WidgetInput::logic(int x, int y) {
 		inpt->slow_repeat[DEL] = true;
 		inpt->slow_repeat[LEFT] = true;
 		inpt->slow_repeat[RIGHT] = true;
+		inpt->startTextInput();
 
 		if (inpt->inkeys != "") {
 			// handle text input
@@ -129,7 +130,7 @@ bool WidgetInput::logic(int x, int y) {
 					n--;
 				}
 				text = text.substr(0, n) + text.substr(cursor_pos, text.length());
-				cursor_pos--;
+				cursor_pos -= (cursor_pos) - n;
 				trimText();
 			}
 		}
@@ -159,6 +160,7 @@ bool WidgetInput::logic(int x, int y) {
 		inpt->slow_repeat[DEL] = false;
 		inpt->slow_repeat[LEFT] = false;
 		inpt->slow_repeat[RIGHT] = false;
+		inpt->stopTextInput();
 	}
 
 	return true;
@@ -211,6 +213,13 @@ void WidgetInput::render() {
 		if (draw) {
 			render_device->drawRectangle(topLeft, bottomRight, color);
 		}
+	}
+
+	// handle on-screen keyboard
+	if (PlatformOptions.is_mobile_device && edit_mode) {
+		osk_buf.clear();
+		osk_buf.addText(trimmed_text_cursor);
+		osk_tip.render(osk_buf, Point(VIEW_W_HALF + pos.w/2, 0), STYLE_FLOAT);
 	}
 }
 

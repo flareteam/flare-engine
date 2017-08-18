@@ -44,6 +44,8 @@ public:
 	std::string getContinueString();
 	int getNumJoysticks();
 	bool usingMouse();
+	void startTextInput();
+	void stopTextInput();
 
 private:
 	SDL_Joystick* joy;
@@ -51,6 +53,7 @@ private:
 	int joy_axis_num;
 	int resize_ticks;
 	bool joystick_init;
+	bool text_input;
 
 	std::vector<int> joy_axis_prev;
 	std::vector<int> joy_axis_deltas;

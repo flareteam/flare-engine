@@ -42,11 +42,8 @@ SDLInputState::SDLInputState(void)
 	, joy_axis_num(0)
 	, resize_ticks(-1)
 	, joystick_init(false)
+	, text_input(false)
 {
-	// don't use keyboard for touchscreen devices
-	if (!PlatformOptions.is_mobile_device)
-		SDL_StartTextInput();
-
 	PlatformSetExitEventFilter();
 
 	defaultQwertyKeyBindings();
@@ -674,6 +671,20 @@ int SDLInputState::getNumJoysticks() {
 
 bool SDLInputState::usingMouse() {
 	return !NO_MOUSE && !last_is_joystick;
+}
+
+void SDLInputState::startTextInput() {
+	if (!text_input) {
+		SDL_StartTextInput();
+		text_input = true;
+	}
+}
+
+void SDLInputState::stopTextInput() {
+	if (text_input) {
+		SDL_StopTextInput();
+		text_input = false;
+	}
 }
 
 SDLInputState::~SDLInputState() {

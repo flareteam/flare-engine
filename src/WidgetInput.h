@@ -31,6 +31,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CommonIncludes.h"
 #include "Utils.h"
 #include "Widget.h"
+#include "WidgetTooltip.h"
 
 class WidgetInput : public Widget {
 
@@ -53,6 +54,10 @@ protected:
 	Point font_pos;
 
 	Color color_normal;
+
+	// on-screen keyboard tooltip
+	TooltipData osk_buf;
+	WidgetTooltip osk_tip;
 
 public:
 	explicit WidgetInput(const std::string& filename = "images/menus/input.png");

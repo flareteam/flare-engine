@@ -117,6 +117,8 @@ public:
 	virtual std::string getContinueString() = 0;
 	virtual int getNumJoysticks() = 0;
 	virtual bool usingMouse() = 0;
+	virtual void startTextInput() = 0;
+	virtual void stopTextInput() = 0;
 
 	void enableEventLog();
 
