@@ -19,9 +19,10 @@ You should have received a copy of the GNU General Public License along with
 FLARE.  If not, see http://www.gnu.org/licenses/
 */
 
-#include "WidgetInput.h"
-#include "SharedResources.h"
+#include "Platform.h"
 #include "Settings.h"
+#include "SharedResources.h"
+#include "WidgetInput.h"
 
 WidgetInput::WidgetInput(const std::string& filename)
 	: background(NULL)
@@ -124,7 +125,7 @@ bool WidgetInput::logic(int x, int y) {
 				// remove utf-8 character
 				// size_t old_cursor_pos = cursor_pos;
 				size_t n = cursor_pos-1;
-				while ((text[n] & 0xc0) == 0x80) {
+				while (n > 0 && ((text[n] & 0xc0) == 0x80)) {
 					n--;
 				}
 				text = text.substr(0, n) + text.substr(cursor_pos, text.length());
