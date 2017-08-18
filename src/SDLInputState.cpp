@@ -97,19 +97,19 @@ void SDLInputState::initJoystick() {
 void SDLInputState::defaultQwertyKeyBindings () {
 	if (PlatformOptions.is_mobile_device) {
 		binding[CANCEL] = SDLK_AC_BACK;
-		binding[ACCEPT] = SDLK_MENU;
+		binding_alt[ACCEPT] = SDLK_MENU;
 	}
 	else {
 		binding[CANCEL] = SDLK_ESCAPE;
-		binding[ACCEPT] = SDLK_RETURN;
+		binding_alt[ACCEPT] = SDLK_SPACE;
 	}
+	binding[ACCEPT] = SDLK_RETURN;
 	binding[UP] = SDLK_w;
 	binding[DOWN] = SDLK_s;
 	binding[LEFT] = SDLK_a;
 	binding[RIGHT] = SDLK_d;
 
 	binding_alt[CANCEL] = SDLK_ESCAPE;
-	binding_alt[ACCEPT] = SDLK_SPACE;
 	binding_alt[UP] = SDLK_UP;
 	binding_alt[DOWN] = SDLK_DOWN;
 	binding_alt[LEFT] = SDLK_LEFT;
