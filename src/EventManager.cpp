@@ -618,7 +618,7 @@ bool EventManager::executeEvent(Event &ev) {
 	if (ec_chance_exec && !percentChance(ec_chance_exec->x)) {
 		Event_Component *ec_repeat = ev.getComponent(EC_REPEAT);
 		if (ec_repeat) {
-			ev.keep_after_trigger = static_cast<bool>(ec_repeat->x);
+			ev.keep_after_trigger = ec_repeat->x == 0 ? false : true;
 		}
 		return !ev.keep_after_trigger;
 	}
@@ -697,7 +697,7 @@ bool EventManager::executeEvent(Event &ev) {
 				pos.y = static_cast<float>(ev.location.y) + 0.5f;
 			}
 
-			if (ev.activate_type == EVENT_ON_LOAD || static_cast<bool>(ec->z) == true)
+			if (ev.activate_type == EVENT_ON_LOAD || ec->z != 0)
 				loop = true;
 
 			SoundManager::SoundID sid = snd->load(ec->s, "MapRenderer background soundfx");
@@ -780,7 +780,7 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->activatePower(ec->x, ec->y, target);
 		}
 		else if (ec->type == EC_STASH) {
-			mapr->stash = static_cast<bool>(ec->x);
+			mapr->stash = ec->x == 0 ? false : true;
 			if (mapr->stash) {
 				mapr->stash_pos.x = static_cast<float>(ev.location.x) + 0.5f;
 				mapr->stash_pos.y = static_cast<float>(ev.location.y) + 0.5f;
@@ -798,10 +798,10 @@ bool EventManager::executeEvent(Event &ev) {
 			mapr->cutscene_file = ec->s;
 		}
 		else if (ec->type == EC_REPEAT) {
-			ev.keep_after_trigger = static_cast<bool>(ec->x);
+			ev.keep_after_trigger = ec->x == 0 ? false : true;
 		}
 		else if (ec->type == EC_SAVE_GAME) {
-			mapr->save_game = static_cast<bool>(ec->x);
+			mapr->save_game = ec->x == 0 ? false : true;
 		}
 		else if (ec->type == EC_NPC_ID) {
 			mapr->npc_id = ec->x;

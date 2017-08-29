@@ -72,7 +72,7 @@ void MenuActiveEffects::loadGraphics() {
 }
 
 void MenuActiveEffects::logic() {
-	for(size_t i; i < effect_icons.size(); ++i){
+	for(size_t i = 0; i < effect_icons.size(); ++i){
 		if(effect_icons[i].stacksLabel){
 			delete effect_icons[i].stacksLabel;
 		}
