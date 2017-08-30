@@ -37,7 +37,7 @@ extern Avatar *pc;
 extern MenuManager *menu;
 extern CampaignManager *camp;
 extern EnemyGroupManager *enemyg;
-extern EnemyManager *enemies;
+extern EnemyManager *enemym;
 extern ItemManager *items;
 extern LootManager *loot;
 extern MapRenderer *mapr;

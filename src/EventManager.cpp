@@ -751,7 +751,7 @@ bool EventManager::executeEvent(Event &ev) {
 			Point spawn_pos;
 			spawn_pos.x = ec->x;
 			spawn_pos.y = ec->y;
-			enemies->spawn(ec->s, spawn_pos);
+			enemym->spawn(ec->s, spawn_pos);
 		}
 		else if (ec->type == EC_POWER) {
 			Event_Component *ec_path = ev.getComponent(EC_POWER_PATH);

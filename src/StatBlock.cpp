@@ -619,18 +619,18 @@ void StatBlock::logic() {
 	else alive = true;
 
 	// handle party buffs
-	if (enemies && powers) {
+	if (enemym && powers) {
 		while (!party_buffs.empty()) {
 			int power_index = party_buffs.front();
 			party_buffs.pop();
 			Power *buff_power = &powers->powers[power_index];
 
-			for (size_t i=0; i < enemies->enemies.size(); ++i) {
-				if(enemies->enemies[i]->stats.hp > 0 &&
-				   ((enemies->enemies[i]->stats.hero_ally && hero) || (enemies->enemies[i]->stats.enemy_ally && enemies->enemies[i]->stats.summoner == this)) &&
-				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemies->enemies[i]->stats.summoned_power_index)
+			for (size_t i=0; i < enemym->enemies.size(); ++i) {
+				if(enemym->enemies[i]->stats.hp > 0 &&
+				   ((enemym->enemies[i]->stats.hero_ally && hero) || (enemym->enemies[i]->stats.enemy_ally && enemym->enemies[i]->stats.summoner == this)) &&
+				   (buff_power->buff_party_power_id == 0 || buff_power->buff_party_power_id == enemym->enemies[i]->stats.summoned_power_index)
 				) {
-					powers->effect(&enemies->enemies[i]->stats, this, power_index, (hero ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY));
+					powers->effect(&enemym->enemies[i]->stats, this, power_index, (hero ? SOURCE_TYPE_HERO : SOURCE_TYPE_ENEMY));
 				}
 			}
 		}
@@ -792,7 +792,7 @@ bool StatBlock::canUsePower(const Power &power, int powerid) const {
 			&& (power.type == POWTYPE_SPAWN ? !summonLimitReached(powerid) : true)
 			&& !(power.spawn_type == "untransform" && !transformed)
 			&& std::includes(equip_flags.begin(), equip_flags.end(), power.requires_flags.begin(), power.requires_flags.end())
-			&& (!power.buff_party || (power.buff_party && enemies && enemies->checkPartyMembers()))
+			&& (!power.buff_party || (power.buff_party && enemym && enemym->checkPartyMembers()))
 			&& (power.requires_item == -1 || (power.requires_item > 0 && items->requirementsMet(this, power.requires_item)))
 		);
 	}

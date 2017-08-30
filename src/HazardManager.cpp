@@ -104,16 +104,16 @@ void HazardManager::logic() {
 
 			// process hazards that can hurt enemies
 			if (h[i]->source_type != SOURCE_TYPE_ENEMY) { //hero or neutral sources
-				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
+				for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
 
 					// only check living enemies
-					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemies->enemies[eindex]->stats.hero_ally == h[i]->target_party)) {
-						if (isWithinRadius(h[i]->pos, h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
-							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
-								h[i]->addEntity(enemies->enemies[eindex]);
-								if (!h[i]->beacon) last_enemy = enemies->enemies[eindex];
+					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && (enemym->enemies[eindex]->stats.hero_ally == h[i]->target_party)) {
+						if (isWithinRadius(h[i]->pos, h[i]->radius, enemym->enemies[eindex]->stats.pos)) {
+							if (!h[i]->hasEntity(enemym->enemies[eindex])) {
+								h[i]->addEntity(enemym->enemies[eindex]);
+								if (!h[i]->beacon) last_enemy = enemym->enemies[eindex];
 								// hit!
-								hit = enemies->enemies[eindex]->takeHit(*h[i]);
+								hit = enemym->enemies[eindex]->takeHit(*h[i]);
 								hitEntity(i, hit);
 							}
 						}
@@ -136,14 +136,14 @@ void HazardManager::logic() {
 				}
 
 				//now process allies
-				for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
+				for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
 					// only check living allies
-					if (enemies->enemies[eindex]->stats.hp > 0 && h[i]->active && enemies->enemies[eindex]->stats.hero_ally) {
-						if (isWithinRadius(h[i]->pos, h[i]->radius, enemies->enemies[eindex]->stats.pos)) {
-							if (!h[i]->hasEntity(enemies->enemies[eindex])) {
-								h[i]->addEntity(enemies->enemies[eindex]);
+					if (enemym->enemies[eindex]->stats.hp > 0 && h[i]->active && enemym->enemies[eindex]->stats.hero_ally) {
+						if (isWithinRadius(h[i]->pos, h[i]->radius, enemym->enemies[eindex]->stats.pos)) {
+							if (!h[i]->hasEntity(enemym->enemies[eindex])) {
+								h[i]->addEntity(enemym->enemies[eindex]);
 								// hit!
-								hit = enemies->enemies[eindex]->takeHit(*h[i]);
+								hit = enemym->enemies[eindex]->takeHit(*h[i]);
 								hitEntity(i, hit);
 							}
 						}
@@ -193,10 +193,10 @@ void HazardManager::checkNewHazards() {
 	}
 
 	// check monster hazards
-	for (unsigned int eindex = 0; eindex < enemies->enemies.size(); eindex++) {
-		if (enemies->enemies[eindex]->haz != NULL) {
-			h.push_back(enemies->enemies[eindex]->haz);
-			enemies->enemies[eindex]->haz = NULL;
+	for (unsigned int eindex = 0; eindex < enemym->enemies.size(); eindex++) {
+		if (enemym->enemies[eindex]->haz != NULL) {
+			h.push_back(enemym->enemies[eindex]->haz);
+			enemym->enemies[eindex]->haz = NULL;
 		}
 	}
 }

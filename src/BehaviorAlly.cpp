@@ -55,9 +55,9 @@ void BehaviorAlly::findTarget() {
 
 	bool enemies_in_combat = false;
 	//enter combat because enemy is targeting the player or a summon
-	for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-		if(enemies->enemies[i]->stats.in_combat && !enemies->enemies[i]->stats.hero_ally) {
-			Enemy* enemy = enemies->enemies[i];
+	for (unsigned int i=0; i < enemym->enemies.size(); i++) {
+		if(enemym->enemies[i]->stats.in_combat && !enemym->enemies[i]->stats.hero_ally) {
+			Enemy* enemy = enemym->enemies[i];
 
 			//now work out the distance to the enemy and compare it to the distance to the current targer (we want to target the closest enemy)
 			if(enemies_in_combat) {
@@ -106,13 +106,13 @@ void BehaviorAlly::findTarget() {
 	//need to set the flag player_blocked so that other allies know to get out of the way as well
 	//if hero is facing the summon
 	if(ENABLE_ALLY_COLLISION_AI) {
-		if(!enemies->player_blocked && hero_dist < ALLY_FLEE_DISTANCE
+		if(!enemym->player_blocked && hero_dist < ALLY_FLEE_DISTANCE
 				&& mapr->collider.is_facing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
-			enemies->player_blocked = true;
-			enemies->player_blocked_ticks = BLOCK_TICKS;
+			enemym->player_blocked = true;
+			enemym->player_blocked_ticks = BLOCK_TICKS;
 		}
 
-		if(enemies->player_blocked && !e->stats.in_combat
+		if(enemym->player_blocked && !e->stats.in_combat
 				&& mapr->collider.is_facing(pc->stats.pos.x,pc->stats.pos.y,pc->stats.direction,e->stats.pos.x,e->stats.pos.y)) {
 			fleeing = true;
 			pursue_pos = pc->stats.pos;
@@ -256,7 +256,7 @@ void BehaviorAlly::checkMoveStateMove() {
 		e->stats.direction = e->faceNextBest(pursue_pos.x, pursue_pos.y);
 		if (!e->move()) {
 			//this prevents an ally trying to move perpendicular to a bridge if the player gets close to it in a certain position and gets blocked
-			if(enemies->player_blocked && !e->stats.in_combat) {
+			if(enemym->player_blocked && !e->stats.in_combat) {
 				e->stats.direction = pc->stats.direction;
 				if (!e->move()) {
 					e->stats.direction = prev_direction;

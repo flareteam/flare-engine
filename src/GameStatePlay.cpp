@@ -83,7 +83,7 @@ GameStatePlay::GameStatePlay()
 	camp = new CampaignManager();
 	mapr = new MapRenderer();
 	pc = new Avatar();
-	enemies = new EnemyManager();
+	enemym = new EnemyManager();
 	enemyg = new EnemyGroupManager();
 	hazards = new HazardManager();
 	menu = new MenuManager(&pc->stats);
@@ -154,7 +154,7 @@ void GameStatePlay::checkEnemyFocus() {
 			enemy = hazards->last_enemy;
 		}
 		else {
-			enemy = enemies->getNearestEnemy(pc->stats.pos);
+			enemy = enemym->getNearestEnemy(pc->stats.pos);
 		}
 	}
 	else {
@@ -163,7 +163,7 @@ void GameStatePlay::checkEnemyFocus() {
 			hazards->last_enemy = NULL;
 		}
 		else {
-			enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, true);
+			enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, true);
 			if (enemy) curs->setCursor(CURSOR_ATTACK);
 			src_pos = screen_to_map(inpt->mouse.x, inpt->mouse.y, mapr->cam.x, mapr->cam.y);
 
@@ -179,7 +179,7 @@ void GameStatePlay::checkEnemyFocus() {
 	}
 	else if (inpt->usingMouse()) {
 		// if we're using a mouse and we didn't select an enemy, try selecting a dead one instead
-		Enemy *temp_enemy = enemies->enemyFocus(inpt->mouse, mapr->cam, false);
+		Enemy *temp_enemy = enemym->enemyFocus(inpt->mouse, mapr->cam, false);
 		if (temp_enemy) {
 			pc->stats.target_corpse = &(temp_enemy->stats);
 			menu->enemy->enemy = temp_enemy;
@@ -197,10 +197,10 @@ void GameStatePlay::checkEnemyFocus() {
 	}
 
 	// save the positions of the nearest enemies for powers that use "target_nearest"
-	Enemy *nearest = enemies->getNearestEnemy(src_pos, false, &(pc->stats.target_nearest_dist));
+	Enemy *nearest = enemym->getNearestEnemy(src_pos, false, &(pc->stats.target_nearest_dist));
 	if (nearest)
 		pc->stats.target_nearest = &(nearest->stats);
-	Enemy *nearest_corpse = enemies->getNearestEnemy(src_pos, true, &(pc->stats.target_nearest_corpse_dist));
+	Enemy *nearest_corpse = enemym->getNearestEnemy(src_pos, true, &(pc->stats.target_nearest_corpse_dist));
 	if (nearest_corpse)
 		pc->stats.target_nearest_corpse = &(nearest_corpse->stats);
 }
@@ -281,11 +281,11 @@ void GameStatePlay::checkTeleport() {
 		// when changing maps, enemies->handleNewMap() does something similar to this
 		if (mapr->teleport_mapname.empty()) {
 			FPoint spawn_pos = mapr->collider.get_random_neighbor(FPointToPoint(pc->stats.pos), 1, false);
-			for (unsigned int i=0; i < enemies->enemies.size(); i++) {
-				if(enemies->enemies[i]->stats.hero_ally && enemies->enemies[i]->stats.alive) {
-					mapr->collider.unblock(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y);
-					enemies->enemies[i]->stats.pos = spawn_pos;
-					mapr->collider.block(enemies->enemies[i]->stats.pos.x, enemies->enemies[i]->stats.pos.y, true);
+			for (unsigned int i=0; i < enemym->enemies.size(); i++) {
+				if(enemym->enemies[i]->stats.hero_ally && enemym->enemies[i]->stats.alive) {
+					mapr->collider.unblock(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y);
+					enemym->enemies[i]->stats.pos = spawn_pos;
+					mapr->collider.block(enemym->enemies[i]->stats.pos.x, enemym->enemies[i]->stats.pos.y, true);
 				}
 			}
 		}
@@ -299,7 +299,7 @@ void GameStatePlay::checkTeleport() {
 			showLoading();
 			mapr->load(teleport_mapname);
 			setLoadingFrame();
-			enemies->handleNewMap();
+			enemym->handleNewMap();
 			hazards->handleNewMap();
 			loot->handleNewMap();
 			powers->handleNewMap(&mapr->collider);
@@ -830,13 +830,13 @@ void GameStatePlay::logic() {
 		}
 
 		// transfer hero data to enemies, for AI use
-		if (pc->stats.get(STAT_STEALTH) > 100) enemies->hero_stealth = 100;
-		else enemies->hero_stealth = pc->stats.get(STAT_STEALTH);
+		if (pc->stats.get(STAT_STEALTH) > 100) enemym->hero_stealth = 100;
+		else enemym->hero_stealth = pc->stats.get(STAT_STEALTH);
 
-		enemies->logic();
+		enemym->logic();
 		hazards->logic();
 		loot->logic();
-		enemies->checkEnemiesforXP();
+		enemym->checkEnemiesforXP();
 		npcs->logic();
 
 		snd->logic(pc->stats.pos);
@@ -863,7 +863,7 @@ void GameStatePlay::logic() {
 	checkCancel();
 
 	mapr->logic();
-	mapr->enemies_cleared = enemies->isCleared();
+	mapr->enemies_cleared = enemym->isCleared();
 	quests->logic();
 
 	pc->checkTransform();
@@ -968,7 +968,7 @@ void GameStatePlay::render() {
 
 	pc->addRenders(rens);
 
-	enemies->addRenders(rens, rens_dead);
+	enemym->addRenders(rens, rens_dead);
 
 	npcs->addRenders(rens); // npcs cannot be dead
 
@@ -1051,7 +1051,7 @@ GameStatePlay::~GameStatePlay() {
 	delete quests;
 	delete npcs;
 	delete hazards;
-	delete enemies;
+	delete enemym;
 	delete pc;
 	delete mapr;
 	delete menu;
@@ -1068,7 +1068,7 @@ GameStatePlay::~GameStatePlay() {
 	enemyg = NULL;
 	powers = NULL;
 	mapr = NULL;
-	enemies = NULL;
+	enemym = NULL;
 	camp = NULL;
 	items = NULL;
 	pc = NULL;

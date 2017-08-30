@@ -35,7 +35,7 @@ const int NPC_VOX_QUEST = 1;
 
 class NPC : public Entity {
 private:
-	bool isDialogType(const EVENT_COMPONENT_TYPE &type);
+	bool isDialogType(const EVENT_COMPONENT_TYPE &event_type);
 
 	std::vector<Event_Component> random_table;
 	Point random_table_count;
@@ -49,7 +49,7 @@ public:
 	void loadGraphics();
 	int loadSound(const std::string& fname, int type);
 	void logic();
-	bool playSound(int type, int id=-1);
+	bool playSound(int vox_type, int id=-1);
 	void getDialogNodes(std::vector<int> &result);
 	std::string getDialogTopic(unsigned int dialog_node);
 	bool checkMovement(unsigned int dialog_node);
