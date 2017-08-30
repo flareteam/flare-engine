@@ -47,7 +47,7 @@ public:
 	~NPC();
 	void load(const std::string& npc_id);
 	void loadGraphics();
-	int loadSound(const std::string& fname, int type);
+	int loadSound(const std::string& fname, int vox_type);
 	void logic();
 	bool playSound(int vox_type, int id=-1);
 	void getDialogNodes(std::vector<int> &result);
