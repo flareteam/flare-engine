@@ -44,7 +44,7 @@ class WidgetTooltip;
 
 class GameStateConfigDesktop : public GameStateConfigBase {
 public:
-	GameStateConfigDesktop();
+	GameStateConfigDesktop(bool _enable_video_tab);
 	~GameStateConfigDesktop();
 
 private:
@@ -133,6 +133,8 @@ private:
 	Color scrollpane_color;
 	int scrollpane_contents;
 	Point secondary_offset;
+
+	bool enable_video_tab;
 };
 
 #endif

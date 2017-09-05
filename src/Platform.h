@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #define CONFIG_MENU_TYPE_BASE 0
 #define CONFIG_MENU_TYPE_DESKTOP 1
+#define CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO 2
 
 struct PlatformOptions_t {
 	bool has_exit_button;

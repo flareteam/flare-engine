@@ -153,8 +153,10 @@ void GameStateTitle::logic() {
 	}
 	else if (button_cfg->checkClick()) {
 		showLoading();
-		if (PlatformOptions.config_menu_type == CONFIG_MENU_TYPE_DESKTOP)
-			setRequestedGameState(new GameStateConfigDesktop());
+		if (PlatformOptions.config_menu_type == CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO)
+			setRequestedGameState(new GameStateConfigDesktop(false));
+		else if (PlatformOptions.config_menu_type == CONFIG_MENU_TYPE_DESKTOP)
+			setRequestedGameState(new GameStateConfigDesktop(true));
 		else
 			setRequestedGameState(new GameStateConfigBase());
 	}

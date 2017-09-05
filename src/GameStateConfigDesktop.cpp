@@ -43,7 +43,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <limits.h>
 #include <iomanip>
 
-GameStateConfigDesktop::GameStateConfigDesktop()
+GameStateConfigDesktop::GameStateConfigDesktop(bool _enable_video_tab)
 	: GameStateConfigBase(false)
 	, fullscreen_cb(new WidgetCheckBox())
 	, fullscreen_lb(new WidgetLabel())
@@ -79,6 +79,7 @@ GameStateConfigDesktop::GameStateConfigDesktop()
 	, input_key(0)
 	, key_count(0)
 	, scrollpane_contents(0)
+	, enable_video_tab(_enable_video_tab)
 {
 	// Allocate KeyBindings
 	for (int i = 0; i < inpt->key_count; i++) {
@@ -99,14 +100,25 @@ GameStateConfigDesktop::~GameStateConfigDesktop() {
 }
 
 void GameStateConfigDesktop::init() {
-	VIDEO_TAB = 0;
-	AUDIO_TAB = 1;
-	INTERFACE_TAB = 2;
-	INPUT_TAB = 3;
-	KEYBINDS_TAB = 4;
-	MODS_TAB = 5;
+	if (enable_video_tab) {
+		VIDEO_TAB = 0;
+		AUDIO_TAB = 1;
+		INTERFACE_TAB = 2;
+		INPUT_TAB = 3;
+		KEYBINDS_TAB = 4;
+		MODS_TAB = 5;
+	}
+	else {
+		AUDIO_TAB = 0;
+		INTERFACE_TAB = 1;
+		INPUT_TAB = 2;
+		KEYBINDS_TAB = 3;
+		MODS_TAB = 4;
+	}
 
-	tab_control->setTabTitle(VIDEO_TAB, msg->get("Video"));
+	if (enable_video_tab) {
+		tab_control->setTabTitle(VIDEO_TAB, msg->get("Video"));
+	}
 	tab_control->setTabTitle(AUDIO_TAB, msg->get("Audio"));
 	tab_control->setTabTitle(INTERFACE_TAB, msg->get("Interface"));
 	tab_control->setTabTitle(INPUT_TAB, msg->get("Input"));
@@ -356,21 +368,23 @@ bool GameStateConfigDesktop::parseKeyDesktop(FileParser &infile, int &x1, int &y
 }
 
 void GameStateConfigDesktop::addChildWidgetsDesktop() {
-	addChildWidget(fullscreen_cb, VIDEO_TAB);
-	addChildWidget(fullscreen_lb, VIDEO_TAB);
-	addChildWidget(hwsurface_cb, VIDEO_TAB);
-	addChildWidget(hwsurface_lb, VIDEO_TAB);
-	addChildWidget(vsync_cb, VIDEO_TAB);
-	addChildWidget(vsync_lb, VIDEO_TAB);
-	addChildWidget(texture_filter_cb, VIDEO_TAB);
-	addChildWidget(texture_filter_lb, VIDEO_TAB);
-	addChildWidget(change_gamma_cb, VIDEO_TAB);
-	addChildWidget(change_gamma_lb, VIDEO_TAB);
-	addChildWidget(gamma_sl, VIDEO_TAB);
-	addChildWidget(gamma_lb, VIDEO_TAB);
-	addChildWidget(hws_note_lb, VIDEO_TAB);
-	addChildWidget(dbuf_note_lb, VIDEO_TAB);
-	addChildWidget(test_note_lb, VIDEO_TAB);
+	if (enable_video_tab) {
+		addChildWidget(fullscreen_cb, VIDEO_TAB);
+		addChildWidget(fullscreen_lb, VIDEO_TAB);
+		addChildWidget(hwsurface_cb, VIDEO_TAB);
+		addChildWidget(hwsurface_lb, VIDEO_TAB);
+		addChildWidget(vsync_cb, VIDEO_TAB);
+		addChildWidget(vsync_lb, VIDEO_TAB);
+		addChildWidget(texture_filter_cb, VIDEO_TAB);
+		addChildWidget(texture_filter_lb, VIDEO_TAB);
+		addChildWidget(change_gamma_cb, VIDEO_TAB);
+		addChildWidget(change_gamma_lb, VIDEO_TAB);
+		addChildWidget(gamma_sl, VIDEO_TAB);
+		addChildWidget(gamma_lb, VIDEO_TAB);
+		addChildWidget(hws_note_lb, VIDEO_TAB);
+		addChildWidget(dbuf_note_lb, VIDEO_TAB);
+		addChildWidget(test_note_lb, VIDEO_TAB);
+	}
 
 	addChildWidget(mouse_move_cb, INPUT_TAB);
 	addChildWidget(mouse_move_lb, INPUT_TAB);
@@ -402,15 +416,17 @@ void GameStateConfigDesktop::setupTabList() {
 	tablist_main.setNextTabList(&tablist);
 	tablist_main.lock();
 
-	tablist_video.add(fullscreen_cb);
-	tablist_video.add(hwsurface_cb);
-	tablist_video.add(vsync_cb);
-	tablist_video.add(texture_filter_cb);
-	tablist_video.add(change_gamma_cb);
-	tablist_video.add(gamma_sl);
-	tablist_video.setPrevTabList(&tablist);
-	tablist_video.setNextTabList(&tablist_main);
-	tablist_video.lock();
+	if (enable_video_tab) {
+		tablist_video.add(fullscreen_cb);
+		tablist_video.add(hwsurface_cb);
+		tablist_video.add(vsync_cb);
+		tablist_video.add(texture_filter_cb);
+		tablist_video.add(change_gamma_cb);
+		tablist_video.add(gamma_sl);
+		tablist_video.setPrevTabList(&tablist);
+		tablist_video.setNextTabList(&tablist_main);
+		tablist_video.lock();
+	}
 
 	tablist_audio.add(music_volume_sl);
 	tablist_audio.add(sound_volume_sl);
@@ -547,7 +563,7 @@ void GameStateConfigDesktop::logic() {
 	// tab contents
 	active_tab = tab_control->getActiveTab();
 
-	if (active_tab == VIDEO_TAB) {
+	if (enable_video_tab && active_tab == VIDEO_TAB) {
 		tablist.setNextTabList(&tablist_video);
 		logicVideo();
 	}
@@ -575,7 +591,9 @@ void GameStateConfigDesktop::logic() {
 
 bool GameStateConfigDesktop::logicMain() {
 	if (GameStateConfigBase::logicMain()) {
-		tablist_video.logic();
+		if (enable_video_tab) {
+			tablist_video.logic();
+		}
 		tablist_input.logic();
 		tablist_keybinds.logic();
 		return true;

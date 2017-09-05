@@ -41,7 +41,7 @@ void PlatformInit(struct PlatformOptions_t *options) {
 	options->has_exit_button = false;
 	options->is_mobile_device = false;
 	options->force_hardware_cursor = false;
-	options->config_menu_type = CONFIG_MENU_TYPE_BASE;
+	options->config_menu_type = CONFIG_MENU_TYPE_DESKTOP_NO_VIDEO;
 	options->default_renderer="sdl_hardware";
 }
 
