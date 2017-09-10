@@ -173,6 +173,10 @@ bool FileParser::next() {
 						delete include_fp;
 						include_fp = NULL;
 					}
+
+					// INCLUDE file will inherit the current section
+					include_fp->section = section;
+
 					continue;
 				}
 			}
