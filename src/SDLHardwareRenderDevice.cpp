@@ -537,6 +537,11 @@ void SDLHardwareRenderDevice::windowResize() {
 	SCREEN_W = static_cast<unsigned short>(w);
 	SCREEN_H = static_cast<unsigned short>(h);
 
+	if (!VIRTUAL_HEIGHTS.empty()) {
+		// default to the smallest VIRTUAL_HEIGHT
+		VIEW_H = VIRTUAL_HEIGHTS.front();
+	}
+
 	for (size_t i = 0; i < VIRTUAL_HEIGHTS.size(); ++i) {
 		if (SCREEN_H >= VIRTUAL_HEIGHTS[i]) {
 			VIEW_H = VIRTUAL_HEIGHTS[i];
