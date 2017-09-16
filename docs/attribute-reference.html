@@ -1431,7 +1431,7 @@ body {
 
 <p><strong>power.remove_effect</strong> | <code>repeatable(predefined_string, int) : Effect ID, Number of Effect instances</code> | Removes a number of instances of a specific Effect ID. Omitting the number of instances, or setting it to zero, will remove all instances/stacks.</p>
 
-<p><strong>power.replace_by_effect</strong> | <code>int, predefined_string, int : Power ID, Effect ID, Number of Effect instances</code> | If the caster has at least the number of instances of the Effect ID, the defined Power ID will be cast instead.</p>
+<p><strong>power.replace_by_effect</strong> | <code>repeatable(int, predefined_string, int) : Power ID, Effect ID, Number of Effect instances</code> | If the caster has at least the number of instances of the Effect ID, the defined Power ID will be cast instead.</p>
 
 <p><strong>power.requires_corpse</strong> | <code>["consume", bool]</code> | If true, a corpse must be targeted for this power to be used. If "consume", then the corpse is also consumed on Power use.</p>
 

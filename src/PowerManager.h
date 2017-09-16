@@ -108,6 +108,13 @@ public:
 	}
 };
 
+class PowerReplaceByEffect {
+public:
+	int power_id;
+	int count;
+	std::string effect_id;
+};
+
 class Power {
 public:
 	// base info
@@ -249,9 +256,7 @@ public:
 
 	std::vector< std::pair<std::string, int> > remove_effects;
 
-	int replace_by_effect_power;
-	std::string replace_by_effect_id;
-	int replace_by_effect_count;
+	std::vector<PowerReplaceByEffect> replace_by_effect;
 
 	bool requires_corpse;
 	bool remove_corpse;
@@ -380,9 +385,7 @@ public:
 
 		, remove_effects()
 
-		, replace_by_effect_power(0)
-		, replace_by_effect_id("")
-		, replace_by_effect_count(0)
+		, replace_by_effect()
 
 		, requires_corpse(false)
 		, remove_corpse(false)

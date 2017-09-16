@@ -643,10 +643,12 @@ void PowerManager::loadPowers() {
 			powers[input_id].remove_effects.push_back(std::pair<std::string, int>(first, second));
 		}
 		else if (infile.key == "replace_by_effect") {
-			// @ATTR power.replace_by_effect|int, predefined_string, int : Power ID, Effect ID, Number of Effect instances|If the caster has at least the number of instances of the Effect ID, the defined Power ID will be cast instead.
-			powers[input_id].replace_by_effect_power = popFirstInt(infile.val);
-			powers[input_id].replace_by_effect_id = popFirstString(infile.val);
-			powers[input_id].replace_by_effect_count = popFirstInt(infile.val);
+			// @ATTR power.replace_by_effect|repeatable(int, predefined_string, int) : Power ID, Effect ID, Number of Effect instances|If the caster has at least the number of instances of the Effect ID, the defined Power ID will be cast instead.
+			PowerReplaceByEffect prbe;
+			prbe.power_id = popFirstInt(infile.val);
+			prbe.effect_id = popFirstString(infile.val);
+			prbe.count = popFirstInt(infile.val);
+			powers[input_id].replace_by_effect.push_back(prbe);
 		}
 		else if (infile.key == "requires_corpse") {
 			// @ATTR power.requires_corpse|["consume", bool]|If true, a corpse must be targeted for this power to be used. If "consume", then the corpse is also consumed on Power use.
@@ -1304,10 +1306,10 @@ bool PowerManager::activate(int power_index, StatBlock *src_stats, const FPoint&
 	if (static_cast<unsigned>(power_index) >= powers.size())
 		return false;
 
-	if (powers[power_index].replace_by_effect_power > 0 &&
-	    src_stats->effects.hasEffect(powers[power_index].replace_by_effect_id, powers[power_index].replace_by_effect_count))
-	{
-		return activate(powers[power_index].replace_by_effect_power, src_stats, target);
+	for (size_t i = 0; i < powers[power_index].replace_by_effect.size(); ++i) {
+		if (src_stats->effects.hasEffect(powers[power_index].replace_by_effect[i].effect_id, powers[power_index].replace_by_effect[i].count)) {
+			return activate(powers[power_index].replace_by_effect[i].power_id, src_stats, target);
+		}
 	}
 
 	if (src_stats->hero) {
