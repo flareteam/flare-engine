@@ -94,6 +94,7 @@ extern unsigned short VIEW_W;
 extern unsigned short VIEW_H;
 extern unsigned short VIEW_W_HALF;
 extern unsigned short VIEW_H_HALF;
+extern float VIEW_SCALING;
 extern unsigned short SCREEN_W;
 extern unsigned short SCREEN_H;
 extern short MIN_SCREEN_W;
@@ -115,6 +116,7 @@ extern bool MOUSE_AIM;
 extern bool NO_MOUSE;
 extern int JOY_DEADZONE;
 extern bool TOUCHSCREEN;
+extern bool MOUSE_SCALED; // mouse position is automatically scaled to VIEW_W x VIEW_H resolution
 
 // Interface Settings
 extern bool COMBAT_TEXT;

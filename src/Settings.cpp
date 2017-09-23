@@ -125,6 +125,7 @@ unsigned short VIEW_W = 0;
 unsigned short VIEW_H = 0;
 unsigned short VIEW_W_HALF = 0;
 unsigned short VIEW_H_HALF = 0;
+float VIEW_SCALING = 1.0f;
 short MIN_SCREEN_W = 640;
 short MIN_SCREEN_H = 480;
 unsigned short SCREEN_W = 640;
@@ -164,6 +165,7 @@ bool MOUSE_AIM;
 bool NO_MOUSE;
 int JOY_DEADZONE;
 bool TOUCHSCREEN = false;
+bool MOUSE_SCALED = true;
 
 // Language Settings
 std::string LANGUAGE = "en";

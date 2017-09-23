@@ -309,12 +309,13 @@ void RenderDevice::windowResizeInternal() {
 
 	VIEW_H_HALF = VIEW_H / 2;
 
-	float scale = static_cast<float>(VIEW_H) / static_cast<float>(SCREEN_H);
-	VIEW_W = static_cast<unsigned short>(static_cast<float>(SCREEN_W) * scale);
+	VIEW_SCALING = static_cast<float>(VIEW_H) / static_cast<float>(SCREEN_H);
+	VIEW_W = static_cast<unsigned short>(static_cast<float>(SCREEN_W) * VIEW_SCALING);
 
 	// letterbox if too tall
 	if (VIEW_W < MIN_SCREEN_W) {
 		VIEW_W = MIN_SCREEN_W;
+		VIEW_SCALING = static_cast<float>(VIEW_W) / static_cast<float>(SCREEN_W);
 	}
 
 	VIEW_W_HALF = VIEW_W/2;

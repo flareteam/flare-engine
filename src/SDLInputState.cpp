@@ -174,8 +174,7 @@ void SDLInputState::handle() {
 			case SDL_MOUSEMOTION:
 				last_is_joystick = false;
 				if (!PlatformOptions.is_mobile_device) {
-					mouse.x = event.motion.x;
-					mouse.y = event.motion.y;
+					mouse = scaleMouse(event.motion.x, event.motion.y);
 					curs->show_cursor = true;
 				}
 				break;
@@ -192,8 +191,7 @@ void SDLInputState::handle() {
 			case SDL_MOUSEBUTTONDOWN:
 				last_is_joystick = false;
 				if (!PlatformOptions.is_mobile_device) {
-					mouse.x = event.button.x;
-					mouse.y = event.button.y;
+					mouse = scaleMouse(event.motion.x, event.motion.y);
 					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 					for (int key=0; key<key_count; key++) {
 						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
@@ -206,8 +204,7 @@ void SDLInputState::handle() {
 			case SDL_MOUSEBUTTONUP:
 				last_is_joystick = false;
 				if (!PlatformOptions.is_mobile_device) {
-					mouse.x = event.button.x;
-					mouse.y = event.button.y;
+					mouse = scaleMouse(event.motion.x, event.motion.y);
 					bind_button = (event.button.button + MOUSE_BIND_OFFSET) * (-1);
 					for (int key=0; key<key_count; key++) {
 						if (bind_button == binding[key] || bind_button == binding_alt[key]) {
