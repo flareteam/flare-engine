@@ -225,6 +225,7 @@ protected:
 	void cacheStore(const std::string &filename, Image *);
 	void cacheRemove(Image *image);
 	void cacheRemoveAll();
+	void windowResizeInternal();
 
 	bool fullscreen;
 	bool hwsurface;
@@ -250,6 +251,7 @@ private:
 	IMAGE_CACHE_CONTAINER cache;
 
 	virtual void drawLine(int x0, int y0, int x1, int y1, const Color& color) = 0;
+	virtual void getWindowSize(short unsigned *screen_w, short unsigned *screen_h) = 0;
 };
 
 #endif // RENDERDEVICE_H

@@ -87,6 +87,7 @@ public:
 private:
 	Uint32 MapRGBA(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void drawLine(int x0, int y0, int x1, int y1, const Color& color);
+	void getWindowSize(short unsigned *screen_w, short unsigned *screen_h);
 	void setSDL_RGBA(Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
 
 	SDL_Surface* screen;
