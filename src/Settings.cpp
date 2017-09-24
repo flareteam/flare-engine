@@ -189,17 +189,13 @@ int MAX_CRIT_DAMAGE;
 int MIN_OVERHIT_DAMAGE;
 int MAX_OVERHIT_DAMAGE;
 
-// Primary stats
+// Gameplay attribue definitions
 std::vector<PrimaryStat> PRIMARY_STATS;
-
-// Elemental types
 std::vector<Element> ELEMENTS;
-
-// Equipment flags
 std::vector<EquipFlag> EQUIP_FLAGS;
-
-// Hero classes
 std::vector<HeroClass> HERO_CLASSES;
+std::vector<DamageType> DAMAGE_TYPES;
+size_t DAMAGE_TYPES_COUNT;
 
 // Currency settings
 std::string CURRENCY;
@@ -331,6 +327,8 @@ void loadMiscSettings() {
 	ELEMENTS.clear();
 	EQUIP_FLAGS.clear();
 	HERO_CLASSES.clear();
+	DAMAGE_TYPES.clear();
+	DAMAGE_TYPES_COUNT = 0;
 	FRAME_W = 0;
 	FRAME_H = 0;
 	IGNORE_TEXTURE_FILTER = false;
@@ -745,6 +743,45 @@ void loadMiscSettings() {
 		msg->get("Adventurer"); // this is needed for translation
 		HERO_CLASSES.push_back(c);
 	}
+
+	// @CLASS Settings: Damage Types|Description of engine/damage_types.txt
+	if (infile.open("engine/damage_types.txt")) {
+		while (infile.next()) {
+			if (infile.new_section) {
+				if (infile.section == "damage_type") {
+					// damage types must have a printable name
+					if (!DAMAGE_TYPES.empty() && DAMAGE_TYPES.back().text == "") {
+						DAMAGE_TYPES.pop_back();
+					}
+					DAMAGE_TYPES.resize(DAMAGE_TYPES.size()+1);
+				}
+			}
+
+			if (DAMAGE_TYPES.empty() || infile.section != "damage_type")
+				continue;
+
+			if (!DAMAGE_TYPES.empty()) {
+				// @ATTR damage_type.id|string|The identifier used for Item damage_type and Power base_damage.
+				if (infile.key == "id") DAMAGE_TYPES.back().id = infile.val;
+				// @ATTR damage_type.text|string, string, string : Normal, Min, Max|The displayed name of this damage type, as well as its min/max counterparts (e.g. Melee,Melee Min,Melee Max).
+				else if (infile.key == "text") {
+					DAMAGE_TYPES.back().text = msg->get(popFirstString(infile.val));
+					DAMAGE_TYPES.back().text_min = msg->get(popFirstString(infile.val));
+					DAMAGE_TYPES.back().text_max = msg->get(popFirstString(infile.val));
+				}
+				// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
+				else if (infile.key == "description") DAMAGE_TYPES.back().description = msg->get(infile.val);
+				// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.
+				else if (infile.key == "min") DAMAGE_TYPES.back().min = infile.val;
+				// @ATTR damage_type.max|string|The identifier used as a Stat type and an Effect type, for the maximum damage of this type.
+				else if (infile.key == "max") DAMAGE_TYPES.back().max = infile.val;
+
+				else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
+			}
+		}
+		infile.close();
+	}
+	DAMAGE_TYPES_COUNT = DAMAGE_TYPES.size() * 2;
 
 	// @CLASS Settings: Death penalty|Description of engine/death_penalty.txt
 	if (infile.open("engine/death_penalty.txt")) {

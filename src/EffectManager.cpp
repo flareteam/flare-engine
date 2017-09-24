@@ -25,7 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "Settings.h"
 
 EffectManager::EffectManager()
-	: bonus(std::vector<int>(STAT_COUNT, 0))
+	: bonus(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
 	, bonus_resist(std::vector<int>(ELEMENTS.size(), 0))
 	, bonus_primary(std::vector<int>(PRIMARY_STATS.size(), 0))
 	, triggered_others(false)
@@ -138,7 +138,7 @@ void EffectManager::clearStatus() {
 	fear = false;
 	knockback_speed = 0;
 
-	for (unsigned i=0; i<STAT_COUNT; i++) {
+	for (unsigned i=0; i<STAT_COUNT + DAMAGE_TYPES_COUNT; i++) {
 		bonus[i] = 0;
 	}
 
@@ -226,17 +226,21 @@ void EffectManager::logic() {
 			// @TYPE knockback|Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.
 			else if (effect_list[i].type == EFFECT_KNOCKBACK) knockback_speed = static_cast<float>(effect_list[i].magnitude)/static_cast<float>(MAX_FRAMES_PER_SEC);
 
-			// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, dmg_melee_min, xp_gain
-			else if (effect_list[i].type >= EFFECT_COUNT && effect_list[i].type < EFFECT_COUNT+STAT_COUNT) {
+			// @TYPE ${STATNAME}|Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain
+			// @TYPE ${DAMAGE_TYPE}|Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min
+			else if (effect_list[i].type >= EFFECT_COUNT && effect_list[i].type < EFFECT_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT)) {
 				bonus[effect_list[i].type - EFFECT_COUNT] += effect_list[i].magnitude;
 			}
+			// else if (effect_list[i].type >= EFFECT_COUNT + STAT_COUNT && effect_list[i].type < EFFECT_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT)) {
+			// 	bonus[effect_list[i].type - EFFECT_COUNT] += effect_list[i].magnitude;
+			// }
 			// @TYPE ${ELEMENT}_resist|Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist
-			else if (effect_list[i].type >= EFFECT_COUNT + STAT_COUNT && effect_list[i].type < EFFECT_COUNT+STAT_COUNT+static_cast<int>(ELEMENTS.size())) {
-				bonus_resist[effect_list[i].type - EFFECT_COUNT - STAT_COUNT] += effect_list[i].magnitude;
+			else if (effect_list[i].type >= EFFECT_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT) && effect_list[i].type < EFFECT_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT) + static_cast<int>(ELEMENTS.size())) {
+				bonus_resist[effect_list[i].type - EFFECT_COUNT - STAT_COUNT - DAMAGE_TYPES_COUNT] += effect_list[i].magnitude;
 			}
 			// @TYPE ${PRIMARYSTAT}|Increases ${PRIMARYSTAT}, where ${PRIMARYSTAT} is any of the primary stats defined in engine/primary_stats.txt. Example: physical
 			else if (effect_list[i].type >= EFFECT_COUNT) {
-				bonus_primary[effect_list[i].type - EFFECT_COUNT - STAT_COUNT - ELEMENTS.size()] += effect_list[i].magnitude;
+				bonus_primary[effect_list[i].type - EFFECT_COUNT - STAT_COUNT - DAMAGE_TYPES_COUNT - ELEMENTS.size()] += effect_list[i].magnitude;
 			}
 		}
 		// expire shield effects
@@ -523,19 +527,28 @@ int EffectManager::getType(const std::string& type) {
 	else {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (type == STAT_KEY[i]) {
-				return EFFECT_COUNT+i;
+				return EFFECT_COUNT + i;
+			}
+		}
+
+		for (unsigned i=0; i<DAMAGE_TYPES.size(); i++) {
+			if (type == DAMAGE_TYPES[i].min) {
+				return EFFECT_COUNT + STAT_COUNT + (i*2);
+			}
+			else if (type == DAMAGE_TYPES[i].max) {
+				return EFFECT_COUNT + STAT_COUNT + (i*2) + 1;
 			}
 		}
 
 		for (unsigned i=0; i<bonus_resist.size(); i++) {
 			if (type == ELEMENTS[i].id + "_resist") {
-				return EFFECT_COUNT+STAT_COUNT+i;
+				return EFFECT_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT) + i;
 			}
 		}
 
 		for (unsigned i=0; i<bonus_primary.size(); i++) {
 			if (type == PRIMARY_STATS[i].id) {
-				return EFFECT_COUNT+STAT_COUNT+static_cast<int>(ELEMENTS.size())+i;
+				return EFFECT_COUNT + STAT_COUNT + static_cast<int>(DAMAGE_TYPES_COUNT) + static_cast<int>(ELEMENTS.size()) + i;
 			}
 		}
 	}

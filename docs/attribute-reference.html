@@ -631,11 +631,7 @@ body {
 
 <p><strong>equip_flags</strong> | <code>list(predefined_string)</code> | A comma separated list of flags to set when this item is equipped. See engine/equip_flags.txt.</p>
 
-<p><strong>dmg_melee</strong> | <code>int, int : Min, Max</code> | Defines the item melee damage, if only min is specified the melee damage is fixed.</p>
-
-<p><strong>dmg_ranged</strong> | <code>int, int : Min, Max</code> | Defines the item ranged damage, if only min is specified the ranged damage is fixed.</p>
-
-<p><strong>dmg_ment</strong> | <code>int, int : Min, Max</code> | Defines the item mental damage, if only min is specified the ranged damage is fixed.</p>
+<p><strong>dmg</strong> | <code>predefined_string, int, int : Damage type, Min, Max</code> | Defines the item's base damage type and range. Max may be ommitted and will default to Min.</p>
 
 <p><strong>abs</strong> | <code>int, int : Min, Max</code> | Defines the item absorb value, if only min is specified the absorb value is fixed.</p>
 
@@ -891,7 +887,7 @@ body {
 
 <p><strong>show_resists</strong> | <code>bool</code> | Hide the elemental "Resistance" stats in the statlist if set to false.</p>
 
-<p><strong>show_stat</strong> | <code>string, bool : Stat name, Visible</code> | Hide the matching stat in the statlist if set to false.</p>
+<p><strong>show_stat</strong> | <code>predefined_string, bool : Stat name / Damage type, Visible</code> | Hide the matching stat or damage type min/max in the statlist if set to false.</p>
 
 <hr />
 
@@ -1335,7 +1331,7 @@ body {
 
 <p><strong>power.radius</strong> | <code>float</code> | Radius in pixels</p>
 
-<p><strong>power.base_damage</strong> | <code>["melee", "ranged", "ment"]</code> | Determines which of the three primary damage stats will be used to calculate damage.</p>
+<p><strong>power.base_damage</strong> | <code>predefined_string : Damage type ID</code> | Determines which damage stat will be used to calculate damage.</p>
 
 <p><strong>power.starting_pos</strong> | <code>["source", "target", "melee"]</code> | Start position for hazard</p>
 
@@ -1659,6 +1655,22 @@ body {
 
 <hr />
 
+<h4>Settings: Damage Types</h4>
+
+<p>Description of engine/damage_types.txt</p>
+
+<p><strong>damage_type.id</strong> | <code>string</code> | The identifier used for Item damage_type and Power base_damage.</p>
+
+<p><strong>damage_type.name</strong> | <code>string, string, string : Normal, Min, Max</code> | The displayed name of this damage type, as well as its min/max counterparts (e.g. Melee,Melee Min,Melee Max).</p>
+
+<p><strong>damage_type.description</strong> | <code>string</code> | The description that will be displayed in the Character menu tooltips.</p>
+
+<p><strong>damage_type.min</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the minimum damage of this type.</p>
+
+<p><strong>damage_type.max</strong> | <code>string</code> | The identifier used as a Stat type and an Effect type, for the maximum damage of this type.</p>
+
+<hr />
+
 <h4>Settings: Death penalty</h4>
 
 <p>Description of engine/death_penalty.txt</p>
@@ -1913,7 +1925,9 @@ body {
 
 <p><strong>knockback</strong> | Pushes the target away from the source caster. Speed is the given value divided by the framerate cap.</p>
 
-<p><strong>${STATNAME}</strong> | Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, dmg_melee_min, xp_gain</p>
+<p><strong>${STATNAME}</strong> | Increases ${STATNAME}, where ${STATNAME} is any of the base stats. Examples: hp, avoidance, xp_gain</p>
+
+<p><strong>${DAMAGE_TYPE}</strong> | Increases a damage min or max, where ${DAMAGE_TYPE} is any 'min' or 'max' value found in engine/damage_types.txt. Example: dmg_melee_min</p>
 
 <p><strong>${ELEMENT}_resist</strong> | Increase Resistance % to ${ELEMENT}, where ${ELEMENT} is any found in engine/elements.txt. Example: fire_resist</p>
 
@@ -1940,18 +1954,6 @@ body {
 <p><strong>accuracy</strong> | Accuracy %. Higher values mean less likely to miss.</p>
 
 <p><strong>avoidance</strong> | Avoidance %. Higher values means more likely to not get hit.</p>
-
-<p><strong>dmg_melee_min</strong> | Minimum melee damage</p>
-
-<p><strong>dmg_melee_max</strong> | Maximum melee damage</p>
-
-<p><strong>dmg_ranged_min</strong> | Minimum ranged damage</p>
-
-<p><strong>dmg_ranged_max</strong> | Maximum ranged damage</p>
-
-<p><strong>dmg_ment_min</strong> | Minimum mental damage</p>
-
-<p><strong>dmg_ment_max</strong> | Maximum mental damage</p>
 
 <p><strong>absorb_min</strong> | Minimum damage absorption</p>
 

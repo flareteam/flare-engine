@@ -59,7 +59,8 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 		cstat[i].visible = true;
 	}
 
-	for (int i=0; i<STAT_COUNT; i++) {
+	show_stat.resize(STAT_COUNT + DAMAGE_TYPES_COUNT);
+	for (size_t i = 0; i < STAT_COUNT + DAMAGE_TYPES_COUNT; i++) {
 		show_stat[i] = true;
 	}
 
@@ -180,7 +181,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			// @ATTR show_resists|bool|Hide the elemental "Resistance" stats in the statlist if set to false.
 			else if (infile.key == "show_resists") show_resists = toBool(infile.val);
 
-			// @ATTR show_stat|string, bool : Stat name, Visible|Hide the matching stat in the statlist if set to false.
+			// @ATTR show_stat|predefined_string, bool : Stat name / Damage type, Visible|Hide the matching stat or damage type min/max in the statlist if set to false.
 			else if (infile.key == "show_stat") {
 				std::string stat_name = popFirstString(infile.val);
 
@@ -188,6 +189,14 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 					if (stat_name == STAT_KEY[i]) {
 						show_stat[i] = toBool(popFirstString(infile.val));
 						break;
+					}
+				}
+				for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+					if (stat_name == DAMAGE_TYPES[i].min) {
+						show_stat[STAT_COUNT + (i*2)] = toBool(popFirstString(infile.val));
+					}
+					else if (stat_name == DAMAGE_TYPES[i].max) {
+						show_stat[STAT_COUNT + (i*2) + 1] = toBool(popFirstString(infile.val));
 					}
 				}
 			}
@@ -295,19 +304,32 @@ void MenuCharacter::refreshStats() {
 	for (unsigned i=0; i<STAT_COUNT; ++i) {
 		if (!show_stat[i]) continue;
 
+		// insert damage stats before absorb min
+		if (i == STAT_ABS_MIN) {
+			for (size_t j = 0; j < DAMAGE_TYPES.size(); ++j) {
+				if (show_stat[STAT_COUNT + (j*2)]) {
+					// min
+					ss.str("");
+					ss << DAMAGE_TYPES[j].text_min << ": " << stats->getDamageMin(j);
+					statList->set(stat_index, ss.str(), damageTooltip(j*2));
+					stat_index++;
+				}
+
+				if (show_stat[STAT_COUNT + (j*2) + 1]) {
+					// max
+					ss.str("");
+					ss << DAMAGE_TYPES[j].text_max << ": " << stats->getDamageMax(j);
+					statList->set(stat_index, ss.str(), damageTooltip((j*2) + 1));
+					stat_index++;
+				}
+			}
+		}
+
 		ss.str("");
 		ss << STAT_NAME[i] << ": " << stats->get((STAT)i);
 		if (STAT_PERCENT[i]) ss << "%";
 
-		std::string stat_tooltip = statTooltip(i);
-		std::string full_tooltip = "";
-		if (STAT_DESC[i] != "")
-			full_tooltip += STAT_DESC[i];
-		if (full_tooltip != "" && stat_tooltip != "")
-			full_tooltip += "\n";
-		full_tooltip += stat_tooltip;
-
-		statList->set(stat_index, ss.str(), full_tooltip);
+		statList->set(stat_index, ss.str(), statTooltip(i));
 		stat_index++;
 	}
 
@@ -370,7 +392,40 @@ std::string MenuCharacter::statTooltip(int stat) {
 			tooltip_text += msg->get("Each point of %s grants %d. ", stats->per_primary[i][stat], PRIMARY_STATS[i].name.c_str());
 	}
 
-	return tooltip_text;
+	std::string full_tooltip = "";
+	if (STAT_DESC[stat] != "")
+		full_tooltip += STAT_DESC[stat];
+	if (full_tooltip != "" && tooltip_text != "")
+		full_tooltip += "\n";
+	full_tooltip += tooltip_text;
+
+	return full_tooltip;
+}
+
+/**
+ * Create tooltip text showing the per_* values of a damage stat
+ */
+std::string MenuCharacter::damageTooltip(size_t dmg_type) {
+	std::string tooltip_text;
+
+	if (stats->per_level[STAT_COUNT + dmg_type] > 0)
+		tooltip_text += msg->get("Each level grants %d. ", stats->per_level[STAT_COUNT + dmg_type]);
+
+	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
+		if (stats->per_primary[i][STAT_COUNT + dmg_type] > 0)
+			tooltip_text += msg->get("Each point of %s grants %d. ", stats->per_primary[i][STAT_COUNT + dmg_type], PRIMARY_STATS[i].name.c_str());
+	}
+
+	size_t real_dmg_type = dmg_type / 2;
+
+	std::string full_tooltip = "";
+	if (DAMAGE_TYPES[real_dmg_type].description != "")
+		full_tooltip += DAMAGE_TYPES[real_dmg_type].description;
+	if (full_tooltip != "" && tooltip_text != "")
+		full_tooltip += "\n";
+	full_tooltip += tooltip_text;
+
+	return full_tooltip;
 }
 
 void MenuCharacter::logic() {

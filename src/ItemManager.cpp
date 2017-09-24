@@ -44,6 +44,29 @@ bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
 	return stack1.item < stack2.item;
 }
 
+static void DEPRECATED_baseDamageParse(FileParser &infile, Item &item, const std::string &new_id, const std::string& old_key) {
+	infile.error("'%s' is deprecated! Please use 'dmg' instead.", old_key.c_str());
+
+	size_t dmg_type = DAMAGE_TYPES.size();
+	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+		if (new_id == DAMAGE_TYPES[i].id) {
+			dmg_type = i;
+			break;
+		}
+	}
+
+	if (dmg_type == DAMAGE_TYPES.size()) {
+		infile.error("ItemManager: Can't find damage type for deprecated '%s'! Please fix your mod and use 'dmg' instead of '%s'.", old_key.c_str(), old_key.c_str());
+		Exit(1); // quit game because lots will be broken
+	}
+
+	item.dmg_min[dmg_type] = popFirstInt(infile.val);
+	if (infile.val.length() > 0)
+		item.dmg_max[dmg_type] = popFirstInt(infile.val);
+	else
+		item.dmg_max[dmg_type] = item.dmg_min[dmg_type];
+}
+
 ItemManager::ItemManager()
 	: color_normal(font->getColor("widget_normal"))
 	, color_bonus(font->getColor("item_bonus"))
@@ -173,28 +196,39 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 			}
 		}
 		else if (infile.key == "dmg_melee") {
-			// @ATTR dmg_melee|int, int : Min, Max|Defines the item melee damage, if only min is specified the melee damage is fixed.
-			items[id].dmg_melee_min = popFirstInt(infile.val);
-			if (infile.val.length() > 0)
-				items[id].dmg_melee_max = popFirstInt(infile.val);
-			else
-				items[id].dmg_melee_max = items[id].dmg_melee_min;
+			// TODO Remove this; DEPRECATED!
+			DEPRECATED_baseDamageParse(infile, items[id], "melee", "dmg_melee");
 		}
 		else if (infile.key == "dmg_ranged") {
-			// @ATTR dmg_ranged|int, int : Min, Max|Defines the item ranged damage, if only min is specified the ranged damage is fixed.
-			items[id].dmg_ranged_min = popFirstInt(infile.val);
-			if (infile.val.length() > 0)
-				items[id].dmg_ranged_max = popFirstInt(infile.val);
-			else
-				items[id].dmg_ranged_max = items[id].dmg_ranged_min;
+			// TODO Remove this; DEPRECATED!
+			DEPRECATED_baseDamageParse(infile, items[id], "ranged", "dmg_ranged");
 		}
 		else if (infile.key == "dmg_ment") {
-			// @ATTR dmg_ment|int, int : Min, Max|Defines the item mental damage, if only min is specified the ranged damage is fixed.
-			items[id].dmg_ment_min = popFirstInt(infile.val);
-			if (infile.val.length() > 0)
-				items[id].dmg_ment_max = popFirstInt(infile.val);
-			else
-				items[id].dmg_ment_max = items[id].dmg_ment_min;
+			// TODO Remove this; DEPRECATED!
+			DEPRECATED_baseDamageParse(infile, items[id], "ment", "dmg_ment");
+		}
+		else if (infile.key == "dmg") {
+			// @ATTR dmg|predefined_string, int, int : Damage type, Min, Max|Defines the item's base damage type and range. Max may be ommitted and will default to Min.
+			std::string dmg_type_str = popFirstString(infile.val);
+
+			size_t dmg_type = DAMAGE_TYPES.size();
+			for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+				if (dmg_type_str == DAMAGE_TYPES[i].id) {
+					dmg_type = i;
+					break;
+				}
+			}
+
+			if (dmg_type == DAMAGE_TYPES.size()) {
+				infile.error("ItemManager: '%s' is not a known damage type id.", dmg_type_str.c_str());
+			}
+			else {
+				items[id].dmg_min[dmg_type] = popFirstInt(infile.val);
+				if (infile.val.length() > 0)
+					items[id].dmg_max[dmg_type] = popFirstInt(infile.val);
+				else
+					items[id].dmg_max[dmg_type] = items[id].dmg_min[dmg_type];
+			}
 		}
 		else if (infile.key == "abs") {
 			// @ATTR abs|int, int : Min, Max|Defines the item absorb value, if only min is specified the absorb value is fixed.
@@ -549,6 +583,17 @@ void ItemManager::parseBonus(BonusData& bdata, FileParser& infile) {
 		}
 	}
 
+	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+		if (bonus_str == DAMAGE_TYPES[i].min) {
+			bdata.damage_index_min = static_cast<int>(i);
+			return;
+		}
+		else if (bonus_str == DAMAGE_TYPES[i].max) {
+			bdata.damage_index_max = static_cast<int>(i);
+			return;
+		}
+	}
+
 	for (unsigned i=0; i<ELEMENTS.size(); ++i) {
 		if (bonus_str == ELEMENTS[i].id + "_resist") {
 			bdata.resist_index = i;
@@ -586,6 +631,12 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 			ss << "%";
 
 		ss << " " << STAT_NAME[bdata->stat_index];
+	}
+	else if (bdata->damage_index_min != -1) {
+		ss << " " << DAMAGE_TYPES[bdata->damage_index_min].text_min;
+	}
+	else if (bdata->damage_index_max != -1) {
+		ss << " " << DAMAGE_TYPES[bdata->damage_index_max].text_max;
 	}
 	else if (bdata->resist_index != -1) {
 		ss << "% " << msg->get("%s Resistance", ELEMENTS[bdata->resist_index].name.c_str());
@@ -673,23 +724,19 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	}
 
 	// damage
-	if (items[stack.item].dmg_melee_max > 0) {
-		if (items[stack.item].dmg_melee_min < items[stack.item].dmg_melee_max)
-			tip.addText(msg->get("Melee damage: %d-%d", items[stack.item].dmg_melee_min, items[stack.item].dmg_melee_max));
-		else
-			tip.addText(msg->get("Melee damage: %d", items[stack.item].dmg_melee_max));
-	}
-	if (items[stack.item].dmg_ranged_max > 0) {
-		if (items[stack.item].dmg_ranged_min < items[stack.item].dmg_ranged_max)
-			tip.addText(msg->get("Ranged damage: %d-%d", items[stack.item].dmg_ranged_min, items[stack.item].dmg_ranged_max));
-		else
-			tip.addText(msg->get("Ranged damage: %d", items[stack.item].dmg_ranged_max));
-	}
-	if (items[stack.item].dmg_ment_max > 0) {
-		if (items[stack.item].dmg_ment_min < items[stack.item].dmg_ment_max)
-			tip.addText(msg->get("Mental damage: %d-%d", items[stack.item].dmg_ment_min, items[stack.item].dmg_ment_max));
-		else
-			tip.addText(msg->get("Mental damage: %d", items[stack.item].dmg_ment_max));
+	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+		if (items[stack.item].dmg_max[i] > 0) {
+			std::stringstream dmg_str;
+			dmg_str << DAMAGE_TYPES[i].text;
+			if (items[stack.item].dmg_min[i] < items[stack.item].dmg_max[i]) {
+				dmg_str << ": " << items[stack.item].dmg_min[i] << "-" << items[stack.item].dmg_max[i];
+				tip.addText(dmg_str.str());
+			}
+			else {
+				dmg_str << ": " << items[stack.item].dmg_max[i];
+				tip.addText(dmg_str.str());
+			}
+		}
 	}
 
 	// absorb

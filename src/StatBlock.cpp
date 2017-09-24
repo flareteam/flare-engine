@@ -70,10 +70,10 @@ StatBlock::StatBlock()
 	, check_title(false)
 	, stat_points_per_level(1)
 	, power_points_per_level(1)
-	, starting(std::vector<int>(STAT_COUNT,0))
-	, base(std::vector<int>(STAT_COUNT,0))
-	, current(std::vector<int>(STAT_COUNT,0))
-	, per_level(std::vector<int>(STAT_COUNT,0))
+	, starting(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
+	, base(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
+	, current(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
+	, per_level(std::vector<int>(STAT_COUNT + DAMAGE_TYPES_COUNT, 0))
 	, character_class("")
 	, character_subclass("")
 	, hp(0)
@@ -81,12 +81,8 @@ StatBlock::StatBlock()
 	, mp(0)
 	, mp_ticker(0)
 	, speed_default(0.1f)
-	, dmg_melee_min_add(0)
-	, dmg_melee_max_add(0)
-	, dmg_ment_min_add(0)
-	, dmg_ment_max_add(0)
-	, dmg_ranged_min_add(0)
-	, dmg_ranged_max_add(0)
+	, dmg_min_add(std::vector<int>(DAMAGE_TYPES.size(), 0))
+	, dmg_max_add(std::vector<int>(DAMAGE_TYPES.size(), 0))
 	, absorb_min_add(0)
 	, absorb_max_add(0)
 	, speed(0.1f)
@@ -177,7 +173,7 @@ StatBlock::StatBlock()
 	per_primary.resize(PRIMARY_STATS.size());
 
 	for (size_t i = 0; i < per_primary.size(); ++i) {
-		per_primary[i].resize(STAT_COUNT, 0);
+		per_primary[i].resize(STAT_COUNT + DAMAGE_TYPES_COUNT, 0);
 	}
 }
 
@@ -205,9 +201,20 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		std::string stat = popFirstString(infile->val);
 		int value = popFirstInt(infile->val);
 
-		for (unsigned i=0; i<STAT_COUNT; i++) {
+		for (size_t i=0; i<STAT_COUNT; ++i) {
 			if (STAT_KEY[i] == stat) {
 				starting[i] = value;
+				return true;
+			}
+		}
+
+		for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+			if (DAMAGE_TYPES[i].min == stat) {
+				starting[STAT_COUNT + (i*2)] = value;
+				return true;
+			}
+			else if (DAMAGE_TYPES[i].max == stat) {
+				starting[STAT_COUNT + (i*2) + 1] = value;
 				return true;
 			}
 		}
@@ -223,6 +230,17 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 				return true;
 			}
 		}
+
+		for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+			if (DAMAGE_TYPES[i].min == stat) {
+				per_level[STAT_COUNT + (i*2)] = value;
+				return true;
+			}
+			else if (DAMAGE_TYPES[i].max == stat) {
+				per_level[STAT_COUNT + (i*2) + 1] = value;
+				return true;
+			}
+		}
 	}
 	else if (infile->key == "stat_per_primary") {
 		// @ATTR stat_per_primary|predefined_string, predefined_string, int : Primary Stat, Stat name, Value|The value for this stat added for every point allocated to this primary stat.
@@ -235,6 +253,17 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 		for (unsigned i=0; i<STAT_COUNT; i++) {
 			if (STAT_KEY[i] == stat) {
 				per_primary[prim_stat_index][i] = value;
+				return true;
+			}
+		}
+
+		for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+			if (DAMAGE_TYPES[i].min == stat) {
+				per_primary[prim_stat_index][STAT_COUNT + (i*2)] = value;
+				return true;
+			}
+			else if (DAMAGE_TYPES[i].max == stat) {
+				per_primary[prim_stat_index][STAT_COUNT + (i*2) + 1] = value;
 				return true;
 			}
 		}
@@ -543,7 +572,7 @@ void StatBlock::calcBase() {
 	// bonuses are skipped for the default level 1 of a stat
 	int lev0 = std::max(level - 1, 0);
 
-	for (int i = 0; i < STAT_COUNT; ++i) {
+	for (size_t i = 0; i < STAT_COUNT + DAMAGE_TYPES_COUNT; ++i) {
 		base[i] = starting[i];
 		base[i] += lev0 * per_level[i];
 		for (size_t j = 0; j < per_primary.size(); ++j) {
@@ -551,23 +580,27 @@ void StatBlock::calcBase() {
 		}
 	}
 
-	// add damage/absorb from equipment
-	base[STAT_DMG_MELEE_MIN] += dmg_melee_min_add;
-	base[STAT_DMG_MELEE_MAX] += dmg_melee_max_add;
-	base[STAT_DMG_MENT_MIN] += dmg_ment_min_add;
-	base[STAT_DMG_MENT_MAX] += dmg_ment_max_add;
-	base[STAT_DMG_RANGED_MIN] += dmg_ranged_min_add;
-	base[STAT_DMG_RANGED_MAX] += dmg_ranged_max_add;
+	// add damage from equipment and increase to minimum amounts
+	// for (size_t i = 0; i < DAMAGE_TYPES_COUNT; ++i) {
+	// 	size_t dmg_id = i / 2;
+    //
+	// 	if (i % 2 == 0) {
+	// 		base[STAT_COUNT + i] += dmg_min_add[dmg_id];
+	// 	}
+	// 	else {
+	// 		base[STAT_COUNT + i] += dmg_max_add[dmg_id];
+	// 	}
+	// }
+	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+		base[STAT_COUNT + (i*2)] += dmg_min_add[i];
+		base[STAT_COUNT + (i*2) + 1] += dmg_max_add[i];
+		base[STAT_COUNT + (i*2)] = std::max(base[STAT_COUNT + (i*2)], 0);
+		base[STAT_COUNT + (i*2) + 1] = std::max(base[STAT_COUNT + (i*2) + 1], base[STAT_COUNT + (i*2)]);
+	}
+
+	// add absorb from equipment and increase to minimum amounts
 	base[STAT_ABS_MIN] += absorb_min_add;
 	base[STAT_ABS_MAX] += absorb_max_add;
-
-	// increase damage and absorb to minimum amounts
-	base[STAT_DMG_MELEE_MIN] = std::max(base[STAT_DMG_MELEE_MIN], 0);
-	base[STAT_DMG_MELEE_MAX] = std::max(base[STAT_DMG_MELEE_MAX], base[STAT_DMG_MELEE_MIN]);
-	base[STAT_DMG_RANGED_MIN] = std::max(base[STAT_DMG_RANGED_MIN], 0);
-	base[STAT_DMG_RANGED_MAX] = std::max(base[STAT_DMG_RANGED_MAX], base[STAT_DMG_RANGED_MIN]);
-	base[STAT_DMG_MENT_MIN] = std::max(base[STAT_DMG_MENT_MIN], 0);
-	base[STAT_DMG_MENT_MAX] = std::max(base[STAT_DMG_MENT_MAX], base[STAT_DMG_MENT_MIN]);
 	base[STAT_ABS_MIN] = std::max(base[STAT_ABS_MIN], 0);
 	base[STAT_ABS_MAX] = std::max(base[STAT_ABS_MAX], base[STAT_ABS_MIN]);
 }
@@ -594,7 +627,7 @@ void StatBlock::applyEffects() {
 
 	calcBase();
 
-	for (int i=0; i<STAT_COUNT; i++) {
+	for (size_t i=0; i<STAT_COUNT + DAMAGE_TYPES_COUNT; i++) {
 		current[i] = base[i] + effects.bonus[i];
 	}
 
@@ -1034,3 +1067,4 @@ bool StatBlock::checkRequiredSpawns(int req_amount) const {
 
 	return true;
 }
+

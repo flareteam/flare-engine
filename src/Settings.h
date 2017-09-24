@@ -67,6 +67,17 @@ public:
 	HeroClass();
 };
 
+class DamageType {
+public:
+	std::string id;
+	std::string text;
+	std::string text_min;
+	std::string text_max;
+	std::string description;
+	std::string min;
+	std::string max;
+};
+
 // Path info
 extern std::string PATH_CONF; // user-configurable settings files
 extern std::string PATH_USER; // important per-user data (saves)
@@ -183,17 +194,13 @@ extern int MAX_CRIT_DAMAGE;
 extern int MIN_OVERHIT_DAMAGE;
 extern int MAX_OVERHIT_DAMAGE;
 
-// Primary stats
+// Gameplay attribue definitions
 extern std::vector<PrimaryStat> PRIMARY_STATS;
-
-// Elemental types
 extern std::vector<Element> ELEMENTS;
-
-// Equip flags
 extern std::vector<EquipFlag> EQUIP_FLAGS;
-
-// Hero classes
 extern std::vector<HeroClass> HERO_CLASSES;
+extern std::vector<DamageType> DAMAGE_TYPES;
+extern size_t DAMAGE_TYPES_COUNT; // DAMAGE_TYPES.size() * 2, to account for min & max
 
 // Currency settings
 extern std::string CURRENCY;

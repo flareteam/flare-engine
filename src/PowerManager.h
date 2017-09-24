@@ -32,6 +32,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "MapCollision.h"
 #include "MapRenderer.h"
 #include "Map.h"
+#include "Settings.h"
 
 class AnimationSet;
 class Hazard;
@@ -46,11 +47,6 @@ const int POWTYPE_BLOCK = 6;
 
 const int POWSTATE_INSTANT = 1;
 const int POWSTATE_ATTACK = 2;
-
-const int BASE_DAMAGE_NONE = 0;
-const int BASE_DAMAGE_MELEE = 1;
-const int BASE_DAMAGE_RANGED = 2;
-const int BASE_DAMAGE_MENT = 3;
 
 // when casting a spell/power, the hazard starting position is
 // either the source (the avatar or enemy), the target (mouse click position),
@@ -170,7 +166,7 @@ public:
 	bool use_hazard;
 	bool no_attack;
 	float radius;
-	int base_damage; // enum.  damage is powered by melee, ranged, mental weapon
+	size_t base_damage;
 	int starting_pos; // enum. (source, target, or melee)
 	bool relative_pos;
 	bool multitarget;
@@ -312,7 +308,7 @@ public:
 		, use_hazard(false)
 		, no_attack(false)
 		, radius(0)
-		, base_damage(BASE_DAMAGE_NONE)
+		, base_damage(DAMAGE_TYPES.size())
 		, starting_pos(STARTING_POS_SOURCE)
 		, relative_pos(false)
 		, multitarget(false)

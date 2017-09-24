@@ -61,36 +61,6 @@ void setStatNames() {
 	STAT_NAME[STAT_AVOIDANCE] = msg->get("Avoidance");
 	STAT_DESC[STAT_AVOIDANCE] = "";
 	STAT_PERCENT[STAT_AVOIDANCE] = true;
-	// @TYPE dmg_melee_min|Minimum melee damage
-	STAT_KEY[STAT_DMG_MELEE_MIN] = "dmg_melee_min";
-	STAT_NAME[STAT_DMG_MELEE_MIN] = msg->get("Melee Damage Min");
-	STAT_DESC[STAT_DMG_MELEE_MIN] = "";
-	STAT_PERCENT[STAT_DMG_MELEE_MIN] = false;
-	// @TYPE dmg_melee_max|Maximum melee damage
-	STAT_KEY[STAT_DMG_MELEE_MAX] = "dmg_melee_max";
-	STAT_NAME[STAT_DMG_MELEE_MAX] = msg->get("Melee Damage Max");
-	STAT_DESC[STAT_DMG_MELEE_MAX] = "";
-	STAT_PERCENT[STAT_DMG_MELEE_MAX] = false;
-	// @TYPE dmg_ranged_min|Minimum ranged damage
-	STAT_KEY[STAT_DMG_RANGED_MIN] = "dmg_ranged_min";
-	STAT_NAME[STAT_DMG_RANGED_MIN] = msg->get("Ranged Damage Min");
-	STAT_DESC[STAT_DMG_RANGED_MIN] = "";
-	STAT_PERCENT[STAT_DMG_RANGED_MIN] = false;
-	// @TYPE dmg_ranged_max|Maximum ranged damage
-	STAT_KEY[STAT_DMG_RANGED_MAX] = "dmg_ranged_max";
-	STAT_NAME[STAT_DMG_RANGED_MAX] = msg->get("Ranged Damage Max");
-	STAT_DESC[STAT_DMG_RANGED_MAX] = "";
-	STAT_PERCENT[STAT_DMG_RANGED_MAX] = false;
-	// @TYPE dmg_ment_min|Minimum mental damage
-	STAT_KEY[STAT_DMG_MENT_MIN] = "dmg_ment_min";
-	STAT_NAME[STAT_DMG_MENT_MIN] = msg->get("Mental Damage Min");
-	STAT_DESC[STAT_DMG_MENT_MIN] = "";
-	STAT_PERCENT[STAT_DMG_MENT_MIN] = false;
-	// @TYPE dmg_ment_max|Maximum mental damage
-	STAT_KEY[STAT_DMG_MENT_MAX] = "dmg_ment_max";
-	STAT_NAME[STAT_DMG_MENT_MAX] = msg->get("Mental Damage Max");
-	STAT_DESC[STAT_DMG_MENT_MAX] = "";
-	STAT_PERCENT[STAT_DMG_MENT_MAX] = false;
 	// @TYPE absorb_min|Minimum damage absorption
 	STAT_KEY[STAT_ABS_MIN] = "absorb_min";
 	STAT_NAME[STAT_ABS_MIN] = msg->get("Absorb Min");

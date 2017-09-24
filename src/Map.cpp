@@ -376,8 +376,14 @@ int Map::addEventStatBlock(Event &evnt) {
 
 	Event_Component *ec_damage = evnt.getComponent(EC_POWER_DAMAGE);
 	if (ec_damage) {
-		statb->starting[STAT_DMG_MELEE_MIN] = statb->starting[STAT_DMG_RANGED_MIN] = statb->starting[STAT_DMG_MENT_MIN] = ec_damage->a;
-		statb->starting[STAT_DMG_MELEE_MAX] = statb->starting[STAT_DMG_RANGED_MAX] = statb->starting[STAT_DMG_MENT_MAX] = ec_damage->b;
+		for (size_t i = 0; i < DAMAGE_TYPES_COUNT; ++i) {
+			if (i % 2 == 0) {
+				statb->starting[STAT_COUNT + i] = ec_damage->a; // min
+			}
+			else {
+				statb->starting[STAT_COUNT + i] = ec_damage->b; // max
+			}
+		}
 	}
 
 	// this is used to store cooldown ticks for a map power

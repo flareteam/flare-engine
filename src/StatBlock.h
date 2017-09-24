@@ -156,6 +156,12 @@ public:
 	int get(STAT stat) {
 		return current[stat];
 	}
+	int getDamageMin(size_t dmg_type) {
+		return current[STAT_COUNT + (dmg_type * 2)];
+	}
+	int getDamageMax(size_t dmg_type) {
+		return current[STAT_COUNT + (dmg_type * 2) + 1];
+	}
 
 	// additional values to base stats, given by items
 	std::vector<int> primary_additional;
@@ -181,12 +187,8 @@ public:
 	float speed_default;
 
 	// addition damage and absorb granted from items
-	int dmg_melee_min_add;
-	int dmg_melee_max_add;
-	int dmg_ment_min_add;
-	int dmg_ment_max_add;
-	int dmg_ranged_min_add;
-	int dmg_ranged_max_add;
+	std::vector<int> dmg_min_add;
+	std::vector<int> dmg_max_add;
 	int absorb_min_add;
 	int absorb_max_add;
 

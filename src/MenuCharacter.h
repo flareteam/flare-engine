@@ -68,6 +68,7 @@ private:
 	void loadGraphics();
 	Color bonusColor(int stat);
 	std::string statTooltip(int stat);
+	std::string damageTooltip(size_t dmg_type);
 	int skill_points;
 	std::vector<bool> primary_up;
 
@@ -77,7 +78,7 @@ private:
 	int statlist_rows;
 	int statlist_scrollbar_offset;
 	LabelInfo unspent_pos;
-	bool show_stat[STAT_COUNT];
+	std::vector<bool> show_stat;
 	bool show_resists;
 
 	std::vector<CharStat> cstat;

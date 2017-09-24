@@ -44,6 +44,20 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 #include <climits>
 
+static void DEPRECATED_handleMagicBuffBaseDamage(FileParser& infile, Power& pwr, PostEffect& pe) {
+	// "shield" and "heal" powers used to assume Mental damage
+	if (pe.id == "shield" || pe.id == "heal") {
+		for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+			if (DAMAGE_TYPES[i].id == "ment") {
+				pwr.base_damage = i;
+				infile.error("PowerManager: shield/heal power does not have base damage. Assuming 'ment'.");
+				return;
+			}
+		}
+		infile.error("PowerManager: shield/heal power does not have base damage. Unable to find fallback 'ment'.");
+	}
+}
+
 /**
  * PowerManager constructor
  */
@@ -351,12 +365,17 @@ void PowerManager::loadPowers() {
 			// @ATTR power.radius|float|Radius in pixels
 			powers[input_id].radius = toFloat(infile.val);
 		else if (infile.key == "base_damage") {
-			// @ATTR power.base_damage|["melee", "ranged", "ment"]|Determines which of the three primary damage stats will be used to calculate damage.
-			if (infile.val == "none")        powers[input_id].base_damage = BASE_DAMAGE_NONE;
-			else if (infile.val == "melee")  powers[input_id].base_damage = BASE_DAMAGE_MELEE;
-			else if (infile.val == "ranged") powers[input_id].base_damage = BASE_DAMAGE_RANGED;
-			else if (infile.val == "ment")   powers[input_id].base_damage = BASE_DAMAGE_MENT;
-			else infile.error("PowerManager: Unknown base_damage '%s'", infile.val.c_str());
+			// @ATTR power.base_damage|predefined_string : Damage type ID|Determines which damage stat will be used to calculate damage.
+			for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+				if (infile.val == DAMAGE_TYPES[i].id) {
+					powers[input_id].base_damage = i;
+					break;
+				}
+			}
+
+			if (powers[input_id].base_damage == DAMAGE_TYPES.size()) {
+				infile.error("PowerManager: Unknown base_damage '%s'", infile.val.c_str());
+			}
 		}
 		else if (infile.key == "starting_pos") {
 			// @ATTR power.starting_pos|["source", "target", "melee"]|Start position for hazard
@@ -475,6 +494,8 @@ void PowerManager::loadPowers() {
 					pe.chance = toInt(chance);
 				}
 				powers[input_id].post_effects.push_back(pe);
+
+				DEPRECATED_handleMagicBuffBaseDamage(infile, powers[input_id], pe);
 			}
 		}
 		// pre and post power effects
@@ -784,21 +805,10 @@ void PowerManager::initHazard(int power_index, StatBlock *src_stats, const FPoin
 
 	// If the hazard's damage isn't default (0), we are applying an item-based power mod.
 	// We don't allow equipment power mods to alter damage (mainly to preserve the base power's multiplier).
-	if (haz->dmg_max == 0) {
-
+	if (haz->dmg_max == 0 && powers[power_index].base_damage != DAMAGE_TYPES.size()) {
 		// base damage is by equipped item
-		if (powers[power_index].base_damage == BASE_DAMAGE_MELEE) {
-			haz->dmg_min = src_stats->get(STAT_DMG_MELEE_MIN);
-			haz->dmg_max = src_stats->get(STAT_DMG_MELEE_MAX);
-		}
-		else if (powers[power_index].base_damage == BASE_DAMAGE_RANGED) {
-			haz->dmg_min = src_stats->get(STAT_DMG_RANGED_MIN);
-			haz->dmg_max = src_stats->get(STAT_DMG_RANGED_MAX);
-		}
-		else if (powers[power_index].base_damage == BASE_DAMAGE_MENT) {
-			haz->dmg_min = src_stats->get(STAT_DMG_MENT_MIN);
-			haz->dmg_max = src_stats->get(STAT_DMG_MENT_MAX);
-		}
+		haz->dmg_min = src_stats->getDamageMin(powers[power_index].base_damage);
+		haz->dmg_max = src_stats->getDamageMax(powers[power_index].base_damage);
 	}
 
 	// animation properties
@@ -964,21 +974,27 @@ bool PowerManager::effect(StatBlock *src_stats, StatBlock *caster_stats, int pow
 			effect_data = (*effect_ptr);
 
 			if (effect_data.type == "shield") {
+				if (powers[power_index].base_damage == DAMAGE_TYPES.size())
+					continue;
+
 				// charge shield to max ment weapon damage * damage multiplier
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
-					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) * powers[power_index].mod_damage_value_min / 100;
+					magnitude = caster_stats->getDamageMax(powers[power_index].base_damage) * powers[power_index].mod_damage_value_min / 100;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ADD)
-					magnitude = caster_stats->get(STAT_DMG_MENT_MAX) + powers[power_index].mod_damage_value_min;
+					magnitude = caster_stats->getDamageMax(powers[power_index].base_damage) + powers[power_index].mod_damage_value_min;
 				else if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_ABSOLUTE)
 					magnitude = randBetween(powers[power_index].mod_damage_value_min, powers[power_index].mod_damage_value_max);
 				else
-					magnitude = caster_stats->get(STAT_DMG_MENT_MAX);
+					magnitude = caster_stats->getDamageMax(powers[power_index].base_damage);
 
 				comb->addString(msg->get("+%d Shield",magnitude), src_stats->pos, COMBAT_MESSAGE_BUFF);
 			}
 			else if (effect_data.type == "heal") {
+				if (powers[power_index].base_damage == DAMAGE_TYPES.size())
+					continue;
+
 				// heal for ment weapon damage * damage multiplier
-				magnitude = randBetween(caster_stats->get(STAT_DMG_MENT_MIN), caster_stats->get(STAT_DMG_MENT_MAX));
+				magnitude = randBetween(caster_stats->getDamageMin(powers[power_index].base_damage), caster_stats->getDamageMax(powers[power_index].base_damage));
 
 				if(powers[power_index].mod_damage_mode == STAT_MODIFIER_MODE_MULTIPLY)
 					magnitude = magnitude * powers[power_index].mod_damage_value_min / 100;

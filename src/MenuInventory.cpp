@@ -916,9 +916,9 @@ void MenuInventory::applyItemStats() {
 		return;
 
 	// reset additional values
-	stats->dmg_melee_min_add = stats->dmg_melee_max_add = 0;
-	stats->dmg_ment_min_add = stats->dmg_ment_max_add = 0;
-	stats->dmg_ranged_min_add = stats->dmg_ranged_max_add = 0;
+	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+		stats->dmg_min_add[i] = stats->dmg_max_add[i] = 0;
+	}
 	stats->absorb_min_add = stats->absorb_max_add = 0;
 
 	// apply stats from all items
@@ -927,12 +927,10 @@ void MenuInventory::applyItemStats() {
 		const Item &item = items->items[item_id];
 
 		// apply base stats
-		stats->dmg_melee_min_add += item.dmg_melee_min;
-		stats->dmg_melee_max_add += item.dmg_melee_max;
-		stats->dmg_ranged_min_add += item.dmg_ranged_min;
-		stats->dmg_ranged_max_add += item.dmg_ranged_max;
-		stats->dmg_ment_min_add += item.dmg_ment_min;
-		stats->dmg_ment_max_add += item.dmg_ment_max;
+		for (size_t j = 0; j < DAMAGE_TYPES.size(); ++j) {
+			stats->dmg_min_add[j] += item.dmg_min[j];
+			stats->dmg_max_add[j] += item.dmg_max[j];
+		}
 
 		// set equip flags
 		for (unsigned j=0; j<item.equip_flags.size(); ++j) {
@@ -1000,6 +998,12 @@ void MenuInventory::applyBonus(const BonusData* bdata) {
 	}
 	else if (bdata->stat_index != -1) {
 		ed.id = ed.type = STAT_KEY[bdata->stat_index];
+	}
+	else if (bdata->damage_index_min != -1) {
+		ed.id = ed.type = DAMAGE_TYPES[bdata->damage_index_min].min;
+	}
+	else if (bdata->damage_index_max != -1) {
+		ed.id = ed.type = DAMAGE_TYPES[bdata->damage_index_max].max;
 	}
 	else if (bdata->resist_index != -1) {
 		ed.id = ed.type = ELEMENTS[bdata->resist_index].id + "_resist";

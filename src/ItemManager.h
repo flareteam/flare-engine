@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include "CommonIncludes.h"
 #include "FileParser.h"
+#include "Settings.h"
 #include "TooltipData.h"
 
 #include <stdint.h>
@@ -53,6 +54,8 @@ public:
 class BonusData {
 public:
 	int stat_index; // Stats.h
+	int damage_index_min; // engine/damage_types.txt
+	int damage_index_max; // engine/damage_types.txt
 	int resist_index; // engine/elements.txt
 	int base_index;
 	bool is_speed;
@@ -60,6 +63,8 @@ public:
 	int value;
 	BonusData()
 		: stat_index(-1)
+		, damage_index_min(-1)
+		, damage_index_max(-1)
 		, resist_index(-1)
 		, base_index(-1)
 		, is_speed(false)
@@ -104,12 +109,8 @@ public:
 	std::vector<std::string> equip_flags;   // common values include: melee, ranged, mental, shield
 	int icon;             // icon index on small pixel sheet
 	std::string book;     // book file location
-	int dmg_melee_min;    // minimum damage amount (melee)
-	int dmg_melee_max;    // maximum damage amount (melee)
-	int dmg_ranged_min;   // minimum damage amount (ranged)
-	int dmg_ranged_max;   // maximum damage amount (ranged)
-	int dmg_ment_min;     // minimum damage amount (mental)
-	int dmg_ment_max;     // maximum damage amount (mental)
+	std::vector<int> dmg_min; // minimum damage amount
+	std::vector<int> dmg_max; // maximum damage amount
 	int abs_min;          // minimum absorb amount
 	int abs_max;          // maximum absorb amount
 	int requires_level;   // Player level must match or exceed this value to use item
@@ -145,12 +146,8 @@ public:
 		, quality("")
 		, type("")
 		, icon(0)
-		, dmg_melee_min(0)
-		, dmg_melee_max(0)
-		, dmg_ranged_min(0)
-		, dmg_ranged_max(0)
-		, dmg_ment_min(0)
-		, dmg_ment_max(0)
+		, dmg_min(DAMAGE_TYPES.size(), 0)
+		, dmg_max(DAMAGE_TYPES.size(), 0)
 		, abs_min(0)
 		, abs_max(0)
 		, requires_level(0)
