@@ -44,20 +44,6 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include <cmath>
 #include <climits>
 
-static void DEPRECATED_handleMagicBuffBaseDamage(FileParser& infile, Power& pwr, PostEffect& pe) {
-	// "shield" and "heal" powers used to assume Mental damage
-	if (pe.id == "shield" || pe.id == "heal") {
-		for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-			if (DAMAGE_TYPES[i].id == "ment") {
-				pwr.base_damage = i;
-				infile.error("PowerManager: shield/heal power does not have base damage. Assuming 'ment'.");
-				return;
-			}
-		}
-		infile.error("PowerManager: shield/heal power does not have base damage. Unable to find fallback 'ment'.");
-	}
-}
-
 /**
  * PowerManager constructor
  */
@@ -494,8 +480,6 @@ void PowerManager::loadPowers() {
 					pe.chance = toInt(chance);
 				}
 				powers[input_id].post_effects.push_back(pe);
-
-				DEPRECATED_handleMagicBuffBaseDamage(infile, powers[input_id], pe);
 			}
 		}
 		// pre and post power effects

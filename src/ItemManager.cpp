@@ -44,29 +44,6 @@ bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2) {
 	return stack1.item < stack2.item;
 }
 
-static void DEPRECATED_baseDamageParse(FileParser &infile, Item &item, const std::string &new_id, const std::string& old_key) {
-	infile.error("'%s' is deprecated! Please use 'dmg' instead.", old_key.c_str());
-
-	size_t dmg_type = DAMAGE_TYPES.size();
-	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
-		if (new_id == DAMAGE_TYPES[i].id) {
-			dmg_type = i;
-			break;
-		}
-	}
-
-	if (dmg_type == DAMAGE_TYPES.size()) {
-		infile.error("ItemManager: Can't find damage type for deprecated '%s'! Please fix your mod and use 'dmg' instead of '%s'.", old_key.c_str(), old_key.c_str());
-		Exit(1); // quit game because lots will be broken
-	}
-
-	item.dmg_min[dmg_type] = popFirstInt(infile.val);
-	if (infile.val.length() > 0)
-		item.dmg_max[dmg_type] = popFirstInt(infile.val);
-	else
-		item.dmg_max[dmg_type] = item.dmg_min[dmg_type];
-}
-
 ItemManager::ItemManager()
 	: color_normal(font->getColor("widget_normal"))
 	, color_bonus(font->getColor("item_bonus"))
@@ -194,18 +171,6 @@ void ItemManager::loadItems(const std::string& filename, bool locateFileName) {
 				items[id].equip_flags.push_back(flag);
 				flag = popFirstString(infile.val);
 			}
-		}
-		else if (infile.key == "dmg_melee") {
-			// TODO Remove this; DEPRECATED!
-			DEPRECATED_baseDamageParse(infile, items[id], "melee", "dmg_melee");
-		}
-		else if (infile.key == "dmg_ranged") {
-			// TODO Remove this; DEPRECATED!
-			DEPRECATED_baseDamageParse(infile, items[id], "ranged", "dmg_ranged");
-		}
-		else if (infile.key == "dmg_ment") {
-			// TODO Remove this; DEPRECATED!
-			DEPRECATED_baseDamageParse(infile, items[id], "ment", "dmg_ment");
 		}
 		else if (infile.key == "dmg") {
 			// @ATTR dmg|predefined_string, int, int : Damage type, Min, Max|Defines the item's base damage type and range. Max may be ommitted and will default to Min.
