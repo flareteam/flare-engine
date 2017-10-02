@@ -1,7 +1,8 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR dallatower@libero.it, 2012.
+# FLARE (Free/Libre Action RPG Engine)
+# Copyright (C) 2017 Stefano Peris
+# This file is distributed under the same license as the Flare package.
+# Gianfranco Del Borrello <jeffry84@hotmail.it>, 2016.
+# Stefano 'LordStephen77' Peris <lordstephen77@gmail.com>, 2017.
 #
 #, fuzzy
 msgid ""
@@ -10,9 +11,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-11 10:52-0400\n"
 "PO-Revision-Date: 2012-07-02 19:21+0100\n"
-"Last-Translator: Gianfranco Del Borrello <jeffry84@hotmail.it>\n"
+"Last-Translator: Stefano Peris <lordstephen77@gmail.com>\n"
 "Language-Team: Italiano <it@li.org>\n"
-"Language: \n"
+"Language: Italian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -188,7 +189,7 @@ msgstr "Mostra sempre etichette bottino"
 
 #: ../../../src/GameStateConfigBase.cpp:251
 msgid "Automatically equip items"
-msgstr ""
+msgstr "Equipaggia gli oggetti automaticamente"
 
 #: ../../../src/GameStateConfigBase.cpp:255
 msgid "Active Mods"
@@ -325,7 +326,7 @@ msgstr "Elimina Salvataggio"
 
 #: ../../../src/GameStateLoad.cpp:86
 msgid "Delete this save?"
-msgstr "Eliminare questosSalvataggio?"
+msgstr "Eliminare questo Salvataggio?"
 
 #: ../../../src/GameStateLoad.cpp:88
 msgid "Exit to Title"
@@ -341,7 +342,7 @@ msgstr "Scegli Slot"
 
 #: ../../../src/GameStateLoad.cpp:592 ../../../src/GameStateLoad.cpp:613
 msgid "Enable a story mod to continue"
-msgstr "Abilita un mod storia per continuare"
+msgstr "Abilita una mod storia per continuare"
 
 #: ../../../src/GameStateLoad.cpp:608
 msgid "Load Game"
@@ -349,7 +350,7 @@ msgstr "Carica Partita"
 
 #: ../../../src/GameStateLoad.cpp:709
 msgid "Entering game world..."
-msgstr "Entrata nel mondo del gioco..."
+msgstr "Entrata nel mondo di gioco..."
 
 #: ../../../src/GameStateLoad.cpp:712
 msgid "Loading saved game..."
@@ -399,7 +400,7 @@ msgstr "Gioca"
 
 #: ../../../src/GameStateTitle.cpp:104
 msgid "Enable a core mod to continue"
-msgstr "Abilitare un mod core per continuare"
+msgstr "Abilitare una mod core per continuare"
 
 #: ../../../src/GameStateTitle.cpp:108
 msgid "Configuration"
@@ -766,8 +767,8 @@ msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:120
-msgid "Type 'help' to get a list of commands. "
-msgstr ""
+msgid "Type 'help' to get a list of commands."
+msgstr "Digita 'aiuto' per ottenere un elenco di comandi."
 
 #: ../../../src/MenuDevConsole.cpp:225
 #, fuzzy
@@ -784,15 +785,15 @@ msgstr "riporta il giocatore al livello 1, senza punti statistiche o abilità sp
 
 #: ../../../src/MenuDevConsole.cpp:228
 msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr ""
+msgstr "Show active campaign states that match a search term. No search term lists all active states."
 
 #: ../../../src/MenuDevConsole.cpp:229
 msgid "Prints a list of items that match a search term. No search term will list all items"
-msgstr ""
+msgstr "Mostra un elenco di elementi che corrispondono a un termine di ricerca. Nessun termine di ricerca elenca tutti gli elementi."
 
 #: ../../../src/MenuDevConsole.cpp:230
 msgid "parses a series of event components and executes them as a single event"
-msgstr ""
+msgstr "Analyze a series of event components and run them as a single event."
 
 #: ../../../src/MenuDevConsole.cpp:231
 msgid "clears the command history"
@@ -804,17 +805,17 @@ msgstr "mostra questo testo"
 
 #: ../../../src/MenuDevConsole.cpp:239
 msgid "Toggled the developer hud"
-msgstr "Alternato lo schermo sviluppatore"
+msgstr "Alterna lo schermo sviluppatore"
 
 #: ../../../src/MenuDevConsole.cpp:243
 #, fuzzy
 msgid "Toggled the hud"
-msgstr "Alternato lo schermo sviluppatore"
+msgstr "Alterna lo schermo sviluppatore"
 
 #: ../../../src/MenuDevConsole.cpp:337
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
-msgstr ""
+msgstr "ERRORE: '%s' non è un valido evento chiave"
 
 #: ../../../src/MenuDevConsole.cpp:346
 msgid "ERROR: Too few arguments"
@@ -871,7 +872,7 @@ msgstr ""
 
 #: ../../../src/MenuExit.cpp:109
 msgid "Paused"
-msgstr ""
+msgstr "In pausa"
 
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
@@ -990,43 +991,43 @@ msgstr "Raffreddamento: %s secondi"
 
 #: ../../../src/MenuPowers.cpp:720 ../../../src/MenuPowers.cpp:723
 msgid "Damage per second"
-msgstr ""
+msgstr "Danno per secondo"
 
 #: ../../../src/MenuPowers.cpp:726 ../../../src/MenuPowers.cpp:729
 msgid "HP per second"
-msgstr ""
+msgstr "HP per secondo"
 
 #: ../../../src/MenuPowers.cpp:732 ../../../src/MenuPowers.cpp:735
 msgid "MP per second"
-msgstr ""
+msgstr "MP per secondo"
 
 #: ../../../src/MenuPowers.cpp:739
 msgid "Immobilize"
-msgstr ""
+msgstr "Immobilizzare"
 
 #: ../../../src/MenuPowers.cpp:744
 msgid "Immunity"
-msgstr ""
+msgstr "Immunità"
 
 #: ../../../src/MenuPowers.cpp:747
 msgid "Immunity to damage over time"
-msgstr ""
+msgstr "Immunità ai danni nel tempo"
 
 #: ../../../src/MenuPowers.cpp:750
 msgid "Immunity to slow"
-msgstr ""
+msgstr "Immunità al rallentamento"
 
 #: ../../../src/MenuPowers.cpp:753
 msgid "Immunity to stun"
-msgstr ""
+msgstr "Immunità allo stordimento"
 
 #: ../../../src/MenuPowers.cpp:756
 msgid "Immunity to HP steal"
-msgstr ""
+msgstr "Immunità al furto di HP"
 
 #: ../../../src/MenuPowers.cpp:759
 msgid "Immunity to MP steal"
-msgstr ""
+msgstr "Immunità al furto di MP"
 
 #: ../../../src/MenuPowers.cpp:762
 msgid "Immunity to knockback"
@@ -1034,43 +1035,43 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:765
 msgid "Immunity to damage reflection"
-msgstr ""
+msgstr "Immunità al danno riflesso"
 
 #: ../../../src/MenuPowers.cpp:768
 msgid "Stun"
-msgstr ""
+msgstr "Stordimento"
 
 #: ../../../src/MenuPowers.cpp:771
 msgid "Automatic revive on death"
-msgstr ""
+msgstr "Rivive automaticamente alla la morte"
 
 #: ../../../src/MenuPowers.cpp:774
 msgid "Convert"
-msgstr ""
+msgstr "Convertire"
 
 #: ../../../src/MenuPowers.cpp:777
 msgid "Fear"
-msgstr ""
+msgstr "Paura"
 
 #: ../../../src/MenuPowers.cpp:780
 msgid "Lifespan"
-msgstr ""
+msgstr "Durata della vita"
 
 #: ../../../src/MenuPowers.cpp:801
 msgid "Magical Shield"
-msgstr ""
+msgstr "Scudo Magico"
 
 #: ../../../src/MenuPowers.cpp:827
 msgid "Healing"
-msgstr ""
+msgstr "Guarigione"
 
 #: ../../../src/MenuPowers.cpp:830
 msgid "Knockback"
-msgstr ""
+msgstr "Contraccolpo"
 
 #: ../../../src/MenuPowers.cpp:872
 msgid "Damage"
-msgstr ""
+msgstr "Danno"
 
 #: ../../../src/MenuPowers.cpp:874
 #, fuzzy
@@ -1099,7 +1100,7 @@ msgstr "Possibilità di Colpo Critico"
 
 #: ../../../src/MenuPowers.cpp:929
 msgid "Ignores Absorbtion"
-msgstr ""
+msgstr "Ignora l'assorbimento"
 
 #: ../../../src/MenuPowers.cpp:934
 #, fuzzy
@@ -1109,7 +1110,7 @@ msgstr "Schivare"
 #: ../../../src/MenuPowers.cpp:939
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
-msgstr ""
+msgstr "%d%% Possibilità di critico rallenta i bersagli"
 
 #: ../../../src/MenuPowers.cpp:944
 #, fuzzy, c-format
@@ -1151,7 +1152,7 @@ msgstr "Scorta condivisa"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
-msgstr ""
+msgstr "Impossibile memorizzare gli elementi della ricerca nello stash."
 
 #: ../../../src/MenuStash.cpp:209
 #, fuzzy
@@ -1191,12 +1192,12 @@ msgstr "Mouse X2"
 #: ../../../src/SDLInputState.cpp:534
 #, c-format
 msgid "Axis %d -"
-msgstr ""
+msgstr "Asse %d -"
 
 #: ../../../src/SDLInputState.cpp:536
 #, c-format
 msgid "Axis %d +"
-msgstr ""
+msgstr "Asse %d +"
 
 #: ../../../src/SDLInputState.cpp:558 ../../../src/SDLInputState.cpp:582
 #: ../../../src/SDLInputState.cpp:600
@@ -1206,12 +1207,12 @@ msgstr ""
 #: ../../../src/SDLInputState.cpp:558 ../../../src/SDLInputState.cpp:561
 #, c-format
 msgid "%s on ground"
-msgstr ""
+msgstr "%s a terra"
 
 #: ../../../src/SDLInputState.cpp:582 ../../../src/SDLInputState.cpp:585
 #, c-format
 msgid "%s on enemy"
-msgstr ""
+msgstr "%s sul nemico"
 
 #: ../../../src/Settings.cpp:722
 msgid "Adventurer"
@@ -1363,11 +1364,11 @@ msgstr "Aumenta la probabilità di rilanciare un proiettile al nemico."
 
 #: ../../../src/Stats.cpp:141
 msgid "Damage Reflection"
-msgstr ""
+msgstr "Danno riflesso"
 
 #: ../../../src/Stats.cpp:142
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr ""
+msgstr "Offre una percentuale di danni riportati all'attaccante."
 
 #: ../../../src/Stats.cpp:146
 msgid "Base HP"
@@ -1820,3 +1821,4 @@ msgstr "Raffreddamento: %s secondi"
 
 #~ msgid "Mental + Defense grants healing and magical protection"
 #~ msgstr "Mentale + Difensivo ottieni incantesimi di guarigione e protezione"
+
