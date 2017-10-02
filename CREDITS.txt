@@ -48,7 +48,7 @@ Translations
 (fr) French by Quentin 'acieroid' Stievenart, Bonbadil, Morgan Strauss, and Christoph J. Thompson
 (gd) Scottish Gaelic by gunchleoc
 (gl) Galacian by Adrian Chaves Fernandez (Gallaecio)
-(it) Italian by Giovanni Dalla Torre and Andrea Ranaldi
+(it) Italian by Giovanni Dalla Torre, Stefano Peris, and Andrea Ranaldi
 (ja) Japanese by Paul Wortmann
 (nb) Norwegian Bokmal by Hans Joachim Desserud
 (nl) Dutch by Bas Doodeman
