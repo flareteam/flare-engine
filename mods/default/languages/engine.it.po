@@ -1,6 +1,7 @@
 # FLARE (Free/Libre Action RPG Engine)
 # Copyright (C) 2017 Stefano Peris
 # This file is distributed under the same license as the Flare package.
+# Giovanni Dalla Torre <dallatower@libero.it>, 2012.
 # Gianfranco Del Borrello <jeffry84@hotmail.it>, 2016.
 # Stefano 'LordStephen77' Peris <lordstephen77@gmail.com>, 2017.
 #
