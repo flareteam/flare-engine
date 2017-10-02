@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-11 10:52+\n"
+"POT-Creation-Date: 2017-10-02 15:50+\n"
 "PO-Revision-Date: 2013-10-12 16:38+0200\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -30,6 +30,18 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:15
 msgid "Defense"
+msgstr ""
+
+#: ../engine/damage_types.txt:3
+msgid "Melee Damage Min"
+msgstr ""
+
+#: ../engine/damage_types.txt:9
+msgid "Ranged Damage Min"
+msgstr ""
+
+#: ../engine/damage_types.txt:15
+msgid "Mental Damage Min"
 msgstr ""
 
 #: ../cutscenes/credits.txt:8
@@ -182,122 +194,130 @@ msgid "Evgen Pavlov"
 msgstr ""
 
 #: ../cutscenes/credits.txt:60
-msgid "Giovanni Dalla Torre"
+msgid "Gianfranco Del Borrello"
 msgstr ""
 
 #: ../cutscenes/credits.txt:61
-msgid "gunchleoc"
+msgid "Giovanni Dalla Torre"
 msgstr ""
 
 #: ../cutscenes/credits.txt:62
+msgid "gunchleoc"
+msgstr ""
+
+#: ../cutscenes/credits.txt:63
 msgid "Hans Joachim Desserud"
 msgstr ""
 
-#: ../cutscenes/credits.txt:64
+#: ../cutscenes/credits.txt:65
 msgid "Juan Pablo Tamayo"
 msgstr ""
 
-#: ../cutscenes/credits.txt:65
+#: ../cutscenes/credits.txt:66
 msgid "losine"
 msgstr ""
 
-#: ../cutscenes/credits.txt:66
+#: ../cutscenes/credits.txt:67
 msgid "Michael Papageorgiou"
 msgstr ""
 
-#: ../cutscenes/credits.txt:67
+#: ../cutscenes/credits.txt:68
 msgid "Mikhail Karalevich"
 msgstr ""
 
-#: ../cutscenes/credits.txt:68
+#: ../cutscenes/credits.txt:69
 msgid "Miro Jánošík"
 msgstr ""
 
-#: ../cutscenes/credits.txt:69
+#: ../cutscenes/credits.txt:70
 msgid "Morgan Strauss"
 msgstr ""
 
-#: ../cutscenes/credits.txt:70
+#: ../cutscenes/credits.txt:71
 msgid "Nikita Vanku"
 msgstr ""
 
-#: ../cutscenes/credits.txt:71
+#: ../cutscenes/credits.txt:72
 msgid "Paul Wortmann"
 msgstr ""
 
-#: ../cutscenes/credits.txt:72
+#: ../cutscenes/credits.txt:73
 msgid "Pawel Puszczynski"
 msgstr ""
 
-#: ../cutscenes/credits.txt:73
+#: ../cutscenes/credits.txt:74
 msgid "Quentin Stievenart"
 msgstr ""
 
-#: ../cutscenes/credits.txt:74
+#: ../cutscenes/credits.txt:75
 msgid "Sergey Basalaev"
 msgstr ""
 
-#: ../cutscenes/credits.txt:76
-msgid "Thomas Glamsch"
-msgstr ""
-
 #: ../cutscenes/credits.txt:77
-msgid "Timo Sievänen"
+msgid "Stefano Peris"
 msgstr ""
 
 #: ../cutscenes/credits.txt:78
-msgid "Wuzzy2"
+msgid "Thomas Glamsch"
 msgstr ""
 
 #: ../cutscenes/credits.txt:79
+msgid "Timo Sievänen"
+msgstr ""
+
+#: ../cutscenes/credits.txt:80
+msgid "Wuzzy2"
+msgstr ""
+
+#: ../cutscenes/credits.txt:81
 msgid "Yannis Anthymidis"
 msgstr ""
 
-#: ../cutscenes/credits.txt:82
+#: ../cutscenes/credits.txt:84
 msgid "Distributors"
 msgstr ""
 
-#: ../cutscenes/credits.txt:84
+#: ../cutscenes/credits.txt:86
 msgid "Ablu"
 msgstr ""
 
-#: ../cutscenes/credits.txt:85
+#: ../cutscenes/credits.txt:87
 msgid "Feillyne"
 msgstr ""
 
-#: ../cutscenes/credits.txt:86
+#: ../cutscenes/credits.txt:88
 msgid "Jan-Hendrik Peters"
 msgstr ""
 
-#: ../cutscenes/credits.txt:88
+#: ../cutscenes/credits.txt:90
 msgid "miffe"
 msgstr ""
 
-#: ../cutscenes/credits.txt:91
+#: ../cutscenes/credits.txt:93
 msgid "Special Thanks"
 msgstr ""
 
-#: ../cutscenes/credits.txt:95
+#: ../cutscenes/credits.txt:97
 msgid "For giving constant feedback and testing:"
 msgstr ""
 
-#: ../cutscenes/credits.txt:96
+#: ../cutscenes/credits.txt:98
 msgid "Bart Kelsey"
 msgstr ""
 
-#: ../cutscenes/credits.txt:97
+#: ../cutscenes/credits.txt:99
 msgid "The community at OpenGameArt"
 msgstr ""
 
-#: ../cutscenes/credits.txt:101
+#: ../cutscenes/credits.txt:103
 msgid "For Tiled and the Flare map exporter:"
 msgstr ""
 
-#: ../cutscenes/credits.txt:102
+#: ../cutscenes/credits.txt:104
 msgid "Thorbjørn Lindeijer"
 msgstr ""
 
-#: ../cutscenes/credits.txt:104
+#: ../cutscenes/credits.txt:106
 msgid "Ranie Jade Ramiso"
 msgstr ""
 
