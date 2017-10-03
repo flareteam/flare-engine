@@ -1,6 +1,7 @@
 # FLARE (Free/Libre Action RPG Engine)
 # Copyright (C) 2017 Stefano Peris
 # This file is distributed under the same license as the Flare package.
+#
 # Giovanni Dalla Torre <dallatower@libero.it>, 2012.
 # Gianfranco Del Borrello <jeffry84@hotmail.it>, 2016.
 # Stefano 'LordStephen77' Peris <lordstephen77@gmail.com>, 2017.
@@ -737,7 +738,7 @@ msgstr "Console Sviluppatore"
 
 #: ../../../src/MenuDevConsole.cpp:120
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
-msgstr ""
+msgstr "Gli argomenti con gli spazi devono essere racchiusi con doppie virgolette. Esempio:"
 
 #: ../../../src/MenuDevConsole.cpp:121
 #, fuzzy
@@ -759,11 +760,11 @@ msgstr "riporta il giocatore al livello 1, senza punti statistiche o abilità sp
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr ""
+msgstr "Stampa tutti i nomi dei file della mappa che si trovano nella directory \"maps/\"."
 
 #: ../../../src/MenuDevConsole.cpp:226
 msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr "Show active campaign states that match a search term. No search term lists all active states."
+msgstr "Stampa gli stati di campagna attivi che corrispondono a un termine di ricerca. Nessun termine di ricerca elenca tutti gli stati attivi."
 
 #: ../../../src/MenuDevConsole.cpp:227
 msgid "Prints a list of items that match a search term. No search term will list all items"
@@ -771,7 +772,7 @@ msgstr "Mostra un elenco di elementi che corrispondono a un termine di ricerca. 
 
 #: ../../../src/MenuDevConsole.cpp:228
 msgid "parses a series of event components and executes them as a single event"
-msgstr "Analyze a series of event components and run them as a single event."
+msgstr "Analizza una serie di componenti di evento e li esegue come un singolo evento."
 
 #: ../../../src/MenuDevConsole.cpp:229
 msgid "clears the command history"
