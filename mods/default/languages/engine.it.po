@@ -1311,7 +1311,7 @@ msgstr "Furtività"
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
-msgstr ""
+msgstr "Percentuale di HP rubata per colpo."
 
 #: ../../../src/Stats.cpp:121
 #, fuzzy
@@ -1320,7 +1320,7 @@ msgstr "Furtività"
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
-msgstr ""
+msgstr "Percentuale di MP rubata per colpo."
 
 #: ../../../src/Stats.cpp:126
 msgid "Base HP"
