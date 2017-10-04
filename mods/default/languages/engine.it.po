@@ -145,7 +145,7 @@ msgstr "Interfaccia"
 #: ../../../src/GameStateConfigBase.cpp:159
 #: ../../../src/GameStateConfigDesktop.cpp:126
 msgid "Mods"
-msgstr "Mod"
+msgstr "Mods"
 
 #: ../../../src/GameStateConfigBase.cpp:237 ../../../src/MenuExit.cpp:64
 msgid "Music Volume"
