@@ -186,7 +186,7 @@ msgstr "Automatycznie załóż ekwipunek"
 
 #: ../../../src/GameStateConfigBase.cpp:281
 msgid "Subtitles"
-msgstr ""
+msgstr "Napisy"
 
 #: ../../../src/GameStateConfigBase.cpp:285
 msgid "Active Mods"
@@ -560,12 +560,12 @@ msgstr "Nieznany przedmiot"
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:761
 #, c-format
 msgid "%d%% Speed"
-msgstr "%d%% Szybkość"
+msgstr "%d%% Szybkość Ruchu"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
-msgstr "%d%% Szybkość"
+msgstr "%d%% Szybkość Ataku"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
 #: ../../../src/MenuPowers.cpp:726
@@ -600,14 +600,14 @@ msgstr "Wymaga %d poziomu"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:992
 #: ../../../src/MenuPowers.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Wymaga %s"
+msgstr "Wymaga: %d %s"
 
 #: ../../../src/ItemManager.cpp:768
 #, c-format
 msgid "Requires Class: %s"
-msgstr "Wymaga Klasy: %s"
+msgstr "Wymagana Klasa: %s"
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, c-format
@@ -647,7 +647,7 @@ msgstr "Klawisz skrótu: %s"
 #: ../../../src/MenuActiveEffects.cpp:119
 #, c-format
 msgid "x%d"
-msgstr ""
+msgstr "x%d"
 
 #: ../../../src/MenuActiveEffects.cpp:214
 msgid "Remaining:"
@@ -656,7 +656,7 @@ msgstr "Pozostało:"
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
 msgid "x%d stacks"
-msgstr ""
+msgstr "x%d sztuk"
 
 #: ../../../src/MenuCharacter.cpp:44
 msgid "Name"
@@ -729,7 +729,7 @@ msgstr "resetuje poziom gracza do 1, bez rozdanych punktów statystyk bądź umi
 
 #: ../../../src/MenuDevConsole.cpp:225
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr ""
+msgstr "Wypisuje nazwy wszystkich plików map zawartych w katalogu \"maps/\"."
 
 #: ../../../src/MenuDevConsole.cpp:226
 msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
@@ -1014,7 +1014,7 @@ msgstr "Odrzucenie"
 #: ../../../src/MenuPowers.cpp:879
 #, c-format
 msgid "%d%% chance"
-msgstr ""
+msgstr "%d%% szansy"
 
 #: ../../../src/MenuPowers.cpp:931
 msgid "Base Accuracy"
@@ -1242,22 +1242,20 @@ msgid "Deals a percentage of damage taken back to the attacker."
 msgstr "Zadaje przeciwnikowi pewien procent zadanych przez niego obrażeń"
 
 #: ../../../src/Stats.cpp:116
-#, fuzzy
 msgid "HP Steal"
-msgstr "Dyskrecja"
+msgstr "Kradzież PŻ"
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
-msgstr ""
+msgstr "Procentowa wartość kradzieży PŻ po zadaniu ciosu."
 
 #: ../../../src/Stats.cpp:121
-#, fuzzy
 msgid "MP Steal"
-msgstr "Dyskrecja"
+msgstr "Kradzież PM"
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
-msgstr ""
+msgstr "Procentowa wartość kradzieży PM po zadaniu ciosu."
 
 #: ../../../src/Stats.cpp:126
 msgid "Base HP"
@@ -1488,7 +1486,6 @@ msgstr "%s sekund"
 #~ msgid "Level %d %s"
 #~ msgstr "Poziom %d %s"
 
-#, fuzzy
 #~ msgid "Flare Alpha v0.19"
 #~ msgstr "Flare Alpha v0.19"
 
@@ -1507,7 +1504,6 @@ msgstr "%s sekund"
 #~ msgid "mbx2"
 #~ msgstr "mbx2"
 
-#, fuzzy
 #~ msgid "Low"
 #~ msgstr "Niski"
 
