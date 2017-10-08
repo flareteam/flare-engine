@@ -33,15 +33,15 @@ msgstr "Obrona"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "Minimalne Obrażenia w Zwarciu"
 
 #: ../engine/damage_types.txt:9
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "Minimalne Obrażenia Dystansowe"
 
 #: ../engine/damage_types.txt:15
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "Minimalne Obrażenia Umysłowe"
 
 #: ../cutscenes/credits.txt:8
 msgid "Flare Engine Credits"
@@ -52,9 +52,8 @@ msgid "Lead Programmers"
 msgstr "Główni programiści"
 
 #: ../cutscenes/credits.txt:13
-#, fuzzy
 msgid "Clint Bellanger"
-msgstr "Domyślna grafika - Clint Bellanger"
+msgstr "Clint Bellanger"
 
 #: ../cutscenes/credits.txt:14
 msgid "Henrik Andersson"
@@ -193,9 +192,8 @@ msgid "Evgen Pavlov"
 msgstr "Evgen Pavlov"
 
 #: ../cutscenes/credits.txt:60
-#, fuzzy
 msgid "Gianfranco Del Borrello"
-msgstr "Giovanni Dalla Torre"
+msgstr "Gianfranco Del Borrello"
 
 #: ../cutscenes/credits.txt:61
 msgid "Giovanni Dalla Torre"
@@ -254,9 +252,8 @@ msgid "Sergey Basalaev"
 msgstr "Sergey Basalaev"
 
 #: ../cutscenes/credits.txt:77
-#, fuzzy
 msgid "Stefano Peris"
-msgstr "Stefan Beller"
+msgstr "Stefano Peris"
 
 #: ../cutscenes/credits.txt:78
 msgid "Thomas Glamsch"
