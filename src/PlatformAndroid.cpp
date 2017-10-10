@@ -129,6 +129,11 @@ void PlatformSetPaths() {
 		}
 	}
 
+	if (PATH_DATA.empty())
+	{
+		PATH_DATA = PATH_USER + "/userdata/mods";
+	}
+
 	PATH_USER += "/userdata";
 
 	createDir(PATH_CONF);
