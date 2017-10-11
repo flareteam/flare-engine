@@ -458,6 +458,8 @@ bool GameStateCutscene::load(const std::string& filename) {
 		return false;
 	}
 
+	render_device->setBackgroundColor(Color(0,0,0,0));
+
 	return true;
 }
 

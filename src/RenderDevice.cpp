@@ -320,3 +320,9 @@ void RenderDevice::windowResizeInternal() {
 
 	VIEW_W_HALF = VIEW_W/2;
 }
+
+void RenderDevice::setBackgroundColor(Color color) {
+	// print out the color to avoid unused variable compiler warning
+	logInfo("RenderDevice: Trying to set background color to (%d,%d,%d,%d).", color.r, color.g, color.b, color.a);
+	logError("RenderDevice: Renderer does not support setting background color!");
+}

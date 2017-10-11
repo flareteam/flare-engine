@@ -109,6 +109,7 @@ SDLHardwareRenderDevice::SDLHardwareRenderDevice()
 	, texture(NULL)
 	, titlebar_icon(NULL)
 	, title(NULL)
+	, background_color(0,0,0,0)
 {
 	logInfo("Using Render Device: SDLHardwareRenderDevice (hardware, SDL 2)");
 
@@ -404,7 +405,7 @@ void SDLHardwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, co
 
 void SDLHardwareRenderDevice::blankScreen() {
 	SDL_SetRenderTarget(renderer, texture);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, background_color.r, background_color.g, background_color.b, background_color.a);
 	SDL_RenderClear(renderer);
 	return;
 }
@@ -548,4 +549,8 @@ void SDLHardwareRenderDevice::windowResize() {
 	SDL_SetRenderTarget(renderer, texture);
 
 	updateScreenVars();
+}
+
+void SDLHardwareRenderDevice::setBackgroundColor(Color color) {
+	background_color = color;
 }

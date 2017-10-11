@@ -130,6 +130,8 @@ GameStateTitle::GameStateTitle()
 		showLoading();
 		setRequestedGameState(new GameStateLoad());
 	}
+
+	render_device->setBackgroundColor(Color(0,0,0,0));
 }
 
 void GameStateTitle::logic() {

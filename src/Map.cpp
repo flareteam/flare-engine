@@ -33,7 +33,8 @@ Map::Map()
 	, w(1)
 	, h(1)
 	, hero_pos_enabled(false)
-	, hero_pos() {
+	, hero_pos()
+	, background_color(0,0,0,0) {
 }
 
 Map::~Map() {
@@ -165,6 +166,10 @@ void Map::loadHeader(FileParser &infile) {
 	else if (infile.key == "parallax_layers") {
 		// @ATTR parallax_layers|filename|Filename of a parallax layers definition.
 		parallax_filename = infile.val;
+	}
+	else if (infile.key == "background_color") {
+		// @ATTR background_color|color, int : Color, alpha|Background color for the map.
+		background_color = toRGBA(infile.val);
 	}
 	else if (infile.key == "tilewidth") {
 		// @ATTR tilewidth|int|Inherited from Tiled map file. Unused by engine.

@@ -165,6 +165,8 @@ int MapRenderer::load(const std::string& fname) {
 
 	parallax_filename = "";
 
+	background_color = Color(0,0,0,0);
+
 	Map::load(fname);
 
 	loadMusic();
@@ -217,6 +219,8 @@ int MapRenderer::load(const std::string& fname) {
 
 	map_parallax.load(parallax_filename);
 	map_parallax.setMapCenter(w/2, h/2);
+
+	render_device->setBackgroundColor(background_color);
 
 	return 0;
 }

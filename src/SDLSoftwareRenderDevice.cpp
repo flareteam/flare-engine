@@ -149,7 +149,8 @@ SDLSoftwareRenderDevice::SDLSoftwareRenderDevice()
 	, renderer(NULL)
 	, texture(NULL)
 	, titlebar_icon(NULL)
-	, title(NULL) {
+	, title(NULL)
+	, background_color(0) {
 	logInfo("Using Render Device: SDLSoftwareRenderDevice (software, SDL 2)");
 
 	fullscreen = FULLSCREEN;
@@ -456,7 +457,7 @@ void SDLSoftwareRenderDevice::drawRectangle(const Point& p0, const Point& p1, co
 }
 
 void SDLSoftwareRenderDevice::blankScreen() {
-	SDL_FillRect(screen, NULL, 0);
+	SDL_FillRect(screen, NULL, background_color);
 	return;
 }
 
@@ -635,4 +636,8 @@ void SDLSoftwareRenderDevice::windowResize() {
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, VIEW_W, VIEW_H);
 
 	updateScreenVars();
+}
+
+void SDLSoftwareRenderDevice::setBackgroundColor(Color color) {
+	background_color = SDL_MapRGBA(screen->format, color.r, color.g, color.b, color.a);
 }

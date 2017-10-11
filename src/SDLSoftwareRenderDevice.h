@@ -76,6 +76,7 @@ public:
 	void commitFrame();
 	void destroyContext();
 	void windowResize();
+	void setBackgroundColor(Color color);
 	Image *createImage(int width, int height);
 	void setGamma(float g);
 	void resetGamma();
@@ -96,6 +97,7 @@ private:
 	SDL_Texture* texture;
 	SDL_Surface* titlebar_icon;
 	char* title;
+	uint32_t background_color;
 };
 
 #endif // SDLSOFTWARERENDERDEVICE_H

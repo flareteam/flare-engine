@@ -212,6 +212,8 @@ GameStateLoad::GameStateLoad() : GameState()
 			loading_requested = true;
 		}
 	}
+
+	render_device->setBackgroundColor(Color(0,0,0,0));
 }
 
 void GameStateLoad::loadGraphics() {

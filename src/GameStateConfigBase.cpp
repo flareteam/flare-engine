@@ -143,6 +143,8 @@ GameStateConfigBase::GameStateConfigBase (bool do_init)
 		INTERFACE_TAB = 0;
 		MODS_TAB = 0;
 	}
+
+	render_device->setBackgroundColor(Color(0,0,0,0));
 }
 
 GameStateConfigBase::~GameStateConfigBase() {

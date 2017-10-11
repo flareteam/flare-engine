@@ -212,6 +212,8 @@ GameStateNew::GameStateNew()
 	tablist.add(class_list);
 
 	refreshWidgets();
+
+	render_device->setBackgroundColor(Color(0,0,0,0));
 }
 
 void GameStateNew::loadGraphics() {
