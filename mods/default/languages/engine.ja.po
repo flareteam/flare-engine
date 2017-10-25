@@ -26,14 +26,13 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr "文字のメニューを介して1つの属性を高める可能性があります。"
 
 #: ../../../src/Avatar.cpp:578
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "死んじゃった。ゲームオーバー！ エンターキーを押して続行します。"
+msgstr "あなたは負けてしまった。ゲームオーバー！ ${INPUT_CONTINUE} を押すと続行します。"
 
 #: ../../../src/Avatar.cpp:581
 #, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "あなたは敗北している。あなたは半分自分の%sを失う。エンターキーを押して続行します。"
+msgstr "あなたは負けてしまった。 ${INPUT_CONTINUE} を押して続行します。"
 
 #: ../../../src/Avatar.cpp:813
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -323,11 +322,11 @@ msgstr "読み込んでいます..."
 
 #: ../../../src/GameStateLoad.cpp:78 ../../../src/GameStateLoad.cpp:91
 msgid "Delete Save"
-msgstr "セーブゲームを削除する"
+msgstr "セーブデータを削除する"
 
 #: ../../../src/GameStateLoad.cpp:78
 msgid "Delete this save?"
-msgstr "このセーブゲームを削除しますか"
+msgstr "このセーブデータを削除しますか"
 
 #: ../../../src/GameStateLoad.cpp:80
 msgid "Exit to Title"
@@ -343,11 +342,11 @@ msgstr "スロットを選択します。"
 
 #: ../../../src/GameStateLoad.cpp:544 ../../../src/GameStateLoad.cpp:565
 msgid "Enable a story mod to continue"
-msgstr "継続する話モッズを有効に"
+msgstr "話モッズを有効にして継続する"
 
 #: ../../../src/GameStateLoad.cpp:560
 msgid "Load Game"
-msgstr "ゲームをロード。"
+msgstr "ゲームをロードする"
 
 #: ../../../src/GameStateLoad.cpp:661
 msgid "Entering game world..."
@@ -355,7 +354,7 @@ msgstr "ゲームの世界に入る…"
 
 #: ../../../src/GameStateLoad.cpp:664
 msgid "Loading saved game..."
-msgstr "保存したゲームをロードする..."
+msgstr "ゲームに保存したセーブデータをロードする..."
 
 #: ../../../src/GameStateLoad.cpp:708 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
@@ -365,7 +364,7 @@ msgstr "レベル %d"
 
 #: ../../../src/GameStateLoad.cpp:710
 msgid "Permadeath"
-msgstr "死永久"
+msgstr "永久に死亡"
 
 #: ../../../src/GameStateNew.cpp:62
 msgid "Create"
@@ -381,7 +380,7 @@ msgstr "名前を選択します。"
 
 #: ../../../src/GameStateNew.cpp:182
 msgid "Permadeath?"
-msgstr "死永久?"
+msgstr "永久に死亡させますか?"
 
 #: ../../../src/GameStateNew.cpp:186
 msgid "Choose a Class"
@@ -820,7 +819,7 @@ msgstr "%s レベル %d"
 
 #: ../../../src/MenuExit.cpp:81
 msgid "Save & Exit"
-msgstr ""
+msgstr "セーブ & 終了"
 
 #: ../../../src/MenuExit.cpp:83
 msgid "Exit"
@@ -828,11 +827,11 @@ msgstr "終了"
 
 #: ../../../src/MenuExit.cpp:85
 msgid "Continue"
-msgstr ""
+msgstr "続行"
 
 #: ../../../src/MenuExit.cpp:109
 msgid "Paused"
-msgstr ""
+msgstr "ポーズ"
 
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
@@ -894,7 +893,7 @@ msgstr "この項目は、アクションバーから使用することができ
 
 #: ../../../src/MenuInventory.cpp:634
 msgid "Inventory is full."
-msgstr "完全なインベントリ。"
+msgstr "インベントリは満杯です。"
 
 #: ../../../src/MenuInventory.cpp:753
 #, fuzzy, c-format
@@ -1100,7 +1099,7 @@ msgstr ""
 #: ../../../src/MenuStash.cpp:209
 #, fuzzy
 msgid "Stash is full."
-msgstr "完全なインベントリ。"
+msgstr "スタッシュは満杯です。"
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1108,7 +1107,7 @@ msgstr "買い戻し"
 
 #: ../../../src/MenuVendor.cpp:184
 msgid "Vendor"
-msgstr "売手"
+msgstr "売り主"
 
 #: ../../../src/PowerManager.cpp:974
 #, c-format
@@ -1174,7 +1173,7 @@ msgstr "HP再生"
 #: ../../../src/Stats.cpp:42
 #, fuzzy
 msgid "Ticks of HP regen per minute."
-msgstr "HPのダニは、毎分生成。"
+msgstr "HPは、毎分生成。"
 
 #: ../../../src/Stats.cpp:46
 #, fuzzy
@@ -1189,7 +1188,7 @@ msgstr "MP再生"
 #: ../../../src/Stats.cpp:52
 #, fuzzy
 msgid "Ticks of MP regen per minute."
-msgstr "MPのダニは、毎分生成。"
+msgstr "MPは、毎分生成。"
 
 #: ../../../src/Stats.cpp:56
 #, fuzzy
@@ -1204,22 +1203,22 @@ msgstr "回避："
 #: ../../../src/Stats.cpp:66
 #, fuzzy
 msgid "Absorb Min"
-msgstr "吸収"
+msgstr "吸収の最小"
 
 #: ../../../src/Stats.cpp:71
 #, fuzzy
 msgid "Absorb Max"
-msgstr "吸収"
+msgstr "吸収の最大"
 
 #: ../../../src/Stats.cpp:76
 #, fuzzy
 msgid "Critical Hit Chance"
-msgstr "重要走向確率"
+msgstr "クリティカルのチャンス"
 
 #: ../../../src/Stats.cpp:81
 #, fuzzy
 msgid "Bonus XP"
-msgstr "ボーナス"
+msgstr "ボーナスXP"
 
 #: ../../../src/Stats.cpp:82
 #, fuzzy
@@ -1331,7 +1330,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "精神"
 
 #~ msgid "Offense"
-#~ msgstr "犯罪"
+#~ msgstr "攻撃"
 
 #~ msgid "Defense"
 #~ msgstr "防衛"
@@ -1391,28 +1390,28 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "精神ダメージ："
 
 #~ msgid "Requires Physical %d"
-#~ msgstr "%d の物理が必要です。"
+#~ msgstr "物理 %d が必要です。"
 
 #~ msgid "Requires Mental %d"
-#~ msgstr "%d 精神が必要です。"
+#~ msgstr "精神 %d が必要です。"
 
 #~ msgid "Requires Offense %d"
-#~ msgstr "%d 犯罪が必要です。"
+#~ msgstr "攻撃 %d が必要です。"
 
 #~ msgid "Requires Defense %d"
-#~ msgstr "%d 防衛が必要です。"
+#~ msgstr "防衛 %d が必要です。"
 
 #, fuzzy
 #~ msgid "Each point of Physical grants %d. "
-#~ msgstr "物理的な助成金のHPの+8点の各点。"
+#~ msgstr "物理が助成 %d 点。"
 
 #, fuzzy
 #~ msgid "Each point of Mental grants %d. "
-#~ msgstr "精神助成金+8 MPの各点。"
+#~ msgstr "精神が助成 %d 点。"
 
 #, fuzzy
 #~ msgid "Each point of Defense grants %d. "
-#~ msgstr "精神助成金+8 MPの各点。"
+#~ msgstr "防衛が助成 %d 点。"
 
 #~ msgid "Requires Physical Offense %d"
 #~ msgstr "物理攻撃 %d が必要です。"
@@ -1428,18 +1427,18 @@ msgstr "クールダウンは%d秒"
 
 #, fuzzy
 #~ msgid "Added item: "
-#~ msgstr "%d アイテム:"
+#~ msgstr "アイテム追加:"
 
 #, fuzzy
 #~ msgid "Removed item: "
-#~ msgstr "%d アイテム:"
+#~ msgstr "アイテム除去:"
 
 #, fuzzy
 #~ msgid "Exit to title?"
 #~ msgstr "タイトルに戻ります。"
 
 #~ msgid "Empty Slot"
-#~ msgstr "空のスロット。"
+#~ msgstr "空のスロット"
 
 #, fuzzy
 #~ msgid "Move only one item:"
@@ -1449,7 +1448,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "CTRL-クリックして販売する実施項目を。"
 
 #~ msgid "Use this resolution?"
-#~ msgstr "この解像度を使うのか？"
+#~ msgstr "この解像度を使いますか？"
 
 #~ msgid "Double buffering"
 #~ msgstr "ダブルバッファリング"
@@ -1516,7 +1515,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "精神的な（M）は、精神的な武器の熟練度と全体のMPを増加させる。"
 
 #~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "犯罪（O）は、遠隔武器の熟練度と精度を向上させます。"
+#~ msgstr "攻撃（O）は、遠隔武器の熟練度と精度を向上させます。"
 
 #~ msgid "Defense (D) increases armor proficiency and avoidance."
 #~ msgstr "防衛（D）は、鎧の習熟度と回避を増加させる。"
@@ -1571,11 +1570,11 @@ msgstr "クールダウンは%d秒"
 
 #, fuzzy
 #~ msgid "Accuracy (vs lvl 5):"
-#~ msgstr "精度対防衛１"
+#~ msgstr "精度  (vs lvl 5):"
 
 #, fuzzy
 #~ msgid "Avoidance (vs lvl 5):"
-#~ msgstr "回避対犯罪1"
+#~ msgstr "回避  (vs lvl 5):"
 
 #, fuzzy
 #~ msgid "Stats"
@@ -1591,7 +1590,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "戦士"
 
 #~ msgid "Wizard"
-#~ msgstr "魔女"
+#~ msgstr "魔術師"
 
 #~ msgid "Ranger"
 #~ msgstr "射手"
@@ -1624,7 +1623,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "キャラクタを作成する。"
 
 #~ msgid "Main Hand"
-#~ msgstr "主な手"
+#~ msgstr "利き手"
 
 #~ msgid "Body"
 #~ msgstr "体"
@@ -1639,7 +1638,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "消耗品"
 
 #~ msgid "Gem"
-#~ msgstr "原石"
+#~ msgstr "宝石"
 
 #~ msgid "%d Gold"
 #~ msgstr "%d 金"
@@ -1651,10 +1650,10 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "MPの全部"
 
 #~ msgid "vs. Def 5"
-#~ msgstr "防衛5対"
+#~ msgstr "防衛 5対"
 
 #~ msgid "vs. Off 5"
-#~ msgstr "対犯罪5"
+#~ msgstr "対攻撃 5"
 
 #~ msgid "Main Weapon"
 #~ msgstr "主な武器"
@@ -1678,7 +1677,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "各レベルは+1の精度を与えます。"
 
 #~ msgid "Each level grants +1 avoidance"
-#~ msgstr "各レベルは+1回避を与えます。"
+#~ msgstr "各レベルは+1の回避を与えます。"
 
 #~ msgid "Dagger Proficiency"
 #~ msgstr "ダガー能力。"
@@ -1732,13 +1731,13 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "メッセージ"
 
 #~ msgid "Physical + Offense grants melee and ranged attacks"
-#~ msgstr "物理的および犯罪の助成金メレーと遠隔攻撃。"
+#~ msgstr "物理および攻撃が助成するのは、近接攻撃と遠隔攻撃"
 
 #~ msgid "Physical + Defense grants melee protection"
-#~ msgstr "物理的および防衛の補助金の近接防御。"
+#~ msgstr "物理および防衛が助成するのは近接防御"
 
 #~ msgid "Mental + Offense grants elemental spell attacks"
-#~ msgstr "精神と犯罪の助成金元素の呪文攻撃を。"
+#~ msgstr "精神と攻撃が助成するのはエレメンタル呪文攻撃"
 
 #~ msgid "Mental + Defense grants healing and magical protection"
-#~ msgstr "精神的、防衛の補助金の治癒と魔法防御。"
+#~ msgstr "精神、防衛が助成するのは治癒と魔法防御"
