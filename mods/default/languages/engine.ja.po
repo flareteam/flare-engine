@@ -322,15 +322,15 @@ msgstr "読み込んでいます..."
 
 #: ../../../src/GameStateLoad.cpp:78 ../../../src/GameStateLoad.cpp:91
 msgid "Delete Save"
-msgstr "セーブデータを削除する"
+msgstr "セーブデータを削除"
 
 #: ../../../src/GameStateLoad.cpp:78
 msgid "Delete this save?"
-msgstr "このセーブデータを削除しますか"
+msgstr "このセーブデータを削除しますか？"
 
 #: ../../../src/GameStateLoad.cpp:80
 msgid "Exit to Title"
-msgstr "タイトルに戻ります。"
+msgstr "タイトルに戻る"
 
 #: ../../../src/GameStateLoad.cpp:83
 msgid "New Game"
@@ -350,11 +350,11 @@ msgstr "ゲームをロードする"
 
 #: ../../../src/GameStateLoad.cpp:661
 msgid "Entering game world..."
-msgstr "ゲームの世界に入る…"
+msgstr "ゲームの世界に入ります…"
 
 #: ../../../src/GameStateLoad.cpp:664
 msgid "Loading saved game..."
-msgstr "ゲームに保存したセーブデータをロードする..."
+msgstr "ゲームのセーブデータをロードしています..."
 
 #: ../../../src/GameStateLoad.cpp:708 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
@@ -372,7 +372,7 @@ msgstr "作る"
 
 #: ../../../src/GameStateNew.cpp:174
 msgid "Choose a Portrait"
-msgstr "画像を選択します。"
+msgstr "肖像を選択します。"
 
 #: ../../../src/GameStateNew.cpp:178
 msgid "Choose a Name"
@@ -475,7 +475,7 @@ msgstr "キャラクター"
 #: ../../../src/MenuActionBar.cpp:394 ../../../src/MenuInventory.cpp:142
 #: ../../../src/MenuVendor.cpp:50
 msgid "Inventory"
-msgstr "在庫品"
+msgstr "物品"
 
 #: ../../../src/InputState.cpp:312 ../../../src/MenuActionBar.cpp:401
 #: ../../../src/MenuActionBar.cpp:403 ../../../src/MenuPowers.cpp:112
@@ -542,27 +542,27 @@ msgstr ""
 #: ../../../src/InputState.cpp:328
 #, fuzzy
 msgid "Right Mouse"
-msgstr "右"
+msgstr "右マウス"
 
 #: ../../../src/InputState.cpp:329
 #, fuzzy
 msgid "Wheel Up"
-msgstr "マウスホイールアップ"
+msgstr "マウスホイール アップ"
 
 #: ../../../src/InputState.cpp:330
 #, fuzzy
 msgid "Wheel Down"
-msgstr "マウスホイールダウン"
+msgstr "マウスホイール ダウン"
 
 #: ../../../src/InputState.cpp:331
 #, fuzzy
 msgid "Mouse X1"
-msgstr "マウスの狙い"
+msgstr "マウス X1"
 
 #: ../../../src/InputState.cpp:332
 #, fuzzy
 msgid "Mouse X2"
-msgstr "マウスの狙い"
+msgstr "マウス X2"
 
 #: ../../../src/ItemManager.cpp:406 ../../../src/ItemManager.cpp:409
 msgid "Unknown Item"
@@ -571,12 +571,12 @@ msgstr ""
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:761
 #, fuzzy, c-format
 msgid "%d%% Speed"
-msgstr "%dスピード"
+msgstr "%d%% スピード"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:764
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
-msgstr "%dスピード"
+msgstr "%d%% スピード"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
 #: ../../../src/MenuPowers.cpp:726
@@ -586,7 +586,7 @@ msgstr "氷への抵抗"
 
 #: ../../../src/ItemManager.cpp:658
 msgid "Quest Item"
-msgstr "探求のもの"
+msgstr "クエスト品"
 
 #: ../../../src/ItemManager.cpp:685
 #, c-format
@@ -613,32 +613,32 @@ msgstr "レベル％dが必要です"
 #: ../../../src/MenuPowers.cpp:994
 #, fuzzy, c-format
 msgid "Requires %s %d"
-msgstr "%d 精神が必要です。"
+msgstr "%s %dが必要です。"
 
 #: ../../../src/ItemManager.cpp:768
 #, fuzzy, c-format
 msgid "Requires Class: %s"
-msgstr "%d 精神が必要です。"
+msgstr "%d が必要です。"
 
 #: ../../../src/ItemManager.cpp:780 ../../../src/ItemManager.cpp:789
 #, c-format
 msgid "Buy Price: %d %s"
-msgstr "価格を購入する: %d %s金"
+msgstr "購入価格: %d %s"
 
 #: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "価格を購入する: %d %s金の各"
+msgstr "購入価格: %d %s 1つあたり"
 
 #: ../../../src/ItemManager.cpp:797
 #, c-format
 msgid "Sell Price: %d %s"
-msgstr "価格を販売: %d %s金"
+msgstr "売却価格: %d %s"
 
 #: ../../../src/ItemManager.cpp:799
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "価格を販売: %d %s金の各"
+msgstr "売却価格: %d %s 1つあたり"
 
 #: ../../../src/ItemManager.cpp:808
 msgid "Set: "
@@ -704,12 +704,12 @@ msgstr ""
 #: ../../../src/MenuCharacter.cpp:388 ../../../src/MenuCharacter.cpp:412
 #, fuzzy, c-format
 msgid "Each level grants %d. "
-msgstr "各レベルは、HPの+2点が付与されます。"
+msgstr "レベルごとに、%d が付与されます。"
 
 #: ../../../src/MenuCharacter.cpp:392 ../../../src/MenuCharacter.cpp:416
 #, fuzzy, c-format
 msgid "Each point of %s grants %d. "
-msgstr "精神助成金+8 MPの各点。"
+msgstr "%s の各点ごとに、%d が付与されます。"
 
 #: ../../../src/MenuDevConsole.cpp:46
 msgid "Execute"
@@ -841,12 +841,12 @@ msgstr "%sの%d%%を失った"
 #: ../../../src/MenuInventory.cpp:162
 #, c-format
 msgid "Lost %d%% of total XP. "
-msgstr "%sの%d%%の合計経験を失った"
+msgstr "合計XPを%d%%失った"
 
 #: ../../../src/MenuInventory.cpp:167
 #, c-format
 msgid "Lost %d%% of current level XP. "
-msgstr "%sの%d%%の現在経験を失った"
+msgstr "現在レベルXPを%d%%失った"
 
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
@@ -907,7 +907,7 @@ msgstr "この項目は、アクションバーから使用することができ
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
-msgstr "注釈"
+msgstr "メモ"
 
 #: ../../../src/MenuLog.cpp:86
 msgid "Quests"
@@ -934,17 +934,17 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:687
 #, c-format
 msgid "Costs %d MP"
-msgstr "費用は、%d はMPです。"
+msgstr "費用は%d MPです。"
 
 #: ../../../src/MenuPowers.cpp:691
 #, c-format
 msgid "Costs %d HP"
-msgstr "%dのHPが必要"
+msgstr "費用は%d HPです。"
 
 #: ../../../src/MenuPowers.cpp:696
 #, fuzzy
 msgid "Cooldown:"
-msgstr "クールダウンは%d秒"
+msgstr "クールダウン:"
 
 #: ../../../src/MenuPowers.cpp:740 ../../../src/MenuPowers.cpp:743
 msgid "Damage per second"
@@ -1072,7 +1072,7 @@ msgstr "%s 精神が必要です。"
 
 #: ../../../src/MenuPowers.cpp:1034
 msgid "Click to Unlock (uses 1 Skill Point)"
-msgstr ""
+msgstr "クリックすると解放（スキルポイントを1消費）"
 
 #: ../../../src/MenuPowers.cpp:1038 ../../../src/MenuPowers.cpp:1040
 #, fuzzy
@@ -1107,7 +1107,7 @@ msgstr "買い戻し"
 
 #: ../../../src/MenuVendor.cpp:184
 msgid "Vendor"
-msgstr "売り主"
+msgstr "売り手"
 
 #: ../../../src/PowerManager.cpp:974
 #, c-format
@@ -1435,7 +1435,7 @@ msgstr "クールダウンは%d秒"
 
 #, fuzzy
 #~ msgid "Exit to title?"
-#~ msgstr "タイトルに戻ります。"
+#~ msgstr "タイトルに戻りますか？"
 
 #~ msgid "Empty Slot"
 #~ msgstr "空のスロット"
@@ -1515,13 +1515,13 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "精神的な（M）は、精神的な武器の熟練度と全体のMPを増加させる。"
 
 #~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "攻撃（O）は、遠隔武器の熟練度と精度を向上させます。"
+#~ msgstr "攻撃（O）は、遠隔武器の熟練度と精度を向上させる。"
 
 #~ msgid "Defense (D) increases armor proficiency and avoidance."
 #~ msgstr "防衛（D）は、鎧の習熟度と回避を増加させる。"
 
 #~ msgid "Save and exit to title?"
-#~ msgstr "保存しタイトルメニューに終了しますか"
+#~ msgstr "セーブして終了しタイトルメニューに戻りますか？"
 
 #~ msgid "Click to Unlock"
 #~ msgstr "ロックを解除するにはクリック"
@@ -1530,7 +1530,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "キャラクターのメニュー (C)"
 
 #~ msgid "Inventory Menu (I)"
-#~ msgstr "在庫メニュー (I)"
+#~ msgstr "物品のメニュー (I)"
 
 #~ msgid "Power Menu (P)"
 #~ msgstr "能力のメニュー (P)"
@@ -1539,31 +1539,31 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "ログのメニュー (L)"
 
 #~ msgid "Each point of Physical grants +%d HP. Each level grants +%d HP"
-#~ msgstr "物理的な助成金の各ポイント+％d個のHP。各レベルの権限付与+％dは、HP"
+#~ msgstr "物理の助成は各点あたり +％d HP。各レベルごとに+％d HPを助成"
 
 #~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "分当たりHP自然回復。物理的な助成金の各点は、+％dのHP自然回復。各レベルの権限付与+％dは、HP自然回復"
+#~ msgstr "分当たりHP自然回復。物理の助成は各点あたり +％d のHP自然回復。各レベルごとに +％d のHP自然回復を助成"
 
 #~ msgid "Each point of Mental grants +%d MP. Each level grants +%d MP"
-#~ msgstr "精神的な助成金の各ポイント+％d個のMP。各レベルの権限付与は+％dはMP"
+#~ msgstr "精神の助成は各点あたり +％d MP。各レベルごとに +％d MPを助成"
 
 #~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "毎分MP自然回復。精神的な助成金の各点は、+%d個のMP自然回復。各レベルの権限付与+%dのMP自然回復"
+#~ msgstr "毎分MP自然回復。精神的な助成は各点あたり +%d のMP自然回復。各レベルごとに +％d のMP自然回復"
 
 #~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "犯罪の助成金の各点は、+％d個の精度。各レベルは+％dの精度を付与"
+#~ msgstr "攻撃の助成は各点あたり +％d の精度。各レベルごとに +％d の精度を助成"
 
 #~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "防衛補助金の各点は、+％dは回避。各レベルの権限付与は+％dの回避"
+#~ msgstr "防衛の補助は各点あたり +％d の回避。各レベルごとに +％d の回避を助成"
 
 #~ msgid "Requires a physical weapon"
-#~ msgstr "物理的な武器が必要です。"
+#~ msgstr "物理 的な武器が必要です。"
 
 #~ msgid "Requires a mental weapon"
-#~ msgstr "精神的な武器が必要です。"
+#~ msgstr "精神 的な武器が必要です。"
 
 #~ msgid "Requires an offense weapon"
-#~ msgstr "攻撃武器が必要です。"
+#~ msgstr "攻撃 的な武器が必要です。"
 
 #~ msgid "Flare"
 #~ msgstr "フレア"
@@ -1620,7 +1620,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "あなたは %d 金を受け取ります。"
 
 #~ msgid "Create Character"
-#~ msgstr "キャラクタを作成する。"
+#~ msgstr "キャラクターを作成する。"
 
 #~ msgid "Main Hand"
 #~ msgstr "利き手"
@@ -1632,7 +1632,7 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "第二の手"
 
 #~ msgid "Artifact"
-#~ msgstr "骨董"
+#~ msgstr "アーティファクト"
 
 #~ msgid "Consumable"
 #~ msgstr "消耗品"
@@ -1665,67 +1665,67 @@ msgstr "クールダウンは%d秒"
 #~ msgstr "耐火"
 
 #~ msgid "Each level grants +1 HP regen"
-#~ msgstr "各レベルは+1 HPの再生を許可します。"
+#~ msgstr "各レベルごとに +1 HPの再生を助成します。"
 
 #~ msgid "Each level grants +2 MP"
-#~ msgstr "各レベルは+2 MPを与えます。"
+#~ msgstr "各レベルごとに +2 MPを助成します。"
 
 #~ msgid "Each level grants +1 MP regen"
-#~ msgstr "各レベルは、+1 MP再生を与えます。"
+#~ msgstr "各レベルごとに +1 MPの再生を助成します。"
 
 #~ msgid "Each level grants +1 accuracy"
-#~ msgstr "各レベルは+1の精度を与えます。"
+#~ msgstr "各レベルごとに +1 の精度を助成します。"
 
 #~ msgid "Each level grants +1 avoidance"
-#~ msgstr "各レベルは+1の回避を与えます。"
+#~ msgstr "各レベルごとに +1　の回避を助成します。"
 
 #~ msgid "Dagger Proficiency"
-#~ msgstr "ダガー能力。"
+#~ msgstr "ダガーの能力。"
 
 #~ msgid "Shortsword Proficiency"
-#~ msgstr "短い剣の能力。"
+#~ msgstr "ショートソードの能力。"
 
 #~ msgid "Longsword Proficiency"
-#~ msgstr "長い剣の能力。"
+#~ msgstr "ロングソードの能力。"
 
 #~ msgid "Greatsword Proficiency"
-#~ msgstr "偉大な剣の能力。"
+#~ msgstr "グレートソードの能力。"
 
 #~ msgid "Wand Proficiency"
-#~ msgstr "ワンド能力。"
+#~ msgstr "ワンドの能力。"
 
 #~ msgid "Rod Proficiency"
-#~ msgstr "ロッド能力。"
+#~ msgstr "ロッドの能力。"
 
 #~ msgid "Staff Proficiency"
 #~ msgstr "スタッフの能力。"
 
 #~ msgid "Greatstaff Proficiency"
-#~ msgstr "素晴らしいスタッフの能力。"
+#~ msgstr "グレートスタッフの能力。"
 
 #~ msgid "Slingshot Proficiency"
 #~ msgstr "スリングショット能力。"
 
 #~ msgid "Shortbow Proficiency"
-#~ msgstr "短弓の能力。"
+#~ msgstr "ショートボウの能力。"
 
 #~ msgid "Longbow Proficiency"
-#~ msgstr "長い弓の能力。"
+#~ msgstr "ロングボウの能力。"
 
 #~ msgid "Greatbow Proficiency"
-#~ msgstr "偉大な弓の能力。"
+#~ msgstr "グレートボウの能力。"
 
 #~ msgid "Light Armor Proficiency"
 #~ msgstr "軽装鎧の能力。"
 
 #~ msgid "Light Shield Proficiency"
-#~ msgstr "遮光能力。"
+#~ msgstr "軽装シールドの能力。"
 
 #~ msgid "Heavy Armor Proficiency"
 #~ msgstr "重い鎧の能力。"
 
 #~ msgid "Heavy Shield Proficiency"
-#~ msgstr "重い遮蔽能力。"
+#~ msgstr "重いシールドの能力。"
 
 #~ msgid "Messages"
 #~ msgstr "メッセージ"
