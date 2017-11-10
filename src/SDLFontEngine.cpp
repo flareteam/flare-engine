@@ -242,6 +242,9 @@ bool SDLFontEngine::hasMissingGlyph(const std::string& text) {
  * Justify is left, right, or center
  */
 void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int justify, Image *target, const Color& color) {
+	if (text.empty())
+		return;
+
 	Image *graphics;
 
 	Rect dest_rect = position(text, x, y, justify);
@@ -254,13 +257,15 @@ void SDLFontEngine::renderInternal(const std::string& text, int x, int y, int ju
 
 	// Render text into target
 	graphics = render_device->renderTextToImage(active_font, text, color, active_font->blend);
-	Rect clip;
-	clip.w = graphics->getWidth();
-	clip.h = graphics->getHeight();
-	render_device->renderToImage(graphics, clip, target, dest_rect);
+	if (graphics) {
+		Rect clip;
+		clip.w = graphics->getWidth();
+		clip.h = graphics->getHeight();
+		render_device->renderToImage(graphics, clip, target, dest_rect);
 
-	// text is cached, we can free temp resource
-	graphics->unref();
+		// text is cached, we can free temp resource
+		graphics->unref();
+	}
 }
 
 SDLFontEngine::~SDLFontEngine() {
