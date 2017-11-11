@@ -43,12 +43,12 @@ msgstr ""
 #: ../../../src/CampaignManager.cpp:124
 #, c-format
 msgid "%d %s removed."
-msgstr "%d %s 除去された。"
+msgstr "%d %s が除去された。"
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%s removed."
-msgstr "%s 除去された。"
+msgstr "%s が除去された。"
 
 #: ../../../src/CampaignManager.cpp:146
 #, c-format
@@ -72,15 +72,15 @@ msgstr "あなたは %d XPを受け取ります。"
 
 #: ../../../src/CampaignManager.cpp:172
 msgid "HP restored."
-msgstr "HPが回復した。"
+msgstr "HP が回復した。"
 
 #: ../../../src/CampaignManager.cpp:176
 msgid "MP restored."
-msgstr "MPが回復した。"
+msgstr "MP が回復した。"
 
 #: ../../../src/CampaignManager.cpp:181
 msgid "HP and MP restored."
-msgstr "HPとMPが回復した。"
+msgstr "HP と MP が回復した。"
 
 #: ../../../src/CampaignManager.cpp:185
 msgid "Negative effects removed."
@@ -210,7 +210,7 @@ msgstr "有効 >>"
 
 #: ../../../src/GameStateConfigBase.cpp:923
 msgid "Game: "
-msgstr ""
+msgstr "ゲーム: "
 
 #: ../../../src/GameStateConfigBase.cpp:928
 msgid "Requires version: "
@@ -1202,7 +1202,7 @@ msgstr "吸収の最大"
 
 #: ../../../src/Stats.cpp:76
 msgid "Critical Hit Chance"
-msgstr "クリティカルヒットのチャンス"
+msgstr "クリティカルヒットの機会"
 
 #: ../../../src/Stats.cpp:81
 msgid "Bonus XP"
@@ -1245,15 +1245,15 @@ msgstr "ポイズ"
 #: ../../../src/Stats.cpp:102
 #, fuzzy
 msgid "Reduces your chance of stumbling when hit."
-msgstr "打ったときつまずきのあなたのチャンスを低減"
+msgstr "打ったときつまずきのあなたのチャンスを低減します。"
 
 #: ../../../src/Stats.cpp:106
 msgid "Missile Reflect Chance"
-msgstr "Missile 反射の機会"
+msgstr "投擲物の反射の機会"
 
 #: ../../../src/Stats.cpp:107
 msgid "Increases your chance of reflecting missiles back at enemies."
-msgstr ""
+msgstr "投擲物を敵に反射する機会の増加です。"
 
 #: ../../../src/Stats.cpp:111
 msgid "Damage Reflection"
@@ -1269,7 +1269,7 @@ msgstr "HP スティール"
 
 #: ../../../src/Stats.cpp:117
 msgid "Percentage of HP stolen per hit."
-msgstr ""
+msgstr "一撃あたりの HP を盗むパーセントです。"
 
 #: ../../../src/Stats.cpp:121
 msgid "MP Steal"
@@ -1277,7 +1277,7 @@ msgstr "MP スティール"
 
 #: ../../../src/Stats.cpp:122
 msgid "Percentage of MP stolen per hit."
-msgstr ""
+msgstr "一撃あたりの MP を盗むパーセントです。"
 
 #: ../../../src/Stats.cpp:126
 msgid "Base HP"
@@ -1381,7 +1381,7 @@ msgstr "%s 秒"
 
 #, fuzzy
 #~ msgid "Each point of Physical grants %d. "
-#~ msgstr "物理が助成 %d 点。"
+#~ msgstr "物理が女性 %d 点。"
 
 #, fuzzy
 #~ msgid "Each point of Mental grants %d. "
