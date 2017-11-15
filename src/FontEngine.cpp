@@ -72,6 +72,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 	char space = 32;
 	size_t cursor = 0;
 	std::string fulltext = text + " ";
+	std::string long_token;
 
 	builder.str("");
 	builder_prev.str("");
@@ -92,7 +93,22 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 			builder_prev.str("");
 			builder.str("");
 
+			long_token = popTokenByWidth(next_word, width);
+
+			if (!long_token.empty()) {
+				while (!long_token.empty()) {
+					if (calc_width(next_word) > max_width) {
+						max_width = calc_width(next_word);
+					}
+					height += getLineHeight();
+
+					next_word = long_token;
+					long_token = popTokenByWidth(next_word, width);
+				}
+			}
+
 			builder << next_word << " ";
+			builder_prev.str(builder.str());
 		}
 		else {
 			builder <<  " ";
@@ -153,6 +169,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 	std::stringstream builder_prev;
 	char space = 32;
 	size_t cursor = 0;
+	std::string long_token;
 
 	builder.str("");
 	builder_prev.str("");
@@ -169,7 +186,20 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 			builder_prev.str("");
 			builder.str("");
 
+			long_token = popTokenByWidth(next_word, width);
+
+			if (!long_token.empty()) {
+				while (!long_token.empty()) {
+					renderInternal(next_word, x, cursor_y, justify, target, color);
+					cursor_y += getLineHeight();
+
+					next_word = long_token;
+					long_token = popTokenByWidth(next_word, width);
+				}
+			}
+
 			builder << next_word << " ";
+			builder_prev.str(builder.str());
 		}
 		else {
 			builder << " ";
@@ -187,4 +217,32 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 void FontEngine::renderShadowed(const std::string& text, int x, int y, int justify, Image *target, int width, const Color& color) {
 	render(text, x+1, y+1, justify, target, width, FONT_BLACK);
 	render(text, x, y, justify, target, width, color);
+}
+
+/*
+ * Fits a string, "text", to a pixel "width".
+ * The original string is mutated to fit within the width.
+ * Returns a string that is the remainder of the original string that could not fit in the width.
+ */
+std::string FontEngine::popTokenByWidth(std::string& text, int width) {
+	size_t new_length = 0;
+
+	for (size_t i = 0; i <= text.length(); ++i) {
+		if ((text[i] & 0xc0) == 0x80)
+			continue;
+
+		if (calc_width(text.substr(0, i)) > width)
+			break;
+
+		new_length = i;
+	}
+
+	if (new_length > 0) {
+		std::string ret = text.substr(new_length, text.length());
+		text = text.substr(0, new_length);
+		return ret;
+	}
+	else {
+		return text;
+	}
 }
