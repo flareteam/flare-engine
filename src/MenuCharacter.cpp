@@ -466,6 +466,10 @@ void MenuCharacter::logic() {
 				upgradeButton[i]->enabled = true;
 				tablist.add(upgradeButton[i]);
 			}
+			else {
+				upgradeButton[i]->enabled = false;
+				tablist.remove(upgradeButton[i]);
+			}
 		}
 	}
 
