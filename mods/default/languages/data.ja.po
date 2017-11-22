@@ -35,15 +35,15 @@ msgstr "防御"
 
 #: ../engine/damage_types.txt:3
 msgid "Melee Damage Min"
-msgstr ""
+msgstr "近接ダメージ Min"
 
 #: ../engine/damage_types.txt:9
 msgid "Ranged Damage Min"
-msgstr ""
+msgstr "遠距離ダメージ Min"
 
 #: ../engine/damage_types.txt:15
 msgid "Mental Damage Min"
-msgstr ""
+msgstr "精神ダメージ Min"
 
 #: ../cutscenes/credits.txt:8
 msgid "Flare Engine Credits"
