@@ -408,7 +408,7 @@ msgstr "ゲームを終了"
 
 #: ../../../src/InputState.cpp:295
 msgid "Accept"
-msgstr "受け入れる"
+msgstr "了解する"
 
 #: ../../../src/InputState.cpp:296
 msgid "Up"
@@ -513,19 +513,19 @@ msgstr "削除"
 
 #: ../../../src/InputState.cpp:320
 msgid "ActionBar Accept"
-msgstr "アクションバー受け入れ"
+msgstr "アクションバー受入"
 
 #: ../../../src/InputState.cpp:321
 msgid "ActionBar Left"
-msgstr "アクションバーを左"
+msgstr "アクションバー左"
 
 #: ../../../src/InputState.cpp:322
 msgid "ActionBar Right"
-msgstr "アクションバーを右"
+msgstr "アクションバー右"
 
 #: ../../../src/InputState.cpp:323
 msgid "ActionBar Use"
-msgstr "アクションバーを使用"
+msgstr "アクションバー使用"
 
 #: ../../../src/InputState.cpp:324
 msgid "Developer Menu"
@@ -926,7 +926,7 @@ msgstr "この項目は、アクションバーから使用することができ
 
 #: ../../../src/MenuNPCActions.cpp:71
 msgid "Trade"
-msgstr "通商"
+msgstr "売買"
 
 #: ../../../src/MenuNumPicker.cpp:108
 msgid "Enter amount:"
@@ -943,25 +943,24 @@ msgid "Costs %d HP"
 msgstr "費用は%d HP"
 
 #: ../../../src/MenuPowers.cpp:696
-#, fuzzy
 msgid "Cooldown:"
 msgstr "クールダウン:"
 
 #: ../../../src/MenuPowers.cpp:740 ../../../src/MenuPowers.cpp:743
 msgid "Damage per second"
-msgstr ""
+msgstr "ダメージ毎秒"
 
 #: ../../../src/MenuPowers.cpp:746 ../../../src/MenuPowers.cpp:749
 msgid "HP per second"
-msgstr ""
+msgstr "HP毎秒"
 
 #: ../../../src/MenuPowers.cpp:752 ../../../src/MenuPowers.cpp:755
 msgid "MP per second"
-msgstr ""
+msgstr "MP毎秒"
 
 #: ../../../src/MenuPowers.cpp:759
 msgid "Immobilize"
-msgstr ""
+msgstr "動けなくする"
 
 #: ../../../src/MenuPowers.cpp:767
 #, fuzzy
@@ -1289,7 +1288,7 @@ msgstr "ベースMP"
 
 #: ../../../src/Utils.cpp:193
 msgid "k"
-msgstr ""
+msgstr "千"
 
 #: ../../../src/Utils.cpp:360
 #, c-format
@@ -1381,7 +1380,7 @@ msgstr "%s 秒"
 
 #, fuzzy
 #~ msgid "Each point of Physical grants %d. "
-#~ msgstr "物理が女性 %d 点。"
+#~ msgstr "物理が助成 %d 点。"
 
 #, fuzzy
 #~ msgid "Each point of Mental grants %d. "
@@ -1466,7 +1465,7 @@ msgstr "%s 秒"
 
 #, fuzzy
 #~ msgid "Low"
-#~ msgstr "ログ"
+#~ msgstr "ロウ"
 
 #~ msgid "Normal"
 #~ msgstr "ノーマル"
