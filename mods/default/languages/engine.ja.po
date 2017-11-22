@@ -1062,7 +1062,7 @@ msgstr "%s エレメンタルダメージ"
 #: ../../../src/MenuPowers.cpp:983
 #, c-format
 msgid "Requires a %s"
-msgstr "%d が必要です"
+msgstr "%s が必要です"
 
 #: ../../../src/MenuPowers.cpp:1022 ../../../src/MenuPowers.cpp:1025
 #, c-format
