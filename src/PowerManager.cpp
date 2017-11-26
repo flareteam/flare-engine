@@ -163,6 +163,7 @@ void PowerManager::loadPowers() {
 				powers.resize(input_id + 1);
 
 			clear_post_effects = true;
+			powers[input_id].is_empty = false;
 
 			continue;
 		}

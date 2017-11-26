@@ -114,6 +114,7 @@ public:
 class Power {
 public:
 	// base info
+	bool is_empty;
 	int type; // what kind of activate() this is
 	std::string name;
 	std::string description;
@@ -260,7 +261,8 @@ public:
 	float target_nearest;
 
 	Power()
-		: type(-1)
+		: is_empty(true)
+		, type(-1)
 		, name("")
 		, description("")
 		, icon(-1)

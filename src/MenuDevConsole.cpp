@@ -22,6 +22,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "EnemyManager.h"
 #include "FileParser.h"
 #include "MenuDevConsole.h"
+#include "MenuManager.h"
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "Settings.h"
@@ -219,9 +220,11 @@ void MenuDevConsole::execute() {
 	}
 
 	if (args[0] == "help") {
+		log_history->add("add_power - " + msg->get("adds a power to the action bar"), false);
 		log_history->add("toggle_hud - " + msg->get("turns on/off all of the HUD elements"), false);
 		log_history->add("toggle_devhud - " + msg->get("turns on/off the developer hud"), false);
 		log_history->add("respec - " + msg->get("resets the player to level 1, with no stat or skill points spent"), false);
+		log_history->add("list_powers - " + msg->get("Prints a list of powers that match a search term. No search term will list all items"), false);
 		log_history->add("list_maps - " + msg->get("Prints out all the map filenames located in the \"maps/\" directory."), false);
 		log_history->add("list_status - " + msg->get("Prints out the active campaign statuses that match a search term. No search term will list all active statuses"), false);
 		log_history->add("list_items - " + msg->get("Prints a list of items that match a search term. No search term will list all items"), false);
@@ -361,6 +364,53 @@ void MenuDevConsole::execute() {
 			}
 
 			log_history->setMaxMessages(); // reset
+		}
+	}
+	else if (args[0] == "list_powers") {
+		std::stringstream ss;
+
+		std::string search_terms;
+		for (size_t i=1; i<args.size(); i++) {
+			search_terms += args[i];
+
+			if (i+1 != args.size())
+				search_terms += ' ';
+		}
+
+		std::vector<size_t> matching_ids;
+
+		for (size_t i=1; i<powers->powers.size(); ++i) {
+			if (powers->powers[i].is_empty)
+				continue;
+
+			std::string item_name = powers->powers[i].name;
+			if (!search_terms.empty() && stringFindCaseInsensitive(item_name, search_terms) == std::string::npos)
+				continue;
+
+			matching_ids.push_back(i);
+		}
+
+		if (!matching_ids.empty()) {
+			log_history->setMaxMessages(static_cast<unsigned>(matching_ids.size()));
+
+			for (size_t i=matching_ids.size(); i>0; i--) {
+				size_t id = matching_ids[i-1];
+
+				ss.str("");
+				ss << powers->powers[id].name << " (" << id <<")";
+				log_history->add(ss.str(), false);
+			}
+
+			log_history->setMaxMessages(); // reset
+		}
+	}
+	else if (args[0] == "add_power") {
+		if (args.size() != 2) {
+			log_history->add(msg->get("ERROR: Incorrect number of arguments"), false, &color_error);
+			log_history->add(msg->get("HINT: ") + args[0] + msg->get(" <id>"), false, &color_hint);
+		}
+		else {
+			menu->act->addPower(toInt(args[1]));
 		}
 	}
 	else if (args[0] == "exec") {
