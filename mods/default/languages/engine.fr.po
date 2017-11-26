@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 15:50-0400\n"
+"POT-Creation-Date: 2017-11-26 13:59-0500\n"
 "PO-Revision-Date: 2012-10-15 HO:MI+ZONE\n"
 "Last-Translator: Nubux<strauss.morgan@gmail.com>\n"
 "Language-Team:\n"
@@ -96,7 +96,7 @@ msgstr "PV et PM restaurés, effet négatif supprimé"
 msgid "miss"
 msgstr "manqué"
 
-#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:990
+#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:997
 #: ../../../src/StatBlock.cpp:751 ../../../src/StatBlock.cpp:757
 #, c-format
 msgid "+%d HP"
@@ -130,96 +130,96 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../../../src/GameStateConfigBase.cpp:157
+#: ../../../src/GameStateConfigBase.cpp:159
 #: ../../../src/GameStateConfigDesktop.cpp:122
 msgid "Audio"
 msgstr "Audio"
 
-#: ../../../src/GameStateConfigBase.cpp:158
+#: ../../../src/GameStateConfigBase.cpp:160
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Interface"
 msgstr "Interface"
 
-#: ../../../src/GameStateConfigBase.cpp:159
+#: ../../../src/GameStateConfigBase.cpp:161
 #: ../../../src/GameStateConfigDesktop.cpp:126
 msgid "Mods"
 msgstr "Mods"
 
-#: ../../../src/GameStateConfigBase.cpp:237 ../../../src/MenuExit.cpp:64
+#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:64
 msgid "Music Volume"
 msgstr "Volume de la musique"
 
-#: ../../../src/GameStateConfigBase.cpp:241 ../../../src/MenuExit.cpp:69
+#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:69
 msgid "Sound Volume"
 msgstr "Volume des sons"
 
-#: ../../../src/GameStateConfigBase.cpp:245
+#: ../../../src/GameStateConfigBase.cpp:247
 msgid "Language"
 msgstr "Langues"
 
-#: ../../../src/GameStateConfigBase.cpp:249
+#: ../../../src/GameStateConfigBase.cpp:251
 msgid "Show combat text"
 msgstr "Afficher le texte des combats"
 
-#: ../../../src/GameStateConfigBase.cpp:253
+#: ../../../src/GameStateConfigBase.cpp:255
 msgid "Show FPS"
 msgstr "Afficher les FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:257
+#: ../../../src/GameStateConfigBase.cpp:259
 msgid "Colorblind Mode"
 msgstr "Mode daltonien"
 
-#: ../../../src/GameStateConfigBase.cpp:261
+#: ../../../src/GameStateConfigBase.cpp:263
 #, fuzzy
 msgid "Hardware mouse cursor"
 msgstr "Hardware surfaces"
 
-#: ../../../src/GameStateConfigBase.cpp:265
+#: ../../../src/GameStateConfigBase.cpp:267
 msgid "Developer Mode"
 msgstr "Mode développeur"
 
-#: ../../../src/GameStateConfigBase.cpp:269
+#: ../../../src/GameStateConfigBase.cpp:271
 msgid "Always show loot labels"
 msgstr "Toujours montrer les étiquettes de butin"
 
-#: ../../../src/GameStateConfigBase.cpp:273
+#: ../../../src/GameStateConfigBase.cpp:275
 msgid "Always show stat bar labels"
 msgstr "Toujours montrer les étiquettes de la bare de statistiques"
 
-#: ../../../src/GameStateConfigBase.cpp:277
+#: ../../../src/GameStateConfigBase.cpp:279
 msgid "Automatically equip items"
 msgstr "Équiper automatiquement les objets"
 
-#: ../../../src/GameStateConfigBase.cpp:281
+#: ../../../src/GameStateConfigBase.cpp:283
 msgid "Subtitles"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:285
+#: ../../../src/GameStateConfigBase.cpp:287
 msgid "Active Mods"
 msgstr "Mods actifs"
 
-#: ../../../src/GameStateConfigBase.cpp:289
+#: ../../../src/GameStateConfigBase.cpp:291
 msgid "Available Mods"
 msgstr "Mods disponibles"
 
-#: ../../../src/GameStateConfigBase.cpp:303
+#: ../../../src/GameStateConfigBase.cpp:305
 msgid "<< Disable"
 msgstr "<< Désactiver"
 
-#: ../../../src/GameStateConfigBase.cpp:309
+#: ../../../src/GameStateConfigBase.cpp:311
 msgid "Enable >>"
 msgstr "Activer >>"
 
-#: ../../../src/GameStateConfigBase.cpp:923
+#: ../../../src/GameStateConfigBase.cpp:925
 msgid "Game: "
 msgstr "Jeu : "
 
-#: ../../../src/GameStateConfigBase.cpp:928
+#: ../../../src/GameStateConfigBase.cpp:930
 #, fuzzy
 msgid "Requires version: "
 msgstr "Nécessite la version: "
 
-#: ../../../src/GameStateConfigBase.cpp:942
+#: ../../../src/GameStateConfigBase.cpp:944
 #, fuzzy
 msgid "Requires mods: "
 msgstr "Nécessite les mods: "
@@ -340,33 +340,33 @@ msgstr "Retour au menu"
 msgid "New Game"
 msgstr "Nouvelle partie"
 
-#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:571
+#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:573
 msgid "Choose a Slot"
 msgstr "Choisir une partie"
 
-#: ../../../src/GameStateLoad.cpp:544 ../../../src/GameStateLoad.cpp:565
+#: ../../../src/GameStateLoad.cpp:546 ../../../src/GameStateLoad.cpp:567
 msgid "Enable a story mod to continue"
 msgstr "Activez un mod scenario pour continuer"
 
-#: ../../../src/GameStateLoad.cpp:560
+#: ../../../src/GameStateLoad.cpp:562
 msgid "Load Game"
 msgstr "Charger la partie"
 
-#: ../../../src/GameStateLoad.cpp:661
+#: ../../../src/GameStateLoad.cpp:663
 msgid "Entering game world..."
 msgstr "Entrée dans le monde du jeu..."
 
-#: ../../../src/GameStateLoad.cpp:664
+#: ../../../src/GameStateLoad.cpp:666
 msgid "Loading saved game..."
 msgstr "Chargement d'une partie..."
 
-#: ../../../src/GameStateLoad.cpp:708 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
 #, c-format
 msgid "Level %d"
 msgstr "Niveau %d"
 
-#: ../../../src/GameStateLoad.cpp:710
+#: ../../../src/GameStateLoad.cpp:712
 #, fuzzy
 msgid "Permadeath"
 msgstr "Mort permanente"
@@ -717,88 +717,106 @@ msgstr "Chaque niveau donne %d"
 msgid "Each point of %s grants %d. "
 msgstr "Chaque point de %s donne %d."
 
-#: ../../../src/MenuDevConsole.cpp:46
+#: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
 msgstr "Éxécuter"
 
-#: ../../../src/MenuDevConsole.cpp:112
+#: ../../../src/MenuDevConsole.cpp:113
 msgid "Developer Console"
 msgstr "Console de développement"
 
-#: ../../../src/MenuDevConsole.cpp:120
+#: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr "Les arguments contenants des espaces devraient être mis entre guillemets. Exemple :"
 
-#: ../../../src/MenuDevConsole.cpp:121
+#: ../../../src/MenuDevConsole.cpp:122
 msgid "Type 'help' to get a list of commands. "
 msgstr "Tapez 'help' pour avoir une liste des commandes."
 
-#: ../../../src/MenuDevConsole.cpp:222
+#: ../../../src/MenuDevConsole.cpp:223
+msgid "adds a power to the action bar"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:224
 msgid "turns on/off all of the HUD elements"
 msgstr "Activer/Désactiver tous les éléments de l'affichage HUD"
 
-#: ../../../src/MenuDevConsole.cpp:223
+#: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off the developer hud"
 msgstr "Activer/Désactiver l'affichage HUD"
 
-#: ../../../src/MenuDevConsole.cpp:224
+#: ../../../src/MenuDevConsole.cpp:226
 msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr "Rétablir le joueur au niveau 1, sans statistiques ni dépense de points de compétences"
 
-#: ../../../src/MenuDevConsole.cpp:225
-msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr ""
-
-#: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr "Affiche les états de la campagne active qui correspondent au terme recherché. L'absence de terme de recherche affichera la liste de tous les états actifs"
-
 #: ../../../src/MenuDevConsole.cpp:227
-msgid "Prints a list of items that match a search term. No search term will list all items"
+#, fuzzy
+msgid "Prints a list of powers that match a search term. No search term will list all items"
 msgstr "Affiche une liste des objets qui correspondent au terme recherché. L'absence de terme de recherche affichera tous les objets"
 
 #: ../../../src/MenuDevConsole.cpp:228
+msgid "Prints out all the map filenames located in the \"maps/\" directory."
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:229
+msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgstr "Affiche les états de la campagne active qui correspondent au terme recherché. L'absence de terme de recherche affichera la liste de tous les états actifs"
+
+#: ../../../src/MenuDevConsole.cpp:230
+msgid "Prints a list of items that match a search term. No search term will list all items"
+msgstr "Affiche une liste des objets qui correspondent au terme recherché. L'absence de terme de recherche affichera tous les objets"
+
+#: ../../../src/MenuDevConsole.cpp:231
 msgid "parses a series of event components and executes them as a single event"
 msgstr "parcourt une série de composants d'événements et les exécutent en tant qu'événement unique"
 
-#: ../../../src/MenuDevConsole.cpp:229
+#: ../../../src/MenuDevConsole.cpp:232
 msgid "clears the command history"
 msgstr "Effacer l'historique de commandes"
 
-#: ../../../src/MenuDevConsole.cpp:230
+#: ../../../src/MenuDevConsole.cpp:233
 msgid "displays this text"
 msgstr "affiche ce texte"
 
-#: ../../../src/MenuDevConsole.cpp:237
+#: ../../../src/MenuDevConsole.cpp:240
 msgid "Toggled the developer hud"
 msgstr "Affichage HUD développeur basculé"
 
-#: ../../../src/MenuDevConsole.cpp:241
+#: ../../../src/MenuDevConsole.cpp:244
 msgid "Toggled the hud"
 msgstr "Affichage HUD basculé"
 
-#: ../../../src/MenuDevConsole.cpp:375
+#: ../../../src/MenuDevConsole.cpp:409
+#, fuzzy
+msgid "ERROR: Incorrect number of arguments"
+msgstr "ERREUR: Trop peu d'arguments"
+
+#: ../../../src/MenuDevConsole.cpp:410 ../../../src/MenuDevConsole.cpp:435
+msgid "HINT: "
+msgstr "SUGGESTION : "
+
+#: ../../../src/MenuDevConsole.cpp:410
+msgid " <id>"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:425
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr "ERREUR: '%s' n'est pas une clé d'évènement valide"
 
-#: ../../../src/MenuDevConsole.cpp:384
+#: ../../../src/MenuDevConsole.cpp:434
 msgid "ERROR: Too few arguments"
 msgstr "ERREUR: Trop peu d'arguments"
 
-#: ../../../src/MenuDevConsole.cpp:385
-msgid "HINT: "
-msgstr "SUGGESTION : "
-
-#: ../../../src/MenuDevConsole.cpp:385
+#: ../../../src/MenuDevConsole.cpp:435
 msgid " <key>=<val> <key>=<val> ..."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:389
+#: ../../../src/MenuDevConsole.cpp:439
 msgid "ERROR: Unknown command"
 msgstr "ERREUR: Commande inconnue"
 
-#: ../../../src/MenuDevConsole.cpp:390
+#: ../../../src/MenuDevConsole.cpp:440
 msgid "HINT: Type help"
 msgstr "SUGGESTION : tapez help"
 
@@ -1114,16 +1132,16 @@ msgstr "Racheter"
 msgid "Vendor"
 msgstr "Vendeur"
 
-#: ../../../src/PowerManager.cpp:974
+#: ../../../src/PowerManager.cpp:981
 #, c-format
 msgid "+%d Shield"
 msgstr "Bouclier +%d"
 
-#: ../../../src/PowerManager.cpp:1230
+#: ../../../src/PowerManager.cpp:1237
 msgid "You are already transformed, untransform first."
 msgstr "Vous êtes deja transformé, reprenez forme humaine avant."
 
-#: ../../../src/PowerManager.cpp:1242
+#: ../../../src/PowerManager.cpp:1249
 msgid "Could not untransform at this position."
 msgstr "Vous ne pouvez pas reprendre forme humaine à cette position."
 

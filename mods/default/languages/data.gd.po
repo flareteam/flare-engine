@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine data\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 15:50+\n"
+"POT-Creation-Date: 2017-11-26 13:59+\n"
 "PO-Revision-Date: 2017-05-17 14:52+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
@@ -259,66 +259,70 @@ msgid "Stefano Peris"
 msgstr "Stefan Beller"
 
 #: ../cutscenes/credits.txt:78
+msgid "sujiniku"
+msgstr ""
+
+#: ../cutscenes/credits.txt:79
 msgid "Thomas Glamsch"
 msgstr "Thomas Glamsch"
 
-#: ../cutscenes/credits.txt:79
+#: ../cutscenes/credits.txt:80
 msgid "Timo Sievänen"
 msgstr "Timo Sievänen"
 
-#: ../cutscenes/credits.txt:80
+#: ../cutscenes/credits.txt:81
 msgid "Wuzzy2"
 msgstr "Wuzzy2"
 
-#: ../cutscenes/credits.txt:81
+#: ../cutscenes/credits.txt:82
 msgid "Yannis Anthymidis"
 msgstr "Yannis Anthymidis"
 
-#: ../cutscenes/credits.txt:84
+#: ../cutscenes/credits.txt:85
 msgid "Distributors"
 msgstr "Luchd-sgaoilidh"
 
-#: ../cutscenes/credits.txt:86
+#: ../cutscenes/credits.txt:87
 msgid "Ablu"
 msgstr "Ablu"
 
-#: ../cutscenes/credits.txt:87
+#: ../cutscenes/credits.txt:88
 msgid "Feillyne"
 msgstr "Feillyne"
 
-#: ../cutscenes/credits.txt:88
+#: ../cutscenes/credits.txt:89
 msgid "Jan-Hendrik Peters"
 msgstr "Jan-Hendrik Peters"
 
-#: ../cutscenes/credits.txt:90
+#: ../cutscenes/credits.txt:91
 msgid "miffe"
 msgstr "miffe"
 
-#: ../cutscenes/credits.txt:93
+#: ../cutscenes/credits.txt:94
 msgid "Special Thanks"
 msgstr "Taing shònraichte"
 
-#: ../cutscenes/credits.txt:97
+#: ../cutscenes/credits.txt:98
 msgid "For giving constant feedback and testing:"
 msgstr "Airson torr bheachdan is deuchainneachaidh:"
 
-#: ../cutscenes/credits.txt:98
+#: ../cutscenes/credits.txt:99
 msgid "Bart Kelsey"
 msgstr "Bart Kelsey"
 
-#: ../cutscenes/credits.txt:99
+#: ../cutscenes/credits.txt:100
 msgid "The community at OpenGameArt"
 msgstr "Coimhearsnachd OpenGameArt"
 
-#: ../cutscenes/credits.txt:103
+#: ../cutscenes/credits.txt:104
 msgid "For Tiled and the Flare map exporter:"
 msgstr "Airson Tiled agus inneal às-phortaidh mhapaichean Flare:"
 
-#: ../cutscenes/credits.txt:104
+#: ../cutscenes/credits.txt:105
 msgid "Thorbjørn Lindeijer"
 msgstr "Thorbjørn Lindeijer"
 
-#: ../cutscenes/credits.txt:106
+#: ../cutscenes/credits.txt:107
 msgid "Ranie Jade Ramiso"
 msgstr "Ranie Jade Ramiso"
 

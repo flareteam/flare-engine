@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine 1.00\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 15:50-0400\n"
+"POT-Creation-Date: 2017-11-26 13:59-0500\n"
 "PO-Revision-Date: 2016-09-15 09:50+0200\n"
 "Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
 "Language-Team: Russian <gnu@dn07.ru>\n"
@@ -95,7 +95,7 @@ msgstr "Жизнь и мана восстановлены, отрицатель�
 msgid "miss"
 msgstr "промах"
 
-#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:990
+#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:997
 #: ../../../src/StatBlock.cpp:751 ../../../src/StatBlock.cpp:757
 #, c-format
 msgid "+%d HP"
@@ -129,94 +129,94 @@ msgstr "ОК"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: ../../../src/GameStateConfigBase.cpp:157
+#: ../../../src/GameStateConfigBase.cpp:159
 #: ../../../src/GameStateConfigDesktop.cpp:122
 msgid "Audio"
 msgstr "Аудио"
 
-#: ../../../src/GameStateConfigBase.cpp:158
+#: ../../../src/GameStateConfigBase.cpp:160
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: ../../../src/GameStateConfigBase.cpp:159
+#: ../../../src/GameStateConfigBase.cpp:161
 #: ../../../src/GameStateConfigDesktop.cpp:126
 msgid "Mods"
 msgstr "Дополнения"
 
-#: ../../../src/GameStateConfigBase.cpp:237 ../../../src/MenuExit.cpp:64
+#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:64
 msgid "Music Volume"
 msgstr "Громкость музыки"
 
-#: ../../../src/GameStateConfigBase.cpp:241 ../../../src/MenuExit.cpp:69
+#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:69
 msgid "Sound Volume"
 msgstr "Громкость звука"
 
-#: ../../../src/GameStateConfigBase.cpp:245
+#: ../../../src/GameStateConfigBase.cpp:247
 msgid "Language"
 msgstr "Язык"
 
-#: ../../../src/GameStateConfigBase.cpp:249
+#: ../../../src/GameStateConfigBase.cpp:251
 msgid "Show combat text"
 msgstr "Сообщения битвы"
 
-#: ../../../src/GameStateConfigBase.cpp:253
+#: ../../../src/GameStateConfigBase.cpp:255
 msgid "Show FPS"
 msgstr "Показывать FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:257
+#: ../../../src/GameStateConfigBase.cpp:259
 msgid "Colorblind Mode"
 msgstr "Режим цветовой слепоты"
 
-#: ../../../src/GameStateConfigBase.cpp:261
+#: ../../../src/GameStateConfigBase.cpp:263
 msgid "Hardware mouse cursor"
 msgstr "Аппаратный курсор мыши"
 
-#: ../../../src/GameStateConfigBase.cpp:265
+#: ../../../src/GameStateConfigBase.cpp:267
 msgid "Developer Mode"
 msgstr "Режим разработчика"
 
-#: ../../../src/GameStateConfigBase.cpp:269
+#: ../../../src/GameStateConfigBase.cpp:271
 msgid "Always show loot labels"
 msgstr "Метки сокровищ"
 
-#: ../../../src/GameStateConfigBase.cpp:273
+#: ../../../src/GameStateConfigBase.cpp:275
 msgid "Always show stat bar labels"
 msgstr "Метки в строке состояния"
 
-#: ../../../src/GameStateConfigBase.cpp:277
+#: ../../../src/GameStateConfigBase.cpp:279
 msgid "Automatically equip items"
 msgstr "Сразу надевать предметы"
 
-#: ../../../src/GameStateConfigBase.cpp:281
+#: ../../../src/GameStateConfigBase.cpp:283
 msgid "Subtitles"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:285
+#: ../../../src/GameStateConfigBase.cpp:287
 msgid "Active Mods"
 msgstr "Активные дополнения"
 
-#: ../../../src/GameStateConfigBase.cpp:289
+#: ../../../src/GameStateConfigBase.cpp:291
 msgid "Available Mods"
 msgstr "Доступные дополнения"
 
-#: ../../../src/GameStateConfigBase.cpp:303
+#: ../../../src/GameStateConfigBase.cpp:305
 msgid "<< Disable"
 msgstr "<< Отключить"
 
-#: ../../../src/GameStateConfigBase.cpp:309
+#: ../../../src/GameStateConfigBase.cpp:311
 msgid "Enable >>"
 msgstr "Включить >>"
 
-#: ../../../src/GameStateConfigBase.cpp:923
+#: ../../../src/GameStateConfigBase.cpp:925
 msgid "Game: "
 msgstr "Игра: "
 
-#: ../../../src/GameStateConfigBase.cpp:928
+#: ../../../src/GameStateConfigBase.cpp:930
 msgid "Requires version: "
 msgstr "Требуется версия:  "
 
-#: ../../../src/GameStateConfigBase.cpp:942
+#: ../../../src/GameStateConfigBase.cpp:944
 msgid "Requires mods: "
 msgstr "Требуются дополнения: "
 
@@ -334,33 +334,33 @@ msgstr "Выйти в меню"
 msgid "New Game"
 msgstr "Новая игра"
 
-#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:571
+#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:573
 msgid "Choose a Slot"
 msgstr "Выберите слот"
 
-#: ../../../src/GameStateLoad.cpp:544 ../../../src/GameStateLoad.cpp:565
+#: ../../../src/GameStateLoad.cpp:546 ../../../src/GameStateLoad.cpp:567
 msgid "Enable a story mod to continue"
 msgstr "Включите сюжетное дополнение для продолжения"
 
-#: ../../../src/GameStateLoad.cpp:560
+#: ../../../src/GameStateLoad.cpp:562
 msgid "Load Game"
 msgstr "Загрузить игру"
 
-#: ../../../src/GameStateLoad.cpp:661
+#: ../../../src/GameStateLoad.cpp:663
 msgid "Entering game world..."
 msgstr "Вход в игровой мир..."
 
-#: ../../../src/GameStateLoad.cpp:664
+#: ../../../src/GameStateLoad.cpp:666
 msgid "Loading saved game..."
 msgstr "Загрузка сохранённой игры..."
 
-#: ../../../src/GameStateLoad.cpp:708 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
 #, c-format
 msgid "Level %d"
 msgstr "Уровень %d"
 
-#: ../../../src/GameStateLoad.cpp:710
+#: ../../../src/GameStateLoad.cpp:712
 msgid "Permadeath"
 msgstr "Одна жизнь"
 
@@ -703,88 +703,106 @@ msgstr "Каждый уровень даёт %d.  "
 msgid "Each point of %s grants %d. "
 msgstr "Каждое очко ловкости даёт %d.  "
 
-#: ../../../src/MenuDevConsole.cpp:46
+#: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
 msgstr "Выполнить"
 
-#: ../../../src/MenuDevConsole.cpp:112
+#: ../../../src/MenuDevConsole.cpp:113
 msgid "Developer Console"
 msgstr "Консоль разработчика"
 
-#: ../../../src/MenuDevConsole.cpp:120
+#: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr "Аргументы с пробелами должны быть заключены в двойные кавычки. Пример:"
 
-#: ../../../src/MenuDevConsole.cpp:121
+#: ../../../src/MenuDevConsole.cpp:122
 msgid "Type 'help' to get a list of commands. "
 msgstr "Введите 'help', чтобы получить список команд. "
 
-#: ../../../src/MenuDevConsole.cpp:222
+#: ../../../src/MenuDevConsole.cpp:223
+msgid "adds a power to the action bar"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:224
 msgid "turns on/off all of the HUD elements"
 msgstr "переключает отображение элементов интерфейса"
 
-#: ../../../src/MenuDevConsole.cpp:223
+#: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off the developer hud"
 msgstr "переключает интерфейс разработчика"
 
-#: ../../../src/MenuDevConsole.cpp:224
+#: ../../../src/MenuDevConsole.cpp:226
 msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr "сбрасывает уровень игрока до 1, без атрибутов и потраченных очков навыков"
 
-#: ../../../src/MenuDevConsole.cpp:225
-msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr ""
-
-#: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr "Выводит найденные статусы активных кампаний. Если ничего не указать, показывает все активные статусы."
-
 #: ../../../src/MenuDevConsole.cpp:227
-msgid "Prints a list of items that match a search term. No search term will list all items"
+#, fuzzy
+msgid "Prints a list of powers that match a search term. No search term will list all items"
 msgstr "Выводит список найденных предметов. Если ничего не указать, показывает все предметы."
 
 #: ../../../src/MenuDevConsole.cpp:228
+msgid "Prints out all the map filenames located in the \"maps/\" directory."
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:229
+msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgstr "Выводит найденные статусы активных кампаний. Если ничего не указать, показывает все активные статусы."
+
+#: ../../../src/MenuDevConsole.cpp:230
+msgid "Prints a list of items that match a search term. No search term will list all items"
+msgstr "Выводит список найденных предметов. Если ничего не указать, показывает все предметы."
+
+#: ../../../src/MenuDevConsole.cpp:231
 msgid "parses a series of event components and executes them as a single event"
 msgstr "анализирует набор компонентов событий и выполняет их как одно событие"
 
-#: ../../../src/MenuDevConsole.cpp:229
+#: ../../../src/MenuDevConsole.cpp:232
 msgid "clears the command history"
 msgstr "очищает историю команд"
 
-#: ../../../src/MenuDevConsole.cpp:230
+#: ../../../src/MenuDevConsole.cpp:233
 msgid "displays this text"
 msgstr "показывает этот текст"
 
-#: ../../../src/MenuDevConsole.cpp:237
+#: ../../../src/MenuDevConsole.cpp:240
 msgid "Toggled the developer hud"
 msgstr "Переключён интерфейс разработчика"
 
-#: ../../../src/MenuDevConsole.cpp:241
+#: ../../../src/MenuDevConsole.cpp:244
 msgid "Toggled the hud"
 msgstr "Переключён интерфейс"
 
-#: ../../../src/MenuDevConsole.cpp:375
+#: ../../../src/MenuDevConsole.cpp:409
+#, fuzzy
+msgid "ERROR: Incorrect number of arguments"
+msgstr "ОШИБКА: недостаточно аргументов"
+
+#: ../../../src/MenuDevConsole.cpp:410 ../../../src/MenuDevConsole.cpp:435
+msgid "HINT: "
+msgstr "ПОДСКАЗКА: "
+
+#: ../../../src/MenuDevConsole.cpp:410
+msgid " <id>"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:425
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr "ОШИБКА: «%s» — недопустимый ключ события"
 
-#: ../../../src/MenuDevConsole.cpp:384
+#: ../../../src/MenuDevConsole.cpp:434
 msgid "ERROR: Too few arguments"
 msgstr "ОШИБКА: недостаточно аргументов"
 
-#: ../../../src/MenuDevConsole.cpp:385
-msgid "HINT: "
-msgstr "ПОДСКАЗКА: "
-
-#: ../../../src/MenuDevConsole.cpp:385
+#: ../../../src/MenuDevConsole.cpp:435
 msgid " <key>=<val> <key>=<val> ..."
 msgstr " <ключ>=<значение> <ключ>=<значение> ..."
 
-#: ../../../src/MenuDevConsole.cpp:389
+#: ../../../src/MenuDevConsole.cpp:439
 msgid "ERROR: Unknown command"
 msgstr "ОШИБКА: неизвестная команда"
 
-#: ../../../src/MenuDevConsole.cpp:390
+#: ../../../src/MenuDevConsole.cpp:440
 msgid "HINT: Type help"
 msgstr "ПОДСКАЗКА: наберите help"
 
@@ -1092,16 +1110,16 @@ msgstr "Выкуп"
 msgid "Vendor"
 msgstr "Торговец"
 
-#: ../../../src/PowerManager.cpp:974
+#: ../../../src/PowerManager.cpp:981
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d щит"
 
-#: ../../../src/PowerManager.cpp:1230
+#: ../../../src/PowerManager.cpp:1237
 msgid "You are already transformed, untransform first."
 msgstr "Вы уже трансформированы, сперва растрансформируйтесь."
 
-#: ../../../src/PowerManager.cpp:1242
+#: ../../../src/PowerManager.cpp:1249
 msgid "Could not untransform at this position."
 msgstr "Здесь нельзя растрансформироваться."
 

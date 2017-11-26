@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 15:50-0400\n"
+"POT-Creation-Date: 2017-11-26 13:59-0500\n"
 "PO-Revision-Date: 2013-03-16 11:05+0300\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -93,7 +93,7 @@ msgstr "Здоров'я та Мана відновлені, шкідливі е�
 msgid "miss"
 msgstr "промах"
 
-#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:990
+#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:997
 #: ../../../src/StatBlock.cpp:751 ../../../src/StatBlock.cpp:757
 #, c-format
 msgid "+%d HP"
@@ -127,95 +127,95 @@ msgstr "Гаразд"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: ../../../src/GameStateConfigBase.cpp:157
+#: ../../../src/GameStateConfigBase.cpp:159
 #: ../../../src/GameStateConfigDesktop.cpp:122
 msgid "Audio"
 msgstr "Аудіо"
 
-#: ../../../src/GameStateConfigBase.cpp:158
+#: ../../../src/GameStateConfigBase.cpp:160
 #: ../../../src/GameStateConfigDesktop.cpp:123
 msgid "Interface"
 msgstr "Інтерфейс"
 
-#: ../../../src/GameStateConfigBase.cpp:159
+#: ../../../src/GameStateConfigBase.cpp:161
 #: ../../../src/GameStateConfigDesktop.cpp:126
 msgid "Mods"
 msgstr "Моди"
 
-#: ../../../src/GameStateConfigBase.cpp:237 ../../../src/MenuExit.cpp:64
+#: ../../../src/GameStateConfigBase.cpp:239 ../../../src/MenuExit.cpp:64
 msgid "Music Volume"
 msgstr "Гучність музики"
 
-#: ../../../src/GameStateConfigBase.cpp:241 ../../../src/MenuExit.cpp:69
+#: ../../../src/GameStateConfigBase.cpp:243 ../../../src/MenuExit.cpp:69
 msgid "Sound Volume"
 msgstr "Гучність звуків"
 
-#: ../../../src/GameStateConfigBase.cpp:245
+#: ../../../src/GameStateConfigBase.cpp:247
 msgid "Language"
 msgstr "Мова"
 
-#: ../../../src/GameStateConfigBase.cpp:249
+#: ../../../src/GameStateConfigBase.cpp:251
 msgid "Show combat text"
 msgstr "Показувати  текст бою"
 
-#: ../../../src/GameStateConfigBase.cpp:253
+#: ../../../src/GameStateConfigBase.cpp:255
 msgid "Show FPS"
 msgstr "Показувати FPS"
 
-#: ../../../src/GameStateConfigBase.cpp:257
+#: ../../../src/GameStateConfigBase.cpp:259
 msgid "Colorblind Mode"
 msgstr "Безколірний режим"
 
-#: ../../../src/GameStateConfigBase.cpp:261
+#: ../../../src/GameStateConfigBase.cpp:263
 msgid "Hardware mouse cursor"
 msgstr "Апаратний курсор миші"
 
-#: ../../../src/GameStateConfigBase.cpp:265
+#: ../../../src/GameStateConfigBase.cpp:267
 msgid "Developer Mode"
 msgstr "Режим розробника"
 
-#: ../../../src/GameStateConfigBase.cpp:269
+#: ../../../src/GameStateConfigBase.cpp:271
 msgid "Always show loot labels"
 msgstr "Завжди видимі мітки речей"
 
-#: ../../../src/GameStateConfigBase.cpp:273
+#: ../../../src/GameStateConfigBase.cpp:275
 #, fuzzy
 msgid "Always show stat bar labels"
 msgstr "Завжди видимі мітки речей"
 
-#: ../../../src/GameStateConfigBase.cpp:277
+#: ../../../src/GameStateConfigBase.cpp:279
 msgid "Automatically equip items"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:281
+#: ../../../src/GameStateConfigBase.cpp:283
 msgid "Subtitles"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:285
+#: ../../../src/GameStateConfigBase.cpp:287
 msgid "Active Mods"
 msgstr "Активні моди"
 
-#: ../../../src/GameStateConfigBase.cpp:289
+#: ../../../src/GameStateConfigBase.cpp:291
 msgid "Available Mods"
 msgstr "Наявні моди"
 
-#: ../../../src/GameStateConfigBase.cpp:303
+#: ../../../src/GameStateConfigBase.cpp:305
 msgid "<< Disable"
 msgstr "<< Вимкнути"
 
-#: ../../../src/GameStateConfigBase.cpp:309
+#: ../../../src/GameStateConfigBase.cpp:311
 msgid "Enable >>"
 msgstr "Ввімкнути >>"
 
-#: ../../../src/GameStateConfigBase.cpp:923
+#: ../../../src/GameStateConfigBase.cpp:925
 msgid "Game: "
 msgstr "Гра: "
 
-#: ../../../src/GameStateConfigBase.cpp:928
+#: ../../../src/GameStateConfigBase.cpp:930
 msgid "Requires version: "
 msgstr "Вимагає версію: "
 
-#: ../../../src/GameStateConfigBase.cpp:942
+#: ../../../src/GameStateConfigBase.cpp:944
 msgid "Requires mods: "
 msgstr "Вимагає моди: "
 
@@ -333,33 +333,33 @@ msgstr "Головне меню"
 msgid "New Game"
 msgstr "Нова гра"
 
-#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:571
+#: ../../../src/GameStateLoad.cpp:87 ../../../src/GameStateLoad.cpp:573
 msgid "Choose a Slot"
 msgstr "Виберіть слот"
 
-#: ../../../src/GameStateLoad.cpp:544 ../../../src/GameStateLoad.cpp:565
+#: ../../../src/GameStateLoad.cpp:546 ../../../src/GameStateLoad.cpp:567
 msgid "Enable a story mod to continue"
 msgstr "Увімкніть мод повісті щоб продовжити"
 
-#: ../../../src/GameStateLoad.cpp:560
+#: ../../../src/GameStateLoad.cpp:562
 msgid "Load Game"
 msgstr "Завантажити"
 
-#: ../../../src/GameStateLoad.cpp:661
+#: ../../../src/GameStateLoad.cpp:663
 msgid "Entering game world..."
 msgstr "Входжу в ігровий світ..."
 
-#: ../../../src/GameStateLoad.cpp:664
+#: ../../../src/GameStateLoad.cpp:666
 msgid "Loading saved game..."
 msgstr "Завантажую збереження..."
 
-#: ../../../src/GameStateLoad.cpp:708 ../../../src/ItemManager.cpp:672
+#: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
 #, c-format
 msgid "Level %d"
 msgstr "Рівень %d"
 
-#: ../../../src/GameStateLoad.cpp:710
+#: ../../../src/GameStateLoad.cpp:712
 msgid "Permadeath"
 msgstr "Не воскресає"
 
@@ -704,90 +704,107 @@ msgstr "Кожен рівень додає %d. "
 msgid "Each point of %s grants %d. "
 msgstr "Кожне очко Нападу додає %d. "
 
-#: ../../../src/MenuDevConsole.cpp:46
+#: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
 msgstr "Виконати"
 
-#: ../../../src/MenuDevConsole.cpp:112
+#: ../../../src/MenuDevConsole.cpp:113
 msgid "Developer Console"
 msgstr "Консоль розробника"
 
-#: ../../../src/MenuDevConsole.cpp:120
+#: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:121
+#: ../../../src/MenuDevConsole.cpp:122
 msgid "Type 'help' to get a list of commands. "
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:222
+#: ../../../src/MenuDevConsole.cpp:223
+msgid "adds a power to the action bar"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:224
 #, fuzzy
 msgid "turns on/off all of the HUD elements"
 msgstr "вмикає/вимикає панель розробника"
 
-#: ../../../src/MenuDevConsole.cpp:223
+#: ../../../src/MenuDevConsole.cpp:225
 msgid "turns on/off the developer hud"
 msgstr "вмикає/вимикає панель розробника"
 
-#: ../../../src/MenuDevConsole.cpp:224
+#: ../../../src/MenuDevConsole.cpp:226
 msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr "скидає гравця до рівня 1, без використаних очків статистики та умінь"
 
-#: ../../../src/MenuDevConsole.cpp:225
-msgid "Prints out all the map filenames located in the \"maps/\" directory."
-msgstr ""
-
-#: ../../../src/MenuDevConsole.cpp:226
-msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
-msgstr ""
-
 #: ../../../src/MenuDevConsole.cpp:227
-msgid "Prints a list of items that match a search term. No search term will list all items"
+msgid "Prints a list of powers that match a search term. No search term will list all items"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:228
-msgid "parses a series of event components and executes them as a single event"
+msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:229
+msgid "Prints out the active campaign statuses that match a search term. No search term will list all active statuses"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:230
+msgid "Prints a list of items that match a search term. No search term will list all items"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:231
+msgid "parses a series of event components and executes them as a single event"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:232
 msgid "clears the command history"
 msgstr "Очищує історію команд"
 
-#: ../../../src/MenuDevConsole.cpp:230
+#: ../../../src/MenuDevConsole.cpp:233
 msgid "displays this text"
 msgstr "показує цей текст"
 
-#: ../../../src/MenuDevConsole.cpp:237
+#: ../../../src/MenuDevConsole.cpp:240
 msgid "Toggled the developer hud"
 msgstr "Стан панелі розробника змінено"
 
-#: ../../../src/MenuDevConsole.cpp:241
+#: ../../../src/MenuDevConsole.cpp:244
 #, fuzzy
 msgid "Toggled the hud"
 msgstr "Стан панелі розробника змінено"
 
-#: ../../../src/MenuDevConsole.cpp:375
+#: ../../../src/MenuDevConsole.cpp:409
+#, fuzzy
+msgid "ERROR: Incorrect number of arguments"
+msgstr "ПОМИЛКА: Замало параметрів"
+
+#: ../../../src/MenuDevConsole.cpp:410 ../../../src/MenuDevConsole.cpp:435
+msgid "HINT: "
+msgstr "ПІДКАЗКА: "
+
+#: ../../../src/MenuDevConsole.cpp:410
+msgid " <id>"
+msgstr ""
+
+#: ../../../src/MenuDevConsole.cpp:425
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:384
+#: ../../../src/MenuDevConsole.cpp:434
 msgid "ERROR: Too few arguments"
 msgstr "ПОМИЛКА: Замало параметрів"
 
-#: ../../../src/MenuDevConsole.cpp:385
-msgid "HINT: "
-msgstr "ПІДКАЗКА: "
-
-#: ../../../src/MenuDevConsole.cpp:385
+#: ../../../src/MenuDevConsole.cpp:435
 msgid " <key>=<val> <key>=<val> ..."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:389
+#: ../../../src/MenuDevConsole.cpp:439
 msgid "ERROR: Unknown command"
 msgstr "ПОМИЛКА: Невідома команда"
 
-#: ../../../src/MenuDevConsole.cpp:390
+#: ../../../src/MenuDevConsole.cpp:440
 msgid "HINT: Type help"
 msgstr "ПІДКАЗКА: Введіть help"
 
@@ -1104,16 +1121,16 @@ msgstr "Зворотня покупка"
 msgid "Vendor"
 msgstr "Торговець"
 
-#: ../../../src/PowerManager.cpp:974
+#: ../../../src/PowerManager.cpp:981
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Захисту"
 
-#: ../../../src/PowerManager.cpp:1230
+#: ../../../src/PowerManager.cpp:1237
 msgid "You are already transformed, untransform first."
 msgstr "Ви вже трансформовані, спершу відновіть початкову форму."
 
-#: ../../../src/PowerManager.cpp:1242
+#: ../../../src/PowerManager.cpp:1249
 msgid "Could not untransform at this position."
 msgstr "Не можу змінити форму в цьому місці."
 
