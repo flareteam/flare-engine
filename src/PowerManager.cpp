@@ -290,9 +290,15 @@ void PowerManager::loadPowers() {
 		// animation info
 		else if (infile.key == "animation") {
 			// @ATTR power.animation|filename|The filename of the power animation.
-			powers[input_id].animation_name = infile.val;
-			anim->increaseCount(powers[input_id].animation_name);
-			anim->getAnimationSet(powers[input_id].animation_name)->getAnimation("");
+			if (!powers[input_id].animation_name.empty()) {
+				anim->decreaseCount(powers[input_id].animation_name);
+				powers[input_id].animation_name.clear();
+			}
+			if (!infile.val.empty()) {
+				powers[input_id].animation_name = infile.val;
+				anim->increaseCount(powers[input_id].animation_name);
+				anim->getAnimationSet(powers[input_id].animation_name)->getAnimation("");
+			}
 		}
 		else if (infile.key == "soundfx")
 			// @ATTR power.soundfx|filename|Filename of a sound effect to play when the power is used.
