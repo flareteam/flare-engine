@@ -760,8 +760,8 @@ bool EventManager::executeEvent(Event &ev) {
 			if (ec_path) {
 				// targets hero option
 				if (ec_path->s == "hero") {
-					target.x = mapr->cam.x;
-					target.y = mapr->cam.y;
+					target.x = pc->stats.pos.x;
+					target.y = pc->stats.pos.y;
 				}
 				// targets fixed path option
 				else {
