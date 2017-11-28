@@ -28,7 +28,10 @@
 #
 
 #=============================================================================
+# Copyright 2000-2014 Kitware, Inc.
+# Copyright 2000-2011 Insight Software Consortium
 # Copyright 2014 Justin Jacobs
+# All rights reserved.
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.
