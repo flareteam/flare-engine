@@ -1229,7 +1229,7 @@ msgstr "ボーナス %s"
 #: ../../../src/Stats.cpp:87
 #, c-format
 msgid "Increases the %s found per drop."
-msgstr "ドロップごとに ％s 発見の増加"
+msgstr "ドロップごとに %s 発見の増加"
 
 #: ../../../src/Stats.cpp:91
 msgid "Item Find Chance"
