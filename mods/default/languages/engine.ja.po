@@ -695,7 +695,7 @@ msgstr "基本 (%d), ボーナス (%d)"
 
 #: ../../../src/MenuCharacter.cpp:362
 msgid "Related stats:"
-msgstr ""
+msgstr "関連する統計:"
 
 #: ../../../src/MenuCharacter.cpp:388 ../../../src/MenuCharacter.cpp:412
 #, c-format
