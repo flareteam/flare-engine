@@ -17,6 +17,12 @@ Originally the first game to be developed using this engine was part of this
 repository. As the engine became mature, the game content was moved to an
 extra repository and is now called [flare-game]. (happened around sept. 2012)
 
+Flare-engine is a runtime only.
+For creating maps, we use an external GUI program.
+
+All the other components of Flare game development are done with plain text files. These files are formatted similar to INI files.
+
+
 [flare-game]: https://github.com/clintbellanger/flare-game
 
 ## Copyright and License
