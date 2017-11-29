@@ -9,9 +9,11 @@ Rather than building a very abstract, robust game engine,
 the goal of this project is to build several real games
 and harvest an engine from the common, reusable code.
 
-Flare uses simple file formats (INI style config files) for most of the game data,
+The Flare engine, which is purely a runtime, is written in C++.
+
+Flare uses simple file formats (INI-style config files) for most of the game data,
 allowing anyone to easily modify game contents. Open formats are preferred (png, ogg).
-The game code is C++.
+For creating maps, we also support [Tiled](http://www.mapeditor.org/) with the Flare plugin.
 
 Originally the first game to be developed using this engine was part of this
 repository. As the engine became mature, the game content was moved to an
