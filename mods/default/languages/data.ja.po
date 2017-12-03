@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../engine/primary_stats.txt:3
 msgid "Physical"
-msgstr "物理"
+msgstr "肉体"
 
 #: ../engine/primary_stats.txt:7
 msgid "Mental"
@@ -39,7 +39,7 @@ msgstr "近接ダメージ Min"
 
 #: ../engine/damage_types.txt:9
 msgid "Ranged Damage Min"
-msgstr "遠距離ダメージ Min"
+msgstr "飛ダメージ Min"
 
 #: ../engine/damage_types.txt:15
 msgid "Mental Damage Min"
