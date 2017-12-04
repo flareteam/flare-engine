@@ -108,12 +108,6 @@ MenuNPCActions::MenuNPCActions()
 }
 
 void MenuNPCActions::update() {
-
-	if (action_menu) {
-		delete action_menu;
-		action_menu = NULL;
-	}
-
 	/* get max width and height of action menu */
 	int w = 0, h = 0;
 	for(size_t i=0; i<npc_actions.size(); i++) {
@@ -199,6 +193,7 @@ void MenuNPCActions::update() {
 		if (graphics) {
 			graphics->fillWithColor(background_color);
 			action_menu = graphics->createSprite();
+			graphics->unref();
 		}
 	}
 
