@@ -26,6 +26,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "Utils.h"
 #include "UtilsParsing.h"
+#include "WidgetButton.h"
 #include "WidgetLabel.h"
 
 enum {
@@ -86,6 +87,9 @@ private:
 	Point art_size;
 	SoundManager::SoundID sid;
 	WidgetScrollBox *caption_box;
+	WidgetButton *button_next;
+	WidgetButton *button_close;
+	WidgetButton *button_advance;
 	bool done;
 	int vscroll_offset;
 	int vscroll_ticks;
@@ -98,6 +102,7 @@ public:
 	void render();
 
 	short cutscene_type;
+	bool is_last_scene;
 	std::queue<SceneComponent> components;
 	std::vector<VScrollComponent> vscroll_components;
 };

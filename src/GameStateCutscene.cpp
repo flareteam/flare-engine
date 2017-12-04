@@ -34,10 +34,14 @@ Scene::Scene(const CutsceneSettings& _settings, short _cutscene_type)
 	, art_scaled(NULL)
 	, sid(-1)
 	, caption_box(NULL)
+	, button_next(new WidgetButton("images/menus/buttons/right.png"))
+	, button_close(new WidgetButton("images/menus/buttons/button_x.png"))
+	, button_advance(NULL)
 	, done(false)
 	, vscroll_offset(0)
 	, vscroll_ticks(0)
 	, cutscene_type(_cutscene_type)
+	, is_last_scene(false)
 {
 }
 
@@ -45,6 +49,8 @@ Scene::~Scene() {
 	if (art) delete art;
 	if (art_scaled) delete art_scaled;
 	delete caption_box;
+	delete button_next;
+	delete button_close;
 	while(!components.empty()) {
 		components.pop();
 	}
@@ -60,18 +66,30 @@ Scene::~Scene() {
 bool Scene::logic() {
 	if (done) return false;
 
+	if (is_last_scene && (cutscene_type == CUTSCENE_VSCROLL || components.empty()))
+		button_advance = button_close;
+	else
+		button_advance = button_next;
+
 	bool skip = false;
-	if (inpt->pressing[MAIN1] && (!inpt->lock[MAIN1] || cutscene_type == CUTSCENE_VSCROLL)) {
-		inpt->lock[MAIN1] = true;
+	bool skip_scroll = false;
+	if (button_advance->checkClick()) {
 		skip = true;
+		skip_scroll = true;
 	}
-	if (inpt->pressing[ACCEPT] && (!inpt->lock[ACCEPT] || cutscene_type == CUTSCENE_VSCROLL)) {
-		inpt->lock[ACCEPT] = true;
-		skip = true;
-	}
-	if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
-		inpt->lock[CANCEL] = true;
-		done = true;
+	if (!button_advance->pressed) {
+		if (inpt->pressing[MAIN1] && (!inpt->lock[MAIN1] || cutscene_type == CUTSCENE_VSCROLL)) {
+			inpt->lock[MAIN1] = true;
+			skip = true;
+		}
+		if (inpt->pressing[ACCEPT] && (!inpt->lock[ACCEPT] || cutscene_type == CUTSCENE_VSCROLL)) {
+			inpt->lock[ACCEPT] = true;
+			skip = true;
+		}
+		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+			inpt->lock[CANCEL] = true;
+			done = true;
+		}
 	}
 
 	if (cutscene_type == CUTSCENE_STATIC) {
@@ -174,7 +192,9 @@ bool Scene::logic() {
 		}
 
 		vscroll_offset = static_cast<int>(static_cast<float>(vscroll_ticks) * (settings.vscroll_speed * MAX_FRAMES_PER_SEC) / VIEW_H);
-		if (skip)
+		if (skip_scroll)
+			return false;
+		else if (skip)
 			vscroll_ticks += 8;
 		else
 			vscroll_ticks++;
@@ -262,6 +282,11 @@ void Scene::refreshWidgets() {
 			}
 		}
 	}
+
+	button_next->setBasePos(0, 0, ALIGN_TOPRIGHT);
+	button_next->setPos(-(button_next->pos.w/2), button_next->pos.h/2);
+	button_close->setBasePos(0, 0, ALIGN_TOPRIGHT);
+	button_close->setPos(-(button_close->pos.w/2), button_close->pos.h/2);
 }
 
 void Scene::render() {
@@ -299,6 +324,8 @@ void Scene::render() {
 			}
 		}
 	}
+
+	button_advance->render();
 }
 
 GameStateCutscene::GameStateCutscene(GameState *game_state)
@@ -456,6 +483,9 @@ bool GameStateCutscene::load(const std::string& filename) {
 	if (scenes.empty()) {
 		logError("GameStateCutscene: No scenes defined in cutscene file %s", filename.c_str());
 		return false;
+	}
+	else {
+		scenes.back()->is_last_scene = true;
 	}
 
 	render_device->setBackgroundColor(Color(0,0,0,0));
