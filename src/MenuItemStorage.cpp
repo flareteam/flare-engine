@@ -210,6 +210,9 @@ ItemStack MenuItemStorage::click(const Point& position) {
 
 void MenuItemStorage::itemReturn(ItemStack stack) {
 	add( stack, drag_prev_slot);
+	if (drag_prev_slot != -1) {
+		slots[drag_prev_slot]->checked = false;
+	}
 	drag_prev_slot = -1;
 }
 

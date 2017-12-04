@@ -326,6 +326,14 @@ void MenuManager::logic() {
 				sticky_dragging = true;
 			}
 		}
+		else if (num_picker->cancel_clicked) {
+			// cancel item dragging
+			drag_stack.quantity = 0;
+			drag_stack.item = 0;
+			resetDrag();
+			num_picker->cancel_clicked = false;
+			num_picker->visible = false;
+		}
 		else {
 			pause = true;
 			return;

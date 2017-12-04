@@ -38,6 +38,7 @@ MenuNumPicker::MenuNumPicker()
 	, spin_delay(MAX_FRAMES_PER_SEC/6)
 	, spin_rate(1)
 	, confirm_clicked(false)
+	, cancel_clicked(false)
 {
 
 	button_ok = new WidgetButton();
@@ -45,6 +46,8 @@ MenuNumPicker::MenuNumPicker()
 
 	button_up = new WidgetButton("images/menus/buttons/up.png");
 	button_down = new WidgetButton("images/menus/buttons/down.png");
+
+	button_close = new WidgetButton("images/menus/buttons/button_x.png");
 
 	input_box = new WidgetInput();
 	input_box->only_numbers = true;
@@ -75,6 +78,11 @@ MenuNumPicker::MenuNumPicker()
 				Point pos = toPoint(infile.val);
 				button_down->setBasePos(pos.x, pos.y);
 			}
+			else if (infile.key == "close") {
+				// @ATTR close|point|Position of the button used to close the number picker window.
+				Point pos = toPoint(infile.val);
+				button_close->setBasePos(pos.x, pos.y);
+			}
 			else if (infile.key == "input") {
 				// @ATTR input|point|Position of the text input box.
 				Point pos = toPoint(infile.val);
@@ -92,6 +100,7 @@ MenuNumPicker::MenuNumPicker()
 	tablist.add(button_down);
 	tablist.add(input_box);
 	tablist.add(button_ok);
+	tablist.add(button_close);
 
 	align();
 }
@@ -102,6 +111,7 @@ void MenuNumPicker::align() {
 	button_ok->setPos(window_area.x, window_area.y);
 	button_up->setPos(window_area.x, window_area.y);
 	button_down->setPos(window_area.x, window_area.y);
+	button_close->setPos(window_area.x, window_area.y);
 
 	input_box->setPos(window_area.x, window_area.y);
 
@@ -118,7 +128,14 @@ void MenuNumPicker::logic() {
 
 		input_box->logic();
 
-		if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
+		if (inpt->pressing[CANCEL] && !inpt->lock[CANCEL]) {
+			inpt->lock[CANCEL] = true;
+			cancel_clicked = true;
+		}
+		else if (button_close->checkClick()) {
+			cancel_clicked = true;
+		}
+		else if (inpt->pressing[ACCEPT] && !inpt->lock[ACCEPT]) {
 			inpt->lock[ACCEPT] = true;
 			confirm_clicked = true;
 		}
@@ -158,6 +175,8 @@ void MenuNumPicker::logic() {
 			setValue(toInt(input_box->getText()));
 			updateInput();
 		}
+
+		// cancel_clicked is handled in MenuManager; need to stay visible
 	}
 }
 
@@ -171,6 +190,7 @@ void MenuNumPicker::render() {
 		button_ok->render();
 		button_up->render();
 		button_down->render();
+		button_close->render();
 		input_box->render();
 	}
 }

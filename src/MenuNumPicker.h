@@ -35,6 +35,7 @@ protected:
 	WidgetButton *button_ok;
 	WidgetButton *button_up;
 	WidgetButton *button_down;
+	WidgetButton *button_close;
 	WidgetInput *input_box;
 	WidgetLabel label;
 
@@ -64,6 +65,7 @@ public:
 	int getValue();
 
 	bool confirm_clicked;
+	bool cancel_clicked;
 };
 
 #endif
