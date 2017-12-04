@@ -352,7 +352,7 @@ msgstr "ゲームの世界に入ります..."
 
 #: ../../../src/GameStateLoad.cpp:666
 msgid "Loading saved game..."
-msgstr "ゲームのセーブデータをロードしています..."
+msgstr "セーブデータをロードしています..."
 
 #: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
 #: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
@@ -625,7 +625,7 @@ msgstr "購入価格: %d %s"
 #: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "購入価格: %d %s 1つあたり"
+msgstr "購入価格: %d %s ひとつあたり"
 
 #: ../../../src/ItemManager.cpp:797
 #, c-format
@@ -635,7 +635,7 @@ msgstr "売却価格: %d %s"
 #: ../../../src/ItemManager.cpp:799
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "売却価格: %d %s 1つあたり"
+msgstr "売却価格: %d %s ひとつあたり"
 
 #: ../../../src/ItemManager.cpp:808
 msgid "Set: "
@@ -876,7 +876,7 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:278
 msgid "Use or equip item:"
-msgstr ""
+msgstr "使用または装備 (アイテム):"
 
 #: ../../../src/MenuInventory.cpp:279
 #, c-format
@@ -885,15 +885,15 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:280
 msgid "Select a quantity of item:"
-msgstr ""
+msgstr "アイテム量の選択"
 
 #: ../../../src/MenuInventory.cpp:283
 msgid "Stash item stack:"
-msgstr ""
+msgstr "各アイテムのスタッシュ:"
 
 #: ../../../src/MenuInventory.cpp:285
 msgid "Sell item stack:"
-msgstr ""
+msgstr "各アイテムの売買:"
 
 #: ../../../src/MenuInventory.cpp:541
 msgid "You don't have enough of the required item."
@@ -1390,7 +1390,7 @@ msgstr "%s 秒"
 
 #, fuzzy
 #~ msgid "Each point of Physical grants %d. "
-#~ msgstr "物理が助成 %d 点。"
+#~ msgstr "肉体が助成 %d 点。"
 
 #, fuzzy
 #~ msgid "Each point of Mental grants %d. "
@@ -1496,13 +1496,13 @@ msgstr "%s 秒"
 #~ msgstr "クリティカル："
 
 #~ msgid "Physical (P) increases melee weapon proficiency and total HP."
-#~ msgstr "物理（P）は、近接武器の熟練度と合計HPを増加させる。"
+#~ msgstr "肉体（P）は、近接武器の熟練度と合計HPを増加させる。"
 
 #~ msgid "Mental (M) increases mental weapon proficiency and total MP."
-#~ msgstr "精神的な（M）は、精神的な武器の熟練度と全体のMPを増加させる。"
+#~ msgstr "精神（M）は、精神的な武器の熟練度と全体のMPを増加させる。"
 
 #~ msgid "Offense (O) increases ranged weapon proficiency and accuracy."
-#~ msgstr "攻撃（O）は、遠隔武器の熟練度と精度を向上させる。"
+#~ msgstr "攻撃（O）は、遠距離武器の熟練度と精度を向上させる。"
 
 #~ msgid "Defense (D) increases armor proficiency and avoidance."
 #~ msgstr "防衛（D）は、鎧の習熟度と回避を増加させる。"
@@ -1526,25 +1526,25 @@ msgstr "%s 秒"
 #~ msgstr "ログのメニュー (L)"
 
 #~ msgid "Each point of Physical grants +%d HP. Each level grants +%d HP"
-#~ msgstr "物理の助成は各点あたり +％d HP。各レベルごとに+％d HPを助成"
+#~ msgstr "肉体の助成は各点あたり +％d HP。 各レベルごとに+％d HPを助成"
 
 #~ msgid "Ticks of HP regen per minute. Each point of Physical grants +%d HP regen. Each level grants +%d HP regen"
-#~ msgstr "分当たりHP自然回復。物理の助成は各点あたり +％d のHP自然回復。各レベルごとに +％d のHP自然回復を助成"
+#~ msgstr "分当たりHP自然回復。 物理の助成は各点あたり +％d のHP自然回復。 各レベルごとに +％d のHP自然回復を助成"
 
 #~ msgid "Each point of Mental grants +%d MP. Each level grants +%d MP"
-#~ msgstr "精神の助成は各点あたり +％d MP。各レベルごとに +％d MPを助成"
+#~ msgstr "精神の助成は各点あたり +％d MP。 各レベルごとに +％d MPを助成"
 
 #~ msgid "Ticks of MP regen per minute. Each point of Mental grants +%d MP regen. Each level grants +%d MP regen"
-#~ msgstr "毎分MP自然回復。精神的な助成は各点あたり +%d のMP自然回復。各レベルごとに +％d のMP自然回復"
+#~ msgstr "毎分MP自然回復。 精神的な助成は各点あたり +%d のMP自然回復。各レベルごとに +％d のMP自然回復"
 
 #~ msgid "Each point of Offense grants +%d accuracy. Each level grants +%d accuracy"
-#~ msgstr "攻撃の助成は各点あたり +％d の精度。各レベルごとに +％d の精度を助成"
+#~ msgstr "攻撃の助成は各点あたり +％d の精度。 各レベルごとに +％d の精度を助成"
 
 #~ msgid "Each point of Defense grants +%d avoidance. Each level grants +%d avoidance"
-#~ msgstr "防衛の補助は各点あたり +％d の回避。各レベルごとに +％d の回避を助成"
+#~ msgstr "防衛の補助は各点あたり +％d の回避。 各レベルごとに +％d の回避を助成"
 
 #~ msgid "Requires a physical weapon"
-#~ msgstr "物理 的な武器が必要です。"
+#~ msgstr "肉体 的な武器が必要です。"
 
 #~ msgid "Requires a mental weapon"
 #~ msgstr "精神 的な武器が必要です。"
@@ -1646,7 +1646,7 @@ msgstr "%s 秒"
 #~ msgstr "主な武器"
 
 #~ msgid "Ranged Weapon"
-#~ msgstr "遠隔武器"
+#~ msgstr "遠距離武器"
 
 #~ msgid "Fire Resist"
 #~ msgstr "耐火"
@@ -1718,10 +1718,10 @@ msgstr "%s 秒"
 #~ msgstr "メッセージ"
 
 #~ msgid "Physical + Offense grants melee and ranged attacks"
-#~ msgstr "物理および攻撃が助成するのは、近接攻撃と遠隔攻撃"
+#~ msgstr "肉体および攻撃が助成するのは、近接攻撃と遠距離攻撃"
 
 #~ msgid "Physical + Defense grants melee protection"
-#~ msgstr "物理および防衛が助成するのは近接防御"
+#~ msgstr "肉体および防衛が助成するのは近接防御"
 
 #~ msgid "Mental + Offense grants elemental spell attacks"
 #~ msgstr "精神と攻撃が助成するのはエレメンタル呪文攻撃"
