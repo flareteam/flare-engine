@@ -236,6 +236,7 @@ void BehaviorStandard::findTarget() {
 
 	// If we have a successful chance_flee roll, try to move to a safe distance
 	if (
+			e->stats.in_combat &&
 			e->stats.cur_state == ENEMY_STANCE &&
 			!move_to_safe_dist && hero_dist < e->stats.flee_range &&
 			hero_dist >= e->stats.melee_range &&
