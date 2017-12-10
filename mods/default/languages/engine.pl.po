@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-26 13:59-0500\n"
-"PO-Revision-Date: 2016-09-15 11:38+0100\n"
+"PO-Revision-Date: 2017-12-10 17:50+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: \n"
 "Language: Polish\n"
@@ -717,7 +717,7 @@ msgstr "Wpisz 'help' aby uzyskać listę komend. "
 
 #: ../../../src/MenuDevConsole.cpp:223
 msgid "adds a power to the action bar"
-msgstr ""
+msgstr "dodaje moc do paska akcji"
 
 #: ../../../src/MenuDevConsole.cpp:224
 msgid "turns on/off all of the HUD elements"
@@ -732,9 +732,8 @@ msgid "resets the player to level 1, with no stat or skill points spent"
 msgstr "resetuje poziom gracza do 1, bez rozdanych punktów statystyk bądź umiejętności"
 
 #: ../../../src/MenuDevConsole.cpp:227
-#, fuzzy
 msgid "Prints a list of powers that match a search term. No search term will list all items"
-msgstr "Wyświetla listę przedmiotów pasujących do podanego wyrażenia. Brak wyrażenia spowoduje wyświelenie wszystkich przedmiotów."
+msgstr "Wyświetla listę mocy pasujących do podanego wyrażenia. Brak wyrażenia spowoduje wyświelenie wszystkich pozycji."
 
 #: ../../../src/MenuDevConsole.cpp:228
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
@@ -769,9 +768,8 @@ msgid "Toggled the hud"
 msgstr "Włączono interfejs użytkownika"
 
 #: ../../../src/MenuDevConsole.cpp:409
-#, fuzzy
 msgid "ERROR: Incorrect number of arguments"
-msgstr "BŁĄD: Za mało argumentów"
+msgstr "BŁĄD: Nieprawidłowa liczba argumentów."
 
 #: ../../../src/MenuDevConsole.cpp:410 ../../../src/MenuDevConsole.cpp:435
 msgid "HINT: "
@@ -779,7 +777,7 @@ msgstr "WSKAZÓWKA: "
 
 #: ../../../src/MenuDevConsole.cpp:410
 msgid " <id>"
-msgstr ""
+msgstr " <id>"
 
 #: ../../../src/MenuDevConsole.cpp:425
 #, c-format
