@@ -1,13 +1,13 @@
 # Copyright (C) 2011 Clint Bellanger
 # This file is distributed under the same license as the FLARE package.
 #
-# PAWEŁ PUSZCZYŃSKI <pawonashi@gmail.com>, 2016.
+# PAWEŁ PUSZCZYŃSKI <pawonashi@gmail.com>, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-26 13:59+\n"
-"PO-Revision-Date: 2016-07-20 13:52+0100\n"
+"PO-Revision-Date: 2016-12-10 16:35+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: Polish <LL@li.org>\n"
 "Language: pl\n"
@@ -257,7 +257,7 @@ msgstr "Stefano Peris"
 
 #: ../cutscenes/credits.txt:78
 msgid "sujiniku"
-msgstr ""
+msgstr "sujiniku"
 
 #: ../cutscenes/credits.txt:79
 msgid "Thomas Glamsch"
