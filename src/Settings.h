@@ -70,9 +70,9 @@ public:
 class DamageType {
 public:
 	std::string id;
-	std::string text;
-	std::string text_min;
-	std::string text_max;
+	std::string name;
+	std::string name_min;
+	std::string name_max;
 	std::string description;
 	std::string min;
 	std::string max;

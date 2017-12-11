@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59+\n"
+"POT-Creation-Date: 2017-12-11 14:03+\n"
 "PO-Revision-Date: 2013-10-12 16:38+0200\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -33,15 +33,39 @@ msgid "Defense"
 msgstr ""
 
 #: ../engine/damage_types.txt:3
+msgid "Melee Damage"
+msgstr ""
+
+#: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
 msgstr ""
 
-#: ../engine/damage_types.txt:9
+#: ../engine/damage_types.txt:5
+msgid "Melee Damage Max"
+msgstr ""
+
+#: ../engine/damage_types.txt:11
+msgid "Ranged Damage"
+msgstr ""
+
+#: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
 msgstr ""
 
-#: ../engine/damage_types.txt:15
+#: ../engine/damage_types.txt:13
+msgid "Ranged Damage Max"
+msgstr ""
+
+#: ../engine/damage_types.txt:19
+msgid "Mental Damage"
+msgstr ""
+
+#: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
+msgstr ""
+
+#: ../engine/damage_types.txt:21
+msgid "Mental Damage Max"
 msgstr ""
 
 #: ../cutscenes/credits.txt:8

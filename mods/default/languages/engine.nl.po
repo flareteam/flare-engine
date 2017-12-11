@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2012-08-23 21:23+0200\n"
 "Last-Translator: Bas Doodeman <bas.doodeman@basdoodeman.nl>\n"
 "Language-Team: Dutch; Flemish <>\n"
@@ -36,7 +36,7 @@ msgstr "Je bent verslagen. Spel afgelopen! Druk op Enter, om naar het hoofdmenu 
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Je bent verslagen.  Je verliest de helft van je goud.  Druk op Enter om verder te gaan."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr "Standaardwaarden"
 msgid "Reset ALL settings?"
 msgstr "ALLE instellingen terugzetten op de standaardwaarden?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr ""
 
@@ -943,7 +943,7 @@ msgstr "Opdrachten"
 msgid "XP: %d/%d"
 msgstr "EP: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "Dit artikel kan alleen vanaf de actiebalk gebruikt worden."
@@ -952,7 +952,7 @@ msgstr "Dit artikel kan alleen vanaf de actiebalk gebruikt worden."
 msgid "Trade"
 msgstr "Handelen"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 

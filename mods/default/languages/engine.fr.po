@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2012-10-15 HO:MI+ZONE\n"
 "Last-Translator: Nubux<strauss.morgan@gmail.com>\n"
 "Language-Team:\n"
@@ -38,7 +38,7 @@ msgstr "Vous êtes vaincu. Votre personnage est mort ! Pressez Entrée pour reve
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Vous êtes vaincu.  Vous perdez la moitié de votre Or. Appuyez sur Entrée pour continuer."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Transformation expirée. On vous a ramené à un endroit sûr."
 
@@ -121,7 +121,7 @@ msgstr "Par défaut"
 msgid "Reset ALL settings?"
 msgstr "Réinitaliser TOUS les réglages ?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "OK"
 
@@ -942,7 +942,7 @@ msgstr "Quêtes"
 msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "Cet objet ne peut être jeté."
@@ -951,7 +951,7 @@ msgstr "Cet objet ne peut être jeté."
 msgid "Trade"
 msgstr "Commercer"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr "Saisir la quantité :"
 

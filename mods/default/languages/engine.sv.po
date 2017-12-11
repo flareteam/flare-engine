@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2014-01-24 17:00+0100\n"
 "Last-Translator: Henrik Andersson <hean01@users.sourceforge.net>\n"
 "Language-Team: SWEDISH <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr "Du är besegrad. Spelet är över! Tryck Retur för att gå till titelme
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Du är besegrad. Tryck Retur för att fortsätta."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr "Standard"
 msgid "Reset ALL settings?"
 msgstr "Återställ samtliga inställningar?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "OK"
 
@@ -930,7 +930,7 @@ msgstr "Uppdrag"
 msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "Det här föremålet kan bara användas från handlingslisten."
@@ -939,7 +939,7 @@ msgstr "Det här föremålet kan bara användas från handlingslisten."
 msgid "Trade"
 msgstr "Handel"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 

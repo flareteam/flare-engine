@@ -1,18 +1,24 @@
 [damage_type]
 id=melee
-text=Melee Damage,Melee Damage Min,Melee Damage Max
+name=Melee Damage
+name_min=Melee Damage Min
+name_max=Melee Damage Max
 min=dmg_melee_min
 max=dmg_melee_max
 
 [damage_type]
 id=ranged
-text=Ranged Damage,Ranged Damage Min,Ranged Damage Max
+name=Ranged Damage
+name_min=Ranged Damage Min
+name_max=Ranged Damage Max
 min=dmg_ranged_min
 max=dmg_ranged_max
 
 [damage_type]
 id=ment
-text=Mental Damage,Mental Damage Min,Mental Damage Max
+name=Mental Damage
+name_min=Mental Damage Min
+name_max=Mental Damage Max
 min=dmg_ment_min
 max=dmg_ment_max
 

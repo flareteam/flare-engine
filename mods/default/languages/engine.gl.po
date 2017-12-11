@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2014-10-26 20:31+0100\n"
 "Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -36,7 +36,7 @@ msgstr "Derrotáronte. Perdiches! Preme Intro para ir ao menú."
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Derrotáronte. Preme Intro para continuar."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -119,7 +119,7 @@ msgstr "Restablecer"
 msgid "Reset ALL settings?"
 msgstr "Volver á configuración inicial?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "Aceptar"
 
@@ -937,7 +937,7 @@ msgstr "Misións"
 msgid "XP: %d/%d"
 msgstr "Experiencia: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "Este obxecto só pode empregarse desde a barra de acción."
@@ -946,7 +946,7 @@ msgstr "Este obxecto só pode empregarse desde a barra de acción."
 msgid "Trade"
 msgstr "Comercio"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 

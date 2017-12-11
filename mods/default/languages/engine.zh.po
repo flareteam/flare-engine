@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2013-04-09 18:55+0800\n"
 "Last-Translator: lonsine <lonsine@qq.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr "角色死亡，游戏结束！按下回车键返回游戏开戏。"
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "角色死亡，你失去了一般的 %s.  按下回车键继续。"
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr "默认设置"
 msgid "Reset ALL settings?"
 msgstr "确定重置?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "确定"
 
@@ -937,7 +937,7 @@ msgstr "任务"
 msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "此物品只能从动作槽使用"
@@ -946,7 +946,7 @@ msgstr "此物品只能从动作槽使用"
 msgid "Trade"
 msgstr "交易"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 

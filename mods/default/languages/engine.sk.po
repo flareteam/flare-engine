@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2012-01-03+GMT+1\n"
 "Last-Translator: Miro Janosik <miro.jano.sik@gmail.com>\n"
 "Language-Team: Slovak <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgstr "Porazili ťa. Prišiel si o polovicu zlata. Stlač Enter pre pokračovan
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Porazili ťa. Prišiel si o polovicu zlata. Stlač Enter pre pokračovanie."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr ""
 msgid "Reset ALL settings?"
 msgstr ""
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr ""
 
@@ -932,7 +932,7 @@ msgstr "Úlohy"
 msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "Tento predmet môžeš použiť iba z pruhu akcií."
@@ -941,7 +941,7 @@ msgstr "Tento predmet môžeš použiť iba z pruhu akcií."
 msgid "Trade"
 msgstr ""
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 

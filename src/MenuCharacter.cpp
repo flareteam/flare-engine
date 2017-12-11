@@ -310,7 +310,7 @@ void MenuCharacter::refreshStats() {
 				if (show_stat[STAT_COUNT + (j*2)]) {
 					// min
 					ss.str("");
-					ss << DAMAGE_TYPES[j].text_min << ": " << stats->getDamageMin(j);
+					ss << DAMAGE_TYPES[j].name_min << ": " << stats->getDamageMin(j);
 					statList->set(stat_index, ss.str(), damageTooltip(j*2));
 					stat_index++;
 				}
@@ -318,7 +318,7 @@ void MenuCharacter::refreshStats() {
 				if (show_stat[STAT_COUNT + (j*2) + 1]) {
 					// max
 					ss.str("");
-					ss << DAMAGE_TYPES[j].text_max << ": " << stats->getDamageMax(j);
+					ss << DAMAGE_TYPES[j].name_max << ": " << stats->getDamageMax(j);
 					statList->set(stat_index, ss.str(), damageTooltip((j*2) + 1));
 					stat_index++;
 				}

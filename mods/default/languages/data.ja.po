@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59+\n"
+"POT-Creation-Date: 2017-12-11 14:03+\n"
 "PO-Revision-Date: 2017-11-11 20:20+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,16 +34,46 @@ msgid "Defense"
 msgstr "防御"
 
 #: ../engine/damage_types.txt:3
+#, fuzzy
+msgid "Melee Damage"
+msgstr "近接ダメージ"
+
+#: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
 msgstr "近接ダメージ Min"
 
-#: ../engine/damage_types.txt:9
+#: ../engine/damage_types.txt:5
+#, fuzzy
+msgid "Melee Damage Max"
+msgstr "近接ダメージ Max"
+
+#: ../engine/damage_types.txt:11
+#, fuzzy
+msgid "Ranged Damage"
+msgstr "飛ダメージ"
+
+#: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
 msgstr "飛ダメージ Min"
 
-#: ../engine/damage_types.txt:15
+#: ../engine/damage_types.txt:13
+#, fuzzy
+msgid "Ranged Damage Max"
+msgstr "飛ダメージ Max"
+
+#: ../engine/damage_types.txt:19
+#, fuzzy
+msgid "Mental Damage"
+msgstr "精神ダメージ"
+
+#: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
 msgstr "精神ダメージ Min"
+
+#: ../engine/damage_types.txt:21
+#, fuzzy
+msgid "Mental Damage Max"
+msgstr "精神ダメージ Max"
 
 #: ../cutscenes/credits.txt:8
 msgid "Flare Engine Credits"

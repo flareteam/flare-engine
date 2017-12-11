@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2017-10-31 03:03+0900\n"
 "Last-Translator: \n"
 "Language-Team: Paul Wortmann <www.physhexgames.co.nr>\n"
@@ -34,7 +34,7 @@ msgstr "あなたは負けてしまった。 ゲームオーバー！ ${INPUT_CO
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "あなたは負けてしまった。 ${INPUT_CONTINUE} を押して続行します。"
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr "デフォルト"
 msgid "Reset ALL settings?"
 msgstr "すべての設定をリセット?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "オーケー"
 
@@ -929,7 +929,7 @@ msgstr "クエスト"
 msgid "XP: %d/%d"
 msgstr "XP: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "この項目は、アクションバーから使用することができます。"
@@ -938,7 +938,7 @@ msgstr "この項目は、アクションバーから使用することができ
 msgid "Trade"
 msgstr "売買"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 

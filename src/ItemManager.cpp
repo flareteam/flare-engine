@@ -598,10 +598,10 @@ void ItemManager::getBonusString(std::stringstream& ss, BonusData* bdata) {
 		ss << " " << STAT_NAME[bdata->stat_index];
 	}
 	else if (bdata->damage_index_min != -1) {
-		ss << " " << DAMAGE_TYPES[bdata->damage_index_min].text_min;
+		ss << " " << DAMAGE_TYPES[bdata->damage_index_min].name_min;
 	}
 	else if (bdata->damage_index_max != -1) {
-		ss << " " << DAMAGE_TYPES[bdata->damage_index_max].text_max;
+		ss << " " << DAMAGE_TYPES[bdata->damage_index_max].name_max;
 	}
 	else if (bdata->resist_index != -1) {
 		ss << "% " << msg->get("%s Resistance", ELEMENTS[bdata->resist_index].name.c_str());
@@ -692,7 +692,7 @@ TooltipData ItemManager::getTooltip(ItemStack stack, StatBlock *stats, int conte
 	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
 		if (items[stack.item].dmg_max[i] > 0) {
 			std::stringstream dmg_str;
-			dmg_str << DAMAGE_TYPES[i].text;
+			dmg_str << DAMAGE_TYPES[i].name;
 			if (items[stack.item].dmg_min[i] < items[stack.item].dmg_max[i]) {
 				dmg_str << ": " << items[stack.item].dmg_min[i] << "-" << items[stack.item].dmg_max[i];
 				tip.addText(dmg_str.str());

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59+\n"
+"POT-Creation-Date: 2017-12-11 14:03+\n"
 "PO-Revision-Date: 2016-12-10 16:35+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: Polish <LL@li.org>\n"
@@ -32,15 +32,45 @@ msgid "Defense"
 msgstr "Obrona"
 
 #: ../engine/damage_types.txt:3
+#, fuzzy
+msgid "Melee Damage"
+msgstr "Minimalne Obrażenia w Zwarciu"
+
+#: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
 msgstr "Minimalne Obrażenia w Zwarciu"
 
-#: ../engine/damage_types.txt:9
+#: ../engine/damage_types.txt:5
+#, fuzzy
+msgid "Melee Damage Max"
+msgstr "Minimalne Obrażenia w Zwarciu"
+
+#: ../engine/damage_types.txt:11
+#, fuzzy
+msgid "Ranged Damage"
+msgstr "Minimalne Obrażenia Dystansowe"
+
+#: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
 msgstr "Minimalne Obrażenia Dystansowe"
 
-#: ../engine/damage_types.txt:15
+#: ../engine/damage_types.txt:13
+#, fuzzy
+msgid "Ranged Damage Max"
+msgstr "Minimalne Obrażenia Dystansowe"
+
+#: ../engine/damage_types.txt:19
+#, fuzzy
+msgid "Mental Damage"
+msgstr "Minimalne Obrażenia Umysłowe"
+
+#: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
+msgstr "Minimalne Obrażenia Umysłowe"
+
+#: ../engine/damage_types.txt:21
+#, fuzzy
+msgid "Mental Damage Max"
 msgstr "Minimalne Obrażenia Umysłowe"
 
 #: ../cutscenes/credits.txt:8

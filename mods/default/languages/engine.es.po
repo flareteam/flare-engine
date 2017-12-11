@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare v0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2013-03-17 20:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -36,7 +36,7 @@ msgstr "Usted está derrotado. Se acabó el juego! Pulse Enter para salir al Tí
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Usted está derrotado. Pierde la mitad de su %s. Pulse Intro para continuar."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -119,7 +119,7 @@ msgstr "Por defecto"
 msgid "Reset ALL settings?"
 msgstr "¿Restablecer TODOS los ajustes?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "ACEPTAR"
 
@@ -938,7 +938,7 @@ msgstr "Misiones"
 msgid "XP: %d/%d"
 msgstr "Experiencia: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "Este elemento sólo se puede utilizar en la barra de acción."
@@ -947,7 +947,7 @@ msgstr "Este elemento sólo se puede utilizar en la barra de acción."
 msgid "Trade"
 msgstr ""
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 

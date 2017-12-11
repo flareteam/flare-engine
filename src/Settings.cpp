@@ -750,7 +750,7 @@ void loadMiscSettings() {
 			if (infile.new_section) {
 				if (infile.section == "damage_type") {
 					// damage types must have a printable name
-					if (!DAMAGE_TYPES.empty() && DAMAGE_TYPES.back().text == "") {
+					if (!DAMAGE_TYPES.empty() && DAMAGE_TYPES.back().name == "") {
 						DAMAGE_TYPES.pop_back();
 					}
 					DAMAGE_TYPES.resize(DAMAGE_TYPES.size()+1);
@@ -763,12 +763,12 @@ void loadMiscSettings() {
 			if (!DAMAGE_TYPES.empty()) {
 				// @ATTR damage_type.id|string|The identifier used for Item damage_type and Power base_damage.
 				if (infile.key == "id") DAMAGE_TYPES.back().id = infile.val;
-				// @ATTR damage_type.text|string, string, string : Normal, Min, Max|The displayed name of this damage type, as well as its min/max counterparts (e.g. Melee,Melee Min,Melee Max).
-				else if (infile.key == "text") {
-					DAMAGE_TYPES.back().text = msg->get(popFirstString(infile.val));
-					DAMAGE_TYPES.back().text_min = msg->get(popFirstString(infile.val));
-					DAMAGE_TYPES.back().text_max = msg->get(popFirstString(infile.val));
-				}
+				// @ATTR damage_type.name|string|The displayed name for the value of this damage type.
+				else if (infile.key == "name") DAMAGE_TYPES.back().name = msg->get(infile.val);
+				// @ATTR damage_type.name_min|string|The displayed name for the minimum value of this damage type.
+				else if (infile.key == "name_min") DAMAGE_TYPES.back().name_min = msg->get(infile.val);
+				// @ATTR damage_type.name_max|string|The displayed name for the maximum value of this damage type.
+				else if (infile.key == "name_max") DAMAGE_TYPES.back().name_max = msg->get(infile.val);
 				// @ATTR damage_type.description|string|The description that will be displayed in the Character menu tooltips.
 				else if (infile.key == "description") DAMAGE_TYPES.back().description = msg->get(infile.val);
 				// @ATTR damage_type.min|string|The identifier used as a Stat type and an Effect type, for the minimum damage of this type.

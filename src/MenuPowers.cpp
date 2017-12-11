@@ -904,7 +904,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			ss << " ";
 
 			if (pwr.base_damage != DAMAGE_TYPES.size()) {
-				ss << DAMAGE_TYPES[pwr.base_damage].text;
+				ss << DAMAGE_TYPES[pwr.base_damage].name;
 			}
 
 			if (pwr.count > 1 && pwr.type != POWTYPE_REPEATER)

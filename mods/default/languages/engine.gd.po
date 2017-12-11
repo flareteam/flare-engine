@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2017-05-17 14:53+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
@@ -34,7 +34,7 @@ msgstr "Chaidh do ruaig. Crìoch a' gheama! ${INPUT_CONTINUE} gus fàgail gun ti
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Chaidh do ruaig. ${INPUT_CONTINUE} gus leantainn air adhart."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Dh'fhalbh an ùine air a' chruth-atharrachadh. Chaidh do ghluasad air ais gu ionad sàbhailte."
 
@@ -117,7 +117,7 @@ msgstr "Bun-roghainnean"
 msgid "Reset ALL settings?"
 msgstr "A bheil thu airson GACH roghainn ath-shuidheachadh?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "Ceart ma-thà"
 
@@ -924,7 +924,7 @@ msgstr "Cinn-turais"
 msgid "XP: %d/%d"
 msgstr "PE: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 msgid "This item can not be dropped."
 msgstr "Chan urrainn dhan an nì seo tuiteam."
 
@@ -932,7 +932,7 @@ msgstr "Chan urrainn dhan an nì seo tuiteam."
 msgid "Trade"
 msgstr "Malart"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr "Cuir a-steach àireamh:"
 

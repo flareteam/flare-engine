@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2017-12-10 17:50+0100\n"
 "Last-Translator: Paweł Puszczyński <pawonashi@gmail.com>\n"
 "Language-Team: \n"
@@ -33,7 +33,7 @@ msgstr "Pokonano Cię. Koniec gry! ${INPUT_CONTINUE} spowoduje powrót do Menu G
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Pokonano Cię. ${INPUT_CONTINUE} sprawi, że odrodzisz się w ostatnim punkcie kontrolnym."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Transformacja minęła. Przeniesiono Cię w bezpieczne miejsce."
 
@@ -110,7 +110,7 @@ msgstr "Domyślne"
 msgid "Reset ALL settings?"
 msgstr "Zresetować WSZYSTKIE ustawienia?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "OK"
 
@@ -903,7 +903,7 @@ msgstr "Zadania"
 msgid "XP: %d/%d"
 msgstr "PD: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 msgid "This item can not be dropped."
 msgstr "Tego przedmiotu nie można upuścić."
 
@@ -911,7 +911,7 @@ msgstr "Tego przedmiotu nie można upuścić."
 msgid "Trade"
 msgstr "Handel"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr "Podaj ilość:"
 

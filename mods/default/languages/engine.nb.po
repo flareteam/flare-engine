@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Flare 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2012-12-24 14:36+0100\n"
 "Last-Translator: Hans Joachim Desserud <github@desserud.org>\n"
 "Language-Team: Norwegian Bokmal\n"
@@ -35,7 +35,7 @@ msgstr "Du har blitt beseiret. Spillet er slutt! Trykk Enter for å gå til hove
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Du har blitt beseiret. Trykk Enter for å fortsette."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr "Standard"
 msgid "Reset ALL settings?"
 msgstr "Still tilbake ALLE innstillinger?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "Ok"
 
@@ -926,7 +926,7 @@ msgstr "Oppdrag"
 msgid "XP: %d/%d"
 msgstr ""
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 msgid "This item can not be dropped."
 msgstr ""
 
@@ -934,7 +934,7 @@ msgstr ""
 msgid "Trade"
 msgstr ""
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 

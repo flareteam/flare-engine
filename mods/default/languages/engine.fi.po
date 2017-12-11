@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-26 13:59-0500\n"
+"POT-Creation-Date: 2017-12-11 14:03-0500\n"
 "PO-Revision-Date: 2013-03-25 22:07+0200\n"
 "Last-Translator: Timo Sievänen <thematic@helsinkilainen.com>\n"
 "Language-Team: \n"
@@ -34,7 +34,7 @@ msgstr "Sinut on nujerrettu, peli päättyi. Paina Enter poistuaksesi päävalik
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Kärsit tappion. Menetät puolet kullasta. Paina Enter jatkaaksesi."
 
-#: ../../../src/Avatar.cpp:813
+#: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr "Oletukset"
 msgid "Reset ALL settings?"
 msgstr "Palauta KAIKKI asetukset?"
 
-#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:44
+#: ../../../src/GameStateConfigBase.cpp:108 ../../../src/MenuNumPicker.cpp:45
 msgid "OK"
 msgstr "OK"
 
@@ -936,7 +936,7 @@ msgstr "Etsinnät"
 msgid "XP: %d/%d"
 msgstr "Kokemus: %d/%d"
 
-#: ../../../src/MenuManager.cpp:802
+#: ../../../src/MenuManager.cpp:810
 #, fuzzy
 msgid "This item can not be dropped."
 msgstr "Tätä tavaraa voit käyttää vain toimintapalkista."
@@ -945,7 +945,7 @@ msgstr "Tätä tavaraa voit käyttää vain toimintapalkista."
 msgid "Trade"
 msgstr "Tee kaupat"
 
-#: ../../../src/MenuNumPicker.cpp:108
+#: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
 msgstr ""
 
