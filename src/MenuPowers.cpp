@@ -709,6 +709,7 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 			}
 
 			ss << pwr.post_effects[i].magnitude;
+			bool found_key = false;
 
 			for (size_t j=0; j<STAT_COUNT; ++j) {
 				if (pwr.post_effects[i].id == STAT_KEY[j]) {
@@ -717,21 +718,43 @@ void MenuPowers::createTooltip(TooltipData* tip, int slot_num, const std::vector
 
 					ss << " " << STAT_NAME[j];
 
+					found_key = true;
 					break;
 				}
 			}
 
-			for (size_t j=0; j<ELEMENTS.size(); ++j) {
-				if (pwr.post_effects[i].id == ELEMENTS[j].id + "_resist") {
-					ss << "% " << msg->get("%s Resistance", ELEMENTS[j].name.c_str());
-					break;
+			if (!found_key) {
+				for (size_t j=0; j<ELEMENTS.size(); ++j) {
+					if (pwr.post_effects[i].id == ELEMENTS[j].id + "_resist") {
+						ss << "% " << msg->get("%s Resistance", ELEMENTS[j].name.c_str());
+						found_key = true;
+						break;
+					}
 				}
 			}
 
-			for (size_t j=0; j<PRIMARY_STATS.size(); ++j) {
-				if (pwr.post_effects[i].id == PRIMARY_STATS[j].id) {
-					ss << " " << PRIMARY_STATS[j].name;
-					break;
+			if (!found_key) {
+				for (size_t j=0; j<PRIMARY_STATS.size(); ++j) {
+					if (pwr.post_effects[i].id == PRIMARY_STATS[j].id) {
+						ss << " " << PRIMARY_STATS[j].name;
+						found_key = true;
+						break;
+					}
+				}
+			}
+
+			if (!found_key) {
+				for (size_t j=0; j<DAMAGE_TYPES.size(); ++j) {
+					if (pwr.post_effects[i].id == DAMAGE_TYPES[j].min) {
+						ss << " " << DAMAGE_TYPES[j].name_min;
+						found_key = true;
+						break;
+					}
+					else if (pwr.post_effects[i].id == DAMAGE_TYPES[j].max) {
+						ss << " " << DAMAGE_TYPES[j].name_max;
+						found_key = true;
+						break;
+					}
 				}
 			}
 		}

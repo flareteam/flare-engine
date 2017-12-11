@@ -700,6 +700,13 @@ bool PowerManager::isValidEffect(const std::string& type) {
 			return true;
 	}
 
+	for (size_t i = 0; i < DAMAGE_TYPES.size(); ++i) {
+		if (type == DAMAGE_TYPES[i].min)
+			return true;
+		else if (type == DAMAGE_TYPES[i].max)
+			return true;
+	}
+
 	for (int i=0; i<STAT_COUNT; ++i) {
 		if (type == STAT_KEY[i])
 			return true;
