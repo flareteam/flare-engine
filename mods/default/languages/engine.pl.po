@@ -38,32 +38,26 @@ msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Transformacja minęła. Przeniesiono Cię w bezpieczne miejsce."
 
 #: ../../../src/CampaignManager.cpp:124
-#, c-format
 msgid "%d %s removed."
 msgstr "Usunięto %d %s."
 
 #: ../../../src/CampaignManager.cpp:133
-#, c-format
 msgid "%s removed."
 msgstr "Usunięto %s."
 
 #: ../../../src/CampaignManager.cpp:146
-#, c-format
 msgid "You receive %s."
-msgstr "Otrzymujesz %s."
+msgstr "Otrzymujesz przedmiot %s."
 
 #: ../../../src/CampaignManager.cpp:148
-#, c-format
 msgid "You receive %s x%d."
 msgstr "Otrzymujesz %s x%d."
 
 #: ../../../src/CampaignManager.cpp:157
-#, c-format
 msgid "You receive %d %s."
 msgstr "Otrzymujesz %d %s."
 
 #: ../../../src/CampaignManager.cpp:166
-#, c-format
 msgid "You receive %d XP."
 msgstr "Otrzymujesz %d PD."
 
@@ -558,18 +552,15 @@ msgid "Unknown Item"
 msgstr "Nieznany przedmiot"
 
 #: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:761
-#, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Szybkość Ruchu"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:764
-#, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% Szybkość Ataku"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
 #: ../../../src/MenuPowers.cpp:726
-#, c-format
 msgid "%s Resistance"
 msgstr "Odporność na %s"
 
@@ -578,29 +569,24 @@ msgid "Quest Item"
 msgstr "Przedmiot związany z zadaniem"
 
 #: ../../../src/ItemManager.cpp:685
-#, c-format
 msgid "Quality: %s"
 msgstr "Jakość: %s"
 
 #: ../../../src/ItemManager.cpp:710
-#, c-format
 msgid "Absorb: %d-%d"
 msgstr "Absorbcja: %d-%d"
 
 #: ../../../src/ItemManager.cpp:712
-#, c-format
 msgid "Absorb: %d"
 msgstr "Absorbcja: %d"
 
 #: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1000
 #: ../../../src/MenuPowers.cpp:1003
-#, c-format
 msgid "Requires Level %d"
 msgstr "Wymaga %d poziomu"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:992
 #: ../../../src/MenuPowers.cpp:994
-#, c-format
 msgid "Requires %s %d"
 msgstr "Wymaga: %d %s"
 
@@ -617,7 +603,7 @@ msgstr "Cena kupna: %d %s"
 #: ../../../src/ItemManager.cpp:782 ../../../src/ItemManager.cpp:791
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "Cena kupna: %d %s sztuka"
+msgstr "Cena kupna: %d %s za sztukę"
 
 #: ../../../src/ItemManager.cpp:797
 #, c-format
@@ -627,7 +613,7 @@ msgstr "Wartość sprzedaży: %d %s"
 #: ../../../src/ItemManager.cpp:799
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "Wartość sprzedaży: %d %s sztuka"
+msgstr "Wartość sprzedaży: %d %s za sztukę"
 
 #: ../../../src/ItemManager.cpp:808
 msgid "Set: "
@@ -673,12 +659,12 @@ msgstr "Pozostałe punkty"
 #: ../../../src/MenuCharacter.cpp:349 ../../../src/MenuManager.cpp:298
 #, c-format
 msgid "XP: %d"
-msgstr "PD: %d"
+msgstr "Obecne PD: %d"
 
 #: ../../../src/MenuCharacter.cpp:351
 #, c-format
 msgid "Next: %d"
-msgstr "Następny: %d"
+msgstr "Do następnego poziomu: %d PD"
 
 #: ../../../src/MenuCharacter.cpp:357
 #, c-format
@@ -690,14 +676,12 @@ msgid "Related stats:"
 msgstr "Powiązane statystyki:"
 
 #: ../../../src/MenuCharacter.cpp:388 ../../../src/MenuCharacter.cpp:412
-#, c-format
 msgid "Each level grants %d. "
-msgstr "Każdy poziom zapewnia %d. "
+msgstr "Każdy poziom zapewnia %d punktów. "
 
 #: ../../../src/MenuCharacter.cpp:392 ../../../src/MenuCharacter.cpp:416
-#, c-format
 msgid "Each point of %s grants %d. "
-msgstr "Każdy punkt %s dodaje %d. "
+msgstr "Każdy punkt atrybutu %s dodaje %d punktów. "
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
@@ -871,9 +855,8 @@ msgid "Use or equip item:"
 msgstr "Użyj bądź załóż przedmiot:"
 
 #: ../../../src/MenuInventory.cpp:279
-#, c-format
 msgid "%s modifiers"
-msgstr "%s - modyfikatory"
+msgstr "Modyfikatory dla %s:"
 
 #: ../../../src/MenuInventory.cpp:280
 msgid "Select a quantity of item:"
@@ -900,7 +883,6 @@ msgid "Inventory is full."
 msgstr "Ekwipunek jest pełny."
 
 #: ../../../src/MenuInventory.cpp:753
-#, c-format
 msgid "Not enough %s."
 msgstr "Za mało %s."
 
@@ -934,12 +916,10 @@ msgid "Enter amount:"
 msgstr "Podaj ilość:"
 
 #: ../../../src/MenuPowers.cpp:687
-#, c-format
 msgid "Costs %d MP"
 msgstr "Koszt: %d PM"
 
 #: ../../../src/MenuPowers.cpp:691
-#, c-format
 msgid "Costs %d HP"
 msgstr "Koszt: %d PŻ"
 
@@ -1049,22 +1029,18 @@ msgid "Ignores Avoidance"
 msgstr "Ignoruje szansę na unik"
 
 #: ../../../src/MenuPowers.cpp:969
-#, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr "%d%% Szansa na trafienie krytyczne spowolnionych celów"
 
 #: ../../../src/MenuPowers.cpp:974
-#, c-format
 msgid "%s Elemental Damage"
-msgstr "%s Obrażeń od żywiołów"
+msgstr "Obrażenia od żywiołu: %s"
 
 #: ../../../src/MenuPowers.cpp:983
-#, c-format
 msgid "Requires a %s"
 msgstr "Wymaga %s"
 
 #: ../../../src/MenuPowers.cpp:1022 ../../../src/MenuPowers.cpp:1025
-#, c-format
 msgid "Requires Power: %s"
 msgstr "Wymagana Moc: %s"
 
@@ -1090,7 +1066,7 @@ msgstr "Wspólna Skrytka"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
-msgstr "Nie można schować przedmiotu związanego z zadaniem do skrytki."
+msgstr "Nie można schować do skrytki przedmiotu związanego z zadaniem."
 
 #: ../../../src/MenuStash.cpp:209
 msgid "Stash is full."
