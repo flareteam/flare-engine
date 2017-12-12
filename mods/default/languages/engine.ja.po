@@ -30,7 +30,6 @@ msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
 msgstr "あなたは負けてしまった。 ゲームオーバー！ ${INPUT_CONTINUE} を押すと終了してタイトル画面に戻ります。"
 
 #: ../../../src/Avatar.cpp:581
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "あなたは負けてしまった。 ${INPUT_CONTINUE} を押して続行します。"
 
@@ -168,7 +167,7 @@ msgstr "色盲モード"
 #: ../../../src/GameStateConfigBase.cpp:263
 #, fuzzy
 msgid "Hardware mouse cursor"
-msgstr "ハードウェアサーフェス"
+msgstr "ハードウェアマウスカーソル"
 
 #: ../../../src/GameStateConfigBase.cpp:267
 msgid "Developer Mode"
@@ -188,7 +187,7 @@ msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:283
 msgid "Subtitles"
-msgstr ""
+msgstr "副題"
 
 #: ../../../src/GameStateConfigBase.cpp:287
 msgid "Active Mods"
@@ -316,7 +315,7 @@ msgstr ""
 
 #: ../../../src/GameState.cpp:33
 msgid "Loading..."
-msgstr "読み込んでいます..."
+msgstr "読み込み中..."
 
 #: ../../../src/GameStateLoad.cpp:78 ../../../src/GameStateLoad.cpp:91
 msgid "Delete Save"
@@ -639,7 +638,7 @@ msgstr "売却価格: %d %s ひとつあたり"
 
 #: ../../../src/ItemManager.cpp:808
 msgid "Set: "
-msgstr ""
+msgstr "組合わせ: "
 
 #: ../../../src/ItemManager.cpp:815
 #, c-format
@@ -897,7 +896,7 @@ msgstr "各アイテムの売買:"
 
 #: ../../../src/MenuInventory.cpp:541
 msgid "You don't have enough of the required item."
-msgstr ""
+msgstr "必要なアイテムが充分ではない。"
 
 #: ../../../src/MenuInventory.cpp:559
 msgid "This item can only be used from the action bar."
@@ -940,7 +939,7 @@ msgstr "売買"
 
 #: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
-msgstr ""
+msgstr "量の入力:"
 
 #: ../../../src/MenuPowers.cpp:687
 #, c-format
@@ -1011,7 +1010,7 @@ msgstr "スタン"
 
 #: ../../../src/MenuPowers.cpp:794
 msgid "Automatic revive on death"
-msgstr ""
+msgstr "死からの自動復帰"
 
 #: ../../../src/MenuPowers.cpp:797
 msgid "Convert"
@@ -1035,7 +1034,7 @@ msgstr "ヒーリング"
 
 #: ../../../src/MenuPowers.cpp:859
 msgid "Knockback"
-msgstr ""
+msgstr "はね返し"
 
 #: ../../../src/MenuPowers.cpp:879
 #, c-format
@@ -1047,7 +1046,6 @@ msgid "Base Accuracy"
 msgstr "ベース精度"
 
 #: ../../../src/MenuPowers.cpp:951
-#, fuzzy
 msgid "Base Critical Chance"
 msgstr "ベースのクリティカル機会"
 
@@ -1101,7 +1099,7 @@ msgstr "共有スタッシュ"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
-msgstr "クエスト品はスタッシュには保管できません。"
+msgstr "クエスト品はスタッシュには保管できない。"
 
 #: ../../../src/MenuStash.cpp:209
 msgid "Stash is full."
