@@ -34,46 +34,40 @@ msgid "Defense"
 msgstr "防御"
 
 #: ../engine/damage_types.txt:3
-#, fuzzy
 msgid "Melee Damage"
 msgstr "近接ダメージ"
 
 #: ../engine/damage_types.txt:4
 msgid "Melee Damage Min"
-msgstr "近接ダメージ Min"
+msgstr "近接ダメージの最小"
 
 #: ../engine/damage_types.txt:5
-#, fuzzy
 msgid "Melee Damage Max"
-msgstr "近接ダメージ Max"
+msgstr "近接ダメージの最大"
 
 #: ../engine/damage_types.txt:11
-#, fuzzy
 msgid "Ranged Damage"
-msgstr "飛ダメージ"
+msgstr "遠距離ダメージ"
 
 #: ../engine/damage_types.txt:12
 msgid "Ranged Damage Min"
-msgstr "飛ダメージ Min"
+msgstr "遠距離ダメージの最小"
 
 #: ../engine/damage_types.txt:13
-#, fuzzy
 msgid "Ranged Damage Max"
-msgstr "飛ダメージ Max"
+msgstr "遠距離ダメージの最大"
 
 #: ../engine/damage_types.txt:19
-#, fuzzy
 msgid "Mental Damage"
 msgstr "精神ダメージ"
 
 #: ../engine/damage_types.txt:20
 msgid "Mental Damage Min"
-msgstr "精神ダメージ Min"
+msgstr "精神ダメージの最小"
 
 #: ../engine/damage_types.txt:21
-#, fuzzy
 msgid "Mental Damage Max"
-msgstr "精神ダメージ Max"
+msgstr "精神ダメージの最大"
 
 #: ../cutscenes/credits.txt:8
 msgid "Flare Engine Credits"
