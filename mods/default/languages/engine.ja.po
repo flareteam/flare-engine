@@ -40,32 +40,32 @@ msgstr ""
 #: ../../../src/CampaignManager.cpp:124
 #, c-format
 msgid "%d %s removed."
-msgstr "%d %s が除去された。"
+msgstr "%d %s を失った。"
 
 #: ../../../src/CampaignManager.cpp:133
 #, c-format
 msgid "%s removed."
-msgstr "%s が除去された。"
+msgstr "%s を失った。"
 
 #: ../../../src/CampaignManager.cpp:146
 #, c-format
 msgid "You receive %s."
-msgstr "あなたは %s を受け取る。"
+msgstr "あなたは %s を入手する。"
 
 #: ../../../src/CampaignManager.cpp:148
 #, c-format
 msgid "You receive %s x%d."
-msgstr "あなたは %s x %d を受け取る。"
+msgstr "あなたは %s x %d を入手する。"
 
 #: ../../../src/CampaignManager.cpp:157
 #, c-format
 msgid "You receive %d %s."
-msgstr "あなたは %d %s を受け取る。"
+msgstr "あなたは %d %s を入手する。"
 
 #: ../../../src/CampaignManager.cpp:166
 #, c-format
 msgid "You receive %d XP."
-msgstr "あなたは %d XPを受け取ります。"
+msgstr "あなたは %d XP を入手する。"
 
 #: ../../../src/CampaignManager.cpp:172
 msgid "HP restored."
@@ -862,7 +862,7 @@ msgstr "現在レベルXPを %d%% 失った。 "
 #: ../../../src/MenuInventory.cpp:193
 #, c-format
 msgid "Lost %s."
-msgstr "%sを失った。"
+msgstr "%s を失った。"
 
 #: ../../../src/MenuInventory.cpp:236 ../../../src/MenuStash.cpp:136
 #, c-format
@@ -944,12 +944,12 @@ msgstr "量の入力:"
 #: ../../../src/MenuPowers.cpp:687
 #, c-format
 msgid "Costs %d MP"
-msgstr "費用は%d MP"
+msgstr "費用は %d MP"
 
 #: ../../../src/MenuPowers.cpp:691
 #, c-format
 msgid "Costs %d HP"
-msgstr "費用は%d HP"
+msgstr "費用は %d HP"
 
 #: ../../../src/MenuPowers.cpp:696
 msgid "Cooldown:"
