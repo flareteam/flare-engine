@@ -337,8 +337,6 @@ void MenuDevConsole::execute() {
 
 		std::sort(map_filenames.begin(), map_filenames.end());
 
-		std::stringstream ss;
-
 		std::string search_terms;
 		for (size_t i=1; i<args.size(); i++) {
 			search_terms += args[i];
