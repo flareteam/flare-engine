@@ -26,14 +26,12 @@ msgid "You may increase one attribute through the Character Menu."
 msgstr ""
 
 #: ../../../src/Avatar.cpp:578
-#, fuzzy
 msgid "You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."
-msgstr "Du har blitt beseiret. Spillet er slutt! Trykk Enter for å gå til hovedmenyen."
+msgstr "Du har blitt beseiret. Spillet er slutt! Trykk ${INPUT_CONTINUE} for å gå til hovedmenyen."
 
 #: ../../../src/Avatar.cpp:581
-#, fuzzy
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
-msgstr "Du har blitt beseiret. Trykk Enter for å fortsette."
+msgstr "Du har blitt beseiret. Trykk ${INPUT_CONTINUE} for å fortsette."
 
 #: ../../../src/Avatar.cpp:833
 msgid "Transformation expired. You have been moved back to a safe place."
@@ -188,7 +186,7 @@ msgstr ""
 
 #: ../../../src/GameStateConfigBase.cpp:283
 msgid "Subtitles"
-msgstr ""
+msgstr "Undertekster"
 
 #: ../../../src/GameStateConfigBase.cpp:287
 msgid "Active Mods"
@@ -565,20 +563,19 @@ msgid "%d%% Speed"
 msgstr "%d%% Hastighet"
 
 #: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "%d%% Attack Speed"
-msgstr "%d%% Hastighet"
+msgstr "%d%% Angrepshastighet"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
 #: ../../../src/MenuPowers.cpp:726
 #, c-format
 msgid "%s Resistance"
-msgstr ""
+msgstr "%s Motstand"
 
 #: ../../../src/ItemManager.cpp:658
-#, fuzzy
 msgid "Quest Item"
-msgstr "Oppdrag"
+msgstr ""
 
 #: ../../../src/ItemManager.cpp:685
 #, c-format
@@ -603,9 +600,9 @@ msgstr "Krever nivå %d"
 
 #: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:992
 #: ../../../src/MenuPowers.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid "Requires %s %d"
-msgstr "Krever en %s"
+msgstr "Krever %s %d"
 
 #: ../../../src/ItemManager.cpp:768
 #, c-format
@@ -653,9 +650,8 @@ msgid "x%d"
 msgstr ""
 
 #: ../../../src/MenuActiveEffects.cpp:214
-#, fuzzy
 msgid "Remaining:"
-msgstr "ubrukte poeng"
+msgstr "Ubrukte:"
 
 #: ../../../src/MenuActiveEffects.cpp:220
 #, c-format
@@ -699,17 +695,17 @@ msgid "Each level grants %d. "
 msgstr "Hvert nivå gir %d. "
 
 #: ../../../src/MenuCharacter.cpp:392 ../../../src/MenuCharacter.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Each point of %s grants %d. "
-msgstr "Hvert nivå gir %d. "
+msgstr "Hvert nivå av %s gir %d. "
 
 #: ../../../src/MenuDevConsole.cpp:47
 msgid "Execute"
-msgstr ""
+msgstr "Utfør"
 
 #: ../../../src/MenuDevConsole.cpp:113
 msgid "Developer Console"
-msgstr ""
+msgstr "Utviklerkonsoll"
 
 #: ../../../src/MenuDevConsole.cpp:121
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -772,9 +768,8 @@ msgid "Toggled the hud"
 msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:409
-#, fuzzy
 msgid "ERROR: Incorrect number of arguments"
-msgstr "FEIL: For få argumenter"
+msgstr "FEIL: Feil antall argumenter"
 
 #: ../../../src/MenuDevConsole.cpp:410 ../../../src/MenuDevConsole.cpp:435
 msgid "HINT: "
@@ -782,7 +777,7 @@ msgstr "HINT: "
 
 #: ../../../src/MenuDevConsole.cpp:410
 msgid " <id>"
-msgstr ""
+msgstr " <id>"
 
 #: ../../../src/MenuDevConsole.cpp:425
 #, c-format
@@ -795,7 +790,7 @@ msgstr "FEIL: For få argumenter"
 
 #: ../../../src/MenuDevConsole.cpp:435
 msgid " <key>=<val> <key>=<val> ..."
-msgstr ""
+msgstr " <nøkkel>=<verdi> <nøkkel>=<verdi> ..."
 
 #: ../../../src/MenuDevConsole.cpp:439
 msgid "ERROR: Unknown command"
@@ -803,7 +798,7 @@ msgstr "FEIL: Ukjent kommando"
 
 #: ../../../src/MenuDevConsole.cpp:440
 msgid "HINT: Type help"
-msgstr ""
+msgstr "HINT: Skriv help"
 
 #: ../../../src/MenuDevHUD.cpp:56
 msgid "Player (x,y): "
@@ -836,11 +831,11 @@ msgstr "Avslutt"
 
 #: ../../../src/MenuExit.cpp:85
 msgid "Continue"
-msgstr ""
+msgstr "Fortsett"
 
 #: ../../../src/MenuExit.cpp:109
 msgid "Paused"
-msgstr ""
+msgstr "Pauset"
 
 #: ../../../src/MenuInventory.cpp:155
 #, c-format
@@ -882,7 +877,7 @@ msgstr ""
 
 #: ../../../src/MenuInventory.cpp:280
 msgid "Select a quantity of item:"
-msgstr ""
+msgstr "Velg et antall:"
 
 #: ../../../src/MenuInventory.cpp:283
 msgid "Stash item stack:"
@@ -911,7 +906,7 @@ msgstr "Ikke nok %s."
 
 #: ../../../src/MenuInventory.cpp:773 ../../../src/MenuInventory.cpp:780
 msgid "This item can not be sold."
-msgstr ""
+msgstr "Du kan ikke selge denne gjenstanden."
 
 #: ../../../src/MenuLog.cpp:85
 msgid "Notes"
@@ -932,7 +927,7 @@ msgstr ""
 
 #: ../../../src/MenuNPCActions.cpp:71
 msgid "Trade"
-msgstr ""
+msgstr "Handle"
 
 #: ../../../src/MenuNumPicker.cpp:118
 msgid "Enter amount:"
@@ -954,7 +949,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:740 ../../../src/MenuPowers.cpp:743
 msgid "Damage per second"
-msgstr ""
+msgstr "Skade per sekund"
 
 #: ../../../src/MenuPowers.cpp:746 ../../../src/MenuPowers.cpp:749
 msgid "HP per second"
@@ -970,11 +965,11 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:767
 msgid "Immunity"
-msgstr ""
+msgstr "Immunitet"
 
 #: ../../../src/MenuPowers.cpp:770
 msgid "Immunity to damage over time"
-msgstr ""
+msgstr "Immun mot skade over tid"
 
 #: ../../../src/MenuPowers.cpp:773
 msgid "Immunity to slow"
@@ -1014,7 +1009,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:800
 msgid "Fear"
-msgstr ""
+msgstr "Frykt"
 
 #: ../../../src/MenuPowers.cpp:803
 msgid "Lifespan"
@@ -1022,7 +1017,7 @@ msgstr ""
 
 #: ../../../src/MenuPowers.cpp:827
 msgid "Magical Shield"
-msgstr ""
+msgstr "Magisk skjold"
 
 #: ../../../src/MenuPowers.cpp:856
 msgid "Healing"
@@ -1035,7 +1030,7 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:879
 #, c-format
 msgid "%d%% chance"
-msgstr ""
+msgstr "%d%% sjanse"
 
 #: ../../../src/MenuPowers.cpp:931
 msgid "Base Accuracy"
@@ -1061,7 +1056,7 @@ msgstr ""
 #: ../../../src/MenuPowers.cpp:974
 #, c-format
 msgid "%s Elemental Damage"
-msgstr ""
+msgstr "%s elemental skade"
 
 #: ../../../src/MenuPowers.cpp:983
 #, c-format
@@ -1091,16 +1086,15 @@ msgstr "Neste nivå:"
 
 #: ../../../src/MenuStash.cpp:132
 msgid "Shared Stash"
-msgstr ""
+msgstr "Delt kiste"
 
 #: ../../../src/MenuStash.cpp:199
 msgid "Can not store quest items in the stash."
 msgstr ""
 
 #: ../../../src/MenuStash.cpp:209
-#, fuzzy
 msgid "Stash is full."
-msgstr "Du har ikke plass til flere gjenstander."
+msgstr "Kisten er full."
 
 #: ../../../src/MenuVendor.cpp:51
 msgid "Buyback"
@@ -1128,9 +1122,9 @@ msgid "Game saved."
 msgstr "Spill lagret."
 
 #: ../../../src/SDLInputState.cpp:562 ../../../src/SDLInputState.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "Mouse %d"
-msgstr "Sikte med musepekeren"
+msgstr "Mus %d"
 
 #: ../../../src/SDLInputState.cpp:588
 #, c-format
@@ -1150,12 +1144,12 @@ msgstr ""
 #: ../../../src/SDLInputState.cpp:612 ../../../src/SDLInputState.cpp:615
 #, c-format
 msgid "%s on ground"
-msgstr ""
+msgstr "%s på bakken"
 
 #: ../../../src/SDLInputState.cpp:636 ../../../src/SDLInputState.cpp:639
 #, c-format
 msgid "%s on enemy"
-msgstr ""
+msgstr "%s på fiende"
 
 #: ../../../src/Settings.cpp:743
 msgid "Adventurer"
@@ -1294,123 +1288,10 @@ msgstr ""
 #: ../../../src/Utils.cpp:360
 #, c-format
 msgid "%s second"
-msgstr ""
+msgstr "%s sekund"
 
 #: ../../../src/Utils.cpp:363
 #, c-format
 msgid "%s seconds"
-msgstr ""
+msgstr "%s sekunder"
 
-#~ msgid "Mental damage: %d-%d"
-#~ msgstr "Mental skade: %d-%d"
-
-#~ msgid "Mental damage: %d"
-#~ msgstr "Mental skade: %d"
-
-#~ msgid "Mental Damage"
-#~ msgstr "Mental skade"
-
-#~ msgid "teleports the player to a specific tile, and optionally, a specific map"
-#~ msgstr "teleporterer spilleren til en angitt flis, og (valgfritt) et angitt kart"
-
-#~ msgid "unsets the given campaign statuses if they are set"
-#~ msgstr "fjerner den angitte kampanjestatusen hvis den har blitt satt"
-
-#~ msgid "sets the given campaign statuses"
-#~ msgstr "setter den angitte kampanjestatusen"
-
-#~ msgid "spawns an enemy matching the given category next to the player"
-#~ msgstr "skaper en fiende fra den angitte kategorien ved siden av spilleren"
-
-#~ msgid "Spawning enemy from category: "
-#~ msgstr "Skaper fiende fra kategori: "
-
-#~ msgid "ERROR: Invalid enemy category"
-#~ msgstr "FEIL: Ugyldig fiendekategori"
-
-#~ msgid " <category> [<x> <y>]"
-#~ msgstr " <kategori> [<x> <y>]"
-
-#~ msgid " <quantity>"
-#~ msgstr " <antall>"
-
-#~ msgid "ERROR: Unknown campaign status: "
-#~ msgstr "FEIL: Ukjent kampanjestatus: "
-
-#~ msgid "Teleporting to: "
-#~ msgstr "Teleporterer til: "
-
-#~ msgid "ERROR: Unknown map: "
-#~ msgstr "FEIL: Ukjent kart"
-
-#~ msgid " <x> <y> [<map>]"
-#~ msgstr " <x> <y> [<kart>]"
-
-#~ msgid "Removed item: "
-#~ msgstr "Fjernet gjenstand: "
-
-#~ msgid "Exit to title?"
-#~ msgstr "Avslutt til hovedmeny?"
-
-#~ msgid "Empty Slot"
-#~ msgstr "Ledig plass"
-
-#~ msgid "Prints out all of the campaign status that are set"
-#~ msgstr "skriver ut alle kampanjestatusene som har blitt satt"
-
-#~ msgid "Move only one item:"
-#~ msgstr "Flytt en enkelt gjenstand."
-
-#~ msgid "CTRL-click a carried item to sell it."
-#~ msgstr "CTRL-klikk på en gjenstand for å selge den."
-
-#~ msgid "Use this resolution?"
-#~ msgstr "Behold denne oppløsningen?"
-
-#~ msgid "Animated tiles"
-#~ msgstr "Animerte fliser"
-
-#~ msgid "Show Hotkeys Labels"
-#~ msgstr "Vis hurtigtaster"
-
-#~ msgid "Resolution"
-#~ msgstr "Oppløsning"
-
-#~ msgid "Level %d %s"
-#~ msgstr "Nivå %d %s"
-
-#~ msgid "Flare Alpha v0.19"
-#~ msgstr "Flare alfa v0.19"
-
-#~ msgid "lmb"
-#~ msgstr "venstre museknapp"
-
-#~ msgid "mmb"
-#~ msgstr "midterste museknapp"
-
-#~ msgid "rmb"
-#~ msgstr "høyre museknapp"
-
-#~ msgid "mbx1"
-#~ msgstr "museknappx1"
-
-#~ msgid "mbx2"
-#~ msgstr "museknappx2"
-
-#~ msgid "Low"
-#~ msgstr "Dårlig"
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "High"
-#~ msgstr "Høy"
-
-#~ msgid "Epic"
-#~ msgstr "Episk"
-
-#~ msgid "Decreases %s by %d"
-#~ msgstr "Reduserer %s by %d"
-
-#~ msgid "Save and exit to title?"
-#~ msgstr "Lagre og gå til hovedmeny?"
