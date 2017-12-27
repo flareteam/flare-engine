@@ -292,12 +292,12 @@ public:
 	std::string animations;
 
 	// default sounds
-	std::vector<std::pair<std::string, std::string> > sfx_attack;
+	std::vector<std::pair<std::string, std::vector<std::string> > > sfx_attack;
 	std::string sfx_step;
-	std::string sfx_hit;
-	std::string sfx_die;
-	std::string sfx_critdie;
-	std::string sfx_block;
+	std::vector<std::string> sfx_hit;
+	std::vector<std::string> sfx_die;
+	std::vector<std::string> sfx_critdie;
+	std::vector<std::string> sfx_block;
 	std::string sfx_levelup;
 
 	// formula numbers

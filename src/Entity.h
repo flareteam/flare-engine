@@ -34,6 +34,13 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class Animation;
 class AnimationSet;
 
+enum {
+	ENTITY_SOUND_HIT,
+	ENTITY_SOUND_DIE,
+	ENTITY_SOUND_CRITDIE,
+	ENTITY_SOUND_BLOCK
+};
+
 class Entity {
 protected:
 	Image *sprites;
@@ -49,16 +56,17 @@ public:
 	void loadSounds(StatBlock *src_stats = NULL);
 	void unloadSounds();
 	void playAttackSound(const std::string& attack_name);
+	void playSound(int sound_type);
 	bool move();
 	bool takeHit(Hazard &h);
 	virtual void doRewards(int) {}
 
 	// sound effects
-	std::vector<std::pair<std::string, SoundManager::SoundID> > sound_attack;
-	SoundManager::SoundID sound_hit;
-	SoundManager::SoundID sound_die;
-	SoundManager::SoundID sound_critdie;
-	SoundManager::SoundID sound_block;
+	std::vector<std::pair<std::string, std::vector<SoundManager::SoundID> > > sound_attack;
+	std::vector<SoundManager::SoundID> sound_hit;
+	std::vector<SoundManager::SoundID> sound_die;
+	std::vector<SoundManager::SoundID> sound_critdie;
+	std::vector<SoundManager::SoundID> sound_block;
 	SoundManager::SoundID sound_levelup;
 
 	bool setAnimation(const std::string& animation);

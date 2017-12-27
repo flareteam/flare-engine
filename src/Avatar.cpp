@@ -572,7 +572,7 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 					// close menus in GameStatePlay
 					close_menus = true;
 
-					snd->play(sound_die);
+					playSound(ENTITY_SOUND_DIE);
 
 					if (stats.permadeath) {
 						logMsg(substituteVarsInString(msg->get("You are defeated. Game over! ${INPUT_CONTINUE} to exit to Title."), this), true);
