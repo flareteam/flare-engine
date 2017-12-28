@@ -620,7 +620,7 @@ float EffectManager::getAttackSpeed(const std::string& anim_name) {
 		if (effect_list[i].type != EFFECT_ATTACK_SPEED)
 			continue;
 
-		if (effect_list[i].attack_speed_anim.empty() || (!effect_list[i].attack_speed_anim.empty() && effect_list[i].attack_speed_anim == anim_name)) {
+		if (effect_list[i].attack_speed_anim.empty() || effect_list[i].attack_speed_anim == anim_name) {
 			attack_speed = (static_cast<float>(effect_list[i].magnitude) * attack_speed) / 100.0f;
 		}
 	}

@@ -163,11 +163,9 @@ void BehaviorStandard::findTarget() {
 
 	// check entering combat (because the player hit the enemy)
 	if (e->stats.join_combat) {
-		AIPower* ai_power = NULL;
-
 		e->stats.in_combat = true;
 
-		ai_power = e->stats.getAIPower(AI_POWER_BEACON);
+		AIPower* ai_power = e->stats.getAIPower(AI_POWER_BEACON);
 		if (ai_power != NULL) {
 			powers->activate(ai_power->id, &e->stats, e->stats.pos); //emit beacon
 		}
