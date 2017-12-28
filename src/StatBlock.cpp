@@ -153,10 +153,10 @@ StatBlock::StatBlock()
 	, animations("")
 	, sfx_attack()
 	, sfx_step("")
-	, sfx_hit("")
-	, sfx_die("")
-	, sfx_critdie("")
-	, sfx_block("")
+	, sfx_hit()
+	, sfx_die()
+	, sfx_critdie()
+	, sfx_block()
 	, sfx_levelup("")
 	, max_spendable_stat_points(0)
 	, max_points_per_stat(0)
@@ -299,35 +299,69 @@ bool StatBlock::loadCoreStat(FileParser *infile) {
 bool StatBlock::loadSfxStat(FileParser *infile) {
 	// @CLASS StatBlock: Sound effects|Description of heroes in engine/avatar/ and enemies in enemies/
 
-	// @ATTR sfx_attack|predefined_string, filename : Animation name, Sound file|Filename of sound effect for the specified attack animation.
+	if (infile->new_section) {
+		sfx_attack.clear();
+		sfx_hit.clear();
+		sfx_die.clear();
+		sfx_critdie.clear();
+		sfx_block.clear();
+	}
+
 	if (infile->key == "sfx_attack") {
+		// @ATTR sfx_attack|repeatable(predefined_string, filename) : Animation name, Sound file|Filename of sound effect for the specified attack animation.
 		std::string anim_name = popFirstString(infile->val);
 		std::string filename = popFirstString(infile->val);
 
-		bool found_anim_name = false;
+		size_t found_index = sfx_attack.size();
 		for (size_t i = 0; i < sfx_attack.size(); ++i) {
 			if (anim_name == sfx_attack[i].first) {
-				sfx_attack[i].second = filename;
-				found_anim_name = true;
+				found_index = i;
 				break;
 			}
 		}
 
-		if (!found_anim_name) {
-			sfx_attack.push_back(std::pair<std::string, std::string>(anim_name, filename));
+		if (found_index == sfx_attack.size()) {
+			sfx_attack.push_back(std::pair<std::string, std::vector<std::string> >());
+			sfx_attack.back().first = anim_name;
+			sfx_attack.back().second.push_back(filename);
+		}
+		else {
+			if (std::find(sfx_attack[found_index].second.begin(), sfx_attack[found_index].second.end(), filename) == sfx_attack[found_index].second.end()) {
+				sfx_attack[found_index].second.push_back(filename);
+			}
 		}
 	}
-	// @ATTR sfx_hit|filename|Filename of sound effect for being hit.
-	else if (infile->key == "sfx_hit") sfx_hit = infile->val;
-	// @ATTR sfx_die|filename|Filename of sound effect for dying.
-	else if (infile->key == "sfx_die") sfx_die = infile->val;
-	// @ATTR sfx_critdie|filename|Filename of sound effect for dying to a critical hit.
-	else if (infile->key == "sfx_critdie") sfx_critdie = infile->val;
-	// @ATTR sfx_block|filename|Filename of sound effect for blocking an incoming hit.
-	else if (infile->key == "sfx_block") sfx_block = infile->val;
-	// @ATTR sfx_levelup|filename|Filename of sound effect for leveling up.
-	else if (infile->key == "sfx_levelup") sfx_levelup = infile->val;
-	else return false;
+	else if (infile->key == "sfx_hit") {
+		// @ATTR sfx_hit|repeatable(filename)|Filename of sound effect for being hit.
+		if (std::find(sfx_hit.begin(), sfx_hit.end(), infile->val) == sfx_hit.end()) {
+			sfx_hit.push_back(infile->val);
+		}
+	}
+	else if (infile->key == "sfx_die") {
+		// @ATTR sfx_die|repeatable(filename)|Filename of sound effect for dying.
+		if (std::find(sfx_die.begin(), sfx_die.end(), infile->val) == sfx_die.end()) {
+			sfx_die.push_back(infile->val);
+		}
+	}
+	else if (infile->key == "sfx_critdie") {
+		// @ATTR sfx_critdie|repeatable(filename)|Filename of sound effect for dying to a critical hit.
+		if (std::find(sfx_critdie.begin(), sfx_critdie.end(), infile->val) == sfx_critdie.end()) {
+			sfx_critdie.push_back(infile->val);
+		}
+	}
+	else if (infile->key == "sfx_block") {
+		// @ATTR sfx_block|repeatable(filename)|Filename of sound effect for blocking an incoming hit.
+		if (std::find(sfx_block.begin(), sfx_block.end(), infile->val) == sfx_block.end()) {
+			sfx_block.push_back(infile->val);
+		}
+	}
+	else if (infile->key == "sfx_levelup") {
+		// @ATTR sfx_levelup|filename|Filename of sound effect for leveling up.
+		sfx_levelup = infile->val;
+	}
+	else {
+		return false;
+	}
 
 	return true;
 }
