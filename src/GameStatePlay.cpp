@@ -351,6 +351,12 @@ void GameStatePlay::checkTeleport() {
 				on_load_teleport = true;
 		}
 
+		if (mapr->collider.is_outside_map(pc->stats.pos.x, pc->stats.pos.y)) {
+			logError("GameStatePlay: Teleport position is outside of map bounds.");
+			pc->stats.pos.x = 0.5f;
+			pc->stats.pos.y = 0.5f;
+		}
+
 		mapr->collider.block(pc->stats.pos.x, pc->stats.pos.y, false);
 
 		pc->stats.teleportation = false;
