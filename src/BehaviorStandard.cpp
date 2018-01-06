@@ -441,10 +441,19 @@ void BehaviorStandard::checkMove() {
 
 	// if patrolling waypoints and has reached a waypoint, cycle to the next one
 	if (!e->stats.waypoints.empty()) {
-		FPoint waypoint = e->stats.waypoints.front();
-		FPoint pos = e->stats.pos;
 		// if the patroller is close to the waypoint
-		if (fabs(waypoint.x - pos.x) <= 0.5f && fabs(waypoint.y - pos.y) <= 0.5f) {
+		FPoint waypoint = e->stats.waypoints.front();
+		float real_speed = e->stats.speed * speedMultiplyer[e->stats.direction] * e->stats.effects.speed / 100;
+		float waypoint_dist = calcDist(waypoint, e->stats.pos);
+
+		FPoint saved_pos = e->stats.pos;
+		e->move();
+		float new_dist = calcDist(waypoint, e->stats.pos);
+		e->stats.pos = saved_pos;
+
+		if (waypoint_dist <= real_speed || (waypoint_dist <= 0.5f && new_dist > waypoint_dist)) {
+			e->stats.pos = waypoint;
+			e->stats.turn_ticks = e->stats.turn_delay;
 			e->stats.waypoints.pop();
 			// pick a new random point if we're wandering
 			if (e->stats.wander) {
