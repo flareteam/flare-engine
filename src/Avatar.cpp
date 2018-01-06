@@ -710,25 +710,27 @@ void Avatar::logic(std::vector<ActionData> &action_queue, bool restrict_power_us
 
 	// calc new cam position from player position
 	// cam is focused at player position
-	float cam_speed = sqrtf(calcDist(mapr->cam, stats.pos)) / 2.f;
+	// TODO the 10.f magic number here should be an engine config option
+	float cam_dx = (calcDist(FPoint(mapr->cam.x, stats.pos.y), stats.pos)) / 10.f;
+	float cam_dy = (calcDist(FPoint(stats.pos.x, mapr->cam.y), stats.pos)) / 10.f;
 
 	if (mapr->cam.x < stats.pos.x) {
-		mapr->cam.x += cam_speed;
+		mapr->cam.x += cam_dx;
 		if (mapr->cam.x > stats.pos.x)
 			mapr->cam.x = stats.pos.x;
 	}
 	else if (mapr->cam.x > stats.pos.x) {
-		mapr->cam.x -= cam_speed;
+		mapr->cam.x -= cam_dx;
 		if (mapr->cam.x < stats.pos.x)
 			mapr->cam.x = stats.pos.x;
 	}
 	if (mapr->cam.y < stats.pos.y) {
-		mapr->cam.y += cam_speed;
+		mapr->cam.y += cam_dy;
 		if (mapr->cam.y > stats.pos.y)
 			mapr->cam.y = stats.pos.y;
 	}
 	else if (mapr->cam.y > stats.pos.y) {
-		mapr->cam.y -= cam_speed;
+		mapr->cam.y -= cam_dy;
 		if (mapr->cam.y < stats.pos.y)
 			mapr->cam.y = stats.pos.y;
 	}
