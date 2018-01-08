@@ -85,7 +85,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 		if (calc_width(builder.str()) > width) {
 
 			// this word can't fit on this line, so word wrap
-			height = height + getLineHeight();
+			height += getLineHeight();
 			if (calc_width(builder_prev.str()) > max_width) {
 				max_width = calc_width(builder_prev.str());
 			}
@@ -96,6 +96,7 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 			long_token = popTokenByWidth(next_word, width);
 
 			if (!long_token.empty()) {
+				height -= getLineHeight();
 				while (!long_token.empty()) {
 					if (calc_width(next_word) > max_width) {
 						max_width = calc_width(next_word);
@@ -189,6 +190,7 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 			long_token = popTokenByWidth(next_word, width);
 
 			if (!long_token.empty()) {
+				cursor_y -= getLineHeight();
 				while (!long_token.empty()) {
 					renderInternal(next_word, x, cursor_y, justify, target, color);
 					cursor_y += getLineHeight();
