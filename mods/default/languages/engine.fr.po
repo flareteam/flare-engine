@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-11 14:03-0500\n"
+"POT-Creation-Date: 2018-01-09 23:19-0500\n"
 "PO-Revision-Date: 2012-10-15 HO:MI+ZONE\n"
 "Last-Translator: Nubux<strauss.morgan@gmail.com>\n"
 "Language-Team:\n"
@@ -38,7 +38,7 @@ msgstr "Vous êtes vaincu. Votre personnage est mort ! Pressez Entrée pour reve
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Vous êtes vaincu.  Vous perdez la moitié de votre Or. Appuyez sur Entrée pour continuer."
 
-#: ../../../src/Avatar.cpp:833
+#: ../../../src/Avatar.cpp:835
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Transformation expirée. On vous a ramené à un endroit sûr."
 
@@ -92,18 +92,18 @@ msgstr "Effet négatif supprimé"
 msgid "HP and MP restored, negative effects removed"
 msgstr "PV et PM restaurés, effet négatif supprimé"
 
-#: ../../../src/Entity.cpp:387
+#: ../../../src/Entity.cpp:428
 msgid "miss"
 msgstr "manqué"
 
-#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:997
-#: ../../../src/StatBlock.cpp:751 ../../../src/StatBlock.cpp:757
+#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1004
+#: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
 msgstr "+%d PV"
 
-#: ../../../src/Entity.cpp:434 ../../../src/StatBlock.cpp:762
-#: ../../../src/StatBlock.cpp:768
+#: ../../../src/Entity.cpp:475 ../../../src/StatBlock.cpp:796
+#: ../../../src/StatBlock.cpp:802
 #, c-format
 msgid "+%d MP"
 msgstr "+%d PM"
@@ -361,7 +361,7 @@ msgid "Loading saved game..."
 msgstr "Chargement d'une partie..."
 
 #: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
-#: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
+#: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
 msgstr "Niveau %d"
@@ -573,18 +573,18 @@ msgstr "Visée à la souris"
 msgid "Unknown Item"
 msgstr "Objet inconnu"
 
-#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:761
+#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:784
 #, fuzzy, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Vitesse"
 
-#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:764
+#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:787
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% Vitesse"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
-#: ../../../src/MenuPowers.cpp:726
+#: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
 msgstr "%s Resistance"
@@ -609,14 +609,14 @@ msgstr "Absorbe : %d-%d"
 msgid "Absorb: %d"
 msgstr "Absorbe : %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1000
-#: ../../../src/MenuPowers.cpp:1003
+#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1023
+#: ../../../src/MenuPowers.cpp:1026
 #, c-format
 msgid "Requires Level %d"
 msgstr "Nécessite le niveau %d"
 
-#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:992
-#: ../../../src/MenuPowers.cpp:994
+#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1015
+#: ../../../src/MenuPowers.cpp:1017
 #, fuzzy, c-format
 msgid "Requires %s %d"
 msgstr "Nécessite %d de %s"
@@ -786,37 +786,37 @@ msgstr "Affichage HUD développeur basculé"
 msgid "Toggled the hud"
 msgstr "Affichage HUD basculé"
 
-#: ../../../src/MenuDevConsole.cpp:409
+#: ../../../src/MenuDevConsole.cpp:407
 #, fuzzy
 msgid "ERROR: Incorrect number of arguments"
 msgstr "ERREUR: Trop peu d'arguments"
 
-#: ../../../src/MenuDevConsole.cpp:410 ../../../src/MenuDevConsole.cpp:435
+#: ../../../src/MenuDevConsole.cpp:408 ../../../src/MenuDevConsole.cpp:433
 msgid "HINT: "
 msgstr "SUGGESTION : "
 
-#: ../../../src/MenuDevConsole.cpp:410
+#: ../../../src/MenuDevConsole.cpp:408
 msgid " <id>"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:425
+#: ../../../src/MenuDevConsole.cpp:423
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr "ERREUR: '%s' n'est pas une clé d'évènement valide"
 
-#: ../../../src/MenuDevConsole.cpp:434
+#: ../../../src/MenuDevConsole.cpp:432
 msgid "ERROR: Too few arguments"
 msgstr "ERREUR: Trop peu d'arguments"
 
-#: ../../../src/MenuDevConsole.cpp:435
+#: ../../../src/MenuDevConsole.cpp:433
 msgid " <key>=<val> <key>=<val> ..."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:439
+#: ../../../src/MenuDevConsole.cpp:437
 msgid "ERROR: Unknown command"
 msgstr "ERREUR: Commande inconnue"
 
-#: ../../../src/MenuDevConsole.cpp:440
+#: ../../../src/MenuDevConsole.cpp:438
 msgid "HINT: Type help"
 msgstr "SUGGESTION : tapez help"
 
@@ -831,6 +831,10 @@ msgstr "Cible (x,y): "
 #: ../../../src/MenuDevHUD.cpp:67
 msgid "Mouse (x,y): "
 msgstr "Souris (x,y): "
+
+#: ../../../src/MenuDevHUD.cpp:72
+msgid "Target distance: "
+msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:137
 msgid "Dead"
@@ -970,143 +974,143 @@ msgstr "Consomme %d PV"
 msgid "Cooldown:"
 msgstr "Récupération:"
 
-#: ../../../src/MenuPowers.cpp:740 ../../../src/MenuPowers.cpp:743
+#: ../../../src/MenuPowers.cpp:763 ../../../src/MenuPowers.cpp:766
 msgid "Damage per second"
 msgstr "Dommages par secondes"
 
-#: ../../../src/MenuPowers.cpp:746 ../../../src/MenuPowers.cpp:749
+#: ../../../src/MenuPowers.cpp:769 ../../../src/MenuPowers.cpp:772
 msgid "HP per second"
 msgstr "PV par seconde"
 
-#: ../../../src/MenuPowers.cpp:752 ../../../src/MenuPowers.cpp:755
+#: ../../../src/MenuPowers.cpp:775 ../../../src/MenuPowers.cpp:778
 msgid "MP per second"
 msgstr "PM par seconde"
 
-#: ../../../src/MenuPowers.cpp:759
+#: ../../../src/MenuPowers.cpp:782
 msgid "Immobilize"
 msgstr "Immobilise"
 
-#: ../../../src/MenuPowers.cpp:767
+#: ../../../src/MenuPowers.cpp:790
 msgid "Immunity"
 msgstr "Immunité"
 
-#: ../../../src/MenuPowers.cpp:770
+#: ../../../src/MenuPowers.cpp:793
 msgid "Immunity to damage over time"
 msgstr "Immunité aux dommages progressifs"
 
-#: ../../../src/MenuPowers.cpp:773
+#: ../../../src/MenuPowers.cpp:796
 msgid "Immunity to slow"
 msgstr "Immunité à la lenteur"
 
-#: ../../../src/MenuPowers.cpp:776
+#: ../../../src/MenuPowers.cpp:799
 msgid "Immunity to stun"
 msgstr "Immunité à l'étourdissement"
 
-#: ../../../src/MenuPowers.cpp:779
+#: ../../../src/MenuPowers.cpp:802
 msgid "Immunity to HP steal"
 msgstr "Immunité au vol de PV"
 
-#: ../../../src/MenuPowers.cpp:782
+#: ../../../src/MenuPowers.cpp:805
 msgid "Immunity to MP steal"
 msgstr "Immunité au vol de PM"
 
-#: ../../../src/MenuPowers.cpp:785
+#: ../../../src/MenuPowers.cpp:808
 msgid "Immunity to knockback"
 msgstr "Immunité au recul"
 
-#: ../../../src/MenuPowers.cpp:788
+#: ../../../src/MenuPowers.cpp:811
 msgid "Immunity to damage reflection"
 msgstr "Immunité au renvoi de dommage"
 
-#: ../../../src/MenuPowers.cpp:791
+#: ../../../src/MenuPowers.cpp:814
 msgid "Stun"
 msgstr "Étourdissement"
 
-#: ../../../src/MenuPowers.cpp:794
+#: ../../../src/MenuPowers.cpp:817
 msgid "Automatic revive on death"
 msgstr "Résurection automatique lors de la mort"
 
-#: ../../../src/MenuPowers.cpp:797
+#: ../../../src/MenuPowers.cpp:820
 msgid "Convert"
 msgstr "Convertir"
 
-#: ../../../src/MenuPowers.cpp:800
+#: ../../../src/MenuPowers.cpp:823
 msgid "Fear"
 msgstr "Peur"
 
-#: ../../../src/MenuPowers.cpp:803
+#: ../../../src/MenuPowers.cpp:826
 msgid "Lifespan"
 msgstr "Durée de vie"
 
-#: ../../../src/MenuPowers.cpp:827
+#: ../../../src/MenuPowers.cpp:850
 msgid "Magical Shield"
 msgstr "Bouclier magique"
 
-#: ../../../src/MenuPowers.cpp:856
+#: ../../../src/MenuPowers.cpp:879
 msgid "Healing"
 msgstr "Soin"
 
-#: ../../../src/MenuPowers.cpp:859
+#: ../../../src/MenuPowers.cpp:882
 msgid "Knockback"
 msgstr "Recul"
 
-#: ../../../src/MenuPowers.cpp:879
+#: ../../../src/MenuPowers.cpp:902
 #, c-format
 msgid "%d%% chance"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:931
+#: ../../../src/MenuPowers.cpp:954
 #, fuzzy
 msgid "Base Accuracy"
 msgstr "Précision de base"
 
-#: ../../../src/MenuPowers.cpp:951
+#: ../../../src/MenuPowers.cpp:974
 msgid "Base Critical Chance"
 msgstr "Chance criticales de base"
 
-#: ../../../src/MenuPowers.cpp:959
+#: ../../../src/MenuPowers.cpp:982
 msgid "Ignores Absorbtion"
 msgstr "Ignore l'Absorption"
 
-#: ../../../src/MenuPowers.cpp:964
+#: ../../../src/MenuPowers.cpp:987
 #, fuzzy
 msgid "Ignores Avoidance"
 msgstr "Ignore l'Esquive"
 
-#: ../../../src/MenuPowers.cpp:969
+#: ../../../src/MenuPowers.cpp:992
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr "%d%% chances de coup critique sur les cibles lentes"
 
-#: ../../../src/MenuPowers.cpp:974
+#: ../../../src/MenuPowers.cpp:997
 #, fuzzy, c-format
 msgid "%s Elemental Damage"
 msgstr "%s dégâts Élémentaux"
 
-#: ../../../src/MenuPowers.cpp:983
+#: ../../../src/MenuPowers.cpp:1006
 #, fuzzy, c-format
 msgid "Requires a %s"
 msgstr "Nécessite un %s"
 
-#: ../../../src/MenuPowers.cpp:1022 ../../../src/MenuPowers.cpp:1025
+#: ../../../src/MenuPowers.cpp:1045 ../../../src/MenuPowers.cpp:1048
 #, c-format
 msgid "Requires Power: %s"
 msgstr "Nécessite le pouvoir: %s"
 
-#: ../../../src/MenuPowers.cpp:1034
+#: ../../../src/MenuPowers.cpp:1057
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Cliquez pour débloquer (utilise 1 point de compétence)"
 
-#: ../../../src/MenuPowers.cpp:1038 ../../../src/MenuPowers.cpp:1040
+#: ../../../src/MenuPowers.cpp:1061 ../../../src/MenuPowers.cpp:1063
 #, fuzzy
 msgid "Requires 1 Skill Point"
 msgstr "Nécessite 1 point de compétence"
 
-#: ../../../src/MenuPowers.cpp:1249
+#: ../../../src/MenuPowers.cpp:1272
 msgid "Unspent skill points:"
 msgstr "Points de compétence non dépensés:"
 
-#: ../../../src/MenuPowers.cpp:1277
+#: ../../../src/MenuPowers.cpp:1300
 #, fuzzy
 msgid "Next Level:"
 msgstr "Niveau suivant:"
@@ -1132,16 +1136,16 @@ msgstr "Racheter"
 msgid "Vendor"
 msgstr "Vendeur"
 
-#: ../../../src/PowerManager.cpp:981
+#: ../../../src/PowerManager.cpp:988
 #, c-format
 msgid "+%d Shield"
 msgstr "Bouclier +%d"
 
-#: ../../../src/PowerManager.cpp:1237
+#: ../../../src/PowerManager.cpp:1244
 msgid "You are already transformed, untransform first."
 msgstr "Vous êtes deja transformé, reprenez forme humaine avant."
 
-#: ../../../src/PowerManager.cpp:1249
+#: ../../../src/PowerManager.cpp:1256
 msgid "Could not untransform at this position."
 msgstr "Vous ne pouvez pas reprendre forme humaine à cette position."
 

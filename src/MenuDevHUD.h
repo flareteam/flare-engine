@@ -34,6 +34,7 @@ protected:
 	WidgetLabel player_pos;
 	WidgetLabel mouse_pos;
 	WidgetLabel target_pos;
+	WidgetLabel target_distance;
 
 public:
 	MenuDevHUD();

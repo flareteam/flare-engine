@@ -68,9 +68,14 @@ void MenuDevHUD::align() {
 	mouse_pos.set(window_area.x, window_area.y+line_height*2, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
 	line_width = std::max(line_width, mouse_pos.bounds.w);
 
+	ss.str("");
+	ss << msg->get("Target distance: ") << calcDist(pc->stats.pos, target);
+	target_distance.set(window_area.x, window_area.y+line_height*3, JUSTIFY_LEFT, VALIGN_TOP, ss.str(), font->getColor("menu_normal"));
+	line_width = std::max(line_width, mouse_pos.bounds.w);
+
 	window_area = original_area;
 	window_area.w = line_width;
-	window_area.h = line_height*3;
+	window_area.h = line_height*4;
 
 	Menu::align();
 }
@@ -89,6 +94,7 @@ void MenuDevHUD::render() {
 		player_pos.render();
 		mouse_pos.render();
 		target_pos.render();
+		target_distance.render();
 	}
 }
 

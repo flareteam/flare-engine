@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-11 14:03-0500\n"
+"POT-Creation-Date: 2018-01-09 23:19-0500\n"
 "PO-Revision-Date: 2013-03-16 11:05+0300\n"
 "Last-Translator: Igor Paliychuk <mansonigor@gmail.com>\n"
 "Language-Team: Ukrainian <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr "Вас перемогли. Кінець гри! Натисніть Enter
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Вас перемогли. Натисніть Enter щоб продовжити."
 
-#: ../../../src/Avatar.cpp:833
+#: ../../../src/Avatar.cpp:835
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Час перетворення скінчився. Ви були переміщені в безпечне місце."
 
@@ -89,18 +89,18 @@ msgstr "Шкідливі ефекти усунено."
 msgid "HP and MP restored, negative effects removed"
 msgstr "Здоров'я та Мана відновлені, шкідливі ефекти усунено"
 
-#: ../../../src/Entity.cpp:387
+#: ../../../src/Entity.cpp:428
 msgid "miss"
 msgstr "промах"
 
-#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:997
-#: ../../../src/StatBlock.cpp:751 ../../../src/StatBlock.cpp:757
+#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1004
+#: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
 msgstr "+%d Здоров'я"
 
-#: ../../../src/Entity.cpp:434 ../../../src/StatBlock.cpp:762
-#: ../../../src/StatBlock.cpp:768
+#: ../../../src/Entity.cpp:475 ../../../src/StatBlock.cpp:796
+#: ../../../src/StatBlock.cpp:802
 #, c-format
 msgid "+%d MP"
 msgstr "+%d Мани"
@@ -354,7 +354,7 @@ msgid "Loading saved game..."
 msgstr "Завантажую збереження..."
 
 #: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
-#: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
+#: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
 msgstr "Рівень %d"
@@ -560,18 +560,18 @@ msgstr "Мишка X2"
 msgid "Unknown Item"
 msgstr "Невідомий предмет"
 
-#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:761
+#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:784
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% Швидкості"
 
-#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:764
+#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:787
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% Швидкості"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
-#: ../../../src/MenuPowers.cpp:726
+#: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
 msgstr ""
@@ -596,14 +596,14 @@ msgstr "Поглинання: %d-%d"
 msgid "Absorb: %d"
 msgstr "Поглинання: %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1000
-#: ../../../src/MenuPowers.cpp:1003
+#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1023
+#: ../../../src/MenuPowers.cpp:1026
 #, c-format
 msgid "Requires Level %d"
 msgstr "Вимагає Рівень %d"
 
-#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:992
-#: ../../../src/MenuPowers.cpp:994
+#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1015
+#: ../../../src/MenuPowers.cpp:1017
 #, fuzzy, c-format
 msgid "Requires %s %d"
 msgstr "Вимагає %s"
@@ -774,37 +774,37 @@ msgstr "Стан панелі розробника змінено"
 msgid "Toggled the hud"
 msgstr "Стан панелі розробника змінено"
 
-#: ../../../src/MenuDevConsole.cpp:409
+#: ../../../src/MenuDevConsole.cpp:407
 #, fuzzy
 msgid "ERROR: Incorrect number of arguments"
 msgstr "ПОМИЛКА: Замало параметрів"
 
-#: ../../../src/MenuDevConsole.cpp:410 ../../../src/MenuDevConsole.cpp:435
+#: ../../../src/MenuDevConsole.cpp:408 ../../../src/MenuDevConsole.cpp:433
 msgid "HINT: "
 msgstr "ПІДКАЗКА: "
 
-#: ../../../src/MenuDevConsole.cpp:410
+#: ../../../src/MenuDevConsole.cpp:408
 msgid " <id>"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:425
+#: ../../../src/MenuDevConsole.cpp:423
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:434
+#: ../../../src/MenuDevConsole.cpp:432
 msgid "ERROR: Too few arguments"
 msgstr "ПОМИЛКА: Замало параметрів"
 
-#: ../../../src/MenuDevConsole.cpp:435
+#: ../../../src/MenuDevConsole.cpp:433
 msgid " <key>=<val> <key>=<val> ..."
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:439
+#: ../../../src/MenuDevConsole.cpp:437
 msgid "ERROR: Unknown command"
 msgstr "ПОМИЛКА: Невідома команда"
 
-#: ../../../src/MenuDevConsole.cpp:440
+#: ../../../src/MenuDevConsole.cpp:438
 msgid "HINT: Type help"
 msgstr "ПІДКАЗКА: Введіть help"
 
@@ -819,6 +819,10 @@ msgstr "Ціль (x,y): "
 #: ../../../src/MenuDevHUD.cpp:67
 msgid "Mouse (x,y): "
 msgstr "Мишка (x,y): "
+
+#: ../../../src/MenuDevHUD.cpp:72
+msgid "Target distance: "
+msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:137
 msgid "Dead"
@@ -960,143 +964,143 @@ msgstr "Коштує %d Здоров'я"
 msgid "Cooldown:"
 msgstr "Перезарядка: %s секунд"
 
-#: ../../../src/MenuPowers.cpp:740 ../../../src/MenuPowers.cpp:743
+#: ../../../src/MenuPowers.cpp:763 ../../../src/MenuPowers.cpp:766
 msgid "Damage per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:746 ../../../src/MenuPowers.cpp:749
+#: ../../../src/MenuPowers.cpp:769 ../../../src/MenuPowers.cpp:772
 msgid "HP per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:752 ../../../src/MenuPowers.cpp:755
+#: ../../../src/MenuPowers.cpp:775 ../../../src/MenuPowers.cpp:778
 msgid "MP per second"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:759
+#: ../../../src/MenuPowers.cpp:782
 msgid "Immobilize"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:767
+#: ../../../src/MenuPowers.cpp:790
 msgid "Immunity"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:770
+#: ../../../src/MenuPowers.cpp:793
 msgid "Immunity to damage over time"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:773
+#: ../../../src/MenuPowers.cpp:796
 msgid "Immunity to slow"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:776
+#: ../../../src/MenuPowers.cpp:799
 msgid "Immunity to stun"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:779
+#: ../../../src/MenuPowers.cpp:802
 msgid "Immunity to HP steal"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:782
+#: ../../../src/MenuPowers.cpp:805
 msgid "Immunity to MP steal"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:785
+#: ../../../src/MenuPowers.cpp:808
 msgid "Immunity to knockback"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:788
+#: ../../../src/MenuPowers.cpp:811
 msgid "Immunity to damage reflection"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:791
+#: ../../../src/MenuPowers.cpp:814
 msgid "Stun"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:794
+#: ../../../src/MenuPowers.cpp:817
 msgid "Automatic revive on death"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:797
+#: ../../../src/MenuPowers.cpp:820
 msgid "Convert"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:800
+#: ../../../src/MenuPowers.cpp:823
 msgid "Fear"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:803
+#: ../../../src/MenuPowers.cpp:826
 msgid "Lifespan"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:827
+#: ../../../src/MenuPowers.cpp:850
 msgid "Magical Shield"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:856
+#: ../../../src/MenuPowers.cpp:879
 msgid "Healing"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:859
+#: ../../../src/MenuPowers.cpp:882
 msgid "Knockback"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:879
+#: ../../../src/MenuPowers.cpp:902
 #, c-format
 msgid "%d%% chance"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:931
+#: ../../../src/MenuPowers.cpp:954
 #, fuzzy
 msgid "Base Accuracy"
 msgstr "Точність"
 
-#: ../../../src/MenuPowers.cpp:951
+#: ../../../src/MenuPowers.cpp:974
 #, fuzzy
 msgid "Base Critical Chance"
 msgstr "Шанс Критичного Удару"
 
-#: ../../../src/MenuPowers.cpp:959
+#: ../../../src/MenuPowers.cpp:982
 msgid "Ignores Absorbtion"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:964
+#: ../../../src/MenuPowers.cpp:987
 #, fuzzy
 msgid "Ignores Avoidance"
 msgstr "Ухилення"
 
-#: ../../../src/MenuPowers.cpp:969
+#: ../../../src/MenuPowers.cpp:992
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:974
+#: ../../../src/MenuPowers.cpp:997
 #, fuzzy, c-format
 msgid "%s Elemental Damage"
 msgstr "Мінімальна Психічна шкода"
 
-#: ../../../src/MenuPowers.cpp:983
+#: ../../../src/MenuPowers.cpp:1006
 #, c-format
 msgid "Requires a %s"
 msgstr "Вимагає %s"
 
-#: ../../../src/MenuPowers.cpp:1022 ../../../src/MenuPowers.cpp:1025
+#: ../../../src/MenuPowers.cpp:1045 ../../../src/MenuPowers.cpp:1048
 #, c-format
 msgid "Requires Power: %s"
 msgstr "Вимагає Уміння: %s"
 
-#: ../../../src/MenuPowers.cpp:1034
+#: ../../../src/MenuPowers.cpp:1057
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Клацніть для вивчення (потребує 1 Очко Умінь)"
 
-#: ../../../src/MenuPowers.cpp:1038 ../../../src/MenuPowers.cpp:1040
+#: ../../../src/MenuPowers.cpp:1061 ../../../src/MenuPowers.cpp:1063
 msgid "Requires 1 Skill Point"
 msgstr "Вимагає 1 Очко Умінь"
 
-#: ../../../src/MenuPowers.cpp:1249
+#: ../../../src/MenuPowers.cpp:1272
 msgid "Unspent skill points:"
 msgstr "Невитрачені очки умінь:"
 
-#: ../../../src/MenuPowers.cpp:1277
+#: ../../../src/MenuPowers.cpp:1300
 msgid "Next Level:"
 msgstr "Натсупний рівень:"
 
@@ -1121,16 +1125,16 @@ msgstr "Зворотня покупка"
 msgid "Vendor"
 msgstr "Торговець"
 
-#: ../../../src/PowerManager.cpp:981
+#: ../../../src/PowerManager.cpp:988
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d Захисту"
 
-#: ../../../src/PowerManager.cpp:1237
+#: ../../../src/PowerManager.cpp:1244
 msgid "You are already transformed, untransform first."
 msgstr "Ви вже трансформовані, спершу відновіть початкову форму."
 
-#: ../../../src/PowerManager.cpp:1249
+#: ../../../src/PowerManager.cpp:1256
 msgid "Could not untransform at this position."
 msgstr "Не можу змінити форму в цьому місці."
 

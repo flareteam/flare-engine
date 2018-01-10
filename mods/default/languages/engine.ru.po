@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flare-engine 1.00\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-11 14:03-0500\n"
+"POT-Creation-Date: 2018-01-09 23:19-0500\n"
 "PO-Revision-Date: 2016-09-15 09:50+0200\n"
 "Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
 "Language-Team: Russian <gnu@dn07.ru>\n"
@@ -37,7 +37,7 @@ msgstr "Вы потерпели поражение. Игра окончена! �
 msgid "You are defeated. ${INPUT_CONTINUE} to continue."
 msgstr "Вы потерпели поражение. Нажмите ${INPUT_CONTINUE} для продолжения."
 
-#: ../../../src/Avatar.cpp:833
+#: ../../../src/Avatar.cpp:835
 msgid "Transformation expired. You have been moved back to a safe place."
 msgstr "Трансформация завершилась. Вы были возвращены в безопасное место."
 
@@ -91,18 +91,18 @@ msgstr "Отрицательные эффекты убраны."
 msgid "HP and MP restored, negative effects removed"
 msgstr "Жизнь и мана восстановлены, отрицательные эффекты убраны"
 
-#: ../../../src/Entity.cpp:387
+#: ../../../src/Entity.cpp:428
 msgid "miss"
 msgstr "промах"
 
-#: ../../../src/Entity.cpp:427 ../../../src/PowerManager.cpp:997
-#: ../../../src/StatBlock.cpp:751 ../../../src/StatBlock.cpp:757
+#: ../../../src/Entity.cpp:468 ../../../src/PowerManager.cpp:1004
+#: ../../../src/StatBlock.cpp:785 ../../../src/StatBlock.cpp:791
 #, c-format
 msgid "+%d HP"
 msgstr "+%d жизни"
 
-#: ../../../src/Entity.cpp:434 ../../../src/StatBlock.cpp:762
-#: ../../../src/StatBlock.cpp:768
+#: ../../../src/Entity.cpp:475 ../../../src/StatBlock.cpp:796
+#: ../../../src/StatBlock.cpp:802
 #, c-format
 msgid "+%d MP"
 msgstr "+%d маны"
@@ -355,7 +355,7 @@ msgid "Loading saved game..."
 msgstr "Загрузка сохранённой игры..."
 
 #: ../../../src/GameStateLoad.cpp:710 ../../../src/ItemManager.cpp:672
-#: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1014
+#: ../../../src/MenuPowers.cpp:678 ../../../src/MenuPowers.cpp:1037
 #, c-format
 msgid "Level %d"
 msgstr "Уровень %d"
@@ -561,18 +561,18 @@ msgstr "мышь X2"
 msgid "Unknown Item"
 msgstr "Неизвестный предмет"
 
-#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:761
+#: ../../../src/ItemManager.cpp:581 ../../../src/MenuPowers.cpp:784
 #, c-format
 msgid "%d%% Speed"
 msgstr "%d%% скорости"
 
-#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:764
+#: ../../../src/ItemManager.cpp:585 ../../../src/MenuPowers.cpp:787
 #, fuzzy, c-format
 msgid "%d%% Attack Speed"
 msgstr "%d%% скорости"
 
 #: ../../../src/ItemManager.cpp:607 ../../../src/MenuCharacter.cpp:339
-#: ../../../src/MenuPowers.cpp:726
+#: ../../../src/MenuPowers.cpp:729
 #, c-format
 msgid "%s Resistance"
 msgstr "сопротивление %s"
@@ -596,14 +596,14 @@ msgstr "Поглощение: %d-%d"
 msgid "Absorb: %d"
 msgstr "Поглощение: %d"
 
-#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1000
-#: ../../../src/MenuPowers.cpp:1003
+#: ../../../src/ItemManager.cpp:749 ../../../src/MenuPowers.cpp:1023
+#: ../../../src/MenuPowers.cpp:1026
 #, c-format
 msgid "Requires Level %d"
 msgstr "Требуется уровень %d"
 
-#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:992
-#: ../../../src/MenuPowers.cpp:994
+#: ../../../src/ItemManager.cpp:760 ../../../src/MenuPowers.cpp:1015
+#: ../../../src/MenuPowers.cpp:1017
 #, fuzzy, c-format
 msgid "Requires %s %d"
 msgstr "Требуется %s"
@@ -772,37 +772,37 @@ msgstr "Переключён интерфейс разработчика"
 msgid "Toggled the hud"
 msgstr "Переключён интерфейс"
 
-#: ../../../src/MenuDevConsole.cpp:409
+#: ../../../src/MenuDevConsole.cpp:407
 #, fuzzy
 msgid "ERROR: Incorrect number of arguments"
 msgstr "ОШИБКА: недостаточно аргументов"
 
-#: ../../../src/MenuDevConsole.cpp:410 ../../../src/MenuDevConsole.cpp:435
+#: ../../../src/MenuDevConsole.cpp:408 ../../../src/MenuDevConsole.cpp:433
 msgid "HINT: "
 msgstr "ПОДСКАЗКА: "
 
-#: ../../../src/MenuDevConsole.cpp:410
+#: ../../../src/MenuDevConsole.cpp:408
 msgid " <id>"
 msgstr ""
 
-#: ../../../src/MenuDevConsole.cpp:425
+#: ../../../src/MenuDevConsole.cpp:423
 #, c-format
 msgid "ERROR: '%s' is not a valid event key"
 msgstr "ОШИБКА: «%s» — недопустимый ключ события"
 
-#: ../../../src/MenuDevConsole.cpp:434
+#: ../../../src/MenuDevConsole.cpp:432
 msgid "ERROR: Too few arguments"
 msgstr "ОШИБКА: недостаточно аргументов"
 
-#: ../../../src/MenuDevConsole.cpp:435
+#: ../../../src/MenuDevConsole.cpp:433
 msgid " <key>=<val> <key>=<val> ..."
 msgstr " <ключ>=<значение> <ключ>=<значение> ..."
 
-#: ../../../src/MenuDevConsole.cpp:439
+#: ../../../src/MenuDevConsole.cpp:437
 msgid "ERROR: Unknown command"
 msgstr "ОШИБКА: неизвестная команда"
 
-#: ../../../src/MenuDevConsole.cpp:440
+#: ../../../src/MenuDevConsole.cpp:438
 msgid "HINT: Type help"
 msgstr "ПОДСКАЗКА: наберите help"
 
@@ -817,6 +817,10 @@ msgstr "Цель (x,y): "
 #: ../../../src/MenuDevHUD.cpp:67
 msgid "Mouse (x,y): "
 msgstr "Мышь (x,y): "
+
+#: ../../../src/MenuDevHUD.cpp:72
+msgid "Target distance: "
+msgstr ""
 
 #: ../../../src/MenuEnemy.cpp:137
 msgid "Dead"
@@ -953,140 +957,140 @@ msgstr "Стоит %d жизни"
 msgid "Cooldown:"
 msgstr "Восстановление:"
 
-#: ../../../src/MenuPowers.cpp:740 ../../../src/MenuPowers.cpp:743
+#: ../../../src/MenuPowers.cpp:763 ../../../src/MenuPowers.cpp:766
 msgid "Damage per second"
 msgstr "урон в секунду"
 
-#: ../../../src/MenuPowers.cpp:746 ../../../src/MenuPowers.cpp:749
+#: ../../../src/MenuPowers.cpp:769 ../../../src/MenuPowers.cpp:772
 msgid "HP per second"
 msgstr "жизнь в секунду"
 
-#: ../../../src/MenuPowers.cpp:752 ../../../src/MenuPowers.cpp:755
+#: ../../../src/MenuPowers.cpp:775 ../../../src/MenuPowers.cpp:778
 msgid "MP per second"
 msgstr "мана в секунду"
 
-#: ../../../src/MenuPowers.cpp:759
+#: ../../../src/MenuPowers.cpp:782
 msgid "Immobilize"
 msgstr "Зафиксировать"
 
-#: ../../../src/MenuPowers.cpp:767
+#: ../../../src/MenuPowers.cpp:790
 msgid "Immunity"
 msgstr "Устойчивость"
 
-#: ../../../src/MenuPowers.cpp:770
+#: ../../../src/MenuPowers.cpp:793
 msgid "Immunity to damage over time"
 msgstr "Устойчивость к урону в течение долгого времени"
 
-#: ../../../src/MenuPowers.cpp:773
+#: ../../../src/MenuPowers.cpp:796
 msgid "Immunity to slow"
 msgstr "Устойчивость к снегу"
 
-#: ../../../src/MenuPowers.cpp:776
+#: ../../../src/MenuPowers.cpp:799
 msgid "Immunity to stun"
 msgstr "Устойчивость к оглушению"
 
-#: ../../../src/MenuPowers.cpp:779
+#: ../../../src/MenuPowers.cpp:802
 msgid "Immunity to HP steal"
 msgstr "Устойчивость к краже жизни"
 
-#: ../../../src/MenuPowers.cpp:782
+#: ../../../src/MenuPowers.cpp:805
 msgid "Immunity to MP steal"
 msgstr "Устойчивость к краже маны"
 
-#: ../../../src/MenuPowers.cpp:785
+#: ../../../src/MenuPowers.cpp:808
 msgid "Immunity to knockback"
 msgstr "Устойчивость к сбиванию с ног"
 
-#: ../../../src/MenuPowers.cpp:788
+#: ../../../src/MenuPowers.cpp:811
 msgid "Immunity to damage reflection"
 msgstr "Устойчивость к отражению урона"
 
-#: ../../../src/MenuPowers.cpp:791
+#: ../../../src/MenuPowers.cpp:814
 msgid "Stun"
 msgstr "Оглушение"
 
-#: ../../../src/MenuPowers.cpp:794
+#: ../../../src/MenuPowers.cpp:817
 msgid "Automatic revive on death"
 msgstr "Автоматически возрождаться после смерти"
 
-#: ../../../src/MenuPowers.cpp:797
+#: ../../../src/MenuPowers.cpp:820
 msgid "Convert"
 msgstr "Преобразовать"
 
-#: ../../../src/MenuPowers.cpp:800
+#: ../../../src/MenuPowers.cpp:823
 msgid "Fear"
 msgstr "Страх"
 
-#: ../../../src/MenuPowers.cpp:803
+#: ../../../src/MenuPowers.cpp:826
 msgid "Lifespan"
 msgstr "Продолжительность жизни"
 
-#: ../../../src/MenuPowers.cpp:827
+#: ../../../src/MenuPowers.cpp:850
 msgid "Magical Shield"
 msgstr "Магический щит"
 
-#: ../../../src/MenuPowers.cpp:856
+#: ../../../src/MenuPowers.cpp:879
 msgid "Healing"
 msgstr "Лечение"
 
-#: ../../../src/MenuPowers.cpp:859
+#: ../../../src/MenuPowers.cpp:882
 msgid "Knockback"
 msgstr "Сбивание с ног"
 
-#: ../../../src/MenuPowers.cpp:879
+#: ../../../src/MenuPowers.cpp:902
 #, c-format
 msgid "%d%% chance"
 msgstr ""
 
-#: ../../../src/MenuPowers.cpp:931
+#: ../../../src/MenuPowers.cpp:954
 msgid "Base Accuracy"
 msgstr "Базовая меткость"
 
-#: ../../../src/MenuPowers.cpp:951
+#: ../../../src/MenuPowers.cpp:974
 msgid "Base Critical Chance"
 msgstr "Базовый шанс критического урона"
 
-#: ../../../src/MenuPowers.cpp:959
+#: ../../../src/MenuPowers.cpp:982
 msgid "Ignores Absorbtion"
 msgstr "Игнорирует поглощение"
 
-#: ../../../src/MenuPowers.cpp:964
+#: ../../../src/MenuPowers.cpp:987
 msgid "Ignores Avoidance"
 msgstr "Игнорирует уклонение"
 
-#: ../../../src/MenuPowers.cpp:969
+#: ../../../src/MenuPowers.cpp:992
 #, c-format
 msgid "%d%% Chance to crit slowed targets"
 msgstr "%d%% шанс критического урона по замедленным целям"
 
-#: ../../../src/MenuPowers.cpp:974
+#: ../../../src/MenuPowers.cpp:997
 #, c-format
 msgid "%s Elemental Damage"
 msgstr "%s стихийный урон"
 
-#: ../../../src/MenuPowers.cpp:983
+#: ../../../src/MenuPowers.cpp:1006
 #, c-format
 msgid "Requires a %s"
 msgstr "Требуется %s"
 
-#: ../../../src/MenuPowers.cpp:1022 ../../../src/MenuPowers.cpp:1025
+#: ../../../src/MenuPowers.cpp:1045 ../../../src/MenuPowers.cpp:1048
 #, c-format
 msgid "Requires Power: %s"
 msgstr "Требуется сила: %s"
 
-#: ../../../src/MenuPowers.cpp:1034
+#: ../../../src/MenuPowers.cpp:1057
 msgid "Click to Unlock (uses 1 Skill Point)"
 msgstr "Щёлкните, чтобы разблокировать (тратится 1 очко навыка)"
 
-#: ../../../src/MenuPowers.cpp:1038 ../../../src/MenuPowers.cpp:1040
+#: ../../../src/MenuPowers.cpp:1061 ../../../src/MenuPowers.cpp:1063
 msgid "Requires 1 Skill Point"
 msgstr "Требуется 1 очко навыка"
 
-#: ../../../src/MenuPowers.cpp:1249
+#: ../../../src/MenuPowers.cpp:1272
 msgid "Unspent skill points:"
 msgstr "Неистраченные очки навыков:"
 
-#: ../../../src/MenuPowers.cpp:1277
+#: ../../../src/MenuPowers.cpp:1300
 msgid "Next Level:"
 msgstr "Следующий уровень:"
 
@@ -1110,16 +1114,16 @@ msgstr "Выкуп"
 msgid "Vendor"
 msgstr "Торговец"
 
-#: ../../../src/PowerManager.cpp:981
+#: ../../../src/PowerManager.cpp:988
 #, c-format
 msgid "+%d Shield"
 msgstr "+%d щит"
 
-#: ../../../src/PowerManager.cpp:1237
+#: ../../../src/PowerManager.cpp:1244
 msgid "You are already transformed, untransform first."
 msgstr "Вы уже трансформированы, сперва растрансформируйтесь."
 
-#: ../../../src/PowerManager.cpp:1249
+#: ../../../src/PowerManager.cpp:1256
 msgid "Could not untransform at this position."
 msgstr "Здесь нельзя растрансформироваться."
 
