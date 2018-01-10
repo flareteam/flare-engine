@@ -257,9 +257,11 @@ void PowerManager::loadPowers() {
 		else if (infile.key == "sacrifice")
 			// @ATTR power.sacrifice|bool|If the power has requires_hp, allow it to kill the caster.
 			powers[input_id].sacrifice = toBool(infile.val);
-		else if (infile.key == "requires_los")
+		else if (infile.key == "requires_los") {
 			// @ATTR power.requires_los|bool|Requires a line-of-sight to target.
 			powers[input_id].requires_los = toBool(infile.val);
+			powers[input_id].requires_los_default = false;
+		}
 		else if (infile.key == "requires_empty_target")
 			// @ATTR power.requires_empty_target|bool|The power can only be cast when target tile is empty.
 			powers[input_id].requires_empty_target = toBool(infile.val);

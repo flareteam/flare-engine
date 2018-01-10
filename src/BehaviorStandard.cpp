@@ -307,7 +307,7 @@ void BehaviorStandard::checkPower() {
 	// The second stage occurs in updateState()
 
 	// pick a power from the available powers for this creature
-	if (los && (e->stats.cur_state == ENEMY_STANCE || e->stats.cur_state == ENEMY_MOVE)) {
+	if (e->stats.cur_state == ENEMY_STANCE || e->stats.cur_state == ENEMY_MOVE) {
 		AIPower* ai_power = NULL;
 
 		// check half dead power use
@@ -324,8 +324,14 @@ void BehaviorStandard::checkPower() {
 		}
 
 		if (ai_power != NULL) {
-			e->stats.cur_state = ENEMY_POWER;
-			e->stats.activated_power = ai_power;
+			const Power& pwr = powers->powers[ai_power->id];
+			if (!los && (pwr.requires_los || pwr.requires_los_default)) {
+				ai_power = NULL;
+			}
+			if (ai_power != NULL) {
+				e->stats.cur_state = ENEMY_POWER;
+				e->stats.activated_power = ai_power;
+			}
 		}
 	}
 

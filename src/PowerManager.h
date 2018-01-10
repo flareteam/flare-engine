@@ -137,6 +137,7 @@ public:
 	int requires_hp;
 	bool sacrifice;
 	bool requires_los; // line of sight
+	bool requires_los_default;
 	bool requires_empty_target; // target square must be empty
 	int requires_item;
 	int requires_item_quantity;
@@ -282,6 +283,7 @@ public:
 		, requires_hp(0)
 		, sacrifice(false)
 		, requires_los(false)
+		, requires_los_default(true)
 		, requires_empty_target(false)
 		, requires_item(-1)
 		, requires_item_quantity(0)
