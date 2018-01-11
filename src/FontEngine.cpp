@@ -85,9 +85,11 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 		if (calc_width(builder.str()) > width) {
 
 			// this word can't fit on this line, so word wrap
-			height += getLineHeight();
-			if (calc_width(builder_prev.str()) > max_width) {
-				max_width = calc_width(builder_prev.str());
+			if (!builder_prev.str().empty()) {
+				height += getLineHeight();
+				if (calc_width(builder_prev.str()) > max_width) {
+					max_width = calc_width(builder_prev.str());
+				}
 			}
 
 			builder_prev.str("");
@@ -96,7 +98,6 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 			long_token = popTokenByWidth(next_word, width);
 
 			if (!long_token.empty()) {
-				height -= getLineHeight();
 				while (!long_token.empty()) {
 					if (calc_width(next_word) > max_width) {
 						max_width = calc_width(next_word);
@@ -119,9 +120,14 @@ Point FontEngine::calc_size(const std::string& text_with_newlines, int width) {
 		next_word = getNextToken(fulltext, cursor, space); // get next word
 	}
 
-	height = height + getLineHeight();
 	builder.str(trim(builder.str())); //removes whitespace that shouldn't be included in the size
+	if (!builder.str().empty())
+		height += getLineHeight();
 	if (calc_width(builder.str()) > max_width) max_width = calc_width(builder.str());
+
+	// handle blank lines
+	if (text_with_newlines == " ")
+		height += getLineHeight();
 
 	Point size;
 	size.x = max_width;
@@ -182,15 +188,16 @@ void FontEngine::render(const std::string& text, int x, int y, int justify, Imag
 		builder << next_word;
 
 		if (calc_width(builder.str()) > width) {
-			renderInternal(builder_prev.str(), x, cursor_y, justify, target, color);
-			cursor_y += getLineHeight();
+			if (!builder_prev.str().empty()) {
+				renderInternal(builder_prev.str(), x, cursor_y, justify, target, color);
+				cursor_y += getLineHeight();
+			}
 			builder_prev.str("");
 			builder.str("");
 
 			long_token = popTokenByWidth(next_word, width);
 
 			if (!long_token.empty()) {
-				cursor_y -= getLineHeight();
 				while (!long_token.empty()) {
 					renderInternal(next_word, x, cursor_y, justify, target, color);
 					cursor_y += getLineHeight();
