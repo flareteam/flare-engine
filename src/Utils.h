@@ -247,4 +247,6 @@ bool rectsOverlap(const Rect &a, const Rect &b);
 
 int rotateDirection(int direction, int val);
 
+std::string getTimeString(const unsigned long time, bool show_seconds = false);
+
 #endif

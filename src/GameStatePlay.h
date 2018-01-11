@@ -103,6 +103,8 @@ private:
 
 	int menu_enemy_timeout;
 
+	int second_ticks;
+
 public:
 	GameStatePlay();
 	~GameStatePlay();

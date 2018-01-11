@@ -453,3 +453,24 @@ int rotateDirection(int direction, int val) {
 
 	return direction;
 }
+
+std::string getTimeString(const unsigned long time, bool show_seconds) {
+	std::stringstream ss;
+	unsigned long hours = (time / 60) / 60;
+	if (hours < 100)
+		ss << std::setfill('0') << std::setw(2) << hours;
+	else
+		ss << hours;
+
+	ss << ":";
+	unsigned long minutes = (time / 60) % 60;
+	ss << std::setfill('0') << std::setw(2) << minutes;
+
+	if (show_seconds) {
+		ss << ":";
+		unsigned long seconds = time % 60;
+		ss << std::setfill('0') << std::setw(2) << seconds;
+	}
+
+	return ss.str();
+}

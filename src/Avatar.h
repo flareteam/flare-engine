@@ -141,6 +141,7 @@ public:
 	std::vector<int> power_cast_ticks;
 	std::vector<int> power_cast_duration;
 	FPoint enemy_pos; // positon of the highlighted enemy
+	unsigned long time_played;
 };
 
 #endif

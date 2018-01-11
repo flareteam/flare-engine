@@ -72,6 +72,7 @@ GameStatePlay::GameStatePlay()
 	, npc_from_map(true)
 	, nearest_npc(-1)
 	, menu_enemy_timeout(MAX_FRAMES_PER_SEC*10)
+	, second_ticks(0)
 {
 	hasMusic = true;
 	has_background = false;
@@ -820,6 +821,12 @@ void GameStatePlay::logic() {
 	menu->logic();
 
 	if (!isPaused()) {
+		if (second_ticks < MAX_FRAMES_PER_SEC)
+			second_ticks++;
+		else if (second_ticks == MAX_FRAMES_PER_SEC) {
+			pc->time_played++;
+			second_ticks = 0;
+		}
 
 		// these actions only occur when the game isn't paused
 		if (pc->stats.alive) checkLoot();

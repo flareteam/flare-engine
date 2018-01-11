@@ -165,8 +165,9 @@ void SaveLoad::saveGame() {
 		}
 
 		// campaign data
-		outfile << "campaign=";
-		outfile << camp->getAll();
+		outfile << "campaign=" << camp->getAll() << "\n";
+
+		outfile << "time_played=" << pc->time_played << "\n";
 
 		outfile << std::endl;
 
@@ -320,6 +321,7 @@ void SaveLoad::loadGame() {
 				}
 			}
 			else if (infile.key == "campaign") camp->setAll(infile.val);
+			else if (infile.key == "time_played") pc->time_played = toUnsignedLong(infile.val);
 		}
 
 		infile.close();

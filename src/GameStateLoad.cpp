@@ -47,6 +47,7 @@ bool compareSaveDirs(const std::string& dir1, const std::string& dir2) {
 
 GameSlot::GameSlot()
 	: id(0)
+	, time_played(0)
 	, preview_turn_ticks(GAMESLOT_PREVIEW_TURN_DURATION) {
 }
 
@@ -317,6 +318,9 @@ void GameStateLoad::readGameSlots() {
 			}
 			else if (infile.key == "permadeath") {
 				game_slots[i]->stats.permadeath = toBool(infile.val);
+			}
+			else if (infile.key == "time_played") {
+				game_slots[i]->time_played = toUnsignedLong(infile.val);
 			}
 		}
 		infile.close();
@@ -708,8 +712,9 @@ void GameStateLoad::render() {
 		label.x = slot_pos[slot].x + level_pos.x;
 		label.y = slot_pos[slot].y + level_pos.y;
 		ss << msg->get("Level %d", game_slots[off_slot]->stats.level);
+		ss << " / " << getTimeString(game_slots[off_slot]->time_played, true);
 		if (game_slots[off_slot]->stats.permadeath)
-			ss << ", " + msg->get("Permadeath");
+			ss << " / +";
 		game_slots[off_slot]->label_level.set(label.x, label.y, level_pos.justify, level_pos.valign, ss.str(), color_normal, level_pos.font_style);
 		if (text_trim_boundary > 0 && game_slots[off_slot]->label_level.bounds.x + game_slots[off_slot]->label_level.bounds.w >= text_trim_boundary + slot_dest.x)
 			game_slots[off_slot]->label_level.setMaxWidth(text_trim_boundary - (game_slots[off_slot]->label_level.bounds.x - slot_dest.x));

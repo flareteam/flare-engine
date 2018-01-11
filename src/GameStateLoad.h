@@ -49,6 +49,7 @@ public:
 
 	StatBlock stats;
 	std::string current_map;
+	unsigned long time_played;
 
 	std::vector<int> equipped;
 	GameSlotPreview preview;

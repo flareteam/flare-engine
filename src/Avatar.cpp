@@ -50,7 +50,8 @@ Avatar::Avatar()
 	, respawn(false)
 	, close_menus(false)
 	, allow_movement(true)
-	, enemy_pos(FPoint(-1,-1)) {
+	, enemy_pos(FPoint(-1,-1))
+	, time_played(0) {
 
 	init();
 
