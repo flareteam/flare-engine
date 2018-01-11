@@ -238,6 +238,7 @@ float INTERACT_RANGE;
 bool SAVE_ONLOAD = true;
 bool SAVE_ONEXIT = true;
 float ENCOUNTER_DIST;
+float CAMERA_SPEED;
 
 static ConfigEntry * getConfigEntry(const char * name) {
 
@@ -372,6 +373,7 @@ void loadMiscSettings() {
 	INTERACT_RANGE = 3;
 	SAVE_ONLOAD = true;
 	SAVE_ONEXIT = true;
+	CAMERA_SPEED = 10.f;
 	TOOLTIP_OFFSET = 0;
 	TOOLTIP_WIDTH = 1;
 	TOOLTIP_MARGIN = 0;
@@ -432,6 +434,12 @@ void loadMiscSettings() {
 			// @ATTR save_onexit|bool|Save the game upon quitting to the title screen or desktop.
 			else if (infile.key == "save_onexit")
 				SAVE_ONEXIT = toBool(infile.val);
+			// @ATTR camera_speed|float|Modifies how fast the camera moves to recenter on the player. Larger values mean a slower camera. Default value is 10.
+			else if (infile.key == "camera_speed") {
+				CAMERA_SPEED = toFloat(infile.val);
+				if (CAMERA_SPEED <= 0)
+					CAMERA_SPEED = 1;
+			}
 
 			else infile.error("Settings: '%s' is not a valid key.", infile.key.c_str());
 		}

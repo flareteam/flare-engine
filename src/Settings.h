@@ -160,6 +160,7 @@ extern float INTERACT_RANGE;
 extern bool SAVE_ONLOAD;
 extern bool SAVE_ONEXIT;
 extern float ENCOUNTER_DIST;
+extern float CAMERA_SPEED;
 
 // Tile Settings
 extern float UNITS_PER_PIXEL_X;
