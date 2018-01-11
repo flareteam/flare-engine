@@ -25,6 +25,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "FileParser.h"
 #include "MenuExit.h"
 #include "SharedResources.h"
+#include "SharedGameResources.h"
 #include "Settings.h"
 #include "UtilsParsing.h"
 
@@ -125,6 +126,9 @@ void MenuExit::align() {
 
 void MenuExit::logic() {
 	if (visible) {
+		std::string title_str = msg->get("Paused") + " [" + getTimeString(pc->time_played, true) + "]";
+		title_lb.set(title_str);
+
 		tablist.logic();
 
 		if (buttonExit->checkClick()) {
