@@ -34,9 +34,17 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "WidgetButton.h"
 #include "WidgetListBox.h"
 
-MenuCharacter::MenuCharacter(StatBlock *_stats) {
-	stats = _stats;
-
+MenuCharacter::MenuCharacter(StatBlock *_stats)
+	: stats(_stats)
+	, closeButton(new WidgetButton("images/menus/buttons/button_x.png"))
+	, labelCharacter(new WidgetLabel())
+	, labelUnspent(new WidgetLabel())
+	, skill_points(0)
+	, statlist_rows(10)
+	, statlist_scrollbar_offset(0)
+	, show_resists(true)
+	, name_max_width(0)
+{
 	// 2 is added here to account for CSTAT_NAME and CSTAT_LEVEL
 	cstat.resize(PRIMARY_STATS.size() + 2);
 
@@ -46,10 +54,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	for (size_t i = 0; i < PRIMARY_STATS.size(); ++i) {
 		cstat[i+2].label_text = PRIMARY_STATS[i].name;
 	}
-
-	skill_points = 0;
-
-	visible = false;
 
 	for (size_t i = 0; i < cstat.size(); ++i) {
 		cstat[i].label = new WidgetLabel();
@@ -68,13 +72,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 	show_stat[STAT_HP_PERCENT] = false;
 	show_stat[STAT_MP_PERCENT] = false;
 
-	show_resists = true;
-
-	statlist_rows = 10;
-	statlist_scrollbar_offset = 0;
-
-	closeButton = new WidgetButton("images/menus/buttons/button_x.png");
-
 	// Upgrade buttons
 	primary_up.resize(PRIMARY_STATS.size());
 	upgradeButton.resize(PRIMARY_STATS.size());
@@ -84,12 +81,6 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 		upgradeButton[i] = new WidgetButton("images/menus/buttons/upgrade.png");
 		upgradeButton[i]->enabled = false;
 	}
-
-	// menu title
-	labelCharacter = new WidgetLabel();
-
-	// unspent points
-	labelUnspent = new WidgetLabel();
 
 	// Load config settings
 	FileParser infile;
@@ -153,7 +144,7 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 			// @ATTR name|rectangle|Position of the player's name and dimensions of the tooltip hotspot.
 			else if(infile.key == "name") {
 				cstat[CSTAT_NAME].value_pos = toRect(infile.val);
-				cstat[CSTAT_NAME].value->setBasePos(cstat[CSTAT_NAME].value_pos.x + 4, cstat[CSTAT_NAME].value_pos.y + (cstat[CSTAT_NAME].value_pos.h/2)); // TODO remove 4 from x value
+				cstat[CSTAT_NAME].value->setBasePos(cstat[CSTAT_NAME].value_pos.x, cstat[CSTAT_NAME].value_pos.y + (cstat[CSTAT_NAME].value_pos.h/2));
 			}
 			// @ATTR level|rectangle|Position of the player's level and dimensions of the tooltip hotspot.
 			else if(infile.key == "level") {
@@ -200,6 +191,9 @@ MenuCharacter::MenuCharacter(StatBlock *_stats) {
 					}
 				}
 			}
+
+			// @ATTR name_max_width|int|The maxiumum width, in pixels, that the character name can occupy until it is abbreviated.
+			else if (infile.key == "name_max_width") name_max_width = toInt(infile.val);
 
 			else {
 				infile.error("MenuCharacter: '%s' is not a valid key.", infile.key.c_str());
@@ -282,7 +276,12 @@ void MenuCharacter::refreshStats() {
 	std::stringstream ss;
 
 	// update stat text
-	cstat[CSTAT_NAME].value->set(cstat[CSTAT_NAME].value->pos.x, cstat[CSTAT_NAME].value->pos.y, JUSTIFY_LEFT, VALIGN_CENTER, stats->name, font->getColor("menu_normal"));
+	std::string trimmed_name;
+	if (name_max_width > 0)
+		trimmed_name = font->trimTextToWidth(stats->name, name_max_width, true, 0);
+	else
+		trimmed_name = stats->name;
+	cstat[CSTAT_NAME].value->set(cstat[CSTAT_NAME].value->pos.x, cstat[CSTAT_NAME].value->pos.y, JUSTIFY_LEFT, VALIGN_CENTER, trimmed_name, font->getColor("menu_normal"));
 
 	ss.str("");
 	ss << stats->level;
@@ -343,6 +342,7 @@ void MenuCharacter::refreshStats() {
 
 	// update tool tips
 	cstat[CSTAT_NAME].tip.clear();
+	cstat[CSTAT_NAME].tip.addText(stats->name);
 	cstat[CSTAT_NAME].tip.addText(stats->getLongClass());
 
 	cstat[CSTAT_LEVEL].tip.clear();

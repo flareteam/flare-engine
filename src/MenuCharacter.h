@@ -87,6 +87,8 @@ private:
 	std::vector<int*> base_stats_add;
 	std::vector< std::vector<int>* > base_bonus;
 
+	int name_max_width;
+
 public:
 	explicit MenuCharacter(StatBlock *stats);
 	~MenuCharacter();
