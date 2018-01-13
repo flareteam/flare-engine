@@ -1087,7 +1087,7 @@ msgstr "クリックすると解放（スキルポイントを1消費）"
 
 #: ../../../src/MenuPowers.cpp:1061 ../../../src/MenuPowers.cpp:1063
 msgid "Requires 1 Skill Point"
-msgstr "1 個のスキルポイントが必要です"
+msgstr "スキルポイント 1 個が 必要です"
 
 #: ../../../src/MenuPowers.cpp:1272
 msgid "Unspent skill points:"
