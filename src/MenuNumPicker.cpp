@@ -246,5 +246,6 @@ MenuNumPicker::~MenuNumPicker() {
 	delete button_up;
 	delete button_down;
 	delete input_box;
+	delete button_close;
 }
 
