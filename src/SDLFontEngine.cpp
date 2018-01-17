@@ -162,8 +162,6 @@ int SDLFontEngine::calc_width(const std::string& text) {
  * It ensures that this character is visible, chopping the end of the string if needed.
  */
 std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int width, const bool use_ellipsis, size_t left_pos) {
-	// TODO multi-byte character support
-
 	if (width >= calc_width(text))
 		return text;
 
@@ -189,6 +187,10 @@ std::string SDLFontEngine::trimTextToWidth(const std::string& text, const int wi
 				ret_length = i;
 			else
 				break;
+		}
+
+		while (ret_length > 0 && ((text[ret_length] & 0xc0) == 0x80)) {
+			ret_length--;
 		}
 	}
 
